@@ -17,8 +17,87 @@ from __future__ import annotations
 import os
 
 import grass.script as gs
+from grass.exceptions import CalledModuleError
 
 from .support import ParameterConverter, ToolFunctionResolver, ToolResult
+
+
+class ToolError(CalledModuleError):
+    """Raised when a tool run ends with error (typically a non-zero return code)
+
+    Inherits from *subprocess.CalledProcessError* to make it easy to transition from
+    or combine with code which is using the *subprocess* package.
+    Inherits from CalledModuleError to make it easy to transition code with except
+    statements around *grass.script.run_command*-style tool calls, but new code should
+    not rely on that.
+    """
+
+    def __init__(
+        self, tool: str, cmd: list, returncode: int, errors: str | None = None
+    ):
+        """Create an exception with a full error message based on the parameters.
+
+        Best results are provided when *errors* is a single line string, aiming at a
+        short and clear message. In case *errors* is `None`, additional text is
+        provided to help the user find the error message, assuming that there is one
+        somewhere. If *errors* is an empty string, it assumes that stderr was produced
+        and reports that in the resulting message. A single line message may be
+        modified to provide the best possible error message assuming it is a standard
+        fatal error message produced by a GRASS tool describing best what went wrong.
+        For multiline error messages, no assumptions are made, so the information
+        about the tool run is printed first and then the error message.
+
+        :param tool: tool name (for interface compatibility with *CalledModuleError*)
+        :param cmd: string or list of strings forming the actual (underlying) command
+        :param returncode: process returncode (assuming non-zero)
+        :param errors: errors provided by the tool (typically stderr)
+
+        Expect changes to the *tool* parameter and the corresponding attribute.
+        """
+        # CalledProcessError has undocumented constructor
+        super().__init__(tool, cmd, returncode, errors)
+        errors_first = False
+        # If provided, we assume errors are the actual tool errors with details, i.e.,
+        # the captured stderr of the tool.
+        if errors is None:
+            # If the stderr was passed to the caller process instead of being capured
+            # by the subprocess caller function, the stderr will be above
+            # the traceback in the command line, but in notebooks or when testing,
+            # the stderr will be somewhere else than the traceback.
+            errors = "See errors above the traceback or in the error output (stderr)."
+        elif errors == "":
+            errors = "No error output was produced"
+        elif "\n" not in errors.strip():
+            errors_first = True
+            # Remove end of line if any (and all other extra whitespace) and remove
+            # error prefix in English.
+            errors = errors.strip().removeprefix("ERROR: ")
+        # Short, one line error message from stderr makes a good error message as the
+        # first line of the exception text (shown by itself e.g. by pytest).
+        # When not clear what is in, include the run details first and the potentially
+        # long stderr afterwards.
+        # While return code would be semantically better with a colon, there is already
+        # a lot of colons in the resulting message (one after the exception type,
+        # one likely from stderr, and another one depending on the order), so no colon
+        # might be slightly easier to read.
+        if errors_first:
+            self.msg = (
+                f"{errors}\nRun `{cmd}` ended with an error (return code {returncode})"
+            )
+        else:
+            self.msg = (
+                f"Run `{cmd}` ended with an error (return code {returncode}):\n{errors}"
+            )
+        self.tool = tool
+
+    def __reduce__(self):
+        return (
+            self.__class__,
+            (self.tool, self.cmd, self.returncode, self.errors),
+        )
+
+    def __str__(self):
+        return self.msg
 
 
 class Tools:
@@ -38,10 +117,8 @@ class Tools:
 
     >>> from grass.tools import Tools
     >>> tools = Tools(session=session)
-    >>> tools.g_region(rows=100, cols=100)  # doctest: +ELLIPSIS
-    ToolResult(...)
+    >>> tools.g_region(rows=100, cols=100)
     >>> tools.r_random_surface(output="surface", seed=42)
-    ToolResult(...)
 
     For tools outputting JSON, the results can be accessed directly:
 
@@ -52,6 +129,71 @@ class Tools:
     the *ToolResult* object:
 
     >>> tools.g_region(flags="p").text  # doctest: +SKIP
+
+    Text inputs, when a tool supports standard input (stdin), can be passed as *io.StringIO* objects:
+
+    >>> from io import StringIO
+    >>> tools.v_in_ascii(
+    ...     input=StringIO("13.45,29.96,200"), output="point", separator=","
+    ... )
+
+    The *Tools* object can be used as a context manager:
+
+    >>> with Tools(session=session) as tools:
+    ...     tools.g_region(rows=100, cols=100)
+
+    A tool can be accessed via a function with the same name as the tool.
+    Alternatively, it can be called through one of the *run* or *call* functions.
+    The *run* function provides convenient functionality for handling tool parameters,
+    while the *call* function simply executes the tool. Both take tool parameters as
+    keyword arguments. Each function has a corresponding variant which accepts a list
+    of strings as parameters (*run_cmd* and *call_cmd*).
+    When a tool is run using the function corresponding to its name, the *run* function
+    is used in the background.
+
+    Raster input and outputs can be NumPy arrays:
+
+    >>> import numpy as np
+    >>> tools.g_region(rows=2, cols=3)
+    >>> slope = tools.r_slope_aspect(elevation=np.ones((2, 3)), slope=np.ndarray)
+    >>> tools.r_grow(
+    ...     input=np.array([[1, np.nan, np.nan], [np.nan, np.nan, np.nan]]),
+    ...     radius=1.5,
+    ...     output=np.ndarray,
+    ... )
+    array([[1., 1., 0.],
+           [1., 1., 0.]])
+
+    The input array's shape and the computational region rows and columns need to
+    match. The output array's shape is determined by the computational region.
+
+    When multiple outputs are returned, they are returned as a tuple:
+
+    >>> (slope, aspect) = tools.r_slope_aspect(
+    ...     elevation=np.ones((2, 3)), slope=np.array, aspect=np.array
+    ... )
+
+    To access the arrays by name, e.g., with a high number of output arrays,
+    the standard result object can be requested with *consistent_return_value*:
+
+    >>> tools = Tools(session=session, consistent_return_value=True)
+    >>> result = tools.r_slope_aspect(
+    ...     elevation=np.ones((2, 3)), slope=np.array, aspect=np.array
+    ... )
+
+    The result object than includes the arrays under the *arrays* attribute
+    where they can be accessed as attributes by names corresponding to the
+    output parameter names:
+
+    >>> slope = result.arrays.slope
+    >>> aspect = result.arrays.aspect
+
+    Using `consistent_return_value=True` is also advantageous to obtain both arrays
+    and text outputs from the tool as the result object has the same
+    attributes and functionality as without arrays:
+
+    >>> result.text
+    ''
     """
 
     def __init__(
@@ -66,6 +208,7 @@ class Tools:
         errors=None,
         capture_output=True,
         capture_stderr=None,
+        consistent_return_value=False,
     ):
         """
         If session is provided and has an env attribute, it is used to execute tools.
@@ -74,16 +217,44 @@ class Tools:
         However, session and env interaction may change in the future.
 
         If overwrite is provided, a an overwrite is set for all the tools.
-        When overwrite is set to False, individual tool calls can set overwrite
-        to True. If overwrite is set in the session or env, it is used.
-        Note that once overwrite is set to True globally, an individual tool call
-        cannot set it back to False.
+        When overwrite is set to `False`, individual tool calls can set overwrite
+        to `True`. If overwrite is set in the session or env, it is used.
+        Note that once overwrite is set to `True` globally, an individual tool call
+        cannot set it back to `False`.
 
-        If verbose, quiet, superquiet is set to True, the corresponding verbosity level
-        is set for all the tools. If one of them is set to False and the environment
+        If verbose, quiet, superquiet is set to `True`, the corresponding verbosity level
+        is set for all the tools. If one of them is set to `False` and the environment
         has the corresponding variable set, it is unset.
-        The values cannot be combined. If multiple are set to True, the most verbose
-        one wins.
+        The values cannot be combined. If multiple ones are set to `True`, the most
+        verbose one wins.
+
+        In case a tool run fails, indicating that by non-zero return code,
+        *grass.tools.ToolError* exception is raised by default. This can
+        be changed by passing, e.g., `errors="ignore"`. The *errors* parameter
+        is passed to the *grass.script.handle_errors* function which determines
+        the specific behavior.
+
+        Text outputs from the tool are captured by default, both standard output
+        (stdout) and standard error output (stderr). Both will be part of the result
+        object returned by each tool run. Additionally, the standard error output will
+        be included in the exception message. When *capture_output* is set to `False`,
+        outputs are not captured in Python as values and go where the Python process
+        outputs go (this is usually clear in command line, but less clear in a Jupyter
+        notebook). When *capture_stderr* is set to `True`, the standard error output
+        is captured and included in the exception message even if *capture_outputs*
+        is set to `False`.
+
+        A tool call will return a result object if the tool produces standard output
+        (stdout) and `None` otherwise. If *consistent_return_value* is set to `True`,
+        a call will return a result object even without standard output (*stdout* and
+        *text* attributes of the result object will evaluate to `False`). This is
+        advantageous when examining the *stdout* or *text* attributes directly, or
+        when using the *returncode* attribute in combination with `errors="ignore"`.
+        Additionally, this can be used to obtain both NumPy arrays and text outputs
+        from a tool call.
+
+        If *env* or other *Popen* arguments are provided to one of the tool running
+        functions, the constructor parameters except *errors* are ignored.
         """
         if env:
             self._original_env = env
@@ -103,6 +274,7 @@ class Tools:
         else:
             self._capture_stderr = capture_stderr
         self._name_resolver = None
+        self._consistent_return_value = consistent_return_value
 
     def _modified_env_if_needed(self):
         """Get the environment for subprocesses
@@ -147,7 +319,7 @@ class Tools:
 
         return env or self._original_env
 
-    def run(self, name: str, /, **kwargs):
+    def run(self, tool_name_: str, /, **kwargs):
         """Run a tool by specifying its name as a string and parameters.
 
         The parameters tool are tool name as a string and parameters as keyword
@@ -156,7 +328,7 @@ class Tools:
 
         The function may perform additional processing on the parameters.
 
-        :param name: name of a GRASS tool
+        :param tool_name_: name of a GRASS tool
         :param kwargs: tool parameters
         """
         # Object parameters are handled first before the conversion of the call to a
@@ -166,14 +338,40 @@ class Tools:
 
         # Get a fixed env parameter at at the beginning of each execution,
         # but repeat it every time in case the referenced environment is modified.
-        args, popen_options = gs.popen_args_command(name, **kwargs)
+        args, popen_options = gs.popen_args_command(tool_name_, **kwargs)
+
+        # Compute the environment for subprocesses and store it for later use.
+        if "env" not in popen_options:
+            popen_options["env"] = self._modified_env_if_needed()
+
+        object_parameter_handler.translate_objects_to_data(
+            kwargs, env=popen_options["env"]
+        )
+
         # We approximate original kwargs with the possibly-modified kwargs.
-        return self.run_cmd(
+        result = self.run_cmd(
             args,
             tool_kwargs=kwargs,
             input=object_parameter_handler.stdin,
             **popen_options,
         )
+        use_objects = object_parameter_handler.translate_data_to_objects(
+            kwargs, env=popen_options["env"]
+        )
+        if use_objects:
+            if self._consistent_return_value:
+                result.set_arrays(object_parameter_handler.all_array_results)
+            else:
+                result = object_parameter_handler.result
+
+        if object_parameter_handler.temporary_rasters:
+            self.call(
+                "g.remove",
+                type="raster",
+                name=object_parameter_handler.temporary_rasters,
+                flags="f",
+            )
+        return result
 
     def run_cmd(
         self,
@@ -199,7 +397,7 @@ class Tools:
             **popen_options,
         )
 
-    def call(self, name: str, /, **kwargs):
+    def call(self, tool_name_: str, /, **kwargs):
         """Run a tool by specifying its name as a string and parameters.
 
         The parameters tool are tool name as a string and parameters as keyword
@@ -210,10 +408,10 @@ class Tools:
         the parameters, but numbers, lists, and tuples will still be translated to
         strings for execution.
 
-        :param name: name of a GRASS tool
+        :param tool_name_: name of a GRASS tool
         :param **kwargs: tool parameters
         """
-        args, popen_options = gs.popen_args_command(name, **kwargs)
+        args, popen_options = gs.popen_args_command(tool_name_, **kwargs)
         return self.call_cmd(args, **popen_options)
 
     def call_cmd(self, command, tool_kwargs=None, input=None, **popen_options):
@@ -270,7 +468,11 @@ class Tools:
                 kwargs=tool_kwargs or {},
                 stderr=stderr,
                 handler=self._errors,
+                exception=ToolError,
+                env=popen_options["env"],
             )
+        if not self._consistent_return_value and not result.stdout:
+            return None
         return result
 
     def __getattr__(self, name):

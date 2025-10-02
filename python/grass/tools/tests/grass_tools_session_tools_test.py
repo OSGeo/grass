@@ -6,9 +6,81 @@ import os
 import pytest
 
 import grass.script as gs
-from grass.exceptions import CalledModuleError
 from grass.experimental.mapset import TemporaryMapsetSession
-from grass.tools import Tools
+from grass.tools import Tools, ToolError
+
+
+has_pandas = False
+try:
+    import pandas as pd
+
+    has_pandas = True
+except ImportError:
+    pass
+
+
+def test_no_stdout_returns_none(xy_dataset_session):
+    """Check that no stdout results in returning None"""
+    tools = Tools(session=xy_dataset_session)
+    assert tools.g_region(res=10) is None
+    assert tools.run("g.region", res=10) is None
+    # Same should apply also to the function accepting a command.
+    assert tools.run_cmd(["g.region", "res=10"]) is None
+    # And to the low-level functions.
+    assert tools.call("g.region", res=10) is None
+    assert tools.call_cmd(["g.region", "res=10"]) is None
+
+
+def test_no_stdout_is_falsy_in_result(xy_dataset_session):
+    """Check that no stdout needs to be at least falsy when stored in the result"""
+    tools = Tools(session=xy_dataset_session, consistent_return_value=True)
+    result = tools.g_region(res=10)
+    assert not result.stdout
+    assert not result.text
+    result = tools.run("g.region", res=10)
+    assert not result.stdout
+    assert not result.text
+    result = tools.run_cmd(["g.region", "res=10"])
+    assert not result.stdout
+    assert not result.text
+    result = tools.call("g.region", res=10)
+    assert not result.stdout
+    assert not result.text
+    result = tools.call_cmd(["g.region", "res=10"])
+    assert not result.stdout
+    assert not result.text
+
+
+def test_no_stdout_is_empty_string_in_result(xy_dataset_session):
+    """Check that no stdout results in an empty string (not None).
+
+    Intentionally, this is not properly specified in the doc.
+    Improve this before version 8.6.
+    """
+    tools = Tools(session=xy_dataset_session, consistent_return_value=True)
+    result = tools.g_region(res=10)
+    assert result.stdout == ""
+    assert result.text == ""
+    result = tools.run("g.region", res=10)
+    assert result.stdout == ""
+    assert result.text == ""
+    result = tools.run_cmd(["g.region", "res=10"])
+    assert result.stdout == ""
+    assert result.text == ""
+    result = tools.call("g.region", res=10)
+    assert result.stdout == ""
+    assert result.text == ""
+    result = tools.call_cmd(["g.region", "res=10"])
+    assert result.stdout == ""
+    assert result.text == ""
+
+
+def test_stdout_vs_text(xy_dataset_session):
+    """Check that stdout is raw while text is stripped"""
+    tools = Tools(session=xy_dataset_session, consistent_return_value=True)
+    result = tools.g_mapset(flags="p")
+    assert result.stdout == "PERMANENT\n"
+    assert result.text == "PERMANENT"
 
 
 def test_key_value_parser_number(xy_dataset_session):
@@ -70,15 +142,24 @@ def test_json_as_list(xy_dataset_session):
     assert len(result)
 
 
+@pytest.mark.skipif(has_pandas is False, reason="Requires Pandas")
+def test_json_for_pandas(xy_dataset_session):
+    """Check that JSON can be read into Pandas dataframe"""
+    tools = Tools(session=xy_dataset_session)
+    # This also tests JSON parsing with a format option.
+    result = tools.run("g.region", flags="p", format="json")
+    assert not pd.DataFrame(result).empty
+
+
 def test_help_call_no_parameters(xy_dataset_session):
     """Check that help text is generated without any one parameters provided"""
-    tools = Tools(session=xy_dataset_session)
+    tools = Tools(session=xy_dataset_session, consistent_return_value=True)
     assert "r.slope.aspect" in tools.call_cmd(["r.slope.aspect", "--help"]).stderr
 
 
 def test_help_call_with_parameters(xy_dataset_session):
     """Check that help text is generated with parameters provided"""
-    tools = Tools(session=xy_dataset_session)
+    tools = Tools(session=xy_dataset_session, consistent_return_value=True)
     assert (
         "r.slope.aspect"
         in tools.call_cmd(
@@ -177,7 +258,9 @@ def test_stdout_comma_items(xy_dataset_session):
 
 def test_stdout_without_capturing(xy_dataset_session):
     """Check that stdout and stderr are not present when not capturing it"""
-    tools = Tools(session=xy_dataset_session, capture_output=False)
+    tools = Tools(
+        session=xy_dataset_session, capture_output=False, consistent_return_value=True
+    )
     result = tools.g_mapset(flags="p")
     assert not result.stdout
     assert result.stdout is None
@@ -187,7 +270,9 @@ def test_stdout_without_capturing(xy_dataset_session):
 
 def test_attributes_without_stdout(xy_dataset_session):
     """Check that attributes behave as expected when not capturing stdout"""
-    tools = Tools(session=xy_dataset_session, capture_output=False)
+    tools = Tools(
+        session=xy_dataset_session, capture_output=False, consistent_return_value=True
+    )
     result = tools.run_cmd(["g.region", "format=json", "-p"])
     assert not result.text
     assert result.text is None
@@ -206,7 +291,12 @@ def test_attributes_without_stdout(xy_dataset_session):
 
 def test_capturing_stdout_and_stderr(xy_dataset_session):
     """Check that both stdout and stdin are present when capturing them"""
-    tools = Tools(session=xy_dataset_session, capture_output=True, errors="ignore")
+    tools = Tools(
+        session=xy_dataset_session,
+        capture_output=True,
+        errors="ignore",
+        consistent_return_value=True,
+    )
     result = tools.g_mapset(flags="l")
     assert result.stdout
     assert result.stdout is not None
@@ -224,6 +314,7 @@ def test_capturing_stdout_without_stderr(xy_dataset_session):
         capture_output=True,
         capture_stderr=False,
         errors="ignore",
+        consistent_return_value=True,
     )
     result = tools.g_mapset(flags="l")
     assert result.stdout
@@ -241,6 +332,7 @@ def test_capturing_stderr_without_stdout(xy_dataset_session):
         capture_output=False,
         capture_stderr=True,
         errors="ignore",
+        consistent_return_value=True,
     )
     result = tools.g_mapset(flags="p")
     assert not result.stdout
@@ -256,7 +348,7 @@ def test_capturing_stderr_for_exception_without_stdout(xy_dataset_session):
     tools = Tools(session=xy_dataset_session, capture_output=False, capture_stderr=True)
     # Testing the actual English message here because that is really generated by the
     # tool itself rather than the message containing the tool parameters.
-    with pytest.raises(CalledModuleError, match="does not exist"):
+    with pytest.raises(ToolError, match="does not exist"):
         tools.g_mapset(mapset="does_not_exist")
 
 
@@ -264,7 +356,7 @@ def test_raises(xy_dataset_session):
     """Test that exception is raised for wrong parameter value"""
     tools = Tools(session=xy_dataset_session)
     wrong_name = "does_not_exist"
-    with pytest.raises(CalledModuleError, match=wrong_name):
+    with pytest.raises(ToolError, match=wrong_name):
         tools.r_slope_aspect(
             elevation=wrong_name,
             slope="slope",
@@ -274,7 +366,7 @@ def test_raises(xy_dataset_session):
 def test_error_handler_default(xy_dataset_session):
     """Check that default error handler works as expected"""
     tools = Tools(session=xy_dataset_session)
-    with pytest.raises(CalledModuleError, match="does_not_exist"):
+    with pytest.raises(ToolError, match="does_not_exist"):
         tools.g_mapset(mapset="does_not_exist")
     # Works after errors as usual.
     assert tools.g_mapset(flags="p").text == "PERMANENT"
@@ -283,7 +375,7 @@ def test_error_handler_default(xy_dataset_session):
 def test_error_handler_none(xy_dataset_session):
     """Check that explicit None error handler works as expected"""
     tools = Tools(session=xy_dataset_session, errors=None)
-    with pytest.raises(CalledModuleError, match="does_not_exist"):
+    with pytest.raises(ToolError, match="does_not_exist"):
         tools.g_mapset(mapset="does_not_exist")
     # Works after errors as usual.
     assert tools.g_mapset(flags="p").text == "PERMANENT"
@@ -292,7 +384,7 @@ def test_error_handler_none(xy_dataset_session):
 def test_error_handler_raise(xy_dataset_session):
     """Check that raise error handler raises an exception"""
     tools = Tools(session=xy_dataset_session, errors="raise")
-    with pytest.raises(CalledModuleError, match="does_not_exist"):
+    with pytest.raises(ToolError, match="does_not_exist"):
         tools.g_mapset(mapset="does_not_exist")
     # Works after errors as usual.
     assert tools.g_mapset(flags="p").text == "PERMANENT"
@@ -309,7 +401,9 @@ def test_error_handler_ignore(xy_dataset_session):
 
 def test_error_handler_check_returncode(xy_dataset_session):
     """Check that ignore error handler allows to check return code"""
-    tools = Tools(session=xy_dataset_session, errors="ignore")
+    tools = Tools(
+        session=xy_dataset_session, errors="ignore", consistent_return_value=True
+    )
     assert tools.g_mapset(mapset="does_not_exist").returncode == 1
     assert tools.g_region(raster="does_not_exist").returncode == 1
     # Works after errors as usual with return code.
@@ -332,7 +426,9 @@ def test_error_handler_exit(xy_dataset_session):
 
 def test_verbose(xy_dataset_session):
     """Check that verbose message is generated"""
-    tools = Tools(session=xy_dataset_session, verbose=True)
+    tools = Tools(
+        session=xy_dataset_session, verbose=True, consistent_return_value=True
+    )
     tools.g_mapset(mapset="test1", flags="c")
     tools.g_mapset(mapset="test2", flags="c")
     result = tools.g_mapsets(mapset="test1")
@@ -343,7 +439,7 @@ def test_verbose(xy_dataset_session):
 
 def test_quiet(xy_dataset_session):
     """Check that quiet configuration works"""
-    tools = Tools(session=xy_dataset_session, quiet=True)
+    tools = Tools(session=xy_dataset_session, quiet=True, consistent_return_value=True)
     result = tools.g_mapsets(mapset="PERMANENT")
     # Expecting an important message about no modification.
     assert result.stderr
@@ -351,21 +447,27 @@ def test_quiet(xy_dataset_session):
 
 def test_superquiet(xy_dataset_session):
     """Check that superquiet configuration does not generate any messages"""
-    tools = Tools(session=xy_dataset_session, superquiet=True)
+    tools = Tools(
+        session=xy_dataset_session, superquiet=True, consistent_return_value=True
+    )
     result = tools.g_mapsets(mapset="PERMANENT")
     assert not result.stderr
 
 
 def test_superquiet_verbose(xy_dataset_session):
     """Check that text function-level verbose overrides object-level superquiet"""
-    tools = Tools(session=xy_dataset_session, superquiet=True)
+    tools = Tools(
+        session=xy_dataset_session, superquiet=True, consistent_return_value=True
+    )
     result = tools.g_mapsets(mapset="PERMANENT", verbose=True)
     assert result.stderr
 
 
 def test_verbose_superquiet(xy_dataset_session):
     """Check that text function-level superquiet overrides object-level verbose"""
-    tools = Tools(session=xy_dataset_session, verbose=True)
+    tools = Tools(
+        session=xy_dataset_session, verbose=True, consistent_return_value=True
+    )
     result = tools.g_mapsets(mapset="PERMANENT", superquiet=True)
     assert not result.stderr
 
@@ -373,7 +475,9 @@ def test_verbose_superquiet(xy_dataset_session):
 def test_superquiet_false(xy_dataset_session):
     """Check that text object-level superquiet False overrides global superquiet"""
     xy_dataset_session.env["GRASS_VERBOSE"] = "0"
-    tools = Tools(session=xy_dataset_session, superquiet=False)
+    tools = Tools(
+        session=xy_dataset_session, superquiet=False, consistent_return_value=True
+    )
     result = tools.g_mapsets(mapset="PERMANENT")
     assert result.stderr
     assert "GRASS_VERBOSE" in xy_dataset_session.env
@@ -386,7 +490,9 @@ def test_superquiet_false(xy_dataset_session):
 def test_verbose_false(xy_dataset_session):
     """Check that text object-level verbose False overrides global verbose"""
     xy_dataset_session.env["GRASS_VERBOSE"] = "3"
-    tools = Tools(session=xy_dataset_session, verbose=False)
+    tools = Tools(
+        session=xy_dataset_session, verbose=False, consistent_return_value=True
+    )
     tools.g_mapset(mapset="test1", flags="c")
     tools.g_mapset(mapset="test2", flags="c")
     result = tools.g_mapsets(mapset="test1")
@@ -419,7 +525,7 @@ def test_no_overwrite(xy_dataset_session):
     assert "GRASS_OVERWRITE" not in xy_dataset_session.env
     tools = Tools(session=xy_dataset_session)
     tools.r_random_surface(output="surface", seed=42)
-    with pytest.raises(CalledModuleError, match="overwrite"):
+    with pytest.raises(ToolError, match="overwrite"):
         tools.r_random_surface(output="surface", seed=42)
 
 
@@ -429,7 +535,7 @@ def test_overwrite_true_in_call(xy_dataset_session):
     tools = Tools(session=xy_dataset_session, overwrite=False)
     tools.r_random_surface(output="surface", seed=42)
     tools.r_random_surface(output="surface", seed=42, overwrite=True)
-    with pytest.raises(CalledModuleError, match="overwrite"):
+    with pytest.raises(ToolError, match="overwrite"):
         tools.r_random_surface(output="surface", seed=42)
 
 
@@ -472,7 +578,7 @@ def test_parent_overwrite_vs_env(xy_dataset_session):
     # Only after the setup, create tools.
     tools = Tools(session=xy_dataset_session, env=env)
     tools.r_random_surface(output="surface", seed=42)
-    with pytest.raises(CalledModuleError, match="overwrite"):
+    with pytest.raises(ToolError, match="overwrite"):
         tools.r_random_surface(output="surface", seed=42)
 
 
@@ -482,7 +588,7 @@ def test_parent_overwrite_vs_object_init(xy_dataset_session):
     tools = Tools(session=xy_dataset_session, overwrite=False)
     xy_dataset_session.env["GRASS_OVERWRITE"] = "1"
     tools.r_random_surface(output="surface", seed=42)
-    with pytest.raises(CalledModuleError, match="overwrite"):
+    with pytest.raises(ToolError, match="overwrite"):
         tools.r_random_surface(output="surface", seed=42)
 
 
@@ -502,6 +608,33 @@ def test_parent_overwrite_after_call(xy_dataset_session):
     tools.r_random_surface(output="surface", seed=42)
     xy_dataset_session.env["GRASS_OVERWRITE"] = "1"
     tools.r_random_surface(output="surface", seed=42)
+
+
+@pytest.mark.parametrize("consistent_return_value", [None, False])
+def test_return_object_or_none(xy_dataset_session, consistent_return_value):
+    tools = Tools(session=xy_dataset_session, consistent_return_value=False)
+    # Tool call without standard output
+    result = tools.g_region(res=10)
+    assert result is None
+    # Tool call with standard output
+    result = tools.g_region(flags="p")
+    assert result is not None
+    assert result.stdout
+    assert result.text
+
+
+def test_consistent_return_value_true(xy_dataset_session):
+    tools = Tools(session=xy_dataset_session, consistent_return_value=True)
+    # Tool call without standard output
+    result = tools.g_region(res=10)
+    assert result is not None
+    assert not result.stdout
+    assert not result.text
+    # Tool call with standard output
+    result = tools.g_region(flags="p")
+    assert result is not None
+    assert result.stdout
+    assert result.text
 
 
 def test_migration_from_run_command_family(xy_dataset_session):
@@ -646,7 +779,9 @@ def test_migration_from_run_command_family(xy_dataset_session):
         == 1
     )
     # replacement:
-    tools_with_returncode = Tools(errors="ignore", env=xy_dataset_session.env)
+    tools_with_returncode = Tools(
+        errors="ignore", consistent_return_value=True, env=xy_dataset_session.env
+    )
     assert tools_with_returncode.run("r.mask.status", flags="t").returncode == 1
     assert tools_with_returncode.r_mask_status(flags="t").returncode == 1
 

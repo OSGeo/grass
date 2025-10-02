@@ -1,4 +1,4 @@
-# Requirements to compile GRASS GIS 8
+# Requirements to compile GRASS 8
 
 A workstation running some flavor of UNIX including
 GNU/Linux, Solaris, IRIX, BSD, Mac OSX, Cygwin or MinGW (on Win32/Win64).

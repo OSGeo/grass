@@ -6,6 +6,8 @@ import os
 import pytest
 
 import grass.script as gs
+from grass.exceptions import ScriptError
+from grass.tools import Tools
 
 xfail_mp_spawn = pytest.mark.xfail(
     multiprocessing.get_start_method() == "spawn",
@@ -144,6 +146,48 @@ def test_create_project(tmp_path):
         assert epsg == "EPSG:3358"
 
 
+@pytest.mark.parametrize("crs", ["XY", "xy", None, ""])
+def test_crs_parameter_xy(tmp_path, crs):
+    project = tmp_path / "test"
+    gs.create_project(project, crs=crs)
+    with (
+        gs.setup.init(project, env=os.environ.copy()) as session,
+        Tools(session=session) as tools,
+    ):
+        assert tools.g_region(flags="p", format="shell").keyval["projection"] == 0
+
+
+def test_crs_parameter_xy_overrides_epsg(tmp_path):
+    project = tmp_path / "test"
+    gs.create_project(project, crs="XY", epsg=4326)
+    with (
+        gs.setup.init(project, env=os.environ.copy()) as session,
+        Tools(session=session) as tools,
+    ):
+        assert tools.g_region(flags="p", format="json")["crs"]["type"] == "xy"
+
+
+def test_crs_parameter_epsg_overrides_epsg(tmp_path):
+    project = tmp_path / "test"
+    gs.create_project(project, crs="EPSG:4326", epsg=3358)
+    with (
+        gs.setup.init(project, env=os.environ.copy()) as session,
+        Tools(session=session) as tools,
+    ):
+        assert tools.g_proj(flags="p", format="shell").keyval["srid"] == "EPSG:4326"
+
+
+@pytest.mark.parametrize("crs", ["EPSG:4326", "epsg:3358"])
+def test_crs_parameter_epsg(tmp_path, crs):
+    project = tmp_path / "test"
+    gs.create_project(project, crs=crs)
+    with (
+        gs.setup.init(project, env=os.environ.copy()) as session,
+        Tools(session=session) as tools,
+    ):
+        assert tools.g_proj(flags="p", format="shell").keyval["srid"] == crs.upper()
+
+
 def test_files(tmp_path):
     """Check expected files are created with bootstrap and session"""
     bootstrap = "bootstrap"
@@ -165,9 +209,20 @@ def test_files(tmp_path):
         assert description_file.read_text(encoding="utf-8").strip() == description
 
 
+@pytest.mark.parametrize("overwrite", [False, None])
+def test_project_no_overwrite(tmp_path, overwrite):
+    """Check that project we raise exception when project exists"""
+    project = tmp_path / "project_1"
+    gs.create_project(project, overwrite=overwrite)
+    assert project.exists()
+    with pytest.raises(ScriptError, match=r"project_1.*already exists"):
+        gs.create_project(project, overwrite=overwrite)
+    assert project.exists()
+
+
 def test_project_overwrite(tmp_path):
-    """Check that project can be overwritten"""
-    project = tmp_path / "project"
+    """Check that existing project can be overwritten"""
+    project = tmp_path / "project_1"
     gs.create_project(project)
     assert project.exists()
     gs.create_project(project, overwrite=True)

@@ -14,7 +14,7 @@
 #############################################################################
 
 # %module
-# % description: Imports a GRASS GIS specific raster archive file (packed with r.pack) as a raster map
+# % description: Imports a GRASS specific raster archive file (packed with r.pack) as a raster map
 # % keyword: raster
 # % keyword: import
 # % keyword: copying
@@ -126,7 +126,7 @@ def main():
     elif os.path.exists("coor"):
         grass.fatal(
             _(
-                "This GRASS GIS pack file contains vector data. Use "
+                "This GRASS pack file contains vector data. Use "
                 "v.unpack to unpack <{name}>"
             ).format(name=map_name)
         )

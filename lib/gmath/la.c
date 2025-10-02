@@ -9,7 +9,7 @@
  * 2006-11-23
  * 2015-01-20
 
- * This file is part of GRASS GIS. It is free software. You can
+ * This file is part of GRASS. It is free software. You can
  * redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option)
@@ -209,7 +209,8 @@ mat_struct *G_matrix_subtract(mat_struct *mt1, mat_struct *mt2)
  * Calculates the scalar-matrix multiplication
  *
  * \param scalar
- * \param A
+ * \param matrix
+ * \param out
  * \return mat_struct
  */
 mat_struct *G_matrix_scalar_mul(double scalar, mat_struct *matrix,
@@ -1509,7 +1510,7 @@ int G_matrix_read(FILE *fp, mat_struct *out)
  *
  * Resizes a matrix
  *
- * \param A
+ * \param in
  * \param rows
  * \param cols
  * \return mat_struct

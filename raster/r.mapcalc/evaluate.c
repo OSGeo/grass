@@ -448,8 +448,8 @@ void execute(expr_list *ee)
         threads = rows;
         omp_set_num_threads(threads);
         G_verbose_message(
-            _("The number of rows is less than the number of threads. \
-            Set the number of threads to be the same as the rows = %d."),
+            _("The number of rows is less than the number of threads. "
+              "Set the number of threads to be the same as the rows = %d."),
             threads);
     }
 #endif
@@ -459,8 +459,9 @@ void execute(expr_list *ee)
 
     verbose = isatty(2);
     for (current_depth = 0; current_depth < depths; current_depth++) {
+        int row;
 #pragma omp parallel for default(shared) schedule(static, 1) private(i) ordered
-        for (int row = 0; row < rows; row++) {
+        for (row = 0; row < rows; row++) {
             if (verbose)
                 G_percent(n, count, 2);
 

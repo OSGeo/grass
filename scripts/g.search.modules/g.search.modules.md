@@ -1,6 +1,6 @@
 ## DESCRIPTION
 
-*g.search.module* searches for given keyword in GRASS GIS modules name,
+*g.search.module* searches for given keyword in GRASS modules name,
 description, keywords and optionally manpages, too. Also installed
 addons are considered in the search.
 

@@ -11,7 +11,7 @@ and session without using grassXY.
     import subprocess
 
     # define GRASS Database
-    # add your path to grassdata (GRASS GIS database) directory
+    # add your path to grassdata (GRASS database) directory
     gisdb = "~/grassdata"
     # the following path is the default path on MS Windows
     # gisdb = "~/Documents/grassdata"
@@ -20,8 +20,8 @@ and session without using grassXY.
     location = "nc_spm_08"
     mapset = "user1"
 
-    # path to the GRASS GIS launch script
-    # we assume that the GRASS GIS start script is available and on PATH
+    # path to the GRASS launch script
+    # we assume that the GRASS start script is available and on PATH
     # query GRASS itself for its GISBASE
     # (with fixes for specific platforms)
     # needs to be edited by the user
@@ -30,14 +30,13 @@ and session without using grassXY.
         # MS Windows
         executable = r"C:\OSGeo4W\bin\grass.bat"
         # uncomment when using standalone WinGRASS installer
-        # executable = r'C:\Program Files (x86)\GRASS GIS <version>\grass.bat'
+        # executable = r'C:\Program Files (x86)\GRASS <version>\grass.bat'
         # this can be skipped if GRASS executable is added to PATH
     elif sys.platform == "darwin":
-        # Mac OS X
-        version = "@GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@"
-        executable = f"/Applications/GRASS-{version}.app/Contents/Resources/bin/grass"
+        # macOS
+        executable = f"/Applications/GRASS-<version>.app/Contents/Resources/bin/grass"
 
-    # query GRASS GIS itself for its Python package path
+    # query GRASS itself for its Python package path
     grass_cmd = [executable, "--config", "python_path"]
     process = subprocess.run(grass_cmd, check=True, text=True, stdout=subprocess.PIPE)
 
@@ -51,7 +50,7 @@ and session without using grassXY.
     session = gs.setup.init(gisdb, location, mapset)
 
     # example calls
-    gs.message("Current GRASS GIS 8 environment:")
+    gs.message("Current GRASS 8 environment:")
     print(gs.gisenv())
 
     gs.message("Available raster maps:")
@@ -92,9 +91,6 @@ import tempfile as tmpfile
 WINDOWS = sys.platform.startswith("win")
 MACOS = sys.platform.startswith("darwin")
 
-VERSION_MAJOR = "@GRASS_VERSION_MAJOR@"
-VERSION_MINOR = "@GRASS_VERSION_MINOR@"
-
 
 def write_gisrc(dbase, location, mapset):
     """Write the ``gisrc`` file and return its path."""
@@ -116,7 +112,7 @@ def set_gui_path():
 def get_install_path(path=None):
     """Get path to GRASS installation usable for setup of environmental variables.
 
-    The function tries to determine path tp GRASS GIS installation so that the
+    The function tries to determine path tp GRASS installation so that the
     returned path can be used for setup of environmental variable for GRASS runtime.
     If the search fails, None is returned.
 
@@ -222,17 +218,18 @@ def setup_runtime_env(gisbase=None, *, env=None):
         set_executable_paths,
         set_path_to_python_executable,
         set_python_path_variable,
+        RuntimePaths,
     )
 
     # Set GISBASE
     env["GISBASE"] = gisbase
     set_executable_paths(
         install_path=gisbase,
-        grass_config_dir=get_grass_config_dir(VERSION_MAJOR, VERSION_MINOR, env=env),
+        grass_config_dir=get_grass_config_dir(env=env),
         env=env,
     )
     set_dynamic_library_path(
-        variable_name="@LD_LIBRARY_PATH_VAR@", install_path=gisbase, env=env
+        variable_name=RuntimePaths().ld_library_path_var, install_path=gisbase, env=env
     )
     set_python_path_variable(install_path=gisbase, env=env)
     set_path_to_python_executable(env=env)
@@ -283,7 +280,7 @@ def init(
 ):
     """Initialize system variables to run GRASS modules
 
-    This function is for running GRASS GIS without starting it with the
+    This function is for running GRASS without starting it with the
     standard main executable grass. No GRASS modules shall be called before
     call of this function but any module or user script can be called
     afterwards because a GRASS session has been set up. GRASS Python
