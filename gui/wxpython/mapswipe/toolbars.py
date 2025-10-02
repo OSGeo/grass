@@ -55,7 +55,7 @@ class SwipeMapToolbar(BaseToolbar):
     def _toolbarData(self):
         """Returns toolbar data (name, icon, handler)"""
         # BaseIcons are a set of often used icons. It is possible
-        # to reuse icons in ./trunk/gui/icons/grass or add new ones there.
+        # to reuse icons in gui/icons/grass or add new ones there.
         icons = BaseIcons
         return self._getToolbarData(
             (

@@ -66,7 +66,7 @@ int M_read_list(int check_if_empty, int *num)
     if (env)
         strcpy(element_list, env);
     else
-        sprintf(element_list, "%s/etc/element_list", G_gisbase());
+        snprintf(element_list, GPATH_MAX, "%s/etc/element_list", G_gisbase());
     fd = fopen(element_list, "r");
 
     if (!fd)

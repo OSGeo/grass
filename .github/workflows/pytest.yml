@@ -8,10 +8,13 @@ on:
       - releasebranch_*
   pull_request:
 
+permissions: {}
+
 jobs:
   pytest:
     concurrency:
-      group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{
+      group: >-
+        ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{
         matrix.os }}-${{ matrix.python-version }}
       cancel-in-progress: true
 
@@ -20,9 +23,8 @@ jobs:
         os:
           - ubuntu-22.04
         python-version:
-          - '3.9'
-          - '3.12'
-          - '3.13'
+          - "3.9"
+          - "3.13"
       fail-fast: true
 
     runs-on: ${{ matrix.os }}
@@ -32,13 +34,15 @@ jobs:
       PYTHONWARNINGS: always
 
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
         with:
           python-version: ${{ matrix.python-version }}
-          cache: pip
+          cache: pip # zizmor: ignore[cache-poisoning] This pytest workflow not used for release artifacts
           allow-prereleases: true
 
       - name: Install non-Python dependencies
@@ -48,7 +52,7 @@ jobs:
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
 
-      - uses: rui314/setup-mold@b015f7e3f2938ad3a5ed6e5111a8c6c7c1d6db6e # v1
+      - uses: rui314/setup-mold@725a8794d15fc7563f59595bd9556495c0564878 # v1
 
       - name: Install Python dependencies
         run: |
@@ -59,18 +63,21 @@ jobs:
 
       - name: Create installation directory
         run: |
-          mkdir $HOME/install
+          mkdir "${HOME}/install"
 
       - name: Set number of cores for compilation
         run: |
-          echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
+          echo "MAKEFLAGS=-j$(nproc)" >> "${GITHUB_ENV}"
 
       - name: Build
-        run: .github/workflows/build_${{ matrix.os }}.sh $HOME/install
+        run: |
+          ".github/workflows/build_${MATRIX_OS}.sh" "${HOME}/install"
+        env:
+          MATRIX_OS: ${{ matrix.os }}
 
       - name: Add the bin directory to PATH
         run: |
-          echo "$HOME/install/bin" >> $GITHUB_PATH
+          echo "${HOME}/install/bin" >> "${GITHUB_PATH}"
 
       - name: Print installed versions
         if: always()
@@ -81,41 +88,74 @@ jobs:
 
       - name: Run pytest with multiple workers in parallel
         run: |
-          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
-          export INITIAL_GISBASE="$(grass --config path)"
-          export INITIAL_PWD="${PWD}"
-          pytest --verbose --color=yes --durations=0 --durations-min=0.5 \
-            --numprocesses auto \
-            --cov \
-            --cov-context=test \
-            -ra . \
-            -m 'not needs_solo_run'
+          PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
+          LD_LIBRARY_PATH="$(grass --config path)/lib:${LD_LIBRARY_PATH}"
+          INITIAL_GISBASE="$(grass --config path)"
+          INITIAL_PWD="${PWD}"
+          export PYTHONPATH
+          export LD_LIBRARY_PATH
+          export INITIAL_GISBASE
+          export INITIAL_PWD
+          pytest \
+            @.github/workflows/pytest_args_ci.txt \
+            @.github/workflows/pytest_args_cov.txt \
+            @.github/workflows/pytest_args_parallel.txt \
+            --junitxml=pytest.xdist.junit.xml \
+            -k 'not testsuite'
 
       - name: Run pytest with a single worker (for tests marked with needs_solo_run)
         run: |
-          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
-          export INITIAL_GISBASE="$(grass --config path)"
-          export INITIAL_PWD="${PWD}"
-          pytest --verbose --color=yes --durations=0 --durations-min=0.5 \
-            --cov \
-            --cov-context=test \
-            --cov-append \
-            -ra . \
-            -m 'needs_solo_run'
+          PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
+          LD_LIBRARY_PATH="$(grass --config path)/lib:${LD_LIBRARY_PATH}"
+          INITIAL_GISBASE="$(grass --config path)"
+          INITIAL_PWD="${PWD}"
+          export PYTHONPATH
+          export LD_LIBRARY_PATH
+          export INITIAL_GISBASE
+          export INITIAL_PWD
+          pytest \
+            @.github/workflows/pytest_args_ci.txt \
+            @.github/workflows/pytest_args_cov.txt \
+            @.github/workflows/pytest_args_not_parallel.txt \
+            --junitxml=pytest.needs_solo_run.junit.xml \
+            -k 'not testsuite'
+      - name: Run pytest with a single worker (for gunittest-based tests)
+        run: |
+          PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
+          LD_LIBRARY_PATH="$(grass --config path)/lib:${LD_LIBRARY_PATH}"
+          INITIAL_GISBASE="$(grass --config path)"
+          INITIAL_PWD="${PWD}"
+          export PYTHONPATH
+          export LD_LIBRARY_PATH
+          export INITIAL_GISBASE
+          export INITIAL_PWD
+          pytest \
+            @.github/workflows/pytest_args_cov.txt \
+            @.github/workflows/pytest_args_gunittest.txt \
+            --junitxml=pytest.gunittest.junit.xml
       - name: Fix non-standard installed script paths in coverage data
         run: |
-          export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
-          export INITIAL_GISBASE="$(grass --config path)"
-          export INITIAL_PWD="${PWD}"
+          PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
+          LD_LIBRARY_PATH="$(grass --config path)/lib:${LD_LIBRARY_PATH}"
+          INITIAL_GISBASE="$(grass --config path)"
+          INITIAL_PWD="${PWD}"
+          export PYTHONPATH
+          export LD_LIBRARY_PATH
+          export INITIAL_GISBASE
+          export INITIAL_PWD
           python utils/coverage_mapper.py
           coverage combine
           coverage html
 
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@47f89e9acb64b76debcd5ea40642d25a4adced9f # v1.1.1
+        with:
+          exclude: gui
+          flags: pytest-python-${{ matrix.python-version }}
+          token: ${{ secrets.CODECOV_TOKEN }}
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238 # v4.6.0
+        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
         with:
           verbose: true
           flags: pytest-python-${{ matrix.python-version }}
@@ -123,7 +163,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
       - name: Make python-only code coverage test report available
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: python-codecoverage-report-${{ matrix.os }}-${{ matrix.python-version }}
           path: coverage_html_report

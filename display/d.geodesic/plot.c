@@ -57,7 +57,7 @@ void plot(double lon1, double lat1, double lon2, double lat2, int line_color,
         D_text_size(10, 10);
 
         distance = G_geodesic_distance(lon1, lat1, lon2, lat2);
-        sprintf(buf, "%.0f %s", distance / factor, unit);
+        snprintf(buf, sizeof(buf), "%.0f %s", distance / factor, unit);
 
         D_pos_abs(text_x, text_y);
         D_get_text_box(buf, &t, &b, &l, &r);

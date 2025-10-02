@@ -2,7 +2,7 @@
 #
 # AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
 #
-# PURPOSE:   Benchmarking for GRASS GIS modules
+# PURPOSE:   Benchmarking for GRASS modules
 #
 # COPYRIGHT: (C) 2021 Vaclav Petras, and by the GRASS Development Team
 #
@@ -43,8 +43,7 @@ class TestBenchmarkCLI(TestCase):
     """Tests that benchmarkin CLI works"""
 
     json_filename = "plot_test.json"
-    png_filenames = [f"plot_test1_{i}.png" for i in range(4)]
-    png_filenames.append("plot_test2.png")
+    png_filenames = [*[f"plot_test1_{i}.png" for i in range(4)], "plot_test2.png"]
 
     def tearDown(self):
         """Remove test files"""

@@ -93,11 +93,11 @@ class Animation(wx.EvtHandler):
 
     def Start(self):
         if not self.IsActive():
-            return
+            pass
 
     def Pause(self, paused):
         if not self.IsActive():
-            return
+            pass
 
     def Stop(self):
         if not self.IsActive():

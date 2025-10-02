@@ -16,7 +16,7 @@
 #############################################################################
 
 # %module
-# % description: Dissolves adjacent or overlaping features sharing a common category number or attribute.
+# % description: Dissolves adjacent or overlapping features sharing a common category number or attribute.
 # % keyword: vector
 # % keyword: dissolve
 # % keyword: area
@@ -76,11 +76,11 @@
 """Dissolve geometries and aggregate attribute values"""
 
 import atexit
-import json
-import subprocess
+import io
 from collections import defaultdict
 
 import grass.script as gs
+from grass.tools import Tools
 from grass.exceptions import CalledModuleError
 
 
@@ -188,7 +188,7 @@ def sql_escape(text):
 
     Simple support for direct creation of SQL statements. This function,
     column_value_to_where, and updates_to_sql need a rewrite with a more systematic
-    solution for generating statements in Python for GRASS GIS attribute engine.
+    solution for generating statements in Python for GRASS attribute engine.
     """
     if isinstance(text, str):
         return text.replace("'", "''")
@@ -212,21 +212,19 @@ def updates_to_sql(table, updates):
 
 def update_columns(output_name, output_layer, updates, add_columns):
     """Update attribute values based on a list of updates"""
+    tools = Tools(capture_output=False)
     if add_columns:
-        gs.run_command(
-            "v.db.addcolumn",
+        tools.v_db_addcolumn(
             map=output_name,
             layer=output_layer,
             columns=",".join(add_columns),
         )
     db_info = gs.vector_db(output_name)[int(output_layer)]
     sql = updates_to_sql(table=db_info["table"], updates=updates)
-    gs.write_command(
-        "db.execute",
-        input="-",
+    tools.db_execute(
+        input=io.StringIO(sql),
         database=db_info["database"],
         driver=db_info["driver"],
-        stdin=sql,
     )
 
 
@@ -391,17 +389,16 @@ def aggregate_attributes_sql(
 ):
     """Aggregate values in selected columns grouped by column using SQL backend"""
     if methods and len(columns_to_aggregate) != len(result_columns):
-        raise ValueError(
-            "Number of columns_to_aggregate and result_columns must be the same"
-        )
+        msg = "Number of columns_to_aggregate and result_columns must be the same"
+        raise ValueError(msg)
     if methods and len(columns_to_aggregate) != len(methods):
-        raise ValueError("Number of columns_to_aggregate and methods must be the same")
+        msg = "Number of columns_to_aggregate and methods must be the same"
+        raise ValueError(msg)
     if not methods:
         for result_column in result_columns:
             if " " not in result_column:
-                raise ValueError(
-                    f"Column {result_column} from result_columns without type"
-                )
+                msg = f"Column {result_column} from result_columns without type"
+                raise ValueError(msg)
     if methods:
         select_columns = [
             f"{method}({agg_column})"
@@ -414,15 +411,13 @@ def aggregate_attributes_sql(
         select_columns = columns_to_aggregate
         column_types = None
 
-    data = json.loads(
-        gs.read_command(
-            "v.db.select",
-            map=input_name,
-            layer=input_layer,
-            columns=",".join([column] + select_columns),
-            group=column,
-            format="json",
-        )
+    tools = Tools()
+    data = tools.v_db_select(
+        map=input_name,
+        layer=input_layer,
+        columns=",".join([column] + select_columns),
+        group=column,
+        format="json",
     )
     # We added the group column to the select, so we need to skip it here.
     select_column_names = [item["name"] for item in data["info"]["columns"]][1:]
@@ -470,19 +465,18 @@ def aggregate_attributes_univar(
 ):
     """Aggregate values in selected columns grouped by column using v.db.univar"""
     if len(columns_to_aggregate) != len(methods) != len(result_columns):
-        raise ValueError(
+        msg = (
             "Number of columns_to_aggregate, methods, and result_columns "
             "must be the same"
         )
-    records = json.loads(
-        gs.read_command(
-            "v.db.select",
-            map=input_name,
-            layer=input_layer,
-            columns=column,
-            group=column,
-            format="json",
-        )
+        raise ValueError(msg)
+    tools = Tools()
+    records = tools.v_db_select(
+        map=input_name,
+        layer=input_layer,
+        columns=column,
+        group=column,
+        format="json",
     )["records"]
     columns = defaultdict(list)
     for agg_column, method, result in zip(
@@ -501,15 +495,12 @@ def aggregate_attributes_univar(
         where = column_value_to_where(column, value, quote=quote_column)
         # for i, aggregate_column in enumerate(columns_to_aggregate):
         for aggregate_column, methods_results in columns.items():
-            stats = json.loads(
-                gs.read_command(
-                    "v.db.univar",
-                    map=input_name,
-                    column=aggregate_column,
-                    format="json",
-                    where=where,
-                )
-            )["statistics"]
+            stats = tools.v_db_univar(
+                map=input_name,
+                column=aggregate_column,
+                format="json",
+                where=where,
+            )
             for method, result_column in methods_results:
                 updates.append(
                     {
@@ -522,14 +513,13 @@ def aggregate_attributes_univar(
 
 
 def cleanup(name):
-    """Remove temporary vector silently"""
-    gs.run_command(
-        "g.remove",
+    """Remove temporary vector silently (outputs are captured)"""
+    tools = Tools()
+    tools.g_remove(
         flags="f",
         type="vector",
         name=name,
         quiet=True,
-        stderr=subprocess.DEVNULL,
         errors="ignore",
     )
 
@@ -579,6 +569,7 @@ def main():
         methods=user_aggregate_methods,
         backend=aggregate_backend,
     )
+    tools = Tools(capture_output=False)
 
     # does map exist?
     if not gs.find_file(input_vector, element="vector")["file"]:
@@ -592,8 +583,7 @@ def main():
             )
             % ("column", layer)
         )
-        gs.run_command(
-            "v.extract",
+        tools.v_extract(
             flags="d",
             input=input_vector,
             output=output,
@@ -629,15 +619,13 @@ def main():
         atexit.register(cleanup, tmpfile)
 
         try:
-            gs.run_command(
-                "v.reclass",
+            tools.v_reclass(
                 input=input_vector,
                 output=tmpfile,
                 layer=layer,
                 column=column,
             )
-            gs.run_command(
-                "v.extract",
+            tools.v_extract(
                 flags="d",
                 input=tmpfile,
                 output=output,

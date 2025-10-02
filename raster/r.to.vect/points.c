@@ -30,6 +30,8 @@ int extract_points(int z_flag UNUSED)
     case DCELL_TYPE:
         dcellbuf = Rast_allocate_d_buf();
         break;
+    default:
+        G_fatal_error(_("Unsupported raster data type encountered."));
     }
 
     G_message(_("Extracting points..."));
@@ -53,8 +55,8 @@ int extract_points(int z_flag UNUSED)
         }
 
         for (col = 0; col < cell_head.cols; col++) {
-            int cat, val;
-            double dval;
+            int cat = 0, val = 0;
+            double dval = 0.0;
 
             x = Rast_col_to_easting((double)(col + .5), &cell_head);
 

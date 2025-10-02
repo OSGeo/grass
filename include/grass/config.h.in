@@ -149,11 +149,11 @@
 /* Define to 1 if glXCreatePbuffer exists. */
 #undef HAVE_PBUFFERS
 
+/* Define to 1 if you have the <pcre.h> header file. */
+#undef HAVE_PCRE_H
+
 /* Define to 1 if PDAL exists. */
 #undef HAVE_PDAL
-
-/* Define to 1 if PDAL NoFilenameWriter is present. */
-#undef HAVE_PDAL_NOFILENAMEWRITER
 
 /* Define to 1 if glXCreateGLXPixmap exists. */
 #undef HAVE_PIXMAPS
@@ -187,6 +187,9 @@
 
 /* Define to 1 if you have the <regex.h> header file. */
 #undef HAVE_REGEX_H
+
+/* Define to 1 if you have the <pcre.h> header file. */
+#undef HAVE_PCRE_H
 
 /* Define to 1 if you have the `setenv' function. */
 #undef HAVE_SETENV

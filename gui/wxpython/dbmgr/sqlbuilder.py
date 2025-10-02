@@ -49,7 +49,7 @@ import grass.script as gs
 
 
 class SQLBuilder(wx.Frame):
-    """SQLBuider class
+    """SQLBuilder class
     Base class for classes, which builds SQL statements.
     """
 
@@ -57,9 +57,7 @@ class SQLBuilder(wx.Frame):
         wx.Frame.__init__(self, parent, id, title)
 
         self.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_sql.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
 
         self.parent = parent
@@ -314,8 +312,8 @@ class SQLBuilder(wx.Frame):
             flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
             border=5,
         )
-        # self.pagesizer.Add(self.btn_uniqe,0,wx.ALIGN_LEFT|wx.TOP,border=5)
-        # self.pagesizer.Add(self.btn_uniqesample,0,wx.ALIGN_LEFT|wx.TOP,border=5)
+        # self.pagesizer.Add(self.btn_unique,0,wx.ALIGN_LEFT|wx.TOP,border=5)
+        # self.pagesizer.Add(self.btn_uniquesample,0,wx.ALIGN_LEFT|wx.TOP,border=5)
         self.pagesizer.Add(
             self.btn_logicpanel, proportion=0, flag=wx.ALIGN_CENTER_HORIZONTAL
         )

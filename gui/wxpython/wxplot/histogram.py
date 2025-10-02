@@ -97,10 +97,7 @@ class HistogramPlotFrame(BasePlotFrame):
         create a list of cell value and count/percent/area pairs. This is passed to
         plot to create a line graph of the histogram.
         """
-        try:
-            self.SetCursor(StockCursor(wx.CURSOR_ARROW))
-        except:
-            pass
+        self.SetCursor(StockCursor(wx.CURSOR_ARROW))
 
         self.SetGraphStyle()
         wx.BeginBusyCursor()

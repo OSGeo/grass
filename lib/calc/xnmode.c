@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -8,6 +9,8 @@
 mode(x1,x2,..,xn)
    return mode of arguments
 **********************************************************************/
+
+#define SIZE_THRESHOLD 32
 
 static int dcmp(const void *aa, const void *bb)
 {
@@ -56,8 +59,9 @@ static double mode(double *value, int argc)
 
 int f_nmode(int argc, const int *argt, void **args)
 {
-    static double *value;
-    static int value_size;
+    double stack_value[SIZE_THRESHOLD];
+    double *value = stack_value;
+    bool use_heap = false;
     int size = argc * sizeof(double);
     int i, j;
 
@@ -68,9 +72,9 @@ int f_nmode(int argc, const int *argt, void **args)
         if (argt[i] != argt[0])
             return E_ARG_TYPE;
 
-    if (size > value_size) {
-        value_size = size;
-        value = G_realloc(value, value_size);
+    if (argc > SIZE_THRESHOLD) {
+        value = G_malloc(size);
+        use_heap = true;
     }
 
     switch (argt[argc]) {
@@ -92,6 +96,9 @@ int f_nmode(int argc, const int *argt, void **args)
             else
                 res[i] = (CELL)mode(value, n);
         }
+        if (use_heap) {
+            G_free(value);
+        }
         return 0;
     }
     case FCELL_TYPE: {
@@ -111,6 +118,9 @@ int f_nmode(int argc, const int *argt, void **args)
                 SET_NULL_F(&res[i]);
             else
                 res[i] = (FCELL)mode(value, n);
+        }
+        if (use_heap) {
+            G_free(value);
         }
         return 0;
     }
@@ -132,9 +142,15 @@ int f_nmode(int argc, const int *argt, void **args)
             else
                 res[i] = (DCELL)mode(value, n);
         }
+        if (use_heap) {
+            G_free(value);
+        }
         return 0;
     }
     default:
+        if (use_heap) {
+            G_free(value);
+        }
         return E_INV_TYPE;
     }
 }

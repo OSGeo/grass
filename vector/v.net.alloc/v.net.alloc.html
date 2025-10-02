@@ -190,8 +190,8 @@ v.db.update map=streets_hospitals column=TF_COST value=-1 where="ONE_WAY = 'FT'"
 v.db.update map=streets_hospitals column=FT_COST value=-1 where="ONE_WAY = 'TF'"
 
 # add costs to newly created lines
-v.db.update map=streets_hospitals column=TF_COST value=0 where="cat > 49746"
-v.db.update map=streets_hospitals column=FT_COST value=0 where="cat > 49746"
+v.db.update map=streets_hospitals column=TF_COST value=0 where="cat &gt; 49746"
+v.db.update map=streets_hospitals column=FT_COST value=0 where="cat &gt; 49746"
 
 # from centers
 v.net.alloc in=streets_hospitals out=streets_hospitals_alloc_from center_cats=1-10000 arc_column=FT_COST arc_backward_column=TF_COST

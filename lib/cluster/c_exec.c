@@ -1,7 +1,7 @@
 /*!
    \file cluster/c_exec.c
 
-   \brief Cluster library - Exectute clusterring
+   \brief Cluster library - Execute clusterring
 
    (C) 2001-2009 by the GRASS Development Team
 

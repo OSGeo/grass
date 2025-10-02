@@ -49,8 +49,9 @@ static void create_table(struct Map_info *flowline_vec,
     db_set_error_handler_driver(drvr);
 
     *driver = drvr;
-    sprintf(buf, "create table %s (cat integer, velocity double precision",
-            fi->table);
+    snprintf(buf, sizeof(buf),
+             "create table %s (cat integer, velocity double precision",
+             fi->table);
     db_set_string(&sql, buf);
     if (write_scalar)
         db_append_string(&sql, ", input double precision");

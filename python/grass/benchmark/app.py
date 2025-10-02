@@ -2,7 +2,7 @@
 #
 # AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
 #
-# PURPOSE:   Benchmarking for GRASS GIS modules
+# PURPOSE:   Benchmarking for GRASS modules
 #
 # COPYRIGHT: (C) 2021 Vaclav Petras, and by the GRASS Development Team
 #
@@ -39,10 +39,11 @@ class CliUsageError(ValueError):
 def join_results_cli(args):
     """Translate CLI parser result to API calls."""
     if args.prefixes and len(args.results) != len(args.prefixes):
-        raise CliUsageError(
+        msg = (
             f"Number of prefixes ({len(args.prefixes)}) needs to be the same"
             f" as the number of input result files ({len(args.results)})"
         )
+        raise CliUsageError(msg)
 
     def select_only(result):
         return result.label == args.only

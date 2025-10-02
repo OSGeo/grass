@@ -4,6 +4,6 @@
 {% endblock %}
 
 {% block header %}
-<img src="../grass_logo.png" alt="GRASS GIS logo">
+<img src="../grass_logo.png" alt="GRASS logo">
 <hr class="header">
 {% endblock %}

@@ -73,9 +73,10 @@ int LR_get_milepost(dbDriver *driver, char *table_name, char *lcat_col,
     dbTable *table;
     dbColumn *column;
     dbValue *value;
-    RSEGMENT *rseg;
+    RSEGMENT *rseg = NULL;
     int nrseg;
     double length, map_length, k;
+    int ret = 0;
 
     G_debug(4, "LR_get_milepost() line_cat = %d, map_offset = %f", line_cat,
             map_offset);
@@ -84,14 +85,14 @@ int LR_get_milepost(dbDriver *driver, char *table_name, char *lcat_col,
 
     /* Because some drivers (dbf) do not support complex queries mixing OR and
      * AND more records with simple condition are selected and processed here */
-    sprintf(buf,
-            "select %s, %s, %s, %s, %s, %s, %s from %s where "
-            "%s = %d and "  /* lcat_col = line_cat */
-            "%s <= %f and " /* start_map_col <= map_offset */
-            "%s >= %f",     /* end_map_col >= map_offset */
-            lid_col, start_map_col, end_map_col, start_mp_col, start_off_col,
-            end_mp_col, end_off_col, table_name, lcat_col, line_cat,
-            start_map_col, map_offset, end_map_col, map_offset);
+    snprintf(buf, sizeof(buf),
+             "select %s, %s, %s, %s, %s, %s, %s from %s where "
+             "%s = %d and "  /* lcat_col = line_cat */
+             "%s <= %f and " /* start_map_col <= map_offset */
+             "%s >= %f",     /* end_map_col >= map_offset */
+             lid_col, start_map_col, end_map_col, start_mp_col, start_off_col,
+             end_mp_col, end_off_col, table_name, lcat_col, line_cat,
+             start_map_col, map_offset, end_map_col, map_offset);
 
     G_debug(3, "  SQL: %s", buf);
     db_init_string(&stmt);
@@ -104,10 +105,14 @@ int LR_get_milepost(dbDriver *driver, char *table_name, char *lcat_col,
     nrseg = db_get_num_rows(&cursor);
     G_debug(3, "  nrseg = %d", nrseg);
 
-    if (nrseg <= 0)
-        return 0;
-    if (nrseg >= 3)
-        return 2;
+    if (nrseg <= 0) {
+        ret = 0;
+        goto cleanup_and_exit;
+    }
+    if (nrseg >= 3) {
+        ret = 2;
+        goto cleanup_and_exit;
+    }
 
     rseg = (RSEGMENT *)G_malloc(nrseg * sizeof(RSEGMENT));
 
@@ -149,7 +154,6 @@ int LR_get_milepost(dbDriver *driver, char *table_name, char *lcat_col,
 
         i++;
     }
-    db_close_cursor(&cursor);
 
     /* Two segments may be selected for one point if they share common MPs */
     /* If 2 segments were found, check if it is correct */
@@ -170,7 +174,8 @@ int LR_get_milepost(dbDriver *driver, char *table_name, char *lcat_col,
             *lid = rseg[0].lid;
             *mpost = rseg[1].start_mp;
             *offset = rseg[1].start_off;
-            return 1;
+            ret = 1;
+            goto cleanup_and_exit;
         }
         else if (rseg[0].lid == rseg[1].lid &&
                  rseg[1].end_map == rseg[0].start_map) {
@@ -179,11 +184,13 @@ int LR_get_milepost(dbDriver *driver, char *table_name, char *lcat_col,
             *lid = rseg[0].lid;
             *mpost = rseg[0].start_mp;
             *offset = rseg[0].start_off;
-            return 1;
+            ret = 1;
+            goto cleanup_and_exit;
         }
         else {
             G_debug(4, " too many segments found in the table -> error ");
-            return 2;
+            ret = 2;
+            goto cleanup_and_exit;
         }
     }
 
@@ -231,8 +238,11 @@ int LR_get_milepost(dbDriver *driver, char *table_name, char *lcat_col,
 
     *mpost = mp;
     *offset = off;
-
-    return 1;
+    ret = 1;
+cleanup_and_exit:
+    db_close_cursor(&cursor);
+    G_free(rseg);
+    return ret;
 }
 
 /* For given lid (line id), mpost (milepost) + offset in real world find
@@ -383,9 +393,10 @@ int LR_get_nearest_offset(dbDriver *driver, char *table_name, char *lcat_col,
      *         b. next nearest segment is reached
      */
 
-    sprintf(buf, "select %s, %s, %s, %s, %s, %s, %s from %s where %s = %d",
-            lcat_col, start_map_col, end_map_col, start_mp_col, start_off_col,
-            end_mp_col, end_off_col, table_name, lid_col, lid);
+    snprintf(buf, sizeof(buf),
+             "select %s, %s, %s, %s, %s, %s, %s from %s where %s = %d",
+             lcat_col, start_map_col, end_map_col, start_mp_col, start_off_col,
+             end_mp_col, end_off_col, table_name, lid_col, lid);
 
     G_debug(3, "  SQL: %s", buf);
     db_init_string(&stmt);
