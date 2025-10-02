@@ -103,7 +103,7 @@ def _directory_to_mapset(path: MapsetPath):
     shutil.copy(region_path1, region_path2)
 
 
-def create_mapset(database, location, mapset):
+def create_mapset(database, location=None, mapset=None):
     """Creates a mapset in a specified location"""
     path = resolve_mapset_path(
         database,
@@ -137,7 +137,6 @@ def create_project_from_pack(
     _create_project_dir(path)
     set_project_crs_from_pack(path, filename)
     if description:
-        # A little inconsistency with create_project which always creates the description file.
         _set_project_description(path, description)
 
 

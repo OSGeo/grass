@@ -2030,6 +2030,12 @@ def parse_cmdline(argv, default_gui) -> Parameters:
 
     Returns Parameters object used throughout the script.
     """
+    # For the subcommands, we keep a list here which allows use not to import
+    # the whole grass.app.cli module and all its dependencies.
+    if len(argv) > 1 and argv[1] in ["run", "project", "mapset", "help", "man"]:
+        from grass.app.cli import main as subcommand_cli_main
+
+        sys.exit(subcommand_cli_main())
     params: Parameters = classic_parser(argv, default_gui)
     validate_cmdline(params)
     return params
