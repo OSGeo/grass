@@ -1971,7 +1971,7 @@ def create_project(
     :param datum: GRASS format datum code
     :param datum_trans: datum transformation parameters (used for epsg and proj4)
     :param description: description of the project
-    :param desc: description of the project (creates MYNAME file)
+    :param desc: description of the project [deprecated]
     :param bool overwrite: True to overwrite project if exists (WARNING:
                            ALL DATA from existing project ARE DELETED!)
 
@@ -2114,9 +2114,11 @@ def create_project(
     # we still need to clean it up.
     if tmp_gisrc:
         try_remove(tmp_gisrc)
-    if description or desc:
+    if description is not None or desc is not None:
         _set_location_description(
-            mapset_path.directory, mapset_path.location, description or desc
+            mapset_path.directory,
+            mapset_path.location,
+            description if description is not None else desc,
         )
 
 
