@@ -304,10 +304,11 @@ int do_symbol(const char *str)
     double size;
     double ix, iy;
     char *symb_name;
-    SYMBOL *Symb;
+    SYMBOL *Symb = NULL;
     char *line_color_str, *fill_color_str;
     RGBA_Color *line_color, *fill_color;
     int R, G, B, ret;
+    int ret_value = 0;
 
     line_color = G_malloc(sizeof(RGBA_Color));
     fill_color = G_malloc(sizeof(RGBA_Color));
@@ -326,7 +327,8 @@ int do_symbol(const char *str)
     if (sscanf(str, "%*s %s %lf %lf %lf %s %s", symb_name, &size, &xper, &yper,
                line_color_str, fill_color_str) < 4) {
         G_warning(_("Problem parsing command [%s]"), str);
-        return (-1);
+        ret_value = -1;
+        goto cleanup_and_exit;
     }
 
     ix = xper;
@@ -348,7 +350,8 @@ int do_symbol(const char *str)
         line_color->a = RGBA_COLOR_NONE;
     else {
         G_warning(_("[%s]: No such color"), line_color_str);
-        return (-1);
+        ret_value = -1;
+        goto cleanup_and_exit;
     }
 
     /* parse fill color */
@@ -363,14 +366,16 @@ int do_symbol(const char *str)
         fill_color->a = RGBA_COLOR_NONE;
     else {
         G_warning(_("[%s]: No such color"), fill_color_str);
-        return (-1);
+        ret_value = -1;
+        goto cleanup_and_exit;
     }
 
     Symb = S_read(symb_name);
 
     if (Symb == NULL) {
         G_warning(_("Cannot read symbol, cannot display points"));
-        return (-1);
+        ret_value = -1;
+        goto cleanup_and_exit;
     }
     else
         S_stroke(Symb, size, rotation, 0);
@@ -384,14 +389,15 @@ int do_symbol(const char *str)
         D_use_color(D_parse_color(DEFAULT_BG_COLOR, 0));
     else /* unset or bad */
         D_RGB_color(line_color->r, line_color->g, line_color->b);
-
+cleanup_and_exit:
     G_free(symb_name);
     G_free(line_color_str);
     G_free(fill_color_str);
     G_free(line_color);
     G_free(fill_color);
+    G_free(Symb);
 
-    return (0);
+    return ret_value;
 }
 
 /* RGBA are 0-255; alpha is only used as an on/off switch. maybe test a<127<a ?
