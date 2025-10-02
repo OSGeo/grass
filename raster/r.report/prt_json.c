@@ -166,6 +166,7 @@ void print_json(void)
     else {
         G_json_object_set_string(root_object, "mask", mask);
     }
+    G_free(mask);
 
     G_JSON_Value *maps_value = G_json_value_init_array();
     G_JSON_Array *maps_array = G_json_array(maps_value);
