@@ -52,14 +52,19 @@ def echoing_resolver():
 
 
 @pytest.fixture(scope="module")
-def rows_raster_file3x3(tmp_path_factory):
-    tmp_path = tmp_path_factory.mktemp("rows_raster_file3x3")
-    project = tmp_path / "xy_test3x3"
+def rows_raster_file3x2(tmp_path_factory):
+    """Native raster pack file
+
+    Smallest possible file, but with rows and columns greater than one,
+    and a different number of rows and columns.
+    """
+    tmp_path = tmp_path_factory.mktemp("rows_raster_file3x2")
+    project = tmp_path / "xy_test3x2"
     gs.create_project(project)
     with gs.setup.init(project, env=os.environ.copy()) as session:
-        gs.run_command("g.region", rows=3, cols=3, env=session.env)
+        gs.run_command("g.region", rows=3, cols=2, env=session.env)
         gs.mapcalc("rows = row()", env=session.env)
-        output_file = tmp_path / "rows3x3.grass_raster"
+        output_file = tmp_path / "rows3x2.grass_raster"
         gs.run_command(
             "r.pack",
             input="rows",
@@ -73,6 +78,10 @@ def rows_raster_file3x3(tmp_path_factory):
 
 @pytest.fixture(scope="module")
 def rows_raster_file4x5(tmp_path_factory):
+    """Native raster pack file
+
+    Small file, but slightly larger than the smallest.
+    """
     tmp_path = tmp_path_factory.mktemp("rows_raster_file4x5")
     project = tmp_path / "xy_test4x5"
     gs.create_project(project)

@@ -10,25 +10,25 @@ from grass.tools import Tools, ToolError
 
 
 def test_pack_input_output_tool_name_function(
-    xy_dataset_session, rows_raster_file3x3, tmp_path
+    xy_dataset_session, rows_raster_file3x2, tmp_path
 ):
     """Check input and output pack files work with tool name call"""
     tools = Tools(session=xy_dataset_session)
     tools.g_region(rows=3, cols=3)
-    assert os.path.exists(rows_raster_file3x3)
+    assert os.path.exists(rows_raster_file3x2)
     output_file = tmp_path / "file.grass_raster"
-    tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=output_file)
+    tools.r_slope_aspect(elevation=rows_raster_file3x2, slope=output_file)
     assert output_file.exists()
     assert not tools.g_findfile(element="raster", file="file", format="json")["name"]
     assert not tools.g_findfile(
-        element="raster", file=rows_raster_file3x3.stem, format="json"
+        element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
     assert not tools.g_list(type="raster", format="json")
 
 
 @pytest.mark.parametrize("parameter_type", [str, Path])
 def test_pack_input_output_tool_name_function_string_value(
-    xy_dataset_session, rows_raster_file3x3, tmp_path, parameter_type
+    xy_dataset_session, rows_raster_file3x2, tmp_path, parameter_type
 ):
     """Check input and output pack files work string a parameter
 
@@ -37,66 +37,66 @@ def test_pack_input_output_tool_name_function_string_value(
     """
     tools = Tools(session=xy_dataset_session)
     tools.g_region(rows=3, cols=3)
-    assert os.path.exists(rows_raster_file3x3)
+    assert os.path.exists(rows_raster_file3x2)
     output_file = tmp_path / "file.grass_raster"
     tools.r_slope_aspect(
-        elevation=parameter_type(rows_raster_file3x3), slope=parameter_type(output_file)
+        elevation=parameter_type(rows_raster_file3x2), slope=parameter_type(output_file)
     )
     assert output_file.exists()
     assert not tools.g_findfile(element="raster", file="file", format="json")["name"]
     assert not tools.g_findfile(
-        element="raster", file=rows_raster_file3x3.stem, format="json"
+        element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
     assert not tools.g_list(type="raster", format="json")
 
 
 def test_pack_input_output_with_name_and_parameter_call(
-    xy_dataset_session, rows_raster_file3x3, tmp_path
+    xy_dataset_session, rows_raster_file3x2, tmp_path
 ):
     """Check input and output pack files work with tool name as string"""
     tools = Tools(session=xy_dataset_session)
     tools.g_region(rows=3, cols=3)
-    assert os.path.exists(rows_raster_file3x3)
+    assert os.path.exists(rows_raster_file3x2)
     output_file = tmp_path / "file.grass_raster"
-    tools.run("r.slope.aspect", elevation=rows_raster_file3x3, slope=output_file)
+    tools.run("r.slope.aspect", elevation=rows_raster_file3x2, slope=output_file)
     assert output_file.exists()
     assert not tools.g_findfile(element="raster", file="file", format="json")["name"]
     assert not tools.g_findfile(
-        element="raster", file=rows_raster_file3x3.stem, format="json"
+        element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
     assert not tools.g_list(type="raster", format="json")
 
 
 def test_pack_input_output_with_subprocess_run_like_call(
-    xy_dataset_session, rows_raster_file3x3, tmp_path
+    xy_dataset_session, rows_raster_file3x2, tmp_path
 ):
     """Check input and output pack files work with command as list"""
     tools = Tools(session=xy_dataset_session)
-    assert os.path.exists(rows_raster_file3x3)
+    assert os.path.exists(rows_raster_file3x2)
     output_file = tmp_path / "file.grass_raster"
     tools.run_cmd(
         [
             "r.slope.aspect",
-            f"elevation={rows_raster_file3x3}",
+            f"elevation={rows_raster_file3x2}",
             f"aspect={output_file}",
         ]
     )
     assert output_file.exists()
     assert not tools.g_findfile(element="raster", file="file", format="json")["name"]
     assert not tools.g_findfile(
-        element="raster", file=rows_raster_file3x3.stem, format="json"
+        element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
     assert not tools.g_list(type="raster", format="json")
 
 
-def test_no_modify_command(xy_dataset_session, rows_raster_file3x3, tmp_path):
+def test_no_modify_command(xy_dataset_session, rows_raster_file3x2, tmp_path):
     """Check that input command is not modified by the function"""
     tools = Tools(session=xy_dataset_session)
     tools.g_region(rows=3, cols=3)
     output_file = tmp_path / "file.grass_raster"
     command = [
         "r.slope.aspect",
-        f"elevation={rows_raster_file3x3}",
+        f"elevation={rows_raster_file3x2}",
         f"slope={output_file}",
     ]
     original = command.copy()
@@ -104,27 +104,27 @@ def test_no_modify_command(xy_dataset_session, rows_raster_file3x3, tmp_path):
     assert original == command
 
 
-def test_io_cleanup_after_function(xy_dataset_session, rows_raster_file3x3, tmp_path):
+def test_io_cleanup_after_function(xy_dataset_session, rows_raster_file3x2, tmp_path):
     """Check input and output rasters are deleted after function call"""
     tools = Tools(session=xy_dataset_session)
     tools.g_region(rows=3, cols=3)
     output_file = tmp_path / "file.grass_raster"
-    tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=output_file)
+    tools.r_slope_aspect(elevation=rows_raster_file3x2, slope=output_file)
     assert output_file.exists()
     assert not tools.g_findfile(element="raster", file="file", format="json")["name"]
     assert not tools.g_findfile(
-        element="raster", file=rows_raster_file3x3.stem, format="json"
+        element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
     assert not tools.g_list(type="raster", format="json")
 
 
-def test_io_cleanup_after_context(xy_dataset_session, rows_raster_file3x3, tmp_path):
+def test_io_cleanup_after_context(xy_dataset_session, rows_raster_file3x2, tmp_path):
     """Check input and output rasters are deleted at the end of context"""
     output_file_1 = tmp_path / "file.grass_raster"
     output_file_2 = tmp_path / "file2.grass_raster"
     with Tools(session=xy_dataset_session) as tools:
         tools.g_region(rows=3, cols=3)
-        tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=output_file_1)
+        tools.r_slope_aspect(elevation=rows_raster_file3x2, slope=output_file_1)
         assert output_file_1.exists()
         assert tools.g_findfile(element="raster", file="file", format="json")["name"]
         tools.r_mapcalc_simple(expression="100 * A", a="file", output=output_file_2)
@@ -137,39 +137,39 @@ def test_io_cleanup_after_context(xy_dataset_session, rows_raster_file3x3, tmp_p
     assert not tools.g_findfile(element="raster", file="file", format="json")["name"]
     assert not tools.g_findfile(element="raster", file="file2", format="json")["name"]
     assert not tools.g_findfile(
-        element="raster", file=rows_raster_file3x3.stem, format="json"
+        element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
     assert not tools.g_list(type="raster", format="json")
 
 
-def test_io_no_cleanup(xy_dataset_session, rows_raster_file3x3, tmp_path):
+def test_io_no_cleanup(xy_dataset_session, rows_raster_file3x2, tmp_path):
     """Check input and output rasters are deleted only with explicit cleanup call"""
     output_file = tmp_path / "file.grass_raster"
     tools = Tools(session=xy_dataset_session, use_cache=True)
     tools.g_region(rows=3, cols=3)
-    tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=output_file)
+    tools.r_slope_aspect(elevation=rows_raster_file3x2, slope=output_file)
     assert output_file.exists()
     # Files should still be available.
     assert tools.g_findfile(element="raster", file="file", format="json")["name"]
     assert tools.g_findfile(
-        element="raster", file=rows_raster_file3x3.stem, format="json"
+        element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
     # But an explicit cleanup should delete the files.
     tools.cleanup()
     assert not tools.g_findfile(element="raster", file="file", format="json")["name"]
     assert not tools.g_findfile(
-        element="raster", file=rows_raster_file3x3.stem, format="json"
+        element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
     assert not tools.g_list(type="raster", format="json")
 
 
-def test_io_no_cleanup_with_context(xy_dataset_session, rows_raster_file3x3, tmp_path):
+def test_io_no_cleanup_with_context(xy_dataset_session, rows_raster_file3x2, tmp_path):
     """Check input and output rasters are kept even with context"""
     file_1 = tmp_path / "file_1.grass_raster"
     file_2 = tmp_path / "file_2.grass_raster"
     with Tools(session=xy_dataset_session, use_cache=True) as tools:
         tools.g_region(rows=3, cols=3)
-        tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=file_1)
+        tools.r_slope_aspect(elevation=rows_raster_file3x2, slope=file_1)
         assert file_1.exists()
         assert tools.g_findfile(element="raster", file=file_1.stem, format="json")[
             "name"
@@ -186,7 +186,7 @@ def test_io_no_cleanup_with_context(xy_dataset_session, rows_raster_file3x3, tmp
     assert tools.g_findfile(element="raster", file=file_1.stem, format="json")["name"]
     assert tools.g_findfile(element="raster", file=file_2.stem, format="json")["name"]
     assert tools.g_findfile(
-        element="raster", file=rows_raster_file3x3.stem, format="json"
+        element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
     # But an explicit cleanup should delete the files.
     tools.cleanup()
@@ -197,7 +197,7 @@ def test_io_no_cleanup_with_context(xy_dataset_session, rows_raster_file3x3, tmp
         "name"
     ]
     assert not tools.g_findfile(
-        element="raster", file=rows_raster_file3x3.stem, format="json"
+        element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
     assert not tools.g_list(type="raster", format="json")
     # The pack files should still exist after cleanup.
@@ -205,66 +205,66 @@ def test_io_no_cleanup_with_context(xy_dataset_session, rows_raster_file3x3, tmp
     assert file_2.exists()
 
 
-def test_multiple_input_usages_with_context(xy_dataset_session, rows_raster_file3x3):
+def test_multiple_input_usages_with_context(xy_dataset_session, rows_raster_file3x2):
     """Check multiple usages of the same input raster with context"""
     with Tools(session=xy_dataset_session) as tools:
-        tools.g_region(raster=rows_raster_file3x3)
-        tools.r_slope_aspect(elevation=rows_raster_file3x3, slope="slope")
+        tools.g_region(raster=rows_raster_file3x2)
+        tools.r_slope_aspect(elevation=rows_raster_file3x2, slope="slope")
         tools.r_mapcalc_simple(
-            expression="100 * A", a=rows_raster_file3x3, output="a100"
+            expression="100 * A", a=rows_raster_file3x2, output="a100"
         )
         assert tools.g_findfile(
-            element="raster", file=rows_raster_file3x3.stem, format="json"
+            element="raster", file=rows_raster_file3x2.stem, format="json"
         )["name"]
     assert tools.g_findfile(element="raster", file="slope", format="json")["name"]
     assert tools.g_findfile(element="raster", file="a100", format="json")["name"]
     assert not tools.g_findfile(
-        element="raster", file=rows_raster_file3x3.stem, format="json"
+        element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
 
 
-def test_multiple_input_usages_with_use_cache(xy_dataset_session, rows_raster_file3x3):
+def test_multiple_input_usages_with_use_cache(xy_dataset_session, rows_raster_file3x2):
     """Check input and output rasters are kept even with context"""
     tools = Tools(session=xy_dataset_session, use_cache=True)
-    tools.g_region(raster=rows_raster_file3x3)
-    tools.r_slope_aspect(elevation=rows_raster_file3x3, slope="slope")
-    tools.r_mapcalc_simple(expression="100 * A", a=rows_raster_file3x3, output="a100")
+    tools.g_region(raster=rows_raster_file3x2)
+    tools.r_slope_aspect(elevation=rows_raster_file3x2, slope="slope")
+    tools.r_mapcalc_simple(expression="100 * A", a=rows_raster_file3x2, output="a100")
     assert tools.g_findfile(
-        element="raster", file=rows_raster_file3x3.stem, format="json"
+        element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
     assert tools.g_findfile(element="raster", file="slope", format="json")["name"]
     assert tools.g_findfile(element="raster", file="a100", format="json")["name"]
     tools.cleanup()
     assert not tools.g_findfile(
-        element="raster", file=rows_raster_file3x3.stem, format="json"
+        element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
 
 
-def test_multiple_input_usages_with_defaults(xy_dataset_session, rows_raster_file3x3):
+def test_multiple_input_usages_with_defaults(xy_dataset_session, rows_raster_file3x2):
     """Check input and output rasters are kept even with context"""
     tools = Tools(session=xy_dataset_session)
     tools.g_region(rows=3, cols=3)
     tools.r_mapcalc_simple(
         expression="A + B",
-        a=rows_raster_file3x3,
-        b=rows_raster_file3x3,
+        a=rows_raster_file3x2,
+        b=rows_raster_file3x2,
         output="output",
     )
     assert not tools.g_findfile(
-        element="raster", file=rows_raster_file3x3.stem, format="json"
+        element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
     assert tools.g_findfile(element="raster", file="output", format="json")["name"]
 
 
 def test_creation_and_use_with_context(
-    xy_dataset_session, rows_raster_file3x3, tmp_path
+    xy_dataset_session, rows_raster_file3x2, tmp_path
 ):
     """Check that we can create an external file and then use the file later"""
     slope = tmp_path / "slope.grass_raster"
     with Tools(session=xy_dataset_session) as tools:
-        tools.g_region(raster=rows_raster_file3x3)
-        tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=slope)
-        tools.r_univar(map=slope, format="json")["cells"] == 9
+        tools.g_region(raster=rows_raster_file3x2)
+        tools.r_slope_aspect(elevation=rows_raster_file3x2, slope=slope)
+        assert tools.r_univar(map=slope, format="json")["cells"] == 6
         assert tools.g_findfile(element="raster", file=slope.stem, format="json")[
             "name"
         ]
@@ -275,54 +275,54 @@ def test_creation_and_use_with_context(
 
 
 def test_creation_and_use_with_use_cache(
-    xy_dataset_session, rows_raster_file3x3, tmp_path
+    xy_dataset_session, rows_raster_file3x2, tmp_path
 ):
     """Check that we can create an external file and then use the file later"""
     slope = tmp_path / "slope.grass_raster"
     tools = Tools(session=xy_dataset_session, use_cache=True)
-    tools.g_region(raster=rows_raster_file3x3)
-    tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=slope)
-    tools.r_univar(map=slope, format="json")["cells"] == 9
+    tools.g_region(raster=rows_raster_file3x2)
+    tools.r_slope_aspect(elevation=rows_raster_file3x2, slope=slope)
+    assert tools.r_univar(map=slope, format="json")["cells"] == 6
     assert tools.g_findfile(element="raster", file=slope.stem, format="json")["name"]
     assert slope.exists()
 
 
 def test_creation_and_use_with_defaults(
-    xy_dataset_session, rows_raster_file3x3, tmp_path
+    xy_dataset_session, rows_raster_file3x2, tmp_path
 ):
     """Check that we can create an external file and then use the file later"""
     slope = tmp_path / "slope.grass_raster"
     tools = Tools(session=xy_dataset_session)
-    tools.g_region(raster=rows_raster_file3x3)
-    tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=slope)
-    tools.r_univar(map=slope, format="json")["cells"] == 9
+    tools.g_region(raster=rows_raster_file3x2)
+    tools.r_slope_aspect(elevation=rows_raster_file3x2, slope=slope)
+    assert tools.r_univar(map=slope, format="json")["cells"] == 6
     assert not tools.g_findfile(element="raster", file=slope.stem, format="json")[
         "name"
     ]
     assert slope.exists()
 
 
-def test_repeated_input_usages_with_context(xy_dataset_session, rows_raster_file3x3):
+def test_repeated_input_usages_with_context(xy_dataset_session, rows_raster_file3x2):
     """Check multiple usages of the same input raster with context"""
     with Tools(session=xy_dataset_session) as tools:
         tools.g_region(rows=3, cols=3)
         tools.r_mapcalc_simple(
             expression="A + B",
-            a=rows_raster_file3x3,
-            b=rows_raster_file3x3,
+            a=rows_raster_file3x2,
+            b=rows_raster_file3x2,
             output="output",
         )
         assert tools.g_findfile(element="raster", file="output", format="json")["name"]
         assert tools.g_findfile(
-            element="raster", file=rows_raster_file3x3.stem, format="json"
+            element="raster", file=rows_raster_file3x2.stem, format="json"
         )["name"]
     assert tools.g_findfile(element="raster", file="output", format="json")["name"]
     assert not tools.g_findfile(
-        element="raster", file=rows_raster_file3x3.stem, format="json"
+        element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
 
 
-def test_repeated_output(xy_dataset_session, rows_raster_file3x3, tmp_path):
+def test_repeated_output(xy_dataset_session, rows_raster_file3x2, tmp_path):
     """Check behavior when two outputs have the same name
 
     This would ideally result in error or some other clear state, but at least
@@ -334,49 +334,49 @@ def test_repeated_output(xy_dataset_session, rows_raster_file3x3, tmp_path):
     tools.g_region(rows=3, cols=3)
     output_file = tmp_path / "file.grass_raster"
     tools.r_slope_aspect(
-        elevation=rows_raster_file3x3, slope=output_file, aspect=output_file
+        elevation=rows_raster_file3x2, slope=output_file, aspect=output_file
     )
     assert output_file.exists()
 
 
-def test_output_without_overwrite(xy_dataset_session, rows_raster_file3x3, tmp_path):
+def test_output_without_overwrite(xy_dataset_session, rows_raster_file3x2, tmp_path):
     """Check input and output pack files work with tool name call"""
     tools = Tools(session=xy_dataset_session)
     tools.g_region(rows=3, cols=3)
-    assert os.path.exists(rows_raster_file3x3)
+    assert os.path.exists(rows_raster_file3x2)
     output_file = tmp_path / "file.grass_raster"
-    tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=output_file)
+    tools.r_slope_aspect(elevation=rows_raster_file3x2, slope=output_file)
     with pytest.raises(ToolError, match=r"[Oo]verwrite"):
-        tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=output_file)
+        tools.r_slope_aspect(elevation=rows_raster_file3x2, slope=output_file)
     assert output_file.exists()
 
 
 def test_output_with_object_level_overwrite(
-    xy_dataset_session, rows_raster_file3x3, tmp_path
+    xy_dataset_session, rows_raster_file3x2, tmp_path
 ):
     """Check input and output pack files work with tool name call"""
     tools = Tools(session=xy_dataset_session, overwrite=True)
     tools.g_region(rows=3, cols=3)
-    assert os.path.exists(rows_raster_file3x3)
+    assert os.path.exists(rows_raster_file3x2)
     output_file = tmp_path / "file.grass_raster"
-    tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=output_file)
+    tools.r_slope_aspect(elevation=rows_raster_file3x2, slope=output_file)
     # Same call the second time.
-    tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=output_file)
+    tools.r_slope_aspect(elevation=rows_raster_file3x2, slope=output_file)
     assert output_file.exists()
 
 
 def test_output_with_function_level_overwrite(
-    xy_dataset_session, rows_raster_file3x3, tmp_path
+    xy_dataset_session, rows_raster_file3x2, tmp_path
 ):
     """Check input and output pack files work with tool name call"""
     tools = Tools(session=xy_dataset_session)
     tools.g_region(rows=3, cols=3)
-    assert os.path.exists(rows_raster_file3x3)
+    assert os.path.exists(rows_raster_file3x2)
     output_file = tmp_path / "file.grass_raster"
-    tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=output_file)
+    tools.r_slope_aspect(elevation=rows_raster_file3x2, slope=output_file)
     # Same call the second time.
     tools.r_slope_aspect(
-        elevation=rows_raster_file3x3, slope=output_file, overwrite=True
+        elevation=rows_raster_file3x2, slope=output_file, overwrite=True
     )
     assert output_file.exists()
 
@@ -399,7 +399,7 @@ def test_non_existent_pack_input(xy_dataset_session, tmp_path):
 
 
 def test_non_existent_output_pack_directory(
-    xy_dataset_session, rows_raster_file3x3, tmp_path
+    xy_dataset_session, rows_raster_file3x2, tmp_path
 ):
     """Check input and output pack files work with tool name call"""
     tools = Tools(session=xy_dataset_session)
@@ -407,15 +407,15 @@ def test_non_existent_output_pack_directory(
     output_file = tmp_path / "does_not_exist" / "file.grass_raster"
     assert not output_file.exists()
     assert not output_file.parent.exists()
-    assert rows_raster_file3x3.exists()
+    assert rows_raster_file3x2.exists()
     with pytest.raises(
         ToolError,
         match=rf"(?s)[^/\/a-zA-Z_]{re.escape(str(output_file.parent))}[^/\/a-zA-Z_].*does not exist",
     ):
-        tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=output_file)
+        tools.r_slope_aspect(elevation=rows_raster_file3x2, slope=output_file)
 
 
-def test_wrong_parameter(xy_dataset_session, rows_raster_file3x3, tmp_path):
+def test_wrong_parameter(xy_dataset_session, rows_raster_file3x2, tmp_path):
     """Check wrong parameter causes standard exception
 
     Since the tool is called to process its parameters with pack IO,
@@ -425,37 +425,37 @@ def test_wrong_parameter(xy_dataset_session, rows_raster_file3x3, tmp_path):
     tools.g_region(rows=3, cols=3)
     with pytest.raises(ToolError, match="does_not_exist"):
         tools.r_slope_aspect(
-            elevation=rows_raster_file3x3,
+            elevation=rows_raster_file3x2,
             slope="file.grass_raster",
             does_not_exist="test",
         )
 
 
-def test_direct_r_unpack_to_data(xy_dataset_session, rows_raster_file3x3):
+def test_direct_r_unpack_to_data(xy_dataset_session, rows_raster_file3x2):
     """Check that we can r.unpack data as usual"""
     tools = Tools(session=xy_dataset_session, use_cache=True)
     tools.g_region(rows=3, cols=3)
     name = "data_1"
-    tools.r_unpack(input=rows_raster_file3x3, output=name)
+    tools.r_unpack(input=rows_raster_file3x2, output=name)
     assert tools.g_findfile(element="raster", file=name, format="json")["name"]
     assert not tools.g_findfile(
-        element="raster", file=rows_raster_file3x3.stem, format="json"
+        element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
 
 
-def test_direct_r_unpack_to_pack(xy_dataset_session, rows_raster_file3x3, tmp_path):
+def test_direct_r_unpack_to_pack(xy_dataset_session, rows_raster_file3x2, tmp_path):
     """Check that roundtrip from existing packed raster to new packed raster works"""
     tools = Tools(session=xy_dataset_session, use_cache=True)
     tools.g_region(rows=3, cols=3)
     name = "auto_packed_data_1.grass_raster"
     packed_file = tmp_path / name
-    tools.r_unpack(input=rows_raster_file3x3, output=packed_file)
+    tools.r_unpack(input=rows_raster_file3x2, output=packed_file)
     assert packed_file.exists()
     assert tools.g_findfile(element="raster", file=packed_file.stem, format="json")[
         "name"
     ]
     assert not tools.g_findfile(
-        element="raster", file=rows_raster_file3x3.stem, format="json"
+        element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
 
 
@@ -480,20 +480,20 @@ def test_direct_r_pack_from_data(xy_dataset_session, tmp_path):
     assert tools.g_findfile(element="raster", file="data_1", format="json")["name"]
 
 
-def test_direct_r_pack_from_pack(xy_dataset_session, rows_raster_file3x3, tmp_path):
+def test_direct_r_pack_from_pack(xy_dataset_session, rows_raster_file3x2, tmp_path):
     """Check that roundtrip from existing packed raster to raster works"""
     tools = Tools(session=xy_dataset_session, use_cache=True)
     tools.g_region(rows=3, cols=3)
     name = "manually_packed_data_1.grass_raster"
     packed_file = tmp_path / name
-    tools.r_pack(input=rows_raster_file3x3, output=packed_file)
+    tools.r_pack(input=rows_raster_file3x2, output=packed_file)
     # New file was created.
     assert packed_file.exists()
     # Input still exists.
-    assert rows_raster_file3x3.exists()
+    assert rows_raster_file3x2.exists()
     # Auto-imported raster should exist.
     assert tools.g_findfile(
-        element="raster", file=rows_raster_file3x3.stem, format="json"
+        element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
     # There should be no raster created automatically.
     assert not tools.g_findfile(element="raster", file=packed_file.stem, format="json")[
@@ -502,12 +502,12 @@ def test_direct_r_pack_from_pack(xy_dataset_session, rows_raster_file3x3, tmp_pa
     tools.cleanup()
     # Auto-imported raster should be deleted.
     assert not tools.g_findfile(
-        element="raster", file=rows_raster_file3x3.stem, format="json"
+        element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
 
 
 def test_clean_after_tool_failure_with_context_and_try(
-    xy_dataset_session, rows_raster_file3x3, tmp_path
+    xy_dataset_session, rows_raster_file3x2, tmp_path
 ):
     """Check we delete imported input when we fail after that import.
 
@@ -519,18 +519,18 @@ def test_clean_after_tool_failure_with_context_and_try(
     try:
         with Tools(session=xy_dataset_session) as tools:
             tools.r_mapcalc_simple(
-                expression="A + does_not_exist", a=rows_raster_file3x3, output="output"
+                expression="A + does_not_exist", a=rows_raster_file3x2, output="output"
             )
     except ToolError:
         pass
     finally:
         assert not tools.g_findfile(
-            element="raster", file=rows_raster_file3x3.stem, format="json"
+            element="raster", file=rows_raster_file3x2.stem, format="json"
         )["name"]
 
 
 def test_clean_after_tool_failure_with_context_and_raises(
-    xy_dataset_session, rows_raster_file3x3, tmp_path
+    xy_dataset_session, rows_raster_file3x2, tmp_path
 ):
     """Check input and output pack files work with tool name call
 
@@ -542,16 +542,16 @@ def test_clean_after_tool_failure_with_context_and_raises(
         Tools(session=xy_dataset_session) as tools,
     ):
         tools.r_mapcalc_simple(
-            expression="A + does_not_exist", a=rows_raster_file3x3, output="output"
+            expression="A + does_not_exist", a=rows_raster_file3x2, output="output"
         )
     assert not tools.g_findfile(
-        element="raster", file=rows_raster_file3x3.stem, format="json"
+        element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
-    assert rows_raster_file3x3.exists()
+    assert rows_raster_file3x2.exists()
 
 
 def test_clean_after_tool_failure_without_context(
-    xy_dataset_session, rows_raster_file3x3, tmp_path
+    xy_dataset_session, rows_raster_file3x2, tmp_path
 ):
     """Check we delete imported input when we fail after that import.
 
@@ -560,16 +560,16 @@ def test_clean_after_tool_failure_without_context(
     tools = Tools(session=xy_dataset_session)
     with pytest.raises(ToolError, match=r"r\.mapcalc\.simple"):
         tools.r_mapcalc_simple(
-            expression="A + does_not_exist", a=rows_raster_file3x3, output="output"
+            expression="A + does_not_exist", a=rows_raster_file3x2, output="output"
         )
     assert not tools.g_findfile(
-        element="raster", file=rows_raster_file3x3.stem, format="json"
+        element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
-    assert rows_raster_file3x3.exists()
+    assert rows_raster_file3x2.exists()
 
 
 def test_clean_after_tool_failure_without_context_with_use_cache(
-    xy_dataset_session, rows_raster_file3x3, tmp_path
+    xy_dataset_session, rows_raster_file3x2, tmp_path
 ):
     """Check we don't delete imported input even after failure when asked.
 
@@ -579,20 +579,20 @@ def test_clean_after_tool_failure_without_context_with_use_cache(
     tools = Tools(session=xy_dataset_session, use_cache=True)
     with pytest.raises(ToolError, match=r"r\.mapcalc\.simple"):
         tools.r_mapcalc_simple(
-            expression="A + does_not_exist", a=rows_raster_file3x3, output="output"
+            expression="A + does_not_exist", a=rows_raster_file3x2, output="output"
         )
     assert tools.g_findfile(
-        element="raster", file=rows_raster_file3x3.stem, format="json"
+        element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
     tools.cleanup()
     assert not tools.g_findfile(
-        element="raster", file=rows_raster_file3x3.stem, format="json"
+        element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
-    assert rows_raster_file3x3.exists()
+    assert rows_raster_file3x2.exists()
 
 
 def test_clean_after_call_failure_with_context_and_try(
-    xy_dataset_session, rows_raster_file3x3, tmp_path
+    xy_dataset_session, rows_raster_file3x2, tmp_path
 ):
     """Check we delete imported input when we fail after that import.
 
@@ -609,18 +609,18 @@ def test_clean_after_call_failure_with_context_and_try(
             # Non-existence of a directory will be failure inside r.pack which is
             # what we use to get an internal failure inside the call.
             # This relies on inputs being resolved before outputs.
-            tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=output_file)
+            tools.r_slope_aspect(elevation=rows_raster_file3x2, slope=output_file)
     except ToolError:
         pass
     finally:
         assert not tools.g_findfile(
-            element="raster", file=rows_raster_file3x3.stem, format="json"
+            element="raster", file=rows_raster_file3x2.stem, format="json"
         )["name"]
-        assert rows_raster_file3x3.exists()
+        assert rows_raster_file3x2.exists()
 
 
 def test_clean_after_call_failure_with_context_and_raises(
-    xy_dataset_session, rows_raster_file3x3, tmp_path
+    xy_dataset_session, rows_raster_file3x2, tmp_path
 ):
     """Check input and output pack files work with tool name call
 
@@ -635,15 +635,15 @@ def test_clean_after_call_failure_with_context_and_raises(
         # what we use to get an internal failure inside the call.
         # This relies on inputs being resolved before outputs.
         with pytest.raises(ToolError, match=r"r\.pack"):
-            tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=output_file)
+            tools.r_slope_aspect(elevation=rows_raster_file3x2, slope=output_file)
     assert not tools.g_findfile(
-        element="raster", file=rows_raster_file3x3.stem, format="json"
+        element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
-    assert rows_raster_file3x3.exists()
+    assert rows_raster_file3x2.exists()
 
 
 def test_clean_after_call_failure_without_context(
-    xy_dataset_session, rows_raster_file3x3, tmp_path
+    xy_dataset_session, rows_raster_file3x2, tmp_path
 ):
     """Check we delete imported input when we fail after that import.
 
@@ -657,15 +657,15 @@ def test_clean_after_call_failure_without_context(
         # Non-existence of a directory will be failure inside r.pack which is
         # what we use to get an internal failure inside the call.
         # This relies on inputs being resolved before outputs.
-        tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=output_file)
+        tools.r_slope_aspect(elevation=rows_raster_file3x2, slope=output_file)
     assert not tools.g_findfile(
-        element="raster", file=rows_raster_file3x3.stem, format="json"
+        element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
-    assert rows_raster_file3x3.exists()
+    assert rows_raster_file3x2.exists()
 
 
 def test_clean_after_call_failure_without_context_with_use_cache(
-    xy_dataset_session, rows_raster_file3x3, tmp_path
+    xy_dataset_session, rows_raster_file3x2, tmp_path
 ):
     """Check we don't delete imported input even after failure when asked.
 
@@ -680,12 +680,12 @@ def test_clean_after_call_failure_without_context_with_use_cache(
         # Non-existence of a directory will be failure inside r.pack which is
         # what we use to get an internal failure inside the call.
         # This relies on inputs being resolved before outputs.
-        tools.r_slope_aspect(elevation=rows_raster_file3x3, slope=output_file)
+        tools.r_slope_aspect(elevation=rows_raster_file3x2, slope=output_file)
     assert tools.g_findfile(
-        element="raster", file=rows_raster_file3x3.stem, format="json"
+        element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
     tools.cleanup()
     assert not tools.g_findfile(
-        element="raster", file=rows_raster_file3x3.stem, format="json"
+        element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
-    assert rows_raster_file3x3.exists()
+    assert rows_raster_file3x2.exists()
