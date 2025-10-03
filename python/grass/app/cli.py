@@ -21,11 +21,13 @@ import tempfile
 import os
 import sys
 import subprocess
+from contextlib import ExitStack
 from pathlib import Path
 
 
 import grass.script as gs
 from grass.app.data import lock_mapset, unlock_mapset, MapsetLockingException
+from grass.exceptions import ScriptError
 from grass.tools import Tools
 
 # Special flags supported besides help and --json which does not need special handling:
@@ -39,12 +41,16 @@ SPECIAL_FLAGS = [
 # --help-text --html-description --rst-description
 
 
-def subcommand_run_tool(args, tool_args: list, print_help: bool):
+def subcommand_run_tool(args, tool_args: list, print_help: bool) -> int:
     command = [args.tool, *tool_args]
-    with tempfile.TemporaryDirectory() as tmp_dir_name:
-        project_name = "project"
-        project_path = Path(tmp_dir_name) / project_name
-        gs.create_project(project_path, crs=args.crs)
+    with ExitStack() as stack:
+        if args.project:
+            project_path = Path(args.project)
+        else:
+            tmp_dir_name = stack.enter_context(tempfile.TemporaryDirectory())
+            project_name = "project"
+            project_path = Path(tmp_dir_name) / project_name
+            gs.create_project(project_path, crs=args.crs)
         with gs.setup.init(project_path) as session:
             tools = Tools(
                 session=session, capture_output=False, consistent_return_value=True
@@ -64,6 +70,25 @@ def subcommand_run_tool(args, tool_args: list, print_help: bool):
                 return tools.run_cmd(command).returncode
             except subprocess.CalledProcessError as error:
                 return error.returncode
+
+
+def subcommand_create_project(args) -> int:
+    """Translates args to function parameters"""
+    try:
+        gs.create_project(
+            path=args.path,
+            crs=args.crs,
+            proj4=args.proj4,
+            wkt=args.wkt,
+            datum=args.datum,
+            datum_trans=args.datum_trans,
+            description=args.description,
+            overwrite=args.overwrite,
+        )
+    except ScriptError as error:
+        print(_("Error creating project: {}").format(error), file=sys.stderr)
+        return 1
+    return 0
 
 
 def subcommand_lock_mapset(args):
@@ -103,6 +128,48 @@ def subcommand_show_man(args):
     return call_g_manual(entry=args.page, flags="m")
 
 
+def add_project_subparser(subparsers):
+    project_parser = subparsers.add_parser("project", help="project operations")
+    project_subparsers = project_parser.add_subparsers(dest="project_command")
+
+    create_parser = project_subparsers.add_parser("create", help="create project")
+    create_parser.add_argument("path", help="path to the new project")
+    create_parser.add_argument(
+        "--crs",
+        help="CRS for the project",
+    )
+    create_parser.add_argument(
+        "--proj4",
+        help="if given, create new project based on Proj4 definition",
+    )
+    create_parser.add_argument(
+        "--wkt",
+        help=(
+            "if given, create new project based on WKT definition "
+            "(can be path to PRJ file or WKT string)"
+        ),
+    )
+    create_parser.add_argument(
+        "--datum",
+        help="GRASS format datum code",
+    )
+    create_parser.add_argument(
+        "--datum-trans",
+        dest="datum_trans",
+        help="datum transformation parameters (used for epsg and proj4)",
+    )
+    create_parser.add_argument(
+        "--description",
+        help="description of the project",
+    )
+    create_parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="overwrite existing project",
+    )
+    create_parser.set_defaults(func=subcommand_create_project)
+
+
 def main(args=None, program=None):
     # Top-level parser
     if program is None:
@@ -128,7 +195,12 @@ def main(args=None, program=None):
     run_subparser.add_argument("tool", type=str, nargs="?", help="name of a tool")
     run_subparser.add_argument("--help", action="store_true")
     run_subparser.add_argument("--crs", type=str, help="CRS to use for computations")
+    run_subparser.add_argument(
+        "--project", type=str, help="project to use for computations"
+    )
     run_subparser.set_defaults(func=subcommand_run_tool)
+
+    add_project_subparser(subparsers)
 
     subparser = subparsers.add_parser("lock", help="lock a mapset")
     subparser.add_argument("mapset_path", type=str)

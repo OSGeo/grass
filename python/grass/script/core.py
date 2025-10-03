@@ -1962,6 +1962,7 @@ def create_project(
     :param str path: path to GRASS database or project; if path to database, project
                      name must be specified with name parameter
     :param str name: project name to create
+    :param crs: CRS of the new project EPSG or filename (defaults to 'XY')
     :param epsg: if given create new project based on EPSG code
     :param proj4: if given create new project based on Proj4 definition
     :param str filename: if given create new project based on georeferenced file
