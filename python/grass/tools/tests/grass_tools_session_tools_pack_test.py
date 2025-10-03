@@ -389,7 +389,7 @@ def test_non_existent_pack_input(xy_dataset_session, tmp_path):
     assert not input_file.exists()
     with pytest.raises(
         ToolError,
-        match=rf"(?s)[^/\/a-zA-Z_]{input_file}[^/\/a-zA-Z_].*not found",
+        match=rf"(?s)[^/\/a-zA-Z_]{re.escape(str(input_file))}[^/\/a-zA-Z_].*not found",
     ):
         tools.r_slope_aspect(elevation=input_file, slope="slope")
     assert not tools.g_findfile(element="raster", file=input_file.stem, format="json")[
