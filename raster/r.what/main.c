@@ -98,9 +98,9 @@ int main(int argc, char *argv[])
     int red, green, blue;
     struct GModule *module;
 
-    JSON_Value *root_value = NULL, *point_value, *layer_value;
-    JSON_Array *root_array;
-    JSON_Object *point_object, *layer_object;
+    G_JSON_Value *root_value = NULL, *point_value, *layer_value;
+    G_JSON_Array *root_array;
+    G_JSON_Object *point_object, *layer_object;
 
     enum OutputFormat format;
 

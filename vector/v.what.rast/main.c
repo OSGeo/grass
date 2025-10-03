@@ -67,9 +67,9 @@ int main(int argc, char *argv[])
 
     char *sep;
     enum OutputFormat format;
-    JSON_Value *root_value = NULL, *cat_value = NULL;
-    JSON_Array *root_array = NULL;
-    JSON_Object *cat_object = NULL;
+    G_JSON_Value *root_value = NULL, *cat_value = NULL;
+    G_JSON_Array *root_array = NULL;
+    G_JSON_Object *cat_object = NULL;
 
     G_gisinit(argv[0]);
 

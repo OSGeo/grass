@@ -70,8 +70,8 @@ int main(int argc, char **argv)
     struct Flag *gflag, *rflag, *eflag, *hflag, *sflag;
     enum OutputFormat format;
 
-    JSON_Value *root_value = NULL;
-    JSON_Object *root_object = NULL;
+    G_JSON_Value *root_value = NULL;
+    G_JSON_Object *root_object = NULL;
 
     /* Initialize GIS Engine */
     G_gisinit(argv[0]);

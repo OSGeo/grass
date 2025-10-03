@@ -30,15 +30,15 @@
 #include "local_proto.h"
 
 static int check_xy(enum OutputFormat);
-static void print_json(JSON_Value *);
+static void print_json(G_JSON_Value *);
 
 /* print projection information gathered from one of the possible inputs
  * in GRASS format */
 void print_projinfo(enum OutputFormat format)
 {
     int i;
-    JSON_Value *value = NULL;
-    JSON_Object *object = NULL;
+    G_JSON_Value *value = NULL;
+    G_JSON_Object *object = NULL;
 
     if (check_xy(format))
         return;
@@ -342,8 +342,8 @@ void print_wkt(int esristyle, int dontprettify)
 
 static int check_xy(enum OutputFormat format)
 {
-    JSON_Value *value = NULL;
-    JSON_Object *object = NULL;
+    G_JSON_Value *value = NULL;
+    G_JSON_Object *object = NULL;
 
     if (cellhd.proj == PROJECTION_XY) {
         switch (format) {
@@ -375,7 +375,7 @@ static int check_xy(enum OutputFormat format)
         return 0;
 }
 
-void print_json(JSON_Value *value)
+void print_json(G_JSON_Value *value)
 {
     char *serialized_string = G_json_serialize_to_string_pretty(value);
     if (serialized_string == NULL) {

@@ -335,8 +335,8 @@ int main(int argc, char **argv)
     if (list->answer) {
         int i;
         char **srclist;
-        JSON_Array *maps_array = NULL;
-        JSON_Value *maps_value = NULL;
+        G_JSON_Array *maps_array = NULL;
+        G_JSON_Value *maps_value = NULL;
 
         if (outputFormat == JSON) {
             maps_value = G_json_value_init_array();
@@ -448,8 +448,8 @@ int main(int argc, char **argv)
     ocols = outcellhd.cols;
 
     if (print_bounds->answer) {
-        JSON_Value *root_value = NULL;
-        JSON_Object *root_object = NULL;
+        G_JSON_Value *root_value = NULL;
+        G_JSON_Object *root_object = NULL;
 
         G_message(_("Input map <%s@%s> in project <%s>:"), inmap->answer,
                   setname, inlocation->answer);

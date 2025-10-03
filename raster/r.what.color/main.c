@@ -33,16 +33,16 @@ static const char *fmt;
 
 static int do_value(const char *buf, RASTER_MAP_TYPE type,
                     struct Colors *colors, enum OutputFormat outputFormat,
-                    ColorFormat colorFormat, JSON_Array *root_array,
-                    JSON_Value *root_value)
+                    ColorFormat colorFormat, G_JSON_Array *root_array,
+                    G_JSON_Value *root_value)
 {
     CELL ival;
     DCELL fval;
     int red, grn, blu;
     char color_str[COLOR_STRING_LENGTH];
 
-    JSON_Object *color_object = NULL;
-    JSON_Value *color_value = NULL;
+    G_JSON_Object *color_object = NULL;
+    G_JSON_Value *color_value = NULL;
 
     if (outputFormat == JSON) {
         color_value = G_json_value_init_object();
@@ -181,8 +181,8 @@ int main(int argc, char **argv)
     enum OutputFormat outputFormat;
     ColorFormat colorFormat;
 
-    JSON_Array *root_array = NULL;
-    JSON_Value *root_value = NULL;
+    G_JSON_Array *root_array = NULL;
+    G_JSON_Value *root_value = NULL;
 
     G_gisinit(argv[0]);
 

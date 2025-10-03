@@ -584,8 +584,8 @@ void select_from_database(void)
 
 void summary(void)
 {
-    JSON_Value *root_value;
-    JSON_Object *root_object;
+    G_JSON_Value *root_value;
+    G_JSON_Object *root_object;
 
     if (compatible) {
         if (!geometry->answer && weight_flag->answer) {
@@ -778,11 +778,11 @@ void summary(void)
             G_json_object_set_number(root_object, "third_quartile",
                                      quartile_75);
 
-            JSON_Value *percentiles_array_value = G_json_value_init_array();
-            JSON_Array *percentiles_array =
+            G_JSON_Value *percentiles_array_value = G_json_value_init_array();
+            G_JSON_Array *percentiles_array =
                 G_json_array(percentiles_array_value);
-            JSON_Value *percentile_value = G_json_value_init_object();
-            JSON_Object *percentile_object = G_json_object(percentile_value);
+            G_JSON_Value *percentile_value = G_json_value_init_object();
+            G_JSON_Object *percentile_object = G_json_object(percentile_value);
 
             G_json_object_set_number(percentile_object, "percentile", perc);
             G_json_object_set_number(percentile_object, "value", quartile_perc);

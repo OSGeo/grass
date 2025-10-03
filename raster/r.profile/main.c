@@ -47,8 +47,8 @@ int main(int argc, char *argv[])
     struct GModule *module;
     enum OutputFormat format;
     ColorFormat clr_frmt;
-    JSON_Value *array_value;
-    JSON_Array *array;
+    G_JSON_Value *array_value;
+    G_JSON_Array *array;
 
     G_gisinit(argv[0]);
 
@@ -338,7 +338,7 @@ int main(int argc, char *argv[])
 int do_profile(double e1, double e2, double n1, double n2, int coords,
                double res, int fd, int data_type, FILE *fp, char *null_string,
                const char *unit, double factor, enum OutputFormat format,
-               JSON_Array *array, ColorFormat clr_frmt)
+               G_JSON_Array *array, ColorFormat clr_frmt)
 {
     double rows, cols, LEN;
     double Y, X, k;
