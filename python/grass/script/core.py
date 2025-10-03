@@ -1953,7 +1953,6 @@ def create_project(
     wkt=None,
     datum=None,
     datum_trans=None,
-    description=None,
     desc=None,
     overwrite=False,
 ):
@@ -1962,7 +1961,6 @@ def create_project(
     :param str path: path to GRASS database or project; if path to database, project
                      name must be specified with name parameter
     :param str name: project name to create
-    :param crs: CRS of the new project EPSG or filename (defaults to 'XY')
     :param epsg: if given create new project based on EPSG code
     :param proj4: if given create new project based on Proj4 definition
     :param str filename: if given create new project based on georeferenced file
@@ -1970,8 +1968,7 @@ def create_project(
                     (can be path to PRJ file or WKT string)
     :param datum: GRASS format datum code
     :param datum_trans: datum transformation parameters (used for epsg and proj4)
-    :param description: description of the project
-    :param desc: description of the project [deprecated]
+    :param desc: description of the project (creates MYNAME file)
     :param bool overwrite: True to overwrite project if exists (WARNING:
                            ALL DATA from existing project ARE DELETED!)
 
@@ -2114,12 +2111,7 @@ def create_project(
     # we still need to clean it up.
     if tmp_gisrc:
         try_remove(tmp_gisrc)
-    if description is not None or desc is not None:
-        _set_location_description(
-            mapset_path.directory,
-            mapset_path.location,
-            description if description is not None else desc,
-        )
+    _set_location_description(mapset_path.directory, mapset_path.location, desc)
 
 
 def _set_location_description(path, location, text):

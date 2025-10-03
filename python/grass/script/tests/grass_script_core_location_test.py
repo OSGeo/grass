@@ -229,38 +229,34 @@ def test_project_overwrite(tmp_path):
     assert project.exists()
 
 
-def create_project_get_description_file(tmp_path, text):
+def set_and_test_description(tmp_path, text):
     """Set text as description and check the result"""
     name = "test"
-    gs.create_project(tmp_path / name, description=text)
-    return tmp_path / name / "PERMANENT" / "MYNAME"
+    gs.create_project(tmp_path / name, desc=text)
+    description_file = tmp_path / name / "PERMANENT" / "MYNAME"
+    # The behavior inherited in the code is that the file always needs to exist,
+    # regardless of user setting the title or not. This may change in the future,
+    # but for now, we test for this specific behavior.
+    assert description_file.exists()
+    text = text or ""  # None and empty should both yield empty.
+    assert description_file.read_text(encoding="utf-8").strip() == text
 
 
 def test_location_description_setter_ascii(tmp_path):
     """Check ASCII text"""
-    text = "This is a test"
-    description_file = create_project_get_description_file(tmp_path, text)
-    assert description_file.exists()
-    assert description_file.read_text(encoding="utf-8").strip() == text
+    set_and_test_description(tmp_path, "This is a test")
 
 
 def test_location_description_setter_unicode(tmp_path):
     """Check unicode text"""
-    text = "This is a test (not Gauss-Krüger or Křovák)"
-    description_file = create_project_get_description_file(tmp_path, text)
-    assert description_file.exists()
-    assert description_file.read_text(encoding="utf-8").strip() == text
+    set_and_test_description(tmp_path, "This is a test (not Gauss-Krüger or Křovák)")
 
 
 def test_location_description_setter_empty(tmp_path):
     """Check empty text"""
-    description_file = create_project_get_description_file(tmp_path, "")
-    # Explicitly set empty is passed through to the file.
-    assert description_file.exists()
-    assert description_file.read_text(encoding="utf-8").strip() == ""
+    set_and_test_description(tmp_path, "")
 
 
 def test_location_description_setter_none(tmp_path):
     """Check None in place of text"""
-    description_file = create_project_get_description_file(tmp_path, None)
-    assert not description_file.exists()
+    set_and_test_description(tmp_path, None)
