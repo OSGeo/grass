@@ -80,7 +80,7 @@ def subcommand_create_project(args) -> int:
             wkt=args.wkt,
             datum=args.datum,
             datum_trans=args.datum_trans,
-            desc=args.description,
+            description=args.description,
             overwrite=args.overwrite,
         )
     except ScriptError as error:
