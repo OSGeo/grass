@@ -8,7 +8,7 @@
  */
 
 #include <stdlib.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
@@ -47,8 +47,8 @@ int main(int argc, char *argv[])
     struct GModule *module;
     enum OutputFormat format;
     ColorFormat clr_frmt;
-    JSON_Value *array_value;
-    JSON_Array *array;
+    G_JSON_Value *array_value;
+    G_JSON_Array *array;
 
     G_gisinit(argv[0]);
 
@@ -173,8 +173,8 @@ int main(int argc, char *argv[])
 
     if (strcmp(parm.format->answer, "json") == 0) {
         format = JSON;
-        array_value = json_value_init_array();
-        array = json_array(array_value);
+        array_value = G_json_value_init_array();
+        array = G_json_array(array_value);
     }
     else if (strcmp(parm.format->answer, "csv") == 0) {
         format = CSV;
@@ -314,13 +314,14 @@ int main(int argc, char *argv[])
     }
 
     if (format == JSON) {
-        char *serialized_string = json_serialize_to_string_pretty(array_value);
+        char *serialized_string =
+            G_json_serialize_to_string_pretty(array_value);
         if (serialized_string == NULL) {
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         }
         puts(serialized_string);
-        json_free_serialized_string(serialized_string);
-        json_value_free(array_value);
+        G_json_free_serialized_string(serialized_string);
+        G_json_value_free(array_value);
     }
 
     Rast_close(fd);
@@ -337,7 +338,7 @@ int main(int argc, char *argv[])
 int do_profile(double e1, double e2, double n1, double n2, int coords,
                double res, int fd, int data_type, FILE *fp, char *null_string,
                const char *unit, double factor, enum OutputFormat format,
-               JSON_Array *array, ColorFormat clr_frmt)
+               G_JSON_Array *array, ColorFormat clr_frmt)
 {
     double rows, cols, LEN;
     double Y, X, k;

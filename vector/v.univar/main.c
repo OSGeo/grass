@@ -43,7 +43,7 @@
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 
 static void select_from_geometry(void);
 static void select_from_database(void);
@@ -584,8 +584,8 @@ void select_from_database(void)
 
 void summary(void)
 {
-    JSON_Value *root_value;
-    JSON_Object *root_object;
+    G_JSON_Value *root_value;
+    G_JSON_Object *root_object;
 
     if (compatible) {
         if (!geometry->answer && weight_flag->answer) {
@@ -624,43 +624,43 @@ void summary(void)
     G_debug(3, "otype %d:", otype);
 
     if (format == JSON) {
-        root_value = json_value_init_object();
+        root_value = G_json_value_init_object();
         if (root_value == NULL) {
             G_fatal_error(
                 _("Failed to initialize JSON object. Out of memory?"));
         }
-        root_object = json_object(root_value);
+        root_object = G_json_object(root_value);
 
-        json_object_set_number(root_object, "n", count);
+        G_json_object_set_number(root_object, "n", count);
         if (geometry->answer) {
-            json_object_set_number(root_object, "nzero", nzero);
+            G_json_object_set_number(root_object, "nzero", nzero);
         }
         else {
-            json_object_set_number(root_object, "missing", nmissing);
-            json_object_set_number(root_object, "nnull", nnull);
+            G_json_object_set_number(root_object, "missing", nmissing);
+            G_json_object_set_number(root_object, "nnull", nnull);
         }
         if (count > 0) {
-            json_object_set_number(root_object, "min", min);
-            json_object_set_number(root_object, "max", max);
-            json_object_set_number(root_object, "range", max - min);
-            json_object_set_number(root_object, "sum", sum);
+            G_json_object_set_number(root_object, "min", min);
+            G_json_object_set_number(root_object, "max", max);
+            G_json_object_set_number(root_object, "range", max - min);
+            G_json_object_set_number(root_object, "sum", sum);
             if (compatible) {
-                json_object_set_number(root_object, "mean", mean);
-                json_object_set_number(root_object, "mean_abs", mean_abs);
+                G_json_object_set_number(root_object, "mean", mean);
+                G_json_object_set_number(root_object, "mean_abs", mean_abs);
                 if (geometry->answer || !weight_flag->answer) {
-                    json_object_set_number(root_object, "population_stddev",
-                                           pop_stdev);
-                    json_object_set_number(root_object, "population_variance",
-                                           pop_variance);
-                    json_object_set_number(root_object,
-                                           "population_coeff_variation",
-                                           pop_coeff_variation);
-                    json_object_set_number(root_object, "sample_stddev",
-                                           sample_stdev);
-                    json_object_set_number(root_object, "sample_variance",
-                                           sample_variance);
-                    json_object_set_number(root_object, "kurtosis", kurtosis);
-                    json_object_set_number(root_object, "skewness", skewness);
+                    G_json_object_set_number(root_object, "population_stddev",
+                                             pop_stdev);
+                    G_json_object_set_number(root_object, "population_variance",
+                                             pop_variance);
+                    G_json_object_set_number(root_object,
+                                             "population_coeff_variation",
+                                             pop_coeff_variation);
+                    G_json_object_set_number(root_object, "sample_stddev",
+                                             sample_stdev);
+                    G_json_object_set_number(root_object, "sample_variance",
+                                             sample_variance);
+                    G_json_object_set_number(root_object, "kurtosis", kurtosis);
+                    G_json_object_set_number(root_object, "skewness", skewness);
                 }
             }
         }
@@ -772,20 +772,23 @@ void summary(void)
         }
 
         if (format == JSON) {
-            json_object_set_number(root_object, "first_quartile", quartile_25);
-            json_object_set_number(root_object, "median", median);
-            json_object_set_number(root_object, "third_quartile", quartile_75);
+            G_json_object_set_number(root_object, "first_quartile",
+                                     quartile_25);
+            G_json_object_set_number(root_object, "median", median);
+            G_json_object_set_number(root_object, "third_quartile",
+                                     quartile_75);
 
-            JSON_Value *percentiles_array_value = json_value_init_array();
-            JSON_Array *percentiles_array = json_array(percentiles_array_value);
-            JSON_Value *percentile_value = json_value_init_object();
-            JSON_Object *percentile_object = json_object(percentile_value);
+            G_JSON_Value *percentiles_array_value = G_json_value_init_array();
+            G_JSON_Array *percentiles_array =
+                G_json_array(percentiles_array_value);
+            G_JSON_Value *percentile_value = G_json_value_init_object();
+            G_JSON_Object *percentile_object = G_json_object(percentile_value);
 
-            json_object_set_number(percentile_object, "percentile", perc);
-            json_object_set_number(percentile_object, "value", quartile_perc);
-            json_array_append_value(percentiles_array, percentile_value);
-            json_object_set_value(root_object, "percentiles",
-                                  percentiles_array_value);
+            G_json_object_set_number(percentile_object, "percentile", perc);
+            G_json_object_set_number(percentile_object, "value", quartile_perc);
+            G_json_array_append_value(percentiles_array, percentile_value);
+            G_json_object_set_value(root_object, "percentiles",
+                                    percentiles_array_value);
         }
         else if (format == SHELL) {
             fprintf(stdout, "first_quartile=%g\n", quartile_25);
@@ -813,12 +816,12 @@ void summary(void)
     }
 
     if (format == JSON) {
-        char *serialized_string = json_serialize_to_string_pretty(root_value);
+        char *serialized_string = G_json_serialize_to_string_pretty(root_value);
         if (serialized_string == NULL) {
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         }
         puts(serialized_string);
-        json_free_serialized_string(serialized_string);
-        json_value_free(root_value);
+        G_json_free_serialized_string(serialized_string);
+        G_json_value_free(root_value);
     }
 }

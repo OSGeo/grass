@@ -1,10 +1,13 @@
+import json
 import os
 import re
 import stat
 import sys
+import tarfile
 
 import pytest
 
+import grass.script as gs
 from grass.exceptions import CalledModuleError
 from grass.tools import Tools
 
@@ -131,3 +134,91 @@ def test_round_trip_with_r_unpack(
     assert stats["sum"] == 0
     assert stats["min"] == 0
     assert stats["max"] == 0
+
+
+@pytest.mark.parametrize("compression_flag", [None, "c"])
+def test_files_present_xy_integer(
+    xy_raster_dataset_session_mapset, tmp_path, compression_flag
+):
+    """Check we have all files for XY project and integer (CELL) data"""
+    output = tmp_path / "output_1.rpack"
+    with Tools(session=xy_raster_dataset_session_mapset) as tools:
+        tools.r_pack(input="rows_raster", output=output, flags=compression_flag)
+    with tarfile.open(output, mode="r") as tar:
+        all_members = tar.getmembers()
+        first_level_names = [
+            tarinfo.name for tarinfo in all_members if "/" not in tarinfo.name
+        ]
+        all_names = [tarinfo.name for tarinfo in all_members]
+        assert "rows_raster" in first_level_names
+        original_name = "rows_raster"
+        for name in [
+            "computational_region_crs.json",
+            "cats",
+            "cell",
+            "cellhd",
+            "cell_misc",
+            "hist",
+        ]:
+            assert f"{original_name}/{name}" in all_names
+        # JSON file is easy to check, so let's do that.
+        data = json.loads(
+            tar.extractfile(
+                tar.getmember(f"{original_name}/computational_region_crs.json")
+            )
+            .read()
+            .decode("utf-8")
+        )
+        assert data["type_code"] == 0
+        assert data["zone"] is None
+        assert data["type"] == "xy"
+
+
+@pytest.mark.parametrize("data_type", ["float", "double"])
+def test_files_present_general_crs_float(tmp_path, data_type):
+    """Check other CRS (NC SPM) project and floating point"""
+    project = tmp_path / "test"
+    gs.create_project(project, epsg="3358")
+    with (
+        gs.setup.init(project, env=os.environ.copy()) as session,
+        Tools(session=session) as tools,
+    ):
+        tools.g_region(rows=2, cols=3)
+        tools.r_mapcalc(expression=f"rows_raster = {data_type}(1.1 * row())")
+        tools.r_colors(map="rows_raster", color="magma")
+        output = tmp_path / "output_1.rpack"
+        tools.r_pack(input="rows_raster", output=output)
+    with tarfile.open(output, mode="r") as tar:
+        all_members = tar.getmembers()
+        first_level_names = [
+            tarinfo.name for tarinfo in all_members if "/" not in tarinfo.name
+        ]
+        all_names = [tarinfo.name for tarinfo in all_members]
+        assert "rows_raster" in first_level_names
+        original_name = "rows_raster"
+        for name in [
+            "PROJ_INFO",
+            "PROJ_UNITS",
+            "PROJ_SRID",
+            "PROJ_WKT",
+            "computational_region_crs.json",
+            "cats",
+            "cell",
+            "cellhd",
+            "cell_misc",
+            "fcell",
+            "colr",
+            "hist",
+        ]:
+            assert f"{original_name}/{name}" in all_names
+        # JSON file is easy to check, so let's do that.
+        data = json.loads(
+            tar.extractfile(
+                tar.getmember(f"{original_name}/computational_region_crs.json")
+            )
+            .read()
+            .decode("utf-8")
+        )
+        assert data["type_code"] == 99
+        assert data["zone"] is None
+        assert data["type"] == "other"

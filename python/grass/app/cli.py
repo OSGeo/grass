@@ -44,7 +44,7 @@ def subcommand_run_tool(args, tool_args: list, print_help: bool):
     with tempfile.TemporaryDirectory() as tmp_dir_name:
         project_name = "project"
         project_path = Path(tmp_dir_name) / project_name
-        gs.create_project(project_path)
+        gs.create_project(project_path, crs=args.crs)
         with gs.setup.init(project_path) as session:
             tools = Tools(
                 session=session, capture_output=False, consistent_return_value=True
@@ -127,6 +127,7 @@ def main(args=None, program=None):
     )
     run_subparser.add_argument("tool", type=str, nargs="?", help="name of a tool")
     run_subparser.add_argument("--help", action="store_true")
+    run_subparser.add_argument("--crs", type=str, help="CRS to use for computations")
     run_subparser.set_defaults(func=subcommand_run_tool)
 
     subparser = subparsers.add_parser("lock", help="lock a mapset")

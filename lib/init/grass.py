@@ -660,29 +660,16 @@ def create_location(gisdbase, location, geostring) -> None:
     :param location: name of new Location
     :param geostring: path to a georeferenced file or EPSG code
     """
-    if gpath("etc", "python") not in sys.path:
-        sys.path.append(gpath("etc", "python"))
-    from grass.script import core as gcore  # pylint: disable=E0611
+    import grass.script as gs  # pylint: disable=E0611
 
     try:
-        if geostring and geostring.upper().find("EPSG:") > -1:
-            # create location using EPSG code
-            epsg = geostring.split(":", 1)[1]
-            if ":" in epsg:
-                epsg, datum_trans = epsg.split(":", 1)
-            else:
-                datum_trans = None
-            gcore.create_location(
-                gisdbase, location, epsg=epsg, datum_trans=datum_trans
+        gs.create_project(gisdbase, location, crs=geostring)
+    except gs.ScriptError as err:
+        fatal(
+            _("Error creating project: {}").format(
+                err.value.strip('"').strip("'").replace("\\n", os.linesep)
             )
-        elif geostring == "XY":
-            # create an XY location
-            gcore.create_location(gisdbase, location)
-        else:
-            # create location using georeferenced file
-            gcore.create_location(gisdbase, location, filename=geostring)
-    except gcore.ScriptError as err:
-        fatal(err.value.strip('"').strip("'").replace("\\n", os.linesep))
+        )
 
 
 def can_create_location(gisdbase: StrPath, location) -> bool:
@@ -1434,8 +1421,6 @@ def start_gui(grass_gui: Literal["wxpython"]):
 
 def close_gui() -> None:
     """Close GUI if running"""
-    if gpath("etc", "python") not in sys.path:
-        sys.path.append(gpath("etc", "python"))
     from grass.script import core as gcore  # pylint: disable=E0611
 
     env = gcore.gisenv()
@@ -2081,25 +2066,89 @@ def validate_cmdline(params: Parameters) -> None:
 
 
 def find_grass_python_package() -> None:
-    """Find path to grass package and add it to path"""
+    """Find path to the grass package and add it to path if needed"""
+    # Whether or not the pre-set path exists, the environment may be just
+    # set up right already. Let's try a basic import first.
+    try:
+        import grass.script as unused_gs  # noqa: F401, ICN001
 
-    # The "@...@" variables are being substituted during build process
+        # The import works without any setup, so there is nothing more to do.
+        return
+    except ModuleNotFoundError:
+        # If the grass package is not on path, we need to add it to path.
+        pass
 
-    if "GRASS_PYDIR" in os.environ and len(os.getenv("GRASS_PYDIR")) > 0:
-        GRASS_PYDIR = os.path.normpath(os.environ["GRASS_PYDIR"])
+    # If we happened to import something else, like our startup script called grass.py,
+    # we need to first remove it from the import cache (this does not truly un-import,
+    # but it should be sufficient for our startup script).
+    if "grass" in sys.modules:
+        del sys.modules["grass"]
+
+    # Try to find the package.
+    path, exists = find_path_to_grass_python_package()
+    if exists:
+        sys.path.insert(0, path)
+        try:
+            # We don't make assumptions about what should be in the directory
+            # and we simply try the actual import.
+            import grass.script as unused_gs_2nd_attempt  # noqa: F401, ICN001
+
+            # If the import worked, we did our part.
+            return
+        except ModuleNotFoundError as error:
+            # Existing path provided, but there is some issue with the import.
+            # It may be a wrong path or issue in the package itself.
+            # These strings are not translatable because we can't load translations.
+            msg = (
+                f"The grass Python package cannot be imported from {path}. "
+                "Try setting PYTHONPATH or GRASS_PYDIR to where the grass package is."
+            )
+            raise RuntimeError(msg) from error
+    # The path provided by the build or by the user does not exist.
+    msg = (
+        f"{path} with the grass Python package does not exist. "
+        "Is the installation of GRASS complete?"
+    )
+    raise RuntimeError(msg)
+
+
+def find_path_to_grass_python_package() -> tuple[str, bool]:
+    """Returns the most likely path to the grass package.
+
+    It prefers the directory provided by the user in an environmental variable.
+    Otherwise, it uses the build time variable.
+    It falls back to a heuristic based on where this file is located.
+    If that fails, it returns the actual set path
+    (and returns False for existence).
+
+    :return: tuple with path as a string and boolean for existence
+    """
+    env_variable = os.environ.get("GRASS_PYDIR", None)
+    if env_variable:
+        path_from_variable = os.path.normpath(env_variable)
     else:
-        GRASS_PYDIR = os.path.normpath(r"@GRASS_PYDIR@")
+        # The "@...@" variables are being substituted during build process
+        path_from_variable = os.path.normpath(r"@GRASS_PYDIR@")
+    if os.path.exists(path_from_variable):
+        return path_from_variable, True
 
-    if os.path.exists(GRASS_PYDIR):
-        sys.path.append(GRASS_PYDIR)
-        # now we can import stuff from grass package
-    else:
-        # Not translatable because we don't have translations loaded.
-        msg = (
-            "The grass Python package is missing. "
-            "Is the installation of GRASS complete?"
-        )
-        raise RuntimeError(msg)
+    base = Path(__file__).parent.parent / "lib"
+    path_from_context = base / "grass" / "etc" / "python"
+    if os.path.exists(path_from_context):
+        return str(path_from_context), True
+
+    major = "@GRASS_VERSION_MAJOR@"
+    minor = "@GRASS_VERSION_MINOR@"
+    # Try a run-together version number for the directory (long-used standard).
+    path_from_context = base / f"grass{major}{minor}" / "etc" / "python"
+    if os.path.exists(path_from_context):
+        return str(path_from_context), True
+    # Try a dotted version number (more common standard).
+    path_from_context = base / f"grass{major}.{minor}" / "etc" / "python"
+    if os.path.exists(path_from_context):
+        return str(path_from_context), True
+
+    return path_from_variable, False
 
 
 def main() -> None:
