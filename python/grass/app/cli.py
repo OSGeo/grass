@@ -89,7 +89,7 @@ def subcommand_create_project(args) -> int:
     return 0
 
 
-def subcommand_lock_mapset(args) -> int:
+def subcommand_lock_mapset(args):
     gs.setup.setup_runtime_env()
     try:
         lock_mapset(
@@ -103,7 +103,7 @@ def subcommand_lock_mapset(args) -> int:
         print(str(e), file=sys.stderr)
 
 
-def subcommand_unlock_mapset(args) -> int:
+def subcommand_unlock_mapset(args):
     unlock_mapset(args.mapset_path)
 
 
@@ -199,6 +199,37 @@ def main(args=None, program=None):
     run_subparser.set_defaults(func=subcommand_run_tool)
 
     add_project_subparser(subparsers)
+
+    subparser = subparsers.add_parser("lock", help="lock a mapset")
+    subparser.add_argument("mapset_path", type=str)
+    subparser.add_argument(
+        "--process-id",
+        metavar="PID",
+        type=int,
+        default=1,
+        help=_(
+            "process ID of the process locking the mapset (a mapset can be "
+            "automatically unlocked if there is no process with this PID)"
+        ),
+    )
+    subparser.add_argument(
+        "--timeout",
+        metavar="TIMEOUT",
+        type=float,
+        default=30,
+        help=_("mapset locking timeout in seconds"),
+    )
+    subparser.add_argument(
+        "-f",
+        "--force-remove-lock",
+        action="store_true",
+        help=_("remove lock if present"),
+    )
+    subparser.set_defaults(func=subcommand_lock_mapset)
+
+    subparser = subparsers.add_parser("unlock", help="unlock a mapset")
+    subparser.add_argument("mapset_path", type=str)
+    subparser.set_defaults(func=subcommand_unlock_mapset)
 
     subparser = subparsers.add_parser(
         "help", help="show HTML documentation for a tool or topic"
