@@ -137,7 +137,6 @@ def create_project_from_pack(
     _create_project_dir(path)
     set_project_crs_from_pack(path, filename)
     if description:
-        # A little inconsistency with create_project which always creates the description file.
         _set_project_description(path, description)
 
 
