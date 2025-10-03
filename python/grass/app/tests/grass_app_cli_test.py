@@ -129,23 +129,6 @@ def test_subcommand_run_with_crs_as_pack_subprocess(pack_raster_file4x5_rows, ca
     assert json.loads(result.stdout)["srid"] == "EPSG:3358"
 
 
-def test_create_lock_unlock(tmp_path):
-    """Check that we can create, lock, unlock (smoke test)"""
-    project = tmp_path / "test_1"
-    assert main(["project", "create", str(project)]) == 0
-    assert main(["mapset", "lock", str(project / "PERMANENT")]) == 0
-    assert main(["mapset", "unlock", str(project / "PERMANENT")]) == 0
-
-
-def test_create_mapset_lock_unlock(tmp_path):
-    """Check that we can create, lock, unlock (smoke test)"""
-    project = tmp_path / "test_1"
-    assert main(["project", "create", str(project)]) == 0
-    assert main(["mapset", "create", str(project / "data_1")]) == 0
-    assert main(["mapset", "lock", str(project / "data_1")]) == 0
-    assert main(["mapset", "unlock", str(project / "data_1")]) == 0
-
-
 def test_create_overwrite(tmp_path):
     """Check that creating when project exists fails unless overwrite is True"""
     project = tmp_path / "test_1"
