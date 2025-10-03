@@ -84,9 +84,9 @@ void free_univar_stat_struct(univar_stat *stats)
 /* *************************************************************** */
 int print_stats(univar_stat *stats, enum OutputFormat format)
 {
-    JSON_Value *root_value = NULL, *zone_value = NULL;
-    JSON_Array *root_array = NULL;
-    JSON_Object *zone_object = NULL;
+    G_JSON_Value *root_value = NULL, *zone_value = NULL;
+    G_JSON_Array *root_array = NULL;
+    G_JSON_Object *zone_object = NULL;
 
     if (format == JSON) {
         if (zone_info.n_zones) {
@@ -384,10 +384,10 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
                 break;
             }
 
-            JSON_Value *percentiles_array_value = NULL,
-                       *percentile_value = NULL;
-            JSON_Array *percentiles_array = NULL;
-            JSON_Object *percentile_object = NULL;
+            G_JSON_Value *percentiles_array_value = NULL,
+                         *percentile_value = NULL;
+            G_JSON_Array *percentiles_array = NULL;
+            G_JSON_Object *percentile_object = NULL;
 
             if (format == JSON) {
                 percentiles_array_value = G_json_value_init_array();

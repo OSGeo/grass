@@ -53,8 +53,8 @@ int main(int argc, char **argv)
     char nsres[30], ewres[30];
     char ch;
     enum OutputFormat format;
-    JSON_Value *root_value = NULL;
-    JSON_Array *root_array = NULL;
+    G_JSON_Value *root_value = NULL;
+    G_JSON_Array *root_array = NULL;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);

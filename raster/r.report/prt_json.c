@@ -5,15 +5,15 @@
 #include <grass/gjson.h>
 #include <grass/glocale.h>
 
-JSON_Value *make_units(int ns, int nl)
+G_JSON_Value *make_units(int ns, int nl)
 {
-    JSON_Value *units_value = G_json_value_init_array();
-    JSON_Array *units_array = G_json_array(units_value);
+    G_JSON_Value *units_value = G_json_value_init_array();
+    G_JSON_Array *units_array = G_json_array(units_value);
     for (int i = 0; i < nunits; i++) {
         int _ns = ns;
 
-        JSON_Value *unit_value = G_json_value_init_object();
-        JSON_Object *unit_object = G_json_object(unit_value);
+        G_JSON_Value *unit_value = G_json_value_init_object();
+        G_JSON_Object *unit_object = G_json_object(unit_value);
 
         if (unit[i].type == CELL_COUNTS) {
             G_json_object_set_string(unit_object, "unit", "cells");
@@ -55,10 +55,10 @@ JSON_Value *make_units(int ns, int nl)
     return units_value;
 }
 
-JSON_Value *make_category(int ns, int nl, JSON_Value *sub_categories)
+G_JSON_Value *make_category(int ns, int nl, G_JSON_Value *sub_categories)
 {
-    JSON_Value *object_value = G_json_value_init_object();
-    JSON_Object *object = G_json_object(object_value);
+    G_JSON_Value *object_value = G_json_value_init_object();
+    G_JSON_Object *object = G_json_object(object_value);
 
     CELL *cats = Gstats[ns].cats;
     G_json_object_set_number(object, "category", cats[nl]);
@@ -87,15 +87,15 @@ JSON_Value *make_category(int ns, int nl, JSON_Value *sub_categories)
 
             G_json_object_set_string(object, "label", "from to");
 
-            JSON_Value *range_value = G_json_value_init_object();
-            JSON_Object *range_object = G_json_object(range_value);
+            G_JSON_Value *range_value = G_json_value_init_object();
+            G_JSON_Object *range_object = G_json_object(range_value);
             G_json_object_set_number(range_object, "from", dLow);
             G_json_object_set_number(range_object, "to", dHigh);
             G_json_object_set_value(object, "range", range_value);
         }
     }
 
-    JSON_Value *units_value = make_units(ns, nl);
+    G_JSON_Value *units_value = make_units(ns, nl);
     G_json_object_set_value(object, "units", units_value);
 
     if (sub_categories != NULL) {
@@ -104,13 +104,13 @@ JSON_Value *make_category(int ns, int nl, JSON_Value *sub_categories)
     return object_value;
 }
 
-JSON_Value *make_categories(int start, int end, int level)
+G_JSON_Value *make_categories(int start, int end, int level)
 {
-    JSON_Value *array_value = G_json_value_init_array();
-    JSON_Array *array = G_json_array(array_value);
+    G_JSON_Value *array_value = G_json_value_init_array();
+    G_JSON_Array *array = G_json_array(array_value);
     if (level == nlayers - 1) {
         for (int i = start; i < end; i++) {
-            JSON_Value *category = make_category(i, level, NULL);
+            G_JSON_Value *category = make_category(i, level, NULL);
             G_json_array_append_value(array, category);
         }
     }
@@ -120,9 +120,10 @@ JSON_Value *make_categories(int start, int end, int level)
             while ((curr < end) && same_cats(start, curr, level)) {
                 curr++;
             }
-            JSON_Value *sub_categories =
+            G_JSON_Value *sub_categories =
                 make_categories(start, curr, level + 1);
-            JSON_Value *category = make_category(start, level, sub_categories);
+            G_JSON_Value *category =
+                make_category(start, level, sub_categories);
             G_json_array_append_value(array, category);
             start = curr;
         }
@@ -134,8 +135,8 @@ void print_json(void)
 {
     compute_unit_format(0, nunits - 1, JSON);
 
-    JSON_Value *root_value = G_json_value_init_object();
-    JSON_Object *root_object = G_json_object(root_value);
+    G_JSON_Value *root_value = G_json_value_init_object();
+    G_JSON_Object *root_object = G_json_object(root_value);
 
     G_json_object_set_string(root_object, "project", G_location());
 
@@ -148,8 +149,8 @@ void print_json(void)
     strftime(date, 64, "%Y-%m-%dT%H:%M:%S%z", tm_info);
     G_json_object_set_string(root_object, "created", date);
 
-    JSON_Value *region_value = G_json_value_init_object();
-    JSON_Object *region_object = G_json_object(region_value);
+    G_JSON_Value *region_value = G_json_value_init_object();
+    G_JSON_Object *region_object = G_json_object(region_value);
     G_json_object_set_number(region_object, "north", window.north);
     G_json_object_set_number(region_object, "south", window.south);
     G_json_object_set_number(region_object, "east", window.east);
@@ -165,13 +166,14 @@ void print_json(void)
     else {
         G_json_object_set_string(root_object, "mask", mask);
     }
+    G_free(mask);
 
-    JSON_Value *maps_value = G_json_value_init_array();
-    JSON_Array *maps_array = G_json_array(maps_value);
+    G_JSON_Value *maps_value = G_json_value_init_array();
+    G_JSON_Array *maps_array = G_json_array(maps_value);
 
     for (int i = 0; i < nlayers; i++) {
-        JSON_Value *map_value = G_json_value_init_object();
-        JSON_Object *map_object = G_json_object(map_value);
+        G_JSON_Value *map_value = G_json_value_init_object();
+        G_JSON_Object *map_object = G_json_object(map_value);
         G_json_object_set_string(map_object, "name", layers[i].name);
 
         char *label;
@@ -189,10 +191,10 @@ void print_json(void)
     }
     G_json_object_set_value(root_object, "maps", maps_value);
 
-    JSON_Value *root_categories_value = make_categories(0, nstats, 0);
+    G_JSON_Value *root_categories_value = make_categories(0, nstats, 0);
     G_json_object_set_value(root_object, "categories", root_categories_value);
 
-    JSON_Value *totals = make_units(0, -1);
+    G_JSON_Value *totals = make_units(0, -1);
     G_json_object_set_value(root_object, "totals", totals);
 
     char *serialized_string = NULL;

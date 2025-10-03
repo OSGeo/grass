@@ -29,7 +29,7 @@
 enum OutputFormat { PLAIN, JSON };
 
 // Function to serialize and print JSON value
-static void serialize_and_print_json_object(JSON_Value *root_value)
+static void serialize_and_print_json_object(G_JSON_Value *root_value)
 {
     char *serialized_string = G_json_serialize_to_string_pretty(root_value);
     if (!serialized_string) {
@@ -60,8 +60,8 @@ int main(int argc, char *argv[])
     const char *shell;
     char path[GPATH_MAX];
     enum OutputFormat format;
-    JSON_Object *root_object = NULL;
-    JSON_Value *root_value = NULL;
+    G_JSON_Object *root_object = NULL;
+    G_JSON_Value *root_value = NULL;
 
     G_gisinit(argv[0]);
 
@@ -160,8 +160,8 @@ int main(int argc, char *argv[])
     if (flag.list->answer) {
         char **ms;
         int nmapsets;
-        JSON_Array *mapsets_array = NULL;
-        JSON_Value *mapsets_value = NULL;
+        G_JSON_Array *mapsets_array = NULL;
+        G_JSON_Value *mapsets_value = NULL;
 
         G_setenv_nogisrc("LOCATION_NAME", location_new);
         G_setenv_nogisrc("GISDBASE", gisdbase_new);

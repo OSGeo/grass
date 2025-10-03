@@ -5,7 +5,7 @@
 
 int cell_stats(int fd[], int with_percents, int with_counts, int with_areas,
                int do_sort, int with_labels, char *fmt,
-               enum OutputFormat format, JSON_Array *root_array)
+               enum OutputFormat format, G_JSON_Array *root_array)
 {
     CELL **cell;
     int i;
