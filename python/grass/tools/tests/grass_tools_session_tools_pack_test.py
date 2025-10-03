@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pytest
 
+import grass.script as gs
 from grass.tools import Tools, ToolError
 
 
@@ -669,7 +670,7 @@ def test_clean_after_call_failure_without_context_with_use_cache(
 ):
     """Check we don't delete imported input even after failure when asked.
 
-    When explicitly requested, we wait for explict request to delete the imported
+    When explicitly requested, we wait for explicit request to delete the imported
     data even after a failure.
     """
     tools = Tools(session=xy_dataset_session, use_cache=True)
@@ -689,3 +690,78 @@ def test_clean_after_call_failure_without_context_with_use_cache(
         element="raster", file=rows_raster_file3x2.stem, format="json"
     )["name"]
     assert rows_raster_file3x2.exists()
+
+
+def test_workflow_create_project_and_run_general_crs(
+    tmp_path, ones_raster_file_epsg3358
+):
+    """Check workflow with create project"""
+    project = tmp_path / "project"
+    raster = tmp_path / "raster.grass_raster"
+    gs.create_project(project, crs=ones_raster_file_epsg3358)
+    with (
+        gs.setup.init(project) as session,
+        Tools(session=session) as tools,
+    ):
+        assert tools.g_region(flags="p", format="json")["crs"]["type"] == "other"
+        assert tools.g_proj(flags="p", format="json")["srid"] == "EPSG:3358"
+        tools.g_region(raster=ones_raster_file_epsg3358)
+        assert tools.g_region(flags="p", format="json")["cells"] == 4 * 5
+        tools.r_mapcalc_simple(
+            expression="2 * A", a=ones_raster_file_epsg3358, output=raster
+        )
+        stats = tools.r_univar(map=raster, format="json")
+        assert stats["cells"] == 4 * 5
+        assert stats["min"] == 2
+        assert stats["max"] == 2
+        assert stats["mean"] == 2
+        assert stats["sum"] == 4 * 5 * 1 * 2
+    assert raster.exists()
+    assert raster.is_file()
+
+
+def test_workflow_create_project_and_run_ll_crs(tmp_path, ones_raster_file_epsg4326):
+    """Check workflow with create project"""
+    project = tmp_path / "project"
+    raster = tmp_path / "raster.grass_raster"
+    gs.create_project(project, crs=ones_raster_file_epsg4326)
+    with (
+        gs.setup.init(project) as session,
+        Tools(session=session) as tools,
+    ):
+        assert tools.g_region(flags="p", format="json")["crs"]["type"] == "ll"
+        assert tools.g_proj(flags="p", format="json")["srid"] == "EPSG:4326"
+        tools.g_region(raster=ones_raster_file_epsg4326)
+        assert tools.g_region(flags="p", format="json")["cells"] == 4 * 5
+        tools.r_mapcalc_simple(
+            expression="2 * A", a=ones_raster_file_epsg4326, output=raster
+        )
+        stats = tools.r_univar(map=raster, format="json")
+        assert stats["cells"] == 4 * 5
+        assert stats["min"] == 2
+        assert stats["max"] == 2
+        assert stats["mean"] == 2
+        assert stats["sum"] == 4 * 5 * 1 * 2
+    assert raster.exists()
+    assert raster.is_file()
+
+
+def test_workflow_create_project_and_run_xy_crs(tmp_path, rows_raster_file4x5):
+    """Check workflow with create project"""
+    project = tmp_path / "project"
+    raster = tmp_path / "raster.grass_raster"
+    gs.create_project(project, crs=rows_raster_file4x5)
+    with (
+        gs.setup.init(project) as session,
+        Tools(session=session) as tools,
+    ):
+        assert tools.g_region(flags="p", format="json")["crs"]["type"] == "xy"
+        tools.g_region(raster=rows_raster_file4x5)
+        assert tools.g_region(flags="p", format="json")["cells"] == 4 * 5
+        tools.r_mapcalc_simple(expression="2 * A", a=rows_raster_file4x5, output=raster)
+        stats = tools.r_univar(map=raster, format="json")
+        assert stats["cells"] == 4 * 5
+        assert stats["min"] == 2
+        assert stats["max"] == 8
+    assert raster.exists()
+    assert raster.is_file()

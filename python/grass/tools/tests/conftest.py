@@ -98,3 +98,45 @@ def rows_raster_file4x5(tmp_path_factory):
             env=session.env,
         )
     return output_file
+
+
+@pytest.fixture(scope="module")
+def ones_raster_file_epsg3358(tmp_path_factory):
+    """Native raster pack with EPSG:3358"""
+    tmp_path = tmp_path_factory.mktemp("ones_raster_file4x5")
+    project = tmp_path / "xy_test4x5"
+    gs.create_project(project, crs="EPSG:3358")
+    with gs.setup.init(project, env=os.environ.copy()) as session:
+        gs.run_command("g.region", rows=4, cols=5, env=session.env)
+        gs.mapcalc("ones = 1", env=session.env)
+        output_file = tmp_path / "ones4x5.grass_raster"
+        gs.run_command(
+            "r.pack",
+            input="ones",
+            output=output_file,
+            flags="c",
+            superquiet=True,
+            env=session.env,
+        )
+    return output_file
+
+
+@pytest.fixture(scope="module")
+def ones_raster_file_epsg4326(tmp_path_factory):
+    """Native raster pack with EPSG:4326 (LL)"""
+    tmp_path = tmp_path_factory.mktemp("ones_raster_file4x5")
+    project = tmp_path / "xy_test4x5"
+    gs.create_project(project, crs="EPSG:4326")
+    with gs.setup.init(project, env=os.environ.copy()) as session:
+        gs.run_command("g.region", rows=4, cols=5, env=session.env)
+        gs.mapcalc("ones = 1", env=session.env)
+        output_file = tmp_path / "ones4x5.grass_raster"
+        gs.run_command(
+            "r.pack",
+            input="ones",
+            output=output_file,
+            flags="c",
+            superquiet=True,
+            env=session.env,
+        )
+    return output_file
