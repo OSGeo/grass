@@ -347,9 +347,9 @@ class processTask:
 
             hidden: bool = bool(
                 self.task.blackList["enabled"]
-                and self.task.name in self.task.blackList["items"]
+                and self.task.get_name() in self.task.blackList["items"]
                 and p.get("name")
-                in self.task.blackList["items"][self.task.name].get("params", [])
+                in self.task.blackList["items"][self.task.get_name()].get("params", [])
             )
 
             self.task.params.append(
