@@ -19,6 +19,7 @@ import os
 import grass.script as gs
 from grass.exceptions import CalledModuleError
 
+from .importexport import ImporterExporter
 from .support import ParameterConverter, ToolFunctionResolver, ToolResult
 
 
@@ -194,6 +195,46 @@ class Tools:
 
     >>> result.text
     ''
+
+    Although using arrays incurs an overhead cost compared to using only
+    in-project data, the array interface provides a convenient workflow
+    when NumPy arrays are used with other array functions.
+
+    If a tool accepts a single raster input or output, a native GRASS raster pack
+    format can be used in the same way as an in-project raster or NumPy array.
+    GRASS native rasters are recognized by `.grass_raster`, `.grr`, and `.rpack`
+    extensions. All approaches can be combined in one workflow:
+
+    >>> with Tools(session=session) as tools:
+    ...     tools.r_slope_aspect(
+    ...         elevation=np.ones((2, 3)), slope="slope.grass_raster", aspect="aspect"
+    ...     )
+    ...     statistics = tools.r_univar(map="slope.grass_raster", format="json")
+    >>> # File now exists
+    >>> from pathlib import Path
+    >>> Path("slope.grass_raster").is_file()
+    True
+    >>> # In-project raster now exists
+    >>> tools.r_info(map="aspect", format="json")["cells"]
+    6
+
+    When the *Tools* object is used as a context manager, in-project data created as
+    part of handling the raster files will be cached and will not be imported again
+    when used in the following steps. The cache is cleared at the end of the context.
+    When the *Tools* object is not used as a context manager, the cashing can be
+    enabled by `use_cache=True`. Explicitly enabled cache requires explicit cleanup:
+
+    >>> tools = Tools(session=session, use_cache=True)
+    >>> tools.r_univar(map="slope.grass_raster", format="json")["cells"]
+    6
+    >>> tools.r_info(map="slope.grass_raster", format="json")["cells"]
+    6
+    >>> tools.cleanup()
+
+    Notably, the above code works also with `use_cache=False` (or the default),
+    but the file will be imported twice, once for each tool call, so using
+    context manager or managing the cache explicity is good for reducing the
+    overhead which the external rasters bring compared to using in-project data.
     """
 
     def __init__(
@@ -209,6 +250,7 @@ class Tools:
         capture_output=True,
         capture_stderr=None,
         consistent_return_value=False,
+        use_cache=None,
     ):
         """
         If session is provided and has an env attribute, it is used to execute tools.
@@ -253,6 +295,13 @@ class Tools:
         Additionally, this can be used to obtain both NumPy arrays and text outputs
         from a tool call.
 
+        While using of cache is primarily driven by the use of the object as
+        a context manager, cashing can be explicitly enabled or disabled with
+        the *use_cache* parameter. The cached data is kept in the current
+        mapset so that it is available as tool inputs. Without a context manager,
+        explicit `use_cache=True` requires explicit call to *cleanup* to remove
+        the data from the current mapset.
+
         If *env* or other *Popen* arguments are provided to one of the tool running
         functions, the constructor parameters except *errors* are ignored.
         """
@@ -275,6 +324,11 @@ class Tools:
             self._capture_stderr = capture_stderr
         self._name_resolver = None
         self._consistent_return_value = consistent_return_value
+        self._importer_exporter = None
+        # Decides if we delete at each run or only at the end of context.
+        self._delete_on_context_exit = False
+        # User request to keep the data.
+        self._use_cache = use_cache
 
     def _modified_env_if_needed(self):
         """Get the environment for subprocesses
@@ -353,6 +407,7 @@ class Tools:
             args,
             tool_kwargs=kwargs,
             input=object_parameter_handler.stdin,
+            parameter_converter=object_parameter_handler,
             **popen_options,
         )
         use_objects = object_parameter_handler.translate_data_to_objects(
@@ -378,6 +433,7 @@ class Tools:
         command: list[str],
         *,
         input: str | bytes | None = None,
+        parameter_converter: ParameterConverter | None = None,
         tool_kwargs: dict | None = None,
         **popen_options,
     ):
@@ -390,12 +446,42 @@ class Tools:
         :param tool_kwargs: named tool arguments used for error reporting (experimental)
         :param **popen_options: additional options for :py:func:`subprocess.Popen`
         """
-        return self.call_cmd(
-            command,
-            tool_kwargs=tool_kwargs,
-            input=input,
-            **popen_options,
-        )
+        # Compute the environment for subprocesses and store it for later use.
+        if "env" not in popen_options:
+            popen_options["env"] = self._modified_env_if_needed()
+
+        if parameter_converter is None:
+            parameter_converter = ParameterConverter()
+            parameter_converter.process_parameter_list(command[1:])
+        try:
+            if parameter_converter.import_export:
+                if self._importer_exporter is None:
+                    self._importer_exporter = ImporterExporter(
+                        run_function=self.call, run_cmd_function=self.call_cmd
+                    )
+                command = self._importer_exporter.process_parameter_list(
+                    command, **popen_options
+                )
+                self._importer_exporter.import_data(env=popen_options["env"])
+            # We approximate tool_kwargs as original kwargs.
+            result = self.call_cmd(
+                command,
+                tool_kwargs=tool_kwargs,
+                input=input,
+                **popen_options,
+            )
+            if parameter_converter.import_export:
+                overwrite = None
+                if "--o" in command or "--overwrite" in command:
+                    overwrite = True
+                self._importer_exporter.export_data(
+                    env=popen_options["env"], overwrite=overwrite
+                )
+        finally:
+            if parameter_converter.import_export:
+                if not self._delete_on_context_exit and not self._use_cache:
+                    self._importer_exporter.cleanup(env=popen_options["env"])
+        return result
 
     def call(self, tool_name_: str, /, **kwargs):
         """Run a tool by specifying its name as a string and parameters.
@@ -504,7 +590,14 @@ class Tools:
 
         :returns: reference to the object (self)
         """
+        self._delete_on_context_exit = True
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
         """Exit the context manager context."""
+        if not self._use_cache:
+            self.cleanup()
+
+    def cleanup(self):
+        if self._importer_exporter is not None:
+            self._importer_exporter.cleanup(env=self._modified_env_if_needed())
