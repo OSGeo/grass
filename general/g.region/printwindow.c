@@ -22,7 +22,7 @@ static double get_shift(double east)
 }
 
 void print_window(struct Cell_head *window, int print_flag, int flat_flag,
-                  enum OutputFormat format, JSON_Object *root_object)
+                  enum OutputFormat format, G_JSON_Object *root_object)
 {
     const char *prj, *datum, *ellps;
     int x, width = 11;

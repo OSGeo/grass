@@ -21,6 +21,7 @@ import tempfile
 import os
 import sys
 import subprocess
+from contextlib import ExitStack
 from pathlib import Path
 
 
@@ -43,10 +44,11 @@ SPECIAL_FLAGS = [
 
 def subcommand_run_tool(args, tool_args: list, print_help: bool) -> int:
     command = [args.tool, *tool_args]
-    with tempfile.TemporaryDirectory() as tmp_dir_name:
+    with ExitStack() as stack:
         if args.project:
             project_path = Path(args.project)
         else:
+            tmp_dir_name = stack.enter_context(tempfile.TemporaryDirectory())
             project_name = "project"
             project_path = Path(tmp_dir_name) / project_name
             gs.create_project(project_path, crs=args.crs)

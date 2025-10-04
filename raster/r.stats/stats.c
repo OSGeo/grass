@@ -256,7 +256,7 @@ int print_node_count(void)
 
 int print_cell_stats(char *fmt, int with_percents, int with_counts,
                      int with_areas, int with_labels, char *fs,
-                     enum OutputFormat format, JSON_Array *array)
+                     enum OutputFormat format, G_JSON_Array *array)
 {
     int i, n, nulls_found;
     struct Node *node;
@@ -264,9 +264,9 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
     DCELL dLow, dHigh;
     char str1[50], str2[50];
 
-    JSON_Object *object, *category;
-    JSON_Array *categories;
-    JSON_Value *object_value, *category_value, *categories_value;
+    G_JSON_Object *object, *category;
+    G_JSON_Array *categories;
+    G_JSON_Value *object_value, *category_value, *categories_value;
 
     if (no_nulls)
         total_count -= sorted_list[node_count - 1]->count;
