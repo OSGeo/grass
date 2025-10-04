@@ -237,7 +237,7 @@ RUN apt-get update \
 
 # # Get datum grids
 # # Currently using https://proj.org/en/9.3/usage/network.html#how-to-enable-network-capabilities
-# FROM ubuntu:22.04 as datum_grids
+# FROM ubuntu:24.04 AS datum_grids
 
 # # See: https://github.com/OSGeo/PROJ-data
 # RUN apt-get update \
