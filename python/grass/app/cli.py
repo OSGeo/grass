@@ -92,6 +92,46 @@ def subcommand_create_project(args) -> int:
     return 0
 
 
+def add_mapset_subparser(subparsers):
+    mapset_subparser = subparsers.add_parser("mapset", help="mapset related operations")
+    mapset_subparsers = mapset_subparser.add_subparsers(dest="mapset_command")
+
+    subparser = mapset_subparsers.add_parser("create", help="create a new mapset")
+    subparser.add_argument("path", help="path to the new mapset")
+    subparser.set_defaults(func=subcommand_mapset_create)
+
+    subparser = mapset_subparsers.add_parser("lock", help="lock a mapset")
+    subparser.add_argument("mapset_path", type=str)
+    subparser.add_argument(
+        "--process-id",
+        metavar="PID",
+        type=int,
+        default=1,
+        help=_(
+            "process ID of the process locking the mapset (a mapset can be "
+            "automatically unlocked if there is no process with this PID)"
+        ),
+    )
+    subparser.add_argument(
+        "--timeout",
+        metavar="TIMEOUT",
+        type=float,
+        default=30,
+        help=_("mapset locking timeout in seconds"),
+    )
+    subparser.add_argument(
+        "-f",
+        "--force-remove-lock",
+        action="store_true",
+        help=_("remove lock if present"),
+    )
+    subparser.set_defaults(func=subcommand_lock_mapset)
+
+    subparser = mapset_subparsers.add_parser("unlock", help="unlock a mapset")
+    subparser.add_argument("mapset_path", type=str)
+    subparser.set_defaults(func=subcommand_unlock_mapset)
+
+
 def subcommand_mapset_create(args) -> int:
     try:
         create_mapset(args.path)
@@ -185,46 +225,6 @@ def add_project_subparser(subparsers):
         help="overwrite existing project",
     )
     create_parser.set_defaults(func=subcommand_create_project)
-
-
-def add_mapset_subparser(subparsers):
-    mapset_subparser = subparsers.add_parser("mapset", help="mapset related operations")
-    mapset_subparsers = mapset_subparser.add_subparsers(dest="mapset_command")
-
-    subparser = mapset_subparsers.add_parser("create", help="create a new mapset")
-    subparser.add_argument("path", help="path to the new mapset")
-    subparser.set_defaults(func=subcommand_mapset_create)
-
-    subparser = mapset_subparsers.add_parser("lock", help="lock a mapset")
-    subparser.add_argument("mapset_path", type=str)
-    subparser.add_argument(
-        "--process-id",
-        metavar="PID",
-        type=int,
-        default=1,
-        help=_(
-            "process ID of the process locking the mapset (a mapset can be "
-            "automatically unlocked if there is no process with this PID)"
-        ),
-    )
-    subparser.add_argument(
-        "--timeout",
-        metavar="TIMEOUT",
-        type=float,
-        default=30,
-        help=_("mapset locking timeout in seconds"),
-    )
-    subparser.add_argument(
-        "-f",
-        "--force-remove-lock",
-        action="store_true",
-        help=_("remove lock if present"),
-    )
-    subparser.set_defaults(func=subcommand_lock_mapset)
-
-    subparser = mapset_subparsers.add_parser("unlock", help="unlock a mapset")
-    subparser.add_argument("mapset_path", type=str)
-    subparser.set_defaults(func=subcommand_unlock_mapset)
 
 
 def main(args=None, program=None):
