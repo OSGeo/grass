@@ -233,8 +233,17 @@ class Tools:
 
     Notably, the above code works also with `use_cache=False` (or the default),
     but the file will be imported twice, once for each tool call, so using
-    context manager or managing the cache explicity is good for reducing the
+    context manager or managing the cache explicitly is good for reducing the
     overhead which the external rasters bring compared to using in-project data.
+
+    For parallel processing, create separate Tools objects. Each Tools instance
+    can operate with the same or different sessions or environments, as well as with
+    :py:class:`grass.script.RegionManager` and :py:class:`grass.script.MaskManager`.
+    When working exclusively with data within a project, objects are lightweight
+    and add negligible overhead compared to direct subprocess calls.
+    Using NumPy or out-of-project native GRASS raster files, adds computational
+    and IO cost, but generally not more than the cost of the same operation done
+    directly without the aid of a Tools object.
     """
 
     def __init__(
@@ -403,9 +412,9 @@ class Tools:
         )
 
         # We approximate original kwargs with the possibly-modified kwargs.
-        result = self.run_cmd(
+        result = self._run_cmd(
             args,
-            tool_kwargs=kwargs,
+            tool_kwargs=kwargs,  # We send the original kwargs for error reporting.
             input=object_parameter_handler.stdin,
             parameter_converter=object_parameter_handler,
             **popen_options,
@@ -439,10 +448,33 @@ class Tools:
     ):
         """Run a tool by passing its name and parameters a list of strings.
 
-        The function may perform additional processing on the parameters.
+        The function will perform additional processing on the parameters
+        such as importing GRASS native raster files to in-project data.
 
         :param command: list of strings to execute as the command
         :param input: text input for the standard input of the tool
+        :param **popen_options: additional options for :py:func:`subprocess.Popen`
+        """
+        return self._run_cmd(command, input=input, **popen_options)
+
+    def _run_cmd(
+        self,
+        command: list[str],
+        *,
+        input: str | bytes | None = None,
+        parameter_converter: ParameterConverter | None = None,
+        tool_kwargs: dict | None = None,
+        **popen_options,
+    ):
+        """Run a tool by passing its name and parameters a list of strings.
+
+        If parameters were already processed using a *ParameterConverter* instance,
+        the instance can be passed as the *parameter_converter* parameter, avoiding
+        re-processing.
+
+        :param command: list of strings to execute as the command
+        :param input: text input for the standard input of the tool
+        :param parameter_converter: a Parameter converter instance if already used
         :param tool_kwargs: named tool arguments used for error reporting (experimental)
         :param **popen_options: additional options for :py:func:`subprocess.Popen`
         """
@@ -451,26 +483,34 @@ class Tools:
             popen_options["env"] = self._modified_env_if_needed()
 
         if parameter_converter is None:
+            # Parameters were not processed yet, so process them now.
             parameter_converter = ParameterConverter()
             parameter_converter.process_parameter_list(command[1:])
         try:
+            # Processing parameters for import and export is costly, so we do it
+            # only when we previously determined it there might be such parameters.
             if parameter_converter.import_export:
                 if self._importer_exporter is None:
+                    # The importer exporter instance may be reused in later calls
+                    # based on how the cache is used.
                     self._importer_exporter = ImporterExporter(
                         run_function=self.call, run_cmd_function=self.call_cmd
                     )
                 command = self._importer_exporter.process_parameter_list(
                     command, **popen_options
                 )
+                # The command now has external files replaced with in-project data,
+                # so now we import the data.
                 self._importer_exporter.import_data(env=popen_options["env"])
-            # We approximate tool_kwargs as original kwargs.
             result = self.call_cmd(
                 command,
-                tool_kwargs=tool_kwargs,
+                tool_kwargs=tool_kwargs,  # used in error reporting
                 input=input,
                 **popen_options,
             )
             if parameter_converter.import_export:
+                # Exporting data inherits the overwrite flag from the command
+                # if provided, otherwise it is driven by the environment.
                 overwrite = None
                 if "--o" in command or "--overwrite" in command:
                     overwrite = True
@@ -480,6 +520,7 @@ class Tools:
         finally:
             if parameter_converter.import_export:
                 if not self._delete_on_context_exit and not self._use_cache:
+                    # Delete the in-project data after each call.
                     self._importer_exporter.cleanup(env=popen_options["env"])
         return result
 
@@ -507,7 +548,7 @@ class Tools:
         defaults and return value.
 
         :param command: list of strings to execute as the command
-        :param tool_kwargs: named tool arguments used for error reporting (experimental)
+        :param tool_kwargs: named tool arguments used for error reporting
         :param input: text input for the standard input of the tool
         :param **popen_options: additional options for :py:func:`subprocess.Popen`
         """
