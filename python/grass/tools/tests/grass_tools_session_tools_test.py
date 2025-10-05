@@ -135,7 +135,8 @@ def test_json_with_direct_subprocess_run_like_call(xy_dataset_session):
 def test_json_as_list(xy_dataset_session):
     """Check that a JSON result behaves as a list"""
     tools = Tools(session=xy_dataset_session)
-    # This also tests JSON parsing with a format option.
+    # This also tests JSON parsing without a format option
+    # (which should not have any influence).
     result = tools.g_search_modules(keyword="random", flags="j")
     for item in result:
         assert "name" in item
@@ -146,7 +147,6 @@ def test_json_as_list(xy_dataset_session):
 def test_json_for_pandas(xy_dataset_session):
     """Check that JSON can be read into Pandas dataframe"""
     tools = Tools(session=xy_dataset_session)
-    # This also tests JSON parsing with a format option.
     result = tools.run("g.region", flags="p", format="json")
     assert not pd.DataFrame(result).empty
 
@@ -171,7 +171,8 @@ def test_help_call_with_parameters(xy_dataset_session):
 def test_json_call_with_low_level_call(xy_dataset_session):
     """Check that --json call works including JSON data parsing"""
     tools = Tools(session=xy_dataset_session)
-    # This also tests JSON parsing with a format option.
+    # This also tests JSON parsing without a format option
+    # (which should not have any influence).
     data = tools.call_cmd(
         ["r.slope.aspect", "elevation=dem", "slope=slope", "--json"]
     ).json
