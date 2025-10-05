@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-27 17:16+0000\n"
-"PO-Revision-Date: 2025-09-28 14:03+0000\n"
+"POT-Creation-Date: 2025-10-04 15:55+0000\n"
+"PO-Revision-Date: 2025-10-05 23:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs/fr/>\n"
 "Language: fr\n"
@@ -570,7 +570,7 @@ msgstr "test unitaire"
 msgid "Performs unit tests for the gjson library"
 msgstr "Effectue les tests unitaires pour la librairie gjson"
 
-#: ../lib/external/parson/test/test_parson_wrapper.c:35
+#: ../lib/external/parson/test/test_parson_wrapper.c:34
 msgid ""
 "\n"
 "++ Running gjson wrapper unit tests ++"
@@ -578,7 +578,7 @@ msgstr ""
 "\n"
 "++ Exécution des tests unitaires gjson ++"
 
-#: ../lib/external/parson/test/test_parson_wrapper.c:40
+#: ../lib/external/parson/test/test_parson_wrapper.c:39
 msgid ""
 "\n"
 "-- gjson wrapper unit tests failure --"
@@ -586,7 +586,7 @@ msgstr ""
 "\n"
 "-- Échec des tests unitaires gjson --"
 
-#: ../lib/external/parson/test/test_parson_wrapper.c:42
+#: ../lib/external/parson/test/test_parson_wrapper.c:41
 msgid ""
 "\n"
 "-- gjson wrapper unit tests finished successfully --"
@@ -3642,7 +3642,7 @@ msgstr "Impossible de lire le fichier de cible pour le groupe [%s]"
 msgid "WARNING"
 msgstr "ATTENTION"
 
-#: ../lib/init/grass.py:148 ../lib/init/grass.py:2367
+#: ../lib/init/grass.py:148 ../lib/init/grass.py:2416
 msgid "Exiting..."
 msgstr "Sortie ..."
 
@@ -3766,7 +3766,7 @@ msgstr "paramètres de l'exécutable"
 msgid "standard flags"
 msgstr "options standards"
 
-#: ../lib/init/grass.py:349 ../lib/init/grass.py:1928
+#: ../lib/init/grass.py:349 ../lib/init/grass.py:1913
 msgid "deprecated, use --tmp-project instead"
 msgstr "obsolète, utiliser --tmp-project à la place."
 
@@ -3851,74 +3851,78 @@ msgid ""
 "Switching to text based interface mode."
 msgstr ""
 
-#: ../lib/init/grass.py:709
+#: ../lib/init/grass.py:669
+msgid "Error creating project: {}"
+msgstr "Erreur lors de la création du projet : {}"
+
+#: ../lib/init/grass.py:696
 #, python-brace-format
 msgid "Unable to create new project because the project <{location}> already exists."
 msgstr "Impossible de créer le nouveau projet car le projet <{location}> existe déjà."
 
-#: ../lib/init/grass.py:715
+#: ../lib/init/grass.py:702
 #, python-brace-format
 msgid "Unable to create new project <{location}> because <{path}> is a file."
 msgstr "Impossible de créer le nouveau projet <{location}> car <{path}> est un fichier."
 
-#: ../lib/init/grass.py:719
+#: ../lib/init/grass.py:706
 #, python-brace-format
 msgid "Unable to create new project <{location}> because the directory <{path}> already exists."
 msgstr "Impossible de créer le nouveau projet <{location}> car le répertoire <{path}> existe déjà."
 
-#: ../lib/init/grass.py:724
+#: ../lib/init/grass.py:711
 #, python-brace-format
 msgid "Unable to create new project in the directory <{path}> for an unknown reason."
 msgstr "Impossible de créer le nouveau projet dans le répertoire <{path}> pour une raison inconnue."
 
-#: ../lib/init/grass.py:806
+#: ../lib/init/grass.py:793
 msgid "Mapset <{}> already exists. Unable to create a new temporary mapset of that name."
 msgstr "Le jeu de cartes <{}> existe déjà. Impossible de créer un nouveau jeu de cartes temporaire de ce nom."
 
-#: ../lib/init/grass.py:811
+#: ../lib/init/grass.py:798
 msgid "Mapset <{}> already exists."
 msgstr "Le jeu de cartes <{}> existe déjà."
 
-#: ../lib/init/grass.py:819
+#: ../lib/init/grass.py:806
 msgid "A new mapset can be created using '-c' flag."
 msgstr "Un nouveau jeu de cartes peut être créé en utilisant l'option '-c'."
 
-#: ../lib/init/grass.py:821
+#: ../lib/init/grass.py:808
 #, fuzzy
 msgid "Maybe you meant a different directory."
 msgstr "Vouliez-vous dire un répertoire différent?"
 
-#: ../lib/init/grass.py:849
+#: ../lib/init/grass.py:836
 msgid "Provide CRS to create a project"
 msgstr ""
 
-#: ../lib/init/grass.py:853
+#: ../lib/init/grass.py:840
 msgid "Creating new GRASS project <{}>..."
 msgstr "Création du nouveau projet GRASS <{}>…"
 
-#: ../lib/init/grass.py:864
+#: ../lib/init/grass.py:851
 #, python-brace-format
 msgid "Unable to create new mapset <{mapset}> because <{path}> is a file."
 msgstr "Impossible de créer le novueau jeux de cartes <{mapset}> car <{path}> est un fichier."
 
-#: ../lib/init/grass.py:873
+#: ../lib/init/grass.py:860
 msgid "The mapset <{}> is missing the WIND file (computational region). It will be fixed now. Note that this warning may become an error in future versions."
 msgstr "Le jeux de cartes <{}> ne contient pas de fichier WIND (zone de calcul). Cela va être corrigé. Cet avertissement pourra devenir une erreur dans les versions futures."
 
-#: ../lib/init/grass.py:883
+#: ../lib/init/grass.py:870
 #, python-brace-format
 msgid "No CRS is needed for creating mapset <{mapset}>, but <{geofile}> was provided as CRS. Did you mean to create a new project?"
 msgstr "Aucun SCR n'est nécessaire pour créer le jeu de cartes <{mapset}>, mais <{geofile}> a été fourni en tant que SCR. Aviez-vous plutôt l’intention de créer un nouveau projet ?"
 
-#: ../lib/init/grass.py:889
+#: ../lib/init/grass.py:876
 msgid "Creating new GRASS mapset <{}>..."
 msgstr "Création du nouveau jeu de cartes GRASS <{}>…"
 
-#: ../lib/init/grass.py:913
+#: ../lib/init/grass.py:900
 msgid "GRASS database directory, project and mapset not set properly. Use GUI or command line to set them."
 msgstr "Répertoire de base de données GRASS, projet et jeu de cartes non définis correctement. Utiliser l'interface graphique ou la ligne de commande pour les définir."
 
-#: ../lib/init/grass.py:973
+#: ../lib/init/grass.py:960
 #, python-brace-format
 msgid ""
 "Error reading data path information from g.gisenv.\n"
@@ -3935,25 +3939,25 @@ msgstr ""
 "\n"
 "Vérifier le fichier <{file}>."
 
-#: ../lib/init/grass.py:1265
+#: ../lib/init/grass.py:1252
 msgid "Building user fontcap..."
 msgstr "Construction des caractère utilisateur ..."
 
-#: ../lib/init/grass.py:1331
+#: ../lib/init/grass.py:1318
 msgid "The SHELL variable is not set"
 msgstr "La variable SHELL n'est pas définie"
 
-#: ../lib/init/grass.py:1348
+#: ../lib/init/grass.py:1335
 #, python-brace-format
 msgid "Unsupported shell <{sh}>: {env_file}"
 msgstr "Shell <{sh}> non supporté : {env_file}"
 
-#: ../lib/init/grass.py:1368
+#: ../lib/init/grass.py:1355
 #, python-format
 msgid "Executing <%s> ..."
 msgstr "Exécution de <%s> ..."
 
-#: ../lib/init/grass.py:1392
+#: ../lib/init/grass.py:1379
 #, python-brace-format
 msgid ""
 "Execution of <{cmd}> failed:\n"
@@ -3962,144 +3966,144 @@ msgstr ""
 "La commande <{cmd}> a échoué :\n"
 "{error}"
 
-#: ../lib/init/grass.py:1405
+#: ../lib/init/grass.py:1392
 #, python-format
 msgid "Execution of <%s> finished."
 msgstr "Exécution de <%s> terminée."
 
-#: ../lib/init/grass.py:1449
+#: ../lib/init/grass.py:1434
 #, python-brace-format
 msgid "Unable to close GUI. {0}"
 msgstr "Impossible de fermer l'interface graphique. {0}"
 
-#: ../lib/init/grass.py:1468
+#: ../lib/init/grass.py:1453
 #, python-format
 msgid "Welcome to GRASS %s"
 msgstr "Bienvenue dans GRASS %s"
 
-#: ../lib/init/grass.py:1494
+#: ../lib/init/grass.py:1479
 msgid "GRASS homepage:"
 msgstr "Page d'accueil de GRASS :"
 
 #. GTC Running through: SHELL NAME
-#: ../lib/init/grass.py:1496
+#: ../lib/init/grass.py:1481
 msgid "This version running through:"
 msgstr "Cette version fonctionne avec :"
 
-#: ../lib/init/grass.py:1499
+#: ../lib/init/grass.py:1484
 msgid "Help is available with the command:"
 msgstr "L'aide est disponible par la commande :"
 
-#: ../lib/init/grass.py:1500
+#: ../lib/init/grass.py:1485
 msgid "See the licence terms with:"
 msgstr "Voir les termes de la licence avec :"
 
-#: ../lib/init/grass.py:1501
+#: ../lib/init/grass.py:1486
 msgid "See citation options with:"
 msgstr "Voir les termes de la licence avec :"
 
-#: ../lib/init/grass.py:1506
+#: ../lib/init/grass.py:1491
 msgid "If required, restart the GUI with:"
 msgstr "Si requis, redémarrer l'interface graphique avec :"
 
-#: ../lib/init/grass.py:1508
+#: ../lib/init/grass.py:1493
 msgid "Start the GUI with:"
 msgstr "Démarrer l'interface graphique avec :"
 
-#: ../lib/init/grass.py:1510
+#: ../lib/init/grass.py:1495
 msgid "When ready to quit enter:"
 msgstr "Lors prêt pour la fermeture entrer :"
 
-#: ../lib/init/grass.py:1692
+#: ../lib/init/grass.py:1677
 msgid "2D and 3D raster masks present"
 msgstr "Masques raster 2D et 3D présents"
 
-#: ../lib/init/grass.py:1693
+#: ../lib/init/grass.py:1678
 msgid "Raster mask present"
 msgstr "Masque raster présent"
 
-#: ../lib/init/grass.py:1694
+#: ../lib/init/grass.py:1679
 msgid "3D raster mask present"
 msgstr "Masque raster 3D présent"
 
-#: ../lib/init/grass.py:1739
+#: ../lib/init/grass.py:1724
 msgid "Done."
 msgstr "Terminé."
 
-#: ../lib/init/grass.py:1741
+#: ../lib/init/grass.py:1726
 msgid "Goodbye from GRASS"
 msgstr "GRASS vous dit au revoir"
 
-#: ../lib/init/grass.py:1802
+#: ../lib/init/grass.py:1787
 msgid "Please install the GRASS development package"
 msgstr "Veuillez installer le paquet développement de GRASS"
 
-#: ../lib/init/grass.py:1848
+#: ../lib/init/grass.py:1833
 #, python-format
 msgid "Parameter <%s> not supported"
 msgstr "Paramètres <%s> on supporté"
 
-#: ../lib/init/grass.py:1897
+#: ../lib/init/grass.py:1882
 #, python-format
 msgid "use mapset %(metavar)s"
 msgstr "utiliser le jeu de cartes %(metavar)s"
 
-#: ../lib/init/grass.py:1903
+#: ../lib/init/grass.py:1888
 #, python-format
 msgid "use temporary mapset in project %(metavar)s"
 msgstr "utiliser un jeu de cartes temporaire dans le projet %(metavar)s"
 
-#: ../lib/init/grass.py:1911
+#: ../lib/init/grass.py:1896
 msgid "path to mapset (or project if creating one)"
 msgstr "chemin d'accès au jeu de cartes (ou au projet s’il est créé)"
 
-#: ../lib/init/grass.py:1914
+#: ../lib/init/grass.py:1899
 msgid "use temporary mapset"
 msgstr "utiliser un jeu de cartes temporaire"
 
-#: ../lib/init/grass.py:1921
+#: ../lib/init/grass.py:1906
 #, python-format
 msgid "use temporary project with %(metavar)s (EPSG, georeferenced file, ...)"
 msgstr "utiliser un projet temporaire avec %(metavar)s (EPSG, fichier géo-référencé, ...)"
 
-#: ../lib/init/grass.py:1935
+#: ../lib/init/grass.py:1920
 msgid "mapset locking timeout in seconds"
 msgstr "délai de verrouillage du jeu de cartes en secondes"
 
-#: ../lib/init/grass.py:1941
+#: ../lib/init/grass.py:1926
 #, fuzzy
 msgid "remove lock if present"
 msgstr "retirer le verrou s'il est présent"
 
-#: ../lib/init/grass.py:1955
+#: ../lib/init/grass.py:1940
 msgid "Option --tmp-location is deprecated, use --tmp-project instead\n"
 msgstr "L'option --tmp-location est obsolète, utilisez --tmp-project à la place.\n"
 
-#: ../lib/init/grass.py:2000
+#: ../lib/init/grass.py:1985
 msgid "execute module or script (followed by executable with arguments)"
 msgstr "exécuter un module ou un script (suivi d'un exécutable avec des arguments)"
 
-#: ../lib/init/grass.py:2056
+#: ../lib/init/grass.py:2041
 msgid "Flag -e requires also flag -c"
 msgstr "L'option -e nécessite également l'option -c"
 
-#: ../lib/init/grass.py:2058
+#: ../lib/init/grass.py:2043
 msgid "Flag -c requires name of project or mapset"
 msgstr "L'option -c requiert le nom du projet ou du jeu de cartes."
 
-#: ../lib/init/grass.py:2061
+#: ../lib/init/grass.py:2046
 msgid "Either --tmp-project or --tmp-mapset can be used, not both"
 msgstr "Soit --tmp-project ou --tmp-mapset peuvent être utilisés, pas les deux"
 
-#: ../lib/init/grass.py:2068
+#: ../lib/init/grass.py:2053
 msgid "Coordinate reference system argument (e.g. EPSG) is needed for --tmp-project"
 msgstr "L'argument du système de coordonnées de référence (ex EPSG) est nécessaire pour --tmp-project"
 
-#: ../lib/init/grass.py:2075
+#: ../lib/init/grass.py:2060
 msgid "Only one argument (e.g. EPSG) is needed for --tmp-project, mapset name <{}> provided"
 msgstr "Un seul argument (ex EPSG) est nécessaire pour --tmp-project, le jeu de cartes <{}> est déjà fourni"
 
-#: ../lib/init/grass.py:2222
+#: ../lib/init/grass.py:2271
 #, python-brace-format
 msgid ""
 "Unable to start GRASS. You have the choice to:\n"
@@ -4128,24 +4132,24 @@ msgstr ""
 "     {cmd_name} --help\n"
 "Voir également : https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 
-#: ../lib/init/grass.py:2243
+#: ../lib/init/grass.py:2292
 msgid "Starting GRASS..."
 msgstr "Démarrage de GRASS..."
 
-#: ../lib/init/grass.py:2292
+#: ../lib/init/grass.py:2341
 msgid "Failed to start GRASS, grassdata directory cannot be found or created."
 msgstr "Le démarrage de GRASS a échoué, le dossier grassdata est introuvable ou ne peut pas être créé."
 
-#: ../lib/init/grass.py:2299
+#: ../lib/init/grass.py:2348
 msgid "Failed to start GRASS, no default project to copy in the installation or copying failed."
 msgstr "Le démarrage de GRASS a échoué, il n'y a pas de projet par défaut à copier dans l'installation, ou la copie a échoué."
 
-#: ../lib/init/grass.py:2404
+#: ../lib/init/grass.py:2453
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr "Lancement de l'interface graphique <%s> en tâche de fond, merci de patienter ..."
 
-#: ../lib/init/grass.py:2442
+#: ../lib/init/grass.py:2491
 #, python-format
 msgid "Failed to start shell '%s'"
 msgstr "Échec au lancement du shell '%s'"
@@ -5386,7 +5390,7 @@ msgstr "aucun"
 msgid "not known"
 msgstr "inconnu"
 
-#: ../lib/raster/mask_info.c:219
+#: ../lib/raster/mask_info.c:220
 msgid "Single thread processing enforced due to raster mask being present."
 msgstr "Le traitement à un seul thread est imposé en raison de la présence d'un masque raster."
 
@@ -5707,81 +5711,79 @@ msgstr "Erreur à la fermeture du fichier de métadonnées <%s> pour la carte ra
 msgid "Unable to create <%s> metadata file for raster map <%s@%s>"
 msgstr "Impossible de créer le fichier de métadonnées <%s> pour la carte raster <%s@%s>"
 
-#: ../lib/raster/reclass.c:162
+#: ../lib/raster/reclass.c:163
 #, c-format
 msgid "Error reading beginning of header file for <%s@%s>: %s"
 msgstr "Erreur de lecture du début du fichier d'en-tête pour <%s@%s> : %s"
 
-#: ../lib/raster/reclass.c:180
+#: ../lib/raster/reclass.c:181
 #, c-format
 msgid "Too many reclass categories for <%s@%s>"
 msgstr "Trop de catégories de reclassification pour <%s@%s>"
 
-#: ../lib/raster/reclass.c:184
+#: ../lib/raster/reclass.c:185
 #, c-format
 msgid "Illegal reclass format in header file for <%s@%s>: %s"
 msgstr "Format de reclassification illégal dans l'en-tête de fichier pour <%s@%s> : %s"
 
-#: ../lib/raster/reclass.c:252
+#: ../lib/raster/reclass.c:253
 #, c-format
 msgid "File too short, reading line %d"
 msgstr "Fichier trop court, lecture de la ligne %d"
 
-#: ../lib/raster/reclass.c:259
+#: ../lib/raster/reclass.c:260
 #, c-format
 msgid "Line too long: %s..."
 msgstr "Ligne trop longue : %s..."
 
-#: ../lib/raster/reclass.c:265
+#: ../lib/raster/reclass.c:266
 #, c-format
 msgid "Format is not key:value: %s"
 msgstr "Le format n'est pas clé:valeur : %s"
 
-#: ../lib/raster/reclass.c:284
+#: ../lib/raster/reclass.c:279
 #, c-format
 msgid "Unknown key at line: %s"
 msgstr "Clé inconnue à la ligne : %s"
 
-#: ../lib/raster/reclass.c:295
-#, fuzzy, c-format
-#| msgid "Unable to read find raster <%s>"
+#: ../lib/raster/reclass.c:290
+#, c-format
 msgid "Mapset not read, only raster name: %s"
-msgstr "Impossible de lire le raster <%s>"
+msgstr "Jeu de cartes non lu, seulement le nom du raster : %s"
 
-#: ../lib/raster/reclass.c:299
-#, fuzzy, c-format
-#| msgid "Raster map <%s> not found in mapset <%s>"
+#: ../lib/raster/reclass.c:294
+#, c-format
 msgid "Raster name not read, only mapset: %s"
-msgstr "Carte raster <%s> non trouvée dans le jeux de données <%s>"
+msgstr "Nom du raster non lu, seulement le jeu de cartes : %s"
 
-#: ../lib/raster/reclass.c:302
+#: ../lib/raster/reclass.c:297
 msgid "Raster name and mapset not read"
 msgstr "Le nom du raster et du jeu de carte n’ont pas été lus"
 
-#: ../lib/raster/reclass.c:333
+#: ../lib/raster/reclass.c:328
 msgid "Illegal reclass request"
 msgstr "Requête de reclassification illégale"
 
-#: ../lib/raster/reclass.c:338
+#: ../lib/raster/reclass.c:333
 msgid "Illegal reclass type"
 msgstr "Type de reclassification illégal"
 
-#: ../lib/raster/reclass.c:344
+#: ../lib/raster/reclass.c:339
 #, c-format
 msgid "Unable to create header file for <%s@%s>"
 msgstr "Impossible de créer le fichier d'en-tête pour <%s@%s>"
 
-#: ../lib/raster/reclass.c:392
+#: ../lib/raster/reclass.c:387
 #, c-format
 msgid "Unable to create dependency file in <%s@%s>"
 msgstr "Impossible de créer le fichier de dépendances dans <%s@%s>"
 
-#: ../lib/raster/reclass.c:479
+#: ../lib/raster/reclass.c:474
 #, c-format
 msgid "Reading integer failed on line: %s (after reading min: %d)"
 msgstr "Échec de la lecture de l'entier à la ligne : %s (après lecture min : %d)"
 
-#: ../lib/raster/reclass.c:484
+#: ../lib/raster/reclass.c:479
 #, c-format
 msgid "First entry (min) not read yet and reading integer failed on line: %s"
 msgstr "La première entrée (min) n'a pas encore été lue et la lecture de l'entier a échoué à la ligne : %s"
