@@ -488,7 +488,7 @@ class Tools:
             parameter_converter.process_parameter_list(command[1:])
         try:
             # Processing parameters for import and export is costly, so we do it
-            # only when we previously determined it there might be such parameters.
+            # only when we previously determined there might be such parameters.
             if parameter_converter.import_export:
                 if self._importer_exporter is None:
                     # The importer exporter instance may be reused in later calls
