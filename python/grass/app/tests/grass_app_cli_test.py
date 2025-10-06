@@ -129,6 +129,99 @@ def test_subcommand_run_with_crs_as_pack_subprocess(pack_raster_file4x5_rows, ca
     assert json.loads(result.stdout)["srid"] == "EPSG:3358"
 
 
+def test_create_mapset(tmp_path):
+    """Check that we can create mapset and we can set its computational region"""
+    project = tmp_path / "test_1"
+    mapset = project / "data_1"
+    assert main(["project", "create", str(project), "--crs", "EPSG:3358"]) == 0
+    assert main(["mapset", "create", str(mapset)]) == 0
+    assert mapset.exists()
+    assert mapset.is_dir()
+    rows = 13
+    cols = 17
+    assert (
+        main(
+            [
+                "run",
+                "--project",
+                str(mapset),
+                "g.region",
+                f"rows={rows}",
+                f"cols={cols}",
+            ]
+        )
+        == 0
+    )
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "grass.app",
+            "run",
+            "--project",
+            str(mapset),
+            "g.region",
+            "-p",
+            "format=json",
+        ],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    region = json.loads(result.stdout)
+    assert region["rows"] == rows
+    assert region["cols"] == cols
+    # Also check it is linked with the project.
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "grass.app",
+            "run",
+            "--project",
+            str(mapset),
+            "g.proj",
+            "-p",
+            "format=json",
+        ],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    assert json.loads(result.stdout)["srid"] == "EPSG:3358"
+    # And check that we are really using the newly created mapset,
+    # so the computational region in the default mapset is different.
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "grass.app",
+            "run",
+            "--project",
+            str(project),
+            "g.region",
+            "-p",
+            "format=json",
+        ],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    region = json.loads(result.stdout)
+    assert region["rows"] == 1
+    assert region["cols"] == 1
+
+
+def test_mapset_create_exists(tmp_path):
+    """Check that creating mapset fails when mapset already exists"""
+    project = tmp_path / "test_1"
+    mapset = project / "data_1"
+    assert main(["project", "create", str(project)]) == 0
+    assert main(["mapset", "create", str(mapset)]) == 0
+    assert main(["mapset", "create", str(mapset)]) == 1
+    # There is no overwrite option for mapset yet, so we don't test that.
+
+
 def test_create_overwrite(tmp_path):
     """Check that creating when project exists fails unless overwrite is True"""
     project = tmp_path / "test_1"
