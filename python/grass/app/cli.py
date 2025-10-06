@@ -27,6 +27,7 @@ from pathlib import Path
 
 import grass.script as gs
 from grass.app.data import lock_mapset, unlock_mapset, MapsetLockingException
+from grass.grassdb.create import create_mapset
 from grass.exceptions import ScriptError
 from grass.tools import Tools
 
@@ -87,6 +88,24 @@ def subcommand_create_project(args) -> int:
         )
     except ScriptError as error:
         print(_("Error creating project: {}").format(error), file=sys.stderr)
+        return 1
+    return 0
+
+
+def add_mapset_subparser(subparsers):
+    mapset_subparser = subparsers.add_parser("mapset", help="mapset related operations")
+    mapset_subparsers = mapset_subparser.add_subparsers(dest="mapset_command")
+
+    subparser = mapset_subparsers.add_parser("create", help="create a new mapset")
+    subparser.add_argument("path", help="path to the new mapset")
+    subparser.set_defaults(func=subcommand_mapset_create)
+
+
+def subcommand_mapset_create(args) -> int:
+    try:
+        create_mapset(args.path)
+    except (ScriptError, OSError) as error:
+        print(_("Error creating mapset: {}").format(error), file=sys.stderr)
         return 1
     return 0
 
@@ -201,6 +220,7 @@ def main(args=None, program=None):
     run_subparser.set_defaults(func=subcommand_run_tool)
 
     add_project_subparser(subparsers)
+    add_mapset_subparser(subparsers)
 
     subparser = subparsers.add_parser("lock", help="lock a mapset")
     subparser.add_argument("mapset_path", type=str)
