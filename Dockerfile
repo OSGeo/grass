@@ -1,46 +1,27 @@
-# syntax=docker/dockerfile:1.18@sha256:dabfc0969b935b2080555ace70ee69a5261af8a8f1b4df97b9e7fbcf6722eddf
+# syntax=docker/dockerfile:1.19@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6
 
 # Note: This file must be kept in sync in ./Dockerfile and ./docker/ubuntu/Dockerfile.
 #       Changes to this file must be copied over to the other file.
-
 ARG GUI=without
+
+FROM ubuntu:24.04@sha256:728785b59223d755e3e5c5af178fab1be7031f3522c5ccd7a0b32b80d8248123 AS common_start
+
+ARG BASE_NAME="ubuntu:24.04"
+ARG DIGEST="sha256:353675e2a41babd526e2b837d7ec780c2a05bca0164f7ea5dbbd433d21d166fc"
+ARG PYTHON_VERSION=3.12
+
 # Have build parameters as build arguments?
 # ARG LDFLAGS="-s -Wl,--no-undefined -lblas"
 # ARG CFLAGS="-O2 -std=gnu99"
 # ARG CXXFLAGS=""
 # ARG PYTHONPATH="$PYTHONPATH"
 # ARG LD_LIBRARY_PATH="/usr/local/lib"
-ARG NUMTHREADS=4
-
-ARG BRANCH=$(git branch --show-current)
 ARG AUTHORS="Carmen Tawalika,Markus Neteler,Anika Weinmann,Stefan Blumentrath"
 ARG MAINTAINERS="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
 ARG VENDOR="GRASS Development Team"
-ARG BASE_NAME="ubuntu:22.04"
-ARG DOCUMENTATION="https://github.com/OSGeo/grass/tree/${BRANCH}/docker/README.md"
+ARG LICENSE="GPL-2.0-or-later"
+ARG DESCRIPTION="GRASS (Geographic Resources Analysis Support System, https://grass.osgeo.org/) is a powerful computational engine for geospatial processing."
 ARG REF_NAME="grass"
-ARG DIGEST="sha256:4e0171b9275e12d375863f2b3ae9ce00a4c53ddda176bd55868df97ac6f21a6e"
-
-FROM ubuntu:22.04@sha256:4e0171b9275e12d375863f2b3ae9ce00a4c53ddda176bd55868df97ac6f21a6e AS common_start
-
-ARG AUTHORS
-ARG MAINTAINERS
-ARG VENDOR
-ARG GUI
-ARG BASE_NAME
-ARG DOCUMENTATION
-ARG REF_NAME
-ARG DIGEST
-ARG NUMTHREADS
-
-LABEL org.opencontainers.image.authors="$AUTHORS" \
-      org.opencontainers.image.vendor="$VENDOR" \
-      org.opencontainers.image.base.name="$BASE_NAME" \
-      org.opencontainers.image.base.digest="$DIGEST" \
-      org.opencontainers.image.ref.name="$REF_NAME" \
-      org.opencontainers.image.documentation="$DOCUMENTATION" \
-      maintainers="$MAINTAINERS"
-
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -73,17 +54,16 @@ ARG GRASS_RUN_PACKAGES="\
   liblapacke-dev \
   libmagic-mgc \
   libmagic1 \
-  libncurses5 \
+  libncurses6 \
   libomp-dev \
   libomp5 \
-  libopenblas-base \
   libopenblas-dev \
+  libopenblas0 \
   libopenjp2-7 \
-  libpdal-base13 \
   libpdal-dev \
   libpdal-plugin-hdf \
   libpdal-plugins \
-  libpdal-util13 \
+  libpdal16 \
   libpnglite0 \
   libpq-dev \
   libpq5 \
@@ -122,7 +102,7 @@ ARG GRASS_BUILD_PACKAGES="\
   libcairo2-dev \
   libfreetype6-dev \
   libjpeg-dev \
-  libncurses5-dev \
+  libncurses-dev \
   libnetcdf-dev \
   libopenjp2-7-dev \
   libpnglite-dev \
@@ -162,7 +142,7 @@ ARG GRASS_CONFIG="\
 ARG GRASS_PYTHON_PACKAGES="\
     matplotlib \
     numpy \
-    Pillow==10.3.0 \
+    Pillow>=10.3.0 \
     pip \
     psycopg2 \
     python-dateutil \
@@ -177,9 +157,9 @@ FROM common_start AS grass_with_gui
 
 ARG GRASS_RUN_PACKAGES="${GRASS_RUN_PACKAGES} \
   adwaita-icon-theme-full \
-  freeglut3 \
   gettext \
   libglu1-mesa \
+  libglut3.12 \
   libgstreamer-plugins-base1.0 \
   libgtk-3-0 \
   libjpeg8 \
@@ -188,8 +168,8 @@ ARG GRASS_RUN_PACKAGES="${GRASS_RUN_PACKAGES} \
   librsvg2-common \
   libsdl2-2.0-0 \
   libsm6 \
-  libtiff5 \
-  libwebkit2gtk-4.0 \
+  libtiff6 \
+  libwebkit2gtk-4.1 \
   libxtst6 \
   python3-wxgtk4.0 \
 "
@@ -211,17 +191,16 @@ ARG GRASS_BUILD_PACKAGES="${GRASS_BUILD_PACKAGES} \
   libsdl2-dev \
   libsm-dev \
   libtiff-dev \
-  libwebkit2gtk-4.0-dev \
+  libwebkit2gtk-4.1-dev \
   libxtst-dev \
 "
 
 ARG GRASS_ADDITIONAL_CONFIG="\
   --with-nls \
   --with-opengl \
-  --with-readline \
   --with-x \
 "
-# ARG GRASS_PYTHON_PACKAGES="${GRASS_PYTHON_PACKAGES} wxPython"
+
 # If you do not use any Gnome Accessibility features, to suppress warning
 # WARNING **: Couldn't connect to accessibility bus:
 # execute programs with
@@ -258,7 +237,7 @@ RUN apt-get update \
 
 # # Get datum grids
 # # Currently using https://proj.org/en/9.3/usage/network.html#how-to-enable-network-capabilities
-# FROM ubuntu:22.04 AS datum_grids
+# FROM ubuntu:24.04 AS datum_grids
 
 # # See: https://github.com/OSGeo/PROJ-data
 # RUN apt-get update \
@@ -280,24 +259,25 @@ RUN apt-get update \
     ${GRASS_BUILD_PACKAGES} \
     && apt-get clean all \
     && rm -rf /var/lib/apt/lists/* \
-    && (echo "Install Python" \
+    && echo "Install Python" \
     && wget --progress="dot:giga" -q https://bootstrap.pypa.io/pip/get-pip.py \
-    && python get-pip.py \
+    && python get-pip.py --break-system-packages \
     && rm -r get-pip.py \
     && mkdir -p /src/site-packages \
-    && python -m pip install --no-cache-dir -t /src/site-packages --upgrade \
+    && python -m pip install --break-system-packages --no-cache-dir -t /src/site-packages --upgrade \
     ${GRASS_PYTHON_PACKAGES} \
     && rm -r /root/.cache \
-    && rm -rf /tmp/pip-* \
-    )
+    && rm -rf /tmp/pip-*
 
-# copy grass gis source
+# copy grass source
 COPY . /src/grass_build/
 
 WORKDIR /src/grass_build
 
 # Set environmental variables for GRASS compilation, without debug symbols
 # Set gcc/g++ environmental variables for GRASS compilation, without debug symbols
+ARG NUMTHREADS=4
+
 ENV LD_LIBRARY_PATH="/usr/local/lib" \
     LDFLAGS="-s -Wl,--no-undefined -lblas" \
     CFLAGS="-O2 -std=gnu99" \
@@ -309,8 +289,8 @@ ENV LD_LIBRARY_PATH="/usr/local/lib" \
 RUN make -j $NUMTHREADS distclean || echo "nothing to clean" \
     && ./configure $GRASS_CONFIG \
     $GRASS_ADDITIONAL_CONFIG \
-    && make -j $NUMTHREADS
-RUN make install && ldconfig \
+    && make -j $NUMTHREADS \
+    && make install && ldconfig \
     && rm -rf /usr/local/grass85/demolocation \
     && if [ "$GUI" = "with" ] ; then \
         echo "GUI selected, skipping GUI related cleanup"; \
@@ -341,8 +321,35 @@ RUN git clone --branch $GDAL_GRASS_VERSION --depth 1 https://github.com/OSGeo/gd
 
 # Leave build stage
 FROM grass AS grass_final
+
+# Set with "$(git branch --show-current)"
+ARG BRANCH=main
+# Set with "$(git log -n 1 --pretty=format:'%h')"
+ARG REVISION=latest
+# Set with "$(head include/VERSION -n 3 | sed ':a;N;$!ba;s/\n/ /g')"
+ARG VERSION=8.5.dev
+# Set with "$(date +'%Y-%m-%dT%H:%M:%S%:z')"
+ARG BUILD_DATE
+ARG TITLE="GRASS ${VERSION}"
+ARG URL="https://github.com/OSGeo/grass/tree/${BRANCH}/docker"
+ARG DOCUMENTATION="https://github.com/OSGeo/grass/tree/${BRANCH}/docker/README.md"
+ARG SOURCE="https://github.com/OSGeo/grass/tree/${BRANCH}/docker/ubuntu"
+
+# Add OCI annotations (see: https://github.com/opencontainers/image-spec/blob/main/annotations.md)
 LABEL org.opencontainers.image.authors="$AUTHORS" \
       org.opencontainers.image.vendor="$VENDOR" \
+      org.opencontainers.image.licenses="$LICENSE" \
+      org.opencontainers.image.created="$BUILD_DATE" \
+      org.opencontainers.image.revision="$REVISION" \
+      org.opencontainers.image.url="$URL" \
+      org.opencontainers.image.source="$SOURCE" \
+      org.opencontainers.image.version="$VERSION" \
+      org.opencontainers.image.title="$TITLE" \
+      org.opencontainers.image.description="$DESCRIPTION" \
+      org.opencontainers.image.base.name="$BASE_NAME" \
+      org.opencontainers.image.base.digest="$DIGEST" \
+      org.opencontainers.image.ref.name="$REF_NAME" \
+      org.opencontainers.image.documentation="$DOCUMENTATION" \
       maintainers="$MAINTAINERS"
 
 # GRASS specific
@@ -359,7 +366,7 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
 # Copy GRASS from build image
 COPY --link --from=build /usr/local/bin/* /usr/local/bin/
 COPY --link --from=build /usr/local/grass85 /usr/local/grass85/
-COPY --link --from=build /src/site-packages /usr/lib/python3.10/
+COPY --link --from=build /src/site-packages /usr/lib/python${PYTHON_VERSION}/
 COPY --link --from=build /usr/lib/gdalplugins /usr/lib/gdalplugins
 # COPY --link --from=datum_grids /tmp/cdn.proj.org/*.tif /usr/share/proj/
 
@@ -369,7 +376,8 @@ RUN ln -sf /usr/local/grass85 /usr/local/grass
 # show GRASS, PROJ, GDAL etc versions
 RUN grass --tmp-project EPSG:4326 --exec g.version -rge && \
     pdal --version && \
-    python --version
+    python --version && \
+    python -c "import numpy; print(numpy.__version__)"
 
 WORKDIR /tmp
 COPY docker/testdata/simple.laz .

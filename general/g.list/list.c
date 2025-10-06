@@ -75,10 +75,10 @@ void print_list(FILE *fp, struct elist *el, int count, const char *separator,
 {
     int i;
     char fullname[1024];
-    JSON_Array *root_array = NULL;
-    JSON_Value *root_value = NULL;
-    JSON_Object *map_object = NULL;
-    JSON_Value *map_value = NULL;
+    G_JSON_Array *root_array = NULL;
+    G_JSON_Value *root_value = NULL;
+    G_JSON_Object *map_object = NULL;
+    G_JSON_Value *map_value = NULL;
 
     if (!count && format != JSON)
         return;

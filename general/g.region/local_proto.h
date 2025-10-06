@@ -22,6 +22,6 @@ int zoom(struct Cell_head *, const char *, const char *);
 
 /* printwindow.c */
 void print_window(struct Cell_head *, int, int, enum OutputFormat,
-                  JSON_Object *);
+                  G_JSON_Object *);
 
 #endif

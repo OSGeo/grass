@@ -115,9 +115,9 @@ int main(int argc, char *argv[])
     dbColumn *column;
     char *sep;
     enum OutputFormat format;
-    JSON_Value *root_value = NULL, *object_value = NULL;
-    JSON_Array *root_array = NULL;
-    JSON_Object *root_object = NULL;
+    G_JSON_Value *root_value = NULL, *object_value = NULL;
+    G_JSON_Array *root_array = NULL;
+    G_JSON_Object *root_object = NULL;
 
     G_gisinit(argv[0]);
 

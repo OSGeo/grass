@@ -64,9 +64,9 @@ int main(int argc, char *argv[])
     struct Cell_head cellhd;
 
     enum OutputFormat format;
-    JSON_Array *root_array;
-    JSON_Object *object;
-    JSON_Value *root_value, *object_value;
+    G_JSON_Array *root_array;
+    G_JSON_Object *object;
+    G_JSON_Value *root_value, *object_value;
 
     G_gisinit(argv[0]);
 

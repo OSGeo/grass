@@ -131,7 +131,7 @@ HorizonProperties horizon_height(const Geometry *geometry,
                                  const OriginAngle *origin_angle);
 void calculate_point_mode(const Settings *settings, const Geometry *geometry,
                           double xcoord, double ycoord, FILE *fp,
-                          enum OutputFormat format, JSON_Object *json_origin);
+                          enum OutputFormat format, G_JSON_Object *json_origin);
 int new_point(const Geometry *geometry, const OriginPoint *origin_point,
               const OriginAngle *origin_angle, SearchPoint *search_point,
               HorizonProperties *horizon);
@@ -602,9 +602,9 @@ int main(int argc, char *argv[])
 
     INPUT(&geometry, elevin);
     if (mode == SINGLE_POINT) {
-        JSON_Value *root_value, *origin_value;
-        JSON_Array *coordinates;
-        JSON_Object *origin;
+        G_JSON_Value *root_value, *origin_value;
+        G_JSON_Array *coordinates;
+        G_JSON_Object *origin;
         if (format == JSON) {
             root_value = G_json_value_init_array();
             coordinates = G_json_array(root_value);
@@ -807,7 +807,7 @@ void com_par(const Geometry *geometry, OriginAngle *origin_angle, double angle,
 
 void calculate_point_mode(const Settings *settings, const Geometry *geometry,
                           double xcoord, double ycoord, FILE *fp,
-                          enum OutputFormat format, JSON_Object *json_origin)
+                          enum OutputFormat format, G_JSON_Object *json_origin)
 {
     /*
        xg0 = xx0 = (double)xcoord * stepx;
@@ -850,8 +850,8 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
     origin_point.maxlength = settings->fixedMaxLength;
     /* JSON variables and formatting */
 
-    JSON_Value *horizons_value;
-    JSON_Array *horizons;
+    G_JSON_Value *horizons_value;
+    G_JSON_Array *horizons;
 
     switch (format) {
     case PLAIN:
@@ -869,8 +869,8 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
     }
 
     for (int i = 0; i < printCount; i++) {
-        JSON_Value *value;
-        JSON_Object *object;
+        G_JSON_Value *value;
+        G_JSON_Object *object;
         OriginAngle origin_angle;
         com_par(geometry, &origin_angle, angle, xp, yp);
 

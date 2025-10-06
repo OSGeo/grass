@@ -22,15 +22,16 @@
 
 #include "local_proto.h"
 
-static void initialize_json_object(JSON_Value **, JSON_Object **);
-static void initialize_json_array(JSON_Value **, JSON_Array **);
-static void append_category_ranges(JSON_Array *range_array, long min, long max);
-static void output_pretty_json(JSON_Value *);
+static void initialize_json_object(G_JSON_Value **, G_JSON_Object **);
+static void initialize_json_array(G_JSON_Value **, G_JSON_Array **);
+static void append_category_ranges(G_JSON_Array *range_array, long min,
+                                   long max);
+static void output_pretty_json(G_JSON_Value *);
 static int show(CELL, CELL, int *, DCELL, DCELL, RASTER_MAP_TYPE, int,
-                enum OutputFormat, JSON_Array *);
+                enum OutputFormat, G_JSON_Array *);
 
-static void initialize_json_object(JSON_Value **root_value,
-                                   JSON_Object **root_object)
+static void initialize_json_object(G_JSON_Value **root_value,
+                                   G_JSON_Object **root_object)
 {
     *root_value = G_json_value_init_object();
     if (*root_value == NULL) {
@@ -39,8 +40,8 @@ static void initialize_json_object(JSON_Value **root_value,
     *root_object = G_json_object(*root_value);
 }
 
-static void initialize_json_array(JSON_Value **root_value,
-                                  JSON_Array **root_array)
+static void initialize_json_array(G_JSON_Value **root_value,
+                                  G_JSON_Array **root_array)
 {
     *root_value = G_json_value_init_array();
     if (*root_value == NULL) {
@@ -49,10 +50,11 @@ static void initialize_json_array(JSON_Value **root_value,
     *root_array = G_json_array(*root_value);
 }
 
-static void append_category_ranges(JSON_Array *range_array, long min, long max)
+static void append_category_ranges(G_JSON_Array *range_array, long min,
+                                   long max)
 {
-    JSON_Object *cat_object;
-    JSON_Value *cat_value;
+    G_JSON_Object *cat_object;
+    G_JSON_Value *cat_value;
     initialize_json_object(&cat_value, &cat_object);
 
     G_json_object_set_number(cat_object, "min", min);
@@ -61,7 +63,7 @@ static void append_category_ranges(JSON_Array *range_array, long min, long max)
     G_json_array_append_value(range_array, cat_value);
 }
 
-static void output_pretty_json(JSON_Value *root_value)
+static void output_pretty_json(G_JSON_Value *root_value)
 {
     char *serialized_string = G_json_serialize_to_string_pretty(root_value);
     if (!serialized_string) {
@@ -80,9 +82,9 @@ int long_list(struct Cell_stats *statf, DCELL dmin, DCELL dmax,
 {
     CELL cat;
     long count; /* not used, but required by cell stats call */
-    JSON_Value *root_value, *range_value;
-    JSON_Object *root_object;
-    JSON_Array *range_array;
+    G_JSON_Value *root_value, *range_value;
+    G_JSON_Object *root_object;
+    G_JSON_Array *range_array;
 
     if (format == JSON) {
         initialize_json_object(&root_value, &root_object);
@@ -120,8 +122,8 @@ int long_list(struct Cell_stats *statf, DCELL dmin, DCELL dmax,
             break;
         case JSON:
             if (map_type != CELL_TYPE) {
-                JSON_Object *cat_object;
-                JSON_Value *cat_value;
+                G_JSON_Object *cat_object;
+                G_JSON_Value *cat_value;
                 initialize_json_object(&cat_value, &cat_object);
 
                 G_json_object_set_number(cat_object, "min",
@@ -162,9 +164,9 @@ int compact_list(struct Cell_stats *statf, DCELL dmin, DCELL dmax,
     CELL cat1, cat2, temp;
     int len;
     long count; /* not used, but required by cell stats call */
-    JSON_Value *root_value, *range_value;
-    JSON_Object *root_object;
-    JSON_Array *range_array = NULL;
+    G_JSON_Value *root_value, *range_value;
+    G_JSON_Object *root_object;
+    G_JSON_Array *range_array = NULL;
 
     if (format == JSON) {
         initialize_json_object(&root_value, &root_object);
@@ -221,12 +223,12 @@ int compact_list(struct Cell_stats *statf, DCELL dmin, DCELL dmax,
 
 static int show(CELL low, CELL high, int *len, DCELL dmin, DCELL dmax,
                 RASTER_MAP_TYPE map_type, int nsteps, enum OutputFormat format,
-                JSON_Array *root_array)
+                G_JSON_Array *root_array)
 {
     char text[100] = {0};
     char xlen;
-    JSON_Object *cat_object;
-    JSON_Value *cat_value;
+    G_JSON_Object *cat_object;
+    G_JSON_Value *cat_value;
 
     if (low + 1 == high) {
         show(low, low, len, dmin, dmax, map_type, nsteps, format, root_array);
@@ -293,9 +295,9 @@ int compact_range_list(CELL negmin, CELL negmax, CELL zero, CELL posmin,
                        CELL posmax, CELL null, char *no_data_str,
                        int skip_nulls, enum OutputFormat format)
 {
-    JSON_Value *root_value, *range_value;
-    JSON_Object *root_object;
-    JSON_Array *range_array;
+    G_JSON_Value *root_value, *range_value;
+    G_JSON_Object *root_object;
+    G_JSON_Array *range_array;
 
     if (format == JSON) {
         initialize_json_object(&root_value, &root_object);
@@ -369,9 +371,9 @@ int range_list(CELL negmin, CELL negmax, CELL zero, CELL posmin, CELL posmax,
                CELL null, char *no_data_str, int skip_nulls,
                enum OutputFormat format)
 {
-    JSON_Value *root_value, *range_value;
-    JSON_Object *root_object;
-    JSON_Array *range_array;
+    G_JSON_Value *root_value, *range_value;
+    G_JSON_Object *root_object;
+    G_JSON_Array *range_array;
 
     if (format == JSON) {
         initialize_json_object(&root_value, &root_object);
