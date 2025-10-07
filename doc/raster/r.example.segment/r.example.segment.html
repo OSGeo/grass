@@ -1,0 +1,35 @@
+<h2>DESCRIPTION</h2>
+
+<em>r.example.segment</em> changes one cell value in hardcoded location.
+It is meant to demonstrate how to use the Segment Library together with
+GRASS GIS raster maps. 
+
+<h2>EXAMPLE</h2>
+
+Create a modified version of the raster map "elevation"
+(North Carolina sample dataset):
+
+<div class="code"><pre>
+g.region raster=elevation
+r.example.segment input=elevation output=modified_elevation
+r.univar raster_map_1
+r.univar raster_map_2
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.example.html">r.example</a>
+<a href="r.example.html">r.example.segmulti</a>
+<a href="v.example.html">v.example</a>
+</em>
+
+<em>
+<a href="https://grass.osgeo.org/programming7/">GRASS Programmer's Manual</a>
+</em>
+
+<h2>AUTHORS</h2>
+
+Vaclav Petras
+
+<p><i>Last changed: $Date$</i>
