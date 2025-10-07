@@ -288,7 +288,7 @@ int main(int argc, char *argv[])
             if (G_strlcpy(result, group.group_ref.file[i].name,
                           sizeof(result)) >= sizeof(result))
                 G_fatal_error(_("Map name <%s> is too long"),
-                             group.group_ref.file[i].name);
+                              group.group_ref.file[i].name);
             strcat(result, extension);
 
             if (G_legal_filename(result) < 0)
