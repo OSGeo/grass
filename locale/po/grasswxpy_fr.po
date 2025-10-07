@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-20 16:33+0000\n"
-"PO-Revision-Date: 2025-09-19 22:48+0000\n"
+"POT-Creation-Date: 2025-09-27 17:16+0000\n"
+"PO-Revision-Date: 2025-10-02 18:24+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/fr/>\n"
 "Language: fr\n"
@@ -881,7 +881,7 @@ msgstr "Attention"
 #: ../gui/wxpython/core/gcmd.py:153
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:714
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:760
-#: ../gui/wxpython/lmgr/frame.py:2319 ../gui/wxpython/main_window/frame.py:2427
+#: ../gui/wxpython/lmgr/frame.py:2319 ../gui/wxpython/main_window/frame.py:2428
 msgid "Message"
 msgstr "Message"
 
@@ -1299,7 +1299,7 @@ msgstr "Erreur de syntaxe : %s"
 msgid "Vector map <%(map)s>: %(msg)s\n"
 msgstr "Carte vectorielle <%(map)s> : %(msg)s\n"
 
-#: ../gui/wxpython/core/utils.py:836
+#: ../gui/wxpython/core/utils.py:838
 #, python-format
 msgid ""
 "%s: line skipped - unable to parse '%s'\n"
@@ -1308,22 +1308,22 @@ msgstr ""
 "%s : ligne sautée - impossible de lire '%s'\n"
 "Raison : %s\n"
 
-#: ../gui/wxpython/core/utils.py:842
+#: ../gui/wxpython/core/utils.py:844
 #, python-format
 msgid "Duplicated key: %s\n"
 msgstr "Paramètre en double : %s\n"
 
-#: ../gui/wxpython/core/utils.py:846
+#: ../gui/wxpython/core/utils.py:848
 #, python-brace-format
 msgid "Unable to open file '{name}': {error}\n"
 msgstr "Impossible d'ouvrir le fichier '{name}': {error}\n"
 
-#: ../gui/wxpython/core/utils.py:871
+#: ../gui/wxpython/core/utils.py:873
 #, python-brace-format
 msgid "Unable to create file '{name}': {error}\n"
 msgstr "Impossible de créer le fichier '{name}': {error}\n"
 
-#: ../gui/wxpython/core/utils.py:945 ../gui/wxpython/gui_core/forms.py:1913
+#: ../gui/wxpython/core/utils.py:947 ../gui/wxpython/gui_core/forms.py:1913
 msgid "Select Color"
 msgstr "Choisir la couleur"
 
@@ -6115,7 +6115,7 @@ msgstr "Paramètres d'affichage des cartes"
 
 #: ../gui/wxpython/gui_core/toolbars.py:87
 msgid "(Un)dock"
-msgstr ""
+msgstr "Ancrer/désancrer"
 
 #: ../gui/wxpython/gui_core/vselect.py:46
 msgid "category"
@@ -6143,7 +6143,7 @@ msgid "No vector map layer selected. Operation canceled."
 msgstr "Aucune couche de carte vectorielle sélectionnée. Opération annulée."
 
 #: ../gui/wxpython/gui_core/vselect.py:288 ../gui/wxpython/lmgr/frame.py:2318
-#: ../gui/wxpython/main_window/frame.py:2426
+#: ../gui/wxpython/main_window/frame.py:2427
 #: ../gui/wxpython/mapdisp/frame.py:711
 msgid "No map layer selected. Operation canceled."
 msgstr "Aucune couche sélectionnée. Opération annulée."
@@ -6611,7 +6611,7 @@ msgstr ""
 "%s"
 
 #: ../gui/wxpython/iclass/frame.py:107 ../gui/wxpython/iclass/frame.py:1652
-#: ../gui/wxpython/lmgr/frame.py:1687 ../gui/wxpython/main_window/frame.py:1842
+#: ../gui/wxpython/lmgr/frame.py:1687 ../gui/wxpython/main_window/frame.py:1843
 msgid "Supervised Classification Tool"
 msgstr "Outil de classification dirigée"
 
@@ -7704,7 +7704,7 @@ msgstr "La commande '%s' n'est pas encore implantée dans wxGUI. Essayez plutôt
 
 #: ../gui/wxpython/lmgr/frame.py:1180 ../gui/wxpython/lmgr/frame.py:1858
 #: ../gui/wxpython/main_window/frame.py:1336
-#: ../gui/wxpython/main_window/frame.py:2022
+#: ../gui/wxpython/main_window/frame.py:2023
 msgid "Selected map layer is not vector."
 msgstr "La couche sélectionnée n'est pas un vecteur."
 
@@ -7817,19 +7817,19 @@ msgstr "Plateforme de compilation"
 msgid "Platform"
 msgstr "Plateforme"
 
-#: ../gui/wxpython/lmgr/frame.py:1566 ../gui/wxpython/main_window/frame.py:1722
+#: ../gui/wxpython/lmgr/frame.py:1566 ../gui/wxpython/main_window/frame.py:1723
 msgid "Close all Map Displays"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1584 ../gui/wxpython/main_window/frame.py:1740
+#: ../gui/wxpython/lmgr/frame.py:1584 ../gui/wxpython/main_window/frame.py:1741
 msgid "Enter new name:"
 msgstr "Entrer le nouveau nom :"
 
-#: ../gui/wxpython/lmgr/frame.py:1585 ../gui/wxpython/main_window/frame.py:1741
+#: ../gui/wxpython/lmgr/frame.py:1585 ../gui/wxpython/main_window/frame.py:1742
 msgid "Rename Map Display"
 msgstr "Renommer la fenêtre de carte"
 
-#: ../gui/wxpython/lmgr/frame.py:1679 ../gui/wxpython/main_window/frame.py:1834
+#: ../gui/wxpython/lmgr/frame.py:1679 ../gui/wxpython/main_window/frame.py:1835
 #, python-format
 msgid ""
 "Unable to launch \"Supervised Classification Tool\".\n"
@@ -7840,35 +7840,35 @@ msgstr ""
 "\n"
 "Raison : %s"
 
-#: ../gui/wxpython/lmgr/frame.py:1726 ../gui/wxpython/main_window/frame.py:1881
+#: ../gui/wxpython/lmgr/frame.py:1726 ../gui/wxpython/main_window/frame.py:1882
 msgid "Unable to start Timeline Tool."
 msgstr "Impossible de démarrer l'outil Temporel"
 
-#: ../gui/wxpython/lmgr/frame.py:1736 ../gui/wxpython/main_window/frame.py:1891
+#: ../gui/wxpython/lmgr/frame.py:1736 ../gui/wxpython/main_window/frame.py:1892
 msgid "Unable to start Temporal Plot Tool."
 msgstr "Impossible de démarrer l'outil d'affichage temporel"
 
-#: ../gui/wxpython/lmgr/frame.py:1906 ../gui/wxpython/main_window/frame.py:2068
+#: ../gui/wxpython/lmgr/frame.py:1906 ../gui/wxpython/main_window/frame.py:2069
 msgid "Add selected map layers into layer tree"
 msgstr "Ajouter les cartes sélectionnées dans l'arborescence des couches"
 
 #: ../gui/wxpython/lmgr/frame.py:1938 ../gui/wxpython/lmgr/frame.py:1976
-#: ../gui/wxpython/main_window/frame.py:2100
-#: ../gui/wxpython/main_window/frame.py:2138
+#: ../gui/wxpython/main_window/frame.py:2101
+#: ../gui/wxpython/main_window/frame.py:2139
 #, python-format
 msgid "Unsupported map layer type <%s>."
 msgstr "Type de couche <%s> non pris en charge"
 
-#: ../gui/wxpython/lmgr/frame.py:2119 ../gui/wxpython/main_window/frame.py:2262
+#: ../gui/wxpython/lmgr/frame.py:2119 ../gui/wxpython/main_window/frame.py:2263
 msgid "Note that cell values can only be displayed for regions of less than 10,000 cells."
 msgstr "A noter que les valeurs des cellules ne peuvent être affichées que pour les régions de moins de 10 000 cellules."
 
 #: ../gui/wxpython/lmgr/frame.py:2214 ../gui/wxpython/lmgr/layertree.py:2128
-#: ../gui/wxpython/main_window/frame.py:2338
+#: ../gui/wxpython/main_window/frame.py:2339
 msgid "opacity:"
 msgstr "opacité :"
 
-#: ../gui/wxpython/lmgr/frame.py:2223 ../gui/wxpython/main_window/frame.py:2347
+#: ../gui/wxpython/lmgr/frame.py:2223 ../gui/wxpython/main_window/frame.py:2348
 #, python-format
 msgid ""
 "Do you want to remove map layer(s)\n"
@@ -7879,23 +7879,23 @@ msgstr ""
 "%s\n"
 "de l'arborescence des couches ?"
 
-#: ../gui/wxpython/lmgr/frame.py:2228 ../gui/wxpython/main_window/frame.py:2352
+#: ../gui/wxpython/lmgr/frame.py:2228 ../gui/wxpython/main_window/frame.py:2353
 msgid "Do you want to remove selected map layer(s) from layer tree?"
 msgstr "Voulez-vous retirer la(les) carte(s) sélectionnée(s) de l'arborescence des couches ?"
 
-#: ../gui/wxpython/lmgr/frame.py:2234 ../gui/wxpython/main_window/frame.py:2358
+#: ../gui/wxpython/lmgr/frame.py:2234 ../gui/wxpython/main_window/frame.py:2359
 msgid "Remove map layer"
 msgstr "Enlever la carte"
 
-#: ../gui/wxpython/lmgr/frame.py:2292 ../gui/wxpython/main_window/frame.py:2400
+#: ../gui/wxpython/lmgr/frame.py:2292 ../gui/wxpython/main_window/frame.py:2401
 msgid "Quit GRASS GUI"
 msgstr "Quitter l'interface graphique GRASS"
 
-#: ../gui/wxpython/lmgr/frame.py:2330 ../gui/wxpython/main_window/frame.py:2438
+#: ../gui/wxpython/lmgr/frame.py:2330 ../gui/wxpython/main_window/frame.py:2439
 msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
 msgstr "La résolution de l'affichage n'est actuellement pas contrainte aux limite de la région de calculs. Il est suggéré de contraindre les cartes aux limites de la région. Voulez-vous contraindre la résolution ?"
 
-#: ../gui/wxpython/lmgr/frame.py:2341 ../gui/wxpython/main_window/frame.py:2449
+#: ../gui/wxpython/lmgr/frame.py:2341 ../gui/wxpython/main_window/frame.py:2450
 msgid "Constrain map to region geometry?"
 msgstr "Restreindre la carte aux limites de la région ?"
 
@@ -8849,7 +8849,11 @@ msgstr ""
 msgid "No project provided. Operation canceled."
 msgstr "Aucun projet fourni. Opération annulée."
 
-#: ../gui/wxpython/main_window/frame.py:2000
+#: ../gui/wxpython/main_window/frame.py:1713
+msgid "Close workspace"
+msgstr "Fermer l'espace de travail"
+
+#: ../gui/wxpython/main_window/frame.py:2001
 msgid "Code editor"
 msgstr "Éditeur de code"
 
@@ -13216,9 +13220,8 @@ msgid "Downloaded project is not valid"
 msgstr "Le projet téléchargé n'est pas valide"
 
 #: ../gui/wxpython/startup/locdownload.py:227
-#, fuzzy
 msgid "Abort"
-msgstr "Abandonner"
+msgstr "Annuler"
 
 #: ../gui/wxpython/startup/locdownload.py:228
 #: ../gui/wxpython/startup/locdownload.py:490
@@ -16006,9 +16009,6 @@ msgstr ""
 
 #~ msgid "Close modeler window"
 #~ msgstr "Fermer la fenêtre du modeleur"
-
-#~ msgid "Close workspace file"
-#~ msgstr "Fermer le fichier de l'espace de travail"
 
 #~ msgid "Closest points"
 #~ msgstr "Points les plus proches"
