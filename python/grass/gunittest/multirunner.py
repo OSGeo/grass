@@ -152,7 +152,6 @@ def main():
         with subprocess.Popen(
             [
                 sys.executable,
-                "-tt",
                 "-m",
                 "grass.gunittest.main",
                 "--grassdata",

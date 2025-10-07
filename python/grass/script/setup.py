@@ -33,9 +33,8 @@ and session without using grassXY.
         # executable = r'C:\Program Files (x86)\GRASS <version>\grass.bat'
         # this can be skipped if GRASS executable is added to PATH
     elif sys.platform == "darwin":
-        # Mac OS X
-        version = "@GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@"
-        executable = f"/Applications/GRASS-{version}.app/Contents/Resources/bin/grass"
+        # macOS
+        executable = f"/Applications/GRASS-<version>.app/Contents/Resources/bin/grass"
 
     # query GRASS itself for its Python package path
     grass_cmd = [executable, "--config", "python_path"]
@@ -91,9 +90,6 @@ import tempfile as tmpfile
 
 WINDOWS = sys.platform.startswith("win")
 MACOS = sys.platform.startswith("darwin")
-
-VERSION_MAJOR = "@GRASS_VERSION_MAJOR@"
-VERSION_MINOR = "@GRASS_VERSION_MINOR@"
 
 
 def write_gisrc(dbase, location, mapset):
@@ -222,17 +218,18 @@ def setup_runtime_env(gisbase=None, *, env=None):
         set_executable_paths,
         set_path_to_python_executable,
         set_python_path_variable,
+        RuntimePaths,
     )
 
     # Set GISBASE
     env["GISBASE"] = gisbase
     set_executable_paths(
         install_path=gisbase,
-        grass_config_dir=get_grass_config_dir(VERSION_MAJOR, VERSION_MINOR, env=env),
+        grass_config_dir=get_grass_config_dir(env=env),
         env=env,
     )
     set_dynamic_library_path(
-        variable_name="@LD_LIBRARY_PATH_VAR@", install_path=gisbase, env=env
+        variable_name=RuntimePaths().ld_library_path_var, install_path=gisbase, env=env
     )
     set_python_path_variable(install_path=gisbase, env=env)
     set_path_to_python_executable(env=env)

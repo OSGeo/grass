@@ -18,7 +18,7 @@
 #ifndef __LOCAL_PROTO_H__
 #define __LOCAL_PROTO_H__
 
-#include <grass/parson.h>
+#include <grass/gjson.h>
 
 enum OutputFormat { PLAIN, JSON };
 enum ColorOutput { NONE, RGB_OUTPUT, HEX_OUTPUT, TRIPLET_OUTPUT, HSV_OUTPUT };
@@ -28,10 +28,10 @@ int get_cats(const char *, const char *);
 int next_cat(long *);
 
 /* main.c */
-void print_json(JSON_Value *);
-int print_label(long, enum OutputFormat, JSON_Array *, enum ColorOutput,
+void print_json(G_JSON_Value *);
+int print_label(long, enum OutputFormat, G_JSON_Array *, enum ColorOutput,
                 struct Colors *);
-int print_d_label(double, enum OutputFormat, JSON_Array *, enum ColorOutput,
+int print_d_label(double, enum OutputFormat, G_JSON_Array *, enum ColorOutput,
                   struct Colors *);
 int scan_cats(const char *, long *, long *);
 int scan_vals(const char *, double *);

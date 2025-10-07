@@ -88,6 +88,7 @@ int NetA_init_distinct(dbDriver *driver, dbString *sql, int **lengths,
         last = cur;
         count++;
     }
+    db_close_cursor(&cursor);
     return result;
 }
 

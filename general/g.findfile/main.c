@@ -28,7 +28,7 @@
 
 enum OutputFormat { SHELL, JSON };
 
-void print_json(JSON_Value *root_value)
+void print_json(G_JSON_Value *root_value)
 {
     char *json_string = G_json_serialize_to_string_pretty(root_value);
     if (!json_string) {
@@ -54,8 +54,8 @@ int main(int argc, char *argv[])
     struct Flag *n_flag, *l_flag, *t_flag;
     size_t len;
     enum OutputFormat format;
-    JSON_Value *root_value = NULL;
-    JSON_Object *root_object = NULL;
+    G_JSON_Value *root_value = NULL;
+    G_JSON_Object *root_object = NULL;
 
     module = G_define_module();
     G_add_keyword(_("general"));
