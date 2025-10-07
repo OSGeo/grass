@@ -151,7 +151,8 @@ int main(int argc, char *argv[])
     interpolate = menu[method].method;
 
     G_strip(grp->answer);
-    if (G_strlcpy(group.name, grp->answer, sizeof(group.name)) >= sizeof(group.name))
+    if (G_strlcpy(group.name, grp->answer, sizeof(group.name)) >=
+        sizeof(group.name))
         G_fatal_error(_("Group name <%s> is too long"), grp->answer);
     if (G_strlcpy(extension, ext->answer, sizeof(extension)) >= sizeof(extension))
         G_fatal_error(_("Extension <%s> is too long"), ext->answer);
