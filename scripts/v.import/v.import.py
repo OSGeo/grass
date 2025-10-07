@@ -266,6 +266,8 @@ def main():
         if OGRdatasource.lower().endswith("gml"):
             try:
                 from osgeo import gdal
+
+                gdal.DontUseExceptions()
             except ImportError:
                 gs.fatal(
                     _(
@@ -344,6 +346,8 @@ def main():
         if OGRdatasource.lower().endswith("gml"):
             try:
                 from osgeo import gdal
+
+                gdal.DontUseExceptions()
             except ImportError:
                 gs.fatal(
                     _(

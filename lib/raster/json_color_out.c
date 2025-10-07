@@ -49,9 +49,9 @@ static void close_file(FILE *fp)
    \param root_value pointer to json value
  */
 static void write_json_rule(DCELL *val, DCELL *min, DCELL *max, int r, int g,
-                            int b, JSON_Array *root_array, int perc,
+                            int b, G_JSON_Array *root_array, int perc,
                             ColorFormat clr_frmt, FILE *fp,
-                            JSON_Value *root_value)
+                            G_JSON_Value *root_value)
 {
     static DCELL v0;
     static int r0 = -1, g0 = -1, b0 = -1;
@@ -62,13 +62,13 @@ static void write_json_rule(DCELL *val, DCELL *min, DCELL *max, int r, int g,
     // Update last processed values
     v0 = *val, r0 = r, g0 = g, b0 = b;
 
-    JSON_Value *color_value = G_json_value_init_object();
+    G_JSON_Value *color_value = G_json_value_init_object();
     if (color_value == NULL) {
         G_json_value_free(root_value);
         close_file(fp);
         G_fatal_error(_("Failed to initialize JSON object. Out of memory?"));
     }
-    JSON_Object *color_object = G_json_object(color_value);
+    G_JSON_Object *color_object = G_json_object(color_value);
 
     // Set the value as a percentage if requested, otherwise set it as-is
     if (perc)
@@ -97,12 +97,12 @@ static void write_json_rule(DCELL *val, DCELL *min, DCELL *max, int r, int g,
 void Rast_print_json_colors(struct Colors *colors, DCELL min, DCELL max,
                             FILE *fp, int perc, ColorFormat clr_frmt)
 {
-    JSON_Value *root_value = G_json_value_init_array();
+    G_JSON_Value *root_value = G_json_value_init_array();
     if (root_value == NULL) {
         close_file(fp);
         G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
     }
-    JSON_Array *root_array = G_json_array(root_value);
+    G_JSON_Array *root_array = G_json_array(root_value);
 
     char color_str[COLOR_STRING_LENGTH];
 
@@ -149,14 +149,14 @@ void Rast_print_json_colors(struct Colors *colors, DCELL min, DCELL max,
 
         // Get RGB color for null values and create JSON entry
         Rast_get_null_value_color(&r, &g, &b, colors);
-        JSON_Value *nv_value = G_json_value_init_object();
+        G_JSON_Value *nv_value = G_json_value_init_object();
         if (nv_value == NULL) {
             G_json_value_free(root_value);
             close_file(fp);
             G_fatal_error(
                 _("Failed to initialize JSON object. Out of memory?"));
         }
-        JSON_Object *nv_object = G_json_object(nv_value);
+        G_JSON_Object *nv_object = G_json_object(nv_value);
         G_json_object_set_string(nv_object, "value", "nv");
         G_color_to_str(r, g, b, clr_frmt, color_str);
         G_json_object_set_string(nv_object, "color", color_str);
@@ -164,14 +164,14 @@ void Rast_print_json_colors(struct Colors *colors, DCELL min, DCELL max,
 
         // Get RGB color for default values and create JSON entry
         Rast_get_default_color(&r, &g, &b, colors);
-        JSON_Value *default_value = G_json_value_init_object();
+        G_JSON_Value *default_value = G_json_value_init_object();
         if (default_value == NULL) {
             G_json_value_free(root_value);
             close_file(fp);
             G_fatal_error(
                 _("Failed to initialize JSON object. Out of memory?"));
         }
-        JSON_Object *default_object = G_json_object(default_value);
+        G_JSON_Object *default_object = G_json_object(default_value);
         G_json_object_set_string(default_object, "value", "default");
         G_color_to_str(r, g, b, clr_frmt, color_str);
         G_json_object_set_string(default_object, "color", color_str);

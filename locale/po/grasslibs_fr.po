@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-04 10:14+0000\n"
-"PO-Revision-Date: 2025-08-04 18:54+0000\n"
+"POT-Creation-Date: 2025-09-27 17:16+0000\n"
+"PO-Revision-Date: 2025-09-28 14:03+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs/fr/>\n"
 "Language: fr\n"
@@ -396,12 +396,12 @@ msgstr "Impossible de démarrer le pilote <%s>"
 #: ../lib/db/dbmi_client/copy_tab.c:114 ../lib/db/dbmi_client/copy_tab.c:135
 #: ../lib/db/dbmi_client/db.c:45 ../lib/ogsf/gp3.c:219 ../lib/ogsf/gv3.c:356
 #: ../lib/rst/interp_float/vinput2d.c:107 ../lib/vector/Vlib/array.c:274
-#: ../lib/vector/Vlib/ascii.c:422 ../lib/vector/Vlib/cats.c:601
+#: ../lib/vector/Vlib/ascii.c:422 ../lib/vector/Vlib/cats.c:603
 #: ../lib/vector/Vlib/close_nat.c:165 ../lib/vector/Vlib/map.c:339
 #: ../lib/vector/Vlib/net_build.c:158 ../lib/vector/Vlib/net_build.c:208
 #: ../lib/vector/Vlib/net_build.c:502 ../lib/vector/Vlib/net_build.c:799
 #: ../lib/vector/Vlib/net_build.c:975 ../lib/vector/Vlib/write_ogr.c:197
-#: ../lib/vector/Vlib/write_pg.c:3040 ../lib/vector/neta/timetables.c:140
+#: ../lib/vector/Vlib/write_pg.c:3040 ../lib/vector/neta/timetables.c:141
 #: ../lib/vector/neta/utils.c:123
 #, c-format
 msgid "Unable to open database <%s> by driver <%s>"
@@ -423,7 +423,7 @@ msgid "Table <%s> already exists in database <%s>"
 msgstr "La table <%s> existe déjà dans la base de données <%s>"
 
 #: ../lib/db/dbmi_client/copy_tab.c:246 ../lib/db/dbmi_client/copy_tab.c:320
-#: ../lib/db/dbmi_client/table.c:111 ../lib/vector/Vlib/write_ogr.c:209
+#: ../lib/db/dbmi_client/table.c:117 ../lib/vector/Vlib/write_ogr.c:209
 #, c-format
 msgid "Unable to open select cursor: '%s'"
 msgstr "Impossible d'ouvrir le curseur de sélection: '%s'"
@@ -465,23 +465,28 @@ msgstr "Impossible d'ouvrir la base de données <%s> par le pilote <%s>"
 msgid "Unable to drop table: '%s'"
 msgstr "Impossible de supprimer la table : '%s'"
 
-#: ../lib/db/dbmi_client/select.c:119 ../lib/db/dbmi_client/select.c:221
-#: ../lib/db/dbmi_client/select.c:290
+#: ../lib/db/dbmi_client/select.c:119 ../lib/db/dbmi_client/select.c:224
+#: ../lib/db/dbmi_client/select.c:293
 msgid "Missing column name"
 msgstr "Nom de colonne manquant"
 
-#: ../lib/db/dbmi_client/select.c:216 ../lib/db/dbmi_client/select.c:285
+#: ../lib/db/dbmi_client/select.c:219 ../lib/db/dbmi_client/select.c:288
 msgid "Missing key column name"
 msgstr "Nom de colonne clé manquant"
 
-#: ../lib/db/dbmi_client/select.c:319 ../lib/vector/Vlib/cats.c:606
+#: ../lib/db/dbmi_client/select.c:322 ../lib/vector/Vlib/cats.c:608
 #, c-format
 msgid "Unable select records from table <%s>"
 msgstr "Impossible de sélectionner les enregistrements depuis la table <%s>"
 
-#: ../lib/db/dbmi_client/select.c:335
+#: ../lib/db/dbmi_client/select.c:338
 msgid "Key column type is not integer"
 msgstr "La colonne clef n'est pas de type entier"
+
+#: ../lib/db/dbmi_client/table.c:63 ../lib/db/dbmi_client/table.c:84
+#, c-format
+msgid "Table name too long: <%s>"
+msgstr "Nom de la table trop long : <%s>"
 
 #: ../lib/db/dbmi_driver/d_error.c:36
 #, c-format
@@ -532,6 +537,11 @@ msgstr "La chaîne de caractères <%s> est trop longue"
 #, c-format
 msgid "[%s]: No such color"
 msgstr "[%s] : cette couleur n'existe pas"
+
+#: ../lib/driver/font2.c:188
+#, c-format
+msgid "Font name <%s> is too long"
+msgstr "Le nom de la police <%s> est trop long"
 
 #: ../lib/driver/parse_ftcap.c:85
 #, c-format
@@ -585,7 +595,7 @@ msgstr ""
 "-- tests unitaires gjson terminés avec succès --"
 
 #: ../lib/gis/adj_cellhd.c:57 ../lib/gis/adj_cellhd.c:170
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Illegal n-s resolution value: %g"
 msgstr "Valeur de résolution n-s illégale : %g"
 
@@ -595,7 +605,7 @@ msgid "Illegal number of rows: %d (resolution is %g)"
 msgstr "Nombre de lignes illégal : %d (la résolution est %g)"
 
 #: ../lib/gis/adj_cellhd.c:68 ../lib/gis/adj_cellhd.c:188
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Illegal e-w resolution value: %g"
 msgstr "Valeur de résolution e-o illégale : %g"
 
@@ -620,14 +630,12 @@ msgid "East must be larger than West, but %g (east) <= %g (west)"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:112 ../lib/gis/adj_cellhd.c:271
-#, fuzzy
 msgid "Invalid coordinates: negative number of columns"
-msgstr "Coordonnées invalides : nombre de colonnes négatif"
+msgstr "Coordonnées invalides : nombre de colonnes négatif"
 
 #: ../lib/gis/adj_cellhd.c:115 ../lib/gis/adj_cellhd.c:274
-#, fuzzy
 msgid "Invalid coordinates: negative number of rows"
-msgstr "Coordonnées invalides : Nombre de lignes négatif"
+msgstr "Coordonnées invalides : nombre de lignes négatif"
 
 #: ../lib/gis/adj_cellhd.c:122 ../lib/gis/adj_cellhd.c:284
 msgid "NS resolution has been changed"
@@ -652,12 +660,12 @@ msgid "Illegal number of rows for 3D: %d (resolution is %g)"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:191
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Illegal e-w resolution value for 3D: %g"
 msgstr "Valeur de résolution e-o illégale pour 3D : %g"
 
 #: ../lib/gis/adj_cellhd.c:200
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Illegal number of columns for 3D: %d (resolution is %g)"
 msgstr "Nombre de colonnes illégal pour 3D : %d (la résolution est %g)"
 
@@ -667,7 +675,7 @@ msgid "Illegal t-b resolution value: %g"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:211
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Illegal depths value: %d"
 msgstr "Valeur des profondeurs illégale : %d"
 
@@ -677,9 +685,8 @@ msgid "Top must be larger than Bottom, but %g (top) <= %g (bottom)"
 msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:277
-#, fuzzy
 msgid "Invalid coordinates: negative number of depths"
-msgstr "Coordonnées invalides : Nombre de profondeurs négatif"
+msgstr "Coordonnées invalides : Nombre de profondeurs négatif"
 
 #: ../lib/gis/adj_cellhd.c:311
 #, c-format
@@ -1121,27 +1128,27 @@ msgstr "Impossible d'ouvrir le fichier élément <%s> pour <%s@%s>"
 msgid "Region file %s/%s/%s is empty"
 msgstr "Le fichier de région %s/%s/%s est vide"
 
-#: ../lib/gis/gisinit.c:78 ../lib/gis/gisinit.c:129
+#: ../lib/gis/gisinit.c:78 ../lib/gis/gisinit.c:128
 #, c-format
-msgid "Module built against version %s but trying to use version %s. In case of errors you need to rebuild the module against GRASS GIS version %s."
-msgstr "Module compilé avec la version %s mais tente d'utiliser la version %s. Vous devez recompiler GRASS ou gérer les versions multiples."
+msgid "Module built against version %s but trying to use version %s. In case of errors you need to rebuild the module against GRASS version %s."
+msgstr "Module compilé avec la version %s mais tent d'utiliser la version %s. En cas d’erreurs, vous devez recompiler le module avec la version %s de GRASS."
 
-#: ../lib/gis/gisinit.c:86 ../lib/gis/gisinit.c:137
+#: ../lib/gis/gisinit.c:85 ../lib/gis/gisinit.c:135
 #, c-format
-msgid "Module built against version %s but trying to use version %s. You need to rebuild GRASS GIS or untangle multiple installations."
+msgid "Module built against version %s but trying to use version %s. You need to rebuild GRASS or untangle multiple installations."
 msgstr "Module compilé avec la version %s mais tentative d'utiliser la version %s. Vous devez recompiler GRASS ou gérer les versions multiples."
 
-#: ../lib/gis/gisinit.c:101
+#: ../lib/gis/gisinit.c:100
 #, c-format
 msgid "MAPSET %s - permission denied"
 msgstr "Jeu de données (MAPSET) %s - permission refusée"
 
-#: ../lib/gis/gisinit.c:104
+#: ../lib/gis/gisinit.c:103
 #, c-format
 msgid "MAPSET %s not found at %s"
 msgstr "Jeu de cartes %s non trouvé dans %s"
 
-#: ../lib/gis/gisinit.c:155
+#: ../lib/gis/gisinit.c:153
 msgid "System not initialized. Programmer forgot to call G_gisinit()."
 msgstr "Système non initialisé. Le développeur a oublié d'appeler G_gisinit()."
 
@@ -1389,7 +1396,7 @@ msgstr "Désolé, <%s> n'est pas une option valide"
 msgid "Your installation doesn't include GUI, exiting."
 msgstr "Votre installation ne comprends pas d'interface graphique. Sortie."
 
-#: ../lib/gis/parser.c:650 ../lib/init/grass.py:149
+#: ../lib/gis/parser.c:650 ../lib/init/grass.py:147
 msgid "ERROR"
 msgstr "ERREUR"
 
@@ -1597,9 +1604,8 @@ msgid "Internal error: invalid rule type: %d"
 msgstr "Erreur interne : type de règle invalide : %d"
 
 #: ../lib/gis/parser_dependencies.c:504 ../lib/gis/parser_dependencies.c:538
-#, fuzzy
 msgid "Internal error: the number of options is < 0"
-msgstr "Erreur interne : option ou argument non trouvé"
+msgstr "Erreur interne : le nombre d'options est < 0"
 
 #: ../lib/gis/parser_help.c:84
 msgid "Description:"
@@ -1622,25 +1628,25 @@ msgid "Flags:"
 msgstr "Options :"
 
 #: ../lib/gis/parser_help.c:222 ../lib/gis/parser_html.c:185
-#: ../lib/gis/parser_interface.c:329 ../lib/gis/parser_md_cli.c:345
-#: ../lib/gis/parser_md_python.c:545 ../lib/gis/parser_rest.c:158
+#: ../lib/gis/parser_interface.c:329 ../lib/gis/parser_md_cli.c:343
+#: ../lib/gis/parser_md_python.c:555 ../lib/gis/parser_rest.c:158
 msgid "Allow output files to overwrite existing files"
 msgstr "Autoriser la sortie à écraser les fichiers existants"
 
 #: ../lib/gis/parser_help.c:224 ../lib/gis/parser_html.c:189
-#: ../lib/gis/parser_interface.c:337 ../lib/gis/parser_md_cli.c:352
+#: ../lib/gis/parser_interface.c:337 ../lib/gis/parser_md_cli.c:350
 msgid "Print usage summary"
 msgstr "Afficher le résumé d'utilisation"
 
 #: ../lib/gis/parser_help.c:225 ../lib/gis/parser_html.c:192
-#: ../lib/gis/parser_interface.c:344 ../lib/gis/parser_md_cli.c:355
-#: ../lib/gis/parser_md_python.c:550 ../lib/gis/parser_rest.c:162
+#: ../lib/gis/parser_interface.c:344 ../lib/gis/parser_md_cli.c:353
+#: ../lib/gis/parser_md_python.c:560 ../lib/gis/parser_rest.c:162
 msgid "Verbose module output"
 msgstr "Sortie du module en mode bavard"
 
 #: ../lib/gis/parser_help.c:226 ../lib/gis/parser_html.c:195
-#: ../lib/gis/parser_interface.c:351 ../lib/gis/parser_md_cli.c:358
-#: ../lib/gis/parser_md_python.c:554 ../lib/gis/parser_rest.c:165
+#: ../lib/gis/parser_interface.c:351 ../lib/gis/parser_md_cli.c:356
+#: ../lib/gis/parser_md_python.c:564 ../lib/gis/parser_rest.c:165
 msgid "Quiet module output"
 msgstr "Sortie du module en mode silence"
 
@@ -1649,7 +1655,7 @@ msgid "Super quiet module output"
 msgstr "Sortie du module en mode super silencieux"
 
 #: ../lib/gis/parser_help.c:228 ../lib/gis/parser_html.c:198
-#: ../lib/gis/parser_md_cli.c:364
+#: ../lib/gis/parser_md_cli.c:362
 msgid "Force launching GUI dialog"
 msgstr "Force le lancement de la boite de dialogue"
 
@@ -1680,12 +1686,12 @@ msgid "SYNOPSIS"
 msgstr "SYNOPSIS"
 
 #: ../lib/gis/parser_html.c:159 ../lib/gis/parser_rest.c:140
-#: ../lib/init/grass.py:305
+#: ../lib/init/grass.py:303
 msgid "Flags"
 msgstr "Drapeaux"
 
 #: ../lib/gis/parser_html.c:207 ../lib/gis/parser_md.c:71
-#: ../lib/gis/parser_rest.c:173 ../lib/init/grass.py:325
+#: ../lib/gis/parser_rest.c:173 ../lib/init/grass.py:323
 msgid "Parameters"
 msgstr "Paramètres"
 
@@ -1694,24 +1700,24 @@ msgid "Options"
 msgstr "Options"
 
 #: ../lib/gis/parser_html.c:257 ../lib/gis/parser_md_cli.c:113
-#: ../lib/gis/parser_md_python.c:256 ../lib/gis/parser_rest.c:224
+#: ../lib/gis/parser_md_python.c:266 ../lib/gis/parser_rest.c:224
 msgid "Default"
 msgstr "Défaut"
 
-#: ../lib/gis/parser_json.c:378
+#: ../lib/gis/parser_json.c:383
 #, c-format
 msgid "Input string not understood: <%s>. Multiple '@' chars?"
-msgstr ""
+msgstr "Chaîne d'entrée incomprise : <%s>. Plusieurs caractères '@' ?"
 
-#: ../lib/gis/parser_md_cli.c:103 ../lib/gis/parser_md_python.c:207
+#: ../lib/gis/parser_md_cli.c:103 ../lib/gis/parser_md_python.c:217
 msgid "Allowed values"
 msgstr "Valeurs autorisées"
 
-#: ../lib/gis/parser_md_cli.c:361 ../lib/gis/parser_md_python.c:559
+#: ../lib/gis/parser_md_cli.c:359 ../lib/gis/parser_md_python.c:569
 msgid "Very quiet module output"
 msgstr "Sortie du module en mode très silencieux"
 
-#: ../lib/gis/parser_md_python.c:182
+#: ../lib/gis/parser_md_python.c:192
 msgid "Used as"
 msgstr "Utilisé comme"
 
@@ -2058,12 +2064,12 @@ msgid "Project name (not path to project)"
 msgstr "Nom du projet (pas le chemin vers le projet)"
 
 #: ../lib/gis/parser_standard_options.c:730
-msgid "GRASS GIS database directory"
-msgstr "Répertoire de la base du SIG GRASS"
+msgid "GRASS database directory"
+msgstr "Répertoire de la base de données GRASS"
 
 #: ../lib/gis/parser_standard_options.c:731
-msgid "Default: path to the current GRASS GIS database"
-msgstr "Défaut : chemin de la base SIG GRASS courante"
+msgid "Default: path to the current GRASS database"
+msgstr "Défaut : chemin de la base de données GRASS courante"
 
 #: ../lib/gis/parser_standard_options.c:743
 msgid "Coordinates"
@@ -2093,11 +2099,11 @@ msgstr "0 : utiliser la valeur par défaut d'OpenMP ; >0 : utiliser nprocs ;
 #, fuzzy
 #| msgid "Pseudo-random number generator not seeded"
 msgid "Seed value for the random number generator"
-msgstr "Générateur de nombres pseudo-aléatoires sans graine"
+msgstr "Valeur de départ pour le générateur de nombres aléatoires"
 
 #: ../lib/gis/parser_standard_options.c:798
 msgid "Using the same seed ensures identical results, while a randomly generated seed produces different outcomes in each run."
-msgstr ""
+msgstr "L’utilisation de la même graine garantit des résultats identiques, tandis qu'une graine générée de manière aléatoire produit des résultats différents à chaque exécution."
 
 #: ../lib/gis/parser_standard_options.c:810
 msgid "Name of the input space time dataset"
@@ -3428,12 +3434,12 @@ msgstr "Impossible d'ouvrir le fichier de signatures '%s'"
 msgid "prepare_signature: outline has odd number of points."
 msgstr "prepare_signature : la outline a un nombre de points impair."
 
-#: ../lib/imagery/iclass_statistics.c:225 ../lib/imagery/iscatt_core.c:956
+#: ../lib/imagery/iclass_statistics.c:225 ../lib/imagery/iscatt_core.c:965
 #, c-format
 msgid "prepare_signature: scan line %d has odd number of points."
 msgstr "prepare_signature : la ligne %d a un nombre de points impair."
 
-#: ../lib/imagery/iclass_statistics.c:235 ../lib/imagery/iscatt_core.c:965
+#: ../lib/imagery/iclass_statistics.c:235 ../lib/imagery/iscatt_core.c:976
 msgid "signature: perimeter points out of order."
 msgstr "signature : points du périmètre hors d'usage."
 
@@ -3463,74 +3469,74 @@ msgstr "Valeur de catégorie en dehors des limites"
 msgid "Unable to write header into category raster condition file <%s>."
 msgstr "Impossible d'écrire l'en-tête du fichier <%s> de catégorie  du raster."
 
-#: ../lib/imagery/iscatt_core.c:98
+#: ../lib/imagery/iscatt_core.c:99
 #, c-format
 msgid "Unable to write into category raster condition file <%s>."
 msgstr "Impossible d'écrire dans le fichier <%s> de catégories du raster."
 
-#: ../lib/imagery/iscatt_core.c:250
+#: ../lib/imagery/iscatt_core.c:252
 #, c-format
 msgid "Unable to open category raster conditions file <%s>."
 msgstr "Impossible d'ouvrir le fichier de conditions du raster <%s>."
 
-#: ../lib/imagery/iscatt_core.c:258
+#: ../lib/imagery/iscatt_core.c:260
 #, c-format
 msgid "Unable to find patch raster <%s>."
 msgstr "Impossible de trouver le raster de patch <%s>."
 
-#: ../lib/imagery/iscatt_core.c:274
+#: ../lib/imagery/iscatt_core.c:276
 #, c-format
 msgid "Resolutions of patch <%s> and patched file <%s> are not same."
 msgstr "Les résolutions du patch <%s> et du fichier patché <%s> ne sont pas les mêmes."
 
-#: ../lib/imagery/iscatt_core.c:300 ../lib/imagery/iscatt_core.c:341
+#: ../lib/imagery/iscatt_core.c:302 ../lib/imagery/iscatt_core.c:345
 #, c-format
 msgid "Corrupted  category raster conditions file <%s> (fseek failed)"
 msgstr "Fichier <%s> de catégories du raster corrompu (fseek a échoué)"
 
-#: ../lib/imagery/iscatt_core.c:331
+#: ../lib/imagery/iscatt_core.c:334
 #, c-format
 msgid "Unable to write into category raster conditions file <%s>"
 msgstr "Impossible d'écrire dans le fichier <%s> de catégories du raster"
 
-#: ../lib/imagery/iscatt_core.c:518
+#: ../lib/imagery/iscatt_core.c:524
 msgid "Unable to read from category raster condition file."
 msgstr "Impossible de lire le fichier de catégories du raster."
 
-#: ../lib/imagery/iscatt_core.c:525
+#: ../lib/imagery/iscatt_core.c:531
 msgid "Invalid size of category raster conditions file."
 msgstr "Taille du fichier de catégories du raster invalide."
 
-#: ../lib/imagery/iscatt_core.c:568
+#: ../lib/imagery/iscatt_core.c:574
 msgid "Data inconsistent. Value computed for scatter plot is out of initialized range."
 msgstr "Données non cohérentes. La valeur calculée pour le graphique est en dehors de la plage initiale."
 
-#: ../lib/imagery/iscatt_core.c:738
+#: ../lib/imagery/iscatt_core.c:741
 #, c-format
 msgid "Unable to find raster <%s>"
 msgstr "Impossible de trouver le raster <%s>"
 
-#: ../lib/imagery/iscatt_core.c:747
+#: ../lib/imagery/iscatt_core.c:750
 #, c-format
 msgid "Unable to open raster <%s>"
 msgstr "Impossible d'ouvrir le raster <%s>"
 
-#: ../lib/imagery/iscatt_core.c:753
+#: ../lib/imagery/iscatt_core.c:759
 #, c-format
 msgid "Raster <%s> type is not <%s>"
 msgstr "Le raster <%s> n'est pas de type <%s>"
 
-#: ../lib/imagery/iscatt_core.c:766
+#: ../lib/imagery/iscatt_core.c:772
 #, c-format
 msgid "Unable to read range of raster <%s>"
 msgstr "Impossible de lire la plage de valeurs du raster <%s>"
 
-#: ../lib/imagery/iscatt_core.c:790
+#: ../lib/imagery/iscatt_core.c:796
 #, c-format
 msgid "Unable to open category raster condition file <%s>"
 msgstr "Impossible d'ouvrir le fichier de catégories du raster <%s>"
 
-#: ../lib/imagery/iscatt_core.c:803
+#: ../lib/imagery/iscatt_core.c:812
 msgid "Corrupted category raster conditions file (fseek failed)"
 msgstr "Fichier de catégories du raster corrompu (fseek a échoué)"
 
@@ -3570,7 +3576,7 @@ msgstr "%s supprimé"
 #: ../lib/imagery/manage_signatures.c:94
 #, c-format
 msgid "Unable to remove %s signature"
-msgstr ""
+msgstr "Impossible de supprimer la signature de %s."
 
 #: ../lib/imagery/manage_signatures.c:97 ../lib/imagery/manage_signatures.c:139
 #: ../lib/imagery/manage_signatures.c:206 ../lib/manage/do_copy.c:62
@@ -3612,216 +3618,212 @@ msgstr "Fichier de signature non valide"
 
 #: ../lib/imagery/sig.c:162 ../lib/imagery/sigset.c:151
 msgid "Invalid signature file version"
-msgstr ""
+msgstr "Version du fichier de signature non valide"
 
 #: ../lib/imagery/sig.c:202 ../lib/imagery/sigset.c:217
 msgid "Invalid signature file: semantic label length limit exceeded"
-msgstr ""
+msgstr "Fichier de signature non valide : limite de longueur d'étiquette sémantique dépassée"
 
 #: ../lib/imagery/sig.c:212 ../lib/imagery/sigset.c:226
 msgid "Signature file does not contain bands"
 msgstr "Le fichier de signature ne contient pas de bandes"
 
 #: ../lib/imagery/sig.c:218
+#, fuzzy
 msgid "Invalid signature file: Original class value presence not readable"
-msgstr ""
+msgstr "Fichier de signature non valide : La valeur originale de la présence de la classe n'est pas lisible."
 
 #: ../lib/imagery/target.c:37
 #, c-format
 msgid "Unable to read target file for group [%s]"
 msgstr "Impossible de lire le fichier de cible pour le groupe [%s]"
 
-#: ../lib/init/grass.py:145
+#: ../lib/init/grass.py:143
 msgid "WARNING"
 msgstr "ATTENTION"
 
-#: ../lib/init/grass.py:150 ../lib/init/grass.py:2376
+#: ../lib/init/grass.py:148 ../lib/init/grass.py:2367
 msgid "Exiting..."
 msgstr "Sortie ..."
 
-#: ../lib/init/grass.py:304
+#: ../lib/init/grass.py:302
 msgid "Usage"
 msgstr "Utilisation"
 
-#: ../lib/init/grass.py:306
+#: ../lib/init/grass.py:304
 msgid "print this help message"
 msgstr "afficher ce message d'aide"
 
-#: ../lib/init/grass.py:307
+#: ../lib/init/grass.py:305
 msgid "show version information and exit"
 msgstr "afficher les informations de version et quitter"
 
-#: ../lib/init/grass.py:308
+#: ../lib/init/grass.py:306
 msgid "create given database, project or mapset if it doesn't exist"
 msgstr "créer la base de données, projet ou jeu de cartes si non existants"
 
-#: ../lib/init/grass.py:309
-#, fuzzy
+#: ../lib/init/grass.py:307
 msgid "exit after creation of project or mapset. Only with -c flag"
-msgstr "quitter après la création du secteur ou du jeu de cartes. Uniquement avec l'argument -c"
+msgstr "quitter après la création du projet ou du jeu de cartes. Uniquement avec l'argument -c"
 
-#: ../lib/init/grass.py:311
+#: ../lib/init/grass.py:309
 msgid "force removal of .gislock if exists (use with care!). Only with --text flag"
 msgstr "force la suppresion de .gislock s'il existe (utiliser avec précaution). Seulement avec l'option --text"
 
-#: ../lib/init/grass.py:314
+#: ../lib/init/grass.py:312
 msgid "use text based interface (skip graphical welcome screen)"
 msgstr "utiliser l'interface en mode texte (saute l'écran graphique d'accueil)"
 
-#: ../lib/init/grass.py:315 ../lib/init/grass.py:317 ../lib/init/grass.py:319
+#: ../lib/init/grass.py:313 ../lib/init/grass.py:315 ../lib/init/grass.py:317
 msgid "and set as default"
 msgstr "et définir par défaut"
 
-#: ../lib/init/grass.py:316
+#: ../lib/init/grass.py:314
 msgid "use text based interface (show graphical welcome screen)"
 msgstr "utiliser l'interface en mode texte (afficher l'écran graphique d'accueil)"
 
-#: ../lib/init/grass.py:318
+#: ../lib/init/grass.py:316
 msgid "use $DEFAULT_GUI graphical user interface"
 msgstr "utiliser l'interface utilisateur graphique $DEFAULT_GUI"
 
-#: ../lib/init/grass.py:320
+#: ../lib/init/grass.py:318
 msgid "print GRASS configuration parameters"
 msgstr "afficher les paramètres de configuration GRASS"
 
-#: ../lib/init/grass.py:322
-#, fuzzy
+#: ../lib/init/grass.py:320
 msgid "options: arch,build,compiler,date,path,python_path,revision,svn_revision,version"
-msgstr "options: arch,build,compiler,date,path,revision,svn_revision,version"
+msgstr "options : arch,build,compiler,date,path,revision,svn_revision,version"
 
-#: ../lib/init/grass.py:326
+#: ../lib/init/grass.py:324
 msgid "initial GRASS database directory"
 msgstr "répertoire initial de la base de données GRASS"
 
-#: ../lib/init/grass.py:327
+#: ../lib/init/grass.py:325
 msgid "directory containing GRASS projects"
 msgstr "répertoire contenant les projets GRASS"
 
-#: ../lib/init/grass.py:328
+#: ../lib/init/grass.py:326
 msgid "initial GRASS project (location)"
 msgstr "projet (Secteur) GRASS initial"
 
-#: ../lib/init/grass.py:330
-#, fuzzy
+#: ../lib/init/grass.py:328
 msgid "directory containing mapsets with one common coordinate reference system"
-msgstr "répertoire contenant les jeux de données qui utilisent un système de coordonnées (projection) commun"
+msgstr "répertoire contenant les jeux de cartes qui utilisent un système de coordonnées de référence commun"
 
-#: ../lib/init/grass.py:333
-#, fuzzy
+#: ../lib/init/grass.py:331
 msgid "initial GRASS mapset"
 msgstr "Jeu de cartes GRASS initial"
 
-#: ../lib/init/grass.py:334
-#, fuzzy
+#: ../lib/init/grass.py:332
 msgid "fully qualified initial mapset directory"
 msgstr "répertoire complet du jeu de cartes initial"
 
-#: ../lib/init/grass.py:335
+#: ../lib/init/grass.py:333
 msgid "Environment variables relevant for startup"
 msgstr "Variables d'environnement pour le démarrage"
 
-#: ../lib/init/grass.py:336
+#: ../lib/init/grass.py:334
 msgid "set root path for configuration directory"
 msgstr ""
 
-#: ../lib/init/grass.py:337
+#: ../lib/init/grass.py:335
 msgid "select GUI (text, gui, gtext)"
 msgstr "sélectionner l'UI (text, gui, gtext)"
 
-#: ../lib/init/grass.py:338
+#: ../lib/init/grass.py:336
 msgid "set html web browser for help pages"
 msgstr "définir le navigateur web pour les pages d'aide"
 
-#: ../lib/init/grass.py:340
+#: ../lib/init/grass.py:338
 msgid "set additional path(s) to local GRASS modules or user scripts"
 msgstr "définir des chemins supplémentaires pour les modules GRASS locaux ou les scripts utilisateurs"
 
-#: ../lib/init/grass.py:343
+#: ../lib/init/grass.py:341
 msgid "set additional GISBASE for locally installed GRASS Addons"
 msgstr "définir un GISBASE supplémentaire pour les extentions GRASS installées localement"
 
-#: ../lib/init/grass.py:345
+#: ../lib/init/grass.py:343
 msgid "set Python interpreter name to override 'python'"
 msgstr "définir le nom du shell python pour supplanter 'python'"
 
-#: ../lib/init/grass.py:346
+#: ../lib/init/grass.py:344
 msgid "execute GRASS module or script"
 msgstr "exécuter le module ou script GRASS"
 
-#: ../lib/init/grass.py:347
+#: ../lib/init/grass.py:345
 msgid "provided executable will be executed in GRASS session"
 msgstr "l'exécutable fourni sera exécuté dans la sesion GRASS"
 
-#: ../lib/init/grass.py:348
+#: ../lib/init/grass.py:346
 msgid "GRASS module, script or any other executable"
 msgstr "module, script ou tout autre exécutable GRASS"
 
-#: ../lib/init/grass.py:349
+#: ../lib/init/grass.py:347
 msgid "parameters of the executable"
 msgstr "paramètres de l'exécutable"
 
-#: ../lib/init/grass.py:350
+#: ../lib/init/grass.py:348
 msgid "standard flags"
 msgstr "options standards"
 
-#: ../lib/init/grass.py:351 ../lib/init/grass.py:1932
+#: ../lib/init/grass.py:349 ../lib/init/grass.py:1928
 msgid "deprecated, use --tmp-project instead"
 msgstr "obsolète, utiliser --tmp-project à la place."
 
-#: ../lib/init/grass.py:352
+#: ../lib/init/grass.py:350
 msgid "location was renamed to project"
 msgstr "Secteur a été renommé en projet"
 
-#: ../lib/init/grass.py:353
+#: ../lib/init/grass.py:351
 msgid "create temporary project (use with the --exec flag)"
 msgstr "créer un projet temporaire (utiliser avec l'option --exec)"
 
-#: ../lib/init/grass.py:355
+#: ../lib/init/grass.py:353
 msgid "created in a temporary directory and deleted at exit"
 msgstr "créé dans un répertoire temporaire et supprimé à la sortie"
 
-#: ../lib/init/grass.py:357
+#: ../lib/init/grass.py:355
 msgid "create temporary mapset (use with the --exec flag)"
 msgstr "créer un jeu de cartes temporaire (utilisez avec l'option --exec)."
 
-#: ../lib/init/grass.py:358
+#: ../lib/init/grass.py:356
 msgid "created in the specified project and deleted at exit"
-msgstr ""
+msgstr "créé dans le projet spécifié et supprimé à la sortie"
 
-#: ../lib/init/grass.py:359
+#: ../lib/init/grass.py:357
 #, fuzzy
 msgid "timeout for acquiring a mapset lock"
 msgstr "délai d'acquisition d'un verrouillage de jeu de cartes"
 
-#: ../lib/init/grass.py:361
+#: ../lib/init/grass.py:359
 msgid "time for which the process will attempt to get a lock in seconds"
 msgstr "durée en secondes pendant laquelle le processus tentera d'obtenir un verrou"
 
-#: ../lib/init/grass.py:397
+#: ../lib/init/grass.py:393
 msgid "Failed to create configuration directory '{}' with error: {}"
 msgstr "Échec de création du répertoire de configuration '{}' avec l'erreur : {}"
 
-#: ../lib/init/grass.py:439
+#: ../lib/init/grass.py:435
 #, python-brace-format
 msgid "Unable to create temporary directory <{tmpdir_name}>! Exiting."
 msgstr "Impossible de créer le répertoire temporaire <{tmpdir_name}>! Sortie."
 
-#: ../lib/init/grass.py:497
+#: ../lib/init/grass.py:493
 #, python-brace-format
 msgid "Invalid line in RC file ({file}): '{line}' ({error})\n"
 msgstr "Ligne invalide dans le fichier RC ({file}) : '{line}' ({error})\n"
 
-#: ../lib/init/grass.py:503
+#: ../lib/init/grass.py:499
 #, python-brace-format
 msgid "Empty RC file ({file})"
 msgstr "Fichier RC ({file}) vide"
 
-#: ../lib/init/grass.py:590
+#: ../lib/init/grass.py:586
 #, python-format
 msgid "GUI <%s> not supported in this version"
 msgstr "Interface <%s> non supportée par cette version"
 
-#: ../lib/init/grass.py:626
+#: ../lib/init/grass.py:622
 msgid ""
 "The python command does not work as expected.\n"
 "Please check your installation or set the GRASS_PYTHON environment variable."
@@ -3829,11 +3831,11 @@ msgstr ""
 "La commande Python ne fonctionne pas comme prévu.\n"
 "Veuillez vérifier votre installation ou définir la variable d'environnement GRASS_PYTHON."
 
-#: ../lib/init/grass.py:631
+#: ../lib/init/grass.py:627
 msgid "GRASS GUI not found. Please check your installation."
 msgstr "GRASS GUI non trouvée. Merci de vérifier votre installation."
 
-#: ../lib/init/grass.py:633
+#: ../lib/init/grass.py:629
 msgid ""
 "{}\n"
 "Switching to text based interface mode."
@@ -3841,7 +3843,7 @@ msgstr ""
 "{}\n"
 "Passage à l’interface textuelle."
 
-#: ../lib/init/grass.py:640
+#: ../lib/init/grass.py:636
 msgid ""
 "It appears that the X Windows system is not active.\n"
 "A graphical based user interface is not supported.\n"
@@ -3849,74 +3851,74 @@ msgid ""
 "Switching to text based interface mode."
 msgstr ""
 
-#: ../lib/init/grass.py:713
+#: ../lib/init/grass.py:709
 #, python-brace-format
 msgid "Unable to create new project because the project <{location}> already exists."
 msgstr "Impossible de créer le nouveau projet car le projet <{location}> existe déjà."
 
-#: ../lib/init/grass.py:719
+#: ../lib/init/grass.py:715
 #, python-brace-format
 msgid "Unable to create new project <{location}> because <{path}> is a file."
 msgstr "Impossible de créer le nouveau projet <{location}> car <{path}> est un fichier."
 
-#: ../lib/init/grass.py:723
+#: ../lib/init/grass.py:719
 #, python-brace-format
 msgid "Unable to create new project <{location}> because the directory <{path}> already exists."
 msgstr "Impossible de créer le nouveau projet <{location}> car le répertoire <{path}> existe déjà."
 
-#: ../lib/init/grass.py:728
+#: ../lib/init/grass.py:724
 #, python-brace-format
 msgid "Unable to create new project in the directory <{path}> for an unknown reason."
 msgstr "Impossible de créer le nouveau projet dans le répertoire <{path}> pour une raison inconnue."
 
-#: ../lib/init/grass.py:810
+#: ../lib/init/grass.py:806
 msgid "Mapset <{}> already exists. Unable to create a new temporary mapset of that name."
 msgstr "Le jeu de cartes <{}> existe déjà. Impossible de créer un nouveau jeu de cartes temporaire de ce nom."
 
-#: ../lib/init/grass.py:815
+#: ../lib/init/grass.py:811
 msgid "Mapset <{}> already exists."
 msgstr "Le jeu de cartes <{}> existe déjà."
 
-#: ../lib/init/grass.py:823
+#: ../lib/init/grass.py:819
 msgid "A new mapset can be created using '-c' flag."
 msgstr "Un nouveau jeu de cartes peut être créé en utilisant l'option '-c'."
 
-#: ../lib/init/grass.py:825
+#: ../lib/init/grass.py:821
 #, fuzzy
 msgid "Maybe you meant a different directory."
 msgstr "Vouliez-vous dire un répertoire différent?"
 
-#: ../lib/init/grass.py:853
+#: ../lib/init/grass.py:849
 msgid "Provide CRS to create a project"
 msgstr ""
 
-#: ../lib/init/grass.py:857
+#: ../lib/init/grass.py:853
 msgid "Creating new GRASS project <{}>..."
 msgstr "Création du nouveau projet GRASS <{}>…"
 
-#: ../lib/init/grass.py:868
+#: ../lib/init/grass.py:864
 #, python-brace-format
 msgid "Unable to create new mapset <{mapset}> because <{path}> is a file."
 msgstr "Impossible de créer le novueau jeux de cartes <{mapset}> car <{path}> est un fichier."
 
-#: ../lib/init/grass.py:877
+#: ../lib/init/grass.py:873
 msgid "The mapset <{}> is missing the WIND file (computational region). It will be fixed now. Note that this warning may become an error in future versions."
 msgstr "Le jeux de cartes <{}> ne contient pas de fichier WIND (zone de calcul). Cela va être corrigé. Cet avertissement pourra devenir une erreur dans les versions futures."
 
-#: ../lib/init/grass.py:887
+#: ../lib/init/grass.py:883
 #, python-brace-format
 msgid "No CRS is needed for creating mapset <{mapset}>, but <{geofile}> was provided as CRS. Did you mean to create a new project?"
-msgstr ""
+msgstr "Aucun SCR n'est nécessaire pour créer le jeu de cartes <{mapset}>, mais <{geofile}> a été fourni en tant que SCR. Aviez-vous plutôt l’intention de créer un nouveau projet ?"
 
-#: ../lib/init/grass.py:893
+#: ../lib/init/grass.py:889
 msgid "Creating new GRASS mapset <{}>..."
 msgstr "Création du nouveau jeu de cartes GRASS <{}>…"
 
-#: ../lib/init/grass.py:917
+#: ../lib/init/grass.py:913
 msgid "GRASS database directory, project and mapset not set properly. Use GUI or command line to set them."
 msgstr "Répertoire de base de données GRASS, projet et jeu de cartes non définis correctement. Utiliser l'interface graphique ou la ligne de commande pour les définir."
 
-#: ../lib/init/grass.py:977
+#: ../lib/init/grass.py:973
 #, python-brace-format
 msgid ""
 "Error reading data path information from g.gisenv.\n"
@@ -3933,25 +3935,25 @@ msgstr ""
 "\n"
 "Vérifier le fichier <{file}>."
 
-#: ../lib/init/grass.py:1269
+#: ../lib/init/grass.py:1265
 msgid "Building user fontcap..."
 msgstr "Construction des caractère utilisateur ..."
 
-#: ../lib/init/grass.py:1335
+#: ../lib/init/grass.py:1331
 msgid "The SHELL variable is not set"
 msgstr "La variable SHELL n'est pas définie"
 
-#: ../lib/init/grass.py:1352
+#: ../lib/init/grass.py:1348
 #, python-brace-format
 msgid "Unsupported shell <{sh}>: {env_file}"
 msgstr "Shell <{sh}> non supporté : {env_file}"
 
-#: ../lib/init/grass.py:1372
+#: ../lib/init/grass.py:1368
 #, python-format
 msgid "Executing <%s> ..."
 msgstr "Exécution de <%s> ..."
 
-#: ../lib/init/grass.py:1396
+#: ../lib/init/grass.py:1392
 #, python-brace-format
 msgid ""
 "Execution of <{cmd}> failed:\n"
@@ -3960,146 +3962,144 @@ msgstr ""
 "La commande <{cmd}> a échoué :\n"
 "{error}"
 
-#: ../lib/init/grass.py:1409
+#: ../lib/init/grass.py:1405
 #, python-format
 msgid "Execution of <%s> finished."
 msgstr "Exécution de <%s> terminée."
 
-#: ../lib/init/grass.py:1453
+#: ../lib/init/grass.py:1449
 #, python-brace-format
 msgid "Unable to close GUI. {0}"
 msgstr "Impossible de fermer l'interface graphique. {0}"
 
-#: ../lib/init/grass.py:1472
+#: ../lib/init/grass.py:1468
 #, python-format
 msgid "Welcome to GRASS %s"
 msgstr "Bienvenue dans GRASS %s"
 
-#: ../lib/init/grass.py:1498
+#: ../lib/init/grass.py:1494
 msgid "GRASS homepage:"
 msgstr "Page d'accueil de GRASS :"
 
 #. GTC Running through: SHELL NAME
-#: ../lib/init/grass.py:1500
+#: ../lib/init/grass.py:1496
 msgid "This version running through:"
 msgstr "Cette version fonctionne avec :"
 
-#: ../lib/init/grass.py:1503
+#: ../lib/init/grass.py:1499
 msgid "Help is available with the command:"
 msgstr "L'aide est disponible par la commande :"
 
-#: ../lib/init/grass.py:1504
+#: ../lib/init/grass.py:1500
 msgid "See the licence terms with:"
 msgstr "Voir les termes de la licence avec :"
 
-#: ../lib/init/grass.py:1505
+#: ../lib/init/grass.py:1501
 msgid "See citation options with:"
 msgstr "Voir les termes de la licence avec :"
 
-#: ../lib/init/grass.py:1510
+#: ../lib/init/grass.py:1506
 msgid "If required, restart the GUI with:"
 msgstr "Si requis, redémarrer l'interface graphique avec :"
 
-#: ../lib/init/grass.py:1512
+#: ../lib/init/grass.py:1508
 msgid "Start the GUI with:"
 msgstr "Démarrer l'interface graphique avec :"
 
-#: ../lib/init/grass.py:1514
+#: ../lib/init/grass.py:1510
 msgid "When ready to quit enter:"
 msgstr "Lors prêt pour la fermeture entrer :"
 
-#: ../lib/init/grass.py:1696
+#: ../lib/init/grass.py:1692
 msgid "2D and 3D raster masks present"
 msgstr "Masques raster 2D et 3D présents"
 
-#: ../lib/init/grass.py:1697
+#: ../lib/init/grass.py:1693
 msgid "Raster mask present"
 msgstr "Masque raster présent"
 
-#: ../lib/init/grass.py:1698
+#: ../lib/init/grass.py:1694
 msgid "3D raster mask present"
 msgstr "Masque raster 3D présent"
 
-#: ../lib/init/grass.py:1743
+#: ../lib/init/grass.py:1739
 msgid "Done."
 msgstr "Terminé."
 
-#: ../lib/init/grass.py:1745
+#: ../lib/init/grass.py:1741
 msgid "Goodbye from GRASS"
 msgstr "GRASS vous dit au revoir"
 
-#: ../lib/init/grass.py:1806
+#: ../lib/init/grass.py:1802
 msgid "Please install the GRASS development package"
 msgstr "Veuillez installer le paquet développement de GRASS"
 
-#: ../lib/init/grass.py:1852
+#: ../lib/init/grass.py:1848
 #, python-format
 msgid "Parameter <%s> not supported"
 msgstr "Paramètres <%s> on supporté"
 
-#: ../lib/init/grass.py:1901
+#: ../lib/init/grass.py:1897
 #, python-format
 msgid "use mapset %(metavar)s"
 msgstr "utiliser le jeu de cartes %(metavar)s"
 
-#: ../lib/init/grass.py:1907
+#: ../lib/init/grass.py:1903
 #, python-format
 msgid "use temporary mapset in project %(metavar)s"
 msgstr "utiliser un jeu de cartes temporaire dans le projet %(metavar)s"
 
-#: ../lib/init/grass.py:1915
+#: ../lib/init/grass.py:1911
 msgid "path to mapset (or project if creating one)"
 msgstr "chemin d'accès au jeu de cartes (ou au projet s’il est créé)"
 
-#: ../lib/init/grass.py:1918
+#: ../lib/init/grass.py:1914
 msgid "use temporary mapset"
 msgstr "utiliser un jeu de cartes temporaire"
 
-#: ../lib/init/grass.py:1925
+#: ../lib/init/grass.py:1921
 #, python-format
 msgid "use temporary project with %(metavar)s (EPSG, georeferenced file, ...)"
 msgstr "utiliser un projet temporaire avec %(metavar)s (EPSG, fichier géo-référencé, ...)"
 
-#: ../lib/init/grass.py:1939
-#, fuzzy
-#| msgid "The calculation time in seconds"
+#: ../lib/init/grass.py:1935
 msgid "mapset locking timeout in seconds"
-msgstr "délai de verrouillage de l'ensemble de cartes en secondes"
+msgstr "délai de verrouillage du jeu de cartes en secondes"
 
-#: ../lib/init/grass.py:1945
+#: ../lib/init/grass.py:1941
 #, fuzzy
 msgid "remove lock if present"
 msgstr "retirer le verrou s'il est présent"
 
-#: ../lib/init/grass.py:1959
+#: ../lib/init/grass.py:1955
 msgid "Option --tmp-location is deprecated, use --tmp-project instead\n"
 msgstr "L'option --tmp-location est obsolète, utilisez --tmp-project à la place.\n"
 
-#: ../lib/init/grass.py:2004
+#: ../lib/init/grass.py:2000
 msgid "execute module or script (followed by executable with arguments)"
 msgstr "exécuter un module ou un script (suivi d'un exécutable avec des arguments)"
 
-#: ../lib/init/grass.py:2060
+#: ../lib/init/grass.py:2056
 msgid "Flag -e requires also flag -c"
 msgstr "L'option -e nécessite également l'option -c"
 
-#: ../lib/init/grass.py:2062
+#: ../lib/init/grass.py:2058
 msgid "Flag -c requires name of project or mapset"
 msgstr "L'option -c requiert le nom du projet ou du jeu de cartes."
 
-#: ../lib/init/grass.py:2065
+#: ../lib/init/grass.py:2061
 msgid "Either --tmp-project or --tmp-mapset can be used, not both"
 msgstr "Soit --tmp-project ou --tmp-mapset peuvent être utilisés, pas les deux"
 
-#: ../lib/init/grass.py:2072
+#: ../lib/init/grass.py:2068
 msgid "Coordinate reference system argument (e.g. EPSG) is needed for --tmp-project"
 msgstr "L'argument du système de coordonnées de référence (ex EPSG) est nécessaire pour --tmp-project"
 
-#: ../lib/init/grass.py:2079
+#: ../lib/init/grass.py:2075
 msgid "Only one argument (e.g. EPSG) is needed for --tmp-project, mapset name <{}> provided"
 msgstr "Un seul argument (ex EPSG) est nécessaire pour --tmp-project, le jeu de cartes <{}> est déjà fourni"
 
-#: ../lib/init/grass.py:2231
+#: ../lib/init/grass.py:2222
 #, python-brace-format
 msgid ""
 "Unable to start GRASS. You have the choice to:\n"
@@ -4128,24 +4128,24 @@ msgstr ""
 "     {cmd_name} --help\n"
 "Voir également : https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 
-#: ../lib/init/grass.py:2252
+#: ../lib/init/grass.py:2243
 msgid "Starting GRASS..."
 msgstr "Démarrage de GRASS..."
 
-#: ../lib/init/grass.py:2301
+#: ../lib/init/grass.py:2292
 msgid "Failed to start GRASS, grassdata directory cannot be found or created."
 msgstr "Le démarrage de GRASS a échoué, le dossier grassdata est introuvable ou ne peut pas être créé."
 
-#: ../lib/init/grass.py:2308
+#: ../lib/init/grass.py:2299
 msgid "Failed to start GRASS, no default project to copy in the installation or copying failed."
 msgstr "Le démarrage de GRASS a échoué, il n'y a pas de projet par défaut à copier dans l'installation, ou la copie a échoué."
 
-#: ../lib/init/grass.py:2413
+#: ../lib/init/grass.py:2404
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr "Lancement de l'interface graphique <%s> en tâche de fond, merci de patienter ..."
 
-#: ../lib/init/grass.py:2451
+#: ../lib/init/grass.py:2442
 #, python-format
 msgid "Failed to start shell '%s'"
 msgstr "Échec au lancement du shell '%s'"
@@ -4195,7 +4195,7 @@ msgstr "%s copié"
 #: ../lib/manage/do_copy.c:85 ../lib/manage/do_remove.c:101
 #: ../lib/manage/do_rename.c:99
 msgid "String for secondary color table has been truncated"
-msgstr ""
+msgstr "La chaîne de caractères de la table de couleurs secondaire a été tronquée"
 
 #: ../lib/manage/do_list.c:30
 #, c-format
@@ -4427,12 +4427,12 @@ msgstr "Carte vecteur <%s> chargée (%d points)"
 
 #: ../lib/ogsf/gp3.c:213 ../lib/ogsf/gv3.c:350
 #: ../lib/rst/interp_float/vinput2d.c:98 ../lib/vector/Vlib/array.c:268
-#: ../lib/vector/Vlib/ascii.c:410 ../lib/vector/Vlib/cats.c:592
+#: ../lib/vector/Vlib/ascii.c:410 ../lib/vector/Vlib/cats.c:594
 #: ../lib/vector/Vlib/copy.c:649 ../lib/vector/Vlib/copy.c:764
 #: ../lib/vector/Vlib/map.c:300 ../lib/vector/Vlib/map.c:433
 #: ../lib/vector/Vlib/net_build.c:152 ../lib/vector/Vlib/net_build.c:203
 #: ../lib/vector/Vlib/net_build.c:496 ../lib/vector/Vlib/net_build.c:793
-#: ../lib/vector/Vlib/net_build.c:970 ../lib/vector/neta/timetables.c:135
+#: ../lib/vector/Vlib/net_build.c:970 ../lib/vector/neta/timetables.c:136
 #: ../lib/vector/neta/utils.c:119
 #, c-format
 msgid "Database connection not defined for layer %d"
@@ -4473,17 +4473,17 @@ msgstr "pas de donnée"
 msgid "Raster map <%s> is outside of current region. Load failed."
 msgstr "La carte raster <%s> est en dehors de la région courante. Chargement échoué."
 
-#: ../lib/ogsf/gs2.c:1726 ../lib/ogsf/gs2.c:1733 ../lib/ogsf/gs2.c:1742
-#: ../lib/ogsf/gs2.c:1752 ../lib/ogsf/gs2.c:1761 ../lib/ogsf/gs2.c:1772
-#: ../lib/ogsf/gs2.c:1820
+#: ../lib/ogsf/gs2.c:1727 ../lib/ogsf/gs2.c:1734 ../lib/ogsf/gs2.c:1743
+#: ../lib/ogsf/gs2.c:1753 ../lib/ogsf/gs2.c:1762 ../lib/ogsf/gs2.c:1773
+#: ../lib/ogsf/gs2.c:1821
 msgid "GS_load_att_map(): Out of memory. Unable to load map"
 msgstr "GS_load_att_map(): Mémoire saturée. Impossible de charger la carte"
 
-#: ../lib/ogsf/gs2.c:1849
+#: ../lib/ogsf/gs2.c:1850
 msgid "Loading failed"
 msgstr "Échec du chargement"
 
-#: ../lib/ogsf/gs2.c:1853
+#: ../lib/ogsf/gs2.c:1854
 msgid "Error finding range"
 msgstr "Erreur de détermination de la plage"
 
@@ -4773,12 +4773,12 @@ msgstr "proj_create() a échoué pour '%s'"
 #: ../lib/proj/do_proj.c:198
 #, fuzzy, c-format
 msgid "Invalid west longitude %g"
-msgstr "Champ d'ouest invalide : %s"
+msgstr "Champ d'ouest invalide : %g"
 
 #: ../lib/proj/do_proj.c:202
 #, fuzzy, c-format
 msgid "Invalid east longitude %g"
-msgstr "Champ d'est invalide : %s"
+msgstr "Champ d'est invalide : %g"
 
 #: ../lib/proj/do_proj.c:206
 #, c-format
@@ -4788,12 +4788,12 @@ msgstr "Latitude sud invalide %g"
 #: ../lib/proj/do_proj.c:210
 #, fuzzy, c-format
 msgid "Invalid north latitude %g"
-msgstr "Champ de nord invalide : %s"
+msgstr "Champ de nord invalide : %g"
 
 #: ../lib/proj/do_proj.c:214
 #, fuzzy, c-format
 msgid "South %g is larger than north %g"
-msgstr "Le Nord doit être plus grand que le Sud"
+msgstr "%g sud est plus grand que %g nord"
 
 #: ../lib/proj/do_proj.c:328
 #, c-format
@@ -4815,26 +4815,26 @@ msgstr "Le système de coordonnées en entrée est NULL"
 
 #: ../lib/proj/do_proj.c:442
 msgid "Input coordinate system definition is NULL"
-msgstr ""
+msgstr "La définition du système de coordonnées en entrée est NULL"
 
 #: ../lib/proj/do_proj.c:464
 msgid "A custom pipeline requires input and output projection info"
 msgstr "Un pipeline personnalisé nécessite des informations sur la projection de l'entrée et de la sortie"
 
 #: ../lib/proj/do_proj.c:492
-#, c-format
+#, fuzzy, c-format
 msgid "The transformation pipeline contains an '%s' step. Remove this step if easting and northing are swapped in the output."
-msgstr ""
+msgstr "Le pipeline de transformation contient une étape '%s'. Supprimez cette étape si l'Est et le Nord sont inversés dans la sortie."
 
 #: ../lib/proj/do_proj.c:557
 #, fuzzy, c-format
 msgid "Unable to determine area of interest for '%s'"
-msgstr "Impossible d'obtenir le répertoire de l'utilisateur"
+msgstr "Impossible de déterminer la zone d'intérêt pour '%s'"
 
 #: ../lib/proj/do_proj.c:578
 #, c-format
 msgid "Input CRS not available for '%s'"
-msgstr ""
+msgstr "SCR en entrée non disponible pour '%s'"
 
 #: ../lib/proj/do_proj.c:599
 #, c-format
@@ -5227,14 +5227,14 @@ msgid "However, header file of that raster map can't be opened. It seems that it
 msgstr "Cependant, le fichier d'en-tête de cette carte raster ne peut pas être ouvert. Il semble qu'il ait été corrompu après avoir créé la carte raster reclassée."
 
 #: ../lib/raster/get_cellhd.c:71
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s>. %s"
 msgstr "Impossible de lire le fichier d'en-tête de la carte raster <%s@%s>. Il s'agit d'une reclassification de la carte raster <%s@%s>. %s"
 
 #: ../lib/raster/get_cellhd.c:79
 #, c-format
 msgid "Unable to open header file for raster map <%s@%s>. It seems that some previous step failed and created an incomplete raster map."
-msgstr ""
+msgstr "Impossible d'ouvrir le fichier d'en-tête pour la carte raster <%s@%s>. Il semble qu'une étape précédente ait échoué et ait créé une carte raster incomplète."
 
 #: ../lib/raster/get_row.c:36 ../lib/raster/get_row.c:935
 #, c-format
@@ -5707,33 +5707,84 @@ msgstr "Erreur à la fermeture du fichier de métadonnées <%s> pour la carte ra
 msgid "Unable to create <%s> metadata file for raster map <%s@%s>"
 msgstr "Impossible de créer le fichier de métadonnées <%s> pour la carte raster <%s@%s>"
 
-#: ../lib/raster/reclass.c:168
+#: ../lib/raster/reclass.c:162
+#, c-format
+msgid "Error reading beginning of header file for <%s@%s>: %s"
+msgstr "Erreur de lecture du début du fichier d'en-tête pour <%s@%s> : %s"
+
+#: ../lib/raster/reclass.c:180
 #, c-format
 msgid "Too many reclass categories for <%s@%s>"
 msgstr "Trop de catégories de reclassification pour <%s@%s>"
 
-#: ../lib/raster/reclass.c:171
+#: ../lib/raster/reclass.c:184
 #, c-format
-msgid "Illegal reclass format in header file for <%s@%s>"
-msgstr "Format de reclassification illégal dans l'en-tête de fichier pour <%s@%s>"
+msgid "Illegal reclass format in header file for <%s@%s>: %s"
+msgstr "Format de reclassification illégal dans l'en-tête de fichier pour <%s@%s> : %s"
 
-#: ../lib/raster/reclass.c:273
+#: ../lib/raster/reclass.c:252
+#, c-format
+msgid "File too short, reading line %d"
+msgstr "Fichier trop court, lecture de la ligne %d"
+
+#: ../lib/raster/reclass.c:259
+#, c-format
+msgid "Line too long: %s..."
+msgstr "Ligne trop longue : %s..."
+
+#: ../lib/raster/reclass.c:265
+#, c-format
+msgid "Format is not key:value: %s"
+msgstr "Le format n'est pas clé:valeur : %s"
+
+#: ../lib/raster/reclass.c:284
+#, c-format
+msgid "Unknown key at line: %s"
+msgstr "Clé inconnue à la ligne : %s"
+
+#: ../lib/raster/reclass.c:295
+#, fuzzy, c-format
+#| msgid "Unable to read find raster <%s>"
+msgid "Mapset not read, only raster name: %s"
+msgstr "Impossible de lire le raster <%s>"
+
+#: ../lib/raster/reclass.c:299
+#, fuzzy, c-format
+#| msgid "Raster map <%s> not found in mapset <%s>"
+msgid "Raster name not read, only mapset: %s"
+msgstr "Carte raster <%s> non trouvée dans le jeux de données <%s>"
+
+#: ../lib/raster/reclass.c:302
+msgid "Raster name and mapset not read"
+msgstr "Le nom du raster et du jeu de carte n’ont pas été lus"
+
+#: ../lib/raster/reclass.c:333
 msgid "Illegal reclass request"
 msgstr "Requête de reclassification illégale"
 
-#: ../lib/raster/reclass.c:278
+#: ../lib/raster/reclass.c:338
 msgid "Illegal reclass type"
 msgstr "Type de reclassification illégal"
 
-#: ../lib/raster/reclass.c:284
+#: ../lib/raster/reclass.c:344
 #, c-format
 msgid "Unable to create header file for <%s@%s>"
 msgstr "Impossible de créer le fichier d'en-tête pour <%s@%s>"
 
-#: ../lib/raster/reclass.c:332
+#: ../lib/raster/reclass.c:392
 #, c-format
 msgid "Unable to create dependency file in <%s@%s>"
 msgstr "Impossible de créer le fichier de dépendances dans <%s@%s>"
+
+#: ../lib/raster/reclass.c:479
+#, c-format
+msgid "Reading integer failed on line: %s (after reading min: %d)"
+msgstr "Échec de la lecture de l'entier à la ligne : %s (après lecture min : %d)"
+
+#: ../lib/raster/reclass.c:484
+#, c-format
+msgid "First entry (min) not read yet and reading integer failed on line: %s"
+msgstr "La première entrée (min) n'a pas encore été lue et la lecture de l'entier a échoué à la ligne : %s"
 
 #: ../lib/raster/sample.c:68
 msgid "Unknown interpolation type"
@@ -5962,10 +6013,10 @@ msgstr "raster3d"
 #: ../lib/vector/neta/components.c:72 ../lib/vector/neta/components.c:182
 #: ../lib/vector/neta/flow.c:67 ../lib/vector/neta/flow.c:190
 #: ../lib/vector/neta/path.c:259 ../lib/vector/neta/spanningtree.c:103
-#: ../lib/vector/neta/timetables.c:69 ../lib/vector/neta/timetables.c:170
-#: ../lib/vector/neta/timetables.c:180 ../lib/vector/neta/timetables.c:193
-#: ../lib/vector/neta/timetables.c:276 ../lib/vector/neta/timetables.c:410
-#: ../lib/vector/neta/timetables.c:421
+#: ../lib/vector/neta/timetables.c:69 ../lib/vector/neta/timetables.c:171
+#: ../lib/vector/neta/timetables.c:181 ../lib/vector/neta/timetables.c:194
+#: ../lib/vector/neta/timetables.c:277 ../lib/vector/neta/timetables.c:411
+#: ../lib/vector/neta/timetables.c:422
 msgid "Out of memory"
 msgstr "Dépassement de mémoire"
 
@@ -6007,7 +6058,7 @@ msgstr "Commencez par changer le nombre de colonnes vers nsizc %d %d"
 #: ../lib/rst/interp_float/resout2d.c:209
 #, c-format
 msgid "RST library temporary file reading error: %s"
-msgstr ""
+msgstr "Erreur de lecture de fichier temporaire de la bibliothèque RST : %s"
 
 #: ../lib/rst/interp_float/resout2d.c:81
 msgid "Temporarily changing the region to desired resolution..."
@@ -6494,36 +6545,36 @@ msgstr "Lignes supprimées : %d"
 msgid "Removed bridges: %d"
 msgstr "Ponts supprimés : %d"
 
-#: ../lib/vector/Vlib/buffer2.c:356
+#: ../lib/vector/Vlib/buffer2.c:361
 msgid "Line is not looped"
 msgstr "La ligne ne boucle pas"
 
-#: ../lib/vector/Vlib/buffer2.c:438
+#: ../lib/vector/Vlib/buffer2.c:443
 #, c-format
 msgid "Unexpected result of line_intersection() res = %d"
 msgstr "Résultat inatendu pour line_intersection() res = %d"
 
-#: ../lib/vector/Vlib/buffer2.c:587
+#: ../lib/vector/Vlib/buffer2.c:592
 msgid "Next edge was visited (right) but it is not the first one !!! breaking loop"
 msgstr "L'angle suivant a déjà été visité (droite) mais il n'est pas le premier !!! Sortie de la boucle"
 
-#: ../lib/vector/Vlib/buffer2.c:598
+#: ../lib/vector/Vlib/buffer2.c:603
 msgid "Next edge was visited (left) but it is not the first one !!! breaking loop"
 msgstr "L'angle suivant a déjà été visité (gauche) mais il n'est pas le premier !!! sortie de la boucle"
 
-#: ../lib/vector/Vlib/buffer2.c:646
+#: ../lib/vector/Vlib/buffer2.c:651
 msgid "side != 0 feature not implemented"
 msgstr "fonction side != 0 non implémentée"
 
-#: ../lib/vector/Vlib/buffer2.c:892 ../lib/vector/Vlib/buffer2.c:940
+#: ../lib/vector/Vlib/buffer2.c:897 ../lib/vector/Vlib/buffer2.c:945
 msgid "zero area size"
 msgstr "surface de taille nulle"
 
-#: ../lib/vector/Vlib/buffer2.c:898 ../lib/vector/Vlib/buffer2.c:946
+#: ../lib/vector/Vlib/buffer2.c:903 ../lib/vector/Vlib/buffer2.c:951
 msgid "Line was not closed"
 msgstr "La ligne n'était pas fermée"
 
-#: ../lib/vector/Vlib/buffer2.c:912 ../lib/vector/Vlib/buffer2.c:965
+#: ../lib/vector/Vlib/buffer2.c:917 ../lib/vector/Vlib/buffer2.c:970
 msgid "Vect_get_point_in_poly() failed"
 msgstr "Vect_get_point_in_poly() a échoué"
 
@@ -6734,9 +6785,9 @@ msgstr[1] "%d primitives référencées"
 #: ../lib/vector/Vlib/build_sfa.c:668
 #, c-format
 msgid "One vertex registered"
-msgid_plural "%<PRId64> vertices registered"
+msgid_plural "%d vertices registered"
 msgstr[0] "%d sommet référencé"
-msgstr[1] "%<PRId64> sommets référencés"
+msgstr[1] "%d sommets référencés"
 
 #: ../lib/vector/Vlib/build_nat.c:137
 msgid "Building areas..."
@@ -6927,33 +6978,33 @@ msgstr "Trop de catégories (%d), dans l'impossibilité de mettre en cat %d (cou
 msgid "Unable to convert category string '%s' (from '%s') to category range"
 msgstr "Impossible de convertir les catégories de caractères '%s' (de '%s') en intervalle de catégorie"
 
-#: ../lib/vector/Vlib/cats.c:573 ../lib/vector/Vlib/cats.c:677
+#: ../lib/vector/Vlib/cats.c:575 ../lib/vector/Vlib/cats.c:679
 msgid "Layer number must be > 0 for category constraints"
 msgstr "Le numéro de couche doit être > 0 pour les contraintes de catégories"
 
-#: ../lib/vector/Vlib/cats.c:586
+#: ../lib/vector/Vlib/cats.c:588
 #, c-format
 msgid "'%s' and '%s' parameters were supplied, cats will be ignored"
 msgstr "les paramètres '%s' et '%s' ont été fournis, cats sera ignoré"
 
-#: ../lib/vector/Vlib/cats.c:596
+#: ../lib/vector/Vlib/cats.c:598
 #, c-format
 msgid "Loading categories from table <%s>..."
 msgstr "Chargement des catégories depuis la table <%s> ..."
 
-#: ../lib/vector/Vlib/cats.c:609
+#: ../lib/vector/Vlib/cats.c:611
 #, c-format
 msgid "One category loaded"
 msgid_plural "%d categories loaded"
 msgstr[0] "Une catégorie chargée"
 msgstr[1] "%d catégories chargées"
 
-#: ../lib/vector/Vlib/cats.c:631
+#: ../lib/vector/Vlib/cats.c:633
 #, c-format
 msgid "No categories selected with '%s' option"
 msgstr "Pas de catégories sélectionnées avec l'option '%s'"
 
-#: ../lib/vector/Vlib/cats.c:641
+#: ../lib/vector/Vlib/cats.c:643
 #, c-format
 msgid "%d errors in '%s' option"
 msgstr "%d erreurs dans l'option '%s'"
@@ -8300,29 +8351,39 @@ msgstr "Impossible d'obtenir le nombre d'entités simples"
 msgid "Unable to report simple features for vector map <%s>"
 msgstr "Impossible d'afficher les entités simples pour la carte vecteur <%s>"
 
-#: ../lib/vector/Vlib/snap.c:221 ../lib/vector/Vlib/snap.c:580
+#: ../lib/vector/Vlib/snap.c:224 ../lib/vector/Vlib/snap.c:590
 msgid "Snap vertices Pass 1: select points"
 msgstr "Accrochage des sommets passe 1 : sélection des points"
 
-#: ../lib/vector/Vlib/snap.c:264 ../lib/vector/Vlib/snap.c:632
+#: ../lib/vector/Vlib/snap.c:267 ../lib/vector/Vlib/snap.c:642
 msgid "Snap vertices Pass 2: assign anchor vertices"
 msgstr "Accrochage des sommets passe 2 : assignation des ancrages de sommets"
 
-#: ../lib/vector/Vlib/snap.c:332 ../lib/vector/Vlib/snap.c:700
+#: ../lib/vector/Vlib/snap.c:335 ../lib/vector/Vlib/snap.c:710
 msgid "Snap vertices Pass 3: snap to assigned points"
 msgstr "Accrochage des sommets passe 3 : accrochage sur les points assignés"
 
-#: ../lib/vector/Vlib/snap.c:521 ../lib/vector/Vlib/snap.c:882
+#: ../lib/vector/Vlib/snap.c:524 ../lib/vector/Vlib/snap.c:892
 #, c-format
 msgid "Snapped vertices: %d"
 msgstr "Sommets accrochés : %d"
 
-#: ../lib/vector/Vlib/snap.c:522 ../lib/vector/Vlib/snap.c:883
+#: ../lib/vector/Vlib/snap.c:525 ../lib/vector/Vlib/snap.c:893
 #, c-format
 msgid "New vertices: %d"
 msgstr "Nouveau sommet : %d"
 
-#: ../lib/vector/Vlib/snap.c:909
+#: ../lib/vector/Vlib/snap.c:571
+#, c-format
+msgid "Unable to create temporary file <%s>: %s"
+msgstr "Impossible de créer le fichier temporaire <%s> : %s"
+
+#: ../lib/vector/Vlib/snap.c:575
+#, c-format
+msgid "Unable to remove temporary file <%s>: %s"
+msgstr "Impossible de supprimer le fichier temporaire <%s> : %s"
+
+#: ../lib/vector/Vlib/snap.c:919
 msgid "Reading features..."
 msgstr "Lecture des entités ..."
 
@@ -8332,19 +8393,19 @@ msgid "Unable to write feature in vector map <%s>"
 msgstr "Impossible d'écrire l'objet dans la carte vecteur <%s>"
 
 #: ../lib/vector/Vlib/write.c:255
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to rewrite feature/offset %<PRId64> in vector map <%s>"
-msgstr "Impossible de réécrire l'entité/décalage %lu dans la carte vecteur <%s>"
+msgstr "Impossible de réécrire l'entité/décalage %<PRId64> dans la carte vecteur <%s>"
 
 #: ../lib/vector/Vlib/write.c:288
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to delete feature/offset %<PRId64> from vector map <%s>"
-msgstr "Impossible de supprimer l'entité/décalage %lu dans la carte vecteur <%s>"
+msgstr "Impossible de supprimer l'entité/décalage %<PRId64> dans la carte vecteur <%s>"
 
 #: ../lib/vector/Vlib/write.c:325
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to restore feature/offset %<PRId64> in vector map <%s>"
-msgstr "Impossible de restaurer l'entité %d de la couche vectorielle <%s>"
+msgstr "Impossible de restaurer l’entité/décalage %<PRId64> dans la carte vectorielle <%s>."
 
 #: ../lib/vector/Vlib/write.c:335
 #, c-format
@@ -8894,8 +8955,8 @@ msgid "Computing minimum spanning tree..."
 msgstr "Calcul de l'arbre couvrant de poids minimal ..."
 
 #: ../lib/vector/neta/timetables.c:46 ../lib/vector/neta/timetables.c:73
-#: ../lib/vector/neta/timetables.c:205 ../lib/vector/neta/timetables.c:244
-#: ../lib/vector/neta/timetables.c:284
+#: ../lib/vector/neta/timetables.c:206 ../lib/vector/neta/timetables.c:245
+#: ../lib/vector/neta/timetables.c:285
 #, c-format
 msgid "Unable to open select cursor: %s"
 msgstr "Impossible d'ouvrir le curseur de sélection: %s"
@@ -10537,9 +10598,6 @@ msgstr "Outil de recherche inconnu"
 #~ msgid "Unable to read band reference file for raster map <%s>"
 #~ msgstr "Impossible de lire les règles de quantification pour la carte raster <%s>"
 
-#~ msgid "Unable to read find raster <%s>"
-#~ msgstr "Impossible de lire le raster <%s>"
-
 #~ msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s> %s"
 #~ msgstr "Impossible de lire le fichier header de la carte raster <%s@%s>. II s'agit d'une reclassification de <%s@%s> %s"
 
@@ -10713,10 +10771,6 @@ msgstr "Outil de recherche inconnu"
 #, python-format
 #~ msgid "Unknown temporal type \"%s\""
 #~ msgstr "Type temporel \"%s\" inconnu"
-
-#, python-format
-#~ msgid "Unknown type: %s"
-#~ msgstr "Type inconnu : %s"
 
 #, python-format
 #~ msgid "Unsupported relative time unit type for %(type)s map <%(id)s> with layer %(l)s: %(u)s"

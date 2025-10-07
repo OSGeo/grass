@@ -33,6 +33,8 @@ from core.gthread import gThread
 try:
     haveGdal = True
     from osgeo import gdal
+
+    gdal.DontUseExceptions()
 except ImportError:
     haveGdal = False
 

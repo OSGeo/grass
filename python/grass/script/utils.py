@@ -559,7 +559,7 @@ def clock():
     return time.perf_counter()
 
 
-def legalize_vector_name(name, fallback_prefix="x"):
+def legalize_vector_name(name, fallback_prefix: str | None = "x") -> str:
     """Make *name* usable for vectors, tables, and columns
 
     The returned string is a name usable for vectors, tables, and columns,
