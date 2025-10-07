@@ -34,7 +34,7 @@ int get_target(char *group)
              _("Mapset <%s> in target project (location) <%s> - "), mapset,
              location);
     (void)G_strlcat(buf, stat == 0 ? _("permission denied") : _("not found"),
-          sizeof(buf));
+                    sizeof(buf));
 error:
     (void)G_strlcat(buf, "\n", sizeof(buf));
     (void)G_strlcat(buf, _("Please run i.target for group "), sizeof(buf));
