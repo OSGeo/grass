@@ -1,5 +1,7 @@
 import os
 import pathlib
+import unittest
+import shutil
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
