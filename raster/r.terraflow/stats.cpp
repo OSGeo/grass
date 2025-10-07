@@ -118,9 +118,10 @@ char *noclobberFileName(char *fname)
             if (rename(fname, buf) != 0) {
                 G_fatal_error("%s", fname);
             }
-            close(fd);
         }
     }
+    if (fd >= 0)
+        close(fd);
     return fname;
 }
 

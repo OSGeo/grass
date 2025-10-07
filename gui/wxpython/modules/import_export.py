@@ -497,6 +497,8 @@ class GdalImportDialog(ImportDialog):
                 elif os.path.exists(idsn):
                     try:
                         from osgeo import gdal
+
+                        gdal.DontUseExceptions()
                     except ImportError:
                         GError(
                             parent=self,

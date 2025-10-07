@@ -120,4 +120,4 @@ class DataCatalogInfoManager:
         return reason
 
     def _onLearnMore(self, event):
-        self._giface.Help(entry="grass_database")
+        self._giface.Help(entry="grass_projects")

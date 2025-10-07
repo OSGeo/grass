@@ -31,6 +31,7 @@
 # % description: Switch the compression off
 # %end
 
+import json
 import os
 import sys
 import shutil
@@ -39,6 +40,7 @@ import tarfile
 
 from pathlib import Path
 
+import grass.script as gs
 from grass.script.utils import try_rmdir, try_remove
 from grass.script import core as grass
 
@@ -71,6 +73,7 @@ def main():
     if not gfile["name"]:
         grass.fatal(_("Raster map <%s> not found") % infile)
 
+    parent_dir = Path(outfile).parent
     if os.path.exists(outfile):
         if os.getenv("GRASS_OVERWRITE"):
             grass.warning(
@@ -79,6 +82,12 @@ def main():
             try_remove(outfile)
         else:
             grass.fatal(_("option <output>: <%s> exists.") % outfile)
+    elif not parent_dir.exists():
+        gs.fatal(_("Directory '{path}' does not exist").format(path=parent_dir))
+    elif not parent_dir.is_dir():
+        gs.fatal(_("Path '{path}' is not a directory").format(path=parent_dir))
+    elif not os.access(parent_dir, os.W_OK):
+        gs.fatal(_("Directory '{path}' is not writable").format(path=parent_dir))
 
     grass.message(_("Packing <%s> to <%s>...") % (gfile["fullname"], outfile))
     basedir = os.path.sep.join(os.path.normpath(gfile["file"]).split(os.path.sep)[:-2])
@@ -154,12 +163,20 @@ def main():
     # copy projection info
     # (would prefer to use g.proj*, but this way is 5.3 and 5.7 compat)
     gisenv = grass.gisenv()
-    for support in ["INFO", "UNITS", "EPSG"]:
+    for support in ["INFO", "UNITS", "EPSG", "SRID", "WKT"]:
         path = os.path.join(
             gisenv["GISDBASE"], gisenv["LOCATION_NAME"], "PERMANENT", "PROJ_" + support
         )
         if os.path.exists(path):
             shutil.copyfile(path, os.path.join(tmp_dir, "PROJ_" + support))
+
+    # copy CRS info from computational region
+    data = gs.parse_command("g.region", flags="p", format="json")["crs"]
+    crs_data = {}
+    crs_data["type_code"] = data["type_code"]
+    crs_data["type"] = data["type"]
+    crs_data["zone"] = data["zone"]
+    (tmp_dir / "computational_region_crs.json").write_text(json.dumps(crs_data))
 
     # pack it all up
     os.chdir(tmp)

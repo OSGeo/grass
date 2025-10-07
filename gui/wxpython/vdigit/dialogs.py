@@ -401,7 +401,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
 
     def OnApply(self, event):
         """Apply button pressed"""
-        for fid in self.cats.keys():
+        for fid in list(self.cats.keys()):
             newfid = self.ApplyChanges(fid)
             if fid == self.fid and newfid > 0:
                 self.fid = newfid

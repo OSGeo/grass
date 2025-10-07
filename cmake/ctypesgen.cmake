@@ -61,7 +61,7 @@ endforeach()
 message(STATUS "Generating ${OUT_FILE}")
 execute_process(
   COMMAND
-    ${PYTHON_EXECUTABLE} ${CTYPESGEN_PY} --cpp "${CTYPESFLAGS}"
+    ${PYTHON_EXECUTABLE} ${CTYPESGEN_PY} --cpp ${CTYPESFLAGS}
     --no-embed-preamble --strip-build-path ${RUNTIME_GISBASE} ${INC_HEADERS}
     ${LIBRARIES} ${DEFINES} -o ${OUT_FILE} ${HEADERS}
   OUTPUT_VARIABLE ctypesgen_OV
