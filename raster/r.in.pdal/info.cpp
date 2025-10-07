@@ -8,9 +8,17 @@
  *   Read the COPYING file that comes with GRASS for details.
  *
  */
+#include <cmath>
+#include <stdbool.h>
+
+#include <pdal/filters/ReprojectionFilter.hpp>
+#include <pdal/io/BufferReader.hpp>
 
 #include "info.h"
-#include <cmath>
+
+extern "C" {
+#include "projection.h"
+}
 
 #ifdef PDAL_USE_NOSRS
 void get_extent(struct StringList *infiles, double *min_x, double *max_x,
@@ -22,8 +30,9 @@ void get_extent(struct StringList *infiles, double *min_x, double *max_x,
 #endif
 {
     pdal::StageFactory factory;
-    bool first = 1;
-
+    pdal::SpatialReference spatial_reference;
+    bool first = true;
+    double min_x_, max_x_, min_y_, max_y_, min_z_, max_z_;
     *min_x = *max_x = *min_y = *max_y = *min_z = *max_z = NAN;
 
     for (int i = 0; i < infiles->num_items; i++) {
@@ -52,30 +61,118 @@ void get_extent(struct StringList *infiles, double *min_x, double *max_x,
         catch (const std::exception &err) {
             G_fatal_error(_("PDAL error: %s"), err.what());
         }
-        const pdal::LasHeader &las_header = las_reader.header();
-        if (first) {
-            *min_x = las_header.minX();
-            *min_y = las_header.minY();
-            *min_z = las_header.minZ();
-            *max_x = las_header.maxX();
-            *max_y = las_header.maxY();
-            *max_z = las_header.maxZ();
+        spatial_reference = las_reader.getSpatialReference();
+        std::string dataset_wkt = spatial_reference.getWKT();
+        bool proj_match = is_wkt_projection_same_as_loc(dataset_wkt.c_str());
 
-            first = 0;
+        const pdal::LasHeader &las_header = las_reader.header();
+
+        min_x_ = las_header.minX();
+        min_y_ = las_header.minY();
+        min_z_ = las_header.minZ();
+        max_x_ = las_header.maxX();
+        max_y_ = las_header.maxY();
+        max_z_ = las_header.maxZ();
+#ifdef PDAL_USE_NOSRS
+        bool need_to_reproject = !nosrs && !proj_match &&
+                                 spatial_reference.valid() &&
+                                 !spatial_reference.empty();
+#else
+        bool need_to_reproject = !proj_match && spatial_reference.valid() &&
+                                 !spatial_reference.empty();
+#endif
+
+        if (need_to_reproject) {
+            get_reprojected_extent(spatial_reference, &min_x_, &max_x_, &min_y_,
+                                   &max_y_, &min_z_, &max_z_);
+        }
+        if (first) {
+            *min_x = min_x_;
+            *min_y = min_y_;
+            *min_z = min_z_;
+            *max_x = max_x_;
+            *max_y = max_y_;
+            *max_z = max_z_;
+
+            first = false;
         }
         else {
-            if (*min_x > las_header.minX())
-                *min_x = las_header.minX();
-            if (*min_y > las_header.minY())
-                *min_y = las_header.minY();
-            if (*min_z > las_header.minZ())
-                *min_z = las_header.minZ();
-            if (*max_x < las_header.maxX())
-                *max_x = las_header.maxX();
-            if (*max_y < las_header.maxY())
-                *max_y = las_header.maxY();
-            if (*max_z < las_header.maxZ())
-                *max_z = las_header.maxZ();
+            if (*min_x > min_x_)
+                *min_x = min_x_;
+            if (*min_y > min_y_)
+                *min_y = min_y_;
+            if (*min_z > min_z_)
+                *min_z = min_z_;
+            if (*max_x < max_x_)
+                *max_x = max_x_;
+            if (*max_y < max_y_)
+                *max_y = max_y_;
+            if (*max_z < max_z_)
+                *max_z = max_z_;
+        }
+    }
+}
+
+void get_reprojected_extent(pdal::SpatialReference &spatial_reference,
+                            double *min_x, double *max_x, double *min_y,
+                            double *max_y, double *min_z, double *max_z)
+{
+    pdal::PointTable table;
+    table.layout()->registerDim(pdal::Dimension::Id::X);
+    table.layout()->registerDim(pdal::Dimension::Id::Y);
+    table.layout()->registerDim(pdal::Dimension::Id::Z);
+
+    pdal::PointViewPtr view(new pdal::PointView(table));
+
+    view->setField(pdal::Dimension::Id::X, 0, *min_x);
+    view->setField(pdal::Dimension::Id::Y, 0, *min_y);
+    view->setField(pdal::Dimension::Id::Z, 0, *min_z);
+    view->setField(pdal::Dimension::Id::X, 1, *min_x);
+    view->setField(pdal::Dimension::Id::Y, 1, *max_y);
+    view->setField(pdal::Dimension::Id::Z, 1, *min_z);
+    view->setField(pdal::Dimension::Id::X, 2, *max_x);
+    view->setField(pdal::Dimension::Id::Y, 2, *min_y);
+    view->setField(pdal::Dimension::Id::Z, 2, *max_z);
+    view->setField(pdal::Dimension::Id::X, 3, *max_x);
+    view->setField(pdal::Dimension::Id::Y, 3, *max_y);
+    view->setField(pdal::Dimension::Id::Z, 3, *max_z);
+
+    pdal::BufferReader reader;
+    reader.addView(view);
+
+    pdal::StageFactory factory;
+    pdal::Stage *reproject = factory.createStage("filters.reprojection");
+    pdal::Options reproject_options;
+    reproject_options.add("in_srs", spatial_reference.getWKT());
+    reproject_options.add("out_srs", location_projection_as_wkt(false));
+    reproject->setOptions(reproject_options);
+    reproject->setInput(reader);
+    reproject->prepare(table);
+    reproject->execute(table);
+
+    for (pdal::PointId i = 0; i < view->size(); ++i) {
+
+        double x = view->getFieldAs<double>(pdal::Dimension::Id::X, i);
+        double y = view->getFieldAs<double>(pdal::Dimension::Id::Y, i);
+        double z = view->getFieldAs<double>(pdal::Dimension::Id::Z, i);
+        if (i == 0) {
+            *min_x = *max_x = x;
+            *min_y = *max_y = y;
+            *min_z = *max_z = z;
+        }
+        else {
+            if (*min_x > x)
+                *min_x = x;
+            if (*min_y > y)
+                *min_y = y;
+            if (*min_z > z)
+                *min_z = z;
+            if (*max_x < x)
+                *max_x = x;
+            if (*max_y < y)
+                *max_y = y;
+            if (*max_z < z)
+                *max_z = z;
         }
     }
 }
