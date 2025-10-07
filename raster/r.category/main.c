@@ -23,7 +23,7 @@
 #include <grass/colors.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 #include "local_proto.h"
 
 static struct Categories cats;
@@ -45,8 +45,8 @@ int main(int argc, char *argv[])
     const char *label_format = NULL;
     enum OutputFormat format;
     enum ColorOutput color_format;
-    JSON_Value *root_value;
-    JSON_Array *root_array;
+    G_JSON_Value *root_value;
+    G_JSON_Array *root_array;
 
     struct {
         struct Option *map, *fs, *cats, *vals, *raster, *file, *fmt_str,
@@ -138,11 +138,11 @@ int main(int argc, char *argv[])
     }
     if (parm.format->answer && strcmp(parm.format->answer, "json") == 0) {
         format = JSON;
-        root_value = json_value_init_array();
+        root_value = G_json_value_init_array();
         if (root_value == NULL) {
             G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
         }
-        root_array = json_array(root_value);
+        root_array = G_json_array(root_value);
     }
     else {
         format = PLAIN;
@@ -404,24 +404,24 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
-void print_json(JSON_Value *root_value)
+void print_json(G_JSON_Value *root_value)
 {
     char *serialized_string = NULL;
-    serialized_string = json_serialize_to_string_pretty(root_value);
+    serialized_string = G_json_serialize_to_string_pretty(root_value);
     if (serialized_string == NULL) {
         G_fatal_error(_("Failed to initialize pretty JSON string."));
     }
     puts(serialized_string);
-    json_free_serialized_string(serialized_string);
-    json_value_free(root_value);
+    G_json_free_serialized_string(serialized_string);
+    G_json_value_free(root_value);
 }
 
-int print_label(long x, enum OutputFormat format, JSON_Array *root_array,
+int print_label(long x, enum OutputFormat format, G_JSON_Array *root_array,
                 enum ColorOutput color_format, struct Colors *colors)
 {
     char *label, color[COLOR_STRING_LENGTH];
-    JSON_Value *category_value;
-    JSON_Object *category;
+    G_JSON_Value *category_value;
+    G_JSON_Object *category;
 
     G_squeeze(label = Rast_get_c_cat((CELL *)&x, &cats));
     if (color_format != NONE) {
@@ -437,37 +437,37 @@ int print_label(long x, enum OutputFormat format, JSON_Array *root_array,
         fprintf(stdout, "\n");
         break;
     case JSON:
-        category_value = json_value_init_object();
-        category = json_object(category_value);
-        json_object_set_number(category, "category", x);
+        category_value = G_json_value_init_object();
+        category = G_json_object(category_value);
+        G_json_object_set_number(category, "category", x);
         if (strlen(label) == 0) {
-            json_object_set_null(category, "label");
+            G_json_object_set_null(category, "label");
         }
         else {
-            json_object_set_string(category, "label", label);
+            G_json_object_set_string(category, "label", label);
         }
         if (color_format != NONE) {
             if (strcmp(color, "*") == 0) {
-                json_object_set_null(category, "color");
+                G_json_object_set_null(category, "color");
             }
             else {
-                json_object_set_string(category, "color", color);
+                G_json_object_set_string(category, "color", color);
             }
         }
-        json_array_append_value(root_array, category_value);
+        G_json_array_append_value(root_array, category_value);
         break;
     }
 
     return 0;
 }
 
-int print_d_label(double x, enum OutputFormat format, JSON_Array *root_array,
+int print_d_label(double x, enum OutputFormat format, G_JSON_Array *root_array,
                   enum ColorOutput color_format, struct Colors *colors)
 {
     char *label, tmp[40], color[COLOR_STRING_LENGTH];
     DCELL dtmp;
-    JSON_Value *category_value;
-    JSON_Object *category;
+    G_JSON_Value *category_value;
+    G_JSON_Object *category;
 
     dtmp = x;
     G_squeeze(label = Rast_get_d_cat(&dtmp, &cats));
@@ -486,24 +486,24 @@ int print_d_label(double x, enum OutputFormat format, JSON_Array *root_array,
         fprintf(stdout, "\n");
         break;
     case JSON:
-        category_value = json_value_init_object();
-        category = json_object(category_value);
-        json_object_set_number(category, "category", x);
+        category_value = G_json_value_init_object();
+        category = G_json_object(category_value);
+        G_json_object_set_number(category, "category", x);
         if (strlen(label) == 0) {
-            json_object_set_null(category, "label");
+            G_json_object_set_null(category, "label");
         }
         else {
-            json_object_set_string(category, "label", label);
+            G_json_object_set_string(category, "label", label);
         }
         if (color_format != NONE) {
             if (strcmp(color, "*") == 0) {
-                json_object_set_null(category, "color");
+                G_json_object_set_null(category, "color");
             }
             else {
-                json_object_set_string(category, "color", color);
+                G_json_object_set_string(category, "color", color);
             }
         }
-        json_array_append_value(root_array, category_value);
+        G_json_array_append_value(root_array, category_value);
         break;
     }
 

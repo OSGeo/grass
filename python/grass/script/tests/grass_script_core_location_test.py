@@ -6,6 +6,8 @@ import os
 import pytest
 
 import grass.script as gs
+from grass.exceptions import ScriptError
+from grass.tools import Tools
 
 xfail_mp_spawn = pytest.mark.xfail(
     multiprocessing.get_start_method() == "spawn",
@@ -144,6 +146,48 @@ def test_create_project(tmp_path):
         assert epsg == "EPSG:3358"
 
 
+@pytest.mark.parametrize("crs", ["XY", "xy", None, ""])
+def test_crs_parameter_xy(tmp_path, crs):
+    project = tmp_path / "test"
+    gs.create_project(project, crs=crs)
+    with (
+        gs.setup.init(project, env=os.environ.copy()) as session,
+        Tools(session=session) as tools,
+    ):
+        assert tools.g_region(flags="p", format="shell").keyval["projection"] == 0
+
+
+def test_crs_parameter_xy_overrides_epsg(tmp_path):
+    project = tmp_path / "test"
+    gs.create_project(project, crs="XY", epsg=4326)
+    with (
+        gs.setup.init(project, env=os.environ.copy()) as session,
+        Tools(session=session) as tools,
+    ):
+        assert tools.g_region(flags="p", format="json")["crs"]["type"] == "xy"
+
+
+def test_crs_parameter_epsg_overrides_epsg(tmp_path):
+    project = tmp_path / "test"
+    gs.create_project(project, crs="EPSG:4326", epsg=3358)
+    with (
+        gs.setup.init(project, env=os.environ.copy()) as session,
+        Tools(session=session) as tools,
+    ):
+        assert tools.g_proj(flags="p", format="shell").keyval["srid"] == "EPSG:4326"
+
+
+@pytest.mark.parametrize("crs", ["EPSG:4326", "epsg:3358"])
+def test_crs_parameter_epsg(tmp_path, crs):
+    project = tmp_path / "test"
+    gs.create_project(project, crs=crs)
+    with (
+        gs.setup.init(project, env=os.environ.copy()) as session,
+        Tools(session=session) as tools,
+    ):
+        assert tools.g_proj(flags="p", format="shell").keyval["srid"] == crs.upper()
+
+
 def test_files(tmp_path):
     """Check expected files are created with bootstrap and session"""
     bootstrap = "bootstrap"
@@ -165,43 +209,58 @@ def test_files(tmp_path):
         assert description_file.read_text(encoding="utf-8").strip() == description
 
 
+@pytest.mark.parametrize("overwrite", [False, None])
+def test_project_no_overwrite(tmp_path, overwrite):
+    """Check that project we raise exception when project exists"""
+    project = tmp_path / "project_1"
+    gs.create_project(project, overwrite=overwrite)
+    assert project.exists()
+    with pytest.raises(ScriptError, match=r"project_1.*already exists"):
+        gs.create_project(project, overwrite=overwrite)
+    assert project.exists()
+
+
 def test_project_overwrite(tmp_path):
-    """Check that project can be overwritten"""
-    project = tmp_path / "project"
+    """Check that existing project can be overwritten"""
+    project = tmp_path / "project_1"
     gs.create_project(project)
     assert project.exists()
     gs.create_project(project, overwrite=True)
     assert project.exists()
 
 
-def set_and_test_description(tmp_path, text):
+def create_project_get_description_file(tmp_path, text):
     """Set text as description and check the result"""
     name = "test"
-    gs.create_project(tmp_path / name, desc=text)
-    description_file = tmp_path / name / "PERMANENT" / "MYNAME"
-    # The behavior inherited in the code is that the file always needs to exist,
-    # regardless of user setting the title or not. This may change in the future,
-    # but for now, we test for this specific behavior.
-    assert description_file.exists()
-    text = text or ""  # None and empty should both yield empty.
-    assert description_file.read_text(encoding="utf-8").strip() == text
+    gs.create_project(tmp_path / name, description=text)
+    return tmp_path / name / "PERMANENT" / "MYNAME"
 
 
 def test_location_description_setter_ascii(tmp_path):
     """Check ASCII text"""
-    set_and_test_description(tmp_path, "This is a test")
+    text = "This is a test"
+    description_file = create_project_get_description_file(tmp_path, text)
+    assert description_file.exists()
+    assert description_file.read_text(encoding="utf-8").strip() == text
 
 
 def test_location_description_setter_unicode(tmp_path):
     """Check unicode text"""
-    set_and_test_description(tmp_path, "This is a test (not Gauss-Krüger or Křovák)")
+    text = "This is a test (not Gauss-Krüger or Křovák)"
+    description_file = create_project_get_description_file(tmp_path, text)
+    assert description_file.exists()
+    assert description_file.read_text(encoding="utf-8").strip() == text
 
 
 def test_location_description_setter_empty(tmp_path):
     """Check empty text"""
-    set_and_test_description(tmp_path, "")
+    description_file = create_project_get_description_file(tmp_path, "")
+    # Explicitly set empty is passed through to the file.
+    assert description_file.exists()
+    assert description_file.read_text(encoding="utf-8").strip() == ""
 
 
 def test_location_description_setter_none(tmp_path):
     """Check None in place of text"""
-    set_and_test_description(tmp_path, None)
+    description_file = create_project_get_description_file(tmp_path, None)
+    assert not description_file.exists()

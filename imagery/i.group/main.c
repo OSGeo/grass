@@ -37,8 +37,8 @@ static int remove_subgroup_files(char group[INAME_LEN],
                                  char subgroup[INAME_LEN], char **rasters,
                                  int k);
 static void print_subgroups(const char *group, const char *mapset,
-                            enum OutputFormat format, JSON_Array *root_array);
-static void list_files_json(const struct Ref *ref, JSON_Array *root_array);
+                            enum OutputFormat format, G_JSON_Array *root_array);
+static void list_files_json(const struct Ref *ref, G_JSON_Array *root_array);
 
 int main(int argc, char *argv[])
 {
@@ -54,8 +54,8 @@ int main(int argc, char *argv[])
 
     enum OutputFormat format;
 
-    JSON_Value *root_value = NULL;
-    JSON_Array *root_array = NULL;
+    G_JSON_Value *root_value = NULL;
+    G_JSON_Array *root_array = NULL;
 
     G_gisinit(argv[0]);
 
@@ -506,7 +506,7 @@ static int remove_subgroup_files(char group[INAME_LEN],
 }
 
 static void print_subgroups(const char *group, const char *mapset,
-                            enum OutputFormat format, JSON_Array *root_array)
+                            enum OutputFormat format, G_JSON_Array *root_array)
 {
     int subgs_num, i;
     int len, tot_len;
@@ -565,7 +565,7 @@ static void print_subgroups(const char *group, const char *mapset,
  * \param ref group reference (set with I_get_group_ref())
  * \param root_array JSON array to which data will be appended.
  */
-static void list_files_json(const struct Ref *ref, JSON_Array *root_array)
+static void list_files_json(const struct Ref *ref, G_JSON_Array *root_array)
 {
     int i;
     char map_str[1024];

@@ -127,7 +127,7 @@ def test_remove_color_table(simple_vector_map):
     - No color rules remain after removal.
     """
     mapname, session = simple_vector_map
-    tools = Tools(session=session)
+    tools = Tools(session=session, consistent_return_value=True)
 
     tools.v_colors(map=mapname, use="cat", color="blues")
     tools.v_colors(map=mapname, flags="r")

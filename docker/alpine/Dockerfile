@@ -210,7 +210,7 @@ ENV GRASS_GISBASE=/usr/local/grass
 
 # run simple LAZ test
 COPY docker/testdata/simple.laz /tmp/
-COPY docker/testdata/test_grass_python.py docker/testdata/test_grass_session.py docker/alpine/grass_tests.sh /scripts/
+COPY docker/testdata/test_grass_session.py docker/alpine/grass_tests.sh /scripts/
 
 # run GRASS python session and scan the test LAZ file; some cleanup
 # also show installed version
@@ -219,7 +219,7 @@ RUN ln -sf /usr/local/grass /usr/local/grass85; \
     $SHELL /scripts/grass_tests.sh; \
     python /scripts/test_grass_session.py && rm -rf /tmp/grasstest_epsg_25832; \
     grass --tmp-project EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g \
-    && rm -f /scripts/grass_tests.sh /tmp/simple.laz /scripts/test_grass_python.py; \
+    && rm -f /scripts/grass_tests.sh /tmp/simple.laz; \
     apk del --no-cache gettext pdal-dev; \
     grass --tmp-project XY --exec g.version -rge \
     && pdal --version \

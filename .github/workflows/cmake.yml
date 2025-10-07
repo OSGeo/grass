@@ -26,19 +26,21 @@ jobs:
   build-cmake:
     runs-on: ubuntu-22.04
     env:
-      CMakeVersion: "3.22.0"
+      CMAKE_VERSION: "3.22.0"
     steps:
       - name: Checkout GRASS
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
       - name: Install CMake
         run: |
-          cd ${GITHUB_WORKSPACE}
-          arch=$(echo $(uname -s)-$(uname -m) | awk '{print tolower($0)}')
-          v=v${{ env.CMakeVersion }}/cmake-${{ env.CMakeVersion }}-${arch}.tar.gz
-          wget https://github.com/Kitware/CMake/releases/download/$v
-          tar xzf cmake-${{ env.CMakeVersion }}-${arch}.tar.gz
-          echo "CMAKE_DIR=$GITHUB_WORKSPACE/cmake-${{ env.CMakeVersion }}-${arch}/bin" >> $GITHUB_ENV
-          echo "$GITHUB_WORKSPACE/cmake-${{ env.CMakeVersion }}-${arch}/bin" >> $GITHUB_PATH
+          cd "${GITHUB_WORKSPACE}" || exit
+          arch="$(echo "$(uname -s)"-"$(uname -m)" | awk '{print tolower($0)}')"
+          v="v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-${arch}.tar.gz"
+          wget "https://github.com/Kitware/CMake/releases/download/$v"
+          tar xzf "cmake-${CMAKE_VERSION}-${arch}.tar.gz"
+          echo "CMAKE_DIR=${GITHUB_WORKSPACE}/cmake-${CMAKE_VERSION}-${arch}/bin" >> "${GITHUB_ENV}"
+          echo "${GITHUB_WORKSPACE}/cmake-${CMAKE_VERSION}-${arch}/bin" >> "${GITHUB_PATH}"
       - run: |
           cmake --version
       - name: Install dependencies
@@ -56,25 +58,25 @@ jobs:
           ldd --version
       - name: Create installation directory
         run: |
-          mkdir $HOME/install
+          mkdir "${HOME}/install"
       - name: Configure
         run: |
-          cmake ${CMAKE_OPTIONS} -S $GITHUB_WORKSPACE -B $GITHUB_WORKSPACE/build -G Ninja \
-            -DCMAKE_INSTALL_PREFIX=$HOME/install -DWITH_NLS=ON -DWITH_GUI=OFF -DWITH_DOCS=OFF \
+          cmake -S "${GITHUB_WORKSPACE}" -B "${GITHUB_WORKSPACE}/build" -G Ninja \
+            -DCMAKE_INSTALL_PREFIX="${HOME}/install" -DWITH_NLS=ON -DWITH_GUI=OFF -DWITH_DOCS=OFF \
             -DWITH_READLINE=ON -DWITH_ODBC=ON -DWITH_NETCDF=ON -DWITH_BZLIB=ON
       - name: Print CMakeCache.txt
         shell: bash -el {0}
         run: |
-          cat ${GITHUB_WORKSPACE}/build/CMakeCache.txt
+          cat "${GITHUB_WORKSPACE}/build/CMakeCache.txt"
       - name: Build
         run: |
-          cmake --build build --verbose -j$(nproc)
+          cmake --build build --verbose -j"$(nproc)"
       - name: Install
         run: |
-          cmake --install $GITHUB_WORKSPACE/build --verbose
+          cmake --install "${GITHUB_WORKSPACE}/build" --verbose
       - name: Add the bin directory to PATH
         run: |
-          echo "$HOME/install/bin" >> $GITHUB_PATH
+          echo "${HOME}/install/bin" >> "${GITHUB_PATH}"
       - name: Print installed versions
         if: always()
         run: .github/workflows/print_versions.sh
