@@ -32,8 +32,11 @@ for details.
 
 from __future__ import annotations
 
-# import traceback
+import atexit
 import os
+import sqlite3
+from datetime import datetime
+from importlib.util import find_spec
 from pathlib import Path
 
 import grass.script as gs
@@ -42,22 +45,24 @@ from grass.script.utils import decode
 
 from .c_libraries_interface import CLibrariesInterface
 
-# Import all supported database backends
+
+# Import all supported database backends (sqlite3 imported above)
 # Ignore import errors since they are checked later
 
-import sqlite3
-
+db_errors: tuple[type[sqlite3.Error], type[psycopg2.Error]] | tuple[type[sqlite3.Error]]
 # Postgresql is optional, existence is checked when needed
-try:
-    import psycopg2
+if find_spec("psycopg2") is not None and find_spec("psycopg2.extras") is not None:
+    # Following explanations on how importing submodules work
+    # from ruff's v0.13.3 new F401 handling https://github.com/astral-sh/ruff/pull/20200
+    # importing "psycopg2.extras" actually makes an "import psycopg2",
+    # making the members of the form `psycopg2.*` available, and then also imports the
+    # extras and makes available the members of the form `psycopg2.extras.*`.
     import psycopg2.extras
 
     db_errors = (sqlite3.Error, psycopg2.Error)
-except ImportError:
+else:
     db_errors = (sqlite3.Error,)
 
-import atexit
-from datetime import datetime
 
 ###############################################################################
 
