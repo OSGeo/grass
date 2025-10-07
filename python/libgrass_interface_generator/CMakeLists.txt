@@ -59,7 +59,9 @@ set(vector_INCHDRS ${PostgreSQL_INCLUDE_DIRS} ${GDAL_INCLUDE_DIRS})
 set(vedit_INCHDRS ${PostgreSQL_INCLUDE_DIRS} ${GDAL_INCLUDE_DIRS})
 
 set(_c_flags ${CMAKE_C_FLAGS})
-if(APPLE AND CMAKE_OSX_SYSROOT)
+if(MSVC)
+  string(APPEND _c_flags " -I${CMAKE_SOURCE_DIR}/msvc")
+elseif(APPLE AND CMAKE_OSX_SYSROOT)
   string(APPEND _c_flags " --sysroot ${CMAKE_OSX_SYSROOT}")
   message("_c_flags")
 endif()
@@ -74,7 +76,7 @@ foreach(module ${MODULES})
   endif()
 
   if(NOT ${module}_INCHDRS)
-    set(${module}_INCHDRS})
+    set(${module}_INCHDRS)
   endif()
   list(INSERT ${module}_INCHDRS 0 ${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR})
   if(CMAKE_INSTALL_INCLUDEDIR)
@@ -109,6 +111,7 @@ foreach(module ${MODULES})
       -DGRASS_INSTALL_DEMODIR=${GRASS_INSTALL_DEMODIR}
       -DGRASS_INSTALL_LIBDIR=${GRASS_INSTALL_LIBDIR}
       -DRUNTIME_GISBASE=${RUNTIME_GISBASE} -DOUT_FILE=${output_file}
+      -DMSVC=${MSVC} -DAPPLE=${APPLE}
       -DGRASS_VERSION_NUMBER=${GRASS_VERSION_NUMBER}
       -DGRASS_VERSION_MAJOR=${GRASS_VERSION_MAJOR}
       -DGRASS_VERSION_MINOR=${GRASS_VERSION_MINOR} -P

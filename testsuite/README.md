@@ -5,12 +5,12 @@ This directory contains additional scripts and information to test functionality
 without a focus on a specific part of the code.
 
 There are two testing mechanism in place, _pytest_ which is the modern way of testing
-GRASS GIS. Tests using _pytest_ are written just as any other Python tests.
+GRASS. Tests using _pytest_ are written just as any other Python tests.
 
 In parallel, there is also custom unittest-based framework centered around
 _grass.gunittest_ package. These tests run in the NC sample datasets and can be
 executed using _pytest_ or directly. The unittest-based adds a number of custom
-assert methods to accommodate different data and outputs typical in GRASS GIS.
+assert methods to accommodate different data and outputs typical in GRASS.
 _grass.gunittest_ documentation:
 <https://grass.osgeo.org/grass-devel/manuals/libpython/gunittest_testing.html>
 

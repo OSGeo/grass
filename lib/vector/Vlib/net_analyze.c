@@ -256,7 +256,6 @@ static int find_shortest_path(struct Map_info *Map, int from, int to,
    return value, \return -1 : destination unreachable
 
  */
-
 int Vect_net_ttb_shortest_path(struct Map_info *Map, int from, int from_type,
                                int to, int to_type, int tucfield,
                                struct ilist *List, double *cost)

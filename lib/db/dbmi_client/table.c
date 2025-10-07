@@ -58,7 +58,10 @@ int db_table_exists(const char *drvname, const char *dbname,
         return (-1);
 
     for (i = 0; i < count; i++) {
-        strcpy(buf, db_get_string(&names[i]));
+        const char *source = db_get_string(&names[i]);
+        if (G_strlcpy(buf, source, sizeof(buf)) >= sizeof(buf)) {
+            G_fatal_error(_("Table name too long: <%s>"), source);
+        }
         bufp = buf;
         if (!full && (c = strchr(buf, '.'))) {
             bufp = c + 1;
@@ -76,7 +79,10 @@ int db_table_exists(const char *drvname, const char *dbname,
             return (-1);
 
         for (i = 0; i < count; i++) {
-            strcpy(buf, db_get_string(&names[i]));
+            const char *src = db_get_string(&names[i]);
+            if (G_strlcpy(buf, src, sizeof(buf)) >= sizeof(buf)) {
+                G_fatal_error(_("Table name too long: <%s>"), src);
+            }
             bufp = buf;
             if (!full && (c = strchr(buf, '.'))) {
                 bufp = c + 1;

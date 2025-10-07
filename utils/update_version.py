@@ -63,7 +63,7 @@ def suggest_commit(action, version, tag):
     print("use:")
     print(f"  commit_message: 'version: {action} {version}'")
     if tag:
-        print(f"  tag_message: 'GRASS GIS {version}'")
+        print(f"  tag_message: 'GRASS {version}'")
 
 
 def release_candidate(args):
@@ -86,7 +86,7 @@ def release_candidate(args):
         micro=micro,
         year=this_year(),
     )
-    suggest_commit_from_version_file("GRASS GIS", tag=True)
+    suggest_commit_from_version_file("GRASS", tag=True)
 
 
 def release(_unused):
@@ -106,7 +106,7 @@ def release(_unused):
         micro=micro,
         year=this_year(),
     )
-    suggest_commit_from_version_file("GRASS GIS", tag=True)
+    suggest_commit_from_version_file("GRASS", tag=True)
 
 
 def update_micro(_unused):
@@ -248,7 +248,7 @@ def suggest_message(args):
     version_info = read_version_file()
     if not version_info.micro.endswith("dev"):
         tag = construct_version(version_info)
-        action = "GRASS GIS"
+        action = "GRASS"
     else:
         tag = None
         action = "Start"

@@ -6,7 +6,7 @@
  * If available, G_strlcat() calls system strlcat(), otherwise it uses
  * implementation by Todd C. Miller of OpenBSD.
  *
- * Addition to GRASS GIS by Nicklas Larsson, 2024
+ * Addition to GRASS by Nicklas Larsson, 2024
  *
  * Original OpenBSD implementation notes:
  *

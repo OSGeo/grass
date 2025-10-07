@@ -1,4 +1,4 @@
-FROM ubuntu:22.04@sha256:1ec65b2719518e27d4d25f104d93f9fac60dc437f81452302406825c46fcc9cb
+FROM ubuntu:22.04@sha256:09506232a8004baa32c47d68f1e5c307d648fdd59f5e7eaa42aaf87914100db3
 
 LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann,Tomas Zigo"
 LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
@@ -174,8 +174,8 @@ WORKDIR /src/grass_build
 # Cleanup potentially leftover GISRC file with wrong path to "demolocation"
 RUN rm -f /src/grass_build/dist.*/demolocation/.grassrc*
 
-# Set environmental variables for GRASS GIS compilation, without debug symbols
-# Set gcc/g++ environmental variables for GRASS GIS compilation, without debug symbols
+# Set environmental variables for GRASS compilation, without debug symbols
+# Set gcc/g++ environmental variables for GRASS compilation, without debug symbols
 ENV MYCFLAGS="-O2 -std=gnu99 -m64"
 ENV MYLDFLAGS="-s"
 # CXX stuff:
@@ -184,7 +184,7 @@ ENV LDFLAGS="$MYLDFLAGS"
 ENV CFLAGS="$MYCFLAGS"
 ENV CXXFLAGS="$MYCXXFLAGS"
 
-# Configure compile and install GRASS GIS
+# Configure compile and install GRASS
 # wxGUI require
 # --with-nls
 # --with-x
@@ -224,7 +224,7 @@ ENV LDFLAGS=""
 ENV CFLAGS=""
 ENV CXXFLAGS=""
 
-# set SHELL var to avoid /bin/sh fallback in interactive GRASS GIS sessions
+# set SHELL var to avoid /bin/sh fallback in interactive GRASS sessions
 ENV SHELL=/bin/bash
 ENV LC_ALL="en_US.UTF-8"
 ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1
@@ -232,10 +232,10 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1
 # https://proj.org/usage/environmentvars.html#envvar-PROJ_NETWORK
 ENV PROJ_NETWORK=ON
 
-# Create generic GRASS GIS lib name regardless of version number
+# Create generic GRASS lib name regardless of version number
 RUN ln -sf /usr/local/grass85 /usr/local/grass
 
-# show GRASS GIS, PROJ, GDAL etc versions
+# show GRASS, PROJ, GDAL etc versions
 RUN grass --tmp-project EPSG:4326 --exec g.version -rge && \
     pdal --version && \
     python --version
@@ -247,10 +247,10 @@ RUN rm -r /src/grass_build/.git
 
 WORKDIR /scripts
 
-# enable GRASS GIS Python session support
+# enable GRASS Python session support
 ## grass --config python-path
 ENV PYTHONPATH="/usr/local/grass/etc/python:${PYTHONPATH}"
-# enable GRASS GIS ctypes imports
+# enable GRASS ctypes imports
 ## grass --config path
 ENV LD_LIBRARY_PATH="/usr/local/grass/lib:$LD_LIBRARY_PATH"
 
@@ -258,7 +258,7 @@ WORKDIR /tmp
 COPY docker/testdata/simple.laz .
 WORKDIR /scripts
 COPY docker/testdata/test_grass_session.py .
-## run GRASS GIS python session and scan the test LAZ file
+## run GRASS python session and scan the test LAZ file
 RUN python /scripts/test_grass_session.py
 RUN rm -rf /tmp/grasstest_epsg_25832
 # test LAZ file

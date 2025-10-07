@@ -466,6 +466,8 @@ t.vect.univar|-s:-u
 #########################
 # v.buffer
 v.buffer|bufcolumn:column
+# v.class
+v.class|-g:-b
 # v.clean
 v.clean|thresh:threshold
 # v.colors

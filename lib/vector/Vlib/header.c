@@ -539,7 +539,6 @@ int Vect_get_proj(struct Map_info *Map)
    \return allocated string containing projection name
    \return NULL if <em>proj</em> is not a valid projection
  */
-
 const char *Vect_get_proj_name(struct Map_info *Map)
 {
     char name[256];

@@ -105,14 +105,12 @@ void print_cli_option(FILE *file, const struct Option *opt, const char *indent)
         fprintf(file, "*");
     }
 
-    if (opt->def) {
+    if (opt->def && opt->def[0] != '\0') {
         fprintf(file, MD_NEWLINE);
         fprintf(file, "\n");
         fprintf(file, "%s", indent);
         G__md_print_escaped(file, "\t");
         fprintf(file, "%s:", _("Default"));
-        /* TODO check if value is empty
-           if (!opt->def.empty()){ */
         fprintf(file, " *");
         G__md_print_escaped(file, opt->def);
         fprintf(file, "*");

@@ -8,7 +8,7 @@
  *
  * No need to call before calling I_read_signatures.
  *
- * \param *Signature to initialize
+ * \param S *Signature to initialize
  * \param nbands band (imagery group member) count
  */
 int I_init_signatures(struct Signature *S, int nbands)
@@ -53,7 +53,7 @@ int I_new_signature(struct Signature *S)
  * One must call I_init_signatures() to re-use struct after it has been
  * passed to this function.
  *
- * \param *Signature to free
+ * \param S Signature struct to free
  *
  * \return always 0
  */
@@ -139,8 +139,8 @@ int I_read_one_signature(FILE *fd, struct Signature *S)
  * There is no need to initialize struct Signature in advance, as this
  * function internally calls I_init_signatures.
  *
- * \param pointer to FILE*
- * \param pointer to struct Signature *S
+ * \param fd pointer to FILE*
+ * \param S pointer to struct Signature *S
  *
  * \return 1 on success, -1 on failure
  */

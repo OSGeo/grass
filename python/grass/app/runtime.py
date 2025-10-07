@@ -1,4 +1,4 @@
-"""Provides functions for the main GRASS GIS executable
+"""Provides functions for the main GRASS executable
 
 (C) 2024-2025 by Vaclav Petras and the GRASS Development Team
 
@@ -86,10 +86,23 @@ class RuntimePaths:
         return res
 
 
-def get_grass_config_dir(major_version, minor_version, env):
-    """Get configuration directory
+def get_grass_config_dir(*, env):
+    """Get configuration directory path
 
-    Determines path of GRASS GIS user configuration directory.
+    Determines path of GRASS user configuration directory for the current platform
+    using the build-time version information.
+    """
+    paths = RuntimePaths(env=env)
+    return get_grass_config_dir_for_version(
+        paths.version_major, paths.version_minor, env=env
+    )
+
+
+def get_grass_config_dir_for_version(major_version, minor_version, *, env):
+    """Get configuration directory path for specific version
+
+    Determines path of GRASS user configuration directory for the current platform
+    and for the provided version.
     """
     if env.get("GRASS_CONFIG_DIR"):
         # use GRASS_CONFIG_DIR environmental variable is defined
@@ -172,19 +185,18 @@ def set_executable_paths(install_path, grass_config_dir, env):
     env["PATH"] = os.pathsep.join(paths)
 
 
-def set_paths(install_path, grass_config_dir, ld_library_path_variable_name):
+def set_paths(install_path, grass_config_dir):
     """Set variables with executable paths, library paths, and other paths"""
     set_executable_paths(
         install_path=install_path, grass_config_dir=grass_config_dir, env=os.environ
     )
-    # Set LD_LIBRARY_PATH (etc) to find GRASS shared libraries
-    # this works for subprocesses but won't affect the current process
-    if ld_library_path_variable_name:
-        set_dynamic_library_path(
-            variable_name=ld_library_path_variable_name,
-            install_path=install_path,
-            env=os.environ,
-        )
+    # Set LD_LIBRARY_PATH (etc) to find GRASS shared libraries.
+    # This works for subprocesses, but won't affect the current process.
+    set_dynamic_library_path(
+        variable_name=res_paths.LD_LIBRARY_PATH_VAR,
+        install_path=install_path,
+        env=os.environ,
+    )
     set_python_path_variable(install_path=install_path, env=os.environ)
 
     # retrieving second time, but now it is always set

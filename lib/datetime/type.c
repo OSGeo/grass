@@ -33,7 +33,6 @@
  *  \param fracsec
  *  \return int
  */
-
 int datetime_set_type(DateTime *dt, int mode, int from, int to, int fracsec)
 {
     dt->mode = mode;
@@ -74,7 +73,6 @@ int datetime_get_type(const DateTime *dt, int *mode, int *from, int *to,
  *  \param dt
  *  \return int
  */
-
 int datetime_is_valid_type(const DateTime *dt)
 {
     /* Returns 0 if DateTime structure is not valid. */
@@ -109,7 +107,6 @@ int datetime_is_valid_type(const DateTime *dt)
  *  \param dt
  *  \return int
  */
-
 int datetime_check_type(const DateTime *dt)
 {
     /* Returns 0 for a valid DateTime structure.
@@ -165,7 +162,6 @@ int datetime_in_interval_day_second(int x)
  *  \param dt
  *  \return int
  */
-
 int datetime_is_absolute(const DateTime *dt)
 {
     return (dt->mode == DATETIME_ABSOLUTE);
@@ -181,7 +177,6 @@ int datetime_is_absolute(const DateTime *dt)
  *  \param dt
  *  \return int
  */
-
 int datetime_is_relative(const DateTime *dt)
 {
     return (dt->mode == DATETIME_RELATIVE);

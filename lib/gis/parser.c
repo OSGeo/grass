@@ -136,7 +136,6 @@ static const char *get_renamed_option(const char *);
  * prompting.
  *
  */
-
 void G_disable_interactive(void)
 {
     st->no_interactive = 1;
@@ -358,7 +357,7 @@ int G_parser(int argc, char **argv)
 
         if (!opt->key)
             G_warning(_("Bug in UI description. Missing option key"));
-        if (!valid_option_name(opt->key))
+        if (opt->key && !valid_option_name(opt->key))
             G_warning(_("Bug in UI description. Option key <%s> is not valid"),
                       opt->key);
         if (!opt->label && !opt->description)

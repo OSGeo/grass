@@ -37,7 +37,6 @@
  * \param ap
  * \return number of bytes written
  */
-
 int G_vasprintf(char **out, const char *fmt, va_list ap)
 {
 #ifdef HAVE_ASPRINTF
@@ -96,7 +95,6 @@ int G_asprintf(char **out, const char *fmt, ...)
  * \param ap
  * \return number of bytes written
  */
-
 int G_rasprintf(char **out, size_t *size, const char *fmt, ...)
 {
     va_list ap;

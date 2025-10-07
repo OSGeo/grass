@@ -2,7 +2,7 @@
 Image non-geospatial operations and manipulations
 
 Note: Functions in this module are experimental and are not considered
-a stable API, i.e. may change in future releases of GRASS GIS.
+a stable API, i.e. may change in future releases of GRASS.
 
 It heavily relies on PIL but unlike PIL, the functions operate on
 files instead of PIL Image objects (which are used internally).
