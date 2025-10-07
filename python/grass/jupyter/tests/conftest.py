@@ -5,12 +5,14 @@ Fixture for grass.jupyter.TimeSeries test
 Fixture for ReprojectionRenderer test with simple GRASS location, raster, vector.
 """
 
+import os
 from datetime import datetime
 from types import SimpleNamespace
 
 import pytest
 
 import grass.script as gs
+from grass.tools import Tools
 
 
 @pytest.fixture(scope="module")
@@ -91,3 +93,22 @@ def simple_dataset(tmp_path_factory):
             vector_name=vector_name,
             full_vector_name=f"{vector_name}@PERMANENT",
         )
+
+
+@pytest.fixture
+def session(tmp_path):
+    project = tmp_path / "xy_project"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy()) as session:
+        yield session
+
+
+@pytest.fixture
+def session_with_data(tmp_path):
+    project = tmp_path / "xy_project"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy()) as session:
+        tools = Tools(session=session)
+        tools.g_region(s=0, n=5, w=0, e=2, res=1)
+        tools.r_mapcalc(expression="data = row() * col()")
+        yield session

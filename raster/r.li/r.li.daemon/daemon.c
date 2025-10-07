@@ -494,7 +494,7 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
         while ((token = strtok(NULL, " ")) != NULL &&
                (strcmp(token, "MASKEDOVERLAYAREA") == 0));
 
-        if (strcmp(token, "RASTERMAP") != 0)
+        if (!token || strcmp(token, "RASTERMAP") != 0)
             G_fatal_error(_("Irregular MASKEDOVERLAY areas definition"));
 
         token = strtok(NULL, "\n");

@@ -12,6 +12,7 @@ MDFILES := grass_database.md \
 	projectionintro.md \
 	jupyter_intro.md \
 	interfaces_overview.md \
-	python_intro.md
+	python_intro.md \
+	grass_projects.md
 
 default: $(patsubst %,$(HTMLDIR)/%,$(FILES)) $(patsubst %,$(MDDIR)/source/%,$(MDFILES)) parsubdirs

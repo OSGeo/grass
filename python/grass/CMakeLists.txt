@@ -32,9 +32,6 @@ endforeach()
 copy_python_files_in_subdir(app ${PYDIR_GRASS} EXCLUDE resource_paths.py)
 
 configure_file(__init__.py ${OUTDIR}/${PYDIR_GRASS}/ COPYONLY)
-configure_file(script/setup.py ${OUTDIR}/${PYDIR_GRASS}/script/setup.py
-               COPYONLY)
-
 
 file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR}/bin BINARY_DIR)
 set(CONFIG_PROJSHARE)

@@ -41,8 +41,8 @@ int main(int argc, char **argv)
     int i, npoints;
     const char *units_name, *sq_units_name;
     enum OutputFormat format;
-    JSON_Value *root_value = NULL;
-    JSON_Object *root_object = NULL;
+    G_JSON_Value *root_value = NULL;
+    G_JSON_Object *root_object = NULL;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
