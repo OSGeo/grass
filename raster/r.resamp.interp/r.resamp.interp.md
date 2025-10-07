@@ -72,7 +72,7 @@ Resampled (bilinear) 250m resolution elevation map
 [r.resamp.stats](r.resamp.stats.md)*
 
 Overview: [Interpolation and
-Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS GIS
+Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS
 
 ## AUTHOR
 

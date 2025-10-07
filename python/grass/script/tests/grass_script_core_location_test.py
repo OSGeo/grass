@@ -6,6 +6,8 @@ import os
 import pytest
 
 import grass.script as gs
+from grass.exceptions import ScriptError
+from grass.tools import Tools
 
 xfail_mp_spawn = pytest.mark.xfail(
     multiprocessing.get_start_method() == "spawn",
@@ -33,18 +35,16 @@ def run_in_subprocess(function):
 
 def create_and_get_srid(tmp_path):
     """Create location on the same path as the current one"""
-    bootstrap_location = "bootstrap"
-    desired_location = "desired"
-    gs.core._create_location_xy(tmp_path, bootstrap_location)  # pylint: disable=protected-access
-    with gs.setup.init(tmp_path / bootstrap_location, env=os.environ.copy()) as session:
-        gs.create_location(tmp_path, desired_location, epsg="3358")
-        assert (tmp_path / desired_location).exists()
-        wkt_file = tmp_path / desired_location / "PERMANENT" / "PROJ_WKT"
+    bootstrap = "bootstrap"
+    desired = "desired"
+    gs.create_project(tmp_path / bootstrap)
+    with gs.setup.init(tmp_path / bootstrap, env=os.environ.copy()) as session:
+        gs.create_location(tmp_path / desired, epsg="3358")
+        assert (tmp_path / desired).exists()
+        wkt_file = tmp_path / desired / "PERMANENT" / "PROJ_WKT"
         assert wkt_file.exists()
         gs.run_command("g.gisenv", set=f"GISDBASE={tmp_path}", env=session.env)
-        gs.run_command(
-            "g.gisenv", set=f"LOCATION_NAME={desired_location}", env=session.env
-        )
+        gs.run_command("g.gisenv", set=f"LOCATION_NAME={desired}", env=session.env)
         gs.run_command("g.gisenv", set="MAPSET=PERMANENT", env=session.env)
         return gs.parse_command("g.proj", flags="p", format="shell", env=session.env)[
             "srid"
@@ -98,23 +98,19 @@ def test_without_session(tmp_path):
 
 def test_with_different_path(tmp_path):
     """Check correct EPSG is created with different path"""
-    bootstrap_location = "bootstrap"
-    desired_location = "desired"
+    bootstrap = "bootstrap"
+    desired = "desired"
     tmp_path_a = tmp_path / "a"
     tmp_path_b = tmp_path / "b"
     tmp_path_a.mkdir()
-    gs.core._create_location_xy(tmp_path_a, bootstrap_location)  # pylint: disable=protected-access
-    with gs.setup.init(
-        tmp_path_a / bootstrap_location, env=os.environ.copy()
-    ) as session:
-        gs.create_location(tmp_path_b, desired_location, epsg="3358")
-        assert (tmp_path_b / desired_location).exists()
-        wkt_file = tmp_path_b / desired_location / "PERMANENT" / "PROJ_WKT"
+    gs.create_project(tmp_path_a / bootstrap)
+    with gs.setup.init(tmp_path_a / bootstrap, env=os.environ.copy()) as session:
+        gs.create_location(tmp_path_b, desired, epsg="3358")
+        assert (tmp_path_b / desired).exists()
+        wkt_file = tmp_path_b / desired / "PERMANENT" / "PROJ_WKT"
         assert wkt_file.exists()
         gs.run_command("g.gisenv", set=f"GISDBASE={tmp_path_b}", env=session.env)
-        gs.run_command(
-            "g.gisenv", set=f"LOCATION_NAME={desired_location}", env=session.env
-        )
+        gs.run_command("g.gisenv", set=f"LOCATION_NAME={desired}", env=session.env)
         gs.run_command("g.gisenv", set="MAPSET=PERMANENT", env=session.env)
         epsg = gs.parse_command("g.proj", flags="p", format="shell", env=session.env)[
             "srid"
@@ -123,8 +119,7 @@ def test_with_different_path(tmp_path):
 
 
 def test_path_only(tmp_path):
-    desired_location = "desired"
-    full_path = tmp_path / desired_location
+    full_path = tmp_path / "desired"
     gs.create_location(full_path, epsg="3358")
     mapset_path = full_path / "PERMANENT"
     wkt_file = mapset_path / "PROJ_WKT"
@@ -151,16 +146,58 @@ def test_create_project(tmp_path):
         assert epsg == "EPSG:3358"
 
 
+@pytest.mark.parametrize("crs", ["XY", "xy", None, ""])
+def test_crs_parameter_xy(tmp_path, crs):
+    project = tmp_path / "test"
+    gs.create_project(project, crs=crs)
+    with (
+        gs.setup.init(project, env=os.environ.copy()) as session,
+        Tools(session=session) as tools,
+    ):
+        assert tools.g_region(flags="p", format="shell").keyval["projection"] == 0
+
+
+def test_crs_parameter_xy_overrides_epsg(tmp_path):
+    project = tmp_path / "test"
+    gs.create_project(project, crs="XY", epsg=4326)
+    with (
+        gs.setup.init(project, env=os.environ.copy()) as session,
+        Tools(session=session) as tools,
+    ):
+        assert tools.g_region(flags="p", format="json")["crs"]["type"] == "xy"
+
+
+def test_crs_parameter_epsg_overrides_epsg(tmp_path):
+    project = tmp_path / "test"
+    gs.create_project(project, crs="EPSG:4326", epsg=3358)
+    with (
+        gs.setup.init(project, env=os.environ.copy()) as session,
+        Tools(session=session) as tools,
+    ):
+        assert tools.g_proj(flags="p", format="shell").keyval["srid"] == "EPSG:4326"
+
+
+@pytest.mark.parametrize("crs", ["EPSG:4326", "epsg:3358"])
+def test_crs_parameter_epsg(tmp_path, crs):
+    project = tmp_path / "test"
+    gs.create_project(project, crs=crs)
+    with (
+        gs.setup.init(project, env=os.environ.copy()) as session,
+        Tools(session=session) as tools,
+    ):
+        assert tools.g_proj(flags="p", format="shell").keyval["srid"] == crs.upper()
+
+
 def test_files(tmp_path):
-    """Check expected files are created"""
-    bootstrap_location = "bootstrap"
-    desired_location = "desired"
-    gs.core._create_location_xy(tmp_path, bootstrap_location)  # pylint: disable=protected-access
-    with gs.setup.init(tmp_path / bootstrap_location, env=os.environ.copy()):
+    """Check expected files are created with bootstrap and session"""
+    bootstrap = "bootstrap"
+    desired = "desired"
+    gs.create_project(tmp_path / bootstrap)
+    with gs.setup.init(tmp_path / bootstrap, env=os.environ.copy()):
         description = "This is a test (not Gauss-Krüger or Křovák)"
-        gs.create_location(tmp_path, desired_location, epsg="3358", desc=description)
-        assert (tmp_path / desired_location).exists()
-        base_path = tmp_path / desired_location / "PERMANENT"
+        gs.create_project(tmp_path, desired, epsg="3358", desc=description)
+        assert (tmp_path / desired).exists()
+        base_path = tmp_path / desired / "PERMANENT"
         assert (base_path / "PROJ_WKT").exists()
         assert (base_path / "PROJ_SRID").exists()
         assert (base_path / "PROJ_UNITS").exists()
@@ -172,32 +209,58 @@ def test_files(tmp_path):
         assert description_file.read_text(encoding="utf-8").strip() == description
 
 
-def set_and_test_description(tmp_path, text):
+@pytest.mark.parametrize("overwrite", [False, None])
+def test_project_no_overwrite(tmp_path, overwrite):
+    """Check that project we raise exception when project exists"""
+    project = tmp_path / "project_1"
+    gs.create_project(project, overwrite=overwrite)
+    assert project.exists()
+    with pytest.raises(ScriptError, match=r"project_1.*already exists"):
+        gs.create_project(project, overwrite=overwrite)
+    assert project.exists()
+
+
+def test_project_overwrite(tmp_path):
+    """Check that existing project can be overwritten"""
+    project = tmp_path / "project_1"
+    gs.create_project(project)
+    assert project.exists()
+    gs.create_project(project, overwrite=True)
+    assert project.exists()
+
+
+def create_project_get_description_file(tmp_path, text):
     """Set text as description and check the result"""
     name = "test"
-    gs.core._create_location_xy(tmp_path, name)  # pylint: disable=protected-access
-    gs.core._set_location_description(tmp_path, name, text)
-    description_file = tmp_path / name / "PERMANENT" / "MYNAME"
-    assert description_file.exists()
-    text = text or ""  # None and empty should both yield empty.
-    assert description_file.read_text(encoding="utf-8").strip() == text
+    gs.create_project(tmp_path / name, description=text)
+    return tmp_path / name / "PERMANENT" / "MYNAME"
 
 
 def test_location_description_setter_ascii(tmp_path):
     """Check ASCII text"""
-    set_and_test_description(tmp_path, "This is a test")
+    text = "This is a test"
+    description_file = create_project_get_description_file(tmp_path, text)
+    assert description_file.exists()
+    assert description_file.read_text(encoding="utf-8").strip() == text
 
 
 def test_location_description_setter_unicode(tmp_path):
     """Check unicode text"""
-    set_and_test_description(tmp_path, "This is a test (not Gauss-Krüger or Křovák)")
+    text = "This is a test (not Gauss-Krüger or Křovák)"
+    description_file = create_project_get_description_file(tmp_path, text)
+    assert description_file.exists()
+    assert description_file.read_text(encoding="utf-8").strip() == text
 
 
 def test_location_description_setter_empty(tmp_path):
     """Check empty text"""
-    set_and_test_description(tmp_path, "")
+    description_file = create_project_get_description_file(tmp_path, "")
+    # Explicitly set empty is passed through to the file.
+    assert description_file.exists()
+    assert description_file.read_text(encoding="utf-8").strip() == ""
 
 
 def test_location_description_setter_none(tmp_path):
     """Check None in place of text"""
-    set_and_test_description(tmp_path, None)
+    description_file = create_project_get_description_file(tmp_path, None)
+    assert not description_file.exists()

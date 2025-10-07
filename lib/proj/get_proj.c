@@ -331,7 +331,6 @@ static void alloc_options(char *buffa)
  * \param info Pointer to a pj_info struct (which must already exist) into
  *        which the co-ordinate system definition will be placed
  * \param str input string with projection definition
- * \param in_units_keys PROJ_UNITS-style key-value pairs
  *
  * \return -1 on error (unable to initialise PROJ.4)
  *          1 on success

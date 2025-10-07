@@ -57,9 +57,7 @@ class TestEvapotranspirationPT(TestCase):
     def test_z_flag(self):
         """Ensure -z flag clamps all negative ET values to zero."""
         self.run_evapo_pt(output=self.output_map, flags="z")
-        stats = gs.parse_command(
-            "r.univar", map=self.output_map, flags="g", format="json"
-        )
+        stats = gs.parse_command("r.univar", map=self.output_map, format="json")
         self.assertGreaterEqual(stats["min"], 0)
 
     def test_default_alpha(self):

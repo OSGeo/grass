@@ -1,4 +1,4 @@
-"""Provides functions for the main GRASS GIS executable
+"""Provides functions for the main GRASS executable
 
 (C) 2020-2025 by Vaclav Petras and the GRASS Development Team
 
@@ -51,7 +51,7 @@ def get_possible_database_path():
 
 
 def create_database_directory():
-    """Creates the standard GRASS GIS directory.
+    """Creates the standard GRASS directory.
     Creates database directory named grassdata in the standard location
     according to the platform.
 
@@ -223,7 +223,7 @@ def acquire_mapset_lock(
     start_time = time.time()
     while True:
         return_code = subprocess.run(
-            [locker_path, lock_file, f"{process_id}"], check=False
+            [locker_path, lock_file, f"{process_id}"], check=False, env=env
         ).returncode
         elapsed_time = time.time() - start_time
         if return_code == 0 or elapsed_time >= timeout or total_sleep >= timeout:

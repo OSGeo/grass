@@ -51,7 +51,7 @@ build_program_in_subdir(r3.in.ascii DEPENDS grass_gis grass_gmath grass_raster
 
 build_program_in_subdir(r3.in.bin DEPENDS grass_gis grass_raster grass_raster3d)
 
-build_program_in_subdir(r3.info DEPENDS grass_gis grass_raster grass_raster3d)
+build_program_in_subdir(r3.info DEPENDS grass_gis grass_raster grass_raster3d grass_parson)
 
 build_program_in_subdir(r3.mask DEPENDS grass_gis grass_raster3d)
 

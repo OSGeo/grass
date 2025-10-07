@@ -7,8 +7,8 @@ deviation, coefficient of variation, and sum. Statistics are calculated
 separately for every category/zone found in the **zones** input map if
 given. If the **-e** extended statistics flag is given the 1st quartile,
 median, 3rd quartile, and given **percentile** are calculated. If the
-**-g** flag is given the results are presented in a format suitable for
-use in a shell script. If the **-t** flag is given the results are
+**format=shell** is given the results are presented in a format suitable for
+use in a shell script. If the **format=csv** is given the results are
 presented in tabular format with the given field separator. The table
 can immediately be converted to a vector attribute table which can then
 be linked to a vector, e.g. the vector that was rasterized to create the
@@ -43,6 +43,13 @@ maps.
 For calculating univariate statistics from a raster map based on vector
 polygon map and uploads statistics to new attribute columns, see
 *[v.rast.stats](v.rast.stats.md)*.
+
+The **g** flag has been deprecated and replaced by the **format=shell** option.
+Also, the **t** flag has been deprecated and replaced by the **format=csv**
+option.
+
+The default separator will be **pipe** to maintain backward compatibility;
+however, if **format=csv** is given, then the default separator will be **comma**.
 
 ### PERFORMANCE
 
@@ -94,7 +101,7 @@ median (even number of cells): 108.88
 
 
 # script style output, along with extended statistics
-r.univar -ge elevation percentile=98
+r.univar -e elevation percentile=98 format=shell
 n=2025000
 null_cells=0
 cells=2025000
@@ -213,7 +220,7 @@ Then statistics for elevation can be calculated separately for every
 zone, i.e. basin found in the **zones** parameter:
 
 ```sh
-r.univar -t map=elevation zones=basins separator=comma \
+r.univar map=elevation zones=basins format=csv \
          output=basin_elev_zonal.csv
 ```
 

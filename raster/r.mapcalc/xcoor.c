@@ -1,3 +1,7 @@
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
+
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include "globals.h"
@@ -35,6 +39,11 @@ int f_x(int argc, const int *argt, void **args)
 
 int f_y(int argc, const int *argt, void **args)
 {
+    int tid = 0;
+#if defined(_OPENMP)
+    tid = omp_get_thread_num();
+#endif
+
     DCELL *res = args[0];
     DCELL y;
     int i;
@@ -45,7 +54,7 @@ int f_y(int argc, const int *argt, void **args)
     if (argt[0] != DCELL_TYPE)
         return E_RES_TYPE;
 
-    y = Rast_row_to_northing(current_row + 0.5, &current_region2);
+    y = Rast_row_to_northing(current_row[tid] + 0.5, &current_region2);
 
     for (i = 0; i < columns; i++)
         res[i] = y;

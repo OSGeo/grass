@@ -572,10 +572,11 @@ int main(int argc, char *argv[])
         nrows = Rast_window_rows();
         ncols = Rast_window_cols();
 
-        G_important_message(_("Writing %s of <%s> to <%s>..."),
-                            (frad->answer             ? _("radiance")
-                             : (lsat.band[i].thermal) ? _("temperature")
-                                                      : _("reflectance")),
+        G_important_message((frad->answer
+                                 ? _("Writing radiance of <%s> to <%s>...")
+                             : (lsat.band[i].thermal)
+                                 ? _("Writing temperature of <%s> to <%s>...")
+                                 : _("Writing reflectance of <%s> to <%s>...")),
                             band_in, band_out);
         for (row = 0; row < nrows; row++) {
             G_percent(row, nrows, 2);

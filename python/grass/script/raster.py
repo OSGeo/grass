@@ -39,7 +39,6 @@ from .core import (
 )
 from grass.exceptions import CalledModuleError
 from .utils import (
-    encode,
     float_or_dms,
     parse_key_val,
     try_remove,
@@ -215,7 +214,7 @@ def mapcalc_start(
         verbose=verbose,
         overwrite=overwrite,
     )
-    p.stdin.write(encode(e))
+    p.stdin.write(e)
     p.stdin.close()
     return p
 
@@ -295,6 +294,18 @@ class MaskManager:
     >>> with gs.MaskManager(mask_name="state_boundary"):
     ...     gs.parse_command("r.univar", map="elevation", format="json")
 
+    Example using explicit activate and deactivate:
+
+    >>> manager = gs.MaskManager()
+    >>> manager.activate()
+    >>> try:
+    ...     # Create mask with r.mask
+    ...     gs.run_command("r.mask", raster="state_boundary")
+    ...     gs.parse_command("r.univar", map="elevation", format="json")
+    ... finally:
+    ...     manager.deactivate()
+
+
     Note the difference between using the name of an existing raster map directly
     and using *r.mask* to create a new mask. Both zeros and NULL values are used
     to represent mask resulting in NULL cells, while *r.mask*
@@ -369,8 +380,9 @@ class MaskManager:
         else:
             self.mask_name = mask_name
             self._remove = False if remove is None else remove
+        self._active = False
 
-    def __enter__(self):
+    def activate(self):
         """Set mask in the given environment.
 
         Sets the `GRASS_MASK` environment variable to the provided or
@@ -378,11 +390,14 @@ class MaskManager:
 
         :return: Returns the MaskManager instance.
         """
+        if self._active:
+            return None
         self._original_value = self.env.get("GRASS_MASK")
         self.env["GRASS_MASK"] = self.mask_name
+        self._active = True
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def deactivate(self):
         """Restore the previous mask state.
 
         Restores the original value of `GRASS_MASK` and optionally removes
@@ -392,6 +407,8 @@ class MaskManager:
         :param exc_val: Exception value, if any.
         :param exc_tb: Traceback, if any.
         """
+        if not self._active:
+            return
         if self._original_value is not None:
             self.env["GRASS_MASK"] = self._original_value
         else:
@@ -406,6 +423,13 @@ class MaskManager:
                 env=self.env,
                 quiet=True,
             )
+        self._active = False
+
+    def __enter__(self):
+        return self.activate()
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.deactivate()
 
 
 class RegionManager:
@@ -443,6 +467,15 @@ class RegionManager:
     ...     manager.set_region(n=226000, s=222000, w=634000, e=638000)
     ...     gs.parse_command("r.univar", map="elevation", format="json")
 
+    Example using explicit activate and deactivate:
+
+    >>> manager = gs.RegionManager(raster="elevation")
+    >>> manager.activate()
+    >>> try:
+    ...     gs.run_command("r.slope.aspect", elevation="elevation", slope="slope")
+    ... finally:
+    ...     manager.deactivate()
+
     If no environment is provided, the global environment is used. When running parallel
     processes in the same mapset that modify region settings, it is useful to use a copy
     of the global environment. The following code creates the copy of the global environment
@@ -467,6 +500,7 @@ class RegionManager:
         self._original_value = None
         self.region_name = append_uuid(append_node_pid("region"))
         self._region_inputs = kwargs or {}
+        self._active = False
 
     def set_region(self, **kwargs):
         """Sets region.
@@ -475,19 +509,22 @@ class RegionManager:
         """
         run_command("g.region", **kwargs, env=self.env)
 
-    def __enter__(self):
+    def activate(self):
         """Sets the `WIND_OVERRIDE` environment variable to the generated region name.
 
         :return: Returns the :class:`RegionManager` instance.
         """
+        if self._active:
+            return None
         self._original_value = self.env.get("WIND_OVERRIDE")
         run_command(
             "g.region", save=self.region_name, env=self.env, **self._region_inputs
         )
         self.env["WIND_OVERRIDE"] = self.region_name
+        self._active = True
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def deactivate(self):
         """Restore the previous region state.
 
         Restores the original value of `WIND_OVERRIDE`.
@@ -496,6 +533,8 @@ class RegionManager:
         :param exc_val: Exception value, if any.
         :param exc_tb: Traceback, if any.
         """
+        if not self._active:
+            return
         if self._original_value is not None:
             self.env["WIND_OVERRIDE"] = self._original_value
         else:
@@ -508,6 +547,13 @@ class RegionManager:
                 name=self.region_name,
                 env=self.env,
             )
+        self._active = False
+
+    def __enter__(self):
+        return self.activate()
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.deactivate()
 
 
 class RegionManagerEnv:
@@ -535,6 +581,17 @@ class RegionManagerEnv:
             manager.env["GRASS_REGION"] = gs.region_env()
     ...     gs.parse_command("r.univar", map="elevation", format="json")
 
+
+    Example using explicit activate and deactivate:
+
+    >>> manager = gs.RegionManagerEnv(raster="elevation")
+    >>> manager.activate()
+    >>> try:
+    ...     manager.set_region(n=226000, s=222000, w=634000, e=638000)
+    ...     gs.parse_command("r.univar", map="elevation", format="json")
+    ... finally:
+    ...     manager.deactivate()
+
     .. caution::
 
         To set region within the context, do not call `g.region`,
@@ -552,6 +609,7 @@ class RegionManagerEnv:
         self.env = env if env is not None else os.environ
         self._original_value = None
         self._region_inputs = kwargs or {}
+        self._active = False
 
     def set_region(self, **kwargs):
         """Sets region.
@@ -560,16 +618,19 @@ class RegionManagerEnv:
         """
         self.env["GRASS_REGION"] = region_env(**kwargs, env=self.env)
 
-    def __enter__(self):
+    def activate(self):
         """Sets the `GRASS_REGION` environment variable to the generated region name.
 
         :return: Returns the :class:`RegionManagerEnv` instance.
         """
+        if self._active:
+            return None
         self._original_value = self.env.get("GRASS_REGION")
         self.env["GRASS_REGION"] = region_env(**self._region_inputs, env=self.env)
+        self._active = True
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def deactivate(self):
         """Restore the previous region state.
 
         Restores the original value of `WIND_OVERRIDE`.
@@ -578,7 +639,16 @@ class RegionManagerEnv:
         :param exc_val: Exception value, if any.
         :param exc_tb: Traceback, if any.
         """
+        if not self._active:
+            return
         if self._original_value is not None:
             self.env["GRASS_REGION"] = self._original_value
         else:
             self.env.pop("GRASS_REGION", None)
+        self._active = False
+
+    def __enter__(self):
+        return self.activate()
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.deactivate()

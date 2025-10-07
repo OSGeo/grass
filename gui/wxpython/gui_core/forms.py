@@ -72,9 +72,7 @@ import xml.etree.ElementTree as ET
 if __name__ == "__main__":
     if os.getenv("GISBASE") is None:
         # intentionally not translatable
-        sys.exit(
-            "Failed to start. GRASS GIS is not running or the installation is broken."
-        )
+        sys.exit("Failed to start. GRASS is not running or the installation is broken.")
     from grass.script.setup import set_gui_path
 
     set_gui_path()
@@ -501,9 +499,7 @@ class TaskFrame(wx.Frame):
 
         # icon
         self.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_dialog.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
 
         guisizer = wx.BoxSizer(wx.VERTICAL)

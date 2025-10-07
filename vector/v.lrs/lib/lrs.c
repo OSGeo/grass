@@ -73,9 +73,10 @@ int LR_get_milepost(dbDriver *driver, char *table_name, char *lcat_col,
     dbTable *table;
     dbColumn *column;
     dbValue *value;
-    RSEGMENT *rseg;
+    RSEGMENT *rseg = NULL;
     int nrseg;
     double length, map_length, k;
+    int ret = 0;
 
     G_debug(4, "LR_get_milepost() line_cat = %d, map_offset = %f", line_cat,
             map_offset);
@@ -104,10 +105,14 @@ int LR_get_milepost(dbDriver *driver, char *table_name, char *lcat_col,
     nrseg = db_get_num_rows(&cursor);
     G_debug(3, "  nrseg = %d", nrseg);
 
-    if (nrseg <= 0)
-        return 0;
-    if (nrseg >= 3)
-        return 2;
+    if (nrseg <= 0) {
+        ret = 0;
+        goto cleanup_and_exit;
+    }
+    if (nrseg >= 3) {
+        ret = 2;
+        goto cleanup_and_exit;
+    }
 
     rseg = (RSEGMENT *)G_malloc(nrseg * sizeof(RSEGMENT));
 
@@ -149,7 +154,6 @@ int LR_get_milepost(dbDriver *driver, char *table_name, char *lcat_col,
 
         i++;
     }
-    db_close_cursor(&cursor);
 
     /* Two segments may be selected for one point if they share common MPs */
     /* If 2 segments were found, check if it is correct */
@@ -170,7 +174,8 @@ int LR_get_milepost(dbDriver *driver, char *table_name, char *lcat_col,
             *lid = rseg[0].lid;
             *mpost = rseg[1].start_mp;
             *offset = rseg[1].start_off;
-            return 1;
+            ret = 1;
+            goto cleanup_and_exit;
         }
         else if (rseg[0].lid == rseg[1].lid &&
                  rseg[1].end_map == rseg[0].start_map) {
@@ -179,11 +184,13 @@ int LR_get_milepost(dbDriver *driver, char *table_name, char *lcat_col,
             *lid = rseg[0].lid;
             *mpost = rseg[0].start_mp;
             *offset = rseg[0].start_off;
-            return 1;
+            ret = 1;
+            goto cleanup_and_exit;
         }
         else {
             G_debug(4, " too many segments found in the table -> error ");
-            return 2;
+            ret = 2;
+            goto cleanup_and_exit;
         }
     }
 
@@ -231,8 +238,11 @@ int LR_get_milepost(dbDriver *driver, char *table_name, char *lcat_col,
 
     *mpost = mp;
     *offset = off;
-
-    return 1;
+    ret = 1;
+cleanup_and_exit:
+    db_close_cursor(&cursor);
+    G_free(rseg);
+    return ret;
 }
 
 /* For given lid (line id), mpost (milepost) + offset in real world find

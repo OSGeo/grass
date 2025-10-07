@@ -120,22 +120,11 @@ int main(int argc, char *argv[])
 
     G_get_set_window(&dst_w);
 
-    sscanf(nprocs->answer, "%d", &threads);
-    if (threads < 1) {
-        G_fatal_error(_("<%d> is not valid number of threads."), threads);
-    }
-#if defined(_OPENMP)
-    omp_set_num_threads(threads);
-#else
-    if (threads != 1)
-        G_warning(_("GRASS is compiled without OpenMP support. Ignoring "
-                    "threads setting."));
-    threads = 1;
-#endif
-    if (threads > 1 && Rast_mask_is_present()) {
-        G_warning(_("Parallel processing disabled due to active mask."));
-        threads = 1;
-    }
+    threads = G_set_omp_num_threads(nprocs);
+    threads = Rast_disable_omp_on_mask(threads);
+    if (threads < 1)
+        G_fatal_error(_("<%d> is not valid number of nprocs."), threads);
+
     bufrows = atoi(memory->answer) * (((1 << 20) / sizeof(DCELL)) / dst_w.cols);
     /* set the output buffer rows to be at most covering the entire map */
     if (bufrows > dst_w.rows) {

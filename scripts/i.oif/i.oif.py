@@ -84,7 +84,7 @@ def main():
 
     if serial:
         for band in bands:
-            grass.verbose("band %d" % band)
+            grass.verbose("band %s" % band)
             s = grass.read_command("r.univar", flags="g", map=band)
             kv = parse_key_val(s)
             stddev[band] = float(kv["stddev"])
