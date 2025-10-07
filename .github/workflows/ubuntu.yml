@@ -26,7 +26,7 @@ jobs:
     strategy:
       matrix:
         name:
-          - "22.04"
+          - "24.04"
           - minimum config
 
         # Only run tests for these folders in this matrix job.
@@ -50,15 +50,15 @@ jobs:
             testsuite utils vector visualization
 
         include:
-          - name: "22.04"
-            os: ubuntu-22.04
-            config: ubuntu-22.04
+          - name: "24.04"
+            os: ubuntu-24.04
+            config: ubuntu-24.04
           # This is without optional things but it still keeps things useful,
           # so, e.g., without OpenMP, but with PDAL. Code or tests should be written
           # so that test pass even when these optional things are not present.
           - name: minimum config
-            os: ubuntu-22.04
-            config: ubuntu-22.04_without_x
+            os: ubuntu-24.04
+            config: ubuntu-24.04_without_x
       fail-fast: false
 
     steps:
@@ -108,6 +108,8 @@ jobs:
         run: |
           sudo apt-get update -y
           sudo apt-get install -y wget git gawk findutils
+          LC_ALL=C.UTF-8 sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
+          sudo apt-get update -y
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
 
