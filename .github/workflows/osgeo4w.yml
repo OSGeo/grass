@@ -41,7 +41,7 @@ jobs:
             mingw-w64-x86_64-fftw mingw-w64-x86_64-lapack mingw-w64-x86_64-pkgconf
             mingw-w64-x86_64-gcc mingw-w64-x86_64-ccache mingw-w64-x86_64-zlib mingw-w64-x86_64-libiconv
             mingw-w64-x86_64-bzip2 mingw-w64-x86_64-gettext mingw-w64-x86_64-libsystre
-            mingw-w64-x86_64-libtre-git mingw-w64-x86_64-libwinpthread-git mingw-w64-x86_64-libpng
+            mingw-w64-x86_64-libtre mingw-w64-x86_64-libwinpthread-git mingw-w64-x86_64-libpng
             mingw-w64-x86_64-pcre
 
       - name: Install OSGeo4W
