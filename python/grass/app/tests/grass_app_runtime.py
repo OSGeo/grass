@@ -13,7 +13,7 @@ from grass.script.setup import get_install_path
 
 
 def return_as_is(x):
-    """Return the parameter exactly as recieved"""
+    """Return the parameter exactly as received"""
     return x
 
 
@@ -41,7 +41,7 @@ def test_install_path_used_as_result(path_type):
     assert get_install_path(path_type(path)) == path
 
 
-def test_consitent_install_path_returned():
+def test_consistent_install_path_returned():
     """Two subsequent calls should return the same result.
 
     The environment should not be modified by the call, so the result should
