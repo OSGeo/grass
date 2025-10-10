@@ -6,7 +6,7 @@ abstract: "GRASS, Geographic Resources Analysis Support System, is a powerful co
 type: software
 authors:
   - name: "GRASS Development Team"
-    email: "grass-dev@lists.osgeo.org"
+    email: "grass-dev@discourse.osgeo.org"
   - given-names: Martin
     family-names: Landa
     affiliation: "Czech Technical University in Prague"
@@ -109,6 +109,7 @@ authors:
 repository-code: "https://github.com/OSGeo/grass"
 license: "GPL-2.0-or-later"
 doi: "10.5281/zenodo.4621728"
+date-released: 2024-07-27
 keywords:
   - "GIS"
   - "geospatial"
