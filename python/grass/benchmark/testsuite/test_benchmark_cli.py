@@ -12,7 +12,6 @@
 
 """Tests of grass.benchmark CLI"""
 
-import sys
 from pathlib import Path
 from subprocess import DEVNULL
 
@@ -30,13 +29,7 @@ from grass.pygrass.modules import Module
 
 def remove_file(path):
     """Remove filename if exists"""
-    if sys.version_info < (3, 8):
-        try:
-            Path(path).unlink()
-        except FileNotFoundError:
-            pass
-    else:
-        Path(path).unlink(missing_ok=True)
+    Path(path).unlink(missing_ok=True)
 
 
 class TestBenchmarkCLI(TestCase):
