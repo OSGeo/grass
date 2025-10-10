@@ -9,6 +9,7 @@ from pathlib import Path
 
 import pytest
 
+from grass.app import resource_paths
 from grass.app.runtime import RuntimePaths
 from grass.script.setup import get_install_path
 
@@ -48,6 +49,18 @@ def test_gisbase_with_custom_prefix(custom_prefix):
     """Check that GISBASE should start with custom prefix"""
     paths = RuntimePaths(env={}, prefix=custom_prefix)
     assert paths.gisbase.startswith(os.path.normpath(custom_prefix))
+
+
+@pytest.mark.parametrize(
+    "custom_prefix",
+    ["/custom/prefix/path", "/custom/prefix/path/", "/path with spaces"],
+)
+def test_gisbase_and_prefix_mix(custom_prefix):
+    """Check passing a custom prefix which is actually GISBASE"""
+    # resource_paths.GISBASE is just the unique part after the prefix.
+    custom_prefix = os.path.join(custom_prefix, resource_paths.GISBASE)
+    paths = RuntimePaths(env={}, prefix=custom_prefix)
+    assert paths.gisbase == os.path.normpath(custom_prefix)
 
 
 def test_env_gisbase_with_custom_prefix():

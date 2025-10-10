@@ -49,7 +49,11 @@ class RuntimePaths:
         if env is None:
             env = os.environ
         self.env = env
-        self._custom_prefix = os.path.normpath(prefix) if prefix else prefix
+        if prefix:
+            self._custom_prefix = os.path.normpath(prefix)
+            self._custom_prefix = self._custom_prefix.removesuffix(res_paths.GISBASE)
+        else:
+            self._custom_prefix = None
         if set_env_variables:
             self.set_env_variables()
 
