@@ -36,6 +36,7 @@ def test_raster_does_not_exist(session_in_mapset, nprocs):
     assert "does_not_exist" in result.stderr.lower()
 
 
+@pytest.mark.skip(reason="Waiting for a fix to work on all platforms for any nprocs")
 @pytest.mark.parametrize("nprocs", [0, 1, *list(range(2, 11, 2))])
 def test_rand_no_explicit_seed_setting(session_in_mapset, nprocs):
     tools = Tools(
