@@ -1902,6 +1902,10 @@ LOC_CHECK_FUNC(pthread_create,POSIX threads functions,PTHREADLIB,,,,,[
 LOC_CHECK_LIBS(pthread,pthread_create,POSIX threads,$PTHREADLIBPATH,PTHREADLIB,,,)
 ])
 
+if test -n "$PTHREADLIB" ; then
+    AC_DEFINE(HAVE_PTHREAD, 1, [Define to 1 if POSIX threads are available.])
+fi
+
 fi # $USE_PTHREAD
 
 AC_SUBST(PTHREADINCPATH)
