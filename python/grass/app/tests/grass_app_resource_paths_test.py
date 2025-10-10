@@ -1,3 +1,5 @@
+import os
+
 import pytest
 
 from grass.app import resource_paths
@@ -30,3 +32,10 @@ def test_path_values_substituted(name):
 def test_value_not_empty(name):
     value = getattr(resource_paths, name)
     assert value
+
+
+@pytest.mark.parametrize("name", ["GRASS_PREFIX"])
+def test_value_is_directory(name):
+    value = getattr(resource_paths, name)
+    assert os.path.exists(value)
+    assert os.path.isdir(value)
