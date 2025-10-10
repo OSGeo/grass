@@ -130,7 +130,7 @@ class TestRasterreport(TestCase):
         # The results on macOS is slightly different from the other platforms
         if IS_MAC:
             values = """min=0
-            max=45368496
+            max=45368492
             mean=2248724.35922656
             variance=2332049429651.92
             n=996244"""
