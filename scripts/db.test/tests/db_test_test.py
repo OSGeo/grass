@@ -14,9 +14,9 @@ def test_run_without_database_connection(xy_empty_dataset_session):
             tools.db_test(test="test1")
 
 
-def test_run_with_defaults(xy_empty_dataset_session):
+def test_run_with_check_or_connect_flag(xy_empty_dataset_session):
     with Tools(session=xy_empty_dataset_session, consistent_return_value=True) as tools:
-        result = tools.db_connect()
+        result = tools.db_connect(flags="c")
         result = tools.db_test(test="test1")
         assert "ERROR" not in result.stderr
 
