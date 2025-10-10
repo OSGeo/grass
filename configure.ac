@@ -36,6 +36,55 @@ AC_CONFIG_HEADERS([include/grass/config.h])
 AC_CANONICAL_HOST
 AC_PROG_CC
 
+# Start some config.h customizations
+
+# Some old system hacks. Probably obsolete in 2025?
+AH_VERBATIM([INT_MIN_FALLBACK],
+[#if defined(HAVE_VALUES_H) && !defined(HAVE_LIMITS_H)
+#define INT_MIN -MAXINT
+#endif
+])
+
+# LFS support for MinGW
+AH_VERBATIM([GRASS_LFS_DEFS],
+[/*
+ * Defines needed to get large file support - from cdrtools-2.01
+ */
+
+/* MINGW32 LFS */
+
+/* define if we have LFS */
+#undef HAVE_LARGEFILES
+
+#ifdef HAVE_LARGEFILES         /* If we have working largefiles at all    */
+                               /* This is not defined with glibc-2.1.3    */
+
+#if defined(__MINGW32__) && (!defined(_FILE_OFFSET_BITS) || (_FILE_OFFSET_BITS != 64))
+
+/* add/remove as needed */
+/* redefine off_t */
+#include <sys/types.h>
+#define off_t off64_t
+/* fseeko and ftello are safe because not defined by MINGW */
+#define HAVE_FSEEKO
+#define fseeko fseeko64
+#define ftello ftello64
+/* redefine lseek */
+#include <unistd.h>
+#define lseek lseek64
+/* redefine stat and fstat */
+/* use _stati64 compatible with MSVCRT < 6.1 */
+#include <sys/stat.h>
+#define stat _stati64
+#define fstat _fstati64
+
+#endif /* MINGW32 LFS */
+
+#endif /* HAVE_LARGEFILES */
+])
+
+# End some config.h customizations
+
 # Enable C++ option
 
 LOC_ARG_WITH(cxx, C++)
@@ -1430,6 +1479,11 @@ esac
 
 if test -n "$USE_OPENGL" ; then
 
+# We assume any OpenGL capable of running GRASS also is recent enough
+# to have FBO support.
+# Moved here from customizations of configure.h.in
+AC_DEFINE(OPENGL_FBO, 1, [Use framebuffer objects for off-screen OpenGL rendering])
+
 if test "$OPENGL_X11" = 1 ; then
 
 # With OpenGL includes directory
@@ -1469,6 +1523,7 @@ OPENGLINC="$OPENGLPATH"
 OPENGLLIBPATH="$OPENGLPATH"
 
 AC_DEFINE(OPENGL_AQUA, 1, [Define to 1 if OpenGL uses Aqua (MacOS X).])
+AC_DEFINE(OPENGL_AGL, 1, [Define to 1 if OpenGL uses AGL (MacOS X).])
 
 fi # $OPENGL_AQUA
 
@@ -1891,6 +1946,10 @@ LOC_CHECK_LIB_PATH(pthread,POSIX threads,PTHREADLIBPATH)
 LOC_CHECK_FUNC(pthread_create,POSIX threads functions,PTHREADLIB,,,,,[
 LOC_CHECK_LIBS(pthread,pthread_create,POSIX threads,$PTHREADLIBPATH,PTHREADLIB,,,)
 ])
+
+if test -n "$PTHREADLIB" ; then
+    AC_DEFINE(HAVE_PTHREAD, 1, [Define to 1 if POSIX threads are available.])
+fi
 
 fi # $USE_PTHREAD
 
