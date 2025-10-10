@@ -83,7 +83,10 @@ def init_finish_global_functions_capture_strerr0_partial(tmp_path, queue):
     gs.setup.init(project)
     gs.run_command("g.region", flags="p")
     runtime_present = bool(os.environ.get("GISBASE"))
-    queue.put((os.environ["GISRC"], runtime_present))
+    gisbase_exists = (
+        os.path.exists(os.environ.get("GISBASE")) if runtime_present else False
+    )
+    queue.put((os.environ["GISRC"], runtime_present, gisbase_exists))
     gs.setup.finish()
 
 
@@ -95,9 +98,10 @@ def test_init_finish_global_functions_capture_strerr0_partial(tmp_path):
     init_finish = partial(
         init_finish_global_functions_capture_strerr0_partial, tmp_path
     )
-    session_file, runtime_present = run_in_subprocess(init_finish)
+    session_file, runtime_present, gisbase_exists = run_in_subprocess(init_finish)
     assert session_file, "Expected file name from the subprocess"
     assert runtime_present, RUNTIME_GISBASE_SHOULD_BE_PRESENT
+    assert gisbase_exists, "GISBASE directory should exist"
     assert not os.path.exists(session_file), SESSION_FILE_NOT_DELETED
 
 
