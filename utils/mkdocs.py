@@ -17,7 +17,7 @@ from urllib.error import HTTPError, URLError
 try:
     import grass.script as gs
 except ImportError:
-    # During compilation GRASS GIS
+    # During compilation GRASS
     gs = None
 
 from generate_last_commit_file import COMMIT_DATE_FORMAT
@@ -54,7 +54,7 @@ def get_version_branch(major_version, addons_git_repo_url):
     if not, take branch for the previous version
     For the official repo we assume that at least one version branch is present
 
-    :param major_version int: GRASS GIS major version
+    :param major_version int: GRASS major version
     :param addons_git_repo_url str: Addons Git repository URL
 
     :return version_branch str: version branch
@@ -140,7 +140,7 @@ def get_last_git_commit(src_dir, top_dir, pgm, addon_path, major_version):
         return get_git_commit_from_rest_api_for_addon_repo(
             addon_path=addon_path, src_dir=src_dir, pgm=pgm, major_version=major_version
         )
-    # During GRASS GIS compilation from source code without Git
+    # During GRASS compilation from source code without Git
     return get_git_commit_from_file(src_dir=src_dir, pgm=pgm)
 
 
@@ -224,7 +224,7 @@ def get_git_commit_from_rest_api_for_addon_repo(
     :param str addon_path: addon path
     :param str src_dir: addon source dir
     :param str pgm: program name
-    :param major_version int: GRASS GIS major version
+    :param major_version int: GRASS major version
     :param dict git_log: dict which store last commit and commnit date
 
     :return dict git_log: dict which store last commit and commnit date

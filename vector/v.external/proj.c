@@ -75,7 +75,7 @@ int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
 
     if (!OSRIsProjected(hSRS) && !OSRIsGeographic(hSRS)) {
         G_important_message(
-            _("Projection for layer <%s> does not contain a valid SRS"),
+            _("Projection for layer <%s> does not contain a valid CRS"),
             OGR_L_GetName(Ogr_layer));
 
         if (verbose) {

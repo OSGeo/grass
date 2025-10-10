@@ -48,7 +48,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
             GPJ_osr_to_grass(cellhd, &proj_info, &proj_units, hSRS, 0);
 
         if (!hSRS || (!OSRIsProjected(hSRS) && !OSRIsGeographic(hSRS))) {
-            G_important_message(_("Input contains an invalid SRS. "
+            G_important_message(_("Input contains an invalid CRS. "
                                   "WKT definition:\n%s"),
                                 wkt);
 
@@ -90,7 +90,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
             GPJ_osr_to_grass(cellhd, &proj_info, &proj_units, hSRS, 0);
 
         if (!hSRS || (!OSRIsProjected(hSRS) && !OSRIsGeographic(hSRS))) {
-            G_important_message(_("Input contains an invalid SRS. "
+            G_important_message(_("Input contains an invalid CRS. "
                                   "WKT definition:\n%s"),
                                 wkt);
 

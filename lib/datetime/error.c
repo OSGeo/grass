@@ -24,7 +24,6 @@ static char err_msg[1024];
  *  \param msg
  *  \return int
  */
-
 int datetime_error(int code, char *msg)
 {
     err_code = code;
@@ -42,7 +41,6 @@ int datetime_error(int code, char *msg)
  *
  *  \return int
  */
-
 int datetime_error_code(void)
 {
     return err_code;
@@ -55,7 +53,6 @@ int datetime_error_code(void)
  *
  *  \return char *
  */
-
 char *datetime_error_msg(void)
 {
     return err_msg;
@@ -68,7 +65,6 @@ char *datetime_error_msg(void)
  *
  *  \return void
  */
-
 void datetime_clear_error(void)
 {
     err_code = 0;

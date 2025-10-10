@@ -71,6 +71,8 @@ _DEBUG = None
 # for wxpath
 _WXPYTHON_BASE = None
 
+GISBASE = None
+
 try:
     # Python >= 3.11
     ENCODING = locale.getencoding()
@@ -80,32 +82,11 @@ if ENCODING is None:
     ENCODING = "UTF-8"
     print("Default locale not found, using UTF-8")  # intentionally not translatable
 
-# The "@...@" variables are being substituted during build process
-#
-# TODO: should GISBASE be renamed to something like GRASS_PATH?
-# GISBASE marks complete runtime, so no need to get it here when
-# setting it up, possible scenario: existing runtime and starting
-# GRASS in that, we want to overwrite the settings, not to take it
-# possibly same for GRASS_PROJSHARE and others but maybe not
-#
-# We need to simultaneously make sure that:
-# - we get GISBASE from os.environ if it is defined (doesn't this mean that we are
-#   already inside a GRASS session? If we are, why do we need to run this script
-#   again???).
-# - GISBASE exists as an ENV variable
-#
-# pmav99: Ugly as hell, but that's what the code before the refactoring was doing.
-if "GISBASE" in os.environ and len(os.getenv("GISBASE")) > 0:
-    GISBASE = os.path.normpath(os.environ["GISBASE"])
-else:
-    GISBASE = os.path.normpath("@GISBASE_INSTALL_PATH@")
-    os.environ["GISBASE"] = GISBASE
-CMD_NAME = "@START_UP@"
-GRASS_VERSION = "@GRASS_VERSION_NUMBER@"
-GRASS_VERSION_MAJOR = "@GRASS_VERSION_MAJOR@"
-GRASS_VERSION_MINOR = "@GRASS_VERSION_MINOR@"
-LD_LIBRARY_PATH_VAR = "@LD_LIBRARY_PATH_VAR@"
-CONFIG_PROJSHARE = os.environ.get("GRASS_PROJSHARE", "@CONFIG_PROJSHARE@")
+CMD_NAME = None
+GRASS_VERSION = None
+GRASS_VERSION_MAJOR = None
+CONFIG_PROJSHARE = None
+GRASS_VERSION_GIT = None
 
 # Get the system name
 WINDOWS = sys.platform.startswith("win")
@@ -397,9 +378,7 @@ def create_grass_config_dir() -> str:
     from grass.app.runtime import get_grass_config_dir
 
     try:
-        directory = get_grass_config_dir(
-            GRASS_VERSION_MAJOR, GRASS_VERSION_MINOR, os.environ
-        )
+        directory = get_grass_config_dir(env=os.environ)
     except (RuntimeError, NotADirectoryError) as e:
         fatal(f"{e}")
 
@@ -681,29 +660,16 @@ def create_location(gisdbase, location, geostring) -> None:
     :param location: name of new Location
     :param geostring: path to a georeferenced file or EPSG code
     """
-    if gpath("etc", "python") not in sys.path:
-        sys.path.append(gpath("etc", "python"))
-    from grass.script import core as gcore  # pylint: disable=E0611
+    import grass.script as gs  # pylint: disable=E0611
 
     try:
-        if geostring and geostring.upper().find("EPSG:") > -1:
-            # create location using EPSG code
-            epsg = geostring.split(":", 1)[1]
-            if ":" in epsg:
-                epsg, datum_trans = epsg.split(":", 1)
-            else:
-                datum_trans = None
-            gcore.create_location(
-                gisdbase, location, epsg=epsg, datum_trans=datum_trans
+        gs.create_project(gisdbase, location, crs=geostring)
+    except gs.ScriptError as err:
+        fatal(
+            _("Error creating project: {}").format(
+                err.value.strip('"').strip("'").replace("\\n", os.linesep)
             )
-        elif geostring == "XY":
-            # create an XY location
-            gcore.create_location(gisdbase, location)
-        else:
-            # create location using georeferenced file
-            gcore.create_location(gisdbase, location, filename=geostring)
-    except gcore.ScriptError as err:
-        fatal(err.value.strip('"').strip("'").replace("\\n", os.linesep))
+        )
 
 
 def can_create_location(gisdbase: StrPath, location) -> bool:
@@ -1455,8 +1421,6 @@ def start_gui(grass_gui: Literal["wxpython"]):
 
 def close_gui() -> None:
     """Close GUI if running"""
-    if gpath("etc", "python") not in sys.path:
-        sys.path.append(gpath("etc", "python"))
     from grass.script import core as gcore  # pylint: disable=E0611
 
     env = gcore.gisenv()
@@ -1842,7 +1806,7 @@ def print_params(params) -> None:
             val = grep("CC", linesplat)
             sys.stdout.write("%s\n" % val[0].split("=")[1].strip())
         elif arg == "revision":
-            sys.stdout.write("@GRASS_VERSION_GIT@\n")
+            sys.stdout.write(f"{GRASS_VERSION_GIT}\n")
         elif arg == "svn_revision":
             with open(gpath("etc", "VERSIONNUMBER")) as filerev:
                 linerev = filerev.readline().rstrip("\n")
@@ -2066,6 +2030,12 @@ def parse_cmdline(argv, default_gui) -> Parameters:
 
     Returns Parameters object used throughout the script.
     """
+    # For the subcommands, we keep a list here which allows us not to import
+    # the whole grass.app.cli module and all its dependencies.
+    if len(argv) > 1 and argv[1] in ["run", "project", "mapset", "help", "man"]:
+        from grass.app.cli import main as subcommand_cli_main
+
+        sys.exit(subcommand_cli_main())
     params: Parameters = classic_parser(argv, default_gui)
     validate_cmdline(params)
     return params
@@ -2102,18 +2072,89 @@ def validate_cmdline(params: Parameters) -> None:
 
 
 def find_grass_python_package() -> None:
-    """Find path to grass package and add it to path"""
-    if os.path.exists(gpath("etc", "python")):
-        path_to_package = gpath("etc", "python")
-        sys.path.append(path_to_package)
-        # now we can import stuff from grass package
+    """Find path to the grass package and add it to path if needed"""
+    # Whether or not the pre-set path exists, the environment may be just
+    # set up right already. Let's try a basic import first.
+    try:
+        import grass.script as unused_gs  # noqa: F401, ICN001
+
+        # The import works without any setup, so there is nothing more to do.
+        return
+    except ModuleNotFoundError:
+        # If the grass package is not on path, we need to add it to path.
+        pass
+
+    # If we happened to import something else, like our startup script called grass.py,
+    # we need to first remove it from the import cache (this does not truly un-import,
+    # but it should be sufficient for our startup script).
+    if "grass" in sys.modules:
+        del sys.modules["grass"]
+
+    # Try to find the package.
+    path, exists = find_path_to_grass_python_package()
+    if exists:
+        sys.path.insert(0, path)
+        try:
+            # We don't make assumptions about what should be in the directory
+            # and we simply try the actual import.
+            import grass.script as unused_gs_2nd_attempt  # noqa: F401, ICN001
+
+            # If the import worked, we did our part.
+            return
+        except ModuleNotFoundError as error:
+            # Existing path provided, but there is some issue with the import.
+            # It may be a wrong path or issue in the package itself.
+            # These strings are not translatable because we can't load translations.
+            msg = (
+                f"The grass Python package cannot be imported from {path}. "
+                "Try setting PYTHONPATH or GRASS_PYDIR to where the grass package is."
+            )
+            raise RuntimeError(msg) from error
+    # The path provided by the build or by the user does not exist.
+    msg = (
+        f"{path} with the grass Python package does not exist. "
+        "Is the installation of GRASS complete?"
+    )
+    raise RuntimeError(msg)
+
+
+def find_path_to_grass_python_package() -> tuple[str, bool]:
+    """Returns the most likely path to the grass package.
+
+    It prefers the directory provided by the user in an environmental variable.
+    Otherwise, it uses the build time variable.
+    It falls back to a heuristic based on where this file is located.
+    If that fails, it returns the actual set path
+    (and returns False for existence).
+
+    :return: tuple with path as a string and boolean for existence
+    """
+    env_variable = os.environ.get("GRASS_PYDIR", None)
+    if env_variable:
+        path_from_variable = os.path.normpath(env_variable)
     else:
-        # Not translatable because we don't have translations loaded.
-        msg = (
-            "The grass Python package is missing. "
-            "Is the installation of GRASS complete?"
-        )
-        raise RuntimeError(msg)
+        # The "@...@" variables are being substituted during build process
+        path_from_variable = os.path.normpath(r"@GRASS_PYDIR@")
+    if os.path.exists(path_from_variable):
+        return path_from_variable, True
+
+    base = Path(__file__).parent.parent / "lib"
+    path_from_context = base / "grass" / "etc" / "python"
+    if os.path.exists(path_from_context):
+        return str(path_from_context), True
+
+    major = "@GRASS_VERSION_MAJOR@"
+    minor = "@GRASS_VERSION_MINOR@"
+    # Try a run-together version number for the directory (long-used standard).
+    path_from_context = base / f"grass{major}{minor}" / "etc" / "python"
+    if os.path.exists(path_from_context):
+        return str(path_from_context), True
+    # Try a dotted version number (more common standard).
+    path_from_context = base / f"grass{major}.{minor}" / "etc" / "python"
+    if os.path.exists(path_from_context):
+        return str(path_from_context), True
+
+    return path_from_variable, False
 
 
 def main() -> None:
@@ -2126,6 +2167,25 @@ def main() -> None:
     # Subsequent functions are using _() calls and
     # thus must be called only after Language has been set.
     find_grass_python_package()
+
+    from grass.app.runtime import RuntimePaths
+
+    global \
+        CMD_NAME, \
+        GRASS_VERSION, \
+        GRASS_VERSION_MAJOR, \
+        GRASS_VERSION_GIT, \
+        GISBASE, \
+        CONFIG_PROJSHARE
+
+    runtime_paths = RuntimePaths()
+    CMD_NAME = runtime_paths.grass_exe_name
+    GRASS_VERSION = runtime_paths.version
+    GRASS_VERSION_MAJOR = runtime_paths.version_major
+    GRASS_VERSION_GIT = runtime_paths.grass_version_git
+    GISBASE = runtime_paths.gisbase
+    CONFIG_PROJSHARE = runtime_paths.config_projshare
+
     grass_config_dir = create_grass_config_dir()
     set_language(grass_config_dir)
 
@@ -2202,7 +2262,6 @@ def main() -> None:
     set_paths(
         install_path=GISBASE,
         grass_config_dir=grass_config_dir,
-        ld_library_path_variable_name=LD_LIBRARY_PATH_VAR,
     )
     # Set GRASS_PAGER, GRASS_PYTHON, GRASS_GNUPLOT, GRASS_PROJSHARE
     set_defaults(config_projshare_path=CONFIG_PROJSHARE)
