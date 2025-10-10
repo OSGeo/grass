@@ -25,13 +25,14 @@ def test_prefix_set():
     assert paths.prefix
 
 
+@pytest.mark.parametrize("path_type", [str, Path])
 @pytest.mark.parametrize(
     "custom_prefix",
     ["/custom/prefix/path", "/custom/prefix/path/", "/path with spaces"],
 )
-def test_custom_prefix_set(custom_prefix):
+def test_custom_prefix_set(custom_prefix, path_type):
     """Check that the prefix attribute is set from constructor"""
-    paths = RuntimePaths(env={}, prefix=custom_prefix)
+    paths = RuntimePaths(env={}, prefix=path_type(custom_prefix))
     assert paths.prefix == os.path.normpath(custom_prefix)
 
 
@@ -63,12 +64,16 @@ def test_gisbase_and_prefix_mix(custom_prefix):
     assert paths.gisbase == os.path.normpath(custom_prefix)
 
 
-def test_env_gisbase_with_custom_prefix():
+@pytest.mark.parametrize("path_type", [str, Path])
+@pytest.mark.parametrize(
+    "custom_prefix",
+    ["/custom/prefix/path", "/custom/prefix/path/", "/path with spaces"],
+)
+def test_env_gisbase_with_custom_prefix(custom_prefix, path_type):
     """Check that GISBASE should start with custom prefix"""
-    custom_prefix = "/custom/prefix/path"
     env = {}
-    RuntimePaths(env=env, prefix=custom_prefix, set_env_variables=True)
-    assert env["GISBASE"].startswith(custom_prefix)
+    RuntimePaths(env=env, prefix=path_type(custom_prefix), set_env_variables=True)
+    assert env["GISBASE"].startswith(os.path.normpath(custom_prefix))
 
 
 def test_attr_access_does_not_modify_env():
