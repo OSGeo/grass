@@ -28,13 +28,36 @@ MACOS = sys.platform.startswith("darwin")
 class RuntimePaths:
     """Get runtime paths to resources and basic GRASS build properties
 
-    The resource paths are also set as environmental variables.
+    The resource paths are accessible as attributes (e.g., `.gisbase`, `.etc_dir`)
+    and can optionally be exported to environment variables.
+
+    Example:
+
+    >>> paths = RuntimePaths(set_env_variables=True)
+    >>> paths.etc_dir
+    '/usr/lib/grass/etc'
+    >>> os.environ["GRASS_ETCDIR"]
+    '/usr/lib/grass/etc'
     """
 
-    def __init__(self, env=None):
+    # Mapping of attribute names to environment variable name except the prefix.
+    _env_vars = {
+        "gisbase": "GISBASE",
+    }
+
+    def __init__(self, *, env=None, set_env_variables=False, prefix=None):
         if env is None:
             env = os.environ
         self.env = env
+        self._custom_prefix = os.path.normpath(prefix) if prefix else prefix
+        if set_env_variables:
+            self.set_env_variables()
+
+    def set_env_variables(self):
+        """Populate all GRASS-related environment variables."""
+        self.env["GRASS_PREFIX"] = self.prefix
+        for env_var in self._env_vars.values():
+            self.env[env_var] = self.__get_dir(env_var, use_env_values=False)
 
     @property
     def version(self):
@@ -61,26 +84,39 @@ class RuntimePaths:
         return res_paths.GRASS_VERSION_GIT
 
     @property
-    def gisbase(self):
-        return self.__get_dir("GISBASE")
-
-    @property
-    def prefix(self):
-        return self.__get_dir("GRASS_PREFIX")
-
-    @property
     def config_projshare(self):
         return self.env.get("GRASS_PROJSHARE", res_paths.CONFIG_PROJSHARE)
 
-    def __get_dir(self, env_var):
+    @property
+    def prefix(self):
+        if self._custom_prefix:
+            return self._custom_prefix
+        return os.path.normpath(res_paths.GRASS_PREFIX)
+
+    def __getattr__(self, name):
+        """Access paths by attributes."""
+        if name in self._env_vars:
+            env_var = self._env_vars[name]
+            return self.__get_dir(env_var)
+        msg = f"{type(self).__name__!r} has no attribute {name!r}"
+        raise AttributeError(msg)
+
+    def __dir__(self):
+        """List both static and dynamic attributes."""
+        base_dir = set(super().__dir__())
+        dynamic_dir = set(self._env_vars.keys())
+        return sorted(base_dir | dynamic_dir)
+
+    def __get_dir(self, env_var, *, use_env_values=True):
         """Get the directory stored in the environmental variable 'env_var'
 
-        If the environmental variable not yet set, it is retrived and
+        If the environmental variable not yet set, it is retrieved and
         set from resource_paths."""
-        if env_var in self.env and len(self.env[env_var]) > 0:
+        if use_env_values and env_var in self.env and self.env[env_var]:
             return os.path.normpath(self.env[env_var])
+        # Default to path from the installation
         path = getattr(res_paths, env_var)
-        return os.path.normpath(os.path.join(res_paths.GRASS_PREFIX, path))
+        return os.path.normpath(os.path.join(self.prefix, path))
 
 
 def get_grass_config_dir(*, env):
@@ -184,9 +220,6 @@ def set_executable_paths(install_path, grass_config_dir, env):
 
 def set_paths(install_path, grass_config_dir):
     """Set variables with executable paths, library paths, and other paths"""
-    # Set main prefix.
-    # See also grass.script.setup.setup_runtime_env.
-    os.environ["GISBASE"] = install_path
     set_executable_paths(
         install_path=install_path, grass_config_dir=grass_config_dir, env=os.environ
     )

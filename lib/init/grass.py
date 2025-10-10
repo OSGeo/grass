@@ -2179,12 +2179,18 @@ def main() -> None:
         GISBASE, \
         CONFIG_PROJSHARE
 
-    runtime_paths = RuntimePaths()
+    runtime_paths = RuntimePaths(set_env_variables=True)
     CMD_NAME = runtime_paths.grass_exe_name
     GRASS_VERSION = runtime_paths.version
     GRASS_VERSION_MAJOR = runtime_paths.version_major
     GRASS_VERSION_GIT = runtime_paths.grass_version_git
-    GISBASE = get_install_path(runtime_paths.gisbase)
+    gisbase = runtime_paths.gisbase
+    if not os.path.isdir(gisbase):
+        gisbase = get_install_path(gisbase)
+        # Set the main prefix again.
+        # See also grass.script.setup.setup_runtime_env.
+        runtime_paths = RuntimePaths(set_env_variables=True, prefix=gisbase)
+    GISBASE = gisbase
     CONFIG_PROJSHARE = runtime_paths.config_projshare
 
     grass_config_dir = create_grass_config_dir()
