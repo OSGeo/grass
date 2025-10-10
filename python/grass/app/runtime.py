@@ -17,7 +17,7 @@ import shutil
 import subprocess
 import sys
 
-from . import resource_paths as res_paths
+from . import resource_paths
 
 # Get the system name
 WINDOWS = sys.platform.startswith("win")
@@ -51,7 +51,9 @@ class RuntimePaths:
         self.env = env
         if prefix:
             self._custom_prefix = os.path.normpath(prefix)
-            self._custom_prefix = self._custom_prefix.removesuffix(res_paths.GISBASE)
+            self._custom_prefix = self._custom_prefix.removesuffix(
+                resource_paths.GISBASE
+            )
         else:
             self._custom_prefix = None
         if set_env_variables:
@@ -65,37 +67,37 @@ class RuntimePaths:
 
     @property
     def version(self):
-        return res_paths.GRASS_VERSION
+        return resource_paths.GRASS_VERSION
 
     @property
     def version_major(self):
-        return res_paths.GRASS_VERSION_MAJOR
+        return resource_paths.GRASS_VERSION_MAJOR
 
     @property
     def version_minor(self):
-        return res_paths.GRASS_VERSION_MINOR
+        return resource_paths.GRASS_VERSION_MINOR
 
     @property
     def ld_library_path_var(self):
-        return res_paths.LD_LIBRARY_PATH_VAR
+        return resource_paths.LD_LIBRARY_PATH_VAR
 
     @property
     def grass_exe_name(self):
-        return res_paths.GRASS_EXE_NAME
+        return resource_paths.GRASS_EXE_NAME
 
     @property
     def grass_version_git(self):
-        return res_paths.GRASS_VERSION_GIT
+        return resource_paths.GRASS_VERSION_GIT
 
     @property
     def config_projshare(self):
-        return self.env.get("GRASS_PROJSHARE", res_paths.CONFIG_PROJSHARE)
+        return self.env.get("GRASS_PROJSHARE", resource_paths.CONFIG_PROJSHARE)
 
     @property
     def prefix(self):
         if self._custom_prefix:
             return self._custom_prefix
-        return os.path.normpath(res_paths.GRASS_PREFIX)
+        return os.path.normpath(resource_paths.GRASS_PREFIX)
 
     def __getattr__(self, name):
         """Access paths by attributes."""
@@ -119,7 +121,7 @@ class RuntimePaths:
         if use_env_values and env_var in self.env and self.env[env_var]:
             return os.path.normpath(self.env[env_var])
         # Default to path from the installation
-        path = getattr(res_paths, env_var)
+        path = getattr(resource_paths, env_var)
         return os.path.normpath(os.path.join(self.prefix, path))
 
 
@@ -230,7 +232,7 @@ def set_paths(install_path, grass_config_dir):
     # Set LD_LIBRARY_PATH (etc) to find GRASS shared libraries.
     # This works for subprocesses, but won't affect the current process.
     set_dynamic_library_path(
-        variable_name=res_paths.LD_LIBRARY_PATH_VAR,
+        variable_name=resource_paths.LD_LIBRARY_PATH_VAR,
         install_path=install_path,
         env=os.environ,
     )
