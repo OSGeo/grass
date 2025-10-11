@@ -23,6 +23,7 @@
 #include <pdal/Options.hpp>
 #include <pdal/io/LasReader.hpp>
 #include <pdal/io/LasHeader.hpp>
+#include <pdal/SpatialReference.hpp>
 #if defined(__clang__)
 #pragma clang diagnostic pop
 #endif
@@ -51,5 +52,7 @@ void get_extent(struct StringList *, double *, double *, double *, double *,
 void print_extent(struct StringList *);
 void print_lasinfo(struct StringList *);
 #endif
+void get_reprojected_extent(pdal::SpatialReference &, double *, double *,
+                            double *, double *, double *, double *);
 
 #endif // INFO_H
