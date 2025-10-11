@@ -154,14 +154,7 @@ import zipfile
 import tempfile
 import json
 import xml.etree.ElementTree as ET
-
-if sys.version_info < (3, 8):
-    from distutils.dir_util import copy_tree
-else:
-    from functools import partial
-
-    copy_tree = partial(shutil.copytree, dirs_exist_ok=True)
-
+from functools import partial
 from pathlib import Path
 from subprocess import PIPE
 from urllib import request as urlrequest
@@ -197,6 +190,8 @@ if sys.platform.startswith("freebsd"):
     MAKE = "gmake"
 else:
     MAKE = "make"
+
+copy_tree = partial(shutil.copytree, dirs_exist_ok=True)
 
 
 class GitAdapter:

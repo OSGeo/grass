@@ -421,7 +421,7 @@ class GifWriter:
         frames = 0
         firstFrame = True
 
-        for im, palette in zip(images, palettes):
+        for im, palette in zip(images, palettes, strict=True):
             if firstFrame:
                 # Write header
 

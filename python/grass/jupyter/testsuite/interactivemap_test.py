@@ -17,8 +17,6 @@
 #############################################################################
 
 
-import os
-import sys
 import unittest
 from pathlib import Path
 
@@ -72,13 +70,7 @@ class TestDisplay(TestCase):
         """
         for f in self.files:
             f = Path(f)
-            if sys.version_info < (3, 8):
-                try:
-                    os.remove(f)
-                except FileNotFoundError:
-                    pass
-            else:
-                f.unlink(missing_ok=True)
+            f.unlink(missing_ok=True)
 
     @unittest.skipIf(not can_import_folium(), "Cannot import folium")
     def test_basic(self):
