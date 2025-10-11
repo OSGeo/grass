@@ -151,7 +151,7 @@ class ScattsManager:
 
         show_add = bool(self.show_add_scatt_plot)
 
-        self.all_bands_to_bands = dict(zip(bands, [-1] * len(bands)))
+        self.all_bands_to_bands = dict(zip(bands, [-1] * len(bands), strict=False))
         self.all_bands = bands
 
         self.region = GetRegion()

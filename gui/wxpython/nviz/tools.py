@@ -3222,7 +3222,9 @@ class NvizToolWindow(GNotebook):
             padding = 20
         minWidth = sw.GetTextExtent(sw.GetLabel())[0] + padding
         for win, name in zip(
-            (w, n, s, e, nw, ne, se, sw), ("w", "n", "s", "e", "nw", "ne", "se", "sw")
+            (w, n, s, e, nw, ne, se, sw),
+            ("w", "n", "s", "e", "nw", "ne", "se", "sw"),
+            strict=True,
         ):
             win.SetMinSize((minWidth, -1))
             win.Bind(wx.EVT_BUTTON, self.OnLookFrom)
@@ -4849,7 +4851,7 @@ class NvizToolWindow(GNotebook):
             return
 
         for coord, val in zip(
-            ("x1", "x2", "y1", "y2", "z1", "z2"), (0, 1, 0, 1, 0, 1, 0)
+            ("x1", "x2", "y1", "y2", "z1", "z2"), (0, 1, 0, 1, 0, 1, 0), strict=True
         ):
             data["volume"]["slice"][sel]["position"][coord] = val
         data["volume"]["slice"][sel]["position"]["update"] = None

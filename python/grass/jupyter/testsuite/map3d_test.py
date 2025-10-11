@@ -18,8 +18,6 @@
 
 """Test of 3D renderer"""
 
-import os
-import sys
 import unittest
 from pathlib import Path
 
@@ -74,13 +72,7 @@ class TestMap3D(TestCase):
         """After each run, remove the created files if exist"""
         for file in self.files:
             file = Path(file)
-            if sys.version_info < (3, 8):
-                try:
-                    os.remove(file)
-                except FileNotFoundError:
-                    pass
-            else:
-                file.unlink(missing_ok=True)
+            file.unlink(missing_ok=True)
 
     @xfail_windows
     def test_defaults(self):

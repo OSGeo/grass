@@ -172,7 +172,9 @@ def test_nested_top_env(xy_session):
             with experimental.MapsetSession(
                 names[2], create=True, env=xy_session.env
             ) as session3:
-                for name, session in zip(names, [session1, session2, session3]):
+                for name, session in zip(
+                    names, [session1, session2, session3], strict=True
+                ):
                     session_mapset = gs.read_command(
                         "g.mapset", flags="p", env=session.env
                     ).strip()
@@ -192,7 +194,9 @@ def test_nested_inherited_env(xy_session):
             with experimental.MapsetSession(
                 names[2], create=True, env=session2.env
             ) as session3:
-                for name, session in zip(names, [session1, session2, session3]):
+                for name, session in zip(
+                    names, [session1, session2, session3], strict=True
+                ):
                     session_mapset = gs.read_command(
                         "g.mapset", flags="p", env=session.env
                     ).strip()
