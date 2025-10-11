@@ -408,7 +408,7 @@ def aggregate_attributes_sql(
         ]
         column_types = [
             "INTEGER" if method == "count" else "DOUBLE" for method in methods
-        ] * len(columns_to_aggregate)
+        ]
     else:
         select_columns = columns_to_aggregate
         column_types = None
@@ -487,9 +487,7 @@ def aggregate_attributes_univar(
         columns_to_aggregate, methods, result_columns, strict=True
     ):
         columns[agg_column].append((method, result))
-    column_types = [
-        "INTEGER" if method == "n" else "DOUBLE" for method in methods
-    ] * len(columns_to_aggregate)
+    column_types = ["INTEGER" if method == "n" else "DOUBLE" for method in methods]
     add_columns = []
     for result_column, column_type in zip(result_columns, column_types, strict=True):
         add_columns.append(f"{result_column} {column_type}")
