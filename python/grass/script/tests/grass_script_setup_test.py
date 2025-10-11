@@ -4,6 +4,7 @@ import multiprocessing
 import os
 import sys
 from functools import partial
+from pathlib import Path
 
 import pytest
 
@@ -82,7 +83,10 @@ def init_finish_global_functions_capture_strerr0_partial(tmp_path, queue):
     gs.setup.init(project)
     gs.run_command("g.region", flags="p")
     runtime_present = bool(os.environ.get("GISBASE"))
-    queue.put((os.environ["GISRC"], runtime_present))
+    gisbase_exists = (
+        os.path.exists(os.environ.get("GISBASE")) if runtime_present else False
+    )
+    queue.put((os.environ["GISRC"], runtime_present, gisbase_exists))
     gs.setup.finish()
 
 
@@ -94,9 +98,10 @@ def test_init_finish_global_functions_capture_strerr0_partial(tmp_path):
     init_finish = partial(
         init_finish_global_functions_capture_strerr0_partial, tmp_path
     )
-    session_file, runtime_present = run_in_subprocess(init_finish)
+    session_file, runtime_present, gisbase_exists = run_in_subprocess(init_finish)
     assert session_file, "Expected file name from the subprocess"
     assert runtime_present, RUNTIME_GISBASE_SHOULD_BE_PRESENT
+    assert gisbase_exists, "GISBASE directory should exist"
     assert not os.path.exists(session_file), SESSION_FILE_NOT_DELETED
 
 
@@ -370,3 +375,28 @@ def test_init_lock_timeout_fail(tmp_path):
             gs.setup.init(project, env=os.environ.copy(), lock=True, timeout=2),
         ):
             pass
+
+
+@pytest.mark.parametrize("project_path_type", [str, Path])
+@pytest.mark.parametrize("grass_path_type", [str, Path])
+def test_grass_path_types_in_init(tmp_path, project_path_type, grass_path_type):
+    """Check that different path types are accepted as path to grass"""
+    # We test with project path type just to be sure there is no interaction.
+    project = project_path_type(tmp_path / "test")
+    gs.create_project(project)
+    grass_path = grass_path_type(gs.setup.get_install_path())
+    with gs.setup.init(
+        project, grass_path=grass_path, env=os.environ.copy()
+    ) as session:
+        gs.run_command("g.region", res=1, env=session.env)
+
+
+@pytest.mark.parametrize("path_type", [str, Path])
+def test_grass_path_types_in_setup(tmp_path, path_type):
+    """Check that different path types are accepted as path to grass"""
+    # We test with project path type just to be sure there is no interaction.
+    grass_path = path_type(gs.setup.get_install_path())
+    env = os.environ.copy()
+    gs.setup.setup_runtime_env(grass_path, env=env)
+    # At least before FHS, GISBASE is the way to detect an active runtime.
+    assert "GISBASE" in env
