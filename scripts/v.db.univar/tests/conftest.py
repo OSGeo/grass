@@ -13,7 +13,7 @@ from grass.script.setup import SessionHandle
 def updates_as_transaction(table, cat_column, column, cats, values):
     """Create SQL statement for categories and values for a given column"""
     sql = ["BEGIN TRANSACTION"]
-    for cat, value in zip(cats, values):
+    for cat, value in zip(cats, values, strict=True):
         sql.append(f"UPDATE {table} SET {column} = {value} WHERE {cat_column} = {cat};")
     sql.append("END TRANSACTION")
     return "\n".join(sql)

@@ -31,11 +31,12 @@ import random
 import string
 
 from pathlib import Path
-from typing import TYPE_CHECKING, AnyStr, Callable, TypeVar, cast, overload
+from typing import TYPE_CHECKING, AnyStr, TypeVar, cast, overload
 
 
 if TYPE_CHECKING:
     from _typeshed import FileDescriptorOrPath, StrOrBytesPath, StrPath
+    from collections.abc import Callable
 
 
 # Type variables

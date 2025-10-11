@@ -202,7 +202,7 @@ class TemporalManager:
             timestamps = sorted(list(labelListSet), key=itemgetter(0))
 
         newMapLists = []
-        for mapList, labelList in zip(mapLists, labelLists):
+        for mapList, labelList in zip(mapLists, labelLists, strict=False):
             newMapList = [None] * len(timestamps)
             i = 0
             # compare start time
@@ -438,7 +438,7 @@ def createAbsoluteInterval():
         maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6,"
         "temp_1,temp_2,temp_3,temp_4,temp_5,temp_6",
     )
-    for name, fname in zip((name1, name2), (n1, n2)):
+    for name, fname in zip((name1, name2), (n1, n2), strict=True):
         gs.run_command(
             "t.create",
             overwrite=True,
@@ -509,7 +509,7 @@ def createRelativeInterval():
         maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6,"
         "temp_1,temp_2,temp_3,temp_4,temp_5,temp_6",
     )
-    for name, fname in zip((name1, name2), (n1, n2)):
+    for name, fname in zip((name1, name2), (n1, n2), strict=True):
         gs.run_command(
             "t.create",
             overwrite=True,

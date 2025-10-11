@@ -1339,9 +1339,6 @@ def get_grass_env_file(sh, grass_config_dir: StrPath) -> str:
     return grass_env_file
 
 
-# No reason to use list over Sequence except that
-# importing of Sequence changed in Python 3.9.
-# (Replace list by Sequence in the future.)
 def run_batch_job(batch_job: list):
     """Runs script, module or any command
 

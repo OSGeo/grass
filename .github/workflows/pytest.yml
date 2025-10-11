@@ -23,7 +23,7 @@ jobs:
         os:
           - ubuntu-22.04
         python-version:
-          - "3.9"
+          - "3.10"
           - "3.13"
       fail-fast: true
 
