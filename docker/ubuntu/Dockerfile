@@ -9,9 +9,13 @@ FROM ubuntu:24.04@sha256:728785b59223d755e3e5c5af178fab1be7031f3522c5ccd7a0b32b8
 ARG BASE_NAME="ubuntu:24.04"
 ARG DIGEST="sha256:728785b59223d755e3e5c5af178fab1be7031f3522c5ccd7a0b32b80d8248123"
 ARG PYTHON_VERSION=3.12
+# renovate: datasource=github-tags depName=libgeos/geos
 ARG GEOS_VERSION=3.14.0
+# renovate: datasource=github-tags depName=OSGeo/PROJ
 ARG PROJ_VERSION=9.7.0
+# renovate: datasource=github-tags depName=OSGeo/gdal
 ARG GDAL_VERSION=3.11.4
+# renovate: datasource=github-tags depName=PDAL/PDAL
 ARG PDAL_VERSION=2.9.2
 # renovate: datasource=github-tags depName=OSGeo/gdal-grass
 ARG GDAL_GRASS_VERSION=1.0.4
