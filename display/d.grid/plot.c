@@ -812,7 +812,7 @@ void check_coords(double e, double n, double *lon, double *lat, int par,
  *******************************************/
 float get_heading(double rows, double cols)
 {
-    float azi;
+    float azi = 0.0;
 
     /* NE Quad or due south */
     if (rows < 0 && cols <= 0) {
