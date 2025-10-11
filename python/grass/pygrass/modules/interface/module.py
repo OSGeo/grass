@@ -685,7 +685,7 @@ class Module:
         #
         # set/update args
         #
-        for param, arg in zip(self.params_list, args):
+        for param, arg in zip(self.params_list, args, strict=False):
             param.value = arg
         for key, val in kargs.items():
             key = key.strip("_")

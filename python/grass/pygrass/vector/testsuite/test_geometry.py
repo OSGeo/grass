@@ -337,7 +337,7 @@ class AreaTestCase(TestCase):
             )
         )
 
-        for boundary, i in zip(boundaries, range(4)):
+        for boundary, i in zip(boundaries, range(4), strict=True):
             self.assertEqual(len(boundary.to_wkb()), 41)
             self.assertEqual(boundary.to_wkt(), string_list[i])
 

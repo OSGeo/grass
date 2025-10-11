@@ -62,7 +62,7 @@ class TestBenchmarkCLI(TestCase):
 
         metrics = ["time", "speedup", "efficiency"]
         benchmark_main(["plot", "nprocs", self.json_filename, self.png_filenames[0]])
-        for png_fname, metric in zip(self.png_filenames[1:4], metrics):
+        for png_fname, metric in zip(self.png_filenames[1:4], metrics, strict=True):
             benchmark_main(
                 ["plot", "nprocs", "--metric", metric, self.json_filename, png_fname]
             )
