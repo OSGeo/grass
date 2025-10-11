@@ -136,6 +136,7 @@ ARG GRASS_BUILD_PACKAGES="\
   libxerces-c-dev \
   libzstd-dev \
   mesa-common-dev \
+  ninja-build \
   unixodbc-dev \
   zlib1g-dev \
   swig \
@@ -267,7 +268,7 @@ RUN apt-get update \
 # RUN wget -q --no-check-certificate -r -l inf -A tif https://cdn.proj.org/
 
 # Start build stage
-FROM grass AS build
+FROM grass AS build_common
 
 # Add build packages
 # hadolint ignore=SC2086
@@ -298,17 +299,26 @@ RUN apt-get update \
 
 # Set environmental variables for GRASS compilation, without debug symbols
 # Set gcc/g++ environmental variables for GRASS compilation, without debug symbols
-ARG NUMTHREADS=8
+ARG NUMTHREADS=4
 ENV CMAKE_BUILD_PARALLEL_LEVEL=$NUMTHREADS
 WORKDIR /src
+
 COPY ./utils/build_ubuntu_dependencies.sh /src/
+
 # Build and install PROJ, GEOS, GDAL and PDAL from source
-# hadolint ignore=DL3059
+FROM build_common AS build_proj
 RUN /src/build_ubuntu_dependencies.sh proj "$PROJ_VERSION" "$NUMTHREADS"
-# hadolint ignore=DL3059
+
+FROM build_common AS build_geos
 RUN /src/build_ubuntu_dependencies.sh geos "$GEOS_VERSION" "$NUMTHREADS"
+
+FROM build_common AS build_gdal_pdal_grass
+COPY --link --from=build_proj /usr/local /usr/local
+COPY --link --from=build_geos /usr/local /usr/local
+
 # hadolint ignore=DL3059
 RUN /src/build_ubuntu_dependencies.sh gdal "$GDAL_VERSION" "$NUMTHREADS"
+
 # hadolint ignore=DL3059
 RUN /src/build_ubuntu_dependencies.sh pdal "$PDAL_VERSION" "$NUMTHREADS"
 
@@ -432,7 +442,7 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     GDAL_DRIVER_PATH="/usr/local/lib/gdalplugins"
 
 # Copy GRASS and compiled dependencies from build image
-COPY --link --from=build /usr/local /usr/local
+COPY --link --from=build_gdal_pdal_grass /usr/local /usr/local
 # COPY --link --from=datum_grids /tmp/cdn.proj.org/*.tif /usr/share/proj/
 
 # Create generic GRASS lib name regardless of version number
