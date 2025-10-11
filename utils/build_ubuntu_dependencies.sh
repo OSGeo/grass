@@ -17,7 +17,7 @@ if [ "$LIB_NAME" == "gdal" ]; then
 
     echo "Configuring ${LIB_NAME_UPPER} build with CMake..."
     mkdir build && cd build
-    cmake .. \
+    cmake -GNinja .. \
         -DCMAKE_BUILD_TYPE=Release \
         -DBUILD_PYTHON_BINDINGS=ON \
         -DGDAL_USE_JPEG=ON \
@@ -39,7 +39,8 @@ if [ "$LIB_NAME" == "gdal" ]; then
         -DGDAL_USE_HDF5=ON \
         -DGDAL_USE_SPATIALITE=ON \
         -DGDAL_USE_PROJ=ON \
-        -DPython_NumPy_INCLUDE_DIRS=$(python3 -c "import numpy; print(numpy.get_include())")
+        -DPython_NumPy_INCLUDE_DIRS=$(python3 -c "import numpy; print(numpy.get_include())") \
+        -DCMAKE_MAKE_PROGRAM=ninja
 fi
 
 if [ "$LIB_NAME" == "proj" ]; then
@@ -50,9 +51,10 @@ if [ "$LIB_NAME" == "proj" ]; then
     echo "Configuring PROJ build with CMake..."
     mkdir build
     cd build
-    cmake .. \
+    cmake -GNinja .. \
         -DCMAKE_BUILD_TYPE=Release \
-        -DCMAKE_INSTALL_PREFIX=/usr/local
+        -DCMAKE_INSTALL_PREFIX=/usr/local \
+        -DCMAKE_MAKE_PROGRAM=ninja
 fi
 
 
@@ -70,7 +72,6 @@ if [ "$LIB_NAME" == "pdal" ]; then
         -DCMAKE_INSTALL_PREFIX=/usr/local \
         -DCMAKE_C_COMPILER=gcc \
         -DCMAKE_CXX_COMPILER=g++ \
-        -DCMAKE_MAKE_PROGRAM=make \
         -DBUILD_PGPOINTCLOUD_TESTS=OFF \
         -DBUILD_PLUGIN_CPD=OFF \
         -DBUILD_PLUGIN_GREYHOUND=ON \
@@ -85,7 +86,8 @@ if [ "$LIB_NAME" == "pdal" ]; then
         -DWITH_ZLIB=ON \
         -DWITH_LASZIP=OFF \
         -DWITH_LAZPERF=ON \
-        -DWITH_TESTS=ON
+        -DWITH_TESTS=ON \
+        -DCMAKE_MAKE_PROGRAM=make
 
 fi
 
@@ -99,16 +101,19 @@ if [ "$LIB_NAME" == "geos" ]; then
 
     echo "Configuring GEOS build with CMake..."
     mkdir build && cd build
-    cmake ..
+    cmake -GNinja .. \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_INSTALL_PREFIX=/usr/local \
+        -DCMAKE_MAKE_PROGRAM=ninja
 
 fi
 
 
 echo "Compiling ${LIB_NAME_UPPER}..."
-make -j $NPROCS
+cmake --build .
 
 echo "Installing ${LIB_NAME_UPPER}..."
-make install
+cmake --install .
 # Update shared library cache
 ldconfig
 
