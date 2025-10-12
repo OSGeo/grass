@@ -30,10 +30,10 @@ from .checkers import text_to_keyvalue
 from io import StringIO
 
 if TYPE_CHECKING:
-    from typing import Literal, Union
+    from typing import Literal
     from _typeshed import FileDescriptor, StrOrBytesPath, StrPath
 
-    FileDescriptorOrPath = Union[FileDescriptor, StrOrBytesPath]
+    FileDescriptorOrPath = FileDescriptor | StrOrBytesPath
 
 
 # TODO: change text_to_keyvalue to same sep as here

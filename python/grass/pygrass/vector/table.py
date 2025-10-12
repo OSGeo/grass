@@ -458,7 +458,7 @@ class Columns:
         )
         sqlcode = [
             sql.ADD_COL.format(tname=self.tname, cname=cn, ctype=ct)
-            for cn, ct in zip(col_name, col_type)
+            for cn, ct in zip(col_name, col_type, strict=True)
         ]
         cur = self.conn.cursor()
         cur.executescript("\n".join(sqlcode))

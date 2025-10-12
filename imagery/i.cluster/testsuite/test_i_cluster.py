@@ -198,7 +198,7 @@ class TestIClusterWithSyntheticData(TestCase):
         """Calculate the minimum pairwise Euclidean distance between cluster means."""
         min_dist = float("inf")
         for a, b in combinations(means, 2):
-            dist = math.sqrt(sum((x - y) ** 2 for x, y in zip(a, b)))
+            dist = math.sqrt(sum((x - y) ** 2 for x, y in zip(a, b, strict=False)))
             min_dist = min(min_dist, dist)
         return min_dist
 

@@ -144,7 +144,7 @@ def main():
     gs.setup.init(gisbase, gisdb, location, mapset)
 
     reports = []
-    for location, location_type in zip(locations, locations_types):
+    for location, location_type in zip(locations, locations_types, strict=True):
         # here it is quite a good place to parallelize
         # including also type to make it unique and preserve it for sure
         report = "report_for_" + location + "_" + location_type

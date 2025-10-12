@@ -248,7 +248,7 @@ class SpeedDialog(wx.Dialog):
             _("second"),
         ]
         timeUnits = ["years", "months", "days", "hours", "minutes", "seconds"]
-        for item, cdata in zip(timeUnitsChoice, timeUnits):
+        for item, cdata in zip(timeUnitsChoice, timeUnits, strict=True):
             choiceWidget.Append(item, cdata)
 
         if self.temporalMode == TemporalMode.TEMPORAL:
@@ -1017,7 +1017,7 @@ class ExportDialog(wx.Dialog):
         buttonNames = ["time", "image", "text"]
         buttonLabels = [_("Add time stamp"), _("Add image"), _("Add text")]
         i = 0
-        for buttonName, buttonLabel in zip(buttonNames, buttonLabels):
+        for buttonName, buttonLabel in zip(buttonNames, buttonLabels, strict=True):
             if buttonName == "time" and self.temporal == TemporalMode.NONTEMPORAL:
                 continue
             btn = Button(panel, id=wx.ID_ANY, name=buttonName, label=buttonLabel)
