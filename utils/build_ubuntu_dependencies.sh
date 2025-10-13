@@ -16,8 +16,7 @@ if [ "$LIB_NAME" == "gdal" ]; then
     cd "./gdal-${LIB_VERSION}"
 
     echo "Configuring ${LIB_NAME_UPPER} build with CMake..."
-    mkdir build && cd build
-    cmake -GNinja .. \
+    cmake -G Ninja -S . -B build \
         -DCMAKE_BUILD_TYPE=Release \
         -DBUILD_PYTHON_BINDINGS=ON \
         -DGDAL_USE_JPEG=ON \
@@ -49,9 +48,7 @@ if [ "$LIB_NAME" == "proj" ]; then
     cd "proj-${LIB_VERSION}"
 
     echo "Configuring PROJ build with CMake..."
-    mkdir build
-    cd build
-    cmake -GNinja .. \
+    cmake -G Ninja -S . -B build \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX=/usr/local \
         -DBUILD_TESTING=OFF
@@ -64,10 +61,7 @@ if [ "$LIB_NAME" == "pdal" ]; then
     cd "PDAL-${LIB_VERSION}-src"
 
     echo "Configuring PDAL build with CMake..."
-    mkdir build
-    cd build
-    cmake .. \
-        -G Ninja \
+    cmake -G Ninja -S . -B build \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX=/usr/local \
         -DCMAKE_C_COMPILER=gcc \
@@ -100,8 +94,7 @@ if [ "$LIB_NAME" == "geos" ]; then
     cd "geos-${LIB_VERSION}"
 
     echo "Configuring GEOS build with CMake..."
-    mkdir build && cd build
-    cmake -GNinja .. \
+    cmake -G Ninja -S . -B build \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX=/usr/local \
         -DBUILD_DOCUMENTATION=OFF
@@ -110,10 +103,10 @@ fi
 
 
 echo "Compiling ${LIB_NAME_UPPER}..."
-cmake --build .
+cmake --build build
 
 echo "Installing ${LIB_NAME_UPPER}..."
-cmake --install .
+cmake --install build
 # Update shared library cache
 ldconfig
 
