@@ -19,7 +19,7 @@ permissions: {}
 jobs:
   analyze:
     name: Analyze
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     permissions:
       security-events: write
       actions: read
@@ -53,6 +53,8 @@ jobs:
         run: |
           sudo apt-get update -y
           sudo apt-get install -y wget git gawk findutils
+          LC_ALL=C.UTF-8 sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
+          sudo apt-get update -y
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
       - uses: rui314/setup-mold@725a8794d15fc7563f59595bd9556495c0564878 # v1
@@ -79,9 +81,9 @@ jobs:
       - name: Build
         if: ${{ matrix.language == 'c-cpp' }}
         env:
-          CFLAGS: -std=gnu11
-          CXXFLAGS: -std=c++11
-        run: .github/workflows/build_ubuntu-22.04.sh "${HOME}/install"
+          CFLAGS: -std=gnu17
+          CXXFLAGS: -std=c++17
+        run: .github/workflows/build_ubuntu-24.04.sh "${HOME}/install"
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@f443b600d91635bebf5b0d9ebc620189c0d6fba5 # v4.30.8
