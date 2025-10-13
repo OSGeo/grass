@@ -64,8 +64,8 @@ if [ "$LIB_NAME" == "pdal" ]; then
     cmake -G Ninja -S . -B build \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX=/usr/local \
-        -DCMAKE_C_COMPILER=gcc \
         -DCMAKE_CXX_COMPILER=g++ \
+        -DCMAKE_C_COMPILER=gcc \
         -DBUILD_PGPOINTCLOUD_TESTS=OFF \
         -DBUILD_PLUGIN_CPD=OFF \
         -DBUILD_PLUGIN_GREYHOUND=ON \
@@ -77,11 +77,11 @@ if [ "$LIB_NAME" == "pdal" ]; then
         -DBUILD_PLUGIN_PYTHON=ON \
         -DBUILD_PLUGIN_SQLITE=ON \
         -DHEXER_INCLUDE_DIR=/usr/include/ \
-        -DWITH_ZSTD=ON \
-        -DWITH_ZLIB=ON \
         -DWITH_LASZIP=OFF \
         -DWITH_LAZPERF=ON \
-        -DWITH_TESTS=OFF
+        -DWITH_TESTS=OFF \
+        -DWITH_ZLIB=ON \
+        -DWITH_ZSTD=ON
 
 fi
 
