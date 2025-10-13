@@ -97,7 +97,8 @@ if [ "$LIB_NAME" == "geos" ]; then
     cmake -G Ninja -S . -B build \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX=/usr/local \
-        -DBUILD_DOCUMENTATION=OFF
+        -DBUILD_DOCUMENTATION=OFF \
+        -DBUILD_TESTING=OFF
 
 fi
 
