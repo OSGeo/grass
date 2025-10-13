@@ -40,7 +40,7 @@ if [ "$LIB_NAME" == "gdal" ]; then
         -DGDAL_USE_SPATIALITE=ON \
         -DGDAL_USE_PROJ=ON \
         -DPython_NumPy_INCLUDE_DIRS="$(python3 -c "import numpy; print(numpy.get_include())")" \
-        -DCMAKE_MAKE_PROGRAM=ninja
+        -DBUILD_TESTING=OFF
 fi
 
 if [ "$LIB_NAME" == "proj" ]; then
@@ -54,7 +54,7 @@ if [ "$LIB_NAME" == "proj" ]; then
     cmake -GNinja .. \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX=/usr/local \
-        -DCMAKE_MAKE_PROGRAM=ninja
+       -DBUILD_TESTING=OFF
 fi
 
 
@@ -67,7 +67,7 @@ if [ "$LIB_NAME" == "pdal" ]; then
     mkdir build
     cd build
     cmake .. \
-        -G "Unix Makefiles" \
+        -G Ninja \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX=/usr/local \
         -DCMAKE_C_COMPILER=gcc \
@@ -86,8 +86,7 @@ if [ "$LIB_NAME" == "pdal" ]; then
         -DWITH_ZLIB=ON \
         -DWITH_LASZIP=OFF \
         -DWITH_LAZPERF=ON \
-        -DWITH_TESTS=ON \
-        -DCMAKE_MAKE_PROGRAM=make
+        -DWITH_TESTS=ON
 
 fi
 
@@ -104,7 +103,7 @@ if [ "$LIB_NAME" == "geos" ]; then
     cmake -GNinja .. \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX=/usr/local \
-        -DCMAKE_MAKE_PROGRAM=ninja
+        -DBUILD_DOCUMENTATION=OFF
 
 fi
 
