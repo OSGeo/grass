@@ -54,7 +54,7 @@ if [ "$LIB_NAME" == "proj" ]; then
     cmake -GNinja .. \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX=/usr/local \
-       -DBUILD_TESTING=OFF
+        -DBUILD_TESTING=OFF
 fi
 
 
@@ -75,6 +75,7 @@ if [ "$LIB_NAME" == "pdal" ]; then
         -DBUILD_PGPOINTCLOUD_TESTS=OFF \
         -DBUILD_PLUGIN_CPD=OFF \
         -DBUILD_PLUGIN_GREYHOUND=ON \
+        -DBUILD_PLUGIN_HDF=ON \
         -DBUILD_PLUGIN_HEXBIN=ON \
         -DBUILD_PLUGIN_ICEBRIDGE=ON \
         -DBUILD_PLUGIN_NITF=OFF \
@@ -86,7 +87,7 @@ if [ "$LIB_NAME" == "pdal" ]; then
         -DWITH_ZLIB=ON \
         -DWITH_LASZIP=OFF \
         -DWITH_LAZPERF=ON \
-        -DWITH_TESTS=ON
+        -DWITH_TESTS=OFF
 
 fi
 
