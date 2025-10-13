@@ -312,7 +312,7 @@ RUN /src/build_ubuntu_dependencies.sh proj "$PROJ_VERSION" "$NUMTHREADS"
 FROM build_common AS build_geos
 RUN /src/build_ubuntu_dependencies.sh geos "$GEOS_VERSION" "$NUMTHREADS"
 
-FROM build_common AS build_gdal_pdal_grass
+FROM build_common AS build_gdal_pdal
 COPY --link --from=build_proj /usr/local /usr/local
 COPY --link --from=build_geos /usr/local /usr/local
 
@@ -322,6 +322,8 @@ RUN /src/build_ubuntu_dependencies.sh gdal "$GDAL_VERSION" "$NUMTHREADS"
 # hadolint ignore=DL3059
 RUN /src/build_ubuntu_dependencies.sh pdal "$PDAL_VERSION" "$NUMTHREADS"
 
+# With all the libraries needed compiled from source, now build grass and gdal-grass
+FROM build_gdal_pdal AS build
 COPY . /src/grass_build/
 
 # copy grass source
@@ -442,7 +444,7 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     GDAL_DRIVER_PATH="/usr/local/lib/gdalplugins"
 
 # Copy GRASS and compiled dependencies from build image
-COPY --link --from=build_gdal_pdal_grass /usr/local /usr/local
+COPY --link --from=build /usr/local /usr/local
 # COPY --link --from=datum_grids /tmp/cdn.proj.org/*.tif /usr/share/proj/
 
 # Create generic GRASS lib name regardless of version number
