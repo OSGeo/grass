@@ -238,7 +238,7 @@ ENV NO_AT_BRIDGE=1
 FROM grass_${GUI}_gui AS grass
 
 # Install runtime-packages
-# hadolint ignore=SC2086
+# hadolint ignore=SC2086,DL3008
 RUN apt-get update \
     && apt-get upgrade -y \
     && apt-get install -y --no-install-recommends --no-install-suggests \
@@ -271,7 +271,7 @@ RUN apt-get update \
 FROM grass AS build_common
 
 # Add build packages
-# hadolint ignore=SC2086
+# hadolint ignore=SC2086,DL3008,DL3013
 RUN apt-get update \
     && apt-get install -y --no-install-recommends --no-install-suggests \
     ${GRASS_BUILD_PACKAGES} ca-certificates \
