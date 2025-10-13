@@ -81,8 +81,8 @@ jobs:
       - name: Build
         if: ${{ matrix.language == 'c-cpp' }}
         env:
-          CFLAGS: -std=gnu11
-          CXXFLAGS: -std=c++11
+          CFLAGS: -std=gnu17
+          CXXFLAGS: -std=c++17
         run: .github/workflows/build_ubuntu-24.04.sh "${HOME}/install"
 
       - name: Perform CodeQL Analysis
