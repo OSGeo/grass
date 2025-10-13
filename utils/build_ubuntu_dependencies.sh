@@ -19,6 +19,7 @@ if [ "$LIB_NAME" == "gdal" ]; then
     cmake -G Ninja -S . -B build \
         -DCMAKE_BUILD_TYPE=Release \
         -DBUILD_PYTHON_BINDINGS=ON \
+        -DBUILD_TESTING=OFF \
         -DGDAL_USE_CURL=ON \
         -DGDAL_USE_EXPAT=ON \
         -DGDAL_USE_FREEXL=ON \
@@ -38,8 +39,7 @@ if [ "$LIB_NAME" == "gdal" ]; then
         -DGDAL_USE_XERCES=ON \
         -DGDAL_USE_XML2=ON \
         -DGDAL_USE_ZSTD=ON \
-        -DPython_NumPy_INCLUDE_DIRS="$(python3 -c "import numpy; print(numpy.get_include())")" \
-        -DBUILD_TESTING=OFF
+        -DPython_NumPy_INCLUDE_DIRS="$(python3 -c "import numpy; print(numpy.get_include())")"
 fi
 
 if [ "$LIB_NAME" == "proj" ]; then
