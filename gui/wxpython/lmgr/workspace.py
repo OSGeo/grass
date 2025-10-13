@@ -21,7 +21,6 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 import wx
-import wx.aui
 
 from core.settings import UserSettings
 from core.gcmd import RunCommand, GError, GMessage
