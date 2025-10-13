@@ -11,9 +11,9 @@ NPROCS=$3
 echo "Downloading ${LIB_NAME_UPPER} ${LIB_VERSION}..."
 
 if [ "$LIB_NAME" == "gdal" ]; then
-    wget https://github.com/OSGeo/gdal/releases/download/v${LIB_VERSION}/gdal-${LIB_VERSION}.tar.gz
-    tar -xzf ./gdal-${LIB_VERSION}.tar.gz
-    cd ./gdal-${LIB_VERSION}
+    wget "https://github.com/OSGeo/gdal/releases/download/v${LIB_VERSION}/gdal-${LIB_VERSION}.tar.gz"
+    tar -xzf "./gdal-${LIB_VERSION}.tar.gz"
+    cd "./gdal-${LIB_VERSION}"
 
     echo "Configuring ${LIB_NAME_UPPER} build with CMake..."
     mkdir build && cd build
@@ -39,7 +39,7 @@ if [ "$LIB_NAME" == "gdal" ]; then
         -DGDAL_USE_HDF5=ON \
         -DGDAL_USE_SPATIALITE=ON \
         -DGDAL_USE_PROJ=ON \
-        -DPython_NumPy_INCLUDE_DIRS=$(python3 -c "import numpy; print(numpy.get_include())") \
+        -DPython_NumPy_INCLUDE_DIRS="$(python3 -c "import numpy; print(numpy.get_include())")" \
         -DCMAKE_MAKE_PROGRAM=ninja
 fi
 
@@ -59,9 +59,9 @@ fi
 
 
 if [ "$LIB_NAME" == "pdal" ]; then
-    wget -q https://github.com/PDAL/PDAL/releases/download/${LIB_VERSION}/PDAL-${LIB_VERSION}-src.tar.gz
-    tar xfz PDAL-${LIB_VERSION}-src.tar.gz
-    cd PDAL-${LIB_VERSION}-src
+    wget -q "https://github.com/PDAL/PDAL/releases/download/${LIB_VERSION}/PDAL-${LIB_VERSION}-src.tar.gz"
+    tar xfz "PDAL-${LIB_VERSION}-src.tar.gz"
+    cd "PDAL-${LIB_VERSION}-src"
 
     echo "Configuring PDAL build with CMake..."
     mkdir build
@@ -93,11 +93,11 @@ fi
 
 if [ "$LIB_NAME" == "geos" ]; then
     echo "Downloading GEOS ${LIB_VERSION}..."
-    wget https://download.osgeo.org/geos/geos-${LIB_VERSION}.tar.bz2
+    wget "https://download.osgeo.org/geos/geos-${LIB_VERSION}.tar.bz2"
 
     # Extract the archive
-    tar -xjf geos-${LIB_VERSION}.tar.bz2
-    cd geos-${LIB_VERSION}
+    tar -xjf "geos-${LIB_VERSION}.tar.bz2"
+    cd "geos-${LIB_VERSION}"
 
     echo "Configuring GEOS build with CMake..."
     mkdir build && cd build
