@@ -1336,7 +1336,7 @@ class TestCase(unittest.TestCase):
             # TODO: message format, parameters
             raise CalledModuleError(
                 module.name, module.get_python(), module.returncode, errors=errors
-            )
+            ) from None
         # TODO: use this also in assert and apply when appropriate
         if expecting_stdout and (not module.outputs.stdout.strip()):
             if module.outputs.stderr:

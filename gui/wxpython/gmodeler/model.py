@@ -311,7 +311,7 @@ class Model:
             gxmXml = ProcessModelFile(ET.parse(filename))
         except Exception as e:
             msg = "{}".format(e)
-            raise GException(msg)
+            raise GException(msg) from e
 
         if self.canvas:
             win = self.canvas.parent
