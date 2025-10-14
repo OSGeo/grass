@@ -21,7 +21,7 @@
 #include <grass/raster.h>
 #include <grass/raster3d.h>
 #include <grass/vector.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
@@ -44,8 +44,8 @@ int main(int argc, char *argv[])
     int pix;
     bool update_file = false;
     enum OutputFormat format;
-    JSON_Value *root_value;
-    JSON_Object *root_object;
+    G_JSON_Value *root_value;
+    G_JSON_Object *root_object;
 
     struct GModule *module;
     struct {
@@ -465,12 +465,12 @@ int main(int argc, char *argv[])
 
     if (strcmp(parm.format->answer, "json") == 0) {
         format = JSON;
-        root_value = json_value_init_object();
+        root_value = G_json_value_init_object();
         if (root_value == NULL) {
             G_fatal_error(
                 _("Failed to initialize JSON object. Out of memory?"));
         }
-        root_object = json_object(root_value);
+        root_object = G_json_object(root_value);
     }
     else if (strcmp(parm.format->answer, "shell") == 0 ||
              (print_flag & PRINT_SH)) {
@@ -985,13 +985,13 @@ int main(int argc, char *argv[])
 
     if (format == JSON) {
         char *serialized_string = NULL;
-        serialized_string = json_serialize_to_string_pretty(root_value);
+        serialized_string = G_json_serialize_to_string_pretty(root_value);
         if (serialized_string == NULL) {
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         }
         puts(serialized_string);
-        json_free_serialized_string(serialized_string);
-        json_value_free(root_value);
+        G_json_free_serialized_string(serialized_string);
+        G_json_value_free(root_value);
     }
 
     exit(EXIT_SUCCESS);

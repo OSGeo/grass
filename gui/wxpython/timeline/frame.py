@@ -336,9 +336,9 @@ class TimelineFrame(wx.Frame):
             # TODO: mixed
             if mapType == "interval":
                 end = convert(self.timeData[name]["end_datetime"])
-                lookUpData = list(zip(start, end))
+                lookUpData = list(zip(start, end, strict=False))
                 duration = end - np.array(start)
-                barData = list(zip(start, duration))
+                barData = list(zip(start, duration, strict=False))
                 lookUp.AddDataset(
                     type_="bar",
                     yrange=(i - 0.1, i + 0.1),

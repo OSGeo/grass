@@ -23,20 +23,20 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
 
     env:
       # renovate: datasource=python-version depName=python
-      PYTHON_VERSION: "3.13"
-      MIN_PYTHON_VERSION: "3.9"
+      PYTHON_VERSION: "3.14"
+      MIN_PYTHON_VERSION: "3.10"
       # renovate: datasource=pypi depName=flake8
       FLAKE8_VERSION: "7.3.0"
       # renovate: datasource=pypi depName=pylint
-      PYLINT_VERSION: "3.3.8"
+      PYLINT_VERSION: "4.0.0"
       # renovate: datasource=pypi depName=bandit
       BANDIT_VERSION: "1.8.6"
       # renovate: datasource=pypi depName=ruff
-      RUFF_VERSION: "0.13.1"
+      RUFF_VERSION: "0.14.0"
 
     runs-on: ${{ matrix.os }}
     permissions:
@@ -65,10 +65,10 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: pip # zizmor: ignore[cache-poisoning] Not creating release artifacts, less of a concern here
       - name: Upgrade pip
-        run: python -m pip install --upgrade pip
+        run: python -m pip install --break-system-packages --upgrade pip
 
       - name: Install Ruff
-        run: pip install "ruff==${RUFF_VERSION}"
+        run: pip install --break-system-packages "ruff==${RUFF_VERSION}"
       - name: Run Ruff (output annotations on fixable errors)
         run: ruff check --output-format=github . --preview --unsafe-fixes
         continue-on-error: true
@@ -97,14 +97,16 @@ jobs:
         run: |
           sudo apt-get update -y
           sudo apt-get install -y wget git gawk findutils
+          LC_ALL=C.UTF-8 sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
+          sudo apt-get update -y
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
           sudo apt-get install -y --no-install-recommends --no-install-suggests
 
       - name: Install Python dependencies
         run: |
-          pip install -r .github/workflows/python_requirements.txt
-          pip install -r .github/workflows/optional_requirements.txt
-          pip install --user pipx
+          pip install --break-system-packages -r .github/workflows/python_requirements.txt
+          pip install --break-system-packages -r .github/workflows/optional_requirements.txt
+          pip install --break-system-packages --user pipx
           pipx ensurepath
           pipx install "flake8==${FLAKE8_VERSION}"
           pipx install "pylint==${PYLINT_VERSION}"
@@ -131,7 +133,7 @@ jobs:
           path: bandit.sarif
 
       - name: Upload SARIF File into Security Tab
-        uses: github/codeql-action/upload-sarif@192325c86100d080feab897ff886c34abd4c83a3 # v3.30.3
+        uses: github/codeql-action/upload-sarif@f443b600d91635bebf5b0d9ebc620189c0d6fba5 # v4.30.8
         with:
           sarif_file: bandit.sarif
 

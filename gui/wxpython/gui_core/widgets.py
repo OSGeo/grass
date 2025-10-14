@@ -65,10 +65,8 @@ from wx.lib.stattext import GenStaticText
 from wx.lib.wordwrap import wordwrap
 
 if wxPythonPhoenix:
-    import wx.adv
     from wx.adv import OwnerDrawnComboBox
 else:
-    import wx.combo
     from wx.combo import OwnerDrawnComboBox
 try:
     import wx.lib.agw.flatnotebook as FN

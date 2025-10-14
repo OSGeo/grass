@@ -1,12 +1,12 @@
 [project]
 name = "grass"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 # *GRASS TODO: keep in sync with MIN_PYTHON_VERSION supported*
 
 [tool.black]
 line-length = 88
 required-version = '25'
-target-version = ['py39', 'py310', 'py311', 'py312', 'py313']
+target-version = ['py310', 'py311', 'py312', 'py313', 'py314']
 # 'extend-exclude' excludes files or directories in addition to the defaults
 extend-exclude = '''
 (
@@ -533,7 +533,7 @@ load-plugins = [
 # version used to run pylint.
 # *GRASS modified*
 # *GRASS TODO: keep in sync with MIN_PYTHON_VERSION supported*
-py-version = "3.9"
+py-version = "3.10"
 
 # Add paths to the list of the source roots. Supports globbing patterns. The
 # source root is an absolute path or a path relative to the current working
@@ -810,7 +810,7 @@ include = ["python"]
 
 # *GRASS modified*
 # *GRASS TODO: keep in sync with MIN_PYTHON_VERSION supported*
-pythonVersion = "3.9"
+pythonVersion = "3.10"
 
 [tool.pyrefact]
 line_length = 88
@@ -818,4 +818,4 @@ line_length = 88
 [tool.isort]
 profile = "black"
 # *GRASS TODO: keep in sync with MIN_PYTHON_VERSION supported*
-py_version = 39
+py_version = 310

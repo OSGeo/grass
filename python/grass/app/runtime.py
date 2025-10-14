@@ -78,12 +78,9 @@ class RuntimePaths:
         If the environmental variable not yet set, it is retrived and
         set from resource_paths."""
         if env_var in self.env and len(self.env[env_var]) > 0:
-            res = os.path.normpath(self.env[env_var])
-        else:
-            path = getattr(res_paths, env_var)
-            res = os.path.normpath(os.path.join(res_paths.GRASS_PREFIX, path))
-            self.env[env_var] = res
-        return res
+            return os.path.normpath(self.env[env_var])
+        path = getattr(res_paths, env_var)
+        return os.path.normpath(os.path.join(res_paths.GRASS_PREFIX, path))
 
 
 def get_grass_config_dir(*, env):
@@ -187,6 +184,9 @@ def set_executable_paths(install_path, grass_config_dir, env):
 
 def set_paths(install_path, grass_config_dir):
     """Set variables with executable paths, library paths, and other paths"""
+    # Set main prefix.
+    # See also grass.script.setup.setup_runtime_env.
+    os.environ["GISBASE"] = install_path
     set_executable_paths(
         install_path=install_path, grass_config_dir=grass_config_dir, env=os.environ
     )

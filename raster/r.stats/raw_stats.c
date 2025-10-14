@@ -1,12 +1,12 @@
 #include <stdlib.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include "global.h"
 
 int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
-              enum OutputFormat format, JSON_Array *array)
+              enum OutputFormat format, G_JSON_Array *array)
 {
     CELL null_cell;
     void **rast, **rastp;
@@ -16,9 +16,9 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
     struct Cell_head window;
     char nbuf[100], ebuf[100];
     RASTER_MAP_TYPE *map_type;
-    JSON_Array *categories;
-    JSON_Object *object, *category;
-    JSON_Value *categories_value, *object_value, *category_value;
+    G_JSON_Array *categories;
+    G_JSON_Object *object, *category;
+    G_JSON_Value *categories_value, *object_value, *category_value;
 
     /* allocate i/o buffers for each raster map */
     rast = (void **)G_calloc(nfiles, sizeof(void *));
@@ -75,10 +75,10 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
 
         for (col = 0; col < ncols; col++) {
             if (format == JSON) {
-                object_value = json_value_init_object();
-                object = json_object(object_value);
-                categories_value = json_value_init_array();
-                categories = json_array(categories_value);
+                object_value = G_json_value_init_object();
+                object = G_json_object(object_value);
+                categories_value = G_json_value_init_array();
+                categories = G_json_array(categories_value);
             }
             if (no_nulls || no_nulls_all) {
                 nulls_found = 0;
@@ -102,13 +102,13 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
             switch (format) {
             case JSON:
                 if (with_coordinates) {
-                    json_object_set_number(
+                    G_json_object_set_number(
                         object, "east", Rast_col_to_easting(col + .5, &window));
-                    json_object_set_number(object, "north", northing);
+                    G_json_object_set_number(object, "north", northing);
                 }
                 if (with_xy) {
-                    json_object_set_number(object, "col", col + 1);
-                    json_object_set_number(object, "row", row + 1);
+                    G_json_object_set_number(object, "col", col + 1);
+                    G_json_object_set_number(object, "row", row + 1);
                 }
                 break;
             case CSV:
@@ -126,16 +126,16 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
 
             for (i = 0; i < nfiles; i++) {
                 if (format == JSON) {
-                    category_value = json_value_init_object();
-                    category = json_object(category_value);
+                    category_value = G_json_value_init_object();
+                    category = G_json_object(category_value);
                 }
 
                 if (Rast_is_null_value(rastp[i], map_type[i])) {
                     switch (format) {
                     case JSON:
-                        json_object_set_null(category, "category");
+                        G_json_object_set_null(category, "category");
                         if (with_labels)
-                            json_object_set_string(
+                            G_json_object_set_string(
                                 category, "label",
                                 Rast_get_c_cat(&null_cell, &labels[i]));
                         break;
@@ -151,10 +151,10 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
                 else if (map_type[i] == CELL_TYPE) {
                     switch (format) {
                     case JSON:
-                        json_object_set_number(category, "category",
-                                               (long)*((CELL *)rastp[i]));
+                        G_json_object_set_number(category, "category",
+                                                 (long)*((CELL *)rastp[i]));
                         if (with_labels && !is_fp[i]) {
-                            json_object_set_string(
+                            G_json_object_set_string(
                                 category, "label",
                                 Rast_get_c_cat((CELL *)rastp[i], &labels[i]));
                         }
@@ -181,10 +181,10 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
                 else if (map_type[i] == FCELL_TYPE) {
                     switch (format) {
                     case JSON:
-                        json_object_set_number(category, "category",
-                                               *((FCELL *)rastp[i]));
+                        G_json_object_set_number(category, "category",
+                                                 *((FCELL *)rastp[i]));
                         if (with_labels)
-                            json_object_set_string(
+                            G_json_object_set_string(
                                 category, "label",
                                 Rast_get_f_cat((FCELL *)rastp[i], &labels[i]));
                         break;
@@ -205,10 +205,10 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
                 else if (map_type[i] == DCELL_TYPE) {
                     switch (format) {
                     case JSON:
-                        json_object_set_number(category, "category",
-                                               *((DCELL *)rastp[i]));
+                        G_json_object_set_number(category, "category",
+                                                 *((DCELL *)rastp[i]));
                         if (with_labels)
-                            json_object_set_string(
+                            G_json_object_set_string(
                                 category, "label",
                                 Rast_get_d_cat((DCELL *)rastp[i], &labels[i]));
                         break;
@@ -230,7 +230,7 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
                     G_fatal_error(_("Invalid map type"));
 
                 if (format == JSON) {
-                    json_array_append_value(categories, category_value);
+                    G_json_array_append_value(categories, category_value);
                 }
 
                 rastp[i] =
@@ -239,8 +239,8 @@ int raw_stats(int fd[], int with_coordinates, int with_xy, int with_labels,
 
             switch (format) {
             case JSON:
-                json_object_set_value(object, "categories", categories_value);
-                json_array_append_value(array, object_value);
+                G_json_object_set_value(object, "categories", categories_value);
+                G_json_array_append_value(array, object_value);
                 break;
             case CSV:
             case PLAIN:

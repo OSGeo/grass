@@ -38,8 +38,8 @@ int main(int argc, char **argv)
     dbTable *table;
     dbString table_name;
     int col, ncols;
-    JSON_Value *root_value = NULL;
-    JSON_Array *root_array = NULL;
+    G_JSON_Value *root_value = NULL;
+    G_JSON_Array *root_array = NULL;
 
     parse_command_line(argc, argv);
 

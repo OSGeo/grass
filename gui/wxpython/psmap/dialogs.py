@@ -644,7 +644,7 @@ class PageSetupDialog(PsmapDialog):
             _("Top"),
             _("Bottom"),
         ]
-        self.catsLabels = dict(zip(self.cat, labels))
+        self.catsLabels = dict(zip(self.cat, labels, strict=True))
         paperString = RunCommand("ps.map", flags="p", read=True, quiet=True)
         self.paperTable = self._toList(paperString)
         self.unitsList = self.unitConv.getPageUnitsNames()
@@ -820,7 +820,7 @@ class PageSetupDialog(PsmapDialog):
     def _toList(self, paperStr):
         sizeList = []
         for line in paperStr.strip().split("\n"):
-            d = dict(zip([self.cat[1]] + self.cat[3:], line.split()))
+            d = dict(zip([self.cat[1]] + self.cat[3:], line.split(), strict=False))
             sizeList.append(d)
         d = {}.fromkeys([self.cat[1]] + self.cat[3:], 100)
         d.update(Format=_("custom"))
@@ -4334,7 +4334,7 @@ class LegendDialog(PsmapDialog):
                     vList[i][3] = self.vectorListCtrl.GetItemData(item)
                     vList[i][4] = self.vectorListCtrl.GetItem(item, 1).GetText()
                 vmaps = self.instruction.FindInstructionByType("vProperties", list=True)
-                for vmap, vector in zip(vmaps, vList):
+                for vmap, vector in zip(vmaps, vList, strict=False):
                     self.instruction[vmap.id]["lpos"] = vector[3]
                     self.instruction[vmap.id]["label"] = vector[4]
                 # units
@@ -4971,7 +4971,7 @@ class ScalebarDialog(PsmapDialog):
             os.path.join(globalvar.IMGDIR, "scalebar-fancy.png"),
             os.path.join(globalvar.IMGDIR, "scalebar-simple.png"),
         )
-        for item, path in zip(["fancy", "simple"], imagePath):
+        for item, path in zip(["fancy", "simple"], imagePath, strict=True):
             bitmap = EmptyBitmap(0, 0) if not os.path.exists(path) else wx.Bitmap(path)
             self.sbCombo.Append(item="", bitmap=bitmap, clientData=item[0])
         # self.sbCombo.Append(

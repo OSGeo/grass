@@ -124,9 +124,9 @@ int main(int argc, char *argv[])
     stat_func *statsvalue = NULL;
     double result;
     enum OutputFormat format;
-    JSON_Value *root_value = NULL, *stat_value = NULL;
-    JSON_Array *root_array = NULL;
-    JSON_Object *stat_object = NULL;
+    G_JSON_Value *root_value = NULL, *stat_value = NULL;
+    G_JSON_Array *root_array = NULL;
+    G_JSON_Object *stat_object = NULL;
 
     column = NULL;
 

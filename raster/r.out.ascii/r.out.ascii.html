@@ -24,6 +24,24 @@ r.out.ascii -s input=inname output=outname.grd [dp=value]
 NULL data are coded to "1.70141e+038" for SURFER ASCII GRID files (ignoring
 the <em>null=</em> parameter).
 
+<p>To write a LISFLOOD .dem ASCII GRID file (with different header) use the
+<em>-l</em> flag:
+
+<div class="code"><pre>
+r.out.ascii -l input=inname output=outname.dem
+</pre></div>
+
+NULL data output are set by the user at "-9999" in this case, see below:
+
+<div class="code"><pre>
+ncols		1514
+nrows		2747
+xllcorner	212236
+yllcorner	2910116
+cellsize	120
+NODATA_value	-9999
+</pre></div>
+
 <h2>NOTES</h2>
 
 The output from <em>r.out.ascii</em> may be placed into a file by using the

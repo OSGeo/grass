@@ -720,7 +720,8 @@ int gvl_isosurf_calc(geovol *gvol)
         }
     }
 
-    /* TODO: G_free() dbuff and need_update ??? */
+    G_free(dbuff);
+    G_free(need_update);
 
     return (1);
 }
@@ -775,19 +776,22 @@ unsigned char gvl_read_char(int pos, const unsigned char *data)
  */
 void gvl_align_data(int pos, unsigned char **data)
 {
-    unsigned char *p = *data;
-
+    if (pos <= 0) {
+        if (*data) {
+            G_free(*data);
+            *data = NULL;
+        }
+        return;
+    }
     /* realloc memory to fit in data length */
-    p = (unsigned char *)G_realloc(p, sizeof(unsigned char) *
-                                          pos); /* G_fatal_error */
+    unsigned char *p;
+    p = (unsigned char *)G_realloc(*data, sizeof(unsigned char) *
+                                              pos); /* G_fatal_error */
     if (!p) {
         return;
     }
 
     G_debug(3, "gvl_align_data(): reallocate memory finally to : %d B", pos);
-
-    if (pos == 0)
-        p = NULL;
 
     *data = p;
 
