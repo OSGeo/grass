@@ -118,7 +118,11 @@ int open_file(char *name)
     work_file_name = G_tempfile();
 
     /* create the file and then open it for read and write */
-    close(creat(work_file_name, 0666));
+    int tmpfd = creat(work_file_name, 0666);
+    if (tmpfd < 0) {
+        G_fatal_error(_("Unable to create temporary file <%s>"), work_file_name);
+    }
+    close(tmpfd);
     if ((work_file = open(work_file_name, 2)) < 0) {
         unlink(work_file_name);
         G_fatal_error(_("Unable to create temporary file <%s> -- errno = %d"),
