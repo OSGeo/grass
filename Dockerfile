@@ -7,7 +7,6 @@ ARG GUI=without
 FROM ubuntu:24.04@sha256:66460d557b25769b102175144d538d88219c077c678a49af4afca6fbfc1b5252 AS common_start
 
 ARG BASE_NAME="ubuntu:24.04"
-# ARG DIGEST="sha256:728785b59223d755e3e5c5af178fab1be7031f3522c5ccd7a0b32b80d8248123"
 ARG PYTHON_VERSION=3.12
 # renovate: datasource=github-tags depName=libgeos/geos
 ARG GEOS_VERSION=3.14.0
@@ -427,7 +426,6 @@ LABEL org.opencontainers.image.authors="$AUTHORS" \
       org.opencontainers.image.title="$TITLE" \
       org.opencontainers.image.description="$DESCRIPTION" \
       org.opencontainers.image.base.name="$BASE_NAME" \
-      org.opencontainers.image.base.digest="$DIGEST" \
       org.opencontainers.image.ref.name="$REF_NAME" \
       org.opencontainers.image.documentation="$DOCUMENTATION" \
       maintainers="$MAINTAINERS"
