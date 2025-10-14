@@ -128,9 +128,9 @@ def test_selection_and_expression(session):
         "number_of_maps": "4",
     }
     for k, v in expected_info.items():
-        assert (
-            strds_info[k] == v
-        ), f"Expected value for key '{k}' is {v}. Got: {strds_info[k]}"
+        assert strds_info[k] == v, (
+            f"Expected value for key '{k}' is {v}. Got: {strds_info[k]}"
+        )
 
 
 def test_inconsistent_selection_and_expression(session):
@@ -163,9 +163,9 @@ def test_inconsistent_selection_and_expression(session):
         "number_of_maps": "4",
     }
     for k, v in expected_info.items():
-        assert (
-            strds_info[k] == v
-        ), f"Expected value for key '{k}' is {v}. Got: {strds_info[k]}"
+        assert strds_info[k] == v, (
+            f"Expected value for key '{k}' is {v}. Got: {strds_info[k]}"
+        )
 
 
 def test_selection_and_expression_simple_name(session):
@@ -198,6 +198,6 @@ def test_selection_and_expression_simple_name(session):
         "number_of_maps": "4",
     }
     for k, v in expected_info.items():
-        assert (
-            strds_info[k] == v
-        ), f"Expected value for key '{k}' is {v}. Got: {strds_info[k]}"
+        assert strds_info[k] == v, (
+            f"Expected value for key '{k}' is {v}. Got: {strds_info[k]}"
+        )
