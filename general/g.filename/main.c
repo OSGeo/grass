@@ -63,6 +63,9 @@ int main(int argc, char *argv[])
     opt2->description = _("Name of a mapset (default: current)");
 
     flag_create = G_define_flag();
+    if (!flag_create) {
+        G_fatal_error(_("Unable to define flag for element creation"));
+    }
     flag_create->key = 'c';
     flag_create->label = _("Create element directory in the current mapset");
     flag_create->description =
