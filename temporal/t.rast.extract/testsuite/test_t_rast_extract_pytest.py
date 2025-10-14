@@ -56,7 +56,7 @@ def session(tmp_path_factory):
         register_strings = []
         for i in range(1, 4):
             for label in ["A", "B"]:
-                mapname = f"prec_{label}_{i}"
+                mapname = f"perc_{label}_{i}"
                 semantic_label = f"S2{label}_{i}"
                 tools.r_mapcalc(expression=f"{mapname} = {i}00", overwrite=True)
                 tools.r_semantic_label(
@@ -69,7 +69,7 @@ def session(tmp_path_factory):
         tools.t_create(
             type="strds",
             temporaltype="absolute",
-            output="prec",
+            output="perc",
             title="A test",
             description="A test",
             overwrite=True,
@@ -78,7 +78,7 @@ def session(tmp_path_factory):
         Path(tmp_file).write_text("".join(register_strings), encoding="UTF8")
         tools.t_register(
             type="raster",
-            input="prec",
+            input="perc",
             file=tmp_file,
             overwrite=True,
         )
@@ -90,8 +90,8 @@ def test_selection(session):
     tools = Tools(session=session)
     gisenv = gs.gisenv(env=session.env)
     tools.t_rast_extract(
-        input="prec",
-        output="prec_1",
+        input="perc",
+        output="perc_1",
         where="start_time > '2025-08-01'",
         verbose=True,
         overwrite=True,
@@ -100,32 +100,32 @@ def test_selection(session):
 
 def test_selection_and_expression(session):
     """Perform a selection and a r.mapcalc expression with full name."""
-    result = "prec_2"
+    result = "perc_2"
     tools = Tools(session=session)
     gisenv = gs.gisenv(env=session.env)
     tools.t_rast_extract(
-        input="prec",
+        input="perc",
         output=result,
         where="start_time > '2025-08-01'",
-        expression=" if(prec@perc>=200,prec@perc,null())",
-        basename="prec_2",
+        expression=" if(perc@perc>=200,perc@perc,null())",
+        basename=result,
         nprocs=2,
         verbose=True,
         overwrite=True,
     )
-    strds_info = gs.parse_key_val(tools.t_info(input=result, flags="g").text)
+    strds_info = tools.t_info(input=result, flags="g").keyval
     expected_info = {
         "start_time": "'2025-08-02 00:00:00'",
         "end_time": "'2025-08-03 00:00:00'",
         "name": result,
-        "min_min": "200.0",
-        "min_max": "300.0",
-        "max_min": "200.0",
-        "max_max": "300.0",
+        "min_min": 200.0,
+        "min_max": 300.0,
+        "max_min": 200.0,
+        "max_max": 300.0,
         "aggregation_type": "None",
-        "number_of_semantic_labels": "4",
+        "number_of_semantic_labels": 4,
         "semantic_labels": "S2A_2,S2A_3,S2B_2,S2B_3",
-        "number_of_maps": "4",
+        "number_of_maps": 4,
     }
     for k, v in expected_info.items():
         assert strds_info[k] == v, (
@@ -135,32 +135,32 @@ def test_selection_and_expression(session):
 
 def test_inconsistent_selection_and_expression(session):
     """Perform a selection and a r.mapcalc expression with simple and full name."""
-    result = "prec_2"
+    result = "perc_3"
     tools = Tools(session=session)
     gisenv = gs.gisenv(env=session.env)
     tools.t_rast_extract(
-        input="prec",
+        input="perc",
         output=result,
         where="start_time > '2025-08-01'",
-        expression=" if(prec>=200,prec@perc,null())",
-        basename="prec_2",
+        expression=" if(perc>=200,perc@perc,null())",
+        basename=result,
         nprocs=2,
         verbose=True,
         overwrite=True,
     )
-    strds_info = gs.parse_key_val(tools.t_info(input=result, flags="g").text)
+    strds_info = tools.t_info(input=result, flags="g").keyval
     expected_info = {
         "start_time": "'2025-08-02 00:00:00'",
         "end_time": "'2025-08-03 00:00:00'",
         "name": result,
-        "min_min": "200.0",
-        "min_max": "300.0",
-        "max_min": "200.0",
-        "max_max": "300.0",
+        "min_min": 200.0,
+        "min_max": 300.0,
+        "max_min": 200.0,
+        "max_max": 300.0,
         "aggregation_type": "None",
-        "number_of_semantic_labels": "4",
+        "number_of_semantic_labels": 4,
         "semantic_labels": "S2A_2,S2A_3,S2B_2,S2B_3",
-        "number_of_maps": "4",
+        "number_of_maps": 4,
     }
     for k, v in expected_info.items():
         assert strds_info[k] == v, (
@@ -170,32 +170,67 @@ def test_inconsistent_selection_and_expression(session):
 
 def test_selection_and_expression_simple_name(session):
     """Perform a selection and a r.mapcalc expression with simple name."""
-    result = "prec_3"
+    result = "perc_4"
     tools = Tools(session=session)
     gisenv = gs.gisenv(env=session.env)
     tools.t_rast_extract(
-        input="prec",
+        input="perc",
         output=result,
         where="start_time > '2025-08-01'",
-        expression=" if(prec>= 200, prec, null())",
-        basename="prec_3",
+        expression=" if(perc>=200,perc@perc,null())",
+        basename=result,
         nprocs=2,
         verbose=True,
         overwrite=True,
     )
-    strds_info = gs.parse_key_val(tools.t_info(input=result, flags="g").text)
+    strds_info = tools.t_info(input=result, flags="g").keyval
     expected_info = {
         "start_time": "'2025-08-02 00:00:00'",
         "end_time": "'2025-08-03 00:00:00'",
         "name": result,
-        "min_min": "200.0",
-        "min_max": "300.0",
-        "max_min": "200.0",
-        "max_max": "300.0",
+        "min_min": 200.0,
+        "min_max": 300.0,
+        "max_min": 200.0,
+        "max_max": 300.0,
         "aggregation_type": "None",
-        "number_of_semantic_labels": "4",
+        "number_of_semantic_labels": 4,
         "semantic_labels": "S2A_2,S2A_3,S2B_2,S2B_3",
-        "number_of_maps": "4",
+        "number_of_maps": 4,
+    }
+    for k, v in expected_info.items():
+        assert strds_info[k] == v, (
+            f"Expected value for key '{k}' is {v}. Got: {strds_info[k]}"
+        )
+
+
+def test_selection_and_expression_simple_name(session):
+    """Perform a selection and a r.mapcalc expression with simple name."""
+    result = "perc_5"
+    tools = Tools(session=session)
+    gisenv = gs.gisenv(env=session.env)
+    tools.t_rast_extract(
+        input="perc",
+        output=result,
+        where="start_time > '2025-08-01'",
+        expression=" if(perc>= 200, perc, null())",
+        basename=result,
+        nprocs=2,
+        verbose=True,
+        overwrite=True,
+    )
+    strds_info = tools.t_info(input=result, flags="g").keyval
+    expected_info = {
+        "start_time": "'2025-08-02 00:00:00'",
+        "end_time": "'2025-08-03 00:00:00'",
+        "name": result,
+        "min_min": 200.0,
+        "min_max": 300.0,
+        "max_min": 200.0,
+        "max_max": 300.0,
+        "aggregation_type": "None",
+        "number_of_semantic_labels": 4,
+        "semantic_labels": "S2A_2,S2A_3,S2B_2,S2B_3",
+        "number_of_maps": 4,
     }
     for k, v in expected_info.items():
         assert strds_info[k] == v, (
