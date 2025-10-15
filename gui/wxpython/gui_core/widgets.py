@@ -17,6 +17,7 @@ Classes:
  - widgets::EmailValidator
  - widgets::TimeISOValidator
  - widgets::MapValidator
+ - widgets::MapNameValidator
  - widgets::NTCValidator
  - widgets::SimpleValidator
  - widgets::GenericValidator
@@ -890,6 +891,30 @@ class MapValidator(GenericValidator):
 
         GenericValidator.__init__(self, grass.legal_name, _mapNameValidationFailed)
 
+
+class MapNameValidator(BaseValidator):
+    """Validator for map name input
+
+    See G_legal_filename()
+    """
+
+    def __init__(self):
+        BaseValidator.__init__(self)
+
+    def _validate(self, win):
+        """Validate input"""
+        text = win.GetValue()
+        if text:
+            if not grass.legal_name(text):
+                self._notvalid()
+                return False
+
+        self._valid()
+        return True
+
+    def Clone(self):
+        """Clone validator"""
+        return MapNameValidator()
 
 class GenericMultiValidator(Validator):
     """This validator checks conditions and calls callbacks
