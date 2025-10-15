@@ -643,6 +643,7 @@ LIBOBJS
 GRASS_HOME
 STRIPFLAG
 USE_TERMIO
+LFS_CFLAGS
 USE_OPENCL
 OCLLIB
 OCLLIBPATH
@@ -16226,6 +16227,7 @@ printf "%s\n" "#define _LARGEFILE_SOURCE $ac_cv_sys_largefile_source" >>confdefs
 
      CFLAGS=$ac_save_cflags
    fi
+
 
 
 USE_TERMIO=

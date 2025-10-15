@@ -2003,6 +2003,7 @@ AC_SUBST(USE_OPENCL)
 # way to handle this. It sets the appropriate CFLAGS and defines necessary
 # preprocessor macros (e.g., _FILE_OFFSET_BITS=64) for the compiler.
 AC_SYS_LARGEFILE
+AC_SUBST(LFS_CFLAGS)
 
 USE_TERMIO=
 AC_SUBST(USE_TERMIO)
