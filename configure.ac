@@ -36,6 +36,10 @@ AC_CONFIG_HEADERS([include/grass/config.h])
 AC_CANONICAL_HOST
 AC_PROG_CC
 
+AH_TOP([#ifndef _config_h
+#define _config_h])
+AH_BOTTOM([#endif /* _config_h */])
+
 # Enable C++ option
 
 LOC_ARG_WITH(cxx, C++)

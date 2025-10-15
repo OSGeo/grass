@@ -1,5 +1,8 @@
 /* include/grass/config.h.in.  Generated from configure.ac by autoheader.  */
 
+#ifndef _config_h
+#define _config_h
+
 /* Define GDEBUG to 1 for historic reasons */
 #undef GDEBUG
 
@@ -367,3 +370,5 @@
 
 /* Define as 'int' if <sys/types.h> doesn't define. */
 #undef uid_t
+
+#endif /* _config_h */
