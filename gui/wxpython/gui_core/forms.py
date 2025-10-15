@@ -840,7 +840,7 @@ class TaskFrame(wx.Frame):
         for p in self.task.params:
             if p.get("age", "") == "new" and p.get("prompt", "") in (
                 "raster",
-                "raster_3d"
+                "raster_3d",
             ):
                 wxIds = p.get("wxId", [])
                 if not wxIds:
@@ -862,9 +862,8 @@ class TaskFrame(wx.Frame):
                         valid = validator.Validate(textWin)
                     except Exception:
                         valid = True
-                    
                     # Return to first notebook page so user can fix output map name
-                    self.notebookpanel.notebook.SetSelection(0) 
+                    self.notebookpanel.notebook.SetSelection(0)
                     return
         ret = 0
         if self.standalone or cmd[0][0:2] != "d.":
@@ -1556,8 +1555,8 @@ class CmdPanel(wx.Panel):
                         # A gselect.Select is a combobox with two children: a textctl
                         # and a popupwindow; we target the textctl here
                         textWin = selection.GetTextCtrl()
-                        #Attach MapValidator to gselect.Select
-                        if p.get("age","") == "new":
+                        # Attach MapValidator to gselect.Select
+                        if p.get("age", "") == "new":
                             validator = MapValidator()
                             textWin.SetValidator(validator)
                         if globalvar.CheckWxVersion([3]):
@@ -3385,7 +3384,8 @@ if __name__ == "__main__":
                 "gisprompt": False,
                 "multiple": "yes",
                 # values must be an array of strings
-                "values": list(utils.str2rgb.keys()) + list(map(str, utils.str2rgb.values())),
+                "values": list(utils.str2rgb.keys())
+                + list(map(str, utils.str2rgb.values())),
                 "key_desc": ["value"],
                 "values_desc": [],
             },
