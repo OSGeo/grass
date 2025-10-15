@@ -20,7 +20,7 @@ permissions: {}
 jobs:
   macos_build:
     name: macOS build
-    runs-on: macos-14
+    runs-on: macos-15
     env:
       PYTHONWARNINGS: always
     steps:
@@ -67,7 +67,7 @@ jobs:
           cp ./macos/files/conda-requirements-dev-arm64.txt "${RUNNER_TEMP}/macos_dependencies.txt"
           echo "${test_dependencies// /\n}" >> "${RUNNER_TEMP}/macos_dependencies.txt"
       - name: Setup Mamba
-        uses: mamba-org/setup-micromamba@7f29b8b80078b1b601dfa018b0f7425c587c63bb # v2.0.6
+        uses: mamba-org/setup-micromamba@add3a49764cedee8ee24e82dfde87f5bc2914462 # v2.0.7
         with:
           init-shell: bash
           environment-file: ${{ runner.temp }}/macos_dependencies.txt
@@ -137,7 +137,7 @@ jobs:
 
       - name: Cache GRASS Sample Dataset
         id: cached-data
-        uses: actions/cache/restore@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: sample-data/nc_spm_full_v2alpha2.tar.gz
           key: nc_spm_full_v2alpha2.tar.gz
@@ -153,7 +153,7 @@ jobs:
             nc_spm_full_v2alpha2.tar.gz"
 
       - name: Save GRASS Sample Dataset to cache
-        uses: actions/cache/save@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         if: steps.cached-data.outputs.cache-hit != 'true'
         with:
           path: sample-data/nc_spm_full_v2alpha2.tar.gz

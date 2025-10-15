@@ -43,11 +43,11 @@ int main(int argc, char *argv[])
     struct GASTATS stats;
     char *desc, *fs;
     enum OutputFormat format;
-    JSON_Value *root_value = NULL, *intervals_value = NULL,
-               *interval_value = NULL, *breaks_value = NULL;
-    JSON_Array *root_array = NULL, *intervals_array = NULL,
-               *breaks_array = NULL;
-    JSON_Object *root_object = NULL, *interval_object = NULL;
+    G_JSON_Value *root_value = NULL, *intervals_value = NULL,
+                 *interval_value = NULL, *breaks_value = NULL;
+    G_JSON_Array *root_array = NULL, *intervals_array = NULL,
+                 *breaks_array = NULL;
+    G_JSON_Object *root_object = NULL, *interval_object = NULL;
 
     module = G_define_module();
     G_add_keyword(_("vector"));

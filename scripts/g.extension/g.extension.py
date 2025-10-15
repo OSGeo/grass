@@ -154,14 +154,7 @@ import zipfile
 import tempfile
 import json
 import xml.etree.ElementTree as ET
-
-if sys.version_info < (3, 8):
-    from distutils.dir_util import copy_tree
-else:
-    from functools import partial
-
-    copy_tree = partial(shutil.copytree, dirs_exist_ok=True)
-
+from functools import partial
 from pathlib import Path
 from subprocess import PIPE
 from urllib import request as urlrequest
@@ -197,6 +190,8 @@ if sys.platform.startswith("freebsd"):
     MAKE = "gmake"
 else:
     MAKE = "make"
+
+copy_tree = partial(shutil.copytree, dirs_exist_ok=True)
 
 
 class GitAdapter:
@@ -2475,10 +2470,13 @@ def resolve_install_prefix(path, to_system):
         path = os.environ["GISBASE"]
     if path == "$GRASS_ADDON_BASE":
         if not os.getenv("GRASS_ADDON_BASE"):
-            from grass.app.runtime import get_grass_config_dir
+            from grass.app.runtime import get_grass_config_dir_for_version
 
             path = os.path.join(
-                get_grass_config_dir(VERSION[0], VERSION[1], os.environ), "addons"
+                get_grass_config_dir_for_version(
+                    VERSION[0], VERSION[1], env=os.environ
+                ),
+                "addons",
             )
             gs.warning(
                 _("GRASS_ADDON_BASE is not defined, installing to {}").format(path)

@@ -92,19 +92,6 @@ def get_executable_name():
     return f"{executable} -m grass.benchmark"
 
 
-class ExtendAction(argparse.Action):
-    """Support for agrparse action="extend" before Python 3.8
-
-    Each parser instance needs the action to be registered.
-    """
-
-    # pylint: disable=too-few-public-methods
-    def __call__(self, parser, namespace, values, option_string=None):
-        items = getattr(namespace, self.dest) or []
-        items.extend(values)
-        setattr(namespace, self.dest, items)
-
-
 def add_subcommand_parser(subparsers, name, description):
     """Add parser for a subcommand into subparsers."""
     # help is in parent's help, description in subcommand's help.
@@ -119,9 +106,6 @@ def add_subparsers(parser, dest):
 
     The *dest* should be 'command', 'subcommand', etc. with appropriate nesting.
     """
-    if sys.version_info < (3, 7):
-        # required as parameter is only in >=3.7.
-        return parser.add_subparsers(title="subcommands", dest=dest)
     return parser.add_subparsers(title="subcommands", required=True, dest=dest)
 
 
@@ -135,8 +119,6 @@ def add_results_subcommand(parent_subparsers):
     join = main_subparsers.add_parser("join", help="Join results")
     join.add_argument("results", help="Files with results", nargs="*", metavar="file")
     join.add_argument("output", help="Output file", metavar="output_file")
-    if sys.version_info < (3, 8):
-        join.register("action", "extend", ExtendAction)
     join.add_argument(
         "--prefixes",
         help="Add prefixes to result labels per file",
