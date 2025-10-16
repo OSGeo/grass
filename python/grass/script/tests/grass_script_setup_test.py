@@ -1,9 +1,10 @@
 """Test functions in grass.script.setup"""
 
-import multiprocessing
 import os
 import sys
-from functools import partial
+import subprocess
+import json
+from textwrap import dedent
 
 import pytest
 
@@ -13,28 +14,35 @@ from grass.app.data import MapsetLockingException
 RUNTIME_GISBASE_SHOULD_BE_PRESENT = "Runtime (GISBASE) should be present"
 SESSION_FILE_NOT_DELETED = "Session file not deleted"
 
-xfail_mp_spawn = pytest.mark.xfail(
-    multiprocessing.get_start_method() == "spawn",
-    reason="Multiprocessing using 'spawn' start method requires pickable functions",
-    raises=AttributeError,
-    strict=True,
-)
 
+def run_in_subprocess(code, tmp_path):
+    """Code as a script in a separate process and return parsed JSON result
 
-# This is useful when we want to ensure that function like init does
-# not change the global environment.
-def run_in_subprocess(function):
-    """Run function in a separate process
-
-    The function must take a Queue and put its result there.
-    The result is then returned from this function.
+    This is useful when we want to ensure that function like init does
+    not change the global environment for other tests.
+    Some effort is made to remove a current if any.
     """
-    queue = multiprocessing.Queue()
-    process = multiprocessing.Process(target=function, args=(queue,))
-    process.start()
-    result = queue.get()
-    process.join()
-    return result
+    source_file = tmp_path / "test.py"
+    source_file.write_text(dedent(code))
+    env = os.environ.copy()
+    for variable in ("GISRC", "GISBASE", "GRASS_PREFIX"):
+        if variable in env:
+            del env[variable]
+    result = subprocess.run(
+        [sys.executable, os.fspath(source_file)],
+        stdout=subprocess.PIPE,
+        text=True,
+        check=True,
+        env=env,
+    )
+    if not result.stdout:
+        msg = "Empty result from subprocess running code"
+        raise ValueError(msg)
+    try:
+        return json.loads(result.stdout)
+    except json.JSONDecodeError as error:
+        msg = f"Invalid JSON: {result.stdout}"
+        raise ValueError(msg) from error
 
 
 def test_init_as_context_manager(tmp_path):
@@ -75,88 +83,84 @@ def test_init_finish_global_functions_with_env(tmp_path):
     assert not os.path.exists(session_file)
 
 
-def init_finish_global_functions_capture_strerr0_partial(tmp_path, queue):
-    gs.set_capture_stderr(True)
+def test_init_finish_global_functions_capture_strerr_enabled(tmp_path):
+    """Check that init and finish with global env with set_capture_stderr enabled"""
     project = tmp_path / "test"
-    gs.create_project(project)
-    gs.setup.init(project)
-    gs.run_command("g.region", flags="p")
-    runtime_present = bool(os.environ.get("GISBASE"))
-    queue.put((os.environ["GISRC"], runtime_present))
-    gs.setup.finish()
+    code = f"""
+        import json
+        import os
+        import grass.script as gs
 
-
-def test_init_finish_global_functions_capture_strerr0_partial(tmp_path):
-    """Check that init and finish global functions work with global env using a partial
-    function
-    """
-
-    init_finish = partial(
-        init_finish_global_functions_capture_strerr0_partial, tmp_path
-    )
-    session_file, runtime_present = run_in_subprocess(init_finish)
-    assert session_file, "Expected file name from the subprocess"
-    assert runtime_present, RUNTIME_GISBASE_SHOULD_BE_PRESENT
-    assert not os.path.exists(session_file), SESSION_FILE_NOT_DELETED
-
-
-@xfail_mp_spawn
-def test_init_finish_global_functions_capture_strerr0(tmp_path):
-    """Check that init and finish global functions work with global env"""
-
-    def init_finish(queue):
         gs.set_capture_stderr(True)
-        project = tmp_path / "test"
-        gs.create_project(project)
-        gs.setup.init(project)
-        gs.run_command("g.region", flags="p")
+        gs.create_project("{project}")
+        gs.setup.init("{project}")
+        crs_type = gs.parse_command("g.region", flags="p", format="json")["crs"]["type"]
         runtime_present = bool(os.environ.get("GISBASE"))
-        queue.put((os.environ["GISRC"], runtime_present))
+        result = {{
+            "session_file": os.environ["GISRC"],
+            "runtime_present": runtime_present,
+            "crs_type": crs_type
+        }}
         gs.setup.finish()
+        print(json.dumps(result))
+    """
+    result = run_in_subprocess(code, tmp_path=tmp_path)
+    assert result["session_file"], "Expected file name from the subprocess"
+    assert result["runtime_present"], RUNTIME_GISBASE_SHOULD_BE_PRESENT
+    assert not os.path.exists(result["session_file"]), SESSION_FILE_NOT_DELETED
+    assert result["crs_type"] == "xy"
 
-    session_file, runtime_present = run_in_subprocess(init_finish)
-    assert session_file, "Expected file name from the subprocess"
-    assert runtime_present, RUNTIME_GISBASE_SHOULD_BE_PRESENT
-    assert not os.path.exists(session_file), SESSION_FILE_NOT_DELETED
 
+def test_init_finish_global_functions_runtime_persists(tmp_path):
+    """Check that init and finish leave runtime behind
 
-@xfail_mp_spawn
-def test_init_finish_global_functions_capture_strerrX(tmp_path):
-    """Check that init and finish global functions work with global env"""
+    This is not necessarily desired behavior and it is not documented that way,
+    but it is the current implementation.
+    """
+    project = tmp_path / "test"
+    code = f"""
+        import json
+        import os
+        import grass.script as gs
 
-    def init_finish(queue):
         gs.set_capture_stderr(True)
-        project = tmp_path / "test"
-        gs.create_project(project)
-        gs.setup.init(project)
-        gs.run_command("g.region", flags="p")
+        gs.create_project("{project}")
+        gs.setup.init("{project}")
+        region_data = gs.read_command("g.region", flags="p")
         runtime_present = bool(os.environ.get("GISBASE"))
         session_file = os.environ["GISRC"]
         gs.setup.finish()
         runtime_present_after = bool(os.environ.get("GISBASE"))
-        queue.put((session_file, runtime_present, runtime_present_after))
+        print(json.dumps({{
+            "session_file": session_file,
+            "runtime_present": runtime_present,
+            "runtime_present_after": runtime_present_after,
+            "region_data": region_data
+        }}))
+    """
 
-    session_file, runtime_present, runtime_present_after = run_in_subprocess(
-        init_finish
-    )
-    assert session_file, "Expected file name from the subprocess"
-    assert runtime_present, RUNTIME_GISBASE_SHOULD_BE_PRESENT
-    assert not os.path.exists(session_file), SESSION_FILE_NOT_DELETED
+    result = run_in_subprocess(code, tmp_path=tmp_path)
+    assert result["session_file"], "Expected file name from the subprocess"
+    assert result["runtime_present"], RUNTIME_GISBASE_SHOULD_BE_PRESENT
+    assert not os.path.exists(result["session_file"]), SESSION_FILE_NOT_DELETED
     # This is testing the current implementation behavior, but it is not required
     # to be this way in terms of design.
-    assert runtime_present_after, "Runtime should continue to be present"
+    assert result["runtime_present_after"], "Runtime should continue to be present"
 
 
-@xfail_mp_spawn
 def test_init_finish_global_functions_isolated(tmp_path):
     """Check that init and finish global functions work with global env"""
+    project = tmp_path / "test"
 
-    def init_finish(queue):
+    code = f"""
+        import json
+        import os
+        import grass.script as gs
+
         gs.set_capture_stderr(True)
-        project = tmp_path / "test"
-        gs.create_project(project)
-        gs.setup.init(project)
-        gs.run_command("g.region", flags="p")
+        gs.create_project("{project}")
+        gs.setup.init("{project}")
+        region_data = gs.parse_command("g.region", flags="p", format="json")
         runtime_present_during = bool(os.environ.get("GISBASE"))
         session_file_variable_present_during = bool(os.environ.get("GISRC"))
         session_file = os.environ.get("GISRC")
@@ -167,60 +171,75 @@ def test_init_finish_global_functions_isolated(tmp_path):
         gs.setup.finish()
         session_file_variable_present_after = bool(os.environ.get("GISRC"))
         runtime_present_after = bool(os.environ.get("GISBASE"))
-        queue.put(
-            (
-                session_file,
-                session_file_variable_present_during,
-                session_file_present_during,
-                session_file_variable_present_after,
-                runtime_present_during,
-                runtime_present_after,
+        print(json.dumps({{
+                "session_file": session_file,
+                "session_file_variable_present_during": session_file_variable_present_during,
+                "session_file_present_during": session_file_present_during,
+                "session_file_variable_present_after": session_file_variable_present_after,
+                "runtime_present_during": runtime_present_during,
+                "runtime_present_after": runtime_present_after,
+                "region_data": region_data
+                }}
             )
         )
+        """
 
-    (
-        session_file,
-        session_file_variable_present_during,
-        session_file_present_during,
-        session_file_variable_present_after,
-        runtime_present_during,
-        runtime_present_after,
-    ) = run_in_subprocess(init_finish)
+    result = run_in_subprocess(code, tmp_path=tmp_path)
 
     # Runtime
-    assert runtime_present_during, RUNTIME_GISBASE_SHOULD_BE_PRESENT
+    assert result["runtime_present_during"], RUNTIME_GISBASE_SHOULD_BE_PRESENT
     # This is testing the current implementation behavior, but it is not required
     # to be this way in terms of design.
-    assert runtime_present_after, "Expected GISBASE to be present when finished"
+    assert result["runtime_present_after"], (
+        "Expected GISBASE to be present when finished"
+    )
 
     # Session
-    assert session_file_present_during, "Expected session file to be present"
-    assert session_file_variable_present_during, "Variable GISRC should be present"
-    assert not session_file_variable_present_after, "Not expecting GISRC when finished"
-    assert not os.path.exists(session_file), SESSION_FILE_NOT_DELETED
+    assert result["session_file_present_during"], "Expected session file to be present"
+    assert result["session_file_variable_present_during"], (
+        "Variable GISRC should be present"
+    )
+    assert not result["session_file_variable_present_after"], (
+        "Not expecting GISRC when finished"
+    )
+    assert not os.path.exists(result["session_file"]), SESSION_FILE_NOT_DELETED
+
+    # Region
+    assert result["region_data"]["crs"]["type"] == "xy"
 
 
-@xfail_mp_spawn
 @pytest.mark.usefixtures("mock_no_session")
 def test_init_as_context_manager_env_attribute(tmp_path):
     """Check that session has global environment as attribute"""
+    project = tmp_path / "test"
+    code = f"""
+        import json
+        import os
+        import grass.script as gs
 
-    def workload(queue):
-        project = tmp_path / "test"
-        gs.create_project(project)
-        with gs.setup.init(project) as session:
-            gs.run_command("g.region", flags="p", env=session.env)
+        gs.create_project("{project}")
+        with gs.setup.init("{project}") as session:
+            region_data = gs.parse_command(
+                "g.region", flags="p", format="json", env=session.env
+            )
             session_file = os.environ["GISRC"]
             runtime_present = bool(os.environ.get("GISBASE"))
-            queue.put((session_file, os.path.exists(session_file), runtime_present))
+            print(json.dumps({{
+                "session_file": session_file,
+                "file_existed": os.path.exists(session_file),
+                "runtime_present": runtime_present,
+                "region_data": region_data
+            }}))
+        """
 
-    session_file, file_existed, runtime_present = run_in_subprocess(workload)
-    assert session_file, "Expected file name from the subprocess"
-    assert file_existed, "File should have been present"
-    assert runtime_present, RUNTIME_GISBASE_SHOULD_BE_PRESENT
-    assert not os.path.exists(session_file), SESSION_FILE_NOT_DELETED
+    result = run_in_subprocess(code, tmp_path=tmp_path)
+    assert result["session_file"], "Expected file name from the subprocess"
+    assert result["file_existed"], "File should have been present"
+    assert result["runtime_present"], RUNTIME_GISBASE_SHOULD_BE_PRESENT
+    assert not os.path.exists(result["session_file"]), SESSION_FILE_NOT_DELETED
     assert not os.environ.get("GISRC")
     assert not os.environ.get("GISBASE")
+    assert result["region_data"]["crs"]["type"] == "xy"
 
 
 @pytest.mark.usefixtures("mock_no_session")
