@@ -92,8 +92,8 @@ def test_init_finish_global_functions_capture_strerr_enabled(tmp_path):
         import grass.script as gs
 
         gs.set_capture_stderr(True)
-        gs.create_project("{project}")
-        gs.setup.init("{project}")
+        gs.create_project(r"{project}")
+        gs.setup.init(r"{project}")
         crs_type = gs.parse_command("g.region", flags="p", format="json")["crs"]["type"]
         runtime_present = bool(os.environ.get("GISBASE"))
         result = {{
@@ -124,8 +124,8 @@ def test_init_finish_global_functions_runtime_persists(tmp_path):
         import grass.script as gs
 
         gs.set_capture_stderr(True)
-        gs.create_project("{project}")
-        gs.setup.init("{project}")
+        gs.create_project(r"{project}")
+        gs.setup.init(r"{project}")
         region_data = gs.read_command("g.region", flags="p")
         runtime_present = bool(os.environ.get("GISBASE"))
         session_file = os.environ["GISRC"]
@@ -158,8 +158,8 @@ def test_init_finish_global_functions_isolated(tmp_path):
         import grass.script as gs
 
         gs.set_capture_stderr(True)
-        gs.create_project("{project}")
-        gs.setup.init("{project}")
+        gs.create_project(r"{project}")
+        gs.setup.init(r"{project}")
         region_data = gs.parse_command("g.region", flags="p", format="json")
         runtime_present_during = bool(os.environ.get("GISBASE"))
         session_file_variable_present_during = bool(os.environ.get("GISRC"))
@@ -217,8 +217,8 @@ def test_init_as_context_manager_env_attribute(tmp_path):
         import os
         import grass.script as gs
 
-        gs.create_project("{project}")
-        with gs.setup.init("{project}") as session:
+        gs.create_project(r"{project}")
+        with gs.setup.init(r"{project}") as session:
             region_data = gs.parse_command(
                 "g.region", flags="p", format="json", env=session.env
             )

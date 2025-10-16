@@ -59,8 +59,8 @@ def test_reading_respects_change_of_session(tmp_path):
 
         names = []
         for project_name in ["test1", "test2", "abc"]:
-            gs.create_project(Path("{tmp_path}") / project_name)
-            with gs.setup.init(Path("{tmp_path}") / project_name):
+            gs.create_project(Path(r"{tmp_path}") / project_name)
+            with gs.setup.init(Path(r"{tmp_path}") / project_name):
                 libgis.G__read_gisrc_path()
                 libgis.G__read_gisrc_env()
                 names.append((pygrass_utils.getenv("LOCATION_NAME"), project_name))
