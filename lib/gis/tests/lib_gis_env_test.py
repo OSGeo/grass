@@ -16,21 +16,34 @@ def run_in_subprocess(code, tmp_path, env):
     This is useful when we want to ensure that function like init does
     not change the global environment for other tests.
     Some effort is made to remove a current if any, but it does not touch
-    paths on purpose to enable dynamic library loading based on a variable.
+    runtime variables on purpose to enable dynamic library loading based on
+    a path variable.
     """
     source_file = tmp_path / "test.py"
     source_file.write_text(dedent(code))
     env = env.copy()
-    for variable in ("GISRC", "GISBASE", "GRASS_PREFIX"):
+    for variable in ("GISRC", "GIS_LOCK"):
         if variable in env:
             del env[variable]
     result = subprocess.run(
         [sys.executable, os.fspath(source_file)],
-        stdout=subprocess.PIPE,
+        capture_output=True,
         text=True,
-        check=True,
+        check=False,
         env=env,
     )
+    if result.returncode != 0:
+        if result.stderr:
+            msg = (
+                "Execution of code in subprocess failed, "
+                f"captured stderr from subprocess:\n{result.stderr}\n"
+            )
+        else:
+            msg = (
+                f"Execution of code in subprocess gave return code {result.returncode}"
+                "but there was no stderr"
+            )
+        raise RuntimeError(msg)
     if not result.stdout:
         msg = "Empty result from subprocess running code"
         raise ValueError(msg)
