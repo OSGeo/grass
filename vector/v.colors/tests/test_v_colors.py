@@ -1,6 +1,8 @@
+import os
 import re
-import pytest
 import io
+
+import pytest
 
 import grass.script as gs
 import grass.exceptions
@@ -22,7 +24,7 @@ def simple_vector_map(tmp_path_factory):
     project = tmp_path / "grassdata"
     gs.create_project(project)
 
-    with gs.setup.init(project) as session:
+    with gs.setup.init(project, env=os.environ.copy()) as session:
         tools = Tools(session=session)
         tools.g_region(n=10, s=0, e=10, w=0, res=1)
 
