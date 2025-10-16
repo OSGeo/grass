@@ -232,7 +232,13 @@ def setup_runtime_env(gisbase=None, *, env=None):
         # Set the main prefix again.
         # See also the main grass executable code.
         runtime_paths = RuntimePaths(env=env, prefix=gisbase)
-    runtime_paths.set_env_variables()
+        runtime_paths.set_env_variables()
+        # The mechanism already failed once to set it, so overwrite
+        # the path it set with what we know exists. (This will make
+        # it work when the variable is not substituted.)
+        os.environ["GISBASE"] = gisbase
+    else:
+        runtime_paths.set_env_variables()
 
     set_executable_paths(
         install_path=gisbase,

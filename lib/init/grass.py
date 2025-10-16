@@ -2187,6 +2187,8 @@ def main() -> None:
         # Set the main prefix again.
         # See also grass.script.setup.setup_runtime_env.
         runtime_paths = RuntimePaths(set_env_variables=True, prefix=gisbase)
+        # Do not trust the value it came up with, and use the one which we determined.
+        os.environ["GISBASE"] = gisbase
     GISBASE = gisbase
     CONFIG_PROJSHARE = runtime_paths.config_projshare
 
