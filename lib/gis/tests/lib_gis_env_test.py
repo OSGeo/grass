@@ -6,6 +6,7 @@ import sys
 import json
 from textwrap import dedent
 
+import pytest
 
 import grass.script as gs
 
@@ -54,6 +55,13 @@ def run_in_subprocess(code, tmp_path, env):
         raise ValueError(msg) from error
 
 
+# To read the new variables on Windows, another subprocess would be needed,
+# but that would not allow for the dynamic changes of the session variables within
+# a single process which is what this test is testing.
+@pytest.mark.skipif(
+    sys.platform.startswith("win"),
+    reason="On Windows, C has a cached environment, so the libraries don't know about the session.",
+)
 def test_reading_respects_change_of_session(tmp_path):
     """Check new session file path is retrieved and the file is read"""
 
