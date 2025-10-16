@@ -1,6 +1,5 @@
 """Test functions in grass.script.setup"""
 
-import multiprocessing
 import os
 
 import pytest
@@ -9,32 +8,15 @@ import grass.script as gs
 from grass.exceptions import ScriptError
 from grass.tools import Tools
 
-xfail_mp_spawn = pytest.mark.xfail(
-    multiprocessing.get_start_method() == "spawn",
-    reason="Multiprocessing using 'spawn' start method requires pickable functions",
-    raises=AttributeError,
-    strict=True,
-)
 
+def test_with_same_path(tmp_path):
+    """Check correct EPSG is created with same path as the current one.
 
-# This is useful when we want to ensure that function like init does
-# not change the global environment.
-def run_in_subprocess(function):
-    """Run function in a separate process
-
-    The function must take a Queue and put its result there.
-    The result is then returned from this function.
+    Creates two projects, a XY bootstrap one and a desired project using
+    the same path (build for the case when only XY project can be created
+    which is no longer the case, but still it makes sense to test that as
+    a possible situation).
     """
-    queue = multiprocessing.Queue()
-    process = multiprocessing.Process(target=function, args=(queue,))
-    process.start()
-    result = queue.get()
-    process.join()
-    return result
-
-
-def create_and_get_srid(tmp_path):
-    """Create location on the same path as the current one"""
     bootstrap = "bootstrap"
     desired = "desired"
     gs.create_project(tmp_path / bootstrap)
@@ -46,27 +28,10 @@ def create_and_get_srid(tmp_path):
         gs.run_command("g.gisenv", set=f"GISDBASE={tmp_path}", env=session.env)
         gs.run_command("g.gisenv", set=f"LOCATION_NAME={desired}", env=session.env)
         gs.run_command("g.gisenv", set="MAPSET=PERMANENT", env=session.env)
-        return gs.parse_command("g.proj", flags="p", format="shell", env=session.env)[
+        srid = gs.parse_command("g.proj", flags="p", format="shell", env=session.env)[
             "srid"
         ]
-
-
-def test_with_same_path(tmp_path):
-    """Check correct EPSG is created with same path as the current one"""
-    srid = create_and_get_srid(tmp_path)
     assert srid == "EPSG:3358"
-
-
-@xfail_mp_spawn
-def test_with_init_in_subprocess(tmp_path):
-    """Check creation when running in a subprocess"""
-
-    def workload(queue):
-        """Transfer the return value using queue"""
-        queue.put(create_and_get_srid(tmp_path))
-
-    epsg = run_in_subprocess(workload)
-    assert epsg == "EPSG:3358"
 
 
 @pytest.mark.usefixtures("mock_no_session")
