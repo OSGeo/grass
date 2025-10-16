@@ -1,5 +1,8 @@
-import grass.script as gs
+import os
+
 import pytest
+
+import grass.script as gs
 from grass.tools import Tools
 
 FORMAT_DICT = {
@@ -27,7 +30,7 @@ def simple_raster_map(tmp_path_factory):
     project = tmp_path / "grassdata"
     gs.create_project(project, epsg=4326)
 
-    with gs.setup.init(project) as session:
+    with gs.setup.init(project, env=os.environ.copy()) as session:
         tools = Tools(session=session, consistent_return_value=True)
         tools.g_region(n=10, s=0, e=10, w=0, res=1)
 

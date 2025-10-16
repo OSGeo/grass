@@ -182,7 +182,7 @@ class BaseSeriesMap:
         if not slider_width:
             slider_width = "70%"
 
-        lookup = list(zip(self._labels, self._indices))
+        lookup = list(zip(self._labels, self._indices, strict=False))
         description = self._slider_description  # modify description
 
         # Datetime selection slider

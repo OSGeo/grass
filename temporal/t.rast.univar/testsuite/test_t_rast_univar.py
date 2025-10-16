@@ -170,7 +170,9 @@ a_3@testing||2001-07-01 00:00:00|2001-10-01 00:00:00|300|300|300|300|0|0|0|28800
 a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|3840000|0|9600|9600
 """
         for ref, res in zip(
-            univar_text.split("\n"), t_rast_univar.outputs.stdout.split("\n")
+            univar_text.split("\n"),
+            t_rast_univar.outputs.stdout.split("\n"),
+            strict=False,
         ):
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
@@ -194,7 +196,9 @@ a_3@testing||2001-07-01 00:00:00|2001-10-01 00:00:00|300|300|300|300|0|0|0|28800
 a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|3840000|0|9600|9600
 """
         for ref, res in zip(
-            univar_text.split("\n"), t_rast_univar.outputs.stdout.split("\n")
+            univar_text.split("\n"),
+            t_rast_univar.outputs.stdout.split("\n"),
+            strict=False,
         ):
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
@@ -219,7 +223,9 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
 """
 
         for ref, res in zip(
-            univar_text.split("\n"), t_rast_univar.outputs.stdout.split("\n")
+            univar_text.split("\n"),
+            t_rast_univar.outputs.stdout.split("\n"),
+            strict=False,
         ):
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
@@ -246,7 +252,9 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
 """
         univar_output = Path("univar_output.txt").read_text()
 
-        for ref, res in zip(univar_text.split("\n"), univar_output.split("\n")):
+        for ref, res in zip(
+            univar_text.split("\n"), univar_output.split("\n"), strict=False
+        ):
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
                 res_line = res.split("|", 1)[1]
@@ -272,7 +280,9 @@ a_4@m2||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|3840000|0|
 """
         univar_output = Path("univar_output.txt").read_text()
 
-        for ref, res in zip(univar_text.split("\n"), univar_output.split("\n")):
+        for ref, res in zip(
+            univar_text.split("\n"), univar_output.split("\n"), strict=False
+        ):
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
                 res_line = res.split("|", 1)[1]
@@ -295,7 +305,9 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
 """
         univar_output = Path("univar_output.txt").read_text()
 
-        for ref, res in zip(univar_text.split("\n"), univar_output.split("\n")):
+        for ref, res in zip(
+            univar_text.split("\n"), univar_output.split("\n"), strict=False
+        ):
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
                 res_line = res.split("|", 1)[1]
@@ -346,7 +358,9 @@ a_4@PERMANENT||2001-10-01 00:00:00|2002-01-01 00:00:00|3|400|400|400|400|0|0|0|2
 """
 
         for ref, res in zip(
-            univar_text.split("\n"), t_rast_univar.outputs.stdout.split("\n")
+            univar_text.split("\n"),
+            t_rast_univar.outputs.stdout.split("\n"),
+            strict=False,
         ):
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
@@ -384,7 +398,9 @@ a_4@PERMANENT||2001-10-01 00:00:00|2002-01-01 00:00:00|3|400|400|400|400|0|0|0|2
 """
 
         for ref, res in zip(
-            univar_text.split("\n"), t_rast_univar.outputs.stdout.split("\n")
+            univar_text.split("\n"),
+            t_rast_univar.outputs.stdout.split("\n"),
+            strict=False,
         ):
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
@@ -410,7 +426,9 @@ b_3@PERMANENT|S2_B1|2001-07-01 00:00:00|2001-10-01 00:00:00|330|330|330|330|0|0|
 b_4@PERMANENT|S2_B1|2001-10-01 00:00:00|2002-01-01 00:00:00|440|440|440|440|0|0|0|4224000|0|9600|9600
 """
         for ref, res in zip(
-            univar_text.split("\n"), t_rast_univar.outputs.stdout.split("\n")
+            univar_text.split("\n"),
+            t_rast_univar.outputs.stdout.split("\n"),
+            strict=False,
         ):
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
@@ -437,7 +455,9 @@ b_3@PERMANENT|S2_B1|2001-07-01 00:00:00|2001-10-01 00:00:00|330|330|330|330|0|0|
 b_4@PERMANENT|S2_B1|2001-10-01 00:00:00|2002-01-01 00:00:00|440|440|440|440|0|0|0|4224000|0|9600|9600
 """
         for ref, res in zip(
-            univar_text.split("\n"), t_rast_univar.outputs.stdout.split("\n")
+            univar_text.split("\n"),
+            t_rast_univar.outputs.stdout.split("\n"),
+            strict=False,
         ):
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
@@ -465,7 +485,9 @@ d_3@stbl||2001-07-01 00:00:00|2001-10-01 00:00:00|300|300|300|300|0|0|0|120000|1
 d_4@stbl||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|10000|11675|25|25
 """
         for ref, res in zip(
-            univar_text.split("\n"), t_rast_univar.outputs.stdout.split("\n")
+            univar_text.split("\n"),
+            t_rast_univar.outputs.stdout.split("\n"),
+            strict=False,
         ):
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
@@ -491,7 +513,9 @@ d_4@stbl||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|10000|11
 d_1@stbl||2001-01-01 00:00:00|2001-04-01 00:00:00|100|100|100|100|0|0|0|770000|0|7700|7700
 """
         for ref, res in zip(
-            univar_text.split("\n"), t_rast_univar.outputs.stdout.split("\n")
+            univar_text.split("\n"),
+            t_rast_univar.outputs.stdout.split("\n"),
+            strict=False,
         ):
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
@@ -516,7 +540,9 @@ d_1@stbl||2001-01-01 00:00:00|2001-04-01 00:00:00|100|100|100|100|0|0|0|770000|0
 d_1@stbl||2001-01-01 00:00:00|2001-04-01 00:00:00|100|100|100|100|0|0|0|960000|2100|9600|9600
 """
         for ref, res in zip(
-            univar_text.split("\n"), t_rast_univar.outputs.stdout.split("\n")
+            univar_text.split("\n"),
+            t_rast_univar.outputs.stdout.split("\n"),
+            strict=False,
         ):
             if ref and res:
                 ref_line = ref.split("|", 1)[1]

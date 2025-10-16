@@ -122,7 +122,9 @@ class BitmapProvider:
         """Returns list of unique commands.
         Takes into account the region assigned."""
         unique = []
-        for cmdList, region in zip(self._cmdsForComposition, self._regions):
+        for cmdList, region in zip(
+            self._cmdsForComposition, self._regions, strict=False
+        ):
             for cmd in cmdList:
                 if region:
                     unique.append((tuple(cmd), tuple(sorted(region.items()))))
@@ -143,10 +145,14 @@ class BitmapProvider:
         """
         Debug.msg(2, "BitmapProvider.Unload")
         if self._cmdsForComposition:
-            for cmd, region in zip(self._uniqueCmds, self._regionsForUniqueCmds):
+            for cmd, region in zip(
+                self._uniqueCmds, self._regionsForUniqueCmds, strict=False
+            ):
                 del self._mapFilesPool[HashCmd(cmd, region)]
 
-            for cmdList, region in zip(self._cmdsForComposition, self._regions):
+            for cmdList, region in zip(
+                self._cmdsForComposition, self._regions, strict=False
+            ):
                 del self._bitmapPool[HashCmds(cmdList, region)]
             self._uniqueCmds = []
             self._cmdsForComposition = []
@@ -165,7 +171,7 @@ class BitmapProvider:
         :param regions: list of regions assigned to the commands
         """
         count = 0
-        for cmd, region in zip(uniqueCmds, regions):
+        for cmd, region in zip(uniqueCmds, regions, strict=False):
             filename = GetFileFromCmd(self._tempDir, cmd, region)
             if (
                 not force
@@ -191,7 +197,7 @@ class BitmapProvider:
         :param force: if forced rerendering
         """
         count = 0
-        for cmdList, region in zip(cmdLists, regions):
+        for cmdList, region in zip(cmdLists, regions, strict=False):
             if (
                 not force
                 and HashCmds(cmdList, region) in self._bitmapPool
@@ -366,7 +372,7 @@ class BitmapRenderer:
         cmd_list = []
 
         filteredCmdList = []
-        for cmd, region in zip(cmdList, regions):
+        for cmd, region in zip(cmdList, regions, strict=False):
             if cmd[0] == "m.nviz.image":
                 region = None
             filename = GetFileFromCmd(self._tempDir, cmd, region)
@@ -491,7 +497,7 @@ class BitmapComposer:
         cmd_lists = []
 
         filteredCmdLists = []
-        for cmdList, region in zip(cmdLists, regions):
+        for cmdList, region in zip(cmdLists, regions, strict=False):
             if (
                 not force
                 and HashCmds(cmdList, region) in self._bitmapPool

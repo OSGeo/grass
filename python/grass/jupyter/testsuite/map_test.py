@@ -17,7 +17,6 @@
 #############################################################################
 
 import os
-import sys
 import unittest
 from pathlib import Path
 
@@ -61,13 +60,7 @@ class TestMap(TestCase):
         """
         for f in self.files:
             f = Path(f)
-            if sys.version_info < (3, 8):
-                try:
-                    os.remove(f)
-                except FileNotFoundError:
-                    pass
-            else:
-                f.unlink(missing_ok=True)
+            f.unlink(missing_ok=True)
 
     def test_defaults(self):
         """Test that Map can create a map with default settings."""
