@@ -9,25 +9,26 @@ from textwrap import dedent
 import pytest
 
 import grass.script as gs
+from grass.exceptions import CalledModuleError
 from grass.app.data import MapsetLockingException
 
 RUNTIME_GISBASE_SHOULD_BE_PRESENT = "Runtime (GISBASE) should be present"
 SESSION_FILE_NOT_DELETED = "Session file not deleted"
 
 
-def run_in_subprocess(code, tmp_path):
+def run_in_subprocess(code, tmp_path, env=None):
     """Code as a script in a separate process and return parsed JSON result
 
     This is useful when we want to ensure that function like init does
     not change the global environment for other tests.
-    Some effort is made to remove a current if any.
+    The current environment is used for the subprocess as is, so any
+    existing global session is passed to the subprocess or it needs to
+    be removed beforehand, e.g., through the mock_no_session fixture.
     """
     source_file = tmp_path / "test.py"
     source_file.write_text(dedent(code))
-    env = os.environ.copy()
-    for variable in ("GISRC", "GISBASE", "GRASS_PREFIX"):
-        if variable in env:
-            del env[variable]
+    if env is None:
+        env = os.environ
     result = subprocess.run(
         [sys.executable, os.fspath(source_file)],
         stdout=subprocess.PIPE,
@@ -45,8 +46,9 @@ def run_in_subprocess(code, tmp_path):
         raise ValueError(msg) from error
 
 
+@pytest.mark.usefixtures("mock_no_session")
 def test_init_as_context_manager(tmp_path):
-    """Check that init function return value works as a context manager"""
+    """Check that init function's return value works as a context manager"""
     project = tmp_path / "test"
     gs.create_project(project)
     with gs.setup.init(project, env=os.environ.copy()) as session:
@@ -56,6 +58,7 @@ def test_init_as_context_manager(tmp_path):
     assert not os.path.exists(session_file)
 
 
+@pytest.mark.usefixtures("mock_no_session")
 def test_init_session_finish(tmp_path):
     """Check that init works with finish on the returned session object"""
     project = tmp_path / "test"
@@ -64,12 +67,35 @@ def test_init_session_finish(tmp_path):
     gs.run_command("g.region", flags="p", env=session.env)
     session_file = session.env["GISRC"]
     session.finish()
-    with pytest.raises(ValueError):  # noqa: PT011
+    # When operating on the object, the error message should be clear
+    # about the session being finished (as opposed to not existing session).
+    with pytest.raises(ValueError, match="finished session"):
         session.finish()
     assert not session.active
     assert not os.path.exists(session_file)
 
 
+@pytest.mark.usefixtures("mock_no_session")
+def test_global_finish_session_only_in_env(tmp_path):
+    """Check that init works with finish on the returned session object"""
+    project = tmp_path / "test"
+    gs.create_project(project)
+    session = gs.setup.init(project, env=os.environ.copy())
+    gs.run_command("g.region", flags="p", env=session.env)
+    session_file = session.env["GISRC"]
+    session.finish()
+    # Test preconditions
+    assert not session.active
+    assert not os.path.exists(session_file)
+    # The global function can only know that a session does not exist,
+    # but not that it existed but has been finished.
+    # On top of that, without capured stderr, the error message has
+    # only the tool name, but actual error is in stderr.
+    with pytest.raises(CalledModuleError, match=r"g\.gisenv"):
+        gs.setup.finish(env=session.env)
+
+
+@pytest.mark.usefixtures("mock_no_session")
 def test_init_finish_global_functions_with_env(tmp_path):
     """Check that init and finish global functions work"""
     project = tmp_path / "test"
@@ -83,15 +109,23 @@ def test_init_finish_global_functions_with_env(tmp_path):
     assert not os.path.exists(session_file)
 
 
-def test_init_finish_global_functions_capture_strerr_enabled(tmp_path):
-    """Check that init and finish with global env with set_capture_stderr enabled"""
+@pytest.mark.parametrize("capture_stderr", [True, False, None])
+@pytest.mark.usefixtures("mock_no_session")
+def test_init_finish_global_functions_capture_strerr(tmp_path, capture_stderr):
+    """Check init and finish with global env and with set_capture_stderr.
+
+    This actually runs a tool in the created environment and checks its output.
+    Capturing or not capturing stderr should not influence the result
+    (in is global for grass.script so it may interfere tool calls inside
+    grass.script.setup).
+    """
     project = tmp_path / "test"
     code = f"""
         import json
         import os
         import grass.script as gs
 
-        gs.set_capture_stderr(True)
+        gs.set_capture_stderr({capture_stderr})
         gs.create_project(r"{project}")
         gs.setup.init(r"{project}")
         crs_type = gs.parse_command("g.region", flags="p", format="json")["crs"]["type"]
@@ -111,11 +145,13 @@ def test_init_finish_global_functions_capture_strerr_enabled(tmp_path):
     assert result["crs_type"] == "xy"
 
 
+@pytest.mark.usefixtures("mock_no_session")
 def test_init_finish_global_functions_runtime_persists(tmp_path):
-    """Check that init and finish leave runtime behind
+    """Check that init and finish leave runtime behind.
 
     This is not necessarily desired behavior and it is not documented that way,
-    but it is the current implementation.
+    but it is the current implementation, so we test the expected behavior
+    (which may change in the future).
     """
     project = tmp_path / "test"
     code = f"""
@@ -126,7 +162,7 @@ def test_init_finish_global_functions_runtime_persists(tmp_path):
         gs.set_capture_stderr(True)
         gs.create_project(r"{project}")
         gs.setup.init(r"{project}")
-        region_data = gs.read_command("g.region", flags="p")
+        region_data = gs.parse_command("g.region", flags="p", format="json")
         runtime_present = bool(os.environ.get("GISBASE"))
         session_file = os.environ["GISRC"]
         gs.setup.finish()
@@ -146,10 +182,15 @@ def test_init_finish_global_functions_runtime_persists(tmp_path):
     # This is testing the current implementation behavior, but it is not required
     # to be this way in terms of design.
     assert result["runtime_present_after"], "Runtime should continue to be present"
+    assert result["region_data"]["crs"]["type"] == "xy"
 
 
-def test_init_finish_global_functions_isolated(tmp_path):
-    """Check that init and finish global functions work with global env"""
+@pytest.mark.usefixtures("mock_no_session")
+def test_init_finish_global_functions_set_environment(tmp_path):
+    """Check that init and finish global functions work with global env.
+
+    This checks the session without running a tool.
+    """
     project = tmp_path / "test"
 
     code = f"""
@@ -157,10 +198,8 @@ def test_init_finish_global_functions_isolated(tmp_path):
         import os
         import grass.script as gs
 
-        gs.set_capture_stderr(True)
         gs.create_project(r"{project}")
         gs.setup.init(r"{project}")
-        region_data = gs.parse_command("g.region", flags="p", format="json")
         runtime_present_during = bool(os.environ.get("GISBASE"))
         session_file_variable_present_during = bool(os.environ.get("GISRC"))
         session_file = os.environ.get("GISRC")
@@ -178,12 +217,10 @@ def test_init_finish_global_functions_isolated(tmp_path):
                 "session_file_variable_present_after": session_file_variable_present_after,
                 "runtime_present_during": runtime_present_during,
                 "runtime_present_after": runtime_present_after,
-                "region_data": region_data
                 }}
             )
         )
         """
-
     result = run_in_subprocess(code, tmp_path=tmp_path)
 
     # Runtime
@@ -203,9 +240,6 @@ def test_init_finish_global_functions_isolated(tmp_path):
         "Not expecting GISRC when finished"
     )
     assert not os.path.exists(result["session_file"]), SESSION_FILE_NOT_DELETED
-
-    # Region
-    assert result["region_data"]["crs"]["type"] == "xy"
 
 
 @pytest.mark.usefixtures("mock_no_session")
