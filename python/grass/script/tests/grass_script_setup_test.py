@@ -31,11 +31,23 @@ def run_in_subprocess(code, tmp_path, env=None):
         env = os.environ
     result = subprocess.run(
         [sys.executable, os.fspath(source_file)],
-        stdout=subprocess.PIPE,
+        capture_output=True,
         text=True,
-        check=True,
+        check=False,
         env=env,
     )
+    if result.returncode != 0:
+        if result.stderr:
+            msg = (
+                "Execution of code in subprocess failed, "
+                f"captured stderr from subprocess:\n{result.stderr}\n"
+            )
+        else:
+            msg = (
+                f"Execution of code in subprocess gave return code {result.returncode}"
+                "but there was no stderr"
+            )
+        raise RuntimeError(msg)
     if not result.stdout:
         msg = "Empty result from subprocess running code"
         raise ValueError(msg)
