@@ -122,6 +122,7 @@ def test_init_finish_global_functions_with_env(tmp_path):
 
     assert not os.path.exists(session_file)
 
+
 @pytest.mark.parametrize("capture_stderr", [True, False, None])
 @pytest.mark.usefixtures("mock_no_session")
 def test_init_finish_global_functions_capture_strerr(tmp_path, capture_stderr):
