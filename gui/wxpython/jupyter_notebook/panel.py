@@ -79,8 +79,12 @@ class JupyterPanel(wx.Panel, MainPageBase):
         JupyterServerRegistry.get().register(self.server_manager)
 
         # Update the status bar with server info
-        status_msg = _("Jupyter server has started at {url} (PID: {pid})").format(
-            url=self.server_manager.server_url, pid=self.server_manager.pid
+        status_msg = _(
+            "Jupyter server has started at {url} (PID: {pid}) in working directory {dir}"
+        ).format(
+            url=self.server_manager.server_url,
+            pid=self.server_manager.pid,
+            dir=self.workdir,
         )
         self.SetStatusText(status_msg, 0)
 
