@@ -15401,6 +15401,12 @@ LIBS=${ac_save_libs}
 LDFLAGS=${ac_save_ldflags}
 
 
+if test -n "$PTHREADLIB" ; then
+
+printf "%s\n" "#define HAVE_PTHREAD 1" >>confdefs.h
+
+fi
+
 fi # $USE_PTHREAD
 
 

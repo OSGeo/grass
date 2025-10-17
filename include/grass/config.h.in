@@ -165,6 +165,9 @@
 /* Define to 1 if you have the <proj.h> header file. */
 #undef HAVE_PROJ_H
 
+/* Define to 1 if POSIX threads are available. */
+#undef HAVE_PTHREAD
+
 /* Define to 1 if you have the <pthread.h> header file. */
 #undef HAVE_PTHREAD_H
 
