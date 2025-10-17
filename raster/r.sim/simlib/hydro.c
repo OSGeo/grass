@@ -178,16 +178,15 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                         }
 
                         if (grids->zz[k][l] != UNDEF) {
-                            if (grids->inf[k][l] !=
-                                UNDEF) { /* infiltration part */
+                            /* infiltration part */
+                            if (grids->inf[k][l] != UNDEF) {
 
-                                double decr =
-                                    pow(addac * sim->w[lw].m,
-                                        3. / 5.); /* decreasing factor in m */
-                                if (grids->inf[k][l] > decr) {
-                                    grids->inf[k][l] -=
-                                        decr; /* decrease infilt. in cell
-                                                    and eliminate the walker */
+                                /* current flow in meters */
+                                double decr = addac * sim->w[lw].m;
+                                if (grids->inf[k][l] * setup->deltap > decr) {
+                                    /* decrease infilt. in cell */
+                                    grids->inf[k][l] -= decr / setup->deltap;
+                                    /* and eliminate the walker */
                                     sim->w[lw].m = 0.;
                                     continue;
                                 }
@@ -196,7 +195,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                                                     grids->inf[k][l] /
                                                     setup->sisum;
                                     grids->inf[k][l] = 0.;
-                                    // eliminate walker
+                                    /* eliminate walker if needed */
                                     if (sim->w[lw].m < 0.) {
                                         sim->w[lw].m = 0.;
                                         continue;
