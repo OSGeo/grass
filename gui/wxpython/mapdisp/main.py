@@ -614,7 +614,7 @@ class MapApp(wx.App):
         #    self.timer.Stop()
         #    return
 
-        # todo: events
+        # TODO: events
         try:
             currentCmdFileTime = os.path.getmtime(monFile["cmd"])
             if currentCmdFileTime > self.cmdTimeStamp:

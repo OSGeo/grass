@@ -95,7 +95,7 @@
 # %end
 # %flag
 # % key: l
-# todo #% description: List available layers and exit
+# TODO #% description: List available layers and exit
 # % description: Download server capabilities to 'wms_capabilities.xml' in the current directory and exit
 # % suppress_required: yes
 # %end

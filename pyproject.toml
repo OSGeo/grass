@@ -86,6 +86,7 @@ select = [
     "SLOT",   # flake8-slots (SLOT)
     "T10",    # flake8-debugger (T10)
     "TC",     # flake8-type-checking (TC)
+    "TD",     # flake8-todos (TD)
     "TID",    # flake8-tidy-imports (TID)
     "TRY",    # tryceratops (TRY)
     "UP",     # pyupgrade (UP)
@@ -266,6 +267,12 @@ ignore = [
     "SIM118",  # in-dict-keys
     "SIM223",  # expr-and-false
     "SLF001",  # private-member-access
+    "TD001",   # invalid-todo-tag
+    "TD002",   # missing-todo-author
+    "TD003",   # missing-todo-link
+    "TD004",   # missing-todo-colon
+    "TD005",   # missing-todo-description
+    "TD007",   # missing-space-after-todo-colon
     "TRY002",  # raise-vanilla-class
     "TRY004",  # type-check-without-type-error
     "TRY201",  # verbose-raise

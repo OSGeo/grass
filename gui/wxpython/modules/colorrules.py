@@ -284,7 +284,7 @@ class RulesPanel:
         for child in self.mainPanel.GetChildren():
             child.Enable(enable)
         sql = True
-        self.LoadRulesline(sql)  # todo
+        self.LoadRulesline(sql)  # TODO
         self.btnAdd.Enable(enable)
         self.numRules.Enable(enable)
         self.checkAll.Enable(enable)

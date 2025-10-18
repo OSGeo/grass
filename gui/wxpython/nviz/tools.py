@@ -331,7 +331,7 @@ class NvizToolWindow(GNotebook):
         # perspective
         # set initial defaults here (or perhaps in a default values file), not in user
         # settings
-        # todo: consider setting an absolute max at 360 instead of undefined.
+        # TODO: consider setting an absolute max at 360 instead of undefined.
         # (leave the default max value at pi)
         tooltip = _(
             "Adjusts the distance and angular perspective of the image viewpoint"
