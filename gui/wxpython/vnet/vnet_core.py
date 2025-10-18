@@ -226,9 +226,8 @@ class VNETManager:
                 parent=self,
                 message=_(
                     "Temporary map '%s' with result "
-                    + "was changed outside vector network analysis tool.\n"
-                    + "Showed result may not correspond "
-                    + "original analysis result."
+                    "was changed outside vector network analysis tool.\n"
+                    "Showed result may not correspond to original analysis result."
                 )
                 % resultVectMap.GetVectMapName(),
                 caption=_("Result changed outside"),
@@ -929,9 +928,8 @@ class VNETHistory:
                 parent=self.guiparent,
                 message=_(
                     "Input map '%s' for analysis was changed outside "
-                    + "vector network analysis tool.\n"
-                    + "Topology column may not "
-                    + "correspond to changed situation."
+                    "vector network analysis tool.\n"
+                    "Topology column may not correspond to changed situation."
                 )
                 % inpMap,
                 caption=_("Input changed outside"),
@@ -1003,8 +1001,8 @@ class VNETHistory:
 def AddTmpMapAnalysisMsg(mapName, tmp_maps):  # TODO
     """Wraps AddTmpVectMap"""
     msg = _(
-        "Temporary map %s  already exists.\n"
-        + "Do you want to continue in analysis and overwrite it?"
+        "Temporary map %s already exists.\n"
+        "Do you want to continue in analysis and overwrite it?"
     ) % (mapName + "@" + grass.gisenv()["MAPSET"])
     return tmp_maps.AddTmpVectMap(mapName, msg)
 
@@ -1071,9 +1069,8 @@ class SnappingNodes(wx.EvtHandler):
         elif self.snapPts.VectMapState() == 0:
             dlg = wx.MessageDialog(
                 message=_(
-                    "Temporary map '%s' was changed outside "
-                    + "vector analysis tool.\n"
-                    "Do you really want to activate " + "snapping and overwrite it? "
+                    "Temporary map '%s' was changed outside vector analysis tool.\n"
+                    "Do you really want to activate snapping and overwrite it? "
                 )
                 % self.snapPts.GetVectMapName(),
                 caption=_("Overwrite map"),

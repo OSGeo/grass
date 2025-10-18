@@ -171,7 +171,6 @@ ignore = [
     "FBT003",  # boolean-positional-value-in-call
     "I001",    # unsorted-imports
     "INP001",  # implicit-namespace-package
-    "ISC003",  # explicit-string-concatenation
     "N801",    # invalid-class-name
     "N802",    # invalid-function-name
     "N803",    # invalid-argument-name
