@@ -1725,7 +1725,7 @@ class ColorTablesComboBox(PictureComboBox):
 
     def _getPath(self, name):
         return os.path.join(
-            os.getenv("GISBASE"), "docs", "html", "colortables", "%s.png" % name
+            os.getenv("GRASS_GRAPHICSDIR"), "colortables", "%s.png" % name
         )
 
 
@@ -1733,9 +1733,7 @@ class BarscalesComboBox(PictureComboBox):
     """ComboBox with barscales for d.barscale."""
 
     def _getPath(self, name):
-        return os.path.join(
-            os.getenv("GISBASE"), "docs", "html", "barscales", name + ".png"
-        )
+        return os.path.join(os.getenv("GRASS_GRAPHICSDIR"), "barscales", name + ".png")
 
 
 class NArrowsComboBox(PictureComboBox):
@@ -1743,7 +1741,7 @@ class NArrowsComboBox(PictureComboBox):
 
     def _getPath(self, name):
         return os.path.join(
-            os.getenv("GISBASE"), "docs", "html", "northarrows", "%s.png" % name
+            os.getenv("GRASS_GRAPHICSDIR"), "northarrows", "%s.png" % name
         )
 
 

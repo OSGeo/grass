@@ -261,7 +261,7 @@ int main(int argc, char *argv[])
     }
 
     /* Build command line */
-    snprintf(command, GPATH_MAX, "%s/etc/r.watershed/%s", G_gisbase(),
+    snprintf(command, GPATH_MAX, "%s/r.watershed/%s", G_etcbin_dir(),
              flag_seg->answer ? "seg" : "ram");
     new_argv[new_argc++] = command;
 

@@ -42,7 +42,7 @@ MSGMERGE_ARGS = --no-wrap --sort-by-file --previous
 MSGUNIQ_ARGS = --no-wrap --sort-by-file
 
 define po_stats
-GISBASE="$(RUN_GISBASE)" $(PYTHON) ./grass_po_stats.py
+GISBASE="$(RUN_GISBASE)" GRASS_MISCDIR="$(RUN_GISBASE)" $(PYTHON) ./grass_po_stats.py
 endef
 
 #The xgettext utility is used to automate the creation of

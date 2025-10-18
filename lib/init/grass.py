@@ -1150,7 +1150,7 @@ def set_language(grass_config_dir: StrPath) -> None:
                         os.environ["LC_MESSAGES"] = "C"
                         os.environ["LC_NUMERIC"] = "C"
                         os.environ["LC_TIME"] = "C"
-                        gettext.install("grasslibs", gpath("locale"))
+                        gettext.install("grasslibs", os.environ["GRASS_LOCALEDIR"])
                         sys.stderr.write(
                             "All attempts to enable English language have"
                             " failed. GRASS running with C locale.\n"
@@ -1231,7 +1231,7 @@ def set_language(grass_config_dir: StrPath) -> None:
         del os.environ["LC_ALL"]  # Remove LC_ALL to not override LC_NUMERIC
 
     # From now on enforce the new language
-    gettext.install("grasslibs", gpath("locale"))
+    gettext.install("grasslibs", os.environ["GRASS_LOCALEDIR"])
 
 
 # TODO: the gisrcrc here does not make sense, remove it from load_gisrc
