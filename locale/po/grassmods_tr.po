@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_tr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-04 15:55+0000\n"
+"POT-Creation-Date: 2025-10-11 15:59+0000\n"
 "PO-Revision-Date: 2025-07-26 01:37+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Turkish <https://weblate.osgeo.org/projects/grass-gis/grassmods/tr/>\n"
@@ -358,6 +358,7 @@ msgid "The -p flag is required when using the format option."
 msgstr ""
 
 #: ../db/db.connect/main.c:236 ../db/db.tables/main.c:41
+#: ../scripts/db.test/db.test.py:45
 msgid "Database connection not defined. Run db.connect."
 msgstr "Veritabanı bağlantısı belirlenmedi. db.connect'i çalıştırın."
 
@@ -1859,7 +1860,7 @@ msgstr ""
 #: ../raster/r.mask.status/main.c:35 ../raster/r.mfilter/main.c:65
 #: ../raster/r.mode/main.c:53 ../raster/r.neighbors/main.c:181
 #: ../raster/r.null/main.c:58 ../raster/r.object.geometry/main.c:76
-#: ../raster/r.out.ascii/main.c:53 ../raster/r.out.bin/main.c:298
+#: ../raster/r.out.ascii/main.c:54 ../raster/r.out.bin/main.c:298
 #: ../raster/r.out.gdal/main.c:135 ../raster/r.out.gridatb/main.c:66
 #: ../raster/r.out.mat/main.c:62 ../raster/r.out.mpeg/main.c:104
 #: ../raster/r.out.png/main.c:110 ../raster/r.out.pov/main.c:111
@@ -2153,7 +2154,7 @@ msgstr "Grafik araç seçilmedi"
 #: ../raster/r.carve/main.c:153 ../raster/r.cost/main.c:357
 #: ../raster/r.walk/main.c:460 ../scripts/r.mask/r.mask.py:173
 #: ../scripts/v.db.univar/v.db.univar.py:80
-#: ../scripts/v.dissolve/v.dissolve.py:576 ../scripts/v.pack/v.pack.py:62
+#: ../scripts/v.dissolve/v.dissolve.py:578 ../scripts/v.pack/v.pack.py:62
 #: ../scripts/v.report/v.report.py:85 ../vector/v.clean/test/topocheck.c:62
 #: ../vector/v.colors/main.c:252 ../vector/v.edit/main.c:161
 #: ../vector/v.lidar.correction/main.c:158
@@ -3671,7 +3672,7 @@ msgstr ""
 #: ../imagery/i.ortho.photo/i.ortho.transform/main.c:413
 #: ../misc/m.nviz.script/main.c:198 ../misc/m.transform/main.c:273
 #: ../raster/r.category/main.c:239 ../raster/r.horizon/main.c:430
-#: ../raster/r.in.lidar/main.c:670 ../raster/r.out.ascii/main.c:152
+#: ../raster/r.in.lidar/main.c:670 ../raster/r.out.ascii/main.c:159
 #: ../raster/r.out.ppm3/main.c:134 ../raster/r.profile/main.c:224
 #: ../raster/r.recode/main.c:89 ../raster3d/r3.out.vtk/main.c:422
 #: ../vector/v.edit/main.c:82 ../vector/v.net/main.c:99
@@ -4040,7 +4041,7 @@ msgstr "Aralık değerleri dosyası okunamada sorun"
 msgid "Overlays cell category values on a raster map displayed in the active graphics frame."
 msgstr ""
 
-#: ../display/d.rast.num/main.c:103 ../raster/r.out.ascii/main.c:74
+#: ../display/d.rast.num/main.c:103 ../raster/r.out.ascii/main.c:78
 #: ../raster/r.out.vtk/parameters.c:97 ../raster3d/r3.out.vtk/parameters.c:107
 #: ../vector/v.out.ascii/args.c:75
 msgid "Number of significant digits (floating point only)"
@@ -12883,7 +12884,7 @@ msgstr ""
 #: ../locale/scriptstrings/v.pack_to_translate.c:3
 #: ../raster/r.colors.out/raster3d_main.c:48
 #: ../raster/r.colors.out/raster_main.c:47 ../raster/r.external.out/main.c:235
-#: ../raster/r.out.ascii/main.c:54 ../raster/r.out.bin/main.c:299
+#: ../raster/r.out.ascii/main.c:55 ../raster/r.out.bin/main.c:299
 #: ../raster/r.out.gdal/main.c:136 ../raster/r.out.gridatb/main.c:67
 #: ../raster/r.out.mat/main.c:63 ../raster/r.out.mpeg/main.c:105
 #: ../raster/r.out.png/main.c:111 ../raster/r.out.pov/main.c:112
@@ -12904,7 +12905,7 @@ msgstr ""
 #: ../locale/scriptstrings/db.out.ogr_to_translate.c:4
 #: ../locale/scriptstrings/r.out.xyz_to_translate.c:4
 #: ../locale/scriptstrings/t.rast.out.vtk_to_translate.c:4
-#: ../raster/r.external.out/main.c:236 ../raster/r.out.ascii/main.c:55
+#: ../raster/r.external.out/main.c:236 ../raster/r.out.ascii/main.c:56
 #: ../raster/r.out.bin/main.c:300 ../raster/r.out.gdal/main.c:137
 #: ../raster/r.out.gridatb/main.c:68 ../raster/r.out.mat/main.c:64
 #: ../raster/r.out.mpeg/main.c:106 ../raster/r.out.png/main.c:112
@@ -23910,64 +23911,60 @@ msgstr ""
 msgid "Writing output"
 msgstr ""
 
-#: ../raster/r.out.ascii/main.c:58
+#: ../raster/r.out.ascii/main.c:62
 msgid "Converts a raster map layer into a GRASS ASCII text file."
 msgstr ""
 
-#: ../raster/r.out.ascii/main.c:67
+#: ../raster/r.out.ascii/main.c:71
 msgid "Name for output ASCII grid map (use out=- for stdout)"
 msgstr ""
 
-#: ../raster/r.out.ascii/main.c:80
+#: ../raster/r.out.ascii/main.c:84
 msgid "Number of values printed before wrapping a line (only SURFER or MODFLOW format)"
 msgstr ""
 
-#: ../raster/r.out.ascii/main.c:86
+#: ../raster/r.out.ascii/main.c:90
 msgid "String to represent null cell (GRASS grid only)"
 msgstr ""
 
-#: ../raster/r.out.ascii/main.c:90 ../raster3d/r3.out.ascii/main.c:98
+#: ../raster/r.out.ascii/main.c:94 ../raster3d/r3.out.ascii/main.c:98
 msgid "Suppress printing of header information"
 msgstr ""
 
-#: ../raster/r.out.ascii/main.c:94
+#: ../raster/r.out.ascii/main.c:98
 msgid "Write SURFER (Golden Software) ASCII grid"
 msgstr ""
 
-#: ../raster/r.out.ascii/main.c:98
+#: ../raster/r.out.ascii/main.c:102
 msgid "Write MODFLOW (USGS) ASCII array"
 msgstr ""
 
-#: ../raster/r.out.ascii/main.c:102
+#: ../raster/r.out.ascii/main.c:106
+msgid "Write LISFLOOD (EU) ASCII array"
+msgstr ""
+
+#: ../raster/r.out.ascii/main.c:110
 msgid "Force output of integer values"
 msgstr ""
 
-#: ../raster/r.out.ascii/main.c:109
+#: ../raster/r.out.ascii/main.c:117
 msgid "Failed to interpret dp as an integer"
 msgstr ""
 
-#: ../raster/r.out.ascii/main.c:111 ../raster3d/r3.out.vtk/main.c:393
+#: ../raster/r.out.ascii/main.c:119 ../raster3d/r3.out.vtk/main.c:393
 msgid "dp has to be from 0 to 20"
 msgstr "dp 0 dan 20'ye kadar olmalıdır"
 
-#: ../raster/r.out.ascii/main.c:117
+#: ../raster/r.out.ascii/main.c:125
 msgid "Failed to interpret width as an integer"
 msgstr ""
 
-#: ../raster/r.out.ascii/main.c:123
-msgid "Both -s and -h doesn't make sense"
-msgstr ""
-
-#: ../raster/r.out.ascii/main.c:126
-msgid "Use -M or -s, not both"
-msgstr "-M veya -s flamasını seçin, ikisini birden değil"
-
-#: ../raster/r.out.ascii/main.c:161
+#: ../raster/r.out.ascii/main.c:168
 #, c-format
 msgid "Unable to read fp range for <%s>"
 msgstr "<%s> raster haritası için kn aralığı okunamıyor"
 
-#: ../raster/r.out.ascii/main.c:177
+#: ../raster/r.out.ascii/main.c:189
 #, c-format
 msgid "Read failed at row %d"
 msgstr "%d satırında okumada hata"
@@ -24311,35 +24308,35 @@ msgstr ""
 msgid "Exporting to GDAL data type: %s"
 msgstr "GDAL veri tipi olarak dışa aktar: %s"
 
-#: ../raster/r.out.gdal/main.c:538
+#: ../raster/r.out.gdal/main.c:532
+msgid "Forcing raster export"
+msgstr ""
+
+#: ../raster/r.out.gdal/main.c:541
 msgid "Raster export would result in complete data loss, aborting."
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:549
+#: ../raster/r.out.gdal/main.c:552
 #, c-format
 msgid "Precision loss: Raster map <%s> of type %s to be exported as %s. This can be avoided by using %s."
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:562
+#: ../raster/r.out.gdal/main.c:565
 #, c-format
 msgid "Precision loss: The range of <%s> can not be accurately preserved with GDAL datatype Float32. This can be avoided by exporting to Int32 or Float64."
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:570
+#: ../raster/r.out.gdal/main.c:573
 #, c-format
 msgid "Precision loss: Float32 can not preserve the DCELL precision of raster <%s>. This can be avoided by using Float64"
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:579
-msgid "Forcing raster export"
-msgstr ""
-
-#: ../raster/r.out.gdal/main.c:582
+#: ../raster/r.out.gdal/main.c:581
 #, c-format
 msgid "Raster export aborted. To override data loss check, use the -%c flag"
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:599 ../raster/r.out.gdal/main.c:641
+#: ../raster/r.out.gdal/main.c:598 ../raster/r.out.gdal/main.c:641
 #: ../raster/r.out.gdal/main.c:645
 msgid "Raster export aborted."
 msgstr ""
@@ -33425,16 +33422,16 @@ msgstr ""
 msgid "Exported table <%s>"
 msgstr ""
 
-#: ../scripts/db.test/db.test.py:44
+#: ../scripts/db.test/db.test.py:46
 #, python-format
 msgid "Using DB driver: %s"
 msgstr ""
 
-#: ../scripts/db.test/db.test.py:72
+#: ../scripts/db.test/db.test.py:74
 msgid "EXECUTE: OK"
 msgstr ""
 
-#: ../scripts/db.test/db.test.py:86
+#: ../scripts/db.test/db.test.py:88
 msgid "RESULT: OK"
 msgstr ""
 
@@ -33585,367 +33582,367 @@ msgstr ""
 msgid "Unable to process extension:%s"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:262
+#: ../scripts/g.extension/g.extension.py:257
 msgid ""
 "Failed to get Git version.\n"
 "{}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:268
+#: ../scripts/g.extension/g.extension.py:263
 msgid "Failed to get Git version."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:298
+#: ../scripts/g.extension/g.extension.py:293
 msgid "Could not found Git. Please install it."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:307
+#: ../scripts/g.extension/g.extension.py:302
 msgid "Cannot write to working directory {}."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:365
+#: ../scripts/g.extension/g.extension.py:360
 #, python-brace-format
 msgid "Branch <{branch}> not found in repository <{url}>"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:391
-#: ../scripts/g.extension/g.extension.py:2790
+#: ../scripts/g.extension/g.extension.py:386
+#: ../scripts/g.extension/g.extension.py:2785
 #, python-brace-format
 msgid ""
 "Failed to get addons files list from the Git repository <{repo_path}>.\n"
 "{error}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:416
+#: ../scripts/g.extension/g.extension.py:411
 msgid "No addon named <{}> found in the repository."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:520
+#: ../scripts/g.extension/g.extension.py:515
 #, python-brace-format
 msgid ""
 "Failed to get branch from the Git repository <{repo_path}>.\n"
 "{error}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:543
+#: ../scripts/g.extension/g.extension.py:538
 msgid "Cannot retrieve organization and repository from URL: <{}>."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:581
+#: ../scripts/g.extension/g.extension.py:576
 #, python-brace-format
 msgid "Download file from <{url}>, failed. File is not on the server or check your internet connection."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:594
+#: ../scripts/g.extension/g.extension.py:589
 #, python-format
 msgid "'%s' required. Please install '%s' first."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:658
+#: ../scripts/g.extension/g.extension.py:653
 msgid "List of installed extensions (toolboxes):"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:660
+#: ../scripts/g.extension/g.extension.py:655
 msgid "List of installed extensions (modules):"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:664
+#: ../scripts/g.extension/g.extension.py:659
 msgid "No extension (toolbox) installed"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:666
+#: ../scripts/g.extension/g.extension.py:661
 msgid "No extension (module) installed"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:741
+#: ../scripts/g.extension/g.extension.py:736
 msgid "List of available extensions (toolboxes):"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:756
+#: ../scripts/g.extension/g.extension.py:751
 msgid "List of available extensions (modules):"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:782
-#: ../scripts/g.extension/g.extension.py:812
+#: ../scripts/g.extension/g.extension.py:777
+#: ../scripts/g.extension/g.extension.py:807
 msgid "Unable to fetch addons metadata file"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:887
+#: ../scripts/g.extension/g.extension.py:882
 #, python-brace-format
 msgid "Unable to parse '{url}'. Trying to scan Git repository (may take some time)..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:935
+#: ../scripts/g.extension/g.extension.py:930
 msgid "Fetching list of extensions from GRASS-Addons SVN repository (be patient)..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:942
+#: ../scripts/g.extension/g.extension.py:937
 msgid "Flag 'c' ignored, addons metadata file not available"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:944
+#: ../scripts/g.extension/g.extension.py:939
 msgid "Flag 'g' ignored, addons metadata file not available"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:949
-#: ../scripts/g.extension/g.extension.py:984
+#: ../scripts/g.extension/g.extension.py:944
+#: ../scripts/g.extension/g.extension.py:979
 #, python-format
 msgid "Checking for '%s' modules..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:957
-#: ../scripts/g.extension/g.extension.py:991
+#: ../scripts/g.extension/g.extension.py:952
+#: ../scripts/g.extension/g.extension.py:986
 #, python-format
 msgid "Unable to fetch '%s'"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1159
+#: ../scripts/g.extension/g.extension.py:1154
 msgid "$GISBASE not defined"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1163
+#: ../scripts/g.extension/g.extension.py:1158
 #, python-format
 msgid "Extension <%s> already installed. Re-installing..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1174
+#: ../scripts/g.extension/g.extension.py:1169
 #, python-format
 msgid "Installing toolbox <%s>..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1184
+#: ../scripts/g.extension/g.extension.py:1179
 msgid "Nothing to install"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1217
+#: ../scripts/g.extension/g.extension.py:1212
 msgid "Installation failed, sorry. Please check above error messages."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1220
+#: ../scripts/g.extension/g.extension.py:1215
 msgid "Updating extensions metadata file..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1224
+#: ../scripts/g.extension/g.extension.py:1219
 msgid "Updating extension modules metadata file..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1231
+#: ../scripts/g.extension/g.extension.py:1226
 #, python-format
 msgid "Installation of <%s> successfully finished"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1237
+#: ../scripts/g.extension/g.extension.py:1232
 msgid "This add-on module will not function until you set the GRASS_ADDON_BASE environment variable (see \"g.manual variables\")"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1272
+#: ../scripts/g.extension/g.extension.py:1267
 msgid "Unable to read addons metadata file from the remote server"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1282
+#: ../scripts/g.extension/g.extension.py:1277
 msgid "No addons metadata available"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1285
+#: ../scripts/g.extension/g.extension.py:1280
 #, python-format
 msgid "No addons metadata available for <%s>"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1342
+#: ../scripts/g.extension/g.extension.py:1337
 #, python-brace-format
 msgid "Unable to read addons metadata file from the remote server: {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1348
+#: ../scripts/g.extension/g.extension.py:1343
 #, python-format, python-brace-format
 msgid "Unable to parse '%s': {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1531
+#: ../scripts/g.extension/g.extension.py:1526
 #, python-brace-format
 msgid "No metadata available for module '{name}': {error}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1600
+#: ../scripts/g.extension/g.extension.py:1595
 msgid "Downloading precompiled GRASS Addons <{}>..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1693
+#: ../scripts/g.extension/g.extension.py:1688
 msgid "svn not found but needed to fetch AddOns from an SVN repository"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1700
-#: ../scripts/g.extension/g.extension.py:1734
+#: ../scripts/g.extension/g.extension.py:1695
+#: ../scripts/g.extension/g.extension.py:1729
 #, python-format
 msgid "GRASS Addons <%s> not found"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1824
+#: ../scripts/g.extension/g.extension.py:1819
 #, python-brace-format
 msgid "ZIP file is unreadable: {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1854
+#: ../scripts/g.extension/g.extension.py:1849
 #: ../scripts/r.unpack/r.unpack.py:119 ../scripts/v.unpack/v.unpack.py:130
 msgid "Extracting may be unsafe; consider updating Python"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1860
+#: ../scripts/g.extension/g.extension.py:1855
 #, python-brace-format
 msgid "Archive file is unreadable: {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1877
+#: ../scripts/g.extension/g.extension.py:1872
 #, python-brace-format
 msgid "Type of source identified as '{source}'."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1880
-#: ../scripts/g.extension/g.extension.py:1889
-#: ../scripts/g.extension/g.extension.py:1896
+#: ../scripts/g.extension/g.extension.py:1875
+#: ../scripts/g.extension/g.extension.py:1884
+#: ../scripts/g.extension/g.extension.py:1891
 #, python-brace-format
 msgid "Fetching <{name}> from <{url}> (be patient)..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1911
+#: ../scripts/g.extension/g.extension.py:1906
 #, python-brace-format
 msgid "Expected default branch not found. Trying again from <{url}>..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1919
+#: ../scripts/g.extension/g.extension.py:1914
 #, python-brace-format
 msgid "Extension <{name}> not found. Please check 'url' and 'branch' options"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1924
+#: ../scripts/g.extension/g.extension.py:1919
 #, fuzzy
 msgid "Extension <{}> not found"
 msgstr "<%s> bölgesi bulunamadı "
 
-#: ../scripts/g.extension/g.extension.py:1952
+#: ../scripts/g.extension/g.extension.py:1947
 #, python-brace-format
 msgid "Unknown extension (addon) source type '{0}'. Please report this to the grass-user mailing list."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1980
+#: ../scripts/g.extension/g.extension.py:1975
 msgid "Path to the source code:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2000
+#: ../scripts/g.extension/g.extension.py:1995
 msgid "Module name not found. Check module Makefile syntax (PGM variable)."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2075
+#: ../scripts/g.extension/g.extension.py:2070
 msgid "To compile run:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2077
+#: ../scripts/g.extension/g.extension.py:2072
 msgid "To install run:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2085
+#: ../scripts/g.extension/g.extension.py:2080
 msgid "Compiling..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2087
+#: ../scripts/g.extension/g.extension.py:2082
 msgid "Please install GRASS development package"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2090
+#: ../scripts/g.extension/g.extension.py:2085
 msgid "Compilation failed, sorry. Please check above error messages."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2104
+#: ../scripts/g.extension/g.extension.py:2099
 msgid "Installing..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2195
+#: ../scripts/g.extension/g.extension.py:2190
 msgid "List of removed files:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2197
+#: ../scripts/g.extension/g.extension.py:2192
 msgid "Files to be removed:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2203
+#: ../scripts/g.extension/g.extension.py:2198
 msgid "Updating addons metadata file..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2207
+#: ../scripts/g.extension/g.extension.py:2202
 #, python-format
 msgid "Extension <%s> successfully uninstalled."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2210
+#: ../scripts/g.extension/g.extension.py:2205
 #, python-format
 msgid "Toolbox <%s> not removed. Re-run '%s' with '-f' flag to force removal"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2215
+#: ../scripts/g.extension/g.extension.py:2210
 #, python-format
 msgid "Extension <%s> not removed. Re-run '%s' with '-f' flag to force removal"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2264
+#: ../scripts/g.extension/g.extension.py:2259
 #, python-format
 msgid "Extension <%s> not found"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2368
+#: ../scripts/g.extension/g.extension.py:2363
 #, python-brace-format
 msgid "Unable to create '{filename}': {error}. Is the GRASS documentation package installed? Installation continues, but documentation may not look right."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2387
+#: ../scripts/g.extension/g.extension.py:2382
 #, python-format
 msgid "Unable to create '%s': %s"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2415
+#: ../scripts/g.extension/g.extension.py:2410
 #, python-format
 msgid "Manual page for <%s> updated"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2422
+#: ../scripts/g.extension/g.extension.py:2417
 #, python-format
 msgid "Unable to read manual page: %s"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2467
+#: ../scripts/g.extension/g.extension.py:2462
 #, python-format
 msgid "Unable for write manual page: %s"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2487
+#: ../scripts/g.extension/g.extension.py:2482
 msgid "GRASS_ADDON_BASE is not defined, installing to {}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2494
+#: ../scripts/g.extension/g.extension.py:2489
 #, python-brace-format
 msgid "You don't have permission to install extension to <{0}>. Try to run {1} with administrator rights (su or sudo)."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2586
+#: ../scripts/g.extension/g.extension.py:2581
 #, python-brace-format
 msgid "Identified {0} as known hosting service"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2591
+#: ../scripts/g.extension/g.extension.py:2586
 #, python-brace-format
 msgid "Not using {service} as known hosting service because the URL ends with '{suffix}'"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2608
+#: ../scripts/g.extension/g.extension.py:2603
 #, python-brace-format
 msgid "Will use the following URL for download: {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2639
+#: ../scripts/g.extension/g.extension.py:2634
 #, python-brace-format
 msgid "Cannot open URL <{url}>: {error}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2845
+#: ../scripts/g.extension/g.extension.py:2840
 msgid "Flag '{}' is relevant only to 'operation=add'. Ignoring this flag."
 msgstr ""
 
@@ -35578,7 +35575,7 @@ msgid "Use of libsqlitefunctions only with SQLite backend"
 msgstr ""
 
 #: ../scripts/v.db.update/v.db.update.py:103
-#: ../scripts/v.dissolve/v.dissolve.py:605 ../vector/v.to.rast/support.c:297
+#: ../scripts/v.dissolve/v.dissolve.py:607 ../vector/v.to.rast/support.c:297
 #: ../vector/v.to.rast/support.c:528 ../vector/v.to.rast/vect2rast.c:67
 #: ../vector/v.what.rast3/main.c:143
 #, c-format, python-format
@@ -35613,51 +35610,51 @@ msgstr ""
 msgid "Column <{column}> selected for aggregation does not exist in vector <{vector}> (layer <{layer}>)"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:320
+#: ../scripts/v.dissolve/v.dissolve.py:322
 #, python-brace-format
 msgid "When result columns are specified, the number of aggregate columns ({columns_to_aggregate}) needs to be the same as the number of methods ({methods})"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:336
+#: ../scripts/v.dissolve/v.dissolve.py:338
 #, python-brace-format
 msgid "The number of result columns ({result_columns}) needs to be the same as the number of aggregate columns ({columns_to_aggregate})"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:347
+#: ../scripts/v.dissolve/v.dissolve.py:349
 #, python-brace-format
 msgid "The number of result columns ({result_columns}) needs to be the same as the number of aggregation methods ({methods})"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:360
+#: ../scripts/v.dissolve/v.dissolve.py:362
 #, python-brace-format
 msgid "Result column '{column}' needs a type specified (using the syntax: 'name type') when no methods are provided with the {option_name} option and aggregation backend is '{backend}'"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:374
+#: ../scripts/v.dissolve/v.dissolve.py:376
 #, python-brace-format
 msgid "Methods must be specified with {backend} backend and with result columns provided"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:581
+#: ../scripts/v.dissolve/v.dissolve.py:583
 #, python-format
 msgid "No '%s' option specified. Dissolving based on category values from layer <%s>."
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:596
+#: ../scripts/v.dissolve/v.dissolve.py:598
 #, python-format
 msgid "Invalid layer number (%d). Parameter '%s' specified, assuming layer '1'."
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:608
+#: ../scripts/v.dissolve/v.dissolve.py:610
 msgid "Key column must be of type integer or string"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:613
+#: ../scripts/v.dissolve/v.dissolve.py:615
 #, python-brace-format
 msgid "Key column type must be string (text) for aggregation method to work, not '{column_type}'"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:664
+#: ../scripts/v.dissolve/v.dissolve.py:666
 #, python-brace-format
 msgid ""
 "A processing step failed. Check the above error messages and see the following details:\n"
@@ -48002,6 +47999,9 @@ msgstr ""
 #: ../visualization/ximgview/main.c:298
 msgid "Image file"
 msgstr "Görüntü dosyası"
+
+#~ msgid "Use -M or -s, not both"
+#~ msgstr "-M veya -s flamasını seçin, ikisini birden değil"
 
 #~ msgid " seed is set to %d"
 #~ msgstr "kaynak %d ye ayarlandı"

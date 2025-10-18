@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-04 15:55+0000\n"
-"PO-Revision-Date: 2025-08-23 20:19+0000\n"
-"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
+"POT-Creation-Date: 2025-10-11 15:59+0000\n"
+"PO-Revision-Date: 2025-10-13 12:30+0000\n"
+"Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -478,10 +478,9 @@ msgid "Key column type is not integer"
 msgstr "Nyckelkolumnens typ är inte heltal"
 
 #: ../lib/db/dbmi_client/table.c:63 ../lib/db/dbmi_client/table.c:84
-#, fuzzy, c-format
-#| msgid "Line <%s> is too long"
+#, c-format
 msgid "Table name too long: <%s>"
-msgstr "Rad <%s> är för lång"
+msgstr "Tabellnamnet är för långt: <%s>"
 
 #: ../lib/db/dbmi_driver/d_error.c:36
 #, c-format
@@ -534,10 +533,9 @@ msgid "[%s]: No such color"
 msgstr "[%s]: Ingen sådan färg"
 
 #: ../lib/driver/font2.c:188
-#, fuzzy, c-format
-#| msgid "Line <%s> is too long"
+#, c-format
 msgid "Font name <%s> is too long"
-msgstr "Rad <%s> är för lång"
+msgstr "Typsnittsnamnet <%s> är för långt"
 
 #: ../lib/driver/parse_ftcap.c:85
 #, c-format
@@ -3634,7 +3632,7 @@ msgstr "Det gick inte att läsa målfilen för grupp [%s]"
 msgid "WARNING"
 msgstr "VARNING"
 
-#: ../lib/init/grass.py:148 ../lib/init/grass.py:2416
+#: ../lib/init/grass.py:148 ../lib/init/grass.py:2420
 msgid "Exiting..."
 msgstr "Spännande..."
 
@@ -3758,7 +3756,7 @@ msgstr "parametrar för den körbara filen"
 msgid "standard flags"
 msgstr "standardflaggor"
 
-#: ../lib/init/grass.py:349 ../lib/init/grass.py:1913
+#: ../lib/init/grass.py:349 ../lib/init/grass.py:1910
 msgid "deprecated, use --tmp-project instead"
 msgstr "föråldrad, använd --tmp-project istället"
 
@@ -3847,10 +3845,8 @@ msgstr ""
 "Växlar till textbaserat gränssnittsläge."
 
 #: ../lib/init/grass.py:669
-#, fuzzy
-#| msgid "Error reading categories: [%s]"
 msgid "Error creating project: {}"
-msgstr "Fel vid läsning av kategorier: [%s]"
+msgstr "Fel vid skapande av projekt: {}"
 
 #: ../lib/init/grass.py:696
 #, python-brace-format
@@ -3948,12 +3944,12 @@ msgstr "SHELL-variabeln är inte inställd"
 msgid "Unsupported shell <{sh}>: {env_file}"
 msgstr "Skal som inte stöds <{sh}>: {env_file}"
 
-#: ../lib/init/grass.py:1355
+#: ../lib/init/grass.py:1352
 #, python-format
 msgid "Executing <%s> ..."
 msgstr "Exekverar <%s> ..."
 
-#: ../lib/init/grass.py:1379
+#: ../lib/init/grass.py:1376
 #, python-brace-format
 msgid ""
 "Execution of <{cmd}> failed:\n"
@@ -3962,143 +3958,143 @@ msgstr ""
 "Exekvering av <{cmd}> misslyckades:\n"
 "{error}"
 
-#: ../lib/init/grass.py:1392
+#: ../lib/init/grass.py:1389
 #, python-format
 msgid "Execution of <%s> finished."
 msgstr "Exekvering av <%s> avslutad."
 
-#: ../lib/init/grass.py:1434
+#: ../lib/init/grass.py:1431
 #, python-brace-format
 msgid "Unable to close GUI. {0}"
 msgstr "Det går inte att stänga GUI. {0}"
 
-#: ../lib/init/grass.py:1453
+#: ../lib/init/grass.py:1450
 #, python-format
 msgid "Welcome to GRASS %s"
 msgstr "Välkommen till GRASS %s"
 
-#: ../lib/init/grass.py:1479
+#: ../lib/init/grass.py:1476
 msgid "GRASS homepage:"
 msgstr "GRASS hemsida:"
 
 #. GTC Running through: SHELL NAME
-#: ../lib/init/grass.py:1481
+#: ../lib/init/grass.py:1478
 msgid "This version running through:"
 msgstr "Denna version går igenom:"
 
-#: ../lib/init/grass.py:1484
+#: ../lib/init/grass.py:1481
 msgid "Help is available with the command:"
 msgstr "Hjälp finns tillgänglig med kommandot:"
 
-#: ../lib/init/grass.py:1485
+#: ../lib/init/grass.py:1482
 msgid "See the licence terms with:"
 msgstr "Se licensvillkoren med:"
 
-#: ../lib/init/grass.py:1486
+#: ../lib/init/grass.py:1483
 msgid "See citation options with:"
 msgstr "Se citeringsalternativ med:"
 
-#: ../lib/init/grass.py:1491
+#: ../lib/init/grass.py:1488
 msgid "If required, restart the GUI with:"
 msgstr "Om så krävs, starta om GUI med :"
 
-#: ../lib/init/grass.py:1493
+#: ../lib/init/grass.py:1490
 msgid "Start the GUI with:"
 msgstr "Starta GUI med:"
 
-#: ../lib/init/grass.py:1495
+#: ../lib/init/grass.py:1492
 msgid "When ready to quit enter:"
 msgstr "När du är redo att avsluta trycker du på :"
 
-#: ../lib/init/grass.py:1677
+#: ../lib/init/grass.py:1674
 msgid "2D and 3D raster masks present"
 msgstr "2D- och 3D-rastermasker närvarande"
 
-#: ../lib/init/grass.py:1678
+#: ../lib/init/grass.py:1675
 msgid "Raster mask present"
 msgstr "Rastermask närvarande"
 
-#: ../lib/init/grass.py:1679
+#: ../lib/init/grass.py:1676
 msgid "3D raster mask present"
 msgstr "3D-rastermask närvarande"
 
-#: ../lib/init/grass.py:1724
+#: ../lib/init/grass.py:1721
 msgid "Done."
 msgstr "Klar."
 
-#: ../lib/init/grass.py:1726
+#: ../lib/init/grass.py:1723
 msgid "Goodbye from GRASS"
 msgstr "Farväl från GRASS"
 
-#: ../lib/init/grass.py:1787
+#: ../lib/init/grass.py:1784
 msgid "Please install the GRASS development package"
 msgstr "Installera GRASS-utvecklingspaketet"
 
-#: ../lib/init/grass.py:1833
+#: ../lib/init/grass.py:1830
 #, python-format
 msgid "Parameter <%s> not supported"
 msgstr "Parameter <%s> stöds inte"
 
-#: ../lib/init/grass.py:1882
+#: ../lib/init/grass.py:1879
 #, python-format
 msgid "use mapset %(metavar)s"
 msgstr "använd mapset %(metavar)s"
 
-#: ../lib/init/grass.py:1888
+#: ../lib/init/grass.py:1885
 #, python-format
 msgid "use temporary mapset in project %(metavar)s"
 msgstr "använd tillfällig mapset i projektet %(metavar)s"
 
-#: ../lib/init/grass.py:1896
+#: ../lib/init/grass.py:1893
 msgid "path to mapset (or project if creating one)"
 msgstr "sökväg till mapset (eller projekt om ett sådant skapas)"
 
-#: ../lib/init/grass.py:1899
+#: ../lib/init/grass.py:1896
 msgid "use temporary mapset"
 msgstr "använda tillfällig mapset"
 
-#: ../lib/init/grass.py:1906
+#: ../lib/init/grass.py:1903
 #, python-format
 msgid "use temporary project with %(metavar)s (EPSG, georeferenced file, ...)"
 msgstr "använd tillfälligt projekt med %(metavar)s (EPSG, georefererad fil, ...)"
 
-#: ../lib/init/grass.py:1920
+#: ../lib/init/grass.py:1917
 msgid "mapset locking timeout in seconds"
 msgstr "tidsgräns för låsning av mapset i sekunder"
 
-#: ../lib/init/grass.py:1926
+#: ../lib/init/grass.py:1923
 msgid "remove lock if present"
 msgstr "avlägsna lås om sådant finns"
 
-#: ../lib/init/grass.py:1940
+#: ../lib/init/grass.py:1937
 msgid "Option --tmp-location is deprecated, use --tmp-project instead\n"
 msgstr "Alternativet --tmp-location är föråldrat, använd --tmp-project istället\n"
 
-#: ../lib/init/grass.py:1985
+#: ../lib/init/grass.py:1982
 msgid "execute module or script (followed by executable with arguments)"
 msgstr "exekvera modul eller skript (följt av körbar med argument)"
 
-#: ../lib/init/grass.py:2041
+#: ../lib/init/grass.py:2044
 msgid "Flag -e requires also flag -c"
 msgstr "Flagga -e kräver också flagga -c"
 
-#: ../lib/init/grass.py:2043
+#: ../lib/init/grass.py:2046
 msgid "Flag -c requires name of project or mapset"
 msgstr "Flagga -c kräver namn på projekt eller mapset"
 
-#: ../lib/init/grass.py:2046
+#: ../lib/init/grass.py:2049
 msgid "Either --tmp-project or --tmp-mapset can be used, not both"
 msgstr "Antingen --tmp-project eller --tmp-mapset kan användas, men inte båda"
 
-#: ../lib/init/grass.py:2053
+#: ../lib/init/grass.py:2056
 msgid "Coordinate reference system argument (e.g. EPSG) is needed for --tmp-project"
 msgstr "Argument för koordinatreferenssystem (t.ex. EPSG) behövs för --tmp-project"
 
-#: ../lib/init/grass.py:2060
+#: ../lib/init/grass.py:2063
 msgid "Only one argument (e.g. EPSG) is needed for --tmp-project, mapset name <{}> provided"
 msgstr "Endast ett argument (t.ex. EPSG) behövs för --tmp-project, mapset-namn <{}> anges"
 
-#: ../lib/init/grass.py:2271
+#: ../lib/init/grass.py:2275
 #, python-brace-format
 msgid ""
 "Unable to start GRASS. You have the choice to:\n"
@@ -4127,24 +4123,24 @@ msgstr ""
 "     {cmd_name} --hjälp\n"
 "Se även: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 
-#: ../lib/init/grass.py:2292
+#: ../lib/init/grass.py:2296
 msgid "Starting GRASS..."
 msgstr "Börjar med GRASS..."
 
-#: ../lib/init/grass.py:2341
+#: ../lib/init/grass.py:2345
 msgid "Failed to start GRASS, grassdata directory cannot be found or created."
 msgstr "Misslyckades med att starta GRASS, grassdata-katalogen kan inte hittas eller skapas."
 
-#: ../lib/init/grass.py:2348
+#: ../lib/init/grass.py:2352
 msgid "Failed to start GRASS, no default project to copy in the installation or copying failed."
 msgstr "GRASS kunde inte startas, inget standardprojekt att kopiera i installationen eller kopieringen misslyckades."
 
-#: ../lib/init/grass.py:2453
+#: ../lib/init/grass.py:2457
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr "Startar <%s> grafiskt gränssnitt i bakgrunden, vänta..."
 
-#: ../lib/init/grass.py:2491
+#: ../lib/init/grass.py:2495
 #, python-format
 msgid "Failed to start shell '%s'"
 msgstr "Misslyckades med att starta skalet '%s'"
@@ -5706,10 +5702,9 @@ msgid "Unable to create <%s> metadata file for raster map <%s@%s>"
 msgstr "Det gick inte att skapa <%s> metadatafil för rasterkarta <%s@%s>"
 
 #: ../lib/raster/reclass.c:163
-#, fuzzy, c-format
-#| msgid "Error reading range file for [%s in %s]"
+#, c-format
 msgid "Error reading beginning of header file for <%s@%s>: %s"
-msgstr "Fel vid läsning av områdesfil för [%s i %s]"
+msgstr "Fel vid läsning av början av rubrikfil för <%s@%s>: %s"
 
 #: ../lib/raster/reclass.c:181
 #, c-format
@@ -5717,52 +5712,43 @@ msgid "Too many reclass categories for <%s@%s>"
 msgstr "För många omklassificeringskategorier för <%s@%s>"
 
 #: ../lib/raster/reclass.c:185
-#, fuzzy, c-format
-#| msgid "Illegal reclass format in header file for <%s@%s>"
+#, c-format
 msgid "Illegal reclass format in header file for <%s@%s>: %s"
-msgstr "Olagligt reclass-format i rubrikfilen för <%s@%s>"
+msgstr "Olagligt reclass-format i rubrikfilen för <%s@%s>: %s"
 
 #: ../lib/raster/reclass.c:253
-#, fuzzy, c-format
-#| msgid "Unable to open %s for reading"
+#, c-format
 msgid "File too short, reading line %d"
-msgstr "Det går inte att öppna %s för läsning"
+msgstr "Filen är för kort, läser rad %d"
 
 #: ../lib/raster/reclass.c:260
-#, fuzzy, c-format
-#| msgid "Line <%s> is too long"
+#, c-format
 msgid "Line too long: %s..."
-msgstr "Rad <%s> är för lång"
+msgstr "Raden är för lång: %s..."
 
 #: ../lib/raster/reclass.c:266
-#, fuzzy, c-format
-#| msgid "Format definition is not correct: %s"
+#, c-format
 msgid "Format is not key:value: %s"
-msgstr "Formatdefinitionen är inte korrekt: %s"
+msgstr "Formatet är inte nyckel:värde: %s"
 
 #: ../lib/raster/reclass.c:279
-#, fuzzy, c-format
-#| msgid "Unknown file extension: %s"
+#, c-format
 msgid "Unknown key at line: %s"
-msgstr "Okänd filtillägg: %s"
+msgstr "Okänd nyckel på rad: %s"
 
 #: ../lib/raster/reclass.c:290
-#, fuzzy, c-format
-#| msgid "Unable to read range of raster map <%s>"
+#, c-format
 msgid "Mapset not read, only raster name: %s"
-msgstr "Det gick inte att läsa intervallet för rasterkartan <%s>"
+msgstr "Mapset inte läst, endast rasternamn: %s"
 
 #: ../lib/raster/reclass.c:294
-#, fuzzy, c-format
-#| msgid "Raster map <%s> not found in mapset <%s>"
+#, c-format
 msgid "Raster name not read, only mapset: %s"
-msgstr "Rasterkarta <%s> finns inte i kartuppsättning <%s>"
+msgstr "Rasternamn inte läst, endast kartuppsättning: %s"
 
 #: ../lib/raster/reclass.c:297
-#, fuzzy
-#| msgid "Raster map <%s> not found"
 msgid "Raster name and mapset not read"
-msgstr "Rasterkarta <%s> hittades inte"
+msgstr "Rasternamn och kartupssättning inte lästa"
 
 #: ../lib/raster/reclass.c:328
 msgid "Illegal reclass request"
@@ -5785,12 +5771,12 @@ msgstr "Det går inte att skapa en beroendefil i <%s@%s>"
 #: ../lib/raster/reclass.c:474
 #, c-format
 msgid "Reading integer failed on line: %s (after reading min: %d)"
-msgstr ""
+msgstr "Läsning av heltal misslyckades på rad: %s (efter läsning av min: %d)"
 
 #: ../lib/raster/reclass.c:479
 #, c-format
 msgid "First entry (min) not read yet and reading integer failed on line: %s"
-msgstr ""
+msgstr "Första posten (min) inte läst ännu och läsning av heltal misslyckades på rad: %s"
 
 #: ../lib/raster/sample.c:68
 msgid "Unknown interpolation type"
@@ -8380,16 +8366,14 @@ msgid "New vertices: %d"
 msgstr "Nya toppar: %d"
 
 #: ../lib/vector/Vlib/snap.c:571
-#, fuzzy, c-format
-#| msgid "Unable to create %s file <%s>: %s"
+#, c-format
 msgid "Unable to create temporary file <%s>: %s"
-msgstr "Det gick inte att skapa %s-filen <%s>: %s"
+msgstr "Det gick inte att skapa temporära filen <%s>: %s"
 
 #: ../lib/vector/Vlib/snap.c:575
-#, fuzzy, c-format
-#| msgid "Unable to open output file <%s>: %s"
+#, c-format
 msgid "Unable to remove temporary file <%s>: %s"
-msgstr "Det gick inte att öppna utdatafilen <%s>: %s"
+msgstr "Det gick inte att ta bort temporära filen <%s>: %s"
 
 #: ../lib/vector/Vlib/snap.c:919
 msgid "Reading features..."
