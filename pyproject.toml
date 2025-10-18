@@ -274,7 +274,6 @@ ignore = [
     "UP030",   # format-literals
     "UP031",   # printf-string-formatting
     "UP032",   # f-string
-    "UP036",   # outdated-version-block
 ]
 
 
@@ -388,6 +387,7 @@ ignore = [
 "python/grass/temporal/stds_import.py" = ["PLW1514", "SIM115"]
 "python/grass/temporal/temporal_algebra.py" = ["D300"]
 "python/grass/temporal/temporal_operator.py" = ["D300"]
+"python/grass/temporal/testsuite/test_temporal_doctests.py" = ["UP036"]
 "python/grass/temporal/univar_statistics.py" = ["PLW1514", "SIM115"]
 "python/grass/utils/download.py" = ["PTH208", "SIM115"]
 "raster/r.*/testsuite/*.py" = ["SIM115"]
