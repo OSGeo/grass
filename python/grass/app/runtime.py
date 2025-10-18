@@ -16,6 +16,7 @@ import os
 import shutil
 import subprocess
 import sys
+from pathlib import Path
 
 from . import resource_paths
 
@@ -181,12 +182,12 @@ def append_left_main_executable_paths(paths, install_path):
     if WINDOWS:
         # Standalone installer has dependencies which are on path in other cases.
         path = os.path.join(install_path, "extrabin")
-        if os.path.exists(path):
+        if Path(path).exists():
             paths.appendleft(path)
     else:
         # Without FHS, scripts are separated like in the source code.
         path = os.path.join(install_path, "scripts")
-        if os.path.exists(path):
+        if Path(path).exists():
             paths.appendleft(path)
 
 
@@ -201,7 +202,7 @@ def append_left_addon_paths(paths, config_dir, env):
 
     if not WINDOWS:
         script_path = os.path.join(addon_base, "scripts")
-        if os.path.exists(script_path):
+        if Path(script_path).exists():
             paths.appendleft(script_path)
     paths.appendleft(os.path.join(addon_base, "bin"))
 

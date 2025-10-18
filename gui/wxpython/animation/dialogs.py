@@ -1443,7 +1443,7 @@ class ExportDialog(wx.Dialog):
     def OnExport(self, event):
         for decor in self.decorations:
             if decor["name"] == "image":
-                if not os.path.exists(decor["file"]):
+                if not Path(decor["file"]).exists():
                     if decor["file"]:
                         GError(
                             parent=self, message=_("File %s not found.") % decor["file"]
@@ -1456,7 +1456,7 @@ class ExportDialog(wx.Dialog):
 
         if self.formatChoice.GetSelection() == 0:
             name = self.dirBrowse.GetValue()
-            if not os.path.exists(name):
+            if not Path(name).exists():
                 if name:
                     GError(parent=self, message=_("Directory %s not found.") % name)
                 else:
@@ -1553,7 +1553,7 @@ class ExportDialog(wx.Dialog):
             file_path += file_postfix
 
         base_dir = os.path.dirname(file_path)
-        if not os.path.exists(base_dir):
+        if not Path(base_dir).exists():
             GError(
                 parent=self,
                 message=file_path_does_not_exist_err_message.format(
@@ -1562,7 +1562,7 @@ class ExportDialog(wx.Dialog):
             )
             return False
 
-        if os.path.exists(file_path):
+        if Path(file_path).exists():
             overwrite_dlg = wx.MessageDialog(
                 self.GetParent(),
                 message=_(

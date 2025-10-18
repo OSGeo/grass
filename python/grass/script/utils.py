@@ -535,7 +535,7 @@ def set_path(modulename, dirname=None, path="."):
     pathlib_ = None
     if dirname:
         pathlib_ = os.path.join(path, dirname)
-    if pathlib_ and os.path.exists(pathlib_):
+    if pathlib_ and Path(pathlib_).exists():
         # we are running the script from the script directory, therefore
         # we add the path to sys.path to reach the directory (dirname)
         sys.path.append(os.path.abspath(path))

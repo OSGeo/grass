@@ -276,7 +276,7 @@ def get_git_commit_from_file(
         top_dir,
         "core_modules_with_last_commit.json",
     )
-    if os.path.exists(json_file_path):
+    if Path(json_file_path).exists():
         with open(json_file_path) as f:
             core_modules_with_last_commit = json.load(f)
         if pgm in core_modules_with_last_commit:

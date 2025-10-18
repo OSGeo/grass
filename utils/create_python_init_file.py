@@ -17,10 +17,11 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import glob
+from pathlib import Path
 
 
 def main(path):
-    if not os.path.exists(path) or not os.path.isdir(path):
+    if not Path(path).exists() or not os.path.isdir(path):
         print("'{}' is not a directory".format(path), file=sys.stderr)
         return 1
 

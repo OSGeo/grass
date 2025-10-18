@@ -17,7 +17,7 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (Mentor: Martin Landa)
 """
 
-import pathlib
+from pathlib import Path
 
 from xml.etree.ElementTree import ParseError
 
@@ -30,7 +30,7 @@ class BaseCapabilitiesTree(ET.ElementTree):
         """!Initialize xml.etree.ElementTree"""
         is_file = False
         try:
-            xml = pathlib.Path(cap_file)
+            xml = Path(cap_file)
             if xml.exists():
                 is_file = True
         except OSError as exc:

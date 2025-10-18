@@ -132,7 +132,7 @@ def _move_extracted_files(extract_dir, target_dir, files):
         else:
             shutil.copy(actual_path, target_dir)
     else:
-        if not os.path.exists(target_dir):
+        if not Path(target_dir).exists():
             os.mkdir(target_dir)
         for file_name in files:
             actual_file = os.path.join(extract_dir, file_name)

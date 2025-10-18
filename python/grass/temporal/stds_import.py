@@ -260,9 +260,9 @@ def import_stds(
     gs.set_raise_on_error(True)
 
     # Check if input file and extraction directory exits
-    if not os.path.exists(input):
+    if not Path(input).exists():
         gs.fatal(_("Space time raster dataset archive <%s> not found") % input)
-    if not create and not os.path.exists(directory):
+    if not create and not Path(directory).exists():
         gs.fatal(_("Extraction directory <%s> not found") % directory)
 
     tar = tarfile.open(name=input, mode="r")
@@ -481,7 +481,7 @@ def import_stds(
         if format_ == "GTiff":
             for row in maplist:
                 filename = row["filename"] + ".tif"
-                if not os.path.exists(filename):
+                if not Path(filename).exists():
                     gs.fatal(
                         _("Unable to find GeoTIFF raster file <%s> in archive.")
                         % filename
@@ -489,7 +489,7 @@ def import_stds(
         elif format_ == "AAIGrid":
             for row in maplist:
                 filename = row["filename"] + ".asc"
-                if not os.path.exists(filename):
+                if not Path(filename).exists():
                     gs.fatal(
                         _("Unable to find AAIGrid raster file <%s> in archive.")
                         % filename
@@ -497,7 +497,7 @@ def import_stds(
         elif format_ == "GML":
             for row in maplist:
                 filename = row["filename"] + ".xml"
-                if not os.path.exists(filename):
+                if not Path(filename).exists():
                     gs.fatal(
                         _("Unable to find GML vector file <%s> in archive.") % filename
                     )
@@ -507,7 +507,7 @@ def import_stds(
                     filename = str(row["filename"].split(":")[0]) + ".pack"
                 else:
                     filename = row["filename"] + ".pack"
-                if not os.path.exists(filename):
+                if not Path(filename).exists():
                     gs.fatal(
                         _("Unable to find GRASS package file <%s> in archive.")
                         % filename

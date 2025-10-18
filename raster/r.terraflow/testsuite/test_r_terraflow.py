@@ -4,6 +4,7 @@
 
 import os
 import tempfile
+from pathlib import Path
 from grass.gunittest.case import TestCase
 
 
@@ -25,7 +26,7 @@ class TestTerraflow(TestCase):
 
     def setUp(self):
         """Create input data for steady state groundwater flow computation"""
-        if not os.path.exists(self.testdir):
+        if not Path(self.testdir).exists():
             os.mkdir(self.testdir)
 
     def test_univar_mfd(self):

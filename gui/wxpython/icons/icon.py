@@ -18,6 +18,7 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import copy
+from pathlib import Path
 
 import wx
 
@@ -41,7 +42,7 @@ iconPath = iconPathDefault
 
 # join paths
 try:
-    if iconPath and not os.path.exists(iconPath):
+    if iconPath and not Path(iconPath).exists():
         raise OSError
 
     for key, img in iconSet.items():

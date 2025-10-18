@@ -22,6 +22,8 @@ import shutil
 import textwrap
 import time
 
+from pathlib import Path
+
 import wx
 from wx.lib.newevent import NewEvent
 
@@ -322,7 +324,7 @@ class LocationDownloadPanel(wx.Panel):
         url = item["url"]
         dirname = location_name_from_url(url)
         destination = os.path.join(self.database, dirname)
-        if os.path.exists(destination):
+        if Path(destination).exists():
             self._error(
                 _(
                     "Project name {name} already exists in {path}, download canceled"
@@ -379,7 +381,7 @@ class LocationDownloadPanel(wx.Panel):
         url = item["url"]
         dirname = location_name_from_url(url)
         destination = os.path.join(self.database, dirname)
-        if os.path.exists(destination):
+        if Path(destination).exists():
             self._warning(
                 _("Project named {name} already exists, rename it first").format(
                     name=dirname

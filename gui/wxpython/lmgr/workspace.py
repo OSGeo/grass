@@ -382,7 +382,7 @@ class WorkspaceManager:
         if filename[-4:] != ".gxw":
             filename += ".gxw"
 
-        if os.path.exists(filename):
+        if Path(filename).exists():
             dlg = wx.MessageDialog(
                 self.lmgr,
                 message=_(

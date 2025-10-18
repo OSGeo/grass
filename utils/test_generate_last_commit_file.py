@@ -22,6 +22,7 @@ import json
 import subprocess
 
 import pytest
+from pathlib import Path
 
 from .generate_last_commit_file import COMMIT_DATE_FORMAT
 
@@ -38,7 +39,7 @@ def read_json_file(json_file):
 
 
 def test_json_file_exists(json_file):
-    assert os.path.exists(json_file) is True
+    assert Path(json_file).exists() is True
 
 
 @pytest.mark.depends(on=["test_json_file_exists"])

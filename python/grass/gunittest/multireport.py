@@ -499,7 +499,7 @@ def main():
     for report in reports:
         try:
             summary_file = os.path.join(report, "test_keyvalue_result.txt")
-            if not os.path.exists(summary_file):
+            if not Path(summary_file).exists():
                 sys.stderr.write(
                     "WARNING: Key-value summary not available in"
                     " report <%s>, skipping.\n" % summary_file

@@ -276,7 +276,7 @@ class Layer:
 
     def IsRendered(self) -> bool:
         """!Check if layer was rendered (if the image file exists)"""
-        return bool(os.path.exists(self.mapfile))
+        return bool(Path(self.mapfile).exists())
 
     def SetType(self, ltype):
         """Set layer type"""
@@ -531,7 +531,7 @@ class RenderMapMgr(wx.EvtHandler):
         self.layers = []
 
         # re-render from scratch
-        if os.path.exists(self.Map.mapfile):
+        if Path(self.Map.mapfile).exists():
             os.remove(self.Map.mapfile)
 
     def _checkRenderedSizes(self, env, layers):

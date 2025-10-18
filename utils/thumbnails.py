@@ -161,7 +161,7 @@ def main():
     color_dir = os.path.join(os.environ["GISBASE"], "etc", "colors")
     output_dir = sys.argv[1]
 
-    if not os.path.exists(output_dir):
+    if not Path(output_dir).exists():
         os.makedirs(output_dir)
 
     pid = os.getpid()
