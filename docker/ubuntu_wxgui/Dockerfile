@@ -107,8 +107,8 @@ RUN apt-get update && apt-get upgrade -y && \
 
 # wxGUI
 RUN pip install -U \
-    -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-22.04 \
-    wxPython \
+    -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-24.04 \
+    wxpython \
     && pip cache purge
 # If you do not use any Gnome Accessibility features, to suppress warning
 # WARNING **: Couldn't connect to accessibility bus:
