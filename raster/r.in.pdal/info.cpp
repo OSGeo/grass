@@ -20,7 +20,7 @@ extern "C" {
 #include "projection.h"
 }
 
-#ifdef PDAL_USE_NOSRS
+#ifdef R_IN_PDAL_USE_NOSRS
 void get_extent(struct StringList *infiles, double *min_x, double *max_x,
                 double *min_y, double *max_y, double *min_z, double *max_z,
                 bool nosrs)
@@ -47,7 +47,7 @@ void get_extent(struct StringList *infiles, double *min_x, double *max_x,
         pdal::Options las_opts;
         pdal::Option las_opt("filename", infile);
         las_opts.add(las_opt);
-#ifdef PDAL_USE_NOSRS
+#ifdef R_IN_PDAL_USE_NOSRS
         if (nosrs) {
             pdal::Option nosrs_opt("nosrs", true);
             las_opts.add(nosrs_opt);
@@ -73,7 +73,7 @@ void get_extent(struct StringList *infiles, double *min_x, double *max_x,
         max_x_ = las_header.maxX();
         max_y_ = las_header.maxY();
         max_z_ = las_header.maxZ();
-#ifdef PDAL_USE_NOSRS
+#ifdef R_IN_PDAL_USE_NOSRS
         bool need_to_reproject = !nosrs && !proj_match &&
                                  spatial_reference.valid() &&
                                  !spatial_reference.empty();
@@ -112,7 +112,7 @@ void get_extent(struct StringList *infiles, double *min_x, double *max_x,
         }
     }
 }
-
+/* Reproject 4 points representing bounding box using PDAL pipeline */
 void get_reprojected_extent(pdal::SpatialReference &spatial_reference,
                             double *min_x, double *max_x, double *min_y,
                             double *max_y, double *min_z, double *max_z)
@@ -177,7 +177,7 @@ void get_reprojected_extent(pdal::SpatialReference &spatial_reference,
     }
 }
 
-#ifdef PDAL_USE_NOSRS
+#ifdef R_IN_PDAL_USE_NOSRS
 void print_extent(struct StringList *infiles, bool nosrs)
 #else
 void print_extent(struct StringList *infiles)
@@ -185,7 +185,7 @@ void print_extent(struct StringList *infiles)
 {
     double min_x, max_x, min_y, max_y, min_z, max_z;
 
-#ifdef PDAL_USE_NOSRS
+#ifdef R_IN_PDAL_USE_NOSRS
     get_extent(infiles, &min_x, &max_x, &min_y, &max_y, &min_z, &max_z, nosrs);
 #else
     get_extent(infiles, &min_x, &max_x, &min_y, &max_y, &min_z, &max_z);
@@ -194,7 +194,7 @@ void print_extent(struct StringList *infiles)
             min_x, min_z, max_z);
 }
 
-#ifdef PDAL_USE_NOSRS
+#ifdef R_IN_PDAL_USE_NOSRS
 void print_lasinfo(struct StringList *infiles, bool nosrs)
 #else
 void print_lasinfo(struct StringList *infiles)
@@ -220,7 +220,7 @@ void print_lasinfo(struct StringList *infiles)
         pdal::Options las_opts;
         pdal::Option las_opt("filename", infile);
         las_opts.add(las_opt);
-#ifdef PDAL_USE_NOSRS
+#ifdef R_IN_PDAL_USE_NOSRS
         if (nosrs) {
             pdal::Option nosrs_opt("nosrs", true);
             las_opts.add(nosrs_opt);

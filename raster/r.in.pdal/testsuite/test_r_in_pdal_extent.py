@@ -94,12 +94,17 @@ class ExtentTest(TestCase):
         tools = Tools()
         extent = tools.r_in_pdal(input=self.point_file_6346, flags="g").text
         extent = gs.parse_key_val(extent, vsep=" ", val_type=float)
-        self.assertAlmostEqual(extent["n"], 222012.882582, places=6)
-        self.assertAlmostEqual(extent["s"], 222000.743357, places=6)
-        self.assertAlmostEqual(extent["e"], 637511.895399, places=6)
-        self.assertAlmostEqual(extent["w"], 637499.697426, places=6)
-        self.assertAlmostEqual(extent["b"], 100, places=6)
-        self.assertAlmostEqual(extent["t"], 109, places=6)
+        expected = {
+            "n": 222012.882582,
+            "s": 222000.743357,
+            "e": 637511.895399,
+            "w": 637499.697426,
+            "b": 100,
+            "t": 109,
+        }
+        for key, expected_value in expected.items():
+            with self.subTest(key=key):
+                self.assertAlmostEqual(extent[key], expected_value, places=6)
 
     @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")
     def test_no_reprojection_needed_extent(self):

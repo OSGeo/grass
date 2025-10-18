@@ -445,7 +445,7 @@ int main(int argc, char *argv[])
 
     /* If we print extent, there is no need to validate rest of the input */
     if (print_extent_flag->answer) {
-#ifdef PDAL_USE_NOSRS
+#ifdef R_IN_PDAL_USE_NOSRS
         print_extent(&infiles, over_flag->answer);
 #else
         print_extent(&infiles);
@@ -454,7 +454,7 @@ int main(int argc, char *argv[])
     }
 
     if (print_info_flag->answer) {
-#ifdef PDAL_USE_NOSRS
+#ifdef R_IN_PDAL_USE_NOSRS
         print_lasinfo(&infiles, over_flag->answer);
 #else
         print_lasinfo(&infiles);
@@ -519,7 +519,7 @@ int main(int argc, char *argv[])
     if (extents_flag->answer) {
         double min_x, max_x, min_y, max_y, min_z, max_z;
 
-#ifdef PDAL_USE_NOSRS
+#ifdef R_IN_PDAL_USE_NOSRS
         get_extent(&infiles, &min_x, &max_x, &min_y, &max_y, &min_z, &max_z,
                    over_flag->answer);
 #else
@@ -736,7 +736,7 @@ int main(int argc, char *argv[])
         pdal::Options las_opts;
         pdal::Option las_opt("filename", infile);
         las_opts.add(las_opt);
-#ifdef PDAL_USE_NOSRS
+#ifdef R_IN_PDAL_USE_NOSRS
         if (over_flag->answer) {
             pdal::Option nosrs_opt("nosrs", true);
             las_opts.add(nosrs_opt);
