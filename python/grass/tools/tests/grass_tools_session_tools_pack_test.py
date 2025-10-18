@@ -700,7 +700,7 @@ def test_workflow_create_project_and_run_general_crs(
     raster = tmp_path / "raster.grass_raster"
     gs.create_project(project, crs=ones_raster_file_epsg3358)
     with (
-        gs.setup.init(project) as session,
+        gs.setup.init(project, env=os.environ.copy()) as session,
         Tools(session=session) as tools,
     ):
         assert tools.g_region(flags="p", format="json")["crs"]["type"] == "other"
@@ -726,7 +726,7 @@ def test_workflow_create_project_and_run_ll_crs(tmp_path, ones_raster_file_epsg4
     raster = tmp_path / "raster.grass_raster"
     gs.create_project(project, crs=ones_raster_file_epsg4326)
     with (
-        gs.setup.init(project) as session,
+        gs.setup.init(project, env=os.environ.copy()) as session,
         Tools(session=session) as tools,
     ):
         assert tools.g_region(flags="p", format="json")["crs"]["type"] == "ll"
@@ -752,7 +752,7 @@ def test_workflow_create_project_and_run_xy_crs(tmp_path, rows_raster_file4x5):
     raster = tmp_path / "raster.grass_raster"
     gs.create_project(project, crs=rows_raster_file4x5)
     with (
-        gs.setup.init(project) as session,
+        gs.setup.init(project, env=os.environ.copy()) as session,
         Tools(session=session) as tools,
     ):
         assert tools.g_region(flags="p", format="json")["crs"]["type"] == "xy"

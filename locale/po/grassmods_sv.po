@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-04 15:55+0000\n"
-"PO-Revision-Date: 2025-10-02 18:25+0000\n"
+"POT-Creation-Date: 2025-10-11 15:59+0000\n"
+"PO-Revision-Date: 2025-10-13 12:30+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
 "Language: sv\n"
@@ -351,6 +351,7 @@ msgid "The -p flag is required when using the format option."
 msgstr "Flaggan -p krävs när formatalternativet används."
 
 #: ../db/db.connect/main.c:236 ../db/db.tables/main.c:41
+#: ../scripts/db.test/db.test.py:45
 msgid "Database connection not defined. Run db.connect."
 msgstr "Databasanslutningen är inte definierad. Kör db.connect."
 
@@ -1854,7 +1855,7 @@ msgstr "Visar en lista över alla tillgängliga displayfärger."
 #: ../raster/r.mask.status/main.c:35 ../raster/r.mfilter/main.c:65
 #: ../raster/r.mode/main.c:53 ../raster/r.neighbors/main.c:181
 #: ../raster/r.null/main.c:58 ../raster/r.object.geometry/main.c:76
-#: ../raster/r.out.ascii/main.c:53 ../raster/r.out.bin/main.c:298
+#: ../raster/r.out.ascii/main.c:54 ../raster/r.out.bin/main.c:298
 #: ../raster/r.out.gdal/main.c:135 ../raster/r.out.gridatb/main.c:66
 #: ../raster/r.out.mat/main.c:62 ../raster/r.out.mpeg/main.c:104
 #: ../raster/r.out.png/main.c:110 ../raster/r.out.pov/main.c:111
@@ -2148,7 +2149,7 @@ msgstr "Ingen grafikenhet vald"
 #: ../raster/r.carve/main.c:153 ../raster/r.cost/main.c:357
 #: ../raster/r.walk/main.c:460 ../scripts/r.mask/r.mask.py:173
 #: ../scripts/v.db.univar/v.db.univar.py:80
-#: ../scripts/v.dissolve/v.dissolve.py:576 ../scripts/v.pack/v.pack.py:62
+#: ../scripts/v.dissolve/v.dissolve.py:578 ../scripts/v.pack/v.pack.py:62
 #: ../scripts/v.report/v.report.py:85 ../vector/v.clean/test/topocheck.c:62
 #: ../vector/v.colors/main.c:252 ../vector/v.edit/main.c:161
 #: ../vector/v.lidar.correction/main.c:158
@@ -3668,7 +3669,7 @@ msgstr "Det går inte att ta bort katalogen <%s>"
 #: ../imagery/i.ortho.photo/i.ortho.transform/main.c:413
 #: ../misc/m.nviz.script/main.c:198 ../misc/m.transform/main.c:273
 #: ../raster/r.category/main.c:239 ../raster/r.horizon/main.c:430
-#: ../raster/r.in.lidar/main.c:670 ../raster/r.out.ascii/main.c:152
+#: ../raster/r.in.lidar/main.c:670 ../raster/r.out.ascii/main.c:159
 #: ../raster/r.out.ppm3/main.c:134 ../raster/r.profile/main.c:224
 #: ../raster/r.recode/main.c:89 ../raster3d/r3.out.vtk/main.c:422
 #: ../vector/v.edit/main.c:82 ../vector/v.net/main.c:99
@@ -4037,7 +4038,7 @@ msgstr "Problem med att läsa range-fil"
 msgid "Overlays cell category values on a raster map displayed in the active graphics frame."
 msgstr "Lägger över cellkategorivärden på en rasterkarta som visas i den aktiva grafikramen."
 
-#: ../display/d.rast.num/main.c:103 ../raster/r.out.ascii/main.c:74
+#: ../display/d.rast.num/main.c:103 ../raster/r.out.ascii/main.c:78
 #: ../raster/r.out.vtk/parameters.c:97 ../raster3d/r3.out.vtk/parameters.c:107
 #: ../vector/v.out.ascii/args.c:75
 msgid "Number of significant digits (floating point only)"
@@ -7057,10 +7058,9 @@ msgid "Region <%s> not found"
 msgstr "Region <%s> hittades inte"
 
 #: ../general/g.region/main.c:509
-#, fuzzy, c-format
-#| msgid "Map name <%s> is too long"
+#, c-format
 msgid "Raster map name too long: <%s>"
-msgstr "Kartnamnet <%s> är för långt"
+msgstr "Rasterkartnamnet är för långt: <%s>"
 
 #: ../general/g.region/main.c:542 ../raster/r.colors/edit_colors.c:515
 #: ../raster/r.univar/r3.univar_main.c:210
@@ -7078,10 +7078,9 @@ msgid "3D raster map <%s> not found"
 msgstr "3D-rasterkarta <%s> hittades inte"
 
 #: ../general/g.region/main.c:566
-#, fuzzy, c-format
-#| msgid "Output vector map name <%s> is too long"
+#, c-format
 msgid "Vector map name too long: <%s>"
-msgstr "Utmatningsvektorkartans namn <%s> är för långt"
+msgstr "Vektorkartans namn är för långt: <%s>"
 
 #: ../general/g.region/main.c:589
 msgid "Unable to get map bounding box"
@@ -12811,7 +12810,7 @@ msgstr "Sparar innehållet i den aktiva bildskärmen till en grafikfil."
 #: ../locale/scriptstrings/v.pack_to_translate.c:3
 #: ../raster/r.colors.out/raster3d_main.c:48
 #: ../raster/r.colors.out/raster_main.c:47 ../raster/r.external.out/main.c:235
-#: ../raster/r.out.ascii/main.c:54 ../raster/r.out.bin/main.c:299
+#: ../raster/r.out.ascii/main.c:55 ../raster/r.out.bin/main.c:299
 #: ../raster/r.out.gdal/main.c:136 ../raster/r.out.gridatb/main.c:67
 #: ../raster/r.out.mat/main.c:63 ../raster/r.out.mpeg/main.c:105
 #: ../raster/r.out.png/main.c:111 ../raster/r.out.pov/main.c:112
@@ -12832,7 +12831,7 @@ msgstr "export"
 #: ../locale/scriptstrings/db.out.ogr_to_translate.c:4
 #: ../locale/scriptstrings/r.out.xyz_to_translate.c:4
 #: ../locale/scriptstrings/t.rast.out.vtk_to_translate.c:4
-#: ../raster/r.external.out/main.c:236 ../raster/r.out.ascii/main.c:55
+#: ../raster/r.external.out/main.c:236 ../raster/r.out.ascii/main.c:56
 #: ../raster/r.out.bin/main.c:300 ../raster/r.out.gdal/main.c:137
 #: ../raster/r.out.gridatb/main.c:68 ../raster/r.out.mat/main.c:64
 #: ../raster/r.out.mpeg/main.c:106 ../raster/r.out.png/main.c:112
@@ -19994,15 +19993,12 @@ msgstr "Bildgrupp <%s> skapad"
 
 #: ../raster/r.external/proj.c:51 ../raster/r.external/proj.c:93
 #: ../raster/r.in.gdal/proj.c:51 ../raster/r.in.gdal/proj.c:93
-#, fuzzy, c-format
-#| msgid ""
-#| "Input contains an invalid SRS. WKT definition:\n"
-#| "%s"
+#, c-format
 msgid ""
 "Input contains an invalid CRS. WKT definition:\n"
 "%s"
 msgstr ""
-"Indata innehåller en ogiltig SRS. WKT definition:\n"
+"Indata innehåller en ogiltig CRS. WKT-definition:\n"
 "%s"
 
 #: ../raster/r.external/proj.c:120 ../raster/r.in.gdal/proj.c:120
@@ -20911,10 +20907,8 @@ msgid "Failed to compute gradient field"
 msgstr "Misslyckades med att beräkna gradientfält"
 
 #: ../raster/r.gwflow/main.c:557
-#, fuzzy
-#| msgid "Unable to create and solve the linear equation system"
 msgid "Unable to create the linear equation system"
-msgstr "Kan inte skapa och lösa det linjära ekvationssystemet"
+msgstr "Kan inte skapa det linjära ekvationssystemet"
 
 #: ../raster/r.his/main.c:72
 msgid "Generates red, green and blue (RGB) raster map layers combining hue, intensity and saturation (HIS) values from user-specified input raster map layers."
@@ -23787,64 +23781,60 @@ msgstr "Beräkning av statistik"
 msgid "Writing output"
 msgstr "Skriva utdata"
 
-#: ../raster/r.out.ascii/main.c:58
+#: ../raster/r.out.ascii/main.c:62
 msgid "Converts a raster map layer into a GRASS ASCII text file."
 msgstr "Konverterar ett rasterkartlager till en GRASS ASCII-textfil."
 
-#: ../raster/r.out.ascii/main.c:67
+#: ../raster/r.out.ascii/main.c:71
 msgid "Name for output ASCII grid map (use out=- for stdout)"
 msgstr "Namn för utmatning av ASCII-nätkarta (använd out=- för stdout)"
 
-#: ../raster/r.out.ascii/main.c:80
+#: ../raster/r.out.ascii/main.c:84
 msgid "Number of values printed before wrapping a line (only SURFER or MODFLOW format)"
 msgstr "Antal värden som skrivs ut innan en rad bryts (endast SURFER- eller MODFLOW-format)"
 
-#: ../raster/r.out.ascii/main.c:86
+#: ../raster/r.out.ascii/main.c:90
 msgid "String to represent null cell (GRASS grid only)"
 msgstr "Sträng för att representera nollcell (endast GRASS-rutnät)"
 
-#: ../raster/r.out.ascii/main.c:90 ../raster3d/r3.out.ascii/main.c:98
+#: ../raster/r.out.ascii/main.c:94 ../raster3d/r3.out.ascii/main.c:98
 msgid "Suppress printing of header information"
 msgstr "Undertrycka utskrift av rubrikinformation"
 
-#: ../raster/r.out.ascii/main.c:94
+#: ../raster/r.out.ascii/main.c:98
 msgid "Write SURFER (Golden Software) ASCII grid"
 msgstr "Skriv SURFER (Golden Software) ASCII-rutnät"
 
-#: ../raster/r.out.ascii/main.c:98
+#: ../raster/r.out.ascii/main.c:102
 msgid "Write MODFLOW (USGS) ASCII array"
 msgstr "Skriva MODFLOW (USGS) ASCII-array"
 
-#: ../raster/r.out.ascii/main.c:102
+#: ../raster/r.out.ascii/main.c:106
+msgid "Write LISFLOOD (EU) ASCII array"
+msgstr "Skriv LISFLOOD (EU) ASCII-array"
+
+#: ../raster/r.out.ascii/main.c:110
 msgid "Force output of integer values"
 msgstr "Tvinga fram utmatning av heltalsvärden"
 
-#: ../raster/r.out.ascii/main.c:109
+#: ../raster/r.out.ascii/main.c:117
 msgid "Failed to interpret dp as an integer"
 msgstr "Misslyckades med att tolka dp som ett heltal"
 
-#: ../raster/r.out.ascii/main.c:111 ../raster3d/r3.out.vtk/main.c:393
+#: ../raster/r.out.ascii/main.c:119 ../raster3d/r3.out.vtk/main.c:393
 msgid "dp has to be from 0 to 20"
 msgstr "dp måste vara mellan 0 och 20"
 
-#: ../raster/r.out.ascii/main.c:117
+#: ../raster/r.out.ascii/main.c:125
 msgid "Failed to interpret width as an integer"
 msgstr "Misslyckades med att tolka bredd som ett heltal"
 
-#: ../raster/r.out.ascii/main.c:123
-msgid "Both -s and -h doesn't make sense"
-msgstr "Både -s och -h är inte meningsfulla"
-
-#: ../raster/r.out.ascii/main.c:126
-msgid "Use -M or -s, not both"
-msgstr "Använd -M eller -s, inte båda"
-
-#: ../raster/r.out.ascii/main.c:161
+#: ../raster/r.out.ascii/main.c:168
 #, c-format
 msgid "Unable to read fp range for <%s>"
 msgstr "Det går inte att läsa fp-intervallet för <%s>"
 
-#: ../raster/r.out.ascii/main.c:177
+#: ../raster/r.out.ascii/main.c:189
 #, c-format
 msgid "Read failed at row %d"
 msgstr "Läsning misslyckades på rad %d"
@@ -24187,35 +24177,35 @@ msgstr "Kunde inte läsa dataintervallet för raster <%s>"
 msgid "Exporting to GDAL data type: %s"
 msgstr "Exporterar till GDAL-datatyp: %s"
 
-#: ../raster/r.out.gdal/main.c:538
+#: ../raster/r.out.gdal/main.c:532
+msgid "Forcing raster export"
+msgstr "Tvinga fram rasterexport"
+
+#: ../raster/r.out.gdal/main.c:541
 msgid "Raster export would result in complete data loss, aborting."
 msgstr "Rasterexport skulle resultera i fullständig dataförlust och avbrytas."
 
-#: ../raster/r.out.gdal/main.c:549
+#: ../raster/r.out.gdal/main.c:552
 #, c-format
 msgid "Precision loss: Raster map <%s> of type %s to be exported as %s. This can be avoided by using %s."
 msgstr "Förlust av precision: Rasterkarta <%s> av typ %s exporteras som %s. Detta kan undvikas genom att använda %s."
 
-#: ../raster/r.out.gdal/main.c:562
+#: ../raster/r.out.gdal/main.c:565
 #, c-format
 msgid "Precision loss: The range of <%s> can not be accurately preserved with GDAL datatype Float32. This can be avoided by exporting to Int32 or Float64."
 msgstr "Förlust av precision: Intervallet för <%s> kan inte bevaras korrekt med GDAL-datatypen Float32. Detta kan undvikas genom att exportera till Int32 eller Float64."
 
-#: ../raster/r.out.gdal/main.c:570
+#: ../raster/r.out.gdal/main.c:573
 #, c-format
 msgid "Precision loss: Float32 can not preserve the DCELL precision of raster <%s>. This can be avoided by using Float64"
 msgstr "Förlust av precision: Float32 kan inte bevara DCELL-precisionen för raster <%s>. Detta kan undvikas genom att använda Float64"
 
-#: ../raster/r.out.gdal/main.c:579
-msgid "Forcing raster export"
-msgstr "Tvinga fram rasterexport"
-
-#: ../raster/r.out.gdal/main.c:582
+#: ../raster/r.out.gdal/main.c:581
 #, c-format
 msgid "Raster export aborted. To override data loss check, use the -%c flag"
 msgstr "Rasterexporten avbröts. Om du vill åsidosätta kontrollen av dataförlust använder du flaggan -%c"
 
-#: ../raster/r.out.gdal/main.c:599 ../raster/r.out.gdal/main.c:641
+#: ../raster/r.out.gdal/main.c:598 ../raster/r.out.gdal/main.c:641
 #: ../raster/r.out.gdal/main.c:645
 msgid "Raster export aborted."
 msgstr "Rasterexporten avbröts."
@@ -24915,10 +24905,9 @@ msgid "Reading raster values map <%s> ..."
 msgstr "Läser rastervärden map <%s> ..."
 
 #: ../raster/r.path/main.c:399
-#, fuzzy, c-format
-#| msgid "Unable to open temporary file <%s>"
+#, c-format
 msgid "Unable to open temporary file <%s>: %s"
-msgstr "Det går inte att öppna temporär fil <%s>"
+msgstr "Det går inte att öppna temporära filen <%s>: %s"
 
 #: ../raster/r.path/main.c:411 ../raster/r.path/main.c:489
 #: ../raster/r.path/main.c:506
@@ -32323,7 +32312,7 @@ msgstr ""
 
 #: ../raster3d/r3.gwflow/main.c:236
 msgid "No sink map provided. Initializing zero sink..."
-msgstr ""
+msgstr "Ingen sänkningskarta tillhandahölls, Initierar noll sänkning..."
 
 #: ../raster3d/r3.gwflow/main.c:380 ../raster3d/r3.in.lidar/main.c:488
 #: ../raster3d/r3.in.lidar/main.c:496 ../raster3d/r3.in.lidar/main.c:504
@@ -33311,16 +33300,16 @@ msgstr "Modul <%s> misslyckades"
 msgid "Exported table <%s>"
 msgstr "Exporterad tabell <%s>"
 
-#: ../scripts/db.test/db.test.py:44
+#: ../scripts/db.test/db.test.py:46
 #, python-format
 msgid "Using DB driver: %s"
 msgstr "Använda DB-drivrutin: %s"
 
-#: ../scripts/db.test/db.test.py:72
+#: ../scripts/db.test/db.test.py:74
 msgid "EXECUTE: OK"
 msgstr "EXECUTE: OK"
 
-#: ../scripts/db.test/db.test.py:86
+#: ../scripts/db.test/db.test.py:88
 msgid "RESULT: OK"
 msgstr "RESULTAT: OK"
 
@@ -33470,7 +33459,7 @@ msgstr "Installera om tillägget <%s>..."
 msgid "Unable to process extension:%s"
 msgstr "Det går inte att bearbeta förlängning:%s"
 
-#: ../scripts/g.extension/g.extension.py:262
+#: ../scripts/g.extension/g.extension.py:257
 msgid ""
 "Failed to get Git version.\n"
 "{}"
@@ -33478,25 +33467,25 @@ msgstr ""
 "Misslyckades med att hämta Git-versionen.\n"
 "{}"
 
-#: ../scripts/g.extension/g.extension.py:268
+#: ../scripts/g.extension/g.extension.py:263
 msgid "Failed to get Git version."
 msgstr "Misslyckades med att hämta Git-versionen."
 
-#: ../scripts/g.extension/g.extension.py:298
+#: ../scripts/g.extension/g.extension.py:293
 msgid "Could not found Git. Please install it."
 msgstr "Kunde inte hitta Git. Installera det."
 
-#: ../scripts/g.extension/g.extension.py:307
+#: ../scripts/g.extension/g.extension.py:302
 msgid "Cannot write to working directory {}."
 msgstr "Det går inte att skriva till arbetskatalogen {}."
 
-#: ../scripts/g.extension/g.extension.py:365
+#: ../scripts/g.extension/g.extension.py:360
 #, python-brace-format
 msgid "Branch <{branch}> not found in repository <{url}>"
 msgstr "Gren <{branch}> hittades inte i arkiv <{url}>"
 
-#: ../scripts/g.extension/g.extension.py:391
-#: ../scripts/g.extension/g.extension.py:2790
+#: ../scripts/g.extension/g.extension.py:386
+#: ../scripts/g.extension/g.extension.py:2785
 #, python-brace-format
 msgid ""
 "Failed to get addons files list from the Git repository <{repo_path}>.\n"
@@ -33505,11 +33494,11 @@ msgstr ""
 "Misslyckades med att hämta listan med tilläggsfiler från Git-arkivet <{repo_path}>.\n"
 "{error}"
 
-#: ../scripts/g.extension/g.extension.py:416
+#: ../scripts/g.extension/g.extension.py:411
 msgid "No addon named <{}> found in the repository."
 msgstr "Inget tillägg med namnet <{}> hittades i förvaret."
 
-#: ../scripts/g.extension/g.extension.py:520
+#: ../scripts/g.extension/g.extension.py:515
 #, python-brace-format
 msgid ""
 "Failed to get branch from the Git repository <{repo_path}>.\n"
@@ -33518,324 +33507,324 @@ msgstr ""
 "Misslyckades med att hämta gren från Git-arkivet <{repo_path}>.\n"
 "{error}"
 
-#: ../scripts/g.extension/g.extension.py:543
+#: ../scripts/g.extension/g.extension.py:538
 msgid "Cannot retrieve organization and repository from URL: <{}>."
 msgstr "Det går inte att hämta organisation och arkiv från URL: <{}>."
 
-#: ../scripts/g.extension/g.extension.py:581
+#: ../scripts/g.extension/g.extension.py:576
 #, python-brace-format
 msgid "Download file from <{url}>, failed. File is not on the server or check your internet connection."
 msgstr "Nedladdning av fil från <{url}> misslyckades. Filen finns inte på servern eller kontrollera din internetanslutning."
 
-#: ../scripts/g.extension/g.extension.py:594
+#: ../scripts/g.extension/g.extension.py:589
 #, python-format
 msgid "'%s' required. Please install '%s' first."
 msgstr "'%s' krävs. Installera '%s' först."
 
-#: ../scripts/g.extension/g.extension.py:658
+#: ../scripts/g.extension/g.extension.py:653
 msgid "List of installed extensions (toolboxes):"
 msgstr "Lista över installerade tillägg (verktygslådor):"
 
-#: ../scripts/g.extension/g.extension.py:660
+#: ../scripts/g.extension/g.extension.py:655
 msgid "List of installed extensions (modules):"
 msgstr "Lista över installerade tillägg (moduler):"
 
-#: ../scripts/g.extension/g.extension.py:664
+#: ../scripts/g.extension/g.extension.py:659
 msgid "No extension (toolbox) installed"
 msgstr "Inget tillägg (verktygslåda) installerat"
 
-#: ../scripts/g.extension/g.extension.py:666
+#: ../scripts/g.extension/g.extension.py:661
 msgid "No extension (module) installed"
 msgstr "Ingen förlängning (modul) installerad"
 
-#: ../scripts/g.extension/g.extension.py:741
+#: ../scripts/g.extension/g.extension.py:736
 msgid "List of available extensions (toolboxes):"
 msgstr "Lista över tillgängliga tillägg (verktygslådor):"
 
-#: ../scripts/g.extension/g.extension.py:756
+#: ../scripts/g.extension/g.extension.py:751
 msgid "List of available extensions (modules):"
 msgstr "Lista över tillgängliga tillägg (moduler):"
 
-#: ../scripts/g.extension/g.extension.py:782
-#: ../scripts/g.extension/g.extension.py:812
+#: ../scripts/g.extension/g.extension.py:777
+#: ../scripts/g.extension/g.extension.py:807
 msgid "Unable to fetch addons metadata file"
 msgstr "Det går inte att hämta metadatafilen för tillägg"
 
-#: ../scripts/g.extension/g.extension.py:887
+#: ../scripts/g.extension/g.extension.py:882
 #, python-brace-format
 msgid "Unable to parse '{url}'. Trying to scan Git repository (may take some time)..."
 msgstr "Det går inte att tolka '{url}'. Försöker skanna Git-arkivet (kan ta lite tid)..."
 
-#: ../scripts/g.extension/g.extension.py:935
+#: ../scripts/g.extension/g.extension.py:930
 msgid "Fetching list of extensions from GRASS-Addons SVN repository (be patient)..."
 msgstr "Hämtar lista över tillägg från GRASS-Addons SVN-repository (ha tålamod) ..."
 
-#: ../scripts/g.extension/g.extension.py:942
+#: ../scripts/g.extension/g.extension.py:937
 msgid "Flag 'c' ignored, addons metadata file not available"
 msgstr "Flagga \"c\" ignorerad, metadatafilen för tillägg inte tillgänglig"
 
-#: ../scripts/g.extension/g.extension.py:944
+#: ../scripts/g.extension/g.extension.py:939
 msgid "Flag 'g' ignored, addons metadata file not available"
 msgstr "Flagga \"g\" ignorerad, metadatafilen för tillägg inte tillgänglig"
 
-#: ../scripts/g.extension/g.extension.py:949
-#: ../scripts/g.extension/g.extension.py:984
+#: ../scripts/g.extension/g.extension.py:944
+#: ../scripts/g.extension/g.extension.py:979
 #, python-format
 msgid "Checking for '%s' modules..."
 msgstr "Kontrollerar för '%s'-moduler..."
 
-#: ../scripts/g.extension/g.extension.py:957
-#: ../scripts/g.extension/g.extension.py:991
+#: ../scripts/g.extension/g.extension.py:952
+#: ../scripts/g.extension/g.extension.py:986
 #, python-format
 msgid "Unable to fetch '%s'"
 msgstr "Det går inte att hämta '%s'"
 
-#: ../scripts/g.extension/g.extension.py:1159
+#: ../scripts/g.extension/g.extension.py:1154
 msgid "$GISBASE not defined"
 msgstr "$GISBASE inte definierad"
 
-#: ../scripts/g.extension/g.extension.py:1163
+#: ../scripts/g.extension/g.extension.py:1158
 #, python-format
 msgid "Extension <%s> already installed. Re-installing..."
 msgstr "Tillägg <%s> redan installerat. Installerar om..."
 
-#: ../scripts/g.extension/g.extension.py:1174
+#: ../scripts/g.extension/g.extension.py:1169
 #, python-format
 msgid "Installing toolbox <%s>..."
 msgstr "Installera verktygslåda <%s>..."
 
-#: ../scripts/g.extension/g.extension.py:1184
+#: ../scripts/g.extension/g.extension.py:1179
 msgid "Nothing to install"
 msgstr "Inget att installera"
 
-#: ../scripts/g.extension/g.extension.py:1217
+#: ../scripts/g.extension/g.extension.py:1212
 msgid "Installation failed, sorry. Please check above error messages."
 msgstr "Installationen misslyckades, tyvärr. Kontrollera ovanstående felmeddelanden."
 
-#: ../scripts/g.extension/g.extension.py:1220
+#: ../scripts/g.extension/g.extension.py:1215
 msgid "Updating extensions metadata file..."
 msgstr "Uppdaterar metadatafilen för tillägg ..."
 
-#: ../scripts/g.extension/g.extension.py:1224
+#: ../scripts/g.extension/g.extension.py:1219
 msgid "Updating extension modules metadata file..."
 msgstr "Uppdaterar metadatafilen för tilläggsmoduler..."
 
-#: ../scripts/g.extension/g.extension.py:1231
+#: ../scripts/g.extension/g.extension.py:1226
 #, python-format
 msgid "Installation of <%s> successfully finished"
 msgstr "Installation av <%s> framgångsrikt avslutad"
 
-#: ../scripts/g.extension/g.extension.py:1237
+#: ../scripts/g.extension/g.extension.py:1232
 msgid "This add-on module will not function until you set the GRASS_ADDON_BASE environment variable (see \"g.manual variables\")"
 msgstr "Denna tilläggsmodul kommer inte att fungera förrän du ställer in miljövariabeln GRASS_ADDON_BASE (se \"g.manual variables\")"
 
-#: ../scripts/g.extension/g.extension.py:1272
+#: ../scripts/g.extension/g.extension.py:1267
 msgid "Unable to read addons metadata file from the remote server"
 msgstr "Det gick inte att läsa metadatafilen för tillägg från fjärrservern"
 
-#: ../scripts/g.extension/g.extension.py:1282
+#: ../scripts/g.extension/g.extension.py:1277
 msgid "No addons metadata available"
 msgstr "Inga metadata för tillägg tillgängliga"
 
-#: ../scripts/g.extension/g.extension.py:1285
+#: ../scripts/g.extension/g.extension.py:1280
 #, python-format
 msgid "No addons metadata available for <%s>"
 msgstr "Inga metadata för tillägg tillgängliga för <%s>"
 
-#: ../scripts/g.extension/g.extension.py:1342
+#: ../scripts/g.extension/g.extension.py:1337
 #, python-brace-format
 msgid "Unable to read addons metadata file from the remote server: {0}"
 msgstr "Det gick inte att läsa metadatafilen för tillägg från fjärrservern: {0}"
 
-#: ../scripts/g.extension/g.extension.py:1348
+#: ../scripts/g.extension/g.extension.py:1343
 #, python-format, python-brace-format
 msgid "Unable to parse '%s': {0}"
 msgstr "Det gick inte att tolka '%s': {0}"
 
-#: ../scripts/g.extension/g.extension.py:1531
+#: ../scripts/g.extension/g.extension.py:1526
 #, python-brace-format
 msgid "No metadata available for module '{name}': {error}"
 msgstr "Inga metadata tillgängliga för modul '{name}': {error}"
 
-#: ../scripts/g.extension/g.extension.py:1600
+#: ../scripts/g.extension/g.extension.py:1595
 msgid "Downloading precompiled GRASS Addons <{}>..."
 msgstr "Nedladdning av förkompilerade GRASS Addons <{}>..."
 
-#: ../scripts/g.extension/g.extension.py:1693
+#: ../scripts/g.extension/g.extension.py:1688
 msgid "svn not found but needed to fetch AddOns from an SVN repository"
 msgstr "svn hittades inte men behövdes för att hämta AddOns från ett SVN-repository"
 
-#: ../scripts/g.extension/g.extension.py:1700
-#: ../scripts/g.extension/g.extension.py:1734
+#: ../scripts/g.extension/g.extension.py:1695
+#: ../scripts/g.extension/g.extension.py:1729
 #, python-format
 msgid "GRASS Addons <%s> not found"
 msgstr "GRASS Addons <%s> hittades inte"
 
-#: ../scripts/g.extension/g.extension.py:1824
+#: ../scripts/g.extension/g.extension.py:1819
 #, python-brace-format
 msgid "ZIP file is unreadable: {0}"
 msgstr "ZIP-filen är oläslig: {0}"
 
-#: ../scripts/g.extension/g.extension.py:1854
+#: ../scripts/g.extension/g.extension.py:1849
 #: ../scripts/r.unpack/r.unpack.py:119 ../scripts/v.unpack/v.unpack.py:130
 msgid "Extracting may be unsafe; consider updating Python"
 msgstr "Extrahering kan vara osäkert; överväg att uppdatera Python"
 
-#: ../scripts/g.extension/g.extension.py:1860
+#: ../scripts/g.extension/g.extension.py:1855
 #, python-brace-format
 msgid "Archive file is unreadable: {0}"
 msgstr "Arkivfilen är oläslig: {0}"
 
-#: ../scripts/g.extension/g.extension.py:1877
+#: ../scripts/g.extension/g.extension.py:1872
 #, python-brace-format
 msgid "Type of source identified as '{source}'."
 msgstr "Typ av källa som identifierats som \"{source}\"."
 
-#: ../scripts/g.extension/g.extension.py:1880
-#: ../scripts/g.extension/g.extension.py:1889
-#: ../scripts/g.extension/g.extension.py:1896
+#: ../scripts/g.extension/g.extension.py:1875
+#: ../scripts/g.extension/g.extension.py:1884
+#: ../scripts/g.extension/g.extension.py:1891
 #, python-brace-format
 msgid "Fetching <{name}> from <{url}> (be patient)..."
 msgstr "Hämtar <{name}> från <{url}> (ha tålamod)..."
 
-#: ../scripts/g.extension/g.extension.py:1911
+#: ../scripts/g.extension/g.extension.py:1906
 #, python-brace-format
 msgid "Expected default branch not found. Trying again from <{url}>..."
 msgstr "Förväntad standardgren hittades inte. Försöker igen från <{url}>..."
 
-#: ../scripts/g.extension/g.extension.py:1919
+#: ../scripts/g.extension/g.extension.py:1914
 #, python-brace-format
 msgid "Extension <{name}> not found. Please check 'url' and 'branch' options"
 msgstr "Tillägg <{name}> hittades inte. Kontrollera alternativen 'url' och 'branch'"
 
-#: ../scripts/g.extension/g.extension.py:1924
+#: ../scripts/g.extension/g.extension.py:1919
 msgid "Extension <{}> not found"
 msgstr "Tillägg <{}> hittades inte"
 
-#: ../scripts/g.extension/g.extension.py:1952
+#: ../scripts/g.extension/g.extension.py:1947
 #, python-brace-format
 msgid "Unknown extension (addon) source type '{0}'. Please report this to the grass-user mailing list."
 msgstr "Okänt tillägg (addon) källtyp '{0}'. Rapportera detta till e-postlistan grass-user."
 
-#: ../scripts/g.extension/g.extension.py:1980
+#: ../scripts/g.extension/g.extension.py:1975
 msgid "Path to the source code:"
 msgstr "Sökväg till källkoden:"
 
-#: ../scripts/g.extension/g.extension.py:2000
+#: ../scripts/g.extension/g.extension.py:1995
 msgid "Module name not found. Check module Makefile syntax (PGM variable)."
 msgstr "Modulnamnet hittades inte. Kontrollera modulens Makefile-syntax (PGM-variabel)."
 
-#: ../scripts/g.extension/g.extension.py:2075
+#: ../scripts/g.extension/g.extension.py:2070
 msgid "To compile run:"
 msgstr "För att kompilera kör:"
 
-#: ../scripts/g.extension/g.extension.py:2077
+#: ../scripts/g.extension/g.extension.py:2072
 msgid "To install run:"
 msgstr "Kör för att installera:"
 
-#: ../scripts/g.extension/g.extension.py:2085
+#: ../scripts/g.extension/g.extension.py:2080
 msgid "Compiling..."
 msgstr "Kompilerar..."
 
-#: ../scripts/g.extension/g.extension.py:2087
+#: ../scripts/g.extension/g.extension.py:2082
 msgid "Please install GRASS development package"
 msgstr "Installera GRASS-utvecklingspaketet"
 
-#: ../scripts/g.extension/g.extension.py:2090
+#: ../scripts/g.extension/g.extension.py:2085
 msgid "Compilation failed, sorry. Please check above error messages."
 msgstr "Kompileringen misslyckades, tyvärr. Kontrollera ovanstående felmeddelanden."
 
-#: ../scripts/g.extension/g.extension.py:2104
+#: ../scripts/g.extension/g.extension.py:2099
 msgid "Installing..."
 msgstr "Installerar …"
 
-#: ../scripts/g.extension/g.extension.py:2195
+#: ../scripts/g.extension/g.extension.py:2190
 msgid "List of removed files:"
 msgstr "Lista över borttagna filer:"
 
-#: ../scripts/g.extension/g.extension.py:2197
+#: ../scripts/g.extension/g.extension.py:2192
 msgid "Files to be removed:"
 msgstr "Filer som ska tas bort:"
 
-#: ../scripts/g.extension/g.extension.py:2203
+#: ../scripts/g.extension/g.extension.py:2198
 msgid "Updating addons metadata file..."
 msgstr "Uppdaterar metadatafilen för tillägg..."
 
-#: ../scripts/g.extension/g.extension.py:2207
+#: ../scripts/g.extension/g.extension.py:2202
 #, python-format
 msgid "Extension <%s> successfully uninstalled."
 msgstr "Tillägg <%s> har avinstallerats."
 
-#: ../scripts/g.extension/g.extension.py:2210
+#: ../scripts/g.extension/g.extension.py:2205
 #, python-format
 msgid "Toolbox <%s> not removed. Re-run '%s' with '-f' flag to force removal"
 msgstr "Verktygslådan <%s> har inte tagits bort. Kör '%s' igen med flaggan '-f' för att tvinga borttagningen"
 
-#: ../scripts/g.extension/g.extension.py:2215
+#: ../scripts/g.extension/g.extension.py:2210
 #, python-format
 msgid "Extension <%s> not removed. Re-run '%s' with '-f' flag to force removal"
 msgstr "Tillägget <%s> har inte tagits bort. Kör '%s' igen med flaggan '-f' för att tvinga borttagningen"
 
-#: ../scripts/g.extension/g.extension.py:2264
+#: ../scripts/g.extension/g.extension.py:2259
 #, python-format
 msgid "Extension <%s> not found"
 msgstr "Tillägg <%s> hittades inte"
 
-#: ../scripts/g.extension/g.extension.py:2368
+#: ../scripts/g.extension/g.extension.py:2363
 #, python-brace-format
 msgid "Unable to create '{filename}': {error}. Is the GRASS documentation package installed? Installation continues, but documentation may not look right."
 msgstr "Det går inte att skapa '{filename}': {error}. Är GRASS-dokumentationspaketet installerat? Installationen fortsätter, men dokumentationen kanske inte ser rätt ut."
 
-#: ../scripts/g.extension/g.extension.py:2387
+#: ../scripts/g.extension/g.extension.py:2382
 #, python-format
 msgid "Unable to create '%s': %s"
 msgstr "Det går inte att skapa '%s': %s"
 
-#: ../scripts/g.extension/g.extension.py:2415
+#: ../scripts/g.extension/g.extension.py:2410
 #, python-format
 msgid "Manual page for <%s> updated"
 msgstr "Manuell sida för <%s> uppdaterad"
 
-#: ../scripts/g.extension/g.extension.py:2422
+#: ../scripts/g.extension/g.extension.py:2417
 #, python-format
 msgid "Unable to read manual page: %s"
 msgstr "Det går inte att läsa sidan med manualen: %s"
 
-#: ../scripts/g.extension/g.extension.py:2467
+#: ../scripts/g.extension/g.extension.py:2462
 #, python-format
 msgid "Unable for write manual page: %s"
 msgstr "Det går inte att skriva en manuell sida: %s"
 
-#: ../scripts/g.extension/g.extension.py:2487
+#: ../scripts/g.extension/g.extension.py:2482
 msgid "GRASS_ADDON_BASE is not defined, installing to {}"
 msgstr "GRASS_ADDON_BASE är inte definierad och installeras till {}"
 
-#: ../scripts/g.extension/g.extension.py:2494
+#: ../scripts/g.extension/g.extension.py:2489
 #, python-brace-format
 msgid "You don't have permission to install extension to <{0}>. Try to run {1} with administrator rights (su or sudo)."
 msgstr "Du har inte behörighet att installera tillägg till <{0}>. Försök att köra {1} med administratörsrättigheter (su eller sudo)."
 
-#: ../scripts/g.extension/g.extension.py:2586
+#: ../scripts/g.extension/g.extension.py:2581
 #, python-brace-format
 msgid "Identified {0} as known hosting service"
 msgstr "Identifierad {0} som känd hostingtjänst"
 
-#: ../scripts/g.extension/g.extension.py:2591
+#: ../scripts/g.extension/g.extension.py:2586
 #, python-brace-format
 msgid "Not using {service} as known hosting service because the URL ends with '{suffix}'"
 msgstr "Använder inte {service} som känd värdtjänst eftersom webbadressen slutar med '{suffix}'"
 
-#: ../scripts/g.extension/g.extension.py:2608
+#: ../scripts/g.extension/g.extension.py:2603
 #, python-brace-format
 msgid "Will use the following URL for download: {0}"
 msgstr "Kommer att använda följande URL för nedladdning: {0}"
 
-#: ../scripts/g.extension/g.extension.py:2639
+#: ../scripts/g.extension/g.extension.py:2634
 #, python-brace-format
 msgid "Cannot open URL <{url}>: {error}"
 msgstr "Det går inte att öppna URL <{url}>: {error}"
 
-#: ../scripts/g.extension/g.extension.py:2845
+#: ../scripts/g.extension/g.extension.py:2840
 msgid "Flag '{}' is relevant only to 'operation=add'. Ignoring this flag."
 msgstr "Flaggan '{}' är endast relevant för 'operation=add'. Ignorera denna flagga."
 
@@ -34932,10 +34921,9 @@ msgid "Directory '{path}' does not exist"
 msgstr "Katalogen '{path}' finns inte"
 
 #: ../scripts/r.pack/r.pack.py:88
-#, fuzzy, python-brace-format
-#| msgid "Path to the export directory"
+#, python-brace-format
 msgid "Path '{path}' is not a directory"
-msgstr "Sökväg till exportkatalogen"
+msgstr "Sökvägen '{path}' är inte en katalog"
 
 #: ../scripts/r.pack/r.pack.py:90
 #, python-brace-format
@@ -35502,7 +35490,7 @@ msgid "Use of libsqlitefunctions only with SQLite backend"
 msgstr "Användning av libsqlitefunctions endast med SQLite-backend"
 
 #: ../scripts/v.db.update/v.db.update.py:103
-#: ../scripts/v.dissolve/v.dissolve.py:605 ../vector/v.to.rast/support.c:297
+#: ../scripts/v.dissolve/v.dissolve.py:607 ../vector/v.to.rast/support.c:297
 #: ../vector/v.to.rast/support.c:528 ../vector/v.to.rast/vect2rast.c:67
 #: ../vector/v.what.rast3/main.c:143
 #, c-format, python-format
@@ -35537,51 +35525,51 @@ msgstr "Kolumn <{column}> finns inte i vektor <{vector}> (lager <{layer}>). Ange
 msgid "Column <{column}> selected for aggregation does not exist in vector <{vector}> (layer <{layer}>)"
 msgstr "Kolumn <{column}> som valts för aggregering finns inte i vektor <{vector}> (lager <{layer}>)"
 
-#: ../scripts/v.dissolve/v.dissolve.py:320
+#: ../scripts/v.dissolve/v.dissolve.py:322
 #, python-brace-format
 msgid "When result columns are specified, the number of aggregate columns ({columns_to_aggregate}) needs to be the same as the number of methods ({methods})"
 msgstr "När resultatkolumner anges måste antalet aggregatkolumner ({columns_to_aggregate}) vara detsamma som antalet metoder ({methods})"
 
-#: ../scripts/v.dissolve/v.dissolve.py:336
+#: ../scripts/v.dissolve/v.dissolve.py:338
 #, python-brace-format
 msgid "The number of result columns ({result_columns}) needs to be the same as the number of aggregate columns ({columns_to_aggregate})"
 msgstr "Antalet resultatkolumner ({result_columns}) måste vara detsamma som antalet aggregatkolumner ({columns_to_aggregate})"
 
-#: ../scripts/v.dissolve/v.dissolve.py:347
+#: ../scripts/v.dissolve/v.dissolve.py:349
 #, python-brace-format
 msgid "The number of result columns ({result_columns}) needs to be the same as the number of aggregation methods ({methods})"
 msgstr "Antalet resultatkolumner ({result_columns}) måste vara detsamma som antalet aggregeringsmetoder ({methods})"
 
-#: ../scripts/v.dissolve/v.dissolve.py:360
+#: ../scripts/v.dissolve/v.dissolve.py:362
 #, python-brace-format
 msgid "Result column '{column}' needs a type specified (using the syntax: 'name type') when no methods are provided with the {option_name} option and aggregation backend is '{backend}'"
 msgstr "Resultatkolumnen '{column}' behöver en specificerad typ (med syntaxen: 'name type') när inga metoder tillhandahålls med alternativet {option_name} och aggregeringsbackend är '{backend}'"
 
-#: ../scripts/v.dissolve/v.dissolve.py:374
+#: ../scripts/v.dissolve/v.dissolve.py:376
 #, python-brace-format
 msgid "Methods must be specified with {backend} backend and with result columns provided"
 msgstr "Metoder måste specificeras med {backend} backend och med resultatkolumner som tillhandahålls"
 
-#: ../scripts/v.dissolve/v.dissolve.py:581
+#: ../scripts/v.dissolve/v.dissolve.py:583
 #, python-format
 msgid "No '%s' option specified. Dissolving based on category values from layer <%s>."
 msgstr "Inget '%s'-alternativ angivet. Upplösning baserad på kategorivärden från lager <%s>."
 
-#: ../scripts/v.dissolve/v.dissolve.py:596
+#: ../scripts/v.dissolve/v.dissolve.py:598
 #, python-format
 msgid "Invalid layer number (%d). Parameter '%s' specified, assuming layer '1'."
 msgstr "Ogiltigt lagernummer (%d). Parameter '%s' angiven, antar lager '1'."
 
-#: ../scripts/v.dissolve/v.dissolve.py:608
+#: ../scripts/v.dissolve/v.dissolve.py:610
 msgid "Key column must be of type integer or string"
 msgstr "Nyckelkolumnen måste vara av typen heltal eller sträng"
 
-#: ../scripts/v.dissolve/v.dissolve.py:613
+#: ../scripts/v.dissolve/v.dissolve.py:615
 #, python-brace-format
 msgid "Key column type must be string (text) for aggregation method to work, not '{column_type}'"
 msgstr "Nyckelkolumnens typ måste vara sträng (text) för att aggregeringsmetoden ska fungera, inte '{column_type}'"
 
-#: ../scripts/v.dissolve/v.dissolve.py:664
+#: ../scripts/v.dissolve/v.dissolve.py:666
 #, python-brace-format
 msgid ""
 "A processing step failed. Check the above error messages and see the following details:\n"
@@ -37305,16 +37293,12 @@ msgid "Print all map connection parameters and exit"
 msgstr "Skriv ut alla parametrar för kartans anslutning och avsluta"
 
 #: ../vector/v.db.connect/main.c:110
-#, fuzzy
-#| msgid "Print all map connection parameters and exit"
 msgid "Print all map connection parameters in a legacy format [deprecated]"
-msgstr "Skriv ut alla parametrar för kartans anslutning och avsluta"
+msgstr "Skriv ut alla parametrar för kartans anslutning i ett gammalt format [föråldrad]"
 
 #: ../vector/v.db.connect/main.c:112
-#, fuzzy
-#| msgid "Format: layer type count min max. This flag is deprecated and will be removed in a future release. Use format=csv instead."
 msgid "Order: layer[/layer name] table key database driverThis flag is deprecated and will be removed in a future release. Use format=csv instead."
-msgstr "Format: lagertyp antal min max. Denna flagga är föråldrad och kommer att tas bort i en framtida version. Använd format=csv istället."
+msgstr "Ordning: layer[/lagernamn] tabellnyckel databasdrivrutin Denna flagga är föråldrad och kommer att tas bort i en framtida utgåva. Använd format=csv istället."
 
 #: ../vector/v.db.connect/main.c:119
 msgid "Print types/names of table columns for specified layer and exit"
@@ -37325,10 +37309,8 @@ msgid "Delete connection for certain layer (not the table)"
 msgstr "Ta bort anslutningen för ett visst lager (inte tabellen)"
 
 #: ../vector/v.db.connect/main.c:174
-#, fuzzy
-#| msgid "The -p flag is required when using the format option."
 msgid "The -p or -c flag is required when using the format option."
-msgstr "Flaggan -p krävs när formatalternativet används."
+msgstr "Flaggan -p eller -c krävs när formatalternativet används."
 
 #: ../vector/v.db.connect/main.c:216
 msgid "Please choose only one print style"
@@ -38696,10 +38678,9 @@ msgid "No projection information available for layer <%s>"
 msgstr "Ingen projektionsinformation tillgänglig för lager <%s>"
 
 #: ../vector/v.external/proj.c:78 ../vector/v.in.ogr/proj.c:79
-#, fuzzy, c-format
-#| msgid "Projection for layer <%s> does not contain a valid SRS"
+#, c-format
 msgid "Projection for layer <%s> does not contain a valid CRS"
-msgstr "Projektionen för lager <%s> innehåller inte en giltig SRS"
+msgstr "Projektionen för lager <%s> innehåller inte en giltig CRS"
 
 #: ../vector/v.extract/extract.c:202
 #, c-format
@@ -39551,16 +39532,14 @@ msgid "Use imported table as attribute table for new map"
 msgstr "Använd importerad tabell som attributtabell för ny karta"
 
 #: ../vector/v.in.db/main.c:126
-#, fuzzy, c-format
-#| msgid "Output vector map name <%s> is too long"
+#, c-format
 msgid "Output vector name too long: <%s>"
-msgstr "Utmatningsvektorkartans namn <%s> är för långt"
+msgstr "Utmatningsvektorkartans namn är för långt: <%s>"
 
 #: ../vector/v.in.db/main.c:131
-#, fuzzy, c-format
-#| msgid "Map name <%s> is too long"
+#, c-format
 msgid "Mapset name too long: <%s>"
-msgstr "Kartnamnet <%s> är för långt"
+msgstr "Kartuppsättningens namn är för långt: <%s>"
 
 #: ../vector/v.in.db/main.c:147
 #, c-format
@@ -39710,10 +39689,9 @@ msgid "Layer %d: %s"
 msgstr "Lager %d: %s"
 
 #: ../vector/v.in.dxf/write_vect.c:151
-#, fuzzy, c-format
-#| msgid "Map name <%s> is too long"
+#, c-format
 msgid "Layer name <%s> is too long"
-msgstr "Kartnamnet <%s> är för långt"
+msgstr "Lagernamnet <%s> är för långt"
 
 #: ../vector/v.in.dxf/write_vect.c:251
 #, c-format
@@ -44447,7 +44425,7 @@ msgstr "Snäppning av gränser med %g ..."
 #: ../vector/v.overlay/area_area.c:99
 #, c-format
 msgid "Line with %d points reduced to %d point, deleting line."
-msgstr ""
+msgstr "Rad med %d punkter reducerad till %d punkt, tar bort rad."
 
 #: ../vector/v.overlay/area_area.c:124
 #, c-format
@@ -47700,56 +47678,44 @@ msgid "Print attribute information"
 msgstr "Skriv ut attributinformation"
 
 #: ../vector/v.what/main.c:110
-#, fuzzy
-#| msgid "Print attribute information"
 msgid "Print attribute database connection information"
-msgstr "Skriv ut attributinformation"
+msgstr "Skriv ut attributinformation för databasanslutning"
 
 #: ../vector/v.what/main.c:115
 msgid "Print topological information (debugging)"
 msgstr "Skriv ut topologisk information (felsökning)"
 
 #: ../vector/v.what/main.c:117
-#, fuzzy
-#| msgid "Print topological information (debugging)"
 msgid "Prints internal information for topology debugging"
-msgstr "Skriv ut topologisk information (felsökning)"
+msgstr "Skriver ut intern topologisk information (felsökning)"
 
 #: ../vector/v.what/main.c:130
-#, fuzzy
-#| msgid "Print the stats in JSON"
 msgid "Print the stats in JSON [deprecated]"
-msgstr "Skriv ut statistiken i JSON"
+msgstr "Skriv ut statistiken i JSON [föråldrad]"
 
 #: ../vector/v.what/main.c:132
-#, fuzzy
-#| msgid "This flag is deprecated and will be removed in a future release. Use format=csv instead."
 msgid "This flag is deprecated and will be removed in a future release. Use format=json instead."
-msgstr "Denna flagga är föråldrad och kommer att tas bort i en framtida version. Använd istället format=csv."
+msgstr "Denna flagga är föråldrad och kommer att tas bort i en framtida version. Använd istället format=json."
 
 #: ../vector/v.what/main.c:139
-#, fuzzy
-#| msgid "Print multiple features if overlapping features are found"
 msgid "Print multiple features for each map if they meet the criteria"
-msgstr "Skriv ut flera funktioner om överlappande funktioner hittas"
+msgstr "Skriv ut flera funktioner för varje karta om de möter kriteriet"
 
 #: ../vector/v.what/main.c:141
 msgid "For JSON, this places features under a \"features\" key"
-msgstr ""
+msgstr "För JSON placeras funktionerna under en ”features”-nyckel."
 
 #: ../vector/v.what/main.c:160
 msgid "No input vector maps!"
 msgstr "Ingen inmatning av vektorkartor!"
 
 #: ../vector/v.what/main.c:190
-#, fuzzy
-#| msgid "Flag 'j' is deprecated and will be removed in a future release. Please use format=proj4 instead."
 msgid "Flag 'j' is deprecated and will be removed in a future release. Please use format=json instead."
-msgstr "Flaggan 'j' är föråldrad och kommer att tas bort i en framtida version. Använd format=proj4 istället."
+msgstr "Flaggan 'j' är föråldrad och kommer att tas bort i en framtida version. Använd format=json istället."
 
 #: ../vector/v.what/main.c:215
 msgid "Flag 'i' prints attribute database connection information. It is currently always enabled for backward compatibility, but this behavior will be removed in a future release. Please use the 'i' flag together with the 'a' flag instead."
-msgstr ""
+msgstr "Flaggan ’i’ skriver ut anslutningsinformation för attributdatabas. Den är för närvarande alltid aktiverad för bakåtkompatibilitet, men detta beteende kommer att tas bort i en framtida utgåva. Använd istället flaggan ’i’ tillsammans med flaggan ’a’."
 
 #: ../vector/v.what/main.c:272
 #, c-format
@@ -47811,10 +47777,9 @@ msgstr ""
 "Nyckelkolumn: %s\n"
 
 #: ../vector/v.what/what.c:450
-#, fuzzy, c-format
-#| msgid "Map name <%s> is too long"
+#, c-format
 msgid "Vector name <%s> is too long"
-msgstr "Kartnamnet <%s> är för långt"
+msgstr "Vektornamnet <%s> är för långt"
 
 #: ../vector/v.what/what.c:495
 #, c-format
@@ -48011,6 +47976,12 @@ msgstr "Visa BMP-bilder från PNG-drivrutinen."
 #: ../visualization/ximgview/main.c:298
 msgid "Image file"
 msgstr "Bildfil"
+
+#~ msgid "Both -s and -h doesn't make sense"
+#~ msgstr "Både -s och -h är inte meningsfulla"
+
+#~ msgid "Use -M or -s, not both"
+#~ msgstr "Använd -M eller -s, inte båda"
 
 #~ msgid "Print the stats in shell script style"
 #~ msgstr "Skriv ut statistiken i skal script-stil"

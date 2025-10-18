@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_tr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-04 15:55+0000\n"
+"POT-Creation-Date: 2025-10-11 15:59+0000\n"
 "PO-Revision-Date: 2025-08-23 20:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Turkish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/tr/>\n"
@@ -3567,7 +3567,7 @@ msgstr ""
 msgid "WARNING"
 msgstr ""
 
-#: ../lib/init/grass.py:148 ../lib/init/grass.py:2416
+#: ../lib/init/grass.py:148 ../lib/init/grass.py:2420
 msgid "Exiting..."
 msgstr ""
 
@@ -3691,7 +3691,7 @@ msgstr ""
 msgid "standard flags"
 msgstr ""
 
-#: ../lib/init/grass.py:349 ../lib/init/grass.py:1913
+#: ../lib/init/grass.py:349 ../lib/init/grass.py:1910
 msgid "deprecated, use --tmp-project instead"
 msgstr ""
 
@@ -3865,159 +3865,159 @@ msgstr ""
 msgid "Unsupported shell <{sh}>: {env_file}"
 msgstr ""
 
-#: ../lib/init/grass.py:1355
+#: ../lib/init/grass.py:1352
 #, python-format
 msgid "Executing <%s> ..."
 msgstr ""
 
-#: ../lib/init/grass.py:1379
+#: ../lib/init/grass.py:1376
 #, python-brace-format
 msgid ""
 "Execution of <{cmd}> failed:\n"
 "{error}"
 msgstr ""
 
-#: ../lib/init/grass.py:1392
+#: ../lib/init/grass.py:1389
 #, python-format
 msgid "Execution of <%s> finished."
 msgstr ""
 
-#: ../lib/init/grass.py:1434
+#: ../lib/init/grass.py:1431
 #, python-brace-format
 msgid "Unable to close GUI. {0}"
 msgstr ""
 
-#: ../lib/init/grass.py:1453
+#: ../lib/init/grass.py:1450
 #, python-format
 msgid "Welcome to GRASS %s"
 msgstr ""
 
-#: ../lib/init/grass.py:1479
+#: ../lib/init/grass.py:1476
 msgid "GRASS homepage:"
 msgstr ""
 
 #. GTC Running through: SHELL NAME
-#: ../lib/init/grass.py:1481
+#: ../lib/init/grass.py:1478
 msgid "This version running through:"
 msgstr ""
 
-#: ../lib/init/grass.py:1484
+#: ../lib/init/grass.py:1481
 msgid "Help is available with the command:"
 msgstr ""
 
-#: ../lib/init/grass.py:1485
+#: ../lib/init/grass.py:1482
 msgid "See the licence terms with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1486
+#: ../lib/init/grass.py:1483
 msgid "See citation options with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1491
+#: ../lib/init/grass.py:1488
 msgid "If required, restart the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1493
+#: ../lib/init/grass.py:1490
 msgid "Start the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1495
+#: ../lib/init/grass.py:1492
 msgid "When ready to quit enter:"
 msgstr ""
 
-#: ../lib/init/grass.py:1677
+#: ../lib/init/grass.py:1674
 msgid "2D and 3D raster masks present"
 msgstr ""
 
-#: ../lib/init/grass.py:1678
+#: ../lib/init/grass.py:1675
 #, fuzzy
 #| msgid "Raster map <%s> is empty"
 msgid "Raster mask present"
 msgstr "<%s> raster haritası boş"
 
-#: ../lib/init/grass.py:1679
+#: ../lib/init/grass.py:1676
 #, fuzzy
 #| msgid "3D raster map <%s> not found"
 msgid "3D raster mask present"
 msgstr "<%s> 3B raster haritası bulunamadı"
 
-#: ../lib/init/grass.py:1724
+#: ../lib/init/grass.py:1721
 msgid "Done."
 msgstr ""
 
-#: ../lib/init/grass.py:1726
+#: ../lib/init/grass.py:1723
 msgid "Goodbye from GRASS"
 msgstr ""
 
-#: ../lib/init/grass.py:1787
+#: ../lib/init/grass.py:1784
 msgid "Please install the GRASS development package"
 msgstr ""
 
-#: ../lib/init/grass.py:1833
+#: ../lib/init/grass.py:1830
 #, python-format
 msgid "Parameter <%s> not supported"
 msgstr ""
 
-#: ../lib/init/grass.py:1882
+#: ../lib/init/grass.py:1879
 #, python-format
 msgid "use mapset %(metavar)s"
 msgstr ""
 
-#: ../lib/init/grass.py:1888
+#: ../lib/init/grass.py:1885
 #, python-format
 msgid "use temporary mapset in project %(metavar)s"
 msgstr ""
 
-#: ../lib/init/grass.py:1896
+#: ../lib/init/grass.py:1893
 msgid "path to mapset (or project if creating one)"
 msgstr ""
 
-#: ../lib/init/grass.py:1899
+#: ../lib/init/grass.py:1896
 msgid "use temporary mapset"
 msgstr ""
 
-#: ../lib/init/grass.py:1906
+#: ../lib/init/grass.py:1903
 #, python-format
 msgid "use temporary project with %(metavar)s (EPSG, georeferenced file, ...)"
 msgstr ""
 
-#: ../lib/init/grass.py:1920
+#: ../lib/init/grass.py:1917
 msgid "mapset locking timeout in seconds"
 msgstr ""
 
-#: ../lib/init/grass.py:1926
+#: ../lib/init/grass.py:1923
 msgid "remove lock if present"
 msgstr ""
 
-#: ../lib/init/grass.py:1940
+#: ../lib/init/grass.py:1937
 msgid "Option --tmp-location is deprecated, use --tmp-project instead\n"
 msgstr ""
 
-#: ../lib/init/grass.py:1985
+#: ../lib/init/grass.py:1982
 msgid "execute module or script (followed by executable with arguments)"
 msgstr ""
 
-#: ../lib/init/grass.py:2041
+#: ../lib/init/grass.py:2044
 msgid "Flag -e requires also flag -c"
 msgstr ""
 
-#: ../lib/init/grass.py:2043
+#: ../lib/init/grass.py:2046
 msgid "Flag -c requires name of project or mapset"
 msgstr ""
 
-#: ../lib/init/grass.py:2046
+#: ../lib/init/grass.py:2049
 msgid "Either --tmp-project or --tmp-mapset can be used, not both"
 msgstr ""
 
-#: ../lib/init/grass.py:2053
+#: ../lib/init/grass.py:2056
 msgid "Coordinate reference system argument (e.g. EPSG) is needed for --tmp-project"
 msgstr ""
 
-#: ../lib/init/grass.py:2060
+#: ../lib/init/grass.py:2063
 msgid "Only one argument (e.g. EPSG) is needed for --tmp-project, mapset name <{}> provided"
 msgstr ""
 
-#: ../lib/init/grass.py:2271
+#: ../lib/init/grass.py:2275
 #, python-brace-format
 msgid ""
 "Unable to start GRASS. You have the choice to:\n"
@@ -4034,24 +4034,24 @@ msgid ""
 "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 msgstr ""
 
-#: ../lib/init/grass.py:2292
+#: ../lib/init/grass.py:2296
 msgid "Starting GRASS..."
 msgstr ""
 
-#: ../lib/init/grass.py:2341
+#: ../lib/init/grass.py:2345
 msgid "Failed to start GRASS, grassdata directory cannot be found or created."
 msgstr ""
 
-#: ../lib/init/grass.py:2348
+#: ../lib/init/grass.py:2352
 msgid "Failed to start GRASS, no default project to copy in the installation or copying failed."
 msgstr ""
 
-#: ../lib/init/grass.py:2453
+#: ../lib/init/grass.py:2457
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr ""
 
-#: ../lib/init/grass.py:2491
+#: ../lib/init/grass.py:2495
 #, python-format
 msgid "Failed to start shell '%s'"
 msgstr ""
