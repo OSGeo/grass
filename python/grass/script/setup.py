@@ -397,7 +397,7 @@ def init(
     # If environment is not provided, use the global one.
     if not env:
         env = os.environ
-    setup_runtime_env(None, env=env)
+    setup_runtime_env(grass_path, env=env)
 
     process_id = os.getpid()
     env["GIS_LOCK"] = str(process_id)
