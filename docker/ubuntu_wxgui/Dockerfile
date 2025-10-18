@@ -241,8 +241,7 @@ RUN grass --tmp-project EPSG:4326 --exec g.version -rge && \
     python --version
 
 # Reduce the image size
-RUN apt-get autoremove -y
-RUN apt-get clean -y
+RUN apt-get autoremove -y && apt-get clean -y
 RUN rm -r /src/grass_build/.git
 
 WORKDIR /scripts
