@@ -36,7 +36,13 @@ from .open_stds import check_new_stds, open_new_stds, open_old_stds
 
 
 def compile_new_map_name(
-    sp, base: str, count: int, map_id: str, time_suffix: str | None, dbif
+    sp,
+    base: str,
+    count: int,
+    map_id: str,
+    semantic_label: str | None,
+    time_suffix: str | None,
+    dbif: SQLDatabaseInterfaceConnection,
 ):
     """Compile new map name with suffix and semantic label.
 
@@ -46,18 +52,17 @@ def compile_new_map_name(
     :param time_suffix: Type of time suffix to use (or None)
     :param dbif: initialized TGIS database interface
     """
+    if semantic_label:
+        base = f"{base}_{semantic_label}"
     if sp.get_temporal_type() == "absolute" and time_suffix:
         old_map = sp.get_new_map_instance(map_id)
         old_map.select(dbif)
-        semantic_label = old_map.metadata.get_semantic_label()
         if time_suffix == "gran":
             suffix = create_suffix_from_datetime(
                 old_map.temporal_extent.get_start_time(), sp.get_granularity()
             )
         elif time_suffix == "time":
             suffix = create_time_suffix(old_map)
-        if semantic_label:
-            return f"{base}_{semantic_label}_{suffix}"
         return f"{base}_{suffix}"
     return create_numeric_suffix(base, count, time_suffix)
 
@@ -157,9 +162,11 @@ def extract_dataset(
     # Check the new stds
     new_sp = check_new_stds(output, type, dbif, gs.overwrite())
     if type == "vector":
-        rows = sp.get_registered_maps("id,name,mapset,layer", where, "start_time", dbif)
+        rows = sp.get_registered_maps(
+            "id,name,mapset,layer,semantic_label", where, "start_time", dbif
+        )
     else:
-        rows = sp.get_registered_maps("id", where, "start_time", dbif)
+        rows = sp.get_registered_maps("id,semantic_label", where, "start_time", dbif)
 
     new_maps = {}
     if rows:
@@ -184,7 +191,13 @@ def extract_dataset(
                     msgr.percent(count, num_rows, 1)
 
                 map_name = compile_new_map_name(
-                    sp, base, count, row["id"], time_suffix, dbif
+                    sp,
+                    base,
+                    count,
+                    row["id"],
+                    row["semantic_label"],
+                    time_suffix,
+                    dbif,
                 )
 
                 # We need to modify the r(3).mapcalc expression
@@ -335,9 +348,8 @@ def extract_dataset(
 
                     if type == "raster":
                         # Set the semantic label
-                        semantic_label = old_map.metadata.get_semantic_label()
-                        if semantic_label is not None:
-                            new_map.set_semantic_label(semantic_label)
+                        if row["semantic_label"] is not None:
+                            new_map.set_semantic_label(row["semantic_label"])
 
                     # Insert map in temporal database
                     new_map.insert(dbif)
