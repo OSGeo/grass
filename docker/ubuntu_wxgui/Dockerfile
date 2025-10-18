@@ -106,7 +106,7 @@ RUN apt-get update && apt-get upgrade -y && \
     && apt-get clean all && rm -rf /var/lib/apt/lists/*
 
 # wxGUI
-RUN pip install -U \
+RUN pip install -U --break-system-packages \
     -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-24.04 \
     wxpython \
     && pip cache purge
