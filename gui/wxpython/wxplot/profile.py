@@ -316,9 +316,9 @@ class ProfileFrame(BasePlotFrame):
             dist, elev = line.strip().split(" ")
             if (
                 dist is None
-                or dist in ("", "nan")
+                or dist in {"", "nan"}
                 or elev is None
-                or elev in ("", "nan")
+                or elev in {"", "nan"}
             ):
                 continue
             dist = float(dist)

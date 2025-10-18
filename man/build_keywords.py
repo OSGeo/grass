@@ -230,7 +230,7 @@ def main():
 
     if len(sys.argv) >= 2:
         doc_type = sys.argv[1]
-    if doc_type in ["html", "md"]:
+    if doc_type in {"html", "md"}:
         offset = 1
     else:
         # The original usage according to the build sever scripts.

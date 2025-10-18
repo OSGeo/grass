@@ -127,7 +127,7 @@ def write_markdown_option(md: list, name: str, option: dict, keys: list) -> None
         value = option.get(item, "")
         if re.match(r"G_[a-zA-Z0-9_]+\(.*\)", value):
             value = f"Computed dynamically by *{value}*"
-        if value in ["YES", "NO"]:
+        if value in {"YES", "NO"}:
             value = f"{value} (`{item}: {value.lower()}`)"
         result = re.match(r"TYPE_([A-Z0-9_]+)", value)
         if result:
@@ -362,7 +362,7 @@ if __name__ == "__main__":
     ):
         options = OptTable(parse_options(cfile.readlines(), startswith=args.startswith))
         outform = args.format
-        if outform in ("csv", "html", "markdown"):
+        if outform in {"csv", "html", "markdown"}:
             print(getattr(options, outform)(), file=outfile)
         else:
             year = os.getenv("VERSION_DATE")

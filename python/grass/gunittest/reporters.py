@@ -950,12 +950,12 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
             # TODO: replace by better handling of potential lists when parsing
             # TODO: create link to module if running in grass or in addons
             # alternatively a link to module test summary
-            if type(modules) not in [list, set]:
+            if type(modules) not in {list, set}:
                 modules = [modules]
             self.modules.update(modules)
 
         test_file_authors = test_summary["test_file_authors"]
-        if type(test_file_authors) not in [list, set]:
+        if type(test_file_authors) not in {list, set}:
             test_file_authors = [test_file_authors]
         self.test_files_authors.update(test_file_authors)
 

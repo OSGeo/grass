@@ -175,7 +175,7 @@ def main():
     source_dir = None
     text_type = "core"
     if len(sys.argv) > 1:
-        if sys.argv[1] in ["html", "md"]:
+        if sys.argv[1] in {"html", "md"}:
             ext = sys.argv[1]
         else:
             year = sys.argv[1]
@@ -196,7 +196,7 @@ def main():
                 source_dir=source_dir,
                 text_type=text_type,
             )
-    elif ext in ["html", "md"]:
+    elif ext in {"html", "md"}:
         build_full_index(
             ext,
             index_name=index_name,
