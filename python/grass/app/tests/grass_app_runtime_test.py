@@ -88,6 +88,7 @@ def test_attr_access_does_not_modify_env_colors():
 
 def test_attr_access_does_not_modify_env_gisbase():
     """Accessing attribute should not change environment."""
+    env = {}
     paths = RuntimePaths(env=env)
     assert "GISBASE" not in env
     value = paths.gisbase  # access the attribute
@@ -99,13 +100,15 @@ def test_explicit_env_vars_set_colors():
     """Explicit call should set the env vars."""
     env = {}
     paths = RuntimePaths(env=env)
-    paths.set_env_vars()
+    paths.set_env_variables()
+    assert env["GRASS_COLORSDIR"] == paths.colors_dir
     assert "GRASS_COLORSDIR" in env
 
 
 def test_explicit_env_vars_set_gisbase():
     """Explicit call should set the env vars."""
-    assert env["GRASS_COLORSDIR"] == paths.colors_dir
+    env = {}
+    paths = RuntimePaths(env=env)
     paths.set_env_variables()
     assert "GISBASE" in env
     assert env["GISBASE"] == paths.gisbase
@@ -114,13 +117,14 @@ def test_explicit_env_vars_set_gisbase():
 def test_constructor_parameter_env_vars_set_colors():
     """Constructor with parameter should set the env vars."""
     env = {}
-    paths = RuntimePaths(env=env, init_env_vars=True)
+    paths = RuntimePaths(env=env, set_env_variables=True)
     assert "GRASS_COLORSDIR" in env
     assert env["GRASS_COLORSDIR"] == paths.colors_dir
 
 
 def test_constructor_parameter_env_vars_set_gisenv():
     """Constructor with parameter should set the env vars."""
+    env = {}
     paths = RuntimePaths(env=env, set_env_variables=True)
     assert "GISBASE" in env
     assert env["GISBASE"] == paths.gisbase
@@ -143,7 +147,7 @@ def test_dir_lists_dynamic_attributes_but_does_not_modify_env_gisbase():
     assert "gisbase" in listing
     assert "GISBASE" not in env, "dir() should not modify env"
 
-    
+
 def test_existing_env_value_is_respected_colors():
     """If env already contains GRASS_COLORSDIR, its value is used."""
     value = "/custom/colors"
@@ -177,7 +181,7 @@ def test_returned_attribute_consistent_colors():
     assert first == second
     assert first == RuntimePaths(env={}).colors_dir
 
-    
+
 def test_returned_attribute_consistent_gisbase():
     """Repeated accesses should return the same value."""
     paths = RuntimePaths(env={})
