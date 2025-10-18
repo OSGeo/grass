@@ -90,7 +90,7 @@ text_type = str
 binary_type = bytes
 
 
-# todo: use imageio/FreeImage to support reading JPEG images from SWF?
+# TODO: use imageio/FreeImage to support reading JPEG images from SWF?
 
 
 def checkImages(images):
@@ -698,7 +698,7 @@ class ShapeTag(DefinitionTag):
             bits += "0"
 
         # give information
-        # todo: nbits for fillStyle and lineStyle is hard coded.
+        # TODO: nbits for fillStyle and lineStyle is hard coded.
 
         if moveTo:
             bits += twitsToBits([moveTo[0], moveTo[1]])
