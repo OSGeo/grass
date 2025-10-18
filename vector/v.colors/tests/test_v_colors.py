@@ -86,7 +86,7 @@ def test_color_by_attr_column(simple_vector_map):
 
     tools.v_colors(map=mapname, use="attr", column="val", color="ryg")
     rules = tools.v_colors_out(map=mapname, format="json")
-    filtered = [r for r in rules if str(r["value"]) not in ("nv", "default")]
+    filtered = [r for r in rules if str(r["value"]) not in {"nv", "default"}]
 
     assert len(filtered) >= 3, (
         f"Expected at least 3 color rules for attributes, found {len(filtered)}."
