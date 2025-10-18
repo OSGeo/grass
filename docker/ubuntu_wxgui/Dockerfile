@@ -47,7 +47,7 @@ RUN apt-get update && apt-get upgrade -y && \
     libcurl4-gnutls-dev \
     libfftw3-bin \
     libfftw3-dev \
-    libfreetype6-dev \
+    libfreetype-dev \
     libgdal-dev \
     libgeos-dev \
     libgl1-mesa-dev \
@@ -57,11 +57,11 @@ RUN apt-get update && apt-get upgrade -y && \
     libgtk-3-dev \
     libjpeg-dev \
     libjsoncpp-dev \
-    libncurses5-dev \
+    libncurses-dev \
     libnetcdf-dev \
     libnotify4 \
-    libopenblas-base \
     libopenblas-dev \
+    libopenblas0 \
     libopenjp2-7 \
     libopenjp2-7-dev \
     libpnglite-dev \
@@ -70,8 +70,8 @@ RUN apt-get update && apt-get upgrade -y && \
     libpython3-all-dev \
     libreadline-dev \
     librsvg2-common \
-    libsecret-1-0 \
     libsdl2-2.0-0 \
+    libsecret-1-0 \
     libsqlite3-dev \
     libtiff-dev \
     libxtst6 \
