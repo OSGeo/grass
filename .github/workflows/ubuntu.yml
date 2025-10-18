@@ -109,7 +109,7 @@ jobs:
         uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3 # v5.2.0
         with:
           python-version: 3.13
-          cache: pip
+          cache: pip # zizmor: ignore[cache-poisoning] This workflow is not used for release artifacts
           allow-prereleases: true
 
       - name: Get dependencies
