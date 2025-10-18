@@ -140,6 +140,11 @@ static void set_file_pointer(int fd, int row)
     struct fileinfo *fcb = &R__.fileinfo[fd];
 
     fcb->row_ptr[row] = lseek(fcb->data_fd, 0L, SEEK_CUR);
+    if (fcb->row_ptr[row] == -1) {
+        int err = errno;
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+    }
 }
 
 static void convert_float(float *work_buf, char *null_buf, const FCELL *rast,
@@ -514,6 +519,11 @@ static void write_null_bits_compressed(const unsigned char *flags, int row,
     int res;
 
     fcb->null_row_ptr[row] = lseek(fcb->null_fd, 0L, SEEK_CUR);
+    if (fcb->null_row_ptr[row] == -1) {
+        int err = errno;
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+    }
 
     /* get upper bound of compressed size */
     cmax = G_compress_bound(size, 3);
@@ -567,7 +577,7 @@ void Rast__write_null_bits(int fd, const unsigned char *flags)
 
     offset = (off_t)size * row;
 
-    if (lseek(fcb->null_fd, offset, SEEK_SET) < 0)
+    if (lseek(fcb->null_fd, offset, SEEK_SET) == -1)
         G_fatal_error(_("Error writing null row %d of <%s>"), row, fcb->name);
 
     if ((res = write(fcb->null_fd, flags, size)) < 0 ||
