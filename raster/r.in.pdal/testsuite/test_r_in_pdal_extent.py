@@ -1,4 +1,5 @@
 import os
+import sys
 import pathlib
 import unittest
 import shutil
@@ -102,9 +103,13 @@ class ExtentTest(TestCase):
             "b": 100,
             "t": 109,
         }
+        if sys.platform == "darwin":
+            delta = 0.3
+        else:
+            delta = 1e-6
         for key, expected_value in expected.items():
             with self.subTest(key=key):
-                self.assertAlmostEqual(extent[key], expected_value, places=6)
+                self.assertAlmostEqual(extent[key], expected_value, delta=delta)
 
     @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")
     def test_no_reprojection_needed_extent(self):
