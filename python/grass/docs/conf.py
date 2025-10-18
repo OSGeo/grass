@@ -137,7 +137,7 @@ exclude_patterns = ["_build"]
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
-# default_role = None
+default_role = "literal"
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
 # add_function_parentheses = True
@@ -187,6 +187,11 @@ html_theme_options = {
     "version_dropdown": False,
     "localtoc_label_text": "Table of contents",
     "nav_links": [
+        {
+            "href": "grass.tools",
+            "title": "Tools API",
+            "internal": True,
+        },
         {
             "href": "script_intro",
             "title": "Scripting API",
@@ -381,7 +386,7 @@ texinfo_documents = [
         project,
         "GRASS Development Team",
         "PythonLib",
-        "Documentation for Python API of GRASS GIS",
+        "Documentation for Python API of GRASS",
         "Miscellaneous",
     ),
 ]

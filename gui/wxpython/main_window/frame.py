@@ -122,7 +122,7 @@ class GMFrame(wx.Frame):
         if title:
             self.baseTitle = title
         else:
-            self.baseTitle = _("GRASS GIS")
+            self.baseTitle = _("GRASS")
 
         self.iconsize = (16, 16)
         self.size = size
@@ -1707,7 +1707,8 @@ class GMFrame(wx.Frame):
 
     def OnWorkspaceClose(self, event=None):
         """Close file with workspace definition"""
-        self.workspace_manager.Close()
+        if self.workspace_manager.CanClosePage(caption=_("Close workspace")):
+            self.workspace_manager.Close()
 
     def OnDisplayClose(self, event=None):
         """Close current map display window"""

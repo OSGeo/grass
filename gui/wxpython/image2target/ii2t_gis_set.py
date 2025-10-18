@@ -117,7 +117,7 @@ class GRASSStartup(wx.Frame):
         self.gisdbase_box = StaticBox(
             parent=self.panel,
             id=wx.ID_ANY,
-            label=" %s " % _("1. Select GRASS GIS database directory"),
+            label=" %s " % _("1. Select GRASS database directory"),
         )
         self.location_box = StaticBox(
             parent=self.panel,
@@ -146,7 +146,7 @@ class GRASSStartup(wx.Frame):
         self.ldbase = StaticText(
             parent=self.gisdbase_panel,
             id=wx.ID_ANY,
-            label=_("GRASS GIS database directory contains Locations."),
+            label=_("GRASS database directory contains Locations."),
         )
 
         self.llocation = StaticWrapText(
@@ -294,7 +294,7 @@ class GRASSStartup(wx.Frame):
 
     def _set_properties(self, version, revision):
         """Set frame properties"""
-        self.SetTitle(_("GRASS GIS %s startup%s") % (version, revision))
+        self.SetTitle(_("GRASS %s startup%s") % (version, revision))
         self.SetIcon(
             wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
@@ -1266,7 +1266,7 @@ class StartUp(wx.App):
 
 if __name__ == "__main__":
     if os.getenv("GISBASE") is None:
-        sys.exit("Failed to start GUI, GRASS GIS is not running.")
+        sys.exit("Failed to start GUI, GRASS is not running.")
 
     GRASSStartUp = StartUp(0)
     GRASSStartUp.MainLoop()

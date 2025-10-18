@@ -161,6 +161,7 @@ int Rast_get_histogram_num(const struct Histogram *histogram)
  * \brief Returns cat for the nth element in the histogram
  *
  *  Returns cat for the nth element in the histogram
+ * \param n: The nth element in the histogram to get the cat for
  * \param histogram: struct for histogram
  * \return CELL
  */

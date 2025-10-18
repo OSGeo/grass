@@ -31,11 +31,12 @@ import random
 import string
 
 from pathlib import Path
-from typing import TYPE_CHECKING, AnyStr, Callable, TypeVar, cast, overload
+from typing import TYPE_CHECKING, AnyStr, TypeVar, cast, overload
 
 
 if TYPE_CHECKING:
     from _typeshed import FileDescriptorOrPath, StrOrBytesPath, StrPath
+    from collections.abc import Callable
 
 
 # Type variables
@@ -525,7 +526,7 @@ def set_path(modulename, dirname=None, path="."):
     The function is checking if the dirname is provided and if the
     directory exists and it is available using the path
     provided as third parameter, if yes add the path to sys.path to be
-    importable, otherwise it will check on GRASS GIS standard paths.
+    importable, otherwise it will check on GRASS standard paths.
 
     """
     import sys
@@ -539,7 +540,7 @@ def set_path(modulename, dirname=None, path="."):
         # we add the path to sys.path to reach the directory (dirname)
         sys.path.append(os.path.abspath(path))
     else:
-        # running from GRASS GIS session
+        # running from GRASS session
         path = get_lib_path(modulename, dirname)
         if path is None:
             pathname = os.path.join(modulename, dirname) if dirname else modulename
@@ -559,7 +560,7 @@ def clock():
     return time.perf_counter()
 
 
-def legalize_vector_name(name, fallback_prefix="x"):
+def legalize_vector_name(name, fallback_prefix: str | None = "x") -> str:
     """Make *name* usable for vectors, tables, and columns
 
     The returned string is a name usable for vectors, tables, and columns,
@@ -613,7 +614,7 @@ def append_node_pid(name):
 
         Before you use this function for creating temporary files (i.e., normal
         files on disk, not maps and other mapset elements), see functions
-        designed for it in the GRASS GIS or standard Python library. These
+        designed for it in the GRASS or standard Python library. These
         take care of collisions already on different levels.
     """
     # We are using this node as a suffix, so we don't need to make sure it

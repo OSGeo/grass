@@ -128,7 +128,7 @@ v.in.db driver=sqlite database=/home/user/tables/mysqlite.db table=pointsfile x=
 [v.info](v.info.md), [v.in.geonames](v.in.geonames.md),
 [v.in.ogr](v.in.ogr.md), [v.to.db](v.to.db.md)*
 
-[SQL support in GRASS GIS](sql.md)
+[SQL support in GRASS](sql.md)
 
 ## AUTHORS
 

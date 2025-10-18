@@ -13,12 +13,8 @@
 #           for details.
 """Create and display visualizations for space-time datasets."""
 
-import os
-import shutil
-
 import grass.script as gs
 
-from .map import Map
 from .region import RegionManagerForTimeSeries
 from .baseseriesmap import BaseSeriesMap
 
@@ -83,7 +79,7 @@ def collect_layers(timeseries, element_type, fill_gaps):
     # Create list of list
     new_rows = [row.split("|") for row in rows]
     # Transpose into columns where the first value is the name of the column
-    new_array = [list(row) for row in zip(*new_rows)]
+    new_array = [list(row) for row in zip(*new_rows, strict=False)]
 
     # Collect layer name and start time
     for column in new_array:
@@ -157,58 +153,75 @@ class TimeSeriesMap(BaseSeriesMap):
         self._layers = None
         self._date_layer_dict = {}
         self._slider_description = _("Date/Time")
+        self._baseseries = None
 
         # Handle Regions
         self._region_manager = RegionManagerForTimeSeries(
             use_region, saved_region, self._env
         )
 
-    def add_raster_series(self, baseseries, fill_gaps=False):
+    def add_raster_series(self, baseseries, fill_gaps=False, **kwargs):
         """
         :param str baseseries: name of space-time dataset
         :param bool fill_gaps: fill empty time steps with data from previous step
         """
-        if self._baseseries_added and self.baseseries != baseseries:
+        if self._baseseries_added and self._baseseries != baseseries:
             msg = "Cannot add more than one space time dataset"
             raise AttributeError(msg)
         self._element_type = "strds"
         check_timeseries_exists(baseseries, self._element_type)
-        self.baseseries = baseseries
+        self._baseseries = baseseries
         self._fill_gaps = fill_gaps
         self._baseseries_added = True
+
         # create list of layers to render and date/times
         self._layers, self._labels = collect_layers(
-            self.baseseries, self._element_type, self._fill_gaps
+            self._baseseries, self._element_type, self._fill_gaps
         )
+        for raster in self._layers:
+            kwargs["map"] = raster
+            if raster == "None":
+                self._calls.append([(None, None)])
+            else:
+                self._calls.append([("d.rast", kwargs.copy())])
         self._date_layer_dict = {
             self._labels[i]: self._layers[i] for i in range(len(self._labels))
         }
         # Update Region
-        self._region_manager.set_region_from_timeseries(self.baseseries)
+        self._region_manager.set_region_from_timeseries(self._baseseries)
         self._indices = self._labels
 
-    def add_vector_series(self, baseseries, fill_gaps=False):
+    def add_vector_series(self, baseseries, fill_gaps=False, **kwargs):
         """
         :param str baseseries: name of space-time dataset
         :param bool fill_gaps: fill empty time steps with data from previous step
         """
-        if self._baseseries_added and self.baseseries != baseseries:
+        if self._baseseries_added and self._baseseries != baseseries:
             msg = "Cannot add more than one space time dataset"
             raise AttributeError(msg)
         self._element_type = "stvds"
         check_timeseries_exists(baseseries, self._element_type)
-        self.baseseries = baseseries
+        self._baseseries = baseseries
         self._fill_gaps = fill_gaps
         self._baseseries_added = True
+
         # create list of layers to render and date/times
         self._layers, self._labels = collect_layers(
-            self.baseseries, self._element_type, self._fill_gaps
+            self._baseseries, self._element_type, self._fill_gaps
         )
+        for vector in self._layers:
+            kwargs["map"] = vector
+            if vector == "None":
+                self._calls.append([(None, None)])
+            else:
+                self._calls.append([("d.vect", kwargs.copy())])
         self._date_layer_dict = {
             self._labels[i]: self._layers[i] for i in range(len(self._labels))
         }
         # Update Region
-        self._region_manager.set_region_from_timeseries(self.baseseries)
+        self._region_manager.set_region_from_timeseries(
+            self._baseseries, element_type="stvds"
+        )
         self._indices = self._labels
 
     def d_legend(self, **kwargs):
@@ -219,97 +232,20 @@ class TimeSeriesMap(BaseSeriesMap):
         if "raster" in kwargs and not self._baseseries_added:
             self._base_layer_calls.append(("d.legend", kwargs))
         if "raster" in kwargs and self._baseseries_added:
-            self._base_calls.append(("d.legend", kwargs))
+            for i in range(len(self._layers)):
+                self._calls[i].append(("d.legend", kwargs))
         else:
-            self._legend = kwargs
-            # If d_legend has been called, we need to re-render layers
-            self._layers_rendered = False
-
-    def _render_legend(self, img):
-        """Add legend to Map instance"""
-        info = gs.parse_command(
-            "t.info", input=self.baseseries, flags="g", env=self._env
-        )
-        min_min = info["min_min"]
-        max_max = info["max_max"]
-        img.d_legend(
-            raster=self._layers[0],
-            range=f"{min_min}, {max_max}",
-            **self._legend,
-        )
-
-    def _render_overlays(self, img):
-        """Add collected overlays to Map instance"""
-        for grass_module, kwargs in self._base_calls:
-            img.run(grass_module, **kwargs)
-
-    def _render_blank_layer(self, filename):
-        """Write blank image for gaps in time series.
-
-        Adds overlays and legend to base map.
-        """
-        img = Map(
-            width=self._width,
-            height=self._height,
-            filename=filename,
-            use_region=True,
-            env=self._env,
-            read_file=True,
-        )
-        # Add overlays
-        self._render_overlays(img)
-        # Add legend if needed
-        if self._legend:
-            self._render_legend(img)
-
-    def _render_layer(self, layer, filename):
-        """Render layer to file with overlays and legend"""
-        img = Map(
-            width=self._width,
-            height=self._height,
-            filename=filename,
-            use_region=True,
-            env=self._env,
-            read_file=True,
-        )
-        if self._element_type == "strds":
-            img.d_rast(map=layer)
-        elif self._element_type == "stvds":
-            img.d_vect(map=layer)
-        # Add overlays
-        self._render_overlays(img)
-        # Add legend if needed
-        if self._legend:
-            self._render_legend(img)
-
-    def _render_worker(self, date, layer, filename):
-        """Function to render a single layer."""
-        shutil.copyfile(self.base_file, filename)
-        if layer == "None":
-            self._render_blank_layer(filename)
-        else:
-            self._render_layer(layer, filename)
-        return date, filename
-
-    def render(self):
-        """Renders image for each time-step in space-time dataset."""
-        if not self._baseseries_added:
-            msg = (
-                "Cannot render space time dataset since none has been added."
-                " Use TimeSeriesMap.add_raster_series() or "
-                "TimeSeriesMap.add_vector_series() to add dataset"
+            info = gs.parse_command(
+                "t.info", input=self._baseseries, flags="g", env=self._env
             )
-            raise RuntimeError(msg)
-
-        # Create name for empty layers
-        random_name_none = gs.append_random("none", 8) + ".png"
-
-        # Prepare tasks with tuples
-        tasks = []
-        for date, layer in self._date_layer_dict.items():
-            if layer == "None":
-                filename = os.path.join(self._tmpdir.name, random_name_none)
-            else:
-                filename = os.path.join(self._tmpdir.name, f"{layer}.png")
-            tasks.append((date, layer, filename))
-        self._render(tasks)
+            for i in range(len(self._layers)):
+                self._calls[i].append(
+                    (
+                        "d.legend",
+                        dict(
+                            raster=self._layers[0],
+                            range=f"{info['min_min']},{info['max_max']}",
+                            **kwargs,
+                        ),
+                    )
+                )
