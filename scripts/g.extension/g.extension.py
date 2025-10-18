@@ -81,19 +81,19 @@
 
 # %flag
 # % key: l
-# % description: List available extensions in the official GRASS GIS Addons repository
+# % description: List available extensions in the official GRASS Addons repository
 # % guisection: Print
 # % suppress_required: yes
 # %end
 # %flag
 # % key: c
-# % description: List available extensions in the official GRASS GIS Addons repository including module description
+# % description: List available extensions in the official GRASS Addons repository including module description
 # % guisection: Print
 # % suppress_required: yes
 # %end
 # %flag
 # % key: g
-# % description: List available extensions in the official GRASS GIS Addons repository (shell script style)
+# % description: List available extensions in the official GRASS Addons repository (shell script style)
 # % guisection: Print
 # % suppress_required: yes
 # %end
@@ -154,14 +154,7 @@ import zipfile
 import tempfile
 import json
 import xml.etree.ElementTree as ET
-
-if sys.version_info < (3, 8):
-    from distutils.dir_util import copy_tree
-else:
-    from functools import partial
-
-    copy_tree = partial(shutil.copytree, dirs_exist_ok=True)
-
+from functools import partial
 from pathlib import Path
 from subprocess import PIPE
 from urllib import request as urlrequest
@@ -198,10 +191,12 @@ if sys.platform.startswith("freebsd"):
 else:
     MAKE = "make"
 
+copy_tree = partial(shutil.copytree, dirs_exist_ok=True)
+
 
 class GitAdapter:
     """
-    Basic class for listing and downloading GRASS GIS AddOns using git
+    Basic class for listing and downloading GRASS AddOns using git
 
     """
 
@@ -313,7 +308,7 @@ class GitAdapter:
         """Return commit hash reference and names for remote branches of
         a git repository
 
-        :param url: URL to git repository, defaults to the official GRASS GIS
+        :param url: URL to git repository, defaults to the official GRASS
                     addon repository
         """
         branch_list = gs.Popen(
@@ -330,7 +325,7 @@ class GitAdapter:
         """Return commit hash reference and names for remote branches of
         a git repository
 
-        :param url: URL to git repository, defaults to the official GRASS GIS
+        :param url: URL to git repository, defaults to the official GRASS
                     addon repository
         """
         default_branch = gs.Popen(
@@ -2366,7 +2361,7 @@ def check_style_file(name):
         gs.warning(
             _(
                 "Unable to create '{filename}': {error}."
-                " Is the GRASS GIS documentation package installed?"
+                " Is the GRASS documentation package installed?"
                 " Installation continues,"
                 " but documentation may not look right."
             ).format(filename=addons_file, error=error)
@@ -2475,10 +2470,13 @@ def resolve_install_prefix(path, to_system):
         path = os.environ["GISBASE"]
     if path == "$GRASS_ADDON_BASE":
         if not os.getenv("GRASS_ADDON_BASE"):
-            from grass.app.runtime import get_grass_config_dir
+            from grass.app.runtime import get_grass_config_dir_for_version
 
             path = os.path.join(
-                get_grass_config_dir(VERSION[0], VERSION[1], os.environ), "addons"
+                get_grass_config_dir_for_version(
+                    VERSION[0], VERSION[1], env=os.environ
+                ),
+                "addons",
             )
             gs.warning(
                 _("GRASS_ADDON_BASE is not defined, installing to {}").format(path)
@@ -2853,7 +2851,7 @@ def main():
         else:
             if original_url == "" or flags["o"]:
                 # Query GitHub API only if extension will be downloaded
-                # from official GRASS GIS addons repository
+                # from official GRASS addons repository
                 get_addons_paths(gg_addons_base_dir=options["prefix"])
             source, url = resolve_source_code(
                 name=options["extension"],

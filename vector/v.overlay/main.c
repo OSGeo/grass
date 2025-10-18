@@ -475,7 +475,7 @@ int main(int argc, char *argv[])
                     db_append_string(&col_defs, buf);
                     break;
                 case DB_SQL_TYPE_TEXT:
-                    db_append_string(&col_defs, "varchar(250)");
+                    db_append_string(&col_defs, "text");
                     break;
                 case DB_SQL_TYPE_SMALLINT:
                 case DB_SQL_TYPE_INTEGER:

@@ -12,7 +12,7 @@ Usage:
 
 (C) 2012-2022 by the GRASS Development Team
 This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS GIS
+License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :authors: Soeren Gebbert
@@ -186,7 +186,7 @@ def _write_json(rows, column_names, file) -> None:
 
     dict_rows = []
     for row in rows:
-        new_row = dict(zip(column_names, row))
+        new_row = dict(zip(column_names, row, strict=True))
         dict_rows.append(new_row)
     meta = {"column_names": column_names}
     with _open_output_file(file) as stream:
@@ -217,7 +217,7 @@ def _write_yaml(rows, column_names, file=sys.stdout) -> None:
 
     dict_rows = []
     for row in rows:
-        new_row = dict(zip(column_names, row))
+        new_row = dict(zip(column_names, row, strict=True))
         dict_rows.append(new_row)
     meta = {"column_names": column_names}
     with _open_output_file(file) as stream:

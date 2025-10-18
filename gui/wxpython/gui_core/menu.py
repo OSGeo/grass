@@ -357,7 +357,7 @@ class RecentFilesMenu:
         self.file_requested = Signal("RecentFilesMenu.FileRequested")
 
         self._filehistory = wx.FileHistory(maxFiles=history_len)
-        # Recent files path stored in GRASS GIS config dir in the
+        # Recent files path stored in GRASS config dir in the
         # .recent_files file in the group by application name
         self._config = wx.FileConfig(
             style=wx.CONFIG_USE_LOCAL_FILE,

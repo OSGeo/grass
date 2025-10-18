@@ -20,6 +20,7 @@
 #include <unistd.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/gjson.h>
 #include <grass/glocale.h>
 #include <grass/stats.h>
 #include <grass/dbmi.h>
@@ -58,6 +59,8 @@ typedef struct {
 
 } AREA_CAT;
 
+enum OutputFormat { PLAIN, CSV, JSON };
+
 /* compare function for qsort and bsearch */
 static int cmp_area(const void *pa, const void *pb)
 {
@@ -90,7 +93,8 @@ int main(int argc, char *argv[])
         *point_column_opt,    /* point column for stats */
         *count_column_opt,    /* area column for point count */
         *stats_column_opt,    /* area column for stats result */
-        *fs_opt;              /* field separator for printed output */
+        *fs_opt,              /* field separator for printed output */
+        *format_opt;          /* output format for printed output */
     struct Flag *print_flag;
     char *fs;
     struct Map_info PIn, AIn;
@@ -119,6 +123,10 @@ int main(int argc, char *argv[])
     int npvalcats, npvalcatsalloc;
     stat_func *statsvalue = NULL;
     double result;
+    enum OutputFormat format;
+    G_JSON_Value *root_value = NULL, *stat_value = NULL;
+    G_JSON_Array *root_array = NULL;
+    G_JSON_Object *stat_object = NULL;
 
     column = NULL;
 
@@ -226,7 +234,14 @@ int main(int argc, char *argv[])
     stats_column_opt->guisection = _("Statistics");
 
     fs_opt = G_define_standard_option(G_OPT_F_SEP);
+    fs_opt->answer = NULL;
     fs_opt->guisection = _("Print");
+
+    format_opt = G_define_standard_option(G_OPT_F_FORMAT);
+    format_opt->options = "plain,csv,json";
+    format_opt->descriptions = ("plain;Human readable text output;"
+                                "csv;CSV (Comma Separated Values);"
+                                "json;JSON (JavaScript Object Notation);");
 
     print_flag = G_define_flag();
     print_flag->key = 'p';
@@ -252,6 +267,30 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
 
     point_type = Vect_option_to_types(point_type_opt);
+
+    /* For backward compatibility */
+    if (!fs_opt->answer) {
+        if (strcmp(format_opt->answer, "csv") == 0)
+            fs_opt->answer = "comma";
+        else
+            fs_opt->answer = "pipe";
+    }
+
+    if (strcmp(format_opt->answer, "json") == 0) {
+        format = JSON;
+
+        root_value = G_json_value_init_array();
+        if (root_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
+        root_array = G_json_array(root_value);
+    }
+    else if (strcmp(format_opt->answer, "csv") == 0) {
+        format = CSV;
+    }
+    else {
+        format = PLAIN;
+    }
 
     fs = NULL;
     if (print_flag->answer) {
@@ -706,10 +745,18 @@ int main(int argc, char *argv[])
 
     /* Update table or print to stdout */
     if (print_flag->answer) { /* print header */
-        fprintf(stdout, "area_cat%scount", fs);
-        if (method_opt->answer)
-            fprintf(stdout, "%s%s", fs, menu[method].name);
-        fprintf(stdout, "\n");
+        switch (format) {
+        case PLAIN:
+        case CSV:
+            fprintf(stdout, "area_cat%scount", fs);
+            if (method_opt->answer)
+                fprintf(stdout, "%s%s", fs, menu[method].name);
+            fprintf(stdout, "\n");
+            break;
+        case JSON:
+            /* fallthrough */
+            break;
+        }
     }
     else {
         G_message("Updating attributes for area vector...");
@@ -732,15 +779,43 @@ int main(int argc, char *argv[])
                 result = Area_cat[i].cats[(int)result];
         }
         if (print_flag->answer) {
-            fprintf(stdout, "%d%s%d", Area_cat[i].area_cat, fs,
-                    Area_cat[i].count);
-            if (method_opt->answer) {
-                if (Area_cat[i].count > 0)
-                    fprintf(stdout, "%s%.15g", fs, result);
-                else
-                    fprintf(stdout, "%snull", fs);
+            switch (format) {
+            case PLAIN:
+            case CSV:
+                fprintf(stdout, "%d%s%d", Area_cat[i].area_cat, fs,
+                        Area_cat[i].count);
+                if (method_opt->answer) {
+                    if (Area_cat[i].count > 0)
+                        fprintf(stdout, "%s%.15g", fs, result);
+                    else
+                        fprintf(stdout, "%snull", fs);
+                }
+                fprintf(stdout, "\n");
+                break;
+
+            case JSON:
+                stat_value = G_json_value_init_object();
+                if (stat_value == NULL) {
+                    G_fatal_error(
+                        _("Failed to initialize JSON object. Out of memory?"));
+                }
+                stat_object = G_json_object(stat_value);
+
+                G_json_object_set_number(stat_object, "category",
+                                         Area_cat[i].area_cat);
+                G_json_object_set_number(stat_object, "count",
+                                         Area_cat[i].count);
+                if (method_opt->answer) {
+                    if (Area_cat[i].count > 0)
+                        G_json_object_set_number(stat_object, menu[method].name,
+                                                 result);
+                    else
+                        G_json_object_set_null(stat_object, menu[method].name);
+                }
+
+                G_json_array_append_value(root_array, stat_value);
+                break;
             }
-            fprintf(stdout, "\n");
         }
         else {
             snprintf(buf, sizeof(buf), "update %s set %s = %d", AFi->table,
@@ -779,6 +854,20 @@ int main(int argc, char *argv[])
             G_message(_("%d update errors"), update_err);
 
         Vect_set_db_updated(&AIn);
+    }
+    else {
+        if (format == JSON) {
+            char *json_string = G_json_serialize_to_string_pretty(root_value);
+            if (!json_string) {
+                G_json_value_free(root_value);
+                G_fatal_error(_("Failed to serialize JSON to pretty format."));
+            }
+
+            puts(json_string);
+
+            G_json_free_serialized_string(json_string);
+            G_json_value_free(root_value);
+        }
     }
 
     Vect_close(&AIn);

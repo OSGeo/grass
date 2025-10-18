@@ -80,7 +80,6 @@ static int new_fileinfo(void)
  *
  * \return open file descriptor ( >= 0) if successful
  */
-
 static int open_raster_new(const char *name, int open_mode,
                            RASTER_MAP_TYPE map_type);
 

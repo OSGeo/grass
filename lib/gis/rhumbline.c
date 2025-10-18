@@ -21,7 +21,7 @@
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
+ * \author GRASS Development Team
  *
  * \date 1999-2014
  */
@@ -54,7 +54,6 @@ static struct state *st = &state;
  * \return 1 on success
  * \return 0 on error
  */
-
 int G_begin_rhumbline_equation(double lon1, double lat1, double lon2,
                                double lat2)
 {
@@ -93,7 +92,6 @@ int G_begin_rhumbline_equation(double lon1, double lat1, double lon2,
  * \param[in] lon longitude
  * \return double latitude in degrees
  */
-
 double G_rhumbline_lat_from_lon(double lon)
 {
     if (st->parallel)

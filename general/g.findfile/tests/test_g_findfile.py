@@ -45,6 +45,7 @@ def test_find_raster(session):
         element="cell",
         file="test_raster",
         flags="n",
+        format="shell",
         errors="ignore",
         env=session.env,
     )
@@ -69,6 +70,7 @@ def test_find_raster(session):
         element="cell",
         file="test_vector",
         flags="n",
+        format="shell",
         errors="ignore",
         env=session.env,
     )
@@ -86,6 +88,7 @@ def test_find_vector(session):
         element="vector",
         file="test_vector",
         flags="n",
+        format="shell",
         errors="ignore",
         env=session.env,
     )
@@ -127,6 +130,7 @@ def test_find_raster_3d(session):
         element="grid3",
         file="test_raster_3d",
         flags="n",
+        format="shell",
         errors="ignore",
         env=session.env,
     )
@@ -156,6 +160,7 @@ def test_find_region(session):
         element="region",
         file="test_region",
         flags="n",
+        format="shell",
         errors="ignore",
         env=session.env,
     )
@@ -208,3 +213,37 @@ def test_t_flag(session):
         env=session.env,
     )
     assert found == 1
+
+
+def test_json_format(session):
+    gisenv = gs.gisenv(env=session.env)
+    path = Path(gisenv["GISDBASE"]) / gisenv["LOCATION_NAME"] / gisenv["MAPSET"]
+    result = gs.parse_command(
+        "g.findfile",
+        element="raster",
+        file="test_raster",
+        format="json",
+        env=session.env,
+    )
+    expected = {
+        "file": str(path / "cell" / "test_raster"),
+        "fullname": "test_raster@PERMANENT",
+        "mapset": "PERMANENT",
+        "name": "test_raster",
+    }
+    assert result == expected
+
+    result = gs.parse_command(
+        "g.findfile",
+        element="cell",
+        file="test_vector",
+        format="json",
+        env=session.env,
+    )
+    expected = {
+        "file": None,
+        "fullname": None,
+        "mapset": None,
+        "name": None,
+    }
+    assert result == expected
