@@ -206,7 +206,7 @@ def main():
     if flags["l"]:
         import shutil
 
-        if os.path.exists("wms_capabilities.xml"):
+        if Path("wms_capabilities.xml").exists():
             grass.fatal(_('A file called "wms_capabilities.xml" already exists here'))
         # os.move() might fail if the temp file is on another volume, so we copy instead
         shutil.copy(tmpxml, "wms_capabilities.xml")

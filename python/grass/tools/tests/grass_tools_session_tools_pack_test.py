@@ -16,7 +16,7 @@ def test_pack_input_output_tool_name_function(
     """Check input and output pack files work with tool name call"""
     tools = Tools(session=xy_dataset_session)
     tools.g_region(rows=3, cols=3)
-    assert os.path.exists(rows_raster_file3x2)
+    assert Path(rows_raster_file3x2).exists()
     output_file = tmp_path / "file.grass_raster"
     tools.r_slope_aspect(elevation=rows_raster_file3x2, slope=output_file)
     assert output_file.exists()
@@ -38,7 +38,7 @@ def test_pack_input_output_tool_name_function_string_value(
     """
     tools = Tools(session=xy_dataset_session)
     tools.g_region(rows=3, cols=3)
-    assert os.path.exists(rows_raster_file3x2)
+    assert Path(rows_raster_file3x2).exists()
     output_file = tmp_path / "file.grass_raster"
     tools.r_slope_aspect(
         elevation=parameter_type(rows_raster_file3x2), slope=parameter_type(output_file)
@@ -57,7 +57,7 @@ def test_pack_input_output_with_name_and_parameter_call(
     """Check input and output pack files work with tool name as string"""
     tools = Tools(session=xy_dataset_session)
     tools.g_region(rows=3, cols=3)
-    assert os.path.exists(rows_raster_file3x2)
+    assert Path(rows_raster_file3x2).exists()
     output_file = tmp_path / "file.grass_raster"
     tools.run("r.slope.aspect", elevation=rows_raster_file3x2, slope=output_file)
     assert output_file.exists()
@@ -73,7 +73,7 @@ def test_pack_input_output_with_subprocess_run_like_call(
 ):
     """Check input and output pack files work with command as list"""
     tools = Tools(session=xy_dataset_session)
-    assert os.path.exists(rows_raster_file3x2)
+    assert Path(rows_raster_file3x2).exists()
     output_file = tmp_path / "file.grass_raster"
     tools.run_cmd(
         [
@@ -344,7 +344,7 @@ def test_output_without_overwrite(xy_dataset_session, rows_raster_file3x2, tmp_p
     """Check input and output pack files work with tool name call"""
     tools = Tools(session=xy_dataset_session)
     tools.g_region(rows=3, cols=3)
-    assert os.path.exists(rows_raster_file3x2)
+    assert Path(rows_raster_file3x2).exists()
     output_file = tmp_path / "file.grass_raster"
     tools.r_slope_aspect(elevation=rows_raster_file3x2, slope=output_file)
     with pytest.raises(ToolError, match=r"[Oo]verwrite"):
@@ -358,7 +358,7 @@ def test_output_with_object_level_overwrite(
     """Check input and output pack files work with tool name call"""
     tools = Tools(session=xy_dataset_session, overwrite=True)
     tools.g_region(rows=3, cols=3)
-    assert os.path.exists(rows_raster_file3x2)
+    assert Path(rows_raster_file3x2).exists()
     output_file = tmp_path / "file.grass_raster"
     tools.r_slope_aspect(elevation=rows_raster_file3x2, slope=output_file)
     # Same call the second time.
@@ -372,7 +372,7 @@ def test_output_with_function_level_overwrite(
     """Check input and output pack files work with tool name call"""
     tools = Tools(session=xy_dataset_session)
     tools.g_region(rows=3, cols=3)
-    assert os.path.exists(rows_raster_file3x2)
+    assert Path(rows_raster_file3x2).exists()
     output_file = tmp_path / "file.grass_raster"
     tools.r_slope_aspect(elevation=rows_raster_file3x2, slope=output_file)
     # Same call the second time.

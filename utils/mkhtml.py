@@ -26,6 +26,7 @@ import locale
 from html.parser import HTMLParser
 
 import urllib.parse as urlparse
+from pathlib import Path
 
 try:
     import grass.script as gs
@@ -471,7 +472,7 @@ if os.getenv("SOURCE_URL", ""):
     addon_path = get_addon_path(base_url=base_url, pgm=pgm, major_version=major)
     if addon_path:
         # Addon is installed from the local dir
-        if os.path.exists(os.getenv("SOURCE_URL")):
+        if Path(os.getenv("SOURCE_URL")).exists():
             url_source = urlparse.urljoin(
                 addons_url,
                 addon_path,

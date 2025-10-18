@@ -276,7 +276,7 @@ class AboutWindow(wx.Frame):
     def _pageCopyright(self):
         """Copyright information"""
         copyfile = os.path.join(os.getenv("GISBASE"), "COPYING")
-        if os.path.exists(copyfile):
+        if Path(copyfile).exists():
             copytext = Path(copyfile).read_text()
         else:
             copytext = _("%s file missing") % "COPYING"
@@ -303,7 +303,7 @@ class AboutWindow(wx.Frame):
     def _pageLicense(self):
         """Licence about"""
         licfile = os.path.join(os.getenv("GISBASE"), "GPL.TXT")
-        if os.path.exists(licfile):
+        if Path(licfile).exists():
             with open(licfile) as licenceFile:
                 license = "".join(licenceFile.readlines())
         else:
@@ -356,7 +356,7 @@ class AboutWindow(wx.Frame):
         """Credit about"""
         # credits
         authfile = os.path.join(os.getenv("GISBASE"), "AUTHORS")
-        if os.path.exists(authfile):
+        if Path(authfile).exists():
             with codecs.open(authfile, encoding="utf-8", mode="r") as authorsFile:
                 authors = "".join(authorsFile.readlines())
         else:
@@ -383,7 +383,7 @@ class AboutWindow(wx.Frame):
             contribfile = os.path.join(os.getenv("GISBASE"), "contributors_extra.csv")
         else:
             contribfile = os.path.join(os.getenv("GISBASE"), "contributors.csv")
-        if os.path.exists(contribfile):
+        if Path(contribfile).exists():
             contribs = []
             errLines = []
             with codecs.open(contribfile, encoding="utf-8", mode="r") as contribFile:
@@ -466,7 +466,7 @@ class AboutWindow(wx.Frame):
     def _pageTranslators(self):
         """Translators info"""
         translatorsfile = os.path.join(os.getenv("GISBASE"), "translators.csv")
-        if os.path.exists(translatorsfile):
+        if Path(translatorsfile).exists():
             translators = {}
             errLines = []
             with codecs.open(translatorsfile, encoding="utf-8", mode="r") as fd:
@@ -537,7 +537,7 @@ class AboutWindow(wx.Frame):
                     flag = os.path.join(
                         globalvar.ICONDIR, "flags", "%s.png" % lang.lower()
                     )
-                    if os.path.exists(flag):
+                    if Path(flag).exists():
                         flagBitmap = wx.StaticBitmap(
                             translatorswin,
                             wx.ID_ANY,
@@ -646,7 +646,7 @@ class AboutWindow(wx.Frame):
         """Translation statistics info"""
         fname = "translation_status.json"
         statsfile = os.path.join(os.getenv("GISBASE"), fname)
-        if os.path.exists(statsfile):
+        if Path(statsfile).exists():
             import json
 
             with open(statsfile) as statsFile:
@@ -762,7 +762,7 @@ class HelpWindow(HtmlWindow):
         self.markdown = True
         # check if mkdocs is used (add slash at the end)
         self.fspath = os.path.join(os.getenv("GISBASE"), "docs", "mkdocs", "site", "")
-        if not os.path.exists(self.fspath):
+        if not Path(self.fspath).exists():
             self.markdown = False
             self.fspath = os.path.join(os.getenv("GISBASE"), "docs", "html", "")
 

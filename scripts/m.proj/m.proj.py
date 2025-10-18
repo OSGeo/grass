@@ -99,8 +99,8 @@ COPYRIGHT: (c) 2006-2019 Hamish Bowman, and the GRASS Development Team
 # %end
 
 import sys
-import os
 import threading
+from pathlib import Path
 from grass.script.utils import separator, parse_key_val, encode, decode
 from grass.script import core as gcore
 
@@ -221,7 +221,7 @@ def main():
         inf = sys.stdin
     else:
         infile = input
-        if not os.path.exists(infile):
+        if not Path(infile).exists():
             gcore.fatal(_("Unable to read input data"))
         inf = open(infile)
         gcore.debug("input file=[%s]" % infile)
