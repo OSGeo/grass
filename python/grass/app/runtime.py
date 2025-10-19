@@ -183,11 +183,11 @@ def append_left_main_executable_paths(paths, install_path):
         path = os.path.join(install_path, "extrabin")
         if os.path.exists(path):
             paths.appendleft(path)
-    else:
-        # Without FHS, scripts are separated like in the source code.
-        path = os.path.join(install_path, "scripts")
-        if os.path.exists(path):
-            paths.appendleft(path)
+
+    # Without FHS, scripts are separated like in the source code.
+    path = os.path.join(install_path, "scripts")
+    if os.path.exists(path):
+        paths.appendleft(path)
 
 
 def append_left_addon_paths(paths, config_dir, env):
