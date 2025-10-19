@@ -37,7 +37,7 @@ def test_raster_pack_crs_param_extensions(tmp_path, pack_raster_file4x5_rows, su
 def test_raster_pack_file(tmp_path, pack_raster_file4x5_rows):
     project = tmp_path / "test"
     gs.create_project(project, pack=pack_raster_file4x5_rows)
-    assert Path(project).exists()
+    assert project.exists()
     for name in ["PROJ_INFO", "PROJ_UNITS", "PROJ_SRID"]:
         assert Path(project / "PERMANENT" / name).exists()
 
