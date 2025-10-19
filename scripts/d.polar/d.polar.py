@@ -422,7 +422,7 @@ def main():
         gcore.fatal(_("Please select only one output method"))
 
     if eps:
-        if os.sep in eps and not Path(os.path.dirname(eps)).exists():
+        if os.sep in eps and not Path(eps).parent.exists():
             gcore.fatal(
                 _(
                     "EPS output file path <{}>, doesn't exists. "
