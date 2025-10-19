@@ -1620,9 +1620,7 @@ class GMFrame(wx.Frame):
         # check also OSGeo4W on MS Windows
         if (
             sys.platform == "win32"
-            and not Path(
-                os.path.join(os.getenv("GISBASE"), "WinGRASS-README.url")
-            ).exists()
+            and not Path(os.getenv("GISBASE"), "WinGRASS-README.url").exists()
         ):
             osgeo4w = " (OSGeo4W)"
         else:

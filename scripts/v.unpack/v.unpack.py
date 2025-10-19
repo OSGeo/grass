@@ -131,9 +131,9 @@ def main():
         grass.warning(_("Extracting may be unsafe; consider updating Python"))
         tar.extractall()
     tar.close()
-    if Path(os.path.join(data_name, "coor")).exists():
+    if Path(data_name, "coor").exists():
         pass
-    elif Path(os.path.join(data_name, "cell")).exists():
+    elif Path(data_name, "cell").exists():
         grass.fatal(
             _("This GRASS pack file contains raster data. Use r.unpack to unpack <%s>")
             % map_name
@@ -146,7 +146,7 @@ def main():
     loc_proj_units = os.path.join(mset_dir, "..", "PERMANENT", "PROJ_UNITS")
 
     skip_projection_check = False
-    if not Path(os.path.join(tmp_dir, "PROJ_INFO")).exists():
+    if not Path(tmp_dir, "PROJ_INFO").exists():
         if Path(loc_proj).exists():
             grass.fatal(
                 _(
@@ -217,15 +217,9 @@ def main():
         dbnlist = dbln.readlines()
         dbln.close()
         # check if dbf or sqlite directory exists
-        if (
-            dbconn["driver"] == "dbf"
-            and not Path(os.path.join(mset_dir, "dbf")).exists()
-        ):
+        if dbconn["driver"] == "dbf" and not Path(mset_dir, "dbf").exists():
             os.mkdir(os.path.join(mset_dir, "dbf"))
-        elif (
-            dbconn["driver"] == "sqlite"
-            and not Path(os.path.join(mset_dir, "sqlite")).exists()
-        ):
+        elif dbconn["driver"] == "sqlite" and not Path(mset_dir, "sqlite").exists():
             os.mkdir(os.path.join(mset_dir, "sqlite"))
         # for each old connection
         for t in dbnlist:

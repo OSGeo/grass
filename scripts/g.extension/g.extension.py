@@ -2078,7 +2078,7 @@ def install_extension_std_platforms(name, source, url, branch):
     os.chdir(srcdir)
 
     gs.message(_("Compiling..."))
-    if not Path(os.path.join(gisbase, "include", "Make", "Module.make")).exists():
+    if not Path(gisbase, "include", "Make", "Module.make").exists():
         gs.fatal(_("Please install GRASS development package"))
 
     if gs.call(make_cmd, stdout=outdev) != 0:
