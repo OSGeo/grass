@@ -110,7 +110,7 @@ def test_output_dir_is_not_writable(xy_raster_dataset_session_for_module, tmp_pa
     parent.chmod(stat.S_IREAD)
     output = parent / "output_1.rpack"
     # Calling output.exists() gives permission denied on Linux, but os.path does not.
-    assert not Path(output).exists()
+    assert not os.path.exists(output) # noqa: PTH110
     assert output.parent.exists()
     assert output.parent.is_dir()
     with pytest.raises(
