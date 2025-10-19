@@ -5,7 +5,6 @@ import stat
 import sys
 import tarfile
 
-
 import pytest
 
 import grass.script as gs

@@ -74,7 +74,7 @@ def main():
         grass.fatal(_("Raster map <%s> not found") % infile)
 
     parent_dir = Path(outfile).parent
-    if Path(outfile).exists():
+    if os.path.exists(outfile):  # noqa: PTH110 # Problem with tests, the way a permission error occurs when checking
         if os.getenv("GRASS_OVERWRITE"):
             grass.warning(
                 _("Pack file <%s> already exists and will be overwritten") % outfile
