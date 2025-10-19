@@ -42,7 +42,7 @@ repos:
           )
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
-    rev: v0.13.2
+    rev: v0.14.1
     hooks:
       # Run the linter.
       - id: ruff-check
@@ -78,14 +78,14 @@ repos:
     hooks:
       - id: yamllint
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.7
+    rev: v1.7.8
     hooks:
       - id: actionlint
   - repo: https://github.com/zizmorcore/zizmor-pre-commit
-    rev: v1.14.2
+    rev: v1.15.2
     hooks:
       - id: zizmor
   - repo: https://github.com/editorconfig-checker/editorconfig-checker
-    rev: v3.4.0
+    rev: v3.4.1
     hooks:
       - id: editorconfig-checker

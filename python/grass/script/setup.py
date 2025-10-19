@@ -212,12 +212,6 @@ def setup_runtime_env(gisbase=None, *, env=None):
     If _gisbase_ is not provided, a heuristic is used to find the path to GRASS
     installation (see the :func:`get_install_path` function for details).
     """
-    gisbase = get_install_path(gisbase)
-
-    # If environment is not provided, use the global one.
-    if not env:
-        env = os.environ
-
     from grass.app.runtime import (
         get_grass_config_dir,
         set_dynamic_library_path,
@@ -227,10 +221,25 @@ def setup_runtime_env(gisbase=None, *, env=None):
         RuntimePaths,
     )
 
-    runtime_paths = RuntimePaths(env=env)
-    # Set main prefix.
-    # See also grass.app.runtime.set_paths.
-    env["GISBASE"] = gisbase
+    # If environment is not provided, use the global one.
+    if not env:
+        env = os.environ
+
+    runtime_paths = RuntimePaths(env=env, prefix=gisbase)
+    gisbase = runtime_paths.gisbase
+    if not os.path.isdir(gisbase):
+        gisbase = get_install_path(gisbase)
+        # Set the main prefix again.
+        # See also the main grass executable code.
+        runtime_paths = RuntimePaths(env=env, prefix=gisbase)
+        runtime_paths.set_env_variables()
+        # The mechanism already failed once to set it, so overwrite
+        # the path it set with what we know exists. (This will make
+        # it work when the variable is not substituted.)
+        os.environ["GISBASE"] = gisbase
+    else:
+        runtime_paths.set_env_variables()
+
     set_executable_paths(
         install_path=gisbase,
         grass_config_dir=get_grass_config_dir(env=env),

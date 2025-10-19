@@ -259,7 +259,7 @@ class AnimationData:
                 values = interpolate(
                     startRegionDict[key], endRegionDict[key], self._mapCount
                 )
-                for value, region in zip(values, regions):
+                for value, region in zip(values, regions, strict=False):
                     region[key] = value
 
         elif zoomValue:

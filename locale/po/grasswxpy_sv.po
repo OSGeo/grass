@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-27 17:16+0000\n"
-"PO-Revision-Date: 2025-10-02 18:25+0000\n"
+"POT-Creation-Date: 2025-10-11 15:59+0000\n"
+"PO-Revision-Date: 2025-10-13 12:30+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/sv/>\n"
 "Language: sv\n"
@@ -48,22 +48,22 @@ msgstr "Inkonsekvent antal kartor, kontrollera indata."
 msgid "No animation to export."
 msgstr "Ingen animering för export."
 
-#: ../gui/wxpython/animation/controller.py:538
+#: ../gui/wxpython/animation/controller.py:540
 msgid "Preparing export, please wait..."
 msgstr "Förbereder export, vänta..."
 
-#: ../gui/wxpython/animation/controller.py:587
+#: ../gui/wxpython/animation/controller.py:589
 #: ../gui/wxpython/animation/frame.py:630
 #, python-format
 msgid "%(from)s %(dash)s %(to)s"
 msgstr "%(from)s %(dash)s %(to)s"
 
-#: ../gui/wxpython/animation/controller.py:597
+#: ../gui/wxpython/animation/controller.py:599
 #, python-format
 msgid "%(start)s %(unit)s"
 msgstr "%(start)s %(unit)s"
 
-#: ../gui/wxpython/animation/controller.py:619
+#: ../gui/wxpython/animation/controller.py:621
 msgid "Exporting animation, please wait..."
 msgstr "Exporterar animering, vänta..."
 
@@ -720,15 +720,15 @@ msgstr "Lägg bara till ett lager i listan."
 msgid "No map series nor space-time dataset is added."
 msgstr "Inga kartserier eller dataset för tid och rum läggs till."
 
-#: ../gui/wxpython/animation/provider.py:444
+#: ../gui/wxpython/animation/provider.py:450
 msgid "Rendering map layers"
 msgstr "Rendering av kartlager"
 
-#: ../gui/wxpython/animation/provider.py:562
+#: ../gui/wxpython/animation/provider.py:568
 msgid "Overlaying map layers"
 msgstr "Överlagring av kartlager"
 
-#: ../gui/wxpython/animation/provider.py:793
+#: ../gui/wxpython/animation/provider.py:799
 #, python-brace-format
 msgid "Directory {t} not removed."
 msgstr "Katalog {t} inte borttagen."
@@ -748,7 +748,7 @@ msgstr "Du kommer att visa data med olika temporala karttyper (intervall och pun
 
 #: ../gui/wxpython/animation/temporal_manager.py:249
 #: ../gui/wxpython/animation/utils.py:72 ../gui/wxpython/animation/utils.py:80
-#: ../gui/wxpython/timeline/frame.py:497 ../gui/wxpython/tplot/frame.py:1155
+#: ../gui/wxpython/timeline/frame.py:497 ../gui/wxpython/tplot/frame.py:1159
 #, python-format
 msgid "Space time dataset <%s> not found."
 msgstr "Rymdtidsdataset <%s> hittades inte."
@@ -1348,60 +1348,51 @@ msgstr ""
 msgid " row %d:"
 msgstr " rad %d:"
 
-#: ../gui/wxpython/datacatalog/catalog.py:52
+#: ../gui/wxpython/datacatalog/catalog.py:55
 msgid "Data catalog"
 msgstr "Datakatalog"
 
-#: ../gui/wxpython/datacatalog/catalog.py:205
-#: ../gui/wxpython/location_wizard/wizard.py:328
-msgid "Choose GRASS data directory:"
-msgstr "Välj GRASS datakatalog:"
+#: ../gui/wxpython/datacatalog/catalog.py:217
+msgid "Choose GRASS project:"
+msgstr "Välj GRASS-projekt:"
 
-#: ../gui/wxpython/datacatalog/catalog.py:216
-msgid "Do you want to create a new project (also known as location)?"
-msgstr "Vill du skapa ett nytt projekt (även känt som plats)?"
-
-#: ../gui/wxpython/datacatalog/catalog.py:221
-msgid "Create project?"
-msgstr "Skapa projekt?"
-
-#: ../gui/wxpython/datacatalog/catalog.py:318
+#: ../gui/wxpython/datacatalog/catalog.py:314
 msgid "Link external raster data  [r.external]"
 msgstr "Länka externa rasterdata [r.external]"
 
-#: ../gui/wxpython/datacatalog/catalog.py:324
+#: ../gui/wxpython/datacatalog/catalog.py:320
 msgid "Link external vector data  [v.external]"
 msgstr "Länka externa vektordata [v.external]"
 
-#: ../gui/wxpython/datacatalog/catalog.py:332
+#: ../gui/wxpython/datacatalog/catalog.py:328
 msgid "Set raster output format  [r.external.out]"
 msgstr "Ange rasterutmatningsformat [r.external.out]"
 
-#: ../gui/wxpython/datacatalog/catalog.py:338
+#: ../gui/wxpython/datacatalog/catalog.py:334
 msgid "Set vector output format  [v.external.out]"
 msgstr "Ställ in vektorutmatningsformat [v.external.out]"
 
-#: ../gui/wxpython/datacatalog/catalog.py:346
+#: ../gui/wxpython/datacatalog/catalog.py:342
 msgid "Unpack GRASS raster map  [r.unpack]"
 msgstr "Packa upp GRASS rasterkarta [r.unpack]"
 
-#: ../gui/wxpython/datacatalog/catalog.py:350
+#: ../gui/wxpython/datacatalog/catalog.py:346
 msgid "Unpack GRASS vector map  [v.unpack]"
 msgstr "Packa upp GRASS-vektorkarta [v.unpack]"
 
-#: ../gui/wxpython/datacatalog/catalog.py:357
+#: ../gui/wxpython/datacatalog/catalog.py:353
 msgid "Create raster map from x,y,z data  [r.in.xyz]"
 msgstr "Skapa rasterkarta från x,y,z-data [r.in.xyz]"
 
-#: ../gui/wxpython/datacatalog/catalog.py:363
+#: ../gui/wxpython/datacatalog/catalog.py:359
 msgid "Create vector map from x,y,z data  [v.in.ascii]"
 msgstr "Skapa vektorkarta från x,y,z-data [v.in.ascii]"
 
-#: ../gui/wxpython/datacatalog/catalog.py:369
+#: ../gui/wxpython/datacatalog/catalog.py:365
 msgid "Link external data"
 msgstr "Länka externa data"
 
-#: ../gui/wxpython/datacatalog/catalog.py:372
+#: ../gui/wxpython/datacatalog/catalog.py:368
 msgid "More options..."
 msgstr "Fler alternativ..."
 
@@ -1456,6 +1447,7 @@ msgid "Data Catalog - GRASS"
 msgstr "Datakatalog - GRASS"
 
 #: ../gui/wxpython/datacatalog/infomanager.py:36
+#: ../gui/wxpython/datacatalog/toolbars.py:34
 msgid "Create new project"
 msgstr "Skapa ett nytt projekt"
 
@@ -1545,48 +1537,36 @@ msgid "Reload current GRASS mapset only"
 msgstr "Uppdatera endast aktuell GRASS-kartuppsättning"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:26
-msgid "Restrict edits to the current mapset only"
-msgstr "Begränsa redigeringar till endast den aktuella kartuppsättningen"
-
-#: ../gui/wxpython/datacatalog/toolbars.py:29
-msgid "Allow edits outside of the current mapset"
-msgstr "Tillåt redigeringar utanför den aktuella kartuppsättningen"
-
-#: ../gui/wxpython/datacatalog/toolbars.py:32
-msgid "Add existing or create new database"
-msgstr "Lägg till befintlig eller skapa ny databas"
-
-#: ../gui/wxpython/datacatalog/toolbars.py:35
 msgid "Create new mapset in current project"
 msgstr "Skapa ny mapset i aktuellt projekt"
 
-#: ../gui/wxpython/datacatalog/toolbars.py:39
-msgid "Create new project (location) in current GRASS database"
-msgstr "Skapa ett nytt projekt (plats) i den aktuella GRASS-databasen"
+#: ../gui/wxpython/datacatalog/toolbars.py:30
+msgid "Add an existing project"
+msgstr "Lägg till ett befintligt projekt"
 
-#: ../gui/wxpython/datacatalog/toolbars.py:43
-msgid "Download sample project (location) to current GRASS database"
-msgstr "Hämta ner exempelprojekt (plats) till aktuell GRASS-databas"
+#: ../gui/wxpython/datacatalog/toolbars.py:38
+msgid "Download sample project"
+msgstr "Hämta ner exempelprojekt"
 
-#: ../gui/wxpython/datacatalog/toolbars.py:46
+#: ../gui/wxpython/datacatalog/toolbars.py:41
 msgid "Import raster data  [r.import]"
 msgstr "Importera rasterdata [r.import]"
 
-#: ../gui/wxpython/datacatalog/toolbars.py:49
+#: ../gui/wxpython/datacatalog/toolbars.py:44
 msgid "Import vector data  [v.import]"
 msgstr "Importera vektordata [v.import]"
 
-#: ../gui/wxpython/datacatalog/toolbars.py:52
+#: ../gui/wxpython/datacatalog/toolbars.py:47
 msgid "Select another import option"
 msgstr "Välj ett annat importalternativ"
 
-#: ../gui/wxpython/datacatalog/toolbars.py:62
+#: ../gui/wxpython/datacatalog/toolbars.py:57
 #: ../gui/wxpython/gui_core/menu.py:186 ../gui/wxpython/history/browser.py:387
 #: ../gui/wxpython/modules/extensions.py:76
 msgid "Search"
 msgstr "Sök"
 
-#: ../gui/wxpython/datacatalog/toolbars.py:80
+#: ../gui/wxpython/datacatalog/toolbars.py:75
 msgid "Type to search database by map type or name. Use Python regular expressions to refine your search."
 msgstr "Typ för att söka i databasen efter karttyp eller namn. Använd Pythons reguljära uttryck för att förfina din sökning."
 
@@ -1634,7 +1614,7 @@ msgstr "{name} (ägare: {owner})"
 msgid "{name}"
 msgstr "{name}"
 
-#: ../gui/wxpython/datacatalog/tree.py:874
+#: ../gui/wxpython/datacatalog/tree.py:892
 #, python-brace-format
 msgid ""
 "Map <{map_name}@{map_mapset}> is not in the current project. To be able to display it you need to switch to <{map_location}> project. Note that if you switch there all current Map Displays will be closed.\n"
@@ -1645,246 +1625,246 @@ msgstr ""
 "\n"
 "Vill du byta ändå?"
 
-#: ../gui/wxpython/datacatalog/tree.py:884
+#: ../gui/wxpython/datacatalog/tree.py:902
 msgid "Map in a different project"
 msgstr "Karta i ett annat projekt"
 
-#: ../gui/wxpython/datacatalog/tree.py:1003
+#: ../gui/wxpython/datacatalog/tree.py:1021
 #, python-brace-format
 msgid "{c} maps marked for moving."
 msgstr "{c} kartor markerade för att flytta."
 
-#: ../gui/wxpython/datacatalog/tree.py:1005
+#: ../gui/wxpython/datacatalog/tree.py:1023
 #, python-brace-format
 msgid "Map <{layer}> marked for moving."
 msgstr "Karta <{layer}> markerad för flyttning."
 
-#: ../gui/wxpython/datacatalog/tree.py:1018
+#: ../gui/wxpython/datacatalog/tree.py:1036
 #, python-brace-format
 msgid "{c} maps marked for copying."
 msgstr "{c} kartor markerade för kopiering."
 
-#: ../gui/wxpython/datacatalog/tree.py:1020
+#: ../gui/wxpython/datacatalog/tree.py:1038
 #, python-brace-format
 msgid "Map <{layer}> marked for copying."
 msgstr "Karta <{layer}> markerad för kopiering."
 
-#: ../gui/wxpython/datacatalog/tree.py:1035
-#: ../gui/wxpython/datacatalog/tree.py:1372
+#: ../gui/wxpython/datacatalog/tree.py:1053
+#: ../gui/wxpython/datacatalog/tree.py:1390
 msgid "New name"
 msgstr "Nytt Namn"
 
-#: ../gui/wxpython/datacatalog/tree.py:1036
+#: ../gui/wxpython/datacatalog/tree.py:1054
 msgid "Rename map"
 msgstr "Byt namn på kartan"
 
-#: ../gui/wxpython/datacatalog/tree.py:1185
+#: ../gui/wxpython/datacatalog/tree.py:1203
 msgid "Cannot rename mapset"
 msgstr "Kan inte byta namn på mapset"
 
-#: ../gui/wxpython/datacatalog/tree.py:1198
+#: ../gui/wxpython/datacatalog/tree.py:1216
 #, python-brace-format
 msgid "Renaming mapset <{oldmapset}> to <{newmapset}> completed"
 msgstr "Omdöpning av mapset <{oldmapset}> till <{newmapset}> slutförd"
 
-#: ../gui/wxpython/datacatalog/tree.py:1210
+#: ../gui/wxpython/datacatalog/tree.py:1228
 msgid "Cannot rename location"
 msgstr "Det går inte att byta namn på platsen"
 
-#: ../gui/wxpython/datacatalog/tree.py:1222
+#: ../gui/wxpython/datacatalog/tree.py:1240
 #, python-brace-format
 msgid "Renaming project <{oldlocation}> to <{newlocation}> completed"
 msgstr "Byte av namn på projekt <{oldlocation}> till <{newlocation}> slutfört"
 
-#: ../gui/wxpython/datacatalog/tree.py:1234
+#: ../gui/wxpython/datacatalog/tree.py:1252
 #, python-brace-format
 msgid "Renaming map <{name}>..."
 msgstr "Byter namn på karta <{name}>..."
 
-#: ../gui/wxpython/datacatalog/tree.py:1244
+#: ../gui/wxpython/datacatalog/tree.py:1262
 #, python-brace-format
 msgid "{cmd} -- completed"
 msgstr "{cmd} -- slutförd"
 
-#: ../gui/wxpython/datacatalog/tree.py:1260
+#: ../gui/wxpython/datacatalog/tree.py:1278
 msgid "No map selected for copying."
 msgstr "Ingen karta vald för kopiering."
 
-#: ../gui/wxpython/datacatalog/tree.py:1262
+#: ../gui/wxpython/datacatalog/tree.py:1280
 msgid "No map selected for moving."
 msgstr "Ingen karta vald för flyttning."
 
-#: ../gui/wxpython/datacatalog/tree.py:1284
-#: ../gui/wxpython/datacatalog/tree.py:1303
+#: ../gui/wxpython/datacatalog/tree.py:1302
+#: ../gui/wxpython/datacatalog/tree.py:1321
 #, python-brace-format
 msgid "New name for <{n}>"
 msgstr "Nytt namn för <{n}>"
 
-#: ../gui/wxpython/datacatalog/tree.py:1287
-#: ../gui/wxpython/datacatalog/tree.py:1306
-#: ../gui/wxpython/datacatalog/tree.py:1373
+#: ../gui/wxpython/datacatalog/tree.py:1305
+#: ../gui/wxpython/datacatalog/tree.py:1324
+#: ../gui/wxpython/datacatalog/tree.py:1391
 msgid "Select new name"
 msgstr "Välj nytt namn"
 
-#: ../gui/wxpython/datacatalog/tree.py:1324
+#: ../gui/wxpython/datacatalog/tree.py:1342
 #, python-brace-format
 msgid "Copying <{name}>..."
 msgstr "Kopiera <{name}>..."
 
-#: ../gui/wxpython/datacatalog/tree.py:1326
+#: ../gui/wxpython/datacatalog/tree.py:1344
 #, python-brace-format
 msgid "Moving <{name}>..."
 msgstr "Flyttar <{name}>..."
 
-#: ../gui/wxpython/datacatalog/tree.py:1340
+#: ../gui/wxpython/datacatalog/tree.py:1358
 msgid "Copying completed"
 msgstr "Kopiering slutförd"
 
-#: ../gui/wxpython/datacatalog/tree.py:1346
+#: ../gui/wxpython/datacatalog/tree.py:1364
 msgid "Moving completed"
 msgstr "Flyttningen slutförd"
 
-#: ../gui/wxpython/datacatalog/tree.py:1362
+#: ../gui/wxpython/datacatalog/tree.py:1380
 msgid "Reprojection is not implemented for 3D rasters"
 msgstr "Reprojektion är inte implementerad för 3D-raster"
 
-#: ../gui/wxpython/datacatalog/tree.py:1443
-#: ../gui/wxpython/datacatalog/tree.py:1559
+#: ../gui/wxpython/datacatalog/tree.py:1461
+#: ../gui/wxpython/datacatalog/tree.py:1577
 msgid "g.remove completed"
 msgstr "g.ta bort färdigställd"
 
-#: ../gui/wxpython/datacatalog/tree.py:1523
+#: ../gui/wxpython/datacatalog/tree.py:1541
 #, python-brace-format
 msgid "Do you really want to delete map(s) <{m}>?"
 msgstr "Vill du verkligen ta bort kartan/kartorna <{m}>?"
 
-#: ../gui/wxpython/datacatalog/tree.py:1527
+#: ../gui/wxpython/datacatalog/tree.py:1545
 #, python-brace-format
 msgid "Do you really want to delete {n} maps?"
 msgstr "Vill du verkligen ta bort {n} kartor?"
 
-#: ../gui/wxpython/datacatalog/tree.py:1528
+#: ../gui/wxpython/datacatalog/tree.py:1546
 msgid "Delete map"
 msgstr "Radera karta"
 
-#: ../gui/wxpython/datacatalog/tree.py:1529
+#: ../gui/wxpython/datacatalog/tree.py:1547
 #, python-brace-format
 msgid "Deleting {name}..."
 msgstr "Radera {name}..."
 
-#: ../gui/wxpython/datacatalog/tree.py:1720
+#: ../gui/wxpython/datacatalog/tree.py:1738
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr "För att flytta eller kopiera kartor till andra kartuppsättningar, låsa upp redigering av andra kartuppsättningar"
 
-#: ../gui/wxpython/datacatalog/tree.py:1734
+#: ../gui/wxpython/datacatalog/tree.py:1752
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr "Om du vill flytta eller kopiera kartor till ett annat projekt drar du dem till ett mapset i destinationsprojektet"
 
-#: ../gui/wxpython/datacatalog/tree.py:2061
+#: ../gui/wxpython/datacatalog/tree.py:2080
 msgid "&Cut"
 msgstr "&Klipp"
 
-#: ../gui/wxpython/datacatalog/tree.py:2067 ../gui/wxpython/history/tree.py:219
+#: ../gui/wxpython/datacatalog/tree.py:2086 ../gui/wxpython/history/tree.py:219
 msgid "&Copy"
 msgstr "&Kopiera"
 
-#: ../gui/wxpython/datacatalog/tree.py:2071
+#: ../gui/wxpython/datacatalog/tree.py:2090
 msgid "Copy &name"
 msgstr "Kopiera &namn"
 
-#: ../gui/wxpython/datacatalog/tree.py:2075
-#: ../gui/wxpython/datacatalog/tree.py:2118
-#: ../gui/wxpython/datacatalog/tree.py:2222
+#: ../gui/wxpython/datacatalog/tree.py:2094
+#: ../gui/wxpython/datacatalog/tree.py:2137
+#: ../gui/wxpython/datacatalog/tree.py:2241
 msgid "&Paste"
 msgstr "Klistra"
 
 #. GTC Delete mapset
-#: ../gui/wxpython/datacatalog/tree.py:2081
+#: ../gui/wxpython/datacatalog/tree.py:2100
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:242
 msgid "&Delete"
 msgstr "&Radera"
 
 #. GTC Rename mapset
-#: ../gui/wxpython/datacatalog/tree.py:2086 ../gui/wxpython/dbmgr/base.py:2490
+#: ../gui/wxpython/datacatalog/tree.py:2105 ../gui/wxpython/dbmgr/base.py:2490
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:235
 msgid "&Rename"
 msgstr "&Rename"
 
-#: ../gui/wxpython/datacatalog/tree.py:2099
+#: ../gui/wxpython/datacatalog/tree.py:2118
 msgid "&Display layers"
 msgstr "&Visa lager"
 
-#: ../gui/wxpython/datacatalog/tree.py:2101
+#: ../gui/wxpython/datacatalog/tree.py:2120
 msgid "&Display layer"
 msgstr "&Display lager"
 
-#: ../gui/wxpython/datacatalog/tree.py:2105
+#: ../gui/wxpython/datacatalog/tree.py:2124
 msgid "Show &metadata"
 msgstr "Visa &metadata"
 
-#: ../gui/wxpython/datacatalog/tree.py:2124
+#: ../gui/wxpython/datacatalog/tree.py:2143
 msgid "&Switch mapset"
 msgstr "&Switch mapset"
 
-#: ../gui/wxpython/datacatalog/tree.py:2134
+#: ../gui/wxpython/datacatalog/tree.py:2153
 msgid "&Delete mapset"
 msgstr "&Radera mapset"
 
-#: ../gui/wxpython/datacatalog/tree.py:2140
+#: ../gui/wxpython/datacatalog/tree.py:2159
 msgid "&Rename mapset"
 msgstr "&Rename mapset"
 
-#: ../gui/wxpython/datacatalog/tree.py:2146
-#: ../gui/wxpython/datacatalog/tree.py:2177
-#: ../gui/wxpython/datacatalog/tree.py:2212
+#: ../gui/wxpython/datacatalog/tree.py:2165
+#: ../gui/wxpython/datacatalog/tree.py:2196
+#: ../gui/wxpython/datacatalog/tree.py:2231
 msgid "Re&load maps"
 msgstr "U&ppdatera kartor"
 
-#: ../gui/wxpython/datacatalog/tree.py:2150
+#: ../gui/wxpython/datacatalog/tree.py:2169
 msgid "&Copy path to mapset"
 msgstr "&Kopiera sökväg till mapset"
 
-#: ../gui/wxpython/datacatalog/tree.py:2161
+#: ../gui/wxpython/datacatalog/tree.py:2180
 msgid "&Create mapset"
 msgstr "& Skapa kartset"
 
-#: ../gui/wxpython/datacatalog/tree.py:2165
+#: ../gui/wxpython/datacatalog/tree.py:2184
 msgid "&Delete project"
 msgstr "&Avsluta projekt"
 
-#: ../gui/wxpython/datacatalog/tree.py:2171
+#: ../gui/wxpython/datacatalog/tree.py:2190
 msgid "&Rename project"
 msgstr "&Rename-projekt"
 
-#: ../gui/wxpython/datacatalog/tree.py:2190
+#: ../gui/wxpython/datacatalog/tree.py:2209
 msgid "&Create new project (location)"
 msgstr "&Skapa nytt projekt (plats)"
 
-#: ../gui/wxpython/datacatalog/tree.py:2194
+#: ../gui/wxpython/datacatalog/tree.py:2213
 msgid "&Download sample project (location)"
 msgstr "&Hämta ner exempelprojekt (plats)"
 
-#: ../gui/wxpython/datacatalog/tree.py:2199
+#: ../gui/wxpython/datacatalog/tree.py:2218
 msgid "&Remove GRASS database from data catalog"
 msgstr "&Remove GRASS-databasen från datakatalogen"
 
-#: ../gui/wxpython/datacatalog/tree.py:2206
+#: ../gui/wxpython/datacatalog/tree.py:2225
 msgid "&Delete GRASS database from disk"
 msgstr "&Radera GRASS-databasen från hårddisken"
 
-#: ../gui/wxpython/datacatalog/tree.py:2236
+#: ../gui/wxpython/datacatalog/tree.py:2255
 msgid "&Delete projects (locations)"
 msgstr "&Avveckla projekt (platser)"
 
-#: ../gui/wxpython/datacatalog/tree.py:2248
+#: ../gui/wxpython/datacatalog/tree.py:2267
 msgid "&Delete mapsets"
 msgstr "&Radera kartor"
 
-#: ../gui/wxpython/datacatalog/tree.py:2254
+#: ../gui/wxpython/datacatalog/tree.py:2273
 msgid "&Copy paths to mapsets"
 msgstr "&Kopiera sökvägar till kartor"
 
-#: ../gui/wxpython/datacatalog/tree.py:2264 ../gui/wxpython/history/tree.py:233
+#: ../gui/wxpython/datacatalog/tree.py:2283 ../gui/wxpython/history/tree.py:233
 msgid "No available options"
 msgstr "Inga tillgängliga alternativ"
 
@@ -8569,6 +8549,10 @@ msgstr "Projekt '{}' finns redan. Överväg att använda ett annat namn för dit
 msgid "Existing project path"
 msgstr "Befintlig projektväg"
 
+#: ../gui/wxpython/location_wizard/wizard.py:328
+msgid "Choose GRASS data directory:"
+msgstr "Välj GRASS datakatalog:"
+
 #: ../gui/wxpython/location_wizard/wizard.py:346
 msgid "Title of the project is limited only to one line and 256 characters. The rest of the text will be ignored."
 msgstr "Projektets titel är begränsad till endast en rad och 256 tecken. Resten av texten kommer att ignoreras."
@@ -10266,7 +10250,7 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/mapwindow.py:2392
 #: ../gui/wxpython/nviz/mapwindow.py:2411 ../gui/wxpython/nviz/tools.py:2806
-#: ../gui/wxpython/nviz/tools.py:5177
+#: ../gui/wxpython/nviz/tools.py:5179
 msgid "constant#"
 msgstr "konstant#"
 
@@ -10735,13 +10719,13 @@ msgstr "använd bredd för tematisk kartläggning"
 msgid "Set options..."
 msgstr "Ställ in alternativ..."
 
-#: ../gui/wxpython/nviz/tools.py:1662 ../gui/wxpython/nviz/tools.py:5452
-#: ../gui/wxpython/nviz/tools.py:5506
+#: ../gui/wxpython/nviz/tools.py:1662 ../gui/wxpython/nviz/tools.py:5454
+#: ../gui/wxpython/nviz/tools.py:5508
 msgid "as 3D"
 msgstr "som 3D"
 
-#: ../gui/wxpython/nviz/tools.py:1662 ../gui/wxpython/nviz/tools.py:5452
-#: ../gui/wxpython/nviz/tools.py:5506
+#: ../gui/wxpython/nviz/tools.py:1662 ../gui/wxpython/nviz/tools.py:5454
+#: ../gui/wxpython/nviz/tools.py:5508
 msgid "on surface(s):"
 msgstr "på yta(n):"
 
@@ -10785,7 +10769,7 @@ msgstr "Status:"
 msgid "Draw wire box"
 msgstr "Dra kabelbox"
 
-#: ../gui/wxpython/nviz/tools.py:2043 ../gui/wxpython/nviz/tools.py:4333
+#: ../gui/wxpython/nviz/tools.py:2043 ../gui/wxpython/nviz/tools.py:4335
 msgid "List of isosurfaces"
 msgstr "Lista över isoytor"
 
@@ -10939,108 +10923,108 @@ msgstr "SÖ"
 msgid "SW"
 msgstr "SV"
 
-#: ../gui/wxpython/nviz/tools.py:3715 ../gui/wxpython/nviz/tools.py:5570
+#: ../gui/wxpython/nviz/tools.py:3717 ../gui/wxpython/nviz/tools.py:5572
 msgid "Level"
 msgstr "Nivå"
 
-#: ../gui/wxpython/nviz/tools.py:4339
+#: ../gui/wxpython/nviz/tools.py:4341
 msgid "List of slices"
 msgstr "Lista över skivor"
 
-#: ../gui/wxpython/nviz/tools.py:4522 ../gui/wxpython/nviz/tools.py:4525
+#: ../gui/wxpython/nviz/tools.py:4524 ../gui/wxpython/nviz/tools.py:4527
 #, python-brace-format
 msgid "Level {level}"
 msgstr "Nivå {level}"
 
-#: ../gui/wxpython/nviz/tools.py:4532 ../gui/wxpython/nviz/tools.py:4535
+#: ../gui/wxpython/nviz/tools.py:4534 ../gui/wxpython/nviz/tools.py:4537
 #, python-brace-format
 msgid "Slice parallel to {axis}"
 msgstr "Skiva parallell med {axis}"
 
-#: ../gui/wxpython/nviz/tools.py:4812 ../gui/wxpython/nviz/tools.py:5583
+#: ../gui/wxpython/nviz/tools.py:4814 ../gui/wxpython/nviz/tools.py:5585
 msgid "Slice parallel to"
 msgstr "Skiva parallell med"
 
-#: ../gui/wxpython/nviz/tools.py:5030
+#: ../gui/wxpython/nviz/tools.py:5032
 #, python-format
 msgid "Scalebar %d"
 msgstr "Scalebar %d"
 
-#: ../gui/wxpython/nviz/tools.py:5184
+#: ../gui/wxpython/nviz/tools.py:5186
 msgid "None"
 msgstr "Ingen"
 
-#: ../gui/wxpython/nviz/tools.py:5185
+#: ../gui/wxpython/nviz/tools.py:5187
 msgid "Plane"
 msgstr "Flygplan"
 
-#: ../gui/wxpython/nviz/tools.py:5389
+#: ../gui/wxpython/nviz/tools.py:5391
 msgid "Vector map is 3D"
 msgstr "Vektorkarta är 3D"
 
-#: ../gui/wxpython/nviz/tools.py:5392
+#: ../gui/wxpython/nviz/tools.py:5394
 msgid "Vector map is 2D"
 msgstr "Vektorkarta är 2D"
 
-#: ../gui/wxpython/nviz/tools.py:5394
+#: ../gui/wxpython/nviz/tools.py:5396
 #, python-format
 msgid "%(features)d features (%(points)d points)"
 msgstr "%(features)d funktioner (%(points)d punkter)"
 
-#: ../gui/wxpython/nviz/tools.py:5454 ../gui/wxpython/nviz/tools.py:5508
+#: ../gui/wxpython/nviz/tools.py:5456 ../gui/wxpython/nviz/tools.py:5510
 msgid "on surface"
 msgstr "på ytan"
 
-#: ../gui/wxpython/nviz/tools.py:5605
+#: ../gui/wxpython/nviz/tools.py:5607
 msgid "range:"
 msgstr "räckvidd:"
 
-#: ../gui/wxpython/nviz/tools.py:5680 ../gui/wxpython/nviz/tools.py:5691
+#: ../gui/wxpython/nviz/tools.py:5682 ../gui/wxpython/nviz/tools.py:5693
 msgid "North edge:"
 msgstr "Norra kanten:"
 
-#: ../gui/wxpython/nviz/tools.py:5681 ../gui/wxpython/nviz/tools.py:5692
+#: ../gui/wxpython/nviz/tools.py:5683 ../gui/wxpython/nviz/tools.py:5694
 msgid "South edge:"
 msgstr "Södra kanten:"
 
-#: ../gui/wxpython/nviz/tools.py:5682 ../gui/wxpython/nviz/tools.py:5689
-#: ../gui/wxpython/nviz/tools.py:5698
+#: ../gui/wxpython/nviz/tools.py:5684 ../gui/wxpython/nviz/tools.py:5691
+#: ../gui/wxpython/nviz/tools.py:5700
 msgid "West edge:"
 msgstr "Västra kanten:"
 
-#: ../gui/wxpython/nviz/tools.py:5683 ../gui/wxpython/nviz/tools.py:5690
-#: ../gui/wxpython/nviz/tools.py:5699
+#: ../gui/wxpython/nviz/tools.py:5685 ../gui/wxpython/nviz/tools.py:5692
+#: ../gui/wxpython/nviz/tools.py:5701
 msgid "East edge:"
 msgstr "Östra kanten:"
 
-#: ../gui/wxpython/nviz/tools.py:5685 ../gui/wxpython/nviz/tools.py:5696
-#: ../gui/wxpython/nviz/tools.py:5704
+#: ../gui/wxpython/nviz/tools.py:5687 ../gui/wxpython/nviz/tools.py:5698
+#: ../gui/wxpython/nviz/tools.py:5706
 msgid "Northing (Y):"
 msgstr "Nordlig riktning (Y):"
 
-#: ../gui/wxpython/nviz/tools.py:5686 ../gui/wxpython/nviz/tools.py:5695
-#: ../gui/wxpython/nviz/tools.py:5705
+#: ../gui/wxpython/nviz/tools.py:5688 ../gui/wxpython/nviz/tools.py:5697
+#: ../gui/wxpython/nviz/tools.py:5707
 msgid "Height (Z):"
 msgstr "Höjd (Z):"
 
-#: ../gui/wxpython/nviz/tools.py:5687 ../gui/wxpython/nviz/tools.py:5694
-#: ../gui/wxpython/nviz/tools.py:5703
+#: ../gui/wxpython/nviz/tools.py:5689 ../gui/wxpython/nviz/tools.py:5696
+#: ../gui/wxpython/nviz/tools.py:5705
 msgid "Easting (X):"
 msgstr "Östlig riktning (X):"
 
-#: ../gui/wxpython/nviz/tools.py:5700
+#: ../gui/wxpython/nviz/tools.py:5702
 msgid "Bottom edge:"
 msgstr "Nedre kant:"
 
-#: ../gui/wxpython/nviz/tools.py:5701
+#: ../gui/wxpython/nviz/tools.py:5703
 msgid "Top edge:"
 msgstr "Övre kant:"
 
-#: ../gui/wxpython/nviz/tools.py:5809
+#: ../gui/wxpython/nviz/tools.py:5811
 msgid "Adjusts the distance and direction of the image viewpoint"
 msgstr "Justerar avstånd och riktning för bildens betraktningspunkt"
 
-#: ../gui/wxpython/nviz/tools.py:5845
+#: ../gui/wxpython/nviz/tools.py:5847
 msgid "Adjusts the light direction. Click and drag the puck to change the light direction."
 msgstr "Justerar ljusets riktning. Klicka och dra i pucken för att ändra ljusets riktning."
 
@@ -12087,17 +12071,17 @@ msgstr ""
 "%s"
 
 #: ../gui/wxpython/psmap/instructions.py:706
-#: ../gui/wxpython/psmap/instructions.py:929
-#: ../gui/wxpython/psmap/instructions.py:1057
-#: ../gui/wxpython/psmap/instructions.py:1132
-#: ../gui/wxpython/psmap/instructions.py:1317
-#: ../gui/wxpython/psmap/instructions.py:1392
-#: ../gui/wxpython/psmap/instructions.py:1470
-#: ../gui/wxpython/psmap/instructions.py:1576
-#: ../gui/wxpython/psmap/instructions.py:1717
-#: ../gui/wxpython/psmap/instructions.py:1859
-#: ../gui/wxpython/psmap/instructions.py:1909
-#: ../gui/wxpython/psmap/instructions.py:2261
+#: ../gui/wxpython/psmap/instructions.py:933
+#: ../gui/wxpython/psmap/instructions.py:1061
+#: ../gui/wxpython/psmap/instructions.py:1136
+#: ../gui/wxpython/psmap/instructions.py:1321
+#: ../gui/wxpython/psmap/instructions.py:1396
+#: ../gui/wxpython/psmap/instructions.py:1474
+#: ../gui/wxpython/psmap/instructions.py:1580
+#: ../gui/wxpython/psmap/instructions.py:1721
+#: ../gui/wxpython/psmap/instructions.py:1863
+#: ../gui/wxpython/psmap/instructions.py:1913
+#: ../gui/wxpython/psmap/instructions.py:2265
 #, python-format
 msgid "Failed to read instruction %s"
 msgstr "Misslyckades med att läsa instruktion %s"
@@ -12138,7 +12122,7 @@ msgstr ""
 "Map frame size ändrad, gammalt värde: %(old1)s %(old2)s\n"
 "nytt värde: %(new1)s %(new2)s"
 
-#: ../gui/wxpython/psmap/instructions.py:840
+#: ../gui/wxpython/psmap/instructions.py:844
 #, python-format
 msgid ""
 "Failed to read instruction %(file)s.\n"
@@ -12147,12 +12131,12 @@ msgstr ""
 "Misslyckades med att läsa instruktion %(file)s.\n"
 "Okänt format %(for)s"
 
-#: ../gui/wxpython/psmap/instructions.py:856
+#: ../gui/wxpython/psmap/instructions.py:860
 #, python-format
 msgid "Failed to read instruction %s."
 msgstr "Misslyckades med att läsa instruktion %s."
 
-#: ../gui/wxpython/psmap/instructions.py:1136
+#: ../gui/wxpython/psmap/instructions.py:1140
 #, python-format
 msgid "Failed to read instruction %(inst)s: file %(file)s not found."
 msgstr "Misslyckades med att läsa instruktion %(inst)s: fil %(file)s hittades inte."
@@ -13379,26 +13363,26 @@ msgstr "Y"
 msgid "Time [%s]"
 msgstr "Tid [%s]"
 
-#: ../gui/wxpython/timeline/frame.py:517 ../gui/wxpython/tplot/frame.py:1175
+#: ../gui/wxpython/timeline/frame.py:517 ../gui/wxpython/tplot/frame.py:1179
 #, python-format
 msgid "Please specify the space time dataset <%s>."
 msgstr "Ange datasetet för rymdtid <%s>."
 
-#: ../gui/wxpython/timeline/frame.py:518 ../gui/wxpython/tplot/frame.py:1176
+#: ../gui/wxpython/timeline/frame.py:518 ../gui/wxpython/tplot/frame.py:1180
 msgid "Ambiguous dataset name"
 msgstr "Tvetydigt namn på dataset"
 
-#: ../gui/wxpython/timeline/frame.py:609 ../gui/wxpython/tplot/frame.py:1352
+#: ../gui/wxpython/timeline/frame.py:609 ../gui/wxpython/tplot/frame.py:1356
 #, python-format
 msgid "Space time raster dataset: %s"
 msgstr "Rasterdataset för rymdtid: %s"
 
-#: ../gui/wxpython/timeline/frame.py:611 ../gui/wxpython/tplot/frame.py:1354
+#: ../gui/wxpython/timeline/frame.py:611 ../gui/wxpython/tplot/frame.py:1358
 #, python-format
 msgid "Space time vector dataset: %s"
 msgstr "Rymdtid vektor dataset: %s"
 
-#: ../gui/wxpython/timeline/frame.py:613 ../gui/wxpython/tplot/frame.py:1356
+#: ../gui/wxpython/timeline/frame.py:613 ../gui/wxpython/tplot/frame.py:1360
 #, python-format
 msgid "Space time 3D raster dataset: %s"
 msgstr "Rymdtid 3D rasterdataset: %s"
@@ -13520,9 +13504,9 @@ msgstr "CVS sökväg"
 msgid "Do you want the CSV header?"
 msgstr "Vill du ha CSV-huvudet?"
 
-#: ../gui/wxpython/tplot/frame.py:422 ../gui/wxpython/tplot/frame.py:1053
-#: ../gui/wxpython/tplot/frame.py:1060 ../gui/wxpython/tplot/frame.py:1089
-#: ../gui/wxpython/tplot/frame.py:1248
+#: ../gui/wxpython/tplot/frame.py:422 ../gui/wxpython/tplot/frame.py:1057
+#: ../gui/wxpython/tplot/frame.py:1064 ../gui/wxpython/tplot/frame.py:1093
+#: ../gui/wxpython/tplot/frame.py:1252
 msgid "Invalid input coordinates"
 msgstr "Ogiltiga inmatade koordinater"
 
@@ -13553,62 +13537,62 @@ msgstr "Ingen koppling mellan vektorkarta {vmap} och lager {la}"
 msgid "Temporal resolution: %s"
 msgstr "Temporal upplösning: %s"
 
-#: ../gui/wxpython/tplot/frame.py:852
+#: ../gui/wxpython/tplot/frame.py:856
 msgid "Problem getting data from raster temporal dataset. Empty list of values."
 msgstr "Problem med att hämta data från raster temporal dataset. Tom lista med värden."
 
-#: ../gui/wxpython/tplot/frame.py:911
+#: ../gui/wxpython/tplot/frame.py:915
 #, python-brace-format
 msgid "Problem getting data from vector temporal dataset. Empty list of values for cat {ca}."
 msgstr "Problem med att hämta data från vektor temporal dataset. Tom lista med värden för katt {ca}."
 
-#: ../gui/wxpython/tplot/frame.py:968
+#: ../gui/wxpython/tplot/frame.py:972
 msgid "Problem getting data from vector temporal dataset. Empty list of values."
 msgstr "Problem med att hämta data från vektor temporal dataset. Tom lista med värden."
 
-#: ../gui/wxpython/tplot/frame.py:1003
+#: ../gui/wxpython/tplot/frame.py:1007
 #, python-brace-format
 msgid "{pa} already exists, do you want to overwrite?"
 msgstr "{pa} finns redan, vill du skriva över?"
 
-#: ../gui/wxpython/tplot/frame.py:1006
+#: ../gui/wxpython/tplot/frame.py:1010
 msgid "File exists"
 msgstr "Filen finns"
 
-#: ../gui/wxpython/tplot/frame.py:1014
+#: ../gui/wxpython/tplot/frame.py:1018
 msgid "Please change name of output CSV file or "
 msgstr "Ändra namnet på den utgående CSV-filen eller "
 
-#: ../gui/wxpython/tplot/frame.py:1042
+#: ../gui/wxpython/tplot/frame.py:1046
 msgid "Incorrect coordinates format, should be: x,y"
 msgstr "Felaktigt koordinatformat, ska vara: x,y"
 
-#: ../gui/wxpython/tplot/frame.py:1068
+#: ../gui/wxpython/tplot/frame.py:1072
 msgid "Seed point outside the current region"
 msgstr "Seed-punkt utanför den aktuella regionen"
 
-#: ../gui/wxpython/tplot/frame.py:1082
+#: ../gui/wxpython/tplot/frame.py:1086
 msgid "Invalid input raster dataset"
 msgstr "Ogiltig inmatad rasterdataset"
 
-#: ../gui/wxpython/tplot/frame.py:1105
+#: ../gui/wxpython/tplot/frame.py:1109
 msgid "Invalid input vector dataset"
 msgstr "Ogiltig inmatningsvektor dataset"
 
-#: ../gui/wxpython/tplot/frame.py:1238 ../gui/wxpython/tplot/frame.py:1302
+#: ../gui/wxpython/tplot/frame.py:1242 ../gui/wxpython/tplot/frame.py:1306
 msgid "Invalid input temporal dataset"
 msgstr "Ogiltig inmatad temporär dataset"
 
-#: ../gui/wxpython/tplot/frame.py:1326
+#: ../gui/wxpython/tplot/frame.py:1330
 msgid "Datasets have different number of values"
 msgstr "Dataset har olika antal värden"
 
-#: ../gui/wxpython/tplot/frame.py:1359
+#: ../gui/wxpython/tplot/frame.py:1363
 #, python-brace-format
 msgid "Value for {date} is {val}"
 msgstr "Värdet för {date} är {val}"
 
-#: ../gui/wxpython/tplot/frame.py:1361
+#: ../gui/wxpython/tplot/frame.py:1365
 msgid "Press Del to dismiss."
 msgstr "Tryck på Del för att avvisa."
 
@@ -15390,6 +15374,27 @@ msgid ""
 msgstr ""
 "Regressionsekvation för rasterkartan <%(rast1)s> vs. <%(rast2)s>:\n"
 "\n"
+
+#~ msgid "Do you want to create a new project (also known as location)?"
+#~ msgstr "Vill du skapa ett nytt projekt (även känt som plats)?"
+
+#~ msgid "Create project?"
+#~ msgstr "Skapa projekt?"
+
+#~ msgid "Restrict edits to the current mapset only"
+#~ msgstr "Begränsa redigeringar till endast den aktuella kartuppsättningen"
+
+#~ msgid "Allow edits outside of the current mapset"
+#~ msgstr "Tillåt redigeringar utanför den aktuella kartuppsättningen"
+
+#~ msgid "Add existing or create new database"
+#~ msgstr "Lägg till befintlig eller skapa ny databas"
+
+#~ msgid "Create new project (location) in current GRASS database"
+#~ msgstr "Skapa ett nytt projekt (plats) i den aktuella GRASS-databasen"
+
+#~ msgid "Download sample project (location) to current GRASS database"
+#~ msgstr "Hämta ner exempelprojekt (plats) till aktuell GRASS-databas"
 
 #~ msgid "GRASS GIS"
 #~ msgstr "GRASS GIS"

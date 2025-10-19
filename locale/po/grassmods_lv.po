@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-27 17:16+0000\n"
+"POT-Creation-Date: 2025-10-11 15:59+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Latvian <https://weblate.osgeo.org/projects/grass-gis/grassmods/lv/>\n"
@@ -67,7 +67,7 @@ msgstr ""
 #: ../db/db.columns/main.c:73 ../db/db.describe/main.c:54
 #: ../db/db.describe/main.c:59 ../general/g.list/list.c:89
 #: ../general/g.mapset/main.c:174 ../imagery/i.group/main.c:124
-#: ../raster/r.category/main.c:143 ../raster/r.describe/dumplist.c:47
+#: ../raster/r.category/main.c:143 ../raster/r.describe/dumplist.c:48
 #: ../raster/r.distance/report.c:63 ../raster/r.proj/main.c:345
 #: ../raster/r.regression.multi/main.c:203
 #: ../raster/r.stats.quantile/main.c:382 ../raster/r.stats.quantile/main.c:439
@@ -77,11 +77,11 @@ msgstr ""
 #: ../vector/v.category/main.c:333 ../vector/v.class/main.c:223
 #: ../vector/v.class/main.c:264 ../vector/v.class/main.c:271
 #: ../vector/v.db.connect/main.c:152 ../vector/v.distance/main.c:310
-#: ../vector/v.info/print.c:866 ../vector/v.vect.stats/main.c:284
+#: ../vector/v.info/print.c:867 ../vector/v.vect.stats/main.c:284
 #: ../vector/v.what.rast/main.c:144 ../vector/v.what/main.c:226
-#: ../vector/v.what/what.c:508 ../vector/v.what/what.c:652
-#: ../vector/v.what/what.c:705 ../vector/v.what/what.c:898
-#: ../vector/v.what/what.c:1037 ../vector/v.what/what.c:1158
+#: ../vector/v.what/what.c:510 ../vector/v.what/what.c:654
+#: ../vector/v.what/what.c:707 ../vector/v.what/what.c:900
+#: ../vector/v.what/what.c:1039 ../vector/v.what/what.c:1160
 msgid "Failed to initialize JSON array. Out of memory?"
 msgstr ""
 
@@ -308,7 +308,7 @@ msgstr ""
 #: ../general/g.mapsets/list.c:13 ../general/g.proj/output.c:54
 #: ../general/g.proj/output.c:360 ../general/g.region/main.c:471
 #: ../general/g.version/main.c:140 ../misc/m.measure/main.c:87
-#: ../raster/r.describe/dumplist.c:37 ../raster/r.distance/report.c:211
+#: ../raster/r.describe/dumplist.c:38 ../raster/r.distance/report.c:211
 #: ../raster/r.distance/report.c:218 ../raster/r.distance/report.c:225
 #: ../raster/r.info/main.c:147 ../raster/r.proj/main.c:487
 #: ../raster/r.regression.line/main.c:101
@@ -321,12 +321,12 @@ msgstr ""
 #: ../vector/v.category/main.c:942 ../vector/v.class/main.c:257
 #: ../vector/v.class/main.c:348 ../vector/v.db.connect/main.c:306
 #: ../vector/v.db.connect/main.c:399 ../vector/v.distance/main.c:1578
-#: ../vector/v.info/print.c:824 ../vector/v.info/print.c:860
+#: ../vector/v.info/print.c:825 ../vector/v.info/print.c:861
 #: ../vector/v.univar/main.c:630 ../vector/v.vect.stats/main.c:800
 #: ../vector/v.what.rast/main.c:628 ../vector/v.what/what.c:202
 #: ../vector/v.what/what.c:273 ../vector/v.what/what.c:441
-#: ../vector/v.what/what.c:539 ../vector/v.what/what.c:680
-#: ../vector/v.what/what.c:728 ../vector/v.what/what.c:933
+#: ../vector/v.what/what.c:541 ../vector/v.what/what.c:682
+#: ../vector/v.what/what.c:730 ../vector/v.what/what.c:935
 msgid "Failed to initialize JSON object. Out of memory?"
 msgstr ""
 
@@ -355,6 +355,7 @@ msgid "The -p flag is required when using the format option."
 msgstr ""
 
 #: ../db/db.connect/main.c:236 ../db/db.tables/main.c:41
+#: ../scripts/db.test/db.test.py:45
 msgid "Database connection not defined. Run db.connect."
 msgstr ""
 
@@ -487,16 +488,16 @@ msgstr ""
 #: ../db/db.describe/main.c:140 ../general/g.proj/output.c:382
 #: ../general/g.region/main.c:990 ../general/g.version/main.c:409
 #: ../imagery/i.group/main.c:301 ../raster/r.category/main.c:412
-#: ../raster/r.describe/dumplist.c:69 ../raster/r.info/main.c:997
-#: ../raster/r.mask.status/main.c:111 ../raster/r.object.geometry/main.c:401
-#: ../raster/r.profile/main.c:319 ../raster/r.proj/main.c:370
-#: ../raster/r.proj/main.c:545 ../raster/r.report/prt_json.c:200
+#: ../raster/r.describe/dumplist.c:71 ../raster/r.info/main.c:1000
+#: ../raster/r.mask.status/main.c:111 ../raster/r.object.geometry/main.c:402
+#: ../raster/r.profile/main.c:320 ../raster/r.proj/main.c:370
+#: ../raster/r.proj/main.c:545 ../raster/r.report/prt_json.c:203
 #: ../raster/r.stats/main.c:427 ../raster/r.univar/stats.c:493
-#: ../raster/r.what.color/main.c:290 ../raster/r.what/main.c:619
+#: ../raster/r.what.color/main.c:290 ../raster/r.what/main.c:620
 #: ../vector/v.category/main.c:320 ../vector/v.category/main.c:989
 #: ../vector/v.distance/main.c:1799 ../vector/v.info/main.c:106
-#: ../vector/v.info/print.c:291 ../vector/v.info/print.c:907
-#: ../vector/v.to.db/report.c:514 ../vector/v.univar/main.c:818
+#: ../vector/v.info/print.c:292 ../vector/v.info/print.c:908
+#: ../vector/v.to.db/report.c:515 ../vector/v.univar/main.c:821
 msgid "Failed to initialize pretty JSON string."
 msgstr ""
 
@@ -1172,12 +1173,12 @@ msgstr ""
 msgid "Unknown type"
 msgstr "Nezināms tips"
 
-#: ../db/drivers/ogr/execute.c:58 ../vector/v.out.ogr/main.c:670
+#: ../db/drivers/ogr/execute.c:63 ../vector/v.out.ogr/main.c:670
 #, c-format
 msgid "OGR layer <%s> not found"
 msgstr ""
 
-#: ../db/drivers/ogr/execute.c:71 ../scripts/db.univar/db.univar.py:137
+#: ../db/drivers/ogr/execute.c:77 ../scripts/db.univar/db.univar.py:137
 #: ../vector/v.colors.out/make_colors.c:42 ../vector/v.colors/scan_attr.c:34
 #: ../vector/v.db.connect/main.c:491 ../vector/v.distance/main.c:574
 #: ../vector/v.distance/main.c:616 ../vector/v.in.db/main.c:195
@@ -1190,7 +1191,7 @@ msgstr ""
 msgid "Column <%s> not found in table <%s>"
 msgstr ""
 
-#: ../db/drivers/ogr/execute.c:113
+#: ../db/drivers/ogr/execute.c:120
 #, fuzzy, c-format
 msgid "\tOGR failed to write feature fid=%lld to layer <%s>"
 msgstr "Draiveris %s nav atrasts"
@@ -1345,8 +1346,9 @@ msgstr ""
 #: ../vector/v.net.connectivity/main.c:183
 #: ../vector/v.net.connectivity/main.c:199 ../vector/v.net.distance/main.c:228
 #: ../vector/v.net.flow/main.c:229 ../vector/v.net.timetable/main.c:384
-#: ../vector/v.net.timetable/main.c:393 ../vector/v.profile/processors.c:30
-#: ../vector/v.surf.rst/main.c:891 ../vector/v.vol.rst/user1.c:433
+#: ../vector/v.net.timetable/main.c:393 ../vector/v.net/main.c:112
+#: ../vector/v.profile/processors.c:30 ../vector/v.surf.rst/main.c:891
+#: ../vector/v.vol.rst/user1.c:433
 msgid "Out of memory"
 msgstr ""
 
@@ -1853,14 +1855,14 @@ msgstr ""
 #: ../raster/r.mask.status/main.c:35 ../raster/r.mfilter/main.c:65
 #: ../raster/r.mode/main.c:53 ../raster/r.neighbors/main.c:181
 #: ../raster/r.null/main.c:58 ../raster/r.object.geometry/main.c:76
-#: ../raster/r.out.ascii/main.c:53 ../raster/r.out.bin/main.c:298
+#: ../raster/r.out.ascii/main.c:54 ../raster/r.out.bin/main.c:298
 #: ../raster/r.out.gdal/main.c:135 ../raster/r.out.gridatb/main.c:66
 #: ../raster/r.out.mat/main.c:62 ../raster/r.out.mpeg/main.c:104
 #: ../raster/r.out.png/main.c:110 ../raster/r.out.pov/main.c:111
 #: ../raster/r.out.ppm/main.c:52 ../raster/r.out.ppm3/main.c:57
 #: ../raster/r.out.vrml/main.c:44 ../raster/r.out.vtk/main.c:59
 #: ../raster/r.param.scale/interface.c:52 ../raster/r.patch/main.c:68
-#: ../raster/r.path/main.c:149 ../raster/r.profile/main.c:57
+#: ../raster/r.path/main.c:150 ../raster/r.profile/main.c:57
 #: ../raster/r.proj/main.c:151 ../raster/r.quant/main.c:48
 #: ../raster/r.quantile/main.c:297 ../raster/r.random.cells/main.c:49
 #: ../raster/r.random.surface/main.c:56 ../raster/r.random/main.c:53
@@ -2084,7 +2086,7 @@ msgstr "L: un  M: atņemt R: iziet un saglabāt\n"
 #: ../vector/v.in.dxf/main.c:62 ../vector/v.in.lidar/main.c:134
 #: ../vector/v.in.ogr/main.c:210 ../vector/v.in.pdal/main.cpp:129
 #: ../vector/v.in.region/main.c:40 ../vector/v.info/main.c:42
-#: ../vector/v.info/print.c:690 ../vector/v.kcv/main.c:53
+#: ../vector/v.info/print.c:691 ../vector/v.kcv/main.c:53
 #: ../vector/v.kernel/main.c:106 ../vector/v.label.sa/main.c:38
 #: ../vector/v.label/main.c:59 ../vector/v.lidar.correction/main.c:70
 #: ../vector/v.lidar.edgedetection/main.c:75
@@ -2147,7 +2149,7 @@ msgstr "Nav izvēlēta grafiskā iekārta"
 #: ../raster/r.carve/main.c:153 ../raster/r.cost/main.c:357
 #: ../raster/r.walk/main.c:460 ../scripts/r.mask/r.mask.py:173
 #: ../scripts/v.db.univar/v.db.univar.py:80
-#: ../scripts/v.dissolve/v.dissolve.py:576 ../scripts/v.pack/v.pack.py:62
+#: ../scripts/v.dissolve/v.dissolve.py:578 ../scripts/v.pack/v.pack.py:62
 #: ../scripts/v.report/v.report.py:85 ../vector/v.clean/test/topocheck.c:62
 #: ../vector/v.colors/main.c:252 ../vector/v.edit/main.c:161
 #: ../vector/v.lidar.correction/main.c:158
@@ -2171,7 +2173,7 @@ msgstr ""
 #: ../general/manage/lister/vector.c:32 ../misc/m.nviz.image/vector.c:301
 #: ../raster/r.carve/main.c:157 ../raster/r.cost/main.c:599
 #: ../raster/r.cost/main.c:666 ../raster/r.drain/main.c:277
-#: ../raster/r.path/main.c:320 ../raster/r.random/support.c:66
+#: ../raster/r.path/main.c:321 ../raster/r.random/support.c:66
 #: ../raster/r.region/main.c:172 ../raster/r.sim/simlib/observation_points.c:42
 #: ../raster/r.walk/main.c:760 ../raster/r.walk/main.c:827
 #: ../raster/r.what/main.c:265 ../raster3d/r3.flow/main.c:398
@@ -2242,7 +2244,7 @@ msgstr ""
 #: ../display/d.extract/main.c:104 ../doc/examples/vector/v.example/main.c:101
 #: ../raster/r.carve/vect.c:30 ../raster/r.contour/main.c:155
 #: ../raster/r.drain/main.c:204 ../raster/r.flow/flow_io.c:181
-#: ../raster/r.path/main.c:260 ../raster/r.random/random.c:58
+#: ../raster/r.path/main.c:261 ../raster/r.random/random.c:58
 #: ../raster/r.resamp.bspline/main.c:484 ../raster/r.sim/simlib/output.c:54
 #: ../raster/r.sim/simlib/output.c:61 ../raster/r.stream.extract/close.c:38
 #: ../raster/r.to.vect/main.c:170 ../raster/r.volume/main.c:232
@@ -2636,8 +2638,8 @@ msgid "Unable to set up lat/long projection parameters"
 msgstr ""
 
 #: ../display/d.grid/plot.c:625 ../display/d.where/main.c:159
-#: ../general/g.region/printwindow.c:331 ../general/g.region/printwindow.c:632
-#: ../general/g.region/printwindow.c:745 ../ps/ps.map/do_geogrid.c:288
+#: ../general/g.region/printwindow.c:362 ../general/g.region/printwindow.c:663
+#: ../general/g.region/printwindow.c:777 ../ps/ps.map/do_geogrid.c:288
 #: ../raster/r.horizon/main.c:599 ../raster/r.in.gdal/main.c:1146
 #: ../raster/r.latlong/main.c:115 ../raster/r.proj/main.c:466
 #: ../raster/r.proj/main.c:571 ../raster/r.proj/main.c:617
@@ -3674,7 +3676,7 @@ msgstr ""
 #: ../imagery/i.ortho.photo/i.ortho.transform/main.c:413
 #: ../misc/m.nviz.script/main.c:198 ../misc/m.transform/main.c:273
 #: ../raster/r.category/main.c:239 ../raster/r.horizon/main.c:430
-#: ../raster/r.in.lidar/main.c:670 ../raster/r.out.ascii/main.c:152
+#: ../raster/r.in.lidar/main.c:670 ../raster/r.out.ascii/main.c:159
 #: ../raster/r.out.ppm3/main.c:134 ../raster/r.profile/main.c:224
 #: ../raster/r.recode/main.c:89 ../raster3d/r3.out.vtk/main.c:422
 #: ../vector/v.edit/main.c:82 ../vector/v.net/main.c:99
@@ -4041,7 +4043,7 @@ msgstr ""
 msgid "Overlays cell category values on a raster map displayed in the active graphics frame."
 msgstr ""
 
-#: ../display/d.rast.num/main.c:103 ../raster/r.out.ascii/main.c:74
+#: ../display/d.rast.num/main.c:103 ../raster/r.out.ascii/main.c:78
 #: ../raster/r.out.vtk/parameters.c:97 ../raster3d/r3.out.vtk/parameters.c:107
 #: ../vector/v.out.ascii/args.c:75
 msgid "Number of significant digits (floating point only)"
@@ -4522,7 +4524,7 @@ msgstr ""
 #: ../display/d.vect/lines.c:136 ../display/d.vect/topo.c:52
 #: ../display/d.vect/vert.c:27 ../display/d.vect/zcoor.c:38
 #: ../raster/r.cost/main.c:615 ../raster/r.cost/main.c:679
-#: ../raster/r.drain/main.c:294 ../raster/r.path/main.c:338
+#: ../raster/r.drain/main.c:294 ../raster/r.path/main.c:339
 #: ../raster/r.to.vect/main.c:300 ../raster/r.walk/main.c:776
 #: ../raster/r.walk/main.c:840 ../vector/v.colors.out/scan_cats.c:31
 #: ../vector/v.colors/scan_cats.c:24 ../vector/v.colors/scan_z.c:38
@@ -5699,8 +5701,8 @@ msgstr ""
 
 #: ../general/g.findfile/main.c:158
 #: ../imagery/i.ortho.photo/i.ortho.photo/menu.c:90
-#: ../raster/r.out.mpeg/main.c:151 ../raster/r.path/main.c:240
-#: ../raster/r.path/main.c:247 ../raster/r.path/main.c:253
+#: ../raster/r.out.mpeg/main.c:151 ../raster/r.path/main.c:241
+#: ../raster/r.path/main.c:248 ../raster/r.path/main.c:254
 #, c-format
 msgid "Name <%s> is too long"
 msgstr ""
@@ -7087,8 +7089,8 @@ msgstr "rastrs <%s> nav atrasts"
 #: ../raster/r.univar/r3.univar_main.c:248 ../raster3d/r3.cross.rast/main.c:246
 #: ../raster3d/r3.flow/main.c:87 ../raster3d/r3.mask/main.c:53
 #: ../raster3d/r3.neighbors/main.c:225 ../raster3d/r3.null/main.c:93
-#: ../raster3d/r3.out.ascii/main.c:327 ../raster3d/r3.out.bin/main.c:312
-#: ../raster3d/r3.out.netcdf/main.c:579 ../raster3d/r3.out.v5d/main.c:306
+#: ../raster3d/r3.out.ascii/main.c:328 ../raster3d/r3.out.bin/main.c:312
+#: ../raster3d/r3.out.netcdf/main.c:579 ../raster3d/r3.out.v5d/main.c:307
 #: ../raster3d/r3.out.vtk/main.c:138 ../raster3d/r3.retile/main.c:114
 #: ../raster3d/r3.stats/main.c:95 ../raster3d/r3.support/main.c:135
 #: ../raster3d/r3.timestamp/main.c:74 ../raster3d/r3.to.rast/main.c:273
@@ -7137,28 +7139,28 @@ msgstr ""
 msgid "Invalid input <%s=%s>"
 msgstr ""
 
-#: ../general/g.region/printwindow.c:313 ../general/g.region/printwindow.c:614
-#: ../general/g.region/printwindow.c:694 ../raster/r.sun/main.c:803
+#: ../general/g.region/printwindow.c:344 ../general/g.region/printwindow.c:645
+#: ../general/g.region/printwindow.c:726 ../raster/r.sun/main.c:803
 #, fuzzy
 msgid "Can't get projection info of current project"
 msgstr "Pārsauc datubāzes elementu failus lietotāja pašreizējā karšu kopā."
 
-#: ../general/g.region/printwindow.c:317 ../general/g.region/printwindow.c:618
-#: ../general/g.region/printwindow.c:703 ../raster/r.sun/main.c:806
+#: ../general/g.region/printwindow.c:348 ../general/g.region/printwindow.c:649
+#: ../general/g.region/printwindow.c:735 ../raster/r.sun/main.c:806
 msgid "Can't get projection units of current project"
 msgstr ""
 
-#: ../general/g.region/printwindow.c:321 ../general/g.region/printwindow.c:622
-#: ../general/g.region/printwindow.c:707 ../raster/r.sun/main.c:810
+#: ../general/g.region/printwindow.c:352 ../general/g.region/printwindow.c:653
+#: ../general/g.region/printwindow.c:739 ../raster/r.sun/main.c:810
 msgid "Can't get projection key values of current project"
 msgstr ""
 
-#: ../general/g.region/printwindow.c:346 ../general/g.region/printwindow.c:358
-#: ../general/g.region/printwindow.c:370 ../general/g.region/printwindow.c:382
-#: ../general/g.region/printwindow.c:396 ../general/g.region/printwindow.c:642
-#: ../general/g.region/printwindow.c:755 ../general/g.region/printwindow.c:770
-#: ../general/g.region/printwindow.c:790 ../general/g.region/printwindow.c:811
-#: ../general/g.region/printwindow.c:829 ../raster/r.latlong/main.c:134
+#: ../general/g.region/printwindow.c:377 ../general/g.region/printwindow.c:389
+#: ../general/g.region/printwindow.c:401 ../general/g.region/printwindow.c:413
+#: ../general/g.region/printwindow.c:427 ../general/g.region/printwindow.c:673
+#: ../general/g.region/printwindow.c:787 ../general/g.region/printwindow.c:802
+#: ../general/g.region/printwindow.c:822 ../general/g.region/printwindow.c:843
+#: ../general/g.region/printwindow.c:861 ../raster/r.latlong/main.c:134
 #: ../raster/r.sun/main.c:1900 ../raster/r.sunhours/main.c:306
 #: ../raster/r.sunhours/main.c:404 ../raster/r.sunmask/g_solposition.c:133
 #: ../vector/v.proj/main.c:427 ../vector/v.proj/main.c:440
@@ -7168,23 +7170,23 @@ msgstr ""
 msgid "Error in %s (projection of input coordinate pair)"
 msgstr "Lasa %s ..."
 
-#: ../general/g.region/printwindow.c:481
+#: ../general/g.region/printwindow.c:512
 msgid "You are already in Lat/Long. Use the -p flag instead."
 msgstr ""
 
-#: ../general/g.region/printwindow.c:484
+#: ../general/g.region/printwindow.c:515
 msgid "You are in a simple XY project, projection to Lat/Lon is not possible. Use the -p flag instead."
 msgstr ""
 
-#: ../general/g.region/printwindow.c:721
+#: ../general/g.region/printwindow.c:753
 msgid "WGS84 output not possible as this project does not contain datum transformation parameters. Try running g.setproj."
 msgstr ""
 
-#: ../general/g.region/printwindow.c:734
+#: ../general/g.region/printwindow.c:766
 msgid "Unable to update lat/long projection parameters"
 msgstr ""
 
-#: ../general/g.region/printwindow.c:894
+#: ../general/g.region/printwindow.c:926
 msgid "Lat/Long calculations are not possible from a simple XY system"
 msgstr ""
 
@@ -11454,9 +11456,9 @@ msgstr ""
 #: ../raster/r.clump/minsize.c:252 ../raster/r.clump/minsize.c:287
 #: ../raster/r.clump/minsize.c:293 ../raster/r.clump/minsize.c:424
 #: ../raster/r.clump/minsize.c:447 ../raster/r.clump/minsize.c:519
-#: ../raster/r.path/main.c:780 ../raster/r.path/main.c:811
-#: ../raster/r.path/main.c:941 ../raster/r.path/main.c:1051
-#: ../raster/r.path/main.c:1077 ../raster/r.path/main.c:1176
+#: ../raster/r.path/main.c:785 ../raster/r.path/main.c:816
+#: ../raster/r.path/main.c:946 ../raster/r.path/main.c:1056
+#: ../raster/r.path/main.c:1082 ../raster/r.path/main.c:1181
 msgid "Unable to read from temp file"
 msgstr ""
 
@@ -12880,14 +12882,14 @@ msgstr ""
 #: ../locale/scriptstrings/v.pack_to_translate.c:3
 #: ../raster/r.colors.out/raster3d_main.c:48
 #: ../raster/r.colors.out/raster_main.c:47 ../raster/r.external.out/main.c:235
-#: ../raster/r.out.ascii/main.c:54 ../raster/r.out.bin/main.c:299
+#: ../raster/r.out.ascii/main.c:55 ../raster/r.out.bin/main.c:299
 #: ../raster/r.out.gdal/main.c:136 ../raster/r.out.gridatb/main.c:67
 #: ../raster/r.out.mat/main.c:63 ../raster/r.out.mpeg/main.c:105
 #: ../raster/r.out.png/main.c:111 ../raster/r.out.pov/main.c:112
 #: ../raster/r.out.ppm/main.c:53 ../raster/r.out.ppm3/main.c:58
 #: ../raster/r.out.vrml/main.c:45 ../raster/r.out.vtk/main.c:60
-#: ../raster3d/r3.out.ascii/main.c:303 ../raster3d/r3.out.bin/main.c:218
-#: ../raster3d/r3.out.netcdf/main.c:565 ../raster3d/r3.out.v5d/main.c:283
+#: ../raster3d/r3.out.ascii/main.c:304 ../raster3d/r3.out.bin/main.c:218
+#: ../raster3d/r3.out.netcdf/main.c:565 ../raster3d/r3.out.v5d/main.c:284
 #: ../raster3d/r3.out.vtk/main.c:375 ../vector/v.colors.out/main.c:50
 #: ../vector/v.db.select/main.c:101 ../vector/v.external.out/main.c:43
 #: ../vector/v.out.ascii/main.c:49 ../vector/v.out.dxf/main.c:55
@@ -12901,14 +12903,14 @@ msgstr ""
 #: ../locale/scriptstrings/db.out.ogr_to_translate.c:4
 #: ../locale/scriptstrings/r.out.xyz_to_translate.c:4
 #: ../locale/scriptstrings/t.rast.out.vtk_to_translate.c:4
-#: ../raster/r.external.out/main.c:236 ../raster/r.out.ascii/main.c:55
+#: ../raster/r.external.out/main.c:236 ../raster/r.out.ascii/main.c:56
 #: ../raster/r.out.bin/main.c:300 ../raster/r.out.gdal/main.c:137
 #: ../raster/r.out.gridatb/main.c:68 ../raster/r.out.mat/main.c:64
 #: ../raster/r.out.mpeg/main.c:106 ../raster/r.out.png/main.c:112
 #: ../raster/r.out.pov/main.c:113 ../raster/r.out.ppm/main.c:54
 #: ../raster/r.out.ppm3/main.c:59 ../raster/r.out.vrml/main.c:46
-#: ../raster/r.out.vtk/main.c:61 ../raster3d/r3.out.ascii/main.c:304
-#: ../raster3d/r3.out.netcdf/main.c:566 ../raster3d/r3.out.v5d/main.c:284
+#: ../raster/r.out.vtk/main.c:61 ../raster3d/r3.out.ascii/main.c:305
+#: ../raster3d/r3.out.netcdf/main.c:566 ../raster3d/r3.out.v5d/main.c:285
 #: ../raster3d/r3.out.vtk/main.c:376 ../vector/v.external.out/main.c:44
 #: ../vector/v.out.ascii/main.c:50 ../vector/v.out.dxf/main.c:56
 #: ../vector/v.out.lidar/main.c:467 ../vector/v.out.ogr/main.c:85
@@ -13841,7 +13843,7 @@ msgstr ""
 #: ../raster/r.basins.fill/main.c:53 ../raster/r.carve/main.c:71
 #: ../raster/r.drain/main.c:111 ../raster/r.fill.dir/main.c:88
 #: ../raster/r.flow/main.c:415 ../raster/r.gwflow/main.c:223
-#: ../raster/r.lake/main.c:153 ../raster/r.path/main.c:150
+#: ../raster/r.lake/main.c:153 ../raster/r.path/main.c:151
 #: ../raster/r.sim/r.sim.sediment/main.c:113
 #: ../raster/r.sim/r.sim.water/main.c:113
 #: ../raster/r.solute.transport/main.c:229 ../raster/r.stream.extract/main.c:77
@@ -13854,7 +13856,7 @@ msgid "hydrology"
 msgstr "hidroloģija"
 
 #: ../locale/scriptstrings/r.drain_to_translate.c:4 ../raster/r.cost/main.c:163
-#: ../raster/r.drain/main.c:112 ../raster/r.path/main.c:151
+#: ../raster/r.drain/main.c:112 ../raster/r.path/main.c:152
 #: ../raster/r.walk/main.c:213
 msgid "cost surface"
 msgstr ""
@@ -13892,7 +13894,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.drain_to_translate.c:12
 #: ../raster/r.cost/main.c:220 ../raster/r.drain/main.c:139
-#: ../raster/r.path/main.c:192 ../raster/r.walk/main.c:275
+#: ../raster/r.path/main.c:193 ../raster/r.walk/main.c:275
 msgid "Coordinates of starting point(s) (E,N)"
 msgstr ""
 
@@ -13901,19 +13903,19 @@ msgstr ""
 #: ../raster/r.cost/main.c:203 ../raster/r.cost/main.c:215
 #: ../raster/r.cost/main.c:221 ../raster/r.cost/main.c:263
 #: ../raster/r.drain/main.c:140 ../raster/r.drain/main.c:147
-#: ../raster/r.path/main.c:193 ../raster/r.path/main.c:199
+#: ../raster/r.path/main.c:194 ../raster/r.path/main.c:200
 #: ../raster/r.walk/main.c:258 ../raster/r.walk/main.c:270
 #: ../raster/r.walk/main.c:276 ../raster/r.walk/main.c:349
 msgid "Start"
 msgstr ""
 
 #: ../locale/scriptstrings/r.drain_to_translate.c:14
-#: ../raster/r.drain/main.c:145 ../raster/r.path/main.c:198
+#: ../raster/r.drain/main.c:145 ../raster/r.path/main.c:199
 msgid "Name of starting vector points map(s)"
 msgstr ""
 
 #: ../locale/scriptstrings/r.drain_to_translate.c:16
-#: ../raster/r.drain/main.c:151 ../raster/r.path/main.c:215
+#: ../raster/r.drain/main.c:151 ../raster/r.path/main.c:216
 msgid "Copy input cell values on output"
 msgstr ""
 
@@ -13921,18 +13923,18 @@ msgstr ""
 #: ../locale/scriptstrings/r.drain_to_translate.c:19
 #: ../locale/scriptstrings/r.drain_to_translate.c:21
 #: ../raster/r.drain/main.c:152 ../raster/r.drain/main.c:157
-#: ../raster/r.drain/main.c:162 ../raster/r.path/main.c:216
-#: ../raster/r.path/main.c:221 ../raster/r.path/main.c:226
+#: ../raster/r.drain/main.c:162 ../raster/r.path/main.c:217
+#: ../raster/r.path/main.c:222 ../raster/r.path/main.c:227
 msgid "Path settings"
 msgstr ""
 
 #: ../locale/scriptstrings/r.drain_to_translate.c:18
-#: ../raster/r.drain/main.c:156 ../raster/r.path/main.c:220
+#: ../raster/r.drain/main.c:156 ../raster/r.path/main.c:221
 msgid "Accumulate input values along the path"
 msgstr ""
 
 #: ../locale/scriptstrings/r.drain_to_translate.c:20
-#: ../raster/r.drain/main.c:161 ../raster/r.path/main.c:225
+#: ../raster/r.drain/main.c:161 ../raster/r.path/main.c:226
 msgid "Count cell numbers along the path"
 msgstr ""
 
@@ -14496,7 +14498,7 @@ msgstr ""
 #: ../raster/r.in.pdal/main.cpp:94 ../raster/r.in.xyz/main.c:156
 #: ../raster/r.to.rast3/main.c:198 ../raster/r.to.rast3elev/main.c:376
 #: ../raster/r.to.vect/main.c:78 ../raster3d/r3.in.ascii/main.c:362
-#: ../raster3d/r3.in.lidar/main.c:163 ../raster3d/r3.out.ascii/main.c:306
+#: ../raster3d/r3.in.lidar/main.c:163 ../raster3d/r3.out.ascii/main.c:307
 #: ../raster3d/r3.to.rast/main.c:258 ../vector/v.to.rast/main.c:46
 #: ../vector/v.to.rast3/main.c:49
 msgid "conversion"
@@ -14763,9 +14765,9 @@ msgstr ""
 #: ../raster3d/r3.in.lidar/main.c:159 ../raster3d/r3.in.v5d/main.c:172
 #: ../raster3d/r3.info/main.c:85 ../raster3d/r3.mask/main.c:131
 #: ../raster3d/r3.mkdspf/main.c:81 ../raster3d/r3.neighbors/main.c:204
-#: ../raster3d/r3.null/main.c:170 ../raster3d/r3.out.ascii/main.c:302
+#: ../raster3d/r3.null/main.c:170 ../raster3d/r3.out.ascii/main.c:303
 #: ../raster3d/r3.out.bin/main.c:217 ../raster3d/r3.out.netcdf/main.c:564
-#: ../raster3d/r3.out.v5d/main.c:282 ../raster3d/r3.out.vtk/main.c:374
+#: ../raster3d/r3.out.v5d/main.c:283 ../raster3d/r3.out.vtk/main.c:374
 #: ../raster3d/r3.retile/main.c:96 ../raster3d/r3.stats/main.c:47
 #: ../raster3d/r3.support/main.c:48 ../raster3d/r3.timestamp/main.c:43
 #: ../raster3d/r3.to.rast/main.c:257
@@ -14786,8 +14788,8 @@ msgstr "rastrs_3d"
 #: ../raster3d/r3.in.v5d/main.c:174 ../raster3d/r3.info/main.c:87
 #: ../raster3d/r3.mask/main.c:135 ../raster3d/r3.mkdspf/main.c:83
 #: ../raster3d/r3.neighbors/main.c:206 ../raster3d/r3.null/main.c:174
-#: ../raster3d/r3.out.ascii/main.c:305 ../raster3d/r3.out.bin/main.c:219
-#: ../raster3d/r3.out.netcdf/main.c:568 ../raster3d/r3.out.v5d/main.c:285
+#: ../raster3d/r3.out.ascii/main.c:306 ../raster3d/r3.out.bin/main.c:219
+#: ../raster3d/r3.out.netcdf/main.c:568 ../raster3d/r3.out.v5d/main.c:286
 #: ../raster3d/r3.out.vtk/main.c:377 ../raster3d/r3.retile/main.c:98
 #: ../raster3d/r3.stats/main.c:49 ../raster3d/r3.support/main.c:50
 #: ../raster3d/r3.timestamp/main.c:47 ../raster3d/r3.to.rast/main.c:260
@@ -19574,7 +19576,7 @@ msgid "Initializing directional output..."
 msgstr ""
 
 #: ../raster/r.cost/main.c:601 ../raster/r.drain/main.c:280
-#: ../raster/r.path/main.c:323 ../raster/r.walk/main.c:762
+#: ../raster/r.path/main.c:324 ../raster/r.walk/main.c:762
 #, c-format
 msgid "Reading vector map <%s> with start points..."
 msgstr ""
@@ -19848,12 +19850,12 @@ msgstr ""
 msgid "Specify just one of the -c, -a and -n flags"
 msgstr ""
 
-#: ../raster/r.drain/main.c:246 ../raster/r.path/main.c:292
+#: ../raster/r.drain/main.c:246 ../raster/r.path/main.c:293
 #, c-format
 msgid "Starting point %d is outside the current region"
 msgstr ""
 
-#: ../raster/r.drain/main.c:331 ../raster/r.path/main.c:374
+#: ../raster/r.drain/main.c:331 ../raster/r.path/main.c:375
 #, c-format
 msgid "Starting vector map <%s> contains no points in the current region"
 msgstr ""
@@ -19867,8 +19869,8 @@ msgid "Calculating flow directions..."
 msgstr ""
 
 #: ../raster/r.drain/main.c:485 ../raster/r.in.lidar/main.c:783
-#: ../raster/r.in.pdal/main.cpp:886 ../raster/r.path/main.c:593
-#: ../raster/r.path/main.c:623 ../raster/r.viewshed/grass.cpp:621
+#: ../raster/r.in.pdal/main.cpp:886 ../raster/r.path/main.c:598
+#: ../raster/r.path/main.c:628 ../raster/r.viewshed/grass.cpp:621
 msgid "Writing output raster map..."
 msgstr ""
 
@@ -21641,8 +21643,8 @@ msgstr ""
 #: ../raster/r.in.gdal/main.c:225 ../raster/r.in.pdal/main.cpp:258
 #: ../raster/r.in.pdal/main.cpp:272 ../raster/r.in.pdal/main.cpp:402
 #: ../vector/v.in.pdal/main.cpp:221 ../vector/v.in.pdal/main.cpp:230
-#: ../vector/v.in.pdal/main.cpp:243 ../vector/v.info/print.c:742
-#: ../vector/v.info/print.c:746
+#: ../vector/v.in.pdal/main.cpp:243 ../vector/v.info/print.c:743
+#: ../vector/v.info/print.c:747
 msgid "Projection"
 msgstr ""
 
@@ -22879,7 +22881,7 @@ msgstr ""
 msgid "The output format for flags -g, -r, -s, and -e currently defaults to 'shell', but this will change to 'plain' in a future release. To avoid unexpected behaviour, specify the format explicitly."
 msgstr ""
 
-#: ../raster/r.info/main.c:403 ../raster/r.info/main.c:1021
+#: ../raster/r.info/main.c:403 ../raster/r.info/main.c:1024
 #: ../raster3d/r3.info/main.c:193 ../raster3d/r3.info/main.c:200
 #: ../raster3d/r3.info/main.c:205 ../raster3d/r3.info/main.c:210
 #: ../raster3d/r3.info/main.c:217 ../raster3d/r3.info/main.c:222
@@ -23953,64 +23955,60 @@ msgstr "Aprēķina %s..."
 msgid "Writing output"
 msgstr "Izejas rastra kartes nosaukums"
 
-#: ../raster/r.out.ascii/main.c:58
+#: ../raster/r.out.ascii/main.c:62
 msgid "Converts a raster map layer into a GRASS ASCII text file."
 msgstr ""
 
-#: ../raster/r.out.ascii/main.c:67
+#: ../raster/r.out.ascii/main.c:71
 msgid "Name for output ASCII grid map (use out=- for stdout)"
 msgstr ""
 
-#: ../raster/r.out.ascii/main.c:80
+#: ../raster/r.out.ascii/main.c:84
 msgid "Number of values printed before wrapping a line (only SURFER or MODFLOW format)"
 msgstr ""
 
-#: ../raster/r.out.ascii/main.c:86
+#: ../raster/r.out.ascii/main.c:90
 msgid "String to represent null cell (GRASS grid only)"
 msgstr ""
 
-#: ../raster/r.out.ascii/main.c:90 ../raster3d/r3.out.ascii/main.c:97
+#: ../raster/r.out.ascii/main.c:94 ../raster3d/r3.out.ascii/main.c:98
 msgid "Suppress printing of header information"
 msgstr ""
 
-#: ../raster/r.out.ascii/main.c:94
+#: ../raster/r.out.ascii/main.c:98
 msgid "Write SURFER (Golden Software) ASCII grid"
 msgstr ""
 
-#: ../raster/r.out.ascii/main.c:98
+#: ../raster/r.out.ascii/main.c:102
 msgid "Write MODFLOW (USGS) ASCII array"
 msgstr ""
 
-#: ../raster/r.out.ascii/main.c:102
+#: ../raster/r.out.ascii/main.c:106
+msgid "Write LISFLOOD (EU) ASCII array"
+msgstr ""
+
+#: ../raster/r.out.ascii/main.c:110
 msgid "Force output of integer values"
 msgstr ""
 
-#: ../raster/r.out.ascii/main.c:109
+#: ../raster/r.out.ascii/main.c:117
 msgid "Failed to interpret dp as an integer"
 msgstr ""
 
-#: ../raster/r.out.ascii/main.c:111 ../raster3d/r3.out.vtk/main.c:393
+#: ../raster/r.out.ascii/main.c:119 ../raster3d/r3.out.vtk/main.c:393
 msgid "dp has to be from 0 to 20"
 msgstr ""
 
-#: ../raster/r.out.ascii/main.c:117
+#: ../raster/r.out.ascii/main.c:125
 msgid "Failed to interpret width as an integer"
 msgstr ""
 
-#: ../raster/r.out.ascii/main.c:123
-msgid "Both -s and -h doesn't make sense"
-msgstr ""
-
-#: ../raster/r.out.ascii/main.c:126
-msgid "Use -M or -s, not both"
-msgstr ""
-
-#: ../raster/r.out.ascii/main.c:161
+#: ../raster/r.out.ascii/main.c:168
 #, c-format
 msgid "Unable to read fp range for <%s>"
 msgstr ""
 
-#: ../raster/r.out.ascii/main.c:177
+#: ../raster/r.out.ascii/main.c:189
 #, c-format
 msgid "Read failed at row %d"
 msgstr ""
@@ -24354,35 +24352,35 @@ msgstr ""
 msgid "Exporting to GDAL data type: %s"
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:538
+#: ../raster/r.out.gdal/main.c:532
+msgid "Forcing raster export"
+msgstr ""
+
+#: ../raster/r.out.gdal/main.c:541
 msgid "Raster export would result in complete data loss, aborting."
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:549
+#: ../raster/r.out.gdal/main.c:552
 #, c-format
 msgid "Precision loss: Raster map <%s> of type %s to be exported as %s. This can be avoided by using %s."
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:562
+#: ../raster/r.out.gdal/main.c:565
 #, c-format
 msgid "Precision loss: The range of <%s> can not be accurately preserved with GDAL datatype Float32. This can be avoided by exporting to Int32 or Float64."
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:570
+#: ../raster/r.out.gdal/main.c:573
 #, c-format
 msgid "Precision loss: Float32 can not preserve the DCELL precision of raster <%s>. This can be avoided by using Float64"
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:579
-msgid "Forcing raster export"
-msgstr ""
-
-#: ../raster/r.out.gdal/main.c:582
+#: ../raster/r.out.gdal/main.c:581
 #, c-format
 msgid "Raster export aborted. To override data loss check, use the -%c flag"
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:599 ../raster/r.out.gdal/main.c:641
+#: ../raster/r.out.gdal/main.c:598 ../raster/r.out.gdal/main.c:641
 #: ../raster/r.out.gdal/main.c:645
 msgid "Raster export aborted."
 msgstr ""
@@ -25022,173 +25020,178 @@ msgstr ""
 msgid "Creating support files for raster map <%s>..."
 msgstr ""
 
-#: ../raster/r.path/main.c:153
+#: ../raster/r.path/main.c:154
 msgid "Traces paths from starting points following input directions."
 msgstr ""
 
-#: ../raster/r.path/main.c:156
+#: ../raster/r.path/main.c:157
 #, fuzzy
 msgid "Name of input direction"
 msgstr "Vektorkartes nosaukums"
 
-#: ../raster/r.path/main.c:158
+#: ../raster/r.path/main.c:159
 msgid "Direction in degrees CCW from east, or bitmask encoded"
 msgstr ""
 
-#: ../raster/r.path/main.c:163
+#: ../raster/r.path/main.c:164
 #, fuzzy
 msgid "Format of the input direction map"
 msgstr "Vektorkartes nosaukums"
 
-#: ../raster/r.path/main.c:169
+#: ../raster/r.path/main.c:170
 msgid "auto-detect direction format"
 msgstr ""
 
-#: ../raster/r.path/main.c:169
+#: ../raster/r.path/main.c:170
 msgid "degrees CCW from East"
 msgstr ""
 
-#: ../raster/r.path/main.c:170
+#: ../raster/r.path/main.c:171
 msgid "degrees CCW from East divided by 45 (e.g. r.watershed directions)"
 msgstr ""
 
-#: ../raster/r.path/main.c:171
+#: ../raster/r.path/main.c:172
 msgid "bitmask encoded directions (e.g. r.cost -b)"
 msgstr ""
 
-#: ../raster/r.path/main.c:176
+#: ../raster/r.path/main.c:177
 #, fuzzy
 msgid "Name of input raster values to be used for output"
 msgstr "Izmantojamās rastra kartes nosaukums priekš <%s>"
 
-#: ../raster/r.path/main.c:182
+#: ../raster/r.path/main.c:183
 #, fuzzy
 msgid "Name for output raster path map"
 msgstr "Izejas rastra kartes nosaukums"
 
-#: ../raster/r.path/main.c:187
+#: ../raster/r.path/main.c:188
 #, fuzzy
 msgid "Name for output vector path map"
 msgstr "Izejas rastra kartes nosaukums"
 
-#: ../raster/r.path/main.c:204
+#: ../raster/r.path/main.c:205
 msgid "Start bitmask encoded directions from East (e.g., r.terraflow)"
 msgstr ""
 
-#: ../raster/r.path/main.c:205 ../raster/r.path/main.c:211
+#: ../raster/r.path/main.c:206 ../raster/r.path/main.c:212
 #, fuzzy
 msgid "Direction settings"
 msgstr "Datu tips"
 
-#: ../raster/r.path/main.c:210
+#: ../raster/r.path/main.c:211
 msgid "Do not break lines (faster for single-direction bitmask encoding)"
 msgstr ""
 
-#: ../raster/r.path/main.c:383
+#: ../raster/r.path/main.c:384
 msgid "No start point(s) specified"
 msgstr ""
 
-#: ../raster/r.path/main.c:393
+#: ../raster/r.path/main.c:394
 #, fuzzy, c-format
 msgid "Reading raster values map <%s> ..."
 msgstr "Izejas rastra kartes nosaukums"
 
-#: ../raster/r.path/main.c:406 ../raster/r.path/main.c:484
-#: ../raster/r.path/main.c:501
+#: ../raster/r.path/main.c:399
+#, fuzzy, c-format
+msgid "Unable to open temporary file <%s>: %s"
+msgstr "Nebija iespējams atvērt failu <%s>"
+
+#: ../raster/r.path/main.c:411 ../raster/r.path/main.c:489
+#: ../raster/r.path/main.c:506
 #, fuzzy
 msgid "Unable to write to tempfile"
 msgstr "Nav iespēju atvērt šūnu failu priekš[%s]"
 
-#: ../raster/r.path/main.c:414
+#: ../raster/r.path/main.c:419
 msgid "Unable to read range file"
 msgstr ""
 
-#: ../raster/r.path/main.c:417
+#: ../raster/r.path/main.c:422
 #, fuzzy, c-format
 msgid "Invalid directions map <%s>"
 msgstr "nederīgs reģions: %s"
 
-#: ../raster/r.path/main.c:422
+#: ../raster/r.path/main.c:427
 msgid "Directional degrees can not be > 360"
 msgstr ""
 
-#: ../raster/r.path/main.c:428
+#: ../raster/r.path/main.c:433
 msgid "Directional degrees divided by 45 can not be > 8"
 msgstr ""
 
-#: ../raster/r.path/main.c:433
+#: ../raster/r.path/main.c:438
 #, c-format
 msgid "Bitmask encoded directions can not be > %d"
 msgstr ""
 
-#: ../raster/r.path/main.c:440
+#: ../raster/r.path/main.c:445
 msgid "Input direction format assumed to be degrees CCW from East divided by 45"
 msgstr ""
 
-#: ../raster/r.path/main.c:445
+#: ../raster/r.path/main.c:450
 msgid "Input direction format assumed to be bitmask encoded without Knight's move"
 msgstr ""
 
-#: ../raster/r.path/main.c:451
+#: ../raster/r.path/main.c:456
 msgid "Input direction format assumed to be degrees CCW from East"
 msgstr ""
 
-#: ../raster/r.path/main.c:455
+#: ../raster/r.path/main.c:460
 msgid "Input direction format assumed to be bitmask encoded with Knight's move"
 msgstr ""
 
-#: ../raster/r.path/main.c:460
+#: ../raster/r.path/main.c:465
 #, fuzzy, c-format
 msgid "Unable to detect format of input direction map <%s>"
 msgstr "Rastra kartes nosaukums"
 
-#: ../raster/r.path/main.c:464
+#: ../raster/r.path/main.c:469
 #, fuzzy, c-format
 msgid "Invalid directions format '%s'"
 msgstr "nederīgs reģions: %s"
 
-#: ../raster/r.path/main.c:466
+#: ../raster/r.path/main.c:471
 #, fuzzy, c-format
 msgid "Reading direction map <%s> ..."
 msgstr "nederīgs reģions: %s"
 
-#: ../raster/r.path/main.c:520
+#: ../raster/r.path/main.c:525
 #, fuzzy
 msgid "Processing start points..."
 msgstr "Izveidot punktus visā garumā ilīniju garumā"
 
-#: ../raster/r.path/main.c:530 ../vector/v.buffer/main.c:410
+#: ../raster/r.path/main.c:535 ../vector/v.buffer/main.c:410
 #: ../vector/v.in.ogr/main.c:881 ../vector/v.overlay/main.c:237
 #: ../vector/v.voronoi/main.c:215
 msgid "Unable to create temporary vector map"
 msgstr ""
 
-#: ../raster/r.path/main.c:536 ../raster/r.path/main.c:552
+#: ../raster/r.path/main.c:541 ../raster/r.path/main.c:557
 #, c-format
 msgid "No path at row %d, col %d"
 msgstr ""
 
-#: ../raster/r.path/main.c:541 ../vector/v.overlay/area_area.c:134
+#: ../raster/r.path/main.c:546 ../vector/v.overlay/area_area.c:134
 #: ../vector/v.overlay/line_area.c:255
 msgid "Breaking lines..."
 msgstr ""
 
-#: ../raster/r.path/main.c:679
+#: ../raster/r.path/main.c:684
 #, fuzzy
 msgid "Unable to increase point list"
 msgstr "Nav iespēju atvērt šūnu failu priekš[%s]"
 
-#: ../raster/r.path/main.c:871
+#: ../raster/r.path/main.c:876
 #, c-format
 msgid "No path from row %d, col %d"
 msgstr ""
 
-#: ../raster/r.path/main.c:885
+#: ../raster/r.path/main.c:890
 #, fuzzy, c-format
 msgid "Invalid direction %d"
 msgstr "nederīgs reģions: %s"
 
-#: ../raster/r.path/main.c:978
+#: ../raster/r.path/main.c:983
 msgid "Path is leaving the current region"
 msgstr ""
 
@@ -25272,12 +25275,12 @@ msgstr ""
 msgid "Invalid coordinates %s %s"
 msgstr ""
 
-#: ../raster/r.profile/main.c:350
+#: ../raster/r.profile/main.c:351
 #, c-format
 msgid "Approx. transect length: %f [%s]"
 msgstr ""
 
-#: ../raster/r.profile/main.c:354
+#: ../raster/r.profile/main.c:355
 msgid "Endpoint coordinates are outside of current region settings"
 msgstr ""
 
@@ -25994,22 +25997,22 @@ msgstr ""
 msgid "Too many categories"
 msgstr ""
 
-#: ../raster/r.reclass/reclass.c:216
+#: ../raster/r.reclass/reclass.c:218
 #, c-format
 msgid "Cannot read header file of <%s@%s>"
 msgstr ""
 
-#: ../raster/r.reclass/reclass.c:234
+#: ../raster/r.reclass/reclass.c:236
 #, c-format
 msgid "Cannot overwrite existing raster map <%s>"
 msgstr ""
 
-#: ../raster/r.reclass/reclass.c:239
+#: ../raster/r.reclass/reclass.c:241
 #, c-format
 msgid "Cannot create reclass file of <%s>"
 msgstr ""
 
-#: ../raster/r.reclass/reclass.c:247
+#: ../raster/r.reclass/reclass.c:249
 #, c-format
 msgid "Cannot create raster map <%s>"
 msgstr ""
@@ -30310,7 +30313,7 @@ msgid "Use the input map values to fill the lower cells"
 msgstr ""
 
 #: ../raster/r.to.rast3elev/main.c:204 ../raster3d/r3.cross.rast/main.c:107
-#: ../raster3d/r3.out.ascii/main.c:117 ../raster3d/r3.out.netcdf/main.c:122
+#: ../raster3d/r3.out.ascii/main.c:118 ../raster3d/r3.out.netcdf/main.c:122
 #: ../raster3d/r3.to.rast/main.c:128
 msgid "Use 3D raster mask (if exists) with input map"
 msgstr ""
@@ -30715,9 +30718,9 @@ msgstr ""
 #: ../raster3d/r3.gradient/main.c:121 ../raster3d/r3.info/main.c:128
 #: ../raster3d/r3.mask/main.c:59 ../raster3d/r3.mkdspf/main.c:169
 #: ../raster3d/r3.neighbors/main.c:261 ../raster3d/r3.neighbors/main.c:268
-#: ../raster3d/r3.null/main.c:100 ../raster3d/r3.out.ascii/main.c:341
+#: ../raster3d/r3.null/main.c:100 ../raster3d/r3.out.ascii/main.c:342
 #: ../raster3d/r3.out.bin/main.c:327 ../raster3d/r3.out.netcdf/main.c:594
-#: ../raster3d/r3.out.v5d/main.c:312 ../raster3d/r3.out.vtk/main.c:207
+#: ../raster3d/r3.out.v5d/main.c:313 ../raster3d/r3.out.vtk/main.c:207
 #: ../raster3d/r3.out.vtk/main.c:291 ../raster3d/r3.out.vtk/main.c:516
 #: ../raster3d/r3.retile/main.c:130 ../raster3d/r3.stats/main.c:102
 #: ../raster3d/r3.to.rast/main.c:296 ../raster3d/r3.to.rast/main.c:318
@@ -32234,9 +32237,9 @@ msgstr ""
 
 #: ../raster3d/r3.cross.rast/main.c:55 ../raster3d/r3.in.ascii/main.c:396
 #: ../raster3d/r3.in.bin/main.c:484 ../raster3d/r3.in.v5d/main.c:199
-#: ../raster3d/r3.out.ascii/main.c:59 ../raster3d/r3.out.ascii/main.c:369
-#: ../raster3d/r3.out.netcdf/main.c:626 ../raster3d/r3.out.v5d/main.c:51
-#: ../raster3d/r3.out.v5d/main.c:326 ../raster3d/r3.out.vtk/main.c:251
+#: ../raster3d/r3.out.ascii/main.c:60 ../raster3d/r3.out.ascii/main.c:370
+#: ../raster3d/r3.out.netcdf/main.c:626 ../raster3d/r3.out.v5d/main.c:52
+#: ../raster3d/r3.out.v5d/main.c:327 ../raster3d/r3.out.vtk/main.c:251
 #: ../raster3d/r3.out.vtk/main.c:336 ../raster3d/r3.to.rast/main.c:75
 #: ../raster3d/r3.to.rast/main.c:442
 msgid "Unable to close 3D raster map"
@@ -32585,12 +32588,12 @@ msgstr ""
 msgid "Number of depths"
 msgstr ""
 
-#: ../raster3d/r3.in.bin/main.c:367 ../raster3d/r3.out.ascii/main.c:102
+#: ../raster3d/r3.in.bin/main.c:367 ../raster3d/r3.out.ascii/main.c:103
 #: ../raster3d/r3.out.bin/main.c:253
 msgid "Switch the row order in output from north->south to south->north"
 msgstr ""
 
-#: ../raster3d/r3.in.bin/main.c:372 ../raster3d/r3.out.ascii/main.c:107
+#: ../raster3d/r3.in.bin/main.c:372 ../raster3d/r3.out.ascii/main.c:108
 #: ../raster3d/r3.out.bin/main.c:258
 msgid "Switch the depth order in output from bottom->top to top->bottom"
 msgstr ""
@@ -32917,27 +32920,27 @@ msgstr ""
 msgid "Explicitly create the 3D NULL-value bitmap file."
 msgstr ""
 
-#: ../raster3d/r3.out.ascii/main.c:77
+#: ../raster3d/r3.out.ascii/main.c:78
 msgid "3D raster map to be converted to ASCII"
 msgstr ""
 
-#: ../raster3d/r3.out.ascii/main.c:81
+#: ../raster3d/r3.out.ascii/main.c:82
 msgid "Name for ASCII output file"
 msgstr "Izvades ACII faila nosaukums"
 
-#: ../raster3d/r3.out.ascii/main.c:90
+#: ../raster3d/r3.out.ascii/main.c:91
 msgid "Number of decimal places for floats"
 msgstr ""
 
-#: ../raster3d/r3.out.ascii/main.c:112
+#: ../raster3d/r3.out.ascii/main.c:113
 msgid "Print grass6 compatible format. Flags -d and -r are ignored."
 msgstr ""
 
-#: ../raster3d/r3.out.ascii/main.c:309
+#: ../raster3d/r3.out.ascii/main.c:310
 msgid "Converts a 3D raster map layer into a ASCII text file."
 msgstr ""
 
-#: ../raster3d/r3.out.ascii/main.c:373
+#: ../raster3d/r3.out.ascii/main.c:374
 msgid "Unable to close new ASCII file"
 msgstr ""
 
@@ -33002,38 +33005,38 @@ msgstr ""
 msgid "Export a 3D raster map as netCDF file."
 msgstr ""
 
-#: ../raster3d/r3.out.v5d/main.c:69
+#: ../raster3d/r3.out.v5d/main.c:70
 msgid "3D raster map to be converted to Vis5D (V5D) file"
 msgstr ""
 
-#: ../raster3d/r3.out.v5d/main.c:73
+#: ../raster3d/r3.out.v5d/main.c:74
 msgid "Name for V5D output file"
 msgstr ""
 
-#: ../raster3d/r3.out.v5d/main.c:145
+#: ../raster3d/r3.out.v5d/main.c:146
 #, c-format
 msgid "Vis5D allows %d columns, %d columns found"
 msgstr ""
 
-#: ../raster3d/r3.out.v5d/main.c:148
+#: ../raster3d/r3.out.v5d/main.c:149
 #, c-format
 msgid "Vis5D allows %d rows, %d rows found"
 msgstr ""
 
-#: ../raster3d/r3.out.v5d/main.c:256
+#: ../raster3d/r3.out.v5d/main.c:257
 #, c-format
 msgid "Unable to create V5D file <%s>"
 msgstr ""
 
-#: ../raster3d/r3.out.v5d/main.c:260
+#: ../raster3d/r3.out.v5d/main.c:261
 msgid "Failed writing V5D file"
 msgstr ""
 
-#: ../raster3d/r3.out.v5d/main.c:287
+#: ../raster3d/r3.out.v5d/main.c:288
 msgid "Exports GRASS 3D raster map to 3-dimensional Vis5D file."
 msgstr ""
 
-#: ../raster3d/r3.out.v5d/main.c:294
+#: ../raster3d/r3.out.v5d/main.c:295
 msgid "Use map coordinates instead of xyz coordinates"
 msgstr ""
 
@@ -33498,16 +33501,16 @@ msgstr "Novietojums %s ir izveidots!"
 msgid "Exported table <%s>"
 msgstr "Rakstu jaunu failu... \n"
 
-#: ../scripts/db.test/db.test.py:44
+#: ../scripts/db.test/db.test.py:46
 #, python-format
 msgid "Using DB driver: %s"
 msgstr ""
 
-#: ../scripts/db.test/db.test.py:72
+#: ../scripts/db.test/db.test.py:74
 msgid "EXECUTE: OK"
 msgstr "IZPILDE: OK"
 
-#: ../scripts/db.test/db.test.py:86
+#: ../scripts/db.test/db.test.py:88
 msgid "RESULT: OK"
 msgstr "REZULTĀTS: OK"
 
@@ -33663,386 +33666,386 @@ msgstr "Rakstu jaunu failu... \n"
 msgid "Unable to process extension:%s"
 msgstr "neiespējami atvērt <%s>"
 
-#: ../scripts/g.extension/g.extension.py:262
+#: ../scripts/g.extension/g.extension.py:257
 msgid ""
 "Failed to get Git version.\n"
 "{}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:268
+#: ../scripts/g.extension/g.extension.py:263
 #, fuzzy
 msgid "Failed to get Git version."
 msgstr "Rastra kartes nosaukums"
 
-#: ../scripts/g.extension/g.extension.py:298
+#: ../scripts/g.extension/g.extension.py:293
 msgid "Could not found Git. Please install it."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:307
+#: ../scripts/g.extension/g.extension.py:302
 #, fuzzy
 msgid "Cannot write to working directory {}."
 msgstr "Nav iespēju atvērt šūnu failu priekš[%s]"
 
-#: ../scripts/g.extension/g.extension.py:365
+#: ../scripts/g.extension/g.extension.py:360
 #, python-brace-format
 msgid "Branch <{branch}> not found in repository <{url}>"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:391
-#: ../scripts/g.extension/g.extension.py:2790
+#: ../scripts/g.extension/g.extension.py:386
+#: ../scripts/g.extension/g.extension.py:2785
 #, python-brace-format
 msgid ""
 "Failed to get addons files list from the Git repository <{repo_path}>.\n"
 "{error}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:416
+#: ../scripts/g.extension/g.extension.py:411
 msgid "No addon named <{}> found in the repository."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:520
+#: ../scripts/g.extension/g.extension.py:515
 #, python-brace-format
 msgid ""
 "Failed to get branch from the Git repository <{repo_path}>.\n"
 "{error}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:543
+#: ../scripts/g.extension/g.extension.py:538
 msgid "Cannot retrieve organization and repository from URL: <{}>."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:581
+#: ../scripts/g.extension/g.extension.py:576
 #, python-brace-format
 msgid "Download file from <{url}>, failed. File is not on the server or check your internet connection."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:594
+#: ../scripts/g.extension/g.extension.py:589
 #, python-format
 msgid "'%s' required. Please install '%s' first."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:658
+#: ../scripts/g.extension/g.extension.py:653
 msgid "List of installed extensions (toolboxes):"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:660
+#: ../scripts/g.extension/g.extension.py:655
 msgid "List of installed extensions (modules):"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:664
+#: ../scripts/g.extension/g.extension.py:659
 #, fuzzy
 msgid "No extension (toolbox) installed"
 msgstr "Jaunā novietojuma nosaukums"
 
-#: ../scripts/g.extension/g.extension.py:666
+#: ../scripts/g.extension/g.extension.py:661
 #, fuzzy
 msgid "No extension (module) installed"
 msgstr "Jaunā novietojuma nosaukums"
 
-#: ../scripts/g.extension/g.extension.py:741
+#: ../scripts/g.extension/g.extension.py:736
 #, fuzzy
 msgid "List of available extensions (toolboxes):"
 msgstr "izveidot sarakstu ar visām pieejamajām karšu biblotēkām/mapsets"
 
-#: ../scripts/g.extension/g.extension.py:756
+#: ../scripts/g.extension/g.extension.py:751
 #, fuzzy
 msgid "List of available extensions (modules):"
 msgstr "izveidot sarakstu ar visām pieejamajām karšu biblotēkām/mapsets"
 
-#: ../scripts/g.extension/g.extension.py:782
-#: ../scripts/g.extension/g.extension.py:812
+#: ../scripts/g.extension/g.extension.py:777
+#: ../scripts/g.extension/g.extension.py:807
 #, fuzzy
 msgid "Unable to fetch addons metadata file"
 msgstr "Nevar atlasīt datus no tabulas"
 
-#: ../scripts/g.extension/g.extension.py:887
+#: ../scripts/g.extension/g.extension.py:882
 #, python-brace-format
 msgid "Unable to parse '{url}'. Trying to scan Git repository (may take some time)..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:935
+#: ../scripts/g.extension/g.extension.py:930
 msgid "Fetching list of extensions from GRASS-Addons SVN repository (be patient)..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:942
+#: ../scripts/g.extension/g.extension.py:937
 msgid "Flag 'c' ignored, addons metadata file not available"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:944
+#: ../scripts/g.extension/g.extension.py:939
 msgid "Flag 'g' ignored, addons metadata file not available"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:949
-#: ../scripts/g.extension/g.extension.py:984
+#: ../scripts/g.extension/g.extension.py:944
+#: ../scripts/g.extension/g.extension.py:979
 #, python-format
 msgid "Checking for '%s' modules..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:957
-#: ../scripts/g.extension/g.extension.py:991
+#: ../scripts/g.extension/g.extension.py:952
+#: ../scripts/g.extension/g.extension.py:986
 #, fuzzy, python-format
 msgid "Unable to fetch '%s'"
 msgstr "Nevar ienest datus"
 
-#: ../scripts/g.extension/g.extension.py:1159
+#: ../scripts/g.extension/g.extension.py:1154
 #, fuzzy
 msgid "$GISBASE not defined"
 msgstr "Tabulas nosaukums"
 
-#: ../scripts/g.extension/g.extension.py:1163
+#: ../scripts/g.extension/g.extension.py:1158
 #, python-format
 msgid "Extension <%s> already installed. Re-installing..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1174
+#: ../scripts/g.extension/g.extension.py:1169
 #, fuzzy, python-format
 msgid "Installing toolbox <%s>..."
 msgstr "Rakstu jaunu failu... \n"
 
-#: ../scripts/g.extension/g.extension.py:1184
+#: ../scripts/g.extension/g.extension.py:1179
 #, fuzzy
 msgid "Nothing to install"
 msgstr "Nekas nav atrasts.\n"
 
-#: ../scripts/g.extension/g.extension.py:1217
+#: ../scripts/g.extension/g.extension.py:1212
 msgid "Installation failed, sorry. Please check above error messages."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1220
+#: ../scripts/g.extension/g.extension.py:1215
 #, fuzzy
 msgid "Updating extensions metadata file..."
 msgstr "Rakstu jaunu failu... \n"
 
-#: ../scripts/g.extension/g.extension.py:1224
+#: ../scripts/g.extension/g.extension.py:1219
 #, fuzzy
 msgid "Updating extension modules metadata file..."
 msgstr "Rakstu jaunu failu... \n"
 
-#: ../scripts/g.extension/g.extension.py:1231
+#: ../scripts/g.extension/g.extension.py:1226
 #, python-format
 msgid "Installation of <%s> successfully finished"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1237
+#: ../scripts/g.extension/g.extension.py:1232
 msgid "This add-on module will not function until you set the GRASS_ADDON_BASE environment variable (see \"g.manual variables\")"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1272
+#: ../scripts/g.extension/g.extension.py:1267
 #, fuzzy
 msgid "Unable to read addons metadata file from the remote server"
 msgstr "Rastra izejas fails"
 
-#: ../scripts/g.extension/g.extension.py:1282
+#: ../scripts/g.extension/g.extension.py:1277
 msgid "No addons metadata available"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1285
+#: ../scripts/g.extension/g.extension.py:1280
 #, python-format
 msgid "No addons metadata available for <%s>"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1342
+#: ../scripts/g.extension/g.extension.py:1337
 #, fuzzy, python-brace-format
 msgid "Unable to read addons metadata file from the remote server: {0}"
 msgstr "Rastra izejas fails"
 
-#: ../scripts/g.extension/g.extension.py:1348
+#: ../scripts/g.extension/g.extension.py:1343
 #, fuzzy, python-format, python-brace-format
 msgid "Unable to parse '%s': {0}"
 msgstr "neiespējami atvērt <%s>"
 
-#: ../scripts/g.extension/g.extension.py:1531
+#: ../scripts/g.extension/g.extension.py:1526
 #, python-brace-format
 msgid "No metadata available for module '{name}': {error}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1600
+#: ../scripts/g.extension/g.extension.py:1595
 msgid "Downloading precompiled GRASS Addons <{}>..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1693
+#: ../scripts/g.extension/g.extension.py:1688
 msgid "svn not found but needed to fetch AddOns from an SVN repository"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1700
-#: ../scripts/g.extension/g.extension.py:1734
+#: ../scripts/g.extension/g.extension.py:1695
+#: ../scripts/g.extension/g.extension.py:1729
 #, fuzzy, python-format
 msgid "GRASS Addons <%s> not found"
 msgstr "reģions <%s> nav atrasts"
 
-#: ../scripts/g.extension/g.extension.py:1824
+#: ../scripts/g.extension/g.extension.py:1819
 #, fuzzy, python-brace-format
 msgid "ZIP file is unreadable: {0}"
 msgstr "Ieejas fails ir pārnesams.\n"
 
-#: ../scripts/g.extension/g.extension.py:1854
+#: ../scripts/g.extension/g.extension.py:1849
 #: ../scripts/r.unpack/r.unpack.py:119 ../scripts/v.unpack/v.unpack.py:130
 msgid "Extracting may be unsafe; consider updating Python"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1860
+#: ../scripts/g.extension/g.extension.py:1855
 #, python-brace-format
 msgid "Archive file is unreadable: {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1877
+#: ../scripts/g.extension/g.extension.py:1872
 #, python-brace-format
 msgid "Type of source identified as '{source}'."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1880
-#: ../scripts/g.extension/g.extension.py:1889
-#: ../scripts/g.extension/g.extension.py:1896
+#: ../scripts/g.extension/g.extension.py:1875
+#: ../scripts/g.extension/g.extension.py:1884
+#: ../scripts/g.extension/g.extension.py:1891
 #, python-brace-format
 msgid "Fetching <{name}> from <{url}> (be patient)..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1911
+#: ../scripts/g.extension/g.extension.py:1906
 #, python-brace-format
 msgid "Expected default branch not found. Trying again from <{url}>..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1919
+#: ../scripts/g.extension/g.extension.py:1914
 #, python-brace-format
 msgid "Extension <{name}> not found. Please check 'url' and 'branch' options"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1924
+#: ../scripts/g.extension/g.extension.py:1919
 #, fuzzy
 msgid "Extension <{}> not found"
 msgstr "reģions <%s> nav atrasts"
 
-#: ../scripts/g.extension/g.extension.py:1952
+#: ../scripts/g.extension/g.extension.py:1947
 #, python-brace-format
 msgid "Unknown extension (addon) source type '{0}'. Please report this to the grass-user mailing list."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1980
+#: ../scripts/g.extension/g.extension.py:1975
 #, fuzzy
 msgid "Path to the source code:"
 msgstr "Izejas rastra kartes nosaukums"
 
-#: ../scripts/g.extension/g.extension.py:2000
+#: ../scripts/g.extension/g.extension.py:1995
 msgid "Module name not found. Check module Makefile syntax (PGM variable)."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2075
+#: ../scripts/g.extension/g.extension.py:2070
 #, fuzzy
 msgid "To compile run:"
 msgstr "Pabeigts: "
 
-#: ../scripts/g.extension/g.extension.py:2077
+#: ../scripts/g.extension/g.extension.py:2072
 msgid "To install run:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2085
+#: ../scripts/g.extension/g.extension.py:2080
 #, fuzzy
 msgid "Compiling..."
 msgstr "Konvertē..."
 
-#: ../scripts/g.extension/g.extension.py:2087
+#: ../scripts/g.extension/g.extension.py:2082
 msgid "Please install GRASS development package"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2090
+#: ../scripts/g.extension/g.extension.py:2085
 msgid "Compilation failed, sorry. Please check above error messages."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2104
+#: ../scripts/g.extension/g.extension.py:2099
 #, fuzzy
 msgid "Installing..."
 msgstr "atubāzes atrašnās"
 
-#: ../scripts/g.extension/g.extension.py:2195
+#: ../scripts/g.extension/g.extension.py:2190
 #, fuzzy
 msgid "List of removed files:"
 msgstr "Sākuma punkta koordinātes"
 
-#: ../scripts/g.extension/g.extension.py:2197
+#: ../scripts/g.extension/g.extension.py:2192
 #, fuzzy
 msgid "Files to be removed:"
 msgstr "%s fails(i) kuri tiks dzēsti"
 
-#: ../scripts/g.extension/g.extension.py:2203
+#: ../scripts/g.extension/g.extension.py:2198
 #, fuzzy
 msgid "Updating addons metadata file..."
 msgstr "Rakstu jaunu failu... \n"
 
-#: ../scripts/g.extension/g.extension.py:2207
+#: ../scripts/g.extension/g.extension.py:2202
 #, fuzzy, python-format
 msgid "Extension <%s> successfully uninstalled."
 msgstr "izejas līmeņa nosaukums"
 
-#: ../scripts/g.extension/g.extension.py:2210
+#: ../scripts/g.extension/g.extension.py:2205
 #, python-format
 msgid "Toolbox <%s> not removed. Re-run '%s' with '-f' flag to force removal"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2215
+#: ../scripts/g.extension/g.extension.py:2210
 #, python-format
 msgid "Extension <%s> not removed. Re-run '%s' with '-f' flag to force removal"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2264
+#: ../scripts/g.extension/g.extension.py:2259
 #, fuzzy, python-format
 msgid "Extension <%s> not found"
 msgstr "reģions <%s> nav atrasts"
 
-#: ../scripts/g.extension/g.extension.py:2368
+#: ../scripts/g.extension/g.extension.py:2363
 #, python-brace-format
 msgid "Unable to create '{filename}': {error}. Is the GRASS documentation package installed? Installation continues, but documentation may not look right."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2387
+#: ../scripts/g.extension/g.extension.py:2382
 #, fuzzy, python-format
 msgid "Unable to create '%s': %s"
 msgstr "Nav iespēju atvērt šūnu failu priekš[%s]"
 
-#: ../scripts/g.extension/g.extension.py:2415
+#: ../scripts/g.extension/g.extension.py:2410
 #, fuzzy, python-format
 msgid "Manual page for <%s> updated"
 msgstr "Krāsu tabula [%s] uzstādīta uz %s"
 
-#: ../scripts/g.extension/g.extension.py:2422
+#: ../scripts/g.extension/g.extension.py:2417
 #, fuzzy, python-format
 msgid "Unable to read manual page: %s"
 msgstr "neiespējami atvērt <%s>"
 
-#: ../scripts/g.extension/g.extension.py:2467
+#: ../scripts/g.extension/g.extension.py:2462
 #, fuzzy, python-format
 msgid "Unable for write manual page: %s"
 msgstr "Nav iespēju atvērt šūnu failu priekš[%s]"
 
-#: ../scripts/g.extension/g.extension.py:2487
+#: ../scripts/g.extension/g.extension.py:2482
 msgid "GRASS_ADDON_BASE is not defined, installing to {}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2494
+#: ../scripts/g.extension/g.extension.py:2489
 #, python-brace-format
 msgid "You don't have permission to install extension to <{0}>. Try to run {1} with administrator rights (su or sudo)."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2586
+#: ../scripts/g.extension/g.extension.py:2581
 #, python-brace-format
 msgid "Identified {0} as known hosting service"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2591
+#: ../scripts/g.extension/g.extension.py:2586
 #, python-brace-format
 msgid "Not using {service} as known hosting service because the URL ends with '{suffix}'"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2608
+#: ../scripts/g.extension/g.extension.py:2603
 #, python-brace-format
 msgid "Will use the following URL for download: {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2639
+#: ../scripts/g.extension/g.extension.py:2634
 #, python-brace-format
 msgid "Cannot open URL <{url}>: {error}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2845
+#: ../scripts/g.extension/g.extension.py:2840
 msgid "Flag '{}' is relevant only to 'operation=add'. Ignoring this flag."
 msgstr ""
 
@@ -35174,7 +35177,7 @@ msgstr "Rakstu jaunu failu... \n"
 msgid "No raster map components found"
 msgstr "Rastra karte kura tiks pārkodēta"
 
-#: ../scripts/r.pack/r.pack.py:199
+#: ../scripts/r.pack/r.pack.py:200
 #, fuzzy, python-format
 msgid "Raster map saved to '%s'"
 msgstr "rastra karte <%s> nav atrasta"
@@ -35740,7 +35743,7 @@ msgid "Use of libsqlitefunctions only with SQLite backend"
 msgstr ""
 
 #: ../scripts/v.db.update/v.db.update.py:103
-#: ../scripts/v.dissolve/v.dissolve.py:605 ../vector/v.to.rast/support.c:297
+#: ../scripts/v.dissolve/v.dissolve.py:607 ../vector/v.to.rast/support.c:297
 #: ../vector/v.to.rast/support.c:528 ../vector/v.to.rast/vect2rast.c:67
 #: ../vector/v.what.rast3/main.c:143
 #, c-format, python-format
@@ -35777,52 +35780,52 @@ msgstr ""
 msgid "Column <{column}> selected for aggregation does not exist in vector <{vector}> (layer <{layer}>)"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:320
+#: ../scripts/v.dissolve/v.dissolve.py:322
 #, python-brace-format
 msgid "When result columns are specified, the number of aggregate columns ({columns_to_aggregate}) needs to be the same as the number of methods ({methods})"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:336
+#: ../scripts/v.dissolve/v.dissolve.py:338
 #, python-brace-format
 msgid "The number of result columns ({result_columns}) needs to be the same as the number of aggregate columns ({columns_to_aggregate})"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:347
+#: ../scripts/v.dissolve/v.dissolve.py:349
 #, python-brace-format
 msgid "The number of result columns ({result_columns}) needs to be the same as the number of aggregation methods ({methods})"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:360
+#: ../scripts/v.dissolve/v.dissolve.py:362
 #, python-brace-format
 msgid "Result column '{column}' needs a type specified (using the syntax: 'name type') when no methods are provided with the {option_name} option and aggregation backend is '{backend}'"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:374
+#: ../scripts/v.dissolve/v.dissolve.py:376
 #, python-brace-format
 msgid "Methods must be specified with {backend} backend and with result columns provided"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:581
+#: ../scripts/v.dissolve/v.dissolve.py:583
 #, python-format
 msgid "No '%s' option specified. Dissolving based on category values from layer <%s>."
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:596
+#: ../scripts/v.dissolve/v.dissolve.py:598
 #, fuzzy, python-format
 msgid "Invalid layer number (%d). Parameter '%s' specified, assuming layer '1'."
 msgstr "Nederīgs soļu skaits: %s"
 
-#: ../scripts/v.dissolve/v.dissolve.py:608
+#: ../scripts/v.dissolve/v.dissolve.py:610
 #, fuzzy
 msgid "Key column must be of type integer or string"
 msgstr "vektora karte <%s> nav atrasta"
 
-#: ../scripts/v.dissolve/v.dissolve.py:613
+#: ../scripts/v.dissolve/v.dissolve.py:615
 #, python-brace-format
 msgid "Key column type must be string (text) for aggregation method to work, not '{column_type}'"
 msgstr ""
 
-#: ../scripts/v.dissolve/v.dissolve.py:664
+#: ../scripts/v.dissolve/v.dissolve.py:666
 #, python-brace-format
 msgid ""
 "A processing step failed. Check the above error messages and see the following details:\n"
@@ -36594,7 +36597,7 @@ msgstr[1] ""
 msgstr[2] ""
 
 #: ../vector/v.build.polylines/main.c:243 ../vector/v.category/main.c:1001
-#: ../vector/v.net/main.c:157 ../vector/v.proj/main.c:615
+#: ../vector/v.net/main.c:159 ../vector/v.proj/main.c:615
 #: ../vector/v.rectify/main.c:280 ../vector/v.transform/main.c:314
 #: ../vector/v.type/main.c:152
 msgid "Failed to copy attribute table to output map"
@@ -39851,7 +39854,7 @@ msgstr ""
 msgid "x/y/z column must be integer or double"
 msgstr ""
 
-#: ../vector/v.in.db/main.c:293 ../vector/v.net/main.c:155
+#: ../vector/v.in.db/main.c:293 ../vector/v.net/main.c:157
 #: ../vector/v.to.3d/main.c:95 ../vector/v.to.3d/main.c:116
 #: ../vector/v.transform/main.c:312
 msgid "Copying attributes..."
@@ -40855,164 +40858,164 @@ msgstr "Nav definēts datubāzes savienojums"
 msgid "Unable to open driver <%s>"
 msgstr ""
 
-#: ../vector/v.info/print.c:589
+#: ../vector/v.info/print.c:590
 msgid "Name:"
 msgstr ""
 
-#: ../vector/v.info/print.c:591
+#: ../vector/v.info/print.c:592
 msgid "Mapset:"
 msgstr ""
 
-#: ../vector/v.info/print.c:594
+#: ../vector/v.info/print.c:595
 msgid "Project:"
 msgstr ""
 
-#: ../vector/v.info/print.c:596
+#: ../vector/v.info/print.c:597
 msgid "Database:"
 msgstr ""
 
-#: ../vector/v.info/print.c:599
+#: ../vector/v.info/print.c:600
 msgid "Title:"
 msgstr "Virsraksts:"
 
-#: ../vector/v.info/print.c:601
+#: ../vector/v.info/print.c:602
 msgid "Map scale:"
 msgstr ""
 
-#: ../vector/v.info/print.c:604
+#: ../vector/v.info/print.c:605
 msgid "Name of creator:"
 msgstr ""
 
-#: ../vector/v.info/print.c:606
+#: ../vector/v.info/print.c:607
 msgid "Organization:"
 msgstr ""
 
-#: ../vector/v.info/print.c:608
+#: ../vector/v.info/print.c:609
 msgid "Source date:"
 msgstr ""
 
-#: ../vector/v.info/print.c:614
+#: ../vector/v.info/print.c:615
 msgid "Timestamp (first layer): "
 msgstr ""
 
-#: ../vector/v.info/print.c:618
+#: ../vector/v.info/print.c:619
 msgid "Timestamp (first layer): none"
 msgstr ""
 
-#: ../vector/v.info/print.c:625 ../vector/v.info/print.c:647
-#: ../vector/v.info/print.c:684
+#: ../vector/v.info/print.c:626 ../vector/v.info/print.c:648
+#: ../vector/v.info/print.c:685
 msgid "Map format:"
 msgstr "Kartes formāts:"
 
-#: ../vector/v.info/print.c:630
+#: ../vector/v.info/print.c:631
 msgid "OGR layer:"
 msgstr ""
 
-#: ../vector/v.info/print.c:632
+#: ../vector/v.info/print.c:633
 msgid "OGR datasource:"
 msgstr ""
 
-#: ../vector/v.info/print.c:635 ../vector/v.info/print.c:662
+#: ../vector/v.info/print.c:636 ../vector/v.info/print.c:663
 msgid "Feature type:"
 msgstr "Objektu tips:"
 
-#: ../vector/v.info/print.c:652
+#: ../vector/v.info/print.c:653
 msgid "DB table:"
 msgstr "DB tabula:"
 
-#: ../vector/v.info/print.c:654
+#: ../vector/v.info/print.c:655
 msgid "DB name:"
 msgstr "DB nosaukums:"
 
-#: ../vector/v.info/print.c:658
+#: ../vector/v.info/print.c:659
 msgid "Geometry column:"
 msgstr ""
 
-#: ../vector/v.info/print.c:668 ../vector/v.info/print.c:676
+#: ../vector/v.info/print.c:669 ../vector/v.info/print.c:677
 msgid "Topology:"
 msgstr ""
 
-#: ../vector/v.info/print.c:669
+#: ../vector/v.info/print.c:670
 msgid "schema:"
 msgstr ""
 
-#: ../vector/v.info/print.c:673
+#: ../vector/v.info/print.c:674
 msgid "Topology column:"
 msgstr ""
 
-#: ../vector/v.info/print.c:690
+#: ../vector/v.info/print.c:691
 msgid "Type of map"
 msgstr ""
 
-#: ../vector/v.info/print.c:691
+#: ../vector/v.info/print.c:692
 msgid "level"
 msgstr ""
 
-#: ../vector/v.info/print.c:696
+#: ../vector/v.info/print.c:697
 msgid "Number of points:"
 msgstr "Punktu skaits:"
 
-#: ../vector/v.info/print.c:698
+#: ../vector/v.info/print.c:699
 msgid "Number of centroids:"
 msgstr ""
 
-#: ../vector/v.info/print.c:701
+#: ../vector/v.info/print.c:702
 msgid "Number of lines:"
 msgstr "Līniju skaits:"
 
-#: ../vector/v.info/print.c:703
+#: ../vector/v.info/print.c:704
 msgid "Number of boundaries:"
 msgstr ""
 
-#: ../vector/v.info/print.c:706
+#: ../vector/v.info/print.c:707
 msgid "Number of areas:"
 msgstr ""
 
-#: ../vector/v.info/print.c:707
+#: ../vector/v.info/print.c:708
 msgid "Number of islands:"
 msgstr ""
 
-#: ../vector/v.info/print.c:712
+#: ../vector/v.info/print.c:713
 msgid "Number of faces:"
 msgstr ""
 
-#: ../vector/v.info/print.c:713
+#: ../vector/v.info/print.c:714
 msgid "Number of kernels:"
 msgstr ""
 
-#: ../vector/v.info/print.c:717
+#: ../vector/v.info/print.c:718
 msgid "Number of volumes:"
 msgstr ""
 
-#: ../vector/v.info/print.c:718
+#: ../vector/v.info/print.c:719
 msgid "Number of holes:"
 msgstr ""
 
-#: ../vector/v.info/print.c:723
+#: ../vector/v.info/print.c:724
 msgid "Map is 3D:"
 msgstr ""
 
-#: ../vector/v.info/print.c:724
+#: ../vector/v.info/print.c:725
 msgid "No"
 msgstr ""
 
-#: ../vector/v.info/print.c:724
+#: ../vector/v.info/print.c:725
 msgid "Yes"
 msgstr "Jā"
 
-#: ../vector/v.info/print.c:726
+#: ../vector/v.info/print.c:727
 msgid "Number of dblinks:"
 msgstr ""
 
-#: ../vector/v.info/print.c:743
+#: ../vector/v.info/print.c:744
 msgid "zone"
 msgstr ""
 
-#: ../vector/v.info/print.c:775
+#: ../vector/v.info/print.c:776
 msgid "Digitization threshold"
 msgstr ""
 
-#: ../vector/v.info/print.c:777
+#: ../vector/v.info/print.c:778
 msgid "Comment"
 msgstr "Komentārs"
 
@@ -43402,17 +43405,17 @@ msgstr ""
 msgid "Performs network maintenance."
 msgstr ""
 
-#: ../vector/v.net/main.c:121
+#: ../vector/v.net/main.c:123
 #, c-format
 msgid "Unable to open vector map <%s> at topology level %d"
 msgstr ""
 
-#: ../vector/v.net/main.c:139
+#: ../vector/v.net/main.c:141
 #, c-format
 msgid "%d new points (nodes) written to output."
 msgstr ""
 
-#: ../vector/v.net/main.c:151
+#: ../vector/v.net/main.c:153
 #, c-format
 msgid "%d lines (network arcs) written to output."
 msgstr ""
@@ -46797,37 +46800,37 @@ msgstr ""
 msgid "No totals for selected option"
 msgstr ""
 
-#: ../vector/v.to.db/report.c:534
+#: ../vector/v.to.db/report.c:535
 #, c-format
 msgid "%d categories read from vector map (layer %d)"
 msgstr ""
 
-#: ../vector/v.to.db/report.c:538
+#: ../vector/v.to.db/report.c:539
 #, c-format
 msgid "%d records selected from table (layer %d)"
 msgstr ""
 
-#: ../vector/v.to.db/report.c:541
+#: ../vector/v.to.db/report.c:542
 #, c-format
 msgid "%d categories read from vector map exist in selection from table"
 msgstr ""
 
-#: ../vector/v.to.db/report.c:545
+#: ../vector/v.to.db/report.c:546
 #, c-format
 msgid "%d categories read from vector map don't exist in selection from table"
 msgstr ""
 
-#: ../vector/v.to.db/report.c:548
+#: ../vector/v.to.db/report.c:549
 #, c-format
 msgid "%d records updated/inserted (layer %d)"
 msgstr ""
 
-#: ../vector/v.to.db/report.c:551
+#: ../vector/v.to.db/report.c:552
 #, c-format
 msgid "%d update/insert errors (layer %d)"
 msgstr ""
 
-#: ../vector/v.to.db/report.c:554
+#: ../vector/v.to.db/report.c:555
 #, c-format
 msgid "%d categories with more points (coordinates not loaded)"
 msgstr ""
@@ -48128,12 +48131,17 @@ msgid ""
 "Key column: %s\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:493
+#: ../vector/v.what/what.c:450
+#, fuzzy, c-format
+msgid "Vector name <%s> is too long"
+msgstr "rastrs <%s> nav atrasts"
+
+#: ../vector/v.what/what.c:495
 #, c-format
 msgid "Nothing found.\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:635
+#: ../vector/v.what/what.c:637
 #, c-format
 msgid ""
 "Id: %d\n"
@@ -48142,12 +48150,12 @@ msgid ""
 "Right: %d\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:638 ../vector/v.what/what.c:794
+#: ../vector/v.what/what.c:640 ../vector/v.what/what.c:796
 #, c-format
 msgid "Length: %f\n"
 msgstr "Garums: %f\n"
 
-#: ../vector/v.what/what.c:667
+#: ../vector/v.what/what.c:669
 #, c-format
 msgid ""
 "Node[%d]=%d\n"
@@ -48155,7 +48163,7 @@ msgid ""
 "Coordinates=%.6f,%.6f,%.6f\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:673
+#: ../vector/v.what/what.c:675
 #, c-format
 msgid ""
 ",\n"
@@ -48164,7 +48172,7 @@ msgid ""
 "\"Coordinates\": %.6f,%.6f,%.6f"
 msgstr ""
 
-#: ../vector/v.what/what.c:696
+#: ../vector/v.what/what.c:698
 #, c-format
 msgid ""
 "Node[%d]: %d\n"
@@ -48172,77 +48180,77 @@ msgid ""
 "Coordinates: %.6f, %.6f, %.6f\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:739
+#: ../vector/v.what/what.c:741
 #, c-format
 msgid ""
 "Id: %d\n"
 "Angle: %.8f\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:791
+#: ../vector/v.what/what.c:793
 #, c-format
 msgid "Type: %s\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:792
+#: ../vector/v.what/what.c:794
 #, c-format
 msgid "Id: %d\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:821
+#: ../vector/v.what/what.c:823
 #, c-format
 msgid "Point height: %f\n"
 msgstr "Punkta augstums: %f\n"
 
-#: ../vector/v.what/what.c:852
+#: ../vector/v.what/what.c:854
 #, c-format
 msgid "Line height: %f\n"
 msgstr "Līnijas augstums: %f\n"
 
-#: ../vector/v.what/what.c:886
+#: ../vector/v.what/what.c:888
 #, c-format
 msgid ""
 "Line height min: %f\n"
 "Line height max: %f\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:969
+#: ../vector/v.what/what.c:971
 #, c-format
 msgid ""
 "Type: Area\n"
 "Area height: %f\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:992
+#: ../vector/v.what/what.c:994
 #, c-format
 msgid "Type: Area\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:1029
+#: ../vector/v.what/what.c:1031
 #, c-format
 msgid ""
 "Area: %d\n"
 "Number of isles: %d\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:1056
+#: ../vector/v.what/what.c:1058
 #, c-format
 msgid "Isle[%d]: %d\n"
 msgstr "Sala[%d]: %d\n"
 
-#: ../vector/v.what/what.c:1099
+#: ../vector/v.what/what.c:1101
 #, c-format
 msgid "Island: %d In area: %d\n"
 msgstr "Sala: %d Poligonā: %d\n"
 
-#: ../vector/v.what/what.c:1142
+#: ../vector/v.what/what.c:1144
 #, c-format
 msgid ""
 "Sq Meters: %.3f\n"
 "Hectares: %.3f\n"
 msgstr ""
 
-#: ../vector/v.what/what.c:1144
+#: ../vector/v.what/what.c:1146
 #, c-format
 msgid ""
 "Acres: %.3f\n"
