@@ -2144,7 +2144,7 @@ def find_path_to_grass_python_package() -> tuple[str, bool]:
     minor = "@GRASS_VERSION_MINOR@"
     # Try a run-together version number for the directory (long-used standard).
     path_from_context = base / f"grass{major}{minor}" / "etc" / "python"
-    if Path(path_from_context).exists():
+    if path_from_context.exists():
         return str(path_from_context), True
     # Try a dotted version number (more common standard).
     path_from_context = base / f"grass{major}.{minor}" / "etc" / "python"
