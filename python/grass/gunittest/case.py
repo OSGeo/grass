@@ -811,9 +811,9 @@ class TestCase(unittest.TestCase):
         )
         expression = (
             '"{diff}" = '
-            + 'if( isnull("{first}") && isnull("{second}"), 0, '
-            + 'if( isnull("{first}") || isnull("{second}"), 1, '
-            + 'if( abs("{first}" - "{second}") > {precision}, 1, 0)))'
+            'if( isnull("{first}") && isnull("{second}"), 0, '
+            'if( isnull("{first}") || isnull("{second}"), 1, '
+            'if( abs("{first}" - "{second}") > {precision}, 1, 0)))'
         ).format(diff=diff, first=first, second=second, precision=precision)
 
         call_module("r.mapcalc", stdin=expression.encode("utf-8"))

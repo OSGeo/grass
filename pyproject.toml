@@ -86,6 +86,7 @@ select = [
     "SLOT",   # flake8-slots (SLOT)
     "T10",    # flake8-debugger (T10)
     "TC",     # flake8-type-checking (TC)
+    "TD",     # flake8-todos (TD)
     "TID",    # flake8-tidy-imports (TID)
     "TRY",    # tryceratops (TRY)
     "UP",     # pyupgrade (UP)
@@ -171,7 +172,6 @@ ignore = [
     "FBT003",  # boolean-positional-value-in-call
     "I001",    # unsorted-imports
     "INP001",  # implicit-namespace-package
-    "ISC003",  # explicit-string-concatenation
     "N801",    # invalid-class-name
     "N802",    # invalid-function-name
     "N803",    # invalid-argument-name
@@ -185,7 +185,6 @@ ignore = [
     "PERF401", # manual-list-comprehension
     "PERF402", # manual-list-copy
     "PERF403", # manual-dict-comprehension
-    "PIE794",  # duplicate-class-field-definition
     "PLC0415", # import-outside-top-level
     "PLC1901", # compare-to-empty-string
     "PLC2701", # import-private-name
@@ -201,7 +200,6 @@ ignore = [
     "PLR1702", # too-many-nested-blocks
     "PLR1704", # redefined-argument-from-local
     "PLR2004", # magic-value-comparison
-    "PLR6201", # literal-membership
     "PLR6301", # no-self-use
     "PLW0602", # global-variable-not-assigned
     "PLW0603", # global-statement
@@ -265,6 +263,12 @@ ignore = [
     "SIM118",  # in-dict-keys
     "SIM223",  # expr-and-false
     "SLF001",  # private-member-access
+    "TD001",   # invalid-todo-tag
+    "TD002",   # missing-todo-author
+    "TD003",   # missing-todo-link
+    "TD004",   # missing-todo-colon
+    "TD005",   # missing-todo-description
+    "TD007",   # missing-space-after-todo-colon
     "TRY002",  # raise-vanilla-class
     "TRY004",  # type-check-without-type-error
     "TRY201",  # verbose-raise
@@ -273,7 +277,6 @@ ignore = [
     "UP030",   # format-literals
     "UP031",   # printf-string-formatting
     "UP032",   # f-string
-    "UP036",   # outdated-version-block
 ]
 
 
@@ -297,9 +300,9 @@ ignore = [
 "gui/wxpython/core/utils.py" = ["PLW1514"]
 "gui/wxpython/core/watchdog.py" = ["PLW1514"]
 "gui/wxpython/core/workspace.py" = ["PLW1514"]
-"gui/wxpython/dbmgr/base.py" = ["PLW1514"]
+"gui/wxpython/dbmgr/base.py" = ["PLR6201", "PLW1514"]
 "gui/wxpython/docs/wxgui_sphinx/conf.py" = ["PLW1514"]
-"gui/wxpython/gcp/manager.py" = ["PLW1514"]
+"gui/wxpython/gcp/manager.py" = ["PLR6201", "PLW1514"]
 "gui/wxpython/gmodeler/model.py" = ["PLW1514"]
 "gui/wxpython/gmodeler/panels.py" = ["PLW1514"]
 "gui/wxpython/gui_core/forms.py" = ["PLW1514"]
@@ -311,14 +314,16 @@ ignore = [
 "gui/wxpython/iclass/frame.py" = ["PLW1514"]
 "gui/wxpython/iclass/statistics.py" = ["A005"]
 "gui/wxpython/image2target/ii2t_gis_set.py" = ["PLW1514"]
-"gui/wxpython/image2target/ii2t_manager.py" = ["PLW1514"]
+"gui/wxpython/image2target/ii2t_manager.py" = ["PLR6201", "PLW1514"]
+"gui/wxpython/iscatt/plots.py" = ["PLR6201"]
 "gui/wxpython/location_wizard/wizard.py" = ["PLW1514"]
 "gui/wxpython/mapdisp/main.py" = ["PLW1514"]
 "gui/wxpython/modules/colorrules.py" = ["PLW1514"]
 "gui/wxpython/modules/mcalc_builder.py" = ["PLW1514"]
-"gui/wxpython/photo2image/ip2i_manager.py" = ["PLW1514"]
+"gui/wxpython/photo2image/ip2i_manager.py" = ["PLR6201", "PLW1514"]
 "gui/wxpython/psmap/instructions.py" = ["PLW1514"]
 "gui/wxpython/rdigit/controller.py" = ["PLW1514"]
+"gui/wxpython/rdigit/toolbars.py" = ["PLR6201"]
 "gui/wxpython/rlisetup/frame.py" = ["PLW1514"]
 "gui/wxpython/rlisetup/wizard.py" = ["PLW1514"]
 "gui/wxpython/tools/update_menudata.py" = ["PLW1514"]
@@ -360,11 +365,13 @@ ignore = [
 "python/grass/jupyter/testsuite/interactivemap_test.py" = ["PGH004"]
 "python/grass/jupyter/testsuite/map_test.py" = ["PGH004"]
 "python/grass/jupyter/utils.py" = ["PLW1514"]
+"python/grass/pydispatch/dispatcher.py" = ["PLR6201"]
 "python/grass/pydispatch/signal.py" = ["A005"]
 "python/grass/pygrass/gis/__init__.py" = ["PLW1514", "PTH208"]
 "python/grass/pygrass/modules/grid/grid.py" = ["PLW1514", "PTH208", "SIM115"]
 "python/grass/pygrass/modules/grid/testsuite/test_*_modules_grid_doctests.py" = ["F401"]
 "python/grass/pygrass/modules/interface/env.py" = ["PLW1514", "SIM115"]
+"python/grass/pygrass/modules/interface/parameter.py" = ["PLR6201"]
 "python/grass/pygrass/modules/testsuite/test_pygrass_modules_doctests.py" = ["F401"]
 "python/grass/pygrass/raster/category.py" = ["FURB189", "PLW1514"]
 "python/grass/pygrass/raster/segment.py" = ["PLW1514", "SIM115"]
@@ -382,12 +389,15 @@ ignore = [
 "python/grass/semantic_label/reader.py" = ["PLW1514"]
 "python/grass/temporal/abstract_space_time_dataset.py" = ["PLW1514"]
 "python/grass/temporal/aggregation.py" = ["PLW1514", "SIM115"]
+"python/grass/temporal/c_libraries_interface.py" = ["PIE794"]
 "python/grass/temporal/register.py" = ["PLW1514", "SIM115"]
 "python/grass/temporal/stds_export.py" = ["PLW1514", "SIM115"]
 "python/grass/temporal/stds_import.py" = ["PLW1514", "SIM115"]
 "python/grass/temporal/temporal_algebra.py" = ["D300"]
 "python/grass/temporal/temporal_operator.py" = ["D300"]
+"python/grass/temporal/testsuite/test_temporal_doctests.py" = ["UP036"]
 "python/grass/temporal/univar_statistics.py" = ["PLW1514", "SIM115"]
+"python/grass/tools/support.py" = ["PLR6201"]
 "python/grass/utils/download.py" = ["PTH208", "SIM115"]
 "raster/r.*/testsuite/*.py" = ["SIM115"]
 "raster/r.mfilter/benchmark/benchmark_r_mfilter_nprocs.py" = ["PLW1514"]
@@ -409,8 +419,8 @@ ignore = [
 "scripts/g.extension/g.extension.py" = ["PLW1514", "PTH208", "SIM115"]
 "scripts/g.search.modules/g.search.modules.py" = ["PLW1514"]
 "scripts/i.in.spotvgt/i.in.spotvgt.py" = ["PLW1514"]
-"scripts/i.oif/i.oif.py" = ["PLW1514"]
 "scripts/i.oif/i.oif*.py" = ["SIM115"]
+"scripts/i.oif/i.oif.py" = ["PLW1514"]
 "scripts/i.pansharpen/i.pansharpen.py" = ["PLW1514"]
 "scripts/i.spectral/i.spectral.py" = ["PLW1514"]
 "scripts/m.proj/m.proj.py" = ["PLW1514", "SIM115"]

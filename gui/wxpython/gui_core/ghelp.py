@@ -16,6 +16,7 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
+from __future__ import annotations
 import os
 import codecs
 import platform
@@ -698,12 +699,12 @@ def extract_md_content(html_string, base_url):
             self.base_url = base_url
             self.target_class = "md-content"
 
-        def handle_starttag(self, tag, attrs):
+        def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]):
             attr_dict = dict(attrs)
 
             # Convert relative URLs to absolute
             # to be able to display images and use links
-            if tag in ["img", "a"]:
+            if tag in {"img", "a"}:
                 if "src" in attr_dict and not bool(urlparse(attr_dict["src"]).netloc):
                     attr_dict["src"] = urljoin(self.base_url, attr_dict["src"])
                 if "href" in attr_dict and not bool(urlparse(attr_dict["href"]).netloc):
@@ -722,7 +723,7 @@ def extract_md_content(html_string, base_url):
                 if tag == "div":
                     self.depth += 1
 
-        def handle_endtag(self, tag):
+        def handle_endtag(self, tag: str):
             if self.recording:
                 self.extracted_data.append(f"</{tag}>")
                 if tag == "div":
@@ -730,7 +731,7 @@ def extract_md_content(html_string, base_url):
                     if self.depth == 0:
                         self.recording = False
 
-        def handle_data(self, data):
+        def handle_data(self, data: str):
             if self.recording:
                 self.extracted_data.append(data)
 
