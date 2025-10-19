@@ -21,7 +21,7 @@ from pathlib import Path
 
 
 def main(path):
-    if not Path(path).exists() or not os.path.isdir(path):
+    if not Path(path).exists() or not Path(path).is_dir():
         print("'{}' is not a directory".format(path), file=sys.stderr)
         return 1
 
