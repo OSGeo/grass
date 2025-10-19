@@ -15,6 +15,7 @@ This program is free software under the GNU General Public License
 @author Michael Barton, Arizona State University
 """
 
+import os
 import sys
 import math
 import numpy as np
