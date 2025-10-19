@@ -2137,7 +2137,7 @@ def find_path_to_grass_python_package() -> tuple[str, bool]:
 
     base = Path(__file__).parent.parent / "lib"
     path_from_context = base / "grass" / "etc" / "python"
-    if Path(path_from_context).exists():
+    if path_from_context.exists():
         return str(path_from_context), True
 
     major = "@GRASS_VERSION_MAJOR@"
