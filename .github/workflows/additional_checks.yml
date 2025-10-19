@@ -38,7 +38,7 @@ jobs:
         with:
           python-version: "3.14"
       - name: Install uv and restore its cache
-        uses: astral-sh/setup-uv@3259c6206f993105e3a61b142c2d97bf4b9ef83d # v7.1.0
+        uses: astral-sh/setup-uv@2ddd2b9cb38ad8efd50337e8ab201519a34c9f24 # v7.1.1
         with:
           # To not have the last commit JSON and release notes files affected on
           # releases, if copying the contents displayed in the CI logs.
