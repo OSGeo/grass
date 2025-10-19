@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-11 15:59+0000\n"
+"POT-Creation-Date: 2025-10-18 16:02+0000\n"
 "PO-Revision-Date: 2025-10-13 12:30+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/sv/>\n"
@@ -201,7 +201,7 @@ msgstr "Välj 2D- eller 3D-vy"
 #: ../gui/wxpython/gui_core/gselect.py:1629
 #: ../gui/wxpython/gui_core/gselect.py:1646
 #: ../gui/wxpython/gui_core/gselect.py:1647
-#: ../gui/wxpython/gui_core/widgets.py:1437
+#: ../gui/wxpython/gui_core/widgets.py:1435
 #: ../gui/wxpython/vnet/dialogs.py:1679
 msgid "Name:"
 msgstr "Namn:"
@@ -2056,12 +2056,12 @@ msgstr "Radera alla poster"
 #: ../gui/wxpython/dbmgr/base.py:1471 ../gui/wxpython/gui_core/dialogs.py:838
 #: ../gui/wxpython/gui_core/dialogs.py:896
 #: ../gui/wxpython/gui_core/dialogs.py:1607
-#: ../gui/wxpython/gui_core/widgets.py:1129
+#: ../gui/wxpython/gui_core/widgets.py:1127
 msgid "Select all"
 msgstr "Välj alla"
 
 #: ../gui/wxpython/dbmgr/base.py:1472 ../gui/wxpython/gui_core/dialogs.py:1609
-#: ../gui/wxpython/gui_core/widgets.py:1130
+#: ../gui/wxpython/gui_core/widgets.py:1128
 msgid "Deselect all"
 msgstr "Avmarkera alla"
 
@@ -3868,7 +3868,7 @@ msgstr "Vänta, läser in modell..."
 msgid "Writing current settings to model file failed."
 msgstr "Skrivning av aktuella inställningar till modellfilen misslyckades."
 
-#: ../gui/wxpython/gmodeler/panels.py:689 ../gui/wxpython/lmgr/workspace.py:456
+#: ../gui/wxpython/gmodeler/panels.py:689 ../gui/wxpython/lmgr/workspace.py:455
 #, python-format
 msgid "Unable to open file <%s> for writing."
 msgstr "Fil <%s> kan inte öppnas för skrivning."
@@ -5130,7 +5130,7 @@ msgid "Native"
 msgstr "Inbyggd"
 
 #: ../gui/wxpython/gui_core/gselect.py:1471
-#: ../gui/wxpython/lmgr/workspace.py:518
+#: ../gui/wxpython/lmgr/workspace.py:517
 msgid "File"
 msgstr "Arkiv"
 
@@ -6142,78 +6142,78 @@ msgstr ""
 "\n"
 "Anledning: %s"
 
-#: ../gui/wxpython/gui_core/widgets.py:128
+#: ../gui/wxpython/gui_core/widgets.py:126
 msgid " (...)"
 msgstr " (...)"
 
-#: ../gui/wxpython/gui_core/widgets.py:885
+#: ../gui/wxpython/gui_core/widgets.py:883
 #, python-format
 msgid "Name <%(name)s> is not a valid name for GRASS map. Please use only ASCII characters excluding %(chars)s and space."
 msgstr "Namnet <%(name)s> är inte ett giltigt namn för GRASS-kartan. Använd endast ASCII-tecken exklusive %(chars)s och mellanslag."
 
-#: ../gui/wxpython/gui_core/widgets.py:889
+#: ../gui/wxpython/gui_core/widgets.py:887
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:1184
 #: ../gui/wxpython/location_wizard/wizard.py:300
 #: ../gui/wxpython/modules/import_export.py:268
 msgid "Invalid name"
 msgstr "Ogiltigt namn"
 
-#: ../gui/wxpython/gui_core/widgets.py:1237
+#: ../gui/wxpython/gui_core/widgets.py:1235
 msgid "Fulltext search"
 msgstr "Fulltextsökning"
 
-#: ../gui/wxpython/gui_core/widgets.py:1239
+#: ../gui/wxpython/gui_core/widgets.py:1237
 msgid "Type to search in all tools. Press Enter for next match."
 msgstr "Skriv för att söka i alla verktyg. Tryck på Enter för nästa matchning."
 
-#: ../gui/wxpython/gui_core/widgets.py:1301
+#: ../gui/wxpython/gui_core/widgets.py:1299
 msgid "Searching, please type more characters."
 msgstr "Söker, skriv fler tecken."
 
-#: ../gui/wxpython/gui_core/widgets.py:1312
+#: ../gui/wxpython/gui_core/widgets.py:1310
 msgid "{} tools matched"
 msgstr "{} verktyg matchade"
 
-#: ../gui/wxpython/gui_core/widgets.py:1379
+#: ../gui/wxpython/gui_core/widgets.py:1377
 msgid "Profiles"
 msgstr "Profiler"
 
-#: ../gui/wxpython/gui_core/widgets.py:1386
+#: ../gui/wxpython/gui_core/widgets.py:1384
 msgid "Save current settings"
 msgstr "Spara aktuella inställningar"
 
-#: ../gui/wxpython/gui_core/widgets.py:1389
+#: ../gui/wxpython/gui_core/widgets.py:1387
 msgid "Delete currently selected settings"
 msgstr "Radera aktuella inställningar"
 
-#: ../gui/wxpython/gui_core/widgets.py:1408
+#: ../gui/wxpython/gui_core/widgets.py:1406
 msgid "Load:"
 msgstr "Läs in:"
 
-#: ../gui/wxpython/gui_core/widgets.py:1424
+#: ../gui/wxpython/gui_core/widgets.py:1422
 #, python-format
 msgid "Settings <%s> not found"
 msgstr "Inställningar <%s> hittades inte"
 
-#: ../gui/wxpython/gui_core/widgets.py:1437
-#: ../gui/wxpython/gui_core/widgets.py:1460
+#: ../gui/wxpython/gui_core/widgets.py:1435
+#: ../gui/wxpython/gui_core/widgets.py:1458
 msgid "Save settings"
 msgstr "Spara inställningar"
 
-#: ../gui/wxpython/gui_core/widgets.py:1443
+#: ../gui/wxpython/gui_core/widgets.py:1441
 msgid "Name not given, settings is not saved."
 msgstr "Namn anges inte, inställningar sparas inte."
 
-#: ../gui/wxpython/gui_core/widgets.py:1456
+#: ../gui/wxpython/gui_core/widgets.py:1454
 #, python-format
 msgid "Settings <%s> already exists. Do you want to overwrite the settings?"
 msgstr "Inställningen <%s> finns redan. Vill du skriva över inställningarna?"
 
-#: ../gui/wxpython/gui_core/widgets.py:1508
+#: ../gui/wxpython/gui_core/widgets.py:1506
 msgid "No settings is defined. Operation canceled."
 msgstr "Inga inställningar har definierats. Operationen avbruten."
 
-#: ../gui/wxpython/gui_core/widgets.py:1544
+#: ../gui/wxpython/gui_core/widgets.py:1542
 msgid "Unable to save settings"
 msgstr "Kan inte att spara inställningar"
 
@@ -8180,8 +8180,8 @@ msgstr "Ny arbetsyta"
 msgid "Open workspace"
 msgstr "Öppet arbetsutrymme"
 
-#: ../gui/wxpython/lmgr/toolbars.py:68 ../gui/wxpython/lmgr/workspace.py:394
-#: ../gui/wxpython/lmgr/workspace.py:417
+#: ../gui/wxpython/lmgr/toolbars.py:68 ../gui/wxpython/lmgr/workspace.py:393
+#: ../gui/wxpython/lmgr/workspace.py:416
 msgid "Save workspace"
 msgstr "Spara arbetsyta"
 
@@ -8310,27 +8310,27 @@ msgstr "Visa dialogrutan för inställningar för 3D-visning"
 msgid "Show 3D view mode manual"
 msgstr "Visa 3D-visningsläge manuell"
 
-#: ../gui/wxpython/lmgr/workspace.py:74
+#: ../gui/wxpython/lmgr/workspace.py:73
 msgid "Current workspace is not empty. Do you want to store current settings to workspace file?"
 msgstr "Den aktuella arbetsytan är inte tom. Vill du lagra aktuella inställningar i arbetsytans fil?"
 
-#: ../gui/wxpython/lmgr/workspace.py:78
+#: ../gui/wxpython/lmgr/workspace.py:77
 msgid "Create new workspace?"
 msgstr "Skapa en ny arbetsyta?"
 
-#: ../gui/wxpython/lmgr/workspace.py:107
+#: ../gui/wxpython/lmgr/workspace.py:106
 msgid "Choose workspace file"
 msgstr "Välj arbetsytans fil"
 
-#: ../gui/wxpython/lmgr/workspace.py:109 ../gui/wxpython/lmgr/workspace.py:371
+#: ../gui/wxpython/lmgr/workspace.py:108 ../gui/wxpython/lmgr/workspace.py:370
 msgid "GRASS Workspace File (*.gxw)|*.gxw"
 msgstr "GRASS-arbetsområdesfil (*.gxw)|*.gxw"
 
-#: ../gui/wxpython/lmgr/workspace.py:138
+#: ../gui/wxpython/lmgr/workspace.py:137
 msgid "Most likely the database, location or mapset does not exist"
 msgstr "Troligen finns inte databasen, platsen eller kartuppsättningen"
 
-#: ../gui/wxpython/lmgr/workspace.py:141
+#: ../gui/wxpython/lmgr/workspace.py:140
 #, python-brace-format
 msgid ""
 "Unable to change to location and mapset specified in the workspace.\n"
@@ -8345,11 +8345,11 @@ msgstr ""
 "\n"
 "Vill du fortsätta med att öppna arbetsytan ändå?"
 
-#: ../gui/wxpython/lmgr/workspace.py:150
+#: ../gui/wxpython/lmgr/workspace.py:149
 msgid "Proceed with opening of the workspace?"
 msgstr "Fortsätta med öppnandet av arbetsytan?"
 
-#: ../gui/wxpython/lmgr/workspace.py:161
+#: ../gui/wxpython/lmgr/workspace.py:160
 #, python-format
 msgid ""
 "Current location is <%(loc)s>.\n"
@@ -8358,7 +8358,7 @@ msgstr ""
 "Aktuell plats är <%(loc)s>.\n"
 "Aktuell kartuppsättning är <%(mapset)s>."
 
-#: ../gui/wxpython/lmgr/workspace.py:181
+#: ../gui/wxpython/lmgr/workspace.py:180
 #, python-format
 msgid ""
 "Reading workspace file <%s> failed.\n"
@@ -8369,20 +8369,20 @@ msgstr ""
 "Ogiltig fil, XML-dokumentet kan inte tolkas.\n"
 "Detaljer om felet: %s"
 
-#: ../gui/wxpython/lmgr/workspace.py:194
+#: ../gui/wxpython/lmgr/workspace.py:193
 msgid "Please wait, loading workspace..."
 msgstr "Vänta, läser in arbetsytan..."
 
-#: ../gui/wxpython/lmgr/workspace.py:369
+#: ../gui/wxpython/lmgr/workspace.py:368
 msgid "Choose file to save current workspace"
 msgstr "Välj fil för att spara aktuell arbetsyta"
 
-#: ../gui/wxpython/lmgr/workspace.py:390 ../gui/wxpython/lmgr/workspace.py:413
+#: ../gui/wxpython/lmgr/workspace.py:389 ../gui/wxpython/lmgr/workspace.py:412
 #, python-format
 msgid "Workspace file <%s> already exists. Do you want to overwrite this file?"
 msgstr "Arbetsområdesfilen <%s> finns redan. Vill du skriva över den här filen?"
 
-#: ../gui/wxpython/lmgr/workspace.py:443
+#: ../gui/wxpython/lmgr/workspace.py:442
 #, python-format
 msgid ""
 "Writing current settings to workspace file <%s> failed.\n"
@@ -8391,19 +8391,19 @@ msgstr ""
 "Skrivning av aktuella inställningar till arbetsytans fil <%s> misslyckades.\n"
 "Detaljer om felet: %s"
 
-#: ../gui/wxpython/lmgr/workspace.py:470
+#: ../gui/wxpython/lmgr/workspace.py:469
 msgid "Do you want to save changes in the workspace?"
 msgstr "Vill du spara ändringar i arbetsytan?"
 
-#: ../gui/wxpython/lmgr/workspace.py:472
+#: ../gui/wxpython/lmgr/workspace.py:471
 msgid "Do you want to store current settings to workspace file?"
 msgstr "Vill du lagra aktuella inställningar i arbetsytans fil?"
 
-#: ../gui/wxpython/lmgr/workspace.py:525
+#: ../gui/wxpython/lmgr/workspace.py:524
 msgid "Workspace"
 msgstr "Arbetsområde"
 
-#: ../gui/wxpython/lmgr/workspace.py:562
+#: ../gui/wxpython/lmgr/workspace.py:561
 msgid "File <{}> doesn't exist. It was probably moved or deleted."
 msgstr "Filen <{}> finns inte. Den har förmodligen flyttats eller raderats."
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-11 15:59+0000\n"
+"POT-Creation-Date: 2025-10-18 16:02+0000\n"
 "PO-Revision-Date: 2025-10-13 12:30+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/sv/>\n"
@@ -3632,7 +3632,7 @@ msgstr "Det gick inte att läsa målfilen för grupp [%s]"
 msgid "WARNING"
 msgstr "VARNING"
 
-#: ../lib/init/grass.py:148 ../lib/init/grass.py:2420
+#: ../lib/init/grass.py:148 ../lib/init/grass.py:2428
 msgid "Exiting..."
 msgstr "Spännande..."
 
@@ -4094,7 +4094,7 @@ msgstr "Argument för koordinatreferenssystem (t.ex. EPSG) behövs för --tmp-pr
 msgid "Only one argument (e.g. EPSG) is needed for --tmp-project, mapset name <{}> provided"
 msgstr "Endast ett argument (t.ex. EPSG) behövs för --tmp-project, mapset-namn <{}> anges"
 
-#: ../lib/init/grass.py:2275
+#: ../lib/init/grass.py:2283
 #, python-brace-format
 msgid ""
 "Unable to start GRASS. You have the choice to:\n"
@@ -4123,24 +4123,24 @@ msgstr ""
 "     {cmd_name} --hjälp\n"
 "Se även: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 
-#: ../lib/init/grass.py:2296
+#: ../lib/init/grass.py:2304
 msgid "Starting GRASS..."
 msgstr "Börjar med GRASS..."
 
-#: ../lib/init/grass.py:2345
+#: ../lib/init/grass.py:2353
 msgid "Failed to start GRASS, grassdata directory cannot be found or created."
 msgstr "Misslyckades med att starta GRASS, grassdata-katalogen kan inte hittas eller skapas."
 
-#: ../lib/init/grass.py:2352
+#: ../lib/init/grass.py:2360
 msgid "Failed to start GRASS, no default project to copy in the installation or copying failed."
 msgstr "GRASS kunde inte startas, inget standardprojekt att kopiera i installationen eller kopieringen misslyckades."
 
-#: ../lib/init/grass.py:2457
+#: ../lib/init/grass.py:2465
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr "Startar <%s> grafiskt gränssnitt i bakgrunden, vänta..."
 
-#: ../lib/init/grass.py:2495
+#: ../lib/init/grass.py:2503
 #, python-format
 msgid "Failed to start shell '%s'"
 msgstr "Misslyckades med att starta skalet '%s'"

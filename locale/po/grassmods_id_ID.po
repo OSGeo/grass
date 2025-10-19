@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_id_ID\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-11 15:59+0000\n"
+"POT-Creation-Date: 2025-10-18 16:02+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Indonesian <https://weblate.osgeo.org/projects/grass-gis/grassmods/id/>\n"
@@ -64,7 +64,7 @@ msgstr ""
 
 #: ../db/db.columns/main.c:73 ../db/db.describe/main.c:54
 #: ../db/db.describe/main.c:59 ../general/g.list/list.c:89
-#: ../general/g.mapset/main.c:174 ../imagery/i.group/main.c:124
+#: ../general/g.mapset/main.c:175 ../imagery/i.group/main.c:124
 #: ../raster/r.category/main.c:143 ../raster/r.describe/dumplist.c:48
 #: ../raster/r.distance/report.c:63 ../raster/r.proj/main.c:345
 #: ../raster/r.regression.multi/main.c:203
@@ -85,7 +85,7 @@ msgstr ""
 
 #: ../db/db.columns/main.c:98 ../db/db.connect/main.c:243
 #: ../general/g.findfile/main.c:36 ../general/g.list/list.c:140
-#: ../general/g.mapset/main.c:37 ../general/g.mapsets/list.c:34
+#: ../general/g.mapset/main.c:38 ../general/g.mapsets/list.c:34
 #: ../misc/m.measure/main.c:182 ../raster/r.distance/report.c:138
 #: ../raster/r.regression.line/main.c:269
 #: ../raster/r.regression.multi/main.c:696
@@ -169,8 +169,8 @@ msgstr ""
 #: ../general/g.list/main.c:104 ../general/g.list/main.c:116
 #: ../general/g.list/main.c:146 ../general/g.list/main.c:152
 #: ../general/g.list/main.c:162 ../general/g.list/main.c:171
-#: ../general/g.mapset/main.c:89 ../general/g.mapset/main.c:101
-#: ../general/g.mapset/main.c:107 ../general/g.mapsets/main.c:111
+#: ../general/g.mapset/main.c:90 ../general/g.mapset/main.c:102
+#: ../general/g.mapset/main.c:108 ../general/g.mapsets/main.c:111
 #: ../general/g.mapsets/main.c:115 ../general/g.mapsets/main.c:121
 #: ../general/g.mapsets/main.c:127 ../general/g.proj/main.c:85
 #: ../general/g.proj/main.c:90 ../general/g.proj/main.c:99
@@ -301,7 +301,7 @@ msgid "plain;Plain text output;shell;shell script style output;json;JSON (JavaSc
 msgstr ""
 
 #: ../db/db.connect/main.c:144 ../general/g.findfile/main.c:187
-#: ../general/g.list/list.c:122 ../general/g.mapset/main.c:118
+#: ../general/g.list/list.c:122 ../general/g.mapset/main.c:119
 #: ../general/g.mapsets/list.c:13 ../general/g.proj/output.c:54
 #: ../general/g.proj/output.c:360 ../general/g.region/main.c:471
 #: ../general/g.version/main.c:140 ../misc/m.measure/main.c:87
@@ -1748,7 +1748,7 @@ msgstr ""
 
 #: ../display/d.colorlist/main.c:35 ../display/d.font/main.c:46
 #: ../display/d.fontlist/main.c:46 ../general/g.gisenv/main.c:43
-#: ../general/g.mapset/main.c:70 ../general/g.mapsets/main.c:87
+#: ../general/g.mapset/main.c:71 ../general/g.mapsets/main.c:87
 #: ../general/g.region/main.c:66 ../temporal/t.connect/main.c:35
 msgid "settings"
 msgstr ""
@@ -4042,7 +4042,7 @@ msgstr ""
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #: ../display/d.rast.num/main.c:211 ../raster/r.thin/io.c:106
-#: ../raster/r.thin/io.c:177 ../raster/r.thin/io.c:186
+#: ../raster/r.thin/io.c:182 ../raster/r.thin/io.c:191
 #: ../vector/v.kernel/main.c:304 ../vector/v.surf.idw/main.c:248
 #, c-format
 msgid "%d row"
@@ -5362,7 +5362,7 @@ msgstr ""
 #: ../general/g.filename/main.c:40 ../general/g.findetc/main.c:27
 #: ../general/g.findfile/main.c:61 ../general/g.gisenv/main.c:42
 #: ../general/g.gui/main.c:38 ../general/g.list/main.c:64
-#: ../general/g.mapset/main.c:69 ../general/g.mapsets/main.c:86
+#: ../general/g.mapset/main.c:70 ../general/g.mapsets/main.c:86
 #: ../general/g.message/main.c:37 ../general/g.mkfontcap/main.c:63
 #: ../general/g.pnmcomp/main.c:281 ../general/g.ppmtopng/main.c:115
 #: ../general/g.proj/main.c:71 ../general/g.region/main.c:65
@@ -5966,98 +5966,103 @@ msgstr ""
 msgid "Mapset <%s> does not exist"
 msgstr ""
 
-#: ../general/g.mapset/main.c:71 ../general/g.mapsets/main.c:88
+#: ../general/g.mapset/main.c:72 ../general/g.mapsets/main.c:88
 msgid "project"
 msgstr ""
 
-#: ../general/g.mapset/main.c:72
+#: ../general/g.mapset/main.c:73
 msgid "Changes or reports current mapset."
 msgstr ""
 
-#: ../general/g.mapset/main.c:73
+#: ../general/g.mapset/main.c:74
 msgid "Optionally, creates new mapset or lists available mapsets in given project (location)."
 msgstr ""
 
-#: ../general/g.mapset/main.c:78
+#: ../general/g.mapset/main.c:79
 msgid "Name of mapset where to switch"
 msgstr ""
 
-#: ../general/g.mapset/main.c:79 ../general/g.mapset/main.c:83
-#: ../general/g.mapset/main.c:86
+#: ../general/g.mapset/main.c:80 ../general/g.mapset/main.c:84
+#: ../general/g.mapset/main.c:87
 msgid "Mapset"
 msgstr ""
 
-#: ../general/g.mapset/main.c:93
+#: ../general/g.mapset/main.c:94
 msgid "Create mapset if it doesn't exist"
 msgstr ""
 
-#: ../general/g.mapset/main.c:95 ../general/g.proj/main.c:234
+#: ../general/g.mapset/main.c:96 ../general/g.proj/main.c:234
 #: ../locale/scriptstrings/r.mask_to_translate.c:20
 msgid "Create"
 msgstr ""
 
-#: ../general/g.mapset/main.c:100
+#: ../general/g.mapset/main.c:101
 msgid "List available mapsets and exit"
 msgstr ""
 
-#: ../general/g.mapset/main.c:106
+#: ../general/g.mapset/main.c:107
 msgid "Print current mapset and exit"
 msgstr ""
 
-#: ../general/g.mapset/main.c:214
+#: ../general/g.mapset/main.c:215
 #, c-format
 msgid "<%s> is already the current mapset"
 msgstr ""
 
-#: ../general/g.mapset/main.c:223
+#: ../general/g.mapset/main.c:224
 #, c-format
 msgid "You don't have permission to use the mapset <%s>"
 msgstr ""
 
-#: ../general/g.mapset/main.c:231
+#: ../general/g.mapset/main.c:232
 #, c-format
 msgid "Unable to create new mapset <%s>"
 msgstr ""
 
-#: ../general/g.mapset/main.c:236
+#: ../general/g.mapset/main.c:237
 #, c-format
 msgid "Mapset <%s> does not exist. Use -c flag to create it."
 msgstr ""
 
-#: ../general/g.mapset/main.c:246
+#: ../general/g.mapset/main.c:247
 msgid "Unable to read GIS_LOCK environment variable"
 msgstr ""
 
-#: ../general/g.mapset/main.c:262
+#: ../general/g.mapset/main.c:263
 #, c-format
 msgid "Lock file of mapset <%s> cannot be checked"
 msgstr ""
 
-#: ../general/g.mapset/main.c:265
+#: ../general/g.mapset/main.c:266
 #, c-format
 msgid "There appears to be an active GRASS session in selected mapset <%s>"
 msgstr ""
 
-#: ../general/g.mapset/main.c:272
+#: ../general/g.mapset/main.c:273
 msgid "Cleaning up temporary files..."
 msgstr ""
 
-#: ../general/g.mapset/main.c:289
+#: ../general/g.mapset/main.c:284
+#, c-format
+msgid "Failed to remove old lock file <%s>: %s"
+msgstr ""
+
+#: ../general/g.mapset/main.c:293
 msgid "Mapset switched."
 msgstr ""
 
-#: ../general/g.mapset/main.c:292
+#: ../general/g.mapset/main.c:296
 msgid "Mapset switched. Your shell continues to use the history for the old mapset"
 msgstr ""
 
-#: ../general/g.mapset/main.c:296
+#: ../general/g.mapset/main.c:300
 #, c-format
 msgid ""
 "You can switch the history by commands:\n"
 "history -S; history -L %s/.history; setenv histfile=%s/.history"
 msgstr ""
 
-#: ../general/g.mapset/main.c:302
+#: ../general/g.mapset/main.c:306
 #, c-format
 msgid "Your current mapset is <%s>"
 msgstr ""
@@ -11251,7 +11256,8 @@ msgstr ""
 msgid "Use thin plate spline"
 msgstr ""
 
-#: ../imagery/i.rectify/main.c:158 ../vector/v.rectify/main.c:130
+#: ../imagery/i.rectify/main.c:158 ../imagery/i.target/main.c:83
+#: ../vector/v.rectify/main.c:130
 #, c-format
 msgid "Group name <%s> is too long"
 msgstr ""
@@ -12253,18 +12259,18 @@ msgstr ""
 msgid "Group must exist in the current mapset"
 msgstr ""
 
-#: ../imagery/i.target/main.c:89 ../imagery/i.target/main.c:107
-#: ../imagery/i.target/main.c:117
+#: ../imagery/i.target/main.c:91 ../imagery/i.target/main.c:109
+#: ../imagery/i.target/main.c:119
 #, c-format
 msgid "Group <%s> targeted for location [%s], mapset [%s]"
 msgstr ""
 
-#: ../imagery/i.target/main.c:92
+#: ../imagery/i.target/main.c:94
 #, c-format
 msgid "Group <%s> has no target"
 msgstr ""
 
-#: ../imagery/i.target/main.c:101
+#: ../imagery/i.target/main.c:103
 msgid ""
 "Use either the Current Mapset and Location Flag (-c)\n"
 " OR\n"
@@ -17907,7 +17913,7 @@ msgstr ""
 msgid "Can't create temporary PostScript mask file."
 msgstr ""
 
-#: ../ps/ps.map/ps_raster.c:101 ../raster/r.grow.distance/main.c:325
+#: ../ps/ps.map/ps_raster.c:102 ../raster/r.grow.distance/main.c:325
 #: ../raster/r.out.mpeg/main.c:295 ../raster/r.series.accumulate/main.c:249
 #: ../raster/r.series.accumulate/main.c:274
 #: ../raster/r.series.accumulate/main.c:285
@@ -17917,7 +17923,7 @@ msgstr ""
 msgid "Reading raster map <%s>..."
 msgstr ""
 
-#: ../ps/ps.map/ps_raster.c:104
+#: ../ps/ps.map/ps_raster.c:106
 #, c-format
 msgid "Reading raster maps in group <%s>..."
 msgstr ""
@@ -18159,7 +18165,7 @@ msgstr ""
 msgid "%s: %s - illegal distance specification"
 msgstr ""
 
-#: ../raster/r.buffer/read_map.c:51 ../raster/r.flow/flow_io.c:92
+#: ../raster/r.buffer/read_map.c:52 ../raster/r.flow/flow_io.c:92
 #: ../raster/r.flow/flow_io.c:110
 #, c-format
 msgid "Reading input raster map <%s>..."
@@ -20687,7 +20693,7 @@ msgstr ""
 msgid "Output distance in meters for lat/lon is only possible with '%s=%s'"
 msgstr ""
 
-#: ../raster/r.grow.distance/main.c:297
+#: ../raster/r.grow.distance/main.c:297 ../raster/r.thin/io.c:123
 #, c-format
 msgid "Unable to create temporary file <%s>"
 msgstr ""
@@ -26627,8 +26633,8 @@ msgstr ""
 msgid "Unable to write raster maps -- try increasing cell size"
 msgstr ""
 
-#: ../raster/r.resamp.rst/main.c:551 ../raster/r.thin/io.c:133
-#: ../raster/r.thin/io.c:141 ../raster/r.thin/io.c:151
+#: ../raster/r.resamp.rst/main.c:551 ../raster/r.thin/io.c:138
+#: ../raster/r.thin/io.c:146 ../raster/r.thin/io.c:156
 #: ../vector/v.surf.rst/main.c:918
 #, c-format
 msgid "Error writing temporary file <%s>"
@@ -29792,8 +29798,8 @@ msgstr ""
 #. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
-#: ../raster/r.thin/io.c:108 ../raster/r.thin/io.c:179
-#: ../raster/r.thin/io.c:189 ../vector/v.kernel/main.c:305
+#: ../raster/r.thin/io.c:108 ../raster/r.thin/io.c:184
+#: ../raster/r.thin/io.c:194 ../vector/v.kernel/main.c:305
 #: ../vector/v.surf.idw/main.c:250
 #, c-format
 msgid "%d column"
@@ -29807,19 +29813,19 @@ msgstr[0] ""
 msgid "Raster map <%s> - %s X %s"
 msgstr ""
 
-#: ../raster/r.thin/io.c:124
+#: ../raster/r.thin/io.c:129
 #, c-format
 msgid "Unable to create temporary file <%s> -- errno = %d"
 msgstr ""
 
 #. GTC %s will be replaced with number of rows and columns
-#: ../raster/r.thin/io.c:181
+#: ../raster/r.thin/io.c:186
 #, c-format
 msgid "Output map %s X %s"
 msgstr ""
 
 #. GTC %s will be replaced with number of rows and columns
-#: ../raster/r.thin/io.c:192
+#: ../raster/r.thin/io.c:197
 #, c-format
 msgid "Window %s X %s"
 msgstr ""
@@ -30205,7 +30211,7 @@ msgstr ""
 msgid "%s cannot be 0"
 msgstr ""
 
-#: ../raster/r.topmodel/file_io.c:209 ../raster/r.topmodel/topmodel.c:77
+#: ../raster/r.topmodel/file_io.c:209 ../raster/r.topmodel/topmodel.c:78
 #: ../vector/v.out.pov/main.c:108
 #, c-format
 msgid "Unable to create output file <%s>"
@@ -30292,12 +30298,12 @@ msgstr ""
 msgid "Ignoring %s because %s is not specified"
 msgstr ""
 
-#: ../raster/r.topmodel/topmodel.c:32
+#: ../raster/r.topmodel/topmodel.c:33
 #, c-format
 msgid "Unable to run %s"
 msgstr ""
 
-#: ../raster/r.topmodel/topmodel.c:74
+#: ../raster/r.topmodel/topmodel.c:75
 #, c-format
 msgid "Invalid %s output"
 msgstr ""
@@ -30697,16 +30703,16 @@ msgstr ""
 msgid "current dist too large %.4f > %.4f"
 msgstr ""
 
-#: ../raster/r.viewshed/statusstructure.cpp:91
+#: ../raster/r.viewshed/statusstructure.cpp:92
 msgid "Estimated size active structure:"
 msgstr ""
 
-#: ../raster/r.viewshed/statusstructure.cpp:92
+#: ../raster/r.viewshed/statusstructure.cpp:93
 #, c-format
 msgid " (key=%d, ptr=%d, total node=%d B)"
 msgstr ""
 
-#: ../raster/r.viewshed/statusstructure.cpp:96
+#: ../raster/r.viewshed/statusstructure.cpp:97
 #, c-format
 msgid " Total= %lld B"
 msgstr ""
@@ -41445,10 +41451,10 @@ msgstr ""
 
 #: ../vector/v.lrs/v.lrs.label/main.c:332 ../vector/v.out.ogr/attrb.c:55
 #: ../vector/v.out.ogr/attrb_fast.c:62
-#: ../vector/v.out.ogr/export_areas_fast.c:119
-#: ../vector/v.out.ogr/export_areas_fast.c:187
-#: ../vector/v.out.ogr/export_areas_fast.c:308
-#: ../vector/v.out.ogr/export_areas_fast.c:413
+#: ../vector/v.out.ogr/export_areas_fast.c:120
+#: ../vector/v.out.ogr/export_areas_fast.c:185
+#: ../vector/v.out.ogr/export_areas_fast.c:306
+#: ../vector/v.out.ogr/export_areas_fast.c:406
 #: ../vector/v.out.ogr/export_lines_fast.c:103
 #: ../vector/v.out.ogr/export_lines_fast.c:170
 #: ../vector/v.out.ogr/export_lines_fast.c:301
@@ -43341,8 +43347,8 @@ msgstr ""
 msgid "List supported output formats and exit"
 msgstr ""
 
-#: ../vector/v.out.ogr/attrb.c:51 ../vector/v.out.ogr/export_areas_fast.c:184
-#: ../vector/v.out.ogr/export_areas_fast.c:410
+#: ../vector/v.out.ogr/attrb.c:51 ../vector/v.out.ogr/export_areas_fast.c:182
+#: ../vector/v.out.ogr/export_areas_fast.c:403
 #: ../vector/v.out.ogr/export_lines_fast.c:167
 #: ../vector/v.out.ogr/export_lines_fast.c:395
 #: ../vector/v.out.vtk/writeVTK.c:582
@@ -43373,10 +43379,10 @@ msgstr ""
 #: ../vector/v.out.ogr/export_areas.c:123
 #: ../vector/v.out.ogr/export_areas.c:227
 #: ../vector/v.out.ogr/export_areas.c:278
-#: ../vector/v.out.ogr/export_areas_fast.c:166
-#: ../vector/v.out.ogr/export_areas_fast.c:223
-#: ../vector/v.out.ogr/export_areas_fast.c:382
-#: ../vector/v.out.ogr/export_areas_fast.c:454
+#: ../vector/v.out.ogr/export_areas_fast.c:164
+#: ../vector/v.out.ogr/export_areas_fast.c:221
+#: ../vector/v.out.ogr/export_areas_fast.c:375
+#: ../vector/v.out.ogr/export_areas_fast.c:447
 #: ../vector/v.out.ogr/export_lines.c:131
 #: ../vector/v.out.ogr/export_lines.c:229
 #: ../vector/v.out.ogr/export_lines.c:278
@@ -43388,10 +43394,8 @@ msgid "Failed to create OGR feature"
 msgstr ""
 
 #: ../vector/v.out.ogr/export_areas.c:168
-#: ../vector/v.out.ogr/export_areas_fast.c:95
-#: ../vector/v.out.ogr/export_areas_fast.c:278
+#: ../vector/v.out.ogr/export_areas_fast.c:276
 #: ../vector/v.out.ogr/export_lines.c:177
-#: ../vector/v.out.ogr/export_lines_fast.c:77
 #: ../vector/v.out.ogr/export_lines_fast.c:265
 #, c-format
 msgid "Unable to export multi-features. No category index for layer %d."
@@ -43399,14 +43403,13 @@ msgstr ""
 
 #: ../vector/v.out.ogr/export_areas.c:180
 #: ../vector/v.out.ogr/export_areas_fast.c:104
-#: ../vector/v.out.ogr/export_areas_fast.c:291
+#: ../vector/v.out.ogr/export_areas_fast.c:289
 #: ../vector/v.out.ogr/export_lines_fast.c:86
 #: ../vector/v.out.ogr/export_lines_fast.c:274
 msgid "Exporting features with category..."
 msgstr ""
 
 #: ../vector/v.out.ogr/export_areas.c:202
-#: ../vector/v.out.ogr/export_areas_fast.c:356
 #: ../vector/v.out.ogr/export_lines.c:212
 #: ../vector/v.out.ogr/export_lines_fast.c:349
 #, c-format
@@ -43414,26 +43417,37 @@ msgid "Unable to create multi-feature. Category %d not found in line %d, field %
 msgstr ""
 
 #: ../vector/v.out.ogr/export_areas.c:243
-#: ../vector/v.out.ogr/export_areas_fast.c:176
-#: ../vector/v.out.ogr/export_areas_fast.c:398
+#: ../vector/v.out.ogr/export_areas_fast.c:174
+#: ../vector/v.out.ogr/export_areas_fast.c:391
 #: ../vector/v.out.ogr/export_lines_fast.c:159
 #: ../vector/v.out.ogr/export_lines_fast.c:383
 msgid "Exporting features without category..."
 msgstr ""
 
-#: ../vector/v.out.ogr/export_areas_fast.c:115
-#: ../vector/v.out.ogr/export_areas_fast.c:304
+#: ../vector/v.out.ogr/export_areas_fast.c:95
+#: ../vector/v.out.ogr/export_lines_fast.c:77
+#, c-format
+msgid "Unable to export features. No category index for layer %d."
+msgstr ""
+
+#: ../vector/v.out.ogr/export_areas_fast.c:116
+#: ../vector/v.out.ogr/export_areas_fast.c:302
 #: ../vector/v.out.ogr/export_lines_fast.c:99
 #: ../vector/v.out.ogr/export_lines_fast.c:297
 #, c-format
 msgid "Cannot select attributes sorted by %s"
 msgstr ""
 
-#: ../vector/v.out.ogr/export_areas_fast.c:144
-#: ../vector/v.out.ogr/export_areas_fast.c:331
+#: ../vector/v.out.ogr/export_areas_fast.c:145
+#: ../vector/v.out.ogr/export_areas_fast.c:329
 #: ../vector/v.out.ogr/export_lines_fast.c:126
 #: ../vector/v.out.ogr/export_lines_fast.c:323
 msgid "Category index is not sorted ascending by cat!"
+msgstr ""
+
+#: ../vector/v.out.ogr/export_areas_fast.c:354
+#, c-format
+msgid "Unable to create multi-feature. Category %d not found in area %d, field %d"
 msgstr ""
 
 #: ../vector/v.out.ogr/main.c:88
