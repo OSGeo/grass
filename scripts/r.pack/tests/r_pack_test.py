@@ -5,7 +5,6 @@ import stat
 import sys
 import tarfile
 
-from pathlib import Path
 
 import pytest
 
