@@ -184,7 +184,6 @@ ignore = [
     "PERF401", # manual-list-comprehension
     "PERF402", # manual-list-copy
     "PERF403", # manual-dict-comprehension
-    "PIE794",  # duplicate-class-field-definition
     "PLC0415", # import-outside-top-level
     "PLC1901", # compare-to-empty-string
     "PLC2701", # import-private-name
@@ -273,7 +272,6 @@ ignore = [
     "UP030",   # format-literals
     "UP031",   # printf-string-formatting
     "UP032",   # f-string
-    "UP036",   # outdated-version-block
 ]
 
 
@@ -382,11 +380,13 @@ ignore = [
 "python/grass/semantic_label/reader.py" = ["PLW1514"]
 "python/grass/temporal/abstract_space_time_dataset.py" = ["PLW1514"]
 "python/grass/temporal/aggregation.py" = ["PLW1514", "SIM115"]
+"python/grass/temporal/c_libraries_interface.py" = ["PIE794"]
 "python/grass/temporal/register.py" = ["PLW1514", "SIM115"]
 "python/grass/temporal/stds_export.py" = ["PLW1514", "SIM115"]
 "python/grass/temporal/stds_import.py" = ["PLW1514", "SIM115"]
 "python/grass/temporal/temporal_algebra.py" = ["D300"]
 "python/grass/temporal/temporal_operator.py" = ["D300"]
+"python/grass/temporal/testsuite/test_temporal_doctests.py" = ["UP036"]
 "python/grass/temporal/univar_statistics.py" = ["PLW1514", "SIM115"]
 "python/grass/utils/download.py" = ["PTH208", "SIM115"]
 "raster/r.*/testsuite/*.py" = ["SIM115"]
