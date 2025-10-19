@@ -1647,7 +1647,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
         # Here we create the file in the Mapset directory if it exists in the
         # user's home directory.
         sudo_success_file = ".sudo_as_admin_successful"
-        if Path(os.path.join(userhome, sudo_success_file)).exists():
+        if Path(userhome, sudo_success_file).exists():
             try:
                 # Open with append so that if the file already exists there
                 # isn't any error.
