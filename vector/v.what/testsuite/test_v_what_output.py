@@ -62,7 +62,7 @@ class TestVWhatModule(TestCase):
             self.assertCountEqual(expected.keys(), actual.keys())
             for key in expected:
                 # Skip exact match for keys containing "mapset" or "database" because their values vary
-                if key in ("mapset", "database"):
+                if key in {"mapset", "database"}:
                     continue
                 self.assert_json_equal(expected[key], actual[key])
         elif isinstance(expected, list):

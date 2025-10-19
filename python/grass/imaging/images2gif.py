@@ -118,7 +118,7 @@ def checkImages(images):
             # Check and convert dtype
             if im.dtype == np.uint8:
                 images2.append(im)  # Ok
-            elif im.dtype in (np.float32, np.float64):
+            elif im.dtype in {np.float32, np.float64}:
                 im = im.copy()
                 im[im < 0] = 0
                 im[im > 1] = 1
@@ -131,7 +131,7 @@ def checkImages(images):
             if im.ndim == 2:
                 pass  # ok
             elif im.ndim == 3:
-                if im.shape[2] not in [3, 4]:
+                if im.shape[2] not in {3, 4}:
                     msg = "This array can not represent an image."
                     raise ValueError(msg)
             else:

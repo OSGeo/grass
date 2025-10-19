@@ -1117,7 +1117,7 @@ class BufferedMapWindow(MapWindowBase, Window):
 
     def DragItem(self, id, coords):
         """Drag an overlay decoration item"""
-        if id in (99, "") or id is None:
+        if id in {99, ""} or id is None:
             return
         Debug.msg(5, "BufferedWindow.DragItem(): id=%d" % id)
         x, y = self.lastpos
