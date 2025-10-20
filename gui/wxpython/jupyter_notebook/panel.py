@@ -35,6 +35,8 @@ class JupyterPanel(wx.Panel, MainPageBase):
         title=_("Jupyter Notebook"),
         statusbar=None,
         dockable=False,
+        workdir=None,
+        create_template=False,
         **kwargs,
     ):
         """Jupyter main panel."""
@@ -44,11 +46,13 @@ class JupyterPanel(wx.Panel, MainPageBase):
         self.parent = parent
         self._giface = giface
         self.statusbar = statusbar
+        self.workdir = workdir
 
         self.SetName("Jupyter")
 
-        self.directory_manager = JupyterDirectoryManager()
-        self.workdir = self.directory_manager.workdir
+        self.directory_manager = JupyterDirectoryManager(
+            workdir=self.workdir, create_template=create_template
+        )
         self.server_manager = JupyterServerInstance(workdir=self.workdir)
 
         self.toolbar = JupyterToolbar(parent=self)
