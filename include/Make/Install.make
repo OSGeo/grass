@@ -128,8 +128,9 @@ $(DESTDIR)$(INST_DIR) $(DESTDIR)$(UNIX_BIN):
 	$(MAKE_DIR_CMD) $@
 
 $(STARTUP): $(ARCH_DISTDIR)/$(GRASS_NAME).tmp
-	sed -e 's#'@GRASS_PYDIR@'#'$(INST_DIR)/etc/python'#g' \
-	    $< > $@
+	sed \
+	-e 's#'@GRASS_PYDIR@'#'$(INST_DIR)/etc/python'#g' \
+	$< > $@
 	-$(CHMOD) a+x $@
 
 $(DESTDIR)$(INST_DIR)/$(RESOURCE_PATHS): $(ARCH_DISTDIR)/resource_paths.py
@@ -143,6 +144,18 @@ $(DESTDIR)$(INST_DIR)/$(RESOURCE_PATHS): $(ARCH_DISTDIR)/resource_paths.py
 	-e 's#'@GRASS_VERSION_NUMBER@'#$(GRASS_VERSION_NUMBER)#' \
 	-e 's#'@LD_LIBRARY_PATH_VAR@'#$(LD_LIBRARY_PATH_VAR)#' \
 	-e 's#'@START_UP@'#$(GRASS_NAME)#' \
+	-e 's#'@GRASS_COLORSDIR@'#etc/colors#' \
+	-e 's#'@GRASS_DOCDIR@'#docs/html#' \
+	-e 's#'@GRASS_ETCBINDIR@'#etc#' \
+	-e 's#'@GRASS_ETCDIR@'#etc#' \
+	-e 's#'@GRASS_FONTSDIR@'#fonts#' \
+	-e 's#'@GRASS_GRAPHICSDIR@'#docs/html#' \
+	-e 's#'@GRASS_GUIRESDIR@'#gui#' \
+	-e 's#'@GRASS_GUISCRIPTDIR@'#gui/scripts#' \
+	-e 's#'@GRASS_GUIWXDIR@'#gui/wxpython#' \
+	-e 's#'@GRASS_LOCALEDIR@'#locale#' \
+	-e 's#'@GRASS_MISCDIR@'##' \
+	-e 's#'@GRASS_MKDOCSDIR@'#docs/mkdocs#' \
 	$< > $@
 
 define fix_gisbase

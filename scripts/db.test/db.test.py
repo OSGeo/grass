@@ -45,7 +45,7 @@ def main():
         gcore.fatal(_("Database connection not defined. Run db.connect."))
     gcore.message(_("Using DB driver: %s") % dbconn["driver"])
 
-    infile = os.path.join(os.environ["GISBASE"], "etc", "db.test", test_file)
+    infile = os.path.join(os.environ["GRASS_ETCDIR"], "db.test", test_file)
     inf = open(infile)
 
     while True:

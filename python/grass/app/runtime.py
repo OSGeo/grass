@@ -43,6 +43,18 @@ class RuntimePaths:
     # Mapping of attribute names to environment variable name except the prefix.
     _env_vars = {
         "gisbase": "GISBASE",
+        "colors_dir": "GRASS_COLORSDIR",
+        "doc_dir": "GRASS_DOCDIR",
+        "etc_dir": "GRASS_ETCDIR",
+        "etcbin_dir": "GRASS_ETCBINDIR",
+        "fonts_dir": "GRASS_FONTSDIR",
+        "graphics_dir": "GRASS_GRAPHICSDIR",
+        "guires_dir": "GRASS_GUIRESDIR",
+        "guiscript_dir": "GRASS_GUISCRIPTDIR",
+        "guiwx_dir": "GRASS_GUIWXDIR",
+        "locale_dir": "GRASS_LOCALEDIR",
+        "misc_dir": "GRASS_MISCDIR",
+        "mkdocs_dir": "GRASS_MKDOCSDIR",
     }
 
     def __init__(self, *, env=None, set_env_variables=False, prefix=None):

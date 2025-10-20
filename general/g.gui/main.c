@@ -104,8 +104,12 @@ int main(int argc, char *argv[])
         exit(EXIT_SUCCESS);
     }
 
-    snprintf(progname, sizeof(progname), "%s/gui/wxpython/wxgui.py",
-             G_gisbase());
+    const char *wxdir = getenv("GRASS_GUIWXDIR");
+    if (!wxdir)
+        G_fatal_error(_("Incomplete GRASS session: Variable '%s' not set"),
+                      "GRASS_GUIWXDIR");
+
+    snprintf(progname, sizeof(progname), "%s/wxgui.py", wxdir);
     if (access(progname, F_OK) == -1)
         G_fatal_error(_("Your installation doesn't include GUI, exiting."));
 

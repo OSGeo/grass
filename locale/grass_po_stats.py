@@ -162,5 +162,5 @@ def main(in_dirpath, out_josonpath):
 
 if __name__ == "__main__":
     directory = "po/"
-    outfile = os.path.join(os.environ["GISBASE"], "translation_status.json")
+    outfile = os.path.join(os.environ["GRASS_MISCDIR"], "translation_status.json")
     sys.exit(main(directory, outfile))

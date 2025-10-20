@@ -45,6 +45,5 @@ if __name__ == "__main__":
     image = options["image"]
     percent = options["percent"]
     python = os.getenv("GRASS_PYTHON", "python")
-    gisbase = os.environ["GISBASE"]
-    script = os.path.join(gisbase, "etc", "wxpyimgview_gui.py")
+    script = os.path.join(os.environ["GRASS_ETCBINDIR"], "wxpyimgview_gui.py")
     os.execlp(python, script, script, image, percent)

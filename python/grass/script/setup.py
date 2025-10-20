@@ -106,7 +106,7 @@ def write_gisrc(dbase, location, mapset):
 
 def set_gui_path():
     """Insert wxPython GRASS path to sys.path."""
-    gui_path = os.path.join(os.environ["GISBASE"], "gui", "wxpython")
+    gui_path = os.environ["GRASS_GUIWXDIR"]
     if gui_path and gui_path not in sys.path:
         sys.path.insert(0, gui_path)
 
@@ -588,9 +588,10 @@ def clean_temp(env=None):
         env = os.environ
 
     gs.verbose(_("Cleaning up temporary files..."), env=env)
-    gisbase = env["GISBASE"]
     call(
-        [os.path.join(gisbase, "etc", "clean_temp")], stdout=subprocess.DEVNULL, env=env
+        [os.path.join(env["GRASS_ETCBINDIR"], "clean_temp")],
+        stdout=subprocess.DEVNULL,
+        env=env,
     )
 
 

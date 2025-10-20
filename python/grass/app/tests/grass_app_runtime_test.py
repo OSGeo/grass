@@ -76,7 +76,17 @@ def test_env_gisbase_with_custom_prefix(custom_prefix, path_type):
     assert env["GISBASE"].startswith(os.path.normpath(custom_prefix))
 
 
-def test_attr_access_does_not_modify_env():
+def test_attr_access_does_not_modify_env_colors():
+    """Accessing attribute should not change environment."""
+    env = {}
+    paths = RuntimePaths(env=env)
+    assert "GRASS_COLORSDIR" not in env
+    value = paths.colors_dir  # access the attribute
+    assert value
+    assert "GRASS_COLORSDIR" not in env, "env was modified unexpectedly"
+
+
+def test_attr_access_does_not_modify_env_gisbase():
     """Accessing attribute should not change environment."""
     env = {}
     paths = RuntimePaths(env=env)
@@ -86,7 +96,16 @@ def test_attr_access_does_not_modify_env():
     assert "GISBASE" not in env, "env was modified unexpectedly"
 
 
-def test_explicit_env_vars_set():
+def test_explicit_env_vars_set_colors():
+    """Explicit call should set the env vars."""
+    env = {}
+    paths = RuntimePaths(env=env)
+    paths.set_env_variables()
+    assert env["GRASS_COLORSDIR"] == paths.colors_dir
+    assert "GRASS_COLORSDIR" in env
+
+
+def test_explicit_env_vars_set_gisbase():
     """Explicit call should set the env vars."""
     env = {}
     paths = RuntimePaths(env=env)
@@ -95,7 +114,15 @@ def test_explicit_env_vars_set():
     assert env["GISBASE"] == paths.gisbase
 
 
-def test_constructor_parameter_env_vars_set():
+def test_constructor_parameter_env_vars_set_colors():
+    """Constructor with parameter should set the env vars."""
+    env = {}
+    paths = RuntimePaths(env=env, set_env_variables=True)
+    assert "GRASS_COLORSDIR" in env
+    assert env["GRASS_COLORSDIR"] == paths.colors_dir
+
+
+def test_constructor_parameter_env_vars_set_gisenv():
     """Constructor with parameter should set the env vars."""
     env = {}
     paths = RuntimePaths(env=env, set_env_variables=True)
@@ -103,7 +130,16 @@ def test_constructor_parameter_env_vars_set():
     assert env["GISBASE"] == paths.gisbase
 
 
-def test_dir_lists_dynamic_attributes_but_does_not_modify_env():
+def test_dir_lists_dynamic_attributes_but_does_not_modify_env_colors():
+    """dir() should show dynamic attrs but not set env."""
+    env = {}
+    paths = RuntimePaths(env=env)
+    listing = dir(paths)
+    assert "colors_dir" in listing
+    assert "GRASS_COLORSDIR" not in env, "dir() should not modify env"
+
+
+def test_dir_lists_dynamic_attributes_but_does_not_modify_env_gisbase():
     """dir() should show dynamic attrs but not set env."""
     env = {}
     paths = RuntimePaths(env=env)
@@ -112,7 +148,16 @@ def test_dir_lists_dynamic_attributes_but_does_not_modify_env():
     assert "GISBASE" not in env, "dir() should not modify env"
 
 
-def test_existing_env_value_is_respected():
+def test_existing_env_value_is_respected_colors():
+    """If env already contains GRASS_COLORSDIR, its value is used."""
+    value = "/custom/colors"
+    env = {"GRASS_COLORSDIR": value}
+    paths = RuntimePaths(env=env)
+    assert paths.colors_dir == os.path.normpath(value)
+    assert env["GRASS_COLORSDIR"] == value
+
+
+def test_existing_env_value_is_respected_gisbase():
     """If env already contains GISBASE, its value is used."""
     value = "/custom/path/to/grass"
     env = {"GISBASE": value}
@@ -128,7 +173,16 @@ def test_invalid_attribute_raises():
         assert paths.unknown_attribute  # avoiding unused value
 
 
-def test_returned_attribute_consistent():
+def test_returned_attribute_consistent_colors():
+    """Repeated accesses should return the same value."""
+    paths = RuntimePaths(env={})
+    first = paths.colors_dir
+    second = paths.colors_dir
+    assert first == second
+    assert first == RuntimePaths(env={}).colors_dir
+
+
+def test_returned_attribute_consistent_gisbase():
     """Repeated accesses should return the same value."""
     paths = RuntimePaths(env={})
     first = paths.gisbase

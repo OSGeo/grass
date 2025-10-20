@@ -276,7 +276,7 @@ class AboutWindow(wx.Frame):
 
     def _pageCopyright(self):
         """Copyright information"""
-        copyfile = os.path.join(os.getenv("GISBASE"), "COPYING")
+        copyfile = os.path.join(os.getenv("GRASS_MISCDIR"), "COPYING")
         if os.path.exists(copyfile):
             copytext = Path(copyfile).read_text()
         else:
@@ -303,7 +303,7 @@ class AboutWindow(wx.Frame):
 
     def _pageLicense(self):
         """Licence about"""
-        licfile = os.path.join(os.getenv("GISBASE"), "GPL.TXT")
+        licfile = os.path.join(os.getenv("GRASS_MISCDIR"), "GPL.TXT")
         if os.path.exists(licfile):
             with open(licfile) as licenceFile:
                 license = "".join(licenceFile.readlines())
@@ -356,7 +356,7 @@ class AboutWindow(wx.Frame):
     def _pageCredit(self):
         """Credit about"""
         # credits
-        authfile = os.path.join(os.getenv("GISBASE"), "AUTHORS")
+        authfile = os.path.join(os.getenv("GRASS_MISCDIR"), "AUTHORS")
         if os.path.exists(authfile):
             with codecs.open(authfile, encoding="utf-8", mode="r") as authorsFile:
                 authors = "".join(authorsFile.readlines())
@@ -381,9 +381,11 @@ class AboutWindow(wx.Frame):
     def _pageContributors(self, extra=False):
         """Contributors info"""
         if extra:
-            contribfile = os.path.join(os.getenv("GISBASE"), "contributors_extra.csv")
+            contribfile = os.path.join(
+                os.getenv("GRASS_MISCDIR"), "contributors_extra.csv"
+            )
         else:
-            contribfile = os.path.join(os.getenv("GISBASE"), "contributors.csv")
+            contribfile = os.path.join(os.getenv("GRASS_MISCDIR"), "contributors.csv")
         if os.path.exists(contribfile):
             contribs = []
             errLines = []
@@ -466,7 +468,7 @@ class AboutWindow(wx.Frame):
 
     def _pageTranslators(self):
         """Translators info"""
-        translatorsfile = os.path.join(os.getenv("GISBASE"), "translators.csv")
+        translatorsfile = os.path.join(os.getenv("GRASS_MISCDIR"), "translators.csv")
         if os.path.exists(translatorsfile):
             translators = {}
             errLines = []
@@ -646,7 +648,7 @@ class AboutWindow(wx.Frame):
     def _pageStats(self):
         """Translation statistics info"""
         fname = "translation_status.json"
-        statsfile = os.path.join(os.getenv("GISBASE"), fname)
+        statsfile = os.path.join(os.getenv("GRASS_MISCDIR"), fname)
         if os.path.exists(statsfile):
             import json
 
@@ -762,10 +764,10 @@ class HelpWindow(HtmlWindow):
         self.historyIdx = 0
         self.markdown = True
         # check if mkdocs is used (add slash at the end)
-        self.fspath = os.path.join(os.getenv("GISBASE"), "docs", "mkdocs", "site", "")
+        self.fspath = os.path.join(os.getenv("GRASS_MKDOCSDIR"), "site", "")
         if not os.path.exists(self.fspath):
             self.markdown = False
-            self.fspath = os.path.join(os.getenv("GISBASE"), "docs", "html", "")
+            self.fspath = os.path.join(os.getenv("GRASS_DOCDIR"), "")
 
         self._setFont()
         self.SetBorders(10)

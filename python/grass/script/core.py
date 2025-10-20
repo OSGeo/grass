@@ -2107,8 +2107,15 @@ def create_project(
         try_remove(tmp_gisrc)
         tmp_gisrc = None
 
-        if ps.returncode != 0 and error:
-            raise ScriptError(repr(error))
+        if ps.returncode != 0:
+            raise ScriptError(
+                repr(error)
+                if error
+                else (
+                    f"g.proj failed with return code {ps.returncode}, "
+                    "but no error message was produced"
+                )
+            )
 
     # If a session was created for messages, but not used for subprocesses,
     # we still need to clean it up.
