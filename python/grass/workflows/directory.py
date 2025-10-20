@@ -33,10 +33,17 @@ import grass.script as gs
 class JupyterDirectoryManager:
     """Manage a directory of Jupyter notebooks tied to the current GRASS mapset."""
 
-    def __init__(self):
-        """Initialize the Jupyter notebook directory and load existing files."""
-        self._workdir = self._get_workdir()
-        self._files = None
+    def __init__(self, workdir=None, create_template=False):
+        """Initialize the Jupyter notebook directory and load existing files.
+
+        :param workdir: Optional custom working directory (Path). If not provided,
+                        the default MAPSET notebooks directory is used.
+        :param create_template: If True, create a welcome notebook if the directory is empty.
+        """
+        self._workdir = workdir or self._get_workdir()
+        self._workdir.mkdir(parents=True, exist_ok=True)
+        self._files = []
+        self._create_template = create_template
 
     @property
     def workdir(self):
@@ -54,7 +61,7 @@ class JupyterDirectoryManager:
 
     def _get_workdir(self):
         """
-        :return: Path to working directory, it is created if it does not exist (Path).
+        :return: Path to default working directory, it is created if it does not exist (Path).
         """
         env = gs.gisenv()
         mapset_path = "{gisdbase}/{location}/{mapset}".format(
@@ -66,6 +73,19 @@ class JupyterDirectoryManager:
         workdir = Path(mapset_path) / "notebooks"
         workdir.mkdir(parents=True, exist_ok=True)
         return workdir
+
+    def prepare_files(self):
+        """
+        Populate the list of files in the working directory.
+        """
+        # Find all .ipynb files in the notebooks directory
+
+        self._files = [
+            f for f in Path(self._workdir).iterdir() if str(f).endswith(".ipynb")
+        ]
+
+        if self._create_template and not self._files:
+            self.create_welcome_notebook()
 
     def import_file(self, source_path, new_name=None, overwrite=False):
         """Import an existing notebook file to the working directory.
@@ -201,16 +221,3 @@ class JupyterDirectoryManager:
         self._files.append(target_path)
 
         return target_path
-
-    def prepare_files(self):
-        """
-        Populate the list of files in the working directory.
-        Creates a welcome template if does not exist.
-        """
-        # Find all .ipynb files in the notebooks directory
-        self._files = [
-            f for f in Path(self._workdir).iterdir() if str(f).endswith(".ipynb")
-        ]
-        if not self._files:
-            # If no .ipynb files are found, create a welcome ipynb file
-            self.create_welcome_notebook()
