@@ -3,7 +3,7 @@
  *
  * \brief GIS Library - Pseudo-random number generation
  *
- * (C) 2014, 2025 by the GRASS Development Team
+ * (C) 2014-2025 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -57,7 +57,9 @@ static pthread_mutex_t lrand48_mutex = PTHREAD_MUTEX_INITIALIZER;
  *
  * \param[in] seedval 32-bit integer used to seed the PRNG
  *
- * This function is thread-safe.
+ * In a multi-threaded program, call `G_srand48()` once from the main
+ * thread *before* starting the worker threads. Subsequent calls will
+ * reset global seed state used by all threads.
  */
 void G_srand48(long seedval)
 {
@@ -83,7 +85,9 @@ void G_srand48(long seedval)
  * A weak hash of the current time and PID is generated and used to
  * seed the PRNG
  *
- * This function is thread-safe.
+ * In a multi-threaded program, call `G_srand48_auto()` once from the main
+ * thread *before* starting the worker threads. Subsequent calls will
+ * reset global seed state used by all threads.
  *
  * \return generated seed value passed to G_srand48()
  */
@@ -124,10 +128,6 @@ long G_srand48_auto(void)
 
 static void G__next(void)
 {
-#ifdef HAVE_PTHREAD
-    pthread_mutex_lock(&lrand48_mutex);
-#endif
-
     uint32 a0x0 = a0 * x0;
     uint32 a0x1 = a0 * x1;
     uint32 a0x2 = a0 * x2;
@@ -147,10 +147,6 @@ static void G__next(void)
     x1 = (uint16)LO(y1);
     y2 += HI(y1);
     x2 = (uint16)LO(y2);
-
-#ifdef HAVE_PTHREAD
-    pthread_mutex_unlock(&lrand48_mutex);
-#endif
 }
 
 /*!
@@ -164,8 +160,17 @@ long G_lrand48(void)
 {
     uint32 r;
 
+#ifdef HAVE_PTHREAD
+    pthread_mutex_lock(&lrand48_mutex);
+#endif
+
     G__next();
     r = ((uint32)x2 << 15) | ((uint32)x1 >> 1);
+
+#ifdef HAVE_PTHREAD
+    pthread_mutex_unlock(&lrand48_mutex);
+#endif
+
     return (long)r;
 }
 
@@ -180,8 +185,17 @@ long G_mrand48(void)
 {
     uint32 r;
 
+#ifdef HAVE_PTHREAD
+    pthread_mutex_lock(&lrand48_mutex);
+#endif
+
     G__next();
     r = ((uint32)x2 << 16) | ((uint32)x1);
+
+#ifdef HAVE_PTHREAD
+    pthread_mutex_unlock(&lrand48_mutex);
+#endif
+
     return (long)(int32)r;
 }
 
@@ -196,6 +210,10 @@ double G_drand48(void)
 {
     double r = 0.0;
 
+#ifdef HAVE_PTHREAD
+    pthread_mutex_lock(&lrand48_mutex);
+#endif
+
     G__next();
     r += x2;
     r *= 0x10000;
@@ -203,6 +221,11 @@ double G_drand48(void)
     r *= 0x10000;
     r += x0;
     r /= 281474976710656.0; /* 2^48 */
+
+#ifdef HAVE_PTHREAD
+    pthread_mutex_unlock(&lrand48_mutex);
+#endif
+
     return r;
 }
 
