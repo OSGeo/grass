@@ -909,9 +909,28 @@ class GMFrame(wx.Frame):
     def OnJupyterNotebook(self, event=None, cmd=None):
         """Launch Jupyter Notebook page. See OnJupyterNotebook documentation"""
         from jupyter_notebook.panel import JupyterPanel
+        from jupyter_notebook.dialogs import JupyterStartDialog
+
+        dlg = JupyterStartDialog(parent=self)
+        result = dlg.ShowModal()
+
+        if result != wx.ID_OK:
+            dlg.Destroy()
+            return
+
+        values = dlg.GetValues()
+        dlg.Destroy()
+
+        workdir = values["directory"]
+        create_template = values["create_template"]
 
         jupyter_panel = JupyterPanel(
-            parent=self, giface=self._giface, statusbar=self.statusbar, dockable=True
+            parent=self,
+            giface=self._giface,
+            statusbar=self.statusbar,
+            dockable=True,
+            workdir=workdir,
+            create_template=create_template,
         )
         jupyter_panel.SetUpPage(self, self.mainnotebook)
         jupyter_panel.SetUpNotebookInterface()
