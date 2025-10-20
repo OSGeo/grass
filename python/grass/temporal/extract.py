@@ -24,6 +24,7 @@ from .core import (
     SQLDatabaseInterfaceConnection,
     get_current_mapset,
     get_tgis_message_interface,
+    get_tgis_db_version,
 )
 from .datetime_math import (
     create_numeric_suffix,
@@ -52,19 +53,24 @@ def compile_new_map_name(
     :param time_suffix: Type of time suffix to use (or None)
     :param dbif: initialized TGIS database interface
     """
+    print(base, count, map_id, semantic_label, time_suffix)
     if semantic_label:
         base = f"{base}_{semantic_label}"
-    if sp.get_temporal_type() == "absolute" and time_suffix:
-        old_map = sp.get_new_map_instance(map_id)
-        old_map.select(dbif)
-        if time_suffix == "gran":
-            suffix = create_suffix_from_datetime(
-                old_map.temporal_extent.get_start_time(), sp.get_granularity()
-            )
-        elif time_suffix == "time":
-            suffix = create_time_suffix(old_map)
-        return f"{base}_{suffix}"
-    return create_numeric_suffix(base, count, time_suffix)
+    if (
+        sp.get_temporal_type() != "absolute"
+        or not time_suffix
+        or time_suffix.startswith("num")
+    ):
+        return create_numeric_suffix(base, count, time_suffix)
+    old_map = sp.get_new_map_instance(map_id)
+    old_map.select(dbif)
+    if time_suffix == "gran":
+        suffix = create_suffix_from_datetime(
+            old_map.temporal_extent.get_start_time(), sp.get_granularity()
+        )
+    else:
+        suffix = create_time_suffix(old_map)
+    return f"{base}_{suffix}"
 
 
 def replace_stds_names(expression: str, simple_name: str, full_name: str) -> str:
@@ -103,7 +109,7 @@ def replace_stds_names(expression: str, simple_name: str, full_name: str) -> str
         else:
             new_expression += simple_name
         old_idx = match.end()
-    new_expression += expression[match.end() :]
+    new_expression += expression[old_idx:]
     return new_expression
 
 
@@ -158,15 +164,21 @@ def extract_dataset(
     dbif = SQLDatabaseInterfaceConnection()
     dbif.connect()
 
+    tgis_version = get_tgis_db_version()
+    gs.warning(tgis_version)
+
     sp = open_old_stds(input, type, dbif)
     # Check the new stds
     new_sp = check_new_stds(output, type, dbif, gs.overwrite())
     if type == "vector":
-        rows = sp.get_registered_maps(
-            "id,name,mapset,layer,semantic_label", where, "start_time", dbif
-        )
+        rows = sp.get_registered_maps("id,name,mapset,layer", where, "start_time", dbif)
     else:
-        rows = sp.get_registered_maps("id,semantic_label", where, "start_time", dbif)
+        rows = sp.get_registered_maps(
+            f"id{',semantic_label' if tgis_version > 2 else ''}",
+            where,
+            "start_time",
+            dbif,
+        )
 
     new_maps = {}
     if rows:
@@ -195,7 +207,9 @@ def extract_dataset(
                     base,
                     count,
                     row["id"],
-                    row["semantic_label"],
+                    None
+                    if tgis_version < 3 or type == "vector"
+                    else row["semantic_label"],
                     time_suffix,
                     dbif,
                 )
@@ -348,7 +362,11 @@ def extract_dataset(
 
                     if type == "raster":
                         # Set the semantic label
-                        if row["semantic_label"] is not None:
+                        if (
+                            tgis_version > 2
+                            and type != "vector"
+                            and row["semantic_label"] is not None
+                        ):
                             new_map.set_semantic_label(row["semantic_label"])
 
                     # Insert map in temporal database
