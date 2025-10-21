@@ -184,10 +184,7 @@ RUN apt-get update \
     $GRASS_RUN_PACKAGES \
     && apt-get autoremove -y \
     && apt-get clean all \
-    && rm -rf /var/lib/apt/lists/* \
-    && echo LANG="en_US.UTF-8" > /etc/default/locale \
-    && echo en_US.UTF-8 UTF-8 >> /etc/locale.gen \
-    && locale-gen
+    && rm -rf /var/lib/apt/lists/*
 
 ## fetch vertical datums for PDAL and store into PROJ dir
 # WORKDIR /src
@@ -291,7 +288,7 @@ ARG GRASS_CONFIG="\
   --without-mysql \
 "
 
-ARG GRASS_NO_GUI_CONFIG="--without-opengl --without-x"
+ARG GRASS_NO_GUI_CONFIG="--without-nls --without-opengl --without-x"
 
 ARG GRASS_GUI_CONFIG="\
   --with-nls \
@@ -341,7 +338,11 @@ RUN make -j $NUMTHREADS distclean || echo "nothing to clean" \
       $GRASS_GUI_BUILD_PACKAGES \
       && apt-get autoremove -y \
       && apt-get clean all \
-      && rm -rf /var/lib/apt/lists/* ; \
+      && rm -rf /var/lib/apt/lists/* \
+      # Need to generate locale when NLS is enabled
+      && echo LANG="en_US.UTF-8" > /etc/default/locale \
+      && echo en_US.UTF-8 UTF-8 >> /etc/locale.gen \
+      && locale-gen ; \
     else \
       export GRASS_CONFIG="$GRASS_CONFIG $GRASS_NO_GUI_CONFIG" ; \
     fi \
