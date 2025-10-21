@@ -2,6 +2,7 @@
 
 # Note: This file must be kept in sync in ./Dockerfile and ./docker/ubuntu/Dockerfile.
 #       Changes to this file must be copied over to the other file.
+ARG GUI=without
 
 FROM ubuntu:24.04@sha256:66460d557b25769b102175144d538d88219c077c678a49af4afca6fbfc1b5252 AS common_start
 
@@ -121,7 +122,7 @@ ARG GRASS_GUI_RUN_PACKAGES=" \
   libtiff6 \
   libwebkit2gtk-4.1 \
   libxtst6 \
-  python3-wxgtk4.1 \
+  python3-wxgtk4.0 \
 "
 
 # Define build packages
@@ -259,9 +260,7 @@ RUN /src/build_ubuntu_dependencies.sh gdal "$GDAL_VERSION" "$NUMTHREADS"
 RUN /src/build_ubuntu_dependencies.sh pdal "$PDAL_VERSION" "$NUMTHREADS"
 
 # With all the libraries needed compiled from source, now build grass and gdal-grass
-FROM build_gdal_pdal AS build_grass
-
-ARG GUI=without
+FROM build_gdal_pdal AS build_grass_config
 
 ARG GRASS_CONFIG="\
   --enable-largefile \
@@ -327,45 +326,57 @@ ENV LD_LIBRARY_PATH="/usr/local/lib:/usr/lib" \
     CXXFLAGS="" \
     NUMTHREADS=$NUMTHREADS
 
+FROM build_grass_config AS build_grass_with_gui
+
+ARG GRASS_CONFIG="$GRASS_CONFIG $GRASS_GUI_CONFIG"
+ARG GRASS_GUI_PACKAGES="$GRASS_GUI_RUN_PACKAGES $GRASS_GUI_BUILD_PACKAGES"
+
+# hadolint ignore=DL3008
+RUN echo "Installing GRASS GUI packages: $GRASS_GUI_PACKAGES" \
+    && apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y --no-install-recommends --no-install-suggests \
+    $GRASS_GUI_PACKAGES \
+    && apt-get autoremove -y \
+    && apt-get clean all \
+    && rm -rf /var/lib/apt/lists/* \
+    # Need to generate locale when NLS is enabled
+    && echo LANG="en_US.UTF-8" > /etc/default/locale \
+    && echo en_US.UTF-8 UTF-8 >> /etc/locale.gen \
+    && locale-gen
+
+FROM build_grass_config AS build_grass_without_gui
+
+ARG GRASS_CONFIG="$GRASS_CONFIG $GRASS_NO_GUI_CONFIG"
+
+# hadolint ignore=DL3006
+FROM build_grass_${GUI}_gui AS build_grass
+
 # Configure compile and install GRASS
 # hadolint ignore=SC2086,DL3008
 RUN make -j $NUMTHREADS distclean || echo "nothing to clean" \
-    && if [ "$GUI" == "with" ] ; then \
-      export GRASS_CONFIG="$GRASS_CONFIG $GRASS_GUI_CONFIG" \
-      && apt-get update \
-      && apt-get upgrade -y \
-      && apt-get install -y --no-install-recommends --no-install-suggests \
-      $GRASS_GUI_BUILD_PACKAGES \
-      && apt-get autoremove -y \
-      && apt-get clean all \
-      && rm -rf /var/lib/apt/lists/* \
-      # Need to generate locale when NLS is enabled
-      && echo LANG="en_US.UTF-8" > /etc/default/locale \
-      && echo en_US.UTF-8 UTF-8 >> /etc/locale.gen \
-      && locale-gen ; \
-    else \
-      export GRASS_CONFIG="$GRASS_CONFIG $GRASS_NO_GUI_CONFIG" ; \
-    fi \
     && make -j $NUMTHREADS distclean || echo "nothing to clean" \
     && ./configure $GRASS_CONFIG \
-    $GRASS_ADDITIONAL_CONFIG \
     && make -j $NUMTHREADS \
     && make install && ldconfig \
     && rm -rf /usr/local/grass85/demolocation \
-    && if [ "$GUI" = "with" ] ; then \
-        echo "GUI selected, skipping GUI related cleanup"; \
-    else \
-        echo "No GUI selected, removing GUI related files"; \
-        cp /usr/local/grass85/gui/wxpython/xml/module_items.xml module_items.xml \
-        && rm -rf /usr/local/grass85/fonts \
-        && rm -rf /usr/local/grass85/gui \
-        && rm -rf /usr/local/grass85/docs/html \
-        && rm -rf /usr/local/grass85/docs/mkdocs \
-        && rm -rf /usr/local/grass85/share \
-        && mkdir -p /usr/local/grass85/gui/wxpython/xml/ \
-        && mv module_items.xml /usr/local/grass85/gui/wxpython/xml/module_items.xml; \
-    fi
+    && cp /usr/local/grass85/gui/wxpython/xml/module_items.xml module_items.xml \
+    && mkdir -p /usr/local/grass85/gui/wxpython/xml/ \
+    && mv module_items.xml /usr/local/grass85/gui/wxpython/xml/module_items.xml
 
+FROM build_grass AS build_grass_with_gui_built
+RUN echo "GUI selected, skipping GUI related cleanup"
+
+FROM build_grass AS build_grass_without_gui_built
+RUN echo "No GUI selected, removing GUI related files" \
+    && rm -rf /usr/local/grass85/fonts \
+    && rm -rf /usr/local/grass85/gui \
+    && rm -rf /usr/local/grass85/docs/html \
+    && rm -rf /usr/local/grass85/docs/mkdocs \
+    && rm -rf /usr/local/grass85/share
+
+# hadolint ignore=DL3006
+FROM build_grass_${GUI}_gui_built AS build_grass_plugin
 # Build the GDAL-GRASS plugin
 # hadolint ignore=DL3003,DL3059
 RUN git clone --branch "$GDAL_GRASS_VERSION" --depth 1 https://github.com/OSGeo/gdal-grass.git \
@@ -396,19 +407,22 @@ RUN /usr/local/bin/grass --tmp-project EPSG:4326 --exec g.version -rge && \
     python3 -c "from osgeo import gdal; print('GDAL_GRASS driver:', 'available' if gdal.GetDriverByName('GRASS') else 'not-available')"
 
 # Leave build stage
-FROM common_start AS grass_final
+FROM common_start AS grass_final_without_gui
+RUN echo "No additional steps needed without GUI."
+
+FROM common_start AS grass_final_with_gui
 
 # hadolint ignore=SC2086,DL3008
-RUN if [ "$GUI" == "with" ] ; then \
-      export GRASS_CONFIG="$GRASS_CONFIG $GRASS_GUI_CONFIG" \
-      && apt-get update \
-      && apt-get upgrade -y \
-      && apt-get install -y --no-install-recommends --no-install-suggests \
-      $GRASS_GUI_RUN_PACKAGES \
-      && apt-get autoremove -y \
-      && apt-get clean all \
-      && rm -rf /var/lib/apt/lists/* ; \
-    fi
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y --no-install-recommends --no-install-suggests \
+    $GRASS_GUI_RUN_PACKAGES \
+    && apt-get autoremove -y \
+    && apt-get clean all \
+    && rm -rf /var/lib/apt/lists/*
+
+# hadolint ignore=DL3006
+FROM grass_final_${GUI}_gui AS grass_final
 
 # Set with "$(git branch --show-current)"
 ARG BRANCH=main
