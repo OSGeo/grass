@@ -476,8 +476,8 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     LD_LIBRARY_PATH="/usr/local/grass/lib:/usr/local/lib:/usr/lib" \
     GDAL_DRIVER_PATH="/usr/local/lib/gdalplugins"
 
-# Copy GRASS and compiled dependencies from build image
-COPY --link --from=build_grass /usr/local /usr/local
+# Copy GRASS, GDAL-GRASS-plugin and compiled dependencies from build image
+COPY --link --from=build_grass_plugin /usr/local /usr/local
 # COPY --link --from=datum_grids /tmp/cdn.proj.org/*.tif /usr/share/proj/
 
 # Create generic GRASS lib name regardless of version number
