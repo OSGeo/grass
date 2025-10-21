@@ -15,7 +15,7 @@ Tools for managing Jupyter Notebook within GRASS
 
 This module provides functionality for:
 - Starting and stopping local Jupyter Notebook servers inside a GRASS session
-- Managing notebook directories linked to specific GRASS mapsets
+- Managing notebook working directories
 - Creating default notebook templates for users
 - Supporting integration with the GUI (e.g., wxGUI) and other tools
 
@@ -32,10 +32,13 @@ Example use case:
 
 from .server import JupyterServerInstance, JupyterServerRegistry
 from .directory import JupyterDirectoryManager
+from .environment import JupyterEnvironment
 
 __all__ = [
     "Directory",
+    "Environment",
     "JupyterDirectoryManager",
+    "JupyterEnvironment",
     "JupyterServerInstance",
     "JupyterServerRegistry",
     "Server",

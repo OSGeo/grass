@@ -907,7 +907,7 @@ class GMFrame(wx.Frame):
         self.mainnotebook.AddPage(gmodeler_panel, _("Graphical Modeler"))
 
     def OnJupyterNotebook(self, event=None, cmd=None):
-        """Launch Jupyter Notebook page. See OnJupyterNotebook documentation"""
+        """Launch Jupyter Notebook interface."""
         from jupyter_notebook.panel import JupyterPanel
         from jupyter_notebook.dialogs import JupyterStartDialog
 
@@ -920,6 +920,9 @@ class GMFrame(wx.Frame):
 
         values = dlg.GetValues()
         dlg.Destroy()
+
+        if not values:
+            return
 
         workdir = values["directory"]
         create_template = values["create_template"]
@@ -939,7 +942,7 @@ class GMFrame(wx.Frame):
         self.mainnotebook.AddPage(jupyter_panel, _("Jupyter Notebook"))
 
     def OnShowJupyterInfo(self, event=None):
-        """Show information dialog when Jupyter Notebook is not installed."""
+        """Show information dialog when Jupyter Notebook is not available."""
         if sys.platform.startswith("win"):
             message = _(
                 "Jupyter Notebook is currently not included in the Windows GRASS build process.\n"
@@ -947,8 +950,9 @@ class GMFrame(wx.Frame):
             )
         else:
             message = _(
-                "To use notebooks in GRASS, you need to have the Jupyter Notebook "
-                "package installed. After the installation, please restart GRASS to enable this feature."
+                "To use notebooks in GRASS, you need to have the Jupyter Notebook package installed. "
+                "For full functionality, we also recommend installing the visualization libraries "
+                "Folium and ipyleaflet. After installing these packages, please restart GRASS to enable this feature."
             )
 
         wx.MessageBox(
@@ -2458,10 +2462,17 @@ class GMFrame(wx.Frame):
                 event.Veto()
             return
 
-        from grass.workflows import JupyterServerRegistry
+        # Stop all running Jupyter servers before destroying the GUI
+        from grass.workflows import JupyterEnvironment
 
-        JupyterServerRegistry.get().stop_all_servers()
-
+        try:
+            JupyterEnvironment.stop_all()
+        except RuntimeError as e:
+            wx.MessageBox(
+                _("Failed to stop Jupyter servers:\n{}").format(str(e)),
+                caption=_("Error"),
+                style=wx.ICON_ERROR | wx.OK,
+            )
         self.DisplayCloseAll()
 
         self._auimgr.UnInit()
