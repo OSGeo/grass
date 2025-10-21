@@ -669,7 +669,7 @@ def check_gui(expected_gui):
                     "Please check your installation or set the GRASS_PYTHON"
                     " environment variable."
                 )
-            if not os.path.exists(wxpath("wxgui.py")):
+            if not Path(wxpath("wxgui.py")).exists():
                 msg = _("GRASS GUI not found. Please check your installation.")
             if msg:
                 warning(_("{}\nSwitching to text based interface mode.").format(msg))
@@ -721,7 +721,7 @@ def create_location(gisdbase, location, geostring) -> None:
 def can_create_location(gisdbase: StrPath, location) -> bool:
     """Checks if location can be created"""
     path = os.path.join(gisdbase, location)
-    return not os.path.exists(path)
+    return not Path(path).exists()
 
 
 def cannot_create_location_reason(gisdbase: StrPath, location: str) -> str:
@@ -1409,10 +1409,10 @@ def run_batch_job(batch_job: list):
             script_in_addon_path = os.path.join(
                 os.environ["GRASS_ADDON_BASE"], "scripts", batch_job[0]
             )
-        if script_in_addon_path and os.path.exists(script_in_addon_path):
+        if script_in_addon_path and Path(script_in_addon_path).exists():
             batch_job[0] = script_in_addon_path
             return script_in_addon_path
-        if os.path.exists(batch_job[0]):
+        if Path(batch_job[0]).exists():
             return batch_job[0]
 
     try:
@@ -1693,7 +1693,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
         # Here we create the file in the Mapset directory if it exists in the
         # user's home directory.
         sudo_success_file = ".sudo_as_admin_successful"
-        if os.path.exists(os.path.join(userhome, sudo_success_file)):
+        if Path(userhome, sudo_success_file).exists():
             try:
                 # Open with append so that if the file already exists there
                 # isn't any error.
@@ -1826,7 +1826,7 @@ def print_params(params) -> None:
     dev_params = ["arch", "compiler", "build", "date"]
     if any(param in dev_params for param in params):
         plat = gpath("include", "Make", "Platform.make")
-        if not os.path.exists(plat):
+        if not Path(plat).exists():
             fatal(_("Please install the GRASS development package"))
         with open(plat) as fileplat:
             # this is in fact require only for some, but prepare it anyway
@@ -2178,23 +2178,23 @@ def find_path_to_grass_python_package() -> tuple[str, bool]:
     else:
         # The "@...@" variables are being substituted during build process
         path_from_variable = os.path.normpath(r"@GRASS_PYDIR@")
-    if os.path.exists(path_from_variable):
+    if Path(path_from_variable).exists():
         return path_from_variable, True
 
     base = Path(__file__).parent.parent / "lib"
     path_from_context = base / "grass" / "etc" / "python"
-    if os.path.exists(path_from_context):
+    if path_from_context.exists():
         return str(path_from_context), True
 
     major = "@GRASS_VERSION_MAJOR@"
     minor = "@GRASS_VERSION_MINOR@"
     # Try a run-together version number for the directory (long-used standard).
     path_from_context = base / f"grass{major}{minor}" / "etc" / "python"
-    if os.path.exists(path_from_context):
+    if path_from_context.exists():
         return str(path_from_context), True
     # Try a dotted version number (more common standard).
     path_from_context = base / f"grass{major}.{minor}" / "etc" / "python"
-    if os.path.exists(path_from_context):
+    if path_from_context.exists():
         return str(path_from_context), True
 
     return path_from_variable, False

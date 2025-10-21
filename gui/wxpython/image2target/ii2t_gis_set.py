@@ -997,7 +997,7 @@ class GRASSStartup(wx.Frame):
         """Database set"""
         gisdbase = self.tgisdbase.GetValue()
         self._hideMessage()
-        if not os.path.exists(gisdbase):
+        if not Path(gisdbase).exists():
             self._showError(_("Path '%s' doesn't exist.") % gisdbase)
             return
 

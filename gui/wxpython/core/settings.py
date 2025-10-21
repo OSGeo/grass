@@ -891,9 +891,9 @@ class Settings:
         if settings is None:
             settings = self.userSettings
 
-        if os.path.exists(self.filePath):
+        if Path(self.filePath).exists():
             self._readFile(settings)
-        elif os.path.exists(self.legacyFilePath):
+        elif Path(self.legacyFilePath).exists():
             self._readLegacyFile(settings)
 
         # set environment variables
@@ -982,7 +982,7 @@ class Settings:
             settings = self.userSettings
 
         dirPath = GetSettingsPath()
-        if not os.path.exists(dirPath):
+        if not Path(dirPath).exists():
             try:
                 os.mkdir(dirPath)
             except OSError:

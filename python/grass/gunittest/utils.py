@@ -26,7 +26,7 @@ if TYPE_CHECKING:
 
 def ensure_dir(directory: StrOrBytesPath) -> None:
     """Create all directories in the given path if needed."""
-    if not os.path.exists(directory):
+    if not Path(directory).exists():
         os.makedirs(directory)
 
 

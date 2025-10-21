@@ -25,6 +25,7 @@ This program is free software under the GNU General Public License
 
 import re
 import os
+from pathlib import Path
 import wx
 
 from core import globalvar
@@ -402,7 +403,7 @@ class RecentFilesMenu:
         file_index = event.GetId() - wx.ID_FILE1
         path = self._filehistory.GetHistoryFile(file_index)
 
-        if not os.path.exists(path):
+        if not Path(path).exists():
             self.RemoveFileFromHistory(file_index)
             file_exists = False
         self.file_requested.emit(
@@ -442,7 +443,7 @@ class RecentFilesMenu:
         """Remove non existent files from the history"""
         for i in reversed(range(self._filehistory.GetCount())):
             file = self._filehistory.GetHistoryFile(index=i)
-            if not os.path.exists(file):
+            if not Path(file).exists():
                 self._filehistory.RemoveFileFromHistory(i=i)
 
         self._filehistory.Save(self._config)
