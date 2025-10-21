@@ -33,11 +33,13 @@ int get_target(char *group)
     snprintf(buf, sizeof(buf),
              _("Mapset <%s> in target project (location) <%s> - "), mapset,
              location);
-    strcat(buf, stat == 0 ? _("permission denied") : _("not found"));
+    (void)G_strlcat(buf, stat == 0 ? _("permission denied") : _("not found"),
+                    sizeof(buf));
 error:
-    strcat(buf, "\n");
-    strcat(buf, _("Please run i.target for group "));
-    strcat(buf, group);
+    (void)G_strlcat(buf, "\n", sizeof(buf));
+    (void)G_strlcat(buf, _("Please run i.target for group "), sizeof(buf));
+    if (G_strlcat(buf, group, sizeof(buf)) >= sizeof(buf))
+        G_fatal_error(_("Internal error: error message too long"));
     G_fatal_error("%s", buf);
     return 1; /* never reached */
 }
