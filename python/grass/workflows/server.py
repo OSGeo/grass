@@ -11,11 +11,12 @@
 #            for details.
 
 """
-This module provides two classes for managing Jupyter Notebook servers
-programmatically within GRASS GIS tools or scripting environments:
+This module provides a simple interface for launching and managing
+a local Jupyter server.
 
 Functions:
 - `is_jupyter_installed()`: Check if Jupyter Notebook is installed on the system.
+
 Classes:
 - `JupyterServerInstance`: Manages a single Jupyter Notebook server instance.
 - `JupyterServerRegistry`: Manages multiple `JupyterServerInstance` objects
@@ -144,7 +145,7 @@ class JupyterServerInstance:
             try:
                 conn = http.client.HTTPConnection("localhost", self.port, timeout=0.5)
                 conn.request("GET", "/")
-                if conn.getresponse().status in (200, 302, 403):
+                if conn.getresponse().status in {200, 302, 403}:
                     conn.close()
                     return True
                 conn.close()
@@ -198,7 +199,11 @@ class JupyterServerInstance:
         :raises RuntimeError: If the server is not running or cannot be stopped.
         """
         if not self.pid or self.pid <= 0:
-            raise RuntimeError(_("Jupyter server is not running or PID is invalid."))
+            raise RuntimeError(
+                _("Jupyter server is not running or PID {} is invalid.").format(
+                    self.pid
+                )
+            )
 
         # Check if the process with the given PID is a Jupyter server
         try:
@@ -278,10 +283,5 @@ class JupyterServerRegistry:
         for server in self.servers[:]:
             try:
                 server.stop_server()
-            except Exception as e:
-                print(f"Failed to stop Jupyter server: {e}")
             finally:
                 self.unregister(server)
-
-    def get_servers(self):
-        return list(self.servers)

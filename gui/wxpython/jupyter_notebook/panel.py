@@ -19,8 +19,7 @@ from pathlib import Path
 import wx
 
 from main_window.page import MainPageBase
-from grass.workflows.directory import JupyterDirectoryManager
-from grass.workflows.server import JupyterServerInstance, JupyterServerRegistry
+from grass.workflows.environment import JupyterEnvironment
 
 from .notebook import JupyterAuiNotebook
 from .toolbars import JupyterToolbar
@@ -47,13 +46,9 @@ class JupyterPanel(wx.Panel, MainPageBase):
         self._giface = giface
         self.statusbar = statusbar
         self.workdir = workdir
-
         self.SetName("Jupyter")
 
-        self.directory_manager = JupyterDirectoryManager(
-            workdir=self.workdir, create_template=create_template
-        )
-        self.server_manager = JupyterServerInstance(workdir=self.workdir)
+        self.env = JupyterEnvironment(self.workdir, create_template)
 
         self.toolbar = JupyterToolbar(parent=self)
         self.aui_notebook = JupyterAuiNotebook(parent=self)
@@ -72,30 +67,37 @@ class JupyterPanel(wx.Panel, MainPageBase):
         self.Layout()
 
     def SetUpNotebookInterface(self):
-        """Start server and load files available in a working directory."""
-        # Prepare the working directory (find all existing files, copy a template file if needed)
-        self.directory_manager.prepare_files()
+        """Setup Jupyter notebook environment and load initial notebooks."""
+        try:
+            self.env.setup()
+        except Exception as e:
+            wx.MessageBox(
+                _("Failed to start Jupyter environment:\n{}").format(str(e)),
+                _("Startup Error"),
+                wx.ICON_ERROR,
+            )
+            return
 
-        # Start the Jupyter server in the specified working directory
-        self.server_manager.start_server()
-
-        # Register server to server registry
-        JupyterServerRegistry.get().register(self.server_manager)
-
-        # Update the status bar with server info
-        status_msg = _(
-            "Jupyter server has started at {url} (PID: {pid}) in working directory {dir}"
-        ).format(
-            url=self.server_manager.server_url,
-            pid=self.server_manager.pid,
-            dir=self.workdir,
-        )
-        self.SetStatusText(status_msg, 0)
-
-        # Load all existing files found in the working directory as separate tabs
-        for fname in self.directory_manager.files:
-            url = self.server_manager.get_url(fname.name)
+        # Load notebook tabs
+        for fname in self.env.directory.files:
+            try:
+                url = self.env.server.get_url(fname.name)
+            except RuntimeError as e:
+                wx.MessageBox(
+                    _("Failed to get Jupyter server URLt:\n{}").format(str(e)),
+                    _("Startup Error"),
+                    wx.ICON_ERROR,
+                )
+                return
             self.aui_notebook.AddPage(url=url, title=fname.name)
+
+        self.SetStatusText(
+            _("Jupyter server started at {url} (PID: {pid}), directory: {dir}").format(
+                url=self.env.server.server_url,
+                pid=self.env.server.pid,
+                dir=str(self.workdir),
+            )
+        )
 
     def Switch(self, file_name):
         """
@@ -114,9 +116,16 @@ class JupyterPanel(wx.Panel, MainPageBase):
         Open a Jupyter notebook to a new tab and switch to it.
         :param file_name: Name of the .ipynb file (e.g., 'example.ipynb') (str).
         """
-        url = self.server_manager.get_url(file_name)
-        self.aui_notebook.AddPage(url=url, title=file_name)
-        self.aui_notebook.SetSelection(self.aui_notebook.GetPageCount() - 1)
+        try:
+            url = self.env.server.get_url(file_name)
+            self.aui_notebook.AddPage(url=url, title=file_name)
+            self.aui_notebook.SetSelection(self.aui_notebook.GetPageCount() - 1)
+        except RuntimeError as e:
+            wx.MessageBox(
+                _("Failed to get Jupyter server URL:\n{}").format(str(e)),
+                _("URL Error"),
+                wx.ICON_ERROR,
+            )
 
     def OpenOrSwitch(self, file_name):
         """
@@ -136,7 +145,7 @@ class JupyterPanel(wx.Panel, MainPageBase):
         :param new_name: Optional new name for the imported file (str).
         """
         try:
-            path = self.directory_manager.import_file(source_path, new_name=new_name)
+            path = self.env.directory.import_file(source_path, new_name=new_name)
             self.Open(path.name)
             self.SetStatusText(_("File '{}' imported and opened.").format(path.name), 0)
         except Exception as e:
@@ -169,7 +178,7 @@ class JupyterPanel(wx.Panel, MainPageBase):
 
             source_path = Path(dlg.GetPath())
             file_name = source_path.name
-            target_path = self.directory_manager.workdir / file_name
+            target_path = self.workdir / file_name
 
             # File is already in the working directory
             if source_path.resolve() == target_path.resolve():
@@ -222,7 +231,7 @@ class JupyterPanel(wx.Panel, MainPageBase):
             destination_path = Path(dlg.GetPath())
 
             try:
-                self.directory_manager.export_file(
+                self.env.directory.export_file(
                     file_name, destination_path, overwrite=True
                 )
                 self.SetStatusText(
@@ -254,7 +263,7 @@ class JupyterPanel(wx.Panel, MainPageBase):
                 return
 
             try:
-                path = self.directory_manager.create_new_notebook(new_name=name)
+                path = self.env.directory.create_new_notebook(new_name=name)
             except Exception as e:
                 wx.MessageBox(
                     _("Failed to create notebook:\n{}").format(str(e)),
@@ -287,25 +296,25 @@ class JupyterPanel(wx.Panel, MainPageBase):
                 event.Veto()
             return
 
-        if self.server_manager:
-            try:
-                # Stop the Jupyter server
-                self.server_manager.stop_server()
+        # Get server info
+        url = self.env.server.server_url
+        pid = self.env.server.pid
 
-                # Unregister server from server registry
-                JupyterServerRegistry.get().unregister(self.server_manager)
-                self.SetStatusText(_("Jupyter server has been stopped."), 0)
-            except RuntimeError as e:
-                wx.MessageBox(
-                    _("Failed to stop the Jupyter server:\n{}").format(str(e)),
-                    _("Error"),
-                    wx.ICON_ERROR | wx.OK,
-                )
-                self.SetStatusText(_("Failed to stop Jupyter server."), 0)
-
-        # Clean up the server manager
-        if hasattr(self.GetParent(), "jupyter_server_manager"):
-            self.GetParent().jupyter_server_manager = None
-
-        # Close the notebook panel
+        # Stop server and close panel
+        try:
+            self.env.stop()
+        except RuntimeError as e:
+            wx.MessageBox(
+                _("Failed to stop Jupyter server at {url} (PID: {pid}):\n{err}").format(
+                    url=url, pid=pid, err=str(e)
+                ),
+                caption=_("Error"),
+                style=wx.ICON_ERROR | wx.OK,
+            )
+            return
+        self.SetStatusText(
+            _("Jupyter server at {url} (PID: {pid}) has been stopped").format(
+                url=url, pid=pid
+            )
+        )
         self._onCloseWindow(event)

@@ -1,5 +1,5 @@
 """
-@package jupyter_notebook.dialog
+@package jupyter_notebook.dialogs
 
 @brief Integration of Jupyter Notebook to GUI.
 
@@ -14,22 +14,21 @@ This program is free software under the GNU General Public License
 @author Linda Karlovska <linda.karlovska seznam.cz>
 """
 
+import os
 from pathlib import Path
-import grass.script as gs
 
 import wx
 
+from grass.workflows.directory import get_default_jupyter_workdir
+
 
 class JupyterStartDialog(wx.Dialog):
-    """Dialog for selecting working directory and Jupyter startup options."""
+    """Dialog for selecting Jupyter startup options."""
 
     def __init__(self, parent):
-        wx.Dialog.__init__(
-            self, parent, title=_("Start Jupyter Notebook"), size=(500, 300)
-        )
-        env = gs.gisenv()
-        mapset_path = Path(env["GISDBASE"]) / env["LOCATION_NAME"] / env["MAPSET"]
-        self.default_dir = mapset_path / "notebooks"
+        super().__init__(parent, title=_("Start Jupyter Notebook"), size=(500, 300))
+
+        self.default_dir = get_default_jupyter_workdir()
 
         self.selected_dir = self.default_dir
         self.create_template = True
@@ -59,11 +58,11 @@ class JupyterStartDialog(wx.Dialog):
         dir_sizer.Add(self.dir_picker, 0, wx.EXPAND | wx.ALL, 5)
         sizer.Add(dir_sizer, 0, wx.EXPAND | wx.ALL, 10)
 
-        # Jupyter startup section
+        # Template preference section
         options_box = wx.StaticBox(self, label=_("Options"))
         options_sizer = wx.StaticBoxSizer(options_box, wx.VERTICAL)
 
-        self.checkbox_template = wx.CheckBox(self, label=_("Create example notebook"))
+        self.checkbox_template = wx.CheckBox(self, label=_("Create welcome notebook"))
         self.checkbox_template.SetValue(True)
         self.checkbox_template.SetToolTip(
             _(
@@ -76,7 +75,7 @@ class JupyterStartDialog(wx.Dialog):
         info = wx.StaticText(
             self,
             label=_(
-                "Note: Template will be created only if the directory contains no .ipynb files."
+                "Note: The welcome notebook will be created only if the directory contains no .ipynb files."
             ),
         )
 
@@ -84,7 +83,6 @@ class JupyterStartDialog(wx.Dialog):
 
         sizer.Add(options_sizer, 0, wx.EXPAND | wx.LEFT | wx.RIGHT, 10)
 
-        # OK / Cancel buttons
         btns = self.CreateSeparatedButtonSizer(wx.OK | wx.CANCEL)
         sizer.Add(btns, 0, wx.EXPAND | wx.ALL, 10)
 
@@ -105,7 +103,16 @@ class JupyterStartDialog(wx.Dialog):
     def GetValues(self):
         """Return selected working directory and template preference."""
         if self.radio_custom.GetValue():
-            self.selected_dir = Path(self.dir_picker.GetPath())
+            path = Path(self.dir_picker.GetPath())
+
+            if not os.access(path, os.W_OK) or not os.access(path, os.X_OK):
+                wx.MessageBox(
+                    _("You do not have permission to write to the selected directory."),
+                    _("Error"),
+                    wx.ICON_ERROR,
+                )
+                return None
+            self.selected_dir = path
         else:
             self.selected_dir = self.default_dir
 
