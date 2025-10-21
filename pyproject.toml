@@ -217,7 +217,6 @@ ignore = [
     "PTH106",  # os-rmdir
     "PTH107",  # os-remove
     "PTH108",  # os-unlink
-    "PTH110",  # os-path-exists
     "PTH111",  # os-path-expanduser
     "PTH112",  # os-path-isdir
     "PTH113",  # os-path-isfile
@@ -353,7 +352,7 @@ ignore = [
 "man/build_rest.py" = ["PLW1514", "PTH208"]
 "man/build_topics.py" = ["PLW1514"]
 "man/parser_standard_options.py" = ["PLW1514"]
-"python/grass/__init__.py" = ["PYI056"]
+"python/grass/__init__.py" = ["PTH110", "PYI056"]
 "python/grass/exp*/tests/grass_script_mapset_session_test.py" = ["SIM117"]
 "python/grass/exp*/tests/grass_script_tmp_mapset_session_test.py" = ["SIM117"]
 "python/grass/gunittest/case.py" = ["PLW1514", "PT009"]

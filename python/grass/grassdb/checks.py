@@ -221,7 +221,7 @@ def get_reason_id_mapset_not_usable(mapset_path):
     If mapset path is None or no reason found, returns None.
     """
     # Check whether mapset exists
-    if not os.path.exists(mapset_path):
+    if not Path(mapset_path).exists():
         return "non-existent"
     # Check whether mapset is valid
     if not is_mapset_valid(mapset_path):

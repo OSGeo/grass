@@ -15,7 +15,6 @@ This program is free software under the GNU General Public License
 @author Michael Barton, Arizona State University
 """
 
-import os
 import sys
 import math
 import numpy as np
@@ -421,7 +420,7 @@ class ProfileFrame(BasePlotFrame):
             path = dlg.GetPath()
             for r in self.rasterList:
                 pfile.append(path + "_" + str(r.replace("@", "_")) + ".csv")
-                if os.path.exists(pfile[-1]):
+                if Path(pfile[-1]).exists():
                     dlgOv = wx.MessageDialog(
                         self,
                         message=_(

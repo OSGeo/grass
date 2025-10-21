@@ -223,7 +223,7 @@ def get_commands(*, env=None):
 
     def scan(gisbase, directory):
         dir_path = os.path.join(gisbase, directory)
-        if os.path.exists(dir_path):
+        if Path(dir_path).exists():
             for fname in os.listdir(os.path.join(gisbase, directory)):
                 if scripts:  # win32
                     name, ext = os.path.splitext(fname)
@@ -1986,7 +1986,7 @@ def create_project(
     mapset_path = resolve_mapset_path(path=path, location=name)
 
     # create dbase if not exists
-    if not os.path.exists(mapset_path.directory):
+    if not Path(mapset_path.directory).exists():
         os.mkdir(mapset_path.directory)
 
     env = None
