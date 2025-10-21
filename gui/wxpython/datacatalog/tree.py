@@ -1800,6 +1800,8 @@ class DataCatalogTree(TreeView):
                 node = self.GetDbNode(grassdb=grassdb)
                 if not node:
                     node = self.InsertGrassDb(name=grassdb)
+                if node:
+                    self.InsertLocation(location, node)
             elif action == "delete":
                 node = self.GetDbNode(grassdb=grassdb)
                 if node:
