@@ -49,6 +49,7 @@ import locale
 import os
 import platform
 import re
+import shlex
 import shutil
 import signal
 import string
@@ -57,6 +58,7 @@ import sys
 import tempfile
 import unicodedata
 import uuid
+import webbrowser
 
 from pathlib import Path
 from typing import TYPE_CHECKING, Literal, NoReturn
@@ -364,6 +366,50 @@ def help_message(default_gui) -> None:
         CMD_NAME=CMD_NAME, DEFAULT_GUI=default_gui, VERSION_NUMBER=GRASS_VERSION
     )
     sys.stderr.write(s)
+
+
+
+def open_browser(url: str) -> None:
+    """
+    Open a URL using GRASS_HTML_BROWSER, BROWSER, or system default.
+    
+    Priority:
+    1. GRASS_HTML_BROWSER (GRASS-specific)
+    2. BROWSER (colon-separated list of browser commands)
+    3. System default browser via Python's webbrowser module
+    """
+    grass_browser = os.getenv("GRASS_HTML_BROWSER")
+    env_browser = os.getenv("BROWSER")
+
+    # 1️⃣ Try GRASS_HTML_BROWSER
+    if grass_browser:
+        try:
+            cmd = shlex.split(grass_browser)
+            os.spawnvp(os.P_NOWAIT, cmd[0], cmd + [url])
+            return  # Success
+        except Exception as e:
+            debug(f"Failed to use GRASS_HTML_BROWSER ({e}), falling back.")
+
+    # 2️⃣ Try BROWSER environment variable
+    if env_browser:
+        for browser_cmd in env_browser.split(":"):
+            try:
+                cmd = shlex.split(browser_cmd)
+                os.spawnvp(os.P_NOWAIT, cmd[0], cmd + [url])
+                return  # Success
+            except FileNotFoundError:
+                continue
+            except Exception as e:
+                debug(f"Browser '{browser_cmd}' failed: {e}")
+                continue
+
+    # 3️⃣ Fallback to Python's default browser
+    try:
+        webbrowser.open(url)
+    except Exception as e:
+        warning(f"Unable to open browser: {e}")
+
+
 
 
 def create_grass_config_dir() -> str:
