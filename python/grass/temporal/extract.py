@@ -53,7 +53,6 @@ def compile_new_map_name(
     :param time_suffix: Type of time suffix to use (or None)
     :param dbif: initialized TGIS database interface
     """
-    print(base, count, map_id, semantic_label, time_suffix)
     if semantic_label:
         base = f"{base}_{semantic_label}"
     if (
@@ -165,16 +164,19 @@ def extract_dataset(
     dbif.connect()
 
     tgis_version = get_tgis_db_version()
-    gs.warning(tgis_version)
 
     sp = open_old_stds(input, type, dbif)
+    has_semantic_labels = bool(
+        tgis_version > 2 and type == "raster" and sp.metadata.semantic_labels
+    )
+
     # Check the new stds
     new_sp = check_new_stds(output, type, dbif, gs.overwrite())
     if type == "vector":
         rows = sp.get_registered_maps("id,name,mapset,layer", where, "start_time", dbif)
     else:
         rows = sp.get_registered_maps(
-            f"id{',semantic_label' if tgis_version > 2 else ''}",
+            f"id{',semantic_label' if has_semantic_labels else ''}",
             where,
             "start_time",
             dbif,
@@ -207,9 +209,7 @@ def extract_dataset(
                     base,
                     count,
                     row["id"],
-                    None
-                    if tgis_version < 3 or type == "vector"
-                    else row["semantic_label"],
+                    row["semantic_label"] if has_semantic_labels else None,
                     time_suffix,
                     dbif,
                 )
@@ -362,11 +362,7 @@ def extract_dataset(
 
                     if type == "raster":
                         # Set the semantic label
-                        if (
-                            tgis_version > 2
-                            and type != "vector"
-                            and row["semantic_label"] is not None
-                        ):
+                        if has_semantic_labels:
                             new_map.set_semantic_label(row["semantic_label"])
 
                     # Insert map in temporal database
