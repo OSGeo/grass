@@ -11,7 +11,7 @@
 
 """
 This module defines a class `JupyterDirectoryManager` that provides functionality
-for working with Jupyter Notebook files stored within the current GRASS mapset.
+for working with Jupyter Notebook files stored within the current working directory.
 
 Features:
 - Creates a working directory if it does not exist
@@ -23,6 +23,7 @@ Features:
 Designed for use within GRASS GUI tools or scripting environments.
 """
 
+import os
 import json
 import shutil
 from pathlib import Path
@@ -30,18 +31,35 @@ from pathlib import Path
 import grass.script as gs
 
 
+def get_default_jupyter_workdir():
+    """
+    Return the default working directory for Jupyter notebooks associated
+    with the current GRASS mapset.
+    :return: Path to the default notebook working directory (Path)
+    """
+    env = gs.gisenv()
+    mapset_path = Path(env["GISDBASE"]) / env["LOCATION_NAME"] / env["MAPSET"]
+    return mapset_path / "notebooks"
+
+
 class JupyterDirectoryManager:
-    """Manage a directory of Jupyter notebooks tied to the current GRASS mapset."""
+    """Manage a Jupyter notebook working directory."""
 
     def __init__(self, workdir=None, create_template=False):
-        """Initialize the Jupyter notebook directory and load existing files.
+        """Initialize the Jupyter notebook directory.
 
         :param workdir: Optional custom working directory (Path). If not provided,
-                        the default MAPSET notebooks directory is used.
-        :param create_template: If True, create a welcome notebook if the directory is empty.
+                        the default working directory is used.
+        :param create_template: If a welcome notebook should be created or not (bool).
         """
-        self._workdir = workdir or self._get_workdir()
+        self._workdir = workdir or get_default_jupyter_workdir()
         self._workdir.mkdir(parents=True, exist_ok=True)
+
+        if not os.access(self._workdir, os.W_OK):
+            raise PermissionError(
+                _("Cannot write to the working directory: {}").format(self._workdir)
+            )
+
         self._files = []
         self._create_template = create_template
 
@@ -59,30 +77,12 @@ class JupyterDirectoryManager:
         """
         return self._files
 
-    def _get_workdir(self):
-        """
-        :return: Path to default working directory, it is created if it does not exist (Path).
-        """
-        env = gs.gisenv()
-        mapset_path = "{gisdbase}/{location}/{mapset}".format(
-            gisdbase=env["GISDBASE"],
-            location=env["LOCATION_NAME"],
-            mapset=env["MAPSET"],
-        )
-        # Create the working directory within the mapset path
-        workdir = Path(mapset_path) / "notebooks"
-        workdir.mkdir(parents=True, exist_ok=True)
-        return workdir
-
     def prepare_files(self):
         """
         Populate the list of files in the working directory.
         """
         # Find all .ipynb files in the notebooks directory
-
-        self._files = [
-            f for f in Path(self._workdir).iterdir() if str(f).endswith(".ipynb")
-        ]
+        self._files = [f for f in self._workdir.iterdir() if f.suffix == ".ipynb"]
 
         if self._create_template and not self._files:
             self.create_welcome_notebook()
@@ -100,8 +100,12 @@ class JupyterDirectoryManager:
         """
         # Validate the source path and ensure it has .ipynb extension
         source = Path(source_path)
-        if not source.exists() or source.suffix != ".ipynb":
+        if not source.exists():
             raise FileNotFoundError(_("File not found: {}").format(source))
+        if source.suffix != ".ipynb":
+            raise ValueError(
+                _("Source file must have .ipynb extension: {}").format(source)
+            )
 
         # Ensure the working directory exists
         target_name = new_name or source.name
@@ -163,13 +167,11 @@ class JupyterDirectoryManager:
         :return: Path to the created template file (Path)
         """
         # Copy template file to the working directory
-        template_path = self.import_file(
-            Path(__file__).parent / "template_notebooks" / file_name
-        )
+        template_path = Path(__file__).parent / "template_notebooks" / file_name
+        template_copy = self.import_file(template_path)
 
         # Load the template file
-        with open(template_path, encoding="utf-8"):
-            content = Path(template_path).read_text(encoding="utf-8")
+        content = template_copy.read_text(encoding="utf-8")
 
         # Replace the placeholder '${NOTEBOOK_DIR}' with actual working directory path
         content = content.replace(
@@ -177,10 +179,8 @@ class JupyterDirectoryManager:
         )
 
         # Save the modified content back to the template file
-        with open(template_path, "w", encoding="utf-8"):
-            Path(template_path).write_text(content, encoding="utf-8")
-
-        return template_path
+        template_copy.write_text(content, encoding="utf-8")
+        return template_copy
 
     def create_new_notebook(self, new_name, template_name="new.ipynb"):
         """
