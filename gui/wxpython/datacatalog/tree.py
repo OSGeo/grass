@@ -1484,7 +1484,7 @@ class DataCatalogTree(TreeView):
         Insert new location into model and refresh tree.
         Check if not already added.
         """
-        if not self.GetDbNode(grassdb=grassdb_node, location=name):
+        if not self.GetDbNode(grassdb=grassdb_node.label, location=name):
             location_node = self._model.AppendNode(
                 parent=grassdb_node, data={"type": "location", "name": name}
             )
