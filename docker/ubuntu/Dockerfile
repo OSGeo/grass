@@ -337,6 +337,11 @@ RUN echo "Installing GRASS GUI packages: $GRASS_GUI_PACKAGES" \
     && apt-get upgrade -y \
     && apt-get install -y --no-install-recommends --no-install-suggests \
     $GRASS_GUI_PACKAGES \
+    && python3 -m pip install  -U --break-system-packages --no-cache-dir --upgrade \
+    -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-24.04 \
+    wxpython \
+    # Clean up
+    && pip cache purge
     && apt-get autoremove -y \
     && apt-get clean all \
     && rm -rf /var/lib/apt/lists/* \
@@ -355,7 +360,6 @@ FROM build_grass_${GUI}_gui AS build_grass
 # Configure compile and install GRASS
 # hadolint ignore=SC2086,DL3008
 RUN make -j $NUMTHREADS distclean || echo "nothing to clean" \
-    && make -j $NUMTHREADS distclean || echo "nothing to clean" \
     && ./configure $GRASS_CONFIG \
     && make -j $NUMTHREADS \
     && make install && ldconfig \
