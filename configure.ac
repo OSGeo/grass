@@ -2007,6 +2007,11 @@ AC_SUBST(USE_OPENCL)
 # way to handle this. It sets the appropriate CFLAGS and defines necessary
 # preprocessor macros (e.g., _FILE_OFFSET_BITS=64) for the compiler.
 AC_SYS_LARGEFILE
+if test "$ac_cv_sys_large_files" != 0; then
+    USE_LARGEFILES=1
+else
+    USE_LARGEFILES=0
+fi
 AC_SUBST(LFS_CFLAGS)
 
 USE_TERMIO=
