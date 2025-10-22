@@ -22,7 +22,7 @@ os.chdir(rest_dir)
 
 filename = "index.txt"
 with open(filename + ".tmp", "w") as f:
-    write_rest_header(f, "GRASS GIS %s Reference Manual" % grass_version, True)
+    write_rest_header(f, "GRASS %s Reference Manual" % grass_version, True)
     write_rest_cmd_overview(f)
     write_rest_footer(f, "index.txt")
 

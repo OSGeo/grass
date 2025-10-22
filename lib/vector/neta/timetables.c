@@ -27,8 +27,8 @@
 
    \param driver DB driver
    \param sql SQl string
-   \param[out] list of lengths
-   \param[out] list of ids
+   \param[out] lengths list of lengths
+   \param[out] ids list of ids
 
    \return number of distinct elements
    \return -1 on failure
@@ -88,6 +88,7 @@ int NetA_init_distinct(dbDriver *driver, dbString *sql, int **lengths,
         last = cur;
         count++;
     }
+    db_close_cursor(&cursor);
     return result;
 }
 
@@ -338,7 +339,7 @@ static neta_heap_data *new_heap_data(int conns, int v)
 /*!
    \brief Update Dijkstra structures
 
-   \param olc_conns old connection
+   \param old_conns old connection
    \param new_conns new connection
    \param to old 'to' node
    \param new_dst new 'to' node

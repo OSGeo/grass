@@ -74,7 +74,7 @@ int export_lines_single(struct Map_info *In, int field, int otype, int donocat,
     /* get category index for given field */
     findex = Vect_cidx_get_field_index(In, field);
     if (findex == -1) {
-        G_fatal_error(_("Unable to export multi-features. No category index "
+        G_fatal_error(_("Unable to export features. No category index "
                         "for layer %d."),
                       field);
     }

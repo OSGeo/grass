@@ -284,7 +284,7 @@ class RulesPanel:
         for child in self.mainPanel.GetChildren():
             child.Enable(enable)
         sql = True
-        self.LoadRulesline(sql)  # todo
+        self.LoadRulesline(sql)  # TODO
         self.btnAdd.Enable(enable)
         self.numRules.Enable(enable)
         self.checkAll.Enable(enable)
@@ -665,7 +665,7 @@ class ColorTable(wx.Frame):
         if not path:
             return
 
-        if os.path.exists(path):
+        if Path(path).exists():
             dlgOw = wx.MessageDialog(
                 self,
                 message=_(
@@ -692,7 +692,7 @@ class ColorTable(wx.Frame):
     def OnLoadRulesFile(self, event):
         """Load color table from file"""
         path = event.GetString()
-        if not os.path.exists(path):
+        if not Path(path).exists():
             return
 
         self.rulesPanel.Clear()

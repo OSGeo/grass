@@ -20,7 +20,7 @@ permissions: {}
 jobs:
   macos_build:
     name: macOS build
-    runs-on: macos-14
+    runs-on: macos-15
     env:
       PYTHONWARNINGS: always
     steps:
@@ -47,7 +47,9 @@ jobs:
             -mindepth 1 -maxdepth 1 -type f -print -delete
           # Rehash to forget about the deleted files
           hash -r
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
       - name: Get current date cache key segment
         id: date
         # Year and week of year so cache key changes weekly
@@ -63,9 +65,9 @@ jobs:
             pyyaml
         run: |
           cp ./macos/files/conda-requirements-dev-arm64.txt "${RUNNER_TEMP}/macos_dependencies.txt"
-          echo "$test_dependencies" | sed "s/ /\n/g" >> "${RUNNER_TEMP}/macos_dependencies.txt"
+          echo "${test_dependencies// /\n}" >> "${RUNNER_TEMP}/macos_dependencies.txt"
       - name: Setup Mamba
-        uses: mamba-org/setup-micromamba@0dea6379afdaffa5d528b3d1dabc45da37f443fc # v2.0.4
+        uses: mamba-org/setup-micromamba@add3a49764cedee8ee24e82dfde87f5bc2914462 # v2.0.7
         with:
           init-shell: bash
           environment-file: ${{ runner.temp }}/macos_dependencies.txt
@@ -79,12 +81,12 @@ jobs:
           printenv | sort
           $CC --version
       - name: Create installation directory
-        run: mkdir $HOME/install
+        run: mkdir "${HOME}/install"
       - name: Build and install
         shell: micromamba-shell {0}
-        run: source ./.github/workflows/macos_install.sh $HOME/install
+        run: source ./.github/workflows/macos_install.sh "${HOME}/install"
       - name: Add the bin directory to PATH
-        run: echo "$HOME/install/bin" >> $GITHUB_PATH
+        run: echo "${HOME}/install/bin" >> "${GITHUB_PATH}"
       - name: Check installed version
         if: ${{ !cancelled() }}
         shell: micromamba-shell {0}
@@ -93,32 +95,49 @@ jobs:
       - name: Run pytest with multiple workers in parallel
         shell: micromamba-shell {0}
         run: |
-          export PYTHONPATH=$(grass --config python_path):$PYTHONPATH
-          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
+          PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
+          LD_LIBRARY_PATH="$(grass --config path)/lib:${LD_LIBRARY_PATH}"
+          export PYTHONPATH
+          export LD_LIBRARY_PATH
           pytest \
             @.github/workflows/pytest_args_ci.txt \
             @.github/workflows/pytest_args_parallel.txt \
+            --junitxml=pytest.xdist.junit.xml \
             -k 'not testsuite'
       - name: Run pytest with a single worker (for tests marked with needs_solo_run)
         shell: micromamba-shell {0}
         run: |
-          export PYTHONPATH=$(grass --config python_path):$PYTHONPATH
-          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
+          PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
+          LD_LIBRARY_PATH="$(grass --config path)/lib:${LD_LIBRARY_PATH}"
+          export PYTHONPATH
+          export LD_LIBRARY_PATH
           pytest \
             @.github/workflows/pytest_args_ci.txt \
             @.github/workflows/pytest_args_not_parallel.txt \
+            --junitxml=pytest.needs_solo_run.junit.xml \
             -k 'not testsuite'
       - name: Run pytest with a single worker (for gunittest-based tests)
         shell: micromamba-shell {0}
         run: |
-          export PYTHONPATH=$(grass --config python_path):$PYTHONPATH
-          export LD_LIBRARY_PATH=$(grass --config path)/lib:$LD_LIBRARY_PATH
+          PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
+          LD_LIBRARY_PATH="$(grass --config path)/lib:${LD_LIBRARY_PATH}"
+          export PYTHONPATH
+          export LD_LIBRARY_PATH
           pytest \
-            @.github/workflows/pytest_args_gunittest.txt
+            @.github/workflows/pytest_args_gunittest.txt \
+            --junitxml=pytest.gunittest.junit.xml
+
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@47f89e9acb64b76debcd5ea40642d25a4adced9f # v1.1.1
+        with:
+          exclude: gui
+          flags: macos-pytest-python
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Cache GRASS Sample Dataset
         id: cached-data
-        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: sample-data/nc_spm_full_v2alpha2.tar.gz
           key: nc_spm_full_v2alpha2.tar.gz
@@ -132,6 +151,13 @@ jobs:
         env:
           SAMPLE_DATA: "https://grass.osgeo.org/sampledata/north_carolina/\
             nc_spm_full_v2alpha2.tar.gz"
+
+      - name: Save GRASS Sample Dataset to cache
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        if: steps.cached-data.outputs.cache-hit != 'true'
+        with:
+          path: sample-data/nc_spm_full_v2alpha2.tar.gz
+          key: nc_spm_full_v2alpha2.tar.gz
 
       - name: Run gunittest tests
         shell: micromamba-shell {0}

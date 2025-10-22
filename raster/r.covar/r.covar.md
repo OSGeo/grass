@@ -17,7 +17,7 @@ of N real numbers).
 
 The module
 *[m.eigensystem](https://grass.osgeo.org/grass-stable/manuals/addons/m.eigensystem.html)*
-in [GRASS GIS Addons](https://grass.osgeo.org/download/addons/) can be
+in [GRASS Addons](https://grass.osgeo.org/download/addons/) can be
 installed and used to generate the eigenvalues and vectors.
 
 ## EXAMPLE

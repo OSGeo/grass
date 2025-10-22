@@ -1,4 +1,5 @@
-from os.path import join, exists
+from os.path import join
+from pathlib import Path
 import grass.lib.gis as libgis
 import ctypes
 
@@ -190,18 +191,6 @@ class Vector(Info):
 
         """
         self.n_lines += 1
-        if not isinstance(cat, int) and not isinstance(cat, str):
-            # likely the case of using 7.0 API
-            import warnings
-
-            warnings.warn(
-                "Vector.write(geo_obj, attrs=(...)) is"
-                " deprecated, specify cat explicitly",
-                DeprecationWarning,
-            )
-            # try to accommodate
-            attrs = cat
-            cat = None
         if attrs and cat is None:
             # TODO: this does not work as expected when there are
             # already features in the map when we opened it
@@ -260,7 +249,7 @@ class Vector(Info):
         """
         loc = Location()
         path = join(loc.path(), self.mapset, "vector", self.name, "colr")
-        return bool(exists(path))
+        return bool(Path(path).exists())
 
 
 # =============================================
@@ -538,28 +527,30 @@ class VectorTopo(Vector):
 
         :param int feature_id: the id of feature to obtain
 
-        >>> test_vect = VectorTopo(test_vector_name)
-        >>> test_vect.open(mode="r")
-        >>> feature1 = test_vect.read(0)  # doctest: +ELLIPSIS
-        Traceback (most recent call last):
-            ...
-        ValueError: The index must be >0, 0 given.
-        >>> feature1 = test_vect.read(5)
-        >>> feature1
-        Line([Point(12.000000, 4.000000), Point(12.000000, 2.000000), Point(12.000000, 0.000000)])
-        >>> feature1.length()
-        4.0
-        >>> test_vect.read(-1)
-        Centroid(7.500000, 3.500000)
-        >>> len(test_vect)
-        21
-        >>> test_vect.read(21)
-        Centroid(7.500000, 3.500000)
-        >>> test_vect.read(22)  # doctest: +ELLIPSIS
-        Traceback (most recent call last):
-          ...
-        IndexError: Index out of range
-        >>> test_vect.close()
+        .. code-block:: pycon
+
+            >>> test_vect = VectorTopo(test_vector_name)
+            >>> test_vect.open(mode="r")
+            >>> feature1 = test_vect.read(0)  # doctest: +ELLIPSIS
+            Traceback (most recent call last):
+                ...
+            ValueError: The index must be >0, 0 given.
+            >>> feature1 = test_vect.read(5)
+            >>> feature1
+            Line([Point(12.000000, 4.000000), Point(12.000000, 2.000000), Point(12.000000, 0.000000)])
+            >>> feature1.length()
+            4.0
+            >>> test_vect.read(-1)
+            Centroid(7.500000, 3.500000)
+            >>> len(test_vect)
+            21
+            >>> test_vect.read(21)
+            Centroid(7.500000, 3.500000)
+            >>> test_vect.read(22)  # doctest: +ELLIPSIS
+            Traceback (most recent call last):
+              ...
+            IndexError: Index out of range
+            >>> test_vect.close()
 
         """  # noqa: E501
         return read_line(
@@ -745,12 +736,12 @@ class VectorTopo(Vector):
         :type bbox: grass.pygrass.vector.basic.Bbox
 
         :param feature_type: The type of feature that should be converted to
-                             the Well Known Binary (WKB) format. Supported are:
+                            the Well Known Binary (WKB) format. Supported are:
                             'point'    -> libvect.GV_POINT     1
                             'line'     -> libvect.GV_LINE      2
                             'boundary' -> libvect.GV_BOUNDARY  3
                             'centroid' -> libvect.GV_CENTROID  4
-        :type type: string
+        :type feature_type: string
 
         :param field: The category field
         :type field: integer
@@ -759,7 +750,9 @@ class VectorTopo(Vector):
 
         The well known binary are stored in byte arrays.
 
-         Examples:
+        Examples:
+
+        .. code-block:: pycon
 
          >>> from grass.pygrass.vector import VectorTopo
          >>> from grass.pygrass.vector.basic import Bbox
@@ -880,7 +873,9 @@ class VectorTopo(Vector):
 
         The well known binary are stored in byte arrays.
 
-         Examples:
+        Examples:
+
+        .. code-block:: pycon
 
          >>> from grass.pygrass.vector import VectorTopo
          >>> from grass.pygrass.vector.basic import Bbox
@@ -911,8 +906,6 @@ class VectorTopo(Vector):
          (4, 3, 141)
 
          >>> test_vect.close()
-
-
         """
         if bbox is None:
             bbox = self.bbox()

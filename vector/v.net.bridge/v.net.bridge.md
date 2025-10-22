@@ -17,7 +17,7 @@ input map to the output map. On the other hand, for
 **method=articulation**, points are created on the positions of
 articulation points.
 
-In GRASS GIS, *line* is not always a single line segment. It might be,
+In GRASS, *line* is not always a single line segment. It might be,
 and often is, a sequence of line segments between two intersections.
 Also, articulation point is a standard graph theoretic terminology which
 is slightly misleading in GRASS. An articulation point in graph theory

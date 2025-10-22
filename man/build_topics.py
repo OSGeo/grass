@@ -36,7 +36,7 @@ def build_topics(ext):
 
     keywords = {}
 
-    files = glob.glob1(man_dir, f"*.{ext}")
+    files = glob.glob(f"*.{ext}", root_dir=man_dir)
     for fname in files:
         with Path(man_dir, fname).open() as fil:
             # TODO maybe move to Python re (regex)

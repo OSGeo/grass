@@ -63,7 +63,7 @@
 #include <grass/raster.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 #include "r.proj.h"
 
 /* modify this table to add new methods */
@@ -234,9 +234,10 @@ int main(int argc, char **argv)
 
     gprint_bounds = G_define_flag();
     gprint_bounds->key = 'g';
+    gprint_bounds->label = _("Print input map's bounds in the current "
+                             "projection in shell script style [deprecated]");
     gprint_bounds->description =
-        _("[DEPRECATED] Print input map's bounds in the current "
-          "projection and exit (shell style). This flag is obsolete and will "
+        _("This flag is deprecated and will "
           "be removed in a future release. Use format=shell instead.");
     gprint_bounds->guisection = _("Print");
 
@@ -265,8 +266,9 @@ int main(int argc, char **argv)
     }
 
     if (gprint_bounds->answer) {
-        G_warning(_("Flag 'g' is deprecated and will be removed in a future "
-                    "release. Please use format=shell instead."));
+        G_verbose_message(
+            _("Flag 'g' is deprecated and will be removed in a future "
+              "release. Please use format=shell instead."));
         outputFormat = SHELL;
     }
 
@@ -333,16 +335,16 @@ int main(int argc, char **argv)
     if (list->answer) {
         int i;
         char **srclist;
-        JSON_Array *maps_array = NULL;
-        JSON_Value *maps_value = NULL;
+        G_JSON_Array *maps_array = NULL;
+        G_JSON_Value *maps_value = NULL;
 
         if (outputFormat == JSON) {
-            maps_value = json_value_init_array();
+            maps_value = G_json_value_init_array();
             if (maps_value == NULL) {
                 G_fatal_error(
                     _("Failed to initialize JSON array. Out of memory?"));
             }
-            maps_array = json_array(maps_value);
+            maps_array = G_json_array(maps_value);
         }
 
         G_verbose_message(_("Checking project <%s> mapset <%s>"),
@@ -357,19 +359,19 @@ int main(int argc, char **argv)
                 break;
 
             case JSON:
-                json_array_append_string(maps_array, srclist[i]);
+                G_json_array_append_string(maps_array, srclist[i]);
                 break;
             }
         }
         if (outputFormat == JSON) {
             char *serialized_string = NULL;
-            serialized_string = json_serialize_to_string_pretty(maps_value);
+            serialized_string = G_json_serialize_to_string_pretty(maps_value);
             if (serialized_string == NULL) {
                 G_fatal_error(_("Failed to initialize pretty JSON string."));
             }
             puts(serialized_string);
-            json_free_serialized_string(serialized_string);
-            json_value_free(maps_value);
+            G_json_free_serialized_string(serialized_string);
+            G_json_value_free(maps_value);
         }
         else {
             fflush(stdout);
@@ -446,8 +448,8 @@ int main(int argc, char **argv)
     ocols = outcellhd.cols;
 
     if (print_bounds->answer) {
-        JSON_Value *root_value = NULL;
-        JSON_Object *root_object = NULL;
+        G_JSON_Value *root_value = NULL;
+        G_JSON_Object *root_object = NULL;
 
         G_message(_("Input map <%s@%s> in project <%s>:"), inmap->answer,
                   setname, inlocation->answer);
@@ -479,12 +481,12 @@ int main(int argc, char **argv)
         G_format_easting(iwest, west_str, curr_proj);
 
         if (outputFormat == JSON) {
-            root_value = json_value_init_object();
+            root_value = G_json_value_init_object();
             if (root_value == NULL) {
                 G_fatal_error(
                     _("Failed to initialize JSON object. Out of memory?"));
             }
-            root_object = json_object(root_value);
+            root_object = G_json_object(root_value);
         }
 
         switch (outputFormat) {
@@ -504,47 +506,47 @@ int main(int argc, char **argv)
 
         case JSON:
             if (isfinite(inorth)) {
-                json_object_set_number(root_object, "north", inorth);
+                G_json_object_set_number(root_object, "north", inorth);
             }
             else {
-                json_object_set_null(root_object, "north");
+                G_json_object_set_null(root_object, "north");
             }
 
             if (isfinite(isouth)) {
-                json_object_set_number(root_object, "south", isouth);
+                G_json_object_set_number(root_object, "south", isouth);
             }
             else {
-                json_object_set_null(root_object, "south");
+                G_json_object_set_null(root_object, "south");
             }
 
             if (isfinite(iwest)) {
-                json_object_set_number(root_object, "west", iwest);
+                G_json_object_set_number(root_object, "west", iwest);
             }
             else {
-                json_object_set_null(root_object, "west");
+                G_json_object_set_null(root_object, "west");
             }
 
             if (isfinite(ieast)) {
-                json_object_set_number(root_object, "east", ieast);
+                G_json_object_set_number(root_object, "east", ieast);
             }
             else {
-                json_object_set_null(root_object, "east");
+                G_json_object_set_null(root_object, "east");
             }
 
-            json_object_set_number(root_object, "rows", irows);
-            json_object_set_number(root_object, "cols", icols);
+            G_json_object_set_number(root_object, "rows", irows);
+            G_json_object_set_number(root_object, "cols", icols);
             break;
         }
 
         if (outputFormat == JSON) {
             char *serialized_string = NULL;
-            serialized_string = json_serialize_to_string_pretty(root_value);
+            serialized_string = G_json_serialize_to_string_pretty(root_value);
             if (serialized_string == NULL) {
                 G_fatal_error(_("Failed to initialize pretty JSON string."));
             }
             puts(serialized_string);
-            json_free_serialized_string(serialized_string);
-            json_value_free(root_value);
+            G_json_free_serialized_string(serialized_string);
+            G_json_value_free(root_value);
         }
 
         exit(EXIT_SUCCESS);

@@ -31,11 +31,12 @@ import random
 import string
 
 from pathlib import Path
-from typing import TYPE_CHECKING, AnyStr, Callable, TypeVar, cast, overload
+from typing import TYPE_CHECKING, AnyStr, TypeVar, cast, overload
 
 
 if TYPE_CHECKING:
     from _typeshed import FileDescriptorOrPath, StrOrBytesPath, StrPath
+    from collections.abc import Callable
 
 
 # Type variables
@@ -153,22 +154,28 @@ class KeyValue(dict[str, VT]):
     """A general-purpose key-value store.
 
     KeyValue is a subclass of dict, but also allows entries to be read and
-    written using attribute syntax. Example:
+    written using attribute syntax.
 
-    >>> reg = KeyValue()
-    >>> reg["north"] = 489
-    >>> reg.north
-    489
-    >>> reg.south = 205
-    >>> reg["south"]
-    205
+    :Example:
+      .. code-block:: pycon
+
+        >>> reg = KeyValue()
+        >>> reg["north"] = 489
+        >>> reg.north
+        489
+        >>> reg.south = 205
+        >>> reg["south"]
+        205
 
     The keys of KeyValue are strings. To use other key types, use other mapping types.
     To use the attribute syntax, the keys must be valid Python attribute names.
     """
 
     def __getattr__(self, key: str) -> VT:
-        return self[key]
+        try:
+            return self[key]
+        except KeyError:
+            raise AttributeError(key)
 
     def __setattr__(self, key: str, value: VT) -> None:
         self[key] = value
@@ -190,7 +197,7 @@ def decode(bytes_: AnyStr, encoding: str | None = None) -> str:
 
     No-op if parameter is not bytes (assumed unicode string).
 
-    :param bytes bytes_: the bytes to decode
+    :param bytes\\_: the bytes to decode
     :param encoding: encoding to be used, default value is None
 
     Example
@@ -245,6 +252,10 @@ def encode(string: AnyStr, encoding: str | None = None) -> bytes:
 def text_to_string(text: AnyStr, encoding: str | None = None) -> str:
     """Convert text to str. Useful when passing text into environments,
     in Python 2 it needs to be bytes on Windows, in Python 3 in needs unicode.
+
+    :param text: The text to convert to string
+    :param encoding: The encoding to be used to decode the text that will be converted
+    :returns: A (unicode) string
     """
     return decode(text, encoding=encoding)
 
@@ -515,7 +526,7 @@ def set_path(modulename, dirname=None, path="."):
     The function is checking if the dirname is provided and if the
     directory exists and it is available using the path
     provided as third parameter, if yes add the path to sys.path to be
-    importable, otherwise it will check on GRASS GIS standard paths.
+    importable, otherwise it will check on GRASS standard paths.
 
     """
     import sys
@@ -524,12 +535,12 @@ def set_path(modulename, dirname=None, path="."):
     pathlib_ = None
     if dirname:
         pathlib_ = os.path.join(path, dirname)
-    if pathlib_ and os.path.exists(pathlib_):
+    if pathlib_ and Path(pathlib_).exists():
         # we are running the script from the script directory, therefore
         # we add the path to sys.path to reach the directory (dirname)
         sys.path.append(os.path.abspath(path))
     else:
-        # running from GRASS GIS session
+        # running from GRASS session
         path = get_lib_path(modulename, dirname)
         if path is None:
             pathname = os.path.join(modulename, dirname) if dirname else modulename
@@ -549,7 +560,7 @@ def clock():
     return time.perf_counter()
 
 
-def legalize_vector_name(name, fallback_prefix="x"):
+def legalize_vector_name(name, fallback_prefix: str | None = "x") -> str:
     """Make *name* usable for vectors, tables, and columns
 
     The returned string is a name usable for vectors, tables, and columns,
@@ -599,11 +610,11 @@ def append_node_pid(name):
 
     >>> append_node_pid("tmp_raster_1")
 
-    ..note::
+    .. note::
 
         Before you use this function for creating temporary files (i.e., normal
         files on disk, not maps and other mapset elements), see functions
-        designed for it in the GRASS GIS or standard Python library. These
+        designed for it in the GRASS or standard Python library. These
         take care of collisions already on different levels.
     """
     # We are using this node as a suffix, so we don't need to make sure it
@@ -632,7 +643,7 @@ def append_uuid(name):
 
     >>> append_uuid("tmp")
 
-    ..note::
+    .. note::
 
         See the note about creating temporary files in the
         :func:`append_node_pid()` description.
@@ -647,12 +658,12 @@ def append_random(name, suffix_length=None, total_length=None):
     >>> append_random("tmp", 8)
     >>> append_random("tmp", total_length=16)
 
-    ..note::
+    .. note::
 
         Note that this will be influenced by the random seed set for the Python
         random package.
 
-    ..note::
+    .. note::
 
         See the note about creating temporary files in the
         :func:`append_node_pid()` description.

@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <grass/gjson.h>
 #include <grass/glocale.h>
 
 #include "global.h"
@@ -39,6 +40,7 @@ CELL NULL_CELL;
 
 char *fs;
 struct Categories *labels;
+char **map_names; /* input map names */
 
 int main(int argc, char *argv[])
 {
@@ -55,6 +57,10 @@ int main(int argc, char *argv[])
     int with_areas;
     int with_labels;
     int do_sort;
+
+    enum OutputFormat format;
+    G_JSON_Array *root_array;
+    G_JSON_Value *root_value;
 
     /* printf format */
     char fmt[20];
@@ -95,6 +101,7 @@ int main(int argc, char *argv[])
                                   explicit fp ranges in cats or when the map
                                   is int, nsteps is ignored */
         struct Option *sort;   /* sort by cell counts */
+        struct Option *format;
     } option;
 
     G_gisinit(argv[0]);
@@ -115,7 +122,7 @@ int main(int argc, char *argv[])
         _("Name for output file (if omitted or \"-\" output to stdout)");
 
     option.fs = G_define_standard_option(G_OPT_F_SEP);
-    option.fs->answer = "space";
+    option.fs->answer = NULL;
     option.fs->guisection = _("Formatting");
 
     option.nv = G_define_standard_option(G_OPT_M_NULL_VALUE);
@@ -144,6 +151,13 @@ int main(int argc, char *argv[])
                _("Sort by cell counts in ascending order"),
                _("Sort by cell counts in descending order"));
     option.sort->guisection = _("Formatting");
+
+    option.format = G_define_standard_option(G_OPT_F_FORMAT);
+    option.format->options = "plain,csv,json";
+    option.format->descriptions = ("plain;Human readable text output;"
+                                   "csv;CSV (Comma Separated Values);"
+                                   "json;JSON (JavaScript Object Notation);");
+    option.format->guisection = _("Print");
 
     /* Define the different flags */
 
@@ -233,6 +247,27 @@ int main(int argc, char *argv[])
                   option.nsteps->key, option.nsteps->key);
         nsteps = 255;
     }
+
+    /* For backward compatibility */
+    if (!option.fs->answer) {
+        if (strcmp(option.format->answer, "csv") == 0)
+            option.fs->answer = "comma";
+        else
+            option.fs->answer = "space";
+    }
+
+    if (strcmp(option.format->answer, "json") == 0) {
+        format = JSON;
+        root_value = G_json_value_init_array();
+        root_array = G_json_array(root_value);
+    }
+    else if (strcmp(option.format->answer, "csv") == 0) {
+        format = CSV;
+    }
+    else {
+        format = PLAIN;
+    }
+
     cat_ranges = flag.C->answer;
 
     averaged = flag.A->answer;
@@ -291,8 +326,11 @@ int main(int argc, char *argv[])
         is_fp = (int *)G_realloc(is_fp, (nfiles + 1) * sizeof(int));
         DMAX = (DCELL *)G_realloc(DMAX, (nfiles + 1) * sizeof(DCELL));
         DMIN = (DCELL *)G_realloc(DMIN, (nfiles + 1) * sizeof(DCELL));
+        map_names =
+            (char **)G_realloc(map_names, (nfiles + 1) * sizeof(char *));
 
         fd[nfiles] = Rast_open_old(name, "");
+        map_names[nfiles] = G_store(name);
 
         if (!as_int)
             is_fp[nfiles] = Rast_map_is_fp(name, "");
@@ -376,10 +414,22 @@ int main(int argc, char *argv[])
         snprintf(fmt, sizeof(fmt), "%%.%dlf", dp);
 
     if (raw_data)
-        raw_stats(fd, with_coordinates, with_xy, with_labels);
+        raw_stats(fd, with_coordinates, with_xy, with_labels, format,
+                  root_array);
     else
         cell_stats(fd, with_percents, with_counts, with_areas, do_sort,
-                   with_labels, fmt);
+                   with_labels, fmt, format, root_array);
+
+    if (format == JSON) {
+        char *serialized_string = NULL;
+        serialized_string = G_json_serialize_to_string_pretty(root_value);
+        if (serialized_string == NULL) {
+            G_fatal_error(_("Failed to initialize pretty JSON string."));
+        }
+        puts(serialized_string);
+        G_json_free_serialized_string(serialized_string);
+        G_json_value_free(root_value);
+    }
 
     exit(EXIT_SUCCESS);
 }
