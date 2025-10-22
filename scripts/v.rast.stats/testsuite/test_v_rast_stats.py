@@ -23,11 +23,12 @@ class TestRastStats(TestCase):
         cls.del_temp_region()
 
     def tearDown(self):
-        self.runModule("g.remove", flags="f", type="raster", name="map_a")
-        self.runModule("g.remove", flags="f", type="raster", name="map_b")
-        self.runModule("g.remove", flags="f", type="raster", name="zone_map")
-        self.runModule("g.remove", flags="f", type="raster", name="row_map")
-        self.runModule("g.remove", flags="f", type="raster", name="test_line")
+        self.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name="map_a,map_b,zone_map,row_map,test_line",
+        )
 
     def setUp(self):
         """Create input data"""
@@ -51,8 +52,8 @@ class TestRastStats(TestCase):
         vt.open("w", tab_cols=cols)
         line1 = Line([(1, 1), (2, 1), (2, 2)])
         line2 = Line([(10, 20), (15, 22), (20, 32), (30, 40)])
-        vt.write(line1, ("first",))
-        vt.write(line2, ("second",))
+        vt.write(line1, attrs=("first",))
+        vt.write(line2, attrs=("second",))
         vt.table.conn.commit()
         vt.close()
 
@@ -66,8 +67,8 @@ class TestRastStats(TestCase):
         cent2 = Centroid(x=2.75, y=2.75)
         vt.write(area1)
         vt.write(area2)
-        vt.write(cent1, ("first",))
-        vt.write(cent2, ("second",))
+        vt.write(cent1, attrs=("first",))
+        vt.write(cent2, attrs=("second",))
         vt.table.conn.commit()
         vt.close()
 

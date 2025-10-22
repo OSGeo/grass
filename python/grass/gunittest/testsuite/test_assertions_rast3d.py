@@ -31,24 +31,24 @@ class TestRaster3dMapAssertions(TestCase):
             "g.remove",
             flags="f",
             type="raster_3d",
-            name=",".join([cls.constant_map, cls.rcd_increasing_map]),
+            name=f"{cls.constant_map},{cls.rcd_increasing_map}",
         )
 
     def test_assertRaster3dFitsUnivar(self):
-        reference = dict(
-            n=1000000,
-            null_cells=0,
-            cells=1000000,
-            min=155,
-            max=155,
-            range=0,
-            mean=155,
-            mean_of_abs=155,
-            stddev=0,
-            variance=0,
-            coeff_var=0,
-            sum=155000000,
-        )
+        reference = {
+            "n": 1000000,
+            "null_cells": 0,
+            "cells": 1000000,
+            "min": 155,
+            "max": 155,
+            "range": 0,
+            "mean": 155,
+            "mean_of_abs": 155,
+            "stddev": 0,
+            "variance": 0,
+            "coeff_var": 0,
+            "sum": 155000000,
+        }
         self.assertRaster3dFitsUnivar(
             self.constant_map, reference=reference, precision=0.000001
         )
@@ -63,30 +63,30 @@ class TestRaster3dMapAssertions(TestCase):
             ValueError,
             self.assertRaster3dFitsUnivar,
             self.constant_map,
-            reference=dict(a=4, b=5, c=6),
+            reference={"a": 4, "b": 5, "c": 6},
         )
         self.assertRaises(
             CalledModuleError,
             self.assertRaster3dFitsUnivar,
             "does_not_exists",
-            reference=dict(a=4, b=5, c=6),
+            reference={"a": 4, "b": 5, "c": 6},
         )
 
     def test_assertRaster3dFitsInfo(self):
-        reference = dict(
-            north=200,
-            south=100,
-            east=400,
-            west=200,
-            bottom=450,
-            top=500,
-            nsres=1,
-            ewres=1,
-            tbres=1,
-            rows=100,
-            cols=200,
-            depths=50,
-        )
+        reference = {
+            "north": 200,
+            "south": 100,
+            "east": 400,
+            "west": 200,
+            "bottom": 450,
+            "top": 500,
+            "nsres": 1,
+            "ewres": 1,
+            "tbres": 1,
+            "rows": 100,
+            "cols": 200,
+            "depths": 50,
+        }
         self.assertRaster3dFitsInfo(self.constant_map, reference=reference)
 
         reference["north"] = 500
@@ -100,11 +100,11 @@ class TestRaster3dMapAssertions(TestCase):
             ValueError,
             self.assertRaster3dFitsInfo,
             self.constant_map,
-            reference=dict(a=5),
+            reference={"a": 5},
         )
 
     def test_common_values_info_univar(self):
-        minmax = dict(min=3, max=350)
+        minmax = {"min": 3, "max": 350}
         self.assertRaster3dFitsUnivar(self.rcd_increasing_map, minmax, precision=0.01)
         self.assertRaster3dFitsInfo(self.rcd_increasing_map, minmax, precision=0.01)
 
@@ -138,7 +138,7 @@ class TestRaster3dMapAssertions(TestCase):
             actual=self.rcd_increasing_map,
             reference=self.rcd_increasing_map,
             precision=0,  # this might need to be increased
-            statistics=dict(mean=0),
+            statistics={"mean": 0},
             msg="The difference of same maps should have small mean",
         )
         self.assertRaises(
@@ -147,7 +147,7 @@ class TestRaster3dMapAssertions(TestCase):
             actual=self.constant_map,
             reference=self.rcd_increasing_map,
             precision=1,
-            statistics=dict(mean=0),
+            statistics={"mean": 0},
             msg="The difference of different maps should have huge mean",
         )
 

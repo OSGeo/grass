@@ -9,7 +9,7 @@
  * PURPOSE:      Imports LAS LiDAR point clouds to a raster map using
  *               aggregate statistics.
  *
- * COPYRIGHT:    (C) 2011-2015 Markus Metz and the The GRASS Development Team
+ * COPYRIGHT:    (C) 2011-2015 Markus Metz and the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -51,8 +51,8 @@ int main(int argc, char *argv[])
     struct PointBinning point_binning;
     void *base_array;
     void *raster_row;
-    struct Cell_head region;
-    struct Cell_head input_region;
+    struct Cell_head region = {0};
+    struct Cell_head input_region = {0};
     int rows, last_rows, row0, cols; /* scan box size */
     int row;                         /* counters */
 
@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
     int return_filter;
 
     const char *projstr;
-    struct Cell_head cellhd, loc_wind;
+    struct Cell_head cellhd = {0}, loc_wind = {0};
 
     unsigned int n_filtered;
 
@@ -808,8 +808,9 @@ int main(int argc, char *argv[])
     /* close raster file & write history */
     Rast_close(out_fd);
 
-    sprintf(title, "Raw X,Y,Z data binned into a raster grid by cell %s",
-            method_opt->answer);
+    snprintf(title, sizeof(title),
+             "Raw X,Y,Z data binned into a raster grid by cell %s",
+             method_opt->answer);
     Rast_put_cell_title(outmap, title);
 
     Rast_short_history(outmap, "raster", &history);
@@ -830,16 +831,16 @@ int main(int argc, char *argv[])
                     " them out"),
                   n_invalid, only_valid_flag->key);
     if (infiles.num_items > 1) {
-        sprintf(buff,
-                _("Raster map <%s> created."
-                  " %lu points from %d files found in region."),
-                outmap, count_total, infiles.num_items);
+        snprintf(buff, sizeof(buff),
+                 _("Raster map <%s> created."
+                   " %lu points from %d files found in region."),
+                 outmap, count_total, infiles.num_items);
     }
     else {
-        sprintf(buff,
-                _("Raster map <%s> created."
-                  " %lu points found in region."),
-                outmap, count_total);
+        snprintf(buff, sizeof(buff),
+                 _("Raster map <%s> created."
+                   " %lu points found in region."),
+                 outmap, count_total);
     }
 
     G_done_msg("%s", buff);

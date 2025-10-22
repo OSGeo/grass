@@ -16,18 +16,23 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
+from __future__ import annotations
+
+from math import ceil, cos, floor, fmod, radians, sin
+from typing import overload
+
 import wx
-from math import ceil, floor, sin, cos, pi
+from core.gcmd import GError, RunCommand
+
+import grass.script as gs
+from grass.exceptions import ScriptError
 
 try:
-    from PIL import Image as PILImage  # noqa
+    from PIL import Image as PILImage  # noqa: F401
 
     havePILImage = True
 except ImportError:
     havePILImage = False
-
-import grass.script as grass
-from core.gcmd import RunCommand, GError
 
 
 class Rect2D(wx.Rect2D):
@@ -93,10 +98,7 @@ class UnitConversion:
 
     def __init__(self, parent=None):
         self.parent = parent
-        if self.parent:
-            ppi = wx.ClientDC(self.parent).GetPPI()
-        else:
-            ppi = (72, 72)
+        ppi = wx.ClientDC(self.parent).GetPPI() if self.parent else (72, 72)
         self._unitsPage = {
             "inch": {"val": 1.0, "tr": _("inch")},
             "point": {"val": 72.0, "tr": _("point")},
@@ -148,12 +150,22 @@ class UnitConversion:
         return float(value) / self._units[fromUnit]["val"] * self._units[toUnit]["val"]
 
 
-def convertRGB(rgb):
+@overload
+def convertRGB(rgb: wx.Colour) -> str:
+    pass
+
+
+@overload
+def convertRGB(rgb: str) -> wx.Colour | None:
+    pass
+
+
+def convertRGB(rgb: wx.Colour | str) -> str | wx.Colour | None:
     """Converts wx.Colour(r,g,b,a) to string 'r:g:b' or named color,
     or named color/r:g:b string to wx.Colour, depending on input"""
     # transform a wx.Colour tuple into an r:g:b string
     if isinstance(rgb, wx.Colour):
-        for name, color in grass.named_colors.items():
+        for name, color in gs.named_colors.items():
             if (
                 rgb.Red() == int(color[0] * 255)
                 and rgb.Green() == int(color[1] * 255)
@@ -162,17 +174,13 @@ def convertRGB(rgb):
                 return name
         return str(rgb.Red()) + ":" + str(rgb.Green()) + ":" + str(rgb.Blue())
     # transform a GRASS named color or an r:g:b string into a wx.Colour tuple
-    else:
-        color = (
-            int(grass.parse_color(rgb)[0] * 255),
-            int(grass.parse_color(rgb)[1] * 255),
-            int(grass.parse_color(rgb)[2] * 255),
-        )
-        color = wx.Colour(*color)
-        if color.IsOk():
-            return color
-        else:
-            return None
+    parsed_color = gs.parse_color(rgb)
+    if parsed_color is None:
+        return None
+    color = wx.Colour(*tuple(int(x * 255) for x in parsed_color))
+    if color.IsOk():
+        return color
+    return None
 
 
 def PaperMapCoordinates(mapInstr, x, y, paperToMap=True, env=None):
@@ -182,34 +190,30 @@ def PaperMapCoordinates(mapInstr, x, y, paperToMap=True, env=None):
     :param x,y: paper coords in inches or mapcoords in map units
     :param paperToMap: specify conversion direction
     """
-    region = grass.region(env=env)
+    region = gs.region(env=env)
     mapWidthPaper = mapInstr["rect"].GetWidth()
     mapHeightPaper = mapInstr["rect"].GetHeight()
     mapWidthEN = region["e"] - region["w"]
     mapHeightEN = region["n"] - region["s"]
 
-    if paperToMap:
-        diffX = x - mapInstr["rect"].GetX()
-        diffY = y - mapInstr["rect"].GetY()
-        diffEW = diffX * mapWidthEN / mapWidthPaper
-        diffNS = diffY * mapHeightEN / mapHeightPaper
-        e = region["w"] + diffEW
-        n = region["n"] - diffNS
-
-        if projInfo()["proj"] == "ll":
-            return e, n
-        else:
-            return int(e), int(n)
-
-    else:
+    if not paperToMap:
         diffEW = x - region["w"]
         diffNS = region["n"] - y
         diffX = mapWidthPaper * diffEW / mapWidthEN
         diffY = mapHeightPaper * diffNS / mapHeightEN
         xPaper = mapInstr["rect"].GetX() + diffX
         yPaper = mapInstr["rect"].GetY() + diffY
+        return (xPaper, yPaper)
 
-        return xPaper, yPaper
+    diffX = x - mapInstr["rect"].GetX()
+    diffY = y - mapInstr["rect"].GetY()
+    diffEW = diffX * mapWidthEN / mapWidthPaper
+    diffNS = diffY * mapHeightEN / mapHeightPaper
+    e = region["w"] + diffEW
+    n = region["n"] - diffNS
+    if projInfo()["proj"] == "ll":
+        return (e, n)
+    return (int(e), int(n))
 
 
 def AutoAdjust(self, scaleType, rect, env, map=None, mapType=None, region=None):
@@ -222,24 +226,22 @@ def AutoAdjust(self, scaleType, rect, env, map=None, mapType=None, region=None):
             res = ""
             if mapType == "raster":
                 try:
-                    res = grass.read_command(
-                        "g.region", flags="gu", raster=map, env=env
-                    )
-                except grass.ScriptError:
+                    res = gs.read_command("g.region", flags="gu", raster=map, env=env)
+                except ScriptError:
                     pass
             elif mapType == "vector":
-                res = grass.read_command("g.region", flags="gu", vector=map, env=env)
-            currRegionDict = grass.parse_key_val(res, val_type=float)
+                res = gs.read_command("g.region", flags="gu", vector=map, env=env)
+            currRegionDict = gs.parse_key_val(res, val_type=float)
         elif scaleType == 1 and region:  # saved region
-            res = grass.read_command("g.region", flags="gu", region=region, env=env)
-            currRegionDict = grass.parse_key_val(res, val_type=float)
+            res = gs.read_command("g.region", flags="gu", region=region, env=env)
+            currRegionDict = gs.parse_key_val(res, val_type=float)
         elif scaleType == 2:  # current region
-            currRegionDict = grass.region(env=None)
+            currRegionDict = gs.region(env=None)
 
         else:
             return None, None, None
     # fails after switching location
-    except (grass.ScriptError, grass.CalledModuleError):
+    except (ScriptError, gs.CalledModuleError):
         pass
 
     if not currRegionDict:
@@ -290,11 +292,11 @@ def SetResolution(dpi, width, height, env):
     :param width: map frame width
     :param height: map frame height
     """
-    region = grass.region(env=env)
+    region = gs.region(env=env)
     if region["cols"] > width * dpi or region["rows"] > height * dpi:
         rows = height * dpi
         cols = width * dpi
-        env["GRASS_REGION"] = grass.region_env(rows=rows, cols=cols, env=env)
+        env["GRASS_REGION"] = gs.region_env(rows=rows, cols=cols, env=env)
 
 
 def ComputeSetRegion(self, mapDict, env):
@@ -329,13 +331,10 @@ def ComputeSetRegion(self, mapDict, env):
         centerN = mapDict["center"][1]
 
         raster = self.instruction.FindInstructionByType("raster")
-        if raster:
-            rasterId = raster.id
-        else:
-            rasterId = None
+        rasterId = raster.id if raster else None
 
         if rasterId:
-            env["GRASS_REGION"] = grass.region_env(
+            env["GRASS_REGION"] = gs.region_env(
                 n=ceil(centerN + rectHalfMeter[1]),
                 s=floor(centerN - rectHalfMeter[1]),
                 e=ceil(centerE + rectHalfMeter[0]),
@@ -344,7 +343,7 @@ def ComputeSetRegion(self, mapDict, env):
                 env=env,
             )
         else:
-            env["GRASS_REGION"] = grass.region_env(
+            env["GRASS_REGION"] = gs.region_env(
                 n=ceil(centerN + rectHalfMeter[1]),
                 s=floor(centerN - rectHalfMeter[1]),
                 e=ceil(centerE + rectHalfMeter[0]),
@@ -361,7 +360,7 @@ def projInfo():
         "g.proj",
         flags="g",
         read=True,
-        parse=grass.parse_key_val,
+        parse=gs.parse_key_val,
     )
 
     return (
@@ -384,7 +383,7 @@ def GetMapBounds(filename, env, portrait=True):
         bb = list(
             map(
                 float,
-                grass.read_command(
+                gs.read_command(
                     "ps.map", flags="b" + orient, quiet=True, input=filename, env=env
                 )
                 .strip()
@@ -392,7 +391,7 @@ def GetMapBounds(filename, env, portrait=True):
                 .split(","),
             )
         )
-    except (grass.ScriptError, IndexError):
+    except (ScriptError, IndexError):
         GError(message=_("Unable to run `ps.map -b`"))
         return None
     return Rect2D(bb[0], bb[3], bb[2] - bb[0], bb[1] - bb[3])
@@ -402,31 +401,33 @@ def getRasterType(map):
     """Returns type of raster map (CELL, FCELL, DCELL)"""
     if map is None:
         map = ""
-    file = grass.find_file(name=map, element="cell")
+    file = gs.find_file(name=map, element="cell")
     if file.get("file"):
-        rasterType = grass.raster_info(map)["datatype"]
-        return rasterType
-    else:
-        return None
+        return gs.raster_info(map)["datatype"]
+    return None
 
 
-def BBoxAfterRotation(w, h, angle):
-    """Compute bounding box or rotated rectangle
+def BBoxAfterRotation(w: float, h: float, angle: float) -> tuple[int, int]:
+    """Compute the bounding box of a rotated rectangle
 
     :param w: rectangle width
     :param h: rectangle height
     :param angle: angle (0, 360) in degrees
     """
-    angleRad = angle / 180.0 * pi
-    ct = cos(angleRad)
-    st = sin(angleRad)
 
-    hct = h * ct
-    wct = w * ct
-    hst = h * st
-    wst = w * st
+    angle = fmod(angle, 360)
+    angleRad: float = radians(angle)
+    ct: float = cos(angleRad)
+    st: float = sin(angleRad)
+
+    hct: float = h * ct
+    wct: float = w * ct
+    hst: float = h * st
+    wst: float = w * st
     y = x = 0
 
+    if angle == 0:
+        return (ceil(w), ceil(h))
     if 0 < angle <= 90:
         y_min = y
         y_max = y + hct + wst
@@ -447,7 +448,10 @@ def BBoxAfterRotation(w, h, angle):
         y_max = y + hct
         x_min = x
         x_max = x + wct - hst
+    else:
+        msg = "The angle argument should be between 0 and 360 degrees"
+        raise ValueError(msg)
 
-    width = int(ceil(abs(x_max) + abs(x_min)))
-    height = int(ceil(abs(y_max) + abs(y_min)))
-    return width, height
+    width: int = ceil(abs(x_max) + abs(x_min))
+    height: int = ceil(abs(y_max) + abs(y_min))
+    return (width, height)

@@ -8,7 +8,8 @@ Usage:
 ::
 
     from grass.script import task as gtask
-    gtask.command_info('r.info')
+
+    gtask.command_info("r.info")
 
 (C) 2011 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -21,14 +22,14 @@ for details.
 import os
 import re
 import sys
-import xml.etree.ElementTree as etree
+import xml.etree.ElementTree as ET
 from xml.parsers import expat
 
 from grass.exceptions import ScriptError
 from .utils import decode, split
 from .core import Popen, PIPE, get_real_command
 
-ETREE_EXCEPTIONS = (etree.ParseError, expat.ExpatError)
+ETREE_EXCEPTIONS = (ET.ParseError, expat.ExpatError)
 
 
 class grassTask:
@@ -38,8 +39,10 @@ class grassTask:
 
     ::
 
-        blackList = {'items' : {'d.legend' : { 'flags' : ['m'], 'params' : [] }},
-                     'enabled': True}
+        blackList = {
+            "items": {"d.legend": {"flags": ["m"], "params": []}},
+            "enabled": True,
+        }
 
     :param str path: full path
     :param blackList: hide some options in the GUI (dictionary)
@@ -48,11 +51,11 @@ class grassTask:
     def __init__(self, path=None, blackList=None):
         self.path = path
         self.name = _("unknown")
-        self.params = list()
+        self.params = []
         self.description = ""
         self.label = ""
-        self.flags = list()
-        self.keywords = list()
+        self.flags = []
+        self.keywords = []
         self.errorMsg = ""
         self.firstParam = None
         if blackList:
@@ -63,7 +66,7 @@ class grassTask:
         if path is not None:
             try:
                 processTask(
-                    tree=etree.fromstring(get_interface_description(path)), task=self
+                    tree=ET.fromstring(get_interface_description(path)), task=self
                 )
             except ScriptError as e:
                 self.errorMsg = e.value
@@ -86,13 +89,12 @@ class grassTask:
 
     def get_name(self):
         """Get task name"""
-        if sys.platform == "win32":
-            name, ext = os.path.splitext(self.name)
-            if ext in (".py", ".sh"):
-                return name
-            else:
-                return self.name
+        if sys.platform != "win32":
+            return self.name
 
+        name, ext = os.path.splitext(self.name)
+        if ext in {".py", ".sh"}:
+            return name
         return self.name
 
     def get_description(self, full=True):
@@ -100,13 +102,11 @@ class grassTask:
 
         :param bool full: True for label + desc
         """
-        if self.label:
-            if full:
-                return self.label + " " + self.description
-            else:
-                return self.label
-        else:
+        if not self.label:
             return self.description
+        if full:
+            return self.label + " " + self.description
+        return self.label
 
     def get_keywords(self):
         """Get module's keywords"""
@@ -117,22 +117,14 @@ class grassTask:
 
         :param str element: element name
         """
-        params = []
-        for p in self.params:
-            params.append(p[element])
-
-        return params
+        return [p[element] for p in self.params]
 
     def get_list_flags(self, element="name"):
         """Get list of flags
 
         :param str element: element name
         """
-        flags = []
-        for p in self.flags:
-            flags.append(p[element])
-
-        return flags
+        return [p[element] for p in self.flags]
 
     def get_param(self, value, element="name", raiseError=True):
         """Find and return a param by name
@@ -148,17 +140,15 @@ class grassTask:
             if isinstance(val, (list, tuple)):
                 if value in val:
                     return p
-            else:
-                if p[element] == value:
-                    return p
+            elif p[element] == value:
+                return p
 
         if raiseError:
             raise ValueError(
                 _("Parameter element '%(element)s' not found: '%(value)s'")
                 % {"element": element, "value": value}
             )
-        else:
-            return None
+        return None
 
     def get_flag(self, aFlag):
         """Find and return a flag by name
@@ -166,18 +156,19 @@ class grassTask:
         Raises ValueError when the flag is not found.
 
         :param str aFlag: name of the flag
+        :raises ValueError: When the flag is not found.
         """
         for f in self.flags:
             if f["name"] == aFlag:
                 return f
         raise ValueError(_("Flag not found: %s") % aFlag)
 
-    def get_cmd_error(self):
+    def get_cmd_error(self) -> list[str]:
         """Get error string produced by get_cmd(ignoreErrors = False)
 
         :return: list of errors
         """
-        errorList = list()
+        errorList = []
         # determine if suppress_required flag is given
         for f in self.flags:
             if f["value"] and f["suppress_required"]:
@@ -206,6 +197,8 @@ class grassTask:
         :param bool ignoreRequired: True to ignore required flags, otherwise
                                     '@<required@>' is shown
         :param bool ignoreDefault: True to ignore parameters with default values
+
+        :raises ValueError: When ``ignoreErrors=False`` and there are errors
         """
         cmd = [self.get_name()]
 
@@ -248,11 +241,7 @@ class grassTask:
 
     def has_required(self):
         """Check if command has at least one required parameter"""
-        for p in self.params:
-            if p.get("required", False):
-                return True
-
-        return False
+        return any(p.get("required", False) for p in self.params)
 
     def set_param(self, aParam, aValue, element="value"):
         """Set param value/values."""
@@ -322,7 +311,7 @@ class processTask:
         self.task.label = self._get_node_text(self.root, "label")
         self.task.description = self._get_node_text(self.root, "description")
 
-    def _process_params(self):
+    def _process_params(self) -> None:
         """Process parameters"""
         for p in self.root.findall("parameter"):
             # gisprompt
@@ -353,24 +342,15 @@ class processTask:
                 for ki in node_key_desc.findall("item"):
                     key_desc.append(ki.text)
 
-            if p.get("multiple", "no") == "yes":
-                multiple = True
-            else:
-                multiple = False
-            if p.get("required", "no") == "yes":
-                required = True
-            else:
-                required = False
+            multiple = p.get("multiple", "no") == "yes"
+            required = p.get("required", "no") == "yes"
 
-            if (
+            hidden: bool = bool(
                 self.task.blackList["enabled"]
-                and self.task.name in self.task.blackList["items"]
+                and self.task.get_name() in self.task.blackList["items"]
                 and p.get("name")
-                in self.task.blackList["items"][self.task.name].get("params", [])
-            ):
-                hidden = True
-            else:
-                hidden = False
+                in self.task.blackList["items"][self.task.get_name()].get("params", [])
+            )
 
             self.task.params.append(
                 {
@@ -395,23 +375,17 @@ class processTask:
                 }
             )
 
-    def _process_flags(self):
+    def _process_flags(self) -> None:
         """Process flags"""
         for p in self.root.findall("flag"):
-            if (
+            hidden: bool = bool(
                 self.task.blackList["enabled"]
                 and self.task.name in self.task.blackList["items"]
                 and p.get("name")
                 in self.task.blackList["items"][self.task.name].get("flags", [])
-            ):
-                hidden = True
-            else:
-                hidden = False
+            )
 
-            if p.find("suppress_required") is not None:
-                suppress_required = True
-            else:
-                suppress_required = False
+            suppress_required: bool = bool(p.find("suppress_required") is not None)
 
             self.task.flags.append(
                 {
@@ -429,8 +403,7 @@ class processTask:
         """Get node text"""
         p = node.find(tag)
         if p is not None:
-            res = " ".join(p.text.split())
-            return res
+            return " ".join(p.text.split())
 
         return default
 
@@ -441,22 +414,25 @@ class processTask:
 
 def convert_xml_to_utf8(xml_text):
     # enc = locale.getdefaultlocale()[1]
-
+    if xml_text is None:
+        return None
     # modify: fetch encoding from the interface description text(xml)
     # e.g. <?xml version="1.0" encoding="GBK"?>
     pattern = re.compile(rb'<\?xml[^>]*\Wencoding="([^"]*)"[^>]*\?>')
     m = re.match(pattern, xml_text)
     if m is None:
-        return xml_text.encode("utf-8") if xml_text else None
-    #
+        try:
+            xml_text.decode("utf-8", errors="strict")
+            return xml_text
+        except UnicodeDecodeError:
+            return decode(xml_text).encode("utf-8")
+
     enc = m.groups()[0]
 
     # modify: change the encoding to "utf-8", for correct parsing
     xml_text_utf8 = xml_text.decode(enc.decode("ascii")).encode("utf-8")
     p = re.compile(b'encoding="' + enc + b'"', re.IGNORECASE)
-    xml_text_utf8 = p.sub(b'encoding="utf-8"', xml_text_utf8)
-
-    return xml_text_utf8
+    return p.sub(b'encoding="utf-8"', xml_text_utf8)
 
 
 def get_interface_description(cmd):
@@ -467,9 +443,13 @@ def get_interface_description(cmd):
     otherwise the parser will not succeed.
 
     :param cmd: command (name of GRASS module)
+    :raises ~grass.exceptions.ScriptError:
+        When unable to fetch the interface description for a command.
     """
     try:
-        p = Popen([cmd, "--interface-description"], stdout=PIPE, stderr=PIPE)
+        p = Popen(
+            [cmd, "--interface-description"], stdout=PIPE, stderr=PIPE, text=False
+        )
         cmdout, cmderr = p.communicate()
 
         # TODO: do it better (?)
@@ -486,6 +466,7 @@ def get_interface_description(cmd):
                 [sys.executable, get_real_command(cmd), "--interface-description"],
                 stdout=PIPE,
                 stderr=PIPE,
+                text=False,
             )
             cmdout, cmderr = p.communicate()
 
@@ -509,13 +490,12 @@ def get_interface_description(cmd):
         )
 
     desc = convert_xml_to_utf8(cmdout)
-    desc = desc.replace(
+    return desc.replace(
         b"grass-interface.dtd",
         os.path.join(os.getenv("GISBASE"), "gui", "xml", "grass-interface.dtd").encode(
             "utf-8"
         ),
     )
-    return desc
 
 
 def parse_interface(name, parser=processTask, blackList=None):
@@ -527,14 +507,17 @@ def parse_interface(name, parser=processTask, blackList=None):
     :param str name: name of GRASS module to be parsed
     :param parser:
     :param blackList:
+
+    :raises ~grass.exceptions.ScriptError:
+        When the interface description of a module cannot be parsed.
     """
     try:
-        tree = etree.fromstring(get_interface_description(name))
+        tree = ET.fromstring(get_interface_description(name))
     except ETREE_EXCEPTIONS as error:
         raise ScriptError(
-            _(
-                "Cannot parse interface description of" "<{name}> module: {error}"
-            ).format(name=name, error=error)
+            _("Cannot parse interface description of <{name}> module: {error}").format(
+                name=name, error=error
+            )
         )
     task = parser(tree, blackList=blackList).get_task()
     # if name from interface is different than the originally
@@ -552,7 +535,7 @@ def command_info(cmd):
     with entries for description, keywords, usage, flags, and
     parameters, e.g.
 
-    >>> command_info('g.tempfile') # doctest: +NORMALIZE_WHITESPACE
+    >>> command_info("g.tempfile")  # doctest: +NORMALIZE_WHITESPACE
     {'keywords': ['general', 'support'], 'params': [{'gisprompt': False,
     'multiple': False, 'name': 'pid', 'guidependency': '', 'default': '',
     'age': None, 'required': True, 'value': '', 'label': '', 'guisection': '',
@@ -571,22 +554,24 @@ def command_info(cmd):
     file and prints it's file name.", 'usage': 'g.tempfile pid=integer [--help]
     [--verbose] [--quiet]'}
 
-    >>> command_info('v.buffer')
+    >>> command_info("v.buffer")
     ['vector', 'geometry', 'buffer']
 
     :param str cmd: the command to query
     """
     task = parse_interface(cmd)
-    cmdinfo = {}
-
-    cmdinfo["description"] = task.get_description()
-    cmdinfo["keywords"] = task.get_keywords()
-    cmdinfo["flags"] = flags = task.get_options()["flags"]
-    cmdinfo["params"] = params = task.get_options()["params"]
+    flags = task.get_options()["flags"]
+    params = task.get_options()["params"]
+    cmdinfo = {
+        "description": task.get_description(),
+        "keywords": task.get_keywords(),
+        "flags": flags,
+        "params": params,
+    }
 
     usage = task.get_name()
-    flags_short = list()
-    flags_long = list()
+    flags_short = []
+    flags_long = []
     for f in flags:
         fname = f.get("name", "unknown")
         if len(fname) > 1:
@@ -641,7 +626,7 @@ def cmdtuple_to_list(cmd):
             cmdList.append("--" + flag)
 
     for k, v in cmd[1].items():
-        if k in ("flags", "help", "verbose", "quiet", "overwrite"):
+        if k in {"flags", "help", "verbose", "quiet", "overwrite"}:
             continue
         if " " in v:
             v = '"%s"' % v
@@ -667,7 +652,7 @@ def cmdlist_to_tuple(cmd):
             dcmd[str(key)] = value.replace('"', "")
         elif item[:2] == "--":  # long flags
             flag = item[2:]
-            if flag in ("help", "verbose", "quiet", "overwrite"):
+            if flag in {"help", "verbose", "quiet", "overwrite"}:
                 dcmd[str(flag)] = True
         elif len(item) == 2 and item[0] == "-":  # -> flags
             if "flags" not in dcmd:

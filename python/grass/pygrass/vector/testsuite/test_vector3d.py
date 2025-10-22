@@ -8,22 +8,19 @@ import numpy as np
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-from grass.script.core import run_command
-
+from grass.pygrass.gis.region import Region
 from grass.pygrass.vector import VectorTopo
 from grass.pygrass.vector.geometry import Point
-from grass.pygrass.gis.region import Region
-from grass.pygrass.utils import get_mapset_vector
 
 
 def generate_coordinates(number, bbox=None, with_z=False):
     """Return 2 or 3 random arrays of coordinates"""
+    rng = np.random.default_rng()
     bbox = Region() if bbox is None else bbox
-    x = bbox.south + (bbox.north - bbox.south) * np.random.random(number)
-    y = bbox.west + (bbox.east - bbox.west) * np.random.random(number)
+    x = bbox.south + (bbox.north - bbox.south) * rng.random(number)
+    y = bbox.west + (bbox.east - bbox.west) * rng.random(number)
     if with_z:
-        z = np.random.random(number) * 1000
+        z = rng.random(number) * 1000
         return x, y, z
     return x, y
 
@@ -40,7 +37,7 @@ class VectorTopo3DTestCase(TestCase):
     def writing_points(self):
         """Write the generated random points to a vector map"""
         with VectorTopo(self.tmpname, mode="w", with_z=True) as vect:
-            for x, y, z in zip(self.x, self.y, self.z):
+            for x, y, z in zip(self.x, self.y, self.z, strict=True):
                 vect.write(Point(x, y, z))
 
     def reading_points(self):
@@ -58,7 +55,7 @@ class VectorTopo3DTestCase(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """Remove the generated vector map, if exist"""
+        """Remove the generated vector map, if exists"""
         cls.runModule("g.remove", flags="f", type="vector", name=cls.tmpname)
 
 

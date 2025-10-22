@@ -118,7 +118,7 @@ struct globals {
 
     /* processing flags */
     FLAG *candidate_flag,
-        *null_flag; /*TODO, need some way to remember MASK/NULL values.  Was
+        *null_flag; /*TODO, need some way to remember mask/NULL values.  Was
                        using -1, 0, 1 in int array.  Better to use 2 FLAG
                        structures, better readability? */
 

@@ -1,6 +1,8 @@
 #ifndef GRASS_VECTORDEFS_H
 #define GRASS_VECTORDEFS_H
 
+#include <stdbool.h>
+
 /*
  * "Public" functions, for use in modules
  */
@@ -616,9 +618,11 @@ GEOSGeometry *Vect_line_to_geos(const struct line_pnts *, int, int);
 GEOSGeometry *Vect_read_area_geos(struct Map_info *, int);
 GEOSCoordSequence *Vect_get_area_points_geos(struct Map_info *, int);
 GEOSCoordSequence *Vect_get_isle_points_geos(struct Map_info *, int);
-char *Vect_line_to_wkt(const struct line_pnts *, int, int);
+char *Vect_line_to_wkt(const struct line_pnts *, int, bool);
+char *Vect_line_to_wkt2(const struct line_pnts *, int, bool, bool);
 unsigned char *Vect_line_to_wkb(const struct line_pnts *, int, int, size_t *);
 char *Vect_read_area_to_wkt(struct Map_info *, int);
+char *Vect_read_area_to_wkt2(struct Map_info *, int, bool);
 unsigned char *Vect_read_area_to_wkb(struct Map_info *, int, size_t *);
 unsigned char *Vect_read_line_to_wkb(struct Map_info *, struct line_pnts *,
                                      struct line_cats *, int, size_t *, int *);

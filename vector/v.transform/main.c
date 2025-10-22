@@ -188,8 +188,17 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    strcpy(Current.name, vold->answer);
-    strcpy(Trans.name, vnew->answer);
+    if (G_strlcpy(Current.name, vold->answer, sizeof(Current.name)) >=
+        sizeof(Current.name)) {
+        G_fatal_error(_("Input vector map name <%s> is too long"),
+                      vold->answer);
+    }
+
+    if (G_strlcpy(Trans.name, vnew->answer, sizeof(Trans.name)) >=
+        sizeof(Trans.name)) {
+        G_fatal_error(_("Output vector map name <%s> is too long"),
+                      vnew->answer);
+    }
 
     Vect_check_input_output_name(vold->answer, vnew->answer, G_FATAL_EXIT);
 
@@ -271,14 +280,14 @@ int main(int argc, char *argv[])
     Vect_hist_copy(&Old, &New);
     Vect_hist_command(&New);
 
-    sprintf(date, "%s", G_date());
+    snprintf(date, sizeof(date), "%s", G_date());
     sscanf(date, "%*s%s%d%*s%d", mon, &day, &yr);
-    sprintf(date, "%s %d %d", mon, day, yr);
+    snprintf(date, sizeof(date), "%s %d %d", mon, day, yr);
     Vect_set_date(&New, date);
 
     Vect_set_person(&New, G_whoami());
 
-    sprintf(buf, "transformed from %s", vold->answer);
+    snprintf(buf, sizeof(buf), "transformed from %s", vold->answer);
     Vect_set_map_name(&New, buf);
 
     Vect_set_scale(&New, 1);

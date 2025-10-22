@@ -254,8 +254,11 @@ static void dangles(struct Map_info *Map, int type, int option,
                 }
                 dangles_removed++;
             } /* delete the chain */
-        }     /* lcount == 1 */
-    }         /* node <= nnodes */
+        } /* lcount == 1 */
+    } /* node <= nnodes */
     G_verbose_message(_("%s lines: %d"), lmsg, lines_removed);
     G_verbose_message(_("%s dangles: %d"), lmsg, dangles_removed);
+    Vect_destroy_line_struct(Points);
+    Vect_destroy_list(List);
+    Vect_destroy_cats_struct(Cats);
 }

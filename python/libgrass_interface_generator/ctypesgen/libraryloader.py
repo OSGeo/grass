@@ -67,7 +67,7 @@ class LibraryLoader:
 
         def __init__(self, path):
             super(LibraryLoader.Lookup, self).__init__()
-            self.access = dict(cdecl=ctypes.CDLL(path, self.mode))
+            self.access = {"cdecl": ctypes.CDLL(path, self.mode)}
 
         def get(self, name, calling_convention="cdecl"):
             """Return the given name according to the selected calling convention"""
@@ -376,7 +376,7 @@ class WindowsLibraryLoader(LibraryLoader):
         super().__init__()
         for p in os.getenv("PATH").split(";"):
             if os.path.exists(p) and hasattr(os, "add_dll_directory"):
-                os.add_dll_directory(p)
+                os.add_dll_directory(os.path.abspath(p))
 
     class Lookup(LibraryLoader.Lookup):
         """Lookup class for Windows libraries..."""

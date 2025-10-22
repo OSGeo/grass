@@ -1,10 +1,4 @@
 """
-Created on Fri Feb 26 14:46:06 2016
-
-@author: lucadelu
-"""
-
-"""
 Test t.rast.import
 
 (C) 2014 by the GRASS Development Team
@@ -15,8 +9,9 @@ for details.
 @author: lucadelu
 """
 
-from grass.gunittest.case import TestCase
 import os
+
+from grass.gunittest.case import TestCase
 
 
 class TestRasterImport(TestCase):

@@ -55,7 +55,7 @@ def parse_modules(fd):
     indent = 4
     for m in sorted(mlist):
         # TODO: get rid of g.mapsets_picker.py
-        if m == "g.mapsets_picker.py" or m == "g.parser":
+        if m in {"g.mapsets_picker.py", "g.parser"}:
             continue
         desc, keyw = get_module_metadata(m)
         fd.write('%s<module-item name="%s">\n' % (" " * indent, m))
@@ -70,7 +70,7 @@ def parse_modules(fd):
 
 
 def get_module_metadata(name):
-    """
+    """Gets the module's metadata for a given module name
 
     >>> get_module_metadata("g.region")
     ('Manages the boundary definitions for the geographic region.', ['general', 'settings'])

@@ -3,26 +3,37 @@ GRASS Python testing framework module for report generation
 
 Copyright (C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS GIS
+License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :authors: Vaclav Petras
 """
 
+from __future__ import annotations
+
 import os
 import datetime
-import xml.sax.saxutils as saxutils
-import xml.etree.ElementTree as et
+from pathlib import Path
+from xml.sax import saxutils
+import xml.etree.ElementTree as ET
 import subprocess
 import collections
 import re
 from collections.abc import Iterable
+from typing import TYPE_CHECKING
 
-from .utils import ensure_dir
+
+from .utils import add_gitignore_to_dir, ensure_dir
 from .checkers import text_to_keyvalue
 
 
 from io import StringIO
+
+if TYPE_CHECKING:
+    from typing import Literal
+    from _typeshed import FileDescriptor, StrOrBytesPath, StrPath
+
+    FileDescriptorOrPath = FileDescriptor | StrOrBytesPath
 
 
 # TODO: change text_to_keyvalue to same sep as here
@@ -39,23 +50,21 @@ def keyvalue_to_text(keyvalue, sep="=", vsep="\n", isep=",", last_vertical=None)
         items.append("{key}{sep}{value}".format(key=key, sep=sep, value=value))
     text = vsep.join(items)
     if last_vertical:
-        text = text + vsep
+        text += vsep
     return text
 
 
-def replace_in_file(file_path, pattern, repl):
+def replace_in_file(file_path, pattern, repl) -> None:
     """
 
     :param repl: a repl parameter of ``re.sub()`` function
     """
     # using tmp file to store the replaced content
     tmp_file_path = file_path + ".tmp"
-    old_file = open(file_path, "r")
-    new_file = open(tmp_file_path, "w")
-    for line in old_file:
-        new_file.write(re.sub(pattern=pattern, string=line, repl=repl))
-    new_file.close()
-    old_file.close()
+    with open(file_path) as old_file, open(tmp_file_path, "w") as new_file:
+        new_file.writelines(
+            re.sub(pattern=pattern, string=line, repl=repl) for line in old_file
+        )
     # remove old file since it must not exist for rename/move
     os.remove(file_path)
     # replace old file by new file
@@ -64,13 +73,18 @@ def replace_in_file(file_path, pattern, repl):
 
 
 class NoopFileAnonymizer:
-    def anonymize(self, filenames):
+    def anonymize(self, filenames) -> None:
         pass
 
 
 # TODO: why not remove GISDBASE by default?
 class FileAnonymizer:
-    def __init__(self, paths_to_remove, remove_gisbase=True, remove_gisdbase=False):
+    def __init__(
+        self,
+        paths_to_remove: list | None,
+        remove_gisbase: bool = True,
+        remove_gisdbase: bool = False,
+    ):
         self._paths_to_remove = []
         if remove_gisbase:
             gisbase = os.environ["GISBASE"]
@@ -78,14 +92,14 @@ class FileAnonymizer:
         if remove_gisdbase:
             # import only when really needed to avoid problems with
             # translations when environment is not set properly
-            import grass.script as gscript
+            import grass.script as gs
 
-            gisdbase = gscript.gisenv()["GISDBASE"]
+            gisdbase = gs.gisenv()["GISDBASE"]
             self._paths_to_remove.append(gisdbase)
         if paths_to_remove:
             self._paths_to_remove.extend(paths_to_remove)
 
-    def anonymize(self, filenames):
+    def anonymize(self, filenames) -> None:
         # besides GISBASE and test recursion start directory (which is
         # supposed to be source root directory or similar) we can also try
         # to remove user home directory and GISDBASE
@@ -102,26 +116,25 @@ class FileAnonymizer:
                 replace_in_file(filename, re.escape(path) + path_end, "")
 
 
-def get_source_url(path, revision, line=None):
+def get_source_url(path, revision, line=None) -> str:
     """
 
     :param path: directory or file path relative to remote repository root
     :param revision: SVN revision (should be a number)
     :param line: line in the file (should be None for directories)
     """
-    tracurl = "http://trac.osgeo.org/grass/browser/"
+    tracurl = "https://trac.osgeo.org/grass/browser/"
     if line:
         return "{tracurl}{path}?rev={revision}#L{line}".format(**locals())
-    else:
-        return "{tracurl}{path}?rev={revision}".format(**locals())
+    return "{tracurl}{path}?rev={revision}".format(**locals())
 
 
-def html_escape(text):
+def html_escape(text: str) -> str:
     """Escape ``'&'``, ``'<'``, and ``'>'`` in a string of data."""
     return saxutils.escape(text)
 
 
-def html_unescape(text):
+def html_unescape(text: str) -> str:
     """Unescape ``'&amp;'``, ``'&lt;'``, and ``'&gt;'`` in a string of data."""
     return saxutils.unescape(text)
 
@@ -144,7 +157,7 @@ def color_error_line(line):
     return line
 
 
-def to_web_path(path):
+def to_web_path(path: str) -> str:
     """Replace OS dependent path separator with slash.
 
     Path on MS Windows are not usable in links on web. For MS Windows,
@@ -152,8 +165,7 @@ def to_web_path(path):
     """
     if os.path.sep != "/":
         return path.replace(os.path.sep, "/")
-    else:
-        return path
+    return path
 
 
 def get_svn_revision():
@@ -164,21 +176,19 @@ def get_svn_revision():
     """
     # TODO: here should be starting directory
     # but now we are using current as starting
-    p = subprocess.Popen(
+    with subprocess.Popen(
         ["svnversion", "."], stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    )
-    stdout, stderr = p.communicate()
-    rc = p.poll()
-    if not rc:
+    ) as p:
+        stdout, stderr = p.communicate()
+        rc = p.poll()
+        if rc:
+            return None
         stdout = stdout.strip()
-        if stdout.endswith("M"):
-            stdout = stdout[:-1]
+        stdout = stdout.removesuffix("M")
         if ":" in stdout:
             # the first one is the one of source code
             stdout = stdout.split(":")[0]
         return stdout
-    else:
-        return None
 
 
 def get_svn_info():
@@ -189,16 +199,16 @@ def get_svn_info():
     """
     try:
         # TODO: introduce directory, not only current
-        p = subprocess.Popen(
+        with subprocess.Popen(
             ["svn", "info", ".", "--xml"],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-        )
-        stdout, stderr = p.communicate()
-        rc = p.poll()
+        ) as p:
+            stdout, stderr = p.communicate()
+            rc = p.poll()
         info = {}
         if not rc:
-            root = et.fromstring(stdout)
+            root = ET.fromstring(stdout)
             # TODO: get also date if this make sense
             # expecting only one <entry> element
             entry = root.find("entry")
@@ -210,8 +220,7 @@ def get_svn_info():
             if relurl is not None:
                 relurl = relurl.text
                 # relative path has ^ at the beginning in SVN version 1.8.8
-                if relurl.startswith("^"):
-                    relurl = relurl[1:]
+                relurl = relurl.removeprefix("^")
             else:
                 # SVN version 1.8.8 supports relative-url but older do not
                 # so, get relative part from absolute URL
@@ -241,22 +250,19 @@ def get_svn_path_authors(path, from_date=None):
 
     :returns: a set of authors
     """
-    if from_date is None:
-        # this is the SVN default for local copies
-        revision_range = "BASE:1"
-    else:
-        revision_range = "BASE:{%s}" % from_date
+    # "BASE:1" is the SVN default for local copies
+    revision_range = "BASE:1" if from_date is None else "BASE:{%s}" % from_date
     try:
         # TODO: allow also usage of --limit
-        p = subprocess.Popen(
+        with subprocess.Popen(
             ["svn", "log", "--xml", "--revision", revision_range, path],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-        )
-        stdout, stderr = p.communicate()
-        rc = p.poll()
+        ) as p:
+            stdout, stderr = p.communicate()
+            rc = p.poll()
         if not rc:
-            root = et.fromstring(stdout)
+            root = ET.fromstring(stdout)
             # TODO: get also date if this make sense
             # expecting only one <entry> element
             author_nodes = root.iterfind("*/author")
@@ -271,13 +277,13 @@ def get_svn_path_authors(path, from_date=None):
     return None
 
 
-def get_html_test_authors_table(directory, tests_authors):
+def get_html_test_authors_table(directory, tests_authors) -> str:
     # SVN gives us authors of code together with authors of tests
     # so test code authors list also contains authors of tests only
     # TODO: don't do this for the top level directories?
     tests_authors = set(tests_authors)
     no_svn_text = (
-        '<span style="font-size: 60%">' "Test file authors were not obtained." "</span>"
+        '<span style="font-size: 60%">Test file authors were not obtained.</span>'
     )
     if not tests_authors or (len(tests_authors) == 1 and list(tests_authors)[0] == ""):
         return "<h3>Code and test authors</h3>" + no_svn_text
@@ -287,15 +293,13 @@ def get_html_test_authors_table(directory, tests_authors):
         not_testing_authors = tested_dir_authors - tests_authors
     else:
         no_svn_text = (
-            '<span style="font-size: 60%">'
-            "Authors cannot be obtained using SVN."
-            "</span>"
+            '<span style="font-size: 60%">Authors cannot be obtained using SVN.</span>'
         )
         not_testing_authors = tested_dir_authors = [no_svn_text]
     if not not_testing_authors:
         not_testing_authors = ["all recent authors contributed tests"]
 
-    test_authors = (
+    return (
         "<h3>Code and test authors</h3>"
         '<p style="font-size: 60%"><em>'
         "Note that determination of authors is approximate and only"
@@ -311,11 +315,10 @@ def get_html_test_authors_table(directory, tests_authors):
             not_testing=", ".join(sorted(not_testing_authors)),
         )
     )
-    return test_authors
 
 
 class GrassTestFilesMultiReporter:
-    """Interface to multiple repoter objects
+    """Interface to multiple reporter objects
 
     For start and finish of the tests and of a test of one file,
     it calls corresponding methods of all contained reporters.
@@ -324,15 +327,16 @@ class GrassTestFilesMultiReporter:
     provided.
     """
 
-    def __init__(self, reporters, forgiving=False):
+    def __init__(self, reporters: list, forgiving: bool = False) -> None:
         self.reporters = reporters
         self.forgiving = forgiving
 
-    def start(self, results_dir):
+    def start(self, results_dir: StrPath) -> None:
         # TODO: no directory cleaning (self.clean_before)? now cleaned by caller
-        # TODO: perhaps only those whoe need it should do it (even multiple times)
+        # TODO: perhaps only those who need it should do it (even multiple times)
         # and there is also the delete problem
         ensure_dir(os.path.abspath(results_dir))
+        add_gitignore_to_dir(os.path.abspath(results_dir))
         for reporter in self.reporters:
             try:
                 reporter.start(results_dir)
@@ -342,7 +346,7 @@ class GrassTestFilesMultiReporter:
                 else:
                     raise
 
-    def finish(self):
+    def finish(self) -> None:
         for reporter in self.reporters:
             try:
                 reporter.finish()
@@ -352,7 +356,7 @@ class GrassTestFilesMultiReporter:
                 else:
                     raise
 
-    def start_file_test(self, module):
+    def start_file_test(self, module) -> None:
         for reporter in self.reporters:
             try:
                 reporter.start_file_test(module)
@@ -362,7 +366,7 @@ class GrassTestFilesMultiReporter:
                 else:
                     raise
 
-    def end_file_test(self, **kwargs):
+    def end_file_test(self, **kwargs) -> None:
         for reporter in self.reporters:
             try:
                 reporter.end_file_test(**kwargs)
@@ -382,24 +386,24 @@ class GrassTestFilesMultiReporter:
 
 
 class GrassTestFilesCountingReporter:
-    def __init__(self):
-        self.test_files = None
-        self.files_fail = None
-        self.files_pass = None
+    def __init__(self) -> None:
+        self.test_files: int | None = None
+        self.files_fail: int | None = None
+        self.files_pass: int | None = None
 
-        self.file_pass_per = None
-        self.file_fail_per = None
+        self.file_pass_per: float | None = None
+        self.file_fail_per: float | None = None
 
-        self.main_start_time = None
-        self.main_end_time = None
-        self.main_time = None
+        self.main_start_time: datetime.datetime | None = None
+        self.main_end_time: datetime.datetime | None = None
+        self.main_time: datetime.timedelta | None = None
 
-        self.file_start_time = None
-        self.file_end_time = None
-        self.file_time = None
+        self.file_start_time: datetime.datetime | None = None
+        self.file_end_time: datetime.datetime | None = None
+        self.file_time: datetime.timedelta | None = None
         self._start_file_test_called = False
 
-    def start(self, results_dir):
+    def start(self, results_dir) -> None:
         self.test_files = 0
         self.files_fail = 0
         self.files_pass = 0
@@ -407,7 +411,7 @@ class GrassTestFilesCountingReporter:
         # this might be moved to some report start method
         self.main_start_time = datetime.datetime.now()
 
-    def finish(self):
+    def finish(self) -> None:
         self.main_end_time = datetime.datetime.now()
         self.main_time = self.main_end_time - self.main_start_time
 
@@ -421,12 +425,12 @@ class GrassTestFilesCountingReporter:
             self.file_pass_per = None
             self.file_fail_per = None
 
-    def start_file_test(self, module):
+    def start_file_test(self, module) -> None:
         self.file_start_time = datetime.datetime.now()
         self._start_file_test_called = True
         self.test_files += 1
 
-    def end_file_test(self, returncode, **kwargs):
+    def end_file_test(self, returncode, **kwargs) -> None:
         assert self._start_file_test_called
         self.file_end_time = datetime.datetime.now()
         self.file_time = self.file_end_time - self.file_start_time
@@ -437,32 +441,34 @@ class GrassTestFilesCountingReporter:
         self._start_file_test_called = False
 
 
-def percent_to_html(percent):
+def percent_to_html(percent: float | None) -> str:
     if percent is None:
         return '<span style="color: {color}">unknown percentage</span>'
-    elif percent > 100 or percent < 0:
+    if percent > 100 or percent < 0:
         return "? {:.2f}% ?".format(percent)
-    elif percent < 40:
+    if percent < 40:
         color = "red"
     elif percent < 70:
         color = "orange"
     else:
         color = "green"
-    return '<span style="color: {color}">{percent:.0f}%</span>'.format(
+    return '<span style="color: {color}">{percent:.1f}%</span>'.format(
         percent=percent, color=color
     )
 
 
-def wrap_stdstream_to_html(infile, outfile, module, stream):
+def wrap_stdstream_to_html(
+    infile: FileDescriptorOrPath,
+    outfile: StrOrBytesPath,
+    module,
+    stream: Literal["stdout", "stderr"],
+) -> None:
     before = "<html><body><h1>%s</h1><pre>" % (module.name + " " + stream)
     after = "</pre></body></html>"
-    html = open(outfile, "w")
-    html.write(before)
-    with open(infile) as text:
-        for line in text:
-            html.write(color_error_line(html_escape(line)))
-    html.write(after)
-    html.close()
+    with open(outfile, "w", encoding="utf-8") as html, open(infile) as text:
+        html.write(before)
+        html.writelines(color_error_line(html_escape(line)) for line in text)
+        html.write(after)
 
 
 def html_file_preview(filename):
@@ -477,13 +483,13 @@ def html_file_preview(filename):
     html = StringIO()
     html.write(before)
     if size < max_size:
-        with open(filename) as text:
+        with open(filename, encoding="utf-8") as text:
             for line in text:
                 html.write(color_error_line(html_escape(line)))
     elif size < 10 * max_size:
 
         def tail(filename, n):
-            return collections.deque(open(filename), n)
+            return collections.deque(open(filename), n)  # noqa: SIM115
 
         html.write("... (lines omitted)\n")
         for line in tail(filename, 50):
@@ -494,16 +500,12 @@ def html_file_preview(filename):
     return html.getvalue()
 
 
-def returncode_to_html_text(returncode, timed_out=None):
+def returncode_to_html_text(returncode, timed_out=None) -> str:
     if returncode:
-        if timed_out is not None:
-            extra = f" (timeout >{timed_out}s)"
-        else:
-            extra = ""
+        extra = f" (timeout >{timed_out}s)" if timed_out is not None else ""
         return f'<span style="color: red">FAILED{extra}</span>'
-    else:
-        # alternatives: SUCCEEDED, passed, OK
-        return '<span style="color: green">succeeded</span>'
+    # alternatives: SUCCEEDED, passed, OK
+    return '<span style="color: green">succeeded</span>'
 
 
 # not used
@@ -513,49 +515,49 @@ def returncode_to_html_sentence(returncode):
             '<span style="color: red">&#x274c;</span>'
             " Test failed (return code %d)" % (returncode)
         )
-    else:
-        return (
-            '<span style="color: green">&#x2713;</span>'
-            " Test succeeded (return code %d)" % (returncode)
-        )
+    return (
+        '<span style="color: green">&#x2713;</span>'
+        " Test succeeded (return code %d)" % (returncode)
+    )
 
 
 def returncode_to_success_html_par(returncode):
     if returncode:
-        return '<p> <span style="color: red">&#x274c;</span>' " Test failed</p>"
-    else:
-        return '<p> <span style="color: green">&#x2713;</span>' " Test succeeded</p>"
+        return '<p> <span style="color: red">&#x274c;</span> Test failed</p>'
+    return '<p> <span style="color: green">&#x2713;</span> Test succeeded</p>'
 
 
 def success_to_html_text(total, successes):
     if successes < total:
         return '<span style="color: red">FAILED</span>'
-    elif successes == total:
+    if successes == total:
         # alternatives: SUCCEEDED, passed, OK
         return '<span style="color: green">succeeded</span>'
-    else:
-        return (
-            '<span style="color: red; font-size: 60%">'
-            "? more successes than total ?</span>"
-        )
+    return (
+        '<span style="color: red; font-size: 60%">? more successes than total ?</span>'
+    )
 
 
 UNKNOWN_NUMBER_HTML = '<span style="font-size: 60%">unknown</span>'
 
 
-def success_to_html_percent(total, successes):
+def success_to_html_percent(total, successes) -> str:
     if total:
         pass_per = 100 * (float(successes) / total)
-        pass_per = percent_to_html(pass_per)
-    else:
-        pass_per = UNKNOWN_NUMBER_HTML
-    return pass_per
+        return percent_to_html(pass_per)
+    return UNKNOWN_NUMBER_HTML
+
+
+def format_percentage(percentage: float | None) -> str:
+    if percentage is not None:
+        return "{nsper:.1f}%".format(nsper=percentage)
+    return "unknown percentage"
 
 
 class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
     unknown_number = UNKNOWN_NUMBER_HTML
 
-    def __init__(self, file_anonymizer, main_page_name="index.html"):
+    def __init__(self, file_anonymizer, main_page_name: str = "index.html"):
         super().__init__()
         self.main_index = None
         self._file_anonymizer = file_anonymizer
@@ -565,7 +567,8 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         super().start(results_dir)
         # having all variables public although not really part of API
         main_page_name = os.path.join(results_dir, self._main_page_name)
-        self.main_index = open(main_page_name, "w")
+        # TODO: Ensure file is closed in all situations
+        self.main_index = open(main_page_name, "w", encoding="utf-8")  # noqa: SIM115
 
         # TODO: this can be moved to the counter class
         self.failures = 0
@@ -579,15 +582,13 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         svn_info = get_svn_info()
         if not svn_info:
             svn_text = (
-                '<span style="font-size: 60%">'
-                "SVN revision cannot be obtained"
-                "</span>"
+                '<span style="font-size: 60%">SVN revision cannot be obtained</span>'
             )
         else:
             url = get_source_url(
                 path=svn_info["relative-url"], revision=svn_info["revision"]
             )
-            svn_text = ("SVN revision" ' <a href="{url}">' "{rev}</a>").format(
+            svn_text = ('SVN revision <a href="{url}">{rev}</a>').format(
                 url=url, rev=svn_info["revision"]
             )
         self.main_index.write(
@@ -627,18 +628,9 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             )
         )
 
-        # this is the second place with this function
-        # TODO: provide one implementation
-        def format_percentage(percentage):
-            if percentage is not None:
-                return "{nsper:.0f}%".format(nsper=percentage)
-            else:
-                return "unknown percentage"
-
         summary_sentence = (
             "\nExecuted {nfiles} test files in {time:}."
-            "\nFrom them"
-            " {nsfiles} files ({nsper}) were successful"
+            "\nFrom them, {nsfiles} files ({nsper}) were successful"
             " and {nffiles} files ({nfper}) failed.\n".format(
                 nfiles=self.test_files,
                 time=self.main_time,
@@ -650,9 +642,9 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         )
 
         self.main_index.write(
-            "<tbody>{tfoot}</table>"
-            "<p>{summary}</p>"
-            "</body></html>".format(tfoot=tfoot, summary=summary_sentence)
+            "<tbody>{tfoot}</table><p>{summary}</p></body></html>".format(
+                tfoot=tfoot, summary=summary_sentence
+            )
         )
         self.main_index.close()
 
@@ -734,8 +726,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         )
 
         file_index_path = os.path.join(cwd, "index.html")
-        file_index = open(file_index_path, "w")
-        file_index.write(
+        header = (
             '<!DOCTYPE html><html><head><meta charset="utf-8"></head><body>'
             "<h1>{m.name}</h1>"
             "<h2>{m.tested_dir} &ndash; {m.name}</h2>"
@@ -774,21 +765,14 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
                 dur=self.file_time,
             )
         )
-        file_index.write(summary_section)
 
         modules = test_summary.get("tested_modules", None)
         if modules:
             # TODO: replace by better handling of potential lists when parsing
             # TODO: create link to module if running in grass or in addons
             # alternatively a link to module test summary
-            if type(modules) is not list:
+            if not isinstance(modules, list):
                 modules = [modules]
-            file_index.write(
-                "<tr><td>Tested modules</td><td>{0}</td></tr>".format(
-                    ", ".join(sorted(set(modules)))
-                )
-            )
-        file_index.write("</tbody></table>")
 
         # here we would have also links to coverage, profiling, ...
         # '<li><a href="testcodecoverage/index.html">code coverage</a></li>'
@@ -798,7 +782,6 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             '<li><a href="stdout.html">standard output (stdout)</a></li>'
             '<li><a href="stderr.html">standard error output (stderr)</a></li>'
         )
-        file_index.write(files_section)
 
         supplementary_files = test_summary.get("supplementary_files", None)
         if supplementary_files:
@@ -810,17 +793,33 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             # moreover something can be shared with other explicitly
             # using constructors as seems advantageous for counting
             self._file_anonymizer.anonymize(supplementary_files)
-            for f in supplementary_files:
-                file_index.write('<li><a href="{f}">{f}</a></li>'.format(f=f))
 
-        file_index.write("</ul>")
+        with open(file_index_path, "w", encoding="utf-8") as file_index:
+            file_index.write(header)
+            file_index.write(summary_section)
+            if modules:
+                file_index.write(
+                    "<tr><td>Tested modules</td><td>{0}</td></tr>".format(
+                        ", ".join(sorted(set(modules)))
+                    )
+                )
+            file_index.write("</tbody></table>")
 
-        if returncode:
-            file_index.write("<h3>Standard error output (stderr)</h3>")
-            file_index.write(html_file_preview(stderr))
+            file_index.write(files_section)
 
-        file_index.write("</body></html>")
-        file_index.close()
+            if supplementary_files:
+                file_index.writelines(
+                    '<li><a href="{f}">{f}</a></li>'.format(f=f)
+                    for f in supplementary_files
+                )
+
+            file_index.write("</ul>")
+
+            if returncode:
+                file_index.write("<h3>Standard error output (stderr)</h3>")
+                file_index.write(html_file_preview(stderr))
+
+            file_index.write("</body></html>")
 
         if returncode:
             pass
@@ -837,7 +836,7 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
         self.result_dir = None
         self._info = info
 
-    def start(self, results_dir):
+    def start(self, results_dir) -> None:
         super().start(results_dir)
         # having all variables public although not really part of API
         self.result_dir = results_dir
@@ -863,53 +862,42 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
     def finish(self):
         super().finish()
 
-        # this shoul be moved to some additional meta passed in constructor
+        # this should be moved to some additional meta passed in constructor
         svn_info = get_svn_info()
-        if not svn_info:
-            svn_revision = ""
-        else:
-            svn_revision = svn_info["revision"]
+        svn_revision = "" if not svn_info else svn_info["revision"]
 
-        summary = {}
-        summary["files_total"] = self.test_files
-        summary["files_successes"] = self.files_pass
-        summary["files_failures"] = self.files_fail
-
-        summary["names"] = self.names
-        summary["tested_dirs"] = self.tested_dirs
-        # TODO: we don't have a general mechanism for storing any type in text
-        summary["files_returncodes"] = [str(item) for item in self.files_returncodes]
-
-        # let's use seconds as a universal time delta format
-        # (there is no standard way how to store time delta as string)
-        summary["time"] = self.main_time.total_seconds()
-
-        status = "failed" if self.files_fail else "succeeded"
-        summary["status"] = status
-
-        summary["total"] = self.total
-        summary["successes"] = self.successes
-        summary["failures"] = self.failures
-        summary["errors"] = self.errors
-        summary["skipped"] = self.skipped
-        summary["expected_failures"] = self.expected_failures
-        summary["unexpected_successes"] = self.unexpected_success
-
-        summary["test_files_authors"] = self.test_files_authors
-        summary["tested_modules"] = self.modules
-        summary["svn_revision"] = svn_revision
-        # ignoring issues with time zones
-        summary["timestamp"] = self.main_start_time.strftime("%Y-%m-%d %H:%M:%S")
-        # TODO: add some general metadata here (passed in constructor)
-
-        # add additional information
-        for key, value in self._info.items():
-            summary[key] = value
+        summary = {
+            "files_total": self.test_files,
+            "files_successes": self.files_pass,
+            "files_failures": self.files_fail,
+            "names": self.names,
+            "tested_dirs": self.tested_dirs,
+            # TODO: we don't have a general mechanism for storing any type in text
+            "files_returncodes": [str(item) for item in self.files_returncodes],
+            # let's use seconds as a universal time delta format
+            # (there is no standard way how to store time delta as string)
+            "time": self.main_time.total_seconds(),
+            "status": "failed" if self.files_fail else "succeeded",
+            "total": self.total,
+            "successes": self.successes,
+            "failures": self.failures,
+            "errors": self.errors,
+            "skipped": self.skipped,
+            "expected_failures": self.expected_failures,
+            "unexpected_successes": self.unexpected_success,
+            "test_files_authors": self.test_files_authors,
+            "tested_modules": self.modules,
+            "svn_revision": svn_revision,
+            # ignoring issues with time zones
+            "timestamp": self.main_start_time.strftime("%Y-%m-%d %H:%M:%S"),
+            # TODO: add some general metadata here (passed in constructor)
+            # add additional information
+            **dict(self._info.items()),
+        }
 
         summary_filename = os.path.join(self.result_dir, "test_keyvalue_result.txt")
-        with open(summary_filename, "w") as summary_file:
-            text = keyvalue_to_text(summary, sep="=", vsep="\n", isep=",")
-            summary_file.write(text)
+        text = keyvalue_to_text(summary, sep="=", vsep="\n", isep=",")
+        Path(summary_filename).write_text(text, encoding="utf-8")
 
     def end_file_test(
         self, module, cwd, returncode, stdout, stderr, test_summary, timed_out=None
@@ -962,12 +950,12 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
             # TODO: replace by better handling of potential lists when parsing
             # TODO: create link to module if running in grass or in addons
             # alternatively a link to module test summary
-            if type(modules) not in [list, set]:
+            if type(modules) not in {list, set}:
                 modules = [modules]
             self.modules.update(modules)
 
         test_file_authors = test_summary["test_file_authors"]
-        if type(test_file_authors) not in [list, set]:
+        if type(test_file_authors) not in {list, set}:
             test_file_authors = [test_file_authors]
         self.test_files_authors.update(test_file_authors)
 
@@ -977,17 +965,8 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
         super().__init__()
         self._stream = stream
 
-    def start(self, results_dir):
-        super().start(results_dir)
-
     def finish(self):
         super().finish()
-
-        def format_percentage(percentage):
-            if percentage is not None:
-                return "{nsper:.0f}%".format(nsper=percentage)
-            else:
-                return "unknown percentage"
 
         summary_sentence = (
             "\nExecuted {nfiles} test files in {time:}."
@@ -1026,8 +1005,7 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
             width = 72
             self._stream.write(width * "=")
             self._stream.write("\n")
-            with open(stderr) as text:
-                self._stream.write(text.read())
+            self._stream.write(Path(stderr).read_text())
             self._stream.write(width * "=")
             self._stream.write("\n")
             self._stream.write(f"FAILED {module.file_path}")
@@ -1036,10 +1014,7 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
             num_failed = test_summary.get("failures", 0)
             num_failed += test_summary.get("errors", 0)
             if num_failed:
-                if num_failed > 1:
-                    text = " ({f} tests failed)"
-                else:
-                    text = " ({f} test failed)"
+                text = " ({f} tests failed)" if num_failed > 1 else " ({f} test failed)"
                 self._stream.write(text.format(f=num_failed))
             self._stream.write("\n")
             # TODO: here we lost the possibility to include also file name
@@ -1054,7 +1029,7 @@ class TestsuiteDirReporter:
     def __init__(
         self,
         main_page_name,
-        testsuite_page_name="index.html",
+        testsuite_page_name: str = "index.html",
         top_level_testsuite_page_name=None,
     ):
         self.main_page_name = main_page_name
@@ -1075,7 +1050,7 @@ class TestsuiteDirReporter:
         self.files = 0
         self.files_successes = 0
 
-    def report_for_dir(self, root, directory, test_files):
+    def report_for_dir(self, root: StrPath, directory: StrPath, test_files) -> str:
         # TODO: create object from this, so that it can be passed from
         # one function to another
         # TODO: put the inside of for loop to another function
@@ -1096,10 +1071,10 @@ class TestsuiteDirReporter:
             os.path.join(root, directory)
         ) == os.path.abspath(root):
             page_name = os.path.join(root, self.top_level_testsuite_page_name)
-        page = open(page_name, "w")
+
         # TODO: should we use forward slashes also for the HTML because
         # it is simpler are more consistent with the rest on MS Windows?
-        head = "<html><body>" "<h1>{name} testsuite results</h1>".format(name=directory)
+        head = "<html><body><h1>{name} testsuite results</h1>".format(name=directory)
         tests_table_head = (
             "<h3>Test files results</h3>"
             "<table>"
@@ -1109,110 +1084,113 @@ class TestsuiteDirReporter:
             "<th>Failed</th><th>Percent successful</th>"
             "</tr></thead><tbody>"
         )
-        page.write(head)
-        page.write(tests_table_head)
-        for test_file_name in test_files:
-            # TODO: put keyvalue fine name to constant
-            summary_filename = os.path.join(
-                root, directory, test_file_name, "test_keyvalue_result.txt"
+        with open(page_name, "w", encoding="utf-8") as page:
+            page.write(head)
+            page.write(tests_table_head)
+            for test_file_name in test_files:
+                # TODO: put keyvalue fine name to constant
+                summary_filename = os.path.join(
+                    root, directory, test_file_name, "test_keyvalue_result.txt"
+                )
+                # if os.path.exists(summary_filename):
+                summary = text_to_keyvalue(
+                    Path(summary_filename).read_text(encoding="utf-8"), sep="="
+                )
+                # else:
+                # TODO: write else here
+                #    summary = None
+
+                if "total" not in summary:
+                    bad_ones = successes = UNKNOWN_NUMBER_HTML
+                    total = None
+                else:
+                    bad_ones = summary["failures"] + summary["errors"]
+                    successes = summary["successes"]
+                    total = summary["total"]
+
+                    self.failures += summary["failures"]
+                    self.errors += summary["errors"]
+                    self.skipped += summary["skipped"]
+                    self.successes += summary["successes"]
+                    self.expected_failures += summary["expected_failures"]
+                    self.unexpected_successes += summary["unexpected_successes"]
+                    self.total += summary["total"]
+
+                    dir_failures += summary["failures"]
+                    dir_errors += summary["failures"]
+                    dir_skipped += summary["skipped"]
+                    dir_successes += summary["successes"]
+                    dir_expected_failures += summary["expected_failures"]
+                    dir_unexpected_success += summary["unexpected_successes"]
+                    dir_total += summary["total"]
+
+                # TODO: keyvalue method should have types for keys function
+                # perhaps just the current post processing function is enough
+                test_file_authors = summary.get("test_file_authors")
+                if not test_file_authors:
+                    test_file_authors = []
+                if not isinstance(test_file_authors, list):
+                    test_file_authors = [test_file_authors]
+                test_files_authors.extend(test_file_authors)
+
+                file_total += 1
+                # Use non-zero return code in case it is missing.
+                # (This can happen when the test has timed out.)
+                return_code = summary.get("returncode", 1)
+                file_successes += 0 if return_code else 1
+
+                pass_per = success_to_html_percent(total=total, successes=successes)
+                row = (
+                    "<tr>"
+                    '<td><a href="{f}/index.html">{f}</a></td>'
+                    "<td>{status}</td>"
+                    "<td>{ntests}</td><td>{stests}</td>"
+                    "<td>{ftests}</td><td>{ptests}</td>"
+                    "<tr>".format(
+                        f=test_file_name,
+                        status=returncode_to_html_text(return_code),
+                        stests=successes,
+                        ftests=bad_ones,
+                        ntests=total,
+                        ptests=pass_per,
+                    )
+                )
+                page.write(row)
+
+            self.testsuites += 1
+            self.testsuites_successes += 1 if file_successes == file_total else 0
+            self.files += file_total
+            self.files_successes += file_successes
+
+            dir_pass_per = success_to_html_percent(
+                total=dir_total, successes=dir_successes
             )
-            # if os.path.exists(summary_filename):
-            with open(summary_filename, "r") as keyval_file:
-                summary = text_to_keyvalue(keyval_file.read(), sep="=")
-            # else:
-            # TODO: write else here
-            #    summary = None
-
-            if "total" not in summary:
-                bad_ones = successes = UNKNOWN_NUMBER_HTML
-                total = None
-            else:
-                bad_ones = summary["failures"] + summary["errors"]
-                successes = summary["successes"]
-                total = summary["total"]
-
-                self.failures += summary["failures"]
-                self.errors += summary["errors"]
-                self.skipped += summary["skipped"]
-                self.successes += summary["successes"]
-                self.expected_failures += summary["expected_failures"]
-                self.unexpected_successes += summary["unexpected_successes"]
-                self.total += summary["total"]
-
-                dir_failures += summary["failures"]
-                dir_errors += summary["failures"]
-                dir_skipped += summary["skipped"]
-                dir_successes += summary["successes"]
-                dir_expected_failures += summary["expected_failures"]
-                dir_unexpected_success += summary["unexpected_successes"]
-                dir_total += summary["total"]
-
-            # TODO: keyvalue method should have types for keys function
-            # perhaps just the current post processing function is enough
-            test_file_authors = summary.get("test_file_authors")
-            if not test_file_authors:
-                test_file_authors = []
-            if type(test_file_authors) is not list:
-                test_file_authors = [test_file_authors]
-            test_files_authors.extend(test_file_authors)
-
-            file_total += 1
-            # Use non-zero return code in case it is missing.
-            # (This can happen when the test has timed out.)
-            return_code = summary.get("returncode", 1)
-            file_successes += 0 if return_code else 1
-
-            pass_per = success_to_html_percent(total=total, successes=successes)
-            row = (
-                "<tr>"
-                '<td><a href="{f}/index.html">{f}</a></td>'
+            file_pass_per = success_to_html_percent(
+                total=file_total, successes=file_successes
+            )
+            tests_table_foot = (
+                "</tbody><tfoot><tr>"
+                "<td>Summary</td>"
                 "<td>{status}</td>"
                 "<td>{ntests}</td><td>{stests}</td>"
                 "<td>{ftests}</td><td>{ptests}</td>"
-                "<tr>".format(
-                    f=test_file_name,
-                    status=returncode_to_html_text(return_code),
-                    stests=successes,
-                    ftests=bad_ones,
-                    ntests=total,
-                    ptests=pass_per,
+                "</tr></tfoot></table>".format(
+                    status=file_pass_per,
+                    stests=dir_successes,
+                    ftests=dir_failures + dir_errors,
+                    ntests=dir_total,
+                    ptests=dir_pass_per,
                 )
             )
-            page.write(row)
-
-        self.testsuites += 1
-        self.testsuites_successes += 1 if file_successes == file_total else 0
-        self.files += file_total
-        self.files_successes += file_successes
-
-        dir_pass_per = success_to_html_percent(total=dir_total, successes=dir_successes)
-        file_pass_per = success_to_html_percent(
-            total=file_total, successes=file_successes
-        )
-        tests_table_foot = (
-            "</tbody><tfoot><tr>"
-            "<td>Summary</td>"
-            "<td>{status}</td>"
-            "<td>{ntests}</td><td>{stests}</td>"
-            "<td>{ftests}</td><td>{ptests}</td>"
-            "</tr></tfoot></table>".format(
-                status=file_pass_per,
-                stests=dir_successes,
-                ftests=dir_failures + dir_errors,
-                ntests=dir_total,
-                ptests=dir_pass_per,
+            page.write(tests_table_foot)
+            test_authors = get_html_test_authors_table(
+                directory=directory, tests_authors=test_files_authors
             )
-        )
-        page.write(tests_table_foot)
-        test_authors = get_html_test_authors_table(
-            directory=directory, tests_authors=test_files_authors
-        )
-        page.write(test_authors)
-        page.write("</body></html>")
-        page.close()
+            page.write(test_authors)
+            page.write("</body></html>")
 
         status = success_to_html_text(total=file_total, successes=file_successes)
-        row = (
+        return (
             "<tr>"
             '<td><a href="{d}/{page}">{d}</a></td><td>{status}</td>'
             "<td>{nfiles}</td><td>{sfiles}</td><td>{pfiles}</td>"
@@ -1231,15 +1209,13 @@ class TestsuiteDirReporter:
                 ptests=dir_pass_per,
             )
         )
-        return row
 
-    def report_for_dirs(self, root, directories):
+    def report_for_dirs(self, root: StrPath, directories) -> None:
         # TODO: this will need changes according to potential changes in
         # absolute/relative paths
 
         page_name = os.path.join(root, self.main_page_name)
-        page = open(page_name, "w")
-        head = "<html><body>" "<h1>Testsuites results</h1>"
+        head = "<html><body><h1>Testsuites results</h1>"
         tests_table_head = (
             "<table>"
             "<thead><tr>"
@@ -1251,14 +1227,6 @@ class TestsuiteDirReporter:
             "<th>Failed</th><th>Percent successful</th>"
             "</tr></thead><tbody>"
         )
-        page.write(head)
-        page.write(tests_table_head)
-
-        for directory, test_files in directories.items():
-            row = self.report_for_dir(
-                root=root, directory=directory, test_files=test_files
-            )
-            page.write(row)
 
         pass_per = success_to_html_percent(total=self.total, successes=self.successes)
         file_pass_per = success_to_html_percent(
@@ -1286,5 +1254,16 @@ class TestsuiteDirReporter:
                 ptests=pass_per,
             )
         )
-        page.write(tests_table_foot)
-        page.write("</body></html>")
+
+        with open(page_name, "w", encoding="utf-8") as page:
+            page.write(head)
+            page.write(tests_table_head)
+
+            for directory, test_files in directories.items():
+                row = self.report_for_dir(
+                    root=root, directory=directory, test_files=test_files
+                )
+                page.write(row)
+
+            page.write(tests_table_foot)
+            page.write("</body></html>")

@@ -12,7 +12,7 @@ from gui_core.preferences import MapsetAccess  # noqa: E402
 
 
 def main():
-    app = wx.App()
+    wx.App()
 
     dlg = MapsetAccess(parent=None)
     dlg.CenterOnScreen()

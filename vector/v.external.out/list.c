@@ -45,7 +45,7 @@ char **format_list(int *count, size_t *len)
         list = G_realloc(list, ((*count) + 1) * sizeof(char *));
 
         /* chg white space to underscore in OGR driver names */
-        sprintf(buf, "%s", OGR_Dr_GetName(Ogr_driver));
+        snprintf(buf, sizeof(buf), "%s", OGR_Dr_GetName(Ogr_driver));
         G_strchg(buf, ' ', '_');
         list[(*count)++] = G_store(buf);
         if (len)
@@ -53,7 +53,8 @@ char **format_list(int *count, size_t *len)
     }
 
     /* order formats by name */
-    qsort(list, *count, sizeof(char *), cmp);
+    if (list)
+        qsort(list, *count, sizeof(char *), cmp);
 #endif
 #if defined HAVE_POSTGRES && !defined HAVE_OGR
     list = G_realloc(list, ((*count) + 1) * sizeof(char *));
@@ -74,7 +75,7 @@ char *format_options(void)
     ret = NULL;
     list = format_list(&count, &len);
 
-    if (len > 0) {
+    if (list) {
         ret = G_malloc((len + 1) * sizeof(char)); /* \0 */
         *ret = '\0';
         for (i = 0; i < count; i++) {

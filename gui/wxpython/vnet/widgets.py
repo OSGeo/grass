@@ -14,7 +14,7 @@ This program is free software under the GNU General Public License
 
 @author Original author Michael Barton
 @author Original version improved by Martin Landa <landa.martin gmail.com>
-@author Rewritten by Markus Metz redesign georectfier -> GCP Manage
+@author Rewritten by Markus Metz redesign georectifier -> GCP Manage
 @author Stepan Turek <stepan.turek seznam.cz> (Created PointsList from GCPList)
         (GSoC 2012, mentor: Martin Landa)
 """
@@ -133,7 +133,7 @@ class PointsList(
         # initialize column sorter
         self.itemDataMap = []
         ncols = self.GetColumnCount()
-        ColumnSorterMixin.__init__(self, ncols)
+        ColumnSorterMixin.__init__(self, ncols)  # noqa: PLC2801, C2801
 
         # init to ascending sort on first click
         self._colSortFlag = [1] * ncols
@@ -217,7 +217,6 @@ class PointsList(
         if colNum < 0:
             return None
 
-        iColEd = self.dataTypes["colEditable"]
         if self.selIdxs[key][colNum] != -1:
             return self.selIdxs[key][colNum]
 
@@ -230,7 +229,6 @@ class PointsList(
         :return: -1 if column does not has values to choose
         """
         colNum = self._getColumnNum(colName)
-        iColEd = self.dataTypes["colEditable"]
         return self.selIdxs[key][colNum]
 
     def EditCellIndex(self, index, colName, cellData):
@@ -390,7 +388,7 @@ class PointsList(
                 )  # convert function for type check
 
         if not data:
-            return
+            return None
         dlg = self.CreateEditDialog(data=data, pointNo=key)
 
         if dlg.ShowModal() == wx.ID_OK:
@@ -441,21 +439,15 @@ class PointsList(
 
     def getSmallUpArrowImage(self):
         """Get arrow up symbol for indication of sorting"""
-        stream = open(os.path.join(globalvar.IMGDIR, "small_up_arrow.png"), "rb")
-        try:
-            img = wx.Image(stream)
-        finally:
-            stream.close()
-        return img
+        with open(os.path.join(globalvar.IMGDIR, "small_up_arrow.png"), "rb") as stream:
+            return wx.Image(stream)
 
     def getSmallDnArrowImage(self):
         """Get arrow down symbol for indication of sorting"""
-        stream = open(os.path.join(globalvar.IMGDIR, "small_down_arrow.png"), "rb")
-        try:
-            img = wx.Image(stream)
-        finally:
-            stream.close()
-        return img
+        with open(
+            os.path.join(globalvar.IMGDIR, "small_down_arrow.png"), "rb"
+        ) as stream:
+            return wx.Image(stream)
 
     def _getColumnNum(self, colName):
         """Get position of column among showed columns
@@ -513,26 +505,23 @@ class PointsList(
         :return: True if column was shown
         :return: False if position is not valid or column is not hidden
         """
-        if pos < 0 and pos >= self.self.GetColumnCount():
+        if pos < 0 or pos >= self.GetColumnCount():
             return False
-        if colName in self.hiddenCols:
-            col = self.hiddenCols[colName]
+        if colName not in self.hiddenCols:
+            return False
+        col = self.hiddenCols[colName]
 
-            for item in enumerate(self.itemDataMap):
-                item[1].insert(pos, col["itemDataMap"][item[0]])
-            for item in enumerate(self.selIdxs):
-                item[1].insert(pos, col["selIdxs"][item[0]])
+        for item in enumerate(self.itemDataMap):
+            item[1].insert(pos, col["itemDataMap"][item[0]])
+        for item in enumerate(self.selIdxs):
+            item[1].insert(pos, col["selIdxs"][item[0]])
+        self.colsData.insert(pos, col["colsData"])
+        self.InsertColumnItem(pos, col["wxCol"])
+        self.ResizeColumns()
+        del self.hiddenCols[colName]
+        return True
 
-            self.colsData.insert(pos, col["colsData"])
-
-            self.InsertColumnItem(pos, col["wxCol"])
-            self.ResizeColumns()
-            del self.hiddenCols[colName]
-            return True
-
-        return False
-
-    def IsShown(self, colName):
+    def IsShown(self, colName) -> bool:
         """Is column shown
 
         :param colName: name of column
@@ -542,10 +531,7 @@ class PointsList(
         :return: False - if is not shown
         """
 
-        if self._getColumnNum(colName) == -1:
-            return False
-        else:
-            return True
+        return self._getColumnNum(colName) != -1
 
 
 class EditItem(wx.Dialog):

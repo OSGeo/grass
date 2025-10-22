@@ -19,13 +19,6 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-#define LEFT        1
-#define RIGHT       2
-
-#define true        1
-#define false       0
-#define DELETED_PIX 9999
-
 static int n_rows, n_cols, pad_size;
 static int box_right, box_left, box_top, box_bottom;
 
@@ -152,7 +145,7 @@ int thin_lines(int iterations)
                         }
 
                     } /* end blank pixel */
-                }     /* end col loop */
+                } /* end col loop */
 
                 for (col = box_left; col <= box_right; col++)
                     row_buf[col] = med[col];
@@ -163,7 +156,7 @@ int thin_lines(int iterations)
                 /* row, since put_a_row(row, med_row) was called and med */
                 med = bottom;
             } /* end row loop */
-        }     /* j-loop */
+        } /* j-loop */
 
         G_message(n_("Deleted %d pixel", "Deleted %d pixels", deleted),
                   deleted);

@@ -421,38 +421,33 @@ class RDigitController(wx.EvtHandler):
                 )
                 return False
             return True
-        else:
-            dlg = NewRasterDialog(parent=self._mapWindow)
-            dlg.CenterOnParent()
-            if dlg.ShowModal() == wx.ID_OK:
-                try:
-                    self._createNewMap(
-                        mapName=dlg.GetMapName(),
-                        backgroundMap=dlg.GetBackgroundMapName(),
-                        mapType=dlg.GetMapType(),
-                    )
-                except ScriptError:
-                    GError(
-                        parent=self._mapWindow,
-                        message=_("Failed to create new raster map."),
-                    )
-                    return False
-                finally:
-                    dlg.Destroy()
-                return True
-            else:
-                dlg.Destroy()
+        dlg = NewRasterDialog(parent=self._mapWindow)
+        dlg.CenterOnParent()
+        if dlg.ShowModal() == wx.ID_OK:
+            try:
+                self._createNewMap(
+                    mapName=dlg.GetMapName(),
+                    backgroundMap=dlg.GetBackgroundMapName(),
+                    mapType=dlg.GetMapType(),
+                )
+            except ScriptError:
+                GError(
+                    parent=self._mapWindow,
+                    message=_("Failed to create new raster map."),
+                )
                 return False
+            finally:
+                dlg.Destroy()
+            return True
+        dlg.Destroy()
+        return False
 
     def _createNewMap(self, mapName, backgroundMap, mapType):
         """Creates a new raster map based on specified background and type."""
         name = mapName.split("@")[0]
         background = backgroundMap.split("@")[0]
         types = {"CELL": "int", "FCELL": "float", "DCELL": "double"}
-        if background:
-            back = background
-        else:
-            back = "null()"
+        back = background or "null()"
         try:
             grast.mapcalc(
                 exp="{name} = {mtype}({back})".format(
@@ -653,9 +648,8 @@ class RDigitController(wx.EvtHandler):
         :return: output raster map name as a result of digitization
         """
         output = "x" + str(uuid.uuid4())[:8]
-        asciiFile = tempfile.NamedTemporaryFile(mode="w", delete=False)
-        asciiFile.write("\n".join(text))
-        asciiFile.close()
+        with tempfile.NamedTemporaryFile(mode="w", delete=False) as asciiFile:
+            asciiFile.write("\n".join(text))
 
         if bufferDist:
             bufferDist /= 2.0

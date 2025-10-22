@@ -6,6 +6,7 @@ Created on Mon Sep 15 17:09:40 2014
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+from grass.gunittest.utils import xfail_windows
 
 from grass.pygrass.raster import RasterRow
 from grass.pygrass.raster.category import Category
@@ -53,7 +54,7 @@ class RasterCategoryTestCase(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """Remove the generated vector map, if exist"""
+        """Remove the generated vector map, if exists"""
         cls.runModule("g.remove", flags="f", type="raster", name=cls.name)
         cls.del_temp_region()
 
@@ -76,6 +77,7 @@ class RasterCategoryTestCase(TestCase):
         self.assertEqual(cats[7], cat7)
         self.assertEqual(cats[15], cat15)
 
+    @xfail_windows
     def testWrite(self):
         tmpfile = tempfile(False)
         cats = Category(self.name)

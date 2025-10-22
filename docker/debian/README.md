@@ -1,7 +1,7 @@
-# Docker GRASS GIS (Debian Linux)
+# Docker GRASS (Debian Linux)
 
 Dockerfile with an [Debian Linux](https://www.debian.org/) image with
-[GRASS GIS](https://grass.osgeo.org/), [PDAL](https://pdal.io) support.
+[GRASS](https://grass.osgeo.org/), [PDAL](https://pdal.io) support.
 
 Download size of this image is of approximately 2.6 GB.
 

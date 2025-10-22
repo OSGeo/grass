@@ -126,7 +126,9 @@ int main(int argc, char *argv[])
 
     if (grp->answer) {
         G_strip(grp->answer);
-        strcpy(group, grp->answer);
+        if (G_strlcpy(group, grp->answer, sizeof(group)) >= sizeof(group)) {
+            G_fatal_error(_("Group name <%s> is too long"), grp->answer);
+        }
     }
     else
         group[0] = '\0';

@@ -56,7 +56,8 @@ void fatalError(char *errorMsg)
     if (map != NULL) {
         /* should unopen map here! */
         if (!Rast3d_close(map))
-            fatalError(_("Unable to close 3D raster map"));
+            Rast3d_fatal_error("%s (%s)", errorMsg,
+                               _("Unable to close 3D raster map"));
     }
 
     Rast3d_fatal_error("%s", errorMsg);
@@ -137,7 +138,7 @@ void writeHeaderString(FILE *fp, char *valueString, double value)
 {
     static char format[100];
 
-    G_snprintf(format, 100, "%s %%lf\n", valueString);
+    snprintf(format, 100, "%s %%lf\n", valueString);
     if (fprintf(fp, format, value) < 0)
         fatalError("writeHeaderString: header value invalid");
 }
@@ -147,7 +148,7 @@ void writeHeaderString2(FILE *fp, char *valueString, int value)
 {
     static char format[100];
 
-    G_snprintf(format, 100, "%s %%d\n", valueString);
+    snprintf(format, 100, "%s %%d\n", valueString);
     if (fprintf(fp, format, value) < 0)
         fatalError("writeHeaderString: header value invalid");
 }
@@ -157,14 +158,14 @@ void writeHeaderString3(FILE *fp, char *valueString, const char *value)
 {
     static char format[100];
 
-    G_snprintf(format, 100, "%s %%s\n", valueString);
+    snprintf(format, 100, "%s %%s\n", valueString);
     if (fprintf(fp, format, value) < 0)
         fatalError("writeHeaderString: header value invalid");
 }
 
 /*---------------------------------------------------------------------------*/
 
-/* Opens the output acsii file and writes the header.
+/* Opens the output ascii file and writes the header.
  * Returns the file handle for the output file.
  */
 FILE *openAscii(char *asciiFile, RASTER3D_Region region)

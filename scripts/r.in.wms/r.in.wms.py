@@ -207,7 +207,7 @@ This program is free software under the GNU General Public License
 import os
 import sys
 
-import grass.script as grass
+import grass.script as gs
 from grass.script.utils import decode
 
 
@@ -219,16 +219,16 @@ def GetRegionParams(opt_region):
         if len(reg_spl) > 1:
             reg_mapset = reg_spl[1]
 
-        if not grass.find_file(name=reg_spl[0], element="windows", mapset=reg_mapset)[
+        if not gs.find_file(name=reg_spl[0], element="windows", mapset=reg_mapset)[
             "name"
         ]:
-            grass.fatal(_("Region <%s> not found") % opt_region)
+            gs.fatal(_("Region <%s> not found") % opt_region)
 
     if opt_region:
-        s = grass.read_command("g.region", quiet=True, flags="ug", region=opt_region)
-        region_params = grass.parse_key_val(decode(s), val_type=float)
+        s = gs.read_command("g.region", quiet=True, flags="ug", region=opt_region)
+        region_params = gs.parse_key_val(decode(s), val_type=float)
     else:
-        region_params = grass.region()
+        region_params = gs.region()
 
     return region_params
 
@@ -237,12 +237,12 @@ def main():
     sys.path.insert(1, os.path.join(os.path.dirname(sys.path[0]), "etc", "r.in.wms"))
 
     if "GRASS" in options["driver"]:
-        grass.debug("Using GRASS driver")
+        gs.debug("Using GRASS driver")
         from wms_drv import WMSDrv
 
         wms = WMSDrv()
     elif "GDAL" in options["driver"]:
-        grass.debug("Using GDAL WMS driver")
+        gs.debug("Using GDAL WMS driver")
         from wms_gdal_drv import WMSGdalDrv
 
         if options["gdal_createopt"]:
@@ -262,7 +262,7 @@ def main():
         if options["proxy"]:
             wms.setProxy(options["proxy"])
             if "GRASS" in options["driver"]:
-                grass.warning(
+                gs.warning(
                     _(
                         "The proxy will be ignored by the chosen GRASS driver. It is "
                         "only used with the GDAL driver."
@@ -272,12 +272,12 @@ def main():
         options["region"] = GetRegionParams(options["region"])
         fetched_map = wms.GetMap(options, flags)
 
-        grass.message(_("Importing raster map into GRASS..."))
+        gs.message(_("Importing raster map into GRASS..."))
         if not fetched_map:
-            grass.warning(
+            gs.warning(
                 _("Nothing to import.\nNo data has been downloaded from wms server.")
             )
-            return
+            return None
         importer = GRASSImporter(options["output"], (not flags["b"]))
         importer.ImportMapIntoGRASS(fetched_map)
 
@@ -285,5 +285,5 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     sys.exit(main())

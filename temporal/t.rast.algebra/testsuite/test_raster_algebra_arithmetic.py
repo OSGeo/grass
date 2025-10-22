@@ -9,10 +9,11 @@ for details.
 
 import datetime
 import os
+
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
-from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
+from grass.gunittest.main import test
 
 
 class TestTRastAlgebra(TestCase):
@@ -251,15 +252,7 @@ class TestTRastAlgebra(TestCase):
         print_module_run.run()
 
         # Check expressions
-        ref_str = "...".join(
-            [
-                "r_2001_01_01=if(a1@...>=3,1,0)",
-                "r_2001_01_02=if(a2@...>=3,2,0)",
-                "r_2001_01_03=if(a3@...>=3,3,0)",
-                "r_2001_01_04=if(a4@...>=3,4,0)",
-            ]
-        )
-        ref_str = f"...{ref_str}..."
+        ref_str = "...r_2001_01_01=if(a1@...>=3,1,0)...r_2001_01_02=if(a2@...>=3,2,0)...r_2001_01_03=if(a3@...>=3,3,0)...r_2001_01_04=if(a4@...>=3,4,0)..."
         print(str(print_module_run.outputs.stdout.replace("\n", "").replace(" ", "")))
         self.assertLooksLike(
             str(print_module_run.outputs.stdout.replace("\n", "").replace(" ", "")),
@@ -296,7 +289,7 @@ class TestTRastAlgebra(TestCase):
 
         self.assertModule(
             "t.rast.algebra",
-            expression="R = if({equal}, start_date(A)" ' >= "2001-01-02", A + A)',
+            expression='R = if({equal}, start_date(A) >= "2001-01-02", A + A)',
             basename="r",
         )
 

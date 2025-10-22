@@ -27,11 +27,11 @@ char *get_datasource_name(const char *opt_dsn, int use_ogr)
         database[i] = '\0';
 
         /* build connection string */
-        sprintf(connect_str, "%s", opt_dsn);
+        snprintf(connect_str, sizeof(connect_str), "%s", opt_dsn);
 
         /* add db.login settings (user, password, host, port) */
         if (DB_OK ==
-            db_get_login2("pg", database, &user, &passwd, &host, &port)) {
+            db_get_login("pg", database, &user, &passwd, &host, &port)) {
             if (user) {
                 if (!G_strcasestr(opt_dsn, "user=")) {
                     strcat(connect_str, " user=");

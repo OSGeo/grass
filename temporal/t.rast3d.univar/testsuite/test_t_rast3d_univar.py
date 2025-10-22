@@ -8,6 +8,8 @@ for details.
 @author Soeren Gebbert
 """
 
+from pathlib import Path
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 
@@ -74,7 +76,9 @@ a_3@testing|2001-07-01 00:00:00|2001-10-01 00:00:00|300|300|300|300|0|0|0|144000
 a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000000|0|480000|480000
 """
         for ref, res in zip(
-            univar_text.split("\n"), t_rast3d_univar.outputs.stdout.split("\n")
+            univar_text.split("\n"),
+            t_rast3d_univar.outputs.stdout.split("\n"),
+            strict=False,
         ):
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
@@ -97,7 +101,9 @@ a_3@testing|2001-07-01 00:00:00|2001-10-01 00:00:00|300|300|300|300|0|0|0|144000
 a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000000|0|480000|480000
 """
         for ref, res in zip(
-            univar_text.split("\n"), t_rast3d_univar.outputs.stdout.split("\n")
+            univar_text.split("\n"),
+            t_rast3d_univar.outputs.stdout.split("\n"),
+            strict=False,
         ):
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
@@ -119,9 +125,11 @@ a_2@testing|2001-04-01 00:00:00|2001-07-01 00:00:00|200|200|200|200|0|0|0|960000
 a_3@testing|2001-07-01 00:00:00|2001-10-01 00:00:00|300|300|300|300|0|0|0|144000000|0|480000|480000
 a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000000|0|480000|480000
 """
-        univar_output = open("univar_output.txt", "r").read()
+        univar_output = Path("univar_output.txt").read_text()
 
-        for ref, res in zip(univar_text.split("\n"), univar_output.split("\n")):
+        for ref, res in zip(
+            univar_text.split("\n"), univar_output.split("\n"), strict=False
+        ):
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
                 res_line = res.split("|", 1)[1]
@@ -142,9 +150,11 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000
 a_3@testing|2001-07-01 00:00:00|2001-10-01 00:00:00|300|300|300|300|0|0|0|144000000|0|480000|480000
 a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000000|0|480000|480000
 """
-        univar_output = open("univar_output.txt", "r").read()
+        univar_output = Path("univar_output.txt").read_text()
 
-        for ref, res in zip(univar_text.split("\n"), univar_output.split("\n")):
+        for ref, res in zip(
+            univar_text.split("\n"), univar_output.split("\n"), strict=False
+        ):
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
                 res_line = res.split("|", 1)[1]
@@ -195,7 +205,9 @@ a_4@PERMANENT|2001-10-01 00:00:00|2002-01-01 00:00:00|3|400|400|400|400|0|0|0|14
 """
 
         for ref, res in zip(
-            univar_text.split("\n"), t_rast_univar_zones.outputs.stdout.split("\n")
+            univar_text.split("\n"),
+            t_rast_univar_zones.outputs.stdout.split("\n"),
+            strict=False,
         ):
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
@@ -233,7 +245,9 @@ a_4@PERMANENT|2001-10-01 00:00:00|2002-01-01 00:00:00|3|400|400|400|400|0|0|0|14
 """
 
         for ref, res in zip(
-            univar_text.split("\n"), t_rast_univar_zones.outputs.stdout.split("\n")
+            univar_text.split("\n"),
+            t_rast_univar_zones.outputs.stdout.split("\n"),
+            strict=False,
         ):
             if ref and res:
                 ref_line = ref.split("|", 1)[1]

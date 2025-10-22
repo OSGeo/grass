@@ -30,18 +30,20 @@ char *start(const char *name, const char *output, int width, int height,
     if (!output) {
         char buff[512];
 
-        sprintf(buff, "GRASS_RENDER_IMMEDIATE=%s", name);
+        snprintf(buff, sizeof(buff), "GRASS_RENDER_IMMEDIATE=%s", name);
         putenv(G_store(buff));
-        sprintf(buff, "GRASS_RENDER_WIDTH=%d", width);
+        snprintf(buff, sizeof(buff), "GRASS_RENDER_WIDTH=%d", width);
         putenv(G_store(buff));
-        sprintf(buff, "GRASS_RENDER_HEIGHT=%d", height);
+        snprintf(buff, sizeof(buff), "GRASS_RENDER_HEIGHT=%d", height);
         putenv(G_store(buff));
 
         D_open_driver();
 
         output_name = D_get_file();
-        if (!output_name)
+        if (!output_name) {
+            G_free(output_path);
             return NULL;
+        }
         if (!update && access(output_name, F_OK) == 0) {
             if (G_get_overwrite()) {
                 G_warning(_("File <%s> already exists and will be overwritten"),
@@ -113,9 +115,10 @@ char *start_wx(const char *name, const char *element, int width, int height,
     mapfile = (char *)G_malloc(GPATH_MAX);
     mapfile[0] = '\0';
 
-    sprintf(progname, "%s/gui/wxpython/mapdisp/main.py", G_gisbase());
-    sprintf(str_width, "%d", width);
-    sprintf(str_height, "%d", height);
+    snprintf(progname, sizeof(progname), "%s/gui/wxpython/mapdisp/main.py",
+             G_gisbase());
+    snprintf(str_width, sizeof(str_width), "%d", width);
+    snprintf(str_height, sizeof(str_height), "%d", height);
 
     if (x_only)
         str_x_only = "1";
@@ -165,7 +168,8 @@ int start_mon(const char *name, const char *output, int select, int width,
     leg_file = G_store(file_path);
 
     /* create py file (renderer) */
-    sprintf(render_cmd_path, "%s/etc/d.mon/render_cmd.py", getenv("GISBASE"));
+    snprintf(render_cmd_path, sizeof(render_cmd_path),
+             "%s/etc/d.mon/render_cmd.py", getenv("GISBASE"));
     G_file_name(file_path, mon_path, "render.py", G_mapset());
     G_debug(1, "Monitor name=%s, pyfile = %s", name, file_path);
     if (1 != G_copy_file(render_cmd_path, file_path))
@@ -184,48 +188,50 @@ int start_mon(const char *name, const char *output, int select, int width,
         G_fatal_error(_("Unable to create file <%s>"), env_file);
 
     if (G_strncasecmp(name, "wx", 2) == 0) {
-        sprintf(buf, "GRASS_RENDER_IMMEDIATE=default\n"); /* TODO: read settings
-                                                             from wxGUI */
+        snprintf(buf, sizeof(buf),
+                 "GRASS_RENDER_IMMEDIATE=default\n"); /* TODO: read settings
+                                           from wxGUI */
         if (write(fd, buf, strlen(buf)) != (ssize_t)strlen(buf))
             G_fatal_error(_("Failed to write to file <%s>"), env_file);
-        sprintf(buf, "GRASS_RENDER_FILE_READ=FALSE\n");
+        snprintf(buf, sizeof(buf), "GRASS_RENDER_FILE_READ=FALSE\n");
         if (write(fd, buf, strlen(buf)) != (ssize_t)strlen(buf))
             G_fatal_error(_("Failed to write to file <%s>"), env_file);
-        sprintf(buf, "GRASS_RENDER_TRANSPARENT=TRUE\n");
+        snprintf(buf, sizeof(buf), "GRASS_RENDER_TRANSPARENT=TRUE\n");
         if (write(fd, buf, strlen(buf)) != (ssize_t)strlen(buf))
             G_fatal_error(_("Failed to write to file <%s>"), env_file);
     }
     else {
-        sprintf(buf, "GRASS_RENDER_IMMEDIATE=%s\n", name);
+        snprintf(buf, sizeof(buf), "GRASS_RENDER_IMMEDIATE=%s\n", name);
         if (write(fd, buf, strlen(buf)) != (ssize_t)strlen(buf))
             G_fatal_error(_("Failed to write to file <%s>"), env_file);
-        sprintf(buf, "GRASS_RENDER_FILE_READ=TRUE\n");
+        snprintf(buf, sizeof(buf), "GRASS_RENDER_FILE_READ=TRUE\n");
         if (write(fd, buf, strlen(buf)) != (ssize_t)strlen(buf))
             G_fatal_error(_("Failed to write to file <%s>"), env_file);
     }
-    sprintf(buf, "GRASS_RENDER_FILE=%s\n", out_file);
+    snprintf(buf, sizeof(buf), "GRASS_RENDER_FILE=%s\n", out_file);
     if (write(fd, buf, strlen(buf)) != (ssize_t)strlen(buf))
         G_fatal_error(_("Failed to write to file <%s>"), env_file);
-    sprintf(buf, "GRASS_RENDER_WIDTH=%d\n", width);
+    snprintf(buf, sizeof(buf), "GRASS_RENDER_WIDTH=%d\n", width);
     if (write(fd, buf, strlen(buf)) != (ssize_t)strlen(buf))
         G_fatal_error(_("Failed to write to file <%s>"), env_file);
-    sprintf(buf, "GRASS_RENDER_HEIGHT=%d\n", height);
+    snprintf(buf, sizeof(buf), "GRASS_RENDER_HEIGHT=%d\n", height);
     if (write(fd, buf, strlen(buf)) != (ssize_t)strlen(buf))
         G_fatal_error(_("Failed to write to file <%s>"), env_file);
-    sprintf(buf, "GRASS_LEGEND_FILE=%s\n", leg_file);
+    snprintf(buf, sizeof(buf), "GRASS_LEGEND_FILE=%s\n", leg_file);
     if (write(fd, buf, strlen(buf)) != (ssize_t)strlen(buf))
         G_fatal_error(_("Failed to write to file <%s>"), env_file);
 
     if (bgcolor) {
         if (strcmp(bgcolor, "none") == 0)
-            sprintf(buf, "GRASS_RENDER_TRANSPARENT=TRUE\n");
+            snprintf(buf, sizeof(buf), "GRASS_RENDER_TRANSPARENT=TRUE\n");
         else
-            sprintf(buf, "GRASS_RENDER_BACKGROUNDCOLOR=%s\n", bgcolor);
+            snprintf(buf, sizeof(buf), "GRASS_RENDER_BACKGROUNDCOLOR=%s\n",
+                     bgcolor);
         if (write(fd, buf, strlen(buf)) != (ssize_t)strlen(buf))
             G_fatal_error(_("Failed to write to file <%s>"), env_file);
     }
     if (truecolor) {
-        sprintf(buf, "GRASS_RENDER_TRUECOLOR=TRUE\n");
+        snprintf(buf, sizeof(buf), "GRASS_RENDER_TRUECOLOR=TRUE\n");
         if (write(fd, buf, strlen(buf)) != (ssize_t)strlen(buf))
             G_fatal_error(_("Failed to write to file <%s>"), env_file);
     }
@@ -233,8 +239,10 @@ int start_mon(const char *name, const char *output, int select, int width,
 
     /* create cmd file (list of GRASS display commands to render) */
     G_debug(1, "Monitor name=%s, cmdfile = %s", name, cmd_file);
-    if (0 > creat(cmd_file, 0666))
+    int fd2 = creat(cmd_file, 0666);
+    if (0 > fd2)
         G_fatal_error(_("Unable to create file <%s>"), cmd_file);
+    close(fd2);
 
     /* select monitor if requested */
     if (select)
@@ -243,6 +251,8 @@ int start_mon(const char *name, const char *output, int select, int width,
     G_free(mon_path);
     G_free(out_file);
     G_free(env_file);
+    G_free(cmd_file);
+    G_free(leg_file);
 
     return 0;
 }

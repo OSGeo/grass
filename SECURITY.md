@@ -1,8 +1,8 @@
-# GRASS GIS Security Policy
+# GRASS Security Policy
 
 ## Reporting a Vulnerability
 
-At GRASS GIS, we take security vulnerabilities seriously. We appreciate your
+At GRASS, we take security vulnerabilities seriously. We appreciate your
 efforts in responsibly disclosing any issues you may find. To report a security
 vulnerability, please follow these steps:
 
@@ -25,7 +25,7 @@ vulnerability, please follow these steps:
 
 ## Supported Versions
 
-Please refer to our [Release Schedule](https://trac.osgeo.org/grass/wiki/Release/Schedule)
+Please refer to our [download section](https://grass.osgeo.org/download/)
 for details on which versions are currently supported.
 
 ## Security Measures
@@ -39,8 +39,8 @@ for details on which versions are currently supported.
 
 ## Vulnerability Scope
 
-Our security policy covers vulnerabilities in the GRASS GIS core codebase,
-official addons, and any official distributions provided by the GRASS GIS team.
+Our security policy covers vulnerabilities in the GRASS core codebase,
+official addons, and any official distributions provided by the GRASS team.
 
 While packages in Linux and other unix-like distributions are out of scope of
 this document, distribution maintainers traditionally do a great job in patching
@@ -55,4 +55,4 @@ in allowing us time to address any reported vulnerabilities before disclosing
 them publicly. We ask that you refrain from disclosing any details of the
 vulnerability until we have had adequate time to provide a fix.
 
-Thank you for helping to keep GRASS GIS secure!
+Thank you for helping to keep GRASS secure!

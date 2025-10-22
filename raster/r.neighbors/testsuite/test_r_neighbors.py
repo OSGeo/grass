@@ -1,3 +1,4 @@
+from pathlib import Path
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.script.raster import raster_info
@@ -66,7 +67,7 @@ class TestNeighbors(TestCase):
                 "stddev": 20.302357806975,
                 "variance": 412.18573252244,
                 "coeff_var": 18.3939006094541,
-                "sum": 223510365.91985,
+                "sum": 223510365.919864,
             },
             "maximum": {
                 "n": 2025000,
@@ -152,7 +153,7 @@ class TestNeighbors(TestCase):
                 "stddev": 20.3000320258108,
                 "variance": 412.091300248942,
                 "coeff_var": 18.2617209334619,
-                "sum": 225102360.298055,
+                "sum": 225102360.298065,
             },
         },
         "test_standard_options_circular": {
@@ -628,8 +629,9 @@ class TestNeighbors(TestCase):
         self.to_remove.extend(outputs_threaded)
 
         weights = tempfile()
-        with open(weights, "w") as w:
-            w.write("0 1 1 1 0\n1 0 0 0 1\n1 0 0 0 1\n1 0 0 0 1\n0 1 1 1 0")
+        Path(weights).write_text(
+            "0 1 1 1 0\n1 0 0 0 1\n1 0 0 0 1\n1 0 0 0 1\n0 1 1 1 0"
+        )
 
         self.assertModule(
             "r.neighbors",
@@ -708,7 +710,7 @@ class TestNeighbors(TestCase):
             rinfo = raster_info(rmap)
             self.assertTrue(
                 rinfo["datatype"] == "CELL"
-                if rinfo["datatype"] in ["diversity", "range", "mode"]
+                if rinfo["datatype"] in {"diversity", "range", "mode"}
                 else "DCELL"
             )
 

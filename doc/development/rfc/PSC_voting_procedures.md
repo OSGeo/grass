@@ -2,14 +2,14 @@
 
 Author: [GRASS PSC](https://trac.osgeo.org/grass/wiki/PSC)
 
-Contact: [grass-psc AT lists.osgeo.org](http://lists.osgeo.org/mailman/listinfo/grass-psc)
+Contact: [grass-psc AT lists.osgeo.org](https://lists.osgeo.org/mailman/listinfo/grass-psc)
 
 Status: Adopted (6 Oct 2014)
 
 ## Introduction
 
 In brief, the PSC members vote on proposals on the dedicated
-[GRASS-PSC mailing list](http://lists.osgeo.org/mailman/listinfo/grass-psc).
+[GRASS-PSC mailing list](https://lists.osgeo.org/mailman/listinfo/grass-psc).
 Proposals are available for review for at least seven calendar days, and a
 single veto is sufficient to delay progress although ultimately a majority
 of committee members can pass a proposal.
@@ -37,7 +37,7 @@ Voting:
 
  1. A voting procedure is started by the proposer. For a more visible communication,
     the word [MOTION] should be put into the subject of the email to the
-    [GRASS-PSC mailing list](http://lists.osgeo.org/mailman/listinfo/grass-psc)
+    [GRASS-PSC mailing list](https://lists.osgeo.org/mailman/listinfo/grass-psc)
     along with a short title.
  2. Respondents may vote "+1" to indicate support for the proposal and a
     willingness to support implementation.

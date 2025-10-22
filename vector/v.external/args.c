@@ -32,7 +32,6 @@ void parse_args(int argc, char **argv, struct _options *options,
                                     "\t\tESRI Shapefile: shapefile name\n"
                                     "\t\tMapInfo File: mapinfo file name\n"
                                     "\t\tPostGIS database: table name");
-    options->layer->required = NO;
     options->layer->key_desc = "name";
     options->layer->gisprompt = "old,datasource_layer,datasource_layer";
 

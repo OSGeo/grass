@@ -1,7 +1,7 @@
-GRASS GIS List of Authors
+GRASS List of Authors
 =========================
 
-Many people have contributed to GRASS GIS. Without any one of them the
+Many people have contributed to GRASS. Without any one of them the
 project would not exist in its current form.
 
 The authors of the individual programs are listed at the end of their
@@ -206,7 +206,7 @@ MS-Windows/Cygwin:  Huidae Cho <grass4u gmail com>
 Source code Quality assessment system
  - SOCCER Labs at Ecole Polytechnique de Montreal, Canada
    http://web.soccerlab.polymtl.ca/grass-evolution/grass-browsers/grass-index-en.html
-   http://lists.osgeo.org/mailman/listinfo/grass-qa
+   https://lists.osgeo.org/mailman/listinfo/grass-qa
 
 
 GRASS 5.7/6.0: Primary authors of new source code

@@ -769,7 +769,9 @@ double compute_all_net_distances(struct Map_info *In, struct Map_info *Net,
             G_debug(3, "  kk = %d", kk);
         }
     }
-
+    Vect_destroy_line_struct(APoints);
+    Vect_destroy_line_struct(BPoints);
+    Vect_destroy_boxlist(List);
     return (kk);
 }
 

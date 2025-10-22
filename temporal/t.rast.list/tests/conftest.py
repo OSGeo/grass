@@ -1,7 +1,6 @@
 """Fixture for t.rast.list test"""
 
 import os
-
 from datetime import datetime
 from types import SimpleNamespace
 
@@ -17,9 +16,9 @@ def space_time_raster_dataset(tmp_path_factory):
     Returns object with attributes about the dataset.
     """
     tmp_path = tmp_path_factory.mktemp("raster_time_series")
-    location = "test"
-    gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with gs.setup.init(tmp_path / location, env=os.environ.copy()) as session:
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy()) as session:
         gs.run_command(
             "g.region",
             s=0,
@@ -34,7 +33,7 @@ def space_time_raster_dataset(tmp_path_factory):
         )
         names = [f"precipitation_{i}" for i in range(1, 7)]
         max_values = [550, 450, 320, 510, 300, 650]
-        for name, value in zip(names, max_values):
+        for name, value in zip(names, max_values, strict=False):
             gs.mapcalc(f"{name} = rand(0, {value})", seed=1, env=session.env)
         dataset_name = "precipitation"
         gs.run_command(

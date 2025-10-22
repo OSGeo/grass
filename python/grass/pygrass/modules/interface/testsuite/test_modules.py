@@ -21,7 +21,7 @@ SKIP = [
 
 
 class ModulesMeta(type):
-    def __new__(mcs, name, bases, dict):
+    def __new__(cls, name, bases, dict):
         def gen_test(cmd):
             def test(self):
                 Module(cmd)
@@ -36,7 +36,7 @@ class ModulesMeta(type):
         for cmd in cmds:
             test_name = "test__%s" % cmd.replace(".", "_")
             dict[test_name] = gen_test(cmd)
-        return type.__new__(mcs, name, bases, dict)
+        return type.__new__(cls, name, bases, dict)
 
 
 class TestModules(TestCase, metaclass=ModulesMeta):

@@ -1,7 +1,7 @@
 ---
 name: CodeQL config
 paths-ignore:
-  - '**/testsuite/**'
+  - "**/testsuite/**"
   - bin.*
   - dist.*
   - node_modules

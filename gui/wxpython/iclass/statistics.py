@@ -18,13 +18,28 @@ for details.
 """
 
 import os
-from ctypes import *
+import sys
+from ctypes import byref, c_char_p, c_float, c_int
 
-import grass.script as grass
+import grass.script as gs
 
 try:
-    from grass.lib.imagery import *
-except ImportError as e:
+    from grass.lib.imagery import (
+        I_iclass_statistics_get_cat,
+        I_iclass_statistics_get_color,
+        I_iclass_statistics_get_histo,
+        I_iclass_statistics_get_max,
+        I_iclass_statistics_get_mean,
+        I_iclass_statistics_get_min,
+        I_iclass_statistics_get_name,
+        I_iclass_statistics_get_nbands,
+        I_iclass_statistics_get_ncells,
+        I_iclass_statistics_get_nstd,
+        I_iclass_statistics_get_range_max,
+        I_iclass_statistics_get_range_min,
+        I_iclass_statistics_get_stddev,
+    )
+except ImportError:
     sys.stderr.write(_("Loading imagery lib failed"))
 
 from grass.pydispatch.signal import Signal
@@ -114,7 +129,7 @@ class Statistics:
         self.name = name
         self.color = color
 
-        rasterPath = grass.tempfile(create=False)
+        rasterPath = gs.tempfile(create=False)
         name = name.replace(" ", "_")
         self.rasterName = name + "_" + os.path.basename(rasterPath)
 
@@ -135,12 +150,12 @@ class Statistics:
         name = c_char_p()
         I_iclass_statistics_get_name(cStatistics, byref(name))
         if self.name != name.value:
-            set_stats["name"] = grass.decode(name.value)
+            set_stats["name"] = gs.decode(name.value)
 
         color = c_char_p()
         I_iclass_statistics_get_color(cStatistics, byref(color))
         if self.color != color.value:
-            set_stats["color"] = grass.decode(color.value)
+            set_stats["color"] = gs.decode(color.value)
 
         nbands = c_int()
         I_iclass_statistics_get_nbands(cStatistics, byref(nbands))

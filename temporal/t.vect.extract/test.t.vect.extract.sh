@@ -44,5 +44,4 @@ t.vect.list input=soil_abs3 columns=name,start_time,end_time,primitives
 # @postprocess
 t.unregister type=vector maps=soil_1,soil_2,soil_3,soil_4,soil_5,soil_6,soil_7,soil_8
 t.remove type=stvds input=soil_abs1,soil_abs2,soil_abs3
-g.remove -f type=vector name=soil_1,soil_2,soil_3,soil_4,soil_5,soil_6,soil_7,soil_8
-g.remove -f type=vector name=new_vect_1,new_vect_2,new_vect_3,new_vect_4,new_vect_5,new_vect_6
+g.remove -f type=vector name=soil_1,soil_2,soil_3,soil_4,soil_5,soil_6,soil_7,soil_8,new_vect_1,new_vect_2,new_vect_3,new_vect_4,new_vect_5,new_vect_6

@@ -8,8 +8,6 @@ for details.
 :authors: Soeren Gebbert
 """
 
-import grass.pygrass.modules as pymod
-import subprocess
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 

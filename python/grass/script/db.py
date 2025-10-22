@@ -1,9 +1,8 @@
 """
 Database related functions to be used in Python scripts.
 
-Usage:
-
-::
+:Usage:
+  .. code-block:: python
 
     from grass.script import db as grass
 
@@ -34,14 +33,17 @@ from grass.exceptions import CalledModuleError
 
 def db_describe(table, env=None, **args):
     """Return the list of columns for a database table
-    (interface to `db.describe -c`). Example:
+    (interface to `db.describe -c`).
 
-    >>> run_command("g.copy", vector="firestations,myfirestations")
-    0
-    >>> db_describe("myfirestations")  # doctest: +ELLIPSIS
-    {'nrows': 71, 'cols': [['cat', 'INTEGER', '20'], ... 'ncols': 22}
-    >>> run_command("g.remove", flags="f", type="vector", name="myfirestations")
-    0
+    :Example:
+      .. code-block:: pycon
+
+        >>> run_command("g.copy", vector="firestations,myfirestations")
+        0
+        >>> db_describe("myfirestations")  # doctest: +ELLIPSIS
+        {'nrows': 71, 'cols': [['cat', 'INTEGER', '20'], ... 'ncols': 22}
+        >>> run_command("g.remove", flags="f", type="vector", name="myfirestations")
+        0
 
     :param str table: table name
     :param list args:
@@ -55,7 +57,7 @@ def db_describe(table, env=None, **args):
         args.pop("driver")
     s = read_command("db.describe", flags="c", table=table, env=env, **args)
     if not s:
-        fatal(_("Unable to describe table <%s>") % table)
+        fatal(_("Unable to describe table <%s>") % table, env=env)
 
     cols = []
     result = {}
@@ -66,7 +68,7 @@ def db_describe(table, env=None, **args):
         if key.startswith("Column "):
             n = int(key.split(" ")[1])
             cols.insert(n, f[1:])
-        elif key in ["ncols", "nrows"]:
+        elif key in {"ncols", "nrows"}:
             result[key] = int(f[1])
         else:
             result[key] = f[1:]
@@ -94,42 +96,41 @@ def db_table_exist(table, env=None, **args):
 
     :return: True for success, False otherwise
     """
-    nuldev = open(os.devnull, "w+")
     ok = True
-    try:
-        run_command(
-            "db.describe",
-            flags="c",
-            table=table,
-            stdout=nuldev,
-            stderr=nuldev,
-            env=env,
-            **args,
-        )
-    except CalledModuleError:
-        ok = False
-    finally:
-        nuldev.close()
-
+    with open(os.devnull, "w+") as nuldev:
+        try:
+            run_command(
+                "db.describe",
+                flags="c",
+                table=table,
+                stdout=nuldev,
+                stderr=nuldev,
+                env=env,
+                **args,
+            )
+        except CalledModuleError:
+            ok = False
     return ok
 
 
 def db_connection(force=False, env=None):
     """Return the current database connection parameters
-    (interface to `db.connect -g`). Example:
+    (interface to `db.connect -g`).
 
-    >>> db_connection()
-    {'group': '', 'schema': '', 'driver': 'sqlite', 'database': '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'}
+    :Example:
+      .. code-block:: pycon
 
-    :param force True to set up default DB connection if not defined
+        >>> db_connection()
+        {'group': '', 'schema': '', 'driver': 'sqlite', 'database': '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'}
+
+    :param force: True to set up default DB connection if not defined
     :param env: environment
 
     :return: parsed output of db.connect
     """  # noqa: E501
     try:
-        nuldev = open(os.devnull, "w")
-        conn = parse_command("db.connect", flags="g", stderr=nuldev, env=env)
-        nuldev.close()
+        with open(os.devnull, "w") as nuldev:
+            conn = parse_command("db.connect", flags="g", stderr=nuldev, env=env)
     except CalledModuleError:
         conn = None
 
@@ -143,22 +144,25 @@ def db_connection(force=False, env=None):
 def db_select(sql=None, filename=None, table=None, env=None, **args):
     """Perform SQL select statement
 
-    Note: one of <em>sql</em>, <em>filename</em>, or <em>table</em>
-    arguments must be provided.
+    .. note:: One of **sql**, **filename**, or **table**
+        arguments must be provided.
 
-    Examples:
+    :Example:
+      .. code-block:: pycon
 
-    >>> run_command("g.copy", vector="firestations,myfirestations")
-    0
-    >>> db_select(sql="SELECT cat,CITY FROM myfirestations WHERE cat < 4")
-    (('1', 'Morrisville'), ('2', 'Morrisville'), ('3', 'Apex'))
+        >>> run_command("g.copy", vector="firestations,myfirestations")
+        0
+        >>> db_select(sql="SELECT cat,CITY FROM myfirestations WHERE cat < 4")
+        (('1', 'Morrisville'), ('2', 'Morrisville'), ('3', 'Apex'))
 
-    Simplyfied usage (it performs <tt>SELECT * FROM myfirestations</tt>.)
+      Simplified usage (it performs ``SELECT * FROM myfirestations``.)
 
-    >>> db_select(table="myfirestations")  # doctest: +ELLIPSIS
-    (('1', '24', 'Morrisville #3', ... 'HS2A', '1.37'))
-    >>> run_command("g.remove", flags="f", type="vector", name="myfirestations")
-    0
+      .. code-block:: pycon
+
+        >>> db_select(table="myfirestations")  # doctest: +ELLIPSIS
+        (('1', '24', 'Morrisville #3', ... 'HS2A', '1.37'))
+        >>> run_command("g.remove", flags="f", type="vector", name="myfirestations")
+        0
 
     :param str sql: SQL statement to perform (or None)
     :param str filename: name of file with SQL statements (or None)
@@ -179,7 +183,8 @@ def db_select(sql=None, filename=None, table=None, env=None, **args):
                 "Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be \
                     provided"
             )
-            % {"sql": "sql", "filename": "filename", "table": "table"}
+            % {"sql": "sql", "filename": "filename", "table": "table"},
+            env=env,
         )
 
     if "sep" not in args:
@@ -188,11 +193,10 @@ def db_select(sql=None, filename=None, table=None, env=None, **args):
     try:
         run_command("db.select", quiet=True, flags="c", output=fname, env=env, **args)
     except CalledModuleError:
-        fatal(_("Fetching data failed"))
+        fatal(_("Fetching data failed"), env=env)
 
-    ofile = open(fname)
-    result = [tuple(x.rstrip(os.linesep).split(args["sep"])) for x in ofile.readlines()]
-    ofile.close()
+    with open(fname) as ofile:
+        result = [tuple(x.rstrip(os.linesep).split(args["sep"])) for x in ofile]
     try_remove(fname)
 
     return tuple(result)
@@ -217,20 +221,19 @@ def db_table_in_vector(table, mapset=".", env=None):
     """
     from .vector import vector_db
 
-    nuldev = open(os.devnull, "w")
     used = []
     vects = list_strings("vector", mapset=mapset, env=env)
-    for vect in vects:
-        for f in vector_db(vect, stderr=nuldev, env=env).values():
-            if not f:
-                continue
-            if f["table"] == table:
-                used.append(vect)
-                break
+    with open(os.devnull, "w") as nuldev:
+        for vect in vects:
+            for f in vector_db(vect, stderr=nuldev, env=env).values():
+                if not f:
+                    continue
+                if f["table"] == table:
+                    used.append(vect)
+                    break
     if len(used) > 0:
         return used
-    else:
-        return None
+    return None
 
 
 def db_begin_transaction(driver):
@@ -238,7 +241,7 @@ def db_begin_transaction(driver):
 
     :return: SQL command as string
     """
-    if driver in ("sqlite", "pg"):
+    if driver in {"sqlite", "pg"}:
         return "BEGIN"
     if driver == "mysql":
         return "START TRANSACTION"
@@ -250,6 +253,6 @@ def db_commit_transaction(driver):
 
     :return: SQL command as string
     """
-    if driver in ("sqlite", "pg", "mysql"):
+    if driver in {"sqlite", "pg", "mysql"}:
         return "COMMIT"
     return ""

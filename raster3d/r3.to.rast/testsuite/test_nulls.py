@@ -149,11 +149,11 @@ class TestR3ToRastNulls(TestCase):
             exclude="%s_*" % self.rast2d_ref,
         )
         self.assertEqual(
-            len(rasts), 4, msg="Wrong number of 2D rasters present" " in the mapset"
+            len(rasts), 4, msg="Wrong number of 2D rasters present in the mapset"
         )
-        ref_info = dict(cells=9)
+        ref_info = {"cells": 9}
         # only this tests the presence of nulls
-        ref_univar = dict(cells=9, null_cells=2)
+        ref_univar = {"cells": 9, "null_cells": 2}
         for rast in rasts:
             self.assertRasterExists(rast)
             # the following doesn't make much sense because we just listed them
@@ -164,7 +164,7 @@ class TestR3ToRastNulls(TestCase):
         # check the actual values
         # TODO: this does not check the position of nulls
         # (it ignores nulls)
-        for rast_ref, rast in zip(self.rast2d_refs, rasts):
+        for rast_ref, rast in zip(self.rast2d_refs, rasts, strict=True):
             self.assertRastersNoDifference(
                 actual=rast, reference=rast_ref, precision=0.1
             )

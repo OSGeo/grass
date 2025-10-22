@@ -235,8 +235,8 @@ void output_handler(void *p)
 
     G_debug(1, "output_handler(): schema = %s; olayer = %s",
             pg_info->schema_name, pg_info->table_name);
-    sprintf(stmt, "SELECT DropGeometryTable('%s', '%s')", pg_info->schema_name,
-            pg_info->table_name);
+    snprintf(stmt, sizeof(stmt), "SELECT DropGeometryTable('%s', '%s')",
+             pg_info->schema_name, pg_info->table_name);
     result = PQexec(pg_info->conn, stmt);
     /*
        be quiet - table may do not exists
@@ -249,8 +249,8 @@ void output_handler(void *p)
     PQclear(result);
 
     if (pg_info->toposchema_name) {
-        sprintf(stmt, "SELECT topology.DropTopology('%s')",
-                pg_info->toposchema_name);
+        snprintf(stmt, sizeof(stmt), "SELECT topology.DropTopology('%s')",
+                 pg_info->toposchema_name);
         result = PQexec(pg_info->conn, stmt);
         if (!result || PQresultStatus(result) != PGRES_TUPLES_OK) {
             G_warning(_("Unable to drop topology schema <%s>"),

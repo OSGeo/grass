@@ -19,12 +19,10 @@ import string
 import re
 import subprocess
 from datetime import datetime
+from pathlib import Path
 
 pgm = sys.argv[1]
-if len(sys.argv) > 1:
-    year = sys.argv[2]
-else:
-    year = str(datetime.now().year)
+year = sys.argv[2] if len(sys.argv) > 1 else str(datetime.now().year)
 
 src_file = "%s.html" % pgm
 tmp_file = "%s.tmp.txt" % pgm
@@ -50,10 +48,7 @@ footer_noindex = string.Template(
 
 def read_file(name):
     try:
-        f = open(name, "rb")
-        s = f.read()
-        f.close()
-        return s
+        return Path(name).read_bytes()
     except OSError:
         return ""
 
@@ -69,7 +64,7 @@ replacement = {
 
 src_data = read_file(src_file)
 
-title = re.search("(<!-- meta page description:)(.*)(-->)", src_data, re.IGNORECASE)
+title = re.search(r"(<!-- meta page description:)(.*)(-->)", src_data, re.IGNORECASE)
 
 if title:
     title_name = title.group(2).strip()
@@ -82,8 +77,9 @@ if tmp_data:
     sys.stdout.write(tmp_data)
 
 arguments = ["pandoc", "-s", "-r", "html", src_file, "-w", "rst"]
-process = subprocess.Popen(arguments, stdout=subprocess.PIPE)
-html_text = process.communicate()[0]
+with subprocess.Popen(arguments, stdout=subprocess.PIPE) as process:
+    html_text = process.communicate()[0]
+
 if html_text:
     for k, v in replacement.iteritems():
         html_text = html_text.replace(k, v)
@@ -111,7 +107,7 @@ index_names = {
     "v": "vector",
 }
 
-index = re.search("(<!-- meta page index:)(.*)(-->)", src_data, re.IGNORECASE)
+index = re.search(r"(<!-- meta page index:)(.*)(-->)", src_data, re.IGNORECASE)
 
 if index:
     index_name = index.group(2).strip()

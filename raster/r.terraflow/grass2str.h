@@ -211,7 +211,7 @@ void stream2_CELL(AMI_STREAM<T> *str, dimension_type nrows,
         Rast_put_row(outfd, outrast, mtype);
 
         G_percent(i, nrows, 2);
-    }                   /* for i */
+    } /* for i */
     G_percent(1, 1, 2); /* finish it */
 
     G_free(outrast);
@@ -288,7 +288,7 @@ void stream2_CELL(AMI_STREAM<T> *str, dimension_type nrows,
         Rast_put_row(outfd, outrast, CELL_TYPE);
 
         G_percent(i, nrows, 2);
-    }                   /* for i */
+    } /* for i */
     G_percent(1, 1, 1); /* finish it */
 
     G_free(outrast);
@@ -361,7 +361,7 @@ void stream2_FCELL(AMI_STREAM<T> *str, dimension_type nrows,
         Rast_put_row(outfd, outrast, FCELL_TYPE);
 
         G_percent(i, nrows, 2);
-    }                   /* for i */
+    } /* for i */
     G_percent(1, 1, 1); /* finish it */
 
     G_free(outrast);
@@ -472,7 +472,7 @@ void stream2_FCELL(AMI_STREAM<T> *str, dimension_type nrows,
 
         G_percent(i, nrows, 2);
 
-    }                   /* for i */
+    } /* for i */
     G_percent(1, 1, 1); /* finish it */
 
     G_free(rast1);

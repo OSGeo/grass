@@ -1,7 +1,7 @@
 /*
  * r.in.pdal point binning output value calculation
  *
- * Copyright 2011-2015, 2020 by Markus Metz, and The GRASS Development Team
+ * Copyright 2011-2015, 2020 by Markus Metz, and the GRASS Development Team
  * Authors:
  *  Markus Metz (r.in.lidar)
  *  Vaclav Petras (move code to separate functions)

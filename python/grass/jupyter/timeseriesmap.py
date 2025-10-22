@@ -1,25 +1,21 @@
 # MODULE:    grass.jupyter.timeseriesmap
 #
 # AUTHOR(S): Caitlin Haedrich <caitlin DOT haedrich AT gmail>
+#            Riya Saxena <29riyasaxena AT gmail>
 #
 # PURPOSE:   This module contains functions for visualizing raster and vector
 #            space-time datasets in Jupyter Notebooks
 #
-# COPYRIGHT: (C) 2022 Caitlin Haedrich, and by the GRASS Development Team
+# COPYRIGHT: (C) 2022-2024 Caitlin Haedrich, and by the GRASS Development Team
 #
 #           This program is free software under the GNU General Public
 #           License (>=v2). Read the file COPYING that comes with GRASS
 #           for details.
 """Create and display visualizations for space-time datasets."""
 
-import os
-import shutil
-
 import grass.script as gs
 
-from .map import Map
 from .region import RegionManagerForTimeSeries
-from .utils import save_gif
 from .baseseriesmap import BaseSeriesMap
 
 
@@ -28,8 +24,6 @@ def fill_none_values(names):
     for i, name in enumerate(names):
         if name == "None":
             names[i] = names[i - 1]
-        else:
-            pass
     return names
 
 
@@ -85,7 +79,7 @@ def collect_layers(timeseries, element_type, fill_gaps):
     # Create list of list
     new_rows = [row.split("|") for row in rows]
     # Transpose into columns where the first value is the name of the column
-    new_array = [list(row) for row in zip(*new_rows)]
+    new_array = [list(row) for row in zip(*new_rows, strict=False)]
 
     # Collect layer name and start time
     for column in new_array:
@@ -117,12 +111,13 @@ class TimeSeriesMap(BaseSeriesMap):
     """Creates visualizations of time-space raster and vector datasets in Jupyter
     Notebooks.
 
-    Basic usage::
+    :Basic usage:
+      .. code-block:: pycon
 
-    >>> img = TimeSeriesMap("series_name")
-    >>> img.d_legend()  # Add legend
-    >>> img.show()  # Create TimeSlider
-    >>> img.save("image.gif")
+        >>> img = TimeSeriesMap("series_name")
+        >>> img.d_legend()  # Add legend
+        >>> img.show()  # Create TimeSlider
+        >>> img.save("image.gif")
 
     This class of grass.jupyter is experimental and under development. The API can
     change at anytime.
@@ -158,56 +153,75 @@ class TimeSeriesMap(BaseSeriesMap):
         self._layers = None
         self._date_layer_dict = {}
         self._slider_description = _("Date/Time")
+        self._baseseries = None
 
         # Handle Regions
         self._region_manager = RegionManagerForTimeSeries(
             use_region, saved_region, self._env
         )
 
-    def add_raster_series(self, baseseries, fill_gaps=False):
+    def add_raster_series(self, baseseries, fill_gaps=False, **kwargs):
         """
         :param str baseseries: name of space-time dataset
         :param bool fill_gaps: fill empty time steps with data from previous step
         """
-        if self._baseseries_added and self.baseseries != baseseries:
-            raise AttributeError("Cannot add more than one space time dataset")
+        if self._baseseries_added and self._baseseries != baseseries:
+            msg = "Cannot add more than one space time dataset"
+            raise AttributeError(msg)
         self._element_type = "strds"
         check_timeseries_exists(baseseries, self._element_type)
-        self.baseseries = baseseries
+        self._baseseries = baseseries
         self._fill_gaps = fill_gaps
         self._baseseries_added = True
+
         # create list of layers to render and date/times
         self._layers, self._labels = collect_layers(
-            self.baseseries, self._element_type, self._fill_gaps
+            self._baseseries, self._element_type, self._fill_gaps
         )
+        for raster in self._layers:
+            kwargs["map"] = raster
+            if raster == "None":
+                self._calls.append([(None, None)])
+            else:
+                self._calls.append([("d.rast", kwargs.copy())])
         self._date_layer_dict = {
             self._labels[i]: self._layers[i] for i in range(len(self._labels))
         }
         # Update Region
-        self._region_manager.set_region_from_timeseries(self.baseseries)
+        self._region_manager.set_region_from_timeseries(self._baseseries)
         self._indices = self._labels
 
-    def add_vector_series(self, baseseries, fill_gaps=False):
+    def add_vector_series(self, baseseries, fill_gaps=False, **kwargs):
         """
         :param str baseseries: name of space-time dataset
         :param bool fill_gaps: fill empty time steps with data from previous step
         """
-        if self._baseseries_added and self.baseseries != baseseries:
-            raise AttributeError("Cannot add more than one space time dataset")
+        if self._baseseries_added and self._baseseries != baseseries:
+            msg = "Cannot add more than one space time dataset"
+            raise AttributeError(msg)
         self._element_type = "stvds"
         check_timeseries_exists(baseseries, self._element_type)
-        self.baseseries = baseseries
+        self._baseseries = baseseries
         self._fill_gaps = fill_gaps
         self._baseseries_added = True
+
         # create list of layers to render and date/times
         self._layers, self._labels = collect_layers(
-            self.baseseries, self._element_type, self._fill_gaps
+            self._baseseries, self._element_type, self._fill_gaps
         )
+        for vector in self._layers:
+            kwargs["map"] = vector
+            if vector == "None":
+                self._calls.append([(None, None)])
+            else:
+                self._calls.append([("d.vect", kwargs.copy())])
         self._date_layer_dict = {
             self._labels[i]: self._layers[i] for i in range(len(self._labels))
         }
         # Update Region
-        self._region_manager.set_region_from_timeseries(self.baseseries)
+        self._region_manager.set_region_from_timeseries(
+            self._baseseries, element_type="stvds"
+        )
         self._indices = self._labels
 
     def d_legend(self, **kwargs):
@@ -218,154 +232,20 @@ class TimeSeriesMap(BaseSeriesMap):
         if "raster" in kwargs and not self._baseseries_added:
             self._base_layer_calls.append(("d.legend", kwargs))
         if "raster" in kwargs and self._baseseries_added:
-            self._base_calls.append(("d.legend", kwargs))
+            for i in range(len(self._layers)):
+                self._calls[i].append(("d.legend", kwargs))
         else:
-            self._legend = kwargs
-            # If d_legend has been called, we need to re-render layers
-            self._layers_rendered = False
-
-    def _render_legend(self, img):
-        """Add legend to Map instance"""
-        info = gs.parse_command(
-            "t.info", input=self.baseseries, flags="g", env=self._env
-        )
-        min_min = info["min_min"]
-        max_max = info["max_max"]
-        img.d_legend(
-            raster=self._layers[0],
-            range=f"{min_min}, {max_max}",
-            **self._legend,
-        )
-
-    def _render_overlays(self, img):
-        """Add collected overlays to Map instance"""
-        for grass_module, kwargs in self._base_calls:
-            img.run(grass_module, **kwargs)
-
-    def _render_blank_layer(self, filename):
-        """Write blank image for gaps in time series.
-
-        Adds overlays and legend to base map.
-        """
-        img = Map(
-            width=self._width,
-            height=self._height,
-            filename=filename,
-            use_region=True,
-            env=self._env,
-            read_file=True,
-        )
-        # Add overlays
-        self._render_overlays(img)
-        # Add legend if needed
-        if self._legend:
-            self._render_legend(img)
-
-    def _render_layer(self, layer, filename):
-        """Render layer to file with overlays and legend"""
-        img = Map(
-            width=self._width,
-            height=self._height,
-            filename=filename,
-            use_region=True,
-            env=self._env,
-            read_file=True,
-        )
-        if self._element_type == "strds":
-            img.d_rast(map=layer)
-        elif self._element_type == "stvds":
-            img.d_vect(map=layer)
-        # Add overlays
-        self._render_overlays(img)
-        # Add legend if needed
-        if self._legend:
-            self._render_legend(img)
-
-    def render(self):
-        """Renders image for each time-step in space-time dataset.
-
-        Save PNGs to temporary directory. Must be run before creating a visualization
-        (i.e. show or save). Can be time-consuming to run with large
-        space-time datasets.
-        """
-
-        self._render()
-        if not self._baseseries_added:
-            raise RuntimeError(
-                "Cannot render space time dataset since none has been added."
-                "Use TimeSeriesMap.add_raster_series() or "
-                "TimeSeriesMap.add_vector_series() to add dataset"
+            info = gs.parse_command(
+                "t.info", input=self._baseseries, flags="g", env=self._env
             )
-
-        # Create name for empty layers
-        # Random name needed to avoid potential conflict with layer names
-        # A new random_name_none is created each time the render function is run,
-        # and any existing random_name_none file will be ignored
-        random_name_none = gs.append_random("none", 8) + ".png"
-
-        # Render each layer
-        for date, layer in self._date_layer_dict.items():
-            if layer == "None":
-                # Create file
-                filename = os.path.join(self._tmpdir.name, random_name_none)
-                self._base_filename_dict[date] = filename
-                # Render blank layer if it hasn't been done already
-                if not os.path.exists(filename):
-                    shutil.copyfile(self.base_file, filename)
-                    self._render_blank_layer(filename)
-            else:
-                # Create file
-                filename = os.path.join(self._tmpdir.name, f"{layer}.png")
-                # Copying the base_file ensures that previous results are overwritten
-                shutil.copyfile(self.base_file, filename)
-                self._base_filename_dict[date] = filename
-                # Render image
-                self._render_layer(layer, filename)
-
-        self._layers_rendered = True
-
-    def save(
-        self,
-        filename,
-        duration=500,
-        label=True,
-        font="DejaVuSans.ttf",
-        text_size=12,
-        text_color="gray",
-    ):
-        """
-        Creates a GIF animation of rendered layers.
-
-        Text color must be in a format accepted by PIL ImageColor module. For supported
-        formats, visit:
-        https://pillow.readthedocs.io/en/stable/reference/ImageColor.html#color-names
-
-        param str filename: name of output GIF file
-        param int duration: time to display each frame; milliseconds
-        param bool label: include date/time stamp on each frame
-        param str font: font file
-        param int text_size: size of date/time text
-        param str text_color: color to use for the text.
-        """
-
-        # Render images if they have not been already
-        if not self._layers_rendered:
-            self.render()
-
-        input_files = []
-        for date in self._labels:
-            input_files.append(self._base_filename_dict[date])
-
-        save_gif(
-            input_files,
-            filename,
-            duration=duration,
-            label=label,
-            labels=self._labels,
-            font=font,
-            text_size=text_size,
-            text_color=text_color,
-        )
-
-        # Display the GIF
-        return filename
+            for i in range(len(self._layers)):
+                self._calls[i].append(
+                    (
+                        "d.legend",
+                        dict(
+                            raster=self._layers[0],
+                            range=f"{info['min_min']},{info['max_max']}",
+                            **kwargs,
+                        ),
+                    )
+                )

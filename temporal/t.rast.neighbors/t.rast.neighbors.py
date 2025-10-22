@@ -39,6 +39,21 @@
 # %end
 
 # %option
+# % key: region_relation
+# % description: Process only maps with this spatial relation to the current computational region
+# % guisection: Selection
+# % options: overlaps, contains, is_contained
+# % required: no
+# % multiple: no
+# %end
+
+# %option G_OPT_R_INPUT
+# % key: selection
+# % required: no
+# % description: Name of an input raster map to select the cells which should be processed
+# %end
+
+# %option
 # % key: size
 # % type: integer
 # % description: Neighborhood size
@@ -58,13 +73,49 @@
 # %end
 
 # %option
+# % key: weighting_function
+# % type: string
+# % required: no
+# % multiple: no
+# % options: none,gaussian,exponential,file
+# % description: Weighting function
+# % descriptions: none;No weighting; gaussian;Gaussian weighting function; exponential;Exponential weighting function; file;File with a custom weighting matrix
+# % answer: none
+# %end
+
+# %option
+# % key: weighting_factor
+# % type: double
+# % required: no
+# % multiple: no
+# % description: Factor used in the selected weighting function (ignored for weighting_function=none and file)
+# %end
+
+# %option G_OPT_F_INPUT
+# % key: weight
+# % type: string
+# % required: no
+# % multiple: no
+# % description: Text file containing weights
+# %end
+
+# %option
+# % key: quantile
+# % type: double
+# % required: no
+# % multiple: yes
+# % options: 0.0-1.0
+# % description: Quantile to calculate for method=quantile
+# % guisection: Neighborhood
+# %end
+
+# %option
 # % key: basename
 # % type: string
 # % label: Basename of the new generated output maps
 # % description: A numerical suffix separated by an underscore will be attached to create a unique identifier
 # % required: yes
 # % multiple: no
-# % gisprompt:
 # %end
 
 # %option
@@ -97,6 +148,16 @@
 # %end
 
 # %flag
+# % key: c
+# % description: Use circular neighborhood
+# %end
+
+# %flag
+# % key: e
+# % description: Extend existing space time raster dataset
+# %end
+
+# %flag
 # % key: n
 # % description: Register Null maps
 # %end
@@ -108,21 +169,19 @@
 
 import copy
 
-import grass.script as grass
-
-
-############################################################################
+import grass.script as gs
 
 
 def main():
     # lazy imports
-    import grass.temporal as tgis
     import grass.pygrass.modules as pymod
+    import grass.temporal as tgis
 
     # Get the options
     input = options["input"]
     output = options["output"]
     where = options["where"]
+    region_relation = options["region_relation"]
     size = options["size"]
     base = options["basename"]
     register_null = flags["n"]
@@ -131,6 +190,14 @@ def main():
     nprocs = options["nprocs"]
     time_suffix = options["suffix"]
     new_labels = options["semantic_labels"]
+    quantiles = (
+        [float(quant) for quant in options["quantile"].split(",")]
+        if options["quantile"]
+        else None
+    )
+
+    if method == "quantile" and not options["quantile"]:
+        gs.fatal(_("The method <quantile> requires input in the 'quantile' option."))
 
     # Make sure the temporal database exists
     tgis.init()
@@ -138,26 +205,45 @@ def main():
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    overwrite = grass.overwrite()
+    overwrite = gs.overwrite()
 
     sp = tgis.open_old_stds(input, "strds", dbif)
-    maps = sp.get_registered_maps_as_objects(where=where, dbif=dbif)
+
+    spatial_extent = None
+    if region_relation:
+        spatial_extent = gs.parse_command("g.region", flags="3gu")
+
+    maps = sp.get_registered_maps_as_objects(
+        where=where,
+        spatial_extent=spatial_extent,
+        spatial_relation=region_relation,
+        dbif=dbif,
+    )
 
     if not maps:
         dbif.close()
-        grass.warning(_("Space time raster dataset <%s> is empty") % sp.get_id())
+        gs.warning(_("Space time raster dataset <{}> is empty").format(sp.get_id()))
         return
 
-    new_sp = tgis.check_new_stds(output, "strds", dbif=dbif, overwrite=overwrite)
+    output_strds = tgis.check_new_stds(output, "strds", dbif=dbif, overwrite=overwrite)
+    output_exists = output_strds.is_in_db(dbif)
     # Configure the r.neighbor module
     neighbor_module = pymod.Module(
         "r.neighbors",
+        flags="c" if flags["c"] else "",
         input="dummy",
         output="dummy",
         run_=False,
         finish_=False,
+        selection=options["selection"],
         size=int(size),
         method=method,
+        quantile=quantiles,
+        weighting_function=options["weighting_function"],
+        weighting_factor=(
+            float(options["weighting_factor"]) if options["weighting_factor"] else None
+        ),
+        weight=options["weight"],
         overwrite=overwrite,
         quiet=True,
     )
@@ -183,10 +269,10 @@ def main():
             suffix = tgis.create_suffix_from_datetime(
                 map.temporal_extent.get_start_time(), sp.get_granularity()
             )
-            map_name = "{ba}_{su}".format(ba=base, su=suffix)
+            map_name = f"{base}_{suffix}"
         elif sp.get_temporal_type() == "absolute" and time_suffix == "time":
             suffix = tgis.create_time_suffix(map)
-            map_name = "{ba}_{su}".format(ba=base, su=suffix)
+            map_name = f"{base}_{suffix}"
         else:
             map_name = tgis.create_numeric_suffix(base, count, time_suffix)
 
@@ -216,13 +302,12 @@ def main():
         if use_raster_region is True:
             reg = copy.deepcopy(gregion_module)
             reg(raster=map.get_id())
-            print(reg.get_bash())
-            print(mod.get_bash())
+            gs.verbose(reg.get_bash())
             mm = pymod.MultiModule([reg, mod], sync=False, set_temp_region=True)
             process_queue.put(mm)
         else:
-            print(mod.get_bash())
             process_queue.put(mod)
+        gs.verbose(mod.get_bash())
 
     # Wait for unfinished processes
     process_queue.wait()
@@ -232,59 +317,76 @@ def main():
     error = 0
     for proc in proc_list:
         if proc.returncode != 0:
-            grass.error(
-                _("Error running module: %\n    stderr: %s")
-                % (proc.get_bash(), proc.outputs.stderr)
+            gs.error(
+                _("Error running module: {mod}\n    stderr: {error}").format(
+                    mod=proc.get_bash(), error=proc.outputs.stderr
+                )
             )
             error += 1
 
     if error > 0:
-        grass.fatal(_("Error running modules."))
+        gs.fatal(_("Error running modules."))
 
-    # Open the new space time raster dataset
-    ttype, stype, title, descr = sp.get_initial_values()
-    new_sp = tgis.open_new_stds(
-        output, "strds", ttype, title, descr, stype, dbif, overwrite
-    )
+    # Open a new space time raster dataset
+    if not output_exists or (overwrite and not flags["e"]):
+        # Get basic metadata
+        temporal_type, semantic_type, title, description = sp.get_initial_values()
+
+        # Create new STRDS
+        output_strds = tgis.open_new_stds(
+            output,
+            "strds",
+            temporal_type,
+            title,
+            description,
+            semantic_type,
+            dbif,
+            overwrite,
+        )
+
+    # Append to existing
+    elif output_exists and flags["e"]:
+        output_strds = tgis.open_old_stds(output, "strds", dbif)
+
     num_maps = len(new_maps)
     # collect empty maps to remove them
     empty_maps = []
 
     # Register the maps in the database
-    count = 0
-    for map in new_maps:
-        count += 1
-
+    for count, raster_map in enumerate(new_maps, 1):
         if count % 10 == 0:
-            grass.percent(count, num_maps, 1)
+            gs.percent(count, num_maps, 1)
 
         # Do not register empty maps
-        map.load()
-        if map.metadata.get_min() is None and map.metadata.get_max() is None:
+        raster_map.load()
+        if (
+            raster_map.metadata.get_min() is None
+            and raster_map.metadata.get_max() is None
+        ):
             if not register_null:
-                empty_maps.append(map)
+                empty_maps.append(raster_map)
                 continue
 
         # Insert map in temporal database
-        map.insert(dbif)
-        new_sp.register_map(map, dbif)
+        raster_map.insert(dbif)
+        output_strds.register_map(raster_map, dbif)
 
     # Update the spatio-temporal extent and the metadata table entries
-    new_sp.update_from_registered_maps(dbif)
-    grass.percent(1, 1, 1)
+    output_strds.update_from_registered_maps(dbif)
+    gs.percent(1, 1, 1)
+
+    if output_exists:
+        output_strds.update_command_string(dbif=dbif)
 
     # Remove empty maps
     if len(empty_maps) > 0:
-        names = ""
-        count = 0
-        for map in empty_maps:
-            if count == 0:
-                count += 1
-                names += "%s" % (map.get_name())
-            else:
-                names += ",%s" % (map.get_name())
-
-        grass.run_command("g.remove", flags="f", type="raster", name=names, quiet=True)
+        gs.run_command(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name=",".join([raster_map.get_name() for raster_map in empty_maps]),
+            quiet=True,
+        )
 
     dbif.close()
 
@@ -292,5 +394,5 @@ def main():
 ############################################################################
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

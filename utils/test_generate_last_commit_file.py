@@ -22,14 +22,14 @@ import json
 import subprocess
 
 import pytest
+from pathlib import Path
 
 from .generate_last_commit_file import COMMIT_DATE_FORMAT
 
 
 @pytest.fixture
 def json_file():
-    file_name = "core_modules_with_last_commit.json"
-    return file_name
+    return "core_modules_with_last_commit.json"
 
 
 @pytest.fixture
@@ -39,7 +39,7 @@ def read_json_file(json_file):
 
 
 def test_json_file_exists(json_file):
-    assert os.path.exists(json_file) is True
+    assert Path(json_file).exists() is True
 
 
 @pytest.mark.depends(on=["test_json_file_exists"])
@@ -83,8 +83,7 @@ def test_compare_json_file_data(read_json_file, core_module_path):
             f"--format=%H,{COMMIT_DATE_FORMAT}",
             core_module_path,
         ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        capture_output=True,
         check=True,
     )  # --format=%H,COMMIT_DATE_FORMAT commit hash,author date
     commit, date = process_result.stdout.decode().strip().split(",")

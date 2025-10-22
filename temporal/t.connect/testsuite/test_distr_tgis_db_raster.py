@@ -8,21 +8,23 @@ for details.
 :authors: Soeren Gebbert
 """
 
+import os
+from pathlib import Path
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 from grass.gunittest.utils import silent_rmtree
-import os
 
 
 class TestRasterExtraction(TestCase):
     mapsets_to_remove = []
     outfile = "rastlist.txt"
-    gisenv = SimpleModule("g.gisenv", get="MAPSET")
-    TestCase.runModule(gisenv, expecting_stdout=True)
-    old_mapset = gisenv.outputs.stdout.strip()
 
     @classmethod
     def setUpClass(cls):
+        gisenv = SimpleModule("g.gisenv", get="MAPSET")
+        TestCase.runModule(gisenv, expecting_stdout=True)
+        cls.old_mapset = gisenv.outputs.stdout.strip()
         os.putenv("GRASS_OVERWRITE", "1")
         for i in range(1, 7):
             mapset_name = "test%i" % i
@@ -93,7 +95,7 @@ class TestRasterExtraction(TestCase):
 
         out = t_list.outputs["stdout"].value
 
-        for a, b in zip(list_string.split("\n"), out.split("\n")):
+        for a, b in zip(list_string.split("\n"), out.split("\n"), strict=False):
             self.assertEqual(a.strip(), b.strip())
 
         t_list = SimpleModule(
@@ -106,9 +108,8 @@ class TestRasterExtraction(TestCase):
         )
         self.assertModule(t_list)
         self.assertFileExists(self.outfile)
-        with open(self.outfile, "r") as f:
-            read_data = f.read()
-        for a, b in zip(list_string.split("\n"), read_data.split("\n")):
+        read_data = Path(self.outfile).read_text()
+        for a, b in zip(list_string.split("\n"), read_data.split("\n"), strict=False):
             self.assertEqual(a.strip(), b.strip())
         # self.assertLooksLike(reference=read_data, actual=list_string)
         if os.path.isfile(self.outfile):
@@ -126,7 +127,7 @@ class TestRasterExtraction(TestCase):
 
         out = trast_list.outputs["stdout"].value
 
-        for a, b in zip(list_string.split("\n"), out.split("\n")):
+        for a, b in zip(list_string.split("\n"), out.split("\n"), strict=False):
             self.assertEqual(a.strip(), b.strip())
 
         list_string = """a1|test2|2001-01-01 00:00:00|2001-03-01 00:00:00
@@ -138,7 +139,7 @@ class TestRasterExtraction(TestCase):
 
         out = trast_list.outputs["stdout"].value
 
-        for a, b in zip(list_string.split("\n"), out.split("\n")):
+        for a, b in zip(list_string.split("\n"), out.split("\n"), strict=False):
             self.assertEqual(a.strip(), b.strip())
 
         list_string = """a1|test3|2001-01-01 00:00:00|2001-04-01 00:00:00
@@ -150,7 +151,7 @@ class TestRasterExtraction(TestCase):
 
         out = trast_list.outputs["stdout"].value
 
-        for a, b in zip(list_string.split("\n"), out.split("\n")):
+        for a, b in zip(list_string.split("\n"), out.split("\n"), strict=False):
             self.assertEqual(a.strip(), b.strip())
 
         list_string = """a1|test4|2001-01-01 00:00:00|2001-05-01 00:00:00
@@ -162,7 +163,7 @@ class TestRasterExtraction(TestCase):
 
         out = trast_list.outputs["stdout"].value
 
-        for a, b in zip(list_string.split("\n"), out.split("\n")):
+        for a, b in zip(list_string.split("\n"), out.split("\n"), strict=False):
             self.assertEqual(a.strip(), b.strip())
 
         list_string = """a1|test5|2001-01-01 00:00:00|2001-06-01 00:00:00
@@ -174,7 +175,7 @@ class TestRasterExtraction(TestCase):
 
         out = trast_list.outputs["stdout"].value
 
-        for a, b in zip(list_string.split("\n"), out.split("\n")):
+        for a, b in zip(list_string.split("\n"), out.split("\n"), strict=False):
             self.assertEqual(a.strip(), b.strip())
 
         trast_list = SimpleModule(
@@ -182,9 +183,8 @@ class TestRasterExtraction(TestCase):
         )
         self.assertModule(trast_list)
         self.assertFileExists(self.outfile)
-        with open(self.outfile, "r") as f:
-            read_data = f.read()
-        for a, b in zip(list_string.split("\n"), read_data.split("\n")):
+        read_data = Path(self.outfile).read_text()
+        for a, b in zip(list_string.split("\n"), read_data.split("\n"), strict=False):
             self.assertEqual(a.strip(), b.strip())
         if os.path.isfile(self.outfile):
             os.remove(self.outfile)

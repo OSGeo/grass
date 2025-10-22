@@ -29,10 +29,10 @@ def get_bbox(reg, row, col, width, height, overlap):
     east = reg.west + ((col + 1) * width + overlap) * reg.ewres
     west = reg.west + (col * width - overlap) * reg.ewres
     return Bbox(
-        north=north if north <= reg.north else reg.north,
-        south=south if south >= reg.south else reg.south,
-        east=east if east <= reg.east else reg.east,
-        west=west if west >= reg.west else reg.west,
+        north=min(north, reg.north),
+        south=max(south, reg.south),
+        east=min(east, reg.east),
+        west=max(west, reg.west),
     )
 
 
@@ -93,16 +93,15 @@ def split_region_in_overlapping_tiles(region=None, width=100, height=100, overla
     [[Bbox(1350.0, 640.0, 1010.0, 0.0), Bbox(1350.0, 640.0, 1500.0, 990.0)],
      [Bbox(660.0, 0.0, 1010.0, 0.0), Bbox(660.0, 0.0, 1500.0, 990.0)]]
     """
-    reg = region if region else Region()
+    reg = region or Region()
     ncols = (reg.cols + width - 1) // width
     nrows = (reg.rows + height - 1) // height
     box_list = []
     # print reg
     for row in range(nrows):
-        row_list = []
-        for col in range(ncols):
-            # print 'c', c, 'r', r
-            row_list.append(get_bbox(reg, row, col, width, height, overlap))
+        row_list = [
+            get_bbox(reg, row, col, width, height, overlap) for col in range(ncols)
+        ]
         box_list.append(row_list)
     return box_list
 
@@ -118,14 +117,15 @@ def split_region_tiles(region=None, width=100, height=100):
     :param height: the width of tiles
     :type height: int
     """
-    reg = region if region else Region()
+    reg = region or Region()
     ncols = (reg.cols + width - 1) // width
     nrows = (reg.rows + height - 1) // height
     box_list = []
     for row in range(nrows):
-        row_list = []
-        for col in range(ncols):
-            row_list.append(get_tile_start_end_row_col(reg, row, col, width, height))
+        row_list = [
+            get_tile_start_end_row_col(reg, row, col, width, height)
+            for col in range(ncols)
+        ]
         box_list.append(row_list)
     return box_list
 
@@ -142,15 +142,13 @@ def get_overlap_region_tiles(region=None, width=100, height=100, overlap=0):
     :param overlap: the value of overlap between tiles
     :type overlap: int
     """
-    reg = region if region else Region()
+    reg = region or Region()
     ncols = (reg.cols + width - 1) // width
     nrows = (reg.rows + height - 1) // height
     box_list = []
-    # print reg
     for row in range(nrows):
-        row_list = []
-        for col in range(ncols):
-            # print 'c', c, 'r', r
-            row_list.append(get_bbox(reg, row, col, width, height, -overlap))
+        row_list = [
+            get_bbox(reg, row, col, width, height, -overlap) for col in range(ncols)
+        ]
         box_list.append(row_list)
     return box_list

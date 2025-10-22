@@ -14,6 +14,8 @@
 #
 #############################################################################
 
+from __future__ import annotations
+
 import codecs
 import glob
 import json
@@ -21,10 +23,12 @@ import os
 import subprocess
 import sys
 
+from pathlib import Path
+
 
 def read_po_files(inputdirpath):
     """Return a dictionary with for each language the list of *.po files"""
-    originalpath = os.getcwd()
+    originalpath = Path.cwd()
     os.chdir(inputdirpath)
     languages = {}
     for pofile in sorted(glob.glob("*.po")):
@@ -70,19 +74,19 @@ def read_msgfmt_statistics(msg, lgood, lfuzzy, lbad):
     return langdict, lgood, lfuzzy, lbad
 
 
-def langDefinition(fil):
-    f = codecs.open(fil, encoding="utf-8", errors="replace", mode="r")
-    for l in f.readlines():
-        if '"Language-Team:' in l:
-            lang = l.split(" ")[1:-1]
-            break
-    f.close()
+def langDefinition(fil: str) -> str:
+    lang: str | list[str] = ""
+    with codecs.open(fil, encoding="utf-8", errors="replace", mode="r") as f:
+        for line in f.readlines():
+            if '"Language-Team:' in line:
+                lang = line.split(" ")[1:-1]
+                break
+
     if len(lang) == 2:
         return " ".join(lang)
-    elif len(lang) == 1:
+    if len(lang) == 1:
         return lang[0]
-    else:
-        return ""
+    return ""
 
 
 def get_stats(languages, directory):
@@ -136,15 +140,14 @@ def writejson(stats, outfile):
     # load dictionary into json format
     fjson = json.dumps(stats, sort_keys=True, indent=4)
     # write a string with pretty style
-    outjson = os.linesep.join([l.rstrip() for l in fjson.splitlines()])
+    outjson = os.linesep.join([line.rstrip() for line in fjson.splitlines()])
     # write out file
-    fout = open(outfile, "w")
-    fout.write(outjson)
-    fout.write(os.linesep)
-    fout.close()
+    with open(outfile, "w", encoding="utf-8") as fout:
+        fout.write(outjson)
+        fout.write(os.linesep)
     try:
         os.remove("messages.mo")
-    except:
+    except OSError:
         pass
 
 
@@ -152,7 +155,7 @@ def main(in_dirpath, out_josonpath):
     languages = read_po_files(in_dirpath)
     stats = get_stats(languages, in_dirpath)
 
-    if os.path.exists(out_josonpath):
+    if Path(out_josonpath).exists():
         os.remove(out_josonpath)
     writejson(stats, out_josonpath)
 

@@ -38,7 +38,7 @@ N_geom_data *N_alloc_geom_data(void)
 }
 
 /* *************************************************************** *
- * *********** Destruktor **************************************** *
+ * *********** Destructor **************************************** *
  * *************************************************************** */
 /*!
  * \brief Release memory of a pde geometry data structure
@@ -108,7 +108,7 @@ N_geom_data *N_init_geom_data_3d(RASTER3D_Region *region3d,
  * the number of rows of the provided region storing all computed areas for each
  * row
  *
- * \param region sruct Cell_head *
+ * \param region struct Cell_head *
  * \param geodata N_geom_data * - if a NULL pointer is given, a new structure
  * will be allocatet and returned
  *

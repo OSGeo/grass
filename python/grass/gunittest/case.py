@@ -3,18 +3,20 @@ GRASS Python testing framework test case
 
 Copyright (C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS GIS
+License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :authors: Vaclav Petras
 """
 
 import os
+from pathlib import Path
 import shutil
 import subprocess
 import hashlib
 import uuid
 import unittest
+from unittest.util import safe_repr
 
 from grass.pygrass.modules import Module
 from grass.exceptions import CalledModuleError
@@ -30,7 +32,6 @@ from .checkers import (
     text_file_md5,
     files_equal_md5,
 )
-from .utils import safe_repr
 from .gutils import is_map_in_mapset
 
 from io import StringIO
@@ -39,7 +40,7 @@ from io import StringIO
 class TestCase(unittest.TestCase):
     # we disable R0904 for all TestCase classes because their purpose is to
     # provide a lot of assert methods
-    # pylint: disable=R0904
+    # pylint: disable=R0904,C0103
     """
 
     Always use keyword arguments for all parameters other than first two. For
@@ -47,6 +48,7 @@ class TestCase(unittest.TestCase):
     Be especially careful and always use keyword argument syntax for *msg*
     parameter.
     """
+
     longMessage = True  # to get both standard and custom message
     maxDiff = None  # we can afford long diffs
     _temp_region = None  # to control the temporary region
@@ -63,19 +65,14 @@ class TestCase(unittest.TestCase):
         self.addTypeEqualityFunc(str, "assertMultiLineEqual")
 
     def _formatMessage(self, msg, standardMsg):
-        """Honor the longMessage attribute when generating failure messages.
-
+        """Honour the longMessage attribute when generating failure messages.
         If longMessage is False this means:
-
         * Use only an explicit message if it is provided
         * Otherwise use the standard message for the assert
 
         If longMessage is True:
-
         * Use the standard message
-        * If an explicit message is provided, return string with both messages
-
-        Based on Python unittest _formatMessage, formatting changed.
+        * If an explicit message is provided, plus ' : ' and the explicit message
         """
         if not self.longMessage:
             return msg or standardMsg
@@ -84,9 +81,9 @@ class TestCase(unittest.TestCase):
         try:
             # don't switch to '{}' formatting in Python 2.X
             # it changes the way unicode input is handled
-            return "%s \n%s" % (msg, standardMsg)
+            return "%s : %s" % (standardMsg, msg)
         except UnicodeDecodeError:
-            return "%s \n%s" % (safe_repr(msg), safe_repr(standardMsg))
+            return "%s : %s" % (safe_repr(standardMsg), safe_repr(msg))
 
     @classmethod
     def use_temp_region(cls):
@@ -102,6 +99,7 @@ class TestCase(unittest.TestCase):
             @classmethod
             def setUpClass(self):
                 self.use_temp_region()
+
 
             @classmethod
             def tearDownClass(self):
@@ -132,21 +130,24 @@ class TestCase(unittest.TestCase):
         name = os.environ.pop("WIND_OVERRIDE")
         if name != cls._temp_region:
             # be strict about usage of region
-            raise RuntimeError(
+            msg = (
                 "Inconsistent use of"
                 " TestCase.use_temp_region, WIND_OVERRIDE"
                 " or temporary region in general\n"
                 "Region to which should be now deleted ({n})"
                 " by TestCase class"
                 "does not correspond to currently set"
-                " WIND_OVERRIDE ({c})",
+                " WIND_OVERRIDE ({c})"
+            )
+            raise RuntimeError(
+                msg,
                 n=cls._temp_region,
                 c=name,
             )
         call_module("g.remove", quiet=True, flags="f", type="region", name=name)
         # TODO: we don't know if user calls this
         # so perhaps some decorator which would use with statement
-        # but we have zero chance of infuencing another test class
+        # but we have zero chance of influencing another test class
         # since we use class-specific name for temporary region
 
     def assertMultiLineEqual(self, first, second, msg=None):
@@ -213,16 +214,21 @@ class TestCase(unittest.TestCase):
 
         ::
 
-            self.assertModuleKeyValue('r.info', map='elevation', flags='gr',
-                                      reference=dict(min=55.58, max=156.33),
-                                      precision=0.01, sep='=')
+            self.assertModuleKeyValue(
+                "r.info",
+                map="elevation",
+                flags="gr",
+                reference=dict(min=55.58, max=156.33),
+                precision=0.01,
+                sep="=",
+            )
 
         ::
 
-            module = SimpleModule('r.info', map='elevation', flags='gr')
-            self.assertModuleKeyValue(module,
-                                      reference=dict(min=55.58, max=156.33),
-                                      precision=0.01, sep='=')
+            module = SimpleModule("r.info", map="elevation", flags="gr")
+            self.assertModuleKeyValue(
+                module, reference=dict(min=55.58, max=156.33), precision=0.01, sep="="
+            )
 
         The output of the module should be key-value pairs (shell script style)
         which is typically obtained using ``-g`` flag.
@@ -254,20 +260,21 @@ class TestCase(unittest.TestCase):
                     " provided in reference"
                     ": %s\n" % (module, ", ".join(missing))
                 )
-            if mismatch:
-                stdMsg = "%s difference:\n" % module
-                stdMsg += "mismatch values"
-                stdMsg += " (key, reference, actual): %s\n" % mismatch
-                stdMsg += "command: %s %s" % (module, parameters)
-            else:
+            if not mismatch:
                 # we can probably remove this once we have more tests
                 # of keyvalue_equals and diff_keyvalue against each other
-                raise RuntimeError(
+                msg = (
                     "keyvalue_equals() showed difference but"
                     " diff_keyvalue() did not. This can be"
                     " a bug in one of them or in the caller"
                     " (assertModuleKeyValue())"
                 )
+                raise RuntimeError(msg)
+            stdMsg = "%s difference:\n" % module
+            stdMsg += "mismatch values"
+            stdMsg += " (key, reference, actual): %s\n" % mismatch
+            stdMsg += "command: %s %s" % (module, parameters)
+
             self.fail(self._formatMessage(msg, stdMsg))
 
     def assertRasterFitsUnivar(self, raster, reference, precision=None, msg=None):
@@ -278,8 +285,8 @@ class TestCase(unittest.TestCase):
         Typical example is checking minimum, maximum and number of NULL cells
         in the map::
 
-            values = 'null_cells=0\nmin=55.5787925720215\nmax=156.329864501953'
-            self.assertRasterFitsUnivar(raster='elevation', reference=values)
+            values = "null_cells=0\nmin=55.5787925720215\nmax=156.329864501953"
+            self.assertRasterFitsUnivar(raster="elevation", reference=values)
 
         Use keyword arguments syntax for all function parameters.
 
@@ -295,6 +302,7 @@ class TestCase(unittest.TestCase):
             msg=msg,
             sep="=",
             precision=precision,
+            nprocs=1,
         )
 
     def assertRasterFitsInfo(self, raster, reference, precision=None, msg=None):
@@ -304,8 +312,8 @@ class TestCase(unittest.TestCase):
         Only the provided values are tested.
         Typical example is checking minimum, maximum and type of the map::
 
-            minmax = 'min=0\nmax=1451\ndatatype=FCELL'
-            self.assertRasterFitsInfo(raster='elevation', reference=minmax)
+            minmax = "min=0\nmax=1451\ndatatype=FCELL"
+            self.assertRasterFitsInfo(raster="elevation", reference=minmax)
 
         Use keyword arguments syntax for all function parameters.
 
@@ -375,7 +383,7 @@ class TestCase(unittest.TestCase):
         A example of checking number of points::
 
             topology = dict(points=10938, primitives=10938)
-            self.assertVectorFitsTopoInfo(vector='bridges', reference=topology)
+            self.assertVectorFitsTopoInfo(vector="bridges", reference=topology)
 
         Note that here we are checking also the number of primitives to prove
         that there are no other features besides points.
@@ -475,9 +483,8 @@ class TestCase(unittest.TestCase):
         Only the provided values are tested.
         Typical example is checking minimum and maximum of a column::
 
-            minmax = 'min=0\nmax=1451'
-            self.assertVectorFitsUnivar(map='bridges', column='WIDTH',
-                                        reference=minmax)
+            minmax = "min=0\nmax=1451"
+            self.assertVectorFitsUnivar(map="bridges", column="WIDTH", reference=minmax)
 
         Use keyword arguments syntax for all function parameters.
 
@@ -485,7 +492,7 @@ class TestCase(unittest.TestCase):
         flag and few other, use `assertModuleKeyValue` for the full interface
         of arbitrary module.
         """
-        parameters = dict(map=map, column=column, flags="g")
+        parameters = {"map": map, "column": column, "flags": "g"}
         if layer:
             parameters.update(layer=layer)
         if type:
@@ -575,7 +582,7 @@ class TestCase(unittest.TestCase):
             self.fail(self._formatMessage(msg, stdmsg))
 
     def _get_detailed_message_about_no_map(self, name, type):
-        msg = "There is no map <{n}> of type <{t}>" " in the current mapset".format(
+        msg = "There is no map <{n}> of type <{t}> in the current mapset".format(
             n=name, t=type
         )
         related = call_module(
@@ -632,7 +639,7 @@ class TestCase(unittest.TestCase):
     ):
         """Test the existence of a file.
 
-        .. note:
+        .. note::
             By default this also checks if the file size is greater than 0
             since we rarely want a file to be empty. It also checks
             if the file is accessible for reading since we expect that user
@@ -664,11 +671,11 @@ class TestCase(unittest.TestCase):
         trust (that you obtain the right file). Then you compute MD5
         sum of the file. And provide the sum in a test as a string::
 
-            self.assertFileMd5('result.png', md5='807bba4ffa...')
+            self.assertFileMd5("result.png", md5="807bba4ffa...")
 
         Use `file_md5()` function from this package::
 
-            file_md5('original_result.png')
+            file_md5("original_result.png")
 
         Or in command line, use ``md5sum`` command if available:
 
@@ -679,22 +686,20 @@ class TestCase(unittest.TestCase):
         Finally, you can use Python ``hashlib`` to obtain MD5::
 
             import hashlib
+
             hasher = hashlib.md5()
             # expecting the file to fit into memory
-            hasher.update(open('original_result.png', 'rb').read())
+            hasher.update(open("original_result.png", "rb").read())
             hasher.hexdigest()
 
-        .. note:
+        .. note::
             For text files, always create MD5 sum using ``\n`` (LF)
             as newline characters for consistency. Also use newline
             at the end of file (as for example, Git or PEP8 requires).
         """
         self.assertFileExists(filename, msg=msg)
-        if text:
-            actual = text_file_md5(filename)
-        else:
-            actual = file_md5(filename)
-        if not actual == md5:
+        actual = text_file_md5(filename) if text else file_md5(filename)
+        if actual != md5:
             standardMsg = (
                 "File <{name}> does not have the right MD5 sum.\n"
                 "Expected is <{expected}>,"
@@ -735,10 +740,9 @@ class TestCase(unittest.TestCase):
         # and ensure uniqueness by add UUID
         if self.readable_names:
             return "tmp_" + self.id().replace(".", "_") + "_" + name
-        else:
-            # UUID might be overkill (and expensive) but it's safe and simple
-            # alternative is to create hash from the readable name
-            return "tmp_" + str(uuid.uuid4()).replace("-", "")
+        # UUID might be overkill (and expensive) but it's safe and simple
+        # alternative is to create hash from the readable name
+        return "tmp_" + str(uuid.uuid4()).replace("-", "")
 
     def _compute_difference_raster(self, first, second, name_part):
         """Compute difference of two rasters (first - second)
@@ -807,9 +811,9 @@ class TestCase(unittest.TestCase):
         )
         expression = (
             '"{diff}" = '
-            + 'if( isnull("{first}") && isnull("{second}"), 0, '
-            + 'if( isnull("{first}") || isnull("{second}"), 1, '
-            + 'if( abs("{first}" - "{second}") > {precision}, 1, 0)))'
+            'if( isnull("{first}") && isnull("{second}"), 0, '
+            'if( isnull("{first}") || isnull("{second}"), 1, '
+            'if( abs("{first}" - "{second}") > {precision}, 1, 0)))'
         ).format(diff=diff, first=first, second=second, precision=precision)
 
         call_module("r.mapcalc", stdin=expression.encode("utf-8"))
@@ -896,14 +900,14 @@ class TestCase(unittest.TestCase):
         If statistics is not given ``dict(min=-precision, max=precision)``
         is used.
 
-        Be ware – comparison is performed on overall statistics and thus
+        Beware - comparison is performed on overall statistics and thus
         differences in individual cell values not changing overall
         statistics might go unnoticed. Use `assertRastersEqual()`
         for cell to cell equivalence testing.
         """
         if statistics is None or sorted(statistics.keys()) == ["max", "min"]:
             if statistics is None:
-                statistics = dict(min=-precision, max=precision)
+                statistics = {"min": -precision, "max": precision}
             diff = self._compute_difference_raster(
                 reference, actual, "assertRastersNoDifference"
             )
@@ -943,7 +947,7 @@ class TestCase(unittest.TestCase):
 
         This method should not be used to test r.mapcalc or r.univar.
 
-        Be ware – comparison is performed on overall statistics and thus
+        Beware - comparison is performed on overall statistics and thus
         differences in individual cell values not changing overall
         statistics might go unnoticed. Use `assertRastersEqual()`
         for cell to cell equivalence testing.
@@ -970,7 +974,7 @@ class TestCase(unittest.TestCase):
         """
         if statistics is None or sorted(statistics.keys()) == ["max", "min"]:
             if statistics is None:
-                statistics = dict(min=-precision, max=precision)
+                statistics = {"min": -precision, "max": precision}
             diff = self._compute_difference_raster3d(
                 reference, actual, "assertRasters3dNoDifference"
             )
@@ -1118,7 +1122,7 @@ class TestCase(unittest.TestCase):
 
         This method should not be used to test v.overlay or v.select.
         """
-        diff = self._compute_xor_vectors(
+        diff = self._compute_vector_xor(
             ainput=reference,
             binput=actual,
             alayer=layer,
@@ -1150,11 +1154,11 @@ class TestCase(unittest.TestCase):
     def assertVectorEqualsVector(self, actual, reference, digits, precision, msg=None):
         """Test that two vectors are equal.
 
-        .. note:
+        .. note::
             This test should not be used to test ``v.in.ascii`` and
             ``v.out.ascii`` modules.
 
-        .. warning:
+        .. warning::
             ASCII files for vectors are loaded into memory, so this
             function works well only for "not too big" vector maps.
         """
@@ -1179,11 +1183,11 @@ class TestCase(unittest.TestCase):
     def assertVectorEqualsAscii(self, actual, reference, digits, precision, msg=None):
         """Test that vector is equal to the vector stored in GRASS ASCII file.
 
-        .. note:
+        .. note::
             This test should not be used to test ``v.in.ascii`` and
             ``v.out.ascii`` modules.
 
-        .. warning:
+        .. warning::
             ASCII files for vectors are loaded into memory, so this
             function works well only for "not too big" vector maps.
         """
@@ -1217,18 +1221,19 @@ class TestCase(unittest.TestCase):
     ):
         """Test that two GRASS ASCII vector files are equal.
 
-        .. note:
+        .. note::
             This test should not be used to test ``v.in.ascii`` and
             ``v.out.ascii`` modules.
 
-        .. warning:
+        .. warning::
             ASCII files for vectors are loaded into memory, so this
             function works well only for "not too big" vector maps.
         """
         import difflib
 
-        fromlines = open(actual).readlines()
-        tolines = open(reference).readlines()
+        with open(actual) as f1, open(reference) as f2:
+            fromlines = f1.readlines()
+            tolines = f2.readlines()
         context_lines = 3  # number of context lines
         # TODO: filenames are set to "actual" and "reference", isn't it too general?
         # it is even more useful if map names or file names are some generated
@@ -1238,8 +1243,8 @@ class TestCase(unittest.TestCase):
         # workaround for missing -h (do not print header) flag in v.out.ascii
         num_lines_of_header = 10
         diff = difflib.unified_diff(
-            fromlines[num_lines_of_header:],
-            tolines[num_lines_of_header:],
+            [line.strip() for line in fromlines[num_lines_of_header:]],
+            [line.strip() for line in tolines[num_lines_of_header:]],
             "reference",
             "actual",
             n=context_lines,
@@ -1250,22 +1255,20 @@ class TestCase(unittest.TestCase):
         if remove_files:
             os.remove(actual)
             os.remove(reference)
-        stdmsg = (
-            "There is a difference between vectors when compared as" " ASCII files.\n"
-        )
+        stdmsg = "There is a difference between vectors when compared as ASCII files.\n"
 
-        output = StringIO()
         # TODO: there is a diff size constant which we can use
         # we are setting it unlimited but we can just set it large
         maxlines = 100
         i = 0
-        for line in diff:
-            if i >= maxlines:
-                break
-            output.write(line)
-            i += 1
-        stdmsg += output.getvalue()
-        output.close()
+        with StringIO() as output:
+            for line in diff:
+                if i >= maxlines:
+                    break
+                output.write(line)
+                i += 1
+            stdmsg += output.getvalue()
+
         # it seems that there is not better way of asking whether there was
         # a difference (always a iterator object is returned)
         if i > 0:
@@ -1281,7 +1284,7 @@ class TestCase(unittest.TestCase):
                 # TODO: all HTML files might be collected by the main reporter
                 # TODO: standardize the format of name of HTML file
                 # for one test id there is only one possible file of this name
-                htmldiff_file_name = self.id() + "_ascii_diff" + ".html"
+                htmldiff_file_name: str = self.id() + "_ascii_diff" + ".html"
                 self.supplementary_files.append(htmldiff_file_name)
                 htmldiff = difflib.HtmlDiff().make_file(
                     fromlines,
@@ -1290,11 +1293,9 @@ class TestCase(unittest.TestCase):
                     "actual",
                     context=True,
                     numlines=context_lines,
+                    charset="utf-8",
                 )
-                htmldiff_file = open(htmldiff_file_name, "w")
-                for line in htmldiff:
-                    htmldiff_file.write(line)
-                htmldiff_file.close()
+                Path(htmldiff_file_name).write_text(htmldiff, encoding="utf-8")
 
             self.fail(self._formatMessage(msg, stdmsg))
 
@@ -1311,7 +1312,7 @@ class TestCase(unittest.TestCase):
         In terms of testing framework, this function causes a common error,
         not a test failure.
 
-        :raises CalledModuleError: if the module failed
+        :raises ~grass.exceptions.CalledModuleError: If the module failed
         """
         module = _module_from_parameters(module, **kwargs)
         _check_module_run_parameters(module)
@@ -1326,10 +1327,10 @@ class TestCase(unittest.TestCase):
             # TODO: standardized error code would be handy here
             import re
 
-            if re.search("Raster map.*not found", errors, flags=re.DOTALL):
+            if re.search(r"Raster map.*not found", errors, flags=re.DOTALL):
                 errors += "\nSee available raster maps:\n"
                 errors += call_module("g.list", type="raster")
-            if re.search("Vector map.*not found", errors, flags=re.DOTALL):
+            if re.search(r"Vector map.*not found", errors, flags=re.DOTALL):
                 errors += "\nSee available vector maps:\n"
                 errors += call_module("g.list", type="vector")
             # TODO: message format, parameters
@@ -1337,17 +1338,14 @@ class TestCase(unittest.TestCase):
                 module.name, module.get_python(), module.returncode, errors=errors
             )
         # TODO: use this also in assert and apply when appropriate
-        if expecting_stdout and not module.outputs.stdout.strip():
+        if expecting_stdout and (not module.outputs.stdout.strip()):
             if module.outputs.stderr:
                 errors = " The errors are:\n" + module.outputs.stderr
             else:
                 errors = " There were no error messages."
-            if module.outputs.stdout:
-                # this is not appropriate for translation but we don't want
-                # and don't need testing to be translated
-                got = "only whitespace."
-            else:
-                got = "nothing."
+            # This is not appropriate for translation but we don't want
+            # and don't need testing to be translated
+            got = "only whitespace." if module.outputs.stdout else "nothing."
             raise RuntimeError(
                 "Module call "
                 + module.get_python()
@@ -1450,11 +1448,11 @@ class TestCase(unittest.TestCase):
 def _module_from_parameters(module, **kwargs):
     if kwargs:
         if not isinstance(module, str):
-            raise ValueError("module can be only string or PyGRASS Module")
+            msg = "module can be only string or PyGRASS Module"
+            raise ValueError(msg)
         if isinstance(module, Module):
-            raise ValueError(
-                "module can be only string if other" " parameters are given"
-            )
+            msg = "module can be only string if other parameters are given"
+            raise ValueError(msg)
             # allow passing all parameters in one dictionary called parameters
         if list(kwargs.keys()) == ["parameters"]:
             kwargs = kwargs["parameters"]
@@ -1465,20 +1463,24 @@ def _module_from_parameters(module, **kwargs):
 def _check_module_run_parameters(module):
     # in this case module already run and we would start it again
     if module.run_:
-        raise ValueError("Do not run the module manually, set run_=False")
+        msg = "Do not run the module manually, set run_=False"
+        raise ValueError(msg)
     if not module.finish_:
-        raise ValueError(
+        msg = (
             "This function will always finish module run,"
             " set finish_=None or finish_=True."
         )
+        raise ValueError(msg)
     # we expect most of the usages with stdout=PIPE
     # TODO: in any case capture PIPE always?
     if module.stdout_ is None:
         module.stdout_ = subprocess.PIPE
     elif module.stdout_ != subprocess.PIPE:
-        raise ValueError("stdout_ can be only PIPE or None")
+        msg = "stdout_ can be only PIPE or None"
+        raise ValueError(msg)
     if module.stderr_ is None:
         module.stderr_ = subprocess.PIPE
     elif module.stderr_ != subprocess.PIPE:
-        raise ValueError("stderr_ can be only PIPE or None")
+        msg = "stderr_ can be only PIPE or None"
+        raise ValueError(msg)
         # because we want to capture it

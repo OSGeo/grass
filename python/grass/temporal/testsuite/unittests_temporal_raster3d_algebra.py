@@ -7,20 +7,22 @@ for details.
 :authors: Soeren Gebbert and Thomas Leppelt
 """
 
-import grass.script
-import grass.temporal as tgis
+import datetime
+
+import grass.script as gs
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-import datetime
+
+import grass.temporal as tgis
 
 
 class TestTemporalRaster3dAlgebra(TestCase):
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         """Initiate the temporal GIS and set the region"""
         tgis.init(True)  # Raise on error instead of exit(1)
         cls.use_temp_region()
-        ret = grass.script.run_command(
+        ret = gs.run_command(
             "g.region", n=80.0, s=0.0, e=120.0, w=0.0, t=100.0, b=0.0, res=10.0
         )
 
@@ -48,16 +50,16 @@ class TestTemporalRaster3dAlgebra(TestCase):
             interval=True,
         )
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         self.runModule("t.remove", type="str3ds", flags="rf", inputs="D", quiet=True)
 
     @classmethod
-    def tearDownClass(cls):
+    def tearDownClass(cls) -> None:
         """Remove the temporary region"""
         # cls.runModule("t.remove", type="str3ds", flags="rf", inputs="A", quiet=True)
         cls.del_temp_region()
 
-    def test_temporal_neighbors_1(self):
+    def test_temporal_neighbors_1(self) -> None:
         """Simple temporal neighborhood computation test"""
         A = tgis.open_old_stds("A", type="str3ds")
         A.print_info()
@@ -75,7 +77,7 @@ class TestTemporalRaster3dAlgebra(TestCase):
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
 
-    def test_temporal_neighbors_2(self):
+    def test_temporal_neighbors_2(self) -> None:
         """Simple temporal neighborhood computation test"""
         A = tgis.open_old_stds("A", type="str3ds")
         A.print_info()

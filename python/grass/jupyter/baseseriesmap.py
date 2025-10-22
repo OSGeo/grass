@@ -1,13 +1,31 @@
+#
+# AUTHOR(S): Riya Saxena <29riyasaxena AT gmail>
+#
+# PURPOSE:   This module provides the base class for interactive visualizations
+#            used by `TimeSeriesMap` and `SeriesMap` in Jupyter Notebooks. It
+#            includes methods for rendering visualizations and creating interactive
+#            sliders to navigate through time-series or series data, while reducing
+#            redundancy and enhancing functionality.
+#
+# COPYRIGHT: (C) 2024 Riya Saxena, and by the GRASS Development Team
+#
+#            This program is free software under the GNU General Public
+#            License (>=v2). Read the file COPYING that comes with GRASS
+#            for details.
+
 """Base class for SeriesMap and TimeSeriesMap"""
 
 import os
+from pathlib import Path
 import tempfile
 import weakref
 import shutil
+import multiprocessing
 
 import grass.script as gs
 
 from .map import Map
+from .utils import get_number_of_cores, save_gif
 
 
 class BaseSeriesMap:
@@ -29,9 +47,8 @@ class BaseSeriesMap:
         else:
             self._env = os.environ.copy()
 
-        self.baseseries = None
         self._base_layer_calls = []
-        self._base_calls = []
+        self._calls = []
         self._baseseries_added = False
         self._layers_rendered = False
         self._base_filename_dict = {}
@@ -74,11 +91,8 @@ class BaseSeriesMap:
             if not self._baseseries_added:
                 self._base_layer_calls.append((grass_module, kwargs))
             else:
-                if self._base_calls is not None:
-                    for row in self._base_calls:
-                        row.append((grass_module, kwargs))
-                else:
-                    self._base_calls.append((grass_module, kwargs))
+                for row in self._calls:
+                    row.append((grass_module, kwargs))
 
         return wrapper
 
@@ -87,20 +101,36 @@ class BaseSeriesMap:
         for grass_module, kwargs in self._base_layer_calls:
             img.run(grass_module, **kwargs)
 
-    def _render(self):
-        """
-        Renders the base image for the dataset.
+    def _render_worker(self, i):
+        """Function to render a single layer."""
+        filename = os.path.join(self._tmpdir.name, f"{i}.png")
+        shutil.copyfile(self.base_file, filename)
+        img = Map(
+            width=self._width,
+            height=self._height,
+            filename=filename,
+            use_region=True,
+            env=self._env,
+            read_file=True,
+        )
+        for grass_module, kwargs in self._calls[i]:
+            if grass_module is not None:
+                img.run(grass_module, **kwargs)
+        return self._indices[i], filename
 
-        Saves PNGs to a temporary directory.
-        This method must be run before creating a visualization (e.g., show or save).
-        It can be time-consuming to run with large space-time datasets.
+    def render(self):
+        """Renders image for each raster in series.
 
-        Child classes should override the `render` method
-        to define specific rendering behaviors, such as:
-        - Rendering images for each time-step in a space-time dataset (e.g., class1).
-        - Rendering images for each raster in a series (e.g., class2).
+        Save PNGs to temporary directory. Must be run before creating a visualization
+        (i.e. show or save).
         """
-        # Runtime error in respective classes
+        if not self._baseseries_added:
+            msg = (
+                "Cannot render series since none has been added."
+                "Use SeriesMap.add_rasters() or SeriesMap.add_vectors()"
+            )
+            raise RuntimeError(msg)
+        tasks = [(i,) for i in range(len(self._indices))]
 
         # Make base image (background and baselayers)
         # Random name needed to avoid potential conflict with layer names
@@ -121,6 +151,14 @@ class BaseSeriesMap:
         self._render_baselayers(img)
 
         # Render layers in respective classes
+        cores = get_number_of_cores(len(tasks), env=self._env)
+        with multiprocessing.Pool(processes=cores) as pool:
+            results = pool.starmap(self._render_worker, tasks)
+
+        for i, filename in results:
+            self._base_filename_dict[i] = filename
+
+        self._layers_rendered = True
 
     def show(self, slider_width=None):
         """Create interactive timeline slider.
@@ -144,7 +182,7 @@ class BaseSeriesMap:
         if not slider_width:
             slider_width = "70%"
 
-        lookup = list(zip(self._labels, self._indices))
+        lookup = list(zip(self._labels, self._indices, strict=False))
         description = self._slider_description  # modify description
 
         # Datetime selection slider
@@ -177,8 +215,7 @@ class BaseSeriesMap:
         # Display image associated with datetime
         def change_image(index):
             filename = self._base_filename_dict[index]
-            with open(filename, "rb") as rfile:
-                out_img.value = rfile.read()
+            out_img.value = Path(filename).read_bytes()
 
         widgets.interactive_output(change_image, {"index": slider})
 
@@ -186,3 +223,47 @@ class BaseSeriesMap:
             width="100%", display="inline-flex", flex_flow="row wrap"
         )
         return widgets.HBox([play, slider, out_img], layout=layout)
+
+    def save(
+        self,
+        filename,
+        duration=500,
+        label=True,
+        font=None,
+        text_size=12,
+        text_color="gray",
+    ):
+        """
+        Creates a GIF animation of rendered layers.
+
+        Text color must be in a format accepted by PIL ImageColor module. For supported
+        formats, visit:
+        https://pillow.readthedocs.io/en/stable/reference/ImageColor.html#color-names
+
+        param str filename: name of output GIF file
+        param int duration: time to display each frame; milliseconds
+        param bool label: include label on each frame
+        param str font: font file
+        param int text_size: size of label text
+        param str text_color: color to use for the text.
+        """
+
+        # Render images if they have not been already
+        if not self._layers_rendered:
+            self.render()
+
+        input_files = [self._base_filename_dict[index] for index in self._indices]
+
+        save_gif(
+            input_files,
+            filename,
+            duration=duration,
+            label=label,
+            labels=self._labels,
+            font=font,
+            text_size=text_size,
+            text_color=text_color,
+        )
+
+        # Display the GIF
+        return filename

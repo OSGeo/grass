@@ -263,11 +263,11 @@ static void quant_update_limits(struct Quant *q, DCELL dLow, DCELL dHigh,
  * from all the rules (except the "infinite" rules) in <i>q</i> into
  * <i>dmin</i>, <i>dmax</i>, <i>cmin</i>, and <i>cmax</i>.
  *
- * \param quant pointer to Quant structure which holds quant rules info
- * \param[out] dmin minimum fp value
- * \param[out] dmax maximum fp value
- * \param[out] cmin minimum value
- * \param[out] cmax maximum value
+ * \param q pointer to Quant structure which holds quant rules info
+ * \param[out] dMin minimum fp value
+ * \param[out] dMax maximum fp value
+ * \param[out] cMin minimum value
+ * \param[out] cMax maximum value
  *
  * \return -1 if q->truncate or q->round are true or after
  * Rast_quant_init (), or any call to Rast_quant_clear () or Rast_quant_free()
@@ -680,7 +680,7 @@ CELL Rast_quant_get_cell_value(struct Quant *q, DCELL dcellVal)
                     return NO_DATA;
             }
         } /* while */
-    }     /* looking up in fp_lookup */
+    } /* looking up in fp_lookup */
 
     if (!NO_FINITE_RULE) {
         p = Rast__quant_get_rule_for_d_raster_val(q, dcellVal);

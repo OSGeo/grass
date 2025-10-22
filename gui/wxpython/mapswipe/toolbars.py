@@ -55,7 +55,7 @@ class SwipeMapToolbar(BaseToolbar):
     def _toolbarData(self):
         """Returns toolbar data (name, icon, handler)"""
         # BaseIcons are a set of often used icons. It is possible
-        # to reuse icons in ./trunk/gui/icons/grass or add new ones there.
+        # to reuse icons in gui/icons/grass or add new ones there.
         icons = BaseIcons
         return self._getToolbarData(
             (
@@ -123,7 +123,6 @@ class SwipeMapToolbar(BaseToolbar):
         """Set currently selected map.
         Unused, needed because of DoubleMapPanel API.
         """
-        pass
 
 
 class SwipeMainToolbar(BaseToolbar):
@@ -138,7 +137,7 @@ class SwipeMainToolbar(BaseToolbar):
         # add tool to toggle active map window
         self.toggleMode = wx.Choice(parent=self)
         for label, cdata in zip(
-            [_("Swipe mode"), _("Mirror mode")], ["swipe", "mirror"]
+            [_("Swipe mode"), _("Mirror mode")], ["swipe", "mirror"], strict=True
         ):
             self.toggleMode.Append(label, cdata)
         self.toggleMode.SetSelection(0)

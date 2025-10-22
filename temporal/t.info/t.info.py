@@ -54,7 +54,7 @@
 # % suppress_required: yes
 # %end
 
-import grass.script as grass
+import grass.script as gs
 
 ############################################################################
 
@@ -91,7 +91,7 @@ def main():
             " +----------------------------------------------------------------------------+"  # noqa: E501
         )
         return
-    elif system and not history:
+    if system and not history:
         print("dbmi_python_interface='" + str(dbif.get_dbmi().__name__) + "'")
         print("dbmi_string='" + str(tgis.get_tgis_database_string()) + "'")
         print("sql_template_path='" + str(tgis.get_sql_template_path()) + "'")
@@ -101,17 +101,13 @@ def main():
         return
 
     if not system and not name:
-        grass.fatal(_("Please specify %s=") % ("name"))
+        gs.fatal(_("Please specify %s=") % ("name"))
 
-    if name.find("@") >= 0:
-        id_ = name
-    else:
-        id_ = name + "@" + grass.gisenv()["MAPSET"]
-
+    id_ = name if name.find("@") >= 0 else name + "@" + gs.gisenv()["MAPSET"]
     dataset = tgis.dataset_factory(type_, id_)
 
     if not dataset.is_in_db(dbif):
-        grass.fatal(
+        gs.fatal(
             _("Dataset <{n}> of type <{t}> not found in temporal database").format(
                 n=id_, t=type_
             )
@@ -119,7 +115,7 @@ def main():
 
     dataset.select(dbif)
 
-    if history and type_ in ["strds", "stvds", "str3ds"]:
+    if history and type_ in {"strds", "stvds", "str3ds"}:
         dataset.print_history()
         return
 
@@ -130,5 +126,5 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

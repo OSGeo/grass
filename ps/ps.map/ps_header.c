@@ -16,7 +16,7 @@ extern int rotate_plot;
 int write_PS_header(void)
 {
     struct Categories cats;
-    int cats_ok;
+    int cats_ok = 0;
 
     if (PS.do_raster)
         cats_ok = Rast_read_cats(PS.cell_name, PS.cell_mapset, &cats) >= 0;

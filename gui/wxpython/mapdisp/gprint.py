@@ -26,26 +26,8 @@ class MapPrint(wx.Printout):
         wx.Printout.__init__(self)
         self.canvas = canvas
 
-    def OnBeginDocument(self, start, end):
-        return super().OnBeginDocument(start, end)
-
-    def OnEndDocument(self):
-        super().OnEndDocument()
-
-    def OnBeginPrinting(self):
-        super().OnBeginPrinting()
-
-    def OnEndPrinting(self):
-        super().OnEndPrinting()
-
-    def OnPreparePrinting(self):
-        super().OnPreparePrinting()
-
-    def HasPage(self, page):
-        if page <= 2:
-            return True
-        else:
-            return False
+    def HasPage(self, page) -> bool:
+        return page <= 2
 
     def GetPageInfo(self):
         return (1, 2, 1, 2)
@@ -62,8 +44,8 @@ class MapPrint(wx.Printout):
         marginY = 10
 
         # Add the margin to the graphic size
-        maxX = maxX + (2 * marginX)
-        maxY = maxY + (2 * marginY)
+        maxX += 2 * marginX
+        maxY += 2 * marginY
 
         # Get the size of the DC in pixels
         (w, h) = dc.GetSizeTuple()

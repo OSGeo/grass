@@ -2,7 +2,10 @@
 name: Validate Titles
 
 on:
+  # zizmor: ignore[dangerous-triggers] Limits to maintained main branch, and avoids running PR code
   pull_request_target:
+    branches:
+      - main
     types:
       - edited
       # The following types are default for pull_request_target
@@ -12,12 +15,18 @@ on:
 
 permissions: {}
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request_target' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
 jobs:
   validate-titles:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout base repository (doesn't include the PR changes)
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
       - name: Call PR title validation function
         run: python utils/generate_release_notes.py check "${PR_TITLE}" "" ""
         env:

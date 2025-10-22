@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
- * \author GRASS GIS Development Team
+ * \author GRASS Development Team
  * \author Brad Douglas - rez at touchofmadness com
  *
  * \date 2006
@@ -49,7 +49,6 @@
  * \param[in] num_orients
  * \return int always returns 0
  */
-
 int G_math_findzc(double conv[], int size, double zc[], double thresh,
                   int num_orients)
 {
@@ -103,7 +102,7 @@ int G_math_findzc(double conv[], int size, double zc[], double thresh,
                     break; /* quit looking at neighbors */
                 }
             } /* for ni */
-        }     /* for p */
+        } /* for p */
     }
 
     return 0;

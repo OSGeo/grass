@@ -33,6 +33,8 @@ from core.gthread import gThread
 try:
     haveGdal = True
     from osgeo import gdal
+
+    gdal.DontUseExceptions()
 except ImportError:
     haveGdal = False
 
@@ -99,7 +101,6 @@ class RenderWMSMgr(wx.EvtHandler):
 
         self.updateMap = True
         fetchData = True  # changed to True when calling Render()
-        zoomChanged = False
 
         if self.renderedRegion is None or cmd != self.fetched_data_cmd:
             fetchData = True
@@ -111,7 +112,6 @@ class RenderWMSMgr(wx.EvtHandler):
 
             for c in ["e-w resol", "n-s resol"]:
                 if self.renderedRegion and region[c] != self.renderedRegion[c]:
-                    zoomChanged = True
                     break
 
         if fetchData:
@@ -215,10 +215,10 @@ class RenderWMSMgr(wx.EvtHandler):
             if len(r) < 2:
                 continue
             try:
-                if r[0] in ["e-w resol3", "n-s resol3", "rows3", "cols3", "depths"]:
+                if r[0] in {"e-w resol3", "n-s resol3", "rows3", "cols3", "depths"}:
                     # ignore 3D region values (causing problems in latlong locations)
                     continue
-                if r[0] in ["cols", "rows", "zone", "proj"]:
+                if r[0] in {"cols", "rows", "zone", "proj"}:
                     region[r[0]] = int(r[1])
                 else:
                     region[r[0]] = float(r[1])
@@ -383,7 +383,7 @@ class GDALRasterMerger:
 
     def SetGeorefAndProj(self):
         """Set georeference and projection to target file"""
-        projection = grass.read_command("g.proj", flags="wf")
+        projection = grass.read_command("g.proj", flags="fp", format="wkt")
         self.tDataset.SetProjection(projection)
 
         self.tDataset.SetGeoTransform(self.tGeotransform)
