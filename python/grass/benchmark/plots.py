@@ -2,7 +2,7 @@
 #
 # AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
 #
-# PURPOSE:   Benchmarking for GRASS GIS modules
+# PURPOSE:   Benchmarking for GRASS modules
 #
 # COPYRIGHT: (C) 2021 Vaclav Petras, and by the GRASS Development Team
 #
@@ -72,10 +72,9 @@ def nprocs_plot(results, filename=None, title=None, metric="time"):
             ylabel = metric.title()
             plt.plot(x, getattr(result, metric), label=result.label)
         else:
-            raise ValueError(
-                f"Invalid metric '{metric}' in result, it should be:\
+            msg = f"Invalid metric '{metric}' in result, it should be:\
                 'time', 'speedup' or 'efficiency'"
-            )
+            raise ValueError(msg)
     plt.legend()
     # If there is not many x values, show ticks for each, but use default
     # ticks when there is a lot of x values.

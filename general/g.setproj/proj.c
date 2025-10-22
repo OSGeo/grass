@@ -13,7 +13,7 @@ struct proj_unit *get_proj_unit(const char *arg)
     struct proj_unit *unit;
     FILE *fp;
 
-    sprintf(buf, "%s/etc/proj/units.table", G_gisbase());
+    snprintf(buf, sizeof(buf), "%s/etc/proj/units.table", G_gisbase());
 
     fp = fopen(buf, "r");
     if (!fp)
@@ -51,7 +51,7 @@ struct proj_desc *get_proj_desc(const char *arg)
     struct proj_desc *res;
     FILE *fp;
 
-    sprintf(buf, "%s/etc/proj/desc.table", G_gisbase());
+    snprintf(buf, sizeof(buf), "%s/etc/proj/desc.table", G_gisbase());
 
     fp = fopen(buf, "r");
     if (!fp)
@@ -92,7 +92,7 @@ struct proj_parm *get_proj_parms(const char *arg)
     int done;
     FILE *fp;
 
-    sprintf(buf, "%s/etc/proj/parms.table", G_gisbase());
+    snprintf(buf, sizeof(buf), "%s/etc/proj/parms.table", G_gisbase());
 
     fp = fopen(buf, "r");
     if (!fp)

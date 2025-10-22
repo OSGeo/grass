@@ -1,16 +1,17 @@
-R"""Setup, initialization, and clean-up functions
+r"""Setup, initialization, and clean-up functions
 
 Functions can be used in Python scripts to setup a GRASS environment
 and session without using grassXY.
 
-Usage::
+:Usage:
+  .. code-block:: python
 
     import os
     import sys
     import subprocess
 
     # define GRASS Database
-    # add your path to grassdata (GRASS GIS database) directory
+    # add your path to grassdata (GRASS database) directory
     gisdb = "~/grassdata"
     # the following path is the default path on MS Windows
     # gisdb = "~/Documents/grassdata"
@@ -19,8 +20,8 @@ Usage::
     location = "nc_spm_08"
     mapset = "user1"
 
-    # path to the GRASS GIS launch script
-    # we assume that the GRASS GIS start script is available and on PATH
+    # path to the GRASS launch script
+    # we assume that the GRASS start script is available and on PATH
     # query GRASS itself for its GISBASE
     # (with fixes for specific platforms)
     # needs to be edited by the user
@@ -29,14 +30,13 @@ Usage::
         # MS Windows
         executable = r"C:\OSGeo4W\bin\grass.bat"
         # uncomment when using standalone WinGRASS installer
-        # executable = r'C:\Program Files (x86)\GRASS GIS <version>\grass.bat'
+        # executable = r'C:\Program Files (x86)\GRASS <version>\grass.bat'
         # this can be skipped if GRASS executable is added to PATH
     elif sys.platform == "darwin":
-        # Mac OS X
-        version = "@GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@"
-        executable = f"/Applications/GRASS-{version}.app/Contents/Resources/bin/grass"
+        # macOS
+        executable = f"/Applications/GRASS-<version>.app/Contents/Resources/bin/grass"
 
-    # query GRASS GIS itself for its Python package path
+    # query GRASS itself for its Python package path
     grass_cmd = [executable, "--config", "python_path"]
     process = subprocess.run(grass_cmd, check=True, text=True, stdout=subprocess.PIPE)
 
@@ -50,7 +50,7 @@ Usage::
     session = gs.setup.init(gisdb, location, mapset)
 
     # example calls
-    gs.message("Current GRASS GIS 8 environment:")
+    gs.message("Current GRASS 8 environment:")
     print(gs.gisenv())
 
     gs.message("Available raster maps:")
@@ -65,7 +65,7 @@ Usage::
     session.finish()
 
 
-(C) 2010-2024 by the GRASS Development Team
+(C) 2010-2025 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -80,6 +80,8 @@ for details.
 # is known, this would allow moving things from there, here
 # then this could even do locking
 
+from __future__ import annotations
+
 from pathlib import Path
 import datetime
 import os
@@ -90,9 +92,6 @@ import tempfile as tmpfile
 
 WINDOWS = sys.platform.startswith("win")
 MACOS = sys.platform.startswith("darwin")
-
-VERSION_MAJOR = "@GRASS_VERSION_MAJOR@"
-VERSION_MINOR = "@GRASS_VERSION_MINOR@"
 
 
 def write_gisrc(dbase, location, mapset):
@@ -112,10 +111,10 @@ def set_gui_path():
         sys.path.insert(0, gui_path)
 
 
-def get_install_path(path=None):
+def get_install_path(path: str | Path | None = None) -> str:
     """Get path to GRASS installation usable for setup of environmental variables.
 
-    The function tries to determine path tp GRASS GIS installation so that the
+    The function tries to determine path tp GRASS installation so that the
     returned path can be used for setup of environmental variable for GRASS runtime.
     If the search fails, None is returned.
 
@@ -148,19 +147,21 @@ def get_install_path(path=None):
             [arg, "--config", "path"], text=True, check=True, capture_output=True
         ).stdout.strip()
 
+    # Directory was provided as a parameter.
+    if path and os.path.isdir(path):
+        return os.fspath(path)
+
     # Executable was provided as parameter.
     if path and shutil.which(path):
         # The path was provided by the user and it is an executable
         # (on path or provided with full path), so raise exception on failure.
-        return ask_executable(path)
+        path_from_executable = ask_executable(path)
+        if os.path.isdir(path_from_executable):
+            return path_from_executable
 
-    # Presumably directory was provided.
-    if path:
-        return path
-
-    # GISBASE is already set.
+    # GISBASE is set from the outside or already set.
     env_gisbase = os.environ.get("GISBASE")
-    if env_gisbase:
+    if env_gisbase and os.path.isdir(env_gisbase):
         return env_gisbase
 
     # Executable provided in environment (name is from grass-session).
@@ -168,7 +169,9 @@ def get_install_path(path=None):
     # at this point (to be re-evaluated).
     grass_bin = os.environ.get("GRASSBIN")
     if grass_bin and shutil.which(grass_bin):
-        return ask_executable(grass_bin)
+        path_from_executable = ask_executable(grass_bin)
+        if os.path.isdir(path_from_executable):
+            return path_from_executable
 
     # Derive the path from path to this file (Python module).
     # This is the standard way when there is no user-provided settings.
@@ -179,7 +182,7 @@ def get_install_path(path=None):
     bin_path = install_path / "bin"
     lib_path = install_path / "lib"
     if bin_path.is_dir() and lib_path.is_dir():
-        return install_path
+        return os.fspath(install_path)
 
     # As a last resort, try running grass command if it exists.
     # This is less likely give the right result than the relative path on systems
@@ -187,9 +190,13 @@ def get_install_path(path=None):
     # However, it allows for non-standard installations with standard command.
     grass_bin = "grass"
     if grass_bin and shutil.which(grass_bin):
-        return ask_executable(grass_bin)
+        path_from_executable = ask_executable(grass_bin)
+        if os.path.isdir(path_from_executable):
+            return path_from_executable
 
-    return None
+    # We fallback to whatever was provided. This may help trace the issue
+    # in broken installations.
+    return os.fspath(path) if path else path
 
 
 def setup_runtime_env(gisbase=None, *, env=None):
@@ -205,42 +212,92 @@ def setup_runtime_env(gisbase=None, *, env=None):
     If _gisbase_ is not provided, a heuristic is used to find the path to GRASS
     installation (see the :func:`get_install_path` function for details).
     """
-    if not gisbase:
-        gisbase = get_install_path()
-
-    # Accept Path objects.
-    gisbase = os.fspath(gisbase)
-
-    # If environment is not provided, use the global one.
-    if not env:
-        env = os.environ
-
     from grass.app.runtime import (
         get_grass_config_dir,
         set_dynamic_library_path,
         set_executable_paths,
         set_path_to_python_executable,
         set_python_path_variable,
+        RuntimePaths,
     )
 
-    # Set GISBASE
-    env["GISBASE"] = gisbase
+    # If environment is not provided, use the global one.
+    if not env:
+        env = os.environ
+
+    runtime_paths = RuntimePaths(env=env, prefix=gisbase)
+    gisbase = runtime_paths.gisbase
+    if not os.path.isdir(gisbase):
+        gisbase = get_install_path(gisbase)
+        # Set the main prefix again.
+        # See also the main grass executable code.
+        runtime_paths = RuntimePaths(env=env, prefix=gisbase)
+        runtime_paths.set_env_variables()
+        # The mechanism already failed once to set it, so overwrite
+        # the path it set with what we know exists. (This will make
+        # it work when the variable is not substituted.)
+        os.environ["GISBASE"] = gisbase
+    else:
+        runtime_paths.set_env_variables()
+
     set_executable_paths(
         install_path=gisbase,
-        grass_config_dir=get_grass_config_dir(VERSION_MAJOR, VERSION_MINOR, env=env),
+        grass_config_dir=get_grass_config_dir(env=env),
         env=env,
     )
     set_dynamic_library_path(
-        variable_name="@LD_LIBRARY_PATH_VAR@", install_path=gisbase, env=env
+        variable_name=runtime_paths.ld_library_path_var, install_path=gisbase, env=env
     )
     set_python_path_variable(install_path=gisbase, env=env)
     set_path_to_python_executable(env=env)
 
 
-def init(path, location=None, mapset=None, *, grass_path=None, env=None):
+def runtime_env_is_active(env=None):
+    """Check that GRASS runtime environment is set up.
+
+    On a best-effort basis, it determines whether the GRASS runtime environment
+    is set up. If so, it returns True; otherwise, it returns False.
+
+    If *env* is not provided, uses the global environment (os.environ).
+    """
+    if not env:
+        env = os.environ
+    gisbase = env.get("GISBASE")
+    if not gisbase:
+        return False
+    # Check also path to tools.
+    return gisbase in env["PATH"]
+
+
+def ensure_runtime_env(env=None):
+    """Ensure that GRASS runtime environment is set up.
+
+    If the environment is set up, does nothing. Otherwise, it modifies the
+    environment to activate the runtime environment.
+    It does not start a session connected to a project.
+
+    If *env* is not provided, uses the global environment (os.environ).
+    """
+    if not env:
+        env = os.environ
+    if not runtime_env_is_active(env=env):
+        setup_runtime_env(env=env)
+
+
+def init(
+    path,
+    location=None,
+    mapset=None,
+    *,
+    grass_path=None,
+    env=None,
+    lock=False,
+    timeout=0,
+    force_unlock=False,
+):
     """Initialize system variables to run GRASS modules
 
-    This function is for running GRASS GIS without starting it with the
+    This function is for running GRASS without starting it with the
     standard main executable grass. No GRASS modules shall be called before
     call of this function but any module or user script can be called
     afterwards because a GRASS session has been set up. GRASS Python
@@ -262,10 +319,12 @@ def init(path, location=None, mapset=None, *, grass_path=None, env=None):
     of the object is called explicitly. Using methods of the session object is
     preferred over calling the function :func:`finish`.
 
-    Basic usage::
+    :Basic usage:
+      .. code-block:: python
 
         # ... setup GISBASE and sys.path before import
         import grass.script as gs
+
         session = gs.setup.init(
             "~/grassdata/nc_spm_08/user1",
             grass_path="/usr/lib/grass",
@@ -274,13 +333,27 @@ def init(path, location=None, mapset=None, *, grass_path=None, env=None):
         # end the session
         session.finish()
 
-    The returned object is a context manager, so the ``with`` statement can be used to
-    ensure that the session is finished (closed) at the end::
+      The returned object is a context manager, so the ``with`` statement can be used to
+      ensure that the session is finished (closed) at the end:
+
+      .. code-block:: python
 
         # ... setup sys.path before import
         import grass.script as gs
-        with gs.setup.init("~/grassdata/nc_spm_08/user1")
+
+        with gs.setup.init("~/grassdata/nc_spm_08/user1"):
             # ... use GRASS modules here
+            pass
+
+
+      A mapset can be locked which will prevent other session from locking it. A timeout can be
+      specified to allow concurrent processes to wait for the lock to be released:
+
+      .. code-block:: python
+
+        with gs.setup.init("~/grassdata/nc_spm_08/user1", lock=True, timeout=30):
+            # ... use GRASS tools here
+            pass
 
     :param path: path to GRASS database
     :param location: location name
@@ -326,13 +399,27 @@ def init(path, location=None, mapset=None, *, grass_path=None, env=None):
         env = os.environ
     setup_runtime_env(grass_path, env=env)
 
-    # TODO: lock the mapset?
-    env["GIS_LOCK"] = str(os.getpid())
+    process_id = os.getpid()
+    env["GIS_LOCK"] = str(process_id)
+
+    if lock:
+        # We have cyclic imports between grass.script and grass.app.
+        # pylint: disable=import-outside-toplevel
+        from grass.app.data import lock_mapset
+
+        lock_mapset(
+            mapset_path.path,
+            force_lock_removal=force_unlock,
+            timeout=timeout,
+            process_id=process_id,
+            message_callback=lambda x: print(x, file=sys.stderr),
+            env=env,
+        )
 
     env["GISRC"] = write_gisrc(
         mapset_path.directory, mapset_path.location, mapset_path.mapset
     )
-    return SessionHandle(env=env)
+    return SessionHandle(env=env, locked=lock)
 
 
 class SessionHandle:
@@ -341,7 +428,8 @@ class SessionHandle:
     Do not create objects of this class directly. Use the *init* function
     to get a session object.
 
-    Basic usage::
+    :Basic usage:
+      .. code-block:: python
 
         # ... setup sys.path before import as needed
 
@@ -354,7 +442,9 @@ class SessionHandle:
         # end the session
         session.finish()
 
-    Context manager usage::
+      Context manager usage:
+
+      .. code-block:: python
 
         # ... setup sys.path before import as needed
 
@@ -362,30 +452,37 @@ class SessionHandle:
 
         with gs.setup.init("~/grassdata/nc_spm_08/user1"):
             # ... use GRASS modules here
-        # session ends automatically here
+            pass
+        # session ends automatically here when outside of the "with" block
 
-    The example above is modifying the global, process environment (`os.environ`).
+    The example above is modifying the global, process environment
+    (:external:py:data:`os.environ`).
     If you don't want to modify the global environment, use the _env_ parameter
     for the _init_ function to modify the provided environment instead.
     This environment is then available as an attribute of the session object.
     The attribute then needs to be passed to all calls of GRASS
     tools and functions that wrap them.
-    Context manager usage with custom environment::
+    Context manager usage with custom environment:
+
+    .. code-block:: python
 
         # ... setup sys.path before import as needed
 
         import grass.script as gs
 
-        with gs.setup.init("~/grassdata/nc_spm_08/user1", env=os.environ.copy()):
+        with gs.setup.init(
+            "~/grassdata/nc_spm_08/user1", env=os.environ.copy()
+        ) as session:
             # ... use GRASS modules here with env parameter
             gs.run_command("g.region", flags="p", env=session.env)
-        # session ends automatically here, global environment was never modifed
+        # session ends automatically here, global environment was never modified
     """
 
-    def __init__(self, *, env, active=True):
+    def __init__(self, *, env, active=True, locked=False):
         self._env = env
         self._active = active
         self._start_time = datetime.datetime.now(datetime.timezone.utc)
+        self._locked = locked
 
     @property
     def active(self):
@@ -404,9 +501,8 @@ class SessionHandle:
         :returns: reference to the object (self)
         """
         if not self.active:
-            raise ValueError(
-                "Attempt to use inactive (finished) session as a context manager"
-            )
+            msg = "Attempt to use inactive (finished) session as a context manager"
+            raise ValueError(msg)
         return self
 
     def __exit__(self, type, value, traceback):
@@ -423,16 +519,17 @@ class SessionHandle:
         and finish the session. No GRASS modules can be called afterwards.
         """
         if not self.active:
-            raise ValueError("Attempt to finish an already finished session")
+            msg = "Attempt to finish an already finished session"
+            raise ValueError(msg)
         self._active = False
-        finish(env=self._env, start_time=self._start_time)
+        finish(env=self._env, start_time=self._start_time, unlock=self._locked)
 
 
 # clean-up functions when terminating a GRASS session
 # these fns can only be called within a valid GRASS session
 
 
-def clean_default_db(*, modified_after=None, env=None):
+def clean_default_db(*, modified_after=None, env=None, gis_env=None):
     """Clean (vacuum) the default db if it is SQLite
 
     When *modified_after* is set, database is cleaned only when it was modified
@@ -446,7 +543,8 @@ def clean_default_db(*, modified_after=None, env=None):
     if not conn or conn["driver"] != "sqlite":
         return
     # check if db exists
-    gis_env = gs.gisenv(env=env)
+    if not gis_env:
+        gis_env = gs.gisenv(env=env)
     database = conn["database"]
     database = database.replace("$GISDBASE", gis_env["GISDBASE"])
     database = database.replace("$LOCATION_NAME", gis_env["LOCATION_NAME"])
@@ -496,13 +594,15 @@ def clean_temp(env=None):
     )
 
 
-def finish(*, env=None, start_time=None):
+def finish(*, env=None, start_time=None, unlock=False):
     """Terminate the GRASS session and clean up
 
     GRASS commands can no longer be used after this function has been
     called
 
-    Basic usage::
+    :Basic usage:
+      .. code-block:: python
+
         import grass.script as gs
 
         gs.setup.finish()
@@ -513,17 +613,34 @@ def finish(*, env=None, start_time=None):
     When *start_time* is set, it might be used to determine cleaning procedures.
     Currently, it is used to do SQLite database vacuum only when database was modified
     since the session started.
+
+    The function does not check whether the mapset is locked or not, but *unlock* can be
+    provided to unlock the mapset.
     """
     if not env:
         env = os.environ
 
-    clean_default_db(modified_after=start_time, env=env)
+    import grass.script as gs
+
+    gis_env = gs.gisenv(env=env)
+
+    clean_default_db(modified_after=start_time, env=env, gis_env=gis_env)
     clean_temp(env=env)
-    # TODO: unlock the mapset?
+
     # unset the GISRC and delete the file
     from grass.script import utils as gutils
 
     gutils.try_remove(env["GISRC"])
     del env["GISRC"]
-    # remove gislock env var (not the gislock itself
+
+    if unlock:
+        # We have cyclic imports between grass.script and grass.app.
+        # pylint: disable=import-outside-toplevel
+        from grass.app.data import unlock_mapset
+
+        mapset_path = Path(
+            gis_env["GISDBASE"], gis_env["LOCATION_NAME"], gis_env["MAPSET"]
+        )
+        unlock_mapset(mapset_path)
+    # remove gislock env var
     del env["GIS_LOCK"]

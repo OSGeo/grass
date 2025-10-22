@@ -11,7 +11,7 @@ path, because "cost" right now is ("time travel in seconds" + Lamba *
 
 it would be interesting to model all the aspects that influence the
 speed movement "inside" the a,b,c,d (see the r.walk documentation)
-parameters going back to a phisical meaning (speed in a specific
+parameters going back to a physical meaning (speed in a specific
 condition) of the formula (the real time in second that the subject
 need to move between two points).
 

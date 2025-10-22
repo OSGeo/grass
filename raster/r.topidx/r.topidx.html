@@ -2,14 +2,14 @@
 
 <em>r.topidx</em> creates topographic index (wetness index), ln(a/tan(beta)),
 map from elevation map where
-<dl>
-<dt>a</dt>
-  <dd>the area of the hillslope per unit contour length that drains through any
-      point,</dd>
-<dt>tan(beta)</dt>
-  <dd>the local surface topographic slope (delta vertical) / (delta
-      horizontal).</dd>
-</dl>
+
+<ul>
+<li>a: the area of the hillslope per unit contour length that drains through any
+      point,</li>
+<li>tan(beta): the local surface topographic slope (delta vertical) / (delta
+      horizontal).</li>
+</ul>
+
 <p>Input maps may have NULL values. For example, if you have a raster mask set
 for a watershed (using basin map from <em>r.water.outlet</em>), the following
 command will create a masked elevation map (belev):

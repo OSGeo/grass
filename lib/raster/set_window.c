@@ -94,7 +94,6 @@ void Rast_set_output_window(struct Cell_head *window)
  *
  * \param window window to become operative window
  */
-
 void Rast_set_input_window(struct Cell_head *window)
 {
     Rast__init();
@@ -118,8 +117,8 @@ static void update_window_mappings(void)
        window = &twindow;
      */
 
-    /* except for MASK, cell files open for read must have same projection
-     * and zone as new window
+    /* except for mask raster, cell files open for read must have same
+     * projection and zone as new window
      */
     maskfd = R__.auto_mask > 0 ? R__.mask_fd : -1;
     for (i = 0; i < R__.fileinfo_count; i++) {

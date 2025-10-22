@@ -11,6 +11,7 @@ for details.
 """
 
 import grass.script as gs
+from grass.exceptions import ScriptError
 
 from .core import get_available_temporal_mapsets, init_dbif
 from .factory import dataset_factory
@@ -23,12 +24,13 @@ def tlist_grouped(type, group_type: bool = False, dbif=None):
 
     Returns a dictionary where the keys are mapset
     names and the values are lists of space time datasets in that
-    mapset. Example:
+    mapset.
 
-    .. code-block:: python
+    :Example:
+      .. code-block:: pycon
 
         >>> import grass.temporal as tgis
-        >>> tgis.tlist_grouped('strds')['PERMANENT']
+        >>> tgis.tlist_grouped("strds")["PERMANENT"]
         ['precipitation', 'temperature']
 
     :param type: element type (strds, str3ds, stvds)
@@ -45,7 +47,7 @@ def tlist_grouped(type, group_type: bool = False, dbif=None):
     for type_ in types:
         try:
             tlist_result = tlist(type=type_, dbif=dbif)
-        except gs.ScriptError as e:
+        except ScriptError as e:
             gs.warning(e)
             continue
 

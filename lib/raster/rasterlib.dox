@@ -974,15 +974,15 @@ current region.
 Reads a row from NULL value bitmap file for the raster map open for
 read. If there is no bitmap file, then this routine simulates the read
 as follows: non-zero values in the raster map correspond to non-NULL;
-zero values correspond to NULL. When MASK exists, masked cells are set
-to null.
+zero values correspond to NULL. When raster mask is active, masked cells
+are set to null.
 
 \subsection Floating_point_and_type_independent_functions Floating-point and type-independent functions
 
  - Rast_maskfd()
 
-Test for current maskreturns file descriptor number if MASK is in use
-and -1 if no MASK is in use.
+Test for current mask returns a file descriptor number if mask is in use
+and -1 if no mask is in use.
 
  - Rast_map_is_fp()
 

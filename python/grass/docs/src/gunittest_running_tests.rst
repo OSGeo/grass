@@ -1,7 +1,7 @@
-Running the test framework of GRASS GIS
+Running the test framework of GRASS
 =======================================
 
-This is an advanced guide to running tests of GRASS GIS using GRASS
+This is an advanced guide to running tests of GRASS using GRASS
 testing framework (`gunittest`). For introduction to this topic,
 go to :ref:`test-general`.
 
@@ -12,8 +12,8 @@ Running tests and creating report
 ---------------------------------
 
 To test before commit, run all tests using testing framework.
-First start GRASS GIS session and go to the root directory of your
-GRASS GIS source code copy::
+First start GRASS session and go to the root directory of your
+GRASS source code copy::
 
     cd my/grass/source/code/root
 
@@ -21,7 +21,7 @@ Then execute::
 
     python -m grass.gunittest.main --location locname --location-type nc
 
-where ``locname`` is a name of location in current GRASS GIS data(base) directory
+where ``locname`` is a name of location in current GRASS data(base) directory
 (GISDBASE) and ``nc`` is a location specified by individual test files
 (the later is not yet fully implemented, so just put there ``nc`` every time).
 
@@ -35,7 +35,7 @@ subdirectory, e.g. ``lib`` and execute the same command as above.
 gain, it will execute all tests in all ``testsuite`` subdirectories and
 create a report.
 
-For changing GRASS GIS data(base) directory and for other parameters, see
+For changing GRASS data(base) directory and for other parameters, see
 help for ``grass.gunittest.main`` module::
 
     python -m grass.gunittest.main --help
@@ -107,10 +107,10 @@ Running tests and creating report
 ---------------------------------
 
 Currently there is full support only for running all the tests in
-the small (basic) version of GRASS GIS sample Location for North Carolina
-(see `GRASS GIS sample data`).
+the small (basic) version of GRASS sample Location for North Carolina
+(see `GRASS sample data`).
 
-.. _GRASS GIS sample data: https://grass.osgeo.org/download/sample-data
+.. _GRASS sample data: https://grass.osgeo.org/download/sample-data
 
 
 Example Bash script to run be used as a cron job
@@ -148,7 +148,7 @@ Example Bash script to run be used as a cron job
 
     GRASSDATA="/grassdata/tests-grassdata"
 
-    echo "Nightly GRASS GIS test started: $NOW" >> $LOGFILE
+    echo "Nightly GRASS test started: $NOW" >> $LOGFILE
 
     # compile current source code from scratch
     cd $GRASSSRC
@@ -178,7 +178,7 @@ Example Bash script to run be used as a cron job
     # so publish or archive results
     rsync -rtvu --delete $REPORTS/ "/var/www/html/grassgistestreports"
 
-    echo "Nightly ($NOW) GRASS GIS test finished: $(date $DATE_FLAGS)" >> $LOGFILE
+    echo "Nightly ($NOW) GRASS test finished: $(date $DATE_FLAGS)" >> $LOGFILE
 
 A script similar to this one can be used as a cron job, on most Linux systems
 using ``crontab -e`` and adding a line similar to the following one::

@@ -66,7 +66,7 @@ class AbstractMapDataset(AbstractDataset):
         """Return a new space time dataset instance that store maps with the
         type of this map object (raster, raster_3d or vector)
 
-        :param ident The identifier of the space time dataset
+        :param ident: The identifier of the space time dataset
         :return: The new space time dataset instance
         """
 
@@ -84,7 +84,8 @@ class AbstractMapDataset(AbstractDataset):
 
         :return: "finer" or "coarser"
         """
-        raise ImplementationError("This method must be implemented in the subclasses")
+        msg = "This method must be implemented in the subclasses"
+        raise ImplementationError(msg)
 
     @abstractmethod
     def has_grass_timestamp(self):
@@ -175,8 +176,7 @@ class AbstractMapDataset(AbstractDataset):
         the keyword arguments.
 
         :param name: The name of the map
-        :param layer: The layer of the vector map, use None in case no
-                      layer exists
+        :param layer: The layer of the vector map, use None in case no layer exists
         :param mapset: The mapset in which the map is located
 
         :return: tuple of three elements name, layer, mapset e(:layer)@mapset" while
@@ -243,11 +243,9 @@ class AbstractMapDataset(AbstractDataset):
 
         :param name: The name of the map
         :param mapset: The mapset in which the map is located
-        :param layer: The layer of the vector map, use None in case no
-                      layer exists
+        :param layer: The layer of the vector map, use None in case no layer exists
 
-        :return: the id of the map as "name(:layer)@mapset" where layer is
-                 optional
+        :return: the id of the map as "name(:layer)@mapset" where layer is optional
         """
 
         # Split given name into relevant parts
@@ -420,8 +418,7 @@ class AbstractMapDataset(AbstractDataset):
          This method only modifies this object and does not commit
          the modifications to the temporal database.
 
-        :param start_time: A datetime object specifying the start time of
-                           the map
+        :param start_time: A datetime object specifying the start time of the map
         :param end_time: A datetime object specifying the end time of the
                          map, None in case or time instance
 
@@ -511,8 +508,7 @@ class AbstractMapDataset(AbstractDataset):
         grass file system based database in addition to the temporal
         database entry.
 
-        :param start_time: A datetime object specifying the start time of
-                                      the map
+        :param start_time: A datetime object specifying the start time of the map
         :param end_time: A datetime object specifying the end time of the
                                      map, None in case or time instance
         :param dbif: The database interface to be used
@@ -668,10 +664,9 @@ class AbstractMapDataset(AbstractDataset):
         """Convenient method to set the temporal extent from a temporal extent
         object
 
-        :param extent: The temporal extent that should be set for
-                                this object
+        :param extent: The temporal extent that should be set for this object
 
-        .. code-block: : python
+        .. code-block:: pycon
 
             >>> import datetime
             >>> import grass.temporal as tgis
@@ -738,7 +733,7 @@ class AbstractMapDataset(AbstractDataset):
 
         Usage:
 
-        .. code-block: : python
+        .. code-block:: pycon
 
             >>> import grass.temporal as tgis
             >>> maps = []
@@ -750,10 +745,8 @@ class AbstractMapDataset(AbstractDataset):
             ...         check = map.set_relative_time(i, None, "years")
             ...     map.temporal_buffer(3)
             ...     maps.append(map)
-            ...
             >>> for map in maps:
             ...     map.temporal_extent.print_info()
-            ...
              +-------------------- Relative time -----------------------------------------+
              | Start time:................. -3
              | End time:................... 4
@@ -785,10 +778,8 @@ class AbstractMapDataset(AbstractDataset):
             ...         check = map.set_absolute_time(datetime(2001, i, 1), None)
             ...     map.temporal_buffer("7 days")
             ...     maps.append(map)
-            ...
             >>> for map in maps:
             ...     map.temporal_extent.print_info()
-            ...
              +-------------------- Absolute time -----------------------------------------+
              | Start time:................. 2000-12-25 00:00:00
              | End time:................... 2001-01-08 00:00:00
@@ -852,10 +843,9 @@ class AbstractMapDataset(AbstractDataset):
          This method only modifies this object and does not commit
          the modifications to the temporal database.
 
-         :param spatial_extent: An object of type SpatialExtent or its
-                                subclasses
+         :param spatial_extent: An object of type SpatialExtent or its subclasses
 
-        .. code-block: : python
+        .. code-block:: pycon
 
             >>> import datetime
             >>> import grass.temporal as tgis
@@ -879,7 +869,7 @@ class AbstractMapDataset(AbstractDataset):
                        internal variables are set
         :param dbif: The database interface to be used
 
-        .. code-block: : python
+        .. code-block:: pycon
 
             >>> import grass.temporal as tgis
             >>> map = tgis.RasterDataset(None)
@@ -911,7 +901,7 @@ class AbstractMapDataset(AbstractDataset):
                        internal variables are set
         :param dbif: The database interface to be used
 
-        .. code-block: : python
+        .. code-block:: pycon
 
             >>> import grass.temporal as tgis
             >>> map = tgis.RasterDataset(None)
@@ -942,33 +932,30 @@ class AbstractMapDataset(AbstractDataset):
         else:
             start, end, unit = self.get_relative_time()
 
-        if start is not None:
-            if end is not None:
-                if start >= end:
-                    if self.get_layer() is not None:
-                        self.msgr.error(
-                            _(
-                                "Map <%(id)s> with layer %(layer)s "
-                                "has incorrect time interval, start "
-                                "time is greater than end time"
-                            )
-                            % {"id": self.get_map_id(), "layer": self.get_layer()}
-                        )
-                    else:
-                        self.msgr.error(
-                            _(
-                                "Map <%s> has incorrect time "
-                                "interval, start time is greater "
-                                "than end time"
-                            )
-                            % (self.get_map_id())
-                        )
-                    return False
-        else:
-            self.msgr.error(
-                _("Map <%s> has incorrect start time") % (self.get_map_id())
-            )
+        if start is None:
+            self.msgr.error(_("Map <%s> has incorrect start time") % self.get_map_id())
             return False
+        if end is not None:
+            if start >= end:
+                if self.get_layer() is not None:
+                    self.msgr.error(
+                        _(
+                            "Map <%(id)s> with layer %(layer)s "
+                            "has incorrect time interval, start "
+                            "time is greater than end time"
+                        )
+                        % {"id": self.get_map_id(), "layer": self.get_layer()}
+                    )
+                else:
+                    self.msgr.error(
+                        _(
+                            "Map <%s> has incorrect time "
+                            "interval, start time is greater "
+                            "than end time"
+                        )
+                        % (self.get_map_id())
+                    )
+                return False
 
         return True
 

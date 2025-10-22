@@ -100,7 +100,7 @@ analysis.
 
 <p>
 The <b>class_filter</b> option should be also provided if only part of
-the points is analyzed, for example <tt>class_filter=3,4,5</tt> would be
+the points is analyzed, for example <code>class_filter=3,4,5</code> would be
 used for low, medium, and high vegetation if the LAS file follows the
 usedstandard ASPRS class numbers.
 
@@ -114,7 +114,7 @@ computational region extent and resolution:
 g.region raster=points_n -p3
 </pre></div>
 
-<tt>class_filter=2</tt> is used to limit
+<code>class_filter=2</code> is used to limit
 
 <div class="code"><pre>
 r.in.lidar input=points.las output=ground_mean method=mean class_filter=2
@@ -137,7 +137,7 @@ v.surf.rst input=ground_decimated elevation=ground
 </pre></div>
 
 Now we need to determine upper vertical limit for the 3D raster
-(the top value from <tt>g.region -p3</tt>). This can be potentially
+(the top value from <code>g.region -p3</code>). This can be potentially
 done with lower resolution. The <b>-d</b> flag ensures that the ground
 raster will be used in its actual resolution regardless of the
 resolution of the output.
@@ -179,9 +179,9 @@ XXIII ISPRS Congress 2016
 <a href="https://www.asprs.org/committee-general/laser-las-file-format-exchange-activities.html">
 ASPRS LAS format</a></li>
 <li>
-<a href="http://www.liblas.org/">LAS library</a></li>
+<a href="https://liblas.org/">LAS library</a></li>
 <li>
-<a href="http://test.liblas.org/doxygen/liblas_8h.htm">LAS library C API</a> documentation</li>
+<a href="https://liblas.org/doxygen/liblas_8h.html">LAS library C API</a> documentation</li>
 </ul>
 
 <h2>SEE ALSO</h2>

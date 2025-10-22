@@ -7,12 +7,13 @@ Created on Mon Nov 26 11:48:03 2012
 import wx
 import os
 import sys
+from pathlib import Path
 from grass.script import core as grass
 from core.gcmd import GError
 
 
 class SamplingType:
-    """ "
+    """
     KMVWINC = samplingtype=moving, regionbox=keyboard, shape=circle
     KMVWINR = samplingtype moving, regionbox=keyboard, shape=rectangle
     MMVWINC = samplingtype=moving, regionbox=mouse, shape=circle
@@ -58,7 +59,7 @@ def retRLiPath():
         grass_config_dir = os.path.join(os.getenv("HOME"), grass_config_dirname)
 
     rlipath = os.path.join(grass_config_dir, "r.li")
-    if os.path.exists(rlipath):
+    if Path(rlipath).exists():
         return rlipath
     os.mkdir(rlipath)
     return rlipath

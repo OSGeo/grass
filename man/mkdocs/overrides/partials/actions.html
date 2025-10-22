@@ -1,0 +1,27 @@
+{% if page.edit_url %}
+
+    {% set toolname = page.file.src_path.split("/")[-1] | replace(".md", "") %}
+    {# Default to the normal edit URL #}
+    {% set ghpath = github_path(toolname, config.extra.source_docs) %}
+    {% if ghpath %}
+        {% set custom_edit_url = page.edit_url | replace(page.edit_url, ghpath ~ "/" ~ toolname ~ ".md") %}
+        {% if "content.action.edit" in features %}
+            <a href="{{ custom_edit_url }}" title="{{ lang.t('action.edit') }}" class="md-content__button md-icon">
+                {% set icon = config.theme.icon.edit or "material/file-edit-outline" %}
+                {% include ".icons/" ~ icon ~ ".svg" %}
+            </a>
+        {% endif %}
+
+        {% if "content.action.view" in features %}
+            {% if "/blob/" in custom_edit_url %}
+                {% set part = "blob" %}
+            {% else %}
+                {% set part = "edit" %}
+            {% endif %}
+                <a href="{{ custom_edit_url | replace(part, 'tree') }}" title="{{ lang.t('action.view') }}" class="md-content__button md-icon">
+                    {% set icon = config.theme.icon.view or "material/file-eye-outline" %}
+                    {% include ".icons/" ~ icon ~ ".svg" %}
+                </a>
+        {% endif %}
+    {% endif %}
+{% endif %}

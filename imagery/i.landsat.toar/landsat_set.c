@@ -120,7 +120,7 @@ void sensor_OLI(lsat_data *lsat)
 /** **********************************************
  ** Before access to these functions ...
  ** store previously
- ** >>> adquisition date,
+ ** >>> acquisition date,
  ** >>> creation date, and
  ** >>> sun_elev
  ** **********************************************/

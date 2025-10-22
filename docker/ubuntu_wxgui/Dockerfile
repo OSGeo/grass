@@ -1,9 +1,9 @@
-FROM ubuntu:22.04@sha256:0e5e4a57c2499249aafc3b40fcd541e9a456aab7296681a3994d631587203f97
+FROM ubuntu:24.04@sha256:66460d557b25769b102175144d538d88219c077c678a49af4afca6fbfc1b5252
 
 LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann,Tomas Zigo"
 LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 # define versions to be used (PDAL is not available on Ubuntu/Debian, so we compile it here)
 # https://github.com/PDAL/PDAL/releases
@@ -47,7 +47,7 @@ RUN apt-get update && apt-get upgrade -y && \
     libcurl4-gnutls-dev \
     libfftw3-bin \
     libfftw3-dev \
-    libfreetype6-dev \
+    libfreetype-dev \
     libgdal-dev \
     libgeos-dev \
     libgl1-mesa-dev \
@@ -57,11 +57,11 @@ RUN apt-get update && apt-get upgrade -y && \
     libgtk-3-dev \
     libjpeg-dev \
     libjsoncpp-dev \
-    libncurses5-dev \
+    libncurses-dev \
     libnetcdf-dev \
     libnotify4 \
-    libopenblas-base \
     libopenblas-dev \
+    libopenblas0 \
     libopenjp2-7 \
     libopenjp2-7-dev \
     libpnglite-dev \
@@ -71,6 +71,7 @@ RUN apt-get update && apt-get upgrade -y && \
     libreadline-dev \
     librsvg2-common \
     libsdl2-2.0-0 \
+    libsecret-1-0 \
     libsqlite3-dev \
     libtiff-dev \
     libxtst6 \
@@ -91,7 +92,6 @@ RUN apt-get update && apt-get upgrade -y && \
     python3-numpy \
     python3-pil \
     python3-pip \
-    python3-ply \
     python3-setuptools \
     python3-venv \
     python3-wxgtk4.0 \
@@ -106,9 +106,9 @@ RUN apt-get update && apt-get upgrade -y && \
     && apt-get clean all && rm -rf /var/lib/apt/lists/*
 
 # wxGUI
-RUN pip install -U \
-    -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-22.04 \
-    wxPython \
+RUN pip install -U --break-system-packages \
+    -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-24.04 \
+    wxpython \
     && pip cache purge
 # If you do not use any Gnome Accessibility features, to suppress warning
 # WARNING **: Couldn't connect to accessibility bus:
@@ -174,17 +174,17 @@ WORKDIR /src/grass_build
 # Cleanup potentially leftover GISRC file with wrong path to "demolocation"
 RUN rm -f /src/grass_build/dist.*/demolocation/.grassrc*
 
-# Set environmental variables for GRASS GIS compilation, without debug symbols
-# Set gcc/g++ environmental variables for GRASS GIS compilation, without debug symbols
-ENV MYCFLAGS "-O2 -std=gnu99 -m64"
-ENV MYLDFLAGS "-s"
+# Set environmental variables for GRASS compilation, without debug symbols
+# Set gcc/g++ environmental variables for GRASS compilation, without debug symbols
+ENV MYCFLAGS="-O2 -std=gnu99 -m64"
+ENV MYLDFLAGS="-s"
 # CXX stuff:
-ENV LD_LIBRARY_PATH "/usr/local/lib"
-ENV LDFLAGS "$MYLDFLAGS"
-ENV CFLAGS "$MYCFLAGS"
-ENV CXXFLAGS "$MYCXXFLAGS"
+ENV LD_LIBRARY_PATH="/usr/local/lib"
+ENV LDFLAGS="$MYLDFLAGS"
+ENV CFLAGS="$MYCFLAGS"
+ENV CXXFLAGS="$MYCXXFLAGS"
 
-# Configure compile and install GRASS GIS
+# Configure compile and install GRASS
 # wxGUI require
 # --with-nls
 # --with-x
@@ -215,50 +215,49 @@ RUN /src/grass_build/configure \
     && make install && ldconfig
 
 # Unset environmental variables to avoid later compilation issues
-ENV INTEL ""
-ENV MYCFLAGS ""
-ENV MYLDFLAGS ""
-ENV MYCXXFLAGS ""
-ENV LD_LIBRARY_PATH ""
-ENV LDFLAGS ""
-ENV CFLAGS ""
-ENV CXXFLAGS ""
+ENV INTEL=""
+ENV MYCFLAGS=""
+ENV MYLDFLAGS=""
+ENV MYCXXFLAGS=""
+ENV LD_LIBRARY_PATH=""
+ENV LDFLAGS=""
+ENV CFLAGS=""
+ENV CXXFLAGS=""
 
-# set SHELL var to avoid /bin/sh fallback in interactive GRASS GIS sessions
-ENV SHELL /bin/bash
-ENV LC_ALL "en_US.UTF-8"
-ENV GRASS_SKIP_MAPSET_OWNER_CHECK 1
+# set SHELL var to avoid /bin/sh fallback in interactive GRASS sessions
+ENV SHELL=/bin/bash
+ENV LC_ALL="en_US.UTF-8"
+ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1
 
 # https://proj.org/usage/environmentvars.html#envvar-PROJ_NETWORK
 ENV PROJ_NETWORK=ON
 
-# Create generic GRASS GIS lib name regardless of version number
+# Create generic GRASS lib name regardless of version number
 RUN ln -sf /usr/local/grass85 /usr/local/grass
 
-# show GRASS GIS, PROJ, GDAL etc versions
+# show GRASS, PROJ, GDAL etc versions
 RUN grass --tmp-project EPSG:4326 --exec g.version -rge && \
     pdal --version && \
     python --version
 
 # Reduce the image size
-RUN apt-get autoremove -y
-RUN apt-get clean -y
+RUN apt-get autoremove -y && apt-get clean -y
 RUN rm -r /src/grass_build/.git
 
 WORKDIR /scripts
 
-# enable GRASS GIS Python session support
+# enable GRASS Python session support
 ## grass --config python-path
-ENV PYTHONPATH "/usr/local/grass/etc/python:${PYTHONPATH}"
-# enable GRASS GIS ctypes imports
+ENV PYTHONPATH="/usr/local/grass/etc/python:${PYTHONPATH}"
+# enable GRASS ctypes imports
 ## grass --config path
-ENV LD_LIBRARY_PATH "/usr/local/grass/lib:$LD_LIBRARY_PATH"
+ENV LD_LIBRARY_PATH="/usr/local/grass/lib:$LD_LIBRARY_PATH"
 
 WORKDIR /tmp
 COPY docker/testdata/simple.laz .
 WORKDIR /scripts
 COPY docker/testdata/test_grass_session.py .
-## run GRASS GIS python session and scan the test LAZ file
+## run GRASS python session and scan the test LAZ file
 RUN python /scripts/test_grass_session.py
 RUN rm -rf /tmp/grasstest_epsg_25832
 # test LAZ file

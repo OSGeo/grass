@@ -12,7 +12,7 @@ otherwise the <em>space</em> option should be set roughly the same
 as the <em>size</em> option.
 <p>
 A description of the labels file follows.<p>
-The file is located in <tt>$MAPSET/paint/labels/</tt>.
+The file is located in <code>$MAPSET/paint/labels/</code>.
 The file is a plain-text ASCII file containing the following fields:
 
 <h4>Caution: The following information may be incomplete, out of date, and wrong!</h4>
@@ -24,8 +24,8 @@ The label information that must be provided in the <em>labels</em> file is:
 <dd><!--Up to four lines of text.-->
 Lines in multiple line labels will appear one above the next.
 More than one line of text can be specified by notating the end of a
-line with a '<b><tt>\n</tt></b>'.<br>
-(e.g. <tt>SPEARFISH<b>\n</b>SOUTH DAKOTA)</tt>.
+line with a '<b><code>\n</code></b>'.<br>
+(e.g. <code>SPEARFISH<b>\n</b>SOUTH DAKOTA)</code>.
 
 <!-- I don't think it exists. -HB 6/2005
 <dt><b>SKIP</b>:
@@ -105,11 +105,11 @@ text color can be specified in one of several ways:
 
 <ol>
 <li>By color name:<br>
-<tt>aqua black blue brown cyan gray green grey indigo
-magenta orange purple red violet white yellow</tt></li>
+<code>aqua black blue brown cyan gray green grey indigo
+magenta orange purple red violet white yellow</code></li>
 
 <li>As red, green, blue component values. (0-255)<br>
-for example: <tt>128:100:200</tt></li>
+for example: <code>128:100:200</code></li>
 
 <!-- eh?
 <li>As red, green, blue percentages.
@@ -124,7 +124,7 @@ for example: .5 .4 .7
 <em><a href="d.labels.html">d.labels</a></em>.)
 -->
 
-<li>Specify "<tt>none</tt>" to suppress the lettering.</li>
+<li>Specify "<code>none</code>" to suppress the lettering.</li>
 </ol>
 
 
@@ -139,9 +139,9 @@ The maximum value is 25.0.
 appears to be in two colors. The text is drawn first in
 this color at a wider line width, and then redrawn in the
 text color at the regular line width.  No highlight color
-("<tt>none</tt>") is used by default, if unspecified by the
+("<code>none</code>") is used by default, if unspecified by the
 user.  To specify use of no highlight color, specify
-"<tt>none</tt>".
+"<code>none</code>".
 (See <a href="#textcolor">TEXT COLOR</a>
 above for a list of permissible color names.)
 
@@ -157,7 +157,7 @@ color).
 <dt><b>BACKGROUND COLOR</b>:
 
 <dd>Text may be boxed in a solid color by specifying a background color.
-Specify "<tt>none</tt>" for no background.  The default background color
+Specify "<code>none</code>" for no background.  The default background color
 setting, if unspecified by the user, is <em>white</em>.
 (See <a href="#textcolor">TEXT COLOR</a>
 above for a list of permissible color names.)
@@ -166,7 +166,7 @@ above for a list of permissible color names.)
 <dt><b>BORDER COLOR</b>:
 
 <dd>Select a color for the border around the background.
-Specify "<tt>none</tt>" to suppress the border.
+Specify "<code>none</code>" to suppress the border.
 The default border color used, if unspecified, is <em>black</em>.
 (See <a href="#textcolor">TEXT COLOR</a>
 above for a list of permissible color names.)
@@ -197,7 +197,7 @@ d.labels lroads
 Since the label files are simple text files, you can merge them together
 if you like. For example if you set the label colors based on database
 attributes using multiple runs with the <b>where</b> option.
-This example uses the standard UNIX <tt>cat</tt> program.
+This example uses the standard UNIX <code>cat</code> program.
 
 <div class="code"><pre>
 cd $MAPSET/paint/labels/

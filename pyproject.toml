@@ -1,14 +1,16 @@
 [project]
 name = "grass"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
+# *GRASS TODO: keep in sync with MIN_PYTHON_VERSION supported*
 
 [tool.black]
-required-version = '24'
 line-length = 88
-target-version = ['py39', 'py310', 'py311', 'py312', 'py313']
+required-version = '25'
+target-version = ['py310', 'py311', 'py312', 'py313', 'py314']
 # 'extend-exclude' excludes files or directories in addition to the defaults
 extend-exclude = '''
 (
+    python/grass/temporal/ply/|
     python/libgrass_interface_generator/
 )
 '''
@@ -19,22 +21,35 @@ required-version = ">=0.8.0"
 builtins = ["_"]
 
 # In addition to the standard set of exclusions, omit the following files or folders.
-extend-exclude = ["python/libgrass_interface_generator"]
+extend-exclude = [
+    "python/grass/temporal/ply",           # External code
+    "python/libgrass_interface_generator",
+]
 
 [tool.ruff.lint]
 # See https://docs.astral.sh/ruff/rules/
+external = ["C2801"]
+
 select = [
     "A",      # flake8-builtins (A)
     "AIR",    # Airflow (AIR)
     "ANN",    # flake8-annotations (ANN)
     "ARG",    # flake8-unused-arguments (ARG)
+    "ASYNC",  # flake8-async (ASYNC)
     "B",      # flake8-bugbear (B)
     "BLE",    # flake8-blind-except (BLE)
     "C4",     # flake8-comprehensions (C4)
     "COM",    # flake8-commas (COM)
     "D",      # pydocstyle (D)
+    "D202",   # pydocstyle (D) blank-line-after-function
+    "D209",   # pydocstyle (D) new-line-after-last-paragraph
+    "D211",   # pydocstyle (D) blank-line-before-class
+    "D212",   # pydocstyle (D) multi-line-summary-first-line
+    "DOC",    # pydoclint (DOC)
     "DTZ",    # flake8-datetimez (DTZ)
     "E",      # pycodestyle (E, W)
+    "EM",     # flake8-errmsg (EM)
+    "EXE",    # flake8-executable (EXE)
     "F",      # Pyflakes (F)
     "FA",     # flake8-future-annotations (FA)
     "FBT",    # flake8-boolean-trap (FBT)
@@ -43,11 +58,13 @@ select = [
     "G",      # flake8-logging-format (G)
     "I",      # isort (I)
     "ICN",    # flake8-import-conventions (ICN)
+    "INP",    # flake8-no-pep420 (INP)
     "INT",    # flake8-gettext (INT)
     "ISC",    # flake8-implicit-str-concat (ISC)
     "LOG",    # flake8-logging (LOG)
     "N",      # pep8-naming (N)
     "NPY",    # NumPy-specific rules (NPY)
+    "PD",     # pandas-vet (PD)
     "PERF",   # Perflint (PERF)
     "PGH",    # pygrep-hooks (PGH)
     "PIE",    # flake8-pie (PIE)
@@ -68,7 +85,8 @@ select = [
     "SLF",    # flake8-self (SLF)
     "SLOT",   # flake8-slots (SLOT)
     "T10",    # flake8-debugger (T10)
-    "TCH",    # flake8-type-checking (TCH)
+    "TC",     # flake8-type-checking (TC)
+    "TD",     # flake8-todos (TD)
     "TID",    # flake8-tidy-imports (TID)
     "TRY",    # tryceratops (TRY)
     "UP",     # pyupgrade (UP)
@@ -81,7 +99,14 @@ ignore = [
     # *GRASS TODO: fix the issues, or use https://docs.astral.sh/ruff/settings/#lint_per-file-ignores
     "A001",    # builtin-variable-shadowing
     "A002",    # builtin-argument-shadowing
-    "ANN",     # flake8-annotations (ANN)
+    "ANN001",  # missing-type-function-argument
+    "ANN002",  # missing-type-args
+    "ANN003",  # missing-type-kwargs
+    "ANN201",  # missing-return-type-undocumented-public-function
+    "ANN202",  # missing-return-type-private-function
+    "ANN204",  # missing-return-type-special-method
+    "ANN205",  # missing-return-type-static-method
+    "ANN206",  # missing-return-type-class-method
     "ARG001",  # unused-function-argument
     "ARG002",  # unused-method-argument
     "ARG005",  # unused-lambda-argument
@@ -99,55 +124,59 @@ ignore = [
     "BLE001",  # blind-except
     "C414",    # unnecessary-double-cast-or-process
     "COM812",  # missing-trailing-comma
-    "COM818",  # trailing-comma-on-bare-tuple
-    "D1",
-    "D2",
-    "D300",    # triple-single-quotes
+    "D1",      # pydocstyle (D), undocumented-*
+    "D200",    # unnecessary-multiline-docstring
+    "D202",    # blank-line-after-function (selected)
+    "D203",    # incorrect-blank-line-before-class (ignored, use D211)
+    "D205",    # missing-blank-line-after-summary
+    "D209",    # new-line-after-last-paragraph (selected)
+    "D212",    # multi-line-summary-first-line (selected)
+    "D213",    # multi-line-summary-second-line (ignored, use D212)
+    "D214",    # overindented-section
     "D301",    # escape-sequence-in-docstring
-    "D400",    # ends-in-period
+    "D400",    # missing-trailing-period
     "D401",    # non-imperative-mood
-    "D402",    # no-signature
-    "D403",    # first-line-capitalized
+    "D403",    # first-word-uncapitalized
     "D404",    # docstring-starts-with-this
-    "D405",    # capitalize-section-name
-    "D406",    # new-line-after-section-name
-    "D407",    # dashed-underline-after-section
-    "D409",    # section-underline-matches-section-length
-    "D411",    # no-blank-line-before-section
+    "D405",    # non-capitalized-section-name
+    "D407",    # missing-dashed-underline-after-section
+    "D409",    # mismatched-section-underline-length
     "D412",    # blank-lines-between-header-and-content
-    "D413",    # blank-line-after-last-section
-    "D415",    # ends-in-punctuation
-    "D416",    # section-name-ends-in-colon
+    "D413",    # missing-blank-line-after-last-section
+    "D415",    # missing-terminal-punctuation
+    "D416",    # missing-section-name-colon
     "D419",    # empty-docstring
+    "DOC201",  # docstring-missing-returns
+    "DOC402",  # docstring-missing-yields
+    "DOC501",  # docstring-missing-exception
     "DTZ001",  # call-datetime-without-tzinfo
     "DTZ002",  # call-datetime-today
     "DTZ005",  # call-datetime-now-without-tzinfo
     "DTZ006",  # call-datetime-fromtimestamp
     "DTZ007",  # call-datetime-strptime-without-zone
     "DTZ011",  # call-date-today
-    "E402",    # module-import-not-at-top-of-file
     "E501",    # line-too-long
     "E721",    # type-comparison
     "E722",    # bare-except
-    "E731",    # lambda-assignment
     "E741",    # ambiguous-variable-name
+    "EXE001",  # shebang-not-executable
+    "EXE002",  # shebang-missing-executable-file
     "F403",    # undefined-local-with-import-star
     "F405",    # undefined-local-with-import-star-usage
     "F811",    # redefined-while-unused
     "F821",    # undefined-name
     "F822",    # undefined-export
-    "F841",    # unused-variable,
+    "F841",    # unused-variable
     "FBT001",  # boolean-type-hint-positional-argument
     "FBT002",  # boolean-default-value-positional-argument
     "FBT003",  # boolean-positional-value-in-call
     "I001",    # unsorted-imports
-    "ISC003",  # explicit-string-concatenation
+    "INP001",  # implicit-namespace-package
     "N801",    # invalid-class-name
     "N802",    # invalid-function-name
     "N803",    # invalid-argument-name
     "N806",    # non-lowercase-variable-in-function
     "N812",    # lowercase-imported-as-non-lowercase
-    "N814",    # camelcase-imported-as-constant
     "N815",    # mixed-case-variable-in-class-scope
     "N816",    # mixed-case-variable-in-global-scope
     "N818",    # error-suffix-on-exception-name
@@ -156,7 +185,6 @@ ignore = [
     "PERF401", # manual-list-comprehension
     "PERF402", # manual-list-copy
     "PERF403", # manual-dict-comprehension
-    "PIE794",  # duplicate-class-field-definition
     "PLC0415", # import-outside-top-level
     "PLC1901", # compare-to-empty-string
     "PLC2701", # import-private-name
@@ -168,18 +196,16 @@ ignore = [
     "PLR0914", # too-many-locals
     "PLR0915", # too-many-statements
     "PLR0916", # too-many-boolean-expressions
-    "PLR0917", # too-many-positional
+    "PLR0917", # too-many-positional-arguments
     "PLR1702", # too-many-nested-blocks
     "PLR1704", # redefined-argument-from-local
     "PLR2004", # magic-value-comparison
-    "PLR6201", # literal-membership
     "PLR6301", # no-self-use
     "PLW0602", # global-variable-not-assigned
     "PLW0603", # global-statement
     "PLW0604", # global-at-module-level
     "PLW1508", # invalid-envvar-default
     "PLW1510", # subprocess-run-without-check
-    "PLW1514", # unspecified-encoding
     "PLW1641", # eq-without-hash
     "PLW2901", # redefined-loop-name
     "PLW3201", # bad-dunder-method-name
@@ -191,7 +217,6 @@ ignore = [
     "PTH106",  # os-rmdir
     "PTH107",  # os-remove
     "PTH108",  # os-unlink
-    "PTH110",  # os-path-exists
     "PTH111",  # os-path-expanduser
     "PTH112",  # os-path-isdir
     "PTH113",  # os-path-isfile
@@ -204,21 +229,18 @@ ignore = [
     "PTH202",  # os-path-getsize
     "PTH204",  # os-path-getmtime
     "PTH207",  # glob
-    "RET501",  # unnecessary-return-none
-    "RET502",  # implicit-return-value
     "RET503",  # implicit-return
     "RUF003",  # ambiguous-unicode-character-comment
     "RUF005",  # collection-literal-concatenation
     "RUF012",  # mutable-class-default
     "RUF015",  # unnecessary-iterable-allocation-for-first-element
     "RUF019",  # unnecessary-key-check
-    "RUF027",  # missing-f-string-syntax
+    "RUF059",  # unused-unpacked-variable
     "RUF100",  # unused-noqa
     "S101",    # assert
     "S108",    # hardcoded-temp-file
     "S110",    # try-except-pass
     "S112",    # try-except-continue
-    "S113",    # request-without-timeout
     "S202",    # tarfile-unsafe-members
     "S307",    # suspicious-eval-usage
     "S310",    # suspicious-url-open-usage
@@ -238,12 +260,16 @@ ignore = [
     "SIM102",  # collapsible-if
     "SIM105",  # suppressible-exception
     "SIM113",  # enumerate-for-loop
-    "SIM116",  # if-else-block-instead-of-dict-lookup
     "SIM118",  # in-dict-keys
     "SIM223",  # expr-and-false
     "SLF001",  # private-member-access
+    "TD001",   # invalid-todo-tag
+    "TD002",   # missing-todo-author
+    "TD003",   # missing-todo-link
+    "TD004",   # missing-todo-colon
+    "TD005",   # missing-todo-description
+    "TD007",   # missing-space-after-todo-colon
     "TRY002",  # raise-vanilla-class
-    "TRY003",  # raise-vanilla-args
     "TRY004",  # type-check-without-type-error
     "TRY201",  # verbose-raise
     "TRY300",  # try-consider-else
@@ -251,7 +277,6 @@ ignore = [
     "UP030",   # format-literals
     "UP031",   # printf-string-formatting
     "UP032",   # f-string
-    "UP036",   # outdated-version-block
 ]
 
 
@@ -260,157 +285,204 @@ ignore = [
 # "A005", # builtin-module-shadowing
 # "PLW0108", # unnecessary-lambda
 # "SIM115", # open-file-with-context-handler
-# Ignore `E402` (import violations) in all `__init__.py` files
-"**.py" = ["PYI066"]
-"*/testsuite/**.py" = ["PT009", "PT027"]
-"__init__.py" = ["E402"]
-"display/d.mon/render_cmd.py" = ["SIM115"]
+# Ignored after reverting:
 "gui/**" = ["PLW0108"] # See https://github.com/OSGeo/grass/issues/4124
-"gui/wxpython/animation/temporal_manager.py" = ["SIM115"]
-"gui/wxpython/core/*.py" = ["SIM115"]
-"gui/wxpython/core/globalvar.py" = ["PTH208"]
-"gui/wxpython/core/settings.py" = ["PTH208"]
-"gui/wxpython/datacatalog/catalog.py" = ["PTH208"]
-"gui/wxpython/dbmgr/base.py" = ["SIM115"]
-"gui/wxpython/gcp/manager.py" = ["PTH208", "SIM115"]
-"gui/wxpython/gmodeler/*.py" = ["SIM115"]
-"gui/wxpython/gui_core/*.py" = ["SIM115"]
-"gui/wxpython/gui_core/dialogs.py" = ["PTH208"]
-"gui/wxpython/iclass/frame*.py" = ["SIM115"]
-"gui/wxpython/iclass/frame.py" = ["FLY002"]
+# Other ignores:
+"**.py" = ["PYI066"]
+"*/testsuite/**.py" = ["PT009", "PT027", "PLW1514"]
+"display/d.mon/render_cmd.py" = ["PLW1514"]
+"display/d.text/test.py" = ["PLW1514"]
+"gui/wxpython/animation/temporal_manager.py" = ["PLW1514"]
+"gui/wxpython/core/gconsole.py" = ["PLW1514"]
+"gui/wxpython/core/render.py" = ["PLW1514"]
+"gui/wxpython/core/settings.py" = ["PLW1514"]
+"gui/wxpython/core/toolboxes.py" = ["PLW1514"]
+"gui/wxpython/core/utils.py" = ["PLW1514"]
+"gui/wxpython/core/watchdog.py" = ["PLW1514"]
+"gui/wxpython/core/workspace.py" = ["PLW1514"]
+"gui/wxpython/dbmgr/base.py" = ["PLR6201", "PLW1514"]
+"gui/wxpython/docs/wxgui_sphinx/conf.py" = ["PLW1514"]
+"gui/wxpython/gcp/manager.py" = ["PLR6201", "PLW1514"]
+"gui/wxpython/gmodeler/model.py" = ["PLW1514"]
+"gui/wxpython/gmodeler/panels.py" = ["PLW1514"]
+"gui/wxpython/gui_core/forms.py" = ["PLW1514"]
+"gui/wxpython/gui_core/ghelp.py" = ["PLW1514"]
+"gui/wxpython/gui_core/goutput.py" = ["PLW1514"]
+"gui/wxpython/gui_core/gselect.py" = ["PLW1514"]
+"gui/wxpython/gui_core/pyedit.py" = ["PLW1514"]
+"gui/wxpython/gui_core/widgets.py" = ["PLW1514"]
+"gui/wxpython/iclass/frame.py" = ["PLW1514"]
 "gui/wxpython/iclass/statistics.py" = ["A005"]
-"gui/wxpython/icons/grass_icons.py" = ["PTH208"]
-"gui/wxpython/image2target/*.py" = ["SIM115"]
-"gui/wxpython/image2target/ii2t_manager.py" = ["PTH208"]
-"gui/wxpython/iscatt/plots.py" = ["PLW0108"]
-"gui/wxpython/lmgr/workspace.py" = ["SIM115"]
-"gui/wxpython/location_wizard/wizard.py" = ["SIM115"]
-"gui/wxpython/mapdisp/main.py" = ["SIM115"]
-"gui/wxpython/modules/colorrules.py" = ["SIM115"]
-"gui/wxpython/modules/mcalc_builder.py" = ["SIM115"]
-"gui/wxpython/photo2image/*.py" = ["SIM115"]
-"gui/wxpython/psmap/*.py" = ["SIM115"]
-"gui/wxpython/psmap/dialogs.py" = ["PTH208"]
-"gui/wxpython/psmap/utils.py" = ["PGH004"]
-"gui/wxpython/rdigit/controller.py" = ["SIM115"]
-"gui/wxpython/rlisetup/*.py" = ["SIM115"]
-"gui/wxpython/rlisetup/frame.py" = ["PTH208"]
-"gui/wxpython/timeline/frame.py" = ["FLY002"]
-"gui/wxpython/tools/update_menudata.py" = ["SIM115"]
-"gui/wxpython/tplot/frame.py" = ["FLY002"]
-"gui/wxpython/vdigit/mapwindow.py" = ["SIM115"]
-"gui/wxpython/vnet/*.py" = ["SIM115"]
-"gui/wxpython/web_services/dialogs.py" = ["SIM115"]
-"gui/wxpython/wxplot/profile*.py" = ["SIM115"]
-"gui/wxpython/wxplot/profile.py" = ["A005"]
-"imagery/i.atcorr/create_iwave.py" = ["SIM115"]
-"lib/imagery/testsuite/test_imagery_signature_management.py" = ["SIM115"]
+"gui/wxpython/image2target/ii2t_gis_set.py" = ["PLW1514"]
+"gui/wxpython/image2target/ii2t_manager.py" = ["PLR6201", "PLW1514"]
+"gui/wxpython/iscatt/plots.py" = ["PLR6201"]
+"gui/wxpython/location_wizard/wizard.py" = ["PLW1514"]
+"gui/wxpython/mapdisp/main.py" = ["PLW1514"]
+"gui/wxpython/modules/colorrules.py" = ["PLW1514"]
+"gui/wxpython/modules/mcalc_builder.py" = ["PLW1514"]
+"gui/wxpython/photo2image/ip2i_manager.py" = ["PLR6201", "PLW1514"]
+"gui/wxpython/psmap/instructions.py" = ["PLW1514"]
+"gui/wxpython/rdigit/controller.py" = ["PLW1514"]
+"gui/wxpython/rdigit/toolbars.py" = ["PLR6201"]
+"gui/wxpython/rlisetup/frame.py" = ["PLW1514"]
+"gui/wxpython/rlisetup/wizard.py" = ["PLW1514"]
+"gui/wxpython/tools/update_menudata.py" = ["PLW1514"]
+"gui/wxpython/tplot/frame.py" = ["PLW1514"]
+"gui/wxpython/vdigit/mapwindow.py" = ["PLW1514"]
+"gui/wxpython/vnet/vnet_core.py" = ["PLW1514"]
+"gui/wxpython/vnet/vnet_data.py" = ["PLW1514"]
+"gui/wxpython/web_services/dialogs.py" = ["PLW1514"]
+"gui/wxpython/wxplot/profile.py" = ["A005", "PLW1514", "SIM115"]
+"imagery/i.atcorr/create_iwave.py" = ["PLW1514"]
 "lib/imagery/testsuite/test_imagery_sigsetfile.py" = ["FURB152"]
-"lib/init/grass.py" = ["SIM115"]
+"lib/init/grass.py" = ["PLW1514", "SIM115"]
 "lib/init/testsuite/test_grass_tmp_mapset.py" = ["PTH208"]
 "locale/grass_po_stats.py" = ["SIM115"]
-"man/build.py" = ["PTH208"]
-"man/build_class_graphical.py" = ["PTH208"]
-"man/build_manual_gallery.py" = ["PTH208"]
-"man/build_rest.py" = ["PTH208"]
-"python/grass/__init__.py" = ["PYI056"]
+"man/build.py" = ["PLW1514", "PTH208"]
+"man/build_class.py" = ["PLW1514"]
+"man/build_class_graphical.py" = ["PLW1514", "PTH208"]
+"man/build_full_index.py" = ["PLW1514"]
+"man/build_graphical_index.py" = ["PLW1514"]
+"man/build_html.py" = ["PLW1514"]
+"man/build_index.py" = ["PLW1514"]
+"man/build_index_rest.py" = ["PLW1514"]
+"man/build_keywords.py" = ["PLW1514"]
+"man/build_manual_gallery.py" = ["PLW1514", "PTH208"]
+"man/build_md.py" = ["PLW1514"]
+"man/build_rest.py" = ["PLW1514", "PTH208"]
+"man/build_topics.py" = ["PLW1514"]
+"man/parser_standard_options.py" = ["PLW1514"]
+"python/grass/__init__.py" = ["PTH110", "PYI056"]
 "python/grass/exp*/tests/grass_script_mapset_session_test.py" = ["SIM117"]
 "python/grass/exp*/tests/grass_script_tmp_mapset_session_test.py" = ["SIM117"]
-"python/grass/gunittest/case.py" = ["PT009"]
-"python/grass/gunittest/loader.py" = ["PTH208", "PYI024"]
-"python/grass/gunittest/multireport.py" = ["PYI024"]
+"python/grass/gunittest/case.py" = ["PLW1514", "PT009"]
+"python/grass/gunittest/checkers.py" = ["PLW1514"]
+"python/grass/gunittest/invoker.py" = ["PLW1514"]
+"python/grass/gunittest/loader.py" = ["PTH208"]
+"python/grass/gunittest/reporters.py" = ["PLW1514"]
 "python/grass/gunittest/testsu*/d*/s*/s*/subsub*/t*/test_segfaut.py" = ["B018"]
-"python/grass/gunittest/testsuite/test_assertions_rast3d.py" = ["FLY002"]
-"python/grass/imaging/images2*.py" = ["SIM115"]
 "python/grass/imaging/images2ims.py" = ["PTH208"]
 "python/grass/jupyter/testsuite/interactivemap_test.py" = ["PGH004"]
 "python/grass/jupyter/testsuite/map_test.py" = ["PGH004"]
+"python/grass/jupyter/utils.py" = ["PLW1514"]
+"python/grass/pydispatch/dispatcher.py" = ["PLR6201"]
 "python/grass/pydispatch/signal.py" = ["A005"]
-"python/grass/pygrass/gis/__init__.py" = ["PTH208"]
-"python/grass/pygrass/modules/grid/grid.py" = ["PTH208", "SIM115"]
+"python/grass/pygrass/gis/__init__.py" = ["PLW1514", "PTH208"]
+"python/grass/pygrass/modules/grid/grid.py" = ["PLW1514", "PTH208", "SIM115"]
 "python/grass/pygrass/modules/grid/testsuite/test_*_modules_grid_doctests.py" = ["F401"]
-"python/grass/pygrass/modules/interface/env.py" = ["SIM115"]
+"python/grass/pygrass/modules/interface/env.py" = ["PLW1514", "SIM115"]
+"python/grass/pygrass/modules/interface/parameter.py" = ["PLR6201"]
 "python/grass/pygrass/modules/testsuite/test_pygrass_modules_doctests.py" = ["F401"]
-"python/grass/pygrass/raster/category.py" = ["FURB189"]
-"python/grass/pygrass/raster/segment.py" = ["SIM115"]
+"python/grass/pygrass/raster/category.py" = ["FURB189", "PLW1514"]
+"python/grass/pygrass/raster/segment.py" = ["PLW1514", "SIM115"]
 "python/grass/pygrass/tests/*.py" = ["SIM115"]
+"python/grass/pygrass/tests/set_mapset.py" = ["PLW1514"]
 "python/grass/pygrass/utils.py" = ["PTH208"]
 "python/grass/pygrass/vector/geometry.py" = ["PYI024"]
-"python/grass/pygrass/vector/sql.py" = ["FLY002"]
 "python/grass/pygrass/vector/testsuite/test_table.py" = ["PLW0108"]
 "python/grass/script/array.py" = ["A005"]
-"python/grass/script/core.py" = ["PTH208", "SIM115"]
-"python/grass/script/db.py" = ["SIM115"]
-"python/grass/script/raster.py" = ["SIM115"]
-"python/grass/script/utils.py" = ["FURB189", "SIM115"]
-"python/grass/temporal/aggregation.py" = ["SIM115"]
-"python/grass/temporal/register.py" = ["SIM115"]
-"python/grass/temporal/stds_export.py" = ["SIM115"]
-"python/grass/temporal/stds_import.py" = ["SIM115"]
-"python/grass/temporal/univar_statistics.py" = ["SIM115"]
+"python/grass/script/core.py" = ["PLW1514", "PTH208"]
+"python/grass/script/db.py" = ["PLW1514"]
+"python/grass/script/raster.py" = ["PLW1514"]
+"python/grass/script/setup.py" = ["PLW1514"]
+"python/grass/script/utils.py" = ["FURB189", "PLW1514"]
+"python/grass/semantic_label/reader.py" = ["PLW1514"]
+"python/grass/temporal/abstract_space_time_dataset.py" = ["PLW1514"]
+"python/grass/temporal/aggregation.py" = ["PLW1514", "SIM115"]
+"python/grass/temporal/c_libraries_interface.py" = ["PIE794"]
+"python/grass/temporal/register.py" = ["PLW1514", "SIM115"]
+"python/grass/temporal/stds_export.py" = ["PLW1514", "SIM115"]
+"python/grass/temporal/stds_import.py" = ["PLW1514", "SIM115"]
+"python/grass/temporal/temporal_algebra.py" = ["D300"]
+"python/grass/temporal/temporal_operator.py" = ["D300"]
+"python/grass/temporal/testsuite/test_temporal_doctests.py" = ["UP036"]
+"python/grass/temporal/univar_statistics.py" = ["PLW1514", "SIM115"]
+"python/grass/tools/support.py" = ["PLR6201"]
 "python/grass/utils/download.py" = ["PTH208", "SIM115"]
 "raster/r.*/testsuite/*.py" = ["SIM115"]
+"raster/r.mfilter/benchmark/benchmark_r_mfilter_nprocs.py" = ["PLW1514"]
 "raster/r.topidx/*.py" = ["SIM115"]
-"raster3d/r3.flow/testsuite/r3flow_test.py" = ["FLY002"]
-"raster3d/r3.gradient/testsuite/r3gradient_test.py" = ["FLY002"]
-"scripts/d.correlate/d.correlate.py" = ["SIM115"]
-"scripts/d.frame/d.frame.py" = ["SIM115"]
-"scripts/d.polar/d.polar.py" = ["FURB154", "SIM115"]
-"scripts/db.in.ogr/db.in.ogr.py" = ["SIM115"]
-"scripts/db.test/db.test.py" = ["SIM115"]
-"scripts/db.univar/db.univar.py" = ["SIM115"]
+"raster/r.topidx/arc_to_gridatb.py" = ["PLW1514"]
+"raster/r.topidx/gridatb_to_arc.py" = ["PLW1514"]
+"scripts/d.correlate/d.correlate.py" = ["PLW1514", "SIM115"]
+"scripts/d.frame/d.frame.py" = ["PLW1514", "SIM115"]
+"scripts/d.out.file/d.out.file.py" = ["PLW1514"]
+"scripts/d.polar/d.polar.py" = ["FURB154", "PLW1514", "SIM115"]
+"scripts/d.to.rast/d.to.rast.py" = ["PLW1514"]
+"scripts/d.what.rast/d.what.rast.py" = ["PLW1514"]
+"scripts/d.what.vect/d.what.vect.py" = ["PLW1514"]
+"scripts/db.in.ogr/db.in.ogr.py" = ["PLW1514"]
+"scripts/db.test/db.test.py" = ["PLW1514", "SIM115"]
+"scripts/db.univar/db.univar.py" = ["PLW1514"]
 "scripts/g.download.project/g.download.project.py" = ["PTH208"]
-"scripts/g.extension.all/g.extension.all.py" = ["SIM115"]
-"scripts/g.extension/g.extension.py" = ["PTH208", "SIM115"]
-"scripts/g.extension/testsuite/test_addons_modules.py" = ["PTH208"]
-"scripts/g.search.modules/g.search.modules.py" = ["SIM115"]
-"scripts/i.in.spotvgt/i.in.spotvgt.py" = ["SIM115"]
+"scripts/g.extension.all/g.extension.all.py" = ["PLW1514", "SIM115"]
+"scripts/g.extension/g.extension.py" = ["PLW1514", "PTH208", "SIM115"]
+"scripts/g.search.modules/g.search.modules.py" = ["PLW1514"]
+"scripts/i.in.spotvgt/i.in.spotvgt.py" = ["PLW1514"]
 "scripts/i.oif/i.oif*.py" = ["SIM115"]
-"scripts/i.pansharpen/i.pansharpen.py" = ["FLY002", "SIM115"]
-"scripts/i.spectral/i.spectral.py" = ["FLY002", "SIM115"]
-"scripts/m.proj/m.proj.py" = ["SIM115"]
-"scripts/r.fillnulls/r.fillnulls.py" = ["SIM115"]
-"scripts/r.in.srtm/r.in.srtm.py" = ["FLY002", "SIM115"]
+"scripts/i.oif/i.oif.py" = ["PLW1514"]
+"scripts/i.pansharpen/i.pansharpen.py" = ["PLW1514"]
+"scripts/i.spectral/i.spectral.py" = ["PLW1514"]
+"scripts/m.proj/m.proj.py" = ["PLW1514", "SIM115"]
+"scripts/r.fillnulls/r.fillnulls.py" = ["PLW1514"]
+"scripts/r.in.srtm/r.in.srtm.py" = ["PLW1514"]
 "scripts/r.in.wms/wms_*.py" = ["SIM115"]
-"scripts/r.tileset/r.tileset.py" = ["SIM115"]
+"scripts/r.in.wms/wms_base.py" = ["PLW1514"]
+"scripts/r.in.wms/wms_gdal_drv.py" = ["PLW1514"]
+"scripts/r.pack/r.pack.py" = ["PLW1514"]
+"scripts/r.tileset/r.tileset.py" = ["PLW1514"]
+"scripts/r.unpack/r.unpack.py" = ["PLW1514"]
 "scripts/v.*/v.*.py" = ["SIM115"]
-"scripts/wxpyimgview/wxpyimgview_gui.py" = ["SIM115"]
-"temporal/t.list/t.list.py" = ["SIM115"]
-"temporal/t.rast.algebra/testsu*/*_algebra_arithmetic.py" = ["FLY002"]
-"temporal/t.rast.colors/t.rast.colors.py" = ["SIM115"]
-"temporal/t.rast.series/t.rast.series.py" = ["SIM115"]
-"temporal/t.rast.what/t.rast.what.py" = ["SIM115"]
-"temporal/t.register/testsu*/*_raster_different_local.py" = ["FLY002"]
-"temporal/t.register/testsu*/*_raster_mapmetadata.py" = ["FLY002"]
-"temporal/t.register/testsuite/test_t_register_raster.py" = ["FLY002"]
-"temporal/t.register/testsuite/test_t_register_raster_file.py" = ["FLY002"]
-"temporal/t.remove/t.remove.py" = ["SIM115"]
-"temporal/t.unregister/t.unregister.py" = ["SIM115"]
-"utils/**.py" = ["SIM115"]
-"utils/generate_release_notes.py" = ["PGH004"]
-"utils/thumbnails.py" = ["PTH208"]
-"vector/v.fill.holes/examples.ipynb" = ["PTH201"]
+"scripts/v.db.addcolumn/v.db.addcolumn.py" = ["PLW1514"]
+"scripts/v.db.addtable/v.db.addtable.py" = ["PLW1514"]
+"scripts/v.db.droptable/v.db.droptable.py" = ["PLW1514"]
+"scripts/v.db.reconnect.all/v.db.reconnect.all.py" = ["PLW1514"]
+"scripts/v.db.univar/v.db.univar.py" = ["PLW1514"]
+"scripts/v.import/v.import.py" = ["PLW1514"]
+"scripts/v.in.e00/v.in.e00.py" = ["PLW1514"]
+"scripts/v.in.lines/v.in.lines.py" = ["PLW1514"]
+"scripts/v.in.mapgen/v.in.mapgen.py" = ["PLW1514"]
+"scripts/v.in.wfs/v.in.wfs.py" = ["PLW1514"]
+"scripts/v.rast.stats/v.rast.stats.py" = ["PLW1514"]
+"scripts/v.report/v.report.py" = ["PLW1514"]
+"scripts/v.unpack/v.unpack.py" = ["PLW1514"]
+"temporal/t.list/t.list.py" = ["PLW1514"]
+"temporal/t.rast.colors/t.rast.colors.py" = ["PLW1514"]
+"temporal/t.rast.series/t.rast.series.py" = ["PLW1514"]
+"temporal/t.rast.what/t.rast.what.py" = ["PLW1514"]
+"temporal/t.remove/t.remove.py" = ["PLW1514"]
+"temporal/t.unregister/t.unregister.py" = ["PLW1514"]
+"utils/*.py" = ["PLW1514"]
 
 [tool.ruff.lint.flake8-import-conventions.extend-aliases]
 # Declare a custom aliases, checked with rule ICN001
 "grass.script" = "gs"
+"grass.temporal" = "tgis"
+
+[tool.ruff.format]
+docstring-code-format = true
 
 [tool.pytest.ini_options]
-minversion = "6.0"
-python_files = "*/tests/*_test.py"
 addopts = """
     --ignore-glob='dist.*'
     --ignore-glob='bin.*'
     --ignore-glob='*/tests/data/*'
+    --ignore-glob='*/testsuite/data/**'
     --ignore-glob='*/grass/pygrass/tests/*'
     --doctest-glob='*doctest*.txt'
     --ignore='raster/r.category/test_rcategory_doctest.txt'
 """
-timeout = 300
 markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
     "needs_solo_run: marks tests that must be run without any other tests running in parallel",
 ]
+minversion = "8.2"
+python_files = """
+    */tests/*_test.py
+    */tests/test_*.py
+    **/testsuite/*test*.py
+"""
+timeout = 300
 
 
 [tool.bandit]
@@ -421,3 +493,338 @@ exclude_dirs = [
     "utils/test_generate_last_commit_file.py",
 ]
 skips = ["B324", "B110", "B101", "B112", "B311", "B404", "B603"]
+
+
+[tool.pylint.main]
+
+# Files or directories to be skipped. They should be base names, not paths.
+ignore = ["CVS", ".git", ".ruff_cache", ".pytest_cache"]
+
+# Add files or directories matching the regular expressions patterns to the
+# ignore-list. The regex matches against paths and can be in Posix or Windows
+# format. Because '\\' represents the directory delimiter on Windows systems, it
+# can't be used as an escape character.
+ignore-paths = [
+    "bin[.].*",
+    "dist[.].*",
+    "gui/wxpython/menustrings.py",
+    "python/grass/temporal/ply",           # External code
+    "python/libgrass_interface_generator",
+]
+
+# Files or directories matching the regular expression patterns are skipped. The
+# regex matches against base names, not paths. The default value ignores Emacs
+# file locks
+ignore-patterns = ["^\\.#", "OBJ[.].*", "Makefile"]
+
+
+# Use multiple processes to speed up Pylint. Specifying 0 will auto-detect the
+# number of processors available to use, and will cap the count on Windows to
+# avoid hangs.
+jobs = 0
+
+# Control the amount of potential inferred values when inferring a single object.
+# This can help the performance when dealing with large functions or complex,
+# nested conditions.
+# *GRASS modified: default 'limit-inference-results = 100'*
+limit-inference-results = 10
+
+# List of plugins (as comma separated values of python module names) to load,
+# usually to register additional checkers.
+load-plugins = [
+    "pylint.extensions.bad_builtin",
+    "pylint.extensions.no_self_use",
+    "pylint.extensions.redefined_variable_type",
+]
+
+
+# Minimum Python version to use for version dependent checks. Will default to the
+# version used to run pylint.
+# *GRASS modified*
+# *GRASS TODO: keep in sync with MIN_PYTHON_VERSION supported*
+py-version = "3.10"
+
+# Add paths to the list of the source roots. Supports globbing patterns. The
+# source root is an absolute path or a path relative to the current working
+# directory used to determine a package namespace for modules located under the
+# source root.
+source-roots = ["python", "gui/wxpython"]
+
+
+[tool.pylint.design]
+# List of regular expressions of class ancestor names to ignore when counting
+# public methods (see R0903)
+# exclude-too-few-public-methods =
+
+# List of qualified class names to ignore when counting class parents (see R0901)
+# ignored-parents =
+
+# Maximum number of arguments for function / method.
+# *GRASS modified: default 5, (see R0913)*
+# *GRASS TODO: Try to reduce this value*
+max-args = 15
+
+# Maximum number of attributes for a class (see R0902).
+# *GRASS modified: default 7*
+# *GRASS TODO: Try to reduce this value*
+max-attributes = 25
+
+# Maximum number of boolean expressions in an if statement (see R0916).
+# *GRASS modified: default 5*
+# *GRASS TODO: Try to reduce this value*
+max-bool-expr = 8
+
+# Maximum number of branch for function / method body.
+# *GRASS modified: default 12, (see R0912)*
+# *GRASS TODO: Try to reduce this value*
+max-branches = 44
+
+# Maximum number of locals for function / method body.
+# *GRASS modified: default 15, (see R0914)*
+# *GRASS TODO: Try to reduce this value*
+max-locals = 50
+
+# # Maximum number of parents for a class (see R0901).
+# max-parents = 7
+
+# Maximum number of positional arguments for function / method.
+# *GRASS modified: default 5, (see R0917)*
+# *GRASS TODO: Try to reduce this value*
+max-positional-arguments = 7
+
+# Maximum number of public methods for a class (see R0904).
+# max-public-methods = 20
+
+# Maximum number of return / yield for function / method body.
+# *GRASS modified: default 6, (see R0911)*
+# *GRASS TODO: Try to reduce this value*
+max-returns = 9
+
+# Maximum number of statements in function / method body.
+# *GRASS modified: default 50, (see R0915)*
+# *GRASS TODO: Try to reduce this value*
+max-statements = 220
+
+# Minimum number of public methods for a class (see R0903).
+# *GRASS modified: default 2, (see R0915)*
+# *GRASS TODO: Try to increase this value*
+min-public-methods = 1
+
+
+[tool.pylint.format]
+
+# Maximum number of lines in a module.
+# *GRASS modified: default 1000, (see C0302)*
+# *GRASS TODO: Try to reduce this value*
+max-module-lines = 2000
+
+
+[tool.pylint."messages control"]
+# Disable the message, report, category or checker with the given id(s). You can
+# either give multiple identifiers separated by comma (,) or put this option
+# multiple times (only on the command line, not in the configuration file where
+# it should appear only once). You can also use "--disable=all" to disable
+# everything first and then re-enable specific checks. For example, if you want
+# to run only the similarities checker, you can use "--disable=all
+# --enable=similarities". If you want to run only the classes checker, but have
+# no Warning level messages displayed, use "--disable=all --enable=classes
+# --disable=W".
+disable = [
+    # *GRASS: The 10 following rules are disabled by default*
+    "bad-inline-option",
+    "deprecated-pragma",
+    "file-ignored",
+    "locally-disabled",
+    "raw-checker-failed",
+    "suppressed-message",
+    "use-implicit-booleaness-not-comparison-to-string",
+    "use-implicit-booleaness-not-comparison-to-zero",
+    "use-symbolic-message-instead",
+    "useless-suppression",
+    # *GRASS modified: The following rules are added to the disabled list*
+    # *GRASS TODO: Try to ignore less rules*
+    "C0103",  # Constant name "%s" doesn't conform to UPPER_CASE naming style (invalid-name)
+    "C0104",  # Disallowed name "foo" (disallowed-name)
+    "C0112",  # Empty %s docstring (empty-docstring)
+    "C0114",  # Missing module docstring (missing-module-docstring)
+    "C0115",  # Missing class docstring (missing-class-docstring)
+    "C0116",  # Missing function or method docstring (missing-function-docstring)
+    "C0200",  # Consider using enumerate instead of iterating with range and len (consider-using-enumerate)
+    "C0201",  # Consider iterating the dictionary directly instead of calling .keys() (consider-iterating-dictionary)
+    "C0204",  # Metaclass class method %s should have %s as first argument (bad-mcs-classmethod-argument)
+    "C0206",  # Consider iterating with .items() (consider-using-dict-items)
+    "C0207",  # Use str(self.start).split(' ', maxsplit=1)[0] instead (use-maxsplit-arg)
+    "C0209",  # Formatting a regular string which could be an f-string (consider-using-f-string)
+    "C0301",  # Line too long (line-too-long)
+    "C0302",  # Too many lines in module (%s/%s) (too-many-lines)
+    "C0325",  # Unnecessary parens after %r keyword (superfluous-parens)
+    "C0411",  # Standard library/third-party library import should be placed before local imports (wrong-import-order)
+    "C0412",  # Imports from package %s are not grouped (ungrouped-imports)
+    "C0413",  # Import "%s" should be placed at the top of the module (wrong-import-position)
+    "C0415",  # (import-outside-toplevel)
+    "C1802",  # Do not use `len(SEQUENCE)` without comparison to determine if a sequence is empty (use-implicit-booleaness-not-len)
+    "C1803",  # "%s" can be simplified to "%s", if it is strictly a sequence, as an empty %s is falsey (use-implicit-booleaness-not-comparison)
+    "C2801",  # Unnecessarily calls dunder method %s. %s. (unnecessary-dunder-call)
+    "E0102",  # %s already defined line %s (function-redefined)
+    "E0203",  # Access to member %r before its definition line %s (access-member-before-definition)
+    "E0213",  # Method %r should have "self" as first argument (no-self-argument)
+    "E0401",  # Unable to import %r (import-error)
+    "E0601",  # Using variable %r before assignment (used-before-assignment)
+    "E0602",  # Undefined variable %r (undefined-variable)
+    "E0606",  # Possibly using variable %r before assignment (possibly-used-before-assignment)
+    "E0611",  # No name %r in module %r (no-name-in-module)
+    "E0633",  # Attempting to unpack a non-sequence%s (unpacking-non-sequence)
+    "E0704",  # The raise statement is not inside an except clause (misplaced-bare-raise)
+    "E1003",  # Bad first argument %r given to super() (bad-super-call)
+    "E1101",  # Instance of %r has no %r member (no-member)
+    "E1102",  # %s is not callable (not-callable)
+    "E1111",  # Assigning result of a function call, where the function has no return (assignment-from-no-return)
+    "E1120",  # No value for argument %r in constructor call (no-value-for-parameter)
+    "E1121",  # (too-many-function-args)
+    "E1123",  # Unexpected keyword argument %r in %s call (unexpected-keyword-arg)
+    "E1124",  # Argument %r passed by position and keyword in %s call (redundant-keyword-arg)
+    "E1126",  # Sequence index is not an int, slice, or instance with __index__ (invalid-sequence-index)
+    "E1128",  # Assigning result of a function call, where the function returns None (assignment-from-none)
+    "E1133",  # Non-iterable value %s is used in an iterating context (not-an-iterable)
+    "E1136",  # Value '%s' is unsubscriptable (unsubscriptable-object)
+    "E1137",  # %r does not support item assignment (unsupported-assignment-operation)
+    "E1307",  # Argument %r does not match format type %r (bad-string-format-type)
+    "R0204",  # Redefinition of %s type from %s to %s (redefined-variable-type)
+    "R0401",  # Cyclic import (%s) (cyclic-import)
+    "R0801",  # Similar lines in %s files %s (duplicate-code)
+    "R0901",  # (too-many-ancestors)
+    "R0902",  # (too-many-instance-attributes)
+    "R0903",  # (too-few-public-methods)
+    "R0904",  # (too-many-public-methods)
+    "R0911",  # (too-many-return-statements)
+    "R0912",  # (too-many-branches)
+    "R0913",  # (too-many-arguments)
+    "R0914",  # (too-many-locals)
+    "R0915",  # (too-many-statements)
+    "R0916",  # (too-many-boolean-expressions)
+    "R0917",  # (too-many-positional-arguments)
+    "R1702",  # (too-many-nested-blocks)
+    "R1704",  # Redefining argument with the local name %r (redefined-argument-from-local)
+    "R1705",  # Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
+    "R1710",  # Either all return statements in a function should return an expression, or none of them should. (inconsistent-return-statements)
+    "R1712",  # Consider using tuple unpacking for swapping variables (consider-swap-variables)
+    "R1713",  # Consider using str.join(sequence) for concatenating strings from an iterable (consider-using-join)
+    "R1714",  # Consider merging these comparisons with 'in' by using '%s %sin (%s)'. Use a set instead if elements are hashable. (consider-using-in)
+    "R1715",  # Consider using dict.get for getting values from a dict if a key is present or a default if not (consider-using-get)
+    "R1724",  # Unnecessary "%s" after "continue", %s (no-else-continue)
+    "R1727",  # Boolean condition '%s' will always evaluate to '%s' (condition-evals-to-constant)
+    "R1732",  # Consider using 'with' for resource-allocating operations (consider-using-with)
+    "R1733",  # Unnecessary dictionary index lookup, use '%s' instead (unnecessary-dict-index-lookup)
+    "R1735",  # Consider using '{**item}' instead of a call to 'dict'. (use-dict-literal)
+    "R6301",  # Method could be a function (no-self-use)
+    "RP0401", # Report: Imports checker: External dependencies
+    "RP0801", # Report: Similarities: Duplication
+    "W0101",  # Unreachable code (unreachable)
+    "W0102",  # Dangerous default value %s as argument (dangerous-default-value)
+    "W0104",  # Statement seems to have no effect (pointless-statement)
+    "W0106",  # Expression "%s" is assigned to nothing (expression-not-assigned)
+    "W0108",  # Lambda may not be necessary (unnecessary-lambda)
+    "W0123",  # Use of eval (eval-used)
+    "W0125",  # Using a conditional statement with a constant value (using-constant-test)
+    "W0133",  # Exception statement has no effect (pointless-exception-statement)
+    "W0141",  # Used builtin function %s (bad-builtin)
+    "W0201",  # Attribute %r defined outside __init__(attribute-defined-outside-init)
+    "W0212",  # Access to a protected member %s of a client class (protected-access)
+    "W0221",  # (arguments-differ)
+    "W0222",  # Signature differs from %s %r method (signature-differs)
+    "W0223",  # Method %r is abstract in class %r but is not overridden in child class %r (abstract-method)
+    "W0237",  # (arguments-renamed)
+    "W0401",  # Wildcard import %s (wildcard-import)
+    "W0404",  # Reimport %r (imported line %s) (reimported)
+    "W0511",  # (fixme)
+    "W0601",  # Global variable %r undefined at the module level (global-variable-undefined)
+    "W0602",  # Using global for %r but no assignment is done (global-variable-not-assigned)
+    "W0603",  # Using the global statement (global-statement)
+    "W0604",  # Using the global statement at the module level (global-at-module-level)
+    "W0611",  # (unused-import)
+    "W0612",  # Unused variable %r (unused-variable)
+    "W0613",  # Unused argument %r (unused-argument)
+    "W0614",  # Unused import(s) %s from wildcard import of %s (unused-wildcard-import)
+    "W0621",  # Redefining name %r from outer scope (line %s) (redefined-outer-name)
+    "W0621",  # Redefining name %r from outer scope (line %s) (redefined-outer-name)
+    "W0622",  # Redefining built-in %r (redefined-builtin)
+    "W0631",  # Using possibly undefined loop variable %r (undefined-loop-variable)
+    "W0632",  # Possible unbalanced tuple unpacking with sequence %s: left side has %d label%s, right side has %d value%s (unbalanced-tuple-unpacking)
+    "W0640",  # Cell variable %s defined in loop (cell-var-from-loop)
+    "W0641",  # Possibly unused variable %r (possibly-unused-variable)
+    "W0702",  # No exception type(s) specified (bare-except)
+    "W0707",  # Consider explicitly re-raising using %s'%s from %s' (raise-missing-from)
+    "W0716",  # Invalid exception operation. %s (wrong-exception-operation)
+    "W0718",  # Catching too general exception Exception (broad-exception-caught)
+    "W0719",  # Raising too general exception: %s (broad-exception-raised)
+    "W1113",  # Keyword argument before variable positional arguments list in the definition of %s function (keyword-arg-before-vararg)
+    "W1114",  # Positional arguments appear to be out of order (arguments-out-of-order)
+    "W1308",  # Duplicate string formatting argument %r, consider passing as named argument (duplicate-string-formatting-argument)
+    "W1503",  # Redundant use of %s with constant value %r (redundant-unittest-assert)
+    "W1508",  # %s default type is %s. Expected str or None. (invalid-envvar-default)
+    "W1510",  # 'subprocess.run' used without explicitly defining the value for 'check'. (subprocess-run-check)
+    "W1514",  # Using open without explicitly specifying an encoding (unspecified-encoding)
+    "W4701",  # Iterated list '%s' is being modified inside for loop body, consider iterating through a copy of it instead. (modified-iterating-list)
+    "W4901",  # Deprecated module %r (deprecated-module)
+    "W4902",  # Using deprecated method %s (deprecated-method)
+    # "RP0402", # Report: Imports checker: Modules dependencies graph
+
+    "similarities", # too long to run
+]
+
+# Enable the message, report, category or checker with the given id(s). You can
+# either give multiple identifier separated by comma (,) or put this option
+# multiple time (only on the command line, not in the configuration file where it
+# should appear only once). See also the "--disable" option for examples.
+enable = ["deprecated-pragma"]
+
+
+[tool.pylint.refactoring]
+# Maximum number of nested blocks for function / method body
+# *GRASS modified: default 5, (see R1702)*
+# *GRASS TODO: Try to reduce this value*
+max-nested-blocks = 7
+
+
+[tool.pylint.reports]
+# Set the output format. Available formats are: text, parseable, colorized, json2
+# (improved json format), json (old json format) and msvs (visual studio). You
+# can also give a reporter class, e.g. mypackage.mymodule.MyReporterClass.
+output-format = "colorized"
+
+# Tells whether to display a full report or only the messages.
+reports = true
+
+[tool.pylint.similarities]
+# Minimum lines number of a similarity.
+# *GRASS modified: default 4, (see R0801)*
+# *GRASS TODO: Try to reduce this value*
+# *GRASS justification: Matching only larger chunks of code, not the default 4 lines.*
+min-similarity-lines = 50
+
+[tool.pylint.variables]
+# List of additional names supposed to be defined in builtins. Remember that you
+# should avoid defining new builtins when possible.
+# *GRASS modified: default '# additional-builtins ='*
+# *GRASS justification: Translation function is (unfortunately) defined as a builtin.*
+# *GRASS TODO: Find another pattern for translation that allows to use _ as a discard variable and other*
+additional-builtins = ["_"]
+
+
+[tool.pyright]
+exclude = ["**/__pycache__", "**/OBJ.*", "bin.*/**", "dist.*/**"]
+include = ["python"]
+
+# Set extraPath to the output of $(grass --config python_path)
+
+# *GRASS modified*
+# *GRASS TODO: keep in sync with MIN_PYTHON_VERSION supported*
+pythonVersion = "3.10"
+
+[tool.pyrefact]
+line_length = 88
+
+[tool.isort]
+profile = "black"
+# *GRASS TODO: keep in sync with MIN_PYTHON_VERSION supported*
+py_version = 310

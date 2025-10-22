@@ -9,7 +9,7 @@ Created on Thu Aug  9 14:04:12 2012
 """
 # utilities for generating REST indices
 # utilities for generating HTML indices
-# (C) 2003-2024 by Luca Delucchi and the GRASS Development Team
+# (C) 2003-2025 by Luca Delucchi and the GRASS Development Team
 
 import os
 import string
@@ -30,7 +30,7 @@ exclude_mods = [
 # these modules don't use G_parser()
 
 desc_override = {
-    "g.parser": "Provides automated parser, GUI, and help support for GRASS scipts.",
+    "g.parser": "Provides automated parser, GUI, and help support for GRASS scripts.",
     "r.li.daemon": "Support module for r.li landscape index calculations.",
 }
 
@@ -39,17 +39,17 @@ desc_override = {
 header2_tmpl = string.Template(
     r"""
 ==================================================================
-GRASS GIS ${grass_version} Reference Manual
+GRASS ${grass_version} Reference Manual
 ==================================================================
 .. figure:: grass_logo.png
    :align: center
    :alt: GRASS logo
 
-GRASS GIS ${grass_version} Reference Manual
+GRASS ${grass_version} Reference Manual
 --------------------------------------------------------------------
 
 **Geographic Resources Analysis Support System**, commonly
-referred to as `GRASS GIS <https://grass.osgeo.org>`_, is a `Geographic
+referred to as `GRASS <https://grass.osgeo.org>`_, is a `Geographic
 Information System <https://en.wikipedia.org/wiki/Geographic_information_system>`_
 (GIS) used for geospatial data management and analysis, image processing,
 graphics/maps production, spatial modeling, and visualization. GRASS is
@@ -79,7 +79,6 @@ Quick Introduction
         Intro vector map processing and network analysis <vectorintro>
         Intro database management <databaseintro>
         Intro temporal data processing <temporalintro>
-        Intro Graphical User Interface <wxguiintro>
 
 Display/Graphical User Interfaces
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -124,7 +123,7 @@ Database
 .. toctree::
     :maxdepth: 1
 
-        SQL support in GRASS GIS <sql>
+        SQL support in GRASS <sql>
         Database commands manual <database>
 
 General
@@ -171,7 +170,7 @@ footer_tmpl = string.Template(
 --------------
 
 :doc:`Manual main page <index>` \| :doc:`Full Index <full_index>`
- 2003-2024 `GRASS Development Team <https://grass.osgeo.org>`_, GRASS GIS ${grass_version} Reference Manual
+ 2003-2025 `GRASS Development Team <https://grass.osgeo.org>`_, GRASS ${grass_version} Reference Manual
 """  # noqa: E501
 )
 
@@ -290,8 +289,8 @@ def try_mkdir(path):
 def replace_file(name):
     temp = name + ".tmp"
     if (
-        os.path.exists(name)
-        and os.path.exists(temp)
+        Path(name).exists()
+        and Path(temp).exists()
         and read_file(name) == read_file(temp)
     ):
         os.remove(temp)

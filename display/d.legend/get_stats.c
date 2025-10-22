@@ -22,7 +22,7 @@ void run_stats(const char *mapname, int nsteps, const char *tempfile,
     argv[argc++] = "-c";
     argv[argc++] = mapname;
 
-    sprintf(buf, "nsteps=%d", nsteps);
+    snprintf(buf, sizeof(buf), "nsteps=%d", nsteps);
     argv[argc++] = buf;
 
     argv[argc++] = SF_REDIRECT_FILE;
@@ -81,7 +81,7 @@ void get_stats(const char *mapname, struct stat_list *dist_stats, int nsteps,
         if (fgets(buf, sizeof(buf), fd) != NULL) {
             /* WARNING!!!!!!
              * this will be very wrong if type!=COUNT
-             * since the stat prodcued by r.stats will be a floating point value
+             * since the stat produced by r.stats will be a floating point value
              * possibly less than 1 (shapiro)
              */
             if (sscanf(buf, "* %ld", &stat) == 1) {

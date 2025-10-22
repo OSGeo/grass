@@ -134,7 +134,7 @@ def main():
     frame = AnimationFrame(
         parent=None,
         giface=StandaloneGrassInterface(),
-        title=_("Animation Tool - GRASS GIS"),
+        title=_("Animation Tool - GRASS"),
     )
     frame.CentreOnScreen()
     frame.Show()

@@ -120,11 +120,15 @@ static void redraw(void)
 {
     struct timeval tv0, tv1;
 
-    gettimeofday(&tv0, NULL);
+    if (gettimeofday(&tv0, NULL) != 0) {
+        G_fatal_error(_("gettimeofday failed"));
+    }
 
     draw();
 
-    gettimeofday(&tv1, NULL);
+    if (gettimeofday(&tv1, NULL) != 0) {
+        G_fatal_error(_("gettimeofday failed"));
+    }
     last = (tv1.tv_sec - tv0.tv_sec) * 1000000L + (tv1.tv_usec - tv0.tv_usec);
 }
 

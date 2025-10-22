@@ -322,7 +322,6 @@ int G_read_compressed(int fd, int rbytes, unsigned char *dst, int nbytes,
 
 int G_write_compressed(int fd, unsigned char *src, int nbytes, int number)
 {
-    int dst_sz, nwritten, err;
     unsigned char *dst, compressed;
 
     /* Catch errors */
@@ -335,13 +334,14 @@ int G_write_compressed(int fd, unsigned char *src, int nbytes, int number)
     }
 
     /* get upper bound of compressed size */
-    dst_sz = G_compress_bound(nbytes, number);
+    int dst_sz = G_compress_bound(nbytes, number);
     if (NULL ==
         (dst = (unsigned char *)G_calloc(dst_sz, sizeof(unsigned char))))
         return -1;
 
     /* Now just call G_compress() */
-    err = G_compress(src, nbytes, dst, dst_sz, number);
+    ssize_t err = G_compress(src, nbytes, dst, dst_sz, number);
+    size_t nwritten = 0;
 
     /* If compression succeeded write compressed row,
      * otherwise write uncompressed row. Compression will fail
@@ -356,12 +356,11 @@ int G_write_compressed(int fd, unsigned char *src, int nbytes, int number)
             G_warning(_("Unable to write compression flag"));
             return -1;
         }
-        nwritten = 0;
         do {
             err = write(fd, dst + nwritten, dst_sz - nwritten);
             if (err >= 0)
                 nwritten += err;
-        } while (err > 0 && nwritten < dst_sz);
+        } while (err > 0 && nwritten < (size_t)dst_sz);
         if (err <= 0) {
             if (err == 0)
                 G_warning(_("Unable to write %d bytes: nothing written"),
@@ -381,12 +380,11 @@ int G_write_compressed(int fd, unsigned char *src, int nbytes, int number)
             G_warning(_("Unable to write compression flag"));
             return -1;
         }
-        nwritten = 0;
         do {
             err = write(fd, src + nwritten, nbytes - nwritten);
             if (err >= 0)
                 nwritten += err;
-        } while (err > 0 && nwritten < nbytes);
+        } while (err > 0 && nwritten < (size_t)nbytes);
         if (err <= 0) {
             if (err == 0)
                 G_warning(_("Unable to write %d bytes: nothing written"),
@@ -406,32 +404,31 @@ int G_write_compressed(int fd, unsigned char *src, int nbytes, int number)
     if (err < 0)
         return -2;
 
-    return nwritten;
+    return (int)nwritten;
 } /* G_write_compressed() */
 
 int G_write_uncompressed(int fd, const unsigned char *src, int nbytes)
 {
-    int err, nwritten;
-    unsigned char compressed;
-
     /* Catch errors */
     if (src == NULL || nbytes < 0)
         return -1;
 
     /* Write the compression flag */
-    compressed = G_COMPRESSED_NO;
+    unsigned char compressed = G_COMPRESSED_NO;
     if (write(fd, &compressed, 1) != 1) {
         G_warning(_("Unable to write compression flag"));
         return -1;
     }
 
+    ssize_t err = 0;
+    size_t nwritten = 0;
+
     /* Now write the data */
-    nwritten = 0;
     do {
         err = write(fd, src + nwritten, nbytes - nwritten);
         if (err > 0)
             nwritten += err;
-    } while (err > 0 && nwritten < nbytes);
+    } while (err > 0 && nwritten < (size_t)nbytes);
     if (err <= 0) {
         if (err == 0)
             G_warning(_("Unable to write %d bytes: nothing written"), nbytes);
@@ -440,14 +437,14 @@ int G_write_uncompressed(int fd, const unsigned char *src, int nbytes)
                       strerror(errno));
     }
 
-    if (err < 0 || nwritten != nbytes)
+    if (err < 0 || nwritten != (size_t)nbytes)
         return -1;
 
     /* Account for extra compressed flag */
     nwritten++;
 
     /* That's all */
-    return nwritten;
+    return (int)nwritten;
 
 } /* G_write_uncompressed() */
 

@@ -1,6 +1,6 @@
 /*
  * r.in.xyz support fns.
- *   Copyright 2006 by M. Hamish Bowman, and The GRASS Development Team
+ *   Copyright 2006 by M. Hamish Bowman, and the GRASS Development Team
  *   Author: M. Hamish Bowman, University of Otago, Dunedin, New Zealand
  *
  *   This program is free software licensed under the GPL (>=v2).

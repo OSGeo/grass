@@ -14,7 +14,7 @@ are drawn. For example to plot <b>vpoints</b> above <b>vareas</b> list the
 <b>vpoints</b> entry first. Raster maps are always drawn first, and only a
 single raster map (or 3 if part of a RGB group) may be used.
 
-<p>The hash character ('<tt>#</tt>') may be used at the beginning of a line
+<p>The hash character ('<code>#</code>') may be used at the beginning of a line
 to indicate that the line is a comment. Blank lines will also be ignored.
 
 <p>Be aware that some mapping instructions require the <i>end</i> command
@@ -29,7 +29,7 @@ if working with large raster datasets. For example if the desired output is
 US-Letter sized paper at 600dpi, with 1" margins and the raster filling the
 entire page, the usable area on the page will be 6.5" x 9", which at 600
 dots/inch is equivalent to a region of 3900 columns x 5400 rows (see
-"<tt>g.region -p</tt>"). Any higher resolution settings will make the
+"<code>g.region -p</code>"). Any higher resolution settings will make the
 output file larger, but with a consumer printer you probably won't be able
 to resolve any better detail in the hardcopy.
 
@@ -41,11 +41,11 @@ barscale, or legend above or below the map box).
 <p>One point ("pixel") is 1/72 of an inch.
 
 <p>For users wanting to use special characters (such as accented characters) it
-is important to note that <em>ps.map</em> uses <tt>ISO-8859-1</tt> encoding.
+is important to note that <em>ps.map</em> uses <code>ISO-8859-1</code> encoding.
 This means that your instructions file will have to be encoded in this
 encoding. If you normally work in a different encoding environment (such as
-<tt>UTF-8</tt>), you have to transform your file to the <tt>ISO-8859-1</tt>
-encoding, for example by using the <tt>iconv</tt> utility:
+<code>UTF-8</code>), you have to transform your file to the <code>ISO-8859-1</code>
+encoding, for example by using the <code>iconv</code> utility:
 
 <div class="code"><pre>
 iconv -f UTF-8 -t ISO_8859-1 utf_file &gt; iso_file
@@ -116,7 +116,7 @@ is less than or equal to zero, the default vertical location is used.
 
 <dd>The name of the PostScript font.
 Fonts present in all PostScript implementations are:
-<tt>
+<code>
 Times-Roman,
 Times-Italic,
 Times-Bold,
@@ -129,7 +129,7 @@ Courier,
 Courier-Oblique,
 Courier-Bold,
 and
-Courier-BoldOblique</tt>.
+Courier-BoldOblique</code>.
 <br>
 The default is Helvetica.
 </dd>
@@ -145,7 +145,7 @@ The default is 10 point.
 <dt><a name="NAMED_COLORS"></a><b>color</b> <em>name</em>
 
 <dd>The following colors names are accepted by <em>ps.map</em>:
-<tt>
+<code>
 aqua,
 black,
 blue,
@@ -162,10 +162,10 @@ red,
 violet,
 white,
 yellow
-</tt>.
+</code>.
 <br><br>
 For vectors and some plotting commands you can also specify
-'<tt>none</tt>' or '<tt>R:G:B</tt>' (e.g '<tt>255:0:0</tt>').
+'<code>none</code>' or '<code>R:G:B</code>' (e.g '<code>255:0:0</code>').
 </dd>
 
 <dt><b>yes|no</b>
@@ -197,7 +197,7 @@ or "none". The width is specified in points, unless followed by an "i"
 in which case it is measured in inches.
 The default is a black border box of width 1 point.
 <p>The border can be turned off completely with the
-&quot;<tt>border&nbsp;n</tt>&quot; instruction. In this case
+&quot;<code>border&nbsp;n</code>&quot; instruction. In this case
 the <b>end</b> command should not be given as the
 main command will be treated as a single line instruction.
 <p>
@@ -245,7 +245,7 @@ map legend information, starting at the left margin.
 The default text color is black.
 <p>
 Omitting the <b>colortable</b> instruction would result in no color table.
-If the colortable is turned off with a &quot;<tt>colortable&nbsp;N</tt>&quot;
+If the colortable is turned off with a &quot;<code>colortable&nbsp;N</code>&quot;
 instruction the <b>end</b> command should not be given as the
 main command will be treated as a single line instruction.
 <p>
@@ -321,7 +321,7 @@ The default location is immediately below the last item item printed,
 starting at the left margin. The default text color is black.
 <p>If you wish to use parentheses spanning multiple lines you will need to
 quote them with a backslash to prevent the PostScript interpreter from
-getting confused. e.g. '<b><tt>\(</tt></b>' and '<b><tt>\)</tt></b>'
+getting confused. e.g. '<b><code>\(</code></b>' and '<b><code>\)</code></b>'
 
 <p>
 This example prints in blue
@@ -527,17 +527,17 @@ The default text color is black.
 of the text in the text file specified, with some special formatting keys:
 
 <ul>
-<li><tt>%%</tt>  - a literal %</li>
-<li><tt>%n</tt>  - ? newline ?</li>
-<li><tt>%_</tt>  - horizontal bar</li>
-<li><tt>%c</tt>  - "&lt;raster name&gt; in mapset &lt;mapset name&gt;"</li>
-<li><tt>%d</tt>  - today's date</li>
-<li><tt>%l</tt>  - project name</li>
-<li><tt>%L</tt>  - project's text description</li>
-<li><tt>%m</tt>  - mapset name</li>
-<li><tt>%u</tt>  - user name</li>
-<li><tt>%x</tt>  - mask info</li>
-<li><tt>%-</tt>  - advance to this character column number (see example below)</li>
+<li><code>%%</code>  - a literal %</li>
+<li><code>%n</code>  - ? newline ?</li>
+<li><code>%_</code>  - horizontal bar</li>
+<li><code>%c</code>  - "&lt;raster name&gt; in mapset &lt;mapset name&gt;"</li>
+<li><code>%d</code>  - today's date</li>
+<li><code>%l</code>  - project name</li>
+<li><code>%L</code>  - project's text description</li>
+<li><code>%m</code>  - mapset name</li>
+<li><code>%u</code>  - user name</li>
+<li><code>%x</code>  - mask info</li>
+<li><code>%-</code>  - advance to this character column number (see example below)</li>
 </ul>
 
 Example header file:
@@ -556,7 +556,7 @@ Software:    GRASS
 
 <p>
 This example prints (in red) whatever is in the file <em>soils.hdr</em> above
-the map, using a 20/72 inch <tt>Courier</tt> font.
+the map, using a 20/72 inch <code>Courier</code> font.
 <div class="code"><pre>
 EXAMPLE:
     <b>header</b>
@@ -657,7 +657,7 @@ The default background box color is white.
 <p>
 This example prints (in brown) the scale, grid and region information
 immediately below the map and starting 1.5 inches from the left edge
-of the page, using a 12/72 inch <tt>Courier</tt> font.
+of the page, using a 12/72 inch <code>Courier</code> font.
 
 <div class="code"><pre>
 EXAMPLE:
@@ -1097,8 +1097,8 @@ Of course, <em>setcolor</em>
 can be requested more than once to override the default color for additional
 categories.  More than one category can be changed for each request by listing
 all the category values separated by commas (but with no spaces). Also ranges
-can be included, for example "1,2,6-10,12". Colors for "<tt>null</tt>" and the
-"<tt>default</tt>" (i.e. out-of-range) color may also be reassigned.
+can be included, for example "1,2,6-10,12". Colors for "<code>null</code>" and the
+"<code>default</code>" (i.e. out-of-range) color may also be reassigned.
 <p>
 
 <a name="text"></a>
@@ -1133,7 +1133,7 @@ More than one line of text can be specified by notating the end of a line with
 <p>The user can then specify various text features:
 <p><b>font:</b>
 the PostScript font. Common possibilities are listed at the start of this
-help page. The default is <tt>Helvetica</tt>.
+help page. The default is <code>Helvetica</code>.
 <p><b>color</b>
 (see <a href="#NAMED_COLORS">NAMED COLORS</a>);
 <p><b>width</b>
@@ -1227,7 +1227,7 @@ by the current mask;
 for more information on the mask)
 <p><b>cats</b> - which categories should be plotted (default is all);
 <p><b>where</b> - select features using a SQL where statement.
-For example: <tt>vlastnik = 'Cimrman'</tt>;
+For example: <code>vlastnik = 'Cimrman'</code>;
 <p><b>label</b> - for description in <a href="#vlegend">vlegend</a>.
 Default is: map(mapset);
 <p><b>lpos</b> - position vector is plotted in legend. If lpos is
@@ -1242,7 +1242,7 @@ are set by <b>fcolor</b> (red, green, ..., none, R:G:B)<!-- no?  and <b>width</b
 until overwritten in the pattern file -->. Color of the boundaries remain set
 by the <b>color</b> instruction.
 Pattern may be scaled with the <b>scale</b> command. Several standard hatching
-patterns are provided in <tt>$GISBASE/etc/paint/patterns/</tt>.
+patterns are provided in <code>$GISBASE/etc/paint/patterns/</code>.
 Demonstrative images can be found on the
 <a href="https://grasswiki.osgeo.org/wiki/AreaFillPatterns">GRASS Wiki site</a>.
 
