@@ -488,10 +488,9 @@ class LocationPage(TitledPage):
         tmplist = [p.name for p in Path(self.grassdatabase, self.xylocation).iterdir()]
         self.mapsetList = []
         for item in tmplist:
-            if os.path.isdir(
-                os.path.join(self.grassdatabase, self.xylocation, item)
-            ) and os.path.exists(
-                os.path.join(self.grassdatabase, self.xylocation, item, "WIND")
+            if (
+                os.path.isdir(os.path.join(self.grassdatabase, self.xylocation, item))
+                and Path(self.grassdatabase, self.xylocation, item, "WIND").exists()
             ):
                 if item != "PERMANENT":
                     self.mapsetList.append(item)
@@ -1088,7 +1087,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         }
 
         # make a backup of the current points file
-        if os.path.exists(self.file["control_points"]):
+        if Path(self.file["control_points"]).exists():
             shutil.copy(self.file["control_points"], self.file["control_points_bak"])
 
         # polynomial order transformation for georectification
@@ -1449,7 +1448,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             self.mapcoordlist[key][4] = coord[0]
             self.mapcoordlist[key][5] = coord[1]
             # ADD ELEVATION FROM MAP AS HEIGHT PARAMETER
-            if os.path.exists(self.file["elevation"]):
+            if Path(self.file["elevation"]).exists():
                 # Parse the i.ortho.elev generated file
                 # Get all lines from file
                 lines = Path(self.file["elevation"]).read_text().splitlines()
@@ -1870,12 +1869,12 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 self.SaveGCPs(None)
             elif ret == wx.NO:
                 # restore POINTS file from backup
-                if os.path.exists(self.file["control_points_bak"]):
+                if Path(self.file["control_points_bak"]).exists():
                     shutil.copy(
                         self.file["control_points_bak"], self.file["control_points"]
                     )
 
-            if os.path.exists(self.file["control_points_bak"]):
+            if Path(self.file["control_points_bak"]).exists():
                 os.unlink(self.file["control_points_bak"])
 
             self.SrcMap.Clean()

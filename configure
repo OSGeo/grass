@@ -16234,6 +16234,11 @@ printf "%s\n" "#define _LARGEFILE_SOURCE $ac_cv_sys_largefile_source" >>confdefs
      CFLAGS=$ac_save_cflags
    fi
 
+if test "$ac_cv_sys_large_files" != 0; then
+    USE_LARGEFILES=1
+else
+    USE_LARGEFILES=0
+fi
 
 
 USE_TERMIO=
