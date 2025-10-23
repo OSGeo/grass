@@ -1477,15 +1477,19 @@ class DataCatalogTree(TreeView):
         return mapset_node
 
     def InsertLocation(self, name, grassdb_node):
-        """Insert new location into model and refresh tree"""
-        location_node = self._model.AppendNode(
-            parent=grassdb_node, data=dict(type="location", name=name)
-        )
-        # reload new location since it has a mapset
-        self._reloadLocationNode(location_node)
-        self._model.SortChildren(grassdb_node)
-        self.RefreshNode(grassdb_node, recursive=True)
-        return location_node
+        """
+        Insert new location into model and refresh tree.
+        Check if not already added.
+        """
+        if not self.GetDbNode(grassdb=grassdb_node.label, location=name):
+            location_node = self._model.AppendNode(
+                parent=grassdb_node, data={"type": "location", "name": name}
+            )
+            # reload new location since it has a mapset
+            self._reloadLocationNode(location_node)
+            self._model.SortChildren(grassdb_node)
+            self.RefreshNode(grassdb_node, recursive=True)
+            return location_node
 
     def InsertGrassDb(self, name):
         """
