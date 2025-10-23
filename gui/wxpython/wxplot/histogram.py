@@ -97,10 +97,7 @@ class HistogramPlotFrame(BasePlotFrame):
         create a list of cell value and count/percent/area pairs. This is passed to
         plot to create a line graph of the histogram.
         """
-        try:
-            self.SetCursor(StockCursor(wx.CURSOR_ARROW))
-        except:
-            pass
+        self.SetCursor(StockCursor(wx.CURSOR_ARROW))
 
         self.SetGraphStyle()
         wx.BeginBusyCursor()
@@ -154,7 +151,7 @@ class HistogramPlotFrame(BasePlotFrame):
         # set xlabel based on first raster map in list to be histogrammed
         #
         units = self.raster[self.rasterList[0]]["units"]
-        if units not in ("", "(none)") and units is not None:
+        if units not in {"", "(none)"} and units is not None:
             self.xlabel = _("Raster cell values %s") % units
         else:
             self.xlabel = _("Raster cell values")

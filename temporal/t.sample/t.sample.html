@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-The purpose of this module is to compute and to show spatio-temporal
+The purpose of <em>t.sample</em> is to compute and to show spatio-temporal
 relations between space time datasets of different type. Several input
 space time datasets are sampled by a <em>sample</em> space time dataset
 using temporal topological relations. The types of the input space time
@@ -57,7 +57,7 @@ v.random -z output=pnts2 n=20 zmin=0 zmax=100 column=height
 n1=`g.tempfile pid=1 -d`
 n2=`g.tempfile pid=2 -d`
 
-cat > "${n1}" << EOF
+cat &gt; "${n1}" &lt;&lt; EOF
 a1
 a2
 a3
@@ -66,7 +66,7 @@ a5
 a6
 EOF
 
-cat > "${n2}" << EOF
+cat &gt; "${n2}" &lt;&lt; EOF
 pnts1|2001-01-01|2001-03-01
 pnts2|2001-05-01|2001-07-01
 EOF

@@ -91,7 +91,7 @@ class DifficultValueTest(TestCase):
             map=cls.vector_points,
             layer=1,
             column="place_name",
-            query_column='"Joan\'s Place"',
+            value="Joan''s Place",
             where="owner_id = 5",
         )
         # Pipe

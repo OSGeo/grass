@@ -11,21 +11,24 @@ static int reclass_text(char *text, struct Reclass *reclass, int next);
 
 char *maskinfo(void)
 {
-    struct Reclass reclass;
+    struct Reclass reclass = {0};
     char *results;
-    char text[100];
+    char text[2 * GNAME_MAX + GMAPSET_MAX];
     int next;
     int first;
+    char mask_name[GNAME_MAX];
+    char mask_mapset[GMAPSET_MAX];
 
     results = NULL;
-    if (G_find_raster("MASK", G_mapset()) == NULL)
-        return "none";
-    if (Rast_get_reclass("MASK", G_mapset(), &reclass) <= 0) {
-        sprintf(text, "MASK in %s", G_mapset());
+    if (!Rast_mask_status(mask_name, mask_mapset, NULL, NULL, NULL))
+        return G_store("none");
+    if (Rast_get_reclass(mask_name, mask_mapset, &reclass) <= 0) {
+        snprintf(text, sizeof(text), "%s in %s", mask_name, mask_mapset);
+        Rast_free_reclass(&reclass);
         return append(results, text);
     }
 
-    sprintf(text, "%s in %s", reclass.name, reclass.mapset);
+    snprintf(text, sizeof(text), "%s in %s", reclass.name, reclass.mapset);
     results = append(results, text);
     next = 0;
     first = 1;
@@ -80,9 +83,9 @@ static void do_text(char *text, long first, long last)
         strcat(text, " ");
 
     if (first == last)
-        sprintf(work, "%ld", first);
+        snprintf(work, sizeof(work), "%ld", first);
     else
-        sprintf(work, "%ld-%ld", first, last);
+        snprintf(work, sizeof(work), "%ld-%ld", first, last);
 
     strcat(text, work);
 }

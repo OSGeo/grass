@@ -328,26 +328,18 @@ class ImportDialog(wx.Dialog):
         self.commandId += 1
         layer, output = self.list.GetLayers()[self.commandId][:2]
 
-        if "@" not in output:
-            name = output + "@" + grass.gisenv()["MAPSET"]
-        else:
-            name = output
+        name = output + "@" + grass.gisenv()["MAPSET"] if "@" not in output else output
 
         # add imported layers into layer tree
         # an alternative would be emit signal (mapCreated) and (optionally)
         # connect to this signal
         llist = self._giface.GetLayerList()
         if self.importType == "gdal":
-            if userData:
-                nBands = int(userData.get("nbands", 1))
-            else:
-                nBands = 1
+            nBands = int(userData.get("nbands", 1)) if userData else 1
 
-            if UserSettings.Get(group="rasterLayer", key="opaque", subkey="enabled"):
-                nFlag = True
-            else:
-                nFlag = False
-
+            nFlag = bool(
+                UserSettings.Get(group="rasterLayer", key="opaque", subkey="enabled")
+            )
             for i in range(1, nBands + 1):
                 nameOrig = name
                 if nBands > 1:
@@ -390,7 +382,7 @@ class ImportDialog(wx.Dialog):
         for itm in data:
             layerId = itm[-1]
 
-            # select only layers with different projetion
+            # select only layers with different projection
             if self.layersData[layerId][projMatch_idx] == 0:
                 dt = [itm[0], itm[grassName_idx]]
                 differentProjLayers.append(tuple(dt))
@@ -406,13 +398,12 @@ class ImportDialog(wx.Dialog):
 
             ret = dlg.ShowModal()
 
-            if ret == wx.ID_OK:
-                # do not import unchecked layers
-                for itm in reversed(list(dlg.GetData(checked=False))):
-                    idx = itm[-1]
-                    layers.pop(idx)
-            else:
+            if ret != wx.ID_OK:
                 return None
+            # do not import unchecked layers
+            for itm in reversed(list(dlg.GetData(checked=False))):
+                idx = itm[-1]
+                layers.pop(idx)
 
         return layers
 
@@ -503,15 +494,16 @@ class GdalImportDialog(ImportDialog):
                 idsn = dsn
                 if "PG:" in dsn:
                     idsn = f"{dsn} table={layer}"
-                elif os.path.exists(idsn):
+                elif Path(idsn).exists():
                     try:
                         from osgeo import gdal
+
+                        gdal.DontUseExceptions()
                     except ImportError:
                         GError(
                             parent=self,
                             message=_(
-                                "The Python GDAL package is missing."
-                                " Please install it."
+                                "The Python GDAL package is missing. Please install it."
                             ),
                         )
                         return
@@ -727,7 +719,7 @@ class OgrImportDialog(ImportDialog):
         return "v.import"
 
     def _getBlackListedParameters(self):
-        """Get parametrs which will not be showed in Settings page"""
+        """Get parameters which will not be showed in Settings page"""
         return ["input", "output", "layer"]
 
     def _getBlackListedFlags(self):
@@ -956,7 +948,7 @@ class DxfImportDialog(ImportDialog):
         return "v.in.dxf"
 
     def _getBlackListedParameters(self):
-        """Get parametrs which will not be showed in Settings page"""
+        """Get parameters which will not be showed in Settings page"""
         return ["input", "output", "layers"]
 
     def _getBlackListedFlags(self):

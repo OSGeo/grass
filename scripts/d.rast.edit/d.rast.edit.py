@@ -644,28 +644,9 @@ def wxGUI():
             if self.angles:
                 self.status["aspect"] = self.angles[row][col]
 
-        def force_color(self, val):
-            run("g.region", rows=1, cols=1)
-            run("r.mapcalc", expression="%s = %d" % (self.tempmap, val))
-            run("r.colors", map=self.tempmap, rast=self.inmap)
-            run("r.out.ppm", input=self.tempmap, out=self.tempfile)
-            run("g.remove", flags="f", type="raster", name=self.tempmap)
-
-            tempimg = wx.Image(self.tempfile)
-            gs.try_remove(self.tempfile)
-
-            rgb = tempimg.get(0, 0)
-            color = "#%02x%02x%02x" % rgb
-            self.colors[val] = color
-            tempimg.delete()
-
         def get_color(self, val):
             if val not in self.colors:
-                try:
-                    self.force_color(val)
-                except:
-                    self.colors[val] = "#ffffff"
-
+                self.colors[val] = "#ffffff"
             return self.colors[val]
 
         def refresh_canvas(self):

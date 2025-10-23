@@ -17,8 +17,7 @@ Usage:
 >>> # Write some data
 ... for y in range(map2d_1.shape[0]):
 ...     for x in range(map2d_1.shape[1]):
-...         map2d_1[y,x] = y + x
-...
+...         map2d_1[y, x] = y + x
 >>> # Lets have a look at the array
 ... print(map2d_1)
 [[0. 1. 2. 3. 4. 5.]
@@ -54,8 +53,7 @@ Usage:
 ... for z in range(map3d_1.shape[0]):
 ...     for y in range(map3d_1.shape[1]):
 ...         for x in range(map3d_1.shape[2]):
-...             map3d_1[z,y,x] = z + y + x
-...
+...             map3d_1[z, y, x] = z + y + x
 >>> # Lets have a look at the 3D array
 ... print(map3d_1)
 [[[ 0.  1.  2.  3.  4.  5.]
@@ -131,6 +129,7 @@ class _tempfile:
 
 
 class array(np.memmap):
+    # pylint: disable-next=signature-differs; W0222
     def __new__(cls, mapname=None, null=None, dtype=np.double, env=None):
         """Define new numpy array
 
@@ -242,6 +241,7 @@ class array(np.memmap):
 
 
 class array3d(np.memmap):
+    # pylint: disable-next=signature-differs; W0222
     def __new__(cls, mapname=None, null=None, dtype=np.double, env=None):
         """Define new 3d numpy array
 

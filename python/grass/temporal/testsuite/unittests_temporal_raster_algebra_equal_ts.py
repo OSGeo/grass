@@ -9,15 +9,16 @@ for details.
 
 import datetime
 
-import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.utils import xfail_windows
 
+import grass.temporal as tgis
+
 
 class TestTemporalRasterAlgebraImplicitAggregation(TestCase):
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         """Initiate the temporal GIS and set the region"""
         tgis.init(True)  # Raise on error instead of exit(1)
         cls.use_temp_region()
@@ -55,18 +56,18 @@ class TestTemporalRasterAlgebraImplicitAggregation(TestCase):
             type="raster", name=None, maps="singletmap", start="2001-01-01"
         )
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         self.runModule("t.remove", flags="rf", inputs="R", quiet=True)
 
     @classmethod
-    def tearDownClass(cls):
+    def tearDownClass(cls) -> None:
         """Remove the temporary region"""
         cls.runModule("t.remove", flags="rf", inputs="A", quiet=True)
         cls.runModule("t.unregister", maps="singletmap", quiet=True)
         cls.del_temp_region()
 
     @xfail_windows
-    def test_simple_operator(self):
+    def test_simple_operator(self) -> None:
         """Test implicit aggregation
 
         R = A + A
@@ -93,7 +94,7 @@ class TestTemporalRasterAlgebraImplicitAggregation(TestCase):
         self.assertEqual(D.check_temporal_topology(), False)
         self.assertEqual(D.get_granularity(), None)
 
-    def test_complex_operator(self):
+    def test_complex_operator(self) -> None:
         """Test implicit aggregation
 
         R = A {+,equal,l} A
@@ -120,7 +121,7 @@ class TestTemporalRasterAlgebraImplicitAggregation(TestCase):
         self.assertEqual(D.check_temporal_topology(), False)
         self.assertEqual(D.get_granularity(), None)
 
-    def test_single_map_complex_operator(self):
+    def test_single_map_complex_operator(self) -> None:
         """Test implicit aggregation
 
         R = singletmap {+,equal,l} A
@@ -152,7 +153,7 @@ class TestTemporalRasterAlgebraImplicitAggregation(TestCase):
         self.assertEqual(D.get_granularity(), None)
 
     @xfail_windows
-    def test_single_map_simple_operator(self):
+    def test_single_map_simple_operator(self) -> None:
         """Test implicit aggregation
 
         R = singletmap + A
@@ -179,7 +180,7 @@ class TestTemporalRasterAlgebraImplicitAggregation(TestCase):
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), None)
 
-    def test_single_map_complex_operator_right_ts(self):
+    def test_single_map_complex_operator_right_ts(self) -> None:
         """Test implicit aggregation
 
         TODO: Is this the correct result? Implicit aggregation and full permutation?

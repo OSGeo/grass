@@ -76,7 +76,7 @@ int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
 
     if (!OSRIsProjected(hSRS) && !OSRIsGeographic(hSRS)) {
         G_important_message(
-            _("Projection for layer <%s> does not contain a valid SRS"),
+            _("Projection for layer <%s> does not contain a valid CRS"),
             OGR_L_GetName(Ogr_layer));
 
         if (verbose) {
@@ -267,7 +267,6 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
 {
     struct Cell_head loc_wind;
     struct Key_Value *proj_info = NULL, *proj_units = NULL;
-    struct Key_Value *loc_proj_info = NULL, *loc_proj_units = NULL;
     char *wkt = NULL, *srid = NULL;
     char error_msg[8096];
     int proj_trouble;
@@ -318,6 +317,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
         }
     }
     else {
+        struct Key_Value *loc_proj_info = NULL, *loc_proj_units = NULL;
         int err = 0;
         void (*msg_fn)(const char *, ...);
 
@@ -521,5 +521,9 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                 exit(EXIT_SUCCESS);
             }
         }
+        G_free_key_value(loc_proj_units);
+        G_free_key_value(loc_proj_info);
     }
+    G_free_key_value(proj_units);
+    G_free_key_value(proj_info);
 }

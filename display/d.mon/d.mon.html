@@ -52,8 +52,8 @@ flag.
 <h2>NOTES</h2>
 
 <em>d.mon</em> is designed for interactive use. If non-interactive use
-is needed (e.g., in a script) set <tt>GRASS_RENDER_IMMEDIATE=png</tt>
-(or <tt>=cairo</tt>) and use the related environment
+is needed (e.g., in a script) set <code>GRASS_RENDER_IMMEDIATE=png</code>
+(or <code>=cairo</code>) and use the related environment
 <a href="variables.html">variables</a> to control output size etc.
 
 <h2>EXAMPLES</h2>
@@ -73,7 +73,7 @@ d.mon start=wx0
 <i>Figure: The initialization of display monitor wx0</i>
 </div>
 
-All subsequently displayed data will be rendered on monitor <tt>wx0</tt>.
+All subsequently displayed data will be rendered on monitor <code>wx0</code>.
 
 <div class="code"><pre>
 g.region raster=elevation -p
@@ -95,7 +95,7 @@ d.mon start=cairo output=out.pdf
 </pre></div>
 
 From this moment on all displayed data will be rendered into
-file <tt>output.pdf</tt>.
+file <code>output.pdf</code>.
 
 <h3>List running monitors</h3>
 

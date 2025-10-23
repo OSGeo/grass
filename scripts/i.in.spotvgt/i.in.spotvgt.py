@@ -20,7 +20,7 @@
 #############################################################################
 #
 # REQUIREMENTS:
-#      -  gdal: http://www.gdal.org
+#      -  gdal: https://gdal.org
 #
 # Notes:
 # * According to the faq (http://www.vgt.vito.be/faq/faq.html), SPOT vegetation
@@ -52,6 +52,7 @@ import atexit
 import string
 import grass.script as gs
 from grass.exceptions import CalledModuleError
+from pathlib import Path
 
 
 vrt = """<VRTDataset rasterXSize="$XSIZE" rasterYSize="$YSIZE">
@@ -73,14 +74,13 @@ vrt = """<VRTDataset rasterXSize="$XSIZE" rasterYSize="$YSIZE">
 
 
 def create_VRT_file(projfile, vrtfile, infile):
-    fh = open(projfile)
     kv = {}
-    for line in fh:
-        f = line.rstrip("\r\n").split()
-        if f < 2:
-            continue
-        kv[f[0]] = f[1]
-    fh.close()
+    with open(projfile) as fh:
+        for line in fh:
+            f = line.rstrip("\r\n").split()
+            if len(f) < 2:
+                continue
+            kv[f[0]] = f[1]
 
     north_center = kv["CARTO_UPPER_LEFT_Y"]
     # south_center = kv['CARTO_LOWER_LEFT_Y']
@@ -105,9 +105,7 @@ def create_VRT_file(projfile, vrtfile, infile):
         RESOLUTION=map_proj_res,
         FILENAME=infile,
     )
-    outf = open(vrtfile, "w")
-    outf.write(s)
-    outf.close()
+    Path(vrtfile).write_text(s)
 
 
 def cleanup():
@@ -125,9 +123,7 @@ def main():
 
     # check for gdalinfo (just to check if installation is complete)
     if not gs.find_program("gdalinfo", "--help"):
-        gs.fatal(
-            _("'gdalinfo' not found, install GDAL tools first (http://www.gdal.org)")
-        )
+        gs.fatal(_("'gdalinfo' not found, install GDAL tools first (https://gdal.org)"))
 
     pid = str(os.getpid())
     tmpfile = gs.tempfile()
@@ -230,7 +226,7 @@ def main():
     if also:
         gs.message(_("Importing SPOT VGT NDVI quality map..."))
         gs.try_remove(vrtfile)
-        qname = spotname.replace("NDV", "SM")
+        qname = spotname.replace("NDV", "SM") + ".HDF"
         qfile = os.path.join(spotdir, qname)
         create_VRT_file(projfile, vrtfile, qfile)
 
@@ -242,33 +238,26 @@ def main():
             gs.fatal(_("An error occurred. Stop."))
 
         # some of the possible values:
-        rules = [
-            r + "\n"
-            for r in [
-                "8 50 50 50",
-                "11 70 70 70",
-                "12 90 90 90",
-                "60 grey",
-                "155 blue",
-                "232 violet",
-                "235 red",
-                "236 brown",
-                "248 orange",
-                "251 yellow",
-                "252 green",
-            ]
-        ]
+        rules = (
+            "8 50 50 50\n"
+            "11 70 70 70\n"
+            "12 90 90 90\n"
+            "60 grey\n"
+            "155 blue\n"
+            "232 violet\n"
+            "235 red\n"
+            "236 brown\n"
+            "248 orange\n"
+            "251 yellow\n"
+            "252 green\n"
+        )
         gs.write_command("r.colors", map=smfile, rules="-", stdin=rules)
 
         gs.message(_("Imported SPOT VEGETATION SM quality map <%s>.") % smfile)
         gs.message(
-            _(
-                "Note: A snow map can be extracted by category "
-                "252 (d.rast %s cat=252)"
-            )
+            _("Note: A snow map can be extracted by category 252 (d.rast %s cat=252)")
             % smfile
         )
-        gs.message("")
         gs.message(_("Filtering NDVI map by Status Map quality layer..."))
 
         filtfile = "%s_filt" % name

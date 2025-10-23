@@ -446,7 +446,7 @@ class VDigitToolbar(BaseToolbar):
             return True
 
     def OnTool(self, event):
-        """Tool selected -> untoggles previusly selected tool in
+        """Tool selected -> untoggles previously selected tool in
         toolbar"""
         Debug.msg(
             3,
@@ -478,7 +478,7 @@ class VDigitToolbar(BaseToolbar):
             event.Skip()
 
     def OnAddPoint(self, event):
-        """Add point to the vector map Laier"""
+        """Add point to the vector map layer"""
         Debug.msg(2, "VDigitToolbar.OnAddPoint()")
         self.action = {"desc": "addLine", "type": "point", "id": self.addPoint}
         self.MapWindow.mouse["box"] = "point"
@@ -705,7 +705,6 @@ class VDigitToolbar(BaseToolbar):
 
     def OnAdditionalToolMenu(self, event):
         """Menu for additional tools"""
-        point = wx.GetMousePosition()
         toolMenu = Menu()
 
         for label, itype, handler, desc in (
@@ -996,31 +995,32 @@ class VDigitToolbar(BaseToolbar):
                 disableAdd=True,
             )
 
-            if dlg and dlg.GetName():
-                # add layer to map layer tree/map display
-                mapName = dlg.GetName() + "@" + gs.gisenv()["MAPSET"]
-                self._giface.GetLayerList().AddLayer(
-                    ltype="vector",
-                    name=mapName,
-                    checked=True,
-                    cmd=["d.vect", "map=%s" % mapName],
-                )
-
-                vectLayers = self.UpdateListOfLayers(updateTool=True)
-                selection = vectLayers.index(mapName)
-
-                # create table ?
-                if dlg.IsChecked("table"):
-                    # TODO: starting of tools such as atm, iclass,
-                    # plots etc. should be handled in some better way
-                    # than starting randomly from mapdisp and lmgr
-                    self.openATM.emit(selection="table")
-                dlg.Destroy()
-            else:
+            if not dlg or not dlg.GetName():
                 self.combo.SetValue(_("Select vector map"))
                 if dlg:
                     dlg.Destroy()
                 return
+
+            # add layer to map layer tree/map display
+            mapName = dlg.GetName() + "@" + gs.gisenv()["MAPSET"]
+            self._giface.GetLayerList().AddLayer(
+                ltype="vector",
+                name=mapName,
+                checked=True,
+                cmd=["d.vect", "map=%s" % mapName],
+            )
+
+            vectLayers = self.UpdateListOfLayers(updateTool=True)
+            selection = vectLayers.index(mapName)
+
+            # create table ?
+            if dlg.IsChecked("table"):
+                # TODO: starting of tools such as atm, iclass,
+                # plots etc. should be handled in some better way
+                # than starting randomly from mapdisp and lmgr
+                self.openATM.emit(selection="table")
+            dlg.Destroy()
+
         else:
             selection = event.GetSelection() - 1  # first option is 'New vector map'
 
@@ -1034,6 +1034,8 @@ class VDigitToolbar(BaseToolbar):
 
         # select the given map layer for editing
         self.StartEditing(self.layers[selection])
+
+        wx.CallLater(100, self.MapWindow.SetFocus)
 
         event.Skip()
 
@@ -1057,10 +1059,9 @@ class VDigitToolbar(BaseToolbar):
                 caption=_("Digitizer error"),
                 style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
             )
-            if dlg.ShowModal() == wx.ID_YES:
-                RunCommand("v.build", map=mapLayer.GetName())
-            else:
-                return
+            if dlg.ShowModal() != wx.ID_YES:
+                return None
+            RunCommand("v.build", map=mapLayer.GetName())
 
         # deactivate layer
         self.Map.ChangeLayerActive(mapLayer, False)
@@ -1214,11 +1215,7 @@ class VDigitToolbar(BaseToolbar):
                     dlg.Destroy()
 
             self.parent.SetStatusText(
-                _(
-                    "Please wait, "
-                    "closing and rebuilding topology of "
-                    "vector map <%s>..."
-                )
+                _("Please wait, closing and rebuilding topology of vector map <%s>...")
                 % self.mapLayer.GetName(),
                 0,
             )
@@ -1291,10 +1288,7 @@ class VDigitToolbar(BaseToolbar):
                 layerNameList.append(layer.GetName())
 
         if updateTool:  # update toolbar
-            if not self.mapLayer:
-                value = _("Select vector map")
-            else:
-                value = layerNameSelected
+            value = _("Select vector map") if not self.mapLayer else layerNameSelected
 
             if not self.comboid:
                 if not self.tools or "selector" in self.tools:

@@ -19,6 +19,7 @@ import os
 import queue as Queue
 import sys
 from math import cos, pi, sin, sqrt
+from pathlib import Path
 
 import wx
 
@@ -195,7 +196,6 @@ class PsMapFrame(wx.Frame):
         self.getInitMap()
 
         # image path
-        env = gs.gisenv()
         self.imgName = gs.tempfile()
 
         # canvas for preview
@@ -359,21 +359,17 @@ class PsMapFrame(wx.Frame):
     def PSFile(self, filename=None, pdf=False):
         """Create temporary instructions file and run ps.map with output = filename"""
         instrFile = gs.tempfile()
-        instrFileFd = open(instrFile, mode="wb")
-        content = self.InstructionFile()
-        if not content:
-            return
-        instrFileFd.write(content)
-        instrFileFd.flush()
-        instrFileFd.close()
+        with open(instrFile, mode="wb") as instrFileFd:
+            content = self.InstructionFile()
+            if not content:
+                return
+            instrFileFd.write(content)
+            instrFileFd.flush()
 
         temp = False
         regOld = gs.region(env=self.env)
 
-        if pdf:
-            pdfname = filename
-        else:
-            pdfname = None
+        pdfname = filename if pdf else None
         # preview or pdf
         if not filename or (filename and pdf):
             temp = True
@@ -472,8 +468,7 @@ class PsMapFrame(wx.Frame):
                     event.userData["pdfname"],
                 ]
                 message = _(
-                    "Program {} is not available."
-                    " Please install it to create PDF.\n\n "
+                    "Program {} is not available. Please install it to create PDF.\n\n "
                 ).format(pdf_rendering_prog)
             try:
                 proc = gs.Popen(command)
@@ -513,45 +508,44 @@ class PsMapFrame(wx.Frame):
                 env=self.env,
             )
             # wx.BusyInfo does not display the message
-            busy = wx.BusyInfo(_("Generating preview, wait please"), parent=self)
-            wx.GetApp().Yield()
-            try:
-                im = PILImage.open(event.userData["filename"])
-                if self.instruction[self.pageId]["Orientation"] == "Landscape":
-                    import numpy as np
+            with wx.BusyInfo(_("Generating preview, wait please"), parent=self):
+                wx.GetApp().Yield()
+                try:
+                    im = PILImage.open(event.userData["filename"])
+                    if self.instruction[self.pageId]["Orientation"] == "Landscape":
+                        import numpy as np
 
-                    im_array = np.array(im)
-                    im = PILImage.fromarray(np.rot90(im_array, 3))
-                im.save(self.imgName, format="PNG")
-            except OSError:
-                del busy
-                program = self._getGhostscriptProgramName()
-                dlg = HyperlinkDialog(
-                    self,
-                    title=_("Preview not available"),
-                    message=_(
-                        "Preview is not available probably because Ghostscript is not "
-                        "installed or not on PATH."
-                    ),
-                    hyperlink="https://www.ghostscript.com/releases/gsdnld.html",
-                    hyperlinkLabel=_(
-                        "You can download {program} {arch} version here."
-                    ).format(
-                        program=program,
-                        arch="64bit" if "64" in program else "32bit",
-                    ),
-                )
-                dlg.ShowModal()
-                dlg.Destroy()
-                return
+                        im_array = np.array(im)
+                        im = PILImage.fromarray(np.rot90(im_array, 3))
+                    im.save(self.imgName, format="PNG")
+                except OSError:
+                    del busy
+                    program = self._getGhostscriptProgramName()
+                    dlg = HyperlinkDialog(
+                        self,
+                        title=_("Preview not available"),
+                        message=_(
+                            "Preview is not available probably because Ghostscript is not "
+                            "installed or not on PATH."
+                        ),
+                        hyperlink="https://www.ghostscript.com/releases/gsdnld.html",
+                        hyperlinkLabel=_(
+                            "You can download {program} {arch} version here."
+                        ).format(
+                            program=program,
+                            arch="64bit" if "64" in program else "32bit",
+                        ),
+                    )
+                    dlg.ShowModal()
+                    dlg.Destroy()
+                    return
 
-            self.book.SetSelection(1)
-            self.currentPage = 1
-            rect = self.previewCanvas.ImageRect()
-            self.previewCanvas.image = wx.Image(self.imgName, wx.BITMAP_TYPE_PNG)
-            self.previewCanvas.DrawImage(rect=rect)
+                self.book.SetSelection(1)
+                self.currentPage = 1
+                rect = self.previewCanvas.ImageRect()
+                self.previewCanvas.image = wx.Image(self.imgName, wx.BITMAP_TYPE_PNG)
+                self.previewCanvas.DrawImage(rect=rect)
 
-            del busy
             self.SetStatusText(_("Preview generated"), 0)
 
         gs.try_remove(event.userData["instrFile"])
@@ -571,10 +565,7 @@ class PsMapFrame(wx.Frame):
                 s = "." + s
             suffix.append(s)
         raster = self.instruction.FindInstructionByType("raster")
-        if raster:
-            rasterId = raster.id
-        else:
-            rasterId = None
+        rasterId = raster.id if raster else None
 
         if rasterId and self.instruction[rasterId]["raster"]:
             mapName = self.instruction[rasterId]["raster"].split("@")[0] + suffix[0]
@@ -606,12 +597,10 @@ class PsMapFrame(wx.Frame):
             wildcard="*.psmap|*.psmap|Text file(*.txt)|*.txt|All files(*.*)|*.*"
         )
         if filename:
-            instrFile = open(filename, "wb")
             content = self.InstructionFile()
             if not content:
                 return
-            instrFile.write(content)
-            instrFile.close()
+            Path(filename).write_bytes(content)
 
     def OnLoadFile(self, event):
         """Launch file dialog and load selected file"""
@@ -1053,19 +1042,9 @@ class PsMapFrame(wx.Frame):
         if "Bold" in fontstyle:
             weight = wx.FONTWEIGHT_BOLD
 
-        try:
-            fn = wx.Font(
-                pointSize=fontsize, family=family, style=style, weight=weight, face=face
-            )
-        except:
-            fn = wx.Font(
-                pointSize=fontsize,
-                family=wx.FONTFAMILY_DEFAULT,
-                style=wx.FONTSTYLE_NORMAL,
-                weight=wx.FONTWEIGHT_NORMAL,
-            )
-
-        return fn
+        return wx.Font(
+            pointSize=fontsize, family=family, style=style, weight=weight, faceName=face
+        )
 
     def getTextExtent(self, textDict):
         """Estimates bounding rectangle of text"""
@@ -1079,20 +1058,19 @@ class PsMapFrame(wx.Frame):
             dc.SetFont(fn)
             w, h, lh = dc.GetFullMultiLineTextExtent(textDict["text"])
             return (w, h)
-        except:
+        except (wx.PyAssertionError, ValueError, KeyError):
             return (0, 0)
 
     def getInitMap(self):
         """Create default map frame when no map is selected, needed for coordinates in
         map units"""
         instrFile = gs.tempfile()
-        instrFileFd = open(instrFile, mode="wb")
-        content = self.InstructionFile()
-        if not content:
-            return
-        instrFileFd.write(content)
-        instrFileFd.flush()
-        instrFileFd.close()
+        with open(instrFile, mode="wb") as instrFileFd:
+            content = self.InstructionFile()
+            if not content:
+                return
+            instrFileFd.write(content)
+            instrFileFd.flush()
 
         page = self.instruction.FindInstructionByType("page")
         mapInitRect = GetMapBounds(
@@ -1108,10 +1086,7 @@ class PsMapFrame(wx.Frame):
         scale = mapInitRect.Get()[2] / realWidth
 
         initMap = self.instruction.FindInstructionByType("initMap")
-        if initMap:
-            id = initMap.id
-        else:
-            id = None
+        id = initMap.id if initMap else None
 
         if not id:
             id = NewId()
@@ -1323,26 +1298,26 @@ class PsMapFrame(wx.Frame):
                 else:
                     self.deleteObject(id)
 
-            if itype == "vectorLegend":
-                if not self.instruction.FindInstructionByType("vector"):
-                    self.deleteObject(id)
-                elif self.instruction[id]["vLegend"]:
-                    self.canvas.UpdateLabel(itype=itype, id=id)
-                    drawRectangle = self.canvas.CanvasPaperCoordinates(
-                        rect=self.instruction[id]["rect"], canvasToPaper=False
-                    )
-                    self.canvas.Draw(
-                        pen=self.pen[itype],
-                        brush=self.brush[itype],
-                        pdc=self.canvas.pdcObj,
-                        drawid=id,
-                        pdctype="rectText",
-                        bb=drawRectangle,
-                    )
-                    self.canvas.RedrawSelectBox(id)
-
-                else:
-                    self.deleteObject(id)
+            if itype != "vectorLegend":
+                continue
+            if not self.instruction.FindInstructionByType("vector"):
+                self.deleteObject(id)
+            elif self.instruction[id]["vLegend"]:
+                self.canvas.UpdateLabel(itype=itype, id=id)
+                drawRectangle = self.canvas.CanvasPaperCoordinates(
+                    rect=self.instruction[id]["rect"], canvasToPaper=False
+                )
+                self.canvas.Draw(
+                    pen=self.pen[itype],
+                    brush=self.brush[itype],
+                    pdc=self.canvas.pdcObj,
+                    drawid=id,
+                    pdctype="rectText",
+                    bb=drawRectangle,
+                )
+                self.canvas.RedrawSelectBox(id)
+            else:
+                self.deleteObject(id)
 
     def OnPageChanged(self, event):
         """GNotebook page has changed"""
@@ -1993,7 +1968,7 @@ class PsMapBufferedWindow(wx.Window):
                         pdcType = "rect"
                         lineCoords = None
                         if r[2] < 2 or r[3] < 2:
-                            # to avoid strange behaviour
+                            # to avoid strange behavior
                             return
 
                     self.Draw(
@@ -2102,10 +2077,7 @@ class PsMapBufferedWindow(wx.Window):
                     instr = self.instruction[self.dragId]
                     points = instr["where"]
                     # moving point
-                    if self.currentLinePoint == 0:
-                        pPaper = points[1]
-                    else:
-                        pPaper = points[0]
+                    pPaper = points[1] if self.currentLinePoint == 0 else points[0]
                     pCanvas = self.CanvasPaperCoordinates(
                         rect=Rect2DPS(pPaper, (0, 0)), canvasToPaper=False
                     )[:2]
@@ -2534,10 +2506,7 @@ class PsMapBufferedWindow(wx.Window):
         pdc.DrawBitmap(bitmap, bbox[0], bbox[1], useMask=True)
 
     def DrawRotText(self, pdc, drawId, textDict, coords, bounds):
-        if textDict["rotate"]:
-            rot = float(textDict["rotate"])
-        else:
-            rot = 0
+        rot = float(textDict["rotate"]) if textDict["rotate"] else 0
 
         if textDict["background"] != "none":
             background = textDict["background"]
@@ -2693,16 +2662,10 @@ class PsMapBufferedWindow(wx.Window):
         """Updates map frame label"""
 
         vector = self.instruction.FindInstructionByType("vector")
-        if vector:
-            vectorId = vector.id
-        else:
-            vectorId = None
+        vectorId = vector.id if vector else None
 
         raster = self.instruction.FindInstructionByType("raster")
-        if raster:
-            rasterId = raster.id
-        else:
-            rasterId = None
+        rasterId = raster.id if raster else None
 
         rasterName = "None"
         if rasterId:

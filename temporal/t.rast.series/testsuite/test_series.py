@@ -10,7 +10,6 @@ for details.
 
 import os
 
-import grass.pygrass.modules as pymod
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
@@ -67,7 +66,7 @@ class TestSnapAbsoluteSTRDS(TestCase):
             type="raster",
             name=(
                 "series_average,series_maximum"
-                + ",series_minimum,series_minimum_2,series_quantile"
+                ",series_minimum,series_minimum_2,series_quantile"
             ),
         )
 

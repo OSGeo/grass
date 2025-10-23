@@ -24,7 +24,7 @@ import wx.lib.scrolledpanel as scrolled
 from core.gcmd import RunCommand, GError
 from core.debug import Debug
 from dbmgr.vinfo import VectorDBInfo, GetUnicodeValue, GetDbEncoding
-from gui_core.widgets import IntegerValidator, FloatValidator
+from gui_core.widgets import IntegerValidator, FloatValidator, TimeISOValidator
 from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox, TextCtrl
 
 
@@ -393,10 +393,7 @@ class DisplayAttributesDialog(wx.Dialog):
         """
         if action:
             self.action = action
-            if action == "display":
-                enabled = False
-            else:
-                enabled = True
+            enabled = action != "display"
             self.closeDialog.Enable(enabled)
             self.FindWindowById(wx.ID_OK).Enable(enabled)
 
@@ -420,10 +417,7 @@ class DisplayAttributesDialog(wx.Dialog):
                 idx = 0
                 for layer in data["Layer"]:
                     layer = int(layer)
-                    if data["Id"][idx] is not None:
-                        tfid = int(data["Id"][idx])
-                    else:
-                        tfid = 0  # Area / Volume
+                    tfid = int(data["Id"][idx]) if data["Id"][idx] is not None else 0
                     if tfid not in self.cats:
                         self.cats[tfid] = {}
                     if layer not in self.cats[tfid]:
@@ -586,7 +580,7 @@ class DisplayAttributesDialog(wx.Dialog):
         return True
 
     def SetColumnValue(self, layer, column, value):
-        """Set attrbute value
+        """Set attribute value
 
         :param column: column name
         :param value: value
@@ -654,15 +648,14 @@ class ModifyTableRecord(wx.Dialog):
                     self.boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
                     cId += 1
                     continue
-                else:
-                    valueWin = SpinCtrl(
-                        parent=self.dataPanel,
-                        id=wx.ID_ANY,
-                        value=value,
-                        min=-1e9,
-                        max=1e9,
-                        size=(250, -1),
-                    )
+                valueWin = SpinCtrl(
+                    parent=self.dataPanel,
+                    id=wx.ID_ANY,
+                    value=value,
+                    min=-1e9,
+                    max=1e9,
+                    size=(250, -1),
+                )
             else:
                 valueWin = TextCtrl(
                     parent=self.dataPanel, id=wx.ID_ANY, value=value, size=(250, -1)
@@ -671,6 +664,11 @@ class ModifyTableRecord(wx.Dialog):
                     valueWin.SetValidator(IntegerValidator())
                 elif ctype == float:
                     valueWin.SetValidator(FloatValidator())
+                elif ctype == str and ctypeStr == "date":
+                    valueWin.SetValidator(TimeISOValidator())
+                    # Date ISO8601 format hint
+                    valueWin.SetHint(_("YYYY-MM-DD"))
+
                 if not winFocus:
                     wx.CallAfter(valueWin.SetFocus)
                     winFocus = True

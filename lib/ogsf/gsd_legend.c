@@ -404,34 +404,39 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
                         cstr = Rast_get_d_cat(&tdcell, &cats);
                     }
                     if (cat_labs && !cat_vals) {
-                        sprintf(buff, "%s", cstr);
+                        snprintf(buff, sizeof(buff), "%s", cstr);
                     }
                     else {
                         if (cat_labs && cat_vals) {
                             if (cstr)
-                                sprintf(buff, "%.*lf) %s", fprec, tdcell, cstr);
+                                snprintf(buff, sizeof(buff), "%.*lf) %s", fprec,
+                                         tdcell, cstr);
                             else
-                                sprintf(buff, "%.*lf", fprec, tdcell);
+                                snprintf(buff, sizeof(buff), "%.*lf", fprec,
+                                         tdcell);
                         }
                         else if (cat_vals)
-                            sprintf(buff, "%.*lf", fprec, tdcell);
+                            snprintf(buff, sizeof(buff), "%.*lf", fprec,
+                                     tdcell);
                     }
                 }
                 else {
                     tcell =
                         discrete ? Listnum ? Listcats[k] : min + k : labvals[k];
                     if (cat_labs && !cat_vals)
-                        sprintf(buff, "%s", Rast_get_c_cat(&tcell, &cats));
+                        snprintf(buff, sizeof(buff), "%s",
+                                 Rast_get_c_cat(&tcell, &cats));
                     else {
                         if (cat_labs && cat_vals) {
                             cstr = Rast_get_c_cat(&tcell, &cats);
                             if (cstr[0])
-                                sprintf(buff, "%*d) %s", iprec, tcell, cstr);
+                                snprintf(buff, sizeof(buff), "%*d) %s", iprec,
+                                         tcell, cstr);
                             else
-                                sprintf(buff, "%d", tcell);
+                                snprintf(buff, sizeof(buff), "%d", tcell);
                         }
                         else if (cat_vals)
-                            sprintf(buff, "%d", tcell);
+                            snprintf(buff, sizeof(buff), "%d", tcell);
                     }
                 }
                 labw = gsd_get_txtwidth(buff, size);
@@ -636,24 +641,28 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
                         cstr = Rast_get_d_cat(&tdcell, &cats);
                 }
                 if (cat_labs && !cat_vals)
-                    sprintf(buff, "%s", cstr);
+                    snprintf(buff, sizeof(buff), "%s", cstr);
                 else {
                     if (cat_labs && cat_vals) {
                         if (cstr)
                             if (is_fp)
-                                sprintf(buff, "%.*lf) %s", fprec, tdcell, cstr);
+                                snprintf(buff, sizeof(buff), "%.*lf) %s", fprec,
+                                         tdcell, cstr);
                             else
-                                sprintf(buff, "%*d) %s", iprec, tcell, cstr);
+                                snprintf(buff, sizeof(buff), "%*d) %s", iprec,
+                                         tcell, cstr);
                         else if (is_fp)
-                            sprintf(buff, "%.*lf", fprec, tdcell);
+                            snprintf(buff, sizeof(buff), "%.*lf", fprec,
+                                     tdcell);
                         else
-                            sprintf(buff, "%d", tcell);
+                            snprintf(buff, sizeof(buff), "%d", tcell);
                     }
                     else if (cat_vals) {
                         if (is_fp)
-                            sprintf(buff, "%.*lf", fprec, tdcell);
+                            snprintf(buff, sizeof(buff), "%.*lf", fprec,
+                                     tdcell);
                         else
-                            sprintf(buff, "%d", tcell);
+                            snprintf(buff, sizeof(buff), "%d", tcell);
                     }
                 }
                 if (horiz) {

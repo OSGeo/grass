@@ -301,7 +301,7 @@ class LegendController(OverlayController):
             else:
                 b, t, l, r = (
                     float(number) for number in param.split("=")[1].split(",")
-                )  # pylint: disable-msg=W0612
+                )  # pylint: disable=W0612
             x = int((l / 100.0) * screensize[0])
             y = int((1 - t / 100.0) * screensize[1])
 
@@ -323,14 +323,8 @@ class LegendController(OverlayController):
         """Resize legend according to given bbox coordinates."""
         w = abs(begin[0] - end[0])
         h = abs(begin[1] - end[1])
-        if begin[0] < end[0]:
-            x = begin[0]
-        else:
-            x = end[0]
-        if begin[1] < end[1]:
-            y = begin[1]
-        else:
-            y = end[1]
+        x = min(end[0], begin[0])
+        y = min(end[1], begin[1])
 
         at = [
             (screenSize[1] - (y + h)) / float(screenSize[1]) * 100,

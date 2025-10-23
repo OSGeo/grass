@@ -6,7 +6,8 @@ extern long seed_value;
 extern long seeded;
 extern int region_approach;
 
-extern int current_depth, current_row;
-extern int depths, rows, columns;
+extern int current_depth;
+extern int *current_row;
+extern int depths, rows;
 
 #endif /* __GLOBALS_H_ */

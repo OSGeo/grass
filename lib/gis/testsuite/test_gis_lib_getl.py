@@ -3,10 +3,10 @@
 @author Vaclav Petras
 """
 
+import os
 import ctypes
-import pathlib
-import platform
 import unittest
+from pathlib import Path
 
 import grass.lib.gis as libgis
 from grass.gunittest.case import TestCase
@@ -18,10 +18,13 @@ class TestNewlinesWithGetlFunctions(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
+        if os.name == "nt":
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("msvcrt"))
+        else:
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
         cls.libc.fopen.restype = ctypes.POINTER(libgis.FILE)
         cls.libc.fopen.argtypes = [ctypes.c_char_p, ctypes.c_char_p]
-        cls.file_path = pathlib.Path("test.txt")
+        cls.file_path = Path("test.txt")
 
     def tearDown(self):
         self.file_path.unlink()
@@ -30,14 +33,14 @@ class TestNewlinesWithGetlFunctions(TestCase):
         """Write and read lines and then assert they are as expected"""
         lines = ["Line 1", "Line 2", "Line 3"]
         with open(self.file_path, mode="w", newline=newline) as stream:
-            for line in lines:
-                # Python text newline here.
-                # The specific newline is added by the stream.
-                stream.write(f"{line}\n")
+            # Python text newline here.
+            # The specific newline is added by the stream.
+            stream.writelines(f"{line}\n" for line in lines)
 
         file_ptr = self.libc.fopen(str(self.file_path).encode("utf-8"), b"r")
         if not file_ptr:
-            raise FileNotFoundError(f"Could not open file: {self.file_path}")
+            msg = f"Could not open file: {self.file_path}"
+            raise FileNotFoundError(msg)
 
         try:
             buffer_size = 50

@@ -29,6 +29,7 @@ import collections.abc
 from core import globalvar
 from core.gcmd import GException, GError
 from core.utils import GetSettingsPath, PathJoin, rgb2str
+from pathlib import Path
 
 
 class SettingsJSONEncoder(json.JSONEncoder):
@@ -104,7 +105,8 @@ class Settings:
     def _generateLocale(self):
         """Generate locales"""
         try:
-            self.locs = os.listdir(os.path.join(os.environ["GISBASE"], "locale"))
+            locale_path = Path(os.environ["GISBASE"]) / "locale"
+            self.locs = [p.name for p in locale_path.iterdir() if p.is_dir()]
             self.locs.append("en")  # GRASS doesn't ship EN po files
             self.locs.sort()
             # Add a default choice to not override system locale
@@ -766,7 +768,7 @@ class Settings:
             },
         }
 
-        # quick fix, http://trac.osgeo.org/grass/ticket/1233
+        # quick fix, https://trac.osgeo.org/grass/ticket/1233
         # TODO
         if sys.platform == "darwin":
             self.defaultSettings["general"]["defWindowPos"]["enabled"] = False
@@ -816,9 +818,9 @@ class Settings:
         )
 
         self.internalSettings["display"]["driver"]["choices"] = ["cairo", "png"]
-        self.internalSettings["display"]["statusbarMode"][
-            "choices"
-        ] = None  # set during MapFrame init
+        self.internalSettings["display"]["statusbarMode"]["choices"] = (
+            None  # set during MapFrame init
+        )
         self.internalSettings["display"]["mouseWheelZoom"]["choices"] = (
             _("Zoom and recenter"),
             _("Zoom to mouse cursor"),
@@ -889,9 +891,9 @@ class Settings:
         if settings is None:
             settings = self.userSettings
 
-        if os.path.exists(self.filePath):
+        if Path(self.filePath).exists():
             self._readFile(settings)
-        elif os.path.exists(self.legacyFilePath):
+        elif Path(self.legacyFilePath).exists():
             self._readLegacyFile(settings)
 
         # set environment variables
@@ -941,33 +943,28 @@ class Settings:
             settings = self.userSettings
 
         try:
-            fd = open(self.legacyFilePath)
+            with open(self.legacyFilePath) as fd:
+                line = ""
+                for line in fd:
+                    line = line.rstrip("%s" % os.linesep)
+                    group, key = line.split(self.sep)[0:2]
+                    kv = line.split(self.sep)[2:]
+                    subkeyMaster = None
+                    if len(kv) % 2 != 0:  # multiple (e.g. nviz)
+                        subkeyMaster = kv[0]
+                        del kv[0]
+                    idx = 0
+                    while idx < len(kv):
+                        subkey = [subkeyMaster, kv[idx]] if subkeyMaster else kv[idx]
+                        value = kv[idx + 1]
+                        value = self._parseValue(value, read=True)
+                        self.Append(settings, group, key, subkey, value)
+                        idx += 2
         except OSError:
             sys.stderr.write(
                 _("Unable to read settings file <%s>\n") % self.legacyFilePath
             )
             return
-
-        try:
-            line = ""
-            for line in fd:
-                line = line.rstrip("%s" % os.linesep)
-                group, key = line.split(self.sep)[0:2]
-                kv = line.split(self.sep)[2:]
-                subkeyMaster = None
-                if len(kv) % 2 != 0:  # multiple (e.g. nviz)
-                    subkeyMaster = kv[0]
-                    del kv[0]
-                idx = 0
-                while idx < len(kv):
-                    if subkeyMaster:
-                        subkey = [subkeyMaster, kv[idx]]
-                    else:
-                        subkey = kv[idx]
-                    value = kv[idx + 1]
-                    value = self._parseValue(value, read=True)
-                    self.Append(settings, group, key, subkey, value)
-                    idx += 2
         except ValueError as e:
             print(
                 _(
@@ -978,9 +975,6 @@ class Settings:
                 % {"file": self.legacyFilePath, "detail": e, "line": line},
                 file=sys.stderr,
             )
-            fd.close()
-
-        fd.close()
 
     def SaveToFile(self, settings=None):
         """Save settings to the file"""
@@ -988,12 +982,12 @@ class Settings:
             settings = self.userSettings
 
         dirPath = GetSettingsPath()
-        if not os.path.exists(dirPath):
+        if not Path(dirPath).exists():
             try:
                 os.mkdir(dirPath)
             except OSError:
                 GError(_("Unable to create settings directory"))
-                return
+                return None
         try:
             with open(self.filePath, "w") as f:
                 json.dump(settings, f, indent=2, cls=SettingsJSONEncoder)
@@ -1001,10 +995,7 @@ class Settings:
             raise GException(e)
         except Exception as e:
             raise GException(
-                _(
-                    "Writing settings to file <%(file)s> failed."
-                    "\n\nDetails: %(detail)s"
-                )
+                _("Writing settings to file <%(file)s> failed.\n\nDetails: %(detail)s")
                 % {"file": self.filePath, "detail": e}
             )
         return self.filePath
@@ -1233,12 +1224,13 @@ def GetDisplayVectSettings():
             % UserSettings.Get(group="vectorLayer", key="point", subkey="size"),
         )
     )
-    types = []
-    for ftype in ["point", "line", "boundary", "centroid", "area", "face"]:
+    types = [
+        ftype
+        for ftype in ["point", "line", "boundary", "centroid", "area", "face"]
         if UserSettings.Get(
             group="vectorLayer", key="showType", subkey=[ftype, "enabled"]
-        ):
-            types.append(ftype)
+        )
+    ]
     settings.append("type=%s" % ",".join(types))
 
     if UserSettings.Get(group="vectorLayer", key="randomColors", subkey="enabled"):
