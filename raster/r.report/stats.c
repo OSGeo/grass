@@ -43,7 +43,7 @@ int get_stats(void)
         if (cat_ranges)
             argv[argc++] = "-C";
         else if (nsteps != 255) {
-            sprintf(tmp, "nsteps=%d", nsteps);
+            snprintf(tmp, sizeof(tmp), "nsteps=%d", nsteps);
             argv[argc++] = tmp;
         }
 
@@ -62,9 +62,10 @@ int get_stats(void)
         for (i = 0; i < nlayers; i++) {
             char *name =
                 G_fully_qualified_name(layers[i].name, layers[i].mapset);
-            char *buf = G_malloc(6 + strlen(name) + 1);
+            size_t len = 6 + strlen(name) + 1;
+            char *buf2 = G_malloc(len);
 
-            sprintf(buf, "input=%s", name);
+            snprintf(buf2, len, "input=%s", name);
             G_free(name);
 
             if (argc + 1 >= n_argv) {
@@ -72,7 +73,7 @@ int get_stats(void)
                 argv = G_realloc(argv, n_argv * sizeof(*argv));
             }
 
-            argv[argc++] = buf;
+            argv[argc++] = buf2;
         }
 
         argv[argc++] = NULL;

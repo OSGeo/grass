@@ -694,15 +694,14 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
         dlg.CentreOnParent()
 
         while True:
-            if dlg.ShowModal() == wx.ID_OK:
-                name = dlg.GetNewName().strip()
-                if not name:
-                    GMessage(parent=self, message=_("Empty name was inserted."))
-                else:
-                    self.cats_mgr.SetCategoryAttrs(cat_id, {"name": name})
-                    break
-            else:
+            if dlg.ShowModal() != wx.ID_OK:
                 break
+
+            name = dlg.GetNewName().strip()
+            if name:
+                self.cats_mgr.SetCategoryAttrs(cat_id, {"name": name})
+                break
+            GMessage(parent=self, message=_("Empty name was inserted."))
 
         dlg.Destroy()
 

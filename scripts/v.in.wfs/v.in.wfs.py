@@ -95,7 +95,7 @@
 # %end
 # %flag
 # % key: l
-# todo #% description: List available layers and exit
+# TODO #% description: List available layers and exit
 # % description: Download server capabilities to 'wms_capabilities.xml' in the current directory and exit
 # % suppress_required: yes
 # %end
@@ -157,7 +157,7 @@ def main():
     tmp = grass.tempfile()
     tmpxml = tmp + ".xml"
 
-    grass.debug("The request URL: {wfs_url}")
+    grass.debug(f"The request URL: {wfs_url}")
 
     # Set user and password if given
     if options["username"] and options["password"]:
@@ -206,7 +206,7 @@ def main():
     if flags["l"]:
         import shutil
 
-        if os.path.exists("wms_capabilities.xml"):
+        if Path("wms_capabilities.xml").exists():
             grass.fatal(_('A file called "wms_capabilities.xml" already exists here'))
         # os.move() might fail if the temp file is on another volume, so we copy instead
         shutil.copy(tmpxml, "wms_capabilities.xml")

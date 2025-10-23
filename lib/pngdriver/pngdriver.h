@@ -16,7 +16,7 @@
 
 #include <stdio.h>
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -34,7 +34,7 @@ struct png_state {
     int true_color;
     int has_alpha;
     int mapped;
-#ifdef __MINGW32__
+#ifdef _WIN32
     HANDLE handle;
 #endif
 

@@ -326,11 +326,11 @@ class HistoryInfoPanel(SP.ScrolledPanel):
 
     def _get_history_region(self):
         """Get computational region settings of executed command."""
-        history_region = {}
-        for key, value in self.region_settings.items():
-            if self._region_settings_filter(key):
-                history_region[key] = value
-        return history_region
+        return {
+            key: value
+            for key, value in self.region_settings.items()
+            if self._region_settings_filter(key)
+        }
 
     def OnUpdateRegion(self, event):
         """Set current region to the region of executed command."""

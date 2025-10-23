@@ -175,7 +175,7 @@ class TestTemporalAlgebraGranularity(TestCase):
         self.assertEqual(D.get_granularity(), "1 month")
 
     def test_common_granularity_2(self) -> None:
-        """Testing the common granularity function year to month samping."""
+        """Testing the common granularity function year to month sampling."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         expr = "R = A : C"
         ret = ta.setup_common_granularity(expression=expr)

@@ -31,12 +31,11 @@ def select(parms, ptype):
     :type ptype: str
     :returns: An iterator with the value of the parameter.
 
-    >>> slp = Module('r.slope.aspect',
-    ...              elevation='ele', slope='slp', aspect='asp',
-    ...              run_=False)
-    >>> for rast in select(slp.outputs, 'raster'):
+    >>> slp = Module(
+    ...     "r.slope.aspect", elevation="ele", slope="slp", aspect="asp", run_=False
+    ... )
+    >>> for rast in select(slp.outputs, "raster"):
     ...     print(rast)
-    ...
     slp
     asp
     """
@@ -73,20 +72,20 @@ def copy_mapset(mapset, path):
 
 
     >>> from grass.script.core import gisenv
-    >>> mname = gisenv()['MAPSET']
+    >>> mname = gisenv()["MAPSET"]
     >>> mset = Mapset()
     >>> mset.name == mname
     True
     >>> import tempfile as tmp
     >>> import os
-    >>> path = os.path.join(tmp.gettempdir(), 'my_loc', 'my_mset')
-    >>> copy_mapset(mset, path)                           # doctest: +ELLIPSIS
+    >>> path = os.path.join(tmp.gettempdir(), "my_loc", "my_mset")
+    >>> copy_mapset(mset, path)  # doctest: +ELLIPSIS
     Mapset(...)
-    >>> sorted(os.listdir(path))                          # doctest: +ELLIPSIS
+    >>> sorted(os.listdir(path))  # doctest: +ELLIPSIS
     [...'PERMANENT'...]
-    >>> sorted(os.listdir(os.path.join(path, 'PERMANENT')))
+    >>> sorted(os.listdir(os.path.join(path, "PERMANENT")))
     ['DEFAULT_WIND', 'PROJ_INFO', 'PROJ_UNITS', 'VAR', 'WIND']
-    >>> sorted(os.listdir(os.path.join(path, mname)))   # doctest: +ELLIPSIS
+    >>> sorted(os.listdir(os.path.join(path, mname)))  # doctest: +ELLIPSIS
     [...'WIND'...]
     >>> import shutil
     >>> shutil.rmtree(path)
@@ -116,9 +115,10 @@ def read_gisrc(gisrc):
     >>> import os
     >>> from grass.script.core import gisenv
     >>> genv = gisenv()
-    >>> (read_gisrc(os.environ['GISRC']) == (genv['MAPSET'],
-    ...                                      genv['LOCATION_NAME'],
-    ...                                      genv['GISDBASE']))
+    >>> (
+    ...     read_gisrc(os.environ["GISRC"])
+    ...     == (genv["MAPSET"], genv["LOCATION_NAME"], genv["GISDBASE"])
+    ... )
     True
     """
     with open(gisrc) as gfile:
@@ -163,8 +163,7 @@ def copy_groups(groups, gisrc_src, gisrc_dst, region=None):
     :param gisrc_dst: path of the GISRC file where the groups will be created
     :type gisrc_dst: str
     :param region: a region like object or a dictionary with the region
-                   parameters that will be used to crop the rasters of the
-                   groups
+                   parameters that will be used to crop the rasters of the groups
     :type region: Region object or dictionary
     :returns: None
 
@@ -204,8 +203,7 @@ def set_region(region, gisrc_src, gisrc_dst, env):
     """Set a region into two different mapsets.
 
     :param region: a region like object or a dictionary with the region
-                   parameters that will be used to crop the rasters of the
-                   groups
+                   parameters that will be used to crop the rasters of the groups
     :type region: Region object or dictionary
     :param gisrc_src: path of the GISRC file from where we want to copy the groups
     :type gisrc_src: str
@@ -238,8 +236,7 @@ def copy_rasters(rasters, gisrc_src, gisrc_dst, region=None):
     :param gisrc_dst: path of the GISRC file where the groups will be created
     :type gisrc_dst: str
     :param region: a region like object or a dictionary with the region
-                   parameters that will be used to crop the rasters of the
-                   groups
+                   parameters that will be used to crop the rasters of the groups
     :type region: Region object or dictionary
     :returns: None
     """
@@ -313,18 +310,21 @@ def get_cmd(cmdd):
     :param cmdd: a module dictionary with all the parameters
     :type cmdd: dict
 
-    >>> slp = Module('r.slope.aspect',
-    ...              elevation='ele', slope='slp', aspect='asp',
-    ...              overwrite=True, run_=False)
+    >>> slp = Module(
+    ...     "r.slope.aspect",
+    ...     elevation="ele",
+    ...     slope="slp",
+    ...     aspect="asp",
+    ...     overwrite=True,
+    ...     run_=False,
+    ... )
     >>> get_cmd(slp.get_dict())  # doctest: +ELLIPSIS
     ['r.slope.aspect', 'elevation=ele', 'format=degrees', ..., '--o']
     """
-    cmd = [
+    return [
         cmdd["name"],
-    ]
-    cmd.extend(("%s=%s" % (k, v) for k, v in cmdd["inputs"] if not isinstance(v, list)))
-    cmd.extend(
-        (
+        *("%s=%s" % (k, v) for k, v in cmdd["inputs"] if not isinstance(v, list)),
+        *(
             "%s=%s"
             % (
                 k,
@@ -332,21 +332,16 @@ def get_cmd(cmdd):
             )
             for k, vals in cmdd["inputs"]
             if isinstance(vals, list)
-        )
-    )
-    cmd.extend(
-        ("%s=%s" % (k, v) for k, v in cmdd["outputs"] if not isinstance(v, list))
-    )
-    cmd.extend(
-        (
+        ),
+        *("%s=%s" % (k, v) for k, v in cmdd["outputs"] if not isinstance(v, list)),
+        *(
             "%s=%s" % (k, ",".join([repr(v) for v in vals]))
             for k, vals in cmdd["outputs"]
             if isinstance(vals, list)
-        )
-    )
-    cmd.extend(f"-{flg}" for flg in cmdd["flags"] if len(flg) == 1)
-    cmd.extend(f"--{flg[0]}" for flg in cmdd["flags"] if len(flg) > 1)
-    return cmd
+        ),
+        *(f"-{flg}" for flg in cmdd["flags"] if len(flg) == 1),
+        *(f"--{flg[0]}" for flg in cmdd["flags"] if len(flg) > 1),
+    ]
 
 
 def cmd_exe(args):
@@ -385,10 +380,7 @@ def cmd_exe(args):
         sub.Popen(["g.region", "raster=%s" % key], shell=shell, env=env).wait()
     else:
         # set the computational region
-        lcmd = [
-            "g.region",
-        ]
-        lcmd.extend(["%s=%s" % (k, v) for k, v in bbox.items()])
+        lcmd = ["g.region", *["%s=%s" % (k, v) for k, v in bbox.items()]]
         sub.Popen(lcmd, shell=shell, env=env).wait()
     if groups:
         copy_groups(groups, gisrc_src, gisrc_dst)
@@ -411,15 +403,15 @@ class GridModule:
     :param overlap: overlap between tiles, in pixel.
     :type overlap: int
     :param processes: number of threads, default value is equal to the number
-                      of processor available.
+                      of processors available.
     :param split: if True use r.tile to split all the inputs.
     :type split: bool
     :param mapset_prefix: if specified created mapsets start with this prefix
     :type mapset_prefix: str
     :param patch_backend: "r.patch", "RasterRow", or None for for default
     :type patch_backend: None or str
-    :param run_: if False only instantiate the object
-    :type run_: bool
+    :param run\\_: if False only instantiate the object
+    :type run\\_: bool
     :param args: give all the parameters to the command
     :param kargs: give all the parameters to the command
 
@@ -427,11 +419,18 @@ class GridModule:
     When patch_backend is "r.patch", r.patch is used with nprocs=processes.
     r.patch can only be used when overlap is 0.
 
-    >>> grd = GridModule('r.slope.aspect',
-    ...                  width=500, height=500, overlap=2,
-    ...                  processes=None, split=False,
-    ...                  elevation='elevation',
-    ...                  slope='slope', aspect='aspect', overwrite=True)
+    >>> grd = GridModule(
+    ...     "r.slope.aspect",
+    ...     width=500,
+    ...     height=500,
+    ...     overlap=2,
+    ...     processes=None,
+    ...     split=False,
+    ...     elevation="elevation",
+    ...     slope="slope",
+    ...     aspect="aspect",
+    ...     overwrite=True,
+    ... )
     >>> grd.run()
 
     Temporary mapsets created start with a generated prefix which is unique for each
@@ -597,13 +596,17 @@ class GridModule:
                 if self.inlist:
                     inms = {}
                     cols = len(box_row)
+
+                    indx = row * cols + col
                     for key in self.inlist:
-                        indx = row * cols + col
                         inms[key] = "%s@%s" % (self.inlist[key][indx], self.mset.name)
                 # set the computational region, prepare the region parameters
-                bbox = {k[0]: str(v) for k, v in box.items()[:-2]}
-                bbox["nsres"] = "%f" % reg.nsres
-                bbox["ewres"] = "%f" % reg.ewres
+                bbox = {
+                    **{k[0]: str(v) for k, v in box.items()[:-2]},
+                    "nsres": "%f" % reg.nsres,
+                    "ewres": "%f" % reg.ewres,
+                }
+
                 new_mset = (
                     self.msetstr % (self.start_row + row, self.start_col + col),
                 )

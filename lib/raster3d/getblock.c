@@ -98,7 +98,6 @@ void Rast3d_get_block_nocache(RASTER3D_Map *map, int x0, int y0, int z0, int nx,
  *  \param type
  *  \return void
  */
-
 void Rast3d_get_block(RASTER3D_Map *map, int x0, int y0, int z0, int nx, int ny,
                       int nz, void *block, int type)
 {

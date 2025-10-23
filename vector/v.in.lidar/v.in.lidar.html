@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 <em>v.in.lidar</em> converts LiDAR point clouds in LAS format to a GRASS
-vector, using the <a href="http://www.liblas.org">libLAS</a> library.
+vector, using the <a href="https://liblas.org">libLAS</a> library.
 The created vector is true 3D with x, y, z coordinates.
 
 <p>
@@ -80,8 +80,8 @@ information when importing datasets if the source format includes such
 information, and if the LAS driver supports it. If the source dataset CRS does
 not match the CRS of the current project (previously called location)
 <em>v.in.lidar</em> will
-report an error message ("<tt>Coordinate reference system of dataset does not appear to
-match current project</tt>") and then report the PROJ_INFO parameters of
+report an error message ("<code>Coordinate reference system of dataset does not appear to
+match current project</code>") and then report the PROJ_INFO parameters of
 the source dataset.
 
 <p>If the user wishes to ignore the difference between the coordinate
@@ -105,30 +105,28 @@ needed to test for matching CRSs.
 
 <h2>EXAMPLE</h2>
 
-This example is analogous to the example used in the GRASS wiki page for
-<a href="https://grasswiki.osgeo.org/wiki/LIDAR#Import_LAS_as_vector_points">importing LAS as vector points</a>.
-<p>The sample LAS data are in the file "Serpent Mound Model LAS Data.las",
+The sample LAS data are in the file "Serpent Mound Model LAS Data.laz",
 available at
-<a href="http://www.appliedimagery.com/downloads/sampledata/Serpent%20Mound%20Model%20LAS%20Data.las">appliedimagery.com</a>
+<a href="https://github.com/PDAL/data/raw/4ee9ee43b195268a59113555908c1c0cdf955bd4/liblas/Serpent%20Mound%20Model%20LAS%20Data.laz">Serpent Mound Model LAS Data.laz</a>
 
 <div class="code"><pre>
-  # print LAS file info
-  v.in.lidar -p input="Serpent Mound Model LAS Data.las"
+# print LAS file info
+v.in.lidar -p input="Serpent Mound Model LAS Data.laz"
 
-  # create a project with CRS information of the LAS data
-  v.in.lidar -i input="Serpent Mound Model LAS Data.las" project=Serpent_Mound
+# create a project with CRS information of the LAS data
+v.in.lidar -i input="Serpent Mound Model LAS Data.laz" project=Serpent_Mound
 
-  # quit and restart GRASS in the newly created project "Serpent_Mound"
-  # real import of LiDAR LAS data, without topology and without attribute table
-  v.in.lidar -tb input="Serpent Mound Model LAS Data.las" output=Serpent_Mound_Model_pts
+# quit and restart GRASS in the newly created project "Serpent_Mound"
+# real import of LiDAR LAS data, without topology and without attribute table
+v.in.lidar -tb input="Serpent Mound Model LAS Data.laz" output=Serpent_Mound_Model_pts
 </pre></div>
 
 <h2>REFERENCES</h2>
 
 <a href="https://www.asprs.org/committee-general/laser-las-file-format-exchange-activities.html">
 ASPRS LAS format</a><br>
-<a href="http://www.liblas.org/">LAS library</a> <br>
-<a href="http://test.liblas.org/doxygen/liblas_8h.htm">LAS library C API</a> documentation
+<a href="https://liblas.org/">LAS library</a> <br>
+<a href="https://liblas.org/doxygen/liblas_8h.html">LAS library C API</a> documentation
 
 <h2>SEE ALSO</h2>
 
