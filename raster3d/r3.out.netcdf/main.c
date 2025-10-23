@@ -17,7 +17,7 @@
  *       here:
  *       http://cf-pcmdi.llnl.gov/documents/cf-conventions/1.6/cf-conventions.html#coordinate-system
  *       https://cf-pcmdi.llnl.gov/trac/wiki/Cf2CrsWkt
- *       http://trac.osgeo.org/gdal/wiki/NetCDF_ProjectionTestingStatus
+ *       https://trac.osgeo.org/gdal/wiki/NetCDF_ProjectionTestingStatus
  *
  *****************************************************************************/
 

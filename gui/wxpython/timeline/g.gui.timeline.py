@@ -24,7 +24,7 @@
 # % keyword: general
 # % keyword: GUI
 # % keyword: temporal
-# % keywords: plot
+# % keyword: plot
 # %end
 # %option G_OPT_STDS_INPUTS
 # % required: no
@@ -50,7 +50,7 @@ def main():
         from timeline.frame import TimelineFrame
     except ImportError as e:
         # TODO: why do we need this special check here, the reason of error
-        # is wrong intallation or something, no need to report this to the
+        # is wrong installation or something, no need to report this to the
         # user in a nice way
         gs.fatal(str(e))
 
@@ -61,7 +61,7 @@ def main():
     app = wx.App()
     frame = TimelineFrame(
         parent=None,
-        title=_("Timeline Tool - GRASS GIS"),
+        title=_("Timeline Tool - GRASS"),
     )
     frame.SetDatasets(datasets)
     frame.Show3D(view3d)

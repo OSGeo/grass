@@ -28,30 +28,30 @@ class TestRasterTile(TestCase):
     def tearDownClass(cls):
         cls.del_temp_region()
 
-        cls.runModule("g.remove", type="raster", flags="f", name=cls.raster)
-        cls.runModule("g.remove", type="raster", flags="f", name=cls.raster + "_null")
-        cls.runModule(
-            "g.remove", type="raster", flags="f", name=cls.raster + "_without_topology"
-        )
-        cls.runModule("g.remove", type="raster", flags="f", name=cls.raster + "_3D")
         cls.runModule(
             "g.remove",
             type="raster",
             flags="f",
-            name=cls.raster + "_cover_landcover_1m",
+            name=(
+                cls.raster,
+                cls.raster + "_null",
+                cls.raster + "_without_topology",
+                cls.raster + "_3D",
+                cls.raster + "_cover_landcover_1m",
+            ),
         )
 
-        cls.runModule("g.remove", type="vector", flags="f", name=cls.vector)
-        cls.runModule("g.remove", type="vector", flags="f", name=cls.vector + "_null")
-        cls.runModule(
-            "g.remove", type="vector", flags="f", name=cls.vector + "_without_topology"
-        )
-        cls.runModule("g.remove", type="vector", flags="f", name=cls.vector + "_3D")
         cls.runModule(
             "g.remove",
             type="vector",
             flags="f",
-            name=cls.vector + "_cover_landcover_1m",
+            name=(
+                cls.vector,
+                cls.vector + "_null",
+                cls.vector + "_without_topology",
+                cls.vector + "_3D",
+                cls.vector + "_cover_landcover_1m",
+            ),
         )
 
     def test_random_raster(self):

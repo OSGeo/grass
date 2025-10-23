@@ -41,6 +41,7 @@
 import os
 import shutil
 import glob
+from pathlib import Path
 from grass.script.utils import try_rmdir, try_remove, basename
 from grass.script import vector as gvect
 from grass.script import core as gcore
@@ -80,16 +81,13 @@ def main():
 
     # check if this is a split E00 file (.e01, .e02 ...):
     merging = False
-    if os.path.exists(e00name + ".e01") or os.path.exists(e00name + ".E01"):
+    if Path(e00name + ".e01").exists() or Path(e00name + ".E01").exists():
         gcore.message(
             _("Found that E00 file is split into pieces (.e01, ...). Merging...")
         )
         merging = True
 
-    if vect:
-        name = vect
-    else:
-        name = e00name
+    name = vect or e00name
 
     # do import
 

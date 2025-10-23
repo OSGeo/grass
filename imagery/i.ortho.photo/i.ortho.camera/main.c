@@ -191,7 +191,8 @@ int main(int argc, char *argv[])
             sscanf(fid_opt->answers[i + 1], "%lf", &Yf);
             cam_info.fiducials[fid_no].Yf = Yf;
 
-            sprintf(cam_info.fiducials[fid_no].fid_id, "%d", fid_no);
+            snprintf(cam_info.fiducials[fid_no].fid_id,
+                     sizeof(cam_info.fiducials[fid_no].fid_id), "%d", fid_no);
         }
         cam_info.num_fid = fid_no;
     }

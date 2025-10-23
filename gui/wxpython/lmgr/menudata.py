@@ -25,10 +25,7 @@ from core.gcmd import GError
 
 class LayerManagerMenuData(MenuTreeModelBuilder):
     def __init__(self, filename=None, message_handler=GError):
-        if filename:
-            expandAddons = False
-        else:
-            expandAddons = True
+        expandAddons = not filename
 
         fallback = os.path.join(WXGUIDIR, "xml", "menudata.xml")
         if not filename:
@@ -57,10 +54,7 @@ class LayerManagerMenuData(MenuTreeModelBuilder):
 
 class LayerManagerModuleTree(MenuTreeModelBuilder):
     def __init__(self, filename=None, message_handler=GError):
-        if filename:
-            expandAddons = False
-        else:
-            expandAddons = True
+        expandAddons = not filename
 
         fallback = os.path.join(WXGUIDIR, "xml", "module_tree_menudata.xml")
         if not filename:

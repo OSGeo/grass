@@ -6,10 +6,10 @@ from grass.script.core import read_command
 class TestVNet(TestCase):
     network = "test_vnet"
 
-    def tearDown(cls):
+    def tearDown(self):
         """Remove viewshed map after each test method"""
         # TODO: eventually, removing maps should be handled through testing framework functions
-        cls.runModule("g.remove", flags="f", type="vector", name=cls.network)
+        self.runModule("g.remove", flags="f", type="vector", name=self.network)
 
     def test_nodes(self):
         """Test"""

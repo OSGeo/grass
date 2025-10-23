@@ -29,7 +29,7 @@ the equations.
 region settings, in order to have the largest possible sample of pixels
 from where to get the darkest one of the scene and perform the DOS
 correction. To limit the results to a custom region, the user is
-advised to clip the results (with <a href="r.clip.html">r.clip</a>, for
+advised to clip the results (with <a href="https://grass.osgeo.org/grass-stable/manuals/addons/r.clip.html">r.clip</a>, for
 instance) or to define the region first, import the images with region
 cropping, and then running the module.
 
@@ -235,7 +235,7 @@ g.copy raster=lsat7_2002_80,lsat7_2002.8
 </pre></div>
 
 Calculation of reflectance values from DN using DOS1 (metadata obtained
-from <a href="http://www.grassbook.org/wp-content/uploads/ncexternal/landsat/2002/p016r035_7x20020524.met.gz">p016r035_7x20020524.met.gz</a>):
+from <a href="https://grassbook.org/wp-content/uploads/ncexternal/landsat/2002/p016r035_7x20020524.met.gz">p016r035_7x20020524.met.gz</a>):
 
 <div class="code"><pre>
 i.landsat.toar input=lsat7_2002. output=lsat7_2002_toar. sensor=tm7 \
@@ -243,7 +243,7 @@ i.landsat.toar input=lsat7_2002. output=lsat7_2002_toar. sensor=tm7 \
   product_date=2004-02-12 gain=HHHLHLHHL
 </pre></div>
 
-The resulting Landsat channels are named <tt>lsat7_2002_toar.1 .. lsat7_2002_toar.8</tt>.
+The resulting Landsat channels are named <code>lsat7_2002_toar.1 .. lsat7_2002_toar.8</code>.
 
 <h2>REFERENCES</h2>
 

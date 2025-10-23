@@ -15,7 +15,7 @@
 #############################################################################
 
 # %module
-# % description: Exports a vector map as GRASS GIS specific archive file
+# % description: Exports a vector map as GRASS specific archive file
 # % keyword: vector
 # % keyword: export
 # % keyword: copying
@@ -73,20 +73,21 @@ def main():
         infile = infile.split("@")[0]
 
     # output name
-    if options["output"]:
-        outfile = options["output"]
-    else:
-        outfile = infile + ".pack"
+    outfile = options["output"] or infile + ".pack"
 
     # check if exists the output file
-    if os.path.exists(outfile):
+    if Path(outfile).exists():
         if os.getenv("GRASS_OVERWRITE"):
             grass.warning(
                 _("Pack file <%s> already exists and will be overwritten") % outfile
             )
             try_remove(outfile)
         else:
-            grass.fatal(_("option <%s>: <%s> exists.") % ("output", outfile))
+            grass.fatal(
+                _("option <{key}>: <{value}> exists.").format(
+                    key="output", value=outfile
+                )
+            )
 
     # prepare for packing
     grass.verbose(_("Packing <%s>...") % (gfile["fullname"]))
@@ -126,7 +127,7 @@ def main():
         path = os.path.join(
             gisenv["GISDBASE"], gisenv["LOCATION_NAME"], "PERMANENT", "PROJ_" + support
         )
-        if os.path.exists(path):
+        if Path(path).exists():
             tar.add(path, "PROJ_" + support)
     tar.close()
 

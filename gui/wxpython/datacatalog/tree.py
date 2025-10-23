@@ -227,7 +227,7 @@ class DataCatalogTree(TreeView):
         super().__init__(parent=parent, model=self._model, id=wx.ID_ANY, style=style)
 
         self._giface = giface
-        self._restricted = True
+        self._restricted = False
 
         self.showNotification = Signal("Tree.showNotification")
         self.showImportDataInfo = Signal("Tree.showImportDataInfo")
@@ -256,6 +256,7 @@ class DataCatalogTree(TreeView):
         self.UpdateCurrentDbLocationMapsetNode()
         self._lastWatchdogUpdate = gs.clock()
         self._updateMapsetWhenIdle = None
+        self._watchingMapsetEnabled = False
 
         #  mapset watchdog
         self._mapset_watchdog = MapsetWatchdog(
@@ -301,13 +302,7 @@ class DataCatalogTree(TreeView):
         )
         self.startEdit.connect(self.OnStartEditLabel)
         self.endEdit.connect(self.OnEditLabel)
-        self.Bind(
-            EVT_UPDATE_MAPSET, lambda evt: self._onWatchdogMapsetReload(evt.src_path)
-        )
-        self.Bind(wx.EVT_IDLE, self._onUpdateMapsetWhenIdle)
-        self.Bind(
-            EVT_CURRENT_MAPSET_CHANGED, lambda evt: self._updateAfterMapsetChanged()
-        )
+        self.EnableWatchingMapset()
 
     def _resetSelectVariables(self):
         """Reset variables related to item selection."""
@@ -623,6 +618,7 @@ class DataCatalogTree(TreeView):
         self._lastWatchdogUpdate = time
         if (time_diff) < 0.5:
             self._updateMapsetWhenIdle = event_path
+            self.DisableWatchingMapset()
             return
         mapset_path = os.path.dirname(os.path.dirname(os.path.abspath(event_path)))
         location_path = os.path.dirname(os.path.abspath(mapset_path))
@@ -642,8 +638,30 @@ class DataCatalogTree(TreeView):
         If watchdog is active, updating is skipped here
         to avoid double updating.
         """
-        if not watchdog_used:
+        if not (watchdog_used or self._watchingMapsetEnabled):
             self._updateAfterMapsetChanged()
+
+    def DisableWatchingMapset(self):
+        """Disable watching of current mapset folder for changes with watchdog."""
+        if not self._watchingMapsetEnabled:
+            return
+        self._watchingMapsetEnabled = False
+        self.Unbind(EVT_UPDATE_MAPSET)
+        self.Unbind(wx.EVT_IDLE)
+        self.Unbind(EVT_CURRENT_MAPSET_CHANGED)
+
+    def EnableWatchingMapset(self):
+        """Enable watching of current mapset folder for changes with watchdog."""
+        if self._watchingMapsetEnabled:
+            return
+        self._watchingMapsetEnabled = True
+        self.Bind(
+            EVT_UPDATE_MAPSET, lambda evt: self._onWatchdogMapsetReload(evt.src_path)
+        )
+        self.Bind(wx.EVT_IDLE, self._onUpdateMapsetWhenIdle)
+        self.Bind(
+            EVT_CURRENT_MAPSET_CHANGED, lambda evt: self._updateAfterMapsetChanged()
+        )
 
     def GetDbNode(self, grassdb, location=None, mapset=None, map=None, map_type=None):
         """Returns node representing db/location/mapset/map or None if not found."""
@@ -1819,6 +1837,7 @@ class DataCatalogTree(TreeView):
             # instead the watchdog handler takes care of refreshing tree
             if (
                 watchdog_used
+                and self._watchingMapsetEnabled
                 and grassdb == self.current_grassdb_node.data["name"]
                 and location == self.current_location_node.data["name"]
                 and mapset == self.current_mapset_node.data["name"]
@@ -1892,6 +1911,7 @@ class DataCatalogTree(TreeView):
             gs.try_remove(event.userData)
 
         for i in range(len(self.selected_layer)):
+            cmd: list[str] = []
             if self.selected_layer[i].data["type"] == "raster":
                 cmd = ["r.info"]
             elif self.selected_layer[i].data["type"] == "vector":
@@ -2016,10 +2036,7 @@ class DataCatalogTree(TreeView):
             mapset=mapset,
         )
         dlg.SetValue(value)
-        if dlg.ShowModal() == wx.ID_OK:
-            name = dlg.GetValue()
-        else:
-            name = None
+        name = dlg.GetValue() if dlg.ShowModal() == wx.ID_OK else None
         dlg.Destroy()
 
         return name

@@ -185,7 +185,7 @@ class InstallExtensionWindow(wx.Frame):
         item = self.tree.GetSelected()
         if not item or "command" not in item[0].data:
             GError(_("Extension not defined"), parent=self)
-            return
+            return None
 
         name = item[0].data["command"]
 
@@ -356,11 +356,7 @@ class ExtensionTreeModelBuilder:
     def Load(self, url, full=True):
         """Load list of extensions"""
         self._emptyTree()
-
-        if full:
-            flags = "g"
-        else:
-            flags = "l"
+        flags = "g" if full else "l"
         retcode, ret, msg = RunCommand(
             "g.extension", read=True, getErrorMsg=True, url=url, flags=flags, quiet=True
         )
@@ -387,23 +383,25 @@ class ExtensionTreeModelBuilder:
                     currentNode.data = {"command": value}
                 elif currentNode is not None:
                     currentNode.data[key] = value
-            else:
-                try:
-                    prefix, name = line.strip().split(".", 1)
-                except ValueError:
-                    prefix = ""
-                    name = line.strip()
 
-                if self._expandPrefix(prefix) == prefix:
-                    prefix = ""
-                module = prefix + "." + name
-                mainNode = self.mainNodes[self._expandPrefix(prefix)]
-                currentNode = self.model.AppendNode(parent=mainNode, label=module)
-                currentNode.data = {
-                    "command": module,
-                    "keywords": "",
-                    "description": "",
-                }
+                continue
+
+            try:
+                prefix, name = line.strip().split(".", 1)
+            except ValueError:
+                prefix = ""
+                name = line.strip()
+
+            if self._expandPrefix(prefix) == prefix:
+                prefix = ""
+            module = prefix + "." + name
+            mainNode = self.mainNodes[self._expandPrefix(prefix)]
+            currentNode = self.model.AppendNode(parent=mainNode, label=module)
+            currentNode.data = {
+                "command": module,
+                "keywords": "",
+                "description": "",
+            }
 
 
 class ManageExtensionWindow(wx.Frame):

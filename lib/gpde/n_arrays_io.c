@@ -150,6 +150,7 @@ N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d *array)
 
     /* Close file */
     Rast_close(map);
+    G_free(rast);
 
     return data;
 }
@@ -219,6 +220,9 @@ void N_write_array_2d_to_rast(N_array_2d *array, char *name)
 
     /* Close file */
     Rast_close(map);
+    G_free(rast);
+    G_free(frast);
+    G_free(drast);
 }
 
 /* ******************** 3D ARRAY FUNCTIONS *********************** */

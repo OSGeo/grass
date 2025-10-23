@@ -8,11 +8,8 @@ for details.
 @author Soeren Gebbert
 """
 
-import subprocess
-
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
-from grass.gunittest.utils import xfail_windows
 
 
 class TestRasterToVector(TestCase):
@@ -76,7 +73,6 @@ class TestRasterToVector(TestCase):
         """Remove generated data"""
         self.runModule("t.remove", flags="df", type="strds", inputs="A")
 
-    @xfail_windows
     def test_simple_2procs(self):
         self.assertModule(
             "t.rast.gapfill",
@@ -127,7 +123,6 @@ a_3|2001-12-01 00:00:00|2002-01-01 00:00:00|1200.0|1200.0
         self.assertModule(rast_list)
         self.assertLooksLike(text, rast_list.outputs.stdout)
 
-    @xfail_windows
     def test_simple_where(self):
         self.assertModule(
             "t.rast.gapfill",
@@ -176,7 +171,6 @@ a_3|2001-12-01 00:00:00|2002-01-01 00:00:00|1200.0|1200.0
         self.assertModule(rast_list)
         self.assertLooksLike(text, rast_list.outputs.stdout)
 
-    @xfail_windows
     def test_simple_where_2(self):
         self.assertModule(
             "t.rast.gapfill",
@@ -220,7 +214,6 @@ a_3|2001-12-01 00:00:00|2002-01-01 00:00:00|1200.0|1200.0
         self.assertModule(rast_list)
         self.assertLooksLike(text, rast_list.outputs.stdout)
 
-    @xfail_windows
     def test_simple_empty(self):
         self.assertModule(
             "t.rast.gapfill",
@@ -307,7 +300,6 @@ a_3|2001-12-01 00:00:00|2002-01-01 00:00:00|1200.0|1200.0
         self.assertModule(rast_list)
         self.assertLooksLike(text, rast_list.outputs.stdout)
 
-    @xfail_windows
     def test_simple_gran(self):
         self.assertModule(
             "t.rast.gapfill",

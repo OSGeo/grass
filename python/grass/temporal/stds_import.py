@@ -7,18 +7,29 @@ Usage:
 
     import grass.temporal as tgis
 
-    input="/tmp/temp_1950_2012.tar.gz"
-    output="temp_1950_2012"
-    directory="/tmp"
-    title="My new dataset"
-    descr="May new shiny dataset"
-    location=None
-    link=True
-    exp=True
-    overr=False
-    create=False
-    tgis.import_stds(input, output, directory, title, descr, location,
-                    link, exp, overr, create, "strds")
+    input = "/tmp/temp_1950_2012.tar.gz"
+    output = "temp_1950_2012"
+    directory = "/tmp"
+    title = "My new dataset"
+    descr = "May new shiny dataset"
+    location = None
+    link = True
+    exp = True
+    overr = False
+    create = False
+    tgis.import_stds(
+        input,
+        output,
+        directory,
+        title,
+        descr,
+        location,
+        link,
+        exp,
+        overr,
+        create,
+        "strds",
+    )
 
 
 (C) 2012-2013 by the GRASS Development Team
@@ -54,8 +65,15 @@ imported_maps = {}
 
 
 def _import_raster_maps_from_gdal(
-    maplist, overr, exp, location, link, format_, set_current_region=False, memory=300
-):
+    maplist,
+    overr,
+    exp,
+    location,
+    link,
+    format_,
+    set_current_region: bool = False,
+    memory=300,
+) -> None:
     impflags = ""
     if overr:
         impflags += "o"
@@ -113,7 +131,7 @@ def _import_raster_maps_from_gdal(
 ############################################################################
 
 
-def _import_raster_maps(maplist, set_current_region=False):
+def _import_raster_maps(maplist, set_current_region: bool = False) -> None:
     # We need to disable the projection check because of its
     # simple implementation
     impflags = "o"
@@ -143,7 +161,7 @@ def _import_raster_maps(maplist, set_current_region=False):
 ############################################################################
 
 
-def _import_vector_maps_from_gml(maplist, overr, exp, location, link):
+def _import_vector_maps_from_gml(maplist, overr, exp, location, link) -> None:
     impflags = "o"
     if exp or location:
         impflags += "e"
@@ -169,7 +187,7 @@ def _import_vector_maps_from_gml(maplist, overr, exp, location, link):
 ############################################################################
 
 
-def _import_vector_maps(maplist):
+def _import_vector_maps(maplist) -> None:
     # We need to disable the projection check because of its
     # simple implementation
     impflags = "o"
@@ -208,23 +226,22 @@ def import_stds(
     title=None,
     descr=None,
     location=None,
-    link=False,
-    exp=False,
-    overr=False,
-    create=False,
+    link: bool = False,
+    exp: bool = False,
+    overr: bool = False,
+    create: bool = False,
     stds_type="strds",
     base=None,
-    set_current_region=False,
+    set_current_region: bool = False,
     memory=300,
-):
+) -> None:
     """Import space time datasets of type raster and vector
 
     :param input: Name of the input archive file
     :param output: The name of the output space time dataset
     :param directory: The extraction directory
     :param title: The title of the new created space time dataset
-    :param descr: The description of the new created
-                 space time dataset
+    :param descr: The description of the new created space time dataset
     :param location: The name of the location that should be created,
                     maps are imported into this location
     :param link: Switch to link raster maps instead importing them
@@ -233,20 +250,19 @@ def import_stds(
     :param create: Create the location specified by the "location"
                   parameter and exit.
                   Do not import the space time datasets.
-    :param stds_type: The type of the space time dataset that
-                     should be imported
+    :param stds_type: The type of the space time dataset that should be imported
     :param base: The base name of the new imported maps, it will be
                  extended using a numerical index.
     :param memory: Cache size for raster rows, used in r.in.gdal
     """
 
-    old_state = gs.raise_on_error
+    old_state = gs.get_raise_on_error()
     gs.set_raise_on_error(True)
 
     # Check if input file and extraction directory exits
-    if not os.path.exists(input):
+    if not Path(input).exists():
         gs.fatal(_("Space time raster dataset archive <%s> not found") % input)
-    if not create and not os.path.exists(directory):
+    if not create and not Path(directory).exists():
         gs.fatal(_("Extraction directory <%s> not found") % directory)
 
     tar = tarfile.open(name=input, mode="r")
@@ -294,7 +310,6 @@ def import_stds(
     # Check projection information
     if not location:
         temp_name = gs.tempfile()
-        temp_file = open(temp_name, "w")
         proj_name = os.path.abspath(proj_file_name)
 
         # We need to convert projection strings generated
@@ -308,9 +323,9 @@ def import_stds(
         proj_name_tmp = f"{temp_name}_in_projection"
         Path(proj_name_tmp).write_text(proj_content)
 
-        p = gs.start_command("g.proj", flags="j", stdout=temp_file)
-        p.communicate()
-        temp_file.close()
+        with open(temp_name, "w") as temp_file:
+            p = gs.start_command("g.proj", flags="p", format="proj4", stdout=temp_file)
+            p.communicate()
 
         if not gs.compare_key_value_text_files(temp_name, proj_name_tmp, sep="="):
             if overr:
@@ -404,13 +419,14 @@ def import_stds(
                 mapname = filename
                 mapid = mapname + "@" + mapset
 
-            row = {}
-            row["filename"] = filename
-            row["name"] = mapname
-            row["id"] = mapid
-            row["start"] = line_list[1].strip()
-            row["end"] = line_list[2].strip()
-            row["semantic_label"] = line_list[3].strip() if len(line_list) == 4 else ""
+            row = {
+                "filename": filename,
+                "name": mapname,
+                "id": mapid,
+                "start": line_list[1].strip(),
+                "end": line_list[2].strip(),
+                "semantic_label": line_list[3].strip() if len(line_list) == 4 else "",
+            }
 
             new_list_file.write(
                 f"{mapname}{fs}{row['start']}{fs}{row['end']}"
@@ -465,7 +481,7 @@ def import_stds(
         if format_ == "GTiff":
             for row in maplist:
                 filename = row["filename"] + ".tif"
-                if not os.path.exists(filename):
+                if not Path(filename).exists():
                     gs.fatal(
                         _("Unable to find GeoTIFF raster file <%s> in archive.")
                         % filename
@@ -473,7 +489,7 @@ def import_stds(
         elif format_ == "AAIGrid":
             for row in maplist:
                 filename = row["filename"] + ".asc"
-                if not os.path.exists(filename):
+                if not Path(filename).exists():
                     gs.fatal(
                         _("Unable to find AAIGrid raster file <%s> in archive.")
                         % filename
@@ -481,7 +497,7 @@ def import_stds(
         elif format_ == "GML":
             for row in maplist:
                 filename = row["filename"] + ".xml"
-                if not os.path.exists(filename):
+                if not Path(filename).exists():
                     gs.fatal(
                         _("Unable to find GML vector file <%s> in archive.") % filename
                     )
@@ -491,7 +507,7 @@ def import_stds(
                     filename = str(row["filename"].split(":")[0]) + ".pack"
                 else:
                     filename = row["filename"] + ".pack"
-                if not os.path.exists(filename):
+                if not Path(filename).exists():
                     gs.fatal(
                         _("Unable to find GRASS package file <%s> in archive.")
                         % filename

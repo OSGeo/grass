@@ -428,10 +428,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             ignoredDelimiter = ""
 
         for char in set(" .,-=") - set(ignoredDelimiter):
-            if not withDelimiter:
-                delimiter = ""
-            else:
-                delimiter = char
+            delimiter = "" if not withDelimiter else char
             parts.append(delimiter + textLeft.rpartition(char)[2])
         return min(parts, key=lambda x: len(x))
 
@@ -461,13 +458,13 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             self.CallTipSetForeground("BLACK")
             self.CallTipShow(pos, info["usage"] + "\n\n" + info["description"])
         elif (
-            event.GetKeyCode() in (wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER)
+            event.GetKeyCode() in {wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER}
             and not self.AutoCompActive()
         ):
             # run command on line when <return> is pressed
             self._runCmd(self.GetCurLine()[0].strip())
         elif (
-            event.GetKeyCode() in [wx.WXK_UP, wx.WXK_DOWN] and not self.AutoCompActive()
+            event.GetKeyCode() in {wx.WXK_UP, wx.WXK_DOWN} and not self.AutoCompActive()
         ):
             # Command history using up and down
             if len(self.cmdbuffer) < 1:

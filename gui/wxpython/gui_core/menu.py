@@ -25,6 +25,7 @@ This program is free software under the GNU General Public License
 
 import re
 import os
+from pathlib import Path
 import wx
 
 from core import globalvar
@@ -62,11 +63,11 @@ class MenuBase:
                 label = child.label
                 subMenu = self._createMenu(child)
                 menu.AppendMenu(wx.ID_ANY, label, subMenu)
-            else:
-                data = child.data.copy()
-                data.pop("label")
+                continue
+            data = child.data.copy()
+            data.pop("label")
 
-                self._createMenuItem(menu, label=child.label, **data)
+            self._createMenuItem(menu, label=child.label, **data)
 
         return menu
 
@@ -91,10 +92,7 @@ class MenuBase:
             menu.AppendSeparator()
             return
 
-        if command:
-            helpString = command + " -- " + description
-        else:
-            helpString = description
+        helpString = command + " -- " + description if command else description
 
         if shortcut:
             label += "\t" + shortcut
@@ -345,8 +343,7 @@ class RecentFilesMenu:
                          written into the .recent_files file
     :param obj parent_menu: menu widget instance where be inserted
                             recent files menu on the specified position
-    :param int pos: position (index) where insert recent files menu in
-                    the parent menu
+    :param int pos: position (index) where insert recent files menu in the parent menu
     :param int history_len: the maximum number of file paths written
                             into the .recent_files file to app name group
     """
@@ -361,7 +358,7 @@ class RecentFilesMenu:
         self.file_requested = Signal("RecentFilesMenu.FileRequested")
 
         self._filehistory = wx.FileHistory(maxFiles=history_len)
-        # Recent files path stored in GRASS GIS config dir in the
+        # Recent files path stored in GRASS config dir in the
         # .recent_files file in the group by application name
         self._config = wx.FileConfig(
             style=wx.CONFIG_USE_LOCAL_FILE,
@@ -406,7 +403,7 @@ class RecentFilesMenu:
         file_index = event.GetId() - wx.ID_FILE1
         path = self._filehistory.GetHistoryFile(file_index)
 
-        if not os.path.exists(path):
+        if not Path(path).exists():
             self.RemoveFileFromHistory(file_index)
             file_exists = False
         self.file_requested.emit(
@@ -446,7 +443,7 @@ class RecentFilesMenu:
         """Remove non existent files from the history"""
         for i in reversed(range(self._filehistory.GetCount())):
             file = self._filehistory.GetHistoryFile(index=i)
-            if not os.path.exists(file):
+            if not Path(file).exists():
                 self._filehistory.RemoveFileFromHistory(i=i)
 
         self._filehistory.Save(self._config)

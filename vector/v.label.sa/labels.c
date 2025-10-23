@@ -149,8 +149,8 @@ label_t *labels_init(struct params *p, int *n_labels)
 
         sql = (char *)G_malloc(sql_len);
         /* Read label from database */
-        sprintf(sql, "select %s from %s where %s = %d", p->column->answer,
-                fi->table, fi->key, cat);
+        snprintf(sql, sql_len, "select %s from %s where %s = %d",
+                 p->column->answer, fi->table, fi->key, cat);
         G_debug(3, "SQL: %s", sql);
         db_init_string(&query);
         db_set_string(&query, sql);
@@ -216,6 +216,7 @@ label_t *labels_init(struct params *p, int *n_labels)
     G_percent(label_sz, label_sz, 10);
 
     *n_labels = i;
+    Vect_destroy_field_info(fi);
     return labels;
 }
 
@@ -714,6 +715,8 @@ static void label_line_candidates(label_t *label)
         label_point_candidates(label);
         label->shape = tmp_shape;
         Vect_destroy_line_struct(tmp);
+        G_free(above_candidates);
+        G_free(below_candidates);
         return;
     }
 
@@ -1027,6 +1030,7 @@ static double label_lineover(label_t *label, label_candidate_t *candidate,
     n = Vect_select_lines_by_polygon(&Map, trbb, 0, NULL, linetype, il);
 
     if (n == 0) {
+        Vect_destroy_list(il);
         return 0.0;
     }
 

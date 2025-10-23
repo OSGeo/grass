@@ -36,7 +36,7 @@ extern "C" {
 #pragma clang diagnostic pop
 #endif
 
-/* All GRASS GIS filters which are similar across multiple modules
+/* All GRASS filters which are similar across multiple modules
  * put together as one PDAL Stage class.
  */
 class GrassLidarFilter : public pdal::Filter, public pdal::Streamable {

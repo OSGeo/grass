@@ -155,7 +155,7 @@ void gsd_get_cplanes_state(int *onstate)
 
    Planes MUST be big enough to hold MAX_CPLANES Point4s
 
-   \param places surface coordinates, normal pointing away from visible side
+   \param planes surface coordinates, normal pointing away from visible side
 
    \return ADD
  */

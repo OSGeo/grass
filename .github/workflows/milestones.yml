@@ -2,28 +2,36 @@
 name: Assign Milestone
 
 on:
-  pull_request_target:
+  pull_request_target: # zizmor: ignore[dangerous-triggers]
     types: [closed]
+
+permissions: {}
 
 jobs:
   assign-milestone:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
-      # Retreiving the current milestoone from API instead of github context,
+      # Retrieving the current milestone from API instead of github context,
       # so up-to-date information is used when running after being queued or for reruns
       # Otherwise, the information should be available using
       # ${{ github.event.pull_request.milestone.title }}
       - name: Get current milestone title
         id: current-milestone
         run: |
-          echo "milestone<<EOF" >> "${GITHUB_OUTPUT}"
-          gh pr view ${{ github.event.pull_request.html_url }} --json milestone \
-            --jq .milestone.title >> "${GITHUB_OUTPUT}"
-          echo 'EOF' >> "${GITHUB_OUTPUT}"
+          {
+            echo "milestone<<EOF"
+            gh pr view "${GITHUB_EVENT_PULL_REQUEST_HTML_URL}" --json milestone \
+              --jq .milestone.title
+            echo 'EOF'
+          } >> "${GITHUB_OUTPUT}"
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
+          GITHUB_EVENT_PULL_REQUEST_HTML_URL: ${{ github.event.pull_request.html_url }}
       - name: PR already has a milestone
         run: echo "PR already has a milestone"
         if: ${{ steps.current-milestone.outputs.milestone }}
@@ -34,12 +42,14 @@ jobs:
         if: ${{ !steps.current-milestone.outputs.milestone }}
         id: version-file
         run: |
-          echo "version<<EOF" >> "${GITHUB_OUTPUT}"
-          gh api \
-            -H "Accept: application/vnd.github.raw" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            "/repos/{owner}/{repo}/contents/include/VERSION?ref=${{ github.sha }}" >> "${GITHUB_OUTPUT}"
-          echo "EOF" >> "${GITHUB_OUTPUT}"
+          {
+            echo "version<<EOF"
+            gh api \
+              -H "Accept: application/vnd.github.raw" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "/repos/{owner}/{repo}/contents/include/VERSION?ref=${{ github.sha }}"
+            echo "EOF"
+          } >> "${GITHUB_OUTPUT}"
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
@@ -52,8 +62,8 @@ jobs:
         if: ${{ !steps.current-milestone.outputs.milestone }}
         id: milestone
         run: |
-          version=$(echo "$VERSIONFILE" | head -n 3 | xargs | sed 's/ /./g; s/\(RC[0-9]*\|dev\)//g')
-          echo "title=$version" >> "${GITHUB_OUTPUT}"
+          version=$(echo "${VERSIONFILE}" | head -n 3 | xargs | sed 's/ /./g; s/\(RC[0-9]*\|dev\)//g')
+          echo "title=${version}" >> "${GITHUB_OUTPUT}"
         env:
           VERSIONFILE: ${{ steps.version-file.outputs.version }}
       - name: Show milestone title
@@ -63,8 +73,9 @@ jobs:
           MILESTONE: ${{ steps.milestone.outputs.title }}
       - name: Set PR milestone
         if: ${{ !steps.current-milestone.outputs.milestone }}
-        run: gh pr edit ${{ github.event.pull_request.html_url }} --milestone "${MILESTONE}"
+        run: gh pr edit "${GITHUB_EVENT_PULL_REQUEST_HTML_URL}" --milestone "${MILESTONE}"
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           MILESTONE: ${{ steps.milestone.outputs.title }}
+          GITHUB_EVENT_PULL_REQUEST_HTML_URL: ${{ github.event.pull_request.html_url }}

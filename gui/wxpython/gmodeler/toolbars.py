@@ -18,19 +18,20 @@ import sys
 
 import wx
 
+from core.globalvar import CheckWxVersion
 from gui_core.toolbars import BaseToolbar, BaseIcons
 
 from icons.icon import MetaIcon
 
 
 class ModelerToolbar(BaseToolbar):
-    """Graphical modeler toolbaro (see gmodeler.py)"""
+    """Graphical modeler toolbar (see gmodeler.py)"""
 
     def __init__(self, parent):
         BaseToolbar.__init__(self, parent)
 
         # workaround for http://trac.wxwidgets.org/ticket/13888
-        if sys.platform == "darwin":
+        if sys.platform == "darwin" and not CheckWxVersion([4, 2, 1]):
             parent.SetToolBar(self)
 
         self.InitToolbar(self._toolbarData())

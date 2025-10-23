@@ -156,7 +156,6 @@ int GPJ__get_ellipsoid_params(const struct Key_Value *proj_keys, double *a,
  * \return 1 on success
  * \return -1 if not found in table
  */
-
 int GPJ_get_ellipsoid_by_name(const char *name, struct gpj_ellps *estruct)
 {
     struct ellps_list *list, *listhead;
@@ -233,7 +232,7 @@ struct ellps_list *read_ellipsoid_table(int fatal)
     struct ellps_list *current = NULL, *outputlist = NULL;
     double a, e2, rf;
 
-    sprintf(file, "%s%s", G_gisbase(), ELLIPSOIDTABLE);
+    snprintf(file, sizeof(file), "%s%s", G_gisbase(), ELLIPSOIDTABLE);
     fd = fopen(file, "r");
 
     if (!fd) {
@@ -252,7 +251,7 @@ struct ellps_list *read_ellipsoid_table(int fatal)
         if (sscanf(buf, "%s  \"%1023[^\"]\" %s %s", name, descr, buf1, buf2) !=
             4) {
             err++;
-            sprintf(buf, " %d", line);
+            snprintf(buf, sizeof(buf), " %d", line);
             if (*badlines)
                 strcat(badlines, ",");
             strcat(badlines, buf);
@@ -274,7 +273,7 @@ struct ellps_list *read_ellipsoid_table(int fatal)
         }
         else {
             err++;
-            sprintf(buf, " %d", line);
+            snprintf(buf, sizeof(buf), " %d", line);
             if (*badlines)
                 strcat(badlines, ",");
             strcat(badlines, buf);

@@ -44,7 +44,6 @@ struct GFONT_CAP *find_font_from_freetypecap(const char *font)
     char *capfile, file[GPATH_MAX];
     char buf[GPATH_MAX];
     FILE *fp;
-    int fonts_count = 0;
     struct GFONT_CAP *font_cap = NULL;
 
     fp = NULL;
@@ -55,7 +54,7 @@ struct GFONT_CAP *find_font_from_freetypecap(const char *font)
                 capfile);
     }
     if (fp == NULL) {
-        sprintf(file, "%s/etc/fontcap", G_gisbase());
+        snprintf(file, sizeof(file), "%s/etc/fontcap", G_gisbase());
         if ((fp = fopen(file, "r")) == NULL)
             G_warning(_("%s: No font definition file"), file);
     }
@@ -81,12 +80,13 @@ struct GFONT_CAP *find_font_from_freetypecap(const char *font)
 
             font_cap = (struct GFONT_CAP *)G_malloc(sizeof(struct GFONT_CAP));
 
-            font_cap[fonts_count].name = G_store(name);
-            font_cap[fonts_count].longname = G_store(longname);
-            font_cap[fonts_count].type = type;
-            font_cap[fonts_count].path = G_store(path);
-            font_cap[fonts_count].index = index;
-            font_cap[fonts_count].encoding = G_store(encoding);
+            font_cap->name = G_store(name);
+            font_cap->longname = G_store(longname);
+            font_cap->type = type;
+            font_cap->path = G_store(path);
+            font_cap->index = index;
+            font_cap->encoding = G_store(encoding);
+            break;
         }
         fclose(fp);
     }

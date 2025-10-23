@@ -37,6 +37,7 @@ except ImportError:
     from wx import HyperlinkCtrl
 
 from core.gcmd import GMessage, GError, GException
+from grass.exceptions import ScriptError
 from core import globalvar
 from gui_core.dialogs import MapLayersDialog, GetImageHandlers
 from gui_core.preferences import PreferencesBaseDialog
@@ -247,7 +248,7 @@ class SpeedDialog(wx.Dialog):
             _("second"),
         ]
         timeUnits = ["years", "months", "days", "hours", "minutes", "seconds"]
-        for item, cdata in zip(timeUnitsChoice, timeUnits):
+        for item, cdata in zip(timeUnitsChoice, timeUnits, strict=True):
             choiceWidget.Append(item, cdata)
 
         if self.temporalMode == TemporalMode.TEMPORAL:
@@ -727,10 +728,9 @@ class InputDialog(wx.Dialog):
             if isStart:
                 self.animationData.startRegion = isStart
         else:
-            if isStart:
-                self.animationData.startRegion = isStart
-            else:
+            if not isStart:
                 raise GException(_("Region information is not complete"))
+            self.animationData.startRegion = isStart
             if isEnd:
                 self.animationData.endRegion = self.endRegion.GetValue()
                 self.animationData.zoomRegionValue = None
@@ -1017,7 +1017,7 @@ class ExportDialog(wx.Dialog):
         buttonNames = ["time", "image", "text"]
         buttonLabels = [_("Add time stamp"), _("Add image"), _("Add text")]
         i = 0
-        for buttonName, buttonLabel in zip(buttonNames, buttonLabels):
+        for buttonName, buttonLabel in zip(buttonNames, buttonLabels, strict=True):
             if buttonName == "time" and self.temporal == TemporalMode.NONTEMPORAL:
                 continue
             btn = Button(panel, id=wx.ID_ANY, name=buttonName, label=buttonLabel)
@@ -1443,7 +1443,7 @@ class ExportDialog(wx.Dialog):
     def OnExport(self, event):
         for decor in self.decorations:
             if decor["name"] == "image":
-                if not os.path.exists(decor["file"]):
+                if not Path(decor["file"]).exists():
                     if decor["file"]:
                         GError(
                             parent=self, message=_("File %s not found.") % decor["file"]
@@ -1456,7 +1456,7 @@ class ExportDialog(wx.Dialog):
 
         if self.formatChoice.GetSelection() == 0:
             name = self.dirBrowse.GetValue()
-            if not os.path.exists(name):
+            if not Path(name).exists():
                 if name:
                     GError(parent=self, message=_("Directory %s not found.") % name)
                 else:
@@ -1553,7 +1553,7 @@ class ExportDialog(wx.Dialog):
             file_path += file_postfix
 
         base_dir = os.path.dirname(file_path)
-        if not os.path.exists(base_dir):
+        if not Path(base_dir).exists():
             GError(
                 parent=self,
                 message=file_path_does_not_exist_err_message.format(
@@ -1562,7 +1562,7 @@ class ExportDialog(wx.Dialog):
             )
             return False
 
-        if os.path.exists(file_path):
+        if Path(file_path).exists():
             overwrite_dlg = wx.MessageDialog(
                 self.GetParent(),
                 message=_(
@@ -1619,10 +1619,7 @@ class AnimSimpleLayerManager(SimpleLayerManager):
         dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_OK:
             layer = dlg.GetLayer()
-            if hidden:
-                signal = self.layerAdded
-            else:
-                signal = self.cmdChanged
+            signal = self.layerAdded if hidden else self.cmdChanged
             signal.emit(index=self._layerList.GetLayerIndex(layer), layer=layer)
         elif hidden:
             self._layerList.RemoveLayer(layer)
@@ -1788,7 +1785,7 @@ class AddTemporalLayerDialog(wx.Dialog):
                     if maps:
                         mapName, mapLayer = getNameAndLayer(maps[0])
                         cmd.append("map={name}".format(name=mapName))
-                except gcore.ScriptError as e:
+                except ScriptError as e:
                     GError(parent=self, message=str(e), showTraceback=False)
                     return None
         return cmd
@@ -1841,7 +1838,7 @@ class AddTemporalLayerDialog(wx.Dialog):
                 self.layer.name = self._name
                 self.layer.cmd = self._cmd
                 event.Skip()
-            except (GException, gcore.ScriptError) as e:
+            except (GException, ScriptError) as e:
                 GError(parent=self, message=str(e))
 
     def GetLayer(self):
@@ -2023,7 +2020,7 @@ class PreferencesDialog(PreferencesBaseDialog):
             panel,
             id=wx.ID_ANY,
             label=_("Learn more about formatting options"),
-            url="http://docs.python.org/2/library/datetime.html#"
+            url="https://docs.python.org/2/library/datetime.html#"
             "strftime-and-strptime-behavior",
         )
         link.SetNormalColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT))

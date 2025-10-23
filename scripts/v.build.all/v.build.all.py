@@ -31,10 +31,7 @@ def main():
     vectors = grass.list_grouped("vect")[mapset]
     num_vectors = len(vectors)
 
-    if grass.verbosity() < 2:
-        quiet = True
-    else:
-        quiet = False
+    quiet = grass.verbosity() < 2
 
     i = 1
     for vect in vectors:

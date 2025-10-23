@@ -11,13 +11,14 @@
  *
  *****************************************************************************/
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
 #include <grass/gis.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
@@ -89,31 +90,28 @@ int report_status(struct Parameters *params)
     }
 
     // Mask raster
-    char *full_mask = G_fully_qualified_name(name, mapset);
+    char *full_mask = Rast_mask_name();
     // Underlying raster if applicable
     char *full_underlying = NULL;
     if (is_mask_reclass)
         full_underlying = G_fully_qualified_name(reclass_name, reclass_mapset);
 
     if (strcmp(params->format->answer, "json") == 0) {
-        JSON_Value *root_value = json_value_init_object();
-        JSON_Object *root_object = json_object(root_value);
-        json_object_set_boolean(root_object, "present", present);
-        if (present)
-            json_object_set_string(root_object, "full_name", full_mask);
-        else
-            json_object_set_null(root_object, "full_name");
+        G_JSON_Value *root_value = G_json_value_init_object();
+        G_JSON_Object *root_object = G_json_object(root_value);
+        G_json_object_set_boolean(root_object, "present", present);
+        G_json_object_set_string(root_object, "name", full_mask);
         if (is_mask_reclass)
-            json_object_set_string(root_object, "is_reclass_of",
-                                   full_underlying);
+            G_json_object_set_string(root_object, "is_reclass_of",
+                                     full_underlying);
         else
-            json_object_set_null(root_object, "is_reclass_of");
-        char *serialized_string = json_serialize_to_string_pretty(root_value);
+            G_json_object_set_null(root_object, "is_reclass_of");
+        char *serialized_string = G_json_serialize_to_string_pretty(root_value);
         if (!serialized_string)
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         puts(serialized_string);
-        json_free_serialized_string(serialized_string);
-        json_value_free(root_value);
+        G_json_free_serialized_string(serialized_string);
+        G_json_value_free(root_value);
     }
     else if (strcmp(params->format->answer, "shell") == 0) {
         printf("present=");
@@ -121,9 +119,7 @@ int report_status(struct Parameters *params)
             printf("1");
         else
             printf("0");
-        printf("\nfull_name=");
-        if (present)
-            printf("%s", full_mask);
+        printf("\nname=%s", full_mask);
         printf("\nis_reclass_of=");
         if (is_mask_reclass)
             printf("%s", full_underlying);
@@ -135,19 +131,16 @@ int report_status(struct Parameters *params)
             printf("true");
         else
             printf("false");
-        printf("\nfull_name: ");
-        if (present)
-            printf("|-\n  %s", full_mask);
-        else
-            printf("null");
-        // Null values in YAML can be an empty (no) value (rather than null),
-        // so we could use that, but using the explicit null as a reasonable
-        // starting point.
+        printf("\nname: ");
+        printf("|-\n  %s", full_mask);
         printf("\nis_reclass_of: ");
         // Using block scalar with |- to avoid need for escaping.
         // Alternatively, we could check mapset naming limits against YAML
         // escaping needs for different types of strings and do the necessary
         // escaping here.
+        // Null values in YAML can be an empty (no) value (rather than null),
+        // so we could use that, but using the explicit null as a reasonable
+        // starting point.
         if (is_mask_reclass)
             printf("|-\n  %s", full_underlying);
         else
@@ -155,13 +148,13 @@ int report_status(struct Parameters *params)
         printf("\n");
     }
     else {
-        if (present)
-            printf(_("Mask is active"));
-        else
-            printf(_("Mask is not present"));
         if (present) {
-            printf("\n");
+            printf(_("Mask is active"));
             printf(_("Mask name: %s"), full_mask);
+        }
+        else {
+            printf(_("Mask is not present"));
+            printf(_("If activated, mask name will be: %s"), full_mask);
         }
         if (is_mask_reclass) {
             printf("\n");

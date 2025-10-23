@@ -89,8 +89,8 @@ from grass.grassdb.history import Status
 
 
 class GMFrame(wx.Frame):
-    """Layer Manager frame with notebook widget for controlling GRASS
-    GIS. Includes command console page for typing GRASS (and other)
+    """Layer Manager frame with notebook widget for controlling GRASS.
+    Includes command console page for typing GRASS (and other)
     commands, tree widget page for managing map layers.
     """
 
@@ -108,7 +108,7 @@ class GMFrame(wx.Frame):
         if title:
             self.baseTitle = title
         else:
-            self.baseTitle = _("GRASS GIS")
+            self.baseTitle = _("GRASS")
 
         self.iconsize = (16, 16)
 
@@ -578,8 +578,7 @@ class GMFrame(wx.Frame):
                                                map display notebook layers
                                                tree page index
             """
-            pgnum_dict = {}
-            pgnum_dict["layers"] = self.notebookLayers.GetPageIndex(page)
+            pgnum_dict = {"layers": self.notebookLayers.GetPageIndex(page)}
             name = self.notebookLayers.GetPageText(pgnum_dict["layers"])
             caption = _("Close Map Display {}").format(name)
             if not askIfSaveWorkspace or (
@@ -687,8 +686,7 @@ class GMFrame(wx.Frame):
     def AddNvizTools(self, firstTime):
         """Add nviz notebook page
 
-        :param firstTime: if a mapdisplay is starting 3D mode for the
-                          first time
+        :param firstTime: if a mapdisplay is starting 3D mode for the first time
         """
         Debug.msg(5, "GMFrame.AddNvizTools()")
         from nviz.main import haveNviz
@@ -747,10 +745,7 @@ class GMFrame(wx.Frame):
             self._giface.grassdbChanged.emit(
                 grassdb=grassdb, location=location, action="new", element="location"
             )
-            if grassdb == gisenv["GISDBASE"]:
-                switch_grassdb = None
-            else:
-                switch_grassdb = grassdb
+            switch_grassdb = grassdb if grassdb != gisenv["GISDBASE"] else None
             if can_switch_mapset_interactive(self, grassdb, location, mapset):
                 switch_mapset_interactively(
                     self,
@@ -973,8 +968,7 @@ class GMFrame(wx.Frame):
         else:
             result = False
             raise ValueError(
-                "Layer Manager special command (%s)"
-                " not supported." % " ".join(command)
+                "Layer Manager special command (%s) not supported." % " ".join(command)
             )
         if result:
             self._gconsole.UpdateHistory(status=Status.SUCCESS)
@@ -985,7 +979,7 @@ class GMFrame(wx.Frame):
         """Handles display commands.
 
         :param command: command in a list
-        :return int: False if failed, True if succcess
+        :return int: False if failed, True if success
         """
         if not self.currentPage:
             self.NewDisplay(show=True)
@@ -1090,11 +1084,10 @@ class GMFrame(wx.Frame):
                 return self.GetLayerTree().GetMapDisplay()
             return None
         # -> return list of all mapdisplays
-        mlist = []
-        for idx in range(self.notebookLayers.GetPageCount()):
-            mlist.append(self.notebookLayers.GetPage(idx).maptree.GetMapDisplay())
-
-        return mlist
+        return [
+            self.notebookLayers.GetPage(idx).maptree.GetMapDisplay()
+            for idx in range(self.notebookLayers.GetPageCount())
+        ]
 
     def GetAllMapDisplays(self):
         """Get all (open) map displays"""
@@ -1116,10 +1109,7 @@ class GMFrame(wx.Frame):
 
         :return: command as a list"""
         layer = None
-        if event:
-            cmd = self.menucmd[event.GetId()]
-        else:
-            cmd = ""
+        cmd = self.menucmd[event.GetId()] if event else ""
 
         try:
             cmdlist = cmd.split(" ")
@@ -1135,7 +1125,7 @@ class GMFrame(wx.Frame):
             layer = self.GetLayerTree().layer_selected
             name = self.GetLayerTree().GetLayerInfo(layer, key="maplayer").name
             type = self.GetLayerTree().GetLayerInfo(layer, key="type")
-        except AttributeError:
+        except (AttributeError, TypeError):
             layer = None
 
         if layer and len(cmdlist) == 1:  # only if no parameters given
@@ -1183,7 +1173,7 @@ class GMFrame(wx.Frame):
         # available only for vector map layers
         try:
             mapLayer = tree.GetLayerInfo(layer, key="maplayer")
-        except AttributeError:
+        except (AttributeError, TypeError):
             mapLayer = None
 
         if not mapLayer or mapLayer.GetType() != "vector":
@@ -1194,8 +1184,7 @@ class GMFrame(wx.Frame):
             GMessage(
                 parent=self,
                 message=_(
-                    "Editing is allowed only for vector maps from the "
-                    "current mapset."
+                    "Editing is allowed only for vector maps from the current mapset."
                 ),
             )
             return
@@ -1234,13 +1223,13 @@ class GMFrame(wx.Frame):
         if not filename:
             return False
 
-        if not os.path.exists(filename):
+        if not Path(filename).exists():
             GError(
                 parent=self,
                 message=_("Script file '%s' doesn't exist. Operation canceled.")
                 % filename,
             )
-            return
+            return None
 
         # check permission
         if not os.access(filename, os.X_OK):
@@ -1257,14 +1246,14 @@ class GMFrame(wx.Frame):
                 style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
             )
             if dlg.ShowModal() != wx.ID_YES:
-                return
+                return None
             dlg.Destroy()
             try:
                 mode = stat.S_IMODE(os.lstat(filename)[stat.ST_MODE])
                 os.chmod(filename, mode | stat.S_IXUSR)
             except OSError:
                 GError(_("Unable to set permission. Operation canceled."), parent=self)
-                return
+                return None
 
         # check GRASS_ADDON_PATH
         addonPath = os.getenv("GRASS_ADDON_PATH", [])
@@ -1402,10 +1391,11 @@ class GMFrame(wx.Frame):
             # this is programmer's error
             # can be relaxed in future
             # but keep it strict unless needed otherwise
-            raise ValueError(
-                "OnChangeCWD cmd parameter must be list of"
+            msg = (
+                f"{self.OnChangeCWD.__name__} cmd parameter must be list of"
                 " length 1 or 2 and 'cd' as a first item"
             )
+            raise ValueError(msg)
         if cmd and len(cmd) > 2:
             # this might be a user error
             write_beginning(command=cmd)
@@ -1472,8 +1462,9 @@ class GMFrame(wx.Frame):
             sys.stderr.write(_("Unable to get GRASS version\n"))
 
         # check also OSGeo4W on MS Windows
-        if sys.platform == "win32" and not os.path.exists(
-            os.path.join(os.getenv("GISBASE"), "WinGRASS-README.url")
+        if (
+            sys.platform == "win32"
+            and not Path(os.getenv("GISBASE"), "WinGRASS-README.url").exists()
         ):
             osgeo4w = " (OSGeo4W)"
         else:
@@ -1711,10 +1702,11 @@ class GMFrame(wx.Frame):
 
         tree = self.GetLayerTree()
         if tree:
-            rasters = []
-            for layer in tree.GetSelectedLayers(checkedOnly=False):
-                if tree.GetLayerInfo(layer, key="type") == "raster":
-                    rasters.append(tree.GetLayerInfo(layer, key="maplayer").GetName())
+            rasters = [
+                tree.GetLayerInfo(layer, key="maplayer").GetName()
+                for layer in tree.GetSelectedLayers(checkedOnly=False)
+                if tree.GetLayerInfo(layer, key="type") == "raster"
+            ]
             if len(rasters) >= 2:
                 from core.layerlist import LayerList
                 from animation.data import AnimLayer
@@ -1860,7 +1852,7 @@ class GMFrame(wx.Frame):
         # available only for vector map layers
         try:
             maptype = tree.GetLayerInfo(layer, key="maplayer").type
-        except AttributeError:
+        except (AttributeError, TypeError):
             maptype = None
 
         if not maptype or maptype != "vector":
@@ -1892,7 +1884,7 @@ class GMFrame(wx.Frame):
         """Changes bookcontrol page to page associated with display."""
         # moved from mapdisp/frame.py
         # TODO: why it is called 3 times when getting focus?
-        # and one times when loosing focus?
+        # and one times when losing focus?
         if self.workspace_manager.loadingWorkspace:
             return
         pgnum = self.notebookLayers.GetPageIndex(notebookLayerPage)

@@ -93,6 +93,7 @@
 # %end
 
 import os
+from grass.exceptions import CalledModuleError
 
 try:
     import numpy as np
@@ -458,7 +459,7 @@ def main():
         gs.run_command(
             "g.remove", flags="f", type="raster", pattern="tmp%s*" % pid, quiet=True
         )
-    except:
+    except CalledModuleError:
         pass
 
 
@@ -523,7 +524,7 @@ def brovey(pan, ms1, ms2, ms3, out, pid, sproc):
         pb.wait(), pg.wait(), pr.wait()
         try:
             pb.terminate(), pg.terminate(), pr.terminate()
-        except:
+        except OSError:
             pass
 
     # Cleanup
@@ -535,7 +536,7 @@ def brovey(pan, ms1, ms2, ms3, out, pid, sproc):
             type="raster",
             name="%s,%s,%s" % (panmatch1, panmatch2, panmatch3),
         )
-    except:
+    except CalledModuleError:
         pass
 
 
@@ -575,7 +576,7 @@ def ihs(pan, ms1, ms2, ms3, out, pid, sproc):
     # Cleanup
     try:
         gs.run_command("g.remove", flags="f", quiet=True, type="raster", name=panmatch)
-    except:
+    except CalledModuleError:
         pass
 
 
@@ -652,7 +653,7 @@ def pca(pan, ms1, ms2, ms3, out, pid, sproc):
         cmd2 = "$outg = 1 * round(($panmatch2 * $b2evect1) + ($pca2 * $b2evect2) + ($pca3 * $b2evect3) + $b2mean)"  # noqa: E501
         cmd3 = "$outr = 1 * round(($panmatch3 * $b3evect1) + ($pca2 * $b3evect2) + ($pca3 * $b3evect3) + $b3mean)"  # noqa: E501
 
-        cmd = "\n".join([cmd1, cmd2, cmd3])
+        cmd = f"{cmd1}\n{cmd2}\n{cmd3}"
 
         gs.mapcalc(
             cmd,
@@ -701,7 +702,7 @@ def pca(pan, ms1, ms2, ms3, out, pid, sproc):
         pb.wait(), pg.wait(), pr.wait()
         try:
             pb.terminate(), pg.terminate(), pr.terminate()
-        except:
+        except OSError:
             pass
 
     # Cleanup
@@ -750,14 +751,11 @@ def matchhist(original, target, matched):
         )
 
         for n in range(256):
-            if str(n) in stats_dict:
-                num_cells = stats_dict[str(n)]
-            else:
-                num_cells = 0
+            num_cells = stats_dict.get(str(n), 0)
 
             cum_cells += num_cells
 
-            # cdf is the the number of cells at or below a given grey value
+            # cdf is the number of cells at or below a given grey value
             #   divided by the total number of cells
             cdf = float(cum_cells) / float(total_cells)
 
@@ -765,31 +763,28 @@ def matchhist(original, target, matched):
             arrays[img][n] = (n, cdf)
 
     # open file for reclass rules
-    outfile = open(gs.tempfile(), "w")
+    with open(gs.tempfile(), "w") as outfile:
+        for i in arrays[original]:
+            # for each grey value and corresponding cdf value in original, find the
+            #   cdf value in target that is closest to the target cdf value
+            difference_list = []
+            for j in arrays[target]:
+                # make a list of the difference between each original cdf value and
+                #   the target cdf value
+                difference_list.append(abs(i[1] - j[1]))
 
-    for i in arrays[original]:
-        # for each grey value and corresponding cdf value in original, find the
-        #   cdf value in target that is closest to the target cdf value
-        difference_list = []
-        for j in arrays[target]:
-            # make a list of the difference between each original cdf value and
-            #   the target cdf value
-            difference_list.append(abs(i[1] - j[1]))
+            # get the smallest difference in the list
+            min_difference = min(difference_list)
 
-        # get the smallest difference in the list
-        min_difference = min(difference_list)
-
-        for j in arrays[target]:
-            # find the grey value in target that corresponds to the cdf
-            #   closest to the original cdf
-            if j[1] <= i[1] + min_difference and j[1] >= i[1] - min_difference:
-                # build a reclass rules file from the original grey value and
-                #   corresponding grey value from target
-                out_line = "%d = %d\n" % (i[0], j[0])
-                outfile.write(out_line)
-                break
-
-    outfile.close()
+            for j in arrays[target]:
+                # find the grey value in target that corresponds to the cdf
+                #   closest to the original cdf
+                if j[1] <= i[1] + min_difference and j[1] >= i[1] - min_difference:
+                    # build a reclass rules file from the original grey value and
+                    #   corresponding grey value from target
+                    out_line = "%d = %d\n" % (i[0], j[0])
+                    outfile.write(out_line)
+                    break
 
     # create reclass of target from reclass rules file
     result = gs.core.find_file(matched, element="cell")

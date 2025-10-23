@@ -289,6 +289,6 @@ def test_gran_json(space_time_raster_dataset):
             item["name"] in space_time_raster_dataset.raster_names
             or item["name"] is None
         )
-    assert len(result["data"]) > len(
-        space_time_raster_dataset.raster_names
-    ), "There should be more entries because of finer granularity"
+    assert len(result["data"]) > len(space_time_raster_dataset.raster_names), (
+        "There should be more entries because of finer granularity"
+    )

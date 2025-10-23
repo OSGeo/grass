@@ -63,7 +63,7 @@ def main():
     # define classes which needs imports as local
     # for longer definitions, a separate file would be a better option
     class VDigitMapDisplay(FrameMixin, MapPanel):
-        """Map display for wrapping map panel with v.digit mathods and frame methods"""
+        """Map display for wrapping map panel with v.digit methods and frame methods"""
 
         def __init__(self, parent, vectorMap):
             MapPanel.__init__(
@@ -72,7 +72,7 @@ def main():
 
             # set system icon
             parent.SetIcon(
-                wx.Icon(os.path.join(ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO)
+                wx.Icon(os.path.join(ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
             )
 
             # bindings
@@ -84,7 +84,7 @@ def main():
             )
             self._initShortcuts()
 
-            # this giface issue not solved yet, we must set mapframe aferwards
+            # this giface issue not solved yet, we must set mapframe afterwards
             self._giface._mapframe = self
             # load vector map
             mapLayer = self.GetMap().AddLayer(
@@ -146,7 +146,7 @@ def main():
         id=wx.ID_ANY,
         size=(850, 600),
         style=wx.DEFAULT_FRAME_STYLE,
-        title=_("Vector Digitizer - GRASS GIS"),
+        title=_("Vector Digitizer - GRASS"),
     )
     frame = VDigitMapDisplay(parent=frame, vectorMap=options["map"])
     frame.Show()

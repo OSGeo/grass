@@ -9,6 +9,7 @@ Licence:   This program is free software under the GNU General Public
            License (>=v2). Read the file COPYING that comes with GRASS
            for details.
 """
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
@@ -30,9 +31,10 @@ class TestVRandom(TestCase):
     def tearDownClass(cls):
         cls.del_temp_region()
 
-    def tearDown(cls):
-        cls.runModule("g.remove", type="vector", flags="f", name=cls.output)
-        cls.runModule("g.remove", type="vector", flags="f", name=cls.output2)
+    def tearDown(self):
+        self.runModule(
+            "g.remove", type="vector", flags="f", name=(self.output, self.output2)
+        )
 
     def test_num_points(self):
         """Checking if number of points equals 100"""

@@ -19,6 +19,8 @@
 # % keyword: vector
 # % keyword: attribute table
 # % keyword: database
+# % keyword: DBF
+# % keyword: SQLite
 # %end
 # %flag
 # % key: c
@@ -97,10 +99,7 @@ def create_db(driver, database):
         return False
 
     gs.info(
-        _(
-            "Target database doesn't exist, "
-            "creating a new database using <%s> driver..."
-        )
+        _("Target database doesn't exist, creating a new database using <%s> driver...")
         % driver
     )
     try:
@@ -255,10 +254,7 @@ def main():
                 schema = ""
                 table = schema_table
 
-            if new_schema:
-                new_schema_table = "%s.%s" % (new_schema, table)
-            else:
-                new_schema_table = table
+            new_schema_table = "%s.%s" % (new_schema, table) if new_schema else table
 
             gs.debug(
                 "DATABASE = '%s' SCHEMA = '%s' TABLE = '%s' ->\n"
@@ -309,10 +305,7 @@ def main():
                     )
                 except CalledModuleError:
                     gs.warning(
-                        _(
-                            "Unable to connect table <%s> to vector "
-                            "<%s> on layer <%s>"
-                        )
+                        _("Unable to connect table <%s> to vector <%s> on layer <%s>")
                         % (table, vect, str(layer))
                     )
 

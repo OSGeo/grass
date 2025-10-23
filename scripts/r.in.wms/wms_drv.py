@@ -18,13 +18,15 @@ This program is free software under the GNU General Public License
 """
 
 import socket
-import grass.script as gs
-
 from time import sleep
+
+import grass.script as gs
 
 try:
     from osgeo import gdal
-except:
+
+    gdal.DontUseExceptions()
+except ImportError:
     gs.fatal(
         _(
             "Unable to load GDAL Python bindings (requires package 'python-gdal' "
@@ -32,21 +34,16 @@ except:
         )
     )
 
-import numpy as np
-
-np.arrayrange = np.arange
-
-from math import pi, floor
-
-from urllib.error import HTTPError
 from http.client import HTTPException
-
+from math import floor, pi
+from urllib.error import HTTPError
 from xml.etree.ElementTree import ParseError
 
-from wms_base import GetEpsg, GetSRSParamVal, WMSBase
+import numpy as np
 
-from wms_cap_parsers import WMTSCapabilitiesTree, OnEarthCapabilitiesTree
 from srs import Srs
+from wms_base import GetEpsg, GetSRSParamVal, WMSBase
+from wms_cap_parsers import OnEarthCapabilitiesTree, WMTSCapabilitiesTree
 
 
 class WMSDrv(WMSBase):
@@ -155,8 +152,7 @@ class WMSDrv(WMSBase):
 
                     sleep(sleep_time)
                     continue
-                else:
-                    gs.fatal(_("Unable to write data into tempfile.\n%s") % str(e))
+                gs.fatal(_("Unable to write data into tempfile.\n%s") % str(e))
             finally:
                 temp_tile_opened.close()
 
@@ -248,7 +244,7 @@ class WMSDrv(WMSBase):
             return temp_map
         # georeferencing and setting projection of temp_map
         projection = gs.read_command(
-            "g.proj", flags="wf", epsg=GetEpsg(self.params["srs"])
+            "g.proj", flags="fp", format="wkt", epsg=GetEpsg(self.params["srs"])
         )
         projection = projection.rstrip("\n")
         temp_map_dataset.SetProjection(projection)
@@ -292,9 +288,9 @@ class WMSDrv(WMSBase):
 
         # Build color table
         lookup = [
-            np.arrayrange(256),
-            np.arrayrange(256),
-            np.arrayrange(256),
+            np.arange(256),
+            np.arange(256),
+            np.arange(256),
             np.ones(256) * 255,
         ]
 
@@ -335,18 +331,18 @@ class BaseRequestMgr:
         # request data bbox specified in row and col number
         self.t_num_bbox = {}
 
-        self.t_num_bbox["min_col"] = int(
-            floor((bbox["minx"] - tl_corner["minx"]) / tile_span["x"] + epsilon)
+        self.t_num_bbox["min_col"] = floor(
+            (bbox["minx"] - tl_corner["minx"]) / tile_span["x"] + epsilon
         )
-        self.t_num_bbox["max_col"] = int(
-            floor((bbox["maxx"] - tl_corner["minx"]) / tile_span["x"] - epsilon)
+        self.t_num_bbox["max_col"] = floor(
+            (bbox["maxx"] - tl_corner["minx"]) / tile_span["x"] - epsilon
         )
 
-        self.t_num_bbox["min_row"] = int(
-            floor((tl_corner["maxy"] - bbox["maxy"]) / tile_span["y"] + epsilon)
+        self.t_num_bbox["min_row"] = floor(
+            (tl_corner["maxy"] - bbox["maxy"]) / tile_span["y"] + epsilon
         )
-        self.t_num_bbox["max_row"] = int(
-            floor((tl_corner["maxy"] - bbox["miny"]) / tile_span["y"] - epsilon)
+        self.t_num_bbox["max_row"] = floor(
+            (tl_corner["maxy"] - bbox["miny"]) / tile_span["y"] - epsilon
         )
 
         # Does required bbox intersects bbox of data available on server?
@@ -995,10 +991,7 @@ class OnEarthRequestMgr(BaseRequestMgr):
         res["y"] = (bbox["maxy"] - bbox["miny"]) / region["rows"]
         res["x"] = (bbox["maxx"] - bbox["minx"]) / region["cols"]
 
-        if res["x"] < res["y"]:
-            comp_res = "x"
-        else:
-            comp_res = "y"
+        comp_res = "x" if res["x"] < res["y"] else "y"
 
         t_res = {}
         best_patt = None

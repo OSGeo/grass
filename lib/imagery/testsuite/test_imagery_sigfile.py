@@ -11,6 +11,7 @@ for details
 
 import stat
 import ctypes
+import os
 import shutil
 from pathlib import Path
 
@@ -43,7 +44,10 @@ from grass.lib.imagery import (
 class SignatureFileTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
+        if os.name == "nt":
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("msvcrt"))
+        else:
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
         cls.mpath = utils.decode(G_mapset_path())
         cls.mapset_name = Mapset().name
         cls.sig_name = tempname(10)
@@ -331,7 +335,10 @@ class SignatureFileTestCase(TestCase):
 class SortSignaturesBysemantic_labelTest(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
+        if os.name == "nt":
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("msvcrt"))
+        else:
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
         cls.mapset = Mapset().name
         cls.map1 = tempname(10)
         cls.semantic_label1 = "The_Doors"
@@ -349,9 +356,12 @@ class SortSignaturesBysemantic_labelTest(TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.map1)
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.map2)
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.map3)
+        cls.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name=(cls.map1, cls.map2, cls.map3),
+        )
 
     def test_symmetric_complete_difference(self):
         # Prepare imagery group reference struct
@@ -473,10 +483,10 @@ class SortSignaturesBysemantic_labelTest(TestCase):
         self.assertEqual(
             sig_err,
             "<semantic label missing>,<semantic label missing>,"
-            + "<semantic label missing>,<semantic label missing>,"
-            + "<semantic label missing>,<semantic label missing>,"
-            + "<semantic label missing>,<semantic label missing>,"
-            + "<semantic label missing>",
+            "<semantic label missing>,<semantic label missing>,"
+            "<semantic label missing>,<semantic label missing>,"
+            "<semantic label missing>,<semantic label missing>,"
+            "<semantic label missing>",
         )
         self.assertEqual(ref_err, f"The_Doors,{self.map3}")
 

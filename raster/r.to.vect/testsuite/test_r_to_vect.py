@@ -28,8 +28,8 @@ class Testrr(TestCase):
     def tearDownClass(cls):
         cls.del_temp_region()
 
-    def tearDown(cls):
-        cls.runModule("g.remove", type="vector", flags="f", name=cls.output)
+    def tearDown(self):
+        self.runModule("g.remove", type="vector", flags="f", name=self.output)
 
     def test_flags(self):
         """Testing flag s"""

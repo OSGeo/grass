@@ -21,7 +21,6 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 import wx
-import wx.aui
 
 from core.settings import UserSettings
 from core.gcmd import RunCommand, GError, GMessage
@@ -46,7 +45,7 @@ class WorkspaceManager:
         self._giface.workspaceChanged.connect(self.WorkspaceChanged)
 
     def WorkspaceChanged(self):
-        "Update window title"
+        """Update window title"""
         self.workspaceChanged = True
 
     def New(self):
@@ -317,35 +316,37 @@ class WorkspaceManager:
             for overlay in gxwXml.overlays:
                 # overlay["cmd"][0] name of command e.g. d.barscale, d.legend
                 # overlay["cmd"][1:] parameters and flags
-                if overlay["display"] == i:
-                    if overlay["cmd"][0] == "d.legend.vect":
-                        mapdisplay[i].AddLegendVect(overlay["cmd"])
-                    if overlay["cmd"][0] == "d.legend":
-                        mapdisplay[i].AddLegendRast(overlay["cmd"])
-                    if overlay["cmd"][0] == "d.barscale":
-                        mapdisplay[i].AddBarscale(overlay["cmd"])
-                    if overlay["cmd"][0] == "d.northarrow":
-                        mapdisplay[i].AddArrow(overlay["cmd"])
-                    if overlay["cmd"][0] == "d.text":
-                        mapdisplay[i].AddDtext(overlay["cmd"])
+                if overlay["display"] != i:
+                    continue
+                if overlay["cmd"][0] == "d.legend.vect":
+                    mapdisplay[i].AddLegendVect(overlay["cmd"])
+                if overlay["cmd"][0] == "d.legend":
+                    mapdisplay[i].AddLegendRast(overlay["cmd"])
+                if overlay["cmd"][0] == "d.barscale":
+                    mapdisplay[i].AddBarscale(overlay["cmd"])
+                if overlay["cmd"][0] == "d.northarrow":
+                    mapdisplay[i].AddArrow(overlay["cmd"])
+                if overlay["cmd"][0] == "d.text":
+                    mapdisplay[i].AddDtext(overlay["cmd"])
 
             # avoid double-rendering when loading workspace
             # mdisp.MapWindow2D.UpdateMap()
             # nviz
-            if gxwXml.displays[i]["viewMode"] == "3d":
-                mapdisplay[i].AddNviz()
-                self.lmgr.nvizUpdateState(
-                    view=gxwXml.nviz_state["view"],
-                    iview=gxwXml.nviz_state["iview"],
-                    light=gxwXml.nviz_state["light"],
-                )
-                mapdisplay[i].MapWindow3D.constants = gxwXml.nviz_state["constants"]
-                for idx, constant in enumerate(mapdisplay[i].MapWindow3D.constants):
-                    mapdisplay[i].MapWindow3D.AddConstant(constant, i + 1)
-                for page in ("view", "light", "fringe", "constant", "cplane"):
-                    self.lmgr.nvizUpdatePage(page)
-                self.lmgr.nvizUpdateSettings()
-                mapdisplay[i].toolbars["map"].combo.SetSelection(1)
+            if gxwXml.displays[i]["viewMode"] != "3d":
+                continue
+            mapdisplay[i].AddNviz()
+            self.lmgr.nvizUpdateState(
+                view=gxwXml.nviz_state["view"],
+                iview=gxwXml.nviz_state["iview"],
+                light=gxwXml.nviz_state["light"],
+            )
+            mapdisplay[i].MapWindow3D.constants = gxwXml.nviz_state["constants"]
+            for idx, constant in enumerate(mapdisplay[i].MapWindow3D.constants):
+                mapdisplay[i].MapWindow3D.AddConstant(constant, i + 1)
+            for page in ("view", "light", "fringe", "constant", "cplane"):
+                self.lmgr.nvizUpdatePage(page)
+            self.lmgr.nvizUpdateSettings()
+            mapdisplay[i].toolbars["map"].combo.SetSelection(1)
 
         #
         # load layout
@@ -381,7 +382,7 @@ class WorkspaceManager:
         if filename[-4:] != ".gxw":
             filename += ".gxw"
 
-        if os.path.exists(filename):
+        if Path(filename).exists():
             dlg = wx.MessageDialog(
                 self.lmgr,
                 message=_(
@@ -431,36 +432,30 @@ class WorkspaceManager:
         """Save layer tree layout to workspace file
         :return: True on success, False on error
         """
-        tmpfile = tempfile.TemporaryFile(mode="w+b")
-        try:
-            WriteWorkspaceFile(lmgr=self.lmgr, file=tmpfile)
-        except Exception as e:
-            GError(
-                parent=self.lmgr,
-                message=_(
-                    "Writing current settings to workspace file <%s> failed.\n"
-                    "Error details: %s"
+        with tempfile.TemporaryFile(mode="w+b") as tmpfile:
+            try:
+                WriteWorkspaceFile(lmgr=self.lmgr, file=tmpfile)
+            except Exception as e:
+                GError(
+                    parent=self.lmgr,
+                    message=_(
+                        "Writing current settings to workspace file <%s> failed.\n"
+                        "Error details: %s"
+                    )
+                    % (tmpfile, str(e)),
                 )
-                % (tmpfile, str(e)),
-            )
-            return False
-
-        try:
-            mfile = open(filename, "wb")
-            tmpfile.seek(0)
-            for line in tmpfile.readlines():
-                mfile.write(line)
-        except OSError:
-            GError(
-                parent=self.lmgr,
-                message=_("Unable to open file <%s> for writing.") % filename,
-            )
-            return False
-
-        mfile.close()
-
+                return False
+            try:
+                with open(filename, "wb") as mfile:
+                    tmpfile.seek(0)
+                    mfile.writelines(tmpfile.readlines())
+            except OSError:
+                GError(
+                    parent=self.lmgr,
+                    message=_("Unable to open file <%s> for writing.") % filename,
+                )
+                return False
         self.AddFileToHistory(file_path=filename)
-
         return True
 
     def CanClosePage(self, caption):
@@ -519,12 +514,20 @@ class WorkspaceManager:
         :return None
         """
         if menu:
-            file_menu = menu.GetMenu(
-                menuIndex=menu.FindMenu(title=_("File")),
-            )
-            workspace_item = file_menu.FindItem(
-                id=file_menu.FindItem(itemString=_("Workspace")),
-            )[0]
+            menu_index = menu.FindMenu(_("File"))
+            if menu_index == wx.NOT_FOUND:
+                # try untranslated version
+                menu_index = menu.FindMenu("File")
+                if menu_index == wx.NOT_FOUND:
+                    return
+            file_menu = menu.GetMenu(menu_index)
+            workspace_index = file_menu.FindItem(_("Workspace"))
+            if workspace_index == wx.NOT_FOUND:
+                workspace_index = file_menu.FindItem("Workspace")
+                if workspace_index == wx.NOT_FOUND:
+                    return
+            workspace_item = file_menu.FindItemById(workspace_index)
+
             self._recent_files = RecentFilesMenu(
                 app_name="main",
                 parent_menu=workspace_item.GetSubMenu(),
