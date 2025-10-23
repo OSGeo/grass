@@ -341,7 +341,7 @@ RUN echo "Installing GRASS GUI packages: $GRASS_GUI_PACKAGES" \
     -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-24.04 \
     wxpython \
     # Clean up
-    && pip cache purge
+    && pip cache purge \
     && apt-get autoremove -y \
     && apt-get clean all \
     && rm -rf /var/lib/apt/lists/* \
