@@ -317,7 +317,6 @@ class HistoryBrowserTree(CTreeView):
         Populate the tree history model based on the current history log.
         """
         for entry in self.ReadFromHistory():
-
             # Get history day node
             day_node = self.GetHistoryNode(entry)
 

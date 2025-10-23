@@ -376,7 +376,7 @@ class WSDialogBase(wx.Dialog):
             self.Fit()
 
         self.statusbar.SetStatusText(
-            _("Connecting to <$s>...") % self.server.GetValue().strip()
+            _("Connecting to <%s>...") % self.server.GetValue().strip()
         )
 
         # number of panels already connected
@@ -565,7 +565,7 @@ class AddWSDialog(WSDialogBase):
 
         lcmd = self.active_ws_panel.CreateCmd()
         if not lcmd:
-            return None
+            return
 
         # TODO: It is not clear how to do GetOptData in giface
         # knowing what GetOptData is doing might help
@@ -680,8 +680,8 @@ class WSPropertiesDialog(WSDialogBase):
                 shutil.copyfile(f, self.revert_ws_cap_files[ws])
             else:
                 # delete file content
-                f_o = open(f, "w")
-                f_o.close()
+                with open(f, "w"):
+                    pass
 
     def _createWidgets(self):
         WSDialogBase._createWidgets(self)

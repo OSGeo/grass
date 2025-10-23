@@ -547,8 +547,6 @@ class HistRasterDialog(wx.Dialog):
             self.gselection.Enable()
             self.rselection.Disable()
             self.rselection.SetValue("")
-        else:
-            pass
 
     def OnRasterSelection(self, event):
         """Handler for selecting a single raster map"""

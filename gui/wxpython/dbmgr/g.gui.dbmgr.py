@@ -52,7 +52,7 @@ def main():
     f = AttributeManager(
         parent=None,
         id=wx.ID_ANY,
-        base_title=_("Attribute Table Manager - GRASS GIS"),
+        base_title=_("Attribute Table Manager - GRASS"),
         size=(900, 600),
         vectorName=mapName,
     )

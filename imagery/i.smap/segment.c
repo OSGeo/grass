@@ -277,7 +277,8 @@ int read_block(DCELL ***img, int wd, int ht, int nbands, struct Region *region,
                                                 nbands, ht, wd);
 
         /* allocate memory for name extension */
-        infn_num = (char *)G_malloc((strlen(optarg) + 10) * sizeof(char));
+        size_t infn_num_size = (strlen(optarg) + 10) * sizeof(char);
+        infn_num = (char *)G_malloc(infn_num_size);
 
         /* read data */
         if (nbands == 1) {
@@ -285,7 +286,7 @@ int read_block(DCELL ***img, int wd, int ht, int nbands, struct Region *region,
         }
         else {
             for (b = 1; b <= nbands; b++) {
-                sprintf(infn_num, "%s.%d", infn, b);
+                snprintf(infn_num, infn_num_size, "%s.%d", infn, b);
                 read_img(img_buf[b - 1], wd, ht, infn_num);
             }
         }

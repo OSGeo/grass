@@ -363,7 +363,7 @@ class BaseToolbar(ToolBar):
 
     def _toolbarData(self):
         """Toolbar data (virtual)"""
-        return None
+        return
 
     def Enable(self, tool, enable=True):
         """@copydoc ToolbarController::Enable()"""
@@ -411,7 +411,7 @@ class AuiToolbar(aui.AuiToolBar):
 
     def _toolbarData(self):
         """Toolbar data (virtual)"""
-        return None
+        return
 
     def Enable(self, tool, enable=True):
         """@copydoc ToolbarController::Enable()"""

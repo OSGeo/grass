@@ -7,18 +7,29 @@ Usage:
 
     import grass.temporal as tgis
 
-    input="/tmp/temp_1950_2012.tar.gz"
-    output="temp_1950_2012"
-    directory="/tmp"
-    title="My new dataset"
-    descr="May new shiny dataset"
-    location=None
-    link=True
-    exp=True
-    overr=False
-    create=False
-    tgis.import_stds(input, output, directory, title, descr, location,
-                    link, exp, overr, create, "strds")
+    input = "/tmp/temp_1950_2012.tar.gz"
+    output = "temp_1950_2012"
+    directory = "/tmp"
+    title = "My new dataset"
+    descr = "May new shiny dataset"
+    location = None
+    link = True
+    exp = True
+    overr = False
+    create = False
+    tgis.import_stds(
+        input,
+        output,
+        directory,
+        title,
+        descr,
+        location,
+        link,
+        exp,
+        overr,
+        create,
+        "strds",
+    )
 
 
 (C) 2012-2013 by the GRASS Development Team
@@ -249,9 +260,9 @@ def import_stds(
     gs.set_raise_on_error(True)
 
     # Check if input file and extraction directory exits
-    if not os.path.exists(input):
+    if not Path(input).exists():
         gs.fatal(_("Space time raster dataset archive <%s> not found") % input)
-    if not create and not os.path.exists(directory):
+    if not create and not Path(directory).exists():
         gs.fatal(_("Extraction directory <%s> not found") % directory)
 
     tar = tarfile.open(name=input, mode="r")
@@ -299,7 +310,6 @@ def import_stds(
     # Check projection information
     if not location:
         temp_name = gs.tempfile()
-        temp_file = open(temp_name, "w")
         proj_name = os.path.abspath(proj_file_name)
 
         # We need to convert projection strings generated
@@ -313,9 +323,9 @@ def import_stds(
         proj_name_tmp = f"{temp_name}_in_projection"
         Path(proj_name_tmp).write_text(proj_content)
 
-        p = gs.start_command("g.proj", flags="j", stdout=temp_file)
-        p.communicate()
-        temp_file.close()
+        with open(temp_name, "w") as temp_file:
+            p = gs.start_command("g.proj", flags="p", format="proj4", stdout=temp_file)
+            p.communicate()
 
         if not gs.compare_key_value_text_files(temp_name, proj_name_tmp, sep="="):
             if overr:
@@ -471,7 +481,7 @@ def import_stds(
         if format_ == "GTiff":
             for row in maplist:
                 filename = row["filename"] + ".tif"
-                if not os.path.exists(filename):
+                if not Path(filename).exists():
                     gs.fatal(
                         _("Unable to find GeoTIFF raster file <%s> in archive.")
                         % filename
@@ -479,7 +489,7 @@ def import_stds(
         elif format_ == "AAIGrid":
             for row in maplist:
                 filename = row["filename"] + ".asc"
-                if not os.path.exists(filename):
+                if not Path(filename).exists():
                     gs.fatal(
                         _("Unable to find AAIGrid raster file <%s> in archive.")
                         % filename
@@ -487,7 +497,7 @@ def import_stds(
         elif format_ == "GML":
             for row in maplist:
                 filename = row["filename"] + ".xml"
-                if not os.path.exists(filename):
+                if not Path(filename).exists():
                     gs.fatal(
                         _("Unable to find GML vector file <%s> in archive.") % filename
                     )
@@ -497,7 +507,7 @@ def import_stds(
                     filename = str(row["filename"].split(":")[0]) + ".pack"
                 else:
                     filename = row["filename"] + ".pack"
-                if not os.path.exists(filename):
+                if not Path(filename).exists():
                     gs.fatal(
                         _("Unable to find GRASS package file <%s> in archive.")
                         % filename

@@ -103,7 +103,7 @@ class NvizTask:
             ("shininess_map", "shininess_value"),
             ("transparency_map", "transparency_value"),
         )
-        for attr, params in zip(attributes, parameters):
+        for attr, params in zip(attributes, parameters, strict=True):
             mapname = None
             const = None
             if attr in surface["attribute"]:
@@ -130,7 +130,7 @@ class NvizTask:
         self._setMultiTaskParam("wire_color", value)
         # resolution
         for mode1, mode2 in zip(
-            ("coarse", "fine"), ("resolution_coarse", "resolution_fine")
+            ("coarse", "fine"), ("resolution_coarse", "resolution_fine"), strict=True
         ):
             value = surface["draw"]["resolution"][mode1]
             self._setMultiTaskParam(mode2, value)
@@ -183,7 +183,7 @@ class NvizTask:
                     ("isosurf_shininess_map", "isosurf_shininess_value"),
                     ("isosurf_transparency_map", "isosurf_transparency_value"),
                 )
-                for attr, params in zip(attributes, parameters):
+                for attr, params in zip(attributes, parameters, strict=True):
                     mapname = None
                     const = None
                     if attr in isosurface:
@@ -299,12 +299,11 @@ class NvizTask:
 
         if len(layerList) > 1:
             raise GException(_("Please add only one layer in the list."))
-            return
+            return None
         layer = layerList[0]
-        if hasattr(layer, "maps"):
-            series = layer.maps
-        else:
+        if not hasattr(layer, "maps"):
             raise GException(_("No map series nor space-time dataset is added."))
+        series = layer.maps
 
         for value in series:
             self.task.set_param(paramName, value)

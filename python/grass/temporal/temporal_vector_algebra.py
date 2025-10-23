@@ -9,7 +9,7 @@ for details.
 
 :authors: Thomas Leppelt and Soeren Gebbert
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> import grass.temporal as tgis
     >>> tgis.init(True)
@@ -44,11 +44,6 @@ for details.
 
 from __future__ import annotations
 
-try:
-    from ply import yacc
-except ImportError:
-    pass
-
 import copy
 
 import grass.pygrass.modules as pygrass
@@ -56,6 +51,7 @@ import grass.pygrass.modules as pygrass
 from .abstract_dataset import AbstractDatasetComparisonKeyStartTime
 from .core import get_current_mapset, init_dbif
 from .open_stds import open_new_stds
+from .ply import yacc
 from .space_time_datasets import VectorDataset
 from .spatio_temporal_relationships import SpatioTemporalTopologyBuilder
 from .temporal_algebra import (
@@ -66,7 +62,7 @@ from .temporal_algebra import (
 
 
 class TemporalVectorAlgebraLexer(TemporalAlgebraLexer):
-    """Lexical analyzer for the GRASS GIS temporal vector algebra"""
+    """Lexical analyzer for the GRASS temporal vector algebra"""
 
     def __init__(self) -> None:
         TemporalAlgebraLexer.__init__(self)
@@ -175,7 +171,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
         self.lexer = TemporalVectorAlgebraLexer()
         self.lexer.build()
-        self.parser = yacc.yacc(module=self, debug=self.debug, write_tables=False)
+        self.parser = yacc.yacc(module=self, debug=self.debug)
 
         self.overwrite = overwrite
         self.count = 0
@@ -217,7 +213,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         :param compare_cmd: Boolean for comparing command list values based on
                           related map list and comparison operator.
         :param compop: Comparison operator, && or ||.
-        :param aggregate: Aggregation operator for relation map list, & or |.
+        :param aggregate: Aggregation operator for relation map list, & or \\|.
         :param new: Boolean if new temporary maps should be created.
         :param convert: Boolean if conditional values should be converted to
                       r.mapcalc command strings.
@@ -272,17 +268,18 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                 self.overlay_cmd_value(map_i, tbrelations, compop, topolist)
 
             for topo in topolist:
-                if topo.upper() in tbrelations.keys():
-                    if count_map:
-                        relationmaplist = tbrelations[topo.upper()]
-                        gvar = GlobalTemporalVar()
-                        gvar.td = len(relationmaplist)
-                        if "map_value" in dir(map_i):
-                            map_i.map_value.append(gvar)
-                        else:
-                            map_i.map_value = gvar
-                    # Use unique identifier, since map names may be equal
-                    resultdict[map_i.uid] = map_i
+                if topo.upper() not in tbrelations.keys():
+                    continue
+                if count_map:
+                    relationmaplist = tbrelations[topo.upper()]
+                    gvar = GlobalTemporalVar()
+                    gvar.td = len(relationmaplist)
+                    if "map_value" in dir(map_i):
+                        map_i.map_value.append(gvar)
+                    else:
+                        map_i.map_value = gvar
+                # Use unique identifier, since map names may be equal
+                resultdict[map_i.uid] = map_i
         resultlist = resultdict.values()
 
         # Sort list of maps chronological.
@@ -311,41 +308,38 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         if "cmd_list" in dir(map_i):
             resultlist += map_i.cmd_list
         for topo in topolist:
-            if topo.upper() in tbrelations.keys():
-                relationmaplist = tbrelations[topo.upper()]
-                for relationmap in relationmaplist:
-                    # Append command list of given map to result command list.
-                    if "cmd_list" in dir(relationmap):
-                        resultlist += relationmap.cmd_list
-                    # Generate an intermediate name
-                    name = self.generate_map_name()
-                    # Put it into the removalbe map list
-                    self.removable_maps[name] = VectorDataset(
-                        name + "@%s" % (self.mapset)
-                    )
-                    map_i.set_id(name + "@" + self.mapset)
-                    # Set second input for overlay module.
-                    mapbinput = relationmap.get_id()
-                    # Create module command in PyGRASS for v.overlay and v.patch.
-                    if operator != "disor":
-                        m = copy.deepcopy(self.m_overlay)
-                        m.run_ = False
-                        m.inputs["operator"].value = operator
-                        m.inputs["ainput"].value = str(mapainput)
-                        m.inputs["binput"].value = str(mapbinput)
-                        m.outputs["output"].value = name
-                        m.flags["overwrite"].value = self.overwrite
-                    else:
-                        patchinput = str(mapainput) + "," + str(mapbinput)
-                        m = copy.deepcopy(self.m_patch)
-                        m.run_ = False
-                        m.inputs["input"].value = patchinput
-                        m.outputs["output"].value = name
-                        m.flags["overwrite"].value = self.overwrite
-                    # Conditional append of module command.
-                    resultlist.append(m)
-                    # Set new map name to temporary map name.
-                    mapainput = name
+            if topo.upper() not in tbrelations.keys():
+                continue
+            relationmaplist = tbrelations[topo.upper()]
+            for relationmap in relationmaplist:
+                # Append command list of given map to result command list.
+                if "cmd_list" in dir(relationmap):
+                    resultlist += relationmap.cmd_list
+                # Generate an intermediate name
+                name = self.generate_map_name()
+                # Put it into the removalbe map list
+                self.removable_maps[name] = VectorDataset(name + "@%s" % (self.mapset))
+                map_i.set_id(name + "@" + self.mapset)
+                # Set second input for overlay module.
+                mapbinput = relationmap.get_id()
+                # Create module command in PyGRASS for v.overlay and v.patch.
+                if operator != "disor":
+                    m = copy.deepcopy(self.m_overlay)
+                    m.run_ = False
+                    m.inputs["operator"].value = operator
+                    m.inputs["ainput"].value = str(mapainput)
+                    m.inputs["binput"].value = str(mapbinput)
+                else:
+                    patchinput = str(mapainput) + "," + str(mapbinput)
+                    m = copy.deepcopy(self.m_patch)
+                    m.run_ = False
+                    m.inputs["input"].value = patchinput
+                m.outputs["output"].value = name
+                m.flags["overwrite"].value = self.overwrite
+                # Conditional append of module command.
+                resultlist.append(m)
+                # Set new map name to temporary map name.
+                mapainput = name
         # Add command list to result map.
         map_i.cmd_list = resultlist
 
@@ -375,30 +369,31 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
             )
             # Combine temporal and spatial extents of intermediate map with related maps
             for topo in topolist:
-                if topo in tbrelations.keys():
-                    for map_j in tbrelations[topo]:
-                        if temporal == "r":
-                            # Generate an intermediate map for the result map list.
-                            map_new = self.generate_new_map(
-                                base_map=map_i,
-                                bool_op="and",
-                                copy=True,
-                                rename=False,
-                                remove=True,
-                            )
-                        # Create overlaid map extent.
-                        returncode = self.overlay_map_extent(
-                            map_new, map_j, "and", temp_op=temporal
+                if topo not in tbrelations.keys():
+                    continue
+                for map_j in tbrelations[topo]:
+                    if temporal == "r":
+                        # Generate an intermediate map for the result map list.
+                        map_new = self.generate_new_map(
+                            base_map=map_i,
+                            bool_op="and",
+                            copy=True,
+                            rename=False,
+                            remove=True,
                         )
-                        # Stop the loop if no temporal or spatial relationship exist.
-                        if returncode == 0:
-                            break
-                        # Append map to result map list.
-                        if returncode == 1:
-                            # resultlist.append(map_new)
-                            resultdict[map_new.get_id()] = map_new
+                    # Create overlaid map extent.
+                    returncode = self.overlay_map_extent(
+                        map_new, map_j, "and", temp_op=temporal
+                    )
+                    # Stop the loop if no temporal or spatial relationship exist.
                     if returncode == 0:
                         break
+                    # Append map to result map list.
+                    if returncode == 1:
+                        # resultlist.append(map_new)
+                        resultdict[map_new.get_id()] = map_new
+                if returncode == 0:
+                    break
             # Append map to result map list.
             # if returncode == 1:
             #    resultlist.append(map_new)
@@ -496,42 +491,43 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                             map_i.set_id(newident + "@" + mapset)
                             count += 1
                             register_list.append(map_i)
-                    else:
-                        # Test if temporal extents have been changed by temporal
-                        # relation operators (i|r). This is a code copy from
-                        # temporal_algebra.py
-                        map_i_extent = map_i.get_temporal_extent_as_tuple()
-                        map_test = map_i.get_new_instance(map_i.get_id())
-                        map_test.select(dbif)
-                        map_test_extent = map_test.get_temporal_extent_as_tuple()
-                        if map_test_extent != map_i_extent:
-                            # Create new map with basename
-                            newident = self.basename + "_" + str(count).zfill(leadzero)
-                            map_result = map_i.get_new_instance(
-                                newident + "@" + self.mapset
+
+                        continue
+
+                    # Test if temporal extents have been changed by temporal
+                    # relation operators (i|r). This is a code copy from
+                    # temporal_algebra.py
+                    map_i_extent = map_i.get_temporal_extent_as_tuple()
+                    map_test = map_i.get_new_instance(map_i.get_id())
+                    map_test.select(dbif)
+                    map_test_extent = map_test.get_temporal_extent_as_tuple()
+                    if map_test_extent != map_i_extent:
+                        # Create new map with basename
+                        newident = self.basename + "_" + str(count).zfill(leadzero)
+                        map_result = map_i.get_new_instance(
+                            newident + "@" + self.mapset
+                        )
+
+                        if map_test.map_exists() and self.overwrite is False:
+                            self.msgr.fatal(
+                                "Error raster maps with basename %s exist. "
+                                "Use --o flag to overwrite existing file" % (mapname)
                             )
 
-                            if map_test.map_exists() and self.overwrite is False:
-                                self.msgr.fatal(
-                                    "Error raster maps with basename %s exist. "
-                                    "Use --o flag to overwrite existing file"
-                                    % (mapname)
-                                )
+                        map_result.set_temporal_extent(map_i.get_temporal_extent())
+                        map_result.set_spatial_extent(map_i.get_spatial_extent())
+                        # Attention we attach a new attribute
+                        map_result.is_new = True
+                        count += 1
+                        register_list.append(map_result)
 
-                            map_result.set_temporal_extent(map_i.get_temporal_extent())
-                            map_result.set_spatial_extent(map_i.get_spatial_extent())
-                            # Attention we attach a new attribute
-                            map_result.is_new = True
-                            count += 1
-                            register_list.append(map_result)
-
-                            # Copy the map
-                            m = copy.deepcopy(self.m_copy)
-                            m.inputs["vector"].value = map_i.get_id(), newident
-                            m.flags["overwrite"].value = self.overwrite
-                            m.run()
-                        else:
-                            register_list.append(map_i)
+                        # Copy the map
+                        m = copy.deepcopy(self.m_copy)
+                        m.inputs["vector"].value = map_i.get_id(), newident
+                        m.flags["overwrite"].value = self.overwrite
+                        m.run()
+                    else:
+                        register_list.append(map_i)
 
                 if len(register_list) > 0:
                     # Create result space time dataset.

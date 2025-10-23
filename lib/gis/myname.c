@@ -27,7 +27,6 @@
  *
  * \return pointer to a string
  */
-
 char *G_myname(void)
 {
     char name[GNAME_MAX];

@@ -6,6 +6,7 @@ Created on Mon Nov 26 11:57:54 2012
 
 import wx
 import os
+from pathlib import Path
 
 from core import globalvar, gcmd
 from grass.script.utils import try_remove
@@ -48,9 +49,8 @@ class ViewFrame(wx.Frame):
             parent=self.panel, id=wx.ID_ANY, style=wx.TE_MULTILINE, size=(-1, 75)
         )
         self.textCtrl.Bind(wx.EVT_TEXT, self.OnFileText)
-        f = open(self.pathfile)
-        self.textCtrl.SetValue("".join(f.readlines()))
-        f.close()
+        with open(self.pathfile) as f:
+            self.textCtrl.SetValue("".join(f.readlines()))
         # BUTTONS      #definition
         self.btn_close = Button(parent=self, id=wx.ID_EXIT)
         self.btn_ok = Button(parent=self, id=wx.ID_SAVE)
@@ -107,11 +107,10 @@ class ViewFrame(wx.Frame):
         )
 
         if dlg.ShowModal() == wx.ID_YES:
-            f = codecs.open(
+            with codecs.open(
                 self.pathfile, encoding=self.enc, mode="w", errors="replace"
-            )
-            f.write(self.text + os.linesep)
-            f.close()
+            ) as f:
+                f.write(self.text + os.linesep)
         dlg.Destroy()
         self.Destroy()
 
@@ -216,9 +215,9 @@ class RLiSetupFrame(wx.Frame):
         # return all the configuration files in self.rlipath, check if there are
         # link or directory and doesn't add them
         listfiles = [
-            rli_conf
-            for rli_conf in os.listdir(self.rlipath)
-            if os.path.isfile(os.path.join(self.rlipath, rli_conf))
+            rli_conf.name
+            for rli_conf in Path(self.rlipath).iterdir()
+            if rli_conf.is_file()
         ]
         return sorted(listfiles)
 

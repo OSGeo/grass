@@ -13,7 +13,7 @@ Classes:
  - forms::GrassGUIApp
 
 This program is just a coarse approach to automatically build a GUI
-from a xml-based GRASS user interface description.
+from an xml-based GRASS user interface description.
 
 You need to have Python 2.4, wxPython 2.8 and python-xml.
 
@@ -72,10 +72,7 @@ import xml.etree.ElementTree as ET
 if __name__ == "__main__":
     if os.getenv("GISBASE") is None:
         # intentionally not translatable
-        sys.exit(
-            "Failed to start. GRASS GIS is not running"
-            " or the installation is broken."
-        )
+        sys.exit("Failed to start. GRASS is not running or the installation is broken.")
     from grass.script.setup import set_gui_path
 
     set_gui_path()
@@ -84,6 +81,7 @@ from grass.pydispatch.signal import Signal
 
 from grass.script import core as grass
 from grass.script import task as gtask
+from grass.exceptions import ScriptError
 
 from core import globalvar
 from gui_core.widgets import (
@@ -207,10 +205,6 @@ class UpdateThread(Thread):
             name = win.GetName()
 
             # @todo: replace name by isinstance() and signals
-
-            pBind = self.task.get_param(uid, element="wxId", raiseError=False)
-            if pBind:
-                pBind["value"] = ""
 
             # set appropriate types in t.* modules and g.list/remove element
             # selections
@@ -336,6 +330,7 @@ class UpdateThread(Thread):
                         "vector": map,
                         "layer": layer,
                         "dbInfo": cparams[map]["dbInfo"],
+                        "setDefaultValue": False,
                     }
                 # table
                 elif driver and db:
@@ -343,10 +338,12 @@ class UpdateThread(Thread):
                         "table": pTable.get("value"),
                         "driver": driver,
                         "database": db,
+                        "setDefaultValue": False,
                     }
                 elif pTable:
                     self.data[win.GetParent().InsertTableColumns] = {
-                        "table": pTable.get("value")
+                        "table": pTable.get("value"),
+                        "setDefaultValue": False,
                     }
 
             elif name == "SubGroupSelect":
@@ -412,8 +409,8 @@ class UpdateQThread(Thread):
 
     requestId = 0
 
-    def __init__(self, parent, requestQ, resultQ, **kwds):
-        Thread.__init__(self, **kwds)
+    def __init__(self, parent, requestQ, resultQ, **kwargs):
+        Thread.__init__(self, **kwargs)
 
         self.parent = parent  # cmdPanel
         self.daemon = True
@@ -423,19 +420,19 @@ class UpdateQThread(Thread):
 
         self.start()
 
-    def Update(self, callable, *args, **kwds):
+    def Update(self, callable, *args, **kwargs):
         UpdateQThread.requestId += 1
 
         self.request = None
-        self.requestQ.put((UpdateQThread.requestId, callable, args, kwds))
+        self.requestQ.put((UpdateQThread.requestId, callable, args, kwargs))
 
         return UpdateQThread.requestId
 
     def run(self):
         while True:
-            requestId, callable, args, kwds = self.requestQ.get()
+            requestId, callable, args, kwargs = self.requestQ.get()
 
-            self.request = callable(*args, **kwds)
+            self.request = callable(*args, **kwargs)
 
             self.resultQ.put((requestId, self.request.run()))
 
@@ -502,9 +499,7 @@ class TaskFrame(wx.Frame):
 
         # icon
         self.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_dialog.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
 
         guisizer = wx.BoxSizer(wx.VERTICAL)
@@ -1121,7 +1116,7 @@ class CmdPanel(wx.Panel):
             which_sizer = tabsizer[p["guisection"]]
             which_panel = tab[p["guisection"]]
             # if label is given -> label and description -> tooltip
-            # otherwise description -> lavel
+            # otherwise description -> label
             if p.get("label", "") != "":
                 title = text_beautify(p["label"])
                 tooltip = text_beautify(p["description"], width=-1)
@@ -2297,6 +2292,9 @@ class CmdPanel(wx.Panel):
 
                 elif prompt == "sql_query":
                     win = gselect.SqlWhereSelect(parent=which_panel, param=p)
+                    value = self._getValue(p)
+                    if value:
+                        win.SetValue(value)  # parameter previously set
                     p["wxId"] = [win.GetTextWin().GetId()]
                     win.GetTextWin().Bind(wx.EVT_TEXT, self.OnSetValue)
                     which_sizer.Add(
@@ -2409,9 +2407,15 @@ class CmdPanel(wx.Panel):
                 pSqlWhere.append(p)
 
         # collect ids
-        pColumnIds = [p["wxId"] for p in pColumn]
-        pLayerIds = [p["wxId"] for p in pLayer]
-        pSqlWhereIds = [p["wxId"] for p in pSqlWhere]
+        pColumnIds = []
+        for p in pColumn:
+            pColumnIds += p["wxId"]
+        pLayerIds = []
+        for p in pLayer:
+            pLayerIds += p["wxId"]
+        pSqlWhereIds = []
+        for p in pSqlWhere:
+            pSqlWhereIds += p["wxId"]
 
         # set wxId-bindings
         if pMap:
@@ -2553,9 +2557,8 @@ class CmdPanel(wx.Panel):
             gcmd.GMessage(parent=self, message=_("Nothing to load."))
             return
 
-        data = ""
         try:
-            f = open(path)
+            data = Path(path).read_text()
         except OSError as e:
             gcmd.GError(
                 parent=self,
@@ -2563,11 +2566,6 @@ class CmdPanel(wx.Panel):
                 message=_("Unable to load file.\n\nReason: %s") % e,
             )
             return
-
-        try:
-            data = f.read()
-        finally:
-            f.close()
 
         win["text"].SetValue(data)
 
@@ -2603,11 +2601,9 @@ class CmdPanel(wx.Panel):
                 enc = locale.getencoding()
             except AttributeError:
                 enc = locale.getdefaultlocale()[1]
-            f = codecs.open(path, encoding=enc, mode="w", errors="replace")
-            try:
+
+            with codecs.open(path, encoding=enc, mode="w", errors="replace") as f:
                 f.write(text + os.linesep)
-            finally:
-                f.close()
 
             win["file"].SetValue(path)
 
@@ -2631,13 +2627,11 @@ class CmdPanel(wx.Panel):
                 enc = locale.getencoding()
             except AttributeError:
                 enc = locale.getdefaultlocale()[1]
-            f = codecs.open(filename, encoding=enc, mode="w", errors="replace")
-            try:
+
+            with codecs.open(filename, encoding=enc, mode="w", errors="replace") as f:
                 f.write(text)
                 if text[-1] != os.linesep:
                     f.write(os.linesep)
-            finally:
-                f.close()
         else:
             win.SetValue("")
 
@@ -2774,38 +2768,43 @@ class CmdPanel(wx.Panel):
     def OnColorChange(self, event):
         myId = event.GetId()
         for p in self.task.params:
-            if "wxId" in p and myId in p["wxId"]:
-                multiple = p["wxId"][1] is not None  # multiple colors
-                hasTansp = p["wxId"][2] is not None
-                if multiple:
-                    # selected color is added at the end of textCtrl
-                    colorchooser = wx.FindWindowById(p["wxId"][0])
-                    new_color = colorchooser.GetValue()[:]
-                    new_label = utils.rgb2str.get(
-                        new_color, ":".join(list(map(str, new_color)))
-                    )
-                    textCtrl = wx.FindWindowById(p["wxId"][1])
-                    val = textCtrl.GetValue()
-                    sep = ","
-                    if val and val[-1] != sep:
-                        val += sep
-                    val += new_label
-                    textCtrl.SetValue(val)
-                    p["value"] = val
-                elif hasTansp and wx.FindWindowById(p["wxId"][2]).GetValue():
-                    p["value"] = "none"
-                else:
-                    colorchooser = wx.FindWindowById(p["wxId"][0])
-                    new_color = colorchooser.GetValue()[:]
-                    # This is weird: new_color is a 4-tuple and new_color[:] is
-                    # a 3-tuple under wx2.8.1
-                    new_label = utils.rgb2str.get(
-                        new_color, ":".join(list(map(str, new_color)))
-                    )
-                    colorchooser.SetLabel(new_label)
-                    colorchooser.SetColour(new_color)
-                    colorchooser.Refresh()
-                    p["value"] = colorchooser.GetLabel()
+            if "wxId" not in p or myId not in p["wxId"]:
+                continue
+
+            multiple = p["wxId"][1] is not None  # multiple colors
+            hasTansp = p["wxId"][2] is not None
+            if multiple:
+                # selected color is added at the end of textCtrl
+                colorchooser = wx.FindWindowById(p["wxId"][0])
+                new_color = colorchooser.GetValue()[:]
+                new_label = utils.rgb2str.get(
+                    new_color, ":".join(list(map(str, new_color)))
+                )
+                textCtrl = wx.FindWindowById(p["wxId"][1])
+                val = textCtrl.GetValue()
+                sep = ","
+                if val and val[-1] != sep:
+                    val += sep
+                val += new_label
+                textCtrl.SetValue(val)
+                p["value"] = val
+
+                continue
+            if hasTansp and wx.FindWindowById(p["wxId"][2]).GetValue():
+                p["value"] = "none"
+                continue
+
+            colorchooser = wx.FindWindowById(p["wxId"][0])
+            new_color = colorchooser.GetValue()[:]
+            # This is weird: new_color is a 4-tuple and new_color[:] is
+            # a 3-tuple under wx2.8.1
+            new_label = utils.rgb2str.get(
+                new_color, ":".join(list(map(str, new_color)))
+            )
+            colorchooser.SetLabel(new_label)
+            colorchooser.SetColour(new_color)
+            colorchooser.Refresh()
+            p["value"] = colorchooser.GetLabel()
         self.OnUpdateValues()
 
     def OnUpdateValues(self, event=None):
@@ -2897,25 +2896,24 @@ class CmdPanel(wx.Panel):
         myId = event.GetId()
 
         for p in self.task.params:
-            if "wxId" in p and myId in p["wxId"]:
-                from gui_core.dialogs import SymbolDialog
+            if "wxId" not in p or myId not in p["wxId"]:
+                continue
+            from gui_core.dialogs import SymbolDialog
 
-                dlg = SymbolDialog(
-                    self, symbolPath=globalvar.SYMBDIR, currentSymbol=p["value"]
-                )
-                if dlg.ShowModal() == wx.ID_OK:
-                    img = dlg.GetSelectedSymbolPath()
-                    p["value"] = dlg.GetSelectedSymbolName()
+            dlg = SymbolDialog(
+                self, symbolPath=globalvar.SYMBDIR, currentSymbol=p["value"]
+            )
+            if dlg.ShowModal() == wx.ID_OK:
+                img = dlg.GetSelectedSymbolPath()
+                p["value"] = dlg.GetSelectedSymbolName()
+                bitmapButton = wx.FindWindowById(p["wxId"][0])
+                label = wx.FindWindowById(p["wxId"][1])
+                bitmapButton.SetBitmapLabel(wx.Bitmap(img + ".png"))
+                label.SetLabel(p["value"])
 
-                    bitmapButton = wx.FindWindowById(p["wxId"][0])
-                    label = wx.FindWindowById(p["wxId"][1])
+                self.OnUpdateValues(event)
 
-                    bitmapButton.SetBitmapLabel(wx.Bitmap(img + ".png"))
-                    label.SetLabel(p["value"])
-
-                    self.OnUpdateValues(event)
-
-                dlg.Destroy()
+            dlg.Destroy()
 
     def OnTimelineTool(self, event):
         """Show Timeline Tool with dataset(s) from gselect.
@@ -2926,35 +2924,37 @@ class CmdPanel(wx.Panel):
         myId = event.GetId()
 
         for p in self.task.params:
-            if "wxId" in p and myId in p["wxId"]:
-                select = self.FindWindowById(p["wxId"][0])
-                if not select.GetValue():
-                    gcmd.GMessage(parent=self, message=_("No dataset given."))
-                    return
-                datasets = select.GetValue().split(",")
-                from timeline import frame
+            if "wxId" not in p or myId not in p["wxId"]:
+                continue
+            select = self.FindWindowById(p["wxId"][0])
+            if not select.GetValue():
+                gcmd.GMessage(parent=self, message=_("No dataset given."))
+                return
+            datasets = select.GetValue().split(",")
+            from timeline import frame
 
-                frame.run(parent=self, datasets=datasets)
+            frame.run(parent=self, datasets=datasets)
 
     def OnSelectFont(self, event):
         """Select font using font dialog"""
         myId = event.GetId()
         for p in self.task.params:
-            if "wxId" in p and myId in p["wxId"]:
-                from gui_core.dialogs import DefaultFontDialog
+            if "wxId" not in p or myId not in p["wxId"]:
+                continue
+            from gui_core.dialogs import DefaultFontDialog
 
-                dlg = DefaultFontDialog(
-                    parent=self,
-                    title=_("Select font"),
-                    style=wx.DEFAULT_DIALOG_STYLE,
-                    type="font",
-                )
-                if dlg.ShowModal() == wx.ID_OK:
-                    if dlg.font:
-                        p["value"] = dlg.font
-                        self.FindWindowById(p["wxId"][1]).SetValue(dlg.font)
-                        self.OnUpdateValues(event)
-                dlg.Destroy()
+            dlg = DefaultFontDialog(
+                parent=self,
+                title=_("Select font"),
+                style=wx.DEFAULT_DIALOG_STYLE,
+                type="font",
+            )
+            if dlg.ShowModal() == wx.ID_OK:
+                if dlg.font:
+                    p["value"] = dlg.font
+                    self.FindWindowById(p["wxId"][1]).SetValue(dlg.font)
+                    self.OnUpdateValues(event)
+            dlg.Destroy()
 
     def OnUpdateSelection(self, event):
         """Update dialog (layers, tables, columns, etc.)"""
@@ -3077,7 +3077,7 @@ class GUI:
         try:
             global _blackList
             self.grass_task = gtask.parse_interface(cmd[0], blackList=_blackList)
-        except (grass.ScriptError, ValueError) as e:
+        except (ScriptError, ValueError) as e:
             raise gcmd.GException(e.value)
 
         # if layer parameters previously set, re-insert them into dialog
@@ -3103,32 +3103,34 @@ class GUI:
                     else:
                         self.grass_task.set_flag(option[1], True)
                     cmd_validated.append(option)
-                else:  # parameter
-                    try:
-                        key, value = option.split("=", 1)
-                    except ValueError:
-                        if self.grass_task.firstParam:
-                            if i == 0:  # add key name of first parameter if not given
-                                key = self.grass_task.firstParam
-                                value = option
-                            else:
-                                raise gcmd.GException(
-                                    _("Unable to parse command '%s'") % " ".join(cmd)
-                                )
-                        else:
-                            continue
+                    continue
 
-                    task = self.grass_task.get_param(key, raiseError=False)
-                    if not task:
-                        err.append(
-                            _("%(cmd)s: parameter '%(key)s' not available")
-                            % {"cmd": cmd[0], "key": key}
-                        )
+                # parameter
+                try:
+                    key, value = option.split("=", 1)
+                except ValueError:
+                    if self.grass_task.firstParam:
+                        if i == 0:  # add key name of first parameter if not given
+                            key = self.grass_task.firstParam
+                            value = option
+                        else:
+                            raise gcmd.GException(
+                                _("Unable to parse command '%s'") % " ".join(cmd)
+                            )
+                    else:
                         continue
 
-                    self.grass_task.set_param(key, value)
-                    cmd_validated.append(key + "=" + value)
-                    i += 1
+                task = self.grass_task.get_param(key, raiseError=False)
+                if not task:
+                    err.append(
+                        _("%(cmd)s: parameter '%(key)s' not available")
+                        % {"cmd": cmd[0], "key": key}
+                    )
+                    continue
+
+                self.grass_task.set_param(key, value)
+                cmd_validated.append(key + "=" + value)
+                i += 1
 
             # update original command list
             cmd = cmd_validated
@@ -3180,16 +3182,17 @@ class GUI:
             self.grass_task = gtask.processTask(tree).get_task()
 
             for p in self.grass_task.params:
-                if p.get("name", "") in {"input", "map"}:
-                    age = p.get("age", "")
-                    prompt = p.get("prompt", "")
-                    element = p.get("element", "")
-                    if (
-                        age == "old"
-                        and element in {"cell", "grid3", "vector"}
-                        and prompt in {"raster", "raster_3d", "vector"}
-                    ):
-                        return p.get("name", None)
+                if p.get("name", "") not in {"input", "map"}:
+                    continue
+                age = p.get("age", "")
+                prompt = p.get("prompt", "")
+                element = p.get("element", "")
+                if (
+                    age == "old"
+                    and (element in {"cell", "grid3", "vector"})
+                    and (prompt in {"raster", "raster_3d", "vector"})
+                ):
+                    return p.get("name", None)
         return None
 
 
@@ -3248,8 +3251,6 @@ if __name__ == "__main__":
             "forms.py opening form for: %s"
             % task.get_cmd(ignoreErrors=True, ignoreRequired=True),
         )
-        app = GrassGUIApp(task)
-        app.MainLoop()
     else:  # Test
         # Test grassTask from within a GRASS session
         if os.getenv("GISBASE") is not None:
@@ -3386,4 +3387,5 @@ if __name__ == "__main__":
             },
         ]
         q = wx.LogNull()
-        GrassGUIApp(task).MainLoop()
+
+    GrassGUIApp(task).MainLoop()

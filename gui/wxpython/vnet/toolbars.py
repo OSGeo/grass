@@ -235,5 +235,4 @@ class AnalysisToolbar(BaseToolbar):
         self.Realize()
 
     def _toolbarData(self):
-
         return self._getToolbarData(())

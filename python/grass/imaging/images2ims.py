@@ -63,7 +63,7 @@ def checkImages(images):
             # Check and convert dtype
             if im.dtype == np.uint8:
                 images2.append(im)  # Ok
-            elif im.dtype in [np.float32, np.float64]:
+            elif im.dtype in {np.float32, np.float64}:
                 theMax = im.max()
                 if 128 < theMax < 300:
                     pass  # assume 0:255
@@ -80,7 +80,7 @@ def checkImages(images):
             if im.ndim == 2:
                 pass  # ok
             elif im.ndim == 3:
-                if im.shape[2] not in [3, 4]:
+                if im.shape[2] not in {3, 4}:
                     msg = "This array can not represent an image."
                     raise ValueError(msg)
             else:
@@ -120,10 +120,9 @@ def _getSequenceNumber(filename, part1, part2):
     # Get all numeric chars
     seq2 = ""
     for c in seq:
-        if c in digits:
-            seq2 += c
-        else:
+        if c not in digits:
             break
+        seq2 += c
     # Make int and return
     return int(seq2)
 

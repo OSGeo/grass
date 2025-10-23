@@ -89,8 +89,8 @@ from grass.grassdb.history import Status
 
 
 class GMFrame(wx.Frame):
-    """Layer Manager frame with notebook widget for controlling GRASS
-    GIS. Includes command console page for typing GRASS (and other)
+    """Layer Manager frame with notebook widget for controlling GRASS.
+    Includes command console page for typing GRASS (and other)
     commands, tree widget page for managing map layers.
     """
 
@@ -108,7 +108,7 @@ class GMFrame(wx.Frame):
         if title:
             self.baseTitle = title
         else:
-            self.baseTitle = _("GRASS GIS")
+            self.baseTitle = _("GRASS")
 
         self.iconsize = (16, 16)
 
@@ -968,8 +968,7 @@ class GMFrame(wx.Frame):
         else:
             result = False
             raise ValueError(
-                "Layer Manager special command (%s)"
-                " not supported." % " ".join(command)
+                "Layer Manager special command (%s) not supported." % " ".join(command)
             )
         if result:
             self._gconsole.UpdateHistory(status=Status.SUCCESS)
@@ -1185,8 +1184,7 @@ class GMFrame(wx.Frame):
             GMessage(
                 parent=self,
                 message=_(
-                    "Editing is allowed only for vector maps from the "
-                    "current mapset."
+                    "Editing is allowed only for vector maps from the current mapset."
                 ),
             )
             return
@@ -1225,13 +1223,13 @@ class GMFrame(wx.Frame):
         if not filename:
             return False
 
-        if not os.path.exists(filename):
+        if not Path(filename).exists():
             GError(
                 parent=self,
                 message=_("Script file '%s' doesn't exist. Operation canceled.")
                 % filename,
             )
-            return
+            return None
 
         # check permission
         if not os.access(filename, os.X_OK):
@@ -1248,14 +1246,14 @@ class GMFrame(wx.Frame):
                 style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
             )
             if dlg.ShowModal() != wx.ID_YES:
-                return
+                return None
             dlg.Destroy()
             try:
                 mode = stat.S_IMODE(os.lstat(filename)[stat.ST_MODE])
                 os.chmod(filename, mode | stat.S_IXUSR)
             except OSError:
                 GError(_("Unable to set permission. Operation canceled."), parent=self)
-                return
+                return None
 
         # check GRASS_ADDON_PATH
         addonPath = os.getenv("GRASS_ADDON_PATH", [])
@@ -1464,8 +1462,9 @@ class GMFrame(wx.Frame):
             sys.stderr.write(_("Unable to get GRASS version\n"))
 
         # check also OSGeo4W on MS Windows
-        if sys.platform == "win32" and not os.path.exists(
-            os.path.join(os.getenv("GISBASE"), "WinGRASS-README.url")
+        if (
+            sys.platform == "win32"
+            and not Path(os.getenv("GISBASE"), "WinGRASS-README.url").exists()
         ):
             osgeo4w = " (OSGeo4W)"
         else:
@@ -1885,7 +1884,7 @@ class GMFrame(wx.Frame):
         """Changes bookcontrol page to page associated with display."""
         # moved from mapdisp/frame.py
         # TODO: why it is called 3 times when getting focus?
-        # and one times when loosing focus?
+        # and one times when losing focus?
         if self.workspace_manager.loadingWorkspace:
             return
         pgnum = self.notebookLayers.GetPageIndex(notebookLayerPage)

@@ -40,7 +40,7 @@ fi
 if [ $# -lt 1 -o "$1" = "-h" -o "$1" = "-help" -o "$1" = "--help"  ] ; then
     echo "
 
-GRASS GIS $NAME_VER binary package installation tool
+GRASS $NAME_VER binary package installation tool
 
 Usage:	grass-$NAME_VER-install.sh grass-$NAME_VER.tar.gz [dest_dir] [bin_dir]
 
@@ -71,7 +71,7 @@ fi
 
 # Print out script identification message
 echo ""
-echo "GRASS GIS $NAME_VER binary package installation tool"
+echo "GRASS $NAME_VER binary package installation tool"
 echo ""
 
 # Check for correct package name:
@@ -338,11 +338,11 @@ cat ${DESTDIR}/include/Make/Platform.make.orig | \
 echo "Installation finished. Start GRASS $NAME_VER with"
 echo "    $BINDIR/grass-$NAME_VER"
 echo ""
-#echo "The graphical user interface can be started within GRASS GIS."
+#echo "The graphical user interface can be started within GRASS."
 #echo ""
 #echo "You can uninstall grass by typing"
 #echo "    sh $UNINSTALL"
 #echo "in the directory $BINDIR"
 echo ""
-echo "Welcome to GRASS GIS. Enjoy this open source GRASS GIS!"
+echo "Welcome to GRASS. Enjoy this open source GRASS GIS!"
 echo ""
