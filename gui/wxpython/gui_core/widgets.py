@@ -914,8 +914,8 @@ class MapNameValidator(BaseValidator):
         """Clone validator"""
         return MapNameValidator()
 
-class GenericMultiValidator(Validator):
 
+class GenericMultiValidator(Validator):
     """This validator checks conditions and calls callbacks
     in case the condition is not fulfilled.
     """
