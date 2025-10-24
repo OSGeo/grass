@@ -346,14 +346,14 @@ RUN make -j $NUMTHREADS distclean || echo "nothing to clean" \
         echo "GUI selected, skipping GUI related cleanup"; \
     else \
         echo "No GUI selected, removing GUI related files"; \
-        cp /usr/local/grass85/gui/wxpython/xml/module_items.xml module_items.xml \
-        && rm -rf /usr/local/grass85/fonts \
-        && rm -rf /usr/local/grass85/gui \
-        && rm -rf /usr/local/grass85/docs/html \
-        && rm -rf /usr/local/grass85/docs/mkdocs \
-        && rm -rf /usr/local/grass85/share \
-        && mkdir -p /usr/local/grass85/gui/wxpython/xml/ \
-        && mv module_items.xml /usr/local/grass85/gui/wxpython/xml/module_items.xml; \
+        cp /usr/local/grass84/gui/wxpython/xml/module_items.xml module_items.xml \
+        && rm -rf /usr/local/grass84/fonts \
+        && rm -rf /usr/local/grass84/gui \
+        && rm -rf /usr/local/grass84/docs/html \
+        && rm -rf /usr/local/grass84/docs/mkdocs \
+        && rm -rf /usr/local/grass84/share \
+        && mkdir -p /usr/local/grass84/gui/wxpython/xml/ \
+        && mv module_items.xml /usr/local/grass84/gui/wxpython/xml/module_items.xml; \
     fi
 
 # Build the GDAL-GRASS plugin
@@ -446,7 +446,7 @@ COPY --link --from=build /usr/local /usr/local
 # COPY --link --from=datum_grids /tmp/cdn.proj.org/*.tif /usr/share/proj/
 
 # Create generic GRASS lib name regardless of version number
-RUN ln -sf /usr/local/grass85 /usr/local/grass \
+RUN ln -sf /usr/local/grass84 /usr/local/grass \
     && ldconfig
 
 # show GRASS, PROJ, GDAL etc versions
