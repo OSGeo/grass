@@ -148,15 +148,11 @@ def cleanup():
             "g.remove", type="vector", name=TMP_REG_NAME, flags="f", quiet=True
         )
 
-    if (
-        TMP_EST_FILE
-        and gs.find_file(
-            name=TMP_EST_FILE, element="cell"
-        )["fullname"]
-    ):
+    if TMP_EST_FILE and gs.find_file(name=TMP_EST_FILE, element="cell")["fullname"]:
         gs.run_command(
             "g.remove", type="raster", name=TMP_EST_FILE, flags="f", quiet=True
         )
+
 
 def is_projection_matching(GDALdatasource):
     """Returns True if current location projection
@@ -221,14 +217,14 @@ def main():
             )
             if flags["e"]:
                 try:
-                    gs.message(_("Calculating estimted resolution..."))
+                    gs.message(_("Calculating estimated resolution..."))
                     raster_info = gs.raster_info(output)
                     if raster_info:
-                        estres = (raster_info["ewres"] + raster_info["nsres"])/2.0
+                        estres = (raster_info["ewres"] + raster_info["nsres"]) / 2.0
                         gs.message(
-                            _("Estimated target resolution for input band <{out}>: {res}").format(
-                                out=output, res=estres
-                            )
+                            _(
+                                "Estimated target resolution for input band <{out}>: {res}"
+                            ).format(out=output, res=estres)
                         )
                     else:
                         gs.warning(
