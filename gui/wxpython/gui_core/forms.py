@@ -1510,7 +1510,9 @@ class CmdPanel(wx.Panel):
                         selection = gselect.Select(
                             parent=which_panel,
                             id=wx.ID_ANY,
-                            validator=MapNameValidator(),
+                            validator=MapNameValidator()
+                            if p.get("age") == "new"
+                            else wx.DefaultValidator,
                             size=globalvar.DIALOG_GSELECT_SIZE,
                             type=elem,
                             multiple=multiple,
@@ -1527,10 +1529,6 @@ class CmdPanel(wx.Panel):
                         # A gselect.Select is a combobox with two children: a textctl
                         # and a popupwindow; we target the textctl here
                         textWin = selection.GetTextCtrl()
-                        '''# Attach MapValidator to gselect.Select
-                        if p.get("age", "") == "new":
-                            validator = MapValidator()
-                            textWin.SetValidator(validator)'''
                         if globalvar.CheckWxVersion([3]):
                             p["wxId"] = [
                                 selection.GetId(),
