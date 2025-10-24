@@ -915,6 +915,7 @@ class MapNameValidator(BaseValidator):
         return MapNameValidator()
 
 class GenericMultiValidator(Validator):
+
     """This validator checks conditions and calls callbacks
     in case the condition is not fulfilled.
     """
