@@ -19,11 +19,11 @@ jobs:
       group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
       cancel-in-progress: true
 
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     env:
       PYTHONWARNINGS: always
       # renovate: datasource=python-version depName=python
-      PYTHON_VERSION: "3.13"
+      PYTHON_VERSION: "3.14"
 
     steps:
       - name: Checkout core
@@ -42,6 +42,8 @@ jobs:
             graphviz \
             libpq-dev \
             unixodbc-dev
+          LC_ALL=C.UTF-8 sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
+          sudo apt-get update -y
           xargs -a <(awk '! /^ *(#|$)/' "grass/.github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
 
@@ -158,7 +160,7 @@ jobs:
           make htmldocs
 
       - name: Make the doxygen results available (html)
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: doxygen-site
           if-no-files-found: error
@@ -169,7 +171,7 @@ jobs:
           retention-days: 3
 
       - name: Make the doxygen results available (latex)
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: doxygen-site-latex
           if-no-files-found: error
@@ -249,7 +251,7 @@ jobs:
             --version "${VERSION}" -o
 
       - name: Make logs available
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: grass-addon-build-logs
           if-no-files-found: error
@@ -257,7 +259,7 @@ jobs:
           retention-days: 3
 
       - name: Make the result available
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: mkdocs-site
           if-no-files-found: error

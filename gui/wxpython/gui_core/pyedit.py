@@ -411,7 +411,7 @@ class PyEditController:
         if filename[-3:] != ".py":
             filename += ".py"
 
-        if os.path.exists(filename):
+        if Path(filename).exists():
             dlg = wx.MessageDialog(
                 parent=self.guiparent,
                 message=_(

@@ -30,7 +30,7 @@
 #include <grass/raster.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 
 struct order {
     int point;
@@ -98,9 +98,9 @@ int main(int argc, char *argv[])
     int red, green, blue;
     struct GModule *module;
 
-    JSON_Value *root_value = NULL, *point_value, *layer_value;
-    JSON_Array *root_array;
-    JSON_Object *point_object, *layer_object;
+    G_JSON_Value *root_value = NULL, *point_value, *layer_value;
+    G_JSON_Array *root_array;
+    G_JSON_Object *point_object, *layer_object;
 
     enum OutputFormat format;
 
@@ -275,11 +275,11 @@ int main(int argc, char *argv[])
         format = PLAIN;
 
     if (format == JSON) {
-        root_value = json_value_init_array();
+        root_value = G_json_value_init_array();
         if (root_value == NULL) {
             G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
         }
-        root_array = json_array(root_value);
+        root_array = G_json_array(root_value);
     }
 
     /* print header row */
@@ -549,57 +549,58 @@ int main(int argc, char *argv[])
                 fprintf(stdout, "\n");
             }
             else {
-                point_value = json_value_init_object();
-                point_object = json_object(point_value);
+                point_value = G_json_value_init_object();
+                point_object = G_json_object(point_value);
 
                 if (flg.cat->answer) {
-                    json_object_set_number(point_object, "cat",
-                                           cache[point].cat);
+                    G_json_object_set_number(point_object, "cat",
+                                             cache[point].cat);
                 }
 
-                json_object_set_number(point_object, "easting",
-                                       atof(cache[point].east_buf));
-                json_object_set_number(point_object, "northing",
-                                       atof(cache[point].north_buf));
-                json_object_set_string(point_object, "site_name",
-                                       cache[point].lab_buf);
+                G_json_object_set_number(point_object, "easting",
+                                         atof(cache[point].east_buf));
+                G_json_object_set_number(point_object, "northing",
+                                         atof(cache[point].north_buf));
+                G_json_object_set_string(point_object, "site_name",
+                                         cache[point].lab_buf);
 
                 for (i = 0; i < nfiles; i++) {
-                    layer_value = json_value_init_object();
-                    layer_object = json_object(layer_value);
+                    layer_value = G_json_value_init_object();
+                    layer_object = G_json_object(layer_value);
 
                     if (Rast_is_c_null_value(&cache[point].value[i]) ||
                         Rast_is_d_null_value(&cache[point].dvalue[i])) {
-                        json_object_set_null(layer_object, "value");
+                        G_json_object_set_null(layer_object, "value");
                         if (flg.label->answer)
-                            json_object_set_null(layer_object, "label");
+                            G_json_object_set_null(layer_object, "label");
                         if (flg.color->answer)
-                            json_object_set_null(layer_object, "color");
+                            G_json_object_set_null(layer_object, "color");
                     }
                     else {
                         if (out_type[i] == CELL_TYPE) {
-                            json_object_set_number(layer_object, "value",
-                                                   (long)cache[point].value[i]);
+                            G_json_object_set_number(
+                                layer_object, "value",
+                                (long)cache[point].value[i]);
                             cache[point].dvalue[i] = cache[point].value[i];
                         }
                         else { /* FCELL or DCELL */
-                            json_object_set_number(layer_object, "value",
-                                                   cache[point].dvalue[i]);
+                            G_json_object_set_number(layer_object, "value",
+                                                     cache[point].dvalue[i]);
                         }
                         if (flg.label->answer)
-                            json_object_set_string(
+                            G_json_object_set_string(
                                 layer_object, "label",
                                 Rast_get_d_cat(&(cache[point].dvalue[i]),
                                                &cats[i]));
                         if (flg.color->answer)
-                            json_object_set_string(layer_object, "color",
-                                                   cache[point].clr_buf[i]);
+                            G_json_object_set_string(layer_object, "color",
+                                                     cache[point].clr_buf[i]);
                     }
 
-                    json_object_set_value(point_object, opt.input->answers[i],
-                                          layer_value);
+                    G_json_object_set_value(point_object, opt.input->answers[i],
+                                            layer_value);
                 }
-                json_array_append_value(root_array, point_value);
+                G_json_array_append_value(root_array, point_value);
             }
         }
 
@@ -614,13 +615,13 @@ int main(int argc, char *argv[])
 
     if (format == JSON) {
         char *serialized_string = NULL;
-        serialized_string = json_serialize_to_string_pretty(root_value);
+        serialized_string = G_json_serialize_to_string_pretty(root_value);
         if (serialized_string == NULL) {
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         }
         puts(serialized_string);
-        json_free_serialized_string(serialized_string);
-        json_value_free(root_value);
+        G_json_free_serialized_string(serialized_string);
+        G_json_value_free(root_value);
     }
 
     if (!opt.coords->answers && !opt.points->answers && tty)

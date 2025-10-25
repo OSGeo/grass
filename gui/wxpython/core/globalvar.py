@@ -200,7 +200,7 @@ def UpdateGRASSAddOnCommands(eList=None):
     nCmd = 0
     pathList = os.getenv("PATH", "").split(os.pathsep)
     for path in addonPath.split(os.pathsep):
-        if not os.path.exists(path) or not os.path.isdir(path):
+        if not Path(path).exists() or not Path(path).is_dir():
             continue
 
         # check if addon is in the path

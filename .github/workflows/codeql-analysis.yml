@@ -19,7 +19,7 @@ permissions: {}
 jobs:
   analyze:
     name: Analyze
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     permissions:
       security-events: write
       actions: read
@@ -53,13 +53,15 @@ jobs:
         run: |
           sudo apt-get update -y
           sudo apt-get install -y wget git gawk findutils
+          LC_ALL=C.UTF-8 sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
+          sudo apt-get update -y
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
       - uses: rui314/setup-mold@725a8794d15fc7563f59595bd9556495c0564878 # v1
         if: ${{ matrix.language == 'c-cpp' }}
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@3599b3baa15b485a2e49ef411a7a4bb2452e7f93 # v3.30.5
+        uses: github/codeql-action/init@4e94bd11f71e507f7f87df81788dff88d1dacbfb # v4.31.0
         with:
           languages: ${{ matrix.language }}
           config-file: ./.github/codeql/codeql-config.yml
@@ -79,11 +81,11 @@ jobs:
       - name: Build
         if: ${{ matrix.language == 'c-cpp' }}
         env:
-          CFLAGS: -std=gnu11
-          CXXFLAGS: -std=c++11
-        run: .github/workflows/build_ubuntu-22.04.sh "${HOME}/install"
+          CFLAGS: -std=gnu17
+          CXXFLAGS: -std=c++17
+        run: .github/workflows/build_ubuntu-24.04.sh "${HOME}/install"
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@3599b3baa15b485a2e49ef411a7a4bb2452e7f93 # v3.30.5
+        uses: github/codeql-action/analyze@4e94bd11f71e507f7f87df81788dff88d1dacbfb # v4.31.0
         with:
           category: "/language:${{matrix.language}}"

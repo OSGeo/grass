@@ -1,4 +1,4 @@
-FROM debian:13.1-slim@sha256:c2880112cc5c61e1200c26f106e4123627b49726375eb5846313da9cca117337
+FROM debian:13.1-slim@sha256:66b37a5078a77098bfc80175fb5eb881a3196809242fd295b25502854e12cbec
 
 # apt-get update && apt-get install lsb-release -y && lsb_release -a
 

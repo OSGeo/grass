@@ -865,8 +865,8 @@ static void wps_print_literal_input_output(
         fprintf(stdout, "\t\t\t\t\t<ows:AnyValue/>\n");
     else {
         /* Check for range values */
-        if (strcmp(datatype, "integer") == 0 ||
-            strcmp(datatype, "float") == 0) {
+        if (datatype && (strcmp(datatype, "integer") == 0 ||
+                         strcmp(datatype, "float") == 0)) {
             str = strtok((char *)choices[0], "-");
             if (str != NULL) {
                 snprintf(range[0], 24, "%s", str);

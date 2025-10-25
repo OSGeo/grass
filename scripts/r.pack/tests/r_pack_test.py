@@ -108,7 +108,7 @@ def test_output_dir_is_not_writable(xy_raster_dataset_session_for_module, tmp_pa
     parent.chmod(stat.S_IREAD)
     output = parent / "output_1.rpack"
     # Calling output.exists() gives permission denied on Linux, but os.path does not.
-    assert not os.path.exists(output)
+    assert not os.path.exists(output)  # noqa: PTH110
     assert output.parent.exists()
     assert output.parent.is_dir()
     with pytest.raises(
@@ -169,8 +169,9 @@ def test_files_present_xy_integer(
             .read()
             .decode("utf-8")
         )
-        assert data["projection"] == 0
-        assert data["zone"] == 0
+        assert data["type_code"] == 0
+        assert data["zone"] is None
+        assert data["type"] == "xy"
 
 
 @pytest.mark.parametrize("data_type", ["float", "double"])
@@ -218,5 +219,6 @@ def test_files_present_general_crs_float(tmp_path, data_type):
             .read()
             .decode("utf-8")
         )
-        assert data["projection"] == 99
-        assert data["zone"] == 0
+        assert data["type_code"] == 99
+        assert data["zone"] is None
+        assert data["type"] == "other"

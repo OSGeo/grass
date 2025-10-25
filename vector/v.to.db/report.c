@@ -7,24 +7,24 @@ int report(enum OutputFormat format)
 {
     char unit_name[20];
 
-    JSON_Value *records_value = NULL, *record_value = NULL, *root_value = NULL,
-               *units_value = NULL, *totals_value = NULL;
-    JSON_Array *records_array = NULL;
-    JSON_Object *record = NULL, *root_object = NULL, *units_object = NULL,
-                *totals_object = NULL;
+    G_JSON_Value *records_value = NULL, *record_value = NULL,
+                 *root_value = NULL, *units_value = NULL, *totals_value = NULL;
+    G_JSON_Array *records_array = NULL;
+    G_JSON_Object *record = NULL, *root_object = NULL, *units_object = NULL,
+                  *totals_object = NULL;
     // todo: add measurement unit
 
     if (format == JSON) {
-        root_value = json_value_init_object();
-        root_object = json_object(root_value);
-        records_value = json_value_init_array();
-        records_array = json_array(records_value);
+        root_value = G_json_value_init_object();
+        root_object = G_json_object(root_value);
+        records_value = G_json_value_init_array();
+        records_array = G_json_array(records_value);
 
-        units_value = json_value_init_object();
-        units_object = json_object(units_value);
+        units_value = G_json_value_init_object();
+        units_object = G_json_object(units_value);
 
-        totals_value = json_value_init_object();
-        totals_object = json_object(totals_value);
+        totals_value = G_json_value_init_object();
+        totals_object = G_json_object(totals_value);
 
         get_unit_name(unit_name);
     }
@@ -52,10 +52,10 @@ int report(enum OutputFormat format)
             break;
         case JSON:
             for (i = 0; i < vstat.rcat; i++) {
-                record_value = json_value_init_object();
-                record = json_object(record_value);
-                json_object_set_number(record, "category", Values[i].cat);
-                json_array_append_value(records_array, record_value);
+                record_value = G_json_value_init_object();
+                record = G_json_object(record_value);
+                G_json_object_set_number(record, "category", Values[i].cat);
+                G_json_array_append_value(records_array, record_value);
             }
         }
         break;
@@ -81,14 +81,14 @@ int report(enum OutputFormat format)
             break;
         case JSON:
             for (i = 0; i < vstat.rcat; i++) {
-                record_value = json_value_init_object();
-                record = json_object(record_value);
-                json_object_set_number(record, "category", Values[i].cat);
-                json_object_set_number(record, "count", Values[i].count1);
-                json_array_append_value(records_array, record_value);
+                record_value = G_json_value_init_object();
+                record = G_json_object(record_value);
+                G_json_object_set_number(record, "category", Values[i].cat);
+                G_json_object_set_number(record, "count", Values[i].count1);
+                G_json_array_append_value(records_array, record_value);
                 sum += Values[i].count1;
             }
-            json_object_set_number(totals_object, "count", sum);
+            G_json_object_set_number(totals_object, "count", sum);
             break;
         }
         break;
@@ -114,15 +114,15 @@ int report(enum OutputFormat format)
             break;
         case JSON:
             for (i = 0; i < vstat.rcat; i++) {
-                record_value = json_value_init_object();
-                record = json_object(record_value);
-                json_object_set_number(record, "category", Values[i].cat);
-                json_object_set_number(record, "area", Values[i].d1);
-                json_array_append_value(records_array, record_value);
+                record_value = G_json_value_init_object();
+                record = G_json_object(record_value);
+                G_json_object_set_number(record, "category", Values[i].cat);
+                G_json_object_set_number(record, "area", Values[i].d1);
+                G_json_array_append_value(records_array, record_value);
                 fsum += Values[i].d1;
             }
-            json_object_set_string(units_object, "area", unit_name);
-            json_object_set_number(totals_object, "area", fsum);
+            G_json_object_set_string(units_object, "area", unit_name);
+            G_json_object_set_number(totals_object, "area", fsum);
             break;
         }
         break;
@@ -142,14 +142,14 @@ int report(enum OutputFormat format)
             break;
         case JSON:
             for (i = 0; i < vstat.rcat; i++) {
-                record_value = json_value_init_object();
-                record = json_object(record_value);
-                json_object_set_number(record, "category", Values[i].cat);
+                record_value = G_json_value_init_object();
+                record = G_json_object(record_value);
+                G_json_object_set_number(record, "category", Values[i].cat);
 
                 Values[i].d1 = Values[i].d2 / (2.0 * sqrt(M_PI * Values[i].d1));
-                json_object_set_number(record, "compact", Values[i].d1);
+                G_json_object_set_number(record, "compact", Values[i].d1);
 
-                json_array_append_value(records_array, record_value);
+                G_json_array_append_value(records_array, record_value);
             }
             break;
         }
@@ -180,16 +180,16 @@ int report(enum OutputFormat format)
             break;
         case JSON:
             for (i = 0; i < vstat.rcat; i++) {
-                record_value = json_value_init_object();
-                record = json_object(record_value);
-                json_object_set_number(record, "category", Values[i].cat);
+                record_value = G_json_value_init_object();
+                record = G_json_object(record_value);
+                G_json_object_set_number(record, "category", Values[i].cat);
 
                 if (Values[i].d1 == 1) /* log(1) == 0 */
                     Values[i].d1 += 0.000001;
                 Values[i].d1 = 2.0 * log(Values[i].d2) / log(Values[i].d1);
-                json_object_set_number(record, "fd", Values[i].d1);
+                G_json_object_set_number(record, "fd", Values[i].d1);
 
-                json_array_append_value(records_array, record_value);
+                G_json_array_append_value(records_array, record_value);
             }
             break;
         }
@@ -206,13 +206,13 @@ int report(enum OutputFormat format)
             break;
         case JSON:
             for (i = 0; i < vstat.rcat; i++) {
-                record_value = json_value_init_object();
-                record = json_object(record_value);
-                json_object_set_number(record, "category", Values[i].cat);
-                json_object_set_number(record, "perimeter", Values[i].d1);
-                json_array_append_value(records_array, record_value);
+                record_value = G_json_value_init_object();
+                record = G_json_object(record_value);
+                G_json_object_set_number(record, "category", Values[i].cat);
+                G_json_object_set_number(record, "perimeter", Values[i].d1);
+                G_json_array_append_value(records_array, record_value);
             }
-            json_object_set_string(units_object, "perimeter", unit_name);
+            G_json_object_set_string(units_object, "perimeter", unit_name);
             break;
         }
         break;
@@ -232,14 +232,14 @@ int report(enum OutputFormat format)
             break;
         case JSON:
             for (i = 0; i < vstat.rcat; i++) {
-                record_value = json_value_init_object();
-                record = json_object(record_value);
-                json_object_set_number(record, "category", Values[i].cat);
-                json_object_set_number(record, "north", Values[i].d1);
-                json_object_set_number(record, "south", Values[i].d2);
-                json_object_set_number(record, "east", Values[i].d3);
-                json_object_set_number(record, "west", Values[i].d4);
-                json_array_append_value(records_array, record_value);
+                record_value = G_json_value_init_object();
+                record = G_json_object(record_value);
+                G_json_object_set_number(record, "category", Values[i].cat);
+                G_json_object_set_number(record, "north", Values[i].d1);
+                G_json_object_set_number(record, "south", Values[i].d2);
+                G_json_object_set_number(record, "east", Values[i].d3);
+                G_json_object_set_number(record, "west", Values[i].d4);
+                G_json_array_append_value(records_array, record_value);
             }
             break;
         }
@@ -266,15 +266,15 @@ int report(enum OutputFormat format)
             break;
         case JSON:
             for (i = 0; i < vstat.rcat; i++) {
-                record_value = json_value_init_object();
-                record = json_object(record_value);
-                json_object_set_number(record, "category", Values[i].cat);
-                json_object_set_number(record, "length", Values[i].d1);
-                json_array_append_value(records_array, record_value);
+                record_value = G_json_value_init_object();
+                record = G_json_object(record_value);
+                G_json_object_set_number(record, "category", Values[i].cat);
+                G_json_object_set_number(record, "length", Values[i].d1);
+                G_json_array_append_value(records_array, record_value);
                 fsum += Values[i].d1;
             }
-            json_object_set_string(units_object, "length", unit_name);
-            json_object_set_number(totals_object, "length", fsum);
+            G_json_object_set_string(units_object, "length", unit_name);
+            G_json_object_set_number(totals_object, "length", fsum);
             break;
         }
         break;
@@ -289,11 +289,11 @@ int report(enum OutputFormat format)
             break;
         case JSON:
             for (i = 0; i < vstat.rcat; i++) {
-                record_value = json_value_init_object();
-                record = json_object(record_value);
-                json_object_set_number(record, "category", Values[i].cat);
-                json_object_set_number(record, "slope", Values[i].d1);
-                json_array_append_value(records_array, record_value);
+                record_value = G_json_value_init_object();
+                record = G_json_object(record_value);
+                G_json_object_set_number(record, "category", Values[i].cat);
+                G_json_object_set_number(record, "slope", Values[i].d1);
+                G_json_array_append_value(records_array, record_value);
             }
             break;
         }
@@ -310,11 +310,11 @@ int report(enum OutputFormat format)
             break;
         case JSON:
             for (i = 0; i < vstat.rcat; i++) {
-                record_value = json_value_init_object();
-                record = json_object(record_value);
-                json_object_set_number(record, "category", Values[i].cat);
-                json_object_set_number(record, "sinuous", Values[i].d1);
-                json_array_append_value(records_array, record_value);
+                record_value = G_json_value_init_object();
+                record = G_json_object(record_value);
+                G_json_object_set_number(record, "category", Values[i].cat);
+                G_json_object_set_number(record, "sinuous", Values[i].d1);
+                G_json_array_append_value(records_array, record_value);
             }
             break;
         }
@@ -337,13 +337,13 @@ int report(enum OutputFormat format)
         case JSON:
             for (i = 0; i < vstat.rcat; i++) {
                 if (Values[i].count1 == 1) {
-                    record_value = json_value_init_object();
-                    record = json_object(record_value);
-                    json_object_set_number(record, "category", Values[i].cat);
-                    json_object_set_number(record, "x", Values[i].d1);
-                    json_object_set_number(record, "y", Values[i].d2);
-                    json_object_set_number(record, "z", Values[i].d3);
-                    json_array_append_value(records_array, record_value);
+                    record_value = G_json_value_init_object();
+                    record = G_json_object(record_value);
+                    G_json_object_set_number(record, "category", Values[i].cat);
+                    G_json_object_set_number(record, "x", Values[i].d1);
+                    G_json_object_set_number(record, "y", Values[i].d2);
+                    G_json_object_set_number(record, "z", Values[i].d3);
+                    G_json_array_append_value(records_array, record_value);
                 }
             }
             break;
@@ -393,39 +393,39 @@ int report(enum OutputFormat format)
             break;
         case JSON:
             for (i = 0; i < vstat.rcat; i++) {
-                record_value = json_value_init_object();
-                record = json_object(record_value);
-                json_object_set_number(record, "category", Values[i].cat);
+                record_value = G_json_value_init_object();
+                record = G_json_object(record_value);
+                G_json_object_set_number(record, "category", Values[i].cat);
 
                 if (Values[i].count1 == 1) {
                     if (Values[i].i1 >= 0)
-                        json_object_set_number(record, "left", Values[i].i1);
+                        G_json_object_set_number(record, "left", Values[i].i1);
                     else
-                        json_object_set_number(record, "left",
-                                               -1); /* NULL, no area/cat */
+                        G_json_object_set_number(record, "left",
+                                                 -1); /* NULL, no area/cat */
                 }
                 else if (Values[i].count1 > 1) {
-                    json_object_set_null(record, "left");
+                    G_json_object_set_null(record, "left");
                 }
                 else { /* Values[i].count1 == 0 */
                     /* It can be OK if the category is assigned to an element
                        type which is not GV_BOUNDARY */
                     /* -> TODO: print only if there is boundary with that cat */
-                    json_object_set_null(record, "left");
+                    G_json_object_set_null(record, "left");
                 }
 
                 if (Values[i].count2 == 1) {
                     if (Values[i].i2 >= 0)
-                        json_object_set_number(record, "right", Values[i].i2);
+                        G_json_object_set_number(record, "right", Values[i].i2);
                     else
-                        json_object_set_number(record, "right",
-                                               -1); /* NULL, no area/cat */
+                        G_json_object_set_number(record, "right",
+                                                 -1); /* NULL, no area/cat */
                 }
                 else if (Values[i].count2 > 1) {
-                    json_object_set_null(record, "right");
+                    G_json_object_set_null(record, "right");
                 }
                 else { /* Values[i].count1 == 0 */
-                    json_object_set_null(record, "right");
+                    G_json_object_set_null(record, "right");
                 }
             }
             break;
@@ -461,21 +461,22 @@ int report(enum OutputFormat format)
             break;
         case JSON:
             for (i = 0; i < vstat.rcat; i++) {
-                record_value = json_value_init_object();
-                record = json_object(record_value);
+                record_value = G_json_value_init_object();
+                record = G_json_object(record_value);
                 if (Values[i].null) {
-                    json_object_set_null(record, "query");
+                    G_json_object_set_null(record, "query");
                 }
                 else {
                     switch (vstat.qtype) {
                     case (DB_C_TYPE_INT):
-                        json_object_set_number(record, "query", Values[i].i1);
+                        G_json_object_set_number(record, "query", Values[i].i1);
                         break;
                     case (DB_C_TYPE_DOUBLE):
-                        json_object_set_number(record, "query", Values[i].d1);
+                        G_json_object_set_number(record, "query", Values[i].d1);
                         break;
                     case (DB_C_TYPE_STRING):
-                        json_object_set_string(record, "query", Values[i].str1);
+                        G_json_object_set_string(record, "query",
+                                                 Values[i].str1);
                         break;
                     }
                 }
@@ -493,29 +494,29 @@ int report(enum OutputFormat format)
             break;
         case JSON:
             for (i = 0; i < vstat.rcat; i++) {
-                record_value = json_value_init_object();
-                record = json_object(record_value);
-                json_object_set_number(record, "category", Values[i].cat);
-                json_object_set_number(record, "azimuth", Values[i].d1);
-                json_array_append_value(records_array, record_value);
+                record_value = G_json_value_init_object();
+                record = G_json_object(record_value);
+                G_json_object_set_number(record, "category", Values[i].cat);
+                G_json_object_set_number(record, "azimuth", Values[i].d1);
+                G_json_array_append_value(records_array, record_value);
             }
-            json_object_set_string(units_object, "azimuth", unit_name);
+            G_json_object_set_string(units_object, "azimuth", unit_name);
             break;
         }
         break;
     }
 
     if (format == JSON) {
-        json_object_set_value(root_object, "units", units_value);
-        json_object_set_value(root_object, "totals", totals_value);
-        json_object_set_value(root_object, "records", records_value);
-        char *serialized_string = json_serialize_to_string_pretty(root_value);
+        G_json_object_set_value(root_object, "units", units_value);
+        G_json_object_set_value(root_object, "totals", totals_value);
+        G_json_object_set_value(root_object, "records", records_value);
+        char *serialized_string = G_json_serialize_to_string_pretty(root_value);
         if (serialized_string == NULL) {
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         }
         puts(serialized_string);
-        json_free_serialized_string(serialized_string);
-        json_value_free(root_value);
+        G_json_free_serialized_string(serialized_string);
+        G_json_value_free(root_value);
     }
 
     return 0;

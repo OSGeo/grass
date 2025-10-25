@@ -59,7 +59,7 @@ def setup_vector_with_values(tmp_path_factory):
 
         sql_statements = "\n".join(
             f"UPDATE test_points SET value = {val} WHERE cat = {cat};"
-            for cat, val in zip(range(1, 11), range(1, 11))
+            for cat, val in zip(range(1, 11), range(1, 11), strict=False)
         )
         gs.write_command(
             "db.execute",
@@ -419,7 +419,7 @@ def assert_json_equal(expected, actual):
     elif isinstance(expected, list):
         assert isinstance(actual, list)
         assert len(expected) == len(actual)
-        for exp_item, act_item in zip(expected, actual):
+        for exp_item, act_item in zip(expected, actual, strict=False):
             assert_json_equal(exp_item, act_item)
     elif isinstance(expected, float):
         assert actual == pytest.approx(expected, rel=1e-6)

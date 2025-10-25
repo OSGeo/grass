@@ -30,7 +30,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/vector.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 #include "local_proto.h"
 
 /* Supported command lines:
@@ -115,9 +115,9 @@ int main(int argc, char *argv[])
     dbColumn *column;
     char *sep;
     enum OutputFormat format;
-    JSON_Value *root_value = NULL, *object_value = NULL;
-    JSON_Array *root_array = NULL;
-    JSON_Object *root_object = NULL;
+    G_JSON_Value *root_value = NULL, *object_value = NULL;
+    G_JSON_Array *root_array = NULL;
+    G_JSON_Object *root_object = NULL;
 
     G_gisinit(argv[0]);
 
@@ -305,11 +305,11 @@ int main(int argc, char *argv[])
 
     if (strcmp(opt.format->answer, "json") == 0) {
         format = JSON;
-        root_value = json_value_init_array();
+        root_value = G_json_value_init_array();
         if (root_value == NULL) {
             G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
         }
-        root_array = json_array(root_value);
+        root_array = G_json_array(root_value);
     }
     else {
         format = PLAIN;
@@ -1572,19 +1572,19 @@ int main(int argc, char *argv[])
                 }
                 break;
             case JSON:
-                object_value = json_value_init_object();
+                object_value = G_json_value_init_object();
                 if (object_value == NULL) {
                     G_fatal_error(
                         _("Failed to initialize JSON object. Out of memory?"));
                 }
-                root_object = json_object(object_value);
+                root_object = G_json_object(object_value);
 
-                json_object_set_number(root_object, "from_cat",
-                                       Near[i].from_cat);
-                json_object_set_number(root_object, "to_cat", Near[i].to_cat);
+                G_json_object_set_number(root_object, "from_cat",
+                                         Near[i].from_cat);
+                G_json_object_set_number(root_object, "to_cat", Near[i].to_cat);
                 print_upload(Near, Upload, i, &cvarr, catval, sep, format,
                              root_object);
-                json_array_append_value(root_array, object_value);
+                G_json_array_append_value(root_array, object_value);
                 break;
             }
         }
@@ -1794,13 +1794,13 @@ int main(int argc, char *argv[])
     }
 
     if (format == JSON) {
-        char *serialized_string = json_serialize_to_string_pretty(root_value);
+        char *serialized_string = G_json_serialize_to_string_pretty(root_value);
         if (serialized_string == NULL) {
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         }
         puts(serialized_string);
-        json_free_serialized_string(serialized_string);
-        json_value_free(root_value);
+        G_json_free_serialized_string(serialized_string);
+        G_json_value_free(root_value);
     }
 
     G_percent(count, count, 1);

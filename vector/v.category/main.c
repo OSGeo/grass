@@ -19,7 +19,7 @@
 
 #include <grass/glocale.h>
 #include <grass/gis.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 #include <grass/vector.h>
 
 #define O_ADD       1
@@ -54,19 +54,19 @@ typedef struct {
 enum OutputFormat { PLAIN, CSV, JSON };
 
 void format_json_fr(FREPORT *freport, int fr_type, char *name,
-                    JSON_Array *array)
+                    G_JSON_Array *array)
 {
-    JSON_Object *object;
-    JSON_Value *value;
+    G_JSON_Object *object;
+    G_JSON_Value *value;
     if (freport->count[fr_type] > 0) {
-        value = json_value_init_object();
-        object = json_object(value);
-        json_object_set_string(object, "type", name);
-        json_object_set_number(object, "layer", freport->field);
-        json_object_set_number(object, "count", freport->count[fr_type]);
-        json_object_set_number(object, "min", freport->min[fr_type]);
-        json_object_set_number(object, "max", freport->max[fr_type]);
-        json_array_append_value(array, value);
+        value = G_json_value_init_object();
+        object = G_json_object(value);
+        G_json_object_set_string(object, "type", name);
+        G_json_object_set_number(object, "layer", freport->field);
+        G_json_object_set_number(object, "count", freport->count[fr_type]);
+        G_json_object_set_number(object, "min", freport->min[fr_type]);
+        G_json_object_set_number(object, "max", freport->max[fr_type]);
+        G_json_array_append_value(array, value);
     }
 }
 
@@ -90,8 +90,8 @@ int main(int argc, char *argv[])
     int nfreps, rtype, fld;
     char *desc, *fs;
     enum OutputFormat format;
-    JSON_Array *root_array = NULL;
-    JSON_Value *root_value = NULL;
+    G_JSON_Array *root_array = NULL;
+    G_JSON_Value *root_value = NULL;
     int skip_header = 0;
 
     module = G_define_module();
@@ -255,15 +255,15 @@ int main(int argc, char *argv[])
     fs = G_option_to_separator(fs_opt);
 
     if (option == O_LYR) {
-        JSON_Array *layers_array = NULL;
-        JSON_Value *layers_value = NULL;
+        G_JSON_Array *layers_array = NULL;
+        G_JSON_Value *layers_value = NULL;
         if (format == JSON) {
-            layers_value = json_value_init_array();
+            layers_value = G_json_value_init_array();
             if (layers_value == NULL) {
                 G_fatal_error(
                     _("Failed to initialize JSON array. Out of memory?"));
             }
-            layers_array = json_array(layers_value);
+            layers_array = G_json_array(layers_value);
         }
 
         /* print vector layer numbers */
@@ -293,7 +293,7 @@ int main(int argc, char *argv[])
                         break;
 
                     case JSON:
-                        json_array_append_number(layers_array, field);
+                        G_json_array_append_number(layers_array, field);
                         break;
                     }
                 }
@@ -307,7 +307,7 @@ int main(int argc, char *argv[])
                 break;
 
             case JSON:
-                json_array_append_string(layers_array, field_opt->answer);
+                G_json_array_append_string(layers_array, field_opt->answer);
                 break;
             }
         }
@@ -315,24 +315,24 @@ int main(int argc, char *argv[])
         if (format == JSON) {
 
             char *serialized_string = NULL;
-            serialized_string = json_serialize_to_string_pretty(layers_value);
+            serialized_string = G_json_serialize_to_string_pretty(layers_value);
             if (serialized_string == NULL) {
                 G_fatal_error(_("Failed to initialize pretty JSON string."));
             }
             puts(serialized_string);
-            json_free_serialized_string(serialized_string);
-            json_value_free(layers_value);
+            G_json_free_serialized_string(serialized_string);
+            G_json_value_free(layers_value);
         }
         Vect_close(&In);
         exit(EXIT_SUCCESS);
     }
 
     if ((option == O_REP || option == O_PRN) && format == JSON) {
-        root_value = json_value_init_array();
+        root_value = G_json_value_init_array();
         if (root_value == NULL) {
             G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
         }
-        root_array = json_array(root_value);
+        root_array = G_json_array(root_value);
     }
 
     cat = atoi(cat_opt->answer);
@@ -934,15 +934,15 @@ int main(int argc, char *argv[])
                             (format == PLAIN || (format == CSV && skip_header)))
                             fprintf(stdout, "/");
 
-                        JSON_Object *cat_object = NULL;
-                        JSON_Value *cat_value = NULL;
+                        G_JSON_Object *cat_object = NULL;
+                        G_JSON_Value *cat_value = NULL;
                         if (format == JSON) {
-                            cat_value = json_value_init_object();
+                            cat_value = G_json_value_init_object();
                             if (cat_value == NULL) {
                                 G_fatal_error(_("Failed to initialize JSON "
                                                 "object. Out of memory?"));
                             }
-                            cat_object = json_object(cat_value);
+                            cat_object = G_json_object(cat_value);
                         }
 
                         switch (format) {
@@ -960,13 +960,13 @@ int main(int argc, char *argv[])
                             break;
 
                         case JSON:
-                            json_object_set_number(cat_object, "id", id);
-                            json_object_set_number(cat_object, "layer",
-                                                   fields[i]);
-                            json_object_set_number(cat_object, "category",
-                                                   Cats->cat[j]);
+                            G_json_object_set_number(cat_object, "id", id);
+                            G_json_object_set_number(cat_object, "layer",
+                                                     fields[i]);
+                            G_json_object_set_number(cat_object, "category",
+                                                     Cats->cat[j]);
 
-                            json_array_append_value(root_array, cat_value);
+                            G_json_array_append_value(root_array, cat_value);
                             break;
                         }
 
@@ -984,13 +984,13 @@ int main(int argc, char *argv[])
 
     if ((option == O_REP || option == O_PRN) && format == JSON) {
         char *serialized_string = NULL;
-        serialized_string = json_serialize_to_string_pretty(root_value);
+        serialized_string = G_json_serialize_to_string_pretty(root_value);
         if (serialized_string == NULL) {
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         }
         puts(serialized_string);
-        json_free_serialized_string(serialized_string);
-        json_value_free(root_value);
+        G_json_free_serialized_string(serialized_string);
+        G_json_value_free(root_value);
     }
 
     if (option == O_ADD || option == O_DEL || option == O_CHFIELD ||

@@ -22,6 +22,7 @@ import shlex
 import re
 import inspect
 import operator
+from pathlib import Path
 from string import digits
 from typing import TYPE_CHECKING
 
@@ -826,7 +827,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
     # read env file
     environ = {}
     lineSkipped = []
-    if os.path.exists(envFile):
+    if Path(envFile).exists():
         try:
             with open(envFile) as fd:
                 for line in fd:

@@ -18,7 +18,6 @@
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
-#include <grass/parson.h>
 #include <grass/gjson.h>
 
 #include "test_gjson_lib.h"
@@ -50,9 +49,9 @@ int unit_test_parson_wrapper(void)
 int test_parson_wrapper(void)
 {
     int sum = 0;
-    JSON_Value *value = NULL;
-    JSON_Object *object = NULL;
-    JSON_Array *array = NULL;
+    G_JSON_Value *value = NULL;
+    G_JSON_Object *object = NULL;
+    G_JSON_Array *array = NULL;
     char *serialized_string;
 
     G_message("\t * testing JSON object initialization\n");
@@ -83,7 +82,7 @@ int test_parson_wrapper(void)
         sum++;
     }
     if (G_json_object_set_string(object, TEST_OBJECT_KEY, TEST_OBJECT_VALUE) !=
-        JSONSuccess) {
+        G_JSONSuccess) {
         G_warning("Error in G_json_object_set_string");
         sum++;
     }
@@ -103,7 +102,7 @@ int test_parson_wrapper(void)
         sum++;
     }
     if (G_json_object_dotset_string(object, TEST_OBJECT_DOT_KEY,
-                                    TEST_OBJECT_VALUE) != JSONSuccess) {
+                                    TEST_OBJECT_VALUE) != G_JSONSuccess) {
         G_warning("Error in G_json_object_dotset_string");
         sum++;
     }
@@ -123,7 +122,7 @@ int test_parson_wrapper(void)
         sum++;
     }
     if (G_json_object_dotset_number(object, TEST_OBJECT_DOT_KEY, TEST_NUMBER) !=
-        JSONSuccess) {
+        G_JSONSuccess) {
         G_warning("Error in G_json_object_dotset_number");
         sum++;
     }
@@ -147,12 +146,12 @@ int test_parson_wrapper(void)
     G_message("\t * testing JSON object set null\n");
     value = G_json_value_init_object();
     object = G_json_value_get_object(value);
-    if (G_json_object_set_null(object, TEST_OBJECT_KEY) != JSONSuccess) {
+    if (G_json_object_set_null(object, TEST_OBJECT_KEY) != G_JSONSuccess) {
         G_warning("Error in G_json_object_set_null");
         sum++;
     }
-    if (json_value_get_type(G_json_object_get_value(object, TEST_OBJECT_KEY)) !=
-        JSONNull) {
+    if (G_json_value_get_type(
+            G_json_object_get_value(object, TEST_OBJECT_KEY)) != G_JSONNull) {
         G_warning("Error: G_json_object_set_null failed, the value type is not "
                   "null.");
         sum++;
@@ -163,7 +162,7 @@ int test_parson_wrapper(void)
     value = G_json_value_init_object();
     object = G_json_value_get_object(value);
     if (G_json_object_set_value(object, TEST_OBJECT_KEY,
-                                G_json_value_init_array()) != JSONSuccess) {
+                                G_json_value_init_array()) != G_JSONSuccess) {
         G_warning("Error in G_json_object_set_value for array");
         sum++;
     }
@@ -178,11 +177,11 @@ int test_parson_wrapper(void)
     value = G_json_value_init_object();
     object = G_json_value_get_object(value);
     if (G_json_object_set_value(object, TEST_OBJECT_KEY,
-                                G_json_value_init_object()) != JSONSuccess) {
+                                G_json_value_init_object()) != G_JSONSuccess) {
         G_warning("Error in G_json_object_set_value for nested object");
         sum++;
     }
-    JSON_Object *nested_object =
+    G_JSON_Object *nested_object =
         G_json_object_get_object(object, TEST_OBJECT_KEY);
     if (!nested_object) {
         G_warning("Error in G_json_object_get_object");
@@ -194,7 +193,7 @@ int test_parson_wrapper(void)
     value = G_json_value_init_array();
     array = G_json_array(value);
     if (G_json_array_append_value(array, G_json_value_init_object()) !=
-        JSONSuccess) {
+        G_JSONSuccess) {
         G_warning("Error in G_json_array_append_value");
         sum++;
     }
@@ -203,7 +202,7 @@ int test_parson_wrapper(void)
     G_message("\t * testing JSON array append number\n");
     value = G_json_value_init_array();
     array = G_json_array(value);
-    if (G_json_array_append_number(array, TEST_NUMBER) != JSONSuccess) {
+    if (G_json_array_append_number(array, TEST_NUMBER) != G_JSONSuccess) {
         G_warning("Error in G_json_array_append_number");
         sum++;
     }
@@ -217,7 +216,7 @@ int test_parson_wrapper(void)
     G_message("\t * testing JSON array append boolean\n");
     value = G_json_value_init_array();
     array = G_json_array(value);
-    if (G_json_array_append_boolean(array, TEST_BOOLEAN) != JSONSuccess) {
+    if (G_json_array_append_boolean(array, TEST_BOOLEAN) != G_JSONSuccess) {
         G_warning("Error in G_json_array_append_boolean");
         sum++;
     }
@@ -231,11 +230,11 @@ int test_parson_wrapper(void)
     G_message("\t * testing JSON array append null\n");
     value = G_json_value_init_array();
     array = G_json_array(value);
-    if (G_json_array_append_null(array) != JSONSuccess) {
+    if (G_json_array_append_null(array) != G_JSONSuccess) {
         G_warning("Error in G_json_array_append_null");
         sum++;
     }
-    if (json_value_get_type(G_json_array_get_value(array, 0)) != JSONNull) {
+    if (G_json_value_get_type(G_json_array_get_value(array, 0)) != G_JSONNull) {
         G_warning("Error in G_json_array_append_null, the value type is not "
                   "null.");
         sum++;
@@ -245,7 +244,7 @@ int test_parson_wrapper(void)
     G_message("\t * testing JSON array append string\n");
     value = G_json_value_init_array();
     array = G_json_array(value);
-    if (G_json_array_append_string(array, TEST_ARRAY_STRING) != JSONSuccess) {
+    if (G_json_array_append_string(array, TEST_ARRAY_STRING) != G_JSONSuccess) {
         G_warning("Error in G_json_array_append_string");
         sum++;
     }
@@ -260,7 +259,7 @@ int test_parson_wrapper(void)
     value = G_json_value_init_object();
     object = G_json_value_get_object(value);
     if (G_json_object_set_number(object, TEST_OBJECT_KEY, TEST_NUMBER) !=
-        JSONSuccess) {
+        G_JSONSuccess) {
         G_warning("Error in G_json_object_set_number");
         sum++;
     }
@@ -276,7 +275,7 @@ int test_parson_wrapper(void)
     value = G_json_value_init_object();
     object = G_json_value_get_object(value);
     if (G_json_object_set_boolean(object, TEST_OBJECT_KEY, TEST_BOOLEAN) !=
-        JSONSuccess) {
+        G_JSONSuccess) {
         G_warning("Error in G_json_object_set_boolean");
         sum++;
     }
