@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-11 15:59+0000\n"
+"POT-Creation-Date: 2025-10-18 16:02+0000\n"
 "PO-Revision-Date: 2025-08-26 13:42+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Russian <https://weblate.osgeo.org/projects/grass-gis/grasslibs/ru/>\n"
@@ -3676,7 +3676,7 @@ msgstr "Невозможно прочитать целевой файл для �
 msgid "WARNING"
 msgstr "ПРЕДУПРЕЖДЕНИЕ"
 
-#: ../lib/init/grass.py:148 ../lib/init/grass.py:2420
+#: ../lib/init/grass.py:148 ../lib/init/grass.py:2428
 msgid "Exiting..."
 msgstr "Завершение работы…"
 
@@ -4177,7 +4177,7 @@ msgstr "Аргумент базовой системы координат (на�
 msgid "Only one argument (e.g. EPSG) is needed for --tmp-project, mapset name <{}> provided"
 msgstr "--tmp-location требует наличия только одного аргумента (например, EPSG), предоставлено имя набора <{}>"
 
-#: ../lib/init/grass.py:2275
+#: ../lib/init/grass.py:2283
 #, fuzzy, python-brace-format
 msgid ""
 "Unable to start GRASS. You have the choice to:\n"
@@ -4206,29 +4206,29 @@ msgstr ""
 "     {cmd_name} --help\n"
 "См. также: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 
-#: ../lib/init/grass.py:2296
+#: ../lib/init/grass.py:2304
 #, fuzzy
 #| msgid "Starting GRASS GIS..."
 msgid "Starting GRASS..."
 msgstr "Запуск GRASS…"
 
-#: ../lib/init/grass.py:2345
+#: ../lib/init/grass.py:2353
 #, fuzzy
 #| msgid "Failed to start GRASS GIS, grassdata directory cannot be found or created."
 msgid "Failed to start GRASS, grassdata directory cannot be found or created."
 msgstr "При запуске GRASS возникла ошибка, каталог grassdata не может быть найден или удалён."
 
-#: ../lib/init/grass.py:2352
+#: ../lib/init/grass.py:2360
 #, fuzzy
 msgid "Failed to start GRASS, no default project to copy in the installation or copying failed."
 msgstr "Ошибка при запуске GRASS, отсутствует область по умолчанию для копирования в место установки или произошла ошибка копирования."
 
-#: ../lib/init/grass.py:2457
+#: ../lib/init/grass.py:2465
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr "Запуск <%s> графического интерфейса в фоновом режиме, подождите…"
 
-#: ../lib/init/grass.py:2495
+#: ../lib/init/grass.py:2503
 #, python-format
 msgid "Failed to start shell '%s'"
 msgstr "Ошибка при запуске командной оболочки «%s»"

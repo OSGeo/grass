@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-11 15:59+0000\n"
+"POT-Creation-Date: 2025-10-18 16:02+0000\n"
 "PO-Revision-Date: 2025-10-13 19:52+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/fr/>\n"
@@ -206,7 +206,7 @@ msgstr "Sélectionner la vue 2d ou 3D"
 #: ../gui/wxpython/gui_core/gselect.py:1629
 #: ../gui/wxpython/gui_core/gselect.py:1646
 #: ../gui/wxpython/gui_core/gselect.py:1647
-#: ../gui/wxpython/gui_core/widgets.py:1437
+#: ../gui/wxpython/gui_core/widgets.py:1435
 #: ../gui/wxpython/vnet/dialogs.py:1679
 msgid "Name:"
 msgstr "Nom :"
@@ -2052,12 +2052,12 @@ msgstr "Supprimer tous les enregistrements"
 #: ../gui/wxpython/dbmgr/base.py:1471 ../gui/wxpython/gui_core/dialogs.py:838
 #: ../gui/wxpython/gui_core/dialogs.py:896
 #: ../gui/wxpython/gui_core/dialogs.py:1607
-#: ../gui/wxpython/gui_core/widgets.py:1129
+#: ../gui/wxpython/gui_core/widgets.py:1127
 msgid "Select all"
 msgstr "Tout sélectionner"
 
 #: ../gui/wxpython/dbmgr/base.py:1472 ../gui/wxpython/gui_core/dialogs.py:1609
-#: ../gui/wxpython/gui_core/widgets.py:1130
+#: ../gui/wxpython/gui_core/widgets.py:1128
 msgid "Deselect all"
 msgstr "Tout dé-sélectionner"
 
@@ -3868,7 +3868,7 @@ msgstr "Merci de patienter, modèle en cours de chargement ..."
 msgid "Writing current settings to model file failed."
 msgstr "Échec de l'écriture des paramètres courant dans le fichier de modèle."
 
-#: ../gui/wxpython/gmodeler/panels.py:689 ../gui/wxpython/lmgr/workspace.py:456
+#: ../gui/wxpython/gmodeler/panels.py:689 ../gui/wxpython/lmgr/workspace.py:455
 #, python-format
 msgid "Unable to open file <%s> for writing."
 msgstr "Impossible d'ouvrir le fichier <%s> en écriture."
@@ -5135,7 +5135,7 @@ msgid "Native"
 msgstr "Natif"
 
 #: ../gui/wxpython/gui_core/gselect.py:1471
-#: ../gui/wxpython/lmgr/workspace.py:518
+#: ../gui/wxpython/lmgr/workspace.py:517
 msgid "File"
 msgstr "Fichier"
 
@@ -6153,79 +6153,79 @@ msgstr ""
 "\n"
 "Raison: %s"
 
-#: ../gui/wxpython/gui_core/widgets.py:128
+#: ../gui/wxpython/gui_core/widgets.py:126
 msgid " (...)"
 msgstr "(...)"
 
-#: ../gui/wxpython/gui_core/widgets.py:885
+#: ../gui/wxpython/gui_core/widgets.py:883
 #, python-format
 msgid "Name <%(name)s> is not a valid name for GRASS map. Please use only ASCII characters excluding %(chars)s and space."
 msgstr "Le nom <%(name)s> n'est pas un nom valide pour une carte GRASS. Merci de n'utiliser que des caractères ASCII à l'exclusion de %(chars)s et des espaces."
 
-#: ../gui/wxpython/gui_core/widgets.py:889
+#: ../gui/wxpython/gui_core/widgets.py:887
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:1184
 #: ../gui/wxpython/location_wizard/wizard.py:300
 #: ../gui/wxpython/modules/import_export.py:268
 msgid "Invalid name"
 msgstr "Nom invalide"
 
-#: ../gui/wxpython/gui_core/widgets.py:1237
+#: ../gui/wxpython/gui_core/widgets.py:1235
 msgid "Fulltext search"
 msgstr "Recherche plein texte"
 
-#: ../gui/wxpython/gui_core/widgets.py:1239
+#: ../gui/wxpython/gui_core/widgets.py:1237
 #, fuzzy
 msgid "Type to search in all tools. Press Enter for next match."
 msgstr "Tapez pour effectuer une recherche dans tous les outils. Appuyez sur la touche Entrée pour obtenir la correspondance suivante."
 
-#: ../gui/wxpython/gui_core/widgets.py:1301
+#: ../gui/wxpython/gui_core/widgets.py:1299
 msgid "Searching, please type more characters."
 msgstr "Recherche, merci de taper plus de caractères."
 
-#: ../gui/wxpython/gui_core/widgets.py:1312
+#: ../gui/wxpython/gui_core/widgets.py:1310
 msgid "{} tools matched"
 msgstr "{} modules correspondent"
 
-#: ../gui/wxpython/gui_core/widgets.py:1379
+#: ../gui/wxpython/gui_core/widgets.py:1377
 msgid "Profiles"
 msgstr "Profil"
 
-#: ../gui/wxpython/gui_core/widgets.py:1386
+#: ../gui/wxpython/gui_core/widgets.py:1384
 msgid "Save current settings"
 msgstr "Enregistrer les paramètres courants"
 
-#: ../gui/wxpython/gui_core/widgets.py:1389
+#: ../gui/wxpython/gui_core/widgets.py:1387
 msgid "Delete currently selected settings"
 msgstr "Supprimer les paramètres actuellement sélectionnés"
 
-#: ../gui/wxpython/gui_core/widgets.py:1408
+#: ../gui/wxpython/gui_core/widgets.py:1406
 msgid "Load:"
 msgstr "Charger :"
 
-#: ../gui/wxpython/gui_core/widgets.py:1424
+#: ../gui/wxpython/gui_core/widgets.py:1422
 #, python-format
 msgid "Settings <%s> not found"
 msgstr "Paramètres <%s> non trouvés"
 
-#: ../gui/wxpython/gui_core/widgets.py:1437
-#: ../gui/wxpython/gui_core/widgets.py:1460
+#: ../gui/wxpython/gui_core/widgets.py:1435
+#: ../gui/wxpython/gui_core/widgets.py:1458
 msgid "Save settings"
 msgstr "Enregistrer les paramètres"
 
-#: ../gui/wxpython/gui_core/widgets.py:1443
+#: ../gui/wxpython/gui_core/widgets.py:1441
 msgid "Name not given, settings is not saved."
 msgstr "Pas de nom fourni, paramètres non enregistrés."
 
-#: ../gui/wxpython/gui_core/widgets.py:1456
+#: ../gui/wxpython/gui_core/widgets.py:1454
 #, python-format
 msgid "Settings <%s> already exists. Do you want to overwrite the settings?"
 msgstr "Les paramètres <%s> existent déjà. Voulez-vous les écraser ?"
 
-#: ../gui/wxpython/gui_core/widgets.py:1508
+#: ../gui/wxpython/gui_core/widgets.py:1506
 msgid "No settings is defined. Operation canceled."
 msgstr "Pas de paramètres définis. Opération annulée."
 
-#: ../gui/wxpython/gui_core/widgets.py:1544
+#: ../gui/wxpython/gui_core/widgets.py:1542
 msgid "Unable to save settings"
 msgstr "Impossible d'enregistrer les paramètres"
 
@@ -8202,8 +8202,8 @@ msgstr "Nouvel espace de travail"
 msgid "Open workspace"
 msgstr "Ouvrir l’espace de travail"
 
-#: ../gui/wxpython/lmgr/toolbars.py:68 ../gui/wxpython/lmgr/workspace.py:394
-#: ../gui/wxpython/lmgr/workspace.py:417
+#: ../gui/wxpython/lmgr/toolbars.py:68 ../gui/wxpython/lmgr/workspace.py:393
+#: ../gui/wxpython/lmgr/workspace.py:416
 msgid "Save workspace"
 msgstr "Enregistrer l'espace de travail"
 
@@ -8337,27 +8337,27 @@ msgstr "Afficher les boites de dialogue des paramètres de vue 3D"
 msgid "Show 3D view mode manual"
 msgstr "Afficher le manuel de la vue 3D"
 
-#: ../gui/wxpython/lmgr/workspace.py:74
+#: ../gui/wxpython/lmgr/workspace.py:73
 msgid "Current workspace is not empty. Do you want to store current settings to workspace file?"
 msgstr "L'espace de travail n'est pas vide. Voulez-vous enregistrer les paramètres actuels dans un fichier ?"
 
-#: ../gui/wxpython/lmgr/workspace.py:78
+#: ../gui/wxpython/lmgr/workspace.py:77
 msgid "Create new workspace?"
 msgstr "Créer un nouvel espace de travail ?"
 
-#: ../gui/wxpython/lmgr/workspace.py:107
+#: ../gui/wxpython/lmgr/workspace.py:106
 msgid "Choose workspace file"
 msgstr "Choisir un fichier d'environnement de travail"
 
-#: ../gui/wxpython/lmgr/workspace.py:109 ../gui/wxpython/lmgr/workspace.py:371
+#: ../gui/wxpython/lmgr/workspace.py:108 ../gui/wxpython/lmgr/workspace.py:370
 msgid "GRASS Workspace File (*.gxw)|*.gxw"
 msgstr "Fichier d'espace de travail GRASS (*.gxw)|*.gxw"
 
-#: ../gui/wxpython/lmgr/workspace.py:138
+#: ../gui/wxpython/lmgr/workspace.py:137
 msgid "Most likely the database, location or mapset does not exist"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/workspace.py:141
+#: ../gui/wxpython/lmgr/workspace.py:140
 #, python-brace-format
 msgid ""
 "Unable to change to location and mapset specified in the workspace.\n"
@@ -8367,11 +8367,11 @@ msgid ""
 "Do you want to proceed with opening the workspace anyway?"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/workspace.py:150
+#: ../gui/wxpython/lmgr/workspace.py:149
 msgid "Proceed with opening of the workspace?"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/workspace.py:161
+#: ../gui/wxpython/lmgr/workspace.py:160
 #, python-format
 msgid ""
 "Current location is <%(loc)s>.\n"
@@ -8380,7 +8380,7 @@ msgstr ""
 "Le secteur courant est <%(loc)s>.\n"
 "Le jeu de cartes courant est <%(mapset)s>."
 
-#: ../gui/wxpython/lmgr/workspace.py:181
+#: ../gui/wxpython/lmgr/workspace.py:180
 #, python-format
 msgid ""
 "Reading workspace file <%s> failed.\n"
@@ -8391,20 +8391,20 @@ msgstr ""
 "Fichier non valide, impossible d'analyser le document XML.\n"
 "Détails de l’erreur : %s"
 
-#: ../gui/wxpython/lmgr/workspace.py:194
+#: ../gui/wxpython/lmgr/workspace.py:193
 msgid "Please wait, loading workspace..."
 msgstr "Patientez, chargement de l'environnement de travail ..."
 
-#: ../gui/wxpython/lmgr/workspace.py:369
+#: ../gui/wxpython/lmgr/workspace.py:368
 msgid "Choose file to save current workspace"
 msgstr "Choisir le fichier où enregistrer l'environnement de travail courant"
 
-#: ../gui/wxpython/lmgr/workspace.py:390 ../gui/wxpython/lmgr/workspace.py:413
+#: ../gui/wxpython/lmgr/workspace.py:389 ../gui/wxpython/lmgr/workspace.py:412
 #, python-format
 msgid "Workspace file <%s> already exists. Do you want to overwrite this file?"
 msgstr "Le fichier d'environnement <%s> existe déjà. Voulez-vous écraser ce fichier ?"
 
-#: ../gui/wxpython/lmgr/workspace.py:443
+#: ../gui/wxpython/lmgr/workspace.py:442
 #, fuzzy, python-format
 #| msgid "Writing current settings to workspace file failed."
 msgid ""
@@ -8412,19 +8412,19 @@ msgid ""
 "Error details: %s"
 msgstr "Échec d'écriture des paramètres de l'espace de travail courant."
 
-#: ../gui/wxpython/lmgr/workspace.py:470
+#: ../gui/wxpython/lmgr/workspace.py:469
 msgid "Do you want to save changes in the workspace?"
 msgstr "Voulez-vous enregistrer les modfications de l'espace de travail ?"
 
-#: ../gui/wxpython/lmgr/workspace.py:472
+#: ../gui/wxpython/lmgr/workspace.py:471
 msgid "Do you want to store current settings to workspace file?"
 msgstr "Voulez-vous enregistrer les paramètres actuels dans un fichier ?"
 
-#: ../gui/wxpython/lmgr/workspace.py:525
+#: ../gui/wxpython/lmgr/workspace.py:524
 msgid "Workspace"
 msgstr "Espace de travail"
 
-#: ../gui/wxpython/lmgr/workspace.py:562
+#: ../gui/wxpython/lmgr/workspace.py:561
 msgid "File <{}> doesn't exist. It was probably moved or deleted."
 msgstr "Le fichier <{}> n'existe pas. Il a probablement été déplacé ou supprimé."
 

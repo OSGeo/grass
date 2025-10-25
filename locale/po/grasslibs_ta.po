@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-11 15:59+0000\n"
+"POT-Creation-Date: 2025-10-18 16:02+0000\n"
 "PO-Revision-Date: 2025-08-23 20:18+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Tamil <https://weblate.osgeo.org/projects/grass-gis/grasslibs/ta/>\n"
@@ -3562,7 +3562,7 @@ msgstr ""
 msgid "WARNING"
 msgstr ""
 
-#: ../lib/init/grass.py:148 ../lib/init/grass.py:2420
+#: ../lib/init/grass.py:148 ../lib/init/grass.py:2428
 msgid "Exiting..."
 msgstr ""
 
@@ -4008,7 +4008,7 @@ msgstr ""
 msgid "Only one argument (e.g. EPSG) is needed for --tmp-project, mapset name <{}> provided"
 msgstr ""
 
-#: ../lib/init/grass.py:2275
+#: ../lib/init/grass.py:2283
 #, python-brace-format
 msgid ""
 "Unable to start GRASS. You have the choice to:\n"
@@ -4025,24 +4025,24 @@ msgid ""
 "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 msgstr ""
 
-#: ../lib/init/grass.py:2296
+#: ../lib/init/grass.py:2304
 msgid "Starting GRASS..."
 msgstr ""
 
-#: ../lib/init/grass.py:2345
+#: ../lib/init/grass.py:2353
 msgid "Failed to start GRASS, grassdata directory cannot be found or created."
 msgstr ""
 
-#: ../lib/init/grass.py:2352
+#: ../lib/init/grass.py:2360
 msgid "Failed to start GRASS, no default project to copy in the installation or copying failed."
 msgstr ""
 
-#: ../lib/init/grass.py:2457
+#: ../lib/init/grass.py:2465
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr ""
 
-#: ../lib/init/grass.py:2495
+#: ../lib/init/grass.py:2503
 #, python-format
 msgid "Failed to start shell '%s'"
 msgstr ""

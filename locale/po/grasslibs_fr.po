@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-11 15:59+0000\n"
+"POT-Creation-Date: 2025-10-18 16:02+0000\n"
 "PO-Revision-Date: 2025-10-05 23:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs/fr/>\n"
@@ -3642,7 +3642,7 @@ msgstr "Impossible de lire le fichier de cible pour le groupe [%s]"
 msgid "WARNING"
 msgstr "ATTENTION"
 
-#: ../lib/init/grass.py:148 ../lib/init/grass.py:2420
+#: ../lib/init/grass.py:148 ../lib/init/grass.py:2428
 msgid "Exiting..."
 msgstr "Sortie ..."
 
@@ -4103,7 +4103,7 @@ msgstr "L'argument du système de coordonnées de référence (ex EPSG) est néc
 msgid "Only one argument (e.g. EPSG) is needed for --tmp-project, mapset name <{}> provided"
 msgstr "Un seul argument (ex EPSG) est nécessaire pour --tmp-project, le jeu de cartes <{}> est déjà fourni"
 
-#: ../lib/init/grass.py:2275
+#: ../lib/init/grass.py:2283
 #, python-brace-format
 msgid ""
 "Unable to start GRASS. You have the choice to:\n"
@@ -4132,24 +4132,24 @@ msgstr ""
 "     {cmd_name} --help\n"
 "Voir également : https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 
-#: ../lib/init/grass.py:2296
+#: ../lib/init/grass.py:2304
 msgid "Starting GRASS..."
 msgstr "Démarrage de GRASS..."
 
-#: ../lib/init/grass.py:2345
+#: ../lib/init/grass.py:2353
 msgid "Failed to start GRASS, grassdata directory cannot be found or created."
 msgstr "Le démarrage de GRASS a échoué, le dossier grassdata est introuvable ou ne peut pas être créé."
 
-#: ../lib/init/grass.py:2352
+#: ../lib/init/grass.py:2360
 msgid "Failed to start GRASS, no default project to copy in the installation or copying failed."
 msgstr "Le démarrage de GRASS a échoué, il n'y a pas de projet par défaut à copier dans l'installation, ou la copie a échoué."
 
-#: ../lib/init/grass.py:2457
+#: ../lib/init/grass.py:2465
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr "Lancement de l'interface graphique <%s> en tâche de fond, merci de patienter ..."
 
-#: ../lib/init/grass.py:2495
+#: ../lib/init/grass.py:2503
 #, python-format
 msgid "Failed to start shell '%s'"
 msgstr "Échec au lancement du shell '%s'"
