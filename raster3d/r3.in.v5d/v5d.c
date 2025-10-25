@@ -1518,7 +1518,7 @@ static int read_v5d_header(v5dstruct *v)
 {
 #define SKIP(N)                                                       \
     do {                                                              \
-        if (lseek(f, N, SEEK_CUR) == (off_t) - 1) {                   \
+        if (lseek(f, N, SEEK_CUR) == -1) {                            \
             int err = errno;                                          \
             G_warning(_("File read/write operation failed: %s (%d)"), \
                       strerror(err), err);                            \

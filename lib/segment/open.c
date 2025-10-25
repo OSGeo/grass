@@ -13,12 +13,8 @@
 
 #include <unistd.h>
 #include <fcntl.h>
-#include <string.h>
-#include <errno.h>
-
 #include <grass/gis.h>
 #include <grass/glocale.h>
-
 #include "local_proto.h"
 
 /**
