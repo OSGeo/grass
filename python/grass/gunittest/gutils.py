@@ -9,6 +9,8 @@ for details.
 :authors: Vaclav Petras
 """
 
+from __future__ import annotations
+
 from grass.script.core import start_command, PIPE
 from grass.script.utils import decode
 
@@ -16,12 +18,12 @@ from .gmodules import call_module
 from .checkers import text_to_keyvalue
 
 
-def get_current_mapset():
+def get_current_mapset() -> str:
     """Get current mapset name as a string"""
     return call_module("g.mapset", flags="p").strip()
 
 
-def is_map_in_mapset(name, type, mapset=None) -> bool:
+def is_map_in_mapset(name, type, mapset: str | None = None) -> bool:
     """Check is map is present in the mapset (current mapset by default)
 
     This function is different from what we would expect in GRASS

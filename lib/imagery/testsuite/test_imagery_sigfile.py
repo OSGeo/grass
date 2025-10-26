@@ -483,10 +483,10 @@ class SortSignaturesBysemantic_labelTest(TestCase):
         self.assertEqual(
             sig_err,
             "<semantic label missing>,<semantic label missing>,"
-            + "<semantic label missing>,<semantic label missing>,"
-            + "<semantic label missing>,<semantic label missing>,"
-            + "<semantic label missing>,<semantic label missing>,"
-            + "<semantic label missing>",
+            "<semantic label missing>,<semantic label missing>,"
+            "<semantic label missing>,<semantic label missing>,"
+            "<semantic label missing>,<semantic label missing>,"
+            "<semantic label missing>",
         )
         self.assertEqual(ref_err, f"The_Doors,{self.map3}")
 

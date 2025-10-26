@@ -76,11 +76,11 @@
 """Dissolve geometries and aggregate attribute values"""
 
 import atexit
-import json
-import subprocess
+import io
 from collections import defaultdict
 
 import grass.script as gs
+from grass.tools import Tools
 from grass.exceptions import CalledModuleError
 
 
@@ -212,21 +212,19 @@ def updates_to_sql(table, updates):
 
 def update_columns(output_name, output_layer, updates, add_columns):
     """Update attribute values based on a list of updates"""
+    tools = Tools(capture_output=False)
     if add_columns:
-        gs.run_command(
-            "v.db.addcolumn",
+        tools.v_db_addcolumn(
             map=output_name,
             layer=output_layer,
             columns=",".join(add_columns),
         )
     db_info = gs.vector_db(output_name)[int(output_layer)]
     sql = updates_to_sql(table=db_info["table"], updates=updates)
-    gs.write_command(
-        "db.execute",
-        input="-",
+    tools.db_execute(
+        input=io.StringIO(sql),
         database=db_info["database"],
         driver=db_info["driver"],
-        stdin=sql,
     )
 
 
@@ -313,7 +311,9 @@ def create_or_check_result_columns_or_fatal(
     if not result_columns:
         return [
             f"{gs.legalize_vector_name(aggregate_column)}_{method}"
-            for aggregate_column, method in zip(columns_to_aggregate, methods)
+            for aggregate_column, method in zip(
+                columns_to_aggregate, methods, strict=True
+            )
         ]
 
     if methods and len(columns_to_aggregate) != len(methods):
@@ -404,31 +404,31 @@ def aggregate_attributes_sql(
     if methods:
         select_columns = [
             f"{method}({agg_column})"
-            for method, agg_column in zip(methods, columns_to_aggregate)
+            for method, agg_column in zip(methods, columns_to_aggregate, strict=True)
         ]
         column_types = [
             "INTEGER" if method == "count" else "DOUBLE" for method in methods
-        ] * len(columns_to_aggregate)
+        ]
     else:
         select_columns = columns_to_aggregate
         column_types = None
 
-    data = json.loads(
-        gs.read_command(
-            "v.db.select",
-            map=input_name,
-            layer=input_layer,
-            columns=",".join([column] + select_columns),
-            group=column,
-            format="json",
-        )
+    tools = Tools()
+    data = tools.v_db_select(
+        map=input_name,
+        layer=input_layer,
+        columns=",".join([column] + select_columns),
+        group=column,
+        format="json",
     )
     # We added the group column to the select, so we need to skip it here.
     select_column_names = [item["name"] for item in data["info"]["columns"]][1:]
     updates = []
     add_columns = []
     if column_types:
-        for result_column, column_type in zip(result_columns, column_types):
+        for result_column, column_type in zip(
+            result_columns, column_types, strict=True
+        ):
             add_columns.append(f"{result_column} {column_type}")
     else:
         # Column types are part of the result column name list.
@@ -446,7 +446,7 @@ def aggregate_attributes_sql(
             result_column,
             column_type,
             key,
-        ) in zip(result_columns, column_types, select_column_names):
+        ) in zip(result_columns, column_types, select_column_names, strict=True):
             updates.append(
                 {
                     "column": result_column,
@@ -474,26 +474,22 @@ def aggregate_attributes_univar(
             "must be the same"
         )
         raise ValueError(msg)
-    records = json.loads(
-        gs.read_command(
-            "v.db.select",
-            map=input_name,
-            layer=input_layer,
-            columns=column,
-            group=column,
-            format="json",
-        )
+    tools = Tools()
+    records = tools.v_db_select(
+        map=input_name,
+        layer=input_layer,
+        columns=column,
+        group=column,
+        format="json",
     )["records"]
     columns = defaultdict(list)
     for agg_column, method, result in zip(
-        columns_to_aggregate, methods, result_columns
+        columns_to_aggregate, methods, result_columns, strict=True
     ):
         columns[agg_column].append((method, result))
-    column_types = [
-        "INTEGER" if method == "n" else "DOUBLE" for method in methods
-    ] * len(columns_to_aggregate)
+    column_types = ["INTEGER" if method == "n" else "DOUBLE" for method in methods]
     add_columns = []
-    for result_column, column_type in zip(result_columns, column_types):
+    for result_column, column_type in zip(result_columns, column_types, strict=True):
         add_columns.append(f"{result_column} {column_type}")
     unique_values = [record[column] for record in records]
     updates = []
@@ -501,15 +497,12 @@ def aggregate_attributes_univar(
         where = column_value_to_where(column, value, quote=quote_column)
         # for i, aggregate_column in enumerate(columns_to_aggregate):
         for aggregate_column, methods_results in columns.items():
-            stats = json.loads(
-                gs.read_command(
-                    "v.db.univar",
-                    map=input_name,
-                    column=aggregate_column,
-                    format="json",
-                    where=where,
-                )
-            )["statistics"]
+            stats = tools.v_db_univar(
+                map=input_name,
+                column=aggregate_column,
+                format="json",
+                where=where,
+            )
             for method, result_column in methods_results:
                 updates.append(
                     {
@@ -522,14 +515,13 @@ def aggregate_attributes_univar(
 
 
 def cleanup(name):
-    """Remove temporary vector silently"""
-    gs.run_command(
-        "g.remove",
+    """Remove temporary vector silently (outputs are captured)"""
+    tools = Tools()
+    tools.g_remove(
         flags="f",
         type="vector",
         name=name,
         quiet=True,
-        stderr=subprocess.DEVNULL,
         errors="ignore",
     )
 
@@ -579,6 +571,7 @@ def main():
         methods=user_aggregate_methods,
         backend=aggregate_backend,
     )
+    tools = Tools(capture_output=False)
 
     # does map exist?
     if not gs.find_file(input_vector, element="vector")["file"]:
@@ -592,8 +585,7 @@ def main():
             )
             % ("column", layer)
         )
-        gs.run_command(
-            "v.extract",
+        tools.v_extract(
             flags="d",
             input=input_vector,
             output=output,
@@ -629,15 +621,13 @@ def main():
         atexit.register(cleanup, tmpfile)
 
         try:
-            gs.run_command(
-                "v.reclass",
+            tools.v_reclass(
                 input=input_vector,
                 output=tmpfile,
                 layer=layer,
                 column=column,
             )
-            gs.run_command(
-                "v.extract",
+            tools.v_extract(
                 flags="d",
                 input=tmpfile,
                 output=output,

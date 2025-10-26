@@ -1641,10 +1641,11 @@ int GS_load_att_map(int id, const char *filename, int att)
     Rast_get_cellhd(filename, mapset, &rast_head);
     if (rast_head.north <= wind.south || rast_head.south >= wind.north ||
         rast_head.east <= wind.west || rast_head.west >= wind.east) {
-
+        char *mname = G_fully_qualified_name(filename, mapset);
         G_warning(
             _("Raster map <%s> is outside of current region. Load failed."),
-            G_fully_qualified_name(filename, mapset));
+            mname);
+        G_free(mname);
     }
 
     while (!reuse && (0 < hdata)) {

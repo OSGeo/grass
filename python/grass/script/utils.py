@@ -31,11 +31,12 @@ import random
 import string
 
 from pathlib import Path
-from typing import TYPE_CHECKING, AnyStr, Callable, TypeVar, cast, overload
+from typing import TYPE_CHECKING, AnyStr, TypeVar, cast, overload
 
 
 if TYPE_CHECKING:
     from _typeshed import FileDescriptorOrPath, StrOrBytesPath, StrPath
+    from collections.abc import Callable
 
 
 # Type variables
@@ -534,7 +535,7 @@ def set_path(modulename, dirname=None, path="."):
     pathlib_ = None
     if dirname:
         pathlib_ = os.path.join(path, dirname)
-    if pathlib_ and os.path.exists(pathlib_):
+    if pathlib_ and Path(pathlib_).exists():
         # we are running the script from the script directory, therefore
         # we add the path to sys.path to reach the directory (dirname)
         sys.path.append(os.path.abspath(path))
@@ -559,7 +560,7 @@ def clock():
     return time.perf_counter()
 
 
-def legalize_vector_name(name, fallback_prefix="x"):
+def legalize_vector_name(name, fallback_prefix: str | None = "x") -> str:
     """Make *name* usable for vectors, tables, and columns
 
     The returned string is a name usable for vectors, tables, and columns,

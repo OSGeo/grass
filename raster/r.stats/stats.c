@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "global.h"
 
-#include <grass/parson.h>
+#include <grass/gjson.h>
 
 /* hash definitions (these should be prime numbers) ************* */
 #define HASHSIZE 7307
@@ -256,7 +256,7 @@ int print_node_count(void)
 
 int print_cell_stats(char *fmt, int with_percents, int with_counts,
                      int with_areas, int with_labels, char *fs,
-                     enum OutputFormat format, JSON_Array *array)
+                     enum OutputFormat format, G_JSON_Array *array)
 {
     int i, n, nulls_found;
     struct Node *node;
@@ -264,18 +264,38 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
     DCELL dLow, dHigh;
     char str1[50], str2[50];
 
-    JSON_Object *object, *category;
-    JSON_Array *categories;
-    JSON_Value *object_value, *category_value, *categories_value;
+    G_JSON_Object *object, *category;
+    G_JSON_Array *categories;
+    G_JSON_Value *object_value, *category_value, *categories_value;
 
     if (no_nulls)
         total_count -= sorted_list[node_count - 1]->count;
 
     Rast_set_c_null_value(&null_cell, 1);
     if (node_count <= 0) {
+        if (format == CSV) {
+            /* CSV Header */
+            for (i = 0; i < nfiles; i++) {
+                fprintf(stdout, "%s%s_%s", i ? fs : "", map_names[i], "cat");
+            }
+            if (with_areas) {
+                fprintf(stdout, "%s%s", fs, "area");
+            }
+            if (with_counts) {
+                fprintf(stdout, "%s%s", fs, "count");
+            }
+            if (with_percents) {
+                fprintf(stdout, "%s%s", fs, "percent");
+            }
+            if (with_labels)
+                fprintf(stdout, "%s%s", fs, "label");
+            fprintf(stdout, "\n");
+        }
+
         switch (format) {
         case JSON:
             break;
+        case CSV:
         case PLAIN:
             fprintf(stdout, "0");
             for (i = 1; i < nfiles; i++)
@@ -293,12 +313,42 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
         }
     }
     else {
+
+        if (format == CSV) {
+            /* CSV Header */
+            for (i = 0; i < nfiles; i++) {
+                if (raw_output || !is_fp[i] || as_int)
+                    fprintf(stdout, "%s%s_%s", i ? fs : "", map_names[i],
+                            "cat");
+                else if (averaged)
+                    fprintf(stdout, "%s%s_%s", i ? fs : "", map_names[i],
+                            "average");
+                else
+                    fprintf(stdout, "%s%s_%s", i ? fs : "", map_names[i],
+                            "range");
+
+                if (with_labels)
+                    fprintf(stdout, "%s%s_%s", fs, map_names[i], "label");
+            }
+
+            if (with_areas) {
+                fprintf(stdout, "%s%s", fs, "area");
+            }
+            if (with_counts) {
+                fprintf(stdout, "%s%s", fs, "count");
+            }
+            if (with_percents) {
+                fprintf(stdout, "%s%s", fs, "percent");
+            }
+            fprintf(stdout, "\n");
+        }
+
         for (n = 0; n < node_count; n++) {
             if (format == JSON) {
-                object_value = json_value_init_object();
-                object = json_object(object_value);
-                categories_value = json_value_init_array();
-                categories = json_array(categories_value);
+                object_value = G_json_value_init_object();
+                object = G_json_object(object_value);
+                categories_value = G_json_value_init_array();
+                categories = G_json_array(categories_value);
             }
 
             node = sorted_list[n];
@@ -322,22 +372,30 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
 
             for (i = 0; i < nfiles; i++) {
                 if (format == JSON) {
-                    category_value = json_value_init_object();
-                    category = json_object(category_value);
+                    category_value = G_json_value_init_object();
+                    category = G_json_object(category_value);
                 }
                 if (node->values[i] == NULL_CELL) {
                     switch (format) {
                     case JSON:
                         if (raw_output || !is_fp[i] || as_int)
-                            json_object_set_null(category, "category");
+                            G_json_object_set_null(category, "category");
                         else if (averaged)
-                            json_object_set_null(category, "average");
+                            G_json_object_set_null(category, "average");
                         else
-                            json_object_set_null(category, "range");
+                            G_json_object_set_null(category, "range");
                         if (with_labels && !(raw_output && is_fp[i]))
-                            json_object_set_string(
+                            G_json_object_set_string(
                                 category, "label",
                                 Rast_get_c_cat(&null_cell, &labels[i]));
+                        break;
+                    case CSV:
+                        fprintf(stdout, "%s%s", i ? fs : "", no_data_str);
+                        if (with_labels)
+                            fprintf(stdout, "%s%s", fs,
+                                    !(raw_output && is_fp[i])
+                                        ? Rast_get_c_cat(&null_cell, &labels[i])
+                                        : no_data_str);
                         break;
                     case PLAIN:
                         fprintf(stdout, "%s%s", i ? fs : "", no_data_str);
@@ -350,14 +408,24 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
                 else if (raw_output || !is_fp[i] || as_int) {
                     switch (format) {
                     case JSON:
-                        json_object_set_number(category, "category",
-                                               (long)node->values[i]);
+                        G_json_object_set_number(category, "category",
+                                                 (long)node->values[i]);
                         if (with_labels && !is_fp[i]) {
-                            json_object_set_string(
+                            G_json_object_set_string(
                                 category, "label",
                                 Rast_get_c_cat((CELL *)&(node->values[i]),
                                                &labels[i]));
                         }
+                        break;
+                    case CSV:
+                        fprintf(stdout, "%s%ld", i ? fs : "",
+                                (long)node->values[i]);
+                        if (with_labels)
+                            fprintf(stdout, "%s%s", fs,
+                                    !is_fp[i] ? Rast_get_c_cat(
+                                                    (CELL *)&(node->values[i]),
+                                                    &labels[i])
+                                              : no_data_str);
                         break;
                     case PLAIN:
                         fprintf(stdout, "%s%ld", i ? fs : "",
@@ -388,9 +456,10 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
                         double average = (dLow + dHigh) / 2.0;
                         switch (format) {
                         case JSON:
-                            json_object_set_number(category, "average",
-                                                   average);
+                            G_json_object_set_number(category, "average",
+                                                     average);
                             break;
+                        case CSV:
                         case PLAIN:
                             snprintf(str1, sizeof(str1), "%10f", average);
                             G_trim_decimal(str1);
@@ -402,11 +471,12 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
                     else {
                         switch (format) {
                         case JSON:
-                            json_object_dotset_number(category, "range.from",
-                                                      dLow);
-                            json_object_dotset_number(category, "range.to",
-                                                      dHigh);
+                            G_json_object_dotset_number(category, "range.from",
+                                                        dLow);
+                            G_json_object_dotset_number(category, "range.to",
+                                                        dHigh);
                             break;
+                        case CSV:
                         case PLAIN:
                             /* print intervals */
                             snprintf(str1, sizeof(str1), "%10f", dLow);
@@ -423,20 +493,21 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
                     case JSON:
                         if (with_labels) {
                             if (cat_ranges) {
-                                json_object_set_string(
+                                G_json_object_set_string(
                                     category, "label",
                                     labels[i].labels[node->values[i]]);
                             }
                             else {
-                                json_object_dotset_string(
+                                G_json_object_dotset_string(
                                     category, "label.from",
                                     Rast_get_d_cat(&dLow, &labels[i]));
-                                json_object_dotset_string(
+                                G_json_object_dotset_string(
                                     category, "label.to",
                                     Rast_get_d_cat(&dHigh, &labels[i]));
                             }
                         }
                         break;
+                    case CSV:
                     case PLAIN:
                         if (with_labels) {
                             if (cat_ranges)
@@ -452,19 +523,20 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
                 }
 
                 if (format == JSON) {
-                    json_array_append_value(categories, category_value);
+                    G_json_array_append_value(categories, category_value);
                 }
             }
 
             if (format == JSON) {
-                json_object_set_value(object, "categories", categories_value);
+                G_json_object_set_value(object, "categories", categories_value);
             }
 
             if (with_areas) {
                 switch (format) {
                 case JSON:
-                    json_object_set_number(object, "area", node->area);
+                    G_json_object_set_number(object, "area", node->area);
                     break;
+                case CSV:
                 case PLAIN:
                     fprintf(stdout, "%s", fs);
                     fprintf(stdout, fmt, node->area);
@@ -474,8 +546,9 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
             if (with_counts) {
                 switch (format) {
                 case JSON:
-                    json_object_set_number(object, "count", node->count);
+                    G_json_object_set_number(object, "count", node->count);
                     break;
+                case CSV:
                 case PLAIN:
                     fprintf(stdout, "%s%ld", fs, (long)node->count);
                     break;
@@ -485,8 +558,9 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
                 double percent = (double)100 * node->count / total_count;
                 switch (format) {
                 case JSON:
-                    json_object_set_number(object, "percent", percent);
+                    G_json_object_set_number(object, "percent", percent);
                     break;
+                case CSV:
                 case PLAIN:
                     fprintf(stdout, "%s%.2f%%", fs, percent);
                     break;
@@ -495,8 +569,9 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
 
             switch (format) {
             case JSON:
-                json_array_append_value(array, object_value);
+                G_json_array_append_value(array, object_value);
                 break;
+            case CSV:
             case PLAIN:
                 fprintf(stdout, "\n");
                 break;

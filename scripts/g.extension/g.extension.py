@@ -154,14 +154,7 @@ import zipfile
 import tempfile
 import json
 import xml.etree.ElementTree as ET
-
-if sys.version_info < (3, 8):
-    from distutils.dir_util import copy_tree
-else:
-    from functools import partial
-
-    copy_tree = partial(shutil.copytree, dirs_exist_ok=True)
-
+from functools import partial
 from pathlib import Path
 from subprocess import PIPE
 from urllib import request as urlrequest
@@ -197,6 +190,8 @@ if sys.platform.startswith("freebsd"):
     MAKE = "gmake"
 else:
     MAKE = "make"
+
+copy_tree = partial(shutil.copytree, dirs_exist_ok=True)
 
 
 class GitAdapter:
@@ -674,7 +669,7 @@ def get_installed_toolboxes(force=False):
     to read the current one.
     """
     xml_file = os.path.join(options["prefix"], "toolboxes.xml")
-    if not os.path.exists(xml_file):
+    if not Path(xml_file).exists():
         write_xml_toolboxes(xml_file)
     # read XML file
     try:
@@ -697,7 +692,7 @@ def get_installed_modules(force=False):
     to read the current one.
     """
     xml_file = os.path.join(options["prefix"], "modules.xml")
-    if not os.path.exists(xml_file):
+    if not Path(xml_file).exists():
         if force:
             write_xml_modules(xml_file)
         else:
@@ -1287,7 +1282,7 @@ def install_toolbox_xml(url, name):
 
     xml_file = os.path.join(options["prefix"], "toolboxes.xml")
     # create an empty file if not exists
-    if not os.path.exists(xml_file):
+    if not Path(xml_file).exists():
         write_xml_modules(xml_file)
 
     # read XML file
@@ -1387,7 +1382,7 @@ def install_extension_xml(edict):
 
     xml_file = os.path.join(options["prefix"], "extensions.xml")
     # create an empty file if not exists
-    if not os.path.exists(xml_file):
+    if not Path(xml_file).exists():
         write_xml_extensions(xml_file)
 
     # read XML file
@@ -1507,7 +1502,7 @@ def install_module_xml(mlist):
 
     xml_file = os.path.join(options["prefix"], "modules.xml")
     # create an empty file if not exists
-    if not os.path.exists(xml_file):
+    if not Path(xml_file).exists():
         write_xml_modules(xml_file)
 
     # read XML file
@@ -1753,7 +1748,7 @@ def move_extracted_files(extract_dir, target_dir, files):
     if len(files) == 1:
         shutil.copytree(os.path.join(extract_dir, files[0]), target_dir)
     else:
-        if not os.path.exists(target_dir):
+        if not Path(target_dir).exists():
             os.mkdir(target_dir)
         for file_name in files:
             actual_file = os.path.join(extract_dir, file_name)
@@ -1969,7 +1964,7 @@ def create_md_if_missing(root_dir):
             md_file = os.path.splitext(html_file)[0] + ".md"
             md_path = os.path.join(dirpath, md_file)
 
-            if not os.path.exists(md_path):
+            if not Path(md_path).exists():
                 html_path = os.path.join(dirpath, html_file)
                 shutil.copy(html_path, md_path)
 
@@ -2083,7 +2078,7 @@ def install_extension_std_platforms(name, source, url, branch):
     os.chdir(srcdir)
 
     gs.message(_("Compiling..."))
-    if not os.path.exists(os.path.join(gisbase, "include", "Make", "Module.make")):
+    if not Path(gisbase, "include", "Make", "Module.make").exists():
         gs.fatal(_("Please install GRASS development package"))
 
     if gs.call(make_cmd, stdout=outdev) != 0:
@@ -2131,7 +2126,7 @@ def remove_extension(force=False):
     # collect modules and files installed by these extensions
     mlist = []
     xml_file = os.path.join(options["prefix"], "extensions.xml")
-    if os.path.exists(xml_file):
+    if Path(xml_file).exists():
         # read XML file
         tree = None
         try:
@@ -2162,7 +2157,7 @@ def remove_extension(force=False):
             write_xml_extensions(xml_file)
 
         xml_file = os.path.join(options["prefix"], "modules.xml")
-        if not os.path.exists(xml_file):
+        if not Path(xml_file).exists():
             if force:
                 write_xml_modules(xml_file)
             else:
@@ -2232,7 +2227,7 @@ def remove_extension_files(edict, force=False):
     einstalled = []
     eremoved = []
 
-    if os.path.exists(xml_file):
+    if Path(xml_file).exists():
         tree = etree_fromfile(xml_file)
         if tree is not None:
             for task in tree.findall("task"):
@@ -2301,7 +2296,7 @@ def remove_extension_std(name, force=False):
 def remove_from_toolbox_xml(name):
     """Update local meta-file when removing existing toolbox"""
     xml_file = os.path.join(options["prefix"], "toolboxes.xml")
-    if not os.path.exists(xml_file):
+    if not Path(xml_file).exists():
         return
     # read XML file
     tree = etree_fromfile(xml_file)
@@ -2321,7 +2316,7 @@ def remove_extension_xml(mlist, edict):
 
     # modules
     xml_file = os.path.join(options["prefix"], "modules.xml")
-    if os.path.exists(xml_file):
+    if Path(xml_file).exists():
         # read XML file
         tree = etree_fromfile(xml_file)
         for name in mlist:
@@ -2333,7 +2328,7 @@ def remove_extension_xml(mlist, edict):
 
     # extensions
     xml_file = os.path.join(options["prefix"], "extensions.xml")
-    if os.path.exists(xml_file):
+    if Path(xml_file).exists():
         # read XML file
         tree = etree_fromfile(xml_file)
         for name in edict:
@@ -2475,17 +2470,20 @@ def resolve_install_prefix(path, to_system):
         path = os.environ["GISBASE"]
     if path == "$GRASS_ADDON_BASE":
         if not os.getenv("GRASS_ADDON_BASE"):
-            from grass.app.runtime import get_grass_config_dir
+            from grass.app.runtime import get_grass_config_dir_for_version
 
             path = os.path.join(
-                get_grass_config_dir(VERSION[0], VERSION[1], os.environ), "addons"
+                get_grass_config_dir_for_version(
+                    VERSION[0], VERSION[1], env=os.environ
+                ),
+                "addons",
             )
             gs.warning(
                 _("GRASS_ADDON_BASE is not defined, installing to {}").format(path)
             )
         else:
             path = os.environ["GRASS_ADDON_BASE"]
-    if os.path.exists(path) and not os.access(path, os.W_OK):
+    if Path(path).exists() and not os.access(path, os.W_OK):
         gs.fatal(
             _(
                 "You don't have permission to install extension to <{0}>."
@@ -2608,7 +2606,7 @@ def resolve_known_host_service(url, name, branch):
 
 
 def validate_url(url):
-    if not os.path.exists(url):
+    if not Path(url).exists():
         url_validated = False
         message = None
         if url.startswith("http"):
@@ -2727,7 +2725,7 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
     # Handle local URLs
     if os.path.isdir(url):
         return "dir", os.path.abspath(url)
-    if os.path.exists(url):
+    if Path(url).exists():
         if url.endswith(".zip"):
             return "zip", os.path.abspath(url)
         for suffix in extract_tar.supported_formats:

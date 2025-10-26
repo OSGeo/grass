@@ -25,7 +25,6 @@ import sys
 import atexit
 import subprocess
 import shutil
-import codecs
 import string
 import random
 import shlex
@@ -144,7 +143,8 @@ _capture_stderr = False  # capture stderr of subprocesses if possible
 
 
 def call(*args, **kwargs):
-    return Popen(*args, **kwargs).wait()
+    with Popen(*args, **kwargs) as p:
+        return p.wait()
 
 
 # GRASS-oriented interface to subprocess module
@@ -223,7 +223,7 @@ def get_commands(*, env=None):
 
     def scan(gisbase, directory):
         dir_path = os.path.join(gisbase, directory)
-        if os.path.exists(dir_path):
+        if Path(dir_path).exists():
             for fname in os.listdir(os.path.join(gisbase, directory)):
                 if scripts:  # win32
                     name, ext = os.path.splitext(fname)
@@ -367,7 +367,14 @@ def make_command(
 
 
 def handle_errors(
-    returncode, result, args, kwargs, handler=None, stderr=None, env=None
+    returncode,
+    result,
+    args,
+    kwargs,
+    handler=None,
+    stderr=None,
+    exception=None,
+    env=None,
 ):
     """Error handler for :func:`run_command()` and similar functions
 
@@ -458,9 +465,9 @@ def handle_errors(
         sys.exit(returncode)
     else:
         module, code = get_module_and_code(args, kwargs)
-        raise CalledModuleError(
-            module=module, code=code, returncode=returncode, errors=stderr
-        )
+        if not exception:
+            exception = CalledModuleError
+        raise exception(module, code, returncode=returncode, errors=stderr)
 
 
 def popen_args_command(
@@ -505,7 +512,7 @@ def start_command(
     verbose=False,
     superquiet=False,
     **kwargs,
-):
+) -> Popen:
     """Returns a :class:`~grass.script.core.Popen` object with the command created by
     :py:func:`~grass.script.core.make_command`.
     Accepts any of the arguments which :py:class:`Popen()` accepts apart from "args"
@@ -596,9 +603,7 @@ def run_command(*args, **kwargs):
 
     :raises ~grass.exceptions.CalledModuleError: When module returns non-zero return code.
     """
-    encoding = "default"
-    if "encoding" in kwargs:
-        encoding = kwargs["encoding"]
+    encoding = kwargs.get("encoding", "default")
 
     if _capture_stderr and "stderr" not in kwargs.keys():
         kwargs["stderr"] = PIPE
@@ -668,9 +673,7 @@ def read_command(*args, **kwargs):
 
     :return: stdout
     """
-    encoding = "default"
-    if "encoding" in kwargs:
-        encoding = kwargs["encoding"]
+    encoding = kwargs.get("encoding", "default")
 
     if _capture_stderr and "stderr" not in kwargs.keys():
         kwargs["stderr"] = PIPE
@@ -774,9 +777,7 @@ def write_command(*args, **kwargs):
 
     :raises ~grass.exceptions.CalledModuleError: When module returns non-zero return code
     """
-    encoding = "default"
-    if "encoding" in kwargs:
-        encoding = kwargs["encoding"]
+    encoding = kwargs.get("encoding", "default")
     # TODO: should we delete it from kwargs?
     stdin = kwargs["stdin"]
     if _capture_stderr and "stderr" not in kwargs.keys():
@@ -1095,8 +1096,11 @@ def parser() -> tuple[dict[str, str], dict[str, bool]]:
         s = p.communicate()[0]
         lines = s.split(b"\0")
         if not lines or lines[0] != b"@ARGS_PARSED@":
-            stdout = os.fdopen(sys.stdout.fileno(), "wb")
-            stdout.write(s)
+            if hasattr(sys.stdout, "buffer"):
+                sys.stdout.buffer.write(s)
+            else:
+                text = s.decode(sys.stdout.encoding, "strict")
+                sys.stdout.write(text)
             sys.exit(p.returncode)
         return _parse_opts(lines[1:])
 
@@ -1940,12 +1944,16 @@ def create_location(*args, **kwargs):
 def create_project(
     path,
     name=None,
+    *,
+    crs=None,
     epsg=None,
     proj4=None,
     filename=None,
+    pack=None,
     wkt=None,
     datum=None,
     datum_trans=None,
+    description=None,
     desc=None,
     overwrite=False,
 ):
@@ -1954,6 +1962,7 @@ def create_project(
     :param str path: path to GRASS database or project; if path to database, project
                      name must be specified with name parameter
     :param str name: project name to create
+    :param crs: CRS of the new project EPSG or filename (defaults to 'XY')
     :param epsg: if given create new project based on EPSG code
     :param proj4: if given create new project based on Proj4 definition
     :param str filename: if given create new project based on georeferenced file
@@ -1961,7 +1970,8 @@ def create_project(
                     (can be path to PRJ file or WKT string)
     :param datum: GRASS format datum code
     :param datum_trans: datum transformation parameters (used for epsg and proj4)
-    :param desc: description of the project (creates MYNAME file)
+    :param description: description of the project
+    :param desc: description of the project [deprecated]
     :param bool overwrite: True to overwrite project if exists (WARNING:
                            ALL DATA from existing project ARE DELETED!)
 
@@ -1976,7 +1986,7 @@ def create_project(
     mapset_path = resolve_mapset_path(path=path, location=name)
 
     # create dbase if not exists
-    if not os.path.exists(mapset_path.directory):
+    if not Path(mapset_path.directory).exists():
         os.mkdir(mapset_path.directory)
 
     env = None
@@ -2001,20 +2011,27 @@ def create_project(
             )
         return env
 
-    # check if location already exists
+    # check if a project with the same name already exists
     if Path(mapset_path.directory, mapset_path.location).exists():
         if not overwrite:
-            fatal(
-                _("Location <%s> already exists. Operation canceled.")
-                % mapset_path.location,
-                env=local_env(),
-            )
-        warning(
-            _("Location <%s> already exists and will be overwritten")
-            % mapset_path.location,
-            env=local_env(),
-        )
+            msg = f"Project <{mapset_path.location}> already exists"
+            raise ScriptError(msg)
         shutil.rmtree(os.path.join(mapset_path.directory, mapset_path.location))
+
+    # translate crs to specific case
+    if crs:
+        if str(crs).upper() == "XY":
+            epsg = proj4 = filename = wkt = pack = None
+        elif str(crs).upper().startswith("EPSG:"):
+            epsg = str(crs).split(":", 1)[1]
+            if ":" in epsg:
+                epsg, datum_trans = epsg.split(":", 1)
+            else:
+                datum_trans = None
+        elif any(str(crs).endswith(ext) for ext in [".grass_raster", ".grr", ".rpack"]):
+            pack = crs
+        else:
+            filename = crs
 
     stdin = None
     kwargs = {}
@@ -2076,6 +2093,12 @@ def create_project(
                 env=local_env(),
             )
             stdin = wkt
+    elif pack:
+        from grass.grassdb.create import create_project_from_pack
+
+        create_project_from_pack(
+            Path(mapset_path.directory) / mapset_path.location, pack
+        )
     else:
         _create_location_xy(mapset_path.directory, mapset_path.location)
 
@@ -2091,7 +2114,12 @@ def create_project(
     # we still need to clean it up.
     if tmp_gisrc:
         try_remove(tmp_gisrc)
-    _set_location_description(mapset_path.directory, mapset_path.location, desc)
+    if description is not None or desc is not None:
+        _set_location_description(
+            mapset_path.directory,
+            mapset_path.location,
+            description if description is not None else desc,
+        )
 
 
 def _set_location_description(path, location, text):
@@ -2100,16 +2128,10 @@ def _set_location_description(path, location, text):
     :raises ~grass.exceptions.ScriptError:
         Raise :py:exc:`~grass.exceptions.ScriptError` on error.
     """
+    from grass.grassdb.create import _set_project_description
+
     try:
-        with codecs.open(
-            os.path.join(path, location, "PERMANENT", "MYNAME"),
-            encoding="utf-8",
-            mode="w",
-        ) as fd:
-            if text:
-                fd.write(text + os.linesep)
-            else:
-                fd.write(os.linesep)
+        _set_project_description(Path(path) / location, text)
     except OSError as e:
         raise ScriptError(repr(e))
 
@@ -2123,37 +2145,10 @@ def _create_location_xy(database, location):
     :raises ~grass.exceptions.ScriptError:
         Raise :py:exc:`~grass.exceptions.ScriptError` on error.
     """
+    from grass.grassdb.create import create_xy_project
+
     try:
-        base_path = Path(database)
-        project_dir = base_path / location
-        permanent_dir = project_dir / "PERMANENT"
-        default_wind_path = permanent_dir / "DEFAULT_WIND"
-        wind_path = permanent_dir / "WIND"
-        project_dir.mkdir()
-        permanent_dir.mkdir()
-        # create DEFAULT_WIND and WIND files
-        regioninfo = [
-            "proj:       0",
-            "zone:       0",
-            "north:      1",
-            "south:      0",
-            "east:       1",
-            "west:       0",
-            "cols:       1",
-            "rows:       1",
-            "e-w resol:  1",
-            "n-s resol:  1",
-            "top:        1",
-            "bottom:     0",
-            "cols3:      1",
-            "rows3:      1",
-            "depths:     1",
-            "e-w resol3: 1",
-            "n-s resol3: 1",
-            "t-b resol:  1",
-        ]
-        default_wind_path.write_text("\n".join(regioninfo))
-        shutil.copy(default_wind_path, wind_path)
+        create_xy_project(Path(database) / location)
     except OSError as e:
         raise ScriptError(repr(e))
 
