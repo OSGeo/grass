@@ -539,8 +539,8 @@ class GRASSStartup(wx.Frame):
 
         gisrc = os.getenv("GISRC")
 
-        if gisrc and os.path.isfile(gisrc):
-            with open(gisrc) as rc:
+        if gisrc and (gisrc_path := Path(gisrc)).is_file():
+            with gisrc_path.open() as rc:
                 for line in rc:
                     try:
                         key, val = line.split(":", 1)
@@ -920,8 +920,9 @@ class GRASSStartup(wx.Frame):
         disabled = []
         idx = 0
         for mapset in self.listOfMapsets:
-            if mapset not in self.listOfMapsetsSelectable or os.path.isfile(
-                os.path.join(self.gisdbase, locationName, mapset, ".gislock")
+            if (
+                mapset not in self.listOfMapsetsSelectable
+                or Path(self.gisdbase, locationName, mapset, ".gislock").is_file()
             ):
                 disabled.append(idx)
             idx += 1
@@ -952,8 +953,9 @@ class GRASSStartup(wx.Frame):
             locationName = ""
 
         for mapset in self.listOfMapsets:
-            if mapset not in self.listOfMapsetsSelectable or os.path.isfile(
-                os.path.join(self.gisdbase, locationName, mapset, ".gislock")
+            if (
+                mapset not in self.listOfMapsetsSelectable
+                or Path(self.gisdbase, locationName, mapset, ".gislock").is_file()
             ):
                 disabled.append(idx)
             idx += 1
@@ -1093,7 +1095,7 @@ class GRASSStartup(wx.Frame):
         mapset = self.listOfMapsets[self.lbmapsets.GetSelection()]
 
         lockfile = os.path.join(dbase, location, mapset, ".gislock")
-        if os.path.isfile(lockfile):
+        if Path(lockfile).is_file():
             dlg = wx.MessageDialog(
                 parent=self,
                 message=_(

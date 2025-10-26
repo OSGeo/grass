@@ -2033,7 +2033,7 @@ class CmdPanel(wx.Panel):
                             style=wx.TE_MULTILINE,
                             size=(-1, 75),
                         )
-                        if p.get("value", "") and os.path.isfile(p["value"]):
+                        if p.get("value", "") and Path(p["value"]).is_file():
                             ifbb.Clear()
                             try:
                                 # Python >= 3.11
