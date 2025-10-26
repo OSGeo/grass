@@ -160,7 +160,7 @@ int add_plines(struct Map_info *Map, int field, double textsize)
         if (field != -1 && cat < 0)
             continue;
 
-        sprintf(cat_num, "%d", cat);
+        snprintf(cat_num, sizeof(cat_num), "%d", cat);
 
         if (ltype == GV_POINT) {
             layer = "point";

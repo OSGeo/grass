@@ -28,7 +28,6 @@
  * \param[in] sql SQL statement
  * \return int DB_FAILED on error; DB_OK on success
  */
-
 int db__driver_execute_immediate(dbString *sql)
 {
     char *s;
@@ -91,7 +90,6 @@ int db__driver_execute_immediate(dbString *sql)
  *
  * \return int DB_FAILED on error; DB_OK on success
  */
-
 int db__driver_begin_transaction(void)
 {
     int ret;
@@ -117,7 +115,6 @@ int db__driver_begin_transaction(void)
  *
  * \return int DB_FAILED on error; DB_OK on success
  */
-
 int db__driver_commit_transaction(void)
 {
     int ret;

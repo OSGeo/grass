@@ -40,7 +40,7 @@ items. See further examples.
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <toolbox name="MyMainMenu">
-  <label>Default GRASS GIS main menu bar</label>
+  <label>Default GRASS main menu bar</label>
   <items>
     <subtoolbox name="File"/>
     <subtoolbox name="Settings"/>
@@ -111,7 +111,7 @@ the following lines where we omitted the two toolboxes:
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <toolbox name="CustomizedMainMenu">
-  <label>Default GRASS GIS main menu bar</label>
+  <label>Default GRASS main menu bar</label>
   <items>
     <subtoolbox name="File"/>
     <subtoolbox name="Settings"/>
@@ -161,7 +161,7 @@ Optionally, we can add this toolbox to the main menu items. The
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <toolbox name="CustomizedMainMenu">
-  <label>Default GRASS GIS main menu bar</label>
+  <label>Default GRASS main menu bar</label>
   <items>
     <subtoolbox name="File"/>
     <subtoolbox name="Settings"/>

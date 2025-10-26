@@ -1,7 +1,7 @@
-# Docker GRASS GIS (alpine linux)
+# Docker GRASS (alpine linux)
 
 Dockerfile with an [Alpine Linux](https://www.alpinelinux.org/) image with
-[GRASS GIS](https://grass.osgeo.org/), [PDAL](https://pdal.io) support.
+[GRASS](https://grass.osgeo.org/), [PDAL](https://pdal.io) support.
 
 Download size of this image is only approximately 80 MB.
 

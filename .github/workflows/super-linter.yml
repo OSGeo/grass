@@ -27,13 +27,14 @@ jobs:
       statuses: write
 
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           # super-linter needs the full git history to get the
           # list of files that changed across commits
           fetch-depth: 0
+          persist-credentials: false
       - name: Lint code base
-        uses: super-linter/super-linter/slim@4e8a7c2bf106c4c766c816b35ec612638dc9b6b2 # v7.3.0
+        uses: super-linter/super-linter/slim@2bdd90ed3262e023ac84bf8fe35dc480721fc1f2 # v8.2.1
         env:
           DEFAULT_BRANCH: main
           # To report GitHub Actions status checks
@@ -51,6 +52,9 @@ jobs:
           VALIDATE_BASH_EXEC: true
           # VALIDATE_CSS: true
           # VALIDATE_DOCKER: true
+          VALIDATE_EDITORCONFIG: true
+          VALIDATE_GITHUB_ACTIONS: true
+          VALIDATE_GITHUB_ACTIONS_ZIZMOR: true
           VALIDATE_JAVASCRIPT_ES: true
           # VALIDATE_JAVASCRIPT_STANDARD: true
           VALIDATE_JSON: true

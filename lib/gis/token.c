@@ -175,7 +175,6 @@ char **tokenize(const char *buf, const char *delim, const char *inchar)
 
    \return number of tokens
  */
-
 int G_number_of_tokens(char **tokens)
 {
     int n;

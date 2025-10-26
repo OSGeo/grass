@@ -1,4 +1,4 @@
-## DESCRIPTION
+## Description
 
 *t.rast.mapcalc* performs spatio-temporal *mapcalc* expressions on maps
 of temporally sampled space time raster datasets (STRDS). Spatial and
@@ -31,51 +31,60 @@ A mapcalc expression must be provided to process the temporal sampled
 maps. Temporal internal variables are available in addition to the
 *[r.mapcalc](r.mapcalc.md)* spatial operators and functions:
 
-The supported internal variables for relative and absolute time are:
+### Supported internal variables
 
-- *td()* - This internal variable represents the size of the current
-  sample time interval in days and fraction of days for absolute time,
-  and in relative units in case of relative time.
-- *start_time()* - This internal variable represents the time difference
-  between the start time of the sample space time raster dataset and the
-  start time of the current sample interval or instance. The time is
-  measured in days and fraction of days for absolute time, and in
-  relative units in case of relative time.
-- *end_time()* - This internal variable represents the time difference
-  between the start time of the sample space time raster dataset and the
-  end time of the current sample interval. The time is measured in days
-  and fraction of days for absolute time, and in relative units in case
-  of relative time. The end_time() will be represented by null() in case
-  of a time instance.
+The supported internal variables for **relative** and **absolute time** are:
 
-The supported internal variables for the current sample interval or
-instance for absolute time are:
+#### Time interval
 
-- *start_doy()* - Day of year (doy) from the start time \[1 - 366\]
-- *start_dow()* - Day of week (dow) from the start time \[1 - 7\], the
-  start of the week is Monday == 1
-- *start_year()* - The year of the start time \[0 - 9999\]
-- *start_month()* - The month of the start time \[1 - 12\]
-- *start_week()* - Week of year of the start time \[1 - 54\]
-- *start_day()* - Day of month from the start time \[1 - 31\]
-- *start_hour()* - The hour of the start time \[0 - 23\]
-- *start_minute()* - The minute of the start time \[0 - 59\]
-- *start_second()* - The second of the start time \[0 - 59\]
-- *end_doy()* - Day of year (doy) from the end time \[1 - 366\]
-- *end_dow()* - Day of week (dow) from the end time \[1 - 7\], the start
-  of the week is Monday == 1
-- *end_year()* - The year of the end time \[0 - 9999\]
-- *end_month()* - The month of the end time \[1 - 12\]
-- *end_woy()* - Week of year (woy) of the end time \[1 - 54\]
-- *end_day()* - Day of month from the start time \[1 - 31\]
-- *end_hour()* - The hour of the end time \[0 - 23\]
-- *end_minute()* - The minute of the end time \[0 - 59\]
-- *end_second()* - The second of the end time \[0 - 59\].
+*td()* - This internal variable represents the size of the current
+sample time interval in days and fraction of days for absolute time,
+and in relative units in case of relative time.
+
+#### Start time
+
+*start_time()* - This internal variable represents the time difference
+between the start time of the sample space time raster dataset and the start
+time of the current sample interval or instance. The time is measured in days
+and fraction of days for absolute time, and in relative units in case of
+relative time.
+
+#### End time
+
+*end_time()* - This internal variable represents the time difference between
+the start time of the sample space time raster dataset and the end time of the
+current sample interval. The time is measured in days and fraction of days for
+absolute time, and in relative units in case of relative time. The end_time()
+will be represented by null() in case of a time instance.
+
+The supported internal variables for the **current sample interval** or
+**instance for absolute time** are:
+
+| **Variable**   | **Description**   |
+|:-------------- |:----------------- |
+| *start_doy()*| Day of year (doy) from the start time \[1 - 366\] |
+| *start_dow()*| Day of week (dow) from the start time \[1 - 7\], the start of the week is Monday == 1 |
+| *start_year()* | The year of the start time \[0 - 9999\] |
+| *start_month()* |The month of the start time \[1 - 12\] |
+| *start_week()* |Week of year of the start time \[1 - 54\] |
+| *start_day()* |Day of month from the start time \[1 - 31\] |
+| *start_hour()* |The hour of the start time \[0 - 23\] |
+| *start_minute()* |The minute of the start time \[0 - 59\] |
+|*start_second()* |The second of the start time \[0 - 59\] |
+|*end_doy()* |Day of year (doy) from the end time \[1 - 366\] |
+|*end_dow()* |Day of week (dow) from the end time \[1 - 7\], the start of the week is Monday == 1 |
+|*end_year()* |The year of the end time \[0 - 9999\] |
+|*end_month()* |The month of the end time \[1 - 12\] |
+|*end_woy()* |Week of year (woy) of the end time \[1 - 54\] |
+|*end_day()* |Day of month from the start time \[1 - 31\] |
+|*end_hour()* |The hour of the end time \[0 - 23\] |
+|*end_minute()* |The minute of the end time \[0 - 59\] |
+|*end_second()* |The second of the end time \[0 - 59\] |
 
 The *end\_\** functions are represented by the null() internal variable
 in case of time instances.
 
-## NOTES
+## Notes
 
 We will discuss the internal work of *t.rast.mapcalc* with an example.
 Imagine we have two STRDS as input, each one of monthly granularity. The
@@ -124,7 +133,7 @@ r.mapcalc expression="c_6 = if(8 == 5 || 8 == 6, (a8 + b8), (a8 * b8))"
 Semantic labels present in the sample dataset A will be transferred to
 the output dataset.
 
-## EXAMPLES
+## Examples
 
 The following command creates a new space time raster dataset
 `january_under_0` that will set to null all cells with temperature above
@@ -168,7 +177,7 @@ t.rast.mapcalc inputs=test.S2_8,test.S2_4 output=ndvi basename=ndvi \
 For more information about semantic label concept see
 *[i.band.library](i.band.library.md)* module.
 
-## SEE ALSO
+## See also
 
 *[r.mapcalc](r.mapcalc.md), [t.register](t.register.md),
 [t.rast.list](t.rast.list.md), [t.info](t.info.md)*
@@ -176,6 +185,6 @@ For more information about semantic label concept see
 [Temporal data processing
 Wiki](https://grasswiki.osgeo.org/wiki/Temporal_data_processing)
 
-## AUTHOR
+## Author
 
 Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

@@ -67,7 +67,7 @@ date, path, python_path, revision, svn_revision, version)
 
 **--exec EXECUTABLE**  
 Execute GRASS module or script. The provided executable will be executed
-in a GRASS GIS non-interactive session.
+in a GRASS non-interactive session.
 
 **--tmp-project**  
 Run using a temporary project which is created based on the given
@@ -101,7 +101,7 @@ Initial mapset directory which is a subdirectory of PROJECT
 
 ## DESCRIPTION
 
-This command is used to launch GRASS GIS. It will parse the command line
+This command is used to launch GRASS. It will parse the command line
 arguments and then initialize GRASS for the user. Since GRASS modules
 require a specific environment, this program must be called before any
 other GRASS module can run. The command line arguments are optional and
@@ -132,7 +132,7 @@ subprocess itself can be interactive if that is what the user requires.
 
 ### Config flag
 
-The flag **--config option** prints GRASS GIS configuration and version
+The flag **--config option** prints GRASS configuration and version
 parameters, with the options:
 
 - **arch**: system architecture (e.g., `x86_64-pc-linux-gnu`)
@@ -148,7 +148,7 @@ parameters, with the options:
 
 ## SAMPLE DATA
 
-The GRASS GIS project provides several free sample geospatial datasets
+The GRASS project provides several free sample geospatial datasets
 as ready-to-use projects. They are available to download at
 <https://grass.osgeo.org/download/sample-data/>. The "North Carolina
 data set" is a modern package of geospatial data from North Carolina
@@ -391,7 +391,7 @@ A very simple Python script ("test.py") may look like this:
 # import GRASS Python bindings (see also pygrass)
 import grass.script as gs
 
-gs.message('Current GRASS GIS environment:')
+gs.message('Current GRASS environment:')
 print(gs.gisenv())
 
 gs.message('Available raster maps:')
@@ -502,10 +502,10 @@ environmental variable.
 
 List of [GRASS environment variables](variables.md)
 
-[GRASS GIS Web site](https://grass.osgeo.org)  
-[GRASS GIS User Wiki](https://grasswiki.osgeo.org/wiki/)  
-[GRASS GIS Bug Tracker](https://github.com/OSGeo/grass/issues)  
-[GRASS GIS 8 Programmer's Manual](https://grass.osgeo.org/programming8/)
+[GRASS Web site](https://grass.osgeo.org)  
+[GRASS User Wiki](https://grasswiki.osgeo.org/wiki/)  
+[GRASS Bug Tracker](https://github.com/OSGeo/grass/issues)  
+[GRASS 8 Programmer's Manual](https://grass.osgeo.org/programming8/)
 
 ## AUTHORS (of this page)
 

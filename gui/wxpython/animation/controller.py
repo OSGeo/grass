@@ -60,7 +60,7 @@ class AnimationController(wx.EvtHandler):
         self.bitmapPool = bitmapPool
         self.mapFilesPool = mapFilesPool
         self.bitmapProvider = provider
-        for anim, win in zip(self.animations, self.mapwindows):
+        for anim, win in zip(self.animations, self.mapwindows, strict=False):
             anim.SetCallbackUpdateFrame(
                 lambda index, dataId, win=win: self.UpdateFrame(index, win, dataId)
             )
@@ -527,7 +527,9 @@ class AnimationController(wx.EvtHandler):
         animWinIndex = []
         legends = [anim.legendCmd for anim in self.animationData]
         # determine position and sizes of bitmaps
-        for i, (win, anim) in enumerate(zip(self.mapwindows, self.animations)):
+        for i, (win, anim) in enumerate(
+            zip(self.mapwindows, self.animations, strict=False)
+        ):
             if anim.IsActive():
                 pos = win.GetPosition()
                 animWinPos.append(pos)

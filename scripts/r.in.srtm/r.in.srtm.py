@@ -156,7 +156,7 @@ def main():
     one = flags["1"]
 
     # are we in LatLong location?
-    s = gs.read_command("g.proj", flags="j")
+    s = gs.read_command("g.proj", flags="p", format="proj4")
     kv = gs.parse_key_val(s)
     if "+proj" not in kv.keys() or kv["+proj"] != "longlat":
         gs.fatal(_("This module only operates in LatLong locations"))

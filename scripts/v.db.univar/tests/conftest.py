@@ -13,7 +13,7 @@ from grass.script.setup import SessionHandle
 def updates_as_transaction(table, cat_column, column, cats, values):
     """Create SQL statement for categories and values for a given column"""
     sql = ["BEGIN TRANSACTION"]
-    for cat, value in zip(cats, values):
+    for cat, value in zip(cats, values, strict=True):
         sql.append(f"UPDATE {table} SET {column} = {value} WHERE {cat_column} = {cat};")
     sql.append("END TRANSACTION")
     return "\n".join(sql)
@@ -44,9 +44,9 @@ def setup_session(
 ) -> Generator[SessionHandle]:
     """Creates a session with a mapset"""
     tmp_path = tmp_path_factory.mktemp("simple_dataset")
-    location = "test"
-    gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with gs.setup.init(tmp_path / location, env=os.environ.copy()) as session:
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy()) as session:
         for key, value in session.env.items():
             monkeypatch_module.setenv(key, value)
         yield session

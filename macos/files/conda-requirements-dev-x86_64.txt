@@ -7,6 +7,7 @@ expat
 fftw
 flex
 freetype
+gdal
 geos
 gettext
 ghostscript
@@ -37,13 +38,11 @@ pandoc
 pdal
 pillow
 pkg-config
-ply
 postgresql
 proj
 python.app
 python<3.13
 setuptools
-six
 sqlite
 wxpython=4.2.2
 zstd
