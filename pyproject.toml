@@ -261,7 +261,6 @@ ignore = [
     "SIM105",  # suppressible-exception
     "SIM113",  # enumerate-for-loop
     "SIM118",  # in-dict-keys
-    "SIM223",  # expr-and-false
     "SLF001",  # private-member-access
     "TD001",   # invalid-todo-tag
     "TD002",   # missing-todo-author
