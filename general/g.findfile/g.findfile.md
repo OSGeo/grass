@@ -87,6 +87,21 @@ import grass.script as gs
 gs.find_file('elevation', element = 'cell')
 ```
 
+Parsing JSON output:
+
+```python
+import grass.script as gs
+
+data = gs.parse_command("g.findfile", file="elevation", element="raster", format="json")
+print(data)
+```
+
+Possible output:
+
+```text
+{'name': 'elevation', 'mapset': 'PERMANENT', 'fullname': 'elevation@PERMANENT', 'file': '/grassdata/PERMANENT/cell/elevation'}
+```
+
 ## SEE ALSO
 
 *[g.filename](g.filename.md), [g.gisenv](g.gisenv.md),

@@ -4,7 +4,7 @@ The *g.gui* module allows user to start the Graphical User Interface
 (GUI) from the command line prompt or to change the default User
 Interface (UI) settings.
 
-GRASS GIS comes with both a wxPython-based GUI aka *[wxGUI](wxGUI.md)*
+GRASS comes with both a wxPython-based GUI aka *[wxGUI](wxGUI.md)*
 (**ui=wxpython**) and command line text-based UI (**ui=text**).
 
 ## NOTES

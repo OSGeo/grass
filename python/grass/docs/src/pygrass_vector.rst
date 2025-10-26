@@ -1,13 +1,13 @@
 Introduction to Vector classes
 ==============================
 
-Details about the GRASS GIS vector architecture can be found in the
-`GRASS GIS 8 Programmer's Manual: GRASS Vector Library
+Details about the GRASS vector architecture can be found in the
+`GRASS 8 Programmer's Manual: GRASS Vector Library
 <https://grass.osgeo.org/programming8/vectorlib.html>`_.
 
 PyGRASS has two classes for vector maps: :ref:`Vector-label` and
 :ref:`VectorTopo-label`.  As the names suggest, the Vector class is
-for vector maps, while VectorTopo opens vector maps with `GRASS GIS
+for vector maps, while VectorTopo opens vector maps with `GRASS
 topology <https://grass.osgeo.org/programming8/vlibTopology.html>`_.
 VectorTopo is an extension of the Vector class, so supports all the
 Vector class methods, with additions. The classes are part of the
@@ -123,13 +123,13 @@ Import the geometry feature class and add two points:
 Write the two points to the map:
 
     >>> new.write(point0, cat=1, attrs=('pub',))
-    >>> new.write(point1, cat=2, attrs=('resturant',))
+    >>> new.write(point1, cat=2, attrs=('restaurant',))
 
 Commit the DB changes (attributes):
 
     >>> new.table.conn.commit()
     >>> new.table.execute().fetchall()
-    [(1, u'pub'), (2, u'resturnat')]
+    [(1, u'pub'), (2, u'restaurant')]
 
 Close the vector map:
 
@@ -147,7 +147,7 @@ Now we can play with the map:
     >>> new.read(1).attrs['name']
     u'pub'
     >>> new.read(2).attrs['name']
-    u'resturnat'
+    u'restaurant'
     >>> new.close()
     >>> new.remove()
 

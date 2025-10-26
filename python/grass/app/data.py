@@ -1,4 +1,4 @@
-"""Provides functions for the main GRASS GIS executable
+"""Provides functions for the main GRASS executable
 
 (C) 2020-2025 by Vaclav Petras and the GRASS Development Team
 
@@ -43,7 +43,7 @@ def get_possible_database_path():
 
     # find possible database path
     for candidate in candidates:
-        if os.path.exists(candidate):
+        if Path(candidate).exists():
             for subdir in next(os.walk(candidate))[1]:
                 if "grassdata" in subdir.lower():
                     return os.path.join(candidate, subdir)
@@ -51,7 +51,7 @@ def get_possible_database_path():
 
 
 def create_database_directory():
-    """Creates the standard GRASS GIS directory.
+    """Creates the standard GRASS directory.
     Creates database directory named grassdata in the standard location
     according to the platform.
 
@@ -83,7 +83,7 @@ def create_database_directory():
     # another GRASS instance will find the data created by the first
     # one which is desired in the "try out GRASS" use case we are
     # aiming towards."
-    if os.path.exists(path):
+    if Path(path).exists():
         return path
     try:
         os.mkdir(path)
@@ -103,7 +103,7 @@ def _get_startup_location_in_distribution():
     startup_location = os.path.join(gisbase, "demolocation")
 
     # Find out if startup location exists
-    if os.path.exists(startup_location):
+    if Path(startup_location).exists():
         return startup_location
     return None
 
@@ -207,7 +207,8 @@ def acquire_mapset_lock(
     :param env: system environment variables
 
     The function assumes the `GISBASE` variable is in the environment. The variable is
-    used to find the lock program. If *env* is not provided, `os.environ` is used.
+    used to find the lock program. If *env* is not provided,
+    :external:py:data:`os.environ` is used.
     """
     if process_id is None:
         process_id = os.getpid()
@@ -222,7 +223,7 @@ def acquire_mapset_lock(
     start_time = time.time()
     while True:
         return_code = subprocess.run(
-            [locker_path, lock_file, f"{process_id}"], check=False
+            [locker_path, lock_file, f"{process_id}"], check=False, env=env
         ).returncode
         elapsed_time = time.time() - start_time
         if return_code == 0 or elapsed_time >= timeout or total_sleep >= timeout:
@@ -268,7 +269,7 @@ def lock_mapset(
 ):
     """Acquire a lock for a mapset and return name of new lock file
 
-    Raises MapsetLockingException when it is not possible to acquire a lock for the
+    Raises :py:exc:`MapsetLockingException` when it is not possible to acquire a lock for the
     given mapset either because of existing lock or due to insufficient permissions.
     A corresponding localized message is given in the exception.
 
@@ -281,12 +282,17 @@ def lock_mapset(
 
     Assumes that the runtime is set up (specifically that GISBASE is in
     the environment). Environment can be provided as *env*.
+
+    :raises ~grass.app.MapsetLockingException:
+        Raised when it is not possible to acquire a lock for the
+        given mapset either because of existing lock or due to insufficient permissions.
+        A corresponding localized message is given in the exception.
     """
     if process_id is None:
         process_id = os.getpid()
     if not env:
         env = os.environ
-    if not os.path.exists(mapset_path):
+    if not Path(mapset_path).exists():
         raise MapsetLockingException(_("Path '{}' doesn't exist").format(mapset_path))
     if not os.access(mapset_path, os.W_OK):
         error = _("Path '{}' not accessible.").format(mapset_path)

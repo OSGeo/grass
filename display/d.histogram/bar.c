@@ -27,8 +27,10 @@
 
 #include <string.h>
 
-#include <grass/raster.h>
 #include <grass/display.h>
+#include <grass/gis.h>
+#include <grass/glocale.h>
+#include <grass/raster.h>
 
 #include "bar.h"
 
@@ -122,7 +124,10 @@ int bar(struct stat_list *dist_stats, /* list of distribution statistics */
         }
         tic_every = tics[i].every;
         tic_unit = tics[i].unit;
-        strcpy(tic_name, tics[i].name);
+        if (G_strlcpy(tic_name, tics[i].name, sizeof(tic_name)) >=
+            sizeof(tic_name)) {
+            G_fatal_error(_("Tic name <%s> is too long"), tics[i].name);
+        }
     }
     else {
         if (is_fp && !cat_ranges) {
@@ -375,7 +380,10 @@ int bar(struct stat_list *dist_stats, /* list of distribution statistics */
         i++;
     tic_every = tics[i].every;
     tic_unit = tics[i].unit;
-    strcpy(tic_name, tics[i].name);
+    if (G_strlcpy(tic_name, tics[i].name, sizeof(tic_name)) >=
+        sizeof(tic_name)) {
+        G_fatal_error(_("Tic name <%s> is too long"), tics[i].name);
+    }
 
     stat_start = tic_unit * ((long)(dist_stats->minstat / tic_unit));
     stat_finis = tic_unit * ((long)(dist_stats->maxstat / tic_unit));

@@ -56,6 +56,7 @@ import string
 import re
 from bisect import bisect
 from datetime import datetime
+from pathlib import Path
 from core.globalvar import wxPythonPhoenix
 
 import wx
@@ -65,10 +66,8 @@ from wx.lib.stattext import GenStaticText
 from wx.lib.wordwrap import wordwrap
 
 if wxPythonPhoenix:
-    import wx.adv
     from wx.adv import OwnerDrawnComboBox
 else:
-    import wx.combo
     from wx.combo import OwnerDrawnComboBox
 try:
     import wx.lib.agw.flatnotebook as FN
@@ -566,11 +565,11 @@ class StaticWrapText(GenStaticText):
     """A Static Text widget that wraps its text to fit parents width,
     enlarging its height if necessary."""
 
-    def __init__(self, parent, id=wx.ID_ANY, label="", margin=0, *args, **kwds):
+    def __init__(self, parent, id=wx.ID_ANY, label="", margin=0, *args, **kwargs):
         self._margin = margin
         self._initialLabel = label
         self.init = False
-        GenStaticText.__init__(self, parent, id, label, *args, **kwds)
+        GenStaticText.__init__(self, parent, id, label, *args, **kwargs)
         self.Bind(wx.EVT_SIZE, self.OnSize)
 
     def DoGetBestSize(self):
@@ -1556,7 +1555,7 @@ class ManageSettingsWidget(wx.Panel):
         """
 
         data = {}
-        if not os.path.exists(self.settingsFile):
+        if not Path(self.settingsFile).exists():
             return data
 
         try:
@@ -1713,7 +1712,7 @@ class PictureComboBox(OwnerDrawnComboBox):
             return self.bitmaps[name]
 
         path = self._getPath(name)
-        if os.path.exists(path):
+        if Path(path).exists():
             bitmap = wx.Bitmap(path)
             self.bitmaps[name] = bitmap
             return bitmap

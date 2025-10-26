@@ -8,7 +8,7 @@ def raster_exists(name, env=None):
 
 
 def raster_sum(name, env=None):
-    return gs.parse_command("r.univar", map="ones", env=env, format="json")[0]["sum"]
+    return gs.parse_command("r.univar", map="ones", env=env, format="json")["sum"]
 
 
 def test_mask_manager_no_operation(session_2x2):
@@ -223,3 +223,38 @@ def test_mask_manager_provided_name_remove_false(session_2x2):
     assert status["name"].startswith(DEFAULT_MASK_NAME)
     assert not status["present"]
     assert raster_sum("ones", env=session_2x2.env) == 4
+
+
+def test_mask_manager_activate_deactivate(session_2x2):
+    """Test MaskManager with explicit activate/deactivate."""
+    assert "GRASS_MASK" not in session_2x2.env
+
+    manager = gs.MaskManager(env=session_2x2.env)
+    manager.activate()
+    assert "GRASS_MASK" in session_2x2.env
+    assert session_2x2.env["GRASS_MASK"] == manager.mask_name
+
+    # Create mask using r.mask
+    gs.run_command("r.mask", raster="nulls_and_one_1_1", env=session_2x2.env)
+    assert raster_exists(manager.mask_name, env=session_2x2.env)
+    status = gs.parse_command("r.mask.status", format="json", env=session_2x2.env)
+    assert status["name"].startswith(manager.mask_name)
+    assert status["present"]
+    assert raster_sum("ones", env=session_2x2.env) == 1
+
+    # Deactivate restores state
+    manager.deactivate()
+    assert "GRASS_MASK" not in session_2x2.env
+    assert not raster_exists(manager.mask_name, env=session_2x2.env)
+    status = gs.parse_command("r.mask.status", format="json", env=session_2x2.env)
+    assert status["name"].startswith(DEFAULT_MASK_NAME)
+    assert not status["present"]
+    assert raster_sum("ones", env=session_2x2.env) == 4
+
+    # Calling again is harmless
+    manager.deactivate()
+    assert "GRASS_MASK" not in session_2x2.env
+    manager.activate()
+    manager.activate()
+    assert "GRASS_MASK" in session_2x2.env
+    manager.deactivate()

@@ -71,8 +71,8 @@ typedef int FILEDESC;
 
    Uses G_distance().
 
-   \param from 'from' point (X, Y)
-   \param to 'to' point (X, Y)
+   \param[in] from 'from' point (X, Y)
+   \param[in] to 'to' point (X, Y)
 
    \return distance
  */

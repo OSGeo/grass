@@ -48,7 +48,6 @@ char **list_subgroups(const char *group, const char *mapset, int *subgs_num)
  * \param[out] subgs_num number of subgroups which the group contains
  * \return array of subgroup names
  */
-
 char **I_list_subgroups(const char *group, int *subgs_num)
 {
 
@@ -63,7 +62,6 @@ char **I_list_subgroups(const char *group, int *subgs_num)
  * \param[out] subgs_num number of subgroups which the group contains
  * \return array of subgroup names
  */
-
 char **I_list_subgroups2(const char *group, const char *mapset, int *subgs_num)
 {
     return list_subgroups(group, mapset, subgs_num);

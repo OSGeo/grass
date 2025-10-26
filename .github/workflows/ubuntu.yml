@@ -26,8 +26,8 @@ jobs:
     strategy:
       matrix:
         name:
-          - "22.04"
-          # - minimum config
+          - "24.04"
+          - minimum config
 
         # Only run tests for these folders in this matrix job.
         extra-include:
@@ -50,22 +50,21 @@ jobs:
             testsuite utils vector visualization
 
         include:
-          - name: "22.04"
-            os: ubuntu-22.04
-            config: ubuntu-22.04
-            c: gnu17
-            cxx: c++17
+          - name: "24.04"
+            os: ubuntu-24.04
+            config: ubuntu-24.04
           # This is without optional things but it still keeps things useful,
           # so, e.g., without OpenMP, but with PDAL. Code or tests should be written
           # so that test pass even when these optional things are not present.
-          # - name: minimum config
-          #   os: ubuntu-22.04
-          #   config: ubuntu-22.04_without_x
+          - name: minimum config
+            os: ubuntu-24.04
+            config: ubuntu-24.04_without_x
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
       - name: Invert inclusion list to an exclusion list
         id: get-exclude
         run: |
@@ -74,12 +73,13 @@ jobs:
           temporal testsuite utils vector visualization)
           echo "Complete set of folders that can be included:"
           echo "${array[@]}"
-          delete=( ${{ env.DELETE_ARRAY }} )
+          # shellcheck disable=SC2206
+          delete=( ${DELETE_ARRAY} )
           echo "Included folders to remove from the complete set:"
           echo "${delete[@]}"
           for target in "${delete[@]}"; do
             for i in "${!array[@]}"; do
-              if [[ ${array[i]} = $target ]]; then
+              if [[ ${array[i]} = "${target}" ]]; then
                 unset 'array[i]'
               fi
             done
@@ -99,29 +99,31 @@ jobs:
 
       - name: Add extra exclusions to a gunittest config file
         run: |
-          sed 's:exclude =:exclude = ${{
-            steps.get-exclude.outputs.extra-exclude
-          }}:g' .gunittest.cfg > .gunittest.extra.cfg
+          sed "s:exclude =:exclude = ${STEPS_GET_EXCLUDE_OUTPUTS_EXTRA_EXCLUDE}:g" .gunittest.cfg > .gunittest.extra.cfg
           cat .gunittest.extra.cfg
+        env:
+          STEPS_GET_EXCLUDE_OUTPUTS_EXTRA_EXCLUDE: ${{ steps.get-exclude.outputs.extra-exclude }}
 
       - name: Get dependencies
         run: |
           sudo apt-get update -y
           sudo apt-get install -y wget git gawk findutils
+          LC_ALL=C.UTF-8 sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
+          sudo apt-get update -y
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
 
       - name: Create installation directory
         run: |
-          mkdir $HOME/install
+          mkdir "${HOME}/install"
 
       - name: Set number of cores for compilation
         run: |
-          echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
+          echo "MAKEFLAGS=-j$(nproc)" >> "${GITHUB_ENV}"
 
       - name: Set LD_LIBRARY_PATH for compilation
         run: |
-          echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
+          echo "LD_LIBRARY_PATH=${HOME}/install/lib" >> "${GITHUB_ENV}"
 
       - name: Print build environment variables
         shell: bash -el {0}
@@ -133,16 +135,16 @@ jobs:
       - name: Build
         env:
           # TODO: -pedantic-errors here won't go through ./configure (with GNU C)
-          CFLAGS: -std=${{ matrix.c }} -fPIC -Wvla -ffp-contract=off -Wall -Wextra
+          CFLAGS: -fPIC -Wvla -ffp-contract=off
           # TODO: -pedantic-errors here won't compile
-          CXXFLAGS: -std=${{ matrix.cxx }} -fPIC -ffp-contract=off -Wall -Wextra
+          CXXFLAGS: -fPIC -ffp-contract=off
+          MATRIX_CONFIG: ${{ matrix.config }}
         run: |
-          .github/workflows/build_${{ matrix.config }}.sh $HOME/install \
-            -isystem/usr/include/gdal -Wpedantic -Werror
+          ".github/workflows/build_${MATRIX_CONFIG}.sh" "${HOME}/install" -Werror
 
       - name: Add the bin directory to PATH
         run: |
-          echo "$HOME/install/bin" >> $GITHUB_PATH
+          echo "${HOME}/install/bin" >> "${GITHUB_PATH}"
 
       - name: Print installed versions
         if: always()
@@ -153,7 +155,7 @@ jobs:
 
       - name: Cache GRASS Sample Dataset
         id: cached-data
-        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: sample-data/nc_spm_full_v2alpha2.tar.gz
           key: nc_spm_full_v2alpha2.tar.gz
@@ -163,10 +165,17 @@ jobs:
         if: steps.cached-data.outputs.cache-hit != 'true'
         run: |
           mkdir -p sample-data
-          curl -L "$SAMPLE_DATA" -o sample-data/nc_spm_full_v2alpha2.tar.gz
+          curl -L "${SAMPLE_DATA}" -o sample-data/nc_spm_full_v2alpha2.tar.gz
         env:
           SAMPLE_DATA: "https://grass.osgeo.org/sampledata/north_carolina/\
             nc_spm_full_v2alpha2.tar.gz"
+
+      - name: Save GRASS Sample Dataset to cache
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        if: steps.cached-data.outputs.cache-hit != 'true'
+        with:
+          path: sample-data/nc_spm_full_v2alpha2.tar.gz
+          key: nc_spm_full_v2alpha2.tar.gz
 
       - name: Run tests
         run: .github/workflows/test_thorough.sh --config .gunittest.extra.cfg
@@ -176,7 +185,7 @@ jobs:
 
       - name: Make HTML test report available
         if: ${{ always() }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: testreport-${{ matrix.os }}-${{ matrix.config }}-${{ matrix.extra-include }}
           path: testreport

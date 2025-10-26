@@ -75,8 +75,8 @@ void Rast_round_fp_map(const char *name, const char *mapset)
 
  * \param name map name
  * \param mapset mapset name
- * \param cmin minimum value
- * \param cmax maximum value
+ * \param min minimum value
+ * \param max maximum value
  */
 void Rast_quantize_fp_map(const char *name, const char *mapset, CELL min,
                           CELL max)
@@ -176,7 +176,7 @@ void Rast_write_quant(const char *name, const char *mapset,
  * mapset.
  *  \param name
  *  \param mapset
- *  \param q
+ *  \param quant
  *
  * \return -2 if raster map is of type integer
  * \return -1 if (!G_name_is_fully_qualified())

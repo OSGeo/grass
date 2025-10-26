@@ -41,6 +41,7 @@ the main tool categories:
 | `t.`   | [Temporal](temporal.md)           | Temporal data processing tools     |
 | `db.`  | [Database](database.md)           | Database management tools          |
 | `d.`   | [Display](display.md)             | Display and visualization tools    |
+| `m.`   | [Miscellaneous](miscellaneous.md) | Miscellaneous tools                |
 """
 
 ADDONS_TEXT = """\
@@ -174,7 +175,7 @@ def main():
     source_dir = None
     text_type = "core"
     if len(sys.argv) > 1:
-        if sys.argv[1] in ["html", "md"]:
+        if sys.argv[1] in {"html", "md"}:
             ext = sys.argv[1]
         else:
             year = sys.argv[1]
@@ -195,7 +196,7 @@ def main():
                 source_dir=source_dir,
                 text_type=text_type,
             )
-    elif ext in ["html", "md"]:
+    elif ext in {"html", "md"}:
         build_full_index(
             ext,
             index_name=index_name,

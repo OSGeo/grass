@@ -22,7 +22,6 @@ static char *months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
  * \param buf
  * \return int
  */
-
 int datetime_format(const DateTime *dt, char *buf)
 {
     /* Format the DateTime structure as a human-readable string */

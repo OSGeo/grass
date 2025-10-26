@@ -43,6 +43,7 @@ typedef struct {
 typedef struct {
     int iterout;    // Number of iterations for creating output maps
     int miter;      // Total number of iterations
+    double chmean;  // Mean Manning's n
     double si0;     // Mean rainfall excess (or sediment concentration?)
     double sisum;   // Sum of rainfall excess (or sediment concentration?)
     double vmean;   // Mean velocity

@@ -71,8 +71,8 @@ def try_mkdir(path):
 def replace_file(name):
     temp = name + ".tmp"
     if (
-        os.path.exists(name)
-        and os.path.exists(temp)
+        Path(name).exists()
+        and Path(temp).exists()
         and read_file(name) == read_file(temp)
     ):
         os.remove(temp)
@@ -92,9 +92,9 @@ def get_files(man_dir, cls=None, ignore_gui=True, extension: str = "html"):
     for cmd in sorted(os.listdir(man_dir)):
         if (
             cmd.endswith(f".{extension}")
-            and (cls in (None, "*") or cmd.startswith(cls + "."))
+            and (cls in {None, "*"} or cmd.startswith(cls + "."))
             and (cls != "*" or len(cmd.split(".")) >= 3)
-            and cmd not in [f"full_index.{extension}", f"index.{extension}"]
+            and cmd not in {f"full_index.{extension}", f"index.{extension}"}
             and cmd not in exclude_mods
             and ((ignore_gui and not cmd.startswith("wxGUI.")) or not ignore_gui)
         ):

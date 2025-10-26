@@ -102,7 +102,7 @@ def CheckForWx():
     except ImportError as e:
         print("ERROR: wxGUI requires wxPython. {}".format(e), file=sys.stderr)
         print(
-            "You can still use GRASS GIS modules in the command line or in Python.",
+            "You can still use GRASS modules in the command line or in Python.",
             file=sys.stderr,
         )
         sys.exit(1)
@@ -200,7 +200,7 @@ def UpdateGRASSAddOnCommands(eList=None):
     nCmd = 0
     pathList = os.getenv("PATH", "").split(os.pathsep)
     for path in addonPath.split(os.pathsep):
-        if not os.path.exists(path) or not os.path.isdir(path):
+        if not Path(path).exists() or not Path(path).is_dir():
             continue
 
         # check if addon is in the path

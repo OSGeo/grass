@@ -3,7 +3,7 @@ GRASS Python testing framework test loading functionality
 
 Copyright (C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS GIS
+License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :authors: Vaclav Petras, Edouard Choinière
@@ -11,13 +11,12 @@ for details.
 
 from __future__ import annotations
 
-import collections
 import fnmatch
 import os
 import re
 import unittest
 from pathlib import PurePath
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, NamedTuple, Any
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -50,18 +49,14 @@ def fnmatch_exclude_with_base(
 
 
 # TODO: resolve test file versus test module
-GrassTestPythonModule = collections.namedtuple(
-    "GrassTestPythonModule",
-    [
-        "name",
-        "module",
-        "file_type",
-        "tested_dir",
-        "file_dir",
-        "file_path",
-        "abs_file_path",
-    ],
-)
+class GrassTestPythonModule(NamedTuple):
+    name: str
+    module: Any
+    file_type: str | None
+    tested_dir: str
+    file_dir: str
+    file_path: str
+    abs_file_path: str
 
 
 # TODO: implement loading without the import
