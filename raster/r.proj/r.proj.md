@@ -56,7 +56,7 @@ sample points in another projection. Thus, the conversion of raster maps
 involves an interpolation step in which the values of points at
 intermediate locations relative to the source grid are estimated.
 
-#### Reprojecting vector maps within the GRASS GIS
+#### Reprojecting vector maps within GRASS
 
 GIS data capture, import and transfer often requires a reprojection
 step, since the source or client will frequently be in a different CRS
@@ -71,7 +71,7 @@ used to process simple lists using a one-line command. The *m.proj*
 module provides a handy front end to `cs2cs`.
 
 Vector maps is generally more complex, as parts of the data stored in
-the files will describe topology, and not just coordinates. In GRASS GIS
+the files will describe topology, and not just coordinates. In GRASS,  
 the *[v.proj](v.proj.md)* module is provided to reproject vector maps,
 transferring topology and attributes as well as node coordinates. This
 program uses the CRS definition and parameters which are stored in the

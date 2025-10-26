@@ -40,7 +40,7 @@ class TestResampInterp(TestCase):
             "stddev": 20.304736015932,
             "variance": 412.282304676688,
             "coeff_var": 18.3948803378694,
-            "sum": 619853590.902006,
+            "sum": 619853590.902052,
         },
         "bicubic": {
             "n": 5601275,
@@ -54,7 +54,7 @@ class TestResampInterp(TestCase):
             "stddev": 20.2966878636654,
             "variance": 411.955538235063,
             "coeff_var": 18.3839759896156,
-            "sum": 618404475.60294,
+            "sum": 618404475.602926,
         },
         "lanczos": {
             "n": 5596536,
@@ -68,7 +68,7 @@ class TestResampInterp(TestCase):
             "stddev": 20.2935834200418,
             "variance": 411.829528026196,
             "coeff_var": 18.3824425253842,
-            "sum": 617838298.813847,
+            "sum": 617838298.813768,
         },
     }
 

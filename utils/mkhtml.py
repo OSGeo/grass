@@ -26,11 +26,12 @@ import locale
 from html.parser import HTMLParser
 
 import urllib.parse as urlparse
+from pathlib import Path
 
 try:
     import grass.script as gs
 except ImportError:
-    # During compilation GRASS GIS
+    # During compilation GRASS
     gs = None
 
 from mkdocs import (
@@ -93,7 +94,7 @@ header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
- <title>${PGM} - GRASS GIS Manual</title>
+ <title>${PGM} - GRASS Manual</title>
  <meta name="Author" content="GRASS Development Team">
  <meta name="description" content="${PGM}: ${PGM_DESC}">
  <link rel="stylesheet" href="grassdocs.css" type="text/css">
@@ -144,7 +145,7 @@ footer_index = string.Template(
 <p>
 &copy; 2003-${YEAR}
 <a href="https://grass.osgeo.org">GRASS Development Team</a>,
-GRASS GIS ${GRASS_VERSION} Reference Manual
+GRASS ${GRASS_VERSION} Reference Manual
 </p>
 
 </div>
@@ -165,7 +166,7 @@ footer_noindex = string.Template(
 <p>
 &copy; 2003-${YEAR}
 <a href="https://grass.osgeo.org">GRASS Development Team</a>,
-GRASS GIS ${GRASS_VERSION} Reference Manual
+GRASS ${GRASS_VERSION} Reference Manual
 </p>
 
 </div>
@@ -339,7 +340,7 @@ def update_toc(data):
 # process header
 src_data = read_file(src_file)
 name = re.search(r"(<!-- meta page name:)(.*)(-->)", src_data, re.IGNORECASE)
-pgm_desc = "GRASS GIS Reference Manual"
+pgm_desc = "GRASS Reference Manual"
 if name:
     pgm = name.group(2).strip().split("-", 1)[0].strip()
     name_desc = re.search(
@@ -471,7 +472,7 @@ if os.getenv("SOURCE_URL", ""):
     addon_path = get_addon_path(base_url=base_url, pgm=pgm, major_version=major)
     if addon_path:
         # Addon is installed from the local dir
-        if os.path.exists(os.getenv("SOURCE_URL")):
+        if Path(os.getenv("SOURCE_URL")).exists():
             url_source = urlparse.urljoin(
                 addons_url,
                 addon_path,

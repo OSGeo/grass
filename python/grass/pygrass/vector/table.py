@@ -7,6 +7,7 @@ Created on Wed Aug  8 15:29:21 2012
 import ctypes
 import os
 from collections import OrderedDict
+from pathlib import Path
 
 import numpy as np
 from sqlite3 import OperationalError
@@ -182,6 +183,7 @@ class Columns:
     For a sqlite table:
 
     >>> import sqlite3
+    >>> from grass.pygrass.vector.table import get_path
     >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
     >>> cols_sqlite = Columns(test_vector_name, sqlite3.connect(get_path(path)))
     >>> cols_sqlite.tname
@@ -228,6 +230,7 @@ class Columns:
         """Return True if two table have the same columns.
 
         >>> import sqlite3
+        >>> from grass.pygrass.vector.table import get_path
         >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
         >>> connection = sqlite3.connect(get_path(path))
         >>> cols0 = Columns(test_vector_name, connection)
@@ -247,6 +250,7 @@ class Columns:
         """Return True if is a psycopg connection.
 
         >>> import sqlite3
+        >>> from grass.pygrass.vector.table import get_path
         >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
         >>> cols_sqlite = Columns(test_vector_name, sqlite3.connect(get_path(path)))
         >>> cols_sqlite.is_pg()
@@ -308,6 +312,7 @@ class Columns:
         Remove it is used to remove a columns.
 
         >>> import sqlite3
+        >>> from grass.pygrass.vector.table import get_path
         >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
         >>> cols_sqlite = Columns(test_vector_name, sqlite3.connect(get_path(path)))
         >>> cols_sqlite.sql_descr()  # doctest: +ELLIPSIS
@@ -329,6 +334,7 @@ class Columns:
         """Return a list with the column types.
 
         >>> import sqlite3
+        >>> from grass.pygrass.vector.table import get_path
         >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
         >>> cols_sqlite = Columns(test_vector_name, sqlite3.connect(get_path(path)))
         >>> cols_sqlite.types()  # doctest: +ELLIPSIS
@@ -348,6 +354,7 @@ class Columns:
         Remove it is used to remove a columns.
 
         >>> import sqlite3
+        >>> from grass.pygrass.vector.table import get_path
         >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
         >>> cols_sqlite = Columns(test_vector_name, sqlite3.connect(get_path(path)))
         >>> cols_sqlite.names()  # doctest: +ELLIPSIS
@@ -372,6 +379,7 @@ class Columns:
         """Return a list of tuple with column name and column type.
 
         >>> import sqlite3
+        >>> from grass.pygrass.vector.table import get_path
         >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
         >>> cols_sqlite = Columns(test_vector_name, sqlite3.connect(get_path(path)))
         >>> cols_sqlite.items()  # doctest: +ELLIPSIS
@@ -395,6 +403,7 @@ class Columns:
         :type col_type: str
 
         >>> import sqlite3
+        >>> from grass.pygrass.vector.table import get_path
         >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
         >>> from grass.pygrass.utils import copy, remove
         >>> copy(test_vector_name, "mycensus", "vect")
@@ -450,7 +459,7 @@ class Columns:
         )
         sqlcode = [
             sql.ADD_COL.format(tname=self.tname, cname=cn, ctype=ct)
-            for cn, ct in zip(col_name, col_type)
+            for cn, ct in zip(col_name, col_type, strict=True)
         ]
         cur = self.conn.cursor()
         cur.executescript("\n".join(sqlcode))
@@ -467,6 +476,7 @@ class Columns:
         :type new_name: str
 
         >>> import sqlite3
+        >>> from grass.pygrass.vector.table import get_path
         >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
         >>> from grass.pygrass.utils import copy, remove
         >>> copy(test_vector_name, "mycensus", "vect")
@@ -525,6 +535,7 @@ class Columns:
         :type new_type: str
 
         >>> import sqlite3
+        >>> from grass.pygrass.vector.table import get_path
         >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
         >>> from grass.pygrass.utils import copy, remove
         >>> copy(test_vector_name, "mycensus", "vect")
@@ -543,7 +554,7 @@ class Columns:
         'float8'
         >>> remove("mycensus", "vect")
 
-        .. warning ::
+        .. warning::
 
            It is not possible to cast a column with sqlite
 
@@ -565,6 +576,7 @@ class Columns:
         :type col_name: str
 
         >>> import sqlite3
+        >>> from grass.pygrass.vector.table import get_path
         >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
         >>> from grass.pygrass.utils import copy, remove
         >>> copy(test_vector_name, "mycensus", "vect")
@@ -835,7 +847,7 @@ class Link:
                 sqlite3.register_adapter(t, int)
             dbpath = get_path(self.database, self.table_name)
             dbdirpath = os.path.split(dbpath)[0]
-            if not os.path.exists(dbdirpath):
+            if not Path(dbdirpath).exists():
                 os.mkdir(dbdirpath)
             return sqlite3.connect(dbpath)
         if driver == "pg":
@@ -944,11 +956,16 @@ class DBlinks:
         """
         nlinks = self.num_dblinks()
         if nlinks == 0:
-            raise IndexError
+            msg = _("No links available.")
+            raise IndexError(msg)
         if indx < 0:
             indx += nlinks
         if indx > nlinks:
-            raise IndexError
+            msg = _(
+                "Index out of bounds. The maximum index allowed is "
+                "{max_link_indx}, the queried index is {indx}"
+            ).format(max_link_indx=nlinks - 1, indx=indx)
+            raise IndexError(msg)
         c_fieldinfo = libvect.Vect_get_dblink(self.c_mapinfo, indx)
         return Link(c_fieldinfo=c_fieldinfo) if c_fieldinfo else None
 
@@ -1049,6 +1066,7 @@ class Table:
     """
 
     >>> import sqlite3
+    >>> from grass.pygrass.vector.table import get_path
     >>> path = "$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db"
     >>> tab_sqlite = Table(
     ...     name=test_vector_name, connection=sqlite3.connect(get_path(path))
@@ -1093,6 +1111,7 @@ class Table:
         """
 
         >>> import sqlite3
+        >>> from grass.pygrass.vector.table import get_path
         >>> path = "$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db"
         >>> tab_sqlite = Table(
         ...     name=test_vector_name, connection=sqlite3.connect(get_path(path))
@@ -1139,6 +1158,7 @@ class Table:
         """Return the number of rows
 
         >>> import sqlite3
+        >>> from grass.pygrass.vector.table import get_path
         >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
         >>> tab_sqlite = Table(
         ...     name=test_vector_name, connection=sqlite3.connect(get_path(path))
@@ -1167,6 +1187,7 @@ class Table:
         :type values: list of tuple
 
         >>> import sqlite3
+        >>> from grass.pygrass.vector.table import get_path
         >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
         >>> tab_sqlite = Table(
         ...     name=test_vector_name, connection=sqlite3.connect(get_path(path))
@@ -1192,7 +1213,7 @@ class Table:
             )
 
     def exist(self, cursor=None):
-        """Return True if the table already exist in the DB, False otherwise
+        """Return True if the table already exists in the DB, False otherwise
 
         :param cursor: the cursor to connect, if None it use the cursor
                        of connection table object

@@ -51,6 +51,42 @@ class GMlistWrongParamertersTest(TestCase):
         self.assertIn("-r", stderr)
         self.assertIn("-e", stderr)
 
+    def test_plain_format_option(self):
+        """Test format=plain with -mt flags"""
+        module = SimpleModule("g.list", flags="mt", type="raster", format="plain")
+        self.assertModuleFail(module)
+        stderr = module.outputs.stderr
+        self.assertIn("Cannot use the -m or -t flag with format=plain", stderr)
+
+    def test_shell_format_option(self):
+        """Test format=shell with -p or -f flags"""
+        module = SimpleModule("g.list", flags="p", type="raster", format="shell")
+        self.assertModuleFail(module)
+        stderr = module.outputs.stderr
+        self.assertIn("Cannot use the -p or -f flag with format=shell", stderr)
+
+        module = SimpleModule("g.list", flags="f", type="raster", format="shell")
+        self.assertModuleFail(module)
+        stderr = module.outputs.stderr
+        self.assertIn("Cannot use the -p or -f flag with format=shell", stderr)
+
+    def test_json_format_option(self):
+        """Test format=json with -mt, -p or -f flags"""
+        module = SimpleModule("g.list", flags="mt", type="raster", format="json")
+        self.assertModuleFail(module)
+        stderr = module.outputs.stderr
+        self.assertIn("Cannot use the -m or -t flag with format=json", stderr)
+
+        module = SimpleModule("g.list", flags="p", type="raster", format="json")
+        self.assertModuleFail(module)
+        stderr = module.outputs.stderr
+        self.assertIn("Cannot use the -p or -f flag with format=json", stderr)
+
+        module = SimpleModule("g.list", flags="f", type="raster", format="json")
+        self.assertModuleFail(module)
+        stderr = module.outputs.stderr
+        self.assertIn("Cannot use the -p or -f flag with format=json", stderr)
+
 
 if __name__ == "__main__":
     test()

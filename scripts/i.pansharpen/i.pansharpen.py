@@ -755,7 +755,7 @@ def matchhist(original, target, matched):
 
             cum_cells += num_cells
 
-            # cdf is the the number of cells at or below a given grey value
+            # cdf is the number of cells at or below a given grey value
             #   divided by the total number of cells
             cdf = float(cum_cells) / float(total_cells)
 

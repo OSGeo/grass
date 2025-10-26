@@ -91,6 +91,14 @@ else()
   endif()
 endif()
 
+# For install tree (first do install tree)
+set(LD_LIBRARY_PATH_VAR "LD_LIBRARY_PATH")
+if(APPLE)
+  set(LD_LIBRARY_PATH_VAR "LD_RUN_PATH")
+elseif(WIN32)
+  set(LD_LIBRARY_PATH_VAR "PATH")
+endif()
+
 # Graphics options
 option(WITH_X11 "Build with X11 support" ${x11_default_option_enabled})
 option(WITH_OPENGL "Build with OpenGL support" ON)
@@ -188,9 +196,6 @@ if(WITH_FHS)
        ${RUNTIME_GISBASE}/etc/renamed_options SYMBOLIC)
   file(CREATE_LINK ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/VERSIONNUMBER
        ${RUNTIME_GISBASE}/etc/VERSIONNUMBER SYMBOLIC)
-  file(MAKE_DIRECTORY "${GISBASE}/gui/wxpython")
-  file(CREATE_LINK ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/wxpython/xml
-       ${RUNTIME_GISBASE}/gui/wxpython/xml SYMBOLIC)
 endif()
 
 include(set_compiler_flags)

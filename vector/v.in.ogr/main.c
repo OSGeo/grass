@@ -1370,9 +1370,11 @@ int main(int argc, char *argv[])
         }
 
         if (nogeom > 0)
-            G_warning(_("%d %s without geometry in input layer <%s> skipped"),
-                      nogeom, nogeom == 1 ? _("feature") : _("features"),
-                      layer_names[layer]);
+            G_warning(
+                n_("%d feature without geometry in input layer <%s> skipped",
+                   "%d features without geometry in input layer <%s> skipped",
+                   nogeom),
+                nogeom, layer_names[layer]);
     }
 
     delete_table = Vect_maptype(&Map) != GV_FORMAT_NATIVE;

@@ -405,13 +405,17 @@ OGRSpatialReferenceH GPJ_grass_to_osr2(const struct Key_Value *proj_info,
  *
  * \param cellhd      Pointer to a GRASS Cell_head structure that will have its
  *                    projection-related members populated with appropriate
- * values \param projinfo   Pointer to a pointer which will have a GRASS
- * Key_Value structure allocated containing a set of GRASS PROJ_INFO values
- * \param projunits  Pointer to a pointer which will have a GRASS Key_Value
+ *                    values
+ * \param projinfo    Pointer to a pointer which will have a GRASS
+ *                    Key_Value structure allocated containing a set of GRASS
+ *                    PROJ_INFO values
+ * \param projunits   Pointer to a pointer which will have a GRASS Key_Value
  *                    structure allocated containing a set of GRASS PROJ_UNITS
- * values \param hSRS        OGRSpatialReferenceH object containing the
- * co-ordinate system to be converted \param datumtrans  Index number of datum
- * parameter set to use, 0 to leave unspecified
+ *                    values.
+ * \param hSRS1       OGRSpatialReferenceH object containing the
+ *                    co-ordinate system to be converted
+ * \param datumtrans  Index number of datum parameter set to use, 0 to leave
+ *                    unspecified
  *
  * \return            2 if a projected or lat/long co-ordinate system has been
  *                    defined

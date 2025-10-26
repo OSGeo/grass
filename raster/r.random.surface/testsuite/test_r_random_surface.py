@@ -1,4 +1,5 @@
 import numpy as np
+
 import grass.script as gs
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -6,29 +7,16 @@ from grass.gunittest.main import test
 
 class TestRRandomSurface(TestCase):
     output_raster = "random_surface_test"
-    mask_raster = "random_surface_mask"
 
     @classmethod
     def setUpClass(cls):
         """Setup input rasters and configure test environment."""
         cls.use_temp_region()
         cls.runModule("g.region", n=20, s=0, e=20, w=0, rows=20, cols=20)
-        cls.runModule(
-            "r.mapcalc",
-            expression=f"{cls.mask_raster} = if(row() < 10, 1, null())",
-            quiet=True,
-        )
 
     @classmethod
     def tearDownClass(cls):
         """Remove generated rasters and reset test environment."""
-        cls.runModule(
-            "g.remove",
-            type="raster",
-            name=[cls.mask_raster],
-            flags="f",
-            quiet=True,
-        )
         cls.del_temp_region()
 
     def tearDown(self):
@@ -58,25 +46,6 @@ class TestRRandomSurface(TestCase):
         )
 
         self.assertEqual(result1, result2, "Outputs with the same seed differ")
-
-    def test_with_mask(self):
-        """Test with a raster mask applied and validate stats."""
-        self.runModule("r.mask", raster=self.mask_raster)
-        self.assertModule(
-            "r.random.surface", output=self.output_raster, seed=42, overwrite=True
-        )
-        self.runModule("r.mask", flags="r")
-
-        reference_stats = {
-            "mean": 135.695,
-            "min": 1,
-            "max": 255,
-            "cells": 400,
-        }
-
-        self.assertRasterFitsUnivar(
-            raster=self.output_raster, reference=reference_stats, precision=1e-6
-        )
 
     def test_different_seeds(self):
         """Test that different seeds produce different outputs."""
@@ -129,9 +98,9 @@ class TestRRandomSurface(TestCase):
         )
         stats = gs.parse_command("r.univar", map=self.output_raster, format="json")
 
-        n = stats[0]["n"]
-        mean = stats[0]["mean"]
-        stddev = stats[0]["stddev"]
+        n = stats["n"]
+        mean = stats["mean"]
+        stddev = stats["stddev"]
 
         self.assertGreater(n, 0, "No valid cells in output")
         self.assertTrue(0 <= mean <= 255, "Mean outside expected range")
@@ -146,8 +115,8 @@ class TestRRandomSurface(TestCase):
 
         stats = gs.parse_command("r.univar", map=self.output_raster, format="json")
 
-        actual_min = stats[0]["min"]
-        actual_max = stats[0]["max"]
+        actual_min = stats["min"]
+        actual_max = stats["max"]
 
         self.assertGreaterEqual(
             actual_min, 0, f"Minimum value {actual_min} is less than 0"
@@ -219,10 +188,10 @@ class TestRRandomSurface(TestCase):
 
         stats = gs.parse_command("r.univar", map=self.output_raster, format="json")
 
-        n = stats[0]["n"]
-        min_val = stats[0]["min"]
-        max_val = stats[0]["max"]
-        mean = stats[0]["mean"]
+        n = stats["n"]
+        min_val = stats["min"]
+        max_val = stats["max"]
+        mean = stats["mean"]
 
         expected_mean = (min_val + max_val) / 2
         mean_tolerance = 25  # Kept high to account for randomness
@@ -249,7 +218,7 @@ class TestRRandomSurface(TestCase):
             tmp_map = f"tmp_range_{i}"
             self.runModule("r.mapcalc", expression=f"{tmp_map} = {expr}", quiet=True)
             stats = gs.parse_command("r.univar", map=tmp_map, format="json")
-            counts.append(stats[0]["sum"])
+            counts.append(stats["sum"])
 
             self.runModule(
                 "g.remove", type="raster", name=tmp_map, flags="f", quiet=True

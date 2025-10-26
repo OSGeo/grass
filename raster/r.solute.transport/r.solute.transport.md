@@ -86,7 +86,7 @@ projection.
 ```python
 #!/usr/bin/env python3
 # This is an example script how groundwater flow and solute transport are
-# computed within GRASS GIS
+# computed within GRASS
 import sys
 import os
 import grass.script as gs
@@ -147,6 +147,5 @@ for dt in range(30):
 
 Sören Gebbert
 
-This work is based on the Diploma Thesis of Sören Gebbert available
-[here](https://grass.osgeo.org/gdp/hydrology/gebbert2007_diplom_stroemung_grass_gis.pdf)
+This work is based on the [Diploma Thesis of Sören Gebbert](https://grass.osgeo.org/gdp/hydrology/gebbert2007_diplom_stroemung_grass_gis.pdf)
 at Technical University Berlin in Germany.

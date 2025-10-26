@@ -1,7 +1,7 @@
 """
 @package gcp.manager
 
-@brief Georectification module for GRASS GIS. Includes ground control
+@brief Georectification module for GRASS. Includes ground control
 point management and interactive point and click GCP creation
 
 Classes:
@@ -647,7 +647,7 @@ class GroupPage(TitledPage):
             self.grassdatabase, self.xylocation, self.xymapset, "vector"
         )
 
-        if os.path.exists(vector_dir):
+        if Path(vector_dir).exists():
             dlg = VectGroup(
                 parent=self,
                 id=wx.ID_ANY,
@@ -1104,7 +1104,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         }
 
         # make a backup of the current points file
-        if os.path.exists(self.file["points"]):
+        if Path(self.file["points"]).exists():
             shutil.copy(self.file["points"], self.file["points_bak"])
 
         # polynomial order transformation for georectification
@@ -1928,10 +1928,10 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 self.SaveGCPs(None)
             elif ret == wx.NO:
                 # restore POINTS file from backup
-                if os.path.exists(self.file["points_bak"]):
+                if Path(self.file["points_bak"]).exists():
                     shutil.copy(self.file["points_bak"], self.file["points"])
 
-            if os.path.exists(self.file["points_bak"]):
+            if Path(self.file["points_bak"]).exists():
                 os.unlink(self.file["points_bak"])
 
             self.SrcMap.Clean()
@@ -2321,9 +2321,7 @@ class GCPDisplay(FrameMixin, GCPPanel):
         )
         # set system icon
         parent.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
 
         # bind to frame
@@ -2707,7 +2705,7 @@ class VectGroup(wx.Dialog):
 
         dirname = os.path.dirname(self.vgrpfile)
 
-        if not os.path.exists(dirname):
+        if not Path(dirname).exists():
             os.makedirs(dirname)
 
         with open(self.vgrpfile, mode="w") as f:

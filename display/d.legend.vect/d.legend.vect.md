@@ -33,7 +33,7 @@ Modules *[d.vect](d.vect.md)* and
 the particular vector or thematic vector from vector legend.
 
 The order of entries is defined by the order in Layer Manager (if used
-in GRASS GIS GUI). If that's not desired, one can export the legend file
+in GRASS GUI). If that's not desired, one can export the legend file
 into a text file using parameter **output**, change the order of entries
 (see section Notes for format description) and then upload the modified
 file with parameter **input**. Parameter **output** defines path to the

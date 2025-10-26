@@ -42,7 +42,6 @@ static struct state *st = &state;
  * \return 1 if the projection is planimetric (ie. UTM or SP)
  * \return 2 if the projection is non-planimetric (ie. latitude-longitude)
  */
-
 int G_begin_cell_area_calculations(void)
 {
     double a, e2;

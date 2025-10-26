@@ -146,7 +146,10 @@ static int get_field_cat(struct Map_info *Map, char *layer, int *field,
      * Because layername is followed by mapname_, it (field_name here) can
      * start with [a-zA-Z0-9]. No need to change the first digit to 'x'.
      */
-    strcpy(field_name, layer);
+    if (G_strlcpy(field_name, layer, sizeof(field_name)) >=
+        sizeof(field_name)) {
+        G_fatal_error(_("Layer name <%s> is too long"), layer);
+    }
     if (field_name[0] >= '0' && field_name[0] <= '9')
         x = field_name[0];
     G_str_to_sql(field_name);
@@ -243,9 +246,12 @@ static int get_field_cat(struct Map_info *Map, char *layer, int *field,
                   Fi[i]->table, Fi[i]->key);
 
     if (Vect_map_add_dblink(Map, *field, field_name, Fi[i]->table,
-                            GV_KEY_COLUMN, Fi[i]->database, Fi[i]->driver))
+                            GV_KEY_COLUMN, Fi[i]->database, Fi[i]->driver)) {
+        const char *map_name = Vect_get_full_name(Map);
         G_warning(_("Unable to add database link for vector map <%s>"),
-                  Vect_get_full_name(Map));
+                  map_name);
+        G_free((void *)map_name);
+    }
 
     return i;
 }

@@ -412,7 +412,7 @@ int main(int argc, char *argv[])
     conv_units();
 
     if (options.print || options.total) {
-        report();
+        report(options.format);
     }
     else {
         update(&Map);

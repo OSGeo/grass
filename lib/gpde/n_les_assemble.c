@@ -457,8 +457,8 @@ N_data_star *N_callback_template_3d(void *data UNUSED, N_geom_data *geom,
  *
  * \param data void * (unused)
  * \param geom N_geom_data *
- * \param row int (unused)
  * \param col int (unused)
+ * \param row int (unused)
  * \return N_data_star *
  *
  * */
@@ -1341,7 +1341,8 @@ int N_les_integrate_dirichlet_3d(N_les *les, N_geom_data *geom,
             }
         }
     }
-
+    G_free(dvect2);
+    G_free(dvect1);
     return 0;
 }
 

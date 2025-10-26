@@ -478,9 +478,7 @@ class DMonDisplay(FrameMixin, MapPanel):
         )
         # set system icon
         parent.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
 
         # bindings
@@ -616,7 +614,7 @@ class MapApp(wx.App):
         #    self.timer.Stop()
         #    return
 
-        # todo: events
+        # TODO: events
         try:
             currentCmdFileTime = os.path.getmtime(monFile["cmd"])
             if currentCmdFileTime > self.cmdTimeStamp:

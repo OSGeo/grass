@@ -9,12 +9,12 @@ for details.
 
 :authors: Thomas Leppelt and Soeren Gebbert
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> p = TemporalRasterAlgebraLexer()
     >>> p.build()
     >>> p.debug = True
-    >>> expression =  'R = A[0,1,0] / B[0,0,1] * 20 + C[0,1,1] - 2.45'
+    >>> expression = "R = A[0,1,0] / B[0,0,1] * 20 + C[0,1,1] - 2.45"
     >>> p.test(expression)
     R = A[0,1,0] / B[0,0,1] * 20 + C[0,1,1] - 2.45
     LexToken(NAME,'R',1,0)
@@ -54,13 +54,9 @@ for details.
 
 from __future__ import annotations
 
-try:
-    from ply import yacc
-except ImportError:
-    pass
-
 import grass.pygrass.modules as pymod
 
+from .ply import yacc
 from .space_time_datasets import RasterDataset
 from .temporal_raster_base_algebra import (
     TemporalRasterAlgebraLexer,
@@ -116,7 +112,7 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
 
         self.lexer = TemporalRasterAlgebraLexer()
         self.lexer.build()
-        self.parser = yacc.yacc(module=self, debug=self.debug, write_tables=False)
+        self.parser = yacc.yacc(module=self, debug=self.debug)
 
         self.overwrite = overwrite
         self.count = 0

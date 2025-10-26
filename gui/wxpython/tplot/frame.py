@@ -19,7 +19,6 @@ This program is free software under the GNU General Public License
 @author start stvds support Matej Krejci
 """
 
-import os
 from itertools import cycle
 from pathlib import Path
 import numpy as np
@@ -751,7 +750,11 @@ class TplotFrame(wx.Frame):
         """Used to write CSV file of plotted data"""
         import csv
 
-        zipped = list(zip(x, *y)) if isinstance(y[0], list) else list(zip(x, y))
+        zipped = (
+            list(zip(x, *y, strict=False))
+            if isinstance(y[0], list)
+            else list(zip(x, y, strict=False))
+        )
         with open(self.csvpath, "w", newline="") as fi:
             writer = csv.writer(fi)
             if self.header:
@@ -997,7 +1000,7 @@ class TplotFrame(wx.Frame):
         self.init()
         self.csvpath = self.csvButton.GetValue()
         self.header = self.headerCheck.IsChecked()
-        if os.path.exists(self.csvpath) and not self.overwrite:
+        if Path(self.csvpath).exists() and not self.overwrite:
             dlg = wx.MessageDialog(
                 self,
                 _("{pa} already exists, do you want to overwrite?").format(
@@ -1460,7 +1463,7 @@ class DataCursor:
                 x = xData[np.argmin(abs(xData - x))]
 
             info = self.lookUp.GetInformation(x)
-            ys = list(zip(*info[1].values()))[1]
+            ys = list(zip(*info[1].values(), strict=False))[1]
             if not info:
                 return
             # Update the annotation in the current axis..

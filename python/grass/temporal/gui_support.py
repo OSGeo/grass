@@ -24,12 +24,13 @@ def tlist_grouped(type, group_type: bool = False, dbif=None):
 
     Returns a dictionary where the keys are mapset
     names and the values are lists of space time datasets in that
-    mapset. Example:
+    mapset.
 
-    .. code-block:: python
+    :Example:
+      .. code-block:: pycon
 
         >>> import grass.temporal as tgis
-        >>> tgis.tlist_grouped('strds')['PERMANENT']
+        >>> tgis.tlist_grouped("strds")["PERMANENT"]
         ['precipitation', 'temperature']
 
     :param type: element type (strds, str3ds, stvds)
