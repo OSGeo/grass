@@ -64,7 +64,7 @@ def get_table_random_values(nrows, columns):
             raise TypeError("Unknown column type %s for: %s" % (ctype, cname))
         vals.append(COL2VALS[ctype](nrows))
         dtype.append((cname, vals[-1].dtype.str))
-    return np.array(list(zip(*vals)), dtype=dtype)
+    return np.array(list(zip(*vals, strict=False)), dtype=dtype)
 
 
 class DBconnection:
@@ -154,7 +154,6 @@ class DBconnection:
         self.cols = self.table.columns
 
     def tearDown(self):
-        """Remove the generated vector map, if exist"""
         self.table.drop(force=True)
         self.table = None
         self.cols = None
@@ -176,7 +175,6 @@ class TableInsertTestCase(DBconnection, TestCase):
         self.cols = self.table.columns
 
     def tearDown(self):
-        """Remove the generated vector map, if exist"""
         self.table.drop(force=True)
         self.table = None
         self.cols = None

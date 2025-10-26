@@ -29,16 +29,16 @@ FCELL, etc). Standard floating point raster precision is float
 <ol>
   <li>old-low to old-high is reclassed to new-low to new high , where the
     user provides all four values. The program figures on the fly what type of
-    raster should be created.
+    raster should be created.</li>
 
   <li>old-low to old-high is reclassed to a single new value. Anything outside
-    the range is null.
+    the range is null.</li>
 
   <li> * to old-high will reclass everything less than old-high to a single
-    new value.
+    new value.</li>
 
   <li> old-low to * will reclass everything greater than old-low to a single
-    new value.
+    new value.</li>
 </ol>
 
 These four sets of arguments can be given on the command line, or

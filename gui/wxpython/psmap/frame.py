@@ -19,6 +19,7 @@ import os
 import queue as Queue
 import sys
 from math import cos, pi, sin, sqrt
+from pathlib import Path
 
 import wx
 
@@ -358,13 +359,12 @@ class PsMapFrame(wx.Frame):
     def PSFile(self, filename=None, pdf=False):
         """Create temporary instructions file and run ps.map with output = filename"""
         instrFile = gs.tempfile()
-        instrFileFd = open(instrFile, mode="wb")
-        content = self.InstructionFile()
-        if not content:
-            return
-        instrFileFd.write(content)
-        instrFileFd.flush()
-        instrFileFd.close()
+        with open(instrFile, mode="wb") as instrFileFd:
+            content = self.InstructionFile()
+            if not content:
+                return
+            instrFileFd.write(content)
+            instrFileFd.flush()
 
         temp = False
         regOld = gs.region(env=self.env)
@@ -468,8 +468,7 @@ class PsMapFrame(wx.Frame):
                     event.userData["pdfname"],
                 ]
                 message = _(
-                    "Program {} is not available."
-                    " Please install it to create PDF.\n\n "
+                    "Program {} is not available. Please install it to create PDF.\n\n "
                 ).format(pdf_rendering_prog)
             try:
                 proc = gs.Popen(command)
@@ -598,12 +597,10 @@ class PsMapFrame(wx.Frame):
             wildcard="*.psmap|*.psmap|Text file(*.txt)|*.txt|All files(*.*)|*.*"
         )
         if filename:
-            instrFile = open(filename, "wb")
             content = self.InstructionFile()
             if not content:
                 return
-            instrFile.write(content)
-            instrFile.close()
+            Path(filename).write_bytes(content)
 
     def OnLoadFile(self, event):
         """Launch file dialog and load selected file"""
@@ -1045,19 +1042,9 @@ class PsMapFrame(wx.Frame):
         if "Bold" in fontstyle:
             weight = wx.FONTWEIGHT_BOLD
 
-        try:
-            fn = wx.Font(
-                pointSize=fontsize, family=family, style=style, weight=weight, face=face
-            )
-        except:
-            fn = wx.Font(
-                pointSize=fontsize,
-                family=wx.FONTFAMILY_DEFAULT,
-                style=wx.FONTSTYLE_NORMAL,
-                weight=wx.FONTWEIGHT_NORMAL,
-            )
-
-        return fn
+        return wx.Font(
+            pointSize=fontsize, family=family, style=style, weight=weight, faceName=face
+        )
 
     def getTextExtent(self, textDict):
         """Estimates bounding rectangle of text"""
@@ -1071,20 +1058,19 @@ class PsMapFrame(wx.Frame):
             dc.SetFont(fn)
             w, h, lh = dc.GetFullMultiLineTextExtent(textDict["text"])
             return (w, h)
-        except:
+        except (wx.PyAssertionError, ValueError, KeyError):
             return (0, 0)
 
     def getInitMap(self):
         """Create default map frame when no map is selected, needed for coordinates in
         map units"""
         instrFile = gs.tempfile()
-        instrFileFd = open(instrFile, mode="wb")
-        content = self.InstructionFile()
-        if not content:
-            return
-        instrFileFd.write(content)
-        instrFileFd.flush()
-        instrFileFd.close()
+        with open(instrFile, mode="wb") as instrFileFd:
+            content = self.InstructionFile()
+            if not content:
+                return
+            instrFileFd.write(content)
+            instrFileFd.flush()
 
         page = self.instruction.FindInstructionByType("page")
         mapInitRect = GetMapBounds(
@@ -1312,26 +1298,26 @@ class PsMapFrame(wx.Frame):
                 else:
                     self.deleteObject(id)
 
-            if itype == "vectorLegend":
-                if not self.instruction.FindInstructionByType("vector"):
-                    self.deleteObject(id)
-                elif self.instruction[id]["vLegend"]:
-                    self.canvas.UpdateLabel(itype=itype, id=id)
-                    drawRectangle = self.canvas.CanvasPaperCoordinates(
-                        rect=self.instruction[id]["rect"], canvasToPaper=False
-                    )
-                    self.canvas.Draw(
-                        pen=self.pen[itype],
-                        brush=self.brush[itype],
-                        pdc=self.canvas.pdcObj,
-                        drawid=id,
-                        pdctype="rectText",
-                        bb=drawRectangle,
-                    )
-                    self.canvas.RedrawSelectBox(id)
-
-                else:
-                    self.deleteObject(id)
+            if itype != "vectorLegend":
+                continue
+            if not self.instruction.FindInstructionByType("vector"):
+                self.deleteObject(id)
+            elif self.instruction[id]["vLegend"]:
+                self.canvas.UpdateLabel(itype=itype, id=id)
+                drawRectangle = self.canvas.CanvasPaperCoordinates(
+                    rect=self.instruction[id]["rect"], canvasToPaper=False
+                )
+                self.canvas.Draw(
+                    pen=self.pen[itype],
+                    brush=self.brush[itype],
+                    pdc=self.canvas.pdcObj,
+                    drawid=id,
+                    pdctype="rectText",
+                    bb=drawRectangle,
+                )
+                self.canvas.RedrawSelectBox(id)
+            else:
+                self.deleteObject(id)
 
     def OnPageChanged(self, event):
         """GNotebook page has changed"""
@@ -1982,7 +1968,7 @@ class PsMapBufferedWindow(wx.Window):
                         pdcType = "rect"
                         lineCoords = None
                         if r[2] < 2 or r[3] < 2:
-                            # to avoid strange behaviour
+                            # to avoid strange behavior
                             return
 
                     self.Draw(

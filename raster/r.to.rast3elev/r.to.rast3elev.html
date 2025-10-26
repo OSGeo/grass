@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-Creates a 3D volume map based on 2D elevation and value raster maps.
+<em>r.to.rast3elev</em> creates a 3D volume map based on 2D elevation and value raster maps.
 If the 2d and 3d region settings are different,
 the 2d resolution will be adjust to the 3d resolution.
 
@@ -60,7 +60,7 @@ r.mapcalc expression="elev_bottom = elevation.10m - 1000"
 
 r.to.rast3elev -l input=one,two,three elevation=elevation.10m,elev_mid,elev_bottom output=threelayer
 
-## Export the map for visualization with paraview (http://www.paraview.org)
+## Export the map for visualization with paraview (https://www.paraview.org)
 ## By default the null value is -9999.99, we adjust it to 0.0 for
 ## better visualization
 r3.out.vtk null=0.0 input=threelayer output=/tmp/threelayer.vtk

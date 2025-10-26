@@ -349,8 +349,8 @@ void gp_free_sitemem(geosite *fp)
    \brief Set drape surfaces
 
    \param gp pointer to geosite struct
-   \param hsurf list of surfaces (id)
-   \param nsurf number of surfaces
+   \param hsurfs list of surfaces (id)
+   \param nsurfs number of surfaces
  */
 void gp_set_drapesurfs(geosite *gp, int hsurfs[], int nsurfs)
 {

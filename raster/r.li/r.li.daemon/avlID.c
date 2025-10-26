@@ -172,7 +172,6 @@ int avlID_add(avlID_tree *root, const long k, const long n)
         break;
     default:
         G_fatal_error("avl, avlID_add: balancing error\n");
-        return AVL_ERR;
     }
 
     /* if after rotation there is a new root update the root pointer */

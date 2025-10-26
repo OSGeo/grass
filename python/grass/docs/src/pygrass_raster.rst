@@ -3,8 +3,8 @@
 Introduction to Raster classes
 ==============================
 
-Details about the GRASS GIS raster architecture can be found in the
-`GRASS GIS 8 Programmer's Manual: GRASS Raster Library
+Details about the GRASS raster architecture can be found in the
+`GRASS 8 Programmer's Manual: GRASS Raster Library
 <https://grass.osgeo.org/programming8/rasterlib.html>`_.
 
 PyGRASS uses 3 different raster classes, that respect the 3 different

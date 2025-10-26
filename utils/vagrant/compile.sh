@@ -19,31 +19,31 @@ cd /vagrant
 if [ ! -f "include/Make/Platform.make" ] ; then
     ./configure \
         --bindir=/usr/bin \
-        --srcdir=/vagrant \
-        --prefix=/usr/lib \
+        --enable-largefile \
         --enable-shared \
-        --with-postgres \
-        --with-mysql \
+        --prefix=/usr/lib \
+        --srcdir=/vagrant \
+        --with-blas \
+        --with-bzlib \
+        --with-cairo \
         --with-cxx \
-        --with-x \
+        --with-freetype \
+        --with-freetype-includes=/usr/include/freetype2 \
         --with-gdal \
         --with-geos \
-        --with-freetype \
-        --with-readline \
+        --with-lapack \
+        --with-mysql \
+        --with-mysql-includes=`mysql_config --include | sed -e 's/-I//'` \
+        --with-netcdf \
         --with-nls \
         --with-odbc \
-        --with-netcdf \
-        --with-blas \
-        --with-lapack \
-        --with-sqlite \
-        --enable-largefile \
-        --with-freetype-includes=/usr/include/freetype2 \
+        --with-postgres \
         --with-postgres-includes=`pg_config --includedir` \
-        --with-mysql-includes=`mysql_config --include | sed -e 's/-I//'` \
         --with-proj-share=/usr/share/proj \
-        --with-cairo \
         --with-pthread \
-        --with-bzlib \
+        --with-readline \
+        --with-sqlite \
+        --with-x \
         --without-pdal
 fi
 

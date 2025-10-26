@@ -14,14 +14,14 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com>
 """
 
-
 import os
 import sys
 import glob
+from pathlib import Path
 
 
 def main(path):
-    if not os.path.exists(path) or not os.path.isdir(path):
+    if not Path(path).exists() or not Path(path).is_dir():
         print("'{}' is not a directory".format(path), file=sys.stderr)
         return 1
 
@@ -32,15 +32,10 @@ def main(path):
             continue
         modules.append(os.path.splitext(os.path.basename(f))[0])
 
-    fd = open(os.path.join(path, "__init__.py"), "w")
-    try:
+    with open(os.path.join(path, "__init__.py"), "w") as fd:
         fd.write("all = [%s" % os.linesep)
-        for m in modules:
-            fd.write("    '%s',%s" % (m, os.linesep))
+        fd.writelines("    '%s',%s" % (m, os.linesep) for m in modules)
         fd.write("    ]%s" % os.linesep)
-    finally:
-        fd.close()
-
     return 0
 
 

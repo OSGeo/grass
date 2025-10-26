@@ -35,7 +35,6 @@ static double determinant(double, double, double, double, double, double,
  *     | s2 s4 s5 |      | s2 s4 s5 |      | s2 s4 s5 |
  *
  */
-
 int I_compute_ref_equations(struct Ortho_Photo_Points *cp, double E12[3],
                             double N12[3], double E21[3], double N21[3])
 {

@@ -22,7 +22,7 @@ benefit.
 
 <p>
 A GRASS virtual raster can be regarded as a simplified version of GDAL's
-<a href="https://gdal.org/gdal_vrttut.html">virtual raster format</a>.
+<a href="https://gdal.org/en/stable/drivers/raster/vrt.html">virtual raster format</a>.
 The GRASS equivalent is simpler because issues like nodata, projection,
 resolution, resampling, masking are already handled by native GRASS
 raster routines.
@@ -56,7 +56,7 @@ Users may experience significant performance degradation with virtual rasters bu
 with <em>r.buildvrt</em> over GDAL-linked (<em>r.external</em>) raster maps,
 especially on slower file systems with latency like NFS. Performance degradation
 may also occur on local file systems, but is usually less severe. For such use cases
-consider using the GRASS GIS addon
+consider using the GRASS addon
 <a href="https://grass.osgeo.org/grass-stable/manuals/addons/r.buildvrt.gdal.html">r.buildvrt.gdal</a>
 or building GDAL VRTs, e.g. with <em>gdalbuildvrt</em>.
 
@@ -72,7 +72,7 @@ or building GDAL VRTs, e.g. with <em>gdalbuildvrt</em>.
 <p>
 The equivalent GDAL utility
 <em>
-<a href="https://gdal.org/gdalbuildvrt.html">gdalbuildvrt</a>
+<a href="https://gdal.org/en/stable/programs/gdalbuildvrt.html">gdalbuildvrt</a>
 </em>
 
 <h2>AUTHOR</h2>

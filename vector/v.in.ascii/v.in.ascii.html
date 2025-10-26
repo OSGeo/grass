@@ -24,9 +24,9 @@ and other software, and for transferring data between machines.
 The input is read from the file specified by the <b>input</b> option or
 from standard input.
 
-<p>The field separator may be a character, the word '<tt>tab</tt>'
-(or '<tt>\t</tt>') for tab, '<tt>space</tt>' (or '&nbsp;') for a blank,
-or '<tt>comma</tt>' (or ',') for a comma.
+<p>The field separator may be a character, the word '<code>tab</code>'
+(or '<code>\t</code>') for tab, '<code>space</code>' (or '&nbsp;') for a blank,
+or '<code>comma</code>' (or ',') for a comma.
 
 <p>An attribute table is only created if it is needed, i.e. when at
 least one attribute column is present in the input file besides
@@ -48,15 +48,15 @@ disabling of topology.
 
 <p>If old version is requested, the <b>output</b> files
 from <em><a href="v.out.ascii.html">v.out.ascii</a></em> is placed in
-the <tt>$LOCATION/$MAPSET/dig_ascii/</tt>
-and <tt>$LOCATION/$MAPSET/dig_att</tt> directory.
+the <code>$LOCATION/$MAPSET/dig_ascii/</code>
+and <code>$LOCATION/$MAPSET/dig_att</code> directory.
 
 <h3>Import of files without category column</h3>
 
 If the input file does not contain a category column, there is the
 possibility to auto-generate these IDs (categories). To automatically
 add an additional column named 'cat', the <b>cat</b> parameter must be
-set to the virtual column number 0 (<tt>cat=0</tt>). This is the
+set to the virtual column number 0 (<code>cat=0</code>). This is the
 default action if the <b>cat</b> parameter is not set.
 
 <h3>Importing from a spreadsheet</h3>
@@ -68,9 +68,9 @@ with <em>v.in.ascii</em> in <b>points</b> mode.  If the input file
 contains any header lines, such as column headings, the
 <b>skip</b> parameter should be used. These skipped header lines will
 be written to the map's history file for later reference (read with
-<tt>v.info&nbsp;-h</tt>). The skip option only works in <b>points</b> mode.
+<code>v.info&nbsp;-h</code>). The skip option only works in <b>points</b> mode.
 
-<p>Any line starting with the hash character ('<tt>#</tt>') will be treated as
+<p>Any line starting with the hash character ('<code>#</code>') will be treated as
 a comment and skipped completely if located in the main data file. If located
 in the header, as defined by the <b>skip</b> parameter, it will be treated as
 a header line and written to the history file.
@@ -82,7 +82,7 @@ but N/S, E/W characters are used to indicate the hemispheres).  While
 the positions are internally translated into decimal degrees during
 the import, the original DMS values are maintained in the attribute
 table. This requires both the latitude and the longitude columns to be
-defined as <tt>varchar()</tt>, not as numbers.  A warning will be
+defined as <code>varchar()</code>, not as numbers.  A warning will be
 issued which can be ignored. See <a href="vectorascii.html">GRASS
 ASCII vector format specification</a> for details.
 
@@ -280,7 +280,7 @@ cat $MAPSET/group/$GROUP/POINTS | v.in.ascii in=- out=$GROUP_gcp separator=space
 
 <h2>REFERENCES</h2>
 
-<a href="sql.html">SQL command notes</a> for creating databases
+<a href="sql.html">SQL command notes</a> for creating databases,
 <br>
 <a href="vectorascii.html">GRASS ASCII vector format</a> specification
 

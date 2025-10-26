@@ -199,7 +199,7 @@ class VDigitSettingsDialog(wx.Dialog):
             self.snappingUnit.SetSelection(
                 UserSettings.Get(group="vdigit", key="snapping", subkey="unit")
             )
-        except:
+        except KeyError:
             self.snappingUnit.SetSelection(0)
         self.snappingUnit.Bind(wx.EVT_CHOICE, self.OnChangeSnappingUnits)
         flexSizer.Add(text, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
@@ -525,7 +525,6 @@ class VDigitSettingsDialog(wx.Dialog):
         # settings
         flexSizer = wx.FlexGridSizer(cols=2, hgap=3, vgap=3)
         flexSizer.AddGrowableCol(0)
-        settings = ((_("Layer"), 1), (_("Category"), 1), (_("Mode"), _("Next to use")))
         # layer
         text = StaticText(parent=panel, id=wx.ID_ANY, label=_("Layer"))
         self.layer = SpinCtrl(parent=panel, id=wx.ID_ANY, min=1, max=1e3)
@@ -990,8 +989,8 @@ class VDigitSettingsDialog(wx.Dialog):
                 tree.SetLayerInfo(item, key="vdigit", value={"geomAttr": {}})
 
             if checked:  # enable
-                _type = key if key == "area" else "length"
-                unitsKey = Units.GetUnitsKey(_type, unitsIdx)
+                type_ = key if key == "area" else "length"
+                unitsKey = Units.GetUnitsKey(type_, unitsIdx)
                 tree.GetLayerInfo(item, key="vdigit")["geomAttr"][key] = {
                     "column": column,
                     "units": unitsKey,

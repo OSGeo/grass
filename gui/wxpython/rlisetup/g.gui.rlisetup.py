@@ -45,7 +45,7 @@ def main():
     frame = RLiSetupFrame(
         parent=None,
         giface=StandaloneGrassInterface(),
-        title=_("Setup for r.li modules - GRASS GIS"),
+        title=_("Setup for r.li modules - GRASS"),
     )
     frame.Show()
     frame.CenterOnScreen()

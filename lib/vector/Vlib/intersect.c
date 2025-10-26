@@ -648,6 +648,8 @@ static int cross_seg(int id, const struct RTree_Rect *rect UNUSED, void *arg)
  *
  * \param APoints first input line
  * \param BPoints second input line
+ * \param ABox
+ * \param BBox
  * \param[out] ALines array of new lines created from original A line
  * \param[out] BLines array of new lines created from original B line
  * \param[out] nalines number of new lines (ALines)

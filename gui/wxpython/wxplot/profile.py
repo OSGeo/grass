@@ -15,7 +15,6 @@ This program is free software under the GNU General Public License
 @author Michael Barton, Arizona State University
 """
 
-import os
 import sys
 import math
 import numpy as np
@@ -193,7 +192,7 @@ class ProfileFrame(BasePlotFrame):
         # title of window
         self.ptitle = _("Profile of")
 
-        # Initialize lattitude-longitude geodesic distance calculation
+        # Initialize latitude-longitude geodesic distance calculation
         if self._is_lat_lon_proj and haveCtypes:
             gislib.G_begin_distance_calculations()
 
@@ -250,7 +249,7 @@ class ProfileFrame(BasePlotFrame):
             # delete extra first segment point
             try:
                 self.seglist.pop(0)
-            except:
+            except IndexError:
                 pass
 
         #
@@ -262,16 +261,18 @@ class ProfileFrame(BasePlotFrame):
         for r in self.raster.keys():
             self.raster[r]["datalist"] = []
             datalist = self.CreateDatalist(r, self.coordstr)
-            if len(datalist) > 0:
-                self.raster[r]["datalist"] = datalist
+            if len(datalist) <= 0:
+                continue
 
-                # update ylabel to match units if they exist
-                if self.raster[r]["units"] != "":
-                    self.ylabel += "%s (%d)," % (self.raster[r]["units"], i)
-                i += 1
+            self.raster[r]["datalist"] = datalist
 
-                # update title
-                self.ptitle += " %s ," % r.split("@")[0]
+            # update ylabel to match units if they exist
+            if self.raster[r]["units"] != "":
+                self.ylabel += "%s (%d)," % (self.raster[r]["units"], i)
+            i += 1
+
+            # update title
+            self.ptitle += " %s ," % r.split("@")[0]
 
         self.ptitle = self.ptitle.rstrip(",")
 
@@ -291,7 +292,6 @@ class ProfileFrame(BasePlotFrame):
         # freezing with large, high resolution maps
         region = gs.region()
         curr_res = min(float(region["nsres"]), float(region["ewres"]))
-        transect_rec = 0
         if self.transect_length / curr_res > 500:
             transect_res = self.transect_length / 500
         else:
@@ -315,9 +315,9 @@ class ProfileFrame(BasePlotFrame):
             dist, elev = line.strip().split(" ")
             if (
                 dist is None
-                or dist in ("", "nan")
+                or dist in {"", "nan"}
                 or elev is None
-                or elev in ("", "nan")
+                or elev in {"", "nan"}
             ):
                 continue
             dist = float(dist)
@@ -420,7 +420,7 @@ class ProfileFrame(BasePlotFrame):
             path = dlg.GetPath()
             for r in self.rasterList:
                 pfile.append(path + "_" + str(r.replace("@", "_")) + ".csv")
-                if os.path.exists(pfile[-1]):
+                if Path(pfile[-1]).exists():
                     dlgOv = wx.MessageDialog(
                         self,
                         message=_(
@@ -437,7 +437,11 @@ class ProfileFrame(BasePlotFrame):
                         continue
 
                 try:
-                    fd = open(pfile[-1], "w")
+                    with open(pfile[-1], "w") as fd:
+                        fd.writelines(
+                            "%.6f,%.6f\n" % (float(datapair[0]), float(datapair[1]))
+                            for datapair in self.raster[r]["datalist"]
+                        )
                 except OSError as e:
                     GError(
                         parent=self,
@@ -446,11 +450,6 @@ class ProfileFrame(BasePlotFrame):
                     )
                     dlg.Destroy()
                     return
-
-                for datapair in self.raster[r]["datalist"]:
-                    fd.write("%.6f,%.6f\n" % (float(datapair[0]), float(datapair[1])))
-
-                fd.close()
 
         dlg.Destroy()
         if pfile:
@@ -486,7 +485,7 @@ class ProfileFrame(BasePlotFrame):
                 statstr += "median: %f\n" % np.median(a)
                 statstr += "distance along transect: %f\n\n" % self.transect_length
                 message.append(statstr)
-            except:
+            except (ValueError, TypeError, KeyError, IndexError):
                 pass
 
         stats = PlotStatsFrame(self, id=wx.ID_ANY, message=message, title=title)

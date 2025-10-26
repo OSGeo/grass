@@ -104,9 +104,9 @@ int read_point(double e, double n)
         error(key, data, "illegal point request");
     }
 
-    sprintf(buf, "P %d %f %f %d %d %d %d %d %d %f %f %s %.2f", masked, e, n,
-            color_R, color_G, color_B, fcolor_R, fcolor_G, fcolor_B, size,
-            rotate, symb, width);
+    snprintf(buf, sizeof(buf), "P %d %f %f %d %d %d %d %d %d %f %f %s %.2f",
+             masked, e, n, color_R, color_G, color_B, fcolor_R, fcolor_G,
+             fcolor_B, size, rotate, symb, width);
 
     add_to_plfile(buf);
 
@@ -184,7 +184,8 @@ int read_eps(double e, double n)
         error(key, data, "illegal eps request");
     }
     if (have_eps) {
-        sprintf(buf, "E %d %f %f %f %f %s", masked, e, n, scale, rotate, eps);
+        snprintf(buf, sizeof(buf), "E %d %f %f %f %f %s", masked, e, n, scale,
+                 rotate, eps);
     }
     add_to_plfile(buf);
 
@@ -247,8 +248,8 @@ int read_line(double e1, double n1, double e2, double n2)
         error(key, data, "illegal line request");
     }
 
-    sprintf(buf, "L %d %f %f %f %f %d %d %d %.2f", masked, e1, n1, e2, n2,
-            color_R, color_G, color_B, width);
+    snprintf(buf, sizeof(buf), "L %d %f %f %f %f %d %d %d %.2f", masked, e1, n1,
+             e2, n2, color_R, color_G, color_B, width);
 
     add_to_plfile(buf);
 
@@ -329,8 +330,9 @@ int read_rectangle(double e1, double n1, double e2, double n2)
         error(key, data, "illegal rectangle request");
     }
 
-    sprintf(buf, "R %d %f %f %f %f %d %d %d %d %d %d %.2f", masked, e1, n1, e2,
-            n2, color_R, color_G, color_B, fcolor_R, fcolor_G, fcolor_B, width);
+    snprintf(buf, sizeof(buf), "R %d %f %f %f %f %d %d %d %d %d %d %.2f",
+             masked, e1, n1, e2, n2, color_R, color_G, color_B, fcolor_R,
+             fcolor_G, fcolor_B, width);
 
     add_to_plfile(buf);
 
