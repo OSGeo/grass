@@ -125,7 +125,6 @@ class TestEqualRamSegOutput(TestCase):
         return passes
 
     def test_same_ram_seg_output(self):
-
         passes = []
         for oi in self.inputs:
             passes.append(self.same_ram_seg_output(**oi))
@@ -133,9 +132,7 @@ class TestEqualRamSegOutput(TestCase):
         # create nice markdown table of matches
         msg = (
             "Output of ram and seg versions of r.watershed do not match:"
-            + "\n\n"
-            + self.md_table(passes)
-            + "\n"
+            "\n\n" + self.md_table(passes) + "\n"
         )
 
         self.assertTrue(all(all(p) for p in passes), msg=msg)
