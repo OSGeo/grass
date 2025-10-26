@@ -398,7 +398,7 @@ def aggregate_by_topology(
                         out_file.writelines(
                             f"{name}|{weight}\n"
                             for name, weight in zip(
-                                aggregation_list, aggregation_weights
+                                aggregation_list, aggregation_weights, strict=False
                             )
                         )
                     else:
