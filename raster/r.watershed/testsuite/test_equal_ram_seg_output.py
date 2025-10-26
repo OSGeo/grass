@@ -137,19 +137,22 @@ class TestEqualRamSegOutput(TestCase):
 
         self.assertTrue(all(all(p) for p in passes), msg=msg)
 
+    @staticmethod
+    def columns(cells):
+        return "| " + (" | ".join(map(str, cells))) + " |"
+
     def md_table(self, passes):
-        columns = lambda l: "| " + (" | ".join(map(str, l))) + " |"
-        strinpts = columns(
+        strinpts = self.columns(
             [", ".join(["%s=%s" % kw for kw in d.items()]) for d in self.inputs]
         )
         for ir in self.tmp_input_rasters:
             strinpts = strinpts.replace("=" + ir, "")
         msg = "| Output " + strinpts + "\n"
-        msg += columns(["---"] * (len(self.inputs) + 1)) + "\n"
+        msg += self.columns(["---"] * (len(self.inputs) + 1)) + "\n"
         symbols = {True: ":white_check_mark:", False: ":red_circle:"}
-        for o, p in zip(self.outputs, zip(*passes)):
+        for o, p in zip(self.outputs, zip(*passes, strict=False), strict=False):
             sym = [symbols[b] for b in p]
-            msg += ("| %s " % o) + columns(sym) + "\n"
+            msg += ("| %s " % o) + self.columns(sym) + "\n"
         return msg
 
 
