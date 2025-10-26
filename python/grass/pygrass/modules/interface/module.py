@@ -698,7 +698,8 @@ class Module:
                 # verbose and quiet) work like parameters
                 self.flags[key].value = val
             else:
-                raise ParameterError("{} is not a valid parameter.".format(key))
+                msg = "{} is not a valid parameter.".format(key)
+                raise ParameterError(msg)
 
     def get_bash(self):
         """Return a BASH representation of the Module."""
@@ -816,7 +817,8 @@ class Module:
 
         # Check export formats
         if export and export not in export_dict:
-            raise GrassError(f"Invalid export format <{export}>.")
+            msg = f"Invalid export format <{export}>."
+            raise GrassError(msg)
 
         # Handle inputs and flags
         json_dict = {
@@ -871,7 +873,8 @@ class Module:
         # Handle stdout
         if stdout_export is not None:
             if stdout_export not in stdout_export_formats:
-                raise GrassError(f"Invalid export format <{stdout_export}> for stdout.")
+                msg = f"Invalid export format <{stdout_export}> for stdout."
+                raise GrassError(msg)
             json_dict["stdout"] = {
                 "id": stdout_id,
                 "format": stdout_export,
