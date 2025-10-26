@@ -226,8 +226,6 @@ ignore = [
     "PTH120",  # os-path-dirname
     "PTH122",  # os-path-splitext
     "PTH123",  # builtin-open
-    "PTH202",  # os-path-getsize
-    "PTH204",  # os-path-getmtime
     "PTH207",  # glob
     "RET503",  # implicit-return
     "RUF003",  # ambiguous-unicode-character-comment

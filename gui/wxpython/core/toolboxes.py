@@ -153,9 +153,9 @@ def getMenudataFile(userRootFile, newFile, fallback):
             )
         else:
             # if newer files -> generate new
-            menudataTime = os.path.getmtime(menudataFile)
+            menudataTime = Path(menudataFile).stat().st_mtime
             if _getUserToolboxesFile():
-                if os.path.getmtime(_getUserToolboxesFile()) > menudataTime:
+                if Path(_getUserToolboxesFile()).stat().st_mtime > menudataTime:
                     _debug(
                         2,
                         (
@@ -165,7 +165,7 @@ def getMenudataFile(userRootFile, newFile, fallback):
                     )
                     generateNew = True
             if userRootFile:
-                if os.path.getmtime(userRootFile) > menudataTime:
+                if Path(userRootFile).stat().st_mtime > menudataTime:
                     _debug(
                         2,
                         (
