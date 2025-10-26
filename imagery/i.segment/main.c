@@ -2,7 +2,7 @@
  *
  * MODULE:       i.segment
  * AUTHOR(S):    Markus Metz
- *               based on the the GSoC project by
+ *               based on the GSoC project by
  *               Eric Momsen <eric.momsen at gmail com>
  * PURPOSE:      Object recognition, segments an image group.
  * COPYRIGHT:    (C) 2012 by Eric Momsen, and the GRASS Development Team

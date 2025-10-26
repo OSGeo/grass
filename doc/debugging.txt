@@ -1,4 +1,4 @@
-GRASS GIS Debugging:
+GRASS Debugging:
 
 See also
 https://grasswiki.osgeo.org/wiki/GRASS_Debugging

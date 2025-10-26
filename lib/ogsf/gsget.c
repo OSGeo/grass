@@ -22,7 +22,7 @@
    \brief Get map attributes
 
    \param buff
-   \param offset
+   \param[in] offset
    \param[out] att
 
    \return 0 on failure

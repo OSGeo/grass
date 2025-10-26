@@ -22,6 +22,8 @@ import shutil
 import textwrap
 import time
 
+from pathlib import Path
+
 import wx
 from wx.lib.newevent import NewEvent
 
@@ -32,9 +34,12 @@ from grass.script.setup import set_gui_path
 
 set_gui_path()
 
+# flake8: noqa: E402
 from core.debug import Debug
 from core.gthread import gThread
 from gui_core.wrap import Button, StaticText
+
+# flakes8: qa
 
 
 # TODO: labels (and descriptions) translatable?
@@ -69,7 +74,7 @@ LOCATIONS = [
     },
     {
         "label": "GISMentors dataset, Czech Republic",
-        "url": "http://training.gismentors.eu/geodata/grass/gismentors.zip",
+        "url": "https://www.training.gismentors.cz/geodata/grass/gismentors.zip",
     },
     {
         "label": "Natural Earth Dataset in WGS84",
@@ -90,11 +95,11 @@ class RedirectText:
         try:
             if self.out:
                 string = self._wrap_string(string)
-                heigth = self._get_heigth(string)
+                height = self._get_height(string)
                 wx.CallAfter(self.out.SetLabel, string)
-                self._resize(heigth)
-        except:
-            # window closed -> PyDeadObjectError
+                self._resize(height)
+        except (RuntimeError, AttributeError):
+            # window closed or destroyed
             pass
 
     def flush(self):
@@ -111,25 +116,25 @@ class RedirectText:
         wrapper = textwrap.TextWrapper(width=width)
         return wrapper.fill(text=string)
 
-    def _get_heigth(self, string):
-        """Get widget new heigth
+    def _get_height(self, string):
+        """Get widget new height
 
         :param str string: input string
 
-        :return int: widget heigth
+        :return int: widget height
         """
         n_lines = string.count("\n")
         attr = self.out.GetClassDefaultAttributes()
         font_size = attr.font.GetPointSize()
         return int((n_lines + 2) * font_size // 0.75)  # 1 px = 0.75 pt
 
-    def _resize(self, heigth=-1):
-        """Resize widget heigth
+    def _resize(self, height=-1):
+        """Resize widget height
 
-        :param int heigth: widget heigth
+        :param int height: widget height
         """
         wx.CallAfter(self.out.GetParent().SetMinSize, (-1, -1))
-        wx.CallAfter(self.out.SetMinSize, (-1, heigth))
+        wx.CallAfter(self.out.SetMinSize, (-1, height))
         wx.CallAfter(
             self.out.GetParent().parent.sizer.Fit,
             self.out.GetParent().parent,
@@ -228,9 +233,7 @@ class LocationDownloadPanel(wx.Panel):
             parent=self, label=_("Select sample project to download:")
         )
 
-        choices = []
-        for item in self.locations:
-            choices.append(item["label"])
+        choices = [item["label"] for item in self.locations]
         self.choice = wx.Choice(parent=self, choices=choices)
 
         self.choice.Bind(wx.EVT_CHOICE, self.OnChangeChoice)
@@ -321,7 +324,7 @@ class LocationDownloadPanel(wx.Panel):
         url = item["url"]
         dirname = location_name_from_url(url)
         destination = os.path.join(self.database, dirname)
-        if os.path.exists(destination):
+        if Path(destination).exists():
             self._error(
                 _(
                     "Project name {name} already exists in {path}, download canceled"
@@ -378,7 +381,7 @@ class LocationDownloadPanel(wx.Panel):
         url = item["url"]
         dirname = location_name_from_url(url)
         destination = os.path.join(self.database, dirname)
-        if os.path.exists(destination):
+        if Path(destination).exists():
             self._warning(
                 _("Project named {name} already exists, rename it first").format(
                     name=dirname

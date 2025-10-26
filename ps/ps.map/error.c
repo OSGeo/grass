@@ -9,7 +9,7 @@ int error(const char *a, const char *b, const char *c)
 {
     char msg[2000];
 
-    sprintf(msg, "%s%s%s : %s", a, *b ? " " : "", b, c);
+    snprintf(msg, sizeof(msg), "%s%s%s : %s", a, *b ? " " : "", b, c);
 
     if (tracefd != NULL && !(isatty(fileno(tracefd)) && isatty(fileno(stderr))))
         fprintf(tracefd, "## error: %s\n", c);

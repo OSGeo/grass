@@ -54,7 +54,7 @@ class RasterCategoryTestCase(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """Remove the generated vector map, if exist"""
+        """Remove the generated vector map, if exists"""
         cls.runModule("g.remove", flags="f", type="raster", name=cls.name)
         cls.del_temp_region()
 

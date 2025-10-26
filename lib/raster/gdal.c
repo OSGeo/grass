@@ -270,7 +270,7 @@ struct GDAL_link *Rast_create_gdal_link(const char *name,
 
     gdal = G_calloc(1, sizeof(struct GDAL_link));
 
-    sprintf(path, "%s/%s%s", st->opts.dir, name, st->opts.ext);
+    snprintf(path, sizeof(path), "%s/%s%s", st->opts.dir, name, st->opts.ext);
     gdal->filename = G_store(path);
     gdal->band_num = 1;
     gdal->hflip = 0;
@@ -371,13 +371,13 @@ struct GDAL_link *Rast_create_gdal_link(const char *name,
 
     G_set_key_value("file", gdal->filename, key_val);
 
-    sprintf(buf, "%d", gdal->band_num);
+    snprintf(buf, sizeof(buf), "%d", gdal->band_num);
     G_set_key_value("band", buf, key_val);
 
-    sprintf(buf, "%.22g", gdal->null_val);
+    snprintf(buf, sizeof(buf), "%.22g", gdal->null_val);
     G_set_key_value("null", buf, key_val);
 
-    sprintf(buf, "%d", gdal->type);
+    snprintf(buf, sizeof(buf), "%d", gdal->type);
     G_set_key_value("type", buf, key_val);
 
     if (G_fwrite_key_value(fp, key_val) < 0)

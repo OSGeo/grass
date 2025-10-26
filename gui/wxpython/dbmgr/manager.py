@@ -65,7 +65,7 @@ class AttributeManager(wx.Frame, DbMgrBase):
         :param item: item from Layer Tree
         :param log: log window
         :param selection: name of page to be selected
-        :param kwagrs: other wx.Frame's arguments
+        :param kwargs: other wx.Frame's arguments
         """
         self.parent = parent
         try:
@@ -100,9 +100,7 @@ class AttributeManager(wx.Frame, DbMgrBase):
 
         # icon
         self.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_sql.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
 
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)

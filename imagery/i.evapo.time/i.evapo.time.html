@@ -5,17 +5,17 @@ reference ET (typically) from a set of meteorological stations dataset.
 
 Inputs:
 <ul>
-<li> ETa images
-<li> ETa images DOY (Day of Year)
-<li> ETo images
-<li> ETo DOYmin as a single value
+<li> ETa images</li>
+<li> ETa images DOY (Day of Year)</li>
+<li> ETo images</li>
+<li> ETo DOYmin as a single value</li>
 </ul>
 
 Method:
 <ol>
-<li> each ETa pixel is divided by the same day ETo and become ETrF
-<li> each ETrF pixel is multiplied by the ETo sum for the representative days
-<li> Sum all n temporal [ETrF*ETo_sum] pixels to make a summed(ET) in [DOYmin;DOYmax]
+<li> each ETa pixel is divided by the same day ETo and become ETrF</li>
+<li> each ETrF pixel is multiplied by the ETo sum for the representative days</li>
+<li> Sum all n temporal [ETrF*ETo_sum] pixels to make a summed(ET) in [DOYmin;DOYmax]</li>
 </ol>
 
 representative days calculation:
@@ -35,8 +35,8 @@ If you only have one meteorological station data set, the easiest way is:
 n=0
 for ETo_val in Eto[1] Eto[2] ...
 do
-	r.mapcalc "eto$n = $ETo_val"
-	`expr n = n + 1`
+    r.mapcalc "eto$n = $ETo_val"
+    `expr n = n + 1`
 done
 </pre></div>
 

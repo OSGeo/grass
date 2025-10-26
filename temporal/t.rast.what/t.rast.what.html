@@ -109,7 +109,7 @@ start|end|115.0043586274;36.3593955783|79.6816763826;45.2391522853|97.4892579600
 # using the where statement to select a subset of the STRDS
 # and stdout as output
 t.rast.what strds=A points=points \
-    where="start_time >= '1990-03-01'" layout=timerow -n
+    where="start_time &gt;= '1990-03-01'" layout=timerow -n
 
 x|y|1990-03-01 00:00:00;1990-04-01 00:00:00|1990-04-01 00:00:00;1990-05-01 00:00:00
 115.004358627375|36.3593955782903|3|4

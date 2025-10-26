@@ -2,7 +2,7 @@
 
 <em>g.mkfontcap</em> is a utility to generate a GRASS font configuration file
 ("fontcap") containing details of the fonts available on the current system.
-If <a href="http://freetype.sourceforge.net/">Freetype</a> is not installed,
+If <a href="https://freetype.org/">Freetype</a> is not installed,
 the font list will be limited to the set of Hershey stroke fonts supplied
 with GRASS. With Freetype enabled however, the module will recursively scan
 all files within a predefined hierarchy to find Freetype-compatible scalable
@@ -24,10 +24,10 @@ directory may optionally contain an environment variable <em>at the start</em>
 of the string, if enclosed in ${xxx} syntax (see examples above).
 
 <p>The module will normally write to the standard fontcap file location,
-<tt>$GISBASE/etc/fontcap</tt>. If the environment variable
-<tt>GRASS_FONT_CAP</tt> is set, the output will instead be written
+<code>$GISBASE/etc/fontcap</code>. If the environment variable
+<code>GRASS_FONT_CAP</code> is set, the output will instead be written
 to the file specified by that variable. This is useful if you don't have
-permission to modify <tt>$GISBASE/etc/fontcap</tt>: in this case you can
+permission to modify <code>$GISBASE/etc/fontcap</code>: in this case you can
 use e.g.
 
 <div class="code"><pre>

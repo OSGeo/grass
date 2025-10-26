@@ -13,8 +13,9 @@ static int export_areas_multi(struct Map_info *, int, int, OGRFeatureDefnH,
 static OGRGeometryH create_polygon(struct Map_info *, int, struct line_pnts *,
                                    int);
 
+#if 0
 /* maybe useful */
-void reverse_points(struct line_pnts *Points)
+static void reverse_points(struct line_pnts *Points)
 {
     int i, j, nhalf;
     double tmp;
@@ -35,6 +36,7 @@ void reverse_points(struct line_pnts *Points)
         Points->z[j] = tmp;
     }
 }
+#endif
 
 /* export areas as single/multi-polygons */
 int export_areas(struct Map_info *In, int field, int multi, int donocat,

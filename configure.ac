@@ -9,7 +9,7 @@
 # PURPOSE:	This configure runs all the tests to determine what components
 #		are installed on the current system. It also defines certain
 #		configuration variables for compilation and installation.
-# COPYRIGHT:    (C) 2000-2024 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2025 by the GRASS Development Team
 #
 #		This program is free software under the GNU General
 #		Public License (>=v2). Read the file COPYING that
@@ -35,6 +35,10 @@ AC_PREREQ([2.71])
 AC_CONFIG_HEADERS([include/grass/config.h])
 AC_CANONICAL_HOST
 AC_PROG_CC
+
+AH_TOP([#ifndef _config_h
+#define _config_h])
+AH_BOTTOM([#endif /* _config_h */])
 
 # Enable C++ option
 
@@ -162,7 +166,7 @@ GRASS_HEADERS_GIT_HASH="${GRASS_VERSION_NUMBER}"
 GRASS_HEADERS_GIT_DATE=`date -u +%FT%T%z | sed 's/\(..\)$/:\1/'`
 AC_PATH_PROG(GIT, git, no)
 AC_CHECK_FILE([$GRASS_VERSION_GIT_FILE])
-AC_MSG_CHECKING(for GRASS GIS headers commit date)
+AC_MSG_CHECKING(for GRASS headers commit date)
 if test "$GIT" != "no" ; then
    GRASS_VERSION_GIT=`$GIT rev-parse --short HEAD 2>/dev/null`
    if test -z "$GRASS_VERSION_GIT"; then
@@ -311,6 +315,7 @@ LOC_ARG_WITH(freetype, FreeType)
 LOC_ARG_WITH(nls, NLS, no)
 LOC_ARG_WITH(readline, Readline, no)
 LOC_ARG_WITH(regex, regex)
+LOC_ARG_WITH(pcre, pcre, no)
 LOC_ARG_WITH(pthread, POSIX threads, no)
 LOC_ARG_WITH(openmp, OpenMP, no)
 LOC_ARG_WITH(opencl, OpenCL, no)
@@ -417,6 +422,9 @@ LOC_ARG_WITH_SHARE(proj, External PROJ.4)
 
 LOC_ARG_WITH_INC(regex, regex)
 LOC_ARG_WITH_LIB(regex, regex)
+
+LOC_ARG_WITH_INC(pcre, pcre)
+LOC_ARG_WITH_LIB(pcre, pcre)
 
 LOC_ARG_WITH_INC(pthread, POSIX threads)
 LOC_ARG_WITH_LIB(pthread, POSIX threads)
@@ -831,6 +839,7 @@ AC_SUBST(PROJSHARE)
 # Enable regex option
 
 LOC_CHECK_USE(regex,regex,USE_REGEX)
+LOC_CHECK_USE(pcre,pcre,USE_PCRE)
 
 REGEXINCPATH=
 REGEXLIBPATH=
@@ -851,13 +860,32 @@ LOC_CHECK_LIB_PATH(regex,regex,REGEXLIBPATH)
 LOC_CHECK_FUNC(regcomp,regex functions,REGEXLIB,,,,,[
 LOC_CHECK_LIBS(regex,regcomp,regex,$REGEXLIBPATH,REGEXLIB,,,)
 ])
+AC_SUBST(USE_REGEX)
+
+elif test -n "$USE_PCRE"; then
+
+# With pcre includes directory
+
+LOC_CHECK_INC_PATH(pcre,pcre,REGEXINCPATH)
+
+LOC_CHECK_INCLUDES(pcre.h,pcre,$REGEXINCPATH)
+
+# With pcre library directory
+
+LOC_CHECK_LIB_PATH(pcre,pcre,REGEXLIBPATH)
+
+LOC_CHECK_FUNC(pcre_compile,pcre functions,REGEXLIB,,,,,[
+LOC_CHECK_LIBS(pcre,pcre_compile,pcre,$REGEXLIBPATH,REGEXLIB,,,)
+])
+
+dnl USE_REGEX=0
+AC_SUBST(USE_PCRE)
 
 fi # $USE_REGEX
 
 AC_SUBST(REGEXINCPATH)
 AC_SUBST(REGEXLIBPATH)
 AC_SUBST(REGEXLIB)
-AC_SUBST(USE_REGEX)
 
 # Done checking regex
 
@@ -1091,16 +1119,6 @@ else
   ])
 
   AC_DEFINE(HAVE_PDAL, 1, [Define to 1 if PDAL exists.])
-
-  AC_MSG_CHECKING(whether to use PDAL NoFilenameWriter)
-  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <pdal/Writer.hpp>
-  class St:public pdal::NoFilenameWriter {};]], [[
-  class NFWTest : public pdal::NoFilenameWriter {};
-  ]])],
-  [
-    AC_DEFINE(HAVE_PDAL_NOFILENAMEWRITER, 1, [Define to 1 if PDAL NoFilenameWriter is present.])
-    AC_MSG_RESULT(yes)
-  ],[AC_MSG_RESULT(no)])
 
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}
@@ -1416,6 +1434,11 @@ esac
 
 if test -n "$USE_OPENGL" ; then
 
+# We assume any OpenGL capable of running GRASS also is recent enough
+# to have FBO support.
+# Moved here from customizations of config.h.in
+AC_DEFINE(OPENGL_FBO, 1, [Use framebuffer objects for off-screen OpenGL rendering])
+
 if test "$OPENGL_X11" = 1 ; then
 
 # With OpenGL includes directory
@@ -1455,6 +1478,7 @@ OPENGLINC="$OPENGLPATH"
 OPENGLLIBPATH="$OPENGLPATH"
 
 AC_DEFINE(OPENGL_AQUA, 1, [Define to 1 if OpenGL uses Aqua (MacOS X).])
+AC_DEFINE(OPENGL_AGL, 1, [Define to 1 if OpenGL uses AGL (MacOS X).])
 
 fi # $OPENGL_AQUA
 
@@ -1878,6 +1902,10 @@ LOC_CHECK_FUNC(pthread_create,POSIX threads functions,PTHREADLIB,,,,,[
 LOC_CHECK_LIBS(pthread,pthread_create,POSIX threads,$PTHREADLIBPATH,PTHREADLIB,,,)
 ])
 
+if test -n "$PTHREADLIB" ; then
+    AC_DEFINE(HAVE_PTHREAD, 1, [Define to 1 if POSIX threads are available.])
+fi
+
 fi # $USE_PTHREAD
 
 AC_SUBST(PTHREADINCPATH)
@@ -1975,27 +2003,32 @@ AC_SUBST(USE_OPENCL)
 
 # Done checking OpenCL
 
-# Enable LFS (from cdr-tools, tar, and autoconf 2.68)
-dnl Check for large file support
-dnl Do this last to make sure that no large file definition
-dnl in confdefs.h will modify our results
+# Check for large file support. AC_SYS_LARGEFILE is the modern, portable
+# way to handle this. It sets the appropriate CFLAGS and defines necessary
+# preprocessor macros (e.g., _FILE_OFFSET_BITS=64) for the compiler.
 AC_SYS_LARGEFILE
-ac_save_cflags=${CFLAGS}
-CFLAGS="$LFS_CFLAGS ${ac_save_cflags}"
-dnl Warning do not run this test. it interferes with the test
-dnl AC_CHECK_FUNCS(fseeko ftello) from above.
-dnl The test AC_HAVE_LARGEFILES will check whether ftello/fseeko
-dnl are available in Large File mode
-AC_FUNC_FSEEKO
-AC_HAVE_LARGEFILES
-CFLAGS=${ac_save_cflags}
-# Done large file support
+if test "$ac_cv_sys_large_files" != 0; then
+    USE_LARGEFILES=1
+else
+    USE_LARGEFILES=0
+fi
+AC_SUBST(LFS_CFLAGS)
 
 USE_TERMIO=
 AC_SUBST(USE_TERMIO)
 
 STRIPFLAG=
 AC_SUBST(STRIPFLAG)
+
+# Some old system hack migrated from config.h.in. Probably obsolete in 2025?
+AH_VERBATIM([INT_MIN_FALLBACK],
+[#if defined(HAVE_VALUES_H) && !defined(HAVE_LIMITS_H)
+#define INT_MIN -MAXINT
+#endif
+])
+
+# Migrated from config.h.in. Unused, purpose – unknown.
+AC_DEFINE(GDEBUG, 1, [Define GDEBUG to 1 for historic reasons])
 
 GRASS_HOME="${DSTDIR}"
 AC_SUBST(GRASS_HOME)
@@ -2050,6 +2083,7 @@ LOC_MSG_USE(POSIX thread support,USE_PTHREAD)
 LOC_MSG_USE(PostgreSQL support,USE_POSTGRES)
 LOC_MSG_USE(Readline support,USE_READLINE)
 LOC_MSG_USE(Regex support,USE_REGEX)
+LOC_MSG_USE(PCRE support,USE_PCRE)
 LOC_MSG_USE(SQLite support,USE_SQLITE)
 LOC_MSG_USE(TIFF support,USE_TIFF)
 LOC_MSG_USE(X11 support,USE_X11)

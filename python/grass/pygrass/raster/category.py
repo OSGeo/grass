@@ -107,7 +107,7 @@ class Category(list):
         return "[{0}]".format(",\n ".join(cats))
 
     def _chk_index(self, index):
-        if type(index) == str:
+        if isinstance(index, str):
             try:
                 index = self.labels().index(index)
             except ValueError:
@@ -115,15 +115,16 @@ class Category(list):
         return index
 
     def _chk_value(self, value):
-        if type(value) == tuple:
-            length = len(value)
-            if length == 2:
-                label, min_cat = value
-                value = (label, min_cat, None)
-            elif length < 2 or length > 3:
-                raise TypeError("Tuple with a length that is not supported.")
-        else:
-            raise TypeError("Only Tuple are supported.")
+        if not isinstance(value, tuple):
+            msg = "Only tuples are supported."
+            raise TypeError(msg)
+        length = len(value)
+        if length == 2:
+            label, min_cat = value
+            value = (label, min_cat, None)
+        elif length < 2 or length > 3:
+            msg = "Tuple with a length that is not supported."
+            raise TypeError(msg)
         return value
 
     def __getitem__(self, index):
@@ -186,7 +187,7 @@ class Category(list):
         )
         # Manage C function Errors
         if err == 1:
-            return None
+            return
         if err == 0:
             raise GrassError(_("Null value detected"))
         if err == -1:
@@ -204,7 +205,8 @@ class Category(list):
         elif index < (len(self)):
             self[index] = value
         else:
-            raise TypeError("Index outside range.")
+            msg = "Index outside range."
+            raise TypeError(msg)
 
     def reset(self):
         for i in range(len(self) - 1, -1, -1):
@@ -244,7 +246,8 @@ class Category(list):
             self.name, self.mapset, ctypes.byref(self.c_cats)
         )
         if err == -1:
-            raise GrassError("Can not read the categories.")
+            msg = "Can not read the categories."
+            raise GrassError(msg)
         # copy from C struct to list
         self._read_cats()
 
@@ -268,8 +271,9 @@ class Category(list):
         :type category: Category object
         """
         libraster.Rast_copy_cats(
-            ctypes.byref(self.c_cats), ctypes.byref(category.c_cats)  # to
-        )  # from
+            ctypes.byref(self.c_cats),  # to
+            ctypes.byref(category.c_cats),  # from
+        )
         self._read_cats()
 
     def ncats(self):
@@ -280,7 +284,8 @@ class Category(list):
         void Rast_set_cats_fmt()
         """
         # TODO: add
-        raise ImplementationError("set_cats_fmt() is not implemented yet.")
+        msg = f"{self.set_cats_fmt.__name__}() is not implemented yet."
+        raise ImplementationError(msg)
 
     def read_rules(self, filename, sep=":"):
         """Copy categories from a rules file, default separator is ':', the
@@ -308,7 +313,8 @@ class Category(list):
                 elif len(cat) == 3:
                     label, min_cat, max_cat = cat
                 else:
-                    raise TypeError("Row length is greater than 3")
+                    msg = "Row length is greater than 3"
+                    raise TypeError(msg)
                 self.append((label, min_cat, max_cat))
 
     def write_rules(self, filename, sep=":"):

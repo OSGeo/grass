@@ -200,7 +200,7 @@ def main(options, flags):
             nprocs = 1
             gs.warning(
                 _(
-                    "The number of parellel r.contour processes was "
+                    "The number of parallel r.contour processes was "
                     "reduced to 1 because of the table attribute "
                     "creation"
                 )

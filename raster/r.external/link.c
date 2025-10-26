@@ -131,18 +131,18 @@ void make_link(const char *input, const char *output, int band,
     char null_str[256], type_str[8], band_str[8];
     FILE *fp;
 
-    sprintf(band_str, "%d", band);
+    snprintf(band_str, sizeof(band_str), "%d", band);
 
     if (info->has_null) {
         if (info->data_type == CELL_TYPE)
-            sprintf(null_str, "%d", (int)info->null_val);
+            snprintf(null_str, sizeof(null_str), "%d", (int)info->null_val);
         else
-            sprintf(null_str, "%.22g", info->null_val);
+            snprintf(null_str, sizeof(null_str), "%.22g", info->null_val);
     }
     else
         strcpy(null_str, "none");
 
-    sprintf(type_str, "%d", info->gdal_type);
+    snprintf(type_str, sizeof(type_str), "%d", info->gdal_type);
 
     G_set_key_value("file", input, key_val);
     G_set_key_value("band", band_str, key_val);
@@ -223,7 +223,7 @@ void create_map(const char *input, int band, const char *output,
     G_verbose_message(_("Creating support files for %s"), output);
     Rast_short_history(output, "GDAL-link", &history);
     Rast_command_history(&history);
-    sprintf(buf, "%s band %d", input, band);
+    snprintf(buf, sizeof(buf), "%s band %d", input, band);
     Rast_set_history(&history, HIST_DATSRC_1, buf);
     Rast_write_history(output, &history);
 
