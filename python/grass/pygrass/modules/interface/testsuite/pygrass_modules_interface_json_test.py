@@ -11,8 +11,7 @@
 #
 #############################################################################
 
-"""Test of JSON export from pygrass.Module for usage in actinia """
-
+"""Test of JSON export from pygrass.Module for usage in actinia"""
 
 from grass.pygrass.modules.interface import Module
 
