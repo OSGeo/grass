@@ -114,8 +114,9 @@ static void make_gmt_header(struct GRD_HEADER *header, const char *name,
 
     strcpy(header->z_units, "elevation");
     strcpy(header->title, name);
-    sprintf(header->command, "r.out.bin -h input=%s output=%s", name, outfile);
-    sprintf(header->remark, "%g used for NULL", null_val);
+    snprintf(header->command, GRD_COMMAND_LEN,
+             "r.out.bin -h input=%s output=%s", name, outfile);
+    snprintf(header->remark, GRD_REMARK_LEN, "%g used for NULL", null_val);
 }
 
 static void write_gmt_header(const struct GRD_HEADER *header, int swap_flag,
@@ -151,7 +152,7 @@ static void write_bil_hdr(const char *outfile, const struct Cell_head *region,
     char out_tmp[GPATH_MAX];
     FILE *fp;
 
-    sprintf(out_tmp, "%s.hdr", outfile);
+    snprintf(out_tmp, sizeof(out_tmp), "%s.hdr", outfile);
     G_verbose_message(_("Header File = %s"), out_tmp);
 
     /* Open Header File */
@@ -239,7 +240,7 @@ static void write_bil_wld(const char *outfile, const struct Cell_head *region)
     char out_tmp[GPATH_MAX];
     FILE *fp;
 
-    sprintf(out_tmp, "%s.wld", outfile);
+    snprintf(out_tmp, sizeof(out_tmp), "%s.wld", outfile);
     G_verbose_message(_("World File = %s"), out_tmp);
 
     /* Open World File */
@@ -370,8 +371,9 @@ int main(int argc, char *argv[])
     if (parm.output->answer)
         outfile = parm.output->answer;
     else {
-        outfile = G_malloc(strlen(name) + 4 + 1);
-        sprintf(outfile, "%s.bin", name);
+        size_t len = strlen(name) + 4 + 1;
+        outfile = G_malloc(len);
+        snprintf(outfile, len, "%s.bin", name);
     }
 
     if (G_strcasecmp(parm.order->answer, "big") == 0)

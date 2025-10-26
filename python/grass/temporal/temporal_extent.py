@@ -3,7 +3,7 @@ Temporal extent classes
 
 Usage:
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> import grass.temporal as tgis
     >>> from datetime import datetime
@@ -38,7 +38,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> A = TemporalExtent(
@@ -81,7 +81,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
     """
 
-    def __init__(self, table=None, ident=None, start_time=None, end_time=None):
+    def __init__(self, table=None, ident=None, start_time=None, end_time=None) -> None:
         SQLDatabaseInterface.__init__(self, table, ident)
 
         self.set_id(ident)
@@ -98,7 +98,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=5, end_time=6)
             >>> inter = A.intersect(A)
@@ -216,7 +216,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=5, end_time=6)
             >>> inter = A.intersect(A)
@@ -405,7 +405,7 @@ class TemporalExtent(SQLDatabaseInterface):
                  or None in case the temporal extents are unrelated
                  (before or after)
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=5, end_time=8)
             >>> B = TemporalExtent(start_time=3, end_time=4)
@@ -442,7 +442,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=5, end_time=6)
             >>> B = TemporalExtent(start_time=5, end_time=7)
@@ -473,7 +473,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=5, end_time=7)
             >>> B = TemporalExtent(start_time=5, end_time=6)
@@ -504,7 +504,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=6, end_time=7)
             >>> B = TemporalExtent(start_time=5, end_time=7)
@@ -535,7 +535,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=5, end_time=7)
             >>> B = TemporalExtent(start_time=6, end_time=7)
@@ -566,7 +566,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=8, end_time=9)
             >>> B = TemporalExtent(start_time=6, end_time=7)
@@ -594,7 +594,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=6, end_time=7)
             >>> B = TemporalExtent(start_time=8, end_time=9)
@@ -624,7 +624,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=5, end_time=7)
             >>> B = TemporalExtent(start_time=7, end_time=9)
@@ -665,7 +665,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=5, end_time=7)
             >>> B = TemporalExtent(start_time=3, end_time=5)
@@ -694,7 +694,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=5, end_time=7)
             >>> B = TemporalExtent(start_time=7, end_time=9)
@@ -722,7 +722,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=5, end_time=7)
             >>> B = TemporalExtent(start_time=4, end_time=9)
@@ -761,7 +761,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=4, end_time=9)
             >>> B = TemporalExtent(start_time=5, end_time=8)
@@ -800,7 +800,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=5, end_time=6)
             >>> B = TemporalExtent(start_time=5, end_time=6)
@@ -834,7 +834,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=5, end_time=7)
             >>> B = TemporalExtent(start_time=6, end_time=8)
@@ -861,7 +861,7 @@ class TemporalExtent(SQLDatabaseInterface):
         )
 
     def overlapped(self, extent) -> bool:
-        """Return True if this temporal extent (A) overlapps the provided
+        """Return True if this temporal extent (A) overlaps the provided
         temporal extent (B)
         ::
 
@@ -874,7 +874,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
         Usage:
 
-        .. code-block:: python
+        .. code-block:: pycon
 
             >>> A = TemporalExtent(start_time=6, end_time=8)
             >>> B = TemporalExtent(start_time=5, end_time=7)
@@ -967,21 +967,22 @@ class TemporalExtent(SQLDatabaseInterface):
             return "precedes"
         return None
 
-    def set_id(self, ident):
+    def set_id(self, ident) -> None:
         """Convenient method to set the unique identifier (primary key)"""
         self.ident = ident
         self.D["id"] = ident
 
-    def set_start_time(self, start_time):
+    def set_start_time(self, start_time) -> None:
         """Set the valid start time of the extent"""
         self.D["start_time"] = start_time
 
-    def set_end_time(self, end_time):
+    def set_end_time(self, end_time) -> None:
         """Set the valid end time of the extent"""
         self.D["end_time"] = end_time
 
     def get_id(self):
         """Convenient method to get the unique identifier (primary key)
+
         :return: None if not found
         """
         if "id" in self.D:
@@ -990,14 +991,18 @@ class TemporalExtent(SQLDatabaseInterface):
 
     def get_start_time(self):
         """Get the valid start time of the extent
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "start_time" in self.D:
             return self.D["start_time"]
         return None
 
     def get_end_time(self):
         """Get the valid end time of the extent
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "end_time" in self.D:
             return self.D["end_time"]
         return None
@@ -1007,13 +1012,13 @@ class TemporalExtent(SQLDatabaseInterface):
     start_time = property(fget=get_start_time, fset=set_start_time)
     end_time = property(fget=get_end_time, fset=set_end_time)
 
-    def print_info(self):
+    def print_info(self) -> None:
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print(" | Start time:................. " + str(self.get_start_time()))
         print(" | End time:................... " + str(self.get_end_time()))
 
-    def print_shell_info(self):
+    def print_shell_info(self) -> None:
         """Print information about this class in shell style"""
         print("start_time='{}'".format(str(self.get_start_time())))
         print("end_time='{}'".format(str(self.get_end_time())))
@@ -1028,10 +1033,10 @@ class AbsoluteTemporalExtent(TemporalExtent):
     start_time and end_time must be of type datetime
     """
 
-    def __init__(self, table=None, ident=None, start_time=None, end_time=None):
+    def __init__(self, table=None, ident=None, start_time=None, end_time=None) -> None:
         TemporalExtent.__init__(self, table, ident, start_time, end_time)
 
-    def print_info(self):
+    def print_info(self) -> None:
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print(
@@ -1039,7 +1044,7 @@ class AbsoluteTemporalExtent(TemporalExtent):
         )
         TemporalExtent.print_info(self)
 
-    def print_shell_info(self):
+    def print_shell_info(self) -> None:
         """Print information about this class in shell style"""
         TemporalExtent.print_shell_info(self)
 
@@ -1048,21 +1053,21 @@ class AbsoluteTemporalExtent(TemporalExtent):
 
 
 class RasterAbsoluteTime(AbsoluteTemporalExtent):
-    def __init__(self, ident=None, start_time=None, end_time=None):
+    def __init__(self, ident=None, start_time=None, end_time=None) -> None:
         AbsoluteTemporalExtent.__init__(
             self, "raster_absolute_time", ident, start_time, end_time
         )
 
 
 class Raster3DAbsoluteTime(AbsoluteTemporalExtent):
-    def __init__(self, ident=None, start_time=None, end_time=None):
+    def __init__(self, ident=None, start_time=None, end_time=None) -> None:
         AbsoluteTemporalExtent.__init__(
             self, "raster3d_absolute_time", ident, start_time, end_time
         )
 
 
 class VectorAbsoluteTime(AbsoluteTemporalExtent):
-    def __init__(self, ident=None, start_time=None, end_time=None):
+    def __init__(self, ident=None, start_time=None, end_time=None) -> None:
         AbsoluteTemporalExtent.__init__(
             self, "vector_absolute_time", ident, start_time, end_time
         )
@@ -1079,7 +1084,7 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> A = STDSAbsoluteTime(
@@ -1122,17 +1127,17 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
         end_time=None,
         granularity=None,
         map_time=None,
-    ):
+    ) -> None:
         AbsoluteTemporalExtent.__init__(self, table, ident, start_time, end_time)
 
         self.set_granularity(granularity)
         self.set_map_time(map_time)
 
-    def set_granularity(self, granularity):
+    def set_granularity(self, granularity) -> None:
         """Set the granularity of the space time dataset"""
         self.D["granularity"] = granularity
 
-    def set_map_time(self, map_time):
+    def set_map_time(self, map_time) -> None:
         """Set the type of the map time
 
         Registered maps may have different types of time:
@@ -1147,7 +1152,9 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
 
     def get_granularity(self):
         """Get the granularity of the space time dataset
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "granularity" in self.D:
             return self.D["granularity"]
         return None
@@ -1171,14 +1178,14 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
     granularity = property(fget=get_granularity, fset=set_granularity)
     map_time = property(fget=get_map_time, fset=set_map_time)
 
-    def print_info(self):
+    def print_info(self) -> None:
         """Print information about this class in human readable style"""
         AbsoluteTemporalExtent.print_info(self)
         #      0123456789012345678901234567890
         print(" | Granularity:................ " + str(self.get_granularity()))
         print(" | Temporal type of maps:...... " + str(self.get_map_time()))
 
-    def print_shell_info(self):
+    def print_shell_info(self) -> None:
         """Print information about this class in shell style"""
         AbsoluteTemporalExtent.print_shell_info(self)
         print("granularity='{}'".format(str(self.get_granularity())))
@@ -1189,21 +1196,27 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
 
 
 class STRDSAbsoluteTime(STDSAbsoluteTime):
-    def __init__(self, ident=None, start_time=None, end_time=None, granularity=None):
+    def __init__(
+        self, ident=None, start_time=None, end_time=None, granularity=None
+    ) -> None:
         STDSAbsoluteTime.__init__(
             self, "strds_absolute_time", ident, start_time, end_time, granularity
         )
 
 
 class STR3DSAbsoluteTime(STDSAbsoluteTime):
-    def __init__(self, ident=None, start_time=None, end_time=None, granularity=None):
+    def __init__(
+        self, ident=None, start_time=None, end_time=None, granularity=None
+    ) -> None:
         STDSAbsoluteTime.__init__(
             self, "str3ds_absolute_time", ident, start_time, end_time, granularity
         )
 
 
 class STVDSAbsoluteTime(STDSAbsoluteTime):
-    def __init__(self, ident=None, start_time=None, end_time=None, granularity=None):
+    def __init__(
+        self, ident=None, start_time=None, end_time=None, granularity=None
+    ) -> None:
         STDSAbsoluteTime.__init__(
             self, "stvds_absolute_time", ident, start_time, end_time, granularity
         )
@@ -1219,7 +1232,7 @@ class RelativeTemporalExtent(TemporalExtent):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> A = RelativeTemporalExtent(
@@ -1251,11 +1264,11 @@ class RelativeTemporalExtent(TemporalExtent):
 
     def __init__(
         self, table=None, ident=None, start_time=None, end_time=None, unit=None
-    ):
+    ) -> None:
         TemporalExtent.__init__(self, table, ident, start_time, end_time)
         self.set_unit(unit)
 
-    def set_unit(self, unit):
+    def set_unit(self, unit) -> None:
         """Set the unit of the relative time. Valid units are:
 
         - years
@@ -1269,7 +1282,9 @@ class RelativeTemporalExtent(TemporalExtent):
 
     def get_unit(self):
         """Get the unit of the relative time
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "unit" in self.D:
             return self.D["unit"]
         return None
@@ -1295,7 +1310,7 @@ class RelativeTemporalExtent(TemporalExtent):
     # Properties
     unit = property(fget=get_unit, fset=set_unit)
 
-    def print_info(self):
+    def print_info(self) -> None:
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print(
@@ -1304,7 +1319,7 @@ class RelativeTemporalExtent(TemporalExtent):
         TemporalExtent.print_info(self)
         print(" | Relative time unit:......... " + str(self.get_unit()))
 
-    def print_shell_info(self):
+    def print_shell_info(self) -> None:
         """Print information about this class in shell style"""
         TemporalExtent.print_shell_info(self)
         print("unit=" + str(self.get_unit()))
@@ -1314,21 +1329,21 @@ class RelativeTemporalExtent(TemporalExtent):
 
 
 class RasterRelativeTime(RelativeTemporalExtent):
-    def __init__(self, ident=None, start_time=None, end_time=None, unit=None):
+    def __init__(self, ident=None, start_time=None, end_time=None, unit=None) -> None:
         RelativeTemporalExtent.__init__(
             self, "raster_relative_time", ident, start_time, end_time, unit
         )
 
 
 class Raster3DRelativeTime(RelativeTemporalExtent):
-    def __init__(self, ident=None, start_time=None, end_time=None, unit=None):
+    def __init__(self, ident=None, start_time=None, end_time=None, unit=None) -> None:
         RelativeTemporalExtent.__init__(
             self, "raster3d_relative_time", ident, start_time, end_time, unit
         )
 
 
 class VectorRelativeTime(RelativeTemporalExtent):
-    def __init__(self, ident=None, start_time=None, end_time=None, unit=None):
+    def __init__(self, ident=None, start_time=None, end_time=None, unit=None) -> None:
         RelativeTemporalExtent.__init__(
             self, "vector_relative_time", ident, start_time, end_time, unit
         )
@@ -1344,7 +1359,7 @@ class STDSRelativeTime(RelativeTemporalExtent):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> A = STDSRelativeTime(
@@ -1393,17 +1408,17 @@ class STDSRelativeTime(RelativeTemporalExtent):
         unit=None,
         granularity=None,
         map_time=None,
-    ):
+    ) -> None:
         RelativeTemporalExtent.__init__(self, table, ident, start_time, end_time, unit)
 
         self.set_granularity(granularity)
         self.set_map_time(map_time)
 
-    def set_granularity(self, granularity):
+    def set_granularity(self, granularity) -> None:
         """Set the granularity of the space time dataset"""
         self.D["granularity"] = granularity
 
-    def set_map_time(self, map_time):
+    def set_map_time(self, map_time) -> None:
         """Set the type of the map time
 
         Registered maps may have different types of time:
@@ -1418,7 +1433,9 @@ class STDSRelativeTime(RelativeTemporalExtent):
 
     def get_granularity(self):
         """Get the granularity of the space time dataset
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "granularity" in self.D:
             return self.D["granularity"]
         return None
@@ -1442,14 +1459,14 @@ class STDSRelativeTime(RelativeTemporalExtent):
     granularity = property(fget=get_granularity, fset=set_granularity)
     map_time = property(fget=get_map_time, fset=set_map_time)
 
-    def print_info(self):
+    def print_info(self) -> None:
         """Print information about this class in human readable style"""
         RelativeTemporalExtent.print_info(self)
         #      0123456789012345678901234567890
         print(" | Granularity:................ " + str(self.get_granularity()))
         print(" | Temporal type of maps:...... " + str(self.get_map_time()))
 
-    def print_shell_info(self):
+    def print_shell_info(self) -> None:
         """Print information about this class in shell style"""
         RelativeTemporalExtent.print_shell_info(self)
         print("granularity=" + str(self.get_granularity()))
@@ -1468,7 +1485,7 @@ class STRDSRelativeTime(STDSRelativeTime):
         unit=None,
         granularity=None,
         map_time=None,
-    ):
+    ) -> None:
         STDSRelativeTime.__init__(
             self,
             "strds_relative_time",
@@ -1490,7 +1507,7 @@ class STR3DSRelativeTime(STDSRelativeTime):
         unit=None,
         granularity=None,
         map_time=None,
-    ):
+    ) -> None:
         STDSRelativeTime.__init__(
             self,
             "str3ds_relative_time",
@@ -1512,7 +1529,7 @@ class STVDSRelativeTime(STDSRelativeTime):
         unit=None,
         granularity=None,
         map_time=None,
-    ):
+    ) -> None:
         STDSRelativeTime.__init__(
             self,
             "stvds_relative_time",

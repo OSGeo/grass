@@ -2,9 +2,13 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <string.h>
+#include <errno.h>
 
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/glocale.h>
+
 #include "raster3d_intern.h"
 
 /*---------------------------------------------------------------------------*/
@@ -122,7 +126,6 @@ static int Rast3d_writeTileCompressed(RASTER3D_Map *map, int nofNum)
  *          2 ... if write request was ignored,
  *          0 ... otherwise.
  */
-
 int Rast3d_write_tile(RASTER3D_Map *map, int tileIndex, const void *tile,
                       int type)
 {
@@ -174,6 +177,11 @@ int Rast3d_write_tile(RASTER3D_Map *map, int tileIndex, const void *tile,
     /* compute the length */
     map->tileLength[tileIndex] =
         lseek(map->data_fd, (long)0, SEEK_END) - map->index[tileIndex];
+    if (map->tileLength[tileIndex] == -1) {
+        int err = errno;
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+    }
 
     return 1;
 }
@@ -191,7 +199,6 @@ int Rast3d_write_tile(RASTER3D_Map *map, int tileIndex, const void *tile,
  *  \param tile
  *  \return int
  */
-
 int Rast3d_write_tile_float(RASTER3D_Map *map, int tileIndex, const void *tile)
 {
     int status;
@@ -216,7 +223,6 @@ int Rast3d_write_tile_float(RASTER3D_Map *map, int tileIndex, const void *tile)
  *  \param tile
  *  \return int
  */
-
 int Rast3d_write_tile_double(RASTER3D_Map *map, int tileIndex, const void *tile)
 {
     int status;
@@ -249,7 +255,6 @@ int Rast3d_write_tile_double(RASTER3D_Map *map, int tileIndex, const void *tile)
  *  \return 1 ... if successful,
  *          0 ... otherwise.
  */
-
 int Rast3d_flush_tile(RASTER3D_Map *map, int tileIndex)
 {
     const void *tile;
@@ -294,7 +299,6 @@ int Rast3d_flush_tile(RASTER3D_Map *map, int tileIndex)
  *  \return 1 ... if successful,
  *          0 ... otherwise.
  */
-
 int Rast3d_flush_tile_cube(RASTER3D_Map *map, int xMin, int yMin, int zMin,
                            int xMax, int yMax, int zMax)
 {
@@ -340,7 +344,6 @@ int Rast3d_flush_tile_cube(RASTER3D_Map *map, int xMin, int yMin, int zMin,
  *  \return 1 ... if successful,
  *          0 ... otherwise.
  */
-
 int Rast3d_flush_tiles_in_cube(RASTER3D_Map *map, int xMin, int yMin, int zMin,
                                int xMax, int yMax, int zMax)
 {

@@ -54,7 +54,7 @@ space time dataset, run:
 <div class="code"><pre>
 # create the subset for 2012 data
 t.rast.extract input=tempmean_monthly output=tempmean_monthly_later_2012 \
-               where="start_time >= '2012-01-01'"
+               where="start_time &gt;= '2012-01-01'"
 
 # set the right 3D region
 g.region -p3 res3=500

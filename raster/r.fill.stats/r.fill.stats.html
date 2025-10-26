@@ -77,7 +77,7 @@ is to use a search radius of just three cells).
 
 The images below show a gradiometer dataset with gaps and its
 interpolated equivalent, produced using the spatially weighted mean
-operator (<tt>mode="wmean"</tt>).
+operator (<code>mode="wmean"</code>).
 
 <p>
 
@@ -132,7 +132,7 @@ lose their influence on the cell to be interpolated more rapidly with
 increasing distance from the latter. Another way of explaining this
 effect is to state that larger "power" settings result in more
 localized interpolation, smaller ones in more globalized interpolation.
-The default setting is <tt>power=2.0</tt>.
+The default setting is <code>power=2.0</code>.
 
 <p>
 
@@ -171,7 +171,7 @@ uncertainty. Uncertainty is measured by summing up all cells in the
 neighborhood (defined by the search radius <b>distance</b>) that
 contain a value in the <b>input</b> map, multiplied by their weights,
 and dividing the result by the sum of all weights in the neighborhood.
-For <tt>mode=wmean</tt>, this means that interpolated output cells that
+For <code>mode=wmean</code>, this means that interpolated output cells that
 were computed from many nearby input cells have very low uncertainty
 and vice versa. For all other modes, all weights in the neighborhood
 are constant "1" and the uncertainty measure is a simple measure of how
@@ -198,7 +198,7 @@ cell data is copied through to the result map without alteration.
 </a>
 <p><em>
 Effect of smoothing the original data: The top row shows a gap-filled surface computed from a rasterized Lidar point
-cloud (using <tt>mode=wmean</tt> and <tt>power=2</tt>), and the derived slope, aspect,
+cloud (using <code>mode=wmean</code> and <code>power=2</code>), and the derived slope, aspect,
 and profile curvature maps. The smoothing effect is clearly visible.
 The bottom row shows the effect of setting the <b>-k</b> flag: Preserving the original
 cell values in the interpolated output produces and unsmoothed, noisy surface, and likewise
@@ -292,11 +292,11 @@ search distance of four cells from the center cell:
 </pre>
 
 Note that the weights in such a small window drop rapidly for the
-default setting of <tt>power=2</tt>.
+default setting of <code>power=2</code>.
 
 <p>
 
-If the distance is given in map units (flag <tt>-m</tt>), then the
+If the distance is given in map units (flag <code>-m</code>), then the
 search window can be modeled more accurately as a circle. The
 illustration below shows the precomputed weights for a distance in map
 units that is approximately equivalent to four cells from the center
@@ -395,10 +395,10 @@ http://fatra.cnr.ncsu.edu/uav-lidar-analytics-course/midpines_2015_spm.las
 -->
 
 Inspect the point density and determine the extent of the point cloud
-using the <em><a href="r.in.lidar.html">r.in.lidar</a></em> module:
+using the <em><a href="r.in.pdal.html">r.in.pdal</a></em> module:
 
 <div class="code"><pre>
-r.in.lidar -e input=points.las output=density method=n resolution=5 class_filter=2
+r.in.pdal -e input=points.las output=density method=n resolution=5 class_filter=2
 </pre></div>
 
 Based on the result, set computational region extent and desired
@@ -411,7 +411,7 @@ g.region -pa raster=density res=1
 Import the point cloud as raster using binning:
 
 <div class="code"><pre>
-r.in.lidar input=points.las output=ground_raw method=mean class_filter=2
+r.in.pdal input=points.las output=ground_raw method=mean class_filter=2
 </pre></div>
 
 Check that there are more non-NULL cells than NULL ("no data") cells:
@@ -433,7 +433,7 @@ r.fill.stats input=ground output=ground_filled uncertainty=uncertainty distance=
 </pre></div>
 
 <center>
-<a href="r_fill_stats_lidar.png"><img src="r_fill_stats_lidar.png" alt="Point density and ground surface" width=600 height=600></a>
+<a href="r_fill_stats_lidar.png"><img src="r_fill_stats_lidar.png" alt="Point density and ground surface" width="600" height="600"></a>
 <p><em>
 Binning of Lidar and resulting ground surface with filled gaps.
 Note the remaining NULL cells (white) in the resulting ground surface.
@@ -476,7 +476,7 @@ d.mon wx0
 d.histogram elev_srtm_30m
 
 # remove SRTM outliers, i.e. SRTM below 50m (esp. lakes), leading to no data areas
-r.mapcalc "elev_srtm_30m_filt = if(elev_srtm_30m < 50.0, null(), elev_srtm_30m)"
+r.mapcalc "elev_srtm_30m_filt = if(elev_srtm_30m &lt; 50.0, null(), elev_srtm_30m)"
 d.histogram elev_srtm_30m_filt
 d.rast elev_srtm_30m_filt
 

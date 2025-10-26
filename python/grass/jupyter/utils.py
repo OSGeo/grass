@@ -11,6 +11,8 @@
 #            for details.
 
 """Utility functions warpping existing processes in a suitable way"""
+
+from collections.abc import Mapping
 import tempfile
 import json
 import os
@@ -35,7 +37,7 @@ def get_region(env=None):
 
 def get_location_proj_string(env=None):
     """Returns projection of environment in PROJ.4 format"""
-    out = gs.read_command("g.proj", flags="jf", env=env)
+    out = gs.read_command("g.proj", flags="fp", format="proj4", env=env)
     return out.strip()
 
 
@@ -70,15 +72,12 @@ def reproject_region(region, from_proj, to_proj):
         stdout=gs.PIPE,
         stderr=gs.PIPE,
     )
-    proc.stdin.write(gs.encode(proj_input))
-    proc.stdin.close()
-    proc.stdin = None
-    proj_output, stderr = proc.communicate()
+    proj_output, stderr = proc.communicate(proj_input)
     if proc.returncode:
         raise RuntimeError(
             _("Encountered error while running m.proj: {}").format(stderr)
         )
-    output = gs.decode(proj_output).splitlines()
+    output = proj_output.splitlines()
     # get the largest bbox
     latitude_list = []
     longitude_list = []
@@ -212,7 +211,7 @@ def query_raster(coord, raster_list):
     :param coord: Coordinates given as a tuple (latitude, longitude).
     :param list raster_list: List of raster names to query.
 
-    :return: str: HTML formatted string containing the results of the raster queries.
+    :return str: HTML formatted string containing the results of the raster queries.
     """
     output_list = ["""<table>"""]
 
@@ -303,17 +302,18 @@ def query_vector(coord, vector_list, distance):
     return _style_table(final_output)
 
 
-def estimate_resolution(raster, mapset, location, dbase, env):
+def estimate_resolution(
+    raster: str, mapset: str, location: str, dbase: str, env: Mapping
+) -> float:
     """Estimates resolution of reprojected raster.
 
-    :param str raster: name of raster
-    :param str mapset: mapset of raster
-    :param str location: name of source location
-    :param str dbase: path to source database
+    :param raster: name of raster
+    :param mapset: mapset of raster
+    :param location: name of source location
+    :param dbase: path to source database
     :param dict env: target environment
 
-    :return float estimate: estimated resolution of raster in destination
-                            environment
+    :return estimate: estimated resolution of raster in destination environment
     """
     output = gs.read_command(
         "r.proj",
@@ -326,9 +326,9 @@ def estimate_resolution(raster, mapset, location, dbase, env):
     ).strip()
     params = gs.parse_key_val(output, vsep=" ")
     output = gs.read_command("g.region", flags="ug", env=env, **params)
-    output = gs.parse_key_val(output, val_type=float)
-    cell_ns = (output["n"] - output["s"]) / output["rows"]
-    cell_ew = (output["e"] - output["w"]) / output["cols"]
+    keyval = gs.parse_key_val(output, val_type=float)
+    cell_ns = (keyval["n"] - keyval["s"]) / keyval["rows"]
+    cell_ew = (keyval["e"] - keyval["w"]) / keyval["cols"]
     return (cell_ew + cell_ns) / 2.0
 
 
@@ -384,7 +384,8 @@ def get_map_name_from_d_command(module, **kwargs):
     """
     special = {"d.his": "hue", "d.legend": "raster", "d.rgb": "red", "d.shade": "shade"}
     parameter = special.get(module, "map")
-    return kwargs.get(parameter, "")
+    value = kwargs.get(parameter, "")
+    return value if isinstance(value, str) else None
 
 
 def get_rendering_size(region, width, height, default_width=600, default_height=400):
@@ -475,13 +476,14 @@ def update_region(region):
     current = gs.region()
     return gs.parse_command(
         "g.region",
-        flags="ga",
+        flags="p" if gs.locn_is_latlong() else "pa",
         n=region["north"],
         s=region["south"],
         e=region["east"],
         w=region["west"],
         nsres=current["nsres"],
         ewres=current["ewres"],
+        format="json",
     )
 
 

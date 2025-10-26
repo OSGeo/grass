@@ -16,9 +16,7 @@ import os
 output = """\
 -78.77462049|35.6875073|-78.60830318|35.74855834|1506|678
 -78.77462049|35.74855834|-78.60830318|35.80960938|1506|678
-""".replace(
-    "\n", os.linesep
-)
+""".replace("\n", os.linesep)
 
 
 class TestRTileset(TestCase):

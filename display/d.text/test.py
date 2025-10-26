@@ -52,7 +52,7 @@ def text(in_text):
 
 for i in range(36):
     font(fonts[int(i % len(fonts))])
-    size((36 - i if ((i >= 9 and i <= 18) or i > 27) else i) % 9)
+    size((36 - i if ((9 <= i <= 18) or i > 27) else i) % 9)
     rotate(i * 10)
     color(colors[i % len(colors)])
     xy(
@@ -73,8 +73,8 @@ src = Path(__file__).read_text()
 print(
     ".L 0\n"
     + re.sub(
-        '(".*?")',
+        r'(".*?")',
         "\n.C red\n,\\g<0>\n.C gray\n",
-        re.sub("\n", "\n.L 1\n.L 0\n", re.sub("(?m)^#.*\n?", "", src)),
+        re.sub(r"\n", "\n.L 1\n.L 0\n", re.sub(r"(?m)^#.*\n?", "", src)),
     )
 )

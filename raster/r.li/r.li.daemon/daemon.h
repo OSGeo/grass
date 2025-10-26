@@ -113,7 +113,7 @@ struct area_entry {
 
 /**
  * \brief function prototype for index calculation
- * \param fd file descripter of opened raster map
+ * \param fd file descriptor of opened raster map
  * \param par optional parameters
  * \param ad definition of the sample area
  * \param result pointer to store the result
@@ -137,7 +137,6 @@ typedef int rli_func(int fd, char **par, struct area_entry *ad, double *result);
  * idiom for success/failure. The interface was designed to accommodate
  * common usage of this function in r.li modules.
  */
-
 int calculateIndex(char *file, rli_func *f, char **parameters, char *raster,
                    char *output);
 

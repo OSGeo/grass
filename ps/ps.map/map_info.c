@@ -51,7 +51,8 @@ int map_info(void)
         fprintf(PS.fp, "(%s) SW pop /t1 XD\n", PS.scaletext);
         if (PS.grid) {
             k = 5.5;
-            sprintf(buf, "%d %s", PS.grid, G_database_unit_name(PS.grid != 1));
+            snprintf(buf, sizeof(buf), "%d %s", PS.grid,
+                     G_database_unit_name(PS.grid != 1));
             fprintf(PS.fp, "(%s) SW pop /t2 XD\n", buf);
             fprintf(PS.fp, "t1 t2 lt {/t1 t2 def} if \n");
         }
@@ -86,7 +87,8 @@ int map_info(void)
 
     /* show size of grid, if any */
     if (PS.grid) {
-        sprintf(buf, "%d %s", PS.grid, G_database_unit_name(PS.grid != 1));
+        snprintf(buf, sizeof(buf), "%d %s", PS.grid,
+                 G_database_unit_name(PS.grid != 1));
         show_text(x, y - dy, "GRID:");
         fprintf(PS.fp, "(%s) sx %.1f MS\n", buf, y - dy);
         y -= dy;
@@ -95,7 +97,7 @@ int map_info(void)
     /* show region */
     dy = 2.5 * fontsize;
     y -= dy;
-    sprintf(buf, "%s    ", west);
+    snprintf(buf, sizeof(buf), "%s    ", west);
     show_text(x, y, region);
     fprintf(PS.fp, "(%s) sx %.1f MS\n", buf, y);
     fprintf(PS.fp, "currentpoint pop ");
