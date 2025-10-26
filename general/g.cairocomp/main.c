@@ -65,7 +65,7 @@ static void write_xid(const char *filename, XID xid)
     if (!fp)
         G_fatal_error(_("Unable to open output file <%s>"), filename);
 
-    sprintf(buf, "0x%08lx\n", (unsigned long)xid);
+    snprintf(buf, sizeof(buf), "0x%08lx\n", (unsigned long)xid);
 
     if (fputs(buf, fp) < 0)
         G_fatal_error(_("Unable to write output file <%s>"), filename);

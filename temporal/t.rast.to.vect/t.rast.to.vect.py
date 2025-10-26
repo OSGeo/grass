@@ -199,7 +199,7 @@ def main(options, flags):
             nprocs = 1
             gs.warning(
                 _(
-                    "The number of parellel r.to.vect processes was "
+                    "The number of parallel r.to.vect processes was "
                     "reduced to 1 because of the table attribute "
                     "creation"
                 )

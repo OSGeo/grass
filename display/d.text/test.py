@@ -52,7 +52,7 @@ def text(in_text):
 
 for i in range(36):
     font(fonts[int(i % len(fonts))])
-    size((36 - i if ((i >= 9 and i <= 18) or i > 27) else i) % 9)
+    size((36 - i if ((9 <= i <= 18) or i > 27) else i) % 9)
     rotate(i * 10)
     color(colors[i % len(colors)])
     xy(

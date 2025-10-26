@@ -74,7 +74,7 @@ int export_lines_single(struct Map_info *In, int field, int otype, int donocat,
     /* get category index for given field */
     findex = Vect_cidx_get_field_index(In, field);
     if (findex == -1) {
-        G_fatal_error(_("Unable to export multi-features. No category index "
+        G_fatal_error(_("Unable to export features. No category index "
                         "for layer %d."),
                       field);
     }
@@ -90,7 +90,8 @@ int export_lines_single(struct Map_info *In, int field, int otype, int donocat,
     if (doatt) {
         /* select attributes ordered by category value */
         db_init_string(&dbstring);
-        sprintf(buf, "SELECT * FROM %s ORDER BY %s ASC", Fi->table, Fi->key);
+        snprintf(buf, sizeof(buf), "SELECT * FROM %s ORDER BY %s ASC",
+                 Fi->table, Fi->key);
         G_debug(2, "SQL: %s", buf);
         db_set_string(&dbstring, buf);
         if (db_open_select_cursor(driver, &dbstring, &cursor, DB_SEQUENTIAL) !=
@@ -287,7 +288,8 @@ int export_lines_multi(struct Map_info *In, int field, int otype, int donocat,
     if (doatt) {
         /* select attributes ordered by category value */
         db_init_string(&dbstring);
-        sprintf(buf, "SELECT * FROM %s ORDER BY %s ASC", Fi->table, Fi->key);
+        snprintf(buf, sizeof(buf), "SELECT * FROM %s ORDER BY %s ASC",
+                 Fi->table, Fi->key);
         G_debug(2, "SQL: %s", buf);
         db_set_string(&dbstring, buf);
         if (db_open_select_cursor(driver, &dbstring, &cursor, DB_SEQUENTIAL) !=

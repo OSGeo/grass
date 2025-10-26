@@ -260,7 +260,8 @@ int Select_Correction(double *Interp, int line_num, dbDriver *driver,
 
     db_init_string(&sql);
 
-    sprintf(buf, "SELECT ID, Interp FROM %s WHERE ID=%d", tab_name, line_num);
+    snprintf(buf, sizeof(buf), "SELECT ID, Interp FROM %s WHERE ID=%d",
+             tab_name, line_num);
     db_append_string(&sql, buf);
 
     if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) != DB_OK)
@@ -291,9 +292,9 @@ int Insert_Correction(double Interp, int line_num, dbDriver *driver,
     int ret;
 
     db_init_string(&sql);
-    sprintf(buf, "INSERT INTO %s (ID, Interp)", tab_name);
+    snprintf(buf, sizeof(buf), "INSERT INTO %s (ID, Interp)", tab_name);
     db_append_string(&sql, buf);
-    sprintf(buf, " VALUES (%d, %lf)", line_num, Interp);
+    snprintf(buf, sizeof(buf), " VALUES (%d, %lf)", line_num, Interp);
     db_append_string(&sql, buf);
 
     ret = db_execute_immediate(driver, &sql);
@@ -309,8 +310,8 @@ int UpDate_Correction(double Interp, int line_num, dbDriver *driver,
     int ret;
 
     db_init_string(&sql);
-    sprintf(buf, "UPDATE %s SET Interp=%lf WHERE ID=%d", tab_name, Interp,
-            line_num);
+    snprintf(buf, sizeof(buf), "UPDATE %s SET Interp=%lf WHERE ID=%d", tab_name,
+             Interp, line_num);
     db_append_string(&sql, buf);
 
     ret = db_execute_immediate(driver, &sql);

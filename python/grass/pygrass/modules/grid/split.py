@@ -99,10 +99,9 @@ def split_region_in_overlapping_tiles(region=None, width=100, height=100, overla
     box_list = []
     # print reg
     for row in range(nrows):
-        row_list = []
-        for col in range(ncols):
-            # print 'c', c, 'r', r
-            row_list.append(get_bbox(reg, row, col, width, height, overlap))
+        row_list = [
+            get_bbox(reg, row, col, width, height, overlap) for col in range(ncols)
+        ]
         box_list.append(row_list)
     return box_list
 
@@ -123,9 +122,10 @@ def split_region_tiles(region=None, width=100, height=100):
     nrows = (reg.rows + height - 1) // height
     box_list = []
     for row in range(nrows):
-        row_list = []
-        for col in range(ncols):
-            row_list.append(get_tile_start_end_row_col(reg, row, col, width, height))
+        row_list = [
+            get_tile_start_end_row_col(reg, row, col, width, height)
+            for col in range(ncols)
+        ]
         box_list.append(row_list)
     return box_list
 
@@ -146,11 +146,9 @@ def get_overlap_region_tiles(region=None, width=100, height=100, overlap=0):
     ncols = (reg.cols + width - 1) // width
     nrows = (reg.rows + height - 1) // height
     box_list = []
-    # print reg
     for row in range(nrows):
-        row_list = []
-        for col in range(ncols):
-            # print 'c', c, 'r', r
-            row_list.append(get_bbox(reg, row, col, width, height, -overlap))
+        row_list = [
+            get_bbox(reg, row, col, width, height, -overlap) for col in range(ncols)
+        ]
         box_list.append(row_list)
     return box_list

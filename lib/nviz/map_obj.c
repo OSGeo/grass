@@ -173,7 +173,8 @@ int Nviz_new_map_obj(int type, const char *name, double value, nv_data *data)
    \param desc attribute descriptor
    \param src attribute source
    \param str_value attribute value as string (if NULL, check for
-   <i>num_value</i>) \param num_value attribute value as double
+      <i>num_value</i>)
+   \param num_value attribute value as double
 
    \return 1 on success
    \return 0 on failure

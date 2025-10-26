@@ -295,6 +295,7 @@ int interp_call(struct octtree *root, struct octtree *tree)
         if (totsegm != 0) {
             G_percent(cursegm, totsegm, 1);
         }
+        G_free(point);
 
         return 1;
     }

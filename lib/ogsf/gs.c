@@ -350,7 +350,7 @@ void print_frto(float (*ft)[4])
 
    \todo G_debug ?
 
-   \param ft pointer to coordinates
+   \param rt pointer to coordinates
  */
 void print_realto(float *rt)
 {
@@ -364,7 +364,7 @@ void print_realto(float *rt)
 
    \todo G_debug ?
 
-   \param ft pointer to buffer
+   \param buff pointer to buffer
  */
 void print_256lookup(int *buff)
 {
@@ -1222,7 +1222,7 @@ int gs_get_data_avg_zmax(float *azmax)
 /*!
    \brief Get data center point
 
-   \param[out] center (array X,Y,Z)
+   \param[out] cen center (array X,Y,Z)
 
    \return -1 on error
    \return 1 on success
@@ -1306,7 +1306,7 @@ int gs_setall_norm_needupdate(void)
    \brief Check if point is masked
 
    \param gs pointer to geosurf struct
-   \param pt point coordinates (X,Y,Z)
+   \param[in] pt point coordinates (X,Y,Z)
 
    \return 1 masked
    \return 0 not masked

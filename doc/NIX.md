@@ -16,7 +16,7 @@ tool that aims to make software deployment fully reproducible.
      | sh -s -- install
   ```
 
-## Create GRASS GIS development environment
+## Create GRASS development environment
 
 Nix provides a development environment containing all required dependencies.
 
@@ -34,7 +34,7 @@ Nix provides a development environment containing all required dependencies.
   direnv allow
   ```
 
-## Launch GRASS GIS directly from the source code
+## Launch GRASS directly from the source code
 
 Nix allows to run a program directly from git source code repository using
 following command:
@@ -62,7 +62,7 @@ nix run \
   nix run github:<PR-OWNER>/grass/<PR-BRANCH>#grass
   ```
 
-## Install GRASS GIS directly from the source code
+## Install GRASS directly from the source code
 
 To install a program permanently, use following command:
 
@@ -83,7 +83,7 @@ nix profile install \
   nix profile install github:OSGeo/grass/<REVISION|BRANCH|TAG>#grass
   ```
 
-## Uninstall GRASS GIS
+## Uninstall GRASS
 
 - List installed programs
 

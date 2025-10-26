@@ -1,0 +1,13 @@
+--ignore-glob=**/tests/**
+--ignore=gui/
+--ignore=python/grass/temporal/unit_tests.py
+lib/gis/testsuite/test_gis_lib_getl.py
+lib/init/testsuite/test_grass_tmp_mapset.py
+lib/vector/Vlib/testsuite/test_vlib_box.py
+python/grass/exceptions/testsuite/test_ScriptError.py
+python/grass/gunittest/testsuite/test_checkers.py
+python/grass/pygrass/modules/interface/testsuite/test_flag.py
+python/grass/pygrass/modules/interface/testsuite/test_parameter.py
+python/grass/pygrass/vector/testsuite/test_filters.py
+python/grass/script/testsuite/test_core_make_val.py
+python/grass/script/testsuite/test_utils.py
