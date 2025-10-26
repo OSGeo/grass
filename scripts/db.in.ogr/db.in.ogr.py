@@ -97,9 +97,8 @@ def main():
 
     # check if table exists
     try:
-        nuldev = open(os.devnull, "w+")
-        s = gs.read_command("db.tables", flags="p", quiet=True, stderr=nuldev)
-        nuldev.close()
+        with open(os.devnull, "w+") as nuldev:
+            s = gs.read_command("db.tables", flags="p", quiet=True, stderr=nuldev)
     except CalledModuleError:
         # check connection parameters, set if uninitialized
         gs.read_command("db.connect", flags="c")
@@ -174,19 +173,18 @@ def main():
         gs.run_command("g.remove", flags="f", quiet=True, type="vector", name=output)
 
     # get rid of superfluous auto-added cat column (and cat_ if present)
-    nuldev = open(os.devnull, "w+")
-    gs.run_command(
-        "db.dropcolumn",
-        quiet=True,
-        flags="f",
-        table=table,
-        database=database,
-        driver=driver,
-        column="cat",
-        stdout=nuldev,
-        stderr=nuldev,
-    )
-    nuldev.close()
+    with open(os.devnull, "w+") as nuldev:
+        gs.run_command(
+            "db.dropcolumn",
+            quiet=True,
+            flags="f",
+            table=table,
+            database=database,
+            driver=driver,
+            column="cat",
+            stdout=nuldev,
+            stderr=nuldev,
+        )
 
     records = gs.db_describe(table, database=database, driver=driver)["nrows"]
     gs.message(_("Imported table <%s> with %d rows") % (output, records))

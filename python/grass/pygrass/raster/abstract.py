@@ -427,13 +427,13 @@ class RasterAbstractBase:
         >>> ele.exist()
         True
         """
-        if self.name:
-            if self.mapset == "":
-                mapset = utils.get_mapset_raster(self.name, self.mapset)
-                self.mapset = mapset or ""
-                return bool(mapset)
-            return bool(utils.get_mapset_raster(self.name, self.mapset))
-        return False
+        if not self.name:
+            return False
+        if self.mapset == "":
+            mapset = utils.get_mapset_raster(self.name, self.mapset)
+            self.mapset = mapset or ""
+            return bool(mapset)
+        return bool(utils.get_mapset_raster(self.name, self.mapset))
 
     def is_open(self):
         """Return True if the map is open False otherwise.

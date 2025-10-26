@@ -382,7 +382,7 @@ class ImportDialog(wx.Dialog):
         for itm in data:
             layerId = itm[-1]
 
-            # select only layers with different projetion
+            # select only layers with different projection
             if self.layersData[layerId][projMatch_idx] == 0:
                 dt = [itm[0], itm[grassName_idx]]
                 differentProjLayers.append(tuple(dt))
@@ -398,13 +398,12 @@ class ImportDialog(wx.Dialog):
 
             ret = dlg.ShowModal()
 
-            if ret == wx.ID_OK:
-                # do not import unchecked layers
-                for itm in reversed(list(dlg.GetData(checked=False))):
-                    idx = itm[-1]
-                    layers.pop(idx)
-            else:
+            if ret != wx.ID_OK:
                 return None
+            # do not import unchecked layers
+            for itm in reversed(list(dlg.GetData(checked=False))):
+                idx = itm[-1]
+                layers.pop(idx)
 
         return layers
 
@@ -495,15 +494,16 @@ class GdalImportDialog(ImportDialog):
                 idsn = dsn
                 if "PG:" in dsn:
                     idsn = f"{dsn} table={layer}"
-                elif os.path.exists(idsn):
+                elif Path(idsn).exists():
                     try:
                         from osgeo import gdal
+
+                        gdal.DontUseExceptions()
                     except ImportError:
                         GError(
                             parent=self,
                             message=_(
-                                "The Python GDAL package is missing."
-                                " Please install it."
+                                "The Python GDAL package is missing. Please install it."
                             ),
                         )
                         return
@@ -719,7 +719,7 @@ class OgrImportDialog(ImportDialog):
         return "v.import"
 
     def _getBlackListedParameters(self):
-        """Get parametrs which will not be showed in Settings page"""
+        """Get parameters which will not be showed in Settings page"""
         return ["input", "output", "layer"]
 
     def _getBlackListedFlags(self):
@@ -948,7 +948,7 @@ class DxfImportDialog(ImportDialog):
         return "v.in.dxf"
 
     def _getBlackListedParameters(self):
-        """Get parametrs which will not be showed in Settings page"""
+        """Get parameters which will not be showed in Settings page"""
         return ["input", "output", "layers"]
 
     def _getBlackListedFlags(self):

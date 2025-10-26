@@ -23,6 +23,7 @@ from gui_core.wrap import StaticText
 from core.gcmd import RunCommand, GError
 from core.settings import UserSettings
 import grass.script as gs
+from grass.exceptions import ScriptError
 
 
 def GetUnicodeValue(value):
@@ -45,10 +46,9 @@ def GetDbEncoding():
     then env variable), if not assumes unicode."""
     enc = UserSettings.Get(group="atm", key="encoding", subkey="value")
     if not enc and "GRASS_DB_ENCODING" in os.environ:
-        enc = os.environ["GRASS_DB_ENCODING"]
-    else:
-        enc = "utf-8"  # assuming UTF-8
-    return enc
+        return os.environ["GRASS_DB_ENCODING"]
+    # assuming UTF-8
+    return "utf-8"
 
 
 def CreateDbInfoDesc(panel, mapDBInfo, layer):
@@ -107,7 +107,7 @@ class VectorDBInfo(VectorDBInfoBase):
                 coord=(float(queryCoords[0]), float(queryCoords[1])),
                 distance=float(qdist),
             )
-        except gs.ScriptError:
+        except ScriptError:
             GError(
                 parent=None,
                 message=_(
@@ -120,9 +120,7 @@ class VectorDBInfo(VectorDBInfoBase):
             return None
 
         # process attributes
-        ret = {}
-        for key in ["Category", "Layer", "Table", "Id"]:
-            ret[key] = []
+        ret = {key: [] for key in ["Category", "Layer", "Table", "Id"]}
 
         for record in data:
             if "Table" not in record:

@@ -36,7 +36,7 @@ import sys
 import time
 import traceback
 from threading import Thread
-from typing import TYPE_CHECKING, TextIO
+from typing import TYPE_CHECKING, AnyStr, TextIO, overload
 
 import wx
 from core.debug import Debug
@@ -59,7 +59,17 @@ if TYPE_CHECKING:
     from io import TextIOWrapper
 
 
-def DecodeString(string):
+@overload
+def DecodeString(string: AnyStr) -> AnyStr | str:
+    pass
+
+
+@overload
+def DecodeString(string: None) -> None:
+    pass
+
+
+def DecodeString(string: AnyStr | None) -> AnyStr | str | None:
     """Decode string using system encoding
 
     :param string: string to be decoded
@@ -75,7 +85,17 @@ def DecodeString(string):
     return string
 
 
-def EncodeString(string):
+@overload
+def EncodeString(string: str) -> bytes | str:
+    pass
+
+
+@overload
+def EncodeString(string: None) -> None:
+    pass
+
+
+def EncodeString(string: str | None) -> bytes | str | None:
     """Return encoded string using system locales
 
     :param string: string to be encoded
@@ -160,25 +180,25 @@ class Popen(subprocess.Popen):
                 # "^" must be the first character in the list to avoid double
                 # escaping.
                 for c in ("^", "|", "&", "<", ">"):
-                    if c in args[i]:
-                        if "=" in args[i]:
-                            a = args[i].split("=")
-                            k = a[0] + "="
-                            v = "=".join(a[1 : len(a)])
-                        else:
-                            k = ""
-                            v = args[i]
+                    if c not in args[i]:
+                        continue
+                    if "=" in args[i]:
+                        a = args[i].split("=")
+                        k = a[0] + "="
+                        v = "=".join(a[1 : len(a)])
+                    else:
+                        k = ""
+                        v = args[i]
 
-                        # If there are spaces, the argument was already
-                        # esscaped with double quotes, so don't escape it
-                        # again.
-                        if c in v and " " not in v:
-                            # Here, we escape each ^ in ^^^ with ^^ and a
-                            # <special character> with ^ + <special character>,
-                            # so we need 7 carets.
-
-                            v = v.replace(c, "^^^^^^^" + c)
-                            args[i] = k + v
+                    # If there are spaces, the argument was already
+                    # escaped with double quotes, so don't escape it
+                    # again.
+                    if c in v and " " not in v:
+                        # Here, we escape each ^ in ^^^ with ^^ and a
+                        # <special character> with ^ + <special character>,
+                        # so we need 7 carets.
+                        v = v.replace(c, "^^^^^^^" + c)
+                        args[i] = k + v
 
         subprocess.Popen.__init__(self, args, **kwargs)
 
@@ -561,7 +581,7 @@ class CommandThread(Thread):
     def run(self):
         """Run command"""
         if len(self.cmd) == 0:
-            return
+            return None
 
         Debug.msg(1, "gcmd.CommandThread(): %s" % " ".join(self.cmd))
 

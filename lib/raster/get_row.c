@@ -93,7 +93,7 @@ static void read_data_fp_compressed(int fd, int row, unsigned char *data_buf,
     size_t bufsize = fcb->cellhd.cols * fcb->nbytes;
     int ret;
 
-    if (lseek(fcb->data_fd, t1, SEEK_SET) < 0)
+    if (lseek(fcb->data_fd, t1, SEEK_SET) == -1)
         G_fatal_error(
             _("Error seeking fp raster data file for row %d of <%s>: %s"), row,
             fcb->name, strerror(errno));
@@ -138,7 +138,7 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
     unsigned char *cmp, *cmp2;
     int n;
 
-    if (lseek(fcb->data_fd, t1, SEEK_SET) < 0)
+    if (lseek(fcb->data_fd, t1, SEEK_SET) == -1)
         G_fatal_error(
             _("Error seeking raster data file for row %d of <%s>: %s"), row,
             fcb->name, strerror(errno));
@@ -764,7 +764,7 @@ void Rast_get_d_row_nomask(int fd, DCELL *buf, int row)
  *            two particular types check the functions).
  *    - Step 4:  read or simmulate null value row and zero out cells
  * corresponding to null value cells. The masked out cells are set to null when
- * the mask exists. (the MASK is taken care of by null values (if the null file
+ * the mask exists. (the mask is taken care of by null values (if the null file
  * doesn't exist for this map, then the null row is simulated by assuming that
  * all zero are nulls *** in case of Rast_get_row() and assuming that all data
  * is valid in case of G_get_f/d_raster_row(). In case of deprecated function
@@ -854,7 +854,7 @@ static int read_null_bits_compressed(int null_fd, unsigned char *flags, int row,
     unsigned char *compressed_buf;
     int res;
 
-    if (lseek(null_fd, t1, SEEK_SET) < 0)
+    if (lseek(null_fd, t1, SEEK_SET) == -1)
         G_fatal_error(
             _("Error seeking compressed null data for row %d of <%s>"), row,
             fcb->name);
@@ -914,7 +914,7 @@ int Rast__read_null_bits(int fd, int row, unsigned char *flags)
 
     offset = (off_t)size * R;
 
-    if (lseek(null_fd, offset, SEEK_SET) < 0)
+    if (lseek(null_fd, offset, SEEK_SET) == -1)
         G_fatal_error(_("Error seeking null row %d for <%s>"), R, fcb->name);
 
     if (read(null_fd, flags, size) != size)
@@ -1089,7 +1089,7 @@ static void embed_nulls(int fd, void *buf, int row, RASTER_MAP_TYPE map_type,
 
    Read or simulate null value row and set the cells corresponding
    to null value to 1. The masked out cells are set to null when the
-   mask exists. (the MASK is taken care of by null values
+   mask exists. (the mask is taken care of by null values
    (if the null file doesn't exist for this map, then the null row
    is simulated by assuming that all zeros in raster map are nulls.
    Also all masked out cells become nulls.

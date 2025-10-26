@@ -177,7 +177,7 @@ class IOValidationTest(TestCase):
 
     @unittest.skipIf(shutil.which("i.svm.train") is None, "i.svm.train not found.")
     def test_wrong_svm_param(self):
-        """Attempt to use invalid SVM parametres"""
+        """Attempt to use invalid SVM parameters"""
         sigfile = grass.tempname(10)
         isvm = SimpleModule(
             "i.svm.train",

@@ -83,7 +83,7 @@ def main():
 
     # modify the color table:
     p = gs.feed_command("r.colors", map=output, rules="-")
-    for img, offset in zip(images, offsets):
+    for img, offset in zip(images, offsets, strict=False):
         print(img, offset)
         copy_colors(p.stdin, img, offset)
     p.stdin.close()
