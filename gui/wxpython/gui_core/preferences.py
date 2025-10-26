@@ -546,6 +546,42 @@ class PreferencesDialog(PreferencesBaseDialog):
         sizer.Add(gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
 
+        #
+        # init
+        #
+        box = StaticBox(
+            parent=panel, id=wx.ID_ANY, label=" %s " % _("Start-up settings")
+        )
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+
+        gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
+
+        row = 0
+        startWithoutShell = wx.CheckBox(
+            parent=panel,
+            id=wx.ID_ANY,
+            label=_(
+                "Start-up GRASS GIS without Terminal if possible (requires restart)"
+            ),
+            name="IsChecked",
+        )
+        startWithoutShell.SetValue(
+            self.settings.Get(
+                group="general",
+                key="init",
+                subkey=["startWithoutShellIfPossible", "enabled"],
+            )
+        )
+        self.winId["general:init:startWithoutShellIfPossible:enabled"] = (
+            startWithoutShell.GetId()
+        )
+
+        gridSizer.Add(startWithoutShell, pos=(row, 0), span=(1, 2))
+
+        gridSizer.AddGrowableCol(0)
+        sizer.Add(gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
+
         panel.SetSizer(border)
 
         return panel
