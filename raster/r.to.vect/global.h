@@ -48,7 +48,8 @@ extern int n_alloced_ptrs;
 
 extern int
     smooth_flag; /* this is 0 for no smoothing, 1 for smoothing of lines */
-extern int value_flag; /* use raster values as categories */
+extern int value_flag;    /* use raster values as categories */
+extern int centroid_flag; /* re-center centroids */
 
 extern struct Categories RastCats;
 extern int has_cats; /* Category labels available */

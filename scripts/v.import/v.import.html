@@ -11,11 +11,11 @@ does match the CRS of the project, the input is imported directly.
 <h3>Supported Vector Formats</h3>
 
 <em>v.import</em> uses the OGR library which supports various vector data
-formats including <a href="https://gdal.org/drv_shapefile.html">ESRI
-Shapefile</a>, <a href="https://gdal.org/drv_mitab.html">Mapinfo
+formats including <a href="https://gdal.org/en/stable/drivers/vector/shapefile.html">ESRI
+Shapefile</a>, <a href="https://gdal.org/en/stable/drivers/vector/mitab.html">Mapinfo
 File</a>, UK .NTF, SDTS, TIGER, IHO S-57 (ENC), DGN, GML, GPX, AVCBin, REC,
 Memory, OGDI, and PostgreSQL, depending on the local OGR installation.
-For details see the <a href="https://gdal.org/drivers/vector/">OGR web
+For details see the <a href="https://gdal.org/en/stable/drivers/vector/">OGR web
 site</a>. The OGR (Simple Features Library) is part of the
 <a href="https://gdal.org">GDAL</a> library, hence GDAL needs to be
 installed to use <em>v.import</em>.
@@ -43,7 +43,7 @@ topological areas. If the input polygons contain errors (unexpected
 overlapping areas, small gaps between polygons, or warnings about being
 unable to calculate centroids), the import might need to be repeated
 using a <em>snap</em> value as suggested in the output messages. The
-default value of <tt>snap=-1</tt> means that no snapping will be done.
+default value of <code>snap=-1</code> means that no snapping will be done.
 
 <!-- TODO: add hints for latlong -->
 

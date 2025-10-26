@@ -22,9 +22,12 @@
 #include <ctype.h>
 #include <math.h>
 #include <grass/gis.h>
+#include <grass/gjson.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
+
+enum OutputFormat { PLAIN, CSV, JSON };
 
 int main(int argc, char **argv)
 {
@@ -33,8 +36,8 @@ int main(int argc, char **argv)
 
     struct GModule *module;
     struct Option *inopt, *dbdriver, *dbdatabase, *dbtable, *field_opt, *dbkey,
-        *sep_opt;
-    struct Flag *print, *columns, *delete, *shell_print;
+        *sep_opt, *format_opt;
+    struct Flag *print, *columns, *delete, *csv_print;
     dbDriver *driver;
     dbString table_name;
     dbTable *table;
@@ -44,6 +47,11 @@ int main(int argc, char **argv)
     char *fieldname;
     struct Map_info Map;
     char *sep;
+    enum OutputFormat format;
+    G_JSON_Value *root_value = NULL, *conn_value = NULL;
+    G_JSON_Array *root_array = NULL;
+    G_JSON_Object *conn_object = NULL;
+    int skip_header = 0;
 
     /* set up the options and flags for the command line parser */
 
@@ -79,21 +87,32 @@ int main(int argc, char **argv)
     field_opt->gisprompt = "new,layer,layer";
 
     sep_opt = G_define_standard_option(G_OPT_F_SEP);
-    sep_opt->label = _("Field separator for shell script style output");
+    sep_opt->answer = NULL;
+    sep_opt->label = _("Field separator for printing output");
     sep_opt->guisection = _("Print");
+
+    format_opt = G_define_standard_option(G_OPT_F_FORMAT);
+    format_opt->options = "plain,csv,json";
+    format_opt->required = NO;
+    format_opt->answer = NULL;
+    format_opt->descriptions = ("plain;Human readable text output;"
+                                "csv;CSV (Comma Separated Values);"
+                                "json;JSON (JavaScript Object Notation);");
 
     print = G_define_flag();
     print->key = 'p';
     print->description = _("Print all map connection parameters and exit");
     print->guisection = _("Print");
 
-    shell_print = G_define_flag();
-    shell_print->key = 'g';
-    shell_print->label =
-        _("Print all map connection parameters in shell script style and exit");
-    shell_print->description =
-        _("Format: layer[/layer name] table key database driver");
-    shell_print->guisection = _("Print");
+    csv_print = G_define_flag();
+    csv_print->key = 'g';
+    csv_print->label = _(
+        "Print all map connection parameters in a legacy format [deprecated]");
+    csv_print->description = _(
+        "Order: layer[/layer name] table key database driver"
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=csv instead.");
+    csv_print->guisection = _("Print");
 
     columns = G_define_flag();
     columns->key = 'c';
@@ -110,6 +129,60 @@ int main(int argc, char **argv)
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
+
+    // ignore -c flag if both -p and -c flags are given
+    if (print->answer && columns->answer) {
+        columns->answer = 0;
+    }
+
+    // If no format option is specified, preserve backward compatibility
+    if (format_opt->answer == NULL || format_opt->answer[0] == '\0') {
+        if (csv_print->answer || columns->answer) {
+            format_opt->answer = "csv";
+            skip_header = 1;
+        }
+        else
+            format_opt->answer = "plain";
+    }
+
+    if (strcmp(format_opt->answer, "json") == 0) {
+        format = JSON;
+        root_value = G_json_value_init_array();
+        if (root_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
+        root_array = G_json_array(root_value);
+    }
+    else if (strcmp(format_opt->answer, "csv") == 0) {
+        format = CSV;
+    }
+    else {
+        format = PLAIN;
+    }
+
+    /* For backward compatibility */
+    if (!sep_opt->answer) {
+        if (!skip_header && format == CSV)
+            sep_opt->answer = "comma";
+        else
+            sep_opt->answer = "pipe";
+    }
+
+    if (format != PLAIN && !print->answer && !csv_print->answer &&
+        !columns->answer) {
+        G_fatal_error(
+            _("The -p or -c flag is required when using the format option."));
+    }
+
+    if (csv_print->answer) {
+        G_verbose_message(
+            _("Flag 'g' is deprecated and will be removed in a future "
+              "release. Please use format=csv instead."));
+        if (format == JSON) {
+            G_fatal_error(_("The -g flag cannot be used with format=json. "
+                            "Please select only one output format."));
+        }
+    }
 
     /* The check must allow '.' in the name (schema.table) */
     /*
@@ -139,11 +212,11 @@ int main(int argc, char **argv)
 
     sep = G_option_to_separator(sep_opt);
 
-    if (print->answer && shell_print->answer)
+    if (print->answer && csv_print->answer)
         G_fatal_error(_("Please choose only one print style"));
 
     Vect_set_open_level(1); /* no topology needed */
-    if (print->answer || shell_print->answer || columns->answer) {
+    if (print->answer || csv_print->answer || columns->answer) {
         if (Vect_open_old2(&Map, inopt->answer, "", field_opt->answer) < 0)
             G_fatal_error(_("Unable to open vector map <%s>"), inopt->answer);
     }
@@ -154,7 +227,7 @@ int main(int argc, char **argv)
         Vect_hist_command(&Map);
     }
 
-    if (print->answer || shell_print->answer || columns->answer) {
+    if (print->answer || csv_print->answer || columns->answer) {
         num_dblinks = Vect_get_num_dblinks(&Map);
         if (num_dblinks <= 0) {
             /* it is ok if a vector map is not connected o an attribute table */
@@ -164,27 +237,51 @@ int main(int argc, char **argv)
         }
         else { /* num_dblinks > 0 */
 
-            if (print->answer || shell_print->answer) {
-                if (!(shell_print->answer)) {
+            if (print->answer || csv_print->answer) {
+                if (format == PLAIN) {
                     fprintf(stdout, _("Vector map <%s> is connected by:\n"),
                             input);
+                }
+                if (!skip_header && format == CSV) {
+                    /* CSV Header */
+                    fprintf(stdout, "%s%s%s%s%s%s%s%s%s%s%s\n", "layer", sep,
+                            "layer_name", sep, "table", sep, "key", sep,
+                            "database", sep, "driver");
                 }
                 for (i = 0; i < num_dblinks; i++) {
                     if ((fi = Vect_get_dblink(&Map, i)) == NULL)
                         G_fatal_error(_("Database connection not defined"));
 
-                    if (shell_print->answer) {
-                        if (fi->name)
-                            fprintf(stdout, "%d/%s%s%s%s%s%s%s%s%s\n",
-                                    fi->number, fi->name, sep, fi->table, sep,
-                                    fi->key, sep, fi->database, sep,
-                                    fi->driver);
-                        else
-                            fprintf(stdout, "%d%s%s%s%s%s%s%s%s\n", fi->number,
-                                    sep, fi->table, sep, fi->key, sep,
-                                    fi->database, sep, fi->driver);
-                    }
-                    else {
+                    switch (format) {
+                    case CSV:
+                        if (skip_header) {
+                            /* For Backward compatibility */
+                            if (fi->name)
+                                fprintf(stdout, "%d/%s%s%s%s%s%s%s%s%s\n",
+                                        fi->number, fi->name, sep, fi->table,
+                                        sep, fi->key, sep, fi->database, sep,
+                                        fi->driver);
+                            else
+                                fprintf(stdout, "%d%s%s%s%s%s%s%s%s\n",
+                                        fi->number, sep, fi->table, sep,
+                                        fi->key, sep, fi->database, sep,
+                                        fi->driver);
+                        }
+                        else {
+                            if (fi->name)
+                                fprintf(stdout, "%d%s%s%s%s%s%s%s%s%s%s\n",
+                                        fi->number, sep, fi->name, sep,
+                                        fi->table, sep, fi->key, sep,
+                                        fi->database, sep, fi->driver);
+                            else
+                                fprintf(stdout, "%d%s%s%s%s%s%s%s%s%s%s\n",
+                                        fi->number, sep, "", sep, fi->table,
+                                        sep, fi->key, sep, fi->database, sep,
+                                        fi->driver);
+                        }
+                        break;
+
+                    case PLAIN:
                         if (fi->name) {
                             fprintf(stdout,
                                     _("layer <%d/%s> table <%s> in database "
@@ -201,6 +298,34 @@ int main(int argc, char **argv)
                                     fi->number, fi->table, fi->database,
                                     fi->driver, fi->key);
                         }
+                        break;
+
+                    case JSON:
+                        conn_value = G_json_value_init_object();
+                        if (conn_value == NULL) {
+                            G_fatal_error(_("Failed to initialize JSON object. "
+                                            "Out of memory?"));
+                        }
+                        conn_object = G_json_object(conn_value);
+
+                        G_json_object_set_number(conn_object, "layer",
+                                                 fi->number);
+                        if (fi->name)
+                            G_json_object_set_string(conn_object, "layer_name",
+                                                     fi->name);
+                        else
+                            G_json_object_set_null(conn_object, "layer_name");
+
+                        G_json_object_set_string(conn_object, "table",
+                                                 fi->table);
+                        G_json_object_set_string(conn_object, "key", fi->key);
+                        G_json_object_set_string(conn_object, "database",
+                                                 fi->database);
+                        G_json_object_set_string(conn_object, "driver",
+                                                 fi->driver);
+
+                        G_json_array_append_value(root_array, conn_value);
+                        break;
                     }
                 }
             } /* end print */
@@ -229,18 +354,92 @@ int main(int argc, char **argv)
                     G_fatal_error(_("Unable to describe table <%s>"),
                                   fi->table);
 
+                if (!skip_header) {
+                    /* CSV Header */
+                    if (format == PLAIN)
+                        fprintf(stdout, "%s|%s\n", "name", "sql_type");
+                    else if (format == CSV)
+                        fprintf(stdout, "%s%s%s\n", "name", sep, "sql_type");
+                }
+
                 ncols = db_get_table_number_of_columns(table);
                 for (col = 0; col < ncols; col++) {
-                    fprintf(
-                        stdout, "%s|%s\n",
-                        db_sqltype_name(db_get_column_sqltype(
-                            db_get_table_column(table, col))),
-                        db_get_column_name(db_get_table_column(table, col)));
+                    switch (format) {
+                    case PLAIN:
+                        fprintf(
+                            stdout, "%s|%s\n",
+                            db_get_column_name(db_get_table_column(table, col)),
+                            db_sqltype_name(db_get_column_sqltype(
+                                db_get_table_column(table, col))));
+
+                        break;
+                    case CSV:
+                        if (skip_header) {
+                            /* For Backward Compatibility */
+                            fprintf(stdout, "%s%s%s\n",
+                                    db_sqltype_name(db_get_column_sqltype(
+                                        db_get_table_column(table, col))),
+                                    sep,
+                                    db_get_column_name(
+                                        db_get_table_column(table, col)));
+                        }
+                        else {
+                            fprintf(stdout, "%s%s%s\n",
+                                    db_get_column_name(
+                                        db_get_table_column(table, col)),
+                                    sep,
+                                    db_sqltype_name(db_get_column_sqltype(
+                                        db_get_table_column(table, col))));
+                        }
+                        break;
+
+                    case JSON:
+                        conn_value = G_json_value_init_object();
+                        if (conn_value == NULL) {
+                            G_fatal_error(_("Failed to initialize JSON object. "
+                                            "Out of memory?"));
+                        }
+                        conn_object = G_json_object(conn_value);
+
+                        G_json_object_set_string(
+                            conn_object, "name",
+                            db_get_column_name(
+                                db_get_table_column(table, col)));
+
+                        int sql_type = db_get_column_sqltype(
+                            db_get_table_column(table, col));
+                        G_json_object_set_string(conn_object, "sql_type",
+                                                 db_sqltype_name(sql_type));
+
+                        int c_type = db_sqltype_to_Ctype(sql_type);
+                        G_json_object_set_boolean(conn_object, "is_number",
+                                                  (c_type == DB_C_TYPE_INT ||
+                                                   c_type == DB_C_TYPE_DOUBLE));
+
+                        G_json_array_append_value(root_array, conn_value);
+                        break;
+                    }
                 }
 
                 db_close_database(driver);
                 db_shutdown_driver(driver);
             }
+
+            if (format == JSON) {
+                char *json_string =
+                    G_json_serialize_to_string_pretty(root_value);
+                if (!json_string) {
+                    G_json_value_free(root_value);
+                    G_fatal_error(
+                        _("Failed to serialize JSON to pretty format."));
+                }
+
+                puts(json_string);
+
+                G_json_free_serialized_string(json_string);
+                G_json_value_free(root_value);
+            }
+
         } /* end else num_dblinks */
     } /* end print/columns */
     else { /* define new dbln settings or delete */

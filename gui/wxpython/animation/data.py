@@ -16,11 +16,12 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
-import os
 import copy
+from pathlib import Path
 
 from grass.script.utils import parse_key_val
 from grass.script import core as gcore
+from grass.exceptions import ScriptError
 
 from core.gcmd import GException
 from animation.nviztask import NvizTask
@@ -133,7 +134,7 @@ class AnimationData:
         if fileName == "":
             raise ValueError(_("No workspace file selected."))
 
-        if not os.path.exists(fileName):
+        if not Path(fileName).exists():
             raise OSError(_("File %s not found") % fileName)
         self._workspaceFile = fileName
 
@@ -240,9 +241,7 @@ class AnimationData:
             del region["projection"]
         if "zone" in region:
             del region["zone"]
-        regions = []
-        for i in range(self._mapCount):
-            regions.append(copy.copy(region))
+        regions = [copy.copy(region) for i in range(self._mapCount)]
         self._regions = regions
         if not (endRegion or zoomValue):
             return
@@ -260,7 +259,7 @@ class AnimationData:
                 values = interpolate(
                     startRegionDict[key], endRegionDict[key], self._mapCount
                 )
-                for value, region in zip(values, regions):
+                for value, region in zip(values, regions, strict=False):
                     region[key] = value
 
         elif zoomValue:
@@ -295,14 +294,13 @@ class AnimLayer(Layer):
     def SetName(self, name):
         if not self.hidden:
             if self._mapType is None:
-                raise ValueError(
-                    "To set layer name, the type of layer must be specified."
-                )
+                msg = "To set layer name, the type of layer must be specified."
+                raise ValueError(msg)
             if self._mapType in {"strds", "stvds", "str3ds"}:
                 try:
                     name = validateTimeseriesName(name, self._mapType)
                     self._maps = getRegisteredMaps(name, self._mapType)
-                except (GException, gcore.ScriptError) as e:
+                except (GException, ScriptError) as e:
                     raise ValueError(str(e))
             else:
                 self._maps = validateMapNames(name.split(","), self._mapType)

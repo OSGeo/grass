@@ -243,8 +243,8 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
 
     def CursorPlotMove(self, x, y, scatt_id):
         try:
-            x = int(round(x))
-            y = int(round(y))
+            x = round(x)
+            y = round(y)
             coords = True
         except TypeError:
             coords = False
@@ -694,15 +694,14 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
         dlg.CentreOnParent()
 
         while True:
-            if dlg.ShowModal() == wx.ID_OK:
-                name = dlg.GetNewName().strip()
-                if not name:
-                    GMessage(parent=self, message=_("Empty name was inserted."))
-                else:
-                    self.cats_mgr.SetCategoryAttrs(cat_id, {"name": name})
-                    break
-            else:
+            if dlg.ShowModal() != wx.ID_OK:
                 break
+
+            name = dlg.GetNewName().strip()
+            if name:
+                self.cats_mgr.SetCategoryAttrs(cat_id, {"name": name})
+                break
+            GMessage(parent=self, message=_("Empty name was inserted."))
 
         dlg.Destroy()
 

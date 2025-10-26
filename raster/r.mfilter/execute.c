@@ -3,8 +3,12 @@
 #endif
 
 #include <unistd.h>
+#include <string.h>
+#include <errno.h>
+
 #include <grass/rowio.h>
 #include <grass/raster.h>
+#include <grass/glocale.h>
 #include "glob.h"
 #include "filter.h"
 
@@ -73,7 +77,11 @@ int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
     ccount = ncols - (size - 1);
 
     /* rewind output */
-    lseek(out[MASTER], 0L, SEEK_SET);
+    if (lseek(out[MASTER], 0L, SEEK_SET) == -1) {
+        int err = errno;
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+    }
 
     /* copy border rows to output */
     row = starty;
@@ -101,7 +109,11 @@ int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
             end = rcount * (id + 1) / nprocs;
             cellp = cell[id];
             starty += start * dy;
-            lseek(out[id], (off_t)buflen * (mid + start), SEEK_SET);
+            if (lseek(out[id], (off_t)buflen * (mid + start), SEEK_SET) == -1) {
+                int err = errno;
+                G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                              strerror(err), err);
+            }
         }
 #endif
 
@@ -148,7 +160,11 @@ int execute_filter(ROWIO *r, int *out, FILTER *filter, DCELL **cell)
     }
     G_percent(work, rcount, 2);
     starty = rcount * dy;
-    lseek(out[MASTER], (off_t)buflen * (mid + rcount), SEEK_SET);
+    if (lseek(out[MASTER], (off_t)buflen * (mid + rcount), SEEK_SET) == -1) {
+        int err = errno;
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+    }
 
     /* copy border rows to output */
     row = starty + mid * dy;

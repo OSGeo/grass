@@ -121,23 +121,23 @@ yields calculated accurately.
 <p>
 Output <b>tci</b> raster map contains topographic index TCI,
 computed as
-<tt>ln(&alpha; / tan(&beta;))</tt> where &alpha; is the cumulative
+<code>ln(&alpha; / tan(&beta;))</code> where &alpha; is the cumulative
 upslope area draining through a point per unit contour length and
-<tt>tan(&beta;)</tt> is the local slope angle. The TCI reflects the
+<code>tan(&beta;)</code> is the local slope angle. The TCI reflects the
 tendency of water to accumulate at any point in the catchment and the
 tendency for gravitational forces to move that water downslope (Quinn
-et al. 1991).  This value will be negative if <tt>&alpha; /
-tan(&beta;) &lt; 1</tt>.
+et al. 1991).  This value will be negative if <code>&alpha; /
+tan(&beta;) &lt; 1</code>.
 
 <p>
 Output <b>spi</b> raster map contains stream power index SPI,
 computed as
-<tt>&alpha; * tan(&beta;)</tt> where &alpha; is the cumulative
+<code>&alpha; * tan(&beta;)</code> where &alpha; is the cumulative
 upslope area draining through a point per unit contour length and
-<tt>tan(&beta;)</tt> is the local slope angle. The SPI reflects the
+<code>tan(&beta;)</code> is the local slope angle. The SPI reflects the
 power of water flow at any point in the catchment and the
 tendency for gravitational forces to move that water downslope (Moore
-et al. 1991).  This value will be negative if <tt>&alpha; &lt; 0</tt>,
+et al. 1991).  This value will be negative if <code>&alpha; &lt; 0</code>,
 i.e. for cells with possible surface runoff from outside of the current
 geographic region.
 
@@ -316,17 +316,15 @@ drainage basins can be of any size because the length of an interior
 stream segment is determined by the distance between the tributaries
 flowing into it.
 
-<h3>MASK and no data</h3>
+<h3>Masking and no data</h3>
 
 
 The <em>r.watershed</em> program does not require the user to have the
 current geographic region filled with elevation values.  Areas without
-elevation data (masked or NULL cells) are ignored. It is NOT necessary
-to create a raster map (or raster reclassification)
-named <tt>MASK</tt> for NULL cells.  Areas without elevation data will
-be treated as if they are off the edge of the region. Such areas will
-reduce the memory necessary to run the program.  Masking out
-unimportant areas can significantly reduce processing time if the
+elevation data (masked or NULL cells, i.e., no data) are ignored and
+treated as if they were outside the region. Masking out
+unimportant areas can significantly reduce processing time and memory
+requirements if the
 watersheds of interest occupy a small percentage of the overall area.
 
 <p>
@@ -357,14 +355,14 @@ To isolate an individual river network using the output of this
 module, a number of approaches may be considered.
 
 <ol>
-<li>Use a resample of the basins catchment raster map as a MASK.<br>
+<li>Use a resample of the basins catchment raster map as a raster mask.<br>
   The equivalent vector map method is similar
   using <em><a href="v.select.html">v.select</a></em> or
-  <em><a href="v.overlay.html">v.overlay</a></em>.
+  <em><a href="v.overlay.html">v.overlay</a></em>.</li>
 <li>Use the <em><a href="r.cost.html">r.cost</a></em> module with a
-  point in the river as a starting point.
+  point in the river as a starting point.</li>
 <li>Use the <em><a href="v.net.iso.html">v.net.iso</a></em> module
-  with a node in the river as a starting point.
+  with a node in the river as a starting point.</li>
 </ol>
 
 All individual river networks in the stream segments output can be
@@ -386,7 +384,7 @@ The stream segments output can be easily vectorized after thinning
 with
 <em><a href="r.thin.html">r.thin</a></em>. Each stream segment in the
 vector map will have the value of the associated basin. To isolate
-subbasins and streams for a larger basin, a MASK for the larger basin
+subbasins and streams for a larger basin, a mask for the larger basin
 can be created with
 <em><a href="r.water.outlet.html">r.water.outlet</a></em>. The stream
 segments output serves as a guide where to place the outlet point used
@@ -398,21 +396,21 @@ stream network and subbasins within the larger basin.
 Given that the <b>drainage</b> is 8 directions numbered
 counter-clockwise starting from 1 in north-east direction,
 multiplying the output
-by 45 (by <tt>45.</tt> to get a double precision floating point raster
+by 45 (by <code>45.</code> to get a double precision floating point raster
 map in <em><a href="r.mapcalc.html">r.mapcalc</a></em>) gives
 the directions in degrees. For most applications, zeros
 which indicate depressions specified by <b>depression</b>
 and negative values which indicate runoff leaving the region
-should be replaced by NULL (<tt>null()</tt> in
+should be replaced by NULL (<code>null()</code> in
 <em><a href="r.mapcalc.html">r.mapcalc</a></em>).
 The following command performs these replacements:
 
 <div class="code"><pre>
-r.mapcalc "drainage_degrees = if(drainage > 0, 45. * drainage, null())"
+r.mapcalc "drainage_degrees = if(drainage &gt; 0, 45. * drainage, null())"
 </pre></div>
 
 Alternatively, the user can use the <b>-a</b> flag or later the
-<tt>abs()</tt> function in
+<code>abs()</code> function in
 <em><a href="r.mapcalc.html">r.mapcalc</a></em> if the runoff is leaving
 the region.
 
@@ -424,7 +422,7 @@ These examples use the Spearfish sample dataset.
 
 If you want a detailed stream network, set the threshold option small
 to create lots of catchment basins, as only one stream is presented
-per catchment. The <tt>r.to.vect -v</tt> flag preserves the catchment
+per catchment. The <code>r.to.vect -v</code> flag preserves the catchment
 ID as the vector category number.
 
 <div class="code"><pre>
@@ -469,13 +467,13 @@ cut-off value. This only works with SFD, not with MFD.
 <div class="code"><pre>
   r.watershed elev=elevation.dem accum=rwater.accum
 
-  r.mapcalc 'MASK = if(!isnull(elevation.dem))'
+  r.mask raster=elevation.dem
   r.mapcalc "rwater.course = \
-   if( abs(rwater.accum) > $mean_of_abs, \
+   if( abs(rwater.accum) &gt; $mean_of_abs, \
        abs(rwater.accum), \
        null() )"
   r.colors -g rwater.course col=bcyr
-  g.remove -f type=raster name=MASK
+  r.mask -r
 
   # <i>Thinning is required before converting raster lines to vector</i>
   r.thin in=rwater.course out=rwater.course.Thin
@@ -515,45 +513,44 @@ to Develop Hydrologic Models from Digital Elevation Data</i>,
 <b>Proceedings of International Geographic Information Systems (IGIS)
 Symposium '89</b>, pp 275-281 (Baltimore, MD, 18-19 March 1989).<br>
 URL: <a href="http://chuck.ehlschlaeger.info/older/IGIS/paper.html">
-http://chuck.ehlschlaeger.info/older/IGIS/paper.html</a>
+http://chuck.ehlschlaeger.info/older/IGIS/paper.html</a></li>
 
 <li>Holmgren P. (1994). <i>Multiple flow direction algorithms for runoff
 modelling in grid based elevation models: An empirical evaluation.</i>
 <b>Hydrological Processes</b> Vol 8(4), 327-334.<br>
-DOI: <a href="https://doi.org/10.1002/hyp.3360080405">10.1002/hyp.3360080405</a>
+DOI: <a href="https://doi.org/10.1002/hyp.3360080405">10.1002/hyp.3360080405</a></li>
 
 <li>Kinner D., Mitasova H., Harmon R., Toma L., Stallard R. (2005).
 <i>GIS-based Stream Network Analysis for The Chagres River Basin,
 Republic of Panama</i>. <b>The Rio Chagres: A Multidisciplinary Profile of
 a Tropical Watershed</b>, R. Harmon (Ed.), Springer/Kluwer, p.83-95.<br>
 URL: <a href="http://fatra.cnr.ncsu.edu/~hmitaso/measwork/panama/panama.html">
-http://fatra.cnr.ncsu.edu/~hmitaso/measwork/panama/panama.html</a>
+http://fatra.cnr.ncsu.edu/~hmitaso/measwork/panama/panama.html</a></li>
 
 <li>McCool et al. (1987). <i>Revised Slope Steepness Factor for the Universal
-Soil Loss Equation</i>, <b>Transactions of the ASAE</b> Vol 30(5).
+Soil Loss Equation</i>, <b>Transactions of the ASAE</b> Vol 30(5).</li>
 
 <li>Metz M., Mitasova H., Harmon R. (2011). <i>Efficient extraction of
 drainage networks from massive, radar-based elevation models with least
 cost path search</i>, <b>Hydrol. Earth Syst. Sci.</b> Vol 15, 667-678.<br>
-DOI: <a href="https://doi.org/10.5194/hess-15-667-2011">10.5194/hess-15-667-2011</a>
+DOI: <a href="https://doi.org/10.5194/hess-15-667-2011">10.5194/hess-15-667-2011</a></li>
 
 <li>
 Moore I.D., Grayson R.B., Ladson A.R. (1991). <i>Digital terrain
 modelling: a review of hydrogical, geomorphological, and biological
 applications</i>, <b>Hydrological Processes</b>, Vol 5(1), 3-30<br>
-DOI: <a href="https://doi.org/10.1002/hyp.3360050103">10.1002/hyp.3360050103</a>
+DOI: <a href="https://doi.org/10.1002/hyp.3360050103">10.1002/hyp.3360050103</a></li>
 
 <li>Quinn P., K. Beven K., Chevallier P., Planchon O. (1991). <i>The
 prediction of hillslope flow paths for distributed hydrological modelling
 using Digital Elevation Models</i>, <b>Hydrological Processes</b> Vol 5(1),
 p.59-79.<br>
-DOI: <a href="https://doi.org/10.1002/hyp.3360050106">10.1002/hyp.3360050106</a>
+DOI: <a href="https://doi.org/10.1002/hyp.3360050106">10.1002/hyp.3360050106</a></li>
 
 <li>Weltz M. A., Renard K.G., Simanton J. R. (1987). <i>Revised Universal Soil
 Loss Equation for Western Rangelands</i>, <b>U.S.A./Mexico Symposium of
 Strategies for Classification and Management of Native Vegetation for
-Food Production In Arid Zones</b> (Tucson, AZ, 12-16 Oct. 1987).
-</li>
+Food Production In Arid Zones</b> (Tucson, AZ, 12-16 Oct. 1987).</li>
 </ul>
 
 <h2>SEE ALSO</h2>

@@ -574,7 +574,7 @@ void gsd_getwindow(int *window, int *viewport, double *modelMatrix,
    \brief ADD
 
    \param pt
-   \param widnow
+   \param window
    \param viewport
    \param doubleMatrix
    \param projMatrix

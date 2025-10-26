@@ -89,7 +89,6 @@ int patch_number(int fd, char **par UNUSED, struct area_entry *ad,
     }
     default: {
         G_fatal_error("data type unknown");
-        return RLI_ERRORE;
     }
     }
 
@@ -112,6 +111,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
     long nalloc, incr;
     int i, j, k;
     int connected;
+    int res = RLI_OK;
     int mask_fd, *mask_buf, *mask_sup, *mask_tmp, masked;
     struct Cell_head hd;
 
@@ -135,17 +135,21 @@ int calculate(int fd, struct area_entry *ad, double *result)
     mask_buf = mask_sup = NULL;
     masked = FALSE;
     if (ad->mask == 1) {
-        if ((mask_fd = open(ad->mask_name, O_RDONLY, 0755)) < 0)
+        if ((mask_fd = open(ad->mask_name, O_RDONLY, 0755)) < 0) {
+            G_free(buf_null);
+            G_free(pid_corr);
+            G_free(pid_sup);
             return RLI_ERRORE;
+        }
         mask_buf = G_malloc(ad->cl * sizeof(int));
         if (mask_buf == NULL) {
+            close(mask_fd);
             G_fatal_error("malloc mask_buf failed");
-            return RLI_ERRORE;
         }
         mask_sup = G_malloc(ad->cl * sizeof(int));
         if (mask_sup == NULL) {
+            close(mask_fd);
             G_fatal_error("malloc mask_buf failed");
-            return RLI_ERRORE;
         }
         for (j = 0; j < ad->cl; j++)
             mask_buf[j] = 0;
@@ -181,8 +185,10 @@ int calculate(int fd, struct area_entry *ad, double *result)
             mask_tmp = mask_sup;
             mask_sup = mask_buf;
             mask_buf = mask_tmp;
-            if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0)
-                return 0;
+            if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
+                res = 0;
+                goto free_exit;
+            }
         }
 
         ltmp = pid_sup;
@@ -229,6 +235,8 @@ int calculate(int fd, struct area_entry *ad, double *result)
                         npatch--;
 
                         if (npatch == 0) {
+                            if (masked)
+                                close(mask_fd);
                             G_fatal_error("npatch == 0 at row %d, col %d", i,
                                           j);
                         }
@@ -288,6 +296,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
 
     *result = npatch;
 
+free_exit:
     if (masked) {
         close(mask_fd);
         G_free(mask_buf);
@@ -298,7 +307,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
     G_free(pid_sup);
     G_free(pst);
 
-    return RLI_OK;
+    return res;
 }
 
 int calculateD(int fd, struct area_entry *ad, double *result)
@@ -311,6 +320,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
     long nalloc, incr;
     int i, j, k;
     int connected;
+    int res = RLI_OK;
     int mask_fd, *mask_buf, *mask_sup, *mask_tmp, masked;
     struct Cell_head hd;
 
@@ -334,17 +344,21 @@ int calculateD(int fd, struct area_entry *ad, double *result)
     mask_buf = mask_sup = NULL;
     masked = FALSE;
     if (ad->mask == 1) {
-        if ((mask_fd = open(ad->mask_name, O_RDONLY, 0755)) < 0)
+        if ((mask_fd = open(ad->mask_name, O_RDONLY, 0755)) < 0) {
+            G_free(buf_null);
+            G_free(pid_corr);
+            G_free(pid_sup);
             return RLI_ERRORE;
+        }
         mask_buf = G_malloc(ad->cl * sizeof(int));
         if (mask_buf == NULL) {
+            close(mask_fd);
             G_fatal_error("malloc mask_buf failed");
-            return RLI_ERRORE;
         }
         mask_sup = G_malloc(ad->cl * sizeof(int));
         if (mask_sup == NULL) {
+            close(mask_fd);
             G_fatal_error("malloc mask_buf failed");
-            return RLI_ERRORE;
         }
         for (j = 0; j < ad->cl; j++)
             mask_buf[j] = 0;
@@ -380,8 +394,10 @@ int calculateD(int fd, struct area_entry *ad, double *result)
             mask_tmp = mask_sup;
             mask_sup = mask_buf;
             mask_buf = mask_tmp;
-            if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0)
-                return 0;
+            if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
+                res = 0;
+                goto free_exit;
+            }
         }
 
         ltmp = pid_sup;
@@ -428,6 +444,8 @@ int calculateD(int fd, struct area_entry *ad, double *result)
                         npatch--;
 
                         if (npatch == 0) {
+                            if (masked)
+                                close(mask_fd);
                             G_fatal_error("npatch == 0 at row %d, col %d", i,
                                           j);
                         }
@@ -487,6 +505,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 
     *result = npatch;
 
+free_exit:
     if (masked) {
         close(mask_fd);
         G_free(mask_buf);
@@ -497,7 +516,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
     G_free(pid_sup);
     G_free(pst);
 
-    return RLI_OK;
+    return res;
 }
 
 int calculateF(int fd, struct area_entry *ad, double *result)
@@ -510,6 +529,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
     long nalloc, incr;
     int i, j, k;
     int connected;
+    int res = RLI_OK;
     int mask_fd, *mask_buf, *mask_sup, *mask_tmp, masked;
     struct Cell_head hd;
 
@@ -533,17 +553,21 @@ int calculateF(int fd, struct area_entry *ad, double *result)
     mask_buf = mask_sup = NULL;
     masked = FALSE;
     if (ad->mask == 1) {
-        if ((mask_fd = open(ad->mask_name, O_RDONLY, 0755)) < 0)
+        if ((mask_fd = open(ad->mask_name, O_RDONLY, 0755)) < 0) {
+            G_free(buf_null);
+            G_free(pid_corr);
+            G_free(pid_sup);
             return RLI_ERRORE;
+        }
         mask_buf = G_malloc(ad->cl * sizeof(int));
         if (mask_buf == NULL) {
+            close(mask_fd);
             G_fatal_error("malloc mask_buf failed");
-            return RLI_ERRORE;
         }
         mask_sup = G_malloc(ad->cl * sizeof(int));
         if (mask_sup == NULL) {
+            close(mask_fd);
             G_fatal_error("malloc mask_buf failed");
-            return RLI_ERRORE;
         }
         for (j = 0; j < ad->cl; j++)
             mask_buf[j] = 0;
@@ -579,8 +603,10 @@ int calculateF(int fd, struct area_entry *ad, double *result)
             mask_tmp = mask_sup;
             mask_sup = mask_buf;
             mask_buf = mask_tmp;
-            if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0)
-                return 0;
+            if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
+                res = 0;
+                goto free_exit;
+            }
         }
 
         ltmp = pid_sup;
@@ -627,6 +653,8 @@ int calculateF(int fd, struct area_entry *ad, double *result)
                         npatch--;
 
                         if (npatch == 0) {
+                            if (masked)
+                                close(mask_fd);
                             G_fatal_error("npatch == 0 at row %d, col %d", i,
                                           j);
                         }
@@ -686,6 +714,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 
     *result = npatch;
 
+free_exit:
     if (masked) {
         close(mask_fd);
         G_free(mask_buf);
@@ -696,5 +725,5 @@ int calculateF(int fd, struct area_entry *ad, double *result)
     G_free(pid_sup);
     G_free(pst);
 
-    return RLI_OK;
+    return res;
 }

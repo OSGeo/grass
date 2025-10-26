@@ -62,7 +62,6 @@ static double Qbar(double x)
  * \param a semi-major axis
  * \param e2 ellipsoid eccentricity squared
  */
-
 void G_begin_ellipsoid_polygon_area(double a, double e2)
 {
     double e4, e6;
@@ -186,7 +185,7 @@ double G_ellipsoid_polygon_area(const double *lon, const double *lat, int n)
         area = -area;
 
     /* kludge - if polygon circles the south pole the area will be
-     * computed as if it cirlced the north pole. The correction is
+     * computed as if it circled the north pole. The correction is
      * the difference between total surface area of the earth and
      * the "north pole" area.
      */

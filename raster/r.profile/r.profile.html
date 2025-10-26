@@ -13,7 +13,7 @@ set with the <b>resolution</b> argument.
 The <b>coordinates</b> parameter can be set to comma separated geographic
 coordinates for profile line endpoints.
 Alternatively the coordinate pairs can be piped from the text file specified
-by <b>file</b> option, or if set to "-", from <tt>stdin</tt>.
+by <b>file</b> option, or if set to "-", from <code>stdin</code>.
 In these cases the coordinate pairs should be given one comma separated pair
 per line.
 
@@ -59,7 +59,7 @@ the end point coordinates entered for the segmanet.
 
 <p>To extract the numbers in scripts, following parameters can be used:
 <div class="code"><pre>
-r.profile input=dgm12.5 coordinates=3570631,5763556 2>/dev/null
+r.profile input=dgm12.5 coordinates=3570631,5763556 2&gt;/dev/null
 </pre></div>
 
 This filters out everything except the numbers.
@@ -68,7 +68,7 @@ This filters out everything except the numbers.
 
 <h3>Extraction of values along profile defined by coordinates (variant 1)</h3>
 
-Extract a profile with coordinates (wayoints) provided on the command line
+Extract a profile with coordinates (waypoints) provided on the command line
 (North Carolina data set):
 
 <div class="code"><pre>
@@ -88,7 +88,7 @@ Extract a profile with coordinates provided from standard input or an external f
 <p>First create a points file with <em><a href="d.where.html">d.where</a></em>
 
 <div class="code"><pre>
-d.where > saved.points
+d.where &gt; saved.points
 </pre></div>
 
 Then pipe the points file into r.profile
@@ -131,7 +131,7 @@ Coordinate pairs can also be "piped" into <em>r.profile</em> (variant 2b):
 echo "641712,226095
 641546,224138
 641546,222048
-641049,221186" > coors.txt
+641049,221186" &gt; coors.txt
 cat coors.txt | r.profile elevation resolution=1000 file=-
 </pre></div>
 

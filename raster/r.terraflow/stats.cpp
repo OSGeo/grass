@@ -20,8 +20,10 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/types.h>
+#ifndef _MSC_VER
 #include <sys/time.h>
-#ifndef __MINGW32__
+#endif
+#ifndef _WIN32
 #include <sys/resource.h>
 #endif
 #include <stdio.h>
@@ -116,9 +118,10 @@ char *noclobberFileName(char *fname)
             if (rename(fname, buf) != 0) {
                 G_fatal_error("%s", fname);
             }
-            close(fd);
         }
     }
+    if (fd >= 0)
+        close(fd);
     return fname;
 }
 

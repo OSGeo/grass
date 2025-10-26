@@ -50,7 +50,7 @@ static double scan_double(const char *, double *);
 /*!
    \brief Read cell header (for internal use only)
 
-   \param fp file descriptor
+   \param fd file descriptor
    \param[out] cellhd pointer to Cell_head structure
  */
 void G__read_Cell_head(FILE *fd, struct Cell_head *cellhd)
@@ -113,7 +113,7 @@ void G__read_Cell_head_array(char **array, struct Cell_head *cellhd)
     cellhd->cols3 = 0;
     cellhd->depths = 1;
     cellhd->proj = -1;
-    cellhd->zone = -1;
+    cellhd->zone = 0;
     cellhd->compressed = -1;
     cellhd->ew_res = 0.0;
     cellhd->ew_res3 = 1.0;
