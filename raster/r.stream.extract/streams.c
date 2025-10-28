@@ -370,7 +370,7 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
     double dx, dy;
     int r_nbr, c_nbr, r_max, c_max, ct_dir, np_side, max_side;
     int is_worked;
-    double max_acc;
+    double max_acc, min_ele;
     int edge, flat;
     int asp_r[9] = {0, -1, -1, -1, 0, 1, 1, 1, 0};
     int asp_c[9] = {0, 1, 0, -1, -1, -1, 0, 1, 1};
@@ -498,6 +498,7 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
         stream_cells = 0;
         swale_cells = 0;
         ele_val = wa.ele;
+        min_ele = wa.ele;
         edge = 0;
         flat = 1;
         /* find main drainage direction */
@@ -547,11 +548,13 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
                         mfd_cells++;
 
                         /* set main drainage direction */
-                        if (valued >= max_acc) {
+                        if (valued > max_acc ||
+                            (valued == max_acc && ele_nbr[ct_dir] < min_ele)) {
                             max_acc = valued;
                             r_max = r_nbr;
                             c_max = c_nbr;
                             max_side = ct_dir;
+                            min_ele = ele_nbr[ct_dir];
                         }
                     }
                 }
