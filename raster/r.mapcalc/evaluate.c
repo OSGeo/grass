@@ -141,7 +141,7 @@ static void initialize_map(expression *e)
     e->data.map.idx = G_malloc(threads * sizeof(int));
     for (int t = 0; t < threads; t++) {
         e->data.map.idx[t] = open_map(e->data.map.name, e->data.map.mod,
-                                      e->data.map.row, e->data.map.col);
+                                      e->data.map.row, e->data.map.col, t);
     }
 }
 
