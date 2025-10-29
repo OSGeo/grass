@@ -293,6 +293,9 @@
 /* Define to 1 if you have the <zstd.h> header file. */
 #undef HAVE_ZSTD_H
 
+/* Define to 1 if OpenGL uses AGL (MacOS X). */
+#undef OPENGL_AGL
+
 /* Define to 1 if OpenGL uses Aqua (MacOS X). */
 #undef OPENGL_AQUA
 
