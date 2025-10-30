@@ -360,7 +360,6 @@ static void translate_from_cats(struct map *m, CELL *cell, DCELL *xcell,
 static void setup_map(struct map *m)
 {
     int nrows = m->max_row - m->min_row + 1;
-    int threads = 1;
 #ifdef HAVE_PTHREAD_H
     pthread_mutex_init(&m->mutex, NULL);
 #endif
