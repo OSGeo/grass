@@ -508,9 +508,13 @@ int open_map(const char *name, int mod, int row, int col, int thread_num)
         break;
     }
 
+    // Optimizes cases when expression has the same map multiple times.
+    // Avoids unnecessary opening of the same map.
     for (i = 0; i < num_maps; i++) {
         m = &maps[i];
 
+        // If map is already used in the expression with the same thread,
+        // do not open it again.
         if (!(strcmp(m->name, name) == 0 && strcmp(m->mapset, mapset) == 0 &&
               m->thread_num == thread_num))
             continue;
