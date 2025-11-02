@@ -489,7 +489,7 @@ class LocationPage(TitledPage):
         self.mapsetList = []
         for item in tmplist:
             if (
-                os.path.isdir(os.path.join(self.grassdatabase, self.xylocation, item))
+                Path(self.grassdatabase, self.xylocation, item).is_dir()
                 and Path(self.grassdatabase, self.xylocation, item, "WIND").exists()
             ):
                 if item != "PERMANENT":

@@ -127,7 +127,7 @@ def _move_extracted_files(extract_dir, target_dir, files):
     debug("_move_extracted_files({})".format(locals()))
     if len(files) == 1:
         actual_path = os.path.join(extract_dir, files[0])
-        if os.path.isdir(actual_path):
+        if Path(actual_path).is_dir():
             shutil.copytree(actual_path, target_dir)
         else:
             shutil.copy(actual_path, target_dir)
@@ -136,7 +136,7 @@ def _move_extracted_files(extract_dir, target_dir, files):
             os.mkdir(target_dir)
         for file_name in files:
             actual_file = os.path.join(extract_dir, file_name)
-            if os.path.isdir(actual_file):
+            if Path(actual_file).is_dir():
                 # Choice of copy tree function:
                 # shutil.copytree() fails when subdirectory exists.
                 # However, distutils.copy_tree() may fail to create directories before

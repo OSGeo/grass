@@ -1752,7 +1752,7 @@ def move_extracted_files(extract_dir, target_dir, files):
             os.mkdir(target_dir)
         for file_name in files:
             actual_file = os.path.join(extract_dir, file_name)
-            if os.path.isdir(actual_file):
+            if Path(actual_file).is_dir():
                 # shutil.copytree() replaced by copy_tree() because
                 # shutil's copytree() fails when subdirectory exists
                 copy_tree(actual_file, os.path.join(target_dir, file_name))
@@ -1948,7 +1948,7 @@ def download_source_code(
                 " Please report this to the grass-user mailing list."
             ).format(source)
         )
-    assert os.path.isdir(directory)
+    assert Path(directory).is_dir()
     return directory, url
 
 
@@ -2287,7 +2287,7 @@ def remove_extension_std(name, force=False):
 
     # remove module libraries under GRASS_ADDONS/etc/{name}/*
     libpath = os.path.join(options["prefix"], "etc", name)
-    if os.path.isdir(libpath):
+    if Path(libpath).is_dir():
         gs.verbose(libpath)
         if force:
             shutil.rmtree(libpath)
@@ -2373,7 +2373,7 @@ def create_dir(path):
 
     NOOP for existing directory.
     """
-    if os.path.isdir(path):
+    if Path(path).is_dir():
         return
 
     try:
@@ -2723,7 +2723,7 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
         return "official_fork", url
 
     # Handle local URLs
-    if os.path.isdir(url):
+    if Path(url).is_dir():
         return "dir", os.path.abspath(url)
     if Path(url).exists():
         if url.endswith(".zip"):
