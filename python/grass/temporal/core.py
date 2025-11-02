@@ -1391,7 +1391,7 @@ class DBConnection:
                     return self.cursor.mogrify(sql, args)
                 except Exception as exc:
                     print(sql, args)
-                    raise exc
+                    raise
             else:
                 self.connect()
                 statement = self.cursor.mogrify(sql, args)

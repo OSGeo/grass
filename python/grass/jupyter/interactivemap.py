@@ -267,7 +267,7 @@ class InteractiveMap:
                 return folium
             except ImportError as err:
                 if error:
-                    raise err
+                    raise
                 return None
 
         def _import_ipyleaflet(error):
@@ -277,7 +277,7 @@ class InteractiveMap:
                 return ipyleaflet
             except ImportError as err:
                 if error:
-                    raise err
+                    raise
                 return None
 
         if not map_backend:
