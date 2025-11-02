@@ -458,7 +458,6 @@ ignore = [
 "temporal/t.rast.what/t.rast.what.py" = ["PLW1514"]
 "temporal/t.remove/t.remove.py" = ["PLW1514"]
 "temporal/t.unregister/t.unregister.py" = ["PLW1514"]
-"utils/**.py" = ["I001"]
 "utils/*.py" = ["PLW1514"]
 "vector/**.py" = ["I001"]
 
