@@ -1,8 +1,7 @@
 import os
 
-import pytest
-
 import grass.script as gs
+import pytest
 from grass.tools import Tools
 
 

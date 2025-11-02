@@ -335,7 +335,6 @@ ignore = [
 "gui/wxpython/wxplot/profile.py" = ["A005", "PLW1514", "SIM115"]
 "imagery/**.py" = ["I001"]
 "imagery/i.atcorr/create_iwave.py" = ["PLW1514"]
-"lib/**.py" = ["I001"]
 "lib/imagery/testsuite/test_imagery_sigsetfile.py" = ["FURB152"]
 "lib/init/grass.py" = ["PLW1514", "SIM115"]
 "lib/init/testsuite/test_grass_tmp_mapset.py" = ["PTH208"]

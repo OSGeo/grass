@@ -1,14 +1,13 @@
 """Test environment and GIS environment functions"""
 
+import json
 import os
 import subprocess
 import sys
-import json
 from textwrap import dedent
 
-import pytest
-
 import grass.script as gs
+import pytest
 
 
 def run_in_subprocess(code, tmp_path, env):
