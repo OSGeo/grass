@@ -225,11 +225,10 @@ class ToolbarController:
                 id = getattr(self.widget, tool[0])
             else:
                 id = getattr(self.widget, tool)
-        except AttributeError:
+        except AttributeError as e:
             # TODO: test everything that this is not raised
             # this error was ignored for a long time
-            raise AttributeError("Toolbar does not have a tool %s." % tool)
-            return
+            raise AttributeError("Toolbar does not have a tool %s." % tool) from e
 
         self.classObject.EnableTool(self.widget, id, enable)
 
