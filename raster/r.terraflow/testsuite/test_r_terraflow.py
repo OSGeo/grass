@@ -111,7 +111,9 @@ variance=3.88643128378274
 coeff_var=47.8572213922083
 sum=8341670.75914752"""
 
-        # cls.assertRasterFitsUnivar(raster="terra_flooded",  reference=terra_flooded_univar,  precision=3)
+        self.assertRasterFitsUnivar(
+            raster="terra_flooded", reference=terra_flooded_univar, precision=3
+        )
         self.assertRasterFitsUnivar(
             raster="terra_flowdir", reference=terra_flowdir_univar, precision=3
         )
