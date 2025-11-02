@@ -4,9 +4,8 @@ import os
 from datetime import datetime
 from types import SimpleNamespace
 
-import pytest
-
 import grass.script as gs
+import pytest
 
 
 @pytest.fixture(scope="module")

@@ -5,9 +5,8 @@ import datetime
 import io
 import json
 
-import pytest
-
 import grass.script as gs
+import pytest
 
 yaml = pytest.importorskip("yaml", reason="PyYAML package not available")
 
