@@ -6,11 +6,12 @@
 #   Markus Neteler
 #   Glynn Clements
 
-import sys
 import os
+import sys
 
-from build import message_tmpl, get_files, read_file
 from build_html import man_dir
+
+from build import get_files, message_tmpl, read_file
 
 os.chdir(man_dir)
 

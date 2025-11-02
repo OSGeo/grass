@@ -340,7 +340,6 @@ ignore = [
 "lib/init/grass.py" = ["PLW1514", "SIM115"]
 "lib/init/testsuite/test_grass_tmp_mapset.py" = ["PTH208"]
 "locale/grass_po_stats.py" = ["SIM115"]
-"man/**.py" = ["I001"]
 "man/build.py" = ["PLW1514", "PTH208"]
 "man/build_class.py" = ["PLW1514"]
 "man/build_class_graphical.py" = ["PLW1514", "PTH208"]
