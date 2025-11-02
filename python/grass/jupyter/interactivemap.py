@@ -265,7 +265,7 @@ class InteractiveMap:
                 import folium  # pylint: disable=import-outside-toplevel
 
                 return folium
-            except ImportError as err:
+            except ImportError:
                 if error:
                     raise
                 return None
@@ -275,7 +275,7 @@ class InteractiveMap:
                 import ipyleaflet  # pylint: disable=import-outside-toplevel
 
                 return ipyleaflet
-            except ImportError as err:
+            except ImportError:
                 if error:
                     raise
                 return None
