@@ -275,6 +275,8 @@ ignore = [
     "UP032",   # f-string
 ]
 
+[tool.ruff.lint.isort]
+known-first-party = ["grass"]
 
 [tool.ruff.lint.per-file-ignores]
 # See https://docs.astral.sh/ruff/settings/#lint_per-file-ignores
