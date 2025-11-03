@@ -267,7 +267,6 @@ ignore = [
     "TD007",   # missing-space-after-todo-colon
     "TRY002",  # raise-vanilla-class
     "TRY004",  # type-check-without-type-error
-    "TRY201",  # verbose-raise
     "TRY300",  # try-consider-else
     "TRY301",  # raise-within-try
     "UP030",   # format-literals
