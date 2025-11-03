@@ -480,7 +480,7 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
 
 # Copy GRASS, GDAL-GRASS-plugin and compiled dependencies from build image
 COPY --link --from=build_grass_plugin /usr/local /usr/local
-COPY --link --from=build_grass_plugin /module_items.xml /usr/local/grass85/gui/wxpython/xml/module_items.xml
+COPY --link --from=build_grass_plugin /src/grass_build/module_items.xml /usr/local/grass85/gui/wxpython/xml/module_items.xml
 # COPY --link --from=datum_grids /tmp/cdn.proj.org/*.tif /usr/share/proj/
 
 # Create generic GRASS lib name regardless of version number
