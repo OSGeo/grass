@@ -555,7 +555,7 @@ py-version = "3.10"
 # source root is an absolute path or a path relative to the current working
 # directory used to determine a package namespace for modules located under the
 # source root.
-source-roots = ["python", "gui/wxpython"]
+source-roots = ["python", "gui/wxpython", "man"]
 
 
 [tool.pylint.design]
