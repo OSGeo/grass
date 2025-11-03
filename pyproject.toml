@@ -166,7 +166,6 @@ ignore = [
     "F811",    # redefined-while-unused
     "F821",    # undefined-name
     "F822",    # undefined-export
-    "F841",    # unused-variable
     "FBT001",  # boolean-type-hint-positional-argument
     "FBT002",  # boolean-default-value-positional-argument
     "FBT003",  # boolean-positional-value-in-call
