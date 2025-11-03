@@ -14,11 +14,10 @@ License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 """
 
-import unittest
 import os
 import shutil
 import subprocess
-
+import unittest
 
 # Note that unlike rest of GRASS, here we are using unittest package
 # directly. The grass.gunittest machinery for mapsets is not needed here.
