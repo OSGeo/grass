@@ -1,6 +1,7 @@
 """Tests of --json CLI"""
 
 import pytest
+
 from grass.exceptions import CalledModuleError
 
 

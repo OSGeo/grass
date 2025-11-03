@@ -1,7 +1,8 @@
 import os
 
-import grass.script as gs
 import pytest
+
+import grass.script as gs
 from grass.experimental import TemporaryMapsetSession
 from grass.tools import Tools
 

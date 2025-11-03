@@ -3,6 +3,7 @@ from io import StringIO
 from pathlib import Path
 
 import pytest
+
 from grass.exceptions import CalledModuleError
 from grass.experimental import MapsetSession
 from grass.script import MaskManager

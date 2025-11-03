@@ -6,8 +6,9 @@ import subprocess
 import sys
 from textwrap import dedent
 
-import grass.script as gs
 import pytest
+
+import grass.script as gs
 
 
 def run_in_subprocess(code, tmp_path, env):
