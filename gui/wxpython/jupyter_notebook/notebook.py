@@ -49,30 +49,31 @@ class JupyterAuiNotebook(aui.AuiNotebook):
 
     def _inject_javascript(self, event):
         """
-        Inject JavaScript into the Jupyter notebook page to hide UI elements.
+        Inject JavaScript into the Jupyter notebook page to hide top UI bars.
 
-        Specifically hides:
-        - The File menu
-        - The top header bar
+        Works for:
+        - Jupyter Notebook 6 and older (classic interface)
+        - Jupyter Notebook 7+ (Jupyter Lab interface)
 
         This is called once the WebView has fully loaded the Jupyter page.
         """
         webview = event.GetEventObject()
         js = """
         var interval = setInterval(function() {
-            var fileMenu = document.querySelector('li#file_menu, a#filelink, a[aria-controls="file_menu"]');
-            if (fileMenu) {
-                if (fileMenu.tagName === "LI") {
-                    fileMenu.style.display = 'none';
-                } else if (fileMenu.parentElement && fileMenu.parentElement.tagName === "LI") {
-                    fileMenu.parentElement.style.display = 'none';
-                }
-            }
-            var header = document.getElementById('header-container');
-            if (header) {
-                header.style.display = 'none';
-            }
-            if (fileMenu && header) {
+            // --- Jupyter Notebook 7+ (new UI) ---
+            var topPanel = document.getElementById('top-panel-wrapper');
+            var menuPanel = document.getElementById('menu-panel-wrapper');
+            if (topPanel) topPanel.style.display = 'none';
+            if (menuPanel) menuPanel.style.display = 'none';
+
+            // --- Jupyter Notebook 6 and older (classic UI) ---
+            var headerContainer = document.getElementById('header-container');
+            var menubar = document.getElementById('menubar');
+            if (headerContainer) headerContainer.style.display = 'none';
+            if (menubar) menubar.style.display = 'none';
+
+            // --- Stop once everything is hidden ---
+            if ((topPanel || headerContainer) && (menuPanel || menubar)) {
                 clearInterval(interval);
             }
         }, 500);
