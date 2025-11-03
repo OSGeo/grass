@@ -70,18 +70,18 @@ jobs:
       - name: Install Ruff
         run: pip install --break-system-packages "ruff==${RUFF_VERSION}"
       - name: Run Ruff (output annotations on fixable errors)
-        run: ruff check --output-format=github . --preview --unsafe-fixes
+        run: ruff check --output-format=github . --preview --unsafe-fixes -v
         continue-on-error: true
       - name: Run Ruff (apply fixes for suggestions)
-        run: ruff check . --preview --fix --unsafe-fixes
+        run: ruff check . --preview --fix --unsafe-fixes -v
       - name: Run `ruff format` showing diff without failing
         continue-on-error: true
         if: ${{ !cancelled() }}
-        run: ruff format --diff
+        run: ruff format --diff -v
       - name: Run `ruff format` fixing files
         # Run `ruff format` even when `ruff check` fixed files: fixes can require formatting
         if: ${{ !cancelled() }}
-        run: ruff format
+        run: ruff format -v
       - name: Create and uploads code suggestions to apply for Ruff
         # Will fail fast here if there are changes required
         id: diff-ruff
