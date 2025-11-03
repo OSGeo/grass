@@ -364,9 +364,7 @@ RUN make -j $NUMTHREADS distclean || echo "nothing to clean" \
     && make -j $NUMTHREADS \
     && make install && ldconfig \
     && rm -rf /usr/local/grass85/demolocation \
-    && cp /usr/local/grass85/gui/wxpython/xml/module_items.xml module_items.xml \
-    && mkdir -p /usr/local/grass85/gui/wxpython/xml/ \
-    && mv module_items.xml /usr/local/grass85/gui/wxpython/xml/module_items.xml
+    && cp /usr/local/grass85/gui/wxpython/xml/module_items.xml module_items.xml
 
 FROM build_grass AS build_grass_with_gui_built
 RUN echo "GUI selected, skipping GUI related cleanup"
@@ -482,6 +480,7 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
 
 # Copy GRASS, GDAL-GRASS-plugin and compiled dependencies from build image
 COPY --link --from=build_grass_plugin /usr/local /usr/local
+COPY --link --from=build_grass_plugin /module_items.xml /usr/local/grass85/gui/wxpython/xml/module_items.xml
 # COPY --link --from=datum_grids /tmp/cdn.proj.org/*.tif /usr/share/proj/
 
 # Create generic GRASS lib name regardless of version number
