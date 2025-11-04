@@ -53,7 +53,7 @@ int get_layer_proj(OGRLayerH Ogr_layer, OGRSpatialReferenceH *hSRS,
          * check with GRASS 6 and GRASS 5 */
         G_warning(_("Unable to convert input layer projection information to "
                     "GRASS format for checking"));
-        if (verbose && hSRS != NULL) {
+        if (verbose && *hSRS != NULL) {
             char *wkt = NULL;
 
             if (OSRExportToPrettyWkt(*hSRS, &wkt, FALSE) != OGRERR_NONE) {
