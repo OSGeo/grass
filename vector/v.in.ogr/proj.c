@@ -404,7 +404,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                      " appear to match current project.\n"));
 
             if (G_verbose() >= G_verbose_std()) {
-                char *wktstr;
+                char *wktstr = NULL;
 
                 CPLSetConfigOption("OSR_WKT_FORMAT", "WKT2");
 
@@ -415,6 +415,8 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                 if (wktstr && *wktstr) {
                     G_warning(_("Dataset CRS is:\n"));
                     fprintf(stderr, "%s\n\n", wktstr);
+                    CPLFree(wktstr);
+                    wktstr = NULL;
                 }
 
                 OSRExportToPrettyWkt(hSRS_loc, &wktstr, 0);
@@ -422,6 +424,8 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                 if (wktstr && *wktstr) {
                     G_warning(_("Project CRS is:\n"));
                     fprintf(stderr, "%s\n\n", wktstr);
+                    CPLFree(wktstr);
+                    wktstr = NULL;
                 }
             }
 
