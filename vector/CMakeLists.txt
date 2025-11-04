@@ -888,6 +888,7 @@ build_program_in_subdir(
   grass_vector
   ${LIBM}
   PRIMARY_DEPENDS
+  PROJ::proj
   GDAL::GDAL)
 
 build_program_in_subdir(

@@ -16,18 +16,14 @@
  * return 0 on success (some non-xy SRS)
  * return 1 if no SRS available
  * return 2 if SRS available but unreadable */
-int get_layer_proj(OGRLayerH Ogr_layer, OGRSpatialReferenceH *hSRS,
-                   struct Cell_head *cellhd, struct Key_Value **proj_info,
-                   struct Key_Value **proj_units, char **proj_srid,
-                   char **proj_wkt, char *geom_col, int verbose)
+OGRSpatialReferenceH get_layer_proj(OGRLayerH Ogr_layer, char *geom_col,
+                                    int verbose)
 {
-    *hSRS = NULL;
-    *proj_info = NULL;
-    *proj_units = NULL;
-    *proj_srid = NULL;
-    *proj_wkt = NULL;
+    OGRSpatialReferenceH hSRS;
 
-    /* Fetch input layer projection in GRASS form. */
+    hSRS = NULL;
+
+    /* Fetch input layer projection as OGR SRS. */
     if (geom_col) {
         int igeom;
         OGRGeomFieldDefnH Ogr_geomdefn;
@@ -40,94 +36,21 @@ int get_layer_proj(OGRLayerH Ogr_layer, OGRSpatialReferenceH *hSRS,
                 _("Geometry column <%s> not found in input layer <%s>"),
                 geom_col, OGR_L_GetName(Ogr_layer));
         Ogr_geomdefn = OGR_FD_GetGeomFieldDefn(Ogr_featuredefn, igeom);
-        *hSRS = OGR_GFld_GetSpatialRef(Ogr_geomdefn);
+        hSRS = OGR_GFld_GetSpatialRef(Ogr_geomdefn);
     }
     else {
-        *hSRS = OGR_L_GetSpatialRef(Ogr_layer);
+        hSRS = OGR_L_GetSpatialRef(Ogr_layer);
     }
 
-    /* verbose is used only when comparing input SRS to GRASS projection,
-     * not when comparing SRS's of several input layers */
-    if (GPJ_osr_to_grass(cellhd, proj_info, proj_units, *hSRS, 0) < 0) {
-        /* TODO: GPJ_osr_to_grass() does not return anything < 0
-         * check with GRASS 6 and GRASS 5 */
-        G_warning(_("Unable to convert input layer projection information to "
-                    "GRASS format for checking"));
-        if (verbose && *hSRS != NULL) {
-            char *wkt = NULL;
-
-            if (OSRExportToPrettyWkt(*hSRS, &wkt, FALSE) != OGRERR_NONE) {
-                G_warning(_("Can't get WKT parameter string"));
-            }
-            else if (wkt) {
-                G_important_message(_("WKT definition:\n%s"), wkt);
-            }
-        }
-
-        return 2;
-    }
-    /* custom checks because if in doubt GPJ_osr_to_grass() returns a
-     * xy CRS */
-    if (*hSRS == NULL) {
+    if (hSRS == NULL) {
         if (verbose) {
             G_important_message(
                 _("No projection information available for layer <%s>"),
                 OGR_L_GetName(Ogr_layer));
         }
-
-        return 1;
     }
 
-    if (!OSRIsProjected(*hSRS) && !OSRIsGeographic(*hSRS)) {
-        G_important_message(
-            _("Projection for layer <%s> does not contain a valid CRS"),
-            OGR_L_GetName(Ogr_layer));
-
-        if (verbose) {
-            char *wkt = NULL;
-
-            if (OSRExportToPrettyWkt(*hSRS, &wkt, FALSE) != OGRERR_NONE) {
-                G_important_message(_("Can't get WKT parameter string"));
-            }
-            else if (wkt) {
-                G_important_message(_("WKT definition:\n%s"), wkt);
-            }
-        }
-
-        return 2;
-    }
-    else {
-        const char *authkey, *authname, *authcode;
-#if GDAL_VERSION_NUM >= 3000000
-        char **papszOptions;
-
-        /* get WKT2 definition */
-        papszOptions = G_calloc(3, sizeof(char *));
-        papszOptions[0] = G_store("MULTILINE=YES");
-        papszOptions[1] = G_store("FORMAT=WKT2");
-        OSRExportToWktEx(*hSRS, proj_wkt, (const char **)papszOptions);
-        G_free(papszOptions[0]);
-        G_free(papszOptions[1]);
-        G_free(papszOptions);
-#else
-        OSRExportToWkt(*hSRS, proj_wkt);
-#endif
-
-        if (OSRIsProjected(*hSRS))
-            authkey = "PROJCS";
-        else /* is geographic */
-            authkey = "GEOGCS";
-
-        authname = OSRGetAuthorityName(*hSRS, authkey);
-        if (authname && *authname) {
-            authcode = OSRGetAuthorityCode(*hSRS, authkey);
-            if (authcode && *authcode) {
-                G_asprintf(proj_srid, "%s:%s", authname, authcode);
-            }
-        }
-    }
-
-    return 0;
+    return hSRS;
 }
 
 /* compare projections of all OGR layers
@@ -137,49 +60,31 @@ int cmp_layer_srs(GDALDatasetH Ogr_ds, int nlayers, int *layers,
                   char **layer_names, char *geom_col)
 {
     int layer;
-    struct Key_Value *proj_info1, *proj_units1;
-    char *proj_srid1, *proj_wkt1;
-    struct Key_Value *proj_info2, *proj_units2;
-    char *proj_srid2, *proj_wkt2;
-    struct Cell_head cellhd1, cellhd2;
     OGRLayerH Ogr_layer;
-    OGRSpatialReferenceH hSRS;
+    OGRSpatialReferenceH hSRS1, hSRS2;
+    char *papszOptions[2];
 
     if (nlayers == 1)
         return 0;
 
-    proj_info1 = proj_units1 = NULL;
-    proj_srid1 = proj_wkt1 = NULL;
-    proj_info2 = proj_units2 = NULL;
-    proj_srid2 = proj_wkt2 = NULL;
-
-    G_get_window(&cellhd1);
     layer = 0;
+    hSRS1 = NULL;
     do {
         /* Get first SRS */
         Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layers[layer]);
+        hSRS1 = get_layer_proj(Ogr_layer, geom_col, 0);
 
-        if (get_layer_proj(Ogr_layer, &hSRS, &cellhd1, &proj_info1,
-                           &proj_units1, &proj_srid1, &proj_wkt1, geom_col,
-                           0) == 0) {
+        if (hSRS1) {
             break;
         }
         layer++;
     } while (layer < nlayers);
 
     if (layer == nlayers) {
-        /* could not get layer proj in GRASS format for any of the layers
+        /* could not get layer proj s OGR SRS for any of the layers
          * -> projections of all layers are the same, i.e. unreadable by GRASS
          */
         G_warning(_("Layer projections are unreadable"));
-        if (proj_info1)
-            G_free_key_value(proj_info1);
-        if (proj_units1)
-            G_free_key_value(proj_units1);
-        if (proj_srid1)
-            G_free(proj_srid1);
-        if (proj_wkt1)
-            CPLFree(proj_wkt1);
 
         return 0;
     }
@@ -188,81 +93,32 @@ int cmp_layer_srs(GDALDatasetH Ogr_ds, int nlayers, int *layers,
          * layers
          * -> mix of unreadable and readable projections  */
         G_warning(_("Projection for layer <%s> is unreadable"),
-                  layer_names[layer]);
-        if (proj_info1)
-            G_free_key_value(proj_info1);
-        if (proj_units1)
-            G_free_key_value(proj_units1);
-        if (proj_srid1)
-            G_free(proj_srid1);
-        if (proj_wkt1)
-            CPLFree(proj_wkt1);
+                  layer_names[layer - 1]);
 
         return 1;
     }
 
+    /* ignore data axis mapping, this is handled separately */
+    papszOptions[0] = G_store("IGNORE_DATA_AXIS_TO_SRS_AXIS_MAPPING=YES");
+    papszOptions[1] = NULL;
+
     for (layer = 1; layer < nlayers; layer++) {
         /* Get SRS of other layer(s) */
         Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layers[layer]);
-        G_get_window(&cellhd2);
-        if (get_layer_proj(Ogr_layer, &hSRS, &cellhd2, &proj_info2,
-                           &proj_units2, &proj_srid2, &proj_wkt2, geom_col,
-                           0) != 0) {
-            if (proj_info1)
-                G_free_key_value(proj_info1);
-            if (proj_units1)
-                G_free_key_value(proj_units1);
-            if (proj_srid1)
-                G_free(proj_srid1);
-            if (proj_wkt1)
-                CPLFree(proj_wkt1);
+        hSRS2 = get_layer_proj(Ogr_layer, geom_col, 0);
 
+        if (!hSRS2) {
             return 1;
         }
 
-        if (cellhd1.proj != cellhd2.proj ||
-            G_compare_projections(proj_info1, proj_units1, proj_info2,
-                                  proj_units2) < 0) {
-            if (proj_info1)
-                G_free_key_value(proj_info1);
-            if (proj_units1)
-                G_free_key_value(proj_units1);
-            if (proj_srid1)
-                G_free(proj_srid1);
-            if (proj_wkt1)
-                CPLFree(proj_wkt1);
-            if (proj_info2)
-                G_free_key_value(proj_info2);
-            if (proj_units2)
-                G_free_key_value(proj_units2);
-            if (proj_srid2)
-                G_free(proj_srid2);
-            if (proj_wkt2)
-                CPLFree(proj_wkt2);
-
+        if (!OSRIsSameEx(hSRS1, hSRS1, (const char **)papszOptions)) {
             G_warning(_("Projection of layer <%s> is different from "
                         "projection of layer <%s>"),
-                      layer_names[layer], layer_names[layer - 1]);
+                      layer_names[layer], layer_names[0]);
 
             return 1;
         }
-        if (proj_info2)
-            G_free_key_value(proj_info2);
-        if (proj_units2)
-            G_free_key_value(proj_units2);
-        if (proj_srid2)
-            G_free(proj_srid2);
-        if (proj_wkt2)
-            CPLFree(proj_wkt2);
     }
-    if (proj_info1)
-        G_free_key_value(proj_info1);
-    if (proj_units1)
-        G_free_key_value(proj_units1);
-    if (proj_srid1)
-        G_free(proj_srid1);
-    if (proj_wkt1)
-        CPLFree(proj_wkt1);
 
     return 0;
 }
@@ -280,12 +136,30 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
     OGRLayerH Ogr_layer;
     OGRSpatialReferenceH hSRS;
 
+    /* ---------------------------------------------------------------------- */
+    /* Fetch the dataset projection as OGR SRS, in GRASS form, SRID, and WKT. */
+    /* ---------------------------------------------------------------------- */
+
     /* Get first layer to be imported to use for projection check */
     Ogr_layer = GDALDatasetGetLayer(hDS, layer);
+    hSRS = get_layer_proj(Ogr_layer, geom_col, 1);
 
-    /* -------------------------------------------------------------------- */
-    /*      Fetch the projection in GRASS form, SRID, and WKT.              */
-    /* -------------------------------------------------------------------- */
+    /* get WKT2 definition */
+    if (hSRS) {
+#if GDAL_VERSION_NUM >= 3000000
+        char **papszOptions;
+
+        papszOptions = G_calloc(3, sizeof(char *));
+        papszOptions[0] = G_store("MULTILINE=YES");
+        papszOptions[1] = G_store("FORMAT=WKT2");
+        OSRExportToWktEx(hSRS, &wkt, (const char **)papszOptions);
+        G_free(papszOptions[0]);
+        G_free(papszOptions[1]);
+        G_free(papszOptions);
+#else
+        OSRExportToWkt(hSRS, wkt);
+#endif
+    }
 
     /* proj_trouble:
      * 0: valid srs
@@ -294,8 +168,41 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
      */
 
     /* Projection only required for checking so convert non-interactively */
-    proj_trouble = get_layer_proj(Ogr_layer, &hSRS, cellhd, &proj_info,
-                                  &proj_units, &srid, &wkt, geom_col, 1);
+    proj_trouble = 0;
+    if (wkt && *wkt) {
+        if (hSRS != NULL)
+            GPJ_osr_to_grass(cellhd, &proj_info, &proj_units, hSRS, 0);
+
+        if (!hSRS || (!OSRIsProjected(hSRS) && !OSRIsGeographic(hSRS))) {
+            G_important_message(_("Input contains an invalid CRS. "
+                                  "WKT definition:\n%s"),
+                                wkt);
+
+            proj_trouble = 2;
+        }
+        else {
+            const char *authkey, *authname, *authcode;
+
+            if (OSRIsProjected(hSRS))
+                authkey = "PROJCS";
+            else /* is geographic */
+                authkey = "GEOGCS";
+
+            authname = OSRGetAuthorityName(hSRS, authkey);
+            if (authname && *authname) {
+                authcode = OSRGetAuthorityCode(hSRS, authkey);
+                if (authcode && *authcode) {
+                    G_asprintf(&srid, "%s:%s", authname, authcode);
+                }
+            }
+        }
+    }
+    else {
+        G_important_message(_("No projection information available"));
+        cellhd->proj = PROJECTION_XY;
+        cellhd->zone = 0;
+        proj_trouble = 1;
+    }
 
     /* -------------------------------------------------------------------- */
     /*      Do we need to create a new location?                            */
@@ -469,9 +376,9 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                 exit(EXIT_SUCCESS);
             }
         }
-        G_free_key_value(loc_proj_units);
         G_free_key_value(loc_proj_info);
+        G_free_key_value(loc_proj_units);
     }
-    G_free_key_value(proj_units);
     G_free_key_value(proj_info);
+    G_free_key_value(proj_units);
 }
