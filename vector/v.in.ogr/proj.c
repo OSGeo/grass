@@ -330,6 +330,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
         char *loc_wkt = NULL, *loc_srid = NULL;
         void (*msg_fn)(const char *, ...);
         OGRSpatialReferenceH hSRS_loc = NULL;
+        char *papszOptions[2];
 
         if (check_only && override) {
             /* can't check when over-riding check */
@@ -392,12 +393,17 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                 GPJ_grass_to_osr2(loc_proj_info, loc_proj_units, loc_epsg);
         }
 
+        /* ignore data axis mapping, this is handled separately */
+        papszOptions[0] = G_store("IGNORE_DATA_AXIS_TO_SRS_AXIS_MAPPING=YES");
+        papszOptions[1] = NULL;
+
         if (override) {
             cellhd->proj = loc_wind.proj;
             cellhd->zone = loc_wind.zone;
             G_message(_("Over-riding projection check"));
         }
-        else if (loc_wind.proj != cellhd->proj || !OSRIsSame(hSRS, hSRS_loc)) {
+        else if (loc_wind.proj != cellhd->proj ||
+                 !OSRIsSameEx(hSRS, hSRS_loc, (const char **)papszOptions)) {
 
             strcpy(error_msg,
                    _("Coordinate reference system of dataset does not"
