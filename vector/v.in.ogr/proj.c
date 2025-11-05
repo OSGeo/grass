@@ -12,10 +12,8 @@
 #include <proj_api.h>
 #endif
 
-/* get projection info of OGR layer in GRASS format
- * return 0 on success (some non-xy SRS)
- * return 1 if no SRS available
- * return 2 if SRS available but unreadable */
+/* get projection info of OGR layer as OGR SRS
+ * return a OGR SRS or NULL */
 OGRSpatialReferenceH get_layer_proj(OGRLayerH Ogr_layer, char *geom_col,
                                     int verbose)
 {
@@ -234,6 +232,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
     else {
         struct Key_Value *loc_proj_info = NULL, *loc_proj_units = NULL;
         struct Key_Value *loc_epsg = NULL;
+        int epsgcode = 0;
         char *loc_wkt = NULL, *loc_srid = NULL;
         void (*msg_fn)(const char *, ...);
         OGRSpatialReferenceH hSRS_loc = NULL;
@@ -271,6 +270,14 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
             loc_proj_info = G_get_projinfo();
             loc_proj_units = G_get_projunits();
             loc_srid = G_get_projsrid();
+            loc_epsg = G_get_projepsg();
+
+            if (loc_epsg) {
+                const char *epsgstr = G_find_key_value("epsg", loc_epsg);
+
+                if (epsgstr)
+                    epsgcode = atoi(epsgstr);
+            }
         }
 
         /* get OGR spatial reference */
@@ -287,15 +294,20 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                 }
             }
         }
-        if (!loc_wkt) {
-            loc_wkt = G_get_projwkt();
+        if (epsgcode) {
+            hSRS_loc = OSRNewSpatialReference(NULL);
+            OSRImportFromEPSG(hSRS_loc, epsgcode);
         }
-        if (loc_wkt && *loc_wkt) {
-            hSRS_loc = OSRNewSpatialReference(loc_wkt);
+        if (!hSRS_loc) {
+            if (!loc_wkt) {
+                loc_wkt = G_get_projwkt();
+            }
+            if (loc_wkt && *loc_wkt) {
+                hSRS_loc = OSRNewSpatialReference(loc_wkt);
+            }
         }
 #endif
         if (!hSRS_loc) {
-            loc_epsg = G_get_projepsg();
             hSRS_loc =
                 GPJ_grass_to_osr2(loc_proj_info, loc_proj_units, loc_epsg);
         }
