@@ -142,22 +142,10 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
     Ogr_layer = GDALDatasetGetLayer(hDS, layer);
     hSRS = get_layer_proj(Ogr_layer, geom_col, 1);
 
-    /* get WKT2 definition */
-    if (hSRS) {
+    /* get WKT definition */
 #if GDAL_VERSION_NUM >= 3000000
-        char **papszOptions;
-
-        papszOptions = G_calloc(3, sizeof(char *));
-        papszOptions[0] = G_store("MULTILINE=YES");
-        papszOptions[1] = G_store("FORMAT=WKT2");
-        OSRExportToWktEx(hSRS, &wkt, (const char **)papszOptions);
-        G_free(papszOptions[0]);
-        G_free(papszOptions[1]);
-        G_free(papszOptions);
-#else
-        OSRExportToWkt(hSRS, wkt);
+    CPLSetConfigOption("OSR_WKT_FORMAT", "WKT2");
 #endif
-    }
 
     /* proj_trouble:
      * 0: valid srs
@@ -167,11 +155,14 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
 
     /* Projection only required for checking so convert non-interactively */
     proj_trouble = 0;
-    if (wkt && *wkt) {
-        if (hSRS != NULL)
-            GPJ_osr_to_grass(cellhd, &proj_info, &proj_units, hSRS, 0);
+    if (hSRS) {
+        if (OSRExportToPrettyWkt(hSRS, &wkt, FALSE) != OGRERR_NONE) {
+            G_important_message(_("Can't get WKT parameter string"));
+        }
 
-        if (!hSRS || (!OSRIsProjected(hSRS) && !OSRIsGeographic(hSRS))) {
+        GPJ_osr_to_grass(cellhd, &proj_info, &proj_units, hSRS, 0);
+
+        if ((!OSRIsProjected(hSRS) && !OSRIsGeographic(hSRS))) {
             G_important_message(_("Input contains an invalid CRS. "
                                   "WKT definition:\n%s"),
                                 wkt);
@@ -197,9 +188,11 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
     }
     else {
         G_important_message(_("No projection information available"));
+        proj_trouble = 1;
+    }
+    if (proj_trouble) {
         cellhd->proj = PROJECTION_XY;
         cellhd->zone = 0;
-        proj_trouble = 1;
     }
 
     /* -------------------------------------------------------------------- */
@@ -265,23 +258,18 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
         /*      dataset?                                                    */
         /* ---------------------------------------------------------------- */
         G_get_default_window(&loc_wind);
-        /* fetch LOCATION PROJ info */
+        /* fetch project CRS info */
         if (loc_wind.proj != PROJECTION_XY) {
             loc_proj_info = G_get_projinfo();
             loc_proj_units = G_get_projunits();
             loc_srid = G_get_projsrid();
+            /* also get EPSG code from PROJ_EPSG for backwards compatibility */
             loc_epsg = G_get_projepsg();
-
-            if (loc_epsg) {
-                const char *epsgstr = G_find_key_value("epsg", loc_epsg);
-
-                if (epsgstr)
-                    epsgcode = atoi(epsgstr);
-            }
         }
 
         /* get OGR spatial reference */
 #if GDAL_VERSION_MAJOR >= 3 && PROJ_VERSION_MAJOR >= 6
+        /* 1. from SRID */
         if (loc_srid && *loc_srid) {
             PJ *obj = NULL;
 
@@ -294,16 +282,23 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                 }
             }
         }
-        if (epsgcode) {
-            hSRS_loc = OSRNewSpatialReference(NULL);
-            OSRImportFromEPSG(hSRS_loc, epsgcode);
+        /* 2. from WKT */
+        if (!loc_wkt) {
+            loc_wkt = G_get_projwkt();
         }
-        if (!hSRS_loc) {
-            if (!loc_wkt) {
-                loc_wkt = G_get_projwkt();
-            }
-            if (loc_wkt && *loc_wkt) {
-                hSRS_loc = OSRNewSpatialReference(loc_wkt);
+        if (loc_wkt && *loc_wkt) {
+            hSRS_loc = OSRNewSpatialReference(loc_wkt);
+        }
+        /* 3. from EPSG */
+        if (!hSRS_loc && loc_epsg) {
+            const char *epsgstr = G_find_key_value("epsg", loc_epsg);
+
+            if (epsgstr)
+                epsgcode = atoi(epsgstr);
+
+            if (epsgcode) {
+                hSRS_loc = OSRNewSpatialReference(NULL);
+                OSRImportFromEPSG(hSRS_loc, epsgcode);
             }
         }
 #endif
@@ -330,8 +325,6 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
 
             if (G_verbose() >= G_verbose_std()) {
                 char *wktstr = NULL;
-
-                CPLSetConfigOption("OSR_WKT_FORMAT", "WKT2");
 
                 OSRExportToPrettyWkt(hSRS, &wktstr, 0);
                 /* G_message and G_fatal_error destroy the pretty formatting
