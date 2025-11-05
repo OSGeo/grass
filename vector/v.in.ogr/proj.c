@@ -303,6 +303,10 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
         }
 #endif
         if (!hSRS_loc) {
+#if GDAL_VERSION_NUM >= 3000000
+            /* GPJ_grass_to_osr2 needs WKT1 format*/
+            CPLSetConfigOption("OSR_WKT_FORMAT", "WKT1");
+#endif
             hSRS_loc =
                 GPJ_grass_to_osr2(loc_proj_info, loc_proj_units, loc_epsg);
         }
@@ -326,6 +330,9 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
             if (G_verbose() >= G_verbose_std()) {
                 char *wktstr = NULL;
 
+#if GDAL_VERSION_NUM >= 3000000
+                CPLSetConfigOption("OSR_WKT_FORMAT", "WKT2");
+#endif
                 OSRExportToPrettyWkt(hSRS, &wktstr, 0);
                 /* G_message and G_fatal_error destroy the pretty formatting
                  * thus use fprintf(stderr, ...) */
