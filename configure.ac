@@ -1471,7 +1471,11 @@ LOC_CHECK_FRAMEWORK_PATH(opengl,OpenGL,OPENGLPATH)
 
 LOC_CHECK_INCLUDES(OpenGL/gl.h OpenGL/glu.h,OpenGL,$OPENGLPATH)
 
-LOC_CHECK_FUNC(glBegin,OpenGL library,OPENGLLIB,-framework OpenGL -framework AGL -framework ApplicationServices,$OPENGLPATH)
+LOC_CHECK_FUNC(glBegin,OpenGL library,OPENGLLIB,-framework OpenGL -framework ApplicationServices,$OPENGLPATH)
+LOC_CHECK_FUNC(aglDestroyPixelFormat,[OpenGL library (AGL)],OPENGLLIB,[-framework AGL],$OPENGLPATH,,[
+  [OPENGLLIB="$OPENGLLIB -framework AGL"]
+  AC_DEFINE(OPENGL_AGL,1,[Define to 1 if OpenGL uses AGL (MacOS X).])
+  ],[:])
 LOC_CHECK_FUNC(gluBeginCurve,GLU library,OPENGLLIB,,$OPENGLPATH,$OPENGLLIB)
 
 OPENGLINC="$OPENGLPATH"

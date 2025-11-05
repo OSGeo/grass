@@ -13580,14 +13580,14 @@ CPPFLAGS=$ac_save_cppflags
 
 ac_save_libs="$LIBS"
 ac_save_ldflags="$LDFLAGS"
-LIBS="-framework OpenGL -framework AGL -framework ApplicationServices  $LIBS"
+LIBS="-framework OpenGL -framework ApplicationServices  $LIBS"
 LDFLAGS="$OPENGLPATH $LDFLAGS"
 ac_fn_c_check_func "$LINENO" "glBegin" "ac_cv_func_glBegin"
 if test "x$ac_cv_func_glBegin" = xyes
 then :
 
 
-    OPENGLLIB="$OPENGLLIB -framework OpenGL -framework AGL -framework ApplicationServices"
+    OPENGLLIB="$OPENGLLIB -framework OpenGL -framework ApplicationServices"
 
 
 else case e in #(
@@ -13596,6 +13596,31 @@ else case e in #(
 as_fn_error $? "*** Unable to locate OpenGL library." "$LINENO" 5
 
 
+ ;;
+esac
+fi
+
+LIBS=${ac_save_libs}
+LDFLAGS=${ac_save_ldflags}
+
+
+ac_save_libs="$LIBS"
+ac_save_ldflags="$LDFLAGS"
+LIBS="-framework AGL  $LIBS"
+LDFLAGS="$OPENGLPATH $LDFLAGS"
+ac_fn_c_check_func "$LINENO" "aglDestroyPixelFormat" "ac_cv_func_aglDestroyPixelFormat"
+if test "x$ac_cv_func_aglDestroyPixelFormat" = xyes
+then :
+
+OPENGLLIB="$OPENGLLIB -framework AGL"
+
+printf "%s\n" "#define OPENGL_AGL 1" >>confdefs.h
+
+
+
+else case e in #(
+  e)
+:
  ;;
 esac
 fi
