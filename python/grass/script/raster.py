@@ -118,10 +118,16 @@ def mapcalc(
     verbose=False,
     overwrite=False,
     seed=None,
+    nprocs=None,
     env=None,
     **kwargs,
 ):
     """Interface to r.mapcalc.
+
+    The *nprocs* parameter currently defaults to 1
+    which may change in the future to using all cores.
+    Pass a value explicitly if you have specific requirements on the number of cores.
+    Explicit ``nprocs=0`` uses all cores.
 
     :param str exp: expression
     :param bool quiet: True to run quietly (``--q``)
@@ -130,6 +136,7 @@ def mapcalc(
     :param bool overwrite: True to enable overwriting the output (``--o``)
     :param seed: an integer used to seed the random-number generator for the
                  rand() function, or 'auto' to generate a random seed
+    :param nprocs: Number of threads for parallel computing
     :param dict env: dictionary of environment variables for child process
     :param kwargs:
     """
@@ -140,6 +147,11 @@ def mapcalc(
     t = string.Template(exp)
     e = t.substitute(**kwargs)
 
+    # Default to 1 to keep the same behavior in the API even with parallelized r.mapcalc,
+    # but for explicit 0, do pass through.
+    if nprocs is None:
+        nprocs = 1
+
     try:
         write_command(
             "r.mapcalc",
@@ -147,6 +159,7 @@ def mapcalc(
             stdin=e,
             env=env,
             seed=seed,
+            nprocs=nprocs,
             quiet=quiet,
             superquiet=superquiet,
             verbose=verbose,
