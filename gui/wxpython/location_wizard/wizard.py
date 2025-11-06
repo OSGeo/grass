@@ -2644,7 +2644,7 @@ class LocationWizard(wx.Object):
         location = self.startpage.location
 
         # location already exists?
-        if Path(os.path.join(database, location)).is_dir():
+        if Path(database, location).is_dir():
             GError(
                 parent=self.wizard,
                 message="%s <%s>: %s"
