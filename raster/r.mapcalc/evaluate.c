@@ -386,6 +386,8 @@ void execute(expr_list *ee)
         expression *e = l->exp;
         const char *var;
 
+        num_exprs++;
+
         if (e->type != expr_type_binding && e->type != expr_type_function)
             G_fatal_error("internal error: execute: invalid type: %d", e->type);
 
@@ -398,7 +400,6 @@ void execute(expr_list *ee)
             G_fatal_error(_("output map <%s> exists. To overwrite, "
                             "use the --overwrite flag"),
                           var);
-        num_exprs++;
     }
 
     /* Create a array of expreesion and stored it in heap */
