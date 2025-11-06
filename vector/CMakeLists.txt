@@ -902,6 +902,7 @@ build_program_in_subdir(
   grass_vector
   PROJ::proj
   PRIMARY_DEPENDS
+  PROJ::proj
   GDAL::GDAL
   OPTIONAL_DEPENDS
   PostgreSQL::PostgreSQL)

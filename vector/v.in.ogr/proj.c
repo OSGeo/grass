@@ -142,11 +142,6 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
     Ogr_layer = GDALDatasetGetLayer(hDS, layer);
     hSRS = get_layer_proj(Ogr_layer, geom_col, 1);
 
-    /* get WKT definition */
-#if GDAL_VERSION_NUM >= 3000000
-    CPLSetConfigOption("OSR_WKT_FORMAT", "WKT2");
-#endif
-
     /* proj_trouble:
      * 0: valid srs
      * 1: no srs, default to xy
@@ -156,16 +151,27 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
     /* Projection only required for checking so convert non-interactively */
     proj_trouble = 0;
     if (hSRS) {
-        if (OSRExportToPrettyWkt(hSRS, &wkt, FALSE) != OGRERR_NONE) {
-            G_important_message(_("Can't get WKT parameter string"));
-        }
-
-        GPJ_osr_to_grass(cellhd, &proj_info, &proj_units, hSRS, 0);
-
         if ((!OSRIsProjected(hSRS) && !OSRIsGeographic(hSRS))) {
-            G_important_message(_("Input contains an invalid CRS. "
-                                  "WKT definition:\n%s"),
-                                wkt);
+            G_important_message(_("Input contains an invalid CRS."));
+
+            /* WKT description could give a hint what's wrong */
+#if GDAL_VERSION_NUM >= 3000000
+            CPLSetConfigOption("OSR_WKT_FORMAT", "WKT2");
+#endif
+            if (OSRExportToPrettyWkt(hSRS, &wkt, FALSE) != OGRERR_NONE) {
+                G_important_message(_("Can't get WKT parameter string"));
+            }
+            else if (wkt) {
+                G_important_message(_("WKT definition:"));
+                /* G_message et al. are stripping off whitespaces
+                 * at the beginning, destroying the pretty WKT format
+                 * and making it far less readable
+                 * fprintf(stderr, ...) is not an option
+                 * because of potential logging to file */
+                G_important_message("%s", wkt);
+                CPLFree(wkt);
+                wkt = NULL;
+            }
 
             proj_trouble = 2;
         }
@@ -185,6 +191,8 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                 }
             }
         }
+
+        GPJ_osr_to_grass(cellhd, &proj_info, &proj_units, hSRS, 0);
     }
     else {
         G_important_message(_("No projection information available"));
@@ -206,6 +214,13 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                             "format; cannot create new project."));
         }
         else {
+#if GDAL_VERSION_NUM >= 3000000
+            CPLSetConfigOption("OSR_WKT_FORMAT", "WKT2");
+#endif
+            if (OSRExportToPrettyWkt(hSRS, &wkt, FALSE) != OGRERR_NONE) {
+                G_important_message(_("Can't get WKT parameter string"));
+            }
+
             if (0 != G_make_location_crs(outloc, cellhd, proj_info, proj_units,
                                          srid, wkt)) {
                 G_fatal_error(_("Unable to create new project <%s>"), outloc);
@@ -267,7 +282,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
             loc_epsg = G_get_projepsg();
         }
 
-        /* get OGR spatial reference */
+        /* get OGR spatial reference for current projection */
 #if GDAL_VERSION_MAJOR >= 3 && PROJ_VERSION_MAJOR >= 6
         /* 1. from SRID */
         if (loc_srid && *loc_srid) {
@@ -289,6 +304,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
         if (loc_wkt && *loc_wkt) {
             hSRS_loc = OSRNewSpatialReference(loc_wkt);
         }
+#endif
         /* 3. from EPSG */
         if (!hSRS_loc && loc_epsg) {
             const char *epsgstr = G_find_key_value("epsg", loc_epsg);
@@ -301,10 +317,10 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                 OSRImportFromEPSG(hSRS_loc, epsgcode);
             }
         }
-#endif
+        /* 4. from GRASS-native proj info */
         if (!hSRS_loc) {
 #if GDAL_VERSION_NUM >= 3000000
-            /* GPJ_grass_to_osr2 needs WKT1 format*/
+            /* GPJ_grass_to_osr2 needs WKT1 format */
             CPLSetConfigOption("OSR_WKT_FORMAT", "WKT1");
 #endif
             hSRS_loc =
@@ -338,8 +354,13 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                  * thus use fprintf(stderr, ...) */
 
                 if (wktstr && *wktstr) {
-                    G_warning(_("Dataset CRS is:\n"));
-                    fprintf(stderr, "%s\n\n", wktstr);
+                    G_important_message(_("Dataset CRS is:\n"));
+                    /* G_message et al. are stripping off whitespaces
+                     * at the beginning, destroying the pretty WKT format
+                     * and making it far less readable
+                     * fprintf(stderr, ...) is not an option
+                     * because of potential logging to file */
+                    G_important_message("%s\n\n", wktstr);
                     CPLFree(wktstr);
                     wktstr = NULL;
                 }
@@ -347,8 +368,13 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                 OSRExportToPrettyWkt(hSRS_loc, &wktstr, 0);
 
                 if (wktstr && *wktstr) {
-                    G_warning(_("Project CRS is:\n"));
-                    fprintf(stderr, "%s\n\n", wktstr);
+                    G_important_message(_("Project CRS is:\n"));
+                    /* G_message et al. are stripping off whitespaces
+                     * at the beginning, destroying the pretty WKT format
+                     * and making it far less readable
+                     * fprintf(stderr, ...) is not an option
+                     * because of potential logging to file */
+                    G_important_message("%s\n\n", wktstr);
                     CPLFree(wktstr);
                     wktstr = NULL;
                 }
