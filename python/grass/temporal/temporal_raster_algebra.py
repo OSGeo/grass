@@ -95,7 +95,7 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
                 "r.mapcalc", region="union", nprocs=1, run_=False
             )
         else:
-            self.m_mapcalc = pymod.Module("r.mapcalc", nprocs=1)
+            self.m_mapcalc = pymod.Module("r.mapcalc", nprocs=1, run_=False)
         self.m_mremove = pymod.Module("g.remove")
 
     def parse(self, expression, basename=None, overwrite: bool = False):
