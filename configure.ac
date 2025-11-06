@@ -20,7 +20,7 @@
 # Website for   config.guess, config.sub:
 #               wget http://git.savannah.gnu.org/cgit/config.git/plain/config.guess
 #               wget http://git.savannah.gnu.org/cgit/config.git/plain/config.sub
-#               Note: use autoconf-2.69
+#               Note: use autoconf-2.72
 #############################################################################
 
 define([AC_CACHE_LOAD], )
@@ -31,7 +31,7 @@ $2
 
 AC_INIT
 AC_CONFIG_SRCDIR([configure.ac])
-AC_PREREQ([2.71])
+AC_PREREQ([2.72])
 AC_CONFIG_HEADERS([include/grass/config.h])
 AC_CANONICAL_HOST
 AC_PROG_CC
@@ -2007,6 +2007,11 @@ AC_SUBST(USE_OPENCL)
 # way to handle this. It sets the appropriate CFLAGS and defines necessary
 # preprocessor macros (e.g., _FILE_OFFSET_BITS=64) for the compiler.
 AC_SYS_LARGEFILE
+if test "$ac_cv_sys_large_files" != 0; then
+    USE_LARGEFILES=1
+else
+    USE_LARGEFILES=0
+fi
 AC_SUBST(LFS_CFLAGS)
 
 USE_TERMIO=

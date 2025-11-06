@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-11 15:59+0000\n"
+"POT-Creation-Date: 2025-10-25 22:50+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Czech <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/cs/>\n"
@@ -206,7 +206,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/gselect.py:1629
 #: ../gui/wxpython/gui_core/gselect.py:1646
 #: ../gui/wxpython/gui_core/gselect.py:1647
-#: ../gui/wxpython/gui_core/widgets.py:1437
+#: ../gui/wxpython/gui_core/widgets.py:1436
 #: ../gui/wxpython/vnet/dialogs.py:1679
 msgid "Name:"
 msgstr "Název:"
@@ -263,9 +263,9 @@ msgstr ""
 #: ../gui/wxpython/location_wizard/wizard.py:1446
 #: ../gui/wxpython/location_wizard/wizard.py:1801
 #: ../gui/wxpython/modules/import_export.py:862
-#: ../gui/wxpython/nviz/tools.py:676 ../gui/wxpython/psmap/dialogs.py:2749
+#: ../gui/wxpython/nviz/tools.py:675 ../gui/wxpython/psmap/dialogs.py:2749
 #: ../gui/wxpython/psmap/dialogs.py:3055 ../gui/wxpython/psmap/dialogs.py:5796
-#: ../gui/wxpython/tplot/frame.py:376
+#: ../gui/wxpython/tplot/frame.py:375
 msgid "Browse"
 msgstr "Procházet"
 
@@ -353,12 +353,12 @@ msgstr ""
 msgid "Format"
 msgstr "Formát"
 
-#: ../gui/wxpython/animation/dialogs.py:952 ../gui/wxpython/nviz/tools.py:829
+#: ../gui/wxpython/animation/dialogs.py:952 ../gui/wxpython/nviz/tools.py:828
 msgid "Decorations"
 msgstr "Dekorace"
 
 #: ../gui/wxpython/animation/dialogs.py:957
-#: ../gui/wxpython/lmgr/layertree.py:771 ../gui/wxpython/tplot/frame.py:396
+#: ../gui/wxpython/lmgr/layertree.py:771 ../gui/wxpython/tplot/frame.py:395
 msgid "Export"
 msgstr ""
 
@@ -444,7 +444,7 @@ msgstr ""
 msgid "Export to:"
 msgstr ""
 
-#: ../gui/wxpython/animation/dialogs.py:1185 ../gui/wxpython/nviz/tools.py:680
+#: ../gui/wxpython/animation/dialogs.py:1185 ../gui/wxpython/nviz/tools.py:679
 msgid "File prefix:"
 msgstr "Předpona souboru:"
 
@@ -452,7 +452,7 @@ msgstr "Předpona souboru:"
 msgid "animation_"
 msgstr "animation_"
 
-#: ../gui/wxpython/animation/dialogs.py:1187 ../gui/wxpython/nviz/tools.py:693
+#: ../gui/wxpython/animation/dialogs.py:1187 ../gui/wxpython/nviz/tools.py:692
 msgid "File format:"
 msgstr "Formát souboru:"
 
@@ -611,7 +611,7 @@ msgstr "Nastavení nástroje pro animace"
 
 #: ../gui/wxpython/animation/dialogs.py:1900
 #: ../gui/wxpython/gui_core/preferences.py:972
-#: ../gui/wxpython/nviz/preferences.py:228 ../gui/wxpython/nviz/tools.py:518
+#: ../gui/wxpython/nviz/preferences.py:228 ../gui/wxpython/nviz/tools.py:517
 #: ../gui/wxpython/web_services/widgets.py:325
 msgid "Background color:"
 msgstr "Barva pozadí:"
@@ -722,15 +722,15 @@ msgstr ""
 msgid "No map series nor space-time dataset is added."
 msgstr ""
 
-#: ../gui/wxpython/animation/provider.py:450
+#: ../gui/wxpython/animation/provider.py:451
 msgid "Rendering map layers"
 msgstr ""
 
-#: ../gui/wxpython/animation/provider.py:568
+#: ../gui/wxpython/animation/provider.py:569
 msgid "Overlaying map layers"
 msgstr ""
 
-#: ../gui/wxpython/animation/provider.py:799
+#: ../gui/wxpython/animation/provider.py:800
 #, python-brace-format
 msgid "Directory {t} not removed."
 msgstr ""
@@ -750,7 +750,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/temporal_manager.py:249
 #: ../gui/wxpython/animation/utils.py:72 ../gui/wxpython/animation/utils.py:80
-#: ../gui/wxpython/timeline/frame.py:497 ../gui/wxpython/tplot/frame.py:1159
+#: ../gui/wxpython/timeline/frame.py:497 ../gui/wxpython/tplot/frame.py:1158
 #, python-format
 msgid "Space time dataset <%s> not found."
 msgstr ""
@@ -772,11 +772,11 @@ msgstr ""
 msgid "Play back"
 msgstr ""
 
-#: ../gui/wxpython/animation/toolbars.py:31 ../gui/wxpython/nviz/tools.py:580
+#: ../gui/wxpython/animation/toolbars.py:31 ../gui/wxpython/nviz/tools.py:579
 msgid "Stop"
 msgstr "Zastavit"
 
-#: ../gui/wxpython/animation/toolbars.py:32 ../gui/wxpython/nviz/tools.py:578
+#: ../gui/wxpython/animation/toolbars.py:32 ../gui/wxpython/nviz/tools.py:577
 msgid "Pause"
 msgstr "Pozastavit"
 
@@ -879,7 +879,7 @@ msgstr "Upozornění"
 #: ../gui/wxpython/core/gcmd.py:153
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:714
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:760
-#: ../gui/wxpython/lmgr/frame.py:2319 ../gui/wxpython/main_window/frame.py:2428
+#: ../gui/wxpython/lmgr/frame.py:2320 ../gui/wxpython/main_window/frame.py:2429
 msgid "Message"
 msgstr "Zpráva"
 
@@ -906,7 +906,7 @@ msgstr "Nelze vykonat příkaz: '%s'"
 msgid "Error in %s"
 msgstr "Chyba v %s"
 
-#: ../gui/wxpython/core/gconsole.py:580
+#: ../gui/wxpython/core/gconsole.py:581
 #, python-format
 msgid ""
 "Unable to run command:\n"
@@ -915,43 +915,43 @@ msgid ""
 "Option <%(opt)s>: read from standard input is not supported by wxGUI"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:617
+#: ../gui/wxpython/core/gconsole.py:618
 #, python-format
 msgid "Module <%s> not found."
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:756 ../gui/wxpython/gmodeler/panels.py:314
+#: ../gui/wxpython/core/gconsole.py:757 ../gui/wxpython/gmodeler/panels.py:314
 #, python-format
 msgid "%d sec"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:759 ../gui/wxpython/gmodeler/panels.py:317
+#: ../gui/wxpython/core/gconsole.py:760 ../gui/wxpython/gmodeler/panels.py:317
 #, python-format
 msgid "%(min)d min %(sec)d sec"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:765
+#: ../gui/wxpython/core/gconsole.py:766
 #: ../gui/wxpython/gmodeler/model_items.py:282
 #: ../gui/wxpython/gmodeler/model_items.py:387
-#: ../gui/wxpython/gmodeler/panels.py:323 ../gui/wxpython/gui_core/ghelp.py:262
+#: ../gui/wxpython/gmodeler/panels.py:323 ../gui/wxpython/gui_core/ghelp.py:263
 #: ../gui/wxpython/startup/guiutils.py:586
 msgid "unknown"
 msgstr "neznámý"
 
-#: ../gui/wxpython/core/gconsole.py:771
+#: ../gui/wxpython/core/gconsole.py:772
 msgid "Please note that the data are left in inconsistent state and may be corrupted"
 msgstr "Data jsou ponechána v nevhodném stavu a mohou být porušena"
 
-#: ../gui/wxpython/core/gconsole.py:775
+#: ../gui/wxpython/core/gconsole.py:776
 msgid "Command aborted"
 msgstr "Příkaz přerušen"
 
-#: ../gui/wxpython/core/gconsole.py:778
+#: ../gui/wxpython/core/gconsole.py:779
 #, python-brace-format
 msgid "Command ended with non-zero return code {returncode}"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:783 ../gui/wxpython/gmodeler/panels.py:330
+#: ../gui/wxpython/core/gconsole.py:784 ../gui/wxpython/gmodeler/panels.py:330
 msgid "Command finished"
 msgstr "Příkaz ukončen"
 
@@ -1279,29 +1279,29 @@ msgstr ""
 msgid "hectares"
 msgstr ""
 
-#: ../gui/wxpython/core/utils.py:60
+#: ../gui/wxpython/core/utils.py:61
 #, python-format
 msgid "Syntax error: %s"
 msgstr ""
 
-#: ../gui/wxpython/core/utils.py:344
+#: ../gui/wxpython/core/utils.py:345
 #, python-format
 msgid "Vector map <%(map)s>: %(msg)s\n"
 msgstr ""
 
-#: ../gui/wxpython/core/utils.py:838
+#: ../gui/wxpython/core/utils.py:839
 #, python-format
 msgid ""
 "%s: line skipped - unable to parse '%s'\n"
 "Reason: %s\n"
 msgstr ""
 
-#: ../gui/wxpython/core/utils.py:844
+#: ../gui/wxpython/core/utils.py:845
 #, python-format
 msgid "Duplicated key: %s\n"
 msgstr ""
 
-#: ../gui/wxpython/core/utils.py:848
+#: ../gui/wxpython/core/utils.py:849
 #, fuzzy, python-brace-format
 #| msgid ""
 #| "Unable to open file\n"
@@ -1311,13 +1311,13 @@ msgstr ""
 "Nelze otevřít soubor\n"
 "%s"
 
-#: ../gui/wxpython/core/utils.py:873
+#: ../gui/wxpython/core/utils.py:874
 #, fuzzy, python-brace-format
 #| msgid "Unable to create file <%s>"
 msgid "Unable to create file '{name}': {error}\n"
 msgstr "Nelze vytvořit soubor <%s>"
 
-#: ../gui/wxpython/core/utils.py:947 ../gui/wxpython/gui_core/forms.py:1913
+#: ../gui/wxpython/core/utils.py:948 ../gui/wxpython/gui_core/forms.py:1913
 msgid "Select Color"
 msgstr "Zvolit barvu"
 
@@ -1557,7 +1557,7 @@ msgid "Select another import option"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:57
-#: ../gui/wxpython/gui_core/menu.py:186 ../gui/wxpython/history/browser.py:387
+#: ../gui/wxpython/gui_core/menu.py:187 ../gui/wxpython/history/browser.py:387
 #: ../gui/wxpython/modules/extensions.py:76
 msgid "Search"
 msgstr ""
@@ -1722,148 +1722,148 @@ msgid "Reprojection is not implemented for 3D rasters"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1461
-#: ../gui/wxpython/datacatalog/tree.py:1577
+#: ../gui/wxpython/datacatalog/tree.py:1581
 msgid "g.remove completed"
-msgstr ""
-
-#: ../gui/wxpython/datacatalog/tree.py:1541
-#, python-brace-format
-msgid "Do you really want to delete map(s) <{m}>?"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1545
 #, python-brace-format
+msgid "Do you really want to delete map(s) <{m}>?"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1549
+#, python-brace-format
 msgid "Do you really want to delete {n} maps?"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1546
+#: ../gui/wxpython/datacatalog/tree.py:1550
 msgid "Delete map"
 msgstr "Smazat mapu"
 
-#: ../gui/wxpython/datacatalog/tree.py:1547
+#: ../gui/wxpython/datacatalog/tree.py:1551
 #, python-brace-format
 msgid "Deleting {name}..."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1738
+#: ../gui/wxpython/datacatalog/tree.py:1742
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1752
+#: ../gui/wxpython/datacatalog/tree.py:1756
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2080
+#: ../gui/wxpython/datacatalog/tree.py:2084
 msgid "&Cut"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2086 ../gui/wxpython/history/tree.py:219
+#: ../gui/wxpython/datacatalog/tree.py:2090 ../gui/wxpython/history/tree.py:219
 msgid "&Copy"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2090
+#: ../gui/wxpython/datacatalog/tree.py:2094
 msgid "Copy &name"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2094
-#: ../gui/wxpython/datacatalog/tree.py:2137
-#: ../gui/wxpython/datacatalog/tree.py:2241
+#: ../gui/wxpython/datacatalog/tree.py:2098
+#: ../gui/wxpython/datacatalog/tree.py:2141
+#: ../gui/wxpython/datacatalog/tree.py:2245
 msgid "&Paste"
 msgstr ""
 
 #. GTC Delete mapset
-#: ../gui/wxpython/datacatalog/tree.py:2100
+#: ../gui/wxpython/datacatalog/tree.py:2104
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:242
 msgid "&Delete"
 msgstr "Od&stranit"
 
 #. GTC Rename mapset
-#: ../gui/wxpython/datacatalog/tree.py:2105 ../gui/wxpython/dbmgr/base.py:2490
+#: ../gui/wxpython/datacatalog/tree.py:2109 ../gui/wxpython/dbmgr/base.py:2490
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:235
 msgid "&Rename"
 msgstr "Pře&jmenovat"
 
-#: ../gui/wxpython/datacatalog/tree.py:2118
+#: ../gui/wxpython/datacatalog/tree.py:2122
 msgid "&Display layers"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2120
+#: ../gui/wxpython/datacatalog/tree.py:2124
 msgid "&Display layer"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2124
+#: ../gui/wxpython/datacatalog/tree.py:2128
 msgid "Show &metadata"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2143
+#: ../gui/wxpython/datacatalog/tree.py:2147
 msgid "&Switch mapset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2153
+#: ../gui/wxpython/datacatalog/tree.py:2157
 msgid "&Delete mapset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2159
+#: ../gui/wxpython/datacatalog/tree.py:2163
 msgid "&Rename mapset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2165
-#: ../gui/wxpython/datacatalog/tree.py:2196
-#: ../gui/wxpython/datacatalog/tree.py:2231
+#: ../gui/wxpython/datacatalog/tree.py:2169
+#: ../gui/wxpython/datacatalog/tree.py:2200
+#: ../gui/wxpython/datacatalog/tree.py:2235
 msgid "Re&load maps"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2169
+#: ../gui/wxpython/datacatalog/tree.py:2173
 msgid "&Copy path to mapset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2180
+#: ../gui/wxpython/datacatalog/tree.py:2184
 msgid "&Create mapset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2184
+#: ../gui/wxpython/datacatalog/tree.py:2188
 #, fuzzy
 msgid "&Delete project"
 msgstr "Smazat záznamy"
 
-#: ../gui/wxpython/datacatalog/tree.py:2190
+#: ../gui/wxpython/datacatalog/tree.py:2194
 #, fuzzy
 msgid "&Rename project"
 msgstr "Správa kartografických zobrazení"
 
-#: ../gui/wxpython/datacatalog/tree.py:2209
+#: ../gui/wxpython/datacatalog/tree.py:2213
 #, fuzzy
 msgid "&Create new project (location)"
 msgstr "Vytvořit novou lokaci"
 
-#: ../gui/wxpython/datacatalog/tree.py:2213
+#: ../gui/wxpython/datacatalog/tree.py:2217
 #, fuzzy
 msgid "&Download sample project (location)"
 msgstr "Vybrat lokaci a mapset projektu"
 
-#: ../gui/wxpython/datacatalog/tree.py:2218
+#: ../gui/wxpython/datacatalog/tree.py:2222
 msgid "&Remove GRASS database from data catalog"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2225
+#: ../gui/wxpython/datacatalog/tree.py:2229
 msgid "&Delete GRASS database from disk"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2255
+#: ../gui/wxpython/datacatalog/tree.py:2259
 #, fuzzy
 msgid "&Delete projects (locations)"
 msgstr "Odstranit vybranou lokaci"
 
-#: ../gui/wxpython/datacatalog/tree.py:2267
+#: ../gui/wxpython/datacatalog/tree.py:2271
 msgid "&Delete mapsets"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2273
+#: ../gui/wxpython/datacatalog/tree.py:2277
 #, fuzzy
 msgid "&Copy paths to mapsets"
 msgstr "Správa přístupu do mapsetů"
 
-#: ../gui/wxpython/datacatalog/tree.py:2283 ../gui/wxpython/history/tree.py:233
+#: ../gui/wxpython/datacatalog/tree.py:2287 ../gui/wxpython/history/tree.py:233
 msgid "No available options"
 msgstr ""
 
@@ -2055,12 +2055,12 @@ msgstr "Smazat všechny záznamy"
 #: ../gui/wxpython/dbmgr/base.py:1471 ../gui/wxpython/gui_core/dialogs.py:838
 #: ../gui/wxpython/gui_core/dialogs.py:896
 #: ../gui/wxpython/gui_core/dialogs.py:1607
-#: ../gui/wxpython/gui_core/widgets.py:1129
+#: ../gui/wxpython/gui_core/widgets.py:1128
 msgid "Select all"
 msgstr "Vybrat vše"
 
 #: ../gui/wxpython/dbmgr/base.py:1472 ../gui/wxpython/gui_core/dialogs.py:1609
-#: ../gui/wxpython/gui_core/widgets.py:1130
+#: ../gui/wxpython/gui_core/widgets.py:1129
 msgid "Deselect all"
 msgstr "Zrušit výběr"
 
@@ -2692,17 +2692,17 @@ msgid "Select source mapset:"
 msgstr "Vybrat zdrojový mapset:"
 
 #: ../gui/wxpython/gcp/manager.py:490
-#: ../gui/wxpython/image2target/ii2t_manager.py:512
+#: ../gui/wxpython/image2target/ii2t_manager.py:511
 msgid "You must select a valid location before selecting a mapset"
 msgstr "Před vybráním mapsetu musíte vybrat platnou lokaci"
 
 #: ../gui/wxpython/gcp/manager.py:503
-#: ../gui/wxpython/image2target/ii2t_manager.py:525
+#: ../gui/wxpython/image2target/ii2t_manager.py:524
 msgid "You must select a valid location and mapset in order to continue"
 msgstr "Abyste mohli pokračovat, musíte vybrat platnou lokaci a mapset"
 
 #: ../gui/wxpython/gcp/manager.py:524
-#: ../gui/wxpython/image2target/ii2t_manager.py:546
+#: ../gui/wxpython/image2target/ii2t_manager.py:545
 msgid "Select image/map group to georectify"
 msgstr "Vybrat obrazovou/mapovou skupinu pro georektifikaci"
 
@@ -2711,24 +2711,24 @@ msgid "Select/create group:"
 msgstr ""
 
 #: ../gui/wxpython/gcp/manager.py:565
-#: ../gui/wxpython/image2target/ii2t_manager.py:587
+#: ../gui/wxpython/image2target/ii2t_manager.py:586
 msgid "Create group if none exists"
 msgstr "vytvořit skupinu pokud žádná neexistuje"
 
 #: ../gui/wxpython/gcp/manager.py:573 ../gui/wxpython/iclass/dialogs.py:92
-#: ../gui/wxpython/image2target/ii2t_manager.py:595
+#: ../gui/wxpython/image2target/ii2t_manager.py:594
 msgid "Create/edit group..."
 msgstr "Vytvořit/upravit skupinu..."
 
 #: ../gui/wxpython/gcp/manager.py:576
-#: ../gui/wxpython/image2target/ii2t_manager.py:598
+#: ../gui/wxpython/image2target/ii2t_manager.py:597
 msgid "Add vector map to group..."
 msgstr "Přidat vektorovou vrstvu do skupiny...."
 
 #: ../gui/wxpython/gcp/manager.py:592 ../gui/wxpython/gcp/manager.py:3190
-#: ../gui/wxpython/image2target/ii2t_manager.py:614
-#: ../gui/wxpython/image2target/ii2t_manager.py:3150
-#: ../gui/wxpython/photo2image/ip2i_manager.py:2282
+#: ../gui/wxpython/image2target/ii2t_manager.py:613
+#: ../gui/wxpython/image2target/ii2t_manager.py:3149
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2283
 msgid "Extension for output maps:"
 msgstr "Přípona pro výstupní mapy:"
 
@@ -2737,17 +2737,17 @@ msgid "No vector maps."
 msgstr ""
 
 #: ../gui/wxpython/gcp/manager.py:674
-#: ../gui/wxpython/image2target/ii2t_manager.py:683
+#: ../gui/wxpython/image2target/ii2t_manager.py:682
 msgid "You must select a valid image/map group in order to continue"
 msgstr "Musíte vybrat platnou skupinu obrazů/map pokud chcete dále pokračovat"
 
 #: ../gui/wxpython/gcp/manager.py:682
-#: ../gui/wxpython/image2target/ii2t_manager.py:691
+#: ../gui/wxpython/image2target/ii2t_manager.py:690
 msgid "You must enter an map name extension in order to continue"
 msgstr "Musíte vložit příponu k mapě pokud chcete dále pokračovat"
 
 #: ../gui/wxpython/gcp/manager.py:743
-#: ../gui/wxpython/image2target/ii2t_manager.py:752
+#: ../gui/wxpython/image2target/ii2t_manager.py:751
 msgid "Select maps to display for ground control point (GCP) creation"
 msgstr "Vyberte mapy zobrazené pro vytvoření vlicovacích bodů"
 
@@ -2756,33 +2756,33 @@ msgid "Map Display Web Service Layer(s)"
 msgstr ""
 
 #: ../gui/wxpython/gcp/manager.py:755 ../gui/wxpython/gcp/manager.py:3083
-#: ../gui/wxpython/image2target/ii2t_manager.py:763
-#: ../gui/wxpython/image2target/ii2t_manager.py:3044
-#: ../gui/wxpython/photo2image/ip2i_manager.py:2194
+#: ../gui/wxpython/image2target/ii2t_manager.py:762
+#: ../gui/wxpython/image2target/ii2t_manager.py:3043
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2195
 msgid "Select source map to display:"
 msgstr "Vyberte zdrojovou mapu k zobrazení:"
 
 #: ../gui/wxpython/gcp/manager.py:781 ../gui/wxpython/gcp/manager.py:3097
-#: ../gui/wxpython/image2target/ii2t_manager.py:789
-#: ../gui/wxpython/image2target/ii2t_manager.py:3061
-#: ../gui/wxpython/photo2image/ip2i_manager.py:2211
+#: ../gui/wxpython/image2target/ii2t_manager.py:788
+#: ../gui/wxpython/image2target/ii2t_manager.py:3060
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2212
 msgid "Select target raster map to display:"
 msgstr ""
 
 #: ../gui/wxpython/gcp/manager.py:808 ../gui/wxpython/gcp/manager.py:3111
-#: ../gui/wxpython/image2target/ii2t_manager.py:815
-#: ../gui/wxpython/image2target/ii2t_manager.py:3078
+#: ../gui/wxpython/image2target/ii2t_manager.py:814
+#: ../gui/wxpython/image2target/ii2t_manager.py:3077
 msgid "Select target vector map to display:"
 msgstr ""
 
 #: ../gui/wxpython/gcp/manager.py:868
-#: ../gui/wxpython/image2target/ii2t_manager.py:875
+#: ../gui/wxpython/image2target/ii2t_manager.py:874
 msgid "You must select a source map in order to continue"
 msgstr "Abyste mohli pokračovat, musíte vybrat zdrojovou mapu"
 
 #: ../gui/wxpython/gcp/manager.py:893 ../gui/wxpython/gcp/manager.py:918
-#: ../gui/wxpython/image2target/ii2t_manager.py:900
-#: ../gui/wxpython/image2target/ii2t_manager.py:934
+#: ../gui/wxpython/image2target/ii2t_manager.py:899
+#: ../gui/wxpython/image2target/ii2t_manager.py:933
 #, python-format
 msgid ""
 "No maps in selected group <%s>.\n"
@@ -2790,42 +2790,42 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/gcp/manager.py:995 ../gui/wxpython/gcp/mapdisplay.py:50
-#: ../gui/wxpython/image2target/ii2t_manager.py:971
+#: ../gui/wxpython/image2target/ii2t_manager.py:970
 msgid "Manage Ground Control Points"
 msgstr "Spravovat Vlicovací body (GCP)"
 
 #: ../gui/wxpython/gcp/manager.py:1287
-#: ../gui/wxpython/image2target/ii2t_manager.py:1273
-#: ../gui/wxpython/photo2image/ip2i_manager.py:669
+#: ../gui/wxpython/image2target/ii2t_manager.py:1272
+#: ../gui/wxpython/photo2image/ip2i_manager.py:670
 #, python-format
 msgid "At least %d GCPs required. Operation canceled."
 msgstr ""
 
 #: ../gui/wxpython/gcp/manager.py:1431 ../gui/wxpython/gcp/toolbars.py:106
-#: ../gui/wxpython/image2target/ii2t_manager.py:1413
+#: ../gui/wxpython/image2target/ii2t_manager.py:1412
 #: ../gui/wxpython/image2target/ii2t_toolbars.py:106
-#: ../gui/wxpython/photo2image/ip2i_manager.py:811
+#: ../gui/wxpython/photo2image/ip2i_manager.py:812
 #: ../gui/wxpython/photo2image/ip2i_toolbars.py:106
 msgid "source"
 msgstr "zdroj"
 
 #: ../gui/wxpython/gcp/manager.py:1433 ../gui/wxpython/gcp/toolbars.py:106
-#: ../gui/wxpython/image2target/ii2t_manager.py:1415
+#: ../gui/wxpython/image2target/ii2t_manager.py:1414
 #: ../gui/wxpython/image2target/ii2t_toolbars.py:106
-#: ../gui/wxpython/photo2image/ip2i_manager.py:813
+#: ../gui/wxpython/photo2image/ip2i_manager.py:814
 #: ../gui/wxpython/photo2image/ip2i_toolbars.py:106
 msgid "target"
 msgstr "cíl"
 
 #: ../gui/wxpython/gcp/manager.py:1436
-#: ../gui/wxpython/image2target/ii2t_manager.py:1418
-#: ../gui/wxpython/photo2image/ip2i_manager.py:816
+#: ../gui/wxpython/image2target/ii2t_manager.py:1417
+#: ../gui/wxpython/photo2image/ip2i_manager.py:817
 msgid "Set GCP coordinates"
 msgstr "Nastavit souřadnice vlicovacím bodům"
 
 #: ../gui/wxpython/gcp/manager.py:1438
-#: ../gui/wxpython/image2target/ii2t_manager.py:1420
-#: ../gui/wxpython/photo2image/ip2i_manager.py:818
+#: ../gui/wxpython/image2target/ii2t_manager.py:1419
+#: ../gui/wxpython/photo2image/ip2i_manager.py:819
 #, python-format
 msgid ""
 "Set %(coor)s coordinates for GCP No. %(key)s? \n"
@@ -2839,37 +2839,37 @@ msgstr ""
 "Sever: %(coor1)s"
 
 #: ../gui/wxpython/gcp/manager.py:1524
-#: ../gui/wxpython/photo2image/ip2i_manager.py:486
-#: ../gui/wxpython/photo2image/ip2i_manager.py:903
+#: ../gui/wxpython/photo2image/ip2i_manager.py:487
+#: ../gui/wxpython/photo2image/ip2i_manager.py:904
 msgid "Writing POINTS file failed"
 msgstr "Zapisování souboru POINTS selhalo"
 
 #: ../gui/wxpython/gcp/manager.py:1535
-#: ../gui/wxpython/photo2image/ip2i_manager.py:915
+#: ../gui/wxpython/photo2image/ip2i_manager.py:916
 #, python-format
 msgid "POINTS file saved for group <%s>"
 msgstr "soubor POINTS byl uložen pro skupinu <%s>"
 
 #: ../gui/wxpython/gcp/manager.py:1549
-#: ../gui/wxpython/image2target/ii2t_manager.py:1574
-#: ../gui/wxpython/photo2image/ip2i_manager.py:929
+#: ../gui/wxpython/image2target/ii2t_manager.py:1573
+#: ../gui/wxpython/photo2image/ip2i_manager.py:930
 msgid "source mapwin not defined"
 msgstr ""
 
 #: ../gui/wxpython/gcp/manager.py:1552
-#: ../gui/wxpython/image2target/ii2t_manager.py:1577
-#: ../gui/wxpython/photo2image/ip2i_manager.py:932
+#: ../gui/wxpython/image2target/ii2t_manager.py:1576
+#: ../gui/wxpython/photo2image/ip2i_manager.py:933
 msgid "target mapwin not defined"
 msgstr ""
 
 #: ../gui/wxpython/gcp/manager.py:1581
-#: ../gui/wxpython/photo2image/ip2i_manager.py:961
+#: ../gui/wxpython/photo2image/ip2i_manager.py:962
 msgid "Reading POINTS file failed"
 msgstr "Čtení souboru POINTS selhalo"
 
 #: ../gui/wxpython/gcp/manager.py:1671
-#: ../gui/wxpython/image2target/ii2t_manager.py:1698
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1051
+#: ../gui/wxpython/image2target/ii2t_manager.py:1697
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1052
 #, python-format
 msgid ""
 "Insufficient points defined and active (checked) for selected rectification method (order: %d).\n"
@@ -2884,174 +2884,174 @@ msgid "The {map_type} map {map_name} exists. Do you want to overwrite?"
 msgstr ""
 
 #: ../gui/wxpython/gcp/manager.py:1769
-#: ../gui/wxpython/image2target/ii2t_manager.py:1725
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1079
+#: ../gui/wxpython/image2target/ii2t_manager.py:1724
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1080
 msgid "Rectifying images, please wait..."
 msgstr "Rektifikuji obrazy. prosím počkejte..."
 
 #: ../gui/wxpython/gcp/manager.py:1819
-#: ../gui/wxpython/image2target/ii2t_manager.py:1762
+#: ../gui/wxpython/image2target/ii2t_manager.py:1761
 #, python-format
 msgid "Transforming <%s>..."
 msgstr "transformuji <%s>..."
 
 #: ../gui/wxpython/gcp/manager.py:1825
-#: ../gui/wxpython/image2target/ii2t_manager.py:1768
+#: ../gui/wxpython/image2target/ii2t_manager.py:1767
 #, python-format
 msgid "Rectifying vector map <%s>, please wait..."
 msgstr ""
 
 #: ../gui/wxpython/gcp/manager.py:1860
-#: ../gui/wxpython/image2target/ii2t_manager.py:1802
+#: ../gui/wxpython/image2target/ii2t_manager.py:1801
 #, python-format
 msgid "Georectification of vector map <%s> failed"
 msgstr "Georektifikace vektorové mapy <%s< selhala"
 
 #: ../gui/wxpython/gcp/manager.py:1869
-#: ../gui/wxpython/image2target/ii2t_manager.py:1811
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1134
+#: ../gui/wxpython/image2target/ii2t_manager.py:1810
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1135
 msgid "GCP Manager settings"
 msgstr "Nastavení správce vlicovacích bodů"
 
 #: ../gui/wxpython/gcp/manager.py:1921
-#: ../gui/wxpython/image2target/ii2t_manager.py:1863
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1180
+#: ../gui/wxpython/image2target/ii2t_manager.py:1862
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1181
 msgid "Quit GCP Manager"
 msgstr "Ukončit Správce GCP"
 
 #: ../gui/wxpython/gcp/manager.py:1922
-#: ../gui/wxpython/image2target/ii2t_manager.py:1864
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1181
+#: ../gui/wxpython/image2target/ii2t_manager.py:1863
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1182
 msgid "Save ground control points?"
 msgstr "Uložit vlicovací body (GCP)?"
 
 #: ../gui/wxpython/gcp/manager.py:2003
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1260
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1261
 msgid ""
 "Could not calculate RMS Error.\n"
 "Possible error with m.transform."
 msgstr ""
 
 #: ../gui/wxpython/gcp/manager.py:2135
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1392
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1393
 msgid ""
 "Could not calculate new extends.\n"
 "Possible error with m.transform."
 msgstr ""
 
 #: ../gui/wxpython/gcp/manager.py:2264
-#: ../gui/wxpython/image2target/ii2t_manager.py:2206
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1521
+#: ../gui/wxpython/image2target/ii2t_manager.py:2205
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1522
 msgid "Adjust source display to target display"
 msgstr "Přizpůsobit zdrojový displej cílovému"
 
 #: ../gui/wxpython/gcp/manager.py:2270
-#: ../gui/wxpython/image2target/ii2t_manager.py:2212
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1527
+#: ../gui/wxpython/image2target/ii2t_manager.py:2211
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1528
 msgid "Adjust target display to source display"
 msgstr "Přizpůsobit cílový displej zdrojovému"
 
 #: ../gui/wxpython/gcp/manager.py:2378 ../gui/wxpython/gcp/manager.py:2397
-#: ../gui/wxpython/image2target/ii2t_manager.py:2320
-#: ../gui/wxpython/image2target/ii2t_manager.py:2341
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1636
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1655
+#: ../gui/wxpython/image2target/ii2t_manager.py:2319
+#: ../gui/wxpython/image2target/ii2t_manager.py:2340
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1637
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1656
 #: ../gui/wxpython/vnet/vnet_data.py:252 ../gui/wxpython/vnet/widgets.py:101
 msgid "use"
 msgstr "použít"
 
 #: ../gui/wxpython/gcp/manager.py:2379 ../gui/wxpython/gcp/manager.py:2398
-#: ../gui/wxpython/image2target/ii2t_manager.py:2321
-#: ../gui/wxpython/image2target/ii2t_manager.py:2342
+#: ../gui/wxpython/image2target/ii2t_manager.py:2320
+#: ../gui/wxpython/image2target/ii2t_manager.py:2341
 msgid "source E"
 msgstr "V souřadnice zdroje "
 
 #: ../gui/wxpython/gcp/manager.py:2380 ../gui/wxpython/gcp/manager.py:2399
-#: ../gui/wxpython/image2target/ii2t_manager.py:2322
-#: ../gui/wxpython/image2target/ii2t_manager.py:2343
+#: ../gui/wxpython/image2target/ii2t_manager.py:2321
+#: ../gui/wxpython/image2target/ii2t_manager.py:2342
 msgid "source N"
 msgstr "S souřadnice zdroje"
 
 #: ../gui/wxpython/gcp/manager.py:2381 ../gui/wxpython/gcp/manager.py:2400
-#: ../gui/wxpython/image2target/ii2t_manager.py:2324
-#: ../gui/wxpython/image2target/ii2t_manager.py:2345
+#: ../gui/wxpython/image2target/ii2t_manager.py:2323
+#: ../gui/wxpython/image2target/ii2t_manager.py:2344
 msgid "target E"
 msgstr "Cílová V souřadnice"
 
 #: ../gui/wxpython/gcp/manager.py:2382 ../gui/wxpython/gcp/manager.py:2401
-#: ../gui/wxpython/image2target/ii2t_manager.py:2325
-#: ../gui/wxpython/image2target/ii2t_manager.py:2346
+#: ../gui/wxpython/image2target/ii2t_manager.py:2324
+#: ../gui/wxpython/image2target/ii2t_manager.py:2345
 msgid "target N"
 msgstr "Cílová S souřadnice"
 
 #: ../gui/wxpython/gcp/manager.py:2383 ../gui/wxpython/gcp/manager.py:2402
-#: ../gui/wxpython/image2target/ii2t_manager.py:2327
-#: ../gui/wxpython/image2target/ii2t_manager.py:2348
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1641
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1660
+#: ../gui/wxpython/image2target/ii2t_manager.py:2326
+#: ../gui/wxpython/image2target/ii2t_manager.py:2347
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1642
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1661
 msgid "Forward error"
 msgstr "Dopředná chyba"
 
 #: ../gui/wxpython/gcp/manager.py:2384 ../gui/wxpython/gcp/manager.py:2403
-#: ../gui/wxpython/image2target/ii2t_manager.py:2328
-#: ../gui/wxpython/image2target/ii2t_manager.py:2349
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1642
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1661
+#: ../gui/wxpython/image2target/ii2t_manager.py:2327
+#: ../gui/wxpython/image2target/ii2t_manager.py:2348
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1643
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1662
 msgid "Backward error"
 msgstr "Zpětná chyba"
 
 #: ../gui/wxpython/gcp/manager.py:2538
-#: ../gui/wxpython/image2target/ii2t_manager.py:2486
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1796
+#: ../gui/wxpython/image2target/ii2t_manager.py:2485
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1797
 msgid "Invalid coordinate value. Operation canceled."
 msgstr ""
 
 #: ../gui/wxpython/gcp/manager.py:2595
-#: ../gui/wxpython/image2target/ii2t_manager.py:2545
+#: ../gui/wxpython/image2target/ii2t_manager.py:2544
 msgid "Create vector map group"
 msgstr "Vytvořit skupinu vektorových map"
 
 #: ../gui/wxpython/gcp/manager.py:2663
-#: ../gui/wxpython/image2target/ii2t_manager.py:2623
+#: ../gui/wxpython/image2target/ii2t_manager.py:2622
 msgid "Select vector map(s) to add to group:"
 msgstr "Vybrat vektorovou mapu pro přidání do skupiny:"
 
 #: ../gui/wxpython/gcp/manager.py:2722
-#: ../gui/wxpython/image2target/ii2t_manager.py:2677
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1842
+#: ../gui/wxpython/image2target/ii2t_manager.py:2676
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1843
 msgid "Edit GCP"
 msgstr "Upravit vlicovací body"
 
 #: ../gui/wxpython/gcp/manager.py:2736
-#: ../gui/wxpython/image2target/ii2t_manager.py:2691
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1856
+#: ../gui/wxpython/image2target/ii2t_manager.py:2690
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1857
 msgid "Ground Control Point No."
 msgstr "Vlicovací bod (GCP) číslo"
 
 #: ../gui/wxpython/gcp/manager.py:2757
-#: ../gui/wxpython/image2target/ii2t_manager.py:2713
+#: ../gui/wxpython/image2target/ii2t_manager.py:2712
 msgid "source E:"
 msgstr "Zdroj V:"
 
 #: ../gui/wxpython/gcp/manager.py:2758
-#: ../gui/wxpython/image2target/ii2t_manager.py:2714
+#: ../gui/wxpython/image2target/ii2t_manager.py:2713
 msgid "target E:"
 msgstr "Cílová V souřadnice:"
 
 #: ../gui/wxpython/gcp/manager.py:2759
-#: ../gui/wxpython/image2target/ii2t_manager.py:2715
+#: ../gui/wxpython/image2target/ii2t_manager.py:2714
 msgid "source N:"
 msgstr "Zdroj S:"
 
 #: ../gui/wxpython/gcp/manager.py:2760
-#: ../gui/wxpython/image2target/ii2t_manager.py:2716
+#: ../gui/wxpython/image2target/ii2t_manager.py:2715
 msgid "target N:"
 msgstr "Cílová S souřadnice:"
 
 #: ../gui/wxpython/gcp/manager.py:2870
-#: ../gui/wxpython/image2target/ii2t_manager.py:2832
+#: ../gui/wxpython/image2target/ii2t_manager.py:2831
 #: ../gui/wxpython/iscatt/dialogs.py:402
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1990
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1991
 #: ../gui/wxpython/vnet/dialogs.py:1322 ../gui/wxpython/wxplot/dialogs.py:807
 #: ../gui/wxpython/wxplot/dialogs.py:1319
 msgid "Apply changes for the current session"
@@ -3059,20 +3059,20 @@ msgstr "Použít změny jen pro toto sezení"
 
 #: ../gui/wxpython/gcp/manager.py:2874
 #: ../gui/wxpython/gui_core/preferences.py:118
-#: ../gui/wxpython/image2target/ii2t_manager.py:2836
+#: ../gui/wxpython/image2target/ii2t_manager.py:2835
 #: ../gui/wxpython/iscatt/dialogs.py:406
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1994
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1995
 #: ../gui/wxpython/vnet/dialogs.py:1326 ../gui/wxpython/wxplot/dialogs.py:814
 #: ../gui/wxpython/wxplot/dialogs.py:1323
 msgid "Apply and save changes to user settings file (default for next sessions)"
 msgstr "Použít změny a uložit je do souboru s uživatelským nastavením (jako výchozí pro další sezení)"
 
 #: ../gui/wxpython/gcp/manager.py:2879
-#: ../gui/wxpython/image2target/ii2t_manager.py:2841
+#: ../gui/wxpython/image2target/ii2t_manager.py:2840
 #: ../gui/wxpython/iscatt/dialogs.py:411
 #: ../gui/wxpython/modules/import_export.py:129
 #: ../gui/wxpython/modules/import_export.py:762
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1999
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2000
 #: ../gui/wxpython/vnet/dialogs.py:1331
 #: ../gui/wxpython/web_services/dialogs.py:152
 #: ../gui/wxpython/web_services/dialogs.py:906
@@ -3080,28 +3080,28 @@ msgid "Close dialog"
 msgstr "Zavřít dialog "
 
 #: ../gui/wxpython/gcp/manager.py:2900
-#: ../gui/wxpython/image2target/ii2t_manager.py:2862
-#: ../gui/wxpython/photo2image/ip2i_manager.py:2020
+#: ../gui/wxpython/image2target/ii2t_manager.py:2861
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2021
 #: ../gui/wxpython/psmap/dialogs.py:2726
 #: ../gui/wxpython/vdigit/preferences.py:84
 msgid "Symbology"
 msgstr "Symbolika"
 
 #: ../gui/wxpython/gcp/manager.py:2908
-#: ../gui/wxpython/image2target/ii2t_manager.py:2870
-#: ../gui/wxpython/photo2image/ip2i_manager.py:2028
+#: ../gui/wxpython/image2target/ii2t_manager.py:2869
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2029
 msgid "Highlight highest RMS error only"
 msgstr "Zvýraznit pouze bod s největší RMS"
 
 #: ../gui/wxpython/gcp/manager.py:2920
-#: ../gui/wxpython/image2target/ii2t_manager.py:2882
-#: ../gui/wxpython/photo2image/ip2i_manager.py:2040
+#: ../gui/wxpython/image2target/ii2t_manager.py:2881
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2041
 msgid "Highlight RMS error > M + SD * factor:"
 msgstr "Zvýraznit RMS chybu > M + SO * faktor:"
 
 #: ../gui/wxpython/gcp/manager.py:2924
-#: ../gui/wxpython/image2target/ii2t_manager.py:2886
-#: ../gui/wxpython/photo2image/ip2i_manager.py:2045
+#: ../gui/wxpython/image2target/ii2t_manager.py:2885
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2046
 msgid ""
 "Highlight GCPs with an RMS error larger than \n"
 "mean + standard deviation * given factor. \n"
@@ -3112,103 +3112,103 @@ msgstr ""
 "Doporučené hodnoty faktoru jsou mezi 1 a 2."
 
 #: ../gui/wxpython/gcp/manager.py:2943
-#: ../gui/wxpython/image2target/ii2t_manager.py:2905
-#: ../gui/wxpython/photo2image/ip2i_manager.py:2065
+#: ../gui/wxpython/image2target/ii2t_manager.py:2904
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2066
 msgid "Symbol settings"
 msgstr "Nastavení symbolu"
 
 #: ../gui/wxpython/gcp/manager.py:2951
 #: ../gui/wxpython/gui_core/preferences.py:1625
-#: ../gui/wxpython/image2target/ii2t_manager.py:2913
+#: ../gui/wxpython/image2target/ii2t_manager.py:2912
 #: ../gui/wxpython/mapswipe/dialogs.py:290
 #: ../gui/wxpython/nviz/preferences.py:410
 #: ../gui/wxpython/nviz/preferences.py:583
-#: ../gui/wxpython/nviz/preferences.py:665 ../gui/wxpython/nviz/tools.py:1501
-#: ../gui/wxpython/nviz/tools.py:2243 ../gui/wxpython/nviz/tools.py:2406
-#: ../gui/wxpython/photo2image/ip2i_manager.py:2073
+#: ../gui/wxpython/nviz/preferences.py:665 ../gui/wxpython/nviz/tools.py:1500
+#: ../gui/wxpython/nviz/tools.py:2242 ../gui/wxpython/nviz/tools.py:2405
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2074
 #: ../gui/wxpython/psmap/dialogs.py:2464 ../gui/wxpython/psmap/dialogs.py:2615
 msgid "Color:"
 msgstr "Barva:"
 
 #: ../gui/wxpython/gcp/manager.py:2965
-#: ../gui/wxpython/image2target/ii2t_manager.py:2927
-#: ../gui/wxpython/photo2image/ip2i_manager.py:2087
+#: ../gui/wxpython/image2target/ii2t_manager.py:2926
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2088
 msgid "Color for high RMS error:"
 msgstr "Barva pro vysokou RMS chybu:"
 
 #: ../gui/wxpython/gcp/manager.py:2980
-#: ../gui/wxpython/image2target/ii2t_manager.py:2942
-#: ../gui/wxpython/photo2image/ip2i_manager.py:2102
+#: ../gui/wxpython/image2target/ii2t_manager.py:2941
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2103
 msgid "Color for selected GCP:"
 msgstr "Barva pro vybraný vlicovací bod:"
 
 #: ../gui/wxpython/gcp/manager.py:2995
-#: ../gui/wxpython/image2target/ii2t_manager.py:2957
-#: ../gui/wxpython/photo2image/ip2i_manager.py:2117
+#: ../gui/wxpython/image2target/ii2t_manager.py:2956
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2118
 msgid "Color for unused GCPs:"
 msgstr "Barva pro nevybraný vlicovací bod:"
 
 #: ../gui/wxpython/gcp/manager.py:3008
-#: ../gui/wxpython/image2target/ii2t_manager.py:2970
-#: ../gui/wxpython/photo2image/ip2i_manager.py:2130
+#: ../gui/wxpython/image2target/ii2t_manager.py:2969
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2131
 msgid "Show unused GCPs"
 msgstr "Zobrazit nepoužívané vlicovací body"
 
 #: ../gui/wxpython/gcp/manager.py:3018
 #: ../gui/wxpython/gui_core/preferences.py:1548
-#: ../gui/wxpython/image2target/ii2t_manager.py:2980
-#: ../gui/wxpython/photo2image/ip2i_manager.py:2140
+#: ../gui/wxpython/image2target/ii2t_manager.py:2979
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2141
 msgid "Symbol size:"
 msgstr "Velikost symbolu:"
 
 #: ../gui/wxpython/gcp/manager.py:3030
 #: ../gui/wxpython/gui_core/preferences.py:1515
-#: ../gui/wxpython/image2target/ii2t_manager.py:2992
+#: ../gui/wxpython/image2target/ii2t_manager.py:2991
 #: ../gui/wxpython/mapswipe/dialogs.py:335
-#: ../gui/wxpython/photo2image/ip2i_manager.py:2152
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2153
 #: ../gui/wxpython/psmap/dialogs.py:6634 ../gui/wxpython/vnet/dialogs.py:1301
 msgid "Line width:"
 msgstr "Šířka linie:"
 
 #: ../gui/wxpython/gcp/manager.py:3137
-#: ../gui/wxpython/image2target/ii2t_manager.py:3107
-#: ../gui/wxpython/photo2image/ip2i_manager.py:2239
+#: ../gui/wxpython/image2target/ii2t_manager.py:3106
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2240
 msgid "Rectification"
 msgstr "Rektifikace"
 
 #: ../gui/wxpython/gcp/manager.py:3145
-#: ../gui/wxpython/image2target/ii2t_manager.py:3115
-#: ../gui/wxpython/photo2image/ip2i_manager.py:2247
+#: ../gui/wxpython/image2target/ii2t_manager.py:3114
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2248
 msgid "Select rectification order"
 msgstr ""
 
 #: ../gui/wxpython/gcp/manager.py:3146
-#: ../gui/wxpython/image2target/ii2t_manager.py:3116
-#: ../gui/wxpython/photo2image/ip2i_manager.py:2248
+#: ../gui/wxpython/image2target/ii2t_manager.py:3115
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2249
 msgid "1st order"
 msgstr "georektifikace 1. řádu"
 
 #: ../gui/wxpython/gcp/manager.py:3146
-#: ../gui/wxpython/image2target/ii2t_manager.py:3116
-#: ../gui/wxpython/photo2image/ip2i_manager.py:2248
+#: ../gui/wxpython/image2target/ii2t_manager.py:3115
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2249
 msgid "2nd order"
 msgstr "georektifikace 2. řádu"
 
 #: ../gui/wxpython/gcp/manager.py:3146
-#: ../gui/wxpython/image2target/ii2t_manager.py:3116
-#: ../gui/wxpython/photo2image/ip2i_manager.py:2248
+#: ../gui/wxpython/image2target/ii2t_manager.py:3115
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2249
 msgid "3rd order"
 msgstr "georektifikace 3.řádu"
 
 #: ../gui/wxpython/gcp/manager.py:3156
-#: ../gui/wxpython/image2target/ii2t_manager.py:3126
-#: ../gui/wxpython/photo2image/ip2i_manager.py:2258
+#: ../gui/wxpython/image2target/ii2t_manager.py:3125
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2259
 msgid "Select interpolation method:"
 msgstr ""
 
 #: ../gui/wxpython/gcp/manager.py:3172
-#: ../gui/wxpython/image2target/ii2t_manager.py:3142
-#: ../gui/wxpython/photo2image/ip2i_manager.py:2274
+#: ../gui/wxpython/image2target/ii2t_manager.py:3141
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2275
 msgid "clip to computational region in target location"
 msgstr "Spojit s výpočetním regionem v cílové lokaci"
 
@@ -3217,14 +3217,14 @@ msgid "overwrite result map"
 msgstr ""
 
 #: ../gui/wxpython/gcp/manager.py:3226
-#: ../gui/wxpython/image2target/ii2t_manager.py:3191
-#: ../gui/wxpython/photo2image/ip2i_manager.py:2323
+#: ../gui/wxpython/image2target/ii2t_manager.py:3190
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2324
 msgid "RMS threshold factor must be > 0"
 msgstr "Prahová hodnota RMS musí být > 0"
 
 #: ../gui/wxpython/gcp/manager.py:3231
-#: ../gui/wxpython/image2target/ii2t_manager.py:3196
-#: ../gui/wxpython/photo2image/ip2i_manager.py:2328
+#: ../gui/wxpython/image2target/ii2t_manager.py:3195
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2329
 msgid ""
 "RMS threshold factor is < 1\n"
 "Too many points might be highlighted"
@@ -3233,13 +3233,13 @@ msgstr ""
 "Příliš mnoho bodů může být zvýrazněno"
 
 #: ../gui/wxpython/gcp/manager.py:3469
-#: ../gui/wxpython/image2target/ii2t_manager.py:3403
-#: ../gui/wxpython/photo2image/ip2i_manager.py:2503
+#: ../gui/wxpython/image2target/ii2t_manager.py:3402
+#: ../gui/wxpython/photo2image/ip2i_manager.py:2504
 #, python-format
 msgid "GCP Manager settings saved to file '%s'."
 msgstr "Nastavení Správce vlicovacích bodů uloženo do souboru '%s'."
 
-#: ../gui/wxpython/gcp/mapdisplay.py:248 ../gui/wxpython/iclass/frame.py:326
+#: ../gui/wxpython/gcp/mapdisplay.py:248 ../gui/wxpython/iclass/frame.py:327
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:251
 #: ../gui/wxpython/mapdisp/frame.py:618 ../gui/wxpython/mapswipe/frame.py:288
 #: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:243
@@ -3475,8 +3475,8 @@ msgstr "Odstranit vlicovací bod"
 msgid "Intermediate"
 msgstr "přechodné"
 
-#: ../gui/wxpython/gmodeler/canvas.py:368 ../gui/wxpython/nviz/tools.py:1653
-#: ../gui/wxpython/nviz/tools.py:1868 ../gui/wxpython/vdigit/preferences.py:136
+#: ../gui/wxpython/gmodeler/canvas.py:368 ../gui/wxpython/nviz/tools.py:1652
+#: ../gui/wxpython/nviz/tools.py:1867 ../gui/wxpython/vdigit/preferences.py:136
 msgid "Display"
 msgstr "Zobrazit"
 
@@ -3844,7 +3844,7 @@ msgstr "Prosím čekejte, načítám model..."
 msgid "Writing current settings to model file failed."
 msgstr "Zápis aktuálního nastavení do souboru modelu selhalo."
 
-#: ../gui/wxpython/gmodeler/panels.py:689 ../gui/wxpython/lmgr/workspace.py:456
+#: ../gui/wxpython/gmodeler/panels.py:689 ../gui/wxpython/lmgr/workspace.py:455
 #, python-format
 msgid "Unable to open file <%s> for writing."
 msgstr "Nelze otevřít soubor <%s> pro zápis."
@@ -3894,7 +3894,7 @@ msgstr "Soubor <%s> byl uložen"
 msgid "Choose file to save current model"
 msgstr "Vybrat soubor pro uložení aktuálního modelu"
 
-#: ../gui/wxpython/gmodeler/panels.py:912 ../gui/wxpython/iclass/frame.py:1263
+#: ../gui/wxpython/gmodeler/panels.py:912 ../gui/wxpython/iclass/frame.py:1264
 msgid "File already exists"
 msgstr "Soubor již existuje"
 
@@ -3986,8 +3986,8 @@ msgstr "Popis"
 
 #: ../gui/wxpython/gmodeler/panels.py:1351
 #: ../gui/wxpython/gmodeler/panels.py:1401
-#: ../gui/wxpython/gui_core/ghelp.py:438 ../gui/wxpython/gui_core/ghelp.py:441
-#: ../gui/wxpython/gui_core/ghelp.py:513
+#: ../gui/wxpython/gui_core/ghelp.py:439 ../gui/wxpython/gui_core/ghelp.py:442
+#: ../gui/wxpython/gui_core/ghelp.py:514
 #: ../gui/wxpython/location_wizard/wizard.py:227
 msgid "Name"
 msgstr "Jméno"
@@ -4109,7 +4109,7 @@ msgid "Choose file to save"
 msgstr "Vyberte soubor k uložení"
 
 #: ../gui/wxpython/gmodeler/panels.py:1749
-#: ../gui/wxpython/gui_core/pyedit.py:418 ../gui/wxpython/wxplot/profile.py:428
+#: ../gui/wxpython/gui_core/pyedit.py:418 ../gui/wxpython/wxplot/profile.py:427
 #, python-format
 msgid "File <%s> already exists. Do you want to overwrite this file?"
 msgstr "Soubor <%s> již existuje. Přejete si tento soubor přepsat?"
@@ -4153,8 +4153,8 @@ msgstr "Nápověda GRASS"
 #: ../gui/wxpython/gmodeler/preferences.py:140
 #: ../gui/wxpython/gmodeler/preferences.py:459
 #: ../gui/wxpython/gmodeler/preferences.py:566
-#: ../gui/wxpython/iclass/dialogs.py:398 ../gui/wxpython/nviz/tools.py:1047
-#: ../gui/wxpython/nviz/tools.py:2943 ../gui/wxpython/psmap/dialogs.py:6317
+#: ../gui/wxpython/iclass/dialogs.py:398 ../gui/wxpython/nviz/tools.py:1046
+#: ../gui/wxpython/nviz/tools.py:2942 ../gui/wxpython/psmap/dialogs.py:6317
 #: ../gui/wxpython/psmap/dialogs.py:6584 ../gui/wxpython/wxplot/dialogs.py:1068
 #: ../gui/wxpython/wxplot/dialogs.py:1130
 msgid "Color"
@@ -4195,8 +4195,8 @@ msgstr "Šířka:"
 #: ../gui/wxpython/gmodeler/preferences.py:418
 #: ../gui/wxpython/gmodeler/preferences.py:525
 #: ../gui/wxpython/gmodeler/preferences.py:630
-#: ../gui/wxpython/gui_core/dialogs.py:1971 ../gui/wxpython/nviz/tools.py:420
-#: ../gui/wxpython/nviz/tools.py:1372 ../gui/wxpython/nviz/tools.py:2205
+#: ../gui/wxpython/gui_core/dialogs.py:1971 ../gui/wxpython/nviz/tools.py:419
+#: ../gui/wxpython/nviz/tools.py:1371 ../gui/wxpython/nviz/tools.py:2204
 #: ../gui/wxpython/psmap/dialogs.py:3820 ../gui/wxpython/psmap/dialogs.py:4055
 #: ../gui/wxpython/psmap/dialogs.py:4887
 msgid "Height:"
@@ -4204,7 +4204,7 @@ msgstr "Výška:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:285
 #: ../gui/wxpython/lmgr/frame.py:629 ../gui/wxpython/main_window/frame.py:648
-#: ../gui/wxpython/nviz/tools.py:114
+#: ../gui/wxpython/nviz/tools.py:113
 msgid "Data"
 msgstr "Data"
 
@@ -4553,7 +4553,7 @@ msgstr ""
 msgid "Use fully-qualified map names"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/dialogs.py:1487 ../gui/wxpython/nviz/tools.py:772
+#: ../gui/wxpython/gui_core/dialogs.py:1487 ../gui/wxpython/nviz/tools.py:771
 msgid "3D raster"
 msgstr "3D rastr"
 
@@ -4865,146 +4865,146 @@ msgstr "%(cmd)s: parametr '%(key)s' není dostupný"
 msgid "Try to set up GRASS_ADDON_PATH or GRASS_ADDON_BASE variable."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/ghelp.py:64
+#: ../gui/wxpython/gui_core/ghelp.py:65
 #, fuzzy
 #| msgid "About GRASS GIS"
 msgid "About GRASS"
 msgstr "O GRASS"
 
-#: ../gui/wxpython/gui_core/ghelp.py:80
+#: ../gui/wxpython/gui_core/ghelp.py:81
 msgid "Info"
 msgstr "Informace"
 
-#: ../gui/wxpython/gui_core/ghelp.py:81
+#: ../gui/wxpython/gui_core/ghelp.py:82
 msgid "Copyright"
 msgstr "Autorská práva"
 
-#: ../gui/wxpython/gui_core/ghelp.py:82
+#: ../gui/wxpython/gui_core/ghelp.py:83
 msgid "License"
 msgstr "Licence"
 
-#: ../gui/wxpython/gui_core/ghelp.py:83
+#: ../gui/wxpython/gui_core/ghelp.py:84
 msgid "Citation"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/ghelp.py:84
+#: ../gui/wxpython/gui_core/ghelp.py:85
 msgid "Authors"
 msgstr "Autoři"
 
-#: ../gui/wxpython/gui_core/ghelp.py:85
+#: ../gui/wxpython/gui_core/ghelp.py:86
 msgid "Contributors"
 msgstr "Přispěvatelé"
 
-#: ../gui/wxpython/gui_core/ghelp.py:86
+#: ../gui/wxpython/gui_core/ghelp.py:87
 msgid "Extra contributors"
 msgstr "Zvláštní přispěvatelé"
 
-#: ../gui/wxpython/gui_core/ghelp.py:87
+#: ../gui/wxpython/gui_core/ghelp.py:88
 msgid "Translators"
 msgstr "Překladatelé"
 
-#: ../gui/wxpython/gui_core/ghelp.py:88
+#: ../gui/wxpython/gui_core/ghelp.py:89
 msgid "Translation status"
 msgstr "Stav překladu"
 
-#: ../gui/wxpython/gui_core/ghelp.py:120 ../gui/wxpython/gui_core/ghelp.py:948
+#: ../gui/wxpython/gui_core/ghelp.py:121 ../gui/wxpython/gui_core/ghelp.py:949
 #: ../gui/wxpython/lmgr/frame.py:1462 ../gui/wxpython/main_window/frame.py:1618
 msgid "Unable to get GRASS version\n"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/ghelp.py:134 ../gui/wxpython/lmgr/frame.py:1489
-#: ../gui/wxpython/main_window/frame.py:1645
+#: ../gui/wxpython/gui_core/ghelp.py:135 ../gui/wxpython/lmgr/frame.py:1490
+#: ../gui/wxpython/main_window/frame.py:1646
 msgid "unknown version"
 msgstr "neznámá verze"
 
-#: ../gui/wxpython/gui_core/ghelp.py:147
+#: ../gui/wxpython/gui_core/ghelp.py:148
 msgid "Official GRASS site:"
 msgstr "Oficiální stránky GRASSu:"
 
-#: ../gui/wxpython/gui_core/ghelp.py:162
+#: ../gui/wxpython/gui_core/ghelp.py:163
 msgid "Code Revision"
 msgstr "Revize kódu"
 
-#: ../gui/wxpython/gui_core/ghelp.py:180
+#: ../gui/wxpython/gui_core/ghelp.py:181
 msgid "Build Date"
 msgstr "Datum sestavení"
 
-#: ../gui/wxpython/gui_core/ghelp.py:248 ../gui/wxpython/gui_core/ghelp.py:519
+#: ../gui/wxpython/gui_core/ghelp.py:249 ../gui/wxpython/gui_core/ghelp.py:520
 msgid "Language"
 msgstr "Jazyk"
 
-#: ../gui/wxpython/gui_core/ghelp.py:282 ../gui/wxpython/gui_core/ghelp.py:310
-#: ../gui/wxpython/gui_core/ghelp.py:363 ../gui/wxpython/gui_core/ghelp.py:431
-#: ../gui/wxpython/gui_core/ghelp.py:505 ../gui/wxpython/gui_core/ghelp.py:663
+#: ../gui/wxpython/gui_core/ghelp.py:283 ../gui/wxpython/gui_core/ghelp.py:311
+#: ../gui/wxpython/gui_core/ghelp.py:364 ../gui/wxpython/gui_core/ghelp.py:432
+#: ../gui/wxpython/gui_core/ghelp.py:506 ../gui/wxpython/gui_core/ghelp.py:664
 #, python-format
 msgid "%s file missing"
 msgstr "%s soubor chybí"
 
-#: ../gui/wxpython/gui_core/ghelp.py:336
+#: ../gui/wxpython/gui_core/ghelp.py:337
 #, python-brace-format
 msgid "Unable to provide citation suggestion, see GRASS website instead. The error was: {0}"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/ghelp.py:416 ../gui/wxpython/gui_core/ghelp.py:488
+#: ../gui/wxpython/gui_core/ghelp.py:417 ../gui/wxpython/gui_core/ghelp.py:489
 #, python-format
 msgid "Error when reading file '%s'."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/ghelp.py:418 ../gui/wxpython/gui_core/ghelp.py:490
+#: ../gui/wxpython/gui_core/ghelp.py:419 ../gui/wxpython/gui_core/ghelp.py:491
 msgid "Lines:"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/ghelp.py:438 ../gui/wxpython/gui_core/ghelp.py:443
+#: ../gui/wxpython/gui_core/ghelp.py:439 ../gui/wxpython/gui_core/ghelp.py:444
 msgid "Country"
 msgstr "Země"
 
-#: ../gui/wxpython/gui_core/ghelp.py:438 ../gui/wxpython/gui_core/ghelp.py:442
-#: ../gui/wxpython/gui_core/ghelp.py:516
+#: ../gui/wxpython/gui_core/ghelp.py:439 ../gui/wxpython/gui_core/ghelp.py:443
+#: ../gui/wxpython/gui_core/ghelp.py:517
 msgid "E-mail"
 msgstr "E-mail"
 
-#: ../gui/wxpython/gui_core/ghelp.py:444
+#: ../gui/wxpython/gui_core/ghelp.py:445
 msgid "OSGeo_ID"
 msgstr "OSGeo_ID"
 
-#: ../gui/wxpython/gui_core/ghelp.py:445
+#: ../gui/wxpython/gui_core/ghelp.py:446
 msgid "ORCID"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/ghelp.py:522
+#: ../gui/wxpython/gui_core/ghelp.py:523
 msgid "Nation"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/ghelp.py:565
+#: ../gui/wxpython/gui_core/ghelp.py:566
 #, python-format
 msgid "   %d translated"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/ghelp.py:569 ../gui/wxpython/gui_core/ghelp.py:594
+#: ../gui/wxpython/gui_core/ghelp.py:570 ../gui/wxpython/gui_core/ghelp.py:595
 #, python-format
 msgid "   %d fuzzy"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/ghelp.py:573 ../gui/wxpython/gui_core/ghelp.py:603
+#: ../gui/wxpython/gui_core/ghelp.py:574 ../gui/wxpython/gui_core/ghelp.py:604
 #, python-format
 msgid "   %d untranslated"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/ghelp.py:585
+#: ../gui/wxpython/gui_core/ghelp.py:586
 #, python-format
 msgid "%d translated"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/ghelp.py:660
+#: ../gui/wxpython/gui_core/ghelp.py:661
 #, python-format
 msgid "File <%s> not found"
 msgstr "Soubor <%s> nebyl nalezen."
 
-#: ../gui/wxpython/gui_core/ghelp.py:832
+#: ../gui/wxpython/gui_core/ghelp.py:833
 msgid "&Next"
 msgstr "&Další"
 
-#: ../gui/wxpython/gui_core/ghelp.py:834
+#: ../gui/wxpython/gui_core/ghelp.py:835
 msgid "&Previous"
 msgstr "&Předchozí"
 
@@ -5110,7 +5110,7 @@ msgid "Native"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/gselect.py:1471
-#: ../gui/wxpython/lmgr/workspace.py:518
+#: ../gui/wxpython/lmgr/workspace.py:517
 msgid "File"
 msgstr "Soubor"
 
@@ -5277,41 +5277,41 @@ msgstr ""
 msgid "GRASS module '%s' not found. Unable to start map display window."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/menu.py:189
+#: ../gui/wxpython/gui_core/menu.py:190
 msgid "Adva&nced search..."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/menu.py:192
+#: ../gui/wxpython/gui_core/menu.py:193
 #, python-format
 msgid "Do advanced search using %s tool"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/menu.py:196 ../gui/wxpython/history/browser.py:381
+#: ../gui/wxpython/gui_core/menu.py:197 ../gui/wxpython/history/browser.py:381
 msgid "Double-click to run selected tool"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/menu.py:199
+#: ../gui/wxpython/gui_core/menu.py:200
 msgid "&Run..."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/menu.py:200
+#: ../gui/wxpython/gui_core/menu.py:201
 msgid "Run selected tool from the tree"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/menu.py:201
+#: ../gui/wxpython/gui_core/menu.py:202
 msgid "H&elp"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/menu.py:202
+#: ../gui/wxpython/gui_core/menu.py:203
 msgid "Show manual for selected tool from the tree"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/menu.py:307
+#: ../gui/wxpython/gui_core/menu.py:308
 #, python-format
 msgid "Documentation for %s is now open in the web browser"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/menu.py:388
+#: ../gui/wxpython/gui_core/menu.py:389
 msgid "&Recent Files"
 msgstr ""
 
@@ -5435,7 +5435,7 @@ msgid "Align region to resolution"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:557
-#: ../gui/wxpython/nviz/tools.py:117
+#: ../gui/wxpython/nviz/tools.py:116
 msgid "Appearance"
 msgstr "Vzhled"
 
@@ -6057,7 +6057,7 @@ msgid "Create histogram with d.histogram"
 msgstr "Vytvořit histogram pomocí d.histogram"
 
 #: ../gui/wxpython/gui_core/toolbars.py:83
-#: ../gui/wxpython/iscatt/toolbars.py:184 ../gui/wxpython/nviz/tools.py:2386
+#: ../gui/wxpython/iscatt/toolbars.py:184 ../gui/wxpython/nviz/tools.py:2385
 #: ../gui/wxpython/vnet/dialogs.py:977
 msgid "Settings"
 msgstr "Nastavení"
@@ -6097,8 +6097,8 @@ msgstr ""
 msgid "No vector map layer selected. Operation canceled."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/vselect.py:288 ../gui/wxpython/lmgr/frame.py:2318
-#: ../gui/wxpython/main_window/frame.py:2427
+#: ../gui/wxpython/gui_core/vselect.py:288 ../gui/wxpython/lmgr/frame.py:2319
+#: ../gui/wxpython/main_window/frame.py:2428
 #: ../gui/wxpython/mapdisp/frame.py:711
 msgid "No map layer selected. Operation canceled."
 msgstr ""
@@ -6125,79 +6125,79 @@ msgid ""
 "Reason: %s"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/widgets.py:128
+#: ../gui/wxpython/gui_core/widgets.py:127
 msgid " (...)"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/widgets.py:885
+#: ../gui/wxpython/gui_core/widgets.py:884
 #, python-format
 msgid "Name <%(name)s> is not a valid name for GRASS map. Please use only ASCII characters excluding %(chars)s and space."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/widgets.py:889
+#: ../gui/wxpython/gui_core/widgets.py:888
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:1184
 #: ../gui/wxpython/location_wizard/wizard.py:300
 #: ../gui/wxpython/modules/import_export.py:268
 msgid "Invalid name"
 msgstr "Neplatný název"
 
-#: ../gui/wxpython/gui_core/widgets.py:1237
+#: ../gui/wxpython/gui_core/widgets.py:1236
 msgid "Fulltext search"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/widgets.py:1239
+#: ../gui/wxpython/gui_core/widgets.py:1238
 msgid "Type to search in all tools. Press Enter for next match."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/widgets.py:1301
+#: ../gui/wxpython/gui_core/widgets.py:1300
 msgid "Searching, please type more characters."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/widgets.py:1312
+#: ../gui/wxpython/gui_core/widgets.py:1311
 #, fuzzy
 msgid "{} tools matched"
 msgstr "%d modulů odpovídá"
 
-#: ../gui/wxpython/gui_core/widgets.py:1379
+#: ../gui/wxpython/gui_core/widgets.py:1378
 msgid "Profiles"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/widgets.py:1386
+#: ../gui/wxpython/gui_core/widgets.py:1385
 msgid "Save current settings"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/widgets.py:1389
+#: ../gui/wxpython/gui_core/widgets.py:1388
 msgid "Delete currently selected settings"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/widgets.py:1408
+#: ../gui/wxpython/gui_core/widgets.py:1407
 msgid "Load:"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/widgets.py:1424
+#: ../gui/wxpython/gui_core/widgets.py:1423
 #, python-format
 msgid "Settings <%s> not found"
 msgstr "Nastavení <%s> nebylo nalezeno."
 
-#: ../gui/wxpython/gui_core/widgets.py:1437
-#: ../gui/wxpython/gui_core/widgets.py:1460
+#: ../gui/wxpython/gui_core/widgets.py:1436
+#: ../gui/wxpython/gui_core/widgets.py:1459
 msgid "Save settings"
 msgstr "Uložit nastavení"
 
-#: ../gui/wxpython/gui_core/widgets.py:1443
+#: ../gui/wxpython/gui_core/widgets.py:1442
 msgid "Name not given, settings is not saved."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/widgets.py:1456
+#: ../gui/wxpython/gui_core/widgets.py:1455
 #, python-format
 msgid "Settings <%s> already exists. Do you want to overwrite the settings?"
 msgstr "Nastavení <%s> již existuje. Přejete si toto nastavení přepsat?"
 
-#: ../gui/wxpython/gui_core/widgets.py:1508
+#: ../gui/wxpython/gui_core/widgets.py:1507
 msgid "No settings is defined. Operation canceled."
 msgstr "Nastavení není definováno. Operace byla zrušena."
 
-#: ../gui/wxpython/gui_core/widgets.py:1544
+#: ../gui/wxpython/gui_core/widgets.py:1543
 msgid "Unable to save settings"
 msgstr "Nastavení nelze uložit"
 
@@ -6569,157 +6569,157 @@ msgstr ""
 msgid "No class selected"
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:58
+#: ../gui/wxpython/iclass/frame.py:59
 #, python-format
 msgid ""
 "Loading imagery lib failed.\n"
 "%s"
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:107 ../gui/wxpython/iclass/frame.py:1652
-#: ../gui/wxpython/lmgr/frame.py:1687 ../gui/wxpython/main_window/frame.py:1843
+#: ../gui/wxpython/iclass/frame.py:108 ../gui/wxpython/iclass/frame.py:1653
+#: ../gui/wxpython/lmgr/frame.py:1688 ../gui/wxpython/main_window/frame.py:1844
 msgid "Supervised Classification Tool"
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:348
+#: ../gui/wxpython/iclass/frame.py:349
 msgid "IClass Toolbar"
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:370
+#: ../gui/wxpython/iclass/frame.py:371
 msgid "IClass Misc Toolbar"
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:410
+#: ../gui/wxpython/iclass/frame.py:411
 msgid "Digitization Toolbar"
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:440
+#: ../gui/wxpython/iclass/frame.py:441
 msgid "Plots"
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:475
+#: ../gui/wxpython/iclass/frame.py:476
 msgid "Preview Display"
 msgstr "Náhled kompozice okna"
 
-#: ../gui/wxpython/iclass/frame.py:478
+#: ../gui/wxpython/iclass/frame.py:479
 msgid "Training Areas Display"
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:558
+#: ../gui/wxpython/iclass/frame.py:559
 msgid "Adjust Training Area Display to Preview Display"
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:562
+#: ../gui/wxpython/iclass/frame.py:563
 msgid "Adjust Preview display to Training Area Display"
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:565
+#: ../gui/wxpython/iclass/frame.py:566
 msgid "Display synchronization ON"
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:567
+#: ../gui/wxpython/iclass/frame.py:568
 msgid "Display synchronization OFF"
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:641
+#: ../gui/wxpython/iclass/frame.py:642
 msgid "All changes will be lost. Do you want to continue?"
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:649
+#: ../gui/wxpython/iclass/frame.py:650
 msgid "Import vector map"
 msgstr "Import vektorové mapy"
 
-#: ../gui/wxpython/iclass/frame.py:668
+#: ../gui/wxpython/iclass/frame.py:669
 #, python-format
 msgid "No areas in vector map <%s>.\n"
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:672
+#: ../gui/wxpython/iclass/frame.py:673
 #, python-format
 msgid "Vector map <%s> contains points or lines, these features are ignored."
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:700
+#: ../gui/wxpython/iclass/frame.py:701
 #, python-format
 msgid "Unable to open vector map <%s>"
 msgstr "Nelze otevřít vektorovou vrstvu <%s>."
 
-#: ../gui/wxpython/iclass/frame.py:710
+#: ../gui/wxpython/iclass/frame.py:711
 #, python-format
 msgid "Unable to copy vector features from <%s>"
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:721
+#: ../gui/wxpython/iclass/frame.py:722
 msgid "Unable to open temporary vector map"
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:818
+#: ../gui/wxpython/iclass/frame.py:819
 msgid "No training areas to export."
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:831
+#: ../gui/wxpython/iclass/frame.py:832
 #, python-format
 msgid "%d training areas (%d classes) exported to vector map <%s>."
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:1102
+#: ../gui/wxpython/iclass/frame.py:1103
 msgid "Failed to create temporary vector map."
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:1154
+#: ../gui/wxpython/iclass/frame.py:1155
 msgid "There was an error initializing signatures. Check GUI console for any error messages."
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:1205
+#: ../gui/wxpython/iclass/frame.py:1206
 #, python-format
 msgid "No area in category %s. Category skipped."
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:1210
+#: ../gui/wxpython/iclass/frame.py:1211
 msgid "Analysis failed."
 msgstr "Analýza selhala."
 
-#: ../gui/wxpython/iclass/frame.py:1217
+#: ../gui/wxpython/iclass/frame.py:1218
 msgid "results"
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:1223
+#: ../gui/wxpython/iclass/frame.py:1224
 msgid "No imagery group selected."
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:1230
+#: ../gui/wxpython/iclass/frame.py:1231
 msgid "Due to recent changes in classes, signatures can be outdated and should be recalculated. Do you still want to continue?"
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:1234
+#: ../gui/wxpython/iclass/frame.py:1235
 msgid "Outdated signatures"
 msgstr "Zastaralé podpisy"
 
-#: ../gui/wxpython/iclass/frame.py:1247
+#: ../gui/wxpython/iclass/frame.py:1248
 msgid "Signatures are not valid. Recalculate them and then try again."
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:1259
+#: ../gui/wxpython/iclass/frame.py:1260
 #, python-format
 msgid ""
 "A signature file named %s already exists.\n"
 "Do you want to replace it?"
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:1310
+#: ../gui/wxpython/iclass/frame.py:1311
 msgid "No imagery group selected. Operation canceled."
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:1321
+#: ../gui/wxpython/iclass/frame.py:1322
 #, python-format
 msgid "Group <%(group)s> does not have enough files (it has %(files)d files). Operation canceled."
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:1330
+#: ../gui/wxpython/iclass/frame.py:1331
 msgid "No areas given. Operation canceled."
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:1348
+#: ../gui/wxpython/iclass/frame.py:1349
 msgid "Vector features are outside raster layers. Operation canceled."
 msgstr ""
 
@@ -6825,12 +6825,12 @@ msgstr ""
 msgid "Add raster map"
 msgstr "Přidat rastrovou vrstvu"
 
-#: ../gui/wxpython/icons/icon.py:36
+#: ../gui/wxpython/icons/icon.py:37
 #, python-format
 msgid "Unknown iconset '%s', using default 'grass'...\n"
 msgstr ""
 
-#: ../gui/wxpython/icons/icon.py:50
+#: ../gui/wxpython/icons/icon.py:51
 #, python-format
 msgid "Unable to load icon theme. Reason: %s. Quitting wxGUI..."
 msgstr ""
@@ -6950,7 +6950,7 @@ msgid "Invalid line in GISRC file (%s):%s\n"
 msgstr ""
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:579
-#: ../gui/wxpython/startup/locdownload.py:421
+#: ../gui/wxpython/startup/locdownload.py:423
 #, python-brace-format
 msgid "Error: {text}"
 msgstr "Chyba: {text}"
@@ -7192,50 +7192,50 @@ msgstr "Název <%(name)s> není platným názvem lokace nebo mapsetu. Používej
 msgid "GRASS needs a directory (GRASS database) in which to store its data. Create one now if you have not already done so. A popular choice is \"grassdata\", located in your home directory. Press Browse button to select the directory."
 msgstr "GRASS potřebuje adresář, ve kterém budou uloženy jeho data (databáze GRASSu). Jestliže takový adresář dosud nemáte, vytvořte jej. Oblíbenou volbou je adresář \"grassdata\" umístěný v domovském adresáři. Adresář vyberete po stisknutí tlačítka Procházet."
 
-#: ../gui/wxpython/image2target/ii2t_manager.py:565
+#: ../gui/wxpython/image2target/ii2t_manager.py:564
 msgid "Select group:"
 msgstr "Vybrat skupinu:"
 
-#: ../gui/wxpython/image2target/ii2t_manager.py:1547
+#: ../gui/wxpython/image2target/ii2t_manager.py:1546
 msgid "Writing CONTROL_POINTS file failed"
 msgstr ""
 
-#: ../gui/wxpython/image2target/ii2t_manager.py:1559
+#: ../gui/wxpython/image2target/ii2t_manager.py:1558
 #, python-format
 msgid "CONTROL_POINTS file saved for group <%s>"
 msgstr ""
 
-#: ../gui/wxpython/image2target/ii2t_manager.py:1606
+#: ../gui/wxpython/image2target/ii2t_manager.py:1605
 msgid "Reading CONTROL_POINTS file failed"
 msgstr ""
 
-#: ../gui/wxpython/image2target/ii2t_manager.py:1945
+#: ../gui/wxpython/image2target/ii2t_manager.py:1944
 msgid ""
 "Could not calculate RMS Error.\n"
 "Possible error with i.ortho.transform."
 msgstr ""
 
-#: ../gui/wxpython/image2target/ii2t_manager.py:2076
+#: ../gui/wxpython/image2target/ii2t_manager.py:2075
 msgid ""
 "Could not calculate new extends.\n"
 "Possible error with i.ortho.transform."
 msgstr ""
 
-#: ../gui/wxpython/image2target/ii2t_manager.py:2323
-#: ../gui/wxpython/image2target/ii2t_manager.py:2344
+#: ../gui/wxpython/image2target/ii2t_manager.py:2322
+#: ../gui/wxpython/image2target/ii2t_manager.py:2343
 msgid "source Z"
 msgstr ""
 
-#: ../gui/wxpython/image2target/ii2t_manager.py:2326
-#: ../gui/wxpython/image2target/ii2t_manager.py:2347
+#: ../gui/wxpython/image2target/ii2t_manager.py:2325
+#: ../gui/wxpython/image2target/ii2t_manager.py:2346
 msgid "target Z"
 msgstr ""
 
-#: ../gui/wxpython/image2target/ii2t_manager.py:2717
+#: ../gui/wxpython/image2target/ii2t_manager.py:2716
 msgid "source Z:"
 msgstr ""
 
-#: ../gui/wxpython/image2target/ii2t_manager.py:2718
+#: ../gui/wxpython/image2target/ii2t_manager.py:2717
 msgid "target Z:"
 msgstr ""
 
@@ -7644,9 +7644,9 @@ msgstr "Vybrat model ke spuštění"
 msgid "Command '%s' not yet implemented in the WxGUI. Try adding it as a command layer instead."
 msgstr "Příkaz '%s' ještě nebyl implementován do WxGUI. Zkuste jej přidat jako vrstvu příkazů."
 
-#: ../gui/wxpython/lmgr/frame.py:1180 ../gui/wxpython/lmgr/frame.py:1858
+#: ../gui/wxpython/lmgr/frame.py:1180 ../gui/wxpython/lmgr/frame.py:1859
 #: ../gui/wxpython/main_window/frame.py:1336
-#: ../gui/wxpython/main_window/frame.py:2023
+#: ../gui/wxpython/main_window/frame.py:2024
 msgid "Selected map layer is not vector."
 msgstr "Vybraná mapová vrstva není vektor."
 
@@ -7733,43 +7733,43 @@ msgstr ""
 msgid "Choose a working directory"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1472 ../gui/wxpython/main_window/frame.py:1628
+#: ../gui/wxpython/lmgr/frame.py:1473 ../gui/wxpython/main_window/frame.py:1629
 msgid "System Info"
 msgstr "Informace o systému"
 
-#: ../gui/wxpython/lmgr/frame.py:1488 ../gui/wxpython/main_window/frame.py:1644
+#: ../gui/wxpython/lmgr/frame.py:1489 ../gui/wxpython/main_window/frame.py:1645
 msgid "GRASS version"
 msgstr "Verze GRASSu"
 
-#: ../gui/wxpython/lmgr/frame.py:1490 ../gui/wxpython/main_window/frame.py:1646
+#: ../gui/wxpython/lmgr/frame.py:1491 ../gui/wxpython/main_window/frame.py:1647
 msgid "Code revision"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1492 ../gui/wxpython/main_window/frame.py:1648
+#: ../gui/wxpython/lmgr/frame.py:1493 ../gui/wxpython/main_window/frame.py:1649
 msgid "Build date"
 msgstr "Datum výstavby"
 
-#: ../gui/wxpython/lmgr/frame.py:1494 ../gui/wxpython/main_window/frame.py:1650
+#: ../gui/wxpython/lmgr/frame.py:1495 ../gui/wxpython/main_window/frame.py:1651
 msgid "Build platform"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1506 ../gui/wxpython/main_window/frame.py:1662
+#: ../gui/wxpython/lmgr/frame.py:1507 ../gui/wxpython/main_window/frame.py:1663
 msgid "Platform"
 msgstr "Platforma"
 
-#: ../gui/wxpython/lmgr/frame.py:1566 ../gui/wxpython/main_window/frame.py:1723
+#: ../gui/wxpython/lmgr/frame.py:1567 ../gui/wxpython/main_window/frame.py:1724
 msgid "Close all Map Displays"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1584 ../gui/wxpython/main_window/frame.py:1741
+#: ../gui/wxpython/lmgr/frame.py:1585 ../gui/wxpython/main_window/frame.py:1742
 msgid "Enter new name:"
 msgstr "Zadejte nový název:"
 
-#: ../gui/wxpython/lmgr/frame.py:1585 ../gui/wxpython/main_window/frame.py:1742
+#: ../gui/wxpython/lmgr/frame.py:1586 ../gui/wxpython/main_window/frame.py:1743
 msgid "Rename Map Display"
 msgstr "Přejmenovat mapové okno"
 
-#: ../gui/wxpython/lmgr/frame.py:1679 ../gui/wxpython/main_window/frame.py:1835
+#: ../gui/wxpython/lmgr/frame.py:1680 ../gui/wxpython/main_window/frame.py:1836
 #, python-format
 msgid ""
 "Unable to launch \"Supervised Classification Tool\".\n"
@@ -7777,35 +7777,35 @@ msgid ""
 "Reason: %s"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1726 ../gui/wxpython/main_window/frame.py:1882
+#: ../gui/wxpython/lmgr/frame.py:1727 ../gui/wxpython/main_window/frame.py:1883
 msgid "Unable to start Timeline Tool."
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1736 ../gui/wxpython/main_window/frame.py:1892
+#: ../gui/wxpython/lmgr/frame.py:1737 ../gui/wxpython/main_window/frame.py:1893
 msgid "Unable to start Temporal Plot Tool."
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1906 ../gui/wxpython/main_window/frame.py:2069
+#: ../gui/wxpython/lmgr/frame.py:1907 ../gui/wxpython/main_window/frame.py:2070
 msgid "Add selected map layers into layer tree"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1938 ../gui/wxpython/lmgr/frame.py:1976
-#: ../gui/wxpython/main_window/frame.py:2101
-#: ../gui/wxpython/main_window/frame.py:2139
+#: ../gui/wxpython/lmgr/frame.py:1939 ../gui/wxpython/lmgr/frame.py:1977
+#: ../gui/wxpython/main_window/frame.py:2102
+#: ../gui/wxpython/main_window/frame.py:2140
 #, python-format
 msgid "Unsupported map layer type <%s>."
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:2119 ../gui/wxpython/main_window/frame.py:2263
+#: ../gui/wxpython/lmgr/frame.py:2120 ../gui/wxpython/main_window/frame.py:2264
 msgid "Note that cell values can only be displayed for regions of less than 10,000 cells."
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:2214 ../gui/wxpython/lmgr/layertree.py:2128
-#: ../gui/wxpython/main_window/frame.py:2339
+#: ../gui/wxpython/lmgr/frame.py:2215 ../gui/wxpython/lmgr/layertree.py:2128
+#: ../gui/wxpython/main_window/frame.py:2340
 msgid "opacity:"
 msgstr "průhlednost:"
 
-#: ../gui/wxpython/lmgr/frame.py:2223 ../gui/wxpython/main_window/frame.py:2348
+#: ../gui/wxpython/lmgr/frame.py:2224 ../gui/wxpython/main_window/frame.py:2349
 #, python-format
 msgid ""
 "Do you want to remove map layer(s)\n"
@@ -7816,23 +7816,23 @@ msgstr ""
 "%s\n"
 "ze seznamu vrstev?"
 
-#: ../gui/wxpython/lmgr/frame.py:2228 ../gui/wxpython/main_window/frame.py:2353
+#: ../gui/wxpython/lmgr/frame.py:2229 ../gui/wxpython/main_window/frame.py:2354
 msgid "Do you want to remove selected map layer(s) from layer tree?"
 msgstr "Přejete si odstranit vybranou mapovou vrstvu ze stromu vrstev?"
 
-#: ../gui/wxpython/lmgr/frame.py:2234 ../gui/wxpython/main_window/frame.py:2359
+#: ../gui/wxpython/lmgr/frame.py:2235 ../gui/wxpython/main_window/frame.py:2360
 msgid "Remove map layer"
 msgstr "Odstranit mapovou vrstvu"
 
-#: ../gui/wxpython/lmgr/frame.py:2292 ../gui/wxpython/main_window/frame.py:2401
+#: ../gui/wxpython/lmgr/frame.py:2293 ../gui/wxpython/main_window/frame.py:2402
 msgid "Quit GRASS GUI"
 msgstr "Ukončit GRASS GUI"
 
-#: ../gui/wxpython/lmgr/frame.py:2330 ../gui/wxpython/main_window/frame.py:2439
+#: ../gui/wxpython/lmgr/frame.py:2331 ../gui/wxpython/main_window/frame.py:2440
 msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:2341 ../gui/wxpython/main_window/frame.py:2450
+#: ../gui/wxpython/lmgr/frame.py:2342 ../gui/wxpython/main_window/frame.py:2451
 msgid "Constrain map to region geometry?"
 msgstr ""
 
@@ -8002,17 +8002,17 @@ msgid "Unable to create profile of raster map."
 msgstr "Nelze vytvořit profil rastrové mapy."
 
 #: ../gui/wxpython/lmgr/layertree.py:1045
-#: ../gui/wxpython/nviz/mapwindow.py:1782 ../gui/wxpython/nviz/tools.py:895
+#: ../gui/wxpython/nviz/mapwindow.py:1782 ../gui/wxpython/nviz/tools.py:894
 #: ../gui/wxpython/psmap/dialogs.py:1635
 msgid "Raster map"
 msgstr "Rastrová vrstva"
 
-#: ../gui/wxpython/lmgr/layertree.py:1049 ../gui/wxpython/nviz/tools.py:1530
+#: ../gui/wxpython/lmgr/layertree.py:1049 ../gui/wxpython/nviz/tools.py:1529
 #: ../gui/wxpython/psmap/dialogs.py:3642
 msgid "Vector map"
 msgstr "Vektorová vrstva"
 
-#: ../gui/wxpython/lmgr/layertree.py:1053 ../gui/wxpython/nviz/tools.py:1954
+#: ../gui/wxpython/lmgr/layertree.py:1053 ../gui/wxpython/nviz/tools.py:1953
 msgid "3D raster map"
 msgstr "3D rastrová mapa"
 
@@ -8121,8 +8121,8 @@ msgstr "Rastrová vrstva <%s> přidána"
 msgid "Vector map <%s> added"
 msgstr "Vektorová vrstva <%s> přidána"
 
-#: ../gui/wxpython/lmgr/statusbar.py:80 ../gui/wxpython/nviz/tools.py:1048
-#: ../gui/wxpython/nviz/tools.py:2944 ../gui/wxpython/psmap/dialogs.py:2408
+#: ../gui/wxpython/lmgr/statusbar.py:80 ../gui/wxpython/nviz/tools.py:1047
+#: ../gui/wxpython/nviz/tools.py:2943 ../gui/wxpython/psmap/dialogs.py:2408
 msgid "Mask"
 msgstr "Maska"
 
@@ -8162,8 +8162,8 @@ msgstr "Uložit pracovní plochu"
 msgid "Open workspace"
 msgstr "Uložit pracovní plochu"
 
-#: ../gui/wxpython/lmgr/toolbars.py:68 ../gui/wxpython/lmgr/workspace.py:394
-#: ../gui/wxpython/lmgr/workspace.py:417
+#: ../gui/wxpython/lmgr/toolbars.py:68 ../gui/wxpython/lmgr/workspace.py:393
+#: ../gui/wxpython/lmgr/workspace.py:416
 msgid "Save workspace"
 msgstr "Uložit pracovní plochu"
 
@@ -8300,27 +8300,27 @@ msgstr ""
 msgid "Show 3D view mode manual"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/workspace.py:74
+#: ../gui/wxpython/lmgr/workspace.py:73
 msgid "Current workspace is not empty. Do you want to store current settings to workspace file?"
 msgstr "Pracovní plocha není prázdná. Přejete si uložit aktuální nastavení do souboru pracovního plochy?"
 
-#: ../gui/wxpython/lmgr/workspace.py:78
+#: ../gui/wxpython/lmgr/workspace.py:77
 msgid "Create new workspace?"
 msgstr "Vytvořit novou pracovní plochu?"
 
-#: ../gui/wxpython/lmgr/workspace.py:107
+#: ../gui/wxpython/lmgr/workspace.py:106
 msgid "Choose workspace file"
 msgstr "Zvolit soubor pracovní plochy"
 
-#: ../gui/wxpython/lmgr/workspace.py:109 ../gui/wxpython/lmgr/workspace.py:371
+#: ../gui/wxpython/lmgr/workspace.py:108 ../gui/wxpython/lmgr/workspace.py:370
 msgid "GRASS Workspace File (*.gxw)|*.gxw"
 msgstr "Soubor pracovní plochy GRASSu (*.gxw)|*.gxw"
 
-#: ../gui/wxpython/lmgr/workspace.py:138
+#: ../gui/wxpython/lmgr/workspace.py:137
 msgid "Most likely the database, location or mapset does not exist"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/workspace.py:141
+#: ../gui/wxpython/lmgr/workspace.py:140
 #, python-brace-format
 msgid ""
 "Unable to change to location and mapset specified in the workspace.\n"
@@ -8330,11 +8330,11 @@ msgid ""
 "Do you want to proceed with opening the workspace anyway?"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/workspace.py:150
+#: ../gui/wxpython/lmgr/workspace.py:149
 msgid "Proceed with opening of the workspace?"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/workspace.py:161
+#: ../gui/wxpython/lmgr/workspace.py:160
 #, python-format
 msgid ""
 "Current location is <%(loc)s>.\n"
@@ -8343,7 +8343,7 @@ msgstr ""
 "Současná location je <%(loc)s>.\n"
 "Současný mapset je <%(mapset)s>."
 
-#: ../gui/wxpython/lmgr/workspace.py:181
+#: ../gui/wxpython/lmgr/workspace.py:180
 #, fuzzy, python-format
 #| msgid ""
 #| "Reading workspace file <%s> failed.\n"
@@ -8356,20 +8356,20 @@ msgstr ""
 "Čtení souboru pracovní plochy <%s> selhalo. \n"
 "Neplatný soubor, nelze parsovat XML dokument."
 
-#: ../gui/wxpython/lmgr/workspace.py:194
+#: ../gui/wxpython/lmgr/workspace.py:193
 msgid "Please wait, loading workspace..."
 msgstr "Prosím čekejte, pracovní plocha se načítá..."
 
-#: ../gui/wxpython/lmgr/workspace.py:369
+#: ../gui/wxpython/lmgr/workspace.py:368
 msgid "Choose file to save current workspace"
 msgstr "Vybrat soubor pro uložení aktuální pracovní plochy"
 
-#: ../gui/wxpython/lmgr/workspace.py:390 ../gui/wxpython/lmgr/workspace.py:413
+#: ../gui/wxpython/lmgr/workspace.py:389 ../gui/wxpython/lmgr/workspace.py:412
 #, python-format
 msgid "Workspace file <%s> already exists. Do you want to overwrite this file?"
 msgstr "Soubor pracovní plochy <%s> již existuje. Přejete si tento soubor přepsat?"
 
-#: ../gui/wxpython/lmgr/workspace.py:443
+#: ../gui/wxpython/lmgr/workspace.py:442
 #, fuzzy, python-format
 #| msgid "Writing current settings to workspace file failed."
 msgid ""
@@ -8377,19 +8377,19 @@ msgid ""
 "Error details: %s"
 msgstr "Zápis aktuálního nastavení do souboru pracovní plochy selhalo."
 
-#: ../gui/wxpython/lmgr/workspace.py:470
+#: ../gui/wxpython/lmgr/workspace.py:469
 msgid "Do you want to save changes in the workspace?"
 msgstr "Chcete uložit změny pracovní plochy?"
 
-#: ../gui/wxpython/lmgr/workspace.py:472
+#: ../gui/wxpython/lmgr/workspace.py:471
 msgid "Do you want to store current settings to workspace file?"
 msgstr "Chcete uložit současné nastavení do souboru pracovní plochy?"
 
-#: ../gui/wxpython/lmgr/workspace.py:525
+#: ../gui/wxpython/lmgr/workspace.py:524
 msgid "Workspace"
 msgstr "Pracovní plocha"
 
-#: ../gui/wxpython/lmgr/workspace.py:562
+#: ../gui/wxpython/lmgr/workspace.py:561
 msgid "File <{}> doesn't exist. It was probably moved or deleted."
 msgstr ""
 
@@ -8803,13 +8803,13 @@ msgstr ""
 msgid "No project provided. Operation canceled."
 msgstr "Nastavení není definováno. Operace byla zrušena."
 
-#: ../gui/wxpython/main_window/frame.py:1713
+#: ../gui/wxpython/main_window/frame.py:1714
 #, fuzzy
 #| msgid "Close workspace file"
 msgid "Close workspace"
 msgstr "Zavřít soubor pracovní plochy"
 
-#: ../gui/wxpython/main_window/frame.py:2001
+#: ../gui/wxpython/main_window/frame.py:2002
 #, fuzzy
 msgid "Code editor"
 msgstr "Editor Pythonu"
@@ -10234,8 +10234,8 @@ msgstr ""
 "%s"
 
 #: ../gui/wxpython/nviz/mapwindow.py:2392
-#: ../gui/wxpython/nviz/mapwindow.py:2411 ../gui/wxpython/nviz/tools.py:2806
-#: ../gui/wxpython/nviz/tools.py:5179
+#: ../gui/wxpython/nviz/mapwindow.py:2411 ../gui/wxpython/nviz/tools.py:2805
+#: ../gui/wxpython/nviz/tools.py:5178
 msgid "constant#"
 msgstr "konstantní#"
 
@@ -10248,11 +10248,11 @@ msgid "Revert settings to default, changes are not applied"
 msgstr "Vrátit nastavení na výchozí, změny se nepoužijí"
 
 #: ../gui/wxpython/nviz/preferences.py:63
-#: ../gui/wxpython/nviz/preferences.py:67 ../gui/wxpython/nviz/tools.py:111
+#: ../gui/wxpython/nviz/preferences.py:67 ../gui/wxpython/nviz/tools.py:110
 msgid "View"
 msgstr "Zobrazení"
 
-#: ../gui/wxpython/nviz/preferences.py:77 ../gui/wxpython/nviz/tools.py:349
+#: ../gui/wxpython/nviz/preferences.py:77 ../gui/wxpython/nviz/tools.py:348
 msgid "Perspective:"
 msgstr "Perspektiva:"
 
@@ -10280,11 +10280,11 @@ msgstr "x:"
 msgid "Twist:"
 msgstr "Otočení:"
 
-#: ../gui/wxpython/nviz/preferences.py:191 ../gui/wxpython/nviz/tools.py:436
+#: ../gui/wxpython/nviz/preferences.py:191 ../gui/wxpython/nviz/tools.py:435
 msgid "Z-exag:"
 msgstr "Převýšení:"
 
-#: ../gui/wxpython/nviz/preferences.py:221 ../gui/wxpython/nviz/tools.py:510
+#: ../gui/wxpython/nviz/preferences.py:221 ../gui/wxpython/nviz/tools.py:509
 msgid "Image Appearance"
 msgstr "Vzhled obrázku"
 
@@ -10300,7 +10300,7 @@ msgstr ""
 msgid "Turn exag:"
 msgstr ""
 
-#: ../gui/wxpython/nviz/preferences.py:314 ../gui/wxpython/nviz/tools.py:810
+#: ../gui/wxpython/nviz/preferences.py:314 ../gui/wxpython/nviz/tools.py:809
 msgid "Lighting"
 msgstr "Osvětlení"
 
@@ -10312,65 +10312,65 @@ msgstr "Světlo"
 msgid "z:"
 msgstr "z:"
 
-#: ../gui/wxpython/nviz/preferences.py:383 ../gui/wxpython/nviz/tools.py:2258
+#: ../gui/wxpython/nviz/preferences.py:383 ../gui/wxpython/nviz/tools.py:2257
 msgid "Brightness:"
 msgstr "Jas:"
 
-#: ../gui/wxpython/nviz/preferences.py:397 ../gui/wxpython/nviz/tools.py:2283
+#: ../gui/wxpython/nviz/preferences.py:397 ../gui/wxpython/nviz/tools.py:2282
 msgid "Ambient:"
 msgstr "Ambientní:"
 
-#: ../gui/wxpython/nviz/preferences.py:436 ../gui/wxpython/nviz/tools.py:744
-#: ../gui/wxpython/nviz/tools.py:2346
+#: ../gui/wxpython/nviz/preferences.py:436 ../gui/wxpython/nviz/tools.py:743
+#: ../gui/wxpython/nviz/tools.py:2345
 msgid "Surface"
 msgstr "Povrch"
 
-#: ../gui/wxpython/nviz/preferences.py:442 ../gui/wxpython/nviz/tools.py:915
-#: ../gui/wxpython/nviz/tools.py:1974 ../gui/wxpython/timeline/frame.py:139
-#: ../gui/wxpython/tplot/frame.py:402
+#: ../gui/wxpython/nviz/preferences.py:442 ../gui/wxpython/nviz/tools.py:914
+#: ../gui/wxpython/nviz/tools.py:1973 ../gui/wxpython/timeline/frame.py:139
+#: ../gui/wxpython/tplot/frame.py:401
 msgid "Draw"
 msgstr "Vykreslit"
 
-#: ../gui/wxpython/nviz/preferences.py:448 ../gui/wxpython/nviz/tools.py:921
-#: ../gui/wxpython/nviz/tools.py:1981
+#: ../gui/wxpython/nviz/preferences.py:448 ../gui/wxpython/nviz/tools.py:920
+#: ../gui/wxpython/nviz/tools.py:1980
 msgid "Mode:"
 msgstr "Režim:"
 
-#: ../gui/wxpython/nviz/preferences.py:456 ../gui/wxpython/nviz/tools.py:929
+#: ../gui/wxpython/nviz/preferences.py:456 ../gui/wxpython/nviz/tools.py:928
 msgid "both"
 msgstr "oba"
 
-#: ../gui/wxpython/nviz/preferences.py:456 ../gui/wxpython/nviz/tools.py:929
+#: ../gui/wxpython/nviz/preferences.py:456 ../gui/wxpython/nviz/tools.py:928
 msgid "coarse"
 msgstr "hrubý"
 
-#: ../gui/wxpython/nviz/preferences.py:456 ../gui/wxpython/nviz/tools.py:929
+#: ../gui/wxpython/nviz/preferences.py:456 ../gui/wxpython/nviz/tools.py:928
 msgid "fine"
 msgstr "jemný"
 
-#: ../gui/wxpython/nviz/preferences.py:467 ../gui/wxpython/nviz/tools.py:1007
+#: ../gui/wxpython/nviz/preferences.py:467 ../gui/wxpython/nviz/tools.py:1006
 msgid "Fine mode:"
 msgstr "Jemný režim:"
 
 #: ../gui/wxpython/nviz/preferences.py:473
-#: ../gui/wxpython/nviz/preferences.py:494 ../gui/wxpython/nviz/tools.py:968
-#: ../gui/wxpython/nviz/tools.py:1013
+#: ../gui/wxpython/nviz/preferences.py:494 ../gui/wxpython/nviz/tools.py:967
+#: ../gui/wxpython/nviz/tools.py:1012
 msgid "resolution:"
 msgstr "rozlišení:"
 
-#: ../gui/wxpython/nviz/preferences.py:486 ../gui/wxpython/nviz/tools.py:963
+#: ../gui/wxpython/nviz/preferences.py:486 ../gui/wxpython/nviz/tools.py:962
 msgid "Coarse mode:"
 msgstr "Hrubý režim:"
 
-#: ../gui/wxpython/nviz/preferences.py:506 ../gui/wxpython/nviz/tools.py:982
+#: ../gui/wxpython/nviz/preferences.py:506 ../gui/wxpython/nviz/tools.py:981
 msgid "style:"
 msgstr "styl:"
 
-#: ../gui/wxpython/nviz/preferences.py:511 ../gui/wxpython/nviz/tools.py:990
+#: ../gui/wxpython/nviz/preferences.py:511 ../gui/wxpython/nviz/tools.py:989
 msgid "surface"
 msgstr "povrch"
 
-#: ../gui/wxpython/nviz/preferences.py:511 ../gui/wxpython/nviz/tools.py:990
+#: ../gui/wxpython/nviz/preferences.py:511 ../gui/wxpython/nviz/tools.py:989
 msgid "wire"
 msgstr "síť"
 
@@ -10378,15 +10378,15 @@ msgstr "síť"
 msgid "wire color:"
 msgstr "barva sítě:"
 
-#: ../gui/wxpython/nviz/preferences.py:555 ../gui/wxpython/nviz/tools.py:763
+#: ../gui/wxpython/nviz/preferences.py:555 ../gui/wxpython/nviz/tools.py:762
 msgid "Vector"
 msgstr "Vektor"
 
-#: ../gui/wxpython/nviz/preferences.py:560 ../gui/wxpython/nviz/tools.py:1566
+#: ../gui/wxpython/nviz/preferences.py:560 ../gui/wxpython/nviz/tools.py:1565
 msgid "Vector lines"
 msgstr "Vektorové linie"
 
-#: ../gui/wxpython/nviz/preferences.py:605 ../gui/wxpython/nviz/tools.py:1745
+#: ../gui/wxpython/nviz/preferences.py:605 ../gui/wxpython/nviz/tools.py:1744
 msgid "Vector points"
 msgstr "Vektorové body"
 
@@ -10407,176 +10407,176 @@ msgstr "Značka:"
 msgid "3D view settings saved to file <%s>."
 msgstr "Nastavení 3D zobrazení bylo uloženo do souboru <%s>."
 
-#: ../gui/wxpython/nviz/tools.py:120
+#: ../gui/wxpython/nviz/tools.py:119
 msgid "Analysis"
 msgstr "Analýza"
 
-#: ../gui/wxpython/nviz/tools.py:122 ../gui/wxpython/nviz/tools.py:552
+#: ../gui/wxpython/nviz/tools.py:121 ../gui/wxpython/nviz/tools.py:551
 msgid "Animation"
 msgstr "Animace"
 
-#: ../gui/wxpython/nviz/tools.py:315
+#: ../gui/wxpython/nviz/tools.py:314
 msgid "Control View"
 msgstr "Nastavení zobrazení"
 
-#: ../gui/wxpython/nviz/tools.py:337
+#: ../gui/wxpython/nviz/tools.py:336
 msgid "Adjusts the distance and angular perspective of the image viewpoint"
 msgstr ""
 
-#: ../gui/wxpython/nviz/tools.py:365
+#: ../gui/wxpython/nviz/tools.py:364
 msgid "Tilts the plane of the surface from the horizontal"
 msgstr "Nakloní rovinu povrchu vzhledem k vodorovné poloze"
 
-#: ../gui/wxpython/nviz/tools.py:375 ../gui/wxpython/nviz/tools.py:1336
+#: ../gui/wxpython/nviz/tools.py:374 ../gui/wxpython/nviz/tools.py:1335
 msgid "Tilt:"
 msgstr "Naklonění:"
 
-#: ../gui/wxpython/nviz/tools.py:390
+#: ../gui/wxpython/nviz/tools.py:389
 msgid "Adjusts the viewing height above the surface (angle of view automatically adjusts to maintain the same center of view)"
 msgstr "Nastaví výšku pohledu nad povrchem (úhel pohledu se automaticky přizpůsobí, aby se zachoval střed pohledu)"
 
-#: ../gui/wxpython/nviz/tools.py:403
+#: ../gui/wxpython/nviz/tools.py:402
 msgid "Adjusts the relative height of features above the plane of the surface"
 msgstr "Nastaví relativní výšku prvků nad rovinou povrchu"
 
-#: ../gui/wxpython/nviz/tools.py:461
+#: ../gui/wxpython/nviz/tools.py:460
 msgid "Look:"
 msgstr "Pohled:"
 
-#: ../gui/wxpython/nviz/tools.py:465
+#: ../gui/wxpython/nviz/tools.py:464
 msgid "here"
 msgstr "zde"
 
-#: ../gui/wxpython/nviz/tools.py:470
+#: ../gui/wxpython/nviz/tools.py:469
 msgid "Allows you to select a point on the surface that becomes the new center of view. Click on the button and then on the surface."
 msgstr "Umožní vybrat bod povrchu, který se stane novým středem pohledu. Klepněte na toto tlačítko a poté na povrch."
 
-#: ../gui/wxpython/nviz/tools.py:479
+#: ../gui/wxpython/nviz/tools.py:478
 msgid "center"
 msgstr "střed"
 
-#: ../gui/wxpython/nviz/tools.py:482
+#: ../gui/wxpython/nviz/tools.py:481
 msgid "Resets the view to the original default center of view"
 msgstr "Obnoví původní, výchozí střed pohledu"
 
-#: ../gui/wxpython/nviz/tools.py:487
+#: ../gui/wxpython/nviz/tools.py:486
 msgid "top"
 msgstr "shora"
 
-#: ../gui/wxpython/nviz/tools.py:492
+#: ../gui/wxpython/nviz/tools.py:491
 msgid "Sets the viewer directly over the scene's center position. This top view orients approximately north south."
 msgstr "Nastaví pohled přímo nad místo středu scény. Tento pohled shora je orientován přibližně severojižně."
 
-#: ../gui/wxpython/nviz/tools.py:498
+#: ../gui/wxpython/nviz/tools.py:497
 msgid "reset"
 msgstr "obnovit"
 
-#: ../gui/wxpython/nviz/tools.py:499
+#: ../gui/wxpython/nviz/tools.py:498
 msgid "Reset to default view"
 msgstr "Obnoví výchozí pohled"
 
-#: ../gui/wxpython/nviz/tools.py:562
+#: ../gui/wxpython/nviz/tools.py:561
 msgid "Press 'Record' button and start changing the view. It is recommended to use fly-through mode (Map Display toolbar) to achieve smooth motion."
 msgstr "Stiskněte tlačítko 'Zaznamenat' a začněte měnit pohled. Abyste dosáhli plynulého pohybu, je vhodné použít režim průletu (nástrojová lišta mapového okna)."
 
-#: ../gui/wxpython/nviz/tools.py:574
+#: ../gui/wxpython/nviz/tools.py:573
 msgid "Record"
 msgstr "Zaznamenat"
 
-#: ../gui/wxpython/nviz/tools.py:576
+#: ../gui/wxpython/nviz/tools.py:575
 msgid "Play"
 msgstr "Přehrát"
 
-#: ../gui/wxpython/nviz/tools.py:598
+#: ../gui/wxpython/nviz/tools.py:597
 msgid "Total number of frames :"
 msgstr "Celkový počet snímků:"
 
-#: ../gui/wxpython/nviz/tools.py:603
+#: ../gui/wxpython/nviz/tools.py:602
 msgid "Frame rate (FPS):"
 msgstr "Snímková frekvence (FPS):"
 
-#: ../gui/wxpython/nviz/tools.py:613
+#: ../gui/wxpython/nviz/tools.py:612
 msgid "Frames are recorded with given frequency (FPS). "
 msgstr "Snímky jsou zaznamenávány s danou frekvencí (FPS)."
 
-#: ../gui/wxpython/nviz/tools.py:665
+#: ../gui/wxpython/nviz/tools.py:664
 msgid "Save image sequence"
 msgstr "Uložit posloupnost obrázků"
 
-#: ../gui/wxpython/nviz/tools.py:674 ../gui/wxpython/psmap/dialogs.py:5794
+#: ../gui/wxpython/nviz/tools.py:673 ../gui/wxpython/psmap/dialogs.py:5794
 msgid "Choose a directory:"
 msgstr "Vyberte adresář:"
 
-#: ../gui/wxpython/nviz/tools.py:675
+#: ../gui/wxpython/nviz/tools.py:674
 msgid "Choose a directory for images"
 msgstr "Zvolte adresář pro obrázky"
 
-#: ../gui/wxpython/nviz/tools.py:689
+#: ../gui/wxpython/nviz/tools.py:688
 msgid "Generated files names will look like this: prefix_1.ppm, prefix_2.ppm, ..."
 msgstr "Budou vytvořeny názvy souborů jako predpona_1.ppm, predpona_2.ppm, ..."
 
-#: ../gui/wxpython/nviz/tools.py:754 ../gui/wxpython/nviz/tools.py:1436
+#: ../gui/wxpython/nviz/tools.py:753 ../gui/wxpython/nviz/tools.py:1435
 msgid "Constant surface"
 msgstr "Konstantní povrch"
 
-#: ../gui/wxpython/nviz/tools.py:818
+#: ../gui/wxpython/nviz/tools.py:817
 msgid "Fringe"
 msgstr "Okraj"
 
-#: ../gui/wxpython/nviz/tools.py:863 ../gui/wxpython/nviz/tools.py:1188
+#: ../gui/wxpython/nviz/tools.py:862 ../gui/wxpython/nviz/tools.py:1187
 msgid "Cutting planes"
 msgstr "Roviny řezu"
 
-#: ../gui/wxpython/nviz/tools.py:940 ../gui/wxpython/nviz/tools.py:1207
-#: ../gui/wxpython/nviz/tools.py:1999
+#: ../gui/wxpython/nviz/tools.py:939 ../gui/wxpython/nviz/tools.py:1206
+#: ../gui/wxpython/nviz/tools.py:1998
 msgid "Shading:"
 msgstr "Stínování:"
 
-#: ../gui/wxpython/nviz/tools.py:945 ../gui/wxpython/nviz/tools.py:2007
+#: ../gui/wxpython/nviz/tools.py:944 ../gui/wxpython/nviz/tools.py:2006
 msgid "flat"
 msgstr "ploché"
 
-#: ../gui/wxpython/nviz/tools.py:945 ../gui/wxpython/nviz/tools.py:2007
+#: ../gui/wxpython/nviz/tools.py:944 ../gui/wxpython/nviz/tools.py:2006
 msgid "gouraud"
 msgstr "Gouraudovo"
 
-#: ../gui/wxpython/nviz/tools.py:953
+#: ../gui/wxpython/nviz/tools.py:952
 msgid "Set to all"
 msgstr "Nastavit všechny"
 
-#: ../gui/wxpython/nviz/tools.py:954
+#: ../gui/wxpython/nviz/tools.py:953
 msgid "Use draw settings for all loaded surfaces"
 msgstr "Použít vykreslovací nastavení pro všechny načtené povrchy"
 
-#: ../gui/wxpython/nviz/tools.py:1001
+#: ../gui/wxpython/nviz/tools.py:1000
 msgid "Change wire color"
 msgstr "Změnit barvu sítě"
 
-#: ../gui/wxpython/nviz/tools.py:1038
+#: ../gui/wxpython/nviz/tools.py:1037
 msgid "Surface attributes"
 msgstr "Vlastnosti povrchu"
 
-#: ../gui/wxpython/nviz/tools.py:1049 ../gui/wxpython/nviz/tools.py:2945
+#: ../gui/wxpython/nviz/tools.py:1048 ../gui/wxpython/nviz/tools.py:2944
 msgid "Transparency"
 msgstr "Průhlednost"
 
-#: ../gui/wxpython/nviz/tools.py:1050 ../gui/wxpython/nviz/tools.py:2946
+#: ../gui/wxpython/nviz/tools.py:1049 ../gui/wxpython/nviz/tools.py:2945
 msgid "Shininess"
 msgstr "Jasnost"
 
-#: ../gui/wxpython/nviz/tools.py:1059 ../gui/wxpython/nviz/tools.py:2961
+#: ../gui/wxpython/nviz/tools.py:1058 ../gui/wxpython/nviz/tools.py:2960
 msgid "map"
 msgstr "mapa"
 
-#: ../gui/wxpython/nviz/tools.py:1063 ../gui/wxpython/nviz/tools.py:2967
+#: ../gui/wxpython/nviz/tools.py:1062 ../gui/wxpython/nviz/tools.py:2966
 msgid "unset"
 msgstr "zrušit"
 
-#: ../gui/wxpython/nviz/tools.py:1068 ../gui/wxpython/nviz/tools.py:2972
+#: ../gui/wxpython/nviz/tools.py:1067 ../gui/wxpython/nviz/tools.py:2971
 msgid "constant"
 msgstr "konstantní"
 
-#: ../gui/wxpython/nviz/tools.py:1120 ../gui/wxpython/nviz/tools.py:2098
+#: ../gui/wxpython/nviz/tools.py:1119 ../gui/wxpython/nviz/tools.py:2097
 #: ../gui/wxpython/psmap/dialogs.py:3759 ../gui/wxpython/psmap/dialogs.py:4523
 #: ../gui/wxpython/psmap/dialogs.py:4813 ../gui/wxpython/psmap/dialogs.py:5427
 #: ../gui/wxpython/psmap/dialogs.py:5431 ../gui/wxpython/psmap/dialogs.py:5903
@@ -10585,431 +10585,431 @@ msgstr "konstantní"
 msgid "Position"
 msgstr "Pozice"
 
-#: ../gui/wxpython/nviz/tools.py:1125
+#: ../gui/wxpython/nviz/tools.py:1124
 msgid "Changes the x, y, and z position of the current surface"
 msgstr "Změní souřadnice x, y a z pro pozici aktuálního povrchu"
 
-#: ../gui/wxpython/nviz/tools.py:1144 ../gui/wxpython/nviz/tools.py:1412
-#: ../gui/wxpython/nviz/tools.py:2120 ../gui/wxpython/nviz/tools.py:3145
+#: ../gui/wxpython/nviz/tools.py:1143 ../gui/wxpython/nviz/tools.py:1411
+#: ../gui/wxpython/nviz/tools.py:2119 ../gui/wxpython/nviz/tools.py:3144
 msgid "Reset"
 msgstr "Obnovit"
 
-#: ../gui/wxpython/nviz/tools.py:1145 ../gui/wxpython/nviz/tools.py:2121
+#: ../gui/wxpython/nviz/tools.py:1144 ../gui/wxpython/nviz/tools.py:2120
 msgid "Reset to default position"
 msgstr "Obnoví výchozí pozici"
 
-#: ../gui/wxpython/nviz/tools.py:1195
+#: ../gui/wxpython/nviz/tools.py:1194
 msgid "Active cutting plane:"
 msgstr "Aktivní rovina řezu:"
 
-#: ../gui/wxpython/nviz/tools.py:1212
+#: ../gui/wxpython/nviz/tools.py:1211
 msgid "clear"
 msgstr "průhledné"
 
-#: ../gui/wxpython/nviz/tools.py:1213
+#: ../gui/wxpython/nviz/tools.py:1212
 msgid "top color"
 msgstr "horní barva"
 
-#: ../gui/wxpython/nviz/tools.py:1214
+#: ../gui/wxpython/nviz/tools.py:1213
 msgid "bottom color"
 msgstr "dolní barva"
 
-#: ../gui/wxpython/nviz/tools.py:1215
+#: ../gui/wxpython/nviz/tools.py:1214
 msgid "blend"
 msgstr "smíšené"
 
-#: ../gui/wxpython/nviz/tools.py:1216
+#: ../gui/wxpython/nviz/tools.py:1215
 msgid "shaded"
 msgstr "stínované"
 
-#: ../gui/wxpython/nviz/tools.py:1229
+#: ../gui/wxpython/nviz/tools.py:1228
 msgid "Horizontal X:"
 msgstr "Vodorovně X:"
 
-#: ../gui/wxpython/nviz/tools.py:1233
+#: ../gui/wxpython/nviz/tools.py:1232
 msgid "Sets the X coordinate of the current cutting plane"
 msgstr "Nastaví pro aktuální rovinu řezu souřadnici X"
 
-#: ../gui/wxpython/nviz/tools.py:1264
+#: ../gui/wxpython/nviz/tools.py:1263
 msgid "Horizontal Y:"
 msgstr "Vodorovně Y:"
 
-#: ../gui/wxpython/nviz/tools.py:1268
+#: ../gui/wxpython/nviz/tools.py:1267
 msgid "Sets the Y coordinate of the current cutting plane"
 msgstr "Nastaví pro aktuální rovinu řezu souřadnici Y"
 
-#: ../gui/wxpython/nviz/tools.py:1300
+#: ../gui/wxpython/nviz/tools.py:1299
 msgid "Rotation:"
 msgstr "Otočení:"
 
-#: ../gui/wxpython/nviz/tools.py:1304
+#: ../gui/wxpython/nviz/tools.py:1303
 msgid "Rotates the current cutting plane about vertical axis"
 msgstr "Otočí aktuální rovinu řezu kolem svislé osy"
 
-#: ../gui/wxpython/nviz/tools.py:1340
+#: ../gui/wxpython/nviz/tools.py:1339
 msgid "Rotates the current cutting plane about horizontal axis"
 msgstr "Otočí aktuální rovinu řezu kolem vodorovné osy"
 
-#: ../gui/wxpython/nviz/tools.py:1377
+#: ../gui/wxpython/nviz/tools.py:1376
 msgid "Sets the Z coordinate of the current cutting plane (only meaningful when tilt is not 0)"
 msgstr "Nataví pro aktuální rovinu řezu souřadnici Z (má význam pouze tehdy, není-li naklonění 0)"
 
-#: ../gui/wxpython/nviz/tools.py:1448
+#: ../gui/wxpython/nviz/tools.py:1447
 msgid "New"
 msgstr "Nový"
 
-#: ../gui/wxpython/nviz/tools.py:1452 ../gui/wxpython/nviz/tools.py:2485
-#: ../gui/wxpython/nviz/tools.py:2547 ../gui/wxpython/psmap/dialogs.py:1859
+#: ../gui/wxpython/nviz/tools.py:1451 ../gui/wxpython/nviz/tools.py:2484
+#: ../gui/wxpython/nviz/tools.py:2546 ../gui/wxpython/psmap/dialogs.py:1859
 msgid "Delete"
 msgstr "Smazat"
 
-#: ../gui/wxpython/nviz/tools.py:1464
+#: ../gui/wxpython/nviz/tools.py:1463
 msgid "Fine resolution:"
 msgstr "Jemné rozlišení:"
 
-#: ../gui/wxpython/nviz/tools.py:1477
+#: ../gui/wxpython/nviz/tools.py:1476
 msgid "Value:"
 msgstr "Hodnota:"
 
-#: ../gui/wxpython/nviz/tools.py:1489 ../gui/wxpython/nviz/tools.py:3127
+#: ../gui/wxpython/nviz/tools.py:1488 ../gui/wxpython/nviz/tools.py:3126
 msgid "Transparency:"
 msgstr "Průhlednost:"
 
-#: ../gui/wxpython/nviz/tools.py:1552
+#: ../gui/wxpython/nviz/tools.py:1551
 msgid "Show vector lines"
 msgstr "Zobrazit vektorové linie"
 
-#: ../gui/wxpython/nviz/tools.py:1572
+#: ../gui/wxpython/nviz/tools.py:1571
 msgid "Line:"
 msgstr "Linie:"
 
-#: ../gui/wxpython/nviz/tools.py:1577
+#: ../gui/wxpython/nviz/tools.py:1576
 msgid "width:"
 msgstr "šířka:"
 
-#: ../gui/wxpython/nviz/tools.py:1592 ../gui/wxpython/nviz/tools.py:1787
+#: ../gui/wxpython/nviz/tools.py:1591 ../gui/wxpython/nviz/tools.py:1786
 msgid "color:"
 msgstr "barva:"
 
-#: ../gui/wxpython/nviz/tools.py:1608 ../gui/wxpython/nviz/tools.py:1823
+#: ../gui/wxpython/nviz/tools.py:1607 ../gui/wxpython/nviz/tools.py:1822
 msgid "use color for thematic mapping"
 msgstr "použít barvu pro tematické mapování"
 
-#: ../gui/wxpython/nviz/tools.py:1611
+#: ../gui/wxpython/nviz/tools.py:1610
 msgid "use width for thematic mapping"
 msgstr "použít šířku pro tematické mapování"
 
-#: ../gui/wxpython/nviz/tools.py:1627 ../gui/wxpython/nviz/tools.py:1638
-#: ../gui/wxpython/nviz/tools.py:1845 ../gui/wxpython/nviz/tools.py:1856
+#: ../gui/wxpython/nviz/tools.py:1626 ../gui/wxpython/nviz/tools.py:1637
+#: ../gui/wxpython/nviz/tools.py:1844 ../gui/wxpython/nviz/tools.py:1855
 msgid "Set options..."
 msgstr "Nastavit volby..."
 
-#: ../gui/wxpython/nviz/tools.py:1662 ../gui/wxpython/nviz/tools.py:5454
-#: ../gui/wxpython/nviz/tools.py:5508
+#: ../gui/wxpython/nviz/tools.py:1661 ../gui/wxpython/nviz/tools.py:5453
+#: ../gui/wxpython/nviz/tools.py:5507
 msgid "as 3D"
 msgstr "jako 3D"
 
-#: ../gui/wxpython/nviz/tools.py:1662 ../gui/wxpython/nviz/tools.py:5454
-#: ../gui/wxpython/nviz/tools.py:5508
+#: ../gui/wxpython/nviz/tools.py:1661 ../gui/wxpython/nviz/tools.py:5453
+#: ../gui/wxpython/nviz/tools.py:5507
 msgid "on surface(s):"
 msgstr "na povrchu:"
 
-#: ../gui/wxpython/nviz/tools.py:1676 ../gui/wxpython/nviz/tools.py:1877
+#: ../gui/wxpython/nviz/tools.py:1675 ../gui/wxpython/nviz/tools.py:1876
 msgid "Height above surface:"
 msgstr "Výška nad povrchem:"
 
-#: ../gui/wxpython/nviz/tools.py:1732
+#: ../gui/wxpython/nviz/tools.py:1731
 msgid "Show vector points"
 msgstr "Zobrazit vektorové body"
 
-#: ../gui/wxpython/nviz/tools.py:1752
+#: ../gui/wxpython/nviz/tools.py:1751
 msgid "Icon:"
 msgstr "Ikona:"
 
-#: ../gui/wxpython/nviz/tools.py:1757 ../gui/wxpython/psmap/dialogs.py:2799
+#: ../gui/wxpython/nviz/tools.py:1756 ../gui/wxpython/psmap/dialogs.py:2799
 msgid "size:"
 msgstr ""
 
-#: ../gui/wxpython/nviz/tools.py:1801 ../gui/wxpython/psmap/dialogs.py:2731
+#: ../gui/wxpython/nviz/tools.py:1800 ../gui/wxpython/psmap/dialogs.py:2731
 msgid "symbol:"
 msgstr ""
 
-#: ../gui/wxpython/nviz/tools.py:1826
+#: ../gui/wxpython/nviz/tools.py:1825
 msgid "use size for thematic mapping"
 msgstr "použít velikost pro tematické mapování"
 
-#: ../gui/wxpython/nviz/tools.py:1989
+#: ../gui/wxpython/nviz/tools.py:1988
 msgid "isosurfaces"
 msgstr "Isopovrch"
 
-#: ../gui/wxpython/nviz/tools.py:1989
+#: ../gui/wxpython/nviz/tools.py:1988
 msgid "slices"
 msgstr ""
 
-#: ../gui/wxpython/nviz/tools.py:2016
+#: ../gui/wxpython/nviz/tools.py:2015
 msgid "Resolution:"
 msgstr "Rozlišení:"
 
-#: ../gui/wxpython/nviz/tools.py:2030
+#: ../gui/wxpython/nviz/tools.py:2029
 msgid "Draw wire box"
 msgstr ""
 
-#: ../gui/wxpython/nviz/tools.py:2043 ../gui/wxpython/nviz/tools.py:4335
+#: ../gui/wxpython/nviz/tools.py:2042 ../gui/wxpython/nviz/tools.py:4334
 msgid "List of isosurfaces"
 msgstr "Seznam Isopovrchů"
 
-#: ../gui/wxpython/nviz/tools.py:2163
+#: ../gui/wxpython/nviz/tools.py:2162
 msgid "Show light model"
 msgstr "Zobrazit světelný model"
 
-#: ../gui/wxpython/nviz/tools.py:2175
+#: ../gui/wxpython/nviz/tools.py:2174
 msgid "Light source position"
 msgstr "Umístění zdroje světla"
 
-#: ../gui/wxpython/nviz/tools.py:2192
+#: ../gui/wxpython/nviz/tools.py:2191
 msgid "Adjusts the light height"
 msgstr "Nastaví výšku světla"
 
-#: ../gui/wxpython/nviz/tools.py:2237
+#: ../gui/wxpython/nviz/tools.py:2236
 msgid "Light color and intensity"
 msgstr "Barva světla a intenzita"
 
-#: ../gui/wxpython/nviz/tools.py:2262
+#: ../gui/wxpython/nviz/tools.py:2261
 msgid "Adjusts the brightness of the light"
 msgstr "Nastaví jas světla"
 
-#: ../gui/wxpython/nviz/tools.py:2287
+#: ../gui/wxpython/nviz/tools.py:2286
 msgid "Adjusts the ambient light"
 msgstr "Nastaví ambientní světlo"
 
-#: ../gui/wxpython/nviz/tools.py:2360
+#: ../gui/wxpython/nviz/tools.py:2359
 msgid "Edges with fringe"
 msgstr "Hrany s okrajem"
 
-#: ../gui/wxpython/nviz/tools.py:2364
+#: ../gui/wxpython/nviz/tools.py:2363
 msgid "N && W"
 msgstr "S && Z"
 
-#: ../gui/wxpython/nviz/tools.py:2365
+#: ../gui/wxpython/nviz/tools.py:2364
 msgid "N && E"
 msgstr "S && V"
 
-#: ../gui/wxpython/nviz/tools.py:2366
+#: ../gui/wxpython/nviz/tools.py:2365
 msgid "S && W"
 msgstr "J && Z"
 
-#: ../gui/wxpython/nviz/tools.py:2367
+#: ../gui/wxpython/nviz/tools.py:2366
 msgid "S && E"
 msgstr "J && V"
 
-#: ../gui/wxpython/nviz/tools.py:2393
+#: ../gui/wxpython/nviz/tools.py:2392
 msgid "Elevation of fringe from bottom:"
 msgstr "Výška okraje ze spodní strany"
 
-#: ../gui/wxpython/nviz/tools.py:2444 ../gui/wxpython/psmap/dialogs.py:6185
+#: ../gui/wxpython/nviz/tools.py:2443 ../gui/wxpython/psmap/dialogs.py:6185
 #: ../gui/wxpython/psmap/toolbars.py:102
 msgid "North Arrow"
 msgstr "Směrová růžice"
 
-#: ../gui/wxpython/nviz/tools.py:2450
+#: ../gui/wxpython/nviz/tools.py:2449
 msgid "Arrow length (in map units):"
 msgstr "Délka růžice (v mapových jednotkách):"
 
-#: ../gui/wxpython/nviz/tools.py:2466
+#: ../gui/wxpython/nviz/tools.py:2465
 msgid "Arrow color:"
 msgstr "Barva růžice:"
 
-#: ../gui/wxpython/nviz/tools.py:2479
+#: ../gui/wxpython/nviz/tools.py:2478
 msgid "Place arrow"
 msgstr "Umístit růžici"
 
-#: ../gui/wxpython/nviz/tools.py:2501 ../gui/wxpython/psmap/toolbars.py:100
+#: ../gui/wxpython/nviz/tools.py:2500 ../gui/wxpython/psmap/toolbars.py:100
 msgid "Scale bar"
 msgstr "Měřítko"
 
-#: ../gui/wxpython/nviz/tools.py:2507
+#: ../gui/wxpython/nviz/tools.py:2506
 msgid "Scale bar length (in map units):"
 msgstr "Délka měřítka (v mapových jednotkách):"
 
-#: ../gui/wxpython/nviz/tools.py:2523
+#: ../gui/wxpython/nviz/tools.py:2522
 msgid "Scale bar color:"
 msgstr "Barva měřítka:"
 
-#: ../gui/wxpython/nviz/tools.py:2537
+#: ../gui/wxpython/nviz/tools.py:2536
 msgid "Place new scale bar"
 msgstr "Umístit nové měřítko"
 
-#: ../gui/wxpython/nviz/tools.py:2614
+#: ../gui/wxpython/nviz/tools.py:2613
 msgid "Do you want to record new animation without saving the previous one?"
 msgstr "Přejete si zaznamenat novou animaci, aniž byste uložili předchozí?"
 
-#: ../gui/wxpython/nviz/tools.py:2620
+#: ../gui/wxpython/nviz/tools.py:2619
 msgid "Animation already exists"
 msgstr ""
 
-#: ../gui/wxpython/nviz/tools.py:2784
+#: ../gui/wxpython/nviz/tools.py:2783
 msgid "No file prefix given."
 msgstr "Nebyla zadána předpona souboru."
 
-#: ../gui/wxpython/nviz/tools.py:2787
+#: ../gui/wxpython/nviz/tools.py:2786
 #, python-format
 msgid "Directory %s does not exist."
 msgstr "Adresář %s neexistuje."
 
-#: ../gui/wxpython/nviz/tools.py:2927
+#: ../gui/wxpython/nviz/tools.py:2926
 msgid "Isosurface attributes"
 msgstr "Atributy isopovrchu"
 
-#: ../gui/wxpython/nviz/tools.py:2934
+#: ../gui/wxpython/nviz/tools.py:2933
 msgid "toggle normal direction"
 msgstr ""
 
-#: ../gui/wxpython/nviz/tools.py:2942
+#: ../gui/wxpython/nviz/tools.py:2941
 msgid "Isosurface value"
 msgstr "Hodnota isopovrchu"
 
-#: ../gui/wxpython/nviz/tools.py:3052
+#: ../gui/wxpython/nviz/tools.py:3051
 msgid "Slice attributes"
 msgstr ""
 
-#: ../gui/wxpython/nviz/tools.py:3059
+#: ../gui/wxpython/nviz/tools.py:3058
 msgid "Slice parallel to axis:"
 msgstr ""
 
-#: ../gui/wxpython/nviz/tools.py:3212
+#: ../gui/wxpython/nviz/tools.py:3211
 msgid "W"
 msgstr "Z"
 
-#: ../gui/wxpython/nviz/tools.py:3213
+#: ../gui/wxpython/nviz/tools.py:3212
 msgid "N"
 msgstr "S"
 
-#: ../gui/wxpython/nviz/tools.py:3214
+#: ../gui/wxpython/nviz/tools.py:3213
 msgid "S"
 msgstr "J"
 
-#: ../gui/wxpython/nviz/tools.py:3215
+#: ../gui/wxpython/nviz/tools.py:3214
 msgid "E"
 msgstr "V"
 
-#: ../gui/wxpython/nviz/tools.py:3216
+#: ../gui/wxpython/nviz/tools.py:3215
 msgid "NW"
 msgstr "SZ"
 
-#: ../gui/wxpython/nviz/tools.py:3217
+#: ../gui/wxpython/nviz/tools.py:3216
 msgid "NE"
 msgstr "SV"
 
-#: ../gui/wxpython/nviz/tools.py:3218
+#: ../gui/wxpython/nviz/tools.py:3217
 msgid "SE"
 msgstr "JV"
 
-#: ../gui/wxpython/nviz/tools.py:3219
+#: ../gui/wxpython/nviz/tools.py:3218
 msgid "SW"
 msgstr "JZ"
 
-#: ../gui/wxpython/nviz/tools.py:3717 ../gui/wxpython/nviz/tools.py:5572
+#: ../gui/wxpython/nviz/tools.py:3716 ../gui/wxpython/nviz/tools.py:5571
 msgid "Level"
 msgstr "Úroveň"
 
-#: ../gui/wxpython/nviz/tools.py:4341
+#: ../gui/wxpython/nviz/tools.py:4340
 msgid "List of slices"
 msgstr ""
 
-#: ../gui/wxpython/nviz/tools.py:4524 ../gui/wxpython/nviz/tools.py:4527
+#: ../gui/wxpython/nviz/tools.py:4523 ../gui/wxpython/nviz/tools.py:4526
 #, python-brace-format
 msgid "Level {level}"
 msgstr ""
 
-#: ../gui/wxpython/nviz/tools.py:4534 ../gui/wxpython/nviz/tools.py:4537
+#: ../gui/wxpython/nviz/tools.py:4533 ../gui/wxpython/nviz/tools.py:4536
 #, python-brace-format
 msgid "Slice parallel to {axis}"
 msgstr ""
 
-#: ../gui/wxpython/nviz/tools.py:4814 ../gui/wxpython/nviz/tools.py:5585
+#: ../gui/wxpython/nviz/tools.py:4813 ../gui/wxpython/nviz/tools.py:5584
 msgid "Slice parallel to"
 msgstr ""
 
-#: ../gui/wxpython/nviz/tools.py:5032
+#: ../gui/wxpython/nviz/tools.py:5031
 #, python-format
 msgid "Scalebar %d"
 msgstr "Měřítko %d"
 
-#: ../gui/wxpython/nviz/tools.py:5186
+#: ../gui/wxpython/nviz/tools.py:5185
 msgid "None"
 msgstr "Žádná"
 
-#: ../gui/wxpython/nviz/tools.py:5187
+#: ../gui/wxpython/nviz/tools.py:5186
 msgid "Plane"
 msgstr "Rovinná plocha"
 
-#: ../gui/wxpython/nviz/tools.py:5391
+#: ../gui/wxpython/nviz/tools.py:5390
 msgid "Vector map is 3D"
 msgstr "Vektorové mapa je 3D"
 
-#: ../gui/wxpython/nviz/tools.py:5394
+#: ../gui/wxpython/nviz/tools.py:5393
 msgid "Vector map is 2D"
 msgstr "Vektorová mapa je 2D"
 
-#: ../gui/wxpython/nviz/tools.py:5396
+#: ../gui/wxpython/nviz/tools.py:5395
 #, python-format
 msgid "%(features)d features (%(points)d points)"
 msgstr "%(features)d prvků (%(points)d bodů)"
 
-#: ../gui/wxpython/nviz/tools.py:5456 ../gui/wxpython/nviz/tools.py:5510
+#: ../gui/wxpython/nviz/tools.py:5455 ../gui/wxpython/nviz/tools.py:5509
 msgid "on surface"
 msgstr "na povrchu"
 
-#: ../gui/wxpython/nviz/tools.py:5607
+#: ../gui/wxpython/nviz/tools.py:5606
 msgid "range:"
 msgstr ""
 
-#: ../gui/wxpython/nviz/tools.py:5682 ../gui/wxpython/nviz/tools.py:5693
+#: ../gui/wxpython/nviz/tools.py:5681 ../gui/wxpython/nviz/tools.py:5692
 msgid "North edge:"
 msgstr ""
 
-#: ../gui/wxpython/nviz/tools.py:5683 ../gui/wxpython/nviz/tools.py:5694
+#: ../gui/wxpython/nviz/tools.py:5682 ../gui/wxpython/nviz/tools.py:5693
 msgid "South edge:"
+msgstr ""
+
+#: ../gui/wxpython/nviz/tools.py:5683 ../gui/wxpython/nviz/tools.py:5690
+#: ../gui/wxpython/nviz/tools.py:5699
+msgid "West edge:"
 msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:5684 ../gui/wxpython/nviz/tools.py:5691
 #: ../gui/wxpython/nviz/tools.py:5700
-msgid "West edge:"
-msgstr ""
-
-#: ../gui/wxpython/nviz/tools.py:5685 ../gui/wxpython/nviz/tools.py:5692
-#: ../gui/wxpython/nviz/tools.py:5701
 msgid "East edge:"
 msgstr ""
 
-#: ../gui/wxpython/nviz/tools.py:5687 ../gui/wxpython/nviz/tools.py:5698
-#: ../gui/wxpython/nviz/tools.py:5706
+#: ../gui/wxpython/nviz/tools.py:5686 ../gui/wxpython/nviz/tools.py:5697
+#: ../gui/wxpython/nviz/tools.py:5705
 msgid "Northing (Y):"
 msgstr ""
 
-#: ../gui/wxpython/nviz/tools.py:5688 ../gui/wxpython/nviz/tools.py:5697
-#: ../gui/wxpython/nviz/tools.py:5707
+#: ../gui/wxpython/nviz/tools.py:5687 ../gui/wxpython/nviz/tools.py:5696
+#: ../gui/wxpython/nviz/tools.py:5706
 msgid "Height (Z):"
 msgstr ""
 
-#: ../gui/wxpython/nviz/tools.py:5689 ../gui/wxpython/nviz/tools.py:5696
-#: ../gui/wxpython/nviz/tools.py:5705
+#: ../gui/wxpython/nviz/tools.py:5688 ../gui/wxpython/nviz/tools.py:5695
+#: ../gui/wxpython/nviz/tools.py:5704
 msgid "Easting (X):"
 msgstr ""
 
-#: ../gui/wxpython/nviz/tools.py:5702
+#: ../gui/wxpython/nviz/tools.py:5701
 msgid "Bottom edge:"
 msgstr ""
 
-#: ../gui/wxpython/nviz/tools.py:5703
+#: ../gui/wxpython/nviz/tools.py:5702
 msgid "Top edge:"
 msgstr ""
 
-#: ../gui/wxpython/nviz/tools.py:5811
+#: ../gui/wxpython/nviz/tools.py:5810
 msgid "Adjusts the distance and direction of the image viewpoint"
 msgstr "Upraví vzdálenost a směr k bodu pohledu."
 
-#: ../gui/wxpython/nviz/tools.py:5847
+#: ../gui/wxpython/nviz/tools.py:5846
 msgid "Adjusts the light direction. Click and drag the puck to change the light direction."
 msgstr "Nastaví směr světla. Směr světla změníte klepnutím a přetažením bodu."
 
@@ -11042,55 +11042,55 @@ msgstr ""
 msgid "Please provide an output files extension (used by i.rectify)"
 msgstr ""
 
-#: ../gui/wxpython/photo2image/ip2i_manager.py:290
+#: ../gui/wxpython/photo2image/ip2i_manager.py:291
 msgid "Manage Location of Fiducial Points on a Scanned Photo"
 msgstr ""
 
-#: ../gui/wxpython/photo2image/ip2i_manager.py:413
+#: ../gui/wxpython/photo2image/ip2i_manager.py:414
 msgid "A POINTS file exists, renaming it to POINTS_BAK"
 msgstr ""
 
-#: ../gui/wxpython/photo2image/ip2i_manager.py:440
+#: ../gui/wxpython/photo2image/ip2i_manager.py:441
 msgid "Opening CAMERA file failed"
 msgstr ""
 
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1101
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1102
 msgid "Writing output image to group, please wait..."
-msgstr ""
-
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1637
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1656
-msgid "source X"
 msgstr ""
 
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1638
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1657
-msgid "source Y"
+msgid "source X"
 msgstr ""
 
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1639
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1658
-msgid "target X"
+msgid "source Y"
 msgstr ""
 
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1640
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1659
+msgid "target X"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1641
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1660
 msgid "target Y"
 msgstr ""
 
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1877
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1878
 msgid "source X:"
 msgstr ""
 
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1878
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1879
 msgid "target X:"
 msgstr ""
 
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1879
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1880
 msgid "source Y:"
 msgstr ""
 
-#: ../gui/wxpython/photo2image/ip2i_manager.py:1880
+#: ../gui/wxpython/photo2image/ip2i_manager.py:1881
 msgid "target Y:"
 msgstr ""
 
@@ -12411,12 +12411,12 @@ msgstr ""
 msgid "Rename configuration file"
 msgstr ""
 
-#: ../gui/wxpython/rlisetup/functions.py:136
+#: ../gui/wxpython/rlisetup/functions.py:137
 #: ../gui/wxpython/rlisetup/wizard.py:1913
 msgid "The polygon seems to have 0 areas"
 msgstr ""
 
-#: ../gui/wxpython/rlisetup/functions.py:152
+#: ../gui/wxpython/rlisetup/functions.py:153
 #, python-format
 msgid "The raster map <%s> already exists. Please remove or rename the maps with the prefix '%s' or select the option to overwrite existing maps"
 msgstr ""
@@ -13115,83 +13115,83 @@ msgstr ""
 msgid "Current mapset is <%s>."
 msgstr "Současný mapset je <%s>."
 
-#: ../gui/wxpython/startup/locdownload.py:150
+#: ../gui/wxpython/startup/locdownload.py:152
 msgid "Download in progress, wait until it is finished 0%"
 msgstr ""
 
-#: ../gui/wxpython/startup/locdownload.py:161
+#: ../gui/wxpython/startup/locdownload.py:163
 #, python-brace-format
 msgid "Download in progress, wait until it is finished {0}%, {1} MB, {2} KB/s, {3:.0f} seconds passed"
 msgstr ""
 
-#: ../gui/wxpython/startup/locdownload.py:183
+#: ../gui/wxpython/startup/locdownload.py:185
 msgid "Downloaded project is not valid"
 msgstr ""
 
-#: ../gui/wxpython/startup/locdownload.py:227
+#: ../gui/wxpython/startup/locdownload.py:229
 msgid "Abort"
 msgstr ""
 
-#: ../gui/wxpython/startup/locdownload.py:228
-#: ../gui/wxpython/startup/locdownload.py:490
+#: ../gui/wxpython/startup/locdownload.py:230
+#: ../gui/wxpython/startup/locdownload.py:492
 msgid "Abort download"
 msgstr ""
 
-#: ../gui/wxpython/startup/locdownload.py:231
+#: ../gui/wxpython/startup/locdownload.py:233
 #, fuzzy
 msgid "Select sample project to download:"
 msgstr "Vyberte zdrojovou mapu k zobrazení:"
 
-#: ../gui/wxpython/startup/locdownload.py:295
-#: ../gui/wxpython/startup/locdownload.py:305
-#: ../gui/wxpython/startup/locdownload.py:445
+#: ../gui/wxpython/startup/locdownload.py:297
+#: ../gui/wxpython/startup/locdownload.py:307
+#: ../gui/wxpython/startup/locdownload.py:447
 msgid "Do&wnload"
 msgstr ""
 
-#: ../gui/wxpython/startup/locdownload.py:295
+#: ../gui/wxpython/startup/locdownload.py:297
 #, fuzzy
 msgid "Download selected project"
 msgstr "Smazat vybraný objekt"
 
-#: ../gui/wxpython/startup/locdownload.py:305
-#: ../gui/wxpython/startup/locdownload.py:388
+#: ../gui/wxpython/startup/locdownload.py:307
+#: ../gui/wxpython/startup/locdownload.py:390
 msgid "Download"
 msgstr ""
 
-#: ../gui/wxpython/startup/locdownload.py:312
-#: ../gui/wxpython/startup/locdownload.py:361
+#: ../gui/wxpython/startup/locdownload.py:314
+#: ../gui/wxpython/startup/locdownload.py:363
 msgid "Download in progress, wait until it is finished"
 msgstr ""
 
-#: ../gui/wxpython/startup/locdownload.py:328
+#: ../gui/wxpython/startup/locdownload.py:330
 #, python-brace-format
 msgid "Project name {name} already exists in {path}, download canceled"
 msgstr ""
 
-#: ../gui/wxpython/startup/locdownload.py:338
+#: ../gui/wxpython/startup/locdownload.py:340
 #, python-format
 msgid "Download failed: %s"
 msgstr ""
 
-#: ../gui/wxpython/startup/locdownload.py:343
+#: ../gui/wxpython/startup/locdownload.py:345
 msgid "Download completed. The downloaded sample data is available now in the data tree"
 msgstr ""
 
-#: ../gui/wxpython/startup/locdownload.py:384
+#: ../gui/wxpython/startup/locdownload.py:386
 #, python-brace-format
 msgid "Project named {name} already exists, rename it first"
 msgstr ""
 
-#: ../gui/wxpython/startup/locdownload.py:438
+#: ../gui/wxpython/startup/locdownload.py:440
 msgid "Dataset Download"
 msgstr ""
 
-#: ../gui/wxpython/startup/locdownload.py:446
+#: ../gui/wxpython/startup/locdownload.py:448
 #, fuzzy
 msgid "Download selected dataset"
 msgstr "Přejmenovat vybraný mapset"
 
-#: ../gui/wxpython/startup/locdownload.py:489
+#: ../gui/wxpython/startup/locdownload.py:491
 #, fuzzy
 msgid "Do you want to cancel dataset download?"
 msgstr "Chcete trvale odstranit data? %s"
@@ -13204,7 +13204,7 @@ msgstr ""
 msgid "Timeline Tool"
 msgstr ""
 
-#: ../gui/wxpython/timeline/frame.py:141 ../gui/wxpython/tplot/frame.py:404
+#: ../gui/wxpython/timeline/frame.py:141 ../gui/wxpython/tplot/frame.py:403
 msgid "Help"
 msgstr "Nápověda"
 
@@ -13220,19 +13220,19 @@ msgstr ""
 msgid "Select space time dataset(s):"
 msgstr ""
 
-#: ../gui/wxpython/timeline/frame.py:185 ../gui/wxpython/tplot/frame.py:435
-#: ../gui/wxpython/tplot/frame.py:570
+#: ../gui/wxpython/timeline/frame.py:185 ../gui/wxpython/tplot/frame.py:434
+#: ../gui/wxpython/tplot/frame.py:569
 #, python-format
 msgid "Dataset <%s> not found in temporal database"
 msgstr ""
 
-#: ../gui/wxpython/timeline/frame.py:201 ../gui/wxpython/tplot/frame.py:456
-#: ../gui/wxpython/tplot/frame.py:594
+#: ../gui/wxpython/timeline/frame.py:201 ../gui/wxpython/tplot/frame.py:455
+#: ../gui/wxpython/tplot/frame.py:593
 msgid "Datasets have different temporal type (absolute x relative), which is not allowed."
 msgstr ""
 
-#: ../gui/wxpython/timeline/frame.py:222 ../gui/wxpython/tplot/frame.py:478
-#: ../gui/wxpython/tplot/frame.py:607
+#: ../gui/wxpython/timeline/frame.py:222 ../gui/wxpython/tplot/frame.py:477
+#: ../gui/wxpython/tplot/frame.py:606
 msgid "Datasets have different time unit which is not allowed."
 msgstr ""
 
@@ -13259,31 +13259,31 @@ msgstr "X"
 msgid "Y"
 msgstr "Y"
 
-#: ../gui/wxpython/timeline/frame.py:384 ../gui/wxpython/tplot/frame.py:742
+#: ../gui/wxpython/timeline/frame.py:384 ../gui/wxpython/tplot/frame.py:741
 #, python-format
 msgid "Time [%s]"
 msgstr ""
 
-#: ../gui/wxpython/timeline/frame.py:517 ../gui/wxpython/tplot/frame.py:1179
+#: ../gui/wxpython/timeline/frame.py:517 ../gui/wxpython/tplot/frame.py:1178
 #, python-format
 msgid "Please specify the space time dataset <%s>."
 msgstr ""
 
-#: ../gui/wxpython/timeline/frame.py:518 ../gui/wxpython/tplot/frame.py:1180
+#: ../gui/wxpython/timeline/frame.py:518 ../gui/wxpython/tplot/frame.py:1179
 msgid "Ambiguous dataset name"
 msgstr ""
 
-#: ../gui/wxpython/timeline/frame.py:609 ../gui/wxpython/tplot/frame.py:1356
+#: ../gui/wxpython/timeline/frame.py:609 ../gui/wxpython/tplot/frame.py:1355
 #, python-format
 msgid "Space time raster dataset: %s"
 msgstr ""
 
-#: ../gui/wxpython/timeline/frame.py:611 ../gui/wxpython/tplot/frame.py:1358
+#: ../gui/wxpython/timeline/frame.py:611 ../gui/wxpython/tplot/frame.py:1357
 #, python-format
 msgid "Space time vector dataset: %s"
 msgstr ""
 
-#: ../gui/wxpython/timeline/frame.py:613 ../gui/wxpython/tplot/frame.py:1360
+#: ../gui/wxpython/timeline/frame.py:613 ../gui/wxpython/tplot/frame.py:1359
 #, python-format
 msgid "Space time 3D raster dataset: %s"
 msgstr ""
@@ -13322,172 +13322,172 @@ msgstr ""
 msgid "Timeline Tool - GRASS"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:48
+#: ../gui/wxpython/tplot/frame.py:47
 #, python-brace-format
 msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:104
+#: ../gui/wxpython/tplot/frame.py:103
 msgid "Temporal Plot Tool"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:192
+#: ../gui/wxpython/tplot/frame.py:191
 msgid ""
 "Raster temporal dataset (strds)\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:209
+#: ../gui/wxpython/tplot/frame.py:208
 msgid "X and Y coordinates separated by comma:"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:226
+#: ../gui/wxpython/tplot/frame.py:225
 msgid "Coordinates can be obtained for example by right-clicking on Map Display."
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:233 ../gui/wxpython/tplot/frame.py:299
+#: ../gui/wxpython/tplot/frame.py:232 ../gui/wxpython/tplot/frame.py:298
 msgid "Show simple linear regression line"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:249
+#: ../gui/wxpython/tplot/frame.py:248
 msgid "STRDS"
 msgstr "STRDS"
 
-#: ../gui/wxpython/tplot/frame.py:257
+#: ../gui/wxpython/tplot/frame.py:256
 msgid ""
 "Vector temporal dataset (stvds)\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:277
+#: ../gui/wxpython/tplot/frame.py:276
 msgid "Select attribute column"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:294
+#: ../gui/wxpython/tplot/frame.py:293
 msgid "Select category of vector(s)"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:318
+#: ../gui/wxpython/tplot/frame.py:317
 msgid "STVDS"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:325
+#: ../gui/wxpython/tplot/frame.py:324
 msgid "Set title for the plot"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:335
+#: ../gui/wxpython/tplot/frame.py:334
 msgid "Set label for X axis"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:345
+#: ../gui/wxpython/tplot/frame.py:344
 msgid "Set label for Y axis"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:361
+#: ../gui/wxpython/tplot/frame.py:360
 msgid "Labels"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:368
+#: ../gui/wxpython/tplot/frame.py:367
 msgid "Path for output CSV file with plotted data"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:375
+#: ../gui/wxpython/tplot/frame.py:374
 msgid "CVS path"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:383
+#: ../gui/wxpython/tplot/frame.py:382
 msgid "Do you want the CSV header?"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:422 ../gui/wxpython/tplot/frame.py:1057
-#: ../gui/wxpython/tplot/frame.py:1064 ../gui/wxpython/tplot/frame.py:1093
-#: ../gui/wxpython/tplot/frame.py:1252
+#: ../gui/wxpython/tplot/frame.py:421 ../gui/wxpython/tplot/frame.py:1056
+#: ../gui/wxpython/tplot/frame.py:1063 ../gui/wxpython/tplot/frame.py:1092
+#: ../gui/wxpython/tplot/frame.py:1251
 msgid "Invalid input coordinates"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:525
+#: ../gui/wxpython/tplot/frame.py:524
 #, python-brace-format
 msgid "Category {ca} is not on vector map {ma} and it will be not used"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:547
+#: ../gui/wxpython/tplot/frame.py:546
 msgid "Both coordinates and categories are set, coordinates will be used. The use categories remove text from coordinate form"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:557
+#: ../gui/wxpython/tplot/frame.py:556
 msgid "With Vector temporal dataset you have to select an attribute column"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:627
+#: ../gui/wxpython/tplot/frame.py:626
 msgid "Difference number of vector layers and maps in the vector temporal dataset"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:671
+#: ../gui/wxpython/tplot/frame.py:670
 #, python-brace-format
 msgid "No connection between vector map {vmap} and layer {la}"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:740
+#: ../gui/wxpython/tplot/frame.py:739
 #, python-format
 msgid "Temporal resolution: %s"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:856
+#: ../gui/wxpython/tplot/frame.py:855
 msgid "Problem getting data from raster temporal dataset. Empty list of values."
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:915
+#: ../gui/wxpython/tplot/frame.py:914
 #, python-brace-format
 msgid "Problem getting data from vector temporal dataset. Empty list of values for cat {ca}."
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:972
+#: ../gui/wxpython/tplot/frame.py:971
 msgid "Problem getting data from vector temporal dataset. Empty list of values."
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:1007
+#: ../gui/wxpython/tplot/frame.py:1006
 #, python-brace-format
 msgid "{pa} already exists, do you want to overwrite?"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:1010
+#: ../gui/wxpython/tplot/frame.py:1009
 msgid "File exists"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:1018
+#: ../gui/wxpython/tplot/frame.py:1017
 msgid "Please change name of output CSV file or "
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:1046
+#: ../gui/wxpython/tplot/frame.py:1045
 msgid "Incorrect coordinates format, should be: x,y"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:1072
+#: ../gui/wxpython/tplot/frame.py:1071
 msgid "Seed point outside the current region"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:1086
+#: ../gui/wxpython/tplot/frame.py:1085
 msgid "Invalid input raster dataset"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:1109
+#: ../gui/wxpython/tplot/frame.py:1108
 msgid "Invalid input vector dataset"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:1242 ../gui/wxpython/tplot/frame.py:1306
+#: ../gui/wxpython/tplot/frame.py:1241 ../gui/wxpython/tplot/frame.py:1305
 msgid "Invalid input temporal dataset"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:1330
+#: ../gui/wxpython/tplot/frame.py:1329
 msgid "Datasets have different number of values"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:1363
+#: ../gui/wxpython/tplot/frame.py:1362
 #, python-brace-format
 msgid "Value for {date} is {val}"
 msgstr ""
 
-#: ../gui/wxpython/tplot/frame.py:1365
+#: ../gui/wxpython/tplot/frame.py:1364
 msgid "Press Del to dismiss."
 msgstr ""
 
@@ -14394,91 +14394,92 @@ msgstr ""
 #, python-format
 msgid ""
 "Temporary map '%s' with result was changed outside vector network analysis tool.\n"
-"Showed result may not correspond original analysis result."
+"Showed result may not correspond to original analysis result."
 msgstr ""
 
-#: ../gui/wxpython/vnet/vnet_core.py:234
+#: ../gui/wxpython/vnet/vnet_core.py:233
 msgid "Result changed outside"
 msgstr ""
 
-#: ../gui/wxpython/vnet/vnet_core.py:272
+#: ../gui/wxpython/vnet/vnet_core.py:271
 msgid "Map can be created only in current mapset"
 msgstr ""
 
-#: ../gui/wxpython/vnet/vnet_core.py:282 ../gui/wxpython/vnet/vnet_core.py:358
+#: ../gui/wxpython/vnet/vnet_core.py:281 ../gui/wxpython/vnet/vnet_core.py:357
 #, python-format
 msgid "Vector map %s already exists. Do you want to overwrite it?"
 msgstr ""
 
-#: ../gui/wxpython/vnet/vnet_core.py:285 ../gui/wxpython/vnet/vnet_core.py:361
+#: ../gui/wxpython/vnet/vnet_core.py:284 ../gui/wxpython/vnet/vnet_core.py:360
 msgid "Overwrite vector map"
 msgstr ""
 
-#: ../gui/wxpython/vnet/vnet_core.py:309
+#: ../gui/wxpython/vnet/vnet_core.py:308
 msgid "Creation of turntable failed."
 msgstr ""
 
-#: ../gui/wxpython/vnet/vnet_core.py:328
+#: ../gui/wxpython/vnet/vnet_core.py:327
 msgid "Vector map with analysis result does not exist."
 msgstr "Vektorová vrstva s výsledkem analýzy neexistuje."
 
-#: ../gui/wxpython/vnet/vnet_core.py:348
+#: ../gui/wxpython/vnet/vnet_core.py:347
 msgid "Map can be saved only to currently set mapset"
 msgstr ""
 
-#: ../gui/wxpython/vnet/vnet_core.py:434
+#: ../gui/wxpython/vnet/vnet_core.py:433
 #, python-format
 msgid "Please choose '%s' and '%s' point."
 msgstr ""
 
-#: ../gui/wxpython/vnet/vnet_core.py:640
+#: ../gui/wxpython/vnet/vnet_core.py:639
 #, python-brace-format
 msgid "Please choose '{0}' and '{1}' point."
 msgstr ""
 
-#: ../gui/wxpython/vnet/vnet_core.py:649
+#: ../gui/wxpython/vnet/vnet_core.py:648
 msgid "Please choose at least two points."
 msgstr ""
 
-#: ../gui/wxpython/vnet/vnet_core.py:931
+#: ../gui/wxpython/vnet/vnet_core.py:930
 #, python-format
 msgid ""
 "Input map '%s' for analysis was changed outside vector network analysis tool.\n"
 "Topology column may not correspond to changed situation."
 msgstr ""
 
-#: ../gui/wxpython/vnet/vnet_core.py:937
+#: ../gui/wxpython/vnet/vnet_core.py:935
 msgid "Input changed outside"
 msgstr ""
 
-#: ../gui/wxpython/vnet/vnet_core.py:1006
-#, python-format
+#: ../gui/wxpython/vnet/vnet_core.py:1004
+#, fuzzy, python-format
+#| msgid "Vector map <%s> already exists. Do you want to overwrite it?"
 msgid ""
-"Temporary map %s  already exists.\n"
+"Temporary map %s already exists.\n"
 "Do you want to continue in analysis and overwrite it?"
-msgstr ""
+msgstr "Vektorová vrstva <%s> již existuje. Přejete si ji přepsat?"
 
-#: ../gui/wxpython/vnet/vnet_core.py:1031
+#: ../gui/wxpython/vnet/vnet_core.py:1029
 msgid "Unable to use ctypes. \n"
 msgstr ""
 
-#: ../gui/wxpython/vnet/vnet_core.py:1032
-#: ../gui/wxpython/vnet/vnet_core.py:1055
+#: ../gui/wxpython/vnet/vnet_core.py:1030
+#: ../gui/wxpython/vnet/vnet_core.py:1053
 msgid "Snapping mode can not be activated."
 msgstr ""
 
-#: ../gui/wxpython/vnet/vnet_core.py:1065
+#: ../gui/wxpython/vnet/vnet_core.py:1063
 msgid "Do you really want to activate snapping and overwrite it?"
 msgstr ""
 
-#: ../gui/wxpython/vnet/vnet_core.py:1074
+#: ../gui/wxpython/vnet/vnet_core.py:1072
 #, python-format
 msgid ""
 "Temporary map '%s' was changed outside vector analysis tool.\n"
 "Do you really want to activate snapping and overwrite it? "
 msgstr ""
 
-#: ../gui/wxpython/vnet/vnet_core.py:1079
+#: ../gui/wxpython/vnet/vnet_core.py:1076
 msgid "Overwrite map"
 msgstr ""
 
@@ -15156,74 +15157,74 @@ msgstr ""
 msgid "Statistics for raster map <%s>"
 msgstr ""
 
-#: ../gui/wxpython/wxplot/profile.py:65
+#: ../gui/wxpython/wxplot/profile.py:64
 msgid "GRASS Profile Analysis Tool"
 msgstr ""
 
-#: ../gui/wxpython/wxplot/profile.py:82 ../gui/wxpython/wxplot/profile.py:194
+#: ../gui/wxpython/wxplot/profile.py:81 ../gui/wxpython/wxplot/profile.py:193
 msgid "Profile of"
 msgstr "Profil"
 
-#: ../gui/wxpython/wxplot/profile.py:113
+#: ../gui/wxpython/wxplot/profile.py:112
 #, python-format
 msgid "Distance (%s)"
 msgstr "Vzdálenost (%s)"
 
-#: ../gui/wxpython/wxplot/profile.py:115
+#: ../gui/wxpython/wxplot/profile.py:114
 msgid "Distance along transect"
 msgstr "Vzdálenost podél transektu"
 
-#: ../gui/wxpython/wxplot/profile.py:116
+#: ../gui/wxpython/wxplot/profile.py:115
 msgid "Cell values"
 msgstr "Hodnoty buňky"
 
-#: ../gui/wxpython/wxplot/profile.py:186
+#: ../gui/wxpython/wxplot/profile.py:185
 msgid "Not all points of profile lie inside computational region."
 msgstr ""
 
-#: ../gui/wxpython/wxplot/profile.py:281
+#: ../gui/wxpython/wxplot/profile.py:280
 msgid "Raster values"
 msgstr "Hodnoty rastrové mapy"
 
-#: ../gui/wxpython/wxplot/profile.py:342
+#: ../gui/wxpython/wxplot/profile.py:341
 msgid "You must draw a transect to profile in the map display window."
 msgstr "Musíte zakreslit transekt profilu do mapového okna."
 
-#: ../gui/wxpython/wxplot/profile.py:344
+#: ../gui/wxpython/wxplot/profile.py:343
 msgid "Nothing to profile"
 msgstr "Nebylo zvoleno nic pro profilování"
 
-#: ../gui/wxpython/wxplot/profile.py:414
+#: ../gui/wxpython/wxplot/profile.py:413
 msgid "Choose prefix for file(s) where to save profile values..."
 msgstr ""
 
-#: ../gui/wxpython/wxplot/profile.py:416
+#: ../gui/wxpython/wxplot/profile.py:415
 msgid "Comma separated value (*.csv)|*.csv"
 msgstr "tečkou oddělené hodnoty (*.csv)|*.csv"
 
-#: ../gui/wxpython/wxplot/profile.py:432
+#: ../gui/wxpython/wxplot/profile.py:431
 msgid "Overwrite file?"
 msgstr "Přepsat soubor?"
 
-#: ../gui/wxpython/wxplot/profile.py:449
+#: ../gui/wxpython/wxplot/profile.py:448
 #, python-format
 msgid ""
 "Unable to open file <%s> for writing.\n"
 "Reason: %s"
 msgstr ""
 
-#: ../gui/wxpython/wxplot/profile.py:457
+#: ../gui/wxpython/wxplot/profile.py:456
 #, python-format
 msgid ""
 "%d files created:\n"
 "%s"
 msgstr ""
 
-#: ../gui/wxpython/wxplot/profile.py:459
+#: ../gui/wxpython/wxplot/profile.py:458
 msgid "No files generated."
 msgstr ""
 
-#: ../gui/wxpython/wxplot/profile.py:466
+#: ../gui/wxpython/wxplot/profile.py:465
 msgid "Statistics for Profile(s)"
 msgstr ""
 

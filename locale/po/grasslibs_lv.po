@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-11 15:59+0000\n"
+"POT-Creation-Date: 2025-10-25 22:50+0000\n"
 "PO-Revision-Date: 2025-08-23 20:18+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Latvian <https://weblate.osgeo.org/projects/grass-gis/grasslibs/lv/>\n"
@@ -1327,6 +1327,27 @@ msgstr ""
 msgid "G__open(write): Unable to open '%s': %s"
 msgstr ""
 
+#: ../lib/gis/open.c:197 ../lib/gis/open.c:289 ../lib/gis/open.c:322
+#: ../lib/gis/open_misc.c:160 ../lib/gis/open_misc.c:232
+#: ../lib/gis/open_misc.c:250 ../lib/gis/seek.c:55 ../lib/gis/seek.c:65
+#: ../lib/raster/close.c:401 ../lib/raster/close.c:447
+#: ../lib/raster/close.c:546 ../lib/raster/format.c:195
+#: ../lib/raster/put_row.c:145 ../lib/raster/put_row.c:524
+#: ../lib/raster3d/open.c:303 ../lib/raster3d/tilewrite.c:182
+#: ../lib/segment/get_row.c:65 ../lib/segment/get_row.c:86
+#: ../lib/segment/pagein.c:95 ../lib/segment/pageout.c:41
+#: ../lib/segment/put_row.c:69 ../lib/segment/put_row.c:94
+#: ../lib/segment/setup.c:57 ../lib/vector/Vlib/break_polygons.c:240
+#: ../lib/vector/Vlib/break_polygons.c:257
+#: ../lib/vector/Vlib/break_polygons.c:277
+#: ../lib/vector/Vlib/break_polygons.c:305
+#: ../lib/vector/Vlib/break_polygons.c:369
+#: ../lib/vector/Vlib/break_polygons.c:412 ../lib/vector/rtree/index.c:144
+#: ../lib/vector/rtree/io.c:104 ../lib/vector/rtree/io.c:204
+#, c-format
+msgid "File read/write operation failed: %s (%d)"
+msgstr ""
+
 #: ../lib/gis/open_misc.c:46
 #, c-format
 msgid "G__open_misc(read): mapset <%s> doesn't match xmapset <%s>"
@@ -2408,12 +2429,7 @@ msgstr ""
 msgid "Invalid compressed field: %s"
 msgstr ""
 
-#: ../lib/gis/seek.c:54 ../lib/gis/seek.c:61
-#, fuzzy, c-format
-msgid "Unable to seek: %s"
-msgstr "Nevar aizvākt %s"
-
-#: ../lib/gis/seek.c:59
+#: ../lib/gis/seek.c:62
 msgid "Seek offset out of range"
 msgstr ""
 
@@ -2774,10 +2790,10 @@ msgstr " Tikai %d%% no loga ir saglabāts \"%s\" pārklājuma ar tekošo GRASS l
 msgid "Task already has a worker"
 msgstr ""
 
-#: ../lib/gis/writ_zeros.c:56 ../lib/vector/Vlib/break_polygons.c:250
-#: ../lib/vector/Vlib/break_polygons.c:265
-#: ../lib/vector/Vlib/break_polygons.c:287
-#: ../lib/vector/Vlib/break_polygons.c:384
+#: ../lib/gis/writ_zeros.c:56 ../lib/vector/Vlib/break_polygons.c:261
+#: ../lib/vector/Vlib/break_polygons.c:281
+#: ../lib/vector/Vlib/break_polygons.c:309
+#: ../lib/vector/Vlib/break_polygons.c:416
 #, c-format
 msgid "File writing error in %s() %d:%s"
 msgstr ""
@@ -3576,7 +3592,7 @@ msgstr ""
 msgid "WARNING"
 msgstr "BRĪDINĀJUMS"
 
-#: ../lib/init/grass.py:148 ../lib/init/grass.py:2420
+#: ../lib/init/grass.py:148 ../lib/init/grass.py:2428
 msgid "Exiting..."
 msgstr "Iziet..."
 
@@ -4032,7 +4048,7 @@ msgstr ""
 msgid "Only one argument (e.g. EPSG) is needed for --tmp-project, mapset name <{}> provided"
 msgstr ""
 
-#: ../lib/init/grass.py:2275
+#: ../lib/init/grass.py:2283
 #, python-brace-format
 msgid ""
 "Unable to start GRASS. You have the choice to:\n"
@@ -4049,26 +4065,26 @@ msgid ""
 "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 msgstr ""
 
-#: ../lib/init/grass.py:2296
+#: ../lib/init/grass.py:2304
 #, fuzzy
 #| msgid "Starting GRASS GIS..."
 msgid "Starting GRASS..."
 msgstr "Startē GRASS..."
 
-#: ../lib/init/grass.py:2345
+#: ../lib/init/grass.py:2353
 msgid "Failed to start GRASS, grassdata directory cannot be found or created."
 msgstr ""
 
-#: ../lib/init/grass.py:2352
+#: ../lib/init/grass.py:2360
 msgid "Failed to start GRASS, no default project to copy in the installation or copying failed."
 msgstr ""
 
-#: ../lib/init/grass.py:2457
+#: ../lib/init/grass.py:2465
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr "Startē <%s> grafisko vidi fona režīmā. Lūdzu uzgaidiet..."
 
-#: ../lib/init/grass.py:2495
+#: ../lib/init/grass.py:2503
 #, python-format
 msgid "Failed to start shell '%s'"
 msgstr ""
@@ -5001,17 +5017,17 @@ msgstr "Nav iespējams nolasīt rastra kartes <%s> krāsu failu"
 msgid "Invalid descriptor: %d"
 msgstr "Nepareizs deskriptors: %d"
 
-#: ../lib/raster/close.c:424 ../lib/raster/close.c:554
+#: ../lib/raster/close.c:429 ../lib/raster/close.c:569
 #, c-format
 msgid "Unable to rename null file '%s' to '%s': %s"
 msgstr ""
 
-#: ../lib/raster/close.c:496
+#: ../lib/raster/close.c:506
 #, c-format
 msgid "Unable to rename cell file '%s' to '%s': %s"
 msgstr ""
 
-#: ../lib/raster/close.c:576
+#: ../lib/raster/close.c:591
 msgid "unable to write f_format file for CELL maps"
 msgstr ""
 
@@ -5290,16 +5306,15 @@ msgstr ""
 msgid "Unknown interpolation method: %s"
 msgstr "Nezināma interpolācijas metode: %s"
 
-#: ../lib/raster/json_color_out.c:69 ../lib/raster/json_color_out.c:157
-#: ../lib/raster/json_color_out.c:172
+#: ../lib/raster/json_color_out.c:69 ../lib/raster/json_color_out.c:103
 msgid "Failed to initialize JSON object. Out of memory?"
 msgstr ""
 
-#: ../lib/raster/json_color_out.c:103
+#: ../lib/raster/json_color_out.c:110
 msgid "Failed to initialize JSON array. Out of memory?"
 msgstr ""
 
-#: ../lib/raster/json_color_out.c:186
+#: ../lib/raster/json_color_out.c:176
 msgid "Failed to serialize JSON to pretty format."
 msgstr ""
 
@@ -5455,51 +5470,51 @@ msgstr ""
 msgid "Error writing compressed FP data for row %d of <%s>: %s"
 msgstr ""
 
-#: ../lib/raster/put_row.c:395 ../lib/raster/put_row.c:402
+#: ../lib/raster/put_row.c:400 ../lib/raster/put_row.c:407
 #, fuzzy, c-format
 msgid "Error writing compressed data for row %d of <%s>: %s"
 msgstr "kļūda nolasot %smap [%s] karšu biblotēkā [%s], līnija %d"
 
-#: ../lib/raster/put_row.c:413
+#: ../lib/raster/put_row.c:418
 #, fuzzy, c-format
 msgid "Error writing uncompressed data for row %d of <%s>: %s"
 msgstr "kļūda nolasot %smap [%s] karšu biblotēkā [%s], līnija %d"
 
-#: ../lib/raster/put_row.c:473
+#: ../lib/raster/put_row.c:478
 #, c-format
 msgid "Error writing data via GDAL for row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/put_row.c:497
+#: ../lib/raster/put_row.c:502
 msgid "GDAL output doesn't support writing null rows separately"
 msgstr ""
 
-#: ../lib/raster/put_row.c:500
+#: ../lib/raster/put_row.c:505
 #, c-format
 msgid "No null file for <%s>"
 msgstr ""
 
-#: ../lib/raster/put_row.c:529 ../lib/raster/put_row.c:536
+#: ../lib/raster/put_row.c:539 ../lib/raster/put_row.c:546
 #, fuzzy, c-format
 msgid "Error writing compressed null data for row %d of <%s>: %s"
 msgstr "kļūda nolasot %smap [%s] karšu biblotēkā [%s], līnija %d"
 
-#: ../lib/raster/put_row.c:571
+#: ../lib/raster/put_row.c:581
 #, c-format
 msgid "Error writing null row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/put_row.c:575
+#: ../lib/raster/put_row.c:585
 #, fuzzy, c-format
 msgid "Error writing null row %d of <%s>: %s"
 msgstr "kļūda nolasot %smap [%s] karšu biblotēkā [%s], līnija %d"
 
-#: ../lib/raster/put_row.c:700
+#: ../lib/raster/put_row.c:710
 #, c-format
 msgid "put_raster_row: raster map <%s> not open for write - request ignored"
 msgstr ""
 
-#: ../lib/raster/put_row.c:709
+#: ../lib/raster/put_row.c:719
 msgid "put_raster_row: unopened file descriptor - request ignored"
 msgstr ""
 
@@ -5825,76 +5840,76 @@ msgstr ""
 msgid "%s: illegal value spec"
 msgstr ""
 
-#: ../lib/raster3d/open.c:21
+#: ../lib/raster3d/open.c:24
 msgid "Rast3d_open_cell_old_no_header: error in Rast3d_mask_open_old"
 msgstr "Nav iespējams izveidot vektoru karti <%s>. Nosaukums nav SQL savietojams"
 
-#: ../lib/raster3d/open.c:28
+#: ../lib/raster3d/open.c:31
 msgid "Rast3d_open_cell_old_no_header: error in Rast3d_malloc"
 msgstr ""
 
-#: ../lib/raster3d/open.c:40
+#: ../lib/raster3d/open.c:43
 msgid "Rast3d_open_cell_old_no_header: error in G_open_old"
 msgstr ""
 
-#: ../lib/raster3d/open.c:97
+#: ../lib/raster3d/open.c:100
 msgid "Rast3d_open_cell_old: error in Rast3d_open_cell_old_no_header"
 msgstr ""
 
-#: ../lib/raster3d/open.c:102
+#: ../lib/raster3d/open.c:105
 msgid "Rast3d_open_cell_old: can't rewind file"
 msgstr ""
 
-#: ../lib/raster3d/open.c:111
+#: ../lib/raster3d/open.c:114
 msgid "Rast3d_open_cell_old: error in Rast3d_read_header"
 msgstr ""
 
-#: ../lib/raster3d/open.c:119
+#: ../lib/raster3d/open.c:122
 msgid "Rast3d_open_cell_old: projection does not match window projection"
 msgstr ""
 
-#: ../lib/raster3d/open.c:125
+#: ../lib/raster3d/open.c:128
 msgid "Rast3d_open_cell_old: zone does not match window zone"
 msgstr ""
 
-#: ../lib/raster3d/open.c:137 ../lib/raster3d/open.c:155
+#: ../lib/raster3d/open.c:140 ../lib/raster3d/open.c:158
 msgid "Rast3d_open_cell_old: can't read header"
 msgstr ""
 
-#: ../lib/raster3d/open.c:144
+#: ../lib/raster3d/open.c:147
 msgid "Rast3d_open_cell_old: index does not fit into long"
 msgstr ""
 
-#: ../lib/raster3d/open.c:148
+#: ../lib/raster3d/open.c:151
 msgid "Rast3d_open_cell_old: error in Rast3d_malloc"
 msgstr ""
 
-#: ../lib/raster3d/open.c:173
+#: ../lib/raster3d/open.c:176
 msgid "Rast3d_open_cell_old: error in Rast3d_fill_header"
 msgstr ""
 
-#: ../lib/raster3d/open.c:217
+#: ../lib/raster3d/open.c:220
 msgid "Rast3d_open_cell_new: error in Rast3d_mask_open_old"
 msgstr ""
 
-#: ../lib/raster3d/open.c:226
+#: ../lib/raster3d/open.c:229
 msgid "Rast3d_open_cell_new: error in Rast3d_malloc"
 msgstr ""
 
-#: ../lib/raster3d/open.c:231
+#: ../lib/raster3d/open.c:234
 #, c-format
 msgid "map <%s> is not in the current mapset"
 msgstr "karte <%s> neatrodas šī brīža karšu kopā"
 
-#: ../lib/raster3d/open.c:241
+#: ../lib/raster3d/open.c:244
 msgid "Rast3d_open_cell_new: could not open file"
 msgstr ""
 
-#: ../lib/raster3d/open.c:286 ../lib/raster3d/open.c:291
+#: ../lib/raster3d/open.c:289 ../lib/raster3d/open.c:294
 msgid "Rast3d_open_cell_new: can't write header"
 msgstr ""
 
-#: ../lib/raster3d/open.c:311
+#: ../lib/raster3d/open.c:320
 msgid "Rast3d_open_cell_new: error in Rast3d_fill_header"
 msgstr ""
 
@@ -6443,28 +6458,28 @@ msgid "Failed to create xpnt temporary file: %s"
 msgstr "Nevar atvērt diapazona failu priekš <%s>"
 
 #: ../lib/vector/Vlib/break_polygons.c:164
-#: ../lib/vector/Vlib/break_polygons.c:452
+#: ../lib/vector/Vlib/break_polygons.c:484
 msgid "Breaking polygons (pass 1: select break points)..."
 msgstr ""
 
-#: ../lib/vector/Vlib/break_polygons.c:238
-#: ../lib/vector/Vlib/break_polygons.c:346
+#: ../lib/vector/Vlib/break_polygons.c:244
+#: ../lib/vector/Vlib/break_polygons.c:373
 #, c-format
 msgid "File reading error in %s() %d:%s"
 msgstr ""
 
-#: ../lib/vector/Vlib/break_polygons.c:300
-#: ../lib/vector/Vlib/break_polygons.c:564
+#: ../lib/vector/Vlib/break_polygons.c:322
+#: ../lib/vector/Vlib/break_polygons.c:596
 msgid "Breaking polygons (pass 2: break at selected points)..."
 msgstr ""
 
-#: ../lib/vector/Vlib/break_polygons.c:418
-#: ../lib/vector/Vlib/break_polygons.c:664
+#: ../lib/vector/Vlib/break_polygons.c:450
+#: ../lib/vector/Vlib/break_polygons.c:696
 #, c-format
 msgid "Breaks: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/break_polygons.c:603
+#: ../lib/vector/Vlib/break_polygons.c:635
 msgid "Point not in search tree!"
 msgstr ""
 
@@ -8956,6 +8971,10 @@ msgstr ""
 #: ../lib/vector/vedit/select.c:231
 msgid "Unknown query tool"
 msgstr ""
+
+#, fuzzy, c-format
+#~ msgid "Unable to seek: %s"
+#~ msgstr "Nevar aizvākt %s"
 
 #~ msgid "Area computation is not supported for LL projections"
 #~ msgstr "Objekta id"

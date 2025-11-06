@@ -59,6 +59,8 @@
 # % multiple: no
 # % description: Value to write for "grown" cells
 # %end
+# %option G_OPT_M_NPROCS
+# %end
 
 import os
 import atexit
@@ -83,6 +85,7 @@ def main():
     metric = options["metric"]
     old = options["old"]
     new = options["new"]
+    nprocs = options["nprocs"]
     mapunits = flags["m"]
 
     tmp = str(os.getpid())
@@ -146,6 +149,7 @@ def main():
             old=old,
             new=new,
             dist=temp_dist,
+            nprocs=nprocs,
         )
     else:
         # shrink
@@ -167,6 +171,7 @@ def main():
             radius=radius,
             old=old,
             dist=temp_dist,
+            nprocs=nprocs,
         )
 
     gs.run_command("r.colors", map=output, raster=input)

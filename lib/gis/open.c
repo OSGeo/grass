@@ -192,7 +192,12 @@ int G_open_update(const char *element, const char *name)
 
     fd = G__open(element, name, G_mapset(), 2);
     if (fd >= 0)
-        lseek(fd, 0L, SEEK_END);
+        if (lseek(fd, 0L, SEEK_END) == -1) {
+            int err = errno;
+            G_warning(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+            return -1;
+        }
 
     return fd;
 }
@@ -279,7 +284,12 @@ FILE *G_fopen_append(const char *element, const char *name)
     fd = G__open(element, name, G_mapset(), 2);
     if (fd < 0)
         return (FILE *)0;
-    lseek(fd, 0L, SEEK_END);
+    if (lseek(fd, 0L, SEEK_END) == -1) {
+        int err = errno;
+        G_warning(_("File read/write operation failed: %s (%d)"), strerror(err),
+                  err);
+        return NULL;
+    }
 
     G_debug(2, "\tfile open: append (mode = a)");
     return fdopen(fd, "a");
@@ -307,7 +317,12 @@ FILE *G_fopen_modify(const char *element, const char *name)
     fd = G__open(element, name, G_mapset(), 2);
     if (fd < 0)
         return (FILE *)0;
-    lseek(fd, 0L, SEEK_END);
+    if (lseek(fd, 0L, SEEK_END) == -1) {
+        int err = errno;
+        G_warning(_("File read/write operation failed: %s (%d)"), strerror(err),
+                  err);
+        return NULL;
+    }
 
     G_debug(2, "\tfile open: modify (mode = r+)");
     return fdopen(fd, "r+");
