@@ -152,7 +152,7 @@ def get_mapset(gisrc_src, gisrc_dst):
     return src, dst
 
 
-def copy_groups(groups, gisrc_src, gisrc_dst, region=None):
+def copy_groups(groups, gisrc_src, gisrc_dst, processes, region=None):
     """Copy group from one mapset to another, crop the raster to the region
 
     :param groups: a list of strings with the group that must be copied
@@ -162,6 +162,7 @@ def copy_groups(groups, gisrc_src, gisrc_dst, region=None):
     :type gisrc_src: str
     :param gisrc_dst: path of the GISRC file where the groups will be created
     :type gisrc_dst: str
+    :param processes: number of processes for parallel execution
     :param region: a region like object or a dictionary with the region
                    parameters that will be used to crop the rasters of the groups
     :type region: Region object or dictionary
@@ -191,7 +192,9 @@ def copy_groups(groups, gisrc_src, gisrc_dst, region=None):
         env["GISRC"] = gisrc_dst
         rast2cp = [r for r in rasts if rmloc(r) not in all_rasts]
         if rast2cp:
-            copy_rasters(rast2cp, gisrc_src, gisrc_dst, region=region)
+            copy_rasters(
+                rast2cp, gisrc_src, gisrc_dst, processes=processes, region=region
+            )
         set_grp(
             group=grp,
             input=[rmloc(r) for r in rasts] if rast2cp or rm else rasts,
@@ -225,7 +228,7 @@ def set_region(region, gisrc_src, gisrc_dst, env):
     sub.Popen(reg_cmd, shell=True, env=env)
 
 
-def copy_rasters(rasters, gisrc_src, gisrc_dst, region=None):
+def copy_rasters(rasters, gisrc_src, gisrc_dst, processes, region=None):
     """Copy rasters from one mapset to another, crop the raster to the region.
 
     :param rasters: a list of strings with the raster map that must be copied
@@ -235,6 +238,7 @@ def copy_rasters(rasters, gisrc_src, gisrc_dst, region=None):
     :type gisrc_src: str
     :param gisrc_dst: path of the GISRC file where the groups will be created
     :type gisrc_dst: str
+    :param processes: number of processes for parallel execution
     :param region: a region like object or a dictionary with the region
                    parameters that will be used to crop the rasters of the groups
     :type region: Region object or dictionary
@@ -258,7 +262,12 @@ def copy_rasters(rasters, gisrc_src, gisrc_dst, region=None):
         # change gisdbase to src
         env["GISRC"] = gisrc_src
         name = nam % rast_clean
-        mpclc(expression="%s=%s" % (name, rast), overwrite=True, env_=env)
+        mpclc(
+            expression="%s=%s" % (name, rast),
+            nprocs=processes,
+            overwrite=True,
+            env_=env,
+        )
         file_dst = "%s.pack" % os.path.join(path_dst, name)
         rpck(input=name, output=file_dst, overwrite=True, env_=env)
         remove(flags="f", type="raster", name=name, env_=env)
@@ -383,7 +392,7 @@ def cmd_exe(args):
         lcmd = ["g.region", *["%s=%s" % (k, v) for k, v in bbox.items()]]
         sub.Popen(lcmd, shell=shell, env=env).wait()
     if groups:
-        copy_groups(groups, gisrc_src, gisrc_dst)
+        copy_groups(groups, gisrc_src, gisrc_dst, processes=1)
     # run the grass command
     sub.Popen(get_cmd(cmd), shell=shell, env=env).wait()
     # remove temp GISRC
@@ -497,14 +506,24 @@ class GridModule:
             rasters = list(select(self.module.inputs, "raster"))
             if rasters:
                 copy_rasters(
-                    rasters, self.gisrc_src, self.gisrc_dst, region=self.region
+                    rasters,
+                    self.gisrc_src,
+                    self.gisrc_dst,
+                    processes=self.processes,
+                    region=self.region,
                 )
             vectors = list(select(self.module.inputs, "vector"))
             if vectors:
                 copy_vectors(vectors, self.gisrc_src, self.gisrc_dst)
             groups = list(select(self.module.inputs, "group"))
             if groups:
-                copy_groups(groups, self.gisrc_src, self.gisrc_dst, region=self.region)
+                copy_groups(
+                    groups,
+                    self.gisrc_src,
+                    self.gisrc_dst,
+                    processes=self.processes,
+                    region=self.region,
+                )
         self.bboxes = split_region_in_overlapping_tiles(
             region=region, width=self.width, height=self.height, overlap=overlap
         )
@@ -676,7 +695,9 @@ class GridModule:
                 routputs = [
                     self.out_prefix + o for o in select(self.module.outputs, "raster")
                 ]
-                copy_rasters(routputs, self.gisrc_dst, self.gisrc_src)
+                copy_rasters(
+                    routputs, self.gisrc_dst, self.gisrc_src, processes=self.processes
+                )
             else:
                 self.patch()
 
