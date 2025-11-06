@@ -57,7 +57,6 @@ import sys
 import tempfile
 import unicodedata
 import uuid
-
 from pathlib import Path
 from typing import TYPE_CHECKING, Literal, NoReturn
 

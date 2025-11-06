@@ -9,40 +9,38 @@ Read the file COPYING that comes with GRASS
 for details
 """
 
+import ctypes
 import os
 import shutil
-import ctypes
+from pathlib import Path
 
+import grass.script as gs
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.utils import xfail_windows
-
-from grass.script.core import tempname
-import grass.script as gs
-from grass.pygrass import utils
-from grass.pygrass.gis import Mapset, make_mapset
-from pathlib import Path
-
 from grass.lib.gis import (
-    G_mapset_path,
-    G_make_mapset,
-    G_reset_mapsets,
     GNAME_MAX,
     HOST_DIRSEP,
+    G_make_mapset,
+    G_mapset_path,
+    G_reset_mapsets,
 )
 from grass.lib.imagery import (
+    I_SIGFILE_TYPE_LIBSVM,
     I_SIGFILE_TYPE_SIG,
     I_SIGFILE_TYPE_SIGSET,
-    I_SIGFILE_TYPE_LIBSVM,
     I_find_signature,
-    I_signatures_remove,
-    I_signatures_copy,
-    I_signatures_rename,
-    I_signatures_list_by_type,
     I_free_signatures_list,
     I_get_signatures_dir,
     I_make_signatures_dir,
+    I_signatures_copy,
+    I_signatures_list_by_type,
+    I_signatures_remove,
+    I_signatures_rename,
 )
+from grass.pygrass import utils
+from grass.pygrass.gis import Mapset, make_mapset
+from grass.script.core import tempname
 
 
 class GetSignaturesDirTestCase(TestCase):
