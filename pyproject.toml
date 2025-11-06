@@ -166,11 +166,9 @@ ignore = [
     "F811",    # redefined-while-unused
     "F821",    # undefined-name
     "F822",    # undefined-export
-    "F841",    # unused-variable
     "FBT001",  # boolean-type-hint-positional-argument
     "FBT002",  # boolean-default-value-positional-argument
     "FBT003",  # boolean-positional-value-in-call
-    "I001",    # unsorted-imports
     "INP001",  # implicit-namespace-package
     "N801",    # invalid-class-name
     "N802",    # invalid-function-name
@@ -268,7 +266,6 @@ ignore = [
     "TD007",   # missing-space-after-todo-colon
     "TRY002",  # raise-vanilla-class
     "TRY004",  # type-check-without-type-error
-    "TRY201",  # verbose-raise
     "TRY300",  # try-consider-else
     "TRY301",  # raise-within-try
     "UP030",   # format-literals
@@ -276,6 +273,8 @@ ignore = [
     "UP032",   # f-string
 ]
 
+[tool.ruff.lint.isort]
+known-first-party = ["grass"]
 
 [tool.ruff.lint.per-file-ignores]
 # See https://docs.astral.sh/ruff/settings/#lint_per-file-ignores
@@ -285,10 +284,14 @@ ignore = [
 # Ignored after reverting:
 "gui/**" = ["PLW0108"] # See https://github.com/OSGeo/grass/issues/4124
 # Other ignores:
+"**.ipynb" = ["I001"]
 "**.py" = ["PYI066"]
 "*/testsuite/**.py" = ["PT009", "PT027", "PLW1514"]
 "display/d.mon/render_cmd.py" = ["PLW1514"]
 "display/d.text/test.py" = ["PLW1514"]
+"doc/**.py" = ["I001"]
+"general/**.py" = ["I001"]
+"gui/**.py" = ["I001"]
 "gui/wxpython/animation/temporal_manager.py" = ["PLW1514"]
 "gui/wxpython/core/gconsole.py" = ["PLW1514"]
 "gui/wxpython/core/render.py" = ["PLW1514"]
@@ -330,6 +333,7 @@ ignore = [
 "gui/wxpython/vnet/vnet_data.py" = ["PLW1514"]
 "gui/wxpython/web_services/dialogs.py" = ["PLW1514"]
 "gui/wxpython/wxplot/profile.py" = ["A005", "PLW1514", "SIM115"]
+"imagery/**.py" = ["I001"]
 "imagery/i.atcorr/create_iwave.py" = ["PLW1514"]
 "lib/imagery/testsuite/test_imagery_sigsetfile.py" = ["FURB152"]
 "lib/init/grass.py" = ["PLW1514", "SIM115"]
@@ -349,6 +353,7 @@ ignore = [
 "man/build_rest.py" = ["PLW1514", "PTH208"]
 "man/build_topics.py" = ["PLW1514"]
 "man/parser_standard_options.py" = ["PLW1514"]
+"python/grass/**.py" = ["I001"]
 "python/grass/__init__.py" = ["PTH110", "PYI056"]
 "python/grass/exp*/tests/grass_script_mapset_session_test.py" = ["SIM117"]
 "python/grass/exp*/tests/grass_script_tmp_mapset_session_test.py" = ["SIM117"]
@@ -396,11 +401,13 @@ ignore = [
 "python/grass/temporal/univar_statistics.py" = ["PLW1514", "SIM115"]
 "python/grass/tools/support.py" = ["PLR6201"]
 "python/grass/utils/download.py" = ["PTH208", "SIM115"]
+"raster/**.py" = ["I001"]
 "raster/r.*/testsuite/*.py" = ["SIM115"]
 "raster/r.mfilter/benchmark/benchmark_r_mfilter_nprocs.py" = ["PLW1514"]
 "raster/r.topidx/*.py" = ["SIM115"]
 "raster/r.topidx/arc_to_gridatb.py" = ["PLW1514"]
 "raster/r.topidx/gridatb_to_arc.py" = ["PLW1514"]
+"scripts/**.py" = ["I001"]
 "scripts/d.correlate/d.correlate.py" = ["PLW1514", "SIM115"]
 "scripts/d.frame/d.frame.py" = ["PLW1514", "SIM115"]
 "scripts/d.out.file/d.out.file.py" = ["PLW1514"]
@@ -450,6 +457,7 @@ ignore = [
 "temporal/t.remove/t.remove.py" = ["PLW1514"]
 "temporal/t.unregister/t.unregister.py" = ["PLW1514"]
 "utils/*.py" = ["PLW1514"]
+"vector/**.py" = ["I001"]
 
 [tool.ruff.lint.flake8-import-conventions.extend-aliases]
 # Declare a custom aliases, checked with rule ICN001
@@ -545,7 +553,7 @@ py-version = "3.10"
 # source root is an absolute path or a path relative to the current working
 # directory used to determine a package namespace for modules located under the
 # source root.
-source-roots = ["python", "gui/wxpython"]
+source-roots = ["python", "gui/wxpython", "man"]
 
 
 [tool.pylint.design]

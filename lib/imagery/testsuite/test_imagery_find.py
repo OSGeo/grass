@@ -14,19 +14,17 @@ import shutil
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-from grass.script.core import tempname
-from grass.pygrass import utils
-from grass.pygrass.gis import Mapset
-
 from grass.lib.gis import G_mapset_path
 from grass.lib.imagery import (
+    I_SIGFILE_TYPE_LIBSVM,
     I_SIGFILE_TYPE_SIG,
     I_SIGFILE_TYPE_SIGSET,
-    I_SIGFILE_TYPE_LIBSVM,
     I_find_signature,
     I_find_signature2,
 )
+from grass.pygrass import utils
+from grass.pygrass.gis import Mapset
+from grass.script.core import tempname
 
 
 class FindSignatureTestCase(TestCase):

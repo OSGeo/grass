@@ -13,13 +13,12 @@
 #       for details.
 #
 
-import os
 import atexit
+import os
 import sys
 from pathlib import Path
 
 import grass.script as gs
-
 
 tmp_grad_abs = None
 tmp_grad_rel = None

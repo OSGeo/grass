@@ -1,6 +1,6 @@
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-from grass.script.core import read_command, parse_command
+from grass.script.core import parse_command, read_command
 
 
 class TestR3Info(TestCase):
