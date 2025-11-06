@@ -80,36 +80,24 @@ class MakeSignaturesDirTestCase(TestCase):
 
     def test_make_sig(self):
         I_make_signatures_dir(I_SIGFILE_TYPE_SIG)
-        self.assertTrue(
-            Path(self.tmp_mapset_path, "signatures", "sig").is_dir()
-        )
+        self.assertTrue(Path(self.tmp_mapset_path, "signatures", "sig").is_dir())
         # There should not be any side effects of calling function multiple times
         I_make_signatures_dir(I_SIGFILE_TYPE_SIG)
-        self.assertTrue(
-            Path(self.tmp_mapset_path, "signatures", "sig").is_dir()
-        )
+        self.assertTrue(Path(self.tmp_mapset_path, "signatures", "sig").is_dir())
 
     def test_make_sigset(self):
         I_make_signatures_dir(I_SIGFILE_TYPE_SIGSET)
-        self.assertTrue(
-            Path(self.tmp_mapset_path, "signatures", "sigset").is_dir()
-        )
+        self.assertTrue(Path(self.tmp_mapset_path, "signatures", "sigset").is_dir())
         # There should not be any side effects of calling function multiple times
         I_make_signatures_dir(I_SIGFILE_TYPE_SIGSET)
-        self.assertTrue(
-            Path(self.tmp_mapset_path, "signatures", "sigset").is_dir()
-        )
+        self.assertTrue(Path(self.tmp_mapset_path, "signatures", "sigset").is_dir())
 
     def test_make_libsvm(self):
         I_make_signatures_dir(I_SIGFILE_TYPE_LIBSVM)
-        self.assertTrue(
-            Path(self.tmp_mapset_path, "signatures", "libsvm").is_dir()
-        )
+        self.assertTrue(Path(self.tmp_mapset_path, "signatures", "libsvm").is_dir())
         # There should not be any side effects of calling function multiple times
         I_make_signatures_dir(I_SIGFILE_TYPE_LIBSVM)
-        self.assertTrue(
-            Path(self.tmp_mapset_path, "signatures", "libsvm").is_dir()
-        )
+        self.assertTrue(Path(self.tmp_mapset_path, "signatures", "libsvm").is_dir())
 
 
 class SignaturesRemoveTestCase(TestCase):
