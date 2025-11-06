@@ -29,7 +29,7 @@ rows=165
 cols=250
 cells=41250"""
 
-src_project = "nc_spm_full_v2alpha2"
+src_project = "nc_spm_full_v2beta1"
 dst_project = "nc_latlong"
 
 raster_maps = [

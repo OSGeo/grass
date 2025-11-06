@@ -97,7 +97,7 @@ class TestRasterreport(TestCase):
     def test_json(self):
         """Test JSON format"""
         reference = {
-            "project": "nc_spm_full_v2alpha2",
+            "project": "nc_spm_full_v2beta1",
             "region": {
                 "north": 228500,
                 "south": 215000,
@@ -299,7 +299,7 @@ class TestRasterreport(TestCase):
     def test_json2(self):
         """Test JSON format with more options"""
         reference = {
-            "project": "nc_spm_full_v2alpha2",
+            "project": "nc_spm_full_v2beta1",
             "created": "2024-07-24T14:59:09+0530",
             "region": {
                 "north": 228500,
