@@ -587,17 +587,25 @@ class GridModule:
         region = Region()
         if self.width and self.height:
             return
+        # Estimation requires number of processes, but it can be None
+        # so we try to estimate the number here as number of CPUs available
+        processes = self.processes
+        if processes is None:
+            try:
+                processes = len(os.sched_getaffinity(0))
+            except AttributeError:
+                processes = mltp.cpu_count()
         if self.width:
             n_tiles_x = ceil(region.cols / self.width)
-            n_tiles_y = ceil(self.processes / n_tiles_x)
+            n_tiles_y = ceil(processes / n_tiles_x)
             self.height = ceil(region.rows / n_tiles_y)
         elif self.height:
             n_tiles_y = ceil(region.rows / self.height)
-            n_tiles_x = ceil(self.processes / n_tiles_y)
+            n_tiles_x = ceil(processes / n_tiles_y)
             self.width = ceil(region.cols / n_tiles_x)
         else:
             self.width = region.cols
-            self.height = ceil(region.rows / self.processes)
+            self.height = ceil(region.rows / processes)
 
     def get_works(self):
         """Return a list of tuples with the parameters for cmd_exe function"""
