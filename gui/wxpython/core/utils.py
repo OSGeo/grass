@@ -613,7 +613,7 @@ def GetListOfMapsets(dbase, location, selectable=False):
         for mapset in glob.glob(os.path.join(dbase, location, "*")):
             if (
                 Path(mapset).is_dir()
-                and Path(os.path.join(dbase, location, mapset, "WIND")).is_file()
+                and Path(dbase, location, mapset, "WIND").is_file()
             ):
                 listOfMapsets.append(os.path.basename(mapset))
 
