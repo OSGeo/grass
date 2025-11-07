@@ -10,9 +10,8 @@ Licence:   This program is free software under the GNU General Public
 """
 
 import os
-import pathlib
 import json
-
+from pathlib import Path
 from tempfile import NamedTemporaryFile
 
 from grass.script import read_command
@@ -33,7 +32,7 @@ class MatrixCorrectnessTest(TestCase):
         cls.use_temp_region()
         cls.runModule("g.region", n=5, s=0, e=5, w=0, res=1)
 
-        cls.data_dir = os.path.join(pathlib.Path(__file__).parent.absolute(), "data")
+        cls.data_dir = os.path.join(Path(__file__).parent.absolute(), "data")
         cls.ref_1 = tempname(10)
         cls.runModule(
             "r.in.ascii",
@@ -90,7 +89,7 @@ class CalculationCorrectness1Test(TestCase):
         cls.use_temp_region()
         cls.runModule("g.region", n=5, s=0, e=5, w=0, res=1)
 
-        cls.data_dir = os.path.join(pathlib.Path(__file__).parent.absolute(), "data")
+        cls.data_dir = os.path.join(Path(__file__).parent.absolute(), "data")
         cls.ref_1 = tempname(10)
         cls.runModule(
             "r.in.ascii",
@@ -205,7 +204,7 @@ class CalculationCorrectness2Test(TestCase):
         cls.use_temp_region()
         cls.runModule("g.region", n=5, s=0, e=5, w=0, res=1)
 
-        cls.data_dir = os.path.join(pathlib.Path(__file__).parent.absolute(), "data")
+        cls.data_dir = os.path.join(Path(__file__).parent.absolute(), "data")
         cls.ref_1 = tempname(10)
         cls.runModule(
             "r.in.ascii",
@@ -308,7 +307,7 @@ class JSONOutputTest(TestCase):
         cls.use_temp_region()
         cls.runModule("g.region", n=5, s=0, e=5, w=0, res=1)
 
-        cls.data_dir = os.path.join(pathlib.Path(__file__).parent.absolute(), "data")
+        cls.data_dir = os.path.join(Path(__file__).parent.absolute(), "data")
         cls.references = []
         cls.classifications = []
         cls.expected_outputs = []

@@ -39,19 +39,19 @@ The <b>output</b> parameter is a basename (prefix) for all generated
 raster maps and each map gets a unique suffix:
 
 <ul>
-  <li><tt>.base</tt> for the base (perpendicular) ROS (cm/minute)</li>
-  <li><tt>.max</tt> for the maximum (forward) ROS (cm/minute),</li>
-  <li><tt>.maxdir</tt> for the direction of the maximum
+  <li><code>.base</code> for the base (perpendicular) ROS (cm/minute)</li>
+  <li><code>.max</code> for the maximum (forward) ROS (cm/minute),</li>
+  <li><code>.maxdir</code> for the direction of the maximum
     ROS, clockwise from north (degree), and optionally</li>
-  <li><tt>.spotdist</tt> for the maximum potential
+  <li><code>.spotdist</code> for the maximum potential
     spotting distance (meters).</li>
 </ul>
 
 <p>
-So, if the output parameter is <tt>blackforest_ros</tt>, <em>r.ros</em> creates
-<tt>blackforest_ros.base</tt>, <tt>blackforest_ros.max</tt>,
-<tt>blackforest_ros.maxdir</tt>,
-and (optionally) <tt>blackforest_ros.spotdist</tt> raster maps.
+So, if the output parameter is <code>blackforest_ros</code>, <em>r.ros</em> creates
+<code>blackforest_ros.base</code>, <code>blackforest_ros.max</code>,
+<code>blackforest_ros.maxdir</code>,
+and (optionally) <code>blackforest_ros.spotdist</code> raster maps.
 
 <p>If only one or two of the options <b>moisture_1h</b>, <b>moisture_10h</b>,
 and <b>moisture_100h</b> are given, the module will assign

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-from pathlib import Path
-import sys
 import re
-from ghtml import HTMLParser
-from ggroff import Formatter
-
+import sys
 from io import StringIO
+from pathlib import Path
+
+from ggroff import Formatter
+from ghtml import HTMLParser
 
 entities = {"nbsp": " ", "bull": "*"}
 
@@ -26,18 +26,17 @@ def fix(content):
 def main():
     # parse HTML
     infile = sys.argv[1]
-    inf = open(infile)
-    p = HTMLParser(entities)
-    for n, line in enumerate(inf):
-        try:
-            p.feed(line)
-        except Exception as err:
-            sys.stderr.write(
-                "%s:%d:0: Error (%s): %s\n" % (infile, n + 1, repr(err), line)
-            )
-            sys.exit(1)
-    p.close()
-    inf.close()
+    with open(infile) as inf:
+        p = HTMLParser(entities)
+        for n, line in enumerate(inf):
+            try:
+                p.feed(line)
+            except Exception as err:
+                sys.stderr.write(
+                    "%s:%d:0: Error (%s): %s\n" % (infile, n + 1, repr(err), line)
+                )
+                sys.exit(1)
+        p.close()
 
     # generate groff
     sf = StringIO()

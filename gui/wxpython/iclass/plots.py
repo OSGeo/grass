@@ -101,7 +101,7 @@ class PlotPanel(scrolled.ScrolledPanel):
     def OnPlotTypeSelected(self, event):
         """Plot type selected"""
 
-        if self.plotSwitch.GetSelection() in [0, 1]:
+        if self.plotSwitch.GetSelection() in {0, 1}:
             self.SetupScrolling(scroll_x=False, scroll_y=True)
             if self.iscatt_panel:
                 self.iscatt_panel.Hide()

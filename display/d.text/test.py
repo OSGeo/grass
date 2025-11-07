@@ -2,8 +2,8 @@
 # Author: Owen Smith - Rewritten from test.pl by Huidae Cho
 # Run: d.mon start=wx0 && ./test.py | d.text at=0,100
 import math
-from pathlib import Path
 import re
+from pathlib import Path
 
 # Quiet black syntax checking for fonts and colors to keep the code printed to
 # the display vertically short.
@@ -52,7 +52,7 @@ def text(in_text):
 
 for i in range(36):
     font(fonts[int(i % len(fonts))])
-    size((36 - i if ((i >= 9 and i <= 18) or i > 27) else i) % 9)
+    size((36 - i if ((9 <= i <= 18) or i > 27) else i) % 9)
     rotate(i * 10)
     color(colors[i % len(colors)])
     xy(

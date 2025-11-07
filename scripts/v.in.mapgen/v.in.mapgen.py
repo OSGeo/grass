@@ -50,6 +50,7 @@ import atexit
 import string
 import time
 import shutil
+from pathlib import Path
 from grass.script.utils import try_remove
 from grass.script import core as grass
 from grass.exceptions import CalledModuleError
@@ -70,7 +71,7 @@ def main():
 
     prog = "v.in.mapgen"
 
-    if not os.path.isfile(infile):
+    if not Path(infile).is_file():
         grass.fatal(_("Input file <%s> not found") % infile)
 
     name = output or ""
@@ -106,8 +107,10 @@ def main():
             if f[0].lower() == "nan":
                 if points != []:
                     outf.write("L %d 1\n" % len(points))
-                    for point in points:
-                        outf.write(" %.15g %.15g %.15g\n" % tuple(map(float, point)))
+                    outf.writelines(
+                        " %.15g %.15g %.15g\n" % tuple(map(float, point))
+                        for point in points
+                    )
                     outf.write(" 1 %d\n" % cat)
                     cat += 1
                 points = []
@@ -134,8 +137,9 @@ def main():
             if line[0] == "#":
                 if points != []:
                     outf.write("L %d 1\n" % len(points))
-                    for point in points:
-                        outf.write(" %.15g %.15g\n" % tuple(map(float, point)))
+                    outf.writelines(
+                        " %.15g %.15g\n" % tuple(map(float, point)) for point in points
+                    )
                     outf.write(" 1 %d\n" % cat)
                     cat += 1
                 points = []
@@ -144,8 +148,9 @@ def main():
 
         if points != []:
             outf.write("L %d 1\n" % len(points))
-            for point in points:
-                outf.write(" %.15g %.15g\n" % tuple(map(float, point)))
+            outf.writelines(
+                " %.15g %.15g\n" % tuple(map(float, point)) for point in points
+            )
             outf.write(" 1 %d\n" % cat)
             cat += 1
     outf.close()

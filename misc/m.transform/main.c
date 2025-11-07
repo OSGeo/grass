@@ -95,9 +95,9 @@ static void compute_transformation(void)
     count = 0;
 
     for (n = 0; n < points.count; n++) {
-        double e1, n1, e2, n2;
-        double fx, fy, fd, fd2;
-        double rx, ry, rd, rd2;
+        double e1 = 0.0, n1 = 0.0, e2 = 0.0, n2 = 0.0;
+        double fx = 0.0, fy = 0.0, fd = 0.0, fd2 = 0.0;
+        double rx = 0.0, ry = 0.0, rd = 0.0, rd2 = 0.0;
 
         if (points.status[n] <= 0)
             continue;

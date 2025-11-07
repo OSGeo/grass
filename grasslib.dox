@@ -1,10 +1,10 @@
-/*! \mainpage GRASS GIS 8 Programmer's Manual
+/*! \mainpage GRASS 8 Programmer's Manual
 <!-- * doxygenized from "GRASS 5 Programmer's Manual"
        by M. Neteler 2/2004
-     * updated 8/2005, 2006-2024
+     * updated 8/2005, 2006-2025
   -->
 
-<a href="https://grass.osgeo.org">GRASS GIS</a> (<b>Geographic
+<a href="https://grass.osgeo.org">GRASS</a> (<b>Geographic
 Resources Analysis Support System</b>) is an open source, free
 software <em>Geographical Information System</em> (GIS) with raster,
 topological %vector, image processing, and graphics production
@@ -23,7 +23,7 @@ Team</a>, an international team of programmers, GRASS module authors
 are cited within their module's source code and the contributed manual
 pages.
 
-&copy; 2000-2024 by the GRASS Development Team
+&copy; 2000-2025 by the GRASS Development Team
 
 This manual is published under <a
 href="http://www.fsf.org/copyleft/fdl.html">GNU Free Documentation
@@ -41,7 +41,7 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
   original:
   doc/grass_arch.odg
 -->
-\image html "grass_arch.png" "GRASS GIS Architecture"
+\image html "grass_arch.png" "GRASS Architecture"
 
 \section libsOverview Libraries
 
@@ -113,7 +113,7 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
 
 \subsection pythonlibs Python API
 
- - python:	See GRASS GIS Python library (https://grass.osgeo.org/grass-devel/manuals/libpython/)
+ - python:	See GRASS Python library (https://grass.osgeo.org/grass-devel/manuals/libpython/)
 
 \subsection projlibs Projection Libraries
 
@@ -136,8 +136,8 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
  The following files must be added or updated when including a new external library.
 
  - <b>add:</b> lib/external/<b>newlib</b>
- - <b>add:</b> lib/external/<b>newlib</b>/*.c
- - <b>add:</b> lib/external/<b>newlib</b>/*.h
+ - <b>add:</b> lib/external/<b>newlib</b>/\*.c
+ - <b>add:</b> lib/external/<b>newlib</b>/\*.h
  - <b>add:</b> lib/external/<b>newlib</b>/LICENSE
  - <b>add:</b> lib/external/<b>newlib</b>/Makefile
  - <b>update:</b> lib/external/Makefile

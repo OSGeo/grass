@@ -12,7 +12,7 @@
  * \author USACERL and many others
  */
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -51,7 +51,7 @@ static void sync_and_close(int fd, char *element, char *name)
      * after you are done writing all your data.
      */
 
-#ifndef __MINGW32__
+#ifndef _WIN32
     if (fsync(fd)) {
         G_warning(_("Unable to flush file %s for raster map %s: %s"), element,
                   name, strerror(errno));
@@ -396,6 +396,11 @@ static int close_new(int fd, int ok)
         if (fcb->null_row_ptr) { /* compressed nulls */
             fcb->null_row_ptr[fcb->cellhd.rows] =
                 lseek(fcb->null_fd, 0L, SEEK_CUR);
+            if (fcb->null_row_ptr[fcb->cellhd.rows] == -1) {
+                int err = errno;
+                G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                              strerror(err), err);
+            }
             Rast__write_null_row_ptrs(fd, fcb->null_fd);
         }
 
@@ -437,6 +442,11 @@ static int close_new(int fd, int ok)
 
         if (fcb->open_mode == OPEN_NEW_COMPRESSED) { /* auto compression */
             fcb->row_ptr[fcb->cellhd.rows] = lseek(fcb->data_fd, 0L, SEEK_CUR);
+            if (fcb->row_ptr[fcb->cellhd.rows] == -1) {
+                int err = errno;
+                G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                              strerror(err), err);
+            }
             Rast__write_row_ptrs(fd);
         }
 
@@ -531,6 +541,11 @@ void Rast__close_null(int fd)
 
     if (fcb->null_row_ptr) { /* compressed nulls */
         fcb->null_row_ptr[fcb->cellhd.rows] = lseek(fcb->null_fd, 0L, SEEK_CUR);
+        if (fcb->null_row_ptr[fcb->cellhd.rows] == -1) {
+            int err = errno;
+            G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                          strerror(err), err);
+        }
         Rast__write_null_row_ptrs(fd, fcb->null_fd);
         G_free(fcb->null_row_ptr);
     }

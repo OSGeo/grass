@@ -3,7 +3,7 @@ GRASS Python testing framework module for running from command line
 
 Copyright (C) 2014-2021 by the GRASS Development Team
 This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS GIS
+License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :authors: Vaclav Petras
@@ -20,7 +20,13 @@ from unittest.main import TestProgram
 import grass.script.core as gs
 
 from .loader import GrassTestLoader
-from .runner import GrassTestRunner, MultiTestResult, TextTestResult, KeyValueTestResult
+from .runner import (
+    GrassTestRunner,
+    KeyValueTestResult,
+    MultiTestResult,
+    TextTestResult,
+    _WritelnDecorator,
+)
 from .invoker import GrassTestFilesInvoker
 from .utils import silent_rmtree
 from .reporters import FileAnonymizer
@@ -39,6 +45,9 @@ class GrassTestProgram(TestProgram):
         verbosity=1,
         failfast=None,
         catchbreak=None,
+        *,
+        tb_locals=False,
+        **kwargs,
     ):
         """Prepares the tests in GRASS way and then runs the tests.
 
@@ -53,9 +62,9 @@ class GrassTestProgram(TestProgram):
         grass_loader = GrassTestLoader(grass_location=self.grass_location)
 
         text_result = TextTestResult(
-            stream=sys.stderr, descriptions=True, verbosity=verbosity
+            stream=_WritelnDecorator(sys.stderr), descriptions=True, verbosity=verbosity
         )
-        with open("test_keyvalue_result.txt", "w") as keyval_file:
+        with open("test_keyvalue_result.txt", "w", encoding="utf-8") as keyval_file:
             keyval_result = KeyValueTestResult(stream=keyval_file)
             result = MultiTestResult(results=[text_result, keyval_result])
 
@@ -68,13 +77,15 @@ class GrassTestProgram(TestProgram):
             super().__init__(
                 module=module,
                 argv=unittest_argv,
-                testLoader=grass_loader,
                 testRunner=grass_runner,
+                testLoader=grass_loader,
                 exit=exit_at_end,
                 verbosity=verbosity,
                 failfast=failfast,
                 catchbreak=catchbreak,
                 buffer=buffer_stdout_stderr,
+                tb_locals=tb_locals,
+                **kwargs,
             )
 
 
@@ -113,6 +124,9 @@ def test():
     sys.exit(not program.result.wasSuccessful())
 
 
+test.__test__ = False  # prevent running this function as a test in pytest
+
+
 def discovery():
     """Recursively find all tests in testsuite directories and run them
 
@@ -135,8 +149,9 @@ def get_config(start_directory, config_file):
 
     If file is explicitly specified, it must exist.
 
-    Raises OSError if file is not accessible, e.g., if it exists,
-    but there is an issue with permissions.
+    :raises OSError: if file is not accessible, e.g., if it exists,
+        but there is an issue with permissions.
+    :raises ValueError: If neither start_directory nor config_file are set.
     """
     config_parser = configparser.ConfigParser()
     if config_file:
@@ -147,7 +162,8 @@ def get_config(start_directory, config_file):
         # Does not check presence of the file
         config_parser.read(config_file)
     else:
-        raise ValueError("Either start_directory or config_file must be set")
+        msg = "Either start_directory or config_file must be set"
+        raise ValueError(msg)
     if "gunittest" not in config_parser:
         # Create an empty section if file is not available or section is not present.
         config_parser.read_dict({"gunittest": {}})
@@ -193,7 +209,7 @@ def main():
         dest="min_success",
         action="store",
         default="100",
-        type=int,
+        type=float,
         help=(
             "Minimum success percentage (lower percentage"
             " than this will result in a non-zero return code; values 0-100)"
@@ -216,9 +232,9 @@ def main():
 
     if not gisdbase:
         return "GISDBASE (grassdata directory) cannot be empty string\n"
-    if not os.path.exists(gisdbase):
+    if not Path(gisdbase).exists():
         return f"GISDBASE (grassdata directory) <{gisdbase}> does not exist\n"
-    if not os.path.exists(os.path.join(gisdbase, location)):
+    if not Path(gisdbase, location).exists():
         return (
             f"GRASS Location <{location}>"
             f" does not exist in GRASS Database <{gisdbase}>\n"

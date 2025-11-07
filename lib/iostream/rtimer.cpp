@@ -33,10 +33,7 @@
  *  General Public License for more details.  *
  *  **************************************************************************/
 
-#include <sys/time.h>
-#include <stdio.h>
-#include <string.h>
-#include <strings.h>
+#include <cstdio>
 
 #include <grass/iostream/rtimer.h>
 

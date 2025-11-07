@@ -1,4 +1,4 @@
-<!-- meta page description: Raster data processing in GRASS GIS -->
+<!-- meta page description: Raster data processing in GRASS -->
 <!-- meta page index: raster -->
 <h3>Raster maps in general</h3>
 
@@ -15,20 +15,24 @@ i.e. the geographic extent of the map is described by the outer bounds of
 all cells within the map.
 
 <p>
-As a general rule in GRASS GIS:
+As a general rule in GRASS:
 <ol>
 <li> Raster output maps have their bounds and resolution equal to those
 of the current computational region.</li>
 <li> Raster input maps are automatically cropped/padded and rescaled
 (using nearest-neighbour resampling) to match the current region.</li>
-<li> Raster input maps are automatically masked if a raster map named
-     MASK exists. The MASK is only applied when <i>reading</i> maps
-     from the disk.</li>
+<li> Processing NULL (no data) values produces NULL values.</li>
+<li> Input raster maps are automatically masked if a raster mask is active,
+     The mask is managed by the <a href="r.mask.html">r.mask</a> tool, and
+     it is represented by a raster map called <code>MASK</code> by default.
+     Unless specified otherwise, the raster mask is only applied
+     when <i>reading</i> raster maps which typically results in NULL values
+    in the output for areas outside of the mask.</li>
 </ol>
 
 There are a few exceptions to this:
 
-<tt>r.in.*</tt> programs read the data cell-for-cell, with no resampling. When
+<code>r.in.*</code> programs read the data cell-for-cell, with no resampling. When
 reading non-georeferenced data, the imported map will usually have its
 lower-left corner at (0,0) in the project's coordinate system; the user
 needs to use <a href="r.region.html">r.region</a> to "place" the imported map.
@@ -73,7 +77,7 @@ first change the region, then explicitly resample the map with e.g.
 <a href="r.resamp.stats.html">r.resamp.stats</a>, then export the
 resampled map.
 <p>
-GRASS GIS raster map exchange between different projects with the same CRS
+GRASS raster map exchange between different projects with the same CRS
 can be done in a lossless way using the <a href="r.pack.html">r.pack</a>
 and <a href="r.unpack.html">r.unpack</a> modules.
 
@@ -85,7 +89,7 @@ and other metadata.
 Metadata such as map title, units, vertical datum etc. can be updated
 with <a href="r.support.html">r.support</a>. Timestamps are managed
 with <a href="r.timestamp.html">r.timestamp</a>. Region extent and
-resolution are mangaged with <a href="r.region.html">r.region</a>.
+resolution are managed with <a href="r.region.html">r.region</a>.
 
 
 <h3>Raster map operations</h3>
@@ -172,14 +176,20 @@ The user may choose from a variety of statistical methods in creating the new ra
 Otherwise, for interpolation of scattered data, use the <em>v.surf.*</em> set of
 modules.
 
-<h4>Raster MASKs</h4>
+<h4>Raster masks</h4>
 If a raster map named "MASK" exists, most GRASS raster modules will operate
 only on data falling inside the masked area, and treat any data falling
 outside of the mask as if its value were NULL. The mask is only applied
 when <em>reading</em> an existing GRASS raster map, for example when used
 in a module as an input map.
+While the mask raster map can be managed directly,
+the <a href="r.mask.html">r.mask</a> tool is a more convenient way to create
+and manage masks.
 <p>
-The mask is read as an integer map. If MASK is actually a
+Alternatively, <code>GRASS_MASK</code> environment variable can be used to specify
+the raster map which will be used as a mask.
+<p>
+The mask is read as an integer map. If the mask raster is actually a
 floating-point map, the values will be converted to integers using the
 map's quantisation rules (this defaults to round-to-nearest, but can
 be changed with r.quant).
@@ -198,8 +208,8 @@ Profiles and transects can be generated
 (<a href="d.polar.html">d.polar</a>).
 
 Univariate statistics (<a href="r.univar.html">r.univar</a>) and
-reports are also available (<a href="r.report.html">r.report</a>,<a
-href="r.stats.html">r.stats</a>, <a href="r.volume.html">r.volume</a>).
+reports are also available (<a href="r.report.html">r.report</a>,
+<a href="r.stats.html">r.stats</a>, <a href="r.volume.html">r.volume</a>).
 
 Since <a href="r.univar.html">r.univar</a> may be slow for extended
 statistics these can be calculated using
@@ -256,7 +266,7 @@ Hydrologic simulation model are available as
 
 <h3>Raster format</h3>
 
-In GRASS GIS, raster data can be stored as 2D or 3D grids.
+In GRASS, raster data can be stored as 2D or 3D grids.
 
 <h4>2D raster maps</h4>
 
@@ -270,7 +280,7 @@ to the Wiki article
 <li>double-precision floating-point (DCELL).</li>
 </ul>
 
-In most GRASS GIS resources, 2D raster maps are usually called "raster" maps.
+In most GRASS resources, 2D raster maps are usually called "raster" maps.
 
 <h4>3D raster maps</h4>
 
@@ -283,28 +293,28 @@ and the double-precision one "double".
 
 <h4>No-data management and data portability</h4>
 
-GRASS GIS distinguishes NULL and zero. When working with NULL data, it
+GRASS distinguishes NULL and zero. When working with NULL data, it
 is important to know that operations on NULL cells lead to NULL cells.
 
 <p>
-The GRASS GIS raster format is architecture independent and portable between
+The GRASS raster format is architecture independent and portable between
 32bit and 64bit machines.
 
 <h3>Raster compression</h3>
 <!-- keep in sync with raster/r.compress/r.compress.html -->
 
-All GRASS GIS raster map types are by default ZSTD compressed if
+All GRASS raster map types are by default ZSTD compressed if
 available, otherwise ZLIB compressed. Through the environment variable
-<tt>GRASS_COMPRESSOR</tt> the compression method can be set to RLE,
+<code>GRASS_COMPRESSOR</code> the compression method can be set to RLE,
 ZLIB, LZ4, BZIP2, or ZSTD.
 <p>
 Important: the NULL file compression can be turned off with
-<tt>export GRASS_COMPRESS_NULLS=0</tt>. Raster maps with NULL file
-compression can only be opened with GRASS GIS 7.2.0 or later. NULL file
+<code>export GRASS_COMPRESS_NULLS=0</code>. Raster maps with NULL file
+compression can only be opened with GRASS 7.2.0 or later. NULL file
 compression for a particular raster map can be managed with <b>r.null -z</b>.
 <p>
 Integer (CELL type) raster maps can be compressed with RLE if
-the environment variable <tt>GRASS_COMPRESSOR</tt> exists and is set to
+the environment variable <code>GRASS_COMPRESSOR</code> exists and is set to
 RLE. However, this is not recommended.
 <p>
 Floating point (FCELL, DCELL) raster maps never use RLE compression;
@@ -319,11 +329,11 @@ FCELL and DCELL maps are never and have never been compressed with RLE.
 </dd>
 <dt><strong>ZLIB</strong></dt>
 <dd>ZLIB's deflate is the default compression method for all raster
-maps, if ZSTD is not available. GRASS GIS 8 uses by default 1 as ZLIB
+maps, if ZSTD is not available. GRASS 8 uses by default 1 as ZLIB
 compression level which is the best compromise between speed and
 compression ratio, also when compared to other available compression
 methods. Valid levels are in the range [1, 9] and can be set with the
-environment variable <tt>GRASS_ZLIB_LEVEL</tt>.</dd>
+environment variable <code>GRASS_ZLIB_LEVEL</code>.</dd>
 <dt><strong>LZ4</strong></dt>
 <dd>LZ4 is a very fast compression method, about as fast as no
 compression. Decompression is also very fast. The compression ratio is
@@ -361,5 +371,4 @@ not the environment variable.
   <li><a href="temporalintro.html">Introduction into temporal data processing</a></li>
   <li><a href="databaseintro.html">Database management</a></li>
   <li><a href="projectionintro.html">Projections and spatial transformations</a></li>
-  <li><a href="wxguiintro.html">Graphical User Interface</a></li>
 </ul>

@@ -4,7 +4,7 @@
 category values in a raster input map.
 <p>Values may be specified either using the <b>values=</b> option, or by
 specifying the <b>-i</b> flag and passing the values on
-<tt>stdin</tt>, one per line.
+<code>stdin</code>, one per line.
 <p>For each value which is specified, a line of output will be generated
 consisting of the category value followed by the color, e.g.:
 
@@ -53,8 +53,8 @@ r.what.color input=elevation.dem value=1500 format='%3$02x:%2$02x:%1$02x'
 
 <p>Common formats:<br>
 <ul>
-<li>Tcl/Tk: <tt>format="#%02x%02x%02x"</tt></li>
-<li>WxPython: <tt>format='"#%02x%02x%02x"'</tt>  or  <tt>format='"(%d,%d,%d)"'</tt></li>
+<li>Tcl/Tk: <code>format="#%02x%02x%02x"</code></li>
+<li>WxPython: <code>format='"#%02x%02x%02x"'</code>  or  <code>format='"(%d,%d,%d)"'</code></li>
 </ul>
 
 <h2>SEE ALSO</h2>

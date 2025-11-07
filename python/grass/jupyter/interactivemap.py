@@ -13,6 +13,7 @@
 #            for details.
 
 """Interactive visualizations map with folium or ipyleaflet"""
+
 import os
 import base64
 import json
@@ -63,12 +64,12 @@ class Layer:  # pylint: disable=too-few-public-methods
     ):
         """Reproject GRASS raster, export to PNG, and compute bounding box.
 
-        param str name: layer name
-        param str title: title of layer to display in layer control legend
-        param bool use_region: use computational region of current mapset
-        param str saved_region: name of saved computation region
-        param renderer: instance of ReprojectionRenderer
-        **kwargs: keyword arguments passed to folium/ipyleaflet layer instance
+        :param str name: layer name
+        :param str title: title of layer to display in layer control legend
+        :param bool use_region: use computational region of current mapset
+        :param str saved_region: name of saved computation region
+        :param renderer: instance of ReprojectionRenderer
+        :param kwargs: keyword arguments passed to folium/ipyleaflet layer instance
         """
         self._name = name
         self._layer_kwargs = kwargs
@@ -87,14 +88,16 @@ class Layer:  # pylint: disable=too-few-public-methods
 class Raster(Layer):
     """Overlays rasters on a folium or ipyleaflet map.
 
-    Basic Usage:
-    >>> m = folium.Map()
-    >>> gj.Raster("elevation", opacity=0.5).add_to(m)
-    >>> m
+    :Basic usage:
+      .. code-block:: pycon
 
-    >>> m = ipyleaflet.Map()
-    >>> gj.Raster("elevation", opacity=0.5).add_to(m)
-    >>> m
+        >>> m = folium.Map()
+        >>> gj.Raster("elevation", opacity=0.5).add_to(m)
+        >>> m
+
+        >>> m = ipyleaflet.Map()
+        >>> gj.Raster("elevation", opacity=0.5).add_to(m)
+        >>> m
     """
 
     def __init__(
@@ -145,14 +148,16 @@ class Raster(Layer):
 class Vector(Layer):
     """Adds vectors to a folium or ipyleaflet map.
 
-    Basic Usage:
-    >>> m = folium.Map()
-    >>> gj.Vector("roadsmajor").add_to(m)
-    >>> m
+    :Basic usage:
+      .. code-block:: pycon
 
-    >>> m = ipyleaflet.Map()
-    >>> gj.Vector("roadsmajor").add_to(m)
-    >>> m
+        >>> m = folium.Map()
+        >>> gj.Vector("roadsmajor").add_to(m)
+        >>> m
+
+        >>> m = ipyleaflet.Map()
+        >>> gj.Vector("roadsmajor").add_to(m)
+        >>> m
     """
 
     def __init__(
@@ -198,12 +203,13 @@ class Vector(Layer):
 class InteractiveMap:
     """This class creates interactive GRASS maps with folium or ipyleaflet.
 
-    Basic Usage:
+    :Basic usage:
+      .. code-block:: pycon
 
-    >>> m = InteractiveMap()
-    >>> m.add_vector("streams")
-    >>> m.add_raster("elevation")
-    >>> m.show()
+        >>> m = InteractiveMap()
+        >>> m.add_vector("streams")
+        >>> m.add_raster("elevation")
+        >>> m.show()
     """
 
     def __init__(
@@ -261,9 +267,9 @@ class InteractiveMap:
                 import folium  # pylint: disable=import-outside-toplevel
 
                 return folium
-            except ImportError as err:
+            except ImportError:
                 if error:
-                    raise err
+                    raise
                 return None
 
         def _import_ipyleaflet(error):
@@ -271,9 +277,9 @@ class InteractiveMap:
                 import ipyleaflet  # pylint: disable=import-outside-toplevel
 
                 return ipyleaflet
-            except ImportError as err:
+            except ImportError:
                 if error:
-                    raise err
+                    raise
                 return None
 
         if not map_backend:
@@ -367,7 +373,7 @@ class InteractiveMap:
         :param str name: name of vector to be added to map;
                          positional-only parameter
         :param str title: vector name for layer control
-        :**kwargs: keyword arguments passed to GeoJSON overlay
+        :param kwargs: keyword arguments passed to GeoJSON overlay
         """
         self.vector_name.append(name)
         Vector(name, title=title, renderer=self._renderer, **kwargs).add_to(self.map)
@@ -379,14 +385,15 @@ class InteractiveMap:
         Color table for the raster can be modified with `r.colors` before calling
         this function.
 
-        .. note:: This will only work if the raster is located in the current mapset.
-        To change the color table of a raster located outside the current mapset,
-        switch to that mapset with `g.mapset`, modify the color table with `r.color`
-        then switch back to the initial mapset and run this function.
+        .. note::
+            This will only work if the raster is located in the current mapset.
+            To change the color table of a raster located outside the current mapset,
+            switch to that mapset with ``g.mapset``, modify the color table with ``r.color``
+            then switch back to the initial mapset and run this function.
 
         :param str name: name of raster to add to display; positional-only parameter
         :param str title: raster name for layer control
-        :**kwargs: keyword arguments passed to image overlay
+        :param kwargs: keyword arguments passed to image overlay
         """
         self.raster_name.append(name)
         Raster(name, title=title, renderer=self._renderer, **kwargs).add_to(self.map)
@@ -396,7 +403,8 @@ class InteractiveMap:
 
         A Layer Control is added by default. Call this function to customize
         layer control object. Accepts keyword arguments to be passed to leaflet
-        layer control object"""
+        layer control object
+        """
 
         if self._folium:
             self.layer_control_object = self._folium.LayerControl(**kwargs)
@@ -533,9 +541,7 @@ class InteractiveRegionController:
         changed_region (dict): The dictionary to store the changed region.
     """
 
-    def __init__(
-        self, map_object, ipyleaflet, ipywidgets, **kwargs
-    ):  # pylint: disable=unused-argument
+    def __init__(self, map_object, ipyleaflet, ipywidgets, **kwargs):  # pylint: disable=unused-argument
         """Initializes the InteractiveRegionController.
 
         :param map_object: The map object.
@@ -578,7 +584,7 @@ class InteractiveRegionController:
             self.bottom_output_widget.clear_output()
             print(
                 _(
-                    "Region changed to: n={n}, s={s}, e={e}, w={w} "
+                    "Region changed to: n={north}, s={south}, e={east}, w={west} "
                     "nsres={nsres} ewres={ewres}"
                 ).format(**region)
             )

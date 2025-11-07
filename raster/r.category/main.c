@@ -20,9 +20,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/colors.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 #include "local_proto.h"
 
 static struct Categories cats;
@@ -38,15 +39,18 @@ int main(int argc, char *argv[])
     RASTER_MAP_TYPE map_type;
     int i;
     int from_stdin = FALSE;
+    struct Colors colors;
     struct GModule *module;
 
+    const char *label_format = NULL;
     enum OutputFormat format;
-    JSON_Value *root_value;
-    JSON_Array *root_array;
+    enum ColorOutput color_format;
+    G_JSON_Value *root_value;
+    G_JSON_Array *root_array;
 
     struct {
         struct Option *map, *fs, *cats, *vals, *raster, *file, *fmt_str,
-            *fmt_coeff, *format;
+            *fmt_coeff, *format, *color;
     } parm;
 
     G_gisinit(argv[0]);
@@ -89,8 +93,20 @@ int main(int argc, char *argv[])
         _("File containing category label rules (or \"-\" to read from stdin)");
     parm.file->guisection = _("Define");
 
+    parm.format = G_define_option();
+    parm.format->key = "format";
+    parm.format->type = TYPE_STRING;
+    parm.format->required = NO;
+    parm.format->label = _("Output format ('plain', 'json')");
+    parm.format->description =
+        _("When the value is not 'plain' or 'json', the value is used as a "
+          "default label or format string for dynamic labeling. "
+          "This usage is deprecated and will be removed in a future release. "
+          "Use parameter 'label_format' instead.");
+    parm.format->guisection = _("Print");
+
     parm.fmt_str = G_define_option();
-    parm.fmt_str->key = "format";
+    parm.fmt_str->key = "label_format";
     parm.fmt_str->type = TYPE_STRING;
     parm.fmt_str->required = NO;
     parm.fmt_str->label =
@@ -108,23 +124,56 @@ int main(int argc, char *argv[])
     parm.fmt_coeff->description =
         _("Two pairs of category multiplier and offsets, for $1 and $2");
 
-    parm.format = G_define_standard_option(G_OPT_F_FORMAT);
-    parm.format->key = "output_format";
-    parm.format->guisection = _("Print");
+    parm.color = G_define_standard_option(G_OPT_C_FORMAT);
+    parm.color->required = NO;
+    parm.color->options = "none,rgb,hex,triplet,hsv";
+    parm.color->answer = "none";
+    parm.color->description = _("Color format for output values or none.");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    if (strcmp(parm.format->answer, "json") == 0) {
+    if (parm.fmt_str->answer != NULL) {
+        label_format = parm.fmt_str->answer;
+    }
+    if (parm.format->answer && strcmp(parm.format->answer, "json") == 0) {
         format = JSON;
-        root_value = json_value_init_array();
+        root_value = G_json_value_init_array();
         if (root_value == NULL) {
             G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
         }
-        root_array = json_array(root_value);
+        root_array = G_json_array(root_value);
     }
     else {
         format = PLAIN;
+
+        if (parm.format->answer && strcmp(parm.format->answer, "plain") != 0) {
+            // for backward compatibility
+            if (label_format != NULL) {
+                label_format = parm.format->answer;
+            }
+
+            G_verbose_message(
+                _("The usage of 'format' for dynamic labeling is deprecated "
+                  "and will be removed in a future release. Please use the "
+                  "'label_format' parameter instead."));
+        }
+    }
+
+    if (strcmp(parm.color->answer, "rgb") == 0) {
+        color_format = RGB_OUTPUT;
+    }
+    else if (strcmp(parm.color->answer, "triplet") == 0) {
+        color_format = TRIPLET_OUTPUT;
+    }
+    else if (strcmp(parm.color->answer, "hex") == 0) {
+        color_format = HEX_OUTPUT;
+    }
+    else if (strcmp(parm.color->answer, "hsv") == 0) {
+        color_format = HSV_OUTPUT;
+    }
+    else {
+        color_format = NONE;
     }
 
     name = parm.map->answer;
@@ -138,7 +187,7 @@ int main(int argc, char *argv[])
     map_type = Rast_map_type(name, mapset);
 
     /* create category labels */
-    if (parm.raster->answer || parm.file->answer || parm.fmt_str->answer ||
+    if (parm.raster->answer || parm.file->answer || label_format ||
         parm.fmt_coeff->answer) {
 
         /* restrict editing to current mapset */
@@ -246,7 +295,7 @@ int main(int argc, char *argv[])
         }
 
         /* set dynamic cat rules for cats without explicit labels */
-        if (parm.fmt_str->answer || parm.fmt_coeff->answer) {
+        if (label_format || parm.fmt_coeff->answer) {
             char *fmt_str;
             double m1, a1, m2, a2;
 
@@ -258,12 +307,11 @@ int main(int argc, char *argv[])
                     _("Unable to read category file of raster map <%s@%s>"),
                     name, G_mapset());
 
-            if (parm.fmt_str->answer) {
-                fmt_str =
-                    G_malloc(strlen(parm.fmt_str->answer) > strlen(cats.fmt)
-                                 ? strlen(parm.fmt_str->answer) + 1
-                                 : strlen(cats.fmt) + 1);
-                strcpy(fmt_str, parm.fmt_str->answer);
+            if (label_format) {
+                fmt_str = G_malloc(strlen(label_format) > strlen(cats.fmt)
+                                       ? strlen(label_format) + 1
+                                       : strlen(cats.fmt) + 1);
+                strcpy(fmt_str, label_format);
             }
             else {
                 fmt_str = G_malloc(strlen(cats.fmt) + 1);
@@ -297,13 +345,17 @@ int main(int argc, char *argv[])
                 name, mapset);
     }
 
+    if (color_format != NONE)
+        if (Rast_read_colors(name, mapset, &colors) < 0)
+            G_fatal_error(_("Unable to read colors for input map %s"), name);
+
     /* describe the category labels */
     /* if no cats requested, use r.describe to get the cats */
     if (parm.cats->answer == NULL) {
         if (map_type == CELL_TYPE) {
             get_cats(name, mapset);
             while (next_cat(&x))
-                print_label(x, format, root_array);
+                print_label(x, format, root_array, color_format, &colors);
             if (format == JSON) {
                 print_json(root_value);
             }
@@ -324,7 +376,7 @@ int main(int argc, char *argv[])
             for (i = 0; parm.cats->answers[i]; i++) {
                 scan_cats(parm.cats->answers[i], &x, &y);
                 while (x <= y)
-                    print_label(x++, format, root_array);
+                    print_label(x++, format, root_array, color_format, &colors);
             }
             if (format == JSON) {
                 print_json(root_value);
@@ -342,7 +394,7 @@ int main(int argc, char *argv[])
         }
     for (i = 0; parm.vals->answers[i]; i++) {
         scan_vals(parm.vals->answers[i], &dx);
-        print_d_label(dx, format, root_array);
+        print_d_label(dx, format, root_array, color_format, &colors);
     }
 
     if (format == JSON) {
@@ -352,64 +404,106 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
-void print_json(JSON_Value *root_value)
+void print_json(G_JSON_Value *root_value)
 {
     char *serialized_string = NULL;
-    serialized_string = json_serialize_to_string_pretty(root_value);
+    serialized_string = G_json_serialize_to_string_pretty(root_value);
     if (serialized_string == NULL) {
         G_fatal_error(_("Failed to initialize pretty JSON string."));
     }
     puts(serialized_string);
-    json_free_serialized_string(serialized_string);
-    json_value_free(root_value);
+    G_json_free_serialized_string(serialized_string);
+    G_json_value_free(root_value);
 }
 
-int print_label(long x, enum OutputFormat format, JSON_Array *root_array)
+int print_label(long x, enum OutputFormat format, G_JSON_Array *root_array,
+                enum ColorOutput color_format, struct Colors *colors)
 {
-    char *label;
-    JSON_Value *category_value;
-    JSON_Object *category;
+    char *label, color[COLOR_STRING_LENGTH];
+    G_JSON_Value *category_value;
+    G_JSON_Object *category;
 
     G_squeeze(label = Rast_get_c_cat((CELL *)&x, &cats));
+    if (color_format != NONE) {
+        scan_colors((CELL *)&x, colors, color_format, color, CELL_TYPE);
+    }
 
     switch (format) {
     case PLAIN:
-        fprintf(stdout, "%ld%s%s\n", x, fs, label);
+        fprintf(stdout, "%ld%s%s", x, fs, label);
+        if (color_format != NONE) {
+            fprintf(stdout, "%s%s", fs, color);
+        }
+        fprintf(stdout, "\n");
         break;
     case JSON:
-        category_value = json_value_init_object();
-        category = json_object(category_value);
-        json_object_set_number(category, "category", x);
-        json_object_set_string(category, "description", label);
-        json_array_append_value(root_array, category_value);
+        category_value = G_json_value_init_object();
+        category = G_json_object(category_value);
+        G_json_object_set_number(category, "category", x);
+        if (strlen(label) == 0) {
+            G_json_object_set_null(category, "label");
+        }
+        else {
+            G_json_object_set_string(category, "label", label);
+        }
+        if (color_format != NONE) {
+            if (strcmp(color, "*") == 0) {
+                G_json_object_set_null(category, "color");
+            }
+            else {
+                G_json_object_set_string(category, "color", color);
+            }
+        }
+        G_json_array_append_value(root_array, category_value);
         break;
     }
 
     return 0;
 }
 
-int print_d_label(double x, enum OutputFormat format, JSON_Array *root_array)
+int print_d_label(double x, enum OutputFormat format, G_JSON_Array *root_array,
+                  enum ColorOutput color_format, struct Colors *colors)
 {
-    char *label, tmp[40];
+    char *label, tmp[40], color[COLOR_STRING_LENGTH];
     DCELL dtmp;
-    JSON_Value *category_value;
-    JSON_Object *category;
+    G_JSON_Value *category_value;
+    G_JSON_Object *category;
 
     dtmp = x;
     G_squeeze(label = Rast_get_d_cat(&dtmp, &cats));
+    if (color_format != NONE) {
+        scan_colors((CELL *)&x, colors, color_format, color, CELL_TYPE);
+    }
 
     switch (format) {
     case PLAIN:
-        sprintf(tmp, "%.10f", x);
+        snprintf(tmp, sizeof(tmp), "%.10f", x);
         G_trim_decimal(tmp);
-        fprintf(stdout, "%s%s%s\n", tmp, fs, label);
+        fprintf(stdout, "%s%s%s", tmp, fs, label);
+        if (color_format != NONE) {
+            fprintf(stdout, "%s%s", fs, color);
+        }
+        fprintf(stdout, "\n");
         break;
     case JSON:
-        category_value = json_value_init_object();
-        category = json_object(category_value);
-        json_object_set_number(category, "category", x);
-        json_object_set_string(category, "description", label);
-        json_array_append_value(root_array, category_value);
+        category_value = G_json_value_init_object();
+        category = G_json_object(category_value);
+        G_json_object_set_number(category, "category", x);
+        if (strlen(label) == 0) {
+            G_json_object_set_null(category, "label");
+        }
+        else {
+            G_json_object_set_string(category, "label", label);
+        }
+        if (color_format != NONE) {
+            if (strcmp(color, "*") == 0) {
+                G_json_object_set_null(category, "color");
+            }
+            else {
+                G_json_object_set_string(category, "color", color);
+            }
+        }
+        G_json_array_append_value(root_array, category_value);
         break;
     }
 
@@ -439,4 +533,40 @@ int scan_vals(const char *s, double *x)
     if (sscanf(s, "%lf%1s", x, dummy) == 1 && *dummy == 0)
         return 1;
     return 0;
+}
+
+void scan_colors(const void *x, struct Colors *colors,
+                 enum ColorOutput color_format, char *color,
+                 RASTER_MAP_TYPE map_type)
+{
+    int red, grn, blu;
+    float h, s, v;
+
+    if (!Rast_get_color(x, &red, &grn, &blu, colors, map_type)) {
+        strcpy(color, "*");
+        return;
+    }
+
+    switch (color_format) {
+    case RGB_OUTPUT:
+        snprintf(color, COLOR_STRING_LENGTH, "rgb(%d, %d, %d)", red, grn, blu);
+        break;
+
+    case HEX_OUTPUT:
+        snprintf(color, COLOR_STRING_LENGTH, "#%02X%02X%02X", red, grn, blu);
+        break;
+
+    case TRIPLET_OUTPUT:
+        snprintf(color, COLOR_STRING_LENGTH, "%d:%d:%d", red, grn, blu);
+        break;
+
+    case HSV_OUTPUT:
+        G_rgb_to_hsv(red, grn, blu, &h, &s, &v);
+        snprintf(color, COLOR_STRING_LENGTH, "hsv(%d, %d, %d)", (int)h, (int)s,
+                 (int)v);
+        break;
+
+    case NONE:
+        break;
+    }
 }

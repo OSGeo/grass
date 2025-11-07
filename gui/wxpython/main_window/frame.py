@@ -55,6 +55,7 @@ from core.watchdog import (
     EVT_CURRENT_MAPSET_CHANGED,
     MapsetWatchdog,
 )
+from core.menutree import MenuTreeModelBuilder
 from gui_core.preferences import MapsetAccess, PreferencesDialog
 from lmgr.layertree import LayerTree, LMIcons
 from lmgr.menudata import LayerManagerMenuData, LayerManagerModuleTree
@@ -124,7 +125,7 @@ class GMFrame(wx.Frame):
         if title:
             self.baseTitle = title
         else:
-            self.baseTitle = _("GRASS GIS")
+            self.baseTitle = _("GRASS")
 
         self.iconsize = (16, 16)
         self.size = size
@@ -521,9 +522,11 @@ class GMFrame(wx.Frame):
                                                map display notebook page
                                                index (single window mode)
             """
-            pgnum_dict = {}
-            pgnum_dict["layers"] = self.notebookLayers.GetPageIndex(page)
-            pgnum_dict["mainnotebook"] = self.mainnotebook.GetPageIndex(mapdisplay)
+            pgnum_dict = {
+                "layers": self.notebookLayers.GetPageIndex(page),
+                "mainnotebook": self.mainnotebook.GetPageIndex(mapdisplay),
+            }
+
             name = self.notebookLayers.GetPageText(pgnum_dict["layers"])
             caption = _("Close Map Display {}").format(name)
             if not askIfSaveWorkspace or (
@@ -790,8 +793,7 @@ class GMFrame(wx.Frame):
     def AddNvizTools(self, firstTime):
         """Add nviz notebook page
 
-        :param firstTime: if a mapdisplay is starting 3D mode for the
-                          first time
+        :param firstTime: if a mapdisplay is starting 3D mode for the first time
         """
         Debug.msg(5, "GMFrame.AddNvizTools()")
         from nviz.main import haveNviz
@@ -1051,7 +1053,7 @@ class GMFrame(wx.Frame):
                                 notebook layers tree page index and
                                 "mainnotebook" key represent map display
                                 notebook page index (single window mode)
-              boolean is_docked: "True" means that map display is docked in map
+        :param boolean is_docked: "True" means that map display is docked in map
                                display notebook, "False" means that map display
                                is undocked to independent frame
         """
@@ -1108,8 +1110,7 @@ class GMFrame(wx.Frame):
         else:
             result = False
             raise ValueError(
-                "Layer Manager special command (%s)"
-                " not supported." % " ".join(command)
+                "Layer Manager special command (%s) not supported." % " ".join(command)
             )
         if result:
             self._gconsole.UpdateHistory(status=Status.SUCCESS)
@@ -1239,11 +1240,10 @@ class GMFrame(wx.Frame):
                 return self.GetLayerTree().GetMapDisplay()
             return None
         # -> return list of all mapdisplays
-        mlist = []
-        for idx in range(self.notebookLayers.GetPageCount()):
-            mlist.append(self.notebookLayers.GetPage(idx).maptree.GetMapDisplay())
-
-        return mlist
+        return [
+            self.notebookLayers.GetPage(idx).maptree.GetMapDisplay()
+            for idx in range(self.notebookLayers.GetPageCount())
+        ]
 
     def GetAllMapDisplays(self):
         """Get all (open) map displays"""
@@ -1340,8 +1340,7 @@ class GMFrame(wx.Frame):
             GMessage(
                 parent=self,
                 message=_(
-                    "Editing is allowed only for vector maps from the "
-                    "current mapset."
+                    "Editing is allowed only for vector maps from the current mapset."
                 ),
             )
             return
@@ -1380,13 +1379,13 @@ class GMFrame(wx.Frame):
         if not filename:
             return False
 
-        if not os.path.exists(filename):
+        if not Path(filename).exists():
             GError(
                 parent=self,
                 message=_("Script file '%s' doesn't exist. Operation canceled.")
                 % filename,
             )
-            return
+            return None
 
         # check permission
         if not os.access(filename, os.X_OK):
@@ -1403,14 +1402,14 @@ class GMFrame(wx.Frame):
                 style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
             )
             if dlg.ShowModal() != wx.ID_YES:
-                return
+                return None
             dlg.Destroy()
             try:
                 mode = stat.S_IMODE(os.lstat(filename)[stat.ST_MODE])
                 os.chmod(filename, mode | stat.S_IXUSR)
             except OSError:
                 GError(_("Unable to set permission. Operation canceled."), parent=self)
-                return
+                return None
 
         # check GRASS_ADDON_PATH
         addonPath = os.getenv("GRASS_ADDON_PATH", [])
@@ -1548,10 +1547,11 @@ class GMFrame(wx.Frame):
             # this is programmer's error
             # can be relaxed in future
             # but keep it strict unless needed otherwise
-            raise ValueError(
-                "OnChangeCWD cmd parameter must be list of"
+            msg = (
+                f"{self.OnChangeCWD.__name__} cmd parameter must be a list of"
                 " length 1 or 2 and 'cd' as a first item"
             )
+            raise ValueError(msg)
         if cmd and len(cmd) > 2:
             # this might be a user error
             write_beginning(command=cmd)
@@ -1618,8 +1618,9 @@ class GMFrame(wx.Frame):
             sys.stderr.write(_("Unable to get GRASS version\n"))
 
         # check also OSGeo4W on MS Windows
-        if sys.platform == "win32" and not os.path.exists(
-            os.path.join(os.getenv("GISBASE"), "WinGRASS-README.url")
+        if (
+            sys.platform == "win32"
+            and not Path(os.getenv("GISBASE"), "WinGRASS-README.url").exists()
         ):
             osgeo4w = " (OSGeo4W)"
         else:
@@ -1710,7 +1711,8 @@ class GMFrame(wx.Frame):
 
     def OnWorkspaceClose(self, event=None):
         """Close file with workspace definition"""
-        self.workspace_manager.Close()
+        if self.workspace_manager.CanClosePage(caption=_("Close workspace")):
+            self.workspace_manager.Close()
 
     def OnDisplayClose(self, event=None):
         """Close current map display window"""
@@ -1856,10 +1858,11 @@ class GMFrame(wx.Frame):
 
         tree = self.GetLayerTree()
         if tree:
-            rasters = []
-            for layer in tree.GetSelectedLayers(checkedOnly=False):
-                if tree.GetLayerInfo(layer, key="type") == "raster":
-                    rasters.append(tree.GetLayerInfo(layer, key="maplayer").GetName())
+            rasters = [
+                tree.GetLayerInfo(layer, key="maplayer").GetName()
+                for layer in tree.GetSelectedLayers(checkedOnly=False)
+                if tree.GetLayerInfo(layer, key="type") == "raster"
+            ]
             if len(rasters) >= 2:
                 from core.layerlist import LayerList
                 from animation.data import AnimLayer
@@ -1980,14 +1983,23 @@ class GMFrame(wx.Frame):
 
     def OnSimpleEditor(self, event):
         # import on demand
-        from gui_core.pyedit import PyEditFrame
+        from gui_core.pyedit import PyEditPanel
 
         # we don't keep track of them and we don't care about open files
         # there when closing the main GUI
-        simpleEditor = PyEditFrame(parent=self, giface=self._giface)
-        simpleEditor.SetSize(self.GetSize())
-        simpleEditor.CenterOnScreen()
-        simpleEditor.Show()
+        simpleEditor = PyEditPanel(
+            parent=self, giface=self._giface, statusbar=self.statusbar, dockable=True
+        )
+        filename = os.path.join(globalvar.WXGUIDIR, "xml", "menudata_pyedit.xml")
+        simpleEditor.SetUpPage(
+            self,
+            self.mainnotebook,
+            menuModel=MenuTreeModelBuilder(filename).GetModel(separators=True),
+            menuName="&Editor",
+        )
+
+        # add map display panel to notebook and make it current
+        self.mainnotebook.AddPage(simpleEditor, _("Code editor"))
 
     def OnShowAttributeTable(self, event, selection=None):
         """Show attribute table of the given vector map layer"""
@@ -2037,7 +2049,7 @@ class GMFrame(wx.Frame):
         """Changes bookcontrol page to page associated with display."""
         # moved from mapdisp/frame.py
         # TODO: why it is called 3 times when getting focus?
-        # and one times when loosing focus?
+        # and one times when losing focus?
         pgnum = self.notebookLayers.GetPageIndex(notebookLayerPage)
         if pgnum > -1:
             self.notebookLayers.SetSelection(pgnum)

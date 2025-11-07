@@ -23,6 +23,7 @@
         // weekly update of lock files (flake.lock)
         ":maintainLockFilesWeekly",
         "group:githubArtifactActions",
+        "schedule:weekends",
     ],
 
     // enable Nix lock file update (flake.lock)

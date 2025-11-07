@@ -1,15 +1,15 @@
 #!/bin/sh
 # Copyright (c) 2000, 2016, Oracle and/or its affiliates. All rights reserved.
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; version 2 of the License.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
@@ -109,7 +109,7 @@ else
   port=3306
 fi
 
-# Create options 
+# Create options
 # We intentionally add a space to the beginning and end of lib strings, simplifies replace later
 libs=" $ldflags -L$pkglibdir  -lmysqlclient   -lpthread -lz -lm -ldl "
 libs="$libs   "
@@ -131,19 +131,19 @@ for remove in DDBUG_OFF DSAFE_MUTEX DFORCE_INIT_OF_VARS \
 do
   # The first option we might strip will always have a space before it because
   # we set -I$pkgincludedir as the first option
-  cflags=`echo "$cflags"|sed -e "s/ -$remove  */ /g"` 
-  cxxflags=`echo "$cxxflags"|sed -e "s/ -$remove  */ /g"` 
+  cflags=`echo "$cflags"|sed -e "s/ -$remove  */ /g"`
+  cxxflags=`echo "$cxxflags"|sed -e "s/ -$remove  */ /g"`
 done
-cflags=`echo "$cflags"|sed -e 's/ *\$//'` 
-cxxflags=`echo "$cxxflags"|sed -e 's/ *\$//'` 
+cflags=`echo "$cflags"|sed -e 's/ *\$//'`
+cxxflags=`echo "$cxxflags"|sed -e 's/ *\$//'`
 
 # Same for --libs(_r)
 for remove in lmtmalloc static-libcxa i-static static-intel
 do
   # We know the strings starts with a space
-  libs=`echo "$libs"|sed -e "s/ -$remove  */ /g"` 
-  libs_r=`echo "$libs_r"|sed -e "s/ -$remove  */ /g"` 
-  embedded_libs=`echo "$embedded_libs"|sed -e "s/ -$remove  */ /g"` 
+  libs=`echo "$libs"|sed -e "s/ -$remove  */ /g"`
+  libs_r=`echo "$libs_r"|sed -e "s/ -$remove  */ /g"`
+  embedded_libs=`echo "$embedded_libs"|sed -e "s/ -$remove  */ /g"`
 done
 
 # Strip trailing and ending space if any, and '+' (FIXME why?)

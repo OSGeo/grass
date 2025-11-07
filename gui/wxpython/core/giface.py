@@ -22,9 +22,6 @@ import grass.script as gs
 
 from grass.pydispatch.signal import Signal
 
-# to disable Abstract class not referenced
-# pylint: disable=R0921
-
 
 class Notification:
     """Enum class for notifications suggestions.
@@ -336,7 +333,7 @@ class StandaloneGrassInterface(GrassInterface):
 
     def GetMapDisplay(self):
         """Get current map display."""
-        return None
+        return
 
     def GetAllMapDisplays(self):
         """Get list of all map displays."""

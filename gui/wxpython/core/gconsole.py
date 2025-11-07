@@ -31,6 +31,7 @@ import queue as Queue
 
 import codecs
 import locale
+from pathlib import Path
 
 import wx
 from wx.lib.newevent import NewEvent
@@ -69,11 +70,11 @@ class CmdThread(threading.Thread):
 
     requestId = 0
 
-    def __init__(self, receiver, requestQ=None, resultQ=None, **kwds):
+    def __init__(self, receiver, requestQ=None, resultQ=None, **kwargs):
         """
         :param receiver: event receiver (used in PostEvent)
         """
-        threading.Thread.__init__(self, **kwds)
+        threading.Thread.__init__(self, **kwargs)
 
         if requestQ is None:
             self.requestQ = Queue.Queue()
@@ -94,18 +95,18 @@ class CmdThread(threading.Thread):
 
         self.start()
 
-    def RunCmd(self, *args, **kwds):
+    def RunCmd(self, *args, **kwargs):
         """Run command in queue
 
         :param args: unnamed command arguments
-        :param kwds: named command arguments
+        :param kwargs: named command arguments
 
         :return: request id in queue
         """
         CmdThread.requestId += 1
 
         self.requestCmd = None
-        self.requestQ.put((CmdThread.requestId, args, kwds))
+        self.requestQ.put((CmdThread.requestId, args, kwargs))
 
         return CmdThread.requestId
 
@@ -128,7 +129,7 @@ class CmdThread(threading.Thread):
                 "addLayer": None,
                 "notification": None,
             }
-            requestId, args, kwds = self.requestQ.get()
+            requestId, args, kwargs = self.requestQ.get()
             for key in (
                 "callable",
                 "onDone",
@@ -137,9 +138,9 @@ class CmdThread(threading.Thread):
                 "addLayer",
                 "notification",
             ):
-                if key in kwds:
-                    variables[key] = kwds[key]
-                    del kwds[key]
+                if key in kwargs:
+                    variables[key] = kwargs[key]
+                    del kwargs[key]
 
             if not variables["callable"]:
                 variables["callable"] = GrassCmd
@@ -166,7 +167,7 @@ class CmdThread(threading.Thread):
                 wx.PostEvent(self.receiver, event)
 
             time.sleep(0.1)
-            self.requestCmd = variables["callable"](*args, **kwds)
+            self.requestCmd = variables["callable"](*args, **kwargs)
             if self._want_abort_all and self.requestCmd is not None:
                 self.requestCmd.abort()
                 if self.requestQ.empty():
@@ -217,7 +218,7 @@ class CmdThread(threading.Thread):
                         "map=%s" % mapName,
                         "color=%s" % colorTable,
                     ]
-                    self.requestCmdColor = variables["callable"](*argsColor, **kwds)
+                    self.requestCmdColor = variables["callable"](*argsColor, **kwargs)
                     self.resultQ.put((requestId, self.requestCmdColor.run()))
 
             if self.receiver:
@@ -316,7 +317,7 @@ class GStderr:
 
             if "GRASS_INFO_PERCENT" in line:
                 value = int(line.rsplit(":", 1)[1].strip())
-                progressValue = value if value >= 0 and value < 100 else 0
+                progressValue = value if 0 <= value < 100 else 0
             elif "GRASS_INFO_MESSAGE" in line:
                 self.type = "message"
                 self.message += line.split(":", 1)[1].strip() + "\n"
@@ -362,7 +363,7 @@ class GConsole(wx.EvtHandler):
     def __init__(self, guiparent=None, giface=None, ignoredCmdPattern=None):
         r"""
         :param guiparent: parent window for created GUI objects
-        :param lmgr: layer manager window (TODO: replace by giface)
+        :param giface: GRASS interface instance
         :param ignoredCmdPattern: regular expression specifying commands
                                   to be ignored (e.g. @c '^d\..*' for
                                   display commands)
@@ -607,11 +608,11 @@ class GConsole(wx.EvtHandler):
                     if sys.platform == "win32":
                         pyFile += ".py"
                     pyPath = os.path.join(os.environ["GISBASE"], "scripts", pyFile)
-                    if not os.path.exists(pyPath):
+                    if not Path(pyPath).exists():
                         pyPath = os.path.join(
                             os.environ["GRASS_ADDON_BASE"], "scripts", pyFile
                         )
-                    if not os.path.exists(pyPath):
+                    if not Path(pyPath).exists():
                         GError(
                             parent=self._guiparent,
                             message=_("Module <%s> not found.") % command[0],
@@ -673,7 +674,9 @@ class GConsole(wx.EvtHandler):
                 return
 
             skipInterface = True
-            if os.path.splitext(command[0])[1] in {".py", ".sh"}:
+            if os.path.splitext(command[0])[1] in {".py", ".sh"} and not isinstance(
+                self._guiparent, FormNotebook
+            ):
                 try:
                     with open(command[0]) as sfile:
                         for line in sfile:
@@ -856,13 +859,15 @@ class GConsole(wx.EvtHandler):
             for p in task.get_options()["flags"]:
                 if p.get("name") == "r" and p.get("value"):
                     action = "delete"
+            mask_full_name = gs.parse_command("r.mask.status", format="json")["name"]
+            mask_name, mask_mapset = mask_full_name.split("@", maxsplit=1)
             gisenv = gs.gisenv()
             self._giface.grassdbChanged.emit(
                 grassdb=gisenv["GISDBASE"],
                 location=gisenv["LOCATION_NAME"],
-                mapset=gisenv["MAPSET"],
+                mapset=mask_mapset,
                 action=action,
-                map="MASK",
+                map=mask_name,
                 element="raster",
             )
 

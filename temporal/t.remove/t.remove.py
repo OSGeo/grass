@@ -100,19 +100,17 @@ def main():
         else:
             dataset_list = tuple(datasets.split(","))
 
-    # Read the dataset list from file
     if file:
-        fd = open(file)
-
         line = True
-        while True:
-            line = fd.readline()
-            if not line:
-                break
+        with open(file) as fd:
+            while True:
+                line = fd.readline()
+                if not line:
+                    break
 
-            line_list = line.split("\n")
-            dataset_name = line_list[0]
-            dataset_list.append(dataset_name)
+                line_list = line.split("\n")
+                dataset_name = line_list[0]
+                dataset_list.append(dataset_name)
 
     statement = ""
 

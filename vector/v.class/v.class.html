@@ -44,10 +44,10 @@ from the preceding straight line. The point on the curve furthest from
 this new polyline is then chosen as a new node to create break up one of
 the two preceding segments, and so forth.
 
-<p>The problem of the difference in terms of units between the two axes 
-is solved by rescaling both amplitudes to an interval between 0 and 1. 
-In the original algorithm, the process is stopped when the difference between 
-the slopes of the two new segments is no longer significant (alpha = 0.05). As 
+<p>The problem of the difference in terms of units between the two axes
+is solved by rescaling both amplitudes to an interval between 0 and 1.
+In the original algorithm, the process is stopped when the difference between
+the slopes of the two new segments is no longer significant (alpha = 0.05). As
 the slope is the ratio between the frequency and the amplitude of the corresponding
 interval, i.e. its density, this effectively tests whether the frequencies
 of the two newly proposed classes are different from those obtained by
