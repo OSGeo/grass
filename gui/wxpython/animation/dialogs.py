@@ -1660,7 +1660,7 @@ class AddTemporalLayerDialog(wx.Dialog):
         self.tselect = Select(parent=self, type="strds")
         iconTheme = UserSettings.Get(group="appearance", key="iconTheme", subkey="type")
         bitmapPath = os.path.join(globalvar.ICONDIR, iconTheme, "layer-open.png")
-        if os.path.isfile(bitmapPath) and Path(bitmapPath).stat().st_size:
+        if Path(bitmapPath).is_file() and Path(bitmapPath).stat().st_size:
             bitmap = wx.Bitmap(name=bitmapPath)
         else:
             bitmap = wx.ArtProvider.GetBitmap(

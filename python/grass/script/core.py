@@ -2073,7 +2073,7 @@ def create_project(
             env=local_env(),
         )
     elif wkt:
-        if os.path.isfile(wkt):
+        if Path(wkt).is_file():
             ps = pipe_command(
                 "g.proj",
                 quiet=True,

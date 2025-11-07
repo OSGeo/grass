@@ -2280,7 +2280,7 @@ def remove_extension_std(name, force=False):
         os.path.join(options["prefix"], "docs", "rest", name + ".txt"),
         os.path.join(options["prefix"], "docs", "man", "man1", name + ".1"),
     ]:
-        if os.path.isfile(fpath):
+        if Path(fpath).is_file():
             gs.verbose(fpath)
             if force:
                 os.remove(fpath)
