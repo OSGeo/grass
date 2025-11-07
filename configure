@@ -13037,7 +13037,7 @@ case "$with_opengl" in
 		USE_OPENGL=1
 		OPENGL_X11=1
 		;;
-	aqua|mac|osx|macosx|agl)
+	aqua|mac|osx|macosx)
 		OPENGL_TYPE=Aqua
 		USE_OPENGL=1
 		OPENGL_AQUA=1
@@ -13660,9 +13660,6 @@ OPENGLLIBPATH="$OPENGLPATH"
 
 
 printf "%s\n" "#define OPENGL_AQUA 1" >>confdefs.h
-
-
-printf "%s\n" "#define OPENGL_AGL 1" >>confdefs.h
 
 
 fi # $OPENGL_AQUA

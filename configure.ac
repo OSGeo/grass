@@ -1417,7 +1417,7 @@ case "$with_opengl" in
 		USE_OPENGL=1
 		OPENGL_X11=1
 		;;
-	aqua|mac|osx|macosx|agl)
+	aqua|mac|osx|macosx)
 		OPENGL_TYPE=Aqua
 		USE_OPENGL=1
 		OPENGL_AQUA=1
@@ -1482,7 +1482,6 @@ OPENGLINC="$OPENGLPATH"
 OPENGLLIBPATH="$OPENGLPATH"
 
 AC_DEFINE(OPENGL_AQUA, 1, [Define to 1 if OpenGL uses Aqua (MacOS X).])
-AC_DEFINE(OPENGL_AGL, 1, [Define to 1 if OpenGL uses AGL (MacOS X).])
 
 fi # $OPENGL_AQUA
 
