@@ -173,7 +173,6 @@ class ReprojectionRenderer:
 
 class DirectRenderer:
     def __init__(self, crs, use_region=False, saved_region=None, work_dir=None):
-
         if not work_dir:
             self._tmp_dir = tempfile.TemporaryDirectory()
         else:
