@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_pl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-25 22:50+0000\n"
+"POT-Creation-Date: 2025-11-01 17:24+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Polish <https://weblate.osgeo.org/projects/grass-gis/grassmods/pl/>\n"
@@ -5298,8 +5298,8 @@ msgstr "Mój pierwszy moduł rastrowy"
 #: ../raster/r.flow/flow_io.c:67 ../raster/r.flow/flow_io.c:245
 #: ../raster/r.geomorphon/memory.c:47 ../raster/r.info/main.c:140
 #: ../raster/r.kappa/main.c:173 ../raster/r.kappa/stats.c:33
-#: ../raster/r.kappa/stats.c:40 ../raster/r.mapcalc/map.c:516
-#: ../raster/r.mapcalc/map.c:794 ../raster/r.mapcalc/map3.c:720
+#: ../raster/r.kappa/stats.c:40 ../raster/r.mapcalc/map.c:513
+#: ../raster/r.mapcalc/map.c:817 ../raster/r.mapcalc/map3.c:720
 #: ../raster/r.null/main.c:129 ../raster/r.reclass/main.c:80
 #: ../raster/r.report/parse.c:276 ../raster/r.ros/main.c:362
 #: ../raster/r.ros/main.c:373 ../raster/r.ros/main.c:377
@@ -18670,7 +18670,7 @@ msgid "Raster map <%s> not found in current mapset"
 msgstr "Mapa rastrowa <%s> nie została znaleziona w bieżącym mapsecie"
 
 #: ../raster/r.category/main.c:214 ../raster/r.category/main.c:307
-#: ../raster/r.mapcalc/map.c:212 ../raster/r.mapcalc/map3.c:193
+#: ../raster/r.mapcalc/map.c:232 ../raster/r.mapcalc/map3.c:193
 #: ../raster/r.report/parse.c:297
 #, c-format
 msgid "Unable to read category file of raster map <%s@%s>"
@@ -23368,7 +23368,7 @@ msgid "Calculates Simpson's diversity index on a raster map"
 msgstr "Oblicza wskaźnik zróżnicowania Simpson'a z mapy rastrowej"
 
 #: ../raster/r.mapcalc/evaluate.c:188 ../raster/r.mapcalc/evaluate.c:350
-#: ../raster/r.mapcalc/map.c:408 ../raster/r.mapcalc/map3.c:354
+#: ../raster/r.mapcalc/map.c:421 ../raster/r.mapcalc/map3.c:354
 #, c-format
 msgid "Unknown type: %d"
 msgstr "Nieznany typ: %d"
@@ -23458,9 +23458,9 @@ msgstr ""
 msgid "Internal error for function %s()"
 msgstr ""
 
-#: ../raster/r.mapcalc/expression.c:354 ../raster/r.mapcalc/map.c:263
-#: ../raster/r.mapcalc/map.c:493 ../raster/r.mapcalc/map.c:533
-#: ../raster/r.mapcalc/map.c:610 ../raster/r.mapcalc/map3.c:240
+#: ../raster/r.mapcalc/expression.c:354 ../raster/r.mapcalc/map.c:283
+#: ../raster/r.mapcalc/map.c:489 ../raster/r.mapcalc/map.c:530
+#: ../raster/r.mapcalc/map.c:633 ../raster/r.mapcalc/map3.c:240
 #: ../raster/r.mapcalc/map3.c:426 ../raster/r.mapcalc/map3.c:471
 #: ../raster/r.mapcalc/map3.c:567
 #, c-format
@@ -23550,12 +23550,12 @@ msgstr "Niewłaściwa liczba przedziałów: %s"
 msgid "Floating point error(s) occurred in the calculation"
 msgstr ""
 
-#: ../raster/r.mapcalc/map.c:203 ../raster/r.mapcalc/map3.c:184
+#: ../raster/r.mapcalc/map.c:223 ../raster/r.mapcalc/map3.c:184
 #, c-format
 msgid "Unable to read color file for raster map <%s@%s>"
 msgstr ""
 
-#: ../raster/r.mapcalc/map.c:216 ../raster/r.mapcalc/map3.c:197
+#: ../raster/r.mapcalc/map.c:236 ../raster/r.mapcalc/map3.c:197
 #, c-format
 msgid "Unable to create btree for raster map <%s@%s>"
 msgstr "Nie można btree utworzyć mapy rastrowej <%s@%s>"
@@ -28940,7 +28940,7 @@ msgid "seg_put_row(): could not write segment file"
 msgstr ""
 
 #: ../raster/r.stream.extract/streams.c:71
-#: ../raster/r.stream.extract/streams.c:656
+#: ../raster/r.stream.extract/streams.c:667
 #, c-format
 msgid "Stream_no %d and n_stream_nodes %<PRId64> out of sync"
 msgstr ""
@@ -28969,11 +28969,11 @@ msgstr ""
 msgid "Bug in stream extraction"
 msgstr ""
 
-#: ../raster/r.stream.extract/streams.c:620
+#: ../raster/r.stream.extract/streams.c:631
 msgid "Can't use Montgomery's method, no stream direction found"
 msgstr ""
 
-#: ../raster/r.stream.extract/streams.c:689
+#: ../raster/r.stream.extract/streams.c:700
 #, c-format
 msgid "MFD: A * path already processed when setting drainage direction: %<PRId64> of %<PRId64> cells"
 msgstr ""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-25 22:50+0000\n"
+"POT-Creation-Date: 2025-11-01 17:24+0000\n"
 "PO-Revision-Date: 2025-10-26 23:01+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/sv/>\n"
@@ -869,7 +869,7 @@ msgstr "Orsak"
 
 #: ../gui/wxpython/core/gcmd.py:146 ../gui/wxpython/core/workspace.py:1756
 #: ../gui/wxpython/gmodeler/model_convert.py:238
-#: ../gui/wxpython/mapwin/buffered.py:2152
+#: ../gui/wxpython/mapwin/buffered.py:2153
 #: ../gui/wxpython/wxplot/dialogs.py:940
 msgid "Warning"
 msgstr "Varning"
@@ -3302,7 +3302,7 @@ msgstr "Inget att återge (tom karta). Operationen avbruten."
 #: ../gui/wxpython/gcp/mapdisplay.py:461 ../gui/wxpython/gmodeler/panels.py:994
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:451
 #: ../gui/wxpython/mapdisp/frame.py:757 ../gui/wxpython/mapswipe/frame.py:612
-#: ../gui/wxpython/modules/histogram.py:474
+#: ../gui/wxpython/modules/histogram.py:475
 #: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:443
 msgid "Choose a file name to save the image (no need to add extension)"
 msgstr "Välj ett filnamn för att spara bilden (du behöver inte ange något tillägg)"
@@ -3310,7 +3310,7 @@ msgstr "Välj ett filnamn för att spara bilden (du behöver inte ange något ti
 #: ../gui/wxpython/gcp/mapdisplay.py:489
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:479
 #: ../gui/wxpython/mapdisp/frame.py:946
-#: ../gui/wxpython/modules/histogram.py:501
+#: ../gui/wxpython/modules/histogram.py:502
 #: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:471
 #: ../gui/wxpython/psmap/toolbars.py:82 ../gui/wxpython/wxplot/base.py:615
 msgid "Page setup"
@@ -3319,17 +3319,17 @@ msgstr "Inställning av sida"
 #: ../gui/wxpython/gcp/mapdisplay.py:493
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:483
 #: ../gui/wxpython/mapdisp/frame.py:950
-#: ../gui/wxpython/modules/histogram.py:505
+#: ../gui/wxpython/modules/histogram.py:506
 #: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:475
 #: ../gui/wxpython/wxplot/base.py:616
 msgid "Print preview"
 msgstr "Förhandsgranska utskrift"
 
 #: ../gui/wxpython/gcp/mapdisplay.py:497
-#: ../gui/wxpython/gui_core/toolbars.py:69
+#: ../gui/wxpython/gui_core/toolbars.py:70
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:487
 #: ../gui/wxpython/mapdisp/frame.py:954
-#: ../gui/wxpython/modules/histogram.py:509
+#: ../gui/wxpython/modules/histogram.py:510
 #: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:479
 #: ../gui/wxpython/wxplot/base.py:617
 msgid "Print display"
@@ -4756,7 +4756,7 @@ msgstr "giltigt intervall"
 
 #: ../gui/wxpython/gui_core/forms.py:1374
 #: ../gui/wxpython/gui_core/forms.py:2948
-#: ../gui/wxpython/gui_core/toolbars.py:70
+#: ../gui/wxpython/gui_core/toolbars.py:71
 msgid "Select font"
 msgstr "Välj teckensnitt"
 
@@ -5967,122 +5967,122 @@ msgstr "Lägg till 3D-rasterkartlager"
 msgid "Add RGB map layer"
 msgstr "Lägg till RGB-kartlager"
 
-#: ../gui/wxpython/gui_core/toolbars.py:38
+#: ../gui/wxpython/gui_core/toolbars.py:39
 msgid "Display map"
 msgstr "Visa karta"
 
-#: ../gui/wxpython/gui_core/toolbars.py:38
+#: ../gui/wxpython/gui_core/toolbars.py:39
 msgid "Re-render modified map layers only"
 msgstr "Återskapa endast modifierade kartlager"
 
-#: ../gui/wxpython/gui_core/toolbars.py:42
+#: ../gui/wxpython/gui_core/toolbars.py:43
 msgid "Render map"
 msgstr "Renderingskarta"
 
-#: ../gui/wxpython/gui_core/toolbars.py:43
+#: ../gui/wxpython/gui_core/toolbars.py:44
 msgid "Force re-rendering all map layers"
 msgstr "Tvinga fram en ny rendering av alla kartlager"
 
-#: ../gui/wxpython/gui_core/toolbars.py:47
+#: ../gui/wxpython/gui_core/toolbars.py:48
 msgid "Erase display"
 msgstr "Radera display"
 
-#: ../gui/wxpython/gui_core/toolbars.py:48
+#: ../gui/wxpython/gui_core/toolbars.py:49
 msgid "Erase display canvas with given background color"
 msgstr "Radera skärmduk med given bakgrundsfärg"
 
-#: ../gui/wxpython/gui_core/toolbars.py:50
+#: ../gui/wxpython/gui_core/toolbars.py:51
 msgid "Pointer"
 msgstr "Pekare"
 
-#: ../gui/wxpython/gui_core/toolbars.py:52
+#: ../gui/wxpython/gui_core/toolbars.py:53
 msgid "Drag or click mouse to zoom"
 msgstr "Dra eller klicka med musen för att zooma"
 
-#: ../gui/wxpython/gui_core/toolbars.py:52
+#: ../gui/wxpython/gui_core/toolbars.py:53
 msgid "Zoom in"
 msgstr "Zooma in"
 
-#: ../gui/wxpython/gui_core/toolbars.py:55
+#: ../gui/wxpython/gui_core/toolbars.py:56
 msgid "Drag or click mouse to unzoom"
 msgstr "Dra eller klicka med musen för att ta bort zoomningen"
 
-#: ../gui/wxpython/gui_core/toolbars.py:55
+#: ../gui/wxpython/gui_core/toolbars.py:56
 msgid "Zoom out"
 msgstr "Zooma ut"
 
-#: ../gui/wxpython/gui_core/toolbars.py:57
+#: ../gui/wxpython/gui_core/toolbars.py:58
 msgid "Return to previous zoom"
 msgstr "Återgå till föregående zoom"
 
-#: ../gui/wxpython/gui_core/toolbars.py:60
+#: ../gui/wxpython/gui_core/toolbars.py:61
 msgid "Various zoom options"
 msgstr "Olika zoomalternativ"
 
-#: ../gui/wxpython/gui_core/toolbars.py:61
+#: ../gui/wxpython/gui_core/toolbars.py:62
 msgid "Zoom to default or saved region, save to named region, ..."
 msgstr "Zooma till standard- eller sparad region, spara till namngiven region, ..."
 
-#: ../gui/wxpython/gui_core/toolbars.py:63
+#: ../gui/wxpython/gui_core/toolbars.py:64
 msgid "Zoom to selected map layer(s)"
 msgstr "Zooma till valda kartlager"
 
-#: ../gui/wxpython/gui_core/toolbars.py:65
+#: ../gui/wxpython/gui_core/toolbars.py:66
 msgid "Zoom to computational region extent"
 msgstr "Zooma till beräkningsregionens omfattning"
 
-#: ../gui/wxpython/gui_core/toolbars.py:67
+#: ../gui/wxpython/gui_core/toolbars.py:68
 msgid "Drag with mouse to pan"
 msgstr "Dra med musen för att panorera"
 
-#: ../gui/wxpython/gui_core/toolbars.py:67
+#: ../gui/wxpython/gui_core/toolbars.py:68
 msgid "Pan"
 msgstr "Panorera"
 
-#: ../gui/wxpython/gui_core/toolbars.py:68
+#: ../gui/wxpython/gui_core/toolbars.py:69
 msgid "Save display to file"
 msgstr "Spara visning till fil"
 
-#: ../gui/wxpython/gui_core/toolbars.py:71
+#: ../gui/wxpython/gui_core/toolbars.py:72
 msgid "Show manual"
 msgstr "Visa manual"
 
-#: ../gui/wxpython/gui_core/toolbars.py:72 ../gui/wxpython/lmgr/layertree.py:56
+#: ../gui/wxpython/gui_core/toolbars.py:73 ../gui/wxpython/lmgr/layertree.py:56
 msgid "Quit"
 msgstr "Avsluta"
 
-#: ../gui/wxpython/gui_core/toolbars.py:73 ../gui/wxpython/lmgr/layertree.py:57
+#: ../gui/wxpython/gui_core/toolbars.py:74 ../gui/wxpython/lmgr/layertree.py:57
 msgid "Add raster map layer"
 msgstr "Lägg till rasterkartlager"
 
-#: ../gui/wxpython/gui_core/toolbars.py:74 ../gui/wxpython/lmgr/layertree.py:65
+#: ../gui/wxpython/gui_core/toolbars.py:75 ../gui/wxpython/lmgr/layertree.py:65
 msgid "Add vector map layer"
 msgstr "Lägg till vektorkartlager"
 
-#: ../gui/wxpython/gui_core/toolbars.py:77
+#: ../gui/wxpython/gui_core/toolbars.py:78
 msgid "Add map elements"
 msgstr "Lägga till kartelement"
 
-#: ../gui/wxpython/gui_core/toolbars.py:78
+#: ../gui/wxpython/gui_core/toolbars.py:79
 msgid "Overlay elements like scale and legend onto map"
 msgstr "Överlagra element som skala och teckenförklaring på kartan"
 
-#: ../gui/wxpython/gui_core/toolbars.py:81
+#: ../gui/wxpython/gui_core/toolbars.py:82
 msgid "Create histogram with d.histogram"
 msgstr "Skapa histogram med d.histogram"
 
-#: ../gui/wxpython/gui_core/toolbars.py:83
+#: ../gui/wxpython/gui_core/toolbars.py:84
 #: ../gui/wxpython/iscatt/toolbars.py:184 ../gui/wxpython/nviz/tools.py:2385
 #: ../gui/wxpython/vnet/dialogs.py:977
 msgid "Settings"
 msgstr "Inställningar"
 
-#: ../gui/wxpython/gui_core/toolbars.py:85
+#: ../gui/wxpython/gui_core/toolbars.py:86
 #: ../gui/wxpython/mapdisp/properties.py:336
 msgid "Map Display Settings"
 msgstr "Inställningar för kartvisning"
 
-#: ../gui/wxpython/gui_core/toolbars.py:87
+#: ../gui/wxpython/gui_core/toolbars.py:88
 msgid "(Un)dock"
 msgstr "(O)docka"
 
@@ -6730,7 +6730,7 @@ msgstr "Undergrupp <%s> hittades inte"
 
 #: ../gui/wxpython/iclass/g.gui.iclass.py:88
 #: ../gui/wxpython/mapswipe/g.gui.mapswipe.py:79
-#: ../gui/wxpython/modules/histogram.py:405 ../gui/wxpython/nviz/wxnviz.py:597
+#: ../gui/wxpython/modules/histogram.py:406 ../gui/wxpython/nviz/wxnviz.py:597
 #: ../gui/wxpython/nviz/wxnviz.py:608
 #, python-format
 msgid "Raster map <%s> not found"
@@ -8919,7 +8919,7 @@ msgid "Set computational region extent interactively"
 msgstr "Ställ in beräkningsregionens omfattning interaktivt"
 
 #: ../gui/wxpython/mapdisp/frame.py:1540
-#: ../gui/wxpython/mapwin/buffered.py:2095
+#: ../gui/wxpython/mapwin/buffered.py:2096
 msgid "Set computational region from named region"
 msgstr "Ställ in beräkningsregion från namngiven region"
 
@@ -8931,27 +8931,27 @@ msgstr "Spara beräkningsregion till namngiven region"
 msgid "Raster Digitizer Toolbar"
 msgstr "Rasterdigitaliseringsverktygsfält"
 
-#: ../gui/wxpython/mapdisp/main.py:187
+#: ../gui/wxpython/mapdisp/main.py:188
 #, python-format
 msgid "Unsupported command %s."
 msgstr "Kommando som inte stöds %s."
 
-#: ../gui/wxpython/mapdisp/main.py:288
+#: ../gui/wxpython/mapdisp/main.py:289
 #, python-format
 msgid "Unable to read cmdfile '%(cmd)s'. Details: %(det)s"
 msgstr "Det gick inte att läsa cmdfile '%(cmd)s'. Detaljerad information: %(det)s"
 
-#: ../gui/wxpython/mapdisp/main.py:652
+#: ../gui/wxpython/mapdisp/main.py:653
 #, python-format
 msgid "Starting map display <%s>..."
 msgstr "Start av kartvisning <%s>..."
 
-#: ../gui/wxpython/mapdisp/main.py:658
+#: ../gui/wxpython/mapdisp/main.py:659
 #, python-format
 msgid "Unable to create file <%s>"
 msgstr "Det går inte att skapa filen <%s>"
 
-#: ../gui/wxpython/mapdisp/main.py:671
+#: ../gui/wxpython/mapdisp/main.py:672
 #, python-format
 msgid "Stopping map display <%s>..."
 msgstr "Stoppa kartvisningen <%s>..."
@@ -9350,40 +9350,40 @@ msgstr ""
 "Fel uppstod vid avregistrering av hanterare: %s\n"
 "                                        Handläggaren avregistrerades"
 
-#: ../gui/wxpython/mapwin/buffered.py:280
+#: ../gui/wxpython/mapwin/buffered.py:281
 msgid "Copy coordinates to clipboard"
 msgstr "Kopiera koordinater till urklipp"
 
-#: ../gui/wxpython/mapwin/buffered.py:314
+#: ../gui/wxpython/mapwin/buffered.py:315
 msgid "Resize and move legend"
 msgstr "Ändra storlek och flytta legend"
 
-#: ../gui/wxpython/mapwin/buffered.py:715
+#: ../gui/wxpython/mapwin/buffered.py:716
 msgid "Please wait, exporting image..."
 msgstr "Vänta, exporterar bild..."
 
-#: ../gui/wxpython/mapwin/buffered.py:1042
+#: ../gui/wxpython/mapwin/buffered.py:1043
 msgid "Unable to draw registered graphics. The graphics was unregistered."
 msgstr "Det gick inte att rita registrerad grafik. Grafiken var oregistrerad."
 
-#: ../gui/wxpython/mapwin/buffered.py:2093
+#: ../gui/wxpython/mapwin/buffered.py:2094
 msgid "Zoom to saved region extents"
 msgstr "Zooma till sparade regioners ytterpunkter"
 
-#: ../gui/wxpython/mapwin/buffered.py:2106
+#: ../gui/wxpython/mapwin/buffered.py:2107
 #, python-format
 msgid "Region <%s> not found. Operation canceled."
 msgstr "Region <%s> hittades inte. Åtgärden avbruten."
 
-#: ../gui/wxpython/mapwin/buffered.py:2135
+#: ../gui/wxpython/mapwin/buffered.py:2136
 msgid "Save display extents to region file"
 msgstr "Spara visningsextender till regionfil"
 
-#: ../gui/wxpython/mapwin/buffered.py:2137
+#: ../gui/wxpython/mapwin/buffered.py:2138
 msgid "Save computational region to region file"
 msgstr "Spara beräkningsregion till regionfil"
 
-#: ../gui/wxpython/mapwin/buffered.py:2149
+#: ../gui/wxpython/mapwin/buffered.py:2150
 #, python-format
 msgid "Region file <%s> already exists. Do you want to overwrite it?"
 msgstr "Regionfil <%s> finns redan. Vill du skriva över den?"
@@ -9777,11 +9777,11 @@ msgstr "Ta bort förlängning"
 msgid "Extension"
 msgstr "Tillägg"
 
-#: ../gui/wxpython/modules/histogram.py:298
+#: ../gui/wxpython/modules/histogram.py:299
 msgid "Histogram Tool  [d.histogram]"
 msgstr "Histogramverktyg [d.histogram]"
 
-#: ../gui/wxpython/modules/histogram.py:427
+#: ../gui/wxpython/modules/histogram.py:428
 msgid "Select font for histogram text"
 msgstr "Välj teckensnitt för histogramtext"
 
