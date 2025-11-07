@@ -73,9 +73,9 @@
     <description>Close graphical user interface.</description>
   </wxgui-item>
   <wxgui-item name="Quit">
-    <label>Quit GRASS GIS</label>
+    <label>Quit GRASS</label>
     <handler>OnCloseWindowOrExit</handler>
-    <description>Close GUI and exit GRASS GIS shell.</description>
+    <description>Close GUI and exit GRASS shell.</description>
     <shortcut>Ctrl+Q</shortcut>
     <wx-id>ID_EXIT</wx-id>
   </wxgui-item>
@@ -100,14 +100,14 @@
   <wxgui-item name="GRASSHelp">
     <label>GRASS help</label>
     <command>g.manual -i</command>
-    <description>Display the HTML man pages of GRASS GIS</description>
+    <description>Display the HTML man pages of GRASS</description>
     <keywords>general,manual,help</keywords>
     <wx-id>ID_HELP</wx-id>
   </wxgui-item>
   <wxgui-item name="GUIHelp">
     <label>GUI help</label>
     <command>g.manual entry=wxGUI</command>
-    <description>Display the HTML man pages of GRASS GIS</description>
+    <description>Display the HTML man pages of GRASS</description>
     <keywords>general,manual,help</keywords>
   </wxgui-item>
   <wxgui-item name="AboutSystem">
@@ -116,9 +116,9 @@
     <description>Prints system information</description>
   </wxgui-item>
   <wxgui-item name="AboutGRASSGIS">
-    <label>About GRASS GIS</label>
+    <label>About GRASS</label>
     <handler>OnAboutGRASS</handler>
-    <description>About GRASS GIS</description>
+    <description>About GRASS</description>
     <wx-id>ID_ABOUT</wx-id>
   </wxgui-item>
   <wxgui-item name="New">

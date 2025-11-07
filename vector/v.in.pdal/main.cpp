@@ -36,6 +36,7 @@ extern "C" {
 #include <grass/vector.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
+#include <unistd.h>
 }
 
 extern "C" {

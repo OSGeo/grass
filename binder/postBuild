@@ -14,8 +14,7 @@ set -e
     --with-opengl-libs=/usr/include/GL \
     --with-proj-share=/usr/share/proj \
     --with-readline \
-    --with-sqlite=yes \
-    --without-pdal
+    --with-sqlite=yes
 make
 
 # put command on path
@@ -25,8 +24,8 @@ mkdir -p $HOME/.local/bin/
 ln -s $HOME/bin.*/grass* $HOME/.local/bin/grass
 
 # download a sample dataset
-mkdir -p data/grassdata \
+mkdir -p data \
   && curl -SL https://grass.osgeo.org/sampledata/north_carolina/nc_basic_spm_grass7.zip > nc_basic_spm_grass7.zip \
   && unzip -qq nc_basic_spm_grass7.zip \
-  && mv nc_basic_spm_grass7 data/grassdata \
+  && mv nc_basic_spm_grass7 data \
   && rm nc_basic_spm_grass7.zip

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import re
-import os
+from pathlib import Path
 
 
 def match(pattern, string):
@@ -13,18 +13,18 @@ def match(pattern, string):
     return False
 
 
-if len(sys.argv) != 3 or re.match("^-*help", sys.argv[1]):
+if len(sys.argv) != 3 or re.match(r"^-*help", sys.argv[1]):
     print("Usage: arc.to.gridatb.py arc_file gridatb_file")
     sys.exit()
 
 infname = sys.argv[1]
 outfname = sys.argv[2]
 
-if not os.path.isfile(infname):
+if not Path(infname).is_file():
     print(f"{infname}: File not found")
     sys.exit()
 
-if os.path.isfile(outfname):
+if Path(outfname).is_file():
     print(f"{outfname}: File already exists")
     sys.exit()
 

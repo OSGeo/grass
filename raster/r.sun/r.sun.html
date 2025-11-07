@@ -13,8 +13,8 @@ horizon raster maps can be calculated using <a href="r.horizon.html">r.horizon</
 <p>For latitude-longitude coordinates it requires that the elevation map is in meters.
 The rules are:
 <ul>
-<li> lat/lon coordinates: elevation in meters;
-<li> Other coordinates: elevation in the same unit as the easting-northing coordinates.
+<li> lat/lon coordinates: elevation in meters;</li>
+<li> Other coordinates: elevation in the same unit as the easting-northing coordinates.</li>
 </ul>
 
 The solar geometry of the model is based on the works of Krcho (1990), later
@@ -104,7 +104,7 @@ less reliable (and more jagged) results. As the sun moves through approx.
 15&deg; of the sky in an hour, the default <i>step</i> of half an hour will
 produce 7.5&deg; steps in the data. For relatively smooth output with the
 sun placed for every degree of movement in the sky you should set the
-<i>step</i> to 4 minutes or less. <i>step</i><tt>=0.05</tt> is equivalent
+<i>step</i> to 4 minutes or less. <i>step</i><code>=0.05</code> is equivalent
 to every 3 minutes. Of course setting the time step to be very fine
 proportionally increases the module's running time.
 <p>The output units are in Wh per squared meter per given
@@ -234,7 +234,7 @@ significant amount of memory. While output raster maps are not
 partitionable, the input raster maps are using the <em>npartitions</em>
 parameter.
 
-In case of out of memory error (<tt>ERROR: G_malloc: out of memory</tt>), the
+In case of out of memory error (<code>ERROR: G_malloc: out of memory</code>), the
 <em>npartitions</em> parameter can be used to run a segmented calculation
 which consumes less memory during the computations.
 
@@ -294,8 +294,8 @@ d.rast.leg it172
 
 We can compute the day of year from a specific date in Python:
 <div class="code"><pre>
->>> import datetime
->>> datetime.datetime(2014, 6, 21).timetuple().tm_yday
+&gt;&gt;&gt; import datetime
+&gt;&gt;&gt; datetime.datetime(2014, 6, 21).timetuple().tm_yday
 172
 </pre></div>
 
@@ -317,53 +317,53 @@ We can compute the day of year from a specific date in Python:
 <li> Hofierka, J., Suri, M. (2002): The solar radiation model for Open source
 GIS: implementation and applications. International
 GRASS users conference in Trento, Italy, September 2002.
-(<a href="http://skagit.meas.ncsu.edu/~jaroslav/trento/Hofierka_Jaroslav.pdf">PDF</a>)
+(<a href="http://skagit.meas.ncsu.edu/~jaroslav/trento/Hofierka_Jaroslav.pdf">PDF</a>)</li>
 <li>
 Hofierka, J. (1997). Direct solar radiation modelling within an open GIS
 environment. Proceedings of JEC-GI'97 conference in Vienna, Austria, IOS
-Press Amsterdam, 575-584.
+Press Amsterdam, 575-584.</li>
 <li>
 Jenco, M. (1992). Distribution of direct solar radiation on georelief and
 its modelling by means of complex digital model of terrain (in Slovak). Geograficky
-casopis, 44, 342-355.
+casopis, 44, 342-355.</li>
 <li>
 Kasten, F. (1996). The Linke turbidity factor based on improved values of
-the integral Rayleigh optical thickness. Solar Energy, 56 (3), 239-244.
+the integral Rayleigh optical thickness. Solar Energy, 56 (3), 239-244.</li>
 <li>
 Kasten, F., Young, A. T. (1989). Revised optical air mass tables and approximation
-formula. Applied Optics, 28, 4735-4738.
+formula. Applied Optics, 28, 4735-4738.</li>
 <li>
 Kittler, R., Mikler, J. (1986): Basis of the utilization of solar radiation
-(in Slovak). VEDA, Bratislava, p. 150.
+(in Slovak). VEDA, Bratislava, p. 150.</li>
 <li>
 Krcho, J. (1990). Morfometrick&aacute; analza a digit&aacute;lne modely georeli&eacute;fu
 (Morphometric analysis and digital models of georelief, in Slovak).
-VEDA, Bratislava.
+VEDA, Bratislava.</li>
 <li>
 Muneer, T. (1990). Solar radiation model for Europe. Building services engineering
-research and technology, 11, 4, 153-163.
+research and technology, 11, 4, 153-163.</li>
 <li>
 Neteler, M., Mitasova, H. (2002): Open Source GIS: A GRASS GIS Approach, Kluwer
 Academic Publishers. (Appendix explains formula;
-<a href="https://grassbook.org/">r.sun script download</a>)
+<a href="https://grassbook.org/">r.sun script download</a>)</li>
 <li>
 Page, J. ed. (1986). Prediction of solar radiation on inclined surfaces. Solar
 energy R&amp;D in the European Community, series F - Solar radiation data,
-Dordrecht (D. Reidel), 3, 71, 81-83.
+Dordrecht (D. Reidel), 3, 71, 81-83.</li>
 <li>
 Page, J., Albuisson, M., Wald, L. (2001). The European solar radiation atlas:
-a valuable digital tool. Solar Energy, 71, 81-83.
+a valuable digital tool. Solar Energy, 71, 81-83.</li>
 <li>
 Rigollier, Ch., Bauer, O., Wald, L. (2000). On the clear sky model of the
 ESRA - European Solar radiation Atlas - with respect to the Heliosat method.
-Solar energy, 68, 33-48.
+Solar energy, 68, 33-48.</li>
 <li>
 Scharmer, K., Greif, J., eds., (2000). The European solar radiation atlas,
 Vol. 2: Database and exploitation software. Paris (Les Presses de l'&Eacute;cole
-des Mines).
+des Mines).</li>
 <li>
 Joint Research Centre: <a href="http://re.jrc.ec.europa.eu/pvgis/">GIS solar radiation database for Europe</a> and
-<a href="http://re.jrc.ec.europa.eu/pvgis/solres/solmod3.htm">Solar radiation and GIS</a>
+<a href="http://re.jrc.ec.europa.eu/pvgis/solres/solmod3.htm">Solar radiation and GIS</a></li>
 </ul>
 
 <h2>AUTHORS</h2>

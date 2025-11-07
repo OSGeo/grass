@@ -6,8 +6,8 @@
 #   Markus Neteler
 #   Glynn Clements
 
-import sys
 import os
+import sys
 
 no_intro_page_classes = ["display", "general", "miscellaneous", "postscript"]
 
@@ -15,59 +15,53 @@ no_intro_page_classes = ["display", "general", "miscellaneous", "postscript"]
 def build_class(ext):
     if ext == "html":
         from build_html import (
-            modclass_tmpl,
-            get_desc,
             desc2_tmpl,
-            modclass_intro_tmpl,
+            get_desc,
             man_dir,
+            modclass_intro_tmpl,
+            modclass_tmpl,
         )
     else:
         from build_md import (
-            modclass_tmpl,
-            get_desc,
             desc2_tmpl,
-            modclass_intro_tmpl,
+            get_desc,
             man_dir,
+            modclass_intro_tmpl,
+            modclass_tmpl,
         )
 
     os.chdir(man_dir)
 
     filename = modclass + f".{ext}"
-    f = open(filename + ".tmp", "w")
-
-    write_header(
-        f,
-        "{} modules - GRASS GIS {} Reference Manual".format(
-            modclass.capitalize(), grass_version
-        ),
-        template=ext,
-    )
-    modclass_lower = modclass.lower()
-    modclass_visible = modclass
-    if modclass_lower not in no_intro_page_classes:
-        if modclass_visible == "raster3d":
-            # convert keyword to nice form
-            modclass_visible = "3D raster"
-        f.write(
-            modclass_intro_tmpl.substitute(
-                modclass=modclass_visible, modclass_lower=modclass_lower
-            )
+    with open(filename + ".tmp", "w") as f:
+        modclass_lower = modclass.lower()
+        # convert keyword to nice form
+        modclass_visible = "3D raster" if modclass_lower == "raster3d" else modclass
+        write_header(
+            f,
+            "{} tools".format(to_title(modclass_visible)),
+            template=ext,
         )
-    f.write(modclass_tmpl.substitute(modclass=to_title(modclass_visible)))
+        if modclass_lower not in no_intro_page_classes:
+            f.write(
+                modclass_intro_tmpl.substitute(
+                    modclass=to_title(modclass_visible), modclass_lower=modclass_lower
+                )
+            )
+        f.write(modclass_tmpl.substitute(modclass=to_title(modclass_visible)))
 
-    # for all modules:
-    for cmd in get_files(man_dir, cls, extension=ext):
-        basename = os.path.splitext(cmd)[0]
-        desc = check_for_desc_override(basename)
-        if desc is None:
-            desc = get_desc(cmd)
-        f.write(desc2_tmpl.substitute(cmd=cmd, basename=basename, desc=desc))
-    if ext == "html":
-        f.write("</table>\n")
+        # for all modules:
+        for cmd in get_files(man_dir, cls, extension=ext):
+            basename = os.path.splitext(cmd)[0]
+            desc = check_for_desc_override(basename)
+            if desc is None:
+                desc = get_desc(cmd)
+            f.write(desc2_tmpl.substitute(cmd=cmd, basename=basename, desc=desc))
+        if ext == "html":
+            f.write("</table>\n")
 
-    write_footer(f, f"index.{ext}", year, template=ext)
+        write_footer(f, f"index.{ext}", year, template=ext)
 
-    f.close()
     replace_file(filename)
 
 
@@ -80,13 +74,12 @@ if __name__ == "__main__":
         year = sys.argv[3]
 
     from build import (
-        grass_version,
-        to_title,
         check_for_desc_override,
-        replace_file,
         get_files,
-        write_header,
+        replace_file,
+        to_title,
         write_footer,
+        write_header,
     )
 
     build_class("html")

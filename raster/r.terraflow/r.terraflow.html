@@ -44,12 +44,12 @@ or cells which do not have downslope neighbors (one-cell pits).
 <ul>
   <li>On plateaus (flat areas that spill out) <em>r.terraflow</em>
 routes flow so that globally the flow goes towards the spill cells of
-the plateaus.
+the plateaus.</li>
 
   <li>On sinks (flat areas that do not spill out, including one-cell
 pits) <em>r.terraflow</em> assigns flow by flooding the terrain until
 all the sinks are filled and assigning flow directions on the filled
-terrain.
+terrain.</li>
 </ul>
 
 <p>In order to flood the terrain, <em>r.terraflow</em> identifies all
@@ -163,7 +163,7 @@ r.terraflow elevation=elev_lid792_1m accumulation=elev_lid792_1m_accumulation
 </pre></div>
 
 <div align="center" style="margin: 10px">
-<img src="rterraflow_accumulation.png" border=0><br>
+<img src="rterraflow_accumulation.png" border="0"><br>
 <i>Flow accumulation</i>
 </div>
 <!--
@@ -198,30 +198,30 @@ r.terraflow elev=elevation.10m filled=elevation10m.filled \
 <h2>REFERENCES</h2>
 
 <ol>
-  <li> The <a href="http://www.cs.duke.edu/geo*/terraflow/">TerraFlow</a> project at Duke University
-  <li><A NAME="arge:drainage"
-       HREF="http://www.cs.duke.edu/geo*/terraflow/papers/alenex00_drainage.ps.gz">
+  <li> The <a href="http://www.cs.duke.edu/geo*/terraflow/">TerraFlow</a> project at Duke University</li>
+  <li><a name="arge:drainage"
+       href="http://www.cs.duke.edu/geo*/terraflow/papers/alenex00_drainage.ps.gz">
        I/O-efficient algorithms for problems on grid-based
        terrains</a>.  Lars Arge, Laura Toma, and Jeffrey S. Vitter. In
        <em>Proc. Workshop on Algorithm Engineering and Experimentation</em>,
-       2000. To appear in <em>Journal of Experimental Algorithms</em>.
+       2000. To appear in <em>Journal of Experimental Algorithms</em>.</li>
 
-  <li><A NAME="terraflow:acmgis01"
-       HREF="http://www.cs.duke.edu/geo*/terraflow/papers/acmgis01_terraflow.pdf">
+  <li><a name="terraflow:acmgis01"
+       href="http://www.cs.duke.edu/geo*/terraflow/papers/acmgis01_terraflow.pdf">
        Flow computation on massive grids</a>.
        Lars Arge, Jeffrey S. Chase, Patrick N. Halpin, Laura Toma,
        Jeffrey S. Vitter, Dean Urban and Rajiv Wickremesinghe. In
        <em>Proc. ACM Symposium on Advances in Geographic Information
-       Systems</em>, 2001.
+       Systems</em>, 2001.</li>
 
-  <li><A NAME="terraflow:geoinformatica"
-       HREF="http://www.cs.duke.edu/geo*/terraflow/papers/journal_terraflow.pdf">
+  <li><a name="terraflow:geoinformatica"
+       href="http://www.cs.duke.edu/geo*/terraflow/papers/journal_terraflow.pdf">
        Flow computation on massive grid terrains</a>.
        Lars Arge, Jeffrey S. Chase, Patrick N. Halpin, Laura Toma,
        Jeffrey S. Vitter, Dean Urban and Rajiv Wickremesinghe.
        In <em>GeoInformatica, International Journal on
        Advances of Computer Science for Geographic Information
-       Systems</em>, 7(4):283-313, December 2003.
+       Systems</em>, 7(4):283-313, December 2003.</li>
 </ol>
 
 <h2>SEE ALSO</h2>
@@ -240,10 +240,10 @@ r.terraflow elev=elevation.10m filled=elevation10m.filled \
 
 <dl>
   <dt>Original version of program: The
-	<a href="http://www.cs.duke.edu/geo*/terraflow/">TerraFlow</a> project,
-	1999, Duke University.
-	<dd><a href="http://www.daimi.au.dk/~large/">Lars Arge</a>,
-		<a href="http://www.cs.duke.edu/~chase/">Jeff Chase</a>,
+    <a href="http://www.cs.duke.edu/geo*/terraflow/">TerraFlow</a> project,
+    1999, Duke University.
+    <dd><a href="http://www.daimi.au.dk/~large/">Lars Arge</a>,
+        <a href="http://www.cs.duke.edu/~chase/">Jeff Chase</a>,
         <a href="http://www.env.duke.edu/faculty/bios/halpin.html">Pat Halpin</a>,
         <a href="http://www.bowdoin.edu/~ltoma/">Laura Toma</a>,
         <a href="http://www.env.duke.edu/faculty/bios/urban.html">Dean Urban</a>,
@@ -252,8 +252,8 @@ r.terraflow elev=elevation.10m filled=elevation10m.filled \
 
   <dt>Porting to GRASS GIS, 2002:
     <dd> <a href="http://www.daimi.au.dk/~large/">Lars Arge</a>,
-	     <a href="http://fatra.cnr.ncsu.edu/~hmitaso/index.html">Helena Mitasova,</a>
-		 <a href="http://www.bowdoin.edu/~ltoma/">Laura Toma</a>.
+         <a href="http://fatra.cnr.ncsu.edu/~hmitaso/index.html">Helena Mitasova,</a>
+         <a href="http://www.bowdoin.edu/~ltoma/">Laura Toma</a>.
 
-	<dt>Contact: <a href="mailto:ltoma@bowdoin.edu "> Laura Toma</a></dt>
+    <dt>Contact: <a href="mailto:ltoma@bowdoin.edu "> Laura Toma</a></dt>
 </dl>

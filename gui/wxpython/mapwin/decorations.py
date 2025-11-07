@@ -301,7 +301,7 @@ class LegendController(OverlayController):
             else:
                 b, t, l, r = (
                     float(number) for number in param.split("=")[1].split(",")
-                )  # pylint: disable-msg=W0612
+                )  # pylint: disable=W0612
             x = int((l / 100.0) * screensize[0])
             y = int((1 - t / 100.0) * screensize[1])
 

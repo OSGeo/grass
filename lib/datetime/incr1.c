@@ -64,7 +64,6 @@ static double _debug_decimal(DateTime * dt)
  *  \param incr
  *  \return int
  */
-
 int datetime_increment(DateTime *src, DateTime *incr)
 {
     int i, relfrom;
@@ -151,7 +150,6 @@ int datetime_increment(DateTime *src, DateTime *incr)
    already be minimized to allow borrowing from "lower" fields
 
  */
-
 static int _datetime_subtract_field(DateTime *src, DateTime *incr, int field)
 {
 

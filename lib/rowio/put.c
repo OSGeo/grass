@@ -37,7 +37,6 @@
  *
  * \return
  */
-
 int Rowio_put(ROWIO *R, const void *buf, int row)
 {
     int i;

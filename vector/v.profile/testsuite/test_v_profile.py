@@ -12,7 +12,7 @@ TODO:       Convert to synthetic dataset. It would allow to shorten output sampl
             Cover more input/output combinations.
 """
 
-import os
+from pathlib import Path
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -129,7 +129,7 @@ class TestProfiling(TestCase):
         )
         # Neither of coords or input line are provided
         self.assertModuleFail("v.profile", input=self.in_points, buffer=10)
-        # Two coordinate parirs are reqiured
+        # Two coordinate parirs are required
         self.assertModuleFail(
             "v.profile", input=self.in_points, coordinates=(647952, 236176), buffer=10
         )
@@ -177,8 +177,7 @@ class TestProfiling(TestCase):
             output=self.outfile,
         )
         self.assertFileExists(self.outfile)
-        if os.path.isfile(self.outfile):
-            os.remove(self.outfile)
+        Path(self.outfile).unlink(missing_ok=True)
 
     def testOutput(self):
         """Test correctness of output"""

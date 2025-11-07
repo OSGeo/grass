@@ -95,7 +95,7 @@
 # %end
 # %flag
 # % key: l
-# todo #% description: List available layers and exit
+# TODO #% description: List available layers and exit
 # % description: Download server capabilities to 'wms_capabilities.xml' in the current directory and exit
 # % suppress_required: yes
 # %end
@@ -154,24 +154,22 @@ def main():
     if flags["l"]:
         wfs_url = options["url"] + "REQUEST=GetCapabilities&SERVICE=WFS"
 
-    print(wfs_url)
-
     tmp = grass.tempfile()
     tmpxml = tmp + ".xml"
 
-    grass.debug(wfs_url)
+    grass.debug(f"The request URL: {wfs_url}")
 
     # Set user and password if given
     if options["username"] and options["password"]:
         grass.message(_("Setting username and password..."))
-        if os.path.isfile(options["username"]):
+        if Path(options["username"]).is_file():
             filecontent = Path(options["username"]).read_text()
             user = filecontent.strip()
         elif options["username"] in os.environ:
             user = os.environ[options["username"]]
         else:
             user = options["username"]
-        if os.path.isfile(options["password"]):
+        if Path(options["password"]).is_file():
             filecontent = Path(options["password"]).read_text()
             pw = filecontent.strip()
         elif options["password"] in os.environ:
@@ -208,7 +206,7 @@ def main():
     if flags["l"]:
         import shutil
 
-        if os.path.exists("wms_capabilities.xml"):
+        if Path("wms_capabilities.xml").exists():
             grass.fatal(_('A file called "wms_capabilities.xml" already exists here'))
         # os.move() might fail if the temp file is on another volume, so we copy instead
         shutil.copy(tmpxml, "wms_capabilities.xml")
@@ -229,7 +227,14 @@ def main():
             grass.run_command("v.in.ogr", flags="o", input=tmpxml, output=out)
         grass.message(_("Vector map <%s> imported from WFS.") % out)
     except Exception:
+        import xml.etree.ElementTree as ET
+
         grass.message(_("WFS import failed"))
+
+        root = ET.parse(tmpxml).getroot()
+        if "ServiceExceptionReport" in root.tag:
+            se = root.find(root.tag[:-6])  # strip "Report" from the tag
+            grass.message(se.text.strip())
     finally:
         try_remove(tmpxml)
 

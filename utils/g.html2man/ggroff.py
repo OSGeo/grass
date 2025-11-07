@@ -1,6 +1,6 @@
-import sys
 import os
 import re
+import sys
 
 __all__ = ["Formatter"]
 
@@ -69,7 +69,7 @@ class Formatter:
             "index": [],
         }
         self.stack = []
-        self.strip_re = re.compile("^[ \t]+")
+        self.strip_re = re.compile(r"^[ \t]+")
         self.filename = filename
         self.at_bol = True
 
@@ -143,7 +143,7 @@ class Formatter:
             + os.path.basename(self.filename).replace(".html", "")
             + ' 1 "" "GRASS '
             + version
-            + '" "GRASS GIS User\'s Manual"'
+            + '" "GRASS User\'s Manual"'
         )
 
     def pp_tr(self, content):

@@ -47,9 +47,8 @@ class BaseSeriesMap:
         else:
             self._env = os.environ.copy()
 
-        self.baseseries = None
         self._base_layer_calls = []
-        self._base_calls = []
+        self._calls = []
         self._baseseries_added = False
         self._layers_rendered = False
         self._base_filename_dict = {}
@@ -91,11 +90,9 @@ class BaseSeriesMap:
         def wrapper(**kwargs):
             if not self._baseseries_added:
                 self._base_layer_calls.append((grass_module, kwargs))
-            elif self._base_calls is not None:
-                for row in self._base_calls:
-                    row.append((grass_module, kwargs))
             else:
-                self._base_calls.append((grass_module, kwargs))
+                for row in self._calls:
+                    row.append((grass_module, kwargs))
 
         return wrapper
 
@@ -104,20 +101,36 @@ class BaseSeriesMap:
         for grass_module, kwargs in self._base_layer_calls:
             img.run(grass_module, **kwargs)
 
-    def _render(self, tasks):
-        """
-        Renders the base image for the dataset.
+    def _render_worker(self, i):
+        """Function to render a single layer."""
+        filename = os.path.join(self._tmpdir.name, f"{i}.png")
+        shutil.copyfile(self.base_file, filename)
+        img = Map(
+            width=self._width,
+            height=self._height,
+            filename=filename,
+            use_region=True,
+            env=self._env,
+            read_file=True,
+        )
+        for grass_module, kwargs in self._calls[i]:
+            if grass_module is not None:
+                img.run(grass_module, **kwargs)
+        return self._indices[i], filename
 
-        Saves PNGs to a temporary directory.
-        This method must be run before creating a visualization (e.g., show or save).
-        It can be time-consuming to run with large space-time datasets.
+    def render(self):
+        """Renders image for each raster in series.
 
-        Child classes should override the `render` method
-        to define specific rendering behaviors, such as:
-        - Rendering images for each time-step in a space-time dataset (e.g., class1).
-        - Rendering images for each raster in a series (e.g., class2).
+        Save PNGs to temporary directory. Must be run before creating a visualization
+        (i.e. show or save).
         """
-        # Runtime error in respective classes
+        if not self._baseseries_added:
+            msg = (
+                "Cannot render series since none has been added."
+                "Use SeriesMap.add_rasters() or SeriesMap.add_vectors()"
+            )
+            raise RuntimeError(msg)
+        tasks = [(i,) for i in range(len(self._indices))]
 
         # Make base image (background and baselayers)
         # Random name needed to avoid potential conflict with layer names
@@ -169,7 +182,7 @@ class BaseSeriesMap:
         if not slider_width:
             slider_width = "70%"
 
-        lookup = list(zip(self._labels, self._indices))
+        lookup = list(zip(self._labels, self._indices, strict=False))
         description = self._slider_description  # modify description
 
         # Datetime selection slider
@@ -239,9 +252,7 @@ class BaseSeriesMap:
         if not self._layers_rendered:
             self.render()
 
-        input_files = []
-        for index in self._indices:
-            input_files.append(self._base_filename_dict[index])
+        input_files = [self._base_filename_dict[index] for index in self._indices]
 
         save_gif(
             input_files,

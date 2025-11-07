@@ -571,7 +571,8 @@ int write_attributes(dbDriver *driver, int cat, const struct field_info *Fi,
     db_init_string(&dbstring);
 
     /* read & set attributes */
-    sprintf(buf, "SELECT * FROM %s WHERE %s = %d", Fi->table, Fi->key, cat);
+    snprintf(buf, sizeof(buf), "SELECT * FROM %s WHERE %s = %d", Fi->table,
+             Fi->key, cat);
     G_debug(4, "SQL: %s", buf);
     db_set_string(&dbstring, buf);
 
