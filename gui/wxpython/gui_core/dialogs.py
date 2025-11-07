@@ -2639,7 +2639,7 @@ class DirBrowseDialog(wx.Dialog):
             labelText=_("Directory:"),
             dialogTitle=_("Choose directory for export"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd(),
+            startDirectory=Path.cwd(),
         )
         self._dirBrowse.SetValidator(
             GenericValidator(
@@ -2664,14 +2664,15 @@ class DirBrowseDialog(wx.Dialog):
         self.Bind(wx.EVT_BUTTON, self.OnPathValidation, self.FindWindow(id=wx.ID_OK))
 
     def _pathExists(self, path):
-        return os.path.exists(path)
+        return Path(path).exists()
 
     def _pathDoesNotExists(self, ctrl):
         GMessage(
             parent=self,
             message=_(
-                "RStudio path <{}> doesn't exists. "
-                "Set correct path, please.".format(ctrl.GetValue())
+                "RStudio path <{}> doesn't exists. Set correct path, please.".format(
+                    ctrl.GetValue()
+                )
             ),
         )
 
