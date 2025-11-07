@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-25 22:50+0000\n"
-"PO-Revision-Date: 2025-10-05 23:29+0000\n"
+"POT-Creation-Date: 2025-11-01 17:24+0000\n"
+"PO-Revision-Date: 2025-11-07 03:28+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs/fr/>\n"
 "Language: fr\n"
@@ -1359,10 +1359,9 @@ msgstr "G_open(write) : impossible d'ouvrir '%s' : %s"
 #: ../lib/vector/Vlib/break_polygons.c:369
 #: ../lib/vector/Vlib/break_polygons.c:412 ../lib/vector/rtree/index.c:144
 #: ../lib/vector/rtree/io.c:104 ../lib/vector/rtree/io.c:204
-#, fuzzy, c-format
-#| msgid "File reading error in %s() %d:%s"
+#, c-format
 msgid "File read/write operation failed: %s (%d)"
-msgstr "Erreur de lecture de fichier dans %s() %d:%s"
+msgstr "L'opération de lecture/écriture du fichier a échoué : %s (%d)"
 
 #: ../lib/gis/open_misc.c:46
 #, c-format
