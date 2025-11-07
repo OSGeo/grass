@@ -121,7 +121,6 @@ class RegionManagerForInteractiveMap:
 
 
 class RegionManagerForDirectRenderer:
-
     def __init__(self, use_region, saved_region, src_env):
         self._use_region = use_region
         self._saved_region = saved_region
