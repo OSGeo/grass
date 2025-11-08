@@ -375,6 +375,7 @@ static int check_xy(enum OutputFormat format)
         return 0;
 }
 
+/* TODO: use proj_as_projjson() from proj */
 void print_json(G_JSON_Value *value)
 {
     char *serialized_string = G_json_serialize_to_string_pretty(value);
