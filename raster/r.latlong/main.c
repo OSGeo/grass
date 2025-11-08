@@ -135,11 +135,9 @@ int main(int argc, char *argv[])
                         "GPJ_transform()");
             }
             if (flag1->answer)
-                /* We shift eastward by half pixel to get pixel center value */
-                d = longitude + ew_res / 2.0;
+                d = longitude;
             else
-                /* We shift southward by half pixel to get pixel center value */
-                d = latitude - ns_res / 2.0;
+                d = latitude;
             outrast1[col] = d;
         }
         Rast_put_d_row(outfd1, outrast1);
