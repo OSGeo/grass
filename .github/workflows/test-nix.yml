@@ -33,7 +33,7 @@ jobs:
           persist-credentials: false
 
       - name: Install nix
-        uses: DeterminateSystems/determinate-nix-action@37e4fa31a956a3fc4db59b8d63153b21a528f174 # v3.12.0
+        uses: DeterminateSystems/determinate-nix-action@0261e3554149588c911e068afc042bdc0627f227 # v3.12.2
 
       - name: Setup cachix
         uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
