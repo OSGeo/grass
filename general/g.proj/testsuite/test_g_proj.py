@@ -21,7 +21,7 @@ class GProjTestCase(TestCase):
     # Expected projection keys for different outputs
     reference = [
         "proj",
-        "a",
+        "ellps",
         "lat_1",
         "lat_2",
         "lat_0",
@@ -37,7 +37,7 @@ class GProjTestCase(TestCase):
             self.assertIn(prefix + key, output)
 
     def test_wkt_output(self):
-        """Test if g.proj returns WKT"""
+        """Test if g.proj returns WKT2, WKT1 is not accepted"""
         module_flag = SimpleModule("g.proj", flags="p", format="wkt")
         self.assertModule(module_flag)
         result_flag = module_flag.outputs.stdout
