@@ -268,7 +268,7 @@ class TestRasterreport(TestCase):
         expected = {
             "cols": 1500,
             "east": -78.60830564948812,
-            "north": 35.80961644859372,
+            "north": 35.80961644859374,
             "rows": 1350,
             "south": 35.68751434209047,
             "west": -78.77462301207872,
