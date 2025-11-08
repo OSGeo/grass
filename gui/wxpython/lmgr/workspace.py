@@ -22,6 +22,8 @@ from pathlib import Path
 
 import wx
 
+import grass.script as gs
+
 from core.settings import UserSettings
 from core.gcmd import RunCommand, GError, GMessage
 from core.workspace import ProcessWorkspaceFile, WriteWorkspaceFile
@@ -125,6 +127,17 @@ class WorkspaceManager:
         self.lmgr._setTitle()
 
     def _tryToSwitchMapsetFromWorkspaceFile(self, gxwXml):
+        gisenv = gs.gisenv()
+        grassdb = gisenv["GISDBASE"]
+        location = gisenv["LOCATION_NAME"]
+        mapset = gisenv["MAPSET"]
+        if (
+            grassdb == gxwXml.database
+            and location == gxwXml.location
+            and mapset == gxwXml.mapset
+        ):
+            # Positive result but no message to the user is needed.
+            return True
         returncode, errors = RunCommand(
             "g.mapset",
             dbase=gxwXml.database,
@@ -162,6 +175,34 @@ class WorkspaceManager:
                 % {"loc": gxwXml.location, "mapset": gxwXml.mapset},
             )
         return True
+
+    # No need for method here, could be a function.
+    def CurrentMapsetWorkspaceFile(self):
+        gisenv = gs.gisenv()
+        grassdb = gisenv["GISDBASE"]
+        location = gisenv["LOCATION_NAME"]
+        mapset = gisenv["MAPSET"]
+        default_workspace_name = f"{mapset}.gxw"
+        return Path(grassdb) / location / mapset / default_workspace_name
+
+    def IsCurrentMapsetWorkspaceFile(self):
+        if not self.workspaceFile:
+            return False
+        path = self.CurrentMapsetWorkspaceFile()
+        return Path(self.workspaceFile) == path
+
+    def AutoLoad(self, filename=None):
+        if not filename:
+            path = self.CurrentMapsetWorkspaceFile()
+            filename = str(path)
+            if path.is_file():
+                self.lmgr.DisplayCloseAll()
+                self.workspaceChanged = False
+            else:
+                self.workspaceFile = filename
+                self.SaveToFile(filename)
+                return True
+        return self.Load(filename)
 
     def Load(self, filename):
         """Load layer tree definition stored in GRASS Workspace XML file (gxw)
@@ -390,7 +431,7 @@ class WorkspaceManager:
                     "Do you want to overwrite this file?"
                 )
                 % filename,
-                caption=_("Save workspace"),
+                caption=_("Save workspace (SaveAs)"),
                 style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
             )
             if dlg.ShowModal() != wx.ID_YES:
@@ -405,6 +446,18 @@ class WorkspaceManager:
 
     def Save(self):
         """Save file with workspace definition"""
+        gisenv = gs.gisenv()
+        grassdb = gisenv["GISDBASE"]
+        location = gisenv["LOCATION_NAME"]
+        mapset = gisenv["MAPSET"]
+        default_workspace_name = f"{mapset}.gxw"
+        path = Path(grassdb) / location / mapset / default_workspace_name
+        if path == Path(self.workspaceFile):
+            self.SaveToFile(self.workspaceFile)
+            self.lmgr._setTitle()
+            self.workspaceChanged = False
+            return
+
         if self.workspaceFile:
             dlg = wx.MessageDialog(
                 self.lmgr,
@@ -413,7 +466,7 @@ class WorkspaceManager:
                     "Do you want to overwrite this file?"
                 )
                 % self.workspaceFile,
-                caption=_("Save workspace"),
+                caption=_("Save workspace (Save)"),
                 style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
             )
             if dlg.ShowModal() == wx.ID_NO:
