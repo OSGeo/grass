@@ -71,7 +71,7 @@ jobs:
             zlib
 
       - name: Setup OSGeo4W environment
-        uses: echoix/setup-OSGeo4W@f4311523e39f2c8b10e34ebbc3f2ff437ecfb9ed # v0.2.0
+        uses: echoix/setup-OSGeo4W@1e711832882e03603e9013181a87885b10af8a98 # v0.3.0
         id: osgeo4w
         with:
           package-dir: "D:/OSGeo4W_pkg"
