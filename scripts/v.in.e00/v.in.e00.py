@@ -94,7 +94,7 @@ def main():
     # make a temporary directory
     tmpdir = gcore.tempfile()
     try_remove(tmpdir)
-    os.mkdir(tmpdir)
+    Path(tmpdir).mkdir()
 
     files = glob.glob(e00name + ".e[0-9][0-9]") + glob.glob(e00name + ".E[0-9][0-9]")
     for f in files:

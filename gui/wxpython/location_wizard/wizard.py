@@ -2663,7 +2663,7 @@ class LocationWizard(wx.Object):
             if not Path(database).is_dir():
                 # create new directory
                 try:
-                    os.mkdir(database)
+                    Path(database).mkdir()
                 except OSError as error:
                     GError(
                         parent=self.wizard,
