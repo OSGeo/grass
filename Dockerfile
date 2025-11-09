@@ -13,11 +13,11 @@ ARG GEOS_VERSION=3.14.1
 # renovate: datasource=github-tags depName=OSGeo/PROJ
 ARG PROJ_VERSION=9.7.0
 # renovate: datasource=github-tags depName=OSGeo/gdal
-ARG GDAL_VERSION=3.11.4
+ARG GDAL_VERSION=3.12.0
 # renovate: datasource=github-tags depName=PDAL/PDAL
 ARG PDAL_VERSION=2.9.2
 # renovate: datasource=github-tags depName=OSGeo/gdal-grass
-ARG GDAL_GRASS_VERSION=1.0.4
+ARG GDAL_GRASS_VERSION=2.0.0
 
 # Have build parameters as build arguments?
 # ARG LDFLAGS="-s -Wl,--no-undefined -lblas"
@@ -364,9 +364,7 @@ RUN make -j $NUMTHREADS distclean || echo "nothing to clean" \
     && make -j $NUMTHREADS \
     && make install && ldconfig \
     && rm -rf /usr/local/grass85/demolocation \
-    && cp /usr/local/grass85/gui/wxpython/xml/module_items.xml module_items.xml \
-    && mkdir -p /usr/local/grass85/gui/wxpython/xml/ \
-    && mv module_items.xml /usr/local/grass85/gui/wxpython/xml/module_items.xml
+    && cp /usr/local/grass85/gui/wxpython/xml/module_items.xml module_items.xml
 
 FROM build_grass AS build_grass_with_gui_built
 RUN echo "GUI selected, skipping GUI related cleanup"
@@ -482,6 +480,7 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
 
 # Copy GRASS, GDAL-GRASS-plugin and compiled dependencies from build image
 COPY --link --from=build_grass_plugin /usr/local /usr/local
+COPY --link --from=build_grass_plugin /src/grass_build/module_items.xml /usr/local/grass85/gui/wxpython/xml/module_items.xml
 # COPY --link --from=datum_grids /tmp/cdn.proj.org/*.tif /usr/share/proj/
 
 # Create generic GRASS lib name regardless of version number

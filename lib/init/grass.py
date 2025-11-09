@@ -696,7 +696,7 @@ def cannot_create_location_reason(gisdbase: StrPath, location: str) -> str:
             " the project <{location}>"
             " already exists."
         ).format(**locals())
-    if os.path.isfile(path):
+    if Path(path).is_file():
         return _(
             "Unable to create new project <{location}> because <{path}> is a file."
         ).format(**locals())
@@ -842,7 +842,7 @@ def set_mapset(
             else:
                 # 'location_name' is a valid GRASS location,
                 # create new mapset
-                if os.path.isfile(path):
+                if Path(path).is_file():
                     # not a valid mapset, but dir exists, assuming
                     # broken/incomplete mapset
                     fatal(

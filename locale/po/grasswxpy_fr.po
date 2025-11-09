@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-25 22:50+0000\n"
-"PO-Revision-Date: 2025-10-26 23:01+0000\n"
+"POT-Creation-Date: 2025-11-01 17:24+0000\n"
+"PO-Revision-Date: 2025-11-07 03:28+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/fr/>\n"
 "Language: fr\n"
@@ -663,7 +663,7 @@ msgstr "Invalide"
 
 #: ../gui/wxpython/animation/frame.py:50
 msgid "Animation Tool"
-msgstr ""
+msgstr "Outil d'animation"
 
 #: ../gui/wxpython/animation/frame.py:172 ../gui/wxpython/mapswipe/frame.py:266
 msgid "Main Toolbar"
@@ -873,7 +873,7 @@ msgstr "Raison"
 
 #: ../gui/wxpython/core/gcmd.py:146 ../gui/wxpython/core/workspace.py:1756
 #: ../gui/wxpython/gmodeler/model_convert.py:238
-#: ../gui/wxpython/mapwin/buffered.py:2152
+#: ../gui/wxpython/mapwin/buffered.py:2153
 #: ../gui/wxpython/wxplot/dialogs.py:940
 msgid "Warning"
 msgstr "Attention"
@@ -3296,7 +3296,7 @@ msgstr "Rien à afficher (carte vide). Opération annulée."
 #: ../gui/wxpython/gcp/mapdisplay.py:461 ../gui/wxpython/gmodeler/panels.py:994
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:451
 #: ../gui/wxpython/mapdisp/frame.py:757 ../gui/wxpython/mapswipe/frame.py:612
-#: ../gui/wxpython/modules/histogram.py:474
+#: ../gui/wxpython/modules/histogram.py:475
 #: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:443
 msgid "Choose a file name to save the image (no need to add extension)"
 msgstr "Choisissez un nom de fichier pour enregistrer l'image (extension non nécessaire)"
@@ -3304,7 +3304,7 @@ msgstr "Choisissez un nom de fichier pour enregistrer l'image (extension non né
 #: ../gui/wxpython/gcp/mapdisplay.py:489
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:479
 #: ../gui/wxpython/mapdisp/frame.py:946
-#: ../gui/wxpython/modules/histogram.py:501
+#: ../gui/wxpython/modules/histogram.py:502
 #: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:471
 #: ../gui/wxpython/psmap/toolbars.py:82 ../gui/wxpython/wxplot/base.py:615
 msgid "Page setup"
@@ -3313,17 +3313,17 @@ msgstr "Mise en page"
 #: ../gui/wxpython/gcp/mapdisplay.py:493
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:483
 #: ../gui/wxpython/mapdisp/frame.py:950
-#: ../gui/wxpython/modules/histogram.py:505
+#: ../gui/wxpython/modules/histogram.py:506
 #: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:475
 #: ../gui/wxpython/wxplot/base.py:616
 msgid "Print preview"
 msgstr "Aperçu avant impression"
 
 #: ../gui/wxpython/gcp/mapdisplay.py:497
-#: ../gui/wxpython/gui_core/toolbars.py:69
+#: ../gui/wxpython/gui_core/toolbars.py:70
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:487
 #: ../gui/wxpython/mapdisp/frame.py:954
-#: ../gui/wxpython/modules/histogram.py:509
+#: ../gui/wxpython/modules/histogram.py:510
 #: ../gui/wxpython/photo2image/ip2i_mapdisplay.py:479
 #: ../gui/wxpython/wxplot/base.py:617
 msgid "Print display"
@@ -4759,7 +4759,7 @@ msgstr "plage de validité"
 
 #: ../gui/wxpython/gui_core/forms.py:1374
 #: ../gui/wxpython/gui_core/forms.py:2948
-#: ../gui/wxpython/gui_core/toolbars.py:70
+#: ../gui/wxpython/gui_core/toolbars.py:71
 msgid "Select font"
 msgstr "Sélectionner une police"
 
@@ -5976,122 +5976,122 @@ msgstr "Ajouter une carte raster 3D"
 msgid "Add RGB map layer"
 msgstr "Ajouter une couche RVB"
 
-#: ../gui/wxpython/gui_core/toolbars.py:38
+#: ../gui/wxpython/gui_core/toolbars.py:39
 msgid "Display map"
 msgstr "Afficher la carte"
 
-#: ../gui/wxpython/gui_core/toolbars.py:38
+#: ../gui/wxpython/gui_core/toolbars.py:39
 msgid "Re-render modified map layers only"
 msgstr "Recalculer l'affichage des cartes modifiées uniquement"
 
-#: ../gui/wxpython/gui_core/toolbars.py:42
+#: ../gui/wxpython/gui_core/toolbars.py:43
 msgid "Render map"
 msgstr "Rafraîchir l'affichage"
 
-#: ../gui/wxpython/gui_core/toolbars.py:43
+#: ../gui/wxpython/gui_core/toolbars.py:44
 msgid "Force re-rendering all map layers"
 msgstr "Forcer le rafraîchissement de toutes les cartes"
 
-#: ../gui/wxpython/gui_core/toolbars.py:47
+#: ../gui/wxpython/gui_core/toolbars.py:48
 msgid "Erase display"
 msgstr "Effacer l'écran"
 
-#: ../gui/wxpython/gui_core/toolbars.py:48
+#: ../gui/wxpython/gui_core/toolbars.py:49
 msgid "Erase display canvas with given background color"
 msgstr "Effacer la trame d'écran avec la couleur d'arrière-plan"
 
-#: ../gui/wxpython/gui_core/toolbars.py:50
+#: ../gui/wxpython/gui_core/toolbars.py:51
 msgid "Pointer"
 msgstr "Pointer"
 
-#: ../gui/wxpython/gui_core/toolbars.py:52
+#: ../gui/wxpython/gui_core/toolbars.py:53
 msgid "Drag or click mouse to zoom"
 msgstr "Glisser ou cliquez pour zoomer"
 
-#: ../gui/wxpython/gui_core/toolbars.py:52
+#: ../gui/wxpython/gui_core/toolbars.py:53
 msgid "Zoom in"
 msgstr "Zoom avant"
 
-#: ../gui/wxpython/gui_core/toolbars.py:55
+#: ../gui/wxpython/gui_core/toolbars.py:56
 msgid "Drag or click mouse to unzoom"
 msgstr "Faites glisser la souris ou cliquez pour dé-zoomer"
 
-#: ../gui/wxpython/gui_core/toolbars.py:55
+#: ../gui/wxpython/gui_core/toolbars.py:56
 msgid "Zoom out"
 msgstr "Zoom arrière"
 
-#: ../gui/wxpython/gui_core/toolbars.py:57
+#: ../gui/wxpython/gui_core/toolbars.py:58
 msgid "Return to previous zoom"
 msgstr "Revenir au zoom précédent"
 
-#: ../gui/wxpython/gui_core/toolbars.py:60
+#: ../gui/wxpython/gui_core/toolbars.py:61
 msgid "Various zoom options"
 msgstr "Diverses options de zoom"
 
-#: ../gui/wxpython/gui_core/toolbars.py:61
+#: ../gui/wxpython/gui_core/toolbars.py:62
 msgid "Zoom to default or saved region, save to named region, ..."
 msgstr "Zoomer sur la région de calculs par défaut ou enregistrée, enregistre vers un nom de région, ..."
 
-#: ../gui/wxpython/gui_core/toolbars.py:63
+#: ../gui/wxpython/gui_core/toolbars.py:64
 msgid "Zoom to selected map layer(s)"
 msgstr "Zoomer sur la(les) carte(s) sélectionnée(s)"
 
-#: ../gui/wxpython/gui_core/toolbars.py:65
+#: ../gui/wxpython/gui_core/toolbars.py:66
 msgid "Zoom to computational region extent"
 msgstr "Zoomer sur la région de calcul"
 
-#: ../gui/wxpython/gui_core/toolbars.py:67
+#: ../gui/wxpython/gui_core/toolbars.py:68
 msgid "Drag with mouse to pan"
 msgstr "Glisser avec la souris pour se déplacer"
 
-#: ../gui/wxpython/gui_core/toolbars.py:67
+#: ../gui/wxpython/gui_core/toolbars.py:68
 msgid "Pan"
 msgstr "Se déplacer dans la zone d'affichage"
 
-#: ../gui/wxpython/gui_core/toolbars.py:68
+#: ../gui/wxpython/gui_core/toolbars.py:69
 msgid "Save display to file"
 msgstr "Enregistrer l'écran dans un fichier"
 
-#: ../gui/wxpython/gui_core/toolbars.py:71
+#: ../gui/wxpython/gui_core/toolbars.py:72
 msgid "Show manual"
 msgstr "Afficher le manuel"
 
-#: ../gui/wxpython/gui_core/toolbars.py:72 ../gui/wxpython/lmgr/layertree.py:56
+#: ../gui/wxpython/gui_core/toolbars.py:73 ../gui/wxpython/lmgr/layertree.py:56
 msgid "Quit"
 msgstr "Quitter"
 
-#: ../gui/wxpython/gui_core/toolbars.py:73 ../gui/wxpython/lmgr/layertree.py:57
+#: ../gui/wxpython/gui_core/toolbars.py:74 ../gui/wxpython/lmgr/layertree.py:57
 msgid "Add raster map layer"
 msgstr "Ajouter une couche 'raster'"
 
-#: ../gui/wxpython/gui_core/toolbars.py:74 ../gui/wxpython/lmgr/layertree.py:65
+#: ../gui/wxpython/gui_core/toolbars.py:75 ../gui/wxpython/lmgr/layertree.py:65
 msgid "Add vector map layer"
 msgstr "Ajouter une couche vectorielle"
 
-#: ../gui/wxpython/gui_core/toolbars.py:77
+#: ../gui/wxpython/gui_core/toolbars.py:78
 msgid "Add map elements"
 msgstr "Ajouter un élément à la carte"
 
-#: ../gui/wxpython/gui_core/toolbars.py:78
+#: ../gui/wxpython/gui_core/toolbars.py:79
 msgid "Overlay elements like scale and legend onto map"
 msgstr "Superposer des éléments sur la carte tels que échelle et légende"
 
-#: ../gui/wxpython/gui_core/toolbars.py:81
+#: ../gui/wxpython/gui_core/toolbars.py:82
 msgid "Create histogram with d.histogram"
 msgstr "Créer un histogramme avec d.histogram"
 
-#: ../gui/wxpython/gui_core/toolbars.py:83
+#: ../gui/wxpython/gui_core/toolbars.py:84
 #: ../gui/wxpython/iscatt/toolbars.py:184 ../gui/wxpython/nviz/tools.py:2385
 #: ../gui/wxpython/vnet/dialogs.py:977
 msgid "Settings"
 msgstr "Paramètres"
 
-#: ../gui/wxpython/gui_core/toolbars.py:85
+#: ../gui/wxpython/gui_core/toolbars.py:86
 #: ../gui/wxpython/mapdisp/properties.py:336
 msgid "Map Display Settings"
 msgstr "Paramètres d'affichage des cartes"
 
-#: ../gui/wxpython/gui_core/toolbars.py:87
+#: ../gui/wxpython/gui_core/toolbars.py:88
 msgid "(Un)dock"
 msgstr "Ancrer/désancrer"
 
@@ -6749,7 +6749,7 @@ msgstr "Sous-groupe <%s> non trouvé"
 
 #: ../gui/wxpython/iclass/g.gui.iclass.py:88
 #: ../gui/wxpython/mapswipe/g.gui.mapswipe.py:79
-#: ../gui/wxpython/modules/histogram.py:405 ../gui/wxpython/nviz/wxnviz.py:597
+#: ../gui/wxpython/modules/histogram.py:406 ../gui/wxpython/nviz/wxnviz.py:597
 #: ../gui/wxpython/nviz/wxnviz.py:608
 #, python-format
 msgid "Raster map <%s> not found"
@@ -8939,7 +8939,7 @@ msgid "Set computational region extent interactively"
 msgstr "Définir l'emprise de la région de calcul de manière interactive"
 
 #: ../gui/wxpython/mapdisp/frame.py:1540
-#: ../gui/wxpython/mapwin/buffered.py:2095
+#: ../gui/wxpython/mapwin/buffered.py:2096
 msgid "Set computational region from named region"
 msgstr "Définir la région de calcul à partir d'une région enregistrée"
 
@@ -8951,27 +8951,27 @@ msgstr "Enregistrer la région calculée vers un nom de région"
 msgid "Raster Digitizer Toolbar"
 msgstr "Barre d'outils de numérisation de raster"
 
-#: ../gui/wxpython/mapdisp/main.py:187
+#: ../gui/wxpython/mapdisp/main.py:188
 #, python-format
 msgid "Unsupported command %s."
 msgstr "Commande %s non prise en charge."
 
-#: ../gui/wxpython/mapdisp/main.py:288
+#: ../gui/wxpython/mapdisp/main.py:289
 #, python-format
 msgid "Unable to read cmdfile '%(cmd)s'. Details: %(det)s"
 msgstr "Impossible de lire le fichier de commandes '%(cmd)s'. Détails : %(det)s"
 
-#: ../gui/wxpython/mapdisp/main.py:652
+#: ../gui/wxpython/mapdisp/main.py:653
 #, python-format
 msgid "Starting map display <%s>..."
 msgstr "Lancement d'un nouvel affichage <%s>..."
 
-#: ../gui/wxpython/mapdisp/main.py:658
+#: ../gui/wxpython/mapdisp/main.py:659
 #, python-format
 msgid "Unable to create file <%s>"
 msgstr "Impossible de créer le fichier <%s>"
 
-#: ../gui/wxpython/mapdisp/main.py:671
+#: ../gui/wxpython/mapdisp/main.py:672
 #, python-format
 msgid "Stopping map display <%s>..."
 msgstr "Arrêt de l'affichage <%s>..."
@@ -8999,7 +8999,7 @@ msgstr "Afficher/cacher les limites de la région de calcul (définie avec g.reg
 
 #: ../gui/wxpython/mapdisp/properties.py:242
 msgid "Display coordinates in different CRS"
-msgstr ""
+msgstr "Afficher les coordonnées dans un différent SCR"
 
 #: ../gui/wxpython/mapdisp/properties.py:248
 #, fuzzy
@@ -9374,40 +9374,40 @@ msgstr ""
 "Erreur lors du désenregistrement du gestionnaire : %s\n"
 "Le gestionnaire n'était pas référencé."
 
-#: ../gui/wxpython/mapwin/buffered.py:280
+#: ../gui/wxpython/mapwin/buffered.py:281
 msgid "Copy coordinates to clipboard"
 msgstr "'Copier les coordonnées dans le presse-papier"
 
-#: ../gui/wxpython/mapwin/buffered.py:314
+#: ../gui/wxpython/mapwin/buffered.py:315
 msgid "Resize and move legend"
 msgstr "Redimensionner et déplacer la légende"
 
-#: ../gui/wxpython/mapwin/buffered.py:715
+#: ../gui/wxpython/mapwin/buffered.py:716
 msgid "Please wait, exporting image..."
 msgstr "Merci de patienter, export de l'image en cours ..."
 
-#: ../gui/wxpython/mapwin/buffered.py:1042
+#: ../gui/wxpython/mapwin/buffered.py:1043
 msgid "Unable to draw registered graphics. The graphics was unregistered."
 msgstr "Impossible de dessiner le graphique référencé. Le graphique n'était pas référencé."
 
-#: ../gui/wxpython/mapwin/buffered.py:2093
+#: ../gui/wxpython/mapwin/buffered.py:2094
 msgid "Zoom to saved region extents"
 msgstr "Zoomer sur les limites de la région enregistrée"
 
-#: ../gui/wxpython/mapwin/buffered.py:2106
+#: ../gui/wxpython/mapwin/buffered.py:2107
 #, python-format
 msgid "Region <%s> not found. Operation canceled."
 msgstr "Région <%s> non trouvée. Opération annulée."
 
-#: ../gui/wxpython/mapwin/buffered.py:2135
+#: ../gui/wxpython/mapwin/buffered.py:2136
 msgid "Save display extents to region file"
 msgstr "Enregistrer les limites d'affichage dans un fichier de région"
 
-#: ../gui/wxpython/mapwin/buffered.py:2137
+#: ../gui/wxpython/mapwin/buffered.py:2138
 msgid "Save computational region to region file"
 msgstr "Enregistrer la région de calcul vers un fichier de région"
 
-#: ../gui/wxpython/mapwin/buffered.py:2149
+#: ../gui/wxpython/mapwin/buffered.py:2150
 #, python-format
 msgid "Region file <%s> already exists. Do you want to overwrite it?"
 msgstr "Le fichier région <%s> existe déjà. Voulez-vous l'écraser ?"
@@ -9801,11 +9801,11 @@ msgstr "Supprimer une extenion"
 msgid "Extension"
 msgstr "Extension"
 
-#: ../gui/wxpython/modules/histogram.py:298
+#: ../gui/wxpython/modules/histogram.py:299
 msgid "Histogram Tool  [d.histogram]"
 msgstr ""
 
-#: ../gui/wxpython/modules/histogram.py:427
+#: ../gui/wxpython/modules/histogram.py:428
 msgid "Select font for histogram text"
 msgstr "Sélectionner la police pour le texte d'histogramme"
 
@@ -13021,10 +13021,15 @@ msgid ""
 "\n"
 "All maps included in these mapsets will be permanently deleted!"
 msgstr ""
+"Voulez-vous continuer à supprimer un ou plusieurs des jeux cartes suivants ?\n"
+"\n"
+"{deletes}\n"
+"\n"
+"Toutes les cartes incluses dans ces jeux de cartes seront définitivement supprimées !"
 
 #: ../gui/wxpython/startup/guiutils.py:396
 msgid "Delete selected mapsets"
-msgstr ""
+msgstr "Supprimer les jeux de cartes sélectionnés"
 
 #: ../gui/wxpython/startup/guiutils.py:409
 msgid "Error when deleting mapsets"
@@ -13069,6 +13074,11 @@ msgid ""
 "\n"
 "All mapsets included in these projects will be permanently deleted!"
 msgstr ""
+"Voulez-vous continuer à supprimer un ou plusieurs des projets suivants ?\n"
+"\n"
+"{deletes}\n"
+"\n"
+"Tous les jeux de cartes inclus dans ces projets seront définitivement supprimés !"
 
 #: ../gui/wxpython/startup/guiutils.py:481
 #, fuzzy
@@ -13112,6 +13122,11 @@ msgid ""
 "\n"
 "The directory will be permanently deleted!"
 msgstr ""
+"Voulez-vous supprimer la base de données GRASS suivante du disque ?\n"
+"\n"
+"{grassdb}\n"
+"\n"
+"Le répertoire sera définitivement supprimé !"
 
 #: ../gui/wxpython/startup/guiutils.py:546
 msgid "Delete selected GRASS database"
@@ -13189,7 +13204,7 @@ msgstr "Le jeux de cartes actuel est <%s>."
 
 #: ../gui/wxpython/startup/locdownload.py:152
 msgid "Download in progress, wait until it is finished 0%"
-msgstr ""
+msgstr "Téléchargement en cours, attendez qu'il soit terminé 0%"
 
 #: ../gui/wxpython/startup/locdownload.py:163
 #, python-brace-format
@@ -13226,7 +13241,7 @@ msgstr "Télécharger le projet sélectionné"
 #: ../gui/wxpython/startup/locdownload.py:307
 #: ../gui/wxpython/startup/locdownload.py:390
 msgid "Download"
-msgstr ""
+msgstr "Télécharger"
 
 #: ../gui/wxpython/startup/locdownload.py:314
 #: ../gui/wxpython/startup/locdownload.py:363
@@ -14455,10 +14470,7 @@ msgid "Unable to perform analysis."
 msgstr "Impossible d'effectuer l'analyse."
 
 #: ../gui/wxpython/vnet/vnet_core.py:228
-#, fuzzy, python-format
-#| msgid ""
-#| "Temporary map '%s' with result was changed outside vector network analysis tool.\n"
-#| "Showed result may not correspond original analysis result."
+#, python-format
 msgid ""
 "Temporary map '%s' with result was changed outside vector network analysis tool.\n"
 "Showed result may not correspond to original analysis result."
@@ -14523,15 +14535,12 @@ msgid "Input changed outside"
 msgstr "Entrée modifiée manuellement"
 
 #: ../gui/wxpython/vnet/vnet_core.py:1004
-#, fuzzy, python-format
-#| msgid ""
-#| "Temporary map %s  already exists.\n"
-#| "Do you want to continue in analysis and overwrite it?"
+#, python-format
 msgid ""
 "Temporary map %s already exists.\n"
 "Do you want to continue in analysis and overwrite it?"
 msgstr ""
-"La carte temporaire %s existe déja.\n"
+"La carte temporaire %s existe déjà.\n"
 "Voulez-vous continuer l'analyse et l'écraser ?"
 
 #: ../gui/wxpython/vnet/vnet_core.py:1029
