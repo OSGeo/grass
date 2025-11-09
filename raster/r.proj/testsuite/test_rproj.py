@@ -274,9 +274,24 @@ class TestRasterreport(TestCase):
             "west": -78.77462301207872,
         }
 
-        # it’s usually not necessary to invoke type-specific methods directly,
-        # instead use assertEqual or assertAlmostEqual
-        self.assertAlmostEqual(result, expected, "Mismatch in print output (JSON)")
+        self.assertEqual(
+            result["cols"], expected["cols"], msg="Mismatch in print output (JSON)"
+        )
+        self.assertAlmostEqual(
+            result["east"], expected["east"], msg="Mismatch in print output (JSON)"
+        )
+        self.assertAlmostEqual(
+            result["north"], expected["north"], msg="Mismatch in print output (JSON)"
+        )
+        self.assertEqual(
+            result["rows"], expected["rows"], msg="Mismatch in print output (JSON)"
+        )
+        self.assertAlmostEqual(
+            result["south"], expected["south"], msg="Mismatch in print output (JSON)"
+        )
+        self.assertAlmostEqual(
+            result["west"], expected["west"], msg="Mismatch in print output (JSON)"
+        )
 
 
 if __name__ == "__main__":
