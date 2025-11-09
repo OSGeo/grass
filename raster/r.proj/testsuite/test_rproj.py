@@ -274,7 +274,9 @@ class TestRasterreport(TestCase):
             "west": -78.77462301207872,
         }
 
-        self.assertDictEqual(result, expected, "Mismatch in print output (JSON)")
+        # it’s usually not necessary to invoke type-specific methods directly,
+        # instead use assertEqual or assertAlmostEqual
+        self.assertAlmostEqual(result, expected, "Mismatch in print output (JSON)")
 
 
 if __name__ == "__main__":
