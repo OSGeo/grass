@@ -73,9 +73,9 @@ east: 3E
 west: 0
 rows: 3
 cols: 3
-3 3 3
-2 2 2
-1 1 1"""
+2.5 2.5 2.5
+1.5 1.5 1.5
+0.5 0.5 0.5"""
 
     assert ascii_clean == expected_output
 
@@ -105,9 +105,9 @@ east: 3E
 west: 0
 rows: 3
 cols: 3
-0 1 2
-0 1 2
-0 1 2"""
+0.5 1.5 2.5
+0.5 1.5 2.5
+0.5 1.5 2.5"""
 
     assert ascii_clean == expected_output
 
