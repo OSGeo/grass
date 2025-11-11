@@ -29,7 +29,7 @@ rows=165
 cols=250
 cells=41250"""
 
-src_project = "nc_spm_full_v2alpha2"
+src_project = "nc_spm_full_v2beta1"
 dst_project = "nc_latlong"
 
 raster_maps = [
@@ -121,11 +121,11 @@ class TestRasterreport(TestCase):
         """Testing method nearest"""
         # Set up variables and validation values
         method = "nearest"
-        statics = """n=40930
+        statics = """n=40929
         min=55.5787925720215
         max=156.038833618164
-        mean=110.377538633405
-        variance=412.751942806146"""
+        mean=110.377588991481
+        variance=412.791070416939"""
 
         self.run_rproj_test(method, statics)
 
@@ -133,11 +133,11 @@ class TestRasterreport(TestCase):
         """Testing method bilinear"""
         # Set up variables and validation values
         method = "bilinear"
-        statics = """n=40845
-        min=56.3932914733887
-        max=156.053298950195
-        mean=110.389074372679
-        variance=411.487781666933"""
+        statics = """n=40846
+        min=56.4586868286133
+        max=156.053405761719
+        mean=110.388441504306
+        variance=411.490915467985"""
 
         self.run_rproj_test(method, statics)
 
@@ -145,11 +145,11 @@ class TestRasterreport(TestCase):
         """Testing method bicubic"""
         # Set up variables and validation values
         method = "bicubic"
-        statics = """n=40677
-        min=56.2407836914062
-        max=156.061599731445
-        mean=110.41701776258
-        variance=411.382636894393"""
+        statics = """n=40678
+        min=56.2927856445312
+        max=156.06169128418
+        mean=110.417365826772
+        variance=411.302683090515"""
 
         self.run_rproj_test(method, statics)
 
@@ -157,11 +157,11 @@ class TestRasterreport(TestCase):
         """Testing method lanczos"""
         # Set up variables and validation values
         method = "lanczos"
-        statics = """n=40585
-        min=56.2350921630859
-        max=156.066345214844
-        mean=110.421826400841
-        variance=411.6875834341575"""
+        statics = """n=40587
+        min=56.2883224487305
+        max=156.066925048828
+        mean=110.423209871101
+        variance=411.631827343473"""
 
         self.run_rproj_test(method, statics)
 
@@ -169,11 +169,11 @@ class TestRasterreport(TestCase):
         """Testing method bilinear_f"""
         # Set up variables and validation values
         method = "bilinear_f"
-        statics = """n=40930
+        statics = """n=40929
         min=55.5787925720215
-        max=156.053298950195
-        mean=110.376211041027
-        variance=412.553041205029"""
+        max=156.053405761719
+        mean=110.376596053808
+        variance=412.568369942043"""
 
         self.run_rproj_test(method, statics)
 
@@ -181,11 +181,11 @@ class TestRasterreport(TestCase):
         """Testing method bicubic_f"""
         # Set up variables and validation values
         method = "bicubic_f"
-        statics = """n=40930
+        statics = """n=40929
         min=55.5787925720215
-        max=156.061599731445
-        mean=110.375897704515
-        variance=412.693308000461"""
+        max=156.06169128418
+        mean=110.37642902228
+        variance=412.70693471812"""
 
         self.run_rproj_test(method, statics)
 
@@ -193,11 +193,11 @@ class TestRasterreport(TestCase):
         """Testing method lanczos_f"""
         # Set up variables and validation values
         method = "lanczos_f"
-        statics = """n=40930
+        statics = """n=40929
         min=55.5787925720215
-        max=156.066345214844
-        mean=110.375715222838
-        variance=412.695433658258"""
+        max=156.066925048828
+        mean=110.376264598194
+        variance=412.710534285851"""
 
         self.run_rproj_test(method, statics)
 
@@ -245,10 +245,10 @@ class TestRasterreport(TestCase):
         expected = [
             "Source cols: 1500",
             "Source rows: 1350",
-            "Local north: 35:48:34.593777N",
-            "Local south: 35:41:15.026269N",
-            "Local west: 78:46:28.633781W",
-            "Local east: 78:36:29.891436W",
+            "Local north: 35:48:34.619215N",
+            "Local south: 35:41:15.051632N",
+            "Local west: 78:46:28.642843W",
+            "Local east: 78:36:29.900338W",
         ]
 
         self.assertListEqual(result, expected, "Mismatch in print output (plain)")
@@ -267,14 +267,31 @@ class TestRasterreport(TestCase):
 
         expected = {
             "cols": 1500,
-            "east": -78.60830317669155,
-            "north": 35.80960938255465,
+            "east": -78.60830564948812,
+            "north": 35.80961644859374,
             "rows": 1350,
-            "south": 35.68750729683966,
-            "west": -78.7746204948163,
+            "south": 35.68751434209047,
+            "west": -78.77462301207872,
         }
 
-        self.assertDictEqual(result, expected, "Mismatch in print output (JSON)")
+        self.assertEqual(
+            result["cols"], expected["cols"], msg="Mismatch in print output (JSON)"
+        )
+        self.assertAlmostEqual(
+            result["east"], expected["east"], msg="Mismatch in print output (JSON)"
+        )
+        self.assertAlmostEqual(
+            result["north"], expected["north"], msg="Mismatch in print output (JSON)"
+        )
+        self.assertEqual(
+            result["rows"], expected["rows"], msg="Mismatch in print output (JSON)"
+        )
+        self.assertAlmostEqual(
+            result["south"], expected["south"], msg="Mismatch in print output (JSON)"
+        )
+        self.assertAlmostEqual(
+            result["west"], expected["west"], msg="Mismatch in print output (JSON)"
+        )
 
 
 if __name__ == "__main__":

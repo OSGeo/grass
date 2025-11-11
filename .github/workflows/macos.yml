@@ -139,32 +139,32 @@ jobs:
         id: cached-data
         uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
-          path: sample-data/nc_spm_full_v2alpha2.tar.gz
-          key: nc_spm_full_v2alpha2.tar.gz
+          path: sample-data/nc_spm_full_v2beta1.tar.gz
+          key: nc_spm_full_v2beta1.tar.gz
           enableCrossOsArchive: true
 
       - name: Download GRASS Sample Dataset
         if: steps.cached-data.outputs.cache-hit != 'true'
         run: |
           mkdir -p sample-data
-          curl -L "$SAMPLE_DATA" -o sample-data/nc_spm_full_v2alpha2.tar.gz
+          curl -L "$SAMPLE_DATA" -o sample-data/nc_spm_full_v2beta1.tar.gz
         env:
           SAMPLE_DATA: "https://grass.osgeo.org/sampledata/north_carolina/\
-            nc_spm_full_v2alpha2.tar.gz"
+            nc_spm_full_v2beta1.tar.gz"
 
       - name: Save GRASS Sample Dataset to cache
         uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         if: steps.cached-data.outputs.cache-hit != 'true'
         with:
-          path: sample-data/nc_spm_full_v2alpha2.tar.gz
-          key: nc_spm_full_v2alpha2.tar.gz
+          path: sample-data/nc_spm_full_v2beta1.tar.gz
+          key: nc_spm_full_v2beta1.tar.gz
 
       - name: Run gunittest tests
         shell: micromamba-shell {0}
         run: .github/workflows/test_thorough.sh --config .github/workflows/macos_gunittest.cfg
         env:
           SAMPLE_DATA_URL: "file://${{ github.workspace }}/sample-data/\
-            nc_spm_full_v2alpha2.tar.gz"
+            nc_spm_full_v2beta1.tar.gz"
 
       - name: Make HTML test report available
         if: ${{ !cancelled() }}

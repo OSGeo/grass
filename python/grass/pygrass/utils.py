@@ -299,6 +299,7 @@ def get_raster_for_points(poi_vector, raster, column=None, region=None):
     (10.0, 1.0)
     >>> r[1]  # doctest: +ELLIPSIS
     (12.0, 1.0)
+    >>> vect.close()
     >>> remove("test_vect_2", "vect")
 
     :param poi_vector: A VectorTopo object that contains points
