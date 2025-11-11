@@ -207,8 +207,7 @@ def main():
                 continue
 
             path = os.path.join(mset_dir, element)
-            if not Path(path).exists():
-                os.mkdir(path)
+            Path(path).mkdir(exist_ok=True)
 
             if element == "cell_misc":
                 if index > 0:

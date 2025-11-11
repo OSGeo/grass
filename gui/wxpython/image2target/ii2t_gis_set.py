@@ -1067,7 +1067,7 @@ class GRASSStartup(wx.Frame):
         try:
             self.gisdbase = self.tgisdbase.GetValue()
             location = self.listOfLocations[self.lblocations.GetSelection()]
-            os.mkdir(os.path.join(self.gisdbase, location, mapset))
+            Path(os.path.join(self.gisdbase, location, mapset)).mkdir()
             # copy WIND file and its permissions from PERMANENT and set
             # permissions to u+rw,go+r
             shutil.copy(

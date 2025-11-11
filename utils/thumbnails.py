@@ -160,8 +160,7 @@ def main():
     color_dir = os.path.join(os.environ["GISBASE"], "etc", "colors")
     output_dir = sys.argv[1]
 
-    if not Path(output_dir).exists():
-        os.makedirs(output_dir)
+    Path(output_dir).mkdir(parents=True, exist_ok=True)
 
     pid = os.getpid()
     tmp_grad_abs = "tmp_grad_abs_%d" % pid

@@ -5,6 +5,7 @@ import multiprocessing as mltp
 import subprocess as sub
 import shutil as sht
 from math import ceil
+from pathlib import Path
 
 from grass.script.setup import write_gisrc
 from grass.script import append_node_pid, legalize_vector_name
@@ -94,10 +95,8 @@ def copy_mapset(mapset, path):
     per_new = os.path.join(path, "PERMANENT")
     map_old = mapset.path()
     map_new = os.path.join(path, mapset.name)
-    if not os.path.isdir(per_new):
-        os.makedirs(per_new)
-    if not os.path.isdir(map_new):
-        os.mkdir(map_new)
+    Path(per_new).mkdir(parents=True, exist_ok=True)
+    Path(map_new).mkdir(exist_ok=True)
     copy_special_mapset_files(per_old, per_new)
     copy_special_mapset_files(map_old, map_new)
     gisdbase, location = os.path.split(path)
@@ -141,7 +140,7 @@ def get_mapset(gisrc_src, gisrc_dst):
     path_src = os.path.join(gsrc, lsrc, msrc)
     path_dst = os.path.join(gdst, ldst, mdst)
     if not os.path.isdir(path_dst):
-        os.makedirs(path_dst)
+        Path(path_dst).mkdir(parents=True)
         copy_special_mapset_files(path_src, path_dst)
     src = Mapset(msrc, lsrc, gsrc)
     dst = Mapset(mdst, ldst, gdst)
@@ -719,8 +718,7 @@ class GridModule:
                 par = self.module.outputs[k]
                 if par.typedesc == "raster" and par.value:
                     dirpath = os.path.join(tmpdir, par.name)
-                    if not os.path.isdir(dirpath):
-                        os.makedirs(dirpath)
+                    Path(dirpath).mkdir(parents=True, exist_ok=True)
                     fil = open(os.path.join(dirpath, self.out_prefix + par.value), "w+")
                     fil.close()
 
