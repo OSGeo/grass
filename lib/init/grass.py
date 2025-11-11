@@ -383,7 +383,7 @@ def create_grass_config_dir() -> str:
 
     if not Path(directory).is_dir():
         try:
-            os.makedirs(directory)
+            Path(directory).mkdir(parents=True)
         except OSError as e:
             # Can happen as a race condition
             if e.errno != errno.EEXIST or not Path(directory).is_dir():
@@ -414,7 +414,7 @@ def create_tmp(user, gis_lock) -> str:
     if tmp:
         tmpdir = os.path.join(tmp, tmpdir_name)
         try:
-            os.mkdir(tmpdir, 0o700)
+            Path(tmpdir).mkdir(mode=0o700)
         except:  # noqa: E722
             tmp = None
 
@@ -423,7 +423,7 @@ def create_tmp(user, gis_lock) -> str:
             tmp = ttmp
             tmpdir = os.path.join(tmp, tmpdir_name)
             try:
-                os.mkdir(tmpdir, 0o700)
+                Path(tmpdir).mkdir(mode=0o700)
             except:  # noqa: E722
                 tmp = None
             if tmp:
@@ -874,7 +874,7 @@ def set_mapset(
                     if not tmp_mapset:
                         message(_("Creating new GRASS mapset <{}>...").format(mapset))
                     # create mapset directory
-                    os.mkdir(path)
+                    Path(path).mkdir()
                     if tmp_mapset:
                         # The tmp location is handled by (re-)using the
                         # tmpdir, but we need to take care of the tmp

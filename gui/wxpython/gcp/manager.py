@@ -2705,8 +2705,7 @@ class VectGroup(wx.Dialog):
 
         dirname = os.path.dirname(self.vgrpfile)
 
-        if not Path(dirname).exists():
-            os.makedirs(dirname)
+        Path(dirname).mkdir(parents=True, exist_ok=True)
 
         with open(self.vgrpfile, mode="w") as f:
             f.writelines(vect + "\n" for vect in vgrouplist)

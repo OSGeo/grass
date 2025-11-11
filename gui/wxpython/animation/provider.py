@@ -904,7 +904,7 @@ def test():
     tempDir = "/tmp/test"
     if Path(tempDir).exists():
         shutil.rmtree(tempDir)
-    os.mkdir(tempDir)
+    Path(tempDir).mkdir()
     # comment this line to keep the directory after program ends
     #    cleanUp = CleanUp(tempDir)
     #    import atexit

@@ -61,7 +61,7 @@ def retRLiPath():
     rlipath = os.path.join(grass_config_dir, "r.li")
     if Path(rlipath).exists():
         return rlipath
-    os.mkdir(rlipath)
+    Path(rlipath).mkdir()
     return rlipath
 
 
