@@ -1474,7 +1474,7 @@ def get_multi_addon_addons_which_install_only_html_man_page():
                     addon_paths.index(addon_src_file.group(0).replace("\n", ""))
                 )
     gs.debug(
-        f"Addon directory names <{', '.join(addon_dirs)}> which "
+        f"Addon directory named <{', '.join(addon_dirs)}> which"
         " does not contain any Python or C source code files."
     )
     return addon_dirs
