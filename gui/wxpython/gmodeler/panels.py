@@ -66,19 +66,20 @@ from gui_core.wrap import (
 )
 from main_window.page import MainPageBase
 from gmodeler.giface import GraphicalModelerGrassInterface
-from gmodeler.model import (
-    Model,
+from gmodeler.model import Model, WriteModelFile
+from gmodeler.model_items import (
     ModelAction,
     ModelRelation,
     ModelLoop,
     ModelCondition,
     ModelComment,
-    WriteModelFile,
     ModelDataSeries,
     ModelDataSingle,
-    WriteActiniaFile,
-    WritePythonFile,
-    WritePyWPSFile,
+)
+from gmodeler.model_convert import (
+    ModelToActinia,
+    ModelToPython,
+    ModelToPyWPS,
 )
 from gmodeler.dialogs import (
     ModelDataDialog,
@@ -530,16 +531,18 @@ class ModelerPanel(wx.Panel, MainPageBase):
                     data.Update()
 
                 # remove dead data items
-                if not p.get("value", ""):
-                    data = layer.FindData(p.get("name", ""))
-                    if data:
-                        remList, upList = self.model.RemoveItem(data, layer)
-                        for item in remList:
-                            self.canvas.diagram.RemoveShape(item)
-                            item.__del__()  # noqa: PLC2801, C2801
+                if p.get("value", ""):
+                    continue
+                data = layer.FindData(p.get("name", ""))
+                if not data:
+                    continue
+                remList, upList = self.model.RemoveItem(data, layer)
+                for item in remList:
+                    self.canvas.diagram.RemoveShape(item)
+                    item.__del__()  # noqa: PLC2801, C2801
 
-                        for item in upList:
-                            item.Update()
+                for item in upList:
+                    item.Update()
 
             # valid / parameterized ?
             layer.SetValid(params)
@@ -898,7 +901,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
         if filename[-4:] != ".gxm":
             filename += ".gxm"
 
-        if os.path.exists(filename):
+        if Path(filename).exists():
             dlg = wx.MessageDialog(
                 parent=self,
                 message=_(
@@ -1583,7 +1586,7 @@ class PythonPanel(wx.Panel):
         self.filename = None
         # default values of variables that will be changed if the desired
         # script type is changed
-        self.write_object = WritePythonFile
+        self.write_object = ModelToPython
 
         self.bodyBox = StaticBox(
             parent=self, id=wx.ID_ANY, label=" %s " % _("Python script")
@@ -1653,19 +1656,19 @@ class PythonPanel(wx.Panel):
         :return: script extension
         """
         # return "py" for Python, PyWPS
-        return "json" if self.write_object == WriteActiniaFile else "py"
+        return "json" if self.write_object == ModelToActinia else "py"
 
     def SetWriteObject(self, script_type):
         """Set correct self.write_object depending on the script type.
         :param script_type: script type name as a string
         """
         if script_type == "PyWPS":
-            self.write_object = WritePyWPSFile
+            self.write_object = ModelToPyWPS
         elif script_type == "actinia":
-            self.write_object = WriteActiniaFile
+            self.write_object = ModelToActinia
         else:
             # script_type == "Python", fallback
-            self.write_object = WritePythonFile
+            self.write_object = ModelToPython
 
     def RefreshScript(self):
         """Refresh the script.
@@ -1739,7 +1742,7 @@ class PythonPanel(wx.Panel):
         if filename[-len(file_ext) - 1 :] != f".{file_ext}":
             filename += f".{file_ext}"
 
-        if os.path.exists(filename):
+        if Path(filename).exists():
             dlg = wx.MessageDialog(
                 self,
                 message=_(
@@ -1768,15 +1771,13 @@ class PythonPanel(wx.Panel):
         """Run Python script"""
         self.filename = grass.tempfile()
         try:
-            fd = open(self.filename, "w")
-            fd.write(self.body.GetText())
+            Path(self.filename).write_text(self.body.GetText())
         except OSError as e:
             GError(_("Unable to launch Python script. %s") % e, parent=self)
             return
-        finally:
-            fd.close()
-            mode = stat.S_IMODE(os.lstat(self.filename)[stat.ST_MODE])
-            os.chmod(self.filename, mode | stat.S_IXUSR)
+
+        mode = stat.S_IMODE(os.lstat(self.filename)[stat.ST_MODE])
+        os.chmod(self.filename, mode | stat.S_IXUSR)
 
         for item in self.parent.GetModel().GetItems():
             if (
@@ -1785,12 +1786,12 @@ class PythonPanel(wx.Panel):
                 > 0
             ):
                 self.parent._gconsole.RunCmd(
-                    [fd.name, "--ui"], skipInterface=False, onDone=self.OnDone
+                    [self.filename, "--ui"], skipInterface=False, onDone=self.OnDone
                 )
                 break
         else:
             self.parent._gconsole.RunCmd(
-                [fd.name], skipInterface=True, onDone=self.OnDone
+                [self.filename], skipInterface=True, onDone=self.OnDone
             )
 
         event.Skip()

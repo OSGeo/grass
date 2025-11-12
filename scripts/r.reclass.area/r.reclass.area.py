@@ -207,7 +207,7 @@ def main():
     diagonal = flags["d"]
 
     # check for unsupported locations
-    in_proj = gs.parse_command("g.proj", flags="g")
+    in_proj = gs.parse_command("g.proj", flags="p", format="shell")
     if in_proj["unit"].lower() == "degree":
         gs.fatal(_("Latitude-longitude locations are not supported"))
     if in_proj["name"].lower() == "xy_location_unprojected":

@@ -233,9 +233,7 @@ class TimelineFrame(wx.Frame):
             self.timeData[name]["west"] = []
             self.timeData[name]["east"] = []
 
-            columns = ",".join(
-                ["name", "start_time", "end_time", "north", "south", "west", "east"]
-            )
+            columns = "name,start_time,end_time,north,south,west,east"
 
             rows = sp.get_registered_maps(
                 columns=columns, where=None, order="start_time", dbif=self.dbif
@@ -271,9 +269,7 @@ class TimelineFrame(wx.Frame):
         self.axes3d.clear()
         self.axes3d.grid(False)
         # self.axes3d.grid(True)
-        convert = (
-            mdates.date2num if self.temporalType == "absolute" else lambda x: x
-        )  # noqa: E731
+        convert = mdates.date2num if self.temporalType == "absolute" else lambda x: x  # noqa: E731
 
         colors = cycle(COLORS)
         plots = []
@@ -299,7 +295,7 @@ class TimelineFrame(wx.Frame):
                 )
             )
 
-        params = gs.read_command("g.proj", flags="g")
+        params = gs.read_command("g.proj", flags="p", format="shell")
         params = gs.parse_key_val(params)
         if "unit" in params:
             self.axes3d.set_xlabel(_("X [%s]") % params["unit"])
@@ -319,9 +315,7 @@ class TimelineFrame(wx.Frame):
         """Draws 2D plot (temporal extents)"""
         self.axes2d.clear()
         self.axes2d.grid(True)
-        convert = (
-            mdates.date2num if self.temporalType == "absolute" else lambda x: x
-        )  # noqa: E731
+        convert = mdates.date2num if self.temporalType == "absolute" else lambda x: x  # noqa: E731
 
         colors = cycle(COLORS)
 
@@ -342,9 +336,9 @@ class TimelineFrame(wx.Frame):
             # TODO: mixed
             if mapType == "interval":
                 end = convert(self.timeData[name]["end_datetime"])
-                lookUpData = list(zip(start, end))
+                lookUpData = list(zip(start, end, strict=False))
                 duration = end - np.array(start)
-                barData = list(zip(start, duration))
+                barData = list(zip(start, duration, strict=False))
                 lookUp.AddDataset(
                     type_="bar",
                     yrange=(i - 0.1, i + 0.1),

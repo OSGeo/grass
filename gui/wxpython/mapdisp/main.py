@@ -32,6 +32,7 @@ import sys
 import time
 import shutil
 import fileinput
+from pathlib import Path
 
 from grass.script.utils import try_remove
 from grass.script import core as grass
@@ -216,24 +217,26 @@ class DMonMap(Map):
 
                 exists = False
                 for i, layer in enumerate(existingLayers):
-                    if layer.GetCmd(string=True) == utils.GetCmdString(
+                    if layer.GetCmd(string=True) != utils.GetCmdString(
                         cmdlist_to_tuple(cmd)
                     ):
-                        exists = True
+                        continue
 
-                        if layersOrder[i] == -1:
-                            layersOrder[i] = next_layer
-                            next_layer += 1
-                        # layer must be put higher in render order (same cmd was
-                        # insered more times)
-                        # TODO delete rendurant cmds from cmd file?
-                        else:
-                            for j, l_order in enumerate(layersOrder):
-                                if l_order > layersOrder[i]:
-                                    layersOrder[j] -= 1
-                            layersOrder[i] = next_layer - 1
+                    exists = True
 
-                        break
+                    if layersOrder[i] == -1:
+                        layersOrder[i] = next_layer
+                        next_layer += 1
+                    # layer must be put higher in render order (same cmd was
+                    # inserted more times)
+                    # TODO delete redundant cmds from cmd file?
+                    else:
+                        for j, l_order in enumerate(layersOrder):
+                            if l_order > layersOrder[i]:
+                                layersOrder[j] -= 1
+                        layersOrder[i] = next_layer - 1
+
+                    break
                 if exists:
                     continue
 
@@ -460,7 +463,7 @@ class DMonGrassInterface(StandaloneMapDisplayGrassInterface):
 
 
 class DMonDisplay(FrameMixin, MapPanel):
-    """Map display for wrapping map panel with d.mon mathods and frame methods"""
+    """Map display for wrapping map panel with d.mon methods and frame methods"""
 
     def __init__(self, parent, giface, id, Map, title, toolbars, statusbar):
         # init map panel
@@ -476,9 +479,7 @@ class DMonDisplay(FrameMixin, MapPanel):
         )
         # set system icon
         parent.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
 
         # bindings
@@ -490,13 +491,14 @@ class DMonDisplay(FrameMixin, MapPanel):
 
         # update env file
         width, height = self.MapWindow.GetClientSize()
-        for line in fileinput.input(monFile["env"], inplace=True):
-            if "GRASS_RENDER_WIDTH" in line:
-                print("GRASS_RENDER_WIDTH={0}".format(width))
-            elif "GRASS_RENDER_HEIGHT" in line:
-                print("GRASS_RENDER_HEIGHT={0}".format(height))
-            else:
-                print(line.rstrip("\n"))
+        with fileinput.input(monFile["env"], inplace=True) as file:
+            for line in file:
+                if "GRASS_RENDER_WIDTH" in line:
+                    print("GRASS_RENDER_WIDTH={0}".format(width))
+                elif "GRASS_RENDER_HEIGHT" in line:
+                    print("GRASS_RENDER_HEIGHT={0}".format(height))
+                else:
+                    print(line.rstrip("\n"))
 
         # add Map Display panel to Map Display frame
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -613,9 +615,9 @@ class MapApp(wx.App):
         #    self.timer.Stop()
         #    return
 
-        # todo: events
+        # TODO: events
         try:
-            currentCmdFileTime = os.path.getmtime(monFile["cmd"])
+            currentCmdFileTime = Path(monFile["cmd"]).stat().st_mtime
             if currentCmdFileTime > self.cmdTimeStamp:
                 self.timer.Stop()
                 self.cmdTimeStamp = currentCmdFileTime

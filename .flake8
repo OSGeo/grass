@@ -2,6 +2,10 @@
 ignore =
     # whitespace before ':' (Black)
     E203,
+    # E501 line too long
+    E501,
+    # global unused (TODO: Solve and remove exclusion)
+    F824,
     # line break before binary operator (Black)
     W503,
 
@@ -16,7 +20,6 @@ per-file-ignores =
     # E722 do not use bare 'except'
     # W605 invalid escape sequence
     # F821 undefined name 'unicode'
-    # F841 local variable assigned to but never used
     # E741 ambiguous variable name 'l'
     man/build_html.py: E501
     man/build_md.py: E501
@@ -30,15 +33,12 @@ per-file-ignores =
     gui/wxpython/iclass/g.gui.iclass.py: E501
     gui/wxpython/mapdisp/test_mapdisp.py: E501
     gui/wxpython/mapswipe/g.gui.mapswipe.py: E501
-    gui/wxpython/mapwin/base.py: E722
-    gui/wxpython/mapwin/buffered.py: E722
     gui/wxpython/timeline/g.gui.timeline.py: E501
     # Generated file
     gui/wxpython/menustrings.py: E501
     # C wrappers call libgis.G_gisinit before importing other modules.
     # TODO: Is this really needed?
     python/grass/jupyter/__init__.py: E501
-    python/grass/pygrass/vector/__init__.py: E402
     # Configuration file for Sphinx:
     # Ignoring import/code mix and line length.
     # Files not managed by Black
@@ -78,6 +78,7 @@ exclude =
     # Test output directory
     testreport,
     # Not yet compliant
+    python/grass/temporal/ply,
     python/libgrass_interface_generator,
     # No tests checked for now
     testsuite,

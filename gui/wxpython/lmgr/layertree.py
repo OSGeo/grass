@@ -1227,7 +1227,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
     def OnPopupGroupOpacityLevel(self, event):
         """Popup opacity level indicator for group of layers"""
-        # Get opacity level from the first finded map layer
+        # Get opacity level from the first found map layer
         child, cookie = self.GetFirstChild(self.layer_selected)
         while child:
             maplayer = self.GetLayerInfo(child, key="maplayer")
@@ -1462,7 +1462,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 if self.GetLayerInfo(item, key="type") == "vector":
                     name = self.GetLayerInfo(item, key="maplayer").GetName()
                     if name == lname:
-                        return
+                        return None
                 item = self.GetNextItem(item)
 
         selectedLayer = self.GetSelectedLayer()
@@ -1881,7 +1881,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         Detects if mouse points at checkbox.
         """
         thisItem, flags = self.HitTest(event.GetPosition())
-        # workaround: in order not to check checkox when clicking outside
+        # workaround: in order not to check checkbox when clicking outside
         # we need flag TREE_HITTEST_ONITEMCHECKICON but not TREE_HITTEST_ONITEMLABEL
         # this applies only for TR_FULL_ROW_HIGHLIGHT style
         if (flags & CT.TREE_HITTEST_ONITEMCHECKICON) and not (

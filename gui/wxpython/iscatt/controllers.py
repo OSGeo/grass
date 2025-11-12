@@ -151,7 +151,7 @@ class ScattsManager:
 
         show_add = bool(self.show_add_scatt_plot)
 
-        self.all_bands_to_bands = dict(zip(bands, [-1] * len(bands)))
+        self.all_bands_to_bands = dict(zip(bands, [-1] * len(bands), strict=False))
         self.all_bands = bands
 
         self.region = GetRegion()
@@ -957,16 +957,15 @@ class IMapDispConnection:
 
         bands = []
         while True:
-            if dlg.ShowModal() == wx.ID_OK:
-                bands = dlg.GetGroupBandsErr(parent=self.scatt_mgr.guiparent)
-                if bands:
-                    name, s = dlg.GetData()
-                    group = gs.find_file(name=name, element="group")
-                    self.set_g["group"] = group["name"]
-                    self.set_g["subg"] = s
+            if dlg.ShowModal() != wx.ID_OK:
+                break
+            bands = dlg.GetGroupBandsErr(parent=self.scatt_mgr.guiparent)
+            if bands:
+                name, s = dlg.GetData()
+                group = gs.find_file(name=name, element="group")
+                self.set_g["group"] = group["name"]
+                self.set_g["subg"] = s
 
-                    break
-            else:
                 break
 
         dlg.Destroy()

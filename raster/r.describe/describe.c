@@ -7,7 +7,7 @@
  * PURPOSE:      Prints terse list of category values found in a raster
  *               map layer.
  *
- * COPYRIGHT:    (C) 2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006-2025 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -36,7 +36,7 @@ int describe(const char *name, int compact, char *no_data_str, int range,
     RASTER_MAP_TYPE map_type;
     struct Quant q;
     struct FPRange r;
-    DCELL dmin, dmax;
+    DCELL dmin = 0.0, dmax = 0.0;
     void (*get_row)(int, CELL *, int);
 
     if (windowed) {

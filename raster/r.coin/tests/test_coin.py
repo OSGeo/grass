@@ -3,9 +3,9 @@ import grass.script as gs
 
 def validate_r_coin_output(actual_results, expected_results):
     """Validate r.coin output against expected results."""
-    assert set(actual_results) == set(
-        expected_results
-    ), f"Expected {expected_results}, but got {actual_results}"
+    assert set(actual_results) == set(expected_results), (
+        f"Expected {expected_results}, but got {actual_results}"
+    )
 
 
 def test_r_coin(setup_maps):

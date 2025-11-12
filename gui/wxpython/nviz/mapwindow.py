@@ -69,7 +69,6 @@ class RenderTypedDict(TypedDict):
 
 
 class NvizThread(Thread):
-
     def __init__(self, log, progressbar, window) -> None:
         Thread.__init__(self)
         Debug.msg(5, "NvizThread.__init__():")
@@ -132,7 +131,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         # or avoid duplication, define in map window base class?
 
         # Emitted when mouse us moving (mouse motion event)
-        # Parametres are x and y of the mouse position in map (cell) units
+        # Parameters are x and y of the mouse position in map (cell) units
         self.mouseMoving = Signal("GLWindow.mouseMoving")
 
         # Emitted when the zoom history stack is emptied
@@ -1172,7 +1171,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             view["position"]["y"],
             iview["height"]["value"],
         ) = self._display.GetViewpointPosition()
-        for key, val in zip(("x", "y", "z"), self._display.GetViewdir()):
+        for key, val in zip(("x", "y", "z"), self._display.GetViewdir(), strict=False):
             iview["dir"][key] = val
 
         iview["dir"]["use"] = True
@@ -1643,7 +1642,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         layer = self.tree.GetLayerInfo(item, key="maplayer")
 
         if layer.type not in {"raster", "raster_3d"}:
-            return
+            return None
 
         if layer.type == "raster":
             id = self._display.LoadSurface(str(layer.name), None, None)
@@ -1827,7 +1826,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         """
         layer = self.tree.GetLayerInfo(item, key="maplayer")
         if layer.type != "vector":
-            return
+            return None
 
         # set default properties
         if points is None:
@@ -2596,16 +2595,18 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                     cmdLColor += "%s," % nvizData["lines"]["color"]["value"]
                     cmdLMode += "%s," % nvizData["lines"]["mode"]["type"]
                     cmdLPos += "0,0,%d," % nvizData["lines"]["height"]["value"]
-                if (vInfo["points"] + vInfo["centroids"]) > 0:
-                    cmdPoints += (
-                        "%s," % self.tree.GetLayerInfo(vector, key="maplayer").GetName()
-                    )
-                    cmdPWidth += "%d," % nvizData["points"]["width"]["value"]
-                    cmdPSize += "%d," % nvizData["points"]["size"]["value"]
-                    cmdPColor += "%s," % nvizData["points"]["color"]["value"]
-                    cmdPMarker += "%s," % markers[nvizData["points"]["marker"]["value"]]
-                    cmdPPos += "0,0,%d," % nvizData["points"]["height"]["value"]
-                    cmdPLayer += "1,1,"
+                if vInfo["points"] + vInfo["centroids"] <= 0:
+                    continue
+                cmdPoints += (
+                    "%s," % self.tree.GetLayerInfo(vector, key="maplayer").GetName()
+                )
+                cmdPWidth += "%d," % nvizData["points"]["width"]["value"]
+                cmdPSize += "%d," % nvizData["points"]["size"]["value"]
+                cmdPColor += "%s," % nvizData["points"]["color"]["value"]
+                cmdPMarker += "%s," % markers[nvizData["points"]["marker"]["value"]]
+                cmdPPos += "0,0,%d," % nvizData["points"]["height"]["value"]
+                cmdPLayer += "1,1,"
+
             if cmdLines:
                 cmd += "vline=" + cmdLines.strip(",") + " "
                 cmd += "vline_width=" + cmdLWidth.strip(",") + " "

@@ -57,7 +57,7 @@ def get_tempfile_name(suffix, create=False):
 
     if not create:
         # remove empty file to have a clean state later
-        os.remove(name)
+        Path(name).unlink()
     return name
 
 
@@ -217,15 +217,12 @@ class Layer:
 
         :return: command list/string
         """
-        if string:
-            if self.type == "command":
-                scmd = []
-                for c in self.cmd:
-                    scmd.append(utils.GetCmdString(c))
-
-                return ";".join(scmd)
-            return utils.GetCmdString(self.cmd)
-        return self.cmd
+        if not string:
+            return self.cmd
+        if self.type == "command":
+            scmd = [utils.GetCmdString(c) for c in self.cmd]
+            return ";".join(scmd)
+        return utils.GetCmdString(self.cmd)
 
     def GetType(self):
         """Get map layer type"""
@@ -279,7 +276,7 @@ class Layer:
 
     def IsRendered(self) -> bool:
         """!Check if layer was rendered (if the image file exists)"""
-        return bool(os.path.exists(self.mapfile))
+        return bool(Path(self.mapfile).exists())
 
     def SetType(self, ltype):
         """Set layer type"""
@@ -431,8 +428,8 @@ class RenderLayerMgr(wx.EvtHandler):
         if self.layer.GetType() in {"vector", "thememap"}:
             if not self.layer._legrow:
                 self.layer._legrow = grass.tempfile(create=True)
-            if os.path.isfile(self.layer._legrow):
-                os.remove(self.layer._legrow)
+            if (p := Path(self.layer._legrow)).is_file():
+                p.unlink()
             env_cmd["GRASS_LEGEND_FILE"] = text_to_string(self.layer._legrow)
 
         cmd_render = copy.deepcopy(cmd)
@@ -534,8 +531,8 @@ class RenderMapMgr(wx.EvtHandler):
         self.layers = []
 
         # re-render from scratch
-        if os.path.exists(self.Map.mapfile):
-            os.remove(self.Map.mapfile)
+        if (p := Path(self.Map.mapfile)).is_file():
+            p.unlink()
 
     def _checkRenderedSizes(self, env, layers):
         """Check if rendering size in current env differs from size of
@@ -666,7 +663,7 @@ class RenderMapMgr(wx.EvtHandler):
             if layer.GetType() == "overlay":
                 continue
 
-            if os.path.isfile(layer.mapfile):
+            if Path(layer.mapfile).is_file():
                 maps.append(layer.mapfile)
                 masks.append(layer.maskfile)
                 opacities.append(str(layer.opacity))
@@ -710,8 +707,8 @@ class RenderMapMgr(wx.EvtHandler):
                 if layer.GetType() not in {"vector", "thememap"}:
                     continue
 
-                if os.path.isfile(layer._legrow) and not layer.hidden:
-                    line = Path(layer._legrow).read_text()
+                if (p := Path(layer._legrow)).is_file() and not layer.hidden:
+                    line = p.read_text()
                     outfile.write(line)
                     new_legend.append(line)
 
@@ -883,24 +880,23 @@ class Map:
             env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"], "WIND"
         )
         try:
-            windfile = open(filename)
+            with open(filename) as windfile:
+                for line in windfile:
+                    line = line.strip()
+                    try:
+                        key, value = line.split(":", 1)
+                    except ValueError as e:
+                        sys.stderr.write(
+                            _("\nERROR: Unable to read WIND file: %s\n") % e
+                        )
+                        return None
+
+                    self.wind[key.strip()] = value.strip()
         except OSError as e:
             sys.exit(
                 _("Error: Unable to open '%(file)s'. Reason: %(ret)s. wxGUI exited.\n")
                 % {"file": filename, "ret": e}
             )
-
-        for line in windfile:
-            line = line.strip()
-            try:
-                key, value = line.split(":", 1)
-            except ValueError as e:
-                sys.stderr.write(_("\nERROR: Unable to read WIND file: %s\n") % e)
-                return None
-
-            self.wind[key.strip()] = value.strip()
-
-        windfile.close()
 
         return self.wind
 
@@ -1406,29 +1402,27 @@ class Map:
 
         list_ = self.overlays if overlay else self.layers
 
-        if layer in list_:
-            if layer.mapfile:
-                base, mapfile = os.path.split(layer.mapfile)
-                tempbase = mapfile.split(".")[0]
-                if base == "" or tempbase == "":
-                    return None
-                basefile = os.path.join(base, tempbase) + r".*"
-                # this comes all the way from r28605, so leaving
-                # it as it is, although it does not really fit with the
-                # new system (but probably works well enough)
-                for f in glob.glob(basefile):
-                    os.remove(f)
+        if layer not in list_:
+            return None
+        if layer.mapfile:
+            base, mapfile = os.path.split(layer.mapfile)
+            tempbase = mapfile.split(".")[0]
+            if base == "" or tempbase == "":
+                return None
+            basefile = os.path.join(base, tempbase) + r".*"
+            # this comes all the way from r28605, so leaving
+            # it as it is, although it does not really fit with the
+            # new system (but probably works well enough)
+            for f in glob.glob(basefile):
+                Path(f).unlink()
 
-            if layer.GetType() in {"vector", "thememap"}:
-                if os.path.isfile(layer._legrow):
-                    os.remove(layer._legrow)
+        if layer.GetType() in {"vector", "thememap"}:
+            Path(layer._legrow).unlink(missing_ok=True)
 
-            list_.remove(layer)
+        list_.remove(layer)
 
-            self.layerRemoved.emit(layer=layer)
-            return layer
-
-        return None
+        self.layerRemoved.emit(layer=layer)
+        return layer
 
     def SetLayers(self, layers):
         self.layers = layers
@@ -1539,8 +1533,8 @@ class Map:
             for layer in self.layers:
                 if layer.name == name:
                     retlayer = layer
-                    os.remove(layer.mapfile)
-                    os.remove(layer.maskfile)
+                    Path(layer.mapfile).unlink()
+                    Path(layer.maskfile).unlink()
                     self.layers.remove(layer)
                     return retlayer
         # del by id
@@ -1653,12 +1647,11 @@ class Map:
         """
         ovl = [overlay for overlay in self.overlays if overlay.id == id]
 
-        if not list:
-            if len(ovl) != 1:
-                return None
-            return ovl[0]
-
-        return ovl
+        if list:
+            return ovl
+        if len(ovl) != 1:
+            return None
+        return ovl[0]
 
     def DeleteOverlay(self, overlay):
         """Delete overlay
@@ -1675,7 +1668,7 @@ class Map:
         del llist[:]
 
     def Clean(self):
-        """Clean layer stack - go trough all layers and remove them
+        """Clean layer stack - go through all layers and remove them
         from layer list.
 
         Removes also mapfile and maskfile.

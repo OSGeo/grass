@@ -157,7 +157,7 @@ def main(options, flags):
     if use_stdin:
         coordinates_stdin = str(sys.__stdin__.read())
         # Check if coordinates are given with site names or IDs
-        stdin_length = len(coordinates_stdin.split("\n")[0].split())
+        stdin_length = len(coordinates_stdin.split("\n", maxsplit=1)[0].split())
         if stdin_length <= 2:
             site_input = False
         elif stdin_length >= 3:
@@ -466,8 +466,7 @@ def one_point_per_col_output(
                             x = row[1]
                             y = row[2]
                             out_str += (
-                                "{sep}{cat}{csep}{x:10.10f}{csep}"
-                                "{y:10.10f}".format(
+                                "{sep}{cat}{csep}{x:10.10f}{csep}{y:10.10f}".format(
                                     cat=cat,
                                     x=float(x),
                                     y=float(y),

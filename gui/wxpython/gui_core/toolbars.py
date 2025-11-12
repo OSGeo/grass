@@ -19,6 +19,7 @@ This program is free software under the GNU General Public License
 import platform
 import os
 from itertools import starmap
+from pathlib import Path
 
 import wx
 from wx.lib.agw import aui
@@ -281,7 +282,7 @@ class ToolbarController:
         Button must be custom (not toolbar tool) to set smaller width.
         """
         arrowPath = os.path.join(IMGDIR, "small_down_arrow.png")
-        if os.path.isfile(arrowPath) and os.path.getsize(arrowPath):
+        if Path(arrowPath).is_file() and Path(arrowPath).stat().st_size:
             bitmap = wx.Bitmap(name=arrowPath)
         else:
             bitmap = wx.ArtProvider.GetBitmap(
@@ -363,7 +364,7 @@ class BaseToolbar(ToolBar):
 
     def _toolbarData(self):
         """Toolbar data (virtual)"""
-        return None
+        return
 
     def Enable(self, tool, enable=True):
         """@copydoc ToolbarController::Enable()"""
@@ -411,7 +412,7 @@ class AuiToolbar(aui.AuiToolBar):
 
     def _toolbarData(self):
         """Toolbar data (virtual)"""
-        return None
+        return
 
     def Enable(self, tool, enable=True):
         """@copydoc ToolbarController::Enable()"""

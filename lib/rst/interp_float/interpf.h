@@ -12,6 +12,11 @@
 #include <grass/dataquad.h>
 #include <grass/qtree.h>
 #include <grass/dbmi.h>
+#ifdef GRASS_CMAKE_BUILD
+#include <export/grass_interpfl_export.h>
+#else
+#define GRASS_INTERPFL_EXPORT
+#endif
 
 /* for resample program */
 struct fcell_triple {
@@ -22,21 +27,21 @@ struct fcell_triple {
 };
 
 #ifdef POINT2D_C
-struct line_pnts *Pnts;
-struct line_cats *Cats2;
-dbDriver *driver2;
-dbString sql2;
-struct Map_info Map2;
-struct field_info *ff;
-int count;
+GRASS_INTERPFL_EXPORT struct line_pnts *Pnts;
+GRASS_INTERPFL_EXPORT struct line_cats *Cats2;
+GRASS_INTERPFL_EXPORT dbDriver *driver2;
+GRASS_INTERPFL_EXPORT dbString sql2;
+GRASS_INTERPFL_EXPORT struct Map_info Map2;
+GRASS_INTERPFL_EXPORT struct field_info *ff;
+GRASS_INTERPFL_EXPORT int count;
 #else
-extern struct line_pnts *Pnts;
-extern struct line_cats *Cats2;
-extern dbDriver *driver2;
-extern dbString sql2;
-extern struct Map_info Map2;
-extern struct field_info *ff;
-extern int count;
+GRASS_INTERPFL_EXPORT extern struct line_pnts *Pnts;
+GRASS_INTERPFL_EXPORT extern struct line_cats *Cats2;
+GRASS_INTERPFL_EXPORT extern dbDriver *driver2;
+GRASS_INTERPFL_EXPORT extern dbString sql2;
+GRASS_INTERPFL_EXPORT extern struct Map_info Map2;
+GRASS_INTERPFL_EXPORT extern struct field_info *ff;
+GRASS_INTERPFL_EXPORT extern int count;
 #endif
 
 struct interp_params;

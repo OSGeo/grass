@@ -1,4 +1,5 @@
-from os.path import join, exists
+from os.path import join
+from pathlib import Path
 import grass.lib.gis as libgis
 import ctypes
 
@@ -160,13 +161,13 @@ class Vector(Info):
         then write the two points on the map, with ::
 
             >>> new.write(point0, cat=1, attrs=("pub",))
-            >>> new.write(point1, cat=2, attrs=("resturant",))
+            >>> new.write(point1, cat=2, attrs=("restaurant",))
 
         commit the db changes ::
 
             >>> new.table.conn.commit()
             >>> new.table.execute().fetchall()
-            [(1, 'pub'), (2, 'resturant')]
+            [(1, 'pub'), (2, 'restaurant')]
 
         close the vector map ::
 
@@ -184,38 +185,26 @@ class Vector(Info):
             >>> new.read(1).attrs["name"]
             'pub'
             >>> new.read(2).attrs["name"]
-            'resturant'
+            'restaurant'
             >>> new.close()
             >>> new.remove()
 
         """
         self.n_lines += 1
-        if not isinstance(cat, int) and not isinstance(cat, str):
-            # likely the case of using 7.0 API
-            import warnings
-
-            warnings.warn(
-                "Vector.write(geo_obj, attrs=(...)) is"
-                " deprecated, specify cat explicitly",
-                DeprecationWarning,
-            )
-            # try to accommodate
-            attrs = cat
-            cat = None
         if attrs and cat is None:
             # TODO: this does not work as expected when there are
             # already features in the map when we opened it
             cat = (self._cats[-1] if self._cats else 0) + 1
 
-        if cat is not None and cat not in self._cats:
-            self._cats.append(cat)
-            if self.table is not None and attrs is not None:
-                attr = [cat, *attrs]
-                cur = self.table.conn.cursor()
-                cur.execute(self.table.columns.insert_str, attr)
-                cur.close()
-
         if cat is not None:
+            if cat not in self._cats:
+                self._cats.append(cat)
+                if self.table is not None and attrs is not None:
+                    attr = [cat, *attrs]
+                    cur = self.table.conn.cursor()
+                    cur.execute(self.table.columns.insert_str, attr)
+                    cur.close()
+
             cats = Cats(geo_obj.c_cats)
             cats.reset()
             cats.set(cat, self.layer)
@@ -260,7 +249,7 @@ class Vector(Info):
         """
         loc = Location()
         path = join(loc.path(), self.mapset, "vector", self.name, "colr")
-        return bool(exists(path))
+        return bool(Path(path).exists())
 
 
 # =============================================
@@ -422,7 +411,7 @@ class VectorTopo(Vector):
             [Area(1), Area(2), Area(3)]
 
 
-        to sort the result in a efficient way, use: ::
+        to sort the result in an efficient way, use: ::
 
             >>> from operator import methodcaller as method
             >>> areas.sort(key=method("area"), reverse=True)  # sort the list
@@ -443,7 +432,6 @@ class VectorTopo(Vector):
 
             >>> test_vect.close()
         """
-        is2D = not self.is_3D()
         if vtype not in _GEOOBJ.keys():
             keys = "', '".join(sorted(_GEOOBJ.keys()))
             raise ValueError("vtype not supported, use one of: '%s'" % keys)
@@ -451,6 +439,7 @@ class VectorTopo(Vector):
             ids = (indx for indx in range(1, self.number_of(vtype) + 1))
             if idonly:
                 return ids
+            is2D = not self.is_3D()
             return (
                 _GEOOBJ[vtype](
                     v_id=indx,
@@ -538,28 +527,30 @@ class VectorTopo(Vector):
 
         :param int feature_id: the id of feature to obtain
 
-        >>> test_vect = VectorTopo(test_vector_name)
-        >>> test_vect.open(mode="r")
-        >>> feature1 = test_vect.read(0)  # doctest: +ELLIPSIS
-        Traceback (most recent call last):
-            ...
-        ValueError: The index must be >0, 0 given.
-        >>> feature1 = test_vect.read(5)
-        >>> feature1
-        Line([Point(12.000000, 4.000000), Point(12.000000, 2.000000), Point(12.000000, 0.000000)])
-        >>> feature1.length()
-        4.0
-        >>> test_vect.read(-1)
-        Centroid(7.500000, 3.500000)
-        >>> len(test_vect)
-        21
-        >>> test_vect.read(21)
-        Centroid(7.500000, 3.500000)
-        >>> test_vect.read(22)  # doctest: +ELLIPSIS
-        Traceback (most recent call last):
-          ...
-        IndexError: Index out of range
-        >>> test_vect.close()
+        .. code-block:: pycon
+
+            >>> test_vect = VectorTopo(test_vector_name)
+            >>> test_vect.open(mode="r")
+            >>> feature1 = test_vect.read(0)  # doctest: +ELLIPSIS
+            Traceback (most recent call last):
+                ...
+            ValueError: The index must be >0, 0 given.
+            >>> feature1 = test_vect.read(5)
+            >>> feature1
+            Line([Point(12.000000, 4.000000), Point(12.000000, 2.000000), Point(12.000000, 0.000000)])
+            >>> feature1.length()
+            4.0
+            >>> test_vect.read(-1)
+            Centroid(7.500000, 3.500000)
+            >>> len(test_vect)
+            21
+            >>> test_vect.read(21)
+            Centroid(7.500000, 3.500000)
+            >>> test_vect.read(22)  # doctest: +ELLIPSIS
+            Traceback (most recent call last):
+              ...
+            IndexError: Index out of range
+            >>> test_vect.close()
 
         """  # noqa: E501
         return read_line(
@@ -605,10 +596,10 @@ class VectorTopo(Vector):
         then write the two points on the map, with ::
 
             >>> test_vect.write(point0, cat=1, attrs=("pub",))
-            >>> test_vect.write(point1, cat=2, attrs=("resturant",))
+            >>> test_vect.write(point1, cat=2, attrs=("restaurant",))
             >>> test_vect.table.conn.commit()  # save changes in the DB
             >>> test_vect.table_to_dict()
-            {1: [1, 'pub'], 2: [2, 'resturant']}
+            {1: [1, 'pub'], 2: [2, 'restaurant']}
             >>> test_vect.close()
 
         Now rewrite one point of the vector map: ::
@@ -632,8 +623,9 @@ class VectorTopo(Vector):
             self.table.update(key=cat, values=attrs)
         elif self.table is None and attrs:
             print(
-                "Table for vector {name} does not exist, attributes not"
-                " loaded".format(name=self.name)
+                "Table for vector {name} does not exist, attributes not loaded".format(
+                    name=self.name
+                )
             )
         libvect.Vect_cat_set(geo_obj.c_cats, self.layer, cat)
         result = libvect.Vect_rewrite_line(
@@ -744,12 +736,12 @@ class VectorTopo(Vector):
         :type bbox: grass.pygrass.vector.basic.Bbox
 
         :param feature_type: The type of feature that should be converted to
-                             the Well Known Binary (WKB) format. Supported are:
+                            the Well Known Binary (WKB) format. Supported are:
                             'point'    -> libvect.GV_POINT     1
                             'line'     -> libvect.GV_LINE      2
                             'boundary' -> libvect.GV_BOUNDARY  3
                             'centroid' -> libvect.GV_CENTROID  4
-        :type type: string
+        :type feature_type: string
 
         :param field: The category field
         :type field: integer
@@ -758,7 +750,9 @@ class VectorTopo(Vector):
 
         The well known binary are stored in byte arrays.
 
-         Examples:
+        Examples:
+
+        .. code-block:: pycon
 
          >>> from grass.pygrass.vector import VectorTopo
          >>> from grass.pygrass.vector.basic import Bbox
@@ -772,7 +766,6 @@ class VectorTopo(Vector):
          >>> for entry in result:
          ...     f_id, cat, wkb = entry
          ...     print((f_id, cat, len(wkb)))
-         ...
          (1, 1, 21)
          (2, 1, 21)
          (3, 1, 21)
@@ -783,7 +776,6 @@ class VectorTopo(Vector):
          >>> for entry in result:
          ...     f_id, cat, wkb = entry
          ...     print((f_id, cat, len(wkb)))
-         ...
          (4, 2, 57)
          (5, 2, 57)
          (6, 2, 57)
@@ -799,7 +791,6 @@ class VectorTopo(Vector):
          >>> for entry in result:
          ...     f_id, cat, wkb = entry
          ...     print((f_id, cat, len(wkb)))
-         ...
          (19, 3, 21)
          (18, 3, 21)
          (20, 3, 21)
@@ -882,7 +873,9 @@ class VectorTopo(Vector):
 
         The well known binary are stored in byte arrays.
 
-         Examples:
+        Examples:
+
+        .. code-block:: pycon
 
          >>> from grass.pygrass.vector import VectorTopo
          >>> from grass.pygrass.vector.basic import Bbox
@@ -896,7 +889,6 @@ class VectorTopo(Vector):
          >>> for entry in result:
          ...     a_id, cat, wkb = entry
          ...     print((a_id, cat, len(wkb)))
-         ...
          (1, 3, 225)
          (2, 3, 141)
          (3, 3, 93)
@@ -908,15 +900,12 @@ class VectorTopo(Vector):
          >>> for entry in result:
          ...     a_id, cat, wkb = entry
          ...     print((a_id, cat, len(wkb)))
-         ...
          (1, 3, 225)
          (2, 3, 141)
          (3, 3, 93)
          (4, 3, 141)
 
          >>> test_vect.close()
-
-
         """
         if bbox is None:
             bbox = self.bbox()

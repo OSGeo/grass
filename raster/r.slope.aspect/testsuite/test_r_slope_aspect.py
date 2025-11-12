@@ -135,7 +135,7 @@ class TestSlopeAspectAgainstReference(TestCase):
     """
 
     # precision for comparisons
-    precision = 0.0001
+    precision = 1e-14
     ref_aspect = "reference_aspect"
     aspect = "fractal_aspect"
     aspect_threaded = "fractal_aspect_threaded"
@@ -173,7 +173,7 @@ class TestSlopeAspectAgainstReference(TestCase):
     def test_slope(self):
         # TODO: using gdal instead of ascii because of cannot seek error
         self.runModule(
-            "r.in.gdal", flags="o", input="data/gdal_slope.grd", output=self.ref_slope
+            "r.in.gdal", flags="o", input="data/gdal_slope.ascii", output=self.ref_slope
         )
         self.assertModule("r.slope.aspect", elevation=self.elevation, slope=self.slope)
         self.assertModule(
@@ -208,7 +208,10 @@ class TestSlopeAspectAgainstReference(TestCase):
     def test_aspect(self):
         # TODO: using gdal instead of ascii because of cannot seek error
         self.runModule(
-            "r.in.gdal", flags="o", input="data/gdal_aspect.grd", output=self.ref_aspect
+            "r.in.gdal",
+            flags="o",
+            input="data/gdal_aspect.ascii",
+            output=self.ref_aspect,
         )
         self.assertModule(
             "r.slope.aspect", elevation=self.elevation, aspect=self.aspect
@@ -234,17 +237,19 @@ class TestSlopeAspectAgainstReference(TestCase):
         )
         # check against reference data
         self.assertRastersNoDifference(
-            actual=self.aspect, reference=self.ref_aspect, precision=self.precision
+            actual=self.aspect,
+            reference=self.ref_aspect,
+            precision=0.0001,  # TODO: Explore why a larger threshold is needed rather than self.precision
         )
         self.assertRastersNoDifference(
             actual=self.aspect_threaded,
             reference=self.ref_aspect,
-            precision=self.precision,
+            precision=0.0001,  # TODO: Explore why a larger threshold is needed rather than self.precision
         )
 
 
 class TestSlopeAspectAgainstItself(TestCase):
-    precision = 0.0000001
+    precision = 1e-14
     elevation = "elevation"
 
     t_aspect = "sa_together_aspect"
@@ -406,7 +411,7 @@ class TestSlopeAspectEdge(TestCase):
     """
 
     # precision for comparisons
-    precision = 0.0001
+    precision = 1e-14
     slope = "elevation_slope"
     slope_threaded = "elevation_slope_threaded"
     slope_edge = "elevation_slope_edge"
@@ -441,7 +446,7 @@ class TestSlopeAspectEdge(TestCase):
             slope=self.slope_threaded,
             nprocs=8,
         )
-        values = "null_cells=5696\nmean=3.86452"
+        values = "null_cells=5696\nmean=3.86452240667335"
         self.assertRasterFitsUnivar(
             raster=self.slope, reference=values, precision=self.precision
         )
@@ -459,7 +464,7 @@ class TestSlopeAspectEdge(TestCase):
             flags="e",
             nprocs=8,
         )
-        values = "null_cells=0\nmean=3.86119"
+        values = "null_cells=0\nmean=3.86118542369876"
         self.assertRasterFitsUnivar(
             raster=self.slope_edge, reference=values, precision=self.precision
         )
@@ -474,7 +479,7 @@ class TestSlopeAspectAllOutputs(TestCase):
     """
 
     # precision for comparisons
-    precision = 0.0001
+    precision = 1e-11
     slope = "elevation_slope"
     slope_threaded = "elevation_slope_threaded"
     aspect = "elevation_aspect"

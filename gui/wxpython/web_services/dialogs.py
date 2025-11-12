@@ -24,6 +24,7 @@ import os
 import shutil
 
 from copy import deepcopy
+from pathlib import Path
 
 import grass.script as gs
 from grass.script.task import cmdlist_to_tuple, cmdtuple_to_list
@@ -376,7 +377,7 @@ class WSDialogBase(wx.Dialog):
             self.Fit()
 
         self.statusbar.SetStatusText(
-            _("Connecting to <$s>...") % self.server.GetValue().strip()
+            _("Connecting to <%s>...") % self.server.GetValue().strip()
         )
 
         # number of panels already connected
@@ -565,7 +566,7 @@ class AddWSDialog(WSDialogBase):
 
         lcmd = self.active_ws_panel.CreateCmd()
         if not lcmd:
-            return None
+            return
 
         # TODO: It is not clear how to do GetOptData in giface
         # knowing what GetOptData is doing might help
@@ -676,12 +677,12 @@ class WSPropertiesDialog(WSDialogBase):
 
     def _setRevertCapFiles(self, ws_cap_files):
         for ws, f in ws_cap_files.items():
-            if os.path.isfile(f):
+            if Path(f).is_file():
                 shutil.copyfile(f, self.revert_ws_cap_files[ws])
             else:
                 # delete file content
-                f_o = open(f, "w")
-                f_o.close()
+                with open(f, "w"):
+                    pass
 
     def _createWidgets(self):
         WSDialogBase._createWidgets(self)

@@ -56,7 +56,7 @@ def extract_tar(name, directory, tmpdir):
     try:
         tar = tarfile.open(name)
         extract_dir = os.path.join(tmpdir, "extract_dir")
-        os.mkdir(extract_dir)
+        Path(extract_dir).mkdir()
 
         # Extraction filters were added in Python 3.12,
         # and backported to 3.8.17, 3.9.17, 3.10.12, and 3.11.4
@@ -103,7 +103,7 @@ def extract_zip(name, directory, tmpdir):
         # we suppose we can write to parent of the given dir
         # (supposing a tmp dir)
         extract_dir = os.path.join(tmpdir, "extract_dir")
-        os.mkdir(extract_dir)
+        Path(extract_dir).mkdir()
         for subfile in file_list:
             # this should be safe in Python 2.7.4
             zip_file.extract(subfile, extract_dir)
@@ -132,8 +132,7 @@ def _move_extracted_files(extract_dir, target_dir, files):
         else:
             shutil.copy(actual_path, target_dir)
     else:
-        if not os.path.exists(target_dir):
-            os.mkdir(target_dir)
+        Path(target_dir).mkdir(exist_ok=True)
         for file_name in files:
             actual_file = os.path.join(extract_dir, file_name)
             if os.path.isdir(actual_file):

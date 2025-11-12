@@ -1,7 +1,7 @@
 """
 @package gcp.manager
 
-@brief Georectification module for GRASS GIS. Includes ground control
+@brief Georectification module for GRASS. Includes ground control
 point management and interactive point and click GCP creation
 
 Classes:
@@ -33,6 +33,7 @@ import os
 import shutil
 import sys
 from copy import copy
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 import wx
@@ -466,16 +467,12 @@ class LocationPage(TitledPage):
         self.xylocation = event.GetString()
 
         # create a list of valid mapsets
-        tmplist = os.listdir(os.path.join(self.grassdatabase, self.xylocation))
+        location_path = Path(self.grassdatabase) / self.xylocation
         self.mapsetList = []
-        for item in tmplist:
-            if os.path.isdir(
-                os.path.join(self.grassdatabase, self.xylocation, item)
-            ) and os.path.exists(
-                os.path.join(self.grassdatabase, self.xylocation, item, "WIND")
-            ):
-                if item != "PERMANENT":
-                    self.mapsetList.append(item)
+        for item in location_path.iterdir():
+            if item.is_dir() and (item / "WIND").exists():
+                if item.name != "PERMANENT":
+                    self.mapsetList.append(item.name)
 
         self.xymapset = "PERMANENT"
         utils.ListSortLower(self.mapsetList)
@@ -503,10 +500,7 @@ class LocationPage(TitledPage):
     def OnPageChanging(self, event: WizardEvent | None = None) -> None:
         if event.GetDirection() and (self.xylocation == "" or self.xymapset == ""):
             GMessage(
-                _(
-                    "You must select a valid location "
-                    "and mapset in order to continue"
-                ),
+                _("You must select a valid location and mapset in order to continue"),
                 parent=self,
             )
             event.Veto()
@@ -653,7 +647,7 @@ class GroupPage(TitledPage):
             self.grassdatabase, self.xylocation, self.xymapset, "vector"
         )
 
-        if os.path.exists(vector_dir):
+        if Path(vector_dir).exists():
             dlg = VectGroup(
                 parent=self,
                 id=wx.ID_ANY,
@@ -700,25 +694,13 @@ class GroupPage(TitledPage):
         self.xymapset = self.parent.gisrc_dict["MAPSET"]
 
         # create a list of groups in selected mapset
-        if os.path.isdir(
-            os.path.join(self.grassdatabase, self.xylocation, self.xymapset, "group")
-        ):
-            tmplist = os.listdir(
-                os.path.join(
-                    self.grassdatabase, self.xylocation, self.xymapset, "group"
-                )
-            )
-            for item in tmplist:
-                if os.path.isdir(
-                    os.path.join(
-                        self.grassdatabase,
-                        self.xylocation,
-                        self.xymapset,
-                        "group",
-                        item,
-                    )
-                ):
-                    self.groupList.append(item)
+        group_path = (
+            Path(self.grassdatabase) / self.xylocation / self.xymapset / "group"
+        )
+        if group_path.is_dir():
+            for item in group_path.iterdir():
+                if item.is_dir():
+                    self.groupList.append(item.name)
 
         if maptype == "raster":
             self.btn_vgroup.Hide()
@@ -904,9 +886,7 @@ class DispMapPage(TitledPage):
                 flags="g",
             )
 
-            if ret:
-                self.parent.src_maps = ret.splitlines()
-            else:
+            if not ret:
                 GError(
                     parent=self,
                     message=_(
@@ -916,6 +896,7 @@ class DispMapPage(TitledPage):
                     % self.parent.grouppage.xygroup,
                 )
                 return
+            self.parent.src_maps = ret.splitlines()
 
         elif maptype == "vector":
             grassdatabase = self.parent.grassdatabase
@@ -1123,7 +1104,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         }
 
         # make a backup of the current points file
-        if os.path.exists(self.file["points"]):
+        if Path(self.file["points"]).exists():
             shutil.copy(self.file["points"], self.file["points_bak"])
 
         # polynomial order transformation for georectification
@@ -1673,7 +1654,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             targetMapWin = self.TgtMapWindow
             targetMapWin.UpdateMap(render=False, renderVector=False)
 
-    def CheckGCPcount(self, msg=False):
+    def CheckGCPcount(self, msg: bool = False) -> bool:
         """
         Checks to make sure that the minimum number of GCPs have been defined and
         are active for the selected transformation order
@@ -1695,9 +1676,10 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                     )
                     % self.gr_order,
                 )
-                return False
-        else:
-            return True
+
+            return False
+
+        return True
 
     def _getOverWriteDialog(self, maptype, overwrite):
         """Get overwrite confirm dialog
@@ -1946,10 +1928,10 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 self.SaveGCPs(None)
             elif ret == wx.NO:
                 # restore POINTS file from backup
-                if os.path.exists(self.file["points_bak"]):
+                if Path(self.file["points_bak"]).exists():
                     shutil.copy(self.file["points_bak"], self.file["points"])
 
-            if os.path.exists(self.file["points_bak"]):
+            if Path(self.file["points_bak"]).exists():
                 os.unlink(self.file["points_bak"])
 
             self.SrcMap.Clean()
@@ -2014,17 +1996,15 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         self.grwiz.SwitchEnv("target")
 
-        if ret:
-            errlist = ret.splitlines()
-        else:
+        if not ret:
             GError(
                 parent=self,
                 message=_(
-                    "Could not calculate RMS Error.\n"
-                    "Possible error with m.transform."
+                    "Could not calculate RMS Error.\nPossible error with m.transform."
                 ),
             )
             return
+        errlist = ret.splitlines()
 
         # insert error values into GCP list for checked items
         sdfactor = float(UserSettings.Get(group="gcpman", key="rms", subkey="sdfactor"))
@@ -2037,8 +2017,8 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         highest_idx = 0
 
         for index in range(self.list.GetItemCount()):
-            key = self.list.GetItemData(index)
             if self.list.IsItemChecked(index):
+                key = self.list.GetItemData(index)
                 fwd_err, bkw_err = errlist[GCPcount].split()
                 self.list.SetItem(index, 5, fwd_err)
                 self.list.SetItem(index, 6, bkw_err)
@@ -2055,12 +2035,13 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 sumsq_bkw_err += float(bkw_err) ** 2
                 sum_fwd_err += float(fwd_err)
                 GCPcount += 1
-            else:
-                self.list.SetItem(index, 5, "")
-                self.list.SetItem(index, 6, "")
-                self.mapcoordlist[key][5] = 0.0
-                self.mapcoordlist[key][6] = 0.0
-                self.list.SetItemTextColour(index, wx.BLACK)
+                continue
+
+            self.list.SetItem(index, 5, "")
+            self.list.SetItem(index, 6, "")
+            self.mapcoordlist[key][5] = 0.0
+            self.mapcoordlist[key][6] = 0.0
+            self.list.SetItemTextColour(index, wx.BLACK)
 
         # SD
         if GCPcount > 0:
@@ -2113,7 +2094,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         if not self.CheckGCPcount(msg=True):
             self.gr_order = order
-            return
+            return None
 
         self.gr_order = order
 
@@ -2147,17 +2128,15 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         self.grwiz.SwitchEnv("target")
 
-        if ret:
-            errlist = ret.splitlines()
-        else:
+        if not ret:
             GError(
                 parent=self,
                 message=_(
-                    "Could not calculate new extends.\n"
-                    "Possible error with m.transform."
+                    "Could not calculate new extends.\nPossible error with m.transform."
                 ),
             )
-            return
+            return None
+        errlist = ret.splitlines()
 
         # fist corner
         e, n = errlist[0].split()
@@ -2342,9 +2321,7 @@ class GCPDisplay(FrameMixin, GCPPanel):
         )
         # set system icon
         parent.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
 
         # bind to frame
@@ -2434,7 +2411,7 @@ class GCPList(ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
         self.DeleteAllItems()
 
         self.render = False
-        if os.path.isfile(self.gcp.file["points"]):
+        if Path(self.gcp.file["points"]).is_file():
             self.gcp.ReadGCPs()
         else:
             # 3 gcp is minimum
@@ -2497,7 +2474,7 @@ class GCPList(ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
     def DeleteGCPItem(self):
         """Deletes selected item in GCP list."""
         if self.selected == wx.NOT_FOUND:
-            return
+            return None
 
         key = self.GetItemData(self.selected)
         self.DeleteItem(self.selected)
@@ -2626,21 +2603,14 @@ class VectGroup(wx.Dialog):
         #
         # get list of valid vector directories
         #
-        vectlist = os.listdir(
-            os.path.join(self.grassdatabase, self.xylocation, self.xymapset, "vector")
+        vector_path = (
+            Path(self.grassdatabase) / self.xylocation / self.xymapset / "vector"
         )
-        for dir in vectlist:
-            if not os.path.isfile(
-                os.path.join(
-                    self.grassdatabase,
-                    self.xylocation,
-                    self.xymapset,
-                    "vector",
-                    dir,
-                    "coor",
-                )
-            ):
-                vectlist.remove(dir)
+        vectlist = [
+            coor_path.parent.name
+            for coor_path in vector_path.glob("*/coor")
+            if coor_path.is_file()
+        ]
 
         utils.ListSortLower(vectlist)
 
@@ -2666,7 +2636,7 @@ class VectGroup(wx.Dialog):
         #
         self.listMap = CheckListBox(parent=self, id=wx.ID_ANY, choices=vectlist)
 
-        if os.path.isfile(self.vgrpfile):
+        if Path(self.vgrpfile).is_file():
             with open(self.vgrpfile) as f:
                 checked = []
                 for line in f:
@@ -2735,8 +2705,7 @@ class VectGroup(wx.Dialog):
 
         dirname = os.path.dirname(self.vgrpfile)
 
-        if not os.path.exists(dirname):
-            os.makedirs(dirname)
+        Path(dirname).mkdir(parents=True, exist_ok=True)
 
         with open(self.vgrpfile, mode="w") as f:
             f.writelines(vect + "\n" for vect in vgrouplist)
@@ -3258,8 +3227,7 @@ class GrSettingsDialog(wx.Dialog):
             GError(
                 parent=self,
                 message=_(
-                    "RMS threshold factor is < 1\n"
-                    "Too many points might be highlighted"
+                    "RMS threshold factor is < 1\nToo many points might be highlighted"
                 ),
             )
 

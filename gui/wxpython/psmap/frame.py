@@ -468,8 +468,7 @@ class PsMapFrame(wx.Frame):
                     event.userData["pdfname"],
                 ]
                 message = _(
-                    "Program {} is not available."
-                    " Please install it to create PDF.\n\n "
+                    "Program {} is not available. Please install it to create PDF.\n\n "
                 ).format(pdf_rendering_prog)
             try:
                 proc = gs.Popen(command)
@@ -1299,26 +1298,26 @@ class PsMapFrame(wx.Frame):
                 else:
                     self.deleteObject(id)
 
-            if itype == "vectorLegend":
-                if not self.instruction.FindInstructionByType("vector"):
-                    self.deleteObject(id)
-                elif self.instruction[id]["vLegend"]:
-                    self.canvas.UpdateLabel(itype=itype, id=id)
-                    drawRectangle = self.canvas.CanvasPaperCoordinates(
-                        rect=self.instruction[id]["rect"], canvasToPaper=False
-                    )
-                    self.canvas.Draw(
-                        pen=self.pen[itype],
-                        brush=self.brush[itype],
-                        pdc=self.canvas.pdcObj,
-                        drawid=id,
-                        pdctype="rectText",
-                        bb=drawRectangle,
-                    )
-                    self.canvas.RedrawSelectBox(id)
-
-                else:
-                    self.deleteObject(id)
+            if itype != "vectorLegend":
+                continue
+            if not self.instruction.FindInstructionByType("vector"):
+                self.deleteObject(id)
+            elif self.instruction[id]["vLegend"]:
+                self.canvas.UpdateLabel(itype=itype, id=id)
+                drawRectangle = self.canvas.CanvasPaperCoordinates(
+                    rect=self.instruction[id]["rect"], canvasToPaper=False
+                )
+                self.canvas.Draw(
+                    pen=self.pen[itype],
+                    brush=self.brush[itype],
+                    pdc=self.canvas.pdcObj,
+                    drawid=id,
+                    pdctype="rectText",
+                    bb=drawRectangle,
+                )
+                self.canvas.RedrawSelectBox(id)
+            else:
+                self.deleteObject(id)
 
     def OnPageChanged(self, event):
         """GNotebook page has changed"""

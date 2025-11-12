@@ -9,42 +9,44 @@ Read the file COPYING that comes with GRASS
 for details
 """
 
-import stat
 import ctypes
+import os
 import shutil
+import stat
 from pathlib import Path
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-from grass.script.core import tempname
-from grass.pygrass import utils
-from grass.pygrass.gis import Mapset
-
 from grass.lib.gis import G_mapset_path
-from grass.lib.raster import Rast_write_semantic_label
 from grass.lib.imagery import (
-    SigSet,
+    I_add_file_to_group_ref,
+    I_fopen_sigset_file_new,
+    I_fopen_sigset_file_old,
+    I_free_group_ref,
+    I_init_group_ref,
     I_InitSigSet,
     I_NewClassSig,
     I_NewSubSig,
-    I_WriteSigSet,
     I_ReadSigSet,
     I_SortSigSetBySemanticLabel,
-    I_fopen_sigset_file_new,
-    I_fopen_sigset_file_old,
+    I_WriteSigSet,
     Ref,
-    I_init_group_ref,
-    I_add_file_to_group_ref,
-    I_free_group_ref,
     ReturnString,
+    SigSet,
 )
+from grass.lib.raster import Rast_write_semantic_label
+from grass.pygrass import utils
+from grass.pygrass.gis import Mapset
+from grass.script.core import tempname
 
 
 class SigSetFileTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
+        if os.name == "nt":
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("msvcrt"))
+        else:
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
         cls.mpath = utils.decode(G_mapset_path())
         cls.mapset_name = Mapset().name
         cls.sig_name = tempname(10)
@@ -224,7 +226,10 @@ class SigSetFileTestCase(TestCase):
 class SortSigSetBySemanticLabelTest(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
+        if os.name == "nt":
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("msvcrt"))
+        else:
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
         cls.mapset = Mapset().name
         cls.map1 = tempname(10)
         cls.semantic_label1 = "The_Doors"
@@ -373,10 +378,10 @@ class SortSigSetBySemanticLabelTest(TestCase):
         self.assertEqual(
             sig_err,
             "<semantic label missing>,<semantic label missing>,"
-            + "<semantic label missing>,<semantic label missing>,"
-            + "<semantic label missing>,<semantic label missing>,"
-            + "<semantic label missing>,<semantic label missing>,"
-            + "<semantic label missing>",
+            "<semantic label missing>,<semantic label missing>,"
+            "<semantic label missing>,<semantic label missing>,"
+            "<semantic label missing>,<semantic label missing>,"
+            "<semantic label missing>",
         )
         self.assertEqual(ref_err, f"The_Doors,{self.map3}")
 

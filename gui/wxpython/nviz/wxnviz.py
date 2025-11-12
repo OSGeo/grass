@@ -326,7 +326,6 @@ except NameError:
 
 
 class Nviz:
-
     def __init__(self, glog, gprogress) -> None:
         """Initialize Nviz class instance
 
@@ -423,7 +422,7 @@ class Nviz:
         """Change view settings
         :param x,y: position
         :param height:
-        :param persp: perpective
+        :param persp: perspective
         :param twist:
         """
         Nviz_set_viewpoint_height(height)
@@ -468,13 +467,13 @@ class Nviz:
     ) -> tuple[float, float, float] | tuple[Literal[-1], Literal[-1], Literal[-1]]:
         """Get focus"""
         Debug.msg(3, "Nviz::GetFocus()")
-        if Nviz_has_focus(self.data):
-            x = c_float()
-            y = c_float()
-            z = c_float()
-            Nviz_get_focus(self.data, byref(x), byref(y), byref(z))
-            return x.value, y.value, z.value
-        return (-1, -1, -1)
+        if not Nviz_has_focus(self.data):
+            return (-1, -1, -1)
+        x = c_float()
+        y = c_float()
+        z = c_float()
+        Nviz_get_focus(self.data, byref(x), byref(y), byref(z))
+        return (x.value, y.value, z.value)
 
     def SetFocus(self, x: float, y: float, z: float) -> None:
         """Set focus"""
@@ -941,7 +940,7 @@ class Nviz:
     ) -> Literal[1, -1, -2]:
         """Set surface mask
 
-        ..todo::
+        .. todo::
             invert
 
         :param id: surface id
@@ -1397,8 +1396,7 @@ class Nviz:
 
         Debug.msg(
             3,
-            "Nviz::SetVectorPointMode(): id=%d, color=%s, "
-            "width=%d, size=%f, marker=%d",
+            "Nviz::SetVectorPointMode(): id=%d, color=%s, width=%d, size=%f, marker=%d",
             id,
             color_str,
             width,
@@ -1999,8 +1997,7 @@ class Nviz:
 
         Debug.msg(
             3,
-            "Nviz::SetIsosurfaceAttr(): id=%d, isosurf=%d, "
-            "attr=%d, map=%s, value=%s",
+            "Nviz::SetIsosurfaceAttr(): id=%d, isosurf=%d, attr=%d, map=%s, value=%s",
             id,
             isosurf_id,
             attr,

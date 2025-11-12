@@ -17,6 +17,7 @@ Classes:
  - widgets::EmailValidator
  - widgets::TimeISOValidator
  - widgets::MapValidator
+ - widgets::MapNameValidator
  - widgets::NTCValidator
  - widgets::SimpleValidator
  - widgets::GenericValidator
@@ -56,6 +57,7 @@ import string
 import re
 from bisect import bisect
 from datetime import datetime
+from pathlib import Path
 from core.globalvar import wxPythonPhoenix
 
 import wx
@@ -65,10 +67,8 @@ from wx.lib.stattext import GenStaticText
 from wx.lib.wordwrap import wordwrap
 
 if wxPythonPhoenix:
-    import wx.adv
     from wx.adv import OwnerDrawnComboBox
 else:
-    import wx.combo
     from wx.combo import OwnerDrawnComboBox
 try:
     import wx.lib.agw.flatnotebook as FN
@@ -183,12 +183,12 @@ class NotebookController:
         :return bool: True if page was deleted, False if not exists
         """
         delPageIndex = self.GetPageIndexByName(page)
-        if delPageIndex != -1:
-            ret = self.classObject.DeletePage(self.widget, delPageIndex)
-            if ret:
-                del self.notebookPages[page]
-            return ret
-        return False
+        if delPageIndex == -1:
+            return False
+        ret = self.classObject.DeletePage(self.widget, delPageIndex)
+        if ret:
+            del self.notebookPages[page]
+        return ret
 
     def RemovePage(self, page):
         """Delete page without deleting the associated window.
@@ -197,12 +197,12 @@ class NotebookController:
         :return: True if page was deleted, False if not exists
         """
         delPageIndex = self.GetPageIndexByName(page)
-        if delPageIndex != -1:
-            ret = self.classObject.RemovePage(self.widget, delPageIndex)
-            if ret:
-                del self.notebookPages[page]
-            return ret
-        return False
+        if delPageIndex == -1:
+            return False
+        ret = self.classObject.RemovePage(self.widget, delPageIndex)
+        if ret:
+            del self.notebookPages[page]
+        return ret
 
     def SetSelectionByName(self, page):
         """Set active notebook page.
@@ -566,11 +566,11 @@ class StaticWrapText(GenStaticText):
     """A Static Text widget that wraps its text to fit parents width,
     enlarging its height if necessary."""
 
-    def __init__(self, parent, id=wx.ID_ANY, label="", margin=0, *args, **kwds):
+    def __init__(self, parent, id=wx.ID_ANY, label="", margin=0, *args, **kwargs):
         self._margin = margin
         self._initialLabel = label
         self.init = False
-        GenStaticText.__init__(self, parent, id, label, *args, **kwds)
+        GenStaticText.__init__(self, parent, id, label, *args, **kwargs)
         self.Bind(wx.EVT_SIZE, self.OnSize)
 
     def DoGetBestSize(self):
@@ -889,6 +889,31 @@ class MapValidator(GenericValidator):
             GError(message, caption=_("Invalid name"))
 
         GenericValidator.__init__(self, grass.legal_name, _mapNameValidationFailed)
+
+
+class MapNameValidator(BaseValidator):
+    """Validator for map name input
+
+    See G_legal_filename()
+    """
+
+    def __init__(self):
+        BaseValidator.__init__(self)
+
+    def _validate(self, win):
+        """Validate input"""
+        text = win.GetValue()
+        if text:
+            if not grass.legal_name(text):
+                self._notvalid()
+                return False
+
+        self._valid()
+        return True
+
+    def Clone(self):
+        """Clone validator"""
+        return MapNameValidator()
 
 
 class GenericMultiValidator(Validator):
@@ -1321,7 +1346,7 @@ class SearchModuleWidget(wx.Panel):
         """Search modules by keys
 
         :param keys: list of keys
-        :param value: patter to match
+        :param value: pattern to match
         """
         nodes = set()
         for key in keys:
@@ -1556,30 +1581,27 @@ class ManageSettingsWidget(wx.Panel):
         """
 
         data = {}
-        if not os.path.exists(self.settingsFile):
+        if not Path(self.settingsFile).exists():
             return data
 
         try:
-            fd = open(self.settingsFile)
+            with open(self.settingsFile) as fd:
+                fd_lines = fd.readlines()
+
+                if not fd_lines:
+                    return data
+
+                if fd_lines[0].strip() == "format_version=2.0":
+                    data = self._loadSettings_v2(fd_lines)
+                else:
+                    data = self._loadSettings_v1(fd_lines)
+
+                self.settingsChoice.SetItems(sorted(data.keys()))
+
         except OSError:
             return data
 
-        fd_lines = fd.readlines()
-
-        if not fd_lines:
-            fd.close()
-            return data
-
-        if fd_lines[0].strip() == "format_version=2.0":
-            data = self._loadSettings_v2(fd_lines)
-        else:
-            data = self._loadSettings_v1(fd_lines)
-
-        self.settingsChoice.SetItems(sorted(data.keys()))
-        fd.close()
-
         self.settingsLoaded.emit(settings=data)
-
         return data
 
     def _loadSettings_v2(self, fd_lines):
@@ -1716,7 +1738,7 @@ class PictureComboBox(OwnerDrawnComboBox):
             return self.bitmaps[name]
 
         path = self._getPath(name)
-        if os.path.exists(path):
+        if Path(path).exists():
             bitmap = wx.Bitmap(path)
             self.bitmaps[name] = bitmap
             return bitmap

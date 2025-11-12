@@ -157,7 +157,7 @@ def aggregate_raster_maps(
                 )
                 % ({"name": new_map.get_name()})
             )
-            return
+            return None
 
     msgr.verbose(
         _("Computing aggregation of maps between %(st)s - %(end)s")

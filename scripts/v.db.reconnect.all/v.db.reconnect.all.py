@@ -54,6 +54,7 @@
 import sys
 import os
 import string
+from pathlib import Path
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
@@ -82,7 +83,7 @@ def create_db(driver, database):
         # check if destination directory exists
         if not os.path.isdir(path):
             # create dbf database
-            os.makedirs(path)
+            Path(path).mkdir(parents=True)
             return True
         return False
 
@@ -90,7 +91,7 @@ def create_db(driver, database):
         path = os.path.dirname(subst_database)
         # check if destination directory exists
         if not os.path.isdir(path):
-            os.makedirs(path)
+            Path(path).mkdir(parents=True)
 
     if (
         subst_database
@@ -99,10 +100,7 @@ def create_db(driver, database):
         return False
 
     gs.info(
-        _(
-            "Target database doesn't exist, "
-            "creating a new database using <%s> driver..."
-        )
+        _("Target database doesn't exist, creating a new database using <%s> driver...")
         % driver
     )
     try:
@@ -308,10 +306,7 @@ def main():
                     )
                 except CalledModuleError:
                     gs.warning(
-                        _(
-                            "Unable to connect table <%s> to vector "
-                            "<%s> on layer <%s>"
-                        )
+                        _("Unable to connect table <%s> to vector <%s> on layer <%s>")
                         % (table, vect, str(layer))
                     )
 

@@ -121,11 +121,8 @@ def writeData(data, file=None):
         return
 
     try:
-        f = open(file, "a")
-        try:
+        with open(file, "a") as f:
             f.write("\n")
-        finally:
-            f.close()
     except OSError:
         print("ERROR: Unable to write to menudata file.", file=sys.stderr)
 
@@ -167,6 +164,6 @@ def main(argv=None):
 
 if __name__ == "__main__":
     if os.getenv("GISBASE") is None:
-        sys.exit("You must be in GRASS GIS to run this program.")
+        sys.exit("You must be in GRASS to run this program.")
 
     sys.exit(main())

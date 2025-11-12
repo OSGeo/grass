@@ -29,7 +29,7 @@ class TestPythonKeywordsInParameters(TestCase):
         stderr = proc.communicate()[1]
         returncode = proc.poll()
         self.assertEqual(returncode, 0, msg="Underscore as prefix was not accepted")
-        self.assertNotIn(b"_raster", stderr)
+        self.assertNotIn("_raster", stderr)
 
     def test_suffixed_underscore(self):
         proc = start_command("g.region", raster_=self.raster, stderr=PIPE)
@@ -40,14 +40,14 @@ class TestPythonKeywordsInParameters(TestCase):
             0,
             msg="Underscore as suffix was not accepted, stderr is:\n%s" % stderr,
         )
-        self.assertNotIn(b"raster_", stderr)
+        self.assertNotIn("raster_", stderr)
 
     def test_multiple_underscores(self):
         proc = start_command("g.region", _raster_=self.raster, stderr=PIPE)
         stderr = proc.communicate()[1]
         returncode = proc.poll()
         self.assertEqual(returncode, 1, msg="Underscore at both sides was accepted")
-        self.assertIn(b"raster", stderr)
+        self.assertIn("raster", stderr)
 
 
 class TestParseCommand(TestCase):

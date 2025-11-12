@@ -48,7 +48,8 @@ void fatalError(char *errorMsg)
     if (map != NULL) {
         /* should unopen map here! */
         if (!Rast3d_close(map))
-            fatalError(_("Unable to close 3D raster map"));
+            Rast3d_fatal_error("%s (%s)", errorMsg,
+                               _("Unable to close 3D raster map"));
     }
 
     Rast3d_fatal_error("%s", errorMsg);
@@ -94,7 +95,6 @@ void getParams(char **input, char **output, int *decim UNUSED)
 /* Opens the output v5d file and writes the header.
  * Returns the file handle for the output file.
  */
-
 void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
 {
 
@@ -212,8 +212,8 @@ void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
        for loops are different to r3.out.ascii and r3.to.sites - hmpf */
 
     /*AV*/
-    /* IT WORKS WHIT A PARTICULAR FOR LOOP PROBABLY BECAUSE THE DATA
-       ARE NOT STORED IN A 3D MATRIX [z,y,x] BUT IN A POINTER
+    /* IT WORKS WITH A PARTICULAR FOR LOOP PROBABLY BECAUSE THE DATA
+       IS NOT STORED IN A 3D MATRIX [z,y,x] BUT IN A POINTER
        MANAGED AS (z,x,y) */
     for (z = 0; z < depths; z++) {
         G_percent(z, depths, 1);

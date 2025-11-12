@@ -416,7 +416,7 @@ def _run_mapcalc2d(expr) -> None:
     """Helper function to run r.mapcalc in parallel"""
     try:
         gs.run_command(
-            "r.mapcalc", expression=expr, overwrite=gs.overwrite(), quiet=True
+            "r.mapcalc", expression=expr, nprocs=1, overwrite=gs.overwrite(), quiet=True
         )
     except CalledModuleError:
         sys.exit(1)

@@ -3,10 +3,9 @@
 @author Vaclav Petras
 """
 
+import grass.lib.gis as libgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-import grass.lib.gis as libgis
 
 # TODO: add tests for content (now testing only number of items)
 

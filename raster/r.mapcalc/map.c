@@ -22,7 +22,6 @@
 /****************************************************************************/
 
 static void prepare_region_from_maps(expression **, int, int);
-int columns;
 struct Cell_head current_region2;
 
 void setup_region(void)
@@ -61,6 +60,7 @@ struct map {
     struct Colors colors;
     BTREE btree;
     struct row_cache cache;
+    int thread_num;
 #ifdef HAVE_PTHREAD_H
     pthread_mutex_t mutex;
 #endif
@@ -294,7 +294,7 @@ static void translate_from_colors(struct map *m, DCELL *rast, CELL *cell,
  * category file.
  *
  * This requires performing sscanf() of the category label
- * and only do it it for new categories. Must maintain
+ * and only do it for new categories. Must maintain
  * some kind of maps of already scanned values.
  *
  * This maps is a hybrid tree, where the data in each node
@@ -383,7 +383,6 @@ static void translate_from_cats(struct map *m, CELL *cell, DCELL *xcell,
 static void setup_map(struct map *m)
 {
     int nrows = m->max_row - m->min_row + 1;
-
 #ifdef HAVE_PTHREAD_H
     pthread_mutex_init(&m->mutex, NULL);
 #endif
@@ -430,7 +429,6 @@ static void read_map(struct map *m, void *buf, int res_type, int row, int col)
         cache_get(&m->cache, buf, row, res_type);
     else
         read_row(m->fd, buf, row, res_type);
-
     if (col)
         column_shift(buf, res_type, col);
 }
@@ -493,13 +491,13 @@ int map_type(const char *name, int mod)
     }
 }
 
-int open_map(const char *name, int mod, int row, int col)
+int open_map(const char *name, int mod, int row, int col, int thread_num)
 {
-    int i;
     const char *mapset;
     int use_cats = 0;
     int use_colors = 0;
     struct map *m;
+    int i;
 
     if (row < min_row)
         min_row = row;
@@ -533,10 +531,15 @@ int open_map(const char *name, int mod, int row, int col)
         break;
     }
 
+    // Optimizes cases when expression has the same map multiple times.
+    // Avoids unnecessary opening of the same map.
     for (i = 0; i < num_maps; i++) {
         m = &maps[i];
 
-        if (strcmp(m->name, name) != 0 || strcmp(m->mapset, mapset) != 0)
+        // If map is already used in the expression with the same thread,
+        // do not open it again.
+        if (!(strcmp(m->name, name) == 0 && strcmp(m->mapset, mapset) == 0 &&
+              m->thread_num == thread_num))
             continue;
 
         if (row < m->min_row)
@@ -568,6 +571,7 @@ int open_map(const char *name, int mod, int row, int col)
     m->min_row = row;
     m->max_row = row;
     m->fd = -1;
+    m->thread_num = thread_num;
 
     if (use_cats)
         init_cats(m);
@@ -766,7 +770,7 @@ void create_history(const char *dst, expression *e)
     if (seeded) {
         char buf[RECORD_LEN];
 
-        sprintf(buf, "random seed = %ld", seed_value);
+        snprintf(buf, sizeof(buf), "random seed = %ld", seed_value);
         Rast_append_history(&hist, buf);
     }
 

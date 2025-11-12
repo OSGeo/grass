@@ -6,8 +6,7 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.utils import xfail_windows
 
-from grass.script.core import start_command, PIPE, run_command, write_command
-from grass.script.core import read_command, find_program
+from grass.script import start_command, PIPE, run_command, write_command, read_command
 from grass.script.utils import encode
 
 
@@ -17,12 +16,12 @@ class TestPythonKeywordsInParameters(TestCase):
     It works the same for keywords, buildins and any names.
     """
 
-    raster = b"does_not_exist"
+    raster = "does_not_exist"
 
     def test_prefixed_underscore(self):
         proc = start_command("g.region", _raster=self.raster, stderr=PIPE)
         stderr = proc.communicate()[1]
-        self.assertNotIn(b"_raster", stderr)
+        self.assertNotIn("_raster", stderr)
         self.assertIn(
             self.raster, stderr, msg="Raster map name should appear in the error output"
         )
@@ -30,7 +29,7 @@ class TestPythonKeywordsInParameters(TestCase):
     def test_suffixed_underscore(self):
         proc = start_command("g.region", raster_=self.raster, stderr=PIPE)
         stderr = proc.communicate()[1]
-        self.assertNotIn(b"raster_", stderr)
+        self.assertNotIn("raster_", stderr)
         self.assertIn(
             self.raster, stderr, msg="Raster map name should appear in the error output"
         )
@@ -40,7 +39,7 @@ class TestPythonKeywordsInParameters(TestCase):
         stderr = proc.communicate()[1]
         returncode = proc.poll()
         self.assertEqual(returncode, 1)
-        self.assertIn(b"raster", stderr)
+        self.assertIn("raster", stderr)
 
 
 class TestPythonModuleWithUnicodeParameters(TestCase):
@@ -86,10 +85,8 @@ class TestPythonModuleWithStdinStdout(TestCase):
     def tearDownClass(cls):
         cls.runModule("g.remove", type="raster", name=cls.raster, flags="f")
 
-    @xfail_windows
-    def test_write_labels_unicode(self):
-        """This tests if Python module works"""
-        find_program("ls", "--version")
+    def test_write_read_labels_str(self):
+        """This tests if standard string works"""
         write_command(
             "r.category",
             map=self.raster,
@@ -102,21 +99,18 @@ class TestPythonModuleWithStdinStdout(TestCase):
         self.assertIsInstance(res, str)
 
     @xfail_windows
-    def test_write_labels_bytes(self):
-        """This tests if Python module works"""
+    def test_write_bytes_read_str(self):
+        """This test backwards compatibility when writing bytes"""
         write_command(
             "r.category",
             map=self.raster,
             rules="-",
-            stdin="1:kůň\n2:kráva\n3:ovečka\n4:býk",
+            stdin=encode("1:kůň\n2:kráva\n3:ovečka\n4:býk"),
             separator=":",
-            encoding=None,
         )
-        res = read_command(
-            "r.category", map=self.raster, separator=":", encoding=None
-        ).strip()
-        self.assertEqual(res, encode("1:kůň\n2:kráva\n3:ovečka\n4:býk"))
-        self.assertIsInstance(res, bytes)
+        res = read_command("r.category", map=self.raster, separator=":").strip()
+        self.assertEqual(res, "1:kůň\n2:kráva\n3:ovečka\n4:býk")
+        self.assertIsInstance(res, str)
 
 
 if __name__ == "__main__":

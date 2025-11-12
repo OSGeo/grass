@@ -1405,7 +1405,7 @@ class SampleUnitsKeyPage(TitledPage):
     def OnEnterPage(self, event: WizardEvent | None = None) -> None:
         """Function during entering"""
         # This is an hack to force the user to choose Rectangle or Circle
-        self.typeBox.SetSelection(2),
+        self.typeBox.SetSelection(2)
         self.typeBox.ShowItem(2, False)
         self.panelSizer.Layout()
 
@@ -1608,7 +1608,7 @@ class UnitsMousePage(TitledPage):
             choices=[_("Rectangle"), _("Circle"), ("")],
         )
         # This is an hack to force the user to choose Rectangle or Circle
-        self.typeBox.SetSelection(2),
+        self.typeBox.SetSelection(2)
         self.typeBox.ShowItem(2, False)
         self.sizer.Add(self.typeBox, flag=wx.ALIGN_LEFT, pos=(0, 0), span=(1, 2))
 
@@ -1855,11 +1855,11 @@ class VectorAreasPage(TitledPage):
             GError(
                 parent=self,
                 message=_(
-                    "The raster map <%s> already exists."
+                    "The raster map <{map_name}> already exists."
                     " Please remove or rename the maps "
-                    "with the prefix '%s' or select the "
+                    "with the prefix '{prefix}' or select the "
                     "option to overwrite existing maps"
-                ).format(self.outname, self.outpref),
+                ).format(map_name=self.outname, prefix=self.outpref),
             )
             self.parent.wizard.ShowPage(self.parent.samplingareapage)
             return
