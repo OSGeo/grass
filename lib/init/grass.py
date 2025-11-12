@@ -381,12 +381,12 @@ def create_grass_config_dir() -> str:
     except (RuntimeError, NotADirectoryError) as e:
         fatal(f"{e}")
 
-    if not os.path.isdir(directory):
+    if not Path(directory).is_dir():
         try:
             Path(directory).mkdir(parents=True)
         except OSError as e:
             # Can happen as a race condition
-            if e.errno != errno.EEXIST or not os.path.isdir(directory):
+            if e.errno != errno.EEXIST or not Path(directory).is_dir():
                 fatal(
                     _(
                         "Failed to create configuration directory '{}' with error: {}"
@@ -700,7 +700,7 @@ def cannot_create_location_reason(gisdbase: StrPath, location: str) -> str:
         return _(
             "Unable to create new project <{location}> because <{path}> is a file."
         ).format(**locals())
-    if os.path.isdir(path):
+    if Path(path).is_dir():
         return _(
             "Unable to create new project <{location}> because"
             " the directory <{path}>"
@@ -851,7 +851,7 @@ def set_mapset(
                             " because <{path}> is a file."
                         ).format(mapset=mapset, path=path)
                     )
-                elif os.path.isdir(path):
+                elif Path(path).is_dir():
                     # not a valid mapset, but dir exists, assuming
                     # broken/incomplete mapset
                     warning(
@@ -2181,7 +2181,7 @@ def main() -> None:
     GRASS_VERSION_MAJOR = runtime_paths.version_major
     GRASS_VERSION_GIT = runtime_paths.grass_version_git
     gisbase = runtime_paths.gisbase
-    if not os.path.isdir(gisbase):
+    if not Path(gisbase).is_dir():
         gisbase = get_install_path(gisbase)
         # Set the main prefix again.
         # See also grass.script.setup.setup_runtime_env.

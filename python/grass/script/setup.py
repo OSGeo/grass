@@ -148,7 +148,7 @@ def get_install_path(path: str | Path | None = None) -> str:
         ).stdout.strip()
 
     # Directory was provided as a parameter.
-    if path and os.path.isdir(path):
+    if path and Path(path).is_dir():
         return os.fspath(path)
 
     # Executable was provided as parameter.
@@ -156,12 +156,12 @@ def get_install_path(path: str | Path | None = None) -> str:
         # The path was provided by the user and it is an executable
         # (on path or provided with full path), so raise exception on failure.
         path_from_executable = ask_executable(path)
-        if os.path.isdir(path_from_executable):
+        if Path(path_from_executable).is_dir():
             return path_from_executable
 
     # GISBASE is set from the outside or already set.
     env_gisbase = os.environ.get("GISBASE")
-    if env_gisbase and os.path.isdir(env_gisbase):
+    if env_gisbase and Path(env_gisbase).is_dir():
         return env_gisbase
 
     # Executable provided in environment (name is from grass-session).
@@ -170,7 +170,7 @@ def get_install_path(path: str | Path | None = None) -> str:
     grass_bin = os.environ.get("GRASSBIN")
     if grass_bin and shutil.which(grass_bin):
         path_from_executable = ask_executable(grass_bin)
-        if os.path.isdir(path_from_executable):
+        if Path(path_from_executable).is_dir():
             return path_from_executable
 
     # Derive the path from path to this file (Python module).
@@ -191,7 +191,7 @@ def get_install_path(path: str | Path | None = None) -> str:
     grass_bin = "grass"
     if grass_bin and shutil.which(grass_bin):
         path_from_executable = ask_executable(grass_bin)
-        if os.path.isdir(path_from_executable):
+        if Path(path_from_executable).is_dir():
             return path_from_executable
 
     # We fallback to whatever was provided. This may help trace the issue
@@ -227,7 +227,7 @@ def setup_runtime_env(gisbase=None, *, env=None):
 
     runtime_paths = RuntimePaths(env=env, prefix=gisbase)
     gisbase = runtime_paths.gisbase
-    if not os.path.isdir(gisbase):
+    if not Path(gisbase).is_dir():
         gisbase = get_install_path(gisbase)
         # Set the main prefix again.
         # See also the main grass executable code.

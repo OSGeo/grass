@@ -62,7 +62,7 @@ from grass.exceptions import CalledModuleError
 # substitute variables (gisdbase, location_name, mapset)
 
 
-def substitute_db(database):
+def substitute_db(database) -> str:
     gisenv = gs.gisenv()
     tmpl = string.Template(database)
 
@@ -76,22 +76,22 @@ def substitute_db(database):
 # create database if doesn't exist
 
 
-def create_db(driver, database):
-    subst_database = substitute_db(database)
+def create_db(driver, database) -> bool:
+    subst_database: str = substitute_db(database)
     if driver == "dbf":
-        path = subst_database
+        path = Path(subst_database)
         # check if destination directory exists
-        if not os.path.isdir(path):
+        if not path.is_dir():
             # create dbf database
-            Path(path).mkdir(parents=True)
+            path.mkdir(parents=True)
             return True
         return False
 
     if driver == "sqlite":
-        path = os.path.dirname(subst_database)
+        path = Path(subst_database).parent
         # check if destination directory exists
-        if not os.path.isdir(path):
-            Path(path).mkdir(parents=True)
+        if not path.is_dir():
+            path.mkdir(parents=True)
 
     if (
         subst_database

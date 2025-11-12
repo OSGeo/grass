@@ -1,6 +1,7 @@
 import fnmatch
 import itertools
 import os
+from pathlib import Path
 from sqlite3 import OperationalError
 
 import grass.lib.gis as libgis
@@ -39,7 +40,7 @@ def findfiles(dirpath, match=None):
     res = []
     for f in sorted(os.listdir(dirpath)):
         abspath = os.path.join(dirpath, f)
-        if os.path.isdir(abspath):
+        if Path(abspath).is_dir():
             res.extend(findfiles(abspath, match))
 
         if match:

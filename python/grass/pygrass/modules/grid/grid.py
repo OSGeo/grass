@@ -139,7 +139,7 @@ def get_mapset(gisrc_src, gisrc_dst):
     mdst, ldst, gdst = read_gisrc(gisrc_dst)
     path_src = os.path.join(gsrc, lsrc, msrc)
     path_dst = os.path.join(gdst, ldst, mdst)
-    if not os.path.isdir(path_dst):
+    if not Path(path_dst).is_dir():
         Path(path_dst).mkdir(parents=True)
         copy_special_mapset_files(path_src, path_dst)
     src = Mapset(msrc, lsrc, gsrc)
@@ -273,7 +273,7 @@ def copy_rasters(rasters, gisrc_src, gisrc_dst, processes, region=None):
         # change gisdbase to dst
         env["GISRC"] = gisrc_dst
         rupck(input=file_dst, output=rast_clean, overwrite=True, env_=env)
-        os.remove(file_dst)
+        Path(file_dst).unlink()
 
 
 def copy_vectors(vectors, gisrc_src, gisrc_dst):
@@ -307,7 +307,7 @@ def copy_vectors(vectors, gisrc_src, gisrc_dst):
         # change gisdbase to dst
         env["GISRC"] = gisrc_dst
         vupck(input=file_dst, output=vect, overwrite=True, env_=env)
-        os.remove(file_dst)
+        Path(file_dst).unlink()
 
 
 def get_cmd(cmdd):
@@ -395,7 +395,7 @@ def cmd_exe(args):
     # run the grass command
     sub.Popen(get_cmd(cmd), shell=shell, env=env).wait()
     # remove temp GISRC
-    os.remove(gisrc_dst)
+    Path(gisrc_dst).unlink()
 
 
 class GridModule:
@@ -539,7 +539,7 @@ class GridModule:
     def __del__(self):
         if self.gisrc_dst:
             # remove GISRC file
-            os.remove(self.gisrc_dst)
+            Path(self.gisrc_dst).unlink()
 
     def clean_location(self, location=None):
         """Remove all created mapsets.
@@ -730,7 +730,7 @@ class GridModule:
             gisdbase, location = os.path.split(self.move)
             self.clean_location(Location(location, gisdbase))
             # rm temporary gis_rc
-            os.remove(self.gisrc_dst)
+            Path(self.gisrc_dst).unlink()
             self.gisrc_dst = None
             sht.rmtree(os.path.join(self.move, "PERMANENT"))
             sht.rmtree(os.path.join(self.move, self.mset.name))
