@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 17:24+0000\n"
+"POT-Creation-Date: 2025-11-08 19:01+0000\n"
 "PO-Revision-Date: 2025-10-26 23:01+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/sv/>\n"
@@ -1297,7 +1297,7 @@ msgstr "Syntaxfel: %s"
 msgid "Vector map <%(map)s>: %(msg)s\n"
 msgstr "Vektorkarta <%(map)s>: %(msg)s\n"
 
-#: ../gui/wxpython/core/utils.py:839
+#: ../gui/wxpython/core/utils.py:840
 #, python-format
 msgid ""
 "%s: line skipped - unable to parse '%s'\n"
@@ -1306,22 +1306,22 @@ msgstr ""
 "%s: rad överhoppad - kunde inte tolka '%s'\n"
 "Orsak: %s\n"
 
-#: ../gui/wxpython/core/utils.py:845
+#: ../gui/wxpython/core/utils.py:846
 #, python-format
 msgid "Duplicated key: %s\n"
 msgstr "Duplicerad nyckel: %s\n"
 
-#: ../gui/wxpython/core/utils.py:849
+#: ../gui/wxpython/core/utils.py:850
 #, python-brace-format
 msgid "Unable to open file '{name}': {error}\n"
 msgstr "Det går inte att öppna filen '{name}': {error}\n"
 
-#: ../gui/wxpython/core/utils.py:874
+#: ../gui/wxpython/core/utils.py:875
 #, python-brace-format
 msgid "Unable to create file '{name}': {error}\n"
 msgstr "Det går inte att skapa filen '{name}': {error}\n"
 
-#: ../gui/wxpython/core/utils.py:948 ../gui/wxpython/gui_core/forms.py:1913
+#: ../gui/wxpython/core/utils.py:949 ../gui/wxpython/gui_core/forms.py:1913
 msgid "Select Color"
 msgstr "Välj färg"
 
@@ -2328,7 +2328,7 @@ msgid "&Create table"
 msgstr "&Skapa tabell"
 
 #: ../gui/wxpython/dbmgr/base.py:3305
-#: ../gui/wxpython/web_services/dialogs.py:533
+#: ../gui/wxpython/web_services/dialogs.py:534
 msgid "&Add layer"
 msgstr "&Lägg till lager"
 
@@ -3089,8 +3089,8 @@ msgstr "Tillämpa och spara ändringar i filen med användarinställningar (stan
 #: ../gui/wxpython/modules/import_export.py:762
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2000
 #: ../gui/wxpython/vnet/dialogs.py:1331
-#: ../gui/wxpython/web_services/dialogs.py:152
-#: ../gui/wxpython/web_services/dialogs.py:906
+#: ../gui/wxpython/web_services/dialogs.py:153
+#: ../gui/wxpython/web_services/dialogs.py:907
 msgid "Close dialog"
 msgstr "Stäng dialogrutan"
 
@@ -5113,7 +5113,7 @@ msgid "No table linked to layer <{}>."
 msgstr "Ingen tabell kopplad till lager <{}>."
 
 #: ../gui/wxpython/gui_core/gselect.py:1244
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1015
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1017
 msgid "Choose GIS Data Directory"
 msgstr "Välj GIS-datakatalog"
 
@@ -5222,7 +5222,7 @@ msgid "No settings available"
 msgstr "Inga inställningar tillgängliga"
 
 #: ../gui/wxpython/gui_core/gselect.py:2066
-#: ../gui/wxpython/web_services/dialogs.py:301
+#: ../gui/wxpython/web_services/dialogs.py:302
 msgid "No data source defined, settings are not saved."
 msgstr "Ingen datakälla definierad, inställningarna sparas inte."
 
@@ -6152,7 +6152,7 @@ msgid "Name <%(name)s> is not a valid name for GRASS map. Please use only ASCII 
 msgstr "Namnet <%(name)s> är inte ett giltigt namn för GRASS-kartan. Använd endast ASCII-tecken exklusive %(chars)s och mellanslag."
 
 #: ../gui/wxpython/gui_core/widgets.py:888
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1184
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1186
 #: ../gui/wxpython/location_wizard/wizard.py:300
 #: ../gui/wxpython/modules/import_export.py:268
 msgid "Invalid name"
@@ -6246,7 +6246,7 @@ msgid "Apply"
 msgstr "Tillämpa"
 
 #: ../gui/wxpython/gui_core/wrap.py:296
-#: ../gui/wxpython/web_services/dialogs.py:689
+#: ../gui/wxpython/web_services/dialogs.py:690
 msgid "&Apply"
 msgstr "&Tillämpa"
 
@@ -6965,7 +6965,7 @@ msgid "New mapset:"
 msgstr "Nytt kartset:"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:632
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1032
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1034
 #: ../gui/wxpython/startup/guiutils.py:134
 msgid "Create new mapset"
 msgstr "Skapa ny mapset"
@@ -7103,21 +7103,21 @@ msgstr "Unicode-fel upptäcktes. Kontrollera dina lokala inställningar. Detalje
 msgid "No GRASS Location found in '%s'. Create a new Location or choose different GRASS database directory."
 msgstr "Ingen GRASS-plats hittades i '%s'. Skapa en ny plats eller välj en annan katalog för GRASS-databasen."
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1001
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1003
 #, python-format
 msgid "Path '%s' doesn't exist."
 msgstr "Banan '%s' finns inte."
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1031
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1033
 msgid "Enter name for new mapset:"
 msgstr "Ange namn för ny mapset:"
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1043
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1045
 #, python-format
 msgid "Mapset <%s> already exists."
 msgstr "Mapset <%s> finns redan."
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1050
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1052
 #, python-format
 msgid ""
 "Mapset <%s> is reserved for direct read access to OGR layers. Please consider to use another name for your mapset.\n"
@@ -7128,16 +7128,16 @@ msgstr ""
 "\n"
 "Är du verkligen säker på att du vill skapa denna mapset?"
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1056
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1058
 msgid "Reserved mapset name"
 msgstr "Reserverat namn på kartuppsättning"
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1084
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1086
 #, python-format
 msgid "Unable to create new mapset: %s"
 msgstr "Det går inte att skapa en ny mapset: %s"
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1100
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1102
 #, python-format
 msgid ""
 "GRASS is already running in selected mapset <%(mapset)s>\n"
@@ -7154,12 +7154,12 @@ msgstr ""
 "\n"
 "Vill du försöka ta bort .gislock (notera att du behöver tillstånd för den här åtgärden) och fortsätta?"
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1107
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1124
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1109
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1126
 msgid "Lock file found"
 msgstr "Låsfil hittades"
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1119
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1121
 msgid ""
 "ARE YOU REALLY SURE?\n"
 "\n"
@@ -7169,7 +7169,7 @@ msgstr ""
 "\n"
 "Om du verkligen kör en annan GRASS-session kan detta korrumpera dina data. Ta en titt i processorhanteraren igen bara för att vara säker..."
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1136
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1138
 #, python-format
 msgid ""
 "Unable to remove '%(lock)s'.\n"
@@ -7180,12 +7180,12 @@ msgstr ""
 "\n"
 "Detaljerad information: %(reason)s"
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1180
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1182
 #, python-format
 msgid "Name <%(name)s> is not a valid name for location or mapset. Please use only ASCII characters excluding %(chars)s and space."
 msgstr "Namn <%(name)s> är inte ett giltigt namn för plats eller kartset. Använd endast ASCII-tecken exklusive %(chars)s och mellanslag."
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1257
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1259
 msgid "GRASS needs a directory (GRASS database) in which to store its data. Create one now if you have not already done so. A popular choice is \"grassdata\", located in your home directory. Press Browse button to select the directory."
 msgstr "GRASS behöver en katalog (GRASS-databas) för att lagra sina data. Skapa en nu om du inte redan har gjort det. Ett populärt val är \"grassdata\", som finns i din hemkatalog. Tryck på Browse-knappen för att välja katalog."
 
@@ -8793,12 +8793,12 @@ msgstr "EPSG-kod saknas."
 msgid "IAU code missing."
 msgstr "IAU-kod saknas."
 
-#: ../gui/wxpython/location_wizard/wizard.py:2736
+#: ../gui/wxpython/location_wizard/wizard.py:2737
 #, python-format
 msgid "File <%s> not found."
 msgstr "Filen <%s> hittades inte."
 
-#: ../gui/wxpython/location_wizard/wizard.py:2746
+#: ../gui/wxpython/location_wizard/wizard.py:2747
 msgid "WKT string missing."
 msgstr "WKT-sträng saknas."
 
@@ -9036,7 +9036,7 @@ msgid "Display extent"
 msgstr "Visa omfattning"
 
 #: ../gui/wxpython/mapdisp/statusbar.py:939
-#: ../gui/wxpython/web_services/dialogs.py:874
+#: ../gui/wxpython/web_services/dialogs.py:875
 msgid "Computational region"
 msgstr "Beräkningsregion"
 
@@ -11158,7 +11158,7 @@ msgid "Close dialog and apply changes"
 msgstr "Stäng dialogrutan och tillämpa ändringarna"
 
 #: ../gui/wxpython/psmap/dialogs.py:600 ../gui/wxpython/vdigit/dialogs.py:168
-#: ../gui/wxpython/web_services/dialogs.py:690
+#: ../gui/wxpython/web_services/dialogs.py:691
 msgid "Apply changes"
 msgstr "Tillämpa ändringar"
 
@@ -13625,7 +13625,7 @@ msgid "Ignore changes and close dialog"
 msgstr "Ignorera ändringar och stäng dialogen"
 
 #: ../gui/wxpython/vdigit/dialogs.py:172
-#: ../gui/wxpython/web_services/dialogs.py:695
+#: ../gui/wxpython/web_services/dialogs.py:696
 msgid "Apply changes and close dialog"
 msgstr "Tillämpa ändringar och stäng dialogrutan"
 
@@ -14730,148 +14730,148 @@ msgstr "Ogiltigt värde infogat. Operationen avbruten."
 msgid "Edit point"
 msgstr "Redigera punkt"
 
-#: ../gui/wxpython/web_services/dialogs.py:105
+#: ../gui/wxpython/web_services/dialogs.py:106
 msgid " Server settings "
 msgstr " Serverinställningar "
 
-#: ../gui/wxpython/web_services/dialogs.py:108
+#: ../gui/wxpython/web_services/dialogs.py:109
 msgid "Server:"
 msgstr "Server:"
 
-#: ../gui/wxpython/web_services/dialogs.py:111
+#: ../gui/wxpython/web_services/dialogs.py:112
 msgid "&Connect"
 msgstr "&Koppla"
 
-#: ../gui/wxpython/web_services/dialogs.py:112
+#: ../gui/wxpython/web_services/dialogs.py:113
 msgid "Connect to the server"
 msgstr "Anslut till servern"
 
-#: ../gui/wxpython/web_services/dialogs.py:116
+#: ../gui/wxpython/web_services/dialogs.py:117
 msgid "Show advanced connection settings"
 msgstr "Visa avancerade anslutningsinställningar"
 
-#: ../gui/wxpython/web_services/dialogs.py:117
+#: ../gui/wxpython/web_services/dialogs.py:118
 msgid "Hide advanced connection settings"
 msgstr "Dölj avancerade anslutningsinställningar"
 
-#: ../gui/wxpython/web_services/dialogs.py:134
+#: ../gui/wxpython/web_services/dialogs.py:135
 msgid " Layer Manager Settings "
 msgstr " Inställningar för Lagerhanterare "
 
-#: ../gui/wxpython/web_services/dialogs.py:138
+#: ../gui/wxpython/web_services/dialogs.py:139
 msgid "Output layer name:"
 msgstr "Namn på utmatningslager:"
 
-#: ../gui/wxpython/web_services/dialogs.py:264
+#: ../gui/wxpython/web_services/dialogs.py:265
 msgid "Username:"
 msgstr "Användarnamn:"
 
-#: ../gui/wxpython/web_services/dialogs.py:267
+#: ../gui/wxpython/web_services/dialogs.py:268
 msgid "Password:"
 msgstr "Lösenord:"
 
-#: ../gui/wxpython/web_services/dialogs.py:379
+#: ../gui/wxpython/web_services/dialogs.py:380
 #, python-format
 msgid "Connecting to <%s>..."
 msgstr "Ansluter till <%s>..."
 
-#: ../gui/wxpython/web_services/dialogs.py:447
+#: ../gui/wxpython/web_services/dialogs.py:448
 msgid "Available web services"
 msgstr "Tillgängliga webbtjänster"
 
-#: ../gui/wxpython/web_services/dialogs.py:462
+#: ../gui/wxpython/web_services/dialogs.py:463
 #, python-format
 msgid "Connected to <%s>"
 msgstr "Ansluten till <%s>"
 
-#: ../gui/wxpython/web_services/dialogs.py:469
+#: ../gui/wxpython/web_services/dialogs.py:470
 #, python-format
 msgid "Unable to connect to <%s>"
 msgstr "Det går inte att ansluta till <%s>"
 
-#: ../gui/wxpython/web_services/dialogs.py:524
+#: ../gui/wxpython/web_services/dialogs.py:525
 msgid "Add web service layer"
 msgstr "Lägg till webbtjänstlager"
 
-#: ../gui/wxpython/web_services/dialogs.py:535
+#: ../gui/wxpython/web_services/dialogs.py:536
 msgid "Add selected web service layers as map layer into layer tree"
 msgstr "Lägg till valda webbtjänstlager som kartlager i lagerträdet"
 
-#: ../gui/wxpython/web_services/dialogs.py:645
+#: ../gui/wxpython/web_services/dialogs.py:646
 msgid "Web service layer properties"
 msgstr "Egenskaper för webbtjänstslager"
 
-#: ../gui/wxpython/web_services/dialogs.py:694
+#: ../gui/wxpython/web_services/dialogs.py:695
 msgid "&OK"
 msgstr "&Ok"
 
-#: ../gui/wxpython/web_services/dialogs.py:854
+#: ../gui/wxpython/web_services/dialogs.py:855
 msgid "Name for output raster map:"
 msgstr "Namn för rasterkartan som matas ut:"
 
-#: ../gui/wxpython/web_services/dialogs.py:865
+#: ../gui/wxpython/web_services/dialogs.py:866
 msgid "Export region"
 msgstr "Exportregion"
 
-#: ../gui/wxpython/web_services/dialogs.py:871
+#: ../gui/wxpython/web_services/dialogs.py:872
 msgid "Map display"
 msgstr "Kartvisning"
 
-#: ../gui/wxpython/web_services/dialogs.py:876
+#: ../gui/wxpython/web_services/dialogs.py:877
 msgid "Named region"
 msgstr "Namngiven region"
 
-#: ../gui/wxpython/web_services/dialogs.py:878
+#: ../gui/wxpython/web_services/dialogs.py:879
 msgid "Extent and resolution are based on Map Display geometry."
 msgstr "Omfattning och upplösning baseras på kartvisningsgeometrin."
 
-#: ../gui/wxpython/web_services/dialogs.py:881
+#: ../gui/wxpython/web_services/dialogs.py:882
 msgid "Extent and resolution are based on computational region."
 msgstr "Omfattning och upplösning baseras på beräkningsregion."
 
-#: ../gui/wxpython/web_services/dialogs.py:884
+#: ../gui/wxpython/web_services/dialogs.py:885
 msgid "Extent and resolution are based on named region."
 msgstr "Omfattning och upplösning baseras på namngiven region."
 
-#: ../gui/wxpython/web_services/dialogs.py:889
+#: ../gui/wxpython/web_services/dialogs.py:890
 msgid "Overwrite existing raster map"
 msgstr "Skriva över befintlig rasterkarta"
 
-#: ../gui/wxpython/web_services/dialogs.py:894
+#: ../gui/wxpython/web_services/dialogs.py:895
 msgid "Choose named region:"
 msgstr "Välj namngiven region:"
 
-#: ../gui/wxpython/web_services/dialogs.py:908
+#: ../gui/wxpython/web_services/dialogs.py:909
 msgid "&Save layer"
 msgstr "&Spara lager"
 
-#: ../gui/wxpython/web_services/dialogs.py:909
+#: ../gui/wxpython/web_services/dialogs.py:910
 msgid "Save web service layer as raster map"
 msgstr "Spara webbtjänstlager som rasterkarta"
 
-#: ../gui/wxpython/web_services/dialogs.py:1015
+#: ../gui/wxpython/web_services/dialogs.py:1016
 msgid "Missing output raster."
 msgstr "Saknar utmatningsraster."
 
-#: ../gui/wxpython/web_services/dialogs.py:1018
+#: ../gui/wxpython/web_services/dialogs.py:1019
 msgid "Output map can be added only to current mapset."
 msgstr "Utdatakartan kan endast läggas till i den aktuella kartuppsättningen."
 
-#: ../gui/wxpython/web_services/dialogs.py:1024
+#: ../gui/wxpython/web_services/dialogs.py:1025
 #, python-format
 msgid "Output map <%s> already exists"
 msgstr "Output map <%s> finns redan"
 
-#: ../gui/wxpython/web_services/dialogs.py:1043
+#: ../gui/wxpython/web_services/dialogs.py:1044
 #, python-format
 msgid "Region <%s> does not exist."
 msgstr "Region <%s> finns inte."
 
-#: ../gui/wxpython/web_services/dialogs.py:1071
+#: ../gui/wxpython/web_services/dialogs.py:1072
 msgid "Downloading data..."
 msgstr "Hämtning av data..."
 
-#: ../gui/wxpython/web_services/dialogs.py:1092
+#: ../gui/wxpython/web_services/dialogs.py:1093
 msgid "Unable to fetch data.\n"
 msgstr "Det går inte att hämta data.\n"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_id_ID\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 17:24+0000\n"
+"POT-Creation-Date: 2025-11-08 19:01+0000\n"
 "PO-Revision-Date: 2025-08-23 20:17+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Indonesian <https://weblate.osgeo.org/projects/grass-gis/grasslibs/id/>\n"
@@ -1391,7 +1391,7 @@ msgstr ""
 msgid "Your installation doesn't include GUI, exiting."
 msgstr ""
 
-#: ../lib/gis/parser.c:650 ../lib/init/grass.py:147
+#: ../lib/gis/parser.c:650 ../lib/init/grass.py:146
 msgid "ERROR"
 msgstr ""
 
@@ -1671,12 +1671,12 @@ msgid "SYNOPSIS"
 msgstr ""
 
 #: ../lib/gis/parser_html.c:159 ../lib/gis/parser_rest.c:140
-#: ../lib/init/grass.py:303
+#: ../lib/init/grass.py:302
 msgid "Flags"
 msgstr ""
 
 #: ../lib/gis/parser_html.c:207 ../lib/gis/parser_md.c:71
-#: ../lib/gis/parser_rest.c:173 ../lib/init/grass.py:323
+#: ../lib/gis/parser_rest.c:173 ../lib/init/grass.py:322
 msgid "Parameters"
 msgstr ""
 
@@ -3570,207 +3570,207 @@ msgstr ""
 msgid "Unable to read target file for group [%s]"
 msgstr ""
 
-#: ../lib/init/grass.py:143
+#: ../lib/init/grass.py:142
 msgid "WARNING"
 msgstr ""
 
-#: ../lib/init/grass.py:148 ../lib/init/grass.py:2428
+#: ../lib/init/grass.py:147 ../lib/init/grass.py:2427
 msgid "Exiting..."
 msgstr ""
 
-#: ../lib/init/grass.py:302
+#: ../lib/init/grass.py:301
 msgid "Usage"
 msgstr ""
 
-#: ../lib/init/grass.py:304
+#: ../lib/init/grass.py:303
 msgid "print this help message"
 msgstr ""
 
-#: ../lib/init/grass.py:305
+#: ../lib/init/grass.py:304
 msgid "show version information and exit"
 msgstr ""
 
-#: ../lib/init/grass.py:306
+#: ../lib/init/grass.py:305
 msgid "create given database, project or mapset if it doesn't exist"
 msgstr ""
 
-#: ../lib/init/grass.py:307
+#: ../lib/init/grass.py:306
 msgid "exit after creation of project or mapset. Only with -c flag"
 msgstr ""
 
-#: ../lib/init/grass.py:309
+#: ../lib/init/grass.py:308
 msgid "force removal of .gislock if exists (use with care!). Only with --text flag"
 msgstr ""
 
-#: ../lib/init/grass.py:312
+#: ../lib/init/grass.py:311
 msgid "use text based interface (skip graphical welcome screen)"
 msgstr ""
 
-#: ../lib/init/grass.py:313 ../lib/init/grass.py:315 ../lib/init/grass.py:317
+#: ../lib/init/grass.py:312 ../lib/init/grass.py:314 ../lib/init/grass.py:316
 msgid "and set as default"
 msgstr ""
 
-#: ../lib/init/grass.py:314
+#: ../lib/init/grass.py:313
 msgid "use text based interface (show graphical welcome screen)"
 msgstr ""
 
-#: ../lib/init/grass.py:316
+#: ../lib/init/grass.py:315
 msgid "use $DEFAULT_GUI graphical user interface"
 msgstr ""
 
-#: ../lib/init/grass.py:318
+#: ../lib/init/grass.py:317
 msgid "print GRASS configuration parameters"
 msgstr ""
 
-#: ../lib/init/grass.py:320
+#: ../lib/init/grass.py:319
 msgid "options: arch,build,compiler,date,path,python_path,revision,svn_revision,version"
 msgstr ""
 
-#: ../lib/init/grass.py:324
+#: ../lib/init/grass.py:323
 msgid "initial GRASS database directory"
 msgstr ""
 
-#: ../lib/init/grass.py:325
+#: ../lib/init/grass.py:324
 msgid "directory containing GRASS projects"
 msgstr ""
 
-#: ../lib/init/grass.py:326
+#: ../lib/init/grass.py:325
 msgid "initial GRASS project (location)"
 msgstr ""
 
-#: ../lib/init/grass.py:328
+#: ../lib/init/grass.py:327
 msgid "directory containing mapsets with one common coordinate reference system"
 msgstr ""
 
-#: ../lib/init/grass.py:331
+#: ../lib/init/grass.py:330
 msgid "initial GRASS mapset"
 msgstr ""
 
-#: ../lib/init/grass.py:332
+#: ../lib/init/grass.py:331
 msgid "fully qualified initial mapset directory"
 msgstr ""
 
-#: ../lib/init/grass.py:333
+#: ../lib/init/grass.py:332
 msgid "Environment variables relevant for startup"
 msgstr ""
 
-#: ../lib/init/grass.py:334
+#: ../lib/init/grass.py:333
 msgid "set root path for configuration directory"
 msgstr ""
 
-#: ../lib/init/grass.py:335
+#: ../lib/init/grass.py:334
 msgid "select GUI (text, gui, gtext)"
 msgstr ""
 
-#: ../lib/init/grass.py:336
+#: ../lib/init/grass.py:335
 msgid "set html web browser for help pages"
 msgstr ""
 
-#: ../lib/init/grass.py:338
+#: ../lib/init/grass.py:337
 msgid "set additional path(s) to local GRASS modules or user scripts"
 msgstr ""
 
-#: ../lib/init/grass.py:341
+#: ../lib/init/grass.py:340
 msgid "set additional GISBASE for locally installed GRASS Addons"
 msgstr ""
 
-#: ../lib/init/grass.py:343
+#: ../lib/init/grass.py:342
 msgid "set Python interpreter name to override 'python'"
 msgstr ""
 
-#: ../lib/init/grass.py:344
+#: ../lib/init/grass.py:343
 msgid "execute GRASS module or script"
 msgstr ""
 
-#: ../lib/init/grass.py:345
+#: ../lib/init/grass.py:344
 msgid "provided executable will be executed in GRASS session"
 msgstr ""
 
-#: ../lib/init/grass.py:346
+#: ../lib/init/grass.py:345
 msgid "GRASS module, script or any other executable"
 msgstr ""
 
-#: ../lib/init/grass.py:347
+#: ../lib/init/grass.py:346
 msgid "parameters of the executable"
 msgstr ""
 
-#: ../lib/init/grass.py:348
+#: ../lib/init/grass.py:347
 msgid "standard flags"
 msgstr ""
 
-#: ../lib/init/grass.py:349 ../lib/init/grass.py:1910
+#: ../lib/init/grass.py:348 ../lib/init/grass.py:1909
 msgid "deprecated, use --tmp-project instead"
 msgstr ""
 
-#: ../lib/init/grass.py:350
+#: ../lib/init/grass.py:349
 msgid "location was renamed to project"
 msgstr ""
 
-#: ../lib/init/grass.py:351
+#: ../lib/init/grass.py:350
 msgid "create temporary project (use with the --exec flag)"
 msgstr ""
 
-#: ../lib/init/grass.py:353
+#: ../lib/init/grass.py:352
 msgid "created in a temporary directory and deleted at exit"
 msgstr ""
 
-#: ../lib/init/grass.py:355
+#: ../lib/init/grass.py:354
 msgid "create temporary mapset (use with the --exec flag)"
 msgstr ""
 
-#: ../lib/init/grass.py:356
+#: ../lib/init/grass.py:355
 msgid "created in the specified project and deleted at exit"
 msgstr ""
 
-#: ../lib/init/grass.py:357
+#: ../lib/init/grass.py:356
 msgid "timeout for acquiring a mapset lock"
 msgstr ""
 
-#: ../lib/init/grass.py:359
+#: ../lib/init/grass.py:358
 msgid "time for which the process will attempt to get a lock in seconds"
 msgstr ""
 
-#: ../lib/init/grass.py:393
+#: ../lib/init/grass.py:392
 msgid "Failed to create configuration directory '{}' with error: {}"
 msgstr ""
 
-#: ../lib/init/grass.py:435
+#: ../lib/init/grass.py:434
 #, python-brace-format
 msgid "Unable to create temporary directory <{tmpdir_name}>! Exiting."
 msgstr ""
 
-#: ../lib/init/grass.py:493
+#: ../lib/init/grass.py:492
 #, python-brace-format
 msgid "Invalid line in RC file ({file}): '{line}' ({error})\n"
 msgstr ""
 
-#: ../lib/init/grass.py:499
+#: ../lib/init/grass.py:498
 #, python-brace-format
 msgid "Empty RC file ({file})"
 msgstr ""
 
-#: ../lib/init/grass.py:586
+#: ../lib/init/grass.py:585
 #, python-format
 msgid "GUI <%s> not supported in this version"
 msgstr ""
 
-#: ../lib/init/grass.py:622
+#: ../lib/init/grass.py:621
 msgid ""
 "The python command does not work as expected.\n"
 "Please check your installation or set the GRASS_PYTHON environment variable."
 msgstr ""
 
-#: ../lib/init/grass.py:627
+#: ../lib/init/grass.py:626
 msgid "GRASS GUI not found. Please check your installation."
 msgstr ""
 
-#: ../lib/init/grass.py:629
+#: ../lib/init/grass.py:628
 msgid ""
 "{}\n"
 "Switching to text based interface mode."
 msgstr ""
 
-#: ../lib/init/grass.py:636
+#: ../lib/init/grass.py:635
 msgid ""
 "It appears that the X Windows system is not active.\n"
 "A graphical based user interface is not supported.\n"
@@ -3778,77 +3778,77 @@ msgid ""
 "Switching to text based interface mode."
 msgstr ""
 
-#: ../lib/init/grass.py:669
+#: ../lib/init/grass.py:668
 msgid "Error creating project: {}"
 msgstr ""
 
-#: ../lib/init/grass.py:696
+#: ../lib/init/grass.py:695
 #, python-brace-format
 msgid "Unable to create new project because the project <{location}> already exists."
 msgstr ""
 
-#: ../lib/init/grass.py:702
+#: ../lib/init/grass.py:701
 #, python-brace-format
 msgid "Unable to create new project <{location}> because <{path}> is a file."
 msgstr ""
 
-#: ../lib/init/grass.py:706
+#: ../lib/init/grass.py:705
 #, python-brace-format
 msgid "Unable to create new project <{location}> because the directory <{path}> already exists."
 msgstr ""
 
-#: ../lib/init/grass.py:711
+#: ../lib/init/grass.py:710
 #, python-brace-format
 msgid "Unable to create new project in the directory <{path}> for an unknown reason."
 msgstr ""
 
-#: ../lib/init/grass.py:793
+#: ../lib/init/grass.py:792
 msgid "Mapset <{}> already exists. Unable to create a new temporary mapset of that name."
 msgstr ""
 
-#: ../lib/init/grass.py:798
+#: ../lib/init/grass.py:797
 msgid "Mapset <{}> already exists."
 msgstr ""
 
-#: ../lib/init/grass.py:806
+#: ../lib/init/grass.py:805
 msgid "A new mapset can be created using '-c' flag."
 msgstr ""
 
-#: ../lib/init/grass.py:808
+#: ../lib/init/grass.py:807
 msgid "Maybe you meant a different directory."
 msgstr ""
 
-#: ../lib/init/grass.py:836
+#: ../lib/init/grass.py:835
 msgid "Provide CRS to create a project"
 msgstr ""
 
-#: ../lib/init/grass.py:840
+#: ../lib/init/grass.py:839
 msgid "Creating new GRASS project <{}>..."
 msgstr ""
 
-#: ../lib/init/grass.py:851
+#: ../lib/init/grass.py:850
 #, python-brace-format
 msgid "Unable to create new mapset <{mapset}> because <{path}> is a file."
 msgstr ""
 
-#: ../lib/init/grass.py:860
+#: ../lib/init/grass.py:859
 msgid "The mapset <{}> is missing the WIND file (computational region). It will be fixed now. Note that this warning may become an error in future versions."
 msgstr ""
 
-#: ../lib/init/grass.py:870
+#: ../lib/init/grass.py:869
 #, python-brace-format
 msgid "No CRS is needed for creating mapset <{mapset}>, but <{geofile}> was provided as CRS. Did you mean to create a new project?"
 msgstr ""
 
-#: ../lib/init/grass.py:876
+#: ../lib/init/grass.py:875
 msgid "Creating new GRASS mapset <{}>..."
 msgstr ""
 
-#: ../lib/init/grass.py:900
+#: ../lib/init/grass.py:899
 msgid "GRASS database directory, project and mapset not set properly. Use GUI or command line to set them."
 msgstr ""
 
-#: ../lib/init/grass.py:960
+#: ../lib/init/grass.py:959
 #, python-brace-format
 msgid ""
 "Error reading data path information from g.gisenv.\n"
@@ -3859,170 +3859,170 @@ msgid ""
 "Check the <{file}> file."
 msgstr ""
 
-#: ../lib/init/grass.py:1252
+#: ../lib/init/grass.py:1251
 msgid "Building user fontcap..."
 msgstr ""
 
-#: ../lib/init/grass.py:1318
+#: ../lib/init/grass.py:1317
 msgid "The SHELL variable is not set"
 msgstr ""
 
-#: ../lib/init/grass.py:1335
+#: ../lib/init/grass.py:1334
 #, python-brace-format
 msgid "Unsupported shell <{sh}>: {env_file}"
 msgstr ""
 
-#: ../lib/init/grass.py:1352
+#: ../lib/init/grass.py:1351
 #, python-format
 msgid "Executing <%s> ..."
 msgstr ""
 
-#: ../lib/init/grass.py:1376
+#: ../lib/init/grass.py:1375
 #, python-brace-format
 msgid ""
 "Execution of <{cmd}> failed:\n"
 "{error}"
 msgstr ""
 
-#: ../lib/init/grass.py:1389
+#: ../lib/init/grass.py:1388
 #, python-format
 msgid "Execution of <%s> finished."
 msgstr ""
 
-#: ../lib/init/grass.py:1431
+#: ../lib/init/grass.py:1430
 #, python-brace-format
 msgid "Unable to close GUI. {0}"
 msgstr ""
 
-#: ../lib/init/grass.py:1450
+#: ../lib/init/grass.py:1449
 #, python-format
 msgid "Welcome to GRASS %s"
 msgstr ""
 
-#: ../lib/init/grass.py:1476
+#: ../lib/init/grass.py:1475
 msgid "GRASS homepage:"
 msgstr ""
 
 #. GTC Running through: SHELL NAME
-#: ../lib/init/grass.py:1478
+#: ../lib/init/grass.py:1477
 msgid "This version running through:"
 msgstr ""
 
-#: ../lib/init/grass.py:1481
+#: ../lib/init/grass.py:1480
 msgid "Help is available with the command:"
 msgstr ""
 
-#: ../lib/init/grass.py:1482
+#: ../lib/init/grass.py:1481
 msgid "See the licence terms with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1483
+#: ../lib/init/grass.py:1482
 msgid "See citation options with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1488
+#: ../lib/init/grass.py:1487
 msgid "If required, restart the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1490
+#: ../lib/init/grass.py:1489
 msgid "Start the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1492
+#: ../lib/init/grass.py:1491
 msgid "When ready to quit enter:"
 msgstr ""
 
-#: ../lib/init/grass.py:1674
+#: ../lib/init/grass.py:1673
 msgid "2D and 3D raster masks present"
 msgstr ""
 
-#: ../lib/init/grass.py:1675
+#: ../lib/init/grass.py:1674
 msgid "Raster mask present"
 msgstr ""
 
-#: ../lib/init/grass.py:1676
+#: ../lib/init/grass.py:1675
 #, fuzzy
 #| msgid "3D raster map <%s> not found"
 msgid "3D raster mask present"
 msgstr "Peta raster 3D <%s> tidak ada"
 
-#: ../lib/init/grass.py:1721
+#: ../lib/init/grass.py:1720
 msgid "Done."
 msgstr ""
 
-#: ../lib/init/grass.py:1723
+#: ../lib/init/grass.py:1722
 msgid "Goodbye from GRASS"
 msgstr ""
 
-#: ../lib/init/grass.py:1784
+#: ../lib/init/grass.py:1783
 msgid "Please install the GRASS development package"
 msgstr ""
 
-#: ../lib/init/grass.py:1830
+#: ../lib/init/grass.py:1829
 #, python-format
 msgid "Parameter <%s> not supported"
 msgstr ""
 
-#: ../lib/init/grass.py:1879
+#: ../lib/init/grass.py:1878
 #, python-format
 msgid "use mapset %(metavar)s"
 msgstr ""
 
-#: ../lib/init/grass.py:1885
+#: ../lib/init/grass.py:1884
 #, python-format
 msgid "use temporary mapset in project %(metavar)s"
 msgstr ""
 
-#: ../lib/init/grass.py:1893
+#: ../lib/init/grass.py:1892
 msgid "path to mapset (or project if creating one)"
 msgstr ""
 
-#: ../lib/init/grass.py:1896
+#: ../lib/init/grass.py:1895
 msgid "use temporary mapset"
 msgstr ""
 
-#: ../lib/init/grass.py:1903
+#: ../lib/init/grass.py:1902
 #, python-format
 msgid "use temporary project with %(metavar)s (EPSG, georeferenced file, ...)"
 msgstr ""
 
-#: ../lib/init/grass.py:1917
+#: ../lib/init/grass.py:1916
 msgid "mapset locking timeout in seconds"
 msgstr ""
 
-#: ../lib/init/grass.py:1923
+#: ../lib/init/grass.py:1922
 msgid "remove lock if present"
 msgstr ""
 
-#: ../lib/init/grass.py:1937
+#: ../lib/init/grass.py:1936
 msgid "Option --tmp-location is deprecated, use --tmp-project instead\n"
 msgstr ""
 
-#: ../lib/init/grass.py:1982
+#: ../lib/init/grass.py:1981
 msgid "execute module or script (followed by executable with arguments)"
 msgstr ""
 
-#: ../lib/init/grass.py:2044
+#: ../lib/init/grass.py:2043
 msgid "Flag -e requires also flag -c"
 msgstr ""
 
-#: ../lib/init/grass.py:2046
+#: ../lib/init/grass.py:2045
 msgid "Flag -c requires name of project or mapset"
 msgstr ""
 
-#: ../lib/init/grass.py:2049
+#: ../lib/init/grass.py:2048
 msgid "Either --tmp-project or --tmp-mapset can be used, not both"
 msgstr ""
 
-#: ../lib/init/grass.py:2056
+#: ../lib/init/grass.py:2055
 msgid "Coordinate reference system argument (e.g. EPSG) is needed for --tmp-project"
 msgstr ""
 
-#: ../lib/init/grass.py:2063
+#: ../lib/init/grass.py:2062
 msgid "Only one argument (e.g. EPSG) is needed for --tmp-project, mapset name <{}> provided"
 msgstr ""
 
-#: ../lib/init/grass.py:2283
+#: ../lib/init/grass.py:2282
 #, python-brace-format
 msgid ""
 "Unable to start GRASS. You have the choice to:\n"
@@ -4039,24 +4039,24 @@ msgid ""
 "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 msgstr ""
 
-#: ../lib/init/grass.py:2304
+#: ../lib/init/grass.py:2303
 msgid "Starting GRASS..."
 msgstr ""
 
-#: ../lib/init/grass.py:2353
+#: ../lib/init/grass.py:2352
 msgid "Failed to start GRASS, grassdata directory cannot be found or created."
 msgstr ""
 
-#: ../lib/init/grass.py:2360
+#: ../lib/init/grass.py:2359
 msgid "Failed to start GRASS, no default project to copy in the installation or copying failed."
 msgstr ""
 
-#: ../lib/init/grass.py:2465
+#: ../lib/init/grass.py:2464
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr ""
 
-#: ../lib/init/grass.py:2503
+#: ../lib/init/grass.py:2502
 #, python-format
 msgid "Failed to start shell '%s'"
 msgstr ""

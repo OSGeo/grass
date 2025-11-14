@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_uk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 17:24+0000\n"
+"POT-Creation-Date: 2025-11-08 19:01+0000\n"
 "PO-Revision-Date: 2025-07-26 01:37+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Ukrainian <https://weblate.osgeo.org/projects/grass-gis/grassmods/uk/>\n"
@@ -4210,7 +4210,7 @@ msgstr ""
 msgid "Redraws the content of currently selected monitor."
 msgstr ""
 
-#: ../display/d.redraw/main.c:49 ../scripts/d.frame/d.frame.py:282
+#: ../display/d.redraw/main.c:49 ../scripts/d.frame/d.frame.py:283
 #: ../scripts/d.out.file/d.out.file.py:58 ../scripts/d.to.rast/d.to.rast.py:44
 #: ../scripts/d.what.rast/d.what.rast.py:44
 #: ../scripts/d.what.vect/d.what.vect.py:44
@@ -5311,7 +5311,7 @@ msgstr ""
 #: ../scripts/d.polar/d.polar.py:58 ../scripts/d.rast.leg/d.rast.leg.py:95
 #: ../scripts/d.rast.leg/d.rast.leg.py:99
 #: ../scripts/r.buffer.lowmem/r.buffer.lowmem.py:85
-#: ../scripts/r.fillnulls/r.fillnulls.py:152 ../scripts/r.grow/r.grow.py:117
+#: ../scripts/r.fillnulls/r.fillnulls.py:152 ../scripts/r.grow/r.grow.py:120
 #: ../scripts/r.mask/r.mask.py:151 ../scripts/r.pack/r.pack.py:74
 #: ../scripts/r.reclass.area/r.reclass.area.py:101
 #: ../scripts/r.reclass.area/r.reclass.area.py:222 ../scripts/r.rgb/r.rgb.py:55
@@ -23223,12 +23223,12 @@ msgstr ""
 msgid "Unknown error for function '%s'"
 msgstr ""
 
-#: ../raster/r.mapcalc/evaluate.c:398
+#: ../raster/r.mapcalc/evaluate.c:400
 #, c-format
 msgid "output map <%s> exists. To overwrite, use the --overwrite flag"
 msgstr ""
 
-#: ../raster/r.mapcalc/evaluate.c:451
+#: ../raster/r.mapcalc/evaluate.c:452
 #, c-format
 msgid "The number of rows is less than the number of threads. Set the number of threads to be the same as the rows = %d."
 msgstr ""
@@ -25235,7 +25235,7 @@ msgstr ""
 msgid "Checking project <%s> mapset <%s>"
 msgstr ""
 
-#: ../raster/r.proj/main.c:383 ../scripts/d.frame/d.frame.py:311
+#: ../raster/r.proj/main.c:383 ../scripts/d.frame/d.frame.py:312
 #: ../vector/v.edit/main.c:89 ../vector/v.external/main.c:109
 #: ../vector/v.in.ogr/main.c:454 ../vector/v.net/args.c:150
 #: ../vector/v.net/args.c:156 ../vector/v.net/args.c:162
@@ -33095,36 +33095,36 @@ msgstr ""
 msgid "At least 2 maps are required"
 msgstr ""
 
-#: ../scripts/d.frame/d.frame.py:96 ../scripts/d.frame/d.frame.py:127
+#: ../scripts/d.frame/d.frame.py:97 ../scripts/d.frame/d.frame.py:128
 #, python-format
 msgid "Unable to get monitor info. %s"
 msgstr ""
 
-#: ../scripts/d.frame/d.frame.py:113
+#: ../scripts/d.frame/d.frame.py:114
 msgid "Unable to get monitor info"
 msgstr ""
 
-#: ../scripts/d.frame/d.frame.py:210
+#: ../scripts/d.frame/d.frame.py:211
 #, python-format
 msgid "Invalid frame position: %s"
 msgstr ""
 
-#: ../scripts/d.frame/d.frame.py:245
+#: ../scripts/d.frame/d.frame.py:246
 #, python-format
 msgid "Invalid monitor size: %dx%d"
 msgstr ""
 
-#: ../scripts/d.frame/d.frame.py:304
+#: ../scripts/d.frame/d.frame.py:305
 #, python-format
 msgid "Frame <%s> doesn't exist, exiting. To create a new frame use '-c' flag."
 msgstr ""
 
-#: ../scripts/d.frame/d.frame.py:316
+#: ../scripts/d.frame/d.frame.py:317
 #, python-format
 msgid "Frame <%s> already exists and will be overwritten"
 msgstr ""
 
-#: ../scripts/d.frame/d.frame.py:322
+#: ../scripts/d.frame/d.frame.py:323
 #, python-format
 msgid "Frame <%s> already found. An existing frame can be overwritten by '%s' flag."
 msgstr ""
@@ -33832,20 +33832,20 @@ msgstr ""
 msgid "Flags -%c and -%c are mutually exclusive"
 msgstr ""
 
-#: ../scripts/g.search.modules/g.search.modules.py:177
+#: ../scripts/g.search.modules/g.search.modules.py:178
 msgid "Cannot colorize, python-termcolor is not installed"
 msgstr ""
 
-#: ../scripts/i.image.mosaic/i.image.mosaic.py:68
+#: ../scripts/i.image.mosaic/i.image.mosaic.py:71
 msgid "Do not forget to set region properly to cover all images."
 msgstr ""
 
-#: ../scripts/i.image.mosaic/i.image.mosaic.py:80
+#: ../scripts/i.image.mosaic/i.image.mosaic.py:83
 #, python-format
 msgid "Mosaicing %d images..."
 msgstr ""
 
-#: ../scripts/i.image.mosaic/i.image.mosaic.py:92
+#: ../scripts/i.image.mosaic/i.image.mosaic.py:97
 #, python-format
 msgid "Done. Raster map <%s> created."
 msgstr ""
@@ -34135,20 +34135,20 @@ msgstr ""
 msgid "Projection transform probably failed, please investigate"
 msgstr ""
 
-#: ../scripts/r.blend/r.blend.py:63
+#: ../scripts/r.blend/r.blend.py:66
 #, python-format
 msgid "Raster map <%s> already exists."
 msgstr ""
 
-#: ../scripts/r.blend/r.blend.py:71
+#: ../scripts/r.blend/r.blend.py:74
 msgid "Calculating the three component maps..."
 msgstr ""
 
-#: ../scripts/r.blend/r.blend.py:128
+#: ../scripts/r.blend/r.blend.py:139
 msgid "Done. Use the following command to visualize the result:"
 msgstr ""
 
-#: ../scripts/r.blend/r.blend.py:129
+#: ../scripts/r.blend/r.blend.py:140
 #, python-format
 msgid "d.rgb r=%s.r g=%s.g b=%s.b"
 msgstr ""
@@ -34261,15 +34261,15 @@ msgstr ""
 msgid "Following holes where not filled. Temporary maps with are left in place to allow examination of unfilled holes"
 msgstr ""
 
-#: ../scripts/r.grow/r.grow.py:124
+#: ../scripts/r.grow/r.grow.py:127
 msgid "Output can be written only to the current mapset"
 msgstr ""
 
-#: ../scripts/r.grow/r.grow.py:139
+#: ../scripts/r.grow/r.grow.py:142
 msgid "Growing failed. Removing temporary maps."
 msgstr ""
 
-#: ../scripts/r.grow/r.grow.py:162
+#: ../scripts/r.grow/r.grow.py:166
 msgid "Shrinking failed. Removing temporary maps."
 msgstr ""
 
@@ -34285,7 +34285,7 @@ msgstr ""
 msgid "Please provide the resolution for the imported dataset or change to 'estimated' resolution"
 msgstr ""
 
-#: ../scripts/r.import/r.import.py:208 ../scripts/v.import/v.import.py:229
+#: ../scripts/r.import/r.import.py:208 ../scripts/v.import/v.import.py:230
 #, python-format
 msgid "Input <%s> successfully imported without reprojection"
 msgstr ""
@@ -34295,12 +34295,12 @@ msgstr ""
 msgid "Unable to import GDAL dataset <%s>"
 msgstr ""
 
-#: ../scripts/r.import/r.import.py:224 ../scripts/v.import/v.import.py:245
+#: ../scripts/r.import/r.import.py:224 ../scripts/v.import/v.import.py:246
 #, python-format
 msgid "Coordinate reference system not available for current project <%s>"
 msgstr ""
 
-#: ../scripts/r.import/r.import.py:237 ../scripts/v.import/v.import.py:264
+#: ../scripts/r.import/r.import.py:237 ../scripts/v.import/v.import.py:265
 #, python-format
 msgid "Creating temporary project for <%s>..."
 msgstr ""
@@ -34310,7 +34310,7 @@ msgstr ""
 msgid "Unable to read GDAL dataset <%s>"
 msgstr ""
 
-#: ../scripts/r.import/r.import.py:273 ../scripts/v.import/v.import.py:310
+#: ../scripts/r.import/r.import.py:273 ../scripts/v.import/v.import.py:311
 #, python-format
 msgid "Coordinate reference system not available for input <%s>"
 msgstr ""
@@ -34332,7 +34332,7 @@ msgstr ""
 msgid "Please check the 'extent' parameter"
 msgstr ""
 
-#: ../scripts/r.import/r.import.py:393 ../scripts/v.import/v.import.py:337
+#: ../scripts/r.import/r.import.py:393 ../scripts/v.import/v.import.py:338
 msgid "Unable to reproject to source project"
 msgstr ""
 
@@ -34351,7 +34351,7 @@ msgstr ""
 msgid "Using current region resolution for input band <{out}>: nsres={ns}, ewres={ew}"
 msgstr ""
 
-#: ../scripts/r.import/r.import.py:447 ../scripts/v.import/v.import.py:386
+#: ../scripts/r.import/r.import.py:447 ../scripts/v.import/v.import.py:387
 #, python-format
 msgid "Reprojecting <%s>..."
 msgstr ""
@@ -34621,7 +34621,7 @@ msgid ""
 msgstr ""
 
 #: ../scripts/r.in.wms/wms_drv.py:32 ../scripts/r.in.wms/wms_gdal_drv.py:25
-#: ../scripts/v.import/v.import.py:274 ../scripts/v.import/v.import.py:354
+#: ../scripts/v.import/v.import.py:275 ../scripts/v.import/v.import.py:355
 msgid "Unable to load GDAL Python bindings (requires package 'python-gdal' being installed)"
 msgstr ""
 
@@ -34767,11 +34767,11 @@ msgstr ""
 msgid "Incorrect WMS query"
 msgstr ""
 
-#: ../scripts/r.mapcalc.simple/r.mapcalc.simple.py:107
+#: ../scripts/r.mapcalc.simple/r.mapcalc.simple.py:109
 msgid "The expression is an empty string"
 msgstr ""
 
-#: ../scripts/r.mapcalc.simple/r.mapcalc.simple.py:141
+#: ../scripts/r.mapcalc.simple/r.mapcalc.simple.py:143
 msgid "Expression: {}"
 msgstr ""
 
@@ -34864,11 +34864,11 @@ msgstr ""
 msgid "Packing <%s> to <%s>..."
 msgstr ""
 
-#: ../scripts/r.pack/r.pack.py:161
+#: ../scripts/r.pack/r.pack.py:160
 msgid "No raster map components found"
 msgstr ""
 
-#: ../scripts/r.pack/r.pack.py:200
+#: ../scripts/r.pack/r.pack.py:199
 #, python-format
 msgid "Raster map saved to '%s'"
 msgstr ""
@@ -35495,37 +35495,37 @@ msgid ""
 "{error}"
 msgstr ""
 
-#: ../scripts/v.import/v.import.py:206
+#: ../scripts/v.import/v.import.py:207
 #, python-format
 msgid "Missing value for parameter <%s>"
 msgstr ""
 
-#: ../scripts/v.import/v.import.py:234
+#: ../scripts/v.import/v.import.py:235
 #, python-format
 msgid "Unable to import <%s>"
 msgstr ""
 
-#: ../scripts/v.import/v.import.py:290
+#: ../scripts/v.import/v.import.py:291
 #, python-format
 msgid "Unable to create project from OGR datasource <%s>"
 msgstr ""
 
-#: ../scripts/v.import/v.import.py:344
+#: ../scripts/v.import/v.import.py:345
 #, python-format
 msgid "Importing <%s> ..."
 msgstr ""
 
-#: ../scripts/v.import/v.import.py:364
+#: ../scripts/v.import/v.import.py:365
 #, python-format
 msgid "Unable to import OGR datasource <%s>"
 msgstr ""
 
-#: ../scripts/v.import/v.import.py:379 ../scripts/v.pack/v.pack.py:87
+#: ../scripts/v.import/v.import.py:380 ../scripts/v.pack/v.pack.py:87
 #, python-brace-format
 msgid "option <{key}>: <{value}> exists."
 msgstr ""
 
-#: ../scripts/v.import/v.import.py:396
+#: ../scripts/v.import/v.import.py:397
 #, python-format
 msgid "Unable to to reproject vector <%s>"
 msgstr ""
@@ -35593,25 +35593,25 @@ msgstr ""
 msgid "Not enough data columns. (incorrect fs setting?)"
 msgstr ""
 
-#: ../scripts/v.in.mapgen/v.in.mapgen.py:74
+#: ../scripts/v.in.mapgen/v.in.mapgen.py:75
 #, python-format
 msgid "Input file <%s> not found"
 msgstr ""
 
-#: ../scripts/v.in.mapgen/v.in.mapgen.py:89 ../scripts/v.in.wfs/v.in.wfs.py:216
+#: ../scripts/v.in.mapgen/v.in.mapgen.py:90 ../scripts/v.in.wfs/v.in.wfs.py:216
 msgid "Importing data..."
 msgstr ""
 
-#: ../scripts/v.in.mapgen/v.in.mapgen.py:128
+#: ../scripts/v.in.mapgen/v.in.mapgen.py:129
 #, python-format
 msgid "An error occurred on line '%s', exiting."
 msgstr ""
 
-#: ../scripts/v.in.mapgen/v.in.mapgen.py:196
+#: ../scripts/v.in.mapgen/v.in.mapgen.py:197
 msgid "Importing with v.in.ascii..."
 msgstr ""
 
-#: ../scripts/v.in.mapgen/v.in.mapgen.py:202
+#: ../scripts/v.in.mapgen/v.in.mapgen.py:203
 #, python-format
 msgid "An error occurred on creating \"%s\", please check"
 msgstr ""

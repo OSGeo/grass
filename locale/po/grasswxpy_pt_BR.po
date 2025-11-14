@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 17:24+0000\n"
+"POT-Creation-Date: 2025-11-08 19:01+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/pt_BR/>\n"
@@ -1296,7 +1296,7 @@ msgstr "Erro de sintaxe: %s"
 msgid "Vector map <%(map)s>: %(msg)s\n"
 msgstr "Mapa vetorial <%(map)s>: %(msg)s\n"
 
-#: ../gui/wxpython/core/utils.py:839
+#: ../gui/wxpython/core/utils.py:840
 #, python-format
 msgid ""
 "%s: line skipped - unable to parse '%s'\n"
@@ -1305,24 +1305,24 @@ msgstr ""
 "%s: linha pulada - não foi possível interpretar '%s'\n"
 "Motivo: %s\n"
 
-#: ../gui/wxpython/core/utils.py:845
+#: ../gui/wxpython/core/utils.py:846
 #, python-format
 msgid "Duplicated key: %s\n"
 msgstr "Chave duplicada: %s\n"
 
-#: ../gui/wxpython/core/utils.py:849
+#: ../gui/wxpython/core/utils.py:850
 #, fuzzy, python-brace-format
 #| msgid "Unable to open file '%s'\n"
 msgid "Unable to open file '{name}': {error}\n"
 msgstr "Não foi possível abrir o arquivo '%s'\n"
 
-#: ../gui/wxpython/core/utils.py:874
+#: ../gui/wxpython/core/utils.py:875
 #, fuzzy, python-brace-format
 #| msgid "Unable to create file '%s'\n"
 msgid "Unable to create file '{name}': {error}\n"
 msgstr "Não foi possível criar o arquivo '%s'\n"
 
-#: ../gui/wxpython/core/utils.py:948 ../gui/wxpython/gui_core/forms.py:1913
+#: ../gui/wxpython/core/utils.py:949 ../gui/wxpython/gui_core/forms.py:1913
 msgid "Select Color"
 msgstr "Selecione uma cor"
 
@@ -2329,7 +2329,7 @@ msgid "&Create table"
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/base.py:3305
-#: ../gui/wxpython/web_services/dialogs.py:533
+#: ../gui/wxpython/web_services/dialogs.py:534
 msgid "&Add layer"
 msgstr ""
 
@@ -3087,8 +3087,8 @@ msgstr "Aplicar e salvar as alterações no arquivo de configurações do usuár
 #: ../gui/wxpython/modules/import_export.py:762
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2000
 #: ../gui/wxpython/vnet/dialogs.py:1331
-#: ../gui/wxpython/web_services/dialogs.py:152
-#: ../gui/wxpython/web_services/dialogs.py:906
+#: ../gui/wxpython/web_services/dialogs.py:153
+#: ../gui/wxpython/web_services/dialogs.py:907
 msgid "Close dialog"
 msgstr "Fechar diálogo"
 
@@ -5135,7 +5135,7 @@ msgid "No table linked to layer <{}>."
 msgstr "Nenhuma tabela vinculada à camada <{}>."
 
 #: ../gui/wxpython/gui_core/gselect.py:1244
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1015
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1017
 msgid "Choose GIS Data Directory"
 msgstr "Escolha o Diretório de Dados GIS"
 
@@ -5244,7 +5244,7 @@ msgid "No settings available"
 msgstr "Nenhuma configuração disponível"
 
 #: ../gui/wxpython/gui_core/gselect.py:2066
-#: ../gui/wxpython/web_services/dialogs.py:301
+#: ../gui/wxpython/web_services/dialogs.py:302
 msgid "No data source defined, settings are not saved."
 msgstr ""
 
@@ -6183,7 +6183,7 @@ msgid "Name <%(name)s> is not a valid name for GRASS map. Please use only ASCII 
 msgstr "Nome <%(name)s> não é um nome válido para o mapa GRASS. Use apenas caracteres ASCII excluindo %(chars)s e espaço."
 
 #: ../gui/wxpython/gui_core/widgets.py:888
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1184
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1186
 #: ../gui/wxpython/location_wizard/wizard.py:300
 #: ../gui/wxpython/modules/import_export.py:268
 msgid "Invalid name"
@@ -6278,7 +6278,7 @@ msgid "Apply"
 msgstr "Aplicar"
 
 #: ../gui/wxpython/gui_core/wrap.py:296
-#: ../gui/wxpython/web_services/dialogs.py:689
+#: ../gui/wxpython/web_services/dialogs.py:690
 msgid "&Apply"
 msgstr ""
 
@@ -7022,7 +7022,7 @@ msgid "New mapset:"
 msgstr "Novo mapset:"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:632
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1032
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1034
 #: ../gui/wxpython/startup/guiutils.py:134
 msgid "Create new mapset"
 msgstr "Criar novo mapset:"
@@ -7161,21 +7161,21 @@ msgstr "Erro Unicode detectado. Verifique suas configurações de locais. Detalh
 msgid "No GRASS Location found in '%s'. Create a new Location or choose different GRASS database directory."
 msgstr "Nenhuma Location GRASS encontrada em '%s'. Crie uma nova Location ou escolha um diretório de banco de dados GRASS diferente."
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1001
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1003
 #, python-format
 msgid "Path '%s' doesn't exist."
 msgstr "Caminho '%s' não existe."
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1031
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1033
 msgid "Enter name for new mapset:"
 msgstr "Insira nome para novo mapset:"
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1043
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1045
 #, python-format
 msgid "Mapset <%s> already exists."
 msgstr "Mapset <%s> já existe"
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1050
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1052
 #, python-format
 msgid ""
 "Mapset <%s> is reserved for direct read access to OGR layers. Please consider to use another name for your mapset.\n"
@@ -7186,16 +7186,16 @@ msgstr ""
 "\n"
 "Tem certeza de que deseja criar este mapset?"
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1056
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1058
 msgid "Reserved mapset name"
 msgstr "Nome do mapset reservado"
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1084
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1086
 #, python-format
 msgid "Unable to create new mapset: %s"
 msgstr "Não é possível criar novo mapset: %s"
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1100
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1102
 #, python-format
 msgid ""
 "GRASS is already running in selected mapset <%(mapset)s>\n"
@@ -7212,12 +7212,12 @@ msgstr ""
 "\n"
 "Quer tentar remover .gislock (observe que você precisa de permissão para esta operação) e continuar?"
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1107
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1124
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1109
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1126
 msgid "Lock file found"
 msgstr "Arquivo de bloqueio encontrado"
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1119
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1121
 msgid ""
 "ARE YOU REALLY SURE?\n"
 "\n"
@@ -7227,7 +7227,7 @@ msgstr ""
 "\n"
 "Se você realmente estiver executando outra sessão do GRASS, fazer isso pode corromper seus dados. Dê uma outra olhada no gerenciador do processador para ter certeza..."
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1136
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1138
 #, python-format
 msgid ""
 "Unable to remove '%(lock)s'.\n"
@@ -7238,12 +7238,12 @@ msgstr ""
 "\n"
 "Detalhes: %(reason)s"
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1180
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1182
 #, python-format
 msgid "Name <%(name)s> is not a valid name for location or mapset. Please use only ASCII characters excluding %(chars)s and space."
 msgstr "Nome <%(name)s> não é um nome válido para location ou mapset. Use apenas caracteres ASCII excluindo %(chars)s e espaço."
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1257
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1259
 msgid "GRASS needs a directory (GRASS database) in which to store its data. Create one now if you have not already done so. A popular choice is \"grassdata\", located in your home directory. Press Browse button to select the directory."
 msgstr "GRASS precisa de um diretório (banco de dados GRASS) para armazenar seus dados. Crie um agora, se ainda não o fez. Uma escolha popular é \"grassdata\", localizado em seu diretório inicial. Pressione o botão Procurar para selecionar o diretório."
 
@@ -8867,12 +8867,12 @@ msgstr "Código EPSG ausente."
 msgid "IAU code missing."
 msgstr "Código IAU ausente."
 
-#: ../gui/wxpython/location_wizard/wizard.py:2736
+#: ../gui/wxpython/location_wizard/wizard.py:2737
 #, python-format
 msgid "File <%s> not found."
 msgstr "Arquivo <%s> não encontrado."
 
-#: ../gui/wxpython/location_wizard/wizard.py:2746
+#: ../gui/wxpython/location_wizard/wizard.py:2747
 msgid "WKT string missing."
 msgstr ""
 
@@ -9118,7 +9118,7 @@ msgid "Display extent"
 msgstr "Geometria de exibição"
 
 #: ../gui/wxpython/mapdisp/statusbar.py:939
-#: ../gui/wxpython/web_services/dialogs.py:874
+#: ../gui/wxpython/web_services/dialogs.py:875
 msgid "Computational region"
 msgstr "Região computacional"
 
@@ -11243,7 +11243,7 @@ msgid "Close dialog and apply changes"
 msgstr "Fechar a caixa de diálogo e aplicar as alterações"
 
 #: ../gui/wxpython/psmap/dialogs.py:600 ../gui/wxpython/vdigit/dialogs.py:168
-#: ../gui/wxpython/web_services/dialogs.py:690
+#: ../gui/wxpython/web_services/dialogs.py:691
 msgid "Apply changes"
 msgstr "Aplicar alterações"
 
@@ -13669,7 +13669,7 @@ msgid "Ignore changes and close dialog"
 msgstr "Ignorar alterações e fechar caixa de diálogo"
 
 #: ../gui/wxpython/vdigit/dialogs.py:172
-#: ../gui/wxpython/web_services/dialogs.py:695
+#: ../gui/wxpython/web_services/dialogs.py:696
 msgid "Apply changes and close dialog"
 msgstr "Aplicar alterações e fechar caixa de diálogo"
 
@@ -14803,148 +14803,148 @@ msgstr "Valor inválido inserido. Operação cancelada."
 msgid "Edit point"
 msgstr "Editar ponto"
 
-#: ../gui/wxpython/web_services/dialogs.py:105
+#: ../gui/wxpython/web_services/dialogs.py:106
 msgid " Server settings "
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:108
+#: ../gui/wxpython/web_services/dialogs.py:109
 msgid "Server:"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:111
+#: ../gui/wxpython/web_services/dialogs.py:112
 msgid "&Connect"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:112
+#: ../gui/wxpython/web_services/dialogs.py:113
 msgid "Connect to the server"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:116
+#: ../gui/wxpython/web_services/dialogs.py:117
 msgid "Show advanced connection settings"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:117
+#: ../gui/wxpython/web_services/dialogs.py:118
 msgid "Hide advanced connection settings"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:134
+#: ../gui/wxpython/web_services/dialogs.py:135
 msgid " Layer Manager Settings "
 msgstr " Configurações do gerenciador de camada "
 
-#: ../gui/wxpython/web_services/dialogs.py:138
+#: ../gui/wxpython/web_services/dialogs.py:139
 msgid "Output layer name:"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:264
+#: ../gui/wxpython/web_services/dialogs.py:265
 msgid "Username:"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:267
+#: ../gui/wxpython/web_services/dialogs.py:268
 msgid "Password:"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:379
+#: ../gui/wxpython/web_services/dialogs.py:380
 #, python-format
 msgid "Connecting to <%s>..."
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:447
+#: ../gui/wxpython/web_services/dialogs.py:448
 msgid "Available web services"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:462
+#: ../gui/wxpython/web_services/dialogs.py:463
 #, python-format
 msgid "Connected to <%s>"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:469
+#: ../gui/wxpython/web_services/dialogs.py:470
 #, python-format
 msgid "Unable to connect to <%s>"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:524
+#: ../gui/wxpython/web_services/dialogs.py:525
 msgid "Add web service layer"
 msgstr "Adicionar camada de serviço da web"
 
-#: ../gui/wxpython/web_services/dialogs.py:535
+#: ../gui/wxpython/web_services/dialogs.py:536
 msgid "Add selected web service layers as map layer into layer tree"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:645
+#: ../gui/wxpython/web_services/dialogs.py:646
 msgid "Web service layer properties"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:694
+#: ../gui/wxpython/web_services/dialogs.py:695
 msgid "&OK"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:854
+#: ../gui/wxpython/web_services/dialogs.py:855
 msgid "Name for output raster map:"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:865
+#: ../gui/wxpython/web_services/dialogs.py:866
 msgid "Export region"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:871
+#: ../gui/wxpython/web_services/dialogs.py:872
 msgid "Map display"
 msgstr "Mostrar mapa"
 
-#: ../gui/wxpython/web_services/dialogs.py:876
+#: ../gui/wxpython/web_services/dialogs.py:877
 msgid "Named region"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:878
+#: ../gui/wxpython/web_services/dialogs.py:879
 msgid "Extent and resolution are based on Map Display geometry."
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:881
+#: ../gui/wxpython/web_services/dialogs.py:882
 msgid "Extent and resolution are based on computational region."
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:884
+#: ../gui/wxpython/web_services/dialogs.py:885
 msgid "Extent and resolution are based on named region."
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:889
+#: ../gui/wxpython/web_services/dialogs.py:890
 msgid "Overwrite existing raster map"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:894
+#: ../gui/wxpython/web_services/dialogs.py:895
 msgid "Choose named region:"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:908
+#: ../gui/wxpython/web_services/dialogs.py:909
 msgid "&Save layer"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:909
+#: ../gui/wxpython/web_services/dialogs.py:910
 msgid "Save web service layer as raster map"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:1015
+#: ../gui/wxpython/web_services/dialogs.py:1016
 msgid "Missing output raster."
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:1018
+#: ../gui/wxpython/web_services/dialogs.py:1019
 msgid "Output map can be added only to current mapset."
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:1024
+#: ../gui/wxpython/web_services/dialogs.py:1025
 #, python-format
 msgid "Output map <%s> already exists"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:1043
+#: ../gui/wxpython/web_services/dialogs.py:1044
 #, python-format
 msgid "Region <%s> does not exist."
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:1071
+#: ../gui/wxpython/web_services/dialogs.py:1072
 msgid "Downloading data..."
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:1092
+#: ../gui/wxpython/web_services/dialogs.py:1093
 msgid "Unable to fetch data.\n"
 msgstr ""
 
