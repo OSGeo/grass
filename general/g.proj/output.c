@@ -32,6 +32,10 @@
 static int check_xy(enum OutputFormat);
 static void print_json(G_JSON_Value *);
 
+#if PROJ_VERSION_MAJOR >= 6
+static void print_projjson(void);
+#endif
+
 /* print projection information gathered from one of the possible inputs
  * in GRASS format */
 void print_projinfo(enum OutputFormat format)
@@ -43,6 +47,13 @@ void print_projinfo(enum OutputFormat format)
     if (check_xy(format))
         return;
 
+#if PROJ_VERSION_MAJOR >= 6
+    if (format == JSON) {
+        print_projjson();
+
+        return;
+    }
+#endif
     if (format == PLAIN)
         fprintf(
             stdout,
@@ -77,7 +88,6 @@ void print_projinfo(enum OutputFormat format)
         }
     }
 
-    /* TODO: use projsrid instead */
     if (projsrid) {
         switch (format) {
         case PLAIN:
@@ -375,7 +385,6 @@ static int check_xy(enum OutputFormat format)
         return 0;
 }
 
-/* TODO: use proj_as_projjson() from proj */
 void print_json(G_JSON_Value *value)
 {
     char *serialized_string = G_json_serialize_to_string_pretty(value);
@@ -387,3 +396,60 @@ void print_json(G_JSON_Value *value)
     G_json_free_serialized_string(serialized_string);
     G_json_value_free(value);
 }
+
+#if PROJ_VERSION_MAJOR >= 6
+void print_projjson(void)
+{
+    /* PROJ6+: create a PJ object from wkt or srid,
+     * then get PROJJSON using PROJ API */
+    const char *projstr = NULL;
+    PJ *obj = NULL;
+
+    if (check_xy(PLAIN))
+        return;
+
+    if (projwkt) {
+        obj = proj_create_from_wkt(NULL, projwkt, NULL, NULL, NULL);
+    }
+    if (!obj && projsrid) {
+        obj = proj_create(NULL, projsrid);
+    }
+    if (!obj && projepsg) {
+        int epsg_num;
+        char *buf = NULL;
+
+        epsg_num = atoi(G_find_key_value("epsg", projepsg));
+        if (epsg_num) {
+            G_asprintf(&buf, "EPSG:%d", epsg_num);
+            obj = proj_create(NULL, buf);
+            G_free(buf);
+        }
+    }
+    if (!obj) {
+        char *outwkt;
+
+        outwkt = GPJ_grass_to_wkt(projinfo, projunits, 0, 0);
+        /* datum info might be incomplete or incorrect */
+        if (outwkt) {
+            obj = proj_create_from_wkt(NULL, projwkt, NULL, NULL, NULL);
+            G_free(outwkt);
+        }
+    }
+    if (obj) {
+        projstr = proj_as_projjson(NULL, obj, NULL);
+
+        if (projstr)
+            projstr = G_store(projstr);
+        proj_destroy(obj);
+    }
+
+    if (projstr) {
+        fprintf(stdout, "%s\n", projstr);
+        G_free((char *)projstr);
+    }
+    else
+        G_warning(_("Unable to convert to PROJJSON"));
+
+    return;
+}
+#endif
