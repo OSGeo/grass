@@ -888,6 +888,7 @@ build_program_in_subdir(
   grass_vector
   ${LIBM}
   PRIMARY_DEPENDS
+  PROJ::proj
   GDAL::GDAL)
 
 build_program_in_subdir(
@@ -901,6 +902,7 @@ build_program_in_subdir(
   grass_vector
   PROJ::proj
   PRIMARY_DEPENDS
+  PROJ::proj
   GDAL::GDAL
   OPTIONAL_DEPENDS
   PostgreSQL::PostgreSQL)
