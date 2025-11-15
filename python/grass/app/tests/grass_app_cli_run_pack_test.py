@@ -28,9 +28,9 @@ def test_run_with_crs_as_pack_as_input(pack_raster_file4x5_rows):
     )  # because we don't set the computational region
 
 
-@pytest.mark.parametrize("crs", ["EPSG:3358", "EPSG:4326"])
+@pytest.mark.parametrize("epsg_code", [3358, 4326])
 @pytest.mark.parametrize("extension", [".grass_raster", ".grr", ".rpack"])
-def test_run_with_crs_as_pack_as_output(tmp_path, crs, extension):
+def test_run_with_crs_as_pack_as_output(tmp_path, epsg_code, extension):
     """Check outputting pack with different CRSs and extensions"""
     raster = tmp_path / f"test{extension}"
     subprocess.run(
@@ -40,7 +40,7 @@ def test_run_with_crs_as_pack_as_output(tmp_path, crs, extension):
             "grass.app",
             "run",
             "--crs",
-            crs,
+            f"EPSG:{epsg_code}",
             "r.mapcalc.simple",
             "expression=row() + col()",
             f"output={raster}",
@@ -65,7 +65,8 @@ def test_run_with_crs_as_pack_as_output(tmp_path, crs, extension):
         text=True,
         check=True,
     )
-    assert json.loads(result.stdout)["srid"] == crs
+    assert json.loads(result.stdout)["id"]["authority"] == "EPSG"
+    assert json.loads(result.stdout)["id"]["code"] == epsg_code
 
 
 def test_run_with_crs_as_pack_with_multiple_steps(tmp_path):
