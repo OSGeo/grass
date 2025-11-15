@@ -120,6 +120,9 @@ class GProjTestCase(TestCase):
         self.assertModule(module)
         result = json.loads(module.outputs.stdout)
         self.assertEqual("ProjectedCRS", result["type"])
+        # the base GEOGCRS must be "NAD83(HARN)" with corresponding EPSG code
+        self.assertEqual("EPSG", result["base_crs"]["id"]["authority"])
+        self.assertEqual(4152, result["base_crs"]["id"]["code"])
 
 
 if __name__ == "__main__":
