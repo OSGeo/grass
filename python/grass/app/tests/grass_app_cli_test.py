@@ -63,8 +63,9 @@ def test_subcommand_run_tool_failure_run():
 def test_subcommand_run_with_crs_as_epsg(capfd):
     """Check that CRS provided as EPSG is applied"""
     assert main(["run", "--crs", "EPSG:3358", "g.proj", "-p", "format=json"]) == 0
-    assert json.loads(capfd.readouterr().out)["id"]["authority"] == "EPSG"
-    assert json.loads(capfd.readouterr().out)["id"]["code"] == 3358
+    result_dict = json.loads(capfd.readouterr().out)
+    assert result_dict["id"]["authority"] == "EPSG"
+    assert result_dict["id"]["code"] == 3358
 
 
 def test_subcommand_run_with_crs_as_epsg_subprocess():
@@ -85,8 +86,9 @@ def test_subcommand_run_with_crs_as_epsg_subprocess():
         text=True,
         check=True,
     )
-    assert json.loads(result.stdout)["id"]["authority"] == "EPSG"
-    assert json.loads(result.stdout)["id"]["code"] == 3358
+    result_dict = json.loads(result.stdout)
+    assert result_dict["id"]["authority"] == "EPSG"
+    assert result_dict["id"]["code"] == 3358
 
 
 @pytest.mark.skipif(
@@ -107,8 +109,9 @@ def test_subcommand_run_with_crs_as_pack(pack_raster_file4x5_rows, capfd):
         )
         == 0
     )
-    assert json.loads(capfd.readouterr().out)["id"]["authority"] == "EPSG"
-    assert json.loads(capfd.readouterr().out)["id"]["code"] == 3358
+    result_dict = json.loads(capfd.readouterr().out)
+    assert result_dict["id"]["authority"] == "EPSG"
+    assert result_dict["id"]["code"] == 3358
 
 
 def test_subcommand_run_with_crs_as_pack_subprocess(pack_raster_file4x5_rows, capfd):
@@ -129,8 +132,9 @@ def test_subcommand_run_with_crs_as_pack_subprocess(pack_raster_file4x5_rows, ca
         text=True,
         check=True,
     )
-    assert json.loads(result.stdout)["id"]["authority"] == "EPSG"
-    assert json.loads(result.stdout)["id"]["code"] == 3358
+    result_dict = json.loads(result.stdout)
+    assert result_dict["id"]["authority"] == "EPSG"
+    assert result_dict["id"]["code"] == 3358
 
 
 def test_create_lock_unlock(tmp_path):
@@ -209,8 +213,9 @@ def test_create_mapset(tmp_path):
         text=True,
         check=True,
     )
-    assert json.loads(result.stdout)["id"]["authority"] == "EPSG"
-    assert json.loads(result.stdout)["id"]["code"] == 3358
+    result_dict = json.loads(result.stdout)
+    assert result_dict["id"]["authority"] == "EPSG"
+    assert result_dict["id"]["code"] == 3358
     # And check that we are really using the newly created mapset,
     # so the computational region in the default mapset is different.
     result = subprocess.run(
@@ -273,5 +278,6 @@ def test_create_crs_epsg(tmp_path, epsg_code):
         text=True,
         check=True,
     )
-    assert json.loads(result.stdout)["id"]["authority"] == "EPSG"
-    assert json.loads(result.stdout)["id"]["code"] == epsg_code
+    result_dict = json.loads(result.stdout)
+    assert result_dict["id"]["authority"] == "EPSG"
+    assert result_dict["id"]["code"] == epsg_code

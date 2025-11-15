@@ -23,8 +23,9 @@ def test_path_types(
         gs.setup.init(path, env=os.environ.copy()) as session,
         Tools(session=session) as tools,
     ):
-        assert tools.g_proj(flags="p", format="json")["id"]["authority"] == "EPSG"
-        assert tools.g_proj(flags="p", format="json")["id"]["code"] == 3358
+        result_dict = tools.g_proj(flags="p", format="json")
+        assert result_dict["id"]["authority"] == "EPSG"
+        assert result_dict["id"]["code"] == 3358
 
 
 def test_set_crs_in_xy(tmp_path, pack_raster_file4x5_rows):
@@ -45,8 +46,9 @@ def test_set_crs_in_xy(tmp_path, pack_raster_file4x5_rows):
         gs.setup.init(project, env=os.environ.copy()) as session,
         Tools(session=session) as tools,
     ):
-        assert tools.g_proj(flags="p", format="json")["id"]["authority"] == "EPSG"
-        assert tools.g_proj(flags="p", format="json")["id"]["code"] == 3358
+        result_dict = tools.g_proj(flags="p", format="json")
+        assert result_dict["id"]["authority"] == "EPSG"
+        assert result_dict["id"]["code"] == 3358
         region = tools.g_region(flags="p", format="json")
         assert region["crs"]["type"] == "other"
         assert region["crs"]["type_code"] == 99

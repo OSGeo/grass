@@ -65,8 +65,9 @@ def test_run_with_crs_as_pack_as_output(tmp_path, epsg_code, extension):
         text=True,
         check=True,
     )
-    assert json.loads(result.stdout)["id"]["authority"] == "EPSG"
-    assert json.loads(result.stdout)["id"]["code"] == epsg_code
+    result_dict = json.loads(result.stdout)
+    assert result_dict["id"]["authority"] == "EPSG"
+    assert result_dict["id"]["code"] == epsg_code
 
 
 def test_run_with_crs_as_pack_with_multiple_steps(tmp_path):
