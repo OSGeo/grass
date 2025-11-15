@@ -193,7 +193,7 @@ def main():
     # make a temporary directory
     tmpdir = gs.tempfile()
     gs.try_remove(tmpdir)
-    os.mkdir(tmpdir)
+    Path(tmpdir).mkdir()
     if is_zip:
         shutil.copyfile(zipfile, os.path.join(tmpdir, f"{tile}{suff}.zip"))
     else:

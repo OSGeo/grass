@@ -209,14 +209,11 @@ ignore = [
     "PLW3201", # bad-dunder-method-name
     "PTH100",  # os-path-abspath
     "PTH101",  # os-chmod
-    "PTH102",  # os-mkdir
-    "PTH103",  # os-makedirs
     "PTH104",  # os-rename
     "PTH106",  # os-rmdir
     "PTH107",  # os-remove
     "PTH108",  # os-unlink
     "PTH111",  # os-path-expanduser
-    "PTH112",  # os-path-isdir
     "PTH117",  # os-path-isabs
     "PTH118",  # os-path-join
     "PTH119",  # os-path-basename

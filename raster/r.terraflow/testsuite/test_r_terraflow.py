@@ -26,8 +26,7 @@ class TestTerraflow(TestCase):
 
     def setUp(self):
         """Create input data for steady state groundwater flow computation"""
-        if not Path(self.testdir).exists():
-            os.mkdir(self.testdir)
+        Path(self.testdir).mkdir(exist_ok=True)
 
     def test_univar_mfd(self):
         # compute a steady state groundwater flow

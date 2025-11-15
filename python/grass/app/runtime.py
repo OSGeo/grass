@@ -157,7 +157,7 @@ def get_grass_config_dir_for_version(major_version, minor_version, *, env):
         )
         raise RuntimeError(msg)
 
-    if not os.path.isdir(config_dir):
+    if not Path(config_dir).is_dir():
         msg = (
             f"The {env_dirname} variable points to directory which does"
             " not exist, ask your operating system support"

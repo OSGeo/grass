@@ -218,9 +218,9 @@ def main():
         dbln.close()
         # check if dbf or sqlite directory exists
         if dbconn["driver"] == "dbf" and not Path(mset_dir, "dbf").exists():
-            os.mkdir(os.path.join(mset_dir, "dbf"))
+            Path(mset_dir, "dbf").mkdir()
         elif dbconn["driver"] == "sqlite" and not Path(mset_dir, "sqlite").exists():
-            os.mkdir(os.path.join(mset_dir, "sqlite"))
+            Path(mset_dir, "sqlite").mkdir()
         # for each old connection
         for t in dbnlist:
             # it split the line of each connection, to found layer number and key

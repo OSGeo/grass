@@ -229,7 +229,7 @@ def _createPath(path):
     """Creates path (for toolboxes) if it doesn't exist'"""
     if not Path(path).exists():
         try:
-            os.mkdir(path)
+            Path(path).mkdir()
         except OSError as e:
             # we cannot use GError or similar because the gui doesn't start at
             # all
