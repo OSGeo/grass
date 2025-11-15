@@ -766,6 +766,9 @@ class Settings:
                     "nodata": {"enable": False},
                 },
             },
+            "rstudio": {
+                "path": "",
+            },
         }
 
         # quick fix, https://trac.osgeo.org/grass/ticket/1233
