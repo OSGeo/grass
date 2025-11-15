@@ -32,7 +32,7 @@ jobs:
       # renovate: datasource=pypi depName=flake8
       FLAKE8_VERSION: "7.3.0"
       # renovate: datasource=pypi depName=pylint
-      PYLINT_VERSION: "4.0.2"
+      PYLINT_VERSION: "4.0.3"
       # renovate: datasource=pypi depName=bandit
       BANDIT_VERSION: "1.8.6"
       # renovate: datasource=pypi depName=ruff
