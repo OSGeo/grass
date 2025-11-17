@@ -41,30 +41,23 @@ static void print_projjson(void);
 void print_projinfo(enum OutputFormat format)
 {
     int i;
-    G_JSON_Value *value = NULL;
-    G_JSON_Object *object = NULL;
 
     if (check_xy(format))
         return;
 
-#if PROJ_VERSION_MAJOR >= 6
     if (format == JSON) {
+#if PROJ_VERSION_MAJOR >= 6
         print_projjson();
 
         return;
-    }
+#else
+        G_fatal_error(_("JSON output is not available."));
 #endif
-    if (format == PLAIN)
+    }
+    if (format == PLAIN) {
         fprintf(
             stdout,
             "-PROJ_INFO-------------------------------------------------\n");
-    else if (format == JSON) {
-        value = G_json_value_init_object();
-        if (value == NULL) {
-            G_fatal_error(
-                _("Failed to initialize JSON object. Out of memory?"));
-        }
-        object = G_json_object(value);
     }
 
     for (i = 0; i < projinfo->nitems; i++) {
@@ -78,12 +71,9 @@ void print_projinfo(enum OutputFormat format)
             fprintf(stdout, "%-11s: %s\n", projinfo->key[i],
                     projinfo->value[i]);
             break;
-        case JSON:
-            G_json_object_set_string(object, projinfo->key[i],
-                                     projinfo->value[i]);
-            break;
         case PROJ4:
         case WKT:
+        case JSON:
             break;
         }
     }
@@ -98,11 +88,9 @@ void print_projinfo(enum OutputFormat format)
         case SHELL:
             fprintf(stdout, "%s=%s\n", "srid", projsrid);
             break;
-        case JSON:
-            G_json_object_set_string(object, "srid", projsrid);
-            break;
         case PROJ4:
         case WKT:
+        case JSON:
             break;
         }
     }
@@ -121,19 +109,12 @@ void print_projinfo(enum OutputFormat format)
                 fprintf(stdout, "%s=%s\n", projunits->key[i],
                         projunits->value[i]);
                 break;
-            case JSON:
-                G_json_object_set_string(object, projunits->key[i],
-                                         projunits->value[i]);
-                break;
             case PROJ4:
             case WKT:
+            case JSON:
                 break;
             }
         }
-    }
-
-    if (format == JSON) {
-        print_json(value);
     }
 
     return;
