@@ -352,7 +352,8 @@ static int check_xy(enum OutputFormat format)
             }
             object = G_json_object(value);
 
-            G_json_object_set_string(object, "name", "xy_location_unprojected");
+            G_json_object_set_string(object, "name",
+                                     "XY location (unprojected)");
 
             print_json(value);
             break;

@@ -20,7 +20,7 @@ parameters, for the current project</li>
 
 <p>When compiled with OGR, functionality is increased and allows output of
 the CRS information in the Well-Known Text (WKT) format popularised
-by proprietary GIS. In addition, if one of the parameters <em>georef</em>,
+by PROJ and GDAL. In addition, if one of the parameters <em>georef</em>,
 <em>wkt</em>, <em>proj4</em> or <em>epsg</em> is specified, rather than being
 read from the current project, the CRS information is imported from
 an external source as follows:
@@ -110,11 +110,17 @@ for an existing project.
 
 <p>Output is simply based on the input CRS information. g.proj does
 <strong>not</strong> attempt to verify that the co-ordinate system thus
-described matches an existing system in use in the world. In particular,
-this means there are no EPSG Authority codes in the WKT output.
+described matches a pre-defined existing system in use in the world. In
+particular, this means there may be no authority names and codes in the
+WKT output.
 
 <p>WKT format shows the false eastings and northings in the projected unit
 (e.g. meters, feet) but in PROJ format it should always be given in meters.
+
+<p>PROJJSON format is a JSON version of the WKT format, see the <a
+href="https://proj.org/en/stable/specifications/projjson.html">PROJJSON
+specification</a>
+
 
 <p>The maximum size of input WKT or PROJ CRS descriptions is
 limited to 8000 bytes.
