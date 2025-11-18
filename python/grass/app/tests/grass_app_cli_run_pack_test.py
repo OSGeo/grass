@@ -59,7 +59,7 @@ def test_run_with_crs_as_pack_as_output(tmp_path, epsg_code, extension):
             str(raster),
             "g.proj",
             "-p",
-            "format=json",
+            "format=projjson",
         ],
         capture_output=True,
         text=True,

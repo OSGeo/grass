@@ -62,7 +62,7 @@ def test_subcommand_run_tool_failure_run():
 )
 def test_subcommand_run_with_crs_as_epsg(capfd):
     """Check that CRS provided as EPSG is applied"""
-    assert main(["run", "--crs", "EPSG:3358", "g.proj", "-p", "format=json"]) == 0
+    assert main(["run", "--crs", "EPSG:3358", "g.proj", "-p", "format=projjson"]) == 0
     result_dict = json.loads(capfd.readouterr().out)
     assert result_dict["id"]["authority"] == "EPSG"
     assert result_dict["id"]["code"] == 3358
@@ -80,7 +80,7 @@ def test_subcommand_run_with_crs_as_epsg_subprocess():
             "EPSG:3358",
             "g.proj",
             "-p",
-            "format=json",
+            "format=projjson",
         ],
         capture_output=True,
         text=True,
@@ -104,7 +104,7 @@ def test_subcommand_run_with_crs_as_pack(pack_raster_file4x5_rows, capfd):
                 str(pack_raster_file4x5_rows),
                 "g.proj",
                 "-p",
-                "format=json",
+                "format=projjson",
             ]
         )
         == 0
@@ -126,7 +126,7 @@ def test_subcommand_run_with_crs_as_pack_subprocess(pack_raster_file4x5_rows, ca
             str(pack_raster_file4x5_rows),
             "g.proj",
             "-p",
-            "format=json",
+            "format=projjson",
         ],
         capture_output=True,
         text=True,
@@ -207,7 +207,7 @@ def test_create_mapset(tmp_path):
             str(mapset),
             "g.proj",
             "-p",
-            "format=json",
+            "format=projjson",
         ],
         capture_output=True,
         text=True,
@@ -272,7 +272,7 @@ def test_create_crs_epsg(tmp_path, epsg_code):
             str(project),
             "g.proj",
             "-p",
-            "format=json",
+            "format=projjson",
         ],
         capture_output=True,
         text=True,

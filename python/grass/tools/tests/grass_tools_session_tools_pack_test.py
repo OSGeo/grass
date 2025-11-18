@@ -710,7 +710,7 @@ def test_workflow_create_project_and_run_general_crs(
         Tools(session=session) as tools,
     ):
         assert tools.g_region(flags="p", format="json")["crs"]["type"] == "other"
-        result_dict = tools.g_proj(flags="p", format="json")
+        result_dict = tools.g_proj(flags="p", format="projjson")
         assert result_dict["id"]["authority"] == "EPSG"
         assert result_dict["id"]["code"] == 3358
         tools.g_region(raster=ones_raster_file_epsg3358)
@@ -740,7 +740,7 @@ def test_workflow_create_project_and_run_ll_crs(
         Tools(session=session) as tools,
     ):
         assert tools.g_region(flags="p", format="json")["crs"]["type"] == "ll"
-        result_dict = tools.g_proj(flags="p", format="json")
+        result_dict = tools.g_proj(flags="p", format="projjson")
         assert result_dict["id"]["authority"] == "EPSG"
         assert result_dict["id"]["code"] == 4326
         tools.g_region(raster=ones_raster_file_epsg4326)
