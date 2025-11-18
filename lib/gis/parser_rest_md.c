@@ -12,6 +12,7 @@
    \author Luca Delucchi
    \author Martin Landa (Markdown added)
  */
+#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 
