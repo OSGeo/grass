@@ -34,7 +34,7 @@ _Bool is not necessarily defined by default.
      ("_Bool", True, 0): "c_bool",
 +    ("bool", True, 0): "c_bool",
  }
- 
+
  ctypes_type_map_python_builtin = {
 ```
 
