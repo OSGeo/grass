@@ -94,14 +94,14 @@ paraview --data=/tmp/out.vtk
 
 <div class="code"><pre>
 #set the region
-g.region n=4926990 s=4914840 w=591570 e=607800 res=30 -p
+g.region n=7000000 s=5000000 w=-1000000 e=2000000 res=1000 -p
 
 # using r.in.wms to create RGB data to get a satellite coverage
-r.in.wms layers=global_mosaic mapserver=http://wms.jpl.nasa.gov/wms.cgi \
-         output=wms_global_mosaic
+r.in.wms layers=BlueMarble_ShadedRelief_Bathymetry url=https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi \
+         output=wms_blue_marble
 
 # export the data to VTK
-r.out.vtk rgbmaps=wms_global_mosaic.red,wms_global_mosaic.green,wms_global_mosaic.blue \
+r.out.vtk rgbmaps=wms_blue_marble.red,wms_blue_marble.green,wms_blue_marble.blue \
           elevation=elevation.10m output=/tmp/out.vtk
 
 # visualize in Paraview or other VTK viewer:
