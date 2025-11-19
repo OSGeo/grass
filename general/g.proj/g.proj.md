@@ -123,11 +123,28 @@ Print the CRS information for the current project:
 g.proj -p
 ```
 
-List the possible datum transformation parameters for the current
-project:  
+Print the CRS information for the current project in JSON format:
 
 ```sh
-g.proj -t datumtrans=-1
+g.proj -p format=json
+```
+
+Print the CRS information for the current project in shell format:
+
+```sh
+g.proj -p format=shell
+```
+
+Print the CRS information for the current project in WKT format:
+
+```sh
+g.proj -p format=wkt
+```
+
+Print the CRS information for the current project in PROJ.4 format (deprecated):
+
+```sh
+g.proj -p format=proj4
 ```
 
 ### Create projection (PRJ) file
