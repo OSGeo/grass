@@ -200,10 +200,12 @@ def append_left_addon_paths(paths, config_dir, env):
         addon_base = os.path.join(config_dir, name)
         env["GRASS_ADDON_BASE"] = addon_base
 
+    # Adding the paths is platform-dependent, but we add them regardless of their
+    # existence, because they might be created later after the setup is done
+    # when installing addons.
     if not WINDOWS:
         script_path = os.path.join(addon_base, "scripts")
-        if Path(script_path).exists():
-            paths.appendleft(script_path)
+        paths.appendleft(script_path)
     paths.appendleft(os.path.join(addon_base, "bin"))
 
     # addons (path)
