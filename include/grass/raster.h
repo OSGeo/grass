@@ -2,6 +2,7 @@
 #define GRASS_RASTER_H
 
 #include <grass/gis.h>
+#include <grass/colors.h>
 
 /*** defines ***/
 #define RECLASS_TABLE   1
