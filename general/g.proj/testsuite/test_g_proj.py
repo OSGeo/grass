@@ -113,13 +113,16 @@ class GProjTestCase(TestCase):
 
         self.assertEqual(result_flag, result_format)
 
-    def test_proj_info_output_json(self):
+    def test_projjson_output(self):
         """Test if g.proj returns consistent projection info in JSON format."""
         # proj has its own PROJJSON format, use this?
-        module = SimpleModule("g.proj", flags="p", format="json")
+        module = SimpleModule("g.proj", flags="p", format="projjson")
         self.assertModule(module)
         result = json.loads(module.outputs.stdout)
-        self.assert_keys_in_grass_output(result)
+        self.assertEqual("ProjectedCRS", result["type"])
+        # the base GEOGCRS must be "NAD83(HARN)" with corresponding EPSG code
+        self.assertEqual("EPSG", result["base_crs"]["id"]["authority"])
+        self.assertEqual(4152, result["base_crs"]["id"]["code"])
 
 
 if __name__ == "__main__":

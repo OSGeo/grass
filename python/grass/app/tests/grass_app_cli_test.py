@@ -62,8 +62,10 @@ def test_subcommand_run_tool_failure_run():
 )
 def test_subcommand_run_with_crs_as_epsg(capfd):
     """Check that CRS provided as EPSG is applied"""
-    assert main(["run", "--crs", "EPSG:3358", "g.proj", "-p", "format=json"]) == 0
-    assert json.loads(capfd.readouterr().out)["srid"] == "EPSG:3358"
+    assert main(["run", "--crs", "EPSG:3358", "g.proj", "-p", "format=projjson"]) == 0
+    result_dict = json.loads(capfd.readouterr().out)
+    assert result_dict["id"]["authority"] == "EPSG"
+    assert result_dict["id"]["code"] == 3358
 
 
 def test_subcommand_run_with_crs_as_epsg_subprocess():
@@ -78,13 +80,15 @@ def test_subcommand_run_with_crs_as_epsg_subprocess():
             "EPSG:3358",
             "g.proj",
             "-p",
-            "format=json",
+            "format=projjson",
         ],
         capture_output=True,
         text=True,
         check=True,
     )
-    assert json.loads(result.stdout)["srid"] == "EPSG:3358"
+    result_dict = json.loads(result.stdout)
+    assert result_dict["id"]["authority"] == "EPSG"
+    assert result_dict["id"]["code"] == 3358
 
 
 @pytest.mark.skipif(
@@ -100,12 +104,14 @@ def test_subcommand_run_with_crs_as_pack(pack_raster_file4x5_rows, capfd):
                 str(pack_raster_file4x5_rows),
                 "g.proj",
                 "-p",
-                "format=json",
+                "format=projjson",
             ]
         )
         == 0
     )
-    assert json.loads(capfd.readouterr().out)["srid"] == "EPSG:3358"
+    result_dict = json.loads(capfd.readouterr().out)
+    assert result_dict["id"]["authority"] == "EPSG"
+    assert result_dict["id"]["code"] == 3358
 
 
 def test_subcommand_run_with_crs_as_pack_subprocess(pack_raster_file4x5_rows, capfd):
@@ -120,13 +126,15 @@ def test_subcommand_run_with_crs_as_pack_subprocess(pack_raster_file4x5_rows, ca
             str(pack_raster_file4x5_rows),
             "g.proj",
             "-p",
-            "format=json",
+            "format=projjson",
         ],
         capture_output=True,
         text=True,
         check=True,
     )
-    assert json.loads(result.stdout)["srid"] == "EPSG:3358"
+    result_dict = json.loads(result.stdout)
+    assert result_dict["id"]["authority"] == "EPSG"
+    assert result_dict["id"]["code"] == 3358
 
 
 def test_create_lock_unlock(tmp_path):
@@ -199,13 +207,15 @@ def test_create_mapset(tmp_path):
             str(mapset),
             "g.proj",
             "-p",
-            "format=json",
+            "format=projjson",
         ],
         capture_output=True,
         text=True,
         check=True,
     )
-    assert json.loads(result.stdout)["srid"] == "EPSG:3358"
+    result_dict = json.loads(result.stdout)
+    assert result_dict["id"]["authority"] == "EPSG"
+    assert result_dict["id"]["code"] == 3358
     # And check that we are really using the newly created mapset,
     # so the computational region in the default mapset is different.
     result = subprocess.run(
@@ -247,11 +257,11 @@ def test_create_overwrite(tmp_path):
     assert main(["project", "create", "--overwrite", str(project)]) == 0
 
 
-@pytest.mark.parametrize("crs", ["EPSG:4326", "EPSG:3358"])
-def test_create_crs_epsg(tmp_path, crs):
-    """Check that created project has the requested EPSG"""
+@pytest.mark.parametrize("epsg_code", [4326, 3358])
+def test_create_crs_epsg(tmp_path, epsg_code):
+    """Check that created project has the requested EPSG code"""
     project = tmp_path / "test_1"
-    assert main(["project", "create", str(project), "--crs", crs]) == 0
+    assert main(["project", "create", str(project), "--crs", f"EPSG:{epsg_code}"]) == 0
     result = subprocess.run(
         [
             sys.executable,
@@ -262,10 +272,12 @@ def test_create_crs_epsg(tmp_path, crs):
             str(project),
             "g.proj",
             "-p",
-            "format=json",
+            "format=projjson",
         ],
         capture_output=True,
         text=True,
         check=True,
     )
-    assert json.loads(result.stdout)["srid"] == crs
+    result_dict = json.loads(result.stdout)
+    assert result_dict["id"]["authority"] == "EPSG"
+    assert result_dict["id"]["code"] == epsg_code
