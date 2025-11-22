@@ -41,6 +41,34 @@ endif()
 
 find_package(Iconv)
 
+# FreeBSD specific iconv configuration
+if(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
+  if(Iconv_FOUND)
+    # LIBICONV_PLUG makes libiconv iconv.h act like libc iconv.h
+    add_compile_definitions(LIBICONV_PLUG)
+
+    # Use CMAKE_PREFIX_PATH to locate iconv (typically /usr/local on FreeBSD)
+    if(NOT Iconv_INCLUDE_DIR AND CMAKE_PREFIX_PATH)
+      find_path(Iconv_INCLUDE_DIR iconv.h HINTS ${CMAKE_PREFIX_PATH}/include)
+    endif()
+    if(NOT Iconv_LIBRARY AND CMAKE_PREFIX_PATH)
+      find_library(Iconv_LIBRARY NAMES iconv libiconv HINTS ${CMAKE_PREFIX_PATH}/lib)
+    endif()
+
+    # Ensure iconv target has correct properties
+    if(TARGET Iconv::Iconv)
+      if(Iconv_INCLUDE_DIR)
+        set_property(TARGET Iconv::Iconv PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${Iconv_INCLUDE_DIR})
+      endif()
+      if(Iconv_LIBRARY)
+        set_property(TARGET Iconv::Iconv PROPERTY INTERFACE_LINK_LIBRARIES ${Iconv_LIBRARY})
+      endif()
+    endif()
+
+    message(STATUS "FreeBSD: Using iconv from ${Iconv_LIBRARY} with LIBICONV_PLUG")
+  endif()
+endif()
+
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads)
 
