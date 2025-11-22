@@ -30,24 +30,28 @@ indicator of the quality of the numerical result.
 
 The groundwater flow calculation is based on Darcy's law and a numerical
 implicit finite volume discretization. The discretization results in a
-symmetric and positive definite linear equation system in form of *Ax =
-b*, which must be solved. The groundwater flow partial differential
+symmetric and positive definite linear equation system in form of $Ax =
+b$, which must be solved. The groundwater flow partial differential
 equation is of the following form:
 
-(dh/dt)\*S = div (K grad h) + q
+$$
+\frac{dh}{dt} \cdot S = \text{div}(K \nabla h) + q
+$$
 
 In detail for 2 dimensions:
 
-(dh/dt)\*S = Kxx \* (d^2h/dx^2) + Kyy \* (d^2h/dy^2) + q
+$$
+\frac{dh}{dt} \cdot S = K_{xx} \frac{\partial^2 h}{\partial x^2} + K_{yy} \frac{\partial^2 h}{\partial y^2} + q
+$$
 
-- h -- the piezometric head im \[m\]
-- dt -- the time step for transient calculation in \[s\]
-- S -- the specific storage \[1/m\]
-- Kxx -- the hydraulic conductivity tensor part in x direction in
-  \[m/s\]
-- Kyy -- the hydraulic conductivity tensor part in y direction in
-  \[m/s\]
-- q - inner source/sink in meter per second \[1/s\]
+- $h$ -- the piezometric head in [m]
+- $dt$ -- the time step for transient calculation in [s]
+- $S$ -- the specific storage [1/m]
+- $K_{xx}$ -- the hydraulic conductivity tensor part in x direction in
+  [m/s]
+- $K_{yy}$ -- the hydraulic conductivity tensor part in y direction in
+  [m/s]
+- $q$ -- inner source/sink in meter per second [1/s]
 
 Confined and unconfined groundwater flow is supported. Be aware that the
 storativity input parameter is handled differently in case of unconfined
@@ -75,7 +79,7 @@ Additionally the linear equation system will be allocated, so the memory
 consumption of this module rapidely grow with the size of the input
 maps.  
   
-The resulting linear equation system *Ax = b* can be solved with several
+The resulting linear equation system $Ax = b$ can be solved with several
 solvers. An iterative solvers with sparse and quadratic matrices support
 is implemented. The conjugate gradients method with (pcg) and without
 (cg) precondition. Additionally a direct Cholesky solver is available.
