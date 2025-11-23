@@ -1,9 +1,7 @@
 
 name: Add Docker Labels and Build
 
-on:
-  push:
-    branches: [ main ]
+on: [push]
 
 jobs:
   label-and-build:
@@ -15,10 +13,10 @@ jobs:
       - name: Read metadata file
         id: readmeta
         run: |
-          echo "VERSION=$(jq -r '.version' metadata.json)" >> $GITHUB_OUTPUT
-          echo "COMMIT=$(jq -r '.commit' metadata.json)" >> $GITHUB_OUTPUT
-          echo "REPO=$(jq -r '.repo' metadata.json)" >> $GITHUB_OUTPUT
-          echo "DESC=$(jq -r '.description' metadata.json)" >> $GITHUB_OUTPUT
+          echo "VERSION=$(jq -r '.version' ../../metadata.json)" >> $GITHUB_OUTPUT
+          echo "COMMIT=$(jq -r '.commit' ../../metadata.json)" >> $GITHUB_OUTPUT
+          echo "REPO=$(jq -r '.repo' ../../metadata.json)" >> $GITHUB_OUTPUT
+          echo "DESC=$(jq -r '.description' ../../metadata.json)" >> $GITHUB_OUTPUT
 
       - name: Create labels string
         id: make_labels
