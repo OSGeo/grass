@@ -30,10 +30,10 @@ from .checkers import text_to_keyvalue
 from io import StringIO
 
 if TYPE_CHECKING:
-    from typing import Literal, Union
+    from typing import Literal
     from _typeshed import FileDescriptor, StrOrBytesPath, StrPath
 
-    FileDescriptorOrPath = Union[FileDescriptor, StrOrBytesPath]
+    FileDescriptorOrPath = FileDescriptor | StrOrBytesPath
 
 
 # TODO: change text_to_keyvalue to same sep as here
@@ -465,7 +465,7 @@ def wrap_stdstream_to_html(
 ) -> None:
     before = "<html><body><h1>%s</h1><pre>" % (module.name + " " + stream)
     after = "</pre></body></html>"
-    with open(outfile, "w") as html, open(infile) as text:
+    with open(outfile, "w", encoding="utf-8") as html, open(infile) as text:
         html.write(before)
         html.writelines(color_error_line(html_escape(line)) for line in text)
         html.write(after)
@@ -474,16 +474,16 @@ def wrap_stdstream_to_html(
 def html_file_preview(filename):
     before = "<pre>"
     after = "</pre>"
-    if not os.path.isfile(filename):
+    if not Path(filename).is_file():
         return '<p style="color: red>File %s does not exist</p>' % filename
-    size = os.path.getsize(filename)
+    size = Path(filename).stat().st_size
     if not size:
         return '<p style="color: red>File %s is empty</p>' % filename
     max_size = 10000
     html = StringIO()
     html.write(before)
     if size < max_size:
-        with open(filename) as text:
+        with open(filename, encoding="utf-8") as text:
             for line in text:
                 html.write(color_error_line(html_escape(line)))
     elif size < 10 * max_size:
@@ -568,7 +568,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         # having all variables public although not really part of API
         main_page_name = os.path.join(results_dir, self._main_page_name)
         # TODO: Ensure file is closed in all situations
-        self.main_index = open(main_page_name, "w")  # noqa: SIM115
+        self.main_index = open(main_page_name, "w", encoding="utf-8")  # noqa: SIM115
 
         # TODO: this can be moved to the counter class
         self.failures = 0
@@ -794,7 +794,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             # using constructors as seems advantageous for counting
             self._file_anonymizer.anonymize(supplementary_files)
 
-        with open(file_index_path, "w") as file_index:
+        with open(file_index_path, "w", encoding="utf-8") as file_index:
             file_index.write(header)
             file_index.write(summary_section)
             if modules:
@@ -897,7 +897,7 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
 
         summary_filename = os.path.join(self.result_dir, "test_keyvalue_result.txt")
         text = keyvalue_to_text(summary, sep="=", vsep="\n", isep=",")
-        Path(summary_filename).write_text(text)
+        Path(summary_filename).write_text(text, encoding="utf-8")
 
     def end_file_test(
         self, module, cwd, returncode, stdout, stderr, test_summary, timed_out=None
@@ -950,12 +950,12 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
             # TODO: replace by better handling of potential lists when parsing
             # TODO: create link to module if running in grass or in addons
             # alternatively a link to module test summary
-            if type(modules) not in [list, set]:
+            if type(modules) not in {list, set}:
                 modules = [modules]
             self.modules.update(modules)
 
         test_file_authors = test_summary["test_file_authors"]
-        if type(test_file_authors) not in [list, set]:
+        if type(test_file_authors) not in {list, set}:
             test_file_authors = [test_file_authors]
         self.test_files_authors.update(test_file_authors)
 
@@ -1084,7 +1084,7 @@ class TestsuiteDirReporter:
             "<th>Failed</th><th>Percent successful</th>"
             "</tr></thead><tbody>"
         )
-        with open(page_name, "w") as page:
+        with open(page_name, "w", encoding="utf-8") as page:
             page.write(head)
             page.write(tests_table_head)
             for test_file_name in test_files:
@@ -1093,7 +1093,9 @@ class TestsuiteDirReporter:
                     root, directory, test_file_name, "test_keyvalue_result.txt"
                 )
                 # if os.path.exists(summary_filename):
-                summary = text_to_keyvalue(Path(summary_filename).read_text(), sep="=")
+                summary = text_to_keyvalue(
+                    Path(summary_filename).read_text(encoding="utf-8"), sep="="
+                )
                 # else:
                 # TODO: write else here
                 #    summary = None
@@ -1253,7 +1255,7 @@ class TestsuiteDirReporter:
             )
         )
 
-        with open(page_name, "w") as page:
+        with open(page_name, "w", encoding="utf-8") as page:
             page.write(head)
             page.write(tests_table_head)
 

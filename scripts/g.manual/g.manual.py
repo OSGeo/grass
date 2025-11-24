@@ -48,6 +48,7 @@
 
 import sys
 import os
+from pathlib import Path
 from urllib.request import urlopen
 
 import webbrowser
@@ -79,20 +80,20 @@ def start_browser(entry):
             )
     else:
         directory = os.path.join(gisbase, "docs", "mkdocs", "site")
-        if os.path.exists(directory):
+        if Path(directory).exists():
             path = os.path.join(directory, entry + ".html")
-            if not os.path.exists(path) and os.getenv("GRASS_ADDON_BASE"):
+            if not Path(path).exists() and os.getenv("GRASS_ADDON_BASE"):
                 path = os.path.join(
                     os.getenv("GRASS_ADDON_BASE"), "docs", "html", entry + ".html"
                 )
         else:
             path = os.path.join(gisbase, "docs", "html", entry + ".html")
-            if not os.path.exists(path) and os.getenv("GRASS_ADDON_BASE"):
+            if not Path(path).exists() and os.getenv("GRASS_ADDON_BASE"):
                 path = os.path.join(
                     os.getenv("GRASS_ADDON_BASE"), "docs", "html", entry + ".html"
                 )
 
-        if not os.path.exists(path):
+        if not Path(path).exists():
             grass.fatal(_("No HTML manual page entry for '%s'") % entry)
 
         url_path = "file://" + path
@@ -116,13 +117,13 @@ def start_browser(entry):
 
 def start_man(entry):
     path = os.path.join(gisbase, "docs", "man", "man1", entry + ".1")
-    if not os.path.exists(path) and os.getenv("GRASS_ADDON_BASE"):
+    if not Path(path).exists() and os.getenv("GRASS_ADDON_BASE"):
         path = os.path.join(
             os.getenv("GRASS_ADDON_BASE"), "docs", "man", "man1", entry + ".1"
         )
 
     for ext in ["", ".gz", ".bz2"]:
-        if os.path.exists(path + ext):
+        if Path(path + ext).exists():
             os.execlp("man", "man", path + ext)
             grass.fatal(_("Error starting 'man' for '%s'") % path)
     grass.fatal(_("No manual page entry for '%s'") % entry)

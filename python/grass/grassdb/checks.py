@@ -200,7 +200,7 @@ def get_mapset_lock_info(mapset_path: str | os.PathLike[str]):
     except KeyError:
         info["owner"] = None
     info["timestamp"] = (
-        datetime.datetime.fromtimestamp(os.path.getmtime(info["lockpath"]))
+        datetime.datetime.fromtimestamp(Path(info["lockpath"]).stat().st_mtime)
     ).replace(microsecond=0)
     return info
 
@@ -221,7 +221,7 @@ def get_reason_id_mapset_not_usable(mapset_path):
     If mapset path is None or no reason found, returns None.
     """
     # Check whether mapset exists
-    if not os.path.exists(mapset_path):
+    if not Path(mapset_path).exists():
         return "non-existent"
     # Check whether mapset is valid
     if not is_mapset_valid(mapset_path):
@@ -277,7 +277,7 @@ def get_mapset_invalid_reason(database, location, mapset, none_for_no_reason=Fal
     if not mapset_path.exists():
         # TODO: remove the grass.py specific wording
         return _(
-            "Mapset <{mapset}> doesn't exist in GRASS Location <{location}>"
+            "Mapset <{mapset}> doesn't exist in GRASS project <{location}>"
         ).format(mapset=mapset, location=location)
     if not mapset_path.is_dir():
         return _("<%s> is not a GRASS Mapset because it is not a directory") % mapset
@@ -296,7 +296,7 @@ def get_mapset_invalid_reason(database, location, mapset, none_for_no_reason=Fal
     if none_for_no_reason:
         return None
     return _(
-        "Mapset <{mapset}> or Location <{location}> is invalid for an unknown reason"
+        "Mapset <{mapset}> or project <{location}> is invalid for an unknown reason"
     ).format(mapset=mapset, location=location)
 
 
@@ -329,20 +329,20 @@ def get_location_invalid_reason(
     # permanent mapset
     if not permanent_path.exists():
         return (
-            _("<%s> is not a valid GRASS Location because PERMANENT Mapset is missing")
+            _("<%s> is not a valid GRASS project because PERMANENT mapset is missing")
             % location_path
         )
     if not permanent_path.is_dir():
         return (
-            _("<%s> is not a valid GRASS Location because PERMANENT is not a directory")
+            _("<%s> is not a valid GRASS project because PERMANENT is not a directory")
             % location_path
         )
     # partially based on the is_location_valid() function
     if not (permanent_path / "DEFAULT_WIND").is_file():
         return (
             _(
-                "<%s> is not a valid GRASS Location"
-                " because PERMANENT Mapset does not have a DEFAULT_WIND file"
+                "<%s> is not a valid GRASS project"
+                " because PERMANENT mapset does not have a DEFAULT_WIND file"
                 " (default computational region)"
             )
             % location_path
@@ -350,7 +350,7 @@ def get_location_invalid_reason(
     # no reason for invalidity found (might be valid)
     if none_for_no_reason:
         return None
-    return _("Location <{location_path}> is invalid for an unknown reason").format(
+    return _("Project <{location_path}> is invalid for an unknown reason").format(
         location_path=location_path
     )
 
@@ -367,13 +367,13 @@ def get_location_invalid_suggestion(database, location) -> str | None:
     # if that's the case, include that info into the message
     if is_mapset_valid(location_path):
         return _(
-            "<{location}> looks like a mapset, not a location."
+            "<{location}> looks like a mapset, not a project."
             " Did you mean just <{one_dir_up}>?"
         ).format(location=location, one_dir_up=database)
     # confusion about what is database and what is location
     if dir_contains_location(location_path):
         return _(
-            "It looks like <{location}> contains locations."
+            "It looks like <{location}> contains projects."
             " Did you mean to specify one of them?"
         ).format(location=location)
     return None
@@ -431,15 +431,15 @@ def get_location_name_invalid_reason(grassdb, location_name):
     # Check if mapset name is valid
     if not gs.legal_name(location_name):
         message = _(
-            "Name '{}' is not a valid name for location or mapset. "
+            "Name '{}' is not a valid name for project or mapset. "
             "Please use only ASCII characters excluding characters {} "
             "and space."
         ).format(location_name, "/\"'@,=*~")
     # Check whether location exists
     elif location_exists(grassdb, location_name):
         message = _(
-            "Location  <{location}> already exists. Please consider using "
-            "another name for your location."
+            "Project <{location}> already exists. Please consider using "
+            "another name for your project."
         ).format(location=location_path)
 
     return message
@@ -497,7 +497,7 @@ def get_reason_mapset_not_removable(grassdb, location, mapset, check_permanent):
 
     # Check if mapset is permanent
     if check_permanent and mapset == "PERMANENT":
-        message = _("Mapset <{mapset}> is required for a valid location.").format(
+        message = _("Mapset <{mapset}> is required for a valid project.").format(
             mapset=mapset_path
         )
     # Check if mapset is current
@@ -541,7 +541,7 @@ def get_reasons_location_not_removable(grassdb, location):
     # Check if location is current
     if is_location_current(grassdb, location):
         messages.append(
-            _("Location <{location}> is the current location.").format(
+            _("Project <{location}> is the current project.").format(
                 location=location_path
             )
         )

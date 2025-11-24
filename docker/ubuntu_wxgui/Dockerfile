@@ -1,4 +1,4 @@
-FROM ubuntu:22.04@sha256:1aa979d85661c488ce030ac292876cf6ed04535d3a237e49f61542d8e5de5ae0
+FROM ubuntu:24.04@sha256:c35e29c9450151419d9448b0fd75374fec4fff364a27f176fb458d472dfc9e54
 
 LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann,Tomas Zigo"
 LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
@@ -8,7 +8,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # define versions to be used (PDAL is not available on Ubuntu/Debian, so we compile it here)
 # https://github.com/PDAL/PDAL/releases
 # renovate: datasource=github-tags depName=PDAL/PDAL
-ARG PDAL_VERSION=2.7.1
+ARG PDAL_VERSION=2.9.2
 
 SHELL ["/bin/bash", "-c"]
 
@@ -47,7 +47,7 @@ RUN apt-get update && apt-get upgrade -y && \
     libcurl4-gnutls-dev \
     libfftw3-bin \
     libfftw3-dev \
-    libfreetype6-dev \
+    libfreetype-dev \
     libgdal-dev \
     libgeos-dev \
     libgl1-mesa-dev \
@@ -57,11 +57,11 @@ RUN apt-get update && apt-get upgrade -y && \
     libgtk-3-dev \
     libjpeg-dev \
     libjsoncpp-dev \
-    libncurses5-dev \
+    libncurses-dev \
     libnetcdf-dev \
     libnotify4 \
-    libopenblas-base \
     libopenblas-dev \
+    libopenblas0 \
     libopenjp2-7 \
     libopenjp2-7-dev \
     libpnglite-dev \
@@ -70,8 +70,8 @@ RUN apt-get update && apt-get upgrade -y && \
     libpython3-all-dev \
     libreadline-dev \
     librsvg2-common \
-    libsecret-1-0 \
     libsdl2-2.0-0 \
+    libsecret-1-0 \
     libsqlite3-dev \
     libtiff-dev \
     libxtst6 \
@@ -106,9 +106,9 @@ RUN apt-get update && apt-get upgrade -y && \
     && apt-get clean all && rm -rf /var/lib/apt/lists/*
 
 # wxGUI
-RUN pip install -U \
-    -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-22.04 \
-    wxPython \
+RUN pip install -U --break-system-packages \
+    -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-24.04 \
+    wxpython \
     && pip cache purge
 # If you do not use any Gnome Accessibility features, to suppress warning
 # WARNING **: Couldn't connect to accessibility bus:
@@ -241,8 +241,7 @@ RUN grass --tmp-project EPSG:4326 --exec g.version -rge && \
     python --version
 
 # Reduce the image size
-RUN apt-get autoremove -y
-RUN apt-get clean -y
+RUN apt-get autoremove -y && apt-get clean -y
 RUN rm -r /src/grass_build/.git
 
 WORKDIR /scripts

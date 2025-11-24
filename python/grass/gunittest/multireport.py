@@ -405,7 +405,7 @@ def main_page(
     directory: StrPath | None = None,
 ) -> None:
     filename = os.path.join(directory, filename)
-    with open(filename, "w") as page:
+    with open(filename, "w", encoding="utf-8") as page:
         page.write(
             "<html><body>"
             "<h1>{title}</h1>"
@@ -499,7 +499,7 @@ def main():
     for report in reports:
         try:
             summary_file = os.path.join(report, "test_keyvalue_result.txt")
-            if not os.path.exists(summary_file):
+            if not Path(summary_file).exists():
                 sys.stderr.write(
                     "WARNING: Key-value summary not available in"
                     " report <%s>, skipping.\n" % summary_file
@@ -507,10 +507,12 @@ def main():
                 # skipping incomplete reports
                 # use only results list for further processing
                 continue
-            summary = text_to_keyvalue(Path(summary_file).read_text(), sep="=")
+            summary = text_to_keyvalue(
+                Path(summary_file).read_text(encoding="utf-8"), sep="="
+            )
             if use_timestamps:
                 test_timestamp = datetime.datetime.fromtimestamp(
-                    os.path.getmtime(summary_file)
+                    Path(summary_file).stat().st_mtime
                 )
             else:
                 test_timestamp = datetime.datetime.strptime(
@@ -551,7 +553,9 @@ def main():
         except KeyError as e:
             print("File %s does not have right values (%s)" % (report, e.message))
 
-    with open(os.path.join(output, "index.html"), "w") as locations_main_page:
+    with open(
+        os.path.join(output, "index.html"), "w", encoding="utf-8"
+    ) as locations_main_page:
         locations_main_page.write(
             "<html><body>"
             "<h1>Test reports grouped by location type</h1>"

@@ -68,7 +68,9 @@ jobs:
             -mindepth 1 -maxdepth 1 -type f -print -delete
           # Rehash to forget about the deleted files
           hash -r
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          persist-credentials: false
       - name: Environment info
         shell: bash -el {0}
         run: |
@@ -109,23 +111,26 @@ jobs:
       - name: Create config file
         shell: bash -el {0}
         env:
-          Config: ${HOME}/.config/grass/configure-build-${{ matrix.name }}.sh
+          CONFIG: ${HOME}/.config/grass/configure-build-${{ matrix.name }}.sh
           MACOS_CERTIFICATE_NAME: ${{ secrets.MACOS_CERTIFICATE_NAME }}
+          MATRIX_DEPLOYMENT_TARGET: ${{ matrix.deployment_target }}
         run: |
           mkdir -p "${HOME}/.config/grass"
-          echo sdk=\"$(xcrun --show-sdk-path)\" >> ${{ env.Config }}
-          echo deployment_target=\"${{ matrix.deployment_target }}\" >> ${{ env.Config }}
-          echo cs_ident=\"${MACOS_CERTIFICATE_NAME}\" >> ${{ env.Config }}
-          echo cs_keychain_profile=\"${KEYCHAIN_PROFILE}\" >> ${{ env.Config }}
-          echo cs_provisionprofile=\"${RUNNER_TEMP}/embedded.provisionprofile\" >> ${{ env.Config }}
+          {
+            echo sdk=\""$(xcrun --show-sdk-path)"\"
+            echo deployment_target=\""${MATRIX_DEPLOYMENT_TARGET}"\"
+            echo cs_ident=\""${MACOS_CERTIFICATE_NAME}"\"
+            echo cs_keychain_profile=\""${KEYCHAIN_PROFILE}"\"
+            echo cs_provisionprofile=\""${RUNNER_TEMP}/embedded.provisionprofile"\"
+          } >> "${CONFIG}"
 
       - name: Build GRASS app
         run: |
-          ./macos/build_grass_app.bash --with-liblas --notarize -o "${{ runner.temp }}"
+          ./macos/build_grass_app.bash --with-liblas --notarize -o "${RUNNER_TEMP}"
 
       - name: Upload DMG file as artifact
         if: ${{ success() && !cancelled() }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: ${{ env.DMG_NAME }}
           path: ${{ env.DMG_FILE }}

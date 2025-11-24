@@ -33,7 +33,7 @@ struct ReportLine {
     double distance;
 };
 
-static void print(struct ReportLine *, struct Parms *, JSON_Array *);
+static void print(struct ReportLine *, struct Parms *, G_JSON_Array *);
 static int compare(const void *, const void *);
 static int revcompare(const void *, const void *);
 
@@ -46,8 +46,8 @@ void report(struct Parms *parms)
     struct CatEdgeList *list1, *list2;
     struct ReportLine *lines;
     int nlines;
-    JSON_Value *root_value = NULL;
-    JSON_Array *root_array = NULL;
+    G_JSON_Value *root_value = NULL;
+    G_JSON_Array *root_array = NULL;
 
     G_get_set_window(&region);
     G_begin_distance_calculations();
@@ -143,17 +143,18 @@ void report(struct Parms *parms)
         G_json_free_serialized_string(json_string);
         G_json_value_free(root_value);
     }
+    G_free(lines);
 }
 
 static void print(struct ReportLine *line, struct Parms *parms,
-                  JSON_Array *root_array)
+                  G_JSON_Array *root_array)
 {
     char *fs;
     char temp[100];
-    JSON_Value *cell_value = NULL, *from_cell_value = NULL,
-               *to_cell_value = NULL;
-    JSON_Object *cell_object = NULL, *from_cell_object = NULL,
-                *to_cell_object = NULL;
+    G_JSON_Value *cell_value = NULL, *from_cell_value = NULL,
+                 *to_cell_value = NULL;
+    G_JSON_Object *cell_object = NULL, *from_cell_object = NULL,
+                  *to_cell_object = NULL;
 
     fs = parms->fs;
 

@@ -151,8 +151,12 @@ int main(int argc, char *argv[])
     interpolate = menu[method].method;
 
     G_strip(grp->answer);
-    strcpy(group.name, grp->answer);
-    strcpy(extension, ext->answer);
+    if (G_strlcpy(group.name, grp->answer, sizeof(group.name)) >=
+        sizeof(group.name))
+        G_fatal_error(_("Group name <%s> is too long"), grp->answer);
+    if (G_strlcpy(extension, ext->answer, sizeof(extension)) >=
+        sizeof(extension))
+        G_fatal_error(_("Extension <%s> is too long"), ext->answer);
 
     seg_mb = NULL;
     if (mem->answer) {
@@ -281,7 +285,10 @@ int main(int argc, char *argv[])
             if (!ref_list[i])
                 continue;
 
-            strcpy(result, group.group_ref.file[i].name);
+            if (G_strlcpy(result, group.group_ref.file[i].name,
+                          sizeof(result)) >= sizeof(result))
+                G_fatal_error(_("Map name <%s> is too long"),
+                              group.group_ref.file[i].name);
             strcat(result, extension);
 
             if (G_legal_filename(result) < 0)

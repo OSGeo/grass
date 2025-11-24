@@ -52,7 +52,7 @@ segment_HDRS    = segment.h defs/segment.h
 rowio_HDRS      = rowio.h defs/rowio.h
 temporal_HDRS   = temporal.h
 
-proj_INC        = $(PROJINC)
+proj_INC        = $(PROJINC) $(GDALCFLAGS)
 vector_INC      = $(VECT_INC) $(VECT_CFLAGS)
 vedit_INC       = $(VECT_INC) $(VECT_CFLAGS)
 

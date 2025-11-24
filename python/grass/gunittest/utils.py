@@ -12,7 +12,6 @@ for details.
 from __future__ import annotations
 
 import errno
-import os
 import shutil
 import sys
 import warnings
@@ -26,14 +25,13 @@ if TYPE_CHECKING:
 
 def ensure_dir(directory: StrOrBytesPath) -> None:
     """Create all directories in the given path if needed."""
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+    Path(directory).mkdir(parents=True, exist_ok=True)
 
 
 def add_gitignore_to_dir(directory: StrPath) -> None:
     gitignore_path = Path(directory) / ".gitignore"
     if not Path(gitignore_path).exists():
-        Path(gitignore_path).write_text("*")
+        Path(gitignore_path).write_text("*", encoding="utf-8")
 
 
 def silent_rmtree(filename: StrOrBytesPath) -> None:

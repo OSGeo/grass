@@ -64,7 +64,7 @@ class GrassTestProgram(TestProgram):
         text_result = TextTestResult(
             stream=_WritelnDecorator(sys.stderr), descriptions=True, verbosity=verbosity
         )
-        with open("test_keyvalue_result.txt", "w") as keyval_file:
+        with open("test_keyvalue_result.txt", "w", encoding="utf-8") as keyval_file:
             keyval_result = KeyValueTestResult(stream=keyval_file)
             result = MultiTestResult(results=[text_result, keyval_result])
 
@@ -232,9 +232,9 @@ def main():
 
     if not gisdbase:
         return "GISDBASE (grassdata directory) cannot be empty string\n"
-    if not os.path.exists(gisdbase):
+    if not Path(gisdbase).exists():
         return f"GISDBASE (grassdata directory) <{gisdbase}> does not exist\n"
-    if not os.path.exists(os.path.join(gisdbase, location)):
+    if not Path(gisdbase, location).exists():
         return (
             f"GRASS Location <{location}>"
             f" does not exist in GRASS Database <{gisdbase}>\n"

@@ -11,21 +11,15 @@ printenv
 # run simple LAZ test
 cp docker/testdata/simple.laz /tmp/
 cp docker/testdata/test_grass_session.py /tmp/
-cp docker/testdata/test_grass_python.py /tmp/
 cp -r demolocation /tmp/
 
 # Test gdal-grass-plugin
 printf "\n############\nTesting the gdal_grass plugin:\n############\n"
 gdalinfo --formats | grep "GRASS -raster-"
 
-# Test grass-session
-printf "\n############\nTesting grass_session:\n############\n"
+# Test grass Python package
+printf "\n############\nTesting grass Python package:\n############\n"
 /usr/bin/python3 /tmp/test_grass_session.py
-
-# Test grass-setup
-printf "\n############\nTesting grass script setup:\n############\n"
-export DEMOLOCATION=/tmp/demolocation/PERMANENT
-/usr/bin/python3 /tmp/test_grass_python.py
 
 # Test PDAL
 printf "\n############\nTesting PDAL with laz:\n############\n"

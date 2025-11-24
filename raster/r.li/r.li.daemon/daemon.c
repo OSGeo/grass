@@ -494,7 +494,7 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
         while ((token = strtok(NULL, " ")) != NULL &&
                (strcmp(token, "MASKEDOVERLAYAREA") == 0));
 
-        if (strcmp(token, "RASTERMAP") != 0)
+        if (!token || strcmp(token, "RASTERMAP") != 0)
             G_fatal_error(_("Irregular MASKEDOVERLAY areas definition"));
 
         token = strtok(NULL, "\n");
@@ -738,7 +738,11 @@ int write_raster(int mv_fd, int random_access, struct g_area *g)
     center = g->sf_x + ((int)g->cl / 2);
 
     file_buf = G_malloc(cols * sizeof(double));
-    lseek(random_access, 0, SEEK_SET);
+    if (lseek(random_access, 0, SEEK_SET) == -1) {
+        int err = errno;
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+    }
 
     cell_buf = Rast_allocate_d_buf();
     Rast_set_d_null_value(cell_buf, Rast_window_cols() + 1);

@@ -34,8 +34,10 @@ jobs:
         run: |
           git config --global core.autocrlf false
           git config --global core.eol lf
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      - uses: msys2/setup-msys2@40677d36a502eb2cf0fb808cc9dec31bf6152638 # v2.28.0
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          persist-credentials: false
+      - uses: msys2/setup-msys2@fb197b72ce45fb24f17bf3f807a388985654d1f2 # v2.29.0
         id: msys2
         with:
           path-type: inherit
@@ -60,7 +62,7 @@ jobs:
             gettext
             libiconv
             libsystre
-            libtre-git
+            libtre
             libwinpthread-git
             openblas
             pcre
@@ -69,7 +71,7 @@ jobs:
             zlib
 
       - name: Setup OSGeo4W environment
-        uses: echoix/setup-OSGeo4W@f4311523e39f2c8b10e34ebbc3f2ff437ecfb9ed # v0.2.0
+        uses: echoix/setup-OSGeo4W@1e711832882e03603e9013181a87885b10af8a98 # v0.3.0
         id: osgeo4w
         with:
           package-dir: "D:/OSGeo4W_pkg"
@@ -91,14 +93,13 @@ jobs:
             python3-numpy
             python3-pip
             python3-pywin32
-            python3-six
             python3-wxpython
             sqlite3-devel
             zstd-devel
 
       - name: Set number of cores for compilation
         run: |
-          echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
+          echo "MAKEFLAGS=-j$(nproc)" >> "${GITHUB_ENV}"
         shell: msys2 {0}
 
       - name: Compile GRASS
@@ -114,7 +115,7 @@ jobs:
         run: .github/workflows/print_versions.sh
 
       - name: Test executing of the grass command
-        run: .github/workflows/test_simple.bat '${{env.O4WROOT}}\opt\grass\grass85.bat'
+        run: .github/workflows/test_simple.bat '%O4WROOT%\opt\grass\grass85.bat'
         env:
           O4WROOT: ${{ steps.osgeo4w.outputs.root }}
 
@@ -159,13 +160,13 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Run tests
-        run: .github/workflows/test_thorough.bat '${{env.O4WROOT}}\opt\grass\grass85.bat' '${{env.O4WROOT}}\bin\python3'
+        run: .github/workflows/test_thorough.bat '%O4WROOT%\opt\grass\grass85.bat' '%O4WROOT%\bin\python3'
         env:
           O4WROOT: ${{ steps.osgeo4w.outputs.root }}
 
       - name: Make HTML test report available
         if: ${{ always() }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: testreport-${{ matrix.os }}
           path: testreport
