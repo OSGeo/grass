@@ -165,6 +165,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           file: docker/${{ matrix.os }}/Dockerfile
           annotations: ${{ steps.meta.outputs.annotations }}
+          labels: ${{ steps.meta.outputs.labels }}
           provenance: mode=max
           sbom: true
           # Don't use cache for releases.
