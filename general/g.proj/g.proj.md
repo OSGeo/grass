@@ -123,10 +123,10 @@ Print the CRS information for the current project:
 g.proj -p
 ```
 
-Print the CRS information for the current project in JSON format:
+Print the CRS information for the current project in PROJJSON format:
 
 ```sh
-g.proj -p format=json
+g.proj -p format=projjson
 ```
 
 Print the CRS information for the current project in shell format:
