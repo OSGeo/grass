@@ -123,19 +123,41 @@ void get_reprojected_extent(pdal::SpatialReference &spatial_reference,
     table.layout()->registerDim(pdal::Dimension::Id::Z);
 
     pdal::PointViewPtr view(new pdal::PointView(table));
+    pdal::PointId idx = 0;
+    int points_per_edge = 10;
+    // Generate points along the 4 edges of the bounding box
+    // Add single corner point and interior points for each edge
+    for (int i = 0; i < points_per_edge - 1; ++i) {
+        double t = i / (double)(points_per_edge - 1);
 
-    view->setField(pdal::Dimension::Id::X, 0, *min_x);
-    view->setField(pdal::Dimension::Id::Y, 0, *min_y);
-    view->setField(pdal::Dimension::Id::Z, 0, *min_z);
-    view->setField(pdal::Dimension::Id::X, 1, *min_x);
-    view->setField(pdal::Dimension::Id::Y, 1, *max_y);
-    view->setField(pdal::Dimension::Id::Z, 1, *min_z);
-    view->setField(pdal::Dimension::Id::X, 2, *max_x);
-    view->setField(pdal::Dimension::Id::Y, 2, *min_y);
-    view->setField(pdal::Dimension::Id::Z, 2, *max_z);
-    view->setField(pdal::Dimension::Id::X, 3, *max_x);
-    view->setField(pdal::Dimension::Id::Y, 3, *max_y);
-    view->setField(pdal::Dimension::Id::Z, 3, *max_z);
+        // South edge (y = min_y)
+        view->setField(pdal::Dimension::Id::X, idx,
+                       *min_x + t * (*max_x - *min_x));
+        view->setField(pdal::Dimension::Id::Y, idx, *min_y);
+        view->setField(pdal::Dimension::Id::Z, idx, *min_z);
+        idx++;
+
+        // East edge (x = max_x)
+        view->setField(pdal::Dimension::Id::X, idx, *max_x);
+        view->setField(pdal::Dimension::Id::Y, idx,
+                       *min_y + t * (*max_y - *min_y));
+        view->setField(pdal::Dimension::Id::Z, idx, *max_z);
+        idx++;
+
+        // North edge (y = max_y)
+        view->setField(pdal::Dimension::Id::X, idx,
+                       *max_x - t * (*max_x - *min_x));
+        view->setField(pdal::Dimension::Id::Y, idx, *max_y);
+        view->setField(pdal::Dimension::Id::Z, idx, *min_z);
+        idx++;
+
+        // West edge (x = min_x)
+        view->setField(pdal::Dimension::Id::X, idx, *min_x);
+        view->setField(pdal::Dimension::Id::Y, idx,
+                       *max_y - t * (*max_y - *min_y));
+        view->setField(pdal::Dimension::Id::Z, idx, *max_z);
+        idx++;
+    }
 
     pdal::BufferReader reader;
     reader.addView(view);
