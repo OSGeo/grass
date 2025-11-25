@@ -17,27 +17,31 @@ is limited to:
 
 When compiled with OGR, functionality is increased and allows output of
 the CRS information in the Well-Known Text (WKT) format popularised by
-proprietary GIS. In addition, if one of the parameters *georef*, *wkt*,
+PROJ and GDAL. In addition, if one of the parameters *georef*, *wkt*,
 *proj4* or *epsg* is specified, rather than being read from the current
 project, the CRS information is imported from an external source as
 follows:
 
-- With **georef**=*filename* g.proj attempts to invoke GDAL and OGR in turn
-to read a georeferenced file *filename*. The CRS information will be read
-from this file. If the file is not georeferenced or cannot be read,
-XY (unprojected) will be used.
+georef=*filename*  
+*g.proj* attempts to invoke GDAL and OGR in turn to read a georeferenced
+file *filename*. The CRS information will be read from this file. If the
+file is not georeferenced or cannot be read, XY (unprojected) will be
+used.
 
-- When using **wkt**=*filename*, the file *filename* should contain a CRS
-description in WKT format with or without line-breaks (e.g. a '.prj' file).
-If **-** is given for the filename, the WKT description will be read from
-stdin rather than a file.
+wkt=*filename* or **-**  
+The file *filename* should contain a CRS description in WKT format with
+or without line-breaks (e.g. a '.prj' file). If **-** is given for the
+filename, the WKT description will be read from stdin rather than a
+file.
 
-- **proj4**=*description* should be a CRS description in [PROJ](https://proj.org/)
+proj4=*description* or **-**  
+*description* should be a CRS description in [PROJ](https://proj.org/)
 format, enclosed in quotation marks if there are any spaces. If **-** is
 given for *description*, the PROJ description will be read from stdin
 rather than as a directly-supplied command-line parameter.
 
-- **epsg**=*number* should correspond to the index number of a valid co-ordinate
+epsg=*number*  
+*number* should correspond to the index number of a valid co-ordinate
 system in the [EPSG database](https://epsg.org/search/by-name). EPSG
 code support is based upon a local copy of the GDAL CSV co-ordinate
 system and datum information files, stored in the directory
@@ -95,13 +99,16 @@ co-ordinate system. This can be useful to change the datum information
 for an existing project.
 
 Output is simply based on the input CRS information. g.proj does **not**
-attempt to verify that the co-ordinate system thus described matches an
-existing system in use in the world. In particular, this means there are
-no EPSG Authority codes in the WKT output.
+attempt to verify that the co-ordinate system thus described matches a
+pre-defined existing system in use in the world. In particular, this
+means there may be no authority names and codes in the WKT output.
 
 WKT format shows the false eastings and northings in the projected unit
 (e.g. meters, feet) but in PROJ format it should always be given in
 meters.
+
+PROJJSON format is a JSON version of the WKT format, see the [PROJJSON
+specification](https://proj.org/en/stable/specifications/projjson.html)
 
 The maximum size of input WKT or PROJ CRS descriptions is limited to
 8000 bytes.
@@ -116,10 +123,10 @@ Print the CRS information for the current project:
 g.proj -p
 ```
 
-Print the CRS information for the current project in JSON format:
+Print the CRS information for the current project in PROJJSON format:
 
 ```sh
-g.proj -p format=json
+g.proj -p format=projjson
 ```
 
 Print the CRS information for the current project in shell format:
@@ -134,17 +141,10 @@ Print the CRS information for the current project in WKT format:
 g.proj -p format=wkt
 ```
 
-Print the CRS information for the current project in PROJ.4 format:
+Print the CRS information for the current project in PROJ.4 format (deprecated):
 
 ```sh
 g.proj -p format=proj4
-```
-
-List the possible datum transformation parameters for the current
-project:  
-
-```sh
-g.proj -t datumtrans=-1
 ```
 
 ### Create projection (PRJ) file
@@ -240,47 +240,13 @@ Reproject external vector map to current GRASS project using the OGR
 ogr2ogr -t_srs "`g.proj -wf`" polbnda_italy_GB_ovest.shp polbnda_italy_LL.shp
 ```
 
-### Using g.proj JSON output with pandas
-
-Using the CRS information for the current project in JSON format with pandas:
-
-```python
-import grass.script as gs
-import pandas as pd
-
-# Run g.proj to get CRS information in JSON format.
-proj_data = gs.parse_command("g.proj", flags="p", format="json")
-
-df = pd.DataFrame.from_dict(proj_data, orient='index')
-print(df)
-```
-
-```sh
-                               0
-name     Lambert Conformal Conic
-proj                         lcc
-datum                      nad83
-a                      6378137.0
-es          0.006694380022900787
-lat_1          36.16666666666666
-lat_2          34.33333333333334
-lat_0                      33.75
-lon_0                        -79
-x_0                    609601.22
-y_0                            0
-no_defs                  defined
-unit                       Meter
-units                     Meters
-meters                         1
-```
-
 ## REFERENCES
 
 [PROJ](https://proj.org): Projection/datum support library  
 [GDAL raster library and toolset](https://gdal.org)  
 [OGR vector library and toolset](https://gdal.org/)
 
-Further reading:
+### Further reading
 
 - [ASPRS Grids and
   Datum](https://www.asprs.org/asprs-publications/grids-and-datums)
