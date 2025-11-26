@@ -744,7 +744,6 @@ disable = [
     "W0611",  # (unused-import)
     "W0612",  # Unused variable %r (unused-variable)
     "W0613",  # Unused argument %r (unused-argument)
-    #"W0614",  # Unused import(s) %s from wildcard import of %s (unused-wildcard-import)
     "W0621",  # Redefining name %r from outer scope (line %s) (redefined-outer-name)
     "W0621",  # Redefining name %r from outer scope (line %s) (redefined-outer-name)
     "W0622",  # Redefining built-in %r (redefined-builtin)
