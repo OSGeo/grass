@@ -334,6 +334,9 @@ Fetch a tarball from GitHub we also publish on OSGeo servers:
 ```bash
 wget https://github.com/OSGeo/grass/releases/download/${VERSION}/grass-${VERSION}.tar.gz \
     -O grass-${VERSION}.tar.gz
+wget https://github.com/OSGeo/grass/releases/download/${VERSION}/grass-${VERSION}.tar.gz.sha256 \
+    -O grass-${VERSION}.tar.gz.sha256
+sha256sum -c grass-${VERSION}.tar.gz.sha256
 md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 ```
 
