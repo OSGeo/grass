@@ -341,6 +341,7 @@ class Messenger:
 
 _MSGR_INSTANCE: Messenger | None = None
 
+
 def get_msgr(
     *args,
     **kwargs,
