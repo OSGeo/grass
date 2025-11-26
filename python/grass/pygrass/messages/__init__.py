@@ -338,6 +338,7 @@ class Messenger:
         self.client_conn.send(["FATAL", message])
         time.sleep(1)
 
+
 _MSGR_INSTANCE: Messenger | None = None
 
 def get_msgr(
