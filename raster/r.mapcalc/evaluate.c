@@ -461,11 +461,11 @@ void execute(expr_list *ee)
     verbose = isatty(2);
     for (current_depth = 0; current_depth < depths; current_depth++) {
         int row;
-#pragma omp parallel for default(shared) schedule(static, 1) private(i) ordered
-        for (row = 0; row < rows; row++) {
-            if (verbose)
-                G_percent(n, count, 2);
 
+        if (verbose)
+            G_percent(current_depth + 1, depths, 2);
+#pragma omp parallel for default(shared) schedule(static, 1) private(i)
+        for (row = 0; row < rows; row++) {
             int tid = 0;
 #if defined(_OPENMP)
             tid = omp_get_thread_num();
@@ -474,22 +474,23 @@ void execute(expr_list *ee)
             current_row[tid] = row;
             for (i = 0; i < num_exprs; i++) {
                 expression *e = exp_arr[i];
-                int fd;
                 evaluate(e);
-#pragma omp ordered
-                {
-                    /* write out values to a file row by row */
-                    if (e->type == expr_type_binding) {
-                        fd = e->data.bind.fd;
-                        put_map_row(fd, e->buf[tid], e->res_type);
-                    }
-                }
             }
 #pragma omp atomic update
             n++;
         }
-    }
 
+        for (row = 0; row < rows; row++) {
+            for (i = 0; i < num_exprs; i++) {
+                expression *e = exp_arr[i];
+                /* write out values to a file row by row */
+                if (e->type == expr_type_binding) {
+                    // Use thread 0's buffer or restructure buffers
+                    put_map_row(e->data.bind.fd, e->buf[0], e->res_type);
+                }
+            }
+        }
+    }
     G_finish_workers();
 
     if (verbose)
