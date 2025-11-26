@@ -721,7 +721,6 @@ disable = [
     "RP0401", # Report: Imports checker: External dependencies
     "RP0801", # Report: Similarities: Duplication
     "W0101",  # Unreachable code (unreachable)
-    "W0102",  # Dangerous default value %s as argument (dangerous-default-value)
     "W0104",  # Statement seems to have no effect (pointless-statement)
     "W0106",  # Expression "%s" is assigned to nothing (expression-not-assigned)
     "W0108",  # Lambda may not be necessary (unnecessary-lambda)
@@ -745,7 +744,7 @@ disable = [
     "W0611",  # (unused-import)
     "W0612",  # Unused variable %r (unused-variable)
     "W0613",  # Unused argument %r (unused-argument)
-    "W0614",  # Unused import(s) %s from wildcard import of %s (unused-wildcard-import)
+    #"W0614",  # Unused import(s) %s from wildcard import of %s (unused-wildcard-import)
     "W0621",  # Redefining name %r from outer scope (line %s) (redefined-outer-name)
     "W0621",  # Redefining name %r from outer scope (line %s) (redefined-outer-name)
     "W0622",  # Redefining built-in %r (redefined-builtin)
