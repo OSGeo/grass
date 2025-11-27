@@ -462,10 +462,10 @@ void execute(expr_list *ee)
     for (current_depth = 0; current_depth < depths; current_depth++) {
         int row;
 
-        if (verbose)
-            G_percent(current_depth + 1, depths, 2);
-#pragma omp parallel for default(shared) schedule(static, 1) private(i)
+#pragma omp parallel for default(shared) schedule(static, 1) private(i) ordered
         for (row = 0; row < rows; row++) {
+            if (verbose)
+                G_percent(n, count, 2);
             int tid = 0;
 #if defined(_OPENMP)
             tid = omp_get_thread_num();
@@ -476,19 +476,18 @@ void execute(expr_list *ee)
                 expression *e = exp_arr[i];
                 evaluate(e);
             }
-#pragma omp atomic update
-            n++;
-        }
-
-        for (row = 0; row < rows; row++) {
-            for (i = 0; i < num_exprs; i++) {
-                expression *e = exp_arr[i];
-                /* write out values to a file row by row */
-                if (e->type == expr_type_binding) {
-                    // Use thread 0's buffer or restructure buffers
-                    put_map_row(e->data.bind.fd, e->buf[0], e->res_type);
+#pragma omp ordered
+            {
+                for (i = 0; i < num_exprs; i++) {
+                    expression *e = exp_arr[i];
+                    /* write out values to a file row by row */
+                    if (e->type == expr_type_binding) {
+                        put_map_row(e->data.bind.fd, e->buf[tid], e->res_type);
+                    }
                 }
             }
+#pragma omp atomic update
+            n++;
         }
     }
     G_finish_workers();
