@@ -996,16 +996,6 @@ else
   fi
 
   if test "$GDAL_CONFIG" != "" ; then
-    gdal_version=$("$GDAL_CONFIG" --version)
-    gdal_version_major=$(echo "$gdal_version" | cut -d . -f 1)
-    gdal_version_minor=$(echo "$gdal_version" | cut -d . -f 2)
-    if test "$(expr "$gdal_version_major" \>= 3)" = 1 && \
-        test "$(expr "$gdal_version_minor" \>= 7)" = 1; then
-        AC_MSG_RESULT([using GDAL version "${gdal_version}"])
-    else
-        AC_MSG_ERROR([*** GDAL version 3.7 or newer is required (found version "${gdal_version}")])
-    fi
-
     GDAL_LIBS=`"$GDAL_CONFIG" --libs`
     GDAL_DEP_LIBS=`"$GDAL_CONFIG" --dep-libs`
     GDAL_CFLAGS=`"$GDAL_CONFIG" --cflags`
@@ -1014,6 +1004,17 @@ else
       AC_DEFINE(HAVE_OGR, 1, [Define to 1 if OGR is to be used.])
       USE_OGR=1
     fi
+  fi
+
+  LOC_CHECK_VERSION_INT(gdal_version.h,GDAL_VERSION_MAJOR,[GDAL major version],gdal_version_major,$GDAL_CFLAGS,0)
+  LOC_CHECK_VERSION_INT(gdal_version.h,GDAL_VERSION_MINOR,[GDAL minor version],gdal_version_minor,$GDAL_CFLAGS,0)
+  LOC_CHECK_VERSION_INT(gdal_version.h,GDAL_VERSION_REV,[GDAL revision version],gdal_version_rev,$GDAL_CFLAGS,0)
+  gdal_version="$gdal_version_major.$gdal_version_minor.$gdal_version_rev"
+  if test "$(expr "$gdal_version_major" \>= 3)" = 1 && \
+      test "$(expr "$gdal_version_minor" \>= 7)" = 1; then
+      AC_MSG_RESULT([using GDAL version "${gdal_version}"])
+  else
+      AC_MSG_ERROR([*** GDAL version 3.7 or newer is required (found version "${gdal_version}")])
   fi
 
   GDAL=
