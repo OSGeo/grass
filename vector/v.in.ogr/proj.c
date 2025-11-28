@@ -155,9 +155,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
             G_important_message(_("Input contains an invalid CRS."));
 
             /* WKT description could give a hint what's wrong */
-#if GDAL_VERSION_NUM >= 3000000
             CPLSetConfigOption("OSR_WKT_FORMAT", "WKT2");
-#endif
             if (OSRExportToPrettyWkt(hSRS, &wkt, FALSE) != OGRERR_NONE) {
                 G_important_message(_("Can't get WKT parameter string"));
             }
@@ -214,9 +212,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                             "format; cannot create new project."));
         }
         else {
-#if GDAL_VERSION_NUM >= 3000000
             CPLSetConfigOption("OSR_WKT_FORMAT", "WKT2");
-#endif
             if (OSRExportToPrettyWkt(hSRS, &wkt, FALSE) != OGRERR_NONE) {
                 G_important_message(_("Can't get WKT parameter string"));
             }
@@ -283,7 +279,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
         }
 
         /* get OGR spatial reference for current projection */
-#if GDAL_VERSION_MAJOR >= 3 && PROJ_VERSION_MAJOR >= 6
+#if PROJ_VERSION_MAJOR >= 6
         /* 1. from SRID */
         if (loc_srid && *loc_srid) {
             PJ *obj = NULL;
@@ -319,10 +315,8 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
         }
         /* 4. from GRASS-native proj info */
         if (!hSRS_loc) {
-#if GDAL_VERSION_NUM >= 3000000
             /* GPJ_grass_to_osr2 needs WKT1 format */
             CPLSetConfigOption("OSR_WKT_FORMAT", "WKT1");
-#endif
             hSRS_loc =
                 GPJ_grass_to_osr2(loc_proj_info, loc_proj_units, loc_epsg);
         }
@@ -346,9 +340,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
             if (G_verbose() >= G_verbose_std()) {
                 char *wktstr = NULL;
 
-#if GDAL_VERSION_NUM >= 3000000
                 CPLSetConfigOption("OSR_WKT_FORMAT", "WKT2");
-#endif
                 OSRExportToPrettyWkt(hSRS, &wktstr, 0);
                 /* G_message and G_fatal_error destroy the pretty formatting
                  * thus use fprintf(stderr, ...) */

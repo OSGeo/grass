@@ -55,9 +55,6 @@
 #endif
 #ifdef HAVE_OGR
 #include <ogr_srs_api.h>
-#if PROJ_VERSION_MAJOR >= 6 && GDAL_VERSION_MAJOR < 3
-#error "PROJ 6+ requires GDAL 3+"
-#endif
 #endif
 
 /* Data Files */

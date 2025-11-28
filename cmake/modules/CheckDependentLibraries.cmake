@@ -22,7 +22,7 @@ endif()
 
 find_package(PROJ REQUIRED)
 
-find_package(GDAL REQUIRED)
+find_package(GDAL 3.7.0 REQUIRED)
 
 find_package(ZLIB REQUIRED)
 

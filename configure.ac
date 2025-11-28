@@ -996,6 +996,16 @@ else
   fi
 
   if test "$GDAL_CONFIG" != "" ; then
+    gdal_version=$("$GDAL_CONFIG" --version)
+    gdal_version_major=$(echo "$gdal_version" | cut -d . -f 1)
+    gdal_version_minor=$(echo "$gdal_version" | cut -d . -f 2)
+    if test "$(expr "$gdal_version_major" \>= 3)" = 1 && \
+        test "$(expr "$gdal_version_minor" \>= 7)" = 1; then
+        AC_MSG_RESULT([using GDAL version "${gdal_version}"])
+    else
+        AC_MSG_ERROR([*** GDAL version 3.7 or newer is required (found version "${gdal_version}")])
+    fi
+
     GDAL_LIBS=`"$GDAL_CONFIG" --libs`
     GDAL_DEP_LIBS=`"$GDAL_CONFIG" --dep-libs`
     GDAL_CFLAGS=`"$GDAL_CONFIG" --cflags`
