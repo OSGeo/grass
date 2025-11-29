@@ -474,14 +474,15 @@ void execute(expr_list *ee)
             current_row[tid] = row;
             for (i = 0; i < num_exprs; i++) {
                 expression *e = exp_arr[i];
-                int fd;
                 evaluate(e);
+            }
 #pragma omp ordered
-                {
+            {
+                for (i = 0; i < num_exprs; i++) {
+                    expression *e = exp_arr[i];
                     /* write out values to a file row by row */
                     if (e->type == expr_type_binding) {
-                        fd = e->data.bind.fd;
-                        put_map_row(fd, e->buf[tid], e->res_type);
+                        put_map_row(e->data.bind.fd, e->buf[tid], e->res_type);
                     }
                 }
             }
