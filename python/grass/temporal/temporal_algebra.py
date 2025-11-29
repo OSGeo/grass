@@ -1118,7 +1118,8 @@ class TemporalAlgebraParser:
 
         :param maplist: List of map objects for which relations has been build
                                     correctly.
-        :param topolist: List of strings of temporal relations.
+        :param topolist: List of strings of temporal relations. If None,
+                         defaults to ["EQUAL"] internally.
         :param temporal: The temporal operator specifying the temporal
                                         extent operation (intersection, union, disjoint
                                         union, right reference, left reference).
@@ -1413,7 +1414,8 @@ class TemporalAlgebraParser:
 
         :param maplistA: List of maps.
         :param maplistB: List of maps.
-        :param topolist: List of strings of spatio-temporal relations.
+        :param topolist: List of strings of spatio-temporal relations. If None,
+                         defaults to ["EQUAL"] internally.
         :param assign_val: Boolean for assigning a boolean map value based on
                            the map_values from the compared map list by
                            topological relationships.
@@ -1634,8 +1636,10 @@ class TemporalAlgebraParser:
         compared map list by topological relationships.
 
           :param map_i: Map object with temporal extent.
-          :param temporal_topo_list: List of strings for given temporal relations.
-          :param spatial_topo_list: List of strings for given spatial relations.
+          :param temporal_topo_list: List of strings for given temporal relations. If None,
+                                    defaults to ["EQUAL"] internally.
+          :param spatial_topo_list: List of strings for given spatial relations. If None,
+                                   defaults to empty list internally.
 
           :return: Map object with conditional value that has been assigned by
                         relation maps that fulfil the topological relationships to
@@ -1685,8 +1689,10 @@ class TemporalAlgebraParser:
         :param map_i: Map object with temporal extent.
         :param compop: Comparison operator, && or ||.
         :param aggregate: Aggregation operator for relation map list, & or \\|.
-        :param temporal_topo_list: List of strings for given temporal relations.
-        :param spatial_topo_list: List of strings for given spatial relations.
+        :param temporal_topo_list: List of strings for given temporal relations. If None,
+                                  defaults to ["EQUAL"] internally.
+        :param spatial_topo_list: List of strings for given spatial relations. If None,
+                                 defaults to empty list internally.
 
         :return: Map object with conditional value that has been evaluated by
                       comparison operators.
@@ -1780,7 +1786,8 @@ class TemporalAlgebraParser:
                            expression.
         :param maplistB:   List of maps representing the right side of a temporal
                            expression.
-        :param topolist: List of strings of temporal relations.
+        :param topolist: List of strings of temporal relations. If None,
+                         defaults to ["EQUAL"] internally.
         :param inverse: Boolean value that specifies if the selection should be
                            inverted.
         :param assign_val: Boolean for assigning a boolean map value based on
@@ -1868,7 +1875,8 @@ class TemporalAlgebraParser:
         :param maplistB: List of maps.
         :param maplistB: List of maps.
         :param toperator: String containing the temporal operator: l, r, d, i, u.
-        :param topolist: List of topological relations.
+        :param topolist: List of topological relations. If None, defaults to ["EQUAL"]
+                         internally.
 
         :return: List of maps with the new temporal extends.
 
@@ -2175,6 +2183,8 @@ class TemporalAlgebraParser:
         :param maplist:  List of map objects containing boolean map values.
         :param thenlist: List of map objects where the boolean values
                         should be added.
+        :param topolist: List of temporal relations between the two map lists. If None,
+                        defaults to ["EQUAL"] internally.
 
         :return: List of maps from thenlist with added conditional boolean values.
         """

@@ -202,7 +202,8 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
         :param maplistA: List of maps.
         :param maplistB: List of maps.
-        :param topolist: List of strings of temporal relations.
+        :param topolist: List of strings of temporal relations. If None, 
+                        defaults to ["EQUAL"] internally.
         :param assign_val: Boolean for assigning a boolean map value based on
                           the map_values from the compared map list by
                           topological relationships.
@@ -292,7 +293,8 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
         :param map_i: Map object with temporal extent.
         :param tbrelations: List of temporal relation to map_i.
-        :param topolist: List of strings for given temporal relations.
+        :param topolist: List of strings for given temporal relations. If None,
+                        defaults to ["EQUAL"] internally.
         :param function: Overlay operator, &|+^~.
 
         :return: Map object with command list with  operators that has been
@@ -355,7 +357,8 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
         :param maplist: List of map objects for which relations has been build
                                     correctly.
-        :param topolist: List of strings of temporal relations.
+        :param topolist: List of strings of temporal relations. If None, 
+                        defaults to ["EQUAL"] internally.
         :param temporal: The temporal operator specifying the temporal
                                         extent operation (intersection, union, disjoint
                                         union, right reference, left reference).
