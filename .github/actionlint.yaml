@@ -1,3 +1,4 @@
+---
 self-hosted-runner:
   # Labels of self-hosted runner in array of strings.
   labels: []
@@ -15,8 +16,8 @@ config-variables: null
 # "ignore" is an array of regular expression patterns. Matched error messages
 # are ignored. This is similar to the "-ignore" command line option.
 paths:
-#  .github/workflows/**/*.yml:
-#    ignore: []
+  # .github/workflows/**/*.yml:
+  #   ignore: []
   .github/workflows/python-code-quality.yml:
     ignore:
       - 'condition "false" is always evaluated to false. remove the if: section' # [if-cond]
