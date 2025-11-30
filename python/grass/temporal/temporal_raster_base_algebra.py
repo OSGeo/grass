@@ -220,7 +220,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
 
         :param maplistA: List of maps.
         :param maplistB: List of maps.
-what        :param topolist: List of strings of temporal relations. If None, defaults to ["EQUAL"] internally.
+        :param topolist: List of strings of temporal relations. If None, defaults to ["EQUAL"] internally.
         :param assign_val: Boolean for assigning a boolean map value based on
                         the map_values from the compared map list by
                         topological relationships.
