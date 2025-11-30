@@ -15,8 +15,7 @@ import threading
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-from grass.lib.gis import G_srand48, G_lrand48
+from grass.lib.gis import G_lrand48, G_srand48
 
 
 class Lrand48ThreadSafetyTestCase(TestCase):
