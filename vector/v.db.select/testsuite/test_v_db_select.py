@@ -9,7 +9,7 @@ Licence:   This program is free software under the GNU General Public
            for details.
 """
 
-import os
+from pathlib import Path
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
@@ -211,8 +211,7 @@ class SelectTest(TestCase):
         """This function checks if the output file is written correctly"""
         self.runModule("v.db.select", map=self.invect, file=self.outfile)
         self.assertFileExists(self.outfile)
-        if os.path.isfile(self.outfile):
-            os.remove(self.outfile)
+        Path(self.outfile).unlink(missing_ok=True)
 
     def testGroup(self):
         """Testing v.db.select with group option"""

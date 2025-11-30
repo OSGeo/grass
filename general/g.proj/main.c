@@ -235,12 +235,13 @@ int main(int argc, char *argv[])
     location->description = _("Name of new project (location) to create");
 
     format = G_define_standard_option(G_OPT_F_FORMAT);
-    format->options = "plain,shell,json,wkt,proj4";
-    format->descriptions = _("plain;Human readable text output;"
-                             "shell;shell script style text output;"
-                             "json;JSON (JavaScript Object Notation);"
-                             "wkt;Well-known text output;"
-                             "proj4;PROJ.4 style text output;");
+    format->options = "plain,shell,wkt,projjson,proj4";
+    format->descriptions =
+        _("plain;Human readable text output;"
+          "shell;shell script style text output;"
+          "wkt;Well-known text output;"
+          "projjson;JSON (JavaScript Object Notation) version of WKT;"
+          "proj4;PROJ.4 style text output;");
     format->guisection = _("Print");
 
     G_option_exclusive(printinfo, datuminfo, create, NULL);
@@ -250,7 +251,7 @@ int main(int argc, char *argv[])
 
     /* Initialisation & Validation */
 
-    if (strcmp(format->answer, "json") == 0) {
+    if (strcmp(format->answer, "projjson") == 0) {
         outputFormat = JSON;
     }
     else if (strcmp(format->answer, "shell") == 0) {

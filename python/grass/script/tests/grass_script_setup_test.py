@@ -2,9 +2,11 @@
 
 import os
 import sys
+
 import subprocess
 import json
 from textwrap import dedent
+from pathlib import Path
 
 import pytest
 
@@ -66,8 +68,8 @@ def test_init_as_context_manager(tmp_path):
     with gs.setup.init(project, env=os.environ.copy()) as session:
         gs.run_command("g.region", flags="p", env=session.env)
         session_file = session.env["GISRC"]
-        assert os.path.exists(session_file)
-    assert not os.path.exists(session_file)
+        assert Path(session_file).exists()
+    assert not Path(session_file).exists()
 
 
 @pytest.mark.usefixtures("mock_no_session")
@@ -84,7 +86,7 @@ def test_init_session_finish(tmp_path):
     with pytest.raises(ValueError, match="finished session"):
         session.finish()
     assert not session.active
-    assert not os.path.exists(session_file)
+    assert not Path(session_file).exists()
 
 
 @pytest.mark.usefixtures("mock_no_session")
@@ -98,7 +100,7 @@ def test_global_finish_session_only_in_env(tmp_path):
     session.finish()
     # Test preconditions
     assert not session.active
-    assert not os.path.exists(session_file)
+    assert not Path(session_file).exists()
     # The global function can only know that a session does not exist,
     # but not that it existed but has been finished.
     # On top of that, without capured stderr, the error message has
@@ -118,7 +120,7 @@ def test_init_finish_global_functions_with_env(tmp_path):
     session_file = env["GISRC"]
     gs.setup.finish(env=env)
 
-    assert not os.path.exists(session_file)
+    assert not Path(session_file).exists()
 
 
 @pytest.mark.parametrize("capture_stderr", [True, False, None])
@@ -142,9 +144,13 @@ def test_init_finish_global_functions_capture_strerr(tmp_path, capture_stderr):
         gs.setup.init(r"{project}")
         crs_type = gs.parse_command("g.region", flags="p", format="json")["crs"]["type"]
         runtime_present = bool(os.environ.get("GISBASE"))
+        gisbase_exists = (
+            os.path.exists(os.environ.get("GISBASE")) if runtime_present else False
+        )
         result = {{
             "session_file": os.environ["GISRC"],
             "runtime_present": runtime_present,
+            "gisbase_exists": gisbase_exists,
             "crs_type": crs_type
         }}
         gs.setup.finish()
@@ -153,7 +159,8 @@ def test_init_finish_global_functions_capture_strerr(tmp_path, capture_stderr):
     result = run_in_subprocess(code, tmp_path=tmp_path)
     assert result["session_file"], "Expected file name from the subprocess"
     assert result["runtime_present"], RUNTIME_GISBASE_SHOULD_BE_PRESENT
-    assert not os.path.exists(result["session_file"]), SESSION_FILE_NOT_DELETED
+    assert result["gisbase_exists"], "Install directory should exist"
+    assert not Path(result["session_file"]).exists(), SESSION_FILE_NOT_DELETED
     assert result["crs_type"] == "xy"
 
 
@@ -190,7 +197,7 @@ def test_init_finish_global_functions_runtime_persists(tmp_path):
     result = run_in_subprocess(code, tmp_path=tmp_path)
     assert result["session_file"], "Expected file name from the subprocess"
     assert result["runtime_present"], RUNTIME_GISBASE_SHOULD_BE_PRESENT
-    assert not os.path.exists(result["session_file"]), SESSION_FILE_NOT_DELETED
+    assert not Path(result["session_file"]).exists(), SESSION_FILE_NOT_DELETED
     # This is testing the current implementation behavior, but it is not required
     # to be this way in terms of design.
     assert result["runtime_present_after"], "Runtime should continue to be present"
@@ -251,7 +258,7 @@ def test_init_finish_global_functions_set_environment(tmp_path):
     assert not result["session_file_variable_present_after"], (
         "Not expecting GISRC when finished"
     )
-    assert not os.path.exists(result["session_file"]), SESSION_FILE_NOT_DELETED
+    assert not Path(result["session_file"]).exists(), SESSION_FILE_NOT_DELETED
 
 
 @pytest.mark.usefixtures("mock_no_session")
@@ -282,7 +289,7 @@ def test_init_as_context_manager_env_attribute(tmp_path):
     assert result["session_file"], "Expected file name from the subprocess"
     assert result["file_existed"], "File should have been present"
     assert result["runtime_present"], RUNTIME_GISBASE_SHOULD_BE_PRESENT
-    assert not os.path.exists(result["session_file"]), SESSION_FILE_NOT_DELETED
+    assert not Path(result["session_file"]).exists(), SESSION_FILE_NOT_DELETED
     assert not os.environ.get("GISRC")
     assert not os.environ.get("GISBASE")
     assert result["region_data"]["crs"]["type"] == "xy"
@@ -435,3 +442,28 @@ def test_init_lock_timeout_fail(tmp_path):
             gs.setup.init(project, env=os.environ.copy(), lock=True, timeout=2),
         ):
             pass
+
+
+@pytest.mark.parametrize("project_path_type", [str, Path])
+@pytest.mark.parametrize("grass_path_type", [str, Path])
+def test_grass_path_types_in_init(tmp_path, project_path_type, grass_path_type):
+    """Check that different path types are accepted as path to grass"""
+    # We test with project path type just to be sure there is no interaction.
+    project = project_path_type(tmp_path / "test")
+    gs.create_project(project)
+    grass_path = grass_path_type(gs.setup.get_install_path())
+    with gs.setup.init(
+        project, grass_path=grass_path, env=os.environ.copy()
+    ) as session:
+        gs.run_command("g.region", res=1, env=session.env)
+
+
+@pytest.mark.parametrize("path_type", [str, Path])
+def test_grass_path_types_in_setup(tmp_path, path_type):
+    """Check that different path types are accepted as path to grass"""
+    # We test with project path type just to be sure there is no interaction.
+    grass_path = path_type(gs.setup.get_install_path())
+    env = os.environ.copy()
+    gs.setup.setup_runtime_env(grass_path, env=env)
+    # At least before FHS, GISBASE is the way to detect an active runtime.
+    assert "GISBASE" in env

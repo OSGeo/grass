@@ -504,13 +504,13 @@ def get_available_temporal_mapsets():
             # mapset
             # to create it
             if (
-                driver == "sqlite" and os.path.exists(database)
+                driver == "sqlite" and Path(database).exists()
             ) or mapset == get_current_mapset():
                 tgis_mapsets[mapset] = (driver, database)
 
             # We need to warn if the connection is defined but the database does not
             # exists
-            if driver == "sqlite" and not os.path.exists(database):
+            if driver == "sqlite" and not Path(database).exists():
                 message_interface.warning(
                     "Temporal database connection defined as:\n"
                     + database
@@ -689,7 +689,7 @@ def init(raise_fatal_error: bool = False, skip_db_version_check: bool = False):
     # Check if the database already exists
     if tgis_backend == "sqlite":
         # Check path of the sqlite database
-        if os.path.exists(tgis_database_string):
+        if Path(tgis_database_string).exists():
             dbif.connect()
             # Check for raster_base table
             dbif.execute(
@@ -877,9 +877,9 @@ def create_temporal_database(dbif) -> None:
     if tgis_backend == "sqlite":
         # We need to create the sqlite3 database path if it does not exist
         tgis_dir = os.path.dirname(tgis_database_string)
-        if not os.path.exists(tgis_dir):
+        if not Path(tgis_dir).exists():
             try:
-                os.makedirs(tgis_dir)
+                Path(tgis_dir).mkdir(parents=True)
             except Exception as e:
                 msgr.fatal(
                     _(
@@ -1389,9 +1389,9 @@ class DBConnection:
             if self.connected:
                 try:
                     return self.cursor.mogrify(sql, args)
-                except Exception as exc:
+                except Exception:
                     print(sql, args)
-                    raise exc
+                    raise
             else:
                 self.connect()
                 statement = self.cursor.mogrify(sql, args)

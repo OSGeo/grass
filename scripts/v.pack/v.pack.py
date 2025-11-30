@@ -76,7 +76,7 @@ def main():
     outfile = options["output"] or infile + ".pack"
 
     # check if exists the output file
-    if os.path.exists(outfile):
+    if Path(outfile).exists():
         if os.getenv("GRASS_OVERWRITE"):
             grass.warning(
                 _("Pack file <%s> already exists and will be overwritten") % outfile
@@ -127,7 +127,7 @@ def main():
         path = os.path.join(
             gisenv["GISDBASE"], gisenv["LOCATION_NAME"], "PERMANENT", "PROJ_" + support
         )
-        if os.path.exists(path):
+        if Path(path).exists():
             tar.add(path, "PROJ_" + support)
     tar.close()
 

@@ -29,7 +29,7 @@ jobs:
       CMAKE_VERSION: "3.22.0"
     steps:
       - name: Checkout GRASS
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
         with:
           persist-credentials: false
       - name: Install CMake
@@ -88,7 +88,7 @@ jobs:
         run: .github/workflows/test_thorough.sh --config .gunittest.cfg --min-success 98
       - name: Make HTML test report available
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: testreport-CMake
           path: testreport

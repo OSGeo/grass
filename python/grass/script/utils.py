@@ -433,21 +433,22 @@ def naturally_sort(items, key=None):
 def get_lib_path(modname, libname=None):
     """Return the path of the libname contained in the module."""
     from os import getenv
-    from os.path import isdir, join, sep
+    from os.path import join, sep
 
-    if isdir(join(getenv("GISBASE"), "etc", modname)):
+    if Path(getenv("GISBASE"), "etc", modname).is_dir():
         path = join(os.getenv("GISBASE"), "etc", modname)
     elif (
         getenv("GRASS_ADDON_BASE")
         and libname
-        and isdir(join(getenv("GRASS_ADDON_BASE"), "etc", modname, libname))
+        and Path(getenv("GRASS_ADDON_BASE"), "etc", modname, libname).is_dir()
     ) or (
         getenv("GRASS_ADDON_BASE")
-        and isdir(join(getenv("GRASS_ADDON_BASE"), "etc", modname))
+        and Path(getenv("GRASS_ADDON_BASE"), "etc", modname).is_dir()
     ):
         path = join(getenv("GRASS_ADDON_BASE"), "etc", modname)
-    elif getenv("GRASS_ADDON_BASE") and isdir(
-        join(getenv("GRASS_ADDON_BASE"), modname, modname)
+    elif (
+        getenv("GRASS_ADDON_BASE")
+        and Path(getenv("GRASS_ADDON_BASE"), modname, modname).is_dir()
     ):
         path = join(os.getenv("GRASS_ADDON_BASE"), modname, modname)
     else:
@@ -535,7 +536,7 @@ def set_path(modulename, dirname=None, path="."):
     pathlib_ = None
     if dirname:
         pathlib_ = os.path.join(path, dirname)
-    if pathlib_ and os.path.exists(pathlib_):
+    if pathlib_ and Path(pathlib_).exists():
         # we are running the script from the script directory, therefore
         # we add the path to sys.path to reach the directory (dirname)
         sys.path.append(os.path.abspath(path))
