@@ -300,7 +300,7 @@ int main(int argc, char *argv[])
     struct Key_Value *projepsg = G_get_projepsg();
     char *srswkt = NULL;
 
-#if GDAL_VERSION_MAJOR >= 3 && PROJ_VERSION_MAJOR >= 6
+#if PROJ_VERSION_MAJOR >= 6
     char *indef;
 
     if ((indef = G_get_projsrid())) {
@@ -337,7 +337,7 @@ int main(int argc, char *argv[])
     if (!srswkt) {
         srswkt = GPJ_grass_to_wkt2(projinfo, projunits, projepsg, 0, 0);
 
-#if GDAL_VERSION_MAJOR >= 3 && PROJ_VERSION_MAJOR >= 6
+#if PROJ_VERSION_MAJOR >= 6
         /* convert bound CRS */
         if (srswkt && *srswkt) {
             PJ *obj = NULL;

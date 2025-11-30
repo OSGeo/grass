@@ -1006,6 +1006,17 @@ else
     fi
   fi
 
+  LOC_CHECK_VERSION_INT(gdal_version.h,GDAL_VERSION_MAJOR,[GDAL major version],gdal_version_major,$GDAL_CFLAGS,0)
+  LOC_CHECK_VERSION_INT(gdal_version.h,GDAL_VERSION_MINOR,[GDAL minor version],gdal_version_minor,$GDAL_CFLAGS,0)
+  LOC_CHECK_VERSION_INT(gdal_version.h,GDAL_VERSION_REV,[GDAL revision version],gdal_version_rev,$GDAL_CFLAGS,0)
+  gdal_version="$gdal_version_major.$gdal_version_minor.$gdal_version_rev"
+  if test "$(expr "$gdal_version_major" \>= 3)" = 1 && \
+      test "$(expr "$gdal_version_minor" \>= 7)" = 1; then
+      AC_MSG_RESULT([using GDAL version "${gdal_version}"])
+  else
+      AC_MSG_ERROR([*** GDAL version 3.7 or newer is required (found version "${gdal_version}")])
+  fi
+
   GDAL=
   ac_save_libs="$LIBS"
   ac_save_cflags="$CFLAGS"
