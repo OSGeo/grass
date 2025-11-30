@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-08 19:01+0000\n"
+"POT-Creation-Date: 2025-11-22 15:39+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grassmods/es/>\n"
@@ -496,7 +496,7 @@ msgstr "Ruta para controlador SQLite, o string de conexión para controlador Pos
 msgid "Lists all databases for a given driver and location."
 msgstr "Lista todas las bases de datos para un controlador y Localización dados."
 
-#: ../db/db.describe/main.c:140 ../general/g.proj/output.c:382
+#: ../db/db.describe/main.c:140 ../general/g.proj/output.c:383
 #: ../general/g.region/main.c:990 ../general/g.version/main.c:409
 #: ../imagery/i.group/main.c:301 ../raster/r.category/main.c:412
 #: ../raster/r.describe/dumplist.c:71 ../raster/r.info/main.c:1000
@@ -6511,10 +6511,10 @@ msgstr "No ha sido posible abrir archivo de salida %s"
 msgid "Converts between PPM/PGM and PNG image formats."
 msgstr "Convierte entre formatos de imagen PPM/PGM y PNG."
 
-#: ../general/g.proj/create.c:16 ../raster/r.external/proj.c:141
-#: ../raster/r.in.gdal/main.c:1045 ../raster/r.in.gdal/proj.c:140
-#: ../vector/v.external/proj.c:173 ../vector/v.in.lidar/main.c:525
-#: ../vector/v.in.ogr/proj.c:307
+#: ../general/g.proj/create.c:16 ../raster/r.external/proj.c:129
+#: ../raster/r.in.gdal/main.c:1045 ../raster/r.in.gdal/proj.c:129
+#: ../vector/v.external/proj.c:158 ../vector/v.in.lidar/main.c:525
+#: ../vector/v.in.ogr/proj.c:228
 #, fuzzy, c-format
 msgid "Project <%s> created"
 msgstr "Localización <%s> creada"
@@ -20258,73 +20258,84 @@ msgstr "La banda seleccionada (%d) no existe"
 msgid "Imagery group <%s> created"
 msgstr "Grupo de imaginería <%s> creado"
 
-#: ../raster/r.external/proj.c:51 ../raster/r.external/proj.c:93
-#: ../raster/r.in.gdal/proj.c:51 ../raster/r.in.gdal/proj.c:93
-#, c-format
-msgid ""
-"Input contains an invalid CRS. WKT definition:\n"
-"%s"
+#: ../raster/r.external/proj.c:36 ../raster/r.external/proj.c:63
+#: ../raster/r.external/proj.c:122 ../raster/r.in.gdal/proj.c:36
+#: ../raster/r.in.gdal/proj.c:63 ../raster/r.in.gdal/proj.c:122
+#: ../vector/v.external/proj.c:92 ../vector/v.external/proj.c:151
+#: ../vector/v.in.ogr/proj.c:162 ../vector/v.in.ogr/proj.c:221
+msgid "Can't get WKT parameter string"
 msgstr ""
 
-#: ../raster/r.external/proj.c:120 ../raster/r.in.gdal/proj.c:120
+#: ../raster/r.external/proj.c:56 ../raster/r.in.gdal/proj.c:56
+#: ../vector/v.external/proj.c:85 ../vector/v.in.ogr/proj.c:155
+#, fuzzy
+#| msgid "Input map contains no data"
+msgid "Input contains an invalid CRS."
+msgstr "El mapa de entrada no contiene datos"
+
+#: ../raster/r.external/proj.c:66 ../raster/r.in.gdal/proj.c:66
+#: ../vector/v.external/proj.c:95 ../vector/v.in.ogr/proj.c:165
+#, fuzzy
+#| msgid "Definition"
+msgid "WKT definition:"
+msgstr "Definición"
+
+#: ../raster/r.external/proj.c:99 ../raster/r.in.gdal/proj.c:99
+#: ../vector/v.external/proj.c:128 ../vector/v.in.ogr/proj.c:198
 msgid "No projection information available"
 msgstr "No se encuentra información disponible sobre la proyección"
 
-#: ../raster/r.external/proj.c:133
+#: ../raster/r.external/proj.c:114 ../raster/r.in.gdal/proj.c:114
+#: ../vector/v.external/proj.c:143 ../vector/v.in.ogr/proj.c:213
 #, fuzzy
-msgid "Unable to convert input map coordinate reference system to GRASS format; cannot create new project."
+msgid "Unable to convert input map projection to GRASS format; cannot create new project."
 msgstr "No se puede convertir la proyección del mapa de entrada a formato GRASS; no se puede crear la nueva localización."
 
-#: ../raster/r.external/proj.c:139 ../raster/r.in.gdal/main.c:1039
-#: ../raster/r.in.gdal/proj.c:138 ../vector/v.external/proj.c:171
-#: ../vector/v.in.lidar/main.c:522 ../vector/v.in.ogr/proj.c:305
+#: ../raster/r.external/proj.c:127 ../raster/r.in.gdal/main.c:1039
+#: ../raster/r.in.gdal/proj.c:127 ../vector/v.external/proj.c:156
+#: ../vector/v.in.lidar/main.c:522 ../vector/v.in.ogr/proj.c:226
 #, fuzzy, c-format
 msgid "Unable to create new project <%s>"
 msgstr "No ha sido posible crear nuevo Directorio de mapas <%s>"
 
-#: ../raster/r.external/proj.c:165 ../raster/r.in.gdal/proj.c:164
-#: ../vector/v.external/proj.c:197 ../vector/v.in.ogr/proj.c:331
+#: ../raster/r.external/proj.c:157 ../raster/r.in.gdal/proj.c:157
+#: ../vector/v.external/proj.c:186 ../vector/v.in.ogr/proj.c:256
 msgid "Unable to convert input map projection information to GRASS format."
 msgstr "No se puede convertir la información de la proyección del mapa de entrada a formato GRASS."
 
-#: ../raster/r.external/proj.c:192 ../raster/r.in.gdal/proj.c:192
+#: ../raster/r.external/proj.c:238 ../raster/r.in.gdal/proj.c:238
 #: ../raster/r.in.lidar/projection.c:126
-#: ../raster3d/r3.in.lidar/projection.c:127 ../vector/v.external/proj.c:228
-#: ../vector/v.in.lidar/projection.c:124 ../vector/v.in.ogr/proj.c:360
+#: ../raster3d/r3.in.lidar/projection.c:127 ../vector/v.external/proj.c:267
+#: ../vector/v.in.lidar/projection.c:124 ../vector/v.in.ogr/proj.c:337
 msgid "Over-riding projection check"
 msgstr "Ignorando comprobación de proyección"
 
-#: ../raster/r.external/proj.c:200 ../raster/r.in.gdal/proj.c:200
-#: ../raster/r.in.lidar/projection.c:32 ../raster/r.in.pdal/projection.c:30
-#: ../raster3d/r3.in.lidar/projection.c:33 ../vector/v.external/proj.c:236
-#: ../vector/v.in.lidar/projection.c:30 ../vector/v.in.ogr/proj.c:368
+#: ../raster/r.external/proj.c:244 ../raster/r.in.gdal/proj.c:244
+#: ../vector/v.external/proj.c:273 ../vector/v.in.ogr/proj.c:343
 #, fuzzy
-msgid ""
-"Coordinate reference system of dataset does not appear to match current project.\n"
-"\n"
+msgid "Coordinate reference system of dataset does not appear to match current project.\n"
 msgstr ""
 "La proyección del conjunto de datos parece no corresponder con la localización actual.\n"
 "\n"
 
-#: ../raster/r.external/proj.c:207 ../raster/r.external/proj.c:216
-#: ../raster/r.in.gdal/proj.c:207 ../raster/r.in.gdal/proj.c:216
-#: ../vector/v.external/proj.c:243 ../vector/v.external/proj.c:252
-#: ../vector/v.in.ogr/proj.c:375 ../vector/v.in.ogr/proj.c:384
+#: ../raster/r.external/proj.c:258 ../raster/r.in.gdal/proj.c:258
+#: ../vector/v.external/proj.c:287 ../vector/v.in.ogr/proj.c:357
 #, fuzzy
-msgid "Project PROJ_INFO is:\n"
-msgstr "La PROJ_INFO de la localización es:\n"
-
-#: ../raster/r.external/proj.c:236 ../raster/r.external/proj.c:243
-#: ../raster/r.in.gdal/proj.c:236 ../raster/r.in.gdal/proj.c:243
-#: ../vector/v.external/proj.c:272 ../vector/v.external/proj.c:279
-#: ../vector/v.in.ogr/proj.c:404 ../vector/v.in.ogr/proj.c:411
-msgid "Dataset PROJ_INFO is:\n"
+#| msgid "Dataset PROJ_INFO is:\n"
+msgid "Dataset CRS is:\n"
 msgstr "La PROJ_INFO del conjunto de datos es:\n"
 
-#: ../raster/r.external/proj.c:324 ../raster/r.in.lidar/projection.c:89
-#: ../raster/r.in.pdal/projection.c:87 ../raster3d/r3.in.lidar/projection.c:90
-#: ../vector/v.external/proj.c:360 ../vector/v.in.lidar/projection.c:87
-#: ../vector/v.in.ogr/proj.c:492 ../vector/v.in.pdal/projection.c:87
+#: ../raster/r.external/proj.c:272 ../raster/r.in.gdal/proj.c:272
+#: ../vector/v.external/proj.c:301 ../vector/v.in.ogr/proj.c:371
+#, fuzzy
+msgid "Project CRS is:\n"
+msgstr "La PROJ_INFO de la localización es:\n"
+
+#: ../raster/r.external/proj.c:286 ../raster/r.in.gdal/proj.c:286
+#: ../raster/r.in.lidar/projection.c:89 ../raster/r.in.pdal/projection.c:87
+#: ../raster3d/r3.in.lidar/projection.c:90 ../vector/v.external/proj.c:315
+#: ../vector/v.in.lidar/projection.c:87 ../vector/v.in.ogr/proj.c:385
+#: ../vector/v.in.pdal/projection.c:87
 #, fuzzy, c-format
 msgid ""
 "\n"
@@ -20333,16 +20344,16 @@ msgstr ""
 "\n"
 "En caso de que no haya diferencias significativas en las definiciones de proyección, use la bandera -o para ignorarlas y use la definición de la Localización actual.\n"
 
-#: ../raster/r.external/proj.c:328 ../raster/r.in.gdal/proj.c:327
-#: ../vector/v.external/proj.c:364 ../vector/v.in.ogr/proj.c:496
+#: ../raster/r.external/proj.c:290 ../raster/r.in.gdal/proj.c:290
+#: ../vector/v.external/proj.c:319 ../vector/v.in.ogr/proj.c:389
 #, fuzzy
 msgid "Consider generating a new project from the input dataset using the 'project' parameter.\n"
 msgstr "Considere generar una nueva localización a partir del conjunto de datos de entrada usando el parámetro 'localización'.\n"
 
-#: ../raster/r.external/proj.c:348 ../raster/r.in.gdal/proj.c:347
+#: ../raster/r.external/proj.c:310 ../raster/r.in.gdal/proj.c:310
 #: ../raster/r.in.lidar/projection.c:136 ../raster/r.in.pdal/projection.c:134
-#: ../raster3d/r3.in.lidar/projection.c:137 ../vector/v.external/proj.c:384
-#: ../vector/v.in.lidar/projection.c:134 ../vector/v.in.ogr/proj.c:516
+#: ../raster3d/r3.in.lidar/projection.c:137 ../vector/v.external/proj.c:339
+#: ../vector/v.in.lidar/projection.c:134 ../vector/v.in.ogr/proj.c:409
 #, fuzzy
 msgid "Coordinate reference system of input dataset and current project appear to match"
 msgstr "Las proyecciones del conjunto de datos de entrada y de la localización actual parecen coincidir"
@@ -20959,7 +20970,7 @@ msgstr ""
 msgid "Region resolution shouldn't be lesser than map %s resolution. Run g.region raster=%s to set proper resolution"
 msgstr ""
 
-#: ../raster/r.geomorphon/pattern.c:228
+#: ../raster/r.geomorphon/pattern.c:229
 #, c-format
 msgid "Internal error in %s()"
 msgstr ""
@@ -21942,8 +21953,7 @@ msgstr "* Proyección de salida para la tabla de GCP: %s"
 msgid "Error in %s (can't re-project GCP %i)"
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:983 ../vector/v.external/proj.c:165
-#: ../vector/v.in.lidar/main.c:516
+#: ../raster/r.in.gdal/main.c:983 ../vector/v.in.lidar/main.c:516
 #, fuzzy
 msgid "Unable to convert input map CRS to GRASS format; cannot create new project."
 msgstr "No se puede convertir la proyección del mapa de entrada a formato GRASS; no se puede crear la nueva localización."
@@ -21997,20 +22007,6 @@ msgstr ""
 #, c-format
 msgid "Unable to open file <%s>: %s."
 msgstr "No ha sido posible abrir archivo <%s>: %s."
-
-#: ../raster/r.in.gdal/proj.c:132 ../vector/v.in.ogr/proj.c:299
-#, fuzzy
-msgid "Unable to convert input map projection to GRASS format; cannot create new project."
-msgstr "No se puede convertir la proyección del mapa de entrada a formato GRASS; no se puede crear la nueva localización."
-
-#: ../raster/r.in.gdal/proj.c:323
-#, fuzzy
-msgid ""
-"\n"
-"In case of no significant differences in the CRS definitions, use the -o flag to ignore them and use current project definition.\n"
-msgstr ""
-"\n"
-"En caso de que no haya diferencias significativas en las definiciones de proyección, use la bandera -o para ignorarlas y use la definición de la Localización actual.\n"
 
 #: ../raster/r.in.gridatb/file_io.c:16
 #, fuzzy, c-format
@@ -22372,6 +22368,16 @@ msgstr "No es posible calcular el percentil sin especificar la opción pth!"
 #: ../raster/r.in.pdal/point_binning.c:180 ../raster/r.in.xyz/main.c:494
 msgid "Unable to calculate trimmed mean without the trim option specified!"
 msgstr "No es posible calcular la media recortada sin especificar la opción de recorte!"
+
+#: ../raster/r.in.lidar/projection.c:32 ../raster/r.in.pdal/projection.c:30
+#: ../raster3d/r3.in.lidar/projection.c:33 ../vector/v.in.lidar/projection.c:30
+#, fuzzy
+msgid ""
+"Coordinate reference system of dataset does not appear to match current project.\n"
+"\n"
+msgstr ""
+"La proyección del conjunto de datos parece no corresponder con la localización actual.\n"
+"\n"
 
 #: ../raster/r.in.lidar/projection.c:38 ../raster/r.in.pdal/projection.c:36
 #: ../vector/v.in.lidar/projection.c:36 ../vector/v.in.pdal/projection.c:36
@@ -33944,7 +33950,7 @@ msgid "Branch <{branch}> not found in repository <{url}>"
 msgstr ""
 
 #: ../scripts/g.extension/g.extension.py:386
-#: ../scripts/g.extension/g.extension.py:2785
+#: ../scripts/g.extension/g.extension.py:2784
 #, python-brace-format
 msgid ""
 "Failed to get addons files list from the Git repository <{repo_path}>.\n"
@@ -34115,172 +34121,172 @@ msgstr ""
 msgid "GRASS Addons <%s> not found"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1819
+#: ../scripts/g.extension/g.extension.py:1818
 #, python-brace-format
 msgid "ZIP file is unreadable: {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1849
+#: ../scripts/g.extension/g.extension.py:1848
 #: ../scripts/r.unpack/r.unpack.py:119 ../scripts/v.unpack/v.unpack.py:131
 msgid "Extracting may be unsafe; consider updating Python"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1855
+#: ../scripts/g.extension/g.extension.py:1854
 #, python-brace-format
 msgid "Archive file is unreadable: {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1872
+#: ../scripts/g.extension/g.extension.py:1871
 #, python-brace-format
 msgid "Type of source identified as '{source}'."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1875
-#: ../scripts/g.extension/g.extension.py:1884
-#: ../scripts/g.extension/g.extension.py:1891
+#: ../scripts/g.extension/g.extension.py:1874
+#: ../scripts/g.extension/g.extension.py:1883
+#: ../scripts/g.extension/g.extension.py:1890
 #, python-brace-format
 msgid "Fetching <{name}> from <{url}> (be patient)..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1906
+#: ../scripts/g.extension/g.extension.py:1905
 #, python-brace-format
 msgid "Expected default branch not found. Trying again from <{url}>..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1914
+#: ../scripts/g.extension/g.extension.py:1913
 #, python-brace-format
 msgid "Extension <{name}> not found. Please check 'url' and 'branch' options"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1919
+#: ../scripts/g.extension/g.extension.py:1918
 #, fuzzy
 msgid "Extension <{}> not found"
 msgstr "Región <%s> no encontrada"
 
-#: ../scripts/g.extension/g.extension.py:1947
+#: ../scripts/g.extension/g.extension.py:1946
 #, python-brace-format
 msgid "Unknown extension (addon) source type '{0}'. Please report this to the grass-user mailing list."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1975
+#: ../scripts/g.extension/g.extension.py:1974
 msgid "Path to the source code:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1995
+#: ../scripts/g.extension/g.extension.py:1994
 msgid "Module name not found. Check module Makefile syntax (PGM variable)."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2070
+#: ../scripts/g.extension/g.extension.py:2069
 msgid "To compile run:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2072
+#: ../scripts/g.extension/g.extension.py:2071
 msgid "To install run:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2080
+#: ../scripts/g.extension/g.extension.py:2079
 msgid "Compiling..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2082
+#: ../scripts/g.extension/g.extension.py:2081
 msgid "Please install GRASS development package"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2085
+#: ../scripts/g.extension/g.extension.py:2084
 msgid "Compilation failed, sorry. Please check above error messages."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2099
+#: ../scripts/g.extension/g.extension.py:2098
 msgid "Installing..."
 msgstr "Instalando..."
 
-#: ../scripts/g.extension/g.extension.py:2190
+#: ../scripts/g.extension/g.extension.py:2189
 msgid "List of removed files:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2192
+#: ../scripts/g.extension/g.extension.py:2191
 msgid "Files to be removed:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2198
+#: ../scripts/g.extension/g.extension.py:2197
 msgid "Updating addons metadata file..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2202
+#: ../scripts/g.extension/g.extension.py:2201
 #, python-format
 msgid "Extension <%s> successfully uninstalled."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2205
+#: ../scripts/g.extension/g.extension.py:2204
 #, python-format
 msgid "Toolbox <%s> not removed. Re-run '%s' with '-f' flag to force removal"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2210
+#: ../scripts/g.extension/g.extension.py:2209
 #, python-format
 msgid "Extension <%s> not removed. Re-run '%s' with '-f' flag to force removal"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2259
+#: ../scripts/g.extension/g.extension.py:2258
 #, python-format
 msgid "Extension <%s> not found"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2363
+#: ../scripts/g.extension/g.extension.py:2362
 #, python-brace-format
 msgid "Unable to create '{filename}': {error}. Is the GRASS documentation package installed? Installation continues, but documentation may not look right."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2382
+#: ../scripts/g.extension/g.extension.py:2381
 #, python-format
 msgid "Unable to create '%s': %s"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2410
+#: ../scripts/g.extension/g.extension.py:2409
 #, python-format
 msgid "Manual page for <%s> updated"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2417
+#: ../scripts/g.extension/g.extension.py:2416
 #, python-format
 msgid "Unable to read manual page: %s"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2462
+#: ../scripts/g.extension/g.extension.py:2461
 #, python-format
 msgid "Unable for write manual page: %s"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2482
+#: ../scripts/g.extension/g.extension.py:2481
 msgid "GRASS_ADDON_BASE is not defined, installing to {}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2489
+#: ../scripts/g.extension/g.extension.py:2488
 #, python-brace-format
 msgid "You don't have permission to install extension to <{0}>. Try to run {1} with administrator rights (su or sudo)."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2581
+#: ../scripts/g.extension/g.extension.py:2580
 #, python-brace-format
 msgid "Identified {0} as known hosting service"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2586
+#: ../scripts/g.extension/g.extension.py:2585
 #, python-brace-format
 msgid "Not using {service} as known hosting service because the URL ends with '{suffix}'"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2603
+#: ../scripts/g.extension/g.extension.py:2602
 #, python-brace-format
 msgid "Will use the following URL for download: {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2634
+#: ../scripts/g.extension/g.extension.py:2633
 #, fuzzy, python-brace-format
 msgid "Cannot open URL <{url}>: {error}"
 msgstr "No se puede abrir controlador"
 
-#: ../scripts/g.extension/g.extension.py:2840
+#: ../scripts/g.extension/g.extension.py:2839
 msgid "Flag '{}' is relevant only to 'operation=add'. Ignoring this flag."
 msgstr ""
 
@@ -35572,7 +35578,7 @@ msgstr ""
 "\n"
 "En caso de que no haya diferencias significativas en las definiciones de proyección, use la bandera -o para ignorarlas y use la definición de la Localización actual.\n"
 
-#: ../scripts/r.unpack/r.unpack.py:245
+#: ../scripts/r.unpack/r.unpack.py:244
 #, python-brace-format
 msgid "Raster map <{name}> unpacked"
 msgstr ""
@@ -35825,48 +35831,48 @@ msgstr ""
 msgid "Error filling columns {}"
 msgstr "\"*\" para todas las columnas"
 
-#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:102
+#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:103
 #, python-format
 msgid "Target database doesn't exist, creating a new database using <%s> driver..."
 msgstr ""
 
-#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:109
+#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:110
 #, python-format
 msgid "Unable to create database <%s> by driver <%s>"
 msgstr ""
 
-#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:144
+#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:145
 #: ../vector/v.decimate/copy_tab.c:101 ../vector/v.extract/copy_tab.c:106
 #: ../vector/v.generalize/misc.c:181 ../vector/v.to.points/main.c:187
 #, c-format, python-format
 msgid "Unable to copy table <%s>"
 msgstr "No se puede copiar la tabla <%s>"
 
-#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:160
+#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:161
 #, python-format
 msgid "Unable to disconnect table <%s> from vector <%s>"
 msgstr ""
 
-#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:173
+#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:174
 #, python-format
 msgid "Unable to drop table <%s>"
 msgstr "No ha sido posible eliminar tabla <%s>"
 
-#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:183
+#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:184
 #, python-format
 msgid "Creating index <%s>..."
 msgstr "Creando el índice <%s>..."
 
-#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:193
+#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:194
 #, python-format
 msgid "Unable to create index <%s>"
 msgstr ""
 
-#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:224
+#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:225
 msgid "Old and new database connection is identical. Nothing to do."
 msgstr ""
 
-#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:240
+#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:241
 #, python-format
 msgid ""
 "%s\n"
@@ -35874,17 +35880,17 @@ msgid ""
 "%s"
 msgstr ""
 
-#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:275
+#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:276
 #, python-format
 msgid "Reconnecting layer %d..."
 msgstr "Reconectando capa %d..."
 
-#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:308
+#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:309
 #, python-format
 msgid "Unable to connect table <%s> to vector <%s> on layer <%s>"
 msgstr ""
 
-#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:315
+#: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:316
 #, python-format
 msgid "Layer <%d> will not be reconnected because database or schema do not match."
 msgstr ""
@@ -39083,37 +39089,15 @@ msgstr "No se puede crear el archivo '%s/%s'"
 msgid "Link to vector map <%s> created."
 msgstr "Liga al mapa vectorial <%s> creada."
 
-#: ../vector/v.external/proj.c:35 ../vector/v.in.ogr/main.c:741
-#: ../vector/v.in.ogr/proj.c:36
+#: ../vector/v.external/proj.c:34 ../vector/v.in.ogr/main.c:741
+#: ../vector/v.in.ogr/proj.c:34
 #, c-format
 msgid "Geometry column <%s> not found in input layer <%s>"
 msgstr ""
 
-#: ../vector/v.external/proj.c:49 ../vector/v.in.ogr/proj.c:50
-msgid "Unable to convert input layer projection information to GRASS format for checking"
-msgstr ""
-
-#: ../vector/v.external/proj.c:55 ../vector/v.external/proj.c:85
-#: ../vector/v.in.ogr/proj.c:56 ../vector/v.in.ogr/proj.c:86
-msgid "Can't get WKT parameter string"
-msgstr ""
-
-#: ../vector/v.external/proj.c:58 ../vector/v.external/proj.c:88
-#: ../vector/v.in.ogr/proj.c:59 ../vector/v.in.ogr/proj.c:89
-#, c-format
-msgid ""
-"WKT definition:\n"
-"%s"
-msgstr ""
-
-#: ../vector/v.external/proj.c:69 ../vector/v.in.ogr/proj.c:70
+#: ../vector/v.external/proj.c:46 ../vector/v.in.ogr/proj.c:46
 #, c-format
 msgid "No projection information available for layer <%s>"
-msgstr ""
-
-#: ../vector/v.external/proj.c:78 ../vector/v.in.ogr/proj.c:79
-#, c-format
-msgid "Projection for layer <%s> does not contain a valid CRS"
 msgstr ""
 
 #: ../vector/v.extract/extract.c:202
@@ -40894,16 +40878,16 @@ msgstr ""
 msgid "The spatial filter does not overlap with OGR layer <%s>. Nothing to import."
 msgstr ""
 
-#: ../vector/v.in.ogr/proj.c:168
+#: ../vector/v.in.ogr/proj.c:85
 msgid "Layer projections are unreadable"
 msgstr ""
 
-#: ../vector/v.in.ogr/proj.c:184
+#: ../vector/v.in.ogr/proj.c:93
 #, c-format
 msgid "Projection for layer <%s> is unreadable"
 msgstr ""
 
-#: ../vector/v.in.ogr/proj.c:236
+#: ../vector/v.in.ogr/proj.c:113
 #, c-format
 msgid "Projection of layer <%s> is different from projection of layer <%s>"
 msgstr ""
@@ -48471,6 +48455,18 @@ msgstr "Ver imágenes BMP desde el controlador PNG."
 #: ../visualization/ximgview/main.c:298
 msgid "Image file"
 msgstr "Archivo de imagen"
+
+#, fuzzy
+#~ msgid "Unable to convert input map coordinate reference system to GRASS format; cannot create new project."
+#~ msgstr "No se puede convertir la proyección del mapa de entrada a formato GRASS; no se puede crear la nueva localización."
+
+#, fuzzy
+#~ msgid ""
+#~ "\n"
+#~ "In case of no significant differences in the CRS definitions, use the -o flag to ignore them and use current project definition.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "En caso de que no haya diferencias significativas en las definiciones de proyección, use la bandera -o para ignorarlas y use la definición de la Localización actual.\n"
 
 #, fuzzy, c-format
 #~| msgid "Unable to select: \n"
