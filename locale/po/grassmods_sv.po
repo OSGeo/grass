@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 15:40+0000\n"
-"PO-Revision-Date: 2025-10-26 23:01+0000\n"
+"POT-Creation-Date: 2025-11-22 15:39+0000\n"
+"PO-Revision-Date: 2025-11-23 15:16+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
 "Language: sv\n"
@@ -6464,10 +6464,10 @@ msgstr "Det går inte att öppna utdatafilen %s"
 msgid "Converts between PPM/PGM and PNG image formats."
 msgstr "Konverterar mellan PPM/PGM- och PNG-bildformat."
 
-#: ../general/g.proj/create.c:16 ../raster/r.external/proj.c:141
-#: ../raster/r.in.gdal/main.c:1045 ../raster/r.in.gdal/proj.c:140
-#: ../vector/v.external/proj.c:173 ../vector/v.in.lidar/main.c:525
-#: ../vector/v.in.ogr/proj.c:307
+#: ../general/g.proj/create.c:16 ../raster/r.external/proj.c:129
+#: ../raster/r.in.gdal/main.c:1045 ../raster/r.in.gdal/proj.c:129
+#: ../vector/v.external/proj.c:158 ../vector/v.in.lidar/main.c:525
+#: ../vector/v.in.ogr/proj.c:228
 #, c-format
 msgid "Project <%s> created"
 msgstr "Projekt <%s> skapat"
@@ -20036,72 +20036,73 @@ msgstr "Valt band (%d) finns inte"
 msgid "Imagery group <%s> created"
 msgstr "Bildgrupp <%s> skapad"
 
-#: ../raster/r.external/proj.c:51 ../raster/r.external/proj.c:93
-#: ../raster/r.in.gdal/proj.c:51 ../raster/r.in.gdal/proj.c:93
-#, c-format
-msgid ""
-"Input contains an invalid CRS. WKT definition:\n"
-"%s"
-msgstr ""
-"Indata innehåller en ogiltig CRS. WKT-definition:\n"
-"%s"
+#: ../raster/r.external/proj.c:36 ../raster/r.external/proj.c:63
+#: ../raster/r.external/proj.c:122 ../raster/r.in.gdal/proj.c:36
+#: ../raster/r.in.gdal/proj.c:63 ../raster/r.in.gdal/proj.c:122
+#: ../vector/v.external/proj.c:92 ../vector/v.external/proj.c:151
+#: ../vector/v.in.ogr/proj.c:162 ../vector/v.in.ogr/proj.c:221
+msgid "Can't get WKT parameter string"
+msgstr "Kan inte få WKT-parametersträng"
 
-#: ../raster/r.external/proj.c:120 ../raster/r.in.gdal/proj.c:120
+#: ../raster/r.external/proj.c:56 ../raster/r.in.gdal/proj.c:56
+#: ../vector/v.external/proj.c:85 ../vector/v.in.ogr/proj.c:155
+msgid "Input contains an invalid CRS."
+msgstr "Indata innehåller en ogiltig CRS."
+
+#: ../raster/r.external/proj.c:66 ../raster/r.in.gdal/proj.c:66
+#: ../vector/v.external/proj.c:95 ../vector/v.in.ogr/proj.c:165
+msgid "WKT definition:"
+msgstr "WKT definition:"
+
+#: ../raster/r.external/proj.c:99 ../raster/r.in.gdal/proj.c:99
+#: ../vector/v.external/proj.c:128 ../vector/v.in.ogr/proj.c:198
 msgid "No projection information available"
 msgstr "Ingen projektionsinformation tillgänglig"
 
-#: ../raster/r.external/proj.c:133
-msgid "Unable to convert input map coordinate reference system to GRASS format; cannot create new project."
-msgstr "Det går inte att konvertera referenssystemet för inmatade kartkoordinater till GRASS-format; det går inte att skapa ett nytt projekt."
+#: ../raster/r.external/proj.c:114 ../raster/r.in.gdal/proj.c:114
+#: ../vector/v.external/proj.c:143 ../vector/v.in.ogr/proj.c:213
+msgid "Unable to convert input map projection to GRASS format; cannot create new project."
+msgstr "Det går inte att konvertera inmatad kartprojektion till GRASS-format; det går inte att skapa ett nytt projekt."
 
-#: ../raster/r.external/proj.c:139 ../raster/r.in.gdal/main.c:1039
-#: ../raster/r.in.gdal/proj.c:138 ../vector/v.external/proj.c:171
-#: ../vector/v.in.lidar/main.c:522 ../vector/v.in.ogr/proj.c:305
+#: ../raster/r.external/proj.c:127 ../raster/r.in.gdal/main.c:1039
+#: ../raster/r.in.gdal/proj.c:127 ../vector/v.external/proj.c:156
+#: ../vector/v.in.lidar/main.c:522 ../vector/v.in.ogr/proj.c:226
 #, c-format
 msgid "Unable to create new project <%s>"
 msgstr "Det går inte att skapa ett nytt projekt <%s>"
 
-#: ../raster/r.external/proj.c:165 ../raster/r.in.gdal/proj.c:164
-#: ../vector/v.external/proj.c:197 ../vector/v.in.ogr/proj.c:331
+#: ../raster/r.external/proj.c:157 ../raster/r.in.gdal/proj.c:157
+#: ../vector/v.external/proj.c:186 ../vector/v.in.ogr/proj.c:256
 msgid "Unable to convert input map projection information to GRASS format."
 msgstr "Det gick inte att konvertera inmatad kartprojektionsinformation till GRASS-format."
 
-#: ../raster/r.external/proj.c:192 ../raster/r.in.gdal/proj.c:192
+#: ../raster/r.external/proj.c:238 ../raster/r.in.gdal/proj.c:238
 #: ../raster/r.in.lidar/projection.c:126
-#: ../raster3d/r3.in.lidar/projection.c:127 ../vector/v.external/proj.c:228
-#: ../vector/v.in.lidar/projection.c:124 ../vector/v.in.ogr/proj.c:360
+#: ../raster3d/r3.in.lidar/projection.c:127 ../vector/v.external/proj.c:267
+#: ../vector/v.in.lidar/projection.c:124 ../vector/v.in.ogr/proj.c:337
 msgid "Over-riding projection check"
 msgstr "Åsidosättande av projektionskontroll"
 
-#: ../raster/r.external/proj.c:200 ../raster/r.in.gdal/proj.c:200
-#: ../raster/r.in.lidar/projection.c:32 ../raster/r.in.pdal/projection.c:30
-#: ../raster3d/r3.in.lidar/projection.c:33 ../vector/v.external/proj.c:236
-#: ../vector/v.in.lidar/projection.c:30 ../vector/v.in.ogr/proj.c:368
-msgid ""
-"Coordinate reference system of dataset does not appear to match current project.\n"
-"\n"
-msgstr ""
-"Datasetets koordinatreferenssystem verkar inte stämma överens med det aktuella projektet.\n"
-"\n"
+#: ../raster/r.external/proj.c:244 ../raster/r.in.gdal/proj.c:244
+#: ../vector/v.external/proj.c:273 ../vector/v.in.ogr/proj.c:343
+msgid "Coordinate reference system of dataset does not appear to match current project.\n"
+msgstr "Datasetets koordinatreferenssystem verkar inte stämma överens med det aktuella projektet.\n"
 
-#: ../raster/r.external/proj.c:207 ../raster/r.external/proj.c:216
-#: ../raster/r.in.gdal/proj.c:207 ../raster/r.in.gdal/proj.c:216
-#: ../vector/v.external/proj.c:243 ../vector/v.external/proj.c:252
-#: ../vector/v.in.ogr/proj.c:375 ../vector/v.in.ogr/proj.c:384
-msgid "Project PROJ_INFO is:\n"
-msgstr "Projekt PROJ_INFO är:\n"
+#: ../raster/r.external/proj.c:258 ../raster/r.in.gdal/proj.c:258
+#: ../vector/v.external/proj.c:287 ../vector/v.in.ogr/proj.c:357
+msgid "Dataset CRS is:\n"
+msgstr "Datasetets CRS är:\n"
 
-#: ../raster/r.external/proj.c:236 ../raster/r.external/proj.c:243
-#: ../raster/r.in.gdal/proj.c:236 ../raster/r.in.gdal/proj.c:243
-#: ../vector/v.external/proj.c:272 ../vector/v.external/proj.c:279
-#: ../vector/v.in.ogr/proj.c:404 ../vector/v.in.ogr/proj.c:411
-msgid "Dataset PROJ_INFO is:\n"
-msgstr "Dataset PROJ_INFO är:\n"
+#: ../raster/r.external/proj.c:272 ../raster/r.in.gdal/proj.c:272
+#: ../vector/v.external/proj.c:301 ../vector/v.in.ogr/proj.c:371
+msgid "Project CRS is:\n"
+msgstr "Projektets CRS är:\n"
 
-#: ../raster/r.external/proj.c:324 ../raster/r.in.lidar/projection.c:89
-#: ../raster/r.in.pdal/projection.c:87 ../raster3d/r3.in.lidar/projection.c:90
-#: ../vector/v.external/proj.c:360 ../vector/v.in.lidar/projection.c:87
-#: ../vector/v.in.ogr/proj.c:492 ../vector/v.in.pdal/projection.c:87
+#: ../raster/r.external/proj.c:286 ../raster/r.in.gdal/proj.c:286
+#: ../raster/r.in.lidar/projection.c:89 ../raster/r.in.pdal/projection.c:87
+#: ../raster3d/r3.in.lidar/projection.c:90 ../vector/v.external/proj.c:315
+#: ../vector/v.in.lidar/projection.c:87 ../vector/v.in.ogr/proj.c:385
+#: ../vector/v.in.pdal/projection.c:87
 #, c-format
 msgid ""
 "\n"
@@ -20110,15 +20111,15 @@ msgstr ""
 "\n"
 "Om det inte finns några betydande skillnader i definitionerna av koordinatreferenssystem kan flaggan -o användas för att ignorera dem och använda den aktuella projektdefinitionen.\n"
 
-#: ../raster/r.external/proj.c:328 ../raster/r.in.gdal/proj.c:327
-#: ../vector/v.external/proj.c:364 ../vector/v.in.ogr/proj.c:496
+#: ../raster/r.external/proj.c:290 ../raster/r.in.gdal/proj.c:290
+#: ../vector/v.external/proj.c:319 ../vector/v.in.ogr/proj.c:389
 msgid "Consider generating a new project from the input dataset using the 'project' parameter.\n"
 msgstr "Överväg att generera ett nytt projekt från indatadatasetet med hjälp av parametern \"project\".\n"
 
-#: ../raster/r.external/proj.c:348 ../raster/r.in.gdal/proj.c:347
+#: ../raster/r.external/proj.c:310 ../raster/r.in.gdal/proj.c:310
 #: ../raster/r.in.lidar/projection.c:136 ../raster/r.in.pdal/projection.c:134
-#: ../raster3d/r3.in.lidar/projection.c:137 ../vector/v.external/proj.c:384
-#: ../vector/v.in.lidar/projection.c:134 ../vector/v.in.ogr/proj.c:516
+#: ../raster3d/r3.in.lidar/projection.c:137 ../vector/v.external/proj.c:339
+#: ../vector/v.in.lidar/projection.c:134 ../vector/v.in.ogr/proj.c:409
 msgid "Coordinate reference system of input dataset and current project appear to match"
 msgstr "Koordinering av referenssystem för indatadataset och aktuellt projekt verkar stämma överens"
 
@@ -20731,7 +20732,7 @@ msgstr "Misslyckades med att profilera beräkningen, kontrollera parametrarna"
 msgid "Region resolution shouldn't be lesser than map %s resolution. Run g.region raster=%s to set proper resolution"
 msgstr "Regionens upplösning bör inte vara mindre än kartans %s upplösning. Kör g.region raster=%s för att ställa in rätt upplösning"
 
-#: ../raster/r.geomorphon/pattern.c:228
+#: ../raster/r.geomorphon/pattern.c:229
 #, c-format
 msgid "Internal error in %s()"
 msgstr "Internt fel i %s()"
@@ -21694,8 +21695,7 @@ msgstr "* Mata ut projektion för GCP-tabell: %s"
 msgid "Error in %s (can't re-project GCP %i)"
 msgstr "Fel i %s (kan inte omprojektera GCP %i)"
 
-#: ../raster/r.in.gdal/main.c:983 ../vector/v.external/proj.c:165
-#: ../vector/v.in.lidar/main.c:516
+#: ../raster/r.in.gdal/main.c:983 ../vector/v.in.lidar/main.c:516
 msgid "Unable to convert input map CRS to GRASS format; cannot create new project."
 msgstr "Det går inte att konvertera CRS-data till GRASS-format; det går inte att skapa ett nytt projekt."
 
@@ -21745,18 +21745,6 @@ msgstr "Det går inte att läsa raden %d"
 #, c-format
 msgid "Unable to open file <%s>: %s."
 msgstr "Det går inte att öppna filen <%s>: %s."
-
-#: ../raster/r.in.gdal/proj.c:132 ../vector/v.in.ogr/proj.c:299
-msgid "Unable to convert input map projection to GRASS format; cannot create new project."
-msgstr "Det går inte att konvertera inmatad kartprojektion till GRASS-format; det går inte att skapa ett nytt projekt."
-
-#: ../raster/r.in.gdal/proj.c:323
-msgid ""
-"\n"
-"In case of no significant differences in the CRS definitions, use the -o flag to ignore them and use current project definition.\n"
-msgstr ""
-"\n"
-"Om det inte finns några betydande skillnader i CRS-definitionerna kan du använda flaggan -o för att ignorera dem och använda den aktuella projektdefinitionen.\n"
 
 #: ../raster/r.in.gridatb/file_io.c:16
 #, c-format
@@ -22117,6 +22105,15 @@ msgstr "Det går inte att beräkna percentil utan att alternativet pth anges!"
 #: ../raster/r.in.pdal/point_binning.c:180 ../raster/r.in.xyz/main.c:494
 msgid "Unable to calculate trimmed mean without the trim option specified!"
 msgstr "Det går inte att beräkna trimmat medelvärde utan att trim-alternativet har angetts!"
+
+#: ../raster/r.in.lidar/projection.c:32 ../raster/r.in.pdal/projection.c:30
+#: ../raster3d/r3.in.lidar/projection.c:33 ../vector/v.in.lidar/projection.c:30
+msgid ""
+"Coordinate reference system of dataset does not appear to match current project.\n"
+"\n"
+msgstr ""
+"Datasetets koordinatreferenssystem verkar inte stämma överens med det aktuella projektet.\n"
+"\n"
 
 #: ../raster/r.in.lidar/projection.c:38 ../raster/r.in.pdal/projection.c:36
 #: ../vector/v.in.lidar/projection.c:36 ../vector/v.in.pdal/projection.c:36
@@ -38702,40 +38699,16 @@ msgstr "Det går inte att skapa filen '%s/%s'"
 msgid "Link to vector map <%s> created."
 msgstr "Länk till vektorkarta <%s> skapad."
 
-#: ../vector/v.external/proj.c:35 ../vector/v.in.ogr/main.c:741
-#: ../vector/v.in.ogr/proj.c:36
+#: ../vector/v.external/proj.c:34 ../vector/v.in.ogr/main.c:741
+#: ../vector/v.in.ogr/proj.c:34
 #, c-format
 msgid "Geometry column <%s> not found in input layer <%s>"
 msgstr "Geometrikolumn <%s> hittades inte i inmatningslagret <%s>"
 
-#: ../vector/v.external/proj.c:49 ../vector/v.in.ogr/proj.c:50
-msgid "Unable to convert input layer projection information to GRASS format for checking"
-msgstr "Det gick inte att konvertera projektionsinformation för inmatningslager till GRASS-format för kontroll"
-
-#: ../vector/v.external/proj.c:55 ../vector/v.external/proj.c:85
-#: ../vector/v.in.ogr/proj.c:56 ../vector/v.in.ogr/proj.c:86
-msgid "Can't get WKT parameter string"
-msgstr "Kan inte få WKT-parametersträng"
-
-#: ../vector/v.external/proj.c:58 ../vector/v.external/proj.c:88
-#: ../vector/v.in.ogr/proj.c:59 ../vector/v.in.ogr/proj.c:89
-#, c-format
-msgid ""
-"WKT definition:\n"
-"%s"
-msgstr ""
-"WKT definition:\n"
-"%s"
-
-#: ../vector/v.external/proj.c:69 ../vector/v.in.ogr/proj.c:70
+#: ../vector/v.external/proj.c:46 ../vector/v.in.ogr/proj.c:46
 #, c-format
 msgid "No projection information available for layer <%s>"
 msgstr "Ingen projektionsinformation tillgänglig för lager <%s>"
-
-#: ../vector/v.external/proj.c:78 ../vector/v.in.ogr/proj.c:79
-#, c-format
-msgid "Projection for layer <%s> does not contain a valid CRS"
-msgstr "Projektionen för lager <%s> innehåller inte en giltig CRS"
 
 #: ../vector/v.extract/extract.c:202
 #, c-format
@@ -40504,16 +40477,16 @@ msgstr "ymin är större än ymax i \"spatial\"-parametrar"
 msgid "The spatial filter does not overlap with OGR layer <%s>. Nothing to import."
 msgstr "Det spatiala filtret överlappar inte OGR-lagret <%s>. Inget att importera."
 
-#: ../vector/v.in.ogr/proj.c:168
+#: ../vector/v.in.ogr/proj.c:85
 msgid "Layer projections are unreadable"
 msgstr "Lagerprojektioner är oläsliga"
 
-#: ../vector/v.in.ogr/proj.c:184
+#: ../vector/v.in.ogr/proj.c:93
 #, c-format
 msgid "Projection for layer <%s> is unreadable"
 msgstr "Projektionen för lager <%s> är oläslig"
 
-#: ../vector/v.in.ogr/proj.c:236
+#: ../vector/v.in.ogr/proj.c:113
 #, c-format
 msgid "Projection of layer <%s> is different from projection of layer <%s>"
 msgstr "Projektionen av lager <%s> skiljer sig från projektionen av lager <%s>"
@@ -48039,6 +48012,23 @@ msgstr "Visa BMP-bilder från PNG-drivrutinen."
 #: ../visualization/ximgview/main.c:298
 msgid "Image file"
 msgstr "Bildfil"
+
+#~ msgid "Unable to convert input map coordinate reference system to GRASS format; cannot create new project."
+#~ msgstr "Det går inte att konvertera referenssystemet för inmatade kartkoordinater till GRASS-format; det går inte att skapa ett nytt projekt."
+
+#~ msgid ""
+#~ "\n"
+#~ "In case of no significant differences in the CRS definitions, use the -o flag to ignore them and use current project definition.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Om det inte finns några betydande skillnader i CRS-definitionerna kan du använda flaggan -o för att ignorera dem och använda den aktuella projektdefinitionen.\n"
+
+#~ msgid "Unable to convert input layer projection information to GRASS format for checking"
+#~ msgstr "Det gick inte att konvertera projektionsinformation för inmatningslager till GRASS-format för kontroll"
+
+#, c-format
+#~ msgid "Projection for layer <%s> does not contain a valid CRS"
+#~ msgstr "Projektionen för lager <%s> innehåller inte en giltig CRS"
 
 #, c-format
 #~ msgid "Unable to seek: %s"
