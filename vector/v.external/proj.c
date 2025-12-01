@@ -6,11 +6,7 @@
 #include <cpl_conv.h>
 #include "local_proto.h"
 
-#ifdef HAVE_PROJ_H
 #include <proj.h>
-#else
-#include <proj_api.h>
-#endif
 
 /* get projection info of OGR layer as OGR SRS
  * return a OGR SRS or NULL */
@@ -209,7 +205,6 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
         }
 
         /* get OGR spatial reference for current projection */
-#if PROJ_VERSION_MAJOR >= 6
         /* 1. from SRID */
         if (loc_srid && *loc_srid) {
             PJ *obj = NULL;
@@ -230,7 +225,6 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
         if (loc_wkt && *loc_wkt) {
             hSRS_loc = OSRNewSpatialReference(loc_wkt);
         }
-#endif
         /* 3. from EPSG */
         if (!hSRS_loc && loc_epsg) {
             const char *epsgstr = G_find_key_value("epsg", loc_epsg);

@@ -20,7 +20,7 @@ if(UNIX)
   set(LIBM LIBM)
 endif()
 
-find_package(PROJ REQUIRED)
+find_package(PROJ 9.0.0 REQUIRED)
 
 find_package(GDAL 3.7.0 REQUIRED)
 
