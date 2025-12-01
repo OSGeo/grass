@@ -74,15 +74,15 @@ def adapt_datetime_iso(value: datetime) -> str:
     return value.strftime("%Y-%m-%d %H:%M:%S")
 
 
-sqlite3.register_adapter(datetime, adapt_datetime_iso)
-
-
 def convert_datetime(value: bytes) -> datetime:
     """Convert ISO 8601 string to timezone-naive datetime object, assuming UTC."""
     return datetime.fromisoformat(value.decode())
 
 
+sqlite3.register_adapter(datetime, adapt_datetime_iso)
+sqlite3.register_converter("date", convert_datetime)
 sqlite3.register_converter("datetime", convert_datetime)
+sqlite3.register_converter("timestamp", convert_datetime)
 
 ###############################################################################
 
