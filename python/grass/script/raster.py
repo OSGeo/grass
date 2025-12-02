@@ -141,9 +141,8 @@ def mapcalc(
     :param kwargs:
     """
 
-  # Removed deprecated auto-seeding. 
-# GRASS handles default or automatic seeding when needed.
-
+    # Removed deprecated auto-seeding.
+    # GRASS handles default or automatic seeding when needed.
 
     t = string.Template(exp)
     e = t.substitute(**kwargs)
