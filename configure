@@ -718,7 +718,6 @@ LIBLAS_INC
 LIBLAS_CFLAGS
 LIBLAS_LIBS
 LIBLAS_CONFIG
-USE_OGR
 GDAL_CFLAGS
 GDAL_LIBS
 GDAL_CONFIG
@@ -10448,7 +10447,6 @@ printf %s "checking whether to use GDAL... " >&6; }
 
 GDAL_LIBS=
 GDAL_CFLAGS=
-USE_OGR=
 
 if test "`basename xx/$with_gdal`" = "gdal-config" ; then
   GDAL_CONFIG="$with_gdal"
@@ -10511,12 +10509,6 @@ fi
     GDAL_LIBS=`"$GDAL_CONFIG" --libs`
     GDAL_DEP_LIBS=`"$GDAL_CONFIG" --dep-libs`
     GDAL_CFLAGS=`"$GDAL_CONFIG" --cflags`
-    if test `"$GDAL_CONFIG" --ogr-enabled` = "yes" ; then
-
-printf "%s\n" "#define HAVE_OGR 1" >>confdefs.h
-
-      USE_OGR=1
-    fi
   fi
 
 
@@ -10698,7 +10690,6 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
   CFLAGS=${ac_save_cflags}
 
 fi
-
 
 
 
@@ -17682,8 +17673,6 @@ echo "  NetCDF support:             `if test -n "${USE_NETCDF}" ; then echo yes 
 echo "  NLS support:                `if test -n "${USE_NLS}" ; then echo yes ; else echo no ; fi`"
 
 echo "  ODBC support:               `if test -n "${USE_ODBC}" ; then echo yes ; else echo no ; fi`"
-
-echo "  OGR support:                `if test -n "${USE_OGR}" ; then echo yes ; else echo no ; fi`"
 
 echo "  OpenCL support:             `if test -n "${USE_OPENCL}" ; then echo yes ; else echo no ; fi`"
 

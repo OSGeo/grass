@@ -978,7 +978,6 @@ AC_MSG_CHECKING(whether to use GDAL)
 
 GDAL_LIBS=
 GDAL_CFLAGS=
-USE_OGR=
 
 if test "`basename xx/$with_gdal`" = "gdal-config" ; then
   GDAL_CONFIG="$with_gdal"
@@ -998,10 +997,6 @@ else
     GDAL_LIBS=`"$GDAL_CONFIG" --libs`
     GDAL_DEP_LIBS=`"$GDAL_CONFIG" --dep-libs`
     GDAL_CFLAGS=`"$GDAL_CONFIG" --cflags`
-    if test `"$GDAL_CONFIG" --ogr-enabled` = "yes" ; then
-      AC_DEFINE(HAVE_OGR, 1, [Define to 1 if OGR is to be used.])
-      USE_OGR=1
-    fi
   fi
 
   LOC_CHECK_VERSION_INT(gdal_version.h,GDAL_VERSION_MAJOR,[GDAL major version],gdal_version_major,$GDAL_CFLAGS,0)
@@ -1033,7 +1028,6 @@ fi
 
 AC_SUBST(GDAL_LIBS)
 AC_SUBST(GDAL_CFLAGS)
-AC_SUBST(USE_OGR)
 
 # libLAS option
 
@@ -2082,7 +2076,6 @@ LOC_MSG_USE(MySQL support,USE_MYSQL)
 LOC_MSG_USE(NetCDF support,USE_NETCDF)
 LOC_MSG_USE(NLS support,USE_NLS)
 LOC_MSG_USE(ODBC support,USE_ODBC)
-LOC_MSG_USE(OGR support,USE_OGR)
 LOC_MSG_USE(OpenCL support,USE_OPENCL)
 LOC_MSG_USE(OpenGL support,USE_OPENGL)
 LOC_MSG_USE(OpenMP support,USE_OPENMP)

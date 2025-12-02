@@ -23,11 +23,9 @@
 #include <grass/glocale.h>
 #include <grass/config.h>
 
-#ifdef HAVE_OGR
 #include <gdal.h>
 #include <ogr_api.h>
 #include <cpl_csv.h>
-#endif
 
 #include "local_proto.h"
 
@@ -82,7 +80,6 @@ static void set_default_region(void)
     return;
 }
 
-#ifdef HAVE_OGR
 static void set_gdal_region(GDALDatasetH);
 static void set_authnamecode(OGRSpatialReferenceH);
 
@@ -570,5 +567,3 @@ void set_authnamecode(OGRSpatialReferenceH hSRS)
         }
     }
 }
-
-#endif /* HAVE_OGR */

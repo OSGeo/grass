@@ -120,9 +120,6 @@
 /* Define to 1 if you have the 'nice' function. */
 #undef HAVE_NICE
 
-/* Define to 1 if OGR is to be used. */
-#undef HAVE_OGR
-
 /* Define to 1 if you have the <omp.h> header file. */
 #undef HAVE_OMP_H
 

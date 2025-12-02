@@ -146,9 +146,6 @@
 /* define if SQLite is to be used */
 #define HAVE_SQLITE 1
 
-/* define if OGR is to be used */
-#define HAVE_OGR 1
-
 /* define if postgres client header exists */
 #define HAVE_LIBPQ_FE_H 1
 
