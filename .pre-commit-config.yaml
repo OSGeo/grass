@@ -40,9 +40,16 @@ repos:
                 python/libgrass_interface_generator/ctypesgen/|
                 lib/fonts/fonts/.*
           )
+      - id: destroyed-symlinks
+      - id: check-symlinks
+      - id: check-toml
+      - id: check-xml
+      - id: check-json
+      - id: check-merge-conflict
+      - id: detect-private-key
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
-    rev: v0.14.2
+    rev: v0.14.7
     hooks:
       # Run the linter.
       - id: ruff-check
@@ -78,14 +85,14 @@ repos:
     hooks:
       - id: yamllint
   - repo: https://github.com/rhysd/actionlint
-    rev: v1.7.8
+    rev: v1.7.9
     hooks:
       - id: actionlint
   - repo: https://github.com/zizmorcore/zizmor-pre-commit
-    rev: v1.16.0
+    rev: v1.18.0
     hooks:
       - id: zizmor
   - repo: https://github.com/editorconfig-checker/editorconfig-checker
-    rev: v3.4.1
+    rev: v3.6.0
     hooks:
       - id: editorconfig-checker

@@ -67,7 +67,7 @@ def create_database_directory():
 
     # Create "grassdata" directory
     try:
-        os.mkdir(path)
+        Path(path).mkdir()
         return path
     except OSError:
         pass
@@ -86,7 +86,7 @@ def create_database_directory():
     if Path(path).exists():
         return path
     try:
-        os.mkdir(path)
+        Path(path).mkdir()
         return path
     except OSError:
         pass

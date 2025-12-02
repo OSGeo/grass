@@ -115,7 +115,7 @@ def _import_raster_maps_from_gdal(
 
         # Set the color rules if present
         filename = row["filename"] + ".color"
-        if os.path.isfile(filename):
+        if Path(filename).is_file():
             try:
                 gs.run_command(
                     "r.colors", map=name, rules=filename, overwrite=gs.overwrite()
@@ -271,7 +271,7 @@ def import_stds(
     msgr = get_tgis_message_interface()
     msgr.message(
         _("Checking validity of input file (size: %0.1f MB). Make take a while...")
-        % (os.path.getsize(input) / (1024 * 1024.0))
+        % (Path(input).stat().st_size / (1024 * 1024.0))
     )
     members = tar.getnames()
     # Make sure that the basenames of the files are used for comparison

@@ -879,7 +879,7 @@ def create_temporal_database(dbif) -> None:
         tgis_dir = os.path.dirname(tgis_database_string)
         if not Path(tgis_dir).exists():
             try:
-                os.makedirs(tgis_dir)
+                Path(tgis_dir).mkdir(parents=True)
             except Exception as e:
                 msgr.fatal(
                     _(
@@ -1389,9 +1389,9 @@ class DBConnection:
             if self.connected:
                 try:
                     return self.cursor.mogrify(sql, args)
-                except Exception as exc:
+                except Exception:
                     print(sql, args)
-                    raise exc
+                    raise
             else:
                 self.connect()
                 statement = self.cursor.mogrify(sql, args)

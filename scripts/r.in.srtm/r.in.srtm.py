@@ -178,13 +178,13 @@ def main():
     zipfile = f"{infile}{suff}.zip"
     hgtfile = f"{infile}{suff}"
 
-    if os.path.isfile(zipfile):
+    if Path(zipfile).is_file():
         # really a ZIP file?
         if not zfile.is_zipfile(zipfile):
             gs.fatal(_("'%s' does not appear to be a valid zip file.") % zipfile)
 
         is_zip = True
-    elif os.path.isfile(hgtfile):
+    elif Path(hgtfile).is_file():
         # try and see if it's already unzipped
         is_zip = False
     else:
@@ -193,7 +193,7 @@ def main():
     # make a temporary directory
     tmpdir = gs.tempfile()
     gs.try_remove(tmpdir)
-    os.mkdir(tmpdir)
+    Path(tmpdir).mkdir()
     if is_zip:
         shutil.copyfile(zipfile, os.path.join(tmpdir, f"{tile}{suff}.zip"))
     else:
