@@ -779,9 +779,15 @@ class Module:
                     raise ParameterError(msg % k)
 
     def get_json_dict(
-        self, export=None, stdout_export=None, stdout_id="stdout", stdout_delimiter="|"
-    ):
-        """Return a dictionary that includes the name, all valid
+        self,
+        export: str | None = None,
+        stdout_export: str | None = None,
+        stdout_id: str = "stdout",
+        stdout_delimiter: str = "|",
+    ) -> dict:
+        """Return a dictionary with the module represented in JSON format.
+
+        The dictionary includes the module name, an id, all valid
         inputs, outputs and flags as well as export settings for
         usage with actinia
         param export: string with export format for non-stdout output, one of
@@ -828,15 +834,15 @@ class Module:
                 [
                     flg
                     for flg in self.flags
-                    if self.flags[flg].value and flg not in special_flags + ["help"]
+                    if self.flags[flg].value and flg not in {*special_flags, "help"}
                 ]
             ),
             "inputs": [
                 {
                     "param": key,
                     "value": (
-                        ",".join(val.value)
-                        if type(val.value) == list
+                        ",".join(map(str, val.value))
+                        if isinstance(val.value, list)
                         else str(val.value)
                     ),
                 }
@@ -857,8 +863,8 @@ class Module:
                 param = {
                     "param": key,
                     "value": (
-                        ",".join(val.value)
-                        if type(val.value) == list
+                        ",".join(map(str, val.value))
+                        if isinstance(val.value, list)
                         else str(val.value)
                     ),
                 }
