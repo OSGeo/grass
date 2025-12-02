@@ -199,25 +199,16 @@ int main(int argc, char **argv)
     val_name = opt.val->answer;
 
     dist_row_max = val_row_max = NULL;
-    mindist = -1;
-    if (opt.min->answer) {
-        if (sscanf(opt.min->answer, "%lf", &mindist) != 1) {
-            G_warning(_("Invalid %s value '%s', ignoring."), opt.min->key,
-                      opt.min->answer);
+   mindist = -1;
+if (opt.min->answer) {
+    mindist = atof(opt.min->answer);
+}
 
-            mindist = -1;
-        }
-    }
 
-    maxdist = -1;
-    if (opt.max->answer) {
-        if (sscanf(opt.max->answer, "%lf", &maxdist) != 1) {
-            G_warning(_("Invalid %s value '%s', ignoring."), opt.max->key,
-                      opt.max->answer);
-
-            maxdist = -1;
-        }
-    }
+maxdist = -1;
+if (opt.max->answer) {
+    maxdist = atof(opt.max->answer);
+}
 
     if (mindist > 0 && maxdist > 0 && mindist >= maxdist) {
         /* GTC error because given minimum_distance is not smaller than
