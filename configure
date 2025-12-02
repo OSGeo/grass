@@ -719,7 +719,6 @@ LIBLAS_CFLAGS
 LIBLAS_LIBS
 LIBLAS_CONFIG
 USE_OGR
-USE_GDAL
 GDAL_CFLAGS
 GDAL_LIBS
 GDAL_CONFIG
@@ -10449,7 +10448,6 @@ printf %s "checking whether to use GDAL... " >&6; }
 
 GDAL_LIBS=
 GDAL_CFLAGS=
-USE_GDAL=
 USE_OGR=
 
 if test "`basename xx/$with_gdal`" = "gdal-config" ; then
@@ -10513,7 +10511,6 @@ fi
     GDAL_LIBS=`"$GDAL_CONFIG" --libs`
     GDAL_DEP_LIBS=`"$GDAL_CONFIG" --dep-libs`
     GDAL_CFLAGS=`"$GDAL_CONFIG" --cflags`
-    USE_GDAL=1
     if test `"$GDAL_CONFIG" --ogr-enabled` = "yes" ; then
 
 printf "%s\n" "#define HAVE_OGR 1" >>confdefs.h
@@ -10700,11 +10697,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}
 
-
-printf "%s\n" "#define HAVE_GDAL 1" >>confdefs.h
-
 fi
-
 
 
 
@@ -17671,8 +17664,6 @@ echo "  Cairo support:              `if test -n "${USE_CAIRO}" ; then echo yes ;
 echo "  FFTW support:               `if test -n "${USE_FFTW}" ; then echo yes ; else echo no ; fi`"
 
 echo "  FreeType support:           `if test -n "${USE_FREETYPE}" ; then echo yes ; else echo no ; fi`"
-
-echo "  GDAL support:               `if test -n "${USE_GDAL}" ; then echo yes ; else echo no ; fi`"
 
 echo "  GEOS support:               `if test -n "${USE_GEOS}" ; then echo yes ; else echo no ; fi`"
 

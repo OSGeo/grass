@@ -56,9 +56,6 @@
 /* Define to 1 if you have the <g2c.h> header file. */
 #cmakedefine HAVE_G2C_H ${HAVE_G2C_H}
 
-/* Define to 1 if GDAL is to be used. */
-#cmakedefine HAVE_GDAL ${HAVE_GDAL}
-
 /* Define to 1 if GEOS is to be used. */
 #cmakedefine HAVE_GEOS ${HAVE_GEOS}
 

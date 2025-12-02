@@ -978,7 +978,6 @@ AC_MSG_CHECKING(whether to use GDAL)
 
 GDAL_LIBS=
 GDAL_CFLAGS=
-USE_GDAL=
 USE_OGR=
 
 if test "`basename xx/$with_gdal`" = "gdal-config" ; then
@@ -999,7 +998,6 @@ else
     GDAL_LIBS=`"$GDAL_CONFIG" --libs`
     GDAL_DEP_LIBS=`"$GDAL_CONFIG" --dep-libs`
     GDAL_CFLAGS=`"$GDAL_CONFIG" --cflags`
-    USE_GDAL=1
     if test `"$GDAL_CONFIG" --ogr-enabled` = "yes" ; then
       AC_DEFINE(HAVE_OGR, 1, [Define to 1 if OGR is to be used.])
       USE_OGR=1
@@ -1031,12 +1029,10 @@ else
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}
 
-  AC_DEFINE(HAVE_GDAL, 1, [Define to 1 if GDAL is to be used.])
 fi
 
 AC_SUBST(GDAL_LIBS)
 AC_SUBST(GDAL_CFLAGS)
-AC_SUBST(USE_GDAL)
 AC_SUBST(USE_OGR)
 
 # libLAS option
@@ -2077,7 +2073,6 @@ LOC_MSG_USE(C++ support,USE_CXX)
 LOC_MSG_USE(Cairo support,USE_CAIRO)
 LOC_MSG_USE(FFTW support,USE_FFTW)
 LOC_MSG_USE(FreeType support,USE_FREETYPE)
-LOC_MSG_USE(GDAL support,USE_GDAL)
 LOC_MSG_USE(GEOS support,USE_GEOS)
 LOC_MSG_USE(LAPACK support,USE_LAPACK)
 LOC_MSG_USE(Large File support (LFS), USE_LARGEFILES)

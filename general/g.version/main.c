@@ -22,16 +22,14 @@
 #include <grass/glocale.h>
 #include <grass/gjson.h>
 
+#include <gdal_version.h>
+
 #include "local_proto.h"
 
 #ifdef HAVE_PROJ_H
 #include <proj.h>
 #else
 #include <proj_api.h>
-#endif
-
-#ifdef HAVE_GDAL
-#include <gdal_version.h>
 #endif
 
 #ifdef HAVE_GEOS
@@ -323,7 +321,6 @@ int main(int argc, char *argv[])
                 break;
             }
         }
-#ifdef HAVE_GDAL
         switch (format) {
         case SHELL:
             fprintf(stdout, "gdal=%s\n", GDAL_RELEASE_NAME);
@@ -335,20 +332,6 @@ int main(int argc, char *argv[])
             G_json_object_set_string(root_object, "gdal", GDAL_RELEASE_NAME);
             break;
         }
-#else
-        switch (format) {
-        case SHELL:
-            fprintf(stdout, "gdal=\n");
-            break;
-        case PLAIN:
-            fprintf(stdout, "%s\n",
-                    _("GRASS not compiled with GDAL/OGR support"));
-            break;
-        case JSON:
-            G_json_object_set_null(root_object, "gdal");
-            break;
-        }
-#endif
 #ifdef HAVE_GEOS
         switch (format) {
         case SHELL:

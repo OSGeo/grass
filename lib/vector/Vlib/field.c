@@ -29,10 +29,7 @@
 
 #include "local_proto.h"
 
-#ifdef HAVE_GDAL
 #include <gdal_version.h> /* needed for FID detection */
-#endif                    /* HAVE_GDAL */
-
 #ifdef HAVE_OGR
 #include <ogr_api.h>
 #endif
@@ -795,7 +792,6 @@ static int read_dblinks_ogr(struct Map_info *Map)
                     Map->fInfo.ogr.layer_name, ogr_fid_col, Map->fInfo.ogr.dsn,
                     "ogr");
     return 1;
-#endif /* HAVE_GDAL */
 }
 
 static int read_dblinks_pg(struct Map_info *Map NOPG_UNUSED)

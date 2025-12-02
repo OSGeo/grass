@@ -146,9 +146,6 @@
 /* define if SQLite is to be used */
 #define HAVE_SQLITE 1
 
-/* define if GDAL is to be used */
-#define HAVE_GDAL 1
-
 /* define if OGR is to be used */
 #define HAVE_OGR 1
 
