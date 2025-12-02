@@ -141,8 +141,9 @@ def mapcalc(
     :param kwargs:
     """
 
-    if seed == "auto":
-        seed = hash((os.getpid(), time.time())) % (2**32)
+  # Removed deprecated auto-seeding. 
+# GRASS handles default or automatic seeding when needed.
+
 
     t = string.Template(exp)
     e = t.substitute(**kwargs)
