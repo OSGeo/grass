@@ -12,9 +12,8 @@ import contextlib
 import os
 import re
 import sys
-
-from typing import IO, TYPE_CHECKING
 from collections import defaultdict
+from typing import IO, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from collections.abc import Generator

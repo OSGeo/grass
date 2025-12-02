@@ -865,14 +865,14 @@ class HelpPanel(wx.Panel):
     def GetFile(self):
         """Get HTML file"""
         fMan = os.path.join(self.content.fspath, self.command + ".html")
-        if os.path.isfile(fMan):
+        if Path(fMan).is_file():
             return fMan
 
         # check also addons
         faMan = os.path.join(
             os.getenv("GRASS_ADDON_BASE"), "docs", "html", self.command + ".html"
         )
-        if os.getenv("GRASS_ADDON_BASE") and os.path.isfile(faMan):
+        if os.getenv("GRASS_ADDON_BASE") and Path(faMan).is_file():
             return faMan
 
         return None

@@ -512,7 +512,7 @@ def main():
             )
             if use_timestamps:
                 test_timestamp = datetime.datetime.fromtimestamp(
-                    os.path.getmtime(summary_file)
+                    Path(summary_file).stat().st_mtime
                 )
             else:
                 test_timestamp = datetime.datetime.strptime(

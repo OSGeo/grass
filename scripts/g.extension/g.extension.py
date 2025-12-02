@@ -1748,11 +1748,10 @@ def move_extracted_files(extract_dir, target_dir, files):
     if len(files) == 1:
         shutil.copytree(os.path.join(extract_dir, files[0]), target_dir)
     else:
-        if not Path(target_dir).exists():
-            os.mkdir(target_dir)
+        Path(target_dir).mkdir(exist_ok=True)
         for file_name in files:
             actual_file = os.path.join(extract_dir, file_name)
-            if os.path.isdir(actual_file):
+            if Path(actual_file).is_dir():
                 # shutil.copytree() replaced by copy_tree() because
                 # shutil's copytree() fails when subdirectory exists
                 copy_tree(actual_file, os.path.join(target_dir, file_name))
@@ -1808,7 +1807,7 @@ def extract_zip(name, directory, tmpdir):
         # we suppose we can write to parent of the given dir
         # (supposing a tmp dir)
         extract_dir = os.path.join(tmpdir, "extract_dir")
-        os.mkdir(extract_dir)
+        Path(extract_dir).mkdir()
         for subfile in file_list:
             if "__pycache__" in subfile:
                 continue
@@ -1833,7 +1832,7 @@ def extract_tar(name, directory, tmpdir):
     try:
         tar = tarfile.open(name)
         extract_dir = os.path.join(tmpdir, "extract_dir")
-        os.mkdir(extract_dir)
+        Path(extract_dir).mkdir()
 
         # Extraction filters were added in Python 3.12,
         # and backported to 3.8.17, 3.9.17, 3.10.12, and 3.11.4
@@ -1948,7 +1947,7 @@ def download_source_code(
                 " Please report this to the grass-user mailing list."
             ).format(source)
         )
-    assert os.path.isdir(directory)
+    assert Path(directory).is_dir()
     return directory, url
 
 
@@ -2280,14 +2279,14 @@ def remove_extension_std(name, force=False):
         os.path.join(options["prefix"], "docs", "rest", name + ".txt"),
         os.path.join(options["prefix"], "docs", "man", "man1", name + ".1"),
     ]:
-        if os.path.isfile(fpath):
+        if Path(fpath).is_file():
             gs.verbose(fpath)
             if force:
                 os.remove(fpath)
 
     # remove module libraries under GRASS_ADDONS/etc/{name}/*
     libpath = os.path.join(options["prefix"], "etc", name)
-    if os.path.isdir(libpath):
+    if Path(libpath).is_dir():
         gs.verbose(libpath)
         if force:
             shutil.rmtree(libpath)
@@ -2373,11 +2372,11 @@ def create_dir(path):
 
     NOOP for existing directory.
     """
-    if os.path.isdir(path):
+    if Path(path).is_dir():
         return
 
     try:
-        os.makedirs(path)
+        Path(path).mkdir(parents=True)
     except OSError as error:
         gs.fatal(_("Unable to create '%s': %s") % (path, error))
 
@@ -2723,7 +2722,7 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
         return "official_fork", url
 
     # Handle local URLs
-    if os.path.isdir(url):
+    if Path(url).is_dir():
         return "dir", os.path.abspath(url)
     if Path(url).exists():
         if url.endswith(".zip"):

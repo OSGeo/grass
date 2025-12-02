@@ -281,7 +281,7 @@ def write_file(name, contents):
 
 def try_mkdir(path):
     try:
-        os.mkdir(path)
+        Path(path).mkdir()
     except OSError:
         pass
 

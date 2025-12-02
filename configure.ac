@@ -20,7 +20,7 @@
 # Website for   config.guess, config.sub:
 #               wget http://git.savannah.gnu.org/cgit/config.git/plain/config.guess
 #               wget http://git.savannah.gnu.org/cgit/config.git/plain/config.sub
-#               Note: use autoconf-2.69
+#               Note: use autoconf-2.72
 #############################################################################
 
 define([AC_CACHE_LOAD], )
@@ -31,7 +31,7 @@ $2
 
 AC_INIT
 AC_CONFIG_SRCDIR([configure.ac])
-AC_PREREQ([2.71])
+AC_PREREQ([2.72])
 AC_CONFIG_HEADERS([include/grass/config.h])
 AC_CANONICAL_HOST
 AC_PROG_CC
@@ -1417,7 +1417,7 @@ case "$with_opengl" in
 		USE_OPENGL=1
 		OPENGL_X11=1
 		;;
-	aqua|mac|osx|macosx|agl)
+	aqua|mac|osx|macosx)
 		OPENGL_TYPE=Aqua
 		USE_OPENGL=1
 		OPENGL_AQUA=1
@@ -1471,14 +1471,17 @@ LOC_CHECK_FRAMEWORK_PATH(opengl,OpenGL,OPENGLPATH)
 
 LOC_CHECK_INCLUDES(OpenGL/gl.h OpenGL/glu.h,OpenGL,$OPENGLPATH)
 
-LOC_CHECK_FUNC(glBegin,OpenGL library,OPENGLLIB,-framework OpenGL -framework AGL -framework ApplicationServices,$OPENGLPATH)
+LOC_CHECK_FUNC(glBegin,OpenGL library,OPENGLLIB,-framework OpenGL -framework ApplicationServices,$OPENGLPATH)
+LOC_CHECK_FUNC(aglDestroyPixelFormat,[OpenGL library (AGL)],OPENGLLIB,[-framework AGL],$OPENGLPATH,,[
+  [OPENGLLIB="$OPENGLLIB -framework AGL"]
+  AC_DEFINE(OPENGL_AGL,1,[Define to 1 if OpenGL uses AGL (MacOS X).])
+  ],[:])
 LOC_CHECK_FUNC(gluBeginCurve,GLU library,OPENGLLIB,,$OPENGLPATH,$OPENGLLIB)
 
 OPENGLINC="$OPENGLPATH"
 OPENGLLIBPATH="$OPENGLPATH"
 
 AC_DEFINE(OPENGL_AQUA, 1, [Define to 1 if OpenGL uses Aqua (MacOS X).])
-AC_DEFINE(OPENGL_AGL, 1, [Define to 1 if OpenGL uses AGL (MacOS X).])
 
 fi # $OPENGL_AQUA
 

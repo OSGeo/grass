@@ -1,23 +1,23 @@
-# syntax=docker/dockerfile:1.19@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6
+# syntax=docker/dockerfile:1.20@sha256:26147acbda4f14c5add9946e2fd2ed543fc402884fd75146bd342a7f6271dc1d
 
 # Note: This file must be kept in sync in ./Dockerfile and ./docker/ubuntu/Dockerfile.
 #       Changes to this file must be copied over to the other file.
 ARG GUI=without
 
-FROM ubuntu:24.04@sha256:66460d557b25769b102175144d538d88219c077c678a49af4afca6fbfc1b5252 AS common_start
+FROM ubuntu:24.04@sha256:c35e29c9450151419d9448b0fd75374fec4fff364a27f176fb458d472dfc9e54 AS common_start
 
 ARG BASE_NAME="ubuntu:24.04"
 ARG PYTHON_VERSION=3.12
 # renovate: datasource=github-tags depName=libgeos/geos
-ARG GEOS_VERSION=3.14.0
+ARG GEOS_VERSION=3.14.1
 # renovate: datasource=github-tags depName=OSGeo/PROJ
 ARG PROJ_VERSION=9.7.0
 # renovate: datasource=github-tags depName=OSGeo/gdal
-ARG GDAL_VERSION=3.11.4
+ARG GDAL_VERSION=3.12.0
 # renovate: datasource=github-tags depName=PDAL/PDAL
 ARG PDAL_VERSION=2.9.2
 # renovate: datasource=github-tags depName=OSGeo/gdal-grass
-ARG GDAL_GRASS_VERSION=1.0.4
+ARG GDAL_GRASS_VERSION=2.0.0
 
 # Have build parameters as build arguments?
 # ARG LDFLAGS="-s -Wl,--no-undefined -lblas"
@@ -364,9 +364,7 @@ RUN make -j $NUMTHREADS distclean || echo "nothing to clean" \
     && make -j $NUMTHREADS \
     && make install && ldconfig \
     && rm -rf /usr/local/grass85/demolocation \
-    && cp /usr/local/grass85/gui/wxpython/xml/module_items.xml module_items.xml \
-    && mkdir -p /usr/local/grass85/gui/wxpython/xml/ \
-    && mv module_items.xml /usr/local/grass85/gui/wxpython/xml/module_items.xml
+    && cp /usr/local/grass85/gui/wxpython/xml/module_items.xml module_items.xml
 
 FROM build_grass AS build_grass_with_gui_built
 RUN echo "GUI selected, skipping GUI related cleanup"
@@ -482,6 +480,7 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
 
 # Copy GRASS, GDAL-GRASS-plugin and compiled dependencies from build image
 COPY --link --from=build_grass_plugin /usr/local /usr/local
+COPY --link --from=build_grass_plugin /src/grass_build/module_items.xml /usr/local/grass85/gui/wxpython/xml/module_items.xml
 # COPY --link --from=datum_grids /tmp/cdn.proj.org/*.tif /usr/share/proj/
 
 # Create generic GRASS lib name regardless of version number

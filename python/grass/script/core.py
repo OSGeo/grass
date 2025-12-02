@@ -1133,7 +1133,7 @@ def tempdir(env=None):
         and :py:func:`~grass.script.core.tempname` functions
     """
     tmp = tempfile(create=False, env=env)
-    os.mkdir(tmp)
+    Path(tmp).mkdir()
 
     return tmp
 
@@ -1986,8 +1986,7 @@ def create_project(
     mapset_path = resolve_mapset_path(path=path, location=name)
 
     # create dbase if not exists
-    if not Path(mapset_path.directory).exists():
-        os.mkdir(mapset_path.directory)
+    Path(mapset_path.directory).mkdir(exist_ok=True)
 
     env = None
     tmp_gisrc = None
@@ -2073,7 +2072,7 @@ def create_project(
             env=local_env(),
         )
     elif wkt:
-        if os.path.isfile(wkt):
+        if Path(wkt).is_file():
             ps = pipe_command(
                 "g.proj",
                 quiet=True,
