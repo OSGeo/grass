@@ -5,7 +5,7 @@ from grass.gunittest.main import test
 
 
 class TestIIFFT(TestCase):
-    """Regression tests for the i.ifft GRASS GIS module."""
+    """Regression tests for the i.ifft GRASS module."""
 
     real_input = "real_input_raster"
     imag_input = "imag_input_raster"

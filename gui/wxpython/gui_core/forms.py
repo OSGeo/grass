@@ -72,9 +72,7 @@ import xml.etree.ElementTree as ET
 if __name__ == "__main__":
     if os.getenv("GISBASE") is None:
         # intentionally not translatable
-        sys.exit(
-            "Failed to start. GRASS GIS is not running or the installation is broken."
-        )
+        sys.exit("Failed to start. GRASS is not running or the installation is broken.")
     from grass.script.setup import set_gui_path
 
     set_gui_path()
@@ -103,6 +101,7 @@ from gui_core.widgets import (
     FormListbook,
     FormNotebook,
     PlacementValidator,
+    MapNameValidator,
 )
 from core.giface import Notification, StandaloneGrassInterface
 from gui_core.widgets import LayersList
@@ -1511,6 +1510,9 @@ class CmdPanel(wx.Panel):
                         selection = gselect.Select(
                             parent=which_panel,
                             id=wx.ID_ANY,
+                            validator=MapNameValidator()
+                            if p.get("age") == "new"
+                            else wx.DefaultValidator,
                             size=globalvar.DIALOG_GSELECT_SIZE,
                             type=elem,
                             multiple=multiple,
@@ -2035,7 +2037,7 @@ class CmdPanel(wx.Panel):
                             style=wx.TE_MULTILINE,
                             size=(-1, 75),
                         )
-                        if p.get("value", "") and os.path.isfile(p["value"]):
+                        if p.get("value", "") and Path(p["value"]).is_file():
                             ifbb.Clear()
                             try:
                                 # Python >= 3.11
@@ -3352,7 +3354,8 @@ if __name__ == "__main__":
                 "gisprompt": False,
                 "multiple": "yes",
                 # values must be an array of strings
-                "values": utils.str2rgb.keys() + list(map(str, utils.str2rgb.values())),
+                "values": list(utils.str2rgb.keys())
+                + list(map(str, utils.str2rgb.values())),
                 "key_desc": ["value"],
                 "values_desc": [],
             },

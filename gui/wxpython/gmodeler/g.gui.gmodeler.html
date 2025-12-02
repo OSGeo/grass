@@ -6,21 +6,21 @@
 The <b>Graphical Modeler</b> is a <em><a href="wxGUI.html">wxGUI</a></em>
 component which allows the user to create, edit, and manage simple and
 complex models using an easy-to-use interface.
-When performing analytical operations in GRASS GIS, the
+When performing analytical operations in GRASS, the
 operations are not isolated, but part of a chain of operations. Using the
-Graphical Modeler, a chain of processes (i.e. GRASS GIS modules)
+Graphical Modeler, a chain of processes (i.e. GRASS modules)
 can be wrapped into one process (i.e. model). Subsequently it is easier to
 execute the model later on even with slightly different inputs or parameters.
 <br>
-Models represent a programming technique used in GRASS GIS to
+Models represent a programming technique used in GRASS to
 concatenate single steps together to accomplish a task. It is advantageous
 when the user see boxes and ovals that are connected by lines and
 represent some tasks rather than seeing lines of coded text. The Graphical
 Modeler can be used as a custom tool that automates a process. Created
 models can simplify or shorten a task which can be run many times and it can
 also be easily shared with others. Important to note is that models cannot
-perform specified tasks that one cannot also manually perform with GRASS
-GIS. It is recommended to first to develop the process manually, note down
+perform specified tasks that one cannot also manually perform with GRASS.
+It is recommended to first to develop the process manually, note down
 the steps (e.g. by using the <i>Copy</i> button in module dialogs) and later
 replicate them in model.
 
@@ -319,7 +319,7 @@ input called <code>%{raster}</code>.
 </center>
 
 <h3>Saving the model file</h3>
-Finally, the model settings can be stored as a GRASS GIS Model file with
+Finally, the model settings can be stored as a GRASS Model file with
 <code>*.gxm</code> extension. The advantage is that it can be shared as a
 reusable workflow that may be run also by other users with different data.
 
@@ -396,7 +396,7 @@ settings. Alternatively also PyGRASS API is supported
 In the example below the <a href="https://e4ftl01.cr.usgs.gov/MOLT/MOD13Q1.006/">MODIS MOD13Q1</a>
 (NDVI) satellite data products are used in a loop. The original data are
 stored as coded integer values that need to be multiplied by the
-value <code>0.0001</code> to represent real <i>ndvi values</i>. Moreover, GRASS GIS
+value <code>0.0001</code> to represent real <i>ndvi values</i>. Moreover, GRASS
 provides a predefined color table called <code>ndvi</code> to represent <i>ndvi data</i>.
 In this case it is not necessary to work with every image separately.
 <br>
@@ -410,7 +410,7 @@ with required settings of map type, mapset, etc.
 <a href="g_gui_gmodeler_loop_dlg.png">
 <img src="g_gui_gmodeler_loop_dlg.png" width="300"></a>
 <br>
-<i>Figure: MODIS data representation in GRASS GIS after Graphical Modeler usage.</i>
+<i>Figure: MODIS data representation in GRASS after Graphical Modeler usage.</i>
 </center>
 
 <p>
@@ -439,7 +439,7 @@ ticked in the boxes of loop dialog. The final model and its results are shown be
 <a href="g_gui_gmodeler_modis_3.png">
 <img src="g_gui_gmodeler_modis_3.png" width="300"></a>
 <br>
-<i>Figure: MODIS data representation in GRASS GIS after Graphical Modeler usage.</i>
+<i>Figure: MODIS data representation in GRASS after Graphical Modeler usage.</i>
 </center>
 
 <p>

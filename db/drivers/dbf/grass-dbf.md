@@ -100,8 +100,7 @@ SQL parser error: syntax error, unexpected NAME processing 'IN'..
 
 indicates that an unsupported SQL statement (here, 'IN') was used. The
 only solution is to switch the DBMI backend to a real SQL engine
-(SQLite, PostgreSQL, MySQL etc.). See [SQL support in GRASS
-GIS](sql.md).
+(SQLite, PostgreSQL, MySQL etc.). See [SQL support in GRASS](sql.md).
 
 An error message such as:
 
@@ -117,6 +116,6 @@ different column names on the fly.
 
 ## SEE ALSO
 
-*[db.connect](db.connect.md), [SQL support in GRASS GIS](sql.md)  
+*[db.connect](db.connect.md), [SQL support in GRASS](sql.md)  
 [DBF Specifications](http://shapelib.maptools.org/dbf_api.html)
 (Shapelib)*

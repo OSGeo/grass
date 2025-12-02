@@ -108,9 +108,9 @@ Running tests and creating report
 
 Currently there is full support only for running all the tests in
 the small (basic) version of GRASS sample Location for North Carolina
-(see `GRASS GIS sample data`).
+(see `GRASS sample data`).
 
-.. _GRASS GIS sample data: https://grass.osgeo.org/download/sample-data
+.. _GRASS sample data: https://grass.osgeo.org/download/sample-data
 
 
 Example Bash script to run be used as a cron job
@@ -148,7 +148,7 @@ Example Bash script to run be used as a cron job
 
     GRASSDATA="/grassdata/tests-grassdata"
 
-    echo "Nightly GRASS GIS test started: $NOW" >> $LOGFILE
+    echo "Nightly GRASS test started: $NOW" >> $LOGFILE
 
     # compile current source code from scratch
     cd $GRASSSRC
@@ -178,7 +178,7 @@ Example Bash script to run be used as a cron job
     # so publish or archive results
     rsync -rtvu --delete $REPORTS/ "/var/www/html/grassgistestreports"
 
-    echo "Nightly ($NOW) GRASS GIS test finished: $(date $DATE_FLAGS)" >> $LOGFILE
+    echo "Nightly ($NOW) GRASS test finished: $(date $DATE_FLAGS)" >> $LOGFILE
 
 A script similar to this one can be used as a cron job, on most Linux systems
 using ``crontab -e`` and adding a line similar to the following one::

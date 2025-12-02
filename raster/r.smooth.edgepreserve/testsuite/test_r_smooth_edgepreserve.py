@@ -10,7 +10,7 @@ Licence:   This program is free software under the GNU General Public
 """
 
 import os
-import pathlib
+from pathlib import Path
 
 from grass.script.core import tempname
 from grass.script.raster import raster_info
@@ -31,7 +31,7 @@ class SmoothingTest(TestCase):
         cls.use_temp_region()
         cls.runModule("g.region", n=10, s=0, e=10, w=0, res=1)
 
-        cls.data_dir = os.path.join(pathlib.Path(__file__).parent.absolute(), "data")
+        cls.data_dir = os.path.join(Path(__file__).parent.absolute(), "data")
         cls.rm_rast = []
 
         cls.in_map_i = tempname(10)

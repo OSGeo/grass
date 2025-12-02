@@ -20,7 +20,7 @@
 # Website for   config.guess, config.sub:
 #               wget http://git.savannah.gnu.org/cgit/config.git/plain/config.guess
 #               wget http://git.savannah.gnu.org/cgit/config.git/plain/config.sub
-#               Note: use autoconf-2.69
+#               Note: use autoconf-2.72
 #############################################################################
 
 define([AC_CACHE_LOAD], )
@@ -31,10 +31,14 @@ $2
 
 AC_INIT
 AC_CONFIG_SRCDIR([configure.ac])
-AC_PREREQ([2.71])
+AC_PREREQ([2.72])
 AC_CONFIG_HEADERS([include/grass/config.h])
 AC_CANONICAL_HOST
 AC_PROG_CC
+
+AH_TOP([#ifndef _config_h
+#define _config_h])
+AH_BOTTOM([#endif /* _config_h */])
 
 # Enable C++ option
 
@@ -162,7 +166,7 @@ GRASS_HEADERS_GIT_HASH="${GRASS_VERSION_NUMBER}"
 GRASS_HEADERS_GIT_DATE=`date -u +%FT%T%z | sed 's/\(..\)$/:\1/'`
 AC_PATH_PROG(GIT, git, no)
 AC_CHECK_FILE([$GRASS_VERSION_GIT_FILE])
-AC_MSG_CHECKING(for GRASS GIS headers commit date)
+AC_MSG_CHECKING(for GRASS headers commit date)
 if test "$GIT" != "no" ; then
    GRASS_VERSION_GIT=`$GIT rev-parse --short HEAD 2>/dev/null`
    if test -z "$GRASS_VERSION_GIT"; then
@@ -1413,7 +1417,7 @@ case "$with_opengl" in
 		USE_OPENGL=1
 		OPENGL_X11=1
 		;;
-	aqua|mac|osx|macosx|agl)
+	aqua|mac|osx|macosx)
 		OPENGL_TYPE=Aqua
 		USE_OPENGL=1
 		OPENGL_AQUA=1
@@ -1429,6 +1433,11 @@ case "$with_opengl" in
 esac
 
 if test -n "$USE_OPENGL" ; then
+
+# We assume any OpenGL capable of running GRASS also is recent enough
+# to have FBO support.
+# Moved here from customizations of config.h.in
+AC_DEFINE(OPENGL_FBO, 1, [Use framebuffer objects for off-screen OpenGL rendering])
 
 if test "$OPENGL_X11" = 1 ; then
 
@@ -1462,7 +1471,11 @@ LOC_CHECK_FRAMEWORK_PATH(opengl,OpenGL,OPENGLPATH)
 
 LOC_CHECK_INCLUDES(OpenGL/gl.h OpenGL/glu.h,OpenGL,$OPENGLPATH)
 
-LOC_CHECK_FUNC(glBegin,OpenGL library,OPENGLLIB,-framework OpenGL -framework AGL -framework ApplicationServices,$OPENGLPATH)
+LOC_CHECK_FUNC(glBegin,OpenGL library,OPENGLLIB,-framework OpenGL -framework ApplicationServices,$OPENGLPATH)
+LOC_CHECK_FUNC(aglDestroyPixelFormat,[OpenGL library (AGL)],OPENGLLIB,[-framework AGL],$OPENGLPATH,,[
+  [OPENGLLIB="$OPENGLLIB -framework AGL"]
+  AC_DEFINE(OPENGL_AGL,1,[Define to 1 if OpenGL uses AGL (MacOS X).])
+  ],[:])
 LOC_CHECK_FUNC(gluBeginCurve,GLU library,OPENGLLIB,,$OPENGLPATH,$OPENGLLIB)
 
 OPENGLINC="$OPENGLPATH"
@@ -1892,6 +1905,10 @@ LOC_CHECK_FUNC(pthread_create,POSIX threads functions,PTHREADLIB,,,,,[
 LOC_CHECK_LIBS(pthread,pthread_create,POSIX threads,$PTHREADLIBPATH,PTHREADLIB,,,)
 ])
 
+if test -n "$PTHREADLIB" ; then
+    AC_DEFINE(HAVE_PTHREAD, 1, [Define to 1 if POSIX threads are available.])
+fi
+
 fi # $USE_PTHREAD
 
 AC_SUBST(PTHREADINCPATH)
@@ -1989,27 +2006,32 @@ AC_SUBST(USE_OPENCL)
 
 # Done checking OpenCL
 
-# Enable LFS (from cdr-tools, tar, and autoconf 2.68)
-dnl Check for large file support
-dnl Do this last to make sure that no large file definition
-dnl in confdefs.h will modify our results
+# Check for large file support. AC_SYS_LARGEFILE is the modern, portable
+# way to handle this. It sets the appropriate CFLAGS and defines necessary
+# preprocessor macros (e.g., _FILE_OFFSET_BITS=64) for the compiler.
 AC_SYS_LARGEFILE
-ac_save_cflags=${CFLAGS}
-CFLAGS="$LFS_CFLAGS ${ac_save_cflags}"
-dnl Warning do not run this test. it interferes with the test
-dnl AC_CHECK_FUNCS(fseeko ftello) from above.
-dnl The test AC_HAVE_LARGEFILES will check whether ftello/fseeko
-dnl are available in Large File mode
-AC_FUNC_FSEEKO
-AC_HAVE_LARGEFILES
-CFLAGS=${ac_save_cflags}
-# Done large file support
+if test "$ac_cv_sys_large_files" != 0; then
+    USE_LARGEFILES=1
+else
+    USE_LARGEFILES=0
+fi
+AC_SUBST(LFS_CFLAGS)
 
 USE_TERMIO=
 AC_SUBST(USE_TERMIO)
 
 STRIPFLAG=
 AC_SUBST(STRIPFLAG)
+
+# Some old system hack migrated from config.h.in. Probably obsolete in 2025?
+AH_VERBATIM([INT_MIN_FALLBACK],
+[#if defined(HAVE_VALUES_H) && !defined(HAVE_LIMITS_H)
+#define INT_MIN -MAXINT
+#endif
+])
+
+# Migrated from config.h.in. Unused, purpose – unknown.
+AC_DEFINE(GDEBUG, 1, [Define GDEBUG to 1 for historic reasons])
 
 GRASS_HOME="${DSTDIR}"
 AC_SUBST(GRASS_HOME)

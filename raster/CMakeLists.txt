@@ -209,7 +209,7 @@ build_program_in_subdir(r.cross DEPENDS grass_gis grass_raster grass_btree
 
 build_program_in_subdir(r.describe DEPENDS grass_gis grass_raster grass_parson)
 
-build_program_in_subdir(r.distance DEPENDS grass_gis grass_raster)
+build_program_in_subdir(r.distance DEPENDS grass_gis grass_raster grass_parson)
 
 build_program_in_subdir(
   r.external
@@ -220,6 +220,7 @@ build_program_in_subdir(
   grass_gproj
   ${LIBM}
   PRIMARY_DEPENDS
+  PROJ::proj
   GDAL::GDAL)
 
 build_program_in_subdir(r.external.out DEPENDS grass_gis grass_raster grass_gproj
@@ -271,6 +272,7 @@ build_program_in_subdir(
   grass_imagery
   ${LIBM}
   PRIMARY_DEPENDS
+  PROJ::proj
   GDAL::GDAL)
 
 build_program_in_subdir(r.in.gridatb DEPENDS grass_gis grass_raster)

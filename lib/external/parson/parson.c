@@ -48,6 +48,10 @@
 #include <math.h>
 #include <errno.h>
 
+#if defined(__GNUC__)
+#pragma GCC visibility push(hidden)
+#endif
+
 /* Apparently sscanf is not implemented in some "standard" libraries, so don't
  * use it, if you don't have to. */
 #ifdef sscanf
@@ -2853,3 +2857,7 @@ void json_set_number_serialization_function(
 {
     parson_number_serialization_function = func;
 }
+
+#if defined(__GNUC__)
+#pragma GCC visibility pop
+#endif
