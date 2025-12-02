@@ -69,7 +69,8 @@ else:
 def adapt_datetime_iso(value: datetime) -> str:
     """Adapt datetime object to timezone-naive ISO 8601 string, assuming UTC.
 
-    Backwards compatibility with datetime storage in the temporal database.
+    Output strftime format ensures backwards compatibility with datetime
+    storage in the temporal database.
     """
     return value.strftime("%Y-%m-%d %H:%M:%S")
 
