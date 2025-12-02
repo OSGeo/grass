@@ -34,7 +34,7 @@ jobs:
         run: |
           git config --global core.autocrlf false
           git config --global core.eol lf
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
         with:
           persist-credentials: false
       - uses: msys2/setup-msys2@fb197b72ce45fb24f17bf3f807a388985654d1f2 # v2.29.0
@@ -71,7 +71,7 @@ jobs:
             zlib
 
       - name: Setup OSGeo4W environment
-        uses: echoix/setup-OSGeo4W@f4311523e39f2c8b10e34ebbc3f2ff437ecfb9ed # v0.2.0
+        uses: echoix/setup-OSGeo4W@1e711832882e03603e9013181a87885b10af8a98 # v0.3.0
         id: osgeo4w
         with:
           package-dir: "D:/OSGeo4W_pkg"
@@ -128,7 +128,8 @@ jobs:
           python -m pip install ^
             pytest ^
             pytest-timeout
-        shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}""
+        # Obfuscated usage of GitHub Actions features, Windows CMD shell limits analysis
+        shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}"" # zizmor: ignore[obfuscation]
       - name: Run pytest with a single worker
         run: |
           call %OSGEO4W_ROOT%\opt\grass\etc\env.bat
@@ -138,7 +139,8 @@ jobs:
             @.github/workflows/pytest_args_ci.txt ^
             --junitxml=pytest.junit.xml ^
             -k "not testsuite"
-        shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}""
+        # Obfuscated usage of GitHub Actions features, Windows CMD shell limits analysis
+        shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}"" # zizmor: ignore[obfuscation]
       - name: Run pytest with a single worker (for gunittest-based tests)
         run: |
           call %OSGEO4W_ROOT%\opt\grass\etc\env.bat
@@ -149,7 +151,8 @@ jobs:
             @.github/workflows/pytest_args_deselect.txt ^
             @.github/workflows/pytest_args_gunittest.txt ^
             --junitxml=pytest.gunittest.junit.xml
-        shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}""
+        # Obfuscated usage of GitHub Actions features, Windows CMD shell limits analysis
+        shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}"" # zizmor: ignore[obfuscation]
 
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
@@ -166,7 +169,7 @@ jobs:
 
       - name: Make HTML test report available
         if: ${{ always() }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: testreport-${{ matrix.os }}
           path: testreport

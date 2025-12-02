@@ -1,23 +1,23 @@
-# syntax=docker/dockerfile:1.19@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6
+# syntax=docker/dockerfile:1.20@sha256:26147acbda4f14c5add9946e2fd2ed543fc402884fd75146bd342a7f6271dc1d
 
 # Note: This file must be kept in sync in ./Dockerfile and ./docker/ubuntu/Dockerfile.
 #       Changes to this file must be copied over to the other file.
 ARG GUI=without
 
-FROM ubuntu:24.04@sha256:66460d557b25769b102175144d538d88219c077c678a49af4afca6fbfc1b5252 AS common_start
+FROM ubuntu:24.04@sha256:c35e29c9450151419d9448b0fd75374fec4fff364a27f176fb458d472dfc9e54 AS common_start
 
 ARG BASE_NAME="ubuntu:24.04"
 ARG PYTHON_VERSION=3.12
 # renovate: datasource=github-tags depName=libgeos/geos
-ARG GEOS_VERSION=3.14.0
+ARG GEOS_VERSION=3.14.1
 # renovate: datasource=github-tags depName=OSGeo/PROJ
 ARG PROJ_VERSION=9.7.0
 # renovate: datasource=github-tags depName=OSGeo/gdal
-ARG GDAL_VERSION=3.11.4
+ARG GDAL_VERSION=3.12.0
 # renovate: datasource=github-tags depName=PDAL/PDAL
 ARG PDAL_VERSION=2.9.2
 # renovate: datasource=github-tags depName=OSGeo/gdal-grass
-ARG GDAL_GRASS_VERSION=1.0.4
+ARG GDAL_GRASS_VERSION=2.0.0
 
 # Have build parameters as build arguments?
 # ARG LDFLAGS="-s -Wl,--no-undefined -lblas"
@@ -106,6 +106,25 @@ ARG GRASS_RUN_PACKAGES="\
   zlib1g \
 "
 
+ARG GRASS_GUI_RUN_PACKAGES=" \
+  adwaita-icon-theme-full \
+  gettext \
+  libglu1-mesa \
+  libglut3.12 \
+  libgstreamer-plugins-base1.0 \
+  libgtk-3-0 \
+  libjpeg8 \
+  libnotify4 \
+  libpng16-16 \
+  librsvg2-common \
+  libsdl2-2.0-0 \
+  libsm6 \
+  libtiff6 \
+  libwebkit2gtk-4.1 \
+  libxtst6 \
+  python3-wxgtk4.0 \
+"
+
 # Define build packages
 ARG GRASS_BUILD_PACKAGES="\
   cmake \
@@ -141,31 +160,6 @@ ARG GRASS_BUILD_PACKAGES="\
   swig \
 "
 
-ARG GRASS_CONFIG="\
-  --enable-largefile \
-  --with-blas \
-  --with-bzlib \
-  --with-cairo --with-cairo-ldflags=-lfontconfig --with-cairo-includes=/usr/include/cairo/ \
-  --with-cxx \
-  --with-fftw \
-  --with-freetype --with-freetype-includes=/usr/include/freetype2/ \
-  --with-gdal=/usr/local/bin/gdal-config \
-  --with-geos \
-  --with-lapack \
-  --with-libsvm \
-  --with-netcdf \
-  --with-odbc \
-  --with-openmp \
-  --with-pcre \
-  --with-pdal \
-  --with-postgres --with-postgres-includes=/usr/include/postgresql \
-  --with-proj-share=/usr/local/share/proj \
-  --with-readline \
-  --with-sqlite \
-  --with-zstd \
-  --without-mysql \
-"
-
 ARG GRASS_PYTHON_PACKAGES="\
     matplotlib \
     numpy \
@@ -177,64 +171,11 @@ ARG GRASS_PYTHON_PACKAGES="\
     setuptools==80.9.0 \
     cython \
     "
-FROM common_start AS grass_without_gui
-
-ARG GRASS_ADDITIONAL_CONFIG="--without-opengl --without-x"
-
-FROM common_start AS grass_with_gui
-
-ARG GRASS_RUN_PACKAGES="${GRASS_RUN_PACKAGES} \
-  adwaita-icon-theme-full \
-  gettext \
-  libglu1-mesa \
-  libglut3.12 \
-  libgstreamer-plugins-base1.0 \
-  libgtk-3-0 \
-  libjpeg8 \
-  libnotify4 \
-  libpng16-16 \
-  librsvg2-common \
-  libsdl2-2.0-0 \
-  libsm6 \
-  libtiff6 \
-  libwebkit2gtk-4.1 \
-  libxtst6 \
-  python3-wxgtk4.1 \
-"
-
-# librsvg2-common \
-# (fix error (wxgui.py:7782): Gtk-WARNING **: 19:53:09.774:
-# Could not load a pixbuf from /org/gtk/libgtk/theme/Adwaita/assets/check-symbolic.svg.
-# This may indicate that pixbuf loaders or the mime database could not be found.)
-ARG GRASS_BUILD_PACKAGES="${GRASS_BUILD_PACKAGES} \
-  freeglut3-dev \
-  libgl1-mesa-dev \
-  libglu1-mesa-dev \
-  libgstreamer-plugins-base1.0-dev \
-  libgtk-3-dev \
-  libjpeg-dev \
-  libnotify-dev \
-  libpng-dev \
-  libsdl2-dev \
-  libsm-dev \
-  libtiff-dev \
-  libwebkit2gtk-4.1-dev \
-  libxtst-dev \
-"
-
-ARG GRASS_ADDITIONAL_CONFIG="\
-  --with-nls \
-  --with-opengl \
-  --with-x \
-"
 
 # If you do not use any Gnome Accessibility features, to suppress warning
 # WARNING **: Couldn't connect to accessibility bus:
 # execute programs with
 ENV NO_AT_BRIDGE=1
-
-# hadolint ignore=DL3006
-FROM grass_${GUI}_gui AS grass
 
 # Install runtime-packages
 # hadolint ignore=SC2086,DL3008
@@ -244,10 +185,7 @@ RUN apt-get update \
     $GRASS_RUN_PACKAGES \
     && apt-get autoremove -y \
     && apt-get clean all \
-    && rm -rf /var/lib/apt/lists/* \
-    && echo LANG="en_US.UTF-8" > /etc/default/locale \
-    && echo en_US.UTF-8 UTF-8 >> /etc/locale.gen \
-    && locale-gen
+    && rm -rf /var/lib/apt/lists/*
 
 ## fetch vertical datums for PDAL and store into PROJ dir
 # WORKDIR /src
@@ -267,7 +205,7 @@ RUN apt-get update \
 # RUN wget -q --no-check-certificate -r -l inf -A tif https://cdn.proj.org/
 
 # Start build stage
-FROM grass AS build_common
+FROM common_start AS build_common
 
 # Add build packages
 # hadolint ignore=SC2086,DL3008,DL3013
@@ -322,7 +260,61 @@ RUN /src/build_ubuntu_dependencies.sh gdal "$GDAL_VERSION" "$NUMTHREADS"
 RUN /src/build_ubuntu_dependencies.sh pdal "$PDAL_VERSION" "$NUMTHREADS"
 
 # With all the libraries needed compiled from source, now build grass and gdal-grass
-FROM build_gdal_pdal AS build
+FROM build_gdal_pdal AS build_grass_config
+
+ARG GRASS_CONFIG="\
+  --enable-largefile \
+  --with-blas \
+  --with-bzlib \
+  --with-cairo --with-cairo-ldflags=-lfontconfig --with-cairo-includes=/usr/include/cairo/ \
+  --with-cxx \
+  --with-fftw \
+  --with-freetype --with-freetype-includes=/usr/include/freetype2/ \
+  --with-gdal=/usr/local/bin/gdal-config \
+  --with-geos \
+  --with-lapack \
+  --with-libsvm \
+  --with-netcdf \
+  --with-odbc \
+  --with-openmp \
+  --with-pcre \
+  --with-pdal \
+  --with-postgres --with-postgres-includes=/usr/include/postgresql \
+  --with-proj-share=/usr/local/share/proj \
+  --with-readline \
+  --with-sqlite \
+  --with-zstd \
+  --without-mysql \
+"
+
+ARG GRASS_NO_GUI_CONFIG="--without-nls --without-opengl --without-x"
+
+ARG GRASS_GUI_CONFIG="\
+  --with-nls \
+  --with-opengl \
+  --with-x \
+"
+
+# librsvg2-common \
+# (fix error (wxgui.py:7782): Gtk-WARNING **: 19:53:09.774:
+# Could not load a pixbuf from /org/gtk/libgtk/theme/Adwaita/assets/check-symbolic.svg.
+# This may indicate that pixbuf loaders or the mime database could not be found.)
+ARG GRASS_GUI_BUILD_PACKAGES=" \
+  freeglut3-dev \
+  libgl1-mesa-dev \
+  libglu1-mesa-dev \
+  libgstreamer-plugins-base1.0-dev \
+  libgtk-3-dev \
+  libjpeg-dev \
+  libnotify-dev \
+  libpng-dev \
+  libsdl2-dev \
+  libsm-dev \
+  libtiff-dev \
+  libwebkit2gtk-4.1-dev \
+  libxtst-dev \
+"
+
 COPY . /src/grass_build/
 
 # copy grass source
@@ -334,28 +326,59 @@ ENV LD_LIBRARY_PATH="/usr/local/lib:/usr/lib" \
     CXXFLAGS="" \
     NUMTHREADS=$NUMTHREADS
 
+FROM build_grass_config AS build_grass_with_gui
+
+ARG GRASS_CONFIG="$GRASS_CONFIG $GRASS_GUI_CONFIG"
+ARG GRASS_GUI_PACKAGES="$GRASS_GUI_RUN_PACKAGES $GRASS_GUI_BUILD_PACKAGES"
+
+# hadolint ignore=DL3008
+RUN echo "Installing GRASS GUI packages: $GRASS_GUI_PACKAGES" \
+    && apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y --no-install-recommends --no-install-suggests \
+    $GRASS_GUI_PACKAGES \
+    && python3 -m pip install  -U --break-system-packages --no-cache-dir --upgrade \
+    -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-24.04 \
+    wxpython \
+    # Clean up
+    && pip cache purge \
+    && apt-get autoremove -y \
+    && apt-get clean all \
+    && rm -rf /var/lib/apt/lists/* \
+    # Need to generate locale when NLS is enabled
+    && echo LANG="en_US.UTF-8" > /etc/default/locale \
+    && echo en_US.UTF-8 UTF-8 >> /etc/locale.gen \
+    && locale-gen
+
+FROM build_grass_config AS build_grass_without_gui
+
+ARG GRASS_CONFIG="$GRASS_CONFIG $GRASS_NO_GUI_CONFIG"
+
+# hadolint ignore=DL3006
+FROM build_grass_${GUI}_gui AS build_grass
+
 # Configure compile and install GRASS
-# hadolint ignore=SC2086
+# hadolint ignore=SC2086,DL3008
 RUN make -j $NUMTHREADS distclean || echo "nothing to clean" \
     && ./configure $GRASS_CONFIG \
-    $GRASS_ADDITIONAL_CONFIG \
     && make -j $NUMTHREADS \
     && make install && ldconfig \
     && rm -rf /usr/local/grass85/demolocation \
-    && if [ "$GUI" = "with" ] ; then \
-        echo "GUI selected, skipping GUI related cleanup"; \
-    else \
-        echo "No GUI selected, removing GUI related files"; \
-        cp /usr/local/grass85/gui/wxpython/xml/module_items.xml module_items.xml \
-        && rm -rf /usr/local/grass85/fonts \
-        && rm -rf /usr/local/grass85/gui \
-        && rm -rf /usr/local/grass85/docs/html \
-        && rm -rf /usr/local/grass85/docs/mkdocs \
-        && rm -rf /usr/local/grass85/share \
-        && mkdir -p /usr/local/grass85/gui/wxpython/xml/ \
-        && mv module_items.xml /usr/local/grass85/gui/wxpython/xml/module_items.xml; \
-    fi
+    && cp /usr/local/grass85/gui/wxpython/xml/module_items.xml module_items.xml
 
+FROM build_grass AS build_grass_with_gui_built
+RUN echo "GUI selected, skipping GUI related cleanup"
+
+FROM build_grass AS build_grass_without_gui_built
+RUN echo "No GUI selected, removing GUI related files" \
+    && rm -rf /usr/local/grass85/fonts \
+    && rm -rf /usr/local/grass85/gui \
+    && rm -rf /usr/local/grass85/docs/html \
+    && rm -rf /usr/local/grass85/docs/mkdocs \
+    && rm -rf /usr/local/grass85/share
+
+# hadolint ignore=DL3006
+FROM build_grass_${GUI}_gui_built AS build_grass_plugin
 # Build the GDAL-GRASS plugin
 # hadolint ignore=DL3003,DL3059
 RUN git clone --branch "$GDAL_GRASS_VERSION" --depth 1 https://github.com/OSGeo/gdal-grass.git \
@@ -365,7 +388,6 @@ RUN git clone --branch "$GDAL_GRASS_VERSION" --depth 1 https://github.com/OSGeo/
     && cmake --install build \
     && cd /src \
     && rm -rf "gdal-grass"
-
 
 ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     SHELL="/bin/bash" \
@@ -387,7 +409,22 @@ RUN /usr/local/bin/grass --tmp-project EPSG:4326 --exec g.version -rge && \
     python3 -c "from osgeo import gdal; print('GDAL_GRASS driver:', 'available' if gdal.GetDriverByName('GRASS') else 'not-available')"
 
 # Leave build stage
-FROM grass AS grass_final
+FROM common_start AS grass_final_without_gui
+RUN echo "No additional steps needed without GUI."
+
+FROM common_start AS grass_final_with_gui
+
+# hadolint ignore=SC2086,DL3008
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y --no-install-recommends --no-install-suggests \
+    $GRASS_GUI_RUN_PACKAGES \
+    && apt-get autoremove -y \
+    && apt-get clean all \
+    && rm -rf /var/lib/apt/lists/*
+
+# hadolint ignore=DL3006
+FROM grass_final_${GUI}_gui AS grass_final
 
 # Set with "$(git branch --show-current)"
 ARG BRANCH=main
@@ -441,8 +478,9 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     LD_LIBRARY_PATH="/usr/local/grass/lib:/usr/local/lib:/usr/lib" \
     GDAL_DRIVER_PATH="/usr/local/lib/gdalplugins"
 
-# Copy GRASS and compiled dependencies from build image
-COPY --link --from=build /usr/local /usr/local
+# Copy GRASS, GDAL-GRASS-plugin and compiled dependencies from build image
+COPY --link --from=build_grass_plugin /usr/local /usr/local
+COPY --link --from=build_grass_plugin /src/grass_build/module_items.xml /usr/local/grass85/gui/wxpython/xml/module_items.xml
 # COPY --link --from=datum_grids /tmp/cdn.proj.org/*.tif /usr/share/proj/
 
 # Create generic GRASS lib name regardless of version number

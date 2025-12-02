@@ -42,7 +42,7 @@ import re
 import sys
 
 import xml.etree.ElementTree as ET
-
+from pathlib import Path
 from urllib import request as urlrequest
 from urllib.error import HTTPError, URLError
 
@@ -60,7 +60,7 @@ def get_extensions():
     if not addon_base:
         gs.fatal(_("%s not defined") % "GRASS_ADDON_BASE")
     fXML = os.path.join(addon_base, "modules.xml")
-    if not os.path.exists(fXML):
+    if not Path(fXML).exists():
         return []
 
     # read XML file

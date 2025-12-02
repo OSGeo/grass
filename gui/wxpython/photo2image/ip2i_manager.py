@@ -30,6 +30,7 @@ import os
 import sys
 import shutil
 from copy import copy
+from pathlib import Path
 
 import wx
 from wx.lib.mixins.listctrl import ColumnSorterMixin, ListCtrlAutoWidthMixin
@@ -407,7 +408,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         }
 
         # make a backup of the current points file if exists
-        if os.path.exists(self.file["points"]):
+        if Path(self.file["points"]).exists():
             shutil.copy(self.file["points"], self.file["points_bak"])
             shutil.copy(self.file["points"], self.file["ref_points"])
             GMessage(_("A POINTS file exists, renaming it to POINTS_BAK"))
@@ -1187,11 +1188,11 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 self.SaveGCPs(None)
             elif ret == wx.NO:
                 # restore POINTS file from backup
-                if os.path.exists(self.file["points_bak"]):
+                if Path(self.file["points_bak"]).exists():
                     shutil.copy(self.file["points_bak"], self.file["points"])
                     shutil.copy(self.file["points_bak"], self.file["ref_points"])
 
-            if os.path.exists(self.file["points_bak"]):
+            if Path(self.file["points_bak"]).exists():
                 os.unlink(self.file["points_bak"])
 
             self.SrcMap.Clean()
@@ -1669,7 +1670,7 @@ class GCPList(ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
         self.DeleteAllItems()
 
         self.render = False
-        if os.path.isfile(self.gcp.file["points"]):
+        if Path(self.gcp.file["points"]).is_file():
             self.gcp.ReadGCPs()
         else:
             # 3 gcp is minimum

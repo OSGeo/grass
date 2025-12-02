@@ -25,6 +25,7 @@ import sys
 import wx
 import tempfile
 from multiprocessing import Process, Queue
+from pathlib import Path
 
 from core.gcmd import GException, DecodeString
 from core.settings import UserSettings
@@ -175,7 +176,7 @@ class BitmapProvider:
             filename = GetFileFromCmd(self._tempDir, cmd, region)
             if (
                 not force
-                and os.path.exists(filename)
+                and Path(filename).exists()
                 and self._mapFilesPool.GetSize(HashCmd(cmd, region))
                 == (self.imageWidth, self.imageHeight)
             ):
@@ -378,7 +379,7 @@ class BitmapRenderer:
             filename = GetFileFromCmd(self._tempDir, cmd, region)
             if (
                 not force
-                and os.path.exists(filename)
+                and Path(filename).exists()
                 and self._mapFilesPool.GetSize(HashCmd(cmd, region))
                 == (self.imageWidth, self.imageHeight)
             ):
@@ -791,7 +792,7 @@ class CleanUp:
     def __call__(self):
         import shutil
 
-        if os.path.exists(self._tempDir):
+        if Path(self._tempDir).exists():
             try:
                 shutil.rmtree(self._tempDir)
                 Debug.msg(5, "CleanUp: removed directory {t}".format(t=self._tempDir))
@@ -901,9 +902,9 @@ def test():
     mapFilesPool = MapFilesPool()
 
     tempDir = "/tmp/test"
-    if os.path.exists(tempDir):
+    if Path(tempDir).exists():
         shutil.rmtree(tempDir)
-    os.mkdir(tempDir)
+    Path(tempDir).mkdir()
     # comment this line to keep the directory after program ends
     #    cleanUp = CleanUp(tempDir)
     #    import atexit

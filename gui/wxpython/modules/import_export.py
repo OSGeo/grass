@@ -494,7 +494,7 @@ class GdalImportDialog(ImportDialog):
                 idsn = dsn
                 if "PG:" in dsn:
                     idsn = f"{dsn} table={layer}"
-                elif os.path.exists(idsn):
+                elif Path(idsn).exists():
                     try:
                         from osgeo import gdal
 

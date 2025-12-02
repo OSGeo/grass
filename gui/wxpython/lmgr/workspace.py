@@ -208,7 +208,7 @@ class WorkspaceManager:
                 self.lmgr.SetSize(gxwXml.layerManager["size"])
             if gxwXml.layerManager["cwd"]:
                 self.lmgr.cwdPath = gxwXml.layerManager["cwd"]
-                if os.path.isdir(self.lmgr.cwdPath):
+                if Path(self.lmgr.cwdPath).is_dir():
                     os.chdir(self.lmgr.cwdPath)
 
         #
@@ -382,7 +382,7 @@ class WorkspaceManager:
         if filename[-4:] != ".gxw":
             filename += ".gxw"
 
-        if os.path.exists(filename):
+        if Path(filename).exists():
             dlg = wx.MessageDialog(
                 self.lmgr,
                 message=_(

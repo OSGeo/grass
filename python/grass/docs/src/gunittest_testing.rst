@@ -721,4 +721,4 @@ Further reading
 .. _1038: https://scan.coverity.com/projects/1038
 .. _Cppcheck: http://cppcheck.sourceforge.net/
 .. _sandbox: https://svn.osgeo.org/grass/sandbox/wenzeslaus/grass_py_static_check.py
-.. _GRASS sample data: https://grass.osgeo.org/download/data/ and http://fatra.cnr.ncsu.edu/data/ (nc_spm_full_v2alpha)
+.. _GRASS sample data: https://grass.osgeo.org/download/data/ and http://fatra.cnr.ncsu.edu/data/ (nc_spm_full_v2beta1)
