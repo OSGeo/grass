@@ -21,7 +21,7 @@
 #include <grass/raster.h>
 #include <grass/raster3d.h>
 #include <grass/vector.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 {
     int i;
     int print_flag = 0;
-    int flat_flag;
+    int flat_flag = 0;
     double x, xs, ys, zs;
     int ival;
     int row_flag = 0, col_flag = 0;
@@ -44,8 +44,8 @@ int main(int argc, char *argv[])
     int pix;
     bool update_file = false;
     enum OutputFormat format;
-    JSON_Value *root_value;
-    JSON_Object *root_object;
+    G_JSON_Value *root_value;
+    G_JSON_Object *root_object;
 
     struct GModule *module;
     struct {
@@ -144,13 +144,16 @@ int main(int argc, char *argv[])
 
     flag.gprint = G_define_flag();
     flag.gprint->key = 'g';
-    flag.gprint->description = _("Print in shell script style");
+    flag.gprint->label = _("Print in shell script style [deprecated]");
+    flag.gprint->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=shell instead.");
     flag.gprint->guisection = _("Print");
 
     flag.flprint = G_define_flag();
     flag.flprint->key = 'f';
-    flag.flprint->description =
-        _("Print in shell script style, but in one line (flat)");
+    flag.flprint->description = _("Print in one line (flat) in shell script "
+                                  "style (ignores format parameter)");
     flag.flprint->guisection = _("Print");
 
     flag.res_set = G_define_flag();
@@ -388,34 +391,42 @@ int main(int argc, char *argv[])
                                   "json;JSON (JavaScript Object Notation);");
     parm.format->guisection = _("Print");
 
-    G_option_required(flag.dflt, flag.savedefault, flag.print, flag.lprint,
-                      flag.eprint, flag.center, flag.gmt_style, flag.wms_style,
-                      flag.dist_res, flag.nangle, flag.z, flag.bbox,
-                      flag.gprint, flag.res_set, flag.noupdate, parm.region,
-                      parm.raster, parm.raster3d, parm.vect, parm.north,
-                      parm.south, parm.east, parm.west, parm.top, parm.bottom,
-                      parm.rows, parm.cols, parm.res, parm.res3, parm.nsres,
-                      parm.ewres, parm.nsres3, parm.ewres3, parm.tbres,
-                      parm.zoom, parm.align, parm.save, parm.grow, NULL);
+    G_option_required(
+        flag.dflt, flag.savedefault, flag.print, flag.lprint, flag.eprint,
+        flag.center, flag.gmt_style, flag.wms_style, flag.dist_res, flag.nangle,
+        flag.z, flag.bbox, flag.gprint, flag.res_set, flag.noupdate,
+        flag.flprint, parm.region, parm.raster, parm.raster3d, parm.vect,
+        parm.north, parm.south, parm.east, parm.west, parm.top, parm.bottom,
+        parm.rows, parm.cols, parm.res, parm.res3, parm.nsres, parm.ewres,
+        parm.nsres3, parm.ewres3, parm.tbres, parm.zoom, parm.align, parm.save,
+        parm.grow, NULL);
     G_option_exclusive(flag.noupdate, flag.force, NULL);
     G_option_requires(flag.noupdate, flag.savedefault, flag.print, flag.lprint,
                       flag.eprint, flag.center, flag.gmt_style, flag.wms_style,
                       flag.dist_res, flag.nangle, flag.z, flag.bbox,
-                      flag.gprint, parm.save, NULL);
-    G_option_requires(flag.flprint, flag.gprint, NULL);
+                      flag.gprint, flag.flprint, parm.save, NULL);
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
     G_get_default_window(&window);
 
-    flat_flag = flag.flprint->answer;
+    if (flag.flprint->answer) {
+        print_flag |= PRINT_SH;
+        flat_flag = 1;
+        parm.format->answer = "shell";
+    }
 
     if (flag.print->answer)
         print_flag |= PRINT_REG;
 
-    if (flag.gprint->answer)
+    if (flag.gprint->answer) {
         print_flag |= PRINT_SH;
+
+        G_verbose_message(
+            _("Flag 'g' is deprecated and will be removed in a future "
+              "release. Please use format=shell instead."));
+    }
 
     if (flag.lprint->answer)
         print_flag |= PRINT_LL;
@@ -454,12 +465,12 @@ int main(int argc, char *argv[])
 
     if (strcmp(parm.format->answer, "json") == 0) {
         format = JSON;
-        root_value = json_value_init_object();
+        root_value = G_json_value_init_object();
         if (root_value == NULL) {
             G_fatal_error(
                 _("Failed to initialize JSON object. Out of memory?"));
         }
-        root_object = json_object(root_value);
+        root_object = G_json_object(root_value);
     }
     else if (strcmp(parm.format->answer, "shell") == 0 ||
              (print_flag & PRINT_SH)) {
@@ -493,7 +504,9 @@ int main(int argc, char *argv[])
         for (; *rast_ptr != NULL; rast_ptr++) {
             char rast_name[GNAME_MAX];
 
-            strcpy(rast_name, *rast_ptr);
+            if (G_strlcpy(rast_name, *rast_ptr, sizeof(rast_name)) >=
+                sizeof(rast_name))
+                G_fatal_error(_("Raster map name too long: <%s>"), *rast_ptr);
             mapset = G_find_raster2(rast_name, "");
             if (!mapset)
                 G_fatal_error(_("Raster map <%s> not found"), rast_name);
@@ -548,7 +561,9 @@ int main(int argc, char *argv[])
             char vect_name[GNAME_MAX];
             struct Cell_head map_window;
 
-            strcpy(vect_name, *vect_ptr);
+            if (G_strlcpy(vect_name, *vect_ptr, sizeof(vect_name)) >=
+                sizeof(vect_name))
+                G_fatal_error(_("Vector map name too long: <%s>"), *vect_ptr);
             mapset = G_find_vector2(vect_name, "");
             if (!mapset)
                 G_fatal_error(_("Vector map <%s> not found"), vect_name);
@@ -970,13 +985,13 @@ int main(int argc, char *argv[])
 
     if (format == JSON) {
         char *serialized_string = NULL;
-        serialized_string = json_serialize_to_string_pretty(root_value);
+        serialized_string = G_json_serialize_to_string_pretty(root_value);
         if (serialized_string == NULL) {
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         }
         puts(serialized_string);
-        json_free_serialized_string(serialized_string);
-        json_value_free(root_value);
+        G_json_free_serialized_string(serialized_string);
+        G_json_value_free(root_value);
     }
 
     exit(EXIT_SUCCESS);

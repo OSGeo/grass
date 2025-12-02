@@ -12,16 +12,17 @@
  */
 
 #include <string.h>
+#include <stdbool.h>
 
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
 static const char NULL_STRING[] = "null";
-static int reclass_type(FILE *, char **, char **);
+static int reclass_type(FILE *, char **, char **, char **);
 static FILE *fopen_cellhd_old(const char *, const char *);
 static FILE *fopen_cellhd_new(const char *);
-static int get_reclass_table(FILE *, struct Reclass *);
+static int get_reclass_table(FILE *, struct Reclass *, char **);
 
 /*!
  * \brief Check if raster map is reclassified
@@ -40,8 +41,8 @@ static int get_reclass_table(FILE *, struct Reclass *);
  * \return 0 if it is not
  * \return -1 if there was a problem reading the raster header
  */
-int Rast_is_reclass(const char *name, const char *mapset, char *rname,
-                    char *rmapset)
+int Rast_is_reclass(const char *name, const char *mapset, char rname[GNAME_MAX],
+                    char rmapset[GMAPSET_MAX])
 {
     FILE *fd;
     int type;
@@ -50,7 +51,7 @@ int Rast_is_reclass(const char *name, const char *mapset, char *rname,
     if (fd == NULL)
         return -1;
 
-    type = reclass_type(fd, &rname, &rmapset);
+    type = reclass_type(fd, &rname, &rmapset, NULL);
     fclose(fd);
     if (type < 0)
         return -1;
@@ -134,29 +135,41 @@ int Rast_is_reclassed_to(const char *name, const char *mapset, int *nrmaps,
    \param mapset mapset name
    \param[out] reclass pointer to Reclass structure
 
-   \return -1 on error
-   \return type code
+   \return type code (>=1), 0 if no reclass, -1 on error
  */
 int Rast_get_reclass(const char *name, const char *mapset,
                      struct Reclass *reclass)
 {
     FILE *fd;
     int stat;
+    char rname[GNAME_MAX] = {0}, rmapset[GMAPSET_MAX] = {0};
+    char *tmp_name = rname, *tmp_mapset = rmapset;
 
     fd = fopen_cellhd_old(name, mapset);
     if (fd == NULL)
         return -1;
-    reclass->name = NULL;
-    reclass->mapset = NULL;
-    reclass->type = reclass_type(fd, &reclass->name, &reclass->mapset);
-    if (reclass->type <= 0) {
+    char *error_message = NULL;
+    reclass->type = reclass_type(fd, &tmp_name, &tmp_mapset, &error_message);
+    reclass->name = G_store(tmp_name);
+    reclass->mapset = G_store(tmp_mapset);
+    if (reclass->type == 0) {
+        // no reclass
         fclose(fd);
+        return reclass->type;
+    }
+    if (reclass->type < 0) {
+        // error
+        fclose(fd);
+        G_warning(_("Error reading beginning of header file for <%s@%s>: %s"),
+                  name, mapset, error_message);
+        if (error_message != NULL)
+            G_free(error_message);
         return reclass->type;
     }
 
     switch (reclass->type) {
     case RECLASS_TABLE:
-        stat = get_reclass_table(fd, reclass);
+        stat = get_reclass_table(fd, reclass, &error_message);
         break;
     default:
         stat = -1;
@@ -168,10 +181,13 @@ int Rast_get_reclass(const char *name, const char *mapset,
             G_warning(_("Too many reclass categories for <%s@%s>"), name,
                       mapset);
         else
-            G_warning(_("Illegal reclass format in header file for <%s@%s>"),
-                      name, mapset);
+            G_warning(
+                _("Illegal reclass format in header file for <%s@%s>: %s"),
+                name, mapset, error_message);
         stat = -1;
     }
+    if (error_message != NULL)
+        G_free(error_message);
     return stat;
 }
 
@@ -199,10 +215,22 @@ void Rast_free_reclass(struct Reclass *reclass)
     }
 }
 
-static int reclass_type(FILE *fd, char **rname, char **rmapset)
+/**
+ * \brief Get reclass type if it is a reclass file
+ *
+ * \param fd[in] file descriptor
+ * \param rname[out] name of the reclass from raster
+ * \param rmapset[out] name of the mapset of the raster
+ * \param error_message[out] will be assigned a newly error message if not NULL
+ *
+ * \returns RECLASS_TABLE if reclass, 0 if not, -1 on error
+ */
+static int reclass_type(FILE *fd, char **rname, char **rmapset,
+                        char **error_message)
 {
-    char buf[128];
-    char label[128], arg[128];
+    char
+        buf[GNAME_MAX + 128 + 1]; // name or mapset plus the label and separator
+    char label[128], arg[GNAME_MAX];
     int i;
     int type;
 
@@ -220,29 +248,56 @@ static int reclass_type(FILE *fd, char **rname, char **rmapset)
     if (*rmapset)
         **rmapset = '\0';
     for (i = 0; i < 2; i++) {
-        if (fgets(buf, sizeof buf, fd) == NULL)
+        if (fgets(buf, sizeof buf, fd) == NULL) {
+            if (error_message != NULL) {
+                G_asprintf(error_message, _("File too short, reading line %d"),
+                           i + 1);
+            }
             return -1;
-        if (sscanf(buf, "%[^:]:%s", label, arg) != 2)
-            return -1;
-        if (strncmp(label, "maps", 4) == 0) {
-            if (*rmapset)
-                strcpy(*rmapset, arg);
-            else
-                *rmapset = G_store(arg);
         }
-        else if (strncmp(label, "name", 4) == 0) {
-            if (*rname)
-                strcpy(*rname, arg);
-            else
-                *rname = G_store(arg);
-        }
-        else
+        if (buf[strlen(buf) - 1] != '\n') {
+            if (error_message != NULL) {
+                G_asprintf(error_message, _("Line too long: %s..."), buf);
+            }
             return -1;
+        }
+        if (sscanf(buf, "%[^:]:%s", label, arg) != 2) {
+            if (error_message != NULL) {
+                G_asprintf(error_message, _("Format is not key:value: %s"),
+                           buf);
+            }
+            return -1;
+        }
+        if (strncmp(label, "maps", 4) == 0 && *rmapset) {
+            G_strlcpy(*rmapset, arg, GMAPSET_MAX);
+        }
+        else if (strncmp(label, "name", 4) == 0 && *rname) {
+            G_strlcpy(*rname, arg, GNAME_MAX);
+        }
+        else {
+            if (error_message != NULL) {
+                G_asprintf(error_message, _("Unknown key at line: %s"), buf);
+            }
+            return -1;
+        }
     }
-    if (**rmapset && **rname)
+    if ((*rmapset && **rmapset) || (*rname && **rname))
         return type;
-    else
+    else {
+        // If they do not occur in the two lines we expect them.
+        if (**rname && error_message != NULL) {
+            G_asprintf(error_message,
+                       _("Mapset not read, only raster name: %s"), *rname);
+        }
+        else if (**rmapset && error_message != NULL) {
+            G_asprintf(error_message,
+                       _("Raster name not read, only mapset: %s"), *rmapset);
+        }
+        else if (error_message != NULL) {
+            *error_message = G_store(_("Raster name and mapset not read"));
+        }
         return -1;
+    }
 }
 
 static FILE *fopen_cellhd_old(const char *name, const char *mapset)
@@ -364,7 +419,22 @@ static FILE *fopen_cellhd_new(const char *name)
     return G_fopen_new("cellhd", name);
 }
 
-static int get_reclass_table(FILE *fd, struct Reclass *reclass)
+/**
+ * \brief Get reclass table from header file
+ *
+ * If there is reading error due to the format, -1 is returned and,
+ * if error_message is not NULL, it will be set to a pointer to a newly
+ * allocated string containing an error message with the line where error
+ * was encountered.
+ *
+ * \param fd header file
+ * \param[out] reclass pointer to Reclass structure
+ * \param[out] error_message pointer to error message
+
+ * \return 1 on success, -1 on format error, -2 on too many categories
+ */
+static int get_reclass_table(FILE *fd, struct Reclass *reclass,
+                             char **error_message)
 {
     char buf[128];
     int n;
@@ -382,19 +452,36 @@ static int get_reclass_table(FILE *fd, struct Reclass *reclass)
     null_str_size = strlen(NULL_STRING);
     n = 0;
     first = 1;
+    bool min_set = false;
     while (fgets(buf, sizeof buf, fd)) {
         if (first) {
             first = 0;
             if (sscanf(buf, "#%d", &cat) == 1) {
                 reclass->min = cat;
+                min_set = true;
                 continue;
             }
         }
         if (strncmp(buf, NULL_STRING, null_str_size) == 0)
             Rast_set_c_null_value(&cat, 1);
         else {
-            if (sscanf(buf, "%d", &cat) != 1)
+            if (sscanf(buf, "%d", &cat) != 1) {
+                if (reclass->table != NULL)
+                    G_free(reclass->table);
+                if (error_message != NULL) {
+                    if (min_set)
+                        G_asprintf(error_message,
+                                   _("Reading integer failed on line: %s "
+                                     "(after reading min: %d)"),
+                                   buf, reclass->min);
+                    else
+                        G_asprintf(error_message,
+                                   _("First entry (min) not read yet and "
+                                     "reading integer failed on line: %s"),
+                                   buf);
+                }
                 return -1;
+            }
         }
         n++;
         len = (long)n * sizeof(CELL);

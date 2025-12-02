@@ -32,18 +32,22 @@ Now you can import raster or vector data with [r.import](r.import.md)
 and [v.import](v.import.md).
 The following examples will use the [North Carolina dataset](https://grass.osgeo.org/download/data/#NorthCarolinaDataset).
 
+<!-- markdownlint-disable MD046 -->
 !!! grass-tip "Importing packages"
-    <!-- markdownlint-disable-next-line MD046 -->
+
     To import the grass.script and grass.jupyter packages, you need to tell
     Python where the GRASS Python package is unless you are running a notebook
     in a GRASS session.
-    <!-- markdownlint-disable-next-line MD046 -->
+
     ```python
     import sys
+    import subprocess
+
     sys.path.append(
         subprocess.check_output(["grass", "--config", "python_path"], text=True).strip()
     )
     ```
+<!-- markdown-restore -->
 
 !!! grass-tip "Mapsets"
     If not specified otherwise in the `gj.init` function, the session will
@@ -85,9 +89,13 @@ features you can refer to the [Cartography](topic_cartography.md) topic page.
 For example, let's add a legend, barscale, and shaded relief to the map:
 
 ```python
+from grass.tools import Tools
+
+# Create an object to access tools
+tools = Tools()
 
 # Compute shaded relief
-gs.run_command("r.relief", input="elevation", output="relief")
+tools.r_relief(input="elevation", output="relief")
 
 # Create a new map
 m = gj.Map()
@@ -176,10 +184,10 @@ maps and play a continuous loop.
 # Create a series of relief maps with different angles
 directions = [0, 90, 180, 270]
 for azimuth in directions:
-    gs.run_command("r.relief",
-                   input="elevation",
-                   output=f"relief_{azimuth}",
-                   azimuth=azimuth)
+    tools.r_relief(
+        input="elevation",
+        output=f"relief_{azimuth}",
+        azimuth=azimuth)
 m = gj.SeriesMap()
 m.add_rasters(f"relief_{azimuth}" for azimuth in directions)
 m.d_vect(map="roads")
@@ -199,30 +207,30 @@ series map of overland water flow:
 
 ```python
 # Zoom in to the study area
-gs.run_command("g.region", n=226040, s=223780, e=639170, w=636190)
+tools.g_region(n=226040, s=223780, e=639170, w=636190)
 # Compute topography dx and dy derivatives
-gs.run_command("r.slope.aspect",
-               elevation="elevation",
-               dx="dx",
-               dy="dy")
+tools.r_slope_aspect(elevation="elevation", dx="dx", dy="dy")
 # Compute overland flow
-gs.run_command("r.sim.water",
-               flags="t",
-               elevation="elevation",
-               dx="dx",
-               dy="dy",
-               depth="depth",
-               niterations=30)
+tools.r_sim_water(
+    flags="t",
+    elevation="elevation",
+    dx="dx",
+    dy="dy",
+    depth="depth",
+    niterations=30)
 
 # Create a time series
-gs.run_command("t.create",
-               output="depth",
-               temporaltype="relative",
-               title="Overland flow depth",
-               description="Overland flow depth")
+tools.t_create(
+    output="depth",
+    temporaltype="relative",
+    title="Overland flow depth",
+    description="Overland flow depth")
 # Register the time series
-maps = gs.list_strings(type="raster", pattern="depth*")
-gs.run_command("t.register", input="depth", maps=maps)
+maps = [
+    item["fullname"]
+    for item in tools.g_list(type="raster", pattern="depth*", format="json")
+]
+tools.t_register(input="depth", maps=maps)
 
 # Create a time series map
 flow_map = gj.TimeSeriesMap()
@@ -251,6 +259,10 @@ flow_map.show()
 
 For complete documentation on the `grass.jupyter` package, see the
 [grass.jupyter](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.jupyter.html)
+library documentation page.
+
+For complete documentation on the `grass.tools` package, see the
+[grass.tools](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.tools.html)
 library documentation page.
 
 For complete documentation on the `grass.script` package, see the

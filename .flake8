@@ -20,7 +20,6 @@ per-file-ignores =
     # E722 do not use bare 'except'
     # W605 invalid escape sequence
     # F821 undefined name 'unicode'
-    # F841 local variable assigned to but never used
     # E741 ambiguous variable name 'l'
     man/build_html.py: E501
     man/build_md.py: E501
@@ -79,6 +78,7 @@ exclude =
     # Test output directory
     testreport,
     # Not yet compliant
+    python/grass/temporal/ply,
     python/libgrass_interface_generator,
     # No tests checked for now
     testsuite,

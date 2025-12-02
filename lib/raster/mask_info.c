@@ -66,7 +66,7 @@ char *Rast_mask_info(void)
  * This function checks if an environment variable "GRASS_MASK" is set.
  * If it is set, the value of the environment variable is returned
  * as the mask name. If it is not set, the function will default to the
- * mask name "MASK@<mapset>", where <mapset> is the current mapset.
+ * mask name "MASK@<mapset>", where \<mapset\> is the current mapset.
  *
  * The memory for the returned mask name is dynamically allocated using
  * G_store(). It is the caller's responsibility to free the memory with
@@ -136,7 +136,8 @@ static bool Rast__get_present_mask(char *name, char *mapset)
  * @return true if mask is present, false otherwise
  */
 bool Rast_mask_status(char *name, char *mapset, bool *is_mask_reclass,
-                      char *reclass_name, char *reclass_mapset)
+                      char reclass_name[GNAME_MAX],
+                      char reclass_mapset[GMAPSET_MAX])
 {
     bool present = Rast__get_present_mask(name, mapset);
 

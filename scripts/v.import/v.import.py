@@ -102,6 +102,7 @@ import os
 import atexit
 import xml.etree.ElementTree as ET  # only needed for GDAL version < 2.4.1
 import re  # only needed for GDAL version < 2.4.1
+from pathlib import Path
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
@@ -159,7 +160,7 @@ def fix_gfsfile(input):
     # set srs string in gfs file
     gml = os.path.basename(input).split(".")[-1]
     gfsfile = input.replace(gml, "gfs")
-    if os.path.isfile(gfsfile):
+    if Path(gfsfile).is_file():
         tree = ET.parse(gfsfile)
         root = tree.getroot()
         gfsstring = ET.tostring(root).decode("utf-8")
@@ -266,6 +267,8 @@ def main():
         if OGRdatasource.lower().endswith("gml"):
             try:
                 from osgeo import gdal
+
+                gdal.DontUseExceptions()
             except ImportError:
                 gs.fatal(
                     _(
@@ -344,6 +347,8 @@ def main():
         if OGRdatasource.lower().endswith("gml"):
             try:
                 from osgeo import gdal
+
+                gdal.DontUseExceptions()
             except ImportError:
                 gs.fatal(
                     _(
@@ -371,7 +376,9 @@ def main():
         not gs.overwrite()
         and gs.find_file(output, element="vector", mapset=".")["mapset"]
     ):
-        gs.fatal(_("option <%s>: <%s> exists.") % ("output", output))
+        gs.fatal(
+            _("option <{key}>: <{value}> exists.").format(key="output", value=output)
+        )
 
     if options["extent"] == "region":
         gs.run_command("g.remove", type="vector", name=vreg, flags="f", quiet=True)

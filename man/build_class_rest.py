@@ -6,21 +6,21 @@
 #   Markus Neteler
 #   Glynn Clements
 
-import sys
 import os
+import sys
 
 from build_rest import (
-    rest_dir,
+    check_for_desc_override,
+    desc2_tmpl,
+    get_desc,
     grass_version,
     modclass_intro_tmpl,
     modclass_tmpl,
-    desc2_tmpl,
-    write_rest_header,
-    write_rest_footer,
-    rest_files,
-    check_for_desc_override,
-    get_desc,
     replace_file,
+    rest_dir,
+    rest_files,
+    write_rest_footer,
+    write_rest_header,
 )
 
 os.chdir(rest_dir)
@@ -33,9 +33,7 @@ modclass = sys.argv[2]
 
 filename = modclass + ".txt"
 with open(filename + ".tmp", "wb") as f:
-    write_rest_header(
-        f, "GRASS GIS %s Reference Manual: %s" % (grass_version, modclass)
-    )
+    write_rest_header(f, "GRASS %s Reference Manual: %s" % (grass_version, modclass))
     if modclass.lower() not in {"general", "miscellaneous", "postscript"}:
         f.write(
             modclass_intro_tmpl.substitute(

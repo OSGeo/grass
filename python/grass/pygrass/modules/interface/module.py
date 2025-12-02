@@ -4,7 +4,7 @@ from xml.etree.ElementTree import fromstring
 
 from grass.exceptions import CalledModuleError, GrassError, ParameterError
 from grass.script.core import Popen, PIPE, use_temp_region, del_temp_region
-from grass.script.utils import encode, decode
+from grass.script.utils import decode
 from .docstring import docstring_property
 from .parameter import Parameter
 from .flag import Flag
@@ -50,11 +50,15 @@ class ParallelModuleQueue:
         >>> from grass.pygrass.modules import Module, MultiModule, ParallelModuleQueue
         >>> mapcalc_list = []
 
-      Setting ``run_`` to False is important, otherwise a parallel processing is not possible
+      Since r.mapcalc can itself run multithreaded, setting ``nprocs`` for the
+      *r.mapcalc* call (and not just the *ParallelModuleQueue*) is needed to determine
+      the number of threads each *r.mapcalc* will use. With 3 processes for the
+      *ParallelModuleQueue*, the computation will use 6 core total (``3 * 2 = 6``).
+      Setting ``run_`` to False is important, otherwise a parallel processing is not possible.
 
       .. code-block:: pycon
 
-        >>> mapcalc = Module("r.mapcalc", overwrite=True, run_=False)
+        >>> mapcalc = Module("r.mapcalc", nprocs=2, overwrite=True, run_=False)
         >>> queue = ParallelModuleQueue(nprocs=3)
         >>> for i in range(5):
         ...     new_mapcalc = copy.deepcopy(mapcalc)
@@ -685,7 +689,7 @@ class Module:
         #
         # set/update args
         #
-        for param, arg in zip(self.params_list, args):
+        for param, arg in zip(self.params_list, args, strict=False):
             param.value = arg
         for key, val in kargs.items():
             key = key.strip("_")
@@ -853,8 +857,6 @@ class Module:
         :return: A reference to this object
         """
         if self._finished is False:
-            if self.stdin:
-                self.stdin = encode(self.stdin)
             stdout, stderr = self._popen.communicate(input=self.stdin)
             self.outputs["stdout"].value = decode(stdout) if stdout else ""
             self.outputs["stderr"].value = decode(stderr) if stderr else ""

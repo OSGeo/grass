@@ -1158,7 +1158,7 @@ class ColumnSelect(ComboCtrl):
         :param excludeCols: list of columns to be removed from the list
         :param type: only columns of given type (given as list)
         :param dbInfo: dbInfo object
-        :param setDefaultValue: True to set default value
+        :param bool setDefaultValue: True to set default value
         """
         if not dbInfo:
             dbInfo = VectorDBInfo(vector)
@@ -1204,12 +1204,15 @@ class ColumnSelect(ComboCtrl):
             if value != "" and value in self.columns:
                 self.SetValue(value)
 
-    def InsertTableColumns(self, table, driver=None, database=None):
+    def InsertTableColumns(
+        self, table, driver=None, database=None, setDefaultValue=True
+    ):
         """Insert table columns
 
         :param str table: table name
         :param str driver: driver name
         :param str database: database name
+        :param bool setDefaultValue: True to set default value
         """
         self.columns[:] = []
 
@@ -1222,7 +1225,8 @@ class ColumnSelect(ComboCtrl):
 
         # update list
         self.tcp.DeleteAllItems()
-        self.SetValue(self.defaultValue)
+        if setDefaultValue:
+            self.SetValue(self.defaultValue)
 
         for col in self.columns:
             self.tcp.AddItem(col)
@@ -2640,6 +2644,8 @@ class GdalSelect(wx.Panel):
         """
         try:
             from osgeo import gdal
+
+            gdal.DontUseExceptions()
         except ImportError:
             GError(
                 parent=self,

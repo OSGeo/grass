@@ -1,161 +1,116 @@
-# syntax=docker/dockerfile:1.16@sha256:e2dd261f92e4b763d789984f6eab84be66ab4f5f08052316d8eb8f173593acf7
+# syntax=docker/dockerfile:1.20@sha256:26147acbda4f14c5add9946e2fd2ed543fc402884fd75146bd342a7f6271dc1d
 
 # Note: This file must be kept in sync in ./Dockerfile and ./docker/ubuntu/Dockerfile.
 #       Changes to this file must be copied over to the other file.
-
 ARG GUI=without
 
-FROM ubuntu:22.04@sha256:01a3ee0b5e413cefaaffc6abe68c9c37879ae3cced56a8e088b1649e5b269eee AS common_start
+FROM ubuntu:24.04@sha256:c35e29c9450151419d9448b0fd75374fec4fff364a27f176fb458d472dfc9e54 AS common_start
 
-LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann,Stefan Blumentrath"
-LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
+ARG BASE_NAME="ubuntu:24.04"
+ARG PYTHON_VERSION=3.12
+# renovate: datasource=github-tags depName=libgeos/geos
+ARG GEOS_VERSION=3.14.1
+# renovate: datasource=github-tags depName=OSGeo/PROJ
+ARG PROJ_VERSION=9.7.0
+# renovate: datasource=github-tags depName=OSGeo/gdal
+ARG GDAL_VERSION=3.12.0
+# renovate: datasource=github-tags depName=PDAL/PDAL
+ARG PDAL_VERSION=2.9.2
+# renovate: datasource=github-tags depName=OSGeo/gdal-grass
+ARG GDAL_GRASS_VERSION=2.0.0
+
+# Have build parameters as build arguments?
+# ARG LDFLAGS="-s -Wl,--no-undefined -lblas"
+# ARG CFLAGS="-O2 -std=gnu99"
+# ARG CXXFLAGS=""
+# ARG PYTHONPATH="$PYTHONPATH"
+# ARG LD_LIBRARY_PATH="/usr/local/lib"
 
 ENV DEBIAN_FRONTEND=noninteractive
 
 SHELL ["/bin/bash", "-c"]
 
-WORKDIR /tmp
-
-ARG GUI
-
 # Todo: re-consider required dev packages for addons (~400MB in dev packages)
 ARG GRASS_RUN_PACKAGES="\
-    bison \
-    build-essential \
-    bzip2 \
-    curl \
-    flex \
-    g++ \
-    gcc \
-    gdal-bin \
-    geos-bin \
-    git \
-    language-pack-en-base \
-    libcairo2 \
-    libcurl4-gnutls-dev \
-    libfftw3-bin \
-    libfftw3-dev \
-    libfreetype6 \
-    libgdal-dev \
-    libgeos-dev \
-    libgsl-dev \
-    libgsl27 \
-    libjpeg-turbo8 \
-    libjsoncpp-dev \
-    liblapacke-dev \
-    libmagic-mgc \
-    libmagic1 \
-    libncurses5 \
-    libomp-dev \
-    libomp5 \
-    libopenblas-base \
-    libopenblas-dev \
-    libopenjp2-7 \
-    libpdal-base13 \
-    libpdal-dev \
-    libpdal-plugin-hdf \
-    libpdal-plugins \
-    libpdal-util13 \
-    libpnglite0 \
-    libpq-dev \
-    libpq5 \
-    libproj-dev \
-    libpython3-all-dev \
-    libreadline8 \
-    libsqlite3-0 \
-    libtiff-tools \
-    libzstd1 \
-    locales \
-    make \
-    mesa-utils \
-    moreutils \
-    ncurses-bin \
-    netcdf-bin \
-    pdal \
-    proj-bin \
-    proj-data \
-    python-is-python3 \
-    python3 \
-    python3-dev \
-    python3-venv \
-    sqlite3 \
-    unzip \
-    vim \
-    wget \
-    zip \
-    zlib1g \
-    "
-ENV GRASS_RUN_PACKAGES=${GRASS_RUN_PACKAGES}
+  bison \
+  build-essential \
+  bzip2 \
+  curl \
+  flex \
+  freetds-bin \
+  freetds-common \
+  g++ \
+  gcc \
+  git \
+  language-pack-en-base \
+  libarmadillo12 \
+  libcairo2 \
+  libcurl4-gnutls-dev \
+  libfftw3-bin \
+  libfftw3-dev \
+  libfreetype6 \
+  libfyba0t64 \
+  libgeotiff5 \
+  libgif7 \
+  libgsl-dev \
+  libgsl27 \
+  libhdf5-dev \
+  libjpeg-turbo8 \
+  libjson-c5 \
+  libjsoncpp-dev \
+  libkmlbase1t64 \
+  libkmldom1t64 \
+  libkmlengine1t64 \
+  libkmlxsd1t64 \
+  libkmlconvenience1t64 \
+  liblapacke-dev \
+  liblz4-1 \
+  libmagic-mgc \
+  libmagic1 \
+  libmuparser2v5 \
+  libncurses6 \
+  libomp-dev \
+  libomp5 \
+  libopenblas-dev \
+  libopenblas0 \
+  libopenjp2-7 \
+  libpnglite0 \
+  libpq-dev \
+  libpq5 \
+  libpython3-all-dev \
+  libreadline8 \
+  libspatialite8t64 \
+  libsqlite3-0 \
+  libsqlite3-mod-spatialite \
+  libsvm3 \
+  libtiff-tools \
+  libxerces-c3.2t64 \
+  libzstd1 \
+  locales \
+  make \
+  mesa-utils \
+  moreutils \
+  ncurses-bin \
+  netcdf-bin \
+  pcre2-utils \
+  python-is-python3 \
+  python3 \
+  python3-dev \
+  sqlite3 \
+  tdsodbc \
+  unixodbc \
+  unzip \
+  vim \
+  wget \
+  zip \
+  zlib1g \
+"
 
-# Define build packages
-ARG GRASS_BUILD_PACKAGES="\
-    cmake \
-    libbz2-dev \
-    libcairo2-dev \
-    libfreetype6-dev \
-    libjpeg-dev \
-    libncurses5-dev \
-    libnetcdf-dev \
-    libopenjp2-7-dev \
-    libpnglite-dev \
-    libreadline-dev \
-    libsqlite3-dev \
-    libtiff-dev \
-    libzstd-dev \
-    mesa-common-dev \
-    zlib1g-dev \
-    "
-ENV GRASS_BUILD_PACKAGES=${GRASS_BUILD_PACKAGES}
-
-ARG GRASS_CONFIG="\
-  --enable-largefile \
-  --with-blas \
-  --with-bzlib \
-  --with-cairo --with-cairo-ldflags=-lfontconfig \
-  --with-cxx \
-  --with-fftw \
-  --with-freetype --with-freetype-includes=/usr/include/freetype2/ \
-  --with-gdal=/usr/bin/gdal-config \
-  --with-geos \
-  --with-lapack \
-  --with-netcdf \
-  --with-odbc \
-  --with-openmp \
-  --with-pdal \
-  --with-postgres --with-postgres-includes=/usr/include/postgresql \
-  --with-proj-share=/usr/share/proj \
-  --with-readline \
-  --with-sqlite \
-  --with-zstd \
-  --without-mysql \
-  "
-
-ARG GRASS_PYTHON_PACKAGES="\
-    matplotlib \
-    numpy \
-    Pillow \
-    pip \
-    ply \
-    psycopg2 \
-    python-dateutil \
-    python-magic \
-    setuptools \
-  "
-ENV GRASS_PYTHON_PACKAGES=${GRASS_PYTHON_PACKAGES}
-
-
-FROM common_start AS grass_without_gui
-
-ARG GRASS_CONFIG="${GRASS_CONFIG} --without-opengl"
-ENV GRASS_CONFIG=${GRASS_CONFIG}
-
-FROM common_start AS grass_with_gui
-
-ARG GRASS_RUN_PACKAGES="${GRASS_RUN_PACKAGES} \
+ARG GRASS_GUI_RUN_PACKAGES=" \
   adwaita-icon-theme-full \
-  freeglut3 \
   gettext \
   libglu1-mesa \
+  libglut3.12 \
   libgstreamer-plugins-base1.0 \
   libgtk-3-0 \
   libjpeg8 \
@@ -164,17 +119,187 @@ ARG GRASS_RUN_PACKAGES="${GRASS_RUN_PACKAGES} \
   librsvg2-common \
   libsdl2-2.0-0 \
   libsm6 \
-  libtiff5 \
-  libwebkit2gtk-4.0 \
+  libtiff6 \
+  libwebkit2gtk-4.1 \
   libxtst6 \
+  python3-wxgtk4.0 \
 "
+
+# Define build packages
+ARG GRASS_BUILD_PACKAGES="\
+  cmake \
+  freetds-dev \
+  libbz2-dev \
+  libarmadillo-dev \
+  libcairo2-dev \
+  libfreetype6-dev \
+  libfyba-dev \
+  libgeotiff-dev \
+  libgif-dev \
+  libjpeg-dev \
+  libjson-c-dev \
+  libkml-dev \
+  liblz4-dev \
+  libmuparser-dev \
+  libncurses-dev \
+  libnetcdf-dev \
+  libopenjp2-7-dev \
+  libpcre2-dev \
+  libpnglite-dev \
+  libreadline-dev \
+  libsqlite3-dev \
+  libspatialite-dev \
+  libsvm-dev \
+  libtiff-dev \
+  libxerces-c-dev \
+  libzstd-dev \
+  mesa-common-dev \
+  ninja-build \
+  unixodbc-dev \
+  zlib1g-dev \
+  swig \
+"
+
+ARG GRASS_PYTHON_PACKAGES="\
+    matplotlib \
+    numpy \
+    packaging>=25.0 \
+    Pillow>=10.3.0 \
+    psycopg2 \
+    python-dateutil \
+    python-magic \
+    setuptools==80.9.0 \
+    cython \
+    "
+
+# If you do not use any Gnome Accessibility features, to suppress warning
+# WARNING **: Couldn't connect to accessibility bus:
+# execute programs with
+ENV NO_AT_BRIDGE=1
+
+# Install runtime-packages
+# hadolint ignore=SC2086,DL3008
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y --no-install-recommends --no-install-suggests \
+    $GRASS_RUN_PACKAGES \
+    && apt-get autoremove -y \
+    && apt-get clean all \
+    && rm -rf /var/lib/apt/lists/*
+
+## fetch vertical datums for PDAL and store into PROJ dir
+# WORKDIR /src
+
+# # Get datum grids
+# # Currently using https://proj.org/en/9.3/usage/network.html#how-to-enable-network-capabilities
+# FROM ubuntu:24.04 AS datum_grids
+
+# # See: https://github.com/OSGeo/PROJ-data
+# RUN apt-get update \
+#     && apt-get install  -y --no-install-recommends --no-install-suggests \
+#     wget \
+#     && apt-get clean all \
+#     && rm -rf /var/lib/apt/lists/*
+
+# WORKDIR /tmp
+# RUN wget -q --no-check-certificate -r -l inf -A tif https://cdn.proj.org/
+
+# Start build stage
+FROM common_start AS build_common
+
+# Add build packages
+# hadolint ignore=SC2086,DL3008,DL3013
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends --no-install-suggests \
+    ${GRASS_BUILD_PACKAGES} ca-certificates \
+    && apt-get autoremove -y \
+    && apt-get clean all \
+    && echo "Install Python" \
+    && wget --progress="dot:giga" https://bootstrap.pypa.io/pip/get-pip.py \
+    && python get-pip.py --break-system-packages \
+    && rm -r get-pip.py \
+    # Deactivate python3-packaging to allow installation of newer version
+    && apt-get remove -y python3-packaging \
+    && apt-get clean all \
+    && python3 -m pip install --break-system-packages --no-cache-dir --upgrade \
+    ${GRASS_PYTHON_PACKAGES} \
+    # Add back dev-packages that depend on python3-packaging
+    && apt-get update \
+    && apt-get install -y --no-install-recommends --no-install-suggests \
+    libcairo2-dev libglib2.0-dev libglib2.0-dev-bin \
+    # Clean up
+    && apt-get autoremove -y \
+    && apt-get clean all \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -r /root/.cache \
+    && rm -rf /tmp/pip-*
+
+# Set environmental variables for GRASS compilation, without debug symbols
+# Set gcc/g++ environmental variables for GRASS compilation, without debug symbols
+ARG NUMTHREADS=4
+ENV CMAKE_BUILD_PARALLEL_LEVEL=$NUMTHREADS
+WORKDIR /src
+
+COPY ./utils/build_ubuntu_dependencies.sh /src/
+
+# Build and install PROJ, GEOS, GDAL and PDAL from source
+FROM build_common AS build_proj
+RUN /src/build_ubuntu_dependencies.sh proj "$PROJ_VERSION" "$NUMTHREADS"
+
+FROM build_common AS build_geos
+RUN /src/build_ubuntu_dependencies.sh geos "$GEOS_VERSION" "$NUMTHREADS"
+
+FROM build_common AS build_gdal_pdal
+COPY --link --from=build_proj /usr/local /usr/local
+COPY --link --from=build_geos /usr/local /usr/local
+
+# hadolint ignore=DL3059
+RUN /src/build_ubuntu_dependencies.sh gdal "$GDAL_VERSION" "$NUMTHREADS"
+
+# hadolint ignore=DL3059
+RUN /src/build_ubuntu_dependencies.sh pdal "$PDAL_VERSION" "$NUMTHREADS"
+
+# With all the libraries needed compiled from source, now build grass and gdal-grass
+FROM build_gdal_pdal AS build_grass_config
+
+ARG GRASS_CONFIG="\
+  --enable-largefile \
+  --with-blas \
+  --with-bzlib \
+  --with-cairo --with-cairo-ldflags=-lfontconfig --with-cairo-includes=/usr/include/cairo/ \
+  --with-cxx \
+  --with-fftw \
+  --with-freetype --with-freetype-includes=/usr/include/freetype2/ \
+  --with-gdal=/usr/local/bin/gdal-config \
+  --with-geos \
+  --with-lapack \
+  --with-libsvm \
+  --with-netcdf \
+  --with-odbc \
+  --with-openmp \
+  --with-pcre \
+  --with-pdal \
+  --with-postgres --with-postgres-includes=/usr/include/postgresql \
+  --with-proj-share=/usr/local/share/proj \
+  --with-readline \
+  --with-sqlite \
+  --with-zstd \
+  --without-mysql \
+"
+
+ARG GRASS_NO_GUI_CONFIG="--without-nls --without-opengl --without-x"
+
+ARG GRASS_GUI_CONFIG="\
+  --with-nls \
+  --with-opengl \
+  --with-x \
+"
+
 # librsvg2-common \
 # (fix error (wxgui.py:7782): Gtk-WARNING **: 19:53:09.774:
 # Could not load a pixbuf from /org/gtk/libgtk/theme/Adwaita/assets/check-symbolic.svg.
 # This may indicate that pixbuf loaders or the mime database could not be found.)
-
-ARG GRASS_BUILD_PACKAGES="${GRASS_BUILD_PACKAGES} \
-  adwaita-icon-theme-full \
+ARG GRASS_GUI_BUILD_PACKAGES=" \
   freeglut3-dev \
   libgl1-mesa-dev \
   libglu1-mesa-dev \
@@ -186,173 +311,201 @@ ARG GRASS_BUILD_PACKAGES="${GRASS_BUILD_PACKAGES} \
   libsdl2-dev \
   libsm-dev \
   libtiff-dev \
-  libwebkit2gtk-4.0-dev \
+  libwebkit2gtk-4.1-dev \
   libxtst-dev \
 "
 
-ARG GRASS_CONFIG="${GRASS_CONFIG} \
-  --with-nls \
-  --with-opengl \
-  --with-readline \
-  --with-x \
-  "
-ARG GRASS_PYTHON_PACKAGES="${GRASS_PYTHON_PACKAGES} wxPython"
-# If you do not use any Gnome Accessibility features, to suppress warning
-# WARNING **: Couldn't connect to accessibility bus:
-# execute programs with
-ENV NO_AT_BRIDGE=1
+COPY . /src/grass_build/
 
+# copy grass source
+WORKDIR /src/grass_build
 
-FROM grass_${GUI}_gui AS grass_gis
-# Add ubuntugis unstable and fetch packages
-RUN apt-get update \
+ENV LD_LIBRARY_PATH="/usr/local/lib:/usr/lib" \
+    LDFLAGS="-s -Wl,--no-undefined -lblas" \
+    CFLAGS="-O2 -std=gnu99" \
+    CXXFLAGS="" \
+    NUMTHREADS=$NUMTHREADS
+
+FROM build_grass_config AS build_grass_with_gui
+
+ARG GRASS_CONFIG="$GRASS_CONFIG $GRASS_GUI_CONFIG"
+ARG GRASS_GUI_PACKAGES="$GRASS_GUI_RUN_PACKAGES $GRASS_GUI_BUILD_PACKAGES"
+
+# hadolint ignore=DL3008
+RUN echo "Installing GRASS GUI packages: $GRASS_GUI_PACKAGES" \
+    && apt-get update \
+    && apt-get upgrade -y \
     && apt-get install -y --no-install-recommends --no-install-suggests \
-    software-properties-common \
-    gpg \
-    gpg-agent \
-    && LC_ALL=C.UTF-8 add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable \
-    && apt-get update -y && apt-get upgrade -y \
-    && apt-get install -y --no-install-recommends --no-install-suggests \
-    $GRASS_RUN_PACKAGES \
-    && apt-get remove -y gpg gpg-agent \
+    $GRASS_GUI_PACKAGES \
+    && python3 -m pip install  -U --break-system-packages --no-cache-dir --upgrade \
+    -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-24.04 \
+    wxpython \
+    # Clean up
+    && pip cache purge \
     && apt-get autoremove -y \
     && apt-get clean all \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN echo LANG="en_US.UTF-8" > /etc/default/locale \
+    && rm -rf /var/lib/apt/lists/* \
+    # Need to generate locale when NLS is enabled
+    && echo LANG="en_US.UTF-8" > /etc/default/locale \
     && echo en_US.UTF-8 UTF-8 >> /etc/locale.gen \
     && locale-gen
 
-## fetch vertical datums for PDAL and store into PROJ dir
-WORKDIR /src
+FROM build_grass_config AS build_grass_without_gui
 
-# # Get datum grids
-# # Currently using https://proj.org/en/9.3/usage/network.html#how-to-enable-network-capabilities
-# FROM ubuntu:22.04 AS datum_grids
+ARG GRASS_CONFIG="$GRASS_CONFIG $GRASS_NO_GUI_CONFIG"
 
-# # See: https://github.com/OSGeo/PROJ-data
-# RUN apt-get update \
-#     && apt-get install  -y --no-install-recommends --no-install-suggests \
-#     wget \
-#     && apt-get clean all \
-#     && rm -rf /var/lib/apt/lists/*
+# hadolint ignore=DL3006
+FROM build_grass_${GUI}_gui AS build_grass
 
-# WORKDIR /tmp
-# RUN wget --no-check-certificate -r -l inf -A tif https://cdn.proj.org/
-
-# Start build stage
-FROM grass_gis AS build
-
-# Add build packages
-RUN apt-get update \
-    && apt-get install  -y --no-install-recommends --no-install-suggests \
-    $GRASS_BUILD_PACKAGES \
-    && apt-get clean all \
-    && rm -rf /var/lib/apt/lists/*
-
-# Add pip and Python packages
-RUN (echo "Install Python" \
-    && wget https://bootstrap.pypa.io/pip/get-pip.py \
-    # && apt-get install -y python3-ensurepip \
-    && python get-pip.py \
-    # && python3 -m ensurepip --upgrade \
-    && rm -r get-pip.py \
-    && mkdir -p /src/site-packages \
-    && cd /src \
-    && python -m pip install --no-cache-dir -t /src/site-packages --upgrade \
-    $GRASS_PYTHON_PACKAGES \
-    && rm -r /root/.cache \
-    && rm -rf /tmp/pip-* \
-    )
-
-# copy grass gis source
-COPY . /src/grass_build/
-
-WORKDIR /src/grass_build
-
-# Set environmental variables for GRASS GIS compilation, without debug symbols
-# Set gcc/g++ environmental variables for GRASS GIS compilation, without debug symbols
-ENV MYCFLAGS="-O2 -std=gnu99"
-ENV MYLDFLAGS="-s"
-# CXX stuff:
-ENV LD_LIBRARY_PATH="/usr/local/lib"
-ENV LDFLAGS="$MYLDFLAGS"
-ENV CFLAGS="$MYCFLAGS"
-ENV CXXFLAGS="$MYCXXFLAGS"
-
-# Configure compile and install GRASS GIS
-ENV NUMTHREADS=4
-RUN make distclean || echo "nothing to clean"
-RUN ./configure $GRASS_CONFIG \
+# Configure compile and install GRASS
+# hadolint ignore=SC2086,DL3008
+RUN make -j $NUMTHREADS distclean || echo "nothing to clean" \
+    && ./configure $GRASS_CONFIG \
     && make -j $NUMTHREADS \
     && make install && ldconfig \
-    &&  cp /usr/local/grass85/gui/wxpython/xml/module_items.xml module_items.xml; \
-    rm -rf /usr/local/grass85/demolocation; \
-    rm -rf /usr/local/grass85/fonts; \
-    rm -rf /usr/local/grass85/gui; \
-    rm -rf /usr/local/grass85/share; \
-    mkdir -p /usr/local/grass85/gui/wxpython/xml/; \
-    mv module_items.xml /usr/local/grass85/gui/wxpython/xml/module_items.xml;
+    && rm -rf /usr/local/grass85/demolocation \
+    && cp /usr/local/grass85/gui/wxpython/xml/module_items.xml module_items.xml
 
+FROM build_grass AS build_grass_with_gui_built
+RUN echo "GUI selected, skipping GUI related cleanup"
+
+FROM build_grass AS build_grass_without_gui_built
+RUN echo "No GUI selected, removing GUI related files" \
+    && rm -rf /usr/local/grass85/fonts \
+    && rm -rf /usr/local/grass85/gui \
+    && rm -rf /usr/local/grass85/docs/html \
+    && rm -rf /usr/local/grass85/docs/mkdocs \
+    && rm -rf /usr/local/grass85/share
+
+# hadolint ignore=DL3006
+FROM build_grass_${GUI}_gui_built AS build_grass_plugin
 # Build the GDAL-GRASS plugin
-# renovate: datasource=github-tags depName=OSGeo/gdal-grass
-ARG GDAL_GRASS_VERSION=1.0.3
-RUN git clone --branch $GDAL_GRASS_VERSION --depth 1 https://github.com/OSGeo/gdal-grass.git \
+# hadolint ignore=DL3003,DL3059
+RUN git clone --branch "$GDAL_GRASS_VERSION" --depth 1 https://github.com/OSGeo/gdal-grass.git \
     && cd "gdal-grass" \
-    && cmake -B build -DAUTOLOAD_DIR=/usr/lib/gdalplugins -DBUILD_TESTING=OFF \
+    && cmake -B build -DAUTOLOAD_DIR=/usr/local/lib/gdalplugins -DBUILD_TESTING=OFF \
     && cmake --build build \
     && cmake --install build \
     && cd /src \
     && rm -rf "gdal-grass"
 
-# Leave build stage
-FROM grass_gis AS grass_gis_final
+ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
+    SHELL="/bin/bash" \
+    # https://proj.org/usage/environmentvars.html#envvar-PROJ_NETWORK
+    PROJ_NETWORK=ON \
+    LC_ALL="en_US.UTF-8" \
+    PYTHONPATH="/usr/local/grass/etc/python" \
+    LD_LIBRARY_PATH="/usr/local/grass/lib:/usr/local/lib" \
+    GDAL_DRIVER_PATH="/usr/local/lib/gdalplugins"
 
-# GRASS GIS specific
+ENV LD_LIBRARY_PATH="/usr/local/grass/lib:/usr/local/lib:/usr/lib"
+
+# show GRASS, PROJ, GDAL etc versions
+RUN /usr/local/bin/grass --tmp-project EPSG:4326 --exec g.version -rge && \
+    pdal --version && \
+    python3 --version && \
+    python3 -c "import numpy; print('numpy', numpy.__version__)" && \
+    python3 -c "import matplotlib as mpl; print('matplotlib', mpl.__version__)" && \
+    python3 -c "from osgeo import gdal; print('GDAL_GRASS driver:', 'available' if gdal.GetDriverByName('GRASS') else 'not-available')"
+
+# Leave build stage
+FROM common_start AS grass_final_without_gui
+RUN echo "No additional steps needed without GUI."
+
+FROM common_start AS grass_final_with_gui
+
+# hadolint ignore=SC2086,DL3008
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y --no-install-recommends --no-install-suggests \
+    $GRASS_GUI_RUN_PACKAGES \
+    && apt-get autoremove -y \
+    && apt-get clean all \
+    && rm -rf /var/lib/apt/lists/*
+
+# hadolint ignore=DL3006
+FROM grass_final_${GUI}_gui AS grass_final
+
+# Set with "$(git branch --show-current)"
+ARG BRANCH=main
+# Set with "$(git log -n 1 --pretty=format:'%h')"
+ARG REVISION=latest
+# Set with "$(head include/VERSION -n 3 | sed ':a;N;$!ba;s/\n/ /g')"
+ARG VERSION=8.5.dev
+# Set with "$(date +'%Y-%m-%dT%H:%M:%S%:z')"
+ARG BUILD_DATE
+ARG TITLE="GRASS ${VERSION}"
+ARG URL="https://github.com/OSGeo/grass/tree/${BRANCH}/docker"
+ARG DOCUMENTATION="https://github.com/OSGeo/grass/tree/${BRANCH}/docker/README.md"
+ARG SOURCE="https://github.com/OSGeo/grass/tree/${BRANCH}/docker/ubuntu"
+ARG AUTHORS="Carmen Tawalika,Markus Neteler,Anika Weinmann,Stefan Blumentrath"
+ARG MAINTAINERS="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
+ARG VENDOR="GRASS Development Team"
+ARG LICENSE="GPL-2.0-or-later"
+ARG DESCRIPTION="GRASS (Geographic Resources Analysis Support System, https://grass.osgeo.org/) "
+ARG DESCRIPTION="$DESCRIPTION is a powerful computational engine for geospatial processing."
+ARG DESCRIPTION="$DESCRIPTION Build with:"
+ARG DESCRIPTION="$DESCRIPTION PROJ ${PROJ_VERSION},"
+ARG DESCRIPTION="$DESCRIPTION GEOS ${GEOS_VERSION},"
+ARG DESCRIPTION="$DESCRIPTION GDAL ${GDAL_VERSION},"
+ARG DESCRIPTION="$DESCRIPTION PDAL ${PDAL_VERSION}."
+ARG REF_NAME="grass"
+
+# Add OCI annotations (see: https://github.com/opencontainers/image-spec/blob/main/annotations.md)
+LABEL org.opencontainers.image.authors="$AUTHORS" \
+      org.opencontainers.image.vendor="$VENDOR" \
+      org.opencontainers.image.licenses="$LICENSE" \
+      org.opencontainers.image.created="$BUILD_DATE" \
+      org.opencontainers.image.revision="$REVISION" \
+      org.opencontainers.image.url="$URL" \
+      org.opencontainers.image.source="$SOURCE" \
+      org.opencontainers.image.version="$VERSION" \
+      org.opencontainers.image.title="$TITLE" \
+      org.opencontainers.image.description="$DESCRIPTION" \
+      org.opencontainers.image.base.name="$BASE_NAME" \
+      org.opencontainers.image.ref.name="$REF_NAME" \
+      org.opencontainers.image.documentation="$DOCUMENTATION" \
+      maintainers="$MAINTAINERS"
+
+# GRASS specific
 # allow work with MAPSETs that are not owned by current user
 ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     SHELL="/bin/bash" \
     # https://proj.org/usage/environmentvars.html#envvar-PROJ_NETWORK
     PROJ_NETWORK=ON \
     LC_ALL="en_US.UTF-8" \
-    PYTHONPATH="/usr/local/grass/etc/python/:${PYTHONPATH}" \
-    LD_LIBRARY_PATH="/usr/local/grass/lib:$LD_LIBRARY_PATH" \
-    GDAL_DRIVER_PATH="/usr/lib/gdalplugins"
+    PYTHONPATH="/usr/local/grass/etc/python" \
+    LD_LIBRARY_PATH="/usr/local/grass/lib:/usr/local/lib:/usr/lib" \
+    GDAL_DRIVER_PATH="/usr/local/lib/gdalplugins"
 
-# Copy GRASS GIS from build image
-COPY --link --from=build /usr/local/bin/* /usr/local/bin/
-COPY --link --from=build /usr/local/grass85 /usr/local/grass85/
-COPY --link --from=build /src/site-packages /usr/lib/python3.10/
-COPY --link --from=build /usr/lib/gdalplugins /usr/lib/gdalplugins
+# Copy GRASS, GDAL-GRASS-plugin and compiled dependencies from build image
+COPY --link --from=build_grass_plugin /usr/local /usr/local
+COPY --link --from=build_grass_plugin /src/grass_build/module_items.xml /usr/local/grass85/gui/wxpython/xml/module_items.xml
 # COPY --link --from=datum_grids /tmp/cdn.proj.org/*.tif /usr/share/proj/
 
-# Create generic GRASS GIS lib name regardless of version number
-RUN ln -sf /usr/local/grass85 /usr/local/grass
+# Create generic GRASS lib name regardless of version number
+RUN ln -sf /usr/local/grass85 /usr/local/grass \
+    && ldconfig
 
-# show GRASS GIS, PROJ, GDAL etc versions
+# show GRASS, PROJ, GDAL etc versions
 RUN grass --tmp-project EPSG:4326 --exec g.version -rge && \
     pdal --version && \
-    python --version
-
-WORKDIR /scripts
-
-# enable GRASS GIS Python session support
-## grass --config python-path
-ENV PYTHONPATH="/usr/local/grass/etc/python:${PYTHONPATH}"
-# enable GRASS GIS ctypes imports
-## grass --config path
-ENV LD_LIBRARY_PATH="/usr/local/grass/lib:$LD_LIBRARY_PATH"
+    python3 --version && \
+    python3 -c "import numpy; print('numpy', numpy.__version__)" && \
+    python3 -c "import matplotlib as mpl; print('matplotlib', mpl.__version__)" && \
+    python3 -c "import packaging; print('packaging', packaging.__version__)" && \
+    python3 -c "from osgeo import gdal; print('GDAL_GRASS driver:', 'available' if gdal.GetDriverByName('GRASS') else 'not-available')"
 
 WORKDIR /tmp
 COPY docker/testdata/simple.laz .
 WORKDIR /scripts
 COPY docker/testdata/test_grass_session.py .
-## run GRASS GIS python session and scan the test LAZ file
-RUN python /scripts/test_grass_session.py
-RUN rm -rf /tmp/grasstest_epsg_25832
-# test LAZ file
-RUN grass --tmp-project EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g
+# Run GRASS python session and scan the test LAZ file
+RUN python3 /scripts/test_grass_session.py \
+    && rm -rf /tmp/grasstest_epsg_25832 \
+    && grass --tmp-project EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g \
+    && rm /tmp/simple.laz \
+    && rm /scripts/test_grass_session.py
+
 WORKDIR /grassdb
 VOLUME /grassdb
-
-CMD ["$GRASSBIN", "--version"]

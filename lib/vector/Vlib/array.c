@@ -35,7 +35,6 @@ static int in_array(int *cats, size_t ncats, int cat);
    \return pointer to new struct varray
    \return NULL if failed
  */
-
 struct varray *Vect_new_varray(int size)
 {
     struct varray *p;

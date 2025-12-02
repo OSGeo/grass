@@ -265,9 +265,9 @@ class InteractiveMap:
                 import folium  # pylint: disable=import-outside-toplevel
 
                 return folium
-            except ImportError as err:
+            except ImportError:
                 if error:
-                    raise err
+                    raise
                 return None
 
         def _import_ipyleaflet(error):
@@ -275,9 +275,9 @@ class InteractiveMap:
                 import ipyleaflet  # pylint: disable=import-outside-toplevel
 
                 return ipyleaflet
-            except ImportError as err:
+            except ImportError:
                 if error:
-                    raise err
+                    raise
                 return None
 
         if not map_backend:
@@ -554,7 +554,7 @@ class InteractiveRegionController:
             self.bottom_output_widget.clear_output()
             print(
                 _(
-                    "Region changed to: n={n}, s={s}, e={e}, w={w} "
+                    "Region changed to: n={north}, s={south}, e={east}, w={west} "
                     "nsres={nsres} ewres={ewres}"
                 ).format(**region)
             )

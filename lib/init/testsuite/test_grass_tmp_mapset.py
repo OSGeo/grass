@@ -14,13 +14,12 @@ License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 """
 
-import unittest
 import os
 import shutil
 import subprocess
+import unittest
 
-
-# Note that unlike rest of GRASS GIS, here we are using unittest package
+# Note that unlike rest of GRASS, here we are using unittest package
 # directly. The grass.gunittest machinery for mapsets is not needed here.
 # How this plays out together with the rest of testing framework is yet to be
 # determined.
@@ -29,7 +28,7 @@ import subprocess
 class TestTmpMapset(unittest.TestCase):
     """Tests --tmp-mapset option of grass command"""
 
-    # TODO: here we need a name of or path to the main GRASS GIS executable
+    # TODO: here we need a name of or path to the main GRASS executable
     # TODO: support OSGeo4W executable with:
     # executable = "grass" if os.name != "nt" else "grass85.bat"
     executable = "grass" if os.name != "nt" else "grass.bat"

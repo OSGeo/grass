@@ -8,11 +8,12 @@ for details.
 @author Soeren Gebbert
 """
 
+import json
 import subprocess
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.utils import xfail_windows
 from grass.script import decode
-import json
 
 
 class TestParserJson(TestCase):
@@ -90,7 +91,6 @@ class TestParserJson(TestCase):
         print(stdout)
         json_code = json.loads(decode(stdout))
         self.assertEqual(json_code["module"], "v.out.ascii")
-        self.assertEqual(len(json_code["inputs"]), 6)
         self.assertEqual(json_code["inputs"], inputs)
         self.assertEqual(json_code["outputs"], outputs)
 
@@ -101,7 +101,6 @@ class TestParserJson(TestCase):
         inputs = [
             {"param": "map", "value": "hospitals@PERMANENT"},
             {"param": "layer", "value": "1"},
-            {"param": "format", "value": "plain"},
         ]
 
         stdout, stderr = subprocess.Popen(args, stdout=subprocess.PIPE).communicate()
@@ -109,7 +108,6 @@ class TestParserJson(TestCase):
         json_code = json.loads(decode(stdout))
         print(json_code)
         self.assertEqual(json_code["module"], "v.info")
-        self.assertEqual(len(json_code["inputs"]), 3)
         self.assertEqual(json_code["inputs"], inputs)
 
 

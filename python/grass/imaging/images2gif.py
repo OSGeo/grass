@@ -62,9 +62,9 @@ Useful links:
   * http://www.w3.org/Graphics/GIF/spec-gif89a.txt
 
 """
-# todo: This module should be part of imageio (or at least based on)
+# TODO: This module should be part of imageio (or at least based on)
 
-import os
+from pathlib import Path
 
 try:
     import PIL
@@ -118,7 +118,7 @@ def checkImages(images):
             # Check and convert dtype
             if im.dtype == np.uint8:
                 images2.append(im)  # Ok
-            elif im.dtype in (np.float32, np.float64):
+            elif im.dtype in {np.float32, np.float64}:
                 im = im.copy()
                 im[im < 0] = 0
                 im[im > 1] = 1
@@ -131,7 +131,7 @@ def checkImages(images):
             if im.ndim == 2:
                 pass  # ok
             elif im.ndim == 3:
-                if im.shape[2] not in [3, 4]:
+                if im.shape[2] not in {3, 4}:
                     msg = "This array can not represent an image."
                     raise ValueError(msg)
             else:
@@ -421,7 +421,7 @@ class GifWriter:
         frames = 0
         firstFrame = True
 
-        for im, palette in zip(images, palettes):
+        for im, palette in zip(images, palettes, strict=True):
             if firstFrame:
                 # Write header
 
@@ -634,7 +634,7 @@ def readGif(filename, asNumpy=True):
         raise RuntimeError(msg)
 
     # Check whether it exists
-    if not os.path.isfile(filename):
+    if not Path(filename).is_file():
         raise OSError("File not found: " + str(filename))
 
     # Load file using PIL

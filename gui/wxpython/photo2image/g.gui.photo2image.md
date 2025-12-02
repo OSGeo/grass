@@ -7,7 +7,7 @@ index: topic_GUI|GUI
 
 ## DESCRIPTION
 
-This module is based on **g.gui.gcp**, the GCP manager of GRASS GIS. It
+This module is based on **g.gui.gcp**, the GCP manager of GRASS. It
 is part of i.ortho.photo suite.
 
 The aim of this module is to give absolute location values to the

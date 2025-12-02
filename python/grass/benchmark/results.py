@@ -2,7 +2,7 @@
 #
 # AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
 #
-# PURPOSE:   Benchmarking for GRASS GIS modules
+# PURPOSE:   Benchmarking for GRASS modules
 #
 # COPYRIGHT: (C) 2021 Vaclav Petras, and by the GRASS Development Team
 #
@@ -82,7 +82,7 @@ def join_results(results, prefixes=None, select=None, prefixes_as_labels=False):
     if not prefixes:
         prefixes = [None] * len(results)
     joined = []
-    for result_list, prefix in zip(results, prefixes):
+    for result_list, prefix in zip(results, prefixes, strict=True):
         if hasattr(result_list, "results"):
             # This is the actual list in the full results structure.
             result_list = result_list.results

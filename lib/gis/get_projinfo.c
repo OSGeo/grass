@@ -123,7 +123,6 @@ struct Key_Value *G_get_projepsg(void)
    \return pointer to WKT string
    \return NULL when WKT is not available for the current location
  */
-
 char *G_get_projwkt(void)
 {
     char *wktstring = NULL;
@@ -233,7 +232,6 @@ char *G_get_projwkt(void)
    \return pointer to srid string
    \return NULL when srid is not available for the current location
  */
-
 char *G_get_projsrid(void)
 {
     char *sridstring = NULL;

@@ -32,6 +32,7 @@ import sys
 import time
 import shutil
 import fileinput
+from pathlib import Path
 
 from grass.script.utils import try_remove
 from grass.script import core as grass
@@ -478,9 +479,7 @@ class DMonDisplay(FrameMixin, MapPanel):
         )
         # set system icon
         parent.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
 
         # bindings
@@ -616,9 +615,9 @@ class MapApp(wx.App):
         #    self.timer.Stop()
         #    return
 
-        # todo: events
+        # TODO: events
         try:
-            currentCmdFileTime = os.path.getmtime(monFile["cmd"])
+            currentCmdFileTime = Path(monFile["cmd"]).stat().st_mtime
             if currentCmdFileTime > self.cmdTimeStamp:
                 self.timer.Stop()
                 self.cmdTimeStamp = currentCmdFileTime

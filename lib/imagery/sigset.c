@@ -58,7 +58,7 @@ struct ClassData *I_AllocClassData(struct SigSet *S, struct ClassSig *C,
  *
  * No need to call before calling I_ReadSigSet.
  *
- * \param *Signature to initialize
+ * \param S *Signature to initialize
  * \param nbands band (imagery group member) count
  */
 int I_InitSigSet(struct SigSet *S, int nbands)
@@ -133,8 +133,8 @@ struct SubSig *I_NewSubSig(struct SigSet *S, struct ClassSig *C)
  * There is no need to initialise struct SigSet in advance, as this
  * function internally calls I_InitSigSet.
  *
- * \param pointer to FILE*
- * \param pointer to struct SigSet *S
+ * \param fd pointer to FILE*
+ * \param S pointer to struct SigSet *S
  *
  * \return 1 on success, -1 on failure
  */
@@ -462,11 +462,13 @@ int I_WriteSigSet(FILE *fd, const struct SigSet *S)
  * detected (== all are present in the other list), a NULL value will be
  * returned in the particular list of mismatches (not an empty string).
  * For example:
- * \code if (ret && ret[1]) printf("List of imagery group bands without
- * signatures: %s\n, ret[1]); \endcode
+ * \code
+ * if (ret && ret[1])
+ *     printf("List of imagery group bands without signatures: %s\n, ret[1]);
+ * \endcode
  *
- * \param *SigSet existing signatures to check & sort
- * \param *Ref group reference
+ * \param S existing signatures to check & sort
+ * \param R group reference
  *
  * \return NULL successfully sorted
  * \return err_array two comma separated lists of mismatches

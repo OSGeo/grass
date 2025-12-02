@@ -1,9 +1,9 @@
-"""GRASS GIS Simple Python Editor
+"""GRASS Simple Python Editor
 
 Copyright (C) 2016 by the GRASS Development Team
 
 This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS GIS
+License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :authors: Vaclav Petras
@@ -284,6 +284,7 @@ class PyEditController:
         self.tempfile = None  # bool, make them strings for better code
         self.overwrite = False
         self.parameters = None
+        self.recent_files = None
 
     def _openFile(self, file_path):
         """Try open file and read content
@@ -411,7 +412,7 @@ class PyEditController:
         if filename[-3:] != ".py":
             filename += ".py"
 
-        if os.path.exists(filename):
+        if Path(filename).exists():
             dlg = wx.MessageDialog(
                 parent=self.guiparent,
                 message=_(
@@ -795,9 +796,15 @@ class PyEditPanel(wx.Panel, MainPageBase):
 
         self.Layout()
 
-    def SetUpPage(self, *args, **kwargs):
-        MainPageBase.SetUpPage(self, *args, **kwargs)
-        self.controller.SetRecentFilesMenu(self.GetMenu()[0])
+    def OnDockUndock(self, event=None):
+        MainPageBase.OnDockUndock(self, event)
+        if not MainPageBase.IsDocked(self):
+            if self.controller.recent_files is None:
+                menuBar = self.GetMenu()[0]
+                # Init recent files submenu
+                self.controller.SetRecentFilesMenu(
+                    menu=menuBar.GetMenus()[0][0],  # Parent File menu
+                )
 
     # TODO: it would be nice if we can pass the controller to the menu
     # might not be possible on the side of menu
@@ -885,6 +892,10 @@ class PyEditFrame(wx.Frame):
             parent=self,
             model=MenuTreeModelBuilder(filename).GetModel(separators=True),
             class_handler=self.panel,
+        )
+        # Init recent files submenu
+        self.panel.controller.SetRecentFilesMenu(
+            menu=self.menubar.GetMenus()[0][0],  # Parent File menu
         )
         self.SetMenuBar(self.menubar)
 

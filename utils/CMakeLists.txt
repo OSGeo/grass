@@ -13,7 +13,7 @@ file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/generate_last_commit_file.py
 
 set(current_time_s_ms_SRCS "timer/main.c")
 if(MSVC)
-  list(APPEND current_time_s_ms_SRCS "../msvc/gettimeofday.c")
+  list(APPEND current_time_s_ms_SRCS "../msvc/sys/gettimeofday.c")
 endif()
 build_program_in_subdir(
   timer

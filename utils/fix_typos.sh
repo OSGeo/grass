@@ -1,9 +1,9 @@
 #!/bin/sh
 #
-# Derived for GRASS GIS from
+# Derived for GRASS from
 # https://trac.osgeo.org/gdal/browser/trunk/gdal/scripts/fix_typos.sh
 #
-# Run in main source code directory of GRASS GIS:
+# Run in main source code directory of GRASS:
 # sh utils/fix_typos.sh
 #
 #
@@ -65,7 +65,7 @@ WORDS_WHITE_LIST="poSession,FIDN,TRAFIC,HTINK,repID,oCurr,INTREST,oPosition"
 WORDS_WHITE_LIST="$WORDS_WHITE_LIST,CPL_SUPRESS_CPLUSPLUS,SRP_NAM,ADRG_NAM,'SRP_NAM,AuxilaryTarget"
 # libtiff
 WORDS_WHITE_LIST="$WORDS_WHITE_LIST,THRESHHOLD_BILEVEL,THRESHHOLD_HALFTONE,THRESHHOLD_ERRORDIFFUSE"
-# GRASS GIS
+# GRASS
 WORDS_WHITE_LIST="$WORDS_WHITE_LIST,thru,parm,parms"
 
 MYPATH=$(pwd)

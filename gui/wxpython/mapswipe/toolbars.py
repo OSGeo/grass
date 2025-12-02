@@ -137,7 +137,7 @@ class SwipeMainToolbar(BaseToolbar):
         # add tool to toggle active map window
         self.toggleMode = wx.Choice(parent=self)
         for label, cdata in zip(
-            [_("Swipe mode"), _("Mirror mode")], ["swipe", "mirror"]
+            [_("Swipe mode"), _("Mirror mode")], ["swipe", "mirror"], strict=True
         ):
             self.toggleMode.Append(label, cdata)
         self.toggleMode.SetSelection(0)

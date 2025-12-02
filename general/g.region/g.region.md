@@ -101,10 +101,13 @@ the number of columns.
 The **-p** (or **-g**) option is recognized last. This means that all
 changes are applied to the region settings before printing occurs.
 
-The **-g** flag prints the current region settings in shell script
-style. This format can be given back to *g.region* on its command line.
+The ****format=shell** parameter prints the current region settings in shell
+script style. This format can be given back to *g.region* on its command line.
 This may also be used to save region settings as shell environment
-variables with the UNIX eval command, "`` eval `g.region -g` ``".
+variables with the UNIX eval command, "`` eval `g.region -p format=shell` ``".
+
+The **-g** flag is deprecated and will be removed in a future release. Please
+use **format=shell** instead.
 
 With **-u** flag current region is not updated even if one or more
 options for changing region is used (**res=**, **raster=**, etc). This
@@ -189,11 +192,11 @@ cols3:      950
 depths:     1
 ```
 
-The **-g** option prints the region in the following script style
+The **format=shell** option prints the region in the following script style
 (key=value) format:
 
 ```sh
-g.region -g
+g.region -p format=shell
 ```
 
 ```sh
@@ -207,11 +210,12 @@ rows=700
 cols=950
 ```
 
-The **-bg** option prints the region in the following script style
-(key=value) format plus the boundary box in latitude-longitude/WGS84:
+The **-b** flag with **format=shell** option prints the region in the following
+script style (key=value) format plus the boundary box in latitude-
+longitude/WGS84:
 
 ```sh
-g.region -bg
+g.region -b format=shell
 ```
 
 ```sh
@@ -343,7 +347,7 @@ Extracting a spatial subset of the external vector map `soils.shp` into
 new external vector map `soils_cut.shp` using the OGR *ogr2ogr* tool:  
 
 ```sh
-eval `g.region -g`
+eval `g.region -p format=shell`
 ogr2ogr -spat $w $s $e $n soils_cut.shp soils.shp
 ```
 
@@ -357,7 +361,7 @@ Extracting a spatial subset of the external raster map
 tool:  
 
 ```sh
-eval `g.region -g`
+eval `g.region -p format=shell`
 gdalwarp -t_srs "`g.proj -wf`" -te $w $s $e $n \
          p016r035_7t20020524_z17_nn30.tif \
          p016r035_7t20020524_nc_spm_wake_nn30.tif
@@ -372,41 +376,27 @@ coordinate reference system since it is reprojected on the fly.
 g.region -p format=json
 ```
 
+Possible output:
+
 ```sh
 {
-    "projection": {
-        "code": 99,
-        "name": "Lambert Conformal Conic"
-    },
-    "zone": 0,
-    "datum": "nad83",
-    "ellipsoid": "a=6378137 es=0.006694380022900787",
-    "region": {
-        "north": 320000,
-        "south": 10000,
-        "west": 120000,
-        "east": 935000,
-        "ns-res": 500,
-        "ns-res3": 1000,
-        "ew-res": 500,
-        "ew-res3": 1000
-    },
-    "top": 500,
-    "bottom": -500,
-    "tbres": 100,
-    "rows": 620,
-    "rows3": 310,
-    "cols": 1630,
-    "cols3": 815,
-    "depths": 10,
-    "cells": 1010600,
-    "cells3": 2526500
+    "north": 223550,
+    "south": 223480,
+    "west": 637830,
+    "east": 637900,
+    "nsres": 10,
+    "ewres": 10,
+    "rows": 7,
+    "cols": 7,
+    "cells": 49,
 }
 ```
 
 ```sh
 g.region -l format=json
 ```
+
+Possible output:
 
 ```sh
 {
@@ -458,7 +448,7 @@ import grass.script as gs
 # Get WGS84 bounding box
 region = gs.parse_command(
     "g.region",
-    flags="bg",
+    flags="b",
     format="json",
 )
 bbox = [region[k] for k in ("ll_w", "ll_s", "ll_e", "ll_n")]

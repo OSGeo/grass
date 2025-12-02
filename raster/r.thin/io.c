@@ -68,7 +68,9 @@ int put_a_row(int row, CELL *buf)
 static int read_row(int file, void *buf, int row, int buf_len)
 {
     if (lseek(file, ((off_t)row) * buf_len, 0) == -1) {
-        G_fatal_error(_("Unable to seek: %s"), strerror(errno));
+        int err = errno;
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
     }
     return (read(file, buf, buf_len) == buf_len);
 }
@@ -76,7 +78,9 @@ static int read_row(int file, void *buf, int row, int buf_len)
 static int write_row(int file, const void *buf, int row, int buf_len)
 {
     if (lseek(file, ((off_t)row) * buf_len, 0) == -1) {
-        G_fatal_error(_("Unable to seek: %s"), strerror(errno));
+        int err = errno;
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
     }
     return (write(file, buf, buf_len) == buf_len);
 }
@@ -118,7 +122,12 @@ int open_file(char *name)
     work_file_name = G_tempfile();
 
     /* create the file and then open it for read and write */
-    close(creat(work_file_name, 0666));
+    int tmpfd = creat(work_file_name, 0666);
+    if (tmpfd < 0) {
+        G_fatal_error(_("Unable to create temporary file <%s>"),
+                      work_file_name);
+    }
+    close(tmpfd);
     if ((work_file = open(work_file_name, 2)) < 0) {
         unlink(work_file_name);
         G_fatal_error(_("Unable to create temporary file <%s> -- errno = %d"),

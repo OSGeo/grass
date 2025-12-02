@@ -727,8 +727,8 @@ struct Option *G_define_standard_option(int opt)
         Opt->type = TYPE_STRING;
         Opt->required = NO;
         Opt->multiple = NO;
-        Opt->label = _("GRASS GIS database directory");
-        Opt->description = _("Default: path to the current GRASS GIS database");
+        Opt->label = _("GRASS database directory");
+        Opt->description = _("Default: path to the current GRASS database");
         Opt->gisprompt = "old,dbase,dbase";
         Opt->key_desc = "path";
         break;
