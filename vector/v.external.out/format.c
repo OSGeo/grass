@@ -8,23 +8,20 @@
 
 int is_ogr(const char *format)
 {
-    int use_ogr = FALSE;
+    int use_ogr = TRUE;
 
     if (strcmp(format, "PostgreSQL") == 0) {
-        if (getenv("GRASS_VECTOR_OGR"))
-            use_ogr = TRUE;
-
 #if defined(HAVE_POSTGRES)
-        if (use_ogr) {
-            G_warning(_("Environment variable GRASS_VECTOR_OGR is defined,"
+        if (getenv("GRASS_VECTOR_OGR"))
+            G_warning(_("Environment variable GRASS_VECTOR_OGR is defined, "
                         "using OGR-PostgreSQL driver instead of native "
                         "GRASS-PostGIS data driver."));
-        }
+        else
+            use_ogr = FALSE;
 #else  /* -> force using OGR */
         G_warning(_("GRASS is not compiled with PostgreSQL support. "
                     "Using OGR-PostgreSQL driver instead of native "
                     "GRASS-PostGIS data driver."));
-        use_ogr = TRUE;
 #endif /* HAVE_POSTGRES */
     }
 
