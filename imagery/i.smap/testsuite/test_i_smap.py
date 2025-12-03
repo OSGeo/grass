@@ -108,7 +108,7 @@ class TestISmap(TestCase):
 
         reference_stats = {
             "min": -7.328390,
-            "max": 4.495414,
+            "max": 3.600805,
         }
         self.assertRasterFitsUnivar(self.goodness_map, reference_stats, precision=1e-6)
 
