@@ -978,8 +978,6 @@ AC_MSG_CHECKING(whether to use GDAL)
 
 GDAL_LIBS=
 GDAL_CFLAGS=
-USE_GDAL=
-USE_OGR=
 
 if test "`basename xx/$with_gdal`" = "gdal-config" ; then
   GDAL_CONFIG="$with_gdal"
@@ -999,11 +997,17 @@ else
     GDAL_LIBS=`"$GDAL_CONFIG" --libs`
     GDAL_DEP_LIBS=`"$GDAL_CONFIG" --dep-libs`
     GDAL_CFLAGS=`"$GDAL_CONFIG" --cflags`
-    USE_GDAL=1
-    if test `"$GDAL_CONFIG" --ogr-enabled` = "yes" ; then
-      AC_DEFINE(HAVE_OGR, 1, [Define to 1 if OGR is to be used.])
-      USE_OGR=1
-    fi
+  fi
+
+  LOC_CHECK_VERSION_INT(gdal_version.h,GDAL_VERSION_MAJOR,[GDAL major version],gdal_version_major,$GDAL_CFLAGS,0)
+  LOC_CHECK_VERSION_INT(gdal_version.h,GDAL_VERSION_MINOR,[GDAL minor version],gdal_version_minor,$GDAL_CFLAGS,0)
+  LOC_CHECK_VERSION_INT(gdal_version.h,GDAL_VERSION_REV,[GDAL revision version],gdal_version_rev,$GDAL_CFLAGS,0)
+  gdal_version="$gdal_version_major.$gdal_version_minor.$gdal_version_rev"
+  if test "$(expr "$gdal_version_major" \>= 3)" = 1 && \
+      test "$(expr "$gdal_version_minor" \>= 7)" = 1; then
+      AC_MSG_RESULT([using GDAL version "${gdal_version}"])
+  else
+      AC_MSG_ERROR([*** GDAL version 3.7 or newer is required (found version "${gdal_version}")])
   fi
 
   GDAL=
@@ -1020,13 +1024,10 @@ else
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}
 
-  AC_DEFINE(HAVE_GDAL, 1, [Define to 1 if GDAL is to be used.])
 fi
 
 AC_SUBST(GDAL_LIBS)
 AC_SUBST(GDAL_CFLAGS)
-AC_SUBST(USE_GDAL)
-AC_SUBST(USE_OGR)
 
 # libLAS option
 
@@ -2066,7 +2067,6 @@ LOC_MSG_USE(C++ support,USE_CXX)
 LOC_MSG_USE(Cairo support,USE_CAIRO)
 LOC_MSG_USE(FFTW support,USE_FFTW)
 LOC_MSG_USE(FreeType support,USE_FREETYPE)
-LOC_MSG_USE(GDAL support,USE_GDAL)
 LOC_MSG_USE(GEOS support,USE_GEOS)
 LOC_MSG_USE(LAPACK support,USE_LAPACK)
 LOC_MSG_USE(Large File support (LFS), USE_LARGEFILES)
@@ -2076,7 +2076,6 @@ LOC_MSG_USE(MySQL support,USE_MYSQL)
 LOC_MSG_USE(NetCDF support,USE_NETCDF)
 LOC_MSG_USE(NLS support,USE_NLS)
 LOC_MSG_USE(ODBC support,USE_ODBC)
-LOC_MSG_USE(OGR support,USE_OGR)
 LOC_MSG_USE(OpenCL support,USE_OPENCL)
 LOC_MSG_USE(OpenGL support,USE_OPENGL)
 LOC_MSG_USE(OpenMP support,USE_OPENMP)

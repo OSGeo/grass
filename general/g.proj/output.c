@@ -23,9 +23,7 @@
 #include <grass/config.h>
 #include <grass/gjson.h>
 
-#ifdef HAVE_OGR
 #include <cpl_csv.h>
-#endif
 
 #include "local_proto.h"
 
@@ -247,7 +245,6 @@ void print_proj4(int dontprettify)
     return;
 }
 
-#ifdef HAVE_OGR
 void print_wkt(int esristyle, int dontprettify)
 {
     char *outwkt;
@@ -329,7 +326,6 @@ void print_wkt(int esristyle, int dontprettify)
 
     return;
 }
-#endif
 
 static int check_xy(enum OutputFormat format)
 {

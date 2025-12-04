@@ -56,9 +56,6 @@
 /* Define to 1 if you have the <g2c.h> header file. */
 #cmakedefine HAVE_G2C_H ${HAVE_G2C_H}
 
-/* Define to 1 if GDAL is to be used. */
-#cmakedefine HAVE_GDAL ${HAVE_GDAL}
-
 /* Define to 1 if GEOS is to be used. */
 #cmakedefine HAVE_GEOS ${HAVE_GEOS}
 
@@ -136,9 +133,6 @@
 
 /* Define to 1 if you have the `nice' function. */
 #cmakedefine HAVE_NICE ${HAVE_NICE}
-
-/* Define to 1 if OGR is to be used. */
-#cmakedefine HAVE_OGR ${HAVE_OGR}
 
 /* Define to 1 if you have the <omp.h> header file. */
 #cmakedefine HAVE_OMP_H ${HAVE_OMP_H}

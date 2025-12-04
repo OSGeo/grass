@@ -42,9 +42,6 @@
 /* Define to 1 if you have the 'ftime' function. */
 #undef HAVE_FTIME
 
-/* Define to 1 if GDAL is to be used. */
-#undef HAVE_GDAL
-
 /* Define to 1 if GEOS is to be used. */
 #undef HAVE_GEOS
 
@@ -122,9 +119,6 @@
 
 /* Define to 1 if you have the 'nice' function. */
 #undef HAVE_NICE
-
-/* Define to 1 if OGR is to be used. */
-#undef HAVE_OGR
 
 /* Define to 1 if you have the <omp.h> header file. */
 #undef HAVE_OMP_H
