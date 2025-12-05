@@ -17,6 +17,9 @@
 #define GRASS_GPROJECTS_H
 
 #include <grass/config.h>
+
+#include <ogr_srs_api.h>
+
 /* TODO: clean up support for PROJ 5+ */
 #ifdef HAVE_PROJ_H
 #include <proj.h>
@@ -52,12 +55,6 @@
 #define PJ_INV             -1
 /* PROJ_VERSION_MAJOR is not set in the old PROJ API */
 #define PROJ_VERSION_MAJOR 4
-#endif
-#ifdef HAVE_OGR
-#include <ogr_srs_api.h>
-#if PROJ_VERSION_MAJOR >= 6 && GDAL_VERSION_MAJOR < 3
-#error "PROJ 6+ requires GDAL 3+"
-#endif
 #endif
 
 /* Data Files */

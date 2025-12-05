@@ -718,8 +718,6 @@ LIBLAS_INC
 LIBLAS_CFLAGS
 LIBLAS_LIBS
 LIBLAS_CONFIG
-USE_OGR
-USE_GDAL
 GDAL_CFLAGS
 GDAL_LIBS
 GDAL_CONFIG
@@ -10449,8 +10447,6 @@ printf %s "checking whether to use GDAL... " >&6; }
 
 GDAL_LIBS=
 GDAL_CFLAGS=
-USE_GDAL=
-USE_OGR=
 
 if test "`basename xx/$with_gdal`" = "gdal-config" ; then
   GDAL_CONFIG="$with_gdal"
@@ -10513,13 +10509,132 @@ fi
     GDAL_LIBS=`"$GDAL_CONFIG" --libs`
     GDAL_DEP_LIBS=`"$GDAL_CONFIG" --dep-libs`
     GDAL_CFLAGS=`"$GDAL_CONFIG" --cflags`
-    USE_GDAL=1
-    if test `"$GDAL_CONFIG" --ogr-enabled` = "yes" ; then
+  fi
 
-printf "%s\n" "#define HAVE_OGR 1" >>confdefs.h
 
-      USE_OGR=1
-    fi
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking GDAL major version version" >&5
+printf %s "checking GDAL major version version... " >&6; }
+ac_save_cppflags="$CPPFLAGS"
+CPPFLAGS="$GDAL_CFLAGS $CPPFLAGS"
+if test "$cross_compiling" = yes
+then :
+     gdal_version_major=0
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: unknown (cross-compiling)" >&5
+printf "%s\n" "unknown (cross-compiling)" >&6; }
+else case e in #(
+  e) cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#include <stdio.h>
+#include <gdal_version.h>
+int main(void) {
+ FILE *fp = fopen("conftestdata","w");
+ fprintf(fp, "%d", GDAL_VERSION_MAJOR);
+ return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_run "$LINENO"
+then :
+     gdal_version_major=`cat conftestdata`
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $gdal_version_major" >&5
+printf "%s\n" "$gdal_version_major" >&6; }
+else case e in #(
+  e)    as_fn_error $? "*** Could not determine GDAL major version version." "$LINENO" 5  ;;
+esac
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext ;;
+esac
+fi
+
+CPPFLAGS=$ac_save_cppflags
+
+
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking GDAL minor version version" >&5
+printf %s "checking GDAL minor version version... " >&6; }
+ac_save_cppflags="$CPPFLAGS"
+CPPFLAGS="$GDAL_CFLAGS $CPPFLAGS"
+if test "$cross_compiling" = yes
+then :
+     gdal_version_minor=0
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: unknown (cross-compiling)" >&5
+printf "%s\n" "unknown (cross-compiling)" >&6; }
+else case e in #(
+  e) cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#include <stdio.h>
+#include <gdal_version.h>
+int main(void) {
+ FILE *fp = fopen("conftestdata","w");
+ fprintf(fp, "%d", GDAL_VERSION_MINOR);
+ return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_run "$LINENO"
+then :
+     gdal_version_minor=`cat conftestdata`
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $gdal_version_minor" >&5
+printf "%s\n" "$gdal_version_minor" >&6; }
+else case e in #(
+  e)    as_fn_error $? "*** Could not determine GDAL minor version version." "$LINENO" 5  ;;
+esac
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext ;;
+esac
+fi
+
+CPPFLAGS=$ac_save_cppflags
+
+
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking GDAL revision version version" >&5
+printf %s "checking GDAL revision version version... " >&6; }
+ac_save_cppflags="$CPPFLAGS"
+CPPFLAGS="$GDAL_CFLAGS $CPPFLAGS"
+if test "$cross_compiling" = yes
+then :
+     gdal_version_rev=0
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: unknown (cross-compiling)" >&5
+printf "%s\n" "unknown (cross-compiling)" >&6; }
+else case e in #(
+  e) cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#include <stdio.h>
+#include <gdal_version.h>
+int main(void) {
+ FILE *fp = fopen("conftestdata","w");
+ fprintf(fp, "%d", GDAL_VERSION_REV);
+ return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_run "$LINENO"
+then :
+     gdal_version_rev=`cat conftestdata`
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $gdal_version_rev" >&5
+printf "%s\n" "$gdal_version_rev" >&6; }
+else case e in #(
+  e)    as_fn_error $? "*** Could not determine GDAL revision version version." "$LINENO" 5  ;;
+esac
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext ;;
+esac
+fi
+
+CPPFLAGS=$ac_save_cppflags
+
+  gdal_version="$gdal_version_major.$gdal_version_minor.$gdal_version_rev"
+  if test "$(expr "$gdal_version_major" \>= 3)" = 1 && \
+      test "$(expr "$gdal_version_minor" \>= 7)" = 1; then
+      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: using GDAL version \"${gdal_version}\"" >&5
+printf "%s\n" "using GDAL version \"${gdal_version}\"" >&6; }
+  else
+      as_fn_error $? "*** GDAL version 3.7 or newer is required (found version \"${gdal_version}\")" "$LINENO" 5
   fi
 
   GDAL=
@@ -10574,12 +10689,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}
 
-
-printf "%s\n" "#define HAVE_GDAL 1" >>confdefs.h
-
 fi
-
-
 
 
 
@@ -17546,8 +17656,6 @@ echo "  FFTW support:               `if test -n "${USE_FFTW}" ; then echo yes ; 
 
 echo "  FreeType support:           `if test -n "${USE_FREETYPE}" ; then echo yes ; else echo no ; fi`"
 
-echo "  GDAL support:               `if test -n "${USE_GDAL}" ; then echo yes ; else echo no ; fi`"
-
 echo "  GEOS support:               `if test -n "${USE_GEOS}" ; then echo yes ; else echo no ; fi`"
 
 echo "  LAPACK support:             `if test -n "${USE_LAPACK}" ; then echo yes ; else echo no ; fi`"
@@ -17565,8 +17673,6 @@ echo "  NetCDF support:             `if test -n "${USE_NETCDF}" ; then echo yes 
 echo "  NLS support:                `if test -n "${USE_NLS}" ; then echo yes ; else echo no ; fi`"
 
 echo "  ODBC support:               `if test -n "${USE_ODBC}" ; then echo yes ; else echo no ; fi`"
-
-echo "  OGR support:                `if test -n "${USE_OGR}" ; then echo yes ; else echo no ; fi`"
 
 echo "  OpenCL support:             `if test -n "${USE_OPENCL}" ; then echo yes ; else echo no ; fi`"
 

@@ -24,8 +24,6 @@ build_program_in_subdir(external/parson/test NAME test.gjson.lib DEPENDS grass_g
 
 build_library_in_subdir(
   raster
-  DEFS
-  "-DGDAL_LINK=1"
   DEPENDS
   ${LIBM}
   GDAL::GDAL
