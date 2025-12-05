@@ -22,9 +22,6 @@ int pj_get_kv(struct pj_info *, const struct Key_Value *,
               const struct Key_Value *);
 int pj_get_string(struct pj_info *, char *);
 
-#ifndef HAVE_PROJ_H
-int GPJ_get_equivalent_latlong(struct pj_info *, struct pj_info *);
-#endif
 const char *set_proj_share(const char *);
 int pj_print_proj_params(const struct pj_info *, const struct pj_info *);
 
@@ -59,15 +56,5 @@ int GPJ_get_ellipsoid_params(double *, double *, double *);
 int GPJ__get_ellipsoid_params(const struct Key_Value *, double *, double *,
                               double *);
 void GPJ_free_ellps(struct gpj_ellps *);
-
-#ifndef HAVE_PROJ_H
-/* PROJ.4's private datastructures copied from projects.h as removed
-   from upstream; pending better solution. see:
-   https://trac.osgeo.org/proj/ticket/98 */
-
-int pj_factors(LP, void *, double, struct FACTORS *);
-
-/* end of copy */
-#endif
 
 #endif

@@ -6,11 +6,7 @@
 #include <ogr_srs_api.h>
 #include <cpl_conv.h>
 
-#ifdef HAVE_PROJ_H
 #include <proj.h>
-#else
-#include <proj_api.h>
-#endif
 
 /* keep in sync with r.external, v.in.ogr, v.external */
 void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
@@ -173,7 +169,6 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
         }
 
         /* get OGR spatial reference for current projection */
-#if PROJ_VERSION_MAJOR >= 6
         /* 1. from SRID */
         if (loc_srid && *loc_srid) {
             PJ *obj = NULL;
@@ -194,7 +189,6 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
         if (loc_wkt && *loc_wkt) {
             hSRS_loc = OSRNewSpatialReference(loc_wkt);
         }
-#endif
         /* 3. from EPSG */
         if (!hSRS_loc && loc_epsg) {
             const char *epsgstr = G_find_key_value("epsg", loc_epsg);

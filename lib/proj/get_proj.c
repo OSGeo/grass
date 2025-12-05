@@ -68,12 +68,8 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     int deflen;
     char proj_in[250], *datum, *params;
 
-#ifdef HAVE_PROJ_H
     PJ *pj;
     PJ_CONTEXT *pjc;
-#else
-    projPJ *pj;
-#endif
 
     proj_in[0] = '\0';
     info->zone = 0;
@@ -239,21 +235,12 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     }
     G_free(datum);
 
-#ifdef HAVE_PROJ_H
-#if PROJ_VERSION_MAJOR >= 6
     /* without type=crs, PROJ6 does not recognize what this is,
      * a crs or some kind of coordinate operation, falling through to
      * PJ_TYPE_OTHER_COORDINATE_OPERATION */
     alloc_options("type=crs");
-#endif
     pjc = proj_context_create();
     if (!(pj = proj_create_argv(pjc, nopt, opt_in))) {
-#else
-    /* Set finder function for locating datum conversion tables PK */
-    pj_set_finder(FINDERFUNC);
-
-    if (!(pj = pj_init(nopt, opt_in))) {
-#endif
         strcpy(
             buffa,
             _("Unable to initialise PROJ with the following parameter list:"));
@@ -264,19 +251,14 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
             strcat(buffa, err);
         }
         G_warning("%s", buffa);
-#ifndef HAVE_PROJ_H
-        G_warning(_("The PROJ error message: %s"), pj_strerrno(pj_errno));
-#endif
         return -1;
     }
 
-#ifdef HAVE_PROJ_H
     int perr = proj_errno(pj);
 
     if (perr)
-        G_fatal_error("PROJ 5 error %d", perr);
+        G_fatal_error("PROJ error %d", perr);
 
-#if PROJ_VERSION_MAJOR >= 6
     if (proj_get_type(pj) == PJ_TYPE_BOUND_CRS) {
         PJ *source_crs = proj_get_source_crs(pjc, pj);
         if (source_crs) {
@@ -284,8 +266,6 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
             pj = source_crs;
         }
     }
-#endif
-#endif
 
     info->pj = pj;
 
@@ -343,12 +323,8 @@ int pj_get_string(struct pj_info *info, char *str)
     char zonebuff[50], buffa[300];
     int deflen;
 
-#ifdef HAVE_PROJ_H
     PJ *pj;
     PJ_CONTEXT *pjc;
-#else
-    projPJ *pj;
-#endif
 
     info->zone = 0;
     info->proj[0] = '\0';
@@ -414,13 +390,10 @@ int pj_get_string(struct pj_info *info, char *str)
         }
     }
 
-#ifdef HAVE_PROJ_H
-#if PROJ_VERSION_MAJOR >= 6
     /* without type=crs, PROJ6 does not recognize what this is,
      * a crs or some kind of coordinate operation, falling through to
      * PJ_TYPE_OTHER_COORDINATE_OPERATION */
     alloc_options("type=crs");
-#endif
     pjc = proj_context_create();
     if (!(pj = proj_create_argv(pjc, nopt, opt_in))) {
         G_warning(_("Unable to initialize pj cause: %s"),
@@ -428,7 +401,6 @@ int pj_get_string(struct pj_info *info, char *str)
         return -1;
     }
 
-#if PROJ_VERSION_MAJOR >= 6
     if (proj_get_type(pj) == PJ_TYPE_BOUND_CRS) {
         PJ *source_crs = proj_get_source_crs(pjc, pj);
         if (source_crs) {
@@ -436,17 +408,6 @@ int pj_get_string(struct pj_info *info, char *str)
             pj = source_crs;
         }
     }
-#endif
-#else
-    /* Set finder function for locating datum conversion tables PK */
-    pj_set_finder(FINDERFUNC);
-
-    if (!(pj = pj_init(nopt, opt_in))) {
-        G_warning(_("Unable to initialize pj cause: %s"),
-                  pj_strerrno(pj_errno));
-        return -1;
-    }
-#endif
     info->pj = pj;
 
     deflen = 0;
@@ -467,47 +428,6 @@ int pj_get_string(struct pj_info *info, char *str)
 
     return 1;
 }
-
-#ifndef HAVE_PROJ_H
-/* GPJ_get_equivalent_latlong(): only available with PROJ 4 API
- * with the new PROJ 5+ API, use pjold directly with PJ_FWD/PJ_INV
- * transformation
- */
-
-/**
- * \brief Define a latitude / longitude co-ordinate system with the same
- *        ellipsoid and datum parameters as an existing projected system
- *
- * This function is useful when projected co-ordinates need to be simply
- * converted to and from latitude / longitude.
- *
- * \param pjnew Pointer to pj_info struct for geographic co-ordinate system
- *        that will be created
- * \param pjold Pointer to pj_info struct for existing projected co-ordinate
- *        system
- *
- * \return 1 on success; -1 if there was an error (i.e. if the PROJ.4
- *         pj_latlong_from_proj() function returned NULL)
- **/
-
-int GPJ_get_equivalent_latlong(struct pj_info *pjnew, struct pj_info *pjold)
-{
-    char *deftmp;
-
-    pjnew->meters = 1.;
-    pjnew->zone = 0;
-    pjnew->def = NULL;
-    snprintf(pjnew->proj, sizeof(pjnew->proj), "ll");
-    if ((pjnew->pj = pj_latlong_from_proj(pjold->pj)) == NULL)
-        return -1;
-
-    deftmp = pj_get_def(pjnew->pj, 1);
-    pjnew->def = G_store(deftmp);
-    pj_dalloc(deftmp);
-
-    return 1;
-}
-#endif
 
 /* set_proj_share()
  * 'finder function' for use with PROJ.4 pj_set_finder() function

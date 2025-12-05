@@ -191,11 +191,7 @@ OGRSpatialReferenceH GPJ_grass_to_osr(const struct Key_Value *proj_info,
         G_warning(_("Unable get PROJ.4-style parameter string"));
         return NULL;
     }
-#ifdef HAVE_PROJ_H
     proj_destroy(pjinfo.pj);
-#else
-    pj_free(pjinfo.pj);
-#endif
 
     unit = G_find_key_value("unit", proj_units);
     unfact = G_find_key_value("meters", proj_units);

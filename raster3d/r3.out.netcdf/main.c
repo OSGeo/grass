@@ -163,11 +163,8 @@ static void write_netcdf_header(int ncid, RASTER3D_Region *region, int *varid,
 
         pj_get_kv(&pjinfo, pkv, ukv);
         proj4 = pjinfo.def;
-#ifdef HAVE_PROJ_H
         proj_destroy(pjinfo.pj);
-#else
-        pj_free(pjinfo.pj);
-#endif
+
         /* We support the CF suggestion crs_wkt and the gdal spatil_ref
          * attribute */
         if ((retval = nc_put_att_text(ncid, crs_varid, "crs_wkt",

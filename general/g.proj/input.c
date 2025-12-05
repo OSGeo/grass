@@ -131,41 +131,34 @@ int input_wkt(char *wktfile)
 
     projwkt = G_store(buff);
 
-#if PROJ_VERSION_MAJOR >= 6
     /* validate input WKT */
-    {
-        PROJ_STRING_LIST wkt_warnings, wkt_grammar_errors;
-        PJ *obj;
+    PROJ_STRING_LIST wkt_warnings = NULL;
+    PROJ_STRING_LIST wkt_grammar_errors = NULL;
 
-        wkt_warnings = NULL;
-        wkt_grammar_errors = NULL;
-
-        /* no strict validation */
-        obj = proj_create_from_wkt(NULL, buff, NULL, &wkt_warnings,
+    /* no strict validation */
+    PJ *obj = proj_create_from_wkt(NULL, buff, NULL, &wkt_warnings,
                                    &wkt_grammar_errors);
 
-        if (wkt_warnings) {
-            int i;
+    if (wkt_warnings) {
+        int i;
 
-            G_warning(_("WKT validation warnings:"));
-            for (i = 0; wkt_warnings[i]; i++)
-                G_warning("%s", wkt_warnings[i]);
+        G_warning(_("WKT validation warnings:"));
+        for (i = 0; wkt_warnings[i]; i++)
+            G_warning("%s", wkt_warnings[i]);
 
-            proj_string_list_destroy(wkt_warnings);
-        }
-
-        if (wkt_grammar_errors) {
-            int i;
-
-            G_warning(_("WKT validation grammar errors:"));
-            for (i = 0; wkt_grammar_errors[i]; i++)
-                G_warning("%s", wkt_grammar_errors[i]);
-
-            proj_string_list_destroy(wkt_grammar_errors);
-        }
-        proj_destroy(obj);
+        proj_string_list_destroy(wkt_warnings);
     }
-#endif
+
+    if (wkt_grammar_errors) {
+        int i;
+
+        G_warning(_("WKT validation grammar errors:"));
+        for (i = 0; wkt_grammar_errors[i]; i++)
+            G_warning("%s", wkt_grammar_errors[i]);
+
+        proj_string_list_destroy(wkt_grammar_errors);
+    }
+    proj_destroy(obj);
 
     /* get GRASS proj info + units */
     /* NOTE: GPJ_wkt_to_grass() converts any WKT version to WKT1 */
@@ -231,14 +224,10 @@ int input_proj4(char *proj4params)
         }
     }
 
-#if PROJ_VERSION_MAJOR >= 6
     if (!strstr(buff, "+type=crs"))
         G_asprintf(&proj4string, "%s +no_defs +type=crs", buff);
     else
         G_asprintf(&proj4string, "%s +no_defs", buff);
-#else
-    G_asprintf(&proj4string, "%s +no_defs", buff);
-#endif
 
     /* Set finder function for locating OGR csv co-ordinate system tables */
     /* SetCSVFilenameHook(GPJ_set_csv_loc); */
@@ -280,7 +269,6 @@ int input_proj4(char *proj4params)
 
 int input_srid(char *srid)
 {
-#if PROJ_VERSION_MAJOR >= 6
     OGRSpatialReferenceH hSRS;
     int ret = 0;
     char *papszOptions[3];
@@ -316,11 +304,6 @@ int input_srid(char *srid)
 
     set_default_region();
     return ret;
-#else
-    G_fatal_error(_("Input srid requires GDAL 3+ and PROJ 6+"));
-
-    return 0;
-#endif
 }
 
 /**

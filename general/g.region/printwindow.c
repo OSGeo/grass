@@ -631,13 +631,8 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
             /* proj parameters  */
             struct pj_info iproj, oproj, tproj;
 
-#ifdef HAVE_PROJ_H
             PJ_COORD c;
             PJ_FACTORS fact;
-#else
-            struct FACTORS fact;
-            LP lp;
-#endif
 
             /* read current projection info */
             if ((in_proj_info = G_get_projinfo()) == NULL)
@@ -673,20 +668,12 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
                     _("Error in %s (projection of input coordinate pair)"),
                     "GPJ_transform()");
 
-#ifdef HAVE_PROJ_H
             c.lpzt.lam = DEG2RAD(longitude);
             c.lpzt.phi = DEG2RAD(latitude);
             c.lpzt.z = 0;
             c.lpzt.t = 0;
             fact = proj_factors(iproj.pj, c);
             convergence = RAD2DEG(fact.meridian_convergence);
-#else
-            G_zero(&fact, sizeof(struct FACTORS));
-            lp.u = DEG2RAD(longitude);
-            lp.v = DEG2RAD(latitude);
-            pj_factors(lp, iproj.pj, 0.0, &fact);
-            convergence = RAD2DEG(fact.conv);
-#endif
         }
 
         switch (format) {
@@ -744,18 +731,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag,
 
             G_set_key_value("proj", "ll", out_proj_info);
 
-#if PROJ_VERSION_MAJOR < 6
-            char buff[100], dum[100];
-
-            /* PROJ6+ has its own datum transformation parameters */
-            if (G_get_datumparams_from_projinfo(in_proj_info, buff, dum) < 0)
-                G_fatal_error(_(
-                    "WGS84 output not possible as this project does not "
-                    "contain "
-                    "datum transformation parameters. Try running g.setproj."));
-            else
-#endif
-                G_set_key_value("datum", "wgs84", out_proj_info);
+            G_set_key_value("datum", "wgs84", out_proj_info);
 
             G_set_key_value("unit", "degree", out_unit_info);
             G_set_key_value("units", "degrees", out_unit_info);
