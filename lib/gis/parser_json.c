@@ -229,7 +229,6 @@ char *G__json(void)
     /* Count input and output options */
     if (st->n_opts) {
         struct Option *opt;
-
         for (opt = &st->first_option; opt; opt = opt->next_opt) {
             if (opt->answer) {
                 if (opt->gisprompt) {
@@ -254,6 +253,18 @@ char *G__json(void)
 
     fprintf(fp, "{\n");
     fprintf(fp, "  \"module\": \"%s\",\n", G_program_name());
+    if (st->overwrite || getenv("GRASS_OVERWRITE")) {
+        fprintf(fp, "  \"overwrite\": true,\n");
+    }
+
+    if (G_verbose() == G_verbose_max()) {
+        fprintf(fp, "  \"verbose\": true,\n");
+    }
+
+    if (G_verbose() == G_verbose_min()) {
+        fprintf(fp, "  \"quiet\": true,\n");
+    }
+
     fprintf(fp, "  \"id\": \"%s_%i\"", G_program_name(), random_int);
 
     if (st->n_flags && num_flags > 0) {
@@ -336,10 +347,10 @@ char *G__json(void)
                 }
             }
         }
-        fprintf(fp, "   ]\n");
+        fprintf(fp, "   ]");
     }
 
-    fprintf(fp, "}\n");
+    fprintf(fp, "\n}\n");
     fclose(fp);
 
     /* Print the file content to stdout */
