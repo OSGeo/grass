@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-22 15:39+0000\n"
-"PO-Revision-Date: 2025-11-22 03:58+0000\n"
+"POT-Creation-Date: 2025-11-29 16:57+0000\n"
+"PO-Revision-Date: 2025-12-05 03:50+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/fr/>\n"
 "Language: fr\n"
@@ -1556,9 +1556,8 @@ msgid "Import vector data  [v.import]"
 msgstr "Importer des données vectorielles  [v.import]"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:47
-#, fuzzy
 msgid "Select another import option"
-msgstr "Sélectionnez une autre option d'importion"
+msgstr "Sélectionnez une autre option d'importation"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:57
 #: ../gui/wxpython/gui_core/menu.py:187 ../gui/wxpython/history/browser.py:387
@@ -5312,7 +5311,6 @@ msgid "Do advanced search using %s tool"
 msgstr "Effectuez une recherche avancée à l'aide de l'outil %s"
 
 #: ../gui/wxpython/gui_core/menu.py:197 ../gui/wxpython/history/browser.py:381
-#, fuzzy
 msgid "Double-click to run selected tool"
 msgstr "Double-cliquez pour exécuter l'outil sélectionné"
 
@@ -8255,19 +8253,16 @@ msgid "Add multiple map layers"
 msgstr "Ajouter plusieurs couches de carte"
 
 #: ../gui/wxpython/lmgr/toolbars.py:138
-#, fuzzy
 msgid "Add various raster maps"
-msgstr "Ajouter une carte raster"
+msgstr "Ajouter des cartes raster diverses"
 
 #: ../gui/wxpython/lmgr/toolbars.py:143
-#, fuzzy
 msgid "Add vector map"
-msgstr "Ajouter un vecteur"
+msgstr "Ajouter une carte vectorielle"
 
 #: ../gui/wxpython/lmgr/toolbars.py:148
-#, fuzzy
 msgid "Add various vector maps"
-msgstr "Ajouter des surcouches"
+msgstr "Ajouter des cartes vectorielles diverses"
 
 #: ../gui/wxpython/lmgr/toolbars.py:158
 msgid "Add web service map"
@@ -8607,7 +8602,7 @@ msgstr ""
 #: ../gui/wxpython/location_wizard/wizard.py:393
 #: ../gui/wxpython/location_wizard/wizard.py:508
 msgid "Define custom CRS"
-msgstr ""
+msgstr "Définir un SCR personnalisé"
 
 #: ../gui/wxpython/location_wizard/wizard.py:404
 msgid "Additional methods:"
@@ -9056,7 +9051,7 @@ msgstr "Coordonnées"
 #: ../gui/wxpython/mapdisp/statusbar.py:814
 #, fuzzy
 msgid "Display extent"
-msgstr "Afficher la géométrie"
+msgstr "Afficher l’emprise"
 
 #: ../gui/wxpython/mapdisp/statusbar.py:939
 #: ../gui/wxpython/web_services/dialogs.py:875
@@ -12831,7 +12826,7 @@ msgstr "Est-ce que cette zone est ok ?"
 #: ../gui/wxpython/rlisetup/wizard.py:1823
 #, fuzzy, python-brace-format
 msgid "Select sample area {areas_count} of {area_num}"
-msgstr "Sélectionner la zone d'échantillon 1 de "
+msgstr "Sélectionner la zone d'échantillon {areas_count} sur {area_num}"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1858
 #, python-brace-format

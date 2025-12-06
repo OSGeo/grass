@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-22 15:39+0000\n"
+"POT-Creation-Date: 2025-11-29 16:57+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Hungarian <https://weblate.osgeo.org/projects/grass-gis/grassmods/hu/>\n"
@@ -176,7 +176,7 @@ msgstr "Oszlopok listája az adott táblából."
 #: ../general/g.proj/main.c:90 ../general/g.proj/main.c:99
 #: ../general/g.proj/main.c:105 ../general/g.proj/main.c:114
 #: ../general/g.proj/main.c:126 ../general/g.proj/main.c:135
-#: ../general/g.proj/main.c:191 ../general/g.proj/main.c:244
+#: ../general/g.proj/main.c:191 ../general/g.proj/main.c:245
 #: ../general/g.region/main.c:91 ../general/g.region/main.c:97
 #: ../general/g.region/main.c:102 ../general/g.region/main.c:108
 #: ../general/g.region/main.c:113 ../general/g.region/main.c:118
@@ -303,13 +303,12 @@ msgstr ""
 
 #: ../db/db.connect/main.c:144 ../general/g.findfile/main.c:187
 #: ../general/g.list/list.c:122 ../general/g.mapset/main.c:119
-#: ../general/g.mapsets/list.c:13 ../general/g.proj/output.c:54
-#: ../general/g.proj/output.c:360 ../general/g.region/main.c:471
-#: ../general/g.version/main.c:140 ../misc/m.measure/main.c:87
-#: ../raster/r.describe/dumplist.c:38 ../raster/r.distance/report.c:211
-#: ../raster/r.distance/report.c:218 ../raster/r.distance/report.c:225
-#: ../raster/r.info/main.c:147 ../raster/r.proj/main.c:487
-#: ../raster/r.regression.line/main.c:101
+#: ../general/g.mapsets/list.c:13 ../general/g.proj/output.c:351
+#: ../general/g.region/main.c:471 ../general/g.version/main.c:140
+#: ../misc/m.measure/main.c:87 ../raster/r.describe/dumplist.c:38
+#: ../raster/r.distance/report.c:211 ../raster/r.distance/report.c:218
+#: ../raster/r.distance/report.c:225 ../raster/r.info/main.c:147
+#: ../raster/r.proj/main.c:487 ../raster/r.regression.line/main.c:101
 #: ../raster/r.regression.multi/main.c:197
 #: ../raster/r.regression.multi/main.c:566
 #: ../raster/r.stats.quantile/main.c:430 ../raster/r.stats.quantile/main.c:447
@@ -328,7 +327,7 @@ msgstr ""
 msgid "Failed to initialize JSON object. Out of memory?"
 msgstr ""
 
-#: ../db/db.connect/main.c:157 ../general/g.proj/main.c:277
+#: ../db/db.connect/main.c:157 ../general/g.proj/main.c:278
 #: ../general/g.region/main.c:427 ../general/g.version/main.c:153
 #: ../imagery/i.group/main.c:137 ../misc/m.measure/main.c:100
 #: ../raster/r.proj/main.c:270 ../raster/r.regression.line/main.c:114
@@ -482,7 +481,7 @@ msgstr ""
 msgid "Lists all databases for a given driver and location."
 msgstr ""
 
-#: ../db/db.describe/main.c:140 ../general/g.proj/output.c:383
+#: ../db/db.describe/main.c:140 ../general/g.proj/output.c:374
 #: ../general/g.region/main.c:990 ../general/g.version/main.c:409
 #: ../imagery/i.group/main.c:301 ../raster/r.category/main.c:412
 #: ../raster/r.describe/dumplist.c:71 ../raster/r.info/main.c:1000
@@ -6756,53 +6755,61 @@ msgstr ""
 msgid "Name of new project (location) to create"
 msgstr "Input szín trékép neve"
 
-#: ../general/g.proj/main.c:239
-msgid "plain;Human readable text output;shell;shell script style text output;json;JSON (JavaScript Object Notation);wkt;Well-known text output;proj4;PROJ.4 style text output;"
+#: ../general/g.proj/main.c:240
+msgid "plain;Human readable text output;shell;shell script style text output;wkt;Well-known text output;projjson;JSON (JavaScript Object Notation) version of WKT;proj4;PROJ.4 style text output;"
 msgstr ""
 
-#: ../general/g.proj/main.c:271 ../vector/v.what.rast/main.c:159
+#: ../general/g.proj/main.c:272 ../vector/v.what.rast/main.c:159
 #, c-format
 msgid "The format option can only be used with -%c flag"
 msgstr ""
 
-#: ../general/g.proj/main.c:283
+#: ../general/g.proj/main.c:284
 msgid "Flag 'j' is deprecated and will be removed in a future release. Please use format=proj4 instead."
 msgstr ""
 
-#: ../general/g.proj/main.c:292
+#: ../general/g.proj/main.c:293
 msgid "Flag 'w' is deprecated and will be removed in a future release. Please use format=wkt instead."
 msgstr ""
 
-#: ../general/g.proj/main.c:312
+#: ../general/g.proj/main.c:313
 #, c-format
 msgid "Only one of '%s', '%s', '%s', '%s' or '%s' options may be specified"
 msgstr ""
 
-#: ../general/g.proj/main.c:364
+#: ../general/g.proj/main.c:365
 msgid "Projection files missing"
 msgstr ""
 
-#: ../general/g.proj/main.c:392
+#: ../general/g.proj/main.c:393
 #, c-format
 msgid "No output format specified. Define one of the options: plain, shell, json, wkt, or proj4 using the -%c flag."
 msgstr ""
 
-#: ../general/g.proj/main.c:397
+#: ../general/g.proj/main.c:398
 #, c-format
 msgid "No output format specified. Define one of the options: plain, shell, json, or proj4 using the -%c flag."
 msgstr ""
 
-#: ../general/g.proj/output.c:221
+#: ../general/g.proj/output.c:54
+msgid "JSON output is not available."
+msgstr ""
+
+#: ../general/g.proj/output.c:212
 msgid "Unable to convert projection information to PROJ format"
 msgstr ""
 
-#: ../general/g.proj/output.c:295
+#: ../general/g.proj/output.c:286
 #, c-format
 msgid "Unable to create PROJ definition from srid <%s>"
 msgstr ""
 
-#: ../general/g.proj/output.c:337
+#: ../general/g.proj/output.c:328
 msgid "Unable to convert to WKT"
+msgstr ""
+
+#: ../general/g.proj/output.c:433
+msgid "Unable to convert to PROJJSON"
 msgstr ""
 
 #: ../general/g.region/main.c:67
@@ -11429,10 +11436,10 @@ msgstr ""
 #: ../raster/r.grow.distance/main.c:392 ../raster/r.li/r.li.daemon/daemon.c:743
 #: ../raster/r.mfilter/execute.c:82 ../raster/r.mfilter/execute.c:114
 #: ../raster/r.mfilter/execute.c:165 ../raster/r.mfilter/getrow.c:24
-#: ../raster/r.mfilter/getrow.c:31 ../raster/r.path/main.c:786
-#: ../raster/r.path/main.c:822 ../raster/r.path/main.c:954
-#: ../raster/r.path/main.c:1073 ../raster/r.path/main.c:1103
-#: ../raster/r.path/main.c:1207 ../raster/r.thin/io.c:72
+#: ../raster/r.mfilter/getrow.c:31 ../raster/r.path/main.c:789
+#: ../raster/r.path/main.c:825 ../raster/r.path/main.c:957
+#: ../raster/r.path/main.c:1076 ../raster/r.path/main.c:1106
+#: ../raster/r.path/main.c:1210 ../raster/r.thin/io.c:72
 #: ../raster/r.thin/io.c:82 ../raster3d/r3.in.v5d/v5d.c:1192
 #: ../raster3d/r3.in.v5d/v5d.c:1443 ../raster3d/r3.in.v5d/v5d.c:1523
 #: ../raster3d/r3.in.v5d/v5d.c:1848 ../raster3d/r3.in.v5d/v5d.c:1859
@@ -11457,9 +11464,9 @@ msgstr ""
 #: ../raster/r.clump/minsize.c:268 ../raster/r.clump/minsize.c:308
 #: ../raster/r.clump/minsize.c:319 ../raster/r.clump/minsize.c:454
 #: ../raster/r.clump/minsize.c:481 ../raster/r.clump/minsize.c:557
-#: ../raster/r.path/main.c:791 ../raster/r.path/main.c:827
-#: ../raster/r.path/main.c:962 ../raster/r.path/main.c:1078
-#: ../raster/r.path/main.c:1108 ../raster/r.path/main.c:1213
+#: ../raster/r.path/main.c:794 ../raster/r.path/main.c:830
+#: ../raster/r.path/main.c:965 ../raster/r.path/main.c:1081
+#: ../raster/r.path/main.c:1111 ../raster/r.path/main.c:1216
 msgid "Unable to read from temp file"
 msgstr ""
 
@@ -19764,7 +19771,7 @@ msgstr ""
 msgid "Starting point %d is outside the current region"
 msgstr ""
 
-#: ../raster/r.drain/main.c:331 ../raster/r.path/main.c:375
+#: ../raster/r.drain/main.c:331 ../raster/r.path/main.c:378
 #, c-format
 msgid "Starting vector map <%s> contains no points in the current region"
 msgstr ""
@@ -19778,8 +19785,8 @@ msgid "Calculating flow directions..."
 msgstr ""
 
 #: ../raster/r.drain/main.c:485 ../raster/r.in.lidar/main.c:783
-#: ../raster/r.in.pdal/main.cpp:886 ../raster/r.path/main.c:598
-#: ../raster/r.path/main.c:628 ../raster/r.viewshed/grass.cpp:621
+#: ../raster/r.in.pdal/main.cpp:886 ../raster/r.path/main.c:601
+#: ../raster/r.path/main.c:631 ../raster/r.viewshed/grass.cpp:621
 msgid "Writing output raster map..."
 msgstr ""
 
@@ -24932,113 +24939,113 @@ msgstr "csatlakozás beállítások"
 msgid "Do not break lines (faster for single-direction bitmask encoding)"
 msgstr ""
 
-#: ../raster/r.path/main.c:384
+#: ../raster/r.path/main.c:387
 msgid "No start point(s) specified"
 msgstr ""
 
-#: ../raster/r.path/main.c:394
+#: ../raster/r.path/main.c:397
 #, c-format
 msgid "Reading raster values map <%s> ..."
 msgstr ""
 
-#: ../raster/r.path/main.c:399
+#: ../raster/r.path/main.c:402
 #, fuzzy, c-format
 msgid "Unable to open temporary file <%s>: %s"
 msgstr "Nem tudom elindítani a <%s> meghajtót"
 
-#: ../raster/r.path/main.c:411 ../raster/r.path/main.c:489
-#: ../raster/r.path/main.c:506
+#: ../raster/r.path/main.c:414 ../raster/r.path/main.c:492
+#: ../raster/r.path/main.c:509
 msgid "Unable to write to tempfile"
 msgstr ""
 
-#: ../raster/r.path/main.c:419
+#: ../raster/r.path/main.c:422
 msgid "Unable to read range file"
 msgstr ""
 
-#: ../raster/r.path/main.c:422
+#: ../raster/r.path/main.c:425
 #, c-format
 msgid "Invalid directions map <%s>"
 msgstr ""
 
-#: ../raster/r.path/main.c:427
+#: ../raster/r.path/main.c:430
 msgid "Directional degrees can not be > 360"
 msgstr ""
 
-#: ../raster/r.path/main.c:433
+#: ../raster/r.path/main.c:436
 msgid "Directional degrees divided by 45 can not be > 8"
 msgstr ""
 
-#: ../raster/r.path/main.c:438
+#: ../raster/r.path/main.c:441
 #, c-format
 msgid "Bitmask encoded directions can not be > %d"
 msgstr ""
 
-#: ../raster/r.path/main.c:445
+#: ../raster/r.path/main.c:448
 msgid "Input direction format assumed to be degrees CCW from East divided by 45"
 msgstr ""
 
-#: ../raster/r.path/main.c:450
+#: ../raster/r.path/main.c:453
 msgid "Input direction format assumed to be bitmask encoded without Knight's move"
 msgstr ""
 
-#: ../raster/r.path/main.c:456
+#: ../raster/r.path/main.c:459
 msgid "Input direction format assumed to be degrees CCW from East"
 msgstr ""
 
-#: ../raster/r.path/main.c:460
+#: ../raster/r.path/main.c:463
 msgid "Input direction format assumed to be bitmask encoded with Knight's move"
 msgstr ""
 
-#: ../raster/r.path/main.c:465
+#: ../raster/r.path/main.c:468
 #, c-format
 msgid "Unable to detect format of input direction map <%s>"
 msgstr ""
 
-#: ../raster/r.path/main.c:469
+#: ../raster/r.path/main.c:472
 #, c-format
 msgid "Invalid directions format '%s'"
 msgstr ""
 
-#: ../raster/r.path/main.c:471
+#: ../raster/r.path/main.c:474
 #, c-format
 msgid "Reading direction map <%s> ..."
 msgstr ""
 
-#: ../raster/r.path/main.c:525
+#: ../raster/r.path/main.c:528
 msgid "Processing start points..."
 msgstr ""
 
-#: ../raster/r.path/main.c:535 ../vector/v.buffer/main.c:410
+#: ../raster/r.path/main.c:538 ../vector/v.buffer/main.c:410
 #: ../vector/v.in.ogr/main.c:881 ../vector/v.overlay/main.c:237
 #: ../vector/v.voronoi/main.c:215
 msgid "Unable to create temporary vector map"
 msgstr ""
 
-#: ../raster/r.path/main.c:541 ../raster/r.path/main.c:557
+#: ../raster/r.path/main.c:544 ../raster/r.path/main.c:560
 #, c-format
 msgid "No path at row %d, col %d"
 msgstr ""
 
-#: ../raster/r.path/main.c:546 ../vector/v.overlay/area_area.c:134
+#: ../raster/r.path/main.c:549 ../vector/v.overlay/area_area.c:134
 #: ../vector/v.overlay/line_area.c:255
 msgid "Breaking lines..."
 msgstr ""
 
-#: ../raster/r.path/main.c:684
+#: ../raster/r.path/main.c:687
 msgid "Unable to increase point list"
 msgstr ""
 
-#: ../raster/r.path/main.c:887
+#: ../raster/r.path/main.c:890
 #, c-format
 msgid "No path from row %d, col %d"
 msgstr ""
 
-#: ../raster/r.path/main.c:901
+#: ../raster/r.path/main.c:904
 #, c-format
 msgid "Invalid direction %d"
 msgstr ""
 
-#: ../raster/r.path/main.c:999
+#: ../raster/r.path/main.c:1002
 msgid "Path is leaving the current region"
 msgstr ""
 

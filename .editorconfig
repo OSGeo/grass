@@ -46,7 +46,7 @@ end_of_line = unset
 insert_final_newline = unset
 
 [*.{c,h,cpp,hpp}]
-indent_size = 2
+indent_size = 4
 
 [{*.js,*.json,*.json5,*.mjs,*.cjs}]
 indent_style = space
