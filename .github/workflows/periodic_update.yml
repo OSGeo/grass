@@ -46,7 +46,7 @@ jobs:
         run: git status --ignored
       - name: Create Pull Request
         id: cpr
-        uses: peter-evans/create-pull-request@84ae59a2cdc2258d6fa0732dd66352dddae2a412 # v7.0.9
+        uses: peter-evans/create-pull-request@22a9089034f40e5a961c8808d113e2c98fb63676 # v7.0.11
         with:
           commit-message: "config.guess + config.sub: updated from http://git.savannah.gnu.org/cgit/config.git/plain/"
           branch: periodic/update-configure
@@ -130,7 +130,7 @@ jobs:
       - name: Create Pull Request
         if: ${{ steps.changed-files.outcome == 'failure' }}
         id: cpr
-        uses: peter-evans/create-pull-request@84ae59a2cdc2258d6fa0732dd66352dddae2a412 # v7.0.9
+        uses: peter-evans/create-pull-request@22a9089034f40e5a961c8808d113e2c98fb63676 # v7.0.11
         with:
           commit-message: "locale: Update translation files"
           branch: periodic/update-i18n
