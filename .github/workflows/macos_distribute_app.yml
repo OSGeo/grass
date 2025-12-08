@@ -55,6 +55,7 @@ jobs:
         run: |
           echo "Moving directories..."
           sudo mkdir /opt/local-off /opt/homebrew-off
+          sed -i '' '/brew\ shellenv/d' "${HOME}/.bashrc"
           test ! -d /usr/local || /usr/bin/sudo /usr/bin/find /usr/local \
             -mindepth 1 -maxdepth 1 -type d -print -exec /bin/mv {} \
             /opt/local-off/ \;
@@ -68,7 +69,7 @@ jobs:
             -mindepth 1 -maxdepth 1 -type f -print -delete
           # Rehash to forget about the deleted files
           hash -r
-      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           persist-credentials: false
       - name: Environment info
@@ -111,11 +112,15 @@ jobs:
       - name: Create config file
         shell: bash -el {0}
         env:
-          CONFIG: ${HOME}/.config/grass/configure-build-${{ matrix.name }}.sh
+          CONFIG: configure-build-${{ matrix.name }}.sh
           MACOS_CERTIFICATE_NAME: ${{ secrets.MACOS_CERTIFICATE_NAME }}
           MATRIX_DEPLOYMENT_TARGET: ${{ matrix.deployment_target }}
         run: |
           mkdir -p "${HOME}/.config/grass"
+          conf_dir="${HOME}/.config/grass"
+          mkdir -p "${conf_dir}"
+          pushd "${conf_dir}"
+          touch "${CONFIG}"
           {
             echo sdk=\""$(xcrun --show-sdk-path)"\"
             echo deployment_target=\""${MATRIX_DEPLOYMENT_TARGET}"\"
@@ -123,6 +128,7 @@ jobs:
             echo cs_keychain_profile=\""${KEYCHAIN_PROFILE}"\"
             echo cs_provisionprofile=\""${RUNNER_TEMP}/embedded.provisionprofile"\"
           } >> "${CONFIG}"
+          popd
 
       - name: Build GRASS app
         run: |
