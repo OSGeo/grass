@@ -56,7 +56,7 @@ ENV GRASS_RUN_PACKAGES="\
       openjpeg \
       pdal \
       pdal-dev \
-      postgresql15-client \
+      postgresql18-client \
       proj-util \
       py3-numpy \
       py3-pillow \
