@@ -576,8 +576,7 @@ int G_parser(int argc, char **argv)
 
                 /* print nothing, but errors  */
                 st->module_info.verbose = G_verbose_min();
-                snprintf(buff, sizeof(buff), "GRASS_VERBOSE=%d",
-                         G_verbose_min());
+                snprintf(buff, sizeof(buff), "GRASS_VERBOSE=%d", -1);
                 putenv(G_store(buff));
                 G_suppress_warnings(TRUE);
                 if (st->quiet == -1) {
