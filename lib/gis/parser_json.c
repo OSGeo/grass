@@ -26,7 +26,6 @@ char *check_mapset_in_layer_name(char *, int);
 static char *str_json_escape(const char *str);
 static char *str_replace_free_buffer(char *buffer, const char old_char,
                                      const char *new_str);
-
 /*!
    \brief This function generates actinia JSON process chain building blocks
    from the command line arguments that can be used in the actinia processing
@@ -261,8 +260,12 @@ char *G__json(void)
         fprintf(fp, "  \"verbose\": true,\n");
     }
 
-    if (G_verbose() == G_verbose_min()) {
+    if (G_verbose() == 0) {
         fprintf(fp, "  \"quiet\": true,\n");
+    }
+
+    if (G_verbose() == -1) {
+        fprintf(fp, "  \"superquiet\": true,\n");
     }
 
     fprintf(fp, "  \"id\": \"%s_%i\"", G_program_name(), random_int);
