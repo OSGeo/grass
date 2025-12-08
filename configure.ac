@@ -416,9 +416,9 @@ LOC_ARG_WITH_LDFLAGS(cairo, cairo)
 LOC_ARG_WITH_INC(freetype, FreeType)
 LOC_ARG_WITH_LIB(freetype, FreeType)
 
-LOC_ARG_WITH_INC(proj, External PROJ)
-LOC_ARG_WITH_LIB(proj, External PROJ)
-LOC_ARG_WITH_SHARE(proj, External PROJ)
+LOC_ARG_WITH_INC(proj, PROJ)
+LOC_ARG_WITH_LIB(proj, PROJ)
+LOC_ARG_WITH_SHARE(proj, PROJ)
 
 LOC_ARG_WITH_INC(regex, regex)
 LOC_ARG_WITH_LIB(regex, regex)
@@ -749,13 +749,13 @@ PROJSHARE=
 
 # With PROJ includes directory
 
-LOC_CHECK_INC_PATH(proj,External PROJ,PROJINC)
+LOC_CHECK_INC_PATH(proj,PROJ,PROJINC)
 
-LOC_CHECK_INCLUDES(proj.h,External PROJ,$PROJINC)
+LOC_CHECK_INCLUDES(proj.h,PROJ,$PROJINC)
 
-LOC_CHECK_VERSION_INT(proj.h,PROJ_VERSION_MAJOR,External PROJ major,proj_ver_major,$PROJINC,0)
-LOC_CHECK_VERSION_INT(proj.h,PROJ_VERSION_MINOR,External PROJ minor,proj_ver_minor,$PROJINC,0)
-LOC_CHECK_VERSION_INT(proj.h,PROJ_VERSION_PATCH,External PROJ patch,proj_ver_patch,$PROJINC,0)
+LOC_CHECK_VERSION_INT(proj.h,PROJ_VERSION_MAJOR,PROJ major,proj_ver_major,$PROJINC,0)
+LOC_CHECK_VERSION_INT(proj.h,PROJ_VERSION_MINOR,PROJ minor,proj_ver_minor,$PROJINC,0)
+LOC_CHECK_VERSION_INT(proj.h,PROJ_VERSION_PATCH,PROJ patch,proj_ver_patch,$PROJINC,0)
 proj_version="$proj_ver_major.$proj_ver_minor.$proj_ver_patch"
 
 if test "$(expr "$proj_ver_major" \>= 9)" = 1; then
@@ -766,20 +766,20 @@ fi
 
 # With PROJ library directory
 
-LOC_CHECK_LIB_PATH(proj,External PROJ,PROJLIB)
-LOC_CHECK_LIBS(proj,proj_pj_info,External PROJ,$PROJLIB,PROJLIB,,,)
+LOC_CHECK_LIB_PATH(proj,PROJ,PROJLIB)
+LOC_CHECK_LIBS(proj,proj_pj_info,PROJ,$PROJLIB,PROJLIB,,,)
 
 # With PROJ share directory
 
-LOC_CHECK_SHARE_PATH(proj,External PROJ,PROJSHARE)
+LOC_CHECK_SHARE_PATH(proj,PROJ,PROJSHARE)
 if test -z "$PROJSHARE" ; then
   if test "$($PKG_CONFIG --exists proj && echo 0)" = "0"; then
     PROJSHARE=$($PKG_CONFIG --variable=datadir proj)
   else
-    AC_MSG_WARN([*** External PROJ data directory not specified; default will be used])
+    AC_MSG_WARN([*** PROJ data directory not specified; default will be used])
     PROJSHARE=/usr/share/proj
   fi
-  AC_MSG_RESULT([using External PROJ data directory "${PROJSHARE}"])
+  AC_MSG_RESULT([using PROJ data directory "${PROJSHARE}"])
 fi
 
 AC_SUBST(PROJINC)

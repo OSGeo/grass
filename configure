@@ -1711,9 +1711,9 @@ Optional Packages:
   --with-freetype-libs=DIRS
                           FreeType library files are in DIRS
   --with-proj-includes=DIRS
-                          External PROJ include files are in DIRS
-  --with-proj-libs=DIRS   External PROJ library files are in DIRS
-  --with-proj-share=DIR   External PROJ data files are in DIR
+                          PROJ include files are in DIRS
+  --with-proj-libs=DIRS   PROJ library files are in DIRS
+  --with-proj-share=DIR   PROJ data files are in DIR
   --with-regex-includes=DIRS
                           regex include files are in DIRS
   --with-regex-libs=DIRS  regex library files are in DIRS
@@ -9172,8 +9172,8 @@ PROJSHARE=
 # With PROJ includes directory
 
 
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of External PROJ includes" >&5
-printf %s "checking for location of External PROJ includes... " >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of PROJ includes" >&5
+printf %s "checking for location of PROJ includes... " >&6; }
 case "$with_proj_includes" in
 y | ye | yes | n | no)
 	as_fn_error $? "*** You must supply a directory to --with-proj-includes." "$LINENO" 5
@@ -9187,7 +9187,7 @@ if test -n "$with_proj_includes" ; then
         if test -d "$dir"; then
             PROJINC="$PROJINC -I$dir"
         else
-            as_fn_error $? "*** External PROJ includes directory $dir does not exist." "$LINENO" 5
+            as_fn_error $? "*** PROJ includes directory $dir does not exist." "$LINENO" 5
         fi
     done
 fi
@@ -9205,7 +9205,7 @@ then :
 
 else case e in #(
   e)
-    as_fn_error $? "*** Unable to locate External PROJ includes." "$LINENO" 5
+    as_fn_error $? "*** Unable to locate PROJ includes." "$LINENO" 5
  ;;
 esac
 fi
@@ -9215,8 +9215,8 @@ CPPFLAGS=$ac_save_cppflags
 
 
 
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking External PROJ major version" >&5
-printf %s "checking External PROJ major version... " >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking PROJ major version" >&5
+printf %s "checking PROJ major version... " >&6; }
 ac_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$PROJINC $CPPFLAGS"
 if test "$cross_compiling" = yes
@@ -9243,7 +9243,7 @@ then :
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $proj_ver_major" >&5
 printf "%s\n" "$proj_ver_major" >&6; }
 else case e in #(
-  e)    as_fn_error $? "*** Could not determine External PROJ major version." "$LINENO" 5  ;;
+  e)    as_fn_error $? "*** Could not determine PROJ major version." "$LINENO" 5  ;;
 esac
 fi
 rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
@@ -9254,8 +9254,8 @@ fi
 CPPFLAGS=$ac_save_cppflags
 
 
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking External PROJ minor version" >&5
-printf %s "checking External PROJ minor version... " >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking PROJ minor version" >&5
+printf %s "checking PROJ minor version... " >&6; }
 ac_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$PROJINC $CPPFLAGS"
 if test "$cross_compiling" = yes
@@ -9282,7 +9282,7 @@ then :
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $proj_ver_minor" >&5
 printf "%s\n" "$proj_ver_minor" >&6; }
 else case e in #(
-  e)    as_fn_error $? "*** Could not determine External PROJ minor version." "$LINENO" 5  ;;
+  e)    as_fn_error $? "*** Could not determine PROJ minor version." "$LINENO" 5  ;;
 esac
 fi
 rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
@@ -9293,8 +9293,8 @@ fi
 CPPFLAGS=$ac_save_cppflags
 
 
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking External PROJ patch version" >&5
-printf %s "checking External PROJ patch version... " >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking PROJ patch version" >&5
+printf %s "checking PROJ patch version... " >&6; }
 ac_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$PROJINC $CPPFLAGS"
 if test "$cross_compiling" = yes
@@ -9321,7 +9321,7 @@ then :
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $proj_ver_patch" >&5
 printf "%s\n" "$proj_ver_patch" >&6; }
 else case e in #(
-  e)    as_fn_error $? "*** Could not determine External PROJ patch version." "$LINENO" 5  ;;
+  e)    as_fn_error $? "*** Could not determine PROJ patch version." "$LINENO" 5  ;;
 esac
 fi
 rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
@@ -9343,8 +9343,8 @@ fi
 # With PROJ library directory
 
 
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of External PROJ library" >&5
-printf %s "checking for location of External PROJ library... " >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of PROJ library" >&5
+printf %s "checking for location of PROJ library... " >&6; }
 case "$with_proj_libs" in
 y | ye | yes | n | no)
 	as_fn_error $? "*** You must supply a directory to --with-proj-libs." "$LINENO" 5
@@ -9358,7 +9358,7 @@ if test -n "$with_proj_libs"; then
         if test -d "$dir"; then
             PROJLIB="$PROJLIB -L$dir"
         else
-            as_fn_error $? "*** External PROJ library directory $dir does not exist." "$LINENO" 5
+            as_fn_error $? "*** PROJ library directory $dir does not exist." "$LINENO" 5
         fi
     done
 fi
@@ -9413,7 +9413,7 @@ else case e in #(
   e)
 LDFLAGS=${ac_save_ldflags}
 
-    as_fn_error $? "*** Unable to locate External PROJ library." "$LINENO" 5
+    as_fn_error $? "*** Unable to locate PROJ library." "$LINENO" 5
 
  ;;
 esac
@@ -9427,8 +9427,8 @@ LDFLAGS=${ac_save_ldflags}
 # With PROJ share directory
 
 
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of External PROJ data files" >&5
-printf %s "checking for location of External PROJ data files... " >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of PROJ data files" >&5
+printf %s "checking for location of PROJ data files... " >&6; }
 case "$with_proj_share" in
 y | ye | yes | n | no)
         as_fn_error $? "*** You must supply a directory to --with-proj-share." "$LINENO" 5
@@ -9441,7 +9441,7 @@ if test -n "$with_proj_share" ; then
     if test -d "$with_proj_share"; then
         PROJSHARE="$with_proj_share"
     else
-        as_fn_error $? "*** External PROJ data directory $dir does not exist." "$LINENO" 5
+        as_fn_error $? "*** PROJ data directory $dir does not exist." "$LINENO" 5
     fi
 fi
 
@@ -9449,12 +9449,12 @@ if test -z "$PROJSHARE" ; then
   if test "$($PKG_CONFIG --exists proj && echo 0)" = "0"; then
     PROJSHARE=$($PKG_CONFIG --variable=datadir proj)
   else
-    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: *** External PROJ data directory not specified; default will be used" >&5
-printf "%s\n" "$as_me: WARNING: *** External PROJ data directory not specified; default will be used" >&2;}
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: *** PROJ data directory not specified; default will be used" >&5
+printf "%s\n" "$as_me: WARNING: *** PROJ data directory not specified; default will be used" >&2;}
     PROJSHARE=/usr/share/proj
   fi
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: using External PROJ data directory \"${PROJSHARE}\"" >&5
-printf "%s\n" "using External PROJ data directory \"${PROJSHARE}\"" >&6; }
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: using PROJ data directory \"${PROJSHARE}\"" >&5
+printf "%s\n" "using PROJ data directory \"${PROJSHARE}\"" >&6; }
 fi
 
 
