@@ -751,7 +751,10 @@ PROJSHARE=
 
 LOC_CHECK_INC_PATH(proj,PROJ,PROJINC)
 
-LOC_CHECK_INCLUDES(proj.h,PROJ,$PROJINC)
+ac_save_cppflags="$CPPFLAGS"
+CPPFLAGS="$PROJINC $CPPFLAGS"
+AC_CHECK_HEADER([proj.h],[],AC_MSG_ERROR([*** Unable to locate <proj.h>.]),[])
+CPPFLAGS=$ac_save_cppflags
 
 LOC_CHECK_VERSION_INT(proj.h,PROJ_VERSION_MAJOR,PROJ major,proj_ver_major,$PROJINC,0)
 LOC_CHECK_VERSION_INT(proj.h,PROJ_VERSION_MINOR,PROJ minor,proj_ver_minor,$PROJINC,0)

@@ -153,9 +153,6 @@
 /* Define to 1 if PQcmdTuples in lpq. */
 #undef HAVE_PQCMDTUPLES
 
-/* Define to 1 if you have the <proj.h> header file. */
-#undef HAVE_PROJ_H
-
 /* Define to 1 if POSIX threads are available. */
 #undef HAVE_PTHREAD
 

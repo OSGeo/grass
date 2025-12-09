@@ -9193,26 +9193,18 @@ if test -n "$with_proj_includes" ; then
 fi
 
 
-
 ac_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$PROJINC $CPPFLAGS"
-       for ac_header in proj.h
-do :
-  ac_fn_c_check_header_compile "$LINENO" "proj.h" "ac_cv_header_proj_h" "$ac_includes_default"
+ac_fn_c_check_header_compile "$LINENO" "proj.h" "ac_cv_header_proj_h" "$ac_includes_default"
 if test "x$ac_cv_header_proj_h" = xyes
 then :
-  printf "%s\n" "#define HAVE_PROJ_H 1" >>confdefs.h
 
 else case e in #(
-  e)
-    as_fn_error $? "*** Unable to locate PROJ includes." "$LINENO" 5
- ;;
+  e) as_fn_error $? "*** Unable to locate <proj.h>." "$LINENO" 5 ;;
 esac
 fi
 
-done
 CPPFLAGS=$ac_save_cppflags
-
 
 
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking PROJ major version" >&5

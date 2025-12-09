@@ -21,7 +21,6 @@
 #include <ogr_srs_api.h>
 
 /* TODO: clean up support for PROJ 5+ */
-#ifdef HAVE_PROJ_H
 #include <proj.h>
 #define RAD_TO_DEG 57.295779513082321
 #define DEG_TO_RAD .017453292519943296
@@ -30,7 +29,6 @@
 /* update if new PROJ versions support new WKT2 standards */
 #define PJ_WKT2_LATEST PJ_WKT2_2019
 #endif
-#endif // HAVE_PROJ_H
 
 /* Data Files */
 #define ELLIPSOIDTABLE      "/etc/proj/ellipse.table"
