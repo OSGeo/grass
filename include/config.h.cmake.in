@@ -158,9 +158,6 @@
 /* Define to 1 if PostgreSQL is to be used. */
 #cmakedefine HAVE_POSTGRES ${HAVE_POSTGRES}
 
-/* Define to 1 if you have the <proj.h> header file. */
-#cmakedefine HAVE_PROJ_H ${HAVE_PROJ_H}
-
 /* Define to 1 if you have the <pthread.h> header file. */
 #cmakedefine HAVE_PTHREAD_H ${HAVE_PTHREAD_H}
 
