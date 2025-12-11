@@ -78,7 +78,6 @@ static int new_fileinfo(void)
 
 /*!
  * \brief Open raster file
- 
  * Arrange for the NULL-value bitmap to be read as well as the raster
  * map. If no NULL-value bitmap exists, arrange for the production of
  * NULL-values based on zeros in the raster map. If the map is
