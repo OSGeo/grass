@@ -89,7 +89,6 @@ static void write_fp_format(int fd);
  * file, with max cat = max value (for backwards compatibility). Move
  * the <tt>.tmp</tt> NULL-value bitmap file to the <tt>cell_misc</tt>
  * directory.
- 
  * \param fd file descriptor
  *
  * \return void
