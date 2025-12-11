@@ -81,7 +81,6 @@ static void write_fp_format(int fd);
  * overwrite the support files. See \ref
  * Raster_Map_Layer_Support_Routines for routines which write raster
  * support files.
- 
  * If the map is a new floating point, move the <tt>.tmp</tt> file
  * into the <tt>fcell</tt> element, create an empty file in the
  * <tt>cell</tt> directory; write the floating-point range file; write
