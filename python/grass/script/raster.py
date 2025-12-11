@@ -120,6 +120,7 @@ def mapcalc(
     seed=None,
     nprocs=None,
     env=None,
+    flags="",
     **kwargs,
 ):
     """Interface to r.mapcalc.
@@ -137,6 +138,7 @@ def mapcalc(
     :param seed: an integer used to seed the random-number generator for the
                  rand() function, or 'auto' to generate a random seed
     :param nprocs: Number of threads for parallel computing
+    :param str flags: flags to be used (given as a string)
     :param dict env: dictionary of environment variables for child process
     :param kwargs:
     """
@@ -164,6 +166,7 @@ def mapcalc(
             superquiet=superquiet,
             verbose=verbose,
             overwrite=overwrite,
+            flags=flags,
         )
     except CalledModuleError:
         fatal(
@@ -181,6 +184,7 @@ def mapcalc_start(
     seed=None,
     nprocs=None,
     env=None,
+    flags="",
     **kwargs,
 ):
     """Interface to r.mapcalc, doesn't wait for it to finish, returns Popen object.
@@ -212,6 +216,7 @@ def mapcalc_start(
     :param seed: an integer used to seed the random-number generator for the
                  rand() function, or 'auto' to generate a random seed
     :param nprocs: Number of threads for parallel computing
+    :param str flags: flags to be used (given as a string)
     :param dict env: dictionary of environment variables for child process
     :param kwargs:
 
@@ -239,6 +244,7 @@ def mapcalc_start(
         superquiet=superquiet,
         verbose=verbose,
         overwrite=overwrite,
+        flags=flags,
     )
     p.stdin.write(e)
     p.stdin.close()
