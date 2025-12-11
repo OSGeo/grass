@@ -121,7 +121,6 @@ void Rast_close(int fd)
  * eventually remove the temporary file, but the file can be quite
  * large and will take up disk space until GRASS does remove it. Use
  * this routine as a courtesy to the user.
- 
  * \param fd file descriptor
  
  * \return void
