@@ -92,7 +92,6 @@ static int new_fileinfo(void)
  * \param name map name
  * \param open_mode mode
  * \param map_type map type (CELL, FCELL, DCELL)
- 
  * \return open file descriptor ( >= 0) if successful
  */
 static int open_raster_new(const char *name, int open_mode,
