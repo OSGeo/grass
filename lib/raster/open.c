@@ -11,7 +11,6 @@
  *
  * \author USACERL and many others
  */
-
 #include <unistd.h>
 #include <string.h>
 #include <sys/types.h>
@@ -27,43 +26,59 @@
 #include "R.h"
 #define FORMAT_FILE "f_format"
 #define NULL_FILE   "null"
-/* cmpressed null file */
+//cmpressed null file 
 #define NULLC_FILE  "nullcmpr"
 
 static int new_fileinfo(void)
 {
-    int oldsize = R__.fileinfo_count;
-    int newsize = oldsize;
+    int oldsize;
+    int newsize;
     int i;
+    int fd = -1;
 
-    for (i = 0; i < oldsize; i++)
-        if (R__.fileinfo[i].open_mode <= 0) {
-            memset(&R__.fileinfo[i], 0, sizeof(struct fileinfo));
-            R__.fileinfo[i].open_mode = -1;
-            return i;
+#pragma omp critical (R_RASTER_OPEN)
+    {
+        oldsize = R__.fileinfo_count;
+        newsize = oldsize;
+
+        for (i = 0; i < oldsize; i++) {
+            if (R__.fileinfo[i].open_mode <= 0) {
+                memset(&R__.fileinfo[i], 0, sizeof(struct fileinfo));
+                // mark as reserved 
+                R__.fileinfo[i].open_mode = 200;
+                fd = i;
+                break;
+            }
         }
 
-    if (newsize < 20)
-        newsize += 20;
-    else
-        newsize *= 2;
+        if (fd < 0) {
+            if (newsize < 20)
+                newsize += 20;
+            else
+                newsize *= 2;
 
-    R__.fileinfo = G_realloc(R__.fileinfo, newsize * sizeof(struct fileinfo));
+            R__.fileinfo = G_realloc(R__.fileinfo, newsize * sizeof(struct fileinfo));
 
-    /* Mark all cell files as closed */
-    for (i = oldsize; i < newsize; i++) {
-        memset(&R__.fileinfo[i], 0, sizeof(struct fileinfo));
-        R__.fileinfo[i].open_mode = -1;
+            //Mark all cell files as closed 
+            for (i = oldsize; i < newsize; i++) {
+                memset(&R__.fileinfo[i], 0, sizeof(struct fileinfo));
+                R__.fileinfo[i].open_mode = -1;
+            }
+
+            R__.fileinfo_count = newsize;
+
+            // mark as reserved 
+            R__.fileinfo[oldsize].open_mode = 200;
+            fd = oldsize;
+        }
     }
 
-    R__.fileinfo_count = newsize;
-
-    return oldsize;
+    return fd;
 }
 
 /*!
  * \brief Open raster file
- *
+ 
  * Arrange for the NULL-value bitmap to be read as well as the raster
  * map. If no NULL-value bitmap exists, arrange for the production of
  * NULL-values based on zeros in the raster map. If the map is
@@ -73,11 +88,11 @@ static int new_fileinfo(void)
  * the floating point map using uing quant rules other than the ones
  * stored in map's quant file, he/she should call Rast_set_quant_rules()
  * after the call to Rast_open_old().
- *
+ 
  * \param name map name
  * \param open_mode mode
  * \param map_type map type (CELL, FCELL, DCELL)
- *
+ 
  * \return open file descriptor ( >= 0) if successful
  */
 static int open_raster_new(const char *name, int open_mode,
@@ -302,7 +317,7 @@ int Rast__open_old(const char *name, const char *mapset)
     fcb->null_bits = Rast__allocate_null_bits(cellhd.cols);
 
     /* mark closed */
-    fcb->open_mode = -1;
+    /* fcb->open_mode = -1; */
 
     /* save name and mapset */
     fcb->name = G_store(name);
@@ -528,7 +543,7 @@ static int open_raster_new_gdal(char *map, char *mapset,
 
     /* mark closed */
     fcb->map_type = map_type;
-    fcb->open_mode = -1;
+    /* fcb->open_mode = -1; */
 
     fcb->gdal = Rast_create_gdal_link(map, map_type);
     if (!fcb->gdal)
@@ -644,7 +659,7 @@ static int open_raster_new(const char *name, int open_mode,
 
     /* mark closed */
     fcb->map_type = map_type;
-    fcb->open_mode = -1;
+    /* fcb->open_mode = -1; */
     fcb->gdal = NULL;
     fcb->vrt = NULL;
 

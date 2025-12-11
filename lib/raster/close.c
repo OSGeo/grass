@@ -11,7 +11,6 @@
  *
  * \author USACERL and many others
  */
-
 #ifdef _WIN32
 #include <windows.h>
 #endif
@@ -82,7 +81,7 @@ static void write_fp_format(int fd);
  * overwrite the support files. See \ref
  * Raster_Map_Layer_Support_Routines for routines which write raster
  * support files.
- *
+ 
  * If the map is a new floating point, move the <tt>.tmp</tt> file
  * into the <tt>fcell</tt> element, create an empty file in the
  * <tt>cell</tt> directory; write the floating-point range file; write
@@ -91,7 +90,7 @@ static void write_fp_format(int fd);
  * file, with max cat = max value (for backwards compatibility). Move
  * the <tt>.tmp</tt> NULL-value bitmap file to the <tt>cell_misc</tt>
  * directory.
- *
+ 
  * \param fd file descriptor
  *
  * \return void
@@ -124,9 +123,9 @@ void Rast_close(int fd)
  * eventually remove the temporary file, but the file can be quite
  * large and will take up disk space until GRASS does remove it. Use
  * this routine as a courtesy to the user.
- *
+ 
  * \param fd file descriptor
- *
+ 
  * \return void
  */
 void Rast_unopen(int fd)
@@ -144,13 +143,13 @@ void Rast_unopen(int fd)
 
 /*!
  * \brief Unopen all raster maps
- *
+ 
  * Unopen all raster maps opened for write. Memory allocated for
  * raster processing is freed, and the temporary file created when the
  * raster map was opened is removed (see \ref
  * Creating_and_Opening_New_Raster_Files). This routine is useful when
  * errors are detected and it is desired to remove temporary files.
- *
+ 
  * \return void
  */
 void Rast__unopen_all(void)
@@ -198,7 +197,7 @@ static int close_old(int fd)
     G_free(fcb->name);
     if (fcb->reclass_flag)
         Rast_free_reclass(&fcb->reclass);
-    fcb->open_mode = -1;
+    // fcb->open_mode = -1; 
 
     if (fcb->map_type != CELL_TYPE) {
         Rast_quant_free(&fcb->quant);
@@ -206,6 +205,8 @@ static int close_old(int fd)
     if (fcb->data_fd >= 0)
         close(fcb->data_fd);
 
+ #pragma omp critical (R_RASTER_OPEN)
+    fcb->open_mode = -1;
     return 1;
 }
 
@@ -347,7 +348,7 @@ static int close_new_gdal(int fd, int ok)
         Rast_close_gdal_link(fcb->gdal);
     }
 
-    fcb->open_mode = -1;
+    /* fcb->open_mode = -1; */
 
     if (fcb->data != NULL)
         G_free(fcb->data);
@@ -360,6 +361,9 @@ static int close_new_gdal(int fd, int ok)
 
     if (fcb->map_type != CELL_TYPE)
         Rast_quant_free(&fcb->quant);
+
+ #pragma omp critical (R_RASTER_OPEN)
+    fcb->open_mode = -1;
 
     return stat;
 }
@@ -477,7 +481,7 @@ static int close_new(int fd, int ok)
 
     sync_and_close(fcb->data_fd,
                    (fcb->map_type == CELL_TYPE ? "cell" : "fcell"), fcb->name);
-    fcb->open_mode = -1;
+    /* fcb->open_mode = -1; */
 
     if (fcb->null_fd >= 0) {
         sync_and_close(fcb->null_fd,
@@ -531,6 +535,8 @@ static int close_new(int fd, int ok)
     if (fcb->map_type != CELL_TYPE)
         Rast_quant_free(&fcb->quant);
 
+#pragma omp critical (R_RASTER_OPEN)
+    fcb->open_mode = -1;
     return stat;
 }
 
@@ -577,6 +583,8 @@ void Rast__close_null(int fd)
 
     G_free(fcb->null_bits);
 
+    /* fcb->open_mode = -1; */
+#pragma omp critical (R_RASTER_OPEN)
     fcb->open_mode = -1;
 }
 
