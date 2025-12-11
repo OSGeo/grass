@@ -260,11 +260,11 @@ char *G__json(void)
         fprintf(fp, "  \"verbose\": true,\n");
     }
 
-    if (G_verbose() == 0) {
+    if (G_verbose() == G_verbose_min() && st->superquiet < 1) {
         fprintf(fp, "  \"quiet\": true,\n");
     }
 
-    if (G_verbose() == -1) {
+    if (st->superquiet == 1 || G_verbose() == -1) {
         fprintf(fp, "  \"superquiet\": true,\n");
     }
 

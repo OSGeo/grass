@@ -552,6 +552,7 @@ int G_parser(int argc, char **argv)
                                 "both. Assuming --verbose."));
                 }
                 st->quiet = -1;
+                st->superquiet = -1;
             }
 
             /* Quiet option */
@@ -568,15 +569,18 @@ int G_parser(int argc, char **argv)
                                 "both. Assuming --quiet."));
                 }
                 st->quiet = 1; /* for passing to gui init */
+                st->superquiet = -1;
             }
 
             /* Super quiet option */
             else if (strcmp(ptr, "--qq") == 0) {
                 char buff[32];
+                st->superquiet = 1;
 
                 /* print nothing, but errors  */
                 st->module_info.verbose = G_verbose_min();
-                snprintf(buff, sizeof(buff), "GRASS_VERBOSE=%d", -1);
+                snprintf(buff, sizeof(buff), "GRASS_VERBOSE=%d",
+                         G_verbose_min());
                 putenv(G_store(buff));
                 G_suppress_warnings(TRUE);
                 if (st->quiet == -1) {
