@@ -88,7 +88,6 @@ static int new_fileinfo(void)
  * the floating point map using uing quant rules other than the ones
  * stored in map's quant file, he/she should call Rast_set_quant_rules()
  * after the call to Rast_open_old().
- 
  * \param name map name
  * \param open_mode mode
  * \param map_type map type (CELL, FCELL, DCELL)
