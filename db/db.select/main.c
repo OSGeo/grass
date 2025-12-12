@@ -25,6 +25,8 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
+enum OutputFormat { PLAIN, CSV, JSON, VERTICAL };
+
 struct {
     char *driver, *database, *table, *sql, *fs, *vs, *nv, *input, *output,
         *format;
@@ -119,6 +121,7 @@ int sel(dbDriver *driver, dbString *stmt)
     dbString value_string;
     int col, ncols;
     int more;
+    enum OutputFormat format = PLAIN;
 
     if (db_open_select_cursor(driver, stmt, &cursor, DB_SEQUENTIAL) != DB_OK)
         return DB_FAILED;
@@ -127,7 +130,7 @@ int sel(dbDriver *driver, dbString *stmt)
 
     table = db_get_cursor_table(&cursor);
     ncols = db_get_table_number_of_columns(table);
-    enum { PLAIN = 0, CSV, JSON, VERTICAL } format = PLAIN;
+
     if (parms.format) {
         if (strcmp(parms.format, "csv") == 0)
             format = CSV;
@@ -326,6 +329,7 @@ void parse_command_line(int argc, char **argv)
     format->guisection = _("Format");
 
     fs = G_define_standard_option(G_OPT_F_SEP);
+    fs->answer = NULL;
     fs->guisection = _("Format");
 
     vs = G_define_standard_option(G_OPT_F_SEP);
@@ -377,7 +381,25 @@ void parse_command_line(int argc, char **argv)
     parms.database = database->answer;
     parms.table = table->answer;
     parms.sql = sql->answer;
-    parms.fs = G_option_to_separator(fs);
+    if (fs->answer) {
+        parms.fs = G_option_to_separator(fs);
+        fprintf(stdout, "debugging\n");
+    }
+    else {
+        if (!format) {
+            format = "plain";
+        }
+        if (strcmp(format->answer, "csv") == 0) {
+            parms.fs = G_store(",");
+        }
+        else if (strcmp(format->answer, "plain") == 0 ||
+                 strcmp(format->answer, "vertical") == 0) {
+            parms.fs = G_store("|");
+        }
+        else {
+            parms.fs = NULL;
+        }
+    }
     parms.vs = NULL;
     if (vs->answer)
         parms.vs = G_option_to_separator(vs);
