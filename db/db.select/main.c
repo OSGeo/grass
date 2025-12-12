@@ -387,7 +387,7 @@ void parse_command_line(int argc, char **argv)
     }
     else {
         if (!format) {
-            format = "plain";
+            format->answer = "plain";
         }
         if (strcmp(format->answer, "csv") == 0) {
             parms.fs = G_store(",");
