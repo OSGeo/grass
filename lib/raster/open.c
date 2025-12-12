@@ -67,7 +67,7 @@ static int new_fileinfo(void)
 
             R__.fileinfo_count = newsize;
 
-            // mark as reserved 
+            // mark as reserved
             R__.fileinfo[oldsize].open_mode = 200;
             fd = oldsize;
         }
