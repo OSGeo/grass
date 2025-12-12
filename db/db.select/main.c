@@ -27,7 +27,7 @@
 
 struct {
     char *driver, *database, *table, *sql, *fs, *vs, *nv, *input, *output,
-         *format;
+        *format;
     int c, d, h, test_only;
 } parms;
 
@@ -127,12 +127,16 @@ int sel(dbDriver *driver, dbString *stmt)
 
     table = db_get_cursor_table(&cursor);
     ncols = db_get_table_number_of_columns(table);
-    enum {FMT_PLAIN=0, FMT_CSV, FMT_JSON, FMT_VERTICAL} format = FMT_PLAIN;
+    enum { PLAIN = 0, CSV, JSON, VERTICAL } format = PLAIN;
     if (parms.format) {
-        if (strcmp(parms.format, "csv") == 0) format = FMT_CSV;
-        else if (strcmp(parms.format, "json") == 0) format = FMT_JSON;
-        else if (strcmp(parms.format, "vertical") == 0) format = FMT_VERTICAL;
-        else format = FMT_PLAIN;
+        if (strcmp(parms.format, "csv") == 0)
+            format = CSV;
+        else if (strcmp(parms.format, "json") == 0)
+            format = JSON;
+        else if (strcmp(parms.format, "vertical") == 0)
+            format = VERTICAL;
+        else
+            format = PLAIN;
     }
     if (parms.d) {
         for (col = 0; col < ncols; col++) {
@@ -153,7 +157,7 @@ int sel(dbDriver *driver, dbString *stmt)
     db_init_string(&value_string);
 
     /* JSON header for single-statement output */
-    if (format == FMT_JSON) {
+    if (format == JSON) {
         fprintf(stdout, "{\"info\":\n{\"columns\":[\n");
         for (col = 0; col < ncols; col++) {
             column = db_get_table_column(table, col);
@@ -174,7 +178,7 @@ int sel(dbDriver *driver, dbString *stmt)
     }
 
     /* column names if horizontal output */
-    if (parms.h && parms.c && format != FMT_JSON && format != FMT_VERTICAL) {
+    if (parms.h && parms.c && format != JSON && format != VERTICAL) {
         for (col = 0; col < ncols; col++) {
             column = db_get_table_column(table, col);
             if (col)
@@ -194,51 +198,53 @@ int sel(dbDriver *driver, dbString *stmt)
 
         if (first_rec)
             first_rec = 0;
-        else if (format == FMT_JSON)
+        else if (format == JSON)
             fprintf(stdout, ",\n");
 
         for (col = 0; col < ncols; col++) {
             column = db_get_table_column(table, col);
             value = db_get_column_value(column);
             db_convert_column_value_to_string(column, &value_string);
-            if (parms.c && !parms.h && format == FMT_VERTICAL)
+            if (parms.c && !parms.h && format == VERTICAL)
                 fprintf(stdout, "%s%s", db_get_column_name(column), parms.fs);
-            if (col && parms.h && format != FMT_JSON && format != FMT_VERTICAL)
+            if (col && parms.h && format != JSON && format != VERTICAL)
                 fprintf(stdout, "%s", parms.fs);
-            if (format == FMT_JSON) {
+            if (format == JSON) {
                 if (!col)
                     fprintf(stdout, "{");
                 fprintf(stdout, "\"%s\":", db_get_column_name(column));
             }
             if (db_test_value_isnull(value)) {
-                if (format == FMT_JSON)
+                if (format == JSON)
                     fprintf(stdout, "null");
                 else if (parms.nv)
                     fprintf(stdout, "%s", parms.nv);
             }
             else {
                 char *str = db_get_string(&value_string);
-
-                /* Escaping rules: follow v.db.select */
-                if (strchr(str, '\\'))
-                    str = G_str_replace(str, "\\", "\\\\");
-                if (strchr(str, '\r'))
-                    str = G_str_replace(str, "\r", "\\r");
-                if (strchr(str, '\n'))
-                    str = G_str_replace(str, "\n", "\\n");
-                if (strchr(str, '\t'))
-                    str = G_str_replace(str, "\t", "\\t");
-                if (format == FMT_JSON && strchr(str, '"'))
-                    str = G_str_replace(str, "\"", "\\\"");
-                if (strchr(str, '\f'))
-                    str = G_str_replace(str, "\f", "\\f");
-                if (strchr(str, '\b'))
-                    str = G_str_replace(str, "\b", "\\b");
-                if (format == FMT_CSV && strchr(str, '"')) {
+                if (format == JSON) {
+                    /* Escaping rules: follow v.db.select */
+                    if (strchr(str, '\\'))
+                        str = G_str_replace(str, "\\", "\\\\");
+                    if (strchr(str, '\r'))
+                        str = G_str_replace(str, "\r", "\\r");
+                    if (strchr(str, '\n'))
+                        str = G_str_replace(str, "\n", "\\n");
+                    if (strchr(str, '\t'))
+                        str = G_str_replace(str, "\t", "\\t");
+                    if (format == JSON && strchr(str, '"'))
+                        str = G_str_replace(str, "\"", "\\\"");
+                    if (strchr(str, '\f')) /* form feed, somewhat unlikely */
+                        str = G_str_replace(str, "\f", "\\f");
+                    if (strchr(str, '\b')) /* backspace, quite unlikely */
+                        str = G_str_replace(str, "\b", "\\b");
+                }
+                if (format == CSV && strchr(str, '"')) {
                     str = G_str_replace(str, "\"", "\"\"");
                 }
-                if (format == FMT_JSON || format == FMT_CSV) {
-                    int type = db_sqltype_to_Ctype(db_get_column_sqltype(column));
+                if (format == JSON || format == CSV) {
+                    int type =
+                        db_sqltype_to_Ctype(db_get_column_sqltype(column));
                     /* Numbers unquoted, others quoted */
                     if (type == DB_C_TYPE_INT || type == DB_C_TYPE_DOUBLE)
                         fprintf(stdout, "%s", str);
@@ -250,25 +256,25 @@ int sel(dbDriver *driver, dbString *stmt)
                     fprintf(stdout, "%s", str);
                 }
             }
-            if (format == FMT_VERTICAL)
+            if (format == VERTICAL)
                 fprintf(stdout, "\n");
-            else if (format == FMT_JSON) {
-                    if (col < ncols - 1)
-                        fprintf(stdout, ",");
-                    else
-                        fprintf(stdout, "}");
+            else if (format == JSON) {
+                if (col < ncols - 1)
+                    fprintf(stdout, ",");
+                else
+                    fprintf(stdout, "}");
             }
         }
- 
+
         /* record separators for plain/csv/vertical modes */
-        if (format != FMT_JSON) {
+        if (format != JSON) {
             if (parms.h)
                 fprintf(stdout, "\n");
             else if (parms.vs)
                 fprintf(stdout, "%s\n", parms.vs);
         }
     }
-    if (format == FMT_JSON) {
+    if (format == JSON) {
         fprintf(stdout, "\n]}\n");
     }
 
