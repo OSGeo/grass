@@ -139,7 +139,6 @@ void Rast_unopen(int fd)
 
 /*!
  * \brief Unopen all raster maps
- 
  * Unopen all raster maps opened for write. Memory allocated for
  * raster processing is freed, and the temporary file created when the
  * raster map was opened is removed (see \ref
