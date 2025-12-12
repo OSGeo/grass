@@ -26,7 +26,8 @@
 #include "local_proto.h"
 
 struct {
-    char *driver, *database, *table, *sql, *fs, *vs, *nv, *input, *output;
+    char *driver, *database, *table, *sql, *fs, *vs, *nv, *input, *output,
+         *format;
     int c, d, h, test_only;
 } parms;
 
@@ -126,6 +127,13 @@ int sel(dbDriver *driver, dbString *stmt)
 
     table = db_get_cursor_table(&cursor);
     ncols = db_get_table_number_of_columns(table);
+    enum {FMT_PLAIN=0, FMT_CSV, FMT_JSON, FMT_VERTICAL} format = FMT_PLAIN;
+    if (parms.format) {
+        if (strcmp(parms.format, "csv") == 0) format = FMT_CSV;
+        else if (strcmp(parms.format, "json") == 0) format = FMT_JSON;
+        else if (strcmp(parms.format, "vertical") == 0) format = FMT_VERTICAL;
+        else format = FMT_PLAIN;
+    }
     if (parms.d) {
         for (col = 0; col < ncols; col++) {
             column = db_get_table_column(table, col);
@@ -144,8 +152,29 @@ int sel(dbDriver *driver, dbString *stmt)
 
     db_init_string(&value_string);
 
+    /* JSON header for single-statement output */
+    if (format == FMT_JSON) {
+        fprintf(stdout, "{\"info\":\n{\"columns\":[\n");
+        for (col = 0; col < ncols; col++) {
+            column = db_get_table_column(table, col);
+            if (col)
+                fprintf(stdout, "},\n");
+            fprintf(stdout, "{\"name\":\"%s\",", db_get_column_name(column));
+            int sql_type = db_get_column_sqltype(column);
+            fprintf(stdout, "\"sql_type\":\"%s\",", db_sqltype_name(sql_type));
+            int c_type = db_sqltype_to_Ctype(sql_type);
+            fprintf(stdout, "\"is_number\":");
+            if (c_type == DB_C_TYPE_INT || c_type == DB_C_TYPE_DOUBLE)
+                fprintf(stdout, "true");
+            else
+                fprintf(stdout, "false");
+        }
+        fprintf(stdout, "}\n]},\n");
+        fprintf(stdout, "\"records\":[\n");
+    }
+
     /* column names if horizontal output */
-    if (parms.h && parms.c) {
+    if (parms.h && parms.c && format != FMT_JSON && format != FMT_VERTICAL) {
         for (col = 0; col < ncols; col++) {
             column = db_get_table_column(table, col);
             if (col)
@@ -155,6 +184,7 @@ int sel(dbDriver *driver, dbString *stmt)
         fprintf(stdout, "\n");
     }
 
+    int first_rec = 1;
     /* fetch the data */
     while (TRUE) {
         if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
@@ -162,25 +192,84 @@ int sel(dbDriver *driver, dbString *stmt)
         if (!more)
             break;
 
+        if (first_rec)
+            first_rec = 0;
+        else if (format == FMT_JSON)
+            fprintf(stdout, ",\n");
+
         for (col = 0; col < ncols; col++) {
             column = db_get_table_column(table, col);
             value = db_get_column_value(column);
             db_convert_column_value_to_string(column, &value_string);
-            if (parms.c && !parms.h)
+            if (parms.c && !parms.h && format == FMT_VERTICAL)
                 fprintf(stdout, "%s%s", db_get_column_name(column), parms.fs);
-            if (col && parms.h)
+            if (col && parms.h && format != FMT_JSON && format != FMT_VERTICAL)
                 fprintf(stdout, "%s", parms.fs);
-            if (parms.nv && db_test_value_isnull(value))
-                fprintf(stdout, "%s", parms.nv);
-            else
-                fprintf(stdout, "%s", db_get_string(&value_string));
-            if (!parms.h)
+            if (format == FMT_JSON) {
+                if (!col)
+                    fprintf(stdout, "{");
+                fprintf(stdout, "\"%s\":", db_get_column_name(column));
+            }
+            if (db_test_value_isnull(value)) {
+                if (format == FMT_JSON)
+                    fprintf(stdout, "null");
+                else if (parms.nv)
+                    fprintf(stdout, "%s", parms.nv);
+            }
+            else {
+                char *str = db_get_string(&value_string);
+
+                /* Escaping rules: follow v.db.select */
+                if (strchr(str, '\\'))
+                    str = G_str_replace(str, "\\", "\\\\");
+                if (strchr(str, '\r'))
+                    str = G_str_replace(str, "\r", "\\r");
+                if (strchr(str, '\n'))
+                    str = G_str_replace(str, "\n", "\\n");
+                if (strchr(str, '\t'))
+                    str = G_str_replace(str, "\t", "\\t");
+                if (format == FMT_JSON && strchr(str, '"'))
+                    str = G_str_replace(str, "\"", "\\\"");
+                if (strchr(str, '\f'))
+                    str = G_str_replace(str, "\f", "\\f");
+                if (strchr(str, '\b'))
+                    str = G_str_replace(str, "\b", "\\b");
+                if (format == FMT_CSV && strchr(str, '"')) {
+                    str = G_str_replace(str, "\"", "\"\"");
+                }
+                if (format == FMT_JSON || format == FMT_CSV) {
+                    int type = db_sqltype_to_Ctype(db_get_column_sqltype(column));
+                    /* Numbers unquoted, others quoted */
+                    if (type == DB_C_TYPE_INT || type == DB_C_TYPE_DOUBLE)
+                        fprintf(stdout, "%s", str);
+                    else
+                        fprintf(stdout, "\"%s\"", str);
+                }
+                else {
+                    /* plain or vertical */
+                    fprintf(stdout, "%s", str);
+                }
+            }
+            if (format == FMT_VERTICAL)
                 fprintf(stdout, "\n");
+            else if (format == FMT_JSON) {
+                    if (col < ncols - 1)
+                        fprintf(stdout, ",");
+                    else
+                        fprintf(stdout, "}");
+            }
         }
-        if (parms.h)
-            fprintf(stdout, "\n");
-        else if (parms.vs)
-            fprintf(stdout, "%s\n", parms.vs);
+ 
+        /* record separators for plain/csv/vertical modes */
+        if (format != FMT_JSON) {
+            if (parms.h)
+                fprintf(stdout, "\n");
+            else if (parms.vs)
+                fprintf(stdout, "%s\n", parms.vs);
+        }
+    }
+    if (format == FMT_JSON) {
+        fprintf(stdout, "\n]}\n");
     }
 
     return DB_OK;
@@ -189,7 +278,7 @@ int sel(dbDriver *driver, dbString *stmt)
 void parse_command_line(int argc, char **argv)
 {
     struct Option *driver, *database, *table, *sql, *fs, *vs, *nv, *input,
-        *output;
+        *output, *format;
     struct Flag *c, *d, *v, *flag_test;
     struct GModule *module;
     const char *drv, *db;
@@ -220,6 +309,15 @@ void parse_command_line(int argc, char **argv)
     if ((db = db_get_default_database_name()))
         database->answer = (char *)db;
     database->guisection = _("Connection");
+
+    format = G_define_standard_option(G_OPT_F_FORMAT);
+    format->options = "plain,csv,json,vertical";
+    format->descriptions =
+        "plain;Configurable plain text output;"
+        "csv;CSV (Comma Separated Values);"
+        "json;JSON (JavaScript Object Notation);"
+        "vertical;Plain text vertical output (instead of horizontal)";
+    format->guisection = _("Format");
 
     fs = G_define_standard_option(G_OPT_F_SEP);
     fs->guisection = _("Format");
@@ -280,6 +378,7 @@ void parse_command_line(int argc, char **argv)
     parms.nv = nv->answer;
     parms.input = input->answer;
     parms.output = output->answer;
+    parms.format = format->answer;
 
     if (!c->answer)
         parms.c = TRUE;
