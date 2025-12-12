@@ -121,7 +121,7 @@ int sel(dbDriver *driver, dbString *stmt)
     dbString value_string;
     int col, ncols;
     int more;
-    enum OutputFormat format = PLAIN;
+    enum OutputFormat format = CSV; // default CSV
 
     if (db_open_select_cursor(driver, stmt, &cursor, DB_SEQUENTIAL) != DB_OK)
         return DB_FAILED;
@@ -320,6 +320,8 @@ void parse_command_line(int argc, char **argv)
     database->guisection = _("Connection");
 
     format = G_define_standard_option(G_OPT_F_FORMAT);
+    format->required = NO;
+    format->answer = NULL;
     format->options = "plain,csv,json,vertical";
     format->descriptions =
         "plain;Configurable plain text output;"
@@ -383,11 +385,11 @@ void parse_command_line(int argc, char **argv)
     parms.sql = sql->answer;
     if (fs->answer) {
         parms.fs = G_option_to_separator(fs);
-        fprintf(stdout, "debugging\n");
     }
     else {
-        if (!format) {
-            format->answer = "plain";
+        fprintf(stdout, "%s\n", format->answer);
+        if (!format->answer) {
+            format->answer = G_store("csv"); // default csv
         }
         if (strcmp(format->answer, "csv") == 0) {
             parms.fs = G_store(",");
