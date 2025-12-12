@@ -59,7 +59,7 @@ static int new_fileinfo(void)
 
             R__.fileinfo = G_realloc(R__.fileinfo, newsize * sizeof(struct fileinfo));
 
-            //Mark all cell files as closed 
+            // Mark all cell files as closed
             for (i = oldsize; i < newsize; i++) {
                 memset(&R__.fileinfo[i], 0, sizeof(struct fileinfo));
                 R__.fileinfo[i].open_mode = -1;
