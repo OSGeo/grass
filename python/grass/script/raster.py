@@ -22,7 +22,6 @@ from __future__ import annotations
 
 import os
 import string
-import time
 from pathlib import Path
 
 from .core import (
@@ -120,6 +119,7 @@ def mapcalc(
     seed=None,
     nprocs=None,
     env=None,
+    flags="",
     **kwargs,
 ):
     """Interface to r.mapcalc.
@@ -135,14 +135,12 @@ def mapcalc(
     :param bool verbose: True to run verbosely (``--v``)
     :param bool overwrite: True to enable overwriting the output (``--o``)
     :param seed: an integer used to seed the random-number generator for the
-                 rand() function, or 'auto' to generate a random seed
+                 rand() function. If not provided, r.mapcalc uses automatic seeding.
     :param nprocs: Number of threads for parallel computing
+    :param str flags: additional flags to pass to r.mapcalc
     :param dict env: dictionary of environment variables for child process
     :param kwargs:
     """
-
-    if seed == "auto":
-        seed = hash((os.getpid(), time.time())) % (2**32)
 
     t = string.Template(exp)
     e = t.substitute(**kwargs)
@@ -151,6 +149,10 @@ def mapcalc(
     # but for explicit 0, do pass through.
     if nprocs is None:
         nprocs = 1
+
+    # Handle deprecated seed="auto" - ignore it, let r.mapcalc auto-seed
+    if seed == "auto":
+        seed = None
 
     try:
         write_command(
@@ -164,6 +166,7 @@ def mapcalc(
             superquiet=superquiet,
             verbose=verbose,
             overwrite=overwrite,
+            flags=flags,
         )
     except CalledModuleError:
         fatal(
@@ -181,6 +184,7 @@ def mapcalc_start(
     seed=None,
     nprocs=None,
     env=None,
+    flags="",
     **kwargs,
 ):
     """Interface to r.mapcalc, doesn't wait for it to finish, returns Popen object.
@@ -210,16 +214,14 @@ def mapcalc_start(
     :param bool verbose: True to run verbosely (``--v``)
     :param bool overwrite: True to enable overwriting the output (``--o``)
     :param seed: an integer used to seed the random-number generator for the
-                 rand() function, or 'auto' to generate a random seed
+                 rand() function. If not provided, r.mapcalc uses automatic seeding.
     :param nprocs: Number of threads for parallel computing
+    :param str flags: additional flags to pass to r.mapcalc
     :param dict env: dictionary of environment variables for child process
     :param kwargs:
 
     :return: Popen object
     """
-
-    if seed == "auto":
-        seed = hash((os.getpid(), time.time())) % (2**32)
 
     t = string.Template(exp)
     e = t.substitute(**kwargs)
@@ -228,6 +230,10 @@ def mapcalc_start(
     # but for explicit 0, do pass through.
     if nprocs is None:
         nprocs = 1
+
+    # Handle deprecated seed="auto" - ignore it, let r.mapcalc auto-seed
+    if seed == "auto":
+        seed = None
 
     p = feed_command(
         "r.mapcalc",
@@ -239,6 +245,7 @@ def mapcalc_start(
         superquiet=superquiet,
         verbose=verbose,
         overwrite=overwrite,
+        flags=flags,
     )
     p.stdin.write(e)
     p.stdin.close()
