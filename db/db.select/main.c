@@ -337,9 +337,13 @@ void parse_command_line(int argc, char **argv)
     format->key = "format";
     format->type = TYPE_STRING;
     format->required = NO;
-    format->options = "plain,json";
     format->answer = "plain";
-    format->description = _("Output format");
+    format->options = "plain,csv,json,vertical";
+    format->descriptions =
+        "plain;Configurable plain text output;"
+        "csv;CSV (Comma Separated Values);"
+        "json;JSON (JavaScript Object Notation);"
+        "vertical;Plain text vertical output (instead of horizontal)";
     format->guisection = _("Format");
 
     output = G_define_standard_option(G_OPT_F_OUTPUT);
