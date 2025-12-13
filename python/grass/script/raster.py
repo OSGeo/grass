@@ -119,7 +119,7 @@ def mapcalc(
     seed=None,
     nprocs=None,
     env=None,
-    flags="s",
+    flags="",
     **kwargs,
 ):
     """Interface to r.mapcalc.
@@ -135,9 +135,9 @@ def mapcalc(
     :param bool verbose: True to run verbosely (``--v``)
     :param bool overwrite: True to enable overwriting the output (``--o``)
     :param seed: an integer used to seed the random-number generator for the
-                 rand() function
+                 rand() function. If not provided, r.mapcalc uses automatic seeding.
     :param nprocs: Number of threads for parallel computing
-    :param str flags: flags to be used, defaults to 's' for automatic seeding
+    :param str flags: additional flags to pass to r.mapcalc
     :param dict env: dictionary of environment variables for child process
     :param kwargs:
     """
@@ -149,6 +149,10 @@ def mapcalc(
     # but for explicit 0, do pass through.
     if nprocs is None:
         nprocs = 1
+
+    # Handle deprecated seed="auto" - ignore it, let r.mapcalc auto-seed
+    if seed == "auto":
+        seed = None
 
     try:
         write_command(
@@ -180,7 +184,7 @@ def mapcalc_start(
     seed=None,
     nprocs=None,
     env=None,
-    flags="s",
+    flags="",
     **kwargs,
 ):
     """Interface to r.mapcalc, doesn't wait for it to finish, returns Popen object.
@@ -210,9 +214,9 @@ def mapcalc_start(
     :param bool verbose: True to run verbosely (``--v``)
     :param bool overwrite: True to enable overwriting the output (``--o``)
     :param seed: an integer used to seed the random-number generator for the
-                 rand() function
+                 rand() function. If not provided, r.mapcalc uses automatic seeding.
     :param nprocs: Number of threads for parallel computing
-    :param str flags: flags to be used, defaults to 's' for automatic seeding
+    :param str flags: additional flags to pass to r.mapcalc
     :param dict env: dictionary of environment variables for child process
     :param kwargs:
 
@@ -226,6 +230,10 @@ def mapcalc_start(
     # but for explicit 0, do pass through.
     if nprocs is None:
         nprocs = 1
+
+    # Handle deprecated seed="auto" - ignore it, let r.mapcalc auto-seed
+    if seed == "auto":
+        seed = None
 
     p = feed_command(
         "r.mapcalc",
