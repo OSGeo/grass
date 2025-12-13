@@ -137,15 +137,26 @@ int sel(dbDriver *driver, dbString *stmt)
     ncols = db_get_table_number_of_columns(table);
     if (parms.format == JSON) {
         root_value = G_json_value_init_object();
+        if (root_value == NULL) {
+            G_fatal_error(
+                _("Failed to initialize JSON object. Out of memory?"));
+        }
         root_object = G_json_value_get_object(root_value);
 
         /* info object */
         G_JSON_Value *info_value = G_json_value_init_object();
+        if (info_value == NULL) {
+            G_fatal_error(
+                _("Failed to initialize JSON object. Out of memory?"));
+        }
         G_json_object_set_value(root_object, "info", info_value);
         info_object = G_json_object_get_object(root_object, "info");
 
         /* records array */
         G_JSON_Value *records_value = G_json_value_init_array();
+        if (records_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
         G_json_object_set_value(root_object, "records", records_value);
         records_array = G_json_object_get_array(root_object, "records");
 
@@ -156,6 +167,9 @@ int sel(dbDriver *driver, dbString *stmt)
             G_json_object_set_string(info_object, "table", parms.table);
 
         G_JSON_Value *columns_value = G_json_value_init_array();
+        if (columns_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
         G_json_object_set_value(info_object, "columns", columns_value);
         columns_array = G_json_object_get_array(info_object, "columns");
 
@@ -163,6 +177,10 @@ int sel(dbDriver *driver, dbString *stmt)
             column = db_get_table_column(table, col);
 
             G_JSON_Value *col_value = G_json_value_init_object();
+            if (col_value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON object. Out of memory?"));
+            }
             G_JSON_Object *col_object = G_json_value_get_object(col_value);
 
             G_json_object_set_string(col_object, "name",
