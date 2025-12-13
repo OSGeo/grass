@@ -416,9 +416,9 @@ LOC_ARG_WITH_LDFLAGS(cairo, cairo)
 LOC_ARG_WITH_INC(freetype, FreeType)
 LOC_ARG_WITH_LIB(freetype, FreeType)
 
-LOC_ARG_WITH_INC(proj, External PROJ.4)
-LOC_ARG_WITH_LIB(proj, External PROJ.4)
-LOC_ARG_WITH_SHARE(proj, External PROJ.4)
+LOC_ARG_WITH_INC(proj, PROJ)
+LOC_ARG_WITH_LIB(proj, PROJ)
+LOC_ARG_WITH_SHARE(proj, PROJ)
 
 LOC_ARG_WITH_INC(regex, regex)
 LOC_ARG_WITH_LIB(regex, regex)
@@ -746,88 +746,43 @@ AC_SUBST(ZSTDLIB)
 PROJINC=
 PROJLIB=
 PROJSHARE=
-PROJ4API=0
-PROJMAJOR=4
 
 # With PROJ includes directory
 
-LOC_CHECK_INC_PATH(proj,External PROJ,PROJINC)
+LOC_CHECK_INC_PATH(proj,PROJ,PROJINC)
 
-# PROJ version check: if proj.h exists, it must be proj 5+
-LOC_CHECK_INCLUDES(proj.h,External PROJ,$PROJINC,PROJ4API=1)
+ac_save_cppflags="$CPPFLAGS"
+CPPFLAGS="$PROJINC $CPPFLAGS"
+AC_CHECK_HEADER([proj.h],[],AC_MSG_ERROR([*** Unable to locate <proj.h>.]),[])
+CPPFLAGS=$ac_save_cppflags
 
-if test $PROJ4API = 0 ; then
-    LOC_CHECK_VERSION_INT(proj.h,PROJ_VERSION_MAJOR,External PROJ major,proj_ver_major,$PROJINC,0)
-    LOC_CHECK_VERSION_INT(proj.h,PROJ_VERSION_MINOR,External PROJ minor,proj_ver_minor,$PROJINC,0)
-    LOC_CHECK_VERSION_INT(proj.h,PROJ_VERSION_PATCH,External PROJ patch,proj_ver_patch,$PROJINC,0)
-    AC_MSG_RESULT([found PROJ version "${proj_ver_major}.${proj_ver_minor}.${proj_ver_patch}"])
-    PROJMAJOR=${proj_ver_major}
-    # minimum required PROJ 5+ version to use the new PROJ API: 5.1.0
-    if test ${proj_ver_major} = 5 && test `expr ${proj_ver_minor} \< 1` = 1 ; then
-	AC_MSG_WARN([At least PROJ version "5.1.0" is required for the new API ])
-	PROJ4API=1
-    fi
+LOC_CHECK_VERSION_INT(proj.h,PROJ_VERSION_MAJOR,PROJ major,proj_ver_major,$PROJINC,0)
+LOC_CHECK_VERSION_INT(proj.h,PROJ_VERSION_MINOR,PROJ minor,proj_ver_minor,$PROJINC,0)
+LOC_CHECK_VERSION_INT(proj.h,PROJ_VERSION_PATCH,PROJ patch,proj_ver_patch,$PROJINC,0)
+proj_version="$proj_ver_major.$proj_ver_minor.$proj_ver_patch"
+
+if test "$(expr "$proj_ver_major" \>= 9)" = 1; then
+  AC_MSG_RESULT([using PROJ version "${proj_version}"])
 else
-    LOC_CHECK_VERSION_INT(proj_api.h,PJ_VERSION,External PROJ.4,proj_ver,$PROJINC,0)
-    if test `expr ${proj_ver} \>= 600` = 1 ; then
-	PROJMAJOR=6
-    elif test `expr ${proj_ver} \>= 500` = 1 ; then
-	PROJMAJOR=5
-    elif test `expr ${proj_ver} \>= 400` = 1 ; then
-	PROJMAJOR=4
-    fi
-    AC_MSG_RESULT([found PROJ version "${proj_ver}"])
+  AC_MSG_ERROR([*** PROJ version 9.0.0 or newer is required (found version "${proj_version}")])
 fi
 
-if test $PROJ4API = 0 ; then
-    AC_MSG_RESULT([using new PROJ version 5+ API])
+# With PROJ library directory
 
-    # With PROJ library directory
-
-    LOC_CHECK_LIB_PATH(proj,External PROJ,PROJLIB)
-    LOC_CHECK_LIBS(proj,proj_pj_info,External PROJ,$PROJLIB,PROJLIB,,,)
-else
-    AC_MSG_RESULT([using old PROJ version 4 API])
-    AC_DEFINE(USE_PROJ4API, 1, [Define to 1 if using old PROJ version 4 API.])
-
-    LOC_CHECK_INCLUDES(proj_api.h,External PROJ,$PROJINC)
-    # PROJ version check for v4.x
-
-    if test "$cross_compiling" = yes; then
-	AC_MSG_WARN([*** Cannot check PROJ.4 version (cross-compiling).])
-    else
-	LOC_CHECK_VERSION_INT(proj_api.h,PJ_VERSION,External PROJ.4,proj_ver,$PROJINC,0)
-
-	if test `expr ${proj_ver} \< 446` = 1 ; then
-	    AC_MSG_ERROR([*** PROJ.4.4.6 or later is required.])
-	fi
-    fi
-
-    # With PROJ library directory
-
-    LOC_CHECK_LIB_PATH(proj,External PROJ.4,PROJLIB)
-    LOC_CHECK_LIBS(proj,pj_get_def,External PROJ.4,$PROJLIB,PROJLIB,,,)
-fi
+LOC_CHECK_LIB_PATH(proj,PROJ,PROJLIB)
+LOC_CHECK_LIBS(proj,proj_pj_info,PROJ,$PROJLIB,PROJLIB,,,)
 
 # With PROJ share directory
 
-LOC_CHECK_SHARE_PATH(proj,External PROJ,PROJSHARE)
+LOC_CHECK_SHARE_PATH(proj,PROJ,PROJSHARE)
 if test -z "$PROJSHARE" ; then
-    AC_MSG_WARN([*** External PROJ directory not specified; default will be used])
+  if test "$($PKG_CONFIG --exists proj && echo 0)" = "0"; then
+    PROJSHARE=$($PKG_CONFIG --variable=datadir proj)
+  else
+    AC_MSG_WARN([*** PROJ data directory not specified; default will be used])
     PROJSHARE=/usr/share/proj
-fi
-
-# check if share/proj/epsg exists only for PROJ < 6
-if test `expr ${PROJMAJOR} \< 6` = 1 ; then
-    # LOC_CHECK_SHARE does not work when cross compiling
-    if test "$cross_compiling" = "yes" ; then
-	AC_MSG_CHECKING([for epsg])
-	AC_MSG_RESULT([unknown (cross-compiling)])
-    else
-	LOC_CHECK_SHARE(epsg,External PROJ,$PROJSHARE,[
-	AC_MSG_WARN([*** Unable to locate PROJ data files.])
-	])
-    fi
+  fi
+  AC_MSG_RESULT([using PROJ data directory "${PROJSHARE}"])
 fi
 
 AC_SUBST(PROJINC)
@@ -2090,11 +2045,4 @@ LOC_MSG_USE(SQLite support,USE_SQLITE)
 LOC_MSG_USE(TIFF support,USE_TIFF)
 LOC_MSG_USE(X11 support,USE_X11)
 LOC_MSG_USE(Zstandard support,USE_ZSTD)
-LOC_MSG()
-# remove when the new PROJ API is stable
-if test $PROJ4API = 0 ; then
-AC_MSG_RESULT([  using new PROJ 5+ API])
-else
-AC_MSG_RESULT([  using old PROJ 4 API])
-fi
 LOC_MSG()

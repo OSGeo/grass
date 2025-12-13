@@ -158,12 +158,6 @@
 /* Define to 1 if PostgreSQL is to be used. */
 #cmakedefine HAVE_POSTGRES ${HAVE_POSTGRES}
 
-/* Define to 1 if you have the <proj_api.h> header file. */
-#cmakedefine HAVE_PROJ_API_H ${HAVE_PROJ_API_H}
-
-/* Define to 1 if you have the <proj.h> header file. */
-#cmakedefine HAVE_PROJ_H ${HAVE_PROJ_H}
-
 /* Define to 1 if you have the <pthread.h> header file. */
 #cmakedefine HAVE_PTHREAD_H ${HAVE_PTHREAD_H}
 
@@ -323,9 +317,6 @@
 
 /* Define to 1 if NLS requested. */
 #cmakedefine USE_NLS ${USE_NLS}
-
-/* Define to 1 if using old PROJ version 4 API. */
-#cmakedefine USE_PROJ4API ${USE_PROJ4API}
 
 /* Define to 1 if the X Window System is missing or not being used. */
 #cmakedefine X_DISPLAY_MISSING ${X_DISPLAY_MISSING}
