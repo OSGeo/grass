@@ -23,11 +23,15 @@
 #include <grass/gis.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
+#include <grass/gjson.h>
 #include "local_proto.h"
+
+enum OutputFormat { PLAIN, JSON };
 
 struct {
     char *driver, *database, *table, *sql, *fs, *vs, *nv, *input, *output;
     int c, d, h, test_only;
+    enum OutputFormat format;
 } parms;
 
 /* function prototypes */
@@ -118,6 +122,11 @@ int sel(dbDriver *driver, dbString *stmt)
     dbString value_string;
     int col, ncols;
     int more;
+    G_JSON_Value *root_value = NULL;
+    G_JSON_Object *root_object = NULL;
+    G_JSON_Object *info_object = NULL;
+    G_JSON_Array *columns_array = NULL;
+    G_JSON_Array *records_array = NULL;
 
     if (db_open_select_cursor(driver, stmt, &cursor, DB_SEQUENTIAL) != DB_OK)
         return DB_FAILED;
@@ -126,7 +135,53 @@ int sel(dbDriver *driver, dbString *stmt)
 
     table = db_get_cursor_table(&cursor);
     ncols = db_get_table_number_of_columns(table);
-    if (parms.d) {
+    if (parms.format == JSON) {
+        root_value = G_json_value_init_object();
+        root_object = G_json_value_get_object(root_value);
+
+        /* info object */
+        G_JSON_Value *info_value = G_json_value_init_object();
+        G_json_object_set_value(root_object, "info", info_value);
+        info_object = G_json_object_get_object(root_object, "info");
+
+        /* records array */
+        G_JSON_Value *records_value = G_json_value_init_array();
+        G_json_object_set_value(root_object, "records", records_value);
+        records_array = G_json_object_get_array(root_object, "records");
+
+        G_json_object_set_string(info_object, "driver", parms.driver);
+        G_json_object_set_string(info_object, "database", parms.database);
+
+        if (parms.table)
+            G_json_object_set_string(info_object, "table", parms.table);
+
+        G_JSON_Value *columns_value = G_json_value_init_array();
+        G_json_object_set_value(info_object, "columns", columns_value);
+        columns_array = G_json_object_get_array(info_object, "columns");
+
+        for (col = 0; col < ncols; col++) {
+            column = db_get_table_column(table, col);
+
+            G_JSON_Value *col_value = G_json_value_init_object();
+            G_JSON_Object *col_object = G_json_value_get_object(col_value);
+
+            G_json_object_set_string(col_object, "name",
+                                     db_get_column_name(column));
+
+            int sql_type = db_get_column_sqltype(column);
+            G_json_object_set_string(col_object, "sql_type",
+                                     db_sqltype_name(sql_type));
+
+            int c_type = db_sqltype_to_Ctype(sql_type);
+
+            G_json_object_set_boolean(col_object, "is_number",
+                                      c_type == DB_C_TYPE_INT ||
+                                          c_type == DB_C_TYPE_DOUBLE);
+
+            G_json_array_append_value(columns_array, col_value);
+        }
+    }
+    if (parms.d && parms.format != JSON) {
         for (col = 0; col < ncols; col++) {
             column = db_get_table_column(table, col);
             print_column_definition(column);
@@ -135,7 +190,8 @@ int sel(dbDriver *driver, dbString *stmt)
         return DB_OK;
     }
 
-    if (parms.output && strcmp(parms.output, "-") != 0) {
+    if (parms.format != JSON && parms.output &&
+        strcmp(parms.output, "-") != 0) {
         if (NULL == freopen(parms.output, "w", stdout)) {
             G_fatal_error(_("Unable to open file <%s> for writing"),
                           parms.output);
@@ -145,7 +201,7 @@ int sel(dbDriver *driver, dbString *stmt)
     db_init_string(&value_string);
 
     /* column names if horizontal output */
-    if (parms.h && parms.c) {
+    if (parms.h && parms.c && parms.format != JSON) {
         for (col = 0; col < ncols; col++) {
             column = db_get_table_column(table, col);
             if (col)
@@ -161,6 +217,40 @@ int sel(dbDriver *driver, dbString *stmt)
             return DB_FAILED;
         if (!more)
             break;
+
+        if (parms.format == JSON) {
+            G_JSON_Value *row_value = G_json_value_init_object();
+            G_JSON_Object *row_object = G_json_value_get_object(row_value);
+
+            for (col = 0; col < ncols; col++) {
+                column = db_get_table_column(table, col);
+                value = db_get_column_value(column);
+
+                const char *col_name = db_get_column_name(column);
+
+                if (db_test_value_isnull(value)) {
+                    G_json_object_set_null(row_object, col_name);
+                }
+                else {
+                    db_convert_column_value_to_string(column, &value_string);
+                    int sql_type = db_get_column_sqltype(column);
+                    int c_type = db_sqltype_to_Ctype(sql_type);
+
+                    if (c_type == DB_C_TYPE_INT || c_type == DB_C_TYPE_DOUBLE) {
+                        G_json_object_set_number(
+                            row_object, col_name,
+                            atof(db_get_string(&value_string)));
+                    }
+                    else {
+                        G_json_object_set_string(row_object, col_name,
+                                                 db_get_string(&value_string));
+                    }
+                }
+            }
+
+            G_json_array_append_value(records_array, row_value);
+            continue;
+        }
 
         for (col = 0; col < ncols; col++) {
             column = db_get_table_column(table, col);
@@ -183,13 +273,23 @@ int sel(dbDriver *driver, dbString *stmt)
             fprintf(stdout, "%s\n", parms.vs);
     }
 
+    if (parms.format == JSON) {
+        char *json_string = G_json_serialize_to_string_pretty(root_value);
+
+        fputs(json_string, stdout);
+        fputc('\n', stdout);
+
+        G_json_free_serialized_string(json_string);
+        G_json_value_free(root_value);
+    }
+
     return DB_OK;
 }
 
 void parse_command_line(int argc, char **argv)
 {
     struct Option *driver, *database, *table, *sql, *fs, *vs, *nv, *input,
-        *output;
+        *output, *format;
     struct Flag *c, *d, *v, *flag_test;
     struct GModule *module;
     const char *drv, *db;
@@ -232,6 +332,15 @@ void parse_command_line(int argc, char **argv)
 
     nv = G_define_standard_option(G_OPT_M_NULL_VALUE);
     nv->guisection = _("Format");
+
+    format = G_define_standard_option(G_OPT_F_FORMAT);
+    format->key = "format";
+    format->type = TYPE_STRING;
+    format->required = NO;
+    format->options = "plain,json";
+    format->answer = "plain";
+    format->description = _("Output format");
+    format->guisection = _("Format");
 
     output = G_define_standard_option(G_OPT_F_OUTPUT);
     output->required = NO;
@@ -280,6 +389,10 @@ void parse_command_line(int argc, char **argv)
     parms.nv = nv->answer;
     parms.input = input->answer;
     parms.output = output->answer;
+    if (strcmp(format->answer, "json") == 0)
+        parms.format = JSON;
+    else
+        parms.format = PLAIN;
 
     if (!c->answer)
         parms.c = TRUE;
