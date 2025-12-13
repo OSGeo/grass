@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 16:57+0000\n"
+"POT-Creation-Date: 2025-12-06 15:40+0000\n"
 "PO-Revision-Date: 2025-10-26 23:01+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/sv/>\n"
@@ -382,7 +382,7 @@ msgstr "Array med värden som ska väljas från kolumn <%s> är tom"
 
 #: ../lib/db/dbmi_client/copy_tab.c:109 ../lib/db/dbmi_client/copy_tab.c:129
 #: ../lib/db/dbmi_client/db.c:40 ../lib/vector/Vlib/ascii.c:416
-#: ../lib/vector/Vlib/write_ogr.c:192 ../lib/vector/Vlib/write_pg.c:3035
+#: ../lib/vector/Vlib/write_ogr.c:174 ../lib/vector/Vlib/write_pg.c:3035
 #, c-format
 msgid "Unable to start driver <%s>"
 msgstr "Det går inte att starta drivrutinen <%s>"
@@ -394,7 +394,7 @@ msgstr "Det går inte att starta drivrutinen <%s>"
 #: ../lib/vector/Vlib/close_nat.c:165 ../lib/vector/Vlib/map.c:339
 #: ../lib/vector/Vlib/net_build.c:158 ../lib/vector/Vlib/net_build.c:208
 #: ../lib/vector/Vlib/net_build.c:502 ../lib/vector/Vlib/net_build.c:799
-#: ../lib/vector/Vlib/net_build.c:975 ../lib/vector/Vlib/write_ogr.c:197
+#: ../lib/vector/Vlib/net_build.c:975 ../lib/vector/Vlib/write_ogr.c:179
 #: ../lib/vector/Vlib/write_pg.c:3040 ../lib/vector/neta/timetables.c:141
 #: ../lib/vector/neta/utils.c:123
 #, c-format
@@ -417,7 +417,7 @@ msgid "Table <%s> already exists in database <%s>"
 msgstr "Tabell <%s> finns redan i databas <%s>"
 
 #: ../lib/db/dbmi_client/copy_tab.c:246 ../lib/db/dbmi_client/copy_tab.c:320
-#: ../lib/db/dbmi_client/table.c:117 ../lib/vector/Vlib/write_ogr.c:209
+#: ../lib/db/dbmi_client/table.c:117 ../lib/vector/Vlib/write_ogr.c:191
 #, c-format
 msgid "Unable to open select cursor: '%s'"
 msgstr "Det går inte att öppna markeringsmarkören: '%s'"
@@ -438,7 +438,7 @@ msgstr "Kolumn <%s> hittades inte"
 msgid "Unable to create table <%s>"
 msgstr "Det går inte att skapa tabellen <%s>"
 
-#: ../lib/db/dbmi_client/copy_tab.c:338 ../lib/vector/Vlib/write_ogr.c:587
+#: ../lib/db/dbmi_client/copy_tab.c:338 ../lib/vector/Vlib/write_ogr.c:569
 #: ../lib/vector/Vlib/write_pg.c:2050
 #, c-format
 msgid "Unable to fetch data from table <%s>"
@@ -1197,7 +1197,7 @@ msgstr "Utmatat rasterkartnamn <%s> är inte ett giltigt kartnamn"
 #: ../lib/ogsf/gs3.c:333 ../lib/ogsf/gs3.c:440 ../lib/ogsf/gs3.c:528
 #: ../lib/ogsf/gs3.c:588 ../lib/ogsf/gs3.c:646 ../lib/ogsf/gs3.c:716
 #: ../lib/ogsf/gs3.c:786 ../lib/ogsf/gsd_legend.c:238 ../lib/raster/open.c:175
-#: ../lib/raster/open.c:867 ../lib/raster/open.c:904 ../lib/raster/open.c:957
+#: ../lib/raster/open.c:857 ../lib/raster/open.c:894 ../lib/raster/open.c:947
 #: ../lib/rst/interp_float/output2d.c:268
 #: ../lib/rst/interp_float/output2d.c:355
 #: ../lib/rst/interp_float/output2d.c:429
@@ -1341,7 +1341,7 @@ msgstr "G__open(write): Det gick inte att öppna '%s': %s"
 #: ../lib/gis/open_misc.c:250 ../lib/gis/seek.c:55 ../lib/gis/seek.c:65
 #: ../lib/raster/close.c:401 ../lib/raster/close.c:447
 #: ../lib/raster/close.c:546 ../lib/raster/format.c:195
-#: ../lib/raster/put_row.c:145 ../lib/raster/put_row.c:524
+#: ../lib/raster/put_row.c:145 ../lib/raster/put_row.c:522
 #: ../lib/raster3d/open.c:303 ../lib/raster3d/tilewrite.c:182
 #: ../lib/segment/get_row.c:65 ../lib/segment/get_row.c:86
 #: ../lib/segment/pagein.c:95 ../lib/segment/pageout.c:41
@@ -4222,7 +4222,7 @@ msgstr "Ta bort %s <%s>"
 #: ../lib/ogsf/gp3.c:61 ../lib/ogsf/gp3.c:202 ../lib/ogsf/gv3.c:60
 #: ../lib/ogsf/gv3.c:339 ../lib/vector/Vlib/legal_vname.c:145
 #: ../lib/vector/Vlib/legal_vname.c:148 ../lib/vector/Vlib/map.c:263
-#: ../lib/vector/Vlib/open.c:246
+#: ../lib/vector/Vlib/open.c:232
 #, c-format
 msgid "Vector map <%s> not found"
 msgstr "Vektorkarta <%s> hittades inte"
@@ -4415,7 +4415,7 @@ msgstr "Okänd ikonmarkör, använder \"sfär\""
 #: ../lib/ogsf/gp3.c:67 ../lib/ogsf/gp3.c:207 ../lib/ogsf/gv3.c:66
 #: ../lib/ogsf/gv3.c:344 ../lib/vector/Vlib/map.c:191
 #: ../lib/vector/Vlib/map.c:201 ../lib/vector/Vlib/map.c:274
-#: ../lib/vector/Vlib/open.c:314 ../lib/vector/Vlib/open.c:457
+#: ../lib/vector/Vlib/open.c:300 ../lib/vector/Vlib/open.c:441
 #, c-format
 msgid "Unable to open vector map <%s>"
 msgstr "Det går inte att öppna vektorkartan <%s>"
@@ -4715,50 +4715,34 @@ msgstr "Det går inte att skriva PNG-fil"
 msgid "Unable to open output PNG file <%s>"
 msgstr "Det går inte att öppna PNG-filen <%s> för utdata"
 
-#: ../lib/proj/convert.c:96 ../lib/vector/Vlib/build_ogr.c:101
-#: ../lib/vector/Vlib/build_ogr.c:173 ../lib/vector/Vlib/build_sfa.c:720
-#: ../lib/vector/Vlib/close.c:279 ../lib/vector/Vlib/close_ogr.c:77
-#: ../lib/vector/Vlib/close_ogr.c:111 ../lib/vector/Vlib/field.c:751
-#: ../lib/vector/Vlib/header_finfo.c:41 ../lib/vector/Vlib/header_finfo.c:81
-#: ../lib/vector/Vlib/header_finfo.c:114 ../lib/vector/Vlib/header_finfo.c:153
-#: ../lib/vector/Vlib/header_finfo.c:255 ../lib/vector/Vlib/open_ogr.c:129
-#: ../lib/vector/Vlib/open_ogr.c:164 ../lib/vector/Vlib/open_ogr.c:242
-#: ../lib/vector/Vlib/read_ogr.c:55 ../lib/vector/Vlib/read_ogr.c:157
-#: ../lib/vector/Vlib/read_ogr.c:239 ../lib/vector/Vlib/rewind_ogr.c:47
-#: ../lib/vector/Vlib/rewind_ogr.c:71 ../lib/vector/Vlib/simple_features.c:317
-#: ../lib/vector/Vlib/write_ogr.c:70 ../lib/vector/Vlib/write_ogr.c:105
-#: ../lib/vector/Vlib/write_ogr.c:146 ../lib/vector/Vlib/write_sfa.c:300
-msgid "GRASS is not compiled with OGR support"
-msgstr "GRASS är inte kompilerad med OGR-stöd"
-
-#: ../lib/proj/convert.c:192
+#: ../lib/proj/convert.c:184
 msgid "Unable parse GRASS PROJ_INFO file"
 msgstr "Det går inte att analysera filen GRASS PROJ_INFO"
 
-#: ../lib/proj/convert.c:199
+#: ../lib/proj/convert.c:191
 msgid "Unable get PROJ.4-style parameter string"
 msgstr "Det går inte att få en parametersträng i PROJ.4-stil"
 
-#: ../lib/proj/convert.c:217
+#: ../lib/proj/convert.c:209
 #, c-format
 msgid "OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
 msgstr "OGR kan inte tolka en parametersträng i PROJ.4-stil: %s (OGR:s felkod var %d)"
 
-#: ../lib/proj/convert.c:231
+#: ../lib/proj/convert.c:223
 #, c-format
 msgid "OGR can't get WKT-style parameter string (OGR Error code was %d)"
 msgstr "OGR kan inte hämta parametersträng i WKT-stil (OGR-felkoden var %d)"
 
-#: ../lib/proj/convert.c:474
+#: ../lib/proj/convert.c:466
 #, c-format
 msgid "Updating spatial reference with embedded proj4 definition failed. Proj4 definition: <%s>"
 msgstr "Uppdatering av spatial referens med inbäddad proj4-definition misslyckades. Proj4 definition: <%s>"
 
-#: ../lib/proj/convert.c:485
+#: ../lib/proj/convert.c:477
 msgid "Updating spatial reference with embedded proj4 definition"
 msgstr "Uppdatering av spatial referens med inbäddad proj4-definition"
 
-#: ../lib/proj/convert.c:623
+#: ../lib/proj/convert.c:615
 msgid "No projection name! Projection parameters likely to be meaningless."
 msgstr "Inget namn på projektionen! Projektionsparametrarna är sannolikt meningslösa."
 
@@ -5167,63 +5151,63 @@ msgstr "Första läsningen av komprimerad fil misslyckades [%s i %s]"
 msgid "Fail of initial read of compressed null file [%s in %s]"
 msgstr "Första läsningen av komprimerad null-fil misslyckades [%s i %s]"
 
-#: ../lib/raster/gdal.c:204
+#: ../lib/raster/gdal.c:187
 msgid "Unable to open GDAL file"
 msgstr "Filen GDAL kan inte öppnas"
 
-#: ../lib/raster/gdal.c:306 ../lib/raster/open.c:614
+#: ../lib/raster/gdal.c:288 ../lib/raster/open.c:606
 #, c-format
 msgid "Invalid map type <%d>"
 msgstr "Ogiltig karttyp <%d>"
 
-#: ../lib/raster/gdal.c:312
+#: ../lib/raster/gdal.c:294
 #, c-format
 msgid "Unable to get <%s> driver"
 msgstr "Det går inte att hämta <%s> drivrutin"
 
-#: ../lib/raster/gdal.c:320
+#: ../lib/raster/gdal.c:302
 #, c-format
 msgid "Unable to create <%s> dataset using <%s> driver"
 msgstr "Det går inte att skapa <%s> dataset med hjälp av <%s> drivrutin"
 
-#: ../lib/raster/gdal.c:328
+#: ../lib/raster/gdal.c:310
 #, c-format
 msgid "Driver <%s> does not support direct writing. Using MEM driver for intermediate dataset."
 msgstr "Drivrutin <%s> stöder inte direkt skrivning. Använder MEM-drivrutin för mellanliggande dataset."
 
-#: ../lib/raster/gdal.c:334
+#: ../lib/raster/gdal.c:316
 msgid "Unable to get in-memory raster driver"
 msgstr "Det går inte att hämta rasterdrivrutin i minnet"
 
-#: ../lib/raster/gdal.c:341
+#: ../lib/raster/gdal.c:323
 #, c-format
 msgid "Unable to create <%s> dataset using memory driver"
 msgstr "Det går inte att skapa <%s> dataset med minnesdrivrutin"
 
-#: ../lib/raster/gdal.c:344
+#: ../lib/raster/gdal.c:326
 #, c-format
 msgid "Driver <%s> does not support creating rasters"
 msgstr "Drivrutin <%s> stöder inte skapande av raster"
 
-#: ../lib/raster/gdal.c:360
+#: ../lib/raster/gdal.c:342
 msgid "Unable to set geo transform"
 msgstr "Det går inte att ställa in geotransformation"
 
-#: ../lib/raster/gdal.c:364
+#: ../lib/raster/gdal.c:346
 msgid "Unable to set projection"
 msgstr "Det går inte att ställa in projektion"
 
-#: ../lib/raster/gdal.c:368
+#: ../lib/raster/gdal.c:350
 #, c-format
 msgid "Unable to create cell_misc/%s/gdal file"
 msgstr "Det går inte att skapa filen cell_misc/%s/gdal"
 
-#: ../lib/raster/gdal.c:384
+#: ../lib/raster/gdal.c:366
 #, c-format
 msgid "Error writing cell_misc/%s/gdal file"
 msgstr "Fel vid skrivning av filen cell_misc/%s/gdal"
 
-#: ../lib/raster/gdal.c:431
+#: ../lib/raster/gdal.c:407
 #, c-format
 msgid "Unable to create output file <%s> using driver <%s>"
 msgstr "Det gick inte att skapa utdatafilen <%s> med drivrutinen <%s>"
@@ -5246,7 +5230,7 @@ msgstr "Det gick inte att läsa huvudfilen för rasterkarta <%s@%s>. Det är en 
 msgid "Unable to open header file for raster map <%s@%s>. It seems that some previous step failed and created an incomplete raster map."
 msgstr "Det går inte att öppna headerfilen för rasterkartan <%s@%s>. Det verkar som om något tidigare steg misslyckades och skapade en ofullständig rasterkarta."
 
-#: ../lib/raster/get_row.c:36 ../lib/raster/get_row.c:935
+#: ../lib/raster/get_row.c:36 ../lib/raster/get_row.c:922
 #, c-format
 msgid "Reading raster map <%s@%s> request for row %d is outside region"
 msgstr "Läser rasterkarta <%s@%s> begäran för rad %d är utanför regionen"
@@ -5281,32 +5265,32 @@ msgstr "Fel vid avkomprimering av rasterdata för rad %d i <%s>"
 msgid "Error reading raster data for row %d of <%s>"
 msgstr "Fel vid läsning av rasterdata för rad %d av <%s>"
 
-#: ../lib/raster/get_row.c:236
+#: ../lib/raster/get_row.c:235
 #, c-format
 msgid "Error reading raster data via GDAL for row %d of <%s>"
 msgstr "Fel vid läsning av rasterdata via GDAL för rad %d av <%s>"
 
-#: ../lib/raster/get_row.c:859
+#: ../lib/raster/get_row.c:846
 #, c-format
 msgid "Error seeking compressed null data for row %d of <%s>"
 msgstr "Fel vid sökning efter komprimerad null-data för rad %d i <%s>"
 
-#: ../lib/raster/get_row.c:866 ../lib/raster/get_row.c:878
+#: ../lib/raster/get_row.c:853 ../lib/raster/get_row.c:865
 #, c-format
 msgid "Error reading compressed null data for row %d of <%s>"
 msgstr "Fel vid läsning av komprimerad nolldata för rad %d i <%s>"
 
-#: ../lib/raster/get_row.c:884
+#: ../lib/raster/get_row.c:871
 #, c-format
 msgid "Error uncompressing null data for row %d of <%s>"
 msgstr "Fel vid avkomprimering av nolldata för rad %d i <%s>"
 
-#: ../lib/raster/get_row.c:918
+#: ../lib/raster/get_row.c:905
 #, c-format
 msgid "Error seeking null row %d for <%s>"
 msgstr "Fel vid sökning av null-rad %d för <%s>"
 
-#: ../lib/raster/get_row.c:921
+#: ../lib/raster/get_row.c:908
 #, c-format
 msgid "Error reading null row %d for <%s>"
 msgstr "Fel vid läsning av null-rad %d för <%s>"
@@ -5447,75 +5431,70 @@ msgstr "Rasterkarta <%s> ligger i en annan zon (%d) än aktuell region (%d)"
 msgid "Raster map <%s>: bytes per cell (%d) too large"
 msgstr "Rasterkarta <%s>: bytes per cell (%d) för stor"
 
-#: ../lib/raster/open.c:280
-#, c-format
-msgid "Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
-msgstr "Rasterkarta <%s@%s> är en GDAL-länk men GRASS är kompilerat utan GDAL-stöd"
-
-#: ../lib/raster/open.c:292
+#: ../lib/raster/open.c:286
 #, c-format
 msgid "Unable to open %s file for raster map <%s@%s>"
 msgstr "Det gick inte att öppna %s-filen för rasterkartan <%s@%s>"
 
-#: ../lib/raster/open.c:331
+#: ../lib/raster/open.c:325
 #, c-format
 msgid "Error reading format for <%s@%s>"
 msgstr "Fel vid läsning av format för <%s@%s>"
 
-#: ../lib/raster/open.c:542
+#: ../lib/raster/open.c:535
 msgid "Unable to create GDAL link"
 msgstr "Det går inte att skapa en GDAL-länk"
 
-#: ../lib/raster/open.c:619 ../lib/raster/open.c:779
+#: ../lib/raster/open.c:611 ../lib/raster/open.c:769
 #, c-format
 msgid "Raster map <%s> is not in the current mapset (%s)"
 msgstr "Rasterkarta <%s> finns inte i den aktuella kartuppsättningen (%s)"
 
-#: ../lib/raster/open.c:626
+#: ../lib/raster/open.c:618
 #, c-format
 msgid "<%s> is an illegal file name"
 msgstr "<%s> är ett olagligt filnamn"
 
-#: ../lib/raster/open.c:642 ../lib/raster/open.c:725 ../lib/raster/open.c:803
+#: ../lib/raster/open.c:632 ../lib/raster/open.c:715 ../lib/raster/open.c:793
 #, c-format
 msgid "No temp files available: %s"
 msgstr "Inga temporära filer tillgängliga: %s"
 
-#: ../lib/raster/open.c:775
+#: ../lib/raster/open.c:765
 #, c-format
 msgid "Raster map <%s> does not exist in the current mapset (%s)"
 msgstr "Rasterkarta <%s> finns inte i den aktuella kartuppsättningen (%s)"
 
-#: ../lib/raster/open.c:842
+#: ../lib/raster/open.c:832
 msgid "Rast_set_fp_type(): can only be called with FCELL_TYPE or DCELL_TYPE"
 msgstr "Rast_set_fp_type(): kan endast anropas med FCELL_TYPE eller DCELL_TYPE"
 
-#: ../lib/raster/open.c:901
+#: ../lib/raster/open.c:891
 #, c-format
 msgid "Raster map <%s> not found in mapset <%s>"
 msgstr "Rasterkarta <%s> finns inte i kartuppsättning <%s>"
 
-#: ../lib/raster/open.c:963
+#: ../lib/raster/open.c:953
 #, c-format
 msgid "Unable to find '%s'"
 msgstr "Det går inte att hitta '%s'"
 
-#: ../lib/raster/open.c:974
+#: ../lib/raster/open.c:964
 #, c-format
 msgid "Invalid type: field '%s' in file '%s'"
 msgstr "Ogiltig typ: fält '%s' i fil '%s'"
 
-#: ../lib/raster/open.c:980
+#: ../lib/raster/open.c:970
 #, c-format
 msgid "Missing type: field in file '%s'"
 msgstr "Saknar typ: fält i filen '%s'"
 
-#: ../lib/raster/open.c:985
+#: ../lib/raster/open.c:975
 #, c-format
 msgid "Raster map <%s> is not xdr: byte_order: %s"
 msgstr "Rasterkarta <%s> är inte xdr: byte_order: %s"
 
-#: ../lib/raster/open.c:1054
+#: ../lib/raster/open.c:1044
 msgid "Rast_set_quant_rules() can be called only for raster maps opened for reading"
 msgstr "Rast_set_quant_rules() kan endast anropas för rasterkartor som öppnats för läsning"
 
@@ -5544,41 +5523,41 @@ msgstr "Fel vid skrivning av komprimerad data för rad %d i <%s>: %s"
 msgid "Error writing uncompressed data for row %d of <%s>: %s"
 msgstr "Fel vid skrivning av okomprimerad data för rad %d i <%s>: %s"
 
-#: ../lib/raster/put_row.c:478
+#: ../lib/raster/put_row.c:477
 #, c-format
 msgid "Error writing data via GDAL for row %d of <%s>"
 msgstr "Fel vid skrivning av data via GDAL för rad %d i <%s>"
 
-#: ../lib/raster/put_row.c:502
+#: ../lib/raster/put_row.c:500
 msgid "GDAL output doesn't support writing null rows separately"
 msgstr "GDAL-utdata stöder inte att skriva nollrader separat"
 
-#: ../lib/raster/put_row.c:505
+#: ../lib/raster/put_row.c:503
 #, c-format
 msgid "No null file for <%s>"
 msgstr "Ingen null-fil för <%s>"
 
-#: ../lib/raster/put_row.c:539 ../lib/raster/put_row.c:546
+#: ../lib/raster/put_row.c:537 ../lib/raster/put_row.c:544
 #, c-format
 msgid "Error writing compressed null data for row %d of <%s>: %s"
 msgstr "Fel vid skrivning av komprimerad null-data för rad %d i <%s>: %s"
 
-#: ../lib/raster/put_row.c:581
+#: ../lib/raster/put_row.c:579
 #, c-format
 msgid "Error writing null row %d of <%s>"
 msgstr "Fel vid skrivning av null-rad %d i <%s>"
 
-#: ../lib/raster/put_row.c:585
+#: ../lib/raster/put_row.c:583
 #, c-format
 msgid "Error writing null row %d of <%s>: %s"
 msgstr "Fel vid skrivning av null-rad %d i <%s>: %s"
 
-#: ../lib/raster/put_row.c:710
+#: ../lib/raster/put_row.c:708
 #, c-format
 msgid "put_raster_row: raster map <%s> not open for write - request ignored"
 msgstr "put_raster_row: rasterkarta <%s> inte öppen för skrivning - begäran ignorerad"
 
-#: ../lib/raster/put_row.c:719
+#: ../lib/raster/put_row.c:717
 msgid "put_raster_row: unopened file descriptor - request ignored"
 msgstr "put_raster_row: oöppnad filbeskrivare - begäran ignoreras"
 
@@ -6276,20 +6255,20 @@ msgid "Attempt to read points of nonexistent isle"
 msgstr "Försök att läsa punkter på icke-existerande öar"
 
 #: ../lib/vector/Vlib/area.c:94 ../lib/vector/Vlib/area.c:495
-#: ../lib/vector/Vlib/build_pg.c:126 ../lib/vector/Vlib/build_sfa.c:727
-#: ../lib/vector/Vlib/close.c:269 ../lib/vector/Vlib/close_pg.c:102
+#: ../lib/vector/Vlib/build_pg.c:126 ../lib/vector/Vlib/build_sfa.c:719
+#: ../lib/vector/Vlib/close.c:262 ../lib/vector/Vlib/close_pg.c:102
 #: ../lib/vector/Vlib/close_pg.c:150 ../lib/vector/Vlib/copy.c:451
-#: ../lib/vector/Vlib/header_finfo.c:47 ../lib/vector/Vlib/header_finfo.c:87
-#: ../lib/vector/Vlib/header_finfo.c:124 ../lib/vector/Vlib/header_finfo.c:171
-#: ../lib/vector/Vlib/open_pg.c:148 ../lib/vector/Vlib/open_pg.c:207
-#: ../lib/vector/Vlib/open_pg.c:309 ../lib/vector/Vlib/open_pg.c:360
-#: ../lib/vector/Vlib/read_pg.c:98 ../lib/vector/Vlib/read_pg.c:221
-#: ../lib/vector/Vlib/read_pg.c:307 ../lib/vector/Vlib/read_pg.c:427
-#: ../lib/vector/Vlib/rewind_pg.c:56 ../lib/vector/Vlib/rewind_pg.c:81
-#: ../lib/vector/Vlib/simple_features.c:344 ../lib/vector/Vlib/write_pg.c:134
-#: ../lib/vector/Vlib/write_pg.c:168 ../lib/vector/Vlib/write_pg.c:206
-#: ../lib/vector/Vlib/write_pg.c:308 ../lib/vector/Vlib/write_pg.c:369
-#: ../lib/vector/Vlib/write_pg.c:496 ../lib/vector/Vlib/write_sfa.c:308
+#: ../lib/vector/Vlib/header_finfo.c:44 ../lib/vector/Vlib/header_finfo.c:81
+#: ../lib/vector/Vlib/header_finfo.c:153 ../lib/vector/Vlib/open_pg.c:148
+#: ../lib/vector/Vlib/open_pg.c:207 ../lib/vector/Vlib/open_pg.c:309
+#: ../lib/vector/Vlib/open_pg.c:360 ../lib/vector/Vlib/read_pg.c:98
+#: ../lib/vector/Vlib/read_pg.c:221 ../lib/vector/Vlib/read_pg.c:307
+#: ../lib/vector/Vlib/read_pg.c:427 ../lib/vector/Vlib/rewind_pg.c:56
+#: ../lib/vector/Vlib/rewind_pg.c:81 ../lib/vector/Vlib/simple_features.c:337
+#: ../lib/vector/Vlib/write_pg.c:134 ../lib/vector/Vlib/write_pg.c:168
+#: ../lib/vector/Vlib/write_pg.c:206 ../lib/vector/Vlib/write_pg.c:308
+#: ../lib/vector/Vlib/write_pg.c:369 ../lib/vector/Vlib/write_pg.c:496
+#: ../lib/vector/Vlib/write_sfa.c:286
 msgid "GRASS is not compiled with PostgreSQL support"
 msgstr "GRASS är inte kompilerat med PostgreSQL-stöd"
 
@@ -6462,13 +6441,13 @@ msgstr "Det går inte att få fram gränsen för ö-id %d (områdes-id %d)"
 msgid "%d features without category skipped. To export also features without category use '%s=-1'."
 msgstr "%d funktioner utan kategori överhoppade. För att exportera även funktioner utan kategori, använd '%s=-1'."
 
-#: ../lib/vector/Vlib/box.c:244 ../lib/vector/Vlib/read.c:184
+#: ../lib/vector/Vlib/box.c:244 ../lib/vector/Vlib/read.c:170
 #: ../lib/vector/Vlib/read_nat.c:145 ../lib/vector/Vlib/read_pg.c:341
-#: ../lib/vector/Vlib/read_sfa.c:50 ../lib/vector/Vlib/write_nat.c:188
+#: ../lib/vector/Vlib/read_sfa.c:49 ../lib/vector/Vlib/write_nat.c:188
 #: ../lib/vector/Vlib/write_nat.c:304 ../lib/vector/Vlib/write_nat.c:672
 #: ../lib/vector/Vlib/write_pg.c:247 ../lib/vector/Vlib/write_pg.c:396
-#: ../lib/vector/Vlib/write_pg.c:412 ../lib/vector/Vlib/write_sfa.c:159
-#: ../lib/vector/Vlib/write_sfa.c:209
+#: ../lib/vector/Vlib/write_pg.c:412 ../lib/vector/Vlib/write_sfa.c:152
+#: ../lib/vector/Vlib/write_sfa.c:196
 #, c-format
 msgid "Attempt to access feature with invalid id (%d)"
 msgstr "Försök att komma åt funktion med ogiltigt id (%d)"
@@ -6594,202 +6573,202 @@ msgstr "Vect_get_point_in_poly() misslyckades"
 msgid "Requested format is not compiled in this version"
 msgstr "Önskat format är inte sammanställt i denna version"
 
-#: ../lib/vector/Vlib/build.c:118
+#: ../lib/vector/Vlib/build.c:111
 msgid "Area of size = 0.0 (less than 4 vertices) ignored"
 msgstr "Område med storlek = 0,0 (mindre än 4 toppar) ignoreras"
 
-#: ../lib/vector/Vlib/build.c:134
+#: ../lib/vector/Vlib/build.c:127
 msgid "Unable to add area (map closed, topo saved)"
 msgstr "Det går inte att lägga till område (karta stängd, topo sparad)"
 
-#: ../lib/vector/Vlib/build.c:142
+#: ../lib/vector/Vlib/build.c:135
 msgid "Unable to add isle (map closed, topo saved)"
 msgstr "Går inte att lägga till ö (karta stängd, topo sparad)"
 
-#: ../lib/vector/Vlib/build.c:152
+#: ../lib/vector/Vlib/build.c:145
 msgid "Area of size = 0.0 ignored"
 msgstr "Storleksområde = 0,0 ignorerad"
 
-#: ../lib/vector/Vlib/build.c:204
+#: ../lib/vector/Vlib/build.c:197
 msgid "Request to find area outside nonexistent isle"
 msgstr "Begäran om att hitta område utanför obefintlig ö"
 
-#: ../lib/vector/Vlib/build.c:359
+#: ../lib/vector/Vlib/build.c:352
 msgid "Larger bbox but smaller area!!!"
 msgstr "Större bbox men mindre yta!!!"
 
-#: ../lib/vector/Vlib/build.c:617
+#: ../lib/vector/Vlib/build.c:610
 msgid "Checking for topological errors..."
 msgstr "Kontrollerar för topologiska fel..."
 
-#: ../lib/vector/Vlib/build.c:652
+#: ../lib/vector/Vlib/build.c:645
 #, c-format
 msgid "Number of lines of length zero: %d"
 msgstr "Antal rader med längden noll: %d"
 
-#: ../lib/vector/Vlib/build.c:654
+#: ../lib/vector/Vlib/build.c:647
 #, c-format
 msgid "Number of boundaries of length zero: %d"
 msgstr "Antal gränser med längden noll: %d"
 
-#: ../lib/vector/Vlib/build.c:667
+#: ../lib/vector/Vlib/build.c:660
 #, c-format
 msgid "Number of boundary intersections: %d"
 msgstr "Antal gränsskärningar: %d"
 
-#: ../lib/vector/Vlib/build.c:692
+#: ../lib/vector/Vlib/build.c:685
 msgid "Skipping further checks because of incorrect boundaries"
 msgstr "Utelämnande av ytterligare kontroller på grund av felaktiga gränser"
 
-#: ../lib/vector/Vlib/build.c:742
+#: ../lib/vector/Vlib/build.c:735
 #, c-format
 msgid "Number of redundant holes: %d"
 msgstr "Antal redundanta hål: %d"
 
-#: ../lib/vector/Vlib/build.c:884 ../lib/vector/Vlib/open.c:383
-#: ../lib/vector/Vlib/open.c:904
+#: ../lib/vector/Vlib/build.c:877 ../lib/vector/Vlib/open.c:369
+#: ../lib/vector/Vlib/open.c:888
 #, c-format
 msgid "Unable to open spatial index file for vector map <%s>"
 msgstr "Det gick inte att öppna en spatial indexfil för vektorkarta <%s>"
 
-#: ../lib/vector/Vlib/build.c:892
+#: ../lib/vector/Vlib/build.c:885
 #, c-format
 msgid "Building topology for vector map <%s>..."
 msgstr "Bygga topologi för vektorkarta <%s>..."
 
-#: ../lib/vector/Vlib/build.c:910
+#: ../lib/vector/Vlib/build.c:903
 msgid "Topology was built"
 msgstr "Topologin byggdes upp"
 
-#: ../lib/vector/Vlib/build.c:921
+#: ../lib/vector/Vlib/build.c:914
 #, c-format
 msgid "Number of nodes: %d"
 msgstr "Antal noder: %d"
 
-#: ../lib/vector/Vlib/build.c:922
+#: ../lib/vector/Vlib/build.c:915
 #, c-format
 msgid "Number of primitives: %d"
 msgstr "Antal primitiver: %d"
 
-#: ../lib/vector/Vlib/build.c:923
+#: ../lib/vector/Vlib/build.c:916
 #, c-format
 msgid "Number of points: %d"
 msgstr "Antal punkter: %d"
 
-#: ../lib/vector/Vlib/build.c:924
+#: ../lib/vector/Vlib/build.c:917
 #, c-format
 msgid "Number of lines: %d"
 msgstr "Antal rader: %d"
 
-#: ../lib/vector/Vlib/build.c:925
+#: ../lib/vector/Vlib/build.c:918
 #, c-format
 msgid "Number of boundaries: %d"
 msgstr "Antal avgränsningar: %d"
 
-#: ../lib/vector/Vlib/build.c:926
+#: ../lib/vector/Vlib/build.c:919
 #, c-format
 msgid "Number of centroids: %d"
 msgstr "Antal centroider: %d"
 
-#: ../lib/vector/Vlib/build.c:929
+#: ../lib/vector/Vlib/build.c:922
 #, c-format
 msgid "Number of faces: %d"
 msgstr "Antal ytor: %d"
 
-#: ../lib/vector/Vlib/build.c:932
+#: ../lib/vector/Vlib/build.c:925
 #, c-format
 msgid "Number of kernels: %d"
 msgstr "Antal kärnor: %d"
 
-#: ../lib/vector/Vlib/build.c:979
+#: ../lib/vector/Vlib/build.c:972
 #, c-format
 msgid "Number of areas: %d"
 msgstr "Antal områden: %d"
 
-#: ../lib/vector/Vlib/build.c:980
+#: ../lib/vector/Vlib/build.c:973
 #, c-format
 msgid "Number of isles: %d"
 msgstr "Antal öar: %d"
 
-#: ../lib/vector/Vlib/build.c:985
+#: ../lib/vector/Vlib/build.c:978
 #, c-format
 msgid "Number of areas without centroid: %d"
 msgstr "Antal områden utan centroid: %d"
 
-#: ../lib/vector/Vlib/build.c:989
+#: ../lib/vector/Vlib/build.c:982
 #, c-format
 msgid "Number of centroids exceeds number of areas: %d > %d"
 msgstr "Antalet centroider överstiger antalet områden: %d > %d"
 
-#: ../lib/vector/Vlib/build.c:993
+#: ../lib/vector/Vlib/build.c:986
 #, c-format
 msgid "Number of incorrect boundaries: %d"
 msgstr "Antal felaktiga gränser: %d"
 
-#: ../lib/vector/Vlib/build.c:996
+#: ../lib/vector/Vlib/build.c:989
 #, c-format
 msgid "Number of centroids outside area: %d"
 msgstr "Antal centroider utanför området: %d"
 
-#: ../lib/vector/Vlib/build.c:999
+#: ../lib/vector/Vlib/build.c:992
 #, c-format
 msgid "Number of duplicate centroids: %d"
 msgstr "Antal duplicerade centroider: %d"
 
-#: ../lib/vector/Vlib/build.c:1002
+#: ../lib/vector/Vlib/build.c:995
 msgid "Number of areas: -"
 msgstr "Antal områden: -"
 
-#: ../lib/vector/Vlib/build.c:1003
+#: ../lib/vector/Vlib/build.c:996
 msgid "Number of isles: -"
 msgstr "Antal öar: -"
 
-#: ../lib/vector/Vlib/build.c:1031
+#: ../lib/vector/Vlib/build.c:1024
 #, c-format
 msgid "Unable to create topo file for vector map <%s>"
 msgstr "Det gick inte att skapa topofilen för vektorkartan <%s>"
 
-#: ../lib/vector/Vlib/build.c:1040
+#: ../lib/vector/Vlib/build.c:1033
 msgid "Error writing out topo file"
 msgstr "Fel vid utskrivning av topofilen"
 
-#: ../lib/vector/Vlib/build.c:1234
+#: ../lib/vector/Vlib/build.c:1227
 msgid "Unable to build spatial index from topology, vector map is not opened at topology level 2"
 msgstr "Det går inte att bygga ett spatialt index från topologin, vektorkartan öppnas inte på topologinivå 2"
 
-#: ../lib/vector/Vlib/build.c:1257
+#: ../lib/vector/Vlib/build.c:1250
 #, c-format
 msgid "%s is no longer supported"
 msgstr "%s stöds inte längre"
 
-#: ../lib/vector/Vlib/build.c:1280
+#: ../lib/vector/Vlib/build.c:1273
 msgid "Spatial index not available, can not be saved"
 msgstr "Spatialt index inte tillgängligt, kan inte sparas"
 
-#: ../lib/vector/Vlib/build.c:1293
+#: ../lib/vector/Vlib/build.c:1286
 #, c-format
 msgid "Unable to create spatial index file for vector map <%s>"
 msgstr "Det gick inte att skapa en spatial indexfil för vektorkarta <%s>"
 
-#: ../lib/vector/Vlib/build.c:1302
+#: ../lib/vector/Vlib/build.c:1295
 msgid "Error writing out spatial index file"
 msgstr "Fel vid utskrivning av spatial indexfil"
 
-#: ../lib/vector/Vlib/build_nat.c:76 ../lib/vector/Vlib/build_sfa.c:333
-#: ../lib/vector/Vlib/build_sfa.c:633
+#: ../lib/vector/Vlib/build_nat.c:76 ../lib/vector/Vlib/build_sfa.c:331
+#: ../lib/vector/Vlib/build_sfa.c:630
 msgid "Registering primitives..."
 msgstr "Registrering av primitiver..."
 
-#: ../lib/vector/Vlib/build_nat.c:119 ../lib/vector/Vlib/build_sfa.c:378
-#: ../lib/vector/Vlib/build_sfa.c:665
+#: ../lib/vector/Vlib/build_nat.c:119 ../lib/vector/Vlib/build_sfa.c:376
+#: ../lib/vector/Vlib/build_sfa.c:662
 #, c-format
 msgid "One primitive registered"
 msgid_plural "%d primitives registered"
 msgstr[0] "En primitiv registrerad"
 msgstr[1] "%d primitiver registrerade"
 
-#: ../lib/vector/Vlib/build_nat.c:122 ../lib/vector/Vlib/build_sfa.c:381
-#: ../lib/vector/Vlib/build_sfa.c:668
+#: ../lib/vector/Vlib/build_nat.c:122 ../lib/vector/Vlib/build_sfa.c:379
+#: ../lib/vector/Vlib/build_sfa.c:665
 #, c-format
 msgid "One vertex registered"
 msgid_plural "%d vertices registered"
@@ -6822,25 +6801,25 @@ msgstr "Fästa öar..."
 msgid "Attaching centroids..."
 msgstr "Ansluter centroids..."
 
-#: ../lib/vector/Vlib/build_ogr.c:72
+#: ../lib/vector/Vlib/build_ogr.c:69
 msgid "Empty OGR layer, nothing to build"
 msgstr "Tomt OGR-lager, inget att bygga"
 
-#: ../lib/vector/Vlib/build_ogr.c:87 ../lib/vector/Vlib/build_pg.c:101
+#: ../lib/vector/Vlib/build_ogr.c:84 ../lib/vector/Vlib/build_pg.c:101
 #, c-format
 msgid "Feature table <%s> has no primary key defined"
 msgstr "Feature-tabellen <%s> har ingen definierad primärnyckel"
 
-#: ../lib/vector/Vlib/build_ogr.c:89
+#: ../lib/vector/Vlib/build_ogr.c:86
 msgid "Random read is not supported by OGR for this layer. Unable to build topology."
 msgstr "Slumpmässig läsning stöds inte av OGR för detta lager. Det går inte att bygga en topologi."
 
-#: ../lib/vector/Vlib/build_ogr.c:95 ../lib/vector/Vlib/build_pg.c:109
+#: ../lib/vector/Vlib/build_ogr.c:92 ../lib/vector/Vlib/build_pg.c:109
 #, c-format
 msgid "Using external data format '%s' (feature type '%s')"
 msgstr "Använda externt dataformat '%s' (funktionstyp '%s')"
 
-#: ../lib/vector/Vlib/build_ogr.c:137
+#: ../lib/vector/Vlib/build_ogr.c:129
 #, c-format
 msgid "Unable to open fidx file for write <%s>"
 msgstr "Det går inte att öppna filen fidx för skrivning <%s>"
@@ -6887,7 +6866,7 @@ msgstr "Inkonsekvens i topologin upptäckt. Död linje hittad."
 msgid "Updating TopoGeometry data..."
 msgstr "Uppdatering av TopoGeometri-data..."
 
-#: ../lib/vector/Vlib/build_pg.c:433 ../lib/vector/Vlib/open.c:1392
+#: ../lib/vector/Vlib/build_pg.c:433 ../lib/vector/Vlib/open.c:1376
 #: ../lib/vector/Vlib/write_pg.c:630 ../lib/vector/Vlib/write_pg.c:898
 msgid "Unable to open PG file"
 msgstr "Det går inte att öppna filen PG"
@@ -6933,41 +6912,41 @@ msgstr "Skapa enkel topologi för funktioner från topogeometridata..."
 msgid "Unable to build simple features from topogeometry data. Unsupported type %d."
 msgstr "Det går inte att bygga enkla funktioner från topogeometridata. Typ som inte stöds %d."
 
-#: ../lib/vector/Vlib/build_sfa.c:273 ../lib/vector/Vlib/build_sfa.c:545
+#: ../lib/vector/Vlib/build_sfa.c:271 ../lib/vector/Vlib/build_sfa.c:542
 #, c-format
 msgid "Unable to calculate centroid for area %d"
 msgstr "Det går inte att beräkna centroid för området %d"
 
-#: ../lib/vector/Vlib/build_sfa.c:299
+#: ../lib/vector/Vlib/build_sfa.c:297
 #, c-format
 msgid "Feature type %d not supported"
 msgstr "Funktionstyp %d stöds inte"
 
-#: ../lib/vector/Vlib/build_sfa.c:348 ../lib/vector/Vlib/build_sfa.c:357
+#: ../lib/vector/Vlib/build_sfa.c:346 ../lib/vector/Vlib/build_sfa.c:355
 #: ../lib/vector/Vlib/read_pg.c:389
 #, c-format
 msgid "Feature %d without geometry skipped"
 msgstr "Funktion %d utan geometri överhoppad"
 
-#: ../lib/vector/Vlib/build_sfa.c:604 ../lib/vector/Vlib/read_ogr.c:341
-#: ../lib/vector/Vlib/read_ogr.c:576
+#: ../lib/vector/Vlib/build_sfa.c:601 ../lib/vector/Vlib/read_ogr.c:323
+#: ../lib/vector/Vlib/read_ogr.c:558
 #, c-format
 msgid "OGR feature type %d not supported"
 msgstr "OGR-funktionstyp %d stöds inte"
 
-#: ../lib/vector/Vlib/build_sfa.c:672
+#: ../lib/vector/Vlib/build_sfa.c:669
 #, c-format
 msgid "One feature without geometry skipped"
 msgid_plural "%d features without geometry skipped"
 msgstr[0] "En funktion utan geometri överhoppad"
 msgstr[1] "%d funktioner utan geometri hoppas över"
 
-#: ../lib/vector/Vlib/build_sfa.c:731
+#: ../lib/vector/Vlib/build_sfa.c:723
 #, c-format
 msgid "%s: Native format unsupported"
 msgstr "%s: Ursprungligt format stöds inte"
 
-#: ../lib/vector/Vlib/build_sfa.c:756
+#: ../lib/vector/Vlib/build_sfa.c:748
 msgid "Feature index is built only for non-native formats. Nothing to dump."
 msgstr "Funktionsindex byggs endast för icke-inhemska format. Inget att dumpa."
 
@@ -7041,7 +7020,7 @@ msgstr "Det gick inte att skapa en kategoriindexfil för vektorkarta <%s>"
 msgid "Error writing out category index file"
 msgstr "Fel vid utskrivning av kategoriindexfil"
 
-#: ../lib/vector/Vlib/cindex.c:547 ../lib/vector/Vlib/open.c:412
+#: ../lib/vector/Vlib/cindex.c:547 ../lib/vector/Vlib/open.c:398
 #, c-format
 msgid "Unable to open category index file for vector map <%s>"
 msgstr "Det går inte att öppna kategoriindexfilen för vector map <%s>"
@@ -7051,31 +7030,31 @@ msgstr "Det går inte att öppna kategoriindexfilen för vector map <%s>"
 msgid "Modifications: %d"
 msgstr "Modifieringar: %d"
 
-#: ../lib/vector/Vlib/close.c:88
+#: ../lib/vector/Vlib/close.c:81
 #, c-format
 msgid "Unable to create vector map <%s>"
 msgstr "Det gick inte att skapa en vektorkarta <%s>"
 
-#: ../lib/vector/Vlib/close.c:106
+#: ../lib/vector/Vlib/close.c:99
 msgid "Copying features failed"
 msgstr "Kopieringsfunktioner misslyckades"
 
-#: ../lib/vector/Vlib/close.c:138
+#: ../lib/vector/Vlib/close.c:131
 #, c-format
 msgid "Unable to open %s file"
 msgstr "Filen %s kan inte öppnas"
 
-#: ../lib/vector/Vlib/close.c:220
+#: ../lib/vector/Vlib/close.c:213
 #, c-format
 msgid "Unable to close vector <%s>"
 msgstr "Det gick inte att stänga vektorn <%s>"
 
-#: ../lib/vector/Vlib/close.c:250
+#: ../lib/vector/Vlib/close.c:243
 #, c-format
 msgid "Invalid request for writing frmt file - map format is %d"
 msgstr "Ogiltig begäran om att skriva frmt-fil - kartformatet är %d"
 
-#: ../lib/vector/Vlib/close.c:284
+#: ../lib/vector/Vlib/close.c:272
 #, c-format
 msgid "Link to vector map <%s> created"
 msgstr "Länk till vektorkarta <%s> skapad"
@@ -7101,7 +7080,7 @@ msgstr "Det går inte att kopiera tabell <%s>"
 msgid "Unable to drop table <%s>"
 msgstr "Det går inte att släppa tabellen <%s>"
 
-#: ../lib/vector/Vlib/close_ogr.c:104 ../lib/vector/Vlib/close_pg.c:143
+#: ../lib/vector/Vlib/close_ogr.c:96 ../lib/vector/Vlib/close_pg.c:143
 #, c-format
 msgid "Unable to save feature index file for vector map <%s>"
 msgstr "Det gick inte att spara indexfilen för vektorgrafik <%s>"
@@ -7226,45 +7205,45 @@ msgstr "%s dinglar: %d"
 msgid "Trying to add more edges to the planar_graph than the initial allocation size allows"
 msgstr "Försöker lägga till fler kanter i planar_graph än vad den initiala tilldelningsstorleken tillåter"
 
-#: ../lib/vector/Vlib/field.c:77
+#: ../lib/vector/Vlib/field.c:72
 #, c-format
 msgid "Name <%s> is not SQL compliant. Must start with a letter."
 msgstr "Namnet <%s> är inte SQL-kompatibelt. Måste börja med en bokstav."
 
-#: ../lib/vector/Vlib/field.c:127
+#: ../lib/vector/Vlib/field.c:122
 msgid "Layer number must be 1 or greater"
 msgstr "Lagernumret måste vara 1 eller större"
 
-#: ../lib/vector/Vlib/field.c:132
+#: ../lib/vector/Vlib/field.c:127
 msgid "Unable to add attribute link, vector map is not opened in WRITE mode"
 msgstr "Det går inte att lägga till attributlänk, vektorkartan öppnas inte i WRITE-läge"
 
-#: ../lib/vector/Vlib/field.c:139
+#: ../lib/vector/Vlib/field.c:134
 msgid "Unable to add attribute link"
 msgstr "Det går inte att lägga till attributlänk"
 
-#: ../lib/vector/Vlib/field.c:145
+#: ../lib/vector/Vlib/field.c:140
 msgid "Unable to write attribute links"
 msgstr "Det går inte att skriva attributlänkar"
 
-#: ../lib/vector/Vlib/field.c:190
+#: ../lib/vector/Vlib/field.c:185
 msgid "Unable to write database links"
 msgstr "Det går inte att skriva databaslänkar"
 
-#: ../lib/vector/Vlib/field.c:215
+#: ../lib/vector/Vlib/field.c:210
 msgid "Database connection not defined. Skipping."
 msgstr "Databasanslutningen är inte definierad. Hoppar över."
 
-#: ../lib/vector/Vlib/field.c:222
+#: ../lib/vector/Vlib/field.c:217
 msgid "More DB links defined for input vector map. Using only first DB link for output."
 msgstr "Fler DB-länkar definierade för inmatningsvektorkarta. Använder endast den första DB-länken för utdata."
 
-#: ../lib/vector/Vlib/field.c:298
+#: ../lib/vector/Vlib/field.c:293
 #, c-format
 msgid "Layer number %d or name <%s> already exists"
 msgstr "Lager nummer %d eller namn <%s> finns redan"
 
-#: ../lib/vector/Vlib/field.c:387
+#: ../lib/vector/Vlib/field.c:382
 #, c-format
 msgid ""
 "Default driver / database set to:\n"
@@ -7275,53 +7254,53 @@ msgstr ""
 "drivrutin: %s\n"
 "databas: %s"
 
-#: ../lib/vector/Vlib/field.c:394
+#: ../lib/vector/Vlib/field.c:389
 msgid "Default driver is not set"
 msgstr "Standarddrivrutin är inte inställd"
 
-#: ../lib/vector/Vlib/field.c:397
+#: ../lib/vector/Vlib/field.c:392
 msgid "Default database is not set"
 msgstr "Standarddatabasen är inte inställd"
 
-#: ../lib/vector/Vlib/field.c:482
+#: ../lib/vector/Vlib/field.c:477
 #, c-format
 msgid "Requested dblink %d, maximum link number %d"
 msgstr "Begärd dblink %d, maximalt länknummer %d"
 
-#: ../lib/vector/Vlib/field.c:689 ../lib/vector/Vlib/field.c:697
+#: ../lib/vector/Vlib/field.c:684 ../lib/vector/Vlib/field.c:692
 #, c-format
 msgid "Error in rule on row %d in <%s>"
 msgstr "Fel i regel på rad %d i <%s>"
 
-#: ../lib/vector/Vlib/field.c:765 ../lib/vector/Vlib/open_ogr.c:77
+#: ../lib/vector/Vlib/field.c:757 ../lib/vector/Vlib/open_ogr.c:74
 #, c-format
 msgid "Unable to open OGR data source '%s'"
 msgstr "Det går inte att öppna OGR-datakällan '%s'"
 
-#: ../lib/vector/Vlib/field.c:784
+#: ../lib/vector/Vlib/field.c:776
 #, c-format
 msgid "Unable to open OGR layer <%s>"
 msgstr "Det går inte att öppna OGR-lagret <%s>"
 
-#: ../lib/vector/Vlib/field.c:812
+#: ../lib/vector/Vlib/field.c:803
 #, c-format
 msgid "Feature table <%s> has no primary key defined. Unable to define DB links."
 msgstr "Feature-tabellen <%s> har ingen definierad primärnyckel. Det går inte att definiera DB-länkar."
 
-#: ../lib/vector/Vlib/field.c:831
+#: ../lib/vector/Vlib/field.c:822
 msgid "GRASS not compiled with PostgreSQL support"
 msgstr "GRASS inte kompilerad med PostgreSQL-stöd"
 
-#: ../lib/vector/Vlib/field.c:864
+#: ../lib/vector/Vlib/field.c:855
 msgid "Unknown vector map format"
 msgstr "Okänt vektorformat för kartan"
 
-#: ../lib/vector/Vlib/field.c:898
+#: ../lib/vector/Vlib/field.c:889
 #, c-format
 msgid "Unable to create database definition file for vector map <%s>"
 msgstr "Det gick inte att skapa en databasdefinitionsfil för vektorkarta <%s>"
 
-#: ../lib/vector/Vlib/field.c:996
+#: ../lib/vector/Vlib/field.c:987
 msgid "Bug: attempt to update map which is not in current mapset"
 msgstr "Bugg: försök att uppdatera karta som inte finns i aktuell kartuppsättning"
 
@@ -7515,13 +7494,13 @@ msgid "Unable to find vector map <%s> in <%s>"
 msgstr "Det går inte att hitta vektorkartan <%s> i <%s>"
 
 #: ../lib/vector/Vlib/map.c:156 ../lib/vector/Vlib/map.c:249
-#: ../lib/vector/Vlib/open.c:851
+#: ../lib/vector/Vlib/open.c:835
 #, c-format
 msgid "Vector map <%s> already exists and will be overwritten"
 msgstr "Vektorkarta <%s> finns redan och kommer att skrivas över"
 
-#: ../lib/vector/Vlib/map.c:160 ../lib/vector/Vlib/open.c:842
-#: ../lib/vector/Vlib/open.c:856
+#: ../lib/vector/Vlib/map.c:160 ../lib/vector/Vlib/open.c:826
+#: ../lib/vector/Vlib/open.c:840
 #, c-format
 msgid "Unable to delete vector map <%s>"
 msgstr "Det gick inte att ta bort vektormapp <%s>"
@@ -7571,8 +7550,8 @@ msgstr "Tabell <%s> länkad till vektorkarta <%s> finns inte"
 msgid "Unable to open directory '%s'"
 msgstr "Det går inte att öppna katalogen '%s'"
 
-#: ../lib/vector/Vlib/map.c:493 ../lib/vector/Vlib/open.c:1500
-#: ../lib/vector/Vlib/open.c:1506
+#: ../lib/vector/Vlib/map.c:493 ../lib/vector/Vlib/open.c:1484
+#: ../lib/vector/Vlib/open.c:1490
 #, c-format
 msgid "Filepath '%s/%s' exceeds max length"
 msgstr "Filvägen '%s/%s' överskrider maxlängd"
@@ -7771,114 +7750,114 @@ msgstr "Databasposten för rad %d (kat = %d, bakåtriktad) hittades inte (riktni
 msgid "Cannot add network arc"
 msgstr "Det går inte att lägga till nätverksbåge"
 
-#: ../lib/vector/Vlib/open.c:142
+#: ../lib/vector/Vlib/open.c:128
 #, c-format
 msgid "Programmer requested unknown access level %d"
 msgstr "Programmeraren begärde okänd åtkomstnivå %d"
 
-#: ../lib/vector/Vlib/open.c:243
+#: ../lib/vector/Vlib/open.c:229
 #, c-format
 msgid "Vector map <%s> not found in current mapset"
 msgstr "Vektorkarta <%s> finns inte i aktuell kartuppsättning"
 
-#: ../lib/vector/Vlib/open.c:264
+#: ../lib/vector/Vlib/open.c:250
 msgid "Temporary vector maps can be accessed only in the current mapset"
 msgstr "Temporära vektorkartor kan endast nås i den aktuella kartuppsättningen"
 
-#: ../lib/vector/Vlib/open.c:289
+#: ../lib/vector/Vlib/open.c:275
 msgid "Vector map which is not in the current mapset cannot be opened for update"
 msgstr "Vektorkarta som inte finns i den aktuella kartuppsättningen kan inte öppnas för uppdatering"
 
-#: ../lib/vector/Vlib/open.c:324
+#: ../lib/vector/Vlib/open.c:310
 #, c-format
 msgid "Unable to read header file of vector map <%s>"
 msgstr "Det gick inte att läsa header-filen för vector map <%s>"
 
-#: ../lib/vector/Vlib/open.c:366
+#: ../lib/vector/Vlib/open.c:352
 #, c-format
 msgid "Unable to open topology file for vector map <%s>"
 msgstr "Det gick inte att öppna topologifilen för vektorkartan <%s>"
 
-#: ../lib/vector/Vlib/open.c:439
+#: ../lib/vector/Vlib/open.c:423
 #, c-format
 msgid "Unable to open vector map <%s> on level %d. Try to rebuild vector topology with v.build."
 msgstr "Det gick inte att öppna vektorkarta <%s> på nivå %d. Försök att återuppbygga vektortopologin med v.build."
 
-#: ../lib/vector/Vlib/open.c:466
+#: ../lib/vector/Vlib/open.c:450
 #, c-format
 msgid "Building topology for OGR layer <%s> from datasource '%s'..."
 msgstr "Skapar topologi för OGR-lagret <%s> från datakällan '%s'..."
 
-#: ../lib/vector/Vlib/open.c:475
+#: ../lib/vector/Vlib/open.c:459
 #, c-format
 msgid "Unable to open vector map <%s> on level %d"
 msgstr "Det går inte att öppna vektorkarta <%s> på nivå %d"
 
-#: ../lib/vector/Vlib/open.c:530
+#: ../lib/vector/Vlib/open.c:514
 #, c-format
 msgid "Unable to open history file for vector map <%s>"
 msgstr "Det gick inte att öppna historikfilen för vector map <%s>"
 
-#: ../lib/vector/Vlib/open.c:804
+#: ../lib/vector/Vlib/open.c:788
 #, c-format
 msgid "Unable to create vector map: <%s> is not in the current mapset (%s)"
 msgstr "Det gick inte att skapa en vektorkarta: <%s> finns inte i den aktuella kartuppsättningen (%s)"
 
-#: ../lib/vector/Vlib/open.c:815
+#: ../lib/vector/Vlib/open.c:799
 #, c-format
 msgid "Unable to create vector map: <%s> is not SQL compliant"
 msgstr "Det gick inte att skapa en vektorkarta: <%s> är inte SQL-kompatibelt"
 
-#: ../lib/vector/Vlib/open.c:876
+#: ../lib/vector/Vlib/open.c:860
 #, c-format
 msgid "Unable to open history file of vector map <%s>"
 msgstr "Det gick inte att öppna historikfilen för vektorkartan <%s>"
 
-#: ../lib/vector/Vlib/open.c:920
+#: ../lib/vector/Vlib/open.c:904
 #, c-format
 msgid "Using OGR/%s format"
 msgstr "Använda OGR/%s-format"
 
-#: ../lib/vector/Vlib/open.c:924
+#: ../lib/vector/Vlib/open.c:908
 msgid "Using PostGIS Topology format"
 msgstr "Använda PostGIS topologiformat"
 
-#: ../lib/vector/Vlib/open.c:926
+#: ../lib/vector/Vlib/open.c:910
 msgid "Using PostGIS format"
 msgstr "Använda PostGIS-format"
 
-#: ../lib/vector/Vlib/open.c:929
+#: ../lib/vector/Vlib/open.c:913
 msgid "Using native format"
 msgstr "Använda inbyggt format"
 
-#: ../lib/vector/Vlib/open.c:1019
+#: ../lib/vector/Vlib/open.c:1003
 #, c-format
 msgid "Unable to stat file <%s>"
 msgstr "Det går inte att stat-fil <%s>"
 
-#: ../lib/vector/Vlib/open.c:1084
+#: ../lib/vector/Vlib/open.c:1068
 #, c-format
 msgid "unknown %d (update Vect_maptype_info)"
 msgstr "okänd %d (uppdatera Vect_maptype_info)"
 
-#: ../lib/vector/Vlib/open.c:1173
+#: ../lib/vector/Vlib/open.c:1157
 msgid "Size of 'coor' file differs from value saved in topology file"
 msgstr "Storleken på \"coor\"-filen skiljer sig från det värde som sparats i topologifilen"
 
-#: ../lib/vector/Vlib/open.c:1184 ../lib/vector/Vlib/open.c:1284
+#: ../lib/vector/Vlib/open.c:1168 ../lib/vector/Vlib/open.c:1268
 #, c-format
 msgid "Please rebuild topology for vector map <%s@%s>"
 msgstr "Vänligen återuppbygg topologin för vektorkartan <%s@%s>"
 
-#: ../lib/vector/Vlib/open.c:1273
+#: ../lib/vector/Vlib/open.c:1257
 msgid "Size of 'coor' file differs from value saved in sidx file"
 msgstr "Storleken på filen 'coor' skiljer sig från värdet som sparats i filen sidx"
 
-#: ../lib/vector/Vlib/open.c:1353
+#: ../lib/vector/Vlib/open.c:1337
 msgid "Unable to open OGR file"
 msgstr "Filen OGR kan inte öppnas"
 
-#: ../lib/vector/Vlib/open.c:1380
+#: ../lib/vector/Vlib/open.c:1364
 msgid "OGR output also detected, using OGR"
 msgstr "OGR-utdata upptäcks också, med hjälp av OGR"
 
@@ -7897,60 +7876,60 @@ msgstr "Coor-filen för vektorkartan &lt;%s@%s&gt; är större än den borde var
 msgid "Coor file of vector <%s@%s> is shorter than it should be (%<PRId64> bytes missing)."
 msgstr "Coor-filen för vektorn &lt;%s@%s&gt; är kortare än den borde vara (%<PRId64> byte saknas)."
 
-#: ../lib/vector/Vlib/open_ogr.c:60
+#: ../lib/vector/Vlib/open_ogr.c:57
 msgid "OGR datasource not defined"
 msgstr "OGR-datakälla inte definierad"
 
-#: ../lib/vector/Vlib/open_ogr.c:65 ../lib/vector/Vlib/write_ogr.c:129
+#: ../lib/vector/Vlib/open_ogr.c:62 ../lib/vector/Vlib/write_ogr.c:116
 msgid "OGR layer not defined"
 msgstr "OGR-lager inte definierat"
 
-#: ../lib/vector/Vlib/open_ogr.c:97
+#: ../lib/vector/Vlib/open_ogr.c:94
 #, c-format
 msgid "OGR layer <%s> not found"
 msgstr "OGR-lager <%s> hittades inte"
 
-#: ../lib/vector/Vlib/open_ogr.c:105 ../lib/vector/Vlib/write_ogr.c:349
+#: ../lib/vector/Vlib/open_ogr.c:102 ../lib/vector/Vlib/write_ogr.c:331
 #, c-format
 msgid "OGR transaction with layer <%s> failed to start"
 msgstr "OGR-transaktion med lager <%s> kunde inte starta"
 
-#: ../lib/vector/Vlib/open_ogr.c:154 ../lib/vector/Vlib/open_pg.c:200
+#: ../lib/vector/Vlib/open_ogr.c:145 ../lib/vector/Vlib/open_pg.c:200
 #, c-format
 msgid "Unable to open feature index file for vector map <%s>"
 msgstr "Det gick inte att öppna feature index-filen för vector map <%s>"
 
-#: ../lib/vector/Vlib/open_ogr.c:201
+#: ../lib/vector/Vlib/open_ogr.c:187
 #, c-format
 msgid "Unable to get OGR driver <%s>"
 msgstr "Det går inte att hämta OGR-drivrutinen <%s>"
 
-#: ../lib/vector/Vlib/open_ogr.c:209
+#: ../lib/vector/Vlib/open_ogr.c:195
 #, c-format
 msgid "Unable to create OGR data source '%s'"
 msgstr "Det går inte att skapa OGR-datakällan '%s'"
 
-#: ../lib/vector/Vlib/open_ogr.c:221
+#: ../lib/vector/Vlib/open_ogr.c:207
 #, c-format
 msgid "OGR layer <%s> already exists and will be overwritten"
 msgstr "OGR-lager <%s> finns redan och kommer att skrivas över"
 
-#: ../lib/vector/Vlib/open_ogr.c:225
+#: ../lib/vector/Vlib/open_ogr.c:211
 #, c-format
 msgid "Unable to delete OGR layer <%s>"
 msgstr "Det går inte att ta bort OGR-lager <%s>"
 
-#: ../lib/vector/Vlib/open_ogr.c:232
+#: ../lib/vector/Vlib/open_ogr.c:218
 #, c-format
 msgid "OGR layer <%s> already exists in datasource '%s'"
 msgstr "OGR-lagret <%s> finns redan i datakällan '%s'"
 
-#: ../lib/vector/Vlib/open_ogr.c:293
+#: ../lib/vector/Vlib/open_ogr.c:275
 #, c-format
 msgid "Feature index format version %d.%d is not supported by this release. Try to rebuild topology or upgrade GRASS."
 msgstr "Feature index format version %d.%d stöds inte av denna utgåva. Försök att bygga om topologin eller uppgradera GRASS."
 
-#: ../lib/vector/Vlib/open_ogr.c:299
+#: ../lib/vector/Vlib/open_ogr.c:281
 #, c-format
 msgid "Your GRASS version does not fully support feature index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
 msgstr "Din GRASS-version har inte fullt stöd för vektorernas feature index-format %d.%d. Överväg att bygga om topologin eller uppgradera GRASS."
@@ -8118,34 +8097,34 @@ msgstr "villkoren misslyckades"
 msgid "for this format/level not supported"
 msgstr "för detta format/denna nivå stöds inte"
 
-#: ../lib/vector/Vlib/read.c:102 ../lib/vector/Vlib/read.c:138
-#: ../lib/vector/Vlib/read.c:179
+#: ../lib/vector/Vlib/read.c:88 ../lib/vector/Vlib/read.c:124
+#: ../lib/vector/Vlib/read.c:165
 msgid "Vector map is not open for reading"
 msgstr "Vektorkartan är inte öppen för läsning"
 
-#: ../lib/vector/Vlib/read.c:145 ../lib/vector/Vlib/read.c:192
+#: ../lib/vector/Vlib/read.c:131 ../lib/vector/Vlib/read.c:178
 #, c-format
 msgid "Unable to read feature %d from vector map <%s>"
 msgstr "Det gick inte att läsa feature %d från vector map <%s>"
 
-#: ../lib/vector/Vlib/read.c:214
+#: ../lib/vector/Vlib/read.c:200
 msgid "Line index is out of range"
 msgstr "Linjeindex är utanför intervallet"
 
-#: ../lib/vector/Vlib/read.c:238
+#: ../lib/vector/Vlib/read.c:224
 msgid "Node index is out of range"
 msgstr "Nodindex är utanför intervallet"
 
-#: ../lib/vector/Vlib/read.c:262
+#: ../lib/vector/Vlib/read.c:248
 msgid "Area index is out of range"
 msgstr "Områdesindex är utanför intervallet"
 
-#: ../lib/vector/Vlib/read.c:286
+#: ../lib/vector/Vlib/read.c:272
 msgid "Isle index is out of range"
 msgstr "Isle index är utanför intervallet"
 
 #: ../lib/vector/Vlib/read_nat.c:151 ../lib/vector/Vlib/read_pg.c:347
-#: ../lib/vector/Vlib/read_sfa.c:56 ../lib/vector/Vlib/write_nat.c:311
+#: ../lib/vector/Vlib/read_sfa.c:55 ../lib/vector/Vlib/write_nat.c:311
 #: ../lib/vector/Vlib/write_nat.c:678 ../lib/vector/Vlib/write_pg.c:254
 #: ../lib/vector/Vlib/write_pg.c:419 ../lib/vector/Vlib/write_pg.c:2711
 #: ../lib/vector/Vlib/write_pg.c:2808
@@ -8153,25 +8132,25 @@ msgstr "Isle index är utanför intervallet"
 msgid "Attempt to access dead feature %d"
 msgstr "Försök att komma åt dödfunktionen %d"
 
-#: ../lib/vector/Vlib/read_ogr.c:214 ../lib/vector/Vlib/read_ogr.c:222
+#: ../lib/vector/Vlib/read_ogr.c:201 ../lib/vector/Vlib/read_ogr.c:209
 #, c-format
 msgid "Unable to get feature geometry, fid %ld"
 msgstr "Det går inte att få fram geometrin för funktionen, fid %ld"
 
-#: ../lib/vector/Vlib/read_ogr.c:379 ../lib/vector/Vlib/read_pg.c:492
+#: ../lib/vector/Vlib/read_ogr.c:361 ../lib/vector/Vlib/read_pg.c:492
 msgid "Feature without geometry. Skipped."
 msgstr "Funktion utan geometri. Hoppa över."
 
-#: ../lib/vector/Vlib/read_ogr.c:387
+#: ../lib/vector/Vlib/read_ogr.c:369
 msgid "OGR feature without ID"
 msgstr "OGR-funktion utan ID"
 
-#: ../lib/vector/Vlib/read_ogr.c:512
+#: ../lib/vector/Vlib/read_ogr.c:494
 #, c-format
 msgid "OGR feature type '%s' not supported"
 msgstr "OGR-funktionstyp '%s' stöds inte"
 
-#: ../lib/vector/Vlib/read_pg.c:199 ../lib/vector/Vlib/read_sfa.c:119
+#: ../lib/vector/Vlib/read_pg.c:199 ../lib/vector/Vlib/read_sfa.c:118
 #, c-format
 msgid "Unexpected feature type (%d) - should be (%d)"
 msgstr "Oväntad typ av funktion (%d) - borde vara (%d)"
@@ -8276,20 +8255,15 @@ msgstr ""
 "Kan inte läsa funktioner. Anledning:\n"
 "%s"
 
-#: ../lib/vector/Vlib/read_sfa.c:92
+#: ../lib/vector/Vlib/read_sfa.c:91
 #, c-format
 msgid "Unable to construct centroid for area %d. Skipped."
 msgstr "Det gick inte att konstruera en centroid för området %d. Hoppade över."
 
-#: ../lib/vector/Vlib/read_sfa.c:97
+#: ../lib/vector/Vlib/read_sfa.c:96
 #, c-format
 msgid "Centroid %d: invalid area %d"
 msgstr "Centroid %d: ogiltigt område %d"
-
-#: ../lib/vector/Vlib/read_sfa.c:126 ../lib/vector/Vlib/write_sfa.c:132
-#: ../lib/vector/Vlib/write_sfa.c:175 ../lib/vector/Vlib/write_sfa.c:276
-msgid "GRASS is not compiled with OGR/PostgreSQL support"
-msgstr "GRASS är inte kompilerad med OGR/PostgreSQL-stöd"
 
 #: ../lib/vector/Vlib/remove_areas.c:105 ../lib/vector/Vlib/remove_areas.c:268
 msgid "Area is composed of dead boundary"
@@ -8338,22 +8312,22 @@ msgstr "Borttagna dubbletter: %d"
 msgid "Unable to delete item %d from spatial index"
 msgstr "Det går inte att ta bort objektet %d från det spatiala indexet"
 
-#: ../lib/vector/Vlib/simple_features.c:226
+#: ../lib/vector/Vlib/simple_features.c:224
 #, c-format
 msgid "Unknown Simple Features type (%d)"
 msgstr "Okänd Typ av enkla funktioner (%d)"
 
-#: ../lib/vector/Vlib/simple_features.c:332 ../lib/vector/Vlib/write_pg.c:336
+#: ../lib/vector/Vlib/simple_features.c:325 ../lib/vector/Vlib/write_pg.c:336
 #: ../lib/vector/Vlib/write_pg.c:829 ../lib/vector/Vlib/write_pg.c:1250
 #: ../lib/vector/Vlib/write_pg.c:1407
 msgid "No connection defined"
 msgstr "Ingen anslutning definierad"
 
-#: ../lib/vector/Vlib/simple_features.c:340
+#: ../lib/vector/Vlib/simple_features.c:333
 msgid "Unable to get number of simple features"
 msgstr "Det går inte att få ett antal enkla funktioner"
 
-#: ../lib/vector/Vlib/simple_features.c:350
+#: ../lib/vector/Vlib/simple_features.c:343
 #, c-format
 msgid "Unable to report simple features for vector map <%s>"
 msgstr "Det går inte att rapportera enkla funktioner för vektorkarta <%s>"
@@ -8394,32 +8368,32 @@ msgstr "Det gick inte att ta bort temporära filen <%s>: %s"
 msgid "Reading features..."
 msgstr "Läsning av funktioner..."
 
-#: ../lib/vector/Vlib/write.c:212
+#: ../lib/vector/Vlib/write.c:184
 #, c-format
 msgid "Unable to write feature in vector map <%s>"
 msgstr "Det går inte att skriva in en funktion i vektormapp <%s>"
 
-#: ../lib/vector/Vlib/write.c:255
+#: ../lib/vector/Vlib/write.c:227
 #, c-format
 msgid "Unable to rewrite feature/offset %<PRId64> in vector map <%s>"
 msgstr "Det går inte att skriva om objekt/offset %<PRId64> i vektorkarta &lt;%s&gt"
 
-#: ../lib/vector/Vlib/write.c:288
+#: ../lib/vector/Vlib/write.c:260
 #, c-format
 msgid "Unable to delete feature/offset %<PRId64> from vector map <%s>"
 msgstr "Det gick inte att ta bort objekt/offset %<PRId64> från vektorkartan &lt;%s&gt"
 
-#: ../lib/vector/Vlib/write.c:325
+#: ../lib/vector/Vlib/write.c:297
 #, c-format
 msgid "Unable to restore feature/offset %<PRId64> in vector map <%s>"
 msgstr "Det gick inte att återställa objekt/offset %<PRId64> i vektorkarta &lt;%s&gt"
 
-#: ../lib/vector/Vlib/write.c:335
+#: ../lib/vector/Vlib/write.c:307
 #, c-format
 msgid "Vector map <%s> is not opened"
 msgstr "Vektorkarta <%s> är inte öppnad"
 
-#: ../lib/vector/Vlib/write.c:340
+#: ../lib/vector/Vlib/write.c:312
 #, c-format
 msgid "Vector map <%s> is not opened in write mode"
 msgstr "Vektorkarta <%s> öppnas inte i skrivläge"
@@ -8444,106 +8418,106 @@ msgstr "%s: Område %d finns inte"
 msgid "Attempt to access dead area %d"
 msgstr "Försök att komma åt ett dött område %d"
 
-#: ../lib/vector/Vlib/write_ogr.c:96 ../lib/vector/Vlib/write_pg.c:197
-#: ../lib/vector/Vlib/write_pg.c:267 ../lib/vector/Vlib/write_sfa.c:166
+#: ../lib/vector/Vlib/write_ogr.c:88 ../lib/vector/Vlib/write_pg.c:197
+#: ../lib/vector/Vlib/write_pg.c:267 ../lib/vector/Vlib/write_sfa.c:158
 msgid "Unable to rewrite feature (incompatible feature types)"
 msgstr "Det går inte att skriva om funktionen (inkompatibla funktionstyper)"
 
-#: ../lib/vector/Vlib/write_ogr.c:134 ../lib/vector/Vlib/write_pg.c:341
+#: ../lib/vector/Vlib/write_ogr.c:121 ../lib/vector/Vlib/write_pg.c:341
 #, c-format
 msgid "Invalid offset (%<PRId64>)"
 msgstr "Ogiltig offset (%<PRId64>)"
 
-#: ../lib/vector/Vlib/write_ogr.c:140 ../lib/vector/Vlib/write_pg.c:362
+#: ../lib/vector/Vlib/write_ogr.c:127 ../lib/vector/Vlib/write_pg.c:362
 msgid "Unable to delete feature"
 msgstr "Det går inte att ta bort funktionen"
 
-#: ../lib/vector/Vlib/write_ogr.c:237
+#: ../lib/vector/Vlib/write_ogr.c:219
 #, c-format
 msgid "Creating field <%s> failed"
 msgstr "Skapandet av fält <%s> misslyckades"
 
-#: ../lib/vector/Vlib/write_ogr.c:301 ../lib/vector/Vlib/write_pg.c:1142
+#: ../lib/vector/Vlib/write_ogr.c:283 ../lib/vector/Vlib/write_pg.c:1142
 #, c-format
 msgid "Unsupported geometry type (%d)"
 msgstr "Geometrityp som inte stöds (%d)"
 
-#: ../lib/vector/Vlib/write_ogr.c:324
+#: ../lib/vector/Vlib/write_ogr.c:306
 #, c-format
 msgid "Unable to create OGR layer <%s> in '%s'"
 msgstr "Det går inte att skapa OGR-lager <%s> i '%s'"
 
-#: ../lib/vector/Vlib/write_ogr.c:336 ../lib/vector/Vlib/write_pg.c:1155
+#: ../lib/vector/Vlib/write_ogr.c:318 ../lib/vector/Vlib/write_pg.c:1155
 #, c-format
 msgid "More layers defined, using driver <%s> and database <%s>"
 msgstr "Fler lager definierade med hjälp av drivrutin <%s> och databas <%s>"
 
-#: ../lib/vector/Vlib/write_ogr.c:343 ../lib/vector/Vlib/write_pg.c:1160
+#: ../lib/vector/Vlib/write_ogr.c:325 ../lib/vector/Vlib/write_pg.c:1160
 msgid "Database connection not defined. Unable to write attributes."
 msgstr "Databasanslutningen är inte definierad. Det går inte att skriva attribut."
 
-#: ../lib/vector/Vlib/write_ogr.c:411 ../lib/vector/Vlib/write_pg.c:1275
+#: ../lib/vector/Vlib/write_ogr.c:393 ../lib/vector/Vlib/write_pg.c:1275
 #: ../lib/vector/Vlib/write_pg.c:1439
 #, c-format
 msgid "No category defined for layer %d"
 msgstr "Ingen kategori definierad för lagret %d"
 
-#: ../lib/vector/Vlib/write_ogr.c:413 ../lib/vector/Vlib/write_pg.c:1277
+#: ../lib/vector/Vlib/write_ogr.c:395 ../lib/vector/Vlib/write_pg.c:1277
 #: ../lib/vector/Vlib/write_pg.c:1441
 #, c-format
 msgid "Feature has more categories, using category %d (from layer %d)"
 msgstr "Funktionen har fler kategorier, använd kategori %d (från lager %d)"
 
-#: ../lib/vector/Vlib/write_ogr.c:426
+#: ../lib/vector/Vlib/write_ogr.c:408
 msgid "Feature is not a point. Skipping."
 msgstr "Feature är inte en punkt. Hoppar över."
 
-#: ../lib/vector/Vlib/write_ogr.c:434
+#: ../lib/vector/Vlib/write_ogr.c:416
 msgid "Feature is not a line. Skipping."
 msgstr "Feature är inte en linje. Hoppar över."
 
-#: ../lib/vector/Vlib/write_ogr.c:441
+#: ../lib/vector/Vlib/write_ogr.c:423
 msgid "Feature is not a polygon. Skipping."
 msgstr "Objektet är inte en polygon. Hoppar över."
 
-#: ../lib/vector/Vlib/write_ogr.c:448
+#: ../lib/vector/Vlib/write_ogr.c:430
 msgid "Feature is not a face. Skipping."
 msgstr "Funktionen är inte en yta. Hoppar över."
 
-#: ../lib/vector/Vlib/write_ogr.c:454
+#: ../lib/vector/Vlib/write_ogr.c:436
 #, c-format
 msgid "Unsupported feature type (%d)"
 msgstr "Typ av funktion som inte stöds (%d)"
 
-#: ../lib/vector/Vlib/write_ogr.c:473
+#: ../lib/vector/Vlib/write_ogr.c:455
 msgid "Boundary is not closed. Feature skipped."
 msgstr "Gränsen är inte stängd. Funktion överhoppad."
 
-#: ../lib/vector/Vlib/write_ogr.c:502
+#: ../lib/vector/Vlib/write_ogr.c:484
 msgid "Unable to writes feature attributes"
 msgstr "Det går inte att skriva funktionsattribut"
 
-#: ../lib/vector/Vlib/write_ogr.c:567
+#: ../lib/vector/Vlib/write_ogr.c:549
 #, c-format
 msgid "Feature without category of layer %d"
 msgstr "Funktion utan kategori av lager %d"
 
-#: ../lib/vector/Vlib/write_ogr.c:582 ../lib/vector/Vlib/write_pg.c:2046
+#: ../lib/vector/Vlib/write_ogr.c:564 ../lib/vector/Vlib/write_pg.c:2046
 #, c-format
 msgid "Unable to select attributes for category %d"
 msgstr "Det går inte att välja attribut för kategori %d"
 
-#: ../lib/vector/Vlib/write_ogr.c:592 ../lib/vector/Vlib/write_pg.c:2054
+#: ../lib/vector/Vlib/write_ogr.c:574 ../lib/vector/Vlib/write_pg.c:2054
 #, c-format
 msgid "No database record for category %d, no attributes will be written"
 msgstr "Ingen databaspost för kategori %d, inga attribut kommer att skrivas"
 
-#: ../lib/vector/Vlib/write_ogr.c:624
+#: ../lib/vector/Vlib/write_ogr.c:606
 #, c-format
 msgid "Unable to create field <%s>"
 msgstr "Det går inte att skapa fält <%s>"
 
-#: ../lib/vector/Vlib/write_ogr.c:652 ../lib/vector/Vlib/write_pg.c:2119
+#: ../lib/vector/Vlib/write_ogr.c:634 ../lib/vector/Vlib/write_pg.c:2119
 #, c-format
 msgid "Unsupported column type %d"
 msgstr "Kolumntyp som inte stöds %d"
@@ -8559,7 +8533,7 @@ msgid "Unable to delete feature (%s) %d"
 msgstr "Det går inte att ta bort funktionen (%s) %d"
 
 #: ../lib/vector/Vlib/write_pg.c:572 ../lib/vector/Vlib/write_pg.c:1338
-#: ../lib/vector/Vlib/write_sfa.c:351
+#: ../lib/vector/Vlib/write_sfa.c:328
 msgid "Boundary is not closed. Skipping."
 msgstr "Gränsen är inte stängd. Hoppar över."
 
@@ -8692,15 +8666,15 @@ msgstr "Kan inte skapa ny yta"
 msgid "Unable to delete node %d"
 msgstr "Det går inte att ta bort noden %d"
 
-#: ../lib/vector/Vlib/write_sfa.c:119
+#: ../lib/vector/Vlib/write_sfa.c:116
 msgid "Unable to calculate centroid for area"
 msgstr "Det går inte att beräkna centroid för området"
 
-#: ../lib/vector/Vlib/write_sfa.c:222
+#: ../lib/vector/Vlib/write_sfa.c:209
 msgid "Attempt to delete dead feature"
 msgstr "Försök att ta bort död funktion"
 
-#: ../lib/vector/Vlib/write_sfa.c:313
+#: ../lib/vector/Vlib/write_sfa.c:291
 #, c-format
 msgid "Unsupported vector map format (%d)"
 msgstr "Vektorkartformat som inte stöds (%d)"
@@ -8722,22 +8696,22 @@ msgstr "Det går inte att ladda filen till minnet, filen är inte öppen"
 msgid "Vector memory mode not supported, using 'AUTO'"
 msgstr "Vector memory mode stöds inte, använd 'AUTO'"
 
-#: ../lib/vector/diglib/frmt.c:47 ../lib/vector/diglib/frmt.c:76
+#: ../lib/vector/diglib/frmt.c:47 ../lib/vector/diglib/frmt.c:74
 #, c-format
 msgid "Vector format not recognized: %s"
 msgstr "Vektorformatet känns inte igen: %s"
 
-#: ../lib/vector/diglib/frmt.c:53 ../lib/vector/diglib/frmt.c:109
+#: ../lib/vector/diglib/frmt.c:53 ../lib/vector/diglib/frmt.c:100
 #, c-format
 msgid "Line <%s> is too long"
 msgstr "Rad <%s> är för lång"
 
-#: ../lib/vector/diglib/frmt.c:85 ../lib/vector/diglib/frmt.c:94
+#: ../lib/vector/diglib/frmt.c:85
 #, c-format
 msgid "Vector format '%s' not supported"
 msgstr "Vektorformatet '%s' stöds inte"
 
-#: ../lib/vector/diglib/frmt.c:103
+#: ../lib/vector/diglib/frmt.c:94
 #, c-format
 msgid "Format definition is not correct: %s"
 msgstr "Formatdefinitionen är inte korrekt: %s"
@@ -9051,6 +9025,16 @@ msgstr "Område %d har inga gränser"
 #: ../lib/vector/vedit/select.c:231
 msgid "Unknown query tool"
 msgstr "Okänt frågeverktyg"
+
+#~ msgid "GRASS is not compiled with OGR support"
+#~ msgstr "GRASS är inte kompilerad med OGR-stöd"
+
+#, c-format
+#~ msgid "Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
+#~ msgstr "Rasterkarta <%s@%s> är en GDAL-länk men GRASS är kompilerat utan GDAL-stöd"
+
+#~ msgid "GRASS is not compiled with OGR/PostgreSQL support"
+#~ msgstr "GRASS är inte kompilerad med OGR/PostgreSQL-stöd"
 
 #, c-format
 #~ msgid "Unable to seek: %s"
