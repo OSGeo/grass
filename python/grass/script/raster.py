@@ -154,6 +154,10 @@ def mapcalc(
     if seed == "auto":
         seed = None
 
+    # When no explicit seed is provided, add -s flag for automatic seeding
+    if seed is None and "s" not in flags:
+        flags += "s"
+
     try:
         write_command(
             "r.mapcalc",
@@ -234,6 +238,10 @@ def mapcalc_start(
     # Handle deprecated seed="auto" - ignore it, let r.mapcalc auto-seed
     if seed == "auto":
         seed = None
+
+    # When no explicit seed is provided, add -s flag for automatic seeding
+    if seed is None and "s" not in flags:
+        flags += "s"
 
     p = feed_command(
         "r.mapcalc",
