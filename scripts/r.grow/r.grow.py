@@ -115,6 +115,8 @@ def main():
         metric = "squared"
         radius *= radius
 
+    radius = f"{radius:.25f}".rstrip("0").rstrip(".")
+
     # check if input file exists
     if not gs.find_file(input)["file"]:
         gs.fatal(_("Raster map <%s> not found") % input)
