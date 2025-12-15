@@ -44,7 +44,7 @@ static int new_fileinfo(void)
         for (i = 0; i < oldsize; i++) {
             if (R__.fileinfo[i].open_mode <= 0) {
                 memset(&R__.fileinfo[i], 0, sizeof(struct fileinfo));
-                // mark as reserved 
+                // mark as reserved
                 R__.fileinfo[i].open_mode = 200;
                 fd = i;
                 break;
