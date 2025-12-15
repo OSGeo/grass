@@ -55,6 +55,13 @@ else:
     ComboPopup = wx.combo.ComboPopup
     wxComboCtrl = wx.combo.ComboCtrl
 
+# Provide NewId for API compatibility
+def NewId():
+    """Return a new wx ID, compatible with both wxPython Classic and Phoenix."""
+    if wxPythonPhoenix:
+        return wx.NewIdRef().Id
+    else:
+        return wx.NewId()
 def convertToInt(argsOrKwargs, roundVal=False):
     """Convert args, kwargs float value to int
 
