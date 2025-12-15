@@ -115,7 +115,9 @@ def main():
         metric = "squared"
         radius *= radius
 
-    radius = f"{radius:.25f}".rstrip("0").rstrip(".")
+    radius_str = str(radius)
+    if "e" in radius_str.lower():
+        radius_str = f"{radius:.20f}".rstrip("0").rstrip(".")
 
     # check if input file exists
     if not gs.find_file(input)["file"]:
@@ -147,7 +149,7 @@ def main():
             '$output = if(!isnull("$input"),$old,if($dist < $radius,$new,null()))',
             output=output,
             input=input,
-            radius=radius,
+            radius=radius_str,
             old=old,
             new=new,
             dist=temp_dist,
@@ -170,7 +172,7 @@ def main():
         gs.mapcalc(
             "$output = if(isnull($dist), $old, if($dist < $radius,null(),$old))",
             output=output,
-            radius=radius,
+            radius=radius_str,
             old=old,
             dist=temp_dist,
             nprocs=nprocs,
