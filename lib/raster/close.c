@@ -144,7 +144,6 @@ void Rast_unopen(int fd)
  * raster map was opened is removed (see \ref
  * Creating_and_Opening_New_Raster_Files). This routine is useful when
  * errors are detected and it is desired to remove temporary files.
- 
  * \return void
  */
 void Rast__unopen_all(void)
