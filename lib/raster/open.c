@@ -26,7 +26,7 @@
 #include "R.h"
 #define FORMAT_FILE "f_format"
 #define NULL_FILE   "null"
-//cmpressed null file 
+// cmpressed null file
 #define NULLC_FILE  "nullcmpr"
 
 static int new_fileinfo(void)
