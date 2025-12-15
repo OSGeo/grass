@@ -356,7 +356,7 @@ static int close_new_gdal(int fd, int ok)
     if (fcb->map_type != CELL_TYPE)
         Rast_quant_free(&fcb->quant);
 
- #pragma omp critical (R_RASTER_OPEN)
+#pragma omp critical(R_RASTER_OPEN)
     fcb->open_mode = -1;
 
     return stat;
