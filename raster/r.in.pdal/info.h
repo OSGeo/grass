@@ -32,7 +32,7 @@
 #if (PDAL_VERSION_MAJOR >= 2 && PDAL_VERSION_MINOR > 4) || \
     (PDAL_VERSION_MAJOR == 2 && PDAL_VERSION_MINOR == 4 && \
      PDAL_VERSION_PATCH == 3)
-#define R_IN_R_IN_PDAL_USE_NOSRS 1
+#define R_IN_PDAL_USE_NOSRS 1
 #endif
 
 extern "C" {

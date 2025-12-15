@@ -126,7 +126,8 @@ void get_reprojected_extent(pdal::SpatialReference &spatial_reference,
     pdal::PointId idx = 0;
     int points_per_edge = 10;
     // Generate points along the 4 edges of the bounding box
-    // Add single corner point and interior points for each edge
+    // First point of each edge starts at the corner and
+    // the last point is right before the corner
     for (int i = 0; i < points_per_edge - 1; ++i) {
         double t = i / (double)(points_per_edge - 1);
 
