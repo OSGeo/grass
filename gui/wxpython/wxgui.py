@@ -37,6 +37,7 @@ import wx
 # during start up, remove when not needed
 import wx.adv
 
+
 class GMApp(wx.App):
     def __init__(self, workspace=None):
         """Main GUI class.

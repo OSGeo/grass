@@ -16,6 +16,7 @@ This program is free software under the GNU General Public License
 
 try:
     import vdigit.wxdigit as _wxdigit
+
     IVDigit = _wxdigit.IVDigit
     GV_LINES = getattr(_wxdigit, "GV_LINES", -1)
     haveVDigit = True

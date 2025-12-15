@@ -28,7 +28,9 @@ import grass.script as gs
 from grass.exceptions import ScriptError
 
 import importlib.util
+
 havePILImage = importlib.util.find_spec("PIL") is not None
+
 
 class Rect2D(wx.Rect2D):
     """Class representing rectangle with floating point values.
