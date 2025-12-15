@@ -1,12 +1,12 @@
 cff-version: 1.2.0
 title: "GRASS"
 message: "If you use this software, please cite it using the metadata from this file."
-version: 8.4.1
+version: 8.4.2
 abstract: "GRASS, Geographic Resources Analysis Support System, is a powerful computational engine for raster, vector, and geospatial processing. It supports terrain and ecosystem modeling, hydrology, data management, and imagery processing. With a built-in temporal framework and Python API, it enables advanced time series analysis and rapid geospatial programming, optimized for large-scale analysis on various hardware configurations."
 type: software
 authors:
   - name: "GRASS Development Team"
-    email: "grass-dev@discourse.osgeo.org"
+    website: "https://grass.osgeo.org"
   - given-names: Martin
     family-names: Landa
     affiliation: "Czech Technical University in Prague"
@@ -108,8 +108,8 @@ authors:
     email: "hamish_b@yahoo.com"
 repository-code: "https://github.com/OSGeo/grass"
 license: "GPL-2.0-or-later"
-doi: "10.5281/zenodo.14918754"
-date-released: 2025-02-24
+doi: "10.5281/zenodo.5176030"
+date-released: 2025-11-27
 keywords:
   - "GIS"
   - "geospatial"
