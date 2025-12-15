@@ -199,7 +199,7 @@ static int close_old(int fd)
     if (fcb->data_fd >= 0)
         close(fcb->data_fd);
 
- #pragma omp critical (R_RASTER_OPEN)
+#pragma omp critical(R_RASTER_OPEN)
     fcb->open_mode = -1;
     return 1;
 }
