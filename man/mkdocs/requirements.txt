@@ -1,6 +1,6 @@
 mkdocs==1.6.1
-mkdocs-glightbox==0.5.1
-mkdocs-material==9.6.22
-pymdown-extensions==10.16.1
+mkdocs-glightbox==0.5.2
+mkdocs-material==9.7.0
+pymdown-extensions==10.19.1
 pyyaml-env-tag==1.1
-mkdocs-material[imaging]==9.6.22
+mkdocs-material[imaging]==9.7.0

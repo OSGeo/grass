@@ -86,6 +86,7 @@ select = [
     "SLOT",   # flake8-slots (SLOT)
     "T10",    # flake8-debugger (T10)
     "TC",     # flake8-type-checking (TC)
+    "TD",     # flake8-todos (TD)
     "TID",    # flake8-tidy-imports (TID)
     "TRY",    # tryceratops (TRY)
     "UP",     # pyupgrade (UP)
@@ -165,13 +166,10 @@ ignore = [
     "F811",    # redefined-while-unused
     "F821",    # undefined-name
     "F822",    # undefined-export
-    "F841",    # unused-variable
     "FBT001",  # boolean-type-hint-positional-argument
     "FBT002",  # boolean-default-value-positional-argument
     "FBT003",  # boolean-positional-value-in-call
-    "I001",    # unsorted-imports
     "INP001",  # implicit-namespace-package
-    "ISC003",  # explicit-string-concatenation
     "N801",    # invalid-class-name
     "N802",    # invalid-function-name
     "N803",    # invalid-argument-name
@@ -185,7 +183,6 @@ ignore = [
     "PERF401", # manual-list-comprehension
     "PERF402", # manual-list-copy
     "PERF403", # manual-dict-comprehension
-    "PIE794",  # duplicate-class-field-definition
     "PLC0415", # import-outside-top-level
     "PLC1901", # compare-to-empty-string
     "PLC2701", # import-private-name
@@ -201,7 +198,6 @@ ignore = [
     "PLR1702", # too-many-nested-blocks
     "PLR1704", # redefined-argument-from-local
     "PLR2004", # magic-value-comparison
-    "PLR6201", # literal-membership
     "PLR6301", # no-self-use
     "PLW0602", # global-variable-not-assigned
     "PLW0603", # global-statement
@@ -213,24 +209,17 @@ ignore = [
     "PLW3201", # bad-dunder-method-name
     "PTH100",  # os-path-abspath
     "PTH101",  # os-chmod
-    "PTH102",  # os-mkdir
-    "PTH103",  # os-makedirs
     "PTH104",  # os-rename
     "PTH106",  # os-rmdir
     "PTH107",  # os-remove
     "PTH108",  # os-unlink
-    "PTH110",  # os-path-exists
     "PTH111",  # os-path-expanduser
-    "PTH112",  # os-path-isdir
-    "PTH113",  # os-path-isfile
     "PTH117",  # os-path-isabs
     "PTH118",  # os-path-join
     "PTH119",  # os-path-basename
     "PTH120",  # os-path-dirname
     "PTH122",  # os-path-splitext
     "PTH123",  # builtin-open
-    "PTH202",  # os-path-getsize
-    "PTH204",  # os-path-getmtime
     "PTH207",  # glob
     "RET503",  # implicit-return
     "RUF003",  # ambiguous-unicode-character-comment
@@ -264,19 +253,24 @@ ignore = [
     "SIM105",  # suppressible-exception
     "SIM113",  # enumerate-for-loop
     "SIM118",  # in-dict-keys
-    "SIM223",  # expr-and-false
     "SLF001",  # private-member-access
+    "TD001",   # invalid-todo-tag
+    "TD002",   # missing-todo-author
+    "TD003",   # missing-todo-link
+    "TD004",   # missing-todo-colon
+    "TD005",   # missing-todo-description
+    "TD007",   # missing-space-after-todo-colon
     "TRY002",  # raise-vanilla-class
     "TRY004",  # type-check-without-type-error
-    "TRY201",  # verbose-raise
     "TRY300",  # try-consider-else
     "TRY301",  # raise-within-try
     "UP030",   # format-literals
     "UP031",   # printf-string-formatting
     "UP032",   # f-string
-    "UP036",   # outdated-version-block
 ]
 
+[tool.ruff.lint.isort]
+known-first-party = ["grass"]
 
 [tool.ruff.lint.per-file-ignores]
 # See https://docs.astral.sh/ruff/settings/#lint_per-file-ignores
@@ -286,10 +280,14 @@ ignore = [
 # Ignored after reverting:
 "gui/**" = ["PLW0108"] # See https://github.com/OSGeo/grass/issues/4124
 # Other ignores:
+"**.ipynb" = ["I001"]
 "**.py" = ["PYI066"]
 "*/testsuite/**.py" = ["PT009", "PT027", "PLW1514"]
 "display/d.mon/render_cmd.py" = ["PLW1514"]
 "display/d.text/test.py" = ["PLW1514"]
+"doc/**.py" = ["I001"]
+"general/**.py" = ["I001"]
+"gui/**.py" = ["I001"]
 "gui/wxpython/animation/temporal_manager.py" = ["PLW1514"]
 "gui/wxpython/core/gconsole.py" = ["PLW1514"]
 "gui/wxpython/core/render.py" = ["PLW1514"]
@@ -298,9 +296,9 @@ ignore = [
 "gui/wxpython/core/utils.py" = ["PLW1514"]
 "gui/wxpython/core/watchdog.py" = ["PLW1514"]
 "gui/wxpython/core/workspace.py" = ["PLW1514"]
-"gui/wxpython/dbmgr/base.py" = ["PLW1514"]
+"gui/wxpython/dbmgr/base.py" = ["PLR6201", "PLW1514"]
 "gui/wxpython/docs/wxgui_sphinx/conf.py" = ["PLW1514"]
-"gui/wxpython/gcp/manager.py" = ["PLW1514"]
+"gui/wxpython/gcp/manager.py" = ["PLR6201", "PLW1514"]
 "gui/wxpython/gmodeler/model.py" = ["PLW1514"]
 "gui/wxpython/gmodeler/panels.py" = ["PLW1514"]
 "gui/wxpython/gui_core/forms.py" = ["PLW1514"]
@@ -312,14 +310,16 @@ ignore = [
 "gui/wxpython/iclass/frame.py" = ["PLW1514"]
 "gui/wxpython/iclass/statistics.py" = ["A005"]
 "gui/wxpython/image2target/ii2t_gis_set.py" = ["PLW1514"]
-"gui/wxpython/image2target/ii2t_manager.py" = ["PLW1514"]
+"gui/wxpython/image2target/ii2t_manager.py" = ["PLR6201", "PLW1514"]
+"gui/wxpython/iscatt/plots.py" = ["PLR6201"]
 "gui/wxpython/location_wizard/wizard.py" = ["PLW1514"]
 "gui/wxpython/mapdisp/main.py" = ["PLW1514"]
 "gui/wxpython/modules/colorrules.py" = ["PLW1514"]
 "gui/wxpython/modules/mcalc_builder.py" = ["PLW1514"]
-"gui/wxpython/photo2image/ip2i_manager.py" = ["PLW1514"]
+"gui/wxpython/photo2image/ip2i_manager.py" = ["PLR6201", "PLW1514"]
 "gui/wxpython/psmap/instructions.py" = ["PLW1514"]
 "gui/wxpython/rdigit/controller.py" = ["PLW1514"]
+"gui/wxpython/rdigit/toolbars.py" = ["PLR6201"]
 "gui/wxpython/rlisetup/frame.py" = ["PLW1514"]
 "gui/wxpython/rlisetup/wizard.py" = ["PLW1514"]
 "gui/wxpython/tools/update_menudata.py" = ["PLW1514"]
@@ -329,6 +329,7 @@ ignore = [
 "gui/wxpython/vnet/vnet_data.py" = ["PLW1514"]
 "gui/wxpython/web_services/dialogs.py" = ["PLW1514"]
 "gui/wxpython/wxplot/profile.py" = ["A005", "PLW1514", "SIM115"]
+"imagery/**.py" = ["I001"]
 "imagery/i.atcorr/create_iwave.py" = ["PLW1514"]
 "lib/imagery/testsuite/test_imagery_sigsetfile.py" = ["FURB152"]
 "lib/init/grass.py" = ["PLW1514", "SIM115"]
@@ -348,7 +349,8 @@ ignore = [
 "man/build_rest.py" = ["PLW1514", "PTH208"]
 "man/build_topics.py" = ["PLW1514"]
 "man/parser_standard_options.py" = ["PLW1514"]
-"python/grass/__init__.py" = ["PYI056"]
+"python/grass/**.py" = ["I001"]
+"python/grass/__init__.py" = ["PTH110", "PYI056"]
 "python/grass/exp*/tests/grass_script_mapset_session_test.py" = ["SIM117"]
 "python/grass/exp*/tests/grass_script_tmp_mapset_session_test.py" = ["SIM117"]
 "python/grass/gunittest/case.py" = ["PLW1514", "PT009"]
@@ -361,11 +363,13 @@ ignore = [
 "python/grass/jupyter/testsuite/interactivemap_test.py" = ["PGH004"]
 "python/grass/jupyter/testsuite/map_test.py" = ["PGH004"]
 "python/grass/jupyter/utils.py" = ["PLW1514"]
+"python/grass/pydispatch/dispatcher.py" = ["PLR6201"]
 "python/grass/pydispatch/signal.py" = ["A005"]
 "python/grass/pygrass/gis/__init__.py" = ["PLW1514", "PTH208"]
 "python/grass/pygrass/modules/grid/grid.py" = ["PLW1514", "PTH208", "SIM115"]
 "python/grass/pygrass/modules/grid/testsuite/test_*_modules_grid_doctests.py" = ["F401"]
 "python/grass/pygrass/modules/interface/env.py" = ["PLW1514", "SIM115"]
+"python/grass/pygrass/modules/interface/parameter.py" = ["PLR6201"]
 "python/grass/pygrass/modules/testsuite/test_pygrass_modules_doctests.py" = ["F401"]
 "python/grass/pygrass/raster/category.py" = ["FURB189", "PLW1514"]
 "python/grass/pygrass/raster/segment.py" = ["PLW1514", "SIM115"]
@@ -383,18 +387,23 @@ ignore = [
 "python/grass/semantic_label/reader.py" = ["PLW1514"]
 "python/grass/temporal/abstract_space_time_dataset.py" = ["PLW1514"]
 "python/grass/temporal/aggregation.py" = ["PLW1514", "SIM115"]
+"python/grass/temporal/c_libraries_interface.py" = ["PIE794"]
 "python/grass/temporal/register.py" = ["PLW1514", "SIM115"]
 "python/grass/temporal/stds_export.py" = ["PLW1514", "SIM115"]
 "python/grass/temporal/stds_import.py" = ["PLW1514", "SIM115"]
 "python/grass/temporal/temporal_algebra.py" = ["D300"]
 "python/grass/temporal/temporal_operator.py" = ["D300"]
+"python/grass/temporal/testsuite/test_temporal_doctests.py" = ["UP036"]
 "python/grass/temporal/univar_statistics.py" = ["PLW1514", "SIM115"]
+"python/grass/tools/support.py" = ["PLR6201"]
 "python/grass/utils/download.py" = ["PTH208", "SIM115"]
+"raster/**.py" = ["I001"]
 "raster/r.*/testsuite/*.py" = ["SIM115"]
 "raster/r.mfilter/benchmark/benchmark_r_mfilter_nprocs.py" = ["PLW1514"]
 "raster/r.topidx/*.py" = ["SIM115"]
 "raster/r.topidx/arc_to_gridatb.py" = ["PLW1514"]
 "raster/r.topidx/gridatb_to_arc.py" = ["PLW1514"]
+"scripts/**.py" = ["I001"]
 "scripts/d.correlate/d.correlate.py" = ["PLW1514", "SIM115"]
 "scripts/d.frame/d.frame.py" = ["PLW1514", "SIM115"]
 "scripts/d.out.file/d.out.file.py" = ["PLW1514"]
@@ -410,8 +419,8 @@ ignore = [
 "scripts/g.extension/g.extension.py" = ["PLW1514", "PTH208", "SIM115"]
 "scripts/g.search.modules/g.search.modules.py" = ["PLW1514"]
 "scripts/i.in.spotvgt/i.in.spotvgt.py" = ["PLW1514"]
-"scripts/i.oif/i.oif.py" = ["PLW1514"]
 "scripts/i.oif/i.oif*.py" = ["SIM115"]
+"scripts/i.oif/i.oif.py" = ["PLW1514"]
 "scripts/i.pansharpen/i.pansharpen.py" = ["PLW1514"]
 "scripts/i.spectral/i.spectral.py" = ["PLW1514"]
 "scripts/m.proj/m.proj.py" = ["PLW1514", "SIM115"]
@@ -444,6 +453,7 @@ ignore = [
 "temporal/t.remove/t.remove.py" = ["PLW1514"]
 "temporal/t.unregister/t.unregister.py" = ["PLW1514"]
 "utils/*.py" = ["PLW1514"]
+"vector/**.py" = ["I001"]
 
 [tool.ruff.lint.flake8-import-conventions.extend-aliases]
 # Declare a custom aliases, checked with rule ICN001
@@ -539,7 +549,7 @@ py-version = "3.10"
 # source root is an absolute path or a path relative to the current working
 # directory used to determine a package namespace for modules located under the
 # source root.
-source-roots = ["python", "gui/wxpython"]
+source-roots = ["python", "gui/wxpython", "man"]
 
 
 [tool.pylint.design]

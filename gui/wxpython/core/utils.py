@@ -22,6 +22,7 @@ import shlex
 import re
 import inspect
 import operator
+from pathlib import Path
 from string import digits
 from typing import TYPE_CHECKING
 
@@ -610,8 +611,9 @@ def GetListOfMapsets(dbase, location, selectable=False):
             listOfMapsets += line.split(" ")
     else:
         for mapset in glob.glob(os.path.join(dbase, location, "*")):
-            if os.path.isdir(mapset) and os.path.isfile(
-                os.path.join(dbase, location, mapset, "WIND")
+            if (
+                Path(mapset).is_dir()
+                and Path(dbase, location, mapset, "WIND").is_file()
             ):
                 listOfMapsets.append(os.path.basename(mapset))
 
@@ -826,7 +828,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
     # read env file
     environ = {}
     lineSkipped = []
-    if os.path.exists(envFile):
+    if Path(envFile).exists():
         try:
             with open(envFile) as fd:
                 for line in fd:

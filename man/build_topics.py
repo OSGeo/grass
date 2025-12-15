@@ -3,10 +3,10 @@
 # generates topics.html and topic_*.html
 # (c) 2012-2025 by the GRASS Development Team
 
+import glob
 import os
 import re
 import sys
-import glob
 from pathlib import Path
 
 year = os.getenv("VERSION_DATE")
@@ -17,21 +17,21 @@ min_num_modules_for_topic = 3
 def build_topics(ext):
     if ext == "html":
         from build_html import (
-            header1_tmpl,
-            headertopics_tmpl,
-            headerkey_tmpl,
             desc1_tmpl,
-            moduletopics_tmpl,
+            header1_tmpl,
+            headerkey_tmpl,
+            headertopics_tmpl,
             man_dir,
+            moduletopics_tmpl,
         )
     else:
         from build_md import (
-            header1_tmpl,
-            headertopics_tmpl,
-            headerkey_tmpl,
             desc1_tmpl,
-            moduletopics_tmpl,
+            header1_tmpl,
+            headerkey_tmpl,
+            headertopics_tmpl,
             man_dir,
+            moduletopics_tmpl,
         )
 
     keywords = {}

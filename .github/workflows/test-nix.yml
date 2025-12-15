@@ -28,12 +28,12 @@ jobs:
       contents: read
 
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           persist-credentials: false
 
       - name: Install nix
-        uses: DeterminateSystems/determinate-nix-action@762d7fdba79d046449732c729c1d3aaad021baa2 # v3.11.3
+        uses: DeterminateSystems/determinate-nix-action@9a921d81e9a16a9ad8423a63a7b31deb601139a6 # v3.14.0
 
       - name: Setup cachix
         uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16

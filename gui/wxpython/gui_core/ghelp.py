@@ -16,6 +16,7 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
+from __future__ import annotations
 import os
 import codecs
 import platform
@@ -276,7 +277,7 @@ class AboutWindow(wx.Frame):
     def _pageCopyright(self):
         """Copyright information"""
         copyfile = os.path.join(os.getenv("GISBASE"), "COPYING")
-        if os.path.exists(copyfile):
+        if Path(copyfile).exists():
             copytext = Path(copyfile).read_text()
         else:
             copytext = _("%s file missing") % "COPYING"
@@ -303,7 +304,7 @@ class AboutWindow(wx.Frame):
     def _pageLicense(self):
         """Licence about"""
         licfile = os.path.join(os.getenv("GISBASE"), "GPL.TXT")
-        if os.path.exists(licfile):
+        if Path(licfile).exists():
             with open(licfile) as licenceFile:
                 license = "".join(licenceFile.readlines())
         else:
@@ -356,7 +357,7 @@ class AboutWindow(wx.Frame):
         """Credit about"""
         # credits
         authfile = os.path.join(os.getenv("GISBASE"), "AUTHORS")
-        if os.path.exists(authfile):
+        if Path(authfile).exists():
             with codecs.open(authfile, encoding="utf-8", mode="r") as authorsFile:
                 authors = "".join(authorsFile.readlines())
         else:
@@ -383,7 +384,7 @@ class AboutWindow(wx.Frame):
             contribfile = os.path.join(os.getenv("GISBASE"), "contributors_extra.csv")
         else:
             contribfile = os.path.join(os.getenv("GISBASE"), "contributors.csv")
-        if os.path.exists(contribfile):
+        if Path(contribfile).exists():
             contribs = []
             errLines = []
             with codecs.open(contribfile, encoding="utf-8", mode="r") as contribFile:
@@ -466,7 +467,7 @@ class AboutWindow(wx.Frame):
     def _pageTranslators(self):
         """Translators info"""
         translatorsfile = os.path.join(os.getenv("GISBASE"), "translators.csv")
-        if os.path.exists(translatorsfile):
+        if Path(translatorsfile).exists():
             translators = {}
             errLines = []
             with codecs.open(translatorsfile, encoding="utf-8", mode="r") as fd:
@@ -537,7 +538,7 @@ class AboutWindow(wx.Frame):
                     flag = os.path.join(
                         globalvar.ICONDIR, "flags", "%s.png" % lang.lower()
                     )
-                    if os.path.exists(flag):
+                    if Path(flag).exists():
                         flagBitmap = wx.StaticBitmap(
                             translatorswin,
                             wx.ID_ANY,
@@ -646,7 +647,7 @@ class AboutWindow(wx.Frame):
         """Translation statistics info"""
         fname = "translation_status.json"
         statsfile = os.path.join(os.getenv("GISBASE"), fname)
-        if os.path.exists(statsfile):
+        if Path(statsfile).exists():
             import json
 
             with open(statsfile) as statsFile:
@@ -698,12 +699,12 @@ def extract_md_content(html_string, base_url):
             self.base_url = base_url
             self.target_class = "md-content"
 
-        def handle_starttag(self, tag, attrs):
+        def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]):
             attr_dict = dict(attrs)
 
             # Convert relative URLs to absolute
             # to be able to display images and use links
-            if tag in ["img", "a"]:
+            if tag in {"img", "a"}:
                 if "src" in attr_dict and not bool(urlparse(attr_dict["src"]).netloc):
                     attr_dict["src"] = urljoin(self.base_url, attr_dict["src"])
                 if "href" in attr_dict and not bool(urlparse(attr_dict["href"]).netloc):
@@ -722,7 +723,7 @@ def extract_md_content(html_string, base_url):
                 if tag == "div":
                     self.depth += 1
 
-        def handle_endtag(self, tag):
+        def handle_endtag(self, tag: str):
             if self.recording:
                 self.extracted_data.append(f"</{tag}>")
                 if tag == "div":
@@ -730,7 +731,7 @@ def extract_md_content(html_string, base_url):
                     if self.depth == 0:
                         self.recording = False
 
-        def handle_data(self, data):
+        def handle_data(self, data: str):
             if self.recording:
                 self.extracted_data.append(data)
 
@@ -762,7 +763,7 @@ class HelpWindow(HtmlWindow):
         self.markdown = True
         # check if mkdocs is used (add slash at the end)
         self.fspath = os.path.join(os.getenv("GISBASE"), "docs", "mkdocs", "site", "")
-        if not os.path.exists(self.fspath):
+        if not Path(self.fspath).exists():
             self.markdown = False
             self.fspath = os.path.join(os.getenv("GISBASE"), "docs", "html", "")
 
@@ -864,14 +865,14 @@ class HelpPanel(wx.Panel):
     def GetFile(self):
         """Get HTML file"""
         fMan = os.path.join(self.content.fspath, self.command + ".html")
-        if os.path.isfile(fMan):
+        if Path(fMan).is_file():
             return fMan
 
         # check also addons
         faMan = os.path.join(
             os.getenv("GRASS_ADDON_BASE"), "docs", "html", self.command + ".html"
         )
-        if os.getenv("GRASS_ADDON_BASE") and os.path.isfile(faMan):
+        if os.getenv("GRASS_ADDON_BASE") and Path(faMan).is_file():
             return faMan
 
         return None

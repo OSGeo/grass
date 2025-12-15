@@ -16,6 +16,7 @@ import os
 import shutil
 import subprocess
 import sys
+from pathlib import Path
 
 from . import resource_paths
 
@@ -156,7 +157,7 @@ def get_grass_config_dir_for_version(major_version, minor_version, *, env):
         )
         raise RuntimeError(msg)
 
-    if not os.path.isdir(config_dir):
+    if not Path(config_dir).is_dir():
         msg = (
             f"The {env_dirname} variable points to directory which does"
             " not exist, ask your operating system support"
@@ -181,12 +182,12 @@ def append_left_main_executable_paths(paths, install_path):
     if WINDOWS:
         # Standalone installer has dependencies which are on path in other cases.
         path = os.path.join(install_path, "extrabin")
-        if os.path.exists(path):
+        if Path(path).exists():
             paths.appendleft(path)
     else:
         # Without FHS, scripts are separated like in the source code.
         path = os.path.join(install_path, "scripts")
-        if os.path.exists(path):
+        if Path(path).exists():
             paths.appendleft(path)
 
 
@@ -199,10 +200,12 @@ def append_left_addon_paths(paths, config_dir, env):
         addon_base = os.path.join(config_dir, name)
         env["GRASS_ADDON_BASE"] = addon_base
 
+    # Adding the paths is platform-dependent, but we add them regardless of their
+    # existence, because they might be created later after the setup is done
+    # when installing addons.
     if not WINDOWS:
         script_path = os.path.join(addon_base, "scripts")
-        if os.path.exists(script_path):
-            paths.appendleft(script_path)
+        paths.appendleft(script_path)
     paths.appendleft(os.path.join(addon_base, "bin"))
 
     # addons (path)

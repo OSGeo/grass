@@ -645,10 +645,10 @@ class TestCase(unittest.TestCase):
             if the file is accessible for reading since we expect that user
             wants to look at created files.
         """
-        if not os.path.isfile(filename):
+        if not Path(filename).is_file():
             stdmsg = "File %s does not exist" % filename
             self.fail(self._formatMessage(msg, stdmsg))
-        if not skip_size_check and not os.path.getsize(filename):
+        if not skip_size_check and not Path(filename).stat().st_size:
             stdmsg = "File %s is empty" % filename
             self.fail(self._formatMessage(msg, stdmsg))
         if not skip_access_check and not os.access(filename, os.R_OK):
@@ -811,9 +811,9 @@ class TestCase(unittest.TestCase):
         )
         expression = (
             '"{diff}" = '
-            + 'if( isnull("{first}") && isnull("{second}"), 0, '
-            + 'if( isnull("{first}") || isnull("{second}"), 1, '
-            + 'if( abs("{first}" - "{second}") > {precision}, 1, 0)))'
+            'if( isnull("{first}") && isnull("{second}"), 0, '
+            'if( isnull("{first}") || isnull("{second}"), 1, '
+            'if( abs("{first}" - "{second}") > {precision}, 1, 0)))'
         ).format(diff=diff, first=first, second=second, precision=precision)
 
         call_module("r.mapcalc", stdin=expression.encode("utf-8"))

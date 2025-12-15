@@ -13,10 +13,10 @@
 #       for details.
 #
 
-import sys
-import os
-import atexit
 import array
+import atexit
+import os
+import sys
 from pathlib import Path
 
 import grass.script as gs
