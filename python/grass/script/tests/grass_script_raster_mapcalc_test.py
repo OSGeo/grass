@@ -23,7 +23,7 @@ class TestMapcalcRandFunction:
             "g.remove",
             type="raster",
             flags="f",
-            name="rand_map,rand_map_seed,rand_map_no_flags",
+            name="rand_map,rand_map_seed,rand_map_no_flags,rand_map_seed_precedence",
             env=self.session.env,
             quiet=True,
             errors="ignore",
@@ -78,17 +78,24 @@ class TestMapcalcRandFunction:
         assert raster_info is not None
         assert "min" in raster_info
 
-    def test_mapcalc_rand_flags_s_and_seed_are_mutually_exclusive(self):
-        """Test that flags='s' and seed= are mutually exclusive"""
-        from grass.script.core import CalledModuleError
+    def test_mapcalc_rand_seed_precedence_over_flag(self):
+        """Test that seed value takes precedence when both seed and -s flag are provided.
 
-        with pytest.raises(CalledModuleError):
-            gs.mapcalc(
-                "rand_map_error = rand(0.0, 1.0)",
-                flags="s",
-                seed=12345,
-                env=self.session.env,
-            )
+        The wrapper removes the -s flag when an explicit seed value is provided.
+        The seed value itself remains unchanged.
+        """
+        # When both flags='s' and seed are provided, seed takes precedence
+        # The wrapper removes the -s flag automatically
+        gs.mapcalc(
+            "rand_map_seed_precedence = rand(0.0, 1.0)",
+            flags="s",
+            seed=12345,  # Same seed value, -s flag is removed
+            env=self.session.env,
+        )
+        # Verify the map was created successfully with the seed value
+        raster_info = gs.raster_info("rand_map_seed_precedence", env=self.session.env)
+        assert raster_info is not None
+        assert "min" in raster_info
 
 
 class TestMapcalcStartRandFunction:
@@ -109,7 +116,7 @@ class TestMapcalcStartRandFunction:
             "g.remove",
             type="raster",
             flags="f",
-            name="rand_map_start,rand_map_start_seed,rand_map_start_no_flags",
+            name="rand_map_start,rand_map_start_seed,rand_map_start_no_flags,rand_map_start_seed_precedence",
             env=self.session.env,
             quiet=True,
             errors="ignore",
@@ -157,18 +164,25 @@ class TestMapcalcStartRandFunction:
         returncode = p.wait()
         assert returncode == 0
 
-    def test_mapcalc_start_rand_flags_s_and_seed_are_mutually_exclusive(self):
-        """Test that flags='s' and seed= are mutually exclusive in mapcalc_start
+    def test_mapcalc_start_rand_seed_precedence_over_flag(self):
+        """Test that seed value takes precedence when both seed and -s flag are provided in mapcalc_start.
 
-        According to r.mapcalc CLI, -s flag and seed= option cannot be used together.
-        This test verifies that attempting to use both results in a non-zero return code.
+        The wrapper removes the -s flag when an explicit seed value is provided.
+        The seed value itself remains unchanged.
         """
+        # When both flags='s' and seed are provided, seed takes precedence
+        # The wrapper removes the -s flag automatically
         p = gs.mapcalc_start(
-            "rand_map_error = rand(0.0, 1.0)",
+            "rand_map_start_seed_precedence = rand(0.0, 1.0)",
             flags="s",
-            seed=12345,
+            seed=12345,  # Same seed value, -s flag is removed
             env=self.session.env,
         )
         returncode = p.wait()
-        # Should fail because -s and seed= are mutually exclusive
-        assert returncode != 0
+        assert returncode == 0
+        # Verify the map was created successfully with the seed value
+        raster_info = gs.raster_info(
+            "rand_map_start_seed_precedence", env=self.session.env
+        )
+        assert raster_info is not None
+        assert "min" in raster_info
