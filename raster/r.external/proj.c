@@ -6,11 +6,7 @@
 #include <ogr_srs_api.h>
 #include <cpl_conv.h>
 
-#ifdef HAVE_PROJ_H
 #include <proj.h>
-#else
-#include <proj_api.h>
-#endif
 
 /* keep in sync with r.in.gdal, v.in.ogr, v.external */
 void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
@@ -28,7 +24,6 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
     /* ---------------------------------------------------------------------- */
 
     /* get OGR SRS definition */
-#if GDAL_VERSION_NUM >= 3000000
     hSRS = GDALGetSpatialRef(hDS);
     if (hSRS) {
         CPLSetConfigOption("OSR_WKT_FORMAT", "WKT2");
@@ -36,12 +31,6 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
             G_important_message(_("Can't get WKT parameter string"));
         }
     }
-#else
-    wkt = G_store(GDALGetProjectionRef(hDS));
-    if (wkt && *wkt) {
-        hSRS = OSRNewSpatialReference(wkt);
-    }
-#endif
 
     /* proj_trouble:
      * 0: valid srs
@@ -56,9 +45,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
             G_important_message(_("Input contains an invalid CRS."));
 
             /* WKT description could give a hint what's wrong */
-#if GDAL_VERSION_NUM >= 3000000
             CPLSetConfigOption("OSR_WKT_FORMAT", "WKT2");
-#endif
             if (OSRExportToPrettyWkt(hSRS, &wkt, FALSE) != OGRERR_NONE) {
                 G_important_message(_("Can't get WKT parameter string"));
             }
@@ -115,9 +102,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
                             "format; cannot create new project."));
         }
         else {
-#if GDAL_VERSION_NUM >= 3000000
             CPLSetConfigOption("OSR_WKT_FORMAT", "WKT2");
-#endif
             if (OSRExportToPrettyWkt(hSRS, &wkt, FALSE) != OGRERR_NONE) {
                 G_important_message(_("Can't get WKT parameter string"));
             }
@@ -184,7 +169,6 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
         }
 
         /* get OGR spatial reference for current projection */
-#if GDAL_VERSION_MAJOR >= 3 && PROJ_VERSION_MAJOR >= 6
         /* 1. from SRID */
         if (loc_srid && *loc_srid) {
             PJ *obj = NULL;
@@ -205,7 +189,6 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
         if (loc_wkt && *loc_wkt) {
             hSRS_loc = OSRNewSpatialReference(loc_wkt);
         }
-#endif
         /* 3. from EPSG */
         if (!hSRS_loc && loc_epsg) {
             const char *epsgstr = G_find_key_value("epsg", loc_epsg);
@@ -220,10 +203,8 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
         }
         /* 4. from GRASS-native proj info */
         if (!hSRS_loc) {
-#if GDAL_VERSION_NUM >= 3000000
             /* GPJ_grass_to_osr2 needs WKT1 format */
             CPLSetConfigOption("OSR_WKT_FORMAT", "WKT1");
-#endif
             hSRS_loc =
                 GPJ_grass_to_osr2(loc_proj_info, loc_proj_units, loc_epsg);
         }
@@ -247,9 +228,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
             if (G_verbose() >= G_verbose_std()) {
                 char *wktstr = NULL;
 
-#if GDAL_VERSION_NUM >= 3000000
                 CPLSetConfigOption("OSR_WKT_FORMAT", "WKT2");
-#endif
                 OSRExportToPrettyWkt(hSRS, &wktstr, 0);
                 /* G_message and G_fatal_error destroy the pretty formatting
                  * thus use fprintf(stderr, ...) */

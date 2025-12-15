@@ -23,9 +23,7 @@
 #include <grass/rtree.h>
 #include <grass/dbmi.h>
 
-#ifdef HAVE_OGR
 #include <ogr_api.h>
-#endif
 
 #ifdef HAVE_POSTGRES
 #include <libpq-fe.h>
@@ -519,7 +517,6 @@ struct Format_info_ogr {
        \brief SQL where statement (to filter features)
      */
     char *where;
-#ifdef HAVE_OGR
     /*!
        \brief Pointer to OGRDriver
      */
@@ -532,11 +529,6 @@ struct Format_info_ogr {
        \brief Pointer to OGRLayer
      */
     OGRLayerH layer;
-#else
-    void *driver;
-    void *ds;
-    void *layer;
-#endif
 
     /*!
        \brief Open DB driver when writing attributes
@@ -565,11 +557,7 @@ struct Format_info_ogr {
 
        NULL if no feature is in cache
      */
-#ifdef HAVE_OGR
     OGRFeatureH feature_cache;
-#else
-    void *feature_cache;
-#endif
 
     /*!
        \brief Offset list used for building pseudo-topology

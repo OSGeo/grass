@@ -27,7 +27,7 @@ static int read_dummy(struct Map_info *Map UNUSED,
     return -1;
 }
 
-#if !defined HAVE_OGR || !defined HAVE_POSTGRES
+#if !defined HAVE_POSTGRES
 static int format(struct Map_info *Map UNUSED, struct line_pnts *line_p UNUSED,
                   struct line_cats *line_c UNUSED)
 {
@@ -45,16 +45,9 @@ static int format2(struct Map_info *Map UNUSED, struct line_pnts *line_p UNUSED,
 
 static int (*Read_next_line_array[][3])(struct Map_info *, struct line_pnts *,
                                         struct line_cats *) = {
-    {read_dummy, V1_read_next_line_nat, V2_read_next_line_nat}
-#ifdef HAVE_OGR
-    ,
+    {read_dummy, V1_read_next_line_nat, V2_read_next_line_nat},
     {read_dummy, V1_read_next_line_ogr, V2_read_next_line_ogr},
     {read_dummy, V1_read_next_line_ogr, V2_read_next_line_ogr}
-#else
-    ,
-    {read_dummy, format, format},
-    {read_dummy, format, format}
-#endif
 #ifdef HAVE_POSTGRES
     ,
     {read_dummy, V1_read_next_line_pg, V2_read_next_line_pg}
@@ -65,21 +58,14 @@ static int (*Read_next_line_array[][3])(struct Map_info *, struct line_pnts *,
 };
 
 static int (*Read_line_array[])(struct Map_info *, struct line_pnts *,
-                                struct line_cats *, int) = {V2_read_line_nat
-#ifdef HAVE_OGR
-                                                            ,
-                                                            V2_read_line_sfa,
-                                                            V2_read_line_sfa
-#else
-                                                            ,
-                                                            format2, format2
-#endif
+                                struct line_cats *, int) = {
+    V2_read_line_nat, V2_read_line_sfa, V2_read_line_sfa
 #ifdef HAVE_POSTGRES
-                                                            ,
-                                                            V2_read_line_pg
+    ,
+    V2_read_line_pg
 #else
-                                                            ,
-                                                            format2
+    ,
+    format2
 #endif
 };
 

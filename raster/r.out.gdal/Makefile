@@ -9,6 +9,4 @@ EXTRA_CFLAGS = -DGRASS_VERSION_NUMBER=\"'$(GRASS_VERSION_NUMBER)'\" \
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
-ifneq ($(USE_GDAL),)
 default: cmd
-endif

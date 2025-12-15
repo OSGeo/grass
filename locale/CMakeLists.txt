@@ -26,10 +26,16 @@ foreach(_locale ${_locales})
     generate_mo_files_dir_${_locale}
     DEPENDS generate_mo_files_dir
     COMMENT "Create locale specific directories")
+  add_custom_target(${_locale}_LC_MESSAGES_dir ALL
+                    COMMENT "Create locale (${_locale}) LC_MESSAGES directory")
   add_custom_command(
-    OUTPUT ${OUTDIR}/${GRASS_INSTALL_LOCALEDIR}/${_locale}/LC_MESSAGES
+    TARGET ${_locale}_LC_MESSAGES_dir
+    PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E make_directory
-            ${OUTDIR}/${GRASS_INSTALL_LOCALEDIR}/${_locale}/LC_MESSAGES)
+            ${OUTDIR}/${GRASS_INSTALL_LOCALEDIR}/${_locale}/LC_MESSAGES
+    BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_LOCALEDIR}/${_locale}/LC_MESSAGES)
+
+  set_target_properties(${_locale}_LC_MESSAGES_dir PROPERTIES FOLDER locale)
   set_target_properties(generate_mo_files_dir_${_locale} PROPERTIES FOLDER
                                                                     locale)
 endforeach()
@@ -44,7 +50,7 @@ foreach(po_file ${po_files})
 
   add_custom_target(
     generate_mo_files_${po_file_name} ALL
-    DEPENDS ${OUTDIR}/${GRASS_INSTALL_LOCALEDIR}/${_locale}/LC_MESSAGES
+    DEPENDS ${_locale}_LC_MESSAGES_dir
     COMMENT "Generate mo files")
   set_target_properties(generate_mo_files_${po_file_name} PROPERTIES FOLDER
                                                                      locale)
