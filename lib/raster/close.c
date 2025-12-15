@@ -578,7 +578,7 @@ void Rast__close_null(int fd)
     G_free(fcb->null_bits);
 
     /* fcb->open_mode = -1; */
-#pragma omp critical (R_RASTER_OPEN)
+#pragma omp critical(R_RASTER_OPEN)
     fcb->open_mode = -1;
 }
 
