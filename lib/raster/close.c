@@ -191,7 +191,7 @@ static int close_old(int fd)
     G_free(fcb->name);
     if (fcb->reclass_flag)
         Rast_free_reclass(&fcb->reclass);
-    // fcb->open_mode = -1; 
+    // fcb->open_mode = -1;
 
     if (fcb->map_type != CELL_TYPE) {
         Rast_quant_free(&fcb->quant);
