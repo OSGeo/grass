@@ -20,11 +20,9 @@ This program is free software under the GNU General Public License
 errorMsg = ""
 
 try:
-    from wx import glcanvas  # noqa: F401
     from nviz import mapwindow
     from nviz import tools
     from nviz import workspace
-    from nviz import wxnviz  # noqa: F401
 
     haveNviz = True
 except (ImportError, NameError) as err:

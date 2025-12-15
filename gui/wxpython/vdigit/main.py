@@ -15,8 +15,9 @@ This program is free software under the GNU General Public License
 """
 
 try:
-    from vdigit.wxdigit import IVDigit, GV_LINES  # noqa: F401
-
+    import vdigit.wxdigit as _wxdigit
+    IVDigit = _wxdigit.IVDigit
+    GV_LINES = getattr(_wxdigit, "GV_LINES", -1)
     haveVDigit = True
     errorMsg = ""
 except (ImportError, NameError) as err:

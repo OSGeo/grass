@@ -27,13 +27,8 @@ from core.gcmd import GError, RunCommand
 import grass.script as gs
 from grass.exceptions import ScriptError
 
-try:
-    from PIL import Image as PILImage  # noqa: F401
-
-    havePILImage = True
-except ImportError:
-    havePILImage = False
-
+import importlib.util
+havePILImage = importlib.util.find_spec("PIL") is not None
 
 class Rect2D(wx.Rect2D):
     """Class representing rectangle with floating point values.
