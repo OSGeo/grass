@@ -36,7 +36,7 @@ static int new_fileinfo(void)
     int i;
     int fd = -1;
 
-#pragma omp critical (R_RASTER_OPEN)
+#pragma omp critical(R_RASTER_OPEN)
     {
         oldsize = R__.fileinfo_count;
         newsize = oldsize;
