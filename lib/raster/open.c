@@ -57,7 +57,8 @@ static int new_fileinfo(void)
             else
                 newsize *= 2;
 
-            R__.fileinfo = G_realloc(R__.fileinfo, newsize * sizeof(struct fileinfo));
+            R__.fileinfo =
+                G_realloc(R__.fileinfo, newsize * sizeof(struct fileinfo));
 
             // Mark all cell files as closed
             for (i = oldsize; i < newsize; i++) {
