@@ -263,8 +263,9 @@ actinia specific parametrization is supported for both import and export.
 Import of input data is denoted with a "@" as delimiter followed by a
 valid URL.
 
-Request for actinia to export a raster, vector or other file-based data can be invoked with a
-"+" behind the file-name followed by an actinia-format name. Currently recognized formats are:
+Request for actinia to export a raster, vector or other file-based data
+can be invoked with a "+" behind the file-name followed by an
+actinia-format name. Currently recognized formats are:
 
 - COG
 - GTiff
@@ -278,10 +279,11 @@ Request for actinia to export a raster, vector or other file-based data can be i
 - PDF
 - PostgreSQL
 
-Many GRASS tools produce textual output to stdout and actinia allows
-to export that output as well, however, the **--json** flag does not yet
-allow to specify export of stdout which may look in an actinia processing
-chain e.g. like this:
+Many GRASS tools produce textual output to *stdout* and actinia allows
+to export that output. However, the **--json** flag does not yet
+allow to specify export of *stdout*, so export instructions need to be
+added manually to the resulting JSON data. In an actinia processing
+chain, exporting *stdout* may be requested as follows:
 
 ```json
 {
@@ -289,6 +291,10 @@ chain e.g. like this:
   'stdout': {'id': 'stats', 'format': 'kv', 'delimiter': '='},
 }
 ```
+
+Please consult the
+[actinia documentation](https://actinia-org.github.io/actinia-core/tutorial_process_chain/)
+for possible export formats and settings of *stdout* results.
 
 Here is a full example for usage of the **--json** flag:
 
