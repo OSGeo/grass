@@ -256,15 +256,16 @@ char *G__json(void)
         fprintf(fp, "  \"overwrite\": true,\n");
     }
 
-    if (G_verbose() == G_verbose_max()) {
+    if (st->module_info.verbose == G_verbose_max() ||
+        G_verbose() == G_verbose_max()) {
         fprintf(fp, "  \"verbose\": true,\n");
     }
 
-    if (G_verbose() == G_verbose_min() && st->superquiet < 1) {
+    if (st->quiet == 1 || (G_verbose() == G_verbose_min() && !st->superquiet)) {
         fprintf(fp, "  \"quiet\": true,\n");
     }
 
-    if (st->superquiet == 1 || G_verbose() == -1) {
+    if (st->superquiet || G_verbose() == -1) {
         fprintf(fp, "  \"superquiet\": true,\n");
     }
 
