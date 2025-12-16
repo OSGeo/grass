@@ -26,7 +26,7 @@
 #include <grass/gjson.h>
 #include "local_proto.h"
 
-enum OutputFormat { PLAIN, JSON };
+enum OutputFormat { PLAIN, JSON, CSV, VERTICAL };
 
 struct {
     char *driver, *database, *table, *sql, *fs, *vs, *nv, *input, *output;
@@ -39,6 +39,15 @@ static void parse_command_line(int, char **);
 static int sel(dbDriver *, dbString *);
 static int get_stmt(FILE *, dbString *);
 static int stmt_is_empty(dbString *);
+void fatal_error_option_value_excludes_option(struct Option *option,
+                                              struct Option *excluded,
+                                              const char *because)
+{
+    if (!excluded->answer)
+        return;
+    G_fatal_error(_("The option %s is not allowed with %s=%s. %s"),
+                  excluded->key, option->key, option->answer, because);
+}
 
 int main(int argc, char **argv)
 {
@@ -433,6 +442,24 @@ void parse_command_line(int argc, char **argv)
         G_fatal_error(
             _("You must provide one of these options: <%s>, <%s>, or <%s>"),
             sql->key, input->key, table->key);
+
+    // Check for mutually exclusive options
+    if (parms.format == JSON) {
+        fatal_error_option_value_excludes_option(
+            format, fs, _("Separator is part of the format"));
+        fatal_error_option_value_excludes_option(
+            format, vs, _("Vertical separator is part of the format"));
+        fatal_error_option_value_excludes_option(
+            format, nv, _("Null value is part of the format"));
+    }
+    if (v->answer) {
+        G_verbose_message(
+            _("Flag 'v' is deprecated and will be removed in a future "
+              "release. Please use format=vertical instead."));
+        if (parms.format != VERTICAL) {
+            G_fatal_error(_("Flag 'v' is only allowed with format=vertical."));
+        }
+    }
 }
 
 int get_stmt(FILE *fd, dbString *stmt)
