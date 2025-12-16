@@ -160,9 +160,6 @@ int sel(dbDriver *driver, dbString *stmt)
         G_json_object_set_value(root_object, "records", records_value);
         records_array = G_json_object_get_array(root_object, "records");
 
-        G_json_object_set_string(info_object, "driver", parms.driver);
-        G_json_object_set_string(info_object, "database", parms.database);
-
         if (parms.table)
             G_json_object_set_string(info_object, "table", parms.table);
 
@@ -208,8 +205,7 @@ int sel(dbDriver *driver, dbString *stmt)
         return DB_OK;
     }
 
-    if (parms.format != JSON && parms.output &&
-        strcmp(parms.output, "-") != 0) {
+    if (parms.output && strcmp(parms.output, "-") != 0) {
         if (NULL == freopen(parms.output, "w", stdout)) {
             G_fatal_error(_("Unable to open file <%s> for writing"),
                           parms.output);
