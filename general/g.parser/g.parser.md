@@ -263,9 +263,8 @@ actinia specific parametrization is supported for both import and export.
 Import of input data is denoted with a "@" as delimiter followed by a
 valid URL.
 
-Export of raster, vector or other file-based date if invoked with a
-"+" behind the file-name followed by an actinia-format name. Formats
-currently supported are:
+Request for actinia to export a raster, vector or other file-based data can be invoked with a
+"+" behind the file-name followed by an actinia-format name. Currently recognized formats are:
 
 - COG
 - GTiff
@@ -279,7 +278,7 @@ currently supported are:
 - PDF
 - PostgreSQL
 
-Many GRASS modules produce textual output to stdout and actinia allows
+Many GRASS tools produce textual output to stdout and actinia allows
 to export that output as well, however, the **--json** flag does not yet
 allow to specify export of stdout which may look in an actinia processing
 chain e.g. like this:
