@@ -91,15 +91,6 @@ class TestRandFunction(TestCase):
         self.assertModule("r.mapcalc", expression="nonrand_cell = 200")
         self.to_remove.append("nonrand_cell")
 
-    def test_seed_required(self):
-        """Test that seed is required when rand() is used
-
-        This test can, and probably should, generate an error message.
-        """
-        self.assertModuleFail("r.mapcalc", expression="rand_x = rand(1, 200)")
-        # TODO: assert map not exists but it would be handy here
-        # TODO: test that error message was generated
-
     def test_seed_cell(self):
         """Test given seed with CELL against reference map"""
         seed = 500
