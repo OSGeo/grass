@@ -345,6 +345,7 @@ void parse_command_line(int argc, char **argv)
     database->guisection = _("Connection");
 
     fs = G_define_standard_option(G_OPT_F_SEP);
+    fs->answer = NULL;
     fs->guisection = _("Format");
 
     vs = G_define_standard_option(G_OPT_F_SEP);
@@ -360,7 +361,7 @@ void parse_command_line(int argc, char **argv)
     format->key = "format";
     format->type = TYPE_STRING;
     format->required = NO;
-    format->answer = "plain";
+    format->answer = NULL;
     format->options = "plain,csv,json,vertical";
     format->descriptions =
         "plain;Configurable plain text output;"
@@ -409,27 +410,53 @@ void parse_command_line(int argc, char **argv)
     parms.database = database->answer;
     parms.table = table->answer;
     parms.sql = sql->answer;
-    parms.fs = G_option_to_separator(fs);
+    if (format->answer) {
+        if (strcmp("json", format->answer) == 0) {
+            parms.format = JSON;
+        }
+        else if (strcmp("csv", format->answer) == 0) {
+            parms.format = CSV;
+        }
+        else if (strcmp("vertical", format->answer) == 0) {
+            parms.format = VERTICAL;
+        }
+        else {
+            parms.format = PLAIN;
+        }
+    }
+    else {
+        parms.format = PLAIN; // DEFAULT
+    }
+    if (fs->answer) {
+        parms.fs = G_option_to_separator(fs);
+    }
+    else {
+        if (parms.format == CSV) {
+            parms.fs = G_store(",");
+        }
+        else if (parms.format == PLAIN || parms.format == VERTICAL) {
+            parms.fs = G_store("|");
+        }
+        else { /* Something like a separator is part of the format. */
+            parms.fs = NULL;
+        }
+    }
     parms.vs = NULL;
     if (vs->answer)
         parms.vs = G_option_to_separator(vs);
     parms.nv = nv->answer;
     parms.input = input->answer;
     parms.output = output->answer;
-    if (strcmp(format->answer, "json") == 0)
-        parms.format = JSON;
-    else
-        parms.format = PLAIN;
 
     if (!c->answer)
         parms.c = TRUE;
     else
         parms.c = FALSE;
     parms.d = d->answer;
-    if (!v->answer)
-        parms.h = TRUE;
-    else
+    if (v->answer || parms.format == VERTICAL)
         parms.h = FALSE;
+    else
+        parms.h = TRUE;
 
     parms.test_only = flag_test->answer;
 
@@ -442,7 +469,6 @@ void parse_command_line(int argc, char **argv)
         G_fatal_error(
             _("You must provide one of these options: <%s>, <%s>, or <%s>"),
             sql->key, input->key, table->key);
-
     // Check for mutually exclusive options
     if (parms.format == JSON) {
         fatal_error_option_value_excludes_option(
@@ -456,7 +482,7 @@ void parse_command_line(int argc, char **argv)
         G_verbose_message(
             _("Flag 'v' is deprecated and will be removed in a future "
               "release. Please use format=vertical instead."));
-        if (parms.format != VERTICAL) {
+        if (format->answer && parms.format != VERTICAL) {
             G_fatal_error(_("Flag 'v' is only allowed with format=vertical."));
         }
     }
