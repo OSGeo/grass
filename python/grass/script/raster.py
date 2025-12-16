@@ -154,12 +154,8 @@ def mapcalc(
     if seed == "auto":
         seed = None
 
-    # When no explicit seed is provided, add -s flag for automatic seeding
-    # (until r.mapcalc C code implements native auto-seeding)
-    if seed is None and "s" not in flags:
-        flags += "s"
     # If seed value is provided, remove -s flag to give precedence to seed
-    elif seed is not None and "s" in flags:
+    if seed is not None and "s" in flags:
         flags = flags.replace("s", "")
 
     try:
