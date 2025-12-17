@@ -25,7 +25,6 @@ extend-exclude = [
     "python/grass/temporal/ply",           # External code
     "python/libgrass_interface_generator",
 ]
-]
 
 [tool.ruff.lint]
 # See https://docs.astral.sh/ruff/rules/
