@@ -745,7 +745,6 @@ disable = [
     "W0612",  # Unused variable %r (unused-variable)
     "W0613",  # Unused argument %r (unused-argument)
     "W0621",  # Redefining name %r from outer scope (line %s) (redefined-outer-name)
-    "W0621",  # Redefining name %r from outer scope (line %s) (redefined-outer-name)
     "W0622",  # Redefining built-in %r (redefined-builtin)
     "W0631",  # Using possibly undefined loop variable %r (undefined-loop-variable)
     "W0632",  # Possible unbalanced tuple unpacking with sequence %s: left side has %d label%s, right side has %d value%s (unbalanced-tuple-unpacking)
