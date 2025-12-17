@@ -300,8 +300,23 @@ int sel(dbDriver *driver, dbString *stmt)
                 fprintf(stdout, "%s", parms.fs);
             if (parms.nv && db_test_value_isnull(value))
                 fprintf(stdout, "%s", parms.nv);
-            else
-                fprintf(stdout, "%s", db_get_string(&value_string));
+            else {
+                char *str = db_get_string(&value_string);
+                if (parms.format == CSV) {
+                    if (strchr(str, '"'))
+                        str = G_str_replace(str, "\"", "\"\"");
+                    int type =
+                        db_sqltype_to_Ctype(db_get_column_sqltype(column));
+
+                    /* Don't quote numbers, quote text and datetime. */
+                    if (type == DB_C_TYPE_INT || type == DB_C_TYPE_DOUBLE)
+                        fprintf(stdout, "%s", str);
+                    else
+                        fprintf(stdout, "\"%s\"", str);
+                }
+                else
+                    fprintf(stdout, "%s", str);
+            }
             if (!parms.h)
                 fprintf(stdout, "\n");
         }

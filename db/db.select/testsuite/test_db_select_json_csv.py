@@ -107,9 +107,9 @@ class DifficultValueTest(TestCase):
 
         self.assertIsNone(records[2]["place_name"])
         self.assertEqual(records[3]["place_name"], 'The "Great" Place')
+        self.assertEqual(records[4]["place_name"], "Joan's Place")
         self.assertEqual(records[7]["place_name"], "Building: GeoLab[5]")
         self.assertEqual(records[8]["place_name"], "892 Long Street\nRaleigh NC 29401")
-        self.assertEqual(records[4]["place_name"], "Joan's Place")
 
     def test_csv_loads(self):
         """Load CSV with difficult values with many separators"""
@@ -144,6 +144,7 @@ class DifficultValueTest(TestCase):
 
             self.assertEqual(data[2]["place_name"], null_value)
             self.assertEqual(data[3]["place_name"], 'The "Great" Place')
+            self.assertEqual(data[4]["place_name"], "Joan's Place")
             self.assertEqual(data[5]["place_name"], "Bright Hall|BLDG209")
             self.assertEqual(data[6]["place_name"], "Raleigh, NC, USA")
             self.assertEqual(data[8]["place_name"], "892 Long Street\nRaleigh NC 29401")
