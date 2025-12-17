@@ -24,6 +24,7 @@ builtins = ["_"]
 extend-exclude = [
     "python/grass/temporal/ply",           # External code
     "python/libgrass_interface_generator",
+    "gui/**",
 ]
 
 [tool.ruff.lint]
@@ -111,7 +112,6 @@ ignore = [
     "ARG002",  # unused-method-argument
     "ARG005",  # unused-lambda-argument
     "B004",    # unreliable-callable-check
-    "B006",    # mutable-argument-default
     "B007",    # unused-loop-control-variable
     "B008",    # function-call-in-default-argument
     "B015",    # useless-comparison
