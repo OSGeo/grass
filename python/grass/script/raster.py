@@ -154,9 +154,7 @@ def mapcalc(
     if seed == "auto":
         seed = None
 
-    # If seed value is provided, remove -s flag to give precedence to seed
-    if seed is not None and "s" in flags:
-        flags = flags.replace("s", "")
+    # We no longer forward `flags` to r.mapcalc; keep `seed` for compatibility
 
     try:
         write_command(
@@ -170,7 +168,6 @@ def mapcalc(
             superquiet=superquiet,
             verbose=verbose,
             overwrite=overwrite,
-            flags=flags,
         )
     except CalledModuleError:
         fatal(
@@ -239,14 +236,7 @@ def mapcalc_start(
     if seed == "auto":
         seed = None
 
-    # When no explicit seed is provided, add -s flag for automatic seeding
-    # (until r.mapcalc C code implements native auto-seeding)
-    if seed is None and "s" not in flags:
-        flags += "s"
-    # If seed value is provided, remove -s flag to give precedence to seed
-    elif seed is not None and "s" in flags:
-        flags = flags.replace("s", "")
-
+    # We no longer forward `flags` to r.mapcalc; keep `seed` for compatibility
     p = feed_command(
         "r.mapcalc",
         file="-",
@@ -257,7 +247,6 @@ def mapcalc_start(
         superquiet=superquiet,
         verbose=verbose,
         overwrite=overwrite,
-        flags=flags,
     )
     p.stdin.write(e)
     p.stdin.close()
