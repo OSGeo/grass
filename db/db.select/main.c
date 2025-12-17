@@ -129,7 +129,7 @@ int sel(dbDriver *driver, dbString *stmt)
     dbColumn *column;
     dbValue *value;
     dbString value_string;
-    int col, ncols;
+    int col, ncols, nrows;
     int more;
     G_JSON_Value *root_value = NULL;
     G_JSON_Object *root_object = NULL;
@@ -144,6 +144,14 @@ int sel(dbDriver *driver, dbString *stmt)
 
     table = db_get_cursor_table(&cursor);
     ncols = db_get_table_number_of_columns(table);
+    nrows = db_get_num_rows(&cursor);
+    if (parms.d && parms.format != JSON) {
+        for (col = 0; col < ncols; col++) {
+            column = db_get_table_column(table, col);
+            print_column_definition(column);
+        }
+        return DB_OK;
+    }
     if (parms.format == JSON) {
         root_value = G_json_value_init_object();
         if (root_value == NULL) {
@@ -171,7 +179,10 @@ int sel(dbDriver *driver, dbString *stmt)
 
         if (parms.table)
             G_json_object_set_string(info_object, "table", parms.table);
-
+        if (parms.d) {
+            G_json_object_set_number(info_object, "ncols", ncols);
+            G_json_object_set_number(info_object, "nrows", nrows);
+        }
         G_JSON_Value *columns_value = G_json_value_init_array();
         if (columns_value == NULL) {
             G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
@@ -188,7 +199,11 @@ int sel(dbDriver *driver, dbString *stmt)
                     _("Failed to initialize JSON object. Out of memory?"));
             }
             G_JSON_Object *col_object = G_json_value_get_object(col_value);
-
+            if (parms.d) {
+                G_json_object_set_number(col_object, "length",
+                                         db_get_column_length(column));
+                G_json_object_set_number(col_object, "position", col + 1);
+            }
             G_json_object_set_string(col_object, "name",
                                      db_get_column_name(column));
 
@@ -201,17 +216,17 @@ int sel(dbDriver *driver, dbString *stmt)
             G_json_object_set_boolean(col_object, "is_number",
                                       c_type == DB_C_TYPE_INT ||
                                           c_type == DB_C_TYPE_DOUBLE);
-
             G_json_array_append_value(columns_array, col_value);
         }
-    }
-    if (parms.d && parms.format != JSON) {
-        for (col = 0; col < ncols; col++) {
-            column = db_get_table_column(table, col);
-            print_column_definition(column);
-        }
+        if (parms.d) {
+            char *json_string = G_json_serialize_to_string_pretty(info_value);
+            fputs(json_string, stdout);
+            fputc('\n', stdout);
 
-        return DB_OK;
+            G_json_free_serialized_string(json_string);
+            G_json_value_free(info_value);
+            return DB_OK;
+        }
     }
 
     if (parms.output && strcmp(parms.output, "-") != 0) {
@@ -481,7 +496,7 @@ void parse_command_line(int argc, char **argv)
     if (v->answer) {
         G_verbose_message(
             _("Flag 'v' is deprecated and will be removed in a future "
-              "release. Please use format=vertical instead."));
+              "release. Please use format=vertical instead [deprecated]."));
         if (format->answer && parms.format != VERTICAL) {
             G_fatal_error(_("Flag 'v' is only allowed with format=vertical."));
         }
