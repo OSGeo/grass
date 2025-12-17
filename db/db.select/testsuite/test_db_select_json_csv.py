@@ -35,7 +35,6 @@ class DifficultValueTest(TestCase):
         cls.runModule(
             "db.connect",
             driver="sqlite",
-            database="$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db",
         )
 
         cls.runModule(
