@@ -58,10 +58,8 @@ static expr_list *parse_file(const char *filename)
     return res;
 }
 
-static int has_rand_expr(const expression *e)
+static bool has_rand_expr(const expression *e)
 {
-    int i;
-
     if (!e)
         return 0;
 
@@ -70,7 +68,7 @@ static int has_rand_expr(const expression *e)
         if (strcmp(e->data.func.name, "rand") == 0)
             return 1;
         // args is 1-indexed (likely from yacc parser conventions)
-        for (i = 1; i <= e->data.func.argc; i++) {
+        for (int i = 1; i <= e->data.func.argc; i++) {
             if (has_rand_expr(e->data.func.args[i]))
                 return 1;
         }
@@ -87,7 +85,7 @@ static int has_rand_expr(const expression *e)
     }
 }
 
-int expr_list_has_rand(const expr_list *list)
+static bool expr_list_has_rand(const expr_list *list)
 {
     for (; list; list = list->next) {
         if (has_rand_expr(list->exp))
