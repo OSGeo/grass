@@ -558,7 +558,7 @@ int G_parser(int argc, char **argv)
                     G_warning(_("Use either --qq or --verbose flag, not "
                                 "both. Assuming --verbose."));
                 }
-                st->superquiet = 0; /* for passing to gui init */
+                st->superquiet = FALSE; /* for passing to gui init */
                 st->quiet = -1;
             }
 
@@ -583,7 +583,7 @@ int G_parser(int argc, char **argv)
                     G_warning(_("Use either --qq or --quiet flag, not "
                                 "both. Assuming --quiet."));
                 }
-                st->superquiet = 0; /* for passing to gui init */
+                st->superquiet = FALSE; /* for passing to gui init */
                 st->quiet = 1;
             }
 
@@ -606,7 +606,7 @@ int G_parser(int argc, char **argv)
                 putenv(G_store(buff));
                 G_set_verbose(G_verbose_min());
                 G_suppress_warnings(TRUE);
-                st->superquiet = 1; /* for passing to gui init */
+                st->superquiet = TRUE; /* for passing to gui init */
                 st->quiet = -1;
             }
 
