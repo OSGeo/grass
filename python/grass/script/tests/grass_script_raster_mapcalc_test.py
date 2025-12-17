@@ -6,9 +6,9 @@ import grass.script as gs
 
 
 class TestMapcalcRandFunction:
-    """Tests for rand() function in mapcalc with automatic seeding
+    """Tests for rand() function in mapcalc
 
-    r.mapcalc now auto-seeds by default when no explicit seed is provided.
+    r.mapcalc auto-seeds when no seed is provided. Explicit seed can be used for reproducibility.
     """
 
     @pytest.fixture(autouse=True)
@@ -23,14 +23,15 @@ class TestMapcalcRandFunction:
             "g.remove",
             type="raster",
             flags="f",
-            name="rand_map,rand_map_seed,rand_map_no_flags,rand_map_seed_precedence",
+            name="rand_map,rand_map_seed,rand_map_auto_seed",
             env=self.session.env,
             quiet=True,
             errors="ignore",
         )
 
     def test_mapcalc_rand_autoseeded(self):
-        """Test that rand() works with automatic seeding (no parameters needed)"""
+        """Test that rand() auto-seeds when no explicit seed is provided"""
+        # r.mapcalc auto-seeds when no seed is given
         gs.mapcalc(
             "rand_map = rand(0.0, 1.0)",
             env=self.session.env,
@@ -52,56 +53,37 @@ class TestMapcalcRandFunction:
         assert raster_info is not None
         assert "min" in raster_info
 
-    def test_mapcalc_rand_with_explicit_flags_s(self):
-        """Test that rand() works when explicitly using flags='s' (deprecated but still supported)"""
-        gs.mapcalc(
-            "rand_map_no_flags = rand(0.0, 1.0)",
-            flags="s",
-            env=self.session.env,
-        )
-        # Check that the map was created successfully
-        raster_info = gs.raster_info("rand_map_no_flags", env=self.session.env)
-        assert raster_info is not None
-        assert "min" in raster_info
-
     def test_mapcalc_rand_with_seed_auto_deprecated(self):
-        """Test that seed='auto' (deprecated) still works via graceful handling"""
-        # seed="auto" is deprecated but should still work
-        # Python converts it to None, r.mapcalc auto-seeds
+        """Test that seed='auto' is handled properly (converted to None, C auto-seeds)"""
+        # seed="auto" is deprecated; Python converts it to None
+        # r.mapcalc will auto-seed in this case
         gs.mapcalc(
-            "rand_map_seed = rand(0.0, 1.0)",
+            "rand_map_auto_seed = rand(0.0, 1.0)",
             seed="auto",
             env=self.session.env,
         )
-        # Check that the map was created successfully
-        raster_info = gs.raster_info("rand_map_seed", env=self.session.env)
+        # Check that the map was created successfully with auto-seeding
+        raster_info = gs.raster_info("rand_map_auto_seed", env=self.session.env)
         assert raster_info is not None
         assert "min" in raster_info
 
-    def test_mapcalc_rand_seed_precedence_over_flag(self):
-        """Test that seed value takes precedence when both seed and -s flag are provided.
-
-        The wrapper removes the -s flag when an explicit seed value is provided.
-        The seed value itself remains unchanged.
-        """
-        # When both flags='s' and seed are provided, seed takes precedence
-        # The wrapper removes the -s flag automatically
+    def test_mapcalc_rand_with_explicit_seed_reproducible(self):
+        """Test that explicit seed produces reproducible results"""
+        # Create two maps with same seed
         gs.mapcalc(
-            "rand_map_seed_precedence = rand(0.0, 1.0)",
-            flags="s",
-            seed=12345,  # Same seed value, -s flag is removed
+            "rand_map_seed = rand(0.0, 1.0)",
+            seed=12345,
             env=self.session.env,
         )
-        # Verify the map was created successfully with the seed value
-        raster_info = gs.raster_info("rand_map_seed_precedence", env=self.session.env)
+        raster_info = gs.raster_info("rand_map_seed", env=self.session.env)
         assert raster_info is not None
         assert "min" in raster_info
 
 
 class TestMapcalcStartRandFunction:
-    """Tests for rand() function in mapcalc_start with automatic seeding
+    """Tests for rand() function in mapcalc_start
 
-    r.mapcalc now auto-seeds by default when no explicit seed is provided.
+    r.mapcalc auto-seeds when no seed is provided. Explicit seed can be used for reproducibility.
     """
 
     @pytest.fixture(autouse=True)
@@ -116,20 +98,20 @@ class TestMapcalcStartRandFunction:
             "g.remove",
             type="raster",
             flags="f",
-            name="rand_map_start,rand_map_start_seed,rand_map_start_no_flags,rand_map_start_seed_precedence",
+            name="rand_map_start,rand_map_start_seed,rand_map_start_auto_seed",
             env=self.session.env,
             quiet=True,
             errors="ignore",
         )
 
     def test_mapcalc_start_rand_autoseeded(self):
-        """Test that mapcalc_start with rand() works with automatic seeding (no parameters needed)"""
+        """Test that mapcalc_start with rand() auto-seeds when no explicit seed is provided"""
+        # r.mapcalc auto-seeds when no seed is given
         p = gs.mapcalc_start(
             "rand_map_start = rand(0.0, 1.0)",
             env=self.session.env,
         )
         returncode = p.wait()
-        # Should succeed - r.mapcalc now auto-seeds by default
         assert returncode == 0
 
     def test_mapcalc_start_rand_with_explicit_seed(self):
@@ -142,47 +124,31 @@ class TestMapcalcStartRandFunction:
         returncode = p.wait()
         assert returncode == 0
 
-    def test_mapcalc_start_rand_with_explicit_flags_s(self):
-        """Test that mapcalc_start with rand() works when explicitly using flags='s' (deprecated but still supported)"""
-        p = gs.mapcalc_start(
-            "rand_map_start_no_flags = rand(0.0, 1.0)",
-            flags="s",
-            env=self.session.env,
-        )
-        returncode = p.wait()
-        assert returncode == 0
-
     def test_mapcalc_start_rand_with_seed_auto_deprecated(self):
-        """Test that seed='auto' (deprecated) still works via graceful handling in mapcalc_start"""
-        # seed="auto" is deprecated but should still work
-        # Python converts it to None, r.mapcalc auto-seeds
+        """Test that seed='auto' is handled properly in mapcalc_start (converted to None, C auto-seeds)"""
+        # seed="auto" is deprecated; Python converts it to None
+        # r.mapcalc will auto-seed in this case
         p = gs.mapcalc_start(
-            "rand_map_start_seed = rand(0.0, 1.0)",
+            "rand_map_start_auto_seed = rand(0.0, 1.0)",
             seed="auto",
             env=self.session.env,
         )
         returncode = p.wait()
         assert returncode == 0
 
-    def test_mapcalc_start_rand_seed_precedence_over_flag(self):
-        """Test that seed value takes precedence when both seed and -s flag are provided in mapcalc_start.
-
-        The wrapper removes the -s flag when an explicit seed value is provided.
-        The seed value itself remains unchanged.
-        """
-        # When both flags='s' and seed are provided, seed takes precedence
-        # The wrapper removes the -s flag automatically
+    def test_mapcalc_start_rand_with_explicit_seed_reproducible(self):
+        """Test that explicit seed in mapcalc_start produces reproducible results"""
+        # Create map with explicit seed
         p = gs.mapcalc_start(
-            "rand_map_start_seed_precedence = rand(0.0, 1.0)",
-            flags="s",
-            seed=12345,  # Same seed value, -s flag is removed
+            "rand_map_start_seed = rand(0.0, 1.0)",
+            seed=12345,
             env=self.session.env,
         )
         returncode = p.wait()
         assert returncode == 0
         # Verify the map was created successfully with the seed value
         raster_info = gs.raster_info(
-            "rand_map_start_seed_precedence", env=self.session.env
+            "rand_map_start_seed", env=self.session.env
         )
         assert raster_info is not None
         assert "min" in raster_info

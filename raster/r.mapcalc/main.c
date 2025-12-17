@@ -166,13 +166,6 @@ int main(int argc, char **argv)
         G_debug(3, "Generated random seed (-s): %ld", seed_value);
     }
 
-    /* Auto-seed if no explicit seed and no -s flag provided */
-    if (!seed->answer && !random->answer) {
-        seed_value = G_srand48_auto();
-        seeded = 1;
-        G_debug(3, "Generated random seed (auto): %ld", seed_value);
-    }
-
     /* Set the global variable of the region setup approach */
     region_approach = 1;
 
