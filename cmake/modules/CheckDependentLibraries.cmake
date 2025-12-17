@@ -20,9 +20,9 @@ if(UNIX)
   set(LIBM LIBM)
 endif()
 
-find_package(PROJ REQUIRED)
+find_package(PROJ 9.0.0 REQUIRED)
 
-find_package(GDAL REQUIRED)
+find_package(GDAL 3.7.0 REQUIRED)
 
 find_package(ZLIB REQUIRED)
 
@@ -247,9 +247,6 @@ if(Python3_FOUND)
   #]]
 endif()
 
-check_target(PROJ::proj HAVE_PROJ_H)
-check_target(GDAL::GDAL HAVE_GDAL)
-check_target(GDAL::GDAL HAVE_OGR)
 check_target(ZLIB::ZLIB HAVE_ZLIB_H)
 check_target(Iconv::Iconv HAVE_ICONV_H)
 check_target(PNG::PNG HAVE_PNG_H)

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-22 15:39+0000\n"
+"POT-Creation-Date: 2025-12-06 15:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -4010,8 +4010,8 @@ msgid "Update"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/panels.py:1722
-#: ../gui/wxpython/gui_core/pyedit.py:400
-#: ../gui/wxpython/gui_core/pyedit.py:471
+#: ../gui/wxpython/gui_core/pyedit.py:401
+#: ../gui/wxpython/gui_core/pyedit.py:472
 msgid "Python script (*.py)|*.py"
 msgstr ""
 
@@ -4020,18 +4020,18 @@ msgid "JSON file (*.json)|*.json"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/panels.py:1728
-#: ../gui/wxpython/gui_core/pyedit.py:398
+#: ../gui/wxpython/gui_core/pyedit.py:399
 msgid "Choose file to save"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/panels.py:1749
-#: ../gui/wxpython/gui_core/pyedit.py:418 ../gui/wxpython/wxplot/profile.py:427
+#: ../gui/wxpython/gui_core/pyedit.py:419 ../gui/wxpython/wxplot/profile.py:427
 #, python-format
 msgid "File <%s> already exists. Do you want to overwrite this file?"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/panels.py:1752
-#: ../gui/wxpython/gui_core/pyedit.py:421
+#: ../gui/wxpython/gui_core/pyedit.py:422
 msgid "Save file"
 msgstr ""
 
@@ -5640,81 +5640,81 @@ msgstr ""
 msgid "Type command here and press Enter"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:300
+#: ../gui/wxpython/gui_core/pyedit.py:301
 msgid "Permission denied <{}>. Please change file permission for reading."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:307
+#: ../gui/wxpython/gui_core/pyedit.py:308
 msgid "Couldn't read file <{}>."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:326
+#: ../gui/wxpython/gui_core/pyedit.py:327
 msgid "Permission denied <{}>. Please change file permission for writing.{}"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:337
+#: ../gui/wxpython/gui_core/pyedit.py:338
 msgid "Couldn't write file <{}>.{}"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:361
-#: ../gui/wxpython/gui_core/pyedit.py:371
+#: ../gui/wxpython/gui_core/pyedit.py:362
+#: ../gui/wxpython/gui_core/pyedit.py:372
 msgid " Unable to launch Python script."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:469
+#: ../gui/wxpython/gui_core/pyedit.py:470
 msgid "Open file"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:511
+#: ../gui/wxpython/gui_core/pyedit.py:512
 #, python-brace-format
 msgid "File <{path}> doesn't exist. It was probably moved or deleted."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:579
+#: ../gui/wxpython/gui_core/pyedit.py:580
 msgid "Replace the content by the template?"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:581
+#: ../gui/wxpython/gui_core/pyedit.py:582
 msgid "Replace the content by the example?"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:583
+#: ../gui/wxpython/gui_core/pyedit.py:584
 msgid "Replace the current content by the file content?"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:590
+#: ../gui/wxpython/gui_core/pyedit.py:591
 msgid "Replace content"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:603
+#: ../gui/wxpython/gui_core/pyedit.py:604
 msgid "Set parameters for the script"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:605
+#: ../gui/wxpython/gui_core/pyedit.py:606
 msgid "Specify command line parameters for the script separated by spaces:"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:658
+#: ../gui/wxpython/gui_core/pyedit.py:659
 msgid "Open (Ctrl+O)"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:659
+#: ../gui/wxpython/gui_core/pyedit.py:660
 msgid "Save (Ctrl+S)"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:660
+#: ../gui/wxpython/gui_core/pyedit.py:661
 msgid "Run (Ctrl+R)"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:662
+#: ../gui/wxpython/gui_core/pyedit.py:663
 msgid "Activate overwrite"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:663
+#: ../gui/wxpython/gui_core/pyedit.py:664
 msgid "Deactivate overwrite"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:876
+#: ../gui/wxpython/gui_core/pyedit.py:883
 msgid "Simple Python Editor"
 msgstr ""
 

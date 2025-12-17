@@ -137,9 +137,7 @@ int main(int argc, char **argv)
         *res,               /* resolution of target map     */
         *format;            /* output format                */
 
-#ifdef HAVE_PROJ_H
-    struct Option *pipeline; /* name of custom PROJ pipeline */
-#endif
+    struct Option *pipeline;   /* name of custom PROJ pipeline */
     struct Cell_head incellhd, /* cell header of input map     */
         outcellhd;             /* and output map               */
 
@@ -207,13 +205,11 @@ int main(int argc, char **argv)
                              "json;JSON (JavaScript Object Notation);");
     format->guisection = _("Print");
 
-#ifdef HAVE_PROJ_H
     pipeline = G_define_option();
     pipeline->key = "pipeline";
     pipeline->type = TYPE_STRING;
     pipeline->required = NO;
     pipeline->description = _("PROJ pipeline for coordinate transformation");
-#endif
 
     list = G_define_flag();
     list->key = 'l';
@@ -413,11 +409,9 @@ int main(int argc, char **argv)
 
     tproj.pj = NULL;
     tproj.def = NULL;
-#ifdef HAVE_PROJ_H
     if (pipeline->answer) {
         tproj.def = G_store(pipeline->answer);
     }
-#endif
 
     G_free_key_value(in_proj_info);
     G_free_key_value(in_unit_info);
@@ -562,11 +556,9 @@ int main(int argc, char **argv)
         G_set_window(&outcellhd);
         tproj.def = NULL;
         tproj.pj = NULL;
-#ifdef HAVE_PROJ_H
         if (pipeline->answer) {
             tproj.def = G_store(pipeline->answer);
         }
-#endif
         if (GPJ_init_transform(&oproj, &iproj, &tproj) < 0)
             G_fatal_error(_("Unable to initialize coordinate transformation"));
 
@@ -608,11 +600,9 @@ int main(int argc, char **argv)
         G_set_window(&incellhd);
         tproj.def = NULL;
         tproj.pj = NULL;
-#ifdef HAVE_PROJ_H
         if (pipeline->answer) {
             tproj.def = G_store(pipeline->answer);
         }
-#endif
         if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
             G_fatal_error(_("Unable to initialize coordinate transformation"));
 
@@ -691,11 +681,9 @@ int main(int argc, char **argv)
     G_set_window(&outcellhd);
     tproj.def = NULL;
     tproj.pj = NULL;
-#ifdef HAVE_PROJ_H
     if (pipeline->answer) {
         tproj.def = G_store(pipeline->answer);
     }
-#endif
     if (GPJ_init_transform(&oproj, &iproj, &tproj) < 0)
         G_fatal_error(_("Unable to initialize coordinate transformation"));
 
