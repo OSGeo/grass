@@ -24,7 +24,7 @@ builtins = ["_"]
 extend-exclude = [
     "python/grass/temporal/ply",           # External code
     "python/libgrass_interface_generator",
-    "gui/**",
+]
 ]
 
 [tool.ruff.lint]
