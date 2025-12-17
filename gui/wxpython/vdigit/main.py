@@ -14,18 +14,16 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
-try:
-    import vdigit.wxdigit as _wxdigit
+# pylint: disable=W0611
 
-    IVDigit = _wxdigit.IVDigit
-    GV_LINES = getattr(_wxdigit, "GV_LINES", -1)
+try:
+    from vdigit.wxdigit import IVDigit, GV_LINES
     haveVDigit = True
     errorMsg = ""
 except (ImportError, NameError) as err:
     haveVDigit = False
     errorMsg = err
     GV_LINES = -1
-
     class IVDigit:
         def __init__(self):
             pass

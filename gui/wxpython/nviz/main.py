@@ -17,12 +17,16 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <KratochAnna seznam.cz> (Google SoC 2011)
 """
 
+# pylint: disable=W0611
+
 errorMsg = ""
 
 try:
+    from wx import glcanvas  # noqa: F401
     from nviz import mapwindow
     from nviz import tools
     from nviz import workspace
+    from nviz import wxnviz  # noqa: F401
 
     haveNviz = True
 except (ImportError, NameError) as err:
