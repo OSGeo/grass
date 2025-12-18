@@ -139,6 +139,9 @@ def mapcalc(
     :param dict env: dictionary of environment variables for child process
     :param kwargs:
     """
+    # Handle backwards compatibility: convert seed="auto" to None
+    if seed == "auto":
+        seed = None
 
     t = string.Template(exp)
     e = t.substitute(**kwargs)
@@ -213,6 +216,9 @@ def mapcalc_start(
 
     :return: Popen object
     """
+    # Handle backwards compatibility: convert seed="auto" to None
+    if seed == "auto":
+        seed = None
 
     t = string.Template(exp)
     e = t.substitute(**kwargs)

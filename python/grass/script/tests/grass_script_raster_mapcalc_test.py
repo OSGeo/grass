@@ -53,10 +53,9 @@ class TestMapcalcRandFunction:
         assert raster_info is not None
         assert "min" in raster_info
 
-    def test_mapcalc_rand_with_seed_auto_deprecated(self):
-        """Test that seed='auto' is handled properly (converted to None, C auto-seeds)"""
-        # seed="auto" is deprecated; Python converts it to None
-        # r.mapcalc will auto-seed in this case
+    def test_mapcalc_rand_with_seed_auto_backwards_compat(self):
+        """Test that seed='auto' is handled for backwards compatibility (converted to None)"""
+        # seed="auto" should be converted to None internally, enabling auto-seeding
         gs.mapcalc(
             "rand_map_auto_seed = rand(0.0, 1.0)",
             seed="auto",
@@ -124,10 +123,9 @@ class TestMapcalcStartRandFunction:
         returncode = p.wait()
         assert returncode == 0
 
-    def test_mapcalc_start_rand_with_seed_auto_deprecated(self):
-        """Test that seed='auto' is handled properly in mapcalc_start (converted to None, C auto-seeds)"""
-        # seed="auto" is deprecated; Python converts it to None
-        # r.mapcalc will auto-seed in this case
+    def test_mapcalc_start_rand_with_seed_auto_backwards_compat(self):
+        """Test that seed='auto' is handled for backwards compatibility (converted to None)"""
+        # seed="auto" should be converted to None internally, enabling auto-seeding
         p = gs.mapcalc_start(
             "rand_map_start_auto_seed = rand(0.0, 1.0)",
             seed="auto",
@@ -147,6 +145,8 @@ class TestMapcalcStartRandFunction:
         returncode = p.wait()
         assert returncode == 0
         # Verify the map was created successfully with the seed value
-        raster_info = gs.raster_info("rand_map_start_seed", env=self.session.env)
+        raster_info = gs.raster_info(
+            "rand_map_start_seed", env=self.session.env
+        )
         assert raster_info is not None
         assert "min" in raster_info
