@@ -25,11 +25,11 @@
         "group:githubArtifactActions",
         "schedule:weekends",
     ],
-    
+
     "baseBranchPatterns" : [
       "$default",
       "releasebranch_8_4",
-    ], 
+    ],
 
     // enable Nix lock file update (flake.lock)
     "nix": {
