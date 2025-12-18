@@ -9,8 +9,8 @@ Read the file COPYING that comes with GRASS
 for details
 """
 
-import os
 import shutil
+from pathlib import Path
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -35,22 +35,22 @@ class FindSignatureTestCase(TestCase):
         cls.sigdirs = []
         # As signatures are created directly not via signature creation
         # tools, we must ensure signature directories exist
-        os.makedirs(f"{cls.mpath}/signatures/sig/", exist_ok=True)
-        os.makedirs(f"{cls.mpath}/signatures/sigset/", exist_ok=True)
-        os.makedirs(f"{cls.mpath}/signatures/libsvm/", exist_ok=True)
+        Path(f"{cls.mpath}/signatures/sig/").mkdir(exist_ok=True, parents=True)
+        Path(f"{cls.mpath}/signatures/sigset/").mkdir(exist_ok=True, parents=True)
+        Path(f"{cls.mpath}/signatures/libsvm/").mkdir(exist_ok=True, parents=True)
         cls.sig_name1 = tempname(10)
         cls.sig_dir1 = f"{cls.mpath}/signatures/sigset/{cls.sig_name1}"
-        os.makedirs(cls.sig_dir1)
+        Path(cls.sig_dir1).mkdir(parents=True)
         cls.sigdirs.append(cls.sig_dir1)
         open(f"{cls.sig_dir1}/sig", "a").close()
         cls.sig_name2 = tempname(10)
         cls.sig_dir2 = f"{cls.mpath}/signatures/sig/{cls.sig_name2}"
-        os.makedirs(cls.sig_dir2)
+        Path(cls.sig_dir2).mkdir(parents=True)
         cls.sigdirs.append(cls.sig_dir2)
         open(f"{cls.sig_dir2}/sig", "a").close()
         cls.sig_name3 = tempname(10)
         cls.sig_dir3 = f"{cls.mpath}/signatures/libsvm/{cls.sig_name3}"
-        os.makedirs(cls.sig_dir3)
+        Path(cls.sig_dir3).mkdir(parents=True)
         cls.sigdirs.append(cls.sig_dir3)
         open(f"{cls.sig_dir3}/sig", "a").close()
 

@@ -98,13 +98,12 @@ function(build_gui_in_subdir dir_name)
         ${HTML_SEARCH_STR} > ${TMP_HTML_FILE}
       COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${MKHTML_PY}
               ${G_TARGET_NAME} ${GRASS_VERSION_DATE} > ${OUT_HTML_FILE}
-      COMMENT "Creating ${OUT_HTML_FILE}"
       COMMAND ${copy_images_command}
       COMMAND ${CMAKE_COMMAND} -E remove ${TMP_HTML_FILE}
               ${CMAKE_CURRENT_BINARY_DIR}/${G_TARGET_NAME}.html
       COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${MKHTML_PY}
               ${G_TARGET_NAME} ${GRASS_VERSION_DATE} > ${GUI_HTML_FILE}
-      COMMENT "Creating ${GUI_HTML_FILE}"
+      COMMENT "Creating ${OUT_HTML_FILE} (and ${GUI_HTML_FILE}))"
       DEPENDS ${OUT_SCRIPT_FILE} GUI_WXPYTHON LIB_PYTHON)
 
 

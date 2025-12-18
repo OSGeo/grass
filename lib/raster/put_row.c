@@ -425,7 +425,6 @@ static void put_data(int fd, char *null_buf, const CELL *cell, int row, int n,
 static void put_data_gdal(int fd, const void *rast, int row, int n,
                           int zeros_r_nulls, RASTER_MAP_TYPE map_type)
 {
-#ifdef HAVE_GDAL
     struct fileinfo *fcb = &R__.fileinfo[fd];
     int size = Rast_cell_size(map_type);
     DCELL null_val = fcb->gdal->null_val;
@@ -477,7 +476,6 @@ static void put_data_gdal(int fd, const void *rast, int row, int n,
     if (err != CE_None)
         G_fatal_error(_("Error writing data via GDAL for row %d of <%s>"), row,
                       fcb->name);
-#endif
 }
 
 static void put_raster_data(int fd, char *null_buf, const void *rast, int row,

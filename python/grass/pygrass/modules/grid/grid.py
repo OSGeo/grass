@@ -5,6 +5,7 @@ import multiprocessing as mltp
 import subprocess as sub
 import shutil as sht
 from math import ceil
+from pathlib import Path
 
 from grass.script.setup import write_gisrc
 from grass.script import append_node_pid, legalize_vector_name
@@ -84,7 +85,7 @@ def copy_mapset(mapset, path):
     >>> sorted(os.listdir(path))  # doctest: +ELLIPSIS
     [...'PERMANENT'...]
     >>> sorted(os.listdir(os.path.join(path, "PERMANENT")))
-    ['DEFAULT_WIND', 'PROJ_INFO', 'PROJ_UNITS', 'VAR', 'WIND']
+    ['DEFAULT_WIND', 'PROJ_INFO', 'PROJ_SRID', 'PROJ_UNITS', 'PROJ_WKT', 'VAR', 'WIND']
     >>> sorted(os.listdir(os.path.join(path, mname)))  # doctest: +ELLIPSIS
     [...'WIND'...]
     >>> import shutil
@@ -94,10 +95,8 @@ def copy_mapset(mapset, path):
     per_new = os.path.join(path, "PERMANENT")
     map_old = mapset.path()
     map_new = os.path.join(path, mapset.name)
-    if not os.path.isdir(per_new):
-        os.makedirs(per_new)
-    if not os.path.isdir(map_new):
-        os.mkdir(map_new)
+    Path(per_new).mkdir(parents=True, exist_ok=True)
+    Path(map_new).mkdir(exist_ok=True)
     copy_special_mapset_files(per_old, per_new)
     copy_special_mapset_files(map_old, map_new)
     gisdbase, location = os.path.split(path)
@@ -140,8 +139,8 @@ def get_mapset(gisrc_src, gisrc_dst):
     mdst, ldst, gdst = read_gisrc(gisrc_dst)
     path_src = os.path.join(gsrc, lsrc, msrc)
     path_dst = os.path.join(gdst, ldst, mdst)
-    if not os.path.isdir(path_dst):
-        os.makedirs(path_dst)
+    if not Path(path_dst).is_dir():
+        Path(path_dst).mkdir(parents=True)
         copy_special_mapset_files(path_src, path_dst)
     src = Mapset(msrc, lsrc, gsrc)
     dst = Mapset(mdst, ldst, gdst)
@@ -274,7 +273,7 @@ def copy_rasters(rasters, gisrc_src, gisrc_dst, processes, region=None):
         # change gisdbase to dst
         env["GISRC"] = gisrc_dst
         rupck(input=file_dst, output=rast_clean, overwrite=True, env_=env)
-        os.remove(file_dst)
+        Path(file_dst).unlink()
 
 
 def copy_vectors(vectors, gisrc_src, gisrc_dst):
@@ -308,7 +307,7 @@ def copy_vectors(vectors, gisrc_src, gisrc_dst):
         # change gisdbase to dst
         env["GISRC"] = gisrc_dst
         vupck(input=file_dst, output=vect, overwrite=True, env_=env)
-        os.remove(file_dst)
+        Path(file_dst).unlink()
 
 
 def get_cmd(cmdd):
@@ -396,7 +395,7 @@ def cmd_exe(args):
     # run the grass command
     sub.Popen(get_cmd(cmd), shell=shell, env=env).wait()
     # remove temp GISRC
-    os.remove(gisrc_dst)
+    Path(gisrc_dst).unlink()
 
 
 class GridModule:
@@ -540,7 +539,7 @@ class GridModule:
     def __del__(self):
         if self.gisrc_dst:
             # remove GISRC file
-            os.remove(self.gisrc_dst)
+            Path(self.gisrc_dst).unlink()
 
     def clean_location(self, location=None):
         """Remove all created mapsets.
@@ -719,8 +718,7 @@ class GridModule:
                 par = self.module.outputs[k]
                 if par.typedesc == "raster" and par.value:
                     dirpath = os.path.join(tmpdir, par.name)
-                    if not os.path.isdir(dirpath):
-                        os.makedirs(dirpath)
+                    Path(dirpath).mkdir(parents=True, exist_ok=True)
                     fil = open(os.path.join(dirpath, self.out_prefix + par.value), "w+")
                     fil.close()
 
@@ -732,7 +730,7 @@ class GridModule:
             gisdbase, location = os.path.split(self.move)
             self.clean_location(Location(location, gisdbase))
             # rm temporary gis_rc
-            os.remove(self.gisrc_dst)
+            Path(self.gisrc_dst).unlink()
             self.gisrc_dst = None
             sht.rmtree(os.path.join(self.move, "PERMANENT"))
             sht.rmtree(os.path.join(self.move, self.mset.name))

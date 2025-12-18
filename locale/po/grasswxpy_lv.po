@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 17:24+0000\n"
+"POT-Creation-Date: 2025-12-06 15:40+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Latvian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/lv/>\n"
@@ -201,10 +201,10 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:415
 #: ../gui/wxpython/gmodeler/preferences.py:730
-#: ../gui/wxpython/gui_core/gselect.py:1629
-#: ../gui/wxpython/gui_core/gselect.py:1646
-#: ../gui/wxpython/gui_core/gselect.py:1647
-#: ../gui/wxpython/gui_core/widgets.py:1436
+#: ../gui/wxpython/gui_core/gselect.py:1633
+#: ../gui/wxpython/gui_core/gselect.py:1650
+#: ../gui/wxpython/gui_core/gselect.py:1651
+#: ../gui/wxpython/gui_core/widgets.py:1462
 #: ../gui/wxpython/vnet/dialogs.py:1679
 msgid "Name:"
 msgstr "Nosaukums:"
@@ -251,13 +251,13 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:1224
 #: ../gui/wxpython/animation/dialogs.py:1247
 #: ../gui/wxpython/animation/dialogs.py:1278
-#: ../gui/wxpython/gui_core/forms.py:2005
-#: ../gui/wxpython/gui_core/forms.py:2116
-#: ../gui/wxpython/gui_core/gselect.py:1245
-#: ../gui/wxpython/gui_core/gselect.py:1561
-#: ../gui/wxpython/gui_core/gselect.py:1578
-#: ../gui/wxpython/gui_core/gselect.py:1631
-#: ../gui/wxpython/gui_core/gselect.py:1666
+#: ../gui/wxpython/gui_core/forms.py:2009
+#: ../gui/wxpython/gui_core/forms.py:2120
+#: ../gui/wxpython/gui_core/gselect.py:1249
+#: ../gui/wxpython/gui_core/gselect.py:1565
+#: ../gui/wxpython/gui_core/gselect.py:1582
+#: ../gui/wxpython/gui_core/gselect.py:1635
+#: ../gui/wxpython/gui_core/gselect.py:1670
 #: ../gui/wxpython/location_wizard/wizard.py:1446
 #: ../gui/wxpython/location_wizard/wizard.py:1801
 #: ../gui/wxpython/modules/import_export.py:862
@@ -456,8 +456,8 @@ msgid "File format:"
 msgstr "Datnes formāts:"
 
 #: ../gui/wxpython/animation/dialogs.py:1194
-#: ../gui/wxpython/gui_core/gselect.py:1576
-#: ../gui/wxpython/gui_core/gselect.py:1664
+#: ../gui/wxpython/gui_core/gselect.py:1580
+#: ../gui/wxpython/gui_core/gselect.py:1668
 msgid "Directory:"
 msgstr "Mape:"
 
@@ -556,7 +556,7 @@ msgid "Exported animation file <{file}> exists. Do you want to overwrite it?"
 msgstr "{pa} jau eksistē. Vai vēlies to pārrakstīt?"
 
 #: ../gui/wxpython/animation/dialogs.py:1574
-#: ../gui/wxpython/datacatalog/tree.py:160 ../gui/wxpython/gcp/manager.py:1737
+#: ../gui/wxpython/datacatalog/tree.py:161 ../gui/wxpython/gcp/manager.py:1737
 #: ../gui/wxpython/gui_core/dialogs.py:531
 #: ../gui/wxpython/lmgr/layertree.py:1086
 #: ../gui/wxpython/modules/colorrules.py:675
@@ -898,7 +898,7 @@ msgstr "Kļūda: "
 msgid "Unable to execute command: '%s'"
 msgstr "Nebija iespējams izpildīt komandu: '%s'"
 
-#: ../gui/wxpython/core/gcmd.py:778 ../gui/wxpython/gui_core/forms.py:2987
+#: ../gui/wxpython/core/gcmd.py:778 ../gui/wxpython/gui_core/forms.py:2991
 #, python-format
 msgid "Error in %s"
 msgstr "Kļūda iekš %s"
@@ -1287,31 +1287,31 @@ msgstr "Sintakses kļūda: %s"
 msgid "Vector map <%(map)s>: %(msg)s\n"
 msgstr ""
 
-#: ../gui/wxpython/core/utils.py:839
+#: ../gui/wxpython/core/utils.py:840
 #, python-format
 msgid ""
 "%s: line skipped - unable to parse '%s'\n"
 "Reason: %s\n"
 msgstr ""
 
-#: ../gui/wxpython/core/utils.py:845
+#: ../gui/wxpython/core/utils.py:846
 #, python-format
 msgid "Duplicated key: %s\n"
 msgstr ""
 
-#: ../gui/wxpython/core/utils.py:849
+#: ../gui/wxpython/core/utils.py:850
 #, fuzzy, python-brace-format
 #| msgid "Unable to open file '%s'\n"
 msgid "Unable to open file '{name}': {error}\n"
 msgstr "Nav iespējams atvērt failu '%s'\n"
 
-#: ../gui/wxpython/core/utils.py:874
+#: ../gui/wxpython/core/utils.py:875
 #, fuzzy, python-brace-format
 #| msgid "Unable to create file '%s'\n"
 msgid "Unable to create file '{name}': {error}\n"
 msgstr "Nav iespējams izveidot failu '%s'\n"
 
-#: ../gui/wxpython/core/utils.py:948 ../gui/wxpython/gui_core/forms.py:1913
+#: ../gui/wxpython/core/utils.py:949 ../gui/wxpython/gui_core/forms.py:1917
 msgid "Select Color"
 msgstr "Izvēlieties krāsu"
 
@@ -1569,52 +1569,52 @@ msgstr "Meklēt:"
 msgid "Type to search database by map type or name. Use Python regular expressions to refine your search."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:96
+#: ../gui/wxpython/datacatalog/tree.py:97
 #, python-brace-format
 msgid "Failed to read mapsets from project <{l}>."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:122
+#: ../gui/wxpython/datacatalog/tree.py:123
 #, python-brace-format
 msgid "Failed to read maps from project <{l}>."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:157
+#: ../gui/wxpython/datacatalog/tree.py:158
 #, python-brace-format
 msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:184
+#: ../gui/wxpython/datacatalog/tree.py:185
 #, fuzzy
 msgid "name unknown"
 msgstr "nezināms"
 
-#: ../gui/wxpython/datacatalog/tree.py:186
+#: ../gui/wxpython/datacatalog/tree.py:187
 #, python-brace-format
 msgid "{name}  (current)"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:188
+#: ../gui/wxpython/datacatalog/tree.py:189
 #, python-brace-format
 msgid "{name}  (in use, owner: {owner})"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:192
+#: ../gui/wxpython/datacatalog/tree.py:193
 #, python-brace-format
 msgid "{name}  (in use)"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:194
+#: ../gui/wxpython/datacatalog/tree.py:195
 #, python-brace-format
 msgid "{name}  (owner: {owner})"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:198
+#: ../gui/wxpython/datacatalog/tree.py:199
 #, fuzzy, python-brace-format
 msgid "{name}"
 msgstr "Pārsaukt"
 
-#: ../gui/wxpython/datacatalog/tree.py:892
+#: ../gui/wxpython/datacatalog/tree.py:893
 #, python-brace-format
 msgid ""
 "Map <{map_name}@{map_mapset}> is not in the current project. To be able to display it you need to switch to <{map_location}> project. Note that if you switch there all current Map Displays will be closed.\n"
@@ -1622,258 +1622,258 @@ msgid ""
 "Do you want to switch anyway?"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:902
+#: ../gui/wxpython/datacatalog/tree.py:903
 #, fuzzy
 msgid "Map in a different project"
 msgstr "Izveidot jaunu karšu kopu izvēlētajā novietojumā"
 
-#: ../gui/wxpython/datacatalog/tree.py:1021
+#: ../gui/wxpython/datacatalog/tree.py:1022
 #, python-brace-format
 msgid "{c} maps marked for moving."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1023
+#: ../gui/wxpython/datacatalog/tree.py:1024
 #, python-brace-format
 msgid "Map <{layer}> marked for moving."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1036
+#: ../gui/wxpython/datacatalog/tree.py:1037
 #, python-brace-format
 msgid "{c} maps marked for copying."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1038
+#: ../gui/wxpython/datacatalog/tree.py:1039
 #, python-brace-format
 msgid "Map <{layer}> marked for copying."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1053
-#: ../gui/wxpython/datacatalog/tree.py:1390
+#: ../gui/wxpython/datacatalog/tree.py:1054
+#: ../gui/wxpython/datacatalog/tree.py:1391
 msgid "New name"
 msgstr "Jauns nosaukums"
 
-#: ../gui/wxpython/datacatalog/tree.py:1054
+#: ../gui/wxpython/datacatalog/tree.py:1055
 msgid "Rename map"
 msgstr "Pārsaukt karti"
 
-#: ../gui/wxpython/datacatalog/tree.py:1203
+#: ../gui/wxpython/datacatalog/tree.py:1204
 #, fuzzy
 msgid "Cannot rename mapset"
 msgstr "Pā&rsaukt karšu kopu"
 
-#: ../gui/wxpython/datacatalog/tree.py:1216
+#: ../gui/wxpython/datacatalog/tree.py:1217
 #, python-brace-format
 msgid "Renaming mapset <{oldmapset}> to <{newmapset}> completed"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1228
+#: ../gui/wxpython/datacatalog/tree.py:1229
 #, fuzzy
 msgid "Cannot rename location"
 msgstr "Pā&rsaukt novietojumu"
 
-#: ../gui/wxpython/datacatalog/tree.py:1240
+#: ../gui/wxpython/datacatalog/tree.py:1241
 #, python-brace-format
 msgid "Renaming project <{oldlocation}> to <{newlocation}> completed"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1252
+#: ../gui/wxpython/datacatalog/tree.py:1253
 #, python-brace-format
 msgid "Renaming map <{name}>..."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1262
+#: ../gui/wxpython/datacatalog/tree.py:1263
 #, python-brace-format
 msgid "{cmd} -- completed"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1278
+#: ../gui/wxpython/datacatalog/tree.py:1279
 msgid "No map selected for copying."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1280
+#: ../gui/wxpython/datacatalog/tree.py:1281
 msgid "No map selected for moving."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1302
-#: ../gui/wxpython/datacatalog/tree.py:1321
+#: ../gui/wxpython/datacatalog/tree.py:1303
+#: ../gui/wxpython/datacatalog/tree.py:1322
 #, fuzzy, python-brace-format
 msgid "New name for <{n}>"
 msgstr "Jauns nosaukums"
 
-#: ../gui/wxpython/datacatalog/tree.py:1305
-#: ../gui/wxpython/datacatalog/tree.py:1324
-#: ../gui/wxpython/datacatalog/tree.py:1391
+#: ../gui/wxpython/datacatalog/tree.py:1306
+#: ../gui/wxpython/datacatalog/tree.py:1325
+#: ../gui/wxpython/datacatalog/tree.py:1392
 msgid "Select new name"
 msgstr "Izvēlieties jaunu nosaukumu"
 
-#: ../gui/wxpython/datacatalog/tree.py:1342
+#: ../gui/wxpython/datacatalog/tree.py:1343
 #, python-brace-format
 msgid "Copying <{name}>..."
 msgstr "Kopē <{name}>..."
 
-#: ../gui/wxpython/datacatalog/tree.py:1344
+#: ../gui/wxpython/datacatalog/tree.py:1345
 #, python-brace-format
 msgid "Moving <{name}>..."
 msgstr "Pārvieto {name}..."
 
-#: ../gui/wxpython/datacatalog/tree.py:1358
+#: ../gui/wxpython/datacatalog/tree.py:1359
 msgid "Copying completed"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1364
+#: ../gui/wxpython/datacatalog/tree.py:1365
 msgid "Moving completed"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1380
+#: ../gui/wxpython/datacatalog/tree.py:1381
 msgid "Reprojection is not implemented for 3D rasters"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1461
-#: ../gui/wxpython/datacatalog/tree.py:1581
+#: ../gui/wxpython/datacatalog/tree.py:1462
+#: ../gui/wxpython/datacatalog/tree.py:1582
 msgid "g.remove completed"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1545
+#: ../gui/wxpython/datacatalog/tree.py:1546
 #, fuzzy, python-brace-format
 msgid "Do you really want to delete map(s) <{m}>?"
 msgstr "Nav iespējams izveidot jaunu karšu kopu: %s"
 
-#: ../gui/wxpython/datacatalog/tree.py:1549
+#: ../gui/wxpython/datacatalog/tree.py:1550
 #, fuzzy, python-brace-format
 msgid "Do you really want to delete {n} maps?"
 msgstr "Nav iespējams izveidot jaunu karšu kopu: %s"
 
-#: ../gui/wxpython/datacatalog/tree.py:1550
+#: ../gui/wxpython/datacatalog/tree.py:1551
 msgid "Delete map"
 msgstr "Dzēst karti"
 
-#: ../gui/wxpython/datacatalog/tree.py:1551
+#: ../gui/wxpython/datacatalog/tree.py:1552
 #, python-brace-format
 msgid "Deleting {name}..."
 msgstr "Dzēš {name}..."
 
-#: ../gui/wxpython/datacatalog/tree.py:1742
+#: ../gui/wxpython/datacatalog/tree.py:1743
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1756
+#: ../gui/wxpython/datacatalog/tree.py:1757
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2084
+#: ../gui/wxpython/datacatalog/tree.py:2085
 msgid "&Cut"
 msgstr "&Izgriezt"
 
-#: ../gui/wxpython/datacatalog/tree.py:2090 ../gui/wxpython/history/tree.py:219
+#: ../gui/wxpython/datacatalog/tree.py:2091 ../gui/wxpython/history/tree.py:219
 msgid "&Copy"
 msgstr "&Kopēt"
 
-#: ../gui/wxpython/datacatalog/tree.py:2094
+#: ../gui/wxpython/datacatalog/tree.py:2095
 msgid "Copy &name"
 msgstr "Kopēt &nosaukumu"
 
-#: ../gui/wxpython/datacatalog/tree.py:2098
-#: ../gui/wxpython/datacatalog/tree.py:2141
-#: ../gui/wxpython/datacatalog/tree.py:2245
+#: ../gui/wxpython/datacatalog/tree.py:2099
+#: ../gui/wxpython/datacatalog/tree.py:2142
+#: ../gui/wxpython/datacatalog/tree.py:2246
 msgid "&Paste"
 msgstr "&Ielīmēt"
 
 #. GTC Delete mapset
-#: ../gui/wxpython/datacatalog/tree.py:2104
+#: ../gui/wxpython/datacatalog/tree.py:2105
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:242
 msgid "&Delete"
 msgstr "&Dzēst"
 
 #. GTC Rename mapset
-#: ../gui/wxpython/datacatalog/tree.py:2109 ../gui/wxpython/dbmgr/base.py:2490
+#: ../gui/wxpython/datacatalog/tree.py:2110 ../gui/wxpython/dbmgr/base.py:2490
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:235
 msgid "&Rename"
 msgstr "&Pārsaukt"
 
-#: ../gui/wxpython/datacatalog/tree.py:2122
+#: ../gui/wxpython/datacatalog/tree.py:2123
 msgid "&Display layers"
 msgstr "Rā&dīt slāņus"
 
-#: ../gui/wxpython/datacatalog/tree.py:2124
+#: ../gui/wxpython/datacatalog/tree.py:2125
 msgid "&Display layer"
 msgstr "&Attēlot slāni"
 
-#: ../gui/wxpython/datacatalog/tree.py:2128
+#: ../gui/wxpython/datacatalog/tree.py:2129
 msgid "Show &metadata"
 msgstr "Rādīt &metadatus"
 
-#: ../gui/wxpython/datacatalog/tree.py:2147
+#: ../gui/wxpython/datacatalog/tree.py:2148
 msgid "&Switch mapset"
 msgstr "Pār&slēgt karšu kopu"
 
-#: ../gui/wxpython/datacatalog/tree.py:2157
+#: ../gui/wxpython/datacatalog/tree.py:2158
 msgid "&Delete mapset"
 msgstr "&Dzēst karšu kopu"
 
-#: ../gui/wxpython/datacatalog/tree.py:2163
+#: ../gui/wxpython/datacatalog/tree.py:2164
 msgid "&Rename mapset"
 msgstr "Pā&rsaukt karšu kopu"
 
-#: ../gui/wxpython/datacatalog/tree.py:2169
-#: ../gui/wxpython/datacatalog/tree.py:2200
-#: ../gui/wxpython/datacatalog/tree.py:2235
+#: ../gui/wxpython/datacatalog/tree.py:2170
+#: ../gui/wxpython/datacatalog/tree.py:2201
+#: ../gui/wxpython/datacatalog/tree.py:2236
 #, fuzzy
 msgid "Re&load maps"
 msgstr "Pārlādēt"
 
-#: ../gui/wxpython/datacatalog/tree.py:2173
+#: ../gui/wxpython/datacatalog/tree.py:2174
 #, fuzzy
 msgid "&Copy path to mapset"
 msgstr "&Izveidot jaunu karšu kopu"
 
-#: ../gui/wxpython/datacatalog/tree.py:2184
+#: ../gui/wxpython/datacatalog/tree.py:2185
 msgid "&Create mapset"
 msgstr "&Izveidot jaunu karšu kopu"
 
-#: ../gui/wxpython/datacatalog/tree.py:2188
+#: ../gui/wxpython/datacatalog/tree.py:2189
 #, fuzzy
 msgid "&Delete project"
 msgstr "&Dzēst karšu kopu"
 
-#: ../gui/wxpython/datacatalog/tree.py:2194
+#: ../gui/wxpython/datacatalog/tree.py:2195
 #, fuzzy
 msgid "&Rename project"
 msgstr "Pā&rsaukt karšu kopu"
 
-#: ../gui/wxpython/datacatalog/tree.py:2213
+#: ../gui/wxpython/datacatalog/tree.py:2214
 #, fuzzy
 msgid "&Create new project (location)"
 msgstr "Veidot &jaunu novietojumu"
 
-#: ../gui/wxpython/datacatalog/tree.py:2217
+#: ../gui/wxpython/datacatalog/tree.py:2218
 #, fuzzy
 msgid "&Download sample project (location)"
 msgstr "&Lejupielādēt parauga novietojumu"
 
-#: ../gui/wxpython/datacatalog/tree.py:2222
+#: ../gui/wxpython/datacatalog/tree.py:2223
 msgid "&Remove GRASS database from data catalog"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2229
+#: ../gui/wxpython/datacatalog/tree.py:2230
 #, fuzzy
 msgid "&Delete GRASS database from disk"
 msgstr "1. Izvēlieties GRASS datubāzes mapi"
 
-#: ../gui/wxpython/datacatalog/tree.py:2259
+#: ../gui/wxpython/datacatalog/tree.py:2260
 #, fuzzy
 msgid "&Delete projects (locations)"
 msgstr "&Dzēst novietojumu"
 
-#: ../gui/wxpython/datacatalog/tree.py:2271
+#: ../gui/wxpython/datacatalog/tree.py:2272
 msgid "&Delete mapsets"
 msgstr "&Dzēst karšu kopas"
 
-#: ../gui/wxpython/datacatalog/tree.py:2277
+#: ../gui/wxpython/datacatalog/tree.py:2278
 #, fuzzy
 msgid "&Copy paths to mapsets"
 msgstr "&Izveidot jaunu karšu kopu"
 
-#: ../gui/wxpython/datacatalog/tree.py:2287 ../gui/wxpython/history/tree.py:233
+#: ../gui/wxpython/datacatalog/tree.py:2288 ../gui/wxpython/history/tree.py:233
 msgid "No available options"
 msgstr ""
 
@@ -2063,12 +2063,12 @@ msgstr "Dzēst visus ierakstus"
 #: ../gui/wxpython/dbmgr/base.py:1471 ../gui/wxpython/gui_core/dialogs.py:838
 #: ../gui/wxpython/gui_core/dialogs.py:896
 #: ../gui/wxpython/gui_core/dialogs.py:1607
-#: ../gui/wxpython/gui_core/widgets.py:1128
+#: ../gui/wxpython/gui_core/widgets.py:1154
 msgid "Select all"
 msgstr "Izvēlēties visu"
 
 #: ../gui/wxpython/dbmgr/base.py:1472 ../gui/wxpython/gui_core/dialogs.py:1609
-#: ../gui/wxpython/gui_core/widgets.py:1129
+#: ../gui/wxpython/gui_core/widgets.py:1155
 msgid "Deselect all"
 msgstr ""
 
@@ -2268,7 +2268,7 @@ msgid "Data type"
 msgstr "Datu tips"
 
 #: ../gui/wxpython/dbmgr/base.py:3051 ../gui/wxpython/dbmgr/base.py:3203
-#: ../gui/wxpython/dbmgr/base.py:3471 ../gui/wxpython/gui_core/gselect.py:1479
+#: ../gui/wxpython/dbmgr/base.py:3471 ../gui/wxpython/gui_core/gselect.py:1483
 msgid "Database"
 msgstr "Datubāze"
 
@@ -2322,7 +2322,7 @@ msgid "&Create table"
 msgstr "I&zveidot tabulu"
 
 #: ../gui/wxpython/dbmgr/base.py:3305
-#: ../gui/wxpython/web_services/dialogs.py:533
+#: ../gui/wxpython/web_services/dialogs.py:534
 msgid "&Add layer"
 msgstr "&Pievienot slāni"
 
@@ -2721,7 +2721,7 @@ msgstr "Veidot / rediģēt grupu"
 msgid "Add vector map to group..."
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:592 ../gui/wxpython/gcp/manager.py:3190
+#: ../gui/wxpython/gcp/manager.py:592 ../gui/wxpython/gcp/manager.py:3189
 #: ../gui/wxpython/image2target/ii2t_manager.py:613
 #: ../gui/wxpython/image2target/ii2t_manager.py:3149
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2283
@@ -2751,21 +2751,21 @@ msgstr ""
 msgid "Map Display Web Service Layer(s)"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:755 ../gui/wxpython/gcp/manager.py:3083
+#: ../gui/wxpython/gcp/manager.py:755 ../gui/wxpython/gcp/manager.py:3082
 #: ../gui/wxpython/image2target/ii2t_manager.py:762
 #: ../gui/wxpython/image2target/ii2t_manager.py:3043
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2195
 msgid "Select source map to display:"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:781 ../gui/wxpython/gcp/manager.py:3097
+#: ../gui/wxpython/gcp/manager.py:781 ../gui/wxpython/gcp/manager.py:3096
 #: ../gui/wxpython/image2target/ii2t_manager.py:788
 #: ../gui/wxpython/image2target/ii2t_manager.py:3060
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2212
 msgid "Select target raster map to display:"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:808 ../gui/wxpython/gcp/manager.py:3111
+#: ../gui/wxpython/gcp/manager.py:808 ../gui/wxpython/gcp/manager.py:3110
 #: ../gui/wxpython/image2target/ii2t_manager.py:814
 #: ../gui/wxpython/image2target/ii2t_manager.py:3077
 msgid "Select target vector map to display:"
@@ -3008,39 +3008,39 @@ msgstr ""
 msgid "Select vector map(s) to add to group:"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:2722
+#: ../gui/wxpython/gcp/manager.py:2721
 #: ../gui/wxpython/image2target/ii2t_manager.py:2676
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1843
 msgid "Edit GCP"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:2736
+#: ../gui/wxpython/gcp/manager.py:2735
 #: ../gui/wxpython/image2target/ii2t_manager.py:2690
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1857
 msgid "Ground Control Point No."
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:2757
+#: ../gui/wxpython/gcp/manager.py:2756
 #: ../gui/wxpython/image2target/ii2t_manager.py:2712
 msgid "source E:"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:2758
+#: ../gui/wxpython/gcp/manager.py:2757
 #: ../gui/wxpython/image2target/ii2t_manager.py:2713
 msgid "target E:"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:2759
+#: ../gui/wxpython/gcp/manager.py:2758
 #: ../gui/wxpython/image2target/ii2t_manager.py:2714
 msgid "source N:"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:2760
+#: ../gui/wxpython/gcp/manager.py:2759
 #: ../gui/wxpython/image2target/ii2t_manager.py:2715
 msgid "target N:"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:2870
+#: ../gui/wxpython/gcp/manager.py:2869
 #: ../gui/wxpython/image2target/ii2t_manager.py:2831
 #: ../gui/wxpython/iscatt/dialogs.py:402
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1991
@@ -3049,7 +3049,7 @@ msgstr ""
 msgid "Apply changes for the current session"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:2874
+#: ../gui/wxpython/gcp/manager.py:2873
 #: ../gui/wxpython/gui_core/preferences.py:118
 #: ../gui/wxpython/image2target/ii2t_manager.py:2835
 #: ../gui/wxpython/iscatt/dialogs.py:406
@@ -3059,19 +3059,19 @@ msgstr ""
 msgid "Apply and save changes to user settings file (default for next sessions)"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:2879
+#: ../gui/wxpython/gcp/manager.py:2878
 #: ../gui/wxpython/image2target/ii2t_manager.py:2840
 #: ../gui/wxpython/iscatt/dialogs.py:411
 #: ../gui/wxpython/modules/import_export.py:129
 #: ../gui/wxpython/modules/import_export.py:762
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2000
 #: ../gui/wxpython/vnet/dialogs.py:1331
-#: ../gui/wxpython/web_services/dialogs.py:152
-#: ../gui/wxpython/web_services/dialogs.py:906
+#: ../gui/wxpython/web_services/dialogs.py:153
+#: ../gui/wxpython/web_services/dialogs.py:907
 msgid "Close dialog"
 msgstr "Aizvērt dialogu"
 
-#: ../gui/wxpython/gcp/manager.py:2900
+#: ../gui/wxpython/gcp/manager.py:2899
 #: ../gui/wxpython/image2target/ii2t_manager.py:2861
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2021
 #: ../gui/wxpython/psmap/dialogs.py:2726
@@ -3079,19 +3079,19 @@ msgstr "Aizvērt dialogu"
 msgid "Symbology"
 msgstr "Simboloģija"
 
-#: ../gui/wxpython/gcp/manager.py:2908
+#: ../gui/wxpython/gcp/manager.py:2907
 #: ../gui/wxpython/image2target/ii2t_manager.py:2869
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2029
 msgid "Highlight highest RMS error only"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:2920
+#: ../gui/wxpython/gcp/manager.py:2919
 #: ../gui/wxpython/image2target/ii2t_manager.py:2881
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2041
 msgid "Highlight RMS error > M + SD * factor:"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:2924
+#: ../gui/wxpython/gcp/manager.py:2923
 #: ../gui/wxpython/image2target/ii2t_manager.py:2885
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2046
 msgid ""
@@ -3100,13 +3100,13 @@ msgid ""
 "Recommended values for this factor are between 1 and 2."
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:2943
+#: ../gui/wxpython/gcp/manager.py:2942
 #: ../gui/wxpython/image2target/ii2t_manager.py:2904
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2066
 msgid "Symbol settings"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:2951
+#: ../gui/wxpython/gcp/manager.py:2950
 #: ../gui/wxpython/gui_core/preferences.py:1625
 #: ../gui/wxpython/image2target/ii2t_manager.py:2912
 #: ../gui/wxpython/mapswipe/dialogs.py:290
@@ -3119,38 +3119,38 @@ msgstr ""
 msgid "Color:"
 msgstr "Krāsa:"
 
-#: ../gui/wxpython/gcp/manager.py:2965
+#: ../gui/wxpython/gcp/manager.py:2964
 #: ../gui/wxpython/image2target/ii2t_manager.py:2926
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2088
 msgid "Color for high RMS error:"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:2980
+#: ../gui/wxpython/gcp/manager.py:2979
 #: ../gui/wxpython/image2target/ii2t_manager.py:2941
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2103
 msgid "Color for selected GCP:"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:2995
+#: ../gui/wxpython/gcp/manager.py:2994
 #: ../gui/wxpython/image2target/ii2t_manager.py:2956
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2118
 msgid "Color for unused GCPs:"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:3008
+#: ../gui/wxpython/gcp/manager.py:3007
 #: ../gui/wxpython/image2target/ii2t_manager.py:2969
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2131
 msgid "Show unused GCPs"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:3018
+#: ../gui/wxpython/gcp/manager.py:3017
 #: ../gui/wxpython/gui_core/preferences.py:1548
 #: ../gui/wxpython/image2target/ii2t_manager.py:2979
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2141
 msgid "Symbol size:"
 msgstr "Simbola izmērs:"
 
-#: ../gui/wxpython/gcp/manager.py:3030
+#: ../gui/wxpython/gcp/manager.py:3029
 #: ../gui/wxpython/gui_core/preferences.py:1515
 #: ../gui/wxpython/image2target/ii2t_manager.py:2991
 #: ../gui/wxpython/mapswipe/dialogs.py:335
@@ -3159,60 +3159,60 @@ msgstr "Simbola izmērs:"
 msgid "Line width:"
 msgstr "Līnijas platums:"
 
-#: ../gui/wxpython/gcp/manager.py:3137
+#: ../gui/wxpython/gcp/manager.py:3136
 #: ../gui/wxpython/image2target/ii2t_manager.py:3106
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2240
 msgid "Rectification"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:3145
+#: ../gui/wxpython/gcp/manager.py:3144
 #: ../gui/wxpython/image2target/ii2t_manager.py:3114
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2248
 msgid "Select rectification order"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:3146
+#: ../gui/wxpython/gcp/manager.py:3145
 #: ../gui/wxpython/image2target/ii2t_manager.py:3115
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2249
 msgid "1st order"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:3146
+#: ../gui/wxpython/gcp/manager.py:3145
 #: ../gui/wxpython/image2target/ii2t_manager.py:3115
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2249
 msgid "2nd order"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:3146
+#: ../gui/wxpython/gcp/manager.py:3145
 #: ../gui/wxpython/image2target/ii2t_manager.py:3115
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2249
 msgid "3rd order"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:3156
+#: ../gui/wxpython/gcp/manager.py:3155
 #: ../gui/wxpython/image2target/ii2t_manager.py:3125
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2259
 msgid "Select interpolation method:"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:3172
+#: ../gui/wxpython/gcp/manager.py:3171
 #: ../gui/wxpython/image2target/ii2t_manager.py:3141
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2275
 msgid "clip to computational region in target location"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:3180
+#: ../gui/wxpython/gcp/manager.py:3179
 #, fuzzy
 msgid "overwrite result map"
 msgstr "Pārrakstīt vektordatu karti"
 
-#: ../gui/wxpython/gcp/manager.py:3226
+#: ../gui/wxpython/gcp/manager.py:3225
 #: ../gui/wxpython/image2target/ii2t_manager.py:3190
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2324
 msgid "RMS threshold factor must be > 0"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:3231
+#: ../gui/wxpython/gcp/manager.py:3230
 #: ../gui/wxpython/image2target/ii2t_manager.py:3195
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2329
 msgid ""
@@ -3220,7 +3220,7 @@ msgid ""
 "Too many points might be highlighted"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:3469
+#: ../gui/wxpython/gcp/manager.py:3468
 #: ../gui/wxpython/image2target/ii2t_manager.py:3402
 #: ../gui/wxpython/photo2image/ip2i_manager.py:2504
 #, python-format
@@ -3652,13 +3652,13 @@ msgid "Delete all"
 msgstr "Dzēst visu"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:983
-#: ../gui/wxpython/gui_core/gselect.py:2294
+#: ../gui/wxpython/gui_core/gselect.py:2298
 #: ../gui/wxpython/location_wizard/wizard.py:981
 msgid "No"
 msgstr "Nē"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:983
-#: ../gui/wxpython/gui_core/gselect.py:2294
+#: ../gui/wxpython/gui_core/gselect.py:2298
 #: ../gui/wxpython/location_wizard/wizard.py:981
 msgid "Yes"
 msgstr "Jā"
@@ -3673,7 +3673,7 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/dialogs.py:1212
 #: ../gui/wxpython/gmodeler/panels.py:1598
-#: ../gui/wxpython/gui_core/forms.py:600
+#: ../gui/wxpython/gui_core/forms.py:601
 #: ../gui/wxpython/modules/mcalc_builder.py:170
 msgid "&Run"
 msgstr "&Darbināt"
@@ -3684,7 +3684,7 @@ msgid "Variables"
 msgstr "Mainīgie"
 
 #: ../gui/wxpython/gmodeler/frame.py:31 ../gui/wxpython/gmodeler/panels.py:106
-#: ../gui/wxpython/gui_core/forms.py:1495 ../gui/wxpython/lmgr/toolbars.py:208
+#: ../gui/wxpython/gui_core/forms.py:1496 ../gui/wxpython/lmgr/toolbars.py:208
 #: ../gui/wxpython/main_window/frame.py:907
 msgid "Graphical Modeler"
 msgstr "Grafiskais modelētājs"
@@ -3792,7 +3792,7 @@ msgid "Script editor"
 msgstr "Vienkārš r&edaktors"
 
 #: ../gui/wxpython/gmodeler/panels.py:194
-#: ../gui/wxpython/gui_core/forms.py:2507
+#: ../gui/wxpython/gui_core/forms.py:2511
 msgid "Command output"
 msgstr "Komandas izvade"
 
@@ -4003,7 +4003,7 @@ msgid "mapset"
 msgstr "karšu kopa"
 
 #: ../gui/wxpython/gmodeler/panels.py:1372
-#: ../gui/wxpython/gui_core/forms.py:2004
+#: ../gui/wxpython/gui_core/forms.py:2008
 msgid "file"
 msgstr "datne"
 
@@ -4080,8 +4080,8 @@ msgid "Update"
 msgstr "Atjaunināt"
 
 #: ../gui/wxpython/gmodeler/panels.py:1722
-#: ../gui/wxpython/gui_core/pyedit.py:400
-#: ../gui/wxpython/gui_core/pyedit.py:471
+#: ../gui/wxpython/gui_core/pyedit.py:401
+#: ../gui/wxpython/gui_core/pyedit.py:472
 msgid "Python script (*.py)|*.py"
 msgstr ""
 
@@ -4090,18 +4090,18 @@ msgid "JSON file (*.json)|*.json"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/panels.py:1728
-#: ../gui/wxpython/gui_core/pyedit.py:398
+#: ../gui/wxpython/gui_core/pyedit.py:399
 msgid "Choose file to save"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/panels.py:1749
-#: ../gui/wxpython/gui_core/pyedit.py:418 ../gui/wxpython/wxplot/profile.py:427
+#: ../gui/wxpython/gui_core/pyedit.py:419 ../gui/wxpython/wxplot/profile.py:427
 #, python-format
 msgid "File <%s> already exists. Do you want to overwrite this file?"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/panels.py:1752
-#: ../gui/wxpython/gui_core/pyedit.py:421
+#: ../gui/wxpython/gui_core/pyedit.py:422
 msgid "Save file"
 msgstr "Saglabāt datni"
 
@@ -4662,166 +4662,166 @@ msgstr "Fonta izmērs:"
 msgid "Example"
 msgstr "Piemērs"
 
-#: ../gui/wxpython/gui_core/forms.py:560
+#: ../gui/wxpython/gui_core/forms.py:561
 msgid "Enter parameters for '"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:572
+#: ../gui/wxpython/gui_core/forms.py:573
 msgid "Close this window without executing the command (Ctrl+Q)"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:601
+#: ../gui/wxpython/gui_core/forms.py:602
 msgid "Run the command (Ctrl+R)"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:613
+#: ../gui/wxpython/gui_core/forms.py:614
 #: ../gui/wxpython/modules/mcalc_builder.py:177
 msgid "Copy"
 msgstr "Kopēt"
 
-#: ../gui/wxpython/gui_core/forms.py:615
+#: ../gui/wxpython/gui_core/forms.py:616
 #: ../gui/wxpython/modules/mcalc_builder.py:178
 msgid "Copy the current command string to the clipboard"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:624
+#: ../gui/wxpython/gui_core/forms.py:625
 msgid "Show manual page of the command (Ctrl+H)"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:662
+#: ../gui/wxpython/gui_core/forms.py:663
 msgid "Add created map(s) into layer tree"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:684
+#: ../gui/wxpython/gui_core/forms.py:685
 #: ../gui/wxpython/modules/import_export.py:119
 msgid "Close dialog on finish"
 msgstr "Aizvērt dialogu, kad darbs ir pabeigts"
 
-#: ../gui/wxpython/gui_core/forms.py:691
+#: ../gui/wxpython/gui_core/forms.py:692
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:889
+#: ../gui/wxpython/gui_core/forms.py:890
 #, python-format
 msgid "'%s' copied to clipboard"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:989 ../gui/wxpython/gui_core/forms.py:1004
+#: ../gui/wxpython/gui_core/forms.py:990 ../gui/wxpython/gui_core/forms.py:1005
 msgid "Required"
 msgstr "Obligāti"
 
-#: ../gui/wxpython/gui_core/forms.py:992 ../gui/wxpython/gui_core/forms.py:1005
+#: ../gui/wxpython/gui_core/forms.py:993 ../gui/wxpython/gui_core/forms.py:1006
 msgid "Optional"
 msgstr "Izvēles"
 
-#: ../gui/wxpython/gui_core/forms.py:1079
-#: ../gui/wxpython/gui_core/forms.py:2311
+#: ../gui/wxpython/gui_core/forms.py:1080
+#: ../gui/wxpython/gui_core/forms.py:2315
 msgid "Parameterized in model"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:1145
+#: ../gui/wxpython/gui_core/forms.py:1146
 #: ../gui/wxpython/location_wizard/wizard.py:214
 msgid "This option is required"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:1163
+#: ../gui/wxpython/gui_core/forms.py:1164
 msgid "[multiple]"
 msgstr "[daudzvērtību]"
 
-#: ../gui/wxpython/gui_core/forms.py:1225
+#: ../gui/wxpython/gui_core/forms.py:1226
 msgid "valid range"
 msgstr "derīgs diapazons"
 
-#: ../gui/wxpython/gui_core/forms.py:1374
-#: ../gui/wxpython/gui_core/forms.py:2948
+#: ../gui/wxpython/gui_core/forms.py:1375
+#: ../gui/wxpython/gui_core/forms.py:2952
 #: ../gui/wxpython/gui_core/toolbars.py:71
 msgid "Select font"
 msgstr "Izvēlēties fontu"
 
-#: ../gui/wxpython/gui_core/forms.py:1503
+#: ../gui/wxpython/gui_core/forms.py:1504
 #: ../gui/wxpython/gui_core/preferences.py:873
 #: ../gui/wxpython/mapdisp/frame.py:83
 msgid "Map Display"
 msgstr "Kartes skats"
 
-#: ../gui/wxpython/gui_core/forms.py:1656
+#: ../gui/wxpython/gui_core/forms.py:1660
 msgid "Show graphical representation of temporal extent of dataset(s)."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:1965
+#: ../gui/wxpython/gui_core/forms.py:1969
 #: ../gui/wxpython/gui_core/preferences.py:1466
 #: ../gui/wxpython/gui_core/preferences.py:1500
 msgid "Transparent"
 msgstr "Caurspīdīgs"
 
-#: ../gui/wxpython/gui_core/forms.py:2003
-#: ../gui/wxpython/gui_core/forms.py:2114
+#: ../gui/wxpython/gui_core/forms.py:2007
+#: ../gui/wxpython/gui_core/forms.py:2118
 #, python-format
 msgid "Choose %s"
 msgstr "Izvēlieties %s"
 
-#: ../gui/wxpython/gui_core/forms.py:2059
+#: ../gui/wxpython/gui_core/forms.py:2063
 #: ../gui/wxpython/modules/mcalc_builder.py:175
 msgid "&Load"
 msgstr "Ie&lādēt"
 
-#: ../gui/wxpython/gui_core/forms.py:2061
+#: ../gui/wxpython/gui_core/forms.py:2065
 msgid "Load and edit content of a file"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:2064
+#: ../gui/wxpython/gui_core/forms.py:2068
 msgid "&Save as"
 msgstr "&Saglabāt kā"
 
-#: ../gui/wxpython/gui_core/forms.py:2066
+#: ../gui/wxpython/gui_core/forms.py:2070
 msgid "Save content to a file for further use"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:2072
+#: ../gui/wxpython/gui_core/forms.py:2076
 msgid "or enter values directly:"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:2076
+#: ../gui/wxpython/gui_core/forms.py:2080
 msgid "Enter file content directly instead of specifying a file. Temporary file will be automatically created."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:2115
-#: ../gui/wxpython/gui_core/gselect.py:1475
+#: ../gui/wxpython/gui_core/forms.py:2119
+#: ../gui/wxpython/gui_core/gselect.py:1479
 msgid "Directory"
 msgstr "Mape"
 
-#: ../gui/wxpython/gui_core/forms.py:2251
+#: ../gui/wxpython/gui_core/forms.py:2255
 #: ../gui/wxpython/modules/import_export.py:86
 #: ../gui/wxpython/modules/import_export.py:981
 msgid "Layer id"
 msgstr "Slāņa id"
 
-#: ../gui/wxpython/gui_core/forms.py:2252
+#: ../gui/wxpython/gui_core/forms.py:2256
 #: ../gui/wxpython/modules/import_export.py:87
 msgid "Layer name"
 msgstr "Slāņa nosaukums"
 
-#: ../gui/wxpython/gui_core/forms.py:2253
+#: ../gui/wxpython/gui_core/forms.py:2257
 #: ../gui/wxpython/modules/import_export.py:91
 #: ../gui/wxpython/psmap/dialogs.py:2272
 msgid "Feature type"
 msgstr "Objektu tips"
 
-#: ../gui/wxpython/gui_core/forms.py:2254
+#: ../gui/wxpython/gui_core/forms.py:2258
 #: ../gui/wxpython/modules/import_export.py:92
 #: ../gui/wxpython/modules/import_export.py:94
 msgid "Projection match"
 msgstr "Projekcijas atbilst"
 
-#: ../gui/wxpython/gui_core/forms.py:2517
+#: ../gui/wxpython/gui_core/forms.py:2521
 msgid "Manual"
 msgstr "Rokasgrāmata"
 
-#: ../gui/wxpython/gui_core/forms.py:2557
+#: ../gui/wxpython/gui_core/forms.py:2561
 msgid "Nothing to load."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:2566
+#: ../gui/wxpython/gui_core/forms.py:2570
 #, python-format
 msgid ""
 "Unable to load file.\n"
@@ -4829,31 +4829,31 @@ msgid ""
 "Reason: %s"
 msgstr "Nav iespējams ielādēt failu. Iemesls: %s"
 
-#: ../gui/wxpython/gui_core/forms.py:2587
+#: ../gui/wxpython/gui_core/forms.py:2591
 #: ../gui/wxpython/modules/colorrules.py:687
 msgid "Nothing to save."
 msgstr "Nav ko saglabāt."
 
-#: ../gui/wxpython/gui_core/forms.py:2592
+#: ../gui/wxpython/gui_core/forms.py:2596
 msgid "Save input as..."
 msgstr "Saglabāt ievadi kā..."
 
-#: ../gui/wxpython/gui_core/forms.py:2931
+#: ../gui/wxpython/gui_core/forms.py:2935
 msgid "No dataset given."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:3099
-#: ../gui/wxpython/gui_core/forms.py:3118
+#: ../gui/wxpython/gui_core/forms.py:3103
+#: ../gui/wxpython/gui_core/forms.py:3122
 #, python-format
 msgid "Unable to parse command '%s'"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:3126
+#: ../gui/wxpython/gui_core/forms.py:3130
 #, python-format
 msgid "%(cmd)s: parameter '%(key)s' not available"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/forms.py:3212
+#: ../gui/wxpython/gui_core/forms.py:3216
 msgid "Try to set up GRASS_ADDON_PATH or GRASS_ADDON_BASE variable."
 msgstr ""
 
@@ -5085,182 +5085,182 @@ msgstr ""
 msgid "No table linked to layer <{}>."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1244
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1015
+#: ../gui/wxpython/gui_core/gselect.py:1248
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1017
 msgid "Choose GIS Data Directory"
 msgstr "Izvēlieties ĢIS datu mapi"
 
-#: ../gui/wxpython/gui_core/gselect.py:1456
+#: ../gui/wxpython/gui_core/gselect.py:1460
 msgid "Output settings"
 msgstr "Izvades iestatījumi"
 
-#: ../gui/wxpython/gui_core/gselect.py:1458
+#: ../gui/wxpython/gui_core/gselect.py:1462
 msgid "Source input"
 msgstr "Ievades avots"
 
-#: ../gui/wxpython/gui_core/gselect.py:1465
+#: ../gui/wxpython/gui_core/gselect.py:1469
 msgid "Native"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1471
+#: ../gui/wxpython/gui_core/gselect.py:1475
 #: ../gui/wxpython/lmgr/workspace.py:517
 msgid "File"
 msgstr "Datne"
 
-#: ../gui/wxpython/gui_core/gselect.py:1483
+#: ../gui/wxpython/gui_core/gselect.py:1487
 msgid "Protocol"
 msgstr "Protokols"
 
-#: ../gui/wxpython/gui_core/gselect.py:1494
+#: ../gui/wxpython/gui_core/gselect.py:1498
 msgid "Output type"
 msgstr "Izvades tips"
 
-#: ../gui/wxpython/gui_core/gselect.py:1496
+#: ../gui/wxpython/gui_core/gselect.py:1500
 msgid "Source type"
 msgstr "Avota tips"
 
-#: ../gui/wxpython/gui_core/gselect.py:1514
+#: ../gui/wxpython/gui_core/gselect.py:1518
 msgid "All files"
 msgstr "Visi faili"
 
-#: ../gui/wxpython/gui_core/gselect.py:1544
+#: ../gui/wxpython/gui_core/gselect.py:1548
 msgid "ZIP files"
 msgstr "ZIP faili"
 
-#: ../gui/wxpython/gui_core/gselect.py:1545
+#: ../gui/wxpython/gui_core/gselect.py:1549
 msgid "GZIP files"
 msgstr "GZIP faili"
 
-#: ../gui/wxpython/gui_core/gselect.py:1546
+#: ../gui/wxpython/gui_core/gselect.py:1550
 msgid "TAR files"
 msgstr "TAR faili"
 
-#: ../gui/wxpython/gui_core/gselect.py:1550
+#: ../gui/wxpython/gui_core/gselect.py:1554
 msgid "TARGZ files"
 msgstr "TARGZ faili"
 
-#: ../gui/wxpython/gui_core/gselect.py:1559
+#: ../gui/wxpython/gui_core/gselect.py:1563
 msgid "File:"
 msgstr "Datne:"
 
-#: ../gui/wxpython/gui_core/gselect.py:1560
+#: ../gui/wxpython/gui_core/gselect.py:1564
 msgid "Choose file to import"
 msgstr "Izvēlieties importējamo  failu"
 
-#: ../gui/wxpython/gui_core/gselect.py:1577
-#: ../gui/wxpython/gui_core/gselect.py:1665
+#: ../gui/wxpython/gui_core/gselect.py:1581
+#: ../gui/wxpython/gui_core/gselect.py:1669
 msgid "Choose input directory"
 msgstr "Izvēlieties ievades mapi"
 
-#: ../gui/wxpython/gui_core/gselect.py:1598
+#: ../gui/wxpython/gui_core/gselect.py:1602
 msgid "Extension:"
 msgstr "Paplašinājums:"
 
-#: ../gui/wxpython/gui_core/gselect.py:1630
+#: ../gui/wxpython/gui_core/gselect.py:1634
 msgid "Choose file"
 msgstr "Izvēlieties failu"
 
-#: ../gui/wxpython/gui_core/gselect.py:1651
-#: ../gui/wxpython/gui_core/gselect.py:2777
+#: ../gui/wxpython/gui_core/gselect.py:1655
+#: ../gui/wxpython/gui_core/gselect.py:2781
 msgid "Feature type:"
 msgstr "Objekta tips:"
 
-#: ../gui/wxpython/gui_core/gselect.py:1652
+#: ../gui/wxpython/gui_core/gselect.py:1656
 msgid "simple features"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1652
+#: ../gui/wxpython/gui_core/gselect.py:1656
 msgid "topological"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1769
-#: ../gui/wxpython/gui_core/gselect.py:1809
-#: ../gui/wxpython/gui_core/gselect.py:1871
-#: ../gui/wxpython/gui_core/gselect.py:1916
+#: ../gui/wxpython/gui_core/gselect.py:1773
+#: ../gui/wxpython/gui_core/gselect.py:1813
+#: ../gui/wxpython/gui_core/gselect.py:1875
+#: ../gui/wxpython/gui_core/gselect.py:1920
 msgid "Creation options:"
 msgstr "Izveides parametri:"
 
-#: ../gui/wxpython/gui_core/gselect.py:1786
-#: ../gui/wxpython/gui_core/gselect.py:1832
-#: ../gui/wxpython/gui_core/gselect.py:1897
+#: ../gui/wxpython/gui_core/gselect.py:1790
+#: ../gui/wxpython/gui_core/gselect.py:1836
+#: ../gui/wxpython/gui_core/gselect.py:1901
 msgid "Format:"
 msgstr "Formāts:"
 
-#: ../gui/wxpython/gui_core/gselect.py:1905
+#: ../gui/wxpython/gui_core/gselect.py:1909
 msgid "Protocol:"
 msgstr "Protokols:"
 
-#: ../gui/wxpython/gui_core/gselect.py:1934
+#: ../gui/wxpython/gui_core/gselect.py:1938
 msgid "No settings available"
 msgstr "Iestatījumi nav pieejami"
 
-#: ../gui/wxpython/gui_core/gselect.py:2066
-#: ../gui/wxpython/web_services/dialogs.py:301
+#: ../gui/wxpython/gui_core/gselect.py:2070
+#: ../gui/wxpython/web_services/dialogs.py:302
 msgid "No data source defined, settings are not saved."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2098
+#: ../gui/wxpython/gui_core/gselect.py:2102
 msgid "PostgreSQL/PostGIS login was not set. Set it via <db.login> module, please."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2253
+#: ../gui/wxpython/gui_core/gselect.py:2257
 #, python-brace-format
 msgid "Getting raster <{table}> SRID from PostgreSQL DB <{db}>, host <{host}> failed. {error}."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2508
+#: ../gui/wxpython/gui_core/gselect.py:2512
 #, python-brace-format
 msgid "Getting list of tables from PostgreSQL DB <{db}>, host <{host}> failed. {error}."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2597
+#: ../gui/wxpython/gui_core/gselect.py:2601
 #, python-brace-format
 msgid "Getting list of tables columns data types from PostGIS DB <{db}>, host <{host}> failed. {error}."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2628
+#: ../gui/wxpython/gui_core/gselect.py:2632
 #, python-brace-format
 msgid "PostgreSQL DB <{psql}> program was not found. Please, install it."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2648
+#: ../gui/wxpython/gui_core/gselect.py:2652
 #: ../gui/wxpython/modules/import_export.py:506
 msgid "The Python GDAL package is missing. Please install it."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2769
+#: ../gui/wxpython/gui_core/gselect.py:2773
 msgid "LineString"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2769
+#: ../gui/wxpython/gui_core/gselect.py:2773
 #: ../gui/wxpython/psmap/dialogs.py:6221 ../gui/wxpython/psmap/toolbars.py:103
 #: ../gui/wxpython/vdigit/preferences.py:729
 msgid "Point"
 msgstr "Punkts"
 
-#: ../gui/wxpython/gui_core/gselect.py:2769
+#: ../gui/wxpython/gui_core/gselect.py:2773
 msgid "Polygon"
 msgstr "Poligons"
 
-#: ../gui/wxpython/gui_core/gselect.py:2982
+#: ../gui/wxpython/gui_core/gselect.py:2986
 msgid "No vector map selected in layer manager. Operation canceled."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:3001
+#: ../gui/wxpython/gui_core/gselect.py:3005
 msgid "Input vector map is not selected"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:3005
+#: ../gui/wxpython/gui_core/gselect.py:3009
 #, python-format
 msgid "Input vector map <%s> and selected map <%s> in layer manager are different. Operation canceled."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:3121
+#: ../gui/wxpython/gui_core/gselect.py:3125
 #, fuzzy, python-format
 msgid "Unable to import C imagery library functions: %s\n"
 msgstr "Nav iespējams izveidot novietojumu"
 
-#: ../gui/wxpython/gui_core/gselect.py:3199
+#: ../gui/wxpython/gui_core/gselect.py:3203
 msgid "No vector map selected"
 msgstr "Nav izvēlēta vektordatu karte"
 
@@ -5743,83 +5743,83 @@ msgstr "Īpašnieks"
 msgid "Type command here and press Enter"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:300
+#: ../gui/wxpython/gui_core/pyedit.py:301
 msgid "Permission denied <{}>. Please change file permission for reading."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:307
+#: ../gui/wxpython/gui_core/pyedit.py:308
 msgid "Couldn't read file <{}>."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:326
+#: ../gui/wxpython/gui_core/pyedit.py:327
 msgid "Permission denied <{}>. Please change file permission for writing.{}"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:337
+#: ../gui/wxpython/gui_core/pyedit.py:338
 msgid "Couldn't write file <{}>.{}"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:361
-#: ../gui/wxpython/gui_core/pyedit.py:371
+#: ../gui/wxpython/gui_core/pyedit.py:362
+#: ../gui/wxpython/gui_core/pyedit.py:372
 #, fuzzy
 #| msgid "Export model to Python script"
 msgid " Unable to launch Python script."
 msgstr "Eksportē modeli kā Python skriptu"
 
-#: ../gui/wxpython/gui_core/pyedit.py:469
+#: ../gui/wxpython/gui_core/pyedit.py:470
 msgid "Open file"
 msgstr "Atvērt failu"
 
-#: ../gui/wxpython/gui_core/pyedit.py:511
+#: ../gui/wxpython/gui_core/pyedit.py:512
 #, python-brace-format
 msgid "File <{path}> doesn't exist. It was probably moved or deleted."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:579
+#: ../gui/wxpython/gui_core/pyedit.py:580
 msgid "Replace the content by the template?"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:581
+#: ../gui/wxpython/gui_core/pyedit.py:582
 msgid "Replace the content by the example?"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:583
+#: ../gui/wxpython/gui_core/pyedit.py:584
 msgid "Replace the current content by the file content?"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:590
+#: ../gui/wxpython/gui_core/pyedit.py:591
 msgid "Replace content"
 msgstr "Aizvietot saturu"
 
-#: ../gui/wxpython/gui_core/pyedit.py:603
+#: ../gui/wxpython/gui_core/pyedit.py:604
 msgid "Set parameters for the script"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:605
+#: ../gui/wxpython/gui_core/pyedit.py:606
 msgid "Specify command line parameters for the script separated by spaces:"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:658
+#: ../gui/wxpython/gui_core/pyedit.py:659
 msgid "Open (Ctrl+O)"
 msgstr "Atvērt (Ctrl+O)"
 
-#: ../gui/wxpython/gui_core/pyedit.py:659
+#: ../gui/wxpython/gui_core/pyedit.py:660
 msgid "Save (Ctrl+S)"
 msgstr "Saglabāt (Ctrl+S)"
 
-#: ../gui/wxpython/gui_core/pyedit.py:660
+#: ../gui/wxpython/gui_core/pyedit.py:661
 msgid "Run (Ctrl+R)"
 msgstr "Darbināt (Ctrl+R)"
 
-#: ../gui/wxpython/gui_core/pyedit.py:662
+#: ../gui/wxpython/gui_core/pyedit.py:663
 msgid "Activate overwrite"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:663
+#: ../gui/wxpython/gui_core/pyedit.py:664
 msgid "Deactivate overwrite"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:876
+#: ../gui/wxpython/gui_core/pyedit.py:883
 msgid "Simple Python Editor"
 msgstr "Vienkāršs Python redaktors"
 
@@ -6117,79 +6117,79 @@ msgid ""
 "Reason: %s"
 msgstr "Nebija iespējams izveidot jaunu vektordatu karti. Iemesls: %s"
 
-#: ../gui/wxpython/gui_core/widgets.py:127
+#: ../gui/wxpython/gui_core/widgets.py:128
 msgid " (...)"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/widgets.py:884
+#: ../gui/wxpython/gui_core/widgets.py:885
 #, python-format
 msgid "Name <%(name)s> is not a valid name for GRASS map. Please use only ASCII characters excluding %(chars)s and space."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/widgets.py:888
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1184
+#: ../gui/wxpython/gui_core/widgets.py:889
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1186
 #: ../gui/wxpython/location_wizard/wizard.py:300
 #: ../gui/wxpython/modules/import_export.py:268
 msgid "Invalid name"
 msgstr "Nederīgs nosaukums"
 
-#: ../gui/wxpython/gui_core/widgets.py:1236
+#: ../gui/wxpython/gui_core/widgets.py:1262
 msgid "Fulltext search"
 msgstr "Pilnteksta meklēšana"
 
-#: ../gui/wxpython/gui_core/widgets.py:1238
+#: ../gui/wxpython/gui_core/widgets.py:1264
 msgid "Type to search in all tools. Press Enter for next match."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/widgets.py:1300
+#: ../gui/wxpython/gui_core/widgets.py:1326
 msgid "Searching, please type more characters."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/widgets.py:1311
+#: ../gui/wxpython/gui_core/widgets.py:1337
 #, fuzzy
 msgid "{} tools matched"
 msgstr "%d moduļi atbilst"
 
-#: ../gui/wxpython/gui_core/widgets.py:1378
+#: ../gui/wxpython/gui_core/widgets.py:1404
 msgid "Profiles"
 msgstr "Profili"
 
-#: ../gui/wxpython/gui_core/widgets.py:1385
+#: ../gui/wxpython/gui_core/widgets.py:1411
 msgid "Save current settings"
 msgstr "Saglabāt pašreizējos iestatījumus"
 
-#: ../gui/wxpython/gui_core/widgets.py:1388
+#: ../gui/wxpython/gui_core/widgets.py:1414
 msgid "Delete currently selected settings"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/widgets.py:1407
+#: ../gui/wxpython/gui_core/widgets.py:1433
 msgid "Load:"
 msgstr "Ielādēt:"
 
-#: ../gui/wxpython/gui_core/widgets.py:1423
+#: ../gui/wxpython/gui_core/widgets.py:1449
 #, python-format
 msgid "Settings <%s> not found"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/widgets.py:1436
-#: ../gui/wxpython/gui_core/widgets.py:1459
+#: ../gui/wxpython/gui_core/widgets.py:1462
+#: ../gui/wxpython/gui_core/widgets.py:1485
 msgid "Save settings"
 msgstr "Saglabāt iestatījumus"
 
-#: ../gui/wxpython/gui_core/widgets.py:1442
+#: ../gui/wxpython/gui_core/widgets.py:1468
 msgid "Name not given, settings is not saved."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/widgets.py:1455
+#: ../gui/wxpython/gui_core/widgets.py:1481
 #, python-format
 msgid "Settings <%s> already exists. Do you want to overwrite the settings?"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/widgets.py:1507
+#: ../gui/wxpython/gui_core/widgets.py:1533
 msgid "No settings is defined. Operation canceled."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/widgets.py:1543
+#: ../gui/wxpython/gui_core/widgets.py:1569
 msgid "Unable to save settings"
 msgstr ""
 
@@ -6227,7 +6227,7 @@ msgid "Apply"
 msgstr "&Pielietot"
 
 #: ../gui/wxpython/gui_core/wrap.py:296
-#: ../gui/wxpython/web_services/dialogs.py:689
+#: ../gui/wxpython/web_services/dialogs.py:690
 msgid "&Apply"
 msgstr "&Pielietot"
 
@@ -6967,7 +6967,7 @@ msgid "New mapset:"
 msgstr "Jauna karšu kopa:"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:632
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1032
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1034
 #: ../gui/wxpython/startup/guiutils.py:134
 msgid "Create new mapset"
 msgstr "Izveidot jaunu karšu kopu"
@@ -7080,21 +7080,21 @@ msgstr ""
 msgid "No GRASS Location found in '%s'. Create a new Location or choose different GRASS database directory."
 msgstr ""
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1001
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1003
 #, python-format
 msgid "Path '%s' doesn't exist."
 msgstr "Ceļš '%s' neeksistē."
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1031
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1033
 msgid "Enter name for new mapset:"
 msgstr "Jaunās karšu kopas nosaukums:"
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1043
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1045
 #, python-format
 msgid "Mapset <%s> already exists."
 msgstr "Karšu kopa <%s> jau eksistē."
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1050
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1052
 #, python-format
 msgid ""
 "Mapset <%s> is reserved for direct read access to OGR layers. Please consider to use another name for your mapset.\n"
@@ -7102,16 +7102,16 @@ msgid ""
 "Are you really sure that you want to create this mapset?"
 msgstr ""
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1056
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1058
 msgid "Reserved mapset name"
 msgstr "Rezervēts karšu kopas nosaukums"
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1084
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1086
 #, python-format
 msgid "Unable to create new mapset: %s"
 msgstr "Nav iespējams izveidot jaunu karšu kopu: %s"
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1100
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1102
 #, python-format
 msgid ""
 "GRASS is already running in selected mapset <%(mapset)s>\n"
@@ -7122,19 +7122,19 @@ msgid ""
 "Do you want to try to remove .gislock (note that you need permission for this operation) and continue?"
 msgstr ""
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1107
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1124
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1109
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1126
 msgid "Lock file found"
 msgstr "Atrasta lock datne"
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1119
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1121
 msgid ""
 "ARE YOU REALLY SURE?\n"
 "\n"
 "If you really are running another GRASS session doing this could corrupt your data. Have another look in the processor manager just to be sure..."
 msgstr ""
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1136
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1138
 #, python-format
 msgid ""
 "Unable to remove '%(lock)s'.\n"
@@ -7142,12 +7142,12 @@ msgid ""
 "Details: %(reason)s"
 msgstr ""
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1180
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1182
 #, python-format
 msgid "Name <%(name)s> is not a valid name for location or mapset. Please use only ASCII characters excluding %(chars)s and space."
 msgstr ""
 
-#: ../gui/wxpython/image2target/ii2t_gis_set.py:1257
+#: ../gui/wxpython/image2target/ii2t_gis_set.py:1259
 msgid "GRASS needs a directory (GRASS database) in which to store its data. Create one now if you have not already done so. A popular choice is \"grassdata\", located in your home directory. Press Browse button to select the directory."
 msgstr ""
 
@@ -8727,12 +8727,12 @@ msgstr ""
 msgid "IAU code missing."
 msgstr ""
 
-#: ../gui/wxpython/location_wizard/wizard.py:2736
+#: ../gui/wxpython/location_wizard/wizard.py:2737
 #, python-format
 msgid "File <%s> not found."
 msgstr "Datne <%s> nav atrasta."
 
-#: ../gui/wxpython/location_wizard/wizard.py:2746
+#: ../gui/wxpython/location_wizard/wizard.py:2747
 msgid "WKT string missing."
 msgstr ""
 
@@ -8970,7 +8970,7 @@ msgid "Display extent"
 msgstr "Ekrāna režīms"
 
 #: ../gui/wxpython/mapdisp/statusbar.py:939
-#: ../gui/wxpython/web_services/dialogs.py:874
+#: ../gui/wxpython/web_services/dialogs.py:875
 msgid "Computational region"
 msgstr "Aprēķinu reģions"
 
@@ -11079,7 +11079,7 @@ msgid "Close dialog and apply changes"
 msgstr "Pielietot izmaiņas un aizvērt dialogu"
 
 #: ../gui/wxpython/psmap/dialogs.py:600 ../gui/wxpython/vdigit/dialogs.py:168
-#: ../gui/wxpython/web_services/dialogs.py:690
+#: ../gui/wxpython/web_services/dialogs.py:691
 msgid "Apply changes"
 msgstr "Pielietot izmaiņas"
 
@@ -13470,7 +13470,7 @@ msgid "Ignore changes and close dialog"
 msgstr "Ignorēt izmaiņas un aizvērt dialogu"
 
 #: ../gui/wxpython/vdigit/dialogs.py:172
-#: ../gui/wxpython/web_services/dialogs.py:695
+#: ../gui/wxpython/web_services/dialogs.py:696
 msgid "Apply changes and close dialog"
 msgstr "Pielietot izmaiņas un aizvērt dialogu"
 
@@ -14581,148 +14581,148 @@ msgstr ""
 msgid "Edit point"
 msgstr "Rediģēt punktu"
 
-#: ../gui/wxpython/web_services/dialogs.py:105
+#: ../gui/wxpython/web_services/dialogs.py:106
 msgid " Server settings "
 msgstr " Servera iestatījumi "
 
-#: ../gui/wxpython/web_services/dialogs.py:108
+#: ../gui/wxpython/web_services/dialogs.py:109
 msgid "Server:"
 msgstr "Serveris:"
 
-#: ../gui/wxpython/web_services/dialogs.py:111
+#: ../gui/wxpython/web_services/dialogs.py:112
 msgid "&Connect"
 msgstr "&Pieslēgties"
 
-#: ../gui/wxpython/web_services/dialogs.py:112
+#: ../gui/wxpython/web_services/dialogs.py:113
 msgid "Connect to the server"
 msgstr "Savienoties ar serveri"
 
-#: ../gui/wxpython/web_services/dialogs.py:116
+#: ../gui/wxpython/web_services/dialogs.py:117
 msgid "Show advanced connection settings"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:117
+#: ../gui/wxpython/web_services/dialogs.py:118
 msgid "Hide advanced connection settings"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:134
+#: ../gui/wxpython/web_services/dialogs.py:135
 msgid " Layer Manager Settings "
 msgstr "Slāņu pārvaldnieka iestatījumi"
 
-#: ../gui/wxpython/web_services/dialogs.py:138
+#: ../gui/wxpython/web_services/dialogs.py:139
 msgid "Output layer name:"
 msgstr "Izvades slāņa nosaukums:"
 
-#: ../gui/wxpython/web_services/dialogs.py:264
+#: ../gui/wxpython/web_services/dialogs.py:265
 msgid "Username:"
 msgstr "Lietotājvārds:"
 
-#: ../gui/wxpython/web_services/dialogs.py:267
+#: ../gui/wxpython/web_services/dialogs.py:268
 msgid "Password:"
 msgstr "Parole:"
 
-#: ../gui/wxpython/web_services/dialogs.py:379
+#: ../gui/wxpython/web_services/dialogs.py:380
 #, python-format
 msgid "Connecting to <%s>..."
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:447
+#: ../gui/wxpython/web_services/dialogs.py:448
 msgid "Available web services"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:462
+#: ../gui/wxpython/web_services/dialogs.py:463
 #, python-format
 msgid "Connected to <%s>"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:469
+#: ../gui/wxpython/web_services/dialogs.py:470
 #, python-format
 msgid "Unable to connect to <%s>"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:524
+#: ../gui/wxpython/web_services/dialogs.py:525
 msgid "Add web service layer"
 msgstr "Pievienot tīmekļa servisa slāni"
 
-#: ../gui/wxpython/web_services/dialogs.py:535
+#: ../gui/wxpython/web_services/dialogs.py:536
 msgid "Add selected web service layers as map layer into layer tree"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:645
+#: ../gui/wxpython/web_services/dialogs.py:646
 msgid "Web service layer properties"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:694
+#: ../gui/wxpython/web_services/dialogs.py:695
 msgid "&OK"
 msgstr "&Labi"
 
-#: ../gui/wxpython/web_services/dialogs.py:854
+#: ../gui/wxpython/web_services/dialogs.py:855
 msgid "Name for output raster map:"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:865
+#: ../gui/wxpython/web_services/dialogs.py:866
 msgid "Export region"
 msgstr "Eksportēt reģionu"
 
-#: ../gui/wxpython/web_services/dialogs.py:871
+#: ../gui/wxpython/web_services/dialogs.py:872
 msgid "Map display"
 msgstr "Kartes skats"
 
-#: ../gui/wxpython/web_services/dialogs.py:876
+#: ../gui/wxpython/web_services/dialogs.py:877
 msgid "Named region"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:878
+#: ../gui/wxpython/web_services/dialogs.py:879
 msgid "Extent and resolution are based on Map Display geometry."
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:881
+#: ../gui/wxpython/web_services/dialogs.py:882
 msgid "Extent and resolution are based on computational region."
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:884
+#: ../gui/wxpython/web_services/dialogs.py:885
 msgid "Extent and resolution are based on named region."
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:889
+#: ../gui/wxpython/web_services/dialogs.py:890
 msgid "Overwrite existing raster map"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:894
+#: ../gui/wxpython/web_services/dialogs.py:895
 msgid "Choose named region:"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:908
+#: ../gui/wxpython/web_services/dialogs.py:909
 msgid "&Save layer"
 msgstr "&Saglabāt slāni"
 
-#: ../gui/wxpython/web_services/dialogs.py:909
+#: ../gui/wxpython/web_services/dialogs.py:910
 msgid "Save web service layer as raster map"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:1015
+#: ../gui/wxpython/web_services/dialogs.py:1016
 msgid "Missing output raster."
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:1018
+#: ../gui/wxpython/web_services/dialogs.py:1019
 msgid "Output map can be added only to current mapset."
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:1024
+#: ../gui/wxpython/web_services/dialogs.py:1025
 #, python-format
 msgid "Output map <%s> already exists"
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:1043
+#: ../gui/wxpython/web_services/dialogs.py:1044
 #, python-format
 msgid "Region <%s> does not exist."
 msgstr ""
 
-#: ../gui/wxpython/web_services/dialogs.py:1071
+#: ../gui/wxpython/web_services/dialogs.py:1072
 msgid "Downloading data..."
 msgstr "Lejupielādē datus..."
 
-#: ../gui/wxpython/web_services/dialogs.py:1092
+#: ../gui/wxpython/web_services/dialogs.py:1093
 msgid "Unable to fetch data.\n"
 msgstr ""
 

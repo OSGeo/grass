@@ -61,7 +61,7 @@ to get GRASS for your platform.
 ## Documentation
 
 See [documentation](https://grass.osgeo.org/grass-devel/manuals/index.html) and
-[tutorials](https://grass.osgeo.org/grass-devel/manuals/tutorials/index.html)
+[tutorials](https://grass-tutorials.osgeo.org/)
 to start learning GRASS.
 
 ## Getting help

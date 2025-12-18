@@ -313,7 +313,7 @@ class GRASSStartup(wx.Frame):
         # set database
         if not self.gisdbase:
             # sets an initial path for gisdbase if nothing in GISRC
-            if os.path.isdir(os.getenv("HOME")):
+            if Path(os.getenv("HOME")).is_dir():
                 self.gisdbase = os.getenv("HOME")
             else:
                 self.gisdbase = str(Path.cwd())
@@ -331,7 +331,7 @@ class GRASSStartup(wx.Frame):
         location = self.GetRCValue("LOCATION_NAME")
         if location == "<UNKNOWN>":
             return
-        if not os.path.isdir(os.path.join(self.gisdbase, location)):
+        if not Path(os.path.join(self.gisdbase, location)).is_dir():
             location = None
 
         # list of locations
@@ -1067,7 +1067,7 @@ class GRASSStartup(wx.Frame):
         try:
             self.gisdbase = self.tgisdbase.GetValue()
             location = self.listOfLocations[self.lblocations.GetSelection()]
-            os.mkdir(os.path.join(self.gisdbase, location, mapset))
+            Path(os.path.join(self.gisdbase, location, mapset)).mkdir()
             # copy WIND file and its permissions from PERMANENT and set
             # permissions to u+rw,go+r
             shutil.copy(

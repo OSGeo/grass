@@ -30,13 +30,10 @@ void query_band(GDALRasterBandH hBand, const char *output,
         cellhd->format = 0;
         break;
 
-/* GDT_Int8 was introduced in GDAL 3.7 */
-#if GDAL_VERSION_NUM >= GDAL_COMPUTE_VERSION(3, 7, 0)
     case GDT_Int8:
         info->data_type = CELL_TYPE;
         cellhd->format = 1;
         break;
-#endif
 
     case GDT_Int16:
     case GDT_UInt16:
