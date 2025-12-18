@@ -119,7 +119,6 @@ def mapcalc(
     seed=None,
     nprocs=None,
     env=None,
-    flags="",
     **kwargs,
 ):
     """Interface to r.mapcalc.
@@ -137,7 +136,6 @@ def mapcalc(
     :param seed: an integer used to seed the random-number generator for the
                  rand() function. If not provided, r.mapcalc uses automatic seeding.
     :param nprocs: Number of threads for parallel computing
-    :param str flags: additional flags to pass to r.mapcalc
     :param dict env: dictionary of environment variables for child process
     :param kwargs:
     """
@@ -149,12 +147,6 @@ def mapcalc(
     # but for explicit 0, do pass through.
     if nprocs is None:
         nprocs = 1
-
-    # Handle deprecated seed="auto" - ignore it, let r.mapcalc auto-seed
-    if seed == "auto":
-        seed = None
-
-    # We no longer forward `flags` to r.mapcalc; keep `seed` for compatibility
 
     try:
         write_command(
@@ -185,7 +177,6 @@ def mapcalc_start(
     seed=None,
     nprocs=None,
     env=None,
-    flags="",
     **kwargs,
 ):
     """Interface to r.mapcalc, doesn't wait for it to finish, returns Popen object.
@@ -217,7 +208,6 @@ def mapcalc_start(
     :param seed: an integer used to seed the random-number generator for the
                  rand() function. If not provided, r.mapcalc uses automatic seeding.
     :param nprocs: Number of threads for parallel computing
-    :param str flags: additional flags to pass to r.mapcalc
     :param dict env: dictionary of environment variables for child process
     :param kwargs:
 
@@ -232,11 +222,6 @@ def mapcalc_start(
     if nprocs is None:
         nprocs = 1
 
-    # Handle deprecated seed="auto" - ignore it, let r.mapcalc auto-seed
-    if seed == "auto":
-        seed = None
-
-    # We no longer forward `flags` to r.mapcalc; keep `seed` for compatibility
     p = feed_command(
         "r.mapcalc",
         file="-",
