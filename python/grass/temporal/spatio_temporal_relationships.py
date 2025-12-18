@@ -408,8 +408,8 @@ class SpatioTemporalTopologyBuilder:
         """
         self._build_iteratable(maps, spatial)
 
-        for _map in maps:
-            self._insert(_map)
+        for map_ in maps:
+            self._insert(map_)
 
         # Detect the first map
         self._detect_first()
@@ -734,9 +734,9 @@ def print_temporal_topology_relationships(maps1, maps2=None, dbif=None) -> None:
 
     dbif, connection_state_changed = init_dbif(dbif)
 
-    for _map in tb:
-        _map.select(dbif)
-        _map.print_info()
+    for map_ in tb:
+        map_.select(dbif)
+        map_.print_info()
 
     if connection_state_changed:
         dbif.close()
@@ -767,9 +767,9 @@ def print_spatio_temporal_topology_relationships(
 
     dbif, connection_state_changed = init_dbif(dbif)
 
-    for _map in tb:
-        _map.select(dbif)
-        _map.print_info()
+    for map_ in tb:
+        map_.select(dbif)
+        map_.print_info()
 
     if connection_state_changed:
         dbif.close()
@@ -797,13 +797,13 @@ def count_temporal_topology_relationships(maps1, maps2=None, dbif=None):
 
     relations = None
 
-    for _map in tb:
+    for map_ in tb:
         if relations is not None:
-            r = _map.get_number_of_relations()
+            r = map_.get_number_of_relations()
             for k in r.keys():
                 relations[k] += r[k]
         else:
-            relations = _map.get_number_of_relations()
+            relations = map_.get_number_of_relations()
 
     if connection_state_changed:
         dbif.close()

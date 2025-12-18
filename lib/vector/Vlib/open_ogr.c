@@ -24,9 +24,7 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
-#ifdef HAVE_OGR
 #include <ogr_api.h>
-#endif
 
 /*!
    \brief Open existing OGR layer on non-topological level
@@ -42,7 +40,6 @@
  */
 int V1_open_old_ogr(struct Map_info *Map, int update)
 {
-#ifdef HAVE_OGR
     int i, layer, nLayers;
 
     struct Format_info_ogr *ogr_info;
@@ -125,10 +122,6 @@ int V1_open_old_ogr(struct Map_info *Map, int update)
     ogr_info->cache.fid = -1; /* FID >= 0 */
 
     return 0;
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-    return -1;
-#endif
 }
 
 /*!
@@ -144,8 +137,6 @@ int V1_open_old_ogr(struct Map_info *Map, int update)
  */
 int V2_open_old_ogr(struct Map_info *Map)
 {
-#ifdef HAVE_OGR
-
     G_debug(3, "V2_open_old_ogr(): name = %s mapset = %s", Map->name,
             Map->mapset);
 
@@ -160,10 +151,6 @@ int V2_open_old_ogr(struct Map_info *Map)
     Map->fInfo.ogr.next_line = 1; /* reset feature cache */
 
     return 0;
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-    return -1;
-#endif
 }
 
 /*!
@@ -181,7 +168,6 @@ int V2_open_old_ogr(struct Map_info *Map)
  */
 int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
 {
-#ifdef HAVE_OGR
     int i, nlayers;
 
     struct Format_info_ogr *ogr_info;
@@ -238,10 +224,6 @@ int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
     }
 
     return 0;
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-    return -1;
-#endif
 }
 
 /*!

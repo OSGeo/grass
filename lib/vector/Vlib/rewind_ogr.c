@@ -16,9 +16,7 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-#ifdef HAVE_OGR
 #include <ogr_api.h>
-#endif
 
 /*!
    \brief Rewind vector map (OGR layer) to cause reads to start at
@@ -32,7 +30,6 @@
 int V1_rewind_ogr(struct Map_info *Map)
 {
     G_debug(2, "V1_rewind_ogr(): name = %s", Map->name);
-#ifdef HAVE_OGR
     struct Format_info_ogr *ogr_info;
 
     ogr_info = &(Map->fInfo.ogr);
@@ -43,10 +40,6 @@ int V1_rewind_ogr(struct Map_info *Map)
     OGR_L_ResetReading(ogr_info->layer);
 
     return 0;
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-    return -1;
-#endif
 }
 
 /*!
@@ -61,14 +54,9 @@ int V1_rewind_ogr(struct Map_info *Map)
 int V2_rewind_ogr(struct Map_info *Map)
 {
     G_debug(2, "V2_rewind_ogr(): name = %s", Map->name);
-#ifdef HAVE_OGR
     Map->next_line = 1;
 
     V1_rewind_ogr(Map);
 
     return 0;
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-    return -1;
-#endif
 }
