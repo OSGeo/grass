@@ -539,13 +539,9 @@ int G_parser(int argc, char **argv)
 
             /* Verbose option */
             else if (strcmp(ptr, "--v") == 0 || strcmp(ptr, "--verbose") == 0) {
-                char buff[32];
 
                 /* print everything: max verbosity level */
                 st->module_info.verbose = G_verbose_max();
-                snprintf(buff, sizeof(buff), "GRASS_VERBOSE=%d",
-                         G_verbose_max());
-                putenv(G_store(buff));
                 G_set_verbose(G_verbose_max());
                 if (st->quiet == 1) {
                     G_warning(_("Use either --quiet or --verbose flag, not "
@@ -558,19 +554,15 @@ int G_parser(int argc, char **argv)
                     G_warning(_("Use either --qq or --verbose flag, not "
                                 "both. Assuming --verbose."));
                 }
-                st->superquiet = FALSE; /* for passing to gui init */
+                st->superquiet = false; /* for passing to gui init */
                 st->quiet = -1;
             }
 
             /* Quiet option */
             else if (strcmp(ptr, "--q") == 0 || strcmp(ptr, "--quiet") == 0) {
-                char buff[32];
 
                 /* print nothing, but errors and warnings */
                 st->module_info.verbose = G_verbose_min();
-                snprintf(buff, sizeof(buff), "GRASS_VERBOSE=%d",
-                         G_verbose_min());
-                putenv(G_store(buff));
                 G_set_verbose(G_verbose_min());
                 if (st->quiet == -1) {
                     G_warning(_("Use either --quiet or --verbose flag, not "
@@ -583,13 +575,12 @@ int G_parser(int argc, char **argv)
                     G_warning(_("Use either --qq or --quiet flag, not "
                                 "both. Assuming --quiet."));
                 }
-                st->superquiet = FALSE; /* for passing to gui init */
+                st->superquiet = false; /* for passing to gui init */
                 st->quiet = 1;
             }
 
             /* Super quiet option */
             else if (strcmp(ptr, "--qq") == 0) {
-                char buff[32];
 
                 if (st->module_info.verbose == G_verbose_max()) {
                     G_warning(_("Use either --qq or --verbose flag, not both. "
@@ -601,12 +592,9 @@ int G_parser(int argc, char **argv)
                 }
                 /* print nothing, but errors  */
                 st->module_info.verbose = G_verbose_min();
-                snprintf(buff, sizeof(buff), "GRASS_VERBOSE=%d",
-                         G_verbose_min());
-                putenv(G_store(buff));
                 G_set_verbose(G_verbose_min());
                 G_suppress_warnings(TRUE);
-                st->superquiet = TRUE; /* for passing to gui init */
+                st->superquiet = true; /* for passing to gui init */
                 st->quiet = -1;
             }
 
