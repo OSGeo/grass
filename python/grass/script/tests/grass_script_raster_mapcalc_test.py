@@ -145,8 +145,6 @@ class TestMapcalcStartRandFunction:
         returncode = p.wait()
         assert returncode == 0
         # Verify the map was created successfully with the seed value
-        raster_info = gs.raster_info(
-            "rand_map_start_seed", env=self.session.env
-        )
+        raster_info = gs.raster_info("rand_map_start_seed", env=self.session.env)
         assert raster_info is not None
         assert "min" in raster_info
