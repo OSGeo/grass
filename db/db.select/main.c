@@ -380,8 +380,8 @@ void parse_command_line(int argc, char **argv)
 
     vs = G_define_standard_option(G_OPT_F_SEP);
     vs->key = "vertical_separator";
-    vs->label =
-        _("Vertical record separator (requires -v flag or format=vertical)");
+    vs->label = _("Vertical record separator (requires -v flag [deprecated] or "
+                  "format=vertical)");
     vs->answer = NULL;
     vs->guisection = _("Format");
 
