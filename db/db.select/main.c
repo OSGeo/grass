@@ -380,7 +380,8 @@ void parse_command_line(int argc, char **argv)
 
     vs = G_define_standard_option(G_OPT_F_SEP);
     vs->key = "vertical_separator";
-    vs->label = _("Vertical record separator (requires -v flag)");
+    vs->label =
+        _("Vertical record separator (requires -v flag or format=vertical)");
     vs->answer = NULL;
     vs->guisection = _("Format");
 
@@ -417,7 +418,8 @@ void parse_command_line(int argc, char **argv)
 
     v = G_define_flag();
     v->key = 'v';
-    v->description = _("Vertical output (instead of horizontal)");
+    v->description = _("Vertical output instead of horizontal [deprecated]. "
+                       "Use format=vertical instead.");
     v->guisection = _("Format");
 
     flag_test = G_define_flag();
@@ -511,7 +513,7 @@ void parse_command_line(int argc, char **argv)
     if (v->answer) {
         G_verbose_message(
             _("Flag 'v' is deprecated and will be removed in a future "
-              "release. Please use format=vertical instead [deprecated]."));
+              "release. Please use format=vertical instead."));
         if (format->answer && parms.format != VERTICAL) {
             G_fatal_error(_("Flag 'v' is only allowed with format=vertical."));
         }
