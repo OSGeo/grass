@@ -19,7 +19,7 @@ _Note: Some later steps in this text are to be done by the development coordinat
 Update your remotes and switch to branch:
 
 ```bash
-git fetch --prune upstream && git checkout releasebranch_8_4
+git fetch --prune upstream && git switch releasebranch_8_4
 ```
 
 Confirm that you are on the right branch and have no local changes
@@ -82,15 +82,26 @@ For a release, change the version after the RC cycle to an official release:
 The script will compute the correct version string and print a message
 containing it into the terminal (e.g., "version: GRASS 3.5.0RC1").
 
+## Create variables
+
+For convenience, create Bash variables with the version update script:
+
+```bash
+# Get VERSION and TAG as variables.
+eval $(./utils/update_version.py status --bash)
+```
+
+If in doubt, run the script without `eval $(...)` to see all the variables created.
+
+## Return to the work
+
 Commit with a commit message suggested by the script, e.g.:
 
 ```bash
 git diff
+./utils/update_version.py suggest
 git commit include/VERSION -m "..."
 ```
-
-If you lost the script output with the suggested message use
-`./utils/update_version.py suggest` to get it.
 
 Check that there is exactly one commit on your local branch and that it is the
 version change:
@@ -106,24 +117,6 @@ Push the commit to the upstream repo:
 git push upstream
 ```
 
-## Create variables
-
-For convenience, create Bash variables with the version update script:
-
-```bash
-# Get VERSION and TAG as variables.
-eval $(./utils/update_version.py status --bash)
-```
-
-Version and tag are the same for all releases:
-
-```bash
-echo "$VERSION"
-echo "$TAG"
-```
-
-If in doubt, run the script without `eval $(...)` to see all the variables created.
-
 ## Create release tag
 
 The tag is created locally, while the release draft is created automatically by
@@ -133,11 +126,8 @@ see: <https://help.github.com/en/articles/creating-releases>.
 ### Tag release
 
 Before creating the tag, it is a good idea to see if the CI jobs are not failing.
-Check on [GitHub Actions](https://github.com/OSGeo/grass/actions) or use GitHub CLI:
-
-```bash
-gh run list --branch releasebranch_8_4
-```
+Check on [GitHub Actions](https://github.com/OSGeo/grass/actions)
+or [GitHub Branches](https://github.com/OSGeo/grass/branches).
 
 Some time was needed to run the checks, so before getting back to creating the tag,
 confirm that you are on the right branch which is up to date:
@@ -185,17 +175,22 @@ good results for the first release candidate because it contains contributor han
 and can identify new contributors, so use with the _api_ backend, e.g.:
 
 ```bash
-python ./utils/generate_release_notes.py api releasebranch_8_4 8.3.0 $VERSION
+python ./utils/generate_release_notes.py api $(git rev-parse --abbrev-ref HEAD) 8.3.0 $VERSION
+
 ```
+
+Note that new contributors are the unknown authors, so update the authors,
+but also manually create a new contributors section from the original
+output of the script.
 
 #### Micro releases
 
 For micro releases (x.y.Z), GitHub API does not give good results because it uses
-PRs while the backports are usually direct commits without PRs.
+PRs while the backports are usually direct commits without PRs (cherry-picks).
 The _git log_ command operates on commits, so use use the _log_ backend:
 
 ```bash
-python ./utils/generate_release_notes.py log releasebranch_8_4 8.4.0 $VERSION
+python ./utils/generate_release_notes.py log $(git rev-parse --abbrev-ref HEAD) 8.4.1 $VERSION
 ```
 
 #### Between RCs and from last RC to final release
@@ -204,10 +199,10 @@ In between RCs and between last RC and final release, the _log_ backend is usefu
 for showing updates since the last RC:
 
 ```bash
-python ./utils/generate_release_notes.py log releasebranch_8_4 8.4.0RC1 $VERSION
+python ./utils/generate_release_notes.py log $(git rev-parse --abbrev-ref HEAD) 8.4.0RC1 $VERSION
 ```
 
-#### Finalizing the release notes
+#### Edit the release notes
 
 For the final release, the changes accumulated since the first RC need to be
 added manually to the result from the _api_ backend.
@@ -217,7 +212,8 @@ However, these notes need to be manually edited to collapse related items into
 one. Additionally, a _Highlights_ section needs to be added on top with manually
 identified new major features for major and minor releases. For all releases, a
 _Major_ section may need to be added showing critical fixes or breaking changes
-if there are any.
+if there are any. Similarly, an _Errata_ section should be added when
+numerical results changed due to a fix of an computational issue.
 
 ### Modify the release draft
 
@@ -259,30 +255,35 @@ Use `--help` for details about the options.
 Eventually, commit with the suggested commit message and push, e.g.:
 
 ```bash
-git show
+git diff
 eval $(./utils/update_version.py status --bash)
-git commit include/VERSION -m "version: Back to $VERSION"
+./utils/update_version.py suggest
+git commit include/VERSION -m "..."
+git show
 git push upstream
 ```
 
-The message was suggested by the script, but if you lost that output,
-you can get the same or similar message again using the script
-(the message provided this way is not precise after RCs):
+A precise message was suggested by the script when switching the version,
+but if you lost that output, the _suggest_ subcommand can get the same or,
+similar message again, although the message provided this way is not
+precise after RCs (the script lacks the context about the change unless
+it is doing it).
 
-```bash
-./utils/update_version.py suggest
-```
+## Publish the release on GitHub
 
-## Publishing a final release
+To finish the GitHub-part of the release, find the draft at
+<https://github.com/OSGeo/grass/releases>.
+Edit the draft of the release again,
+reviewing the section about editing the release notes above.
+To publish it, use the "Publish release" button.
 
-The published RC releases has the initial release notes (based on locally
-auto-generated notes) which need to be refined further:
+## Close milestone
 
-- add highlights
-- verify that the subsections are well sorted
-
-For the final release, edit these draft release again in order to publish it
-using the "Publish release" button.
+For a final release (not release candidate), close the related milestone at
+<https://github.com/OSGeo/grass/milestones>.
+If there are any open issues or PRs, move them to another milestone
+in the milestone view (all can be moved at once by selecting the open
+issues and PRs and reassigning the next milestone).
 
 ## Upload to OSGeo servers
 
@@ -414,21 +415,6 @@ Add the new version to repos which build or test addons:
   (currently, for new branches only)
 - <https://github.com/landam/wingrass-maintenance-scripts/blob/master/grass_addons.sh>
   (add new release related line for new branches and final releases)
-
-## Close milestone
-
-For a final release (not release candidate), close the related milestone at
-<https://github.com/OSGeo/grass/milestones>.
-If there are any open issues or PRs, move them to another milestone
-in the milestone view (all can be moved at once by selecting the open
-issues and PRs and reassigning the next milestone).
-
-## Publish the release
-
-When the above is done and the release notes are ready, publish the release at
-<https://github.com/OSGeo/grass/releases>.
-
-Release is done.
 
 ## Improve release description
 
