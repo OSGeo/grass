@@ -418,8 +418,8 @@ void parse_command_line(int argc, char **argv)
 
     v = G_define_flag();
     v->key = 'v';
-    v->description = _("Vertical output instead of horizontal [deprecated]. "
-                       "Use format=vertical instead.");
+    v->label = _("Vertical output instead of horizontal [deprecated]");
+    v->description = _("Use format=vertical instead.");
     v->guisection = _("Format");
 
     flag_test = G_define_flag();
