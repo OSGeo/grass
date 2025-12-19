@@ -91,7 +91,7 @@ jobs:
               echo "error_latest=yes" >> "${GITHUB_OUTPUT}"
               exit 0
           fi
-          latest_rel_branch="$(git branch --all --list 'origin/*' \
+          latest_rel_branch="$(git branch --all --list 'origin/releasebranch_[0-9]_[0-9]' \
             --contains "${latest_tag}" --format "%(refname:lstrip=3)" || echo "")"
           echo "latest_rel_branch=${latest_rel_branch}" >> "${GITHUB_OUTPUT}"
           echo "latest_rel_branch is: ${latest_rel_branch}"
