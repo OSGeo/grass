@@ -49,6 +49,16 @@ void fatal_error_option_value_excludes_option(struct Option *option,
                   excluded->key, option->key, option->answer, because);
 }
 
+void fatal_error_option_value_excludes_flag(struct Option *option,
+                                            struct Flag *excluded,
+                                            const char *because)
+{
+    if (!excluded->answer)
+        return;
+    G_fatal_error(_("The flag -%c is not allowed with %s=%s. %s"),
+                  excluded->key, option->key, option->answer, because);
+}
+
 int main(int argc, char **argv)
 {
     dbString stmt;
@@ -509,6 +519,8 @@ void parse_command_line(int argc, char **argv)
             format, vs, _("Vertical separator is part of the format"));
         fatal_error_option_value_excludes_option(
             format, nv, _("Null value is part of the format"));
+        fatal_error_option_value_excludes_flag(
+            format, c, _("Column names are always included"));
     }
     if (v->answer) {
         G_verbose_message(
