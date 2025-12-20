@@ -152,37 +152,71 @@ class DifficultValueTest(TestCase):
             self.assertEqual(data[8]["place_name"], "892 Long Street\nRaleigh NC 29401")
 
 
-def test_multiple_sql_json(self):
-    """Test multiple SQL queries via input file returning a single JSON list"""
+class MultipleSQLInputTest(TestCase):
+    """Test for Multiple SQL statements: JSON reading successfully"""
 
-    sql_queries = (
-        f"SELECT place_name FROM {self.table_name} WHERE cat = 1;\n"
-        f"SELECT place_name FROM {self.table_name} WHERE cat = 2;"
-    )
-    with tempfile.NamedTemporaryFile(mode="w", delete=False) as tmp_sql:
-        tmp_sql.write(sql_queries)
-        tmp_sql_path = tmp_sql.name
-    try:
+    table_name = "test_db_select"
+
+    @classmethod
+    def setUpClass(cls):
+        cls.db_path = os.path.join(tempfile.gettempdir(), "test_db_select.sqlite")
+
+        cls.runModule(
+            "db.connect",
+            driver="sqlite",
+            database=cls.db_path,
+        )
+
+        cls.runModule(
+            "db.execute",
+            sql=f"""
+            CREATE TABLE {cls.table_name} (
+                cat INTEGER,
+                place_name TEXT
+            );
+            """,
+        )
+
+        cls.runModule(
+            "db.execute",
+            sql=f"""
+            INSERT INTO {cls.table_name} VALUES
+            (1, 'Big Hill'),
+            (2, 'Small Hill');
+            """,
+        )
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.runModule("db.execute", sql=f"DROP TABLE {cls.table_name};")
+
+        if pathlib.Path(cls.db_path).exists():
+            os.remove(cls.db_path)
+
+    def test_multiple_sql_json(self):
+        sql_queries = (
+            f"SELECT place_name FROM {self.table_name} WHERE cat = 1;\n"
+            f"SELECT place_name FROM {self.table_name} WHERE cat = 2;\n"
+        )
+
+        with tempfile.NamedTemporaryFile(mode="w", delete=False) as tmp_sql:
+            tmp_sql.write(sql_queries)
+            tmp_sql_path = tmp_sql.name
+
         text = gs.read_command(
             "db.select",
             input=tmp_sql_path,
             format="json",
         )
+
         data = json.loads(text)
 
         self.assertIsInstance(data, list)
         self.assertEqual(len(data), 2)
+        self.assertEqual(data[0]["records"][0]["place_name"], "Big Hill")
+        self.assertEqual(data[1]["records"][0]["place_name"], "Small Hill")
 
-        records_1 = data[0]["records"]  # first query
-        self.assertEqual(len(records_1), 1)
-        self.assertEqual(records_1[0]["place_name"], "Big Hill")
-
-        records_2 = data[1]["records"]  # second query
-        self.assertEqual(len(records_2), 1)
-        self.assertEqual(records_2[0]["place_name"], "Small Hill")
-    finally:
-        if pathlib.Path(tmp_sql_path).exists():
-            os.remove(tmp_sql_path)
+        os.remove(tmp_sql_path)
 
 
 if __name__ == "__main__":
