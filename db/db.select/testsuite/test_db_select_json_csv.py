@@ -17,6 +17,9 @@ import csv
 import io
 import itertools
 import json
+import os
+import pathlib
+import tempfile
 
 import grass.script as gs
 from grass.gunittest.case import TestCase
@@ -84,7 +87,7 @@ class DifficultValueTest(TestCase):
         )
         data = json.loads(text)
 
-        column_info = data["info"]["columns"]
+        column_info = data[0]["info"]["columns"]
 
         self.assertEqual(column_info[0]["name"], "cat")
         self.assertEqual(column_info[0]["sql_type"], "INTEGER")
@@ -102,7 +105,7 @@ class DifficultValueTest(TestCase):
         self.assertEqual(column_info[5]["sql_type"], "TEXT")
         self.assertFalse(column_info[5]["is_number"])
 
-        records = data["records"]
+        records = data[0]["records"]
 
         self.assertIsNone(records[2]["place_name"])
         self.assertEqual(records[3]["place_name"], 'The "Great" Place')
@@ -147,6 +150,39 @@ class DifficultValueTest(TestCase):
             self.assertEqual(data[5]["place_name"], "Bright Hall|BLDG209")
             self.assertEqual(data[6]["place_name"], "Raleigh, NC, USA")
             self.assertEqual(data[8]["place_name"], "892 Long Street\nRaleigh NC 29401")
+
+
+def test_multiple_sql_json(self):
+    """Test multiple SQL queries via input file returning a single JSON list"""
+
+    sql_queries = (
+        f"SELECT place_name FROM {self.table_name} WHERE cat = 1;\n"
+        f"SELECT place_name FROM {self.table_name} WHERE cat = 2;"
+    )
+    with tempfile.NamedTemporaryFile(mode="w", delete=False) as tmp_sql:
+        tmp_sql.write(sql_queries)
+        tmp_sql_path = tmp_sql.name
+    try:
+        text = gs.read_command(
+            "db.select",
+            input=tmp_sql_path,
+            format="json",
+        )
+        data = json.loads(text)
+
+        self.assertIsInstance(data, list)
+        self.assertEqual(len(data), 2)
+
+        records_1 = data[0]["records"]  # first query
+        self.assertEqual(len(records_1), 1)
+        self.assertEqual(records_1[0]["place_name"], "Big Hill")
+
+        records_2 = data[1]["records"]  # second query
+        self.assertEqual(len(records_2), 1)
+        self.assertEqual(records_2[0]["place_name"], "Small Hill")
+    finally:
+        if pathlib.Path(tmp_sql_path).exists():
+            os.remove(tmp_sql_path)
 
 
 if __name__ == "__main__":
