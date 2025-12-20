@@ -66,6 +66,8 @@ int main(int argc, char **argv)
     dbHandle handle;
     int stat;
     FILE *fd;
+    G_JSON_Value *root_json_value = NULL;
+    G_JSON_Array *results_array = NULL;
 
     parse_command_line(argc, argv);
 
@@ -110,11 +112,11 @@ int main(int argc, char **argv)
         G_fatal_error(_("Unable to open database <%s>"), parms.database);
     db_set_error_handler_driver(driver);
 
-    G_JSON_Value *root_json_value = NULL;
-    G_JSON_Array *results_array = NULL;
-
     if (parms.format == JSON) {
         root_json_value = G_json_value_init_array();
+        if (root_json_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
         results_array = G_json_array(root_json_value);
     }
 
