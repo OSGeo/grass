@@ -9,7 +9,7 @@ FROM ubuntu:24.04@sha256:66460d557b25769b102175144d538d88219c077c678a49af4afca6f
 ARG BASE_NAME="ubuntu:24.04"
 ARG PYTHON_VERSION=3.12
 # renovate: datasource=github-tags depName=libgeos/geos
-ARG GEOS_VERSION=3.14.0
+ARG GEOS_VERSION=3.14.1
 # renovate: datasource=github-tags depName=OSGeo/PROJ
 ARG PROJ_VERSION=9.7.0
 # renovate: datasource=github-tags depName=OSGeo/gdal
