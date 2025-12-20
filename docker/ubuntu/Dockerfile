@@ -13,7 +13,7 @@ ARG GEOS_VERSION=3.14.1
 # renovate: datasource=github-tags depName=OSGeo/PROJ
 ARG PROJ_VERSION=9.7.1
 # renovate: datasource=github-tags depName=OSGeo/gdal
-ARG GDAL_VERSION=3.12.0
+ARG GDAL_VERSION=3.12.1
 # renovate: datasource=github-tags depName=PDAL/PDAL
 ARG PDAL_VERSION=2.9.2
 # renovate: datasource=github-tags depName=OSGeo/gdal-grass
