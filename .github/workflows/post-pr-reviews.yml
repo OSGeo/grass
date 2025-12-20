@@ -26,7 +26,7 @@ jobs:
           name: diff
           github-token: ${{ github.token }}
           run-id: ${{github.event.workflow_run.id }}
-      - uses: reviewdog/action-setup@3f401fe1d58fe77e10d665ab713057375e39b887 # v1.3.0
+      - uses: reviewdog/action-setup@d8a7baabd7f3e8544ee4dbde3ee41d0011c3a93f # v1.5.0
       - name: Check what tools have suggestions to post
         # Using this pattern to have expected file names explicitly named
         id: tools
