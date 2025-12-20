@@ -186,29 +186,14 @@ int sel(dbDriver *driver, dbString *stmt, G_JSON_Array *results_array)
         return DB_OK;
     }
     if (parms.format == JSON) {
-        root_value = G_json_value_init_object();
-        if (root_value == NULL) {
-            G_fatal_error(
-                _("Failed to initialize JSON object. Out of memory?"));
-        }
-        root_object = G_json_value_get_object(root_value);
-
         /* info object */
         G_JSON_Value *info_value = G_json_value_init_object();
         if (info_value == NULL) {
             G_fatal_error(
                 _("Failed to initialize JSON object. Out of memory?"));
         }
-        G_json_object_set_value(root_object, "info", info_value);
-        info_object = G_json_object_get_object(root_object, "info");
-
-        /* records array */
-        G_JSON_Value *records_value = G_json_value_init_array();
-        if (records_value == NULL) {
-            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
-        }
-        G_json_object_set_value(root_object, "records", records_value);
-        records_array = G_json_object_get_array(root_object, "records");
+        // G_json_object_set_value(root_object, "info", info_value);
+        info_object = G_json_value_get_object(info_value);
 
         if (parms.table)
             G_json_object_set_string(info_object, "table", parms.table);
@@ -253,10 +238,28 @@ int sel(dbDriver *driver, dbString *stmt, G_JSON_Array *results_array)
         }
         if (parms.d) {
             if (results_array) {
-                G_json_array_append_value(results_array, root_value);
+                G_json_array_append_value(results_array, info_value);
+            }
+            else {
+                G_json_value_free(info_value);
             }
             return DB_OK;
         }
+        root_value = G_json_value_init_object();
+        if (root_value == NULL) {
+            G_fatal_error(
+                _("Failed to initialize JSON object. Out of memory?"));
+        }
+        root_object = G_json_value_get_object(root_value);
+        G_json_object_set_value(root_object, "info", info_value);
+
+        /* records array */
+        G_JSON_Value *records_value = G_json_value_init_array();
+        if (records_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
+        G_json_object_set_value(root_object, "records", records_value);
+        records_array = G_json_object_get_array(root_object, "records");
     }
 
     db_init_string(&value_string);
