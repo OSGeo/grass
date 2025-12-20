@@ -627,6 +627,11 @@ int G_parser(int argc, char **argv)
                 append_error(err);
             }
         }
+
+        /* Set verbosity in shell env */
+        char buff[32];
+        snprintf(buff, sizeof(buff), "GRASS_VERBOSE=%d", G_verbose());
+        putenv(G_store(buff));
     }
 
     /* Split options where multiple answers are OK */
