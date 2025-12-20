@@ -36,7 +36,7 @@ struct {
 
 /* function prototypes */
 static void parse_command_line(int, char **);
-static int sel(dbDriver *, dbString *);
+static int sel(dbDriver *, dbString *, G_JSON_Array *results_array);
 static int get_stmt(FILE *, dbString *);
 static int stmt_is_empty(dbString *);
 void fatal_error_option_value_excludes_option(struct Option *option,
@@ -89,6 +89,13 @@ int main(int argc, char **argv)
     else
         fd = stdin;
 
+    if (parms.output && strcmp(parms.output, "-") != 0) {
+        if (NULL == freopen(parms.output, "w", stdout)) {
+            G_fatal_error(_("Unable to open file <%s> for writing"),
+                          parms.output);
+        }
+    }
+
     /* open DB connection */
     db_init_string(&stmt);
 
@@ -103,24 +110,40 @@ int main(int argc, char **argv)
         G_fatal_error(_("Unable to open database <%s>"), parms.database);
     db_set_error_handler_driver(driver);
 
+    G_JSON_Value *root_json_value = NULL;
+    G_JSON_Array *results_array = NULL;
+
+    if (parms.format == JSON) {
+        root_json_value = G_json_value_init_array();
+        results_array = G_json_array(root_json_value);
+    }
+
     /* check for sql, table, and input */
     if (parms.sql) {
         /* parms.sql */
         db_set_string(&stmt, parms.sql);
-        stat = sel(driver, &stmt);
+        stat = sel(driver, &stmt, results_array);
     }
     else if (parms.table) {
         /* parms.table */
         db_set_string(&stmt, "SELECT * FROM ");
         db_append_string(&stmt, parms.table);
-        stat = sel(driver, &stmt);
+        stat = sel(driver, &stmt, results_array);
     }
     else { /* -> parms.input */
         stat = DB_OK;
         while (stat == DB_OK && get_stmt(fd, &stmt)) {
             if (!stmt_is_empty(&stmt))
-                stat = sel(driver, &stmt);
+                stat = sel(driver, &stmt, results_array);
         }
+    }
+
+    if (parms.format == JSON && root_json_value) {
+        char *json_string = G_json_serialize_to_string_pretty(root_json_value);
+        fputs(json_string, stdout);
+        fputc('\n', stdout);
+        G_json_free_serialized_string(json_string);
+        G_json_value_free(root_json_value);
     }
 
     if (parms.test_only)
@@ -132,7 +155,7 @@ int main(int argc, char **argv)
     exit(stat == DB_OK ? EXIT_SUCCESS : EXIT_FAILURE);
 }
 
-int sel(dbDriver *driver, dbString *stmt)
+int sel(dbDriver *driver, dbString *stmt, G_JSON_Array *results_array)
 {
     dbCursor cursor;
     dbTable *table;
@@ -229,20 +252,10 @@ int sel(dbDriver *driver, dbString *stmt)
             G_json_array_append_value(columns_array, col_value);
         }
         if (parms.d) {
-            char *json_string = G_json_serialize_to_string_pretty(info_value);
-            fputs(json_string, stdout);
-            fputc('\n', stdout);
-
-            G_json_free_serialized_string(json_string);
-            G_json_value_free(info_value);
+            if (results_array) {
+                G_json_array_append_value(results_array, root_value);
+            }
             return DB_OK;
-        }
-    }
-
-    if (parms.output && strcmp(parms.output, "-") != 0) {
-        if (NULL == freopen(parms.output, "w", stdout)) {
-            G_fatal_error(_("Unable to open file <%s> for writing"),
-                          parms.output);
         }
     }
 
@@ -336,14 +349,8 @@ int sel(dbDriver *driver, dbString *stmt)
             fprintf(stdout, "%s\n", parms.vs);
     }
 
-    if (parms.format == JSON) {
-        char *json_string = G_json_serialize_to_string_pretty(root_value);
-
-        fputs(json_string, stdout);
-        fputc('\n', stdout);
-
-        G_json_free_serialized_string(json_string);
-        G_json_value_free(root_value);
+    if (parms.format == JSON && results_array) {
+        G_json_array_append_value(results_array, root_value);
     }
 
     return DB_OK;
