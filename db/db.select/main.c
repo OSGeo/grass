@@ -196,7 +196,6 @@ int sel(dbDriver *driver, dbString *stmt, G_JSON_Array *results_array)
             G_fatal_error(
                 _("Failed to initialize JSON object. Out of memory?"));
         }
-        // G_json_object_set_value(root_object, "info", info_value);
         info_object = G_json_value_get_object(info_value);
 
         if (parms.table)

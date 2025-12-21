@@ -87,7 +87,7 @@ class DifficultValueTest(TestCase):
         )
         data = json.loads(text)
 
-        column_info = data[0]["info"]["columns"]
+        column_info = data["info"]["columns"]
 
         self.assertEqual(column_info[0]["name"], "cat")
         self.assertEqual(column_info[0]["sql_type"], "INTEGER")
@@ -105,7 +105,7 @@ class DifficultValueTest(TestCase):
         self.assertEqual(column_info[5]["sql_type"], "TEXT")
         self.assertFalse(column_info[5]["is_number"])
 
-        records = data[0]["records"]
+        records = data["records"]
 
         self.assertIsNone(records[2]["place_name"])
         self.assertEqual(records[3]["place_name"], 'The "Great" Place')
