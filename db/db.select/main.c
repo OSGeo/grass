@@ -141,6 +141,8 @@ int main(int argc, char **argv)
     }
 
     if (parms.format == JSON && root_json_value) {
+        if (!parms.input) /* single sql statement */
+            root_json_value = G_json_array_get_value(results_array, 0);
         char *json_string = G_json_serialize_to_string_pretty(root_json_value);
         fputs(json_string, stdout);
         fputc('\n', stdout);
