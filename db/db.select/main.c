@@ -141,12 +141,22 @@ int main(int argc, char **argv)
     }
 
     if (parms.format == JSON && root_json_value) {
-        if (!parms.input) /* single sql statement */
-            root_json_value = G_json_array_get_value(results_array, 0);
-        char *json_string = G_json_serialize_to_string_pretty(root_json_value);
-        fputs(json_string, stdout);
-        fputc('\n', stdout);
-        G_json_free_serialized_string(json_string);
+        G_JSON_Value *output_value = root_json_value;
+
+        if (!parms.input) { // if single sql statement, jsonify the only element
+            G_JSON_Value *first_child =
+                G_json_array_get_value(results_array, 0);
+            if (first_child) {
+                output_value = first_child;
+            }
+        }
+        char *json_string = G_json_serialize_to_string_pretty(output_value);
+
+        if (json_string) {
+            fputs(json_string, stdout);
+            fputc('\n', stdout);
+            G_json_free_serialized_string(json_string);
+        }
         G_json_value_free(root_json_value);
     }
 
