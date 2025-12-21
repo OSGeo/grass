@@ -3,9 +3,12 @@
 import pytest
 import numpy as np
 import re
+import tempfile
+import os
+import time
 
 import grass.script as gs
-from grass.pygrass.raster import raster2numpy
+import pathlib
 
 
 def extract_seed_from_comments(comments_str):
@@ -24,6 +27,55 @@ def extract_seed_from_comments(comments_str):
         return None
     match = re.search(r"\bseed\s*[=:]\s*(-?\d+)", comments_str)
     return int(match.group(1)) if match else None
+
+
+def read_raster_as_array(mapname, env):
+    """Read a raster map as numpy array using r.out.ascii.
+
+    This helper function works with isolated test sessions by respecting
+    the env parameter, unlike raster2numpy() which only reads from the
+    global GRASS environment.
+
+    Args:
+        mapname: Name of the raster map to read
+        env: Environment dictionary for the GRASS session
+
+    Returns:
+        numpy.ndarray: Array containing raster values (NaN for null cells)
+    """
+    with tempfile.NamedTemporaryFile(
+        mode="w+", suffix=".txt", delete=False, encoding="utf-8"
+    ) as tmp:
+        tmp_path = tmp.name
+
+    try:
+        # Export raster to ASCII format
+        gs.run_command(
+            "r.out.ascii", input=mapname, output=tmp_path, precision=10, env=env
+        )
+
+        # Read the ASCII file
+        with open(tmp_path, encoding="utf-8") as f:
+            lines = f.readlines()
+
+        # Skip header lines (first 6 lines contain metadata)
+        data_lines = lines[6:]
+
+        # Parse data into numpy array
+        data = []
+        for line in data_lines:
+            line = line.strip()
+            if line:
+                # Convert '*' (null values) to NaN, everything else to float
+                row = [float(x) if x != "*" else np.nan for x in line.split()]
+                if row:
+                    data.append(row)
+
+        return np.array(data)
+    finally:
+        # Clean up temporary file
+        if pathlib.Path(tmp_path).exists():
+            os.unlink(tmp_path)
 
 
 class TestMapcalcRandFunction:
@@ -53,9 +105,29 @@ class TestMapcalcRandFunction:
                     env=self.session.env,
                     quiet=True,
                 )
-        except Exception:
-            # Silently ignore cleanup errors to avoid masking test failures
-            pass
+        except Exception as e:
+            # Log but don't fail - prevents masking test failures
+            import warnings
+
+            warnings.warn(f"Cleanup failed: {e}")
+
+    def verify_seed_in_metadata(self, mapname, expected_seed):
+        """Helper to verify seed value in raster metadata.
+
+        Args:
+            mapname: Name of the raster map to check
+            expected_seed: Expected seed value
+
+        Returns:
+            int: The actual seed value found in metadata
+        """
+        info = gs.raster_info(mapname, env=self.session.env)
+        comments = info.get("comments", "")
+        actual_seed = extract_seed_from_comments(comments)
+        assert actual_seed == expected_seed, (
+            f"Expected seed={expected_seed} in metadata, got seed={actual_seed}"
+        )
+        return actual_seed
 
     def test_mapcalc_rand_autoseeded(self):
         """Test that rand() auto-seeds when no explicit seed is provided.
@@ -63,25 +135,30 @@ class TestMapcalcRandFunction:
         Verifies:
         1. Two consecutive runs without explicit seed produce different results (different auto-seeds)
         2. Metadata contains different auto-generated seed values
+
+        Note: On Windows with low-resolution timers, consecutive calls may occasionally
+        receive the same auto-seed. We add a small delay to ensure different timestamps.
         """
         # r.mapcalc auto-seeds when no seed is given — two runs should differ
         gs.mapcalc(
             "rand_map_auto1 = rand(0.0, 1.0)",
             env=self.session.env,
         )
+
+        # Small delay to ensure different auto-seed on systems with low-resolution timers
+        # G_srand48_auto() uses microsecond precision, but on some Windows systems
+        # the timer granularity may be coarser
+        time.sleep(0.01)
+
         gs.mapcalc(
             "rand_map_auto2 = rand(0.0, 1.0)",
             env=self.session.env,
         )
 
         # Verify arrays differ (outcome of different auto-seeds)
-        array1 = raster2numpy("rand_map_auto1")
-        array2 = raster2numpy("rand_map_auto2")
-        assert array1 is not None
-        assert array2 is not None
-        assert array1.size > 0
-        assert array2.size > 0
-        assert not np.array_equal(array1, array2), (
+        array1 = read_raster_as_array("rand_map_auto1", self.session.env)
+        array2 = read_raster_as_array("rand_map_auto2", self.session.env)
+        assert not np.array_equal(array1, array2, equal_nan=True), (
             "Auto-seeded runs should produce different maps"
         )
 
@@ -100,7 +177,10 @@ class TestMapcalcRandFunction:
         assert seed2 is not None, (
             "Auto-seed should be recorded in metadata for second run"
         )
-        assert seed1 != seed2, "Auto-seeds should differ between runs"
+        assert seed1 != seed2, (
+            f"Auto-seeds should differ between runs (got {seed1} and {seed2}). "
+            f"If this fails repeatedly, there may be a timer resolution issue."
+        )
 
     def test_mapcalc_rand_with_explicit_seed(self):
         """Test that rand() works with explicit seed value.
@@ -114,16 +194,23 @@ class TestMapcalcRandFunction:
             seed=12345,
             env=self.session.env,
         )
-        # Check that the map was created and seed was written to metadata
-        raster_info = gs.raster_info("rand_map_seed", env=self.session.env)
-        assert raster_info is not None
+        self.verify_seed_in_metadata("rand_map_seed", 12345)
 
-        # Verify seed parameter was passed to r.mapcalc (check metadata)
-        comments = raster_info.get("comments", "")
-        seed_found = extract_seed_from_comments(comments)
-        assert seed_found == 12345, (
-            f"Expected seed=12345 in metadata, got seed={seed_found}"
-        )
+    def test_mapcalc_rand_with_invalid_seed(self):
+        """Test that invalid seed values raise appropriate errors.
+
+        Verifies:
+        1. Invalid seed types (non-numeric strings) raise errors
+        2. Invalid seeds are properly rejected by r.mapcalc
+        """
+        from grass.exceptions import CalledModuleError
+
+        with pytest.raises(CalledModuleError):
+            gs.mapcalc(
+                "rand_map_invalid = rand(0.0, 1.0)",
+                seed="invalid_string",
+                env=self.session.env,
+            )
 
     def test_mapcalc_rand_with_seed_auto_backwards_compat(self):
         """Test that seed='auto' is handled for backwards compatibility.
@@ -144,7 +231,6 @@ class TestMapcalcRandFunction:
             env=self.session.env,
         )
         raster_info_1 = gs.raster_info("rand_map_auto_seed", env=self.session.env)
-        assert raster_info_1 is not None
         comments_1 = raster_info_1.get("comments", "")
         seed_1 = extract_seed_from_comments(comments_1)
 
@@ -154,6 +240,9 @@ class TestMapcalcRandFunction:
             "seed='auto' should convert to None and enable auto-seeding, recording an auto-generated seed in metadata"
         )
 
+        # Small delay to ensure different auto-seed
+        time.sleep(0.01)
+
         # Create second map with seed='auto' — should differ from first (different auto-seeds)
         gs.mapcalc(
             "rand_map_auto_seed_2 = rand(0.0, 1.0)",
@@ -161,7 +250,6 @@ class TestMapcalcRandFunction:
             env=self.session.env,
         )
         raster_info_2 = gs.raster_info("rand_map_auto_seed_2", env=self.session.env)
-        assert raster_info_2 is not None
         comments_2 = raster_info_2.get("comments", "")
         seed_2 = extract_seed_from_comments(comments_2)
 
@@ -174,8 +262,8 @@ class TestMapcalcRandFunction:
         )
 
         # Verify actual raster data differs
-        array_1 = raster2numpy("rand_map_auto_seed")
-        array_2 = raster2numpy("rand_map_auto_seed_2")
+        array_1 = read_raster_as_array("rand_map_auto_seed", self.session.env)
+        array_2 = read_raster_as_array("rand_map_auto_seed_2", self.session.env)
         assert not np.array_equal(array_1, array_2, equal_nan=True), (
             "seed='auto' should enable auto-seeding, producing different results each time"
         )
@@ -194,16 +282,8 @@ class TestMapcalcRandFunction:
             seed=12345,
             env=self.session.env,
         )
-        raster_info_1 = gs.raster_info("rand_map_seed", env=self.session.env)
-        assert raster_info_1 is not None
-        comments_1 = raster_info_1.get("comments", "")
-        seed_1 = extract_seed_from_comments(comments_1)
-        assert seed_1 == 12345, f"Expected seed=12345 in metadata, got seed={seed_1}"
-
-        # Read actual raster data
-        array_1 = raster2numpy("rand_map_seed")
-        assert array_1 is not None
-        assert array_1.size > 0
+        self.verify_seed_in_metadata("rand_map_seed", 12345)
+        array_1 = read_raster_as_array("rand_map_seed", self.session.env)
 
         # Create another map with the same seed
         gs.mapcalc(
@@ -211,16 +291,8 @@ class TestMapcalcRandFunction:
             seed=12345,
             env=self.session.env,
         )
-        raster_info_2 = gs.raster_info("rand_map_seed_2", env=self.session.env)
-        assert raster_info_2 is not None
-        comments_2 = raster_info_2.get("comments", "")
-        seed_2 = extract_seed_from_comments(comments_2)
-        assert seed_2 == 12345, f"Expected seed=12345 in metadata, got seed={seed_2}"
-
-        # Read actual raster data
-        array_2 = raster2numpy("rand_map_seed_2")
-        assert array_2 is not None
-        assert array_2.size > 0
+        self.verify_seed_in_metadata("rand_map_seed_2", 12345)
+        array_2 = read_raster_as_array("rand_map_seed_2", self.session.env)
 
         # Verify reproducibility: arrays must be identical (byte-for-byte)
         assert np.array_equal(array_1, array_2, equal_nan=True), (
@@ -233,13 +305,8 @@ class TestMapcalcRandFunction:
             seed=54321,
             env=self.session.env,
         )
-        raster_info_3 = gs.raster_info("rand_map_seed_3", env=self.session.env)
-        comments_3 = raster_info_3.get("comments", "")
-        seed_3 = extract_seed_from_comments(comments_3)
-        assert seed_3 == 54321, f"Expected seed=54321 in metadata, got seed={seed_3}"
-
-        array_3 = raster2numpy("rand_map_seed_3")
-        assert array_3 is not None
+        self.verify_seed_in_metadata("rand_map_seed_3", 54321)
+        array_3 = read_raster_as_array("rand_map_seed_3", self.session.env)
 
         # Different seed should produce different results
         assert not np.array_equal(array_1, array_3, equal_nan=True), (
@@ -259,13 +326,8 @@ class TestMapcalcRandFunction:
             seed=0,
             env=self.session.env,
         )
-        raster_info_1 = gs.raster_info("rand_map_seed_0", env=self.session.env)
-        assert raster_info_1 is not None
-        comments_1 = raster_info_1.get("comments", "")
-        seed_1 = extract_seed_from_comments(comments_1)
-        assert seed_1 == 0, f"Expected seed=0 in metadata, got seed={seed_1}"
-
-        array_1 = raster2numpy("rand_map_seed_0")
+        self.verify_seed_in_metadata("rand_map_seed_0", 0)
+        array_1 = read_raster_as_array("rand_map_seed_0", self.session.env)
 
         # Create another map with seed=0 — should be reproducible
         gs.mapcalc(
@@ -273,7 +335,7 @@ class TestMapcalcRandFunction:
             seed=0,
             env=self.session.env,
         )
-        array_2 = raster2numpy("rand_map_seed_0_2")
+        array_2 = read_raster_as_array("rand_map_seed_0_2", self.session.env)
         assert np.array_equal(array_1, array_2, equal_nan=True), (
             "seed=0 should produce reproducible results"
         )
@@ -283,7 +345,7 @@ class TestMapcalcRandFunction:
             "rand_map_seed_0_auto = rand(0.0, 1.0)",
             env=self.session.env,
         )
-        array_auto = raster2numpy("rand_map_seed_0_auto")
+        array_auto = read_raster_as_array("rand_map_seed_0_auto", self.session.env)
         assert not np.array_equal(array_1, array_auto, equal_nan=True), (
             "seed=0 should produce different results than auto-seeding"
         )
@@ -301,13 +363,8 @@ class TestMapcalcRandFunction:
             seed=-42,
             env=self.session.env,
         )
-        raster_info_1 = gs.raster_info("rand_map_neg_seed", env=self.session.env)
-        assert raster_info_1 is not None
-        comments_1 = raster_info_1.get("comments", "")
-        seed_1 = extract_seed_from_comments(comments_1)
-        assert seed_1 == -42, f"Expected seed=-42 in metadata, got seed={seed_1}"
-
-        array_1 = raster2numpy("rand_map_neg_seed")
+        self.verify_seed_in_metadata("rand_map_neg_seed", -42)
+        array_1 = read_raster_as_array("rand_map_neg_seed", self.session.env)
 
         # Create another map with same negative seed — should be reproducible
         gs.mapcalc(
@@ -315,7 +372,7 @@ class TestMapcalcRandFunction:
             seed=-42,
             env=self.session.env,
         )
-        array_2 = raster2numpy("rand_map_neg_seed_2")
+        array_2 = read_raster_as_array("rand_map_neg_seed_2", self.session.env)
         assert np.array_equal(array_1, array_2, equal_nan=True), (
             "Negative seed should produce reproducible results"
         )
@@ -326,7 +383,7 @@ class TestMapcalcRandFunction:
             seed=-99,
             env=self.session.env,
         )
-        array_3 = raster2numpy("rand_map_neg_seed_3")
+        array_3 = read_raster_as_array("rand_map_neg_seed_3", self.session.env)
         assert not np.array_equal(array_1, array_3, equal_nan=True), (
             "Different negative seeds should produce different results"
         )
@@ -346,15 +403,8 @@ class TestMapcalcRandFunction:
             seed=large_seed,
             env=self.session.env,
         )
-        raster_info_1 = gs.raster_info("rand_map_large_seed", env=self.session.env)
-        assert raster_info_1 is not None
-        comments_1 = raster_info_1.get("comments", "")
-        seed_1 = extract_seed_from_comments(comments_1)
-        assert seed_1 == large_seed, (
-            f"Expected seed={large_seed} in metadata, got seed={seed_1}"
-        )
-
-        array_1 = raster2numpy("rand_map_large_seed")
+        self.verify_seed_in_metadata("rand_map_large_seed", large_seed)
+        array_1 = read_raster_as_array("rand_map_large_seed", self.session.env)
 
         # Create another map with same large seed — should be reproducible
         gs.mapcalc(
@@ -362,7 +412,7 @@ class TestMapcalcRandFunction:
             seed=large_seed,
             env=self.session.env,
         )
-        array_2 = raster2numpy("rand_map_large_seed_2")
+        array_2 = read_raster_as_array("rand_map_large_seed_2", self.session.env)
         assert np.array_equal(array_1, array_2, equal_nan=True), (
             "Large seed should produce reproducible results"
         )
@@ -373,7 +423,7 @@ class TestMapcalcRandFunction:
             seed=12345,
             env=self.session.env,
         )
-        array_regular = raster2numpy("rand_map_regular_seed")
+        array_regular = read_raster_as_array("rand_map_regular_seed", self.session.env)
         assert not np.array_equal(array_1, array_regular, equal_nan=True), (
             "Large seed should produce different results than regular seed"
         )
@@ -410,9 +460,29 @@ class TestMapcalcStartRandFunction:
                     env=self.session.env,
                     quiet=True,
                 )
-        except Exception:
-            # Silently ignore cleanup errors to avoid masking test failures
-            pass
+        except Exception as e:
+            # Log but don't fail - prevents masking test failures
+            import warnings
+
+            warnings.warn(f"Cleanup failed: {e}")
+
+    def verify_seed_in_metadata(self, mapname, expected_seed):
+        """Helper to verify seed value in raster metadata
+
+        Args:
+            mapname: Name of the raster map
+            expected_seed: Expected seed value
+
+        Returns:
+            The actual seed value found
+        """
+        raster_info = gs.raster_info(mapname, env=self.session.env)
+        comments = raster_info.get("comments", "")
+        actual_seed = extract_seed_from_comments(comments)
+        assert actual_seed == expected_seed, (
+            f"Expected seed={expected_seed} in metadata, got seed={actual_seed}"
+        )
+        return actual_seed
 
     def test_mapcalc_start_rand_autoseeded(self):
         """Test that mapcalc_start with rand() auto-seeds when no explicit seed is provided.
@@ -428,6 +498,10 @@ class TestMapcalcStartRandFunction:
         )
         returncode = p.wait()
         assert returncode == 0
+
+        # Small delay to ensure different auto-seed
+        time.sleep(0.01)
+
         p = gs.mapcalc_start(
             "rand_map_start_auto2 = rand(0.0, 1.0)",
             env=self.session.env,
@@ -436,13 +510,9 @@ class TestMapcalcStartRandFunction:
         assert returncode == 0
 
         # Verify outcome: arrays differ (different auto-seeds)
-        array1 = raster2numpy("rand_map_start_auto1")
-        array2 = raster2numpy("rand_map_start_auto2")
-        assert array1 is not None
-        assert array2 is not None
-        assert array1.size > 0
-        assert array2.size > 0
-        assert not np.array_equal(array1, array2), (
+        array1 = read_raster_as_array("rand_map_start_auto1", self.session.env)
+        array2 = read_raster_as_array("rand_map_start_auto2", self.session.env)
+        assert not np.array_equal(array1, array2, equal_nan=True), (
             "Auto-seeded runs should produce different maps"
         )
 
@@ -461,7 +531,9 @@ class TestMapcalcStartRandFunction:
         assert seed2 is not None, (
             "Auto-seed should be recorded in metadata for second run"
         )
-        assert seed1 != seed2, "Auto-seeds should differ between runs"
+        assert seed1 != seed2, (
+            f"Auto-seeds should differ between runs (got {seed1} and {seed2})"
+        )
 
     def test_mapcalc_start_rand_with_explicit_seed(self):
         """Test that mapcalc_start with rand() works with explicit seed value.
@@ -478,15 +550,7 @@ class TestMapcalcStartRandFunction:
         returncode = p.wait()
         assert returncode == 0
         # Verify the map was created and seed was written to metadata
-        raster_info = gs.raster_info("rand_map_start_seed", env=self.session.env)
-        assert raster_info is not None
-
-        # Verify seed parameter was passed to r.mapcalc (check metadata)
-        comments = raster_info.get("comments", "")
-        seed_found = extract_seed_from_comments(comments)
-        assert seed_found == 12345, (
-            f"Expected seed=12345 in metadata, got seed={seed_found}"
-        )
+        self.verify_seed_in_metadata("rand_map_start_seed", 12345)
 
     def test_mapcalc_start_rand_with_seed_auto_backwards_compat(self):
         """Test that seed='auto' is handled for backwards compatibility.
@@ -508,7 +572,6 @@ class TestMapcalcStartRandFunction:
         returncode = p.wait()
         assert returncode == 0
         raster_info_1 = gs.raster_info("rand_map_start_auto_seed", env=self.session.env)
-        assert raster_info_1 is not None
         comments_1 = raster_info_1.get("comments", "")
         seed_1 = extract_seed_from_comments(comments_1)
 
@@ -517,6 +580,9 @@ class TestMapcalcStartRandFunction:
         assert seed_1 is not None, (
             "seed='auto' should convert to None and enable auto-seeding, recording an auto-generated seed in metadata"
         )
+
+        # Small delay to ensure different auto-seed
+        time.sleep(0.01)
 
         # Create second map with seed='auto' — should differ from first (different auto-seeds)
         p = gs.mapcalc_start(
@@ -529,7 +595,6 @@ class TestMapcalcStartRandFunction:
         raster_info_2 = gs.raster_info(
             "rand_map_start_auto_seed_2", env=self.session.env
         )
-        assert raster_info_2 is not None
         comments_2 = raster_info_2.get("comments", "")
         seed_2 = extract_seed_from_comments(comments_2)
 
@@ -538,12 +603,12 @@ class TestMapcalcStartRandFunction:
             "seed='auto' should enable auto-seeding, recording an auto-generated seed"
         )
         assert seed_1 != seed_2, (
-            "seed='auto' should produce different auto-generated seeds on consecutive runs"
+            f"seed='auto' should produce different auto-generated seeds (got {seed_1} and {seed_2})"
         )
 
         # Verify actual raster data differs
-        array_1 = raster2numpy("rand_map_start_auto_seed")
-        array_2 = raster2numpy("rand_map_start_auto_seed_2")
+        array_1 = read_raster_as_array("rand_map_start_auto_seed", self.session.env)
+        array_2 = read_raster_as_array("rand_map_start_auto_seed_2", self.session.env)
         assert not np.array_equal(array_1, array_2, equal_nan=True), (
             "seed='auto' should enable auto-seeding, producing different results each time"
         )
@@ -564,16 +629,10 @@ class TestMapcalcStartRandFunction:
         )
         returncode = p.wait()
         assert returncode == 0
-        raster_info_1 = gs.raster_info("rand_map_start_seed", env=self.session.env)
-        assert raster_info_1 is not None
-        comments_1 = raster_info_1.get("comments", "")
-        seed_1 = extract_seed_from_comments(comments_1)
-        assert seed_1 == 12345, f"Expected seed=12345 in metadata, got seed={seed_1}"
+        self.verify_seed_in_metadata("rand_map_start_seed", 12345)
 
         # Read actual raster data
-        array_1 = raster2numpy("rand_map_start_seed")
-        assert array_1 is not None
-        assert array_1.size > 0
+        array_1 = read_raster_as_array("rand_map_start_seed", self.session.env)
 
         # Create another map with the same seed
         p = gs.mapcalc_start(
@@ -583,16 +642,10 @@ class TestMapcalcStartRandFunction:
         )
         returncode = p.wait()
         assert returncode == 0
-        raster_info_2 = gs.raster_info("rand_map_start_seed_2", env=self.session.env)
-        assert raster_info_2 is not None
-        comments_2 = raster_info_2.get("comments", "")
-        seed_2 = extract_seed_from_comments(comments_2)
-        assert seed_2 == 12345, f"Expected seed=12345 in metadata, got seed={seed_2}"
+        self.verify_seed_in_metadata("rand_map_start_seed_2", 12345)
 
         # Read actual raster data
-        array_2 = raster2numpy("rand_map_start_seed_2")
-        assert array_2 is not None
-        assert array_2.size > 0
+        array_2 = read_raster_as_array("rand_map_start_seed_2", self.session.env)
 
         # Verify reproducibility: arrays must be identical (byte-for-byte)
         assert np.array_equal(array_1, array_2, equal_nan=True), (
@@ -607,13 +660,9 @@ class TestMapcalcStartRandFunction:
         )
         returncode = p.wait()
         assert returncode == 0
-        raster_info_3 = gs.raster_info("rand_map_start_seed_3", env=self.session.env)
-        comments_3 = raster_info_3.get("comments", "")
-        seed_3 = extract_seed_from_comments(comments_3)
-        assert seed_3 == 54321, f"Expected seed=54321 in metadata, got seed={seed_3}"
+        self.verify_seed_in_metadata("rand_map_start_seed_3", 54321)
 
-        array_3 = raster2numpy("rand_map_start_seed_3")
-        assert array_3 is not None
+        array_3 = read_raster_as_array("rand_map_start_seed_3", self.session.env)
 
         # Different seed should produce different results
         assert not np.array_equal(array_1, array_3, equal_nan=True), (
