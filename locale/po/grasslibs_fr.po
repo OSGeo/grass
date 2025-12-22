@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-06 15:40+0000\n"
-"PO-Revision-Date: 2025-11-07 03:28+0000\n"
+"POT-Creation-Date: 2025-12-13 22:01+0000\n"
+"PO-Revision-Date: 2025-12-18 01:06+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs/fr/>\n"
 "Language: fr\n"
@@ -3910,7 +3910,7 @@ msgstr "Vouliez-vous dire un répertoire différent?"
 
 #: ../lib/init/grass.py:835
 msgid "Provide CRS to create a project"
-msgstr ""
+msgstr "Fournir un SCR pour créer un projet"
 
 #: ../lib/init/grass.py:839
 msgid "Creating new GRASS project <{}>..."
@@ -4732,26 +4732,26 @@ msgstr "Impossible d'analyser le fichier GRASS PROJ_INFO"
 msgid "Unable get PROJ.4-style parameter string"
 msgstr "Impossible d'obtenir la chaîne de paramètre PROJ.4"
 
-#: ../lib/proj/convert.c:209
+#: ../lib/proj/convert.c:205
 #, c-format
 msgid "OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
 msgstr "OGR ne peut pas analyser la chaîne de paramètre PROJ.4: %s (Le code erreur OGR était %d)"
 
-#: ../lib/proj/convert.c:223
+#: ../lib/proj/convert.c:219
 #, c-format
 msgid "OGR can't get WKT-style parameter string (OGR Error code was %d)"
 msgstr "OGR ne peut pas obtenir les paramètres WKT (code d'erreur OGR %d)"
 
-#: ../lib/proj/convert.c:466
+#: ../lib/proj/convert.c:462
 #, c-format
 msgid "Updating spatial reference with embedded proj4 definition failed. Proj4 definition: <%s>"
 msgstr "La mise à jour de la référence spatiale avec la définition proj4 embarquée a échoué. définition proj4 : <%s>"
 
-#: ../lib/proj/convert.c:477
+#: ../lib/proj/convert.c:473
 msgid "Updating spatial reference with embedded proj4 definition"
 msgstr "Mise à jour de la référence spatiale avec la définition proj4 embarquée"
 
-#: ../lib/proj/convert.c:615
+#: ../lib/proj/convert.c:611
 msgid "No projection name! Projection parameters likely to be meaningless."
 msgstr "Aucun nom de projection ! Paramètres de projection susceptibles d'être vides de sens."
 
@@ -4765,187 +4765,171 @@ msgstr "Impossible d'ouvrir le fichier de datums <%s>"
 msgid "Error in datum table file <%s>, line %d"
 msgstr "Erreur dans la table du fichier de datums <%s>, ligne %d"
 
-#: ../lib/proj/do_proj.c:103 ../lib/proj/do_proj.c:112
-#: ../lib/proj/do_proj.c:472 ../lib/proj/do_proj.c:478
-#: ../lib/proj/do_proj.c:523 ../lib/proj/do_proj.c:530
-#: ../lib/proj/do_proj.c:855 ../lib/proj/do_proj.c:870
-#: ../lib/proj/do_proj.c:882 ../lib/proj/do_proj.c:961
+#: ../lib/proj/do_proj.c:101 ../lib/proj/do_proj.c:110
+#: ../lib/proj/do_proj.c:460 ../lib/proj/do_proj.c:466
+#: ../lib/proj/do_proj.c:511 ../lib/proj/do_proj.c:518
+#: ../lib/proj/do_proj.c:838
 #, c-format
 msgid "proj_create() failed for '%s'"
 msgstr "proj_create() a échoué pour '%s'"
 
-#: ../lib/proj/do_proj.c:198
+#: ../lib/proj/do_proj.c:196
 #, fuzzy, c-format
 msgid "Invalid west longitude %g"
 msgstr "Champ d'ouest invalide : %g"
 
-#: ../lib/proj/do_proj.c:202
+#: ../lib/proj/do_proj.c:200
 #, fuzzy, c-format
 msgid "Invalid east longitude %g"
 msgstr "Champ d'est invalide : %g"
 
-#: ../lib/proj/do_proj.c:206
+#: ../lib/proj/do_proj.c:204
 #, c-format
 msgid "Invalid south latitude %g"
 msgstr "Latitude sud invalide %g"
 
-#: ../lib/proj/do_proj.c:210
+#: ../lib/proj/do_proj.c:208
 #, fuzzy, c-format
 msgid "Invalid north latitude %g"
 msgstr "Champ de nord invalide : %g"
 
-#: ../lib/proj/do_proj.c:214
+#: ../lib/proj/do_proj.c:212
 #, fuzzy, c-format
 msgid "South %g is larger than north %g"
 msgstr "%g sud est plus grand que %g nord"
 
-#: ../lib/proj/do_proj.c:328
+#: ../lib/proj/do_proj.c:326
 #, c-format
 msgid "Unrecognized SRID '%s'"
 msgstr "SRID '%s' non reconnu"
 
-#: ../lib/proj/do_proj.c:342
+#: ../lib/proj/do_proj.c:340
 #, c-format
 msgid "Unrecognized WKT '%s'"
 msgstr "WKT '%s' non reconnu"
 
-#: ../lib/proj/do_proj.c:360
+#: ../lib/proj/do_proj.c:358
 msgid "Unable to create PROJ object"
 msgstr "Impossible de créer l'objet PROJ"
 
-#: ../lib/proj/do_proj.c:439
+#: ../lib/proj/do_proj.c:430
 msgid "Input coordinate system is NULL"
 msgstr "Le système de coordonnées en entrée est NULL"
 
-#: ../lib/proj/do_proj.c:442
+#: ../lib/proj/do_proj.c:433
 msgid "Input coordinate system definition is NULL"
 msgstr "La définition du système de coordonnées en entrée est NULL"
 
-#: ../lib/proj/do_proj.c:464
+#: ../lib/proj/do_proj.c:452
 msgid "A custom pipeline requires input and output projection info"
 msgstr "Un pipeline personnalisé nécessite des informations sur la projection de l'entrée et de la sortie"
 
-#: ../lib/proj/do_proj.c:492
+#: ../lib/proj/do_proj.c:480
 #, fuzzy, c-format
 msgid "The transformation pipeline contains an '%s' step. Remove this step if easting and northing are swapped in the output."
 msgstr "Le pipeline de transformation contient une étape '%s'. Supprimez cette étape si l'Est et le Nord sont inversés dans la sortie."
 
-#: ../lib/proj/do_proj.c:557
+#: ../lib/proj/do_proj.c:545
 #, fuzzy, c-format
 msgid "Unable to determine area of interest for '%s'"
 msgstr "Impossible de déterminer la zone d'intérêt pour '%s'"
 
-#: ../lib/proj/do_proj.c:578
+#: ../lib/proj/do_proj.c:566
 #, c-format
 msgid "Input CRS not available for '%s'"
 msgstr "SCR en entrée non disponible pour '%s'"
 
-#: ../lib/proj/do_proj.c:599
+#: ../lib/proj/do_proj.c:587
 #, c-format
 msgid "Output CRS not available for '%s'"
-msgstr ""
+msgstr "SCR de sortie non disponible pour '%s'"
 
-#: ../lib/proj/do_proj.c:625
+#: ../lib/proj/do_proj.c:613
 #, c-format
 msgid "Found %d possible transformations"
 msgstr "%d Possibles transformations trouvées"
 
-#: ../lib/proj/do_proj.c:637
+#: ../lib/proj/do_proj.c:625
 #, c-format
 msgid "proj_normalize_for_visualization() failed for operation %d"
 msgstr "proj_normalize_for_visualization() a échoué pour %d"
 
-#: ../lib/proj/do_proj.c:649
+#: ../lib/proj/do_proj.c:637
 #, c-format
 msgid "Operation %d:"
 msgstr "Operation %d:"
 
-#: ../lib/proj/do_proj.c:651
+#: ../lib/proj/do_proj.c:639
 #, c-format
 msgid "Description: %s"
 msgstr "Description: %s"
 
-#: ../lib/proj/do_proj.c:656
+#: ../lib/proj/do_proj.c:644
 #, c-format
 msgid "Area of use: %s"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:660
+#: ../lib/proj/do_proj.c:648
 #, c-format
 msgid "Accuracy within area of use: %g m"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:668
+#: ../lib/proj/do_proj.c:655
 #, c-format
 msgid "Remarks: %s"
 msgstr "Remarques: %s"
 
-#: ../lib/proj/do_proj.c:673
+#: ../lib/proj/do_proj.c:660
 #, c-format
 msgid "Scope: %s"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:680
+#: ../lib/proj/do_proj.c:666
 msgid "PROJ string:"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:687
+#: ../lib/proj/do_proj.c:673
 msgid "See also output of:"
 msgstr "Voir aussi la sortie de:"
 
-#: ../lib/proj/do_proj.c:690
+#: ../lib/proj/do_proj.c:676
 #, c-format
 msgid "Please provide the appropriate PROJ string with the %s option"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:816
+#: ../lib/proj/do_proj.c:799
 #, c-format
 msgid "proj_normalize_for_visualization() failed for '%s'"
 msgstr "proj_normalize_for_visualization() a échoué pour '%s'"
 
-#: ../lib/proj/do_proj.c:829
+#: ../lib/proj/do_proj.c:812
 #, c-format
 msgid "No PROJ definition for normalized version of '%s'"
 msgstr "Aucune définition PROJ pour la version normalisée de '%s'"
 
-#: ../lib/proj/do_proj.c:834
+#: ../lib/proj/do_proj.c:817
 msgid "Selected PROJ pipeline:"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:835
+#: ../lib/proj/do_proj.c:818
 #, c-format
 msgid "%s"
 msgstr "%s"
 
-#: ../lib/proj/do_proj.c:970
-#, c-format
-msgid "Unable to create latlong equivalent for '%s'"
-msgstr "Impossible de créer l'équivalent latlong pour '%s'"
-
-#: ../lib/proj/do_proj.c:1020
+#: ../lib/proj/do_proj.c:883
 msgid "No input projection"
 msgstr "Pas de projection en entrée"
 
-#: ../lib/proj/do_proj.c:1023 ../lib/proj/do_proj.c:1242
+#: ../lib/proj/do_proj.c:886 ../lib/proj/do_proj.c:1045
 msgid "No transformation object"
 msgstr "Pas d'objet de transformation"
 
-#: ../lib/proj/do_proj.c:1120 ../lib/proj/do_proj.c:1410
+#: ../lib/proj/do_proj.c:975 ../lib/proj/do_proj.c:1205
 #, c-format
 msgid "proj_trans() failed: %s"
 msgstr "proj_trans() a échoué : %s"
 
-#: ../lib/proj/do_proj.c:1153
-msgid "No output projection"
-msgstr "Pas de projection de sortie"
-
-#: ../lib/proj/do_proj.c:1182 ../lib/proj/do_proj.c:1463
-#: ../lib/proj/do_proj.c:1591 ../lib/proj/do_proj.c:1755
-#, c-format
-msgid "pj_transform() failed: %s"
-msgstr "pj_transform() a échoué: %s"
-
-#: ../lib/proj/do_proj.c:1549 ../lib/proj/do_proj.c:1714
+#: ../lib/proj/do_proj.c:1290 ../lib/proj/do_proj.c:1411
 #, c-format
 msgid "proj_trans() failed: %d"
 msgstr "proj_trans() a échoué : %d"
@@ -4967,42 +4951,37 @@ msgstr "Descripteurs de l'ellipsoïde (a, rf, es ou b) invalides dans le fichier
 msgid "No ellipsoid info given in file"
 msgstr "Le fichier ne contient pas d'information sur l'ellipsoïde"
 
-#: ../lib/proj/get_proj.c:168
+#: ../lib/proj/get_proj.c:164
 #, c-format
 msgid "Invalid zone %s specified"
 msgstr "La zone spécifiée %s est invalide"
 
-#: ../lib/proj/get_proj.c:259
+#: ../lib/proj/get_proj.c:246
 msgid "Unable to initialise PROJ with the following parameter list:"
 msgstr "Impossible d'initialiser PROJ avec la liste suivante de paramètres :"
 
-#: ../lib/proj/get_proj.c:268
-#, c-format
-msgid "The PROJ error message: %s"
-msgstr "Message d'erreur PROJ : %s"
-
-#: ../lib/proj/get_proj.c:388
+#: ../lib/proj/get_proj.c:364
 msgid "Option input overflowed option table"
 msgstr "Les options d'entrée débordent les options du tableau"
 
-#: ../lib/proj/get_proj.c:426 ../lib/proj/get_proj.c:445
+#: ../lib/proj/get_proj.c:399
 #, c-format
 msgid "Unable to initialize pj cause: %s"
 msgstr "Impossible d'initialiser pj cause: %s"
 
-#: ../lib/proj/get_proj.c:562
+#: ../lib/proj/get_proj.c:482
 msgid "Input Projection Parameters"
 msgstr "Paramètres de la projection d'entrée"
 
-#: ../lib/proj/get_proj.c:563
+#: ../lib/proj/get_proj.c:483
 msgid "Input Unit Factor"
 msgstr "Facteur unité d'entrée"
 
-#: ../lib/proj/get_proj.c:573
+#: ../lib/proj/get_proj.c:493
 msgid "Output Projection Parameters"
 msgstr "Paramètres de projection de sortie"
 
-#: ../lib/proj/get_proj.c:574
+#: ../lib/proj/get_proj.c:494
 msgid "Output Unit Factor"
 msgstr "Facteur unité de sortie"
 
@@ -9035,6 +9014,21 @@ msgstr "Surface %d sans contours"
 #: ../lib/vector/vedit/select.c:231
 msgid "Unknown query tool"
 msgstr "Outil de recherche inconnu"
+
+#, c-format
+#~ msgid "Unable to create latlong equivalent for '%s'"
+#~ msgstr "Impossible de créer l'équivalent latlong pour '%s'"
+
+#~ msgid "No output projection"
+#~ msgstr "Pas de projection de sortie"
+
+#, c-format
+#~ msgid "pj_transform() failed: %s"
+#~ msgstr "pj_transform() a échoué: %s"
+
+#, c-format
+#~ msgid "The PROJ error message: %s"
+#~ msgstr "Message d'erreur PROJ : %s"
 
 #~ msgid "GRASS is not compiled with OGR support"
 #~ msgstr "GRASS n'est pas compilé avec le support de OGR"
