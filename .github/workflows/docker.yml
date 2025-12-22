@@ -59,22 +59,22 @@ jobs:
           - name: alpine
             os: alpine
             dockerfile: docker/alpine/Dockerfile
-            build_args: |
+            build_args: |-
               GUI=without
           - name: debian
             os: debian
             dockerfile: docker/debian/Dockerfile
-            build_args: |
+            build_args: |-
               GUI=without
           - name: ubuntu
             os: ubuntu
             dockerfile: docker/ubuntu/Dockerfile
-            build_args: |
+            build_args: |-
               GUI=without
           - name: ubuntu_wxgui
             os: ubuntu
             dockerfile: docker/ubuntu/Dockerfile
-            build_args: |
+            build_args: |-
               GUI=with
 
     permissions:
