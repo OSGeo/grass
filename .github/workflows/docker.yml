@@ -58,26 +58,22 @@ jobs:
         include:
           - name: alpine
             os: alpine
-            image_name: osgeo/grass-gis
             dockerfile: docker/alpine/Dockerfile
-            build_id: docker_build_no_args
+            build_args: |
+              GUI=without
           - name: debian
             os: debian
-            image_name: osgeo/grass-gis
             dockerfile: docker/debian/Dockerfile
-            build_id: docker_build_no_args
+            build_args: |
+              GUI=without
           - name: ubuntu
             os: ubuntu
-            image_name: osgeo/grass-gis
             dockerfile: docker/ubuntu/Dockerfile
-            build_id: docker_build
             build_args: |
               GUI=without
           - name: ubuntu_wxgui
             os: ubuntu
-            image_name: osgeo/grass-gis
             dockerfile: docker/ubuntu/Dockerfile
-            build_id: docker_build
             build_args: |
               GUI=with
 
@@ -175,32 +171,13 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN  }}
-      - name: Build and push  ${{ matrix.image_name }}:${{ github.ref_name }}-${{ matrix.name }}
-        if: ${{ !matrix.build_args }}
-        id: docker_build_no_args
-        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
-        with:
-          push: ${{ github.event_name != 'pull_request' }}
-          context: .
-          tags: ${{ steps.meta.outputs.tags }}
-          file: ${{ matrix.dockerfile }}
-          annotations: ${{ steps.meta.outputs.annotations }}
-          provenance: mode=max
-          sbom: true
-          # Don't use cache for releases.
-          no-cache: ${{ contains(fromJSON('["tag", "release"]'), github.event_name) && true }}
-          # Don't use gha cache for releases. Cache is not used if `cache-from:` is empty
-          cache-from: >-
-            ${{ !contains(fromJSON('["tag", "release"]'), github.event_name)
-                && format('type=gha,scope={0}', matrix.os) || '' }}
-          cache-to: type=gha,mode=max,scope=${{ matrix.os }}
-      - name: Build and push  ${{ matrix.image_name }}:${{ github.ref_name }}-${{ matrix.name }}
-        if: ${{ matrix.build_args }}
+      - name: Build and push osgeo/grass-gis:${{ github.ref_name }}-${{ matrix.name }}
         id: docker_build
         uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
         with:
           push: ${{ github.event_name != 'pull_request' }}
           context: .
+          build-args: ${{ matrix.build_args }}
           tags: ${{ steps.meta.outputs.tags }}
           file: ${{ matrix.dockerfile }}
           annotations: ${{ steps.meta.outputs.annotations }}
@@ -216,24 +193,24 @@ jobs:
       - name: Image digest
         run: echo "${STEPS_DOCKER_BUILD_OUTPUTS_DIGEST}"
         env:
-          STEPS_DOCKER_BUILD_OUTPUTS_DIGEST: ${{ steps[matrix.build_id].outputs.digest }}
+          STEPS_DOCKER_BUILD_OUTPUTS_DIGEST: ${{ steps.docker_build.outputs.digest }}
       - name: Attest docker.io image
         uses: actions/attest-build-provenance@00014ed6ed5efc5b1ab7f7f34a39eb55d41aa4f8 # v3.1.0
         # If there isn't a digest, an annotation cannot be added
         if: >-
           ${{ github.repository_owner == 'OSGeo' && github.event_name != 'pull_request'
-            && steps[matrix.build_id].outputs.digest }}
+            && steps.docker_build.outputs.digest }}
         id: attest
         with:
           subject-name: docker.io/osgeo/grass-gis
-          subject-digest: ${{ steps[matrix.build_id].outputs.digest }}
+          subject-digest: ${{ steps.docker_build.outputs.digest }}
           push-to-registry: ${{ github.repository_owner == 'OSGeo' && github.event_name != 'pull_request' }}
       - name: Attest ghcr.io image
         uses: actions/attest-build-provenance@00014ed6ed5efc5b1ab7f7f34a39eb55d41aa4f8 # v3.1.0
         # If there isn't a digest, an annotation cannot be added
-        if: ${{ steps[matrix.build_id].outputs.digest }}
+        if: ${{ steps.docker_build.outputs.digest }}
         id: attest-ghcr
         with:
           subject-name: ghcr.io/${{ github.repository }}
-          subject-digest: ${{ steps[matrix.build_id].outputs.digest }}
+          subject-digest: ${{ steps.docker_build.outputs.digest }}
           push-to-registry: ${{ github.event_name != 'pull_request' }}
