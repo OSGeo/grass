@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-06 15:40+0000\n"
+"POT-Creation-Date: 2025-12-13 22:01+0000\n"
 "PO-Revision-Date: 2025-08-26 13:42+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Russian <https://weblate.osgeo.org/projects/grass-gis/grasslibs/ru/>\n"
@@ -4821,26 +4821,26 @@ msgstr "Не удалось обработать файл PROJ_INFO прилож
 msgid "Unable get PROJ.4-style parameter string"
 msgstr "Не удалось получить строку параметров в формате PROJ.4"
 
-#: ../lib/proj/convert.c:209
+#: ../lib/proj/convert.c:205
 #, c-format
 msgid "OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
 msgstr "OGR не может выполнить разбор строки параметров в формате PROJ.4: %s (Код ошибки OGR: %d)"
 
-#: ../lib/proj/convert.c:223
+#: ../lib/proj/convert.c:219
 #, c-format
 msgid "OGR can't get WKT-style parameter string (OGR Error code was %d)"
 msgstr "OGR не может получить строку параметров в формате WKT (Код ошибки OGR %d)"
 
-#: ../lib/proj/convert.c:466
+#: ../lib/proj/convert.c:462
 #, c-format
 msgid "Updating spatial reference with embedded proj4 definition failed. Proj4 definition: <%s>"
 msgstr "Ошибка обновления пространственной привязки с вложенным определением proj4. Определение Proj4: <%s>"
 
-#: ../lib/proj/convert.c:477
+#: ../lib/proj/convert.c:473
 msgid "Updating spatial reference with embedded proj4 definition"
 msgstr "Обновление пространственной привязки с вложенным определением proj4"
 
-#: ../lib/proj/convert.c:615
+#: ../lib/proj/convert.c:611
 msgid "No projection name! Projection parameters likely to be meaningless."
 msgstr "Имя проекции отсутствует! Вероятно, параметры проекции не имеют смысла."
 
@@ -4854,187 +4854,171 @@ msgstr "Не удалось открыть файл таблицы датумо�
 msgid "Error in datum table file <%s>, line %d"
 msgstr "Ошибка в файле таблицы датумов <%s>, строка %d"
 
-#: ../lib/proj/do_proj.c:103 ../lib/proj/do_proj.c:112
-#: ../lib/proj/do_proj.c:472 ../lib/proj/do_proj.c:478
-#: ../lib/proj/do_proj.c:523 ../lib/proj/do_proj.c:530
-#: ../lib/proj/do_proj.c:855 ../lib/proj/do_proj.c:870
-#: ../lib/proj/do_proj.c:882 ../lib/proj/do_proj.c:961
+#: ../lib/proj/do_proj.c:101 ../lib/proj/do_proj.c:110
+#: ../lib/proj/do_proj.c:460 ../lib/proj/do_proj.c:466
+#: ../lib/proj/do_proj.c:511 ../lib/proj/do_proj.c:518
+#: ../lib/proj/do_proj.c:838
 #, c-format
 msgid "proj_create() failed for '%s'"
 msgstr "Ошибка выполнения proj_create() для «%s»"
 
-#: ../lib/proj/do_proj.c:198
+#: ../lib/proj/do_proj.c:196
 #, fuzzy, c-format
 msgid "Invalid west longitude %g"
 msgstr "Недопустимое поле запада: %s"
 
-#: ../lib/proj/do_proj.c:202
+#: ../lib/proj/do_proj.c:200
 #, fuzzy, c-format
 msgid "Invalid east longitude %g"
 msgstr "Недопустимое поле востока: %s"
 
-#: ../lib/proj/do_proj.c:206
+#: ../lib/proj/do_proj.c:204
 #, fuzzy, c-format
 msgid "Invalid south latitude %g"
 msgstr "Недопустимое поле юга: %s"
 
-#: ../lib/proj/do_proj.c:210
+#: ../lib/proj/do_proj.c:208
 #, fuzzy, c-format
 msgid "Invalid north latitude %g"
 msgstr "Недопустимое поле севера: %s"
 
-#: ../lib/proj/do_proj.c:214
+#: ../lib/proj/do_proj.c:212
 #, fuzzy, c-format
 msgid "South %g is larger than north %g"
 msgstr "Север должен быть больше Юга"
 
-#: ../lib/proj/do_proj.c:328
+#: ../lib/proj/do_proj.c:326
 #, c-format
 msgid "Unrecognized SRID '%s'"
 msgstr "Нераспознанный SRID «%s»"
 
-#: ../lib/proj/do_proj.c:342
+#: ../lib/proj/do_proj.c:340
 #, c-format
 msgid "Unrecognized WKT '%s'"
 msgstr "Нераспознанный WKT «%s»"
 
-#: ../lib/proj/do_proj.c:360
+#: ../lib/proj/do_proj.c:358
 msgid "Unable to create PROJ object"
 msgstr "Не удалось создать объект PROJ"
 
-#: ../lib/proj/do_proj.c:439
+#: ../lib/proj/do_proj.c:430
 msgid "Input coordinate system is NULL"
 msgstr "Входная система координат имеет значение NULL"
 
-#: ../lib/proj/do_proj.c:442
+#: ../lib/proj/do_proj.c:433
 msgid "Input coordinate system definition is NULL"
 msgstr "Определение входной системы координат имеет значение NULL"
 
-#: ../lib/proj/do_proj.c:464
+#: ../lib/proj/do_proj.c:452
 msgid "A custom pipeline requires input and output projection info"
 msgstr "Для настраиваемого конвейера необходима входная и выходная информация о проекции"
 
-#: ../lib/proj/do_proj.c:492
+#: ../lib/proj/do_proj.c:480
 #, c-format
 msgid "The transformation pipeline contains an '%s' step. Remove this step if easting and northing are swapped in the output."
 msgstr "Конвейер преобразования содержит шаг «%s». Удалите этот шаг, если восточное и северное смещения меняются местами в выводе."
 
-#: ../lib/proj/do_proj.c:557
+#: ../lib/proj/do_proj.c:545
 #, fuzzy, c-format
 msgid "Unable to determine area of interest for '%s'"
 msgstr "Не удалось определить расположение домашнего каталога пользователя"
 
-#: ../lib/proj/do_proj.c:578
+#: ../lib/proj/do_proj.c:566
 #, c-format
 msgid "Input CRS not available for '%s'"
 msgstr "Входной CRS недоступен для «%s»"
 
-#: ../lib/proj/do_proj.c:599
+#: ../lib/proj/do_proj.c:587
 #, c-format
 msgid "Output CRS not available for '%s'"
 msgstr "Выходной CRS недоступен для «%s»"
 
-#: ../lib/proj/do_proj.c:625
+#: ../lib/proj/do_proj.c:613
 #, c-format
 msgid "Found %d possible transformations"
 msgstr "Найдено %d возможных преобразований"
 
-#: ../lib/proj/do_proj.c:637
+#: ../lib/proj/do_proj.c:625
 #, c-format
 msgid "proj_normalize_for_visualization() failed for operation %d"
 msgstr "Ошибка выполнения proj_normalize_for_visualization() для операции %d"
 
-#: ../lib/proj/do_proj.c:649
+#: ../lib/proj/do_proj.c:637
 #, c-format
 msgid "Operation %d:"
 msgstr "Операция %d:"
 
-#: ../lib/proj/do_proj.c:651
+#: ../lib/proj/do_proj.c:639
 #, c-format
 msgid "Description: %s"
 msgstr "Описание: %s"
 
-#: ../lib/proj/do_proj.c:656
+#: ../lib/proj/do_proj.c:644
 #, c-format
 msgid "Area of use: %s"
 msgstr "Используемая область: %s"
 
-#: ../lib/proj/do_proj.c:660
+#: ../lib/proj/do_proj.c:648
 #, c-format
 msgid "Accuracy within area of use: %g m"
 msgstr "Точность внутри используемой области: %g m"
 
-#: ../lib/proj/do_proj.c:668
+#: ../lib/proj/do_proj.c:655
 #, c-format
 msgid "Remarks: %s"
 msgstr "Примечания: %s"
 
-#: ../lib/proj/do_proj.c:673
+#: ../lib/proj/do_proj.c:660
 #, c-format
 msgid "Scope: %s"
 msgstr "Сфера применения: %s"
 
-#: ../lib/proj/do_proj.c:680
+#: ../lib/proj/do_proj.c:666
 msgid "PROJ string:"
 msgstr "Строка PROJ:"
 
-#: ../lib/proj/do_proj.c:687
+#: ../lib/proj/do_proj.c:673
 msgid "See also output of:"
 msgstr "Также просмотрите вывод команды:"
 
-#: ../lib/proj/do_proj.c:690
+#: ../lib/proj/do_proj.c:676
 #, c-format
 msgid "Please provide the appropriate PROJ string with the %s option"
 msgstr "Здесь необходимо указать соответствующую строку PROJ с опцией %s"
 
-#: ../lib/proj/do_proj.c:816
+#: ../lib/proj/do_proj.c:799
 #, c-format
 msgid "proj_normalize_for_visualization() failed for '%s'"
 msgstr "Ошибка выполнения proj_normalize_for_visualization() для «%s»"
 
-#: ../lib/proj/do_proj.c:829
+#: ../lib/proj/do_proj.c:812
 #, c-format
 msgid "No PROJ definition for normalized version of '%s'"
 msgstr "Отсутствует определение PROJ для нормализованной версии «%s»"
 
-#: ../lib/proj/do_proj.c:834
+#: ../lib/proj/do_proj.c:817
 msgid "Selected PROJ pipeline:"
 msgstr "Выбранный конвейер PROJ:"
 
-#: ../lib/proj/do_proj.c:835
+#: ../lib/proj/do_proj.c:818
 #, c-format
 msgid "%s"
 msgstr "%s"
 
-#: ../lib/proj/do_proj.c:970
-#, c-format
-msgid "Unable to create latlong equivalent for '%s'"
-msgstr "Не удалось создать эквивалентное значение широты и долготы для «%s»"
-
-#: ../lib/proj/do_proj.c:1020
+#: ../lib/proj/do_proj.c:883
 msgid "No input projection"
 msgstr "Входная проекция отсутствует"
 
-#: ../lib/proj/do_proj.c:1023 ../lib/proj/do_proj.c:1242
+#: ../lib/proj/do_proj.c:886 ../lib/proj/do_proj.c:1045
 msgid "No transformation object"
 msgstr "Объект преобразования отсутствует"
 
-#: ../lib/proj/do_proj.c:1120 ../lib/proj/do_proj.c:1410
+#: ../lib/proj/do_proj.c:975 ../lib/proj/do_proj.c:1205
 #, c-format
 msgid "proj_trans() failed: %s"
 msgstr "Ошибка выполнения proj_trans(): %s"
 
-#: ../lib/proj/do_proj.c:1153
-msgid "No output projection"
-msgstr "Выходная проекция отсутствует"
-
-#: ../lib/proj/do_proj.c:1182 ../lib/proj/do_proj.c:1463
-#: ../lib/proj/do_proj.c:1591 ../lib/proj/do_proj.c:1755
-#, c-format
-msgid "pj_transform() failed: %s"
-msgstr "Ошибка выполнения pj_transform(): %s"
-
-#: ../lib/proj/do_proj.c:1549 ../lib/proj/do_proj.c:1714
+#: ../lib/proj/do_proj.c:1290 ../lib/proj/do_proj.c:1411
 #, c-format
 msgid "proj_trans() failed: %d"
 msgstr "Ошибка выполнения proj_trans(): %d"
@@ -5056,42 +5040,37 @@ msgstr "Недопустимые параметры описания эллип�
 msgid "No ellipsoid info given in file"
 msgstr "В файле нет информации об эллипсоиде"
 
-#: ../lib/proj/get_proj.c:168
+#: ../lib/proj/get_proj.c:164
 #, c-format
 msgid "Invalid zone %s specified"
 msgstr "Указана недопустимая зона %s"
 
-#: ../lib/proj/get_proj.c:259
+#: ../lib/proj/get_proj.c:246
 msgid "Unable to initialise PROJ with the following parameter list:"
 msgstr "Не удалось инициализировать PROJ со следующим списком параметров:"
 
-#: ../lib/proj/get_proj.c:268
-#, c-format
-msgid "The PROJ error message: %s"
-msgstr "Сообщение об ошибке PROJ: %s"
-
-#: ../lib/proj/get_proj.c:388
+#: ../lib/proj/get_proj.c:364
 msgid "Option input overflowed option table"
 msgstr "При вводе опций произошло переполнение таблицы опций"
 
-#: ../lib/proj/get_proj.c:426 ../lib/proj/get_proj.c:445
+#: ../lib/proj/get_proj.c:399
 #, c-format
 msgid "Unable to initialize pj cause: %s"
 msgstr "Не удалось инициализировать pj по причине: %s"
 
-#: ../lib/proj/get_proj.c:562
+#: ../lib/proj/get_proj.c:482
 msgid "Input Projection Parameters"
 msgstr "Параметры входной проекции"
 
-#: ../lib/proj/get_proj.c:563
+#: ../lib/proj/get_proj.c:483
 msgid "Input Unit Factor"
 msgstr "Входной коэффициент единицы измерения"
 
-#: ../lib/proj/get_proj.c:573
+#: ../lib/proj/get_proj.c:493
 msgid "Output Projection Parameters"
 msgstr "Параметры выходной проекции"
 
-#: ../lib/proj/get_proj.c:574
+#: ../lib/proj/get_proj.c:494
 msgid "Output Unit Factor"
 msgstr "Выходной коэффициент единицы измерения"
 
@@ -9155,6 +9134,21 @@ msgstr "Полигон %d не содержит границ"
 #: ../lib/vector/vedit/select.c:231
 msgid "Unknown query tool"
 msgstr "Неизвестный инструмент запроса"
+
+#, c-format
+#~ msgid "Unable to create latlong equivalent for '%s'"
+#~ msgstr "Не удалось создать эквивалентное значение широты и долготы для «%s»"
+
+#~ msgid "No output projection"
+#~ msgstr "Выходная проекция отсутствует"
+
+#, c-format
+#~ msgid "pj_transform() failed: %s"
+#~ msgstr "Ошибка выполнения pj_transform(): %s"
+
+#, c-format
+#~ msgid "The PROJ error message: %s"
+#~ msgstr "Сообщение об ошибке PROJ: %s"
 
 #~ msgid "GRASS is not compiled with OGR support"
 #~ msgstr "GRASS собран без поддержки OGR"
