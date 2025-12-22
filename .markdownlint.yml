@@ -1,4 +1,5 @@
 ---
+# yamllint disable-line rule:line-length
 # yaml-language-server: $schema=https://raw.githubusercontent.com/DavidAnson/markdownlint/refs/heads/main/schema/markdownlint-config-schema.json
 default: true
 
