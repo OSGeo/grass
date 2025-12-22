@@ -427,8 +427,8 @@ direct read and write access to raster data with the
 module. The core classes include [RasterRow](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rasterrow),
 [RasterRowIO](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rasterrowio),
 and [RasterSegment](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rastersegment).
-Each class provides a different level of access to the raster data with its own set
-of read and write capabilities, as shown in the table below.
+Each class provides a different level of access to the raster data with its own
+set of read and write capabilities, as shown in the table below.
 
 | Class | Description | Read | Write |
 | ----- | ----------- | ---- | ----- |
@@ -438,8 +438,8 @@ of read and write capabilities, as shown in the table below.
 
 The [RasterRow](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rasterrow)
 class allows for either read or write access to raster row data
-and provides methods to access raster state and metadata. To read all rows of the
-`elevation` raster:
+and provides methods to access raster state and metadata.
+To read all rows of the `elevation` raster:
 
 ```python
 from grass.pygrass import raster
