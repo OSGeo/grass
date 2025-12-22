@@ -54,13 +54,33 @@ jobs:
       # The already running job will be completed.
       cancel-in-progress: ${{ github.event_name == 'pull_request' }}
     strategy:
-      matrix:
-        os:
-          - alpine
-          - debian
-          - ubuntu
-          - ubuntu_wxgui
       fail-fast: false
+      matrix:
+        include:
+          - name: alpine
+            image_name: osgeo/grass-gis
+            dockerfile: docker/alpine/Dockerfile
+            build_id: docker_build_no_args
+            tag_suffix: alpine
+          - name: debian
+            image_name: osgeo/grass-gis
+            dockerfile: docker/debian/Dockerfile
+            build_id: docker_build_no_args
+            tag_suffix: debian
+          - name: ubuntu
+            image_name: osgeo/grass-gis
+            dockerfile: docker/ubuntu/Dockerfile
+            build_id: docker_build
+            tag_suffix: ubuntu
+            build_args: |
+              GUI=without
+          - name: ubuntu
+            image_name: osgeo/grass-gis
+            dockerfile: docker/ubuntu/Dockerfile
+            build_id: docker_build
+            tag_suffix: ubuntu_wxgui
+            build_args: |
+              GUI=with
 
     permissions:
       attestations: write
@@ -139,7 +159,7 @@ jobs:
             type=raw,value=latest,enable=${{ steps.enable.outputs.latest }},suffix=
           flavor: |
             latest=false
-            suffix=-${{ matrix.os }}
+            suffix=-${{ matrix.tag_suffix }}
       - name: Set up QEMU
         uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3.7.0
       - name: Set up Docker Buildx
@@ -156,14 +176,15 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN  }}
-      - name: Build and push
-        id: docker_build
+      - name: Build and push  ${{ matrix.image_name }}:${{ github.ref_name }}-${{ matrix.tag_suffix }}
+        if: ${{ !matrix.build_args }}
+        id: docker_build_no_args
         uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
         with:
           push: ${{ github.event_name != 'pull_request' }}
           context: .
           tags: ${{ steps.meta.outputs.tags }}
-          file: docker/${{ matrix.os }}/Dockerfile
+          file: ${{ matrix.dockerfile }}
           annotations: ${{ steps.meta.outputs.annotations }}
           provenance: mode=max
           sbom: true
@@ -172,18 +193,37 @@ jobs:
           # Don't use gha cache for releases. Cache is not used if `cache-from:` is empty
           cache-from: >-
             ${{ !contains(fromJSON('["tag", "release"]'), github.event_name)
-                && format('type=gha,scope={0}', matrix.os) || '' }}
-          cache-to: type=gha,mode=max,scope=${{ matrix.os }}
+                && format('type=gha,scope={0}', matrix.name) || '' }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.name }}
+      - name: Build and push  ${{ matrix.image_name }}:${{ github.ref_name }}-${{ matrix.tag_suffix }}
+        if: ${{ matrix.build_args }}
+        id: docker_build
+        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
+        with:
+          push: ${{ github.event_name != 'pull_request' }}
+          context: .
+          tags: ${{ steps.meta.outputs.tags }}
+          file: ${{ matrix.dockerfile }}
+          annotations: ${{ steps.meta.outputs.annotations }}
+          provenance: mode=max
+          sbom: true
+          # Don't use cache for releases.
+          no-cache: ${{ contains(fromJSON('["tag", "release"]'), github.event_name) && true }}
+          # Don't use gha cache for releases. Cache is not used if `cache-from:` is empty
+          cache-from: >-
+            ${{ !contains(fromJSON('["tag", "release"]'), github.event_name)
+                && format('type=gha,scope={0}', matrix.name) || '' }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.name }}
       - name: Image digest
         run: echo "${STEPS_DOCKER_BUILD_OUTPUTS_DIGEST}"
         env:
-          STEPS_DOCKER_BUILD_OUTPUTS_DIGEST: ${{ steps.docker_build.outputs.digest }}
+          STEPS_DOCKER_BUILD_OUTPUTS_DIGEST: ${{ steps.${{ matrix.build_id }}.outputs.digest }}
       - name: Attest docker.io image
         uses: actions/attest-build-provenance@00014ed6ed5efc5b1ab7f7f34a39eb55d41aa4f8 # v3.1.0
         # If there isn't a digest, an annotation cannot be added
         if: >-
           ${{ github.repository_owner == 'OSGeo' && github.event_name != 'pull_request'
-            && steps.docker_build.outputs.digest }}
+            && steps.${{ matrix.build_id }}.outputs.digest }}
         id: attest
         with:
           subject-name: docker.io/osgeo/grass-gis
@@ -192,9 +232,9 @@ jobs:
       - name: Attest ghcr.io image
         uses: actions/attest-build-provenance@00014ed6ed5efc5b1ab7f7f34a39eb55d41aa4f8 # v3.1.0
         # If there isn't a digest, an annotation cannot be added
-        if: ${{ steps.docker_build.outputs.digest }}
+        if: ${{ steps.${{ matrix.build_id }}.outputs.digest }}
         id: attest-ghcr
         with:
           subject-name: ghcr.io/${{ github.repository }}
-          subject-digest: ${{ steps.docker_build.outputs.digest }}
+          subject-digest: ${{ steps.${{ matrix.build_id }}.outputs.digest }}
           push-to-registry: ${{ github.event_name != 'pull_request' }}
