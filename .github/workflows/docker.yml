@@ -41,12 +41,11 @@ jobs:
   #     releasebranch_8_3-alpine, releasebranch_8_3-debian, releasebranch_8_3-ubuntu
   # For a release, e.g. 8.3.0, created tags are:
   #     8.3.0-alpine, 8.3.0-debian, 8.3.0-ubuntu and latest (with ubuntu)
-  docker-os-matrix:
-    name: ${{ matrix.os }}
+  build:
     runs-on: ubuntu-latest
     concurrency:
       group: >-
-        ${{ github.workflow }}-${{ matrix.os }}-${{ github.event_name }}-
+        ${{ github.workflow }}-${{ matrix.name }}-${{ github.event_name }}-
         ${{ github.event_name == 'pull_request' && github.head_ref || github.ref }}
       # Cancel in progress in pull requests.
       # Otherwise, limit to one in progress and one queued for each type.
@@ -128,7 +127,7 @@ jobs:
           latest="${{
             (github.ref || format('{0}{1}', 'refs/tags/', github.event.release.tag_name))
               == format('refs/tags/{0}', steps.tag-branch.outputs.latest_tag)
-            && matrix.os == 'ubuntu' && steps.tag-branch.outputs.error_latest == 'no' }}"
+            && matrix.name == 'ubuntu' && steps.tag-branch.outputs.error_latest == 'no' }}"
           current="${{
             ( contains(fromJSON('["tag", "release"]'), github.event_name)
               && (github.ref || format('{0}{1}', 'refs/tags/', github.event.release.tag_name))
