@@ -216,24 +216,24 @@ jobs:
       - name: Image digest
         run: echo "${STEPS_DOCKER_BUILD_OUTPUTS_DIGEST}"
         env:
-          STEPS_DOCKER_BUILD_OUTPUTS_DIGEST: ${{ steps.${{ matrix.build_id }}.outputs.digest }}
+          STEPS_DOCKER_BUILD_OUTPUTS_DIGEST: ${{ steps[matrix.build_id].outputs.digest }}
       - name: Attest docker.io image
         uses: actions/attest-build-provenance@00014ed6ed5efc5b1ab7f7f34a39eb55d41aa4f8 # v3.1.0
         # If there isn't a digest, an annotation cannot be added
         if: >-
           ${{ github.repository_owner == 'OSGeo' && github.event_name != 'pull_request'
-            && steps.${{ matrix.build_id }}.outputs.digest }}
+            && steps.[matrix.build_id].outputs.digest }}
         id: attest
         with:
           subject-name: docker.io/osgeo/grass-gis
-          subject-digest: ${{ steps.docker_build.outputs.digest }}
+          subject-digest: ${{ steps[matrix.build_id].outputs.digest }}
           push-to-registry: ${{ github.repository_owner == 'OSGeo' && github.event_name != 'pull_request' }}
       - name: Attest ghcr.io image
         uses: actions/attest-build-provenance@00014ed6ed5efc5b1ab7f7f34a39eb55d41aa4f8 # v3.1.0
         # If there isn't a digest, an annotation cannot be added
-        if: ${{ steps.${{ matrix.build_id }}.outputs.digest }}
+        if: ${{ steps.[matrix.build_id].outputs.digest }}
         id: attest-ghcr
         with:
           subject-name: ghcr.io/${{ github.repository }}
-          subject-digest: ${{ steps.${{ matrix.build_id }}.outputs.digest }}
+          subject-digest: ${{ steps[matrix.build_id].outputs.digest }}
           push-to-registry: ${{ github.event_name != 'pull_request' }}
