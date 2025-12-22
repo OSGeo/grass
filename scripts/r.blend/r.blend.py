@@ -42,6 +42,8 @@
 # % key: c
 # % description: Combine resulting R,G,B layers into single output map
 # %end
+# %option G_OPT_M_NPROCS
+# %end
 
 import os
 import string
@@ -53,6 +55,7 @@ def main():
     second = options["second"]
     output = options["output"]
     percent = options["percent"]
+    nprocs = options["nprocs"]
 
     mapset = gs.gisenv()["MAPSET"]
 
@@ -80,7 +83,15 @@ def main():
     cmd = [template.substitute(ch=ch) for ch in ["r", "g", "b"]]
     cmd = ";".join(cmd)
 
-    gs.mapcalc(cmd, output=output, first=first, second=second, frac1=frac1, frac2=frac2)
+    gs.mapcalc(
+        cmd,
+        output=output,
+        first=first,
+        second=second,
+        frac1=frac1,
+        frac2=frac2,
+        nprocs=nprocs,
+    )
 
     for ch in ["r", "g", "b"]:
         map = "%s.%s" % (output, ch)

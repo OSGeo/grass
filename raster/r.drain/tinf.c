@@ -417,7 +417,11 @@ int retreat_band3(int fh, struct band3 *bnd)
         rc = 0;
     else {
         rc = read(fh, bnd->b[0], bnd->sz);
-        lseek(fh, (off_t)-2 * bnd->sz, SEEK_CUR);
+        if (lseek(fh, (off_t)-2 * bnd->sz, SEEK_CUR) == -1) {
+            int err = errno;
+            G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                          strerror(err), err);
+        }
     }
     return rc;
 }

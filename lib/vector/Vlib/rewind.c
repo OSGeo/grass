@@ -23,7 +23,7 @@ static int rew_dummy(struct Map_info *Map UNUSED)
     return -1;
 }
 
-#if !defined HAVE_OGR || !defined HAVE_POSTGRES
+#if !defined HAVE_POSTGRES
 static int format(struct Map_info *Map UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
@@ -32,16 +32,9 @@ static int format(struct Map_info *Map UNUSED)
 #endif
 
 static int (*Rewind_array[][4])(struct Map_info *) = {
-    {rew_dummy, V1_rewind_nat, V2_rewind_nat, rew_dummy}
-#ifdef HAVE_OGR
-    ,
+    {rew_dummy, V1_rewind_nat, V2_rewind_nat, rew_dummy},
     {rew_dummy, V1_rewind_ogr, V2_rewind_ogr, rew_dummy},
     {rew_dummy, V1_rewind_ogr, V2_rewind_ogr, rew_dummy}
-#else
-    ,
-    {rew_dummy, format, format, rew_dummy},
-    {rew_dummy, format, format, rew_dummy}
-#endif
 #ifdef HAVE_POSTGRES
     ,
     {rew_dummy, V1_rewind_pg, V2_rewind_pg, V2_rewind_pg}

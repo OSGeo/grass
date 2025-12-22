@@ -16,16 +16,15 @@
 #
 #############################################################################
 
-import sys
-import os
-import string
-import re
-from datetime import datetime
 import locale
-
-from html.parser import HTMLParser
-
+import os
+import re
+import string
+import sys
 import urllib.parse as urlparse
+from datetime import datetime
+from html.parser import HTMLParser
+from pathlib import Path
 
 try:
     import grass.script as gs
@@ -34,12 +33,14 @@ except ImportError:
     gs = None
 
 from mkdocs import (
-    read_file,
+    get_addon_path,
     get_addons_url,
     get_last_git_commit,
-    top_dir as topdir,
-    get_addon_path,
+    read_file,
     set_proxy,
+)
+from mkdocs import (
+    top_dir as topdir,
 )
 
 grass_version = os.getenv("VERSION_NUMBER", "unknown")
@@ -453,7 +454,7 @@ if os.getenv("SOURCE_URL", ""):
     addon_path = get_addon_path(base_url=base_url, pgm=pgm, major_version=major)
     if addon_path:
         # Addon is installed from the local dir
-        if os.path.exists(os.getenv("SOURCE_URL")):
+        if Path(os.getenv("SOURCE_URL")).exists():
             url_source = urlparse.urljoin(
                 get_addons_url(base_url=base_url, major_version=major),
                 addon_path,

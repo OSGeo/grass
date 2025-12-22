@@ -29,11 +29,12 @@ for other platforms you may have to install some of them.
   flex: [https://github.com/westes/flex](https://github.com/westes/flex)
 - **parser generator** (yacc, bison)
   bison: [https://www.gnu.org/software/bison/bison.html](https://www.gnu.org/software/bison/bison.html)
-- **PROJ** - Cartographic Projection Library
+- **PROJ >= 9.0** - Cartographic Projection Library
   PROJ: [https://proj.org/](https://proj.org/)
-- **GDAL/OGR** for import and export of most external raster and vector map formats
+- **GDAL/OGR >= 3.7** for import and export of most external raster and
+  vector map formats
   GDAL: [https://gdal.org](https://gdal.org)
-- **Python >= 3.8** (for temporal framework, scripts, wxGUI, and ctypes interface)
+- **Python >= 3.10** (for temporal framework, scripts, wxGUI, and ctypes interface)
   [https://www.python.org](https://www.python.org)
 - **MkDocs** with "Material" theme Python packages for the manual pages:
   See `man/mkdocs/requirements.txt`.

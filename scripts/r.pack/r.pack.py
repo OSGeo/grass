@@ -74,7 +74,7 @@ def main():
         grass.fatal(_("Raster map <%s> not found") % infile)
 
     parent_dir = Path(outfile).parent
-    if os.path.exists(outfile):
+    if os.path.exists(outfile):  # noqa: PTH110 # Problem with tests, the way a permission error occurs when checking
         if os.getenv("GRASS_OVERWRITE"):
             grass.warning(
                 _("Pack file <%s> already exists and will be overwritten") % outfile
@@ -103,7 +103,7 @@ def main():
         )
         if map_file["file"]:
             vrt = os.path.join(map_file["file"], "vrt")
-            if os.path.exists(vrt):
+            if Path(vrt).exists():
                 with open(vrt) as f:
                     for r in f:
                         map, mapset = r.split("@")
@@ -124,9 +124,9 @@ def main():
         "hist",
     ]:
         path = os.path.join(basedir, element, infile)
-        if os.path.exists(path):
+        if Path(path).exists():
             grass.debug("copying %s" % path)
-            if os.path.isfile(path):
+            if Path(path).is_file():
                 shutil.copyfile(
                     path,
                     os.path.join(tmp_dir, element),
@@ -141,12 +141,11 @@ def main():
         if vrt_files:
             for f, value in vrt_files.items():
                 f_tmp_dir = os.path.join(tmp, f)
-                if not os.path.exists(f_tmp_dir):
-                    os.mkdir(f_tmp_dir)
+                Path(f_tmp_dir).mkdir(exist_ok=True)
                 path = os.path.join(value, element, f)
-                if os.path.exists(path):
+                if Path(path).exists():
                     grass.debug("copying vrt file {}".format(path))
-                    if os.path.isfile(path):
+                    if Path(path).is_file():
                         shutil.copyfile(
                             path,
                             os.path.join(f_tmp_dir, element),
@@ -167,7 +166,7 @@ def main():
         path = os.path.join(
             gisenv["GISDBASE"], gisenv["LOCATION_NAME"], "PERMANENT", "PROJ_" + support
         )
-        if os.path.exists(path):
+        if Path(path).exists():
             shutil.copyfile(path, os.path.join(tmp_dir, "PROJ_" + support))
 
     # copy CRS info from computational region

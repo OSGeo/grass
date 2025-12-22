@@ -762,23 +762,18 @@ g.rename raster=newmap,oldmap
 ### Random number generator initialization
 
 The pseudo-random number generator used by the rand() function can be
-initialised to a specific value using the **seed** option. This can be
+initialised to a specific value using the **seed** parameter. This can be
 used to replicate a previous calculation.
 
-Alternatively, it can be initialised from the system time and the PID
-using the **-s** flag. This should result in a different seed being used
-each time.
+If rand() function is used and no seed is given,
+*r.mapcalc* will generate a seed, resulting in a different result for
+each run.
 
 In either case, the seed will be written to the map's history, and can
 be seen using *r.info*.
 
 If you want other people to be able to verify your results, it's
-preferable to use the **seed** option to supply a seed which is either
-specified in the script or generated from a deterministic process such
-as a pseudo-random number generator given an explicit seed.
-
-Note that the rand() function will generate a fatal error if neither the
-**seed** option nor the **-s** flag are given.
+preferable to use the **seed** parameter.
 
 ## EXAMPLES
 
@@ -819,8 +814,7 @@ To change all values below 5 to NULL, keep 5 otherwise:
 newmap = if(map<5, null(), 5)
 ```
 
-To create a map with random values in a defined range (needs either the
-usage of **-s** flag or the *seed* parameter). The precision of the
+To create a map with random values in a defined range. The precision of the
 input values determines the output precision (the resulting [raster map
 type](rasterintro.md#raster-format)):
 
