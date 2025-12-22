@@ -430,11 +430,11 @@ and [RasterSegment](https://grass.osgeo.org/grass-stable/manuals/libpython/pygra
 Each class provides a different level of access to the raster data with its own set
 of read and write capabilities, as shown in the table below.
 
-| Class          | Description                                             | Read | Write |
-|----------------|-------------------------------------------------------- |-------|------|
-| [RasterRow](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rasterrow)    | Read write access to raster row data.                       | :rabbit2: Random  | :rabbit2: Sequential |
-| [RasterRowIO](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rasterrowio)  | Fast read only access to raster row data.                   | :rabbit2: Cached | :x: No |
-| [RasterSegment](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rastersegment) | Simultaneous read write access to tiled raster segments stored on disk.       | :turtle: Cached | :turtle: Random |
+| Class | Description | Read | Write |
+| ----- | ----------- | ---- | ----- |
+| [RasterRow](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rasterrow) | Read write access to raster row data. | :rabbit2: Random | :rabbit2: Sequential |
+| [RasterRowIO](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rasterrowio) | Fast read only access to raster row data. | :rabbit2: Cached | :x: No |
+| [RasterSegment](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rastersegment) | Simultaneous read write access to tiled raster segments stored on disk. | :turtle: Cached | :turtle: Random |
 
 The [RasterRow](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rasterrow)
 class allows for either read or write access to raster row data
@@ -497,8 +497,8 @@ module provides direct read and write access to vector data in GRASS.
 The core classes include [Vector](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.Vector)
 and [VectorTopo](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_vector.html#vectortopo-label).
 
-| Class          | Description  |
-|----------------|--------------|
+| Class | Description |
+| ----- | ----------- |
 | [Vector](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.Vector) | Provides basic information about vector data. |
 | [VectorTopo](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_vector.html#vectortopo-label) | Read and write access to vector data. |
 
@@ -547,7 +547,7 @@ To build a geometry object, you can use the geometry class in the
 module.
 
 | Geometry Class | Description |
-|----------------|-------------|
+| -------------- | ----------- |
 | [Area](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Area) | Represents the topological composition of a closed ring of boundaries and a centroid. |
 | [Boundary](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Boundary) | Represents the border line to describe an area. |
 | [Centroid](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Centroid) | Represents a centroid feature in a vector map. |
