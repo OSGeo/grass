@@ -51,7 +51,7 @@ def read_raster_as_array(mapname, env):
     try:
         # Export raster to ASCII format
         gs.run_command(
-            "r.out.ascii", input=mapname, output=tmp_path, precision=10, env=env
+            "r.out.ascii", input=mapname, output=tmp_path, precision=10, env=env, overwrite=True
         )
 
         # Read the ASCII file
@@ -145,10 +145,10 @@ class TestMapcalcRandFunction:
             env=self.session.env,
         )
 
-        # Small delay to ensure different auto-seed on systems with low-resolution timers
+        # Increased delay to ensure different auto-seed on systems with low-resolution timers
         # G_srand48_auto() uses microsecond precision, but on some Windows systems
         # the timer granularity may be coarser
-        time.sleep(0.01)
+        time.sleep(0.1)
 
         gs.mapcalc(
             "rand_map_auto2 = rand(0.0, 1.0)",
@@ -240,8 +240,8 @@ class TestMapcalcRandFunction:
             "seed='auto' should convert to None and enable auto-seeding, recording an auto-generated seed in metadata"
         )
 
-        # Small delay to ensure different auto-seed
-        time.sleep(0.01)
+        # Increased delay to ensure different auto-seed
+        time.sleep(0.1)
 
         # Create second map with seed='auto' — should differ from first (different auto-seeds)
         gs.mapcalc(
@@ -499,8 +499,8 @@ class TestMapcalcStartRandFunction:
         returncode = p.wait()
         assert returncode == 0
 
-        # Small delay to ensure different auto-seed
-        time.sleep(0.01)
+        # Increased delay to ensure different auto-seed
+        time.sleep(0.1)
 
         p = gs.mapcalc_start(
             "rand_map_start_auto2 = rand(0.0, 1.0)",
@@ -581,8 +581,8 @@ class TestMapcalcStartRandFunction:
             "seed='auto' should convert to None and enable auto-seeding, recording an auto-generated seed in metadata"
         )
 
-        # Small delay to ensure different auto-seed
-        time.sleep(0.01)
+        # Increased delay to ensure different auto-seed
+        time.sleep(0.1)
 
         # Create second map with seed='auto' — should differ from first (different auto-seeds)
         p = gs.mapcalc_start(
