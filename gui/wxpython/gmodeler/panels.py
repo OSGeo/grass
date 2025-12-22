@@ -66,19 +66,20 @@ from gui_core.wrap import (
 )
 from main_window.page import MainPageBase
 from gmodeler.giface import GraphicalModelerGrassInterface
-from gmodeler.model import (
-    Model,
+from gmodeler.model import Model, WriteModelFile
+from gmodeler.model_items import (
     ModelAction,
     ModelRelation,
     ModelLoop,
     ModelCondition,
     ModelComment,
-    WriteModelFile,
     ModelDataSeries,
     ModelDataSingle,
-    WriteActiniaFile,
-    WritePythonFile,
-    WritePyWPSFile,
+)
+from gmodeler.model_convert import (
+    ModelToActinia,
+    ModelToPython,
+    ModelToPyWPS,
 )
 from gmodeler.dialogs import (
     ModelDataDialog,
@@ -900,7 +901,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
         if filename[-4:] != ".gxm":
             filename += ".gxm"
 
-        if os.path.exists(filename):
+        if Path(filename).exists():
             dlg = wx.MessageDialog(
                 parent=self,
                 message=_(
@@ -1585,7 +1586,7 @@ class PythonPanel(wx.Panel):
         self.filename = None
         # default values of variables that will be changed if the desired
         # script type is changed
-        self.write_object = WritePythonFile
+        self.write_object = ModelToPython
 
         self.bodyBox = StaticBox(
             parent=self, id=wx.ID_ANY, label=" %s " % _("Python script")
@@ -1655,19 +1656,19 @@ class PythonPanel(wx.Panel):
         :return: script extension
         """
         # return "py" for Python, PyWPS
-        return "json" if self.write_object == WriteActiniaFile else "py"
+        return "json" if self.write_object == ModelToActinia else "py"
 
     def SetWriteObject(self, script_type):
         """Set correct self.write_object depending on the script type.
         :param script_type: script type name as a string
         """
         if script_type == "PyWPS":
-            self.write_object = WritePyWPSFile
+            self.write_object = ModelToPyWPS
         elif script_type == "actinia":
-            self.write_object = WriteActiniaFile
+            self.write_object = ModelToActinia
         else:
             # script_type == "Python", fallback
-            self.write_object = WritePythonFile
+            self.write_object = ModelToPython
 
     def RefreshScript(self):
         """Refresh the script.
@@ -1741,7 +1742,7 @@ class PythonPanel(wx.Panel):
         if filename[-len(file_ext) - 1 :] != f".{file_ext}":
             filename += f".{file_ext}"
 
-        if os.path.exists(filename):
+        if Path(filename).exists():
             dlg = wx.MessageDialog(
                 self,
                 message=_(

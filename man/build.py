@@ -7,10 +7,16 @@
 #   Glynn Clements
 #   Luca Delucchi
 
+from __future__ import annotations
+
 import os
 import string
 from datetime import datetime
 from pathlib import Path
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from typing import IO
 
 # TODO: better fix this in include/Make/Html.make, see bug RT #5361
 
@@ -57,7 +63,7 @@ def write_file(name, contents):
 
 def try_mkdir(path):
     try:
-        os.mkdir(path)
+        Path(path).mkdir()
     except OSError:
         pass
 
@@ -65,8 +71,8 @@ def try_mkdir(path):
 def replace_file(name):
     temp = name + ".tmp"
     if (
-        os.path.exists(name)
-        and os.path.exists(temp)
+        Path(name).exists()
+        and Path(temp).exists()
         and read_file(name) == read_file(temp)
     ):
         os.remove(temp)
@@ -82,22 +88,22 @@ def copy_file(src, dst):
     write_file(dst, read_file(src))
 
 
-def get_files(man_dir, cls=None, ignore_gui=True, extension="html"):
+def get_files(man_dir, cls=None, ignore_gui=True, extension: str = "html"):
     for cmd in sorted(os.listdir(man_dir)):
         if (
             cmd.endswith(f".{extension}")
-            and (cls in (None, "*") or cmd.startswith(cls + "."))
+            and (cls in {None, "*"} or cmd.startswith(cls + "."))
             and (cls != "*" or len(cmd.split(".")) >= 3)
-            and cmd not in [f"full_index.{extension}", f"index.{extension}"]
+            and cmd not in {f"full_index.{extension}", f"index.{extension}"}
             and cmd not in exclude_mods
             and ((ignore_gui and not cmd.startswith("wxGUI.")) or not ignore_gui)
         ):
             yield cmd
 
 
-def write_header(f, title, ismain=False, body_width="99%", template="html"):
+def write_header(f: IO, title, ismain=False, body_width="99%", template: str = "html"):
     if template == "html":
-        from build_html import header1_tmpl, macosx_tmpl, header2_tmpl
+        from build_html import header1_tmpl, header2_tmpl, macosx_tmpl
     else:
         from build_md import header1_tmpl, header2_tmpl
     f.write(header1_tmpl.substitute(title=title))
@@ -108,7 +114,7 @@ def write_header(f, title, ismain=False, body_width="99%", template="html"):
     f.write(header2_tmpl.substitute(grass_version=grass_version, body_width=body_width))
 
 
-def write_cmd_overview(f, template="html"):
+def write_cmd_overview(f: IO, template: str = "html"):
     from build_html import overview_tmpl
 
     if template == "html":
@@ -120,7 +126,7 @@ def write_cmd_overview(f, template="html"):
         )
 
 
-def write_footer(f, index_url, year=None, template="html"):
+def write_footer(f: IO, index_url, year=None, template: str = "html"):
     if template == "html":
         from build_html import footer_tmpl
 

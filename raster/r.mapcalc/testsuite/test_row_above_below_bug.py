@@ -73,7 +73,7 @@ class TestRowAboveAndBelowBug(TestCase):
 
     def tearDown(self):
         self.del_temp_region()
-        if 0 and self.to_remove:
+        if 0 and self.to_remove:  # noqa: SIM223
             self.runModule(
                 "g.remove",
                 flags="f",

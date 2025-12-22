@@ -147,12 +147,14 @@ int main(int argc, char *argv[])
     /* Using user-provided strings instead of attempting to guess the
      * right formatting. */
     if (i_flag->answer) {
-        sprintf(title, _("Uniform random integer values in range [%s, %s]"),
-                min->answer, max->answer);
+        snprintf(title, sizeof(title),
+                 _("Uniform random integer values in range [%s, %s]"),
+                 min->answer, max->answer);
     }
     else {
-        sprintf(title, _("Uniform random float values in range [%s, %s)"),
-                min->answer, max->answer);
+        snprintf(title, sizeof(title),
+                 _("Uniform random float values in range [%s, %s)"),
+                 min->answer, max->answer);
     }
     Rast_put_cell_title(out->answer, title);
     Rast_short_history(out->answer, "raster", &history);

@@ -4,7 +4,7 @@
  *
  * AUTHOR(S):  Maris Nartiss <maris.gis@gmail.com>
  *             with hints from v.out.ascii, v.buffer, v.what
- *             and other GRASS GIS modules
+ *             and other GRASS modules
  *
  * PURPOSE:    Output vector point/line values along sampling line
  *
@@ -698,8 +698,8 @@ int main(int argc, char *argv[])
         if (open3d == WITH_Z)
             fprintf(ascii, "%s%.*f", fs, dp, resultset[j].z);
         if (Fi != NULL) {
-            sprintf(sql, "select * from %s where %s=%d", Fi->table, Fi->key,
-                    resultset[j].cat);
+            snprintf(sql, sizeof(sql), "select * from %s where %s=%d",
+                     Fi->table, Fi->key, resultset[j].cat);
             G_debug(2, "SQL: \"%s\"", sql);
             db_set_string(&dbsql, sql);
             /* driver IS initialized here in case if Fi != NULL */

@@ -24,6 +24,8 @@ import grass.script as gs
 
 try:
     from osgeo import gdal
+
+    gdal.DontUseExceptions()
 except ImportError:
     gs.fatal(
         _(
@@ -242,7 +244,7 @@ class WMSDrv(WMSBase):
             return temp_map
         # georeferencing and setting projection of temp_map
         projection = gs.read_command(
-            "g.proj", flags="wf", epsg=GetEpsg(self.params["srs"])
+            "g.proj", flags="fp", format="wkt", epsg=GetEpsg(self.params["srs"])
         )
         projection = projection.rstrip("\n")
         temp_map_dataset.SetProjection(projection)

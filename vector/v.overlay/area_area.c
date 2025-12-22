@@ -79,6 +79,8 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
             Vect_select_lines_by_box(Tmp, &box, GV_BOUNDARY, boxlist);
 
             if (boxlist->n_values > 0) {
+                int npoints_org;
+
                 Vect_reset_list(reflist);
                 for (j = 0; j < boxlist->n_values; j++) {
                     int aline = boxlist->id[j];
@@ -90,17 +92,26 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                 }
 
                 /* snap bline to alines */
+                npoints_org = Points->n_points;
                 if (Vect_snap_line(Tmp, reflist, Points, snap, 0, NULL, NULL)) {
-                    /* rewrite bline */
+                    Vect_line_prune(Points);
+                    if (Points->n_points < 2) {
+                        G_message(_("Line with %d points reduced to %d point, "
+                                    "deleting line."),
+                                  npoints_org, Points->n_points);
+                        Vect_delete_line(Tmp, line);
+                    }
+                    else {
+                        /* rewrite bline */
 #if 0
-                    Vect_delete_line(Tmp, line);
-                    ret = Vect_write_line(Tmp, GV_BOUNDARY, Points, Cats);
-                    G_ilist_add(BList, ret);
+                        Vect_delete_line(Tmp, line);
+                        ret = Vect_write_line(Tmp, GV_BOUNDARY, Points, Cats);
+                        G_ilist_add(BList, ret);
 #else
-                    ret =
-                        Vect_rewrite_line(Tmp, line, GV_BOUNDARY, Points, Cats);
+                        ret = Vect_rewrite_line(Tmp, line, GV_BOUNDARY, Points,
+                                                Cats);
 #endif
-
+                    }
                     snapped_lines++;
                     G_debug(3, "line %d snapped", line);
                 }
@@ -351,8 +362,8 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                     if (driver) {
                         ATTR *at;
 
-                        sprintf(buf, "insert into %s values ( %d", Fi->table,
-                                out_cat);
+                        snprintf(buf, sizeof(buf), "insert into %s values ( %d",
+                                 Fi->table, out_cat);
                         db_set_string(&stmt, buf);
 
                         /* cata */
@@ -370,8 +381,8 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                                                      attr[0].null_values);
                             }
                             else {
-                                sprintf(buf, ", %d",
-                                        Centr[area].cat[0]->cat[i]);
+                                snprintf(buf, sizeof(buf), ", %d",
+                                         Centr[area].cat[0]->cat[i]);
                                 db_append_string(&stmt, buf);
                             }
                         }
@@ -380,7 +391,7 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                                 db_append_string(&stmt, attr[0].null_values);
                             }
                             else {
-                                sprintf(buf, ", null");
+                                snprintf(buf, sizeof(buf), ", null");
                                 db_append_string(&stmt, buf);
                             }
                         }
@@ -400,8 +411,8 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                                                      attr[1].null_values);
                             }
                             else {
-                                sprintf(buf, ", %d",
-                                        Centr[area].cat[1]->cat[j]);
+                                snprintf(buf, sizeof(buf), ", %d",
+                                         Centr[area].cat[1]->cat[j]);
                                 db_append_string(&stmt, buf);
                             }
                         }
@@ -410,7 +421,7 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                                 db_append_string(&stmt, attr[1].null_values);
                             }
                             else {
-                                sprintf(buf, ", null");
+                                snprintf(buf, sizeof(buf), ", null");
                                 db_append_string(&stmt, buf);
                             }
                         }

@@ -25,6 +25,7 @@ import sys
 import wx
 import tempfile
 from multiprocessing import Process, Queue
+from pathlib import Path
 
 from core.gcmd import GException, DecodeString
 from core.settings import UserSettings
@@ -122,7 +123,9 @@ class BitmapProvider:
         """Returns list of unique commands.
         Takes into account the region assigned."""
         unique = []
-        for cmdList, region in zip(self._cmdsForComposition, self._regions):
+        for cmdList, region in zip(
+            self._cmdsForComposition, self._regions, strict=False
+        ):
             for cmd in cmdList:
                 if region:
                     unique.append((tuple(cmd), tuple(sorted(region.items()))))
@@ -143,10 +146,14 @@ class BitmapProvider:
         """
         Debug.msg(2, "BitmapProvider.Unload")
         if self._cmdsForComposition:
-            for cmd, region in zip(self._uniqueCmds, self._regionsForUniqueCmds):
+            for cmd, region in zip(
+                self._uniqueCmds, self._regionsForUniqueCmds, strict=False
+            ):
                 del self._mapFilesPool[HashCmd(cmd, region)]
 
-            for cmdList, region in zip(self._cmdsForComposition, self._regions):
+            for cmdList, region in zip(
+                self._cmdsForComposition, self._regions, strict=False
+            ):
                 del self._bitmapPool[HashCmds(cmdList, region)]
             self._uniqueCmds = []
             self._cmdsForComposition = []
@@ -165,11 +172,11 @@ class BitmapProvider:
         :param regions: list of regions assigned to the commands
         """
         count = 0
-        for cmd, region in zip(uniqueCmds, regions):
+        for cmd, region in zip(uniqueCmds, regions, strict=False):
             filename = GetFileFromCmd(self._tempDir, cmd, region)
             if (
                 not force
-                and os.path.exists(filename)
+                and Path(filename).exists()
                 and self._mapFilesPool.GetSize(HashCmd(cmd, region))
                 == (self.imageWidth, self.imageHeight)
             ):
@@ -191,7 +198,7 @@ class BitmapProvider:
         :param force: if forced rerendering
         """
         count = 0
-        for cmdList, region in zip(cmdLists, regions):
+        for cmdList, region in zip(cmdLists, regions, strict=False):
             if (
                 not force
                 and HashCmds(cmdList, region) in self._bitmapPool
@@ -366,13 +373,13 @@ class BitmapRenderer:
         cmd_list = []
 
         filteredCmdList = []
-        for cmd, region in zip(cmdList, regions):
+        for cmd, region in zip(cmdList, regions, strict=False):
             if cmd[0] == "m.nviz.image":
                 region = None
             filename = GetFileFromCmd(self._tempDir, cmd, region)
             if (
                 not force
-                and os.path.exists(filename)
+                and Path(filename).exists()
                 and self._mapFilesPool.GetSize(HashCmd(cmd, region))
                 == (self.imageWidth, self.imageHeight)
             ):
@@ -491,7 +498,7 @@ class BitmapComposer:
         cmd_lists = []
 
         filteredCmdLists = []
-        for cmdList, region in zip(cmdLists, regions):
+        for cmdList, region in zip(cmdLists, regions, strict=False):
             if (
                 not force
                 and HashCmds(cmdList, region) in self._bitmapPool
@@ -785,7 +792,7 @@ class CleanUp:
     def __call__(self):
         import shutil
 
-        if os.path.exists(self._tempDir):
+        if Path(self._tempDir).exists():
             try:
                 shutil.rmtree(self._tempDir)
                 Debug.msg(5, "CleanUp: removed directory {t}".format(t=self._tempDir))
@@ -895,9 +902,9 @@ def test():
     mapFilesPool = MapFilesPool()
 
     tempDir = "/tmp/test"
-    if os.path.exists(tempDir):
+    if Path(tempDir).exists():
         shutil.rmtree(tempDir)
-    os.mkdir(tempDir)
+    Path(tempDir).mkdir()
     # comment this line to keep the directory after program ends
     #    cleanUp = CleanUp(tempDir)
     #    import atexit

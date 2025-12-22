@@ -1,4 +1,4 @@
-# Requirements to compile GRASS GIS 8
+# Requirements to compile GRASS 8
 
 A workstation running some flavor of UNIX including
 GNU/Linux, Solaris, IRIX, BSD, Mac OSX, Cygwin or MinGW (on Win32/Win64).
@@ -29,11 +29,12 @@ for other platforms you may have to install some of them.
   flex: [https://github.com/westes/flex](https://github.com/westes/flex)
 - **parser generator** (yacc, bison)
   bison: [https://www.gnu.org/software/bison/bison.html](https://www.gnu.org/software/bison/bison.html)
-- **PROJ** - Cartographic Projection Library
+- **PROJ >= 9.0** - Cartographic Projection Library
   PROJ: [https://proj.org/](https://proj.org/)
-- **GDAL/OGR** for import and export of most external raster and vector map formats
+- **GDAL/OGR >= 3.7** for import and export of most external raster and
+  vector map formats
   GDAL: [https://gdal.org](https://gdal.org)
-- **Python >= 3.8** (for temporal framework, scripts, wxGUI, and ctypes interface)
+- **Python >= 3.10** (for temporal framework, scripts, wxGUI, and ctypes interface)
   [https://www.python.org](https://www.python.org)
 - **MkDocs** with "Material" theme Python packages for the manual pages:
   See `man/mkdocs/requirements.txt`.
@@ -95,9 +96,6 @@ Note: also the respective development packages (commonly named `xxx-dev` or
 - **Python dateutil Library** (`python-dateutil`, needed for the tgrass modules `t.*`)
   [https://pypi.org/project/python-dateutil/](https://pypi.org/project/python-dateutil/)
   [https://github.com/dateutil/dateutil](https://github.com/dateutil/dateutil)
-- **Python PLY Library (Python Lex-Yacc)** (`python-ply`, needed for the
-  temporal algebra in tgis)
-  [https://www.dabeaz.com/ply](https://www.dabeaz.com/ply/)
 - **Pillow (Python Imaging Library)** (highly recommended for wxGUI and
   necessary for wxGUI Cartographic Composer)
   [https://python-pillow.org/](https://python-pillow.org/)

@@ -12,7 +12,7 @@ The **elevation** input raster map specified by the user must contain
 true elevation values, *not* rescaled or categorized data. If the
 elevation values are in other units than in the horizontal units, they
 must be converted to horizontal units using the parameter **zscale**.
-*In GRASS GIS 7, vertical units are not assumed to be meters any more.
+*In GRASS, vertical units are not assumed to be meters any more.
 For example, if both your vertical and horizontal units are feet,
 parameter **zscale** must not be used*.
 
@@ -150,7 +150,7 @@ memory size for 5000x5000 raster. See benchmark scripts in source code.
 (Intel Core i9-10940X CPU @ 3.30GHz x 28)*
 
 To reduce the memory requirements to minimum, set option **memory** to
-zero. To take advantage of the parallelization, GRASS GIS needs to
+zero. To take advantage of the parallelization, GRASS needs to
 compiled with OpenMP enabled.
 
 ## EXAMPLES

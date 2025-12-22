@@ -67,11 +67,10 @@ def main(ext):
         )
 
     with open(os.path.join(man_dir, output_name + f".{ext}"), "w") as output:
-        output.write(
-            header1_tmpl.substitute(
-                title=f"GRASS {grass_version} Reference Manual - Graphical index"
-            )
-        )
+        title = "Graphical index"
+        if ext == "html":
+            title = f"GRASS {grass_version} Reference Manual - {title}"
+        output.write(header1_tmpl.substitute(title=title))
         output.write(header_graphical_index_tmpl)
         if ext == "html":
             output.write('<ul class="img-list">\n')
@@ -99,8 +98,8 @@ def main(ext):
 
 if __name__ == "__main__":
     from build import (
-        write_footer,
         grass_version,
+        write_footer,
     )
 
     main("html")

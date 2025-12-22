@@ -29,13 +29,8 @@
 
 #include "local_proto.h"
 
-#ifdef HAVE_GDAL
 #include <gdal_version.h> /* needed for FID detection */
-#endif                    /* HAVE_GDAL */
-
-#ifdef HAVE_OGR
 #include <ogr_api.h>
-#endif
 
 #ifdef HAVE_POSTGRES
 #define NOPG_UNUSED
@@ -413,17 +408,17 @@ struct field_info *Vect_default_field_info(struct Map_info *Map, int field,
 
     /* Table name */
     if (type == GV_1TABLE) {
-        sprintf(buf, "%s", Map->name);
+        snprintf(buf, sizeof(buf), "%s", Map->name);
     }
     else {
         if (fi->name != NULL && strlen(fi->name) > 0) {
-            sprintf(buf, "%s_%s", Map->name, fi->name);
+            snprintf(buf, sizeof(buf), "%s_%s", Map->name, fi->name);
             if (!name2sql(buf)) {
-                sprintf(buf, "%s_%d", Map->name, field);
+                snprintf(buf, sizeof(buf), "%s_%d", Map->name, field);
             }
         }
         else
-            sprintf(buf, "%s_%d", Map->name, field);
+            snprintf(buf, sizeof(buf), "%s_%d", Map->name, field);
     }
     schema = connection.schemaName;
     if (schema && strlen(schema) > 0) {
@@ -747,9 +742,6 @@ static int read_dblinks_ogr(struct Map_info *Map)
 
     dbl = Map->dblnk;
     G_debug(3, "Searching for FID column in OGR DB");
-#ifndef HAVE_OGR
-    G_warning(_("GRASS is not compiled with OGR support"));
-#else
     int nLayers;
     char *ogr_fid_col;
 
@@ -795,7 +787,6 @@ static int read_dblinks_ogr(struct Map_info *Map)
                     Map->fInfo.ogr.layer_name, ogr_fid_col, Map->fInfo.ogr.dsn,
                     "ogr");
     return 1;
-#endif /* HAVE_GDAL */
 }
 
 static int read_dblinks_pg(struct Map_info *Map NOPG_UNUSED)
@@ -902,9 +893,10 @@ int Vect_write_dblinks(struct Map_info *Map)
 
     for (i = 0; i < dbl->n_fields; i++) {
         if (dbl->field[i].name != NULL)
-            sprintf(buf, "%d/%s", dbl->field[i].number, dbl->field[i].name);
+            snprintf(buf, sizeof(buf), "%d/%s", dbl->field[i].number,
+                     dbl->field[i].name);
         else
-            sprintf(buf, "%d", dbl->field[i].number);
+            snprintf(buf, sizeof(buf), "%d", dbl->field[i].number);
 
         fprintf(fd, "%s|%s|%s|%s|%s\n", buf, dbl->field[i].table,
                 dbl->field[i].key, dbl->field[i].database,
@@ -950,28 +942,28 @@ char *Vect_subst_var(const char *in, struct Map_info *Map)
     c = (char *)strstr(buf, "$GISDBASE");
     if (c != NULL) {
         *c = '\0';
-        sprintf(str, "%s%s%s", buf, Map->gisdbase, c + 9);
+        snprintf(str, sizeof(str), "%s%s%s", buf, Map->gisdbase, c + 9);
     }
 
     strcpy(buf, str);
     c = (char *)strstr(buf, "$LOCATION_NAME");
     if (c != NULL) {
         *c = '\0';
-        sprintf(str, "%s%s%s", buf, Map->location, c + 14);
+        snprintf(str, sizeof(str), "%s%s%s", buf, Map->location, c + 14);
     }
 
     strcpy(buf, str);
     c = (char *)strstr(buf, "$MAPSET");
     if (c != NULL) {
         *c = '\0';
-        sprintf(str, "%s%s%s", buf, Map->mapset, c + 7);
+        snprintf(str, sizeof(str), "%s%s%s", buf, Map->mapset, c + 7);
     }
 
     strcpy(buf, str);
     c = (char *)strstr(buf, "$MAP");
     if (c != NULL) {
         *c = '\0';
-        sprintf(str, "%s%s%s", buf, Map->name, c + 4);
+        snprintf(str, sizeof(str), "%s%s%s", buf, Map->name, c + 4);
     }
 
     G_debug(3, "  -> %s", str);

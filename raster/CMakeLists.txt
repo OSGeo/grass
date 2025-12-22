@@ -90,6 +90,7 @@ set(raster_modules_list
     r.series.interp
     r.sim
     r.slope.aspect
+    r.smooth.edgepreserve
     r.solute.transport
     r.spread
     r.spreadpath
@@ -208,7 +209,7 @@ build_program_in_subdir(r.cross DEPENDS grass_gis grass_raster grass_btree
 
 build_program_in_subdir(r.describe DEPENDS grass_gis grass_raster grass_parson)
 
-build_program_in_subdir(r.distance DEPENDS grass_gis grass_raster)
+build_program_in_subdir(r.distance DEPENDS grass_gis grass_raster grass_parson)
 
 build_program_in_subdir(
   r.external
@@ -219,6 +220,7 @@ build_program_in_subdir(
   grass_gproj
   ${LIBM}
   PRIMARY_DEPENDS
+  PROJ::proj
   GDAL::GDAL)
 
 build_program_in_subdir(r.external.out DEPENDS grass_gis grass_raster grass_gproj
@@ -270,6 +272,7 @@ build_program_in_subdir(
   grass_imagery
   ${LIBM}
   PRIMARY_DEPENDS
+  PROJ::proj
   GDAL::GDAL)
 
 build_program_in_subdir(r.in.gridatb DEPENDS grass_gis grass_raster)
@@ -420,6 +423,7 @@ build_program_in_subdir(
   grass_gis
   grass_raster
   grass_gproj
+  grass_parson
   ${LIBM}
   OPTIONAL_DEPENDS
   OPENMP)
@@ -449,10 +453,10 @@ build_program_in_subdir(r.recode DEPENDS grass_gis grass_raster)
 
 build_program_in_subdir(r.region DEPENDS grass_gis grass_raster grass_vector)
 
-build_program_in_subdir(r.regression.line DEPENDS grass_gis grass_raster
+build_program_in_subdir(r.regression.line DEPENDS grass_gis grass_raster grass_parson
                         ${LIBM})
 
-build_program_in_subdir(r.regression.multi DEPENDS grass_gis grass_raster
+build_program_in_subdir(r.regression.multi DEPENDS grass_gis grass_raster grass_parson
                         ${LIBM})
 
 build_program_in_subdir(r.report DEPENDS grass_gis grass_raster grass_parson)
@@ -542,6 +546,16 @@ build_program_in_subdir(
   OPENMP)
 
 build_program_in_subdir(
+  r.smooth.edgepreserve
+  DEPENDS
+  grass_gis
+  grass_raster
+  grass_rowio
+  ${LIBM}
+  OPTIONAL_DEPENDS
+  OPENMP)
+
+build_program_in_subdir(
   r.solute.transport
   DEPENDS
   grass_gis
@@ -559,9 +573,9 @@ build_program_in_subdir(r.statistics DEPENDS grass_gis grass_raster ${LIBM})
 
 build_program_in_subdir(r.stats.zonal DEPENDS grass_gis grass_raster ${LIBM})
 
-build_program_in_subdir(r.stats.quantile DEPENDS grass_gis grass_raster ${LIBM})
+build_program_in_subdir(r.stats.quantile DEPENDS grass_gis grass_raster grass_parson ${LIBM})
 
-build_program_in_subdir(r.stats DEPENDS grass_gis grass_raster ${LIBM})
+build_program_in_subdir(r.stats DEPENDS grass_gis grass_raster grass_parson ${LIBM})
 
 build_program_in_subdir(
   r.stream.extract
@@ -660,7 +674,8 @@ build_program_in_subdir(
   grass_vector
   grass_dbmibase
   grass_dbmiclient
-  grass_dbmidriver)
+  grass_dbmidriver
+  grass_parson)
 
 build_program_in_subdir(
   r.walk
@@ -676,7 +691,7 @@ build_program_in_subdir(r.water.outlet DEPENDS grass_gis grass_raster)
 build_program_in_subdir(r.what DEPENDS grass_gis grass_raster grass_vector
                         grass_parson)
 
-build_program_in_subdir(r.what.color DEPENDS grass_gis grass_raster)
+build_program_in_subdir(r.what.color DEPENDS grass_gis grass_raster grass_parson)
 
 build_program_in_subdir(
   r.in.lidar

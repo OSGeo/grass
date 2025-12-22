@@ -45,7 +45,7 @@ def check_granularity_string(granularity, temporal_type) -> bool:
                           absolute
     :return: True if valid, False if invalid
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> check_granularity_string("1 year", "absolute")
         True
@@ -120,7 +120,7 @@ def get_time_tuple_function(maps):
     :param maps: a list of AbstractDataset objects or database rows
     :return: A function
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> from grass.temporal.abstract_map_dataset import AbstractMapDataset
         >>> maps = AbstractMapDataset()
@@ -159,7 +159,7 @@ def _is_after(start, start1, end1) -> bool:
     :param end1: datetime object (>= start1) or None for comparison
     :return: bool
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> from datetime import datetime
         >>> start = datetime(2024, 1, 1)
@@ -192,7 +192,7 @@ def compute_relative_time_granularity(maps):
     :return: An integer
 
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> import grass.temporal as tgis
         >>> tgis.init()
@@ -202,7 +202,6 @@ def compute_relative_time_granularity(maps):
         ...     check = map.set_relative_time(i, i + 1, "seconds")
         ...     if check:
         ...         maps.append(map)
-        ...
         >>> tgis.compute_relative_time_granularity(maps)
         1
 
@@ -215,7 +214,6 @@ def compute_relative_time_granularity(maps):
         ...     if check:
         ...         maps.append(map)
         ...     count += 1
-        ...
         >>> tgis.compute_relative_time_granularity(maps)
         3
 
@@ -228,7 +226,6 @@ def compute_relative_time_granularity(maps):
         ...     if check:
         ...         maps.append(map)
         ...     count += 1
-        ...
         >>> tgis.compute_relative_time_granularity(maps)
         1
 
@@ -241,7 +238,6 @@ def compute_relative_time_granularity(maps):
         ...     if check:
         ...         maps.append(map)
         ...     count += 1
-        ...
         >>> tgis.compute_relative_time_granularity(maps)
         4
 
@@ -254,7 +250,6 @@ def compute_relative_time_granularity(maps):
         ...     if check:
         ...         maps.append(map)
         ...     count += 1
-        ...
         >>> tgis.compute_relative_time_granularity(maps)
         2
 
@@ -267,7 +262,6 @@ def compute_relative_time_granularity(maps):
         ...     if check:
         ...         maps.append(map)
         ...     count += 1
-        ...
         >>> tgis.compute_relative_time_granularity(maps)
         4
 
@@ -280,7 +274,6 @@ def compute_relative_time_granularity(maps):
         ...     if check:
         ...         maps.append(map)
         ...     count += 1
-        ...
         >>> tgis.compute_relative_time_granularity(maps)
         2
 
@@ -293,7 +286,6 @@ def compute_relative_time_granularity(maps):
         ...     if check:
         ...         maps.append(map)
         ...     count += 1
-        ...
         >>> tgis.compute_relative_time_granularity(maps)
         21
 
@@ -357,7 +349,7 @@ def compute_absolute_time_granularity(maps):
     :param maps: a ordered by start_time list of map objects or database rows
     :return: The temporal topology as string "integer unit"
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> import grass.temporal as tgis
         >>> import datetime
@@ -372,7 +364,6 @@ def compute_absolute_time_granularity(maps):
         ...     if check:
         ...         maps.append(map)
         ...     count += 1
-        ...
         >>> tgis.compute_absolute_time_granularity(maps)
         '1 month'
 
@@ -389,7 +380,6 @@ def compute_absolute_time_granularity(maps):
         ...     if check:
         ...         maps.append(map)
         ...     count += 1
-        ...
         >>> tgis.compute_absolute_time_granularity(maps)
         '1 day'
 
@@ -406,7 +396,6 @@ def compute_absolute_time_granularity(maps):
         ...     if check:
         ...         maps.append(map)
         ...     count += 1
-        ...
         >>> tgis.compute_absolute_time_granularity(maps)
         '30 seconds'
 
@@ -419,7 +408,6 @@ def compute_absolute_time_granularity(maps):
         ...     if check:
         ...         maps.append(map)
         ...     count += 1
-        ...
         >>> tgis.compute_absolute_time_granularity(maps)
         '2 hours'
 
@@ -435,7 +423,6 @@ def compute_absolute_time_granularity(maps):
         ...     if check:
         ...         maps.append(map)
         ...     count += 1
-        ...
         >>> tgis.compute_absolute_time_granularity(maps)
         '6 hours'
 
@@ -548,7 +535,7 @@ def compute_absolute_time_granularity(maps):
 def compute_common_relative_time_granularity(gran_list):
     """Compute the greatest common granule from a list of relative time granules
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> import grass.temporal as tgis
         >>> tgis.init()
@@ -581,7 +568,7 @@ def compute_common_absolute_time_granularity(gran_list, start_date_list=None):
     :param start_date_list: List of the start times of related space time datasets
     :return: The common granularity
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> from datetime import datetime
         >>> import grass.temporal as tgis
@@ -835,7 +822,7 @@ def compute_common_absolute_time_granularity_simple(gran_list):
     :param gran_list: List of granularities
     :return: The common granularity
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> import grass.temporal as tgis
         >>> tgis.init()
@@ -1096,7 +1083,7 @@ def gran_singular_unit(gran):
     :param gran: input granularity
     :return: granularity unit
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> import grass.temporal as tgis
         >>> tgis.init()
@@ -1139,7 +1126,7 @@ def gran_plural_unit(gran):
     :param gran: input granularity
     :return: granularity unit
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> import grass.temporal as tgis
         >>> tgis.init()
@@ -1186,7 +1173,7 @@ def gran_to_gran(from_gran, to_gran="days", shell: bool = False):
     :param to_gran: output granularity
     :return: The output granularity
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> import grass.temporal as tgis
         >>> tgis.init()

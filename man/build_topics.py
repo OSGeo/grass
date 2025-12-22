@@ -3,10 +3,10 @@
 # generates topics.html and topic_*.html
 # (c) 2012-2025 by the GRASS Development Team
 
+import glob
 import os
 import re
 import sys
-import glob
 from pathlib import Path
 
 year = os.getenv("VERSION_DATE")
@@ -17,26 +17,26 @@ min_num_modules_for_topic = 3
 def build_topics(ext):
     if ext == "html":
         from build_html import (
-            header1_tmpl,
-            headertopics_tmpl,
-            headerkey_tmpl,
             desc1_tmpl,
-            moduletopics_tmpl,
+            header1_tmpl,
+            headerkey_tmpl,
+            headertopics_tmpl,
             man_dir,
+            moduletopics_tmpl,
         )
     else:
         from build_md import (
-            header1_tmpl,
-            headertopics_tmpl,
-            headerkey_tmpl,
             desc1_tmpl,
-            moduletopics_tmpl,
+            header1_tmpl,
+            headerkey_tmpl,
+            headertopics_tmpl,
             man_dir,
+            moduletopics_tmpl,
         )
 
     keywords = {}
 
-    files = glob.glob1(man_dir, f"*.{ext}")
+    files = glob.glob(f"*.{ext}", root_dir=man_dir)
     for fname in files:
         with Path(man_dir, fname).open() as fil:
             # TODO maybe move to Python re (regex)
@@ -108,11 +108,10 @@ def build_topics(ext):
             keywords[key][fname] = desc
 
     with Path(man_dir, f"topics.{ext}").open("w") as topicsfile:
-        topicsfile.write(
-            header1_tmpl.substitute(
-                title="GRASS %s Reference Manual - Topics index" % grass_version
-            )
-        )
+        title = "Topics index"
+        if ext == "html":
+            title = f"GRASS {grass_version} Reference Manual - {title}"
+        topicsfile.write(header1_tmpl.substitute(title=title))
         topicsfile.write(headertopics_tmpl)
 
         for key, values in sorted(keywords.items(), key=lambda s: s[0].lower()):

@@ -2,6 +2,7 @@
 name: Post PR code suggestions
 
 on:
+  # zizmor: ignore[dangerous-triggers] Only selected workflows, and whitelisted input values are used
   workflow_run:
     workflows: ["ClangFormat Check", "Python Code Quality"]
     types:
@@ -19,14 +20,14 @@ jobs:
     steps:
       - name: Create a .git directory needed by reviewdog
         run: git init
-      - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         id: diff
         continue-on-error: true
         with:
           name: diff
           github-token: ${{ github.token }}
           run-id: ${{github.event.workflow_run.id }}
-      - uses: reviewdog/action-setup@e04ffabe3898a0af8d0fb1af00c188831c4b5893 # v1.3.2
+      - uses: reviewdog/action-setup@d8a7baabd7f3e8544ee4dbde3ee41d0011c3a93f # v1.5.0
       - name: Check what tools have suggestions to post
         # Using this pattern to have expected file names explicitly named
         id: tools

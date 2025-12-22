@@ -166,7 +166,7 @@ int main(int argc, char *argv[])
             char *buf;
 
             buf = (char *)G_malloc(strlen(pattern) + 3);
-            sprintf(buf, "{%s}", pattern);
+            snprintf(buf, (strlen(pattern) + 3), "{%s}", pattern);
 
             filter = G_ls_glob_filter(buf, 0, (int)flag.ignorecase->answer);
         }
@@ -188,7 +188,7 @@ int main(int argc, char *argv[])
                 char *buf;
 
                 buf = (char *)G_malloc(strlen(exclude) + 3);
-                sprintf(buf, "{%s}", exclude);
+                snprintf(buf, (strlen(exclude) + 3), "{%s}", exclude);
 
                 exclude_filter =
                     G_ls_glob_filter(buf, 1, (int)flag.ignorecase->answer);

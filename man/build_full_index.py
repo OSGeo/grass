@@ -6,25 +6,41 @@
 #   Markus Neteler
 #   Glynn Clements
 
-import sys
 import os
-
+import sys
 from datetime import date
 from operator import itemgetter
 
 from build import (
+    check_for_desc_override,
     get_files,
-    write_footer,
-    write_header,
     grass_version,
     grass_version_major,
     grass_version_minor,
-    check_for_desc_override,
     replace_file,
+    write_footer,
+    write_header,
 )
 
 CORE_TEXT = """\
 # Tools
+
+GRASS offers a comprehensive set of tools for geospatial processing, modeling,
+analysis, and visualization. These tools are categorized by data type,
+with prefixes indicating their respective categories. Use the table below to explore
+the main tool categories:
+
+| Prefix | Category                          | Description                        |
+|--------|-----------------------------------|------------------------------------|
+| `g.`   | [General](general.md)             | General GIS management tools       |
+| `r.`   | [Raster](raster.md)               | Raster data processing tools       |
+| `r3.`  | [3D raster](raster3d.md)          | 3D Raster data processing tools    |
+| `v.`   | [Vector](vector.md)               | Vector data processing tools       |
+| `i.`   | [Imagery](imagery.md)             | Imagery processing tools           |
+| `t.`   | [Temporal](temporal.md)           | Temporal data processing tools     |
+| `db.`  | [Database](database.md)           | Database management tools          |
+| `d.`   | [Display](display.md)             | Display and visualization tools    |
+| `m.`   | [Miscellaneous](miscellaneous.md) | Miscellaneous tools                |
 """
 
 ADDONS_TEXT = """\
@@ -58,19 +74,19 @@ def build_full_index(ext, index_name, source_dir, year, text_type):
     """Generate index with all tools"""
     if ext == "html":
         from build_html import (
-            man_dir,
-            full_index_header,
             cmd2_tmpl,
             desc1_tmpl,
+            full_index_header,
             get_desc,
+            man_dir,
             toc,
         )
     else:
         from build_md import (
-            man_dir,
             cmd2_tmpl,
             desc1_tmpl,
             get_desc,
+            man_dir,
         )
 
     if source_dir is None:
@@ -158,7 +174,7 @@ def main():
     source_dir = None
     text_type = "core"
     if len(sys.argv) > 1:
-        if sys.argv[1] in ["html", "md"]:
+        if sys.argv[1] in {"html", "md"}:
             ext = sys.argv[1]
         else:
             year = sys.argv[1]
@@ -179,7 +195,7 @@ def main():
                 source_dir=source_dir,
                 text_type=text_type,
             )
-    elif ext in ["html", "md"]:
+    elif ext in {"html", "md"}:
         build_full_index(
             ext,
             index_name=index_name,

@@ -1,7 +1,7 @@
 ## DESCRIPTION
 
 *i.band.library* prints available band information of multispectral data
-defined by GRASS GIS. The following multispectral sensors are supported
+defined by GRASS. The following multispectral sensors are supported
 by default (other band reference registry files can be added, see
 below):
 
@@ -101,7 +101,7 @@ API](https://developers.google.com/earth-engine/tutorial_api_04) for
 example) to address multi spectral satellite images series. GRASS
 supports a multi-band raster layer approach basically with the imagery
 group concept (*[i.group](i.group.md)*). A new semantic label concept is
-designed in order to support image collections in GRASS GIS.
+designed in order to support image collections in GRASS.
 
 ### Band reference registry files
 
@@ -160,7 +160,7 @@ Band reference identifier defined by **pattern** option is given by a
 *shortcut* in order to print band reference information for whole series
 or by specific *shortcut*\_*band* identifier.
 
-System-defined registry files are located in GRASS GIS installation
+System-defined registry files are located in GRASS installation
 directory (`$GISBASE/etc/i.band.library`). Note that currently
 *i.band.library* allows managing only system-defined registry files.
 Support for user-defined registry files is planned to be implemented,

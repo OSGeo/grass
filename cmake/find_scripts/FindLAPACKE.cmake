@@ -75,7 +75,12 @@ if(CBLAS_PREFER_PKGCONFIG)
     if(PKGC_LAPACKE_FOUND)
       set(LAPACKE_FOUND ${PKGC_LAPACKE_FOUND})
       set(LAPACKE_LIBRARIES "${PKGC_LAPACKE_LINK_LIBRARIES}")
-      set(LAPACKE_INCLUDEDIR "${PKGC_LAPACKE_INCLUDEDIR}")
+      if(MSVC)
+        # MSVC needs msvc/lapacke.h to define custom complex types
+        set(LAPACKE_INCLUDEDIR "${CMAKE_SOURCE_DIR}/msvc;${PKGC_LAPACKE_INCLUDEDIR}")
+      else()
+        set(LAPACKE_INCLUDEDIR "${PKGC_LAPACKE_INCLUDEDIR}")
+      endif()
       set(LAPACKE_INCLUDE_DIRS ${PKGC_LAPACKE_INCLUDEDIR}
                                ${PKGC_LAPACKE_INCLUDE_DIRS})
       set(LAPACKE_VERSION ${PKGC_LAPACKE_VERSION})

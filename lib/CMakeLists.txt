@@ -24,14 +24,15 @@ build_program_in_subdir(external/parson/test NAME test.gjson.lib DEPENDS grass_g
 
 build_library_in_subdir(
   raster
-  DEFS
-  "-DGDAL_LINK=1"
   DEPENDS
+  ${LIBM}
   GDAL::GDAL
   PROJ::proj
   grass_gis
   grass_gproj
-  grass_parson)
+  grass_parson
+  OPTIONAL_DEPENDS
+  OPENMP)
 
 if(TARGET LAPACKE)
   target_link_libraries(grass_raster PRIVATE LAPACKE)
@@ -168,14 +169,21 @@ build_library_in_subdir(
   HEADERS
   "lidar.h")
 
-build_library_in_subdir(raster3d NAME grass_raster3d DEPENDS grass_raster
-                        grass_gis)
+build_library_in_subdir(
+  raster3d
+  NAME
+  grass_raster3d
+  DEPENDS
+  ${LIBM}
+  grass_raster
+  grass_gis)
 
 build_program_in_subdir(
   raster3d/test
   NAME
   test.raster3d.lib
   DEPENDS
+  ${LIBM}
   grass_gis
   grass_interpfl
   grass_raster
@@ -197,7 +205,7 @@ build_library_in_subdir(
 
 build_library_in_subdir(dspf DEPENDS grass_gis)
 
-build_library_in_subdir(symbol NAME grass_symb DEPENDS grass_gis)
+build_library_in_subdir(symbol NAME grass_symb DEPENDS grass_gis ${LIBM})
 add_custom_command(
   TARGET grass_symb
   POST_BUILD
@@ -212,9 +220,9 @@ add_subdirectory(init)
 
 build_library_in_subdir(cdhc DEPENDS grass_gis grass_raster)
 
-build_library_in_subdir(stats DEPENDS grass_gis grass_raster)
+build_library_in_subdir(stats DEPENDS grass_gis grass_raster ${LIBM})
 
-build_library_in_subdir(arraystats DEPENDS grass_gis)
+build_library_in_subdir(arraystats DEPENDS grass_gis ${LIBM})
 
 if(WITH_OPENGL)
   build_library_in_subdir(
@@ -257,4 +265,4 @@ file(COPY manage/element_list DESTINATION ${OUTDIR}/${GRASS_INSTALL_ETCDIR})
 install(FILES ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/element_list
         DESTINATION ${GRASS_INSTALL_ETCDIR})
 
-build_library_in_subdir(calc DEPENDS grass_raster grass_gis)
+build_library_in_subdir(calc DEPENDS grass_raster grass_gis ${LIBM})

@@ -31,7 +31,7 @@
 
 #define SEP "-----------------------------------\n"
 
-#if !defined HAVE_OGR || !defined HAVE_POSTGRES
+#if !defined HAVE_POSTGRES
 static int format(struct Map_info *Map UNUSED, int build UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
@@ -39,21 +39,14 @@ static int format(struct Map_info *Map UNUSED, int build UNUSED)
 }
 #endif
 
-static int (*Build_array[])(struct Map_info *, int) = {Vect_build_nat
-#ifdef HAVE_OGR
-                                                       ,
-                                                       Vect_build_ogr,
-                                                       Vect_build_ogr
-#else
-                                                       ,
-                                                       format, format
-#endif
+static int (*Build_array[])(struct Map_info *, int) = {
+    Vect_build_nat, Vect_build_ogr, Vect_build_ogr
 #ifdef HAVE_POSTGRES
-                                                       ,
-                                                       Vect_build_pg
+    ,
+    Vect_build_pg
 #else
-                                                       ,
-                                                       format
+    ,
+    format
 #endif
 };
 
@@ -840,8 +833,8 @@ void Vect__build_downgrade(struct Map_info *Map, int build)
    - GV_BUILD_CENTROIDS - assign centroids to areas, build category index;
    - GV_BUILD_ALL - top level, the same as GV_BUILD_CENTROIDS.
 
-   If functions is called with build lower than current value of the
-   Map, the level is downgraded to requested value.
+   If the function is called with build level lower than the current value of
+   the Map, the level is downgraded to the requested value.
 
    All calls to Vect_write_line(), Vect_rewrite_line(),
    Vect_delete_line() respect the last value of build used in this

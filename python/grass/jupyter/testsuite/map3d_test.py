@@ -18,8 +18,6 @@
 
 """Test of 3D renderer"""
 
-import os
-import sys
 import unittest
 from pathlib import Path
 
@@ -74,13 +72,7 @@ class TestMap3D(TestCase):
         """After each run, remove the created files if exist"""
         for file in self.files:
             file = Path(file)
-            if sys.version_info < (3, 8):
-                try:
-                    os.remove(file)
-                except FileNotFoundError:
-                    pass
-            else:
-                file.unlink(missing_ok=True)
+            file.unlink(missing_ok=True)
 
     @xfail_windows
     def test_defaults(self):
@@ -134,6 +126,20 @@ class TestMap3D(TestCase):
         renderer = gj.Map3D()
         renderer.render(elevation_map="elevation", color_map="elevation")
         self.assertIsNone(renderer.show(), "Failed to create IPython Image object")
+
+    def test_save_file(self):
+        """Test saving of file"""
+        grass_renderer = gj.Map3D()
+        # Add a vector and a raster to the map
+        grass_renderer.render(
+            elevation_map="elevation", color_map="elevation", perspective=20
+        )
+        custom_filename = "test_filename_save.png"
+        grass_renderer.save(custom_filename)
+        # Add files to self for cleanup later
+        self.files.append(custom_filename)
+        # Ensure the image was created
+        self.assertFileExists(custom_filename)
 
 
 if __name__ == "__main__":

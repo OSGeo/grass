@@ -1479,7 +1479,7 @@ class GeoreferencedFilePage(TitledPage):
         event.Skip()
 
     def OnPageChanging(self, event: WizardEvent) -> None:
-        if event.GetDirection() and not os.path.isfile(self.georeffile):
+        if event.GetDirection() and not Path(self.georeffile).is_file():
             event.Veto()
         self.GetNext().SetPrev(self)
 
@@ -1487,7 +1487,7 @@ class GeoreferencedFilePage(TitledPage):
         """File changed"""
         self.georeffile = event.GetString()
         nextButton = wx.FindWindowById(wx.ID_FORWARD)
-        if len(self.georeffile) > 0 and os.path.isfile(self.georeffile):
+        if len(self.georeffile) > 0 and Path(self.georeffile).is_file():
             if not nextButton.IsEnabled():
                 nextButton.Enable(True)
         elif nextButton.IsEnabled():
@@ -1916,7 +1916,8 @@ class IAUPage(TitledPage):
             # convert them:
             ret, projlabel, err = RunCommand(
                 "g.proj",
-                flags="jft",
+                flags="ftp",
+                format="proj4",
                 proj4=self.epsgparams,
                 datum_trans=self.parent.datum_trans,
                 getErrorMsg=True,
@@ -2133,7 +2134,8 @@ class CustomPage(TitledPage):
                 # convert them:
                 ret, projlabel, err = RunCommand(
                     "g.proj",
-                    flags="jft",
+                    flags="ftp",
+                    format="proj4",
                     proj4=self.customstring,
                     datum_trans=dtrans,
                     getErrorMsg=True,
@@ -2297,7 +2299,11 @@ class SummaryPage(TitledPage):
                     extra_opts["datum_trans"] = dtrans
 
                 ret, projlabel, err = RunCommand(
-                    "g.proj", flags="jf", proj4=proj4string, **extra_opts
+                    "g.proj",
+                    flags="fp",
+                    format="proj4",
+                    proj4=proj4string,
+                    **extra_opts,
                 )
             elif coordsys == "iau":
                 if len(datum) > 0:
@@ -2305,12 +2311,17 @@ class SummaryPage(TitledPage):
                     extra_opts["datum_trans"] = dtrans
 
                 ret, projlabel, err = RunCommand(
-                    "g.proj", flags="jf", proj4=iauproj4string, **extra_opts
+                    "g.proj",
+                    flags="fp",
+                    format="proj4",
+                    proj4=iauproj4string,
+                    **extra_opts,
                 )
             elif coordsys == "epsg":
                 ret, projlabel, err = RunCommand(
                     "g.proj",
-                    flags="jft",
+                    flags="ftp",
+                    format="proj4",
                     epsg=epsgcode,
                     datum_trans=dtrans,
                     **extra_opts,
@@ -2318,14 +2329,16 @@ class SummaryPage(TitledPage):
             elif coordsys == "file":
                 ret, projlabel, err = RunCommand(
                     "g.proj",
-                    flags="jft",
+                    flags="ftp",
+                    format="proj4",
                     georef=self.parent.filepage.georeffile,
                     **extra_opts,
                 )
             elif coordsys == "wkt":
                 ret, projlabel, err = RunCommand(
                     "g.proj",
-                    flags="jft",
+                    flags="ftp",
+                    format="proj4",
                     wkt="-",
                     stdin=self.parent.wktpage.wktstring,
                     **extra_opts,
@@ -2631,7 +2644,7 @@ class LocationWizard(wx.Object):
         location = self.startpage.location
 
         # location already exists?
-        if os.path.isdir(os.path.join(database, location)):
+        if Path(database, location).is_dir():
             GError(
                 parent=self.wizard,
                 message="%s <%s>: %s"
@@ -2647,10 +2660,10 @@ class LocationWizard(wx.Object):
         current_gdb = decode(grass.gisenv()["GISDBASE"])
         if current_gdb != database:
             # change to new GISDbase or create new one
-            if not os.path.isdir(database):
+            if not Path(database).is_dir():
                 # create new directory
                 try:
-                    os.mkdir(database)
+                    Path(database).mkdir()
                 except OSError as error:
                     GError(
                         parent=self.wizard,
@@ -2717,8 +2730,9 @@ class LocationWizard(wx.Object):
                     desc=self.startpage.locTitle,
                 )
             elif coordsys == "file":
-                if not self.filepage.georeffile or not os.path.isfile(
-                    self.filepage.georeffile
+                if (
+                    not self.filepage.georeffile
+                    or not Path(self.filepage.georeffile).is_file()
                 ):
                     return _("File <%s> not found.") % self.filepage.georeffile
 

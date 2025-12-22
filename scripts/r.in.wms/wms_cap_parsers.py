@@ -17,7 +17,7 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (Mentor: Martin Landa)
 """
 
-import pathlib
+from pathlib import Path
 
 from xml.etree.ElementTree import ParseError
 
@@ -30,7 +30,7 @@ class BaseCapabilitiesTree(ET.ElementTree):
         """!Initialize xml.etree.ElementTree"""
         is_file = False
         try:
-            xml = pathlib.Path(cap_file)
+            xml = Path(cap_file)
             if xml.exists():
                 is_file = True
         except OSError as exc:
@@ -88,7 +88,7 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
             If the capabilities file cannot be parsed if it raises
             xml.etree.ElementTree.ParseError.
 
-        The class manges inheritance in 'Layer' elements. Inherited elements
+        The class manages inheritance in 'Layer' elements. Inherited elements
         are added to 'Layer' element.
         The class also removes elements which are in invalid form and are needed
         by wxGUI capabilities dialog.
@@ -233,17 +233,17 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
                 continue
 
             is_there = False
-            for _elem in elem:
+            for elem_ in elem:
                 cmp_text = None
                 if cmp_type == "attribute":
-                    if add_arg in _elem.attrib:
-                        cmp_text = _elem.attrib[add_arg]
+                    if add_arg in elem_.attrib:
+                        cmp_text = elem_.attrib[add_arg]
 
                 elif cmp_type == "element_content":
-                    cmp_text = _elem.text
+                    cmp_text = elem_.text
 
                 elif cmp_type == "child_element_content":
-                    cmp = _elem.find(self.xml_ns.Ns(add_arg))
+                    cmp = elem_.find(self.xml_ns.Ns(add_arg))
                     if cmp is not None:
                         cmp_text = cmp.text
 

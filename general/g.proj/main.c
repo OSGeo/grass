@@ -35,26 +35,22 @@ int main(int argc, char *argv[])
         *printproj4,        /* Print projection in PROJ.4 format        */
         *datuminfo,         /* Check if datum information is present    */
         *create,            /* Create new projection files              */
-#ifdef HAVE_OGR
-        *printwkt,  /* Print projection in WKT format           */
-        *esristyle, /* Use ESRI-style WKT format                */
-#endif
-        *dontprettify,    /* Print 'flat' output (no linebreaks)      */
-        *forcedatumtrans; /* Force override of datumtrans parameters  */
+        *printwkt,          /* Print projection in WKT format           */
+        *esristyle,         /* Use ESRI-style WKT format                */
+        *dontprettify,      /* Print 'flat' output (no linebreaks)      */
+        *forcedatumtrans;   /* Force override of datumtrans parameters  */
 
     struct Option *location, /* Name of new location to create           */
-#ifdef HAVE_OGR
-        *insrid,  /* spatial reference id (auth name + code   */
-        *inepsg,  /* EPSG projection code                     */
-        *inwkt,   /* Input file with projection in WKT format */
-        *inproj4, /* Projection in PROJ.4 format              */
-        *ingeo,   /* Input geo-referenced file readable by
-                   * GDAL or OGR                              */
-#endif
-        *listcodes, /* list codes of given authority */
-        *datum,     /* datum to add (or replace existing datum) */
-        *dtrans,    /* index to datum transform option          */
-        *format;    /* output format */
+        *insrid,             /* spatial reference id (auth name + code   */
+        *inepsg,             /* EPSG projection code                     */
+        *inwkt,              /* Input file with projection in WKT format */
+        *inproj4,            /* Projection in PROJ.4 format              */
+        *ingeo,              /* Input geo-referenced file readable by
+                              * GDAL or OGR                              */
+        *listcodes,          /* list codes of given authority */
+        *datum,              /* datum to add (or replace existing datum) */
+        *dtrans,             /* index to datum transform option          */
+        *format;             /* output format */
     struct GModule *module;
 
     int formats;
@@ -71,28 +67,23 @@ int main(int argc, char *argv[])
     G_add_keyword(_("general"));
     G_add_keyword(_("projection"));
     G_add_keyword(_("create project"));
-#ifdef HAVE_OGR
     module->label = _("Prints or modifies GRASS projection information files "
                       "(in various co-ordinate system descriptions).");
     module->description = _("Can also be used to create new GRASS projects.");
-#else
-    module->description =
-        _("Prints and manipulates GRASS projection information files.");
-#endif
 
     printinfo = G_define_flag();
     printinfo->key = 'p';
     printinfo->guisection = _("Print");
-    printinfo->description =
-        _("Print projection information in conventional GRASS format");
+    printinfo->description = _("Print projection information");
 
     shellinfo = G_define_flag();
     shellinfo->key = 'g';
     shellinfo->guisection = _("Print");
-    shellinfo->description =
-        _("[DEPRECATED] Print projection information in shell script style. "
-          "This flag is obsolete and will be removed in a future release. Use "
-          "format=shell instead.");
+    shellinfo->label =
+        _("Print projection information in shell script style [deprecated]");
+    shellinfo->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=shell instead.");
 
     datuminfo = G_define_flag();
     datuminfo->key = 'd';
@@ -103,30 +94,26 @@ int main(int argc, char *argv[])
     printproj4 = G_define_flag();
     printproj4->key = 'j';
     printproj4->guisection = _("Print");
-    printproj4->description =
-        _("[DEPRECATED] Print projection information in PROJ.4 format. "
-          "This flag is obsolete and will be removed in a future release. Use "
-          "format=proj4 instead.");
+    printproj4->label =
+        _("Print projection information in PROJ.4 format [deprecated]");
+    printproj4->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=proj4 instead.");
 
     dontprettify = G_define_flag();
     dontprettify->key = 'f';
     dontprettify->guisection = _("Print");
-#ifdef HAVE_OGR
     dontprettify->description = _("Print 'flat' output with no linebreaks "
                                   "(applies to WKT and PROJ.4 output)");
-#else
-    dontprettify->description =
-        _("Print 'flat' output with no linebreaks (applies to PROJ.4 output)");
-#endif
 
-#ifdef HAVE_OGR
     printwkt = G_define_flag();
     printwkt->key = 'w';
     printwkt->guisection = _("Print");
-    printwkt->description =
-        _("[DEPRECATED] Print projection information in WKT format. "
-          "This flag is obsolete and will be removed in a future release. Use "
-          "format=wkt instead.");
+    printwkt->label =
+        _("Print projection information in WKT format [deprecated]");
+    printwkt->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=wkt instead.");
 
     esristyle = G_define_flag();
     esristyle->key = 'e';
@@ -179,7 +166,6 @@ int main(int argc, char *argv[])
     inepsg->options = "1-1000000";
     inepsg->guisection = _("Specification");
     inepsg->description = _("EPSG projection code");
-#endif
 
     listcodes = G_define_option();
     listcodes->key = "list_codes";
@@ -233,20 +219,23 @@ int main(int argc, char *argv[])
     location->description = _("Name of new project (location) to create");
 
     format = G_define_standard_option(G_OPT_F_FORMAT);
-    format->options = "plain,shell,json,wkt,proj4";
-    format->descriptions = _("plain;Human readable text output;"
-                             "shell;shell script style text output;"
-                             "json;JSON (JavaScript Object Notation);"
-                             "wkt;Well-known text output;"
-                             "proj4;PROJ.4 style text output;");
+    format->options = "plain,shell,wkt,projjson,proj4";
+    format->descriptions =
+        _("plain;Human readable text output;"
+          "shell;shell script style text output;"
+          "wkt;Well-known text output;"
+          "projjson;JSON (JavaScript Object Notation) version of WKT;"
+          "proj4;PROJ.4 style text output;");
     format->guisection = _("Print");
+
+    G_option_exclusive(printinfo, datuminfo, create, NULL);
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
     /* Initialisation & Validation */
 
-    if (strcmp(format->answer, "json") == 0) {
+    if (strcmp(format->answer, "projjson") == 0) {
         outputFormat = JSON;
     }
     else if (strcmp(format->answer, "shell") == 0) {
@@ -269,19 +258,25 @@ int main(int argc, char *argv[])
     }
 
     if (shellinfo->answer) {
-        G_warning(_("Flag 'g' is deprecated and will be removed in a future "
-                    "release. Please use format=shell instead."));
+        G_verbose_message(
+            _("Flag 'g' is deprecated and will be removed in a future "
+              "release. Please use format=shell instead."));
         outputFormat = SHELL;
     }
     else if (printproj4->answer) {
-        G_warning(_("Flag 'j' is deprecated and will be removed in a future "
-                    "release. Please use format=proj4 instead."));
+        G_verbose_message(
+            _("Flag 'j' is deprecated and will be removed in a future "
+              "release. Please use format=proj4 instead."));
         outputFormat = PROJ4;
     }
-    else if (printwkt->answer) {
-        G_warning(_("Flag 'w' is deprecated and will be removed in a future "
-                    "release. Please use format=wkt instead."));
+    else if (printwkt->answer || esristyle->answer) {
         outputFormat = WKT;
+
+        if (printwkt->answer) {
+            G_verbose_message(
+                _("Flag 'w' is deprecated and will be removed in a future "
+                  "release. Please use format=wkt instead."));
+        }
     }
 
     /* list codes for given authority */
@@ -290,7 +285,6 @@ int main(int argc, char *argv[])
         exit(EXIT_SUCCESS);
     }
 
-#ifdef HAVE_OGR
     /* -e implies -w */
     if (esristyle->answer && !printwkt->answer)
         printwkt->answer = 1;
@@ -326,10 +320,8 @@ int main(int argc, char *argv[])
     /* We can only have one input source, hence if..else construct */
 
     if (formats == 0)
-#endif
         /* Input is projection of current location */
         input_currloc();
-#ifdef HAVE_OGR
     else if (inwkt->answer)
         /* Input in WKT format */
         input_wkt(inwkt->answer);
@@ -345,7 +337,6 @@ int main(int argc, char *argv[])
     else
         /* Input from georeferenced file */
         input_georef(ingeo->answer);
-#endif
 
     /* Consistency Check */
 
@@ -361,26 +352,6 @@ int main(int argc, char *argv[])
     set_datumtrans(atoi(dtrans->answer), forcedatumtrans->answer);
 
     /* Output */
-    /* Only allow one output format at a time, to reduce confusion */
-    formats = ((printinfo->answer ? 1 : 0) + (shellinfo->answer ? 1 : 0) +
-               (datuminfo->answer ? 1 : 0) + (printproj4->answer ? 1 : 0) +
-#ifdef HAVE_OGR
-               (printwkt->answer ? 1 : 0) +
-#endif
-               (create->answer ? 1 : 0));
-    if (formats > 1) {
-#ifdef HAVE_OGR
-        G_fatal_error(_("Only one of -%c, -%c, -%c, -%c, -%c"
-                        " or -%c flags may be specified"),
-                      printinfo->key, shellinfo->key, datuminfo->key,
-                      printproj4->key, printwkt->key, create->key);
-#else
-        G_fatal_error(_("Only one of -%c, -%c, -%c, -%c"
-                        " or -%c flags may be specified"),
-                      printinfo->key, shellinfo->key, datuminfo->key,
-                      printproj4->key, create->key);
-#endif
-    }
     if ((printinfo->answer && outputFormat == PLAIN) || outputFormat == SHELL ||
         outputFormat == JSON)
         print_projinfo(outputFormat);
@@ -388,26 +359,17 @@ int main(int argc, char *argv[])
         print_datuminfo();
     else if (outputFormat == PROJ4)
         print_proj4(dontprettify->answer);
-#ifdef HAVE_OGR
     else if (outputFormat == WKT)
         print_wkt(esristyle->answer, dontprettify->answer);
-#endif
     else if (location->answer)
         create_location(location->answer);
     else if (create->answer)
         modify_projinfo();
     else
-#ifdef HAVE_OGR
         G_fatal_error(
             _("No output format specified. Define one of the options: "
               "plain, shell, json, wkt, or proj4 using the -%c flag."),
             printinfo->key);
-#else
-        G_fatal_error(
-            _("No output format specified. Define one of the options: "
-              "plain, shell, json, or proj4 using the -%c flag."),
-            printinfo->key);
-#endif
 
     /* Tidy Up */
     if (projinfo != NULL)

@@ -1,9 +1,9 @@
 ---
-description: Database management in GRASS GIS
+description: Database management in GRASS
 index: database
 ---
 
-# Database management in GRASS GIS
+# Database management in GRASS
 
 ## Attribute management in general
 
@@ -14,7 +14,7 @@ map (see [Vector introduction](vectorintro.md)).
 
 ## Available drivers
 
-Available drivers are listed in [SQL support in GRASS GIS](sql.md).
+Available drivers are listed in [SQL support in GRASS](sql.md).
 
 **Notes**:  
 The DBF driver provides only very limited SQL support (as DBF is not an
@@ -111,4 +111,3 @@ original MAPSET to the current MAPSET with [g.copy](g.copy.md).
 - [Introduction into image processing](imageryintro.md)
 - [Introduction into temporal data processing](temporalintro.md)
 - [Projections and spatial transformations](projectionintro.md)
-- [Graphical User Interface](wxguiintro.md)

@@ -22,7 +22,6 @@
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 
-#ifdef HAVE_OGR
 #include <cpl_csv.h>
 #include "local_proto.h"
 
@@ -30,7 +29,6 @@
 #define CSVDIR "/etc/proj/ogr_csv"
 
 static void DatumNameMassage(char **);
-#endif
 
 /* from proj-5.0.0/src/pj_units.c */
 struct gpj_units {
@@ -70,7 +68,6 @@ static char *grass_to_wkt(const struct Key_Value *proj_info,
                           const struct Key_Value *proj_epsg, int esri_style,
                           int prettify)
 {
-#ifdef HAVE_OGR
     OGRSpatialReferenceH hSRS;
     char *wkt, *local_wkt;
 
@@ -92,10 +89,6 @@ static char *grass_to_wkt(const struct Key_Value *proj_info,
     OSRDestroySpatialReference(hSRS);
 
     return local_wkt;
-#else
-    G_warning(_("GRASS is not compiled with OGR support"));
-    return NULL;
-#endif
 }
 
 /*!
@@ -155,7 +148,6 @@ char *GPJ_grass_to_wkt2(const struct Key_Value *proj_info,
     return grass_to_wkt(proj_info, proj_units, proj_epsg, esri_style, prettify);
 }
 
-#ifdef HAVE_OGR
 /*!
  * \brief Converts a GRASS co-ordinate system to an OGRSpatialReferenceH object.
  *
@@ -199,11 +191,7 @@ OGRSpatialReferenceH GPJ_grass_to_osr(const struct Key_Value *proj_info,
         G_warning(_("Unable get PROJ.4-style parameter string"));
         return NULL;
     }
-#ifdef HAVE_PROJ_H
     proj_destroy(pjinfo.pj);
-#else
-    pj_free(pjinfo.pj);
-#endif
 
     unit = G_find_key_value("unit", proj_units);
     unfact = G_find_key_value("meters", proj_units);
@@ -405,13 +393,17 @@ OGRSpatialReferenceH GPJ_grass_to_osr2(const struct Key_Value *proj_info,
  *
  * \param cellhd      Pointer to a GRASS Cell_head structure that will have its
  *                    projection-related members populated with appropriate
- * values \param projinfo   Pointer to a pointer which will have a GRASS
- * Key_Value structure allocated containing a set of GRASS PROJ_INFO values
- * \param projunits  Pointer to a pointer which will have a GRASS Key_Value
+ *                    values
+ * \param projinfo    Pointer to a pointer which will have a GRASS
+ *                    Key_Value structure allocated containing a set of GRASS
+ *                    PROJ_INFO values
+ * \param projunits   Pointer to a pointer which will have a GRASS Key_Value
  *                    structure allocated containing a set of GRASS PROJ_UNITS
- * values \param hSRS        OGRSpatialReferenceH object containing the
- * co-ordinate system to be converted \param datumtrans  Index number of datum
- * parameter set to use, 0 to leave unspecified
+ *                    values.
+ * \param hSRS1       OGRSpatialReferenceH object containing the
+ *                    co-ordinate system to be converted
+ * \param datumtrans  Index number of datum parameter set to use, 0 to leave
+ *                    unspecified
  *
  * \return            2 if a projected or lat/long co-ordinate system has been
  *                    defined
@@ -500,7 +492,8 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
                     /* use name of the projection as name for the coordinate
                      * system */
 
-                    sprintf(path, "%s/etc/proj/projections", G_gisbase());
+                    snprintf(path, sizeof(path), "%s/etc/proj/projections",
+                             G_gisbase());
                     if (G_lookup_key_value_from_file(path, pszProj, name,
                                                      sizeof(name)) > 0)
                         G_set_key_value("name", name, *projinfo);
@@ -635,7 +628,8 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 
             /* use name of the projection as name for the coordinate system */
 
-            sprintf(path, "%s/etc/proj/projections", G_gisbase());
+            snprintf(path, sizeof(path), "%s/etc/proj/projections",
+                     G_gisbase());
             if (G_lookup_key_value_from_file(path, pszProj, name,
                                              sizeof(name)) > 0)
                 G_set_key_value("name", name, *projinfo);
@@ -811,7 +805,7 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 
                 G_set_key_value("a", (char *)pszSemiMajor, *projinfo);
 
-                sprintf(es_str, "%.16g", es);
+                snprintf(es_str, sizeof(es_str), "%.16g", es);
                 G_set_key_value("es", es_str, *projinfo);
             }
             else {
@@ -827,9 +821,9 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
         if (GPJ__get_ellipsoid_params(temp_projinfo_ext, &a, &es, &rf)) {
             char parmstr[100];
 
-            sprintf(parmstr, "%.16g", a);
+            snprintf(parmstr, sizeof(parmstr), "%.16g", a);
             G_set_key_value("a", parmstr, *projinfo);
-            sprintf(parmstr, "%.16g", es);
+            snprintf(parmstr, sizeof(parmstr), "%.16g", es);
             G_set_key_value("es", parmstr, *projinfo);
         }
     }
@@ -926,7 +920,7 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
         G_set_key_value("units", pszUnitsPlural, *projunits);
         G_free(pszUnitsPlural);
 
-        sprintf(szFormatBuf, "%.16g", dfToMeters);
+        snprintf(szFormatBuf, sizeof(szFormatBuf), "%.16g", dfToMeters);
         G_set_key_value("meters", szFormatBuf, *projunits);
     }
 
@@ -954,7 +948,6 @@ default_to_xy:
 
     return 1;
 }
-#endif
 
 /*!
  * \brief Converts a WKT projection description to a GRASS co-ordinate system.
@@ -979,7 +972,6 @@ int GPJ_wkt_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
                      struct Key_Value **projunits, const char *wkt,
                      int datumtrans)
 {
-#ifdef HAVE_OGR
     int retval;
 
     if (wkt == NULL)
@@ -998,12 +990,8 @@ int GPJ_wkt_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
     }
 
     return retval;
-#else
-    return -1;
-#endif
 }
 
-#ifdef HAVE_OGR
 /* GPJ_set_csv_loc()
  * 'finder function' for use with OGR SetCSVFilenameHook() function */
 
@@ -1137,5 +1125,3 @@ static void DatumNameMassage(char **ppszDatum)
         }
     }
 }
-
-#endif /* HAVE_OGR */

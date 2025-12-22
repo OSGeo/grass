@@ -4,11 +4,10 @@ Created on Sun Jun 08 10:15:22 2018
 @author: Sanjeet Bhatti
 """
 
+from pathlib import Path
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
-
-import os
 
 
 class TestRPack(TestCase):
@@ -28,8 +27,7 @@ class TestRPack(TestCase):
         """Remove temporary region. Delete output file"""
         cls.del_temp_region()
 
-        if os.path.isfile(cls.outFile):
-            os.remove(cls.outFile)
+        Path(cls.outFile).unlink(missing_ok=True)
 
     def test_r_pack(self):
         """Create a pack file test"""

@@ -14,14 +14,12 @@ License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 """
 
-import unittest
 import os
 import shutil
 import subprocess
-from grass.gunittest.utils import xfail_windows
+import unittest
 
-
-# Note that unlike rest of GRASS GIS, here we are using unittest package
+# Note that unlike rest of GRASS, here we are using unittest package
 # directly. The grass.gunittest machinery for mapsets is not needed here.
 # How this plays out together with the rest of testing framework is yet to be
 # determined.
@@ -30,8 +28,10 @@ from grass.gunittest.utils import xfail_windows
 class TestTmpMapset(unittest.TestCase):
     """Tests --tmp-mapset option of grass command"""
 
-    # TODO: here we need a name of or path to the main GRASS GIS executable
-    executable = "grass"
+    # TODO: here we need a name of or path to the main GRASS executable
+    # TODO: support OSGeo4W executable with:
+    # executable = "grass" if os.name != "nt" else "grass85.bat"
+    executable = "grass" if os.name != "nt" else "grass.bat"
     # an arbitrary, but identifiable and fairly unique name
     location = "test_tmp_mapset_xy"
 
@@ -44,7 +44,6 @@ class TestTmpMapset(unittest.TestCase):
         """Deletes the location"""
         shutil.rmtree(self.location, ignore_errors=True)
 
-    @xfail_windows
     def test_command_runs(self):
         """Check that correct parameters are accepted"""
         return_code = subprocess.call(
@@ -59,7 +58,6 @@ class TestTmpMapset(unittest.TestCase):
             ),
         )
 
-    @xfail_windows
     def test_command_fails_without_location(self):
         """Check that the command fails with a nonexistent location"""
         return_code = subprocess.call(
@@ -81,7 +79,6 @@ class TestTmpMapset(unittest.TestCase):
             ),
         )
 
-    @xfail_windows
     def test_mapset_metadata_correct(self):
         """Check that metadata is readable and have expected value (XY CRS)"""
         output = subprocess.check_output(
@@ -95,7 +92,6 @@ class TestTmpMapset(unittest.TestCase):
             ),
         )
 
-    @xfail_windows
     def test_mapset_deleted(self):
         """Check that mapset is deleted at the end of execution"""
         subprocess.check_call(

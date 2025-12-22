@@ -22,7 +22,7 @@ footer_tmpl = string.Template(
 | <a href="../keywords.html">Keywords Index</a>
 | <a href="../full_index.html">Full Index</a></p>
 <p>&copy; 2003-${year} <a href="https://grass.osgeo.org">GRASS Development Team</a>,
-GRASS GIS ${grass_version} Reference Manual</p>
+GRASS ${grass_version} Documentation</p>
 {% endblock %}
 """
 )
@@ -95,7 +95,7 @@ exclude_patterns = ["_build"]
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
-# default_role = None
+default_role = "literal"
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
 # add_function_parentheses = True
@@ -264,7 +264,7 @@ texinfo_documents = [
         project,
         "GRASS Development Team",
         "wxGUI",
-        "Documentation for GRASS GIS wxGUI Python code.",
+        "Documentation for GRASS wxGUI Python code.",
         "Miscellaneous",
     ),
 ]

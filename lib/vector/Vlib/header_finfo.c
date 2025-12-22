@@ -37,9 +37,6 @@
 const char *Vect_get_finfo_dsn_name(struct Map_info *Map)
 {
     if (Map->format == GV_FORMAT_OGR || Map->format == GV_FORMAT_OGR_DIRECT) {
-#ifndef HAVE_OGR
-        G_warning(_("GRASS is not compiled with OGR support"));
-#endif
         return Map->fInfo.ogr.dsn;
     }
     else if (Map->format == GV_FORMAT_POSTGIS) {
@@ -77,9 +74,6 @@ char *Vect_get_finfo_layer_name(struct Map_info *Map)
 
     name = NULL;
     if (Map->format == GV_FORMAT_OGR || Map->format == GV_FORMAT_OGR_DIRECT) {
-#ifndef HAVE_OGR
-        G_warning(_("GRASS is not compiled with OGR support"));
-#endif
         name = G_store(Map->fInfo.ogr.layer_name);
     }
     else if (Map->format == GV_FORMAT_POSTGIS) {
@@ -110,21 +104,13 @@ char *Vect_get_finfo_layer_name(struct Map_info *Map)
 const char *Vect_get_finfo_format_info(struct Map_info *Map)
 {
     if (Map->format == GV_FORMAT_OGR || Map->format == GV_FORMAT_OGR_DIRECT) {
-#ifndef HAVE_OGR
-        G_warning(_("GRASS is not compiled with OGR support"));
-#else
         if (!Map->fInfo.ogr.ds)
             return NULL;
 
         return OGR_Dr_GetName(OGR_DS_GetDriver(Map->fInfo.ogr.ds));
-#endif
     }
     else if (Map->format == GV_FORMAT_POSTGIS) {
-#ifndef HAVE_OGR
-        G_warning(_("GRASS is not compiled with PostgreSQL support"));
-#else
         return "PostgreSQL";
-#endif
     }
 
     return NULL;
@@ -149,9 +135,6 @@ const char *Vect_get_finfo_geometry_type(struct Map_info *Map)
 
     ftype_tmp = ftype = NULL;
     if (Map->format == GV_FORMAT_OGR || Map->format == GV_FORMAT_OGR_DIRECT) {
-#ifndef HAVE_OGR
-        G_warning(_("GRASS is not compiled with OGR support"));
-#else
         OGRwkbGeometryType Ogr_geom_type;
         OGRFeatureDefnH Ogr_feature_defn;
 
@@ -164,7 +147,6 @@ const char *Vect_get_finfo_geometry_type(struct Map_info *Map)
         Ogr_geom_type = wkbFlatten(OGR_FD_GetGeomType(Ogr_feature_defn));
 
         ftype_tmp = G_store(OGRGeometryTypeToName(Ogr_geom_type));
-#endif
     }
     else if (Map->format == GV_FORMAT_POSTGIS) {
 #ifndef HAVE_POSTGRES
@@ -177,10 +159,10 @@ const char *Vect_get_finfo_geometry_type(struct Map_info *Map)
         PGresult *res;
 
         pg_info = &(Map->fInfo.pg);
-        sprintf(stmt,
-                "SELECT type,coord_dimension FROM geometry_columns "
-                "WHERE f_table_schema = '%s' AND f_table_name = '%s'",
-                pg_info->schema_name, pg_info->table_name);
+        snprintf(stmt, sizeof(stmt),
+                 "SELECT type,coord_dimension FROM geometry_columns "
+                 "WHERE f_table_schema = '%s' AND f_table_name = '%s'",
+                 pg_info->schema_name, pg_info->table_name);
         G_debug(2, "SQL: %s", stmt);
 
         res = PQexec(pg_info->conn, stmt);
@@ -206,8 +188,9 @@ const char *Vect_get_finfo_geometry_type(struct Map_info *Map)
     G_str_to_lower(ftype);
 
     if (dim == 3) {
-        ftype_tmp = (char *)G_malloc(3 + strlen(ftype) + 1);
-        sprintf(ftype_tmp, "3D %s", ftype);
+        size_t len = 3 + strlen(ftype) + 1;
+        ftype_tmp = (char *)G_malloc(len);
+        snprintf(ftype_tmp, len, "3D %s", ftype);
         G_free(ftype);
         ftype = ftype_tmp;
     }
@@ -250,11 +233,7 @@ int Vect_get_finfo_topology_info(struct Map_info *Map, char **toposchema,
                                  char **topogeom, int *topo_geo_only)
 {
     if (Map->format == GV_FORMAT_OGR || Map->format == GV_FORMAT_OGR_DIRECT) {
-#ifndef HAVE_OGR
-        G_warning(_("GRASS is not compiled with OGR support"));
-#else
         return GV_TOPO_PSEUDO;
-#endif
     }
 
     if (Map->format == GV_FORMAT_POSTGIS) {

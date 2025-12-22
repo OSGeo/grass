@@ -29,8 +29,9 @@ void write_rgb_values(struct Map_info *Map, int layer, const char *column_name,
 
     ctype = db_column_Ctype(driver, fi->table, column_name);
     if (ctype == -1) {
-        sprintf(buf, "ALTER TABLE \"%s\" ADD COLUMN \"%s\" VARCHAR(11)",
-                fi->table, column_name);
+        snprintf(buf, sizeof(buf),
+                 "ALTER TABLE \"%s\" ADD COLUMN \"%s\" VARCHAR(11)", fi->table,
+                 column_name);
         db_set_string(&stmt, buf);
         if (db_execute_immediate(driver, &stmt) != DB_OK)
             G_fatal_error(_("Unable to add column <%s> to table <%s>"),
@@ -78,8 +79,9 @@ void write_rgb_values(struct Map_info *Map, int layer, const char *column_name,
                              colors) == 0)
             G_warning(_("No color value defined for category %d"), pval[i]);
 
-        sprintf(buf, "UPDATE %s SET \"%s\"='%d:%d:%d' WHERE %s=%d", fi->table,
-                column_name, red, grn, blu, fi->key, pval[i]);
+        snprintf(buf, sizeof(buf),
+                 "UPDATE %s SET \"%s\"='%d:%d:%d' WHERE %s=%d", fi->table,
+                 column_name, red, grn, blu, fi->key, pval[i]);
         G_debug(3, "\tSQL: %s", buf);
 
         db_set_string(&stmt, buf);

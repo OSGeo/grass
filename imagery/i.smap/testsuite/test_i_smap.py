@@ -4,7 +4,7 @@ from grass.gunittest.main import test
 
 
 class TestISmap(TestCase):
-    """Regression tests for i.smap GRASS GIS module."""
+    """Regression tests for i.smap GRASS module."""
 
     group_name = "test_smap_group"
     subgroup_name = "test_smap_subgroup"
@@ -32,7 +32,7 @@ class TestISmap(TestCase):
         )
         cls.runModule(
             "r.mapcalc",
-            expression=f"{cls.input_maps[2]} = 20 * exp(-((row() - 50)^2 + (col() - 50)^2) / 500)",
+            expression=f"{cls.input_maps[2]} = 20 * exp(-(((row() - 50)^2 + (col() - 50)^2) / 500))",
             overwrite=True,
         )
         cls.temp_rasters.extend(cls.input_maps)
