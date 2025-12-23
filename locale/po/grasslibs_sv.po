@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-06 15:40+0000\n"
+"POT-Creation-Date: 2025-12-13 22:01+0000\n"
 "PO-Revision-Date: 2025-10-26 23:01+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/sv/>\n"
@@ -4723,26 +4723,26 @@ msgstr "Det går inte att analysera filen GRASS PROJ_INFO"
 msgid "Unable get PROJ.4-style parameter string"
 msgstr "Det går inte att få en parametersträng i PROJ.4-stil"
 
-#: ../lib/proj/convert.c:209
+#: ../lib/proj/convert.c:205
 #, c-format
 msgid "OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
 msgstr "OGR kan inte tolka en parametersträng i PROJ.4-stil: %s (OGR:s felkod var %d)"
 
-#: ../lib/proj/convert.c:223
+#: ../lib/proj/convert.c:219
 #, c-format
 msgid "OGR can't get WKT-style parameter string (OGR Error code was %d)"
 msgstr "OGR kan inte hämta parametersträng i WKT-stil (OGR-felkoden var %d)"
 
-#: ../lib/proj/convert.c:466
+#: ../lib/proj/convert.c:462
 #, c-format
 msgid "Updating spatial reference with embedded proj4 definition failed. Proj4 definition: <%s>"
 msgstr "Uppdatering av spatial referens med inbäddad proj4-definition misslyckades. Proj4 definition: <%s>"
 
-#: ../lib/proj/convert.c:477
+#: ../lib/proj/convert.c:473
 msgid "Updating spatial reference with embedded proj4 definition"
 msgstr "Uppdatering av spatial referens med inbäddad proj4-definition"
 
-#: ../lib/proj/convert.c:615
+#: ../lib/proj/convert.c:611
 msgid "No projection name! Projection parameters likely to be meaningless."
 msgstr "Inget namn på projektionen! Projektionsparametrarna är sannolikt meningslösa."
 
@@ -4756,187 +4756,171 @@ msgstr "Det går inte att öppna datumtabellfilen <%s>"
 msgid "Error in datum table file <%s>, line %d"
 msgstr "Fel i datumtabellfil <%s>, rad %d"
 
-#: ../lib/proj/do_proj.c:103 ../lib/proj/do_proj.c:112
-#: ../lib/proj/do_proj.c:472 ../lib/proj/do_proj.c:478
-#: ../lib/proj/do_proj.c:523 ../lib/proj/do_proj.c:530
-#: ../lib/proj/do_proj.c:855 ../lib/proj/do_proj.c:870
-#: ../lib/proj/do_proj.c:882 ../lib/proj/do_proj.c:961
+#: ../lib/proj/do_proj.c:101 ../lib/proj/do_proj.c:110
+#: ../lib/proj/do_proj.c:460 ../lib/proj/do_proj.c:466
+#: ../lib/proj/do_proj.c:511 ../lib/proj/do_proj.c:518
+#: ../lib/proj/do_proj.c:838
 #, c-format
 msgid "proj_create() failed for '%s'"
 msgstr "proj_create() misslyckades för '%s'"
 
-#: ../lib/proj/do_proj.c:198
+#: ../lib/proj/do_proj.c:196
 #, c-format
 msgid "Invalid west longitude %g"
 msgstr "Ogiltig västlig longitud %g"
 
-#: ../lib/proj/do_proj.c:202
+#: ../lib/proj/do_proj.c:200
 #, c-format
 msgid "Invalid east longitude %g"
 msgstr "Ogiltig östlig longitud %g"
 
-#: ../lib/proj/do_proj.c:206
+#: ../lib/proj/do_proj.c:204
 #, c-format
 msgid "Invalid south latitude %g"
 msgstr "Ogiltig sydlig latitud %g"
 
-#: ../lib/proj/do_proj.c:210
+#: ../lib/proj/do_proj.c:208
 #, c-format
 msgid "Invalid north latitude %g"
 msgstr "Ogiltig nordlig latitud %g"
 
-#: ../lib/proj/do_proj.c:214
+#: ../lib/proj/do_proj.c:212
 #, c-format
 msgid "South %g is larger than north %g"
 msgstr "Syd %g är större än nord %g"
 
-#: ../lib/proj/do_proj.c:328
+#: ../lib/proj/do_proj.c:326
 #, c-format
 msgid "Unrecognized SRID '%s'"
 msgstr "Oigenkänd SRID '%s'"
 
-#: ../lib/proj/do_proj.c:342
+#: ../lib/proj/do_proj.c:340
 #, c-format
 msgid "Unrecognized WKT '%s'"
 msgstr "Oigenkänd WKT '%s'"
 
-#: ../lib/proj/do_proj.c:360
+#: ../lib/proj/do_proj.c:358
 msgid "Unable to create PROJ object"
 msgstr "Det går inte att skapa PROJ-objekt"
 
-#: ../lib/proj/do_proj.c:439
+#: ../lib/proj/do_proj.c:430
 msgid "Input coordinate system is NULL"
 msgstr "Inmatat koordinatsystem är NULL"
 
-#: ../lib/proj/do_proj.c:442
+#: ../lib/proj/do_proj.c:433
 msgid "Input coordinate system definition is NULL"
 msgstr "Definition av koordinatsystem för inmatning är NULL"
 
-#: ../lib/proj/do_proj.c:464
+#: ../lib/proj/do_proj.c:452
 msgid "A custom pipeline requires input and output projection info"
 msgstr "En anpassad pipeline kräver information om in- och utmatningsprojektion"
 
-#: ../lib/proj/do_proj.c:492
+#: ../lib/proj/do_proj.c:480
 #, c-format
 msgid "The transformation pipeline contains an '%s' step. Remove this step if easting and northing are swapped in the output."
 msgstr "Transformationspipelinen innehåller ett '%s'-steg. Ta bort detta steg om ost och nord är ombytta i utdata."
 
-#: ../lib/proj/do_proj.c:557
+#: ../lib/proj/do_proj.c:545
 #, c-format
 msgid "Unable to determine area of interest for '%s'"
 msgstr "Det går inte att fastställa intresseområdet för '%s'"
 
-#: ../lib/proj/do_proj.c:578
+#: ../lib/proj/do_proj.c:566
 #, c-format
 msgid "Input CRS not available for '%s'"
 msgstr "CRS-inmatning inte tillgänglig för '%s'"
 
-#: ../lib/proj/do_proj.c:599
+#: ../lib/proj/do_proj.c:587
 #, c-format
 msgid "Output CRS not available for '%s'"
 msgstr "CRS-utdata inte tillgänglig för '%s'"
 
-#: ../lib/proj/do_proj.c:625
+#: ../lib/proj/do_proj.c:613
 #, c-format
 msgid "Found %d possible transformations"
 msgstr "Hittade %d möjliga omvandlingar"
 
-#: ../lib/proj/do_proj.c:637
+#: ../lib/proj/do_proj.c:625
 #, c-format
 msgid "proj_normalize_for_visualization() failed for operation %d"
 msgstr "proj_normalize_for_visualization() misslyckades för operation %d"
 
-#: ../lib/proj/do_proj.c:649
+#: ../lib/proj/do_proj.c:637
 #, c-format
 msgid "Operation %d:"
 msgstr "Operation %d:"
 
-#: ../lib/proj/do_proj.c:651
+#: ../lib/proj/do_proj.c:639
 #, c-format
 msgid "Description: %s"
 msgstr "Beskrivning: %s"
 
-#: ../lib/proj/do_proj.c:656
+#: ../lib/proj/do_proj.c:644
 #, c-format
 msgid "Area of use: %s"
 msgstr "Användningsområde: %s"
 
-#: ../lib/proj/do_proj.c:660
+#: ../lib/proj/do_proj.c:648
 #, c-format
 msgid "Accuracy within area of use: %g m"
 msgstr "Noggrannhet inom användningsområdet: %g m"
 
-#: ../lib/proj/do_proj.c:668
+#: ../lib/proj/do_proj.c:655
 #, c-format
 msgid "Remarks: %s"
 msgstr "Anmärkningar: %s"
 
-#: ../lib/proj/do_proj.c:673
+#: ../lib/proj/do_proj.c:660
 #, c-format
 msgid "Scope: %s"
 msgstr "Scope: %s"
 
-#: ../lib/proj/do_proj.c:680
+#: ../lib/proj/do_proj.c:666
 msgid "PROJ string:"
 msgstr "PROJ string:"
 
-#: ../lib/proj/do_proj.c:687
+#: ../lib/proj/do_proj.c:673
 msgid "See also output of:"
 msgstr "Se även utmatning av:"
 
-#: ../lib/proj/do_proj.c:690
+#: ../lib/proj/do_proj.c:676
 #, c-format
 msgid "Please provide the appropriate PROJ string with the %s option"
 msgstr "Ange lämplig PROJ-sträng med alternativet %s"
 
-#: ../lib/proj/do_proj.c:816
+#: ../lib/proj/do_proj.c:799
 #, c-format
 msgid "proj_normalize_for_visualization() failed for '%s'"
 msgstr "proj_normalize_for_visualization() misslyckades för '%s'"
 
-#: ../lib/proj/do_proj.c:829
+#: ../lib/proj/do_proj.c:812
 #, c-format
 msgid "No PROJ definition for normalized version of '%s'"
 msgstr "Ingen PROJ-definition för normaliserad version av '%s'"
 
-#: ../lib/proj/do_proj.c:834
+#: ../lib/proj/do_proj.c:817
 msgid "Selected PROJ pipeline:"
 msgstr "Vald PROJ-pipeline:"
 
-#: ../lib/proj/do_proj.c:835
+#: ../lib/proj/do_proj.c:818
 #, c-format
 msgid "%s"
 msgstr "%s"
 
-#: ../lib/proj/do_proj.c:970
-#, c-format
-msgid "Unable to create latlong equivalent for '%s'"
-msgstr "Det går inte att skapa en latlong-ekvivalent för '%s'"
-
-#: ../lib/proj/do_proj.c:1020
+#: ../lib/proj/do_proj.c:883
 msgid "No input projection"
 msgstr "Ingen inmatningsprojektion"
 
-#: ../lib/proj/do_proj.c:1023 ../lib/proj/do_proj.c:1242
+#: ../lib/proj/do_proj.c:886 ../lib/proj/do_proj.c:1045
 msgid "No transformation object"
 msgstr "Inget transformationsobjekt"
 
-#: ../lib/proj/do_proj.c:1120 ../lib/proj/do_proj.c:1410
+#: ../lib/proj/do_proj.c:975 ../lib/proj/do_proj.c:1205
 #, c-format
 msgid "proj_trans() failed: %s"
 msgstr "proj_trans() misslyckades: %s"
 
-#: ../lib/proj/do_proj.c:1153
-msgid "No output projection"
-msgstr "Ingen utdataprojektion"
-
-#: ../lib/proj/do_proj.c:1182 ../lib/proj/do_proj.c:1463
-#: ../lib/proj/do_proj.c:1591 ../lib/proj/do_proj.c:1755
-#, c-format
-msgid "pj_transform() failed: %s"
-msgstr "pj_transform() misslyckades: %s"
-
-#: ../lib/proj/do_proj.c:1549 ../lib/proj/do_proj.c:1714
+#: ../lib/proj/do_proj.c:1290 ../lib/proj/do_proj.c:1411
 #, c-format
 msgid "proj_trans() failed: %d"
 msgstr "proj_trans() misslyckades: %d"
@@ -4958,42 +4942,37 @@ msgstr "Ogiltiga ellipsoiddeskriptorer (a, rf, es eller b) i filen"
 msgid "No ellipsoid info given in file"
 msgstr "Ingen information om ellipsoid finns i filen"
 
-#: ../lib/proj/get_proj.c:168
+#: ../lib/proj/get_proj.c:164
 #, c-format
 msgid "Invalid zone %s specified"
 msgstr "Ogiltig zon %s angiven"
 
-#: ../lib/proj/get_proj.c:259
+#: ../lib/proj/get_proj.c:246
 msgid "Unable to initialise PROJ with the following parameter list:"
 msgstr "Det går inte att initiera PROJ med följande parameterlista:"
 
-#: ../lib/proj/get_proj.c:268
-#, c-format
-msgid "The PROJ error message: %s"
-msgstr "PROJ felmeddelande: %s"
-
-#: ../lib/proj/get_proj.c:388
+#: ../lib/proj/get_proj.c:364
 msgid "Option input overflowed option table"
 msgstr "Alternativinmatning överflödade alternativtabell"
 
-#: ../lib/proj/get_proj.c:426 ../lib/proj/get_proj.c:445
+#: ../lib/proj/get_proj.c:399
 #, c-format
 msgid "Unable to initialize pj cause: %s"
 msgstr "Det går inte att initiera pj orsak: %s"
 
-#: ../lib/proj/get_proj.c:562
+#: ../lib/proj/get_proj.c:482
 msgid "Input Projection Parameters"
 msgstr "Ingångsparametrar för projektion"
 
-#: ../lib/proj/get_proj.c:563
+#: ../lib/proj/get_proj.c:483
 msgid "Input Unit Factor"
 msgstr "Inmatningsenhet Faktor"
 
-#: ../lib/proj/get_proj.c:573
+#: ../lib/proj/get_proj.c:493
 msgid "Output Projection Parameters"
 msgstr "Utdata Projektering Parametrar"
 
-#: ../lib/proj/get_proj.c:574
+#: ../lib/proj/get_proj.c:494
 msgid "Output Unit Factor"
 msgstr "Faktor för utmatningsenhet"
 
@@ -9025,6 +9004,21 @@ msgstr "Område %d har inga gränser"
 #: ../lib/vector/vedit/select.c:231
 msgid "Unknown query tool"
 msgstr "Okänt frågeverktyg"
+
+#, c-format
+#~ msgid "Unable to create latlong equivalent for '%s'"
+#~ msgstr "Det går inte att skapa en latlong-ekvivalent för '%s'"
+
+#~ msgid "No output projection"
+#~ msgstr "Ingen utdataprojektion"
+
+#, c-format
+#~ msgid "pj_transform() failed: %s"
+#~ msgstr "pj_transform() misslyckades: %s"
+
+#, c-format
+#~ msgid "The PROJ error message: %s"
+#~ msgstr "PROJ felmeddelande: %s"
 
 #~ msgid "GRASS is not compiled with OGR support"
 #~ msgstr "GRASS är inte kompilerad med OGR-stöd"
