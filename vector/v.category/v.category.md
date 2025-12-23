@@ -151,7 +151,8 @@ Print vector categories from the first layer, only for feature ids 1-50.
 v.category input=roads option=print layer=1 id=1-50
 ```
 
-Print vector categories from the first layer, only for feature ids 1-50 in JSON format.
+Print vector categories from the first layer,
+only for feature ids 1-50 in JSON format.
 
 ```sh
 v.category input=roads option=print layer=1 id=1-50 format=json
