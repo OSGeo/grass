@@ -72,7 +72,35 @@ jobs:
           path: ~/.cache/pre-commit
           key: pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}
 
-      - name: "Run pre-commit"
+      - name: "Run pre-commit/prek for fixes"
+        run: |
+          echo '```console' > "$GITHUB_STEP_SUMMARY"
+          # Enable color output for pre-commit and remove it for the summary
+          # Use --hook-stage=manual to enable slower pre-commit hooks that are skipped by default
+          # Skip hooks already handled in another workflow, to avoid duplicate suggestions
+          # Skip hooks with no fixes made with these hooks (for now)
+          uvx prek run --all-files --show-diff-on-failure --color=always --hook-stage=manual \
+            --skip ruff-check --skip ruff-format \
+            --skip actionlint \
+            --skip editorconfig-checker \
+            --skip flake8 \
+            --skip yamllint | \
+            tee >(sed -E 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})*)?[mGK]//g' >> "$GITHUB_STEP_SUMMARY") >&1
+          exit_code="${PIPESTATUS[0]}"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          exit "$exit_code"
+
+      - name: Create and uploads code suggestions to apply for pre-commit
+        # Will fail fast here if there are changes required
+        id: diff-pre-commit
+        # To run after pre-commit step exits with failure
+        if: ${{ !cancelled() }}
+        uses: ./.github/actions/create-upload-suggestions
+        with:
+          tool-name: pre-commit
+          # To keep repo's file structure in formatted changes artifact
+          extra-upload-changes: pyproject.toml
+      - name: "Run pre-commit/prek"
         run: |
           echo '```console' > "$GITHUB_STEP_SUMMARY"
           # Enable color output for pre-commit and remove it for the summary
