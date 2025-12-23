@@ -53,7 +53,7 @@ jobs:
 
       - name: Generate core modules with last commit JSON file and test it
         run: |
-          python -m pip install pytest pytest-depends
+          python -m pip install pytest pytest-depends pytest-timeout
           python utils/generate_last_commit_file.py .
           pytest utils/test_generate_last_commit_file.py
 
