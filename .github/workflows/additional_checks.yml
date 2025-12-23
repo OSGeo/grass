@@ -67,7 +67,18 @@ jobs:
           python ./utils/generate_release_notes.py log \
               "${GITHUB_REF_NAME}" \
               "$(git rev-parse HEAD~30)" \
-              ""
+              "" | \
+            tee -a "release_notes_sample.md"
+      - name: Upload release notes and core modules with last commit JSON file
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: release_notes-core_modules_with_last_commit
+          path: |-
+            core_modules_with_last_commit.json
+            release_notes_sample.md
+      - name: Remove created files
+        run: rm --verbose -f release_notes_sample.md core_modules_with_last_commit.json
       - name: "Cache pre-commit/prek"
         # Not used for releases, only for running pre-commit
         uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1  # zizmor: ignore[cache-poisoning]
