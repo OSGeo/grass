@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 16:57+0000\n"
+"POT-Creation-Date: 2025-12-13 22:01+0000\n"
 "PO-Revision-Date: 2025-08-23 20:17+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Arabic <https://weblate.osgeo.org/projects/grass-gis/grasslibs/ar/>\n"
@@ -372,7 +372,7 @@ msgstr ""
 
 #: ../lib/db/dbmi_client/copy_tab.c:109 ../lib/db/dbmi_client/copy_tab.c:129
 #: ../lib/db/dbmi_client/db.c:40 ../lib/vector/Vlib/ascii.c:416
-#: ../lib/vector/Vlib/write_ogr.c:192 ../lib/vector/Vlib/write_pg.c:3035
+#: ../lib/vector/Vlib/write_ogr.c:174 ../lib/vector/Vlib/write_pg.c:3035
 #, fuzzy, c-format
 msgid "Unable to start driver <%s>"
 msgstr "لم يمكن فتحه %s فى %s"
@@ -384,7 +384,7 @@ msgstr "لم يمكن فتحه %s فى %s"
 #: ../lib/vector/Vlib/close_nat.c:165 ../lib/vector/Vlib/map.c:339
 #: ../lib/vector/Vlib/net_build.c:158 ../lib/vector/Vlib/net_build.c:208
 #: ../lib/vector/Vlib/net_build.c:502 ../lib/vector/Vlib/net_build.c:799
-#: ../lib/vector/Vlib/net_build.c:975 ../lib/vector/Vlib/write_ogr.c:197
+#: ../lib/vector/Vlib/net_build.c:975 ../lib/vector/Vlib/write_ogr.c:179
 #: ../lib/vector/Vlib/write_pg.c:3040 ../lib/vector/neta/timetables.c:141
 #: ../lib/vector/neta/utils.c:123
 #, fuzzy, c-format
@@ -407,7 +407,7 @@ msgid "Table <%s> already exists in database <%s>"
 msgstr "datum لم يمكن فتح ملف جدول : %s"
 
 #: ../lib/db/dbmi_client/copy_tab.c:246 ../lib/db/dbmi_client/copy_tab.c:320
-#: ../lib/db/dbmi_client/table.c:117 ../lib/vector/Vlib/write_ogr.c:209
+#: ../lib/db/dbmi_client/table.c:117 ../lib/vector/Vlib/write_ogr.c:191
 #, fuzzy, c-format
 msgid "Unable to open select cursor: '%s'"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
@@ -428,7 +428,7 @@ msgstr "لم يتم كتابة روابط قاعدة البيانات"
 msgid "Unable to create table <%s>"
 msgstr "لم يمكن فتحه %s فى %s"
 
-#: ../lib/db/dbmi_client/copy_tab.c:338 ../lib/vector/Vlib/write_ogr.c:587
+#: ../lib/db/dbmi_client/copy_tab.c:338 ../lib/vector/Vlib/write_ogr.c:569
 #: ../lib/vector/Vlib/write_pg.c:2050
 #, fuzzy, c-format
 msgid "Unable to fetch data from table <%s>"
@@ -1198,7 +1198,7 @@ msgstr "غير صالح '%s' اسم الملف الفيكتورى المخرج"
 #: ../lib/ogsf/gs3.c:333 ../lib/ogsf/gs3.c:440 ../lib/ogsf/gs3.c:528
 #: ../lib/ogsf/gs3.c:588 ../lib/ogsf/gs3.c:646 ../lib/ogsf/gs3.c:716
 #: ../lib/ogsf/gs3.c:786 ../lib/ogsf/gsd_legend.c:238 ../lib/raster/open.c:175
-#: ../lib/raster/open.c:867 ../lib/raster/open.c:904 ../lib/raster/open.c:957
+#: ../lib/raster/open.c:857 ../lib/raster/open.c:894 ../lib/raster/open.c:947
 #: ../lib/rst/interp_float/output2d.c:268
 #: ../lib/rst/interp_float/output2d.c:355
 #: ../lib/rst/interp_float/output2d.c:429
@@ -1348,7 +1348,7 @@ msgstr " %s لم يمكن فتح"
 #: ../lib/gis/open_misc.c:250 ../lib/gis/seek.c:55 ../lib/gis/seek.c:65
 #: ../lib/raster/close.c:401 ../lib/raster/close.c:447
 #: ../lib/raster/close.c:546 ../lib/raster/format.c:195
-#: ../lib/raster/put_row.c:145 ../lib/raster/put_row.c:524
+#: ../lib/raster/put_row.c:145 ../lib/raster/put_row.c:522
 #: ../lib/raster3d/open.c:303 ../lib/raster3d/tilewrite.c:182
 #: ../lib/segment/get_row.c:65 ../lib/segment/get_row.c:86
 #: ../lib/segment/pagein.c:95 ../lib/segment/pageout.c:41
@@ -4311,7 +4311,7 @@ msgstr "[%s] لم يتم ايجاد"
 #: ../lib/ogsf/gp3.c:61 ../lib/ogsf/gp3.c:202 ../lib/ogsf/gv3.c:60
 #: ../lib/ogsf/gv3.c:339 ../lib/vector/Vlib/legal_vname.c:145
 #: ../lib/vector/Vlib/legal_vname.c:148 ../lib/vector/Vlib/map.c:263
-#: ../lib/vector/Vlib/open.c:246
+#: ../lib/vector/Vlib/open.c:232
 #, fuzzy, c-format
 msgid "Vector map <%s> not found"
 msgstr "غير موجود'%s' الفيكتور"
@@ -4511,7 +4511,7 @@ msgstr ""
 #: ../lib/ogsf/gp3.c:67 ../lib/ogsf/gp3.c:207 ../lib/ogsf/gv3.c:66
 #: ../lib/ogsf/gv3.c:344 ../lib/vector/Vlib/map.c:191
 #: ../lib/vector/Vlib/map.c:201 ../lib/vector/Vlib/map.c:274
-#: ../lib/vector/Vlib/open.c:314 ../lib/vector/Vlib/open.c:457
+#: ../lib/vector/Vlib/open.c:300 ../lib/vector/Vlib/open.c:441
 #, fuzzy, c-format
 msgid "Unable to open vector map <%s>"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
@@ -4822,50 +4822,34 @@ msgstr "لم يمكن فتحه %s فى %s"
 msgid "Unable to open output PNG file <%s>"
 msgstr "datum لم يمكن فتح ملف جدول : %s"
 
-#: ../lib/proj/convert.c:96 ../lib/vector/Vlib/build_ogr.c:101
-#: ../lib/vector/Vlib/build_ogr.c:173 ../lib/vector/Vlib/build_sfa.c:720
-#: ../lib/vector/Vlib/close.c:279 ../lib/vector/Vlib/close_ogr.c:77
-#: ../lib/vector/Vlib/close_ogr.c:111 ../lib/vector/Vlib/field.c:751
-#: ../lib/vector/Vlib/header_finfo.c:41 ../lib/vector/Vlib/header_finfo.c:81
-#: ../lib/vector/Vlib/header_finfo.c:114 ../lib/vector/Vlib/header_finfo.c:153
-#: ../lib/vector/Vlib/header_finfo.c:255 ../lib/vector/Vlib/open_ogr.c:129
-#: ../lib/vector/Vlib/open_ogr.c:164 ../lib/vector/Vlib/open_ogr.c:242
-#: ../lib/vector/Vlib/read_ogr.c:55 ../lib/vector/Vlib/read_ogr.c:157
-#: ../lib/vector/Vlib/read_ogr.c:239 ../lib/vector/Vlib/rewind_ogr.c:47
-#: ../lib/vector/Vlib/rewind_ogr.c:71 ../lib/vector/Vlib/simple_features.c:317
-#: ../lib/vector/Vlib/write_ogr.c:70 ../lib/vector/Vlib/write_ogr.c:105
-#: ../lib/vector/Vlib/write_ogr.c:146 ../lib/vector/Vlib/write_sfa.c:300
-msgid "GRASS is not compiled with OGR support"
-msgstr ""
-
-#: ../lib/proj/convert.c:192
+#: ../lib/proj/convert.c:184
 msgid "Unable parse GRASS PROJ_INFO file"
 msgstr ""
 
-#: ../lib/proj/convert.c:199
+#: ../lib/proj/convert.c:191
 msgid "Unable get PROJ.4-style parameter string"
 msgstr ""
 
-#: ../lib/proj/convert.c:217
+#: ../lib/proj/convert.c:205
 #, c-format
 msgid "OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
 msgstr ""
 
-#: ../lib/proj/convert.c:231
+#: ../lib/proj/convert.c:219
 #, c-format
 msgid "OGR can't get WKT-style parameter string (OGR Error code was %d)"
 msgstr ""
 
-#: ../lib/proj/convert.c:474
+#: ../lib/proj/convert.c:462
 #, c-format
 msgid "Updating spatial reference with embedded proj4 definition failed. Proj4 definition: <%s>"
 msgstr ""
 
-#: ../lib/proj/convert.c:485
+#: ../lib/proj/convert.c:473
 msgid "Updating spatial reference with embedded proj4 definition"
 msgstr ""
 
-#: ../lib/proj/convert.c:623
+#: ../lib/proj/convert.c:611
 msgid "No projection name! Projection parameters likely to be meaningless."
 msgstr ""
 
@@ -4879,193 +4863,176 @@ msgstr "datum لم يمكن فتح ملف جدول : %s"
 msgid "Error in datum table file <%s>, line %d"
 msgstr "datum  فى ملف جدول %d يوجد خطأ فى الخط "
 
-#: ../lib/proj/do_proj.c:103 ../lib/proj/do_proj.c:112
-#: ../lib/proj/do_proj.c:472 ../lib/proj/do_proj.c:478
-#: ../lib/proj/do_proj.c:523 ../lib/proj/do_proj.c:530
-#: ../lib/proj/do_proj.c:855 ../lib/proj/do_proj.c:870
-#: ../lib/proj/do_proj.c:882 ../lib/proj/do_proj.c:961
+#: ../lib/proj/do_proj.c:101 ../lib/proj/do_proj.c:110
+#: ../lib/proj/do_proj.c:460 ../lib/proj/do_proj.c:466
+#: ../lib/proj/do_proj.c:511 ../lib/proj/do_proj.c:518
+#: ../lib/proj/do_proj.c:838
 #, c-format
 msgid "proj_create() failed for '%s'"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:198
+#: ../lib/proj/do_proj.c:196
 #, fuzzy, c-format
 msgid "Invalid west longitude %g"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
-#: ../lib/proj/do_proj.c:202
+#: ../lib/proj/do_proj.c:200
 #, fuzzy, c-format
 msgid "Invalid east longitude %g"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
-#: ../lib/proj/do_proj.c:206
+#: ../lib/proj/do_proj.c:204
 #, fuzzy, c-format
 msgid "Invalid south latitude %g"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
-#: ../lib/proj/do_proj.c:210
+#: ../lib/proj/do_proj.c:208
 #, fuzzy, c-format
 msgid "Invalid north latitude %g"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
-#: ../lib/proj/do_proj.c:214
+#: ../lib/proj/do_proj.c:212
 #, fuzzy, c-format
 msgid "South %g is larger than north %g"
 msgstr "الشرق يجب أن يكون أكبر من الغرب"
 
-#: ../lib/proj/do_proj.c:328
+#: ../lib/proj/do_proj.c:326
 #, c-format
 msgid "Unrecognized SRID '%s'"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:342
+#: ../lib/proj/do_proj.c:340
 #, c-format
 msgid "Unrecognized WKT '%s'"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:360
+#: ../lib/proj/do_proj.c:358
 #, fuzzy
 msgid "Unable to create PROJ object"
 msgstr "لم يتم انشاء عملية جديدة"
 
-#: ../lib/proj/do_proj.c:439
+#: ../lib/proj/do_proj.c:430
 msgid "Input coordinate system is NULL"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:442
+#: ../lib/proj/do_proj.c:433
 msgid "Input coordinate system definition is NULL"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:464
+#: ../lib/proj/do_proj.c:452
 msgid "A custom pipeline requires input and output projection info"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:492
+#: ../lib/proj/do_proj.c:480
 #, c-format
 msgid "The transformation pipeline contains an '%s' step. Remove this step if easting and northing are swapped in the output."
 msgstr ""
 
-#: ../lib/proj/do_proj.c:557
+#: ../lib/proj/do_proj.c:545
 #, fuzzy, c-format
 msgid "Unable to determine area of interest for '%s'"
 msgstr "لم يمكن تحديد مكان ملفات المستخدم"
 
-#: ../lib/proj/do_proj.c:578
+#: ../lib/proj/do_proj.c:566
 #, fuzzy, c-format
 msgid "Input CRS not available for '%s'"
 msgstr "لم يمكن فتح ملف مؤقت"
 
-#: ../lib/proj/do_proj.c:599
+#: ../lib/proj/do_proj.c:587
 #, fuzzy, c-format
 msgid "Output CRS not available for '%s'"
 msgstr "لم يمكن فتح ملف مؤقت"
 
-#: ../lib/proj/do_proj.c:625
+#: ../lib/proj/do_proj.c:613
 #, c-format
 msgid "Found %d possible transformations"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:637
+#: ../lib/proj/do_proj.c:625
 #, c-format
 msgid "proj_normalize_for_visualization() failed for operation %d"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:649
+#: ../lib/proj/do_proj.c:637
 #, fuzzy, c-format
 msgid "Operation %d:"
 msgstr "مساقط أخرى"
 
-#: ../lib/proj/do_proj.c:651
+#: ../lib/proj/do_proj.c:639
 #, fuzzy, c-format
 msgid "Description: %s"
 msgstr ""
 "\n"
 "وصف:\n"
 
-#: ../lib/proj/do_proj.c:656
+#: ../lib/proj/do_proj.c:644
 #, fuzzy, c-format
 msgid "Area of use: %s"
 msgstr " %s لم يمكن فتح"
 
-#: ../lib/proj/do_proj.c:660
+#: ../lib/proj/do_proj.c:648
 #, c-format
 msgid "Accuracy within area of use: %g m"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:668
+#: ../lib/proj/do_proj.c:655
 #, c-format
 msgid "Remarks: %s"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:673
+#: ../lib/proj/do_proj.c:660
 #, c-format
 msgid "Scope: %s"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:680
+#: ../lib/proj/do_proj.c:666
 msgid "PROJ string:"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:687
+#: ../lib/proj/do_proj.c:673
 #, fuzzy
 msgid "See also output of:"
 msgstr "إسم الراستر المخرجة"
 
-#: ../lib/proj/do_proj.c:690
+#: ../lib/proj/do_proj.c:676
 #, c-format
 msgid "Please provide the appropriate PROJ string with the %s option"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:816
+#: ../lib/proj/do_proj.c:799
 #, c-format
 msgid "proj_normalize_for_visualization() failed for '%s'"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:829
+#: ../lib/proj/do_proj.c:812
 #, c-format
 msgid "No PROJ definition for normalized version of '%s'"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:834
+#: ../lib/proj/do_proj.c:817
 msgid "Selected PROJ pipeline:"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:835
+#: ../lib/proj/do_proj.c:818
 #, c-format
 msgid "%s"
 msgstr "%s"
 
-#: ../lib/proj/do_proj.c:970
-#, fuzzy, c-format
-msgid "Unable to create latlong equivalent for '%s'"
-msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
-
-#: ../lib/proj/do_proj.c:1020
+#: ../lib/proj/do_proj.c:883
 #, fuzzy
 msgid "No input projection"
 msgstr "مسقط غير معروف"
 
-#: ../lib/proj/do_proj.c:1023 ../lib/proj/do_proj.c:1242
+#: ../lib/proj/do_proj.c:886 ../lib/proj/do_proj.c:1045
 msgid "No transformation object"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:1120 ../lib/proj/do_proj.c:1410
+#: ../lib/proj/do_proj.c:975 ../lib/proj/do_proj.c:1205
 #, fuzzy, c-format
 msgid "proj_trans() failed: %s"
 msgstr "فشل الإتصال\n"
 
-#: ../lib/proj/do_proj.c:1153
-#, fuzzy
-msgid "No output projection"
-msgstr " %s لم يمكن فتح"
-
-#: ../lib/proj/do_proj.c:1182 ../lib/proj/do_proj.c:1463
-#: ../lib/proj/do_proj.c:1591 ../lib/proj/do_proj.c:1755
-#, c-format
-msgid "pj_transform() failed: %s"
-msgstr ""
-
-#: ../lib/proj/do_proj.c:1549 ../lib/proj/do_proj.c:1714
+#: ../lib/proj/do_proj.c:1290 ../lib/proj/do_proj.c:1411
 #, c-format
 msgid "proj_trans() failed: %d"
 msgstr ""
@@ -5089,42 +5056,37 @@ msgstr ""
 msgid "No ellipsoid info given in file"
 msgstr ""
 
-#: ../lib/proj/get_proj.c:168
+#: ../lib/proj/get_proj.c:164
 #, c-format
 msgid "Invalid zone %s specified"
 msgstr ""
 
-#: ../lib/proj/get_proj.c:259
+#: ../lib/proj/get_proj.c:246
 msgid "Unable to initialise PROJ with the following parameter list:"
 msgstr ""
 
-#: ../lib/proj/get_proj.c:268
-#, c-format
-msgid "The PROJ error message: %s"
-msgstr ""
-
-#: ../lib/proj/get_proj.c:388
+#: ../lib/proj/get_proj.c:364
 msgid "Option input overflowed option table"
 msgstr ""
 
-#: ../lib/proj/get_proj.c:426 ../lib/proj/get_proj.c:445
+#: ../lib/proj/get_proj.c:399
 #, fuzzy, c-format
 msgid "Unable to initialize pj cause: %s"
 msgstr "لم يمكن فتحه %s فى %s"
 
-#: ../lib/proj/get_proj.c:562
+#: ../lib/proj/get_proj.c:482
 msgid "Input Projection Parameters"
 msgstr ""
 
-#: ../lib/proj/get_proj.c:563
+#: ../lib/proj/get_proj.c:483
 msgid "Input Unit Factor"
 msgstr ""
 
-#: ../lib/proj/get_proj.c:573
+#: ../lib/proj/get_proj.c:493
 msgid "Output Projection Parameters"
 msgstr ""
 
-#: ../lib/proj/get_proj.c:574
+#: ../lib/proj/get_proj.c:494
 msgid "Output Unit Factor"
 msgstr ""
 
@@ -5291,67 +5253,67 @@ msgstr "خطأ قراءة ملف مضغوط [%s in %s]"
 msgid "Fail of initial read of compressed null file [%s in %s]"
 msgstr "خطأ قراءة ملف مضغوط [%s in %s]"
 
-#: ../lib/raster/gdal.c:204
+#: ../lib/raster/gdal.c:187
 #, fuzzy
 msgid "Unable to open GDAL file"
 msgstr "لم يمكن فتحه %s فى %s"
 
-#: ../lib/raster/gdal.c:306 ../lib/raster/open.c:614
+#: ../lib/raster/gdal.c:288 ../lib/raster/open.c:606
 #, fuzzy, c-format
 msgid "Invalid map type <%d>"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
-#: ../lib/raster/gdal.c:312
+#: ../lib/raster/gdal.c:294
 #, fuzzy, c-format
 msgid "Unable to get <%s> driver"
 msgstr " %s لم يمكن فتح"
 
-#: ../lib/raster/gdal.c:320
+#: ../lib/raster/gdal.c:302
 #, fuzzy, c-format
 msgid "Unable to create <%s> dataset using <%s> driver"
 msgstr "لم يمكن فتحه %s فى %s"
 
-#: ../lib/raster/gdal.c:328
+#: ../lib/raster/gdal.c:310
 #, c-format
 msgid "Driver <%s> does not support direct writing. Using MEM driver for intermediate dataset."
 msgstr ""
 
-#: ../lib/raster/gdal.c:334
+#: ../lib/raster/gdal.c:316
 #, fuzzy
 msgid "Unable to get in-memory raster driver"
 msgstr "لم يتم انشاء عملية جديدة"
 
-#: ../lib/raster/gdal.c:341
+#: ../lib/raster/gdal.c:323
 #, fuzzy, c-format
 msgid "Unable to create <%s> dataset using memory driver"
 msgstr "لم يتم كتابة روابط قاعدة البيانات"
 
-#: ../lib/raster/gdal.c:344
+#: ../lib/raster/gdal.c:326
 #, c-format
 msgid "Driver <%s> does not support creating rasters"
 msgstr ""
 
-#: ../lib/raster/gdal.c:360
+#: ../lib/raster/gdal.c:342
 #, fuzzy
 msgid "Unable to set geo transform"
 msgstr " %s لم يمكن فتح"
 
-#: ../lib/raster/gdal.c:364
+#: ../lib/raster/gdal.c:346
 #, fuzzy
 msgid "Unable to set projection"
 msgstr " %s لم يمكن فتح"
 
-#: ../lib/raster/gdal.c:368
+#: ../lib/raster/gdal.c:350
 #, fuzzy, c-format
 msgid "Unable to create cell_misc/%s/gdal file"
 msgstr "لم يمكن فتح ملف مؤقت"
 
-#: ../lib/raster/gdal.c:384
+#: ../lib/raster/gdal.c:366
 #, fuzzy, c-format
 msgid "Error writing cell_misc/%s/gdal file"
 msgstr "خطا فى كتابة الدليل الفراغى\n"
 
-#: ../lib/raster/gdal.c:431
+#: ../lib/raster/gdal.c:407
 #, fuzzy, c-format
 msgid "Unable to create output file <%s> using driver <%s>"
 msgstr "لم يمكن فتحه %s فى %s"
@@ -5374,7 +5336,7 @@ msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيس�
 msgid "Unable to open header file for raster map <%s@%s>. It seems that some previous step failed and created an incomplete raster map."
 msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
 
-#: ../lib/raster/get_row.c:36 ../lib/raster/get_row.c:935
+#: ../lib/raster/get_row.c:36 ../lib/raster/get_row.c:922
 #, c-format
 msgid "Reading raster map <%s@%s> request for row %d is outside region"
 msgstr ""
@@ -5409,32 +5371,32 @@ msgstr "دعم الفئة [%s] فى مجموعة الخرائط [%s] %s"
 msgid "Error reading raster data for row %d of <%s>"
 msgstr "دعم الفئة [%s] فى مجموعة الخرائط [%s] %s"
 
-#: ../lib/raster/get_row.c:236
+#: ../lib/raster/get_row.c:235
 #, fuzzy, c-format
 msgid "Error reading raster data via GDAL for row %d of <%s>"
 msgstr "خطا فى كتابة الدليل الفراغى\n"
 
-#: ../lib/raster/get_row.c:859
+#: ../lib/raster/get_row.c:846
 #, fuzzy, c-format
 msgid "Error seeking compressed null data for row %d of <%s>"
 msgstr "دعم الفئة [%s] فى مجموعة الخرائط [%s] %s"
 
-#: ../lib/raster/get_row.c:866 ../lib/raster/get_row.c:878
+#: ../lib/raster/get_row.c:853 ../lib/raster/get_row.c:865
 #, fuzzy, c-format
 msgid "Error reading compressed null data for row %d of <%s>"
 msgstr "دعم الفئة [%s] فى مجموعة الخرائط [%s] %s"
 
-#: ../lib/raster/get_row.c:884
+#: ../lib/raster/get_row.c:871
 #, fuzzy, c-format
 msgid "Error uncompressing null data for row %d of <%s>"
 msgstr "دعم الفئة [%s] فى مجموعة الخرائط [%s] %s"
 
-#: ../lib/raster/get_row.c:918
+#: ../lib/raster/get_row.c:905
 #, fuzzy, c-format
 msgid "Error seeking null row %d for <%s>"
 msgstr "%d خطأ فى كتابة الصف المنعدم"
 
-#: ../lib/raster/get_row.c:921
+#: ../lib/raster/get_row.c:908
 #, fuzzy, c-format
 msgid "Error reading null row %d for <%s>"
 msgstr "%d خطأ فى كتابة الصف المنعدم"
@@ -5576,76 +5538,71 @@ msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموع�
 msgid "Raster map <%s>: bytes per cell (%d) too large"
 msgstr "[%s] فى [%s] - بيتة لكل خلية (%d) قيم كبيرة"
 
-#: ../lib/raster/open.c:280
-#, c-format
-msgid "Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
-msgstr ""
-
-#: ../lib/raster/open.c:292
+#: ../lib/raster/open.c:286
 #, fuzzy, c-format
 msgid "Unable to open %s file for raster map <%s@%s>"
 msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
 
-#: ../lib/raster/open.c:331
+#: ../lib/raster/open.c:325
 #, fuzzy, c-format
 msgid "Error reading format for <%s@%s>"
 msgstr "دعم الفئة [%s] فى مجموعة الخرائط [%s] %s"
 
-#: ../lib/raster/open.c:542
+#: ../lib/raster/open.c:535
 #, fuzzy
 msgid "Unable to create GDAL link"
 msgstr "لم يمكن فتحه %s فى %s"
 
-#: ../lib/raster/open.c:619 ../lib/raster/open.c:779
+#: ../lib/raster/open.c:611 ../lib/raster/open.c:769
 #, fuzzy, c-format
 msgid "Raster map <%s> is not in the current mapset (%s)"
 msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
 
-#: ../lib/raster/open.c:626
+#: ../lib/raster/open.c:618
 #, fuzzy, c-format
 msgid "<%s> is an illegal file name"
 msgstr "%s اسم ملف غير صحيح"
 
-#: ../lib/raster/open.c:642 ../lib/raster/open.c:725 ../lib/raster/open.c:803
+#: ../lib/raster/open.c:632 ../lib/raster/open.c:715 ../lib/raster/open.c:793
 #, fuzzy, c-format
 msgid "No temp files available: %s"
 msgstr "غير متاح << %s >> الموقع"
 
-#: ../lib/raster/open.c:775
+#: ../lib/raster/open.c:765
 #, fuzzy, c-format
 msgid "Raster map <%s> does not exist in the current mapset (%s)"
 msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
 
-#: ../lib/raster/open.c:842
+#: ../lib/raster/open.c:832
 msgid "Rast_set_fp_type(): can only be called with FCELL_TYPE or DCELL_TYPE"
 msgstr ""
 
-#: ../lib/raster/open.c:901
+#: ../lib/raster/open.c:891
 #, fuzzy, c-format
 msgid "Raster map <%s> not found in mapset <%s>"
 msgstr "غير موجود'%s' الفيكتور"
 
-#: ../lib/raster/open.c:963
+#: ../lib/raster/open.c:953
 #, fuzzy, c-format
 msgid "Unable to find '%s'"
 msgstr "[%s] لم يتم ايجاد"
 
-#: ../lib/raster/open.c:974
+#: ../lib/raster/open.c:964
 #, fuzzy, c-format
 msgid "Invalid type: field '%s' in file '%s'"
 msgstr " %s ellipsoid لا يوجد حقل  %s فى %s الملف"
 
-#: ../lib/raster/open.c:980
+#: ../lib/raster/open.c:970
 #, fuzzy, c-format
 msgid "Missing type: field in file '%s'"
 msgstr " %s ellipsoid لا يوجد حقل  %s فى %s الملف"
 
-#: ../lib/raster/open.c:985
+#: ../lib/raster/open.c:975
 #, fuzzy, c-format
 msgid "Raster map <%s> is not xdr: byte_order: %s"
 msgstr "غير موجود'%s' الفيكتور"
 
-#: ../lib/raster/open.c:1054
+#: ../lib/raster/open.c:1044
 msgid "Rast_set_quant_rules() can be called only for raster maps opened for reading"
 msgstr ""
 
@@ -5674,41 +5631,41 @@ msgstr "دعم الفئة [%s] فى مجموعة الخرائط [%s] %s"
 msgid "Error writing uncompressed data for row %d of <%s>: %s"
 msgstr "دعم الفئة [%s] فى مجموعة الخرائط [%s] %s"
 
-#: ../lib/raster/put_row.c:478
+#: ../lib/raster/put_row.c:477
 #, fuzzy, c-format
 msgid "Error writing data via GDAL for row %d of <%s>"
 msgstr "خطا فى كتابة الدليل الفراغى\n"
 
-#: ../lib/raster/put_row.c:502
+#: ../lib/raster/put_row.c:500
 msgid "GDAL output doesn't support writing null rows separately"
 msgstr ""
 
-#: ../lib/raster/put_row.c:505
+#: ../lib/raster/put_row.c:503
 #, fuzzy, c-format
 msgid "No null file for <%s>"
 msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
 
-#: ../lib/raster/put_row.c:539 ../lib/raster/put_row.c:546
+#: ../lib/raster/put_row.c:537 ../lib/raster/put_row.c:544
 #, fuzzy, c-format
 msgid "Error writing compressed null data for row %d of <%s>: %s"
 msgstr "دعم الفئة [%s] فى مجموعة الخرائط [%s] %s"
 
-#: ../lib/raster/put_row.c:581
+#: ../lib/raster/put_row.c:579
 #, fuzzy, c-format
 msgid "Error writing null row %d of <%s>"
 msgstr "%d خطأ فى كتابة الصف المنعدم"
 
-#: ../lib/raster/put_row.c:585
+#: ../lib/raster/put_row.c:583
 #, fuzzy, c-format
 msgid "Error writing null row %d of <%s>: %s"
 msgstr "%d خطأ فى كتابة الصف المنعدم"
 
-#: ../lib/raster/put_row.c:710
+#: ../lib/raster/put_row.c:708
 #, fuzzy, c-format
 msgid "put_raster_row: raster map <%s> not open for write - request ignored"
 msgstr "غير موجود'%s' الفيكتور"
 
-#: ../lib/raster/put_row.c:719
+#: ../lib/raster/put_row.c:717
 #, fuzzy
 msgid "put_raster_row: unopened file descriptor - request ignored"
 msgstr "غير موجود'%s' الفيكتور"
@@ -6423,20 +6380,20 @@ msgid "Attempt to read points of nonexistent isle"
 msgstr "%s: لم يمكن فتح ملف  الطبوغرافية للكتابة\n"
 
 #: ../lib/vector/Vlib/area.c:94 ../lib/vector/Vlib/area.c:495
-#: ../lib/vector/Vlib/build_pg.c:126 ../lib/vector/Vlib/build_sfa.c:727
-#: ../lib/vector/Vlib/close.c:269 ../lib/vector/Vlib/close_pg.c:102
+#: ../lib/vector/Vlib/build_pg.c:126 ../lib/vector/Vlib/build_sfa.c:719
+#: ../lib/vector/Vlib/close.c:262 ../lib/vector/Vlib/close_pg.c:102
 #: ../lib/vector/Vlib/close_pg.c:150 ../lib/vector/Vlib/copy.c:451
-#: ../lib/vector/Vlib/header_finfo.c:47 ../lib/vector/Vlib/header_finfo.c:87
-#: ../lib/vector/Vlib/header_finfo.c:124 ../lib/vector/Vlib/header_finfo.c:171
-#: ../lib/vector/Vlib/open_pg.c:148 ../lib/vector/Vlib/open_pg.c:207
-#: ../lib/vector/Vlib/open_pg.c:309 ../lib/vector/Vlib/open_pg.c:360
-#: ../lib/vector/Vlib/read_pg.c:98 ../lib/vector/Vlib/read_pg.c:221
-#: ../lib/vector/Vlib/read_pg.c:307 ../lib/vector/Vlib/read_pg.c:427
-#: ../lib/vector/Vlib/rewind_pg.c:56 ../lib/vector/Vlib/rewind_pg.c:81
-#: ../lib/vector/Vlib/simple_features.c:344 ../lib/vector/Vlib/write_pg.c:134
-#: ../lib/vector/Vlib/write_pg.c:168 ../lib/vector/Vlib/write_pg.c:206
-#: ../lib/vector/Vlib/write_pg.c:308 ../lib/vector/Vlib/write_pg.c:369
-#: ../lib/vector/Vlib/write_pg.c:496 ../lib/vector/Vlib/write_sfa.c:308
+#: ../lib/vector/Vlib/header_finfo.c:44 ../lib/vector/Vlib/header_finfo.c:81
+#: ../lib/vector/Vlib/header_finfo.c:153 ../lib/vector/Vlib/open_pg.c:148
+#: ../lib/vector/Vlib/open_pg.c:207 ../lib/vector/Vlib/open_pg.c:309
+#: ../lib/vector/Vlib/open_pg.c:360 ../lib/vector/Vlib/read_pg.c:98
+#: ../lib/vector/Vlib/read_pg.c:221 ../lib/vector/Vlib/read_pg.c:307
+#: ../lib/vector/Vlib/read_pg.c:427 ../lib/vector/Vlib/rewind_pg.c:56
+#: ../lib/vector/Vlib/rewind_pg.c:81 ../lib/vector/Vlib/simple_features.c:337
+#: ../lib/vector/Vlib/write_pg.c:134 ../lib/vector/Vlib/write_pg.c:168
+#: ../lib/vector/Vlib/write_pg.c:206 ../lib/vector/Vlib/write_pg.c:308
+#: ../lib/vector/Vlib/write_pg.c:369 ../lib/vector/Vlib/write_pg.c:496
+#: ../lib/vector/Vlib/write_sfa.c:286
 msgid "GRASS is not compiled with PostgreSQL support"
 msgstr ""
 
@@ -6610,13 +6567,13 @@ msgstr "لم يمكن فتح ملف مؤقت"
 msgid "%d features without category skipped. To export also features without category use '%s=-1'."
 msgstr ""
 
-#: ../lib/vector/Vlib/box.c:244 ../lib/vector/Vlib/read.c:184
+#: ../lib/vector/Vlib/box.c:244 ../lib/vector/Vlib/read.c:170
 #: ../lib/vector/Vlib/read_nat.c:145 ../lib/vector/Vlib/read_pg.c:341
-#: ../lib/vector/Vlib/read_sfa.c:50 ../lib/vector/Vlib/write_nat.c:188
+#: ../lib/vector/Vlib/read_sfa.c:49 ../lib/vector/Vlib/write_nat.c:188
 #: ../lib/vector/Vlib/write_nat.c:304 ../lib/vector/Vlib/write_nat.c:672
 #: ../lib/vector/Vlib/write_pg.c:247 ../lib/vector/Vlib/write_pg.c:396
-#: ../lib/vector/Vlib/write_pg.c:412 ../lib/vector/Vlib/write_sfa.c:159
-#: ../lib/vector/Vlib/write_sfa.c:209
+#: ../lib/vector/Vlib/write_pg.c:412 ../lib/vector/Vlib/write_sfa.c:152
+#: ../lib/vector/Vlib/write_sfa.c:196
 #, fuzzy, c-format
 msgid "Attempt to access feature with invalid id (%d)"
 msgstr "%s: لم يمكن فتح ملف  الطبوغرافية للكتابة\n"
@@ -6745,205 +6702,205 @@ msgstr ""
 msgid "Requested format is not compiled in this version"
 msgstr "الشكل المطلوب غير متاح فى هذا الأصدار"
 
-#: ../lib/vector/Vlib/build.c:118
+#: ../lib/vector/Vlib/build.c:111
 #, fuzzy
 msgid "Area of size = 0.0 (less than 4 vertices) ignored"
 msgstr "المساحة بحجم= 0.0 أهملت"
 
-#: ../lib/vector/Vlib/build.c:134
+#: ../lib/vector/Vlib/build.c:127
 #, fuzzy
 msgid "Unable to add area (map closed, topo saved)"
 msgstr "لم يمكن اضافة مساحة, تم قفل الخريطة وحفظت الطبوغرافية"
 
-#: ../lib/vector/Vlib/build.c:142
+#: ../lib/vector/Vlib/build.c:135
 #, fuzzy
 msgid "Unable to add isle (map closed, topo saved)"
 msgstr "لم يمكن اضافة جزيرة, تم قفل الخريطة وحفظت الطبوغرافية"
 
-#: ../lib/vector/Vlib/build.c:152
+#: ../lib/vector/Vlib/build.c:145
 msgid "Area of size = 0.0 ignored"
 msgstr "المساحة بحجم= 0.0 أهملت"
 
-#: ../lib/vector/Vlib/build.c:204
+#: ../lib/vector/Vlib/build.c:197
 msgid "Request to find area outside nonexistent isle"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:359
+#: ../lib/vector/Vlib/build.c:352
 msgid "Larger bbox but smaller area!!!"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:617
+#: ../lib/vector/Vlib/build.c:610
 msgid "Checking for topological errors..."
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:652
+#: ../lib/vector/Vlib/build.c:645
 #, fuzzy, c-format
 msgid "Number of lines of length zero: %d"
 msgstr "عدد الخطوط     :   %d\n"
 
-#: ../lib/vector/Vlib/build.c:654
+#: ../lib/vector/Vlib/build.c:647
 #, fuzzy, c-format
 msgid "Number of boundaries of length zero: %d"
 msgstr "%d : عدد الحدود غير الصحيحة\n"
 
-#: ../lib/vector/Vlib/build.c:667
+#: ../lib/vector/Vlib/build.c:660
 #, fuzzy, c-format
 msgid "Number of boundary intersections: %d"
 msgstr "%d : عدد الحدود غير الصحيحة\n"
 
-#: ../lib/vector/Vlib/build.c:692
+#: ../lib/vector/Vlib/build.c:685
 #, fuzzy
 msgid "Skipping further checks because of incorrect boundaries"
 msgstr "%d : عدد الحدود غير الصحيحة\n"
 
-#: ../lib/vector/Vlib/build.c:742
+#: ../lib/vector/Vlib/build.c:735
 #, fuzzy, c-format
 msgid "Number of redundant holes: %d"
 msgstr "%d : عدد الحدود غير الصحيحة\n"
 
-#: ../lib/vector/Vlib/build.c:884 ../lib/vector/Vlib/open.c:383
-#: ../lib/vector/Vlib/open.c:904
+#: ../lib/vector/Vlib/build.c:877 ../lib/vector/Vlib/open.c:369
+#: ../lib/vector/Vlib/open.c:888
 #, fuzzy, c-format
 msgid "Unable to open spatial index file for vector map <%s>"
 msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
 
-#: ../lib/vector/Vlib/build.c:892
+#: ../lib/vector/Vlib/build.c:885
 #, fuzzy, c-format
 msgid "Building topology for vector map <%s>..."
 msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
 
-#: ../lib/vector/Vlib/build.c:910
+#: ../lib/vector/Vlib/build.c:903
 #, fuzzy
 msgid "Topology was built"
 msgstr "تم بناء الطبولوجى\n"
 
-#: ../lib/vector/Vlib/build.c:921
+#: ../lib/vector/Vlib/build.c:914
 #, fuzzy, c-format
 msgid "Number of nodes: %d"
 msgstr "عدد العقد     :   %d\n"
 
-#: ../lib/vector/Vlib/build.c:922
+#: ../lib/vector/Vlib/build.c:915
 #, fuzzy, c-format
 msgid "Number of primitives: %d"
 msgstr "عدد النقاط    :   %d\n"
 
-#: ../lib/vector/Vlib/build.c:923
+#: ../lib/vector/Vlib/build.c:916
 #, fuzzy, c-format
 msgid "Number of points: %d"
 msgstr "عدد النقاط    :   %d\n"
 
-#: ../lib/vector/Vlib/build.c:924
+#: ../lib/vector/Vlib/build.c:917
 #, fuzzy, c-format
 msgid "Number of lines: %d"
 msgstr "عدد الخطوط     :   %d\n"
 
-#: ../lib/vector/Vlib/build.c:925
+#: ../lib/vector/Vlib/build.c:918
 #, fuzzy, c-format
 msgid "Number of boundaries: %d"
 msgstr "%d : عدد الحدود غير الصحيحة\n"
 
-#: ../lib/vector/Vlib/build.c:926
+#: ../lib/vector/Vlib/build.c:919
 #, fuzzy, c-format
 msgid "Number of centroids: %d"
 msgstr "عدد  اشباه المراكز :   %d\n"
 
-#: ../lib/vector/Vlib/build.c:929
+#: ../lib/vector/Vlib/build.c:922
 #, fuzzy, c-format
 msgid "Number of faces: %d"
 msgstr "عدد  الأوجه    :   %d\n"
 
-#: ../lib/vector/Vlib/build.c:932
+#: ../lib/vector/Vlib/build.c:925
 #, fuzzy, c-format
 msgid "Number of kernels: %d"
 msgstr "عدد العقد     :   %d\n"
 
-#: ../lib/vector/Vlib/build.c:979
+#: ../lib/vector/Vlib/build.c:972
 #, fuzzy, c-format
 msgid "Number of areas: %d"
 msgstr "عدد المساحات     :   %d\n"
 
-#: ../lib/vector/Vlib/build.c:980
+#: ../lib/vector/Vlib/build.c:973
 #, fuzzy, c-format
 msgid "Number of isles: %d"
 msgstr "عدد الجزر:    %d\n"
 
-#: ../lib/vector/Vlib/build.c:985
+#: ../lib/vector/Vlib/build.c:978
 #, fuzzy, c-format
 msgid "Number of areas without centroid: %d"
 msgstr "%d : عدد المساحات بدون اشباه مراكز\n"
 
-#: ../lib/vector/Vlib/build.c:989
+#: ../lib/vector/Vlib/build.c:982
 #, fuzzy, c-format
 msgid "Number of centroids exceeds number of areas: %d > %d"
 msgstr "%d : عدد  اشباه المراكز خارج المساحة\n"
 
-#: ../lib/vector/Vlib/build.c:993
+#: ../lib/vector/Vlib/build.c:986
 #, fuzzy, c-format
 msgid "Number of incorrect boundaries: %d"
 msgstr "%d : عدد الحدود غير الصحيحة\n"
 
-#: ../lib/vector/Vlib/build.c:996
+#: ../lib/vector/Vlib/build.c:989
 #, fuzzy, c-format
 msgid "Number of centroids outside area: %d"
 msgstr "%d : عدد  اشباه المراكز خارج المساحة\n"
 
-#: ../lib/vector/Vlib/build.c:999
+#: ../lib/vector/Vlib/build.c:992
 #, fuzzy, c-format
 msgid "Number of duplicate centroids: %d"
 msgstr "%d : عدد اشباه المراكز المضاعفة\n"
 
-#: ../lib/vector/Vlib/build.c:1002
+#: ../lib/vector/Vlib/build.c:995
 #, fuzzy
 msgid "Number of areas: -"
 msgstr "عدد المساحات     :   -\n"
 
-#: ../lib/vector/Vlib/build.c:1003
+#: ../lib/vector/Vlib/build.c:996
 #, fuzzy
 msgid "Number of isles: -"
 msgstr "عدد الجزر     :   -\n"
 
-#: ../lib/vector/Vlib/build.c:1031
+#: ../lib/vector/Vlib/build.c:1024
 #, fuzzy, c-format
 msgid "Unable to create topo file for vector map <%s>"
 msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
 
-#: ../lib/vector/Vlib/build.c:1040
+#: ../lib/vector/Vlib/build.c:1033
 #, fuzzy
 msgid "Error writing out topo file"
 msgstr "خطا فى كتابة ملف الطبوغرافية\n"
 
-#: ../lib/vector/Vlib/build.c:1234
+#: ../lib/vector/Vlib/build.c:1227
 #, fuzzy
 msgid "Unable to build spatial index from topology, vector map is not opened at topology level 2"
 msgstr "لم يمكن محو الخط,الخريطة  غير مفتوحة على المستوى الثانى"
 
-#: ../lib/vector/Vlib/build.c:1257
+#: ../lib/vector/Vlib/build.c:1250
 #, c-format
 msgid "%s is no longer supported"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:1280
+#: ../lib/vector/Vlib/build.c:1273
 msgid "Spatial index not available, can not be saved"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:1293
+#: ../lib/vector/Vlib/build.c:1286
 #, fuzzy, c-format
 msgid "Unable to create spatial index file for vector map <%s>"
 msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
 
-#: ../lib/vector/Vlib/build.c:1302
+#: ../lib/vector/Vlib/build.c:1295
 #, fuzzy
 msgid "Error writing out spatial index file"
 msgstr "خطا فى كتابة الدليل الفراغى\n"
 
-#: ../lib/vector/Vlib/build_nat.c:76 ../lib/vector/Vlib/build_sfa.c:333
-#: ../lib/vector/Vlib/build_sfa.c:633
+#: ../lib/vector/Vlib/build_nat.c:76 ../lib/vector/Vlib/build_sfa.c:331
+#: ../lib/vector/Vlib/build_sfa.c:630
 #, fuzzy
 msgid "Registering primitives..."
 msgstr ":تسجيل الخطوط"
 
-#: ../lib/vector/Vlib/build_nat.c:119 ../lib/vector/Vlib/build_sfa.c:378
-#: ../lib/vector/Vlib/build_sfa.c:665
+#: ../lib/vector/Vlib/build_nat.c:119 ../lib/vector/Vlib/build_sfa.c:376
+#: ../lib/vector/Vlib/build_sfa.c:662
 #, c-format
 msgid "One primitive registered"
 msgid_plural "%d primitives registered"
@@ -6954,8 +6911,8 @@ msgstr[3] ""
 msgstr[4] ""
 msgstr[5] ""
 
-#: ../lib/vector/Vlib/build_nat.c:122 ../lib/vector/Vlib/build_sfa.c:381
-#: ../lib/vector/Vlib/build_sfa.c:668
+#: ../lib/vector/Vlib/build_nat.c:122 ../lib/vector/Vlib/build_sfa.c:379
+#: ../lib/vector/Vlib/build_sfa.c:665
 #, c-format
 msgid "One vertex registered"
 msgid_plural "%d vertices registered"
@@ -7003,25 +6960,25 @@ msgstr ": توصيل الجزر"
 msgid "Attaching centroids..."
 msgstr " : توصيل اشباه المراكز"
 
-#: ../lib/vector/Vlib/build_ogr.c:72
+#: ../lib/vector/Vlib/build_ogr.c:69
 msgid "Empty OGR layer, nothing to build"
 msgstr ""
 
-#: ../lib/vector/Vlib/build_ogr.c:87 ../lib/vector/Vlib/build_pg.c:101
+#: ../lib/vector/Vlib/build_ogr.c:84 ../lib/vector/Vlib/build_pg.c:101
 #, c-format
 msgid "Feature table <%s> has no primary key defined"
 msgstr ""
 
-#: ../lib/vector/Vlib/build_ogr.c:89
+#: ../lib/vector/Vlib/build_ogr.c:86
 msgid "Random read is not supported by OGR for this layer. Unable to build topology."
 msgstr ""
 
-#: ../lib/vector/Vlib/build_ogr.c:95 ../lib/vector/Vlib/build_pg.c:109
+#: ../lib/vector/Vlib/build_ogr.c:92 ../lib/vector/Vlib/build_pg.c:109
 #, c-format
 msgid "Using external data format '%s' (feature type '%s')"
 msgstr ""
 
-#: ../lib/vector/Vlib/build_ogr.c:137
+#: ../lib/vector/Vlib/build_ogr.c:129
 #, fuzzy, c-format
 msgid "Unable to open fidx file for write <%s>"
 msgstr "%s: لم يمكن فتح ملف  الطبوغرافية للكتابة\n"
@@ -7073,7 +7030,7 @@ msgstr ""
 msgid "Updating TopoGeometry data..."
 msgstr ""
 
-#: ../lib/vector/Vlib/build_pg.c:433 ../lib/vector/Vlib/open.c:1392
+#: ../lib/vector/Vlib/build_pg.c:433 ../lib/vector/Vlib/open.c:1376
 #: ../lib/vector/Vlib/write_pg.c:630 ../lib/vector/Vlib/write_pg.c:898
 #, fuzzy
 msgid "Unable to open PG file"
@@ -7123,29 +7080,29 @@ msgstr ""
 msgid "Unable to build simple features from topogeometry data. Unsupported type %d."
 msgstr ""
 
-#: ../lib/vector/Vlib/build_sfa.c:273 ../lib/vector/Vlib/build_sfa.c:545
+#: ../lib/vector/Vlib/build_sfa.c:271 ../lib/vector/Vlib/build_sfa.c:542
 #, fuzzy, c-format
 msgid "Unable to calculate centroid for area %d"
 msgstr "لم يمكن توفير ذاكرة كافية\n"
 
-#: ../lib/vector/Vlib/build_sfa.c:299
+#: ../lib/vector/Vlib/build_sfa.c:297
 #, fuzzy, c-format
 msgid "Feature type %d not supported"
 msgstr "غير موجود'%s' الفيكتور"
 
-#: ../lib/vector/Vlib/build_sfa.c:348 ../lib/vector/Vlib/build_sfa.c:357
+#: ../lib/vector/Vlib/build_sfa.c:346 ../lib/vector/Vlib/build_sfa.c:355
 #: ../lib/vector/Vlib/read_pg.c:389
 #, fuzzy, c-format
 msgid "Feature %d without geometry skipped"
 msgstr "%d : عدد المساحات بدون اشباه مراكز\n"
 
-#: ../lib/vector/Vlib/build_sfa.c:604 ../lib/vector/Vlib/read_ogr.c:341
-#: ../lib/vector/Vlib/read_ogr.c:576
+#: ../lib/vector/Vlib/build_sfa.c:601 ../lib/vector/Vlib/read_ogr.c:323
+#: ../lib/vector/Vlib/read_ogr.c:558
 #, c-format
 msgid "OGR feature type %d not supported"
 msgstr ""
 
-#: ../lib/vector/Vlib/build_sfa.c:672
+#: ../lib/vector/Vlib/build_sfa.c:669
 #, fuzzy, c-format
 msgid "One feature without geometry skipped"
 msgid_plural "%d features without geometry skipped"
@@ -7156,12 +7113,12 @@ msgstr[3] ""
 msgstr[4] ""
 msgstr[5] ""
 
-#: ../lib/vector/Vlib/build_sfa.c:731
+#: ../lib/vector/Vlib/build_sfa.c:723
 #, c-format
 msgid "%s: Native format unsupported"
 msgstr ""
 
-#: ../lib/vector/Vlib/build_sfa.c:756
+#: ../lib/vector/Vlib/build_sfa.c:748
 msgid "Feature index is built only for non-native formats. Nothing to dump."
 msgstr ""
 
@@ -7244,7 +7201,7 @@ msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
 msgid "Error writing out category index file"
 msgstr "خطا فى كتابة الدليل الفراغى\n"
 
-#: ../lib/vector/Vlib/cindex.c:547 ../lib/vector/Vlib/open.c:412
+#: ../lib/vector/Vlib/cindex.c:547 ../lib/vector/Vlib/open.c:398
 #, fuzzy, c-format
 msgid "Unable to open category index file for vector map <%s>"
 msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
@@ -7254,32 +7211,32 @@ msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
 msgid "Modifications: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/close.c:88
+#: ../lib/vector/Vlib/close.c:81
 #, fuzzy, c-format
 msgid "Unable to create vector map <%s>"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
-#: ../lib/vector/Vlib/close.c:106
+#: ../lib/vector/Vlib/close.c:99
 #, fuzzy
 msgid "Copying features failed"
 msgstr "يتم الان بناء الطبولوجى ...\n"
 
-#: ../lib/vector/Vlib/close.c:138
+#: ../lib/vector/Vlib/close.c:131
 #, fuzzy, c-format
 msgid "Unable to open %s file"
 msgstr "لم يمكن فتحه %s فى %s"
 
-#: ../lib/vector/Vlib/close.c:220
+#: ../lib/vector/Vlib/close.c:213
 #, fuzzy, c-format
 msgid "Unable to close vector <%s>"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
-#: ../lib/vector/Vlib/close.c:250
+#: ../lib/vector/Vlib/close.c:243
 #, c-format
 msgid "Invalid request for writing frmt file - map format is %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/close.c:284
+#: ../lib/vector/Vlib/close.c:272
 #, fuzzy, c-format
 msgid "Link to vector map <%s> created"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
@@ -7305,7 +7262,7 @@ msgstr "لم يمكن فتحه %s فى %s"
 msgid "Unable to drop table <%s>"
 msgstr "لم يمكن فتحه %s فى %s"
 
-#: ../lib/vector/Vlib/close_ogr.c:104 ../lib/vector/Vlib/close_pg.c:143
+#: ../lib/vector/Vlib/close_ogr.c:96 ../lib/vector/Vlib/close_pg.c:143
 #, fuzzy, c-format
 msgid "Unable to save feature index file for vector map <%s>"
 msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
@@ -7434,50 +7391,50 @@ msgstr ""
 msgid "Trying to add more edges to the planar_graph than the initial allocation size allows"
 msgstr ""
 
-#: ../lib/vector/Vlib/field.c:77
+#: ../lib/vector/Vlib/field.c:72
 #, fuzzy, c-format
 msgid "Name <%s> is not SQL compliant. Must start with a letter."
 msgstr " يجب أن يبدأ بحرف <%s> اسم ماف فيكتورى غير سليم \n"
 
-#: ../lib/vector/Vlib/field.c:127
+#: ../lib/vector/Vlib/field.c:122
 #, fuzzy
 msgid "Layer number must be 1 or greater"
 msgstr "رقم الحقل يجب ان يكون 1 او اكثر"
 
-#: ../lib/vector/Vlib/field.c:132
+#: ../lib/vector/Vlib/field.c:127
 #, fuzzy
 msgid "Unable to add attribute link, vector map is not opened in WRITE mode"
 msgstr "لم يتم اضافة رابط قاعدة البيانات حيث ان الخريطة غير مفتوحة على وضع الكتابة"
 
-#: ../lib/vector/Vlib/field.c:139
+#: ../lib/vector/Vlib/field.c:134
 #, fuzzy
 msgid "Unable to add attribute link"
 msgstr "لم يتم اضافة رابط قاعدة البيانات"
 
-#: ../lib/vector/Vlib/field.c:145
+#: ../lib/vector/Vlib/field.c:140
 #, fuzzy
 msgid "Unable to write attribute links"
 msgstr "لم يتم كتابة روابط قاعدة البيانات"
 
-#: ../lib/vector/Vlib/field.c:190
+#: ../lib/vector/Vlib/field.c:185
 #, fuzzy
 msgid "Unable to write database links"
 msgstr "لم يتم كتابة روابط قاعدة البيانات"
 
-#: ../lib/vector/Vlib/field.c:215
+#: ../lib/vector/Vlib/field.c:210
 msgid "Database connection not defined. Skipping."
 msgstr ""
 
-#: ../lib/vector/Vlib/field.c:222
+#: ../lib/vector/Vlib/field.c:217
 msgid "More DB links defined for input vector map. Using only first DB link for output."
 msgstr ""
 
-#: ../lib/vector/Vlib/field.c:298
+#: ../lib/vector/Vlib/field.c:293
 #, fuzzy, c-format
 msgid "Layer number %d or name <%s> already exists"
 msgstr "موجود بالفعل <%d> ورقم الحقل <%s> الأسم"
 
-#: ../lib/vector/Vlib/field.c:387
+#: ../lib/vector/Vlib/field.c:382
 #, c-format
 msgid ""
 "Default driver / database set to:\n"
@@ -7485,54 +7442,54 @@ msgid ""
 "database: %s"
 msgstr ""
 
-#: ../lib/vector/Vlib/field.c:394
+#: ../lib/vector/Vlib/field.c:389
 msgid "Default driver is not set"
 msgstr "لم يحدد المشغل الأساسى"
 
-#: ../lib/vector/Vlib/field.c:397
+#: ../lib/vector/Vlib/field.c:392
 msgid "Default database is not set"
 msgstr "لم تحدد قاعدة البيانات الأساس"
 
-#: ../lib/vector/Vlib/field.c:482
+#: ../lib/vector/Vlib/field.c:477
 #, c-format
 msgid "Requested dblink %d, maximum link number %d"
 msgstr "رابط قاعدة البيانات المطلوب %d, القيمة العظمى للرابط %d"
 
-#: ../lib/vector/Vlib/field.c:689 ../lib/vector/Vlib/field.c:697
+#: ../lib/vector/Vlib/field.c:684 ../lib/vector/Vlib/field.c:692
 #, fuzzy, c-format
 msgid "Error in rule on row %d in <%s>"
 msgstr " %s فى  %d خطا فى القاعدة على الصف"
 
-#: ../lib/vector/Vlib/field.c:765 ../lib/vector/Vlib/open_ogr.c:77
+#: ../lib/vector/Vlib/field.c:757 ../lib/vector/Vlib/open_ogr.c:74
 #, fuzzy, c-format
 msgid "Unable to open OGR data source '%s'"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
-#: ../lib/vector/Vlib/field.c:784
+#: ../lib/vector/Vlib/field.c:776
 #, fuzzy, c-format
 msgid "Unable to open OGR layer <%s>"
 msgstr "لم يمكن فتحه %s فى %s"
 
-#: ../lib/vector/Vlib/field.c:812
+#: ../lib/vector/Vlib/field.c:803
 #, c-format
 msgid "Feature table <%s> has no primary key defined. Unable to define DB links."
 msgstr ""
 
-#: ../lib/vector/Vlib/field.c:831
+#: ../lib/vector/Vlib/field.c:822
 msgid "GRASS not compiled with PostgreSQL support"
 msgstr ""
 
-#: ../lib/vector/Vlib/field.c:864
+#: ../lib/vector/Vlib/field.c:855
 #, fuzzy
 msgid "Unknown vector map format"
 msgstr "مسقط غير معروف"
 
-#: ../lib/vector/Vlib/field.c:898
+#: ../lib/vector/Vlib/field.c:889
 #, fuzzy, c-format
 msgid "Unable to create database definition file for vector map <%s>"
 msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
 
-#: ../lib/vector/Vlib/field.c:996
+#: ../lib/vector/Vlib/field.c:987
 #, fuzzy
 msgid "Bug: attempt to update map which is not in current mapset"
 msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
@@ -7732,13 +7689,13 @@ msgid "Unable to find vector map <%s> in <%s>"
 msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
 
 #: ../lib/vector/Vlib/map.c:156 ../lib/vector/Vlib/map.c:249
-#: ../lib/vector/Vlib/open.c:851
+#: ../lib/vector/Vlib/open.c:835
 #, fuzzy, c-format
 msgid "Vector map <%s> already exists and will be overwritten"
 msgstr "موجود ولايمكن تغييره '%s' الفيكتور"
 
-#: ../lib/vector/Vlib/map.c:160 ../lib/vector/Vlib/open.c:842
-#: ../lib/vector/Vlib/open.c:856
+#: ../lib/vector/Vlib/map.c:160 ../lib/vector/Vlib/open.c:826
+#: ../lib/vector/Vlib/open.c:840
 #, fuzzy, c-format
 msgid "Unable to delete vector map <%s>"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
@@ -7788,8 +7745,8 @@ msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
 msgid "Unable to open directory '%s'"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
-#: ../lib/vector/Vlib/map.c:493 ../lib/vector/Vlib/open.c:1500
-#: ../lib/vector/Vlib/open.c:1506
+#: ../lib/vector/Vlib/map.c:493 ../lib/vector/Vlib/open.c:1484
+#: ../lib/vector/Vlib/open.c:1490
 #, c-format
 msgid "Filepath '%s/%s' exceeds max length"
 msgstr ""
@@ -7984,120 +7941,120 @@ msgstr ""
 msgid "Cannot add network arc"
 msgstr "%s: لم يمكن فتح ملف  الطبوغرافية للكتابة\n"
 
-#: ../lib/vector/Vlib/open.c:142
+#: ../lib/vector/Vlib/open.c:128
 #, fuzzy, c-format
 msgid "Programmer requested unknown access level %d"
 msgstr "تحذير: المبرمج طلب مستوى  غير معروف\n"
 
-#: ../lib/vector/Vlib/open.c:243
+#: ../lib/vector/Vlib/open.c:229
 #, fuzzy, c-format
 msgid "Vector map <%s> not found in current mapset"
 msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
 
-#: ../lib/vector/Vlib/open.c:264
+#: ../lib/vector/Vlib/open.c:250
 #, fuzzy
 msgid "Temporary vector maps can be accessed only in the current mapset"
 msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
 
-#: ../lib/vector/Vlib/open.c:289
+#: ../lib/vector/Vlib/open.c:275
 #, fuzzy
 msgid "Vector map which is not in the current mapset cannot be opened for update"
 msgstr "الخريطة لا يمكن فتحها للتحديث"
 
-#: ../lib/vector/Vlib/open.c:324
+#: ../lib/vector/Vlib/open.c:310
 #, fuzzy, c-format
 msgid "Unable to read header file of vector map <%s>"
 msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
 
-#: ../lib/vector/Vlib/open.c:366
+#: ../lib/vector/Vlib/open.c:352
 #, fuzzy, c-format
 msgid "Unable to open topology file for vector map <%s>"
 msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
 
-#: ../lib/vector/Vlib/open.c:439
+#: ../lib/vector/Vlib/open.c:423
 #, fuzzy, c-format
 msgid "Unable to open vector map <%s> on level %d. Try to rebuild vector topology with v.build."
 msgstr "%d على مستوى %s لم يمكن فتح فيكتور قديم "
 
-#: ../lib/vector/Vlib/open.c:466
+#: ../lib/vector/Vlib/open.c:450
 #, fuzzy, c-format
 msgid "Building topology for OGR layer <%s> from datasource '%s'..."
 msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
 
-#: ../lib/vector/Vlib/open.c:475
+#: ../lib/vector/Vlib/open.c:459
 #, fuzzy, c-format
 msgid "Unable to open vector map <%s> on level %d"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
-#: ../lib/vector/Vlib/open.c:530
+#: ../lib/vector/Vlib/open.c:514
 #, fuzzy, c-format
 msgid "Unable to open history file for vector map <%s>"
 msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
 
-#: ../lib/vector/Vlib/open.c:804
+#: ../lib/vector/Vlib/open.c:788
 #, fuzzy, c-format
 msgid "Unable to create vector map: <%s> is not in the current mapset (%s)"
 msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
 
-#: ../lib/vector/Vlib/open.c:815
+#: ../lib/vector/Vlib/open.c:799
 #, fuzzy, c-format
 msgid "Unable to create vector map: <%s> is not SQL compliant"
 msgstr "SQL اسم الخريطة غير متوافق مع نظام"
 
-#: ../lib/vector/Vlib/open.c:876
+#: ../lib/vector/Vlib/open.c:860
 #, fuzzy, c-format
 msgid "Unable to open history file of vector map <%s>"
 msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
 
-#: ../lib/vector/Vlib/open.c:920
+#: ../lib/vector/Vlib/open.c:904
 #, c-format
 msgid "Using OGR/%s format"
 msgstr ""
 
-#: ../lib/vector/Vlib/open.c:924
+#: ../lib/vector/Vlib/open.c:908
 msgid "Using PostGIS Topology format"
 msgstr ""
 
-#: ../lib/vector/Vlib/open.c:926
+#: ../lib/vector/Vlib/open.c:910
 msgid "Using PostGIS format"
 msgstr ""
 
-#: ../lib/vector/Vlib/open.c:929
+#: ../lib/vector/Vlib/open.c:913
 #, fuzzy
 msgid "Using native format"
 msgstr "تشكيل غير صالح\n"
 
-#: ../lib/vector/Vlib/open.c:1019
+#: ../lib/vector/Vlib/open.c:1003
 #, fuzzy, c-format
 msgid "Unable to stat file <%s>"
 msgstr "لم يمكن فتحه %s فى %s"
 
-#: ../lib/vector/Vlib/open.c:1084
+#: ../lib/vector/Vlib/open.c:1068
 #, c-format
 msgid "unknown %d (update Vect_maptype_info)"
 msgstr ""
 
-#: ../lib/vector/Vlib/open.c:1173
+#: ../lib/vector/Vlib/open.c:1157
 #, fuzzy
 msgid "Size of 'coor' file differs from value saved in topology file"
 msgstr "حجم ملف الأحداثيات مختلف عن القيم المحفوظة فى ملف الطبوغرافية"
 
-#: ../lib/vector/Vlib/open.c:1184 ../lib/vector/Vlib/open.c:1284
+#: ../lib/vector/Vlib/open.c:1168 ../lib/vector/Vlib/open.c:1268
 #, fuzzy, c-format
 msgid "Please rebuild topology for vector map <%s@%s>"
 msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
 
-#: ../lib/vector/Vlib/open.c:1273
+#: ../lib/vector/Vlib/open.c:1257
 #, fuzzy
 msgid "Size of 'coor' file differs from value saved in sidx file"
 msgstr "حجم ملف الأحداثيات مختلف عن القيم المحفوظة فى ملف الطبوغرافية"
 
-#: ../lib/vector/Vlib/open.c:1353
+#: ../lib/vector/Vlib/open.c:1337
 #, fuzzy
 msgid "Unable to open OGR file"
 msgstr "لم يمكن فتحه %s فى %s"
 
-#: ../lib/vector/Vlib/open.c:1380
+#: ../lib/vector/Vlib/open.c:1364
 msgid "OGR output also detected, using OGR"
 msgstr ""
 
@@ -8116,60 +8073,60 @@ msgstr ""
 msgid "Coor file of vector <%s@%s> is shorter than it should be (%<PRId64> bytes missing)."
 msgstr ""
 
-#: ../lib/vector/Vlib/open_ogr.c:60
+#: ../lib/vector/Vlib/open_ogr.c:57
 msgid "OGR datasource not defined"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_ogr.c:65 ../lib/vector/Vlib/write_ogr.c:129
+#: ../lib/vector/Vlib/open_ogr.c:62 ../lib/vector/Vlib/write_ogr.c:116
 msgid "OGR layer not defined"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_ogr.c:97
+#: ../lib/vector/Vlib/open_ogr.c:94
 #, fuzzy, c-format
 msgid "OGR layer <%s> not found"
 msgstr "غير موجود'%s' الفيكتور"
 
-#: ../lib/vector/Vlib/open_ogr.c:105 ../lib/vector/Vlib/write_ogr.c:349
+#: ../lib/vector/Vlib/open_ogr.c:102 ../lib/vector/Vlib/write_ogr.c:331
 #, c-format
 msgid "OGR transaction with layer <%s> failed to start"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_ogr.c:154 ../lib/vector/Vlib/open_pg.c:200
+#: ../lib/vector/Vlib/open_ogr.c:145 ../lib/vector/Vlib/open_pg.c:200
 #, fuzzy, c-format
 msgid "Unable to open feature index file for vector map <%s>"
 msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
 
-#: ../lib/vector/Vlib/open_ogr.c:201
+#: ../lib/vector/Vlib/open_ogr.c:187
 #, fuzzy, c-format
 msgid "Unable to get OGR driver <%s>"
 msgstr "لم يمكن فتحه %s فى %s"
 
-#: ../lib/vector/Vlib/open_ogr.c:209
+#: ../lib/vector/Vlib/open_ogr.c:195
 #, fuzzy, c-format
 msgid "Unable to create OGR data source '%s'"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
-#: ../lib/vector/Vlib/open_ogr.c:221
+#: ../lib/vector/Vlib/open_ogr.c:207
 #, fuzzy, c-format
 msgid "OGR layer <%s> already exists and will be overwritten"
 msgstr "موجود ولايمكن تغييره '%s' الفيكتور"
 
-#: ../lib/vector/Vlib/open_ogr.c:225
+#: ../lib/vector/Vlib/open_ogr.c:211
 #, fuzzy, c-format
 msgid "Unable to delete OGR layer <%s>"
 msgstr "لم يمكن فتحه %s فى %s"
 
-#: ../lib/vector/Vlib/open_ogr.c:232
+#: ../lib/vector/Vlib/open_ogr.c:218
 #, fuzzy, c-format
 msgid "OGR layer <%s> already exists in datasource '%s'"
 msgstr "datum لم يمكن فتح ملف جدول : %s"
 
-#: ../lib/vector/Vlib/open_ogr.c:293
+#: ../lib/vector/Vlib/open_ogr.c:275
 #, c-format
 msgid "Feature index format version %d.%d is not supported by this release. Try to rebuild topology or upgrade GRASS."
 msgstr ""
 
-#: ../lib/vector/Vlib/open_ogr.c:299
+#: ../lib/vector/Vlib/open_ogr.c:281
 #, c-format
 msgid "Your GRASS version does not fully support feature index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
 msgstr ""
@@ -8344,39 +8301,39 @@ msgstr "فشل الإتصال\n"
 msgid "for this format/level not supported"
 msgstr ""
 
-#: ../lib/vector/Vlib/read.c:102 ../lib/vector/Vlib/read.c:138
-#: ../lib/vector/Vlib/read.c:179
+#: ../lib/vector/Vlib/read.c:88 ../lib/vector/Vlib/read.c:124
+#: ../lib/vector/Vlib/read.c:165
 #, fuzzy
 msgid "Vector map is not open for reading"
 msgstr "غير موجود'%s' الفيكتور"
 
-#: ../lib/vector/Vlib/read.c:145 ../lib/vector/Vlib/read.c:192
+#: ../lib/vector/Vlib/read.c:131 ../lib/vector/Vlib/read.c:178
 #, fuzzy, c-format
 msgid "Unable to read feature %d from vector map <%s>"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
-#: ../lib/vector/Vlib/read.c:214
+#: ../lib/vector/Vlib/read.c:200
 #, fuzzy
 msgid "Line index is out of range"
 msgstr "دليل الخواص المضاعفة القيمة خارج النطاق"
 
-#: ../lib/vector/Vlib/read.c:238
+#: ../lib/vector/Vlib/read.c:224
 #, fuzzy
 msgid "Node index is out of range"
 msgstr "دليل الخواص المضاعفة القيمة خارج النطاق"
 
-#: ../lib/vector/Vlib/read.c:262
+#: ../lib/vector/Vlib/read.c:248
 #, fuzzy
 msgid "Area index is out of range"
 msgstr "دليل الخواص المضاعفة القيمة خارج النطاق"
 
-#: ../lib/vector/Vlib/read.c:286
+#: ../lib/vector/Vlib/read.c:272
 #, fuzzy
 msgid "Isle index is out of range"
 msgstr "دليل الخواص المضاعفة القيمة خارج النطاق"
 
 #: ../lib/vector/Vlib/read_nat.c:151 ../lib/vector/Vlib/read_pg.c:347
-#: ../lib/vector/Vlib/read_sfa.c:56 ../lib/vector/Vlib/write_nat.c:311
+#: ../lib/vector/Vlib/read_sfa.c:55 ../lib/vector/Vlib/write_nat.c:311
 #: ../lib/vector/Vlib/write_nat.c:678 ../lib/vector/Vlib/write_pg.c:254
 #: ../lib/vector/Vlib/write_pg.c:419 ../lib/vector/Vlib/write_pg.c:2711
 #: ../lib/vector/Vlib/write_pg.c:2808
@@ -8384,25 +8341,25 @@ msgstr "دليل الخواص المضاعفة القيمة خارج النطا�
 msgid "Attempt to access dead feature %d"
 msgstr "%s: لم يمكن فتح ملف  الطبوغرافية للكتابة\n"
 
-#: ../lib/vector/Vlib/read_ogr.c:214 ../lib/vector/Vlib/read_ogr.c:222
+#: ../lib/vector/Vlib/read_ogr.c:201 ../lib/vector/Vlib/read_ogr.c:209
 #, fuzzy, c-format
 msgid "Unable to get feature geometry, fid %ld"
 msgstr "لم يمكن فتحه %s فى %s"
 
-#: ../lib/vector/Vlib/read_ogr.c:379 ../lib/vector/Vlib/read_pg.c:492
+#: ../lib/vector/Vlib/read_ogr.c:361 ../lib/vector/Vlib/read_pg.c:492
 msgid "Feature without geometry. Skipped."
 msgstr ""
 
-#: ../lib/vector/Vlib/read_ogr.c:387
+#: ../lib/vector/Vlib/read_ogr.c:369
 msgid "OGR feature without ID"
 msgstr ""
 
-#: ../lib/vector/Vlib/read_ogr.c:512
+#: ../lib/vector/Vlib/read_ogr.c:494
 #, c-format
 msgid "OGR feature type '%s' not supported"
 msgstr ""
 
-#: ../lib/vector/Vlib/read_pg.c:199 ../lib/vector/Vlib/read_sfa.c:119
+#: ../lib/vector/Vlib/read_pg.c:199 ../lib/vector/Vlib/read_sfa.c:118
 #, fuzzy, c-format
 msgid "Unexpected feature type (%d) - should be (%d)"
 msgstr "مسقط غير معروف"
@@ -8501,19 +8458,14 @@ msgid ""
 "%s"
 msgstr "لم يمكن فتحه %s فى %s"
 
-#: ../lib/vector/Vlib/read_sfa.c:92
+#: ../lib/vector/Vlib/read_sfa.c:91
 #, fuzzy, c-format
 msgid "Unable to construct centroid for area %d. Skipped."
 msgstr "لم يمكن توفير ذاكرة كافية\n"
 
-#: ../lib/vector/Vlib/read_sfa.c:97
+#: ../lib/vector/Vlib/read_sfa.c:96
 #, c-format
 msgid "Centroid %d: invalid area %d"
-msgstr ""
-
-#: ../lib/vector/Vlib/read_sfa.c:126 ../lib/vector/Vlib/write_sfa.c:132
-#: ../lib/vector/Vlib/write_sfa.c:175 ../lib/vector/Vlib/write_sfa.c:276
-msgid "GRASS is not compiled with OGR/PostgreSQL support"
 msgstr ""
 
 #: ../lib/vector/Vlib/remove_areas.c:105 ../lib/vector/Vlib/remove_areas.c:268
@@ -8568,24 +8520,24 @@ msgstr "عدد الخطوط     :   %d\n"
 msgid "Unable to delete item %d from spatial index"
 msgstr "لم يمكن فتحه %s فى %s"
 
-#: ../lib/vector/Vlib/simple_features.c:226
+#: ../lib/vector/Vlib/simple_features.c:224
 #, fuzzy, c-format
 msgid "Unknown Simple Features type (%d)"
 msgstr "مسقط غير معروف"
 
-#: ../lib/vector/Vlib/simple_features.c:332 ../lib/vector/Vlib/write_pg.c:336
+#: ../lib/vector/Vlib/simple_features.c:325 ../lib/vector/Vlib/write_pg.c:336
 #: ../lib/vector/Vlib/write_pg.c:829 ../lib/vector/Vlib/write_pg.c:1250
 #: ../lib/vector/Vlib/write_pg.c:1407
 #, fuzzy
 msgid "No connection defined"
 msgstr "فشل الإتصال\n"
 
-#: ../lib/vector/Vlib/simple_features.c:340
+#: ../lib/vector/Vlib/simple_features.c:333
 #, fuzzy
 msgid "Unable to get number of simple features"
 msgstr "لم يمكن فتح ملف مؤقت"
 
-#: ../lib/vector/Vlib/simple_features.c:350
+#: ../lib/vector/Vlib/simple_features.c:343
 #, fuzzy, c-format
 msgid "Unable to report simple features for vector map <%s>"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
@@ -8627,32 +8579,32 @@ msgstr "datum لم يمكن فتح ملف جدول : %s"
 msgid "Reading features..."
 msgstr "يتم الان بناء الطبولوجى ...\n"
 
-#: ../lib/vector/Vlib/write.c:212
+#: ../lib/vector/Vlib/write.c:184
 #, fuzzy, c-format
 msgid "Unable to write feature in vector map <%s>"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
-#: ../lib/vector/Vlib/write.c:255
+#: ../lib/vector/Vlib/write.c:227
 #, fuzzy, c-format
 msgid "Unable to rewrite feature/offset %<PRId64> in vector map <%s>"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
-#: ../lib/vector/Vlib/write.c:288
+#: ../lib/vector/Vlib/write.c:260
 #, fuzzy, c-format
 msgid "Unable to delete feature/offset %<PRId64> from vector map <%s>"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
-#: ../lib/vector/Vlib/write.c:325
+#: ../lib/vector/Vlib/write.c:297
 #, fuzzy, c-format
 msgid "Unable to restore feature/offset %<PRId64> in vector map <%s>"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
-#: ../lib/vector/Vlib/write.c:335
+#: ../lib/vector/Vlib/write.c:307
 #, fuzzy, c-format
 msgid "Vector map <%s> is not opened"
 msgstr "غير موجود'%s' الفيكتور"
 
-#: ../lib/vector/Vlib/write.c:340
+#: ../lib/vector/Vlib/write.c:312
 #, fuzzy, c-format
 msgid "Vector map <%s> is not opened in write mode"
 msgstr "غير موجود'%s' الفيكتور"
@@ -8677,109 +8629,109 @@ msgstr ""
 msgid "Attempt to access dead area %d"
 msgstr "%s: لم يمكن فتح ملف  الطبوغرافية للكتابة\n"
 
-#: ../lib/vector/Vlib/write_ogr.c:96 ../lib/vector/Vlib/write_pg.c:197
-#: ../lib/vector/Vlib/write_pg.c:267 ../lib/vector/Vlib/write_sfa.c:166
+#: ../lib/vector/Vlib/write_ogr.c:88 ../lib/vector/Vlib/write_pg.c:197
+#: ../lib/vector/Vlib/write_pg.c:267 ../lib/vector/Vlib/write_sfa.c:158
 #, fuzzy
 msgid "Unable to rewrite feature (incompatible feature types)"
 msgstr "لم يمكن كتابة الخط"
 
-#: ../lib/vector/Vlib/write_ogr.c:134 ../lib/vector/Vlib/write_pg.c:341
+#: ../lib/vector/Vlib/write_ogr.c:121 ../lib/vector/Vlib/write_pg.c:341
 #, fuzzy, c-format
 msgid "Invalid offset (%<PRId64>)"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
-#: ../lib/vector/Vlib/write_ogr.c:140 ../lib/vector/Vlib/write_pg.c:362
+#: ../lib/vector/Vlib/write_ogr.c:127 ../lib/vector/Vlib/write_pg.c:362
 #, fuzzy
 msgid "Unable to delete feature"
 msgstr "لم يمكن فتحه %s فى %s"
 
-#: ../lib/vector/Vlib/write_ogr.c:237
+#: ../lib/vector/Vlib/write_ogr.c:219
 #, fuzzy, c-format
 msgid "Creating field <%s> failed"
 msgstr "لم يمكن فتحه %s فى %s"
 
-#: ../lib/vector/Vlib/write_ogr.c:301 ../lib/vector/Vlib/write_pg.c:1142
+#: ../lib/vector/Vlib/write_ogr.c:283 ../lib/vector/Vlib/write_pg.c:1142
 #, c-format
 msgid "Unsupported geometry type (%d)"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:324
+#: ../lib/vector/Vlib/write_ogr.c:306
 #, fuzzy, c-format
 msgid "Unable to create OGR layer <%s> in '%s'"
 msgstr "لم يمكن فتحه %s فى %s"
 
-#: ../lib/vector/Vlib/write_ogr.c:336 ../lib/vector/Vlib/write_pg.c:1155
+#: ../lib/vector/Vlib/write_ogr.c:318 ../lib/vector/Vlib/write_pg.c:1155
 #, c-format
 msgid "More layers defined, using driver <%s> and database <%s>"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:343 ../lib/vector/Vlib/write_pg.c:1160
+#: ../lib/vector/Vlib/write_ogr.c:325 ../lib/vector/Vlib/write_pg.c:1160
 msgid "Database connection not defined. Unable to write attributes."
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:411 ../lib/vector/Vlib/write_pg.c:1275
+#: ../lib/vector/Vlib/write_ogr.c:393 ../lib/vector/Vlib/write_pg.c:1275
 #: ../lib/vector/Vlib/write_pg.c:1439
 #, c-format
 msgid "No category defined for layer %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:413 ../lib/vector/Vlib/write_pg.c:1277
+#: ../lib/vector/Vlib/write_ogr.c:395 ../lib/vector/Vlib/write_pg.c:1277
 #: ../lib/vector/Vlib/write_pg.c:1441
 #, c-format
 msgid "Feature has more categories, using category %d (from layer %d)"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:426
+#: ../lib/vector/Vlib/write_ogr.c:408
 msgid "Feature is not a point. Skipping."
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:434
+#: ../lib/vector/Vlib/write_ogr.c:416
 msgid "Feature is not a line. Skipping."
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:441
+#: ../lib/vector/Vlib/write_ogr.c:423
 msgid "Feature is not a polygon. Skipping."
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:448
+#: ../lib/vector/Vlib/write_ogr.c:430
 msgid "Feature is not a face. Skipping."
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:454
+#: ../lib/vector/Vlib/write_ogr.c:436
 #, fuzzy, c-format
 msgid "Unsupported feature type (%d)"
 msgstr "مسقط غير معروف"
 
-#: ../lib/vector/Vlib/write_ogr.c:473
+#: ../lib/vector/Vlib/write_ogr.c:455
 msgid "Boundary is not closed. Feature skipped."
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:502
+#: ../lib/vector/Vlib/write_ogr.c:484
 #, fuzzy
 msgid "Unable to writes feature attributes"
 msgstr "لم يتم كتابة روابط قاعدة البيانات"
 
-#: ../lib/vector/Vlib/write_ogr.c:567
+#: ../lib/vector/Vlib/write_ogr.c:549
 #, c-format
 msgid "Feature without category of layer %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:582 ../lib/vector/Vlib/write_pg.c:2046
+#: ../lib/vector/Vlib/write_ogr.c:564 ../lib/vector/Vlib/write_pg.c:2046
 #, fuzzy, c-format
 msgid "Unable to select attributes for category %d"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
-#: ../lib/vector/Vlib/write_ogr.c:592 ../lib/vector/Vlib/write_pg.c:2054
+#: ../lib/vector/Vlib/write_ogr.c:574 ../lib/vector/Vlib/write_pg.c:2054
 #, c-format
 msgid "No database record for category %d, no attributes will be written"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_ogr.c:624
+#: ../lib/vector/Vlib/write_ogr.c:606
 #, fuzzy, c-format
 msgid "Unable to create field <%s>"
 msgstr "لم يمكن فتحه %s فى %s"
 
-#: ../lib/vector/Vlib/write_ogr.c:652 ../lib/vector/Vlib/write_pg.c:2119
+#: ../lib/vector/Vlib/write_ogr.c:634 ../lib/vector/Vlib/write_pg.c:2119
 #, fuzzy, c-format
 msgid "Unsupported column type %d"
 msgstr "مسقط غير معروف"
@@ -8795,7 +8747,7 @@ msgid "Unable to delete feature (%s) %d"
 msgstr "لم يمكن فتحه %s فى %s"
 
 #: ../lib/vector/Vlib/write_pg.c:572 ../lib/vector/Vlib/write_pg.c:1338
-#: ../lib/vector/Vlib/write_sfa.c:351
+#: ../lib/vector/Vlib/write_sfa.c:328
 msgid "Boundary is not closed. Skipping."
 msgstr ""
 
@@ -8935,17 +8887,17 @@ msgstr "لم يتم انشاء عملية جديدة"
 msgid "Unable to delete node %d"
 msgstr "لم يمكن فتح ملف مؤقت"
 
-#: ../lib/vector/Vlib/write_sfa.c:119
+#: ../lib/vector/Vlib/write_sfa.c:116
 #, fuzzy
 msgid "Unable to calculate centroid for area"
 msgstr "لم يمكن توفير ذاكرة كافية\n"
 
-#: ../lib/vector/Vlib/write_sfa.c:222
+#: ../lib/vector/Vlib/write_sfa.c:209
 #, fuzzy
 msgid "Attempt to delete dead feature"
 msgstr "%s: لم يمكن فتح ملف  الطبوغرافية للكتابة\n"
 
-#: ../lib/vector/Vlib/write_sfa.c:313
+#: ../lib/vector/Vlib/write_sfa.c:291
 #, fuzzy, c-format
 msgid "Unsupported vector map format (%d)"
 msgstr "مسقط غير معروف"
@@ -8968,22 +8920,22 @@ msgstr "لم يمكن فتحه %s فى %s"
 msgid "Vector memory mode not supported, using 'AUTO'"
 msgstr ""
 
-#: ../lib/vector/diglib/frmt.c:47 ../lib/vector/diglib/frmt.c:76
+#: ../lib/vector/diglib/frmt.c:47 ../lib/vector/diglib/frmt.c:74
 #, fuzzy, c-format
 msgid "Vector format not recognized: %s"
 msgstr "غير موجود'%s' الفيكتور"
 
-#: ../lib/vector/diglib/frmt.c:53 ../lib/vector/diglib/frmt.c:109
+#: ../lib/vector/diglib/frmt.c:53 ../lib/vector/diglib/frmt.c:100
 #, fuzzy, c-format
 msgid "Line <%s> is too long"
 msgstr "حقل النطاق مفقود"
 
-#: ../lib/vector/diglib/frmt.c:85 ../lib/vector/diglib/frmt.c:94
+#: ../lib/vector/diglib/frmt.c:85
 #, fuzzy, c-format
 msgid "Vector format '%s' not supported"
 msgstr "غير موجود'%s' الفيكتور"
 
-#: ../lib/vector/diglib/frmt.c:103
+#: ../lib/vector/diglib/frmt.c:94
 #, c-format
 msgid "Format definition is not correct: %s"
 msgstr ""
@@ -9306,6 +9258,14 @@ msgstr "غير موجود'%s' الفيكتور"
 #, fuzzy
 msgid "Unknown query tool"
 msgstr "مسقط غير معروف"
+
+#, fuzzy, c-format
+#~ msgid "Unable to create latlong equivalent for '%s'"
+#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy
+#~ msgid "No output projection"
+#~ msgstr " %s لم يمكن فتح"
 
 #, fuzzy, c-format
 #~ msgid "Unable to seek: %s"

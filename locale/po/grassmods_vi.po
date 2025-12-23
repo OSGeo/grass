@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_vi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 16:57+0000\n"
+"POT-Creation-Date: 2025-12-13 22:01+0000\n"
 "PO-Revision-Date: 2025-07-26 01:37+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Vietnamese <https://weblate.osgeo.org/projects/grass-gis/grassmods/vi/>\n"
@@ -52,7 +52,7 @@ msgstr ""
 #: ../doc/examples/vector/v.example/main.c:143
 #: ../scripts/db.univar/db.univar.py:129 ../vector/v.db.connect/main.c:354
 #: ../vector/v.extract/main.c:233 ../vector/v.in.ascii/main.c:447
-#: ../vector/v.info/print.c:229 ../vector/v.out.ogr/main.c:722
+#: ../vector/v.info/print.c:229 ../vector/v.out.ogr/main.c:718
 #: ../vector/v.out.postgis/table.c:41 ../vector/v.out.svg/main.c:165
 #: ../vector/v.out.vtk/writeVTK.c:651 ../vector/v.patch/main.c:169
 #: ../vector/v.patch/main.c:215 ../vector/v.profile/main.c:447
@@ -67,7 +67,7 @@ msgstr ""
 #: ../db/db.describe/main.c:59 ../general/g.list/list.c:89
 #: ../general/g.mapset/main.c:175 ../imagery/i.group/main.c:124
 #: ../raster/r.category/main.c:143 ../raster/r.describe/dumplist.c:48
-#: ../raster/r.distance/report.c:63 ../raster/r.proj/main.c:345
+#: ../raster/r.distance/report.c:63 ../raster/r.proj/main.c:341
 #: ../raster/r.regression.multi/main.c:203
 #: ../raster/r.stats.quantile/main.c:382 ../raster/r.stats.quantile/main.c:439
 #: ../raster/r.univar/stats.c:96 ../raster/r.univar/stats.c:396
@@ -173,18 +173,18 @@ msgstr ""
 #: ../general/g.mapset/main.c:90 ../general/g.mapset/main.c:102
 #: ../general/g.mapset/main.c:108 ../general/g.mapsets/main.c:111
 #: ../general/g.mapsets/main.c:115 ../general/g.mapsets/main.c:121
-#: ../general/g.mapsets/main.c:127 ../general/g.proj/main.c:85
-#: ../general/g.proj/main.c:90 ../general/g.proj/main.c:99
-#: ../general/g.proj/main.c:105 ../general/g.proj/main.c:114
-#: ../general/g.proj/main.c:126 ../general/g.proj/main.c:135
-#: ../general/g.proj/main.c:191 ../general/g.proj/main.c:245
+#: ../general/g.mapsets/main.c:127 ../general/g.proj/main.c:76
+#: ../general/g.proj/main.c:81 ../general/g.proj/main.c:90
+#: ../general/g.proj/main.c:96 ../general/g.proj/main.c:105
+#: ../general/g.proj/main.c:111 ../general/g.proj/main.c:120
+#: ../general/g.proj/main.c:175 ../general/g.proj/main.c:229
 #: ../general/g.region/main.c:91 ../general/g.region/main.c:97
 #: ../general/g.region/main.c:102 ../general/g.region/main.c:108
 #: ../general/g.region/main.c:113 ../general/g.region/main.c:118
 #: ../general/g.region/main.c:124 ../general/g.region/main.c:132
 #: ../general/g.region/main.c:137 ../general/g.region/main.c:143
 #: ../general/g.region/main.c:151 ../general/g.region/main.c:157
-#: ../general/g.region/main.c:392 ../general/g.version/main.c:130
+#: ../general/g.region/main.c:392 ../general/g.version/main.c:124
 #: ../imagery/i.group/main.c:91 ../imagery/i.group/main.c:102
 #: ../imagery/i.group/main.c:107 ../imagery/i.group/main.c:115
 #: ../imagery/i.signatures/main.c:122 ../imagery/i.signatures/main.c:128
@@ -205,8 +205,8 @@ msgstr ""
 #: ../raster/r.in.gdal/main.c:238 ../raster/r.in.gdal/main.c:272
 #: ../raster/r.info/main.c:115 ../raster/r.object.geometry/main.c:95
 #: ../raster/r.out.gdal/main.c:142 ../raster/r.profile/main.c:118
-#: ../raster/r.proj/main.c:208 ../raster/r.proj/main.c:221
-#: ../raster/r.proj/main.c:233 ../raster/r.proj/main.c:242
+#: ../raster/r.proj/main.c:206 ../raster/r.proj/main.c:217
+#: ../raster/r.proj/main.c:229 ../raster/r.proj/main.c:238
 #: ../raster/r.stats/main.c:160 ../raster/r.sunmask/main.c:233
 #: ../raster/r.sunmask/main.c:239 ../raster/r.univar/r.univar_main.c:127
 #: ../raster/r.univar/r3.univar_main.c:89 ../raster/r.what/main.c:134
@@ -219,8 +219,8 @@ msgstr ""
 #: ../vector/v.colors/main.c:132 ../vector/v.colors/main.c:140
 #: ../vector/v.db.connect/main.c:92 ../vector/v.db.connect/main.c:105
 #: ../vector/v.db.connect/main.c:115 ../vector/v.db.connect/main.c:121
-#: ../vector/v.distance/main.c:247 ../vector/v.external.out/args.c:68
-#: ../vector/v.external.out/args.c:81 ../vector/v.external.out/args.c:87
+#: ../vector/v.distance/main.c:247 ../vector/v.external.out/args.c:62
+#: ../vector/v.external.out/args.c:75 ../vector/v.external.out/args.c:81
 #: ../vector/v.external/args.c:60 ../vector/v.external/args.c:67
 #: ../vector/v.external/args.c:76 ../vector/v.in.ogr/main.c:351
 #: ../vector/v.in.ogr/main.c:358 ../vector/v.info/parse.c:24
@@ -256,12 +256,12 @@ msgstr ""
 msgid "Print current connection parameters using shell style and exit [deprecated]"
 msgstr "đọc bản đồ vùng vec-tơ"
 
-#: ../db/db.connect/main.c:64 ../general/g.proj/main.c:94
-#: ../general/g.region/main.c:149 ../general/g.version/main.c:120
+#: ../db/db.connect/main.c:64 ../general/g.proj/main.c:85
+#: ../general/g.region/main.c:149 ../general/g.version/main.c:114
 #: ../imagery/i.group/main.c:113
 #: ../locale/scriptstrings/db.univar_to_translate.c:11
 #: ../locale/scriptstrings/v.db.univar_to_translate.c:11
-#: ../misc/m.measure/main.c:76 ../raster/r.proj/main.c:240
+#: ../misc/m.measure/main.c:76 ../raster/r.proj/main.c:236
 #: ../raster/r.regression.line/main.c:83
 #: ../raster/r.regression.multi/main.c:179
 #: ../raster/r.univar/r.univar_main.c:103
@@ -304,12 +304,12 @@ msgstr ""
 
 #: ../db/db.connect/main.c:144 ../general/g.findfile/main.c:187
 #: ../general/g.list/list.c:122 ../general/g.mapset/main.c:119
-#: ../general/g.mapsets/list.c:13 ../general/g.proj/output.c:351
-#: ../general/g.region/main.c:471 ../general/g.version/main.c:140
+#: ../general/g.mapsets/list.c:13 ../general/g.proj/output.c:320
+#: ../general/g.region/main.c:471 ../general/g.version/main.c:134
 #: ../misc/m.measure/main.c:87 ../raster/r.describe/dumplist.c:38
 #: ../raster/r.distance/report.c:211 ../raster/r.distance/report.c:218
 #: ../raster/r.distance/report.c:225 ../raster/r.info/main.c:147
-#: ../raster/r.proj/main.c:487 ../raster/r.regression.line/main.c:101
+#: ../raster/r.proj/main.c:481 ../raster/r.regression.line/main.c:101
 #: ../raster/r.regression.multi/main.c:197
 #: ../raster/r.regression.multi/main.c:566
 #: ../raster/r.stats.quantile/main.c:430 ../raster/r.stats.quantile/main.c:447
@@ -328,10 +328,10 @@ msgstr ""
 msgid "Failed to initialize JSON object. Out of memory?"
 msgstr ""
 
-#: ../db/db.connect/main.c:157 ../general/g.proj/main.c:278
-#: ../general/g.region/main.c:427 ../general/g.version/main.c:153
+#: ../db/db.connect/main.c:157 ../general/g.proj/main.c:262
+#: ../general/g.region/main.c:427 ../general/g.version/main.c:147
 #: ../imagery/i.group/main.c:137 ../misc/m.measure/main.c:100
-#: ../raster/r.proj/main.c:270 ../raster/r.regression.line/main.c:114
+#: ../raster/r.proj/main.c:266 ../raster/r.regression.line/main.c:114
 #: ../raster/r.regression.multi/main.c:213
 #: ../raster/r.univar/r.univar_main.c:220
 #: ../raster/r.univar/r3.univar_main.c:176
@@ -482,13 +482,13 @@ msgstr ""
 msgid "Lists all databases for a given driver and location."
 msgstr ""
 
-#: ../db/db.describe/main.c:140 ../general/g.proj/output.c:374
-#: ../general/g.region/main.c:990 ../general/g.version/main.c:409
+#: ../db/db.describe/main.c:140 ../general/g.proj/output.c:343
+#: ../general/g.region/main.c:990 ../general/g.version/main.c:384
 #: ../imagery/i.group/main.c:301 ../raster/r.category/main.c:412
 #: ../raster/r.describe/dumplist.c:71 ../raster/r.info/main.c:1000
 #: ../raster/r.mask.status/main.c:111 ../raster/r.object.geometry/main.c:402
-#: ../raster/r.profile/main.c:320 ../raster/r.proj/main.c:370
-#: ../raster/r.proj/main.c:545 ../raster/r.report/prt_json.c:203
+#: ../raster/r.profile/main.c:320 ../raster/r.proj/main.c:366
+#: ../raster/r.proj/main.c:539 ../raster/r.report/prt_json.c:203
 #: ../raster/r.stats/main.c:427 ../raster/r.univar/stats.c:493
 #: ../raster/r.what.color/main.c:290 ../raster/r.what/main.c:620
 #: ../vector/v.category/main.c:320 ../vector/v.category/main.c:989
@@ -562,7 +562,7 @@ msgid "Name of file containing SQL statement(s)"
 msgstr ""
 
 #: ../db/db.execute/main.c:149 ../db/db.select/main.c:206
-#: ../general/g.proj/main.c:156 ../general/g.proj/main.c:174
+#: ../general/g.proj/main.c:141 ../general/g.proj/main.c:159
 #: ../locale/scriptstrings/m.proj_to_translate.c:8
 #: ../raster/r.in.ascii/main.c:78 ../raster/r.reclass/main.c:67
 #: ../raster/r.recode/main.c:60 ../raster3d/r3.in.ascii/main.c:87
@@ -630,8 +630,8 @@ msgstr ""
 #: ../raster/r.walk/main.c:334 ../vector/v.colors.out/main.c:68
 #: ../vector/v.colors.out/main.c:79 ../vector/v.db.connect/main.c:73
 #: ../vector/v.db.connect/main.c:79 ../vector/v.external.out/args.c:23
-#: ../vector/v.external.out/args.c:38 ../vector/v.external.out/args.c:51
-#: ../vector/v.external.out/args.c:57 ../vector/v.lidar.correction/main.c:103
+#: ../vector/v.external.out/args.c:32 ../vector/v.external.out/args.c:45
+#: ../vector/v.external.out/args.c:51 ../vector/v.lidar.correction/main.c:103
 #: ../vector/v.lidar.correction/main.c:112
 #: ../vector/v.lidar.edgedetection/main.c:100
 #: ../vector/v.lidar.edgedetection/main.c:109
@@ -1169,7 +1169,7 @@ msgstr ""
 msgid "Unknown type"
 msgstr ""
 
-#: ../db/drivers/ogr/execute.c:63 ../vector/v.out.ogr/main.c:670
+#: ../db/drivers/ogr/execute.c:63 ../vector/v.out.ogr/main.c:666
 #, c-format
 msgid "OGR layer <%s> not found"
 msgstr ""
@@ -1859,7 +1859,7 @@ msgstr ""
 #: ../raster/r.out.vrml/main.c:44 ../raster/r.out.vtk/main.c:59
 #: ../raster/r.param.scale/interface.c:52 ../raster/r.patch/main.c:68
 #: ../raster/r.path/main.c:150 ../raster/r.profile/main.c:57
-#: ../raster/r.proj/main.c:151 ../raster/r.quant/main.c:48
+#: ../raster/r.proj/main.c:149 ../raster/r.quant/main.c:48
 #: ../raster/r.quantile/main.c:297 ../raster/r.random.cells/main.c:49
 #: ../raster/r.random.surface/main.c:56 ../raster/r.random/main.c:53
 #: ../raster/r.reclass/main.c:51 ../raster/r.recode/main.c:47
@@ -2074,8 +2074,8 @@ msgstr ""
 #: ../vector/v.db.connect/main.c:59 ../vector/v.db.select/main.c:97
 #: ../vector/v.decimate/main.c:116 ../vector/v.delaunay/main.c:85
 #: ../vector/v.distance/main.c:125 ../vector/v.drape/main.c:55
-#: ../vector/v.edit/main.c:55 ../vector/v.external.out/main.c:42
-#: ../vector/v.external/main.c:51 ../vector/v.extract/main.c:77
+#: ../vector/v.edit/main.c:55 ../vector/v.external.out/main.c:40
+#: ../vector/v.external/main.c:49 ../vector/v.extract/main.c:77
 #: ../vector/v.extrude/main.c:66 ../vector/v.fill.holes/main.c:46
 #: ../vector/v.generalize/main.c:76 ../vector/v.hull/main.c:51
 #: ../vector/v.in.ascii/main.c:67 ../vector/v.in.db/main.c:51
@@ -2106,7 +2106,7 @@ msgstr ""
 #: ../vector/v.outlier/main.c:68 ../vector/v.overlay/main.c:62
 #: ../vector/v.parallel/main.c:48 ../vector/v.patch/main.c:73
 #: ../vector/v.perturb/main.c:62 ../vector/v.profile/main.c:155
-#: ../vector/v.proj/main.c:73 ../vector/v.qcount/main.c:59
+#: ../vector/v.proj/main.c:71 ../vector/v.qcount/main.c:59
 #: ../vector/v.random/main.c:98 ../vector/v.reclass/main.c:67
 #: ../vector/v.rectify/main.c:67 ../vector/v.sample/main.c:73
 #: ../vector/v.segment/main.c:61 ../vector/v.select/main.c:50
@@ -2183,7 +2183,7 @@ msgstr ""
 #: ../vector/v.decimate/main.c:267 ../vector/v.delaunay/main.c:120
 #: ../vector/v.distance/main.c:398 ../vector/v.distance/main.c:421
 #: ../vector/v.drape/main.c:141 ../vector/v.edit/main.c:176
-#: ../vector/v.edit/main.c:251 ../vector/v.external/main.c:226
+#: ../vector/v.edit/main.c:251 ../vector/v.external/main.c:215
 #: ../vector/v.extract/main.c:193 ../vector/v.extrude/main.c:188
 #: ../vector/v.fill.holes/main.c:74 ../vector/v.generalize/main.c:324
 #: ../vector/v.hull/main.c:85 ../vector/v.info/main.c:65
@@ -2217,7 +2217,7 @@ msgstr ""
 #: ../vector/v.patch/main.c:188 ../vector/v.patch/main.c:335
 #: ../vector/v.patch/main.c:413 ../vector/v.perturb/main.c:160
 #: ../vector/v.perturb/main.c:190 ../vector/v.profile/main.c:382
-#: ../vector/v.profile/main.c:406 ../vector/v.proj/main.c:290
+#: ../vector/v.profile/main.c:406 ../vector/v.proj/main.c:284
 #: ../vector/v.qcount/main.c:101 ../vector/v.random/main.c:202
 #: ../vector/v.reclass/main.c:113 ../vector/v.rectify/main.c:152
 #: ../vector/v.sample/main.c:120 ../vector/v.segment/main.c:107
@@ -2251,7 +2251,7 @@ msgstr ""
 #: ../vector/v.decimate/main.c:387 ../vector/v.delaunay/main.c:126
 #: ../vector/v.distance/main.c:446 ../vector/v.drape/main.c:156
 #: ../vector/v.edit/main.c:107 ../vector/v.edit/main.c:124
-#: ../vector/v.external/main.c:178 ../vector/v.extract/main.c:409
+#: ../vector/v.external/main.c:167 ../vector/v.extract/main.c:409
 #: ../vector/v.extrude/main.c:194 ../vector/v.fill.holes/main.c:88
 #: ../vector/v.generalize/main.c:335 ../vector/v.hull/main.c:122
 #: ../vector/v.in.ascii/main.c:252 ../vector/v.in.db/main.c:157
@@ -2278,7 +2278,7 @@ msgstr ""
 #: ../vector/v.overlay/main.c:230 ../vector/v.parallel/main.c:151
 #: ../vector/v.patch/main.c:344 ../vector/v.patch/main.c:349
 #: ../vector/v.perturb/main.c:170 ../vector/v.profile/main.c:560
-#: ../vector/v.proj/main.c:489 ../vector/v.qcount/main.c:127
+#: ../vector/v.proj/main.c:481 ../vector/v.qcount/main.c:127
 #: ../vector/v.random/main.c:227 ../vector/v.reclass/main.c:117
 #: ../vector/v.rectify/main.c:219 ../vector/v.sample/main.c:159
 #: ../vector/v.segment/main.c:113 ../vector/v.select/main.c:157
@@ -2606,11 +2606,11 @@ msgstr ""
 #: ../display/d.grid/plot.c:342 ../display/d.grid/plot.c:350
 #: ../display/d.grid/plot.c:443 ../display/d.grid/plot.c:451
 #: ../display/d.grid/plot.c:504 ../display/d.grid/plot.c:512
-#: ../display/d.grid/plot.c:665 ../display/d.grid/plot.c:682
-#: ../display/d.grid/plot.c:700 ../display/d.grid/plot.c:718
-#: ../display/d.grid/plot.c:772 ../display/d.grid/plot.c:779
-#: ../display/d.grid/plot.c:784 ../display/d.grid/plot.c:794
-#: ../display/d.grid/plot.c:799 ../display/d.where/where.c:64
+#: ../display/d.grid/plot.c:654 ../display/d.grid/plot.c:671
+#: ../display/d.grid/plot.c:689 ../display/d.grid/plot.c:707
+#: ../display/d.grid/plot.c:761 ../display/d.grid/plot.c:768
+#: ../display/d.grid/plot.c:773 ../display/d.grid/plot.c:783
+#: ../display/d.grid/plot.c:788 ../display/d.where/where.c:64
 msgid "Error in GPJ_transform()"
 msgstr ""
 
@@ -2623,25 +2623,19 @@ msgstr ""
 msgid "Can't get projection key values of current location"
 msgstr ""
 
-#: ../display/d.grid/plot.c:597
-msgid ""
-"WGS84 grid output not possible as this location does not contain\n"
-"datum transformation parameters. Try running g.setproj."
-msgstr ""
-
-#: ../display/d.grid/plot.c:612 ../display/d.where/main.c:146
+#: ../display/d.grid/plot.c:601 ../display/d.where/main.c:135
 msgid "Unable to set up lat/long projection parameters"
 msgstr ""
 
-#: ../display/d.grid/plot.c:625 ../display/d.where/main.c:159
-#: ../general/g.region/printwindow.c:362 ../general/g.region/printwindow.c:663
-#: ../general/g.region/printwindow.c:777 ../ps/ps.map/do_geogrid.c:288
-#: ../raster/r.horizon/main.c:599 ../raster/r.in.gdal/main.c:1146
-#: ../raster/r.latlong/main.c:115 ../raster/r.proj/main.c:466
-#: ../raster/r.proj/main.c:571 ../raster/r.proj/main.c:617
-#: ../raster/r.proj/main.c:700 ../raster/r.sun/main.c:819
+#: ../display/d.grid/plot.c:614 ../display/d.where/main.c:148
+#: ../general/g.region/printwindow.c:362 ../general/g.region/printwindow.c:658
+#: ../general/g.region/printwindow.c:753 ../ps/ps.map/do_geogrid.c:288
+#: ../raster/r.horizon/main.c:599 ../raster/r.in.gdal/main.c:1135
+#: ../raster/r.latlong/main.c:115 ../raster/r.proj/main.c:460
+#: ../raster/r.proj/main.c:563 ../raster/r.proj/main.c:607
+#: ../raster/r.proj/main.c:688 ../raster/r.sun/main.c:819
 #: ../raster/r.sunhours/main.c:237 ../raster/r.sunmask/g_solposition.c:125
-#: ../vector/v.proj/main.c:361
+#: ../vector/v.proj/main.c:353
 msgid "Unable to initialize coordinate transformation"
 msgstr ""
 
@@ -2854,7 +2848,7 @@ msgstr ""
 #: ../display/d.legend.vect/draw.c:78 ../display/d.legend.vect/main.c:266
 #: ../display/d.linegraph/main.c:409 ../display/d.linegraph/main.c:427
 #: ../display/d.linegraph/main.c:726 ../display/d.text/main.c:368
-#: ../display/d.where/main.c:168 ../general/g.cairocomp/main.c:46
+#: ../display/d.where/main.c:157 ../general/g.cairocomp/main.c:46
 #: ../imagery/i.group/main.c:169 ../raster/r.buildvrt/main.c:125
 #: ../raster/r.in.mat/main.c:126 ../raster/r.in.xyz/main.c:586
 #: ../raster/r.mapcalc/main.c:51 ../raster/r.series.accumulate/main.c:222
@@ -3591,8 +3585,8 @@ msgid "File <%s> already exists and will be overwritten"
 msgstr ""
 
 #: ../display/d.mon/start.c:55 ../misc/m.nviz.image/main.c:77
-#: ../raster/r.proj/main.c:288 ../vector/v.external/main.c:136
-#: ../vector/v.proj/main.c:163
+#: ../raster/r.proj/main.c:284 ../vector/v.external/main.c:125
+#: ../vector/v.proj/main.c:159
 #, c-format
 msgid "option <%s>: <%s> exists. To overwrite, use the --overwrite flag"
 msgstr ""
@@ -4465,7 +4459,7 @@ msgstr ""
 #: ../vector/v.net.components/main.c:178 ../vector/v.net.distance/main.c:280
 #: ../vector/v.net.flow/main.c:167 ../vector/v.net.iso/main.c:372
 #: ../vector/v.net.path/path.c:95 ../vector/v.net.timetable/main.c:89
-#: ../vector/v.normal/main.c:120 ../vector/v.out.ogr/main.c:717
+#: ../vector/v.normal/main.c:120 ../vector/v.out.ogr/main.c:713
 #: ../vector/v.out.postgis/table.c:34 ../vector/v.out.svg/main.c:159
 #: ../vector/v.out.vtk/writeVTK.c:645 ../vector/v.overlay/main.c:255
 #: ../vector/v.overlay/main.c:439 ../vector/v.patch/main.c:161
@@ -4853,7 +4847,7 @@ msgstr[0] ""
 #: ../display/d.vect/main.c:75 ../general/g.region/main.c:70
 #: ../raster/r.random/main.c:57 ../vector/v.cluster/main.c:86
 #: ../vector/v.decimate/main.c:123 ../vector/v.edit/main.c:62
-#: ../vector/v.external/main.c:56 ../vector/v.in.ascii/main.c:70
+#: ../vector/v.external/main.c:54 ../vector/v.in.ascii/main.c:70
 #: ../vector/v.in.dxf/main.c:65 ../vector/v.in.lidar/main.c:137
 #: ../vector/v.info/main.c:48 ../vector/v.patch/main.c:75
 #: ../vector/v.perturb/main.c:67 ../vector/v.random/main.c:104
@@ -5210,12 +5204,6 @@ msgstr ""
 msgid "Can't get projection units of current location"
 msgstr ""
 
-#: ../display/d.where/main.c:133
-msgid ""
-"WGS84 output not possible as this location does not contain\n"
-"datum transformation parameters. Try running g.setproj."
-msgstr ""
-
 #: ../display/d.where/where.c:32
 #, c-format
 msgid "Invalid coordinates <%s,%s>"
@@ -5367,10 +5355,10 @@ msgstr ""
 #: ../general/g.mapset/main.c:70 ../general/g.mapsets/main.c:86
 #: ../general/g.message/main.c:37 ../general/g.mkfontcap/main.c:63
 #: ../general/g.pnmcomp/main.c:281 ../general/g.ppmtopng/main.c:115
-#: ../general/g.proj/main.c:71 ../general/g.region/main.c:65
+#: ../general/g.proj/main.c:67 ../general/g.region/main.c:65
 #: ../general/g.remove/main.c:69 ../general/g.rename/main.c:44
 #: ../general/g.setproj/main.c:77 ../general/g.tempfile/main.c:38
-#: ../general/g.version/main.c:74
+#: ../general/g.version/main.c:68
 #: ../locale/scriptstrings/g.download.location_to_translate.c:3
 #: ../locale/scriptstrings/g.download.project_to_translate.c:3
 #: ../locale/scriptstrings/g.extension.all_to_translate.c:3
@@ -5896,9 +5884,9 @@ msgstr ""
 msgid "If not given or '-' then standard output"
 msgstr ""
 
-#: ../general/g.list/main.c:122 ../general/g.version/main.c:127
+#: ../general/g.list/main.c:122 ../general/g.version/main.c:121
 #: ../imagery/i.group/main.c:88 ../raster/r.info/main.c:112
-#: ../raster/r.proj/main.c:205 ../vector/v.info/parse.c:48
+#: ../raster/r.proj/main.c:203 ../vector/v.info/parse.c:48
 #: ../vector/v.univar/main.c:149
 msgid "plain;Human readable text output;shell;shell script style text output;json;JSON (JavaScript Object Notation);"
 msgstr ""
@@ -5994,7 +5982,7 @@ msgstr ""
 msgid "Create mapset if it doesn't exist"
 msgstr ""
 
-#: ../general/g.mapset/main.c:96 ../general/g.proj/main.c:234
+#: ../general/g.mapset/main.c:96 ../general/g.proj/main.c:218
 #: ../locale/scriptstrings/r.mask_to_translate.c:20
 msgid "Create"
 msgstr ""
@@ -6172,7 +6160,7 @@ msgid "Unable to open SEARCH_PATH for write"
 msgstr ""
 
 #: ../general/g.message/main.c:38 ../general/g.tempfile/main.c:39
-#: ../general/g.version/main.c:75
+#: ../general/g.version/main.c:69
 msgid "support"
 msgstr ""
 
@@ -6432,10 +6420,10 @@ msgstr ""
 msgid "Converts between PPM/PGM and PNG image formats."
 msgstr ""
 
-#: ../general/g.proj/create.c:16 ../raster/r.external/proj.c:129
-#: ../raster/r.in.gdal/main.c:1045 ../raster/r.in.gdal/proj.c:129
-#: ../vector/v.external/proj.c:158 ../vector/v.in.lidar/main.c:525
-#: ../vector/v.in.ogr/proj.c:228
+#: ../general/g.proj/create.c:16 ../raster/r.external/proj.c:114
+#: ../raster/r.in.gdal/main.c:1034 ../raster/r.in.gdal/proj.c:114
+#: ../vector/v.external/proj.c:150 ../vector/v.in.lidar/main.c:525
+#: ../vector/v.in.ogr/proj.c:220
 #, c-format
 msgid "Project <%s> created"
 msgstr ""
@@ -6490,315 +6478,276 @@ msgstr ""
 msgid "Ellipsoid set to <%s>"
 msgstr ""
 
-#: ../general/g.proj/input.c:122
+#: ../general/g.proj/input.c:119
 msgid "Input WKT definition is too long"
 msgstr ""
 
-#: ../general/g.proj/input.c:124
+#: ../general/g.proj/input.c:121
 msgid "Error reading WKT definition"
 msgstr ""
 
-#: ../general/g.proj/input.c:133
+#: ../general/g.proj/input.c:130
 #, c-format
 msgid "Unable to open file '%s' for reading"
 msgstr ""
 
-#: ../general/g.proj/input.c:153
+#: ../general/g.proj/input.c:145
 msgid "WKT validation warnings:"
 msgstr ""
 
-#: ../general/g.proj/input.c:163
+#: ../general/g.proj/input.c:155
 msgid "WKT validation grammar errors:"
 msgstr ""
 
-#: ../general/g.proj/input.c:177
+#: ../general/g.proj/input.c:167
 #, c-format
 msgid "WKT not recognized: %s"
 msgstr ""
 
-#: ../general/g.proj/input.c:232
+#: ../general/g.proj/input.c:218
 msgid "Failed to read PROJ.4 parameter from stdin"
 msgstr ""
 
-#: ../general/g.proj/input.c:236
+#: ../general/g.proj/input.c:222
 #, c-format
 msgid "PROJ.4 parameter string is too long: %s"
 msgstr ""
 
-#: ../general/g.proj/input.c:255
+#: ../general/g.proj/input.c:237
 msgid "Can't parse PROJ.4-style parameter string"
 msgstr ""
 
-#: ../general/g.proj/input.c:300
+#: ../general/g.proj/input.c:281
 #, c-format
 msgid "SRID <%s> not recognized by PROJ"
 msgstr ""
 
-#: ../general/g.proj/input.c:305
+#: ../general/g.proj/input.c:286
 #, c-format
 msgid "WKT for SRID <%s> not recognized by GDAL"
 msgstr ""
 
-#: ../general/g.proj/input.c:315
+#: ../general/g.proj/input.c:296
 msgid "Unable to convert srid to WKT"
 msgstr ""
 
-#: ../general/g.proj/input.c:327
-msgid "Input srid requires GDAL 3+ and PROJ 6+"
-msgstr ""
-
-#: ../general/g.proj/input.c:360
+#: ../general/g.proj/input.c:336
 msgid "Unable to translate EPSG code"
 msgstr ""
 
-#: ../general/g.proj/input.c:379
+#: ../general/g.proj/input.c:354
 msgid "Unable to convert EPSG code to WKT"
 msgstr ""
 
-#: ../general/g.proj/input.c:447
+#: ../general/g.proj/input.c:419
 #, c-format
 msgid "Input dataset <%s> contains subdatasets. Please select a subdataset."
 msgstr ""
 
-#: ../general/g.proj/input.c:464 ../general/g.proj/input.c:555
+#: ../general/g.proj/input.c:436
 #, c-format
 msgid "<%s> is not a GDAL dataset, trying to open it as ESRI WKT"
 msgstr ""
 
-#: ../general/g.proj/input.c:471 ../general/g.proj/input.c:562
+#: ../general/g.proj/input.c:443
 #, c-format
 msgid "Unable to read georeferenced file <%s> using GDAL library"
 msgstr ""
 
-#: ../general/g.proj/input.c:484 ../general/g.proj/input.c:570
+#: ../general/g.proj/input.c:456
 #, c-format
 msgid "Read of file %s was successful, but it did not contain projection information. 'XY (unprojected)' will be used"
 msgstr ""
 
-#: ../general/g.proj/list_codes.c:63
+#: ../general/g.proj/list_codes.c:44
 #, c-format
 msgid "No codes found for authority %s"
 msgstr ""
 
-#: ../general/g.proj/list_codes.c:107
-#, c-format
-msgid "Unable to find init file %s"
-msgstr ""
-
-#: ../general/g.proj/list_codes.c:120
-msgid "Environment variable GRASS_PROJSHARE is not set"
-msgstr ""
-
-#: ../general/g.proj/list_codes.c:131
-msgid "Only epsg file is currently supported"
-msgstr ""
-
-#: ../general/g.proj/list_codes.c:136
-#, c-format
-msgid "Unable to open init file <%s>"
-msgstr ""
-
-#: ../general/g.proj/main.c:72 ../general/g.setproj/main.c:78
+#: ../general/g.proj/main.c:68 ../general/g.setproj/main.c:78
 #: ../locale/scriptstrings/m.proj_to_translate.c:3
 #: ../locale/scriptstrings/r.import_to_translate.c:4
 #: ../locale/scriptstrings/v.import_to_translate.c:4
-#: ../raster/r.latlong/main.c:58 ../raster/r.proj/main.c:152
-#: ../vector/v.proj/main.c:74
+#: ../raster/r.latlong/main.c:58 ../raster/r.proj/main.c:150
+#: ../vector/v.proj/main.c:72
 msgid "projection"
 msgstr ""
 
-#: ../general/g.proj/main.c:73
+#: ../general/g.proj/main.c:69
 #: ../locale/scriptstrings/t.rast.import_to_translate.c:6
 #: ../locale/scriptstrings/t.vect.import_to_translate.c:6
 #: ../raster/r.in.gdal/main.c:116 ../vector/v.in.ogr/main.c:216
 msgid "create project"
 msgstr ""
 
-#: ../general/g.proj/main.c:75
+#: ../general/g.proj/main.c:70
 msgid "Prints or modifies GRASS projection information files (in various co-ordinate system descriptions)."
 msgstr ""
 
-#: ../general/g.proj/main.c:77
+#: ../general/g.proj/main.c:72
 msgid "Can also be used to create new GRASS projects."
 msgstr ""
 
-#: ../general/g.proj/main.c:80
-msgid "Prints and manipulates GRASS projection information files."
-msgstr ""
-
-#: ../general/g.proj/main.c:86
+#: ../general/g.proj/main.c:77
 #, fuzzy
 msgid "Print projection information"
 msgstr "đọc bản đồ vùng vec-tơ"
 
-#: ../general/g.proj/main.c:92
+#: ../general/g.proj/main.c:83
 #, fuzzy
 msgid "Print projection information in shell script style [deprecated]"
 msgstr "đọc bản đồ vùng vec-tơ"
 
-#: ../general/g.proj/main.c:101
+#: ../general/g.proj/main.c:92
 msgid "Verify datum information and print transformation parameters"
 msgstr ""
 
-#: ../general/g.proj/main.c:107
+#: ../general/g.proj/main.c:98
 #, fuzzy
 msgid "Print projection information in PROJ.4 format [deprecated]"
 msgstr "đọc bản đồ vùng vec-tơ"
 
-#: ../general/g.proj/main.c:109
+#: ../general/g.proj/main.c:100
 msgid "This flag is deprecated and will be removed in a future release. Use format=proj4 instead."
 msgstr ""
 
-#: ../general/g.proj/main.c:116
+#: ../general/g.proj/main.c:106
 msgid "Print 'flat' output with no linebreaks (applies to WKT and PROJ.4 output)"
 msgstr ""
 
-#: ../general/g.proj/main.c:120
-msgid "Print 'flat' output with no linebreaks (applies to PROJ.4 output)"
-msgstr ""
-
-#: ../general/g.proj/main.c:128
+#: ../general/g.proj/main.c:113
 #, fuzzy
 msgid "Print projection information in WKT format [deprecated]"
 msgstr "đọc bản đồ vùng vec-tơ"
 
-#: ../general/g.proj/main.c:130
+#: ../general/g.proj/main.c:115
 msgid "This flag is deprecated and will be removed in a future release. Use format=wkt instead."
 msgstr ""
 
-#: ../general/g.proj/main.c:137
+#: ../general/g.proj/main.c:122
 msgid "Use ESRI-style format (applies to WKT output only)"
 msgstr ""
 
-#: ../general/g.proj/main.c:144 ../general/g.proj/main.c:153
-#: ../general/g.proj/main.c:163 ../general/g.proj/main.c:172
-#: ../general/g.proj/main.c:182
+#: ../general/g.proj/main.c:129 ../general/g.proj/main.c:138
+#: ../general/g.proj/main.c:148 ../general/g.proj/main.c:157
+#: ../general/g.proj/main.c:167
 msgid "Specification"
 msgstr ""
 
-#: ../general/g.proj/main.c:145
+#: ../general/g.proj/main.c:130
 msgid "Name of georeferenced data file to read projection information from"
 msgstr ""
 
-#: ../general/g.proj/main.c:154
+#: ../general/g.proj/main.c:139
 msgid "Name of ASCII file containing a WKT projection description"
 msgstr ""
 
-#: ../general/g.proj/main.c:164
+#: ../general/g.proj/main.c:149
 msgid "Spatial reference ID with authority name and code"
 msgstr ""
 
-#: ../general/g.proj/main.c:165
+#: ../general/g.proj/main.c:150
 msgid "E.g. EPSG:4326 or urn:ogc:def:crs:EPSG::4326"
 msgstr ""
 
-#: ../general/g.proj/main.c:173
+#: ../general/g.proj/main.c:158
 msgid "PROJ.4 projection description"
 msgstr ""
 
-#: ../general/g.proj/main.c:183
+#: ../general/g.proj/main.c:168
 #: ../locale/scriptstrings/v.import_to_translate.c:21
 msgid "EPSG projection code"
 msgstr ""
 
-#: ../general/g.proj/main.c:193
+#: ../general/g.proj/main.c:177
 msgid "List codes for given authority, e.g. EPSG, and exit"
 msgstr ""
 
-#: ../general/g.proj/main.c:200 ../general/g.proj/main.c:213
-#: ../general/g.proj/main.c:219
+#: ../general/g.proj/main.c:184 ../general/g.proj/main.c:197
+#: ../general/g.proj/main.c:203
 msgid "Datum"
 msgstr ""
 
-#: ../general/g.proj/main.c:202
+#: ../general/g.proj/main.c:186
 msgid "Datum (overrides any datum specified in input co-ordinate system)"
 msgstr ""
 
-#: ../general/g.proj/main.c:204
+#: ../general/g.proj/main.c:188
 msgid "Accepts standard GRASS datum codes, or \"list\" to list and exit"
 msgstr ""
 
-#: ../general/g.proj/main.c:214
+#: ../general/g.proj/main.c:198
 #: ../locale/scriptstrings/v.import_to_translate.c:23
 msgid "Index number of datum transform parameters"
 msgstr ""
 
-#: ../general/g.proj/main.c:215
+#: ../general/g.proj/main.c:199
 msgid "\"0\" for unspecified or \"-1\" to list and exit"
 msgstr ""
 
-#: ../general/g.proj/main.c:221
+#: ../general/g.proj/main.c:205
 msgid "Force override of datum transformation information in input co-ordinate system"
 msgstr ""
 
-#: ../general/g.proj/main.c:226 ../raster/r.null/main.c:75
+#: ../general/g.proj/main.c:210 ../raster/r.null/main.c:75
 #: ../raster/r.null/main.c:83
 msgid "Modify"
 msgstr ""
 
-#: ../general/g.proj/main.c:227
+#: ../general/g.proj/main.c:211
 msgid "Modify current project's projection files"
 msgstr ""
 
-#: ../general/g.proj/main.c:235
+#: ../general/g.proj/main.c:219
 #, fuzzy
 msgid "Name of new project (location) to create"
 msgstr "Tên của bản đồ raster hướng đầu ra"
 
-#: ../general/g.proj/main.c:240
+#: ../general/g.proj/main.c:224
 msgid "plain;Human readable text output;shell;shell script style text output;wkt;Well-known text output;projjson;JSON (JavaScript Object Notation) version of WKT;proj4;PROJ.4 style text output;"
 msgstr ""
 
-#: ../general/g.proj/main.c:272 ../vector/v.what.rast/main.c:159
+#: ../general/g.proj/main.c:256 ../vector/v.what.rast/main.c:159
 #, c-format
 msgid "The format option can only be used with -%c flag"
 msgstr ""
 
-#: ../general/g.proj/main.c:284
+#: ../general/g.proj/main.c:268
 msgid "Flag 'j' is deprecated and will be removed in a future release. Please use format=proj4 instead."
 msgstr ""
 
-#: ../general/g.proj/main.c:293
+#: ../general/g.proj/main.c:277
 msgid "Flag 'w' is deprecated and will be removed in a future release. Please use format=wkt instead."
 msgstr ""
 
-#: ../general/g.proj/main.c:313
+#: ../general/g.proj/main.c:296
 #, c-format
 msgid "Only one of '%s', '%s', '%s', '%s' or '%s' options may be specified"
 msgstr ""
 
-#: ../general/g.proj/main.c:365
+#: ../general/g.proj/main.c:345
 msgid "Projection files missing"
 msgstr ""
 
-#: ../general/g.proj/main.c:393
+#: ../general/g.proj/main.c:370
 #, c-format
 msgid "No output format specified. Define one of the options: plain, shell, json, wkt, or proj4 using the -%c flag."
 msgstr ""
 
-#: ../general/g.proj/main.c:398
-#, c-format
-msgid "No output format specified. Define one of the options: plain, shell, json, or proj4 using the -%c flag."
-msgstr ""
-
-#: ../general/g.proj/output.c:54
-msgid "JSON output is not available."
-msgstr ""
-
-#: ../general/g.proj/output.c:212
+#: ../general/g.proj/output.c:200
 msgid "Unable to convert projection information to PROJ format"
 msgstr ""
 
-#: ../general/g.proj/output.c:286
+#: ../general/g.proj/output.c:261
 #, c-format
 msgid "Unable to create PROJ definition from srid <%s>"
 msgstr ""
 
-#: ../general/g.proj/output.c:328
+#: ../general/g.proj/output.c:298
 msgid "Unable to convert to WKT"
 msgstr ""
 
-#: ../general/g.proj/output.c:433
+#: ../general/g.proj/output.c:401
 msgid "Unable to convert to PROJJSON"
 msgstr ""
 
@@ -7053,7 +7002,7 @@ msgstr "Bản đồ hướng (hay fy) đầu ra"
 #: ../raster3d/r3.flow/main.c:87 ../raster3d/r3.mask/main.c:53
 #: ../raster3d/r3.neighbors/main.c:225 ../raster3d/r3.null/main.c:93
 #: ../raster3d/r3.out.ascii/main.c:328 ../raster3d/r3.out.bin/main.c:312
-#: ../raster3d/r3.out.netcdf/main.c:579 ../raster3d/r3.out.v5d/main.c:307
+#: ../raster3d/r3.out.netcdf/main.c:574 ../raster3d/r3.out.v5d/main.c:307
 #: ../raster3d/r3.out.vtk/main.c:138 ../raster3d/r3.retile/main.c:114
 #: ../raster3d/r3.stats/main.c:95 ../raster3d/r3.support/main.c:135
 #: ../raster3d/r3.timestamp/main.c:74 ../raster3d/r3.to.rast/main.c:273
@@ -7101,32 +7050,32 @@ msgstr ""
 msgid "Invalid input <%s=%s>"
 msgstr ""
 
-#: ../general/g.region/printwindow.c:344 ../general/g.region/printwindow.c:645
-#: ../general/g.region/printwindow.c:726 ../raster/r.sun/main.c:803
+#: ../general/g.region/printwindow.c:344 ../general/g.region/printwindow.c:640
+#: ../general/g.region/printwindow.c:713 ../raster/r.sun/main.c:803
 msgid "Can't get projection info of current project"
 msgstr ""
 
-#: ../general/g.region/printwindow.c:348 ../general/g.region/printwindow.c:649
-#: ../general/g.region/printwindow.c:735 ../raster/r.sun/main.c:806
+#: ../general/g.region/printwindow.c:348 ../general/g.region/printwindow.c:644
+#: ../general/g.region/printwindow.c:722 ../raster/r.sun/main.c:806
 msgid "Can't get projection units of current project"
 msgstr ""
 
-#: ../general/g.region/printwindow.c:352 ../general/g.region/printwindow.c:653
-#: ../general/g.region/printwindow.c:739 ../raster/r.sun/main.c:810
+#: ../general/g.region/printwindow.c:352 ../general/g.region/printwindow.c:648
+#: ../general/g.region/printwindow.c:726 ../raster/r.sun/main.c:810
 msgid "Can't get projection key values of current project"
 msgstr ""
 
 #: ../general/g.region/printwindow.c:377 ../general/g.region/printwindow.c:389
 #: ../general/g.region/printwindow.c:401 ../general/g.region/printwindow.c:413
-#: ../general/g.region/printwindow.c:427 ../general/g.region/printwindow.c:673
-#: ../general/g.region/printwindow.c:787 ../general/g.region/printwindow.c:802
-#: ../general/g.region/printwindow.c:822 ../general/g.region/printwindow.c:843
-#: ../general/g.region/printwindow.c:861 ../raster/r.latlong/main.c:134
+#: ../general/g.region/printwindow.c:427 ../general/g.region/printwindow.c:668
+#: ../general/g.region/printwindow.c:763 ../general/g.region/printwindow.c:778
+#: ../general/g.region/printwindow.c:798 ../general/g.region/printwindow.c:819
+#: ../general/g.region/printwindow.c:837 ../raster/r.latlong/main.c:134
 #: ../raster/r.sun/main.c:1900 ../raster/r.sunhours/main.c:306
 #: ../raster/r.sunhours/main.c:404 ../raster/r.sunmask/g_solposition.c:133
-#: ../vector/v.proj/main.c:427 ../vector/v.proj/main.c:440
-#: ../vector/v.proj/main.c:456 ../vector/v.proj/main.c:472
-#: ../vector/v.proj/main.c:555 ../vector/v.proj/main.c:562
+#: ../vector/v.proj/main.c:419 ../vector/v.proj/main.c:432
+#: ../vector/v.proj/main.c:448 ../vector/v.proj/main.c:464
+#: ../vector/v.proj/main.c:547 ../vector/v.proj/main.c:554
 #, c-format
 msgid "Error in %s (projection of input coordinate pair)"
 msgstr ""
@@ -7139,15 +7088,11 @@ msgstr ""
 msgid "You are in a simple XY project, projection to Lat/Lon is not possible. Use the -p flag instead."
 msgstr ""
 
-#: ../general/g.region/printwindow.c:753
-msgid "WGS84 output not possible as this project does not contain datum transformation parameters. Try running g.setproj."
-msgstr ""
-
-#: ../general/g.region/printwindow.c:766
+#: ../general/g.region/printwindow.c:742
 msgid "Unable to update lat/long projection parameters"
 msgstr ""
 
-#: ../general/g.region/printwindow.c:926
+#: ../general/g.region/printwindow.c:902
 msgid "Lat/Long calculations are not possible from a simple XY system"
 msgstr ""
 
@@ -7515,100 +7460,96 @@ msgstr ""
 msgid "Dry run - don't create a file, just prints it's file name"
 msgstr ""
 
-#: ../general/g.version/main.c:76
+#: ../general/g.version/main.c:70
 msgid "citing"
 msgstr ""
 
-#: ../general/g.version/main.c:77
+#: ../general/g.version/main.c:71
 msgid "copyright"
 msgstr ""
 
-#: ../general/g.version/main.c:78
+#: ../general/g.version/main.c:72
 msgid "version"
 msgstr ""
 
-#: ../general/g.version/main.c:79
+#: ../general/g.version/main.c:73
 msgid "license"
 msgstr ""
 
-#: ../general/g.version/main.c:80
+#: ../general/g.version/main.c:74
 msgid "Displays GRASS version info."
 msgstr ""
 
-#: ../general/g.version/main.c:82
+#: ../general/g.version/main.c:76
 msgid "Optionally also prints build or copyright information."
 msgstr ""
 
-#: ../general/g.version/main.c:86
+#: ../general/g.version/main.c:80
 msgid "Print also the copyright message"
 msgstr ""
 
-#: ../general/g.version/main.c:87 ../general/g.version/main.c:92
-#: ../general/g.version/main.c:97 ../general/g.version/main.c:107
-#: ../general/g.version/main.c:113
+#: ../general/g.version/main.c:81 ../general/g.version/main.c:86
+#: ../general/g.version/main.c:91 ../general/g.version/main.c:101
+#: ../general/g.version/main.c:107
 msgid "Additional info"
 msgstr ""
 
-#: ../general/g.version/main.c:91
+#: ../general/g.version/main.c:85
 msgid "Print also the citation options"
 msgstr ""
 
-#: ../general/g.version/main.c:96
+#: ../general/g.version/main.c:90
 msgid "Print also the build information"
 msgstr ""
 
-#: ../general/g.version/main.c:106
+#: ../general/g.version/main.c:100
 msgid "Print also the GIS library revision number and date"
 msgstr ""
 
-#: ../general/g.version/main.c:111
+#: ../general/g.version/main.c:105
 msgid "Print also extended info for additional libraries"
 msgstr ""
 
-#: ../general/g.version/main.c:112
+#: ../general/g.version/main.c:106
 msgid "GDAL/OGR, PROJ, GEOS"
 msgstr ""
 
-#: ../general/g.version/main.c:117
+#: ../general/g.version/main.c:111
 msgid "Print info in shell script style (including Git reference commit) [deprecated]"
 msgstr ""
 
-#: ../general/g.version/main.c:122
+#: ../general/g.version/main.c:116
 msgid "Shell"
 msgstr ""
 
-#: ../general/g.version/main.c:157 ../imagery/i.group/main.c:141
+#: ../general/g.version/main.c:151 ../imagery/i.group/main.c:141
 msgid "Cannot use the -g flag with format=json; please select only one option."
 msgstr ""
 
-#: ../general/g.version/main.c:267
+#: ../general/g.version/main.c:261
 #, c-format
 msgid "Cannot determine GRASS libgis version and date number. The GRASS build might be broken. Report this to developers or packagers.\n"
 msgstr ""
 
-#: ../general/g.version/main.c:279
+#: ../general/g.version/main.c:273
 msgid "GRASS libgis version and date number don't have the expected format. Trying to print the original strings..."
 msgstr ""
 
-#: ../general/g.version/main.c:282
+#: ../general/g.version/main.c:276
 #, c-format
 msgid "GIS_H_VERSION=\"%s\""
 msgstr ""
 
-#: ../general/g.version/main.c:283
+#: ../general/g.version/main.c:277
 #, c-format
 msgid "GIS_H_DATE=\"%s\""
 msgstr ""
 
 #: ../general/g.version/main.c:345
-msgid "GRASS not compiled with GDAL/OGR support"
-msgstr ""
-
-#: ../general/g.version/main.c:370
 msgid "GRASS not compiled with GEOS support"
 msgstr ""
 
-#: ../general/g.version/main.c:396
+#: ../general/g.version/main.c:371
 msgid "GRASS not compiled with SQLite support"
 msgstr ""
 
@@ -8974,8 +8915,8 @@ msgstr ""
 #: ../imagery/i.pca/main.c:68
 #: ../locale/scriptstrings/i.tasscap_to_translate.c:3
 #: ../locale/scriptstrings/m.proj_to_translate.c:4
-#: ../misc/m.transform/main.c:313 ../raster/r.proj/main.c:153
-#: ../vector/v.proj/main.c:75 ../vector/v.transform/main.c:72
+#: ../misc/m.transform/main.c:313 ../raster/r.proj/main.c:151
+#: ../vector/v.proj/main.c:73 ../vector/v.transform/main.c:72
 msgid "transformation"
 msgstr ""
 
@@ -10692,7 +10633,7 @@ msgstr ""
 #: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:118
 #: ../imagery/i.rectify/main.c:127
 #: ../locale/scriptstrings/r.fillnulls_to_translate.c:8
-#: ../raster/r.proj/main.c:190
+#: ../raster/r.proj/main.c:188
 msgid "Interpolation method to use"
 msgstr ""
 
@@ -10715,7 +10656,7 @@ msgid "Enable panorama camera correction"
 msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:149
-#: ../imagery/i.rectify/main.c:151 ../raster/r.proj/main.c:281
+#: ../imagery/i.rectify/main.c:151 ../raster/r.proj/main.c:277
 #: ../raster/r.statistics/main.c:118 ../raster/r.stats.zonal/main.c:168
 #: ../vector/v.neighbors/main.c:193 ../vector/v.vect.stats/main.c:357
 #, c-format
@@ -10946,15 +10887,15 @@ msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/target.c:36
 #: ../imagery/i.ortho.photo/i.ortho.transform/main.c:117
-#: ../imagery/i.rectify/target.c:35 ../raster/r.in.gdal/main.c:1154
-#: ../raster/r.proj/main.c:332 ../vector/v.rectify/target.c:44
+#: ../imagery/i.rectify/target.c:35 ../raster/r.in.gdal/main.c:1143
+#: ../raster/r.proj/main.c:328 ../vector/v.rectify/target.c:44
 msgid "not found"
 msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/target.c:36
 #: ../imagery/i.ortho.photo/i.ortho.transform/main.c:117
-#: ../imagery/i.rectify/target.c:35 ../raster/r.in.gdal/main.c:1154
-#: ../raster/r.proj/main.c:331 ../vector/v.rectify/target.c:44
+#: ../imagery/i.rectify/target.c:35 ../raster/r.in.gdal/main.c:1143
+#: ../raster/r.proj/main.c:327 ../vector/v.rectify/target.c:44
 msgid "permission denied"
 msgstr ""
 
@@ -12867,9 +12808,9 @@ msgstr ""
 #: ../raster/r.out.ppm/main.c:53 ../raster/r.out.ppm3/main.c:58
 #: ../raster/r.out.vrml/main.c:45 ../raster/r.out.vtk/main.c:60
 #: ../raster3d/r3.out.ascii/main.c:304 ../raster3d/r3.out.bin/main.c:218
-#: ../raster3d/r3.out.netcdf/main.c:565 ../raster3d/r3.out.v5d/main.c:284
+#: ../raster3d/r3.out.netcdf/main.c:560 ../raster3d/r3.out.v5d/main.c:284
 #: ../raster3d/r3.out.vtk/main.c:375 ../vector/v.colors.out/main.c:50
-#: ../vector/v.db.select/main.c:101 ../vector/v.external.out/main.c:43
+#: ../vector/v.db.select/main.c:101 ../vector/v.external.out/main.c:41
 #: ../vector/v.out.ascii/main.c:49 ../vector/v.out.dxf/main.c:55
 #: ../vector/v.out.lidar/main.c:466 ../vector/v.out.ogr/main.c:84
 #: ../vector/v.out.postgis/main.c:45 ../vector/v.out.pov/main.c:47
@@ -12888,8 +12829,8 @@ msgstr ""
 #: ../raster/r.out.pov/main.c:113 ../raster/r.out.ppm/main.c:54
 #: ../raster/r.out.ppm3/main.c:59 ../raster/r.out.vrml/main.c:46
 #: ../raster/r.out.vtk/main.c:61 ../raster3d/r3.out.ascii/main.c:305
-#: ../raster3d/r3.out.netcdf/main.c:566 ../raster3d/r3.out.v5d/main.c:285
-#: ../raster3d/r3.out.vtk/main.c:376 ../vector/v.external.out/main.c:44
+#: ../raster3d/r3.out.netcdf/main.c:561 ../raster3d/r3.out.v5d/main.c:285
+#: ../raster3d/r3.out.vtk/main.c:376 ../vector/v.external.out/main.c:42
 #: ../vector/v.out.ascii/main.c:50 ../vector/v.out.dxf/main.c:56
 #: ../vector/v.out.lidar/main.c:467 ../vector/v.out.ogr/main.c:85
 #: ../vector/v.out.postgis/main.c:46 ../vector/v.out.pov/main.c:48
@@ -13105,13 +13046,13 @@ msgstr ""
 #: ../raster/r.in.gridatb/main.c:44 ../raster/r.in.lidar/main.c:111
 #: ../raster/r.in.mat/main.c:96 ../raster/r.in.pdal/main.cpp:91
 #: ../raster/r.in.png/main.c:483 ../raster/r.in.poly/main.c:35
-#: ../raster/r.in.xyz/main.c:154 ../raster/r.proj/main.c:154
+#: ../raster/r.in.xyz/main.c:154 ../raster/r.proj/main.c:152
 #: ../raster3d/r3.in.ascii/main.c:360 ../raster3d/r3.in.bin/main.c:266
 #: ../raster3d/r3.in.lidar/main.c:160 ../raster3d/r3.in.v5d/main.c:173
-#: ../vector/v.external/main.c:52 ../vector/v.in.ascii/main.c:68
+#: ../vector/v.external/main.c:50 ../vector/v.in.ascii/main.c:68
 #: ../vector/v.in.db/main.c:52 ../vector/v.in.dxf/main.c:63
 #: ../vector/v.in.lidar/main.c:135 ../vector/v.in.ogr/main.c:211
-#: ../vector/v.in.pdal/main.cpp:130 ../vector/v.proj/main.c:76
+#: ../vector/v.in.pdal/main.cpp:130 ../vector/v.proj/main.c:74
 msgid "import"
 msgstr ""
 
@@ -14732,7 +14673,7 @@ msgstr ""
 #: ../raster3d/r3.info/main.c:85 ../raster3d/r3.mask/main.c:131
 #: ../raster3d/r3.mkdspf/main.c:81 ../raster3d/r3.neighbors/main.c:204
 #: ../raster3d/r3.null/main.c:170 ../raster3d/r3.out.ascii/main.c:303
-#: ../raster3d/r3.out.bin/main.c:217 ../raster3d/r3.out.netcdf/main.c:564
+#: ../raster3d/r3.out.bin/main.c:217 ../raster3d/r3.out.netcdf/main.c:559
 #: ../raster3d/r3.out.v5d/main.c:283 ../raster3d/r3.out.vtk/main.c:374
 #: ../raster3d/r3.retile/main.c:96 ../raster3d/r3.stats/main.c:47
 #: ../raster3d/r3.support/main.c:48 ../raster3d/r3.timestamp/main.c:43
@@ -14755,7 +14696,7 @@ msgstr ""
 #: ../raster3d/r3.mask/main.c:135 ../raster3d/r3.mkdspf/main.c:83
 #: ../raster3d/r3.neighbors/main.c:206 ../raster3d/r3.null/main.c:174
 #: ../raster3d/r3.out.ascii/main.c:306 ../raster3d/r3.out.bin/main.c:219
-#: ../raster3d/r3.out.netcdf/main.c:568 ../raster3d/r3.out.v5d/main.c:286
+#: ../raster3d/r3.out.netcdf/main.c:563 ../raster3d/r3.out.v5d/main.c:286
 #: ../raster3d/r3.out.vtk/main.c:377 ../raster3d/r3.retile/main.c:98
 #: ../raster3d/r3.stats/main.c:49 ../raster3d/r3.support/main.c:50
 #: ../raster3d/r3.timestamp/main.c:47 ../raster3d/r3.to.rast/main.c:260
@@ -15867,7 +15808,7 @@ msgid "Table is not created. Currently supported only for points."
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:18
-#: ../raster/r.to.vect/main.c:118 ../vector/v.proj/main.c:143
+#: ../raster/r.to.vect/main.c:118 ../vector/v.proj/main.c:139
 msgid "Do not build vector topology"
 msgstr ""
 
@@ -16665,7 +16606,7 @@ msgid "OGR layer name. If not given, all available layers are imported"
 msgstr ""
 
 #: ../locale/scriptstrings/v.import_to_translate.c:9
-#: ../vector/v.proj/main.c:113
+#: ../vector/v.proj/main.c:111
 msgid "Name for output vector map (default: input)"
 msgstr ""
 
@@ -18283,12 +18224,12 @@ msgstr ""
 msgid "Writing output raster map <%s>..."
 msgstr ""
 
-#: ../raster/r.buildvrt/link.c:13 ../raster/r.external/link.c:113
+#: ../raster/r.buildvrt/link.c:13 ../raster/r.external/link.c:110
 #, c-format
 msgid "Unable to create cell/%s file"
 msgstr ""
 
-#: ../raster/r.buildvrt/link.c:22 ../raster/r.external/link.c:122
+#: ../raster/r.buildvrt/link.c:22 ../raster/r.external/link.c:119
 #, c-format
 msgid "Unable to create fcell/%s file"
 msgstr ""
@@ -18298,17 +18239,17 @@ msgstr ""
 msgid "Unable to create cell_misc/%s/vrt file"
 msgstr ""
 
-#: ../raster/r.buildvrt/link.c:63 ../raster/r.external/link.c:184
+#: ../raster/r.buildvrt/link.c:63 ../raster/r.external/link.c:181
 #, c-format
 msgid "Unable to create cell_misc/%s/f_format file"
 msgstr ""
 
-#: ../raster/r.buildvrt/link.c:66 ../raster/r.external/link.c:187
+#: ../raster/r.buildvrt/link.c:66 ../raster/r.external/link.c:184
 #, c-format
 msgid "Error writing cell_misc/%s/f_format file"
 msgstr ""
 
-#: ../raster/r.buildvrt/link.c:124 ../raster/r.external/link.c:223
+#: ../raster/r.buildvrt/link.c:124 ../raster/r.external/link.c:220
 #, c-format
 msgid "Creating support files for %s"
 msgstr ""
@@ -19796,7 +19737,7 @@ msgstr ""
 msgid "Unable to open GDAL file"
 msgstr ""
 
-#: ../raster/r.external.out/main.c:154 ../vector/v.external.out/format.c:49
+#: ../raster/r.external.out/main.c:154 ../vector/v.external.out/format.c:42
 #, c-format
 msgid "Format <%s> not supported"
 msgstr ""
@@ -19806,7 +19747,7 @@ msgstr ""
 msgid "Format <%s> does not support direct write"
 msgstr ""
 
-#: ../raster/r.external.out/main.c:164 ../vector/v.external.out/format.c:52
+#: ../raster/r.external.out/main.c:164 ../vector/v.external.out/format.c:45
 #, c-format
 msgid "Format <%s> does not support writing"
 msgstr ""
@@ -19820,7 +19761,7 @@ msgid "Error writing GDAL file"
 msgstr ""
 
 #: ../raster/r.external.out/main.c:237 ../raster/r.external/main.c:60
-#: ../vector/v.external.out/main.c:45 ../vector/v.external/main.c:53
+#: ../vector/v.external.out/main.c:43 ../vector/v.external/main.c:51
 msgid "external"
 msgstr ""
 
@@ -19840,13 +19781,13 @@ msgstr ""
 msgid "Format of output files"
 msgstr ""
 
-#: ../raster/r.external.out/main.c:264 ../vector/v.external.out/args.c:42
+#: ../raster/r.external.out/main.c:264 ../vector/v.external.out/args.c:36
 #: ../vector/v.out.postgis/args.c:50
 msgid "Creation options"
 msgstr ""
 
 #: ../raster/r.external.out/main.c:271 ../raster/r.external/main.c:96
-#: ../raster/r.in.gdal/main.c:237 ../vector/v.external.out/args.c:67
+#: ../raster/r.in.gdal/main.c:237 ../vector/v.external.out/args.c:61
 #: ../vector/v.external/args.c:59
 msgid "List supported formats and exit"
 msgstr ""
@@ -19855,64 +19796,64 @@ msgstr ""
 msgid "Cease using GDAL and revert to native output"
 msgstr ""
 
-#: ../raster/r.external.out/main.c:282 ../vector/v.external.out/args.c:80
+#: ../raster/r.external.out/main.c:282 ../vector/v.external.out/args.c:74
 msgid "Print current status"
 msgstr ""
 
 #: ../raster/r.external/colors.c:177 ../raster/r.external/colors.c:233
-#: ../raster/r.in.gdal/main.c:1735 ../raster/r.in.gdal/main.c:1791
+#: ../raster/r.in.gdal/main.c:1724 ../raster/r.in.gdal/main.c:1780
 msgid "Inconsistent color rules in RAT"
 msgstr ""
 
-#: ../raster/r.external/colors.c:292 ../raster/r.in.gdal/main.c:1850
+#: ../raster/r.external/colors.c:292 ../raster/r.in.gdal/main.c:1839
 #, c-format
 msgid "Setting grey color table for <%s> (8bit, full range)"
 msgstr ""
 
-#: ../raster/r.external/colors.c:307 ../raster/r.in.gdal/main.c:1865
+#: ../raster/r.external/colors.c:307 ../raster/r.in.gdal/main.c:1854
 #, c-format
 msgid "Setting grey color table for <%s> (16bit, image range)"
 msgstr ""
 
-#: ../raster/r.external/link.c:54
+#: ../raster/r.external/link.c:51
 msgid "Complex types not supported"
 msgstr ""
 
-#: ../raster/r.external/link.c:64
+#: ../raster/r.external/link.c:61
 msgid "Statistics in metadata are sometimes approximations: min and max can be wrong!"
 msgstr ""
 
-#: ../raster/r.external/link.c:69
+#: ../raster/r.external/link.c:66
 msgid "Unable to get raster band statistics"
 msgstr ""
 
-#: ../raster/r.external/link.c:81
+#: ../raster/r.external/link.c:78
 #, c-format
 msgid "Copying color table for %s"
 msgstr ""
 
-#: ../raster/r.external/link.c:100
+#: ../raster/r.external/link.c:97
 #, c-format
 msgid "Setting grey color table for <%s> (full 8bit range)"
 msgstr ""
 
-#: ../raster/r.external/link.c:158
+#: ../raster/r.external/link.c:155
 #, c-format
 msgid "Unable to create cell_misc/%s/gdal file"
 msgstr ""
 
-#: ../raster/r.external/link.c:161
+#: ../raster/r.external/link.c:158
 #, c-format
 msgid "Error writing cell_misc/%s/gdal file"
 msgstr ""
 
-#: ../raster/r.external/link.c:256
+#: ../raster/r.external/link.c:253
 #, c-format
 msgid "Link to raster map <%s> created."
 msgstr ""
 
 #: ../raster/r.external/list.c:23 ../raster/r.in.gdal/main.c:303
-#: ../vector/v.external.out/list.c:103 ../vector/v.external/list.c:96
+#: ../vector/v.external.out/list.c:99 ../vector/v.external/list.c:91
 #: ../vector/v.in.ogr/main.c:431 ../vector/v.out.ogr/list.c:87
 msgid "Supported formats:"
 msgstr ""
@@ -20026,73 +19967,73 @@ msgstr ""
 msgid "Imagery group <%s> created"
 msgstr ""
 
-#: ../raster/r.external/proj.c:36 ../raster/r.external/proj.c:63
-#: ../raster/r.external/proj.c:122 ../raster/r.in.gdal/proj.c:36
-#: ../raster/r.in.gdal/proj.c:63 ../raster/r.in.gdal/proj.c:122
-#: ../vector/v.external/proj.c:92 ../vector/v.external/proj.c:151
-#: ../vector/v.in.ogr/proj.c:162 ../vector/v.in.ogr/proj.c:221
+#: ../raster/r.external/proj.c:31 ../raster/r.external/proj.c:50
+#: ../raster/r.external/proj.c:107 ../raster/r.in.gdal/proj.c:31
+#: ../raster/r.in.gdal/proj.c:50 ../raster/r.in.gdal/proj.c:107
+#: ../vector/v.external/proj.c:86 ../vector/v.external/proj.c:143
+#: ../vector/v.in.ogr/proj.c:156 ../vector/v.in.ogr/proj.c:213
 msgid "Can't get WKT parameter string"
 msgstr ""
 
-#: ../raster/r.external/proj.c:56 ../raster/r.in.gdal/proj.c:56
-#: ../vector/v.external/proj.c:85 ../vector/v.in.ogr/proj.c:155
+#: ../raster/r.external/proj.c:45 ../raster/r.in.gdal/proj.c:45
+#: ../vector/v.external/proj.c:81 ../vector/v.in.ogr/proj.c:151
 msgid "Input contains an invalid CRS."
 msgstr ""
 
-#: ../raster/r.external/proj.c:66 ../raster/r.in.gdal/proj.c:66
-#: ../vector/v.external/proj.c:95 ../vector/v.in.ogr/proj.c:165
+#: ../raster/r.external/proj.c:53 ../raster/r.in.gdal/proj.c:53
+#: ../vector/v.external/proj.c:89 ../vector/v.in.ogr/proj.c:159
 #, fuzzy
 msgid "WKT definition:"
 msgstr "Vị trí: %s\n"
 
-#: ../raster/r.external/proj.c:99 ../raster/r.in.gdal/proj.c:99
-#: ../vector/v.external/proj.c:128 ../vector/v.in.ogr/proj.c:198
+#: ../raster/r.external/proj.c:86 ../raster/r.in.gdal/proj.c:86
+#: ../vector/v.external/proj.c:122 ../vector/v.in.ogr/proj.c:192
 msgid "No projection information available"
 msgstr ""
 
-#: ../raster/r.external/proj.c:114 ../raster/r.in.gdal/proj.c:114
-#: ../vector/v.external/proj.c:143 ../vector/v.in.ogr/proj.c:213
+#: ../raster/r.external/proj.c:101 ../raster/r.in.gdal/proj.c:101
+#: ../vector/v.external/proj.c:137 ../vector/v.in.ogr/proj.c:207
 msgid "Unable to convert input map projection to GRASS format; cannot create new project."
 msgstr ""
 
-#: ../raster/r.external/proj.c:127 ../raster/r.in.gdal/main.c:1039
-#: ../raster/r.in.gdal/proj.c:127 ../vector/v.external/proj.c:156
-#: ../vector/v.in.lidar/main.c:522 ../vector/v.in.ogr/proj.c:226
+#: ../raster/r.external/proj.c:112 ../raster/r.in.gdal/main.c:1028
+#: ../raster/r.in.gdal/proj.c:112 ../vector/v.external/proj.c:148
+#: ../vector/v.in.lidar/main.c:522 ../vector/v.in.ogr/proj.c:218
 #, fuzzy, c-format
 msgid "Unable to create new project <%s>"
 msgstr "Tập tin đầu vào"
 
-#: ../raster/r.external/proj.c:157 ../raster/r.in.gdal/proj.c:157
-#: ../vector/v.external/proj.c:186 ../vector/v.in.ogr/proj.c:256
+#: ../raster/r.external/proj.c:142 ../raster/r.in.gdal/proj.c:142
+#: ../vector/v.external/proj.c:178 ../vector/v.in.ogr/proj.c:248
 msgid "Unable to convert input map projection information to GRASS format."
 msgstr ""
 
-#: ../raster/r.external/proj.c:238 ../raster/r.in.gdal/proj.c:238
+#: ../raster/r.external/proj.c:219 ../raster/r.in.gdal/proj.c:219
 #: ../raster/r.in.lidar/projection.c:126
-#: ../raster3d/r3.in.lidar/projection.c:127 ../vector/v.external/proj.c:267
-#: ../vector/v.in.lidar/projection.c:124 ../vector/v.in.ogr/proj.c:337
+#: ../raster3d/r3.in.lidar/projection.c:127 ../vector/v.external/proj.c:255
+#: ../vector/v.in.lidar/projection.c:124 ../vector/v.in.ogr/proj.c:325
 msgid "Over-riding projection check"
 msgstr ""
 
-#: ../raster/r.external/proj.c:244 ../raster/r.in.gdal/proj.c:244
-#: ../vector/v.external/proj.c:273 ../vector/v.in.ogr/proj.c:343
+#: ../raster/r.external/proj.c:225 ../raster/r.in.gdal/proj.c:225
+#: ../vector/v.external/proj.c:261 ../vector/v.in.ogr/proj.c:331
 msgid "Coordinate reference system of dataset does not appear to match current project.\n"
 msgstr ""
 
-#: ../raster/r.external/proj.c:258 ../raster/r.in.gdal/proj.c:258
-#: ../vector/v.external/proj.c:287 ../vector/v.in.ogr/proj.c:357
+#: ../raster/r.external/proj.c:237 ../raster/r.in.gdal/proj.c:237
+#: ../vector/v.external/proj.c:273 ../vector/v.in.ogr/proj.c:343
 msgid "Dataset CRS is:\n"
 msgstr ""
 
-#: ../raster/r.external/proj.c:272 ../raster/r.in.gdal/proj.c:272
-#: ../vector/v.external/proj.c:301 ../vector/v.in.ogr/proj.c:371
+#: ../raster/r.external/proj.c:251 ../raster/r.in.gdal/proj.c:251
+#: ../vector/v.external/proj.c:287 ../vector/v.in.ogr/proj.c:357
 msgid "Project CRS is:\n"
 msgstr ""
 
-#: ../raster/r.external/proj.c:286 ../raster/r.in.gdal/proj.c:286
+#: ../raster/r.external/proj.c:265 ../raster/r.in.gdal/proj.c:265
 #: ../raster/r.in.lidar/projection.c:89 ../raster/r.in.pdal/projection.c:87
-#: ../raster3d/r3.in.lidar/projection.c:90 ../vector/v.external/proj.c:315
-#: ../vector/v.in.lidar/projection.c:87 ../vector/v.in.ogr/proj.c:385
+#: ../raster3d/r3.in.lidar/projection.c:90 ../vector/v.external/proj.c:301
+#: ../vector/v.in.lidar/projection.c:87 ../vector/v.in.ogr/proj.c:371
 #: ../vector/v.in.pdal/projection.c:87
 #, c-format
 msgid ""
@@ -20100,15 +20041,15 @@ msgid ""
 "In case of no significant differences in the coordinate reference system definitions, use the -o flag to ignore them and use current project definition.\n"
 msgstr ""
 
-#: ../raster/r.external/proj.c:290 ../raster/r.in.gdal/proj.c:290
-#: ../vector/v.external/proj.c:319 ../vector/v.in.ogr/proj.c:389
+#: ../raster/r.external/proj.c:269 ../raster/r.in.gdal/proj.c:269
+#: ../vector/v.external/proj.c:305 ../vector/v.in.ogr/proj.c:375
 msgid "Consider generating a new project from the input dataset using the 'project' parameter.\n"
 msgstr ""
 
-#: ../raster/r.external/proj.c:310 ../raster/r.in.gdal/proj.c:310
+#: ../raster/r.external/proj.c:289 ../raster/r.in.gdal/proj.c:289
 #: ../raster/r.in.lidar/projection.c:136 ../raster/r.in.pdal/projection.c:134
-#: ../raster3d/r3.in.lidar/projection.c:137 ../vector/v.external/proj.c:339
-#: ../vector/v.in.lidar/projection.c:134 ../vector/v.in.ogr/proj.c:409
+#: ../raster3d/r3.in.lidar/projection.c:137 ../vector/v.external/proj.c:325
+#: ../vector/v.in.lidar/projection.c:134 ../vector/v.in.ogr/proj.c:395
 msgid "Coordinate reference system of input dataset and current project appear to match"
 msgstr ""
 
@@ -20124,12 +20065,12 @@ msgstr ""
 msgid "Applying vertical flip"
 msgstr ""
 
-#: ../raster/r.external/window.c:94 ../raster/r.in.gdal/main.c:1089
+#: ../raster/r.external/window.c:94 ../raster/r.in.gdal/main.c:1078
 #: ../vector/v.in.ogr/main.c:1983
 msgid "Default region for this project updated"
 msgstr ""
 
-#: ../raster/r.external/window.c:97 ../raster/r.in.gdal/main.c:1092
+#: ../raster/r.external/window.c:97 ../raster/r.in.gdal/main.c:1081
 #: ../vector/v.in.ogr/main.c:1986
 msgid "Region for the current mapset updated"
 msgstr ""
@@ -21137,7 +21078,7 @@ msgid "OOPS: cols changed from %d to %d"
 msgstr ""
 
 #: ../raster/r.horizon/main.c:761 ../raster/r.horizon/main.c:776
-#: ../raster/r.proj/main.c:635 ../raster/r.proj/main.c:741
+#: ../raster/r.proj/main.c:625 ../raster/r.proj/main.c:729
 #, c-format
 msgid "Error in %s"
 msgstr ""
@@ -21682,53 +21623,53 @@ msgstr ""
 msgid "Error in %s (can't re-project GCP %i)"
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:983 ../vector/v.in.lidar/main.c:516
+#: ../raster/r.in.gdal/main.c:974 ../vector/v.in.lidar/main.c:516
 msgid "Unable to convert input map CRS to GRASS format; cannot create new project."
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:1048
+#: ../raster/r.in.gdal/main.c:1037
 #, c-format
 msgid "The target for the output group <%s> has been set to project <%s>, mapset <PERMANENT>."
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:1122
+#: ../raster/r.in.gdal/main.c:1111
 msgid "Unable to translate projection key values of input GCPs"
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:1139
+#: ../raster/r.in.gdal/main.c:1128
 msgid "Unable to get CRS info of target project"
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:1141
+#: ../raster/r.in.gdal/main.c:1130
 msgid "Unable to get CRS units of target project"
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:1143
+#: ../raster/r.in.gdal/main.c:1132
 msgid "Unable to get CRS key values of target project"
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:1151 ../vector/v.rectify/target.c:42
+#: ../raster/r.in.gdal/main.c:1140 ../vector/v.rectify/target.c:42
 #, c-format
 msgid "Mapset <%s> in target project <%s> - "
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:1188
+#: ../raster/r.in.gdal/main.c:1177
 #, c-format
 msgid "Importing raster map <%s>..."
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:1306 ../raster/r.in.gdal/main.c:1371
-#: ../raster/r.in.gdal/main.c:1456
+#: ../raster/r.in.gdal/main.c:1295 ../raster/r.in.gdal/main.c:1360
+#: ../raster/r.in.gdal/main.c:1445
 msgid "Invalid row"
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:1313 ../raster/r.in.gdal/main.c:1377
-#: ../raster/r.in.gdal/main.c:1462
+#: ../raster/r.in.gdal/main.c:1302 ../raster/r.in.gdal/main.c:1366
+#: ../raster/r.in.gdal/main.c:1451
 #, c-format
 msgid "Unable to read row %d"
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:1967
+#: ../raster/r.in.gdal/main.c:1956
 #, c-format
 msgid "Unable to open file <%s>: %s."
 msgstr ""
@@ -24044,19 +23985,19 @@ msgstr ""
 #: ../raster/r.out.gdal/export_band.c:535
 #: ../raster/r.out.gdal/export_band.c:547
 #: ../raster/r.out.gdal/export_band.c:562
-#: ../raster/r.out.gdal/export_band.c:578 ../raster/r.out.gdal/main.c:809
-#: ../raster/r.out.gdal/main.c:821 ../raster/r.out.gdal/main.c:834
-#: ../raster/r.out.gdal/main.c:847 ../raster/r.out.gdal/main.c:859
-#: ../raster/r.out.gdal/main.c:873
+#: ../raster/r.out.gdal/export_band.c:578 ../raster/r.out.gdal/main.c:805
+#: ../raster/r.out.gdal/main.c:817 ../raster/r.out.gdal/main.c:830
+#: ../raster/r.out.gdal/main.c:843 ../raster/r.out.gdal/main.c:855
+#: ../raster/r.out.gdal/main.c:869
 msgid "Selected GDAL datatype does not cover data range."
 msgstr ""
 
 #: ../raster/r.out.gdal/export_band.c:498
 #: ../raster/r.out.gdal/export_band.c:510
 #: ../raster/r.out.gdal/export_band.c:523
-#: ../raster/r.out.gdal/export_band.c:536 ../raster/r.out.gdal/main.c:810
-#: ../raster/r.out.gdal/main.c:822 ../raster/r.out.gdal/main.c:835
-#: ../raster/r.out.gdal/main.c:848
+#: ../raster/r.out.gdal/export_band.c:536 ../raster/r.out.gdal/main.c:806
+#: ../raster/r.out.gdal/main.c:818 ../raster/r.out.gdal/main.c:831
+#: ../raster/r.out.gdal/main.c:844
 #, c-format
 msgid "GDAL datatype: %s, range: %d - %d"
 msgstr ""
@@ -24072,12 +24013,12 @@ msgstr ""
 msgid "Raster map <%s> range: %g - %g"
 msgstr ""
 
-#: ../raster/r.out.gdal/export_band.c:548 ../raster/r.out.gdal/main.c:860
+#: ../raster/r.out.gdal/export_band.c:548 ../raster/r.out.gdal/main.c:856
 #, c-format
 msgid "GDAL datatype: %s, range: %u - %u"
 msgstr ""
 
-#: ../raster/r.out.gdal/export_band.c:563 ../raster/r.out.gdal/main.c:874
+#: ../raster/r.out.gdal/export_band.c:563 ../raster/r.out.gdal/main.c:870
 #, c-format
 msgid "GDAL datatype: %s, range: %.7g - %.7g"
 msgstr ""
@@ -24181,161 +24122,161 @@ msgstr ""
 msgid "No raster maps in group <%s>"
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:375
+#: ../raster/r.out.gdal/main.c:371
 #, c-format
 msgid "Unable to get <%s> driver"
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:381
+#: ../raster/r.out.gdal/main.c:377
 #, c-format
 msgid "Driver <%s> does not support direct writing. Using MEM driver for intermediate dataset."
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:386
+#: ../raster/r.out.gdal/main.c:382
 msgid "Unable to get in-memory raster driver"
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:389
+#: ../raster/r.out.gdal/main.c:385
 #, c-format
 msgid "Driver <%s> does not support creating rasters"
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:464
+#: ../raster/r.out.gdal/main.c:460
 #, c-format
 msgid "Could not read data range of raster <%s>"
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:521
+#: ../raster/r.out.gdal/main.c:517
 #, c-format
 msgid "Exporting to GDAL data type: %s"
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:532
+#: ../raster/r.out.gdal/main.c:528
 msgid "Forcing raster export"
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:541
+#: ../raster/r.out.gdal/main.c:537
 msgid "Raster export would result in complete data loss, aborting."
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:552
+#: ../raster/r.out.gdal/main.c:548
 #, c-format
 msgid "Precision loss: Raster map <%s> of type %s to be exported as %s. This can be avoided by using %s."
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:565
+#: ../raster/r.out.gdal/main.c:561
 #, c-format
 msgid "Precision loss: The range of <%s> can not be accurately preserved with GDAL datatype Float32. This can be avoided by exporting to Int32 or Float64."
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:573
+#: ../raster/r.out.gdal/main.c:569
 #, c-format
 msgid "Precision loss: Float32 can not preserve the DCELL precision of raster <%s>. This can be avoided by using Float64"
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:581
+#: ../raster/r.out.gdal/main.c:577
 #, c-format
 msgid "Raster export aborted. To override data loss check, use the -%c flag"
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:598 ../raster/r.out.gdal/main.c:641
-#: ../raster/r.out.gdal/main.c:645
+#: ../raster/r.out.gdal/main.c:594 ../raster/r.out.gdal/main.c:637
+#: ../raster/r.out.gdal/main.c:641
 msgid "Raster export aborted."
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:622
+#: ../raster/r.out.gdal/main.c:618
 msgid "Checking GDAL data type and nodata value..."
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:626
+#: ../raster/r.out.gdal/main.c:622
 #, c-format
 msgid "Checking options for raster map <%s> (band %d)..."
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:639
+#: ../raster/r.out.gdal/main.c:635
 msgid "Forcing raster export."
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:670
+#: ../raster/r.out.gdal/main.c:666
 msgid "Unable to create dataset using memory raster driver"
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:678
+#: ../raster/r.out.gdal/main.c:674
 #, c-format
 msgid "Unable to create <%s> dataset using <%s> driver"
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:693
+#: ../raster/r.out.gdal/main.c:689
 msgid "Unable to set geo transform"
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:701
+#: ../raster/r.out.gdal/main.c:697
 msgid "Unable to set projection"
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:729
+#: ../raster/r.out.gdal/main.c:725
 #, c-format
 msgid "Exporting raster data to %s format..."
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:732
+#: ../raster/r.out.gdal/main.c:728
 #, c-format
 msgid "Exporting raster map <%s> (band %d)..."
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:745
+#: ../raster/r.out.gdal/main.c:741
 #, c-format
 msgid "Unable to export raster map <%s>"
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:758
+#: ../raster/r.out.gdal/main.c:754
 msgid "Number of overviews must be between 0 and 5"
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:765
+#: ../raster/r.out.gdal/main.c:761
 msgid "Building overviews ..."
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:775
+#: ../raster/r.out.gdal/main.c:771
 msgid "Unable to build overviews"
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:786
+#: ../raster/r.out.gdal/main.c:782
 #, c-format
 msgid "Unable to create raster map <%s> using driver <%s>"
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:813 ../raster/r.out.gdal/main.c:825
-#: ../raster/r.out.gdal/main.c:838 ../raster/r.out.gdal/main.c:851
-#: ../raster/r.out.gdal/main.c:863 ../raster/r.out.gdal/main.c:877
+#: ../raster/r.out.gdal/main.c:809 ../raster/r.out.gdal/main.c:821
+#: ../raster/r.out.gdal/main.c:834 ../raster/r.out.gdal/main.c:847
+#: ../raster/r.out.gdal/main.c:859 ../raster/r.out.gdal/main.c:873
 #, c-format
 msgid "Range to be exported: %g - %g"
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:901 ../raster/r.out.gdal/main.c:916
-#: ../raster/r.out.gdal/main.c:932 ../raster/r.out.gdal/main.c:947
-#: ../raster/r.out.gdal/main.c:964
+#: ../raster/r.out.gdal/main.c:897 ../raster/r.out.gdal/main.c:912
+#: ../raster/r.out.gdal/main.c:928 ../raster/r.out.gdal/main.c:943
+#: ../raster/r.out.gdal/main.c:960
 #, c-format
 msgid "Mismatch between metadata nodata value and actual nodata value in exported raster: specified nodata value %g gets converted to %d by selected GDAL datatype."
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:906 ../raster/r.out.gdal/main.c:937
-#: ../raster/r.out.gdal/main.c:969
+#: ../raster/r.out.gdal/main.c:902 ../raster/r.out.gdal/main.c:933
+#: ../raster/r.out.gdal/main.c:965
 #, c-format
 msgid "GDAL datatype: %s, valid range: %d - %d"
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:921 ../raster/r.out.gdal/main.c:952
+#: ../raster/r.out.gdal/main.c:917 ../raster/r.out.gdal/main.c:948
 #, c-format
 msgid "GDAL datatype: %s, valid range: %u - %u"
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:980
+#: ../raster/r.out.gdal/main.c:976
 #, c-format
 msgid "Mismatch between metadata nodata value and actual nodata value in exported raster: specified nodata value %g gets converted to %g by selected GDAL datatype."
 msgstr ""
 
-#: ../raster/r.out.gdal/main.c:985
+#: ../raster/r.out.gdal/main.c:981
 #, c-format
 msgid "GDAL datatype: %s, valid range: %g - %g"
 msgstr ""
@@ -25141,194 +25082,194 @@ msgstr ""
 msgid "Unable to reproject map center %g, %g"
 msgstr ""
 
-#: ../raster/r.proj/main.c:155
+#: ../raster/r.proj/main.c:153
 #, fuzzy
 msgid "Re-projects a raster map from given project to the current project."
 msgstr "đổi tất cả các bản đồ vector GRASS kiểu cũ < 5.7 trong bộ bản đồ hiện tại thành định dạng hiện tại"
 
-#: ../raster/r.proj/main.c:160
+#: ../raster/r.proj/main.c:158
 msgid "Project (location) containing input raster map"
 msgstr ""
 
-#: ../raster/r.proj/main.c:161 ../raster/r.proj/main.c:166
-#: ../raster/r.proj/main.c:171 ../vector/v.net.flow/main.c:107
-#: ../vector/v.net.flow/main.c:113 ../vector/v.proj/main.c:85
-#: ../vector/v.proj/main.c:90 ../vector/v.proj/main.c:96
+#: ../raster/r.proj/main.c:159 ../raster/r.proj/main.c:164
+#: ../raster/r.proj/main.c:169 ../vector/v.net.flow/main.c:107
+#: ../vector/v.net.flow/main.c:113 ../vector/v.proj/main.c:83
+#: ../vector/v.proj/main.c:88 ../vector/v.proj/main.c:94
 msgid "Source"
 msgstr ""
 
-#: ../raster/r.proj/main.c:164
+#: ../raster/r.proj/main.c:162
 msgid "Mapset containing input raster map"
 msgstr ""
 
-#: ../raster/r.proj/main.c:165 ../vector/v.proj/main.c:89
+#: ../raster/r.proj/main.c:163 ../vector/v.proj/main.c:87
 msgid "Default: name of current mapset"
 msgstr ""
 
-#: ../raster/r.proj/main.c:169
+#: ../raster/r.proj/main.c:167
 msgid "Name of input raster map to re-project"
 msgstr ""
 
-#: ../raster/r.proj/main.c:174 ../vector/v.proj/main.c:99
+#: ../raster/r.proj/main.c:172 ../vector/v.proj/main.c:97
 msgid "Path to GRASS database of input project"
 msgstr ""
 
-#: ../raster/r.proj/main.c:179
+#: ../raster/r.proj/main.c:177
 msgid "Name for output raster map (default: same as 'input')"
 msgstr ""
 
-#: ../raster/r.proj/main.c:180 ../raster/r.proj/main.c:191
-#: ../raster/r.proj/main.c:201 ../vector/v.proj/main.c:109
-#: ../vector/v.proj/main.c:114 ../vector/v.proj/main.c:133
-#: ../vector/v.proj/main.c:139
+#: ../raster/r.proj/main.c:178 ../raster/r.proj/main.c:189
+#: ../raster/r.proj/main.c:199 ../vector/v.proj/main.c:107
+#: ../vector/v.proj/main.c:112 ../vector/v.proj/main.c:129
+#: ../vector/v.proj/main.c:135
 msgid "Target"
 msgstr ""
 
-#: ../raster/r.proj/main.c:200
+#: ../raster/r.proj/main.c:198
 msgid "Resolution of output raster map"
 msgstr ""
 
-#: ../raster/r.proj/main.c:215 ../vector/v.proj/main.c:121
+#: ../raster/r.proj/main.c:212 ../vector/v.proj/main.c:118
 msgid "PROJ pipeline for coordinate transformation"
 msgstr ""
 
-#: ../raster/r.proj/main.c:220
+#: ../raster/r.proj/main.c:216
 msgid "List raster maps in input mapset and exit"
 msgstr ""
 
-#: ../raster/r.proj/main.c:226
+#: ../raster/r.proj/main.c:222
 msgid "Do not perform region cropping optimization. See Notes if working with a global latitude-longitude projection"
 msgstr ""
 
-#: ../raster/r.proj/main.c:232
+#: ../raster/r.proj/main.c:228
 msgid "Print input map's bounds in the current projection and exit"
 msgstr ""
 
-#: ../raster/r.proj/main.c:237
+#: ../raster/r.proj/main.c:233
 msgid "Print input map's bounds in the current projection in shell script style [deprecated]"
 msgstr ""
 
-#: ../raster/r.proj/main.c:264
+#: ../raster/r.proj/main.c:260
 #, c-format
 msgid "The format option can only be used with -%c or -%c flags"
 msgstr ""
 
-#: ../raster/r.proj/main.c:296
+#: ../raster/r.proj/main.c:292
 msgid "Input and output locations can not be the same"
 msgstr ""
 
-#: ../raster/r.proj/main.c:298
+#: ../raster/r.proj/main.c:294
 msgid "Input and output projects are the same"
 msgstr ""
 
-#: ../raster/r.proj/main.c:308
+#: ../raster/r.proj/main.c:304
 msgid "Unable to get projection info of output raster map"
 msgstr ""
 
-#: ../raster/r.proj/main.c:311
+#: ../raster/r.proj/main.c:307
 msgid "Unable to get projection units of output raster map"
 msgstr ""
 
-#: ../raster/r.proj/main.c:315
+#: ../raster/r.proj/main.c:311
 msgid "Unable to get projection key values of output raster map"
 msgstr ""
 
-#: ../raster/r.proj/main.c:329
+#: ../raster/r.proj/main.c:325
 #, c-format
 msgid "Mapset <%s> in input project <%s> - %s"
 msgstr ""
 
-#: ../raster/r.proj/main.c:350 ../vector/v.proj/main.c:231
+#: ../raster/r.proj/main.c:346 ../vector/v.proj/main.c:225
 #, c-format
 msgid "Checking project <%s> mapset <%s>"
 msgstr ""
 
-#: ../raster/r.proj/main.c:383 ../scripts/d.frame/d.frame.py:312
-#: ../vector/v.edit/main.c:89 ../vector/v.external/main.c:109
+#: ../raster/r.proj/main.c:379 ../scripts/d.frame/d.frame.py:312
+#: ../vector/v.edit/main.c:89 ../vector/v.external/main.c:98
 #: ../vector/v.in.ogr/main.c:454 ../vector/v.net/args.c:150
 #: ../vector/v.net/args.c:156 ../vector/v.net/args.c:162
 #: ../vector/v.net/args.c:166 ../vector/v.net/args.c:176
-#: ../vector/v.proj/main.c:248 ../vector/v.select/main.c:100
+#: ../vector/v.proj/main.c:242 ../vector/v.select/main.c:100
 #: ../vector/v.what.rast/main.c:138
 #, c-format, python-format
 msgid "Required parameter <%s> not set"
 msgstr ""
 
-#: ../raster/r.proj/main.c:387
+#: ../raster/r.proj/main.c:383
 #, c-format
 msgid "Raster map <%s> in project <%s> in mapset <%s> not found"
 msgstr ""
 
-#: ../raster/r.proj/main.c:395
+#: ../raster/r.proj/main.c:391
 msgid "Unable to get projection info of input map"
 msgstr ""
 
-#: ../raster/r.proj/main.c:406
+#: ../raster/r.proj/main.c:402
 msgid "Unable to get projection units of input map"
 msgstr ""
 
-#: ../raster/r.proj/main.c:409
+#: ../raster/r.proj/main.c:405
 msgid "Unable to get projection key values of input map"
 msgstr ""
 
-#: ../raster/r.proj/main.c:433
+#: ../raster/r.proj/main.c:427
 msgid "Unable to work with unprojected data (xy project)"
 msgstr ""
 
-#: ../raster/r.proj/main.c:454
+#: ../raster/r.proj/main.c:448
 #, c-format
 msgid "Input map <%s@%s> in project <%s>:"
 msgstr ""
 
-#: ../raster/r.proj/main.c:655
+#: ../raster/r.proj/main.c:645
 msgid "Input:"
 msgstr ""
 
-#: ../raster/r.proj/main.c:656 ../raster/r.proj/main.c:667
+#: ../raster/r.proj/main.c:646 ../raster/r.proj/main.c:657
 #, c-format
 msgid "Cols: %d (original: %d)"
 msgstr ""
 
-#: ../raster/r.proj/main.c:657 ../raster/r.proj/main.c:668
+#: ../raster/r.proj/main.c:647 ../raster/r.proj/main.c:658
 #, c-format
 msgid "Rows: %d (original: %d)"
 msgstr ""
 
-#: ../raster/r.proj/main.c:658 ../raster/r.proj/main.c:669
+#: ../raster/r.proj/main.c:648 ../raster/r.proj/main.c:659
 #, c-format
 msgid "North: %f (original: %f)"
 msgstr ""
 
-#: ../raster/r.proj/main.c:659 ../raster/r.proj/main.c:670
+#: ../raster/r.proj/main.c:649 ../raster/r.proj/main.c:660
 #, c-format
 msgid "South: %f (original: %f)"
 msgstr ""
 
-#: ../raster/r.proj/main.c:660 ../raster/r.proj/main.c:671
+#: ../raster/r.proj/main.c:650 ../raster/r.proj/main.c:661
 #, c-format
 msgid "West: %f (original: %f)"
 msgstr ""
 
-#: ../raster/r.proj/main.c:661 ../raster/r.proj/main.c:672
+#: ../raster/r.proj/main.c:651 ../raster/r.proj/main.c:662
 #, c-format
 msgid "East: %f (original: %f)"
 msgstr ""
 
-#: ../raster/r.proj/main.c:662 ../raster/r.proj/main.c:673
+#: ../raster/r.proj/main.c:652 ../raster/r.proj/main.c:663
 #, c-format
 msgid "EW-res: %f"
 msgstr ""
 
-#: ../raster/r.proj/main.c:663 ../raster/r.proj/main.c:674
+#: ../raster/r.proj/main.c:653 ../raster/r.proj/main.c:664
 #, c-format
 msgid "NS-res: %f"
 msgstr ""
 
-#: ../raster/r.proj/main.c:666
+#: ../raster/r.proj/main.c:656
 msgid "Output:"
 msgstr ""
 
-#: ../raster/r.proj/main.c:717
+#: ../raster/r.proj/main.c:705
 msgid "Projecting..."
 msgstr ""
 
@@ -26512,7 +26453,7 @@ msgstr ""
 msgid "Filter radius (vertical)"
 msgstr ""
 
-#: ../raster/r.resamp.filter/main.c:492 ../vector/v.external.out/args.c:96
+#: ../raster/r.resamp.filter/main.c:492 ../vector/v.external.out/args.c:90
 #, c-format
 msgid "%s= and %s=/%s= are mutually exclusive"
 msgstr ""
@@ -30515,7 +30456,7 @@ msgstr ""
 #: ../raster3d/r3.mask/main.c:59 ../raster3d/r3.mkdspf/main.c:169
 #: ../raster3d/r3.neighbors/main.c:261 ../raster3d/r3.neighbors/main.c:268
 #: ../raster3d/r3.null/main.c:100 ../raster3d/r3.out.ascii/main.c:342
-#: ../raster3d/r3.out.bin/main.c:327 ../raster3d/r3.out.netcdf/main.c:594
+#: ../raster3d/r3.out.bin/main.c:327 ../raster3d/r3.out.netcdf/main.c:589
 #: ../raster3d/r3.out.v5d/main.c:313 ../raster3d/r3.out.vtk/main.c:207
 #: ../raster3d/r3.out.vtk/main.c:291 ../raster3d/r3.out.vtk/main.c:516
 #: ../raster3d/r3.retile/main.c:130 ../raster3d/r3.stats/main.c:102
@@ -32020,7 +31961,7 @@ msgstr ""
 #: ../raster3d/r3.cross.rast/main.c:55 ../raster3d/r3.in.ascii/main.c:396
 #: ../raster3d/r3.in.bin/main.c:484 ../raster3d/r3.in.v5d/main.c:199
 #: ../raster3d/r3.out.ascii/main.c:60 ../raster3d/r3.out.ascii/main.c:370
-#: ../raster3d/r3.out.netcdf/main.c:626 ../raster3d/r3.out.v5d/main.c:52
+#: ../raster3d/r3.out.netcdf/main.c:621 ../raster3d/r3.out.v5d/main.c:52
 #: ../raster3d/r3.out.v5d/main.c:327 ../raster3d/r3.out.vtk/main.c:251
 #: ../raster3d/r3.out.vtk/main.c:336 ../raster3d/r3.to.rast/main.c:75
 #: ../raster3d/r3.to.rast/main.c:442
@@ -32773,11 +32714,11 @@ msgstr ""
 msgid "Export projection information as wkt and proj4 parameter"
 msgstr ""
 
-#: ../raster3d/r3.out.netcdf/main.c:567
+#: ../raster3d/r3.out.netcdf/main.c:562
 msgid "netCDF"
 msgstr ""
 
-#: ../raster3d/r3.out.netcdf/main.c:569
+#: ../raster3d/r3.out.netcdf/main.c:564
 msgid "Export a 3D raster map as netCDF file."
 msgstr ""
 
@@ -36231,7 +36172,7 @@ msgid_plural "%d polylines stored in output vector map"
 msgstr[0] ""
 
 #: ../vector/v.build.polylines/main.c:243 ../vector/v.category/main.c:1001
-#: ../vector/v.net/main.c:159 ../vector/v.proj/main.c:615
+#: ../vector/v.net/main.c:159 ../vector/v.proj/main.c:607
 #: ../vector/v.rectify/main.c:280 ../vector/v.transform/main.c:314
 #: ../vector/v.type/main.c:152
 msgid "Failed to copy attribute table to output map"
@@ -38289,7 +38230,7 @@ msgstr ""
 msgid "Format for output vector data"
 msgstr ""
 
-#: ../vector/v.external.out/args.c:44
+#: ../vector/v.external.out/args.c:38
 msgid ""
 "Examples:\n"
 "\t\t'SHPT=POINTZ': create 3D point Shapefile data\n"
@@ -38297,41 +38238,41 @@ msgid ""
 "\t\t'SCHEMA=grass': create new PostGIS tables in 'grass' schema"
 msgstr ""
 
-#: ../vector/v.external.out/args.c:56
+#: ../vector/v.external.out/args.c:50
 msgid "Name of input file to read settings from"
 msgstr ""
 
-#: ../vector/v.external.out/args.c:63
+#: ../vector/v.external.out/args.c:57
 msgid "Name for output file where to save current settings"
 msgstr ""
 
-#: ../vector/v.external.out/args.c:74
+#: ../vector/v.external.out/args.c:68
 msgid "Cease using OGR/PostGIS, revert to native output and exit"
 msgstr ""
 
-#: ../vector/v.external.out/args.c:76
+#: ../vector/v.external.out/args.c:70
 msgid "Native"
 msgstr ""
 
-#: ../vector/v.external.out/args.c:86
+#: ../vector/v.external.out/args.c:80
 msgid "Print current status in shell script style"
 msgstr ""
 
-#: ../vector/v.external.out/args.c:104
+#: ../vector/v.external.out/args.c:98
 #, c-format
 msgid "%s= or %s= must be specified"
 msgstr ""
 
-#: ../vector/v.external.out/args.c:107
+#: ../vector/v.external.out/args.c:101
 #, c-format
 msgid "%s= must be specified"
 msgstr ""
 
-#: ../vector/v.external.out/format.c:22 ../vector/v.external/main.c:77
-msgid "Environment variable GRASS_VECTOR_OGR defined, but GRASS is compiled with OGR support. Using GRASS-PostGIS data driver instead."
+#: ../vector/v.external.out/format.c:16 ../vector/v.external/main.c:69
+msgid "Environment variable GRASS_VECTOR_OGR is defined, using OGR-PostgreSQL driver instead of native GRASS-PostGIS data driver."
 msgstr ""
 
-#: ../vector/v.external.out/format.c:27 ../vector/v.external/main.c:82
+#: ../vector/v.external.out/format.c:22 ../vector/v.external/main.c:75
 msgid "GRASS is not compiled with PostgreSQL support. Using OGR-PostgreSQL driver instead of native GRASS-PostGIS data driver."
 msgstr ""
 
@@ -38362,19 +38303,19 @@ msgstr ""
 msgid "Unable to parse option '%s'"
 msgstr ""
 
-#: ../vector/v.external.out/main.c:48
+#: ../vector/v.external.out/main.c:46
 msgid "Defines vector output format."
 msgstr ""
 
-#: ../vector/v.external.out/main.c:62
+#: ../vector/v.external.out/main.c:58
 msgid "Switched from OGR to native format"
 msgstr ""
 
-#: ../vector/v.external.out/main.c:66
+#: ../vector/v.external.out/main.c:62
 msgid "Switched from PostGIS to native format"
 msgstr ""
 
-#: ../vector/v.external.out/main.c:68 ../vector/v.external.out/main.c:95
+#: ../vector/v.external.out/main.c:64 ../vector/v.external.out/main.c:91
 #, c-format
 msgid "Current output format for vectors: %s"
 msgstr ""
@@ -38437,89 +38378,85 @@ msgstr ""
 msgid "Invalid connection string (dbname missing)"
 msgstr ""
 
-#: ../vector/v.external/list.c:114
+#: ../vector/v.external/list.c:109
 msgid "GRASS is not compiled with PostgreSQL support"
 msgstr ""
 
-#: ../vector/v.external/list.c:120
-msgid "GRASS is not compiled with OGR support"
-msgstr ""
-
-#: ../vector/v.external/list.c:162
+#: ../vector/v.external/list.c:153
 msgid "Connection to PostgreSQL database failed."
 msgstr ""
 
-#: ../vector/v.external/list.c:173
+#: ../vector/v.external/list.c:164
 msgid "No feature tables found in database."
 msgstr ""
 
-#: ../vector/v.external/list.c:185
+#: ../vector/v.external/list.c:176
 #, c-format
 msgid "PostGIS database <%s> contains %d feature table:"
 msgid_plural "PostGIS database <%s> contains %d feature tables:"
 msgstr[0] ""
 
-#: ../vector/v.external/list.c:265
+#: ../vector/v.external/list.c:255
 #, c-format
 msgid "Unable to open data source '%s'"
 msgstr ""
 
-#: ../vector/v.external/list.c:273
+#: ../vector/v.external/list.c:263
 #, c-format
 msgid "Data source <%s> (format '%s') contains %d layer:"
 msgid_plural "Data source <%s> (format '%s') contains %d layers:"
 msgstr[0] ""
 
-#: ../vector/v.external/list.c:312
+#: ../vector/v.external/list.c:302
 #, c-format
 msgid "Unable to convert input map projection to GRASS format. Projection check cannot be provided for OGR layer <%s>"
 msgstr ""
 
-#: ../vector/v.external/list.c:332
+#: ../vector/v.external/list.c:322
 #, c-format
 msgid "Invalid geometry column %d"
 msgstr ""
 
-#: ../vector/v.external/main.c:59
+#: ../vector/v.external/main.c:57
 msgid "Creates a new pseudo-vector map as a link to an OGR-supported layer or a PostGIS feature table."
 msgstr ""
 
-#: ../vector/v.external/main.c:123 ../vector/v.in.ogr/main.c:635
+#: ../vector/v.external/main.c:112 ../vector/v.in.ogr/main.c:635
 #, c-format
 msgid "Layer <%s> not available"
 msgstr ""
 
-#: ../vector/v.external/main.c:125
+#: ../vector/v.external/main.c:114
 msgid "No layer defined"
 msgstr ""
 
-#: ../vector/v.external/main.c:148 ../vector/v.in.ogr/main.c:551
+#: ../vector/v.external/main.c:137 ../vector/v.in.ogr/main.c:551
 #, c-format
 msgid "Unable to open data source <%s>"
 msgstr ""
 
-#: ../vector/v.external/main.c:190
+#: ../vector/v.external/main.c:179
 #, c-format
 msgid "Unable to delete '%s'"
 msgstr ""
 
-#: ../vector/v.external/main.c:197
+#: ../vector/v.external/main.c:186
 #, c-format
 msgid "Unable to create file '%s/%s'"
 msgstr ""
 
-#: ../vector/v.external/main.c:231
+#: ../vector/v.external/main.c:220
 #, c-format
 msgid "Link to vector map <%s> created."
 msgstr ""
 
-#: ../vector/v.external/proj.c:34 ../vector/v.in.ogr/main.c:741
-#: ../vector/v.in.ogr/proj.c:34
+#: ../vector/v.external/proj.c:30 ../vector/v.in.ogr/main.c:741
+#: ../vector/v.in.ogr/proj.c:30
 #, c-format
 msgid "Geometry column <%s> not found in input layer <%s>"
 msgstr ""
 
-#: ../vector/v.external/proj.c:46 ../vector/v.in.ogr/proj.c:46
+#: ../vector/v.external/proj.c:42 ../vector/v.in.ogr/proj.c:42
 #, c-format
 msgid "No projection information available for layer <%s>"
 msgstr ""
@@ -40280,16 +40217,16 @@ msgstr ""
 msgid "The spatial filter does not overlap with OGR layer <%s>. Nothing to import."
 msgstr ""
 
-#: ../vector/v.in.ogr/proj.c:85
+#: ../vector/v.in.ogr/proj.c:81
 msgid "Layer projections are unreadable"
 msgstr ""
 
-#: ../vector/v.in.ogr/proj.c:93
+#: ../vector/v.in.ogr/proj.c:89
 #, c-format
 msgid "Projection for layer <%s> is unreadable"
 msgstr ""
 
-#: ../vector/v.in.ogr/proj.c:113
+#: ../vector/v.in.ogr/proj.c:109
 #, c-format
 msgid "Projection of layer <%s> is different from projection of layer <%s>"
 msgstr ""
@@ -43593,218 +43530,218 @@ msgstr ""
 msgid "The combination of types is not supported by all formats."
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:343
+#: ../vector/v.out.ogr/main.c:339
 msgid "Unable to create OGR spatial reference"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:364
+#: ../vector/v.out.ogr/main.c:360
 #, c-format
 msgid "OGR layer <%s> created in datasource <%s> (format '%s')"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:375
+#: ../vector/v.out.ogr/main.c:371
 msgid "The map contains islands. With the -c flag, islands will appear as filled areas, not holes in the output map."
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:381
+#: ../vector/v.out.ogr/main.c:377
 #, c-format
 msgid "%d point found, but not requested to be exported. Verify 'type' parameter."
 msgid_plural "%d points found, but not requested to be exported. Verify 'type' parameter."
 msgstr[0] ""
 
-#: ../vector/v.out.ogr/main.c:389
+#: ../vector/v.out.ogr/main.c:385
 #, c-format
 msgid "%d line found, but not requested to be exported. Verify 'type' parameter."
 msgid_plural "%d line(s) found, but not requested to be exported. Verify 'type' parameter."
 msgstr[0] ""
 
-#: ../vector/v.out.ogr/main.c:398
+#: ../vector/v.out.ogr/main.c:394
 #, c-format
 msgid "%d boundary found, but not requested to be exported. Verify 'type' parameter."
 msgid_plural "%d boundaries found, but not requested to be exported. Verify 'type' parameter."
 msgstr[0] ""
 
-#: ../vector/v.out.ogr/main.c:407
+#: ../vector/v.out.ogr/main.c:403
 #, c-format
 msgid "%d centroid found, but not requested to be exported. Verify 'type' parameter."
 msgid_plural "%d centroids found, but not requested to be exported. Verify 'type' parameter."
 msgstr[0] ""
 
-#: ../vector/v.out.ogr/main.c:415
+#: ../vector/v.out.ogr/main.c:411
 #, c-format
 msgid "%d area found, but not requested to be exported. Verify 'type' parameter."
 msgid_plural "%d areas found, but not requested to be exported. Verify 'type' parameter."
 msgstr[0] ""
 
-#: ../vector/v.out.ogr/main.c:423
+#: ../vector/v.out.ogr/main.c:419
 #, c-format
 msgid "%d face found, but not requested to be exported. Verify 'type' parameter."
 msgid_plural "%d faces found, but not requested to be exported. Verify 'type' parameter."
 msgstr[0] ""
 
-#: ../vector/v.out.ogr/main.c:431
+#: ../vector/v.out.ogr/main.c:427
 #, c-format
 msgid "%d volume found, but not requested to be exported. Verify 'type' parameter."
 msgid_plural "%d volumes found, but not requested to be exported. Verify 'type' parameter."
 msgstr[0] ""
 
-#: ../vector/v.out.ogr/main.c:441
+#: ../vector/v.out.ogr/main.c:437
 msgid "No points found, but requested to be exported. Will skip this feature type."
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:450
+#: ../vector/v.out.ogr/main.c:446
 msgid "No lines found, but requested to be exported. Will skip this feature type."
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:460
+#: ../vector/v.out.ogr/main.c:456
 msgid "No boundaries found, but requested to be exported. Will skip this feature type."
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:469
+#: ../vector/v.out.ogr/main.c:465
 msgid "No areas found, but requested to be exported. Will skip this feature type."
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:479
+#: ../vector/v.out.ogr/main.c:475
 msgid "No centroids found, but requested to be exported. Will skip this feature type."
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:488
+#: ../vector/v.out.ogr/main.c:484
 msgid "No faces found, but requested to be exported. Will skip this feature type."
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:497
+#: ../vector/v.out.ogr/main.c:493
 msgid "No kernels found, but requested to be exported. Will skip this feature type."
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:506
+#: ../vector/v.out.ogr/main.c:502
 msgid "No volumes found, but requested to be exported. Will skip this feature type."
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:531
+#: ../vector/v.out.ogr/main.c:527
 #, c-format
 msgid "OGR driver <%s> not found"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:558
+#: ../vector/v.out.ogr/main.c:554
 #, c-format
 msgid "Unable to open OGR data source '%s'"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:573
+#: ../vector/v.out.ogr/main.c:569
 #, c-format
 msgid "Layer <%s> already exists in OGR data source '%s'"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:578
+#: ../vector/v.out.ogr/main.c:574
 #, c-format
 msgid "OGR layer <%s> already exists and will be overwritten"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:586
+#: ../vector/v.out.ogr/main.c:582
 #, c-format
 msgid "OGR layer <%s> doesn't exists, creating new OGR layer instead"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:616
+#: ../vector/v.out.ogr/main.c:612
 msgid "Overriding existing user-defined 'SHPT=' LCO."
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:631
+#: ../vector/v.out.ogr/main.c:627
 #, c-format
 msgid "Vector map <%s> is 3D. Use format specific layer creation options SHPT (parameter 'lco') to export in 3D rather than 2D (default)"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:644
+#: ../vector/v.out.ogr/main.c:640
 #, c-format
 msgid "Vector map <%s> is 3D. Use format specific layer creation options DIM (parameter 'lco') to export in 3D rather than 2D (default)."
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:652
+#: ../vector/v.out.ogr/main.c:648
 #, c-format
 msgid "Vector map <%s> is 3D. Use format specific layer creation options (parameter 'lco') to export in 3D rather than 2D (default)."
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:672
+#: ../vector/v.out.ogr/main.c:668
 msgid "Unable to create OGR layer"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:685
+#: ../vector/v.out.ogr/main.c:681
 msgid "No attribute table found -> using only category numbers as attributes"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:690
+#: ../vector/v.out.ogr/main.c:686
 msgid "Exporting 'cat' anyway, as it is the only attribute table field"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:700 ../vector/v.out.ogr/main.c:774
+#: ../vector/v.out.ogr/main.c:696 ../vector/v.out.ogr/main.c:770
 #, c-format
 msgid "New attribute column <%s> added to the table"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:707 ../vector/v.out.ogr/main.c:782
+#: ../vector/v.out.ogr/main.c:703 ../vector/v.out.ogr/main.c:778
 #: ../vector/v.to.db/main.c:302
 #, c-format
 msgid "Unable to create column <%s>"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:788
+#: ../vector/v.out.ogr/main.c:784
 #, c-format
 msgid "Key column <%s> not found"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:798
+#: ../vector/v.out.ogr/main.c:794
 msgid "Unable to start OGR transaction"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:819
+#: ../vector/v.out.ogr/main.c:815
 #, c-format
 msgid "Exporting %d feature..."
 msgid_plural "Exporting %d features..."
 msgstr[0] ""
 
-#: ../vector/v.out.ogr/main.c:841
+#: ../vector/v.out.ogr/main.c:837
 #, c-format
 msgid "Exporting %d area (may take some time)..."
 msgid_plural "Exporting %d areas (may take some time)..."
 msgstr[0] ""
 
-#: ../vector/v.out.ogr/main.c:869
+#: ../vector/v.out.ogr/main.c:865
 #, c-format
 msgid "Exporting %d volume..."
 msgid_plural "Exporting %d volumes..."
 msgstr[0] ""
 
-#: ../vector/v.out.ogr/main.c:872
+#: ../vector/v.out.ogr/main.c:868
 msgid "Export of volumes not implemented yet. Skipping."
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:877
+#: ../vector/v.out.ogr/main.c:873
 msgid "Unable to commit OGR transaction"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:892
+#: ../vector/v.out.ogr/main.c:888
 #, c-format
 msgid "%d feature without attributes was written"
 msgid_plural "%d features without attributes were written"
 msgstr[0] ""
 
-#: ../vector/v.out.ogr/main.c:899
+#: ../vector/v.out.ogr/main.c:895
 #, c-format
 msgid "%d feature without category was written"
 msgid_plural "%d features without category were written"
 msgstr[0] ""
 
-#: ../vector/v.out.ogr/main.c:904
+#: ../vector/v.out.ogr/main.c:900
 #, c-format
 msgid "%d feature without category was skipped. Features without category are written only when -%c flag is given."
 msgid_plural "%d features without category were skipped. Features without category are written only when -%c flag is given."
 msgstr[0] ""
 
-#: ../vector/v.out.ogr/main.c:923
+#: ../vector/v.out.ogr/main.c:919
 msgid "Output layer is empty, no features written"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:924
+#: ../vector/v.out.ogr/main.c:920
 #, c-format
 msgid "%d feature (%s type) written to <%s> (%s format)."
 msgid_plural "%d features (%s type) written to <%s> (%s format)."
@@ -44728,98 +44665,98 @@ msgstr ""
 msgid "Can not write data portion to provided output"
 msgstr ""
 
-#: ../vector/v.proj/main.c:78
+#: ../vector/v.proj/main.c:76
 #, fuzzy
 msgid "Re-projects a vector map from one project to the current project."
 msgstr "đổi tất cả các bản đồ vector GRASS kiểu cũ < 5.7 trong bộ bản đồ hiện tại thành định dạng hiện tại"
 
-#: ../vector/v.proj/main.c:84
+#: ../vector/v.proj/main.c:82
 msgid "Project (location) containing input vector map"
 msgstr ""
 
-#: ../vector/v.proj/main.c:88
+#: ../vector/v.proj/main.c:86
 msgid "Mapset containing input vector map"
 msgstr ""
 
-#: ../vector/v.proj/main.c:94
+#: ../vector/v.proj/main.c:92
 msgid "Name of input vector map to re-project"
 msgstr ""
 
-#: ../vector/v.proj/main.c:106
+#: ../vector/v.proj/main.c:104
 msgid "Maximum segment length in meters in output vector map"
 msgstr ""
 
-#: ../vector/v.proj/main.c:108
+#: ../vector/v.proj/main.c:106
 msgid "Increases accuracy of reprojected shapes, disable with smax=0"
 msgstr ""
 
-#: ../vector/v.proj/main.c:126
+#: ../vector/v.proj/main.c:122
 msgid "List vector maps in input mapset and exit"
 msgstr ""
 
-#: ../vector/v.proj/main.c:130
+#: ../vector/v.proj/main.c:126
 msgid "3D vector maps only"
 msgstr ""
 
-#: ../vector/v.proj/main.c:131
+#: ../vector/v.proj/main.c:127
 msgid "Assume z coordinate is ellipsoidal height and transform if possible"
 msgstr ""
 
-#: ../vector/v.proj/main.c:137
+#: ../vector/v.proj/main.c:133
 msgid "Latlon output only, default is -180,180"
 msgstr ""
 
-#: ../vector/v.proj/main.c:138
+#: ../vector/v.proj/main.c:134
 msgid "Disable wrapping to -180,180 for latlon output"
 msgstr ""
 
-#: ../vector/v.proj/main.c:144
+#: ../vector/v.proj/main.c:140
 msgid "Recommended for massive point projection"
 msgstr ""
 
-#: ../vector/v.proj/main.c:179
+#: ../vector/v.proj/main.c:175
 msgid "Input and output projects can not be the same"
 msgstr ""
 
-#: ../vector/v.proj/main.c:242
+#: ../vector/v.proj/main.c:236
 msgid "No vector maps found"
 msgstr ""
 
-#: ../vector/v.proj/main.c:256
+#: ../vector/v.proj/main.c:250
 #, c-format
 msgid "Vector map <%s> in project <%s> mapset <%s> not found"
 msgstr ""
 
-#: ../vector/v.proj/main.c:310 ../vector/v.proj/main.c:395
-#: ../vector/v.proj/main.c:526 ../vector/v.rectify/main.c:238
+#: ../vector/v.proj/main.c:303 ../vector/v.proj/main.c:387
+#: ../vector/v.proj/main.c:518 ../vector/v.rectify/main.c:238
 msgid "Reading input vector map"
 msgstr ""
 
-#: ../vector/v.proj/main.c:333 ../vector/v.proj/main.c:418
+#: ../vector/v.proj/main.c:326 ../vector/v.proj/main.c:410
 #, c-format
 msgid "Input vector map <%s> is empty"
 msgstr ""
 
-#: ../vector/v.proj/main.c:368
+#: ../vector/v.proj/main.c:360
 #, c-format
 msgid "Mapset <%s> in input project <%s> - permission denied"
 msgstr ""
 
-#: ../vector/v.proj/main.c:371
+#: ../vector/v.proj/main.c:363
 #, c-format
 msgid "Mapset <%s> in input project <%s> not found"
 msgstr ""
 
-#: ../vector/v.proj/main.c:517
+#: ../vector/v.proj/main.c:509
 msgid "Reprojecting primitives ..."
 msgstr ""
 
-#: ../vector/v.proj/main.c:587 ../vector/v.proj/main.c:604
+#: ../vector/v.proj/main.c:579 ../vector/v.proj/main.c:596
 #, c-format
 msgid "Unable to re-project vector map <%s> from <%s>"
 msgstr ""
 
-#: ../vector/v.proj/main.c:624
+#: ../vector/v.proj/main.c:616
 msgid "Try to disable wrapping to -180,180 if topological errors occurred"
 msgstr ""
 
