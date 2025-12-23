@@ -151,10 +151,10 @@ int geos_buffer(struct Map_info *In, struct Map_info *Out, struct Map_info *Buf,
     else
         IGeom = Vect_read_line_geos(In, id, &type);
 
-        /* GEOS code comment on the number of quadrant segments:
-         * A value of 8 gives less than 2% max error in the buffer distance.
-         * For a max error of < 1%, use QS = 12.
-         * For a max error of < 0.1%, use QS = 18. */
+    /* GEOS code comment on the number of quadrant segments:
+     * A value of 8 gives less than 2% max error in the buffer distance.
+     * For a max error of < 1%, use QS = 12.
+     * For a max error of < 0.1%, use QS = 18. */
 #ifdef GEOS_3_3
     if (flat || no_caps) {
         GEOSBufferParams *geos_params = GEOSBufferParams_create();
