@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-13 22:01+0000\n"
+"POT-Creation-Date: 2025-12-20 19:40+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/grassmods/de/>\n"
@@ -1857,7 +1857,7 @@ msgstr ""
 #: ../raster/r.li/r.li.pielou/pielou.c:46 ../raster/r.li/r.li.renyi/renyi.c:47
 #: ../raster/r.li/r.li.richness/richness.c:42
 #: ../raster/r.li/r.li.shannon/shannon.c:46 ../raster/r.li/r.li.shape/main.c:48
-#: ../raster/r.li/r.li.simpson/simpson.c:46 ../raster/r.mapcalc/main.c:74
+#: ../raster/r.li/r.li.simpson/simpson.c:46 ../raster/r.mapcalc/main.c:109
 #: ../raster/r.mask.status/main.c:35 ../raster/r.mfilter/main.c:65
 #: ../raster/r.mode/main.c:53 ../raster/r.neighbors/main.c:181
 #: ../raster/r.null/main.c:58 ../raster/r.object.geometry/main.c:76
@@ -2675,6 +2675,7 @@ msgid "Percent to brighten intensity channel"
 msgstr "Prozent, die der Intensitätskanal aufgehellt wird."
 
 #: ../display/d.his/main.c:101
+#: ../locale/scriptstrings/d.shade_to_translate.c:11
 msgid "Respect NULL values while drawing"
 msgstr "Respektiere NULL-Werte während des Zeichnens."
 
@@ -2861,7 +2862,7 @@ msgstr "Kann die Beshriftungsdatei <%s> nicht öffnen."
 #: ../display/d.where/main.c:157 ../general/g.cairocomp/main.c:46
 #: ../imagery/i.group/main.c:169 ../raster/r.buildvrt/main.c:125
 #: ../raster/r.in.mat/main.c:126 ../raster/r.in.xyz/main.c:586
-#: ../raster/r.mapcalc/main.c:51 ../raster/r.series.accumulate/main.c:222
+#: ../raster/r.mapcalc/main.c:52 ../raster/r.series.accumulate/main.c:222
 #: ../raster/r.series/main.c:252 ../raster/r.support/main.c:209
 #: ../raster/r.topmodel/file_io.c:28 ../raster/r.topmodel/file_io.c:136
 #: ../raster/r.topmodel/file_io.c:161 ../raster3d/r3.support/main.c:169
@@ -5298,7 +5299,7 @@ msgstr "Mein erstes Rastermodul."
 #: ../scripts/d.polar/d.polar.py:58 ../scripts/d.rast.leg/d.rast.leg.py:95
 #: ../scripts/d.rast.leg/d.rast.leg.py:99
 #: ../scripts/r.buffer.lowmem/r.buffer.lowmem.py:85
-#: ../scripts/r.fillnulls/r.fillnulls.py:152 ../scripts/r.grow/r.grow.py:120
+#: ../scripts/r.fillnulls/r.fillnulls.py:152 ../scripts/r.grow/r.grow.py:124
 #: ../scripts/r.mask/r.mask.py:151 ../scripts/r.pack/r.pack.py:74
 #: ../scripts/r.reclass.area/r.reclass.area.py:101
 #: ../scripts/r.reclass.area/r.reclass.area.py:222 ../scripts/r.rgb/r.rgb.py:55
@@ -14389,7 +14390,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast3d.algebra_to_translate.c:3
 #: ../locale/scriptstrings/t.rast3d.mapcalc_to_translate.c:3
 #: ../locale/scriptstrings/t.vect.algebra_to_translate.c:3
-#: ../raster/r.mapcalc/main.c:75 ../raster/r.mfilter/main.c:66
+#: ../raster/r.mapcalc/main.c:110 ../raster/r.mfilter/main.c:66
 #: ../raster/r.mode/main.c:55 ../raster/r.neighbors/main.c:182
 #: ../raster/r.quantile/main.c:298 ../raster/r.texture/main.c:98
 #: ../raster3d/r3.neighbors/main.c:205 ../vector/v.neighbors/main.c:119
@@ -14450,8 +14451,7 @@ msgid "Random"
 msgstr ""
 
 #: ../locale/scriptstrings/r.mapcalc.simple_to_translate.c:20
-#: ../raster/r.mapcalc/main.c:116 ../raster/r.random/main.c:100
-#: ../vector/v.perturb/main.c:109
+#: ../raster/r.random/main.c:100 ../vector/v.perturb/main.c:109
 msgid "Generate random seed (result is non-deterministic)"
 msgstr ""
 
@@ -18434,7 +18434,7 @@ msgid "Name of input raster files"
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:108 ../raster/r.external/main.c:183
-#: ../raster/r.mapcalc/main.c:139 ../raster/r.series.accumulate/main.c:207
+#: ../raster/r.mapcalc/main.c:177 ../raster/r.series.accumulate/main.c:207
 #: ../raster/r.series.interp/main.c:132 ../raster/r.series.interp/main.c:136
 #: ../raster/r.series.interp/main.c:148 ../raster/r.series.interp/main.c:152
 #: ../vector/v.colors/main.c:222
@@ -23475,62 +23475,74 @@ msgstr "Format_expression_prec: unbekannter Typ: %d"
 msgid "Known functions:"
 msgstr "Bekannte Funktionen:"
 
-#: ../raster/r.mapcalc/main.c:76
+#: ../raster/r.mapcalc/main.c:111
 msgid "Raster map calculator."
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:83
+#: ../raster/r.mapcalc/main.c:118
 msgid "Expression to evaluate"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:84 ../raster/r.mapcalc/main.c:109
+#: ../raster/r.mapcalc/main.c:119 ../raster/r.mapcalc/main.c:144
 msgid "Expression"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:92
+#: ../raster/r.mapcalc/main.c:127
 #, fuzzy
 msgid "The computational region that should be used."
 msgstr "Mapset mit der Eingaberasterkarte"
 
-#: ../raster/r.mapcalc/main.c:98
+#: ../raster/r.mapcalc/main.c:133
 #, fuzzy
 msgid "current uses the current region of the mapset"
 msgstr "Gib die Ausdehnung der aktuellen Region aus."
 
-#: ../raster/r.mapcalc/main.c:99
+#: ../raster/r.mapcalc/main.c:134
 msgid "intersect computes the intersection region between all input maps and uses the smallest resolution"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:101
+#: ../raster/r.mapcalc/main.c:136
 msgid "union computes the union extent of all map regions and uses the smallest resolution"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:108
+#: ../raster/r.mapcalc/main.c:143
 msgid "File containing expression(s) to evaluate"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:120
+#: ../raster/r.mapcalc/main.c:151
+msgid "Generate random seed (result is non-deterministic) [deprecated]"
+msgstr ""
+
+#: ../raster/r.mapcalc/main.c:153
+msgid "This flag is deprecated and will be removed in a future release. Seeding is automatic or use parameter seed."
+msgstr ""
+
+#: ../raster/r.mapcalc/main.c:158
 msgid "List input and output maps"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:143
+#: ../raster/r.mapcalc/main.c:181
 #, c-format
 msgid "%s= and -%c are mutually exclusive"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:154
+#: ../raster/r.mapcalc/main.c:192
 msgid "parse error"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:201
+#: ../raster/r.mapcalc/main.c:208
+msgid "Flag 's' is deprecated and will be removed in a future release. Seeding is automatic or use parameter seed."
+msgstr ""
+
+#: ../raster/r.mapcalc/main.c:246
 msgid "r3.mapcalc does not support parallel execution."
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:207
-msgid "Parallel execution is not supported for random seed."
+#: ../raster/r.mapcalc/main.c:252
+msgid "Parallel execution is not supported with rand() function"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:215 ../raster/r.mfilter/main.c:127
+#: ../raster/r.mapcalc/main.c:260 ../raster/r.mfilter/main.c:127
 #: ../raster/r.neighbors/main.c:304 ../raster/r.patch/main.c:108
 #: ../raster/r.resamp.filter/main.c:488 ../raster/r.resamp.interp/main.c:126
 #: ../raster/r.series/main.c:225 ../raster/r.slope.aspect/main.c:303
@@ -23539,7 +23551,7 @@ msgstr ""
 msgid "<%d> is not valid number of nprocs."
 msgstr "<%s=%s> Ungültige Anzahl von Punkten."
 
-#: ../raster/r.mapcalc/main.c:227
+#: ../raster/r.mapcalc/main.c:272
 msgid "Floating point error(s) occurred in the calculation"
 msgstr "Während der Berechnung sind Fließkomma-Fehler aufgetreten."
 
@@ -33497,7 +33509,7 @@ msgstr ""
 msgid "magnitude: %.1f percent of fullscale"
 msgstr ""
 
-#: ../scripts/d.shade/d.shade.py:59 ../scripts/r.shade/r.shade.py:130
+#: ../scripts/d.shade/d.shade.py:68 ../scripts/r.shade/r.shade.py:130
 #, python-format
 msgid "Module %s failed. Check the above error messages."
 msgstr ""
@@ -34590,15 +34602,15 @@ msgstr ""
 msgid "Following holes where not filled. Temporary maps with are left in place to allow examination of unfilled holes"
 msgstr ""
 
-#: ../scripts/r.grow/r.grow.py:127
+#: ../scripts/r.grow/r.grow.py:131
 msgid "Output can be written only to the current mapset"
 msgstr ""
 
-#: ../scripts/r.grow/r.grow.py:142
+#: ../scripts/r.grow/r.grow.py:146
 msgid "Growing failed. Removing temporary maps."
 msgstr ""
 
-#: ../scripts/r.grow/r.grow.py:166
+#: ../scripts/r.grow/r.grow.py:170
 msgid "Shrinking failed. Removing temporary maps."
 msgstr ""
 
