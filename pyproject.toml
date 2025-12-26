@@ -742,7 +742,6 @@ disable = [
     "W0602",  # Using global for %r but no assignment is done (global-variable-not-assigned)
     "W0603",  # Using the global statement (global-statement)
     "W0604",  # Using the global statement at the module level (global-at-module-level)
-    "W0611",  # (unused-import)
     "W0612",  # Unused variable %r (unused-variable)
     "W0613",  # Unused argument %r (unused-argument)
     "W0614",  # Unused import(s) %s from wildcard import of %s (unused-wildcard-import)
