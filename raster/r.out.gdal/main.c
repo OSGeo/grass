@@ -182,8 +182,8 @@ int main(int argc, char *argv[])
     supported_formats(&gdal_formats);
     if (gdal_formats)
         format->options = G_store(gdal_formats);
-        /* else
-         * G_fatal_error (_("Unknown GIS formats")); */
+    /* else
+     * G_fatal_error (_("Unknown GIS formats")); */
 #else
     gdal_formats = "AAIGrid,BMP,BSB,DTED,ELAS,ENVI,FIT,GIF,GTiff,HFA,JPEG,MEM,"
                    "MFF,MFF2,NITF,PAux,PNG,PNM,VRT,XPM";

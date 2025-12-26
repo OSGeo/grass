@@ -75,7 +75,7 @@ int classify(CELL *class, CELL *reject, int ncols)
                 max = tot;
             }
         }
-        *class ++ = cc + 1;
+        *class ++= cc + 1;
 
         if (reject) {
             rej = 2 * (B[cc] - max);
