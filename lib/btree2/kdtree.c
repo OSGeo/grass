@@ -888,7 +888,7 @@ static int kdtree_replace(struct kdtree *t, struct kdnode *r)
     double mindist;
     int rdir, ordir, dir;
     int ld, rd;
-    struct kdnode *n, *rn, * or ;
+    struct kdnode *n, *rn, *or ;
     struct kdstack {
         struct kdnode *n;
         int dir;
@@ -914,8 +914,8 @@ static int kdtree_replace(struct kdtree *t, struct kdnode *r)
     rdir = 1;
 
     or = r;
-    ld = (! or->child[0] ? -1 : or->child[0]->depth);
-    rd = (! or->child[1] ? -1 : or->child[1]->depth);
+    ld = (!or->child[0] ? -1 : or->child[0]->depth);
+    rd = (!or->child[1] ? -1 : or->child[1]->depth);
 
     if (ld > rd) {
         rdir = 0;
@@ -1072,8 +1072,8 @@ static int kdtree_replace(struct kdtree *t, struct kdnode *r)
 
             /* pick a subtree */
             ordir = 1;
-            ld = (! or->child[0] ? -1 : or->child[0]->depth);
-            rd = (! or->child[1] ? -1 : or->child[1]->depth);
+            ld = (!or->child[0] ? -1 : or->child[0]->depth);
+            rd = (!or->child[1] ? -1 : or->child[1]->depth);
             if (ld > rd) {
                 ordir = 0;
             }

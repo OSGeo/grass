@@ -239,7 +239,7 @@ void GeomCond::posobs(double tu, int nc, int nl)
         xt = -(sn * tanx);
         yt = sn * tany / cos(x);
         teta = asin(yt / rp);
-        ylat = (atan(((tan(teta)) * rp) / re));
+        ylat = (atan(((tan(teta))*rp) / re));
         ylon = atan(xt / zt);
     }
 

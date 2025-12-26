@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-06 15:40+0000\n"
-"PO-Revision-Date: 2025-12-05 03:50+0000\n"
+"POT-Creation-Date: 2025-12-13 22:01+0000\n"
+"PO-Revision-Date: 2025-12-18 01:06+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/fr/>\n"
 "Language: fr\n"
@@ -8574,7 +8574,7 @@ msgstr "Le titre du projet est limité à une ligne et è 256 caractères. Le re
 
 #: ../gui/wxpython/location_wizard/wizard.py:357
 msgid "Select Coordinate Reference System (CRS)"
-msgstr ""
+msgstr "Sélectionner le système de coordonnées de référence (SCR)"
 
 #: ../gui/wxpython/location_wizard/wizard.py:370
 msgid "Select CRS from a list by EPSG or description"
@@ -8592,12 +8592,12 @@ msgstr ""
 #: ../gui/wxpython/location_wizard/wizard.py:387
 #: ../gui/wxpython/location_wizard/wizard.py:1516
 msgid "Specify CRS using WKT string"
-msgstr ""
+msgstr "Spécifier le SCR en utilisant une chaîne WKT"
 
 #: ../gui/wxpython/location_wizard/wizard.py:390
 #: ../gui/wxpython/location_wizard/wizard.py:2044
 msgid "Specify CRS using PROJ.4 string"
-msgstr ""
+msgstr "Spécifier le SCR en utilisant une chaîne de caractères PROJ.4"
 
 #: ../gui/wxpython/location_wizard/wizard.py:393
 #: ../gui/wxpython/location_wizard/wizard.py:508
@@ -8700,7 +8700,7 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:1578
 msgid "Select CRS from a list"
-msgstr ""
+msgstr "Sélectionner le SCR dans une liste"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1594
 msgid "Filter by EPSG code or description:"
