@@ -18,12 +18,14 @@ This program is free software under the GNU General Public License
 
 try:
     from vdigit.wxdigit import IVDigit, GV_LINES
+
     haveVDigit = True
     errorMsg = ""
 except (ImportError, NameError) as err:
     haveVDigit = False
     errorMsg = err
     GV_LINES = -1
+
     class IVDigit:
         def __init__(self):
             pass
