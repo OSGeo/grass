@@ -902,7 +902,7 @@ class ProjParamsPage(TitledPage):
             self.p4projparams = ""
             for param in self.pparam.values():
                 if param["type"] == "bool":
-                    if param["value"] is False:
+                    if param["value"] == 0 or param["value"] is False:
                         continue
                     self.p4projparams += " +" + param["proj4"]
                 elif param["value"] is None:
