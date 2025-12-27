@@ -229,17 +229,13 @@ void print_columns(struct Map_info *Map, const char *input_opt,
         G_fatal_error(_("Unable to describe table <%s>"), fi->table);
     }
 
-    G_JSON_Value *root_value = NULL, *columns_value = NULL,
-                 *column_value = NULL;
-    G_JSON_Object *root_object = NULL, *column_object = NULL;
+    G_JSON_Value *root_value = NULL, *column_value = NULL;
+    G_JSON_Object *column_object = NULL;
     G_JSON_Array *columns_array = NULL;
 
     if (format == JSON) {
-        root_value = G_json_value_init_object();
-        root_object = G_json_object(root_value);
-        columns_value = G_json_value_init_array();
-        columns_array = G_json_array(columns_value);
-        G_json_object_set_value(root_object, "columns", columns_value);
+        root_value = G_json_value_init_array();
+        columns_array = G_json_array(root_value);
     }
 
     ncols = db_get_table_number_of_columns(table);

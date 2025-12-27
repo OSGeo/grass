@@ -407,20 +407,18 @@ class TestVInfo(TestCase):
         )
         self.runModule(module)
 
-        expected_json = {
-            "columns": [
-                {"is_number": True, "name": "cat", "sql_type": "INTEGER"},
-                {
-                    "is_number": True,
-                    "name": "elevation",
-                    "sql_type": "DOUBLE PRECISION",
-                },
-            ]
-        }
+        expected_json = [
+            {"is_number": True, "name": "cat", "sql_type": "INTEGER"},
+            {
+                "is_number": True,
+                "name": "elevation",
+                "sql_type": "DOUBLE PRECISION",
+            },
+        ]
 
         result = json.loads(module.outputs.stdout)
 
-        self.assertDictEqual(expected_json, result)
+        self.assertListEqual(expected_json, result)
 
     def test_json_history(self):
         """Test the JSON output format of v.info with the history flag, using a history file containing multiple commands."""
