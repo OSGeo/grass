@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-06 15:40+0000\n"
-"PO-Revision-Date: 2025-12-05 03:50+0000\n"
+"POT-Creation-Date: 2025-12-20 19:40+0000\n"
+"PO-Revision-Date: 2025-12-26 20:58+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/fr/>\n"
 "Language: fr\n"
@@ -558,7 +558,7 @@ msgstr "Le fichier d'export est manquant."
 #: ../gui/wxpython/animation/dialogs.py:1569
 #, python-brace-format
 msgid "Exported animation file <{file}> exists. Do you want to overwrite it?"
-msgstr ""
+msgstr "Le fichier d'animation à exporter <{file}> existe. Voulez-vous l'écraser ?"
 
 #: ../gui/wxpython/animation/dialogs.py:1574
 #: ../gui/wxpython/datacatalog/tree.py:161 ../gui/wxpython/gcp/manager.py:1737
@@ -1099,7 +1099,7 @@ msgstr ""
 
 #: ../gui/wxpython/core/settings.py:809
 msgid "Expert (tool names only)"
-msgstr ""
+msgstr "Expert (noms d'outils uniquement)"
 
 #: ../gui/wxpython/core/settings.py:815
 msgid "Basic top"
@@ -8574,7 +8574,7 @@ msgstr "Le titre du projet est limité à une ligne et è 256 caractères. Le re
 
 #: ../gui/wxpython/location_wizard/wizard.py:357
 msgid "Select Coordinate Reference System (CRS)"
-msgstr ""
+msgstr "Sélectionner le système de coordonnées de référence (SCR)"
 
 #: ../gui/wxpython/location_wizard/wizard.py:370
 msgid "Select CRS from a list by EPSG or description"
@@ -8592,12 +8592,12 @@ msgstr ""
 #: ../gui/wxpython/location_wizard/wizard.py:387
 #: ../gui/wxpython/location_wizard/wizard.py:1516
 msgid "Specify CRS using WKT string"
-msgstr ""
+msgstr "Spécifier le SCR en utilisant une chaîne WKT"
 
 #: ../gui/wxpython/location_wizard/wizard.py:390
 #: ../gui/wxpython/location_wizard/wizard.py:2044
 msgid "Specify CRS using PROJ.4 string"
-msgstr ""
+msgstr "Spécifier le SCR en utilisant une chaîne de caractères PROJ.4"
 
 #: ../gui/wxpython/location_wizard/wizard.py:393
 #: ../gui/wxpython/location_wizard/wizard.py:508
@@ -8700,11 +8700,11 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:1578
 msgid "Select CRS from a list"
-msgstr ""
+msgstr "Sélectionner le SCR dans une liste"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1594
 msgid "Filter by EPSG code or description:"
-msgstr ""
+msgstr "Filtre par code EPSG ou par description :"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1598
 msgid "Find more information at:"
@@ -10104,43 +10104,41 @@ msgid "Insert mapcalc function"
 msgstr "insérer une fonction mapcalc"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:292
-msgid "Generate random seed for rand()"
-msgstr "Générer une graine aléatoire pour rand()"
+#, fuzzy
+#| msgid "Random cells"
+msgid "Random seed:"
+msgstr "Cellules aléatoires"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:294
-msgid "Seed:"
-msgstr "Graine :"
-
-#: ../gui/wxpython/modules/mcalc_builder.py:298
+#: ../gui/wxpython/modules/mcalc_builder.py:297
 msgid "Integer seed for rand() function"
 msgstr "Graine en entier pour la fonction rand()"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:305
+#: ../gui/wxpython/modules/mcalc_builder.py:301
 msgid "Add created raster map into layer tree"
 msgstr "Ajouter la carte raster créée dans l'arborescence des couches"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:649
+#: ../gui/wxpython/modules/mcalc_builder.py:626
 msgid "You must enter the name of a new raster map to create."
 msgstr "Vous devez entrer le nom de la nouvelle carte à créer."
 
-#: ../gui/wxpython/modules/mcalc_builder.py:662
+#: ../gui/wxpython/modules/mcalc_builder.py:639
 msgid "You must enter an expression to create a new raster map."
 msgstr "Vous devez entrer une expression pour créer une nouvelle carte."
 
-#: ../gui/wxpython/modules/mcalc_builder.py:727
+#: ../gui/wxpython/modules/mcalc_builder.py:695
 msgid "Choose a file name to save the expression"
 msgstr "Choisir un nom de fichier où enregistrer l'expression"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:728
-#: ../gui/wxpython/modules/mcalc_builder.py:746
+#: ../gui/wxpython/modules/mcalc_builder.py:696
+#: ../gui/wxpython/modules/mcalc_builder.py:714
 msgid "Expression file (*)|*"
 msgstr "Fichier de formule (*)|*"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:745
+#: ../gui/wxpython/modules/mcalc_builder.py:713
 msgid "Choose a file name to load the expression"
 msgstr "Choisir un fichier pour charger une formule"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:777
+#: ../gui/wxpython/modules/mcalc_builder.py:745
 #, python-brace-format
 msgid "'{cmd}' copied to clipboard"
 msgstr "'{cmd}' copiée dans le presse-papier"
@@ -15356,6 +15354,12 @@ msgstr ""
 "Équation de régression pour la carte raster <%(rast1)s> vs. <%(rast2)s> :\n"
 "\n"
 
+#~ msgid "Generate random seed for rand()"
+#~ msgstr "Générer une graine aléatoire pour rand()"
+
+#~ msgid "Seed:"
+#~ msgstr "Graine :"
+
 #, fuzzy
 #~ msgid "Do you want to create a new project (also known as location)?"
 #~ msgstr "Voulez-vous créer un nouveau jeux de données ?"
@@ -18332,9 +18336,6 @@ msgstr ""
 
 #~ msgid "RGB to HIS"
 #~ msgstr "RVB vers TSV"
-
-#~ msgid "Random cells"
-#~ msgstr "Cellules aléatoires"
 
 #~ msgid "Random cells and vector points"
 #~ msgstr "Cellules aléatoires et points vectoriels"

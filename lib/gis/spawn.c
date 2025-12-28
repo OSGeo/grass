@@ -730,7 +730,7 @@ static void begin_spawn(struct spawn *sp)
 }
 
 #define NEXT_ARG(var, type) ((type) * (var)++)
-#define NEXT_ARG_INT(var)   (int)((intptr_t) * (var)++)
+#define NEXT_ARG_INT(var)   (int)((intptr_t)*(var)++)
 
 static void parse_argvec(struct spawn *sp, const char **va)
 {

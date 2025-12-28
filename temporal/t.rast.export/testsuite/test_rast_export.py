@@ -39,7 +39,6 @@ class TestRasterExport(TestCase):
             cls.runModule(
                 "r.mapcalc",
                 expression="a_{id_} = rand(0.1,1.0)".format(id_=i),
-                flags="s",
                 overwrite=True,
             )
             maps.append("a_{id_}".format(id_=i))
