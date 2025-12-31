@@ -38,8 +38,8 @@ void G__md_print_escaped(FILE *f, const char *str)
             do_escape('<', "&lt;");
             do_escape('>', "&gt;");
             do_escape('*', "\\*");
-            default:
-                fputc(*s, f);
+        default:
+            fputc(*s, f);
         }
     }
 }
