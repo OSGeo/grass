@@ -17,7 +17,7 @@ concurrency:
 jobs:
   macos_build:
     name: macOS build
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
       - name: Info
         run: |
