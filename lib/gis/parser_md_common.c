@@ -29,16 +29,17 @@
 void G__md_print_escaped(FILE *f, const char *str)
 {
     const char *s;
-
     for (s = str; *s; s++) {
         switch (*s) {
-            do_escape('\n', "\\\n");
-            do_escape('\t', "&nbsp;&nbsp;&nbsp;&nbsp;");
+            case '\n':
+                fputs("\\\n    ", f);
+                break;
+            do_escape('\t', "    ");
             do_escape('<', "&lt;");
             do_escape('>', "&gt;");
             do_escape('*', "\\*");
-        default:
-            fputc(*s, f);
+            default:
+                fputc(*s, f);
         }
     }
 }
