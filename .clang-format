@@ -3,7 +3,6 @@ BasedOnStyle: LLVM
 IndentWidth: 4
 ---
 Language: C
-AccessModifierOffset: -4
 AlignConsecutiveMacros:
   Enabled: true
   AcrossEmptyLines: true
@@ -12,7 +11,6 @@ AlignConsecutiveMacros:
 AlignEscapedNewlines: Left
 AllowShortFunctionsOnASingleLine: InlineOnly
 BreakBeforeBraces: Stroustrup
-BreakTemplateDeclarations: Yes
 ForEachMacros:
   - DGL_FOREACH_NODE
   - DGL_FOREACH_EDGE
