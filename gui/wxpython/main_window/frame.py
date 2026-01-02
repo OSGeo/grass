@@ -93,6 +93,7 @@ from startup.guiutils import (
 )
 from grass.grassdb.checks import is_first_time_user
 from grass.grassdb.history import Status
+from grass.workflows.server import is_wx_html2_available
 
 
 class SingleWindowAuiManager(aui.AuiManager):
@@ -946,7 +947,16 @@ class GMFrame(wx.Frame):
         if sys.platform.startswith("win"):
             message = _(
                 "Jupyter Notebook is currently not included in the Windows GRASS build process.\n"
-                "This feature will be available in a future release."
+                "This feature will be available in a future release. "
+                "You can use Jupyter Notebook externally."
+            )
+        elif not is_wx_html2_available():
+            message = _(
+                "Jupyter Notebook integration requires wxPython with the wx.html2 module enabled.\n\n"
+                "Your current wxPython / wxWidgets build does not provide wx.html2 support "
+                "(typically due to missing WebView / WebKit support).\n\n"
+                "Please install wxPython and wxWidgets with HTML2/WebView support enabled, "
+                "or use Jupyter Notebook externally."
             )
         else:
             message = _(
