@@ -11,8 +11,8 @@ AlignConsecutiveMacros:
   PadOperators: true
 AlignEscapedNewlines: Left
 AllowShortFunctionsOnASingleLine: InlineOnly
-AlwaysBreakTemplateDeclarations: Yes
 BreakBeforeBraces: Stroustrup
+BreakTemplateDeclarations: Yes
 ForEachMacros:
   - DGL_FOREACH_NODE
   - DGL_FOREACH_EDGE
@@ -32,8 +32,8 @@ AlignConsecutiveMacros:
   PadOperators: true
 AlignEscapedNewlines: Left
 AllowShortFunctionsOnASingleLine: InlineOnly
-AlwaysBreakTemplateDeclarations: Yes
 BreakBeforeBraces: Stroustrup
+BreakTemplateDeclarations: Yes
 ForEachMacros:
   - DGL_FOREACH_NODE
   - DGL_FOREACH_EDGE
