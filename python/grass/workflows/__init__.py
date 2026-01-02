@@ -35,11 +35,8 @@ from .directory import JupyterDirectoryManager
 from .environment import JupyterEnvironment
 
 __all__ = [
-    "Directory",
-    "Environment",
     "JupyterDirectoryManager",
     "JupyterEnvironment",
     "JupyterServerInstance",
     "JupyterServerRegistry",
-    "Server",
 ]
