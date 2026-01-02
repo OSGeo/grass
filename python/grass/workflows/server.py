@@ -81,6 +81,19 @@ def is_jupyter_installed():
         return False
 
 
+def is_wx_html2_available():
+    """Check whether wx.html2 (WebView) support is available.
+
+    This can be missing on some platforms or distributions (e.g. Gentoo)
+    when wxPython or the underlying wxWidgets library is built without
+    HTML2/WebView support.
+    """
+    try:
+        return True
+    except Exception:
+        return False
+
+
 class JupyterServerInstance:
     """Manage the lifecycle of a Jupyter server instance."""
 
