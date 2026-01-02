@@ -198,13 +198,10 @@ class DatabasePage(TitledPage):
 
         # text controls
         # Show long paths with middle ellipsis and full value in tooltip
-        self.tgisdbase = StaticText(
-            parent=self,
-            id=wx.ID_ANY,
-            label=grassdatabase,
-            style=wx.ST_ELLIPSIZE_MIDDLE,
+        self.tgisdbase = self.MakeLabel(
+            text=grassdatabase, style=wx.ST_ELLIPSIZE_MIDDLE, tooltip=grassdatabase
         )
-        self.tgisdbase.SetToolTip(grassdatabase)
+        self.tgisdbase.SetMaxSize((400, -1))
         self.tlocation = self.MakeTextCtrl("newProject")
         self.tlocation.SetFocus()
 
@@ -281,7 +278,7 @@ class DatabasePage(TitledPage):
         )
         self.sizer.Add(
             self.tgisdbase,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND,
             border=5,
             pos=(6, 1),
         )
@@ -2826,5 +2823,4 @@ class WizardWithHelpButton(Wizard):
                 title=title,
                 style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER | wx.MAXIMIZE_BOX,
             )
-            self.PostCreate(pre)
             self.PostCreate(pre)
