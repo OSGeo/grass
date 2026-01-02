@@ -69,10 +69,10 @@ repos:
                 .*\.ipynb$
           )
   - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.29.0
+    rev: v1.37.1
     hooks:
       - id: yamllint
   - repo: https://github.com/editorconfig-checker/editorconfig-checker
-    rev: v3.3.0
+    rev: v3.6.0
     hooks:
       - id: editorconfig-checker
