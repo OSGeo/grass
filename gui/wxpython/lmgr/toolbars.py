@@ -24,7 +24,7 @@ This program is free software under the GNU General Public License
 """
 
 from core.gcmd import RunCommand
-from grass.workflows.server import is_jupyter_installed
+from grass.workflows.server import is_jupyter_installed, is_wx_html2_available
 from gui_core.toolbars import BaseToolbar, AuiToolbar, BaseIcons
 from icons.icon import MetaIcon
 
@@ -225,7 +225,7 @@ class LMToolsToolbar(AuiToolbar):
         }
 
         # Decide if Jupyter is available
-        if is_jupyter_installed():
+        if is_jupyter_installed() and is_wx_html2_available():
             jupyter_icon = icons["jupyter"]
             jupyter_handler = self.parent.OnJupyterNotebook
         else:
