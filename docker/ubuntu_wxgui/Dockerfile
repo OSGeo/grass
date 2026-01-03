@@ -3,12 +3,12 @@ FROM ubuntu:24.04@sha256:c35e29c9450151419d9448b0fd75374fec4fff364a27f176fb458d4
 LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann,Tomas Zigo"
 LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 # define versions to be used (PDAL is not available on Ubuntu/Debian, so we compile it here)
 # https://github.com/PDAL/PDAL/releases
 # renovate: datasource=github-tags depName=PDAL/PDAL
-ARG PDAL_VERSION=2.7.1
+ARG PDAL_VERSION=2.9.3
 
 SHELL ["/bin/bash", "-c"]
 
@@ -29,8 +29,8 @@ WORKDIR /tmp
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends --no-install-suggests \
     adwaita-icon-theme-full \
-    build-essential \
     bison \
+    build-essential \
     bzip2 \
     cmake \
     curl \
@@ -47,21 +47,21 @@ RUN apt-get update && apt-get upgrade -y && \
     libcurl4-gnutls-dev \
     libfftw3-bin \
     libfftw3-dev \
-    libfreetype6-dev \
-    libgl1-mesa-dev \
+    libfreetype-dev \
     libgdal-dev \
     libgeos-dev \
+    libgl1-mesa-dev \
     libglu1-mesa-dev \
     libgsl0-dev \
     libgtk-3-0 \
     libgtk-3-dev \
     libjpeg-dev \
     libjsoncpp-dev \
+    libncurses-dev \
     libnetcdf-dev \
-    libncurses5-dev \
     libnotify4 \
-    libopenblas-base \
     libopenblas-dev \
+    libopenblas0 \
     libopenjp2-7 \
     libopenjp2-7-dev \
     libpnglite-dev \
@@ -70,8 +70,8 @@ RUN apt-get update && apt-get upgrade -y && \
     libpython3-all-dev \
     libreadline-dev \
     librsvg2-common \
-    libsecret-1-0 \
     libsdl2-2.0-0 \
+    libsecret-1-0 \
     libsqlite3-dev \
     libtiff-dev \
     libxtst6 \
@@ -107,9 +107,9 @@ RUN apt-get update && apt-get upgrade -y && \
     && apt-get clean all && rm -rf /var/lib/apt/lists/*
 
 # wxGUI
-RUN pip install -U \
-    -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-22.04 \
-    wxPython \
+RUN pip install -U --break-system-packages \
+    -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-24.04 \
+    wxpython \
     && pip cache purge
 # If you do not use any Gnome Accessibility features, to suppress warning
 # WARNING **: Couldn't connect to accessibility bus:
@@ -123,15 +123,15 @@ RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen && locale-gen
 WORKDIR /src
 RUN mkdir vdatum && \
     cd vdatum && \
-    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2012.zip && unzip -j -u usa_geoid2012.zip -d /usr/share/proj; \
-    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2009.zip && unzip -j -u usa_geoid2009.zip -d /usr/share/proj; \
-    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2003.zip && unzip -j -u usa_geoid2003.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/egm08_25/egm08_25.gtx && mv egm08_25.gtx /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/egm96_15/egm96_15.gtx && mv egm96_15.gtx /usr/share/proj; \
     wget -q http://download.osgeo.org/proj/vdatum/usa_geoid1999.zip && unzip -j -u usa_geoid1999.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2003.zip && unzip -j -u usa_geoid2003.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2009.zip && unzip -j -u usa_geoid2009.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2012.zip && unzip -j -u usa_geoid2012.zip -d /usr/share/proj; \
     wget -q http://download.osgeo.org/proj/vdatum/vertcon/vertconc.gtx && mv vertconc.gtx /usr/share/proj; \
     wget -q http://download.osgeo.org/proj/vdatum/vertcon/vertcone.gtx && mv vertcone.gtx /usr/share/proj; \
     wget -q http://download.osgeo.org/proj/vdatum/vertcon/vertconw.gtx && mv vertconw.gtx /usr/share/proj; \
-    wget -q http://download.osgeo.org/proj/vdatum/egm96_15/egm96_15.gtx && mv egm96_15.gtx /usr/share/proj; \
-    wget -q http://download.osgeo.org/proj/vdatum/egm08_25/egm08_25.gtx && mv egm08_25.gtx /usr/share/proj; \
     cd .. && \
     rm -rf vdatum
 
@@ -151,16 +151,16 @@ RUN wget -q \
       -DCMAKE_C_COMPILER=gcc \
       -DCMAKE_CXX_COMPILER=g++ \
       -DCMAKE_MAKE_PROGRAM=make \
-      -DBUILD_PLUGIN_PYTHON=ON \
+      -DBUILD_PGPOINTCLOUD_TESTS=OFF \
       -DBUILD_PLUGIN_CPD=OFF \
       -DBUILD_PLUGIN_GREYHOUND=ON \
       -DBUILD_PLUGIN_HEXBIN=ON \
-      -DHEXER_INCLUDE_DIR=/usr/include/ \
-      -DBUILD_PLUGIN_NITF=OFF \
       -DBUILD_PLUGIN_ICEBRIDGE=ON \
+      -DBUILD_PLUGIN_NITF=OFF \
       -DBUILD_PLUGIN_PGPOINTCLOUD=OFF \
-      -DBUILD_PGPOINTCLOUD_TESTS=OFF \
+      -DBUILD_PLUGIN_PYTHON=ON \
       -DBUILD_PLUGIN_SQLITE=ON \
+      -DHEXER_INCLUDE_DIR=/usr/include/ \
       -DWITH_LASZIP=OFF \
       -DWITH_LAZPERF=ON \
       -DWITH_TESTS=ON && \
@@ -177,58 +177,58 @@ RUN rm -f /src/grass_build/dist.*/demolocation/.grassrc*
 
 # Set environmental variables for GRASS GIS compilation, without debug symbols
 # Set gcc/g++ environmental variables for GRASS GIS compilation, without debug symbols
-ENV MYCFLAGS "-O2 -std=gnu99 -m64"
-ENV MYLDFLAGS "-s"
+ENV MYCFLAGS="-O2 -std=gnu99 -m64"
+ENV MYLDFLAGS="-s"
 # CXX stuff:
-ENV LD_LIBRARY_PATH "/usr/local/lib"
-ENV LDFLAGS "$MYLDFLAGS"
-ENV CFLAGS "$MYCFLAGS"
-ENV CXXFLAGS "$MYCXXFLAGS"
+ENV LD_LIBRARY_PATH="/usr/local/lib"
+ENV LDFLAGS="$MYLDFLAGS"
+ENV CFLAGS="$MYCFLAGS"
+ENV CXXFLAGS="$MYCXXFLAGS"
 
 # Configure compile and install GRASS GIS
 # wxGUI require
-# --with-x
 # --with-nls
+# --with-x
 ENV NUMTHREADS=4
 RUN make distclean || echo "nothing to clean"
 RUN /src/grass_build/configure \
-  --with-cxx \
   --enable-largefile \
-  --with-proj-share=/usr/share/proj \
+  --with-bzlib \
+  --with-cairo --with-cairo-ldflags=-lfontconfig \
+  --with-cxx \
+  --with-fftw \
+  --with-freetype --with-freetype-includes="/usr/include/freetype2/" \
   --with-gdal=/usr/bin/gdal-config \
   --with-geos \
-  --with-sqlite \
-  --with-cairo --with-cairo-ldflags=-lfontconfig \
-  --with-freetype --with-freetype-includes="/usr/include/freetype2/" \
-  --with-fftw \
-  --with-postgres --with-postgres-includes="/usr/include/postgresql" \
   --with-netcdf \
-  --with-zstd \
-  --with-bzlib \
+  --with-nls \
   --with-pdal \
+  --with-postgres --with-postgres-includes="/usr/include/postgresql" \
+  --with-proj-share=/usr/share/proj \
+  --with-readline \
+  --with-sqlite \
+  --with-x \
+  --with-zstd \
   --without-mysql \
   --without-odbc \
   --without-openmp \
-  --with-x \
-  --with-nls \
-  --with-readline \
     && make -j $NUMTHREADS \
     && make install && ldconfig
 
 # Unset environmental variables to avoid later compilation issues
-ENV INTEL ""
-ENV MYCFLAGS ""
-ENV MYLDFLAGS ""
-ENV MYCXXFLAGS ""
-ENV LD_LIBRARY_PATH ""
-ENV LDFLAGS ""
-ENV CFLAGS ""
-ENV CXXFLAGS ""
+ENV INTEL=""
+ENV MYCFLAGS=""
+ENV MYLDFLAGS=""
+ENV MYCXXFLAGS=""
+ENV LD_LIBRARY_PATH=""
+ENV LDFLAGS=""
+ENV CFLAGS=""
+ENV CXXFLAGS=""
 
 # set SHELL var to avoid /bin/sh fallback in interactive GRASS GIS sessions
-ENV SHELL /bin/bash
-ENV LC_ALL "en_US.UTF-8"
-ENV GRASS_SKIP_MAPSET_OWNER_CHECK 1
+ENV SHELL=/bin/bash
+ENV LC_ALL="en_US.UTF-8"
+ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1
 
 # https://proj.org/usage/environmentvars.html#envvar-PROJ_NETWORK
 ENV PROJ_NETWORK=ON
@@ -242,18 +242,17 @@ RUN grass --tmp-project EPSG:4326 --exec g.version -rge && \
     python --version
 
 # Reduce the image size
-RUN apt-get autoremove -y
-RUN apt-get clean -y
+RUN apt-get autoremove -y && apt-get clean -y
 RUN rm -r /src/grass_build/.git
 
 WORKDIR /scripts
 
 # enable GRASS GIS Python session support
 ## grass --config python-path
-ENV PYTHONPATH "/usr/local/grass/etc/python:${PYTHONPATH}"
+ENV PYTHONPATH="/usr/local/grass/etc/python:${PYTHONPATH}"
 # enable GRASS GIS ctypes imports
 ## grass --config path
-ENV LD_LIBRARY_PATH "/usr/local/grass/lib:$LD_LIBRARY_PATH"
+ENV LD_LIBRARY_PATH="/usr/local/grass/lib:$LD_LIBRARY_PATH"
 
 WORKDIR /tmp
 COPY docker/testdata/simple.laz .
