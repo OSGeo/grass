@@ -26,17 +26,24 @@
         fputs(escaped, f);    \
         break
 
+// Newline requires special handling with Markdown line breaks and indentation.
+static void G__md_print_escaped_newline(FILE *f)
+{
+    fputs(MD_NEWLINE "\n    ", f);
+}
+
 void G__md_print_escaped(FILE *f, const char *str)
 {
     const char *s;
-
     for (s = str; *s; s++) {
         switch (*s) {
-            do_escape('\n', "\\\n");
             do_escape('\t', "&nbsp;&nbsp;&nbsp;&nbsp;");
             do_escape('<', "&lt;");
             do_escape('>', "&gt;");
             do_escape('*', "\\*");
+        case '\n':
+            G__md_print_escaped_newline(f);
+            break;
         default:
             fputc(*s, f);
         }
