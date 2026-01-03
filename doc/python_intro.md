@@ -9,11 +9,11 @@ authors:
 GRASS Python interface provides libraries to use GRASS tools, create scripts,
 and access the GRASS data structures. The Python interface consists of
 three main libraries:
-*[grass.tools](https://grass.osgeo.org/grass-stable/manuals/libpython/tools_index.html)*
+*[grass.tools](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.tools.html)*
 provides a Python interface to GRASS tools,
-*[grass.script](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script_intro.html)*
+*[grass.script](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html)*
 handles GRASS projects and sessions in Python,
-and *[grass.pygrass](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_index.html)*
+and *[grass.pygrass](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.pygrass.html)*
 enables a fine-grained access to the GRASS data structures.
 
 ## Scripting
@@ -65,7 +65,7 @@ tools.r_slope_aspect(elevation="elevation", slope="slope")
 
 ### Running tools
 
-Tools can be accessed through a *[grass.tool.Tools](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.tools.html#grass.tools.Tools)*
+Tools can be accessed through a *[grass.tools.Tools](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.tools.html#grass.tools.Tools)*
 object from *grass.tools* which is created either within an active GRASS
 session or with a session passed as a parameter (see above).
 Here, we create the *Tools* object assuming an active session:
@@ -184,7 +184,7 @@ we can use the *text* attribute:
 print(tools.g_region(flags="p").text)
 ```
 
-The documentation of *[grass.tool.support.ToolResult](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.tools.html#grass.tools.support.ToolResult)*
+The documentation of *[grass.tools.support.ToolResult](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.tools.html#grass.tools.support.ToolResult)*
 provides an overview of all the attributes and text processing functions,
 such as *text_split* function and *comma_items* attribute.
 
@@ -217,8 +217,8 @@ tools.g_region(n=elevation.shape[0], s=0, e=elevation.shape[1], w=0, res=1)
 accumulation = tools.r_watershed(elevation=elevation, accumulation=np.array)
 ```
 
-Additional APIs, *[grass.script.array](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html#script.array.array)*
-and *[grass.script.array3d](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html#script.array.array3d)*,
+Additional APIs, *[grass.script.array](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html#grass.script.array.array)*
+and *[grass.script.array3d](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html#grass.script.array.array3d)*,
 provide you with full control over read and writing data
 between GRASS raster maps and NumPy arrays, including 3D raster maps.
 The following example demonstrates reading an existing GRASS raster into a NumPy
