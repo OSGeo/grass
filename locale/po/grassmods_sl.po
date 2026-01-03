@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_sl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-27 15:40+0000\n"
+"POT-Creation-Date: 2026-01-03 15:41+0000\n"
 "PO-Revision-Date: 2025-07-26 01:37+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Slovenian <https://weblate.osgeo.org/projects/grass-gis/grassmods/sl/>\n"
@@ -76,7 +76,7 @@ msgstr "Ne morem opisati tabele"
 #: ../vector/v.category/main.c:333 ../vector/v.class/main.c:223
 #: ../vector/v.class/main.c:264 ../vector/v.class/main.c:271
 #: ../vector/v.db.connect/main.c:148 ../vector/v.distance/main.c:310
-#: ../vector/v.info/print.c:867 ../vector/v.vect.stats/main.c:284
+#: ../vector/v.info/print.c:863 ../vector/v.vect.stats/main.c:284
 #: ../vector/v.what.rast/main.c:144 ../vector/v.what/main.c:226
 #: ../vector/v.what/what.c:510 ../vector/v.what/what.c:654
 #: ../vector/v.what/what.c:707 ../vector/v.what/what.c:900
@@ -332,7 +332,7 @@ msgstr ""
 #: ../vector/v.category/main.c:942 ../vector/v.class/main.c:257
 #: ../vector/v.class/main.c:348 ../vector/v.db.connect/main.c:302
 #: ../vector/v.db.connect/main.c:395 ../vector/v.distance/main.c:1578
-#: ../vector/v.info/print.c:825 ../vector/v.info/print.c:861
+#: ../vector/v.info/print.c:821 ../vector/v.info/print.c:857
 #: ../vector/v.univar/main.c:630 ../vector/v.vect.stats/main.c:800
 #: ../vector/v.what.rast/main.c:628 ../vector/v.what/what.c:202
 #: ../vector/v.what/what.c:273 ../vector/v.what/what.c:441
@@ -521,7 +521,7 @@ msgstr "Navedi vse baze podatkov za določeni gonilnik in lokacijo"
 #: ../raster/r.what.color/main.c:290 ../raster/r.what/main.c:620
 #: ../vector/v.category/main.c:320 ../vector/v.category/main.c:989
 #: ../vector/v.distance/main.c:1799 ../vector/v.info/main.c:106
-#: ../vector/v.info/print.c:292 ../vector/v.info/print.c:908
+#: ../vector/v.info/print.c:288 ../vector/v.info/print.c:904
 #: ../vector/v.to.db/report.c:515 ../vector/v.univar/main.c:821
 #, fuzzy
 msgid "Failed to initialize pretty JSON string."
@@ -2313,7 +2313,7 @@ msgstr "L: od  S: do  D: zaključi\n"
 #: ../vector/v.in.dxf/main.c:62 ../vector/v.in.lidar/main.c:134
 #: ../vector/v.in.ogr/main.c:210 ../vector/v.in.pdal/main.cpp:129
 #: ../vector/v.in.region/main.c:40 ../vector/v.info/main.c:42
-#: ../vector/v.info/print.c:691 ../vector/v.kcv/main.c:53
+#: ../vector/v.info/print.c:687 ../vector/v.kcv/main.c:53
 #: ../vector/v.kernel/main.c:106 ../vector/v.label.sa/main.c:38
 #: ../vector/v.label/main.c:59 ../vector/v.lidar.correction/main.c:70
 #: ../vector/v.lidar.edgedetection/main.c:75
@@ -23402,8 +23402,8 @@ msgstr "Ime lokacije (location) iz katere naj povzamem projekcijo za GCP transfo
 #: ../raster/r.in.gdal/main.c:225 ../raster/r.in.pdal/main.cpp:258
 #: ../raster/r.in.pdal/main.cpp:272 ../raster/r.in.pdal/main.cpp:402
 #: ../vector/v.in.pdal/main.cpp:221 ../vector/v.in.pdal/main.cpp:230
-#: ../vector/v.in.pdal/main.cpp:243 ../vector/v.info/print.c:743
-#: ../vector/v.info/print.c:747
+#: ../vector/v.in.pdal/main.cpp:243 ../vector/v.info/print.c:739
+#: ../vector/v.info/print.c:743
 #, fuzzy
 msgid "Projection"
 msgstr "Rišem ..."
@@ -43906,188 +43906,188 @@ msgstr "Povezava z bazo podatkov ni definirana\n"
 msgid "Unable to open driver <%s>"
 msgstr "Ime izhodnega rastrskega sloja"
 
-#: ../vector/v.info/print.c:590
+#: ../vector/v.info/print.c:586
 msgid "Name:"
 msgstr ""
 
-#: ../vector/v.info/print.c:592
+#: ../vector/v.info/print.c:588
 msgid "Mapset:"
 msgstr ""
 
-#: ../vector/v.info/print.c:595
+#: ../vector/v.info/print.c:591
 #, fuzzy
 msgid "Project:"
 msgstr "Rišem ..."
 
-#: ../vector/v.info/print.c:597
+#: ../vector/v.info/print.c:593
 #, fuzzy
 msgid "Database:"
 msgstr "ime baze podatkov"
 
-#: ../vector/v.info/print.c:600
+#: ../vector/v.info/print.c:596
 msgid "Title:"
 msgstr ""
 
-#: ../vector/v.info/print.c:602
+#: ../vector/v.info/print.c:598
 msgid "Map scale:"
 msgstr ""
 
-#: ../vector/v.info/print.c:605
+#: ../vector/v.info/print.c:601
 #, fuzzy
 msgid "Name of creator:"
 msgstr "Ime rastrskega sloja"
 
-#: ../vector/v.info/print.c:607
+#: ../vector/v.info/print.c:603
 msgid "Organization:"
 msgstr ""
 
-#: ../vector/v.info/print.c:609
+#: ../vector/v.info/print.c:605
 msgid "Source date:"
 msgstr ""
 
-#: ../vector/v.info/print.c:615
+#: ../vector/v.info/print.c:611
 msgid "Timestamp (first layer): "
 msgstr ""
 
-#: ../vector/v.info/print.c:619
+#: ../vector/v.info/print.c:615
 msgid "Timestamp (first layer): none"
 msgstr ""
 
-#: ../vector/v.info/print.c:626 ../vector/v.info/print.c:648
-#: ../vector/v.info/print.c:685
+#: ../vector/v.info/print.c:622 ../vector/v.info/print.c:644
+#: ../vector/v.info/print.c:681
 #, fuzzy
 msgid "Map format:"
 msgstr "Izhodni sloj"
 
-#: ../vector/v.info/print.c:631
+#: ../vector/v.info/print.c:627
 #, fuzzy
 msgid "OGR layer:"
 msgstr "Vpiši ime sloja"
 
-#: ../vector/v.info/print.c:633
+#: ../vector/v.info/print.c:629
 #, fuzzy
 msgid "OGR datasource:"
 msgstr "ime baze podatkov"
 
-#: ../vector/v.info/print.c:636 ../vector/v.info/print.c:663
+#: ../vector/v.info/print.c:632 ../vector/v.info/print.c:659
 #, fuzzy
 msgid "Feature type:"
 msgstr "Tip objektov"
 
-#: ../vector/v.info/print.c:653
+#: ../vector/v.info/print.c:649
 #, fuzzy
 msgid "DB table:"
 msgstr "Ime datoteke s filtrom"
 
-#: ../vector/v.info/print.c:655
+#: ../vector/v.info/print.c:651
 msgid "DB name:"
 msgstr ""
 
-#: ../vector/v.info/print.c:659
+#: ../vector/v.info/print.c:655
 #, fuzzy
 msgid "Geometry column:"
 msgstr " Število kolon\n"
 
-#: ../vector/v.info/print.c:669 ../vector/v.info/print.c:677
+#: ../vector/v.info/print.c:665 ../vector/v.info/print.c:673
 #, fuzzy
 msgid "Topology:"
 msgstr "Rastrski sloj, ki ga nameravate uvoziti"
 
-#: ../vector/v.info/print.c:670
+#: ../vector/v.info/print.c:666
 msgid "schema:"
 msgstr ""
 
-#: ../vector/v.info/print.c:674
+#: ../vector/v.info/print.c:670
 #, fuzzy
 msgid "Topology column:"
 msgstr "ne najdem regije <%s>"
 
-#: ../vector/v.info/print.c:691
+#: ../vector/v.info/print.c:687
 #, fuzzy
 msgid "Type of map"
 msgstr "Ime datoteke s filtrom"
 
-#: ../vector/v.info/print.c:692
+#: ../vector/v.info/print.c:688
 #, fuzzy
 msgid "level"
 msgstr "Ime rastrskega sloja"
 
-#: ../vector/v.info/print.c:697
+#: ../vector/v.info/print.c:693
 #, fuzzy
 msgid "Number of points:"
 msgstr " Število vrstic\n"
 
-#: ../vector/v.info/print.c:699
+#: ../vector/v.info/print.c:695
 #, fuzzy
 msgid "Number of centroids:"
 msgstr " Število vrstic\n"
 
-#: ../vector/v.info/print.c:702
+#: ../vector/v.info/print.c:698
 #, fuzzy
 msgid "Number of lines:"
 msgstr " Število vrstic\n"
 
-#: ../vector/v.info/print.c:704
+#: ../vector/v.info/print.c:700
 #, fuzzy
 msgid "Number of boundaries:"
 msgstr " Število vrstic\n"
 
-#: ../vector/v.info/print.c:707
+#: ../vector/v.info/print.c:703
 #, fuzzy
 msgid "Number of areas:"
 msgstr " Število vrstic\n"
 
-#: ../vector/v.info/print.c:708
+#: ../vector/v.info/print.c:704
 #, fuzzy
 msgid "Number of islands:"
 msgstr " Število kolon\n"
 
-#: ../vector/v.info/print.c:713
+#: ../vector/v.info/print.c:709
 #, fuzzy
 msgid "Number of faces:"
 msgstr " Število vrstic\n"
 
-#: ../vector/v.info/print.c:714
+#: ../vector/v.info/print.c:710
 #, fuzzy
 msgid "Number of kernels:"
 msgstr " Število vrstic\n"
 
-#: ../vector/v.info/print.c:718
+#: ../vector/v.info/print.c:714
 #, fuzzy
 msgid "Number of volumes:"
 msgstr " Število kolon\n"
 
-#: ../vector/v.info/print.c:719
+#: ../vector/v.info/print.c:715
 #, fuzzy
 msgid "Number of holes:"
 msgstr " Število vrstic\n"
 
-#: ../vector/v.info/print.c:724
+#: ../vector/v.info/print.c:720
 msgid "Map is 3D:"
 msgstr ""
 
-#: ../vector/v.info/print.c:725
+#: ../vector/v.info/print.c:721
 msgid "No"
 msgstr ""
 
-#: ../vector/v.info/print.c:725
+#: ../vector/v.info/print.c:721
 msgid "Yes"
 msgstr ""
 
-#: ../vector/v.info/print.c:727
+#: ../vector/v.info/print.c:723
 #, fuzzy
 msgid "Number of dblinks:"
 msgstr " Število vrstic\n"
 
-#: ../vector/v.info/print.c:744
+#: ../vector/v.info/print.c:740
 msgid "zone"
 msgstr ""
 
-#: ../vector/v.info/print.c:776
+#: ../vector/v.info/print.c:772
 msgid "Digitization threshold"
 msgstr ""
 
-#: ../vector/v.info/print.c:778
+#: ../vector/v.info/print.c:774
 msgid "Comment"
 msgstr ""
 
