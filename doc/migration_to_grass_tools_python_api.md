@@ -34,7 +34,7 @@ all parameters become keyword arguments, and you get consistent,
 smart return values regardless of what the tool outputs.
 The result is code that reads more naturally and requires less mental overhead
 when reading as the tool names are more prominent
-and special configuration is concenterated in one place.
+and special configuration is concentrated in one place.
 
 Key advantages of *grass.tools*:
 
@@ -307,7 +307,7 @@ tools.r_mapcalc(expression="a = 1")
 ```
 
 For longer expressions (which would hit the operating system limit on the length
-of subprocess parameter list), you can use an *StringIO* object:
+of subprocess parameter list), you can use a *StringIO* object:
 
 ```python
 tools.r_mapcalc(file=io.StringIO("a = 1"))
@@ -478,7 +478,7 @@ returncode = result.returncode
 
 While the new tool call above involves more objects,
 namely a separate *Tools* object and also tool result object,
-an actual tool call in the code may be quite straigforward:
+an actual tool call in the code may be quite straightforward:
 
 ```python
 returncode = tools.r_mask_status(flags="t").returncode
@@ -526,7 +526,7 @@ tools.r_random_surface(output="surface", seed=42)
 This approach is particularly useful in scripts where you frequently recreate outputs
 during development and testing,
 but are not ready to turn your script into a GRASS tool in Python
-which provide the overwrite settings automatically.
+which provides the overwrite settings automatically.
 For many scripts, this means that overwrite setting is limited to one line
 rather than being present in every tool call.
 
