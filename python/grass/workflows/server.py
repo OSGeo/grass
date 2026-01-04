@@ -82,15 +82,18 @@ def is_jupyter_installed():
 
 
 def is_wx_html2_available():
-    """Check whether wx.html2 (WebView) support is available.
+    """Check whether wx.html2 (WebView) support is available and does not trigger Pylance import warnings.
 
     This can be missing on some platforms or distributions (e.g. Gentoo)
     when wxPython or the underlying wxWidgets library is built without
     HTML2/WebView support.
+
+    :return: True if wxPython/wxWidgets html2 module is available, False otherwise.
     """
     try:
+        __import__("wx.html2")
         return True
-    except Exception:
+    except ImportError:
         return False
 
 
