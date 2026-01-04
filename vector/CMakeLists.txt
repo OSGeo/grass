@@ -26,7 +26,6 @@ set(vector_modules_list
     v.in.dxf
     v.in.lidar
     v.in.ogr
-    v.in.pdal
     v.in.region
     v.info
     v.kcv
@@ -313,18 +312,21 @@ build_program_in_subdir(
   grass_vector
   ${LIBM})
 
+if(WITH_PDAL)
 file(GLOB v_in_pdal_SOURCES "v.in.pdal/*.c" "v.in.pdal/main.cpp")
-build_program_in_subdir(
-  v.in.pdal
-  SOURCES
-  "${v_in_pdal_SOURCES}"
-  DEPENDS
-  grass_gis
-  grass_gproj
-  grass_vector
-  ${LIBM}
-  PRIMARY_DEPENDS
-  ${PDAL})
+  build_program_in_subdir(
+    v.in.pdal
+    SOURCES
+    "${v_in_pdal_SOURCES}"
+    DEPENDS
+    grass_gis
+    grass_gproj
+    grass_vector
+    ${LIBM}
+    PRIMARY_DEPENDS
+    ${PDAL})
+  list(APPEND vector_modules_list v.in.pdal)
+endif()
 
 build_program_in_subdir(
   v.in.region
