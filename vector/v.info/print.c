@@ -250,12 +250,12 @@ void print_columns(struct Map_info *Map, const char *input_opt,
 
         case CSV:
             fprintf(stdout, "%s,%s\n",
-                    db_sqltype_name(
-                        db_get_column_sqltype(db_get_table_column(table, col))),
-                    db_get_column_name(db_get_table_column(table, col)));
+                    db_get_column_name(db_get_table_column(table, col)),
+                    db_sqltype_name(db_get_column_sqltype(
+                        db_get_table_column(table, col))));
             break;
 
-        case NONE:
+        case NONE: // Backward Compatibility
             fprintf(stdout, "%s|%s\n",
                     db_sqltype_name(
                         db_get_column_sqltype(db_get_table_column(table, col))),

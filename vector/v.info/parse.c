@@ -90,9 +90,9 @@ void parse_args(int argc, char **argv, char **input, char **field, int *history,
         // No flags and no format specified, default to plain.
         *format_ptr = PLAIN;
     }
-    else if (!format_opt->answer && *columns) {
-        // Backward compatibilty: sep should be pipe, and header should be
-        // skipped sep and header is handled during printing
+    else if (!format_opt->answer && *columns) { // -c without `format=`
+        // Backward compatibilty: sep should be pipe + header skipped
+        // sep and header is handled during printing
         *format_ptr = NONE;
     }
     else {
