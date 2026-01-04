@@ -255,6 +255,13 @@ void print_columns(struct Map_info *Map, const char *input_opt,
                     db_get_column_name(db_get_table_column(table, col)));
             break;
 
+        case NONE:
+            fprintf(stdout, "%s|%s\n",
+                    db_sqltype_name(
+                        db_get_column_sqltype(db_get_table_column(table, col))),
+                    db_get_column_name(db_get_table_column(table, col)));
+            break;
+
         case JSON:
             column_value = G_json_value_init_object();
             column_object = G_json_object(column_value);
