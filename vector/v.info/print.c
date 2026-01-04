@@ -201,6 +201,9 @@ void print_columns(struct Map_info *Map, const char *input_opt,
                   "layer <%s>:\n"),
                 field_opt);
     }
+    if (format == CSV) {
+        fprintf(stdout, "%s,%s\n", "name", "sql_type");
+    }
 
     if ((fi = Vect_get_field2(Map, field_opt)) == NULL) {
         Vect_close(Map);
@@ -242,7 +245,11 @@ void print_columns(struct Map_info *Map, const char *input_opt,
     for (col = 0; col < ncols; col++) {
         switch (format) {
         case SHELL:
-            fprintf(stdout, "%s|%s\n",
+            G_fatal_error(_("format=shell is not valid with -c flag."));
+            break;
+
+        case CSV:
+            fprintf(stdout, "%s,%s\n",
                     db_sqltype_name(
                         db_get_column_sqltype(db_get_table_column(table, col))),
                     db_get_column_name(db_get_table_column(table, col)));
