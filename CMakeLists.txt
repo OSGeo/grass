@@ -23,6 +23,8 @@ endif()
 project(GRASS)
 string(TOLOWER ${PROJECT_NAME} PROJECT_NAME_LOWER)
 
+include(CMakePackageConfigHelpers)
+
 set(BUILD_SHARED_LIBS ON)
 # message(FATAL_ERROR "VCPKG_TARGET_TRIPLET=${VCPKG_TARGET_TRIPLET}")
 if(MSVC)
@@ -334,3 +336,25 @@ endif()
 if(WITH_X11)
   build_program_in_subdir(visualization/ximgview DEPENDS grass_gis X11::X11)
 endif()
+
+install(
+  EXPORT GRASSTargets
+  NAMESPACE GRASS::
+  FILE GRASSTargets.cmake
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/GRASS")
+
+configure_package_config_file(
+  "${CMAKE_SOURCE_DIR}/cmake/GRASSConfig.cmake.in"
+  "${CMAKE_BINARY_DIR}/cmake/GRASS/GRASSConfig.cmake"
+  INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/GRASS")
+
+write_basic_package_version_file(
+  "${CMAKE_BINARY_DIR}/cmake/GRASS/GRASSConfigVersion.cmake"
+  VERSION "${GRASS_VERSION_NUMBER}"
+  COMPATIBILITY SameMajorVersion)
+
+install(
+  FILES
+    "${CMAKE_BINARY_DIR}/cmake/GRASS/GRASSConfig.cmake"
+    "${CMAKE_BINARY_DIR}/cmake/GRASS/GRASSConfigVersion.cmake"
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/GRASS")

@@ -157,6 +157,37 @@ function(build_module)
       add_dependencies(${G_NAME} ${G_OPTIONAL_DEPEND})
     endif()
   endforeach()
+
+  set(${G_NAME}_INCLUDE_DIRS)
+  list(APPEND ${G_NAME}_INCLUDE_DIRS "${G_SRC_DIR}")
+  foreach(G_INCLUDE ${G_INCLUDES})
+    list(APPEND ${G_NAME}_INCLUDE_DIRS "${G_INCLUDE}")
+  endforeach()
+
+  if(${G_NAME}_INCLUDE_DIRS)
+    list(REMOVE_DUPLICATES ${G_NAME}_INCLUDE_DIRS)
+  endif()
+
+  set(_grass_build_interface_includes)
+  foreach(_grass_inc_dir IN LISTS ${G_NAME}_INCLUDE_DIRS)
+    if(IS_ABSOLUTE "${_grass_inc_dir}")
+      set(_grass_inc_abs "${_grass_inc_dir}")
+    else()
+      get_filename_component(
+        _grass_inc_abs
+        "${_grass_inc_dir}"
+        ABSOLUTE
+        BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+    endif()
+    list(APPEND _grass_build_interface_includes
+         "$<BUILD_INTERFACE:${_grass_inc_abs}>")
+  endforeach()
+  target_include_directories(
+    ${G_NAME}
+    PUBLIC
+      ${_grass_build_interface_includes}
+      "$<INSTALL_INTERFACE:${GRASS_INSTALL_INCLUDEDIR}>")
+
   foreach(G_DEPEND ${G_DEPENDS})
     if(NOT TARGET ${G_DEPEND})
       message(FATAL_ERROR "${G_DEPEND} not a target")
@@ -164,18 +195,6 @@ function(build_module)
     endif()
 
     add_dependencies(${G_NAME} ${G_DEPEND})
-
-    set(${G_NAME}_INCLUDE_DIRS)
-    list(APPEND ${G_NAME}_INCLUDE_DIRS "${G_SRC_DIR}")
-    foreach(G_INCLUDE ${G_INCLUDES})
-      list(APPEND ${G_NAME}_INCLUDE_DIRS "${G_INCLUDE}")
-    endforeach()
-
-    if(${G_NAME}_INCLUDE_DIRS)
-      list(REMOVE_DUPLICATES ${G_NAME}_INCLUDE_DIRS)
-    endif()
-
-    target_include_directories(${G_NAME} PUBLIC ${${G_NAME}_INCLUDE_DIRS})
   endforeach()
 
   foreach(G_DEF ${G_DEFS})
@@ -289,6 +308,15 @@ function(build_module)
     message("[build_module] ADDING TEST ${G_NAME}-test")
   endforeach()
 
-  install(TARGETS ${G_NAME} DESTINATION ${install_dest})
+  if(G_EXE)
+    install(TARGETS ${G_NAME} DESTINATION ${install_dest})
+  else()
+    install(
+      TARGETS ${G_NAME}
+      EXPORT GRASSTargets
+      RUNTIME DESTINATION ${install_dest}
+      LIBRARY DESTINATION ${install_dest}
+      ARCHIVE DESTINATION ${install_dest})
+  endif()
 
 endfunction()

@@ -1,0 +1,22 @@
+include("${CMAKE_CURRENT_LIST_DIR}/GRASSTargets.cmake")
+
+set(GRASS_VERSION "@GRASS_VERSION_NUMBER@")
+set(GRASS_INCLUDE_DIR "@OUTDIR@/@GRASS_INSTALL_INCLUDEDIR@")
+
+if(TARGET GRASS::grass_gis AND NOT TARGET GRASS::GIS)
+  add_library(GRASS::GIS INTERFACE IMPORTED)
+  set_property(TARGET GRASS::GIS PROPERTY INTERFACE_LINK_LIBRARIES
+               GRASS::grass_gis)
+endif()
+
+if(TARGET GRASS::grass_raster AND NOT TARGET GRASS::Raster)
+  add_library(GRASS::Raster INTERFACE IMPORTED)
+  set_property(TARGET GRASS::Raster PROPERTY INTERFACE_LINK_LIBRARIES
+               GRASS::grass_raster)
+endif()
+
+if(TARGET GRASS::grass_vector AND NOT TARGET GRASS::Vector)
+  add_library(GRASS::Vector INTERFACE IMPORTED)
+  set_property(TARGET GRASS::Vector PROPERTY INTERFACE_LINK_LIBRARIES
+               GRASS::grass_vector)
+endif()
