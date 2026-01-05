@@ -93,7 +93,7 @@ def is_wx_html2_available():
     try:
         __import__("wx.html2")
         return True
-    except ImportError:
+    except (ImportError, ModuleNotFoundError):
         return False
 
 
