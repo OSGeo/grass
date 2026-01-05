@@ -34,7 +34,7 @@ GRASS Databases can be safely copied or moved as any other
 directories. Don't be confused with (relational) databases which are
 used in GRASS to hold attribute data and might be part of the GRASS
 Database. From the user's point of view, GRASS Database with all its
-data in it is similar to, e.g. PostGIS, database, as it stores all
+data in it is similar to, e.g. PostGIS database, as it stores all
 information in a specific format and is accessible by specific
 tools. GRASS Database is often called GISDBASE or
 DATABASE.
