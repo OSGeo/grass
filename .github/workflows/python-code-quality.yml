@@ -187,7 +187,7 @@ jobs:
         run: |
           pip install sphinx
           make sphinxdoclib
-          ARCH="$(cat include/Make/Platform.make | grep ^ARCH | cut -d'=' -f2 | xargs)"
+          ARCH="$(grep ^ARCH include/Make/Platform.make | cut -d'=' -f2 | xargs)"
           cp -rp "dist.${ARCH}/docs/html/libpython" sphinx-grass
 
       - name: Make Sphinx documentation available
