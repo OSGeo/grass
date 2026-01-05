@@ -1,8 +1,8 @@
 ## DESCRIPTION
 
 *v.profile* prints out distance and attributes of points/lines along a
-profiling line. Distance is calculated from the first profiling line
-coordinate pair or from the beginning of vector line.  
+profiling line. Distance is calculated from the first profiling line 
+coordinate pair or from the beginning of vector line.
 The *buffer* (tolerance) parameter sets how far point can be located
 from a profiling line and still be included in the output data set.  
 The *output* map option can be used to visually check which points are
@@ -28,6 +28,63 @@ Due to bugs in GRASS native buffering algorithms, this module for now
 depends on GEOS and will not function if GRASS is compiled without GEOS.
 This restriction will be removed as soon as GRASS native buffer
 generation is fixed.
+
+## OUTPUT FORMATS
+
+The module supports three output formats specified via the `format` parameter. 
+If `format=` is not specified, plain format is used by default.
+
+### Plain format (default)
+
+Traditional CSV output using the delimiter (default pipe `|`). 
+String values are enclosed in double quotes for backward compatibility with existing 
+scripts. This is the default format and does not require explicitly setting `format=plain`.
+
+Example output:
+```text
+Number|Distance|cat|ID|LABEL
+1|2750.44|60|42|"Morrisville #2"
+```
+
+### CSV format
+
+Delimiter-separated output without quotes around string values, suitable for 
+spreadsheet applications and data processing tools. Uses the same *separator* 
+as plain format.
+
+For true comma-separated values, combine with `separator=comma`:
+`v.profile input=data buffer=100 profile_map=line format=csv separator=comma`
+
+
+Example output with comma separator:
+```text
+Number,Distance,cat,ID,LABEL
+1,2750.44,60,42,Morrisville #2
+```
+
+
+### JSON format
+
+Structured JSON output with nested attributes. Each feature is represented
+as an object containing `category`, `distance`, and `attributes` fields.
+
+Example output:
+```text
+[
+    {
+        "category": 60,
+        "distance": 2750.44,
+        "attributes": {
+            "cat": 60,
+            "ID": 42,
+            "LABEL": "Morrisville #2"
+        }
+    }
+]
+```
+
+Note: In JSON format, the category is always included even when no attribute 
+table is linked.
 
 ## EXAMPLES
 
