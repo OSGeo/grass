@@ -66,8 +66,8 @@ default: $(DSTFILES)
 	@echo "Generating manual pages index (help system)..."
 	$(MAKE) $(INDICES)
 	$(call build,check)
-	$(MAKE) manpages
 	$(MAKE) $(INDICES_MD)
+	$(MAKE) manpages
 # $(MAKE) build-mkdocs
 
 # This must be a separate target so that evaluation of $(MANPAGES)
