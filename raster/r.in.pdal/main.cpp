@@ -422,6 +422,14 @@ int main(int argc, char *argv[])
     print_extent_flag->description =
         _("Print data file extent in shell script style and then exit");
 
+    Option *mem_opt = G_define_option();
+    mem_opt->key =="memmory";
+    mem_opt->type= TYPE_INTEGER;
+    mem_opt->required = NO;
+    mem_opt->description = _("Percentage of map to hold in memort(1-100)");
+    mem_opt->answer = const_cawst<char*>("50"); //default value is 50%
+    mem_opt->guisection=_("Performance");
+
     G_option_required(input_opt, file_list_opt, NULL);
     G_option_exclusive(input_opt, file_list_opt, NULL);
     G_option_requires(base_rast_res_flag, base_raster_opt, NULL);
@@ -798,8 +806,20 @@ int main(int argc, char *argv[])
     // stream_filter.setInput(*last_stage);
     //  there is no difference between 1 and 10k points in memory
     //  consumption, so using 10k in case it is faster for some cases
-    pdal::point_count_t point_table_capacity = 10000;
+    // pahal - 
+    rows= region.rows;
+    cols = region.cols;
+    //pahal- 
+    int mem_percent = atoi(mem_opt->answer);
+    if(mem_percent <1 || mem_percent >100)
+        G_fatal_error(_("Memory option must be between 1 and 100"));
+    size_t total_cells = (size_t)rows * (size_t)cols;
+    size_t point_table_capacity = (total_cells * mem_percent) / 100;
+    if(point_table_capacity < 1000)
+        point_table_capacity = 1000;
+    G_message(_("Using approximately %zu points in memory for processing"), point_table_capacity);
     pdal::FixedPointTable point_table(point_table_capacity);
+    
     try {
         binning_writer.prepare(point_table);
     }
