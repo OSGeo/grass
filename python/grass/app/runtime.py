@@ -95,6 +95,26 @@ class RuntimePaths:
         return self.env.get("GRASS_PROJSHARE", resource_paths.CONFIG_PROJSHARE)
 
     @property
+    def grass_cmake_config_dir(self):
+        return (
+            Path(self.prefix, resource_paths.GRASS_CMAKE_CONFIG)
+            if self.is_cmake_build
+            else ""
+        )
+
+    @property
+    def grass_cmake_module_dir(self):
+        return (
+            Path(self.prefix, resource_paths.GRASS_CMAKE_MODULES)
+            if self.is_cmake_build
+            else ""
+        )
+
+    @property
+    def is_cmake_build(self):
+        return resource_paths.GRASS_CMAKE_MODULES != ""
+
+    @property
     def prefix(self):
         if self._custom_prefix:
             return self._custom_prefix
