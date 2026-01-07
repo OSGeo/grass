@@ -25,7 +25,7 @@ build_program_in_subdir(
   OPTIONAL_DEPENDS
   OPENMP
   INCLUDES
-  "../simlib")
+  "${CMAKE_CURRENT_SOURCE_DIR}/../simlib")
 
 build_program_in_subdir(
   r.sim.sediment
@@ -38,4 +38,4 @@ build_program_in_subdir(
   OPTIONAL_DEPENDS
   OPENMP
   INCLUDES
-  "../simlib")
+  "${CMAKE_CURRENT_SOURCE_DIR}/../simlib")

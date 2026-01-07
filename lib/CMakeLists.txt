@@ -86,7 +86,7 @@ build_library_in_subdir(
   grass_driver
   grass_gis
   INCLUDES
-  "./driver")
+  "${CMAKE_CURRENT_SOURCE_DIR}/driver")
 add_custom_command(
   TARGET grass_psdriver
   POST_BUILD
@@ -102,7 +102,7 @@ build_library_in_subdir(
   grass_gis
   grass_driver
   INCLUDES
-  "./driver")
+  "${CMAKE_CURRENT_SOURCE_DIR}/driver")
 
 set(_grass_display_DEFS)
 
