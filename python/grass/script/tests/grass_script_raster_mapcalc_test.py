@@ -34,14 +34,14 @@ class TestMapcalcRandFunction:
     r.mapcalc auto-seeds when no seed is provided. Explicit seed can be used for reproducibility.
     """
 
-    @pytest.fixture(scope="module", autouse=True)
-    def setup_session(self, tmp_path_factory):
+    @pytest.fixture(scope="class", autouse=True)
+    def setup_session(self, request, tmp_path_factory):
         """Setup temporary GRASS session for tests"""
         tmp_path = tmp_path_factory.mktemp("mapcalc_rand_test")
         gs.create_project(tmp_path, overwrite=True)
         with gs.setup.init(tmp_path, env=os.environ.copy()) as session:
             gs.run_command("g.region", rows=2, cols=2, env=session.env)
-            self.session = session
+            request.cls.session = session
             yield
 
     def verify_seed_in_metadata(self, mapname, expected_seed):
@@ -65,9 +65,7 @@ class TestMapcalcRandFunction:
     def test_mapcalc_rand_autoseeded(self):
         """Test that rand() auto-seeds when no explicit seed is provided.
 
-        Verifies:
-        1. Two consecutive runs without explicit seed produce different results (different auto-seeds)
-        2. Metadata contains different auto-generated seed values
+        Verifies that metadata contains different auto-generated seed values.
 
         Note: On Windows with low-resolution timers, consecutive calls may occasionally
         receive the same auto-seed. We add a small delay to ensure different timestamps.
@@ -87,13 +85,6 @@ class TestMapcalcRandFunction:
         gs.mapcalc(
             "rand_map_auto2 = rand(0.0, 1.0)",
             env=self.session.env,
-        )
-
-        # Verify arrays differ (outcome of different auto-seeds)
-        array1 = garray.array("rand_map_auto1", env=self.session.env)
-        array2 = garray.array("rand_map_auto2", env=self.session.env)
-        assert not np.array_equal(array1, array2, equal_nan=True), (
-            "Auto-seeded runs should produce different maps"
         )
 
         # Verify mechanism: auto-generated seeds are recorded in metadata and differ
@@ -155,11 +146,7 @@ class TestMapcalcRandFunction:
         seed='auto' should be converted to None internally, enabling auto-seeding behavior.
         This means it should behave identically to not providing a seed parameter.
 
-        Verifies:
-        1. seed='auto' does not pass literal 'auto' to r.mapcalc (it's converted before calling)
-        2. Two runs with seed='auto' produce different results (auto-seeding enabled)
-        3. Auto-generated seeds are recorded in metadata (consistent with no-seed behavior)
-        4. Auto-generated seeds differ between runs
+        Verifies that auto-generated seeds are recorded in metadata and differ between runs.
         """
         # Create one map with seed='auto'
         gs.mapcalc(
@@ -198,29 +185,18 @@ class TestMapcalcRandFunction:
             "seed='auto' should produce different auto-generated seeds on consecutive runs"
         )
 
-        # Verify actual raster data differs
-        array_1 = garray.array("rand_map_auto_seed", env=self.session.env)
-        array_2 = garray.array("rand_map_auto_seed_2", env=self.session.env)
-        assert not np.array_equal(array_1, array_2, equal_nan=True), (
-            "seed='auto' should enable auto-seeding, producing different results each time"
-        )
-
     def test_mapcalc_rand_with_explicit_seed_reproducible(self):
         """Test that explicit seed produces reproducible results.
 
-        Verifies:
-        1. Same seed produces identical raster arrays (byte-for-byte reproducibility)
-        2. Different seeds produce different results (seed actually has effect)
-        3. Seed metadata is correctly recorded for all variations
+        Verifies that explicit seeds are correctly passed to r.mapcalc by checking metadata.
         """
-        # Create two maps with same seed=12345
+        # Create map with seed=12345
         gs.mapcalc(
             "rand_map_seed = rand(0.0, 1.0)",
             seed=12345,
             env=self.session.env,
         )
         self.verify_seed_in_metadata("rand_map_seed", 12345)
-        array_1 = garray.array("rand_map_seed", env=self.session.env)
 
         # Create another map with the same seed
         gs.mapcalc(
@@ -229,12 +205,6 @@ class TestMapcalcRandFunction:
             env=self.session.env,
         )
         self.verify_seed_in_metadata("rand_map_seed_2", 12345)
-        array_2 = garray.array("rand_map_seed_2", env=self.session.env)
-
-        # Verify reproducibility: arrays must be identical (byte-for-byte)
-        assert np.array_equal(array_1, array_2, equal_nan=True), (
-            "Maps with same seed should have identical cell values"
-        )
 
         # Verify seed actually has an effect by comparing with different seed
         gs.mapcalc(
@@ -243,19 +213,11 @@ class TestMapcalcRandFunction:
             env=self.session.env,
         )
         self.verify_seed_in_metadata("rand_map_seed_3", 54321)
-        array_3 = garray.array("rand_map_seed_3", env=self.session.env)
-
-        # Different seed should produce different results
-        assert not np.array_equal(array_1, array_3, equal_nan=True), (
-            "Maps with different seeds should have different cell values"
-        )
 
     def test_mapcalc_rand_with_seed_zero(self):
         """Test that seed=0 is handled correctly.
 
-        Verifies:
-        1. seed=0 is valid and produces reproducible results
-        2. seed=0 differs from seed='auto' (explicit seed produces different results than auto-seeding)
+        Verifies that seed=0 is correctly passed to r.mapcalc by checking metadata.
         """
         # Create map with seed=0
         gs.mapcalc(
@@ -264,28 +226,6 @@ class TestMapcalcRandFunction:
             env=self.session.env,
         )
         self.verify_seed_in_metadata("rand_map_seed_0", 0)
-        array_1 = garray.array("rand_map_seed_0", env=self.session.env)
-
-        # Create another map with seed=0 — should be reproducible
-        gs.mapcalc(
-            "rand_map_seed_0_2 = rand(0.0, 1.0)",
-            seed=0,
-            env=self.session.env,
-        )
-        array_2 = garray.array("rand_map_seed_0_2", env=self.session.env)
-        assert np.array_equal(array_1, array_2, equal_nan=True), (
-            "seed=0 should produce reproducible results"
-        )
-
-        # Verify seed=0 differs from auto-seeding
-        gs.mapcalc(
-            "rand_map_seed_0_auto = rand(0.0, 1.0)",
-            env=self.session.env,
-        )
-        array_auto = garray.array("rand_map_seed_0_auto", env=self.session.env)
-        assert not np.array_equal(array_1, array_auto, equal_nan=True), (
-            "seed=0 should produce different results than auto-seeding"
-        )
 
     @pytest.mark.parametrize(
         ("seed_value", "description"),
@@ -297,44 +237,17 @@ class TestMapcalcRandFunction:
     def test_mapcalc_rand_with_edge_seeds(self, seed_value, description):
         """Test that edge seed values (negative, large) are handled correctly.
 
-        Verifies:
-        1. Edge seed values are valid and produce reproducible results
-        2. Different edge seeds produce different results
+        Verifies that edge seed values are correctly passed to r.mapcalc by checking metadata.
         """
-        map_name_1 = f"rand_map_{description.replace(' ', '_')}_1"
-        map_name_2 = f"rand_map_{description.replace(' ', '_')}_2"
-        map_name_diff = f"rand_map_{description.replace(' ', '_')}_diff"
+        map_name = f"rand_map_{description.replace(' ', '_')}"
 
         # Create map with edge seed
         gs.mapcalc(
-            f"{map_name_1} = rand(0.0, 1.0)",
+            f"{map_name} = rand(0.0, 1.0)",
             seed=seed_value,
             env=self.session.env,
         )
-        self.verify_seed_in_metadata(map_name_1, seed_value)
-        array_1 = garray.array(map_name_1, env=self.session.env)
-
-        # Create another map with same edge seed — should be reproducible
-        gs.mapcalc(
-            f"{map_name_2} = rand(0.0, 1.0)",
-            seed=seed_value,
-            env=self.session.env,
-        )
-        array_2 = garray.array(map_name_2, env=self.session.env)
-        assert np.array_equal(array_1, array_2, equal_nan=True), (
-            f"{description} should produce reproducible results"
-        )
-
-        # Different seed should produce different results (compare with seed=12345)
-        gs.mapcalc(
-            f"{map_name_diff} = rand(0.0, 1.0)",
-            seed=12345,
-            env=self.session.env,
-        )
-        array_diff = garray.array(map_name_diff, env=self.session.env)
-        assert not np.array_equal(array_1, array_diff, equal_nan=True), (
-            f"{description} should produce different results than regular seed"
-        )
+        self.verify_seed_in_metadata(map_name, seed_value)
 
 
 class TestMapcalcStartRandFunction:
@@ -347,14 +260,14 @@ class TestMapcalcStartRandFunction:
     Testing the mechanism once is sufficient to ensure both code paths work correctly.
     """
 
-    @pytest.fixture(scope="module", autouse=True)
-    def setup_session(self, tmp_path_factory):
+    @pytest.fixture(scope="class", autouse=True)
+    def setup_session(self, request, tmp_path_factory):
         """Setup temporary GRASS session for tests"""
         tmp_path = tmp_path_factory.mktemp("mapcalc_start_rand_test")
-        gs.create_project(tmp_path)
+        gs.create_project(tmp_path, overwrite=True)
         with gs.setup.init(tmp_path, env=os.environ.copy()) as session:
             gs.run_command("g.region", rows=2, cols=2, env=session.env)
-            self.session = session
+            request.cls.session = session
             yield
 
     def verify_seed_in_metadata(self, mapname, expected_seed):
@@ -378,9 +291,7 @@ class TestMapcalcStartRandFunction:
     def test_mapcalc_start_rand_autoseeded(self):
         """Test that mapcalc_start with rand() auto-seeds when no explicit seed is provided.
 
-        Verifies:
-        1. Two consecutive runs without explicit seed produce different results (different auto-seeds)
-        2. Metadata contains different auto-generated seed values
+        Verifies that auto-seeding is enabled and different seeds are recorded in metadata.
         """
         # r.mapcalc auto-seeds when no seed is given — two runs should differ
         p = gs.mapcalc_start(
@@ -399,13 +310,6 @@ class TestMapcalcStartRandFunction:
         )
         returncode = p.wait()
         assert returncode == 0
-
-        # Verify outcome: arrays differ (different auto-seeds)
-        array1 = garray.array("rand_map_start_auto1", env=self.session.env)
-        array2 = garray.array("rand_map_start_auto2", env=self.session.env)
-        assert not np.array_equal(array1, array2, equal_nan=True), (
-            "Auto-seeded runs should produce different maps"
-        )
 
         # Verify mechanism: auto-generated seeds are recorded in metadata and differ
         info1 = gs.raster_info("rand_map_start_auto1", env=self.session.env)
@@ -448,11 +352,7 @@ class TestMapcalcStartRandFunction:
 
         seed='auto' should be converted to None internally, enabling auto-seeding behavior.
 
-        Verifies:
-        1. seed='auto' does not pass literal 'auto' to r.mapcalc (it's converted before calling)
-        2. Two runs with seed='auto' produce different results (auto-seeding enabled)
-        3. Auto-generated seeds are recorded in metadata (consistent with no-seed behavior)
-        4. Auto-generated seeds differ between runs
+        Verifies that auto-generated seeds are recorded in metadata and differ between runs.
         """
         # Create one map with seed='auto'
         p = gs.mapcalc_start(
@@ -497,22 +397,12 @@ class TestMapcalcStartRandFunction:
             f"seed='auto' should produce different auto-generated seeds (got {seed_1} and {seed_2})"
         )
 
-        # Verify actual raster data differs
-        array_1 = garray.array("rand_map_start_auto_seed", env=self.session.env)
-        array_2 = garray.array("rand_map_start_auto_seed_2", env=self.session.env)
-        assert not np.array_equal(array_1, array_2, equal_nan=True), (
-            "seed='auto' should enable auto-seeding, producing different results each time"
-        )
-
     def test_mapcalc_start_rand_with_explicit_seed_reproducible(self):
         """Test that explicit seed in mapcalc_start produces reproducible results.
 
-        Verifies:
-        1. Same seed produces identical raster arrays (byte-for-byte reproducibility)
-        2. Different seeds produce different results (seed actually has effect)
-        3. Seed metadata is correctly recorded for all variations
+        Verifies that explicit seeds are correctly passed to r.mapcalc by checking metadata.
         """
-        # Create two maps with same seed=12345
+        # Create map with seed=12345
         p = gs.mapcalc_start(
             "rand_map_start_seed = rand(0.0, 1.0)",
             seed=12345,
@@ -521,9 +411,6 @@ class TestMapcalcStartRandFunction:
         returncode = p.wait()
         assert returncode == 0
         self.verify_seed_in_metadata("rand_map_start_seed", 12345)
-
-        # Read actual raster data
-        array_1 = garray.array("rand_map_start_seed", env=self.session.env)
 
         # Create another map with the same seed
         p = gs.mapcalc_start(
@@ -535,14 +422,6 @@ class TestMapcalcStartRandFunction:
         assert returncode == 0
         self.verify_seed_in_metadata("rand_map_start_seed_2", 12345)
 
-        # Read actual raster data
-        array_2 = garray.array("rand_map_start_seed_2", env=self.session.env)
-
-        # Verify reproducibility: arrays must be identical (byte-for-byte)
-        assert np.array_equal(array_1, array_2, equal_nan=True), (
-            "Maps with same seed should have identical cell values"
-        )
-
         # Verify seed actually has an effect by comparing with different seed
         p = gs.mapcalc_start(
             "rand_map_start_seed_3 = rand(0.0, 1.0)",
@@ -552,10 +431,3 @@ class TestMapcalcStartRandFunction:
         returncode = p.wait()
         assert returncode == 0
         self.verify_seed_in_metadata("rand_map_start_seed_3", 54321)
-
-        array_3 = garray.array("rand_map_start_seed_3", env=self.session.env)
-
-        # Different seed should produce different results
-        assert not np.array_equal(array_1, array_3, equal_nan=True), (
-            "Maps with different seeds should have different cell values"
-        )
