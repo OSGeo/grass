@@ -46,7 +46,7 @@
  * buffers are fixed. (Will happen at some point after next ten years
  * or so as there's nothing more permanent than a temporary solution.)
  * 2017-11-19
-*/
+ */
 enum OutputFormat { PLAIN, CSV, JSON };
 
 static int ring2pts(const GEOSGeometry *geom, struct line_pnts *Points)
@@ -79,27 +79,27 @@ static int ring2pts(const GEOSGeometry *geom, struct line_pnts *Points)
             G_fatal_error(_("Invalid y coordinate %f"), y);
         Vect_append_point(Points, x, y, z);
     }
-        
+
     return 1;
 }
 
-    /* Helper for converting multipoligons to GRASS polygons */
-    static void add_poly(const GEOSGeometry *OGeom, struct line_pnts *Buffer)
-    {
-        const GEOSGeometry *geom2;
-        static struct line_pnts *gPoints;
-        int i, nrings;
-        
-        gPoints = Vect_new_line_struct();
-        
-        geom2 = GEOSGetExteriorRing(OGeom);
-        if (!ring2pts(geom2, gPoints)) {
-            G_fatal_error(_("Corrupt GEOS geometry"));
-        }
-        
-        Vect_append_points(Buffer, gPoints, GV_FORWARD);
-        Vect_reset_line(gPoints);
-        
+/* Helper for converting multipoligons to GRASS polygons */
+static void add_poly(const GEOSGeometry *OGeom, struct line_pnts *Buffer)
+{
+    const GEOSGeometry *geom2;
+    static struct line_pnts *gPoints;
+    int i, nrings;
+
+    gPoints = Vect_new_line_struct();
+
+    geom2 = GEOSGetExteriorRing(OGeom);
+    if (!ring2pts(geom2, gPoints)) {
+        G_fatal_error(_("Corrupt GEOS geometry"));
+    }
+
+    Vect_append_points(Buffer, gPoints, GV_FORWARD);
+    Vect_reset_line(gPoints);
+
     nrings = GEOSGetNumInteriorRings(OGeom);
 
     for (i = 0; i < nrings; i++) {
@@ -209,8 +209,8 @@ int main(int argc, char *argv[])
     format_opt->required = NO;
     format_opt->answer = "plain";
     format_opt->descriptions = _("plain;Human readable text output;"
-                             "csv;CSV (Comma Separated Values);"
-                             "json;JSON (JavaScript Object Notation)");
+                                 "csv;CSV (Comma Separated Values);"
+                                 "json;JSON (JavaScript Object Notation)");
     format_opt->guisection = _("Format");
 
     /* Profiling tolerance */
@@ -288,7 +288,6 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
-    
     if (strcmp(format_opt->answer, "json") == 0) {
         format = JSON;
         root_value = G_json_value_init_array();
@@ -420,6 +419,7 @@ int main(int argc, char *argv[])
 
     /* the field separator */
     fs = G_option_to_separator(delim_opt);
+    const char *csv_separator = ",";
 
     /* Let's get vector layers db connections information */
     Fi = Vect_get_field(&In, layer);
@@ -661,7 +661,7 @@ int main(int argc, char *argv[])
                         case GV_POINT:
                             Vect_cat_get(Cats, layer, &cat);
                             proc_point(Points, Profil, Buffer, cat, &rescount,
-                                        open3d);
+                                       open3d);
                             break;
                         case GV_LINE:
                             Vect_reset_line(Ipoints);
@@ -710,209 +710,234 @@ int main(int argc, char *argv[])
 
     /* Print output based on format */
     switch (format) {
-        case PLAIN:
-            /* Print header for PLAIN format */
-            if (!no_column_flag->answer) {
-                fprintf(ascii, "Number%sDistance", fs);
-                if (open3d == WITH_Z)
-                    fprintf(ascii, "%sZ", fs);
-                if (Fi != NULL) {
-                    for (col = 0; col < ncols; col++) {
-                        column = db_get_table_column(table, col);
-                        fprintf(ascii, "%s%s", fs, db_get_column_name(column));
-                    }
+    case PLAIN:
+        /* Print header for PLAIN format */
+        if (!no_column_flag->answer) {
+            fprintf(ascii, "Number%sDistance", fs);
+            if (open3d == WITH_Z)
+                fprintf(ascii, "%sZ", fs);
+            if (Fi != NULL) {
+                for (col = 0; col < ncols; col++) {
+                    column = db_get_table_column(table, col);
+                    fprintf(ascii, "%s%s", fs, db_get_column_name(column));
                 }
-                fprintf(ascii, "\n");
             }
-            
-            /* Print rows */
-            for (j = 0; j < rescount; j++) {
-                fprintf(ascii, "%zu%s%.*f", j + 1, fs, dp, resultset[j].distance);
-                if (open3d == WITH_Z)
-                    fprintf(ascii, "%s%.*f", fs, dp, resultset[j].z);
-                
-                if (Fi != NULL) {
-                    snprintf(sql, sizeof(sql), "select * from %s where %s=%d",
-                            Fi->table, Fi->key, resultset[j].cat);
-                    G_debug(2, "SQL: \"%s\"", sql);
-                    db_set_string(&dbsql, sql);
+            fprintf(ascii, "\n");
+        }
 
-                    if (db_open_select_cursor(driver, &dbsql, &cursor, DB_SEQUENTIAL) != DB_OK) {
-                        G_warning(_("Unable to get attribute data for cat %d"), resultset[j].cat);
-                        fprintf(ascii, "\n");
-                    }
-                    else {
-                        nrows = db_get_num_rows(&cursor);
-                        table = db_get_cursor_table(&cursor);
-                        
-                        if (nrows > 0) {
-                            if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK) {
-                                G_warning(_("Error while retrieving database record for cat %d"),
-                                        resultset[j].cat);
-                            }
-                            else {
-                                for (col = 0; col < ncols; col++) {
-                                    column = db_get_table_column(table, col);
-                                    db_convert_column_value_to_string(column, &valstr);
-                                    type = db_get_column_sqltype(column);
-                                    
-                                    if (type == DB_SQL_TYPE_CHARACTER ||
-                                        type == DB_SQL_TYPE_DATE ||
-                                        type == DB_SQL_TYPE_TIME ||
-                                        type == DB_SQL_TYPE_TIMESTAMP ||
-                                        type == DB_SQL_TYPE_INTERVAL ||
-                                        type == DB_SQL_TYPE_TEXT ||
-                                        type == DB_SQL_TYPE_SERIAL)
-                                        fprintf(ascii, "%s\"%s\"", fs, db_get_string(&valstr));
-                                    else
-                                        fprintf(ascii, "%s%s", fs, db_get_string(&valstr));
-                                }
-                            }
-                            db_close_cursor(&cursor);
+        /* Print rows */
+        for (j = 0; j < rescount; j++) {
+            fprintf(ascii, "%zu%s%.*f", j + 1, fs, dp, resultset[j].distance);
+            if (open3d == WITH_Z)
+                fprintf(ascii, "%s%.*f", fs, dp, resultset[j].z);
+
+            if (Fi != NULL) {
+                snprintf(sql, sizeof(sql), "select * from %s where %s=%d",
+                         Fi->table, Fi->key, resultset[j].cat);
+                G_debug(2, "SQL: \"%s\"", sql);
+                db_set_string(&dbsql, sql);
+
+                if (db_open_select_cursor(driver, &dbsql, &cursor,
+                                          DB_SEQUENTIAL) != DB_OK) {
+                    G_warning(_("Unable to get attribute data for cat %d"),
+                              resultset[j].cat);
+                    fprintf(ascii, "\n");
+                }
+                else {
+                    nrows = db_get_num_rows(&cursor);
+                    table = db_get_cursor_table(&cursor);
+
+                    if (nrows > 0) {
+                        if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK) {
+                            G_warning(_("Error while retrieving database "
+                                        "record for cat %d"),
+                                      resultset[j].cat);
                         }
-                    }
-                }
-                fprintf(ascii, "\n");
-            }    
-        break;
-            
-        case CSV:
-            /* CSV header */
-            if (!no_column_flag->answer) {
-                fprintf(ascii, "Number%sDistance", fs);
-                if (open3d == WITH_Z)
-                    fprintf(ascii, "%sZ", fs);
-                if (Fi != NULL) {
-                    for (col = 0; col < ncols; col++) {
-                        column = db_get_table_column(table, col);
-                        fprintf(ascii, "%s%s", fs, db_get_column_name(column));
-                    }
-                }
-                fprintf(ascii, "\n");
-            }
-        
-            for (j = 0; j < rescount; j++) {
-                fprintf(ascii, "%zu%s%.*f", j + 1, fs, dp, resultset[j].distance);
-                if (open3d == WITH_Z)
-                    fprintf(ascii, "%s%.*f", fs, dp, resultset[j].z);
-                
-                if (Fi != NULL) {
-                    snprintf(sql, sizeof(sql), "select * from %s where %s=%d",
-                            Fi->table, Fi->key, resultset[j].cat);
-                    G_debug(2, "SQL: \"%s\"", sql);
-                    db_set_string(&dbsql, sql);
-                    
-                    if (db_open_select_cursor(driver, &dbsql, &cursor, DB_SEQUENTIAL) != DB_OK) {
-                        G_warning(_("Unable to get attribute data for cat %d"), resultset[j].cat);
-                        fprintf(ascii, "\n");
-                    }
-                    else {
-                        nrows = db_get_num_rows(&cursor);
-                        table = db_get_cursor_table(&cursor);
-                        
-                        if (nrows > 0) {
-                            if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK) {
-                                G_warning(_("Error while retrieving database record for cat %d"),
-                                        resultset[j].cat);
+                        else {
+                            for (col = 0; col < ncols; col++) {
+                                column = db_get_table_column(table, col);
+                                db_convert_column_value_to_string(column,
+                                                                  &valstr);
+                                type = db_get_column_sqltype(column);
+
+                                if (type == DB_SQL_TYPE_CHARACTER ||
+                                    type == DB_SQL_TYPE_DATE ||
+                                    type == DB_SQL_TYPE_TIME ||
+                                    type == DB_SQL_TYPE_TIMESTAMP ||
+                                    type == DB_SQL_TYPE_INTERVAL ||
+                                    type == DB_SQL_TYPE_TEXT ||
+                                    type == DB_SQL_TYPE_SERIAL)
+                                    fprintf(ascii, "%s\"%s\"", fs,
+                                            db_get_string(&valstr));
+                                else
+                                    fprintf(ascii, "%s%s", fs,
+                                            db_get_string(&valstr));
                             }
-                            else {
-                                for (col = 0; col < ncols; col++) {
-                                    column = db_get_table_column(table, col);
-                                    db_convert_column_value_to_string(column, &valstr);
-                                    fprintf(ascii, "%s%s", fs, db_get_string(&valstr));
-                                }
-                            }
-                            db_close_cursor(&cursor);
                         }
+                        db_close_cursor(&cursor);
                     }
                 }
-                fprintf(ascii, "\n");
             }
+            fprintf(ascii, "\n");
+        }
         break;
 
-        case JSON:
-            /* Build JSON array */
-            for (j = 0; j < rescount; j++) {
-                item_value = G_json_value_init_object();
-                if (item_value == NULL) {
-                    G_fatal_error(_("Failed to initialize JSON object. Out of memory?"));
+    case CSV:
+        /* CSV header */
+        if (!no_column_flag->answer) {
+            fprintf(ascii, "Number%sDistance", csv_separator);
+            if (open3d == WITH_Z)
+                fprintf(ascii, "%sZ", csv_separator);
+            if (Fi != NULL) {
+                for (col = 0; col < ncols; col++) {
+                    column = db_get_table_column(table, col);
+                    fprintf(ascii, "%s%s", csv_separator,
+                            db_get_column_name(column));
                 }
-                item_object = G_json_object(item_value);
-                
-                /* Always include category and distance */
-                G_json_object_set_number(item_object, "category", resultset[j].cat);
-                G_json_object_set_number(item_object, "distance", resultset[j].distance);
-                
-                if (open3d == WITH_Z)
-                    G_json_object_set_number(item_object, "z", resultset[j].z);
-                
-                /* Add attributes */
-                if (Fi != NULL) {
-                    snprintf(sql, sizeof(sql), "select * from %s where %s=%d",
-                            Fi->table, Fi->key, resultset[j].cat);
-                    G_debug(2, "SQL: \"%s\"", sql);
-                    db_set_string(&dbsql, sql);
-                    
-                    if (db_open_select_cursor(driver, &dbsql, &cursor, DB_SEQUENTIAL) != DB_OK) {
-                        G_warning(_("Unable to get attribute data for cat %d"), resultset[j].cat);
-                        fprintf(ascii, "\n");
-                    }
-                    else {
-                        nrows = db_get_num_rows(&cursor);
-                        table = db_get_cursor_table(&cursor);
-                        
-                        if (nrows > 0) {
-                            if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK) {
-                                G_warning(_("Error while retrieving database record for cat %d"),
-                                        resultset[j].cat);
-                            }
-                            else {
-                                G_JSON_Value *attr_value = G_json_value_init_object();
-                                G_JSON_Object *attr_object = G_json_object(attr_value);
-                                
-                                for (col = 0; col < ncols; col++) {
-                                    column = db_get_table_column(table, col);
-                                    dbValue *value = db_get_column_value(column);
-                                    int ctype = db_get_column_sqltype(column);
-                                    const char *col_name = db_get_column_name(column);
-                                    
-                                    if (db_test_value_isnull(value)) {
-                                        G_json_object_set_null(attr_object, col_name);
-                                    }
-                                    else if (ctype == DB_SQL_TYPE_INTEGER) {
-                                        G_json_object_set_number(attr_object, col_name, 
-                                                                db_get_value_int(value));
-                                    }
-                                    else if (ctype == DB_SQL_TYPE_REAL) {
-                                        G_json_object_set_number(attr_object, col_name, 
-                                                                db_get_value_double(value));
-                                    }
-                                    else {
-                                        db_convert_column_value_to_string(column, &valstr);
-                                        G_json_object_set_string(attr_object, col_name, 
-                                                                db_get_string(&valstr));
-                                    }
-                                }
-                                
-                                G_json_object_set_value(item_object, "attributes", attr_value);
-                            }
-                            db_close_cursor(&cursor);
-                        }
-                    }
-                    
-                }
-                G_json_array_append_value(root_array, item_value);
             }
+            fprintf(ascii, "\n");
+        }
+
+        for (j = 0; j < rescount; j++) {
+            fprintf(ascii, "%zu%s%.*f", j + 1, csv_separator, dp,
+                    resultset[j].distance);
+            if (open3d == WITH_Z)
+                fprintf(ascii, "%s%.*f", csv_separator, dp, resultset[j].z);
+
+            if (Fi != NULL) {
+                snprintf(sql, sizeof(sql), "select * from %s where %s=%d",
+                         Fi->table, Fi->key, resultset[j].cat);
+                G_debug(2, "SQL: \"%s\"", sql);
+                db_set_string(&dbsql, sql);
+
+                if (db_open_select_cursor(driver, &dbsql, &cursor,
+                                          DB_SEQUENTIAL) != DB_OK) {
+                    G_warning(_("Unable to get attribute data for cat %d"),
+                              resultset[j].cat);
+                    fprintf(ascii, "\n");
+                }
+                else {
+                    nrows = db_get_num_rows(&cursor);
+                    table = db_get_cursor_table(&cursor);
+
+                    if (nrows > 0) {
+                        if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK) {
+                            G_warning(_("Error while retrieving database "
+                                        "record for cat %d"),
+                                      resultset[j].cat);
+                        }
+                        else {
+                            for (col = 0; col < ncols; col++) {
+                                column = db_get_table_column(table, col);
+                                db_convert_column_value_to_string(column,
+                                                                  &valstr);
+                                fprintf(ascii, "%s%s", csv_separator,
+                                        db_get_string(&valstr));
+                            }
+                        }
+                        db_close_cursor(&cursor);
+                    }
+                }
+            }
+            fprintf(ascii, "\n");
+        }
+        break;
+
+    case JSON:
+        /* Build JSON array */
+        for (j = 0; j < rescount; j++) {
+            item_value = G_json_value_init_object();
+            if (item_value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON object. Out of memory?"));
+            }
+            item_object = G_json_object(item_value);
+
+            /* Always include category and distance */
+            G_json_object_set_number(item_object, "category", resultset[j].cat);
+            G_json_object_set_number(item_object, "distance",
+                                     resultset[j].distance);
+
+            if (open3d == WITH_Z)
+                G_json_object_set_number(item_object, "z", resultset[j].z);
+
+            /* Add attributes */
+            if (Fi != NULL) {
+                snprintf(sql, sizeof(sql), "select * from %s where %s=%d",
+                         Fi->table, Fi->key, resultset[j].cat);
+                G_debug(2, "SQL: \"%s\"", sql);
+                db_set_string(&dbsql, sql);
+
+                if (db_open_select_cursor(driver, &dbsql, &cursor,
+                                          DB_SEQUENTIAL) != DB_OK) {
+                    G_warning(_("Unable to get attribute data for cat %d"),
+                              resultset[j].cat);
+                }
+                else {
+                    nrows = db_get_num_rows(&cursor);
+                    table = db_get_cursor_table(&cursor);
+
+                    if (nrows > 0) {
+                        if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK) {
+                            G_warning(_("Error while retrieving database "
+                                        "record for cat %d"),
+                                      resultset[j].cat);
+                        }
+                        else {
+                            G_JSON_Value *attr_value =
+                                G_json_value_init_object();
+                            G_JSON_Object *attr_object =
+                                G_json_object(attr_value);
+
+                            for (col = 0; col < ncols; col++) {
+                                column = db_get_table_column(table, col);
+                                dbValue *value = db_get_column_value(column);
+                                int ctype = db_get_column_sqltype(column);
+                                const char *col_name =
+                                    db_get_column_name(column);
+
+                                if (db_test_value_isnull(value)) {
+                                    G_json_object_set_null(attr_object,
+                                                           col_name);
+                                }
+                                else if (ctype == DB_SQL_TYPE_INTEGER) {
+                                    G_json_object_set_number(
+                                        attr_object, col_name,
+                                        db_get_value_int(value));
+                                }
+                                else if (ctype == DB_SQL_TYPE_REAL) {
+                                    G_json_object_set_number(
+                                        attr_object, col_name,
+                                        db_get_value_double(value));
+                                }
+                                else {
+                                    db_convert_column_value_to_string(column,
+                                                                      &valstr);
+                                    G_json_object_set_string(
+                                        attr_object, col_name,
+                                        db_get_string(&valstr));
+                                }
+                            }
+
+                            G_json_object_set_value(item_object, "attributes",
+                                                    attr_value);
+                        }
+                        db_close_cursor(&cursor);
+                    }
+                }
+            }
+            G_json_array_append_value(root_array, item_value);
+        }
         /* Output JSON */
         char *json_string = G_json_serialize_to_string_pretty(root_value);
         if (!json_string) {
             G_json_value_free(root_value);
             G_fatal_error(_("Failed to serialize JSON to pretty format."));
         }
-        
+
         fputs(json_string, ascii);
         fputc('\n', ascii);
-        
+
         G_json_free_serialized_string(json_string);
         G_json_value_free(root_value);
         break;
