@@ -62,7 +62,15 @@ def main():
     if gs.verbosity() > 2:
         quiet = False
 
-    in_info = gs.vector_info(input)
+    try:
+        in_info = gs.vector_info(input)
+    except CalledModuleError:
+        gs.fatal(
+            _(
+                "Unable to get vector map info for <{name}>. "
+                "The input vector map may not have a valid structure or attribute table."
+            ).format(name=input)
+        )
     # check for wild mixture of vector types
     if in_info["points"] > 0 and in_info["boundaries"] > 0:
         gs.fatal(
@@ -88,7 +96,15 @@ def main():
 
         gs.run_command("v.db.addtable", map=out_temp, quiet=True)
         input = out_temp
-        in_info = gs.vector_info(input)
+        try:
+            in_info = gs.vector_info(input)
+        except CalledModuleError:
+            gs.fatal(
+                _(
+                    "Unable to get vector map info for <{name}> after point processing. "
+                    "The processed vector may not have a valid structure."
+                ).format(name=input)
+            )
 
     # process areas
     if in_info["areas"] == 0 and in_info["boundaries"] == 0:
