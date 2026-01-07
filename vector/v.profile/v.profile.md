@@ -1,7 +1,7 @@
 ## DESCRIPTION
 
 *v.profile* prints out distance and attributes of points/lines along a
-profiling line. Distance is calculated from the first profiling line 
+profiling line. Distance is calculated from the first profiling line
 coordinate pair or from the beginning of vector line.
 The *buffer* (tolerance) parameter sets how far point can be located
 from a profiling line and still be included in the output data set.  
@@ -28,63 +28,6 @@ Due to bugs in GRASS native buffering algorithms, this module for now
 depends on GEOS and will not function if GRASS is compiled without GEOS.
 This restriction will be removed as soon as GRASS native buffer
 generation is fixed.
-
-## OUTPUT FORMATS
-
-The module supports three output formats specified via the `format` parameter. 
-If `format=` is not specified, plain format is used by default.
-
-### Plain format (default)
-
-Traditional CSV output using the delimiter (default pipe `|`). 
-String values are enclosed in double quotes for backward compatibility with existing 
-scripts. This is the default format and does not require explicitly setting `format=plain`.
-
-Example output:
-```text
-Number|Distance|cat|ID|LABEL
-1|2750.44|60|42|"Morrisville #2"
-```
-
-### CSV format
-
-Delimiter-separated output without quotes around string values, suitable for 
-spreadsheet applications and data processing tools. Uses the same *separator* 
-as plain format.
-
-For true comma-separated values, combine with `separator=comma`:
-`v.profile input=data buffer=100 profile_map=line format=csv separator=comma`
-
-
-Example output with comma separator:
-```text
-Number,Distance,cat,ID,LABEL
-1,2750.44,60,42,Morrisville #2
-```
-
-
-### JSON format
-
-Structured JSON output with nested attributes. Each feature is represented
-as an object containing `category`, `distance`, and `attributes` fields.
-
-Example output:
-```text
-[
-    {
-        "category": 60,
-        "distance": 2750.44,
-        "attributes": {
-            "cat": 60,
-            "ID": 42,
-            "LABEL": "Morrisville #2"
-        }
-    }
-]
-```
-
-Note: In JSON format, the category is always included even when no attribute 
-table is linked.
 
 ## EXAMPLES
 
@@ -120,6 +63,93 @@ r.profile input=elevation.dem@PERMANENT output=/home/user/elevation.profile \
 # Now get distance to place where river marker should be set
 v.profile input=streams@PERMANENT output=/home/user/river_profile.csv \
   east_north=600570.27364,4920613.41838,600348.034348,4920840.38617
+```
+
+### CSV Output
+
+```sh
+v.profile input=firestations@PERMANENT buffer=100 \
+  profile_map=railroads@PERMANENT profile_where="cat=3202" \
+  format=csv
+```
+
+The output looks as follows:
+
+```text
+Number,Distance,cat,ID,LABEL,LOCATION,CITY,MUN_COUNT,PUMPERS,PUMPER_TAN,TANKER,MINI_PUMPE,RESCUE_SER,AERIAL,BRUSH,OTHERS,WATER_RESC,MUNCOID,BLDGCODE,AGENCY,STATIONID,RECNO,CV_SID2,CVLAG
+1,2750.44,60,42,Morrisville #2,10632 Chapel Hill Rd,Morrisville,M,0,1,0,0,0,1,0,1,0,1,298,FD,MF2A,62,MF2A,1.4
+2,5394.27,2,23,Morrisville #1,100 Morrisville-Carpenter Rd,Morrisville,M,0,1,0,0,1,0,1,3,0,1,241,FD,MF1A,2,MF1A,1.4
+```
+
+### JSON Output
+
+```sh
+v.profile input=firestations@PERMANENT buffer=100 \
+  profile_map=railroads@PERMANENT profile_where="cat=3202" \
+  format=json
+```
+
+The output looks as follows:
+
+```json
+[
+    {
+        "category": 60,
+        "distance": 2750.4354923389592,
+        "attributes": {
+            "cat": 60,
+            "ID": 42,
+            "LABEL": "Morrisville #2",
+            "LOCATION": "10632 Chapel Hill Rd",
+            "CITY": "Morrisville",
+            "MUN_COUNT": "M",
+            "PUMPERS": 0,
+            "PUMPER_TAN": 1,
+            "TANKER": 0,
+            "MINI_PUMPE": "0",
+            "RESCUE_SER": 0,
+            "AERIAL": 1,
+            "BRUSH": 0,
+            "OTHERS": 1,
+            "WATER_RESC": 0,
+            "MUNCOID": 1,
+            "BLDGCODE": "298",
+            "AGENCY": "FD",
+            "STATIONID": "MF2A",
+            "RECNO": "62",
+            "CV_SID2": "MF2A",
+            "CVLAG": "1.4"
+        }
+    },
+    {
+        "category": 2,
+        "distance": 5394.2668921394143,
+        "attributes": {
+            "cat": 2,
+            "ID": 23,
+            "LABEL": "Morrisville #1",
+            "LOCATION": "100 Morrisville-Carpenter Rd",
+            "CITY": "Morrisville",
+            "MUN_COUNT": "M",
+            "PUMPERS": 0,
+            "PUMPER_TAN": 1,
+            "TANKER": 0,
+            "MINI_PUMPE": "0",
+            "RESCUE_SER": 1,
+            "AERIAL": 0,
+            "BRUSH": 1,
+            "OTHERS": 3,
+            "WATER_RESC": 0,
+            "MUNCOID": 1,
+            "BLDGCODE": "241",
+            "AGENCY": "FD",
+            "STATIONID": "MF1A",
+            "RECNO": "2",
+            "CV_SID2": "MF1A",
+            "CVLAG": "1.4"
+        }
+    }
+]
 ```
 
 ## BUGS
