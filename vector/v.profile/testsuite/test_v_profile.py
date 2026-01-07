@@ -11,6 +11,7 @@ Licence:    This program is free software under the GNU General Public
 TODO:       Convert to synthetic dataset. It would allow to shorten output sample length.
             Cover more input/output combinations.
 """
+
 import json
 from pathlib import Path
 
@@ -241,12 +242,12 @@ class TestProfiling(TestCase):
             profile_map=self.in_map,
             buffer=200,
             profile_where=self.where,
-            format="json"
+            format="json",
         )
         vpro.run()
-        
+
         actual = json.loads(vpro.outputs.stdout)
-        
+
         expected = [
             {
                 "category": 572,
@@ -254,7 +255,7 @@ class TestProfiling(TestCase):
                 "attributes": {
                     "featurenam": "Greshams Lake",
                     "class": "Reservoir",
-                }
+                },
             },
             {
                 "category": 1029,
@@ -262,19 +263,24 @@ class TestProfiling(TestCase):
                 "attributes": {
                     "featurenam": "Greshams Lake Dam",
                     "class": "Dam",
-                }
-            }
+                },
+            },
         ]
-        
+
         # Compare key fields
         self.assertEqual(len(actual), len(expected))
         for i in range(len(expected)):
             self.assertEqual(actual[i]["category"], expected[i]["category"])
-            self.assertAlmostEqual(actual[i]["distance"], expected[i]["distance"], places=2)
-            self.assertEqual(actual[i]["attributes"]["featurenam"], 
-                        expected[i]["attributes"]["featurenam"])
-            self.assertEqual(actual[i]["attributes"]["class"], 
-                        expected[i]["attributes"]["class"])
+            self.assertAlmostEqual(
+                actual[i]["distance"], expected[i]["distance"], places=2
+            )
+            self.assertEqual(
+                actual[i]["attributes"]["featurenam"],
+                expected[i]["attributes"]["featurenam"],
+            )
+            self.assertEqual(
+                actual[i]["attributes"]["class"], expected[i]["attributes"]["class"]
+            )
 
     def testMultiCrossing(self):
         """If profile crosses single line multiple times, all crossings
