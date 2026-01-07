@@ -34,8 +34,8 @@ except ImportError:
 
 from mkdocs import (
     get_addon_path,
+    get_addons_url,
     get_last_git_commit,
-    get_version_branch,
     read_file,
     set_proxy,
 )
@@ -45,7 +45,6 @@ from mkdocs import (
 
 grass_version = os.getenv("VERSION_NUMBER", "unknown")
 trunk_url = ""
-addons_url = ""
 grass_git_branch = "main"
 major, minor, patch = None, None, None
 if grass_version != "unknown":
@@ -56,16 +55,6 @@ if grass_version != "unknown":
         urlparse.urljoin(
             "grass/tree/",
             grass_git_branch + "/",
-        ),
-    )
-    addons_url = urlparse.urljoin(
-        base_url,
-        urlparse.urljoin(
-            "grass-addons/tree/",
-            get_version_branch(
-                major,
-                urlparse.urljoin(base_url, "grass-addons/"),
-            ),
         ),
     )
 
@@ -457,15 +446,8 @@ year = os.getenv("VERSION_DATE")
 if not year:
     year = str(datetime.now().year)
 
-# check the names of scripts to assign the right folder
 curdir = os.path.abspath(os.path.curdir)
-if curdir.startswith(topdir + os.path.sep):
-    source_url = trunk_url
-    pgmdir = curdir.replace(topdir, "").lstrip(os.path.sep)
-else:
-    # addons
-    source_url = addons_url
-    pgmdir = os.path.sep.join(curdir.split(os.path.sep)[-3:])
+
 url_source = ""
 addon_path = None
 if os.getenv("SOURCE_URL", ""):
@@ -474,7 +456,7 @@ if os.getenv("SOURCE_URL", ""):
         # Addon is installed from the local dir
         if Path(os.getenv("SOURCE_URL")).exists():
             url_source = urlparse.urljoin(
-                addons_url,
+                get_addons_url(base_url=base_url, major_version=major),
                 addon_path,
             )
         else:
@@ -483,6 +465,14 @@ if os.getenv("SOURCE_URL", ""):
                 addon_path,
             )
 else:
+    # check the names of scripts to assign the right folder
+    if curdir.startswith(topdir + os.path.sep):
+        source_url = trunk_url
+        pgmdir = curdir.replace(topdir, "").lstrip(os.path.sep)
+    else:
+        # addons
+        source_url = get_addons_url(base_url=base_url, major_version=major)
+        pgmdir = os.path.sep.join(curdir.split(os.path.sep)[-3:])
     url_source = urlparse.urljoin(source_url, pgmdir)
 if sys.platform == "win32":
     url_source = url_source.replace(os.path.sep, "/")
