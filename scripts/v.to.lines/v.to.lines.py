@@ -62,15 +62,7 @@ def main():
     if gs.verbosity() > 2:
         quiet = False
 
-    try:
-        in_info = gs.vector_info(input)
-    except CalledModuleError:
-        gs.fatal(
-            _(
-                "Unable to get vector map info for <{name}>. "
-                "The input vector map may not have a valid structure or attribute table."
-            ).format(name=input)
-        )
+    in_info = gs.vector_info(input)
     # check for wild mixture of vector types
     if in_info["points"] > 0 and in_info["boundaries"] > 0:
         gs.fatal(
@@ -96,15 +88,7 @@ def main():
 
         gs.run_command("v.db.addtable", map=out_temp, quiet=True)
         input = out_temp
-        try:
-            in_info = gs.vector_info(input)
-        except CalledModuleError:
-            gs.fatal(
-                _(
-                    "Unable to get vector map info for <{name}> after point processing. "
-                    "The processed vector may not have a valid structure."
-                ).format(name=input)
-            )
+        in_info = gs.vector_info(input)
 
     # process areas
     if in_info["areas"] == 0 and in_info["boundaries"] == 0:
@@ -193,19 +177,13 @@ def main():
             gs.fatal(_("Error removing centroids"))
 
     try:
-        try:
-            # TODO: fix magic numbers for layer here and there
-            gs.run_command(
-                "v.db.droptable", map=out_type, layer=1, flags="f", quiet=True
-            )
-        except CalledModuleError:
-            gs.run_command(
-                "g.remove", flags="f", type="vector", name=remove_names, quiet=quiet
-            )
-            gs.fatal(_("Error removing table from layer 1"))
-    # TODO: when this except is happening, it seems that never, so it seems wrong
-    except Exception:
-        gs.warning(_("No table for layer %d") % 1)
+        # TODO: fix magic numbers for layer here and there
+        gs.run_command("v.db.droptable", map=out_type, layer=2, flags="f", quiet=True)
+    except CalledModuleError:
+        gs.run_command(
+            "g.remove", flags="f", type="vector", name=remove_names, quiet=quiet
+        )
+        gs.fatal(_("Error removing table from layer 2"))
     try:
         gs.run_command(
             "v.category",
