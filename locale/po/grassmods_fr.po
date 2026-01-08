@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-03 15:41+0000\n"
-"PO-Revision-Date: 2026-01-03 04:37+0000\n"
+"PO-Revision-Date: 2026-01-04 20:50+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grassmods/fr/>\n"
 "Language: fr\n"
@@ -820,10 +820,8 @@ msgid "Column names are always included"
 msgstr ""
 
 #: ../db/db.select/main.c:550
-#, fuzzy
-#| msgid "Flag 't' is deprecated and will be removed in a future release. Please use format=csv instead."
 msgid "Flag 'v' is deprecated and will be removed in a future release. Please use format=vertical instead."
-msgstr "L'option 't' est obsolète et sera retirée dans une prochaine version. Utiliser plutôt format=csv."
+msgstr "L'option 'v' est obsolète et sera retirée dans une prochaine version. Utiliser plutôt format=vertical."
 
 #: ../db/db.select/main.c:553
 msgid "Flag 'v' is only allowed with format=vertical."
