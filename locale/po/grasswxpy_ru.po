@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-13 22:01+0000\n"
+"POT-Creation-Date: 2026-01-03 15:41+0000\n"
 "PO-Revision-Date: 2023-06-28 19:08+0000\n"
 "Last-Translator: Sergey Kazorin <kazorin@basealt.ru>\n"
 "Language-Team: Russian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/ru/>\n"
@@ -257,8 +257,8 @@ msgstr "Выберите файл проекта для импорта пара�
 #: ../gui/wxpython/gui_core/gselect.py:1582
 #: ../gui/wxpython/gui_core/gselect.py:1635
 #: ../gui/wxpython/gui_core/gselect.py:1670
-#: ../gui/wxpython/location_wizard/wizard.py:1446
-#: ../gui/wxpython/location_wizard/wizard.py:1801
+#: ../gui/wxpython/location_wizard/wizard.py:1451
+#: ../gui/wxpython/location_wizard/wizard.py:1806
 #: ../gui/wxpython/modules/import_export.py:862
 #: ../gui/wxpython/nviz/tools.py:675 ../gui/wxpython/psmap/dialogs.py:2749
 #: ../gui/wxpython/psmap/dialogs.py:3055 ../gui/wxpython/psmap/dialogs.py:5796
@@ -855,9 +855,9 @@ msgstr "ПРЕДУПРЕЖДЕНИЕ: Игнорируется неподдер�
 #: ../gui/wxpython/location_wizard/dialogs.py:102
 #: ../gui/wxpython/location_wizard/dialogs.py:122
 #: ../gui/wxpython/location_wizard/dialogs.py:533
-#: ../gui/wxpython/location_wizard/wizard.py:735
-#: ../gui/wxpython/location_wizard/wizard.py:912
-#: ../gui/wxpython/location_wizard/wizard.py:2109
+#: ../gui/wxpython/location_wizard/wizard.py:740
+#: ../gui/wxpython/location_wizard/wizard.py:917
+#: ../gui/wxpython/location_wizard/wizard.py:2114
 #: ../gui/wxpython/psmap/dialogs.py:5598
 #: ../gui/wxpython/startup/guiutils.py:255
 #: ../gui/wxpython/startup/guiutils.py:308
@@ -3727,13 +3727,13 @@ msgstr "Удалить всё"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:983
 #: ../gui/wxpython/gui_core/gselect.py:2298
-#: ../gui/wxpython/location_wizard/wizard.py:981
+#: ../gui/wxpython/location_wizard/wizard.py:986
 msgid "No"
 msgstr "Нет"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:983
 #: ../gui/wxpython/gui_core/gselect.py:2298
-#: ../gui/wxpython/location_wizard/wizard.py:981
+#: ../gui/wxpython/location_wizard/wizard.py:986
 msgid "Yes"
 msgstr "Да"
 
@@ -4047,12 +4047,12 @@ msgstr "Значение по умолчанию"
 
 #: ../gui/wxpython/gmodeler/panels.py:1351
 #: ../gui/wxpython/gmodeler/panels.py:1419
-#: ../gui/wxpython/location_wizard/wizard.py:249
-#: ../gui/wxpython/location_wizard/wizard.py:530
-#: ../gui/wxpython/location_wizard/wizard.py:1070
-#: ../gui/wxpython/location_wizard/wizard.py:1271
-#: ../gui/wxpython/location_wizard/wizard.py:1607
-#: ../gui/wxpython/location_wizard/wizard.py:1808
+#: ../gui/wxpython/location_wizard/wizard.py:253
+#: ../gui/wxpython/location_wizard/wizard.py:535
+#: ../gui/wxpython/location_wizard/wizard.py:1075
+#: ../gui/wxpython/location_wizard/wizard.py:1276
+#: ../gui/wxpython/location_wizard/wizard.py:1612
+#: ../gui/wxpython/location_wizard/wizard.py:1813
 msgid "Description"
 msgstr "Описание"
 
@@ -4060,7 +4060,7 @@ msgstr "Описание"
 #: ../gui/wxpython/gmodeler/panels.py:1401
 #: ../gui/wxpython/gui_core/ghelp.py:439 ../gui/wxpython/gui_core/ghelp.py:442
 #: ../gui/wxpython/gui_core/ghelp.py:514
-#: ../gui/wxpython/location_wizard/wizard.py:227
+#: ../gui/wxpython/location_wizard/wizard.py:231
 msgid "Name"
 msgstr "Имя"
 
@@ -4342,7 +4342,7 @@ msgid "Close dialog and ignore changes"
 msgstr "Закрыть диалоговое окно и игнорировать изменения"
 
 #: ../gui/wxpython/gmodeler/preferences.py:740
-#: ../gui/wxpython/location_wizard/wizard.py:2240
+#: ../gui/wxpython/location_wizard/wizard.py:2245
 msgid "Description:"
 msgstr "Описание:"
 
@@ -4808,7 +4808,7 @@ msgid "Parameterized in model"
 msgstr "Параметризация по модели"
 
 #: ../gui/wxpython/gui_core/forms.py:1146
-#: ../gui/wxpython/location_wizard/wizard.py:214
+#: ../gui/wxpython/location_wizard/wizard.py:218
 msgid "This option is required"
 msgstr "Это обязательный параметр"
 
@@ -5795,7 +5795,7 @@ msgid "Precision:"
 msgstr "Точность:"
 
 #: ../gui/wxpython/gui_core/preferences.py:2035
-#: ../gui/wxpython/location_wizard/wizard.py:1750
+#: ../gui/wxpython/location_wizard/wizard.py:1755
 #, python-brace-format
 msgid "Unable to read EPGS codes: {0}"
 msgstr "Не удалось прочитать коды EPGS: {0}"
@@ -6237,7 +6237,7 @@ msgstr "Имя <%(name)s> не является допустимым имене�
 
 #: ../gui/wxpython/gui_core/widgets.py:889
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:1186
-#: ../gui/wxpython/location_wizard/wizard.py:300
+#: ../gui/wxpython/location_wizard/wizard.py:304
 #: ../gui/wxpython/modules/import_export.py:268
 msgid "Invalid name"
 msgstr "Недопустимое имя"
@@ -8665,7 +8665,7 @@ msgid "Select from list of datum transformations"
 msgstr "Выбрать из списка преобразований датума"
 
 #: ../gui/wxpython/location_wizard/wizard.py:183
-#: ../gui/wxpython/location_wizard/wizard.py:2432
+#: ../gui/wxpython/location_wizard/wizard.py:2437
 #, fuzzy
 msgid "Define new GRASS project"
 msgstr "Определить новую область GRASS"
@@ -8674,242 +8674,242 @@ msgstr "Определить новую область GRASS"
 msgid "Change"
 msgstr "Изменить"
 
-#: ../gui/wxpython/location_wizard/wizard.py:217
+#: ../gui/wxpython/location_wizard/wizard.py:221
 msgid "(optional)"
 msgstr "(дополнительно)"
 
-#: ../gui/wxpython/location_wizard/wizard.py:228
+#: ../gui/wxpython/location_wizard/wizard.py:232
 #, fuzzy
 msgid "Name of project directory in GIS Data Directory"
 msgstr "Имя каталога области в каталоге данных ГИС"
 
-#: ../gui/wxpython/location_wizard/wizard.py:250
+#: ../gui/wxpython/location_wizard/wizard.py:254
 #, fuzzy
 msgid "Description of project directory in GIS Data Directory"
 msgstr "Описание каталога области в каталоге данных ГИС"
 
-#: ../gui/wxpython/location_wizard/wizard.py:270
+#: ../gui/wxpython/location_wizard/wizard.py:274
 #, fuzzy
 msgid "Project will be created in GRASS database:"
 msgstr "Область будет создана в базе данных GRASS:"
 
-#: ../gui/wxpython/location_wizard/wizard.py:296
+#: ../gui/wxpython/location_wizard/wizard.py:300
 #, fuzzy
 msgid "Name '{}' is not a valid name for project. Please use only ASCII characters excluding characters {} and space."
 msgstr "Имя «{}» недопустимо для области. Используйте только ASCII-символы, за исключением символов {} и пробела."
 
-#: ../gui/wxpython/location_wizard/wizard.py:308
+#: ../gui/wxpython/location_wizard/wizard.py:312
 #, fuzzy
 msgid "Project '{}' already exists. Please consider using another name for your project."
 msgstr "Область «{}» уже существует. Попробуйте использовать для области другое имя."
 
-#: ../gui/wxpython/location_wizard/wizard.py:311
+#: ../gui/wxpython/location_wizard/wizard.py:315
 #, fuzzy
 msgid "Existing project path"
 msgstr "Пусть к существующей области"
 
-#: ../gui/wxpython/location_wizard/wizard.py:328
+#: ../gui/wxpython/location_wizard/wizard.py:332
 msgid "Choose GRASS data directory:"
 msgstr "Выберите каталог с данными GRASS:"
 
-#: ../gui/wxpython/location_wizard/wizard.py:346
+#: ../gui/wxpython/location_wizard/wizard.py:351
 #, fuzzy
 msgid "Title of the project is limited only to one line and 256 characters. The rest of the text will be ignored."
 msgstr "Имя области может быть представлено только одной строкой, длиной в 256 символов. Остальная часть текста будет проигнорирована."
 
-#: ../gui/wxpython/location_wizard/wizard.py:357
+#: ../gui/wxpython/location_wizard/wizard.py:362
 msgid "Select Coordinate Reference System (CRS)"
 msgstr "Выбор системы координат"
 
-#: ../gui/wxpython/location_wizard/wizard.py:370
+#: ../gui/wxpython/location_wizard/wizard.py:375
 msgid "Select CRS from a list by EPSG or description"
 msgstr "Выбор системы координат из списка с помощью EPSG или описания"
 
-#: ../gui/wxpython/location_wizard/wizard.py:379
-#: ../gui/wxpython/location_wizard/wizard.py:1434
+#: ../gui/wxpython/location_wizard/wizard.py:384
+#: ../gui/wxpython/location_wizard/wizard.py:1439
 msgid "Read CRS from a georeferenced data file"
 msgstr "Чтение системы координат из файла с геопривязкой"
 
-#: ../gui/wxpython/location_wizard/wizard.py:384
+#: ../gui/wxpython/location_wizard/wizard.py:389
 msgid "Create a generic cartesian coordinate system (XY)"
 msgstr "Создать общую декартову систему координат (XY)"
 
-#: ../gui/wxpython/location_wizard/wizard.py:387
-#: ../gui/wxpython/location_wizard/wizard.py:1516
+#: ../gui/wxpython/location_wizard/wizard.py:392
+#: ../gui/wxpython/location_wizard/wizard.py:1521
 msgid "Specify CRS using WKT string"
 msgstr "Указать систему координат с помощью строки в формате WKT"
 
-#: ../gui/wxpython/location_wizard/wizard.py:390
-#: ../gui/wxpython/location_wizard/wizard.py:2044
+#: ../gui/wxpython/location_wizard/wizard.py:395
+#: ../gui/wxpython/location_wizard/wizard.py:2049
 msgid "Specify CRS using PROJ.4 string"
 msgstr "Указать систему координат с помощью строки в формате PROJ.4"
 
-#: ../gui/wxpython/location_wizard/wizard.py:393
-#: ../gui/wxpython/location_wizard/wizard.py:508
+#: ../gui/wxpython/location_wizard/wizard.py:398
+#: ../gui/wxpython/location_wizard/wizard.py:513
 msgid "Define custom CRS"
 msgstr "Определить пользовательскую систему координат"
 
-#: ../gui/wxpython/location_wizard/wizard.py:404
+#: ../gui/wxpython/location_wizard/wizard.py:409
 msgid "Additional methods:"
 msgstr "Дополнительные методы:"
 
-#: ../gui/wxpython/location_wizard/wizard.py:530
-#: ../gui/wxpython/location_wizard/wizard.py:1070
-#: ../gui/wxpython/location_wizard/wizard.py:1271
-#: ../gui/wxpython/location_wizard/wizard.py:1607
-#: ../gui/wxpython/location_wizard/wizard.py:1808
+#: ../gui/wxpython/location_wizard/wizard.py:535
+#: ../gui/wxpython/location_wizard/wizard.py:1075
+#: ../gui/wxpython/location_wizard/wizard.py:1276
+#: ../gui/wxpython/location_wizard/wizard.py:1612
+#: ../gui/wxpython/location_wizard/wizard.py:1813
 msgid "Code"
 msgstr "Код"
 
-#: ../gui/wxpython/location_wizard/wizard.py:536
+#: ../gui/wxpython/location_wizard/wizard.py:541
 msgid "Projection code:"
 msgstr "Код проекции:"
 
-#: ../gui/wxpython/location_wizard/wizard.py:546
-#: ../gui/wxpython/location_wizard/wizard.py:1089
-#: ../gui/wxpython/location_wizard/wizard.py:1297
+#: ../gui/wxpython/location_wizard/wizard.py:551
+#: ../gui/wxpython/location_wizard/wizard.py:1094
+#: ../gui/wxpython/location_wizard/wizard.py:1302
 msgid "Search in description:"
 msgstr "Искать в описании:"
 
-#: ../gui/wxpython/location_wizard/wizard.py:734
+#: ../gui/wxpython/location_wizard/wizard.py:739
 #, python-format
 msgid "Unable to read list: %s"
 msgstr "Не удалось прочитать список: %s"
 
-#: ../gui/wxpython/location_wizard/wizard.py:822
+#: ../gui/wxpython/location_wizard/wizard.py:827
 msgid "Choose projection parameters"
 msgstr "Выбор параметров проекции"
 
-#: ../gui/wxpython/location_wizard/wizard.py:841
+#: ../gui/wxpython/location_wizard/wizard.py:846
 msgid "Select datum or ellipsoid (next page)"
 msgstr "Выберите датум или эллипсоид (следующая страница)"
 
-#: ../gui/wxpython/location_wizard/wizard.py:852
+#: ../gui/wxpython/location_wizard/wizard.py:857
 msgid "Datum with associated ellipsoid"
 msgstr "Датум со связанным эллипсоидом"
 
-#: ../gui/wxpython/location_wizard/wizard.py:856
+#: ../gui/wxpython/location_wizard/wizard.py:861
 msgid "Ellipsoid only"
 msgstr "Только эллипсоид"
 
-#: ../gui/wxpython/location_wizard/wizard.py:911
+#: ../gui/wxpython/location_wizard/wizard.py:916
 #, python-format
 msgid "You must enter a value for %s"
 msgstr "Необходимо ввести значение для %s"
 
-#: ../gui/wxpython/location_wizard/wizard.py:929
-#: ../gui/wxpython/location_wizard/wizard.py:948
+#: ../gui/wxpython/location_wizard/wizard.py:934
+#: ../gui/wxpython/location_wizard/wizard.py:953
 #, python-format
 msgid " Enter parameters for %s projection "
 msgstr " Введите параметры для проекции %s "
 
-#: ../gui/wxpython/location_wizard/wizard.py:1045
+#: ../gui/wxpython/location_wizard/wizard.py:1050
 msgid "Specify geodetic datum"
 msgstr "Указание геодезического датума"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1070
+#: ../gui/wxpython/location_wizard/wizard.py:1075
 msgid "Ellipsoid"
 msgstr "Эллипсоид"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1076
+#: ../gui/wxpython/location_wizard/wizard.py:1081
 msgid "Datum code:"
 msgstr "Код датума:"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1237
+#: ../gui/wxpython/location_wizard/wizard.py:1242
 msgid "Specify ellipsoid"
 msgstr "Указание эллипсоида"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1258
+#: ../gui/wxpython/location_wizard/wizard.py:1263
 msgid "Earth based"
 msgstr "Земной"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1261
+#: ../gui/wxpython/location_wizard/wizard.py:1266
 msgid "Planetary bodies"
 msgstr "Планетарные тела"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1278
+#: ../gui/wxpython/location_wizard/wizard.py:1283
 msgid "Ellipsoid code:"
 msgstr "Код эллипсоида:"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1444
+#: ../gui/wxpython/location_wizard/wizard.py:1449
 msgid "Georeferenced file:"
 msgstr "Файл с геопривязкой:"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1501
+#: ../gui/wxpython/location_wizard/wizard.py:1506
 msgid "Select georeferenced file"
 msgstr "Выбор файла с геопривязкой"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1527
+#: ../gui/wxpython/location_wizard/wizard.py:1532
 msgid "Enter WKT parameters string:"
 msgstr "Введите строку параметров в формате WKT:"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1578
+#: ../gui/wxpython/location_wizard/wizard.py:1583
 msgid "Select CRS from a list"
 msgstr "Выбор системы координат из списка"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1594
+#: ../gui/wxpython/location_wizard/wizard.py:1599
 msgid "Filter by EPSG code or description:"
 msgstr "Фильтровать по коду EPSG или описанию"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1598
+#: ../gui/wxpython/location_wizard/wizard.py:1603
 msgid "Find more information at:"
 msgstr "Дополнительная информация доступна на:"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1607
-#: ../gui/wxpython/location_wizard/wizard.py:1808
+#: ../gui/wxpython/location_wizard/wizard.py:1612
+#: ../gui/wxpython/location_wizard/wizard.py:1813
 #: ../gui/wxpython/vnet/dialogs.py:384
 msgid "Parameters"
 msgstr "Параметры"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1770
+#: ../gui/wxpython/location_wizard/wizard.py:1775
 msgid "Choose IAU Code"
 msgstr "Выбор кода IAU"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1786
+#: ../gui/wxpython/location_wizard/wizard.py:1791
 msgid "Path to the IAU-codes file:"
 msgstr "Путь к файлу с кодом IAU:"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1790
+#: ../gui/wxpython/location_wizard/wizard.py:1795
 msgid "IAU code:"
 msgstr "Код IAU:"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1989
+#: ../gui/wxpython/location_wizard/wizard.py:1994
 msgid "Choose IAU codes file"
 msgstr "Выбор файла с кодами IAU"
 
-#: ../gui/wxpython/location_wizard/wizard.py:2024
+#: ../gui/wxpython/location_wizard/wizard.py:2029
 #, python-brace-format
 msgid "Unable to read IAU codes: {0}"
 msgstr "Не удалось прочитать коды IAU: {0}"
 
-#: ../gui/wxpython/location_wizard/wizard.py:2060
+#: ../gui/wxpython/location_wizard/wizard.py:2065
 msgid "Enter PROJ.4 parameters string:"
 msgstr "Введите строку параметров в формате PROJ.4:"
 
-#: ../gui/wxpython/location_wizard/wizard.py:2125
-#: ../gui/wxpython/location_wizard/wizard.py:2129
+#: ../gui/wxpython/location_wizard/wizard.py:2130
+#: ../gui/wxpython/location_wizard/wizard.py:2134
 msgid "Datum transform is required."
 msgstr "Необходимо преобразование датума."
 
-#: ../gui/wxpython/location_wizard/wizard.py:2173
+#: ../gui/wxpython/location_wizard/wizard.py:2178
 #: ../gui/wxpython/rlisetup/wizard.py:1947
 msgid "Summary"
 msgstr "Сводные данные"
 
-#: ../gui/wxpython/location_wizard/wizard.py:2222
+#: ../gui/wxpython/location_wizard/wizard.py:2227
 msgid "GRASS Database:"
 msgstr "База данных GRASS:"
 
-#: ../gui/wxpython/location_wizard/wizard.py:2231
+#: ../gui/wxpython/location_wizard/wizard.py:2236
 #, fuzzy
 msgid "Project Name:"
 msgstr "Код проекции:"
 
-#: ../gui/wxpython/location_wizard/wizard.py:2252
+#: ../gui/wxpython/location_wizard/wizard.py:2257
 msgid "Projection:"
 msgstr "Проекция:"
 
-#: ../gui/wxpython/location_wizard/wizard.py:2264
+#: ../gui/wxpython/location_wizard/wizard.py:2269
 msgid ""
 "PROJ.4 definition:\n"
 " (non-definitive)"
@@ -8917,12 +8917,12 @@ msgstr ""
 "Определение PROJ.4:\n"
 " (неоднозначное)"
 
-#: ../gui/wxpython/location_wizard/wizard.py:2391
+#: ../gui/wxpython/location_wizard/wizard.py:2396
 #: ../gui/wxpython/psmap/dialogs.py:804 ../gui/wxpython/psmap/dialogs.py:826
 msgid "custom"
 msgstr "пользовательская"
 
-#: ../gui/wxpython/location_wizard/wizard.py:2531
+#: ../gui/wxpython/location_wizard/wizard.py:2544
 #, fuzzy, python-format
 msgid ""
 "Unable to create new project. Project <%(loc)s> not created.\n"
@@ -8933,35 +8933,35 @@ msgstr ""
 "\n"
 "Подробная информация: %(err)s"
 
-#: ../gui/wxpython/location_wizard/wizard.py:2652
+#: ../gui/wxpython/location_wizard/wizard.py:2665
 #, fuzzy
 msgid "Unable to create new project"
 msgstr "Не удалось создать новую область"
 
-#: ../gui/wxpython/location_wizard/wizard.py:2654
+#: ../gui/wxpython/location_wizard/wizard.py:2667
 #, fuzzy
 msgid "Project already exists in GRASS Database."
 msgstr "Область уже существует в базе данных GRASS"
 
-#: ../gui/wxpython/location_wizard/wizard.py:2671
+#: ../gui/wxpython/location_wizard/wizard.py:2684
 #, python-brace-format
 msgid "Unable to create new GRASS Database <{path}>: {error}"
 msgstr "Не удалось создать новую базу данных GRASS <{path}>: {error}"
 
-#: ../gui/wxpython/location_wizard/wizard.py:2710
+#: ../gui/wxpython/location_wizard/wizard.py:2723
 msgid "EPSG code missing."
 msgstr "Отсутствует код EPSG."
 
-#: ../gui/wxpython/location_wizard/wizard.py:2722
+#: ../gui/wxpython/location_wizard/wizard.py:2735
 msgid "IAU code missing."
 msgstr "Отсутствует код IAU."
 
-#: ../gui/wxpython/location_wizard/wizard.py:2737
+#: ../gui/wxpython/location_wizard/wizard.py:2750
 #, python-format
 msgid "File <%s> not found."
 msgstr "Файл <%s> не найден."
 
-#: ../gui/wxpython/location_wizard/wizard.py:2747
+#: ../gui/wxpython/location_wizard/wizard.py:2760
 msgid "WKT string missing."
 msgstr "Отсутствует строка в формате WKT."
 
@@ -10260,43 +10260,41 @@ msgid "Insert mapcalc function"
 msgstr "Вставьте функцию mapcalc"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:292
-msgid "Generate random seed for rand()"
-msgstr "Сгенерируйте случайное значение для rand()"
+#, fuzzy
+#| msgid "Random cells"
+msgid "Random seed:"
+msgstr "Случайные ячейки"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:294
-msgid "Seed:"
-msgstr "Случайное значение:"
-
-#: ../gui/wxpython/modules/mcalc_builder.py:298
+#: ../gui/wxpython/modules/mcalc_builder.py:297
 msgid "Integer seed for rand() function"
 msgstr "Целое случайной число для функции rand()"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:305
+#: ../gui/wxpython/modules/mcalc_builder.py:301
 msgid "Add created raster map into layer tree"
 msgstr "Добавьте созданную растровую карту в дерево слоёв"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:649
+#: ../gui/wxpython/modules/mcalc_builder.py:626
 msgid "You must enter the name of a new raster map to create."
 msgstr "Необходимо ввести имя вновь создаваемой растровой карты."
 
-#: ../gui/wxpython/modules/mcalc_builder.py:662
+#: ../gui/wxpython/modules/mcalc_builder.py:639
 msgid "You must enter an expression to create a new raster map."
 msgstr "Необходимо ввести выражение для создания новой растровой карты."
 
-#: ../gui/wxpython/modules/mcalc_builder.py:727
+#: ../gui/wxpython/modules/mcalc_builder.py:695
 msgid "Choose a file name to save the expression"
 msgstr "Выбор имени файла для сохранения выражения"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:728
-#: ../gui/wxpython/modules/mcalc_builder.py:746
+#: ../gui/wxpython/modules/mcalc_builder.py:696
+#: ../gui/wxpython/modules/mcalc_builder.py:714
 msgid "Expression file (*)|*"
 msgstr "Файл выражения (*)|*"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:745
+#: ../gui/wxpython/modules/mcalc_builder.py:713
 msgid "Choose a file name to load the expression"
 msgstr "Выбор имени файла для загрузки выражения"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:777
+#: ../gui/wxpython/modules/mcalc_builder.py:745
 #, python-brace-format
 msgid "'{cmd}' copied to clipboard"
 msgstr "«{cmd}» скопировано в буфер обмена"
@@ -15618,6 +15616,12 @@ msgstr ""
 "Уравнение регрессии для растровых карт <%(rast1)s> и <%(rast2)s>:\n"
 "\n"
 
+#~ msgid "Generate random seed for rand()"
+#~ msgstr "Сгенерируйте случайное значение для rand()"
+
+#~ msgid "Seed:"
+#~ msgstr "Случайное значение:"
+
 #, fuzzy
 #~ msgid "Do you want to create a new project (also known as location)?"
 #~ msgstr "Создать область?"
@@ -18394,9 +18398,6 @@ msgstr ""
 
 #~ msgid "RGB to HIS"
 #~ msgstr "RGB в HIS"
-
-#~ msgid "Random cells"
-#~ msgstr "Случайные ячейки"
 
 #~ msgid "Random cells and vector points"
 #~ msgstr "Случайные ячейки и векторные точки"

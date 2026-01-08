@@ -71,7 +71,7 @@ repos:
                 .*/testsuite/.*
           )
   - repo: https://github.com/pre-commit/mirrors-clang-format
-    rev: v18.1.8
+    rev: v20.1.0
     hooks:
       - id: clang-format
         types_or: [c, c++, javascript, json, objective-c]
@@ -92,6 +92,10 @@ repos:
     rev: v1.19.0
     hooks:
       - id: zizmor
+        args:
+          - "--fix"
+          # https://github.com/zizmorcore/zizmor-pre-commit/blob/120fe9ac3c965ab7decf67e8b9ca24b274230eed/.pre-commit-hooks.yaml#L10
+          - "--no-progress"
   - repo: https://github.com/editorconfig-checker/editorconfig-checker
     rev: v3.6.0
     hooks:

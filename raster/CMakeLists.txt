@@ -33,7 +33,6 @@ set(raster_modules_list
     r.in.gridatb
     r.in.lidar
     r.in.mat
-    r.in.pdal
     r.in.poly
     r.in.xyz
     r.info
@@ -279,21 +278,24 @@ build_program_in_subdir(r.in.gridatb DEPENDS grass_gis grass_raster)
 
 build_program_in_subdir(r.in.mat DEPENDS grass_gis grass_raster)
 
-file(GLOB r_in_pdal_SOURCES "r.in.pdal/*.c" "r.in.pdal/*.cpp")
-build_program_in_subdir(
-  r.in.pdal
-  SOURCES
-  "${r_in_pdal_SOURCES}"
-  DEPENDS
-  grass_gis
-  grass_raster
-  grass_vector
-  grass_gmath
-  grass_segment
-  grass_gproj
-  ${LIBM}
-  PRIMARY_DEPENDS
-  ${PDAL})
+if(WITH_PDAL)
+  file(GLOB r_in_pdal_SOURCES "r.in.pdal/*.c" "r.in.pdal/*.cpp")
+  build_program_in_subdir(
+    r.in.pdal
+    SOURCES
+    "${r_in_pdal_SOURCES}"
+    DEPENDS
+    grass_gis
+    grass_raster
+    grass_vector
+    grass_gmath
+    grass_segment
+    grass_gproj
+    ${LIBM}
+    PRIMARY_DEPENDS
+    ${PDAL})
+  list(APPEND raster_modules_list r.in.pdal)
+endif()
 
 build_program_in_subdir(
   r.in.png
