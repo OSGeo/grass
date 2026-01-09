@@ -19,8 +19,22 @@ if(DEFINED ENV{VCPKG_DEFAULT_TRIPLET} AND NOT DEFINED VCPKG_TARGET_TRIPLET)
 set(VCPKG_TARGET_TRIPLET "$ENV{VCPKG_DEFAULT_TRIPLET}" CACHE STRING "")
 endif()
 ]]
+set(CMAKE_MODULE_PATH
+    "${CMAKE_SOURCE_DIR}/cmake/find_scripts;${CMAKE_SOURCE_DIR}/cmake/modules;${CMAKE_MODULE_PATH}"
+)
 
-project(GRASS)
+include(get_versions)
+get_versions("include/VERSION" GRASS_VERSION_MAJOR GRASS_VERSION_MINOR
+             GRASS_VERSION_RELEASE GRASS_VERSION_SUFFIX GRASS_VERSION_DATE)
+
+set(GRASS_VERSION_NUMBER
+    ${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_VERSION_RELEASE}${GRASS_VERSION_SUFFIX})
+set(GRASS_VERSION_STRING ${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_VERSION_RELEASE})
+message(STATUS "GRASS_VERSION_NUMBER  =  '${GRASS_VERSION_NUMBER}'")
+set(GRASS_VERSION_UPDATE_PKG "0.2")
+
+project(GRASS VERSION ${GRASS_VERSION_STRING}
+        HOMEPAGE_URL https://grass.osgeo.org)
 string(TOLOWER ${PROJECT_NAME} PROJECT_NAME_LOWER)
 
 set(BUILD_SHARED_LIBS ON)
@@ -31,10 +45,6 @@ if(MSVC)
   endif()
   set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 endif()
-
-set(CMAKE_MODULE_PATH
-    "${CMAKE_SOURCE_DIR}/cmake/find_scripts;${CMAKE_SOURCE_DIR}/cmake/modules;${CMAKE_MODULE_PATH}"
-)
 
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 11)
@@ -145,15 +155,6 @@ include(CheckDependentLibraries)
 
 include(get_host_arch)
 get_host_arch(BUILD_ARCH)
-
-include(get_versions)
-get_versions("include/VERSION" GRASS_VERSION_MAJOR GRASS_VERSION_MINOR
-             GRASS_VERSION_RELEASE GRASS_VERSION_DATE)
-
-set(GRASS_VERSION_NUMBER
-    ${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_VERSION_RELEASE})
-message(STATUS "GRASS_VERSION_NUMBER  =  '${GRASS_VERSION_NUMBER}'")
-set(GRASS_VERSION_UPDATE_PKG "0.2")
 
 # Setup GRASS install directories
 include(GRASSInstallDirs)
@@ -334,3 +335,13 @@ endif()
 if(WITH_X11)
   build_program_in_subdir(visualization/ximgview DEPENDS grass_gis X11::X11)
 endif()
+
+include(CMakePackageConfigHelpers)
+configure_package_config_file(GRASSConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/GRASSConfig.cmake
+                              INSTALL_DESTINATION ${GRASS_INSTALL_CMAKECONFDIR}/GRASS)
+write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/GRASSConfigVersion.cmake
+                                 VERSION ${GRASS_VERSION_STRING}
+                                 COMPATIBILITY ExactVersion)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/GRASSConfig.cmake
+              ${CMAKE_CURRENT_BINARY_DIR}/GRASSConfigVersion.cmake
+        DESTINATION ${GRASS_INSTALL_CMAKECONFDIR}/GRASS)
