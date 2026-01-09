@@ -228,6 +228,7 @@ ignore = [
     "RUF015",  # unnecessary-iterable-allocation-for-first-element
     "RUF019",  # unnecessary-key-check
     "RUF059",  # unused-unpacked-variable
+    "RUF067",  # non-empty-init-module
     "RUF100",  # unused-noqa
     "S101",    # assert
     "S108",    # hardcoded-temp-file
