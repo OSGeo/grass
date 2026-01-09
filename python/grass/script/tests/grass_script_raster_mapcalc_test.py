@@ -85,6 +85,7 @@ class TestMapcalcRandFunction:
         # r.mapcalc auto-seeds when no seed is given — two runs should differ
         gs.mapcalc(
             "rand_map_auto1 = rand(0.0, 1.0)",
+            overwrite=True,
             env=mapcalc_rand_session.env,
         )
 
@@ -96,6 +97,7 @@ class TestMapcalcRandFunction:
 
         gs.mapcalc(
             "rand_map_auto2 = rand(0.0, 1.0)",
+            overwrite=True,
             env=mapcalc_rand_session.env,
         )
 
@@ -129,6 +131,7 @@ class TestMapcalcRandFunction:
         gs.mapcalc(
             "rand_map_seed = rand(0.0, 1.0)",
             seed=12345,
+            overwrite=True,
             env=mapcalc_rand_session.env,
         )
         verify_seed_in_metadata(mapcalc_rand_session, "rand_map_seed", 12345)
@@ -149,6 +152,7 @@ class TestMapcalcRandFunction:
             gs.mapcalc(
                 "rand_map_invalid = rand(0.0, 1.0)",
                 seed="invalid_string",
+                overwrite=True,
                 env=mapcalc_rand_session.env,
             )
 
@@ -164,9 +168,12 @@ class TestMapcalcRandFunction:
         gs.mapcalc(
             "rand_map_auto_seed = rand(0.0, 1.0)",
             seed="auto",
+            overwrite=True,
             env=mapcalc_rand_session.env,
         )
-        raster_info_1 = gs.raster_info("rand_map_auto_seed", env=mapcalc_rand_session.env)
+        raster_info_1 = gs.raster_info(
+            "rand_map_auto_seed", env=mapcalc_rand_session.env
+        )
         comments_1 = raster_info_1.get("comments", "")
         seed_1 = extract_seed_from_comments(comments_1)
 
@@ -183,9 +190,12 @@ class TestMapcalcRandFunction:
         gs.mapcalc(
             "rand_map_auto_seed_2 = rand(0.0, 1.0)",
             seed="auto",
+            overwrite=True,
             env=mapcalc_rand_session.env,
         )
-        raster_info_2 = gs.raster_info("rand_map_auto_seed_2", env=mapcalc_rand_session.env)
+        raster_info_2 = gs.raster_info(
+            "rand_map_auto_seed_2", env=mapcalc_rand_session.env
+        )
         comments_2 = raster_info_2.get("comments", "")
         seed_2 = extract_seed_from_comments(comments_2)
 
@@ -206,6 +216,7 @@ class TestMapcalcRandFunction:
         gs.mapcalc(
             "rand_map_seed = rand(0.0, 1.0)",
             seed=12345,
+            overwrite=True,
             env=mapcalc_rand_session.env,
         )
         verify_seed_in_metadata(mapcalc_rand_session, "rand_map_seed", 12345)
@@ -214,6 +225,7 @@ class TestMapcalcRandFunction:
         gs.mapcalc(
             "rand_map_seed_2 = rand(0.0, 1.0)",
             seed=12345,
+            overwrite=True,
             env=mapcalc_rand_session.env,
         )
         verify_seed_in_metadata(mapcalc_rand_session, "rand_map_seed_2", 12345)
@@ -222,6 +234,7 @@ class TestMapcalcRandFunction:
         gs.mapcalc(
             "rand_map_seed_3 = rand(0.0, 1.0)",
             seed=54321,
+            overwrite=True,
             env=mapcalc_rand_session.env,
         )
         verify_seed_in_metadata(mapcalc_rand_session, "rand_map_seed_3", 54321)
@@ -233,7 +246,9 @@ class TestMapcalcRandFunction:
             (2147483647, "large seed"),  # Max 32-bit signed integer
         ],
     )
-    def test_mapcalc_rand_with_edge_seeds(self, mapcalc_rand_session, seed_value, description):
+    def test_mapcalc_rand_with_edge_seeds(
+        self, mapcalc_rand_session, seed_value, description
+    ):
         """Test that edge seed values (negative, large) are handled correctly.
 
         Verifies that edge seed values are correctly passed to r.mapcalc by checking metadata.
@@ -244,6 +259,7 @@ class TestMapcalcRandFunction:
         gs.mapcalc(
             f"{map_name} = rand(0.0, 1.0)",
             seed=seed_value,
+            overwrite=True,
             env=mapcalc_rand_session.env,
         )
         verify_seed_in_metadata(mapcalc_rand_session, map_name, seed_value)
@@ -267,6 +283,7 @@ class TestMapcalcStartRandFunction:
         # r.mapcalc auto-seeds when no seed is given — two runs should differ
         p = gs.mapcalc_start(
             "rand_map_start_auto1 = rand(0.0, 1.0)",
+            overwrite=True,
             env=mapcalc_start_rand_session.env,
         )
         returncode = p.wait()
@@ -277,14 +294,19 @@ class TestMapcalcStartRandFunction:
 
         p = gs.mapcalc_start(
             "rand_map_start_auto2 = rand(0.0, 1.0)",
+            overwrite=True,
             env=mapcalc_start_rand_session.env,
         )
         returncode = p.wait()
         assert returncode == 0
 
         # Verify mechanism: auto-generated seeds are recorded in metadata and differ
-        info1 = gs.raster_info("rand_map_start_auto1", env=mapcalc_start_rand_session.env)
-        info2 = gs.raster_info("rand_map_start_auto2", env=mapcalc_start_rand_session.env)
+        info1 = gs.raster_info(
+            "rand_map_start_auto1", env=mapcalc_start_rand_session.env
+        )
+        info2 = gs.raster_info(
+            "rand_map_start_auto2", env=mapcalc_start_rand_session.env
+        )
         comments1 = info1.get("comments", "")
         comments2 = info2.get("comments", "")
 
@@ -311,14 +333,19 @@ class TestMapcalcStartRandFunction:
         p = gs.mapcalc_start(
             "rand_map_start_seed = rand(0.0, 1.0)",
             seed=12345,
+            overwrite=True,
             env=mapcalc_start_rand_session.env,
         )
         returncode = p.wait()
         assert returncode == 0
         # Verify the map was created and seed was written to metadata
-        verify_seed_in_metadata(mapcalc_start_rand_session, "rand_map_start_seed", 12345)
+        verify_seed_in_metadata(
+            mapcalc_start_rand_session, "rand_map_start_seed", 12345
+        )
 
-    def test_mapcalc_start_rand_with_seed_auto_backwards_compat(self, mapcalc_start_rand_session):
+    def test_mapcalc_start_rand_with_seed_auto_backwards_compat(
+        self, mapcalc_start_rand_session
+    ):
         """Test that seed='auto' is handled for backwards compatibility.
 
         seed='auto' should be converted to None internally, enabling auto-seeding behavior.
@@ -329,11 +356,14 @@ class TestMapcalcStartRandFunction:
         p = gs.mapcalc_start(
             "rand_map_start_auto_seed = rand(0.0, 1.0)",
             seed="auto",
+            overwrite=True,
             env=mapcalc_start_rand_session.env,
         )
         returncode = p.wait()
         assert returncode == 0
-        raster_info_1 = gs.raster_info("rand_map_start_auto_seed", env=mapcalc_start_rand_session.env)
+        raster_info_1 = gs.raster_info(
+            "rand_map_start_auto_seed", env=mapcalc_start_rand_session.env
+        )
         comments_1 = raster_info_1.get("comments", "")
         seed_1 = extract_seed_from_comments(comments_1)
 
@@ -350,6 +380,7 @@ class TestMapcalcStartRandFunction:
         p = gs.mapcalc_start(
             "rand_map_start_auto_seed_2 = rand(0.0, 1.0)",
             seed="auto",
+            overwrite=True,
             env=mapcalc_start_rand_session.env,
         )
         returncode = p.wait()
@@ -368,7 +399,9 @@ class TestMapcalcStartRandFunction:
             f"seed='auto' should produce different auto-generated seeds (got {seed_1} and {seed_2})"
         )
 
-    def test_mapcalc_start_rand_with_explicit_seed_reproducible(self, mapcalc_start_rand_session):
+    def test_mapcalc_start_rand_with_explicit_seed_reproducible(
+        self, mapcalc_start_rand_session
+    ):
         """Test that explicit seed in mapcalc_start produces reproducible results.
 
         Verifies that explicit seeds are correctly passed to r.mapcalc by checking metadata.
@@ -377,28 +410,37 @@ class TestMapcalcStartRandFunction:
         p = gs.mapcalc_start(
             "rand_map_start_seed = rand(0.0, 1.0)",
             seed=12345,
+            overwrite=True,
             env=mapcalc_start_rand_session.env,
         )
         returncode = p.wait()
         assert returncode == 0
-        verify_seed_in_metadata(mapcalc_start_rand_session, "rand_map_start_seed", 12345)
+        verify_seed_in_metadata(
+            mapcalc_start_rand_session, "rand_map_start_seed", 12345
+        )
 
         # Create another map with the same seed
         p = gs.mapcalc_start(
             "rand_map_start_seed_2 = rand(0.0, 1.0)",
             seed=12345,
+            overwrite=True,
             env=mapcalc_start_rand_session.env,
         )
         returncode = p.wait()
         assert returncode == 0
-        verify_seed_in_metadata(mapcalc_start_rand_session, "rand_map_start_seed_2", 12345)
+        verify_seed_in_metadata(
+            mapcalc_start_rand_session, "rand_map_start_seed_2", 12345
+        )
 
         # Verify seed actually has an effect by comparing with different seed
         p = gs.mapcalc_start(
             "rand_map_start_seed_3 = rand(0.0, 1.0)",
             seed=54321,
+            overwrite=True,
             env=mapcalc_start_rand_session.env,
         )
         returncode = p.wait()
         assert returncode == 0
-        verify_seed_in_metadata(mapcalc_start_rand_session, "rand_map_start_seed_3", 54321)
+        verify_seed_in_metadata(
+            mapcalc_start_rand_session, "rand_map_start_seed_3", 54321
+        )
