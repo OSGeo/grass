@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Daniel Nylander <daniel@danielnylander.se>, 2025.
+# Daniel Nylander <daniel@danielnylander.se>, 2025, 2026.
 # Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-03 15:41+0000\n"
-"PO-Revision-Date: 2025-12-22 12:47+0000\n"
+"PO-Revision-Date: 2026-01-08 02:38+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
 "Language: sv\n"
@@ -776,7 +776,7 @@ msgstr "Vertikal utmatning (istället för horisontell)"
 
 #: ../db/db.select/main.c:455
 msgid "Use format=vertical instead."
-msgstr ""
+msgstr "Använd format=vertical istället."
 
 #: ../db/db.select/main.c:460
 msgid "Only test query, do not execute"
