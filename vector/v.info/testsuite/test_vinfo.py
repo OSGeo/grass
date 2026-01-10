@@ -4,6 +4,7 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
 from grass.gunittest.gmodules import SimpleModule
+from grass.exceptions import CalledModuleError
 
 
 class TestVInfo(TestCase):
@@ -471,6 +472,34 @@ class TestVInfo(TestCase):
             precision=0.1,
             reference={"INTEGER": "cat", "DOUBLE PRECISION": "elevation"},
         )
+
+    def test_column_csv_format(self):
+        """Test v.info -c format=csv output"""
+        expected = "name,sql_type\ncat,INTEGER\nelevation,DOUBLE PRECISION\n"
+
+        module = SimpleModule(
+            "v.info", map=self.test_vinfo_with_db, flags="c", format="csv"
+        )
+        self.runModule(module)
+        self.assertEqual(module.outputs.stdout, expected)
+
+    def test_column_default_format(self):
+        """Test backward compatibility -c"""
+        expected = "INTEGER|cat\nDOUBLE PRECISION|elevation\n"
+
+        module = SimpleModule("v.info", map=self.test_vinfo_with_db, flags="c")
+        self.runModule(module)
+        self.assertEqual(module.outputs.stdout, expected)
+
+    def test_error_invalid_flag(self):
+        """Test for error: `format=shell -c` and `format=csv` without -c"""
+        with self.assertRaises(CalledModuleError):
+            self.runModule(
+                "v.info", map=self.test_vinfo_with_db, flags="c", format="shell"
+            )
+
+        with self.assertRaises(CalledModuleError):
+            self.runModule("v.info", map=self.test_vinfo_with_db, format="csv")
 
 
 if __name__ == "__main__":
