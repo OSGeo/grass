@@ -131,14 +131,7 @@ file(WRITE ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/VERSIONNUMBER
 install(FILES ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/VERSIONNUMBER
         DESTINATION ${GRASS_INSTALL_ETCDIR})
 
-file(READ "${CMAKE_CURRENT_SOURCE_DIR}/license.txt" _license_txt)
-string(REPLACE "GRASS_VERSION_NUMBER" "${GRASS_VERSION_NUMBER}"
-       _license_txt "${_license_txt}")
-string(REPLACE "GRASS_VERSION_DATE" "${GRASS_VERSION_DATE}"
-       _license_txt "${_license_txt}")
-string(REPLACE "GRASS_VERSION_UPDATE_PKG" ""
-       _license_txt "${_license_txt}")
-file(WRITE "${OUTDIR}/${GRASS_INSTALL_ETCDIR}/license" "${_license_txt}")
+configure_file(license.txt "${OUTDIR}/${GRASS_INSTALL_ETCDIR}/license" @ONLY)
 
 install(FILES ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/license
         DESTINATION ${GRASS_INSTALL_ETCDIR})
