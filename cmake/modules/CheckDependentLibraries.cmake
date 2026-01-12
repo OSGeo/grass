@@ -327,3 +327,11 @@ if(WITH_OPENGL)
     set(OPENGL_X11 1)
   endif()
 endif()
+
+# Workaround to make sure core modules linking to GRASS libraries find the way
+# to thirdparty include files exposed in GRASS API, without the need to add
+# dependency targets unnecessarily
+set(_grass_lib_thirdparty_includes ${GDAL_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR} ${PROJ_INCLUDE_DIRS} ${PostgreSQL_INCLUDE_DIR})
+list(REMOVE_DUPLICATES _grass_lib_thirdparty_includes)
+include_directories(${_grass_lib_thirdparty_includes})
+unset(_grass_lib_thirdparty_includes)

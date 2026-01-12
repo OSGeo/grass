@@ -19,5 +19,3 @@ build_module(
   "${grass_gproj_SOURCES}"
   INCLUDES
   "${CMAKE_CURRENT_SOURCE_DIR}/../driver")
-
-target_include_directories(grass_gproj PUBLIC ${GDAL_INCLUDE_DIR} ${PROJ_INCLUDE_DIRS})
