@@ -309,7 +309,7 @@ class MaskManager:
     ...     gs.run_command("r.mask", raster="state_boundary")
     ...     gs.parse_command("r.univar", map="elevation", format="json")
 
-    The `mask_name` can be a name of an existing raster map and in that case,
+    The *mask_name* can be a name of an existing raster map and in that case,
     that raster map is used directly as is. If the raster map does not exist,
     the name will be used for the mask once it is created (with *r.mask*).
 
@@ -338,17 +338,17 @@ class MaskManager:
     by default sets the mask in the way that only NULL values in the original raster
     result in NULL cells.
 
-    If `mask_name` is not provided, it generates a unique name using node (computer)
+    If *mask_name* is not provided, it generates a unique name using node (computer)
     name, PID (current process ID), and unique ID (UUID).
     In this case, the raster map representing the mask is removed if it exists at the
     end of the context.
     Optionally, the context manager can remove the raster map at the end of the context
-    when `remove` is set to `True`.
+    when *remove* is set to *True*.
     The defaults for the removal of a mask raster are set to align with the two main use
     cases which is creating the mask within the context and using an existing raster as
     a mask.
 
-    Name of the raster mask is available as the `mask_name` attribute and can be used to
+    Name of the raster mask is available as the *mask_name* attribute and can be used to
     directly create a mask (without the need to use *r.mask*). The following example
     uses the attribute to create a mask directly by name. This is equivalent to the
     basic case where a raster named `MASK` is created directly by the user in an
@@ -362,14 +362,14 @@ class MaskManager:
                 "r.mapcalc", expression=f"masked_elevation = elevation"
             )
 
-    In the background, this class manages the `GRASS_MASK` environment variable.
+    In the background, this class manages the *GRASS_MASK* environment variable.
     It modifies the current system environment or the one provided. It does not
     create a copy internally. However, the modified environment is available as
-    the `env` attribute for convenience and consistency with other managers
+    the *env* attribute for convenience and consistency with other managers
     which provide this attribute.
 
     The following code creates a copy of the global environment and lets the manager
-    modify it. The copy is then available as the `env` attribute.
+    modify it. The copy is then available as the *env* attribute.
 
     >>> with gs.MaskManager(env=os.environ.copy()) as manager:
     ...     gs.run_command(
@@ -462,12 +462,12 @@ class RegionManager:
     """Context manager for temporarily setting the computational region.
 
     This context manager makes it possible to safely modify the computational region
-    (for example via `g.region`) within a `with` block. When the context exits, the original region
+    (for example via *g.region*) within a *with* block. When the context exits, the original region
     settings are automatically restored. This is useful in scripts or functions that need to
     work with a specific region without permanently altering the user's working environment.
 
-    The new region can be defined by passing `g.region` parameters when initializing the context,
-    or by calling `g.region` directly within the context.
+    The new region can be defined by passing *g.region* parameters when initializing the context,
+    or by calling *g.region* directly within the context.
 
     The original region is saved at the beginning of the context and restored at the end.
 
@@ -505,12 +505,12 @@ class RegionManager:
     If no environment is provided, the global environment is used. When running parallel
     processes in the same mapset that modify region settings, it is useful to use a copy
     of the global environment. The following code creates the copy of the global environment
-    and lets the manager modify it. The copy is then available as the _env_ attribute.
+    and lets the manager modify it. The copy is then available as the *env* attribute.
 
     >>> with gs.RegionManager(raster="elevation", env=os.environ.copy()) as manager:
     ...     gs.run_command("r.univar", map="elevation", env=manager.env)
 
-    In the background, this class manages the `WIND_OVERRIDE` environment variable
+    In the background, this class manages the *WIND_OVERRIDE* environment variable
     that holds the unique name of the saved region to use.
     """
 
@@ -586,8 +586,8 @@ class RegionManagerEnv:
     """Context manager for temporarily setting the computational region.
 
     See :class:`RegionManager`. Unlike :class:`RegionManager`, this class uses
-    `GRASS_REGION` instead of `WIND_OVERRIDE`. The advantage is no files are written to disk.
-    The disadvantage is that simply calling `g.region` within the context will not affect
+    *GRASS_REGION* instead of *WIND_OVERRIDE*. The advantage is no files are written to disk.
+    The disadvantage is that simply calling *g.region* within the context will not affect
     the temporary region, but the global one, which can be confusing.
 
     Example with explicit region parameters:
@@ -620,7 +620,7 @@ class RegionManagerEnv:
 
     .. caution::
 
-        To set region within the context, do not call `g.region`,
+        To set region within the context, do not call *g.region*,
         use :py:meth:`.set_region` instead.
     """
 
