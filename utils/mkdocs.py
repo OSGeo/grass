@@ -5,7 +5,6 @@ import os
 import re
 import shutil
 import subprocess
-import sys
 import tempfile
 import urllib.parse as urlparse
 from datetime import datetime
@@ -61,30 +60,29 @@ def get_version_branch(major_version, addons_git_repo_url):
     """
     version_branch = f"grass{major_version}"
     if gs:
-        branch = gs.Popen(
-            [
-                "git",
-                "ls-remote",
-                "--heads",
-                addons_git_repo_url,
-                f"refs/heads/{version_branch}",
-            ],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
-        branch, stderr = branch.communicate()
-        if stderr:
-            gs.fatal(
-                _(
-                    "Failed to get branch from the Git repository"
-                    " <{repo_path}>.\n{error}"
-                ).format(
-                    repo_path=addons_git_repo_url,
-                    error=gs.decode(stderr),
-                )
+        try:
+            branch = gs.Popen(
+                [
+                    "git",
+                    "ls-remote",
+                    "--heads",
+                    addons_git_repo_url,
+                    f"refs/heads/{version_branch}",
+                ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
             )
-        if version_branch not in gs.decode(branch):
-            version_branch = "grass{}".format(int(major_version) - 1)
+            branch, stderr = branch.communicate()
+            if stderr:
+                # Network access failed - return default branch without failing
+                # This allows builds to continue offline
+                return version_branch
+            if version_branch not in gs.decode(branch):
+                version_branch = "grass{}".format(int(major_version) - 1)
+        except (OSError, subprocess.SubprocessError):
+            # Network access failed - return default branch without failing
+            # This allows builds to continue offline
+            return version_branch
     return version_branch
 
 
@@ -388,22 +386,29 @@ def get_addon_path(base_url, pgm, major_version):
     if gs:
         call = gs.call
         popen = gs.Popen
-        fatal = gs.fatal
     else:
         call = subprocess.call
         popen = subprocess.Popen
-        fatal = sys.stderr.write
-    addons_branch = get_version_branch(
-        major_version=major_version,
-        addons_git_repo_url=urlparse.urljoin(base_url, "grass-addons/"),
-    )
+    # Try to get version branch, but don't fail if network is unavailable
+    try:
+        addons_branch = get_version_branch(
+            major_version=major_version,
+            addons_git_repo_url=urlparse.urljoin(base_url, "grass-addons/"),
+        )
+    except Exception:
+        # Network access failed - return None to skip addon lookup
+        # This allows builds to continue offline
+        return None
+
     if not Path(addons_base_dir).exists():
         Path(addons_base_dir).mkdir(parents=True, exist_ok=True)
+
+    # Only try to clone if directory doesn't exist
     if not grass_addons_dir.exists():
         try:
             with tempfile.TemporaryDirectory(dir=addons_base_dir) as tmpdir:
                 tmp_clone_path = Path(tmpdir) / "grass-addons"
-                call(
+                result = call(
                     [
                         "git",
                         "clone",
@@ -415,39 +420,37 @@ def get_addon_path(base_url, pgm, major_version):
                         str(tmp_clone_path),
                     ]
                 )
+                if result != 0:
+                    # Git clone failed (likely network issue) - return None
+                    # This allows builds to continue offline
+                    return None
                 shutil.move(tmp_clone_path, grass_addons_dir)
-        except (shutil.Error, OSError):
+        except (shutil.Error, OSError, subprocess.SubprocessError):
+            # Network access or file operation failed - return None
+            # This allows builds to continue offline
             if not grass_addons_dir.exists():
-                raise
-    addons_file_list = popen(
-        ["git", "ls-tree", "--name-only", "-r", addons_branch],
-        cwd=grass_addons_dir,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
-    addons_file_list, stderr = addons_file_list.communicate()
-    if stderr:
-        message = (
-            "Failed to get addons files list from the"
-            " Git repository <{repo_path}>.\n{error}"
+                return None
+
+    # Only proceed if addons directory exists
+    if not grass_addons_dir.exists():
+        return None
+
+    try:
+        addons_file_list_process = popen(
+            ["git", "ls-tree", "--name-only", "-r", addons_branch],
+            cwd=grass_addons_dir,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
         )
-        if gs:
-            fatal(
-                _(
-                    message,
-                ).format(
-                    repo_path=grass_addons_dir,
-                    error=gs.decode(stderr),
-                )
-            )
-        else:
-            message += "\n"
-            fatal(
-                message.format(
-                    repo_path=grass_addons_dir,
-                    error=stderr.decode(),
-                )
-            )
+        addons_file_list, stderr = addons_file_list_process.communicate()
+        if stderr or addons_file_list_process.returncode != 0:
+            # Git command failed (likely network issue or repo problem)
+            # Return None to skip addon lookup - allows builds to continue offline
+            return None
+    except (OSError, subprocess.SubprocessError):
+        # Process execution failed - return None
+        # This allows builds to continue offline
+        return None
     addon_paths = re.findall(
         rf".*{pgm}*.",
         gs.decode(addons_file_list) if gs else addons_file_list.decode(),
