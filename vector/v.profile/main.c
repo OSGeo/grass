@@ -47,7 +47,7 @@
  * or so as there's nothing more permanent than a temporary solution.)
  * 2017-11-19
  */
-enum OutputFormat { PLAIN, CSV, JSON };
+enum OutputFormat { CSV, JSON };
 
 static int ring2pts(const GEOSGeometry *geom, struct line_pnts *Points)
 {
@@ -205,11 +205,10 @@ int main(int argc, char *argv[])
     dp_opt->guisection = _("Format");
 
     format_opt = G_define_standard_option(G_OPT_F_FORMAT);
-    format_opt->options = "plain,csv,json";
+    format_opt->options = "csv,json";
     format_opt->required = NO;
-    format_opt->answer = "plain";
-    format_opt->descriptions = _("plain;Human readable text output;"
-                                 "csv;CSV (Comma Separated Values);"
+    format_opt->answer = "csv";
+    format_opt->descriptions = _("csv;CSV (Comma Separated Values);"
                                  "json;JSON (JavaScript Object Notation)");
     format_opt->guisection = _("Format");
 
@@ -296,11 +295,8 @@ int main(int argc, char *argv[])
         }
         root_array = G_json_array(root_value);
     }
-    else if (strcmp(format_opt->answer, "csv") == 0) {
-        format = CSV;
-    }
     else {
-        format = PLAIN;
+        format = CSV;
     }
 
 #if HAVE_GEOS
@@ -419,7 +415,6 @@ int main(int argc, char *argv[])
 
     /* the field separator */
     fs = G_option_to_separator(delim_opt);
-    const char *csv_separator = ",";
 
     /* Let's get vector layers db connections information */
     Fi = Vect_get_field(&In, layer);
@@ -710,13 +705,15 @@ int main(int argc, char *argv[])
 
     /* Print output based on format */
     switch (format) {
-    case PLAIN:
-        /* Print header for PLAIN format */
+    case CSV:
+        /* Print out column names */
         if (!no_column_flag->answer) {
             fprintf(ascii, "Number%sDistance", fs);
             if (open3d == WITH_Z)
                 fprintf(ascii, "%sZ", fs);
             if (Fi != NULL) {
+                /* ncols are initialized here from previous Fi != NULL if block
+                 */
                 for (col = 0; col < ncols; col++) {
                     column = db_get_table_column(table, col);
                     fprintf(ascii, "%s%s", fs, db_get_column_name(column));
@@ -725,7 +722,7 @@ int main(int argc, char *argv[])
             fprintf(ascii, "\n");
         }
 
-        /* Print rows */
+        /* Print out result */
         for (j = 0; j < rescount; j++) {
             fprintf(ascii, "%zu%s%.*f", j + 1, fs, dp, resultset[j].distance);
             if (open3d == WITH_Z)
@@ -736,7 +733,7 @@ int main(int argc, char *argv[])
                          Fi->table, Fi->key, resultset[j].cat);
                 G_debug(2, "SQL: \"%s\"", sql);
                 db_set_string(&dbsql, sql);
-
+                /* driver IS initialized here in case if Fi != NULL */
                 if (db_open_select_cursor(driver, &dbsql, &cursor,
                                           DB_SEQUENTIAL) != DB_OK) {
                     G_warning(_("Unable to get attribute data for cat %d"),
@@ -755,11 +752,14 @@ int main(int argc, char *argv[])
                         }
                         else {
                             for (col = 0; col < ncols; col++) {
+                                /* Column description retrieving is fast, as
+                                 * they live in provided table structure */
                                 column = db_get_table_column(table, col);
                                 db_convert_column_value_to_string(column,
                                                                   &valstr);
                                 type = db_get_column_sqltype(column);
 
+                                /* Those values should be quoted */
                                 if (type == DB_SQL_TYPE_CHARACTER ||
                                     type == DB_SQL_TYPE_DATE ||
                                     type == DB_SQL_TYPE_TIME ||
@@ -779,67 +779,11 @@ int main(int argc, char *argv[])
                 }
             }
             fprintf(ascii, "\n");
-        }
-        break;
-
-    case CSV:
-        /* CSV header */
-        if (!no_column_flag->answer) {
-            fprintf(ascii, "Number%sDistance", csv_separator);
-            if (open3d == WITH_Z)
-                fprintf(ascii, "%sZ", csv_separator);
-            if (Fi != NULL) {
-                for (col = 0; col < ncols; col++) {
-                    column = db_get_table_column(table, col);
-                    fprintf(ascii, "%s%s", csv_separator,
-                            db_get_column_name(column));
-                }
-            }
-            fprintf(ascii, "\n");
-        }
-
-        for (j = 0; j < rescount; j++) {
-            fprintf(ascii, "%zu%s%.*f", j + 1, csv_separator, dp,
-                    resultset[j].distance);
-            if (open3d == WITH_Z)
-                fprintf(ascii, "%s%.*f", csv_separator, dp, resultset[j].z);
-
-            if (Fi != NULL) {
-                snprintf(sql, sizeof(sql), "select * from %s where %s=%d",
-                         Fi->table, Fi->key, resultset[j].cat);
-                G_debug(2, "SQL: \"%s\"", sql);
-                db_set_string(&dbsql, sql);
-
-                if (db_open_select_cursor(driver, &dbsql, &cursor,
-                                          DB_SEQUENTIAL) != DB_OK) {
-                    G_warning(_("Unable to get attribute data for cat %d"),
-                              resultset[j].cat);
-                    fprintf(ascii, "\n");
-                }
-                else {
-                    nrows = db_get_num_rows(&cursor);
-                    table = db_get_cursor_table(&cursor);
-
-                    if (nrows > 0) {
-                        if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK) {
-                            G_warning(_("Error while retrieving database "
-                                        "record for cat %d"),
-                                      resultset[j].cat);
-                        }
-                        else {
-                            for (col = 0; col < ncols; col++) {
-                                column = db_get_table_column(table, col);
-                                db_convert_column_value_to_string(column,
-                                                                  &valstr);
-                                fprintf(ascii, "%s%s", csv_separator,
-                                        db_get_string(&valstr));
-                            }
-                        }
-                        db_close_cursor(&cursor);
-                    }
-                }
-            }
-            fprintf(ascii, "\n");
+            /* Terminate attribute data line and flush data to provided output
+             * (file/stdout) */
+            if (fflush(ascii))
+                G_fatal_error(
+                    _("Can not write data portion to provided output"));
         }
         break;
 
@@ -937,7 +881,9 @@ int main(int argc, char *argv[])
 
         fputs(json_string, ascii);
         fputc('\n', ascii);
-
+        /* Flush data to provided output (file/stdout) */
+        if (fflush(ascii))
+            G_fatal_error(_("Can not write data portion to provided output"));
         G_json_free_serialized_string(json_string);
         G_json_value_free(root_value);
         break;

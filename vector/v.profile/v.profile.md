@@ -65,21 +65,23 @@ v.profile input=streams@PERMANENT output=/home/user/river_profile.csv \
   east_north=600570.27364,4920613.41838,600348.034348,4920840.38617
 ```
 
-### CSV Output
+### Default Output
 
 ```sh
 v.profile input=firestations@PERMANENT buffer=100 \
-  profile_map=railroads@PERMANENT profile_where="cat=3202" \
-  format=csv
+  profile_map=railroads@PERMANENT profile_where="cat=3202" 
 ```
 
 The output looks as follows:
 
 ```text
-Number,Distance,cat,ID,LABEL,LOCATION,CITY,MUN_COUNT,PUMPERS,PUMPER_TAN,TANKER,MINI_PUMPE,RESCUE_SER,AERIAL,BRUSH,OTHERS,WATER_RESC,MUNCOID,BLDGCODE,AGENCY,STATIONID,RECNO,CV_SID2,CVLAG
-1,2750.44,60,42,Morrisville #2,10632 Chapel Hill Rd,Morrisville,M,0,1,0,0,0,1,0,1,0,1,298,FD,MF2A,62,MF2A,1.4
-2,5394.27,2,23,Morrisville #1,100 Morrisville-Carpenter Rd,Morrisville,M,0,1,0,0,1,0,1,3,0,1,241,FD,MF1A,2,MF1A,1.4
+Number|Distance|cat|ID|LABEL|LOCATION|CITY|MUN_COUNT|PUMPERS|PUMPER_TAN|TANKER|MINI_PUMPE|RESCUE_SER|AERIAL|BRUSH|OTHERS|WATER_RESC|MUNCOID|BLDGCODE|AGENCY|STATIONID|RECNO|CV_SID2|CVLAG
+1|2750.44|60|42|"Morrisville #2"|"10632 Chapel Hill Rd"|"Morrisville"|"M"|0|1|0|0|0|1|0|1|0|1|"298"|"FD"|"MF2A"|62|"MF2A"|1.4
+2|5394.27|2|23|"Morrisville #1"|"100 Morrisville-Carpenter Rd"|"Morrisville"|"M"|0|1|0|0|1|0|1|3|0|1|"241"|"FD"|"MF1A"|2|"MF1A"|1.4
 ```
+
+**Note:** You can use different delimiters with the `separator=` option
+(e.g., `separator=comma`, `separator=tab`, `separator=space`).
 
 ### JSON Output
 
