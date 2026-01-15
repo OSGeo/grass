@@ -1,6 +1,5 @@
-file(COPY desc.table DESTINATION etc/proj)
-file(COPY parms.table DESTINATION etc/proj)
-file(COPY units.table DESTINATION etc/proj)
+install(FILES desc.table parms.table units.table
+        DESTINATION ${GRASS_INSTALL_ETCDIR}/proj)
 
 set(grass_gproj_SOURCES convert.c datum.c do_proj.c ellipse.c get_proj.c)
 if(MINGW)
