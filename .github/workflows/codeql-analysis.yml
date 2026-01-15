@@ -62,28 +62,18 @@ jobs:
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@5d4e8d1aca955e8d8589aabd499c5cae939e33c7 # v4.31.9
+        id: init
         with:
           languages: ${{ matrix.language }}
           config-file: ./.github/codeql/codeql-config.yml
+          # Use build-mode: none for C/C++ to scan all source files without requiring a build
+          # This improves coverage from ~3.01k to all ~3.35k C files in the repository
+          # Generated code (flex/bison) in build directories won't be scanned, which is acceptable
+          # Python and Actions languages ignore build-mode parameter
+          build-mode: ${{ matrix.language == 'c-cpp' && 'none' || '' }}
 
-      - name: Create installation directory
-        run: |
-          mkdir "${HOME}/install"
-
-      - name: Set LD_LIBRARY_PATH for compilation
-        run: |
-          echo "LD_LIBRARY_PATH=${HOME}/install/lib" >> "${GITHUB_ENV}"
-
-      - name: Set number of cores for compilation
-        run: |
-          echo "MAKEFLAGS=-j$(nproc)" >> "${GITHUB_ENV}"
-
-      - name: Build
-        if: ${{ matrix.language == 'c-cpp' }}
-        env:
-          CFLAGS: -std=gnu17
-          CXXFLAGS: -std=c++17
-        run: .github/workflows/build_ubuntu-24.04.sh "${HOME}/install"
+      # Build step removed for C/C++ when using build-mode: none
+      # Dependencies are still installed above to ensure headers are available for analysis
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@5d4e8d1aca955e8d8589aabd499c5cae939e33c7 # v4.31.9
