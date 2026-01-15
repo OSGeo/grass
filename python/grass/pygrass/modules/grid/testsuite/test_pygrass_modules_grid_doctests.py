@@ -8,8 +8,6 @@ import grass.gunittest.case
 import grass.gunittest.main
 import grass.gunittest.utils
 
-import grass.pygrass.modules as gmodules
-
 
 # doctest does not allow changing the base classes of test case, skip test case
 # and test suite, so we need to create a new type which inherits from our class
