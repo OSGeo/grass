@@ -12,7 +12,7 @@ include(GenerateExportHeader)
 function(build_module)
   cmake_parse_arguments(
     G
-    "EXE;NO_DOCS"
+    "EXE;NO_DOCS;GENERATE_EXPORT_HEADER"
     "NAME;SRC_DIR;SRC_REGEX;RUNTIME_OUTPUT_DIR;PACKAGE;HTML_FILE_NAME"
     "SOURCES;INCLUDES;DEPENDS;OPTIONAL_DEPENDS;PRIMARY_DEPENDS;DEFS;HEADERS;TEST_SOURCES"
     ${ARGN})
@@ -134,15 +134,19 @@ function(build_module)
 
     add_library(GRASS::${_libname} ALIAS ${G_NAME})
 
-    # TODO: check when and where the export header files are needed
-    set(export_file_name
-        "${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}/export/${G_NAME}_export.h")
     # Default is to use library target name without grass_ prefix
     string(REPLACE "grass_" "" default_html_file_name ${G_NAME})
     set(PGM_NAME ${default_html_file_name})
 
-    generate_export_header(${G_NAME} STATIC_DEFINE "STATIC_BUILD"
-                           EXPORT_FILE_NAME ${export_file_name})
+    # Export headers are only needed for libraries that explicitly require them
+    # (typically for Windows DLL symbol visibility when headers are included externally).
+    # Only a small subset of libraries actually include their export headers.
+    if(G_GENERATE_EXPORT_HEADER)
+      set(export_file_name
+          "${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}/export/${G_NAME}_export.h")
+      generate_export_header(${G_NAME} STATIC_DEFINE "STATIC_BUILD"
+                             EXPORT_FILE_NAME ${export_file_name})
+    endif()
   endif()
 
   if(G_HTML_FILE_NAME)

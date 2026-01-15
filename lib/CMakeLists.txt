@@ -9,6 +9,7 @@ add_subdirectory(gis)
 
 build_library_in_subdir(
   driver
+  GENERATE_EXPORT_HEADER
   DEFS
   "${use_math_DEFS}"
   DEPENDS
@@ -203,7 +204,7 @@ build_library_in_subdir(
   OPTIONAL_DEPENDS
   OPENMP)
 
-build_library_in_subdir(dspf DEPENDS grass_gis)
+build_library_in_subdir(dspf GENERATE_EXPORT_HEADER DEPENDS grass_gis)
 
 build_library_in_subdir(symbol NAME grass_symb DEPENDS grass_gis ${LIBM})
 add_custom_command(
@@ -257,7 +258,7 @@ endif()
 
 add_subdirectory(temporal)
 
-build_library_in_subdir(iostream SRC_REGEX "*.cpp" DEPENDS grass_gis)
+build_library_in_subdir(iostream GENERATE_EXPORT_HEADER SRC_REGEX "*.cpp" DEPENDS grass_gis)
 
 build_library_in_subdir(manage DEPENDS grass_gis grass_raster grass_vector
                         grass_raster3d GDAL::GDAL)
@@ -265,4 +266,4 @@ file(COPY manage/element_list DESTINATION ${OUTDIR}/${GRASS_INSTALL_ETCDIR})
 install(FILES ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/element_list
         DESTINATION ${GRASS_INSTALL_ETCDIR})
 
-build_library_in_subdir(calc DEPENDS grass_raster grass_gis ${LIBM})
+build_library_in_subdir(calc GENERATE_EXPORT_HEADER DEPENDS grass_raster grass_gis ${LIBM})
