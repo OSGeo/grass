@@ -18,6 +18,9 @@ build_module(
   SOURCES
   "${grass_gproj_SOURCES}"
   INCLUDES
-  "../driver")
+  "${CMAKE_CURRENT_SOURCE_DIR}/../driver")
 
-target_include_directories(grass_gproj PUBLIC ${GDAL_INCLUDE_DIR} ${PROJ_INCLUDE_DIRS})
+target_include_directories(grass_gproj
+  INTERFACE $<TARGET_PROPERTY:GDAL::GDAL,INTERFACE_INCLUDE_DIRECTORIES>
+            $<TARGET_PROPERTY:GDAL::GDAL,INTERFACE_INCLUDE_DIRECTORIES>/gdal
+            $<TARGET_PROPERTY:PROJ::proj,INTERFACE_INCLUDE_DIRECTORIES>)

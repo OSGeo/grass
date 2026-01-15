@@ -123,12 +123,16 @@ function(build_module)
         CACHE INTERNAL "list of modules")
 
   else()
+    string(REPLACE "grass_" "" _libname ${G_NAME})
     add_library(${G_NAME} ${${G_NAME}_SRCS})
     set_target_properties(
       ${G_NAME}
       PROPERTIES FOLDER lib
                  VERSION ${GRASS_VERSION_NUMBER}
-                 SOVERSION ${GRASS_VERSION_MAJOR})
+                 SOVERSION ${GRASS_VERSION_MAJOR}
+                 EXPORT_NAME ${_libname})
+
+    add_library(GRASS::${_libname} ALIAS ${G_NAME})
 
     # TODO: check when and where the export header files are needed
     set(export_file_name
@@ -174,8 +178,8 @@ function(build_module)
     if(${G_NAME}_INCLUDE_DIRS)
       list(REMOVE_DUPLICATES ${G_NAME}_INCLUDE_DIRS)
     endif()
-
-    target_include_directories(${G_NAME} PUBLIC ${${G_NAME}_INCLUDE_DIRS})
+    target_include_directories(
+      ${G_NAME} PUBLIC "$<BUILD_INTERFACE:${${G_NAME}_INCLUDE_DIRS}>")
   endforeach()
 
   foreach(G_DEF ${G_DEFS})
@@ -251,8 +255,8 @@ function(build_module)
 
     if(RUN_HTML_DESCR)
       set(html_descr_command
-            ${G_NAME}${PGM_EXT}  --html-description < ${NULL_DEVICE} | ${SEARCH_COMMAND}
-            ${HTML_SEARCH_STR})
+          ${G_NAME}${PGM_EXT} --html-description < ${NULL_DEVICE} |
+          ${SEARCH_COMMAND} ${HTML_SEARCH_STR})
     else()
       set(html_descr_command ${CMAKE_COMMAND} -E echo)
     endif()
@@ -289,6 +293,25 @@ function(build_module)
     message("[build_module] ADDING TEST ${G_NAME}-test")
   endforeach()
 
-  install(TARGETS ${G_NAME} DESTINATION ${install_dest})
+  if(NOT G_EXE)
+    string(REPLACE "grass_" "" _libname ${G_NAME})
+    install(
+      TARGETS ${G_NAME}
+      EXPORT ${_libname}Targets
+      LIBRARY DESTINATION ${install_dest}
+      ARCHIVE DESTINATION ${install_dest}
+      RUNTIME DESTINATION ${G_RUNTIME_OUTPUT_DIR}
+      INCLUDES
+      DESTINATION ${GRASS_INSTALL_INCLUDEDIR})
+
+    install(
+      EXPORT ${_libname}Targets
+      FILE GRASS_${_libname}Targets.cmake
+      DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/GRASS
+      NAMESPACE GRASS::
+      EXPORT_LINK_INTERFACE_LIBRARIES)
+  else()
+    install(TARGETS ${G_NAME} DESTINATION ${install_dest})
+  endif()
 
 endfunction()
