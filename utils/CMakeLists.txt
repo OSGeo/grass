@@ -66,9 +66,6 @@ add_custom_target(
     ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}
   COMMAND
     ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/mkmarkdown.py
-    ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}
-  COMMAND
-    ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/mkrest.py
     ${OUTDIR}/${GRASS_INSTALL_UTILSDIR})
 
 install(
@@ -80,5 +77,4 @@ install(
         ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/mkhtml.py
         ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/mkdocs.py
         ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/mkmarkdown.py
-        ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/mkrest.py
   DESTINATION ${GRASS_INSTALL_UTILSDIR})

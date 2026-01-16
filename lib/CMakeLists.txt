@@ -19,7 +19,7 @@ build_library_in_subdir(
 
 add_subdirectory(proj)
 
-build_library_in_subdir(external/parson NAME grass_parson HEADERS "gjson.h" "parson.h")
+build_library_in_subdir(external/parson NAME grass_parson HEADERS "gjson.h")
 build_program_in_subdir(external/parson/test NAME test.gjson.lib DEPENDS grass_gis grass_parson)
 
 build_library_in_subdir(
