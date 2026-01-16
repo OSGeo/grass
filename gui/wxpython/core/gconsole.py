@@ -198,10 +198,11 @@ class CmdThread(threading.Thread):
                     group="rasterLayer", key="colorTable", subkey="selection"
                 )
                 mapName = None
-                if args[0][0] == "r.mapcalc":
+                modules_to_excempt = {"r.mapcalc", "r.shade"}
+                if args[0][0] in modules_to_excempt:
                     try:
                         mapName = args[0][1].split("=", 1)[0].strip()
-                    except KeyError:
+                    except (IndexError, AttributeError):
                         pass
                 else:
                     moduleInterface = GUI(show=None).ParseCommand(args[0])
