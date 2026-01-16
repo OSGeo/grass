@@ -1,8 +1,9 @@
 ---
+title: grass-mesql
 description: MySQL embedded driver
 ---
 
-# MySQL embedded driver
+MySQL embedded driver
 
 MySQL database driver enables GRASS to store vector attributes in MySQL
 embedded database without necessity to run MySQL server.
