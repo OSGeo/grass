@@ -1,7 +1,13 @@
 # Copy utility script files, fix file permissions
 set(py_files
-  mkhtml.py mkdocs.py mkmarkdown.py thumbnails.py generate_last_commit_file.py
-  g.html2man/g.html2man.py g.html2man/ggroff.py g.html2man/ghtml.py)
+  g.html2man/g.html2man.py
+  g.html2man/ggroff.py
+  g.html2man/ghtml.py
+  generate_last_commit_file.py
+  mkdocs.py
+  mkhtml.py
+  mkmarkdown.py
+  thumbnails.py)
 foreach(py_file ${py_files})
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${py_file} ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
   cmake_path(GET py_file FILENAME pyfile)
@@ -73,10 +79,9 @@ install(
     ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/g.html2man.py
     ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/generate_last_commit_file.py
     ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/ggroff.py
-    ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/g.html2man.py
     ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/ghtml.py
-    ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/mkhtml.py
     ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/mkdocs.py
+    ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/mkhtml.py
     ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/mkmarkdown.py
   DESTINATION
     ${GRASS_INSTALL_UTILSDIR})
