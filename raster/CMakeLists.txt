@@ -145,7 +145,7 @@ add_custom_target(
   COMMENT "All raster modules are built.")
 
 if(WITH_DOCS)
-  generate_html(TARGET ALL_RASTER_MODULES NAME rasterintro)
+  generate_docs(rasterintro TARGET ALL_RASTER_MODULES)
 endif()
 
 build_program_in_subdir(r.basins.fill DEPENDS grass_gis grass_raster)
