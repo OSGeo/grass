@@ -347,6 +347,12 @@ class ImportDialog(wx.Dialog):
                     mapName += ".%d" % i
                     name = mapName + "@" + mapsetName
 
+                # Check if map exists before adding (fixes issue when only selected bands are imported)
+                mapInfo = grass.find_file(name, element="cell")
+                if not mapInfo["name"]:
+                    name = nameOrig
+                    continue
+
                 cmd = ["d.rast", "map=%s" % name]
                 if nFlag:
                     cmd.append("-n")
