@@ -1,9 +1,10 @@
 ---
+title: g.gui.rlisetup
 description: wxGUI RLi Setup
 index: topic_GUI|GUI
 ---
 
-# wxGUI RLi Setup
+wxGUI RLi Setup
 
 ## DESCRIPTION
 

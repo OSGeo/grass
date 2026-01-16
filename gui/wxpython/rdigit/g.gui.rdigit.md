@@ -1,10 +1,11 @@
 ---
+title: g.gui.rdigit
 description: wxGUI Raster Digitizer
 index: wxGUI
 keywords: [display, GUI, raster, editing, digitizer]
 ---
 
-# wxGUI Raster Digitizer
+wxGUI Raster Digitizer
 
 ## DESCRIPTION
 

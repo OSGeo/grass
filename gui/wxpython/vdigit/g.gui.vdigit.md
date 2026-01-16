@@ -1,9 +1,10 @@
 ---
+title: g.gui.vdigit
 description: wxGUI Vector Digitizer
 index: topic_GUI|GUI
 ---
 
-# wxGUI Vector Digitizer
+wxGUI Vector Digitizer
 
 ## DESCRIPTION
 
