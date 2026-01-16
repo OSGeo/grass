@@ -336,6 +336,7 @@ if(WITH_X11)
   build_program_in_subdir(visualization/ximgview DEPENDS grass_gis X11::X11)
 endif()
 
+add_subdirectory(cmake)
 include(CMakePackageConfigHelpers)
 configure_package_config_file(GRASSConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/GRASSConfig.cmake
                               INSTALL_DESTINATION ${GRASS_INSTALL_CMAKECONFDIR}/GRASS)
