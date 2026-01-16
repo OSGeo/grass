@@ -219,15 +219,11 @@ include(generate_docs)
 
 set(MKHTML_PY ${CMAKE_BINARY_DIR}/utils/mkhtml.py)
 set(THUMBNAILS_PY ${CMAKE_BINARY_DIR}/utils/thumbnails.py)
-set(HTML2MAN VERSION_NUMBER=${GRASS_VERSION_NUMBER} ${PYTHON_EXECUTABLE}
-             ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/g.html2man.py)
+set(HTML2MAN ${CMAKE_BINARY_DIR}/utils/g.html2man.py)
 
 set(env_path "$ENV{PATH}")
 
 if(WIN32)
-  set(NULL_DEVICE nul)
-  set(SEARCH_COMMAND findstr /v)
-  set(HTML_SEARCH_STR "\"</body>\|</html>\|</div> <!-- end container -->\"")
   set(sep "\;")
   string(REPLACE ";" "${sep}" env_path "${env_path}")
   set(grass_env_command
@@ -241,9 +237,6 @@ if(WIN32)
     "VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\""
     "VERSION_DATE=\"${GRASS_VERSION_DATE}\"")
 else()
-  set(NULL_DEVICE /dev/null)
-  set(SEARCH_COMMAND grep -v)
-  set(HTML_SEARCH_STR "\'</body>\|</html>\|</div> <!-- end container -->\'")
   set(sep ":")
   set(grass_env_command
     ${CMAKE_COMMAND} -E env "PATH=${BIN_DIR}${sep}${SCRIPTS_DIR}${sep}${env_path}"
@@ -300,6 +293,8 @@ endif()
 if(WITH_DOCS)
   add_subdirectory(doc)
   add_subdirectory(man)
+  install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/ DESTINATION ${GRASS_INSTALL_DOCDIR})
+  install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_MANDIR}/ DESTINATION ${GRASS_INSTALL_MANDIR})
 endif()
 
 add_custom_target(

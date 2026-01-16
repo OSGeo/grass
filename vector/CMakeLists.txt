@@ -111,9 +111,10 @@ add_custom_target(
   COMMENT "All vector modules are built.")
 
 if(WITH_DOCS)
-  generate_html(TARGET ALL_VECTOR_MODULES NAME vectorintro)
-  generate_html(TARGET ALL_VECTOR_MODULES NAME lrs SOURCEDIR
-                ${CMAKE_CURRENT_SOURCE_DIR}/v.lrs)
+  generate_docs(vectorintro TARGET ALL_VECTOR_MODULES)
+  generate_docs(lrs
+    TARGET ALL_VECTOR_MODULES
+    SOURCEDIR "${CMAKE_CURRENT_SOURCE_DIR}/v.lrs")
 endif()
 
 # build v.buffer only with GEOS following
