@@ -20,6 +20,7 @@ build_library_in_subdir(
   interp_float
   NAME
   grass_interpfl
+  GENERATE_EXPORT_HEADER
   DEPENDS
   grass_gis
   grass_dbmibase

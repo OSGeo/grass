@@ -14,6 +14,7 @@ endif()
 build_module(
   NAME
   grass_gis
+  GENERATE_EXPORT_HEADER
   INCLUDES
   ${gislib_INCLUDES}
   SOURCES
