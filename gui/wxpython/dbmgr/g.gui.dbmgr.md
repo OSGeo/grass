@@ -1,9 +1,10 @@
 ---
+title: g.gui.dbmgr
 description: wxGUI Attribute Table Manager
 index: topic_GUI|GUI
 ---
 
-# wxGUI Attribute Table Manager
+wxGUI Attribute Table Manager
 
 ## DESCRIPTION
 

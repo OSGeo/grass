@@ -1,9 +1,10 @@
 ---
+title: g.gui.psmap
 description: wxGUI Cartographic Composer
 index: topic_GUI|GUI
 ---
 
-# wxGUI Cartographic Composer
+wxGUI Cartographic Composer
 
 ## DESCRIPTION
 

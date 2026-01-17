@@ -1,9 +1,10 @@
 ---
+title: g.gui.mapswipe
 description: wxGUI Map Swipe
 index: topic_GUI|GUI
 ---
 
-# wxGUI Map Swipe
+wxGUI Map Swipe
 
 ## DESCRIPTION
 

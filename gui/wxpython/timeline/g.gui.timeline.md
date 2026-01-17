@@ -1,9 +1,10 @@
 ---
+title: g.gui.timeline
 description: wxGUI Timeline Tool
 index: topic_GUI|GUI
 ---
 
-# wxGUI Timeline Tool
+wxGUI Timeline Tool
 
 ## DESCRIPTION
 

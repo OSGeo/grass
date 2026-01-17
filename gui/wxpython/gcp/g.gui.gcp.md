@@ -1,9 +1,10 @@
 ---
+title: g.gui.gcp
 description: wxGUI GCP Manager
 index: topic_GUI|GUI
 ---
 
-# wxGUI GCP Manager
+wxGUI GCP Manager
 
 ## DESCRIPTION
 

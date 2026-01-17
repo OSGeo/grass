@@ -1,9 +1,10 @@
 ---
+title: g.gui.example
 description: wxGUI Example Tool
 index: wxGUI
 ---
 
-# wxGUI Example Tool
+wxGUI Example Tool
 
 ## DESCRIPTION
 

@@ -1,9 +1,9 @@
 ---
-name: r.li
+title: r.li
 description: Landscape structure analysis package overview
 ---
 
-# Landscape structure analysis package overview
+Landscape structure analysis package overview
 
 ## DESCRIPTION
 
