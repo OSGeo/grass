@@ -135,6 +135,7 @@ option(WITH_FFTW "Build with FFTW support" ON)
 option(WITH_CBLAS "Build with CBLAS support" ON)
 option(WITH_LAPACKE "Build with LAPACKE support" ON)
 option(WITH_OPENMP "Build with OpenMP support" ON)
+option(WITH_LIBSVM "Build with LIBSVM support" OFF)
 
 # Data format options
 option(WITH_TIFF "Build with LibTIFF support ." ON)
