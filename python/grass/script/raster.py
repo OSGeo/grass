@@ -343,7 +343,7 @@ class MaskManager:
     In this case, the raster map representing the mask is removed if it exists at the
     end of the context.
     Optionally, the context manager can remove the raster map at the end of the context
-    when *remove* is set to *True*.
+    when *remove* is set to `True`.
     The defaults for the removal of a mask raster are set to align with the two main use
     cases which is creating the mask within the context and using an existing raster as
     a mask.
@@ -362,7 +362,7 @@ class MaskManager:
                 "r.mapcalc", expression=f"masked_elevation = elevation"
             )
 
-    In the background, this class manages the *GRASS_MASK* environment variable.
+    In the background, this class manages the `GRASS_MASK` environment variable.
     It modifies the current system environment or the one provided. It does not
     create a copy internally. However, the modified environment is available as
     the *env* attribute for convenience and consistency with other managers
@@ -510,7 +510,7 @@ class RegionManager:
     >>> with gs.RegionManager(raster="elevation", env=os.environ.copy()) as manager:
     ...     gs.run_command("r.univar", map="elevation", env=manager.env)
 
-    In the background, this class manages the *WIND_OVERRIDE* environment variable
+    In the background, this class manages the `WIND_OVERRIDE` environment variable
     that holds the unique name of the saved region to use.
     """
 
@@ -586,7 +586,7 @@ class RegionManagerEnv:
     """Context manager for temporarily setting the computational region.
 
     See :class:`RegionManager`. Unlike :class:`RegionManager`, this class uses
-    *GRASS_REGION* instead of *WIND_OVERRIDE*. The advantage is no files are written to disk.
+    `GRASS_REGION` instead of `WIND_OVERRIDE`. The advantage is no files are written to disk.
     The disadvantage is that simply calling *g.region* within the context will not affect
     the temporary region, but the global one, which can be confusing.
 
