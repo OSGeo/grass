@@ -392,6 +392,7 @@ build_program_in_subdir(
   grass_dbmiclient
   grass_gis
   grass_vector
+  grass_parson
   OPTIONAL_DEPENDS
   GEOS::geos_c)
 
