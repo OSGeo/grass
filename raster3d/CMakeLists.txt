@@ -33,7 +33,7 @@ add_custom_target(
   COMMENT "All temporal modules are built.")
 
 if(WITH_DOCS)
-  generate_html(TARGET ALL_RASTER3D_MODULES NAME raster3dintro)
+  generate_docs(raster3dintro TARGET ALL_RASTER3D_MODULES)
 endif()
 
 build_program_in_subdir(r3.cross.rast DEPENDS grass_gis grass_raster

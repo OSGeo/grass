@@ -39,18 +39,18 @@ function(build_script_in_subdir dir_name)
     return()
   endif()
 
-  set(SCRIPT_EXT "")
+  set(script_ext "")
   if(WIN32)
-    set(SCRIPT_EXT ".py")
+    set(script_ext ".py")
   endif()
 
   set(HTML_FILE ${G_SRC_DIR}/${G_NAME}.html)
 
   configure_file(
     ${G_SRC_DIR}/${G_NAME}.py
-    ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${G_NAME}${SCRIPT_EXT} COPYONLY)
+    ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${G_NAME}${script_ext} COPYONLY)
   file(
-    COPY ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${G_NAME}${SCRIPT_EXT}
+    COPY ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${G_NAME}${script_ext}
     DESTINATION ${OUTDIR}/${G_DEST_DIR}
     FILE_PERMISSIONS
       OWNER_READ
@@ -90,46 +90,17 @@ function(build_script_in_subdir dir_name)
       install(FILES ${IMG_FILES} DESTINATION ${GRASS_INSTALL_DOCDIR})
     endif()
 
-    set(HTML_FILE ${G_SRC_DIR}/${G_NAME}.html)
-    if(EXISTS ${HTML_FILE})
-      install(FILES ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${G_NAME}.html
-              DESTINATION ${GRASS_INSTALL_DOCDIR})
-    else()
-      set(HTML_FILE)
-      file(GLOB html_files ${G_SRC_DIR}/*.html)
-      if(html_files)
-        message(
-          FATAL_ERROR
-            "${html_file} does not exists. ${G_SRC_DIR} \n ${OUTDIR}/${G_DEST_DIR}| ${G_NAME}"
-        )
-      endif()
-    endif()
+    set(out_html_file ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${G_NAME}.html)
 
-    set(TMP_HTML_FILE ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.tmp.html)
-    set(OUT_HTML_FILE ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${G_NAME}.html)
-
-    add_custom_command(
-      OUTPUT ${OUT_HTML_FILE}
-      COMMAND ${CMAKE_COMMAND} -E copy ${G_SRC_DIR}/${G_NAME}.html
-              ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.html
-      COMMAND
-        ${grass_env_command} ${PYTHON_EXECUTABLE}
-        ${OUTDIR}/${G_DEST_DIR}/${G_NAME}${SCRIPT_EXT}
-        --html-description < ${NULL_DEVICE} | ${SEARCH_COMMAND}
-        ${HTML_SEARCH_STR} > ${TMP_HTML_FILE}
-      COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${MKHTML_PY} ${G_NAME} >
-              ${OUT_HTML_FILE}
-      COMMAND ${copy_images_command}
-      COMMAND ${CMAKE_COMMAND} -E remove ${TMP_HTML_FILE}
-              ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.html
-      COMMENT "Creating ${OUT_HTML_FILE}"
+    generate_docs(${G_NAME}
+      OUTPUT ${out_html_file}
+      SOURCEDIR ${G_SRC_DIR}
+      DEST_DIR ${G_DEST_DIR}
       DEPENDS ${TRANSLATE_C_FILE} LIB_PYTHON)
-
-    install(FILES ${OUT_HTML_FILE} DESTINATION ${GRASS_INSTALL_DOCDIR})
 
   endif() # WITH_DOCS
 
-  add_custom_target(${G_NAME} DEPENDS ${TRANSLATE_C_FILE} ${OUT_HTML_FILE})
+  add_custom_target(${G_NAME} DEPENDS ${TRANSLATE_C_FILE} ${out_html_file})
 
   set(modules_list
       "${G_NAME};${modules_list}"
@@ -142,7 +113,7 @@ function(build_script_in_subdir dir_name)
             DESTINATION ${G_DEST_DIR})
   endif()
 
-  install(PROGRAMS ${OUTDIR}/${G_DEST_DIR}/${G_NAME}${SCRIPT_EXT}
+  install(PROGRAMS ${OUTDIR}/${G_DEST_DIR}/${G_NAME}${script_ext}
           DESTINATION ${G_DEST_DIR})
 
 endfunction()
