@@ -24,6 +24,7 @@ import os
 import shutil
 
 from copy import deepcopy
+from pathlib import Path
 
 import grass.script as gs
 from grass.script.task import cmdlist_to_tuple, cmdtuple_to_list
@@ -676,7 +677,7 @@ class WSPropertiesDialog(WSDialogBase):
 
     def _setRevertCapFiles(self, ws_cap_files):
         for ws, f in ws_cap_files.items():
-            if os.path.isfile(f):
+            if Path(f).is_file():
                 shutil.copyfile(f, self.revert_ws_cap_files[ws])
             else:
                 # delete file content

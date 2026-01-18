@@ -1,4 +1,4 @@
-FROM alpine:3.22@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412 as common
+FROM alpine:3.23@sha256:865b95f46d98cf867a156fe4a135ad3fe50d2056aa3f25ed31662dff6da4eb62 as common
 
 # Based on:
 # https://github.com/mundialis/docker-grass-gis/blob/master/Dockerfile
@@ -56,7 +56,7 @@ ENV GRASS_RUN_PACKAGES="\
       openjpeg \
       pdal \
       pdal-dev \
-      postgresql15-client \
+      postgresql18-client \
       proj-util \
       py3-numpy \
       py3-pillow \
@@ -169,7 +169,7 @@ RUN echo "  => Configure and compile grass" && \
 
 # Build the GDAL-GRASS plugin
 # renovate: datasource=github-tags depName=OSGeo/gdal-grass
-ARG GDAL_GRASS_VERSION=1.0.4
+ARG GDAL_GRASS_VERSION=2.0.0
 RUN git clone --branch $GDAL_GRASS_VERSION --depth 1 https://github.com/OSGeo/gdal-grass.git /src/gdal-grass
 WORKDIR /src/gdal-grass
 RUN cmake -B build -DAUTOLOAD_DIR=/usr/lib/gdalplugins -DBUILD_TESTING=OFF && \

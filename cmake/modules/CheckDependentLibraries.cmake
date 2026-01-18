@@ -20,9 +20,9 @@ if(UNIX)
   set(LIBM LIBM)
 endif()
 
-find_package(PROJ REQUIRED)
+find_package(PROJ 9.0.0 REQUIRED)
 
-find_package(GDAL REQUIRED)
+find_package(GDAL 3.7.0 REQUIRED)
 
 find_package(ZLIB REQUIRED)
 
@@ -40,6 +40,34 @@ if(MSVC)
 endif()
 
 find_package(Iconv)
+
+# FreeBSD specific iconv configuration
+if(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
+  if(Iconv_FOUND)
+    # LIBICONV_PLUG makes libiconv iconv.h act like libc iconv.h
+    add_compile_definitions(LIBICONV_PLUG)
+
+    # Use CMAKE_PREFIX_PATH to locate iconv (typically /usr/local on FreeBSD)
+    if(NOT Iconv_INCLUDE_DIR AND CMAKE_PREFIX_PATH)
+      find_path(Iconv_INCLUDE_DIR iconv.h HINTS ${CMAKE_PREFIX_PATH}/include)
+    endif()
+    if(NOT Iconv_LIBRARY AND CMAKE_PREFIX_PATH)
+      find_library(Iconv_LIBRARY NAMES iconv libiconv HINTS ${CMAKE_PREFIX_PATH}/lib)
+    endif()
+
+    # Ensure iconv target has correct properties
+    if(TARGET Iconv::Iconv)
+      if(Iconv_INCLUDE_DIR)
+        set_property(TARGET Iconv::Iconv PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${Iconv_INCLUDE_DIR})
+      endif()
+      if(Iconv_LIBRARY)
+        set_property(TARGET Iconv::Iconv PROPERTY INTERFACE_LINK_LIBRARIES ${Iconv_LIBRARY})
+      endif()
+    endif()
+
+    message(STATUS "FreeBSD: Using iconv from ${Iconv_LIBRARY} with LIBICONV_PLUG")
+  endif()
+endif()
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads)
@@ -172,6 +200,12 @@ if(WITH_OPENMP)
   endif()
 endif()
 
+if(WITH_LIBSVM)
+  find_package(LibSVM REQUIRED)
+  include(DevelUtils)
+  print_target_properties(LibSVM::LibSVM)
+endif()
+
 # Data format options
 if(WITH_TIFF)
   find_package(TIFF REQUIRED)
@@ -219,9 +253,6 @@ if(Python3_FOUND)
   #]]
 endif()
 
-check_target(PROJ::proj HAVE_PROJ_H)
-check_target(GDAL::GDAL HAVE_GDAL)
-check_target(GDAL::GDAL HAVE_OGR)
 check_target(ZLIB::ZLIB HAVE_ZLIB_H)
 check_target(Iconv::Iconv HAVE_ICONV_H)
 check_target(PNG::PNG HAVE_PNG_H)
@@ -246,6 +277,7 @@ check_target(LAPACKE::LAPACKE HAVE_LIBLAPACK)
 check_target(TIFF::TIFF HAVE_TIFFIO_H)
 check_target(NETCDF HAVE_NETCDF)
 check_target(GEOS::geos_c HAVE_GEOS)
+check_target(LibSVM::LibSVM HAVE_SVM_H)
 
 if(MSVC)
   check_target(PCRE HAVE_PCRE_H)

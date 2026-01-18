@@ -23,13 +23,7 @@
 
 #include "R.h"
 
-#ifndef HAVE_GDAL
-#undef GDAL_LINK
-#endif
-
-#ifdef GDAL_LINK
 #include <gdal.h>
-#endif
 
 /*!
    \brief Initialization
@@ -38,7 +32,6 @@
  */
 void Rast_init_gdal(void)
 {
-#ifdef GDAL_LINK
     static int initialized;
 
     if (G_is_initialized(&initialized))
@@ -46,7 +39,6 @@ void Rast_init_gdal(void)
 
     GDALAllRegister();
     G_initialize_done(&initialized);
-#endif
 }
 
 /*!
@@ -60,12 +52,10 @@ void Rast_init_gdal(void)
  */
 struct GDAL_link *Rast_get_gdal_link(const char *name, const char *mapset)
 {
-#ifdef GDAL_LINK
     GDALDatasetH data;
     GDALRasterBandH band;
     GDALDataType type;
     RASTER_MAP_TYPE req_type;
-#endif
     const char *filename;
     int band_num;
     struct GDAL_link *gdal;
@@ -117,7 +107,6 @@ struct GDAL_link *Rast_get_gdal_link(const char *name, const char *mapset)
     hflip = G_find_key_value("hflip", key_val) ? 1 : 0;
     vflip = G_find_key_value("vflip", key_val) ? 1 : 0;
 
-#ifdef GDAL_LINK
     p = G_find_key_value("type", key_val);
     if (!p)
         return NULL;
@@ -125,10 +114,7 @@ struct GDAL_link *Rast_get_gdal_link(const char *name, const char *mapset)
 
     switch (type) {
     case GDT_Byte:
-/* GDT_Int8 was introduced in GDAL 3.7 */
-#if GDAL_VERSION_NUM >= GDAL_COMPUTE_VERSION(3, 7, 0)
     case GDT_Int8:
-#endif
     case GDT_Int16:
     case GDT_UInt16:
     case GDT_Int32:
@@ -159,7 +145,6 @@ struct GDAL_link *Rast_get_gdal_link(const char *name, const char *mapset)
         GDALClose(data);
         return NULL;
     }
-#endif
 
     gdal = G_calloc(1, sizeof(struct GDAL_link));
 
@@ -168,11 +153,9 @@ struct GDAL_link *Rast_get_gdal_link(const char *name, const char *mapset)
     gdal->null_val = null_val;
     gdal->hflip = hflip;
     gdal->vflip = vflip;
-#ifdef GDAL_LINK
     gdal->data = data;
     gdal->band = band;
     gdal->type = type;
-#endif
 
     return gdal;
 }
@@ -244,7 +227,6 @@ static void read_gdal_options(void)
 struct GDAL_link *Rast_create_gdal_link(const char *name,
                                         RASTER_MAP_TYPE map_type)
 {
-#ifdef GDAL_LINK
     char path[GPATH_MAX];
     GDALDriverH driver;
     double transform[6];
@@ -388,9 +370,6 @@ struct GDAL_link *Rast_create_gdal_link(const char *name,
     fclose(fp);
 
     return gdal;
-#else
-    return NULL;
-#endif
 }
 
 /*!
@@ -400,9 +379,7 @@ struct GDAL_link *Rast_create_gdal_link(const char *name,
  */
 void Rast_close_gdal_link(struct GDAL_link *gdal)
 {
-#ifdef GDAL_LINK
     GDALClose(gdal->data);
-#endif
     G_free(gdal->filename);
     G_free(gdal);
 }
@@ -419,7 +396,6 @@ int Rast_close_gdal_write_link(struct GDAL_link *gdal)
 {
     int stat = 1;
 
-#ifdef GDAL_LINK
     GDALDriverH src_drv = GDALGetDatasetDriver(gdal->data);
 
     if (G_strcasecmp(GDALGetDriverShortName(src_drv), "MEM") == 0) {
@@ -437,14 +413,12 @@ int Rast_close_gdal_write_link(struct GDAL_link *gdal)
 
     GDALClose(gdal->data);
 
-#endif
     G_free(gdal->filename);
     G_free(gdal);
 
     return stat;
 }
 
-#ifdef GDAL_LINK
 /*!
    \brief Input/output function for GDAL links
 
@@ -459,4 +433,3 @@ CPLErr Rast_gdal_raster_IO(GDALRasterBandH band, GDALRWFlag rw_flag, int x_off,
                         buf_x_size, buf_y_size, buf_type, pixel_size,
                         line_size);
 }
-#endif

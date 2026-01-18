@@ -80,36 +80,24 @@ class MakeSignaturesDirTestCase(TestCase):
 
     def test_make_sig(self):
         I_make_signatures_dir(I_SIGFILE_TYPE_SIG)
-        self.assertTrue(
-            os.path.isdir(os.path.join(self.tmp_mapset_path, "signatures", "sig"))
-        )
+        self.assertTrue(Path(self.tmp_mapset_path, "signatures", "sig").is_dir())
         # There should not be any side effects of calling function multiple times
         I_make_signatures_dir(I_SIGFILE_TYPE_SIG)
-        self.assertTrue(
-            os.path.isdir(os.path.join(self.tmp_mapset_path, "signatures", "sig"))
-        )
+        self.assertTrue(Path(self.tmp_mapset_path, "signatures", "sig").is_dir())
 
     def test_make_sigset(self):
         I_make_signatures_dir(I_SIGFILE_TYPE_SIGSET)
-        self.assertTrue(
-            os.path.isdir(os.path.join(self.tmp_mapset_path, "signatures", "sigset"))
-        )
+        self.assertTrue(Path(self.tmp_mapset_path, "signatures", "sigset").is_dir())
         # There should not be any side effects of calling function multiple times
         I_make_signatures_dir(I_SIGFILE_TYPE_SIGSET)
-        self.assertTrue(
-            os.path.isdir(os.path.join(self.tmp_mapset_path, "signatures", "sigset"))
-        )
+        self.assertTrue(Path(self.tmp_mapset_path, "signatures", "sigset").is_dir())
 
     def test_make_libsvm(self):
         I_make_signatures_dir(I_SIGFILE_TYPE_LIBSVM)
-        self.assertTrue(
-            os.path.isdir(os.path.join(self.tmp_mapset_path, "signatures", "libsvm"))
-        )
+        self.assertTrue(Path(self.tmp_mapset_path, "signatures", "libsvm").is_dir())
         # There should not be any side effects of calling function multiple times
         I_make_signatures_dir(I_SIGFILE_TYPE_LIBSVM)
-        self.assertTrue(
-            os.path.isdir(os.path.join(self.tmp_mapset_path, "signatures", "libsvm"))
-        )
+        self.assertTrue(Path(self.tmp_mapset_path, "signatures", "libsvm").is_dir())
 
 
 class SignaturesRemoveTestCase(TestCase):
@@ -120,9 +108,9 @@ class SignaturesRemoveTestCase(TestCase):
         cls.sigdirs = []
         # As signatures are created directly not via signature creation
         # tools, we must ensure signature directories exist
-        os.makedirs(f"{cls.mpath}/signatures/sig/", exist_ok=True)
-        os.makedirs(f"{cls.mpath}/signatures/sigset/", exist_ok=True)
-        os.makedirs(f"{cls.mpath}/signatures/libsvm/", exist_ok=True)
+        Path(f"{cls.mpath}/signatures/sig/").mkdir(exist_ok=True, parents=True)
+        Path(f"{cls.mpath}/signatures/sigset/").mkdir(exist_ok=True, parents=True)
+        Path(f"{cls.mpath}/signatures/libsvm/").mkdir(exist_ok=True, parents=True)
 
     @classmethod
     def tearDownClass(cls):
@@ -134,21 +122,21 @@ class SignaturesRemoveTestCase(TestCase):
         # Set up files and mark for clean-up
         sig_name1 = tempname(10)
         sig_dir1 = f"{self.mpath}/signatures/sigset/{sig_name1}"
-        os.makedirs(sig_dir1)
+        Path(sig_dir1).mkdir(parents=True)
         self.sigdirs.append(sig_dir1)
         sigfile_name1 = f"{sig_dir1}/sig"
         with open(sigfile_name1, "a"):
             pass
         sig_name2 = tempname(10)
         sig_dir2 = f"{self.mpath}/signatures/sig/{sig_name2}"
-        os.makedirs(sig_dir2)
+        Path(sig_dir2).mkdir(parents=True)
         self.sigdirs.append(sig_dir2)
         sigfile_name2 = f"{sig_dir2}/sig"
         with open(sigfile_name2, "a"):
             pass
         sig_name3 = tempname(10)
         sig_dir3 = f"{self.mpath}/signatures/sig/{sig_name3}"
-        os.makedirs(sig_dir3)
+        Path(sig_dir3).mkdir(parents=True)
         self.sigdirs.append(sig_dir3)
         sigfile_name3 = f"{sig_dir3}/sig"
         with open(sigfile_name3, "a"):
@@ -184,7 +172,7 @@ class SignaturesRemoveTestCase(TestCase):
         # Set up files and mark for clean-up
         sig_name1 = tempname(10)
         sig_dir1 = f"{self.mpath}/signatures/sigset/{sig_name1}"
-        os.makedirs(sig_dir1)
+        Path(sig_dir1).mkdir(parents=True)
         self.sigdirs.append(sig_dir1)
         sigfile_name1 = f"{sig_dir1}/sig"
         with open(sigfile_name1, "a"):
@@ -193,7 +181,7 @@ class SignaturesRemoveTestCase(TestCase):
         # Do not create sig_name2 matching file
         sig_name3 = tempname(10)
         sig_dir3 = f"{self.mpath}/signatures/sig/{sig_name3}"
-        os.makedirs(sig_dir3)
+        Path(sig_dir3).mkdir(parents=True)
         self.sigdirs.append(sig_dir3)
         sigfile_name3 = f"{sig_dir3}/sig"
         with open(sigfile_name3, "a"):
@@ -218,21 +206,21 @@ class SignaturesRemoveTestCase(TestCase):
         # Set up files and mark for clean-up
         sig_name1 = tempname(10)
         sig_dir1 = f"{self.mpath}/signatures/sigset/{sig_name1}"
-        os.makedirs(sig_dir1)
+        Path(sig_dir1).mkdir(parents=True)
         self.sigdirs.append(sig_dir1)
         sigfile_name1 = f"{sig_dir1}/sig"
         with open(sigfile_name1, "a"):
             pass
         sig_name2 = tempname(10)
         sig_dir2 = f"{self.mpath}/signatures/sigset/{sig_name2}"
-        os.makedirs(sig_dir2)
+        Path(sig_dir2).mkdir(parents=True)
         self.sigdirs.append(sig_dir2)
         sigfile_name2 = f"{sig_dir2}/sig"
         with open(sigfile_name2, "a"):
             pass
         sig_name3 = tempname(10)
         sig_dir3 = f"{self.mpath}/signatures/sig/{sig_name3}"
-        os.makedirs(sig_dir3)
+        Path(sig_dir3).mkdir(parents=True)
         self.sigdirs.append(sig_dir3)
         sigfile_name3 = f"{sig_dir3}/sig"
         with open(sigfile_name3, "a"):
@@ -268,7 +256,7 @@ class SignaturesRemoveTestCase(TestCase):
         # Set up files and mark for clean-up
         sig_name1 = tempname(10)
         sig_dir1 = f"{self.mpath}/signatures/sigset/{sig_name1}"
-        os.makedirs(sig_dir1)
+        Path(sig_dir1).mkdir(parents=True)
         self.sigdirs.append(sig_dir1)
         sigfile_name1 = f"{sig_dir1}/sig"
         with open(sigfile_name1, "a"):
@@ -277,7 +265,7 @@ class SignaturesRemoveTestCase(TestCase):
         # Do not create sig_name2 matching file
         sig_name3 = tempname(10)
         sig_dir3 = f"{self.mpath}/signatures/sig/{sig_name3}"
-        os.makedirs(sig_dir3)
+        Path(sig_dir3).mkdir(parents=True)
         self.sigdirs.append(sig_dir3)
         sigfile_name3 = f"{sig_dir3}/sig"
         with open(sigfile_name3, "a"):
@@ -303,21 +291,21 @@ class SignaturesRemoveTestCase(TestCase):
         # Set up files and mark for clean-up
         sig_name1 = tempname(10)
         sig_dir1 = f"{self.mpath}/signatures/libsvm/{sig_name1}"
-        os.makedirs(sig_dir1)
+        Path(sig_dir1).mkdir(parents=True)
         sigfile_name1 = f"{sig_dir1}/sig"
         with open(sigfile_name1, "a"):
             pass
         self.sigdirs.append(sig_dir1)
         sig_name2 = tempname(10)
         sig_dir2 = f"{self.mpath}/signatures/libsvm/{sig_name2}"
-        os.makedirs(sig_dir2)
+        Path(sig_dir2).mkdir(parents=True)
         sigfile_name2 = f"{sig_dir2}/sig"
         with open(sigfile_name2, "a"):
             pass
         self.sigdirs.append(sig_dir2)
         sig_name3 = tempname(10)
         sig_dir3 = f"{self.mpath}/signatures/sig/{sig_name3}"
-        os.makedirs(sig_dir3)
+        Path(sig_dir3).mkdir(parents=True)
         sigfile_name3 = f"{sig_dir3}/sig"
         with open(sigfile_name3, "a"):
             pass
@@ -353,7 +341,7 @@ class SignaturesRemoveTestCase(TestCase):
         # Set up files and mark for clean-up
         sig_name1 = tempname(10)
         sig_dir1 = f"{self.mpath}/signatures/sigset/{sig_name1}"
-        os.makedirs(sig_dir1)
+        Path(sig_dir1).mkdir(parents=True)
         sigfile_name1 = f"{sig_dir1}/sig"
         with open(sigfile_name1, "a"):
             pass
@@ -362,7 +350,7 @@ class SignaturesRemoveTestCase(TestCase):
         # Do not create sig_name2 matching file
         sig_name3 = tempname(10)
         sig_dir3 = f"{self.mpath}/signatures/libsvm/{sig_name3}"
-        os.makedirs(sig_dir3)
+        Path(sig_dir3).mkdir(parents=True)
         sigfile_name3 = f"{sig_dir3}/sig"
         with open(sigfile_name3, "a"):
             pass
@@ -392,9 +380,9 @@ class SignaturesCopyTestCase(TestCase):
         cls.sigdirs = []
         # As signatures are created directly not via signature creation
         # tools, we must ensure signature directories exist
-        os.makedirs(f"{cls.mpath}/signatures/sig/", exist_ok=True)
-        os.makedirs(f"{cls.mpath}/signatures/sigset/", exist_ok=True)
-        os.makedirs(f"{cls.mpath}/signatures/libsvm/", exist_ok=True)
+        Path(f"{cls.mpath}/signatures/sig/").mkdir(exist_ok=True, parents=True)
+        Path(f"{cls.mpath}/signatures/sigset/").mkdir(exist_ok=True, parents=True)
+        Path(f"{cls.mpath}/signatures/libsvm/").mkdir(exist_ok=True, parents=True)
         # A mapset with a random name
         cls.src_mapset_name = tempname(10)
         G_make_mapset(None, None, cls.src_mapset_name)
@@ -402,22 +390,22 @@ class SignaturesCopyTestCase(TestCase):
             cls.mpath.rsplit("/", maxsplit=1)[0] + "/" + cls.src_mapset_name
         )
         # Create fake signature files
-        os.makedirs(f"{cls.src_mapset_path}/signatures/sig/")
+        Path(f"{cls.src_mapset_path}/signatures/sig/").mkdir(parents=True)
         cls.src_sig = tempname(10)
         cls.src_sig_dir = f"{cls.src_mapset_path}/signatures/sig/{cls.src_sig}"
-        os.makedirs(cls.src_sig_dir)
+        Path(cls.src_sig_dir).mkdir(parents=True)
         cls.sigdirs.append(cls.src_sig_dir)
         Path(f"{cls.src_sig_dir}/sig").write_text("A sig file")
-        os.makedirs(f"{cls.src_mapset_path}/signatures/sigset/")
+        Path(f"{cls.src_mapset_path}/signatures/sigset/").mkdir(parents=True)
         cls.src_sigset = tempname(10)
         cls.src_sigset_dir = f"{cls.src_mapset_path}/signatures/sigset/{cls.src_sigset}"
-        os.makedirs(cls.src_sigset_dir)
+        Path(cls.src_sigset_dir).mkdir(parents=True)
         cls.sigdirs.append(cls.src_sigset_dir)
         Path(f"{cls.src_sigset_dir}/sig").write_text("A sigset file")
-        os.makedirs(f"{cls.src_mapset_path}/signatures/libsvm/")
+        Path(f"{cls.src_mapset_path}/signatures/libsvm/").mkdir(parents=True)
         cls.src_libsvm = tempname(10)
         cls.src_libsvm_dir = f"{cls.src_mapset_path}/signatures/libsvm/{cls.src_libsvm}"
-        os.makedirs(cls.src_libsvm_dir)
+        Path(cls.src_libsvm_dir).mkdir(parents=True)
         cls.sigdirs.append(cls.src_libsvm_dir)
         Path(f"{cls.src_libsvm_dir}/sig").write_text("A libsvm file")
 
@@ -468,7 +456,7 @@ class SignaturesCopyTestCase(TestCase):
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
-        self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sig/{dst}/sig"))
+        self.assertTrue(Path(f"{self.mpath}/signatures/sig/{dst}/sig").is_file())
 
     def test_success_fq_sig(self):
         dst_name = tempname(10)
@@ -489,7 +477,7 @@ class SignaturesCopyTestCase(TestCase):
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
-        self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sig/{dst_name}/sig"))
+        self.assertTrue(Path(f"{self.mpath}/signatures/sig/{dst_name}/sig").is_file())
 
     def test_success_unqualified_sigset(self):
         dst = tempname(10)
@@ -508,7 +496,7 @@ class SignaturesCopyTestCase(TestCase):
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
-        self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sigset/{dst}/sig"))
+        self.assertTrue(Path(f"{self.mpath}/signatures/sigset/{dst}/sig").is_file())
 
     def test_success_fq_sigset(self):
         dst_name = tempname(10)
@@ -532,7 +520,7 @@ class SignaturesCopyTestCase(TestCase):
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
         self.assertTrue(
-            os.path.isfile(f"{self.mpath}/signatures/sigset/{dst_name}/sig")
+            Path(f"{self.mpath}/signatures/sigset/{dst_name}/sig").is_file()
         )
 
     def test_success_unqualified_libsvm(self):
@@ -552,7 +540,7 @@ class SignaturesCopyTestCase(TestCase):
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
-        self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/libsvm/{dst}/sig"))
+        self.assertTrue(Path(f"{self.mpath}/signatures/libsvm/{dst}/sig").is_file())
 
     def test_success_fq_libsvm(self):
         dst = tempname(10)
@@ -576,7 +564,7 @@ class SignaturesCopyTestCase(TestCase):
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
-        self.assertTrue(os.path.isfile(f"{dst_dir}/sig"))
+        self.assertTrue(Path(f"{dst_dir}/sig").is_file())
 
 
 class SignaturesRenameTestCase(TestCase):
@@ -587,9 +575,9 @@ class SignaturesRenameTestCase(TestCase):
         cls.sigdirs = []
         # As signatures are created directly not via signature creation
         # tools, we must ensure signature directories exist
-        os.makedirs(f"{cls.mpath}/signatures/sig/", exist_ok=True)
-        os.makedirs(f"{cls.mpath}/signatures/sigset/", exist_ok=True)
-        os.makedirs(f"{cls.mpath}/signatures/libsvm/", exist_ok=True)
+        Path(f"{cls.mpath}/signatures/sig/").mkdir(exist_ok=True, parents=True)
+        Path(f"{cls.mpath}/signatures/sigset/").mkdir(exist_ok=True, parents=True)
+        Path(f"{cls.mpath}/signatures/libsvm/").mkdir(exist_ok=True, parents=True)
 
     @classmethod
     def tearDownClass(cls):
@@ -621,7 +609,7 @@ class SignaturesRenameTestCase(TestCase):
     def test_success_unqualified_sig(self):
         src_sig = tempname(10)
         sig_dir = f"{self.mpath}/signatures/sig/{src_sig}"
-        os.makedirs(sig_dir)
+        Path(sig_dir).mkdir(parents=True)
         self.sigdirs.append(sig_dir)
         Path(f"{sig_dir}/sig").write_text("A sig file")
         dst = tempname(10)
@@ -636,12 +624,12 @@ class SignaturesRenameTestCase(TestCase):
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
-        self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sig/{dst}/sig"))
+        self.assertTrue(Path(f"{self.mpath}/signatures/sig/{dst}/sig").is_file())
 
     def test_success_fq_sig(self):
         src_sig = tempname(10)
         sig_dir = f"{self.mpath}/signatures/sig/{src_sig}"
-        os.makedirs(sig_dir)
+        Path(sig_dir).mkdir(parents=True)
         self.sigdirs.append(sig_dir)
         Path(f"{sig_dir}/sig").write_text("A sig file")
         dst_name = tempname(10)
@@ -661,12 +649,12 @@ class SignaturesRenameTestCase(TestCase):
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
-        self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sig/{dst_name}/sig"))
+        self.assertTrue(Path(f"{self.mpath}/signatures/sig/{dst_name}/sig").is_file())
 
     def test_success_unqualified_sigset(self):
         src_sigset = tempname(10)
         sig_dir = f"{self.mpath}/signatures/sigset/{src_sigset}"
-        os.makedirs(sig_dir)
+        Path(sig_dir).mkdir(parents=True)
         self.sigdirs.append(sig_dir)
         Path(f"{sig_dir}/sig").write_text("A sigset file")
         dst = tempname(10)
@@ -681,12 +669,12 @@ class SignaturesRenameTestCase(TestCase):
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
-        self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sigset/{dst}/sig"))
+        self.assertTrue(Path(f"{self.mpath}/signatures/sigset/{dst}/sig").is_file())
 
     def test_success_fq_sigset(self):
         src_sigset = tempname(10)
         sig_dir = f"{self.mpath}/signatures/sigset/{src_sigset}"
-        os.makedirs(sig_dir)
+        Path(sig_dir).mkdir(parents=True)
         self.sigdirs.append(sig_dir)
         Path(f"{sig_dir}/sig").write_text("A sigset file")
         dst_name = tempname(10)
@@ -707,13 +695,13 @@ class SignaturesRenameTestCase(TestCase):
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
         self.assertTrue(
-            os.path.isfile(f"{self.mpath}/signatures/sigset/{dst_name}/sig")
+            Path(f"{self.mpath}/signatures/sigset/{dst_name}/sig").is_file()
         )
 
     def test_success_unqualified_libsvm(self):
         src_sig = tempname(10)
         sig_dir = f"{self.mpath}/signatures/libsvm/{src_sig}"
-        os.makedirs(sig_dir)
+        Path(sig_dir).mkdir(parents=True)
         self.sigdirs.append(sig_dir)
         Path(f"{sig_dir}/sig").write_text("A libsvm file")
         dst = tempname(10)
@@ -728,12 +716,12 @@ class SignaturesRenameTestCase(TestCase):
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
-        self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/libsvm/{dst}/sig"))
+        self.assertTrue(Path(f"{self.mpath}/signatures/libsvm/{dst}/sig").is_file())
 
     def test_success_fq_libsvm(self):
         src_sig = tempname(10)
         sig_dir = f"{self.mpath}/signatures/libsvm/{src_sig}"
-        os.makedirs(sig_dir)
+        Path(sig_dir).mkdir(parents=True)
         self.sigdirs.append(sig_dir)
         Path(f"{sig_dir}/sig").write_text("A libsvm file")
         dst = tempname(10)
@@ -754,7 +742,7 @@ class SignaturesRenameTestCase(TestCase):
         self.assertTrue(ret)
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
-        self.assertTrue(os.path.isfile(f"{dst_dir}/sig"))
+        self.assertTrue(Path(f"{dst_dir}/sig").is_file())
 
 
 class SignaturesListByTypeTestCase(TestCase):
@@ -766,18 +754,18 @@ class SignaturesListByTypeTestCase(TestCase):
         cls.sigdirs = []
         # As signatures are created directly not via signature creation
         # tools, we must ensure signature directories exist
-        os.makedirs(f"{cls.mpath}/signatures/sig/", exist_ok=True)
-        os.makedirs(f"{cls.mpath}/signatures/sigset/", exist_ok=True)
-        os.makedirs(f"{cls.mpath}/signatures/libsvm/", exist_ok=True)
+        Path(f"{cls.mpath}/signatures/sig/").mkdir(exist_ok=True, parents=True)
+        Path(f"{cls.mpath}/signatures/sigset/").mkdir(exist_ok=True, parents=True)
+        Path(f"{cls.mpath}/signatures/libsvm/").mkdir(exist_ok=True, parents=True)
         # A mapset with a random name
         cls.rnd_mapset_name = tempname(10)
         G_make_mapset(None, None, cls.rnd_mapset_name)
         cls.rnd_mapset_path = (
             cls.mpath.rsplit("/", maxsplit=1)[0] + "/" + cls.rnd_mapset_name
         )
-        os.makedirs(f"{cls.rnd_mapset_path}/signatures/sig/")
-        os.makedirs(f"{cls.rnd_mapset_path}/signatures/sigset/")
-        os.makedirs(f"{cls.rnd_mapset_path}/signatures/libsvm/")
+        Path(f"{cls.rnd_mapset_path}/signatures/sig/").mkdir(parents=True)
+        Path(f"{cls.rnd_mapset_path}/signatures/sigset/").mkdir(parents=True)
+        Path(f"{cls.rnd_mapset_path}/signatures/libsvm/").mkdir(parents=True)
 
     @classmethod
     def tearDownClass(cls):
@@ -811,7 +799,7 @@ class SignaturesListByTypeTestCase(TestCase):
         # Sig type
         local_sig = tempname(10)
         sig_dir = f"{self.mpath}/signatures/sig/{local_sig}"
-        os.makedirs(sig_dir)
+        Path(sig_dir).mkdir(parents=True)
         self.sigdirs.append(sig_dir)
         Path(f"{sig_dir}/sig").write_text("A sig file")
         sig_list = self.list_ptr()
@@ -824,7 +812,7 @@ class SignaturesListByTypeTestCase(TestCase):
         # SigSet type
         local_sigset = tempname(10)
         sig_dir = f"{self.mpath}/signatures/sigset/{local_sigset}"
-        os.makedirs(sig_dir)
+        Path(sig_dir).mkdir(parents=True)
         self.sigdirs.append(sig_dir)
         Path(f"{sig_dir}/sig").write_text("A sigset file")
         sig_list = self.list_ptr()
@@ -837,7 +825,7 @@ class SignaturesListByTypeTestCase(TestCase):
         # Libsvm type
         local_sig = tempname(10)
         sig_dir = f"{self.mpath}/signatures/libsvm/{local_sig}"
-        os.makedirs(sig_dir)
+        Path(sig_dir).mkdir(parents=True)
         sig_file = f"{sig_dir}/sig"
         self.sigdirs.append(sig_dir)
         Path(sig_file).write_text("A libsvm file")
@@ -854,7 +842,7 @@ class SignaturesListByTypeTestCase(TestCase):
         # Sig type
         rnd_sig = tempname(10)
         sig_dir = f"{self.rnd_mapset_path}/signatures/sig/{rnd_sig}"
-        os.makedirs(sig_dir)
+        Path(sig_dir).mkdir(parents=True)
         self.sigdirs.append(sig_dir)
         Path(f"{sig_dir}/sig").write_text("A sig file")
         sig_list = self.list_ptr()
@@ -870,7 +858,7 @@ class SignaturesListByTypeTestCase(TestCase):
         # SigSet equals sig. Just testing branching inside.
         rnd_sigset = tempname(10)
         sig_dir = f"{self.rnd_mapset_path}/signatures/sigset/{rnd_sigset}"
-        os.makedirs(sig_dir)
+        Path(sig_dir).mkdir(parents=True)
         self.sigdirs.append(sig_dir)
         Path(f"{sig_dir}/sig").write_text("A sigset file")
         sigset_list = self.list_ptr()
@@ -885,7 +873,7 @@ class SignaturesListByTypeTestCase(TestCase):
         # libsvm type
         rnd_sig = tempname(10)
         sig_dir = f"{self.rnd_mapset_path}/signatures/libsvm/{rnd_sig}"
-        os.makedirs(sig_dir)
+        Path(sig_dir).mkdir(parents=True)
         sig_file = f"{sig_dir}/sig"
         Path(sig_file).write_text("A libsvm file")
         sig_list = self.list_ptr()
@@ -903,12 +891,12 @@ class SignaturesListByTypeTestCase(TestCase):
         # Sig type
         rnd_sig1 = tempname(10)
         sig_dir1 = f"{self.rnd_mapset_path}/signatures/sig/{rnd_sig1}"
-        os.makedirs(sig_dir1)
+        Path(sig_dir1).mkdir(parents=True)
         self.sigdirs.append(sig_dir1)
         Path(f"{sig_dir1}/sig").write_text("A sig file")
         rnd_sig2 = tempname(10)
         sig_dir2 = f"{self.rnd_mapset_path}/signatures/sig/{rnd_sig2}"
-        os.makedirs(sig_dir2)
+        Path(sig_dir2).mkdir(parents=True)
         self.sigdirs.append(sig_dir2)
         Path(f"{sig_dir2}/sig").write_text("A sig file")
         # POINTER(POINTER(c_char))
@@ -929,12 +917,12 @@ class SignaturesListByTypeTestCase(TestCase):
         # SigSet type
         rnd_sigset1 = tempname(10)
         sig_dir1 = f"{self.rnd_mapset_path}/signatures/sigset/{rnd_sigset1}"
-        os.makedirs(sig_dir1)
+        Path(sig_dir1).mkdir(parents=True)
         self.sigdirs.append(sig_dir1)
         Path(f"{sig_dir1}/sig").write_text("A sigset file")
         rnd_sigset2 = tempname(10)
         sig_dir2 = f"{self.rnd_mapset_path}/signatures/sigset/{rnd_sigset2}"
-        os.makedirs(sig_dir2)
+        Path(sig_dir2).mkdir(parents=True)
         self.sigdirs.append(sig_dir2)
         Path(f"{sig_dir2}/sig").write_text("A sigset file")
         sigset_list = self.list_ptr()
@@ -954,12 +942,12 @@ class SignaturesListByTypeTestCase(TestCase):
         # libsvm type
         rnd_sig1 = tempname(10)
         sig_dir1 = f"{self.rnd_mapset_path}/signatures/libsvm/{rnd_sig1}"
-        os.makedirs(sig_dir1)
+        Path(sig_dir1).mkdir(parents=True)
         sig_file1 = f"{sig_dir1}/sig"
         Path(sig_file1).write_text("A libsvm file")
         rnd_sig2 = tempname(10)
         sig_dir2 = f"{self.rnd_mapset_path}/signatures/libsvm/{rnd_sig2}"
-        os.makedirs(sig_dir2)
+        Path(sig_dir2).mkdir(parents=True)
         sig_file2 = f"{sig_dir2}/sig"
         Path(sig_file2).write_text("A libsvm file")
         # POINTER(POINTER(c_char))
@@ -982,12 +970,12 @@ class SignaturesListByTypeTestCase(TestCase):
         # Test searching in multiple mapsets. Identical to SIGSET case
         rnd_sig1 = tempname(10)
         sig_dir1 = f"{self.rnd_mapset_path}/signatures/sig/{rnd_sig1}"
-        os.makedirs(sig_dir1)
+        Path(sig_dir1).mkdir(parents=True)
         self.sigdirs.append(sig_dir1)
         Path(f"{sig_dir1}/sig").write_text("A sig file")
         rnd_sig2 = tempname(10)
         sig_dir2 = f"{self.mpath}/signatures/sig/{rnd_sig2}"
-        os.makedirs(sig_dir2)
+        Path(sig_dir2).mkdir(parents=True)
         self.sigdirs.append(sig_dir2)
         Path(f"{sig_dir2}/sig").write_text("A sig file")
         sig_list = self.list_ptr()
@@ -1029,12 +1017,12 @@ class SignaturesListByTypeTestCase(TestCase):
         # Test searching in multiple mapsets. Identical to SIG case
         rnd_sig1 = tempname(10)
         sig_dir1 = f"{self.rnd_mapset_path}/signatures/sigset/{rnd_sig1}"
-        os.makedirs(sig_dir1)
+        Path(sig_dir1).mkdir(parents=True)
         self.sigdirs.append(sig_dir1)
         Path(f"{sig_dir1}/sig").write_text("A sigset file")
         rnd_sig2 = tempname(10)
         sig_dir2 = f"{self.mpath}/signatures/sigset/{rnd_sig2}"
-        os.makedirs(sig_dir2)
+        Path(sig_dir2).mkdir(parents=True)
         self.sigdirs.append(sig_dir2)
         Path(f"{sig_dir2}/sig").write_text("A sigset file")
         sig_list = self.list_ptr()
@@ -1076,12 +1064,12 @@ class SignaturesListByTypeTestCase(TestCase):
         # Test searching in multiple mapsets. Identical to SIG and SIGSET case
         rnd_sig1 = tempname(10)
         sig_dir1 = f"{self.rnd_mapset_path}/signatures/libsvm/{rnd_sig1}"
-        os.makedirs(sig_dir1)
+        Path(sig_dir1).mkdir(parents=True)
         sig_file1 = f"{sig_dir1}/sig"
         Path(sig_file1).write_text("A libsvm file")
         rnd_sig2 = tempname(10)
         sig_dir2 = f"{self.mpath}/signatures/libsvm/{rnd_sig2}"
-        os.makedirs(sig_dir2)
+        Path(sig_dir2).mkdir(parents=True)
         sig_file2 = f"{sig_dir2}/sig"
         Path(sig_file2).write_text("A libsvm file")
         self.sigdirs.append(sig_dir2)

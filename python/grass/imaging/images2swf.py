@@ -68,7 +68,6 @@ sources and tools:
 
 from __future__ import annotations
 
-import os
 import zlib
 from pathlib import Path
 
@@ -904,7 +903,7 @@ def readSwf(filename, asNumpy=True):
     """
 
     # Check whether it exists
-    if not os.path.isfile(filename):
+    if not Path(filename).is_file():
         raise OSError("File not found: " + str(filename))
 
     # Check PIL

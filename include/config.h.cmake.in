@@ -56,9 +56,6 @@
 /* Define to 1 if you have the <g2c.h> header file. */
 #cmakedefine HAVE_G2C_H ${HAVE_G2C_H}
 
-/* Define to 1 if GDAL is to be used. */
-#cmakedefine HAVE_GDAL ${HAVE_GDAL}
-
 /* Define to 1 if GEOS is to be used. */
 #cmakedefine HAVE_GEOS ${HAVE_GEOS}
 
@@ -137,9 +134,6 @@
 /* Define to 1 if you have the `nice' function. */
 #cmakedefine HAVE_NICE ${HAVE_NICE}
 
-/* Define to 1 if OGR is to be used. */
-#cmakedefine HAVE_OGR ${HAVE_OGR}
-
 /* Define to 1 if you have the <omp.h> header file. */
 #cmakedefine HAVE_OMP_H ${HAVE_OMP_H}
 
@@ -163,12 +157,6 @@
 
 /* Define to 1 if PostgreSQL is to be used. */
 #cmakedefine HAVE_POSTGRES ${HAVE_POSTGRES}
-
-/* Define to 1 if you have the <proj_api.h> header file. */
-#cmakedefine HAVE_PROJ_API_H ${HAVE_PROJ_API_H}
-
-/* Define to 1 if you have the <proj.h> header file. */
-#cmakedefine HAVE_PROJ_H ${HAVE_PROJ_H}
 
 /* Define to 1 if you have the <pthread.h> header file. */
 #cmakedefine HAVE_PTHREAD_H ${HAVE_PTHREAD_H}
@@ -287,6 +275,9 @@
 /* Define to 1 if you have the <zstd.h> header file. */
 #cmakedefine HAVE_ZSTD_H ${HAVE_ZSTD_H}
 
+/* Define to 1 if you have the <svm.h> header file. */
+#cmakedefine HAVE_SVM_H ${HAVE_SVM_H}
+
 // TODO: look at this for a more proper fix
 /* Define to 1 if OpenGL uses Aqua (MacOS X). */
 #cmakedefine OPENGL_AQUA ${OPENGL_AQUA}
@@ -329,9 +320,6 @@
 
 /* Define to 1 if NLS requested. */
 #cmakedefine USE_NLS ${USE_NLS}
-
-/* Define to 1 if using old PROJ version 4 API. */
-#cmakedefine USE_PROJ4API ${USE_PROJ4API}
 
 /* Define to 1 if the X Window System is missing or not being used. */
 #cmakedefine X_DISPLAY_MISSING ${X_DISPLAY_MISSING}

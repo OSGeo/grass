@@ -474,7 +474,7 @@ def wrap_stdstream_to_html(
 def html_file_preview(filename):
     before = "<pre>"
     after = "</pre>"
-    if not os.path.isfile(filename):
+    if not Path(filename).is_file():
         return '<p style="color: red>File %s does not exist</p>' % filename
     size = Path(filename).stat().st_size
     if not size:
