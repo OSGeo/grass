@@ -74,6 +74,8 @@ void print_region(struct Map_info *Map, enum OutputFormat format,
         G_json_object_set_number(root_object, "top", box.T);
         G_json_object_set_number(root_object, "bottom", box.B);
         break;
+    default: // case CSV, NONE
+        break;
     }
 }
 
@@ -172,6 +174,8 @@ void print_topo(struct Map_info *Map, enum OutputFormat format,
         }
         G_json_object_set_number(root_object, "primitives", nprimitives);
         G_json_object_set_boolean(root_object, "map3d", Vect_is_3d(Map));
+    default: // case NONE, CSV
+        break;
     }
 }
 
@@ -200,6 +204,9 @@ void print_columns(struct Map_info *Map, const char *input_opt,
                 _("Column names and types for database connection of "
                   "layer <%s>:\n"),
                 field_opt);
+    }
+    if (format == CSV) {
+        fprintf(stdout, "%s,%s\n", "name", "sql_type");
     }
 
     if ((fi = Vect_get_field2(Map, field_opt)) == NULL) {
@@ -242,6 +249,17 @@ void print_columns(struct Map_info *Map, const char *input_opt,
     for (col = 0; col < ncols; col++) {
         switch (format) {
         case SHELL:
+            G_fatal_error(_("format=shell is not valid with -c flag."));
+            break;
+
+        case CSV:
+            fprintf(stdout, "%s,%s\n",
+                    db_get_column_name(db_get_table_column(table, col)),
+                    db_sqltype_name(db_get_column_sqltype(
+                        db_get_table_column(table, col))));
+            break;
+
+        case NONE: // Backward Compatibility
             fprintf(stdout, "%s|%s\n",
                     db_sqltype_name(
                         db_get_column_sqltype(db_get_table_column(table, col))),
@@ -354,6 +372,8 @@ void print_shell(struct Map_info *Map, const char *field_opt,
         G_json_object_set_string(root_object, "source_date",
                                  Vect_get_map_date(Map));
         break;
+    default: // case CSV, NONE
+        break;
     }
 
     /* This shows the TimeStamp (if present) */
@@ -368,6 +388,8 @@ void print_shell(struct Map_info *Map, const char *field_opt,
         case JSON:
             G_json_object_set_string(root_object, "timestamp", timebuff);
             break;
+        default: // case CSV, NONE
+            break;
         }
     }
     else {
@@ -379,6 +401,8 @@ void print_shell(struct Map_info *Map, const char *field_opt,
             break;
         case JSON:
             G_json_object_set_null(root_object, "timestamp");
+            break;
+        default: // case CSV, NONE
             break;
         }
     }
@@ -402,6 +426,8 @@ void print_shell(struct Map_info *Map, const char *field_opt,
             G_json_object_set_string(root_object, "ogr_dsn",
                                      Vect_get_finfo_dsn_name(Map));
             G_json_object_set_string(root_object, "feature_type", geom_type);
+            break;
+        default: // case CSV, NONE
             break;
         }
     }
@@ -434,6 +460,8 @@ void print_shell(struct Map_info *Map, const char *field_opt,
                                      finfo->pg.geom_column);
             G_json_object_set_string(root_object, "feature_type", geom_type);
             break;
+        default: // case CSV, NONE
+            break;
         }
 
         topo_format = Vect_get_finfo_topology_info(Map, &toposchema_name,
@@ -452,6 +480,8 @@ void print_shell(struct Map_info *Map, const char *field_opt,
                 G_json_object_set_string(root_object, "pg_topo_column",
                                          topogeom_column);
                 break;
+            default: // case CSV, NONE
+                break;
             }
         }
         G_free(topogeom_column);
@@ -467,6 +497,8 @@ void print_shell(struct Map_info *Map, const char *field_opt,
         case JSON:
             G_json_object_set_string(root_object, "format", maptype_str);
             break;
+        default:
+            break;
         }
     }
 
@@ -479,6 +511,8 @@ void print_shell(struct Map_info *Map, const char *field_opt,
     case JSON:
         G_json_object_set_number(root_object, "level", Vect_level(Map));
         break;
+    default: // case CSV, NONE
+        break;
     }
     if (Vect_level(Map) > 0) {
         switch (format) {
@@ -490,6 +524,8 @@ void print_shell(struct Map_info *Map, const char *field_opt,
         case JSON:
             G_json_object_set_number(root_object, "num_dblinks",
                                      Vect_get_num_dblinks(Map));
+            break;
+        default: // case CSV, NONE
             break;
         }
 
@@ -522,6 +558,8 @@ void print_shell(struct Map_info *Map, const char *field_opt,
                     G_json_object_set_string(root_object,
                                              "attribute_primary_key", fi->key);
                     break;
+                default: // case CSV, NONE
+                    break;
                 }
             }
             Vect_destroy_field_info(fi);
@@ -548,6 +586,8 @@ void print_shell(struct Map_info *Map, const char *field_opt,
         G_json_object_set_number(root_object, "digitization_threshold",
                                  Vect_get_thresh(Map));
         G_json_object_set_string(root_object, "comment", Vect_get_comment(Map));
+        break;
+    default: // case CSV, NONE
         break;
     }
     G_free(finfo_lname);
@@ -891,6 +931,8 @@ void print_history(struct Map_info *Map, enum OutputFormat format)
                 date[0] = '\0';
                 mapset_path[0] = '\0';
             }
+            break;
+        default: // case CSV, NONE
             break;
         }
     }

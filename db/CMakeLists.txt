@@ -18,7 +18,7 @@ add_custom_target(
   COMMENT "All database modules are built.")
 
 if(WITH_DOCS)
-  generate_html(TARGET ALL_DATABASE_MODULES NAME databaseintro)
+  generate_docs(databaseintro TARGET ALL_DATABASE_MODULES)
 endif()
 
 set(db_drivers grass_gis)
