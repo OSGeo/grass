@@ -204,7 +204,7 @@ void resolve(int fd, int nl, struct band3 *bnd)
         }
         retreat_band3(fd, bnd);
         retreat_band3(fd, bnd);
-        for (i = nl - 2; i >= 1; i -= 1) {
+        for (i = nl - 1; i > 1; i -= 1) {
             if (lseek(fd, (off_t)(i - 1) * bnd->sz, SEEK_SET) == -1) {
                 int err = errno;
                 G_fatal_error(_("File read/write operation failed: %s (%d)"),

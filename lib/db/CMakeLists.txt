@@ -1,7 +1,7 @@
-file(GLOB dbmibase_SRCS "./dbmi_base/*.c")
+file(GLOB dbmibase_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/dbmi_base/*.c")
 if(MSVC)
-  set(dbmibase_INCLUDES "./dbmi_base" "../../msvc")
-  list(APPEND dbmibase_SRCS "../../msvc/dirent.c")
+  set(dbmibase_INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}/dbmi_base" "${CMAKE_SOURCE_DIR}/msvc")
+  list(APPEND dbmibase_SRCS "${CMAKE_SOURCE_DIR}/msvc/dirent.c")
 endif()
 
 build_library_in_subdir(
@@ -25,7 +25,7 @@ build_library_in_subdir(
   grass_dbmibase
   grass_gis
   INCLUDES
-  "./dbmi_base")
+  "${CMAKE_CURRENT_SOURCE_DIR}/dbmi_base")
 
 build_library_in_subdir(stubs NAME grass_dbstubs DEPENDS grass_gis
                         grass_dbmibase)
@@ -39,6 +39,6 @@ build_library_in_subdir(
   grass_dbstubs
   grass_gis
   INCLUDES
-  "./dbmi_base")
+  "${CMAKE_CURRENT_SOURCE_DIR}/dbmi_base")
 
 add_subdirectory(sqlp)

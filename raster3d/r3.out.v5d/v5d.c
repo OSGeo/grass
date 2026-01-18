@@ -2835,7 +2835,7 @@ int v5dcreate
     }
 
     return v5dCreate(filename, *numtimes, *numvars, *nr, *nc, nl,
-                     (const char(*)[10])names, timestamp, datestamp,
+                     (const char (*)[10])names, timestamp, datestamp,
                      *compressmode, *projection, proj_args, *vertical,
                      vert_args);
 }

@@ -229,7 +229,7 @@ def _createPath(path):
     """Creates path (for toolboxes) if it doesn't exist'"""
     if not Path(path).exists():
         try:
-            os.mkdir(path)
+            Path(path).mkdir()
         except OSError as e:
             # we cannot use GError or similar because the gui doesn't start at
             # all
@@ -331,8 +331,8 @@ def _indent(elem, level=0):
             elem.text = i + "  "
         if not elem.tail or not elem.tail.strip():
             elem.tail = i
-        for _elem in elem:
-            _indent(_elem, level + 1)
+        for elem_ in elem:
+            _indent(elem_, level + 1)
         if not elem.tail or not elem.tail.strip():
             elem.tail = i
     elif level and (not elem.tail or not elem.tail.strip()):

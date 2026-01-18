@@ -19,13 +19,11 @@ build_library_in_subdir(
 
 add_subdirectory(proj)
 
-build_library_in_subdir(external/parson NAME grass_parson HEADERS "gjson.h" "parson.h")
+build_library_in_subdir(external/parson NAME grass_parson HEADERS "gjson.h")
 build_program_in_subdir(external/parson/test NAME test.gjson.lib DEPENDS grass_gis grass_parson)
 
 build_library_in_subdir(
   raster
-  DEFS
-  "-DGDAL_LINK=1"
   DEPENDS
   ${LIBM}
   GDAL::GDAL
@@ -88,7 +86,7 @@ build_library_in_subdir(
   grass_driver
   grass_gis
   INCLUDES
-  "./driver")
+  "${CMAKE_CURRENT_SOURCE_DIR}/driver")
 add_custom_command(
   TARGET grass_psdriver
   POST_BUILD
@@ -104,7 +102,7 @@ build_library_in_subdir(
   grass_gis
   grass_driver
   INCLUDES
-  "./driver")
+  "${CMAKE_CURRENT_SOURCE_DIR}/driver")
 
 set(_grass_display_DEFS)
 

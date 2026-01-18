@@ -127,7 +127,7 @@ class GrassTestFilesInvoker:
         mapset_dir = os.path.join(gisdbase, location, mapset)
         if self.clean_before:
             silent_rmtree(mapset_dir)
-        os.mkdir(mapset_dir)
+        Path(mapset_dir).mkdir()
         # TODO: default region in mapset will be what?
         # copy DEFAULT_WIND file from PERMANENT to WIND
         # TODO: this should be a function in grass.script (used also in gis_set.py,

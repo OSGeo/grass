@@ -295,7 +295,7 @@ import grass.script as gs
 # projection using JSON output format
 bounds = gs.parse_command(
     "r.proj",
-    project="nc_spm_full_v2alpha2",
+    project="nc_spm_full_v2beta1",
     mapset="PERMANENT",
     input="elevation",
     flags="p",

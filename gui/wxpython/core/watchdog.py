@@ -178,7 +178,7 @@ class MapsetWatchdog:
             path = os.path.join(mapset_path, directory)
             if not Path(path).exists():
                 try:
-                    os.mkdir(path)
+                    Path(path).mkdir()
                 except OSError:
                     pass
             if Path(path).exists():
