@@ -419,8 +419,8 @@ int main(int argc, char *argv[])
 
     /* the field separator */
     if (delim_opt->count == 0 && format == CSV) {
-            delim_opt->answer = "comma";
-        }
+        delim_opt->answer = "comma";
+    }
 
     fs = G_option_to_separator(delim_opt);
 
