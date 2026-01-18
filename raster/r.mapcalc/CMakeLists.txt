@@ -48,3 +48,7 @@ build_program(
   Readline::Readline
   Readline::History
   Threads::Threads)
+
+# mapcalc.yy.c is attached to both targets, work around this with build
+# dependency chain
+add_dependencies(r3.mapcalc r.mapcalc)

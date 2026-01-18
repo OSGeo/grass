@@ -64,9 +64,9 @@ int gsd_wire_surf(geosurf *surf)
             ret = (gsd_coarse_surf_map(surf)); /* draw coarse surf */
 
 #ifdef DO_ARROWS
-            /*
-               gsd_wire_arrows(surf);
-             */
+        /*
+           gsd_wire_arrows(surf);
+         */
 #endif
 
         break;

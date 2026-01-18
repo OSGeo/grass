@@ -26,7 +26,8 @@ optimized for large-scale analysis on various hardware configurations.
 You can use GRASS as your desktop Geographic Information System (GIS)
 or as a geoprocessing engine through command-line, Python or R interface.
 
-GRASS is open-source and free software, available under the [GNU General Public License](https://www.gnu.org/licenses/#GPL),
+GRASS is open-source and free software,
+available under the [GNU General Public License](https://www.gnu.org/licenses/#GPL),
 and hosted by the Open Source Geospatial Foundation ([OSGeo](https://www.osgeo.org/)).
 
 [//]: # (numfocus-fiscal-sponsor-attribution)
@@ -60,9 +61,8 @@ to get GRASS for your platform.
 
 ## Documentation
 
-See [documentation](https://grass.osgeo.org/grass-devel/manuals/index.html) and
-[tutorials](https://grass.osgeo.org/grass-devel/manuals/tutorials/index.html)
-to start learning GRASS.
+See [documentation](https://grass.osgeo.org/grass-devel/manuals/index.html)
+and [tutorials](https://grass-tutorials.osgeo.org/) to start learning GRASS.
 
 ## Getting help
 

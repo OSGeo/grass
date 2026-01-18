@@ -20,7 +20,7 @@
 # Website for   config.guess, config.sub:
 #               wget http://git.savannah.gnu.org/cgit/config.git/plain/config.guess
 #               wget http://git.savannah.gnu.org/cgit/config.git/plain/config.sub
-#               Note: use autoconf-2.69
+#               Note: use autoconf-2.72
 #############################################################################
 
 define([AC_CACHE_LOAD], )
@@ -31,10 +31,14 @@ $2
 
 AC_INIT
 AC_CONFIG_SRCDIR([configure.ac])
-AC_PREREQ([2.71])
+AC_PREREQ([2.72])
 AC_CONFIG_HEADERS([include/grass/config.h])
 AC_CANONICAL_HOST
 AC_PROG_CC
+
+AH_TOP([#ifndef _config_h
+#define _config_h])
+AH_BOTTOM([#endif /* _config_h */])
 
 # Enable C++ option
 
@@ -145,10 +149,10 @@ AC_SUBST(GRASS_BIN)
 
 GRASS_VERSION_FILE=include/VERSION
 GRASS_VERSION_GIT_FILE=include/VERSION_GIT
-GRASS_VERSION_MAJOR=`sed -n 1p "${GRASS_VERSION_FILE}"`
-GRASS_VERSION_MINOR=`sed -n 2p "${GRASS_VERSION_FILE}"`
-GRASS_VERSION_RELEASE=`sed -n 3p "${GRASS_VERSION_FILE}"`
-GRASS_VERSION_DATE=`sed -n 4p "${GRASS_VERSION_FILE}"`
+GRASS_VERSION_MAJOR=`sed -n 1p "${SRCDIR}/${GRASS_VERSION_FILE}"`
+GRASS_VERSION_MINOR=`sed -n 2p "${SRCDIR}/${GRASS_VERSION_FILE}"`
+GRASS_VERSION_RELEASE=`sed -n 3p "${SRCDIR}/${GRASS_VERSION_FILE}"`
+GRASS_VERSION_DATE=`sed -n 4p "${SRCDIR}/${GRASS_VERSION_FILE}"`
 GRASS_VERSION_NUMBER=`echo ${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_VERSION_RELEASE}`
 NAME_VER=`echo ${GRASS_VERSION_NUMBER} | sed 's/\..*//'`
 changequote(,)
@@ -161,7 +165,9 @@ GRASS_VERSION_GIT="exported"
 GRASS_HEADERS_GIT_HASH="${GRASS_VERSION_NUMBER}"
 GRASS_HEADERS_GIT_DATE=`date -u +%FT%T%z | sed 's/\(..\)$/:\1/'`
 AC_PATH_PROG(GIT, git, no)
-AC_CHECK_FILE([$GRASS_VERSION_GIT_FILE])
+AS_IF([test -f "${SRCDIR}/${GRASS_VERSION_GIT_FILE}"],
+      [ac_cv_file_include_VERSION_GIT=yes],
+      [ac_cv_file_include_VERSION_GIT=no])
 AC_MSG_CHECKING(for GRASS headers commit date)
 if test "$GIT" != "no" ; then
    GRASS_VERSION_GIT=`$GIT rev-parse --short HEAD 2>/dev/null`
@@ -180,9 +186,9 @@ if test "$GIT" != "no" ; then
 fi
 if test $GRASS_VERSION_GIT == "exported" && \
    test "$ac_cv_file_include_VERSION_GIT" == "yes"; then
-      GRASS_HEADERS_GIT_HASH=$(sed -n 1p "${GRASS_VERSION_GIT_FILE}")
+      GRASS_HEADERS_GIT_HASH=$(sed -n 1p "${SRCDIR}/${GRASS_VERSION_GIT_FILE}")
       GRASS_VERSION_GIT=$GRASS_HEADERS_GIT_HASH
-      GRASS_HEADERS_GIT_DATE=$(sed -n 2p "${GRASS_VERSION_GIT_FILE}")
+      GRASS_HEADERS_GIT_DATE=$(sed -n 2p "${SRCDIR}/${GRASS_VERSION_GIT_FILE}")
 fi
 AC_MSG_RESULT($GRASS_HEADERS_GIT_DATE)
 
@@ -250,9 +256,9 @@ MACOSX_SDK=
 if test -z "$with_macosx_sdk" ; then
   AC_MSG_RESULT(no)
 else
-  AC_CHECK_FILE($with_macosx_sdk/SDKSettings.plist, [
-    MACOSX_SDK="-isysroot $with_macosx_sdk"],[
-    AC_MSG_ERROR([*** specified SDK does not exist or is not a SDK])])
+  AS_IF([test -f "$with_macosx_sdk/SDKSettings.plist"],
+    [MACOSX_SDK="-isysroot $with_macosx_sdk"],
+    [AC_MSG_ERROR([*** specified SDK does not exist or is not a SDK])])
   LDFLAGS="$LDFLAGS $MACOSX_SDK"
   CFLAGS="$CFLAGS $MACOSX_SDK"
   CXXFLAGS="$CXXFLAGS $MACOSX_SDK"
@@ -412,9 +418,9 @@ LOC_ARG_WITH_LDFLAGS(cairo, cairo)
 LOC_ARG_WITH_INC(freetype, FreeType)
 LOC_ARG_WITH_LIB(freetype, FreeType)
 
-LOC_ARG_WITH_INC(proj, External PROJ.4)
-LOC_ARG_WITH_LIB(proj, External PROJ.4)
-LOC_ARG_WITH_SHARE(proj, External PROJ.4)
+LOC_ARG_WITH_INC(proj, PROJ)
+LOC_ARG_WITH_LIB(proj, PROJ)
+LOC_ARG_WITH_SHARE(proj, PROJ)
 
 LOC_ARG_WITH_INC(regex, regex)
 LOC_ARG_WITH_LIB(regex, regex)
@@ -742,88 +748,43 @@ AC_SUBST(ZSTDLIB)
 PROJINC=
 PROJLIB=
 PROJSHARE=
-PROJ4API=0
-PROJMAJOR=4
 
 # With PROJ includes directory
 
-LOC_CHECK_INC_PATH(proj,External PROJ,PROJINC)
+LOC_CHECK_INC_PATH(proj,PROJ,PROJINC)
 
-# PROJ version check: if proj.h exists, it must be proj 5+
-LOC_CHECK_INCLUDES(proj.h,External PROJ,$PROJINC,PROJ4API=1)
+ac_save_cppflags="$CPPFLAGS"
+CPPFLAGS="$PROJINC $CPPFLAGS"
+AC_CHECK_HEADER([proj.h],[],AC_MSG_ERROR([*** Unable to locate <proj.h>.]),[])
+CPPFLAGS=$ac_save_cppflags
 
-if test $PROJ4API = 0 ; then
-    LOC_CHECK_VERSION_INT(proj.h,PROJ_VERSION_MAJOR,External PROJ major,proj_ver_major,$PROJINC,0)
-    LOC_CHECK_VERSION_INT(proj.h,PROJ_VERSION_MINOR,External PROJ minor,proj_ver_minor,$PROJINC,0)
-    LOC_CHECK_VERSION_INT(proj.h,PROJ_VERSION_PATCH,External PROJ patch,proj_ver_patch,$PROJINC,0)
-    AC_MSG_RESULT([found PROJ version "${proj_ver_major}.${proj_ver_minor}.${proj_ver_patch}"])
-    PROJMAJOR=${proj_ver_major}
-    # minimum required PROJ 5+ version to use the new PROJ API: 5.1.0
-    if test ${proj_ver_major} = 5 && test `expr ${proj_ver_minor} \< 1` = 1 ; then
-	AC_MSG_WARN([At least PROJ version "5.1.0" is required for the new API ])
-	PROJ4API=1
-    fi
+LOC_CHECK_VERSION_INT(proj.h,PROJ_VERSION_MAJOR,PROJ major,proj_ver_major,$PROJINC,0)
+LOC_CHECK_VERSION_INT(proj.h,PROJ_VERSION_MINOR,PROJ minor,proj_ver_minor,$PROJINC,0)
+LOC_CHECK_VERSION_INT(proj.h,PROJ_VERSION_PATCH,PROJ patch,proj_ver_patch,$PROJINC,0)
+proj_version="$proj_ver_major.$proj_ver_minor.$proj_ver_patch"
+
+if test "$(expr "$proj_ver_major" \>= 9)" = 1; then
+  AC_MSG_RESULT([using PROJ version "${proj_version}"])
 else
-    LOC_CHECK_VERSION_INT(proj_api.h,PJ_VERSION,External PROJ.4,proj_ver,$PROJINC,0)
-    if test `expr ${proj_ver} \>= 600` = 1 ; then
-	PROJMAJOR=6
-    elif test `expr ${proj_ver} \>= 500` = 1 ; then
-	PROJMAJOR=5
-    elif test `expr ${proj_ver} \>= 400` = 1 ; then
-	PROJMAJOR=4
-    fi
-    AC_MSG_RESULT([found PROJ version "${proj_ver}"])
+  AC_MSG_ERROR([*** PROJ version 9.0.0 or newer is required (found version "${proj_version}")])
 fi
 
-if test $PROJ4API = 0 ; then
-    AC_MSG_RESULT([using new PROJ version 5+ API])
+# With PROJ library directory
 
-    # With PROJ library directory
-
-    LOC_CHECK_LIB_PATH(proj,External PROJ,PROJLIB)
-    LOC_CHECK_LIBS(proj,proj_pj_info,External PROJ,$PROJLIB,PROJLIB,,,)
-else
-    AC_MSG_RESULT([using old PROJ version 4 API])
-    AC_DEFINE(USE_PROJ4API, 1, [Define to 1 if using old PROJ version 4 API.])
-
-    LOC_CHECK_INCLUDES(proj_api.h,External PROJ,$PROJINC)
-    # PROJ version check for v4.x
-
-    if test "$cross_compiling" = yes; then
-	AC_MSG_WARN([*** Cannot check PROJ.4 version (cross-compiling).])
-    else
-	LOC_CHECK_VERSION_INT(proj_api.h,PJ_VERSION,External PROJ.4,proj_ver,$PROJINC,0)
-
-	if test `expr ${proj_ver} \< 446` = 1 ; then
-	    AC_MSG_ERROR([*** PROJ.4.4.6 or later is required.])
-	fi
-    fi
-
-    # With PROJ library directory
-
-    LOC_CHECK_LIB_PATH(proj,External PROJ.4,PROJLIB)
-    LOC_CHECK_LIBS(proj,pj_get_def,External PROJ.4,$PROJLIB,PROJLIB,,,)
-fi
+LOC_CHECK_LIB_PATH(proj,PROJ,PROJLIB)
+LOC_CHECK_LIBS(proj,proj_pj_info,PROJ,$PROJLIB,PROJLIB,,,)
 
 # With PROJ share directory
 
-LOC_CHECK_SHARE_PATH(proj,External PROJ,PROJSHARE)
+LOC_CHECK_SHARE_PATH(proj,PROJ,PROJSHARE)
 if test -z "$PROJSHARE" ; then
-    AC_MSG_WARN([*** External PROJ directory not specified; default will be used])
+  if test "$($PKG_CONFIG --exists proj && echo 0)" = "0"; then
+    PROJSHARE=$($PKG_CONFIG --variable=datadir proj)
+  else
+    AC_MSG_WARN([*** PROJ data directory not specified; default will be used])
     PROJSHARE=/usr/share/proj
-fi
-
-# check if share/proj/epsg exists only for PROJ < 6
-if test `expr ${PROJMAJOR} \< 6` = 1 ; then
-    # LOC_CHECK_SHARE does not work when cross compiling
-    if test "$cross_compiling" = "yes" ; then
-	AC_MSG_CHECKING([for epsg])
-	AC_MSG_RESULT([unknown (cross-compiling)])
-    else
-	LOC_CHECK_SHARE(epsg,External PROJ,$PROJSHARE,[
-	AC_MSG_WARN([*** Unable to locate PROJ data files.])
-	])
-    fi
+  fi
+  AC_MSG_RESULT([using PROJ data directory "${PROJSHARE}"])
 fi
 
 AC_SUBST(PROJINC)
@@ -974,8 +935,6 @@ AC_MSG_CHECKING(whether to use GDAL)
 
 GDAL_LIBS=
 GDAL_CFLAGS=
-USE_GDAL=
-USE_OGR=
 
 if test "`basename xx/$with_gdal`" = "gdal-config" ; then
   GDAL_CONFIG="$with_gdal"
@@ -995,11 +954,17 @@ else
     GDAL_LIBS=`"$GDAL_CONFIG" --libs`
     GDAL_DEP_LIBS=`"$GDAL_CONFIG" --dep-libs`
     GDAL_CFLAGS=`"$GDAL_CONFIG" --cflags`
-    USE_GDAL=1
-    if test `"$GDAL_CONFIG" --ogr-enabled` = "yes" ; then
-      AC_DEFINE(HAVE_OGR, 1, [Define to 1 if OGR is to be used.])
-      USE_OGR=1
-    fi
+  fi
+
+  LOC_CHECK_VERSION_INT(gdal_version.h,GDAL_VERSION_MAJOR,[GDAL major version],gdal_version_major,$GDAL_CFLAGS,0)
+  LOC_CHECK_VERSION_INT(gdal_version.h,GDAL_VERSION_MINOR,[GDAL minor version],gdal_version_minor,$GDAL_CFLAGS,0)
+  LOC_CHECK_VERSION_INT(gdal_version.h,GDAL_VERSION_REV,[GDAL revision version],gdal_version_rev,$GDAL_CFLAGS,0)
+  gdal_version="$gdal_version_major.$gdal_version_minor.$gdal_version_rev"
+  if test "$(expr "$gdal_version_major" \>= 3)" = 1 && \
+      test "$(expr "$gdal_version_minor" \>= 7)" = 1; then
+      AC_MSG_RESULT([using GDAL version "${gdal_version}"])
+  else
+      AC_MSG_ERROR([*** GDAL version 3.7 or newer is required (found version "${gdal_version}")])
   fi
 
   GDAL=
@@ -1016,13 +981,10 @@ else
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}
 
-  AC_DEFINE(HAVE_GDAL, 1, [Define to 1 if GDAL is to be used.])
 fi
 
 AC_SUBST(GDAL_LIBS)
 AC_SUBST(GDAL_CFLAGS)
-AC_SUBST(USE_GDAL)
-AC_SUBST(USE_OGR)
 
 # libLAS option
 
@@ -1413,7 +1375,7 @@ case "$with_opengl" in
 		USE_OPENGL=1
 		OPENGL_X11=1
 		;;
-	aqua|mac|osx|macosx|agl)
+	aqua|mac|osx|macosx)
 		OPENGL_TYPE=Aqua
 		USE_OPENGL=1
 		OPENGL_AQUA=1
@@ -1429,6 +1391,11 @@ case "$with_opengl" in
 esac
 
 if test -n "$USE_OPENGL" ; then
+
+# We assume any OpenGL capable of running GRASS also is recent enough
+# to have FBO support.
+# Moved here from customizations of config.h.in
+AC_DEFINE(OPENGL_FBO, 1, [Use framebuffer objects for off-screen OpenGL rendering])
 
 if test "$OPENGL_X11" = 1 ; then
 
@@ -1462,7 +1429,11 @@ LOC_CHECK_FRAMEWORK_PATH(opengl,OpenGL,OPENGLPATH)
 
 LOC_CHECK_INCLUDES(OpenGL/gl.h OpenGL/glu.h,OpenGL,$OPENGLPATH)
 
-LOC_CHECK_FUNC(glBegin,OpenGL library,OPENGLLIB,-framework OpenGL -framework AGL -framework ApplicationServices,$OPENGLPATH)
+LOC_CHECK_FUNC(glBegin,OpenGL library,OPENGLLIB,-framework OpenGL -framework ApplicationServices,$OPENGLPATH)
+LOC_CHECK_FUNC(aglDestroyPixelFormat,[OpenGL library (AGL)],OPENGLLIB,[-framework AGL],$OPENGLPATH,,[
+  [OPENGLLIB="$OPENGLLIB -framework AGL"]
+  AC_DEFINE(OPENGL_AGL,1,[Define to 1 if OpenGL uses AGL (MacOS X).])
+  ],[:])
 LOC_CHECK_FUNC(gluBeginCurve,GLU library,OPENGLLIB,,$OPENGLPATH,$OPENGLLIB)
 
 OPENGLINC="$OPENGLPATH"
@@ -1892,6 +1863,10 @@ LOC_CHECK_FUNC(pthread_create,POSIX threads functions,PTHREADLIB,,,,,[
 LOC_CHECK_LIBS(pthread,pthread_create,POSIX threads,$PTHREADLIBPATH,PTHREADLIB,,,)
 ])
 
+if test -n "$PTHREADLIB" ; then
+    AC_DEFINE(HAVE_PTHREAD, 1, [Define to 1 if POSIX threads are available.])
+fi
+
 fi # $USE_PTHREAD
 
 AC_SUBST(PTHREADINCPATH)
@@ -1989,27 +1964,32 @@ AC_SUBST(USE_OPENCL)
 
 # Done checking OpenCL
 
-# Enable LFS (from cdr-tools, tar, and autoconf 2.68)
-dnl Check for large file support
-dnl Do this last to make sure that no large file definition
-dnl in confdefs.h will modify our results
+# Check for large file support. AC_SYS_LARGEFILE is the modern, portable
+# way to handle this. It sets the appropriate CFLAGS and defines necessary
+# preprocessor macros (e.g., _FILE_OFFSET_BITS=64) for the compiler.
 AC_SYS_LARGEFILE
-ac_save_cflags=${CFLAGS}
-CFLAGS="$LFS_CFLAGS ${ac_save_cflags}"
-dnl Warning do not run this test. it interferes with the test
-dnl AC_CHECK_FUNCS(fseeko ftello) from above.
-dnl The test AC_HAVE_LARGEFILES will check whether ftello/fseeko
-dnl are available in Large File mode
-AC_FUNC_FSEEKO
-AC_HAVE_LARGEFILES
-CFLAGS=${ac_save_cflags}
-# Done large file support
+if test "$ac_cv_sys_large_files" != 0; then
+    USE_LARGEFILES=1
+else
+    USE_LARGEFILES=0
+fi
+AC_SUBST(LFS_CFLAGS)
 
 USE_TERMIO=
 AC_SUBST(USE_TERMIO)
 
 STRIPFLAG=
 AC_SUBST(STRIPFLAG)
+
+# Some old system hack migrated from config.h.in. Probably obsolete in 2025?
+AH_VERBATIM([INT_MIN_FALLBACK],
+[#if defined(HAVE_VALUES_H) && !defined(HAVE_LIMITS_H)
+#define INT_MIN -MAXINT
+#endif
+])
+
+# Migrated from config.h.in. Unused, purpose – unknown.
+AC_DEFINE(GDEBUG, 1, [Define GDEBUG to 1 for historic reasons])
 
 GRASS_HOME="${DSTDIR}"
 AC_SUBST(GRASS_HOME)
@@ -2044,7 +2024,6 @@ LOC_MSG_USE(C++ support,USE_CXX)
 LOC_MSG_USE(Cairo support,USE_CAIRO)
 LOC_MSG_USE(FFTW support,USE_FFTW)
 LOC_MSG_USE(FreeType support,USE_FREETYPE)
-LOC_MSG_USE(GDAL support,USE_GDAL)
 LOC_MSG_USE(GEOS support,USE_GEOS)
 LOC_MSG_USE(LAPACK support,USE_LAPACK)
 LOC_MSG_USE(Large File support (LFS), USE_LARGEFILES)
@@ -2054,7 +2033,6 @@ LOC_MSG_USE(MySQL support,USE_MYSQL)
 LOC_MSG_USE(NetCDF support,USE_NETCDF)
 LOC_MSG_USE(NLS support,USE_NLS)
 LOC_MSG_USE(ODBC support,USE_ODBC)
-LOC_MSG_USE(OGR support,USE_OGR)
 LOC_MSG_USE(OpenCL support,USE_OPENCL)
 LOC_MSG_USE(OpenGL support,USE_OPENGL)
 LOC_MSG_USE(OpenMP support,USE_OPENMP)
@@ -2069,11 +2047,4 @@ LOC_MSG_USE(SQLite support,USE_SQLITE)
 LOC_MSG_USE(TIFF support,USE_TIFF)
 LOC_MSG_USE(X11 support,USE_X11)
 LOC_MSG_USE(Zstandard support,USE_ZSTD)
-LOC_MSG()
-# remove when the new PROJ API is stable
-if test $PROJ4API = 0 ; then
-AC_MSG_RESULT([  using new PROJ 5+ API])
-else
-AC_MSG_RESULT([  using old PROJ 4 API])
-fi
 LOC_MSG()

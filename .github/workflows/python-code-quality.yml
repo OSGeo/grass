@@ -23,20 +23,20 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: ubuntu-22.04
+          - os: ubuntu-24.04
 
     env:
       # renovate: datasource=python-version depName=python
-      PYTHON_VERSION: "3.13"
-      MIN_PYTHON_VERSION: "3.9"
+      PYTHON_VERSION: "3.14"
+      MIN_PYTHON_VERSION: "3.10"
       # renovate: datasource=pypi depName=flake8
       FLAKE8_VERSION: "7.3.0"
       # renovate: datasource=pypi depName=pylint
-      PYLINT_VERSION: "3.3.9"
+      PYLINT_VERSION: "4.0.4"
       # renovate: datasource=pypi depName=bandit
-      BANDIT_VERSION: "1.8.6"
+      BANDIT_VERSION: "1.9.2"
       # renovate: datasource=pypi depName=ruff
-      RUFF_VERSION: "0.13.2"
+      RUFF_VERSION: "0.14.13"
 
     runs-on: ${{ matrix.os }}
     permissions:
@@ -55,20 +55,20 @@ jobs:
         env:
           MATRIX_OS: ${{ matrix.os }}
 
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
+        uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: pip # zizmor: ignore[cache-poisoning] Not creating release artifacts, less of a concern here
       - name: Upgrade pip
-        run: python -m pip install --upgrade pip
+        run: python -m pip install --break-system-packages --upgrade pip
 
       - name: Install Ruff
-        run: pip install "ruff==${RUFF_VERSION}"
+        run: pip install --break-system-packages "ruff==${RUFF_VERSION}"
       - name: Run Ruff (output annotations on fixable errors)
         run: ruff check --output-format=github . --preview --unsafe-fixes
         continue-on-error: true
@@ -97,14 +97,16 @@ jobs:
         run: |
           sudo apt-get update -y
           sudo apt-get install -y wget git gawk findutils
+          LC_ALL=C.UTF-8 sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
+          sudo apt-get update -y
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
           sudo apt-get install -y --no-install-recommends --no-install-suggests
 
       - name: Install Python dependencies
         run: |
-          pip install -r .github/workflows/python_requirements.txt
-          pip install -r .github/workflows/optional_requirements.txt
-          pip install --user pipx
+          pip install --break-system-packages -r .github/workflows/python_requirements.txt
+          pip install --break-system-packages -r .github/workflows/optional_requirements.txt
+          pip install --break-system-packages --user pipx
           pipx ensurepath
           pipx install "flake8==${FLAKE8_VERSION}"
           pipx install "pylint==${PYLINT_VERSION}"
@@ -125,13 +127,13 @@ jobs:
           bandit -c pyproject.toml -iii -r . -f sarif -o bandit.sarif --exit-zero
 
       - name: Upload Bandit Scan Results
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: bandit.sarif
           path: bandit.sarif
 
       - name: Upload SARIF File into Security Tab
-        uses: github/codeql-action/upload-sarif@64d10c13136e1c5bce3e5fbde8d4906eeaafc885 # v3.30.6
+        uses: github/codeql-action/upload-sarif@cdefb33c0f6224e58673d9004f47f7cb3e328b89 # v4.31.10
         with:
           sarif_file: bandit.sarif
 

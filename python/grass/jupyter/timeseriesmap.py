@@ -79,7 +79,7 @@ def collect_layers(timeseries, element_type, fill_gaps):
     # Create list of list
     new_rows = [row.split("|") for row in rows]
     # Transpose into columns where the first value is the name of the column
-    new_array = [list(row) for row in zip(*new_rows)]
+    new_array = [list(row) for row in zip(*new_rows, strict=False)]
 
     # Collect layer name and start time
     for column in new_array:

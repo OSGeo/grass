@@ -22,7 +22,6 @@ import json
 import os
 import subprocess
 import sys
-
 from pathlib import Path
 
 
@@ -155,7 +154,7 @@ def main(in_dirpath, out_josonpath):
     languages = read_po_files(in_dirpath)
     stats = get_stats(languages, in_dirpath)
 
-    if os.path.exists(out_josonpath):
+    if Path(out_josonpath).exists():
         os.remove(out_josonpath)
     writejson(stats, out_josonpath)
 

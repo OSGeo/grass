@@ -133,7 +133,8 @@ see: <https://help.github.com/en/articles/creating-releases>.
 ### Tag release
 
 Before creating the tag, it is a good idea to see if the CI jobs are not failing.
-Check on [GitHub Actions](https://github.com/OSGeo/grass/actions) or use GitHub CLI:
+Check on [GitHub Actions](https://github.com/OSGeo/grass/actions)
+or use GitHub CLI:
 
 ```bash
 gh run list --branch releasebranch_8_4
@@ -332,7 +333,11 @@ wget https://github.com/OSGeo/grass/releases/download/${VERSION}/ChangeLog.gz \
 Fetch a tarball from GitHub we also publish on OSGeo servers:
 
 ```bash
-wget https://github.com/OSGeo/grass/archive/${VERSION}.tar.gz -O grass-${VERSION}.tar.gz
+wget https://github.com/OSGeo/grass/releases/download/${VERSION}/grass-${VERSION}.tar.gz \
+    -O grass-${VERSION}.tar.gz
+wget https://github.com/OSGeo/grass/releases/download/${VERSION}/grass-${VERSION}.tar.gz.sha256 \
+    -O grass-${VERSION}.tar.gz.sha256
+sha256sum -c grass-${VERSION}.tar.gz.sha256
 md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 ```
 
