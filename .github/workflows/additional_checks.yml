@@ -38,7 +38,7 @@ jobs:
         with:
           python-version: "3.14"
       - name: Install uv and restore its cache
-        uses: astral-sh/setup-uv@681c641aba71e4a1c380be3ab5e12ad51f415867 # v7.1.6
+        uses: astral-sh/setup-uv@61cb8a9741eeb8a550a1b8544337180c0fc8476b # v7.2.0
         with:
           # To not have the last commit JSON and release notes files affected on
           # releases, if copying the contents displayed in the CI logs.
@@ -67,7 +67,7 @@ jobs:
               ""
       - name: "Cache pre-commit"
         # Not used for releases, only for running pre-commit
-        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1  # zizmor: ignore[cache-poisoning]
+        uses: actions/cache@8b402f58fbc84540c8b491a91e594a4576fec3d7 # v5.0.2  # zizmor: ignore[cache-poisoning]
         with:
           path: ~/.cache/pre-commit
           key: pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}

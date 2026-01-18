@@ -275,6 +275,9 @@
 /* Define to 1 if you have the <zstd.h> header file. */
 #cmakedefine HAVE_ZSTD_H ${HAVE_ZSTD_H}
 
+/* Define to 1 if you have the <svm.h> header file. */
+#cmakedefine HAVE_SVM_H ${HAVE_SVM_H}
+
 // TODO: look at this for a more proper fix
 /* Define to 1 if OpenGL uses Aqua (MacOS X). */
 #cmakedefine OPENGL_AQUA ${OPENGL_AQUA}

@@ -48,17 +48,17 @@ typedef struct {
     time_t tv1, tv2;
 } Rtimer;
 
-#define rt_start(rt)                           \
-    if ((time(&(rt.tv1)) == ((time_t) - 1))) { \
-        perror("time");                        \
-        exit(1);                               \
+#define rt_start(rt)                         \
+    if ((time(&(rt.tv1)) == ((time_t)-1))) { \
+        perror("time");                      \
+        exit(1);                             \
     }
 
 /* doesn't really stop, just updates endtimes */
-#define rt_stop(rt)                            \
-    if ((time(&(rt.tv2)) == ((time_t) - 1))) { \
-        perror("time");                        \
-        exit(1);                               \
+#define rt_stop(rt)                          \
+    if ((time(&(rt.tv2)) == ((time_t)-1))) { \
+        perror("time");                      \
+        exit(1);                             \
     }
 
 #define rt_u_useconds(rt) rt_w_useconds(rt)

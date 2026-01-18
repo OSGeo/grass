@@ -75,12 +75,12 @@ foreach(
   192)
   set(icon_size "${icon_type}x${icon_type}")
   install(
-    FILES grass-${icon_size}.png
-    DESTINATION ${GRASS_INSTALL_SHAREDIR}/icons/hicolor/${icon_size}/apps
-    RENAME grass.svg)
+    FILES grass-${icon_size}.png RENAME grass.png
+    DESTINATION ${GRASS_INSTALL_SHAREDIR}/icons/hicolor/${icon_size}/apps)
 endforeach()
 
 install(FILES grass.svg
         DESTINATION ${GRASS_INSTALL_SHAREDIR}/icons/hicolor/scalable/apps)
 
-install(FILES grass.appdata.xml DESTINATION ${GRASS_INSTALL_SHAREDIR}/metainfo)
+install(FILES grass.appdata.xml RENAME org.osgeo.grass.appdata.xml
+        DESTINATION ${GRASS_INSTALL_SHAREDIR}/metainfo)

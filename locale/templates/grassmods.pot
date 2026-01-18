@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-13 22:01+0000\n"
+"POT-Creation-Date: 2026-01-17 15:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 #: ../db/db.columns/main.c:47 ../db/db.copy/main.c:104
-#: ../db/db.describe/main.c:65 ../db/db.select/main.c:52
+#: ../db/db.describe/main.c:65 ../db/db.select/main.c:77
 #, c-format
 msgid "Table <%s> not found in database <%s> using driver <%s>"
 msgstr ""
@@ -27,11 +27,11 @@ msgstr ""
 #: ../db/db.columns/main.c:54 ../db/db.createdb/main.c:38
 #: ../db/db.databases/main.c:47 ../db/db.describe/main.c:71
 #: ../db/db.dropdb/main.c:39 ../db/db.execute/main.c:68
-#: ../db/db.select/main.c:74 ../db/db.tables/main.c:45
+#: ../db/db.select/main.c:106 ../db/db.tables/main.c:45
 #: ../display/d.vect.thematic/main.c:294 ../display/d.vect/opt.c:147
 #: ../doc/examples/vector/v.example/main.c:130
-#: ../raster/r.stream.extract/close.c:176 ../vector/v.db.connect/main.c:341
-#: ../vector/v.db.connect/main.c:484 ../vector/v.edit/select.c:505
+#: ../raster/r.stream.extract/close.c:176 ../vector/v.db.connect/main.c:337
+#: ../vector/v.db.connect/main.c:480 ../vector/v.edit/select.c:505
 #: ../vector/v.out.svg/main.c:152 ../vector/v.out.vtk/writeVTK.c:640
 #: ../vector/v.profile/main.c:434 ../vector/v.profile/main.c:600
 #, c-format
@@ -39,7 +39,7 @@ msgid "Unable to start driver <%s>"
 msgstr ""
 
 #: ../db/db.columns/main.c:59 ../db/db.describe/main.c:76
-#: ../db/db.execute/main.c:74 ../db/db.select/main.c:80
+#: ../db/db.execute/main.c:74 ../db/db.select/main.c:112
 #: ../db/db.tables/main.c:50 ../display/d.vect.thematic/main.c:299
 #: ../display/d.vect/opt.c:152
 #, c-format
@@ -48,9 +48,9 @@ msgstr ""
 
 #: ../db/db.columns/main.c:65 ../db/db.describe/main.c:82
 #: ../doc/examples/vector/v.example/main.c:143
-#: ../scripts/db.univar/db.univar.py:129 ../vector/v.db.connect/main.c:354
+#: ../scripts/db.univar/db.univar.py:129 ../vector/v.db.connect/main.c:350
 #: ../vector/v.extract/main.c:233 ../vector/v.in.ascii/main.c:447
-#: ../vector/v.info/print.c:229 ../vector/v.out.ogr/main.c:718
+#: ../vector/v.info/print.c:236 ../vector/v.out.ogr/main.c:718
 #: ../vector/v.out.postgis/table.c:41 ../vector/v.out.svg/main.c:165
 #: ../vector/v.out.vtk/writeVTK.c:651 ../vector/v.patch/main.c:169
 #: ../vector/v.patch/main.c:215 ../vector/v.profile/main.c:447
@@ -62,19 +62,20 @@ msgid "Unable to describe table <%s>"
 msgstr ""
 
 #: ../db/db.columns/main.c:73 ../db/db.describe/main.c:54
-#: ../db/db.describe/main.c:59 ../general/g.list/list.c:89
-#: ../general/g.mapset/main.c:175 ../imagery/i.group/main.c:124
-#: ../raster/r.category/main.c:143 ../raster/r.describe/dumplist.c:48
-#: ../raster/r.distance/report.c:63 ../raster/r.proj/main.c:341
-#: ../raster/r.regression.multi/main.c:203
+#: ../db/db.describe/main.c:59 ../db/db.select/main.c:118
+#: ../db/db.select/main.c:219 ../db/db.select/main.c:272
+#: ../general/g.list/list.c:89 ../general/g.mapset/main.c:175
+#: ../imagery/i.group/main.c:124 ../raster/r.category/main.c:143
+#: ../raster/r.describe/dumplist.c:48 ../raster/r.distance/report.c:63
+#: ../raster/r.proj/main.c:341 ../raster/r.regression.multi/main.c:203
 #: ../raster/r.stats.quantile/main.c:382 ../raster/r.stats.quantile/main.c:439
 #: ../raster/r.univar/stats.c:96 ../raster/r.univar/stats.c:396
 #: ../raster/r.volume/main.c:177 ../raster/r.what.color/main.c:246
 #: ../raster/r.what/main.c:280 ../vector/v.category/main.c:264
 #: ../vector/v.category/main.c:333 ../vector/v.class/main.c:223
 #: ../vector/v.class/main.c:264 ../vector/v.class/main.c:271
-#: ../vector/v.db.connect/main.c:152 ../vector/v.distance/main.c:310
-#: ../vector/v.info/print.c:867 ../vector/v.vect.stats/main.c:284
+#: ../vector/v.db.connect/main.c:148 ../vector/v.distance/main.c:310
+#: ../vector/v.info/print.c:903 ../vector/v.vect.stats/main.c:284
 #: ../vector/v.what.rast/main.c:144 ../vector/v.what/main.c:226
 #: ../vector/v.what/what.c:510 ../vector/v.what/what.c:654
 #: ../vector/v.what/what.c:707 ../vector/v.what/what.c:900
@@ -90,7 +91,7 @@ msgstr ""
 #: ../raster/r.regression.multi/main.c:696
 #: ../raster/r.stats.quantile/main.c:472 ../raster/r.volume/main.c:448
 #: ../raster3d/r3.info/main.c:993 ../vector/v.class/main.c:379
-#: ../vector/v.db.connect/main.c:434 ../vector/v.vect.stats/main.c:863
+#: ../vector/v.db.connect/main.c:430 ../vector/v.vect.stats/main.c:863
 #: ../vector/v.what.rast/main.c:694 ../vector/v.what/main.c:321
 msgid "Failed to serialize JSON to pretty format."
 msgstr ""
@@ -100,7 +101,7 @@ msgstr ""
 #: ../db/db.databases/main.c:94 ../db/db.describe/main.c:185
 #: ../db/db.drivers/main.c:68 ../db/db.dropdb/main.c:67
 #: ../db/db.execute/main.c:134 ../db/db.login/main.c:39
-#: ../db/db.select/main.c:263 ../db/db.tables/main.c:98
+#: ../db/db.select/main.c:465 ../db/db.tables/main.c:98
 #: ../locale/scriptstrings/db.dropcolumn_to_translate.c:2
 #: ../locale/scriptstrings/db.droptable_to_translate.c:2
 #: ../locale/scriptstrings/db.in.ogr_to_translate.c:2
@@ -128,7 +129,7 @@ msgstr ""
 #: ../db/db.copy/main.c:35 ../db/db.createdb/main.c:67
 #: ../db/db.databases/main.c:95 ../db/db.describe/main.c:187
 #: ../db/db.dropdb/main.c:68 ../db/db.execute/main.c:135
-#: ../db/db.select/main.c:264 ../db/db.tables/main.c:99
+#: ../db/db.select/main.c:466 ../db/db.tables/main.c:99
 #: ../locale/scriptstrings/db.dropcolumn_to_translate.c:3
 #: ../locale/scriptstrings/db.droptable_to_translate.c:3
 #: ../locale/scriptstrings/db.in.ogr_to_translate.c:4
@@ -224,7 +225,7 @@ msgstr ""
 #: ../vector/v.in.ogr/main.c:358 ../vector/v.info/parse.c:24
 #: ../vector/v.info/parse.c:29 ../vector/v.info/parse.c:34
 #: ../vector/v.info/parse.c:39 ../vector/v.info/parse.c:44
-#: ../vector/v.info/parse.c:53 ../vector/v.to.db/parse.c:118
+#: ../vector/v.info/parse.c:54 ../vector/v.to.db/parse.c:118
 #: ../vector/v.to.db/parse.c:125 ../vector/v.to.db/parse.c:130
 #: ../vector/v.to.db/parse.c:136 ../vector/v.to.db/parse.c:141
 #: ../vector/v.to.db/parse.c:147 ../vector/v.univar/main.c:152
@@ -299,14 +300,16 @@ msgstr ""
 msgid "plain;Plain text output;shell;shell script style output;json;JSON (JavaScript Object Notation);"
 msgstr ""
 
-#: ../db/db.connect/main.c:144 ../general/g.findfile/main.c:187
-#: ../general/g.list/list.c:122 ../general/g.mapset/main.c:119
-#: ../general/g.mapsets/list.c:13 ../general/g.proj/output.c:320
-#: ../general/g.region/main.c:471 ../general/g.version/main.c:134
-#: ../misc/m.measure/main.c:87 ../raster/r.describe/dumplist.c:38
-#: ../raster/r.distance/report.c:211 ../raster/r.distance/report.c:218
-#: ../raster/r.distance/report.c:225 ../raster/r.info/main.c:147
-#: ../raster/r.proj/main.c:481 ../raster/r.regression.line/main.c:101
+#: ../db/db.connect/main.c:144 ../db/db.select/main.c:207
+#: ../db/db.select/main.c:230 ../db/db.select/main.c:264
+#: ../general/g.findfile/main.c:187 ../general/g.list/list.c:122
+#: ../general/g.mapset/main.c:119 ../general/g.mapsets/list.c:13
+#: ../general/g.proj/output.c:320 ../general/g.region/main.c:471
+#: ../general/g.version/main.c:134 ../misc/m.measure/main.c:87
+#: ../raster/r.describe/dumplist.c:38 ../raster/r.distance/report.c:211
+#: ../raster/r.distance/report.c:218 ../raster/r.distance/report.c:225
+#: ../raster/r.info/main.c:147 ../raster/r.proj/main.c:481
+#: ../raster/r.regression.line/main.c:101
 #: ../raster/r.regression.multi/main.c:197
 #: ../raster/r.regression.multi/main.c:566
 #: ../raster/r.stats.quantile/main.c:430 ../raster/r.stats.quantile/main.c:447
@@ -314,9 +317,9 @@ msgstr ""
 #: ../raster/r.univar/stats.c:439 ../raster/r.volume/main.c:409
 #: ../raster/r.what.color/main.c:52 ../raster3d/r3.info/main.c:153
 #: ../vector/v.category/main.c:942 ../vector/v.class/main.c:257
-#: ../vector/v.class/main.c:348 ../vector/v.db.connect/main.c:306
-#: ../vector/v.db.connect/main.c:399 ../vector/v.distance/main.c:1578
-#: ../vector/v.info/print.c:825 ../vector/v.info/print.c:861
+#: ../vector/v.class/main.c:348 ../vector/v.db.connect/main.c:302
+#: ../vector/v.db.connect/main.c:395 ../vector/v.distance/main.c:1578
+#: ../vector/v.info/print.c:861 ../vector/v.info/print.c:897
 #: ../vector/v.univar/main.c:630 ../vector/v.vect.stats/main.c:800
 #: ../vector/v.what.rast/main.c:628 ../vector/v.what/what.c:202
 #: ../vector/v.what/what.c:273 ../vector/v.what/what.c:441
@@ -340,7 +343,7 @@ msgstr ""
 
 #: ../db/db.connect/main.c:160 ../misc/m.measure/main.c:103
 #: ../raster/r.regression.line/main.c:117
-#: ../raster/r.regression.multi/main.c:216 ../vector/v.db.connect/main.c:182
+#: ../raster/r.regression.multi/main.c:216 ../vector/v.db.connect/main.c:178
 #: ../vector/v.univar/main.c:180
 msgid "The -g flag cannot be used with format=json. Please select only one output format."
 msgstr ""
@@ -382,7 +385,7 @@ msgstr ""
 #: ../db/db.copy/main.c:36 ../db/db.createdb/main.c:68
 #: ../db/db.databases/main.c:96 ../db/db.dropdb/main.c:69
 #: ../db/db.execute/main.c:136 ../db/db.execute/main.c:144
-#: ../db/db.execute/main.c:150 ../db/db.select/main.c:265
+#: ../db/db.execute/main.c:150 ../db/db.select/main.c:467
 #: ../vector/v.db.select/main.c:100
 msgid "SQL"
 msgstr ""
@@ -457,8 +460,8 @@ msgstr ""
 
 #: ../db/db.databases/main.c:79 ../db/db.databases/main.c:90
 #: ../db/db.execute/main.c:154 ../db/db.execute/main.c:159
-#: ../db/db.execute/main.c:164 ../db/db.select/main.c:217
-#: ../db/db.select/main.c:222
+#: ../db/db.execute/main.c:164 ../db/db.select/main.c:403
+#: ../db/db.select/main.c:408
 #: ../locale/scriptstrings/db.droptable_to_translate.c:7
 #: ../locale/scriptstrings/db.droptable_to_translate.c:10
 #: ../locale/scriptstrings/r.in.wms_to_translate.c:18
@@ -490,7 +493,7 @@ msgstr ""
 #: ../raster/r.what.color/main.c:290 ../raster/r.what/main.c:620
 #: ../vector/v.category/main.c:320 ../vector/v.category/main.c:989
 #: ../vector/v.distance/main.c:1799 ../vector/v.info/main.c:106
-#: ../vector/v.info/print.c:292 ../vector/v.info/print.c:908
+#: ../vector/v.info/print.c:306 ../vector/v.info/print.c:946
 #: ../vector/v.to.db/report.c:515 ../vector/v.univar/main.c:821
 msgid "Failed to initialize pretty JSON string."
 msgstr ""
@@ -527,7 +530,7 @@ msgstr ""
 msgid "Removes an existing database."
 msgstr ""
 
-#: ../db/db.execute/main.c:55 ../db/db.select/main.c:62
+#: ../db/db.execute/main.c:55 ../db/db.select/main.c:87
 #, c-format
 msgid "Unable to open file <%s>: %s"
 msgstr ""
@@ -558,7 +561,7 @@ msgstr ""
 msgid "Name of file containing SQL statement(s)"
 msgstr ""
 
-#: ../db/db.execute/main.c:149 ../db/db.select/main.c:206
+#: ../db/db.execute/main.c:149 ../db/db.select/main.c:392
 #: ../general/g.proj/main.c:141 ../general/g.proj/main.c:159
 #: ../locale/scriptstrings/m.proj_to_translate.c:8
 #: ../raster/r.in.ascii/main.c:78 ../raster/r.reclass/main.c:67
@@ -679,15 +682,19 @@ msgstr ""
 msgid "The password was stored in file (%s%cdblogin)"
 msgstr ""
 
-#: ../db/db.select/main.c:104
-msgid "Test failed."
+#: ../db/db.select/main.c:48 ../general/g.mapsets/main.c:55
+#: ../vector/v.db.select/main.c:51
+#, c-format
+msgid "The option %s is not allowed with %s=%s. %s"
 msgstr ""
 
-#: ../db/db.select/main.c:104
-msgid "Test succeeded."
+#: ../db/db.select/main.c:58 ../general/g.mapsets/main.c:45
+#: ../vector/v.db.select/main.c:41
+#, c-format
+msgid "The flag -%c is not allowed with %s=%s. %s"
 msgstr ""
 
-#: ../db/db.select/main.c:140 ../raster/r.object.geometry/main.c:118
+#: ../db/db.select/main.c:96 ../raster/r.object.geometry/main.c:118
 #: ../raster/r.quantile/main.c:346 ../raster/r.regression.line/main.c:92
 #: ../raster/r.regression.multi/main.c:188
 #: ../raster/r.stats.quantile/main.c:375 ../raster/r.stats/main.c:240
@@ -698,38 +705,47 @@ msgstr ""
 msgid "Unable to open file <%s> for writing"
 msgstr ""
 
-#: ../db/db.select/main.c:201 ../db/db.select/main.c:207
-#: ../db/db.select/main.c:211 ../db/db.select/main.c:249
-#: ../db/db.select/main.c:259 ../raster/r.what/main.c:124
+#: ../db/db.select/main.c:164
+msgid "Test failed."
+msgstr ""
+
+#: ../db/db.select/main.c:164
+msgid "Test succeeded."
+msgstr ""
+
+#: ../db/db.select/main.c:387 ../db/db.select/main.c:393
+#: ../db/db.select/main.c:397 ../db/db.select/main.c:450
+#: ../db/db.select/main.c:461 ../raster/r.what/main.c:124
 #: ../raster/r.what/main.c:130 ../vector/v.to.db/parse.c:106
 #: ../vector/v.to.db/parse.c:114
 msgid "Query"
 msgstr ""
 
-#: ../db/db.select/main.c:205
+#: ../db/db.select/main.c:391
 msgid "Name of file containing SQL select statement(s)"
 msgstr ""
 
-#: ../db/db.select/main.c:210
+#: ../db/db.select/main.c:396
 msgid "Name of table to query"
 msgstr ""
 
-#: ../db/db.select/main.c:225 ../db/db.select/main.c:231
-#: ../db/db.select/main.c:234 ../db/db.select/main.c:244
-#: ../db/db.select/main.c:254 ../general/g.gisenv/main.c:93
-#: ../general/g.gisenv/main.c:98 ../vector/v.db.select/main.c:130
-#: ../vector/v.db.select/main.c:134 ../vector/v.db.select/main.c:140
-#: ../vector/v.db.select/main.c:143 ../vector/v.db.select/main.c:161
-#: ../vector/v.db.select/main.c:166 ../vector/v.profile/main.c:186
-#: ../vector/v.profile/main.c:189 ../vector/v.profile/main.c:198
+#: ../db/db.select/main.c:412 ../db/db.select/main.c:419
+#: ../db/db.select/main.c:422 ../db/db.select/main.c:435
+#: ../db/db.select/main.c:445 ../db/db.select/main.c:456
+#: ../general/g.gisenv/main.c:93 ../general/g.gisenv/main.c:98
+#: ../vector/v.db.select/main.c:130 ../vector/v.db.select/main.c:134
+#: ../vector/v.db.select/main.c:140 ../vector/v.db.select/main.c:143
+#: ../vector/v.db.select/main.c:161 ../vector/v.db.select/main.c:166
+#: ../vector/v.profile/main.c:186 ../vector/v.profile/main.c:189
+#: ../vector/v.profile/main.c:198
 msgid "Format"
 msgstr ""
 
-#: ../db/db.select/main.c:229
-msgid "Vertical record separator (requires -v flag)"
+#: ../db/db.select/main.c:416
+msgid "Vertical record separator (requires -v flag [deprecated] or format=vertical)"
 msgstr ""
 
-#: ../db/db.select/main.c:239 ../locale/scriptstrings/i.oif_to_translate.c:5
+#: ../db/db.select/main.c:440 ../locale/scriptstrings/i.oif_to_translate.c:5
 #: ../locale/scriptstrings/r.out.xyz_to_translate.c:7
 #: ../raster/r.quantile/main.c:331 ../raster/r.stats.quantile/main.c:684
 #: ../raster/r.stats/main.c:122 ../raster/r.univar/r.univar_main.c:78
@@ -738,34 +754,62 @@ msgstr ""
 msgid "Name for output file (if omitted or \"-\" output to stdout)"
 msgstr ""
 
-#: ../db/db.select/main.c:243 ../locale/scriptstrings/v.report_to_translate.c:9
+#: ../db/db.select/main.c:444 ../locale/scriptstrings/v.report_to_translate.c:9
 #: ../vector/v.db.select/main.c:160
 msgid "Do not include column names in output"
 msgstr ""
 
-#: ../db/db.select/main.c:248
+#: ../db/db.select/main.c:449
 msgid "Describe query only (don't run it)"
 msgstr ""
 
-#: ../db/db.select/main.c:253
-msgid "Vertical output (instead of horizontal)"
+#: ../db/db.select/main.c:454
+msgid "Vertical output instead of horizontal [deprecated]"
 msgstr ""
 
-#: ../db/db.select/main.c:258
+#: ../db/db.select/main.c:455
+msgid "Use format=vertical instead."
+msgstr ""
+
+#: ../db/db.select/main.c:460
 msgid "Only test query, do not execute"
 msgstr ""
 
-#: ../db/db.select/main.c:266
+#: ../db/db.select/main.c:468
 msgid "Selects data from attribute table."
 msgstr ""
 
-#: ../db/db.select/main.c:267
+#: ../db/db.select/main.c:469
 msgid "Performs SQL query statement(s)."
 msgstr ""
 
-#: ../db/db.select/main.c:303
+#: ../db/db.select/main.c:535
 #, c-format
 msgid "You must provide one of these options: <%s>, <%s>, or <%s>"
+msgstr ""
+
+#: ../db/db.select/main.c:540 ../vector/v.db.select/main.c:201
+msgid "Separator is part of the format"
+msgstr ""
+
+#: ../db/db.select/main.c:542
+msgid "Vertical separator is part of the format"
+msgstr ""
+
+#: ../db/db.select/main.c:544 ../vector/v.db.select/main.c:204
+msgid "Null value is part of the format"
+msgstr ""
+
+#: ../db/db.select/main.c:546 ../vector/v.db.select/main.c:199
+msgid "Column names are always included"
+msgstr ""
+
+#: ../db/db.select/main.c:550
+msgid "Flag 'v' is deprecated and will be removed in a future release. Please use format=vertical instead."
+msgstr ""
+
+#: ../db/db.select/main.c:553
+msgid "Flag 'v' is only allowed with format=vertical."
 msgstr ""
 
 #: ../db/db.tables/main.c:54
@@ -1173,7 +1217,7 @@ msgstr ""
 
 #: ../db/drivers/ogr/execute.c:77 ../scripts/db.univar/db.univar.py:137
 #: ../vector/v.colors.out/make_colors.c:42 ../vector/v.colors/scan_attr.c:34
-#: ../vector/v.db.connect/main.c:491 ../vector/v.distance/main.c:574
+#: ../vector/v.db.connect/main.c:487 ../vector/v.distance/main.c:574
 #: ../vector/v.distance/main.c:616 ../vector/v.in.db/main.c:195
 #: ../vector/v.neighbors/main.c:234 ../vector/v.out.lidar/main.c:114
 #: ../vector/v.out.lidar/main.c:154 ../vector/v.reclass/main.c:145
@@ -1844,7 +1888,7 @@ msgstr ""
 #: ../raster/r.li/r.li.pielou/pielou.c:46 ../raster/r.li/r.li.renyi/renyi.c:47
 #: ../raster/r.li/r.li.richness/richness.c:42
 #: ../raster/r.li/r.li.shannon/shannon.c:46 ../raster/r.li/r.li.shape/main.c:48
-#: ../raster/r.li/r.li.simpson/simpson.c:46 ../raster/r.mapcalc/main.c:74
+#: ../raster/r.li/r.li.simpson/simpson.c:46 ../raster/r.mapcalc/main.c:109
 #: ../raster/r.mask.status/main.c:35 ../raster/r.mfilter/main.c:65
 #: ../raster/r.mode/main.c:53 ../raster/r.neighbors/main.c:181
 #: ../raster/r.null/main.c:58 ../raster/r.object.geometry/main.c:76
@@ -2079,7 +2123,7 @@ msgstr ""
 #: ../vector/v.in.dxf/main.c:62 ../vector/v.in.lidar/main.c:134
 #: ../vector/v.in.ogr/main.c:210 ../vector/v.in.pdal/main.cpp:129
 #: ../vector/v.in.region/main.c:40 ../vector/v.info/main.c:42
-#: ../vector/v.info/print.c:691 ../vector/v.kcv/main.c:53
+#: ../vector/v.info/print.c:727 ../vector/v.kcv/main.c:53
 #: ../vector/v.kernel/main.c:106 ../vector/v.label.sa/main.c:38
 #: ../vector/v.label/main.c:59 ../vector/v.lidar.correction/main.c:70
 #: ../vector/v.lidar.edgedetection/main.c:75
@@ -2176,7 +2220,7 @@ msgstr ""
 #: ../vector/v.clean/test/topocheck.c:66 ../vector/v.clean/test/topocheck.c:86
 #: ../vector/v.cluster/main.c:140 ../vector/v.colors.out/make_colors.c:23
 #: ../vector/v.colors.out/scan_cats.c:19 ../vector/v.colors/main.c:276
-#: ../vector/v.db.connect/main.c:221 ../vector/v.db.select/main.c:268
+#: ../vector/v.db.connect/main.c:217 ../vector/v.db.select/main.c:268
 #: ../vector/v.decimate/main.c:267 ../vector/v.delaunay/main.c:120
 #: ../vector/v.distance/main.c:398 ../vector/v.distance/main.c:421
 #: ../vector/v.drape/main.c:141 ../vector/v.edit/main.c:176
@@ -2662,6 +2706,7 @@ msgid "Percent to brighten intensity channel"
 msgstr ""
 
 #: ../display/d.his/main.c:101
+#: ../locale/scriptstrings/d.shade_to_translate.c:11
 msgid "Respect NULL values while drawing"
 msgstr ""
 
@@ -2848,7 +2893,7 @@ msgstr ""
 #: ../display/d.where/main.c:157 ../general/g.cairocomp/main.c:46
 #: ../imagery/i.group/main.c:169 ../raster/r.buildvrt/main.c:125
 #: ../raster/r.in.mat/main.c:126 ../raster/r.in.xyz/main.c:586
-#: ../raster/r.mapcalc/main.c:51 ../raster/r.series.accumulate/main.c:222
+#: ../raster/r.mapcalc/main.c:52 ../raster/r.series.accumulate/main.c:222
 #: ../raster/r.series/main.c:252 ../raster/r.support/main.c:209
 #: ../raster/r.topmodel/file_io.c:28 ../raster/r.topmodel/file_io.c:136
 #: ../raster/r.topmodel/file_io.c:161 ../raster3d/r3.support/main.c:169
@@ -4440,17 +4485,17 @@ msgstr ""
 #: ../raster3d/r3.flow/main.c:46 ../vector/v.buffer/main.c:427
 #: ../vector/v.class/main.c:160 ../vector/v.colors.out/make_colors.c:36
 #: ../vector/v.colors/read_rgb.c:27 ../vector/v.colors/scan_attr.c:28
-#: ../vector/v.colors/write_rgb.c:24 ../vector/v.db.connect/main.c:349
-#: ../vector/v.db.connect/main.c:533 ../vector/v.db.select/main.c:282
+#: ../vector/v.colors/write_rgb.c:24 ../vector/v.db.connect/main.c:345
+#: ../vector/v.db.connect/main.c:529 ../vector/v.db.select/main.c:282
 #: ../vector/v.distance/main.c:562 ../vector/v.distance/main.c:595
 #: ../vector/v.distance/main.c:646 ../vector/v.distance/main.c:1395
 #: ../vector/v.distance/main.c:1415 ../vector/v.edit/select.c:512
-#: ../vector/v.extract/extract.c:276 ../vector/v.extract/main.c:226
+#: ../vector/v.extract/extract.c:277 ../vector/v.extract/main.c:226
 #: ../vector/v.extract/main.c:324 ../vector/v.extrude/main.c:228
 #: ../vector/v.in.ascii/main.c:359 ../vector/v.in.db/main.c:169
 #: ../vector/v.in.db/main.c:315 ../vector/v.in.dxf/write_vect.c:214
 #: ../vector/v.in.ogr/main.c:1167 ../vector/v.in.ogr/main.c:1216
-#: ../vector/v.info/print.c:221 ../vector/v.kcv/main.c:126
+#: ../vector/v.info/print.c:228 ../vector/v.kcv/main.c:126
 #: ../vector/v.label.sa/labels.c:78 ../vector/v.label/main.c:277
 #: ../vector/v.lrs/v.lrs.create/main.c:298
 #: ../vector/v.lrs/v.lrs.create/main.c:307 ../vector/v.mkgrid/main.c:294
@@ -4685,7 +4730,7 @@ msgid "'layer' must be > 0"
 msgstr ""
 
 #: ../display/d.vect.thematic/main.c:290 ../display/d.vect/opt.c:143
-#: ../vector/v.db.connect/main.c:253
+#: ../vector/v.db.connect/main.c:249
 msgid "Database connection not defined"
 msgstr ""
 
@@ -5275,7 +5320,7 @@ msgstr ""
 #: ../scripts/d.polar/d.polar.py:58 ../scripts/d.rast.leg/d.rast.leg.py:95
 #: ../scripts/d.rast.leg/d.rast.leg.py:99
 #: ../scripts/r.buffer.lowmem/r.buffer.lowmem.py:85
-#: ../scripts/r.fillnulls/r.fillnulls.py:152 ../scripts/r.grow/r.grow.py:120
+#: ../scripts/r.fillnulls/r.fillnulls.py:152 ../scripts/r.grow/r.grow.py:124
 #: ../scripts/r.mask/r.mask.py:151 ../scripts/r.pack/r.pack.py:74
 #: ../scripts/r.reclass.area/r.reclass.area.py:101
 #: ../scripts/r.reclass.area/r.reclass.area.py:222 ../scripts/r.rgb/r.rgb.py:55
@@ -5894,8 +5939,7 @@ msgstr ""
 
 #: ../general/g.list/main.c:122 ../general/g.version/main.c:121
 #: ../imagery/i.group/main.c:88 ../raster/r.info/main.c:112
-#: ../raster/r.proj/main.c:203 ../vector/v.info/parse.c:48
-#: ../vector/v.univar/main.c:149
+#: ../raster/r.proj/main.c:203 ../vector/v.univar/main.c:149
 msgid "plain;Human readable text output;shell;shell script style text output;json;JSON (JavaScript Object Notation);"
 msgstr ""
 
@@ -6075,16 +6119,6 @@ msgstr ""
 
 #: ../general/g.mapsets/list.c:60
 msgid "Accessible mapsets:"
-msgstr ""
-
-#: ../general/g.mapsets/main.c:45 ../vector/v.db.select/main.c:41
-#, c-format
-msgid "The flag -%c is not allowed with %s=%s. %s"
-msgstr ""
-
-#: ../general/g.mapsets/main.c:55 ../vector/v.db.select/main.c:51
-#, c-format
-msgid "The option %s is not allowed with %s=%s. %s"
 msgstr ""
 
 #: ../general/g.mapsets/main.c:89
@@ -14229,7 +14263,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast3d.algebra_to_translate.c:3
 #: ../locale/scriptstrings/t.rast3d.mapcalc_to_translate.c:3
 #: ../locale/scriptstrings/t.vect.algebra_to_translate.c:3
-#: ../raster/r.mapcalc/main.c:75 ../raster/r.mfilter/main.c:66
+#: ../raster/r.mapcalc/main.c:110 ../raster/r.mfilter/main.c:66
 #: ../raster/r.mode/main.c:55 ../raster/r.neighbors/main.c:182
 #: ../raster/r.quantile/main.c:298 ../raster/r.texture/main.c:98
 #: ../raster3d/r3.neighbors/main.c:205 ../vector/v.neighbors/main.c:119
@@ -14290,8 +14324,7 @@ msgid "Random"
 msgstr ""
 
 #: ../locale/scriptstrings/r.mapcalc.simple_to_translate.c:20
-#: ../raster/r.mapcalc/main.c:116 ../raster/r.random/main.c:100
-#: ../vector/v.perturb/main.c:109
+#: ../raster/r.random/main.c:100 ../vector/v.perturb/main.c:109
 msgid "Generate random seed (result is non-deterministic)"
 msgstr ""
 
@@ -18251,7 +18284,7 @@ msgid "Name of input raster files"
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:108 ../raster/r.external/main.c:183
-#: ../raster/r.mapcalc/main.c:139 ../raster/r.series.accumulate/main.c:207
+#: ../raster/r.mapcalc/main.c:177 ../raster/r.series.accumulate/main.c:207
 #: ../raster/r.series.interp/main.c:132 ../raster/r.series.interp/main.c:136
 #: ../raster/r.series.interp/main.c:148 ../raster/r.series.interp/main.c:152
 #: ../vector/v.colors/main.c:222
@@ -21440,8 +21473,8 @@ msgstr ""
 #: ../raster/r.in.gdal/main.c:225 ../raster/r.in.pdal/main.cpp:258
 #: ../raster/r.in.pdal/main.cpp:272 ../raster/r.in.pdal/main.cpp:402
 #: ../vector/v.in.pdal/main.cpp:221 ../vector/v.in.pdal/main.cpp:230
-#: ../vector/v.in.pdal/main.cpp:243 ../vector/v.info/print.c:743
-#: ../vector/v.info/print.c:747
+#: ../vector/v.in.pdal/main.cpp:243 ../vector/v.info/print.c:779
+#: ../vector/v.info/print.c:783
 msgid "Projection"
 msgstr ""
 
@@ -23206,60 +23239,72 @@ msgstr ""
 msgid "Known functions:"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:76
+#: ../raster/r.mapcalc/main.c:111
 msgid "Raster map calculator."
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:83
+#: ../raster/r.mapcalc/main.c:118
 msgid "Expression to evaluate"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:84 ../raster/r.mapcalc/main.c:109
+#: ../raster/r.mapcalc/main.c:119 ../raster/r.mapcalc/main.c:144
 msgid "Expression"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:92
+#: ../raster/r.mapcalc/main.c:127
 msgid "The computational region that should be used."
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:98
+#: ../raster/r.mapcalc/main.c:133
 msgid "current uses the current region of the mapset"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:99
+#: ../raster/r.mapcalc/main.c:134
 msgid "intersect computes the intersection region between all input maps and uses the smallest resolution"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:101
+#: ../raster/r.mapcalc/main.c:136
 msgid "union computes the union extent of all map regions and uses the smallest resolution"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:108
+#: ../raster/r.mapcalc/main.c:143
 msgid "File containing expression(s) to evaluate"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:120
+#: ../raster/r.mapcalc/main.c:151
+msgid "Generate random seed (result is non-deterministic) [deprecated]"
+msgstr ""
+
+#: ../raster/r.mapcalc/main.c:153
+msgid "This flag is deprecated and will be removed in a future release. Seeding is automatic or use parameter seed."
+msgstr ""
+
+#: ../raster/r.mapcalc/main.c:158
 msgid "List input and output maps"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:143
+#: ../raster/r.mapcalc/main.c:181
 #, c-format
 msgid "%s= and -%c are mutually exclusive"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:154
+#: ../raster/r.mapcalc/main.c:192
 msgid "parse error"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:201
+#: ../raster/r.mapcalc/main.c:208
+msgid "Flag 's' is deprecated and will be removed in a future release. Seeding is automatic or use parameter seed."
+msgstr ""
+
+#: ../raster/r.mapcalc/main.c:246
 msgid "r3.mapcalc does not support parallel execution."
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:207
-msgid "Parallel execution is not supported for random seed."
+#: ../raster/r.mapcalc/main.c:252
+msgid "Parallel execution is not supported with rand() function"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:215 ../raster/r.mfilter/main.c:127
+#: ../raster/r.mapcalc/main.c:260 ../raster/r.mfilter/main.c:127
 #: ../raster/r.neighbors/main.c:304 ../raster/r.patch/main.c:108
 #: ../raster/r.resamp.filter/main.c:488 ../raster/r.resamp.interp/main.c:126
 #: ../raster/r.series/main.c:225 ../raster/r.slope.aspect/main.c:303
@@ -23268,7 +23313,7 @@ msgstr ""
 msgid "<%d> is not valid number of nprocs."
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:227
+#: ../raster/r.mapcalc/main.c:272
 msgid "Floating point error(s) occurred in the calculation"
 msgstr ""
 
@@ -33061,7 +33106,7 @@ msgstr ""
 msgid "magnitude: %.1f percent of fullscale"
 msgstr ""
 
-#: ../scripts/d.shade/d.shade.py:59 ../scripts/r.shade/r.shade.py:130
+#: ../scripts/d.shade/d.shade.py:68 ../scripts/r.shade/r.shade.py:130
 #, python-format
 msgid "Module %s failed. Check the above error messages."
 msgstr ""
@@ -33319,366 +33364,367 @@ msgstr ""
 msgid "Unable to process extension:%s"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:257
+#: ../scripts/g.extension/g.extension.py:258
 msgid ""
 "Failed to get Git version.\n"
 "{}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:263
+#: ../scripts/g.extension/g.extension.py:264
 msgid "Failed to get Git version."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:293
+#: ../scripts/g.extension/g.extension.py:294
 msgid "Could not found Git. Please install it."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:302
+#: ../scripts/g.extension/g.extension.py:303
 msgid "Cannot write to working directory {}."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:360
+#: ../scripts/g.extension/g.extension.py:361
 #, python-brace-format
 msgid "Branch <{branch}> not found in repository <{url}>"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:386
-#: ../scripts/g.extension/g.extension.py:2784
+#: ../scripts/g.extension/g.extension.py:387
+#: ../scripts/g.extension/g.extension.py:2851
 #, python-brace-format
 msgid ""
 "Failed to get addons files list from the Git repository <{repo_path}>.\n"
 "{error}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:411
+#: ../scripts/g.extension/g.extension.py:412
 msgid "No addon named <{}> found in the repository."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:515
+#: ../scripts/g.extension/g.extension.py:516
 #, python-brace-format
 msgid ""
 "Failed to get branch from the Git repository <{repo_path}>.\n"
 "{error}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:538
+#: ../scripts/g.extension/g.extension.py:539
 msgid "Cannot retrieve organization and repository from URL: <{}>."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:576
+#: ../scripts/g.extension/g.extension.py:577
 #, python-brace-format
 msgid "Download file from <{url}>, failed. File is not on the server or check your internet connection."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:589
+#: ../scripts/g.extension/g.extension.py:590
 #, python-format
 msgid "'%s' required. Please install '%s' first."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:653
+#: ../scripts/g.extension/g.extension.py:654
 msgid "List of installed extensions (toolboxes):"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:655
+#: ../scripts/g.extension/g.extension.py:656
 msgid "List of installed extensions (modules):"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:659
+#: ../scripts/g.extension/g.extension.py:660
 msgid "No extension (toolbox) installed"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:661
+#: ../scripts/g.extension/g.extension.py:662
 msgid "No extension (module) installed"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:736
+#: ../scripts/g.extension/g.extension.py:737
 msgid "List of available extensions (toolboxes):"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:751
+#: ../scripts/g.extension/g.extension.py:752
 msgid "List of available extensions (modules):"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:777
-#: ../scripts/g.extension/g.extension.py:807
+#: ../scripts/g.extension/g.extension.py:778
+#: ../scripts/g.extension/g.extension.py:808
 msgid "Unable to fetch addons metadata file"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:882
+#: ../scripts/g.extension/g.extension.py:883
 #, python-brace-format
 msgid "Unable to parse '{url}'. Trying to scan Git repository (may take some time)..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:930
+#: ../scripts/g.extension/g.extension.py:931
 msgid "Fetching list of extensions from GRASS-Addons SVN repository (be patient)..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:937
+#: ../scripts/g.extension/g.extension.py:938
 msgid "Flag 'c' ignored, addons metadata file not available"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:939
+#: ../scripts/g.extension/g.extension.py:940
 msgid "Flag 'g' ignored, addons metadata file not available"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:944
-#: ../scripts/g.extension/g.extension.py:979
+#: ../scripts/g.extension/g.extension.py:945
+#: ../scripts/g.extension/g.extension.py:980
 #, python-format
 msgid "Checking for '%s' modules..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:952
-#: ../scripts/g.extension/g.extension.py:986
+#: ../scripts/g.extension/g.extension.py:953
+#: ../scripts/g.extension/g.extension.py:987
 #, python-format
 msgid "Unable to fetch '%s'"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1154
+#: ../scripts/g.extension/g.extension.py:1155
 msgid "$GISBASE not defined"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1158
+#: ../scripts/g.extension/g.extension.py:1159
 #, python-format
 msgid "Extension <%s> already installed. Re-installing..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1169
+#: ../scripts/g.extension/g.extension.py:1170
 #, python-format
 msgid "Installing toolbox <%s>..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1179
+#: ../scripts/g.extension/g.extension.py:1180
 msgid "Nothing to install"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1212
+#: ../scripts/g.extension/g.extension.py:1213
 msgid "Installation failed, sorry. Please check above error messages."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1215
+#: ../scripts/g.extension/g.extension.py:1216
 msgid "Updating extensions metadata file..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1219
+#: ../scripts/g.extension/g.extension.py:1220
 msgid "Updating extension modules metadata file..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1226
+#: ../scripts/g.extension/g.extension.py:1227
 #, python-format
 msgid "Installation of <%s> successfully finished"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1232
+#: ../scripts/g.extension/g.extension.py:1233
 msgid "This add-on module will not function until you set the GRASS_ADDON_BASE environment variable (see \"g.manual variables\")"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1267
+#: ../scripts/g.extension/g.extension.py:1268
 msgid "Unable to read addons metadata file from the remote server"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1277
+#: ../scripts/g.extension/g.extension.py:1278
 msgid "No addons metadata available"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1280
+#: ../scripts/g.extension/g.extension.py:1281
 #, python-format
 msgid "No addons metadata available for <%s>"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1337
+#: ../scripts/g.extension/g.extension.py:1338
 #, python-brace-format
 msgid "Unable to read addons metadata file from the remote server: {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1343
+#: ../scripts/g.extension/g.extension.py:1344
 #, python-format, python-brace-format
 msgid "Unable to parse '%s': {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1526
+#: ../scripts/g.extension/g.extension.py:1527
 #, python-brace-format
 msgid "No metadata available for module '{name}': {error}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1595
+#: ../scripts/g.extension/g.extension.py:1596
 msgid "Downloading precompiled GRASS Addons <{}>..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1688
+#: ../scripts/g.extension/g.extension.py:1689
 msgid "svn not found but needed to fetch AddOns from an SVN repository"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1695
-#: ../scripts/g.extension/g.extension.py:1729
+#: ../scripts/g.extension/g.extension.py:1696
+#: ../scripts/g.extension/g.extension.py:1730
 #, python-format
 msgid "GRASS Addons <%s> not found"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1818
+#: ../scripts/g.extension/g.extension.py:1819
 #, python-brace-format
 msgid "ZIP file is unreadable: {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1848
+#: ../scripts/g.extension/g.extension.py:1849
 #: ../scripts/r.unpack/r.unpack.py:119 ../scripts/v.unpack/v.unpack.py:131
 msgid "Extracting may be unsafe; consider updating Python"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1854
+#: ../scripts/g.extension/g.extension.py:1855
 #, python-brace-format
 msgid "Archive file is unreadable: {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1871
+#: ../scripts/g.extension/g.extension.py:1872
 #, python-brace-format
 msgid "Type of source identified as '{source}'."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1874
-#: ../scripts/g.extension/g.extension.py:1883
-#: ../scripts/g.extension/g.extension.py:1890
+#: ../scripts/g.extension/g.extension.py:1875
+#: ../scripts/g.extension/g.extension.py:1884
+#: ../scripts/g.extension/g.extension.py:1891
 #, python-brace-format
 msgid "Fetching <{name}> from <{url}> (be patient)..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1905
+#: ../scripts/g.extension/g.extension.py:1906
 #, python-brace-format
 msgid "Expected default branch not found. Trying again from <{url}>..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1913
+#: ../scripts/g.extension/g.extension.py:1914
 #, python-brace-format
 msgid "Extension <{name}> not found. Please check 'url' and 'branch' options"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1918
+#: ../scripts/g.extension/g.extension.py:1919
 msgid "Extension <{}> not found"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1946
+#: ../scripts/g.extension/g.extension.py:1947
 #, python-brace-format
 msgid "Unknown extension (addon) source type '{0}'. Please report this to the grass-user mailing list."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1974
+#: ../scripts/g.extension/g.extension.py:1976
 msgid "Path to the source code:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1994
+#: ../scripts/g.extension/g.extension.py:1998
 msgid "Module name not found. Check module Makefile syntax (PGM variable)."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2069
+#: ../scripts/g.extension/g.extension.py:2133
 msgid "To compile run:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2071
+#: ../scripts/g.extension/g.extension.py:2135
 msgid "To install run:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2079
+#: ../scripts/g.extension/g.extension.py:2143
 msgid "Compiling..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2081
+#: ../scripts/g.extension/g.extension.py:2145
 msgid "Please install GRASS development package"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2084
+#: ../scripts/g.extension/g.extension.py:2148
+#: ../scripts/g.extension/g.extension.py:2151
 msgid "Compilation failed, sorry. Please check above error messages."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2098
+#: ../scripts/g.extension/g.extension.py:2165
 msgid "Installing..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2189
+#: ../scripts/g.extension/g.extension.py:2256
 msgid "List of removed files:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2191
+#: ../scripts/g.extension/g.extension.py:2258
 msgid "Files to be removed:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2197
+#: ../scripts/g.extension/g.extension.py:2264
 msgid "Updating addons metadata file..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2201
+#: ../scripts/g.extension/g.extension.py:2268
 #, python-format
 msgid "Extension <%s> successfully uninstalled."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2204
+#: ../scripts/g.extension/g.extension.py:2271
 #, python-format
 msgid "Toolbox <%s> not removed. Re-run '%s' with '-f' flag to force removal"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2209
+#: ../scripts/g.extension/g.extension.py:2276
 #, python-format
 msgid "Extension <%s> not removed. Re-run '%s' with '-f' flag to force removal"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2258
+#: ../scripts/g.extension/g.extension.py:2325
 #, python-format
 msgid "Extension <%s> not found"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2362
+#: ../scripts/g.extension/g.extension.py:2429
 #, python-brace-format
 msgid "Unable to create '{filename}': {error}. Is the GRASS documentation package installed? Installation continues, but documentation may not look right."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2381
+#: ../scripts/g.extension/g.extension.py:2448
 #, python-format
 msgid "Unable to create '%s': %s"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2409
+#: ../scripts/g.extension/g.extension.py:2476
 #, python-format
 msgid "Manual page for <%s> updated"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2416
+#: ../scripts/g.extension/g.extension.py:2483
 #, python-format
 msgid "Unable to read manual page: %s"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2461
+#: ../scripts/g.extension/g.extension.py:2528
 #, python-format
 msgid "Unable for write manual page: %s"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2481
+#: ../scripts/g.extension/g.extension.py:2548
 msgid "GRASS_ADDON_BASE is not defined, installing to {}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2488
+#: ../scripts/g.extension/g.extension.py:2555
 #, python-brace-format
 msgid "You don't have permission to install extension to <{0}>. Try to run {1} with administrator rights (su or sudo)."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2580
+#: ../scripts/g.extension/g.extension.py:2647
 #, python-brace-format
 msgid "Identified {0} as known hosting service"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2585
+#: ../scripts/g.extension/g.extension.py:2652
 #, python-brace-format
 msgid "Not using {service} as known hosting service because the URL ends with '{suffix}'"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2602
+#: ../scripts/g.extension/g.extension.py:2669
 #, python-brace-format
 msgid "Will use the following URL for download: {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2633
+#: ../scripts/g.extension/g.extension.py:2700
 #, python-brace-format
 msgid "Cannot open URL <{url}>: {error}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2839
+#: ../scripts/g.extension/g.extension.py:2906
 msgid "Flag '{}' is relevant only to 'operation=add'. Ignoring this flag."
 msgstr ""
 
@@ -34150,15 +34196,15 @@ msgstr ""
 msgid "Following holes where not filled. Temporary maps with are left in place to allow examination of unfilled holes"
 msgstr ""
 
-#: ../scripts/r.grow/r.grow.py:127
+#: ../scripts/r.grow/r.grow.py:131
 msgid "Output can be written only to the current mapset"
 msgstr ""
 
-#: ../scripts/r.grow/r.grow.py:142
+#: ../scripts/r.grow/r.grow.py:146
 msgid "Growing failed. Removing temporary maps."
 msgstr ""
 
-#: ../scripts/r.grow/r.grow.py:166
+#: ../scripts/r.grow/r.grow.py:170
 msgid "Shrinking failed. Removing temporary maps."
 msgstr ""
 
@@ -35676,16 +35722,11 @@ msgstr ""
 msgid "Error removing centroids"
 msgstr ""
 
-#: ../scripts/v.to.lines/v.to.lines.py:189
-msgid "Error removing table from layer 1"
+#: ../scripts/v.to.lines/v.to.lines.py:186
+msgid "Error removing table from layer 2"
 msgstr ""
 
-#: ../scripts/v.to.lines/v.to.lines.py:192 ../vector/v.select/copy_tabs.c:52
-#, c-format, python-format
-msgid "No table for layer %d"
-msgstr ""
-
-#: ../scripts/v.to.lines/v.to.lines.py:207
+#: ../scripts/v.to.lines/v.to.lines.py:201
 msgid "Error adding categories"
 msgstr ""
 
@@ -36254,7 +36295,7 @@ msgstr ""
 msgid "Database connection and attribute tables for concerned layers are not changed"
 msgstr ""
 
-#: ../vector/v.category/main.c:243 ../vector/v.db.connect/main.c:179
+#: ../vector/v.category/main.c:243 ../vector/v.db.connect/main.c:175
 msgid "Flag 'g' is deprecated and will be removed in a future release. Please use format=csv instead."
 msgstr ""
 
@@ -36864,7 +36905,7 @@ msgstr ""
 msgid "Layer <%s> not found"
 msgstr ""
 
-#: ../vector/v.colors.out/make_colors.c:31 ../vector/v.db.connect/main.c:337
+#: ../vector/v.colors.out/make_colors.c:31 ../vector/v.db.connect/main.c:333
 #: ../vector/v.db.select/main.c:276 ../vector/v.distance/main.c:557
 #: ../vector/v.distance/main.c:639 ../vector/v.extract/main.c:217
 #: ../vector/v.extract/main.c:315 ../vector/v.random/main.c:268
@@ -37098,58 +37139,58 @@ msgstr ""
 msgid "Delete connection for certain layer (not the table)"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:174
+#: ../vector/v.db.connect/main.c:170
 msgid "The -p or -c flag is required when using the format option."
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:216
+#: ../vector/v.db.connect/main.c:212
 msgid "Please choose only one print style"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:226 ../vector/v.kcv/main.c:170
+#: ../vector/v.db.connect/main.c:222 ../vector/v.kcv/main.c:170
 msgid "Unable to modify vector map stored in other mapset"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:234
+#: ../vector/v.db.connect/main.c:230
 #, c-format
 msgid "Map <%s> is not connected to a database"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:242
+#: ../vector/v.db.connect/main.c:238
 #, c-format
 msgid "Vector map <%s> is connected by:\n"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:287
+#: ../vector/v.db.connect/main.c:283
 #, c-format
 msgid "layer <%d/%s> table <%s> in database <%s> through driver <%s> with key <%s>\n"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:295
+#: ../vector/v.db.connect/main.c:291
 #, c-format
 msgid "layer <%d> table <%s> in database <%s> through driver <%s> with key <%s>\n"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:469
+#: ../vector/v.db.connect/main.c:465
 #, c-format
 msgid "Use --overwrite to overwrite existing link for layer <%d>"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:478 ../vector/v.db.connect/main.c:517
+#: ../vector/v.db.connect/main.c:474 ../vector/v.db.connect/main.c:513
 #, c-format
 msgid "Table <%s> does not exist in database <%s>"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:497 ../vector/v.in.db/main.c:198
+#: ../vector/v.db.connect/main.c:493 ../vector/v.in.db/main.c:198
 msgid "Data type of key column must be integer"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:504 ../vector/v.db.connect/main.c:524
+#: ../vector/v.db.connect/main.c:500 ../vector/v.db.connect/main.c:520
 #, c-format
 msgid "The table <%s> is now part of vector map <%s> and may be deleted or overwritten by GRASS modules"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:539 ../vector/v.kcv/main.c:176
+#: ../vector/v.db.connect/main.c:535 ../vector/v.kcv/main.c:176
 #: ../vector/v.net.alloc/main.c:328 ../vector/v.net.allpairs/main.c:183
 #: ../vector/v.net.centrality/main.c:268 ../vector/v.net.components/main.c:193
 #: ../vector/v.net.distance/main.c:297 ../vector/v.net.flow/main.c:183
@@ -37158,16 +37199,16 @@ msgstr ""
 msgid "Cannot create index"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:543 ../vector/v.kcv/main.c:180
+#: ../vector/v.db.connect/main.c:539 ../vector/v.kcv/main.c:180
 #, c-format
 msgid "Cannot grant privileges on table %s"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:547 ../vector/v.kcv/main.c:182
+#: ../vector/v.db.connect/main.c:543 ../vector/v.kcv/main.c:182
 msgid "Select privileges were granted on the table"
 msgstr ""
 
-#: ../vector/v.db.connect/main.c:554
+#: ../vector/v.db.connect/main.c:550
 msgid "For defining a new connection you have to specify these parameters: driver, database, table [, key [, layer]]"
 msgstr ""
 
@@ -37197,18 +37238,6 @@ msgstr ""
 
 #: ../vector/v.db.select/main.c:196
 msgid "Escaping is based on the format"
-msgstr ""
-
-#: ../vector/v.db.select/main.c:199
-msgid "Column names are always included"
-msgstr ""
-
-#: ../vector/v.db.select/main.c:201
-msgid "Separator is part of the format"
-msgstr ""
-
-#: ../vector/v.db.select/main.c:204
-msgid "Null value is part of the format"
 msgstr ""
 
 #: ../vector/v.db.select/main.c:209
@@ -38432,27 +38461,27 @@ msgstr ""
 msgid "No projection information available for layer <%s>"
 msgstr ""
 
-#: ../vector/v.extract/extract.c:202
+#: ../vector/v.extract/extract.c:203
 #, c-format
 msgid "No category found for area %d. Skipping."
 msgstr ""
 
-#: ../vector/v.extract/extract.c:206
+#: ../vector/v.extract/extract.c:207
 #, c-format
 msgid "More categories (%d) found for area %d. Using first found category %d"
 msgstr ""
 
-#: ../vector/v.extract/extract.c:267 ../vector/v.out.lidar/main.c:74
+#: ../vector/v.extract/extract.c:268 ../vector/v.out.lidar/main.c:74
 #, c-format
 msgid "Database connection not defined for layer <%d>"
 msgstr ""
 
-#: ../vector/v.extract/extract.c:271 ../vector/v.extract/main.c:319
+#: ../vector/v.extract/extract.c:272 ../vector/v.extract/main.c:319
 #, c-format
 msgid "Loading categories from table <%s>..."
 msgstr ""
 
-#: ../vector/v.extract/extract.c:289
+#: ../vector/v.extract/extract.c:290
 msgid "Topology level required for extracting areas for OGR layers. Areas will be not processed."
 msgstr ""
 
@@ -40293,189 +40322,201 @@ msgstr ""
 msgid "Print only topology info"
 msgstr ""
 
+#: ../vector/v.info/parse.c:48
+msgid "plain;Human readable text output;shell;shell script style text output;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values);"
+msgstr ""
+
+#: ../vector/v.info/parse.c:84
+msgid "format=csv is only valid with -c flag."
+msgstr ""
+
 #: ../vector/v.info/print.c:32 ../vector/v.info/print.c:34
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: ../vector/v.info/print.c:194
+#: ../vector/v.info/print.c:198
 #, c-format
 msgid "Database connection for map <%s> is not defined in DB file"
 msgstr ""
 
-#: ../vector/v.info/print.c:200
+#: ../vector/v.info/print.c:204
 #, c-format
 msgid "Column names and types for database connection of layer <%s>:\n"
 msgstr ""
 
-#: ../vector/v.info/print.c:208
+#: ../vector/v.info/print.c:215
 #, c-format
 msgid "Database connection not defined for layer <%s> of <%s>"
 msgstr ""
 
-#: ../vector/v.info/print.c:214
+#: ../vector/v.info/print.c:221
 #, c-format
 msgid "Unable to open driver <%s>"
 msgstr ""
 
-#: ../vector/v.info/print.c:590
+#: ../vector/v.info/print.c:252
+msgid "format=shell is not valid with -c flag."
+msgstr ""
+
+#: ../vector/v.info/print.c:626
 msgid "Name:"
 msgstr ""
 
-#: ../vector/v.info/print.c:592
+#: ../vector/v.info/print.c:628
 msgid "Mapset:"
 msgstr ""
 
-#: ../vector/v.info/print.c:595
+#: ../vector/v.info/print.c:631
 msgid "Project:"
 msgstr ""
 
-#: ../vector/v.info/print.c:597
+#: ../vector/v.info/print.c:633
 msgid "Database:"
 msgstr ""
 
-#: ../vector/v.info/print.c:600
+#: ../vector/v.info/print.c:636
 msgid "Title:"
 msgstr ""
 
-#: ../vector/v.info/print.c:602
+#: ../vector/v.info/print.c:638
 msgid "Map scale:"
 msgstr ""
 
-#: ../vector/v.info/print.c:605
+#: ../vector/v.info/print.c:641
 msgid "Name of creator:"
 msgstr ""
 
-#: ../vector/v.info/print.c:607
+#: ../vector/v.info/print.c:643
 msgid "Organization:"
 msgstr ""
 
-#: ../vector/v.info/print.c:609
+#: ../vector/v.info/print.c:645
 msgid "Source date:"
 msgstr ""
 
-#: ../vector/v.info/print.c:615
+#: ../vector/v.info/print.c:651
 msgid "Timestamp (first layer): "
 msgstr ""
 
-#: ../vector/v.info/print.c:619
+#: ../vector/v.info/print.c:655
 msgid "Timestamp (first layer): none"
 msgstr ""
 
-#: ../vector/v.info/print.c:626 ../vector/v.info/print.c:648
-#: ../vector/v.info/print.c:685
+#: ../vector/v.info/print.c:662 ../vector/v.info/print.c:684
+#: ../vector/v.info/print.c:721
 msgid "Map format:"
 msgstr ""
 
-#: ../vector/v.info/print.c:631
+#: ../vector/v.info/print.c:667
 msgid "OGR layer:"
 msgstr ""
 
-#: ../vector/v.info/print.c:633
+#: ../vector/v.info/print.c:669
 msgid "OGR datasource:"
 msgstr ""
 
-#: ../vector/v.info/print.c:636 ../vector/v.info/print.c:663
+#: ../vector/v.info/print.c:672 ../vector/v.info/print.c:699
 msgid "Feature type:"
 msgstr ""
 
-#: ../vector/v.info/print.c:653
+#: ../vector/v.info/print.c:689
 msgid "DB table:"
 msgstr ""
 
-#: ../vector/v.info/print.c:655
+#: ../vector/v.info/print.c:691
 msgid "DB name:"
 msgstr ""
 
-#: ../vector/v.info/print.c:659
+#: ../vector/v.info/print.c:695
 msgid "Geometry column:"
 msgstr ""
 
-#: ../vector/v.info/print.c:669 ../vector/v.info/print.c:677
+#: ../vector/v.info/print.c:705 ../vector/v.info/print.c:713
 msgid "Topology:"
 msgstr ""
 
-#: ../vector/v.info/print.c:670
+#: ../vector/v.info/print.c:706
 msgid "schema:"
 msgstr ""
 
-#: ../vector/v.info/print.c:674
+#: ../vector/v.info/print.c:710
 msgid "Topology column:"
 msgstr ""
 
-#: ../vector/v.info/print.c:691
+#: ../vector/v.info/print.c:727
 msgid "Type of map"
 msgstr ""
 
-#: ../vector/v.info/print.c:692
+#: ../vector/v.info/print.c:728
 msgid "level"
 msgstr ""
 
-#: ../vector/v.info/print.c:697
+#: ../vector/v.info/print.c:733
 msgid "Number of points:"
 msgstr ""
 
-#: ../vector/v.info/print.c:699
+#: ../vector/v.info/print.c:735
 msgid "Number of centroids:"
 msgstr ""
 
-#: ../vector/v.info/print.c:702
+#: ../vector/v.info/print.c:738
 msgid "Number of lines:"
 msgstr ""
 
-#: ../vector/v.info/print.c:704
+#: ../vector/v.info/print.c:740
 msgid "Number of boundaries:"
 msgstr ""
 
-#: ../vector/v.info/print.c:707
+#: ../vector/v.info/print.c:743
 msgid "Number of areas:"
 msgstr ""
 
-#: ../vector/v.info/print.c:708
+#: ../vector/v.info/print.c:744
 msgid "Number of islands:"
 msgstr ""
 
-#: ../vector/v.info/print.c:713
+#: ../vector/v.info/print.c:749
 msgid "Number of faces:"
 msgstr ""
 
-#: ../vector/v.info/print.c:714
+#: ../vector/v.info/print.c:750
 msgid "Number of kernels:"
 msgstr ""
 
-#: ../vector/v.info/print.c:718
+#: ../vector/v.info/print.c:754
 msgid "Number of volumes:"
 msgstr ""
 
-#: ../vector/v.info/print.c:719
+#: ../vector/v.info/print.c:755
 msgid "Number of holes:"
 msgstr ""
 
-#: ../vector/v.info/print.c:724
+#: ../vector/v.info/print.c:760
 msgid "Map is 3D:"
 msgstr ""
 
-#: ../vector/v.info/print.c:725
+#: ../vector/v.info/print.c:761
 msgid "No"
 msgstr ""
 
-#: ../vector/v.info/print.c:725
+#: ../vector/v.info/print.c:761
 msgid "Yes"
 msgstr ""
 
-#: ../vector/v.info/print.c:727
+#: ../vector/v.info/print.c:763
 msgid "Number of dblinks:"
 msgstr ""
 
-#: ../vector/v.info/print.c:744
+#: ../vector/v.info/print.c:780
 msgid "zone"
 msgstr ""
 
-#: ../vector/v.info/print.c:776
+#: ../vector/v.info/print.c:812
 msgid "Digitization threshold"
 msgstr ""
 
-#: ../vector/v.info/print.c:778
+#: ../vector/v.info/print.c:814
 msgid "Comment"
 msgstr ""
 
@@ -45245,6 +45286,11 @@ msgstr ""
 
 #: ../vector/v.select/args.c:105
 msgid "Do not skip features without category"
+msgstr ""
+
+#: ../vector/v.select/copy_tabs.c:52
+#, c-format
+msgid "No table for layer %d"
 msgstr ""
 
 #: ../vector/v.select/copy_tabs.c:69

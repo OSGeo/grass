@@ -237,11 +237,11 @@ int com_line_Gwater(INPUT *input, OUTPUT *output)
     if (input->slow)
         com_line_add(&(input->com_line_seg), " ba=", input->haf_name, NULL);
 
-        /*
-           This section queries the user about the armsed file input. If
-           you want to make this an option,  the code below "COMMENT2" needs to
-           be modified.
-         */
+    /*
+       This section queries the user about the armsed file input. If
+       you want to make this an option,  the code below "COMMENT2" needs to
+       be modified.
+     */
 
 #ifdef ARMSED
     G_message(_("\n%s must create a file of watershed basin relationships"),
