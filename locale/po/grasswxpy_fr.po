@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-13 22:01+0000\n"
-"PO-Revision-Date: 2025-12-18 01:06+0000\n"
+"POT-Creation-Date: 2026-01-03 15:41+0000\n"
+"PO-Revision-Date: 2025-12-26 20:58+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/fr/>\n"
 "Language: fr\n"
@@ -262,8 +262,8 @@ msgstr "Choisir le fichier d'espace de travail pour l'import des paramètres de 
 #: ../gui/wxpython/gui_core/gselect.py:1582
 #: ../gui/wxpython/gui_core/gselect.py:1635
 #: ../gui/wxpython/gui_core/gselect.py:1670
-#: ../gui/wxpython/location_wizard/wizard.py:1446
-#: ../gui/wxpython/location_wizard/wizard.py:1801
+#: ../gui/wxpython/location_wizard/wizard.py:1451
+#: ../gui/wxpython/location_wizard/wizard.py:1806
 #: ../gui/wxpython/modules/import_export.py:862
 #: ../gui/wxpython/nviz/tools.py:675 ../gui/wxpython/psmap/dialogs.py:2749
 #: ../gui/wxpython/psmap/dialogs.py:3055 ../gui/wxpython/psmap/dialogs.py:5796
@@ -558,7 +558,7 @@ msgstr "Le fichier d'export est manquant."
 #: ../gui/wxpython/animation/dialogs.py:1569
 #, python-brace-format
 msgid "Exported animation file <{file}> exists. Do you want to overwrite it?"
-msgstr ""
+msgstr "Le fichier d'animation à exporter <{file}> existe. Voulez-vous l'écraser ?"
 
 #: ../gui/wxpython/animation/dialogs.py:1574
 #: ../gui/wxpython/datacatalog/tree.py:161 ../gui/wxpython/gcp/manager.py:1737
@@ -857,9 +857,9 @@ msgstr "ALERTE : niveau de debug wx non supporté (doit être >=0 et <=5). {0}\n
 #: ../gui/wxpython/location_wizard/dialogs.py:102
 #: ../gui/wxpython/location_wizard/dialogs.py:122
 #: ../gui/wxpython/location_wizard/dialogs.py:533
-#: ../gui/wxpython/location_wizard/wizard.py:735
-#: ../gui/wxpython/location_wizard/wizard.py:912
-#: ../gui/wxpython/location_wizard/wizard.py:2109
+#: ../gui/wxpython/location_wizard/wizard.py:740
+#: ../gui/wxpython/location_wizard/wizard.py:917
+#: ../gui/wxpython/location_wizard/wizard.py:2114
 #: ../gui/wxpython/psmap/dialogs.py:5598
 #: ../gui/wxpython/startup/guiutils.py:255
 #: ../gui/wxpython/startup/guiutils.py:308
@@ -1099,7 +1099,7 @@ msgstr ""
 
 #: ../gui/wxpython/core/settings.py:809
 msgid "Expert (tool names only)"
-msgstr ""
+msgstr "Expert (noms d'outils uniquement)"
 
 #: ../gui/wxpython/core/settings.py:815
 msgid "Basic top"
@@ -3682,13 +3682,13 @@ msgstr "Supprimer tout"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:983
 #: ../gui/wxpython/gui_core/gselect.py:2298
-#: ../gui/wxpython/location_wizard/wizard.py:981
+#: ../gui/wxpython/location_wizard/wizard.py:986
 msgid "No"
 msgstr "Non"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:983
 #: ../gui/wxpython/gui_core/gselect.py:2298
-#: ../gui/wxpython/location_wizard/wizard.py:981
+#: ../gui/wxpython/location_wizard/wizard.py:986
 msgid "Yes"
 msgstr "Oui"
 
@@ -3999,12 +3999,12 @@ msgstr "Valeur par défaut"
 
 #: ../gui/wxpython/gmodeler/panels.py:1351
 #: ../gui/wxpython/gmodeler/panels.py:1419
-#: ../gui/wxpython/location_wizard/wizard.py:249
-#: ../gui/wxpython/location_wizard/wizard.py:530
-#: ../gui/wxpython/location_wizard/wizard.py:1070
-#: ../gui/wxpython/location_wizard/wizard.py:1271
-#: ../gui/wxpython/location_wizard/wizard.py:1607
-#: ../gui/wxpython/location_wizard/wizard.py:1808
+#: ../gui/wxpython/location_wizard/wizard.py:253
+#: ../gui/wxpython/location_wizard/wizard.py:535
+#: ../gui/wxpython/location_wizard/wizard.py:1075
+#: ../gui/wxpython/location_wizard/wizard.py:1276
+#: ../gui/wxpython/location_wizard/wizard.py:1612
+#: ../gui/wxpython/location_wizard/wizard.py:1813
 msgid "Description"
 msgstr "Description"
 
@@ -4012,7 +4012,7 @@ msgstr "Description"
 #: ../gui/wxpython/gmodeler/panels.py:1401
 #: ../gui/wxpython/gui_core/ghelp.py:439 ../gui/wxpython/gui_core/ghelp.py:442
 #: ../gui/wxpython/gui_core/ghelp.py:514
-#: ../gui/wxpython/location_wizard/wizard.py:227
+#: ../gui/wxpython/location_wizard/wizard.py:231
 msgid "Name"
 msgstr "Nom"
 
@@ -4292,7 +4292,7 @@ msgid "Close dialog and ignore changes"
 msgstr "Fermer la boîte de dialogue et ignorer les changements"
 
 #: ../gui/wxpython/gmodeler/preferences.py:740
-#: ../gui/wxpython/location_wizard/wizard.py:2240
+#: ../gui/wxpython/location_wizard/wizard.py:2245
 msgid "Description:"
 msgstr "Description :"
 
@@ -4746,7 +4746,7 @@ msgid "Parameterized in model"
 msgstr "Paramètré dans le modèle"
 
 #: ../gui/wxpython/gui_core/forms.py:1146
-#: ../gui/wxpython/location_wizard/wizard.py:214
+#: ../gui/wxpython/location_wizard/wizard.py:218
 msgid "This option is required"
 msgstr "Cette option est requise"
 
@@ -5722,7 +5722,7 @@ msgid "Precision:"
 msgstr "Précision :"
 
 #: ../gui/wxpython/gui_core/preferences.py:2035
-#: ../gui/wxpython/location_wizard/wizard.py:1750
+#: ../gui/wxpython/location_wizard/wizard.py:1755
 #, python-brace-format
 msgid "Unable to read EPGS codes: {0}"
 msgstr "Impossible de lire les codes EPSG : {0}"
@@ -6161,7 +6161,7 @@ msgstr "Le nom <%(name)s> n'est pas un nom valide pour une carte GRASS. Merci de
 
 #: ../gui/wxpython/gui_core/widgets.py:889
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:1186
-#: ../gui/wxpython/location_wizard/wizard.py:300
+#: ../gui/wxpython/location_wizard/wizard.py:304
 #: ../gui/wxpython/modules/import_export.py:268
 msgid "Invalid name"
 msgstr "Nom invalide"
@@ -8528,7 +8528,7 @@ msgid "Select from list of datum transformations"
 msgstr "Sélectionner parmi une liste de datums de transformation"
 
 #: ../gui/wxpython/location_wizard/wizard.py:183
-#: ../gui/wxpython/location_wizard/wizard.py:2432
+#: ../gui/wxpython/location_wizard/wizard.py:2437
 msgid "Define new GRASS project"
 msgstr "Définir un nouveau projet GRASS"
 
@@ -8536,234 +8536,234 @@ msgstr "Définir un nouveau projet GRASS"
 msgid "Change"
 msgstr ""
 
-#: ../gui/wxpython/location_wizard/wizard.py:217
+#: ../gui/wxpython/location_wizard/wizard.py:221
 msgid "(optional)"
 msgstr "(optionnel)"
 
-#: ../gui/wxpython/location_wizard/wizard.py:228
+#: ../gui/wxpython/location_wizard/wizard.py:232
 msgid "Name of project directory in GIS Data Directory"
 msgstr "Nom du répertoire du projet dans le dossier GIS Data"
 
-#: ../gui/wxpython/location_wizard/wizard.py:250
+#: ../gui/wxpython/location_wizard/wizard.py:254
 msgid "Description of project directory in GIS Data Directory"
 msgstr "Description du répertoire du projet dans le dossier de données GIS"
 
-#: ../gui/wxpython/location_wizard/wizard.py:270
+#: ../gui/wxpython/location_wizard/wizard.py:274
 msgid "Project will be created in GRASS database:"
 msgstr "Le projet sera créé dans la base de données GRASS :"
 
-#: ../gui/wxpython/location_wizard/wizard.py:296
+#: ../gui/wxpython/location_wizard/wizard.py:300
 msgid "Name '{}' is not a valid name for project. Please use only ASCII characters excluding characters {} and space."
 msgstr "Le nom <{}> n'est pas un nom valide pour un projet. Merci de n'utiliser que des caractères ASCII à l'exclusion de %(chars)s et des espaces."
 
-#: ../gui/wxpython/location_wizard/wizard.py:308
+#: ../gui/wxpython/location_wizard/wizard.py:312
 msgid "Project '{}' already exists. Please consider using another name for your project."
 msgstr "Le projet '{}' existe déjà. Veuillez considérer l'utilisation d'un autre nom pour votre projet."
 
-#: ../gui/wxpython/location_wizard/wizard.py:311
+#: ../gui/wxpython/location_wizard/wizard.py:315
 msgid "Existing project path"
 msgstr "Chemin du projet existant"
 
-#: ../gui/wxpython/location_wizard/wizard.py:328
+#: ../gui/wxpython/location_wizard/wizard.py:332
 msgid "Choose GRASS data directory:"
 msgstr "Choisir le répertoire des données de GRASS :"
 
-#: ../gui/wxpython/location_wizard/wizard.py:346
+#: ../gui/wxpython/location_wizard/wizard.py:351
 msgid "Title of the project is limited only to one line and 256 characters. The rest of the text will be ignored."
 msgstr "Le titre du projet est limité à une ligne et è 256 caractères. Le reste du texte sera ignoré."
 
-#: ../gui/wxpython/location_wizard/wizard.py:357
+#: ../gui/wxpython/location_wizard/wizard.py:362
 msgid "Select Coordinate Reference System (CRS)"
 msgstr "Sélectionner le système de coordonnées de référence (SCR)"
 
-#: ../gui/wxpython/location_wizard/wizard.py:370
+#: ../gui/wxpython/location_wizard/wizard.py:375
 msgid "Select CRS from a list by EPSG or description"
 msgstr ""
 
-#: ../gui/wxpython/location_wizard/wizard.py:379
-#: ../gui/wxpython/location_wizard/wizard.py:1434
+#: ../gui/wxpython/location_wizard/wizard.py:384
+#: ../gui/wxpython/location_wizard/wizard.py:1439
 msgid "Read CRS from a georeferenced data file"
 msgstr ""
 
-#: ../gui/wxpython/location_wizard/wizard.py:384
+#: ../gui/wxpython/location_wizard/wizard.py:389
 msgid "Create a generic cartesian coordinate system (XY)"
 msgstr ""
 
-#: ../gui/wxpython/location_wizard/wizard.py:387
-#: ../gui/wxpython/location_wizard/wizard.py:1516
+#: ../gui/wxpython/location_wizard/wizard.py:392
+#: ../gui/wxpython/location_wizard/wizard.py:1521
 msgid "Specify CRS using WKT string"
 msgstr "Spécifier le SCR en utilisant une chaîne WKT"
 
-#: ../gui/wxpython/location_wizard/wizard.py:390
-#: ../gui/wxpython/location_wizard/wizard.py:2044
+#: ../gui/wxpython/location_wizard/wizard.py:395
+#: ../gui/wxpython/location_wizard/wizard.py:2049
 msgid "Specify CRS using PROJ.4 string"
 msgstr "Spécifier le SCR en utilisant une chaîne de caractères PROJ.4"
 
-#: ../gui/wxpython/location_wizard/wizard.py:393
-#: ../gui/wxpython/location_wizard/wizard.py:508
+#: ../gui/wxpython/location_wizard/wizard.py:398
+#: ../gui/wxpython/location_wizard/wizard.py:513
 msgid "Define custom CRS"
 msgstr "Définir un SCR personnalisé"
 
-#: ../gui/wxpython/location_wizard/wizard.py:404
+#: ../gui/wxpython/location_wizard/wizard.py:409
 msgid "Additional methods:"
 msgstr ""
 
-#: ../gui/wxpython/location_wizard/wizard.py:530
-#: ../gui/wxpython/location_wizard/wizard.py:1070
-#: ../gui/wxpython/location_wizard/wizard.py:1271
-#: ../gui/wxpython/location_wizard/wizard.py:1607
-#: ../gui/wxpython/location_wizard/wizard.py:1808
+#: ../gui/wxpython/location_wizard/wizard.py:535
+#: ../gui/wxpython/location_wizard/wizard.py:1075
+#: ../gui/wxpython/location_wizard/wizard.py:1276
+#: ../gui/wxpython/location_wizard/wizard.py:1612
+#: ../gui/wxpython/location_wizard/wizard.py:1813
 msgid "Code"
 msgstr "Code"
 
-#: ../gui/wxpython/location_wizard/wizard.py:536
+#: ../gui/wxpython/location_wizard/wizard.py:541
 msgid "Projection code:"
 msgstr "Code de la projection "
 
-#: ../gui/wxpython/location_wizard/wizard.py:546
-#: ../gui/wxpython/location_wizard/wizard.py:1089
-#: ../gui/wxpython/location_wizard/wizard.py:1297
+#: ../gui/wxpython/location_wizard/wizard.py:551
+#: ../gui/wxpython/location_wizard/wizard.py:1094
+#: ../gui/wxpython/location_wizard/wizard.py:1302
 msgid "Search in description:"
 msgstr "Rechercher dans la description :"
 
-#: ../gui/wxpython/location_wizard/wizard.py:734
+#: ../gui/wxpython/location_wizard/wizard.py:739
 #, python-format
 msgid "Unable to read list: %s"
 msgstr "Impossible de lire la liste : %s"
 
-#: ../gui/wxpython/location_wizard/wizard.py:822
+#: ../gui/wxpython/location_wizard/wizard.py:827
 msgid "Choose projection parameters"
 msgstr "Choisir les paramètres de projection"
 
-#: ../gui/wxpython/location_wizard/wizard.py:841
+#: ../gui/wxpython/location_wizard/wizard.py:846
 msgid "Select datum or ellipsoid (next page)"
 msgstr "Sélectionner le datum ou l'ellipsoïde (page suivante)"
 
-#: ../gui/wxpython/location_wizard/wizard.py:852
+#: ../gui/wxpython/location_wizard/wizard.py:857
 msgid "Datum with associated ellipsoid"
 msgstr "Datum et ellipsoïde associé"
 
-#: ../gui/wxpython/location_wizard/wizard.py:856
+#: ../gui/wxpython/location_wizard/wizard.py:861
 msgid "Ellipsoid only"
 msgstr "Ellipsoïde uniquement"
 
-#: ../gui/wxpython/location_wizard/wizard.py:911
+#: ../gui/wxpython/location_wizard/wizard.py:916
 #, python-format
 msgid "You must enter a value for %s"
 msgstr "Vous devez entrer une valeur pour %s"
 
-#: ../gui/wxpython/location_wizard/wizard.py:929
-#: ../gui/wxpython/location_wizard/wizard.py:948
+#: ../gui/wxpython/location_wizard/wizard.py:934
+#: ../gui/wxpython/location_wizard/wizard.py:953
 #, python-format
 msgid " Enter parameters for %s projection "
 msgstr "Entrez les paramètres pour la projection %s"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1045
+#: ../gui/wxpython/location_wizard/wizard.py:1050
 msgid "Specify geodetic datum"
 msgstr "Spécifier les données géodésiques"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1070
+#: ../gui/wxpython/location_wizard/wizard.py:1075
 msgid "Ellipsoid"
 msgstr "Ellipsoïde"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1076
+#: ../gui/wxpython/location_wizard/wizard.py:1081
 msgid "Datum code:"
 msgstr "Code des données :"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1237
+#: ../gui/wxpython/location_wizard/wizard.py:1242
 msgid "Specify ellipsoid"
 msgstr "Spécifier l'ellipsoïde"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1258
+#: ../gui/wxpython/location_wizard/wizard.py:1263
 msgid "Earth based"
 msgstr "Coordonnées terrestres"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1261
+#: ../gui/wxpython/location_wizard/wizard.py:1266
 msgid "Planetary bodies"
 msgstr "Corps planétaire"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1278
+#: ../gui/wxpython/location_wizard/wizard.py:1283
 msgid "Ellipsoid code:"
 msgstr "Code de l'ellipsoïde : "
 
-#: ../gui/wxpython/location_wizard/wizard.py:1444
+#: ../gui/wxpython/location_wizard/wizard.py:1449
 msgid "Georeferenced file:"
 msgstr "Fichier géo-référencé : "
 
-#: ../gui/wxpython/location_wizard/wizard.py:1501
+#: ../gui/wxpython/location_wizard/wizard.py:1506
 msgid "Select georeferenced file"
 msgstr "Sélectionner un fichier géo-référencé"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1527
+#: ../gui/wxpython/location_wizard/wizard.py:1532
 msgid "Enter WKT parameters string:"
 msgstr ""
 
-#: ../gui/wxpython/location_wizard/wizard.py:1578
+#: ../gui/wxpython/location_wizard/wizard.py:1583
 msgid "Select CRS from a list"
 msgstr "Sélectionner le SCR dans une liste"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1594
+#: ../gui/wxpython/location_wizard/wizard.py:1599
 msgid "Filter by EPSG code or description:"
-msgstr ""
+msgstr "Filtre par code EPSG ou par description :"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1598
+#: ../gui/wxpython/location_wizard/wizard.py:1603
 msgid "Find more information at:"
 msgstr "Pour de plus amples renseignements :"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1607
-#: ../gui/wxpython/location_wizard/wizard.py:1808
+#: ../gui/wxpython/location_wizard/wizard.py:1612
+#: ../gui/wxpython/location_wizard/wizard.py:1813
 #: ../gui/wxpython/vnet/dialogs.py:384
 msgid "Parameters"
 msgstr "Paramètres"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1770
+#: ../gui/wxpython/location_wizard/wizard.py:1775
 msgid "Choose IAU Code"
 msgstr "Choisir le code IAU"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1786
+#: ../gui/wxpython/location_wizard/wizard.py:1791
 msgid "Path to the IAU-codes file:"
 msgstr "Chemin vers le fichier de codes IAU :"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1790
+#: ../gui/wxpython/location_wizard/wizard.py:1795
 msgid "IAU code:"
 msgstr "Code IAU :"
 
-#: ../gui/wxpython/location_wizard/wizard.py:1989
+#: ../gui/wxpython/location_wizard/wizard.py:1994
 msgid "Choose IAU codes file"
 msgstr "Choisir un fichier de codes IAU"
 
-#: ../gui/wxpython/location_wizard/wizard.py:2024
+#: ../gui/wxpython/location_wizard/wizard.py:2029
 #, python-brace-format
 msgid "Unable to read IAU codes: {0}"
 msgstr "Impossible de lire les codes IAU : {0}"
 
-#: ../gui/wxpython/location_wizard/wizard.py:2060
+#: ../gui/wxpython/location_wizard/wizard.py:2065
 msgid "Enter PROJ.4 parameters string:"
 msgstr "Entrer la chaîne de paramètres PROJ.4 :"
 
-#: ../gui/wxpython/location_wizard/wizard.py:2125
-#: ../gui/wxpython/location_wizard/wizard.py:2129
+#: ../gui/wxpython/location_wizard/wizard.py:2130
+#: ../gui/wxpython/location_wizard/wizard.py:2134
 msgid "Datum transform is required."
 msgstr "Transformation par datum requise."
 
-#: ../gui/wxpython/location_wizard/wizard.py:2173
+#: ../gui/wxpython/location_wizard/wizard.py:2178
 #: ../gui/wxpython/rlisetup/wizard.py:1947
 msgid "Summary"
 msgstr "Résumé"
 
-#: ../gui/wxpython/location_wizard/wizard.py:2222
+#: ../gui/wxpython/location_wizard/wizard.py:2227
 msgid "GRASS Database:"
 msgstr "Base de données GRASS :"
 
-#: ../gui/wxpython/location_wizard/wizard.py:2231
+#: ../gui/wxpython/location_wizard/wizard.py:2236
 msgid "Project Name:"
 msgstr "Nom du projet:"
 
-#: ../gui/wxpython/location_wizard/wizard.py:2252
+#: ../gui/wxpython/location_wizard/wizard.py:2257
 msgid "Projection:"
 msgstr "Projection :"
 
-#: ../gui/wxpython/location_wizard/wizard.py:2264
+#: ../gui/wxpython/location_wizard/wizard.py:2269
 msgid ""
 "PROJ.4 definition:\n"
 " (non-definitive)"
@@ -8771,12 +8771,12 @@ msgstr ""
 "Définition PROJ.4 :\n"
 " (temporaire)"
 
-#: ../gui/wxpython/location_wizard/wizard.py:2391
+#: ../gui/wxpython/location_wizard/wizard.py:2396
 #: ../gui/wxpython/psmap/dialogs.py:804 ../gui/wxpython/psmap/dialogs.py:826
 msgid "custom"
 msgstr "Personnalisé"
 
-#: ../gui/wxpython/location_wizard/wizard.py:2531
+#: ../gui/wxpython/location_wizard/wizard.py:2544
 #, python-format
 msgid ""
 "Unable to create new project. Project <%(loc)s> not created.\n"
@@ -8787,33 +8787,33 @@ msgstr ""
 "\n"
 "Détails: %(err)s"
 
-#: ../gui/wxpython/location_wizard/wizard.py:2652
+#: ../gui/wxpython/location_wizard/wizard.py:2665
 msgid "Unable to create new project"
 msgstr "Impossible de créer le nouveau projet"
 
-#: ../gui/wxpython/location_wizard/wizard.py:2654
+#: ../gui/wxpython/location_wizard/wizard.py:2667
 msgid "Project already exists in GRASS Database."
 msgstr "Le projet existe déjà dans la base de données GRASS."
 
-#: ../gui/wxpython/location_wizard/wizard.py:2671
+#: ../gui/wxpython/location_wizard/wizard.py:2684
 #, python-brace-format
 msgid "Unable to create new GRASS Database <{path}>: {error}"
 msgstr ""
 
-#: ../gui/wxpython/location_wizard/wizard.py:2710
+#: ../gui/wxpython/location_wizard/wizard.py:2723
 msgid "EPSG code missing."
 msgstr "Code EPSG manquant."
 
-#: ../gui/wxpython/location_wizard/wizard.py:2722
+#: ../gui/wxpython/location_wizard/wizard.py:2735
 msgid "IAU code missing."
 msgstr "Code IAU manquant."
 
-#: ../gui/wxpython/location_wizard/wizard.py:2737
+#: ../gui/wxpython/location_wizard/wizard.py:2750
 #, python-format
 msgid "File <%s> not found."
 msgstr "Fichier <%s> non trouvé."
 
-#: ../gui/wxpython/location_wizard/wizard.py:2747
+#: ../gui/wxpython/location_wizard/wizard.py:2760
 msgid "WKT string missing."
 msgstr ""
 
@@ -10104,43 +10104,41 @@ msgid "Insert mapcalc function"
 msgstr "insérer une fonction mapcalc"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:292
-msgid "Generate random seed for rand()"
-msgstr "Générer une graine aléatoire pour rand()"
+#, fuzzy
+#| msgid "Random cells"
+msgid "Random seed:"
+msgstr "Cellules aléatoires"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:294
-msgid "Seed:"
-msgstr "Graine :"
-
-#: ../gui/wxpython/modules/mcalc_builder.py:298
+#: ../gui/wxpython/modules/mcalc_builder.py:297
 msgid "Integer seed for rand() function"
 msgstr "Graine en entier pour la fonction rand()"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:305
+#: ../gui/wxpython/modules/mcalc_builder.py:301
 msgid "Add created raster map into layer tree"
 msgstr "Ajouter la carte raster créée dans l'arborescence des couches"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:649
+#: ../gui/wxpython/modules/mcalc_builder.py:626
 msgid "You must enter the name of a new raster map to create."
 msgstr "Vous devez entrer le nom de la nouvelle carte à créer."
 
-#: ../gui/wxpython/modules/mcalc_builder.py:662
+#: ../gui/wxpython/modules/mcalc_builder.py:639
 msgid "You must enter an expression to create a new raster map."
 msgstr "Vous devez entrer une expression pour créer une nouvelle carte."
 
-#: ../gui/wxpython/modules/mcalc_builder.py:727
+#: ../gui/wxpython/modules/mcalc_builder.py:695
 msgid "Choose a file name to save the expression"
 msgstr "Choisir un nom de fichier où enregistrer l'expression"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:728
-#: ../gui/wxpython/modules/mcalc_builder.py:746
+#: ../gui/wxpython/modules/mcalc_builder.py:696
+#: ../gui/wxpython/modules/mcalc_builder.py:714
 msgid "Expression file (*)|*"
 msgstr "Fichier de formule (*)|*"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:745
+#: ../gui/wxpython/modules/mcalc_builder.py:713
 msgid "Choose a file name to load the expression"
 msgstr "Choisir un fichier pour charger une formule"
 
-#: ../gui/wxpython/modules/mcalc_builder.py:777
+#: ../gui/wxpython/modules/mcalc_builder.py:745
 #, python-brace-format
 msgid "'{cmd}' copied to clipboard"
 msgstr "'{cmd}' copiée dans le presse-papier"
@@ -15356,6 +15354,12 @@ msgstr ""
 "Équation de régression pour la carte raster <%(rast1)s> vs. <%(rast2)s> :\n"
 "\n"
 
+#~ msgid "Generate random seed for rand()"
+#~ msgstr "Générer une graine aléatoire pour rand()"
+
+#~ msgid "Seed:"
+#~ msgstr "Graine :"
+
 #, fuzzy
 #~ msgid "Do you want to create a new project (also known as location)?"
 #~ msgstr "Voulez-vous créer un nouveau jeux de données ?"
@@ -18332,9 +18336,6 @@ msgstr ""
 
 #~ msgid "RGB to HIS"
 #~ msgstr "RVB vers TSV"
-
-#~ msgid "Random cells"
-#~ msgstr "Cellules aléatoires"
 
 #~ msgid "Random cells and vector points"
 #~ msgstr "Cellules aléatoires et points vectoriels"

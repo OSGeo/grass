@@ -109,17 +109,6 @@ add_custom_target(
   COMMAND
     ${grass_env_command} ${PYTHON_EXECUTABLE}
     ${CMAKE_CURRENT_SOURCE_DIR}/build_check.py ${OUTDIR}/${GRASS_INSTALL_DOCDIR}
-  DEPENDS ${category_targets} ALL_MODULES LIB_PYTHON GUI_WXPYTHON
+  DEPENDS ${category_targets} build_class_graphical ALL_MODULES LIB_PYTHON GUI_WXPYTHON
   COMMENT "man generation: check output")
 set_target_properties(build_check PROPERTIES FOLDER man)
-
-#[=======[ TODO: implement somehow...
-add_custom_target(
-  create_man_pages ALL
-  DEPENDS build_check
-  COMMAND ${CMAKE_COMMAND} -DHTML2MAN=${HTML2MAN}
-    -DGRASS_INSTALL_DOCDIR=${GRASS_INSTALL_DOCDIR} -DOUTDIR=${OUTDIR}
-    -DGRASS_INSTALL_MANDIR=${GRASS_INSTALL_MANDIR} -P
-    ${CMAKE_SOURCE_DIR}/cmake/generate_man_pages.cmake
-  COMMENT "!!! man generation: create man pages")
-]=======]

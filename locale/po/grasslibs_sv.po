@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Daniel Nylander <daniel@danielnylander.se>, 2025.
+# Daniel Nylander <daniel@danielnylander.se>, 2025, 2026.
 # Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-13 22:01+0000\n"
-"PO-Revision-Date: 2025-10-26 23:01+0000\n"
+"POT-Creation-Date: 2026-01-03 15:41+0000\n"
+"PO-Revision-Date: 2026-01-08 02:38+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/sv/>\n"
 "Language: sv\n"
@@ -3991,7 +3991,7 @@ msgstr "Välkommen till GRASS %s"
 
 #: ../lib/init/grass.py:1475
 msgid "GRASS homepage:"
-msgstr "GRASS hemsida:"
+msgstr "GRASS webbsida:"
 
 #. GTC Running through: SHELL NAME
 #: ../lib/init/grass.py:1477
