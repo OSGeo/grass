@@ -47,7 +47,7 @@
  * or so as there's nothing more permanent than a temporary solution.)
  * 2017-11-19
  */
-enum OutputFormat { CSV, JSON };
+enum OutputFormat { PLAIN, CSV, JSON };
 
 static int ring2pts(const GEOSGeometry *geom, struct line_pnts *Points)
 {
@@ -205,10 +205,11 @@ int main(int argc, char *argv[])
     dp_opt->guisection = _("Format");
 
     format_opt = G_define_standard_option(G_OPT_F_FORMAT);
-    format_opt->options = "csv,json";
+    format_opt->options = "plain,csv,json";
     format_opt->required = NO;
-    format_opt->answer = "csv";
-    format_opt->descriptions = _("csv;CSV (Comma Separated Values);"
+    format_opt->answer = "plain";
+    format_opt->descriptions = _("plain;Plain text with pipe separator;"
+                                 "csv;CSV (Comma Separated Values);"
                                  "json;JSON (JavaScript Object Notation)");
     format_opt->guisection = _("Format");
 
@@ -295,8 +296,11 @@ int main(int argc, char *argv[])
         }
         root_array = G_json_array(root_value);
     }
-    else {
+    else if (strcmp(format_opt->answer, "csv") == 0) {
         format = CSV;
+    }
+    else {
+        format = PLAIN;
     }
 
 #if HAVE_GEOS
@@ -414,6 +418,10 @@ int main(int argc, char *argv[])
         open3d = WITHOUT_Z;
 
     /* the field separator */
+    if (delim_opt->count == 0 && format == CSV) {
+            delim_opt->answer = "comma";
+        }
+
     fs = G_option_to_separator(delim_opt);
 
     /* Let's get vector layers db connections information */
@@ -705,6 +713,7 @@ int main(int argc, char *argv[])
 
     /* Print output based on format */
     switch (format) {
+    case PLAIN: /* Use same code as CSV */
     case CSV:
         /* Print out column names */
         if (!no_column_flag->answer) {
