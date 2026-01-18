@@ -37,7 +37,26 @@ set(imagery_modules_list
     i.vi
     i.zc)
 
-# TODO: add i.svm.predict and i.svm.train
+if(WITH_LIBSVM)
+  build_program_in_subdir(
+    i.svm.predict
+    DEPENDS
+    grass_imagery
+    grass_raster
+    grass_gis
+    LibSVM::LibSVM)
+
+  build_program_in_subdir(
+    i.svm.train
+    DEPENDS
+    grass_imagery
+    grass_raster
+    grass_vector
+    grass_gis
+    LibSVM::LibSVM)
+
+    list(APPEND imagery_modules_list i.svm.predict i.svm.train)
+endif()
 
 add_custom_target(
   ALL_IMAGERY_MODULES ALL
@@ -45,7 +64,7 @@ add_custom_target(
   COMMENT "All imagery modules are built.")
 
 if(WITH_DOCS)
-  generate_html(TARGET ALL_IMAGERY_MODULES NAME imageryintro)
+  generate_docs(imageryintro TARGET ALL_IMAGERY_MODULES)
 
   file(COPY ${CMAKE_SOURCE_DIR}/lib/imagery/band_references_scheme.png
        DESTINATION ${OUTDIR}/${GRASS_INSTALL_DOCDIR})

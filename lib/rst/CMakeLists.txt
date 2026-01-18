@@ -37,7 +37,10 @@ build_library_in_subdir(
   HEADERS
   "interpf.h")
 
-target_include_directories(grass_interpfl PUBLIC ${GDAL_INCLUDE_DIR})
+target_include_directories(grass_interpfl
+  INTERFACE $<TARGET_PROPERTY:GDAL::GDAL,INTERFACE_INCLUDE_DIRECTORIES>
+            $<TARGET_PROPERTY:GDAL::GDAL,INTERFACE_INCLUDE_DIRECTORIES>/gdal)
 if(TARGET PostgreSQL::PostgreSQL)
-  target_include_directories(grass_interpfl PUBLIC ${PostgreSQL_INCLUDE_DIR})
+  target_include_directories(grass_interpfl
+    INTERFACE $<TARGET_PROPERTY:PostgreSQL::PostgreSQL,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()

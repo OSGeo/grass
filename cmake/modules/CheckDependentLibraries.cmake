@@ -200,6 +200,12 @@ if(WITH_OPENMP)
   endif()
 endif()
 
+if(WITH_LIBSVM)
+  find_package(LibSVM REQUIRED)
+  include(DevelUtils)
+  print_target_properties(LibSVM::LibSVM)
+endif()
+
 # Data format options
 if(WITH_TIFF)
   find_package(TIFF REQUIRED)
@@ -271,6 +277,7 @@ check_target(LAPACKE::LAPACKE HAVE_LIBLAPACK)
 check_target(TIFF::TIFF HAVE_TIFFIO_H)
 check_target(NETCDF HAVE_NETCDF)
 check_target(GEOS::geos_c HAVE_GEOS)
+check_target(LibSVM::LibSVM HAVE_SVM_H)
 
 if(MSVC)
   check_target(PCRE HAVE_PCRE_H)

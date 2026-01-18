@@ -6,10 +6,11 @@ COPYRIGHT:  (C) 2020 by the GRASS Development Team
 SPDX-License-Identifier: GPL-2.0-or-later
 #]]
 
-function(get_versions file_path var_major var_minor var_release var_date)
+function(get_versions file_path var_major var_minor var_release var_suffix var_date)
   set(version_major 0)
   set(version_minor 0)
   set(version_release 0)
+  set(version_suffix "")
   set(version_date 00000000)
   file(STRINGS "${file_path}" grass_version_strings)
   list(LENGTH grass_version_strings grass_version_file_length)
@@ -23,6 +24,8 @@ function(get_versions file_path var_major var_minor var_release var_date)
 
   if(grass_version_file_length GREATER 2)
     list(GET grass_version_strings 2 version_release)
+    string(REGEX REPLACE "(^[0-9]+)(.*)" "\\2" version_suffix ${version_release})
+    string(REGEX MATCH "^[0-9]+" version_release ${version_release})
   endif()
 
   if(grass_version_file_length GREATER 3)
@@ -37,6 +40,9 @@ function(get_versions file_path var_major var_minor var_release var_date)
       PARENT_SCOPE)
   set(${var_release}
       ${version_release}
+      PARENT_SCOPE)
+  set(${var_suffix}
+      ${version_suffix}
       PARENT_SCOPE)
   set(${var_date}
       ${version_date}
