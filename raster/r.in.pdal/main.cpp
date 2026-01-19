@@ -648,10 +648,16 @@ int main(int argc, char *argv[])
         Rast_align_window(&region, &loc_wind);
     }
     if (base_rast_res_flag->answer) {
+        /* * Retrieve the base raster header to get its elevation values.
+         * We no longer overwrite 'region.ns_res' or 'region.ew_res' here
+         * to ensure the output respects the user's computational region
+         * settings rather than being forced to the base raster resolution.
+         */
+        
         Rast_get_cellhd(base_raster_opt->answer, "", &input_region);
-        region.ns_res = input_region.ns_res;
-        region.ew_res = input_region.ew_res;
-        G_adjust_Cell_head(&region, 0, 0);
+        // region.ns_res = input_region.ns_res;
+        // region.ew_res = input_region.ew_res;
+        // G_adjust_Cell_head(&region, 0, 0);
     }
 
     Rast_set_output_window(&region);
