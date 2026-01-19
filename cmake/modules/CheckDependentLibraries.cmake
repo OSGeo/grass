@@ -202,8 +202,6 @@ endif()
 
 if(WITH_LIBSVM)
   find_package(LibSVM REQUIRED)
-  include(DevelUtils)
-  print_target_properties(LibSVM::LibSVM)
 endif()
 
 # Data format options

@@ -151,7 +151,7 @@ endfunction()
 
 function(_build_addon)
   cmake_parse_arguments(G "NO_DOCS;IS_SCRIPT" "NAME;SRC_DIR;PYTHONPATH"
-                        "SOURCES;DEPENDS;GRASSLIBS;DOCFILES" ${ARGN})
+                        "SOURCES;DEPENDS;OPTIONAL_DEPENDS;GRASSLIBS;DOCFILES" ${ARGN})
 
   find_package(GRASS REQUIRED)
 
@@ -219,7 +219,17 @@ function(_build_addon)
       add_dependencies(${G_NAME} ${G_DEPEND})
     endforeach()
 
-    target_link_libraries(${G_NAME} ${G_GRASSLIBS} ${G_DEPENDS})
+    set(opt_depends)
+    foreach(optional_dep ${G_OPTIONAL_DEPENDS})
+      if(TARGET ${optional_dep})
+        add_dependencies(${G_NAME} ${optional_dep})
+        list(APPEND opt_depends ${optional_dep})
+      else()
+        message(WARNING "${optional_dep} not a target")
+      endif()
+    endforeach()
+
+    target_link_libraries(${G_NAME} ${G_GRASSLIBS} ${G_DEPENDS} ${opt_depends})
 
     install(TARGETS ${G_NAME} DESTINATION ${install_dest})
   endif()
@@ -316,4 +326,14 @@ macro(_set_thirdparty_include_paths)
       endif()
     endif()
   endif()
+endmacro()
+
+macro(find_OpenMP)
+if(MSVC AND CMAKE_VERSION VERSION_GREATER_EQUAL "3.30")
+  set(OpenMP_RUNTIME_MSVC "llvm")
+endif()
+find_package(OpenMP)
+if(OpenMP_FOUND AND MSVC AND CMAKE_VERSION VERSION_LESS "3.30")
+  add_compile_options(-openmp:llvm)
+endif()
 endmacro()
