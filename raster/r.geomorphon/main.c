@@ -94,15 +94,19 @@ int main(int argc, char **argv)
 
     int i;
     int meters = 0, extended = 0; /* flags */
-    int oneoff;
-    int row, cur_row, col;
-    int nrows;
-    int pattern_size;
-    int search_cells;
-    double skip_distance;
-    double max_resolution;
-    double oneoff_easting, oneoff_northing;
-    int oneoff_row, oneoff_col;
+    int oneoff = 0;
+    int row = 0, cur_row = 0, col = 0;
+    int nrows = 0;
+    int pattern_size = 0;
+    int search_cells = 0;
+    int skip_cells = 0;
+    double skip_distance = 0.0;
+    double flat_distance = 0.0;
+    double flat_threshold = 0.0;
+    double flat_threshold_height = 0.0;
+    double max_resolution = 0.0;
+    double oneoff_easting = 0.0, oneoff_northing = 0.0;
+    int oneoff_row = 0, oneoff_col = 0;
     FILE *profile_file;
 
     G_gisinit(argv[0]);
@@ -204,8 +208,8 @@ int main(int argc, char **argv)
 
     { /* calculate parameters */
         int num_outputs = 0;
-        double search_radius, skip_radius;
-        double ns_resolution;
+        double search_radius = 0.0, skip_radius = 0.0;
+        double ns_resolution = 0.0;
 
         if (!strcmp(par_comparison->answer, "anglev1"))
             compmode = ANGLEV1;
@@ -346,12 +350,17 @@ int main(int argc, char **argv)
     open_map(&elevation);
 
     if (1) {
-        PATTERN *pattern;
+        PATTERN *pattern = NULL; /* Initialize pointer to NULL */
         PATTERN patterns[4];
-        void *pointer_buf;
-        double search_dist = search_distance;
-        double skip_dist = skip_distance;
-        double flat_dist = flat_distance;
+        void *pointer_buf = NULL;
+        double search_dist = 0.0; /* Initialize these before copying */
+        double skip_dist = 0.0;
+        double flat_dist = 0.0;
+
+        /* Now assign the values */
+        search_dist = search_distance;
+        skip_dist = skip_distance;
+        flat_dist = flat_distance;
         double area_of_octagon =
             4 * (search_distance * search_distance) * sin(DEGREE2RAD(45.));
         unsigned char oneoff_done = 0;
@@ -412,9 +421,8 @@ int main(int argc, char **argv)
                                 G_fatal_error(_("Unknown output data type"));
                             }
                         }
-                    continue;
                 } /* end null value */
-                {
+                else {
                     FORMS cur_form;
                     FORMS orig_form;
 
@@ -548,51 +556,53 @@ int main(int argc, char **argv)
                     pattern = &patterns[0];
                     if (opt_output[o_forms]->answer)
                         ((CELL *)rasters[o_forms].buffer)[col] = cur_form;
+
+                    if (opt_output[o_ternary]->answer)
+                        ((CELL *)rasters[o_ternary].buffer)[col] =
+                            determine_ternary(pattern->pattern);
+                    if (opt_output[o_positive]->answer)
+                        ((CELL *)rasters[o_positive].buffer)[col] =
+                            rotate(pattern->positives);
+                    if (opt_output[o_negative]->answer)
+                        ((CELL *)rasters[o_negative].buffer)[col] =
+                            rotate(pattern->negatives);
+                    if (opt_output[o_intensity]->answer)
+                        ((FCELL *)rasters[o_intensity].buffer)[col] =
+                            intensity(pattern->elevation, pattern_size);
+                    if (opt_output[o_exposition]->answer)
+                        ((FCELL *)rasters[o_exposition].buffer)[col] =
+                            exposition(pattern->elevation);
+                    if (opt_output[o_range]->answer)
+                        ((FCELL *)rasters[o_range].buffer)[col] =
+                            range(pattern->elevation);
+                    if (opt_output[o_variance]->answer)
+                        ((FCELL *)rasters[o_variance].buffer)[col] =
+                            variance(pattern->elevation, pattern_size);
+
+                    /*                       used only for next four shape
+                     * functions
+                     */
+                    if (opt_output[o_elongation]->answer ||
+                        opt_output[o_azimuth]->answer ||
+                        opt_output[o_extend]->answer ||
+                        opt_output[o_width]->answer) {
+                        float azimuth, elongation, width;
+
+                        radial2cartesian(pattern);
+                        shape(pattern, pattern_size, &azimuth, &elongation,
+                              &width);
+                        if (opt_output[o_azimuth]->answer)
+                            ((FCELL *)rasters[o_azimuth].buffer)[col] = azimuth;
+                        if (opt_output[o_elongation]->answer)
+                            ((FCELL *)rasters[o_elongation].buffer)[col] =
+                                elongation;
+                        if (opt_output[o_width]->answer)
+                            ((FCELL *)rasters[o_width].buffer)[col] = width;
+                    }
+                    if (opt_output[o_extend]->answer)
+                        ((FCELL *)rasters[o_extend].buffer)[col] =
+                            extends(pattern) / area_of_octagon;
                 }
-
-                if (opt_output[o_ternary]->answer)
-                    ((CELL *)rasters[o_ternary].buffer)[col] =
-                        determine_ternary(pattern->pattern);
-                if (opt_output[o_positive]->answer)
-                    ((CELL *)rasters[o_positive].buffer)[col] =
-                        rotate(pattern->positives);
-                if (opt_output[o_negative]->answer)
-                    ((CELL *)rasters[o_negative].buffer)[col] =
-                        rotate(pattern->negatives);
-                if (opt_output[o_intensity]->answer)
-                    ((FCELL *)rasters[o_intensity].buffer)[col] =
-                        intensity(pattern->elevation, pattern_size);
-                if (opt_output[o_exposition]->answer)
-                    ((FCELL *)rasters[o_exposition].buffer)[col] =
-                        exposition(pattern->elevation);
-                if (opt_output[o_range]->answer)
-                    ((FCELL *)rasters[o_range].buffer)[col] =
-                        range(pattern->elevation);
-                if (opt_output[o_variance]->answer)
-                    ((FCELL *)rasters[o_variance].buffer)[col] =
-                        variance(pattern->elevation, pattern_size);
-
-                /*                       used only for next four shape functions
-                 */
-                if (opt_output[o_elongation]->answer ||
-                    opt_output[o_azimuth]->answer ||
-                    opt_output[o_extend]->answer ||
-                    opt_output[o_width]->answer) {
-                    float azimuth, elongation, width;
-
-                    radial2cartesian(pattern);
-                    shape(pattern, pattern_size, &azimuth, &elongation, &width);
-                    if (opt_output[o_azimuth]->answer)
-                        ((FCELL *)rasters[o_azimuth].buffer)[col] = azimuth;
-                    if (opt_output[o_elongation]->answer)
-                        ((FCELL *)rasters[o_elongation].buffer)[col] =
-                            elongation;
-                    if (opt_output[o_width]->answer)
-                        ((FCELL *)rasters[o_width].buffer)[col] = width;
-                }
-                if (opt_output[o_extend]->answer)
-                    ((FCELL *)rasters[o_extend].buffer)[col] =
-                        extends(pattern) / area_of_octagon;
 
             } /* end for col */
 
