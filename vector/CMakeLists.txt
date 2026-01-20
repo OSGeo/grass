@@ -712,7 +712,7 @@ build_program_in_subdir(
   grass_raster
   ${LIBM}
   OPTIONAL_DEPENDS
-  OPENMP)
+  OpenMP::OpenMP_C)
 
 build_program_in_subdir(
   v.transform
