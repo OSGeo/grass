@@ -2053,7 +2053,7 @@ def install_extension_std_platforms(name, source, url, branch):
                 )
 
     if is_cmake:
-        grass_addon_base = os.getenv("GRASS_ADDON_BASE")
+        grass_addon_base = options["prefix"]
         cmake_prefix_path = (
             ";" + os.getenv("CMAKE_PREFIX_PATH")
             if os.getenv("CMAKE_PREFIX_PATH")
@@ -2091,6 +2091,7 @@ def install_extension_std_platforms(name, source, url, branch):
             f"-DCMAKE_MODULE_PATH={c_mod_path}",
             f"-DCMAKE_INSTALL_PREFIX={grass_addon_base}",
             f"-DPYTHON_EXECUTABLE={sys.executable}",
+            f"-DSOURCE_URL={url}",
             c_compiler,
             cxx_compiler,
         ]

@@ -209,6 +209,8 @@ function(_build_addon)
       set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${G_RUNTIME_OUTPUT_DIR})
     endif()
 
+    add_compile_definitions(PACKAGE="grassmods")
+
     add_executable(${G_NAME} ${G_SOURCES})
     add_dependencies(${G_NAME} ${G_GRASSLIBS} ${G_DEPENDS})
 
@@ -270,12 +272,13 @@ function(_build_addon)
       COMMAND
         ${G_PYTHONPATH} GISBASE=$ENV{GISBASE} GISRC=$ENV{GISRC}
         VERSION_NUMBER=${GRASS_VERSION_STRING}
-        VERSION_DATE=${GRASS_VERSION_DATE} SOURCE_URL=$ENV{SOURCE_URL}
+        VERSION_DATE=${GRASS_VERSION_DATE}
         ${_execute} ${OUTDIR}/${install_dest}/${G_NAME}${SCRIPT_EXT}
         --html-description < ${null_device} | ${search_command}
         ${html_search_str} > ${_tmp_html_file}
-      COMMAND MODULE_TOPDIR=$ENV{GISBASE} ${PYTHON_EXECUTABLE} ${MKHTML_PY}
-              ${G_NAME} > ${_out_html_file}
+      COMMAND MODULE_TOPDIR=$ENV{GISBASE} SOURCE_URL=${SOURCE_URL}
+              VERSION_NUMBER=${GRASS_VERSION_STRING} ${PYTHON_EXECUTABLE}
+              ${MKHTML_PY} ${G_NAME} > ${_out_html_file}
       COMMAND ${copy_images_command}
       COMMAND ${CMAKE_COMMAND} -E remove ${_tmp_html_file}
               ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.html
