@@ -157,6 +157,10 @@ class Settings:
                     "enabled": False,
                     "pos": "",
                 },
+                # init
+                "init": {
+                    "startWithoutShellIfPossible": {"enabled": True},
+                },
             },
             #
             # datacatalog
