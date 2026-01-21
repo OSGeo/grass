@@ -233,6 +233,10 @@ class DataCatalogTree(TreeView):
         self.showNotification = Signal("Tree.showNotification")
         self.showImportDataInfo = Signal("Tree.showImportDataInfo")
         self.loadingDone = Signal("Tree.loadingDone")
+        self.showDownloadingNewLocationInfoMessage = Signal(
+            "Tree.showDownloadingNewLocationInfoMessage"
+        )
+        self.dismissShowInfoBarMessage = Signal("Tree.dismissShowInfoBarMessage")
         self.parent = parent
         self.contextMenu.connect(self.OnRightClick)
         self.itemActivated.connect(self.OnDoubleClick)
@@ -1635,17 +1639,35 @@ class DataCatalogTree(TreeView):
             for change in changes:
                 self._giface.grassdbChanged.emit(**change)
 
+    def AddDownloadedNewLocation(self):
+        """
+        Add downloaded new location into tree
+        """
+        location = self.loc_download.GetLocation()
+        if location:
+            self._reloadGrassDBNode(self.selected_grassdb[0])
+            self.UpdateCurrentDbLocationMapsetNode()
+            self.RefreshItems()
+            self.showNotification.emit(
+                message=_(
+                    "The new location <{}> has been downloaded successfully"
+                ).format(location)
+            )
+
     def DownloadLocation(self, grassdb_node):
         """
         Download new location interactively.
         """
-        grassdatabase, location, mapset = download_location_interactively(
+        self.loc_download = download_location_interactively(
             self, grassdb_node.data["name"]
         )
-        if location:
-            self._reloadGrassDBNode(grassdb_node)
-            self.UpdateCurrentDbLocationMapsetNode()
-            self.RefreshItems()
+        self.loc_download.newLocationIsDownloaded.connect(self.AddDownloadedNewLocation)
+        self.loc_download.showInfoBarMessage.connect(
+            self.showDownloadingNewLocationInfoMessage
+        )
+        self.loc_download.dismissShowInfoBarMessage.connect(
+            self.dismissShowInfoBarMessage
+        )
 
     def OnDownloadLocation(self, event):
         """
