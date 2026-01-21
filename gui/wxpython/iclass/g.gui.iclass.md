@@ -5,8 +5,6 @@ index: topic_GUI|GUI
 keywords: [display, GUI, imagery, classification, supervised classification]
 ---
 
-wxGUI Supervised Classification Tool
-
 ## DESCRIPTION
 
 **Supervised Classification Tool** (wxIClass) is a *[wxGUI](wxGUI.md)*

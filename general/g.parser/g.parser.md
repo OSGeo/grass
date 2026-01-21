@@ -4,8 +4,6 @@ description: Provides full parser support for GRASS scripts.
 keywords: [general, support, scripts]
 ---
 
-Provides full parser support for GRASS scripts
-
 ## SYNOPSIS
 
 **g.parser --help**  

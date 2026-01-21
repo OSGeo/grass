@@ -4,8 +4,6 @@ description: wxGUI Temporal Plot Tool
 index: topic_GUI|GUI
 ---
 
-wxGUI Temporal Plot Tool
-
 ## DESCRIPTION
 
 The **Temporal Plot Tool** is a *[wxGUI](wxGUI.md)* component that

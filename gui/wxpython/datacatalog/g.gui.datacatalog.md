@@ -4,8 +4,6 @@ description: wxGUI Data Catalog
 index: topic_GUI|GUI
 ---
 
-wxGUI Data Catalog
-
 ## DESCRIPTION
 
 The **Data Catalog** is a *[wxGUI](wxGUI.md)* component for browsing,

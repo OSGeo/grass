@@ -3,8 +3,6 @@ title: r.li
 description: Landscape structure analysis package overview
 ---
 
-Landscape structure analysis package overview
-
 ## DESCRIPTION
 
 The *r.li* suite is a toolset for multiscale analysis of landscape

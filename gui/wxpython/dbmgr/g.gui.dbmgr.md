@@ -4,8 +4,6 @@ description: wxGUI Attribute Table Manager
 index: topic_GUI|GUI
 ---
 
-wxGUI Attribute Table Manager
-
 ## DESCRIPTION
 
 The **Attribute Table Manager** is a *[wxGUI](wxGUI.md)* component to

@@ -4,8 +4,6 @@ description: wxGUI Map Swipe
 index: topic_GUI|GUI
 ---
 
-wxGUI Map Swipe
-
 ## DESCRIPTION
 
 The **Map Swipe** is a *[wxGUI](wxGUI.md)* component which allows the

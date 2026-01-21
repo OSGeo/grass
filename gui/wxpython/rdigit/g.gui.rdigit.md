@@ -5,8 +5,6 @@ index: wxGUI
 keywords: [display, GUI, raster, editing, digitizer]
 ---
 
-wxGUI Raster Digitizer
-
 ## DESCRIPTION
 
 **Raster Digitizer** is a simple tool to quickly draw lines, areas, and
