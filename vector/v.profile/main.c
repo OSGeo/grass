@@ -47,6 +47,7 @@
  * or so as there's nothing more permanent than a temporary solution.)
  * 2017-11-19
  */
+enum OutputFormat { PLAIN, CSV, JSON };
 
 static int ring2pts(const GEOSGeometry *geom, struct line_pnts *Points)
 {
@@ -115,7 +116,6 @@ static void add_poly(const GEOSGeometry *OGeom, struct line_pnts *Buffer)
 static int compdist(const void *, const void *);
 
 Result *resultset;
-enum OutputFormat { PLAIN, CSV, JSON };
 
 int main(int argc, char *argv[])
 {

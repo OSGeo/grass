@@ -103,7 +103,12 @@ int main(int argc, char **argv)
 
                 G_json_array_append_value(root_array, column_value);
                 break;
-
+            case PLAIN:
+                fprintf(stdout, "%s: %s\n",
+                        db_get_column_name(db_get_table_column(table, col)),
+                        db_sqltype_name(db_get_column_sqltype(
+                            db_get_table_column(table, col))));
+                break;
             default:
                 // should not reach here as -e is supported only for format=json
                 break;
