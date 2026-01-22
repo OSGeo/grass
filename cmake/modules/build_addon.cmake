@@ -151,7 +151,7 @@ endfunction()
 
 function(_build_addon)
   cmake_parse_arguments(G "NO_DOCS;IS_SCRIPT" "NAME;SRC_DIR;PYTHONPATH"
-                        "SOURCES;DEPENDS;GRASSLIBS;DOCFILES" ${ARGN})
+                        "SOURCES;DEPENDS;OPTIONAL_DEPENDS;GRASSLIBS;DOCFILES" ${ARGN})
 
   find_package(GRASS REQUIRED)
 
@@ -209,6 +209,8 @@ function(_build_addon)
       set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${G_RUNTIME_OUTPUT_DIR})
     endif()
 
+    add_compile_definitions(PACKAGE="grassmods")
+
     add_executable(${G_NAME} ${G_SOURCES})
     add_dependencies(${G_NAME} ${G_GRASSLIBS} ${G_DEPENDS})
 
@@ -219,7 +221,17 @@ function(_build_addon)
       add_dependencies(${G_NAME} ${G_DEPEND})
     endforeach()
 
-    target_link_libraries(${G_NAME} ${G_GRASSLIBS} ${G_DEPENDS})
+    set(opt_depends)
+    foreach(optional_dep ${G_OPTIONAL_DEPENDS})
+      if(TARGET ${optional_dep})
+        add_dependencies(${G_NAME} ${optional_dep})
+        list(APPEND opt_depends ${optional_dep})
+      else()
+        message(WARNING "${optional_dep} not a target")
+      endif()
+    endforeach()
+
+    target_link_libraries(${G_NAME} ${G_GRASSLIBS} ${G_DEPENDS} ${opt_depends})
 
     install(TARGETS ${G_NAME} DESTINATION ${install_dest})
   endif()
@@ -260,12 +272,13 @@ function(_build_addon)
       COMMAND
         ${G_PYTHONPATH} GISBASE=$ENV{GISBASE} GISRC=$ENV{GISRC}
         VERSION_NUMBER=${GRASS_VERSION_STRING}
-        VERSION_DATE=${GRASS_VERSION_DATE} SOURCE_URL=$ENV{SOURCE_URL}
+        VERSION_DATE=${GRASS_VERSION_DATE}
         ${_execute} ${OUTDIR}/${install_dest}/${G_NAME}${SCRIPT_EXT}
         --html-description < ${null_device} | ${search_command}
         ${html_search_str} > ${_tmp_html_file}
-      COMMAND MODULE_TOPDIR=$ENV{GISBASE} ${PYTHON_EXECUTABLE} ${MKHTML_PY}
-              ${G_NAME} > ${_out_html_file}
+      COMMAND MODULE_TOPDIR=$ENV{GISBASE} SOURCE_URL=${SOURCE_URL}
+              VERSION_NUMBER=${GRASS_VERSION_STRING} ${PYTHON_EXECUTABLE}
+              ${MKHTML_PY} ${G_NAME} > ${_out_html_file}
       COMMAND ${copy_images_command}
       COMMAND ${CMAKE_COMMAND} -E remove ${_tmp_html_file}
               ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.html
@@ -315,5 +328,15 @@ macro(_set_thirdparty_include_paths)
           INTERFACE_INCLUDE_DIRECTORIES ${GRASS_PostgreSQL_INCLUDE_DIR})
       endif()
     endif()
+  endif()
+endmacro()
+
+macro(find_OpenMP)
+  if(MSVC AND CMAKE_VERSION VERSION_GREATER_EQUAL "3.30")
+    set(OpenMP_RUNTIME_MSVC "llvm")
+  endif()
+  find_package(OpenMP)
+  if(OpenMP_FOUND AND MSVC AND CMAKE_VERSION VERSION_LESS "3.30")
+    add_compile_options(-openmp:llvm)
   endif()
 endmacro()
