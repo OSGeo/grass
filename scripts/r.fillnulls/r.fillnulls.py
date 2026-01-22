@@ -103,7 +103,6 @@
 
 import os
 import atexit
-import subprocess
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
@@ -126,6 +125,12 @@ def cleanup():
         gs.run_command(
             "g.remove", quiet=True, flags="fb", type="raster", name=tmp_rmaps
         )
+
+
+def raster_has_nulls(raster):
+    """Return True if raster has any NULL cells."""
+    stats = gs.parse_command("r.univar", flags="g", map=raster)
+    return int(stats.get("null_cells", "0")) > 0
 
 
 def main():
@@ -557,61 +562,30 @@ def main():
                 )
 
     # check if method is different from rst to use r.resamp.bspline
+    if method != "rst" and not raster_has_nulls(input):
+        gs.warning(
+            _("Input map <%s> has no holes. Copying to output without modification.")
+            % (input,)
+        )
+        gs.run_command("g.copy", raster=f"{input},{output}", overwrite=True)
+        gs.message(_("Done."))
+        return
+
     if method != "rst":
         gs.message(_("Using %s bspline interpolation") % method)
 
-        # clone current region
         gs.use_temp_region()
         gs.run_command("g.region", align=input)
 
         reg = gs.region()
-        # launch r.resamp.bspline
         tmp_rmaps.append(prefix + "filled")
-        # If there are no NULL cells, r.resamp.bslpine call
-        # will end with an error although for our needs it's fine
-        # Only problem - this state must be read from stderr
-        new_env = dict(os.environ)
-        new_env["LC_ALL"] = "C"
+
         if usermask:
-            try:
-                with gs.MaskManager():
-                    p = gs.core.start_command(
-                        "r.resamp.bspline",
-                        input=input,
-                        mask=usermask,
-                        output=prefix + "filled",
-                        method=method,
-                        ew_step=3 * reg["ewres"],
-                        ns_step=3 * reg["nsres"],
-                        lambda_=lambda_,
-                        memory=memory,
-                        flags="n",
-                        stderr=subprocess.PIPE,
-                        env=new_env,
-                    )
-                    stderr = gs.decode(p.communicate()[1])
-                if "No NULL cells found" in stderr:
-                    gs.run_command(
-                        "g.copy", raster="%s,%sfilled" % (input, prefix), overwrite=True
-                    )
-                    p.returncode = 0
-                    gs.warning(
-                        _(
-                            "Input map <%s> has no holes. Copying to output without "
-                            "modification."
-                        )
-                        % (input,)
-                    )
-            except CalledModuleError:
-                gs.fatal(
-                    _("Failure during bspline interpolation. Error message: %s")
-                    % stderr
-                )
-        else:
-            try:
-                p = gs.core.start_command(
+            with gs.MaskManager():
+                gs.run_command(
                     "r.resamp.bspline",
                     input=input,
+                    mask=usermask,
                     output=prefix + "filled",
                     method=method,
                     ew_step=3 * reg["ewres"],
@@ -619,27 +593,19 @@ def main():
                     lambda_=lambda_,
                     memory=memory,
                     flags="n",
-                    stderr=subprocess.PIPE,
-                    env=new_env,
                 )
-                stderr = gs.decode(p.communicate()[1])
-                if "No NULL cells found" in stderr:
-                    gs.run_command(
-                        "g.copy", raster="%s,%sfilled" % (input, prefix), overwrite=True
-                    )
-                    p.returncode = 0
-                    gs.warning(
-                        _(
-                            "Input map <%s> has no holes. Copying to output without "
-                            "modification."
-                        )
-                        % (input,)
-                    )
-            except CalledModuleError:
-                gs.fatal(
-                    _("Failure during bspline interpolation. Error message: %s")
-                    % stderr
-                )
+        else:
+            gs.run_command(
+                "r.resamp.bspline",
+                input=input,
+                output=prefix + "filled",
+                method=method,
+                ew_step=3 * reg["ewres"],
+                ns_step=3 * reg["nsres"],
+                lambda_=lambda_,
+                memory=memory,
+                flags="n",
+            )
 
     # set region to original extents, align to input
     gs.run_command(
