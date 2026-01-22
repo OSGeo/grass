@@ -13,7 +13,7 @@
  *               for details.
  *
  *****************************************************************************/
-
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
@@ -228,11 +228,30 @@ int main(int argc, char **argv)
     if (legend_flag->answer) {
         tokens = G_tokenize(columns_opt->answer, ",");
         ntokens = G_number_of_tokens(tokens);
-
-        for (i = 0; i < ntokens; i++) {
-            fprintf(stdout, "%d|%s|%d:%d:%d\n", i + 1, tokens[i], colors[i].r,
-                    colors[i].g, colors[i].b);
+        /* feature (outline) color in RGBA, empty if none */
+        char feature_rgba[64];
+        if (ocolor.none) {
+            feature_rgba[0] = '\0';
         }
+        else {
+            snprintf(feature_rgba, sizeof(feature_rgba), "%d:%d:%d:%d",
+                     ocolor.r, ocolor.g, ocolor.b, 255);
+        }
+        for (i = 0; i < ntokens; i++) {
+            /* fill color in RGBA, empty if none */
+            char fill_rgba[64];
+            if (colors[i].none) {
+                fill_rgba[0] = '\0';
+            }
+            else {
+                snprintf(fill_rgba, sizeof(fill_rgba), "%d:%d:%d:%d",
+                         colors[i].r, colors[i].g, colors[i].b, 255);
+            }
+            /* Use defaults to output complete, parseable legend records. */
+            fprintf(stdout, "%s|legend/area|5|ps|%s|%s|1|area|\n",
+                    tokens[i], feature_rgba, fill_rgba);
+        }
+        G_free_tokens(tokens);
     }
 
     size = atoi(size_opt->answer);
