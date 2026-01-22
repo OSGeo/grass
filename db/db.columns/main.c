@@ -109,7 +109,7 @@ int main(int argc, char **argv)
                 break;
             }
         }
-        else {
+        else { /* without -e flag */
             switch (parms.format) {
             case PLAIN:
                 fprintf(stdout, "%s\n",
