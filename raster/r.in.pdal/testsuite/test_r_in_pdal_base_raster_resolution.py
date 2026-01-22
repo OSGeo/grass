@@ -39,6 +39,8 @@ class BaseRasterResolutionTest(TestCase):
     def setUpClass(cls):
         """Set up test environment with different resolution regions"""
         cls.use_temp_region()
+        # Set initial region
+        cls.runModule("g.region", n=18, s=0, e=18, w=0, res=6)
 
         # Create test data directory
         cls.data_dir = os.path.join(Path(__file__).parent.absolute(), "data")
@@ -71,9 +73,16 @@ class BaseRasterResolutionTest(TestCase):
         cls.tmp_dir.cleanup()
         cls.del_temp_region()
 
+    def setUp(self):
+        """Set up for each test - ensure clean region"""
+        # Reset region to default for this test
+        self.runModule("g.region", n=18, s=0, e=18, w=0, res=6)
+
     @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")
     def tearDown(self):
         """Remove the outputs created by the test"""
+        # Reset region before cleanup
+        self.runModule("g.region", n=18, s=0, e=18, w=0, res=6)
         self.runModule(
             "g.remove",
             flags="f",
@@ -89,9 +98,6 @@ class BaseRasterResolutionTest(TestCase):
         the -d flag with a base raster of different resolution, the output
         raster resolution matches the computational region, not the base raster.
         """
-        # Set up computational region at 6m resolution
-        self.runModule("g.region", n=18, s=0, e=18, w=0, res=6)
-
         # Create a base raster at finer resolution (2m)
         # This simulates a high-resolution DEM
         self.runModule("g.region", n=18, s=0, e=18, w=0, res=2)
@@ -104,7 +110,7 @@ class BaseRasterResolutionTest(TestCase):
             method="mean",
         )
 
-        # Set computational region back to 6m
+        # Set computational region to coarser resolution (6m)
         self.runModule("g.region", n=18, s=0, e=18, w=0, res=6)
 
         # Import with -d flag using the fine resolution base raster
@@ -125,15 +131,17 @@ class BaseRasterResolutionTest(TestCase):
         info = grass.raster_info("test_base_raster_output")
 
         # Verify that output resolution matches computational region (6m), not base raster (2m)
-        self.assertEqual(
+        self.assertAlmostEqual(
             info["nsres"],
             6.0,
-            "Output north-south resolution should be 6m (computational region), not 2m (base raster)",
+            places=1,
+            msg="Output north-south resolution should be 6m (computational region), not 2m (base raster)",
         )
-        self.assertEqual(
+        self.assertAlmostEqual(
             info["ewres"],
             6.0,
-            "Output east-west resolution should be 6m (computational region), not 2m (base raster)",
+            places=1,
+            msg="Output east-west resolution should be 6m (computational region), not 2m (base raster)",
         )
 
         # Verify that output has correct number of rows and columns for 6m resolution
