@@ -965,7 +965,10 @@ class ProjParamsPage(TitledPage):
 
                 # default values
                 if param["type"] == "bool":
-                    param["value"] = 0
+                    if len(paramgrp) > 2:
+                        param["value"] = paramgrp[2]
+                    else:
+                        param["value"] = 0
                 elif param["type"] == "zone":
                     param["value"] = 30
                     param["desc"] += " (1-60)"
