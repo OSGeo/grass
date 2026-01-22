@@ -110,7 +110,6 @@ int main(int argc, char **argv)
                             db_get_table_column(table, col))));
                 break;
             default:
-                // should not reach here as -e is supported only for format=json
                 break;
             }
         }
@@ -198,9 +197,6 @@ static void parse_command_line(int argc, char **argv)
         parms.format = JSON;
     }
     else {
-        if (parms.more_info)
-            G_fatal_error(
-                _("-e flag is currently only supported with format=json."));
         parms.format = PLAIN;
     }
 }
