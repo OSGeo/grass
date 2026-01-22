@@ -78,51 +78,50 @@ int main(int argc, char **argv)
     }
 
     ncols = db_get_table_number_of_columns(table);
-    // -e flag is handled here
-    if (parms.more_info) {
-        for (col = 0; col < ncols; col++) {
-            switch (parms.format)
-            {
+    for (col = 0; col < ncols; col++) {
+
+        // -e flag is handled here
+        if (parms.more_info) {
+            switch (parms.format) {
             case JSON:
-            column_value = G_json_value_init_object();
-            column_object = G_json_object(column_value);
+                column_value = G_json_value_init_object();
+                column_object = G_json_object(column_value);
 
-            G_json_object_set_string(
-                column_object, "name",
-                db_get_column_name(db_get_table_column(table, col)));
+                G_json_object_set_string(
+                    column_object, "name",
+                    db_get_column_name(db_get_table_column(table, col)));
 
-            int sql_type =
-                db_get_column_sqltype(db_get_table_column(table, col));
-            G_json_object_set_string(column_object, "sql_type",
-                                     db_sqltype_name(sql_type));
+                int sql_type =
+                    db_get_column_sqltype(db_get_table_column(table, col));
+                G_json_object_set_string(column_object, "sql_type",
+                                         db_sqltype_name(sql_type));
 
-            int c_type = db_sqltype_to_Ctype(sql_type);
-            G_json_object_set_boolean(
-                column_object, "is_number",
-                (c_type == DB_C_TYPE_INT || c_type == DB_C_TYPE_DOUBLE));
+                int c_type = db_sqltype_to_Ctype(sql_type);
+                G_json_object_set_boolean(
+                    column_object, "is_number",
+                    (c_type == DB_C_TYPE_INT || c_type == DB_C_TYPE_DOUBLE));
 
-            G_json_array_append_value(root_array, column_value);
-            break;
-            
+                G_json_array_append_value(root_array, column_value);
+                break;
+
             default:
                 // should not reach here as -e is supported only for format=json
                 break;
             }
         }
-    }
+        else {
+            switch (parms.format) {
+            case PLAIN:
+                fprintf(stdout, "%s\n",
+                        db_get_column_name(db_get_table_column(table, col)));
+                break;
 
-    for (col = 0; col < ncols; col++) {
-        switch (parms.format) {
-        case PLAIN:
-            fprintf(stdout, "%s\n",
+            case JSON:
+                G_json_array_append_string(
+                    root_array,
                     db_get_column_name(db_get_table_column(table, col)));
-            break;
-
-        case JSON:
-            G_json_array_append_string(
-                root_array,
-                db_get_column_name(db_get_table_column(table, col)));
-            break;
+                break;
+            }
         }
     }
 
@@ -163,7 +162,7 @@ static void parse_command_line(int argc, char **argv)
     database = G_define_standard_option(G_OPT_DB_DATABASE);
     if ((db = db_get_default_database_name()))
         database->answer = (char *)db;
-    
+
     more_info = G_define_flag();
     more_info->key = 'e';
     more_info->label = _("Print type information about the columns");
@@ -195,7 +194,8 @@ static void parse_command_line(int argc, char **argv)
     }
     else {
         if (parms.more_info)
-            G_fatal_error(_("-e flag is currently only supported with format=json."));
+            G_fatal_error(
+                _("-e flag is currently only supported with format=json."));
         parms.format = PLAIN;
     }
 }
