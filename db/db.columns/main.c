@@ -26,6 +26,7 @@ enum OutputFormat { PLAIN, JSON };
 struct {
     char *driver, *database, *table;
     enum OutputFormat format;
+    int *more_info;
 } parms;
 
 /* function prototypes */
@@ -38,7 +39,8 @@ int main(int argc, char **argv)
     dbTable *table;
     dbString table_name;
     int col, ncols;
-    G_JSON_Value *root_value = NULL;
+    G_JSON_Value *root_value = NULL, *column_value = NULL;
+    G_JSON_Object *column_object = NULL;
     G_JSON_Array *root_array = NULL;
 
     parse_command_line(argc, argv);
@@ -76,6 +78,39 @@ int main(int argc, char **argv)
     }
 
     ncols = db_get_table_number_of_columns(table);
+    // -e flag is handled here
+    if (parms.more_info) {
+        for (col = 0; col < ncols; col++) {
+            switch (parms.format)
+            {
+            case JSON:
+            column_value = G_json_value_init_object();
+            column_object = G_json_object(column_value);
+
+            G_json_object_set_string(
+                column_object, "name",
+                db_get_column_name(db_get_table_column(table, col)));
+
+            int sql_type =
+                db_get_column_sqltype(db_get_table_column(table, col));
+            G_json_object_set_string(column_object, "sql_type",
+                                     db_sqltype_name(sql_type));
+
+            int c_type = db_sqltype_to_Ctype(sql_type);
+            G_json_object_set_boolean(
+                column_object, "is_number",
+                (c_type == DB_C_TYPE_INT || c_type == DB_C_TYPE_DOUBLE));
+
+            G_json_array_append_value(root_array, column_value);
+            break;
+            
+            default:
+                // should not reach here as -e is supported only for format=json
+                break;
+            }
+        }
+    }
+
     for (col = 0; col < ncols; col++) {
         switch (parms.format) {
         case PLAIN:
@@ -110,6 +145,7 @@ int main(int argc, char **argv)
 static void parse_command_line(int argc, char **argv)
 {
     struct Option *driver, *database, *table, *format;
+    struct Flag *more_info;
     struct GModule *module;
     const char *drv, *db;
 
@@ -127,6 +163,14 @@ static void parse_command_line(int argc, char **argv)
     database = G_define_standard_option(G_OPT_DB_DATABASE);
     if ((db = db_get_default_database_name()))
         database->answer = (char *)db;
+    
+    more_info = G_define_flag();
+    more_info->key = 'e';
+    more_info->label = _("Print type information about the columns");
+    more_info->description =
+        _("Column names and types are printed for the "
+          "specified layer if it has an attribute table database connection");
+    more_info->guisection = _("Print");
 
     /* Set description */
     module = G_define_module();
@@ -144,10 +188,14 @@ static void parse_command_line(int argc, char **argv)
     parms.database = database->answer;
     parms.table = table->answer;
 
+    parms.more_info = more_info->answer ? TRUE : FALSE;
+
     if (strcmp(format->answer, "json") == 0) {
         parms.format = JSON;
     }
     else {
+        if (parms.more_info)
+            G_fatal_error(_("-e flag is currently only supported with format=json."));
         parms.format = PLAIN;
     }
 }
