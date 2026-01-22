@@ -16,6 +16,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 from grass.script import core as grass
+from grass.script import raster as grast
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
@@ -128,7 +129,7 @@ class BaseRasterResolutionTest(TestCase):
         self.assertRasterExists("test_base_raster_output")
 
         # Get output raster info
-        info = grass.raster_info("test_base_raster_output")
+        info = grast.raster_info("test_base_raster_output")
 
         # Verify that output resolution matches computational region (6m), not base raster (2m)
         self.assertAlmostEqual(
