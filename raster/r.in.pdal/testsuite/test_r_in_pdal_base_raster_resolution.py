@@ -148,12 +148,12 @@ class BaseRasterResolutionTest(TestCase):
         # Verify that output has correct number of rows and columns for 6m resolution
         # Region is 18x18 with 6m resolution = 3x3 cells
         self.assertEqual(
-            info["rows"],
+            int(info["rows"]),
             3,
             "Output should have 3 rows (18m / 6m resolution)",
         )
         self.assertEqual(
-            info["cols"],
+            int(info["cols"]),
             3,
             "Output should have 3 columns (18m / 6m resolution)",
         )
