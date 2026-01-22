@@ -961,6 +961,7 @@ def create_suffix_from_datetime(start_time: datetime, granularity: str) -> str:
         "minutes": "%Y_%m_%d_%H_%M",
         "minute": "%Y_%m_%d_%H_%M",
         "seconds": "%Y_%m_%d_%H_%M_%S",
+        "second": "%Y_%m_%d_%H_%M_%S",
     }
 
     return start_time.strftime(suffix_units[granularity.split(" ", 2)[1]])
