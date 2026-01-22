@@ -1,5 +1,5 @@
 ---
-title: MySQL embedded Driver
+title: MySQL Embedded Driver
 description: MySQL embedded driver
 ---
 
