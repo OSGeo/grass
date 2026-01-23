@@ -196,14 +196,12 @@ if(WITH_OPENMP)
   if(OpenMP_FOUND AND MSVC AND CMAKE_VERSION VERSION_LESS "3.30")
     # CMake < 3.30 doesn't support OpenMP_RUNTIME_MSVC
     # for min/max reduction
-    add_compile_options(-openmp:llvm)
+    target_compile_options(OpenMP::OpenMP_C PRIVATE -openmp:llvm)
   endif()
 endif()
 
 if(WITH_LIBSVM)
   find_package(LibSVM REQUIRED)
-  include(DevelUtils)
-  print_target_properties(LibSVM::LibSVM)
 endif()
 
 # Data format options

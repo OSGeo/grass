@@ -32,7 +32,7 @@ build_library_in_subdir(
   grass_gproj
   grass_parson
   OPTIONAL_DEPENDS
-  OPENMP)
+  OpenMP::OpenMP_C)
 
 if(TARGET LAPACKE)
   target_link_libraries(grass_raster PRIVATE LAPACKE)
@@ -62,7 +62,7 @@ build_library_in_subdir(
   CBLAS::CBLAS
   FFTW
   LAPACKE::LAPACKE
-  OPENMP)
+  OpenMP::OpenMP_C)
 
 build_library_in_subdir(linkm)
 
@@ -201,7 +201,7 @@ build_library_in_subdir(
   grass_gmath
   ${LIBM}
   OPTIONAL_DEPENDS
-  OPENMP)
+  OpenMP::OpenMP_C)
 
 build_library_in_subdir(dspf DEPENDS grass_gis)
 
