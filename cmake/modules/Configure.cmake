@@ -35,7 +35,11 @@ if(MSVC)
 else()
   check_include_file(pthread.h HAVE_PTHREAD_H)
   check_include_file(regex.h HAVE_REGEX_H)
+
+  set(CMAKE_REQUIRED_INCLUDES ${Intl_INCLUDE_DIR})
   check_include_file(libintl.h HAVE_LIBINTL_H)
+  unset(CMAKE_REQUIRED_INCLUDES)
+
   check_include_file(langinfo.h HAVE_LANGINFO_H)
   check_include_file(dbm.h HAVE_DBM_H)
 endif()

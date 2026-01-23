@@ -42,7 +42,7 @@ add_custom_target(
   COMMENT "All display modules are built.")
 
 if(WITH_DOCS)
-  generate_html(TARGET ALL_DISPLAY_MODULES NAME displaydrivers)
+  generate_docs(displaydrivers TARGET ALL_DISPLAY_MODULES)
 endif()
 
 build_program_in_subdir(d.barscale DEPENDS grass_symb grass_display grass_gis)

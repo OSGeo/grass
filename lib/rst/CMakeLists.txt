@@ -33,7 +33,7 @@ build_library_in_subdir(
   grass_interpdata
   ${LIBM}
   OPTIONAL_DEPENDS
-  OPENMP
+  OpenMP::OpenMP_C
   HEADERS
   "interpf.h")
 

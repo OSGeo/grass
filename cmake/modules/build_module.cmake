@@ -143,6 +143,7 @@ function(build_module)
 
     generate_export_header(${G_NAME} STATIC_DEFINE "STATIC_BUILD"
                            EXPORT_FILE_NAME ${export_file_name})
+    add_dependencies(${G_NAME} python_doc_utils)
   endif()
 
   if(G_HTML_FILE_NAME)
@@ -209,18 +210,8 @@ function(build_module)
         target_compile_definitions(${G_NAME} PRIVATE "${interface_def}")
       endif()
       target_link_libraries(${G_NAME} PRIVATE ${dep})
-    elseif(OpenMP_C_FOUND)
-      target_link_libraries(${G_NAME} PRIVATE OpenMP::OpenMP_C)
     endif()
   endforeach()
-
-  # To use this property later in build_docs
-  set(PGM_EXT "")
-  if(WIN32)
-    if(G_EXE)
-      set(PGM_EXT ".exe")
-    endif()
-  endif()
 
   set(G_HTML_FILE_NAME "${HTML_FILE_NAME}.html")
   set(html_file_search ${G_SRC_DIR}/${G_HTML_FILE_NAME})
@@ -229,61 +220,30 @@ function(build_module)
   endif()
 
   if(WITH_DOCS AND NOT G_NO_DOCS)
-    set(HTML_FILE)
+
+    set(html_file)
     if(EXISTS ${html_file_search})
-      set(HTML_FILE ${html_file_search})
-      install(FILES ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${G_HTML_FILE_NAME}
-              DESTINATION ${GRASS_INSTALL_DOCDIR})
+      set(html_file ${html_file_search})
     endif()
 
-    if(NOT HTML_FILE)
+    if(NOT html_file)
       return()
     endif()
 
-    get_filename_component(HTML_FILE_NAME ${HTML_FILE} NAME)
-    get_filename_component(PGM_SOURCE_DIR ${HTML_FILE} PATH)
+    get_filename_component(HTML_FILE_NAME ${html_file} NAME)
+    get_filename_component(PGM_SOURCE_DIR ${html_file} PATH)
 
     string(REPLACE ".html" "" PGM_NAME "${HTML_FILE_NAME}")
-    string(REPLACE ".html" ".tmp.html" TMP_HTML_NAME ${HTML_FILE_NAME})
-    set(TMP_HTML_FILE ${CMAKE_CURRENT_BINARY_DIR}/${TMP_HTML_NAME})
-    set(OUT_HTML_FILE ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${HTML_FILE_NAME})
-
-    set(PGM_EXT "")
-    if(WIN32)
-      set(PGM_EXT ".exe")
-    endif()
 
     if(RUN_HTML_DESCR)
-      set(html_descr_command
-          ${G_NAME}${PGM_EXT} --html-description < ${NULL_DEVICE} |
-          ${SEARCH_COMMAND} ${HTML_SEARCH_STR})
-    else()
-      set(html_descr_command ${CMAKE_COMMAND} -E echo)
+      set(HTML_DESCR "HTML_DESCR")
     endif()
 
-    file(
-      GLOB IMG_FILES
-      LIST_DIRECTORIES FALSE
-      ${G_SRC_DIR}/*.png ${G_SRC_DIR}/*.jpg)
-    if(IMG_FILES)
-      set(copy_images_command ${CMAKE_COMMAND} -E copy ${IMG_FILES}
-                              ${OUTDIR}/${GRASS_INSTALL_DOCDIR})
-      install(FILES ${IMG_FILES} DESTINATION ${GRASS_INSTALL_DOCDIR})
-    endif()
-
-    add_custom_command(
+    generate_docs(${PGM_NAME}
       TARGET ${G_NAME}
-      POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy ${G_SRC_DIR}/${G_HTML_FILE_NAME}
-              ${CMAKE_CURRENT_BINARY_DIR}/${G_HTML_FILE_NAME}
-      COMMAND ${grass_env_command} ${html_descr_command} > ${TMP_HTML_FILE}
-      COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${MKHTML_PY} ${PGM_NAME}
-              > ${OUT_HTML_FILE}
-      COMMAND ${copy_images_command}
-      COMMAND ${CMAKE_COMMAND} -E remove ${TMP_HTML_FILE}
-              ${CMAKE_CURRENT_BINARY_DIR}/${G_HTML_FILE_NAME}
-      COMMENT "Creating ${OUT_HTML_FILE}")
-    install(FILES ${OUT_HTML_FILE} DESTINATION ${GRASS_INSTALL_DOCDIR})
+      SOURCEDIR ${PGM_SOURCE_DIR}
+      ${HTML_DESCR})
+
   endif() # WITH_DOCS
 
   foreach(test_SOURCE ${G_TEST_SOURCES})

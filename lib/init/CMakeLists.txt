@@ -1,13 +1,26 @@
 # #for i18N support
 
-file(GLOB init_HTMLFILES "*.html")
 add_custom_target(ADD_INIT_DOCS ALL COMMENT "Generate init docs.")
 
 if(WITH_DOCS)
-  foreach(html_file ${init_HTMLFILES})
-    get_filename_component(filename ${html_file} NAME_WLE)
-    generate_html(TARGET ADD_INIT_DOCS NAME ${filename})
-  endforeach()
+
+  generate_docs_list(
+    TARGET ADD_INIT_DOCS
+    DOC_FILES
+      grass
+      helptext
+      variables
+    IMG_FILES
+      grass_start.png
+      grassdb.png
+      help_project_structure.png
+      location-add.png
+      location-download.png
+      location.png
+      mapset.png
+      raster-import.png
+      vector-import.png)
+
 endif()
 
 # START_UP is the variable used in grass.py, grass.sh.in and grass.bat.in

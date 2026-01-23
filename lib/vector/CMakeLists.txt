@@ -62,5 +62,5 @@ build_library_in_subdir(
   GDAL::GDAL)
 
 if(WITH_DOCS)
-  generate_html(TARGET grass_vector NAME vectorascii)
+  generate_docs(vectorascii TARGET grass_vector)
 endif()
