@@ -26,7 +26,7 @@ enum OutputFormat { PLAIN, JSON };
 struct {
     char *driver, *database, *table;
     enum OutputFormat format;
-    int *more_info;
+    int more_info;
 } parms;
 
 /* function prototypes */
