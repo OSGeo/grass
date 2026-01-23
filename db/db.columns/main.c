@@ -14,6 +14,7 @@
  *****************************************************************************/
 
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
 
 #include <grass/gis.h>
@@ -26,7 +27,7 @@ enum OutputFormat { PLAIN, JSON };
 struct {
     char *driver, *database, *table;
     enum OutputFormat format;
-    int more_info;
+    bool more_info;
 } parms;
 
 /* function prototypes */
@@ -171,8 +172,7 @@ static void parse_command_line(int argc, char **argv)
     more_info->key = 'e';
     more_info->label = _("Print type information about the columns");
     more_info->description =
-        _("Column names and types are printed for the "
-          "specified layer if it has an attribute table database connection");
+        _("Print the name and the type of all the columns for a given table.");
     more_info->guisection = _("Print");
 
     /* Set description */
