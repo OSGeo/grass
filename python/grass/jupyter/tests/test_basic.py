@@ -6,6 +6,8 @@ They are separate from the main test suite to avoid fixture conflicts.
 
 import importlib.util
 
+import pytest
+
 
 def test_grass_jupyter_module_exists():
     """Test that grass.jupyter module exists"""
@@ -15,43 +17,31 @@ def test_grass_jupyter_module_exists():
 
 def test_import_interactivemap():
     """Test importing InteractiveMap class"""
-    try:
-        from grass.jupyter import InteractiveMap
+    pytest.importorskip("grass.jupyter")
+    from grass.jupyter import InteractiveMap
 
-        assert InteractiveMap is not None
-    except ImportError as e:
-        # Skip if dependencies not available
-        assert "grass.jupyter" in str(e) or "folium" in str(e)
+    assert InteractiveMap is not None
 
 
 def test_import_map():
     """Test importing Map class"""
-    try:
-        from grass.jupyter import Map
+    pytest.importorskip("grass.jupyter")
+    from grass.jupyter import Map
 
-        assert Map is not None
-    except ImportError as e:
-        # Skip if dependencies not available
-        assert "grass.jupyter" in str(e) or "PIL" in str(e)
+    assert Map is not None
 
 
 def test_import_map3d():
     """Test importing Map3D class"""
-    try:
-        from grass.jupyter import Map3D
+    pytest.importorskip("grass.jupyter")
+    from grass.jupyter import Map3D
 
-        assert Map3D is not None
-    except ImportError as e:
-        # Skip if dependencies not available
-        assert "grass.jupyter" in str(e)
+    assert Map3D is not None
 
 
 def test_import_timeseriesmap():
     """Test importing TimeSeriesMap class"""
-    try:
-        from grass.jupyter import TimeSeriesMap
+    pytest.importorskip("grass.jupyter")
+    from grass.jupyter import TimeSeriesMap
 
-        assert TimeSeriesMap is not None
-    except ImportError as e:
-        # Skip if dependencies not available
-        assert "grass.jupyter" in str(e)
+    assert TimeSeriesMap is not None
