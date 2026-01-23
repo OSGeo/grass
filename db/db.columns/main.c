@@ -191,7 +191,7 @@ static void parse_command_line(int argc, char **argv)
     parms.database = database->answer;
     parms.table = table->answer;
 
-    parms.more_info = more_info->answer ? TRUE : FALSE;
+    parms.more_info = more_info->answer ? true : false;
 
     if (strcmp(format->answer, "json") == 0) {
         parms.format = JSON;
