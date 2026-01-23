@@ -1,47 +1,40 @@
-"""Basic import tests for grass.jupyter module
+"""Basic import tests for grass.jupyter module"""
 
-These tests verify that grass.jupyter classes can be imported.
-They are separate from the main test suite to avoid fixture conflicts.
-"""
-
-import importlib.util
-
-import pytest
+import grass.jupyter as gj
 
 
-def test_grass_jupyter_module_exists():
-    """Test that grass.jupyter module exists"""
-    spec = importlib.util.find_spec("grass.jupyter")
-    assert spec is not None, "grass.jupyter module not found"
+def test_module_can_be_imported():
+    """Test that grass.jupyter module can be imported"""
+    assert gj is not None
 
 
-def test_import_interactivemap():
-    """Test importing InteractiveMap class"""
-    pytest.importorskip("grass.jupyter")
-    from grass.jupyter import InteractiveMap
-
-    assert InteractiveMap is not None
+def test_interactivemap_class_exists():
+    """Test that InteractiveMap class exists"""
+    assert hasattr(gj, "InteractiveMap")
 
 
-def test_import_map():
-    """Test importing Map class"""
-    pytest.importorskip("grass.jupyter")
-    from grass.jupyter import Map
-
-    assert Map is not None
+def test_map_class_exists():
+    """Test that Map class exists"""
+    assert hasattr(gj, "Map")
 
 
-def test_import_map3d():
-    """Test importing Map3D class"""
-    pytest.importorskip("grass.jupyter")
-    from grass.jupyter import Map3D
-
-    assert Map3D is not None
+def test_map3d_class_exists():
+    """Test that Map3D class exists"""
+    assert hasattr(gj, "Map3D")
 
 
-def test_import_timeseriesmap():
-    """Test importing TimeSeriesMap class"""
-    pytest.importorskip("grass.jupyter")
-    from grass.jupyter import TimeSeriesMap
+def test_timeseriesmap_class_exists():
+    """Test that TimeSeriesMap class exists"""
+    assert hasattr(gj, "TimeSeriesMap")
 
-    assert TimeSeriesMap is not None
+
+def test_seriesmap_class_exists():
+    """Test that SeriesMap class exists"""
+    assert hasattr(gj, "SeriesMap")
+
+
+def test_map_has_display_methods():
+    """Test that Map class has display methods available"""
+    map2d = gj.Map()
+    assert "d_rast" in dir(map2d)
+    assert "d_vect" in dir(map2d)
