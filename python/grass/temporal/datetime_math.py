@@ -927,8 +927,8 @@ def create_suffix_from_datetime(start_time: datetime, granularity: str) -> str:
     granularity that can be used as suffix for map names. The largest
     granularity determines the suffix. E.g.:
 
-    dateteime=2001-01-01 00:00:00, granularity="1 month" returns "2001_01"
-    dateteime=2001-01-01 00:00:00, granularity="1 year 1 month" returns "2001"
+    datetime=2001-01-01 00:00:00, granularity="1 month" returns "2001_01"
+    datetime=2001-01-01 00:00:00, granularity="1 year 1 month" returns "2001"
 
     :param start_time: The datetime object
     :param granularity: The granularity for example "1 month" or "100 seconds"
