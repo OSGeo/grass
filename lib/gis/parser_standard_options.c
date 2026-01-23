@@ -956,7 +956,7 @@ struct Option *G_define_standard_option(int opt)
                              "'gran' for granularity, "
                              "'time' for the full time format, "
                              "'num' for numerical suffix with "
-                             "a specific number of digits (default %05)");
+                             "a specific number of digits (default %%05)");
         break;
     case G_OPT_T_TYPE:
         Opt->key = "temporaltype";
