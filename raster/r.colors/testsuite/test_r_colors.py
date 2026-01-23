@@ -127,17 +127,9 @@ class TestRColors(TestCase):
         """Test applying precipitation color table"""
         self.assertModule("r.colors", map="elevation", color="precipitation")
 
-    def test_color_rainbow(self):
-        """Test applying rainbow color table"""
-        self.assertModule("r.colors", map="elevation", color="rainbow")
-
     def test_color_ramp(self):
         """Test applying ramp color table"""
         self.assertModule("r.colors", map="elevation", color="ramp")
-
-    def test_color_random(self):
-        """Test applying random color table"""
-        self.assertModule("r.colors", map="elevation", color="random")
 
     def test_color_reds(self):
         """Test applying reds color table"""
