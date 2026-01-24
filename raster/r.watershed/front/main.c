@@ -61,6 +61,8 @@ int main(int argc, char *argv[])
     struct Option *opt17;
     struct Option *opt18;
     struct Option *opt19;
+    struct Option *opt20; /* Input accumulation map */
+    struct Option *opt21; /* Input drainage direction map */
     struct Flag *flag_sfd;
     struct Flag *flag_flow;
     struct Flag *flag_seg;
@@ -122,6 +124,22 @@ int main(int argc, char *argv[])
         _("Name of input raster map with percentages for flow accumulation.");
     opt19->required = NO;
     opt19->guisection = _("Inputs");
+
+    opt20 = G_define_standard_option(G_OPT_R_INPUT);
+    opt20->key = "accumulation_input";
+    opt20->label = _("Name of existing accumulation raster map to reuse");
+    opt20->description =
+        _("Reuses existing flow accumulation map instead of recalculating");
+    opt20->required = NO;
+    opt20->guisection = _("Inputs");
+
+    opt21 = G_define_standard_option(G_OPT_R_INPUT);
+    opt21->key = "drainage_input";
+    opt21->label = _("Name of existing drainage direction raster map to reuse");
+    opt21->description =
+        _("Reuses existing drainage direction map instead of recalculating");
+    opt21->required = NO;
+    opt21->guisection = _("Inputs");
 
     opt6 = G_define_option();
     opt6->key = "threshold";
@@ -247,6 +265,15 @@ int main(int argc, char *argv[])
     G_option_requires(opt13, opt6, NULL);
     G_option_requires(opt14, opt6, NULL);
 
+    G_option_requires(opt20, opt21, NULL);
+    G_option_requires(opt21, opt20, NULL);
+
+    /* Cannot use input maps with certain incompatible options */
+    G_option_excludes(
+        opt20, opt2, opt3, opt4, opt5, opt19,
+        NULL); /* depression, flow, disturbed_land, blocking, retention */
+    G_option_excludes(opt21, opt2, opt3, opt4, opt5, opt19, NULL);
+
     /* Check for some output map */
     G_option_required(opt8, opt17, opt18, opt9, opt10, opt11, opt12, opt13,
                       opt14, NULL);
@@ -287,6 +314,8 @@ int main(int argc, char *argv[])
     do_opt(opt4);
     do_opt(opt5);
     do_opt(opt19);
+    do_opt(opt20);
+    do_opt(opt21);
     do_opt(opt6);
     do_opt(opt7);
     do_opt(opt8);
