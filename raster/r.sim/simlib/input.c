@@ -104,11 +104,12 @@ int input_data(const Geometry *geometry, Simulation *sim, const Inputs *inputs,
     else {
         grids->v1 = read_double_raster_map(rows, cols, inputs->dxin, 1.0);
         grids->v2 = read_double_raster_map(rows, cols, inputs->dyin, 1.0);
-    }
 
-    /* Update elevation map */
-    copy_matrix_undef_double_to_float_values(rows, cols, grids->v1, grids->zz);
-    copy_matrix_undef_double_to_float_values(rows, cols, grids->v2, grids->zz);
+        copy_matrix_undef_double_to_float_values(rows, cols, grids->v1,
+                                                 grids->zz);
+        copy_matrix_undef_double_to_float_values(rows, cols, grids->v2,
+                                                 grids->zz);
+    }
 
     /* Manning surface roughnes: read map or use a single value */
     if (inputs->manin != NULL) {
