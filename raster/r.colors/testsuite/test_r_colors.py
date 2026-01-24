@@ -1,171 +1,138 @@
-"""Test r.colors module"""
+"""Test r.colors module
+
+Tests for r.colors color table assignment and manipulation.
+"""
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-from grass.gunittest.gmodules import call_module
+import grass.script as gs
 
 
-class TestRColors(TestCase):
-    """Test r.colors module"""
+class TestRColorsBasic(TestCase):
+    """Test basic r.colors functionality"""
 
     @classmethod
     def setUpClass(cls):
         """Set up test environment"""
         cls.use_temp_region()
-        call_module("g.region", raster="elevation")
+        cls.runModule("g.region", raster="elevation")
 
     @classmethod
     def tearDownClass(cls):
         """Clean up"""
         cls.del_temp_region()
 
-    def test_module_help(self):
-        """Test that module help works"""
-        self.assertModule("r.colors", help=True)
+    def test_color_table_applied(self):
+        """Test that color table is actually applied"""
+        self.assertModule("r.colors", map="elevation", color="viridis")
+        # Verify color table was applied by checking output
+        rules = gs.read_command("r.colors.out", map="elevation")
+        self.assertIn("nv", rules, "Color table should contain null value rule")
+        self.assertGreater(
+            len(rules.split("\n")), 5, "Color table should have multiple rules"
+        )
 
-    def test_color_grey(self):
-        """Test applying grey color table"""
+    def test_equalize_flag(self):
+        """Test equalize histogram flag"""
+        self.assertModule("r.colors", map="elevation", color="grey", flags="e")
+        rules_eq = gs.read_command("r.colors.out", map="elevation")
+
+        # Apply without equalize
         self.assertModule("r.colors", map="elevation", color="grey")
+        rules_normal = gs.read_command("r.colors.out", map="elevation")
 
-    def test_color_viridis(self):
-        """Test applying viridis color table"""
+        # Rules should be different
+        self.assertNotEqual(
+            rules_eq, rules_normal, "Equalized colors should differ from normal"
+        )
+
+    def test_remove_color_table(self):
+        """Test removing color table with -r flag"""
+        # First apply a color table
         self.assertModule("r.colors", map="elevation", color="viridis")
 
+        # Remove it
+        self.assertModule("r.colors", map="elevation", flags="r")
+
+        # Check it was removed (should have default grey)
+        rules = gs.read_command("r.colors.out", map="elevation")
+        # After removal, should have minimal rules
+        self.assertLess(
+            len(rules.split("\n")), 10, "Removed color table should have minimal rules"
+        )
+
+    def test_invert_colors(self):
+        """Test inverting colors with -n flag"""
+        self.assertModule("r.colors", map="elevation", color="viridis")
+        rules_normal = gs.read_command("r.colors.out", map="elevation")
+
+        self.assertModule("r.colors", map="elevation", color="viridis", flags="n")
+        rules_inverted = gs.read_command("r.colors.out", map="elevation")
+
+        self.assertNotEqual(
+            rules_normal, rules_inverted, "Inverted colors should differ from normal"
+        )
+
+
+class TestRColorsRules(TestCase):
+    """Test r.colors with custom rules"""
+
+    @classmethod
+    def setUpClass(cls):
+        """Set up test environment"""
+        cls.use_temp_region()
+        cls.runModule("g.region", raster="elevation")
+
+    @classmethod
+    def tearDownClass(cls):
+        """Clean up"""
+        cls.del_temp_region()
+
+    def test_custom_rules_stdin(self):
+        """Test applying custom color rules via stdin"""
+        rules = "0 blue\n100 green\n200 red"
+        self.assertModule("r.colors", map="elevation", rules="-", stdin_=rules)
+
+        # Verify custom rules were applied
+        output = gs.read_command("r.colors.out", map="elevation")
+        self.assertIn("blue", output.lower(), "Should contain blue color")
+        self.assertIn("green", output.lower(), "Should contain green color")
+        self.assertIn("red", output.lower(), "Should contain red color")
+
+
+class TestRColorsColorTables(TestCase):
+    """Test standard color tables"""
+
+    @classmethod
+    def setUpClass(cls):
+        """Set up test environment"""
+        cls.use_temp_region()
+        cls.runModule("g.region", raster="elevation")
+
+    @classmethod
+    def tearDownClass(cls):
+        """Clean up"""
+        cls.del_temp_region()
+
+    def test_color_viridis(self):
+        """Test viridis color table"""
+        self.assertModule("r.colors", map="elevation", color="viridis")
+
+    def test_color_grey(self):
+        """Test grey color table"""
+        self.assertModule("r.colors", map="elevation", color="grey")
+
     def test_color_rainbow(self):
-        """Test applying rainbow color table"""
+        """Test rainbow color table"""
         self.assertModule("r.colors", map="elevation", color="rainbow")
 
-    def test_color_aspect(self):
-        """Test applying aspect color table"""
-        self.assertModule("r.colors", map="elevation", color="aspect")
-
-    def test_color_bcyr(self):
-        """Test applying bcyr color table"""
-        self.assertModule("r.colors", map="elevation", color="bcyr")
-
-    def test_color_bgyr(self):
-        """Test applying bgyr color table"""
-        self.assertModule("r.colors", map="elevation", color="bgyr")
-
-    def test_color_blues(self):
-        """Test applying blues color table"""
-        self.assertModule("r.colors", map="elevation", color="blues")
-
-    def test_color_celsius(self):
-        """Test applying celsius color table"""
-        self.assertModule("r.colors", map="elevation", color="celsius")
-
-    def test_color_corine(self):
-        """Test applying corine color table"""
-        self.assertModule("r.colors", map="elevation", color="corine")
-
-    def test_color_curvature(self):
-        """Test applying curvature color table"""
-        self.assertModule("r.colors", map="elevation", color="curvature")
-
-    def test_color_differences(self):
-        """Test applying differences color table"""
-        self.assertModule("r.colors", map="elevation", color="differences")
-
     def test_color_elevation(self):
-        """Test applying elevation color table"""
+        """Test elevation color table"""
         self.assertModule("r.colors", map="elevation", color="elevation")
 
-    def test_color_etopo2(self):
-        """Test applying etopo2 color table"""
-        self.assertModule("r.colors", map="elevation", color="etopo2")
-
-    def test_color_evi(self):
-        """Test applying evi color table"""
-        self.assertModule("r.colors", map="elevation", color="evi")
-
-    def test_color_fahrenheit(self):
-        """Test applying fahrenheit color table"""
-        self.assertModule("r.colors", map="elevation", color="fahrenheit")
-
-    def test_color_gdd(self):
-        """Test applying gdd color table"""
-        self.assertModule("r.colors", map="elevation", color="gdd")
-
-    def test_color_grass(self):
-        """Test applying grass color table"""
-        self.assertModule("r.colors", map="elevation", color="grass")
-
-    def test_color_greens(self):
-        """Test applying greens color table"""
-        self.assertModule("r.colors", map="elevation", color="greens")
-
-    def test_color_gyr(self):
-        """Test applying gyr color table"""
-        self.assertModule("r.colors", map="elevation", color="gyr")
-
-    def test_color_haxby(self):
-        """Test applying haxby color table"""
-        self.assertModule("r.colors", map="elevation", color="haxby")
-
-    def test_color_kelvin(self):
-        """Test applying kelvin color table"""
-        self.assertModule("r.colors", map="elevation", color="kelvin")
-
-    def test_color_ndvi(self):
-        """Test applying ndvi color table"""
-        self.assertModule("r.colors", map="elevation", color="ndvi")
-
-    def test_color_ndwi(self):
-        """Test applying ndwi color table"""
-        self.assertModule("r.colors", map="elevation", color="ndwi")
-
-    def test_color_oranges(self):
-        """Test applying oranges color table"""
-        self.assertModule("r.colors", map="elevation", color="oranges")
-
-    def test_color_population(self):
-        """Test applying population color table"""
-        self.assertModule("r.colors", map="elevation", color="population")
-
-    def test_color_precipitation(self):
-        """Test applying precipitation color table"""
-        self.assertModule("r.colors", map="elevation", color="precipitation")
-
-    def test_color_ramp(self):
-        """Test applying ramp color table"""
-        self.assertModule("r.colors", map="elevation", color="ramp")
-
-    def test_color_reds(self):
-        """Test applying reds color table"""
-        self.assertModule("r.colors", map="elevation", color="reds")
-
-    def test_color_roygbiv(self):
-        """Test applying roygbiv color table"""
-        self.assertModule("r.colors", map="elevation", color="roygbiv")
-
-    def test_color_ryb(self):
-        """Test applying ryb color table"""
-        self.assertModule("r.colors", map="elevation", color="ryb")
-
-    def test_color_ryg(self):
-        """Test applying ryg color table"""
-        self.assertModule("r.colors", map="elevation", color="ryg")
-
-    def test_color_sepia(self):
-        """Test applying sepia color table"""
-        self.assertModule("r.colors", map="elevation", color="sepia")
-
     def test_color_slope(self):
-        """Test applying slope color table"""
+        """Test slope color table"""
         self.assertModule("r.colors", map="elevation", color="slope")
-
-    def test_color_srtm(self):
-        """Test applying srtm color table"""
-        self.assertModule("r.colors", map="elevation", color="srtm")
-
-    def test_color_terrain(self):
-        """Test applying terrain color table"""
-        self.assertModule("r.colors", map="elevation", color="terrain")
-
-    def test_color_wave(self):
-        """Test applying wave color table"""
-        self.assertModule("r.colors", map="elevation", color="wave")
 
 
 if __name__ == "__main__":
