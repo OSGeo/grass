@@ -37,6 +37,8 @@
 #include <grass/gjson.h>
 #include "local_proto.h"
 
+enum OutputFormat { PLAIN, CSV, JSON };
+
 #if HAVE_GEOS
 #include <float.h>
 
@@ -47,7 +49,6 @@
  * or so as there's nothing more permanent than a temporary solution.)
  * 2017-11-19
  */
-enum OutputFormat { PLAIN, CSV, JSON };
 
 static int ring2pts(const GEOSGeometry *geom, struct line_pnts *Points)
 {
