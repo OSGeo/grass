@@ -1,7 +1,7 @@
 """
 Functions for mathematical datetime operations
 
-(C) 2011-2024 by the GRASS Development Team
+(C) 2011-2025 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -922,37 +922,52 @@ def datetime_to_grass_datetime_string(dt: datetime | None) -> str:
 ###############################################################################
 
 
-suffix_units = {
-    "years": "%Y",
-    "year": "%Y",
-    "months": "%Y_%m",
-    "month": "%Y_%m",
-    "weeks": "%Y_%m_%d",
-    "week": "%Y_%m_%d",
-    "days": "%Y_%m_%d",
-    "day": "%Y_%m_%d",
-    "hours": "%Y_%m_%d_%H",
-    "hour": "%Y_%m_%d_%H",
-    "minutes": "%Y_%m_%d_%H_%M",
-    "minute": "%Y_%m_%d_%H_%M",
-}
-
-
-def create_suffix_from_datetime(start_time: datetime, granularity) -> str:
+def create_suffix_from_datetime(start_time: datetime, granularity: str) -> str:
     """Create a datetime string based on a datetime object and a provided
-    granularity that can be used as suffix for map names.
+    granularity that can be used as suffix for map names. The largest
+    granularity determines the suffix. E.g.:
 
-    dateteime=2001-01-01 00:00:00, granularity="1 month" returns "2001_01"
+    datetime=2001-01-01 00:00:00, granularity="1 month" returns "2001_01"
+    datetime=2001-01-01 00:00:00, granularity="1 year 1 month" returns "2001"
 
     :param start_time: The datetime object
     :param granularity: The granularity for example "1 month" or "100 seconds"
     :return: A string
+
+    .. code-block:: pycon
+
+        >>> from datetime import datetime
+        >>> import grass.temporal as tgis
+        >>> start_time = datetime(2001, 1, 1, 10, 4, 12)
+        >>> tgis.create_suffix_from_datetime(start_time, "1 month")
+        '2001_01'
+        >>> tgis.create_suffix_from_datetime(start_time, "1 year 1 month")
+        '2001'
+        >>> tgis.create_suffix_from_datetime(start_time, "6 seconds")
+        '2001_01_01_10_04_12'
+
     """
-    global suffix_units
-    return start_time.strftime(suffix_units[granularity.split(" ")[1]])
+    suffix_units = {
+        "years": "%Y",
+        "year": "%Y",
+        "months": "%Y_%m",
+        "month": "%Y_%m",
+        "weeks": "%Y_%m_%d",
+        "week": "%Y_%m_%d",
+        "days": "%Y_%m_%d",
+        "day": "%Y_%m_%d",
+        "hours": "%Y_%m_%d_%H",
+        "hour": "%Y_%m_%d_%H",
+        "minutes": "%Y_%m_%d_%H_%M",
+        "minute": "%Y_%m_%d_%H_%M",
+        "seconds": "%Y_%m_%d_%H_%M_%S",
+        "second": "%Y_%m_%d_%H_%M_%S",
+    }
+
+    return start_time.strftime(suffix_units[granularity.split(" ", 2)[1]])
 
 
-def create_time_suffix(mapp, end: bool = False):
+def create_time_suffix(mapp, end: bool = False) -> str:
     """Create a datetime string based on a map datetime object
 
     :param mapp: a temporal map dataset
