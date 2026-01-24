@@ -181,6 +181,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           file: ${{ matrix.dockerfile }}
           annotations: ${{ steps.meta.outputs.annotations }}
+          labels: ${{ steps.meta.outputs.labels }}
           provenance: mode=max
           sbom: true
           # Don't use cache for releases.
@@ -214,3 +215,5 @@ jobs:
           subject-name: ghcr.io/${{ github.repository }}
           subject-digest: ${{ steps.docker_build.outputs.digest }}
           push-to-registry: ${{ github.event_name != 'pull_request' }}
+
+
