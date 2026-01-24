@@ -766,20 +766,15 @@ int main(int argc, char *argv[])
                                 column = db_get_table_column(table, col);
                                 db_convert_column_value_to_string(column,
                                                                   &valstr);
-                                type = db_get_column_sqltype(column);
+                                int ctype = db_sqltype_to_Ctype(
+                                    db_get_column_sqltype(column));
 
-                                /* Those values should be quoted */
-                                if (type == DB_SQL_TYPE_CHARACTER ||
-                                    type == DB_SQL_TYPE_DATE ||
-                                    type == DB_SQL_TYPE_TIME ||
-                                    type == DB_SQL_TYPE_TIMESTAMP ||
-                                    type == DB_SQL_TYPE_INTERVAL ||
-                                    type == DB_SQL_TYPE_TEXT ||
-                                    type == DB_SQL_TYPE_SERIAL)
-                                    fprintf(ascii, "%s\"%s\"", fs,
+                                if (ctype == DB_C_TYPE_INT ||
+                                    ctype == DB_C_TYPE_DOUBLE)
+                                    fprintf(ascii, "%s%s", fs,
                                             db_get_string(&valstr));
                                 else
-                                    fprintf(ascii, "%s%s", fs,
+                                    fprintf(ascii, "%s\"%s\"", fs,
                                             db_get_string(&valstr));
                             }
                         }
@@ -845,7 +840,8 @@ int main(int argc, char *argv[])
                             for (col = 0; col < ncols; col++) {
                                 column = db_get_table_column(table, col);
                                 dbValue *value = db_get_column_value(column);
-                                int ctype = db_get_column_sqltype(column);
+                                int ctype = db_sqltype_to_Ctype(
+                                    db_get_column_sqltype(column));
                                 const char *col_name =
                                     db_get_column_name(column);
 
@@ -853,12 +849,12 @@ int main(int argc, char *argv[])
                                     G_json_object_set_null(attr_object,
                                                            col_name);
                                 }
-                                else if (ctype == DB_SQL_TYPE_INTEGER) {
+                                else if (ctype == DB_C_TYPE_INT) {
                                     G_json_object_set_number(
                                         attr_object, col_name,
                                         db_get_value_int(value));
                                 }
-                                else if (ctype == DB_SQL_TYPE_REAL) {
+                                else if (ctype == DB_C_TYPE_DOUBLE) {
                                     G_json_object_set_number(
                                         attr_object, col_name,
                                         db_get_value_double(value));
