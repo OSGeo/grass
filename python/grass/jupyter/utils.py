@@ -20,6 +20,7 @@ import multiprocessing
 
 from pathlib import Path
 import grass.script as gs
+from grass.tools import Tools
 
 
 def get_region(env=None):
@@ -27,7 +28,8 @@ def get_region(env=None):
 
     Additionally, it adds long key names.
     """
-    region = gs.region(env=env)
+    tools = Tools()
+    region = tools.g_region(flags="g", env=env)
     region["east"] = region["e"]
     region["west"] = region["w"]
     region["north"] = region["n"]
@@ -37,7 +39,8 @@ def get_region(env=None):
 
 def get_location_proj_string(env=None):
     """Returns projection of environment in PROJ.4 format"""
-    out = gs.read_command("g.proj", flags="fp", format="proj4", env=env)
+    tools = Tools()
+    out = tools.g_proj(flags="fp", format="proj4", env=env, stdout_=True)
     return out.strip()
 
 
