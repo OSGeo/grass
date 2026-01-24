@@ -196,8 +196,12 @@ if(WITH_OPENMP)
   if(OpenMP_FOUND AND MSVC AND CMAKE_VERSION VERSION_LESS "3.30")
     # CMake < 3.30 doesn't support OpenMP_RUNTIME_MSVC
     # for min/max reduction
-    add_compile_options(-openmp:llvm)
+    target_compile_options(OpenMP::OpenMP_C PRIVATE -openmp:llvm)
   endif()
+endif()
+
+if(WITH_LIBSVM)
+  find_package(LibSVM REQUIRED)
 endif()
 
 # Data format options
@@ -271,6 +275,7 @@ check_target(LAPACKE::LAPACKE HAVE_LIBLAPACK)
 check_target(TIFF::TIFF HAVE_TIFFIO_H)
 check_target(NETCDF HAVE_NETCDF)
 check_target(GEOS::geos_c HAVE_GEOS)
+check_target(LibSVM::LibSVM HAVE_SVM_H)
 
 if(MSVC)
   check_target(PCRE HAVE_PCRE_H)

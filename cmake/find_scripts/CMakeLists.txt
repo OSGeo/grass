@@ -1,0 +1,16 @@
+install(
+  FILES
+  FindCairo.cmake
+  FindCBLAS.cmake
+  FindFFTW.cmake
+  FindGEOS.cmake
+  FindLAPACKE.cmake
+  FindLibLAS.cmake
+  FindMySQL.cmake
+  FindNetCDF.cmake
+  FindPCRE.cmake
+  FindPROJ.cmake
+  FindReadline.cmake
+  Findzstd.cmake
+  DESTINATION
+  ${GRASS_INSTALL_ETCDIR}/cmake)
