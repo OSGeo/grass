@@ -62,7 +62,7 @@ t.register -i type=raster input=precip_where_single maps=prec_1,prec_2,prec_3 st
 t.rast.mapcalc inputs=precip_where_single output=precip_where_single_out \
            expression="precip_where_single * 2" base=new_prec \
            where="start_time >= '2001-02-01'"
-t.info -g type=strds input=precip_where_single_out | grep "number_of_maps=2" || exit 1
+t.info -g type=strds input=precip_where_single_out | grep -q "number_of_maps=2" || exit 1
 
 # Test with where parameter - multiple STRDS (sampling case)
 echo "Test: Multiple STRDS with where filter"
@@ -76,7 +76,7 @@ t.register -i type=raster input=precip_where_b maps=prec_1,prec_2,prec_3 start="
 t.rast.mapcalc inputs=precip_where_a,precip_where_b output=precip_where_multi_out \
            expression="precip_where_a + precip_where_b" base=new_prec \
            method=equal where="start_time >= '2001-02-01'"
-t.info -g type=strds input=precip_where_multi_out | grep "number_of_maps=2" || exit 1
+t.info -g type=strds input=precip_where_multi_out | grep -q "number_of_maps=2" || exit 1
 
 # @postprocess
 t.remove -rf type=strds input=precip_abs1,precip_abs2,precip_abs3,precip_abs4,precip_where_single,precip_where_a,precip_where_b,precip_where_single_out,precip_where_multi_out
