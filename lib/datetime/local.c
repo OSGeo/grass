@@ -27,13 +27,14 @@
  */
 int datetime_get_local_timezone(int *minutes)
 {
+    struct tm local_tm, gm_tm;
     struct tm *local, *gm;
     time_t clock;
     DateTime dtl, dtg, dtdiff;
 
     time(&clock);
 
-    local = localtime(&clock);
+    local = localtime_r(&clock, &local_tm);
 
     datetime_set_type(&dtl, DATETIME_ABSOLUTE, DATETIME_YEAR, DATETIME_SECOND,
                       0);
