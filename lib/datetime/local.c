@@ -47,7 +47,7 @@ int datetime_get_local_timezone(int *minutes)
     datetime_set_minute(&dtl, (int)local->tm_min);
     datetime_set_second(&dtl, (double)local->tm_sec);
 
-    gm = gmtime(&clock);
+    gm = gmtime_r(&clock, &gm_tm);
 
     datetime_set_type(&dtg, DATETIME_ABSOLUTE, DATETIME_YEAR, DATETIME_SECOND,
                       0);
