@@ -410,7 +410,8 @@ static int write_error(const char *msg, int fatal, time_t clock,
     fprintf(log, "%-10s %s\n", "program:", G_program_name());
     fprintf(log, "%-10s %s\n", "user:", G_whoami());
     fprintf(log, "%-10s %s\n", "cwd:", cwd);
-    fprintf(log, "%-10s %s\n", "date:", ctime(&clock));
+    char ctime_buf[26];
+    fprintf(log, "%-10s %s\n", "date:", ctime_r(&clock, ctime_buf));
     fprintf(log, "%-10s %s\n", fatal ? "error:" : "warning:", msg);
     fprintf(log, "-------------------------------------\n");
 
