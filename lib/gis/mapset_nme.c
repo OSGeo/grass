@@ -73,7 +73,7 @@ void G__get_list_of_mapsets(void)
     if (fp) {
         char name[GNAME_MAX];
 
-        while (fscanf(fp, "%s", name) == 1) {
+        while (fscanf(fp, "%255s", name) == 1) {
             if (strcmp(name, cur) == 0)
                 continue;
             if (G_mapset_permissions(name) >= 0)
