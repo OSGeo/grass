@@ -229,11 +229,8 @@ int main(int argc, char **argv)
         tokens = G_tokenize(columns_opt->answer, ",");
         ntokens = G_number_of_tokens(tokens);
         /* feature (outline) color in RGBA, empty if none */
-        char feature_rgba[64];
-        if (ocolor.none) {
-            feature_rgba[0] = '\0';
-        }
-        else {
+        char feature_rgba[64] = {'\0'};
+        if (!ocolor.none) {
             snprintf(feature_rgba, sizeof(feature_rgba), "%d:%d:%d:%d",
                      ocolor.r, ocolor.g, ocolor.b, 255);
         }
