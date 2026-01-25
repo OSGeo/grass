@@ -313,7 +313,7 @@ static void print_error(const char *msg, const int type)
                     ;
             }
             else {
-                fprintf(stderr, "%s%s\n", prefix_std[type], msg);
+                 fprintf(stderr, "%s%s\n", prefix_std[(type >= 0 && type < 3) ? type : MSG], msg);
             }
 
             if ((type != MSG) && isatty(fileno(stderr)) &&
