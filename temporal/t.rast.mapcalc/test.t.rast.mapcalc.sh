@@ -36,11 +36,6 @@ t.rast.mapcalc -s inputs=precip_abs1,precip_abs2,precip_abs3 output=precip_abs4 
            method=equal nprocs=5
 t.info type=strds input=precip_abs4
 
-t.rast.mapcalc -s inputs=precip_abs1,precip_abs2 output=precip_abs4 \
-           expression=" (precip_abs1 + precip_abs2) * null()" base=new_prec \
-           method=equal nprocs=5
-t.info type=strds input=precip_abs4
-
 t.rast.mapcalc -sn inputs=precip_abs1,precip_abs2 output=precip_abs4 \
            expression=" (precip_abs1 + precip_abs2) * null()" base=new_prec \
            method=equal nprocs=5
