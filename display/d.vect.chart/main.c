@@ -248,8 +248,8 @@ int main(int argc, char **argv)
                          colors[i].r, colors[i].g, colors[i].b, 255);
             }
             /* Use defaults to output complete, parseable legend records. */
-            fprintf(stdout, "%s|legend/area|5|ps|%s|%s|1|area|\n",
-                    tokens[i], fill_rgba, feature_rgba);
+            fprintf(stdout, "%s|legend/area|5|ps|%s|%s|1|area|\n", tokens[i],
+                    fill_rgba, feature_rgba);
         }
         G_free_tokens(tokens);
     }
