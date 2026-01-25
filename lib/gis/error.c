@@ -305,7 +305,7 @@ static void print_error(const char *msg, const int type)
                 char *w;
                 int len, lead;
 
-                fprintf(stderr, "%s", prefix_std[type]);
+                fprintf(stderr, "%s", prefix_std[(type >= 0 && type < 3) ? type : MSG]);
                 len = lead = strlen(prefix_std[type]);
                 w = (char *)msg;
 
