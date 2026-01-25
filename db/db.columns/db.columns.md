@@ -38,7 +38,7 @@ Note that the SQLite backend is the default setting.
 db.columns driver=sqlite table=archsites database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
 ```
 
-### List columns information of table
+### List column information
 
 ```sh
 db.columns -e table=zipcodes_wake format=json
