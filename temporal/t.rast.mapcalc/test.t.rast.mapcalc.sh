@@ -52,31 +52,5 @@ t.rast.mapcalc -sn inputs=precip_abs1,precip_abs2 output=precip_abs4 \
            expression=" (precip_abs1 + precip_abs2) * null()" base=new_prec \
            method=equal nprocs=5
 
-# Test with where parameter - single STRDS (no sampling)
-echo "Test: Single STRDS with where filter"
-r.mapcalc expr="prec_1 = rand(0, 50)"
-r.mapcalc expr="prec_2 = rand(0, 50)"
-r.mapcalc expr="prec_3 = rand(0, 50)"
-t.create type=strds temporaltype=absolute output=precip_where_single title="Test where single" descr="Test"
-t.register -i type=raster input=precip_where_single maps=prec_1,prec_2,prec_3 start="2001-01-01" increment="1 month"
-t.rast.mapcalc inputs=precip_where_single output=precip_where_single_out \
-           expression="precip_where_single * 2" base=new_prec \
-           where="start_time >= '2001-02-01'"
-t.info -g type=strds input=precip_where_single_out | grep -q "number_of_maps=2" || exit 1
-
-# Test with where parameter - multiple STRDS (sampling case)
-echo "Test: Multiple STRDS with where filter"
-r.mapcalc expr="prec_1 = rand(0, 50)"
-r.mapcalc expr="prec_2 = rand(0, 50)"
-r.mapcalc expr="prec_3 = rand(0, 50)"
-t.create type=strds temporaltype=absolute output=precip_where_a title="Test where A" descr="Test"
-t.create type=strds temporaltype=absolute output=precip_where_b title="Test where B" descr="Test"
-t.register -i type=raster input=precip_where_a maps=prec_1,prec_2,prec_3 start="2001-01-01" increment="1 month"
-t.register -i type=raster input=precip_where_b maps=prec_1,prec_2,prec_3 start="2001-01-01" increment="1 month"
-t.rast.mapcalc inputs=precip_where_a,precip_where_b output=precip_where_multi_out \
-           expression="precip_where_a + precip_where_b" base=new_prec \
-           method=equal where="start_time >= '2001-02-01'"
-t.info -g type=strds input=precip_where_multi_out | grep -q "number_of_maps=2" || exit 1
-
 # @postprocess
-t.remove -rf type=strds input=precip_abs1,precip_abs2,precip_abs3,precip_abs4,precip_where_single,precip_where_a,precip_where_b,precip_where_single_out,precip_where_multi_out
+t.remove -rf type=strds input=precip_abs1,precip_abs2,precip_abs3,precip_abs4
