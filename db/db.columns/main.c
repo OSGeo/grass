@@ -13,6 +13,7 @@
  *
  *****************************************************************************/
 
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -26,6 +27,7 @@ enum OutputFormat { PLAIN, JSON };
 struct {
     char *driver, *database, *table;
     enum OutputFormat format;
+    bool more_info;
 } parms;
 
 /* function prototypes */
@@ -38,7 +40,8 @@ int main(int argc, char **argv)
     dbTable *table;
     dbString table_name;
     int col, ncols;
-    G_JSON_Value *root_value = NULL;
+    G_JSON_Value *root_value = NULL, *column_value = NULL;
+    G_JSON_Object *column_object = NULL;
     G_JSON_Array *root_array = NULL;
 
     parse_command_line(argc, argv);
@@ -77,17 +80,53 @@ int main(int argc, char **argv)
 
     ncols = db_get_table_number_of_columns(table);
     for (col = 0; col < ncols; col++) {
-        switch (parms.format) {
-        case PLAIN:
-            fprintf(stdout, "%s\n",
-                    db_get_column_name(db_get_table_column(table, col)));
-            break;
 
-        case JSON:
-            G_json_array_append_string(
-                root_array,
-                db_get_column_name(db_get_table_column(table, col)));
-            break;
+        // -e flag is handled here
+        if (parms.more_info) {
+            switch (parms.format) {
+            case JSON:
+                column_value = G_json_value_init_object();
+                column_object = G_json_object(column_value);
+
+                G_json_object_set_string(
+                    column_object, "name",
+                    db_get_column_name(db_get_table_column(table, col)));
+
+                int sql_type =
+                    db_get_column_sqltype(db_get_table_column(table, col));
+                G_json_object_set_string(column_object, "sql_type",
+                                         db_sqltype_name(sql_type));
+
+                int c_type = db_sqltype_to_Ctype(sql_type);
+                G_json_object_set_boolean(
+                    column_object, "is_number",
+                    (c_type == DB_C_TYPE_INT || c_type == DB_C_TYPE_DOUBLE));
+
+                G_json_array_append_value(root_array, column_value);
+                break;
+            case PLAIN:
+                fprintf(stdout, "%s: %s\n",
+                        db_get_column_name(db_get_table_column(table, col)),
+                        db_sqltype_name(db_get_column_sqltype(
+                            db_get_table_column(table, col))));
+                break;
+            default:
+                break;
+            }
+        }
+        else { /* without -e flag */
+            switch (parms.format) {
+            case PLAIN:
+                fprintf(stdout, "%s\n",
+                        db_get_column_name(db_get_table_column(table, col)));
+                break;
+
+            case JSON:
+                G_json_array_append_string(
+                    root_array,
+                    db_get_column_name(db_get_table_column(table, col)));
+                break;
+            }
         }
     }
 
@@ -110,6 +149,7 @@ int main(int argc, char **argv)
 static void parse_command_line(int argc, char **argv)
 {
     struct Option *driver, *database, *table, *format;
+    struct Flag *more_info;
     struct GModule *module;
     const char *drv, *db;
 
@@ -128,6 +168,13 @@ static void parse_command_line(int argc, char **argv)
     if ((db = db_get_default_database_name()))
         database->answer = (char *)db;
 
+    more_info = G_define_flag();
+    more_info->key = 'e';
+    more_info->label = _("Print type information about the columns");
+    more_info->description =
+        _("Print the name and the type of all the columns for a given table.");
+    more_info->guisection = _("Print");
+
     /* Set description */
     module = G_define_module();
     G_add_keyword(_("database"));
@@ -143,6 +190,8 @@ static void parse_command_line(int argc, char **argv)
     parms.driver = driver->answer;
     parms.database = database->answer;
     parms.table = table->answer;
+
+    parms.more_info = more_info->answer ? true : false;
 
     if (strcmp(format->answer, "json") == 0) {
         parms.format = JSON;

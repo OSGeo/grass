@@ -38,6 +38,57 @@ Note that the SQLite backend is the default setting.
 db.columns driver=sqlite table=archsites database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
 ```
 
+### List column information
+
+```sh
+db.columns -e table=zipcodes_wake format=json
+```
+
+Possible output:
+
+```json
+[
+    {
+        "name": "cat",
+        "sql_type": "INTEGER",
+        "is_number": true
+    },
+    {
+        "name": "OBJECTID",
+        "sql_type": "INTEGER",
+        "is_number": true
+    },
+    {
+        "name": "WAKE_ZIPCO",
+        "sql_type": "DOUBLE PRECISION",
+        "is_number": true
+    },
+
+    ...
+]
+```
+
+```sh
+db.columns -e table=zipcodes_wake format=plain
+```
+
+Possible output:
+
+```text
+cat: INTEGER
+OBJECTID: INTEGER
+WAKE_ZIPCO: DOUBLE PRECISION
+PERIMETER: DOUBLE PRECISION
+ZIPCODE_: DOUBLE PRECISION
+ZIPCODE_ID: DOUBLE PRECISION
+ZIPNAME: CHARACTER
+ZIPNUM: DOUBLE PRECISION
+ZIPCODE: CHARACTER
+NAME: CHARACTER
+SHAPE_Leng: DOUBLE PRECISION
+SHAPE_Area: DOUBLE PRECISION
+```
+
 ### List columns using Python
 
 ```python
