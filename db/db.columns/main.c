@@ -112,12 +112,12 @@ int main(int argc, char **argv)
                     fprintf(stdout, "\n");
                 break;
             case CSV:
-                char *is_number =
-                    (c_type == DB_C_TYPE_INT || c_type == DB_C_TYPE_DOUBLE)
-                        ? "true"
-                        : "false";
-                fprintf(stdout, "%s%s%s%s%s\n", column_name, parms.separator,
-                        sql_type_name, parms.separator, is_number);
+                fprintf(stdout, "%s%s%s%s\n", column_name, parms.separator,
+                        sql_type_name, parms.separator);
+                if (c_type == DB_C_TYPE_INT || c_type == DB_C_TYPE_DOUBLE)
+                    fprintf(stdout, "true\n");
+                else
+                    fprintf(stdout, "false\n");
                 break;
             case JSON:
                 column_value = G_json_value_init_object();
