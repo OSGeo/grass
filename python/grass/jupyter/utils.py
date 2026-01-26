@@ -28,19 +28,15 @@ def get_region(env=None):
 
     Additionally, it adds long key names.
     """
-    tools = Tools()
-    region = tools.g_region(flags="g", env=env)
-    region["east"] = region["e"]
-    region["west"] = region["w"]
-    region["north"] = region["n"]
-    region["south"] = region["s"]
+    tools = Tools(env=env)
+    region = tools.g_region(flags="g", format=json)
     return region
 
 
 def get_location_proj_string(env=None):
     """Returns projection of environment in PROJ.4 format"""
-    tools = Tools()
-    out = tools.g_proj(flags="fp", format="proj4", env=env, stdout_=True)
+    tools = Tools(env=env)
+    out = tools.g_proj(flags="fp", format="proj4")
     return out.strip()
 
 
