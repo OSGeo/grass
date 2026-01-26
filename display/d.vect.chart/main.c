@@ -304,7 +304,7 @@ int main(int argc, char **argv)
     }
 
     size = atoi(size_opt->answer);
-    scale = atof(scale_opt->answer);
+    scale = atof(scale_opt->answer);₹
 
     if (!nodraw_flag->answer) {
         /* open vector */
