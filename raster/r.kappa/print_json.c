@@ -1,14 +1,92 @@
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
+#include <grass/gjson.h>
 #include "kappa.h"
 #include "local_proto.h"
 
+static char *compact_matrix_rows(const char *json_str)
+{
+    char *result = G_store(json_str);
+    char *matrix_start = strstr(result, "\"matrix\":");
+
+    if (!matrix_start)
+        return result;
+
+    char *array_start = strchr(matrix_start, '[');
+    if (!array_start)
+        return result;
+
+    char *pos = array_start + 1;
+    int bracket_depth = 1;
+    int in_row = 0;
+    char *row_start = NULL;
+
+    while (*pos && bracket_depth > 0) {
+        if (*pos == '[') {
+            bracket_depth++;
+            if (bracket_depth == 2) {
+                in_row = 1;
+                row_start = pos;
+            }
+        }
+        else if (*pos == ']') {
+            bracket_depth--;
+            if (bracket_depth == 1 && in_row) {
+                char *row_end = pos;
+                size_t row_len = row_end - row_start + 1;
+
+                char *compact_row = G_malloc(row_len * 2);
+                char *out = compact_row;
+                char *in = row_start;
+
+                *out++ = '[';
+                in++;
+
+                while (in <= row_end) {
+                    if (*in == '\n' || *in == '\r') {
+                        in++;
+                        continue;
+                    }
+                    if (*in == ' ' && *(in + 1) == ' ') {
+                        in++;
+                        continue;
+                    }
+                    if (*in == ' ' && *(in - 1) != ',') {
+                        in++;
+                        continue;
+                    }
+                    *out++ = *in++;
+                }
+                *out = '\0';
+
+                size_t compact_len = strlen(compact_row);
+                size_t old_len = row_end - row_start + 1;
+
+                if (compact_len < old_len) {
+                    memmove(row_start + compact_len, row_end + 1,
+                            strlen(row_end + 1) + 1);
+                    memcpy(row_start, compact_row, compact_len);
+                    pos = row_start + compact_len;
+                }
+
+                G_free(compact_row);
+                in_row = 0;
+            }
+        }
+        pos++;
+    }
+
+    return result;
+}
+
 void print_json(void)
 {
-    bool first;
     FILE *fd;
+    G_JSON_Value *root_value = NULL;
+    G_JSON_Object *root_object = NULL;
 
     if (output != NULL)
         fd = fopen(output, "w");
@@ -18,113 +96,117 @@ void print_json(void)
     if (fd == NULL)
         G_fatal_error(_("Cannot open file <%s> to write JSON output"), output);
 
-    fprintf(fd, "{\n");
-    fprintf(fd, "    \"reference\": \"%s\",\n", maps[0]);
-    fprintf(fd, "    \"classification\": \"%s\",\n", maps[1]);
-    fprintf(fd, "    \"observations\": %ld,\n", metrics->observations);
-    fprintf(fd, "    \"correct\": %ld,\n", metrics->correct);
-    fprintf(fd, "    \"overall_accuracy\": %.5f,\n", metrics->overall_accuracy);
+    root_value = G_json_value_init_object();
+    if (!root_value)
+        G_fatal_error(_("Failed to initialize JSON object. Out of memory?"));
+
+    root_object = G_json_object(root_value);
+
+    G_json_object_set_string(root_object, "reference", maps[0]);
+    G_json_object_set_string(root_object, "classification", maps[1]);
+    G_json_object_set_number(root_object, "observations",
+                             metrics->observations);
+    G_json_object_set_number(root_object, "correct", metrics->correct);
+
+    G_json_object_set_number(root_object, "overall_accuracy",
+                             metrics->overall_accuracy);
+
     if (metrics->kappa == na_value)
-        fprintf(fd, "    \"kappa\": null,\n");
+        G_json_object_set_null(root_object, "kappa");
     else
-        fprintf(fd, "    \"kappa\": %.5f,\n", metrics->kappa);
+        G_json_object_set_number(root_object, "kappa", metrics->kappa);
+
     if (metrics->kappa_variance == na_value)
-        fprintf(fd, "    \"kappa_variance\": null,\n");
+        G_json_object_set_null(root_object, "kappa_variance");
     else
-        fprintf(fd, "    \"kappa_variance\": %.5f,\n", metrics->kappa_variance);
-    fprintf(fd, "    \"cats\": [");
-    first = 1;
-    for (int i = 0; i < ncat; i++) {
-        if (first)
-            first = 0;
-        else
-            fprintf(fd, ", ");
-        fprintf(fd, "%ld", rlst[i]);
-    }
-    fprintf(fd, "],\n");
-    fprintf(fd, "    \"matrix\": [\n        [");
-    first = 1;
-    for (int i = 0; i < ncat; i++) {
-        if (first)
-            first = 0;
-        else
-            fprintf(fd, "],\n        [");
-        bool cfirst = 1;
+        G_json_object_set_number(root_object, "kappa_variance",
+                                 metrics->kappa_variance);
 
+    G_JSON_Value *cats_value = G_json_value_init_array();
+    G_JSON_Array *cats_array = G_json_array(cats_value);
+    for (int i = 0; i < ncat; i++) {
+        G_json_array_append_number(cats_array, rlst[i]);
+    }
+    G_json_object_set_value(root_object, "cats", cats_value);
+
+    G_JSON_Value *matrix_value = G_json_value_init_array();
+    G_JSON_Array *matrix_array = G_json_array(matrix_value);
+    for (int i = 0; i < ncat; i++) {
+        G_JSON_Value *row_value = G_json_value_init_array();
+        G_JSON_Array *row_array = G_json_array(row_value);
         for (int j = 0; j < ncat; j++) {
-            if (cfirst)
-                cfirst = 0;
-            else
-                fprintf(fd, ", ");
-            fprintf(fd, "%ld", metrics->matrix[ncat * i + j]);
+            G_json_array_append_number(row_array,
+                                       metrics->matrix[ncat * i + j]);
         }
+        G_json_array_append_value(matrix_array, row_value);
     }
-    fprintf(fd, "]\n    ],\n");
-    fprintf(fd, "    \"row_sum\": [");
-    first = 1;
-    for (int i = 0; i < ncat; i++) {
-        if (first)
-            first = 0;
-        else
-            fprintf(fd, ", ");
-        fprintf(fd, "%ld", metrics->row_sum[i]);
-    }
-    fprintf(fd, "],\n");
-    fprintf(fd, "    \"col_sum\": [");
-    first = 1;
-    for (int i = 0; i < ncat; i++) {
-        if (first)
-            first = 0;
-        else
-            fprintf(fd, ", ");
-        fprintf(fd, "%ld", metrics->col_sum[i]);
-    }
-    fprintf(fd, "],\n");
-    fprintf(fd, "    \"producers_accuracy\": [");
-    first = 1;
-    for (int i = 0; i < ncat; i++) {
-        if (first)
-            first = 0;
-        else
-            fprintf(fd, ", ");
-        if (metrics->producers_accuracy[i] == na_value)
-            fprintf(fd, "null");
-        else
-            fprintf(fd, "%.5f", metrics->producers_accuracy[i]);
-    }
-    fprintf(fd, "],\n");
-    fprintf(fd, "    \"users_accuracy\": [");
-    first = 1;
-    for (int i = 0; i < ncat; i++) {
-        if (first)
-            first = 0;
-        else
-            fprintf(fd, ", ");
-        if (metrics->users_accuracy[i] == na_value)
-            fprintf(fd, "null");
-        else
-            fprintf(fd, "%.5f", metrics->users_accuracy[i]);
-    }
-    fprintf(fd, "],\n");
-    fprintf(fd, "    \"conditional_kappa\": [");
-    first = 1;
-    for (int i = 0; i < ncat; i++) {
-        if (first)
-            first = 0;
-        else
-            fprintf(fd, ", ");
-        if (metrics->conditional_kappa[i] == na_value)
-            fprintf(fd, "null");
-        else
-            fprintf(fd, "%.5f", metrics->conditional_kappa[i]);
-    }
-    fprintf(fd, "],\n");
-    if (metrics->mcc == na_value)
-        fprintf(fd, "    \"mcc\": null\n");
-    else
-        fprintf(fd, "    \"mcc\": %.5f\n", metrics->mcc);
+    G_json_object_set_value(root_object, "matrix", matrix_value);
 
-    fprintf(fd, "}\n");
+    G_JSON_Value *row_sum_value = G_json_value_init_array();
+    G_JSON_Array *row_sum_array = G_json_array(row_sum_value);
+    for (int i = 0; i < ncat; i++) {
+        G_json_array_append_number(row_sum_array, metrics->row_sum[i]);
+    }
+    G_json_object_set_value(root_object, "row_sum", row_sum_value);
+
+    G_JSON_Value *col_sum_value = G_json_value_init_array();
+    G_JSON_Array *col_sum_array = G_json_array(col_sum_value);
+    for (int i = 0; i < ncat; i++) {
+        G_json_array_append_number(col_sum_array, metrics->col_sum[i]);
+    }
+    G_json_object_set_value(root_object, "col_sum", col_sum_value);
+
+    G_JSON_Value *prod_acc_value = G_json_value_init_array();
+    G_JSON_Array *prod_acc_array = G_json_array(prod_acc_value);
+    for (int i = 0; i < ncat; i++) {
+        if (metrics->producers_accuracy[i] == na_value)
+            G_json_array_append_null(prod_acc_array);
+        else
+            G_json_array_append_number(prod_acc_array,
+                                       metrics->producers_accuracy[i]);
+    }
+    G_json_object_set_value(root_object, "producers_accuracy", prod_acc_value);
+
+    G_JSON_Value *user_acc_value = G_json_value_init_array();
+    G_JSON_Array *user_acc_array = G_json_array(user_acc_value);
+    for (int i = 0; i < ncat; i++) {
+        if (metrics->users_accuracy[i] == na_value)
+            G_json_array_append_null(user_acc_array);
+        else
+            G_json_array_append_number(user_acc_array,
+                                       metrics->users_accuracy[i]);
+    }
+    G_json_object_set_value(root_object, "users_accuracy", user_acc_value);
+
+    G_JSON_Value *cond_kappa_value = G_json_value_init_array();
+    G_JSON_Array *cond_kappa_array = G_json_array(cond_kappa_value);
+    for (int i = 0; i < ncat; i++) {
+        if (metrics->conditional_kappa[i] == na_value)
+            G_json_array_append_null(cond_kappa_array);
+        else
+            G_json_array_append_number(cond_kappa_array,
+                                       metrics->conditional_kappa[i]);
+    }
+    G_json_object_set_value(root_object, "conditional_kappa", cond_kappa_value);
+
+    if (metrics->mcc == na_value)
+        G_json_object_set_null(root_object, "mcc");
+    else
+        G_json_object_set_number(root_object, "mcc", metrics->mcc);
+
+    char *json_str = G_json_serialize_to_string_pretty(root_value);
+    if (!json_str) {
+        G_json_value_free(root_value);
+        G_fatal_error(_("Failed to serialize JSON"));
+    }
+
+    char *compacted = compact_matrix_rows(json_str);
+    fprintf(fd, "%s\n", compacted);
+
+    G_free(compacted);
+    G_json_free_serialized_string(json_str);
+    G_json_value_free(root_value);
+
     if (output != NULL)
         fclose(fd);
 }
