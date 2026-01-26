@@ -42,7 +42,8 @@ int main(int argc, char **argv)
     struct Option *field_opt;
     struct Option *ocolor_opt, *colors_opt;
     struct Option *columns_opt, *sizecol_opt;
-    struct Flag *y_center_flag, *legend_flag, *chart3d_flag;
+    struct Option *legend_title_opt;
+    struct Flag *y_center_flag, *legend_flag, *chart3d_flag, *nodraw_flag, *vlegend_flag;
 
     /*   struct Flag *horizontal_bar_flag; */
     struct Map_info Map;
@@ -139,6 +140,26 @@ int main(int argc, char **argv)
     legend_flag->key = 'l';
     legend_flag->description =
         _("Create legend information and send to stdout");
+    legend_flag->guisection = _("Legend");
+
+    legend_title_opt = G_define_option();
+    legend_title_opt->key = "legend_title";
+    legend_title_opt->type = TYPE_STRING;
+    legend_title_opt->required = NO;
+    legend_title_opt->multiple = NO;
+    legend_title_opt->guisection = _("Legend");
+    legend_title_opt->description = _("Legend title");
+
+    nodraw_flag = G_define_flag();
+    nodraw_flag->key = 'n';
+    nodraw_flag->description =
+        _("Do not draw map, only output the legend information");
+    nodraw_flag->guisection = _("Legend");
+
+    vlegend_flag = G_define_flag();
+    vlegend_flag->key = 's';
+    vlegend_flag->label = _("Do not show this layer in vector legend");
+    vlegend_flag->guisection = _("Legend");
 
     chart3d_flag = G_define_flag();
     chart3d_flag->key = '3';
@@ -225,71 +246,104 @@ int main(int argc, char **argv)
         }
     }
 
-    if (legend_flag->answer) {
+    /* Legend output (stdout and/or GRASS_LEGEND_FILE) */
+    const char *leg_file = getenv("GRASS_LEGEND_FILE");
+    if (legend_flag->answer || (leg_file && !vlegend_flag->answer)) {
         tokens = G_tokenize(columns_opt->answer, ",");
         ntokens = G_number_of_tokens(tokens);
-        /* feature (outline) color in RGBA, empty if none */
-        char feature_rgba[64] = {'\0'};
+
+        /* Title: use legend_title if provided, else use map name */
+        const char *title =
+            legend_title_opt->answer ? legend_title_opt->answer : map_opt->answer;
+
+        /* Secondary color = outline (feature/border) color in RGBA, empty if none */
+        char secondary_rgba[64] = {'\0'};
         if (!ocolor.none) {
-            snprintf(feature_rgba, sizeof(feature_rgba), "%d:%d:%d:%d",
+            snprintf(secondary_rgba, sizeof(secondary_rgba), "%d:%d:%d:%d",
                      ocolor.r, ocolor.g, ocolor.b, 255);
         }
-        for (i = 0; i < ntokens; i++) {
-            /* fill color in RGBA, empty if none */
-            char fill_rgba[64];
-            if (colors[i].none) {
-                fill_rgba[0] = '\0';
+
+        /* Helper to write legend lines to a FILE* */
+#define WRITE_LEGEND(fd)                                                        \
+        do {                                                                     \
+            fprintf((fd), "||||||%s\n", title);                                  \
+            for (i = 0; i < ntokens; i++) {                                      \
+                /* Primary color = fill color in RGBA, empty if none */          \
+                char primary_rgba[64] = {'\0'};                                  \
+                if (!colors[i].none) {                                           \
+                    snprintf(primary_rgba, sizeof(primary_rgba), "%d:%d:%d:%d",  \
+                             colors[i].r, colors[i].g, colors[i].b, 255);        \
+                }                                                                \
+                /* label|icon|size|ps|primary|secondary|width|topo|count */      \
+                fprintf((fd), "%s|legend/area|5|ps|%s|%s|1|point|1\n",            \
+                        tokens[i], primary_rgba, secondary_rgba);                \
+            }                                                                    \
+        } while (0)
+
+        /* Print legend to stdout if -l */
+        if (legend_flag->answer) {
+            WRITE_LEGEND(stdout);
+        }
+
+        /* Write into default legend file if GUI requests and -s is NOT set */
+        if (leg_file && !vlegend_flag->answer) {
+            FILE *fd = fopen(leg_file, "a");
+            if (!fd) {
+                G_warning(_("Unable to open GRASS_LEGEND_FILE <%s> for writing"),
+                          leg_file);
             }
             else {
-                snprintf(fill_rgba, sizeof(fill_rgba), "%d:%d:%d:%d",
-                         colors[i].r, colors[i].g, colors[i].b, 255);
+                WRITE_LEGEND(fd);
+                fclose(fd);
             }
-            /* Use defaults to output complete, parseable legend records. */
-            fprintf(stdout, "%s|legend/area|5|ps|%s|%s|1|area|\n", tokens[i],
-                    fill_rgba, feature_rgba);
         }
+
+#undef WRITE_LEGEND
+
         G_free_tokens(tokens);
     }
 
     size = atoi(size_opt->answer);
     scale = atof(scale_opt->answer);
 
-    /* open vector */
-    Vect_set_open_level(2);
-    if (Vect_open_old(&Map, map_opt->answer, "") < 0)
-        G_fatal_error(_("Unable to open vector map <%s>"), map_opt->answer);
+    if (!nodraw_flag->answer) {
+        /* open vector */
+        Vect_set_open_level(2);
+        if (Vect_open_old(&Map, map_opt->answer, "") < 0)
+            G_fatal_error(_("Unable to open vector map <%s>"), map_opt->answer);
 
-    ctype = CTYPE_PIE;
-    if (ctype_opt->answer[0] == 'b')
-        ctype = CTYPE_BAR;
+        ctype = CTYPE_PIE;
+        if (ctype_opt->answer[0] == 'b')
+            ctype = CTYPE_BAR;
 
-    D_open_driver();
+        D_open_driver();
 
-    /* should we plot the maximum reference on bar plots? */
-    if (max_reference_opt->answer != NULL) {
-        max_reference = (double *)G_malloc(ncols * sizeof(double));
+        /* should we plot the maximum reference on bar plots? */
+        if (max_reference_opt->answer != NULL) {
+            max_reference = (double *)G_malloc(ncols * sizeof(double));
 
-        /* loop through the given values */
-        for (i = 0; i < ncols; i++) {
-            if (max_reference_opt->answers[i] == NULL)
-                break;
+            /* loop through the given values */
+            for (i = 0; i < ncols; i++) {
+                if (max_reference_opt->answers[i] == NULL)
+                    break;
 
-            max_reference[i] =
-                atof(max_reference_opt
-                         ->answers[i]); /* remember to convert to float */
+                max_reference[i] =
+                    atof(max_reference_opt
+                             ->answers[i]); /* remember to convert to float */
+            }
         }
+
+        D_setup(0);
+
+        ret = plot(ctype, &Map, type, field, columns_opt->answer, ncols,
+                   sizecol_opt->answer, size, scale, &ocolor, colors, y_center,
+                   max_reference, chart3d_flag->answer);
+
+        D_save_command(G_recreate_command());
+        D_close_driver();
+
+        Vect_close(&Map);
     }
-
-    D_setup(0);
-
-    ret = plot(ctype, &Map, type, field, columns_opt->answer, ncols,
-               sizecol_opt->answer, size, scale, &ocolor, colors, y_center,
-               max_reference, chart3d_flag->answer);
-
-    D_save_command(G_recreate_command());
-    D_close_driver();
-
-    Vect_close(&Map);
 
     exit(EXIT_SUCCESS);
 }
