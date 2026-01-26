@@ -25,7 +25,7 @@
 enum OutputFormat { PLAIN, JSON };
 
 struct {
-    char *driver, *database, *table;
+    char *driver, *database, *table, *separator;
     enum OutputFormat format;
     bool more_info;
 } parms;
@@ -148,7 +148,7 @@ int main(int argc, char **argv)
 
 static void parse_command_line(int argc, char **argv)
 {
-    struct Option *driver, *database, *table, *format;
+    struct Option *driver, *database, *table, *format, *separator;
     struct Flag *more_info;
     struct GModule *module;
     const char *drv, *db;
@@ -174,6 +174,10 @@ static void parse_command_line(int argc, char **argv)
     more_info->description =
         _("Print the name and the type of all the columns for a given table.");
     more_info->guisection = _("Print");
+
+    separator = G_define_standard_option(G_OPT_F_SEP);
+    separator->answer = NULL;
+    separator->guisection = _("Format");
 
     /* Set description */
     module = G_define_module();
