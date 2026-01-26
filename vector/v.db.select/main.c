@@ -516,7 +516,8 @@ int main(int argc, char **argv)
         }
 
         if (format == JSON && !flags.region->answer && record_value) {
-            if (flags.features->answer && col < ncols) {
+            if ((flags.features->answer && col < ncols) ||
+                (flags.region->answer && col < ncols)) {
                 G_json_value_free(record_value);
             }
             else {
