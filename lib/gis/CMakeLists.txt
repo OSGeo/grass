@@ -4,7 +4,13 @@ if(NOT WIN32)
   list(FILTER gislib_SRCS EXCLUDE REGEX [[.*/fmode\.c$]])
 endif()
 
+find_package(Threads)
+
 set(grass_gis_DEFS "-DGRASS_VERSION_DATE=\"${GRASS_VERSION_DATE}\"")
+if(Threads_FOUND)
+  list(APPEND grass_gis_DEFS "HAVE_PTHREAD")
+endif()
+
 if(MSVC)
   set(grass_gis_DEFS "${grass_gis_DEFS};-D_USE_MATH_DEFINES=1")
   set(gislib_INCLUDES "../../msvc")
