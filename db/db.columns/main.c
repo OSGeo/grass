@@ -102,7 +102,8 @@ int main(int argc, char **argv)
 
             switch (parms.format) {
             case LIST:
-                fprintf("%s %s%s", column_name, sql_type_name, parms.separator);
+                fprintf(stdout, "%s %s%s", column_name, sql_type_name,
+                        parms.separator);
                 break;
             case CSV:
                 char *is_number =
@@ -135,7 +136,7 @@ int main(int argc, char **argv)
         else { /* without -e flag */
             switch (parms.format) {
             case LIST:
-                fprintf("%s%s", column_name, parms.separator);
+                fprintf(stdout, "%s%s", column_name, parms.separator);
                 break;
             case CSV: // except header, same as plain; header handled above
             case PLAIN:
