@@ -84,21 +84,22 @@ int main(int argc, char **argv)
     if (parms.format == CSV) {
         if (parms.more_info) { /* -e flag */
             fprintf(stdout, "name%ssql_type%sis_number\n", parms.separator,
-                    parms.separator, parms.separator);
+                    parms.separator);
         }
         else {
             fprintf(stdout, "name\n");
         }
     }
     for (col = 0; col < ncols; col++) {
-        char *column_name = db_get_column_name(db_get_table_column(table, col));
+        const char *column_name =
+            db_get_column_name(db_get_table_column(table, col));
 
         // -e flag is handled here
         if (parms.more_info) {
             int sql_type =
                 db_get_column_sqltype(db_get_table_column(table, col));
             int c_type = db_sqltype_to_Ctype(sql_type);
-            char *sql_type_name = db_sqltype_name(sql_type);
+            const char *sql_type_name = db_sqltype_name(sql_type);
 
             switch (parms.format) {
             case LIST:
