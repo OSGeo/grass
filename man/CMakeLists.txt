@@ -1,16 +1,3 @@
-string(TIMESTAMP YEAR %Y)
-
-add_custom_target(
-  build_full_index
-  COMMAND
-    ${grass_env_command} ${PYTHON_EXECUTABLE}
-    ${CMAKE_CURRENT_SOURCE_DIR}/build_full_index.py
-    ${YEAR}
-  BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/full_index.html
-  DEPENDS ALL_MODULES LIB_PYTHON GUI_WXPYTHON
-  COMMENT "man generation: build full index")
-set_target_properties(build_full_index PROPERTIES FOLDER man)
-
 set(data_files
     ${CMAKE_CURRENT_SOURCE_DIR}/jquery.fixedheadertable.min.js
     ${CMAKE_CURRENT_SOURCE_DIR}/grassdocs.css
@@ -21,6 +8,21 @@ set(data_files
     ${CMAKE_CURRENT_SOURCE_DIR}/parser_standard_options.css
     ${CMAKE_CURRENT_SOURCE_DIR}/parser_standard_options.js)
 install(FILES ${data_files} DESTINATION ${GRASS_INSTALL_DOCDIR})
+
+# TODO(FHS): remove this if condition
+if(NOT WITH_FHS)
+
+string(TIMESTAMP YEAR %Y)
+add_custom_target(
+  build_full_index
+  COMMAND
+    ${grass_env_command} ${PYTHON_EXECUTABLE}
+    ${CMAKE_CURRENT_SOURCE_DIR}/build_full_index.py
+    ${YEAR}
+  BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/full_index.html
+  DEPENDS ALL_MODULES LIB_PYTHON GUI_WXPYTHON
+  COMMENT "man generation: build full index")
+set_target_properties(build_full_index PROPERTIES FOLDER man)
 
 add_custom_command(
   TARGET build_full_index
@@ -112,3 +114,5 @@ add_custom_target(
   DEPENDS ${category_targets} build_class_graphical ALL_MODULES LIB_PYTHON GUI_WXPYTHON
   COMMENT "man generation: check output")
 set_target_properties(build_check PROPERTIES FOLDER man)
+
+endif() # NOT WITH_FHS
