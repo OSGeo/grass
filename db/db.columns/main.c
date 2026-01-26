@@ -22,7 +22,7 @@
 #include <grass/gjson.h>
 #include <grass/glocale.h>
 
-enum OutputFormat { PLAIN, JSON };
+enum OutputFormat { PLAIN, JSON, CSV, LIST };
 
 struct {
     char *driver, *database, *table, *separator;
@@ -186,6 +186,11 @@ static void parse_command_line(int argc, char **argv)
     module->description = _("List all columns for a given table.");
 
     format = G_define_standard_option(G_OPT_F_FORMAT);
+    format->options = "plain,csv,json,list";
+    format->descriptions = "plain;Configurable plain text output;"
+                           "csv;CSV (Comma Separated Values);"
+                           "json;JSON (JavaScript Object Notation);"
+                           "list;Output in list format";
     format->guisection = _("Print");
 
     if (G_parser(argc, argv))
@@ -199,6 +204,12 @@ static void parse_command_line(int argc, char **argv)
 
     if (strcmp(format->answer, "json") == 0) {
         parms.format = JSON;
+    }
+    else if (strcmp(format->answer, "csv") == 0) {
+        parms.format = CSV;
+    }
+    else if (strcmp(format->answer, "list") == 0) {
+        parms.format = LIST;
     }
     else {
         parms.format = PLAIN;
