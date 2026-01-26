@@ -79,25 +79,43 @@ int main(int argc, char **argv)
     }
 
     ncols = db_get_table_number_of_columns(table);
+
+    // In CSV, we need to print the headers too
+    if (parms.format == CSV) {
+        if (parms.more_info) { /* -e flag */
+            fprintf(stdout, "name%ssql_type%sis_number\n", parms.separator,
+                    parms.separator, parms.separator);
+        }
+        else {
+            fprintf(stdout, "name\n");
+        }
+    }
     for (col = 0; col < ncols; col++) {
 
         // -e flag is handled here
         if (parms.more_info) {
+            char *column_name =
+                db_get_column_name(db_get_table_column(table, col));
+            int sql_type =
+                db_get_column_sqltype(db_get_table_column(table, col));
+            int c_type = db_sqltype_to_Ctype(sql_type);
+            char *sql_type_name = db_sqltype_name(sql_type);
             switch (parms.format) {
+            case CSV:
+                char *is_number =
+                    (c_type == DB_C_TYPE_INT || c_type == DB_C_TYPE_DOUBLE)
+                        ? "true"
+                        : "false";
+                fprintf(stdout, "%s%s%s%s%s\n", column_name, parms.separator,
+                        sql_type_name, parms.separator, is_number);
+                break;
             case JSON:
                 column_value = G_json_value_init_object();
                 column_object = G_json_object(column_value);
 
-                G_json_object_set_string(
-                    column_object, "name",
-                    db_get_column_name(db_get_table_column(table, col)));
-
-                int sql_type =
-                    db_get_column_sqltype(db_get_table_column(table, col));
+                G_json_object_set_string(column_object, "name", column_name);
                 G_json_object_set_string(column_object, "sql_type",
-                                         db_sqltype_name(sql_type));
-
-                int c_type = db_sqltype_to_Ctype(sql_type);
+                                         sql_type_name);
                 G_json_object_set_boolean(
                     column_object, "is_number",
                     (c_type == DB_C_TYPE_INT || c_type == DB_C_TYPE_DOUBLE));
@@ -105,10 +123,7 @@ int main(int argc, char **argv)
                 G_json_array_append_value(root_array, column_value);
                 break;
             case PLAIN:
-                fprintf(stdout, "%s: %s\n",
-                        db_get_column_name(db_get_table_column(table, col)),
-                        db_sqltype_name(db_get_column_sqltype(
-                            db_get_table_column(table, col))));
+                fprintf(stdout, "%s: %s\n", column_name, sql_type_name);
                 break;
             default:
                 break;
@@ -116,6 +131,7 @@ int main(int argc, char **argv)
         }
         else { /* without -e flag */
             switch (parms.format) {
+            case CSV: // except header, same as plain; header handled above
             case PLAIN:
                 fprintf(stdout, "%s\n",
                         db_get_column_name(db_get_table_column(table, col)));
