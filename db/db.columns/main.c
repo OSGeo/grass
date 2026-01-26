@@ -91,16 +91,19 @@ int main(int argc, char **argv)
         }
     }
     for (col = 0; col < ncols; col++) {
+        char *column_name = db_get_column_name(db_get_table_column(table, col));
 
         // -e flag is handled here
         if (parms.more_info) {
-            char *column_name =
-                db_get_column_name(db_get_table_column(table, col));
             int sql_type =
                 db_get_column_sqltype(db_get_table_column(table, col));
             int c_type = db_sqltype_to_Ctype(sql_type);
             char *sql_type_name = db_sqltype_name(sql_type);
+
             switch (parms.format) {
+            case LIST:
+                fprintf("%s %s%s", column_name, sql_type_name, parms.separator);
+                break;
             case CSV:
                 char *is_number =
                     (c_type == DB_C_TYPE_INT || c_type == DB_C_TYPE_DOUBLE)
@@ -131,16 +134,16 @@ int main(int argc, char **argv)
         }
         else { /* without -e flag */
             switch (parms.format) {
+            case LIST:
+                fprintf("%s%s", column_name, parms.separator);
+                break;
             case CSV: // except header, same as plain; header handled above
             case PLAIN:
-                fprintf(stdout, "%s\n",
-                        db_get_column_name(db_get_table_column(table, col)));
+                fprintf(stdout, "%s\n", column_name);
                 break;
 
             case JSON:
-                G_json_array_append_string(
-                    root_array,
-                    db_get_column_name(db_get_table_column(table, col)));
+                G_json_array_append_string(root_array, column_name);
                 break;
             }
         }
