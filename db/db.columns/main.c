@@ -112,7 +112,7 @@ int main(int argc, char **argv)
                     fprintf(stdout, "\n");
                 break;
             case CSV:
-                fprintf(stdout, "%s%s%s%s\n", column_name, parms.separator,
+                fprintf(stdout, "%s%s%s%s", column_name, parms.separator,
                         sql_type_name, parms.separator);
                 if (c_type == DB_C_TYPE_INT || c_type == DB_C_TYPE_DOUBLE)
                     fprintf(stdout, "true\n");
