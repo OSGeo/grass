@@ -3,9 +3,9 @@
 ############################################################################
 #
 # MODULE:        test_r_mapcalc_functions.py
-# AUTHOR:        Saurabh Nxf
+# AUTHOR:        Saurabh Singh
 # PURPOSE:       Test math functions, conditionals, and operators in r.mapcalc
-# COPYRIGHT:     (C) 2026 by Saurabh Nxf and the GRASS Development Team
+# COPYRIGHT:     (C) 2026 by Saurabh Singh and the GRASS Development Team
 #
 #                This program is free software under the GNU General Public
 #                License (>=v2). Read the file COPYING that comes with GRASS
