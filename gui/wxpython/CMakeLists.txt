@@ -89,6 +89,9 @@ add_custom_target(build_modules_items_xml
 add_dependencies(build_modules_items_xml copy_wxpython_xml grass_interface_dtd
                  compile_python_files ${g_gui_targets})
 
+# TODO(FHS): remove this if condition
+if(NOT WITH_FHS)
+
 add_custom_target(
   build_xml_menudata
   COMMAND
@@ -135,5 +138,7 @@ add_custom_target(
     ${CMAKE_CURRENT_SOURCE_DIR}/core/menutree.py "psmap" >>
     ${CMAKE_CURRENT_SOURCE_DIR}/menustrings.py
   DEPENDS build_module_tree_menudata gui_images)
+
+endif() # NOT WITH_FHS
 
 install(DIRECTORY "${OUTDIR}/${WXPYTHON_DIR}/xml" DESTINATION "${WXPYTHON_DIR}")
