@@ -214,4 +214,29 @@ static void parse_command_line(int argc, char **argv)
     else {
         parms.format = PLAIN;
     }
+    if (separator->answer) {
+        switch (parms.format) {
+        case CSV:
+        case LIST:
+            parms.separator = G_option_to_separator(separator);
+            break;
+        case JSON:
+        case PLAIN:
+            G_fatal_error(_("Separator is part of the format."));
+            break;
+        }
+    }
+    else {
+        switch (parms.format) {
+        case CSV:
+            parms.separator = G_store(",");
+            break;
+        case LIST:
+            parms.separator = G_store("\n");
+            break;
+        case JSON:
+        case PLAIN:
+            break;
+        }
+    }
 }
