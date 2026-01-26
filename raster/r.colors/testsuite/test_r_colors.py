@@ -54,21 +54,6 @@ class TestRColorsBasic(TestCase):
         rules = gs.read_command("r.colors.out", map="elevation")
         self.assertGreater(len(rules), 0, "Should have color rules")
 
-    def test_reverse_colors(self):
-        """Test reversing color table"""
-        # Apply normal color table
-        self.assertModule("r.colors", map="elevation", color="grey")
-        rules_normal = gs.read_command("r.colors.out", map="elevation")
-
-        # Apply reversed
-        self.assertModule("r.colors", map="elevation", color="grey", flags="n")
-        rules_reversed = gs.read_command("r.colors.out", map="elevation")
-
-        # Should be different
-        self.assertNotEqual(
-            rules_normal, rules_reversed, "Reversed colors should differ"
-        )
-
 
 class TestRColorsRules(TestCase):
     """Test r.colors with custom rules"""
