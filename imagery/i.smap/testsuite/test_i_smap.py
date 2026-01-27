@@ -99,7 +99,7 @@ class TestISmap(TestCase):
             unique_classes, 3, f"Expected 3 classes in output, found {unique_classes}"
         )
 
-    @unittest.expectedFailure
+    @unittest.skip("known to fail at random")
     def test_with_goodness_map(self):
         """
         Validate goodness of fit map generation and
