@@ -289,6 +289,14 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
+    /* Prevent basin delineation with input maps */
+    if ((opt20->answer || opt21->answer) &&
+        (opt10->answer || opt11->answer || opt12->answer)) {
+        G_fatal_error(
+            _("Basin delineation (basin=, stream=, half_basin=) is not "
+              "supported when using accumulation_input and drainage_input. "
+              "To generate basins, run r.watershed without input maps."));
+    }
     /* basin threshold */
     if (opt6->answer) {
         if (atoi(opt6->answer) <= 0)
