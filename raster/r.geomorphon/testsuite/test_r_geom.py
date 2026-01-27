@@ -144,6 +144,8 @@ class TestMultipleOutputs(TestCase):
 
 
 class TestFlags(TestCase):
+    """Test flags"""
+
     inele = "elevation"
 
     @classmethod
@@ -156,7 +158,7 @@ class TestFlags(TestCase):
         cls.del_temp_region()
 
     def tearDown(self):
-        outputs = ["test_extended"]
+        outputs = ["test_extended", "test_meters"]
         existing = [o for o in outputs if gs.find_file(name=o, element="cell")["file"]]
         if existing:
             self.runModule("g.remove", flags="f", type="raster", name=existing)
@@ -171,6 +173,71 @@ class TestFlags(TestCase):
             search=10,
         )
         self.assertRasterExists("test_extended")
+
+    def test_meter_units_flag(self):
+        """Test using meters instead of cells for search units"""
+        self.assertModule(
+            "r.geomorphon",
+            flags="m",
+            elevation=self.inele,
+            forms="test_meters",
+            search=30,  # 30 meters
+        )
+        self.assertRasterExists("test_meters")
+
+
+class TestComparisonModes(TestCase):
+    """Test different comparison modes for zenith/nadir line-of-sight"""
+
+    inele = "elevation"
+
+    @classmethod
+    def setUpClass(cls):
+        cls.use_temp_region()
+        cls.runModule("g.region", raster=cls.inele)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.del_temp_region()
+
+    def tearDown(self):
+        outputs = ["test_anglev1", "test_anglev2", "test_anglev2_dist"]
+        existing = [o for o in outputs if gs.find_file(name=o, element="cell")["file"]]
+        if existing:
+            self.runModule("g.remove", flags="f", type="raster", name=existing)
+
+    def test_anglev1_mode(self):
+        """Test anglev1 comparison mode (default)"""
+        self.assertModule(
+            "r.geomorphon",
+            elevation=self.inele,
+            forms="test_anglev1",
+            search=10,
+            comparison="anglev1",
+        )
+        self.assertRasterExists("test_anglev1")
+
+    def test_anglev2_mode(self):
+        """Test anglev2 comparison mode"""
+        self.assertModule(
+            "r.geomorphon",
+            elevation=self.inele,
+            forms="test_anglev2",
+            search=10,
+            comparison="anglev2",
+        )
+        self.assertRasterExists("test_anglev2")
+
+    def test_anglev2_distance_mode(self):
+        """Test anglev2_distance comparison mode"""
+        self.assertModule(
+            "r.geomorphon",
+            elevation=self.inele,
+            forms="test_anglev2_dist",
+            search=10,
+            comparison="anglev2_distance",
+        )
+        self.assertRasterExists("test_anglev2_dist")
 
 
 if __name__ == "__main__":
