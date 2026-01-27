@@ -2,22 +2,22 @@
  *
  * MODULE:       r.geomorphon
  * AUTHOR(S):    Jarek Jasiewicz jarekj amu.edu.pl with collaboration of Tom
- *               Stepinski stepintz uc.edu based on idea of Tomasz Stepinski
- *               and Jaroslaw Jasiewicz
+ * Stepinski stepintz uc.edu based on idea of Tomasz Stepinski
+ * and Jaroslaw Jasiewicz
  *
  * PURPOSE:      Calculate terrain forms using machine-vison technique called
- *               geomorphons This module allow to calculate standard set of
- *               terrain forms using look-up table proposed by authors,
- *               calculate patterns (binary and ternary) for every pixel as
- *               well as several geomorphometrical parameters This technology
- *               is currently capable of "experimental" stage.
+ * geomorphons This module allow to calculate standard set of
+ * terrain forms using look-up table proposed by authors,
+ * calculate patterns (binary and ternary) for every pixel as
+ * well as several geomorphometrical parameters This technology
+ * is currently capable of "experimental" stage.
  *
  * COPYRIGHT:    (C) 2002,2012 by the GRASS Development Team
- *               (C) Scientific idea of geomorphon copyrighted to authors.
+ * (C) Scientific idea of geomorphon copyrighted to authors.
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
  *
  *****************************************************************************/
 
@@ -92,12 +92,13 @@ int main(int argc, char **argv)
 
     struct History history;
 
-    int i;
     int meters = 0, extended = 0; /* flags */
     int oneoff = 0;
-    int row = 0, cur_row = 0, col = 0;
+
+    /* row must be declared here because it is accessed after the loop
+     * finishes */
+    int row = 0;
     int nrows = 0;
-    int pattern_size = 0;
     int search_cells = 0;
     int skip_cells = 0;
     double skip_distance = 0.0;
@@ -123,7 +124,7 @@ int main(int argc, char **argv)
 
         opt_input = G_define_standard_option(G_OPT_R_ELEV);
 
-        for (i = o_forms; i < o_size; ++i) {
+        for (int i = o_forms; i < o_size; ++i) {
             opt_output[i] = G_define_standard_option(G_OPT_R_OUTPUT);
             opt_output[i]->key = rasters[i].name;
             opt_output[i]->required = NO;
@@ -180,7 +181,7 @@ int main(int argc, char **argv)
         par_coords = G_define_standard_option(G_OPT_M_COORDS);
         par_coords->description = _("Coordinates to profile");
         par_coords->guisection = _("Profile");
-        for (i = o_forms; i < o_size; i++)
+        for (int i = o_forms; i < o_size; i++)
             G_option_excludes(par_coords, opt_output[i], NULL);
 
         par_profiledata = G_define_standard_option(G_OPT_F_OUTPUT);
@@ -220,7 +221,7 @@ int main(int argc, char **argv)
         else
             G_fatal_error(_("Failed parsing <%s>"), par_comparison->answer);
         oneoff = par_coords->answer != NULL;
-        for (i = o_forms; i < o_size; ++i) /* check for outputs */
+        for (int i = o_forms; i < o_size; ++i) /* check for outputs */
             if (opt_output[i]->answer) {
                 if (G_legal_filename(opt_output[i]->answer) < 0)
                     G_fatal_error(_("<%s> is an illegal file name"),
@@ -322,13 +323,7 @@ int main(int argc, char **argv)
         G_verbose_message("Flat threshold distance m: %f, height: %f",
                           flat_distance, flat_threshold_height);
         G_verbose_message("%s version", (extended) ? "Extended" : "Basic");
-        /*
-         * FIXME: It would be nice to have an additional "-s" flag to set the
-         * current computational region just large enough for the one-off
-         * computation (plus some margins and any required outward alignment
-         * to the cell boundary). And also perhaps another "-r" flag to
-         * restore the region afterwards.
-         */
+
         if (oneoff) {
             unsigned long window_square = nrows * ncols;
             unsigned long search_square = 4 * search_cells * search_cells;
@@ -349,308 +344,281 @@ int main(int argc, char **argv)
     strcpy(elevation.elevname, opt_input->answer);
     open_map(&elevation);
 
-    if (1) {
-        PATTERN *pattern = NULL; /* Initialize pointer to NULL */
-        PATTERN patterns[4];
-        void *pointer_buf = NULL;
-        double search_dist = 0.0; /* Initialize these before copying */
-        double skip_dist = 0.0;
-        double flat_dist = 0.0;
+    PATTERN patterns[4];
 
-        /* Now assign the values */
-        search_dist = search_distance;
-        skip_dist = skip_distance;
-        flat_dist = flat_distance;
-        double area_of_octagon =
-            4 * (search_distance * search_distance) * sin(DEGREE2RAD(45.));
-        unsigned char oneoff_done = 0;
+    double search_dist = search_distance;
+    double skip_dist = skip_distance;
+    double flat_dist = flat_distance;
 
-        /* prepare outputs */
-        for (i = o_forms; i < o_size; ++i)
-            if (opt_output[i]->answer) {
-                rasters[i].fd = Rast_open_new(opt_output[i]->answer,
-                                              rasters[i].out_data_type);
-                rasters[i].buffer = Rast_allocate_buf(rasters[i].out_data_type);
-            }
+    double area_of_octagon =
+        4 * (search_distance * search_distance) * sin(DEGREE2RAD(45.));
+    unsigned char oneoff_done = 0;
 
-        /* main loop */
-        for (row = 0; row < nrows; ++row) {
-            G_percent(row, nrows, 2);
-            cur_row = (row < row_radius_size)
+    /* prepare outputs */
+    for (int i = o_forms; i < o_size; ++i)
+        if (opt_output[i]->answer) {
+            rasters[i].fd =
+                Rast_open_new(opt_output[i]->answer, rasters[i].out_data_type);
+            rasters[i].buffer = Rast_allocate_buf(rasters[i].out_data_type);
+        }
+
+    /* main loop */
+    for (row = 0; row < nrows; ++row) {
+        G_percent(row, nrows, 2);
+
+        int cur_row = (row < row_radius_size)
                           ? row
                           : ((row >= nrows - row_radius_size - 1)
                                  ? row_buffer_size - (nrows - row - 1)
                                  : row_radius_size);
 
-            if (row > (row_radius_size) && row < nrows - (row_radius_size + 1))
-                shift_buffers(row);
+        if (row > (row_radius_size) && row < nrows - (row_radius_size + 1))
+            shift_buffers(row);
 
-            /* If skipping the current row, only after the buffer shift would be
-             * fine. */
-            if (oneoff && row != oneoff_row)
+        if (oneoff && row != oneoff_row)
+            continue;
+
+        for (int col = 0; col < ncols; ++col) {
+            if (oneoff && col != oneoff_col)
                 continue;
 
-            for (col = 0; col < ncols; ++col) {
-                /* If skipping the current column, early would be fine. */
-                if (oneoff && col != oneoff_col)
-                    continue;
+            /* on borders forms usually are unnatural. */
+            if (row < (skip_cells + 1) || row > nrows - (skip_cells + 2) ||
+                col < (skip_cells + 1) || col > ncols - (skip_cells + 2) ||
+                Rast_is_f_null_value(&elevation.elev[cur_row][col])) {
 
-                /* on borders forms ussualy are innatural. */
-                if (row < (skip_cells + 1) || row > nrows - (skip_cells + 2) ||
-                    col < (skip_cells + 1) || col > ncols - (skip_cells + 2) ||
-                    Rast_is_f_null_value(&elevation.elev[cur_row][col])) {
-                    /* set outputs to NULL and do nothing if source value is
-                     * null   or border */
-                    for (i = o_forms; i < o_size; ++i)
-                        if (opt_output[i]->answer) {
-                            pointer_buf = rasters[i].buffer;
-                            switch (rasters[i].out_data_type) {
-                            case CELL_TYPE:
-                                Rast_set_c_null_value(
-                                    &((CELL *)pointer_buf)[col], 1);
-                                break;
-                            case FCELL_TYPE:
-                                Rast_set_f_null_value(
-                                    &((FCELL *)pointer_buf)[col], 1);
-                                break;
-                            case DCELL_TYPE:
-                                Rast_set_d_null_value(
-                                    &((DCELL *)pointer_buf)[col], 1);
-                                break;
-                            default:
-                                G_fatal_error(_("Unknown output data type"));
-                            }
+                /* set outputs to NULL */
+                for (int i = o_forms; i < o_size; ++i)
+                    if (opt_output[i]->answer) {
+                        void *pointer_buf = rasters[i].buffer;
+                        switch (rasters[i].out_data_type) {
+                        case CELL_TYPE:
+                            Rast_set_c_null_value(&((CELL *)pointer_buf)[col],
+                                                  1);
+                            break;
+                        case FCELL_TYPE:
+                            Rast_set_f_null_value(&((FCELL *)pointer_buf)[col],
+                                                  1);
+                            break;
+                        case DCELL_TYPE:
+                            Rast_set_d_null_value(&((DCELL *)pointer_buf)[col],
+                                                  1);
+                            break;
+                        default:
+                            G_fatal_error(_("Unknown output data type"));
                         }
-                } /* end null value */
-                else {
-                    FORMS cur_form;
-                    FORMS orig_form;
-
-                    search_distance = search_dist;
-                    skip_distance = skip_dist;
-                    flat_distance = flat_dist;
-                    pattern_size =
-                        calc_pattern(&patterns[0], row, cur_row, col, oneoff);
-                    pattern = &patterns[0];
-                    cur_form = orig_form = determine_form(
-                        pattern->num_negatives, pattern->num_positives);
-
-                    /* correction of forms */
-                    if (extended && search_distance > 10 * max_resolution) {
-                        /* 1) remove extensive innatural forms: ridges, peaks,
-                         * shoulders and footslopes */
-                        if ((cur_form == SH || cur_form == FS ||
-                             cur_form == PK || cur_form == RI)) {
-                            FORMS small_form;
-
-                            search_distance =
-                                (search_dist / 2. < 4 * max_resolution)
-                                    ? 4 * max_resolution
-                                    : search_dist / 2.;
-                            skip_distance = 0;
-                            flat_distance = 0;
-                            pattern_size = calc_pattern(&patterns[1], row,
-                                                        cur_row, col, 0);
-                            pattern = &patterns[1];
-                            small_form = determine_form(pattern->num_negatives,
-                                                        pattern->num_positives);
-                            if (cur_form == SH || cur_form == FS)
-                                cur_form = (small_form == FL) ? FL : cur_form;
-                            if (cur_form == PK || cur_form == RI)
-                                cur_form = small_form;
-                        }
-                        /* 3) Depressions */
-
-                    } /* end of correction */
-
-                    /* one-off mode */
-                    if (oneoff) {
-                        char buf[BUFSIZ];
-                        float azimuth, elongation, width;
-
-                        radial2cartesian(pattern);
-                        shape(pattern, pattern_size, &azimuth, &elongation,
-                              &width);
-                        prof_map_info();
-                        prof_sso("computation_parameters");
-                        prof_dbl("easting", oneoff_easting);
-                        prof_dbl("northing", oneoff_northing);
-                        prof_mtr("search_m", search_distance);
-                        prof_int("search_cells", search_cells);
-                        prof_mtr("skip_m", skip_distance);
-                        prof_int("skip_cells", skip_cells);
-                        prof_dbl("flat_thresh_deg", RAD2DEGREE(flat_threshold));
-                        prof_mtr("flat_distance_m", flat_distance);
-                        prof_mtr("flat_height_m", flat_threshold_height);
-                        prof_bln("extended_correction", extended);
-                        prof_eso(); /* computation_parameters */
-                        prof_sso("intermediate_data");
-                        if (extended) {
-                            prof_int("initial_landform_cat", orig_form);
-                            prof_str("initial_landform_code",
-                                     form_short_name(orig_form));
-                            prof_str("initial_landform_name",
-                                     form_long_name(orig_form));
-                        }
-                        prof_int("ternary_498",
-                                 determine_ternary(pattern->pattern));
-                        prof_int("ternary_6561",
-                                 preliminary_ternary(pattern->pattern));
-                        prof_int("pattern_size", pattern_size);
-                        prof_dbl("origin_easting",
-                                 Rast_col_to_easting(col + 0.5, &window));
-                        prof_dbl("origin_northing",
-                                 Rast_row_to_northing(row + 0.5, &window));
-                        prof_pattern(elevation.elev[cur_row][col], pattern);
-                        prof_eso(); /* intermediate_data */
-                        prof_sso("final_results");
-                        prof_int("landform_cat", cur_form);
-                        prof_str("landform_code", form_short_name(cur_form));
-                        prof_str("landform_name", form_long_name(cur_form));
-                        prof_int("landform_deviation",
-                                 form_deviation(pattern->num_negatives,
-                                                pattern->num_positives));
-                        prof_dbl("azimuth", azimuth);
-                        prof_dbl("elongation", elongation);
-                        prof_mtr("width_m", width);
-                        prof_mtr("intensity_m",
-                                 intensity(pattern->elevation, pattern_size));
-                        prof_mtr("exposition_m",
-                                 exposition(pattern->elevation));
-                        prof_mtr("range_m", range(pattern->elevation));
-                        prof_dbl("variance",
-                                 variance(pattern->elevation, pattern_size));
-                        prof_dbl("extends", extends(pattern) / area_of_octagon);
-                        prof_mtr("octagon_perimeter_m",
-                                 octa_perimeter(pattern));
-                        prof_mtr("octagon_area_m2", extends(pattern));
-                        prof_mtr("mesh_perimeter_m", mesh_perimeter(pattern));
-                        prof_mtr("mesh_area_m2", mesh_area(pattern));
-                        prof_eso(); /* final_results */
-                        /*
-                         * When adding new data items, increment the minor
-                         * version. When deleting, moving, renaming or
-                         * otherwise changing existing data, increment the
-                         * major version and reset the minor version.
-                         */
-                        prof_int("format_version_major", 0);
-                        prof_int("format_version_minor", 9);
-                        prof_utc("timestamp", time(NULL));
-                        snprintf(buf, sizeof(buf), "r.geomorphon GRASS %s [%s]",
-                                 GRASS_VERSION_STRING, GRASS_HEADERS_VERSION);
-                        prof_str("generator", buf);
-
-                        oneoff_done =
-                            prof_write(profile_file, par_profileformat->answer);
-                        if (oneoff_done)
-                            G_verbose_message(
-                                _("Profile data has been written"));
-                        else
-                            G_important_message(
-                                _("Failed writing profile data"));
-                        /* Break out of both loops. */
-                        row = nrows - 1;
-                        break;
-                    } /* end of one-off mode */
-
-                    pattern = &patterns[0];
-                    if (opt_output[o_forms]->answer)
-                        ((CELL *)rasters[o_forms].buffer)[col] = cur_form;
-
-                    if (opt_output[o_ternary]->answer)
-                        ((CELL *)rasters[o_ternary].buffer)[col] =
-                            determine_ternary(pattern->pattern);
-                    if (opt_output[o_positive]->answer)
-                        ((CELL *)rasters[o_positive].buffer)[col] =
-                            rotate(pattern->positives);
-                    if (opt_output[o_negative]->answer)
-                        ((CELL *)rasters[o_negative].buffer)[col] =
-                            rotate(pattern->negatives);
-                    if (opt_output[o_intensity]->answer)
-                        ((FCELL *)rasters[o_intensity].buffer)[col] =
-                            intensity(pattern->elevation, pattern_size);
-                    if (opt_output[o_exposition]->answer)
-                        ((FCELL *)rasters[o_exposition].buffer)[col] =
-                            exposition(pattern->elevation);
-                    if (opt_output[o_range]->answer)
-                        ((FCELL *)rasters[o_range].buffer)[col] =
-                            range(pattern->elevation);
-                    if (opt_output[o_variance]->answer)
-                        ((FCELL *)rasters[o_variance].buffer)[col] =
-                            variance(pattern->elevation, pattern_size);
-
-                    /*                       used only for next four shape
-                     * functions
-                     */
-                    if (opt_output[o_elongation]->answer ||
-                        opt_output[o_azimuth]->answer ||
-                        opt_output[o_extend]->answer ||
-                        opt_output[o_width]->answer) {
-                        float azimuth, elongation, width;
-
-                        radial2cartesian(pattern);
-                        shape(pattern, pattern_size, &azimuth, &elongation,
-                              &width);
-                        if (opt_output[o_azimuth]->answer)
-                            ((FCELL *)rasters[o_azimuth].buffer)[col] = azimuth;
-                        if (opt_output[o_elongation]->answer)
-                            ((FCELL *)rasters[o_elongation].buffer)[col] =
-                                elongation;
-                        if (opt_output[o_width]->answer)
-                            ((FCELL *)rasters[o_width].buffer)[col] = width;
                     }
-                    if (opt_output[o_extend]->answer)
-                        ((FCELL *)rasters[o_extend].buffer)[col] =
-                            extends(pattern) / area_of_octagon;
+            } /* end null value */
+            else {
+                FORMS cur_form;
+                FORMS orig_form;
+
+                search_distance = search_dist;
+                skip_distance = skip_dist;
+                flat_distance = flat_dist;
+
+                int pattern_size =
+                    calc_pattern(&patterns[0], row, cur_row, col, oneoff);
+                PATTERN *pattern = &patterns[0];
+
+                cur_form = orig_form = determine_form(pattern->num_negatives,
+                                                      pattern->num_positives);
+
+                /* correction of forms */
+                if (extended && search_distance > 10 * max_resolution) {
+                    /* 1) remove extensive unnatural forms */
+                    if ((cur_form == SH || cur_form == FS || cur_form == PK ||
+                         cur_form == RI)) {
+                        FORMS small_form;
+
+                        search_distance =
+                            (search_dist / 2. < 4 * max_resolution)
+                                ? 4 * max_resolution
+                                : search_dist / 2.;
+                        skip_distance = 0;
+                        flat_distance = 0;
+                        pattern_size =
+                            calc_pattern(&patterns[1], row, cur_row, col, 0);
+                        pattern = &patterns[1];
+                        small_form = determine_form(pattern->num_negatives,
+                                                    pattern->num_positives);
+                        if (cur_form == SH || cur_form == FS)
+                            cur_form = (small_form == FL) ? FL : cur_form;
+                        if (cur_form == PK || cur_form == RI)
+                            cur_form = small_form;
+                    }
+                } /* end of correction */
+
+                /* one-off mode */
+                if (oneoff) {
+                    char buf[BUFSIZ];
+                    float azimuth, elongation, width;
+
+                    radial2cartesian(pattern);
+                    shape(pattern, pattern_size, &azimuth, &elongation, &width);
+                    prof_map_info();
+                    prof_sso("computation_parameters");
+                    prof_dbl("easting", oneoff_easting);
+                    prof_dbl("northing", oneoff_northing);
+                    prof_mtr("search_m", search_distance);
+                    prof_int("search_cells", search_cells);
+                    prof_mtr("skip_m", skip_distance);
+                    prof_int("skip_cells", skip_cells);
+                    prof_dbl("flat_thresh_deg", RAD2DEGREE(flat_threshold));
+                    prof_mtr("flat_distance_m", flat_distance);
+                    prof_mtr("flat_height_m", flat_threshold_height);
+                    prof_bln("extended_correction", extended);
+                    prof_eso(); /* computation_parameters */
+                    prof_sso("intermediate_data");
+                    if (extended) {
+                        prof_int("initial_landform_cat", orig_form);
+                        prof_str("initial_landform_code",
+                                 form_short_name(orig_form));
+                        prof_str("initial_landform_name",
+                                 form_long_name(orig_form));
+                    }
+                    prof_int("ternary_498",
+                             determine_ternary(pattern->pattern));
+                    prof_int("ternary_6561",
+                             preliminary_ternary(pattern->pattern));
+                    prof_int("pattern_size", pattern_size);
+                    prof_dbl("origin_easting",
+                             Rast_col_to_easting(col + 0.5, &window));
+                    prof_dbl("origin_northing",
+                             Rast_row_to_northing(row + 0.5, &window));
+                    prof_pattern(elevation.elev[cur_row][col], pattern);
+                    prof_eso(); /* intermediate_data */
+                    prof_sso("final_results");
+                    prof_int("landform_cat", cur_form);
+                    prof_str("landform_code", form_short_name(cur_form));
+                    prof_str("landform_name", form_long_name(cur_form));
+                    prof_int("landform_deviation",
+                             form_deviation(pattern->num_negatives,
+                                            pattern->num_positives));
+                    prof_dbl("azimuth", azimuth);
+                    prof_dbl("elongation", elongation);
+                    prof_mtr("width_m", width);
+                    prof_mtr("intensity_m",
+                             intensity(pattern->elevation, pattern_size));
+                    prof_mtr("exposition_m", exposition(pattern->elevation));
+                    prof_mtr("range_m", range(pattern->elevation));
+                    prof_dbl("variance",
+                             variance(pattern->elevation, pattern_size));
+                    prof_dbl("extends", extends(pattern) / area_of_octagon);
+                    prof_mtr("octagon_perimeter_m", octa_perimeter(pattern));
+                    prof_mtr("octagon_area_m2", extends(pattern));
+                    prof_mtr("mesh_perimeter_m", mesh_perimeter(pattern));
+                    prof_mtr("mesh_area_m2", mesh_area(pattern));
+                    prof_eso(); /* final_results */
+
+                    prof_int("format_version_major", 0);
+                    prof_int("format_version_minor", 9);
+                    prof_utc("timestamp", time(NULL));
+                    snprintf(buf, sizeof(buf), "r.geomorphon GRASS %s [%s]",
+                             GRASS_VERSION_STRING, GRASS_HEADERS_VERSION);
+                    prof_str("generator", buf);
+
+                    oneoff_done =
+                        prof_write(profile_file, par_profileformat->answer);
+                    if (oneoff_done)
+                        G_verbose_message(_("Profile data has been written"));
+                    else
+                        G_important_message(_("Failed writing profile data"));
+                    /* Break out of both loops. */
+                    row = nrows - 1;
+                    break;
+                } /* end of one-off mode */
+
+                pattern = &patterns[0];
+                if (opt_output[o_forms]->answer)
+                    ((CELL *)rasters[o_forms].buffer)[col] = cur_form;
+
+                if (opt_output[o_ternary]->answer)
+                    ((CELL *)rasters[o_ternary].buffer)[col] =
+                        determine_ternary(pattern->pattern);
+                if (opt_output[o_positive]->answer)
+                    ((CELL *)rasters[o_positive].buffer)[col] =
+                        rotate(pattern->positives);
+                if (opt_output[o_negative]->answer)
+                    ((CELL *)rasters[o_negative].buffer)[col] =
+                        rotate(pattern->negatives);
+                if (opt_output[o_intensity]->answer)
+                    ((FCELL *)rasters[o_intensity].buffer)[col] =
+                        intensity(pattern->elevation, pattern_size);
+                if (opt_output[o_exposition]->answer)
+                    ((FCELL *)rasters[o_exposition].buffer)[col] =
+                        exposition(pattern->elevation);
+                if (opt_output[o_range]->answer)
+                    ((FCELL *)rasters[o_range].buffer)[col] =
+                        range(pattern->elevation);
+                if (opt_output[o_variance]->answer)
+                    ((FCELL *)rasters[o_variance].buffer)[col] =
+                        variance(pattern->elevation, pattern_size);
+
+                /* used only for next four shape functions */
+                if (opt_output[o_elongation]->answer ||
+                    opt_output[o_azimuth]->answer ||
+                    opt_output[o_extend]->answer ||
+                    opt_output[o_width]->answer) {
+                    float azimuth, elongation, width;
+
+                    radial2cartesian(pattern);
+                    shape(pattern, pattern_size, &azimuth, &elongation, &width);
+                    if (opt_output[o_azimuth]->answer)
+                        ((FCELL *)rasters[o_azimuth].buffer)[col] = azimuth;
+                    if (opt_output[o_elongation]->answer)
+                        ((FCELL *)rasters[o_elongation].buffer)[col] =
+                            elongation;
+                    if (opt_output[o_width]->answer)
+                        ((FCELL *)rasters[o_width].buffer)[col] = width;
                 }
-
-            } /* end for col */
-
-            /* write existing outputs */
-            for (i = o_forms; i < o_size; ++i)
-                if (opt_output[i]->answer)
-                    Rast_put_row(rasters[i].fd, rasters[i].buffer,
-                                 rasters[i].out_data_type);
-        }
-        G_percent(row, nrows, 2); /* end main loop */
-
-        /* finish and close */
-        free_map(elevation.elev, row_buffer_size + 1);
-        for (i = o_forms; i < o_size; ++i)
-            if (opt_output[i]->answer) {
-                G_free(rasters[i].buffer);
-                Rast_close(rasters[i].fd);
-                Rast_short_history(opt_output[i]->answer, "raster", &history);
-                Rast_command_history(&history);
-                Rast_write_history(opt_output[i]->answer, &history);
+                if (opt_output[o_extend]->answer)
+                    ((FCELL *)rasters[o_extend].buffer)[col] =
+                        extends(pattern) / area_of_octagon;
             }
 
-        if (opt_output[o_forms]->answer)
-            write_form_cat_colors(opt_output[o_forms]->answer);
-        if (opt_output[o_intensity]->answer)
-            write_contrast_colors(opt_output[o_intensity]->answer);
-        if (opt_output[o_exposition]->answer)
-            write_contrast_colors(opt_output[o_exposition]->answer);
-        if (opt_output[o_range]->answer)
-            write_contrast_colors(opt_output[o_range]->answer);
+        } /* end for col */
 
-        G_done_msg(" ");
-
-        if (oneoff) {
-            if (strcmp(par_profiledata->answer, "-"))
-                fclose(profile_file);
-            /*
-             * In case all the earlier checks had not detected some edge case
-             * and the one-off computation has not been done properly or not
-             * at all, do not fail to fail now.
-             */
-            if (!oneoff_done) {
-                G_fatal_error(_("Failed to profile the computation, please "
-                                "check the parameters"));
-                exit(EXIT_FAILURE);
-            }
-        }
-
-        exit(EXIT_SUCCESS);
+        /* write existing outputs */
+        for (int i = o_forms; i < o_size; ++i)
+            if (opt_output[i]->answer)
+                Rast_put_row(rasters[i].fd, rasters[i].buffer,
+                             rasters[i].out_data_type);
     }
+    G_percent(row, nrows, 2); /* end main loop */
+
+    /* finish and close */
+    free_map(elevation.elev, row_buffer_size + 1);
+    for (int i = o_forms; i < o_size; ++i)
+        if (opt_output[i]->answer) {
+            G_free(rasters[i].buffer);
+            Rast_close(rasters[i].fd);
+            Rast_short_history(opt_output[i]->answer, "raster", &history);
+            Rast_command_history(&history);
+            Rast_write_history(opt_output[i]->answer, &history);
+        }
+
+    if (opt_output[o_forms]->answer)
+        write_form_cat_colors(opt_output[o_forms]->answer);
+    if (opt_output[o_intensity]->answer)
+        write_contrast_colors(opt_output[o_intensity]->answer);
+    if (opt_output[o_exposition]->answer)
+        write_contrast_colors(opt_output[o_exposition]->answer);
+    if (opt_output[o_range]->answer)
+        write_contrast_colors(opt_output[o_range]->answer);
+
+    G_done_msg(" ");
+
+    if (oneoff) {
+        if (strcmp(par_profiledata->answer, "-"))
+            fclose(profile_file);
+
+        if (!oneoff_done) {
+            G_fatal_error(_("Failed to profile the computation, please "
+                            "check the parameters"));
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    exit(EXIT_SUCCESS);
 }
