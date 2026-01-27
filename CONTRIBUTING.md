@@ -6,6 +6,41 @@ around the main GRASS source code.
 You can also report issues, plan new features,
 or explore <https://grass.osgeo.org/get-involved/>.
 
+## AI use policy
+
+AI tools are part of modern development workflows and
+contributors may use them. However, all contributions must meet
+GRASS quality standards regardless of how they were created.
+
+### Guidelines
+
+AI-assisted development is acceptable when used responsibly.
+Contributors must:
+
+- **Test all code thoroughly.** Submit only code you have verified works correctly.
+- **Understand your contributions.** You need to be able to explain the code changes
+ you submit.
+- **Write clear, concise PR descriptions** in your own words.
+- **Use your own voice** in GitHub issues and PR discussions.
+- **Take responsibility** for code quality, correctness, and maintainability.
+
+### Disclosure
+
+Disclose AI assistance when substantial algorithms or logic were AI-generated,
+or when uncertain about licensing or copyright implications.
+Be honest if a reviewer asks about code origins.
+
+### Unacceptable submissions
+
+Pull requests may be closed without review if they contain:
+
+- Untested code
+- Verbose AI-generated descriptions
+- Evidence the contributor doesn't understand the submission
+
+Using AI to assist learning and development is encouraged.
+Using it to bypass understanding or submit work you cannot explain is not.
+
 ## Changing code and documentation
 
 To contribute changes to GRASS GitHub repository, use a
@@ -25,8 +60,8 @@ linters (automated code quality checks).
 
 There is a series of automated checks which will run on your pull request
 after you create one. You don't need to run all these
-checks locally and, indeed, some of them may fail for your code. This is a part of
-the standard iterative process of integrating changes into the main code,
+checks locally and, indeed, some of them may fail for your code. This is a part
+of the standard iterative process of integrating changes into the main code,
 so if that happens, just see the error messages, go back to your code
 and try again. If you are not sure what to do, let others know in a pull
 request comment.

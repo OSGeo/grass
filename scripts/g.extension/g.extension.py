@@ -173,6 +173,7 @@ else:
 import grass.script as gs
 from grass.script import task as gtask
 from grass.script.utils import try_rmdir
+from grass.app.runtime import RuntimePaths
 
 # temp dir
 REMOVE_TMPDIR = True
@@ -1970,8 +1971,11 @@ def create_md_if_missing(root_dir):
 
 def install_extension_std_platforms(name, source, url, branch):
     """Install extension on standard platforms"""
-    gisbase = os.getenv("GISBASE")
+    runtime_paths = RuntimePaths()
+    gisbase = runtime_paths.gisbase
     path_to_src_code_message = _("Path to the source code:")
+
+    is_cmake = runtime_paths.is_cmake_build
 
     # to hide non-error messages from subprocesses
     outdev = open(os.devnull, "w") if gs.verbosity() <= 2 else sys.stdout
@@ -1995,22 +1999,42 @@ def install_extension_std_platforms(name, source, url, branch):
     )
     # collect module names
     module_list = []
-    for r, d, f in os.walk(srcdir):
-        for filename in f:
-            if filename == "Makefile":
-                # get the module name: PGM = <module name>
-                with open(os.path.join(r, "Makefile")) as fp:
-                    for line in fp:
-                        if re.match(r"PGM.*.=|PGM=", line):
-                            try:
-                                modulename = line.split("=")[1].strip()
-                                if modulename:
-                                    if modulename not in module_list:
-                                        module_list.append(modulename)
-                                else:
+
+    if is_cmake:
+        for r, d, f in os.walk(srcdir):
+            for filename in f:
+                if filename == "CMakeLists.txt":
+                    # get the module name: project(<module name>)
+                    with open(os.path.join(r, "CMakeLists.txt")) as fp:
+                        for line in fp:
+                            m = re.match(r"project\((.*)\)", line)
+                            if m:
+                                try:
+                                    modulename = m.group(1)
+                                    if modulename:
+                                        if modulename not in module_list:
+                                            module_list.append(modulename)
+                                    else:
+                                        gs.fatal(pgm_not_found_message)
+                                except IndexError:
                                     gs.fatal(pgm_not_found_message)
-                            except IndexError:
-                                gs.fatal(pgm_not_found_message)
+    else:
+        for r, d, f in os.walk(srcdir):
+            for filename in f:
+                if filename == "Makefile":
+                    # get the module name: PGM = <module name>
+                    with open(os.path.join(r, "Makefile")) as fp:
+                        for line in fp:
+                            if re.match(r"PGM.*.=|PGM=", line):
+                                try:
+                                    modulename = line.split("=")[1].strip()
+                                    if modulename:
+                                        if modulename not in module_list:
+                                            module_list.append(modulename)
+                                    else:
+                                        gs.fatal(pgm_not_found_message)
+                                except IndexError:
+                                    gs.fatal(pgm_not_found_message)
 
     # change shebang from python to python3
     pyfiles = []
@@ -2028,42 +2052,99 @@ def install_extension_std_platforms(name, source, url, branch):
                     end="",
                 )
 
-    dirs = {
-        "bin": os.path.join(srcdir, "bin"),
-        "docs": os.path.join(srcdir, "docs"),
-        "html": os.path.join(srcdir, "docs", "html"),
-        "mkdocs": os.path.join(srcdir, "docs", "mkdocs"),
-        "rest": os.path.join(srcdir, "docs", "rest"),
-        "man": os.path.join(srcdir, "docs", "man"),
-        "script": os.path.join(srcdir, "scripts"),
-        # TODO: handle locales also for addons
-        #             'string'  : os.path.join(srcdir, 'locale'),
-        "string": srcdir,
-        "etc": os.path.join(srcdir, "etc"),
-    }
+    if is_cmake:
+        grass_addon_base = options["prefix"]
+        cmake_prefix_path = (
+            ";" + os.getenv("CMAKE_PREFIX_PATH")
+            if os.getenv("CMAKE_PREFIX_PATH")
+            else ""
+        )
+        cmake_module_path = (
+            ";" + os.getenv("CMAKE_MODULE_PATH")
+            if os.getenv("CMAKE_MODULE_PATH")
+            else ""
+        )
+        grass_cmake_prefix_path = (
+            ";" + runtime_paths.grass_cmake_prefix_path
+            if runtime_paths.grass_cmake_prefix_path
+            else ""
+        )
+        g_cmake_config_dir = runtime_paths.grass_cmake_config_dir
+        g_cmake_module_dir = runtime_paths.grass_cmake_module_dir
+        g_c_compiler = os.getenv("CC") or runtime_paths.grass_cmake_c_compiler
+        g_cxx_compiler = os.getenv("CXX") or runtime_paths.grass_cmake_cxx_compiler
 
-    make_cmd = [
-        MAKE,
-        "MODULE_TOPDIR=%s" % gisbase.replace(" ", r"\ "),
-        "RUN_GISRC=%s" % os.environ["GISRC"],
-        "BIN=%s" % dirs["bin"],
-        "HTMLDIR=%s" % dirs["html"],
-        "MDDIR=%s" % dirs["mkdocs"],
-        "RESTDIR=%s" % dirs["rest"],
-        "MANBASEDIR=%s" % dirs["man"],
-        "SCRIPTDIR=%s" % dirs["script"],
-        "STRINGDIR=%s" % dirs["string"],
-        "ETC=%s" % os.path.join(dirs["etc"]),
-        "SOURCE_URL=%s" % url,
-    ]
+        c_prefix_path = (
+            f"{g_cmake_config_dir}{grass_cmake_prefix_path}{cmake_prefix_path}"
+        )
+        c_mod_path = f"{g_cmake_module_dir}{cmake_module_path}"
+        c_compiler = f"-DCMAKE_C_COMPILER={g_c_compiler}" if g_c_compiler else ""
+        cxx_compiler = (
+            f"-DCMAKE_CXX_COMPILER={g_cxx_compiler}" if g_cxx_compiler else ""
+        )
 
-    install_cmd = [
-        MAKE,
-        "MODULE_TOPDIR=%s" % gisbase,
-        "ARCH_DISTDIR=%s" % srcdir,
-        "INST_DIR=%s" % options["prefix"],
-        "install",
-    ]
+        config_cmd = [
+            "cmake",
+            "-B",
+            "build",
+            f"-DCMAKE_PREFIX_PATH={c_prefix_path}",
+            f"-DCMAKE_MODULE_PATH={c_mod_path}",
+            f"-DCMAKE_INSTALL_PREFIX={grass_addon_base}",
+            f"-DPYTHON_EXECUTABLE={sys.executable}",
+            f"-DSOURCE_URL={url}",
+            c_compiler,
+            cxx_compiler,
+        ]
+        make_cmd = [
+            "cmake",
+            "--build",
+            "build",
+            "-v",
+        ]
+        install_cmd = [
+            "cmake",
+            "--install",
+            "build",
+        ]
+        try:
+            shutil.rmtree(os.path.join(srcdir, "build"))
+        except FileNotFoundError:
+            pass
+    else:
+        dirs = {
+            "bin": os.path.join(srcdir, "bin"),
+            "docs": os.path.join(srcdir, "docs"),
+            "html": os.path.join(srcdir, "docs", "html"),
+            "mkdocs": os.path.join(srcdir, "docs", "mkdocs"),
+            "rest": os.path.join(srcdir, "docs", "rest"),
+            "man": os.path.join(srcdir, "docs", "man"),
+            "script": os.path.join(srcdir, "scripts"),
+            # TODO: handle locales also for addons
+            #             'string'  : os.path.join(srcdir, 'locale'),
+            "string": srcdir,
+            "etc": os.path.join(srcdir, "etc"),
+        }
+        make_cmd = [
+            MAKE,
+            "MODULE_TOPDIR=%s" % gisbase.replace(" ", r"\ "),
+            "RUN_GISRC=%s" % os.environ["GISRC"],
+            "BIN=%s" % dirs["bin"],
+            "HTMLDIR=%s" % dirs["html"],
+            "MDDIR=%s" % dirs["mkdocs"],
+            "RESTDIR=%s" % dirs["rest"],
+            "MANBASEDIR=%s" % dirs["man"],
+            "SCRIPTDIR=%s" % dirs["script"],
+            "STRINGDIR=%s" % dirs["string"],
+            "ETC=%s" % os.path.join(dirs["etc"]),
+            "SOURCE_URL=%s" % url,
+        ]
+        install_cmd = [
+            MAKE,
+            "MODULE_TOPDIR=%s" % gisbase,
+            "ARCH_DISTDIR=%s" % srcdir,
+            "INST_DIR=%s" % options["prefix"],
+            "install",
+        ]
 
     if flags["d"]:
         gs.message("\n%s\n" % _("To compile run:"))
@@ -2077,8 +2158,11 @@ def install_extension_std_platforms(name, source, url, branch):
     os.chdir(srcdir)
 
     gs.message(_("Compiling..."))
-    if not Path(gisbase, "include", "Make", "Module.make").exists():
+    if not is_cmake and not Path(gisbase, "include", "Make", "Module.make").exists():
         gs.fatal(_("Please install GRASS development package"))
+
+    if is_cmake and gs.call(config_cmd, stdout=outdev) != 0:
+        gs.fatal(_("Compilation failed, sorry. Please check above error messages."))
 
     if gs.call(make_cmd, stdout=outdev) != 0:
         gs.fatal(_("Compilation failed, sorry. Please check above error messages."))

@@ -162,8 +162,9 @@ if(TARGET MYSQL)
   list(APPEND db_drivers mysql)
 
   if(WITH_DOCS)
-    generate_html(TARGET mysql NAME grass-mesql SOURCEDIR
-                  ${CMAKE_CURRENT_SOURCE_DIR}/mysql)
+    generate_docs(grass-mesql
+      TARGET mysql
+      SOURCEDIR ${CMAKE_CURRENT_SOURCE_DIR}/mysql)
   endif()
 endif()
 

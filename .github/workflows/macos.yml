@@ -47,7 +47,7 @@ jobs:
             -mindepth 1 -maxdepth 1 -type f -print -delete
           # Rehash to forget about the deleted files
           hash -r
-      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
       - name: Get current date cache key segment
@@ -129,7 +129,7 @@ jobs:
 
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@47f89e9acb64b76debcd5ea40642d25a4adced9f # v1.1.1
+        uses: codecov/test-results-action@0fa95f0e1eeaafde2c782583b36b28ad0d8c77d3 # v1.2.1
         with:
           exclude: gui
           flags: macos-pytest-python
@@ -137,7 +137,7 @@ jobs:
 
       - name: Cache GRASS Sample Dataset
         id: cached-data
-        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache/restore@8b402f58fbc84540c8b491a91e594a4576fec3d7 # v5.0.2
         with:
           path: sample-data/nc_spm_full_v2beta1.tar.gz
           key: nc_spm_full_v2beta1.tar.gz
@@ -153,7 +153,7 @@ jobs:
             nc_spm_full_v2beta1.tar.gz"
 
       - name: Save GRASS Sample Dataset to cache
-        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache/save@8b402f58fbc84540c8b491a91e594a4576fec3d7 # v5.0.2
         if: steps.cached-data.outputs.cache-hit != 'true'
         with:
           path: sample-data/nc_spm_full_v2beta1.tar.gz
@@ -168,7 +168,7 @@ jobs:
 
       - name: Make HTML test report available
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: testreport-macOS
           path: testreport

@@ -29,7 +29,7 @@ for other platforms you may have to install some of them.
   flex: [https://github.com/westes/flex](https://github.com/westes/flex)
 - **parser generator** (yacc, bison)
   bison: [https://www.gnu.org/software/bison/bison.html](https://www.gnu.org/software/bison/bison.html)
-- **PROJ** - Cartographic Projection Library
+- **PROJ >= 9.0** - Cartographic Projection Library
   PROJ: [https://proj.org/](https://proj.org/)
 - **GDAL/OGR >= 3.7** for import and export of most external raster and
   vector map formats
@@ -93,6 +93,7 @@ Note: also the respective development packages (commonly named `xxx-dev` or
   [https://www.wxpython.org](https://www.wxpython.org)
 - **NumPy >= 1.0.4** (for various wxGUI components and pyGRASS)
   [https://numpy.org](https://numpy.org)
+<!-- markdownlint-disable-next-line line-length -->
 - **Python dateutil Library** (`python-dateutil`, needed for the tgrass modules `t.*`)
   [https://pypi.org/project/python-dateutil/](https://pypi.org/project/python-dateutil/)
   [https://github.com/dateutil/dateutil](https://github.com/dateutil/dateutil)
