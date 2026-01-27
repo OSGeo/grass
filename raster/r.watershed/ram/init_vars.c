@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "Gwater.h"
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -242,7 +243,7 @@ int init_vars(int argc, char *argv[])
         G_percent(nrows, nrows, 2);
         Rast_close(input_fd);
         G_free(asp_buf);
-        
+
         /* Read elevation for other calculations */
         fd = Rast_open_old(ele_name, "");
         ele_map_type = Rast_get_map_type(fd);
@@ -298,6 +299,27 @@ int init_vars(int argc, char *argv[])
         Rast_close(fd);
         G_free(elebuf);
 
+        /*  Initialize RUSLE s_l array when using input maps */
+        if (er_flag) {
+            s_l = (double *)G_malloc(size_array(&s_l_seg, nrows, ncols) *
+                                     sizeof(double));
+            /* Initialize s_l with half_res for all cells */
+            for (r = 0; r < nrows; r++) {
+                for (c = 0; c < ncols; c++) {
+                    seg_idx = SEG_INDEX(s_l_seg, r, c);
+                    s_l[seg_idx] = half_res;
+                }
+            }
+
+            if (sg_flag) {
+                s_g = (double *)G_malloc(size_array(&s_g_seg, nrows, ncols) *
+                                         sizeof(double));
+            }
+            if (ls_flag) {
+                l_s = (double *)G_malloc(size_array(&l_s_seg, nrows, ncols) *
+                                         sizeof(double));
+            }
+        }
         /* Mark swales from drainage direction if needed for basin delineation
          */
         if (bas_thres > 0) {
@@ -305,7 +327,7 @@ int init_vars(int argc, char *argv[])
                 for (c = 0; c < ncols; c++) {
                     seg_idx = SEG_INDEX(wat_seg, r, c);
                     if (!Rast_is_d_null_value(&wat[seg_idx]) &&
-                        wat[seg_idx] >= bas_thres) {
+                        fabs(wat[seg_idx]) >= bas_thres) {
                         FLAG_SET(swale, r, c);
                     }
                 }

@@ -129,7 +129,11 @@ int main(int argc, char *argv[])
     opt20->key = "accumulation_input";
     opt20->label = _("Name of existing accumulation raster map to reuse");
     opt20->description =
-        _("Reuses existing flow accumulation map instead of recalculating");
+        _("Reuses existing flow accumulation map instead of recalculating"
+          "Must be from r.watershed output with the same elevation. "
+          "Skips flow calculation for faster basin delineation with different "
+          "thresholds. "
+          "Requires drainage_input to also be specified.");
     opt20->required = NO;
     opt20->guisection = _("Inputs");
 
@@ -137,7 +141,12 @@ int main(int argc, char *argv[])
     opt21->key = "drainage_input";
     opt21->label = _("Name of existing drainage direction raster map to reuse");
     opt21->description =
-        _("Reuses existing drainage direction map instead of recalculating");
+        _("Reuses existing drainage direction map instead of recalculating"
+          "MUST be from r.watershed (not r.stream.* or r.terraflow). "
+          "Uses r.watershed conventions: values 0-8 for directions, negative "
+          "for outlets. "
+          "Using incompatible maps will produce incorrect results. "
+          "Requires accumulation_input to also be specified.");
     opt21->required = NO;
     opt21->guisection = _("Inputs");
 
@@ -265,8 +274,7 @@ int main(int argc, char *argv[])
     G_option_requires(opt13, opt6, NULL);
     G_option_requires(opt14, opt6, NULL);
 
-    G_option_requires(opt20, opt21, NULL);
-    G_option_requires(opt21, opt20, NULL);
+    G_option_collective(opt20, opt21, NULL);
 
     /* Cannot use input maps with certain incompatible options */
     G_option_excludes(

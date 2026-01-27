@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "Gwater.h"
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -445,7 +446,8 @@ int init_vars(int argc, char *argv[])
                 for (c = 0; c < ncols; c++) {
                     seg_get(&watalt, (char *)&wa, r, c);
                     seg_get(&aspflag, (char *)&af, r, c);
-                    if (!FLAG_GET(af.flag, NULLFLAG) && wa.wat >= bas_thres) {
+                    if (!FLAG_GET(af.flag, NULLFLAG) &&
+                        fabs(wa.wat) >= bas_thres) {
                         FLAG_SET(af.flag, SWALEFLAG);
                         seg_put(&aspflag, (char *)&af, r, c);
                     }
@@ -455,8 +457,24 @@ int init_vars(int argc, char *argv[])
         }
 
         /* Skip RUSLE slope length initialization and A* setup */
+        /* Initialize RUSLE slope length and other segments when using
+         * input maps */
         if (er_flag) {
+            double init_val;
+
             dseg_open(&s_l, seg_rows, seg_cols, num_open_segs);
+
+            /* Initialize s_l with half_res for all non-NULL cells */
+            init_val = half_res;
+            for (r = 0; r < nrows; r++) {
+                for (c = 0; c < ncols; c++) {
+                    seg_get(&aspflag, (char *)&af, r, c);
+                    if (!FLAG_GET(af.flag, NULLFLAG)) {
+                        dseg_put(&s_l, &init_val, r, c);
+                    }
+                }
+            }
+
             if (sg_flag)
                 dseg_open(&s_g, seg_rows, seg_cols, num_open_segs);
             if (ls_flag)
