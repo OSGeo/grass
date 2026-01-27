@@ -64,6 +64,7 @@ class TestRFillNulls(TestCase):
             },
             precision=1e-6,
         )
+
     def test_no_nulls(self):
         """Test r.fillnulls when input raster has no NULL cells"""
         # elevation has no NULL cells by default
