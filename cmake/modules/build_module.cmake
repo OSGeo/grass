@@ -210,8 +210,6 @@ function(build_module)
         target_compile_definitions(${G_NAME} PRIVATE "${interface_def}")
       endif()
       target_link_libraries(${G_NAME} PRIVATE ${dep})
-    elseif(OpenMP_C_FOUND)
-      target_link_libraries(${G_NAME} PRIVATE OpenMP::OpenMP_C)
     endif()
   endforeach()
 
