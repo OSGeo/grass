@@ -1,86 +1,10 @@
 #include <stdbool.h>
 #include <stdlib.h>
-#include <string.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/gjson.h>
 #include "kappa.h"
 #include "local_proto.h"
-
-static char *compact_matrix_rows(const char *json_str)
-{
-    char *result = G_store(json_str);
-    char *matrix_start = strstr(result, "\"matrix\":");
-
-    if (!matrix_start)
-        return result;
-
-    char *array_start = strchr(matrix_start, '[');
-    if (!array_start)
-        return result;
-
-    char *pos = array_start + 1;
-    int bracket_depth = 1;
-    int in_row = 0;
-    char *row_start = NULL;
-
-    while (*pos && bracket_depth > 0) {
-        if (*pos == '[') {
-            bracket_depth++;
-            if (bracket_depth == 2) {
-                in_row = 1;
-                row_start = pos;
-            }
-        }
-        else if (*pos == ']') {
-            bracket_depth--;
-            if (bracket_depth == 1 && in_row) {
-                char *row_end = pos;
-                size_t row_len = row_end - row_start + 1;
-
-                char *compact_row = G_malloc(row_len * 2);
-                char *out = compact_row;
-                char *in = row_start;
-
-                *out++ = '[';
-                in++;
-
-                while (in <= row_end) {
-                    if (*in == '\n' || *in == '\r') {
-                        in++;
-                        continue;
-                    }
-                    if (*in == ' ' && *(in + 1) == ' ') {
-                        in++;
-                        continue;
-                    }
-                    if (*in == ' ' && *(in - 1) != ',') {
-                        in++;
-                        continue;
-                    }
-                    *out++ = *in++;
-                }
-                *out = '\0';
-
-                size_t compact_len = strlen(compact_row);
-                size_t old_len = row_end - row_start + 1;
-
-                if (compact_len < old_len) {
-                    memmove(row_start + compact_len, row_end + 1,
-                            strlen(row_end + 1) + 1);
-                    memcpy(row_start, compact_row, compact_len);
-                    pos = row_start + compact_len;
-                }
-
-                G_free(compact_row);
-                in_row = 0;
-            }
-        }
-        pos++;
-    }
-
-    return result;
-}
 
 void print_json(void)
 {
@@ -131,14 +55,21 @@ void print_json(void)
 
     G_JSON_Value *matrix_value = G_json_value_init_array();
     G_JSON_Array *matrix_array = G_json_array(matrix_value);
-    for (int i = 0; i < ncat; i++) {
-        G_JSON_Value *row_value = G_json_value_init_array();
-        G_JSON_Array *row_array = G_json_array(row_value);
-        for (int j = 0; j < ncat; j++) {
-            G_json_array_append_number(row_array,
-                                       metrics->matrix[ncat * i + j]);
+
+    if (ncat == 0) {
+        G_JSON_Value *empty_row_value = G_json_value_init_array();
+        G_json_array_append_value(matrix_array, empty_row_value);
+    }
+    else {
+        for (int i = 0; i < ncat; i++) {
+            G_JSON_Value *row_value = G_json_value_init_array();
+            G_JSON_Array *row_array = G_json_array(row_value);
+            for (int j = 0; j < ncat; j++) {
+                G_json_array_append_number(row_array,
+                                           metrics->matrix[ncat * i + j]);
+            }
+            G_json_array_append_value(matrix_array, row_value);
         }
-        G_json_array_append_value(matrix_array, row_value);
     }
     G_json_object_set_value(root_object, "matrix", matrix_value);
 
@@ -194,16 +125,14 @@ void print_json(void)
     else
         G_json_object_set_number(root_object, "mcc", metrics->mcc);
 
-    char *json_str = G_json_serialize_to_string_pretty(root_value);
+    char *json_str = G_json_serialize_to_string(root_value);
     if (!json_str) {
         G_json_value_free(root_value);
         G_fatal_error(_("Failed to serialize JSON"));
     }
 
-    char *compacted = compact_matrix_rows(json_str);
-    fprintf(fd, "%s\n", compacted);
+    fprintf(fd, "%s\n", json_str);
 
-    G_free(compacted);
     G_json_free_serialized_string(json_str);
     G_json_value_free(root_value);
 
