@@ -10,6 +10,7 @@ Licence:   This program is free software under the GNU General Public
            for details.
 """
 
+import unittest
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
@@ -24,12 +25,10 @@ class TestWatershedReuse(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
-
         cls.runModule(
             "r.mapcalc",
             expression=f"{cls.elevation} = row() + col()",
         )
-
         cls.runModule("g.region", raster=cls.elevation, res=10)
 
     @classmethod
@@ -46,8 +45,11 @@ class TestWatershedReuse(TestCase):
             exclude=self.elevation,
         )
 
+    @unittest.expectedFailure
     def test_reuse_workflow(self):
-        """Test complete reuse workflow: generate, reuse for accumulation and RUSLE"""
+        """Test complete reuse workflow: generate, reuse for accumulation and RUSLE.
+        Expected to fail until accumulation_input and drainage_input parameters are implemented.
+        """
         self.assertModule(
             "r.watershed",
             elevation=self.elevation,
@@ -94,6 +96,51 @@ class TestWatershedReuse(TestCase):
         )
 
         self.assertRasterExists(ls_factor)
+
+    @unittest.expectedFailure
+    def test_input_validation(self):
+        """Test input validation: both inputs required, depression incompatible.
+        Expected to fail until accumulation_input and drainage_input parameters are implemented.
+        """
+        self.assertModule(
+            "r.watershed",
+            elevation=self.elevation,
+            accumulation=self.accumulation,
+            drainage=self.drainage,
+        )
+
+        # Missing drainage_input should fail
+        self.assertModuleFail(
+            "r.watershed",
+            elevation=self.elevation,
+            accumulation_input=self.accumulation,
+            accumulation="reuse_out",
+        )
+
+        # Missing accumulation_input should fail
+        self.assertModuleFail(
+            "r.watershed",
+            elevation=self.elevation,
+            drainage_input=self.drainage,
+            accumulation="reuse_out",
+        )
+
+        # Depression incompatible with input maps
+        self.runModule("r.mapcalc", expression="reuse_dep = 1")
+        self.assertModuleFail(
+            "r.watershed",
+            elevation=self.elevation,
+            accumulation_input=self.accumulation,
+            drainage_input=self.drainage,
+            depression="reuse_dep",
+            accumulation="reuse_out",
+        )
+
+    @unittest.skip(
+        "Basin delineation with input maps not yet supported - TODO: recalculate flow"
+    )
+    def test_basin_limitation(self):
+        """TODO: Add"""
 
 
 if __name__ == "__main__":
