@@ -26,6 +26,16 @@ typedef struct json_value_t G_json_value_t;
 /* ***** WRAPPER FOR PARSON FUNCTIONS USED IN GRASS ************** */
 /* *************************************************************** */
 
+G_JSON_Value *G_json_parse(const char *string)
+{
+    return (G_JSON_Value *)json_parse_string(string);
+}
+
+int G_json_array_get_count(const G_JSON_Array *array)
+{
+    return (int)json_array_get_count((const JSON_Array *)array);
+}
+
 G_JSON_Value *G_json_value_init_object(void)
 {
     return (G_JSON_Value *)json_value_init_object();
