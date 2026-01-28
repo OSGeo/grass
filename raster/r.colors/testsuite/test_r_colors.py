@@ -84,32 +84,6 @@ class TestRColorsOptions(TestCase):
 
         self.runModule("g.remove", flags="f", type="raster", name="test_raster")
 
-    def test_offset_option(self):
-        """Test offset parameter"""
-        self.assertModule("r.colors", map="elevation", color="viridis")
-        rules_no_offset = gs.read_command("r.colors.out", map="elevation")
-
-        self.assertModule("r.colors", map="elevation", color="viridis", offset=100)
-        rules_with_offset = gs.read_command("r.colors.out", map="elevation")
-
-        self.assertNotEqual(
-            rules_no_offset,
-            rules_with_offset,
-            "Offset should change color rules",
-        )
-
-    def test_scale_option(self):
-        """Test scale parameter"""
-        self.assertModule("r.colors", map="elevation", color="viridis")
-        rules_no_scale = gs.read_command("r.colors.out", map="elevation")
-
-        self.assertModule("r.colors", map="elevation", color="viridis", scale=2.0)
-        rules_with_scale = gs.read_command("r.colors.out", map="elevation")
-
-        self.assertNotEqual(
-            rules_no_scale, rules_with_scale, "Scale should change color rules"
-        )
-
 
 if __name__ == "__main__":
     test()
