@@ -25,10 +25,12 @@ class TestWatershedReuse(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
+
         cls.runModule(
             "r.mapcalc",
             expression=f"{cls.elevation} = row() + col()",
         )
+
         cls.runModule("g.region", raster=cls.elevation, res=10)
 
     @classmethod
@@ -50,6 +52,7 @@ class TestWatershedReuse(TestCase):
         """Test complete reuse workflow: generate, reuse for accumulation and RUSLE.
         Expected to fail until accumulation_input and drainage_input parameters are implemented.
         """
+        # Generate flow maps
         self.assertModule(
             "r.watershed",
             elevation=self.elevation,
@@ -140,7 +143,72 @@ class TestWatershedReuse(TestCase):
         "Basin delineation with input maps not yet supported - TODO: recalculate flow"
     )
     def test_basin_limitation(self):
-        """TODO: Add"""
+        """TODO: Add basin delineation test once supported"""
+
+
+class TestWatershedReuseLarge(TestCase):
+    """Performance test on full extent - SKIP FOR CI
+    Remove @unittest.skip to run.
+    Expected to fail until accumulation_input and drainage_input parameters are implemented.
+
+    """
+
+    elevation = "reuse_large_elevation"
+
+    @classmethod
+    def setUpClass(cls):
+        """Set up larger region for performance testing"""
+        cls.use_temp_region()
+
+        cls.runModule("g.region", n=5000, s=0, e=5000, w=0, res=10)
+        cls.runModule(
+            "r.mapcalc",
+            expression=f"{cls.elevation} = row() + col() + rand(0, 100)",
+        )
+        cls.runModule("g.region", raster=cls.elevation)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.runModule("g.remove", flags="f", type="raster", name=cls.elevation)
+        cls.del_temp_region()
+
+    def tearDown(self):
+        self.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            pattern="reuse_large_*",
+            exclude=self.elevation,
+        )
+
+    @unittest.skip("DEACTIVATED FOR CI")
+    def test_large_area_iterations(self):
+        """Test parameter iterations without recalculating flow
+        Expected to fail until accumulation_input and drainage_input parameters are implemented.
+
+        """
+        accum, drain = "reuse_large_accum", "reuse_large_drain"
+
+        self.assertModule(
+            "r.watershed",
+            elevation=self.elevation,
+            accumulation=accum,
+            drainage=drain,
+        )
+
+        for length in [50, 100, 200, 500, 1000]:
+            ls_name = f"reuse_large_ls_{length}"
+            self.assertModule(
+                "r.watershed",
+                elevation=self.elevation,
+                accumulation_input=accum,
+                drainage_input=drain,
+                threshold=1000,
+                length_slope=ls_name,
+                max_slope_length=length,
+                overwrite=True,
+            )
+            self.assertRasterExists(ls_name)
 
 
 if __name__ == "__main__":
