@@ -456,7 +456,10 @@ int main(int argc, char *argv[])
             Rast_close(maskfd);
         }
         if (null_flag->answer && null_count == 0 && !mask_opt->answer) {
-            G_fatal_error(_("No NULL cells found in input raster."));
+            G_done_msg(_("No NULL cells found in input raster."));
+            Segment_close(&mask_seg);
+            Segment_close(&in_seg);
+            exit(EXIT_SUCCESS);
         }
     }
 
