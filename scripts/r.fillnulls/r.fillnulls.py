@@ -127,12 +127,6 @@ def cleanup():
         )
 
 
-def raster_has_nulls(raster):
-    """Return True if raster has any NULL cells."""
-    stats = gs.parse_command("r.univar", flags="g", map=raster)
-    return int(stats.get("null_cells", "0")) > 0
-
-
 def main():
     global usermask, mapset, tmp_rmaps, tmp_vmaps
 
@@ -560,16 +554,6 @@ def main():
                         "needed:"
                     )
                 )
-
-    # check if method is different from rst to use r.resamp.bspline
-    if method != "rst" and not raster_has_nulls(input):
-        gs.warning(
-            _("Input map <%s> has no holes. Copying to output without modification.")
-            % (input,)
-        )
-        gs.run_command("g.copy", raster=f"{input},{output}", overwrite=True)
-        gs.message(_("Done."))
-        return
 
     if method != "rst":
         gs.message(_("Using %s bspline interpolation") % method)
