@@ -47,7 +47,7 @@ jobs:
         run: |
           sudo apt-get update -y
           sudo apt-get install -y wget git gawk findutils ninja-build libpq-dev \
-            gettext unixodbc-dev libnetcdf-dev
+            gettext unixodbc-dev libnetcdf-dev python3-wxgtk4.0
           LC_ALL=C.UTF-8 sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
           sudo apt-get update -y
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
@@ -64,8 +64,8 @@ jobs:
       - name: Configure
         run: |
           cmake -S "${GITHUB_WORKSPACE}" -B "${GITHUB_WORKSPACE}/build" -G Ninja \
-            -DCMAKE_INSTALL_PREFIX="${HOME}/install" -DWITH_NLS=ON -DWITH_GUI=OFF -DWITH_DOCS=OFF \
-            -DWITH_READLINE=ON -DWITH_ODBC=ON -DWITH_NETCDF=ON -DWITH_BZLIB=ON
+            -DCMAKE_INSTALL_PREFIX="${HOME}/install" -DWITH_READLINE=ON -DWITH_ODBC=ON \
+            -DWITH_NETCDF=ON -DWITH_BZLIB=ON
       - name: Print CMakeCache.txt
         shell: bash -el {0}
         run: |
@@ -85,7 +85,7 @@ jobs:
       - name: Test executing of the grass command
         run: .github/workflows/test_simple.sh
       - name: Run tests
-        run: .github/workflows/test_thorough.sh --config .gunittest.cfg --min-success 98
+        run: .github/workflows/test_thorough.sh --config .gunittest.cfg --min-success 100
       - name: Make HTML test report available
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
