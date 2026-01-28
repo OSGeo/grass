@@ -27,7 +27,8 @@
 #include "global.h"
 
 static void write_legend(FILE *fd, const char *title, char **tokens,
-                         int ntokens, char *secondary_rgba, COLOR *colors)
+                         int ntokens, const char *secondary_rgba,
+                         const COLOR *colors, int legend_symbol_size)
 {
     int i;
     fprintf(fd, "||||||%s\n", title);
@@ -39,8 +40,8 @@ static void write_legend(FILE *fd, const char *title, char **tokens,
                      colors[i].r, colors[i].g, colors[i].b, 255);
         }
         /* label|icon|size|ps|primary|secondary|width|topo|count */
-        fprintf(fd, "%s|legend/area|5|ps|%s|%s|1|point|1\n", tokens[i],
-                primary_rgba, secondary_rgba);
+        fprintf(fd, "%s|legend/area|%d|ps|%s|%s|1|point|1\n", tokens[i],
+                legend_symbol_size, primary_rgba, secondary_rgba);
     }
 }
 
@@ -61,6 +62,7 @@ int main(int argc, char **argv)
     struct Option *ocolor_opt, *colors_opt;
     struct Option *columns_opt, *sizecol_opt;
     struct Option *legend_title_opt;
+    struct Option *legend_symbol_size_opt;
     struct Flag *y_center_flag, *legend_flag, *chart3d_flag, *nodraw_flag,
         *vlegend_flag;
 
@@ -168,6 +170,15 @@ int main(int argc, char **argv)
     legend_title_opt->multiple = NO;
     legend_title_opt->guisection = _("Legend");
     legend_title_opt->description = _("Legend title");
+
+    legend_symbol_size_opt = G_define_option();
+    legend_symbol_size_opt->key = "legend_symbol_size";
+    legend_symbol_size_opt->type = TYPE_INTEGER;
+    legend_symbol_size_opt->required = NO;
+    legend_symbol_size_opt->multiple = NO;
+    legend_symbol_size_opt->answer = "10";
+    legend_symbol_size_opt->guisection = _("Legend");
+    legend_symbol_size_opt->description = _("Legend symbol size");
 
     nodraw_flag = G_define_flag();
     nodraw_flag->key = 'n';
@@ -282,10 +293,14 @@ int main(int argc, char **argv)
                      ocolor.r, ocolor.g, ocolor.b, 255);
         }
 
+        int legend_symbol_size = atoi(legend_symbol_size_opt->answer);
+        if (legend_symbol_size <= 0)
+            legend_symbol_size = 10;
+
         /* Print legend to stdout if -l */
         if (legend_flag->answer) {
-            write_legend(stdout, title, tokens, ntokens, secondary_rgba,
-                         colors);
+            write_legend(stdout, title, tokens, ntokens, secondary_rgba, colors,
+                         legend_symbol_size);
         }
 
         /* Write into default legend file if GUI requests and -s is NOT set */
@@ -297,8 +312,8 @@ int main(int argc, char **argv)
                     leg_file);
             }
             else {
-                write_legend(fd, title, tokens, ntokens, secondary_rgba,
-                             colors);
+                write_legend(fd, title, tokens, ntokens, secondary_rgba, colors,
+                             legend_symbol_size);
                 fclose(fd);
             }
         }
