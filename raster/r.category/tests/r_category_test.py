@@ -375,3 +375,31 @@ def test_r_category_with_plain_output_color(simple_dataset):
         assert result == expected, (
             f"test failed: expected {expected} but got {result} for color option {color}"
         )
+
+
+def test_r_category_json_input(simple_dataset, tmp_path):
+    """Test r.category handles JSON input format correctly."""
+    session = simple_dataset
+
+    json_data = [
+        {"category": 1, "label": "trees, very green"},
+        {"category": 2, "label": "water, very deep"},
+        {"category": 3, "label": "buildings"},
+    ]
+
+    json_file = tmp_path / "rules.json"
+    json_file.write_text(json.dumps(json_data))
+
+    gs.run_command(
+        "r.category",
+        map="test",
+        rules=str(json_file),
+        env=session.env,
+    )
+
+    result = gs.read_command(
+        "r.category", map="test", cats="1,2,3", separator="\t", env=session.env
+    )
+
+    expected_output = "1\ttrees, very green\n2\twater, very deep\n3\tbuildings\n"
+    assert result == expected_output, f"Expected {expected_output}, but got {result}"
