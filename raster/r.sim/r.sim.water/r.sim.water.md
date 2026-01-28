@@ -10,7 +10,8 @@ equation, provides robustness necessary for spatially variable
 conditions and high resolutions (Mitas and Mitasova 1998). The key
 inputs of the model include elevation (**elevation** raster map), flow
 gradient vector given by first-order partial derivatives of elevation
-field (**dx** and **dy** raster maps), rainfall excess rate (**rain**
+field (**dx** and **dy** raster maps are optional),
+rainfall excess rate (**rain**
 raster map or **rain_value** single value) and a surface roughness
 coefficient given by Manning's n (**man** raster map or **man_value**
 single value). Partial derivatives raster maps can be computed along
