@@ -74,9 +74,14 @@ class TestRasterMapcalcBasic(TestCase):
             flags="rf",
             type="strds",
             inputs="precip_abs1,precip_abs2,precip_abs3,precip_abs4",
+            quiet=True,
         )
-        cls.runModule("g.remove", flags="f", type="raster", pattern="prec_*")
-        cls.runModule("g.remove", flags="f", type="raster", pattern="new_prec_*")
+        cls.runModule(
+            "g.remove", flags="f", type="raster", pattern="prec_*", quiet=True
+        )
+        cls.runModule(
+            "g.remove", flags="f", type="raster", pattern="new_prec_*", quiet=True
+        )
         cls.del_temp_region()
 
     def test_basic_addition(self):
@@ -103,6 +108,18 @@ name=precip_abs3"""
 
     def test_division_with_three_inputs(self):
         """Test division expression with three input STRDS using -s flag."""
+        # Create precip_abs3 first to make this test independent
+        self.assertModule(
+            "t.rast.mapcalc",
+            flags="n",
+            inputs="precip_abs1,precip_abs2",
+            output="precip_abs3",
+            expression=" precip_abs1 + precip_abs2",
+            basename="new_prec",
+            method="equal",
+            nprocs=5,
+            overwrite=True,
+        )
         self.assertModule(
             "t.rast.mapcalc",
             flags="s",
@@ -142,8 +159,8 @@ name=precip_abs4"""
         self.assertEqual(info.returncode, 0)
         strds_info = gs.parse_key_val(info.outputs.stdout, sep="=")
         self.assertEqual(strds_info["name"], "precip_abs4")
-        # With null() multiplication, maps may be empty but STRDS should exist
-        self.assertIn("number_of_maps", strds_info)
+        # With null() multiplication without -n flag, null maps are not registered
+        self.assertEqual(int(strds_info["number_of_maps"]), 0)
 
     def test_null_multiplication_with_null_flag(self):
         """Test multiplication with null() function using -sn flags."""
@@ -164,8 +181,8 @@ name=precip_abs4"""
         self.assertEqual(info.returncode, 0)
         strds_info = gs.parse_key_val(info.outputs.stdout, sep="=")
         self.assertEqual(strds_info["name"], "precip_abs4")
-        # With -n flag, null maps should be registered
-        self.assertIn("number_of_maps", strds_info)
+        # With -n flag, null maps are registered, so should have 6 maps
+        self.assertEqual(int(strds_info["number_of_maps"]), 6)
 
     def test_failure_on_missing_map(self):
         """Test that the module fails when a required map is missing."""

@@ -22,7 +22,7 @@ class TestRasterMapcalcOperators(TestCase):
         cls.runModule("g.gisenv", set="TGIS_USE_CURRENT_MAPSET=1")
         cls.runModule("g.region", s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10)
 
-        # Generate data with -s flag (silent) to match original shell test
+        # Generate data
         cls.runModule(
             "r.mapcalc", expression="prec_1 = rand(0, 550)", flags="s", overwrite=True
         )
@@ -86,9 +86,14 @@ class TestRasterMapcalcOperators(TestCase):
             flags="rf",
             type="strds",
             inputs="precip_abs1,precip_abs2,precip_abs3",
+            quiet=True,
         )
-        cls.runModule("g.remove", flags="f", type="raster", pattern="prec_*")
-        cls.runModule("g.remove", flags="f", type="raster", pattern="new_prec_*")
+        cls.runModule(
+            "g.remove", flags="f", type="raster", pattern="prec_*", quiet=True
+        )
+        cls.runModule(
+            "g.remove", flags="f", type="raster", pattern="new_prec_*", quiet=True
+        )
         cls.del_temp_region()
 
     def test_start_time_end_time_operators(self):
@@ -220,7 +225,8 @@ name=precip_abs3"""
         self.assertEqual(info.returncode, 0)
         strds_info = gs.parse_key_val(info.outputs.stdout, sep="=")
         self.assertEqual(strds_info["name"], "precip_abs3")
-        self.assertIn("number_of_maps", strds_info)
+        # With -n flag, null maps are registered, so should have 6 maps
+        self.assertEqual(int(strds_info["number_of_maps"]), 6)
 
 
 if __name__ == "__main__":
