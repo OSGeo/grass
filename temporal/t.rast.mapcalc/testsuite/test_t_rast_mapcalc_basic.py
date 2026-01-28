@@ -75,6 +75,8 @@ class TestRasterMapcalcBasic(TestCase):
             type="strds",
             inputs="precip_abs1,precip_abs2,precip_abs3,precip_abs4",
         )
+        cls.runModule("g.remove", flags="f", type="raster", pattern="prec_*")
+        cls.runModule("g.remove", flags="f", type="raster", pattern="new_prec_*")
         cls.del_temp_region()
 
     def test_basic_addition(self):
