@@ -24,6 +24,7 @@
         ":maintainLockFilesMonthly",
         "group:githubArtifactActions",
         "schedule:monthly",
+        ":prConcurrentLimitNone",
     ],
 
     "baseBranchPatterns" : [
