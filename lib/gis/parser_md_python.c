@@ -327,20 +327,38 @@ void print_python_example(FILE *file, const char *python_function,
                 if (opt->answer) {
                     value = G_store(opt->answer);
                 }
-                else if (opt->options && opt->type == TYPE_STRING) {
-                    // Get example value from allowed values, but only for
-                    // strings because numbers may have ranges and we don't
-                    // want to print a range.
-                    // Get allowed values as tokens.
+                else if (opt->options) {
+                    // Get example value from allowed values.
+                    // For strings, use the first value from comma-separated
+                    // list. For numbers, only use if it's a discrete list (not
+                    // a range). Get allowed values as tokens.
                     char **tokens;
                     char delm[2];
                     delm[0] = ',';
                     delm[1] = '\0';
                     tokens = G_tokenize(opt->options, delm);
-                    // We are interested in the first allowed value.
-                    if (tokens[0]) {
-                        G_chop(tokens[0]);
-                        value = G_store(tokens[0]);
+                    // Check if we have at least one token and it's not empty
+                    if (tokens[0] && tokens[0][0] != '\0') {
+                        // For STRING types, always use first value from options
+                        if (opt->type == TYPE_STRING) {
+                            G_chop(tokens[0]);
+                            value = G_store(tokens[0]);
+                        }
+                        // For INTEGER and DOUBLE types, only use if it's a
+                        // discrete list (multiple tokens) and not a range (no
+                        // '-' in first token)
+                        else if (opt->type == TYPE_INTEGER ||
+                                 opt->type == TYPE_DOUBLE) {
+                            // Check if there are multiple tokens (discrete
+                            // list) and first token doesn't contain '-' (not a
+                            // range)
+                            int num_tokens = G_number_of_tokens(tokens);
+                            if (num_tokens > 1 &&
+                                strchr(tokens[0], '-') == NULL) {
+                                G_chop(tokens[0]);
+                                value = G_store(tokens[0]);
+                            }
+                        }
                     }
                     G_free_tokens(tokens);
                 }
