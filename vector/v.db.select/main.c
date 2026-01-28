@@ -29,6 +29,7 @@
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>
+#include <grass/gjson.h>
 
 enum OutputFormat { PLAIN, JSON, CSV, VERTICAL };
 
@@ -92,6 +93,11 @@ int main(int argc, char **argv)
     bool init_box;
     enum OutputFormat format;
     bool vsep_needs_newline;
+    G_JSON_Value *root_json_value = NULL, *info_value = NULL,
+                 *extent_value = NULL;
+    G_JSON_Object *root_object = NULL, *info_object = NULL,
+                  *extent_object = NULL;
+    G_JSON_Array *columns_array = NULL, *records_array = NULL;
 
     module = G_define_module();
     G_add_keyword(_("vector"));
@@ -329,33 +335,65 @@ int main(int argc, char **argv)
     first_rec = true;
 
     if (format == JSON) {
-        if (flags.region->answer)
-            fprintf(stdout, "{\"extent\":\n");
+        root_json_value = G_json_value_init_object();
+        if (root_json_value == NULL)
+            G_fatal_error(
+                _("Failed to initialize JSON object. Out of memory?"));
+        root_object = G_json_object(root_json_value);
+
+        if (flags.region->answer) {
+            extent_value = G_json_value_init_object();
+            if (extent_value == NULL)
+                G_fatal_error(
+                    _("Failed to initialize JSON object. Out of memory?"));
+            extent_object = G_json_object(extent_value);
+            G_json_object_set_value(root_object, "extent", extent_value);
+        }
         else {
-            fprintf(stdout, "{\"info\":\n{\"columns\":[\n");
+            info_value = G_json_value_init_object();
+            if (info_value == NULL)
+                G_fatal_error(
+                    _("Failed to initialize JSON object. Out of memory?"));
+            info_object = G_json_object(info_value);
+
+            G_JSON_Value *columns_value = G_json_value_init_array();
+            if (columns_value == NULL)
+                G_fatal_error(
+                    _("Failed to initialize JSON array. Out of memory?"));
+            columns_array = G_json_array(columns_value);
+            G_json_object_set_value(info_object, "columns", columns_value);
+
             for (col = 0; col < ncols; col++) {
                 column = db_get_table_column(table, col);
-                if (col)
-                    fprintf(stdout, "},\n");
-                fprintf(stdout, "{\"name\":\"%s\",",
-                        db_get_column_name(column));
+                G_JSON_Value *column_value = G_json_value_init_object();
+                if (column_value == NULL)
+                    G_fatal_error(
+                        _("Failed to initialize JSON object. Out of memory?"));
+                G_JSON_Object *column_object = G_json_object(column_value);
+
+                G_json_object_set_string(column_object, "name",
+                                         db_get_column_name(column));
                 int sql_type = db_get_column_sqltype(column);
-                fprintf(stdout, "\"sql_type\":\"%s\",",
-                        db_sqltype_name(sql_type));
+                G_json_object_set_string(column_object, "sql_type",
+                                         db_sqltype_name(sql_type));
 
                 int c_type = db_sqltype_to_Ctype(sql_type);
-                fprintf(stdout, "\"is_number\":");
-                /* Same rules as for quoting, i.e., number only as
-                 * JSON or Python would see it and not numeric which may
-                 * include, e.g., date. */
                 if (c_type == DB_C_TYPE_INT || c_type == DB_C_TYPE_DOUBLE)
-                    fprintf(stdout, "true");
+                    G_json_object_set_boolean(column_object, "is_number", 1);
                 else
-                    fprintf(stdout, "false");
+                    G_json_object_set_boolean(column_object, "is_number", 0);
+
+                G_json_array_append_value(columns_array, column_value);
             }
 
-            fprintf(stdout, "}\n]},\n");
-            fprintf(stdout, "\"records\":[\n");
+            G_JSON_Value *records_value = G_json_value_init_array();
+            if (records_value == NULL)
+                G_fatal_error(
+                    _("Failed to initialize JSON array. Out of memory?"));
+            records_array = G_json_array(records_value);
+            G_json_object_set_value(info_object, "records", records_value);
+
+            G_json_object_set_value(root_object, "info", info_value);
         }
     }
 
@@ -369,10 +407,19 @@ int main(int argc, char **argv)
 
         if (first_rec)
             first_rec = false;
-        else if (!flags.region->answer && format == JSON)
-            fprintf(stdout, ",\n");
 
         cat = -1;
+        G_JSON_Value *record_value = NULL;
+        G_JSON_Object *record_object = NULL;
+
+        if (format == JSON && !flags.region->answer) {
+            record_value = G_json_value_init_object();
+            if (record_value == NULL)
+                G_fatal_error(
+                    _("Failed to initialize JSON object. Out of memory?"));
+            record_object = G_json_object(record_value);
+        }
+
         for (col = 0; col < ncols; col++) {
             column = db_get_table_column(table, col);
             value = db_get_column_value(column);
@@ -389,84 +436,91 @@ int main(int argc, char **argv)
             if (flags.features->answer) {
                 Vect_cidx_find_all(&Map, field_number, ~GV_AREA, cat,
                                    list_lines);
-                /* if no features are found for this category, don't print
-                 * anything. */
                 if (list_lines->n_values == 0)
                     break;
             }
 
-            db_convert_column_value_to_string(column, &value_string);
-
-            if (!flags.colnames->answer && format == VERTICAL)
-                fprintf(stdout, "%s%s", db_get_column_name(column), fsep);
-
-            if (col && format != JSON && format != VERTICAL)
-                fprintf(stdout, "%s", fsep);
-
             if (format == JSON) {
-                if (!col)
-                    fprintf(stdout, "{");
-                fprintf(stdout, "\"%s\":", db_get_column_name(column));
-            }
+                const char *col_name = db_get_column_name(column);
 
-            if (db_test_value_isnull(value)) {
-                if (format == JSON)
-                    fprintf(stdout, "null");
-                else if (options.nullval->answer)
-                    fprintf(stdout, "%s", options.nullval->answer);
+                if (db_test_value_isnull(value)) {
+                    G_json_object_set_null(record_object, col_name);
+                }
+                else {
+                    db_convert_column_value_to_string(column, &value_string);
+                    int sql_type = db_get_column_sqltype(column);
+                    int c_type = db_sqltype_to_Ctype(sql_type);
+
+                    if (c_type == DB_C_TYPE_INT || c_type == DB_C_TYPE_DOUBLE) {
+                        G_json_object_set_number(
+                            record_object, col_name,
+                            atof(db_get_string(&value_string)));
+                    }
+                    else {
+                        G_json_object_set_string(record_object, col_name,
+                                                 db_get_string(&value_string));
+                    }
+                }
             }
             else {
-                char *str = db_get_string(&value_string);
+                db_convert_column_value_to_string(column, &value_string);
 
-                /* Escaped characters in different formats
-                 * JSON (mandatory): \" \\ \r \n \t \f \b
-                 * CSV (usually none, here optional): \\ \r \n \t \f \b
-                 * Plain, vertical (optional): v7: \\ \r \n, v8 also: \t \f \b
-                 */
-                if (flags.escape->answer || format == JSON) {
-                    if (strchr(str, '\\'))
-                        str = G_str_replace(str, "\\", "\\\\");
-                    if (strchr(str, '\r'))
-                        str = G_str_replace(str, "\r", "\\r");
-                    if (strchr(str, '\n'))
-                        str = G_str_replace(str, "\n", "\\n");
-                    if (strchr(str, '\t'))
-                        str = G_str_replace(str, "\t", "\\t");
-                    if (format == JSON && strchr(str, '"'))
-                        str = G_str_replace(str, "\"", "\\\"");
-                    if (strchr(str, '\f')) /* form feed, somewhat unlikely */
-                        str = G_str_replace(str, "\f", "\\f");
-                    if (strchr(str, '\b')) /* backspace, quite unlikely */
-                        str = G_str_replace(str, "\b", "\\b");
+                if (!flags.colnames->answer && format == VERTICAL)
+                    fprintf(stdout, "%s%s", db_get_column_name(column), fsep);
+
+                if (col && format != JSON && format != VERTICAL)
+                    fprintf(stdout, "%s", fsep);
+
+                if (db_test_value_isnull(value)) {
+                    if (options.nullval->answer)
+                        fprintf(stdout, "%s", options.nullval->answer);
                 }
-                /* Common CSV does not escape, but doubles quotes (and we quote
-                 * all text fields which takes care of a separator character in
-                 * text). */
-                if (format == CSV && strchr(str, '"')) {
-                    str = G_str_replace(str, "\"", "\"\"");
-                }
+                else {
+                    char *str = db_get_string(&value_string);
 
-                if (format == JSON || format == CSV) {
-                    int type =
-                        db_sqltype_to_Ctype(db_get_column_sqltype(column));
+                    if (flags.escape->answer) {
+                        if (strchr(str, '\\'))
+                            str = G_str_replace(str, "\\", "\\\\");
+                        if (strchr(str, '\r'))
+                            str = G_str_replace(str, "\r", "\\r");
+                        if (strchr(str, '\n'))
+                            str = G_str_replace(str, "\n", "\\n");
+                        if (strchr(str, '\t'))
+                            str = G_str_replace(str, "\t", "\\t");
+                        if (strchr(str, '\f'))
+                            str = G_str_replace(str, "\f", "\\f");
+                        if (strchr(str, '\b'))
+                            str = G_str_replace(str, "\b", "\\b");
+                    }
 
-                    /* Don't quote numbers, quote text and datetime. */
-                    if (type == DB_C_TYPE_INT || type == DB_C_TYPE_DOUBLE)
-                        fprintf(stdout, "%s", str);
+                    if (format == CSV && strchr(str, '"')) {
+                        str = G_str_replace(str, "\"", "\"\"");
+                    }
+
+                    if (format == CSV) {
+                        int type =
+                            db_sqltype_to_Ctype(db_get_column_sqltype(column));
+
+                        if (type == DB_C_TYPE_INT || type == DB_C_TYPE_DOUBLE)
+                            fprintf(stdout, "%s", str);
+                        else
+                            fprintf(stdout, "\"%s\"", str);
+                    }
                     else
-                        fprintf(stdout, "\"%s\"", str);
+                        fprintf(stdout, "%s", str);
                 }
-                else
-                    fprintf(stdout, "%s", str);
             }
 
             if (format == VERTICAL)
                 fprintf(stdout, "\n");
-            else if (format == JSON) {
-                if (col < ncols - 1)
-                    fprintf(stdout, ",");
-                else
-                    fprintf(stdout, "}");
+        }
+
+        if (format == JSON && !flags.region->answer && record_value) {
+            if (flags.features->answer && col < ncols) {
+                G_json_value_free(record_value);
+            }
+            else {
+                G_json_array_append_value(records_array, record_value);
             }
         }
 
@@ -508,9 +562,6 @@ int main(int argc, char **argv)
         }
     }
 
-    if (!flags.region->answer && format == JSON)
-        fprintf(stdout, "\n]}\n");
-
     if (flags.region->answer) {
         if (format == CSV) {
             fprintf(stdout, "n%ss%sw%se", fsep, fsep, fsep);
@@ -526,16 +577,14 @@ int main(int argc, char **argv)
             fprintf(stdout, "\n");
         }
         else if (format == JSON) {
-            fprintf(stdout, "{");
-            fprintf(stdout, "\"n\":%f,", min_box->N);
-            fprintf(stdout, "\"s\":%f,", min_box->S);
-            fprintf(stdout, "\"w\":%f,", min_box->W);
-            fprintf(stdout, "\"e\":%f", min_box->E);
+            G_json_object_set_number(extent_object, "n", min_box->N);
+            G_json_object_set_number(extent_object, "s", min_box->S);
+            G_json_object_set_number(extent_object, "w", min_box->W);
+            G_json_object_set_number(extent_object, "e", min_box->E);
             if (Vect_is_3d(&Map)) {
-                fprintf(stdout, ",\"t\":%f,", min_box->T);
-                fprintf(stdout, "\"b\":%f", min_box->B);
+                G_json_object_set_number(extent_object, "t", min_box->T);
+                G_json_object_set_number(extent_object, "b", min_box->B);
             }
-            fprintf(stdout, "\n}}\n");
         }
         else {
             fprintf(stdout, "n%s%f\n", fsep, min_box->N);
@@ -553,6 +602,16 @@ int main(int argc, char **argv)
         G_free((void *)line_box);
 
         Vect_destroy_list(list_lines);
+    }
+
+    if (format == JSON) {
+        char *json_string = G_json_serialize_to_string(root_json_value);
+        if (json_string == NULL)
+            G_fatal_error(_("Failed to serialize JSON. Out of memory?"));
+        fputs(json_string, stdout);
+        fputc('\n', stdout);
+        G_json_free_serialized_string(json_string);
+        G_json_value_free(root_json_value);
     }
 
     db_close_cursor(&cursor);
