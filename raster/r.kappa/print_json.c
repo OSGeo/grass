@@ -131,7 +131,8 @@ void print_json(void)
         G_fatal_error(_("Failed to serialize JSON"));
     }
 
-    fprintf(fd, "%s\n", json_str);
+    fputs(json_str, fd);
+    fputc('\n', fd);
 
     G_json_free_serialized_string(json_str);
     G_json_value_free(root_value);
