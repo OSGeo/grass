@@ -373,7 +373,7 @@ class JSONOutputTest(TestCase):
                 "correct": 0,
                 "overall_accuracy": 0.0,
                 "kappa": 0.0,
-                "kappa_variance": 0.0,
+                "kappa_variance": 0.06356,
                 "cats": [0, 1, 2, 3, 4, 9],
                 "matrix": [
                     [0, 0, 0, 0, 0, 0],
@@ -381,10 +381,10 @@ class JSONOutputTest(TestCase):
                     [0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0],
-                    [8, 8, 4, 1, 4, 0],
+                    [4, 8, 8, 4, 1, 0],
                 ],
                 "row_sum": [0, 0, 0, 0, 0, 25],
-                "col_sum": [8, 8, 4, 1, 4, 0],
+                "col_sum": [4, 8, 8, 4, 1, 0],
                 "producers_accuracy": [0.0, 0.0, 0.0, 0.0, 0.0, None],
                 "users_accuracy": [None, None, None, None, None, 0.0],
                 "conditional_kappa": [None, None, None, None, None, 0.0],
@@ -476,6 +476,26 @@ class JSONOutputTest(TestCase):
             self.assertTrue(
                 keyvalue_equals(self.expected_outputs[i], json_out, precision=4)
             )
+            if self.expected_outputs[i]["matrix"] != [[]]:
+                self.assertEqual(
+                    json_out["matrix"],
+                    self.expected_outputs[i]["matrix"],
+                    f"Matrix order mismatch in test case {i}",
+                )
+
+            if self.expected_outputs[i]["col_sum"]:
+                self.assertListEqual(
+                    json_out["col_sum"],
+                    self.expected_outputs[i]["col_sum"],
+                    f"col_sum order mismatch in test case {i}",
+                )
+
+            if self.expected_outputs[i]["row_sum"]:
+                self.assertListEqual(
+                    json_out["row_sum"],
+                    self.expected_outputs[i]["row_sum"],
+                    f"row_sum order mismatch in test case {i}",
+                )
 
     @xfail_windows
     def test_file(self):
