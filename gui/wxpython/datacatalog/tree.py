@@ -181,6 +181,17 @@ class DataCatalogNode(DictFilterNode):
     @property
     def label(self):
         data = self.data
+        if getattr(self, "force_full_path", False):
+            return data["name"]
+
+        if data.get("type") == "grassdb":
+            path = data["name"]
+            aliases = (
+                UserSettings.Get(group="datacatalog", key="aliases", subkey="databases")
+                or {}
+            )
+            return aliases.get(path, path)
+
         if data["type"] == "mapset":
             owner = data["owner"] or _("name unknown")
             if data["current"]:
@@ -226,6 +237,20 @@ class DataCatalogTree(TreeView):
         self._model = TreeModel(DataCatalogNode)
         self._orig_model = self._model
         super().__init__(parent=parent, model=self._model, id=wx.ID_ANY, style=style)
+
+        if UserSettings.Get(group="datacatalog", key="aliases") is None:
+            default_aliases = {"databases": {}}
+
+            # Register in default settings
+            if "datacatalog" not in UserSettings.defaultSettings:
+                UserSettings.defaultSettings["datacatalog"] = {}
+            UserSettings.defaultSettings["datacatalog"]["aliases"] = default_aliases
+
+            # Initialize in user settings
+            if "datacatalog" not in UserSettings.userSettings:
+                UserSettings.userSettings["datacatalog"] = {}
+            if "aliases" not in UserSettings.userSettings["datacatalog"]:
+                UserSettings.userSettings["datacatalog"]["aliases"] = default_aliases
 
         self._giface = giface
         self._restricted = False
@@ -2211,6 +2236,42 @@ class DataCatalogTree(TreeView):
         genv = gisenv()
         currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
 
+        node = self.selected_grassdb[0]
+        db_path = node.data["name"]
+
+        aliases = (
+            UserSettings.Get(group="datacatalog", key="aliases", subkey="databases")
+            or {}
+        )
+        current_alias = aliases.get(db_path)
+
+        if current_alias:
+            # Change Alias option
+            item = wx.MenuItem(menu, wx.ID_ANY, _("Change Alias"))
+            menu.AppendItem(item)
+            self.Bind(
+                wx.EVT_MENU, lambda e: self.OnSetAlias(e, db_path, current_alias), item
+            )
+
+            # Toggle between alias and full path
+            show_full = getattr(node, "force_full_path", False)
+            label = _("Show Alias") if show_full else _("Show Full Database Path")
+
+            item = wx.MenuItem(menu, wx.ID_ANY, label)
+            menu.AppendItem(item)
+            self.Bind(wx.EVT_MENU, lambda e: self.OnTogglePathDisplay(e, node), item)
+
+            item = wx.MenuItem(menu, wx.ID_ANY, _("Remove Alias"))
+            menu.AppendItem(item)
+            self.Bind(wx.EVT_MENU, lambda e: self.OnRemoveAlias(e, db_path), item)
+        else:
+            # Set Alias option
+            item = wx.MenuItem(menu, wx.ID_ANY, _("Set Alias"))
+            menu.AppendItem(item)
+            self.Bind(wx.EVT_MENU, lambda e: self.OnSetAlias(e, db_path, None), item)
+
+        menu.AppendSeparator()
+
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Create new project (location)"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCreateLocation, item)
@@ -2281,6 +2342,75 @@ class DataCatalogTree(TreeView):
 
         self.PopupMenu(menu)
         menu.Destroy()
+
+    def OnSetAlias(self, event, path, current_alias):
+        """Handler for Set/Change Alias context menu"""
+        default_val = current_alias or ""
+
+        dlg = TextEntryDialog(
+            parent=self,
+            message=_("Enter alias for database:"),
+            caption=_("Set Alias"),
+            defaultValue=default_val,
+        )
+
+        if dlg.ShowModal() == wx.ID_OK:
+            new_alias = dlg.GetValue().strip()
+            aliases = (
+                UserSettings.Get(group="datacatalog", key="aliases", subkey="databases")
+                or {}
+            )
+
+            if new_alias:
+                aliases[path] = new_alias
+            elif path in aliases:
+                del aliases[path]
+
+            UserSettings.Set(
+                group="datacatalog", key="aliases", subkey="databases", value=aliases
+            )
+            UserSettings.SaveToFile()
+            self.RefreshItems()
+
+        dlg.Destroy()
+
+    def OnRemoveAlias(self, event, path):
+        """Remove alias for database."""
+        aliases = (
+            UserSettings.Get(group="datacatalog", key="aliases", subkey="databases")
+            or {}
+        )
+
+        if path in aliases:
+            alias_name = aliases[path]
+
+            # Show confirmation dialog
+            dlg = wx.MessageDialog(
+                self,
+                message=_("Remove alias '{alias}' for this database?").format(
+                    alias=alias_name
+                ),
+                caption=_("Remove Alias"),
+                style=wx.YES_NO | wx.ICON_QUESTION,
+            )
+
+            if dlg.ShowModal() == wx.ID_YES:
+                del aliases[path]
+                UserSettings.Set(
+                    group="datacatalog",
+                    key="aliases",
+                    subkey="databases",
+                    value=aliases,
+                )
+                UserSettings.SaveToFile()
+                self.RefreshItems()
+
+            dlg.Destroy()
+
+    def OnTogglePathDisplay(self, event, node):
+        """Toggle between alias and full path display"""
+        node.force_full_path = not getattr(node, "force_full_path", False)
+        self.RefreshNode(node)
 
     def _popupMenuEmpty(self):
         """Create empty popup when multiple different types of items are selected"""
