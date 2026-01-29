@@ -10,8 +10,8 @@ for details.
 
 import pytest
 
+import grass.exceptions
 import grass.script as gs
-from grass.exceptions import CalledModuleError
 
 
 def _assert_tinfo_key_value(env, strds_name, reference_string, sep="="):
@@ -136,7 +136,8 @@ def test_failure_on_missing_map(mapcalc_session_basic):
     gs.run_command(
         "g.remove", flags="f", type="raster", name="prec_1", overwrite=True, env=env
     )
-    with pytest.raises(CalledModuleError):
+    # Assert failure only; do not assert exact error message (migrated from shell test).
+    with pytest.raises(grass.exceptions.CalledModuleError):
         gs.run_command(
             "t.rast.mapcalc",
             flags="sn",
@@ -149,6 +150,3 @@ def test_failure_on_missing_map(mapcalc_session_basic):
             overwrite=True,
             env=env,
         )
-    gs.run_command(
-        "r.mapcalc", expression="prec_1 = rand(0, 550)", overwrite=True, env=env
-    )

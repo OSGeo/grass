@@ -26,50 +26,19 @@ def setup_maps(use_seed):
         res=10,
         res3=10,
     )
-    if use_seed:
-        for name, val in [
-            ("prec_1", 550),
-            ("prec_2", 450),
-            ("prec_3", 320),
-            ("prec_4", 510),
-            ("prec_5", 300),
-            ("prec_6", 650),
-        ]:
-            gs.run_command(
-                "r.mapcalc",
-                expression=f"{name} = rand(0, {val})",
-                flags="s",
-                overwrite=True,
-            )
-    else:
+    # rand() requires a seeded PRNG; use flags="s" in all cases
+    for name, val in [
+        ("prec_1", 550),
+        ("prec_2", 450),
+        ("prec_3", 320),
+        ("prec_4", 510),
+        ("prec_5", 300),
+        ("prec_6", 650),
+    ]:
         gs.run_command(
             "r.mapcalc",
-            expression="prec_1 = rand(0, 550)",
-            overwrite=True,
-        )
-        gs.run_command(
-            "r.mapcalc",
-            expression="prec_2 = rand(0, 450)",
-            overwrite=True,
-        )
-        gs.run_command(
-            "r.mapcalc",
-            expression="prec_3 = rand(0, 320)",
-            overwrite=True,
-        )
-        gs.run_command(
-            "r.mapcalc",
-            expression="prec_4 = rand(0, 510)",
-            overwrite=True,
-        )
-        gs.run_command(
-            "r.mapcalc",
-            expression="prec_5 = rand(0, 300)",
-            overwrite=True,
-        )
-        gs.run_command(
-            "r.mapcalc",
-            expression="prec_6 = rand(0, 650)",
+            expression=f"{name} = rand(0, {val})",
+            flags="s",
             overwrite=True,
         )
     gs.run_command(
@@ -110,13 +79,19 @@ def setup_maps(use_seed):
 
 
 def cleanup_maps():
-    """Remove STRDS and raster maps created by setup_maps or tests."""
+    """Remove STRDS and raster maps created by setup_maps or tests.
+
+    Teardown must be idempotent: STRDS or maps may already have been removed
+    by tests (e.g. test_failure_on_missing_map). Use errors='ignore' so missing
+    datasets/maps do not raise during teardown.
+    """
     gs.run_command(
         "t.remove",
         flags="df",
         type="strds",
         inputs="precip_abs1,precip_abs2,precip_abs3,precip_abs4",
         quiet=True,
+        errors="ignore",
     )
     gs.run_command(
         "g.remove",
@@ -124,6 +99,7 @@ def cleanup_maps():
         type="raster",
         name="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6",
         quiet=True,
+        errors="ignore",
     )
     gs.run_command(
         "g.remove",
@@ -131,12 +107,13 @@ def cleanup_maps():
         type="raster",
         pattern="new_prec_*",
         quiet=True,
+        errors="ignore",
     )
 
 
 @pytest.fixture(scope="module")
 def mapcalc_session_basic():
-    """STRDS data for basic tests (rand without seed)."""
+    """STRDS data for basic tests."""
     setup_maps(use_seed=False)
     yield SimpleNamespace(env=os.environ)
     cleanup_maps()
@@ -144,7 +121,7 @@ def mapcalc_session_basic():
 
 @pytest.fixture(scope="module")
 def mapcalc_session_operators():
-    """STRDS data for operator tests (rand with seed)."""
+    """STRDS data for operator tests."""
     setup_maps(use_seed=True)
     yield SimpleNamespace(env=os.environ)
     cleanup_maps()
