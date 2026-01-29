@@ -29,7 +29,7 @@ def get_region(env=None):
     Additionally, it adds long key names.
     """
     tools = Tools(env=env)
-    region = tools.g_region(flags="fp", format="json")
+    region = tools.g_region(flags="g", format="json")
     return region
 
 
