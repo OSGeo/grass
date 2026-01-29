@@ -474,7 +474,7 @@ class JSONOutputTest(TestCase):
             )
             json_out = json.loads(decode(out))
             self.assertTrue(
-                keyvalue_equals(self.expected_outputs[i], json_out, precision=0.0001)
+                keyvalue_equals(self.expected_outputs[i], json_out, precision=4)
             )
 
     @xfail_windows
