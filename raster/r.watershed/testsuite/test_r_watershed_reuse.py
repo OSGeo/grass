@@ -145,7 +145,7 @@ class TestWatershedReuse(TestCase):
     def test_basin_limitation(self):
         """TODO: Add basin delineation test once supported"""
 
-
+@unittest.skip("DEACTIVATED FOR CI")
 class TestWatershedReuseLarge(TestCase):
     """Performance test on full extent - SKIP FOR CI
     Remove @unittest.skip to run.
