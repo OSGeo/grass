@@ -19,7 +19,7 @@ from grass.script import decode
 from grass.script.core import tempname
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-from grass.gunittest.checkers import keyvalue_equals
+from grass.gunittest.checkers import keyvalue_equals, diff_keyvalue
 from grass.gunittest.utils import xfail_windows
 
 
@@ -301,6 +301,8 @@ class CalculationCorrectness2Test(TestCase):
 class JSONOutputTest(TestCase):
     """Test printing of parameters in JSON format"""
 
+    precision = 0.001
+
     @classmethod
     def setUpClass(cls):
         """Import sample maps with known properties"""
@@ -474,7 +476,17 @@ class JSONOutputTest(TestCase):
             )
             json_out = json.loads(decode(out))
             self.assertTrue(
-                keyvalue_equals(self.expected_outputs[i], json_out, precision=4)
+                keyvalue_equals(
+                    self.expected_outputs[i], json_out, precision=self.precision
+                ),
+                (
+                    "Output differs from expected: "
+                    + str(
+                        diff_keyvalue(
+                            self.expected_outputs[i], json_out, precision=0.001
+                        )
+                    )
+                ),
             )
 
     @xfail_windows
@@ -491,7 +503,17 @@ class JSONOutputTest(TestCase):
             )
             json_out = json.loads(f.read())
             self.assertTrue(
-                keyvalue_equals(self.expected_outputs[i], json_out, precision=4)
+                keyvalue_equals(
+                    self.expected_outputs[i], json_out, precision=self.precision
+                ),
+                (
+                    "Output differs from expected: "
+                    + str(
+                        diff_keyvalue(
+                            self.expected_outputs[i], json_out, precision=0.001
+                        )
+                    )
+                ),
             )
 
 
