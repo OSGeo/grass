@@ -301,7 +301,7 @@ class CalculationCorrectness2Test(TestCase):
 class JSONOutputTest(TestCase):
     """Test printing of parameters in JSON format"""
 
-    precision = 0.001
+    precision = 0.0001
 
     @classmethod
     def setUpClass(cls):
