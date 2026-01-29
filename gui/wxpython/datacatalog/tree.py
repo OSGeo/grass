@@ -239,18 +239,12 @@ class DataCatalogTree(TreeView):
         super().__init__(parent=parent, model=self._model, id=wx.ID_ANY, style=style)
 
         if UserSettings.Get(group="datacatalog", key="aliases") is None:
-            default_aliases = {"databases": {}}
-
-            # Register in default settings
-            if "datacatalog" not in UserSettings.defaultSettings:
-                UserSettings.defaultSettings["datacatalog"] = {}
-            UserSettings.defaultSettings["datacatalog"]["aliases"] = default_aliases
-
-            # Initialize in user settings
-            if "datacatalog" not in UserSettings.userSettings:
-                UserSettings.userSettings["datacatalog"] = {}
-            if "aliases" not in UserSettings.userSettings["datacatalog"]:
-                UserSettings.userSettings["datacatalog"]["aliases"] = default_aliases
+            UserSettings.Set(
+                group="datacatalog",
+                key="aliases",
+                value={"databases": {}},
+            )
+            UserSettings.SaveToFile()
 
         self._giface = giface
         self._restricted = False
