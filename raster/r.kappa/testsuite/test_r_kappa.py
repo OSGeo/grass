@@ -483,7 +483,7 @@ class JSONOutputTest(TestCase):
                     "Output differs from expected: "
                     + str(
                         diff_keyvalue(
-                            self.expected_outputs[i], json_out, precision=0.001
+                            self.expected_outputs[i], json_out, precision=self.precision
                         )
                     )
                 ),
@@ -510,7 +510,7 @@ class JSONOutputTest(TestCase):
                     "Output differs from expected: "
                     + str(
                         diff_keyvalue(
-                            self.expected_outputs[i], json_out, precision=0.001
+                            self.expected_outputs[i], json_out, precision=self.precision
                         )
                     )
                 ),
