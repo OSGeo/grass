@@ -176,7 +176,7 @@ int main(int argc, char **argv)
     legend_symbol_size_opt->type = TYPE_INTEGER;
     legend_symbol_size_opt->required = NO;
     legend_symbol_size_opt->multiple = NO;
-    legend_symbol_size_opt->answer = "10";
+    legend_symbol_size_opt->answer = "20";
     legend_symbol_size_opt->guisection = _("Legend");
     legend_symbol_size_opt->description = _("Legend symbol size");
 
