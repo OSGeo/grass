@@ -474,28 +474,8 @@ class JSONOutputTest(TestCase):
             )
             json_out = json.loads(decode(out))
             self.assertTrue(
-                keyvalue_equals(self.expected_outputs[i], json_out, precision=4)
+                keyvalue_equals(self.expected_outputs[i], json_out, precision=0.0001)
             )
-            if self.expected_outputs[i]["matrix"] != [[]]:
-                self.assertEqual(
-                    json_out["matrix"],
-                    self.expected_outputs[i]["matrix"],
-                    f"Matrix order mismatch in test case {i}",
-                )
-
-            if self.expected_outputs[i]["col_sum"]:
-                self.assertListEqual(
-                    json_out["col_sum"],
-                    self.expected_outputs[i]["col_sum"],
-                    f"col_sum order mismatch in test case {i}",
-                )
-
-            if self.expected_outputs[i]["row_sum"]:
-                self.assertListEqual(
-                    json_out["row_sum"],
-                    self.expected_outputs[i]["row_sum"],
-                    f"row_sum order mismatch in test case {i}",
-                )
 
     @xfail_windows
     def test_file(self):
