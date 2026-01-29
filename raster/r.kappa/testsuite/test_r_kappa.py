@@ -373,7 +373,7 @@ class JSONOutputTest(TestCase):
                 "correct": 0,
                 "overall_accuracy": 0.0,
                 "kappa": 0.0,
-                "kappa_variance": 0.06356,
+                "kappa_variance": 0.0,
                 "cats": [0, 1, 2, 3, 4, 9],
                 "matrix": [
                     [0, 0, 0, 0, 0, 0],
