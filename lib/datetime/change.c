@@ -101,78 +101,68 @@ int datetime_change_from_to(DateTime *dt, int from, int to, int round)
         }
     }
 
-    /* if losing precision, round
-     *    round > 0 force up if any lost values not zero
-     *    round ==0 increment by all lost values
-     */
-    if (to < dt->to) {
-        if (round > 0) {
-            int x;
-
-            x = datetime_is_absolute(dt) ? 1 : 0;
-
-            for (carry = 0, pos = dt->to; carry == 0 && pos > to; pos--) {
-                switch (pos) {
-                case DATETIME_MONTH:
-                    if (dt->month != x)
-                        carry = 1;
-                    break;
-                case DATETIME_DAY:
-                    if (dt->day != x)
-                        carry = 1;
-                    break;
-                case DATETIME_HOUR:
-                    if (dt->hour != 0)
-                        carry = 1;
-                    break;
-                case DATETIME_MINUTE:
-                    if (dt->minute != 0)
-                        carry = 1;
-                    break;
-                case DATETIME_SECOND:
-                    if (dt->second != 0)
-                        carry = 1;
-                    break;
-                }
-            }
-
-            if (carry) {
-                make_incr(&incr, to, to, dt);
-
-                incr.year = 1;
-                incr.month = 1;
-                incr.day = 1;
-                incr.hour = 1;
-                incr.minute = 1;
-                incr.second = 1.0;
-
-                datetime_increment(dt, &incr);
-            }
-        }
-
-        if (round == 0) {
-            /*NEW*/ if (datetime_is_absolute(dt))
-                /*NEW*/ ndays = datetime_days_in_year(dt->year, dt->positive);
-            /*NEW*/
-            else
-                /*NEW*/ ndays = 0;
-
-            for (pos = dt->to; pos > to; pos--) {
-                make_incr(&incr, pos, pos, dt);
-
-                incr.year = dt->year;
-                incr.month = dt->month;
-                /*NEW*/ incr.day = dt->day + ndays / 2;
-                incr.hour = dt->hour;
-                incr.minute = dt->minute;
-                incr.second = dt->second;
-
-                datetime_increment(dt, &incr);
-                /*NEW*/ if (ndays > 0 && pos == DATETIME_DAY)
-                    /*NEW*/ break;
-            }
+static void round_lost_precision(DateTime *dt, int to, int round)
+ {
+     DateTime incr;
+     int pos, carry, ndays;
+ 
+     if (to >= dt->to)
+         return;
+ 
+     if (round > 0) {
+         int x = datetime_is_absolute(dt) ? 1 : 0;
+ 
+         for (carry = 0, pos = dt->to; carry == 0 && pos > to; pos--) {
+             switch (pos) {
+             case DATETIME_MONTH:
+                 if (dt->month != x) carry = 1;
+                 break;
+             case DATETIME_DAY:
+                 if (dt->day != x) carry = 1;
+                 break;
+             case DATETIME_HOUR:
+                 if (dt->hour != 0) carry = 1;
+                 break;
+             case DATETIME_MINUTE:
+                 if (dt->minute != 0) carry = 1;
+                 break;
+             case DATETIME_SECOND:
+                 if (dt->second != 0) carry = 1;
+                 break;
+             }
+         }
+ 
+         if (carry) {
+             make_incr(&incr, to, to, dt);
+             incr.year = 1; incr.month = 1; incr.day = 1;
+             incr.hour = 1; incr.minute = 1; incr.second = 1.0;
+             datetime_increment(dt, &incr);
+         }
+     }
+ 
+     if (round == 0) {
+         ndays = datetime_is_absolute(dt)
+                     ? datetime_days_in_year(dt->year, dt->positive)
+                     : 0;
+ 
+         for (pos = dt->to; pos > to; pos--) {
+             make_incr(&incr, pos, pos, dt);
+             incr.year = dt->year;
+             incr.month = dt->month;
+             incr.day = dt->day + ndays / 2;
+             incr.hour = dt->hour;
+             incr.minute = dt->minute;
+             incr.second = dt->second;
+             datetime_increment(dt, &incr);
+ 
+             if (ndays > 0 && pos == DATETIME_DAY)
+                 break;
         }
     }
+ }
+
+
+    round_lost_precision(dt, to, round);
 
     /* set the new elements to zero */
     for (pos = from; pos < dtfrom; pos++)
