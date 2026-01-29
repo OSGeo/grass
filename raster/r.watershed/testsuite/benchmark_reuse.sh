@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Exit if hyperfine is not installed
+if [ "$CI" = "true" ]; then
+    type hyperfine >/dev/null 2>&1 || { echo "CI environment: hyperfine not found, skipping benchmark."; exit 0; }
+fi
+
 g.region raster=elevation res=10
 
 echo "Benchmark: r.watershed reuse feature"
