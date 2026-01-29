@@ -1,7 +1,13 @@
 """Fixtures for t.rast.mapcalc tests.
 
-Assumes an active GRASS session (e.g. grass --tmp-location XY --exec pytest ...).
-Only prepares and cleans up raster maps and STRDS.
+Each fixture creates its own temporary GRASS project and session, following
+the pattern from temporal/t.rast.list/tests/conftest.py. Tests do NOT rely
+on a pre-existing GRASS session.
+
+(C) 2025 by the GRASS Development Team
+This program is free software under the GNU General Public
+License (>=v2). Read the file COPYING that comes with GRASS
+for details.
 """
 
 import os
@@ -12,9 +18,12 @@ import pytest
 import grass.script as gs
 
 
-def setup_maps(use_seed):
-    """Create region, prec_* rasters, and STRDS precip_abs1, precip_abs2."""
-    gs.run_command("g.gisenv", set="TGIS_USE_CURRENT_MAPSET=1")
+def _setup_maps(session):
+    """Create region, prec_* rasters, and STRDS precip_abs1, precip_abs2.
+
+    All commands use session.env to ensure they run in the correct session.
+    """
+    gs.run_command("g.gisenv", set="TGIS_USE_CURRENT_MAPSET=1", env=session.env)
     gs.run_command(
         "g.region",
         s=0,
@@ -25,8 +34,9 @@ def setup_maps(use_seed):
         t=50,
         res=10,
         res3=10,
+        env=session.env,
     )
-    # rand() requires a seeded PRNG; use flags="s" in all cases
+    # Create raster maps with seeded random values
     for name, val in [
         ("prec_1", 550),
         ("prec_2", 450),
@@ -35,12 +45,9 @@ def setup_maps(use_seed):
         ("prec_5", 300),
         ("prec_6", 650),
     ]:
-        gs.run_command(
-            "r.mapcalc",
-            expression=f"{name} = rand(0, {val})",
-            flags="s",
-            overwrite=True,
-        )
+        gs.mapcalc(f"{name} = rand(0, {val})", seed=1, env=session.env)
+
+    # Create STRDS datasets
     gs.run_command(
         "t.create",
         type="strds",
@@ -49,6 +56,7 @@ def setup_maps(use_seed):
         title="A test",
         description="A test",
         overwrite=True,
+        env=session.env,
     )
     gs.run_command(
         "t.create",
@@ -58,7 +66,9 @@ def setup_maps(use_seed):
         title="A test",
         description="A test",
         overwrite=True,
+        env=session.env,
     )
+    # Register maps with temporal information
     gs.run_command(
         "t.register",
         flags="i",
@@ -68,6 +78,7 @@ def setup_maps(use_seed):
         start="2001-01-01",
         increment="3 months",
         overwrite=True,
+        env=session.env,
     )
     gs.run_command(
         "t.register",
@@ -75,53 +86,37 @@ def setup_maps(use_seed):
         input="precip_abs2",
         maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6",
         overwrite=True,
+        env=session.env,
     )
 
 
-def cleanup_maps():
-    """Remove STRDS and raster maps created by setup_maps or tests.
+@pytest.fixture(scope="module")
+def mapcalc_session_basic(tmp_path_factory):
+    """Create a GRASS session with STRDS data for basic tests.
 
-    Teardown must be idempotent: STRDS or maps may already have been removed
-    by tests (e.g. test_failure_on_missing_map). Use errors='ignore' so missing
-    datasets/maps do not raise during teardown.
+    Creates a temporary GRASS project and initializes a session. The session
+    and all data are cleaned up automatically when the context exits.
+    Follows the pattern from temporal/t.rast.list/tests/conftest.py.
     """
-    gs.run_command(
-        "t.remove",
-        flags="df",
-        type="strds",
-        inputs="precip_abs1,precip_abs2,precip_abs3,precip_abs4",
-        quiet=True,
-        errors="ignore",
-    )
-    gs.run_command(
-        "g.remove",
-        flags="f",
-        type="raster",
-        name="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6",
-        quiet=True,
-        errors="ignore",
-    )
-    gs.run_command(
-        "g.remove",
-        flags="f",
-        type="raster",
-        pattern="new_prec_*",
-        quiet=True,
-        errors="ignore",
-    )
+    tmp_path = tmp_path_factory.mktemp("t_rast_mapcalc_basic")
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy()) as session:
+        _setup_maps(session)
+        # Yield SimpleNamespace with env for backward compatibility with tests
+        yield SimpleNamespace(session=session, env=session.env)
 
 
 @pytest.fixture(scope="module")
-def mapcalc_session_basic():
-    """STRDS data for basic tests."""
-    setup_maps(use_seed=False)
-    yield SimpleNamespace(env=os.environ)
-    cleanup_maps()
+def mapcalc_session_operators(tmp_path_factory):
+    """Create a GRASS session with STRDS data for operator tests.
 
-
-@pytest.fixture(scope="module")
-def mapcalc_session_operators():
-    """STRDS data for operator tests."""
-    setup_maps(use_seed=True)
-    yield SimpleNamespace(env=os.environ)
-    cleanup_maps()
+    Identical structure to mapcalc_session_basic but creates a separate
+    project to isolate operator tests from basic tests.
+    """
+    tmp_path = tmp_path_factory.mktemp("t_rast_mapcalc_operators")
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy()) as session:
+        _setup_maps(session)
+        yield SimpleNamespace(session=session, env=session.env)
