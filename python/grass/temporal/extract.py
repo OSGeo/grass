@@ -363,19 +363,14 @@ def extract_dataset(
             # In case of a empty map continue, do not register empty
             # maps
             if not register_null and (
-                all(
-                    [
-                        stds_type in {"raster", "raster3d"},
-                        new_map.metadata.get_min() is None,
-                        new_map.metadata.get_max() is None,
-                    ]
+                (
+                    stds_type in {"raster", "raster3d"}
+                    and new_map.metadata.get_min() is None
+                    and new_map.metadata.get_max() is None
                 )
-                or all(
-                    [
-                        stds_type == "vector",
-                        new_map.metadata.get_number_of_primitives() == 0
-                        or new_map.metadata.get_number_of_primitives() is None,
-                    ]
+                or (
+                    stds_type == "vector"
+                    and not new_map.metadata.get_number_of_primitives()
                 )
             ):
                 empty_maps.append(new_map)
