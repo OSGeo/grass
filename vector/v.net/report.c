@@ -3,8 +3,12 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 #include "proto.h"
+#include <grass/gjson.h>
 
-int report(struct Map_info *In, int afield, int nfield, int action)
+int report(struct Map_info *In, int afield, int nfield, int action,
+           const char *format);
+int report(struct Map_info *In, int afield, int nfield, int action,
+           const char *format)
 {
     int i, j, line, nlines, ltype, node, nnodes;
     int cat_line, cat_node[2];
@@ -23,6 +27,12 @@ int report(struct Map_info *In, int afield, int nfield, int action)
 
     if (action == TOOL_REPORT) {
         struct boxlist *List;
+        G_JSON_Value *root_value = NULL;
+        G_JSON_Array *root_array = NULL;
+        if (format && strcmp(format, "json") == 0) {
+            root_value = G_json_value_init_array();
+            root_array = G_json_array(root_value);
+        }
 
         List = Vect_new_boxlist(0);
 
@@ -67,8 +77,30 @@ int report(struct Map_info *In, int afield, int nfield, int action)
                     G_warning(_("%d points found: %g %g %g line category: %d"),
                               nnodes, x, y, z, cat_line);
             }
-            fprintf(stdout, "%d %d %d\n", cat_line, cat_node[0], cat_node[1]);
+            if (root_array) {
+                G_JSON_Value *item_value = G_json_value_init_object();
+                G_JSON_Object *item_obj = G_json_object(item_value);
+
+                G_json_object_set_number(item_obj, "line_cat", cat_line);
+                G_json_object_set_number(item_obj, "start_node_cat",
+                                         cat_node[0]);
+                G_json_object_set_number(item_obj, "end_node_cat", cat_node[1]);
+
+                G_json_array_append_value(root_array, item_value);
+            }
+            else {
+                fprintf(stdout, "%d %d %d\n", cat_line, cat_node[0],
+                        cat_node[1]);
+            }
         }
+
+        if (root_value) {
+            char *json_str = G_json_serialize_to_string_pretty(root_value);
+            fprintf(stdout, "%s\n", json_str);
+            G_json_free_serialized_string(json_str);
+            G_json_value_free(root_value);
+        }
+
         Vect_destroy_boxlist(List);
     }
     else { /* node report */
