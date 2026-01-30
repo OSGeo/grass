@@ -120,11 +120,26 @@ void define_options(struct opt *opt)
     opt->tucfield->key = "turn_cat_layer";
     opt->tucfield->required = NO;
     opt->tucfield->guisection = _("Turntable");
+
+    opt->format = G_define_option();
+    opt->format->key = "format";
+    opt->format->type = TYPE_STRING;
+    opt->format->required = NO;
+    opt->format->options = "plain,shell,json";
+    opt->format->answer = "plain";
+    opt->format->description = _("Output");
 }
 
 void parse_arguments(const struct opt *opt, int *afield, int *nfield,
-                     double *thresh, int *act)
+                     double *thresh, int *act, int output_format)
 {
+    if (strcmp(opt->format->answer, "json") == 0)
+        output_format = 2;
+    else if (strcmp(opt->format->answer, "shell") == 0)
+        output_format = 1;
+    else
+        output_format = 0;
+
     *afield = atoi(opt->afield_opt->answer);
     *nfield = atoi(opt->nfield_opt->answer);
     *thresh = 0.0;
