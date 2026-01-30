@@ -486,7 +486,7 @@ void gsd_swapbuffers(void)
      * the back buffer becomes undefined afterward */
 #if defined(OPENGL_X11)
     glXSwapBuffers(glXGetCurrentDisplay(), glXGetCurrentDrawable());
-#elif defined(OPENGL_AQUA)
+#elif defined(OPENGL_AGL)
     aglSwapBuffers(aglGetCurrentContext());
 #elif defined(OPENGL_WINDOWS)
     SwapBuffers(wglGetCurrentDC());
