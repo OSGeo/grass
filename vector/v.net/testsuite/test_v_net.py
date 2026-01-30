@@ -13,6 +13,16 @@ class TestVNet(TestCase):
         # TODO: eventually, removing maps should be handled through testing framework functions
         self.runModule("g.remove", flags="f", type="vector", name=self.network)
 
+    def test_nodes(self):
+        """Test"""
+        self.assertModule(
+            "v.net", input="streets", output=self.network, operation="nodes"
+        )
+        topology = {"points": 41813, "nodes": 41813, "lines": 49746}
+        self.assertVectorFitsTopoInfo(vector=self.network, reference=topology)
+        layers = read_command("v.category", input=self.network, option="layers").strip()
+        self.assertEqual(first="1", second=layers, msg="Layers do not match")
+
     def test_nodes_layers(self):
         """Test"""
         self.assertModule(
