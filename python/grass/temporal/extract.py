@@ -402,24 +402,13 @@ def extract_dataset(
             else:
                 names += f",{map.get_name()}"
             count += 1
-        if stds_type == "raster":
-            gs.run_command(
-                "g.remove",
-                flags="f",
-                stds_type="raster",
-                name=names,
-                quiet=True,
-            )
-        elif stds_type == "raster3d":
-            gs.run_command(
-                "g.remove",
-                flags="f",
-                type="raster_3d",
-                name=names,
-                quiet=True,
-            )
-        elif stds_type == "vector":
-            gs.run_command("g.remove", flags="f", type="vector", name=names, quiet=True)
+        gs.run_command(
+            "g.remove",
+            flags="f",
+            type=stds_type.replace("_", ""),
+            name=names,
+            superquiet=True,
+        )
 
     dbif.close()
 
