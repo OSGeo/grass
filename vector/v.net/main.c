@@ -24,17 +24,23 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 #include "proto.h"
-
+#include <grass/gjson.h>
 int main(int argc, char **argv)
 {
+    enum { PLAIN, SHELL, JSON } output_format;
     struct GModule *module;
     struct opt opt;
     struct Map_info *In = NULL, *Out = NULL, *Points = NULL;
+
+    G_JSON_Value *root_value = NULL;
+    G_JSON_Object *root_object = NULL;
 
     FILE *file_arcs;
 
     int afield, nfield;
     int act;
+    int n_lines = 0;
+    int nnodes = 0;
     double thresh;
 
     char message[4096];
@@ -53,8 +59,7 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    parse_arguments(&opt, &afield, &nfield, &thresh, &act);
-
+    parse_arguments(&opt, &afield, &nfield, &thresh, &act, output_format);
     In = Points = Out = NULL;
     file_arcs = NULL;
     message[0] = '\0';
@@ -66,6 +71,21 @@ int main(int argc, char **argv)
         if (Vect_open_old(In, opt.input->answer, "") == -1)
             G_fatal_error(_("Unable to open vector map <%s>"),
                           opt.input->answer);
+    }
+
+    if (opt.format->answer && strcmp(opt.format->answer, "json") == 0) {
+        output_format = JSON;
+        root_value = G_json_value_init_object();
+        if (root_value == NULL) {
+            G_fatal_error(_("Failed to create JSON root object"));
+        }
+        root_object = G_json_value_get_object(root_value);
+    }
+    else if (opt.format->answer && strcmp(opt.format->answer, "shell") == 0) {
+        output_format = SHELL;
+    }
+    else {
+        output_format = PLAIN;
     }
 
     if (act == TOOL_NODES || act == TOOL_CONNECT || act == TOOL_ARCS) {
@@ -133,10 +153,7 @@ int main(int argc, char **argv)
 
         if (act == TOOL_NODES) {
             /* nodes */
-            int nnodes;
-
             nnodes = nodes(In, Out, opt.cats_flag->answer, nfield);
-
             snprintf(message, sizeof(message),
                      _("%d new points (nodes) written to output."), nnodes);
         }
@@ -154,11 +171,26 @@ int main(int argc, char **argv)
         }
 
         if (In) {
-            G_message(_("Copying attributes..."));
-            if (Vect_copy_tables(In, Out, 0))
-                G_warning(_("Failed to copy attribute table to output map"));
-        }
+            if (root_object) {
+                G_json_object_set_string(root_object, "current_step",
+                                         "copying_attributes");
+            }
+            else {
+                G_message(_("Copying attributes..."));
+            }
 
+            if (Vect_copy_tables(In, Out, 0)) {
+                if (root_object) {
+                    G_json_object_set_boolean(root_object, "table_copy_success",
+                                              false);
+                }
+                G_warning(_("Failed to copy attribute table to output map"));
+            }
+            else if (root_object) {
+                G_json_object_set_boolean(root_object, "table_copy_success",
+                                          true);
+            }
+        }
         /* support */
         Vect_build_partial(Out, GV_BUILD_NONE);
         Vect_build(Out);
@@ -171,8 +203,20 @@ int main(int argc, char **argv)
     else if (act == TOOL_TURNTABLE) {
         turntable(&opt);
     }
-    else { /* report */
-        report(In, afield, nfield, act);
+    else {
+        report(In, afield, nfield, act, opt.format->answer);
+    }
+
+    if (output_format == JSON && root_object) {
+        G_json_object_set_number(root_object, "new_nodes", nnodes);
+        char *json_str = G_json_serialize_to_string_pretty(root_value);
+        if (json_str) {
+            fprintf(stdout, "%s\n", json_str);
+            fflush(stdout);
+            G_free(json_str);
+        }
+        G_json_value_free(root_value);
+        root_object = NULL;
     }
 
     if (In)
@@ -180,8 +224,6 @@ int main(int argc, char **argv)
 
     if (file_arcs)
         fclose(file_arcs);
-
     G_done_msg("%s", message);
-
     return (EXIT_SUCCESS);
 }
