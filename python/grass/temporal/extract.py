@@ -201,6 +201,9 @@ def extract_dataset(
                 ),
             )
         )
+        dbif.close()
+        return
+
     num_rows = len(rows)
 
     msgr.percent(0, num_rows, 1)
@@ -339,50 +342,53 @@ def extract_dataset(
         old_map = sp.get_new_map_instance(row["id"])
         old_map.select(dbif)
 
-        if expression:
-            # Register the new maps
-            if row["id"] in new_maps:
-                new_map = new_maps[row["id"]]
-
-                # Read the raster map data
-                new_map.load()
-
-                # In case of a empty map continue, do not register empty
-                # maps
-                if type in {"raster", "raster3d"}:
-                    if (
-                        new_map.metadata.get_min() is None
-                        and new_map.metadata.get_max() is None
-                    ):
-                        if not register_null:
-                            empty_maps.append(new_map)
-                            continue
-                elif type == "vector":
-                    if (
-                        new_map.metadata.get_number_of_primitives() == 0
-                        or new_map.metadata.get_number_of_primitives() is None
-                    ):
-                        if not register_null:
-                            empty_maps.append(new_map)
-                            continue
-
-                # Set the time stamp
-                new_map.set_temporal_extent(old_map.get_temporal_extent())
-
-                if type == "raster":
-                    # Set the semantic label
-                    if has_semantic_labels:
-                        new_map.set_semantic_label(row["semantic_label"])
-
-                # Insert map in temporal database
-                new_map.insert(dbif)
-                new_sp.register_map(new_map, dbif)
-        else:
-            # Maps that are not part of the temporal database
-            # in the current mapset need to be inserted first
+        if not expression:
+            # Just register the source map in the new STRDS if no
+            # the expression option is not used
             if not old_map.is_in_db():
+                # Maps that are not part of the temporal database
+                # in the current mapset need to be inserted first
                 old_map.insert(dbif)
             new_sp.register_map(old_map, dbif)
+            continue
+
+        # Register the new maps
+        if row["id"] in new_maps:
+            new_map = new_maps[row["id"]]
+
+            # Read the raster map data
+            new_map.load()
+
+            # In case of a empty map continue, do not register empty
+            # maps
+            if type in {"raster", "raster3d"}:
+                if (
+                    new_map.metadata.get_min() is None
+                    and new_map.metadata.get_max() is None
+                ):
+                    if not register_null:
+                        empty_maps.append(new_map)
+                        continue
+            elif type == "vector":
+                if (
+                    new_map.metadata.get_number_of_primitives() == 0
+                    or new_map.metadata.get_number_of_primitives() is None
+                ):
+                    if not register_null:
+                        empty_maps.append(new_map)
+                        continue
+
+            # Set the time stamp
+            new_map.set_temporal_extent(old_map.get_temporal_extent())
+
+            if type == "raster":
+                # Set the semantic label
+                if has_semantic_labels:
+                    new_map.set_semantic_label(row["semantic_label"])
+
+            # Insert map in temporal database
+            new_map.insert(dbif)
+            new_sp.register_map(new_map, dbif)
 
     # Update the spatio-temporal extent and the metadata table entries
     new_sp.update_from_registered_maps(dbif)
@@ -415,7 +421,7 @@ def extract_dataset(
 
 
 def run_mapcalc2d(expr) -> None:
-    """Helper function to run r.mapcalc in parallel"""
+    """Run r.mapcalc in parallel."""
     try:
         gs.run_command(
             "r.mapcalc", expression=expr, nprocs=1, overwrite=gs.overwrite(), quiet=True
@@ -425,7 +431,7 @@ def run_mapcalc2d(expr) -> None:
 
 
 def run_mapcalc3d(expr) -> None:
-    """Helper function to run r3.mapcalc in parallel"""
+    """Run r3.mapcalc in parallel."""
     try:
         gs.run_command(
             "r3.mapcalc", expression=expr, overwrite=gs.overwrite(), quiet=True
@@ -435,7 +441,7 @@ def run_mapcalc3d(expr) -> None:
 
 
 def run_vector_extraction(input, output, layer, type, where) -> None:
-    """Helper function to run r.mapcalc in parallel"""
+    """Run v.extract in parallel."""
     try:
         gs.run_command(
             "v.extract",
