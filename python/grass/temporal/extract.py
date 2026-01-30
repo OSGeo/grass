@@ -190,7 +190,6 @@ def extract_dataset(
 
         # Run the mapcalc expression
         if expression:
-            count = 0
             proc_count = 0
             proc_list = []
 
@@ -198,9 +197,7 @@ def extract_dataset(
             expression = replace_stds_names(
                 expression, sp.base.get_name(), sp.base.get_map_id()
             )
-            for row in rows:
-                count += 1
-
+            for count, row in enumerate(rows, 1):
                 if count % 10 == 0:
                     msgr.percent(count, num_rows, 1)
 
@@ -304,7 +301,7 @@ def extract_dataset(
 
         msgr.percent(0, num_rows, 1)
 
-        temporal_type, semantic_type, title, description = sp.get_initial_values()
+        _temporal_type, semantic_type, title, description = sp.get_initial_values()
         new_sp = open_new_stds(
             output,
             type,
@@ -320,10 +317,7 @@ def extract_dataset(
         empty_maps = []
 
         # Register the maps in the database
-        count = 0
-        for row in rows:
-            count += 1
-
+        for count, row in enumerate(rows, 1):
             if count % 10 == 0:
                 msgr.percent(count, num_rows, 1)
 
@@ -367,9 +361,12 @@ def extract_dataset(
 
                     # Insert map in temporal database
                     new_map.insert(dbif)
-
                     new_sp.register_map(new_map, dbif)
             else:
+                # Maps that are not part of the temporal database
+                # in the current mapset need to be inserted first
+                if not old_map.is_in_db():
+                    old_map.insert(dbif)
                 new_sp.register_map(old_map, dbif)
 
         # Update the spatio-temporal extent and the metadata table entries
