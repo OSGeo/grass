@@ -89,26 +89,44 @@ SHAPE_Leng: DOUBLE PRECISION
 SHAPE_Area: DOUBLE PRECISION
 ```
 
+### Other supported formats
+
+1. List
+
 ```sh
-db.columns -e table=zipcodes_wake format=list
+db.columns table=zipcodes_wake format=list
 ```
 
 Possible output:
 
 ```text
-cat INTEGER
-OBJECTID INTEGER
-WAKE_ZIPCO DOUBLE PRECISION
-PERIMETER DOUBLE PRECISION
-ZIPCODE_ DOUBLE PRECISION
-ZIPCODE_ID DOUBLE PRECISION
-ZIPNAME CHARACTER
-ZIPNUM DOUBLE PRECISION
-ZIPCODE CHARACTER
-NAME CHARACTER
-SHAPE_Leng DOUBLE PRECISION
-SHAPE_Area DOUBLE PRECISION
+cat
+OBJECTID
+WAKE_ZIPCO
+PERIMETER
+ZIPCODE_
+ZIPCODE_ID
+ZIPNAME
+ZIPNUM
+ZIPCODE
+NAME
+SHAPE_Leng
+SHAPE_Area
 ```
+
+```sh
+db.columns -e table=zipcodes_wake format=list separator=','
+```
+
+Possible output:
+
+```text
+cat INTEGER,OBJECTID INTEGER,WAKE_ZIPCO DOUBLE PRECISION,PERIMETER DOUBLE PRECISION,ZIPCODE_ DOUBLE PRECISION,ZIPCODE_ID DOUBLE PRECISION,ZIPNAME CHARACTER,ZIPNUM DOUBLE PRECISION,ZIPCODE CHARACTER,NAME CHARACTER,SHAPE_Leng DOUBLE PRECISION,SHAPE_Area DOUBLE PRECISION
+```
+
+This allows us to create SQL-like column list.
+
+1. CSV
 
 ```sh
 db.columns -e table=zipcodes_wake format=csv
@@ -155,18 +173,6 @@ NAME    CHARACTER       false
 SHAPE_Leng      DOUBLE PRECISION        true
 SHAPE_Area      DOUBLE PRECISION        true
 ```
-
-```sh
-db.columns -e table=zipcodes_wake format=list separator=','
-```
-
-Possible output:
-
-```text
-cat INTEGER,OBJECTID INTEGER,WAKE_ZIPCO DOUBLE PRECISION,PERIMETER DOUBLE PRECISION,ZIPCODE_ DOUBLE PRECISION,ZIPCODE_ID DOUBLE PRECISION,ZIPNAME CHARACTER,ZIPNUM DOUBLE PRECISION,ZIPCODE CHARACTER,NAME CHARACTER,SHAPE_Leng DOUBLE PRECISION,SHAPE_Area DOUBLE PRECISION
-```
-
-This allows us to create SQL-like column list.
 
 ### List columns using Python
 
