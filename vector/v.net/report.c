@@ -6,8 +6,6 @@
 #include <grass/gjson.h>
 
 int report(struct Map_info *In, int afield, int nfield, int action,
-           const char *format);
-int report(struct Map_info *In, int afield, int nfield, int action,
            const char *format)
 {
     int i, j, line, nlines, ltype, node, nnodes;
