@@ -1,7 +1,6 @@
-"""
-Extract functions for space time raster, 3d raster and vector datasets
+"""Extract functions for space time raster, 3d raster and vector datasets.
 
-(C) 2012-2013 by the GRASS Development Team
+(C) 2012-2026 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -44,7 +43,7 @@ def compile_new_map_name(
     semantic_label: str | None,
     time_suffix: str | None,
     dbif: SQLDatabaseInterfaceConnection,
-):
+) -> str:
     """Compile new map name with suffix and semantic label.
 
     :param sp: An open SpaceTimeDataSet (STDS)
@@ -65,7 +64,8 @@ def compile_new_map_name(
     old_map.select(dbif)
     if time_suffix == "gran":
         suffix = create_suffix_from_datetime(
-            old_map.temporal_extent.get_start_time(), sp.get_granularity()
+            old_map.temporal_extent.get_start_time(),
+            sp.get_granularity(),
         )
     else:
         suffix = create_time_suffix(old_map)
@@ -113,28 +113,28 @@ def replace_stds_names(expression: str, simple_name: str, full_name: str) -> str
 
 
 def extract_dataset(
-    input,
-    output,
-    type,
-    where,
-    expression,
-    base,
-    time_suffix,
+    input_stds: str,
+    output: str,
+    stds_type: str,
+    where: str,
+    expression: str,
+    base: str,
+    time_suffix: str,
     nprocs: int = 1,
     register_null: bool = False,
     layer: int = 1,
-    vtype="point,line,boundary,centroid,area,face",
+    vtype: str = "point,line,boundary,centroid,area,face",
 ) -> None:
-    """Extract a subset of a space time raster, raster3d or vector dataset
+    """Extract a subset of a space time raster, raster3d or vector dataset.
 
     A mapcalc expression can be provided to process the temporal extracted
     maps.
     Mapcalc expressions are supported for raster and raster3d maps.
 
-    :param input: The name of the input space time raster/raster3d dataset
+    :param input_stds: The name of the input space time raster/raster3d dataset
     :param output: The name of the extracted new space time raster/raster3d
                   dataset
-    :param type: The type of the dataset: "raster", "raster3d" or vector
+    :param stds_type: The type of the dataset: "raster", "raster3d" or vector
     :param where: The temporal SQL WHERE statement for subset extraction
     :param expression: The r(3).mapcalc expression or the v.extract where
                       statement
@@ -151,7 +151,6 @@ def extract_dataset(
     :param vtype: The feature type to be extracted for vector maps, default
            is point,line,boundary,centroid,area and face
     """
-
     # Check the parameters
     msgr = get_tgis_message_interface()
 
@@ -165,14 +164,14 @@ def extract_dataset(
 
     tgis_version = get_tgis_db_version()
 
-    sp = open_old_stds(input, type, dbif)
+    sp = open_old_stds(input_stds, stds_type, dbif)
     has_semantic_labels = bool(
-        tgis_version > 2 and type == "raster" and sp.metadata.semantic_labels
+        tgis_version > 2 and stds_type == "raster" and sp.metadata.semantic_labels,
     )
 
     # Check the new stds
-    new_sp = check_new_stds(output, type, dbif, gs.overwrite())
-    if type == "vector":
+    new_sp = check_new_stds(output, stds_type, dbif, gs.overwrite())
+    if stds_type == "vector":
         rows = sp.get_registered_maps("id,name,mapset,layer", where, "start_time", dbif)
     else:
         rows = sp.get_registered_maps(
@@ -187,19 +186,19 @@ def extract_dataset(
         gs.warning(
             _(
                 "Nothing found in the database for space time dataset <{name}> "
-                "(type: {element_type}): {detail}"
+                "(type: {element_type}): {detail}",
             ).format(
-                name=input,
-                element_type=type,
+                name=input_stds,
+                element_type=stds_type,
                 detail=(
                     _(
                         "Dataset is empty or where clause is too constrained or "
-                        "incorrect"
+                        "incorrect",
                     )
                     if where
                     else _("Dataset is empty")
                 ),
-            )
+            ),
         )
         dbif.close()
         return
@@ -215,7 +214,9 @@ def extract_dataset(
 
         # Make sure STRDS is in the expression referenced with fully qualified name
         expression = replace_stds_names(
-            expression, sp.base.get_name(), sp.base.get_map_id()
+            expression,
+            sp.base.get_name(),
+            sp.base.get_map_id(),
         )
         for count, row in enumerate(rows, 1):
             if count % 10 == 0:
@@ -232,10 +233,10 @@ def extract_dataset(
             )
 
             # We need to modify the r(3).mapcalc expression
-            if type != "vector":
+            if stds_type != "vector":
                 expr = expression
                 expr = expr.replace(sp.base.get_map_id(), row["id"])
-                expr = "%s = %s" % (map_name, expr)
+                expr = f"{map_name} = {expr}"
 
                 # We need to build the id
                 map_id = AbstractMapDataset.build_id(map_name, mapset)
@@ -254,20 +255,20 @@ def extract_dataset(
                     msgr.error(
                         _(
                             "Map <%s> is already in temporal database"
-                            ", use overwrite flag to overwrite"
+                            ", use overwrite flag to overwrite",
                         )
-                        % (new_map.get_map_id())
+                        % (new_map.get_map_id()),
                     )
                     continue
 
             # Add process to the process list
-            if type == "raster":
+            if stds_type == "raster":
                 msgr.verbose(_('Applying r.mapcalc expression: "%s"') % expr)
                 proc_list.append(Process(target=run_mapcalc2d, args=(expr,)))
-            elif type == "raster3d":
+            elif stds_type == "raster3d":
                 msgr.verbose(_('Applying r3.mapcalc expression: "%s"') % expr)
                 proc_list.append(Process(target=run_mapcalc3d, args=(expr,)))
-            elif type == "vector":
+            elif stds_type == "vector":
                 msgr.verbose(_('Applying v.extract where statement: "%s"') % expression)
                 if row["layer"]:
                     proc_list.append(
@@ -280,7 +281,7 @@ def extract_dataset(
                                 vtype,
                                 expression,
                             ),
-                        )
+                        ),
                     )
                 else:
                     proc_list.append(
@@ -293,7 +294,7 @@ def extract_dataset(
                                 vtype,
                                 expression,
                             ),
-                        )
+                        ),
                     )
 
             proc_list[proc_count].start()
@@ -322,7 +323,7 @@ def extract_dataset(
     _temporal_type, semantic_type, title, description = sp.get_initial_values()
     new_sp = open_new_stds(
         output,
-        type,
+        stds_type,
         sp.get_temporal_type(),
         title,
         description,
@@ -361,30 +362,26 @@ def extract_dataset(
 
             # In case of a empty map continue, do not register empty
             # maps
-            if type in {"raster", "raster3d"}:
-                if (
-                    new_map.metadata.get_min() is None
-                    and new_map.metadata.get_max() is None
-                ):
-                    if not register_null:
-                        empty_maps.append(new_map)
-                        continue
-            elif type == "vector":
-                if (
-                    new_map.metadata.get_number_of_primitives() == 0
-                    or new_map.metadata.get_number_of_primitives() is None
-                ):
-                    if not register_null:
-                        empty_maps.append(new_map)
-                        continue
+            if all(
+                stds_type in {"raster", "raster3d"},
+                new_map.metadata.get_min() is None,
+                new_map.metadata.get_max() is None,
+                not register_null,
+            ) or all(
+                stds_type == "vector",
+                new_map.metadata.get_number_of_primitives() == 0
+                or new_map.metadata.get_number_of_primitives() is None,
+                not register_null,
+            ):
+                empty_maps.append(new_map)
+                continue
 
             # Set the time stamp
             new_map.set_temporal_extent(old_map.get_temporal_extent())
 
-            if type == "raster":
+            if stds_type == "raster" and has_semantic_labels:
                 # Set the semantic label
-                if has_semantic_labels:
-                    new_map.set_semantic_label(row["semantic_label"])
+                new_map.set_semantic_label(row["semantic_label"])
 
             # Insert map in temporal database
             new_map.insert(dbif)
@@ -401,17 +398,27 @@ def extract_dataset(
         count = 0
         for map in empty_maps:
             if count == 0:
-                names += "%s" % (map.get_name())
+                names += str(map.get_name())
             else:
-                names += ",%s" % (map.get_name())
+                names += f",{map.get_name()}"
             count += 1
-        if type == "raster":
-            gs.run_command("g.remove", flags="f", type="raster", name=names, quiet=True)
-        elif type == "raster3d":
+        if stds_type == "raster":
             gs.run_command(
-                "g.remove", flags="f", type="raster_3d", name=names, quiet=True
+                "g.remove",
+                flags="f",
+                stds_type="raster",
+                name=names,
+                quiet=True,
             )
-        elif type == "vector":
+        elif stds_type == "raster3d":
+            gs.run_command(
+                "g.remove",
+                flags="f",
+                type="raster_3d",
+                name=names,
+                quiet=True,
+            )
+        elif stds_type == "vector":
             gs.run_command("g.remove", flags="f", type="vector", name=names, quiet=True)
 
     dbif.close()
@@ -420,35 +427,48 @@ def extract_dataset(
 ###############################################################################
 
 
-def run_mapcalc2d(expr) -> None:
+def run_mapcalc2d(expr: str) -> None:
     """Run r.mapcalc in parallel."""
     try:
         gs.run_command(
-            "r.mapcalc", expression=expr, nprocs=1, overwrite=gs.overwrite(), quiet=True
+            "r.mapcalc",
+            expression=expr,
+            nprocs=1,
+            overwrite=gs.overwrite(),
+            quiet=True,
         )
     except CalledModuleError:
         sys.exit(1)
 
 
-def run_mapcalc3d(expr) -> None:
+def run_mapcalc3d(expr: str) -> None:
     """Run r3.mapcalc in parallel."""
     try:
         gs.run_command(
-            "r3.mapcalc", expression=expr, overwrite=gs.overwrite(), quiet=True
+            "r3.mapcalc",
+            expression=expr,
+            overwrite=gs.overwrite(),
+            quiet=True,
         )
     except CalledModuleError:
         sys.exit(1)
 
 
-def run_vector_extraction(input, output, layer, type, where) -> None:
+def run_vector_extraction(
+    input_map: str,
+    output: str,
+    layer: str | int,
+    feature_type: str,
+    where: str,
+) -> None:
     """Run v.extract in parallel."""
     try:
         gs.run_command(
             "v.extract",
-            input=input,
+            input=input_map,
             output=output,
             layer=layer,
-            type=type,
+            type=feature_type,
             where=where,
             overwrite=gs.overwrite(),
             quiet=True,
