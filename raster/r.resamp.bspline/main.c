@@ -152,7 +152,6 @@ int main(int argc, char *argv[])
     /*----------------------------------------------------------------*/
     /* Parsing */
     G_gisinit(argv[0]);
-
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
