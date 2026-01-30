@@ -103,6 +103,7 @@
 
 import os
 import atexit
+import errno
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
@@ -564,12 +565,25 @@ def main():
         reg = gs.region()
         tmp_rmaps.append(prefix + "filled")
 
-        if usermask:
-            with gs.MaskManager():
+        try:
+            if usermask:
+                with gs.MaskManager():
+                    gs.run_command(
+                        "r.resamp.bspline",
+                        input=input,
+                        mask=usermask,
+                        output=prefix + "filled",
+                        method=method,
+                        ew_step=3 * reg["ewres"],
+                        ns_step=3 * reg["nsres"],
+                        lambda_=lambda_,
+                        memory=memory,
+                        flags="n",
+                    )
+            else:
                 gs.run_command(
                     "r.resamp.bspline",
                     input=input,
-                    mask=usermask,
                     output=prefix + "filled",
                     method=method,
                     ew_step=3 * reg["ewres"],
@@ -578,18 +592,24 @@ def main():
                     memory=memory,
                     flags="n",
                 )
-        else:
-            gs.run_command(
-                "r.resamp.bspline",
-                input=input,
-                output=prefix + "filled",
-                method=method,
-                ew_step=3 * reg["ewres"],
-                ns_step=3 * reg["nsres"],
-                lambda_=lambda_,
-                memory=memory,
-                flags="n",
-            )
+
+        except CalledModuleError as e:
+            # r.resamp.bspline sets exit status to errno (EINVAL) for "no NULL cells"
+            if e.returncode == errno.EINVAL:
+                gs.warning(
+                    _(
+                        "Input map <%s> has no holes. Copying to output without "
+                        "modification."
+                    )
+                    % (input,)
+                )
+                gs.run_command(
+                    "g.copy",
+                    raster="%s,%sfilled" % (input, prefix),
+                    overwrite=True,
+                )
+            else:
+                raise
 
     # set region to original extents, align to input
     gs.run_command(

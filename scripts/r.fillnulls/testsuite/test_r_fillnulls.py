@@ -75,7 +75,7 @@ class TestRFillNulls(TestCase):
             overwrite=True,
         )
 
-        # Must succeed (no error, no stderr parsing)
+        # Must succeed for rasters without NULLs
         self.assertModule(module)
 
         # Output should be identical in terms of NULL count
