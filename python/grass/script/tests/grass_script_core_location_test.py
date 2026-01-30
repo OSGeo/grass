@@ -6,7 +6,20 @@ import pytest
 
 import grass.script as gs
 from grass.exceptions import ScriptError
-from grass.tools import Tools
+
+# Try to import grass.tools, skip tests if not available
+try:
+    from grass.tools import Tools
+
+    TOOLS_AVAILABLE = True
+except ModuleNotFoundError:
+    TOOLS_AVAILABLE = False
+    Tools = None
+
+# Skip tests that require grass.tools
+requires_tools = pytest.mark.skipif(
+    not TOOLS_AVAILABLE, reason="grass.tools module not available"
+)
 
 
 def test_with_same_path(tmp_path):
@@ -111,6 +124,7 @@ def test_create_project(tmp_path):
         assert epsg == "EPSG:3358"
 
 
+@requires_tools
 @pytest.mark.parametrize("crs", ["XY", "xy", None, ""])
 def test_crs_parameter_xy(tmp_path, crs):
     project = tmp_path / "test"
@@ -122,6 +136,7 @@ def test_crs_parameter_xy(tmp_path, crs):
         assert tools.g_region(flags="p", format="shell").keyval["projection"] == 0
 
 
+@requires_tools
 def test_crs_parameter_xy_overrides_epsg(tmp_path):
     project = tmp_path / "test"
     gs.create_project(project, crs="XY", epsg=4326)
@@ -132,6 +147,7 @@ def test_crs_parameter_xy_overrides_epsg(tmp_path):
         assert tools.g_region(flags="p", format="json")["crs"]["type"] == "xy"
 
 
+@requires_tools
 def test_crs_parameter_epsg_overrides_epsg(tmp_path):
     project = tmp_path / "test"
     gs.create_project(project, crs="EPSG:4326", epsg=3358)
@@ -142,6 +158,7 @@ def test_crs_parameter_epsg_overrides_epsg(tmp_path):
         assert tools.g_proj(flags="p", format="shell").keyval["srid"] == "EPSG:4326"
 
 
+@requires_tools
 @pytest.mark.parametrize("crs", ["EPSG:4326", "epsg:3358"])
 def test_crs_parameter_epsg(tmp_path, crs):
     project = tmp_path / "test"

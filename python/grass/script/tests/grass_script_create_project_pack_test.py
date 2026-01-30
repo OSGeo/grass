@@ -8,9 +8,23 @@ from pathlib import Path
 import pytest
 
 import grass.script as gs
-from grass.tools import Tools
+
+# Try to import grass.tools, skip tests if not available
+try:
+    from grass.tools import Tools
+
+    TOOLS_AVAILABLE = True
+except ModuleNotFoundError:
+    TOOLS_AVAILABLE = False
+    Tools = None
+
+# Skip tests that require grass.tools
+requires_tools = pytest.mark.skipif(
+    not TOOLS_AVAILABLE, reason="grass.tools module not available"
+)
 
 
+@requires_tools
 def test_raster_pack_pack_param(tmp_path, pack_raster_file4x5_rows):
     project = tmp_path / "test"
     gs.create_project(project, pack=pack_raster_file4x5_rows)
@@ -21,6 +35,7 @@ def test_raster_pack_pack_param(tmp_path, pack_raster_file4x5_rows):
         assert tools.g_proj(flags="p", format="shell").keyval["srid"] == "EPSG:3358"
 
 
+@requires_tools
 @pytest.mark.parametrize("suffix", [".rpack", ".grass_raster", ".grr"])
 def test_raster_pack_crs_param_extensions(tmp_path, pack_raster_file4x5_rows, suffix):
     project = tmp_path / "test"
@@ -34,6 +49,7 @@ def test_raster_pack_crs_param_extensions(tmp_path, pack_raster_file4x5_rows, su
         assert tools.g_proj(flags="p", format="shell").keyval["srid"] == "EPSG:3358"
 
 
+@requires_tools
 def test_raster_pack_file(tmp_path, pack_raster_file4x5_rows):
     project = tmp_path / "test"
     gs.create_project(project, pack=pack_raster_file4x5_rows)
@@ -42,6 +58,7 @@ def test_raster_pack_file(tmp_path, pack_raster_file4x5_rows):
         assert Path(project, "PERMANENT", name).exists()
 
 
+@requires_tools
 @pytest.mark.parametrize("compression", ["c", None])
 def test_xy_crs_and_compression(tmp_path, compression):
     project = tmp_path / "test"
@@ -63,6 +80,7 @@ def test_xy_crs_and_compression(tmp_path, compression):
         assert tools.g_region(flags="p", format="shell").keyval["projection"] == 0
 
 
+@requires_tools
 @pytest.mark.parametrize("crs", [("4326", 3), ("3358", 99)])
 def test_crs(tmp_path, crs):
     project = tmp_path / "test"
