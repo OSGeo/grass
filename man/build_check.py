@@ -9,9 +9,8 @@
 import os
 import sys
 
-from build_html import man_dir
-
 from build import get_files, message_tmpl, read_file
+from build_html import man_dir
 
 os.chdir(man_dir)
 
