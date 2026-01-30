@@ -1,6 +1,7 @@
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.script.core import read_command, parse_command
+from grass.gunittest.gmodules import SimpleModule
 
 
 class TestVDbConnect(TestCase):
@@ -112,6 +113,13 @@ class TestVDbConnect(TestCase):
             "v.db.connect", map="bridges", flags="c", format="csv"
         ).splitlines()
         self.assertEqual(actual, expected)
+
+    def test_layer_number_name_syntax_no_warning(self):
+        """layer=number/name should not trigger filename validation warnings"""
+        m = SimpleModule("v.db.connect", map="bridges", layer="1/bridges", flags="c")
+        self.assertModule(m)
+        self.assertNotIn("Illegal filename", m.outputs.stderr)
+        self.assertNotIn("Character </> not allowed", m.outputs.stderr)
 
     def test_columns_json(self):
         """Test -c flag with JSON format"""
