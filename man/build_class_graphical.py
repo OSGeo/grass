@@ -18,13 +18,6 @@ import os
 import sys
 
 import build_md
-from build_html import (
-    get_desc,
-    header1_tmpl,
-    man_dir,
-    modclass_intro_tmpl,
-)
-
 from build import (
     check_for_desc_override,
     default_year,
@@ -33,6 +26,12 @@ from build import (
     replace_file,
     to_title,
     write_footer,
+)
+from build_html import (
+    get_desc,
+    header1_tmpl,
+    man_dir,
+    modclass_intro_tmpl,
 )
 
 graphical_index_style = """\
