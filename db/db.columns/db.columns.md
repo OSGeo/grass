@@ -89,7 +89,7 @@ SHAPE_Leng: DOUBLE PRECISION
 SHAPE_Area: DOUBLE PRECISION
 ```
 
-### Other supported formats
+### Other supported output formats
 
 1. List
 
@@ -148,30 +148,6 @@ ZIPCODE,CHARACTER,false
 NAME,CHARACTER,false
 SHAPE_Leng,DOUBLE PRECISION,true
 SHAPE_Area,DOUBLE PRECISION,true
-```
-
-Using custom `separator`:
-
-```sh
-db.columns -e table=zipcodes_wake format=csv separator='\t'
-```
-
-Possible output:
-
-```text
-name    sql_type        is_number
-cat     INTEGER true
-OBJECTID        INTEGER true
-WAKE_ZIPCO      DOUBLE PRECISION        true
-PERIMETER       DOUBLE PRECISION        true
-ZIPCODE_        DOUBLE PRECISION        true
-ZIPCODE_ID      DOUBLE PRECISION        true
-ZIPNAME CHARACTER       false
-ZIPNUM  DOUBLE PRECISION        true
-ZIPCODE CHARACTER       false
-NAME    CHARACTER       false
-SHAPE_Leng      DOUBLE PRECISION        true
-SHAPE_Area      DOUBLE PRECISION        true
 ```
 
 ### List columns using Python
