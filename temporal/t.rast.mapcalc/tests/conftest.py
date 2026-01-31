@@ -16,16 +16,18 @@ from types import SimpleNamespace
 import pytest
 
 import grass.script as gs
+from grass.tools import Tools
 
 
 def _setup_maps(session):
     """Create region, prec_* rasters, and STRDS precip_abs1, precip_abs2.
 
-    All commands use session.env to ensure they run in the correct session.
+    Uses Tools(session=session) so the Tools instance manages the session
+    environment; no explicit env= is passed.
     """
-    gs.run_command("g.gisenv", set="TGIS_USE_CURRENT_MAPSET=1", env=session.env)
-    gs.run_command(
-        "g.region",
+    tools = Tools(session=session, overwrite=True)
+    tools.g_gisenv(set="TGIS_USE_CURRENT_MAPSET=1")
+    tools.g_region(
         s=0,
         n=80,
         w=0,
@@ -34,7 +36,6 @@ def _setup_maps(session):
         t=50,
         res=10,
         res3=10,
-        env=session.env,
     )
     # Create raster maps with seeded random values
     for name, val in [
@@ -45,48 +46,36 @@ def _setup_maps(session):
         ("prec_5", 300),
         ("prec_6", 650),
     ]:
-        gs.mapcalc(f"{name} = rand(0, {val})", seed=1, env=session.env)
+        tools.r_mapcalc(expression=f"{name} = rand(0, {val})", seed=1)
 
     # Create STRDS datasets
-    gs.run_command(
-        "t.create",
+    tools.t_create(
         type="strds",
         temporaltype="absolute",
         output="precip_abs1",
         title="A test",
         description="A test",
-        overwrite=True,
-        env=session.env,
     )
-    gs.run_command(
-        "t.create",
+    tools.t_create(
         type="strds",
         temporaltype="absolute",
         output="precip_abs2",
         title="A test",
         description="A test",
-        overwrite=True,
-        env=session.env,
     )
     # Register maps with temporal information
-    gs.run_command(
-        "t.register",
+    tools.t_register(
         flags="i",
         type="raster",
         input="precip_abs1",
         maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6",
         start="2001-01-01",
         increment="3 months",
-        overwrite=True,
-        env=session.env,
     )
-    gs.run_command(
-        "t.register",
+    tools.t_register(
         type="raster",
         input="precip_abs2",
         maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6",
-        overwrite=True,
-        env=session.env,
     )
 
 
