@@ -99,7 +99,9 @@ def mapcalc_session_basic(tmp_path_factory):
     Follows the pattern from temporal/t.rast.list/tests/conftest.py.
     """
     tmp_path = tmp_path_factory.mktemp("t_rast_mapcalc_basic")
-    with gs.setup.init(tmp_path, env=os.environ.copy()) as session:
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy()) as session:
         _setup_maps(session)
         # Yield SimpleNamespace with env for backward compatibility with tests
         yield SimpleNamespace(session=session, env=session.env)
@@ -113,6 +115,8 @@ def mapcalc_session_operators(tmp_path_factory):
     project to isolate operator tests from basic tests.
     """
     tmp_path = tmp_path_factory.mktemp("t_rast_mapcalc_operators")
-    with gs.setup.init(tmp_path, env=os.environ.copy()) as session:
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy()) as session:
         _setup_maps(session)
         yield SimpleNamespace(session=session, env=session.env)
