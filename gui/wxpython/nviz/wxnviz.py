@@ -241,7 +241,7 @@ except (ImportError, OSError, TypeError) as e:
     print("wxnviz.py: {}".format(e), file=sys.stderr)
 try:
     from numpy import matrix
-    from numpy.linalg import LinAlgError
+    from numpy.linalg import det
 except ImportError:
     msg = _(
         "This module requires the NumPy module, which could not be "
@@ -2597,11 +2597,10 @@ class Nviz:
             if (i + 1) % 4 == 0:
                 m.append(row)
                 row = []
-        try:
-            inv = matrix(m).I
-        except LinAlgError:
-            # Modelview matrix is singular (degenerate view state); skip rotation
+        # Skip rotation if modelview matrix is singular (degenerate view state)
+        if abs(det(m)) < 1e-10:
             return 0.0, 0.0, 0.0, 1.0
+        inv = matrix(m).I
         ax, ay, az = dy, dx, 0.0
         x = inv[0, 0] * ax + inv[1, 0] * ay + inv[2, 0] * az
         y = inv[0, 1] * ax + inv[1, 1] * ay + inv[2, 1] * az
