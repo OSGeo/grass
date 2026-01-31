@@ -1,6 +1,7 @@
 set(PYDIRS
     benchmark
     exceptions
+    experimental
     grassdb
     gunittest
     imaging

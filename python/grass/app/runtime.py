@@ -97,7 +97,7 @@ class RuntimePaths:
     @property
     def grass_cmake_config_dir(self):
         return (
-            Path(self.prefix, resource_paths.GRASS_CMAKE_CONFIG)
+            str(Path(self.prefix, resource_paths.GRASS_CMAKE_CONFIG))
             if self.is_cmake_build
             else ""
         )
@@ -105,8 +105,30 @@ class RuntimePaths:
     @property
     def grass_cmake_module_dir(self):
         return (
-            Path(self.prefix, resource_paths.GRASS_CMAKE_MODULES)
+            str(Path(self.prefix, resource_paths.GRASS_CMAKE_MODULES))
             if self.is_cmake_build
+            else ""
+        )
+
+    @property
+    def grass_cmake_prefix_path(self):
+        return resource_paths.GRASS_CMAKE_PREFIX_PATH
+
+    @property
+    def grass_cmake_c_compiler(self):
+        return (
+            str(Path(resource_paths.GRASS_CMAKE_C_COMPILER))
+            if Path(resource_paths.GRASS_CMAKE_C_COMPILER).exists()
+            and self.is_cmake_build
+            else ""
+        )
+
+    @property
+    def grass_cmake_cxx_compiler(self):
+        return (
+            str(Path(resource_paths.GRASS_CMAKE_CXX_COMPILER))
+            if Path(resource_paths.GRASS_CMAKE_CXX_COMPILER).exists()
+            and self.is_cmake_build
             else ""
         )
 

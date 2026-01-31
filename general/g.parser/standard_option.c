@@ -85,6 +85,7 @@ static char *STD_OPT_STRINGS[] = {"G_OPT_UNDEFINED",
                                   "G_OPT_MAP_INPUTS",
                                   "G_OPT_STDS_TYPE",
                                   "G_OPT_MAP_TYPE",
+                                  "G_OPT_T_SUFFIX",
                                   "G_OPT_T_TYPE",
                                   "G_OPT_T_WHERE",
                                   "G_OPT_T_SAMPLE"};
