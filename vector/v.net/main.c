@@ -171,25 +171,9 @@ int main(int argc, char **argv)
         }
 
         if (In) {
-            if (root_object) {
-                G_json_object_set_string(root_object, "current_step",
-                                         "copying_attributes");
-            }
-            else {
-                G_message(_("Copying attributes..."));
-            }
-
-            if (Vect_copy_tables(In, Out, 0)) {
-                if (root_object) {
-                    G_json_object_set_boolean(root_object, "table_copy_success",
-                                              false);
-                }
+            G_message(_("Copying attributes..."));
+            if (Vect_copy_tables(In, Out, 0))
                 G_warning(_("Failed to copy attribute table to output map"));
-            }
-            else if (root_object) {
-                G_json_object_set_boolean(root_object, "table_copy_success",
-                                          true);
-            }
         }
         /* support */
         Vect_build_partial(Out, GV_BUILD_NONE);

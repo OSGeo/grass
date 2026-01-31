@@ -121,7 +121,7 @@ void define_options(struct opt *opt)
     opt->tucfield->required = NO;
     opt->tucfield->guisection = _("Turntable");
 
-    opt->format = G_define_option();
+    opt->format = G_define_standard_option(G_OPT_F_FORMAT);
     opt->format->key = "format";
     opt->format->type = TYPE_STRING;
     opt->format->required = NO;
