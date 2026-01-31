@@ -39,7 +39,6 @@ def collect_layers(timeseries, element_type, fill_gaps):
     :param str element_type: element type, "stvds" or "strds"
     :param bool fill_gaps: fill empty time steps with data from previous step
     """
-    # NEW WAY: Comment in after json output for t.rast.list and t.vect.list is merged
     import json
 
     if element_type == "strds":
@@ -61,32 +60,6 @@ def collect_layers(timeseries, element_type, fill_gaps):
     # Get layer names and start time from json
     names = [item["name"] for item in result["data"]]
     dates = [item["start_time"] for item in result["data"]]
-
-    # if element_type == "strds":
-    #     rows = gs.read_command(
-    #         "t.rast.list", method="gran", input=timeseries
-    #     ).splitlines()
-    # elif element_type == "stvds":
-    #     rows = gs.read_command(
-    #         "t.vect.list", method="gran", input=timeseries
-    #     ).splitlines()
-    # else:
-    #     raise NameError(
-    #         _("Dataset {} must be element type 'strds' or 'stvds'").format(timeseries)
-    #     )
-
-    # # Parse string
-    # # Create list of list
-    # new_rows = [row.split("|") for row in rows]
-    # # Transpose into columns where the first value is the name of the column
-    # new_array = [list(row) for row in zip(*new_rows, strict=False)]
-
-    # # Collect layer name and start time
-    # for column in new_array:
-    #     if column[0] == "name":
-    #         names = column[1:]
-    #     if column[0] == "start_time":
-    #         dates = column[1:]
 
     # For datasets with variable time steps, fill in gaps with
     # previous time step value, if fill_gaps==True.
