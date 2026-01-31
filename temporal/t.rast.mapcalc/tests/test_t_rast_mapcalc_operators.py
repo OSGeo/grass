@@ -9,13 +9,12 @@ for details.
 """
 
 import grass.script as gs
+from grass.tools import Tools
 
 
-def _assert_tinfo_key_value(env, strds_name, reference_string, sep="="):
+def _assert_tinfo_key_value(tools, strds_name, reference_string, sep="="):
     """Parse t.info output and assert key-value pairs match reference string."""
-    output = gs.read_command(
-        "t.info", type="strds", input=strds_name, flags="g", env=env
-    )
+    output = tools.t_info(type="strds", input=strds_name, flags="g").text
     actual = gs.parse_key_val(output, sep=sep)
     reference = dict(
         line.strip().split(sep, 1)
@@ -29,9 +28,8 @@ def _assert_tinfo_key_value(env, strds_name, reference_string, sep="="):
 
 def test_start_time_end_time_operators(mapcalc_session_operators):
     """Test start_time() and end_time() temporal operators."""
-    env = mapcalc_session_operators.env
-    gs.run_command(
-        "t.rast.mapcalc",
+    tools = Tools(session=mapcalc_session_operators.session, overwrite=True)
+    tools.t_rast_mapcalc(
         flags="sn",
         inputs="precip_abs1,precip_abs2",
         output="precip_abs3",
@@ -40,20 +38,17 @@ def test_start_time_end_time_operators(mapcalc_session_operators):
         method="equal",
         nprocs=5,
         verbose=True,
-        overwrite=True,
-        env=env,
     )
     tinfo_string = """number_of_maps=6
 temporal_type=absolute
 name=precip_abs3"""
-    _assert_tinfo_key_value(env, "precip_abs3", tinfo_string)
+    _assert_tinfo_key_value(tools, "precip_abs3", tinfo_string)
 
 
 def test_start_time_components(mapcalc_session_operators):
     """Test start_year(), start_month(), start_day(), start_hour(), start_minute(), start_second() operators."""
-    env = mapcalc_session_operators.env
-    gs.run_command(
-        "t.rast.mapcalc",
+    tools = Tools(session=mapcalc_session_operators.session, overwrite=True)
+    tools.t_rast_mapcalc(
         flags="sn",
         inputs="precip_abs1,precip_abs2",
         output="precip_abs3",
@@ -62,19 +57,16 @@ def test_start_time_components(mapcalc_session_operators):
         method="equal",
         nprocs=5,
         verbose=True,
-        overwrite=True,
-        env=env,
     )
     tinfo_string = """number_of_maps=6
 name=precip_abs3"""
-    _assert_tinfo_key_value(env, "precip_abs3", tinfo_string)
+    _assert_tinfo_key_value(tools, "precip_abs3", tinfo_string)
 
 
 def test_end_time_components(mapcalc_session_operators):
     """Test end_year(), end_month(), end_day(), end_hour(), end_minute(), end_second() operators."""
-    env = mapcalc_session_operators.env
-    gs.run_command(
-        "t.rast.mapcalc",
+    tools = Tools(session=mapcalc_session_operators.session, overwrite=True)
+    tools.t_rast_mapcalc(
         flags="sn",
         inputs="precip_abs1,precip_abs2",
         output="precip_abs3",
@@ -83,19 +75,16 @@ def test_end_time_components(mapcalc_session_operators):
         method="equal",
         nprocs=5,
         verbose=True,
-        overwrite=True,
-        env=env,
     )
     tinfo_string = """number_of_maps=6
 name=precip_abs3"""
-    _assert_tinfo_key_value(env, "precip_abs3", tinfo_string)
+    _assert_tinfo_key_value(tools, "precip_abs3", tinfo_string)
 
 
 def test_start_doy_dow_operators(mapcalc_session_operators):
     """Test start_doy() and start_dow() temporal operators."""
-    env = mapcalc_session_operators.env
-    gs.run_command(
-        "t.rast.mapcalc",
+    tools = Tools(session=mapcalc_session_operators.session, overwrite=True)
+    tools.t_rast_mapcalc(
         flags="sn",
         inputs="precip_abs1,precip_abs2",
         output="precip_abs3",
@@ -104,19 +93,16 @@ def test_start_doy_dow_operators(mapcalc_session_operators):
         method="equal",
         nprocs=5,
         verbose=True,
-        overwrite=True,
-        env=env,
     )
     tinfo_string = """number_of_maps=6
 name=precip_abs3"""
-    _assert_tinfo_key_value(env, "precip_abs3", tinfo_string)
+    _assert_tinfo_key_value(tools, "precip_abs3", tinfo_string)
 
 
 def test_end_doy_dow_operators(mapcalc_session_operators):
     """Test end_doy() and end_dow() temporal operators."""
-    env = mapcalc_session_operators.env
-    gs.run_command(
-        "t.rast.mapcalc",
+    tools = Tools(session=mapcalc_session_operators.session, overwrite=True)
+    tools.t_rast_mapcalc(
         flags="sn",
         inputs="precip_abs1,precip_abs2",
         output="precip_abs3",
@@ -125,31 +111,24 @@ def test_end_doy_dow_operators(mapcalc_session_operators):
         method="equal",
         nprocs=5,
         verbose=True,
-        overwrite=True,
-        env=env,
     )
     tinfo_string = """number_of_maps=6
 name=precip_abs3"""
-    _assert_tinfo_key_value(env, "precip_abs3", tinfo_string)
+    _assert_tinfo_key_value(tools, "precip_abs3", tinfo_string)
 
 
 def test_map_comparison_operator(mapcalc_session_operators):
     """Test comparison operator with map names."""
-    env = mapcalc_session_operators.env
-    gs.run_command(
-        "t.rast.mapcalc",
+    tools = Tools(session=mapcalc_session_operators.session, overwrite=True)
+    tools.t_rast_mapcalc(
         flags="sn",
         inputs="precip_abs1",
         output="precip_abs3",
         expression="if(precip_abs1 == prec_1, prec_1, null())",
         basename="new_prec",
         verbose=True,
-        overwrite=True,
-        env=env,
     )
-    output = gs.read_command(
-        "t.info", type="strds", input="precip_abs3", flags="g", env=env
-    )
+    output = tools.t_info(type="strds", input="precip_abs3", flags="g").text
     strds_info = gs.parse_key_val(output, sep="=")
     assert strds_info["name"] == "precip_abs3"
     assert int(strds_info["number_of_maps"]) == 6

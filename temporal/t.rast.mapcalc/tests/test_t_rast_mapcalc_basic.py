@@ -12,13 +12,12 @@ import pytest
 
 import grass.exceptions
 import grass.script as gs
+from grass.tools import Tools
 
 
-def _assert_tinfo_key_value(env, strds_name, reference_string, sep="="):
+def _assert_tinfo_key_value(tools, strds_name, reference_string, sep="="):
     """Parse t.info output and assert key-value pairs match reference string."""
-    output = gs.read_command(
-        "t.info", type="strds", input=strds_name, flags="g", env=env
-    )
+    output = tools.t_info(type="strds", input=strds_name, flags="g").text
     actual = gs.parse_key_val(output, sep=sep)
     reference = dict(
         line.strip().split(sep, 1)
@@ -32,9 +31,8 @@ def _assert_tinfo_key_value(env, strds_name, reference_string, sep="="):
 
 def test_basic_addition(mapcalc_session_basic):
     """Test basic addition of two STRDS with -n flag (register null maps)."""
-    env = mapcalc_session_basic.env
-    gs.run_command(
-        "t.rast.mapcalc",
+    tools = Tools(session=mapcalc_session_basic.session, overwrite=True)
+    tools.t_rast_mapcalc(
         flags="n",
         inputs="precip_abs1,precip_abs2",
         output="precip_abs3",
@@ -42,20 +40,17 @@ def test_basic_addition(mapcalc_session_basic):
         basename="new_prec",
         method="equal",
         nprocs=5,
-        overwrite=True,
-        env=env,
     )
     tinfo_string = """number_of_maps=6
 temporal_type=absolute
 name=precip_abs3"""
-    _assert_tinfo_key_value(env, "precip_abs3", tinfo_string)
+    _assert_tinfo_key_value(tools, "precip_abs3", tinfo_string)
 
 
 def test_division_with_three_inputs(mapcalc_session_basic):
     """Test division expression with three input STRDS using -s flag."""
-    env = mapcalc_session_basic.env
-    gs.run_command(
-        "t.rast.mapcalc",
+    tools = Tools(session=mapcalc_session_basic.session, overwrite=True)
+    tools.t_rast_mapcalc(
         flags="n",
         inputs="precip_abs1,precip_abs2",
         output="precip_abs3",
@@ -63,11 +58,8 @@ def test_division_with_three_inputs(mapcalc_session_basic):
         basename="new_prec",
         method="equal",
         nprocs=5,
-        overwrite=True,
-        env=env,
     )
-    gs.run_command(
-        "t.rast.mapcalc",
+    tools.t_rast_mapcalc(
         flags="s",
         inputs="precip_abs1,precip_abs2,precip_abs3",
         output="precip_abs4",
@@ -75,20 +67,17 @@ def test_division_with_three_inputs(mapcalc_session_basic):
         basename="new_prec",
         method="equal",
         nprocs=5,
-        overwrite=True,
-        env=env,
     )
     tinfo_string = """number_of_maps=6
 temporal_type=absolute
 name=precip_abs4"""
-    _assert_tinfo_key_value(env, "precip_abs4", tinfo_string)
+    _assert_tinfo_key_value(tools, "precip_abs4", tinfo_string)
 
 
 def test_null_multiplication(mapcalc_session_basic):
     """Test multiplication with null() function using -s flag."""
-    env = mapcalc_session_basic.env
-    gs.run_command(
-        "t.rast.mapcalc",
+    tools = Tools(session=mapcalc_session_basic.session, overwrite=True)
+    tools.t_rast_mapcalc(
         flags="s",
         inputs="precip_abs1,precip_abs2",
         output="precip_abs4",
@@ -96,12 +85,8 @@ def test_null_multiplication(mapcalc_session_basic):
         basename="new_prec",
         method="equal",
         nprocs=5,
-        overwrite=True,
-        env=env,
     )
-    output = gs.read_command(
-        "t.info", type="strds", input="precip_abs4", flags="g", env=env
-    )
+    output = tools.t_info(type="strds", input="precip_abs4", flags="g").text
     strds_info = gs.parse_key_val(output, sep="=")
     assert strds_info["name"] == "precip_abs4"
     assert int(strds_info["number_of_maps"]) == 0
@@ -109,9 +94,8 @@ def test_null_multiplication(mapcalc_session_basic):
 
 def test_null_multiplication_with_null_flag(mapcalc_session_basic):
     """Test multiplication with null() function using -sn flags."""
-    env = mapcalc_session_basic.env
-    gs.run_command(
-        "t.rast.mapcalc",
+    tools = Tools(session=mapcalc_session_basic.session, overwrite=True)
+    tools.t_rast_mapcalc(
         flags="sn",
         inputs="precip_abs1,precip_abs2",
         output="precip_abs4",
@@ -119,12 +103,8 @@ def test_null_multiplication_with_null_flag(mapcalc_session_basic):
         basename="new_prec",
         method="equal",
         nprocs=5,
-        overwrite=True,
-        env=env,
     )
-    output = gs.read_command(
-        "t.info", type="strds", input="precip_abs4", flags="g", env=env
-    )
+    output = tools.t_info(type="strds", input="precip_abs4", flags="g").text
     strds_info = gs.parse_key_val(output, sep="=")
     assert strds_info["name"] == "precip_abs4"
     assert int(strds_info["number_of_maps"]) == 6
@@ -132,14 +112,11 @@ def test_null_multiplication_with_null_flag(mapcalc_session_basic):
 
 def test_failure_on_missing_map(mapcalc_session_basic):
     """Test that the module fails when a required map is missing."""
-    env = mapcalc_session_basic.env
-    gs.run_command(
-        "g.remove", flags="f", type="raster", name="prec_1", overwrite=True, env=env
-    )
+    tools = Tools(session=mapcalc_session_basic.session, overwrite=True)
+    tools.g_remove(flags="f", type="raster", name="prec_1")
     # Assert failure only; do not assert exact error message (migrated from shell test).
     with pytest.raises(grass.exceptions.CalledModuleError):
-        gs.run_command(
-            "t.rast.mapcalc",
+        tools.t_rast_mapcalc(
             flags="sn",
             inputs="precip_abs1,precip_abs2",
             output="precip_abs4",
@@ -147,6 +124,4 @@ def test_failure_on_missing_map(mapcalc_session_basic):
             basename="new_prec",
             method="equal",
             nprocs=5,
-            overwrite=True,
-            env=env,
         )
