@@ -82,6 +82,7 @@ class TestRFillNulls(TestCase):
         self.assertRasterFitsUnivar(
             raster=self.mapComplete,
             reference={"null_cells": float(0)},
+            precision=0,
         )
 
     def test_bicubic(self):
