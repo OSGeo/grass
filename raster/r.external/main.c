@@ -33,6 +33,80 @@
 
 #include "proto.h"
 
+/* Get band description or name from GDAL; prefer description over name */
+static char *get_gdal_band_semantic_label(GDALRasterBandH hBand)
+{
+    const char *desc, *name;
+    char *buf;
+
+    desc = GDALGetDescription(hBand);
+    if (desc && *desc) {
+        buf = G_store(desc);
+        G_strip(buf);
+        if (*buf)
+            return buf;
+        G_free(buf);
+    }
+    name = GDALGetMetadataItem(hBand, "BANDNAME", "");
+    if (name && *name) {
+        buf = G_store(name);
+        G_strip(buf);
+        if (*buf)
+            return buf;
+        G_free(buf);
+    }
+    return NULL;
+}
+
+/* Silent validation: same rules as Rast_legal_semantic_label, no warning */
+static int semantic_label_valid(const char *label)
+{
+    const char *s;
+
+    if (strlen(label) >= GNAME_MAX)
+        return 0;
+    if (G_legal_filename(label) != 1)
+        return 0;
+    for (s = label; *s; s++) {
+        if (!((*s >= 'A' && *s <= 'Z') || (*s >= 'a' && *s <= 'z') ||
+              (*s >= '0' && *s <= '9') || *s == '_' || *s == '-'))
+            return 0;
+    }
+    return 1;
+}
+
+static void set_semantic_label_from_gdal(GDALRasterBandH hBand,
+                                         const char *mapname,
+                                         char ***used_labels, int *n_used)
+{
+    char *label;
+    int i;
+
+    label = get_gdal_band_semantic_label(hBand);
+    if (!label)
+        return;
+    if (!semantic_label_valid(label)) {
+        G_free(label);
+        return;
+    }
+    if (used_labels && n_used) {
+        for (i = 0; i < *n_used; i++) {
+            if (strcmp((*used_labels)[i], label) == 0) {
+                G_free(label);
+                return;
+            }
+        }
+    }
+    Rast_write_semantic_label(mapname, label);
+    if (used_labels && n_used) {
+        *used_labels =
+            (char **)G_realloc(*used_labels, (*n_used + 1) * sizeof(char *));
+        (*used_labels)[*n_used] = G_store(label);
+        (*n_used)++;
+    }
+    G_free(label);
+}
+
 int main(int argc, char *argv[])
 {
     const char *input, *source, *output;
@@ -238,34 +312,49 @@ int main(int argc, char *argv[])
     info.have_minmax = !flag.r->answer;
     if (info.have_minmax && flag.m->answer)
         info.have_minmax = 2;
-    for (band = min_band; band <= max_band; band++) {
-        char *output2, *title2 = NULL;
+    {
+        char **used_labels = NULL;
+        int n_used = 0;
+        int i;
 
-        G_message(_("Reading band %d of %d..."), band, GDALGetRasterCount(hDS));
+        for (band = min_band; band <= max_band; band++) {
+            char *output2, *title2 = NULL;
 
-        hBand = GDALGetRasterBand(hDS, band);
-        if (!hBand)
-            G_fatal_error(_("Selected band (%d) does not exist"), band);
+            G_message(_("Reading band %d of %d..."), band,
+                      GDALGetRasterCount(hDS));
 
-        if (max_band > min_band) {
-            G_asprintf(&output2, "%s.%d", output, band);
-            if (title)
-                G_asprintf(&title2, "%s (band %d)", title, band);
-            G_debug(1, "Adding raster map <%s> to group <%s>", output2, output);
-            I_add_file_to_group_ref(output2, G_mapset(), &reference);
+            hBand = GDALGetRasterBand(hDS, band);
+            if (!hBand)
+                G_fatal_error(_("Selected band (%d) does not exist"), band);
+
+            if (max_band > min_band) {
+                G_asprintf(&output2, "%s.%d", output, band);
+                if (title)
+                    G_asprintf(&title2, "%s (band %d)", title, band);
+                G_debug(1, "Adding raster map <%s> to group <%s>", output2,
+                        output);
+                I_add_file_to_group_ref(output2, G_mapset(), &reference);
+            }
+            else {
+                output2 = G_store(output);
+                if (title)
+                    title2 = G_store(title);
+            }
+
+            query_band(hBand, output2, &cellhd, &info);
+            create_map(input, band, output2, &cellhd, &info, title, flip);
+            transfer_colormap(hBand, output2);
+            set_semantic_label_from_gdal(
+                hBand, output2, (max_band > min_band) ? &used_labels : NULL,
+                (max_band > min_band) ? &n_used : NULL);
+
+            G_free(output2);
+            G_free(title2);
         }
-        else {
-            output2 = G_store(output);
-            if (title)
-                title2 = G_store(title);
-        }
 
-        query_band(hBand, output2, &cellhd, &info);
-        create_map(input, band, output2, &cellhd, &info, title, flip);
-        transfer_colormap(hBand, output2);
-
-        G_free(output2);
-        G_free(title2);
+        for (i = 0; i < n_used; i++)
+            G_free(used_labels[i]);
+        G_free(used_labels);
     }
 
     /* close the GDALDataset to avoid segfault in libgdal */

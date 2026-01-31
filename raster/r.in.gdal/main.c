@@ -37,6 +37,9 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
 static void ImportBand(GDALRasterBandH hBand, const char *output,
                        struct Ref *group_ref, int *rowmap, int *colmap,
                        int col_offset);
+static void set_semantic_label_from_gdal(GDALRasterBandH hBand,
+                                         const char *mapname,
+                                         char ***used_labels, int *n_used);
 static void SetupReprojector(const char *pszSrcWKT, const char *pszDstLoc,
                              struct pj_info *iproj, struct pj_info *oproj,
                              struct pj_info *tproj);
@@ -746,6 +749,8 @@ int main(int argc, char *argv[])
         if (parm.rat->answer)
             dump_rat(hBand, parm.rat->answer, nBand);
 
+        set_semantic_label_from_gdal(hBand, output, NULL, NULL);
+
         if (title)
             Rast_put_cell_title(output, title);
     }
@@ -760,6 +765,9 @@ int main(int argc, char *argv[])
         int nBand = 0;
         char colornamebuf[512], colornamebuf2[512];
         FILE *map_names_file = NULL;
+        char **used_labels = NULL;
+        int n_used = 0;
+        int i;
 
         if (parm.map_names_file->answer) {
             map_names_file = fopen(parm.map_names_file->answer, "w");
@@ -841,6 +849,9 @@ int main(int argc, char *argv[])
 
             ImportBand(hBand, szBandName, &ref, rowmap, colmap, col_offset);
 
+            set_semantic_label_from_gdal(hBand, szBandName, &used_labels,
+                                         &n_used);
+
             if (map_names_file)
                 fprintf(map_names_file, "%s\n", szBandName);
 
@@ -850,6 +861,10 @@ int main(int argc, char *argv[])
 
         if (map_names_file)
             fclose(map_names_file);
+
+        for (i = 0; i < n_used; i++)
+            G_free(used_labels[i]);
+        G_free(used_labels);
 
         I_put_group_ref(output, &ref);
         I_free_group_ref(&ref);
@@ -1082,6 +1097,87 @@ int main(int argc, char *argv[])
     }
 
     exit(EXIT_SUCCESS);
+}
+
+/************************************************************************/
+/*                   set_semantic_label_from_gdal()                      */
+/*                                                                      */
+/* Get band description or name from GDAL, validate, and store as       */
+/* GRASS semantic label. Prefer description over name. Silently skip     */
+/* if missing, invalid, or duplicate (multi-band).                      */
+/************************************************************************/
+
+static char *get_gdal_band_semantic_label(GDALRasterBandH hBand)
+{
+    const char *desc, *name;
+    char *buf;
+
+    desc = GDALGetDescription(hBand);
+    if (desc && *desc) {
+        buf = G_store(desc);
+        G_strip(buf);
+        if (*buf)
+            return buf;
+        G_free(buf);
+    }
+    name = GDALGetMetadataItem(hBand, "BANDNAME", "");
+    if (name && *name) {
+        buf = G_store(name);
+        G_strip(buf);
+        if (*buf)
+            return buf;
+        G_free(buf);
+    }
+    return NULL;
+}
+
+/* Silent validation: same rules as Rast_legal_semantic_label, no warning */
+static int semantic_label_valid(const char *label)
+{
+    const char *s;
+
+    if (strlen(label) >= GNAME_MAX)
+        return 0;
+    if (G_legal_filename(label) != 1)
+        return 0;
+    for (s = label; *s; s++) {
+        if (!((*s >= 'A' && *s <= 'Z') || (*s >= 'a' && *s <= 'z') ||
+              (*s >= '0' && *s <= '9') || *s == '_' || *s == '-'))
+            return 0;
+    }
+    return 1;
+}
+
+static void set_semantic_label_from_gdal(GDALRasterBandH hBand,
+                                         const char *mapname,
+                                         char ***used_labels, int *n_used)
+{
+    char *label;
+    int i;
+
+    label = get_gdal_band_semantic_label(hBand);
+    if (!label)
+        return;
+    if (!semantic_label_valid(label)) {
+        G_free(label);
+        return;
+    }
+    if (used_labels && n_used) {
+        for (i = 0; i < *n_used; i++) {
+            if (strcmp((*used_labels)[i], label) == 0) {
+                G_free(label);
+                return;
+            }
+        }
+    }
+    Rast_write_semantic_label(mapname, label);
+    if (used_labels && n_used) {
+        *used_labels =
+            (char **)G_realloc(*used_labels, (*n_used + 1) * sizeof(char *));
+        (*used_labels)[*n_used] = G_store(label);
+        (*n_used)++;
+    }
+    G_free(label);
 }
 
 /************************************************************************/
