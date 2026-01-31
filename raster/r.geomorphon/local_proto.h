@@ -8,7 +8,7 @@
 #include <grass/glocale.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
-#include <grass/parson/gjson.h>
+#include <grass/gjson.h>
 
 #ifdef MAIN
 #define GLOBAL
