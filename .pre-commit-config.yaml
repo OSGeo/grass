@@ -81,6 +81,6 @@ repos:
     hooks:
       - id: zizmor
   - repo: https://github.com/editorconfig-checker/editorconfig-checker
-    rev: v3.6.0
+    rev: v3.6.1
     hooks:
       - id: editorconfig-checker
