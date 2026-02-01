@@ -178,19 +178,37 @@ class DataCatalogNode(DictFilterNode):
     def __init__(self, data=None):
         super().__init__(data=data)
 
+    @staticmethod
+    def _shorten_path(path, max_parts=4):
+        sep = "\\" if "\\" in path else "/"
+
+        parts = [p for p in path.split(sep) if p]
+
+        if len(parts) <= max_parts:
+            return path
+
+        head = [parts[0]]
+        tail = parts[-(max_parts - 1) :]
+        shortened_parts = head + ["…"] + tail
+
+        result = sep.join(shortened_parts)
+        if path.startswith(sep):
+            result = sep + result
+
+        return result
+
     @property
     def label(self):
         data = self.data
-        if getattr(self, "force_full_path", False):
-            return data["name"]
 
-        if data.get("type") == "grassdb":
+        if data["type"] == "grassdb":
             path = data["name"]
-            aliases = (
-                UserSettings.Get(group="datacatalog", key="aliases", subkey="databases")
-                or {}
-            )
-            return aliases.get(path, path)
+            grassdbs = UserSettings.Get(group="datacatalog", key="grassdbs") or {}
+            items = grassdbs.get("items", [])
+            for item in items:
+                if item["path"] == path and item["label"]:
+                    return item["label"]
+            return self._shorten_path(path, max_parts=4)
 
         if data["type"] == "mapset":
             owner = data["owner"] or _("name unknown")
@@ -237,14 +255,6 @@ class DataCatalogTree(TreeView):
         self._model = TreeModel(DataCatalogNode)
         self._orig_model = self._model
         super().__init__(parent=parent, model=self._model, id=wx.ID_ANY, style=style)
-
-        if UserSettings.Get(group="datacatalog", key="aliases") is None:
-            UserSettings.Set(
-                group="datacatalog",
-                key="aliases",
-                value={"databases": {}},
-            )
-            UserSettings.SaveToFile()
 
         self._giface = giface
         self._restricted = False
@@ -294,6 +304,13 @@ class DataCatalogTree(TreeView):
         currentDB = gisenv()["GISDBASE"]
         if currentDB not in self.grassdatabases:
             self.grassdatabases.append(currentDB)
+            self._saveGrassDBs()
+
+        # Onetime upgrade of grassdbs settings from old format to new format
+        items = (UserSettings.Get(group="datacatalog", key="grassdbs") or {}).get(
+            "items", []
+        )
+        if self.grassdatabases != [item["path"] for item in items]:
             self._saveGrassDBs()
 
         self.beginDrag = Signal("DataCatalogTree.beginDrag")
@@ -370,28 +387,55 @@ class DataCatalogTree(TreeView):
 
     def _getValidSavedGrassDBs(self):
         """Returns list of GRASS databases from settings.
-        Returns only existing directories."""
-        dbs = UserSettings.Get(
-            group="datacatalog", key="grassdbs", subkey="listAsString"
-        )
-        return [db for db in dbs.split(",") if Path(db).is_dir()]
+
+        Returns only existing directories. Reads from new 'items' format,
+        falls back to legacy 'listAsString' if items doesn't exist.
+        """
+        grassdbs = UserSettings.Get(group="datacatalog", key="grassdbs") or {}
+        items = grassdbs.get("items")
+        if items:
+            # Extract paths from items list
+            dbs = [item["path"] for item in items]
+        else:
+            # Fallback to OLD format
+            list_as_string = UserSettings.Get(
+                group="datacatalog", key="grassdbs", subkey="listAsString"
+            )
+            dbs = list_as_string.split(",") if list_as_string else []
+        return [db for db in dbs if Path(db).is_dir()]
 
     def _saveGrassDBs(self):
-        """Save current grass dbs in tree to settings"""
-        UserSettings.Set(
-            group="datacatalog",
-            key="grassdbs",
-            subkey="listAsString",
-            value=",".join(self.grassdatabases),
-        )
+        """Save current grass dbs in tree to settings using NEW 'items' format.
+
+        Preserves existing labels when saving.
+        """
+        grassdbs = UserSettings.Get(group="datacatalog", key="grassdbs") or {}
+
+        existing_items = grassdbs.get("items", [])
+        label_map = {
+            item["path"]: item["label"]
+            for item in existing_items
+            if isinstance(item, dict)
+        }
+
+        items = []
+        for db in self.grassdatabases:
+            items.append({"path": db, "label": label_map.get(db)})
+
+        grassdbs["items"] = items
+
+        UserSettings.Set(group="datacatalog", key="grassdbs", value=grassdbs)
+
         grassdbSettings = {}
         UserSettings.ReadSettingsFile(settings=grassdbSettings)
+
         if "datacatalog" not in grassdbSettings:
-            grassdbSettings["datacatalog"] = UserSettings.Get(group="datacatalog")
-        # update only dbs
+            grassdbSettings["datacatalog"] = UserSettings.Get(group="datacatalog") or {}
+
         grassdbSettings["datacatalog"]["grassdbs"] = UserSettings.Get(
             group="datacatalog", key="grassdbs"
         )
+
         UserSettings.SaveToFile(grassdbSettings)
 
     def _reloadMapsetNode(self, mapset_node):
@@ -1174,11 +1218,8 @@ class DataCatalogTree(TreeView):
         """Start label editing"""
         self.DefineItems([node])
 
-        # Not allowed for grassdb node
-        if node.data["type"] == "grassdb":
-            event.Veto()
         # Check selected mapset
-        elif node.data["type"] == "mapset":
+        if node.data["type"] == "mapset":
             if self._restricted or get_reason_mapset_not_removable(
                 self.selected_grassdb[0].data["name"],
                 self.selected_location[0].data["name"],
@@ -1207,7 +1248,26 @@ class DataCatalogTree(TreeView):
         Debug.msg(1, "End label edit {name}".format(name=old_name))
         new_name = event.GetLabel()
 
-        if node.data["type"] in {"raster", "raster_3d", "vector"}:
+        if node.data["type"] == "grassdb":
+            path = node.data["name"]
+            newname = event.GetLabel().strip()
+
+            grassdbs = UserSettings.Get(group="datacatalog", key="grassdbs") or {}
+            items = grassdbs.get("items", [])
+
+            for item in items:
+                if item["path"] == path:
+                    item["label"] = newname or None
+                    break
+
+            grassdbs["items"] = items
+            UserSettings.Set(group="datacatalog", key="grassdbs", value=grassdbs)
+            UserSettings.SaveToFile()
+
+            event.Veto()
+            self.RefreshNode(node, recursive=False)
+
+        elif node.data["type"] in {"raster", "raster_3d", "vector"}:
             self.Rename(old_name, new_name)
 
         elif node.data["type"] == "mapset":
@@ -2233,36 +2293,21 @@ class DataCatalogTree(TreeView):
         node = self.selected_grassdb[0]
         db_path = node.data["name"]
 
-        aliases = (
-            UserSettings.Get(group="datacatalog", key="aliases", subkey="databases")
-            or {}
-        )
-        current_alias = aliases.get(db_path)
+        grassdbs = UserSettings.Get(group="datacatalog", key="grassdbs") or {}
+        items = grassdbs.get("items", [])
+        has_label = any(item["path"] == db_path and item["label"] for item in items)
+        label_text = _("Change Label") if has_label else _("Set Label")
 
-        if current_alias:
-            # Change Alias option
-            item = wx.MenuItem(menu, wx.ID_ANY, _("Change Alias"))
-            menu.AppendItem(item)
-            self.Bind(
-                wx.EVT_MENU, lambda e: self.OnSetAlias(e, db_path, current_alias), item
-            )
+        # Set Label / Change Label
+        item = wx.MenuItem(menu, wx.ID_ANY, label_text)
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, lambda e: self.EditLabel(self.GetSelections()[0]), item)
 
-            # Toggle between alias and full path
-            show_full = getattr(node, "force_full_path", False)
-            label = _("Show Alias") if show_full else _("Show Full Database Path")
-
-            item = wx.MenuItem(menu, wx.ID_ANY, label)
+        # Remove Label (only if its exists)
+        if has_label:
+            item = wx.MenuItem(menu, wx.ID_ANY, _("Remove Label"))
             menu.AppendItem(item)
-            self.Bind(wx.EVT_MENU, lambda e: self.OnTogglePathDisplay(e, node), item)
-
-            item = wx.MenuItem(menu, wx.ID_ANY, _("Remove Alias"))
-            menu.AppendItem(item)
-            self.Bind(wx.EVT_MENU, lambda e: self.OnRemoveAlias(e, db_path), item)
-        else:
-            # Set Alias option
-            item = wx.MenuItem(menu, wx.ID_ANY, _("Set Alias"))
-            menu.AppendItem(item)
-            self.Bind(wx.EVT_MENU, lambda e: self.OnSetAlias(e, db_path, None), item)
+            self.Bind(wx.EVT_MENU, lambda e: self.OnRemoveLabel(db_path), item)
 
         menu.AppendSeparator()
 
@@ -2337,74 +2382,35 @@ class DataCatalogTree(TreeView):
         self.PopupMenu(menu)
         menu.Destroy()
 
-    def OnSetAlias(self, event, path, current_alias):
-        """Handler for Set/Change Alias context menu"""
-        default_val = current_alias or ""
+    def OnRemoveLabel(self, path):
+        """Remove label for database."""
+        grassdbs = UserSettings.Get(group="datacatalog", key="grassdbs") or {}
+        items = grassdbs.get("items", [])
 
-        dlg = TextEntryDialog(
-            parent=self,
-            message=_("Enter alias for database:"),
-            caption=_("Set Alias"),
-            defaultValue=default_val,
-        )
+        for item in items:
+            if item["path"] == path:
+                label_name = item.get("label", path)
 
-        if dlg.ShowModal() == wx.ID_OK:
-            new_alias = dlg.GetValue().strip()
-            aliases = (
-                UserSettings.Get(group="datacatalog", key="aliases", subkey="databases")
-                or {}
-            )
-
-            if new_alias:
-                aliases[path] = new_alias
-            elif path in aliases:
-                del aliases[path]
-
-            UserSettings.Set(
-                group="datacatalog", key="aliases", subkey="databases", value=aliases
-            )
-            UserSettings.SaveToFile()
-            self.RefreshItems()
-
-        dlg.Destroy()
-
-    def OnRemoveAlias(self, event, path):
-        """Remove alias for database."""
-        aliases = (
-            UserSettings.Get(group="datacatalog", key="aliases", subkey="databases")
-            or {}
-        )
-
-        if path in aliases:
-            alias_name = aliases[path]
-
-            # Show confirmation dialog
-            dlg = wx.MessageDialog(
-                self,
-                message=_("Remove alias '{alias}' for this database?").format(
-                    alias=alias_name
-                ),
-                caption=_("Remove Alias"),
-                style=wx.YES_NO | wx.ICON_QUESTION,
-            )
-
-            if dlg.ShowModal() == wx.ID_YES:
-                del aliases[path]
-                UserSettings.Set(
-                    group="datacatalog",
-                    key="aliases",
-                    subkey="databases",
-                    value=aliases,
+                dlg = wx.MessageDialog(
+                    self,
+                    message=_("Remove label '{label}' for this database?").format(
+                        label=label_name
+                    ),
+                    caption=_("Remove Label"),
+                    style=wx.YES_NO | wx.ICON_QUESTION,
                 )
-                UserSettings.SaveToFile()
-                self.RefreshItems()
 
-            dlg.Destroy()
+                if dlg.ShowModal() == wx.ID_YES:
+                    item["label"] = None
+                    grassdbs["items"] = items
+                    UserSettings.Set(
+                        group="datacatalog", key="grassdbs", value=grassdbs
+                    )
+                    UserSettings.SaveToFile()
+                    self.RefreshNode(self.selected_grassdb[0], recursive=False)
 
-    def OnTogglePathDisplay(self, event, node):
-        """Toggle between alias and full path display"""
-        node.force_full_path = not getattr(node, "force_full_path", False)
-        self.RefreshNode(node)
+                dlg.Destroy()
+                break
 
     def _popupMenuEmpty(self):
         """Create empty popup when multiple different types of items are selected"""
