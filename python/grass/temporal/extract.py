@@ -393,19 +393,17 @@ def extract_dataset(
 
     # Remove empty maps
     if len(empty_maps) > 0:
-        names = ""
-        count = 0
-        for map in empty_maps:
-            if count == 0:
-                names += str(map.get_name())
-            else:
-                names += f",{map.get_name()}"
-            count += 1
         gs.run_command(
             "g.remove",
             flags="f",
             type=type.replace("_", ""),
-            name=names,
+            name=",".join(
+                [
+                    empty_map.get_name()
+                    for empty_map in empty_maps
+                    if empty_map.get_name()
+                ]
+            ),
             superquiet=True,
         )
 
@@ -413,10 +411,15 @@ def extract_dataset(
 
 
 ###############################################################################
+# Helper functions
 
 
 def run_mapcalc2d(expr: str) -> None:
-    """Run r.mapcalc in parallel."""
+    """Run r.mapcalc on single core in quiet mode.
+
+    Wrapper function setting nprocs to 1 and verbosity to quiet. It is
+    intended to be run in parallel in `extract_dataset`.
+    """
     try:
         gs.run_command(
             "r.mapcalc",
@@ -430,7 +433,11 @@ def run_mapcalc2d(expr: str) -> None:
 
 
 def run_mapcalc3d(expr: str) -> None:
-    """Run r3.mapcalc in parallel."""
+    """Run r3.mapcalc in quiet mode.
+
+    Wrapper function setting verbosity to quiet. It is intended to be
+    run in parallel in `extract_dataset`.
+    """
     try:
         gs.run_command(
             "r3.mapcalc",
@@ -449,7 +456,12 @@ def run_vector_extraction(
     type: str,
     where: str,
 ) -> None:
-    """Run v.extract in parallel."""
+    """Run v.extract in quiet mode.
+
+    Wrapper function setting verbosity to quiet. It is intended to be
+    run in parallel in `extract_dataset`. Parallel execution requires
+    a database backend that support it, like PostgreSQL.
+    """
     try:
         gs.run_command(
             "v.extract",
