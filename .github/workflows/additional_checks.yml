@@ -27,7 +27,7 @@ jobs:
       contents: read
     env:
       # renovate: datasource=pypi depName=prek
-      PREK_VERSION: 0.2.24
+      PREK_VERSION: 0.3.1
 
     steps:
       - name: Checkout repository contents
