@@ -4,13 +4,17 @@
 """
 
 import json
-import unittest
+import shutil
 import sys
+import unittest
 
 from subprocess import check_output
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
+
+# Resolve full path for gdal-config to satisfy Bandit B607 (no partial paths)
+_gdal_config_path = shutil.which("gdal-config")
 
 
 class TestGdalImport(TestCase):
@@ -315,15 +319,18 @@ test_gdal_import_map.0000000105
 
     @unittest.skipIf(
         not sys.platform.startswith("win")
-        and tuple(
-            map(
-                int,
-                check_output(["gdal-config", "--version"])
-                .decode("UTF8")
-                .split(".")[0:2],
+        and (
+            _gdal_config_path is None
+            or tuple(
+                map(
+                    int,
+                    check_output([_gdal_config_path, "--version"])
+                    .decode("UTF8")
+                    .split(".")[0:2],
+                )
             )
-        )
-        < (3, 7),
+            < (3, 7)
+        ),
         "GDAL version too old. Int8 support was introduced in GDAL 3.7",
     )
     def test_int8_data(self):
