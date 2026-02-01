@@ -571,6 +571,9 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
             Rast_set_cats_title("Rasterized vector map from categories",
                                 &rast_cats);
 
+            /* Fast: store a label format instead of writing N category rules */
+            Rast_set_cats_fmt("Category $1", 1.0, 0.0, 0.0, 0.0, &rast_cats);
+
             /* Rast_set_cat() is terribly slow for many categories,
              * and the added labels are not really informative:
              * 1:Category 1

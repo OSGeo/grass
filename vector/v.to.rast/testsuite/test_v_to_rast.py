@@ -54,6 +54,25 @@ class TestParameters(TestCase):
         )
         self.assertRasterFitsInfo(raster=self.output, reference={"min": 1, "max": 1})
 
+    def test_use_cat_writes_categories_metadata(self):
+        """Check that use=cat writes categories metadata (not 0 cats)"""
+        self.assertModule(
+            "v.to.rast", input="roadsmajor", output=self.output, use="cat"
+        )
+
+        info = self.runModule(
+            "r.info", map=self.output, flags="gr", stdout_=True
+        ).outputs.stdout
+
+        categories = None
+        for line in info.splitlines():
+            if line.startswith("categories="):
+                categories = int(line.split("=", 1)[1])
+                break
+
+        self.assertIsNotNone(categories, msg=f"r.info output:\n{info}")
+        self.assertNotEqual(categories, 0, msg=f"r.info output:\n{info}")
+
 
 if __name__ == "__main__":
     test()
