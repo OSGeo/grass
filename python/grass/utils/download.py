@@ -70,9 +70,18 @@ def extract_tar(name, directory, tmpdir):
         if hasattr(tarfile, "data_filter"):
             tar.extractall(path=extract_dir, filter="data")
         else:
-            # Remove this when no longer needed
-            debug(_("Extracting may be unsafe; consider updating Python"))
-            tar.extractall(path=extract_dir)
+            # Fallback for Python without data_filter: validate members (B202)
+            def _safe_members():
+                base = os.path.abspath(extract_dir)
+                for m in tar.getmembers():
+                    dest = os.path.normpath(
+                        os.path.abspath(os.path.join(extract_dir, m.name))
+                    )
+                    if not (dest == base or dest.startswith(base + os.sep)):
+                        continue
+                    yield m
+
+            tar.extractall(path=extract_dir, members=_safe_members())  # nosec B202 - _safe_members rejects path traversal
 
         files = os.listdir(extract_dir)
         _move_extracted_files(
