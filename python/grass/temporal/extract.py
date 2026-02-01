@@ -113,7 +113,7 @@ def replace_stds_names(expression: str, simple_name: str, full_name: str) -> str
 
 
 def extract_dataset(
-    input_stds: str,
+    input: str,
     output: str,
     type: str,
     where: str,
@@ -131,7 +131,7 @@ def extract_dataset(
     maps.
     Mapcalc expressions are supported for raster and raster3d maps.
 
-    :param input_stds: The name of the input space time raster/raster3d dataset
+    :param input: The name of the input space time raster/raster3d dataset
     :param output: The name of the extracted new space time raster/raster3d
                   dataset
     :param type: The type of the dataset: "raster", "raster3d" or vector
@@ -164,7 +164,7 @@ def extract_dataset(
 
     tgis_version = get_tgis_db_version()
 
-    sp = open_old_stds(input_stds, type, dbif)
+    sp = open_old_stds(input, type, dbif)
     has_semantic_labels = bool(
         tgis_version > 2 and type == "raster" and sp.metadata.semantic_labels,
     )
@@ -188,7 +188,7 @@ def extract_dataset(
                 "Nothing found in the database for space time dataset <{name}> "
                 "(type: {element_type}): {detail}",
             ).format(
-                name=input_stds,
+                name=input,
                 element_type=type,
                 detail=(
                     _(
