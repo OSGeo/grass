@@ -8,7 +8,7 @@ import shutil
 import sys
 import unittest
 
-from subprocess import check_output
+from subprocess import check_output  # nosec B404 - test only, gdal-config version check
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
@@ -324,7 +324,7 @@ test_gdal_import_map.0000000105
             or tuple(
                 map(
                     int,
-                    check_output([_gdal_config_path, "--version"])
+                    check_output([_gdal_config_path, "--version"])  # nosec B603 - path and args controlled
                     .decode("UTF8")
                     .split(".")[0:2],
                 )
