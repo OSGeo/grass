@@ -60,9 +60,7 @@ class TestParameters(TestCase):
             "v.to.rast", input="roadsmajor", output=self.output, use="cat"
         )
 
-        info = self.runModule(
-            "r.info", map=self.output, flags="gr", stdout_=True
-        ).outputs.stdout
+        info = self.runModule("r.info", map=self.output, flags="gr").outputs.stdout
 
         categories = None
         for line in info.splitlines():
