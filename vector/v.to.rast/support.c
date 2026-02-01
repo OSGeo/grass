@@ -573,44 +573,6 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
 
             /* Fast: store a label format instead of writing N category rules */
             Rast_set_cats_fmt("Category $1", 1.0, 0.0, 0.0, 0.0, &rast_cats);
-
-            /* Rast_set_cat() is terribly slow for many categories,
-             * and the added labels are not really informative:
-             * 1:Category 1
-             * 2:Category 2
-             * ...
-             * 100000:Category 100000
-             * -> skip */
-
-#if 0
-                int row, rows, fd;
-                void *rowbuf;
-                struct Cell_stats stats;
-                CELL n;
-                long count;
-
-                fd = Rast_open_old(rast_name, G_mapset());
-                rowbuf = Rast_allocate_buf(map_type);
-                Rast_init_cell_stats(&stats);
-                rows = Rast_window_rows();
-
-                for (row = 0; row < rows; row++) {
-                    Rast_get_row(fd, rowbuf, row, map_type);
-                    Rast_update_cell_stats(rowbuf, Rast_window_cols(),
-                                           &stats);
-                }
-
-                Rast_rewind_cell_stats(&stats);
-
-                while (Rast_next_cell_stat(&n, &count, &stats)) {
-                    char msg[80];
-
-                    sprintf(msg, "Category %d", n);
-                    Rast_set_cat(&n, &n, msg, &rast_cats, map_type);
-                }
-                Rast_close(fd);
-                G_free(rowbuf);
-#endif
         }
     } break;
     case USE_D: {
