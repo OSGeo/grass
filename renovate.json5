@@ -21,9 +21,10 @@
         ":enablePreCommit",
 
         // weekly update of lock files (flake.lock)
-        ":maintainLockFilesWeekly",
+        ":maintainLockFilesMonthly",
         "group:githubArtifactActions",
-        "schedule:weekends",
+        "schedule:monthly",
+        ":prConcurrentLimitNone",
     ],
 
     "baseBranchPatterns" : [
