@@ -37,6 +37,7 @@ The test suite provides comprehensive coverage of r.proj functionality:
 - **Region handling**: Output matching computational region
 
 ### Manual Example Coverage
+
 Tests based on examples from the r.proj manual:
 
 - Print bounds before reprojection (-p and -g flags)
