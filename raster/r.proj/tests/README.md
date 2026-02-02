@@ -170,6 +170,7 @@ When testing actual CRS transformations, tests need to:
 3. Clean up properly to avoid state leakage
 
 Example pattern:
+
 ```python
 def test_cross_crs_reprojection(utm_location, latlon_location):
     current_env = gs.gisenv()
