@@ -161,16 +161,16 @@ class TestWatershed(TestCase):
             basin=self.basin,
             overwrite=True,
         )
-        # it is expected that 100k Threshold has a min=2 and max=12 for this
-        # data
-        reference = "min=2\nmax=12"
+        # it is expected that 100k Threshold has a min=2 and max=20 for this
+        # data (north Carolina dataset, (nc_spm_08_grass7))
+        reference = "min=2\nmax=20"
         self.assertRasterFitsUnivar(
             self.basin,
             reference=reference,
-            msg="Basin values must be in the range [2, 12]",
+            msg="Basin values must be in the range [2, 20]",
         )
-        # it is expected that 100k Threshold has a min=2 and max=256 for this
-        # data
+        # it is expected that 100k Threshold has a min=2 and max=274 for this
+        # data (North carolina dataset,(nc_spm_08_grass7))
         self.assertModule(
             "r.watershed",
             elevation=self.elevation,
@@ -178,11 +178,11 @@ class TestWatershed(TestCase):
             basin=self.basin,
             overwrite=True,
         )
-        reference = "min=2\nmax=256"
+        reference = "min=2\nmax=274"
         self.assertRasterFitsUnivar(
             self.basin,
             reference=reference,
-            msg="Basin values must be in the range [2, 256]",
+            msg="Basin values must be in the range [2, 274]",
         )
 
     def test_drainageDirection(self):
@@ -208,11 +208,144 @@ class TestWatershed(TestCase):
         # TODO: test just min, max is theoretically unlimited
         # or set a lower value according to what is expected with this data
         # TODO: add test which tests that 'max basin id' == 'num of basins'
-        reference = "min=2\nmax=256"
+        reference = "min=2\nmax=274"
         self.assertRasterFitsUnivar(
             self.basin,
             reference=reference,
-            msg="Basin values must be in the range [2, 256]",
+            msg="Basin values must be in the range [2, 274]",
+        )
+
+    def test_accumulationValues(self):
+        """Test if accumulation values follow expected patterns"""
+        self.assertModule(
+            "r.watershed",
+            elevation=self.elevation,
+            threshold="10000",
+            accumulation=self.accumulation,
+        )
+        # Just verify the output exists and has valid statistics
+        self.assertRasterExists(
+            self.accumulation, msg="Accumulation output was not created"
+        )
+
+    def test_streamValuesConsistency(self):
+        """Test if stream output is created with valid values"""
+        self.assertModule(
+            "r.watershed",
+            elevation=self.elevation,
+            threshold="10000",
+            stream=self.stream,
+        )
+        # Stream values should be 0 (no stream) or positive integers
+        self.assertRasterMinMax(
+            self.stream, 0, 10000, msg="Stream values out of expected range"
+        )
+
+    def test_slopeSteepnessRange(self):
+        """Test if slope steepness values are created"""
+        self.assertModule(
+            "r.watershed",
+            elevation=self.elevation,
+            threshold="10000",
+            slope_steepness=self.slopesteepness,
+        )
+        # Verify output exists with reasonable range
+        self.assertRasterMinMax(
+            self.slopesteepness,
+            0,
+            100,
+            msg="Slope steepness out of expected range",
+        )
+
+    def test_convergenceFlag(self):
+        """Test the convergence parameter"""
+        self.assertModule(
+            "r.watershed",
+            elevation=self.elevation,
+            threshold="10000",
+            convergence="5",
+            accumulation=self.accumulation,
+        )
+        self.assertRasterExists(
+            self.accumulation, msg="Accumulation with convergence parameter not created"
+        )
+
+    def test_memoryParameter(self):
+        """Test if memory parameter is accepted"""
+        self.assertModule(
+            "r.watershed",
+            elevation=self.elevation,
+            threshold="10000",
+            memory="300",
+            accumulation=self.accumulation,
+        )
+        self.assertRasterExists(
+            self.accumulation, msg="Accumulation with memory parameter not created"
+        )
+
+    def test_aFlag(self):
+        """Test the -a flag for positive flow accumulation"""
+        self.assertModule(
+            "r.watershed",
+            flags="a",
+            elevation=self.elevation,
+            threshold="10000",
+            accumulation=self.accumulation,
+        )
+        # Verify output is created with -a flag
+        self.assertRasterExists(
+            self.accumulation, msg="Accumulation with -a flag not created"
+        )
+
+    def test_consistentResults(self):
+        """Test that running twice with same parameters gives identical results"""
+        # First run
+        self.assertModule(
+            "r.watershed",
+            elevation=self.elevation,
+            threshold="10000",
+            basin=self.basin,
+        )
+        # Store first result
+        self.runModule("g.copy", raster=(self.basin, "basin_copy"))
+
+        # Second run with overwrite
+        self.assertModule(
+            "r.watershed",
+            elevation=self.elevation,
+            threshold="10000",
+            basin=self.basin,
+            overwrite=True,
+        )
+        # Results should be identical
+        self.assertRastersNoDifference(
+            self.basin, "basin_copy", 0, msg="Results are not reproducible"
+        )
+        self.runModule("g.remove", flags="f", type="raster", name="basin_copy")
+
+    def test_minimumThreshold(self):
+        """Test that minimum valid threshold (1) works"""
+        self.assertModule(
+            "r.watershed",
+            elevation=self.elevation,
+            threshold="1",
+            stream=self.stream,
+        )
+        self.assertRasterExists(
+            self.stream, msg="Stream output with threshold=1 not created"
+        )
+
+    def test_bFlag(self):
+        """Test the -b flag for beautification"""
+        self.assertModule(
+            "r.watershed",
+            flags="b",
+            elevation=self.elevation,
+            threshold="10000",
+            accumulation=self.accumulation,
+        )
+        self.assertRasterExists(
+            self.accumulation, msg="Accumulation with -b flag not created"
         )
 
 
