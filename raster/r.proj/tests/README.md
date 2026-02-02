@@ -218,6 +218,7 @@ This test suite addresses the requirements in issue #2512:
 - Extensible to other CRS combinations
 
 ✅ **Examples from manual**
+
 - Print bounds flags (-p, -g)
 - Resolution parameter usage
 - Memory parameter testing
