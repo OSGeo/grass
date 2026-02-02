@@ -40,6 +40,7 @@ SUBDIRS = \
 	v.lidar.growing \
 	v.lrs \
 	v.proj \
+	v.ppa \
 	v.mkgrid \
 	v.neighbors \
 	v.net \
