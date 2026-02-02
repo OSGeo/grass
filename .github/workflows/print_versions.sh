@@ -9,7 +9,7 @@ python3 --version
 git --version
 
 # This will fail if the build failed.
-command -v grass >/dev/null 2>&1 && grass --version || echo "GRASS not installed yet"
+grass --version
 grass --tmp-project XY --exec g.version -ergb
 # Detailed Python version info (in one line thanks to echo)
 grass --tmp-project XY --exec bash -c "echo Python: \$(\$GRASS_PYTHON -c 'import sys; print(sys.version)')"
