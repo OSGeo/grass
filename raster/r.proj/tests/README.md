@@ -26,6 +26,7 @@ The test suite provides comprehensive coverage of r.proj functionality:
 - **Parameter validation**: Invalid parameter rejection
 
 ### Comprehensive CRS Transformation Tests (`test_r_proj_comprehensive.py`)
+
 - **Actual CRS transformations**: UTM ↔ Lat/Lon reprojection
 - **Datum transformations**: NAD83, WGS84
 - **Print bounds flags**: Testing -p and -g flags (from manual examples)
