@@ -98,7 +98,6 @@ class TestConditionals(TestCase):
         """Create test data"""
         cls.use_temp_region()
         cls.runModule("g.region", n=3, s=0, e=3, w=0, res=1)
-        # Create input map with values 0-8
         cls.runModule("r.mapcalc", expression=f"{cls.input_map} = row() * col()")
         cls.to_remove.append(cls.input_map)
 
@@ -114,10 +113,6 @@ class TestConditionals(TestCase):
         expression = f"{self.output} = if({self.input_map} > 4, 1, 0)"
         self.assertModule("r.mapcalc", expression=expression, overwrite=True)
         self.to_remove.append(self.output)
-        # Values > 4 should be 1, others 0
-        # Input is row()*col(), so values are: 0,0,0,0,1,2,0,2,4,6,8
-        # Values > 4: 6, 8 (2 cells out of 9)
-        # Mean should be around 0.22 (2/9)
         self.assertRasterFitsUnivar(self.output, {"min": 0, "max": 1}, precision=1e-6)
 
     def test_if_nested(self):
@@ -125,7 +120,6 @@ class TestConditionals(TestCase):
         expression = f"{self.output} = if({self.input_map} < 3, 1, if({self.input_map} < 6, 2, 3))"
         self.assertModule("r.mapcalc", expression=expression, overwrite=True)
         self.to_remove.append(self.output)
-        # Verify result has values 1, 2, or 3
         self.assertRasterFitsUnivar(self.output, {"min": 1, "max": 3}, precision=1e-6)
 
 
@@ -142,7 +136,6 @@ class TestLogicalOperators(TestCase):
         """Create test environment with input rasters"""
         cls.use_temp_region()
         cls.runModule("g.region", n=3, s=0, e=3, w=0, res=1)
-        # Create input rasters with different patterns
         cls.runModule("r.mapcalc", expression=f"{cls.input_a} = if(row() > 1, 1, 0)")
         cls.runModule("r.mapcalc", expression=f"{cls.input_b} = if(col() > 1, 1, 0)")
         cls.to_remove.extend([cls.input_a, cls.input_b])
@@ -179,21 +172,49 @@ class TestLogicalOperators(TestCase):
             self.output, {"mean": 1, "range": 0}, precision=1e-6
         )
 
-    def test_and_and_and_operator(self):
-        """Test &&& (triple AND) operator with rasters"""
-        expression = f"{self.output} = {self.input_a} &&& {self.input_b}"
-        self.assertModule("r.mapcalc", expression=expression, overwrite=True)
-        self.to_remove.append(self.output)
-        # Result should be 1 where both inputs are 1
-        self.assertRasterFitsUnivar(self.output, {"min": 0, "max": 1}, precision=1e-6)
+    def test_and_and_and_operator_special_behavior(self):
+        """Test &&& operator handles NULL differently than &&
 
-    def test_or_or_or_operator(self):
-        """Test ||| (triple OR) operator with rasters"""
-        expression = f"{self.output} = {self.input_a} ||| {self.input_b}"
+        Regular && returns NULL if any operand is NULL.
+        Special &&& returns 0 if one operand is 0, even if the other is NULL.
+        """
+        # Create NULL and Zero maps
+        null_map = "test_null_and"
+        zero_map = "test_zero"
+        self.runModule("r.mapcalc", expression=f"{null_map} = null()")
+        self.runModule("r.mapcalc", expression=f"{zero_map} = 0")
+        self.to_remove.extend([null_map, zero_map])
+
+        # Test &&& (Special)
+        # null &&& 0 should be 0
+        expression = f"{self.output} = {null_map} &&& {zero_map}"
         self.assertModule("r.mapcalc", expression=expression, overwrite=True)
         self.to_remove.append(self.output)
-        # Result should be 1 where either input is 1
-        self.assertRasterFitsUnivar(self.output, {"min": 0, "max": 1}, precision=1e-6)
+        self.assertRasterFitsUnivar(
+            self.output, {"mean": 0, "range": 0}, precision=1e-6
+        )
+
+    def test_or_or_or_operator_special_behavior(self):
+        """Test ||| operator handles NULL differently than ||
+
+        Regular || returns NULL if any operand is NULL.
+        Special ||| returns 1 if one operand is 1, even if the other is NULL.
+        """
+        # Create NULL and One maps
+        null_map = "test_null_or"
+        one_map = "test_one"
+        self.runModule("r.mapcalc", expression=f"{null_map} = null()")
+        self.runModule("r.mapcalc", expression=f"{one_map} = 1")
+        self.to_remove.extend([null_map, one_map])
+
+        # Test ||| (Special)
+        # null ||| 1 should be 1
+        expression = f"{self.output} = {null_map} ||| {one_map}"
+        self.assertModule("r.mapcalc", expression=expression, overwrite=True)
+        self.to_remove.append(self.output)
+        self.assertRasterFitsUnivar(
+            self.output, {"mean": 1, "range": 0}, precision=1e-6
+        )
 
 
 class TestComparisonOperators(TestCase):
@@ -282,8 +303,7 @@ class TestNullHandling(TestCase):
         )
 
     def test_null_creation(self):
-        """Test that null map from setup is actually null"""
-        # Use the null map created in setUpClass
+        """Test null() creates a null raster"""
         self.assertRasterFitsUnivar(self.null_map, {"n": 0}, precision=1e-6)
 
 
