@@ -254,5 +254,6 @@ When adding tests:
 7. Consider both normal cases and edge cases
 
 For questions or to report issues with these tests:
-- GitHub: https://github.com/OSGeo/grass/issues/2512
-- Mailing list: grass-dev@lists.osgeo.org
+
+- GitHub: <https://github.com/OSGeo/grass/issues/2512>
+- Mailing list: <grass-dev@lists.osgeo.org>
