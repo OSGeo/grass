@@ -12,15 +12,9 @@ import grass.script as gs
 from grass.tools import Tools
 
 
-def _assert_tinfo_key_value(tools, strds_name, reference_string, sep="="):
-    """Parse t.info output and assert key-value pairs match reference string."""
+def _assert_tinfo_key_value(tools, strds_name, reference):
     output = tools.t_info(type="strds", input=strds_name, flags="g").text
-    actual = gs.parse_key_val(output, sep=sep)
-    reference = dict(
-        line.strip().split(sep, 1)
-        for line in reference_string.strip().split("\n")
-        if sep in line
-    )
+    actual = gs.parse_key_val(output, sep="=")
     for key, value in reference.items():
         assert key in actual, f"Missing key: {key}"
         assert actual[key] == value, f"{key}: expected {value!r}, got {actual[key]!r}"
@@ -39,10 +33,12 @@ def test_start_time_end_time_operators(mapcalc_session_operators):
         nprocs=5,
         verbose=True,
     )
-    tinfo_string = """number_of_maps=6
-temporal_type=absolute
-name=precip_abs3"""
-    _assert_tinfo_key_value(tools, "precip_abs3", tinfo_string)
+    reference = {
+        "number_of_maps": "6",
+        "temporal_type": "absolute",
+        "name": "precip_abs3",
+    }
+    _assert_tinfo_key_value(tools, "precip_abs3", reference)
 
 
 def test_start_time_components(mapcalc_session_operators):
@@ -58,9 +54,11 @@ def test_start_time_components(mapcalc_session_operators):
         nprocs=5,
         verbose=True,
     )
-    tinfo_string = """number_of_maps=6
-name=precip_abs3"""
-    _assert_tinfo_key_value(tools, "precip_abs3", tinfo_string)
+    reference = {
+        "number_of_maps": "6",
+        "name": "precip_abs3",
+    }
+    _assert_tinfo_key_value(tools, "precip_abs3", reference)
 
 
 def test_end_time_components(mapcalc_session_operators):
@@ -76,9 +74,11 @@ def test_end_time_components(mapcalc_session_operators):
         nprocs=5,
         verbose=True,
     )
-    tinfo_string = """number_of_maps=6
-name=precip_abs3"""
-    _assert_tinfo_key_value(tools, "precip_abs3", tinfo_string)
+    reference = {
+        "number_of_maps": "6",
+        "name": "precip_abs3",
+    }
+    _assert_tinfo_key_value(tools, "precip_abs3", reference)
 
 
 def test_start_doy_dow_operators(mapcalc_session_operators):
@@ -94,9 +94,11 @@ def test_start_doy_dow_operators(mapcalc_session_operators):
         nprocs=5,
         verbose=True,
     )
-    tinfo_string = """number_of_maps=6
-name=precip_abs3"""
-    _assert_tinfo_key_value(tools, "precip_abs3", tinfo_string)
+    reference = {
+        "number_of_maps": "6",
+        "name": "precip_abs3",
+    }
+    _assert_tinfo_key_value(tools, "precip_abs3", reference)
 
 
 def test_end_doy_dow_operators(mapcalc_session_operators):
@@ -112,9 +114,11 @@ def test_end_doy_dow_operators(mapcalc_session_operators):
         nprocs=5,
         verbose=True,
     )
-    tinfo_string = """number_of_maps=6
-name=precip_abs3"""
-    _assert_tinfo_key_value(tools, "precip_abs3", tinfo_string)
+    reference = {
+        "number_of_maps": "6",
+        "name": "precip_abs3",
+    }
+    _assert_tinfo_key_value(tools, "precip_abs3", reference)
 
 
 def test_map_comparison_operator(mapcalc_session_operators):
