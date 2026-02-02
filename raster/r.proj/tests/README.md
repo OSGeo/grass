@@ -207,6 +207,7 @@ def test_cross_crs_reprojection(utm_location, latlon_location):
 This test suite addresses the requirements in issue #2512:
 
 ✅ **Basic unit tests with artificial data**
+
 - Simple rasters with known values
 - Predictable, deterministic results
 
