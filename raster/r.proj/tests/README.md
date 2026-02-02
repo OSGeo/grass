@@ -18,6 +18,7 @@ raster/r.proj/
 The test suite provides comprehensive coverage of r.proj functionality:
 
 ### Basic Tests (`test_r_proj.py`)
+
 - **Identity transforms**: Same source/target CRS
 - **Invalid location handling**: Graceful failure testing
 - **Region preservation**: Computational region respect
