@@ -38,6 +38,7 @@ The test suite provides comprehensive coverage of r.proj functionality:
 
 ### Manual Example Coverage
 Tests based on examples from the r.proj manual:
+
 - Print bounds before reprojection (-p and -g flags)
 - Resolution parameter usage
 - Common transformations (projected ↔ geographic)
