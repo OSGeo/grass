@@ -73,7 +73,6 @@ int process(void)
 
 /***************************************************/
 
-
 int data_reset(double *data[2], int nn)
 {
     size_t size = (size_t)nn * nn * sizeof(double);
