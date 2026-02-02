@@ -164,6 +164,7 @@ def test_methods(simple_raster, method):
 ### Testing Across Locations
 
 When testing actual CRS transformations, tests need to:
+
 1. Create or use test locations with different CRS
 2. Switch between locations during the test
 3. Clean up properly to avoid state leakage
