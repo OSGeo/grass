@@ -161,16 +161,16 @@ class TestWatershed(TestCase):
             basin=self.basin,
             overwrite=True,
         )
-        # it is expected that 100k Threshold has a min=2 and max=20 for this
-        # data (north Carolina dataset, (nc_spm_08_grass7))
-        reference = "min=2\nmax=20"
+        # it is expected that 100k Threshold has a min=2 and max=12 for this
+        # data
+        reference = "min=2\nmax=12"
         self.assertRasterFitsUnivar(
             self.basin,
             reference=reference,
-            msg="Basin values must be in the range [2, 20]",
+            msg="Basin values must be in the range [2, 12]",
         )
-        # it is expected that 100k Threshold has a min=2 and max=274 for this
-        # data (North carolina dataset,(nc_spm_08_grass7))
+        # it is expected that 100k Threshold has a min=2 and max=256 for this
+        # data
         self.assertModule(
             "r.watershed",
             elevation=self.elevation,
@@ -178,11 +178,11 @@ class TestWatershed(TestCase):
             basin=self.basin,
             overwrite=True,
         )
-        reference = "min=2\nmax=274"
+        reference = "min=2\nmax=256"
         self.assertRasterFitsUnivar(
             self.basin,
             reference=reference,
-            msg="Basin values must be in the range [2, 274]",
+            msg="Basin values must be in the range [2, 256]",
         )
 
     def test_drainageDirection(self):
@@ -208,11 +208,11 @@ class TestWatershed(TestCase):
         # TODO: test just min, max is theoretically unlimited
         # or set a lower value according to what is expected with this data
         # TODO: add test which tests that 'max basin id' == 'num of basins'
-        reference = "min=2\nmax=274"
+        reference = "min=2\nmax=256"
         self.assertRasterFitsUnivar(
             self.basin,
             reference=reference,
-            msg="Basin values must be in the range [2, 274]",
+            msg="Basin values must be in the range [2, 256]",
         )
 
     def test_accumulationValues(self):
