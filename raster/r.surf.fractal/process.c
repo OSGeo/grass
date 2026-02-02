@@ -12,7 +12,7 @@
 
 /***************************************************************************/
 
-#include <string.h>
+
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include "frac.h"
@@ -74,12 +74,12 @@ int process(void)
 
 /***************************************************/
 
+
 int data_reset(double *data[2], int nn)
 {
     size_t size = (size_t)nn * nn * sizeof(double);
-
-    memset(data[0], 0, size);
-    memset(data[1], 0, size);
+    G_zero(data[0], (int)size);
+    G_zero(data[1], (int)size);
 
     return 0;
 }
