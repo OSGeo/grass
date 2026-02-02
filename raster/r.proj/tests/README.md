@@ -232,6 +232,7 @@ This test suite addresses the requirements in issue #2512:
 ### Future Extensions
 
 Potential areas for expansion:
+
 - **More CRS combinations**: State Plane, different UTM zones, international CRS
 - **Performance benchmarks**: Large raster handling, OpenMP testing
 - **Null value handling**: Nodata regions, masked areas
