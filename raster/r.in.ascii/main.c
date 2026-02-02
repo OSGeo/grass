@@ -64,7 +64,6 @@ int main(int argc, char *argv[])
     RASTER_MAP_TYPE data_type;
 
     G_gisinit(argv[0]);
-    memset(&cellhd, 0, sizeof(struct Cell_head));
 
     module = G_define_module();
     G_add_keyword(_("raster"));
