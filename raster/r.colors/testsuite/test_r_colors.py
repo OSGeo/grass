@@ -15,20 +15,17 @@ class TestRColorsBasic(TestCase):
         """Test that color table is actually applied"""
         self.assertModule("r.colors", map="elevation", color="grey")
         # Get rules in JSON format
-        rules = gs.parse_command("r.colors.out", map="elevation", format="json")
-        self.assertIsNotNone(rules, "Color table should be returned")
+        output = gs.parse_command("r.colors.out", map="elevation", format="json")
+        self.assertIsNotNone(output, "Color table should be returned")
+
+        rules = output["table"]
         self.assertTrue(len(rules) > 0, "Color table should not be empty")
 
         first_rule = rules[0]
         last_rule = rules[-1]
 
-        self.assertEqual(first_rule["r"], 0, "First rule red component should be 0")
-        self.assertEqual(first_rule["g"], 0, "First rule green component should be 0")
-        self.assertEqual(first_rule["b"], 0, "First rule blue component should be 0")
-
-        self.assertEqual(last_rule["r"], 255, "Last rule red component should be 255")
-        self.assertEqual(last_rule["g"], 255, "Last rule green component should be 255")
-        self.assertEqual(last_rule["b"], 255, "Last rule blue component should be 255")
+        self.assertEqual(first_rule["color"], "#000000", "First rule should be black")
+        self.assertEqual(last_rule["color"], "#FFFFFF", "Last rule should be white")
 
     def test_equalize_flag(self):
         """Test equalize histogram flag"""
@@ -103,28 +100,32 @@ class TestRColorsOptions(TestCase):
         self.assertModule("r.colors", map="test_raster", raster="elevation")
 
         # Verify color tables match exactly
-        rules_src = gs.parse_command("r.colors.out", map="elevation", format="json")
-        rules_dst = gs.parse_command("r.colors.out", map="test_raster", format="json")
+        output_src = gs.parse_command("r.colors.out", map="elevation", format="json")
+        output_dst = gs.parse_command("r.colors.out", map="test_raster", format="json")
+
+        rules_src = output_src["table"]
+        rules_dst = output_dst["table"]
 
         self.assertTrue(len(rules_dst) > 0, "Copied color table should not be empty")
         self.assertEqual(
             len(rules_src), len(rules_dst), "Color table length should match"
         )
 
-        # Verify all RGB values match (ignoring 'val' as data ranges differ)
+        # Verify all hex colors match (ignoring 'val' as data ranges differ)
         for i in range(len(rules_src)):
             src = rules_src[i]
             dst = rules_dst[i]
+            self.assertEqual(src["color"], dst["color"], f"Rule {i} Color mismatch")
 
-            self.assertEqual(src["r"], dst["r"], f"Rule {i} Red component mismatch")
-            self.assertEqual(src["g"], dst["g"], f"Rule {i} Green component mismatch")
-            self.assertEqual(src["b"], dst["b"], f"Rule {i} Blue component mismatch")
-
-            # Check null value color if present
-            if "nv" in src or "nv" in dst:
-                self.assertEqual(
-                    src.get("nv"), dst.get("nv"), f"Rule {i} Null Value color mismatch"
-                )
+        # Check null value and default colors
+        self.assertEqual(
+            output_src.get("nv"), output_dst.get("nv"), "Null Value color mismatch"
+        )
+        self.assertEqual(
+            output_src.get("default"),
+            output_dst.get("default"),
+            "Default color mismatch",
+        )
 
 
 if __name__ == "__main__":
