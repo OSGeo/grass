@@ -209,6 +209,7 @@ This test suite addresses the requirements in issue #2512:
 - Predictable, deterministic results
 
 ✅ **Different CRS transformations**
+
 - UTM ↔ Lat/Lon (most common transformation)
 - Datum transformations (NAD83 vs WGS84)
 - Extensible to other CRS combinations
