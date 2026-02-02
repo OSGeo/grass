@@ -80,6 +80,7 @@ pytest test_r_proj_comprehensive.py::TestRProjCRSTransformations::test_utm_to_la
 ### Test Locations
 
 The comprehensive tests automatically create test locations with different CRS:
+
 - **test_utm_nad83_z17n**: UTM Zone 17N (NAD83) - EPSG:26917
 - **test_latlon_wgs84**: Lat/Lon WGS84 - EPSG:4326
 
