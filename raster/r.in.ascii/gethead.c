@@ -90,8 +90,6 @@ int gethead(FILE *fd, struct Cell_head *cellhd, RASTER_MAP_TYPE *d_type,
     char buf[1024];
     int ret;
 
-    G_zero(cellhd, sizeof(struct Cell_head));
-
     /* rsb fix */
     fpos_t p;
 
