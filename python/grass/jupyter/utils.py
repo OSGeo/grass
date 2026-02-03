@@ -24,12 +24,9 @@ from grass.tools import Tools
 
 
 def get_region(env=None):
-    """Returns current computational region as dictionary.
-
-    Additionally, it adds long key names.
-    """
+    """Returns current computational region as dictionary. """
     tools = Tools(env=env)
-    return tools.g_region(flags="p", format="json")
+    return tools.g_region(flags="p", format="json").json
 
 
 def get_location_proj_string(env=None):
