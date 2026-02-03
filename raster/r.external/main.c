@@ -58,23 +58,6 @@ static char *get_gdal_band_semantic_label(GDALRasterBandH hBand)
     return NULL;
 }
 
-/* Silent validation: same rules as Rast_legal_semantic_label, no warning */
-static int semantic_label_valid(const char *label)
-{
-    const char *s;
-
-    if (strlen(label) >= GNAME_MAX)
-        return 0;
-    if (G_legal_filename(label) != 1)
-        return 0;
-    for (s = label; *s; s++) {
-        if (!((*s >= 'A' && *s <= 'Z') || (*s >= 'a' && *s <= 'z') ||
-              (*s >= '0' && *s <= '9') || *s == '_' || *s == '-'))
-            return 0;
-    }
-    return 1;
-}
-
 static void set_semantic_label_from_gdal(GDALRasterBandH hBand,
                                          const char *mapname,
                                          char ***used_labels, int *n_used)
@@ -85,7 +68,7 @@ static void set_semantic_label_from_gdal(GDALRasterBandH hBand,
     label = get_gdal_band_semantic_label(hBand);
     if (!label)
         return;
-    if (!semantic_label_valid(label)) {
+    if (!Rast_legal_semantic_label(label)) {
         G_free(label);
         return;
     }
