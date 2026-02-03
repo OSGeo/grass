@@ -103,6 +103,7 @@ class TestClipling(TestCase):
                 profiledata=tmp,
                 profileformat="json",
                 coordinates=(e, n),
+                overwrite=True,
             )
             self.assertTrue(pathlib.Path(tmp).exists())
             self.assertGreater(pathlib.Path(tmp).stat().st_size, 0)
