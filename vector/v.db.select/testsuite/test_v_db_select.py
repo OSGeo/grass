@@ -255,7 +255,12 @@ class SelectTest(TestCase):
         self.assertLooksLike(reference=out_sep, actual=sel.outputs.stdout)
 
     def testJSON(self):
-        """Test that JSON can be decoded and formatted exactly as expected"""
+        """Test that JSON output has correct structure and values.
+
+        The v.db.select manual states that indentation and newlines are minimal
+        and not guaranteed. This test compares parsed structure and values only,
+        not layout.
+        """
         import json
 
         sel = SimpleModule(
@@ -267,11 +272,12 @@ class SelectTest(TestCase):
         sel.run()
 
         try:
-            json.loads(sel.outputs.stdout)
+            actual = json.loads(sel.outputs.stdout)
         except ValueError:
             self.fail(msg="No JSON object could be decoded:\n" + sel.outputs.stdout)
 
-        self.assertLooksLike(reference=out_json, actual=sel.outputs.stdout)
+        expected = json.loads(out_json)
+        self.assertEqual(expected, actual)
 
 
 if __name__ == "__main__":
