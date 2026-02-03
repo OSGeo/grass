@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_si\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-17 15:43+0000\n"
+"POT-Creation-Date: 2026-01-24 15:47+0000\n"
 "PO-Revision-Date: 2025-07-26 01:37+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Sinhala <https://weblate.osgeo.org/projects/grass-gis/grassmods/si/>\n"
@@ -34,7 +34,7 @@ msgstr ""
 #: ../raster/r.stream.extract/close.c:176 ../vector/v.db.connect/main.c:337
 #: ../vector/v.db.connect/main.c:480 ../vector/v.edit/select.c:505
 #: ../vector/v.out.svg/main.c:152 ../vector/v.out.vtk/writeVTK.c:640
-#: ../vector/v.profile/main.c:434 ../vector/v.profile/main.c:600
+#: ../vector/v.profile/main.c:469 ../vector/v.profile/main.c:635
 #, c-format
 msgid "Unable to start driver <%s>"
 msgstr ""
@@ -54,8 +54,8 @@ msgstr ""
 #: ../vector/v.info/print.c:236 ../vector/v.out.ogr/main.c:718
 #: ../vector/v.out.postgis/table.c:41 ../vector/v.out.svg/main.c:165
 #: ../vector/v.out.vtk/writeVTK.c:651 ../vector/v.patch/main.c:169
-#: ../vector/v.patch/main.c:215 ../vector/v.profile/main.c:447
-#: ../vector/v.profile/main.c:611 ../vector/v.random/main.c:282
+#: ../vector/v.patch/main.c:215 ../vector/v.profile/main.c:482
+#: ../vector/v.profile/main.c:646 ../vector/v.random/main.c:282
 #: ../vector/v.random/main.c:314 ../vector/v.reclass/main.c:189
 #: ../vector/v.to.db/main.c:151 ../vector/v.to.db/main.c:179
 #, c-format, python-format
@@ -76,11 +76,12 @@ msgstr ""
 #: ../vector/v.category/main.c:333 ../vector/v.class/main.c:223
 #: ../vector/v.class/main.c:264 ../vector/v.class/main.c:271
 #: ../vector/v.db.connect/main.c:148 ../vector/v.distance/main.c:310
-#: ../vector/v.info/print.c:903 ../vector/v.vect.stats/main.c:284
-#: ../vector/v.what.rast/main.c:144 ../vector/v.what/main.c:226
-#: ../vector/v.what/what.c:510 ../vector/v.what/what.c:654
-#: ../vector/v.what/what.c:707 ../vector/v.what/what.c:900
-#: ../vector/v.what/what.c:1039 ../vector/v.what/what.c:1160
+#: ../vector/v.info/print.c:903 ../vector/v.profile/main.c:296
+#: ../vector/v.vect.stats/main.c:284 ../vector/v.what.rast/main.c:144
+#: ../vector/v.what/main.c:226 ../vector/v.what/what.c:510
+#: ../vector/v.what/what.c:654 ../vector/v.what/what.c:707
+#: ../vector/v.what/what.c:900 ../vector/v.what/what.c:1039
+#: ../vector/v.what/what.c:1160
 msgid "Failed to initialize JSON array. Out of memory?"
 msgstr ""
 
@@ -92,8 +93,9 @@ msgstr ""
 #: ../raster/r.regression.multi/main.c:696
 #: ../raster/r.stats.quantile/main.c:472 ../raster/r.volume/main.c:448
 #: ../raster3d/r3.info/main.c:993 ../vector/v.class/main.c:379
-#: ../vector/v.db.connect/main.c:430 ../vector/v.vect.stats/main.c:863
-#: ../vector/v.what.rast/main.c:694 ../vector/v.what/main.c:321
+#: ../vector/v.db.connect/main.c:430 ../vector/v.profile/main.c:889
+#: ../vector/v.vect.stats/main.c:863 ../vector/v.what.rast/main.c:694
+#: ../vector/v.what/main.c:321
 msgid "Failed to serialize JSON to pretty format."
 msgstr ""
 
@@ -321,11 +323,12 @@ msgstr ""
 #: ../vector/v.class/main.c:348 ../vector/v.db.connect/main.c:302
 #: ../vector/v.db.connect/main.c:395 ../vector/v.distance/main.c:1578
 #: ../vector/v.info/print.c:861 ../vector/v.info/print.c:897
-#: ../vector/v.univar/main.c:630 ../vector/v.vect.stats/main.c:800
-#: ../vector/v.what.rast/main.c:628 ../vector/v.what/what.c:202
-#: ../vector/v.what/what.c:273 ../vector/v.what/what.c:441
-#: ../vector/v.what/what.c:541 ../vector/v.what/what.c:682
-#: ../vector/v.what/what.c:730 ../vector/v.what/what.c:935
+#: ../vector/v.profile/main.c:806 ../vector/v.univar/main.c:630
+#: ../vector/v.vect.stats/main.c:800 ../vector/v.what.rast/main.c:628
+#: ../vector/v.what/what.c:202 ../vector/v.what/what.c:273
+#: ../vector/v.what/what.c:441 ../vector/v.what/what.c:541
+#: ../vector/v.what/what.c:682 ../vector/v.what/what.c:730
+#: ../vector/v.what/what.c:935
 msgid "Failed to initialize JSON object. Out of memory?"
 msgstr ""
 
@@ -737,8 +740,8 @@ msgstr ""
 #: ../vector/v.db.select/main.c:130 ../vector/v.db.select/main.c:134
 #: ../vector/v.db.select/main.c:140 ../vector/v.db.select/main.c:143
 #: ../vector/v.db.select/main.c:161 ../vector/v.db.select/main.c:166
-#: ../vector/v.profile/main.c:186 ../vector/v.profile/main.c:189
-#: ../vector/v.profile/main.c:198
+#: ../vector/v.profile/main.c:194 ../vector/v.profile/main.c:197
+#: ../vector/v.profile/main.c:206 ../vector/v.profile/main.c:215
 msgid "Format"
 msgstr ""
 
@@ -2147,7 +2150,7 @@ msgstr ""
 #: ../vector/v.out.svg/main.c:76 ../vector/v.out.vtk/main.c:45
 #: ../vector/v.outlier/main.c:68 ../vector/v.overlay/main.c:62
 #: ../vector/v.parallel/main.c:48 ../vector/v.patch/main.c:73
-#: ../vector/v.perturb/main.c:62 ../vector/v.profile/main.c:155
+#: ../vector/v.perturb/main.c:62 ../vector/v.profile/main.c:163
 #: ../vector/v.proj/main.c:71 ../vector/v.qcount/main.c:59
 #: ../vector/v.random/main.c:98 ../vector/v.reclass/main.c:67
 #: ../vector/v.rectify/main.c:67 ../vector/v.sample/main.c:73
@@ -2198,7 +2201,7 @@ msgstr ""
 #: ../vector/v.lrs/v.lrs.segment/main.c:138
 #: ../vector/v.lrs/v.lrs.where/main.c:126
 #: ../vector/v.lrs/v.lrs.where/main.c:135 ../vector/v.outlier/main.c:176
-#: ../vector/v.profile/main.c:371 ../vector/v.profile/main.c:375
+#: ../vector/v.profile/main.c:402 ../vector/v.profile/main.c:406
 #: ../vector/v.surf.bspline/main.c:260 ../vector/v.surf.bspline/main.c:336
 #: ../vector/v.vect.stats/main.c:319 ../vector/v.vect.stats/main.c:327
 #, c-format, python-format
@@ -2258,8 +2261,8 @@ msgstr ""
 #: ../vector/v.patch/main.c:133 ../vector/v.patch/main.c:152
 #: ../vector/v.patch/main.c:188 ../vector/v.patch/main.c:335
 #: ../vector/v.patch/main.c:413 ../vector/v.perturb/main.c:160
-#: ../vector/v.perturb/main.c:190 ../vector/v.profile/main.c:382
-#: ../vector/v.profile/main.c:406 ../vector/v.proj/main.c:284
+#: ../vector/v.perturb/main.c:190 ../vector/v.profile/main.c:413
+#: ../vector/v.profile/main.c:441 ../vector/v.proj/main.c:284
 #: ../vector/v.qcount/main.c:101 ../vector/v.random/main.c:202
 #: ../vector/v.reclass/main.c:113 ../vector/v.rectify/main.c:152
 #: ../vector/v.sample/main.c:120 ../vector/v.segment/main.c:107
@@ -2319,7 +2322,7 @@ msgstr ""
 #: ../vector/v.outlier/main.c:237 ../vector/v.outlier/main.c:243
 #: ../vector/v.overlay/main.c:230 ../vector/v.parallel/main.c:151
 #: ../vector/v.patch/main.c:344 ../vector/v.patch/main.c:349
-#: ../vector/v.perturb/main.c:170 ../vector/v.profile/main.c:560
+#: ../vector/v.perturb/main.c:170 ../vector/v.profile/main.c:595
 #: ../vector/v.proj/main.c:481 ../vector/v.qcount/main.c:127
 #: ../vector/v.random/main.c:227 ../vector/v.reclass/main.c:117
 #: ../vector/v.rectify/main.c:219 ../vector/v.sample/main.c:159
@@ -3705,7 +3708,7 @@ msgstr ""
 #: ../raster/r.recode/main.c:89 ../raster3d/r3.out.vtk/main.c:422
 #: ../vector/v.edit/main.c:82 ../vector/v.net/main.c:99
 #: ../vector/v.out.ascii/main.c:129 ../vector/v.out.vtk/main.c:172
-#: ../vector/v.profile/main.c:340
+#: ../vector/v.profile/main.c:371
 #, c-format
 msgid "Unable to open file <%s>"
 msgstr ""
@@ -3971,7 +3974,7 @@ msgstr ""
 
 #: ../display/d.profile/main.c:194 ../raster/r.profile/main.c:58
 #: ../raster/r.transect/main.c:103 ../raster3d/r3.cross.rast/main.c:230
-#: ../vector/v.profile/main.c:156
+#: ../vector/v.profile/main.c:164
 msgid "profile"
 msgstr ""
 
@@ -4192,8 +4195,8 @@ msgstr ""
 #: ../vector/v.out.lidar/main.c:486 ../vector/v.out.lidar/main.c:586
 #: ../vector/v.out.ogr/args.c:12 ../vector/v.out.ogr/args.c:22
 #: ../vector/v.out.ogr/args.c:116 ../vector/v.out.postgis/args.c:15
-#: ../vector/v.out.postgis/args.c:19 ../vector/v.profile/main.c:167
-#: ../vector/v.profile/main.c:170 ../vector/v.profile/main.c:175
+#: ../vector/v.out.postgis/args.c:19 ../vector/v.profile/main.c:175
+#: ../vector/v.profile/main.c:178 ../vector/v.profile/main.c:183
 #: ../vector/v.random/main.c:120 ../vector/v.random/main.c:124
 #: ../vector/v.random/main.c:127 ../vector/v.random/main.c:130
 #: ../vector/v.reclass/main.c:78 ../vector/v.reclass/main.c:83
@@ -4510,8 +4513,8 @@ msgstr ""
 #: ../vector/v.out.vtk/writeVTK.c:645 ../vector/v.overlay/main.c:255
 #: ../vector/v.overlay/main.c:439 ../vector/v.patch/main.c:161
 #: ../vector/v.patch/main.c:199 ../vector/v.patch/main.c:368
-#: ../vector/v.patch/main.c:450 ../vector/v.profile/main.c:440
-#: ../vector/v.profile/main.c:605 ../vector/v.random/main.c:243
+#: ../vector/v.patch/main.c:450 ../vector/v.profile/main.c:475
+#: ../vector/v.profile/main.c:640 ../vector/v.random/main.c:243
 #: ../vector/v.random/main.c:273 ../vector/v.reclass/main.c:133
 #: ../vector/v.sample/main.c:175 ../vector/v.select/copy_tabs.c:80
 #: ../vector/v.surf.bspline/crosscorr.c:132 ../vector/v.surf.bspline/main.c:389
@@ -5336,16 +5339,18 @@ msgid "My first vector module"
 msgstr ""
 
 #: ../doc/examples/vector/v.example/main.c:82 ../vector/v.cluster/main.c:137
-#: ../vector/v.profile/main.c:378
+#: ../vector/v.profile/main.c:409
 msgid "Unable to set predetermined vector open level"
 msgstr ""
 
-#: ../doc/examples/vector/v.example/main.c:176 ../vector/v.profile/main.c:708
+#: ../doc/examples/vector/v.example/main.c:176 ../vector/v.profile/main.c:749
+#: ../vector/v.profile/main.c:827
 #, c-format
 msgid "Unable to get attribute data for cat %d"
 msgstr ""
 
-#: ../doc/examples/vector/v.example/main.c:185 ../vector/v.profile/main.c:717
+#: ../doc/examples/vector/v.example/main.c:185 ../vector/v.profile/main.c:759
+#: ../vector/v.profile/main.c:836
 #, c-format
 msgid "Error while retrieving database record for cat %d"
 msgstr ""
@@ -7931,8 +7936,8 @@ msgstr ""
 #: ../vector/v.in.ogr/main.c:315 ../vector/v.in.ogr/main.c:365
 #: ../vector/v.in.ogr/main.c:372 ../vector/v.in.ogr/main.c:413
 #: ../vector/v.out.ascii/args.c:35 ../vector/v.out.ascii/args.c:81
-#: ../vector/v.profile/main.c:221 ../vector/v.profile/main.c:226
-#: ../vector/v.profile/main.c:232
+#: ../vector/v.profile/main.c:238 ../vector/v.profile/main.c:243
+#: ../vector/v.profile/main.c:249
 msgid "Output"
 msgstr ""
 
@@ -24993,7 +24998,7 @@ msgid "One coordinate pair per line, please"
 msgstr ""
 
 #: ../raster/r.profile/main.c:59 ../raster/r.transect/main.c:104
-#: ../vector/v.profile/main.c:157
+#: ../vector/v.profile/main.c:165
 msgid "transect"
 msgstr ""
 
@@ -33389,7 +33394,7 @@ msgid "Branch <{branch}> not found in repository <{url}>"
 msgstr ""
 
 #: ../scripts/g.extension/g.extension.py:387
-#: ../scripts/g.extension/g.extension.py:2851
+#: ../scripts/g.extension/g.extension.py:2868
 #, python-brace-format
 msgid ""
 "Failed to get addons files list from the Git repository <{repo_path}>.\n"
@@ -33614,118 +33619,118 @@ msgstr ""
 msgid "Module name not found. Check module Makefile syntax (PGM variable)."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2133
+#: ../scripts/g.extension/g.extension.py:2150
 msgid "To compile run:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2135
+#: ../scripts/g.extension/g.extension.py:2152
 msgid "To install run:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2143
+#: ../scripts/g.extension/g.extension.py:2160
 msgid "Compiling..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2145
+#: ../scripts/g.extension/g.extension.py:2162
 msgid "Please install GRASS development package"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2148
-#: ../scripts/g.extension/g.extension.py:2151
+#: ../scripts/g.extension/g.extension.py:2165
+#: ../scripts/g.extension/g.extension.py:2168
 msgid "Compilation failed, sorry. Please check above error messages."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2165
+#: ../scripts/g.extension/g.extension.py:2182
 msgid "Installing..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2256
+#: ../scripts/g.extension/g.extension.py:2273
 msgid "List of removed files:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2258
+#: ../scripts/g.extension/g.extension.py:2275
 msgid "Files to be removed:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2264
+#: ../scripts/g.extension/g.extension.py:2281
 msgid "Updating addons metadata file..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2268
+#: ../scripts/g.extension/g.extension.py:2285
 #, python-format
 msgid "Extension <%s> successfully uninstalled."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2271
+#: ../scripts/g.extension/g.extension.py:2288
 #, python-format
 msgid "Toolbox <%s> not removed. Re-run '%s' with '-f' flag to force removal"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2276
+#: ../scripts/g.extension/g.extension.py:2293
 #, python-format
 msgid "Extension <%s> not removed. Re-run '%s' with '-f' flag to force removal"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2325
+#: ../scripts/g.extension/g.extension.py:2342
 #, python-format
 msgid "Extension <%s> not found"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2429
+#: ../scripts/g.extension/g.extension.py:2446
 #, python-brace-format
 msgid "Unable to create '{filename}': {error}. Is the GRASS documentation package installed? Installation continues, but documentation may not look right."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2448
+#: ../scripts/g.extension/g.extension.py:2465
 #, python-format
 msgid "Unable to create '%s': %s"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2476
+#: ../scripts/g.extension/g.extension.py:2493
 #, python-format
 msgid "Manual page for <%s> updated"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2483
+#: ../scripts/g.extension/g.extension.py:2500
 #, python-format
 msgid "Unable to read manual page: %s"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2528
+#: ../scripts/g.extension/g.extension.py:2545
 #, python-format
 msgid "Unable for write manual page: %s"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2548
+#: ../scripts/g.extension/g.extension.py:2565
 msgid "GRASS_ADDON_BASE is not defined, installing to {}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2555
+#: ../scripts/g.extension/g.extension.py:2572
 #, python-brace-format
 msgid "You don't have permission to install extension to <{0}>. Try to run {1} with administrator rights (su or sudo)."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2647
+#: ../scripts/g.extension/g.extension.py:2664
 #, python-brace-format
 msgid "Identified {0} as known hosting service"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2652
+#: ../scripts/g.extension/g.extension.py:2669
 #, python-brace-format
 msgid "Not using {service} as known hosting service because the URL ends with '{suffix}'"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2669
+#: ../scripts/g.extension/g.extension.py:2686
 #, python-brace-format
 msgid "Will use the following URL for download: {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2700
+#: ../scripts/g.extension/g.extension.py:2717
 #, python-brace-format
 msgid "Cannot open URL <{url}>: {error}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2906
+#: ../scripts/g.extension/g.extension.py:2923
 msgid "Flag '{}' is relevant only to 'operation=add'. Ignoring this flag."
 msgstr ""
 
@@ -35852,26 +35857,26 @@ msgstr ""
 msgid "Default TGIS database is not set"
 msgstr ""
 
-#: ../vector/v.buffer/geos.c:19 ../vector/v.profile/main.c:60
+#: ../vector/v.buffer/geos.c:19 ../vector/v.profile/main.c:63
 msgid "Invalid GEOS geometry!"
 msgstr ""
 
-#: ../vector/v.buffer/geos.c:25 ../vector/v.profile/main.c:66
+#: ../vector/v.buffer/geos.c:25 ../vector/v.profile/main.c:69
 msgid "No coordinates in GEOS geometry (can be ok for negative distance)!"
 msgstr ""
 
-#: ../vector/v.buffer/geos.c:34 ../vector/v.profile/main.c:75
+#: ../vector/v.buffer/geos.c:34 ../vector/v.profile/main.c:78
 #, c-format
 msgid "Invalid x coordinate %f"
 msgstr ""
 
-#: ../vector/v.buffer/geos.c:36 ../vector/v.profile/main.c:77
+#: ../vector/v.buffer/geos.c:36 ../vector/v.profile/main.c:80
 #, c-format
 msgid "Invalid y coordinate %f"
 msgstr ""
 
-#: ../vector/v.buffer/geos.c:106 ../vector/v.profile/main.c:95
-#: ../vector/v.profile/main.c:106
+#: ../vector/v.buffer/geos.c:106 ../vector/v.profile/main.c:98
+#: ../vector/v.profile/main.c:109
 msgid "Corrupt GEOS geometry"
 msgstr ""
 
@@ -44070,7 +44075,7 @@ msgstr ""
 msgid "Name for output VTK file"
 msgstr ""
 
-#: ../vector/v.out.vtk/main.c:67 ../vector/v.profile/main.c:197
+#: ../vector/v.out.vtk/main.c:67 ../vector/v.profile/main.c:205
 msgid "Number of significant digits"
 msgstr ""
 
@@ -44563,151 +44568,155 @@ msgstr ""
 msgid "normalsv: save of uninitialized block"
 msgstr ""
 
-#: ../vector/v.profile/main.c:158
+#: ../vector/v.profile/main.c:166
 msgid "Vector map profiling tool"
 msgstr ""
 
-#: ../vector/v.profile/main.c:174
+#: ../vector/v.profile/main.c:182
 msgid "Use features only from specified layer"
 msgstr ""
 
-#: ../vector/v.profile/main.c:185
+#: ../vector/v.profile/main.c:193
 msgid "Path to output text file or - for stdout"
 msgstr ""
 
-#: ../vector/v.profile/main.c:206
+#: ../vector/v.profile/main.c:212
+msgid "plain;Plain text with pipe separator;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
+msgstr ""
+
+#: ../vector/v.profile/main.c:223
 msgid "Buffer (tolerance) for points in map units"
 msgstr ""
 
-#: ../vector/v.profile/main.c:207
+#: ../vector/v.profile/main.c:224
 msgid "How far points can be from sampling line"
 msgstr ""
 
-#: ../vector/v.profile/main.c:218
+#: ../vector/v.profile/main.c:235
 msgid "Name for profile line and buffer output map"
 msgstr ""
 
-#: ../vector/v.profile/main.c:220
+#: ../vector/v.profile/main.c:237
 msgid "Profile line and buffer around it will be written"
 msgstr ""
 
-#: ../vector/v.profile/main.c:225
+#: ../vector/v.profile/main.c:242
 msgid "Do not print column names"
 msgstr ""
 
-#: ../vector/v.profile/main.c:230
+#: ../vector/v.profile/main.c:247
 msgid "Do not print 3D vector data (z values)"
 msgstr ""
 
-#: ../vector/v.profile/main.c:231
+#: ../vector/v.profile/main.c:248
 msgid "Only affects 3D vectors"
 msgstr ""
 
-#: ../vector/v.profile/main.c:238
+#: ../vector/v.profile/main.c:255
 msgid "Coordinates for profiling line nodes"
 msgstr ""
 
-#: ../vector/v.profile/main.c:239
+#: ../vector/v.profile/main.c:256
 msgid "Specify profiling line vertices and nodes"
 msgstr ""
 
-#: ../vector/v.profile/main.c:240 ../vector/v.profile/main.c:252
-#: ../vector/v.profile/main.c:263 ../vector/v.profile/main.c:271
+#: ../vector/v.profile/main.c:257 ../vector/v.profile/main.c:269
+#: ../vector/v.profile/main.c:280 ../vector/v.profile/main.c:288
 msgid "Profiling line"
 msgstr ""
 
-#: ../vector/v.profile/main.c:250
+#: ../vector/v.profile/main.c:267
 msgid "Profiling line map"
 msgstr ""
 
-#: ../vector/v.profile/main.c:251
+#: ../vector/v.profile/main.c:268
 msgid "Vector map containing profiling line"
 msgstr ""
 
-#: ../vector/v.profile/main.c:260
+#: ../vector/v.profile/main.c:277
 msgid "WHERE conditions for input profile line map"
 msgstr ""
 
-#: ../vector/v.profile/main.c:262
+#: ../vector/v.profile/main.c:279
 msgid "Use to select only one line from profiling line map"
 msgstr ""
 
-#: ../vector/v.profile/main.c:270
+#: ../vector/v.profile/main.c:287
 msgid "Profiling line map layer"
 msgstr ""
 
-#: ../vector/v.profile/main.c:294
+#: ../vector/v.profile/main.c:325
 msgid "Layer 0 not supported"
 msgstr ""
 
-#: ../vector/v.profile/main.c:300
+#: ../vector/v.profile/main.c:331
 msgid "Failed to interpreter 'dp' parameter as an integer"
 msgstr ""
 
-#: ../vector/v.profile/main.c:306
+#: ../vector/v.profile/main.c:337
 msgid "Tolerance value must be greater than 0"
 msgstr ""
 
-#: ../vector/v.profile/main.c:311
+#: ../vector/v.profile/main.c:342
 #, c-format
 msgid "<%s> is not a valid vector map name"
 msgstr ""
 
-#: ../vector/v.profile/main.c:316
+#: ../vector/v.profile/main.c:347
 msgid "No input profile map name provided, but WHERE conditions for it have been set"
 msgstr ""
 
-#: ../vector/v.profile/main.c:322
+#: ../vector/v.profile/main.c:353
 msgid "Profile input coordinates and vector map are provided. Please provide only one of them"
 msgstr ""
 
-#: ../vector/v.profile/main.c:327
+#: ../vector/v.profile/main.c:358
 msgid "No profile input coordinates nor vector map are provided. Please provide one of them"
 msgstr ""
 
-#: ../vector/v.profile/main.c:366
+#: ../vector/v.profile/main.c:397
 msgid "At least profile start and end coordinates are required!"
 msgstr ""
 
-#: ../vector/v.profile/main.c:397 ../vector/v.profile/main.c:414
+#: ../vector/v.profile/main.c:432 ../vector/v.profile/main.c:449
 #, c-format
 msgid "No database connection defined for map <%s> layer %d, but WHERE condition is provided"
 msgstr ""
 
-#: ../vector/v.profile/main.c:456 ../vector/v.profile/main.c:621
+#: ../vector/v.profile/main.c:491 ../vector/v.profile/main.c:656
 msgid "No features match Your query"
 msgstr ""
 
-#: ../vector/v.profile/main.c:461 ../vector/v.profile/main.c:476
+#: ../vector/v.profile/main.c:496 ../vector/v.profile/main.c:511
 msgid "Your query matches more than one record in input profiling map. Currently it's not supported. Enhance WHERE conditions to get only one line."
 msgstr ""
 
-#: ../vector/v.profile/main.c:469
+#: ../vector/v.profile/main.c:504
 msgid "Error while initialising line list"
 msgstr ""
 
-#: ../vector/v.profile/main.c:483
+#: ../vector/v.profile/main.c:518
 msgid "Error while reading vector feature from profile line map"
 msgstr ""
 
-#: ../vector/v.profile/main.c:500
+#: ../vector/v.profile/main.c:535
 msgid "Your input profile map contains more than one line. Currently it's not supported. Provide WHERE conditions to get only one line."
 msgstr ""
 
-#: ../vector/v.profile/main.c:522
+#: ../vector/v.profile/main.c:557
 msgid "Failed to convert GRASS line to GEOS line"
 msgstr ""
 
-#: ../vector/v.profile/main.c:531
+#: ../vector/v.profile/main.c:566
 msgid "Buffering failed"
 msgstr ""
 
-#: ../vector/v.profile/main.c:580
+#: ../vector/v.profile/main.c:615
 #, c-format
 msgid "Vector map <%s> does not have cat's defined on layer %d"
 msgstr ""
 
-#: ../vector/v.profile/main.c:757
+#: ../vector/v.profile/main.c:796 ../vector/v.profile/main.c:896
 msgid "Can not write data portion to provided output"
 msgstr ""
 

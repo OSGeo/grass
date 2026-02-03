@@ -131,6 +131,7 @@
    - G_OPT_MAP_INPUTS
    - G_OPT_STDS_TYPE
    - G_OPT_MAP_TYPE
+   - G_OPT_T_SUFFIX
    - G_OPT_T_TYPE
    - G_OPT_T_WHERE
 
@@ -944,6 +945,18 @@ struct Option *G_define_standard_option(int opt)
         Opt->answer = "raster";
         Opt->options = "raster,vector,raster_3d";
         Opt->description = _("Type of the input map");
+        break;
+    case G_OPT_T_SUFFIX:
+        Opt->key = "suffix";
+        Opt->type = TYPE_STRING;
+        Opt->key_desc = "name";
+        Opt->required = NO;
+        Opt->answer = "gran";
+        Opt->description = _("Suffix to add at basename: set "
+                             "'gran' for granularity, "
+                             "'time' for the full time format, "
+                             "'num' for numerical suffix with "
+                             "a specific number of digits (default %%05)");
         break;
     case G_OPT_T_TYPE:
         Opt->key = "temporaltype";
