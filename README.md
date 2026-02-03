@@ -95,3 +95,5 @@ For using and building a GRASS docker image, see [docker/README.md](docker/READM
 ## Thanks to all contributors ❤
 
 [![GRASS contributors](https://contrib.rocks/image?repo=OSGeo/grass "GRASS contributors")](https://github.com/OSGeo/grass/graphs/contributors)
+
+- [AgentMarket](https://agentmarket.cloud) - Energy and weather data API for geospatial applications.
