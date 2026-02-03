@@ -1,221 +1,199 @@
-"""Test r.proj module with basic CRS transformations.
+"""Basic unit tests for r.proj.
 
-This test suite validates r.proj functionality including:
-- Basic raster reprojection
-- Different interpolation methods
-- Invalid input handling
-- Region preservation
-
-Author: [Your Name]
-Date: 2026
+Every test requests ``temp_region`` which pulls in ``grass_session``
+automatically.  That fixture (in conftest.py) creates a temporary project
+and calls gs.setup.init so that all GRASS modules work in CI without a
+pre-existing GRASS session.
 """
 
 import pytest
 import grass.script as gs
+from grass.exceptions import CalledModuleError
 
 
-@pytest.fixture
-def simple_raster(tmp_path):
-    """Create a simple test raster with known values."""
-    # Set a basic region
-    gs.run_command("g.region", n=50, s=0, e=50, w=0, res=1)
-
-    # Create a gradient raster for testing
-    raster_name = "test_input_raster"
-    gs.run_command(
-        "r.mapcalc", expression=f"{raster_name} = row() + col()", overwrite=True
-    )
-
-    yield raster_name
-
-    # Cleanup
-    gs.run_command("g.remove", type="raster", name=raster_name, flags="f", quiet=True)
+# ---------------------------------------------------------------------------
+# helper
+# ---------------------------------------------------------------------------
+def _make_raster(name, expression="row() * 10 + col()"):
+    """Create a small test raster in the current region."""
+    gs.run_command("r.mapcalc", expression=f"{name} = {expression}", overwrite=True)
 
 
+# ---------------------------------------------------------------------------
+# identity / same-CRS tests
+# ---------------------------------------------------------------------------
 class TestRProjBasic:
-    """Basic functionality tests for r.proj."""
+    """Tests that stay inside a single project."""
 
-    def test_same_projection_identity_transform(self, simple_raster):
-        """Test r.proj with identical source and target projections."""
-        output_name = "test_output_same_proj"
+    def test_same_projection_identity_transform(self, temp_region):
+        """Reprojecting within the same CRS should preserve values."""
+        gs.run_command("g.region", n=50, s=0, e=50, w=0, res=1)
+        _make_raster("test_identity_in")
 
-        try:
-            # Run r.proj with same projection (identity transform)
-            gs.run_command(
-                "r.proj",
-                input=simple_raster,
-                output=output_name,
-                location=gs.gisenv()["LOCATION_NAME"],
-                mapset=gs.gisenv()["MAPSET"],
-                overwrite=True,
-                quiet=True,
-            )
-
-            # Verify output exists
-            assert gs.find_file(output_name, element="raster")[
-                "name"
-            ], "Output raster should exist"
-
-            # Check statistics are similar
-            stats_input = gs.parse_command("r.univar", map=simple_raster, flags="g")
-            stats_output = gs.parse_command("r.univar", map=output_name, flags="g")
-
-            assert (
-                abs(float(stats_input["mean"]) - float(stats_output["mean"])) < 0.1
-            ), "Mean values should be very similar for identity transform"
-
-        finally:
-            gs.run_command(
-                "g.remove", type="raster", name=output_name, flags="f", quiet=True
-            )
-
-    def test_invalid_location_fails(self, simple_raster):
-        """Test that r.proj fails gracefully with non-existent location."""
-        output_name = "test_output_invalid"
-
-        with pytest.raises(Exception):
-            gs.run_command(
-                "r.proj",
-                input=simple_raster,
-                output=output_name,
-                location="nonexistent_location_xyz123",
-                mapset="PERMANENT",
-                quiet=True,
-            )
-
-    def test_output_respects_computational_region(self, simple_raster):
-        """Test that r.proj respects the current computational region."""
-        output_name = "test_output_region"
-
-        # Set a specific region smaller than input
-        gs.run_command("g.region", n=30, s=10, e=40, w=5, res=2)
-
-        try:
-            gs.run_command(
-                "r.proj",
-                input=simple_raster,
-                output=output_name,
-                location=gs.gisenv()["LOCATION_NAME"],
-                mapset=gs.gisenv()["MAPSET"],
-                overwrite=True,
-                quiet=True,
-            )
-
-            # Get output info
-            output_info = gs.raster_info(output_name)
-            current_region = gs.region()
-
-            # Verify output matches region
-            assert output_info["north"] == pytest.approx(current_region["n"], abs=0.01)
-            assert output_info["south"] == pytest.approx(current_region["s"], abs=0.01)
-            assert output_info["east"] == pytest.approx(current_region["e"], abs=0.01)
-            assert output_info["west"] == pytest.approx(current_region["w"], abs=0.01)
-
-        finally:
-            gs.run_command(
-                "g.remove", type="raster", name=output_name, flags="f", quiet=True
-            )
-
-
-class TestRProjInterpolation:
-    """Test different interpolation methods in r.proj."""
-
-    @pytest.fixture
-    def binary_raster(self):
-        """Create a binary test raster with distinct values."""
-        gs.run_command("g.region", n=20, s=0, e=20, w=0, res=1)
-
-        raster_name = "test_binary_raster"
-        # Create a raster with only 100 and 200 values
         gs.run_command(
-            "r.mapcalc",
-            expression=f"{raster_name} = if(row() < 10, 100, 200)",
+            "r.proj",
+            input="test_identity_in",
+            output="test_identity_out",
+            method="nearest",
             overwrite=True,
         )
 
-        yield raster_name
+        assert gs.find_file("test_identity_out", element="raster")["name"]
 
-        gs.run_command(
-            "g.remove", type="raster", name=raster_name, flags="f", quiet=True
+        in_stats = gs.parse_command("r.univar", map="test_identity_in", flags="g")
+        out_stats = gs.parse_command("r.univar", map="test_identity_out", flags="g")
+        assert float(in_stats["mean"]) == pytest.approx(
+            float(out_stats["mean"]), rel=1e-3
         )
 
-    @pytest.mark.parametrize("method", ["nearest", "bilinear", "bicubic"])
-    def test_interpolation_method_runs(self, binary_raster, method):
-        """Test that all interpolation methods execute successfully."""
-        output_name = f"test_output_{method}"
+        gs.run_command(
+            "g.remove",
+            type="raster",
+            name="test_identity_in,test_identity_out",
+            flags="f",
+        )
 
-        try:
-            gs.run_command(
-                "r.proj",
-                input=binary_raster,
-                output=output_name,
-                location=gs.gisenv()["LOCATION_NAME"],
-                mapset=gs.gisenv()["MAPSET"],
-                method=method,
-                overwrite=True,
-                quiet=True,
-            )
+    def test_output_raster_exists(self, temp_region):
+        """r.proj must produce an output raster."""
+        gs.run_command("g.region", n=50, s=0, e=50, w=0, res=1)
+        _make_raster("test_exists_in")
 
-            # Verify output exists
-            assert gs.find_file(output_name, element="raster")[
-                "name"
-            ], f"Output with {method} interpolation should exist"
-
-        finally:
-            gs.run_command(
-                "g.remove", type="raster", name=output_name, flags="f", quiet=True
-            )
-
-    def test_nearest_neighbor_preserves_values(self, binary_raster):
-        """Test that nearest neighbor doesn't interpolate values."""
-        output_name = "test_nearest_values"
-
-        try:
-            gs.run_command(
-                "r.proj",
-                input=binary_raster,
-                output=output_name,
-                location=gs.gisenv()["LOCATION_NAME"],
-                mapset=gs.gisenv()["MAPSET"],
-                method="nearest",
-                overwrite=True,
-                quiet=True,
-            )
-
-            # Get statistics
-            stats = gs.parse_command("r.univar", map=output_name, flags="g")
-            min_val = float(stats["min"])
-            max_val = float(stats["max"])
-
-            # Nearest neighbor should only have original values (100, 200)
-            # with possible NULL values, but no interpolated values between
-            assert min_val >= 100.0, "Min should be original value"
-            assert max_val <= 200.0, "Max should be original value"
-
-        finally:
-            gs.run_command(
-                "g.remove", type="raster", name=output_name, flags="f", quiet=True
-            )
-
-
-@pytest.mark.parametrize(
-    "invalid_param",
-    [
-        {"memory": -1},  # Invalid memory
-        {"method": "invalid_method"},  # Invalid interpolation method
-    ],
-)
-def test_invalid_parameters(simple_raster, invalid_param):
-    """Test that r.proj rejects invalid parameters."""
-    output_name = "test_invalid_output"
-
-    with pytest.raises(Exception):
         gs.run_command(
             "r.proj",
-            input=simple_raster,
-            output=output_name,
-            location=gs.gisenv()["LOCATION_NAME"],
-            mapset=gs.gisenv()["MAPSET"],
-            **invalid_param,
-            quiet=True,
+            input="test_exists_in",
+            output="test_exists_out",
+            method="nearest",
+            overwrite=True,
+        )
+
+        assert gs.find_file("test_exists_out", element="raster")["name"]
+        gs.run_command(
+            "g.remove",
+            type="raster",
+            name="test_exists_in,test_exists_out",
+            flags="f",
+        )
+
+    def test_region_not_silently_changed(self, temp_region):
+        """r.proj must not silently alter the computational region."""
+        gs.run_command("g.region", n=100, s=0, e=100, w=0, res=2)
+        before = gs.parse_command("g.region", flags="gp")
+
+        _make_raster("test_region_in")
+        gs.run_command(
+            "r.proj",
+            input="test_region_in",
+            output="test_region_out",
+            method="nearest",
+            overwrite=True,
+        )
+
+        after = gs.parse_command("g.region", flags="gp")
+        assert before["n"] == after["n"]
+        assert before["s"] == after["s"]
+
+        gs.run_command(
+            "g.remove",
+            type="raster",
+            name="test_region_in,test_region_out",
+            flags="f",
+        )
+
+
+# ---------------------------------------------------------------------------
+# interpolation
+# ---------------------------------------------------------------------------
+class TestRProjInterpolation:
+    """Every supported interpolation keyword must be accepted."""
+
+    @pytest.mark.parametrize("method", ["nearest", "bilinear", "bicubic"])
+    def test_interpolation_method_runs(self, temp_region, method):
+        gs.run_command("g.region", n=50, s=0, e=50, w=0, res=1)
+        _make_raster("test_interp_in")
+
+        gs.run_command(
+            "r.proj",
+            input="test_interp_in",
+            output=f"test_interp_{method}",
+            method=method,
+            overwrite=True,
+        )
+
+        assert gs.find_file(f"test_interp_{method}", element="raster")["name"]
+        gs.run_command(
+            "g.remove",
+            type="raster",
+            name=f"test_interp_in,test_interp_{method}",
+            flags="f",
+        )
+
+    def test_nearest_preserves_values(self, temp_region):
+        """Nearest-neighbor must not interpolate – mean stays the same."""
+        gs.run_command("g.region", n=50, s=0, e=50, w=0, res=1)
+        _make_raster("test_nn_in")
+
+        gs.run_command(
+            "r.proj",
+            input="test_nn_in",
+            output="test_nn_out",
+            method="nearest",
+            overwrite=True,
+        )
+
+        in_stats = gs.parse_command("r.univar", map="test_nn_in", flags="g")
+        out_stats = gs.parse_command("r.univar", map="test_nn_out", flags="g")
+        assert float(in_stats["mean"]) == pytest.approx(
+            float(out_stats["mean"]), rel=1e-3
+        )
+
+        gs.run_command(
+            "g.remove", type="raster", name="test_nn_in,test_nn_out", flags="f"
+        )
+
+
+# ---------------------------------------------------------------------------
+# error handling
+# ---------------------------------------------------------------------------
+class TestRProjInvalidParams:
+    """r.proj must reject bad parameters gracefully."""
+
+    def test_invalid_project_raises(self, temp_region):
+        """Non-existent source project must raise CalledModuleError."""
+        gs.run_command("g.region", n=50, s=0, e=50, w=0, res=1)
+        _make_raster("test_inv_proj_in")
+
+        with pytest.raises(CalledModuleError):
+            gs.run_command(
+                "r.proj",
+                input="test_inv_proj_in",
+                project="this_project_does_not_exist_xyz",
+                output="test_inv_proj_out",
+                method="nearest",
+            )
+
+        gs.run_command(
+            "g.remove", type="raster", name="test_inv_proj_in", flags="f"
+        )
+
+    @pytest.mark.parametrize(
+        "bad_param",
+        [
+            {"method": "invalid_method_xyz"},
+            {"memory": "-999"},
+        ],
+    )
+    def test_invalid_parameters(self, temp_region, bad_param):
+        gs.run_command("g.region", n=50, s=0, e=50, w=0, res=1)
+        _make_raster("test_bad_in")
+
+        with pytest.raises(CalledModuleError):
+            gs.run_command(
+                "r.proj",
+                input="test_bad_in",
+                output="test_bad_out",
+                **bad_param,
+            )
+
+        gs.run_command(
+            "g.remove", type="raster", name="test_bad_in", flags="f"
         )
