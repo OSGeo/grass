@@ -73,8 +73,8 @@ extern G_JSON_Status G_json_array_append_boolean(G_JSON_Array *, int);
 extern G_JSON_Status G_json_array_append_null(G_JSON_Array *);
 
 extern void G_json_set_float_serialization_format(const char *format);
-extern char *G_json_serialize_to_string_pretty(const G_JSON_Value *);
 extern char *G_json_serialize_to_string(const G_JSON_Value *);
+extern char *G_json_serialize_to_string_pretty(const G_JSON_Value *);
 extern void G_json_free_serialized_string(char *);
 extern void G_json_value_free(G_JSON_Value *);
 
