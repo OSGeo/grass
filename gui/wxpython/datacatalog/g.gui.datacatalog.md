@@ -1,9 +1,8 @@
 ---
+title: g.gui.datacatalog
 description: wxGUI Data Catalog
 index: topic_GUI|GUI
 ---
-
-# wxGUI Data Catalog
 
 ## DESCRIPTION
 

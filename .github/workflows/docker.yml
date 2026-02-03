@@ -42,12 +42,11 @@ jobs:
   #     releasebranch_8_3-alpine, releasebranch_8_3-debian, releasebranch_8_3-ubuntu
   # For a release, e.g. 8.3.0, created tags are:
   #     8.3.0-alpine, 8.3.0-debian, 8.3.0-ubuntu and latest (with ubuntu)
-  docker-os-matrix:
-    name: ${{ matrix.os }}
+  build:
     runs-on: ubuntu-latest
     concurrency:
       group: >-
-        ${{ github.workflow }}-${{ matrix.os }}-${{ github.event_name }}-
+        ${{ github.workflow }}-${{ matrix.name }}-${{ github.event_name }}-
         ${{ github.event_name == 'pull_request' && github.head_ref || github.ref }}
       # Cancel in progress in pull requests.
       # Otherwise, limit to one in progress and one queued for each type.
@@ -55,13 +54,29 @@ jobs:
       # The already running job will be completed.
       cancel-in-progress: ${{ github.event_name == 'pull_request' }}
     strategy:
-      matrix:
-        os:
-          - alpine
-          - debian
-          - ubuntu
-          - ubuntu_wxgui
       fail-fast: false
+      matrix:
+        include:
+          - name: alpine
+            os: alpine
+            dockerfile: docker/alpine/Dockerfile
+            build_args: |-
+              GUI=without
+          - name: debian
+            os: debian
+            dockerfile: docker/debian/Dockerfile
+            build_args: |-
+              GUI=without
+          - name: ubuntu
+            os: ubuntu
+            dockerfile: docker/ubuntu/Dockerfile
+            build_args: |-
+              GUI=without
+          - name: ubuntu_wxgui
+            os: ubuntu
+            dockerfile: docker/ubuntu/Dockerfile
+            build_args: |-
+              GUI=with
 
     permissions:
       attestations: write
@@ -71,7 +86,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
           fetch-tags: true
@@ -92,7 +107,7 @@ jobs:
               echo "error_latest=yes" >> "${GITHUB_OUTPUT}"
               exit 0
           fi
-          latest_rel_branch="$(git branch --all --list 'origin/*' \
+          latest_rel_branch="$(git branch --all --list 'origin/releasebranch_[0-9]_[0-9]' \
             --contains "${latest_tag}" --format "%(refname:lstrip=3)" || echo "")"
           echo "latest_rel_branch=${latest_rel_branch}" >> "${GITHUB_OUTPUT}"
           echo "latest_rel_branch is: ${latest_rel_branch}"
@@ -109,7 +124,7 @@ jobs:
           latest="${{
             (github.ref || format('{0}{1}', 'refs/tags/', github.event.release.tag_name))
               == format('refs/tags/{0}', steps.tag-branch.outputs.latest_tag)
-            && matrix.os == 'ubuntu' && steps.tag-branch.outputs.error_latest == 'no' }}"
+            && matrix.name == 'ubuntu' && steps.tag-branch.outputs.error_latest == 'no' }}"
           current="${{
             ( contains(fromJSON('["tag", "release"]'), github.event_name)
               && (github.ref || format('{0}{1}', 'refs/tags/', github.event.release.tag_name))
@@ -126,7 +141,7 @@ jobs:
           echo "current is ${current}"
       - name: Docker meta
         id: meta
-        uses: docker/metadata-action@318604b99e75e41977312d83839a89be02ca4893 # v5.9.0
+        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0
         with:
           images: |
             name=docker.io/osgeo/grass-gis,enable=${{ github.repository_owner == 'OSGeo'
@@ -140,20 +155,20 @@ jobs:
             type=raw,value=latest,enable=${{ steps.enable.outputs.latest }},suffix=
           flavor: |
             latest=false
-            suffix=-${{ matrix.os }}
+            suffix=-${{ matrix.name }}
       - name: Set up QEMU
         uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3.7.0
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3.11.1
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Login to Docker Hub
         if: ${{ github.repository_owner == 'OSGeo' && github.event_name != 'pull_request' }}
-        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN  }}
@@ -164,14 +179,13 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           context: .
           file: docker/${{ matrix.os }}/Dockerfile
+          build-args: ${{ matrix.build_args }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           annotations: ${{ steps.meta.outputs.annotations }}
           provenance: mode=max
           sbom: true
-          # Don't use cache for releases.
           no-cache: ${{ contains(fromJSON('["tag", "release"]'), github.event_name) && true }}
-          # Don't use gha cache for releases. Cache is not used if `cache-from:` is empty
           cache-from: >-
             ${{ !contains(fromJSON('["tag", "release"]'), github.event_name)
                 && format('type=gha,scope={0}', matrix.os) || '' }}
@@ -181,7 +195,7 @@ jobs:
         env:
           STEPS_DOCKER_BUILD_OUTPUTS_DIGEST: ${{ steps.docker_build.outputs.digest }}
       - name: Attest docker.io image
-        uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a # v3.0.0
+        uses: actions/attest-build-provenance@96278af6caaf10aea03fd8d33a09a777ca52d62f # v3.2.0
         # If there isn't a digest, an annotation cannot be added
         if: >-
           ${{ github.repository_owner == 'OSGeo' && github.event_name != 'pull_request'
@@ -192,7 +206,7 @@ jobs:
           subject-digest: ${{ steps.docker_build.outputs.digest }}
           push-to-registry: ${{ github.repository_owner == 'OSGeo' && github.event_name != 'pull_request' }}
       - name: Attest ghcr.io image
-        uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a # v3.0.0
+        uses: actions/attest-build-provenance@96278af6caaf10aea03fd8d33a09a777ca52d62f # v3.2.0
         # If there isn't a digest, an annotation cannot be added
         if: ${{ steps.docker_build.outputs.digest }}
         id: attest-ghcr

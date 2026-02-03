@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
     DCELL *cell_real, *cell_imag;
     int rows, cols; /* number of rows & columns */
     long totsize;   /* Total number of data points */
-    double(
+    double (
         *data)[2]; /* Data structure containing real & complex values of FFT */
     int i, j;      /* Loop control variables */
 

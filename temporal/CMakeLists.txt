@@ -58,7 +58,7 @@ add_custom_target(
   COMMENT "All temporal modules are built.")
 
 if(WITH_DOCS)
-  generate_html(TARGET ALL_TEMPORAL_MODULES NAME temporalintro)
+  generate_docs(temporalintro TARGET ALL_TEMPORAL_MODULES)
 endif()
 
 build_program_in_subdir(t.connect DEPENDS grass_gis grass_temporal)
