@@ -238,6 +238,8 @@ def get_commands(*, env=None):
     search_paths = [gisbase]
     if env.get("GRASS_ADDON_BASE"):
         search_paths.append(env["GRASS_ADDON_BASE"])
+    if env.get("GRASS_ADDON_PATH"):
+        search_paths.extend([p for p in env["GRASS_ADDON_PATH"].split(os.pathsep) if p])
 
     for base_dir in search_paths:
         for directory in ("bin", "scripts"):
