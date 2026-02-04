@@ -50,10 +50,15 @@ class TestMultibandApiStability(TestCase):
         for map_name in self.EXPECTED_MAPS:
             self.runModule("r.info", map=map_name)
         module = SimpleModule(
-            "g.list", type="raster", pattern=f"{self.OUTPUT_BASENAME}*", separator="newline"
+            "g.list",
+            type="raster",
+            pattern=f"{self.OUTPUT_BASENAME}*",
+            separator="newline",
         )
         self.runModule(module, expecting_stdout=True)
-        listed = [m.strip() for m in module.outputs.stdout.strip().split("\n") if m.strip()]
+        listed = [
+            m.strip() for m in module.outputs.stdout.strip().split("\n") if m.strip()
+        ]
         self.assertEqual(
             listed,
             self.EXPECTED_MAPS,
