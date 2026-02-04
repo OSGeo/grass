@@ -32,7 +32,6 @@ a web-based translation platform.
 Translations are automatically submitted to the GRASS repository as pull requests.
 For help or questions, join the
 [GRASS development community on Discourse](https://discourse.osgeo.org/c/grass/developer/61)
-or contact the mailing list.
 
 See [locale/README.md](locale/README.md) for more technical details about the
 translation process.

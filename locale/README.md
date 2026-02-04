@@ -1,6 +1,6 @@
-# Contributing to GRASS GIS Translations
+# Contributing to GRASS Translations
 
-**Welcome!** Thank you for your interest in helping translate GRASS GIS.
+**Welcome!** Thank you for your interest in helping translate GRASS.
 Your contributions make GRASS accessible to users around the world.
 
 ## For translators: How to contribute
@@ -20,8 +20,6 @@ Weblate interface. Weblate administrators will set it up for you.
 ### Need help?
 
 - Ask questions on the [GRASS development forum](https://discourse.osgeo.org/c/grass/developer/61)
-- Email the development mailing list at `grass-dev@lists.osgeo.org`
-  ([subscribe here](https://lists.osgeo.org/mailman/listinfo/grass-dev))
 
 Your time and effort are valuable - thank you for contributing!
 
