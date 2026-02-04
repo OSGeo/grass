@@ -24,7 +24,7 @@ from grass.tools import Tools
 
 
 def get_region(env=None):
-    """Returns current computational region as dictionary. """
+    """Returns current computational region as dictionary."""
     tools = Tools(env=env)
     return tools.g_region(flags="p", format="json").json
 
