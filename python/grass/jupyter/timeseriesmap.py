@@ -14,6 +14,7 @@
 """Create and display visualizations for space-time datasets."""
 
 import grass.script as gs
+from grass.tools import Tools
 
 from .region import RegionManagerForTimeSeries
 from .baseseriesmap import BaseSeriesMap
@@ -39,20 +40,11 @@ def collect_layers(timeseries, element_type, fill_gaps):
     :param str element_type: element type, "stvds" or "strds"
     :param bool fill_gaps: fill empty time steps with data from previous step
     """
-    import json
-
+    tools = Tools()
     if element_type == "strds":
-        result = json.loads(
-            gs.read_command(
-                "t.rast.list", method="gran", input=timeseries, format="json"
-            )
-        )
+        result = tools.t_rast_list(method="gran", input=timeseries, format="json")
     elif element_type == "stvds":
-        result = json.loads(
-            gs.read_command(
-                "t.vect.list", method="gran", input=timeseries, format="json"
-            )
-        )
+        result = tools.t_vect_list(method="gran", input=timeseries, format="json")
     else:
         raise NameError(
             _("Dataset {} must be element type 'strds' or 'stvds'").format(timeseries)
