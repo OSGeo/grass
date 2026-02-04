@@ -209,12 +209,20 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
     double deltaw = 1.e12;
 
     setup->sisum = 0.;
+    double sisum = 0.;
     double infsum = 0.;
+
     cmul2 = rhow * gacc;
 
+#pragma omp parallel for private(l, zx, zy, zd2, zd4, sinsl, hh, sheer) \
+    reduction(+ : n, vsum, chsum, infsum, sisum)                        \
+    reduction(min : zmin, zd2min, smin, infmin)                         \
+    reduction(max : zmax, zd2max, smax, infmax, vmax, sigmax, cchezmax)
     for (k = 0; k < geometry->my; k++) {
         for (l = 0; l < geometry->mx; l++) {
+
             if (grids->zz[k][l] != UNDEF) {
+                hh = 1.0;
                 zx = grids->v1[k][l];
                 zy = grids->v2[k][l];
                 zd2 = zx * zx + zy * zy;
@@ -268,9 +276,10 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
                                  1.5)); /* rill erosion=1.5, sheet = 1.1 */
                     }
                 }
-                setup->sisum += grids->si[k][l];
+                sisum += grids->si[k][l];
                 smin = amin1(smin, grids->si[k][l]);
                 smax = amax1(smax, grids->si[k][l]);
+
                 if (grids->inf) {
                     infsum += grids->inf[k][l];
                     infmin = amin1(infmin, grids->inf[k][l]);
@@ -297,9 +306,11 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
     if (n == 0) {
         G_fatal_error(_("No values in the elevation raster."));
     }
+    setup->sisum = sisum;
     cc = (double)n;
 
     setup->si0 = setup->sisum / cc;
+
     setup->vmean = vsum / cc;
     setup->chmean = chsum / cc;
 
@@ -369,8 +380,11 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
      * r}) \bigl[\rho_w\, g h({\bf r}) \sin \beta ({\bf r}) \bigr]^p \f$
      * [kg/ms]=...
      */
+#pragma omp parallel for private(l)
+
     for (k = 0; k < geometry->my; k++) {
         for (l = 0; l < geometry->mx; l++) {
+
             if (grids->zz[k][l] != UNDEF) {
                 grids->v1[k][l] *= setup->deltap;
                 grids->v2[k][l] *= setup->deltap;
@@ -412,8 +426,10 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
      * operator WRITE the equation here
      */
     if (inputs->wdepth) {
+#pragma omp parallel for private(l)
         for (k = 0; k < geometry->my; k++) {
             for (l = 0; l < geometry->mx; l++) {
+
                 if (grids->zz[k][l] != UNDEF) {
                     /* get back from temp */
                     if (outputs->et)
