@@ -38,4 +38,3 @@ r.example.segmulti input=raster_1,raster_2,raster_3 output=raster_out
 
 Vaclav Petras,
 [NCSU Center for Geospatial Analytics](http://geospatial.ncsu.edu)
-

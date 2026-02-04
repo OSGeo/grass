@@ -29,4 +29,3 @@ r.univar raster_map_2
 ## AUTHORS
 
 Vaclav Petras
-
