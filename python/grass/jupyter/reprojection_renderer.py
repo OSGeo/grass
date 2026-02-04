@@ -95,6 +95,14 @@ class ReprojectionRenderer:
         name = file_info["name"]
         mapset = file_info["mapset"]
 
+        # Validate that raster exists
+        if not full_name:
+            msg = (
+                f"Raster map <{name}> not found. "
+                "Please check the raster name and ensure it exists in the current location."
+            )
+            raise ValueError(msg)
+
         self._region_manager.set_region_from_raster(full_name)
         # Reproject raster into WGS84/epsg3857 location
         env_info = gs.gisenv(env=self._src_env)
@@ -143,6 +151,15 @@ class ReprojectionRenderer:
         full_name = file_info["fullname"]
         name = file_info["name"]
         mapset = file_info["mapset"]
+
+        # Validate that vector exists
+        if not full_name:
+            msg = (
+                f"Vector map <{name}> not found. "
+                "Please check the vector name and ensure it exists in the current location."
+            )
+            raise ValueError(msg)
+
         new_name = full_name.replace("@", "_")
         # set bbox
         self._region_manager.set_bbox_vector(full_name)
