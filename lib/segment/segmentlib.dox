@@ -90,7 +90,7 @@ DEPENDENCIES = ... $(SEGMENTDEP)
 \endcode
 
 <P>
-See \ref Compiling_and_Installing_GRASS_Modules for a complete 
+See \ref Compiling_and_Installing_GRASS_Modules for a complete
 discussion of Makefiles.
 
 \section How_to_Use_the_Library How to Use the Library for Raster Maps

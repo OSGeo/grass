@@ -1,44 +1,41 @@
-<h2>DESCRIPTION</h2>
+# r.example.segmulti
 
-<em>r.example.segmulti</em> changes one cell value in hardcoded location
+## DESCRIPTION
+
+*r.example.segmulti* changes one cell value in hardcoded location
 and sums input rasters together.
 It is meant to demonstrate how to use the Segment Library together with
 GRASS GIS raster maps. Specifically is focuses on case when multiple
 rasters are always accessed together (e.g. image bands) and when their
 values can be stored as a same type (here double).
 
-<h2>EXAMPLE</h2>
+## EXAMPLE
 
 Set computational region and generate synthetic data:
 
-<div class="code"><pre>
+```bash
 g.region cols=100 rows=50 -p
 r.mapcalc -s expression='raster_1 = row()'
 r.mapcalc -s expression='raster_2 = 10 * col()'
 r.mapcalc -s expression='raster_3 = 1000'
-</pre></div>
+```
 
 Test the module:
 
-<div class="code"><pre>
+```bash
 r.example.segmulti input=raster_1,raster_2,raster_3 output=raster_out
-</pre></div>
+```
 
-<h2>SEE ALSO</h2>
+## SEE ALSO
 
-<em>
-<a href="r.example.html">r.example</a>
-<a href="r.example.html">r.example.segment</a>
-<a href="v.example.html">v.example</a>
-</em>
+* [r.example](r.example.html)
+* [r.example.segment](r.example.segment.html)
+* [v.example](v.example.html)
 
-<em>
-<a href="https://grass.osgeo.org/programming7/">GRASS Programmer's Manual</a>
-</em>
+* [GRASS Programmer's Manual](https://grass.osgeo.org/programming7/)
 
-<h2>AUTHORS</h2>
+## AUTHORS
 
 Vaclav Petras,
-<a href="http://geospatial.ncsu.edu">NCSU Center for Geospatial Analytics</a>
+[NCSU Center for Geospatial Analytics](http://geospatial.ncsu.edu)
 
-<p><i>Last changed: $Date$</i>
