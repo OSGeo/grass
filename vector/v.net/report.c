@@ -6,7 +6,7 @@
 #include <grass/gjson.h>
 
 int report(struct Map_info *In, int afield, int nfield, int action,
-           const char *format)
+            const char *format)
 {
     int i, j, line, nlines, ltype, node, nnodes;
     int cat_line, cat_node[2];
@@ -94,7 +94,9 @@ int report(struct Map_info *In, int afield, int nfield, int action,
 
         if (root_value) {
             char *json_str = G_json_serialize_to_string_pretty(root_value);
-            fprintf(stdout, "%s\n", json_str);
+            if (json_str) {
+                fprintf(stdout, "%s\n", json_str);
+            }
             G_json_free_serialized_string(json_str);
             G_json_value_free(root_value);
         }
@@ -106,6 +108,9 @@ int report(struct Map_info *In, int afield, int nfield, int action,
         struct ilist *List;
 
         List = Vect_new_list();
+
+        G_JSON_Value *root_val = (format && strcmp(format, "json") == 0) ? G_json_value_init_array() : NULL;
+        G_JSON_Array *root_arr = G_json_array(root_val);
 
         for (i = 1; i <= nlines; i++) {
 
@@ -132,9 +137,15 @@ int report(struct Map_info *In, int afield, int nfield, int action,
                 for (j = 0; j < Cats->n_cats; j++) {
                     if (Cats->field[j] == nfield) {
                         int count = 0;
-
-                        fprintf(stdout, "%d ", Cats->cat[j]);
-
+                        G_JSON_Value *item_val = root_arr ? G_json_value_init_object() : NULL;
+                        G_JSON_Value *lines_val = root_arr ? G_json_value_init_array() : NULL;
+                        
+                        if (root_arr) { 
+                             G_json_object_set_number(G_json_value_get_object(item_val), "node_cat", Cats->cat[j]); 
+                        } 
+                        else{
+                            fprintf(stdout, "%d ", Cats->cat[j]); 
+                        }
                         /* Loop through all lines */
                         for (k = 0; k < nelem; k++) {
                             elem = abs(Vect_get_node_line(In, node, k));
@@ -145,18 +156,26 @@ int report(struct Map_info *In, int afield, int nfield, int action,
                             /* Loop through all cats of line */
                             for (l = 0; l < Cats2->n_cats; l++) {
                                 if (Cats2->field[l] == afield) {
-                                    if (count > 0)
-                                        fprintf(stdout, ",");
-
-                                    fprintf(stdout, "%d", Cats2->cat[l]);
-                                    count++;
+                                    if (root_arr) G_json_array_append_number(G_json_array(lines_val), Cats2->cat[l]);
+                                    else {
+                                        if (count > 0) fprintf(stdout, ",");
+                                        fprintf(stdout, "%d", Cats2->cat[l]);
+                                        count++;
+                                    }
                                 }
                             }
                         }
-                        fprintf(stdout, "\n");
+                        if (root_arr) {
+                            G_json_object_set_value(G_json_value_get_object(item_val), "lines", lines_val);                            G_json_array_append_value(root_arr, item_val);
+                        } else fprintf(stdout, "\n");
                     }
                 }
             }
+        }
+        if (root_val) {
+            char *s = G_json_serialize_to_string_pretty(root_val);
+            if (s) { fprintf(stdout, "%s\n", s); G_json_free_serialized_string(s); }
+            G_json_value_free(root_val);
         }
         Vect_destroy_list(List);
     }

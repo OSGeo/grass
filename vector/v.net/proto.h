@@ -21,7 +21,7 @@ int create_arcs(FILE *, struct Map_info *, struct Map_info *, int, int);
 
 /* argc.c */
 void define_options(struct opt *);
-void parse_arguments(const struct opt *, int *, int *, double *, int *, int);
+void parse_arguments(const struct opt *, int *, int *, double *, int *);
 
 /* connect.c */
 int connect_arcs(struct Map_info *, struct Map_info *, struct Map_info *, int,
