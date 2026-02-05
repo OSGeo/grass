@@ -89,7 +89,7 @@ On grass.osgeo.org (grasslxd), new version directories need to be created:
 
 ```bash
 cd /var/www/code_and_data/
-VER=grass85
+VER=grass86
 mkdir -p ${VER}/manuals \
                 ${VER}/source/snapshot \
                 ${VER}/binary/mswindows/native \
