@@ -163,7 +163,7 @@ class JupyterDirectoryManager:
         Create a welcome Jupyter notebook in the working directory with
         the placeholder '${NOTEBOOK_DIR}' replaced by the actual path.
 
-        :param filename: Name of the template file to copy (str)
+        :param file_name: Name of the template file to copy (str)
         :return: Path to the created template file (Path)
         """
         # Copy template file to the working directory
