@@ -152,7 +152,7 @@ class JupyterServerInstance:
             return sock.getsockname()[1]
 
     def is_server_running(self, retries=10, delay=0.2):
-        """Check if the server in responding on the given port.
+        """Check if the server is responding on the given port.
         :param retries: Number of retries before giving up (int).
         :param delay: Delay between retries in seconds (float).
         :return: True if the server is up, False otherwise (bool).
