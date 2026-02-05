@@ -2,7 +2,6 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.script.core import read_command
 import json
-import grass.script as gs
 
 
 class TestVNet(TestCase):
@@ -12,13 +11,18 @@ class TestVNet(TestCase):
         """Remove viewshed map after each test method"""
         # TODO: eventually, removing maps should be handled through testing framework functions
         self.runModule("g.remove", flags="f", type="vector", name=self.network)
-   
+
     def test_nreport_json(self):
         """Test nreport operation JSON output"""
         self.runModule("v.net", input="streets", output=self.network, operation="nodes")
-        output = read_command("v.net", input=self.network, operation="nreport", 
-                              node_layer=2, format="json").strip()
-        
+        output = read_command(
+            "v.net",
+            input=self.network,
+            operation="nreport",
+            node_layer=2,
+            format="json",
+        ).strip()
+
         self.assertTrue(output, "nreport produced no output on stdout")
         try:
             data = json.loads(output)
@@ -26,18 +30,26 @@ class TestVNet(TestCase):
             self.fail(f"nreport produced invalid JSON: {output}")
 
         self.assertIsInstance(data, list, "nreport output must be a JSON array")
-    
+
     def test_report_json(self):
         """Test report operation JSON output"""
-        output = read_command("v.net", input="streets", operation="report", 
-                              arc_layer=1, node_layer=2, format="json").strip()
+        output = read_command(
+            "v.net",
+            input="streets",
+            operation="report",
+            arc_layer=1,
+            node_layer=2,
+            format="json",
+        ).strip()
 
         self.assertTrue(output, "report produced no output on stdout")
-        
+
         data = json.loads(output)
         self.assertIsInstance(data, list, "report output must be a JSON array")
         if len(data) > 0:
-            self.assertIn("line_cat", data[0], "Key 'line_cat' not found in JSON output")
+            self.assertIn(
+                "line_cat", data[0], "Key 'line_cat' not found in JSON output"
+            )
 
     def test_nodes(self):
         """Test"""
