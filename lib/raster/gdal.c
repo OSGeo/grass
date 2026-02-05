@@ -433,3 +433,81 @@ CPLErr Rast_gdal_raster_IO(GDALRasterBandH band, GDALRWFlag rw_flag, int x_off,
                         buf_x_size, buf_y_size, buf_type, pixel_size,
                         line_size);
 }
+
+/*!
+   \brief Get band description or name from GDAL
+
+   Prefer description over name. Returns NULL if neither is available.
+
+   \param hBand GDAL raster band handle
+
+   \return pointer to allocated string (caller must free)
+   \return NULL if no description or name available
+ */
+static char *get_gdal_band_semantic_label(GDALRasterBandH hBand)
+{
+    const char *desc, *name;
+    char *buf;
+
+    desc = GDALGetDescription(hBand);
+    if (desc && *desc) {
+        buf = G_store(desc);
+        G_strip(buf);
+        if (*buf)
+            return buf;
+        G_free(buf);
+    }
+    name = GDALGetMetadataItem(hBand, "BANDNAME", "");
+    if (name && *name) {
+        buf = G_store(name);
+        G_strip(buf);
+        if (*buf)
+            return buf;
+        G_free(buf);
+    }
+    return NULL;
+}
+
+/*!
+   \brief Get band description or name from GDAL, validate, and store as
+   GRASS semantic label
+
+   Prefer description over name. Silently skip if missing, invalid, or
+   duplicate (multi-band).
+
+   \param hBand GDAL raster band handle
+   \param mapname GRASS raster map name
+   \param used_labels pointer to array of used labels (for duplicate checking)
+   \param n_used pointer to number of used labels
+ */
+void Rast_set_semantic_label_from_gdal(GDALRasterBandH hBand,
+                                       const char *mapname, char ***used_labels,
+                                       int *n_used)
+{
+    char *label;
+    int i;
+
+    label = get_gdal_band_semantic_label(hBand);
+    if (!label)
+        return;
+    if (!Rast_legal_semantic_label(label)) {
+        G_free(label);
+        return;
+    }
+    if (used_labels && n_used) {
+        for (i = 0; i < *n_used; i++) {
+            if (strcmp((*used_labels)[i], label) == 0) {
+                G_free(label);
+                return;
+            }
+        }
+    }
+    Rast_write_semantic_label(mapname, label);
+    if (used_labels && n_used) {
+        *used_labels =
+            (char **)G_realloc(*used_labels, (*n_used + 1) * sizeof(char *));
+        (*used_labels)[*n_used] = G_store(label);
+        (*n_used)++;
+    }
+    G_free(label);
+}
