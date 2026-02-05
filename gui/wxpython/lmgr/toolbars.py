@@ -24,7 +24,6 @@ This program is free software under the GNU General Public License
 """
 
 from core.gcmd import RunCommand
-from grass.workflows.server import is_jupyter_installed, is_wx_html2_available
 from gui_core.toolbars import BaseToolbar, AuiToolbar, BaseIcons
 from icons.icon import MetaIcon
 
@@ -212,25 +211,11 @@ class LMToolsToolbar(AuiToolbar):
             "python": MetaIcon(
                 img="python", label=_("Open a simple Python code editor")
             ),
-            "jupyter": MetaIcon(img="jupyter", label=_("Start Jupyter Notebook")),
-            "jupyter-inactive": MetaIcon(
-                img="jupyter-inactive",
-                label=_(
-                    "Start Jupyter Notebook - requires Jupyter Notebook, click for more info"
-                ),
-            ),
             "script-load": MetaIcon(
                 img="script-load", label=_("Launch user-defined script")
             ),
+            "jupyter": MetaIcon(img="jupyter", label=_("Start Jupyter Notebook")),
         }
-
-        # Decide if Jupyter is available
-        if is_jupyter_installed() and is_wx_html2_available():
-            jupyter_icon = icons["jupyter"]
-            jupyter_handler = self.parent.OnJupyterNotebook
-        else:
-            jupyter_icon = icons["jupyter-inactive"]
-            jupyter_handler = self.parent.OnShowJupyterInfo
 
         return self._getToolbarData(
             (
@@ -267,14 +252,14 @@ class LMToolsToolbar(AuiToolbar):
                     self.parent.OnSimpleEditor,
                 ),
                 (
-                    ("jupyter", jupyter_icon.label),
-                    jupyter_icon,
-                    jupyter_handler,
-                ),
-                (
                     ("script-load", icons["script-load"].label),
                     icons["script-load"],
                     self.parent.OnRunScript,
+                ),
+                (
+                    ("jupyter", _("Jupyter Notebook")),
+                    icons["jupyter"],
+                    self.parent.OnJupyterNotebook,
                 ),
             )
         )
