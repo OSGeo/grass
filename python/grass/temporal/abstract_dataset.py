@@ -243,7 +243,7 @@ class AbstractDataset(
             "start_time": start,
             "end_time": end,
         }
-        
+
         if self.is_time_relative():
             info["temporal_extent"]["unit"] = self.get_relative_time_unit()
 
@@ -261,7 +261,7 @@ class AbstractDataset(
             "is_spatial_built": self.is_spatial_topology_build(),
             "is_temporal_built": self.is_temporal_topology_build(),
         }
-        
+
         if self.is_temporal_topology_build():
             info["topology"]["temporal_relations"] = self.get_number_of_temporal_relations()
 
