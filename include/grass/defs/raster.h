@@ -316,8 +316,6 @@ struct GDAL_link *Rast_get_gdal_link(const char *, const char *);
 struct GDAL_link *Rast_create_gdal_link(const char *, RASTER_MAP_TYPE);
 void Rast_close_gdal_link(struct GDAL_link *);
 int Rast_close_gdal_write_link(struct GDAL_link *);
-void Rast_set_semantic_label_from_gdal(GDALRasterBandH, const char *, char ***,
-                                       int *);
 
 /* get_cellhd.c */
 void Rast_get_cellhd(const char *, const char *, struct Cell_head *);

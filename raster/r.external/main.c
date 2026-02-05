@@ -33,6 +33,63 @@
 
 #include "proto.h"
 
+/* Get band description or name from GDAL; prefer description over name */
+static char *get_gdal_band_semantic_label(GDALRasterBandH hBand)
+{
+    const char *desc, *name;
+    char *buf;
+
+    desc = GDALGetDescription(hBand);
+    if (desc && *desc) {
+        buf = G_store(desc);
+        G_strip(buf);
+        if (*buf)
+            return buf;
+        G_free(buf);
+    }
+    name = GDALGetMetadataItem(hBand, "BANDNAME", "");
+    if (name && *name) {
+        buf = G_store(name);
+        G_strip(buf);
+        if (*buf)
+            return buf;
+        G_free(buf);
+    }
+    return NULL;
+}
+
+static void set_semantic_label_from_gdal(GDALRasterBandH hBand,
+                                         const char *mapname,
+                                         char ***used_labels, int *n_used)
+{
+    char *label;
+    int i;
+
+    label = get_gdal_band_semantic_label(hBand);
+    if (!label)
+        return;
+    if (!Rast_legal_semantic_label(label)) {
+        G_free(label);
+        return;
+    }
+    if (used_labels && n_used) {
+        for (i = 0; i < *n_used; i++) {
+            if (strcmp((*used_labels)[i], label) == 0) {
+                G_free(label);
+                return;
+            }
+        }
+    }
+    Rast_write_semantic_label(mapname, label);
+    if (used_labels && n_used) {
+        *used_labels =
+            (char **)G_realloc(*used_labels, (*n_used + 1) * sizeof(char *));
+        (*used_labels)[*n_used] = G_store(label);
+        (*n_used)++;
+    }
+    G_free(label);
+}
+
 int main(int argc, char *argv[])
 {
     const char *input, *source, *output;
@@ -270,7 +327,7 @@ int main(int argc, char *argv[])
             query_band(hBand, output2, &cellhd, &info);
             create_map(input, band, output2, &cellhd, &info, title, flip);
             transfer_colormap(hBand, output2);
-            Rast_set_semantic_label_from_gdal(
+            set_semantic_label_from_gdal(
                 hBand, output2, (max_band > min_band) ? &used_labels : NULL,
                 (max_band > min_band) ? &n_used : NULL);
 
