@@ -24,13 +24,12 @@
 #include <math.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <gdal.h>
+#include <cpl_conv.h>
 #include <grass/raster.h>
 #include <grass/imagery.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
-
-#include <gdal.h>
-#include <cpl_conv.h>
 
 void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
                       int create_only, int override, int check_only);

@@ -23,13 +23,12 @@
 #include <string.h>
 
 #include <grass/gis.h>
-#include <grass/raster.h>
-#include <grass/imagery.h>
-#include <grass/glocale.h>
-
 #include <gdal.h>
 #include <ogr_srs_api.h>
 #include <cpl_conv.h>
+#include <grass/raster.h>
+#include <grass/imagery.h>
+#include <grass/glocale.h>
 
 #include "proto.h"
 
