@@ -218,6 +218,55 @@ class AbstractDataset(
     def print_shell_info(self):
         """Print information about this class in shell style"""
 
+    def print_json(self):
+        """Print information about this class in JSON format"""
+        import json
+        import datetime
+
+        def json_serial(obj):
+            if isinstance(obj, (datetime.datetime, datetime.date)):
+                return obj.isoformat()
+            return None
+
+        info = {
+            "basic": {
+                "id": self.get_id(),
+                "name": self.get_name(),
+                "mapset": self.get_mapset(),
+                "type": self.get_type(),
+                "temporal_type": self.get_temporal_type(),
+            }
+        }
+
+        start, end = self.get_temporal_extent_as_tuple()
+        info["temporal_extent"] = {
+            "start_time": start,
+            "end_time": end,
+        }
+        
+        if self.is_time_relative():
+            info["temporal_extent"]["unit"] = self.get_relative_time_unit()
+
+        north, south, east, west, top, bottom = self.get_spatial_extent_as_tuple()
+        info["spatial_extent"] = {
+            "north": north,
+            "south": south,
+            "east": east,
+            "west": west,
+            "top": top,
+            "bottom": bottom,
+        }
+
+        info["topology"] = {
+            "is_spatial_built": self.is_spatial_topology_build(),
+            "is_temporal_built": self.is_temporal_topology_build(),
+        }
+        
+        if self.is_temporal_topology_build():
+            info["topology"]["temporal_relations"] = self.get_number_of_temporal_relations()
+
+        print(json.dumps(info, indent=4, default=json_serial))
+
     @abstractmethod
     def print_self(self):
         """Print the content of the internal structure to stdout"""
