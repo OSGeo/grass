@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-24 15:47+0000\n"
+"POT-Creation-Date: 2026-01-31 15:57+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Hungarian <https://weblate.osgeo.org/projects/grass-gis/grassmods/hu/>\n"
@@ -19,13 +19,13 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.4.3\n"
 
-#: ../db/db.columns/main.c:47 ../db/db.copy/main.c:104
+#: ../db/db.columns/main.c:50 ../db/db.copy/main.c:104
 #: ../db/db.describe/main.c:65 ../db/db.select/main.c:77
 #, c-format
 msgid "Table <%s> not found in database <%s> using driver <%s>"
 msgstr "<%s> táblát nem találom a <%s> adatbázisban, a <%s> meghajtót használva"
 
-#: ../db/db.columns/main.c:54 ../db/db.createdb/main.c:38
+#: ../db/db.columns/main.c:57 ../db/db.createdb/main.c:38
 #: ../db/db.databases/main.c:47 ../db/db.describe/main.c:71
 #: ../db/db.dropdb/main.c:39 ../db/db.execute/main.c:68
 #: ../db/db.select/main.c:106 ../db/db.tables/main.c:45
@@ -39,7 +39,7 @@ msgstr "<%s> táblát nem találom a <%s> adatbázisban, a <%s> meghajtót haszn
 msgid "Unable to start driver <%s>"
 msgstr "Nem tudom elindítani a <%s> meghajtót"
 
-#: ../db/db.columns/main.c:59 ../db/db.describe/main.c:76
+#: ../db/db.columns/main.c:62 ../db/db.describe/main.c:76
 #: ../db/db.execute/main.c:74 ../db/db.select/main.c:112
 #: ../db/db.tables/main.c:50 ../display/d.vect.thematic/main.c:299
 #: ../display/d.vect/opt.c:152
@@ -47,7 +47,7 @@ msgstr "Nem tudom elindítani a <%s> meghajtót"
 msgid "Unable to open database <%s>"
 msgstr "Nem tudom megnyitni a <%s> adatbázist"
 
-#: ../db/db.columns/main.c:65 ../db/db.describe/main.c:82
+#: ../db/db.columns/main.c:68 ../db/db.describe/main.c:82
 #: ../doc/examples/vector/v.example/main.c:143
 #: ../scripts/db.univar/db.univar.py:129 ../vector/v.db.connect/main.c:350
 #: ../vector/v.extract/main.c:233 ../vector/v.in.ascii/main.c:447
@@ -62,7 +62,7 @@ msgstr "Nem tudom megnyitni a <%s> adatbázist"
 msgid "Unable to describe table <%s>"
 msgstr ""
 
-#: ../db/db.columns/main.c:73 ../db/db.describe/main.c:54
+#: ../db/db.columns/main.c:76 ../db/db.describe/main.c:54
 #: ../db/db.describe/main.c:59 ../db/db.select/main.c:118
 #: ../db/db.select/main.c:219 ../db/db.select/main.c:272
 #: ../general/g.list/list.c:89 ../general/g.mapset/main.c:175
@@ -85,7 +85,7 @@ msgstr ""
 msgid "Failed to initialize JSON array. Out of memory?"
 msgstr ""
 
-#: ../db/db.columns/main.c:98 ../db/db.connect/main.c:243
+#: ../db/db.columns/main.c:169 ../db/db.connect/main.c:243
 #: ../general/g.findfile/main.c:36 ../general/g.list/list.c:140
 #: ../general/g.mapset/main.c:38 ../general/g.mapsets/list.c:34
 #: ../misc/m.measure/main.c:182 ../raster/r.distance/report.c:138
@@ -93,104 +93,49 @@ msgstr ""
 #: ../raster/r.regression.multi/main.c:696
 #: ../raster/r.stats.quantile/main.c:472 ../raster/r.volume/main.c:448
 #: ../raster3d/r3.info/main.c:993 ../vector/v.class/main.c:379
-#: ../vector/v.db.connect/main.c:430 ../vector/v.profile/main.c:889
+#: ../vector/v.db.connect/main.c:430 ../vector/v.profile/main.c:885
 #: ../vector/v.vect.stats/main.c:863 ../vector/v.what.rast/main.c:694
 #: ../vector/v.what/main.c:321
 msgid "Failed to serialize JSON to pretty format."
 msgstr ""
 
-#: ../db/db.columns/main.c:133 ../db/db.connect/main.c:48
-#: ../db/db.copy/main.c:34 ../db/db.createdb/main.c:66
-#: ../db/db.databases/main.c:94 ../db/db.describe/main.c:185
-#: ../db/db.drivers/main.c:68 ../db/db.dropdb/main.c:67
-#: ../db/db.execute/main.c:134 ../db/db.login/main.c:39
-#: ../db/db.select/main.c:465 ../db/db.tables/main.c:98
-#: ../locale/scriptstrings/db.dropcolumn_to_translate.c:2
-#: ../locale/scriptstrings/db.droptable_to_translate.c:2
-#: ../locale/scriptstrings/db.in.ogr_to_translate.c:2
-#: ../locale/scriptstrings/db.out.ogr_to_translate.c:2
-#: ../locale/scriptstrings/db.test_to_translate.c:2
-#: ../locale/scriptstrings/db.univar_to_translate.c:2
-#: ../locale/scriptstrings/t.vect.db.select_to_translate.c:5
-#: ../locale/scriptstrings/v.db.addcolumn_to_translate.c:4
-#: ../locale/scriptstrings/v.db.addtable_to_translate.c:4
-#: ../locale/scriptstrings/v.db.dropcolumn_to_translate.c:4
-#: ../locale/scriptstrings/v.db.droprow_to_translate.c:4
-#: ../locale/scriptstrings/v.db.droptable_to_translate.c:4
-#: ../locale/scriptstrings/v.db.join_to_translate.c:4
-#: ../locale/scriptstrings/v.db.reconnect.all_to_translate.c:4
-#: ../locale/scriptstrings/v.db.renamecolumn_to_translate.c:4
-#: ../locale/scriptstrings/v.db.update_to_translate.c:4
-#: ../locale/scriptstrings/v.what.vect_to_translate.c:4
-#: ../vector/v.db.connect/main.c:61 ../vector/v.db.select/main.c:99
-#: ../vector/v.distance/main.c:127 ../vector/v.in.db/main.c:53
-#: ../vector/v.to.db/main.c:39 ../vector/v.vect.stats/main.c:138
-msgid "database"
-msgstr "adatbázis"
+#: ../db/db.columns/main.c:205
+msgid "Print type information about the columns"
+msgstr ""
 
-#: ../db/db.columns/main.c:134 ../db/db.connect/main.c:49
-#: ../db/db.copy/main.c:35 ../db/db.createdb/main.c:67
-#: ../db/db.databases/main.c:95 ../db/db.describe/main.c:187
-#: ../db/db.dropdb/main.c:68 ../db/db.execute/main.c:135
-#: ../db/db.select/main.c:466 ../db/db.tables/main.c:99
-#: ../locale/scriptstrings/db.dropcolumn_to_translate.c:3
-#: ../locale/scriptstrings/db.droptable_to_translate.c:3
-#: ../locale/scriptstrings/db.in.ogr_to_translate.c:4
-#: ../locale/scriptstrings/db.out.ogr_to_translate.c:5
-#: ../locale/scriptstrings/db.test_to_translate.c:3
-#: ../locale/scriptstrings/db.univar_to_translate.c:4
-#: ../locale/scriptstrings/t.vect.db.select_to_translate.c:3
-#: ../locale/scriptstrings/v.db.addcolumn_to_translate.c:3
-#: ../locale/scriptstrings/v.db.addtable_to_translate.c:3
-#: ../locale/scriptstrings/v.db.dropcolumn_to_translate.c:3
-#: ../locale/scriptstrings/v.db.droprow_to_translate.c:3
-#: ../locale/scriptstrings/v.db.droptable_to_translate.c:3
-#: ../locale/scriptstrings/v.db.join_to_translate.c:3
-#: ../locale/scriptstrings/v.db.reconnect.all_to_translate.c:3
-#: ../locale/scriptstrings/v.db.renamecolumn_to_translate.c:3
-#: ../locale/scriptstrings/v.db.univar_to_translate.c:4
-#: ../locale/scriptstrings/v.db.update_to_translate.c:3
-#: ../locale/scriptstrings/v.what.strds_to_translate.c:7
-#: ../locale/scriptstrings/v.what.vect_to_translate.c:7
-#: ../vector/v.class/main.c:55 ../vector/v.db.connect/main.c:60
-#: ../vector/v.db.select/main.c:98 ../vector/v.distance/main.c:128
-#: ../vector/v.to.db/main.c:38 ../vector/v.univar/main.c:97
-#: ../vector/v.vect.stats/main.c:137 ../vector/v.what.rast/main.c:82
-#: ../vector/v.what.rast3/main.c:70
-msgid "attribute table"
-msgstr "attribútum tábla"
-
-#: ../db/db.columns/main.c:135
-msgid "List all columns for a given table."
+#: ../db/db.columns/main.c:207
+#, fuzzy
+#| msgid "List all columns for a given table."
+msgid "Print the name and the type of all the columns for a given table."
 msgstr "Oszlopok listája az adott táblából."
 
-#: ../db/db.columns/main.c:138 ../db/db.connect/main.c:57
-#: ../db/db.connect/main.c:66 ../db/db.connect/main.c:118
-#: ../db/db.describe/main.c:181 ../db/db.login/main.c:90
-#: ../display/d.mon/main.c:118 ../display/d.mon/main.c:124
-#: ../display/d.mon/main.c:130 ../general/g.findfile/main.c:95
-#: ../general/g.list/main.c:104 ../general/g.list/main.c:116
-#: ../general/g.list/main.c:146 ../general/g.list/main.c:152
-#: ../general/g.list/main.c:162 ../general/g.list/main.c:171
-#: ../general/g.mapset/main.c:90 ../general/g.mapset/main.c:102
-#: ../general/g.mapset/main.c:108 ../general/g.mapsets/main.c:111
-#: ../general/g.mapsets/main.c:115 ../general/g.mapsets/main.c:121
-#: ../general/g.mapsets/main.c:127 ../general/g.proj/main.c:76
-#: ../general/g.proj/main.c:81 ../general/g.proj/main.c:90
-#: ../general/g.proj/main.c:96 ../general/g.proj/main.c:105
-#: ../general/g.proj/main.c:111 ../general/g.proj/main.c:120
-#: ../general/g.proj/main.c:175 ../general/g.proj/main.c:229
-#: ../general/g.region/main.c:91 ../general/g.region/main.c:97
-#: ../general/g.region/main.c:102 ../general/g.region/main.c:108
-#: ../general/g.region/main.c:113 ../general/g.region/main.c:118
-#: ../general/g.region/main.c:124 ../general/g.region/main.c:132
-#: ../general/g.region/main.c:137 ../general/g.region/main.c:143
-#: ../general/g.region/main.c:151 ../general/g.region/main.c:157
-#: ../general/g.region/main.c:392 ../general/g.version/main.c:124
-#: ../imagery/i.group/main.c:91 ../imagery/i.group/main.c:102
-#: ../imagery/i.group/main.c:107 ../imagery/i.group/main.c:115
-#: ../imagery/i.signatures/main.c:122 ../imagery/i.signatures/main.c:128
-#: ../imagery/i.signatures/main.c:160
+#: ../db/db.columns/main.c:208 ../db/db.columns/main.c:226
+#: ../db/db.connect/main.c:57 ../db/db.connect/main.c:66
+#: ../db/db.connect/main.c:118 ../db/db.describe/main.c:181
+#: ../db/db.login/main.c:90 ../display/d.mon/main.c:118
+#: ../display/d.mon/main.c:124 ../display/d.mon/main.c:130
+#: ../general/g.findfile/main.c:95 ../general/g.list/main.c:104
+#: ../general/g.list/main.c:116 ../general/g.list/main.c:146
+#: ../general/g.list/main.c:152 ../general/g.list/main.c:162
+#: ../general/g.list/main.c:171 ../general/g.mapset/main.c:90
+#: ../general/g.mapset/main.c:102 ../general/g.mapset/main.c:108
+#: ../general/g.mapsets/main.c:111 ../general/g.mapsets/main.c:115
+#: ../general/g.mapsets/main.c:121 ../general/g.mapsets/main.c:127
+#: ../general/g.proj/main.c:76 ../general/g.proj/main.c:81
+#: ../general/g.proj/main.c:90 ../general/g.proj/main.c:96
+#: ../general/g.proj/main.c:105 ../general/g.proj/main.c:111
+#: ../general/g.proj/main.c:120 ../general/g.proj/main.c:175
+#: ../general/g.proj/main.c:229 ../general/g.region/main.c:91
+#: ../general/g.region/main.c:97 ../general/g.region/main.c:102
+#: ../general/g.region/main.c:108 ../general/g.region/main.c:113
+#: ../general/g.region/main.c:118 ../general/g.region/main.c:124
+#: ../general/g.region/main.c:132 ../general/g.region/main.c:137
+#: ../general/g.region/main.c:143 ../general/g.region/main.c:151
+#: ../general/g.region/main.c:157 ../general/g.region/main.c:392
+#: ../general/g.version/main.c:124 ../imagery/i.group/main.c:91
+#: ../imagery/i.group/main.c:102 ../imagery/i.group/main.c:107
+#: ../imagery/i.group/main.c:115 ../imagery/i.signatures/main.c:122
+#: ../imagery/i.signatures/main.c:128 ../imagery/i.signatures/main.c:160
 #: ../locale/scriptstrings/g.extension_to_translate.c:17
 #: ../locale/scriptstrings/g.extension_to_translate.c:19
 #: ../locale/scriptstrings/g.extension_to_translate.c:21
@@ -239,6 +184,88 @@ msgstr "Oszlopok listája az adott táblából."
 #: ../vector/v.what/main.c:134 ../vector/v.what/main.c:142
 msgid "Print"
 msgstr "Nyomtatás"
+
+#: ../db/db.columns/main.c:212 ../db/db.select/main.c:412
+#: ../db/db.select/main.c:419 ../db/db.select/main.c:422
+#: ../db/db.select/main.c:435 ../db/db.select/main.c:445
+#: ../db/db.select/main.c:456 ../general/g.gisenv/main.c:93
+#: ../general/g.gisenv/main.c:98 ../vector/v.db.select/main.c:130
+#: ../vector/v.db.select/main.c:134 ../vector/v.db.select/main.c:140
+#: ../vector/v.db.select/main.c:143 ../vector/v.db.select/main.c:161
+#: ../vector/v.db.select/main.c:166 ../vector/v.profile/main.c:194
+#: ../vector/v.profile/main.c:197 ../vector/v.profile/main.c:206
+#: ../vector/v.profile/main.c:215
+msgid "Format"
+msgstr ""
+
+#: ../db/db.columns/main.c:216 ../db/db.connect/main.c:48
+#: ../db/db.copy/main.c:34 ../db/db.createdb/main.c:66
+#: ../db/db.databases/main.c:94 ../db/db.describe/main.c:185
+#: ../db/db.drivers/main.c:68 ../db/db.dropdb/main.c:67
+#: ../db/db.execute/main.c:134 ../db/db.login/main.c:39
+#: ../db/db.select/main.c:465 ../db/db.tables/main.c:98
+#: ../locale/scriptstrings/db.dropcolumn_to_translate.c:2
+#: ../locale/scriptstrings/db.droptable_to_translate.c:2
+#: ../locale/scriptstrings/db.in.ogr_to_translate.c:2
+#: ../locale/scriptstrings/db.out.ogr_to_translate.c:2
+#: ../locale/scriptstrings/db.test_to_translate.c:2
+#: ../locale/scriptstrings/db.univar_to_translate.c:2
+#: ../locale/scriptstrings/t.vect.db.select_to_translate.c:5
+#: ../locale/scriptstrings/v.db.addcolumn_to_translate.c:4
+#: ../locale/scriptstrings/v.db.addtable_to_translate.c:4
+#: ../locale/scriptstrings/v.db.dropcolumn_to_translate.c:4
+#: ../locale/scriptstrings/v.db.droprow_to_translate.c:4
+#: ../locale/scriptstrings/v.db.droptable_to_translate.c:4
+#: ../locale/scriptstrings/v.db.join_to_translate.c:4
+#: ../locale/scriptstrings/v.db.reconnect.all_to_translate.c:4
+#: ../locale/scriptstrings/v.db.renamecolumn_to_translate.c:4
+#: ../locale/scriptstrings/v.db.update_to_translate.c:4
+#: ../locale/scriptstrings/v.what.vect_to_translate.c:4
+#: ../vector/v.db.connect/main.c:61 ../vector/v.db.select/main.c:99
+#: ../vector/v.distance/main.c:127 ../vector/v.in.db/main.c:53
+#: ../vector/v.to.db/main.c:39 ../vector/v.vect.stats/main.c:138
+msgid "database"
+msgstr "adatbázis"
+
+#: ../db/db.columns/main.c:217 ../db/db.connect/main.c:49
+#: ../db/db.copy/main.c:35 ../db/db.createdb/main.c:67
+#: ../db/db.databases/main.c:95 ../db/db.describe/main.c:187
+#: ../db/db.dropdb/main.c:68 ../db/db.execute/main.c:135
+#: ../db/db.select/main.c:466 ../db/db.tables/main.c:99
+#: ../locale/scriptstrings/db.dropcolumn_to_translate.c:3
+#: ../locale/scriptstrings/db.droptable_to_translate.c:3
+#: ../locale/scriptstrings/db.in.ogr_to_translate.c:4
+#: ../locale/scriptstrings/db.out.ogr_to_translate.c:5
+#: ../locale/scriptstrings/db.test_to_translate.c:3
+#: ../locale/scriptstrings/db.univar_to_translate.c:4
+#: ../locale/scriptstrings/t.vect.db.select_to_translate.c:3
+#: ../locale/scriptstrings/v.db.addcolumn_to_translate.c:3
+#: ../locale/scriptstrings/v.db.addtable_to_translate.c:3
+#: ../locale/scriptstrings/v.db.dropcolumn_to_translate.c:3
+#: ../locale/scriptstrings/v.db.droprow_to_translate.c:3
+#: ../locale/scriptstrings/v.db.droptable_to_translate.c:3
+#: ../locale/scriptstrings/v.db.join_to_translate.c:3
+#: ../locale/scriptstrings/v.db.reconnect.all_to_translate.c:3
+#: ../locale/scriptstrings/v.db.renamecolumn_to_translate.c:3
+#: ../locale/scriptstrings/v.db.univar_to_translate.c:4
+#: ../locale/scriptstrings/v.db.update_to_translate.c:3
+#: ../locale/scriptstrings/v.what.strds_to_translate.c:7
+#: ../locale/scriptstrings/v.what.vect_to_translate.c:7
+#: ../vector/v.class/main.c:55 ../vector/v.db.connect/main.c:60
+#: ../vector/v.db.select/main.c:98 ../vector/v.distance/main.c:128
+#: ../vector/v.to.db/main.c:38 ../vector/v.univar/main.c:97
+#: ../vector/v.vect.stats/main.c:137 ../vector/v.what.rast/main.c:82
+#: ../vector/v.what.rast3/main.c:70
+msgid "attribute table"
+msgstr "attribútum tábla"
+
+#: ../db/db.columns/main.c:218
+msgid "List all columns for a given table."
+msgstr "Oszlopok listája az adott táblából."
+
+#: ../db/db.columns/main.c:257 ../general/g.mapsets/main.c:166
+msgid "Separator is part of the format."
+msgstr ""
 
 #: ../db/db.connect/main.c:50 ../db/db.drivers/main.c:69
 #: ../db/db.login/main.c:40
@@ -324,7 +351,7 @@ msgstr ""
 #: ../vector/v.class/main.c:348 ../vector/v.db.connect/main.c:302
 #: ../vector/v.db.connect/main.c:395 ../vector/v.distance/main.c:1578
 #: ../vector/v.info/print.c:861 ../vector/v.info/print.c:897
-#: ../vector/v.profile/main.c:806 ../vector/v.univar/main.c:630
+#: ../vector/v.profile/main.c:801 ../vector/v.univar/main.c:630
 #: ../vector/v.vect.stats/main.c:800 ../vector/v.what.rast/main.c:628
 #: ../vector/v.what/what.c:202 ../vector/v.what/what.c:273
 #: ../vector/v.what/what.c:441 ../vector/v.what/what.c:541
@@ -732,18 +759,6 @@ msgstr ""
 
 #: ../db/db.select/main.c:396
 msgid "Name of table to query"
-msgstr ""
-
-#: ../db/db.select/main.c:412 ../db/db.select/main.c:419
-#: ../db/db.select/main.c:422 ../db/db.select/main.c:435
-#: ../db/db.select/main.c:445 ../db/db.select/main.c:456
-#: ../general/g.gisenv/main.c:93 ../general/g.gisenv/main.c:98
-#: ../vector/v.db.select/main.c:130 ../vector/v.db.select/main.c:134
-#: ../vector/v.db.select/main.c:140 ../vector/v.db.select/main.c:143
-#: ../vector/v.db.select/main.c:161 ../vector/v.db.select/main.c:166
-#: ../vector/v.profile/main.c:194 ../vector/v.profile/main.c:197
-#: ../vector/v.profile/main.c:206 ../vector/v.profile/main.c:215
-msgid "Format"
 msgstr ""
 
 #: ../db/db.select/main.c:416
@@ -1573,7 +1588,7 @@ msgstr ""
 #: ../display/d.rast.num/main.c:77 ../display/d.rast/main.c:53
 #: ../display/d.redraw/main.c:39 ../display/d.rgb/main.c:54
 #: ../display/d.rhumbline/main.c:42 ../display/d.text/main.c:136
-#: ../display/d.title/main.c:48 ../display/d.vect.chart/main.c:63
+#: ../display/d.title/main.c:48 ../display/d.vect.chart/main.c:85
 #: ../display/d.vect.thematic/main.c:88 ../display/d.vect/main.c:72
 #: ../display/d.where/main.c:44 ../general/g.cairocomp/main.c:200
 #: ../general/g.mkfontcap/main.c:64 ../general/g.pnmcomp/main.c:282
@@ -1598,7 +1613,7 @@ msgstr ""
 #: ../display/d.grid/main.c:51 ../display/d.legend.vect/main.c:49
 #: ../display/d.legend/main.c:77 ../display/d.linegraph/main.c:224
 #: ../display/d.northarrow/main.c:48 ../display/d.text/main.c:137
-#: ../display/d.title/main.c:49 ../display/d.vect.chart/main.c:64
+#: ../display/d.title/main.c:49 ../display/d.vect.chart/main.c:86
 #: ../display/d.vect.thematic/main.c:89
 #: ../locale/scriptstrings/d.rast.leg_to_translate.c:3
 msgid "cartography"
@@ -2210,7 +2225,7 @@ msgid "Vector map <%s> not found"
 msgstr ""
 
 #: ../display/d.extract/main.c:101 ../display/d.path/main.c:190
-#: ../display/d.vect.chart/main.c:244
+#: ../display/d.vect.chart/main.c:334
 #: ../doc/examples/vector/v.example/main.c:88 ../general/g.region/main.c:579
 #: ../general/manage/lister/vector.c:32 ../misc/m.nviz.image/vector.c:301
 #: ../raster/r.carve/main.c:157 ../raster/r.cost/main.c:599
@@ -2939,6 +2954,7 @@ msgid "Layout"
 msgstr ""
 
 #: ../display/d.legend.vect/main.c:77 ../display/d.legend/main.c:97
+#: ../display/d.vect.chart/main.c:172
 msgid "Legend title"
 msgstr ""
 
@@ -4125,7 +4141,7 @@ msgid "List of categories or values to be displayed"
 msgstr ""
 
 #: ../display/d.rast/main.c:70 ../display/d.rast/main.c:87
-#: ../display/d.vect.chart/main.c:74 ../display/d.vect.chart/main.c:77
+#: ../display/d.vect.chart/main.c:96 ../display/d.vect.chart/main.c:99
 #: ../display/d.vect.thematic/main.c:100 ../display/d.vect.thematic/main.c:145
 #: ../display/d.vect/main.c:83 ../display/d.vect/main.c:107
 #: ../display/d.vect/main.c:110 ../display/d.vect/main.c:113
@@ -4405,64 +4421,94 @@ msgstr ""
 msgid "Unable to open temporary file <%s>"
 msgstr ""
 
-#: ../display/d.vect.chart/main.c:65
+#: ../display/d.vect.chart/main.c:87
 msgid "chart maps"
 msgstr ""
 
-#: ../display/d.vect.chart/main.c:67
+#: ../display/d.vect.chart/main.c:89
 msgid "Displays charts of vector data in the active frame on the graphics monitor."
 msgstr ""
 
-#: ../display/d.vect.chart/main.c:86
+#: ../display/d.vect.chart/main.c:108
 msgid "Chart type"
 msgstr ""
 
-#: ../display/d.vect.chart/main.c:87 ../display/d.vect.chart/main.c:97
-#: ../display/d.vect.chart/main.c:105 ../display/d.vect.chart/main.c:112
-#: ../display/d.vect.chart/main.c:117 ../display/d.vect.chart/main.c:123
-#: ../display/d.vect.chart/main.c:128 ../display/d.vect.chart/main.c:146
+#: ../display/d.vect.chart/main.c:109 ../display/d.vect.chart/main.c:119
+#: ../display/d.vect.chart/main.c:127 ../display/d.vect.chart/main.c:134
+#: ../display/d.vect.chart/main.c:139 ../display/d.vect.chart/main.c:145
+#: ../display/d.vect.chart/main.c:150 ../display/d.vect.chart/main.c:197
 msgid "Chart properties"
 msgstr ""
 
-#: ../display/d.vect.chart/main.c:91
+#: ../display/d.vect.chart/main.c:113
 msgid "Attribute columns containing data"
 msgstr ""
 
-#: ../display/d.vect.chart/main.c:96
+#: ../display/d.vect.chart/main.c:118
 msgid "Column used for pie chart size"
 msgstr ""
 
-#: ../display/d.vect.chart/main.c:104
+#: ../display/d.vect.chart/main.c:126
 msgid "Size of chart (diameter for pie, total width for bar)"
 msgstr ""
 
-#: ../display/d.vect.chart/main.c:111
+#: ../display/d.vect.chart/main.c:133
 msgid "Scale for size (to get size in pixels)"
 msgstr ""
 
-#: ../display/d.vect.chart/main.c:116
+#: ../display/d.vect.chart/main.c:138
 msgid "Outline color"
 msgstr ""
 
-#: ../display/d.vect.chart/main.c:122
+#: ../display/d.vect.chart/main.c:144
 msgid "Colors used to fill charts"
 msgstr ""
 
-#: ../display/d.vect.chart/main.c:127
+#: ../display/d.vect.chart/main.c:149
 msgid "Center the bar chart around a data point"
 msgstr ""
 
-#: ../display/d.vect.chart/main.c:136
+#: ../display/d.vect.chart/main.c:158
 msgid "Maximum value used for bar plot reference"
 msgstr ""
 
-#: ../display/d.vect.chart/main.c:141 ../display/d.vect.thematic/main.c:221
+#: ../display/d.vect.chart/main.c:163 ../display/d.vect.thematic/main.c:221
 msgid "Create legend information and send to stdout"
 msgstr ""
 
-#: ../display/d.vect.chart/main.c:145
+#: ../display/d.vect.chart/main.c:164 ../display/d.vect.chart/main.c:171
+#: ../display/d.vect.chart/main.c:180 ../display/d.vect.chart/main.c:187
+#: ../display/d.vect.chart/main.c:192 ../display/d.vect.thematic/main.c:184
+#: ../display/d.vect.thematic/main.c:196 ../display/d.vect.thematic/main.c:206
+#: ../display/d.vect.thematic/main.c:216 ../display/d.vect.thematic/main.c:222
+#: ../display/d.vect.thematic/main.c:228 ../display/d.vect.thematic/main.c:237
+#: ../display/d.vect.thematic/main.c:242 ../display/d.vect/main.c:201
+#: ../display/d.vect/main.c:211 ../display/d.vect/main.c:219
+#: ../display/d.vect/main.c:332
+msgid "Legend"
+msgstr ""
+
+#: ../display/d.vect.chart/main.c:181
+msgid "Legend symbol size"
+msgstr ""
+
+#: ../display/d.vect.chart/main.c:186 ../display/d.vect.thematic/main.c:227
+msgid "Do not draw map, only output the legend information"
+msgstr ""
+
+#: ../display/d.vect.chart/main.c:191 ../display/d.vect.thematic/main.c:241
+#: ../display/d.vect/main.c:331
+msgid "Do not show this layer in vector legend"
+msgstr ""
+
+#: ../display/d.vect.chart/main.c:196
 msgid "Create 3D charts"
 msgstr ""
+
+#: ../display/d.vect.chart/main.c:311
+#, fuzzy, c-format
+msgid "Unable to open GRASS_LEGEND_FILE <%s> for writing"
+msgstr "Nem tudom elindítani a <%s> meghajtót"
 
 #: ../display/d.vect.chart/plot.c:34 ../display/d.vect.thematic/plot1.c:108
 #: ../display/d.vect/shape.c:41 ../doc/examples/vector/v.example/main.c:110
@@ -4676,15 +4722,6 @@ msgstr ""
 msgid "Point and centroid symbol"
 msgstr ""
 
-#: ../display/d.vect.thematic/main.c:184 ../display/d.vect.thematic/main.c:196
-#: ../display/d.vect.thematic/main.c:206 ../display/d.vect.thematic/main.c:216
-#: ../display/d.vect.thematic/main.c:222 ../display/d.vect.thematic/main.c:228
-#: ../display/d.vect.thematic/main.c:237 ../display/d.vect.thematic/main.c:242
-#: ../display/d.vect/main.c:201 ../display/d.vect/main.c:211
-#: ../display/d.vect/main.c:219 ../display/d.vect/main.c:332
-msgid "Legend"
-msgstr ""
-
 #: ../display/d.vect.thematic/main.c:189
 msgid "Legend symbol for lines"
 msgstr ""
@@ -4705,16 +4742,8 @@ msgstr ""
 msgid "Output legend file"
 msgstr ""
 
-#: ../display/d.vect.thematic/main.c:227
-msgid "Do not draw map, only output the legend information"
-msgstr ""
-
 #: ../display/d.vect.thematic/main.c:234
 msgid "When printing legend info, include extended statistical info from classification algorithm"
-msgstr ""
-
-#: ../display/d.vect.thematic/main.c:241 ../display/d.vect/main.c:331
-msgid "Do not show this layer in vector legend"
 msgstr ""
 
 #: ../display/d.vect.thematic/main.c:253
@@ -5345,13 +5374,13 @@ msgid "Unable to set predetermined vector open level"
 msgstr ""
 
 #: ../doc/examples/vector/v.example/main.c:176 ../vector/v.profile/main.c:749
-#: ../vector/v.profile/main.c:827
+#: ../vector/v.profile/main.c:822
 #, c-format
 msgid "Unable to get attribute data for cat %d"
 msgstr ""
 
 #: ../doc/examples/vector/v.example/main.c:185 ../vector/v.profile/main.c:759
-#: ../vector/v.profile/main.c:836
+#: ../vector/v.profile/main.c:831
 #, c-format
 msgid "Error while retrieving database record for cat %d"
 msgstr ""
@@ -6169,10 +6198,6 @@ msgstr ""
 #: ../general/g.mapsets/main.c:155
 #, c-format
 msgid "Unknown operation '%s'"
-msgstr ""
-
-#: ../general/g.mapsets/main.c:166
-msgid "Separator is part of the format."
 msgstr ""
 
 #: ../general/g.mapsets/main.c:236 ../general/g.mapsets/main.c:271
@@ -15248,24 +15273,20 @@ msgid "A numerical suffix separated by an underscore will be attached to create 
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:16
-msgid "Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'count' for numerical suffix with a specific number of digits (default %05)"
-msgstr ""
-
-#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:17
 msgid "The minimum and maximum value of the occurrence of accumulated values, these values will be used if the min/max space time raster datasets are not specified"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:18
+#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:17
 msgid "The user defined values that indicate start, intermediate and end status in the indicator output space time raster dataset"
+msgstr ""
+
+#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:18
+#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:20
+msgid "Register empty maps in the output space time raster dataset, otherwise they will be deleted"
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:19
 #: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:21
-msgid "Register empty maps in the output space time raster dataset, otherwise they will be deleted"
-msgstr ""
-
-#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:20
-#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:22
 msgid "Reverse time direction in cyclic accumulation"
 msgstr ""
 
@@ -15290,26 +15311,22 @@ msgid "The granularity for accumulation '1 day'"
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:15
-msgid "Suffix to add to the basename. Set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)"
-msgstr ""
-
-#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:16
 msgid "Use these limits in case lower and/or upper input space time raster datasets are not defined or contain NULL values"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:17
+#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:16
 msgid "Scale factor for input space time raster dataset"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:18
+#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:17
 msgid "Shift factor for input space time raster dataset"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:19
+#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:18
 msgid "This method will be applied to compute the accumulative values from the input maps in a single granule"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:20
+#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:19
 msgid "Growing Degree Days or Winkler indices; Mean: sum(input maps)/(number of input maps); Biologically Effective Degree Days; Huglin Heliothermal index"
 msgstr ""
 
@@ -15326,46 +15343,33 @@ msgid "Type of the space time dataset from which aggregation will be copied"
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:10
-#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:8
-#: ../locale/scriptstrings/t.rast.algebra_to_translate.c:9
-#: ../locale/scriptstrings/t.rast.contour_to_translate.c:9
-#: ../locale/scriptstrings/t.rast.extract_to_translate.c:9
-#: ../locale/scriptstrings/t.rast.gapfill_to_translate.c:9
-#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:19
-#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:10
-#: ../locale/scriptstrings/t.rast3d.extract_to_translate.c:9
-#: ../locale/scriptstrings/t.vect.extract_to_translate.c:8
-msgid "Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)"
-msgstr ""
-
-#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:11
-#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:10
+#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:9
 #: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:10
 #: ../locale/scriptstrings/t.rast.series_to_translate.c:7
 #: ../locale/scriptstrings/t.vect.what.strds_to_translate.c:8
 msgid "Aggregate operation to be performed on the raster maps"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:12
-#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:11
+#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:11
+#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:10
 msgid "Offset that is used to create the output map ids, output map id is generated as: basename_ (count + offset)"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:13
-#: ../locale/scriptstrings/t.rast.algebra_to_translate.c:10
-#: ../locale/scriptstrings/t.rast.extract_to_translate.c:10
+#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:12
+#: ../locale/scriptstrings/t.rast.algebra_to_translate.c:9
+#: ../locale/scriptstrings/t.rast.extract_to_translate.c:9
 #: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:9
 msgid "Number of r.mapcalc processes to run in parallel"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:14
-#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:14
-#: ../locale/scriptstrings/t.rast.algebra_to_translate.c:12
-#: ../locale/scriptstrings/t.rast.extract_to_translate.c:11
+#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:13
+#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:13
+#: ../locale/scriptstrings/t.rast.algebra_to_translate.c:11
+#: ../locale/scriptstrings/t.rast.extract_to_translate.c:10
 #: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:10
-#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:25
+#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:24
 #: ../locale/scriptstrings/t.rast3d.algebra_to_translate.c:12
-#: ../locale/scriptstrings/t.rast3d.extract_to_translate.c:11
+#: ../locale/scriptstrings/t.rast3d.extract_to_translate.c:10
 #: ../locale/scriptstrings/t.rast3d.mapcalc_to_translate.c:11
 msgid "Register Null maps"
 msgstr ""
@@ -15378,15 +15382,15 @@ msgstr ""
 msgid "Either a numerical suffix or the start time (s-flag) separated by an underscore will be attached to create a unique identifier"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:9
+#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:8
 msgid "Aggregation granularity, format absolute time \"x years, x months, x weeks, x days, x hours, x minutes, x seconds\" or an integer value for relative time"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:12
+#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:11
 msgid "Number of r.series processes to run in parallel"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:13
+#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:12
 #: ../locale/scriptstrings/t.rast.series_to_translate.c:10
 msgid "The maximum number of open files allowed for each r.series process"
 msgstr ""
@@ -15399,7 +15403,7 @@ msgstr ""
 msgid "r.mapcalc expression for temporal and spatial analysis of space time raster datasets"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.algebra_to_translate.c:11
+#: ../locale/scriptstrings/t.rast.algebra_to_translate.c:10
 #: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:11
 #: ../locale/scriptstrings/t.rast3d.algebra_to_translate.c:11
 #: ../locale/scriptstrings/t.rast3d.mapcalc_to_translate.c:12
@@ -15407,12 +15411,12 @@ msgstr ""
 msgid "Check the spatial topology of temporally related maps and process only spatially related maps"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.algebra_to_translate.c:13
+#: ../locale/scriptstrings/t.rast.algebra_to_translate.c:12
 #: ../locale/scriptstrings/t.rast3d.algebra_to_translate.c:13
 msgid "Use granularity sampling instead of the temporal topology approach"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.algebra_to_translate.c:14
+#: ../locale/scriptstrings/t.rast.algebra_to_translate.c:13
 #: ../locale/scriptstrings/t.select_to_translate.c:9
 msgid "Perform a dry run, compute all dependencies and module calls but don't run them"
 msgstr ""
@@ -15483,42 +15487,42 @@ msgstr ""
 msgid "contour"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.contour_to_translate.c:10
+#: ../locale/scriptstrings/t.rast.contour_to_translate.c:9
 #: ../raster/r.contour/main.c:101
 msgid "Increment between contour levels"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.contour_to_translate.c:11
+#: ../locale/scriptstrings/t.rast.contour_to_translate.c:10
 #: ../raster/r.contour/main.c:109
 msgid "List of contour levels"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.contour_to_translate.c:12
+#: ../locale/scriptstrings/t.rast.contour_to_translate.c:11
 #: ../raster/r.contour/main.c:116
 msgid "Minimum contour level"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.contour_to_translate.c:13
+#: ../locale/scriptstrings/t.rast.contour_to_translate.c:12
 #: ../raster/r.contour/main.c:123
 msgid "Maximum contour level"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.contour_to_translate.c:14
+#: ../locale/scriptstrings/t.rast.contour_to_translate.c:13
 #: ../raster/r.contour/main.c:132
 msgid "Minimum number of points for a contour line (0 -> no limit)"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.contour_to_translate.c:15
+#: ../locale/scriptstrings/t.rast.contour_to_translate.c:14
 msgid "Number of r.contour processes to run in parallel, more than 1 process works only in conjunction with flag -t"
+msgstr ""
+
+#: ../locale/scriptstrings/t.rast.contour_to_translate.c:15
+#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:12
+msgid "Register empty vector maps"
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.contour_to_translate.c:16
 #: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:13
-msgid "Register empty vector maps"
-msgstr ""
-
-#: ../locale/scriptstrings/t.rast.contour_to_translate.c:17
-#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:14
 msgid "Do not create attribute tables"
 msgstr ""
 
@@ -15605,11 +15609,11 @@ msgstr ""
 msgid "Replaces gaps in a space time raster dataset with interpolated raster maps."
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.gapfill_to_translate.c:10
+#: ../locale/scriptstrings/t.rast.gapfill_to_translate.c:9
 msgid "Number of interpolation processes to run in parallel"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.gapfill_to_translate.c:11
+#: ../locale/scriptstrings/t.rast.gapfill_to_translate.c:10
 msgid "Assign the space time raster dataset start and end time to the output map"
 msgstr ""
 
@@ -15733,28 +15737,28 @@ msgstr ""
 msgid "Neighborhood"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:20
+#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:19
 msgid "Set semantic labels"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:21
+#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:20
 msgid "input;copy semantic labels from input to output;method;append method name to input label if existing, otherwise use method name"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:22
+#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:21
 msgid "Number of r.neighbor processes to run in parallel"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:23
+#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:22
 #: ../raster/r.neighbors/main.c:288
 msgid "Use circular neighborhood"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:24
+#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:23
 msgid "Extend existing space time raster dataset"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:26
+#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:25
 msgid "Ignore the current region settings and use the raster map regions"
 msgstr ""
 
@@ -15827,41 +15831,41 @@ msgstr ""
 msgid "Output feature type"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:11
+#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:10
 #: ../raster/r.to.vect/main.c:95
 msgid "Name of attribute column to store value"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:12
+#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:11
 msgid "Number of r.to.vect processes to run in parallel, more than 1 process works only in conjunction with flag -t"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:15
+#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:14
 #: ../raster/r.to.vect/main.c:101
 msgid "Smooth corners of area features"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:16
+#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:15
 #: ../raster/r.to.vect/main.c:111
 msgid "Write raster values as z coordinate"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:17
+#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:16
 #: ../raster/r.to.vect/main.c:112
 msgid "Table is not created. Currently supported only for points."
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:18
+#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:17
 #: ../raster/r.to.vect/main.c:118 ../vector/v.proj/main.c:139
 msgid "Do not build vector topology"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:19
+#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:18
 #: ../raster/r.to.vect/main.c:96
 msgid "Name must be SQL compliant"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:20
+#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:19
 #: ../raster/r.to.vect/main.c:105
 msgid "Use raster values as categories instead of unique sequence (CELL only)"
 msgstr ""
@@ -15943,7 +15947,7 @@ msgid "Algebraic expression for temporal and spatial analysis of space time 3D r
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast3d.algebra_to_translate.c:10
-#: ../locale/scriptstrings/t.rast3d.extract_to_translate.c:10
+#: ../locale/scriptstrings/t.rast3d.extract_to_translate.c:9
 #: ../locale/scriptstrings/t.rast3d.mapcalc_to_translate.c:10
 msgid "Number of r3.mapcalc processes to run in parallel"
 msgstr ""
@@ -16248,11 +16252,11 @@ msgstr ""
 msgid "Extracts a subset of a space time vector dataset."
 msgstr ""
 
-#: ../locale/scriptstrings/t.vect.extract_to_translate.c:9
+#: ../locale/scriptstrings/t.vect.extract_to_translate.c:8
 msgid "The number of v.extract processes to run in parallel. Use only if database backend is used which supports concurrent writing"
 msgstr ""
 
-#: ../locale/scriptstrings/t.vect.extract_to_translate.c:10
+#: ../locale/scriptstrings/t.vect.extract_to_translate.c:9
 msgid "Register empty maps"
 msgstr ""
 
@@ -33802,7 +33806,7 @@ msgstr ""
 msgid "Flag '{}' is relevant only to 'operation=add'. Ignoring this flag."
 msgstr ""
 
-#: ../scripts/g.extension/testsuite/test_addons_download.py:231
+#: ../scripts/g.extension/testsuite/test_addons_download.py:236
 msgid "No metadata available for module '{}':"
 msgstr ""
 
@@ -44794,7 +44798,7 @@ msgstr ""
 msgid "Vector map <%s> does not have cat's defined on layer %d"
 msgstr ""
 
-#: ../vector/v.profile/main.c:796 ../vector/v.profile/main.c:896
+#: ../vector/v.profile/main.c:791 ../vector/v.profile/main.c:892
 msgid "Can not write data portion to provided output"
 msgstr ""
 
