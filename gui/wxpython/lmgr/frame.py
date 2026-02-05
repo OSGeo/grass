@@ -86,6 +86,7 @@ from startup.guiutils import (
 )
 from grass.grassdb.checks import is_first_time_user
 from grass.grassdb.history import Status
+from grass.workflows.server import is_wx_html2_available
 
 
 class GMFrame(wx.Frame):
@@ -777,6 +778,62 @@ class GMFrame(wx.Frame):
         win = ModelerFrame(parent=self, giface=self._giface)
         win.CentreOnScreen()
         win.Show()
+
+    def OnJupyterNotebook(self, event=None):
+        """Launch Jupyter Notebook interface."""
+        from jupyter_notebook.frame import JupyterFrame
+        from jupyter_notebook.dialogs import JupyterStartDialog
+
+        dlg = JupyterStartDialog(parent=self)
+        try:
+            if dlg.ShowModal() != wx.ID_OK:
+                return
+
+            values = dlg.GetValues()
+        finally:
+            dlg.Destroy()
+
+        if not values:
+            return
+
+        frame = JupyterFrame(
+            parent=self,
+            giface=self._giface,
+            workdir=values["directory"],
+            create_template=values["create_template"],
+        )
+        frame.CentreOnParent()
+        frame.Show()
+
+    def OnShowJupyterInfo(self, event=None):
+        """Show information dialog when Jupyter Notebook is not available."""
+        if sys.platform.startswith("win"):
+            message = _(
+                "Jupyter Notebook is currently not included in the Windows GRASS build process.\n"
+                "This feature will be available in a future release. "
+                "You can use Jupyter Notebook externally."
+            )
+        elif not is_wx_html2_available():
+            message = _(
+                "Jupyter Notebook integration requires wxPython with the wx.html2 module enabled.\n\n"
+                "Your current wxPython / wxWidgets build does not provide wx.html2 support "
+                "(typically due to missing WebView / WebKit support).\n\n"
+                "Please install wxPython and wxWidgets with HTML2/WebView support enabled, "
+                "or use Jupyter Notebook externally."
+            )
+        else:
+            message = _(
+                "To use notebooks in GRASS, you need to have the Jupyter Notebook package installed. "
+                "For full functionality, we also recommend installing the visualization libraries "
+                "Folium and ipyleaflet. After installing these packages, please restart GRASS to enable this feature."
+            )
+
+        wx.MessageBox(
+            message=message,
+            caption=_("Jupyter Notebook not available"),
+            style=wx.OK | wx.ICON_INFORMATION,
+            parent=self,
+        )
 
     def OnPsMap(self, event=None, cmd=None):
         """Launch Cartographic Composer. See OnIClass documentation"""
@@ -2296,6 +2353,18 @@ class GMFrame(wx.Frame):
             if hasattr(event, "Veto"):
                 event.Veto()
             return
+
+        # Stop all running Jupyter servers before destroying the GUI
+        from grass.workflows import JupyterEnvironment
+
+        try:
+            JupyterEnvironment.stop_all()
+        except RuntimeError as e:
+            wx.MessageBox(
+                _("Failed to stop Jupyter servers:\n{}").format(str(e)),
+                caption=_("Error"),
+                style=wx.ICON_ERROR | wx.OK,
+            )
 
         self.DisplayCloseAll()
 
