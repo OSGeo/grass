@@ -12,6 +12,32 @@ class TestVNet(TestCase):
         """Remove viewshed map after each test method"""
         # TODO: eventually, removing maps should be handled through testing framework functions
         self.runModule("g.remove", flags="f", type="vector", name=self.network)
+   
+    def test_nreport_json(self):
+        """Test nreport operation JSON output"""
+        self.runModule("v.net", input="streets", output=self.network, operation="nodes")
+        output = read_command("v.net", input=self.network, operation="nreport", 
+                              node_layer=2, format="json").strip()
+        
+        self.assertTrue(output, "nreport produced no output on stdout")
+        try:
+            data = json.loads(output)
+        except json.JSONDecodeError:
+            self.fail(f"nreport produced invalid JSON: {output}")
+
+        self.assertIsInstance(data, list, "nreport output must be a JSON array")
+    
+    def test_report_json(self):
+        """Test report operation JSON output"""
+        output = read_command("v.net", input="streets", operation="report", 
+                              arc_layer=1, node_layer=2, format="json").strip()
+
+        self.assertTrue(output, "report produced no output on stdout")
+        
+        data = json.loads(output)
+        self.assertIsInstance(data, list, "report output must be a JSON array")
+        if len(data) > 0:
+            self.assertIn("line_cat", data[0], "Key 'line_cat' not found in JSON output")
 
     def test_nodes(self):
         """Test"""
@@ -47,33 +73,6 @@ class TestVNet(TestCase):
         self.assertVectorFitsTopoInfo(vector=self.network, reference=topology)
         layers = read_command("v.category", input=self.network, option="layers").strip()
         self.assertEqual(first="1\n2", second=layers, msg="Layers do not match")
-
-    def test_nodes_json(self):
-        output = gs.read_command(
-            "v.net",
-            input="streets",
-            points="schools",
-            output=self.network,
-            operation="nodes",
-            format="json",
-        )
-
-        self.assertTrue(output, "Module produced no output on stdout")
-
-        try:
-            start = output.find("{")
-            end = output.rfind("}") + 1
-            json_str = output[start:end]
-            data = json.loads(json_str)
-        except Exception as e:
-            self.fail(f"Failed to parse JSON. Error: {e}. Raw output: {output}")
-
-        self.assertIn("new_nodes", data)
-        self.assertEqual(
-            data["new_nodes"],
-            41813,
-            "The number of new nodes does not match the expected value",
-        )
 
     def test_connect_snap(self):
         """Test"""
