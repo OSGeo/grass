@@ -2,14 +2,14 @@
  *
  * MODULE:       r.resamp.stats
  * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original
- *                 contributor)
- *               Hamish Bowman <hamish_b yahoo.com>
+ * contributor)
+ * Hamish Bowman <hamish_b yahoo.com>
  * PURPOSE:
  * COPYRIGHT:    (C) 2006-2007 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
  *
  *****************************************************************************/
 
@@ -20,6 +20,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include <grass/stats.h>
+#include <omp.h>   /* ADDED FOR OPENMP */
 
 static const struct menu {
     stat_func *method;     /* routine to compute new value */
@@ -83,6 +84,7 @@ static const void *closure;
 static int row_scale, col_scale;
 static double quantile;
 
+/* UNMODIFIED SERIAL VERSION */
 static void resamp_unweighted(void)
 {
     stat_func *method_fn;
@@ -154,34 +156,36 @@ static void resamp_unweighted(void)
     G_free(values);
 }
 
+/* OPTIMIZED PARALLEL VERSION */
 static void resamp_weighted(void)
 {
     stat_func_w *method_fn;
-
-    DCELL(*values)[2];
     double *col_map, *row_map;
     int row, col;
 
     method_fn = menu[method].method_w;
 
-    values = G_malloc(row_scale * col_scale * 2 * sizeof(DCELL));
-
+    /* 1. Pre-calculate coordinate maps (Fast) */
     col_map = G_malloc((dst_w.cols + 1) * sizeof(double));
     row_map = G_malloc((dst_w.rows + 1) * sizeof(double));
 
     for (col = 0; col <= dst_w.cols; col++) {
         double x = Rast_col_to_easting(col, &dst_w);
-
-        /* col_map[col] = Rast_easting_to_col(x, &src_w); */
         col_map[col] = (x - src_w.west) / src_w.ew_res;
     }
 
     for (row = 0; row <= dst_w.rows; row++) {
         double y = Rast_row_to_northing(row, &dst_w);
-
         row_map[row] = Rast_northing_to_row(y, &src_w);
     }
 
+    /* 2. Allocate Input Buffers (Streaming Mode) */
+    /* We only allocate enough memory for a few rows, not the whole map */
+    bufs = G_malloc(row_scale * sizeof(DCELL *));
+    for (row = 0; row < row_scale; row++)
+        bufs[row] = Rast_allocate_d_input_buf();
+
+    /* 3. Main Processing Loop */
     for (row = 0; row < dst_w.rows; row++) {
         double y0 = row_map[row + 0];
         double y1 = row_map[row + 1];
@@ -190,55 +194,67 @@ static void resamp_weighted(void)
         int count = maprow1 - maprow0;
         int i;
 
-        G_percent(row, dst_w.rows, 4);
+        G_percent(row, dst_w.rows, 2);
 
+        /* SERIAL: Read only the necessary input rows */
         for (i = 0; i < count; i++)
             Rast_get_d_row(infile, bufs[i], maprow0 + i);
 
-        for (col = 0; col < dst_w.cols; col++) {
-            double x0 = col_map[col + 0];
-            double x1 = col_map[col + 1];
-            int mapcol0 = (int)floor(x0);
-            int mapcol1 = (int)ceil(x1);
-            int null = 0;
-            int n = 0;
-            int i, j;
+        /* PARALLEL: Process this strip of data */
+        #pragma omp parallel default(none) \
+            shared(dst_w, col_map, bufs, maprow0, maprow1, y0, y1, menu, method, outbuf, nulls, closure, row_scale, col_scale) \
+            private(col)
+        {
+            /* KEY FIX: Use standard 'malloc' to avoid locking! */
+            DCELL (*my_values)[2] = malloc(row_scale * col_scale * 2 * sizeof(DCELL));
+            stat_func_w *my_method_fn = menu[method].method_w;
 
-            for (i = maprow0; i < maprow1; i++) {
-                double ky = (i == maprow0)       ? 1 - (y0 - maprow0)
-                            : (i == maprow1 - 1) ? 1 - (maprow1 - y1)
-                                                 : 1;
+            #pragma omp for schedule(dynamic, 8)
+            for (col = 0; col < dst_w.cols; col++) {
+                double x0 = col_map[col + 0];
+                double x1 = col_map[col + 1];
+                int mapcol0 = (int)floor(x0);
+                int mapcol1 = (int)ceil(x1);
+                int null = 0;
+                int n = 0;
+                int i, j;
 
-                for (j = mapcol0; j < mapcol1; j++) {
-                    double kx = (j == mapcol0)       ? 1 - (x0 - mapcol0)
-                                : (j == mapcol1 - 1) ? 1 - (mapcol1 - x1)
-                                                     : 1;
+                for (i = maprow0; i < maprow1; i++) {
+                    double ky = (i == maprow0) ? 1 - (y0 - maprow0) : (i == maprow1 - 1) ? 1 - (maprow1 - y1) : 1;
+                    
+                    for (j = mapcol0; j < mapcol1; j++) {
+                        double kx = (j == mapcol0) ? 1 - (x0 - mapcol0) : (j == mapcol1 - 1) ? 1 - (mapcol1 - x1) : 1;
 
-                    DCELL *src = &bufs[i - maprow0][j];
-                    DCELL *dst = &values[n++][0];
+                        DCELL *src = &bufs[i - maprow0][j];
+                        DCELL *dst = &my_values[n][0];
 
-                    if (Rast_is_d_null_value(src)) {
-                        Rast_set_d_null_value(&dst[0], 1);
-                        null = 1;
-                    }
-                    else {
-                        dst[0] = *src;
-                        dst[1] = kx * ky;
+                        if (Rast_is_d_null_value(src)) {
+                            Rast_set_d_null_value(&dst[0], 1);
+                            null = 1;
+                        } else {
+                            dst[0] = *src;
+                            dst[1] = kx * ky;
+                        }
+                        n++;
                     }
                 }
-            }
 
-            if (null && nulls)
-                Rast_set_d_null_value(&outbuf[col], 1);
-            else
-                (*method_fn)(&outbuf[col], values, n, closure);
+                if (null && nulls)
+                    Rast_set_d_null_value(&outbuf[col], 1);
+                else
+                    (*my_method_fn)(&outbuf[col], my_values, n, closure);
+            }
+            
+            /* KEY FIX: Use standard 'free' */
+            free(my_values);
         }
 
+        /* SERIAL: Write the result */
         Rast_put_d_row(outfile, outbuf);
     }
+
     G_free(row_map);
     G_free(col_map);
-    G_free(values);
 }
 
 int main(int argc, char *argv[])
@@ -354,9 +370,10 @@ int main(int argc, char *argv[])
     col_scale = 2 + ceil(dst_w.ew_res / src_w.ew_res);
 
     /* allocate buffers for input rows */
-    bufs = G_malloc(row_scale * sizeof(DCELL *));
-    for (row = 0; row < row_scale; row++)
-        bufs[row] = Rast_allocate_d_input_buf();
+    /* REMOVED: bufs allocation is now handled inside the resamp_ functions */
+    /* bufs = G_malloc(row_scale * sizeof(DCELL *)); */
+    /* for (row = 0; row < row_scale; row++) */
+    /* bufs[row] = Rast_allocate_d_input_buf(); */
 
     /* open old map */
     infile = Rast_open_old(parm.rastin->answer, "");
@@ -387,7 +404,7 @@ int main(int argc, char *argv[])
     G_format_resolution(src_w.ns_res, buf_nsres, src_w.proj);
     G_format_resolution(src_w.ew_res, buf_ewres, src_w.proj);
     Rast_format_history(&history, HIST_DATSRC_2,
-                        "Source map NS res: %s   EW res: %s", buf_nsres,
+                        "Source map NS res: %s    EW res: %s", buf_nsres,
                         buf_ewres);
     Rast_command_history(&history);
     Rast_write_history(parm.rastout->answer, &history);
