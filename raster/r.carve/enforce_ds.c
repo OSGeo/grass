@@ -4,6 +4,8 @@
  *
  * AUTHOR(S):    Original author Bill Brown, UIUC GIS Laboratory
  *               Brad Douglas <rez touchofmadness com>
+ *               Tomas Zigo <tomas zigo slovanet sk> (adding the option
+ *               to read width, depth values from vector map table columns)
  *
  * PURPOSE:      Takes vector stream data, converts it to 3D raster and
  *               subtracts a specified depth
@@ -16,6 +18,7 @@
  *
  ****************************************************************************/
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
@@ -32,8 +35,8 @@
 
 /* function prototypes */
 static void clear_bitmap(struct BM *bm);
-static int process_line(struct Map_info *Map, struct Map_info *outMap,
-                        void *rbuf, const int line, const struct parms *parm);
+void process_line(struct Map_info *Map, struct Map_info *outMap,
+                  const struct parms *parm, void *rbuf, const int *line);
 static void traverse_line_flat(Point2 *pgpts, const int pt, const int npts);
 static void traverse_line_noflat(Point2 *pgpts, const double depth,
                                  const int pt, const int npts);
@@ -47,21 +50,53 @@ static void process_line_segment(const int npts, void *rbuf, Point2 *pgxypts,
                                  Point2 *pgpts, struct BM *bm,
                                  struct Map_info *outMap,
                                  const struct parms *parm);
+double get_value(unsigned short int *ctype, dbColumn *col);
+void set_value(dbColumn *col, unsigned short int *ctype, char *answer,
+               double *parm, double *def_value, dbTable *table,
+               struct Cell_head *wind, value_type type);
+struct sql_statement
+create_select_sql_statement(struct Map_info *Map, struct field_info *Fi,
+                            struct boxlist *box_list, char *columns[2],
+                            unsigned short int *field, char *keycol);
 
-/******************************************************************
- * Returns 0 on success, -1 on error, 1 on warning, writing message
- * to errbuf for -1 or 1 */
-
-int enforce_downstream(int infd, int outfd, struct Map_info *Map,
-                       struct Map_info *outMap, struct parms *parm)
+void enforce_downstream(int infd, int outfd, struct Map_info *Map,
+                        struct Map_info *outMap, struct parms *parm,
+                        struct field_info *Fi, int *width_col_pos,
+                        int *depth_col_pos, char *columns[2], dbDriver *driver)
+/*
+ * Function: enforce_downstream
+ * -------------------------
+ * Enforce downstream
+ *
+ * infd: input raster elevation map
+ * outfd: output raster elevation map with carved streams
+ * Map: input streams vector map
+ * outMap: output vector map for adjusted stream points
+ * parm: module parameters
+ * Fi: layer (old: field) information
+ * width_col_pos: width column position in the columns array
+ * depth_col_pos: depth column position in the columns array
+ * columns: array of width and depth column names
+ * driver: db driver
+ *
+ */
 {
     struct Cell_head wind;
-    int retval = 0;
-    int line, nlines;
     void *rbuf = NULL;
+    struct bound_box box;
+    struct boxlist *box_list;
+    int more;
+    unsigned int c;
+    unsigned short int field, width_col_type, depth_col_type;
 
-    /* width used here is actually distance to center of stream */
-    parm->swidth /= 2;
+    /* Width used here is actually distance to center of stream */
+    unsigned short int const distance = 2;
+    double *def_depth = NULL, *def_width = NULL;
+    dbCursor cursor;
+    dbTable *table = NULL;
+    dbColumn *width_col = NULL, *depth_col = NULL, *cat_col = NULL;
+    struct field_info *finfo = NULL;
+    struct sql_statement sql;
 
     G_get_window(&wind);
 
@@ -77,32 +112,127 @@ int enforce_downstream(int infd, int outfd, struct Map_info *Map,
 
     G_message(_("Processing lines... "));
 
-    nlines = Vect_get_num_lines(Map);
-    for (line = 1; line <= nlines; line++)
-        retval = process_line(Map, outMap, rbuf, line, parm);
+    box_list = Vect_new_boxlist(0);
+
+    box.N = wind.north;
+    box.E = wind.east;
+    box.S = wind.south;
+    box.W = wind.west;
+    box.B = wind.bottom;
+    box.T = wind.top;
+
+    Vect_select_lines_by_box(Map, &box, GV_LINE, box_list);
+    field = Vect_get_field_number(Map, parm->field->answer);
+
+    /* Get key col */
+    finfo = Vect_get_field(Map, field);
+
+    if (parm->width_col->answer || parm->depth_col->answer) {
+        sql = create_select_sql_statement(Map, Fi, box_list, columns, &field,
+                                          finfo->key);
+
+        if (db_open_select_cursor(driver, sql.sql, &cursor, DB_SEQUENTIAL) !=
+            DB_OK)
+            G_fatal_error(_("Unable to open select cursor"));
+
+        def_width = G_malloc(sizeof(double));
+        def_depth = G_malloc(sizeof(double));
+        memcpy(def_width, &parm->swidth, sizeof(double));
+        memcpy(def_depth, &parm->sdepth, sizeof(double));
+
+        table = db_get_cursor_table(&cursor);
+        G_debug(1, "Default width: %.2f, depth: %.2f", *def_width / distance,
+                *def_depth);
+
+        cat_col = db_get_table_column_by_name(table, finfo->key);
+        if (parm->width_col->answer) {
+            width_col =
+                db_get_table_column_by_name(table, columns[*width_col_pos]);
+            width_col_type = db_get_column_sqltype(width_col);
+        }
+        if (parm->depth_col->answer) {
+            depth_col =
+                db_get_table_column_by_name(table, columns[*depth_col_pos]);
+            depth_col_type = db_get_column_sqltype(depth_col);
+        }
+
+        while (1) {
+            if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
+                G_fatal_error(_("Unable to fetch data from table <%s>"),
+                              Fi->table);
+
+            if (!more)
+                break;
+
+            int cat = db_get_value_int(db_get_column_value(cat_col));
+
+            /* Set width */
+            set_value(width_col, &width_col_type, parm->width_col->answer,
+                      &parm->swidth, def_width, table, &wind, WIDTH);
+            parm->swidth /= distance;
+            /* Set depth */
+            set_value(depth_col, &depth_col_type, parm->depth_col->answer,
+                      &parm->sdepth, def_depth, table, &wind, DEPTH);
+
+            for (c = 0; c < sql.ncats; c++) {
+                /* Line cat has an entry in the db table */
+                if (cat == sql.id_cat_map[c].cat) {
+                    G_debug(3,
+                            "Process line with id: %d, cat: %d, "
+                            "width: %.2f, depth: %.2f",
+                            sql.id_cat_map[c].id, cat, parm->swidth,
+                            parm->sdepth);
+
+                    process_line(Map, outMap, parm, rbuf,
+                                 &sql.id_cat_map[c].id);
+                }
+            }
+        }
+        db_free_column(cat_col);
+        if (parm->width_col->answer) {
+            db_free_column(width_col);
+        }
+        if (parm->depth_col->answer) {
+            db_free_column(depth_col);
+        }
+        if (db_close_cursor(&cursor) != DB_OK)
+            G_fatal_error(_("Unable to close select cursor"));
+        db_close_database_shutdown_driver(driver);
+        db_free_string(sql.sql);
+        G_free(sql.id_cat_map);
+        G_free(def_width);
+        G_free(def_depth);
+    }
 
     /* write output raster map */
     write_raster(rbuf, outfd, parm->raster_type);
 
     G_free(rbuf);
-
-    return retval;
 }
 
-static int process_line(struct Map_info *Map, struct Map_info *outMap,
-                        void *rbuf, const int line, const struct parms *parm)
+void process_line(struct Map_info *Map, struct Map_info *outMap,
+                  const struct parms *parm, void *rbuf, const int *line)
+/*
+ * Function: process_line
+ * -------------------------
+ * Process line
+ *
+ * Map: input streams vector map
+ * outfd: output raster elevation map with carved streams
+ * outMap: output vector map for adjusted stream points
+ * parm: module parameters
+ * rbuf: raster elevation map buffer
+ * line: streams vector map line id
+ *
+ */
 {
-    int i, retval = 0;
-    int do_warn = 0;
-    int npts = 0;
-    int in_out = 0;
-    int first_in = -1;
+    int i, do_warn = 0, first_in = -1, in_out = 0, npts = 0;
     double totdist = 0.;
     struct Cell_head wind;
     static struct line_pnts *points = NULL;
     static struct line_cats *cats = NULL;
     static struct BM *bm = NULL;
-    Point2 *pgpts, *pgxypts;
+    Point2 *pgpts = NULL, *pgxypts = NULL;
     PointGrp pg;
     PointGrp pgxy; /* copy any points in region to this one */
 
@@ -113,8 +243,8 @@ static int process_line(struct Map_info *Map, struct Map_info *outMap,
     if (!cats)
         cats = Vect_new_cats_struct();
 
-    if (!(Vect_read_line(Map, points, cats, line) & GV_LINE))
-        return 0;
+    if (!(Vect_read_line(Map, points, cats, *line) & GV_LINE))
+        return;
 
     if (!bm)
         bm = BM_create(Rast_window_cols(), Rast_window_rows());
@@ -123,7 +253,7 @@ static int process_line(struct Map_info *Map, struct Map_info *outMap,
     pg_init(&pg);
     pg_init(&pgxy);
 
-    G_percent(line, Vect_get_num_lines(Map), 10);
+    G_percent(*line, Vect_get_num_lines(Map), 10);
 
     for (i = 0; i < points->n_points; i++) {
         Point2 pt, ptxy;
@@ -168,7 +298,6 @@ static int process_line(struct Map_info *Map, struct Map_info *outMap,
     if (do_warn) {
         G_warning(_("Vect runs out of region and re-enters - "
                     "this case is not yet implemented."));
-        retval = 1;
     }
 
     /* now check to see if points go downslope(inorder) or upslope */
@@ -194,10 +323,7 @@ static int process_line(struct Map_info *Map, struct Map_info *outMap,
             /* ok to have flat segments in line */
             traverse_line_flat(pgpts, i, npts);
     }
-
     process_line_segment(npts, rbuf, pgxypts, pgpts, bm, outMap, parm);
-
-    return retval;
 }
 
 static void clear_bitmap(struct BM *bm)
@@ -490,4 +616,241 @@ static void process_line_segment(const int npts, void *rbuf, Point2 *pgxypts,
     }
     Vect_destroy_line_struct(points);
     Vect_destroy_cats_struct(cats);
+}
+
+double get_value(unsigned short int *ctype, dbColumn *col)
+/*
+ * Function:  get_value
+ * --------------------
+ * Get value from column
+ *
+ * ctype: column type
+ * col: column
+ *
+ * return: column value
+ */
+{
+    if (*ctype == DB_SQL_TYPE_INTEGER)
+        return (double)(db_get_value_int(db_get_column_value(col)));
+    else
+        return db_get_value_double(db_get_column_value(col));
+}
+
+void set_value(dbColumn *col, unsigned short int *ctype, char *answer,
+               double *parm, double *def_value, dbTable *table,
+               struct Cell_head *wind, value_type type)
+/*
+ * Function:  set_value
+ * --------------------
+ * Set correct column (with or depth) value
+ *
+ * col: db table column
+ * ctype: db table column type
+ * answer: column parameter answer
+ * parm: module parameters
+ * def_value: default column value
+ * table: streams vector map table
+ * wind: current region settings
+ * type: column type (width or depth)
+ */
+{
+    double value;
+
+    if (answer) {
+        if (!db_get_column_value(col)->isNull) {
+            value = get_value(ctype, col);
+            switch (type) {
+            case WIDTH:
+                adjust_swidth(wind, &value);
+                break;
+            case DEPTH:
+                adjust_sdepth(&value);
+                break;
+            }
+            *parm = value;
+        }
+        else
+            *parm = *def_value;
+    }
+    else
+        *parm = *def_value;
+}
+
+void adjust_swidth(struct Cell_head *win, double *value)
+/*
+ * Function:  adjust_swidth
+ * ------------------------
+ * Adjust width value
+ *
+ * win: current region settings
+ * value: input width value
+ */
+{
+    double width = 0.0;
+
+    if (*value <= width) {
+        double def_width = G_distance(
+            (win->east + win->west) / 2, (win->north + win->south) / 2,
+            ((win->east + win->west) / 2) + win->ew_res,
+            (win->north + win->south) / 2);
+
+        *value = def_width;
+    }
+}
+
+void adjust_sdepth(double *value)
+/*
+ * Function: adjust_sdepth
+ * -----------------------
+ * Adjust depth value
+ *
+ * value: input depth value
+ */
+{
+    double def_depth = 0.0;
+
+    if (*value < def_depth)
+        *value = def_depth;
+}
+
+struct sql_statement
+create_select_sql_statement(struct Map_info *Map, struct field_info *Fi,
+                            struct boxlist *box_list, char *columns[2],
+                            unsigned short int *field, char *keycol)
+/*
+ * Function: create_select_sql_statement
+ * -------------------------------------
+ * Creates sql string
+ *
+ * Map: input streams vector line map
+ * Fi: layer (old: field) information
+ * box_list: list of bounding boxes with id (line streams inside region)
+ * columns: width and depth column names
+ * field: layer (old: field) number)
+ * keycol: key column name
+ *
+ * return ret: sql_statement struct
+ *             sql_statement.sql: sql string
+ *             sql.sql: number of cats
+ *             sql.id_cat_map: line id with matching cat (
+ *             vect_id_cat_map struct)
+ *
+ */
+{
+    int cat_buf_len, size, line, ncats, next_cat, prev_line = -2;
+    bool no_cat = false;
+    char query[DB_SQL_MAX];
+    char *cat_buf = NULL, *where_buf = NULL;
+    dbString sql; /* value_string; */
+    struct sql_statement ret;
+    struct ptr *p = G_malloc(sizeof(struct ptr));
+
+    db_init_string(&sql);
+
+    sprintf(query, "SELECT %s, %s, %s FROM ", keycol, columns[0], columns[1]);
+    db_set_string(&sql, query);
+    if (db_append_string(&sql, Fi->table) != DB_OK)
+        G_fatal_error(_("Unable to append string"));
+
+    cat_buf_len = 0;
+    ncats = 0;
+
+    /* Create WHERE clause ("WHERE keycol in (value, ....)") */
+    for (line = 0; line < box_list->n_values; line++) {
+        int cat = Vect_get_line_cat(Map, box_list->id[line], *field);
+
+        /* Filter out cat = -1 */
+        if (cat < 0) {
+            no_cat = true;
+            prev_line = line;
+
+            if (line == box_list->n_values - 1 && !no_cat) {
+                size = snprintf(NULL, 0, "%d)", cat);
+                cat_buf = G_realloc(cat_buf, strlen(cat_buf) + size + 1);
+                p->type = P_CHAR;
+                p->p_char = cat_buf;
+                check_mem_alloc(p);
+                cat_buf_len += sprintf(cat_buf + cat_buf_len, "%d)", cat);
+            }
+            continue;
+        }
+        else {
+            ncats += 1;
+            if (ncats == 1)
+                ret.id_cat_map = G_malloc(sizeof(struct vect_id_cat_map));
+            else
+                ret.id_cat_map = G_realloc(
+                    ret.id_cat_map, sizeof(struct vect_id_cat_map) * ncats);
+
+            p->type = P_VECT_ID_CAT_MAP;
+            p->p_vect_id_cat_map = ret.id_cat_map;
+            check_mem_alloc(p);
+            /* Saving id with corresponding cat value */
+            ret.id_cat_map[ncats - 1].cat = cat;
+            ret.id_cat_map[ncats - 1].id = box_list->id[line];
+        }
+        if (line == 0 || (prev_line == 0 && no_cat)) {
+            size = snprintf(NULL, 0, "(%d, ", cat);
+            cat_buf = G_malloc(size + 1);
+            p->type = P_CHAR;
+            p->p_char = cat_buf;
+            check_mem_alloc(p);
+            cat_buf_len += sprintf(cat_buf + cat_buf_len, "(%d, ", cat);
+
+            if (prev_line == 0)
+                prev_line = -2;
+        }
+        else if (line > 0 && line < box_list->n_values - 1) {
+            next_cat = Vect_get_line_cat(Map, box_list->id[line + 1], *field);
+            if (next_cat < 0 && line + 1 == box_list->n_values - 1) {
+                size = snprintf(NULL, 0, "%d)", cat);
+                cat_buf = G_realloc(cat_buf, strlen(cat_buf) + size + 1);
+                p->type = P_CHAR;
+                p->p_char = cat_buf;
+                check_mem_alloc(p);
+                cat_buf_len += sprintf(cat_buf + cat_buf_len, "%d)", cat);
+            }
+            else {
+                size = snprintf(NULL, 0, "%d, ", cat);
+                cat_buf = G_realloc(cat_buf, strlen(cat_buf) + size + 1);
+                p->type = P_CHAR;
+                p->p_char = cat_buf;
+                check_mem_alloc(p);
+                cat_buf_len += sprintf(cat_buf + cat_buf_len, "%d, ", cat);
+            }
+        }
+        else if (line == box_list->n_values - 1) {
+            size = snprintf(NULL, 0, "%d)", cat);
+            cat_buf = G_realloc(cat_buf, strlen(cat_buf) + size + 1);
+            p->type = P_CHAR;
+            p->p_char = cat_buf;
+            check_mem_alloc(p);
+            cat_buf_len += sprintf(cat_buf + cat_buf_len, "%d)", cat);
+        }
+    }
+
+    size = snprintf(NULL, 0, " WHERE %s in %s", keycol, cat_buf);
+    where_buf = G_malloc(size + 1);
+    p->type = P_CHAR;
+    p->p_char = where_buf;
+    check_mem_alloc(p);
+
+    sprintf(where_buf, " WHERE %s in %s", keycol, cat_buf);
+    if (db_append_string(&sql, where_buf) != DB_OK)
+        G_fatal_error(_("Unable to append string"));
+    G_free(cat_buf);
+    G_free(where_buf);
+
+    ret.sql = G_malloc(sizeof(sql));
+    p->type = P_DBSTRING;
+    check_mem_alloc(p);
+    p->p_dbString = ret.sql;
+    ret.sql = &sql;
+
+    ret.ncats = ncats;
+
+    G_debug(1, "Sql statement: %s", ret.sql->string);
+    G_debug(1, "Number of cats: %d", ret.ncats);
+
+    return ret;
 }

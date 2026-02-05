@@ -4,6 +4,8 @@
  *
  * AUTHOR(S):    Original author Bill Brown, UIUC GIS Laboratory
  *               Brad Douglas <rez touchofmadness com>
+ *               Tomas Zigo <tomas zigo slovanet sk> (adding the option
+ *               to read width, depth values from vector map table columns)
  *
  * PURPOSE:      Takes vector stream data, converts it to 3D raster and
  *               subtracts a specified depth
@@ -42,4 +44,57 @@ void update_rast_history(struct parms *parm)
                         parm->invect->answer);
     Rast_command_history(&hist);
     Rast_write_history(parm->outrast->answer, &hist);
+}
+
+void check_mem_alloc(struct ptr *pointer)
+/*
+ * Function: check_mem_alloc
+ * -------------------------
+ * Check memory allocation
+ *
+ * pointer: ptr struct
+ *          ptr.type: pointer type
+ *          ptr.int|double|char|dbString: pointer
+ *          ptr.p_vect_id_cat_map: line id with matching cat (
+ *          vect_id_cat_map struct)
+ *
+ */
+{
+    switch (pointer->type) {
+    case P_INT:
+        if (!pointer->p_int) {
+            G_free(pointer->p_int);
+            pointer->p_int = NULL;
+            G_fatal_error(_("Fail to allocate memory"));
+        }
+        break;
+    case P_DOUBLE:
+        if (!pointer->p_double) {
+            G_free(pointer->p_double);
+            pointer->p_double = NULL;
+            G_fatal_error(_("Fail to allocate memory"));
+        }
+        break;
+    case P_CHAR:
+        if (!pointer->p_char) {
+            G_free(pointer->p_char);
+            pointer->p_char = NULL;
+            G_fatal_error(_("Fail to allocate memory"));
+        }
+        break;
+    case P_DBSTRING:
+        if (!pointer->p_dbString) {
+            db_free_string(pointer->p_dbString);
+            pointer->p_dbString = NULL;
+            G_fatal_error(_("Fail to allocate memory"));
+        }
+        break;
+    case P_VECT_ID_CAT_MAP:
+        if (!pointer->p_vect_id_cat_map) {
+            G_free(pointer->p_vect_id_cat_map);
+            pointer->p_vect_id_cat_map = NULL;
+            G_fatal_error(_("Fail to allocate memory"));
+        }
+        break;
+    }
 }
