@@ -22,6 +22,7 @@ This program is free software under the GNU General Public License
 """
 
 import os
+import tempfile
 from collections import deque
 
 from pathlib import Path
@@ -33,7 +34,7 @@ import wx.lib.filebrowsebutton as filebrowse
 from grass.script import core as grass
 from grass.script import task as gtask
 
-from core.gcmd import GError, GMessage, GWarning, RunCommand
+from core.gcmd import GError, GMessage, RunCommand
 from gui_core.forms import CmdPanel
 from gui_core.gselect import GdalSelect
 from gui_core.widgets import GListCtrl, GNotebook, LayersList, LayersListValidator
@@ -317,54 +318,70 @@ class ImportDialog(wx.Dialog):
             self.list.validate = True
 
     def AddLayers(self, returncode, cmd=None, userData=None):
-        """Add imported/linked layers into layer tree"""
+        """Add imported/linked layers into layer tree.
+
+        For GDAL raster imports/links, uses map_names_file from r.in.gdal/r.external
+        to determine exactly which raster maps were created. Only those maps
+        are added to the layer tree; non-imported bands are never displayed.
+        """
+        map_names_file = (userData or {}).get("map_names_file")
+        if map_names_file and (not self.add.IsChecked() or returncode != 0):
+            try:
+                os.remove(map_names_file)
+            except OSError:
+                pass
         if not self.add.IsChecked() or returncode != 0:
             return
 
-        # TODO: if importing map creates more map the following does not work
-        # * do nothing if map does not exist or
-        # * try to determine names using regexp or
-        # * persuade import tools to report map names
         self.commandId += 1
         layer, output = self.list.GetLayers()[self.commandId][:2]
 
-        name = output + "@" + grass.gisenv()["MAPSET"] if "@" not in output else output
+        base_name = (
+            output + "@" + grass.gisenv()["MAPSET"] if "@" not in output else output
+        )
 
-        # add imported layers into layer tree
-        # an alternative would be emit signal (mapCreated) and (optionally)
-        # connect to this signal
         llist = self._giface.GetLayerList()
         if self.importType == "gdal":
-            nBands = int(userData.get("nbands", 1)) if userData else 1
+            map_names = []
+            if map_names_file and Path(map_names_file).is_file():
+                try:
+                    with open(map_names_file, encoding="utf-8") as f:
+                        for line in f:
+                            name = line.strip()
+                            if name:
+                                map_names.append(name)
+                except OSError:
+                    pass
+                finally:
+                    try:
+                        os.remove(map_names_file)
+                    except OSError:
+                        pass
+
+            if not map_names:
+                map_names = [base_name]
 
             nFlag = bool(
                 UserSettings.Get(group="rasterLayer", key="opaque", subkey="enabled")
             )
-            for i in range(1, nBands + 1):
-                nameOrig = name
-                if nBands > 1:
-                    mapName, mapsetName = name.split("@")
-                    mapName += ".%d" % i
-                    name = mapName + "@" + mapsetName
-
-                # Check if map exists before adding (fixes issue when only selected bands are imported)
-                mapInfo = grass.find_file(name, element="cell")
-                if not mapInfo["name"]:
-                    name = nameOrig
+            for name in map_names:
+                full_name = (
+                    name + "@" + grass.gisenv()["MAPSET"] if "@" not in name else name
+                )
+                if not grass.find_file(name, element="cell")["file"]:
                     continue
-
-                cmd = ["d.rast", "map=%s" % name]
+                disp_cmd = ["d.rast", "map=%s" % full_name]
                 if nFlag:
-                    cmd.append("-n")
-
-                llist.AddLayer(ltype="raster", name=name, checked=True, cmd=cmd)
-                name = nameOrig
+                    disp_cmd.append("-n")
+                llist.AddLayer(
+                    ltype="raster", name=full_name, checked=True, cmd=disp_cmd
+                )
         else:
             llist.AddLayer(
                 ltype="vector",
-                name=name,
+                name=base_name,
                 checked=True,
-                cmd=["d.vect", "map=%s" % name] + GetDisplayVectSettings(),
+                cmd=["d.vect", "map=%s" % base_name] + GetDisplayVectSettings(),
             )
 
         self._giface.GetMapWindow().ZoomToMap()
@@ -519,22 +536,17 @@ class GdalImportDialog(ImportDialog):
             else:
                 idsn = dsn
 
-            # check number of bands
-            nBandsStr = RunCommand("r.in.gdal", flags="p", input=idsn, read=True)
-            nBands = -1
-            if nBandsStr:
-                try:
-                    nBands = int(nBandsStr.rstrip("\n"))
-                except ValueError:
-                    pass
-            if nBands < 0:
-                GWarning(_("Unable to determine number of raster bands"), parent=self)
-                nBands = 1
-
-            userData["nbands"] = nBands
             cmd = self.getSettingsPageCmd()
             cmd.append("input=%s" % idsn)
             cmd.append("output=%s" % output)
+
+            if self.add.IsChecked():
+                fd, map_names_path = tempfile.mkstemp(
+                    suffix=".txt", prefix="grass_map_names_"
+                )
+                os.close(fd)
+                cmd.append("map_names_file=%s" % map_names_path)
+                userData["map_names_file"] = map_names_path
 
             if self.override.IsChecked():
                 cmd.append("-o")
@@ -573,8 +585,8 @@ class GdalImportDialog(ImportDialog):
         return "r.import"
 
     def _getBlackListedParameters(self):
-        """Get flags which will not be showed in Settings page"""
-        return ["input", "output"]
+        """Get parameters which will not be shown in Settings page"""
+        return ["input", "output", "map_names_file"]
 
     def _getBlackListedFlags(self):
         """Get flags which will not be showed in Settings page"""
