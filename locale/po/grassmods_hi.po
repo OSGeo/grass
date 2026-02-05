@@ -2,19 +2,21 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2026.
+# Abhimanyu <abhimanyupg04@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-31 15:57+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-02-05 20:05+0000\n"
+"Last-Translator: Abhimanyu  <abhimanyupg04@gmail.com>\n"
+"Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grassmods/hi/>\n"
 "Language: hi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: ../db/db.columns/main.c:50 ../db/db.copy/main.c:104
 #: ../db/db.describe/main.c:65 ../db/db.select/main.c:77
@@ -1745,7 +1747,7 @@ msgstr ""
 #: ../vector/v.label/main.c:175 ../vector/v.label/main.c:188
 #: ../vector/v.label/main.c:194 ../vector/v.label/main.c:204
 msgid "Colors"
-msgstr ""
+msgstr "रंग"
 
 #: ../display/d.barscale/main.c:151
 msgid "Background color (drawn behind the bar)"
@@ -2561,7 +2563,7 @@ msgstr ""
 #: ../raster/r.colors.out/raster_main.c:63 ../raster/r.profile/main.c:123
 #: ../raster/r.what.color/main.c:218 ../vector/v.colors.out/main.c:74
 msgid "Color"
-msgstr ""
+msgstr "रंग"
 
 #: ../display/d.grid/main.c:97 ../display/d.legend.vect/main.c:91
 #: ../display/d.legend/main.c:237 ../vector/v.label.sa/main.c:140
@@ -3196,7 +3198,7 @@ msgstr ""
 #: ../display/d.legend/main.c:289 ../raster/r.what/main.c:154
 #: ../raster/r.what/main.c:180
 msgid "Advanced"
-msgstr ""
+msgstr "उन्नत"
 
 #: ../display/d.legend/main.c:125
 msgid "Thinning factor (thin=10 gives cats 0,10,20...)"
@@ -4659,7 +4661,7 @@ msgstr ""
 #: ../display/d.vect.thematic/main.c:112 ../display/d.vect.thematic/main.c:126
 #: ../display/d.vect.thematic/main.c:134
 msgid "Classes"
-msgstr ""
+msgstr "क्लासेस"
 
 #: ../display/d.vect.thematic/main.c:120 ../vector/v.class/main.c:76
 msgid "Algorithm to use for classification"
@@ -14531,7 +14533,7 @@ msgstr ""
 #: ../locale/scriptstrings/r.reclass.area_to_translate.c:10
 #: ../locale/scriptstrings/v.to.lines_to_translate.c:8
 msgid "Area"
-msgstr ""
+msgstr "क्षेत्र (Area)"
 
 #: ../locale/scriptstrings/r.reclass.area_to_translate.c:7
 msgid "Lesser or greater than specified value"
@@ -17544,7 +17546,7 @@ msgstr ""
 #: ../misc/m.nviz.image/volume.c:42 ../misc/m.nviz.image/volume.c:132
 #, c-format
 msgid "3d raster map <%s> not found"
-msgstr ""
+msgstr "3d रास्टर मैप <%s> नहीं मिला"
 
 #: ../misc/m.nviz.image/volume.c:95 ../misc/m.nviz.image/volume.c:263
 #, c-format
@@ -28310,7 +28312,7 @@ msgstr ""
 
 #: ../raster/r.stats/main.c:191 ../raster/r.stats/main.c:198
 msgid "Coordinates"
-msgstr ""
+msgstr "कोआर्डिनेट"
 
 #: ../raster/r.stats/main.c:195
 msgid "Print x and y (column and row)"
@@ -30183,7 +30185,7 @@ msgstr ""
 #: ../vector/v.overlay/main.c:146 ../vector/v.to.rast/main.c:88
 #: ../vector/v.to.rast/main.c:94 ../vector/v.to.rast/main.c:99
 msgid "Attributes"
-msgstr ""
+msgstr "विशेषताएँ (Attributes)"
 
 #: ../raster/r.to.vect/main.c:119
 msgid "Recommended for massive point conversion"
@@ -40523,7 +40525,7 @@ msgstr ""
 
 #: ../vector/v.info/print.c:814
 msgid "Comment"
-msgstr ""
+msgstr "टिप्पणी"
 
 #: ../vector/v.kcv/main.c:56 ../vector/v.mkgrid/main.c:77
 #: ../vector/v.normal/main.c:73 ../vector/v.perturb/main.c:66
@@ -42142,7 +42144,7 @@ msgstr ""
 #: ../vector/v.out.lidar/main.c:548 ../vector/v.out.lidar/main.c:554
 #: ../vector/v.out.lidar/main.c:560
 msgid "Columns"
-msgstr ""
+msgstr "कॉलम"
 
 #: ../vector/v.net.centrality/main.c:154
 msgid "Name of closeness centrality column"
