@@ -89,6 +89,8 @@ class ReprojectionRenderer:
 
         param str name: name of raster
         """
+        # Store original name before find_file overwrites it
+        original_name = name
         # Find full name of raster
         file_info = gs.find_file(name, element="cell", env=self._src_env)
         full_name = file_info["fullname"]
@@ -98,8 +100,8 @@ class ReprojectionRenderer:
         # Validate that raster exists
         if not full_name:
             msg = (
-                f"Raster map <{name}> not found. "
-                "Please check the raster name and ensure it exists in the current location."
+                f"Raster map <{original_name}> not found. "
+                "Please check the raster name and ensure it exists in the current project."
             )
             raise ValueError(msg)
 
@@ -146,6 +148,8 @@ class ReprojectionRenderer:
         geoJSON filename.
 
         param str name: name of vector"""
+        # Store original name before find_file overwrites it
+        original_name = name
         # Find full name of vector
         file_info = gs.find_file(name, element="vector")
         full_name = file_info["fullname"]
@@ -155,8 +159,8 @@ class ReprojectionRenderer:
         # Validate that vector exists
         if not full_name:
             msg = (
-                f"Vector map <{name}> not found. "
-                "Please check the vector name and ensure it exists in the current location."
+                f"Vector map <{original_name}> not found. "
+                "Please check the vector name and ensure it exists in the current project."
             )
             raise ValueError(msg)
 
