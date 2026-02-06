@@ -152,11 +152,15 @@ class JupyterServerInstance:
             return sock.getsockname()[1]
 
     def is_server_running(self, retries=10, delay=0.2):
-        """Check if the server is responding on the given port.
+        """Check if the server is responding.
+
         :param retries: Number of retries before giving up (int).
         :param delay: Delay between retries in seconds (float).
         :return: True if the server is up, False otherwise (bool).
         """
+        if not self.port:
+            return False
+
         for _ in range(retries):
             try:
                 conn = http.client.HTTPConnection("localhost", self.port, timeout=0.5)
@@ -204,7 +208,7 @@ class JupyterServerInstance:
         thread.start()
 
         # Check if the server is up
-        if not self.is_server_running(self.port):
+        if not self.is_server_running():
             raise RuntimeError(_("Jupyter server is not running"))
 
         # Save the PID of the Jupyter server
@@ -222,7 +226,7 @@ class JupyterServerInstance:
             )
 
         # Attempt to terminate the server process
-        if self.is_server_running(self.port):
+        if self.is_server_running():
             try:
                 os.kill(self.pid, signal.SIGTERM)
             except Exception as e:
