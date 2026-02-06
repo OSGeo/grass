@@ -215,11 +215,16 @@ class JupyterServerInstance:
         self.port = JupyterServerInstance.find_free_port()
         self.server_url = "http://localhost:{}".format(self.port)
 
+        # Check if Jupyter is available in PATH
+        jupyter = shutil.which("jupyter")
+        if not jupyter:
+            raise RuntimeError(_("Jupyter executable not found in PATH"))
+
         # Start Jupyter notebook server
         try:
             self.proc = subprocess.Popen(
                 [
-                    "jupyter",
+                    jupyter,
                     "notebook",
                     "--no-browser",
                     "--NotebookApp.token=''",
