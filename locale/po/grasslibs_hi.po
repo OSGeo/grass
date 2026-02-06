@@ -2,19 +2,21 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2026.
+# Abhimanyu <abhimanyupg04@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-31 15:57+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-02-05 20:05+0000\n"
+"Last-Translator: Abhimanyu  <abhimanyupg04@gmail.com>\n"
+"Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grasslibs/hi/>\n"
 "Language: hi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: ../lib/arraystats/class.c:22
 #, c-format
@@ -1612,7 +1614,7 @@ msgstr ""
 #: ../lib/gis/parser_interface.c:329 ../lib/gis/parser_md_cli.c:343
 #: ../lib/gis/parser_md_python.c:555 ../lib/gis/parser_rest.c:158
 msgid "Allow output files to overwrite existing files"
-msgstr ""
+msgstr "आउटपुट फ़ाइलों को मौजूदा फ़ाइलों को अधिलेखित (overwrite) करने की अनुमति दें"
 
 #: ../lib/gis/parser_help.c:224 ../lib/gis/parser_html.c:189
 #: ../lib/gis/parser_interface.c:337 ../lib/gis/parser_md_cli.c:350
@@ -1981,7 +1983,7 @@ msgstr ""
 #: ../lib/gis/parser_standard_options.c:644
 #: ../lib/gis/parser_standard_options.c:654
 msgid "Color"
-msgstr ""
+msgstr "रंग"
 
 #: ../lib/gis/parser_standard_options.c:645
 msgid "Either a standard color name or R:G:B triplet"
@@ -2053,7 +2055,7 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:744
 msgid "Coordinates"
-msgstr ""
+msgstr "कोआर्डिनेट"
 
 #: ../lib/gis/parser_standard_options.c:753
 msgid "Name of color table"
