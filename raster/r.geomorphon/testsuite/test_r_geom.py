@@ -16,6 +16,7 @@ from grass.script.core import read_command
 import grass.script as gs
 import unittest
 import os
+import json
 
 synth_out = """1	flat
 3	ridge
@@ -346,6 +347,68 @@ class TestComparisonModes(TestCase):
 
         stats = gs.parse_command("r.univar", flags="g", map="test_diff")
         self.assertGreater(float(stats["n"]), 0)
+
+
+class TestProfileFormat(TestCase):
+    """Test profile output format parameter"""
+
+    inele = "elevation"
+
+    @classmethod
+    def setUpClass(cls):
+        cls.use_temp_region()
+        cls.runModule("g.region", raster=cls.inele)
+
+        info = gs.raster_info(cls.inele)
+        cls.test_easting = (info["east"] + info["west"]) / 2
+        cls.test_northing = (info["north"] + info["south"]) / 2
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.del_temp_region()
+
+    def test_json_profile_format(self):
+        """Test JSON profile format output"""
+        profile_file = gs.tempfile()
+        gs.try_remove(profile_file)
+
+        try:
+            self.assertModule(
+                "r.geomorphon",
+                elevation=self.inele,
+                search=10,
+                coordinates=(self.test_easting, self.test_northing),
+                profiledata=profile_file,
+                profileformat="json",
+            )
+
+            with open(profile_file) as f:
+                data = json.load(f)
+
+            self.assertIn("computation_parameters", data)
+            self.assertIn("intermediate_data", data)
+            self.assertIn("final_results", data)
+
+            comp = data["computation_parameters"]
+            self.assertIn("search_cells", comp)
+            self.assertIn("flat_thresh_deg", comp)
+
+            final = data["final_results"]
+            for key in [
+                "landform_cat",
+                "landform_code",
+                "landform_name",
+                "azimuth",
+                "elongation",
+                "intensity_m",
+            ]:
+                self.assertIn(key, final)
+
+            self.assertIn("format_version_major", data)
+            self.assertIn("format_version_minor", data)
+
+        finally:
+            gs.try_remove(profile_file)
 
 
 if __name__ == "__main__":
