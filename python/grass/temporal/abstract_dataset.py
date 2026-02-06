@@ -12,11 +12,27 @@ for details.
 
 from __future__ import annotations
 
+import json
 from abc import ABCMeta, abstractmethod
+from datetime import datetime
 
 from .core import get_current_mapset, get_tgis_message_interface, init_dbif
 from .spatial_topology_dataset_connector import SpatialTopologyDatasetConnector
 from .temporal_topology_dataset_connector import TemporalTopologyDatasetConnector
+
+
+class TemporalJSONEncoder(json.JSONEncoder):
+    """JSON encoder for temporal dataset metadata.
+
+    Serializes datetime using ISO format; delegates all other types
+    to the standard encoder.
+    """
+
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            return obj.isoformat()
+        return super().default(obj)
+
 
 ###############################################################################
 
@@ -217,6 +233,10 @@ class AbstractDataset(
     @abstractmethod
     def print_shell_info(self):
         """Print information about this class in shell style"""
+
+    @abstractmethod
+    def print_json(self) -> None:
+        """Print dataset metadata as JSON to stdout."""
 
     @abstractmethod
     def print_self(self):
