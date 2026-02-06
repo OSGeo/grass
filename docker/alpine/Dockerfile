@@ -1,4 +1,4 @@
-FROM alpine:3.23@sha256:865b95f46d98cf867a156fe4a135ad3fe50d2056aa3f25ed31662dff6da4eb62 as common
+FROM alpine:3.23@sha256:25109184c71bdad752c8312a8623239686a9a2071e8825f20acb8f2198c3f659 as common
 
 # Based on:
 # https://github.com/mundialis/docker-grass-gis/blob/master/Dockerfile
@@ -177,7 +177,7 @@ RUN cmake -B build -DAUTOLOAD_DIR=/usr/lib/gdalplugins -DBUILD_TESTING=OFF && \
     cmake --install build
 
 # Get rid of version number here, restore in next stage via symbolic link
-RUN mv /usr/local/grass85 /usr/local/grass
+RUN mv /usr/local/grass86 /usr/local/grass
 
 # Reduce the image size - Remove unnecessary grass files
 RUN cp /usr/local/grass/gui/wxpython/xml/module_items.xml module_items.xml; \
@@ -214,7 +214,7 @@ COPY docker/testdata/test_grass_session.py docker/alpine/grass_tests.sh /scripts
 
 # run GRASS python session and scan the test LAZ file; some cleanup
 # also show installed version
-RUN ln -sf /usr/local/grass /usr/local/grass85; \
+RUN ln -sf /usr/local/grass /usr/local/grass86; \
     rm -rf /tmp/grasstest_epsg_25832; \
     $SHELL /scripts/grass_tests.sh; \
     python /scripts/test_grass_session.py && rm -rf /tmp/grasstest_epsg_25832; \

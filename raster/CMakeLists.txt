@@ -321,7 +321,7 @@ build_program_in_subdir(
   grass_raster
   grass_parson)
 
-build_program_in_subdir(r.kappa DEPENDS grass_gis grass_raster ${LIBM})
+build_program_in_subdir(r.kappa DEPENDS grass_gis grass_raster grass_parson ${LIBM})
 
 build_program_in_subdir(r.latlong DEPENDS grass_gis grass_raster grass_gproj)
 
