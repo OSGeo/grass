@@ -2,7 +2,7 @@
 
 import os
 import sys
-
+import stat
 import pytest
 
 import grass.script as gs
@@ -65,3 +65,35 @@ def test_in_session(tmp_path):
     with gs.setup.init(project, env=os.environ.copy()) as session:
         executables_set, scripts_dict = gs.get_commands(env=session.env)
     common_test_code(executables_set, scripts_dict)
+
+
+def test_addon_path_multiple_dirs(tmp_path):
+    """Test that get_commands scans multiple directories in GRASS_ADDON_PATH"""
+
+    dir_a = tmp_path / "addon_a"
+    dir_b = tmp_path / "addon_b"
+    dir_a.mkdir()
+    dir_b.mkdir()
+
+    bin_a = dir_a / "scripts"
+    bin_b = dir_b / "bin"
+    bin_a.mkdir()
+    bin_b.mkdir()
+
+    ext = ".py" if sys.platform == "win32" else ""
+    script_a = f"my_custom_cmd_a{ext}"
+    script_b = f"my_custom_cmd_b{ext}"
+
+    for folder, script in [(bin_a, script_a), (bin_b, script_b)]:
+        file_path = folder / script
+        file_path.write_text("#!/bin/sh\necho 'Test ADDON PATH'", encoding="utf-8")
+        file_path.chmod(stat.S_IRWXU)
+
+    new_path = f"{dir_a}{os.pathsep}{dir_b}"
+    env = os.environ.copy()
+    env["GRASS_ADDON_PATH"] = new_path
+
+    executables_set, _ = gs.get_commands(env=env)
+
+    assert "my_custom_cmd_a" in executables_set
+    assert "my_custom_cmd_b" in executables_set
