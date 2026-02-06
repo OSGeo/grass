@@ -27,9 +27,7 @@ class TestTinfoJson(TestCase):
         cls.runModule(
             "g.region", s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10, flags="p3"
         )
-        cls.runModule(
-            "r.mapcalc", expression="prec_1 = 1", overwrite=True
-        )
+        cls.runModule("r.mapcalc", expression="prec_1 = 1", overwrite=True)
         cls.runModule(
             "t.create",
             type="strds",
