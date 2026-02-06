@@ -14,9 +14,10 @@ msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-31 15:57+0000\n"
-"PO-Revision-Date: 2026-01-04 20:50+0000\n"
+"PO-Revision-Date: 2026-02-06 19:59+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
-"Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grassmods/fr/>\n"
+"Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/"
+"grassmods-8-5/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1161,7 +1162,7 @@ msgstr ""
 
 #: ../db/drivers/mysql/parse.c:61
 msgid "Wrong port number in MySQL database definition: "
-msgstr "Erreur de définition du numéro de port de la base de données MySQL:"
+msgstr "Erreur de définition du numéro de port de la base de données MySQL : "
 
 #: ../db/drivers/mysql/parse.c:72 ../db/drivers/postgres/parse.c:60
 msgid "'user' in database definition is not supported, use db.login"
@@ -4065,7 +4066,7 @@ msgstr ""
 
 #: ../display/d.rast.arrow/main.c:142
 msgid "Draw arrow every Nth grid cell"
-msgstr "Tracer une flèche sur chaque chaque énième cellule de la grille"
+msgstr "Tracer une flèche sur chaque énième cellule de la grille"
 
 #: ../display/d.rast.arrow/main.c:150
 msgid "Raster map containing values used for arrow length"
@@ -5114,7 +5115,9 @@ msgstr "Taille maximum de la région (hauteur et largeur moyenne) quand la couch
 
 #: ../display/d.vect/main.c:312
 msgid "Random colors according to category number (or layer number if 'layer=-1' is given)"
-msgstr "Couleurs aléatoires en fonction du code de catégorie (ou du code de la couche si 'layer=-1' "
+msgstr ""
+"Couleurs aléatoires en fonction du code de catégorie (ou du code de la "
+"couche si 'layer=-1' est indiqué)"
 
 #: ../display/d.vect/main.c:319
 msgid "Use values from 'cats' option as feature id"
@@ -5709,7 +5712,7 @@ msgstr ""
 
 #: ../general/g.findfile/element.c:7
 msgid "List of available elements:"
-msgstr "Liste des éléments disponibles : "
+msgstr "Liste des éléments disponibles :"
 
 #: ../general/g.findfile/main.c:64
 msgid "Searches for GRASS data base files and sets variables for the shell."
@@ -8520,7 +8523,7 @@ msgstr "moyennes"
 #: ../imagery/i.cluster/print1.c:17
 #, c-format
 msgid " stddev "
-msgstr "écart-type"
+msgstr " écart-type "
 
 #: ../imagery/i.cluster/print2.c:17
 #, c-format
@@ -8535,7 +8538,7 @@ msgstr ""
 #: ../imagery/i.cluster/print2.c:23
 #, c-format
 msgid "  means "
-msgstr "moyennes"
+msgstr "  moyennes "
 
 #: ../imagery/i.cluster/print2.c:28
 #, c-format
@@ -9053,7 +9056,7 @@ msgstr ""
 
 #: ../imagery/i.fft/main.c:147
 msgid "Starting FFT..."
-msgstr "Lancement de la FFT ... "
+msgstr "Lancement de la FFT..."
 
 #: ../imagery/i.fft/main.c:168 ../imagery/i.ifft/main.c:192
 msgid "Rotating data..."
@@ -11557,7 +11560,7 @@ msgstr ""
 #: ../imagery/i.segment/main.c:70
 #, c-format
 msgid "Number of segments created: %d"
-msgstr "Nombre de segments créés :  %d"
+msgstr "Nombre de segments créés : %d"
 
 #: ../imagery/i.segment/mean_shift.c:92
 #, c-format
@@ -13629,7 +13632,7 @@ msgstr "fusion"
 
 #: ../locale/scriptstrings/i.pansharpen_to_translate.c:4
 msgid "sharpen"
-msgstr "améliorer "
+msgstr "améliorer"
 
 #: ../locale/scriptstrings/i.pansharpen_to_translate.c:5
 msgid "Brovey"
@@ -14267,7 +14270,7 @@ msgstr "Requête"
 
 #: ../locale/scriptstrings/r.in.wms_to_translate.c:14
 msgid "EPSG code of requested source projection"
-msgstr "Code EPSG de  projection de la source demandée"
+msgstr "Code EPSG de projection de la source demandée"
 
 #: ../locale/scriptstrings/r.in.wms_to_translate.c:16
 msgid "Driver used for communication with the server"
@@ -15524,7 +15527,7 @@ msgstr "Échelle logarithmique"
 #: ../locale/scriptstrings/t.rast.colors_to_translate.c:23
 #: ../raster/r.colors/edit_colors.c:186 ../vector/v.colors/main.c:154
 msgid "Logarithmic-absolute scaling"
-msgstr "Échelle logarithmique  absolue"
+msgstr "Échelle logarithmique absolue"
 
 #: ../locale/scriptstrings/t.rast.colors_to_translate.c:25
 #: ../raster/r.colors/edit_colors.c:191
@@ -19668,7 +19671,7 @@ msgstr ""
 #: ../raster/r.cross/cross.c:64
 #, c-format
 msgid "%s: STEP 1 ... "
-msgstr "%s : ÉTAPE 1 ..."
+msgstr "%s : ÉTAPE 1 ... "
 
 #: ../raster/r.cross/main.c:67
 msgid "Creates a cross product of the category values from multiple raster map layers."
@@ -19705,7 +19708,7 @@ msgstr "%d catégories"
 #: ../raster/r.cross/renumber.c:31
 #, c-format
 msgid "%s: STEP 3 ... "
-msgstr "%s : ÉTAPE 3 ..."
+msgstr "%s : ÉTAPE 3 ... "
 
 #: ../raster/r.describe/describe.c:94
 #, c-format
@@ -22577,9 +22580,9 @@ msgid " points found in input file(s)"
 msgstr "%lu points trouvés dans le fichier d'entrée"
 
 #: ../raster/r.in.pdal/main.cpp:938 ../raster/r.in.pdal/main.cpp:945
-#, fuzzy, c-format
+#, c-format
 msgid "Raster map <%s> created. "
-msgstr "Carte raster <%s> créée."
+msgstr "Carte raster <%s> créée. "
 
 #: ../raster/r.in.pdal/projection.c:124 ../vector/v.in.pdal/projection.c:124
 msgid "Overriding projection check"
@@ -22834,7 +22837,11 @@ msgstr "Afficher l'historique du raster à la place des informations générales
 
 #: ../raster/r.info/main.c:127
 msgid "The output format for flags -g, -r, -s, and -e currently defaults to 'shell', but this will change to 'plain' in a future release. To avoid unexpected behaviour, specify the format explicitly."
-msgstr "Le format de sortie des des options -g, -r, -s et -e est actuellement par défaut « shell », mais il sera remplacé par « plain » (texte brut) dans une prochaine version. Pour éviter tout comportement inattendu, spécifiez explicitement le format."
+msgstr ""
+"Le format de sortie des options -g, -r, -s et -e est actuellement par défaut "
+"« shell », mais il sera remplacé par « plain » (texte brut) dans une "
+"prochaine version. Pour éviter tout comportement inattendu, spécifiez "
+"explicitement le format."
 
 #: ../raster/r.info/main.c:403 ../raster/r.info/main.c:1024
 #: ../raster3d/r3.info/main.c:193 ../raster3d/r3.info/main.c:200
@@ -24756,7 +24763,7 @@ msgstr "Information de plage pour <%s> non disponible (lancez r.support)"
 #: ../raster/r.out.vrml/main.c:129
 #, c-format
 msgid "Opening %s for writing... "
-msgstr "Ouverture de %s en écriture ..."
+msgstr "Ouverture de %s en écriture... "
 
 #: ../raster/r.out.vrml/put_grid.c:34
 msgid "Writing vertices..."
@@ -25213,7 +25220,7 @@ msgstr "Utilisation de la résolution : %g [%s]"
 
 #: ../raster/r.profile/main.c:232
 msgid "Output columns:"
-msgstr "Colonnes en sortie : "
+msgstr "Colonnes en sortie :"
 
 #: ../raster/r.profile/main.c:235
 #, c-format
@@ -25405,7 +25412,7 @@ msgstr "Carte en entrée <%s@%s> dans le Secteur <%s> :"
 
 #: ../raster/r.proj/main.c:645
 msgid "Input:"
-msgstr "Entrée : "
+msgstr "Entrée :"
 
 #: ../raster/r.proj/main.c:646 ../raster/r.proj/main.c:657
 #, c-format
@@ -26847,7 +26854,7 @@ msgstr "Retour à la région originale..."
 
 #: ../raster/r.resamp.rst/main.c:484 ../raster/r.resample/main.c:112
 msgid "Percent complete: "
-msgstr "Pourcentage complet :"
+msgstr "Pourcentage complet : "
 
 #: ../raster/r.resamp.rst/main.c:492
 #, c-format
@@ -28788,7 +28795,7 @@ msgstr "Au moins une carte raster en sortie doit être spécifiée"
 #: ../raster/r.stream.extract/main.c:312
 #, c-format
 msgid "%.2f%% of data are kept in memory"
-msgstr "%.2f% % de données sont gardées en mémoire"
+msgstr "%.2f %% de données sont gardées en mémoire"
 
 #: ../raster/r.stream.extract/main.c:316
 #: ../raster/r.watershed/seg/init_vars.c:252
@@ -29292,7 +29299,7 @@ msgstr "S_decode ==> Merci de fixer la minute : %d"
 #: ../raster/r.sunhours/solpos00.c:980 ../raster/r.sunmask/solpos00.c:939
 #, c-format
 msgid "S_decode ==> Please fix the second: %d"
-msgstr "S_decode ==> Merci de fixer la seconde = %d "
+msgstr "S_decode ==> Merci de fixer la seconde = %d"
 
 #: ../raster/r.sunhours/solpos00.c:982 ../raster/r.sunmask/solpos00.c:941
 #, c-format
@@ -29307,12 +29314,12 @@ msgstr "S_decode ==> Merci de fixer l'intervalle : %d"
 #: ../raster/r.sunhours/solpos00.c:988 ../raster/r.sunmask/solpos00.c:947
 #, c-format
 msgid "S_decode ==> Please fix the latitude: %f"
-msgstr "S_decode ==> Merci de fixer  la latitude : %f"
+msgstr "S_decode ==> Merci de fixer la latitude : %f"
 
 #: ../raster/r.sunhours/solpos00.c:991 ../raster/r.sunmask/solpos00.c:950
 #, c-format
 msgid "S_decode ==> Please fix the longitude: %f"
-msgstr "S_decode ==> Merci de fixer la longitude : %f "
+msgstr "S_decode ==> Merci de fixer la longitude : %f"
 
 #: ../raster/r.sunhours/solpos00.c:994 ../raster/r.sunmask/solpos00.c:953
 #, c-format
@@ -29654,7 +29661,7 @@ msgstr "[%s] est la reclassification d'une autre couche. Sortie."
 #: ../raster/r.support/main.c:328
 #, c-format
 msgid "Writing new null file for [%s]... "
-msgstr "Écriture du nouveau fichier null de [%s]..."
+msgstr "Écriture du nouveau fichier null de [%s]... "
 
 #: ../raster/r.support/main.c:348
 #, c-format
@@ -29701,7 +29708,7 @@ msgstr "Sortie en 'unité de carte au carré'"
 
 #: ../raster/r.surf.area/main.c:151
 msgid "Null value area ignored in calculation:"
-msgstr "Surfaces de valeur nulle ignorées dans les calculs : "
+msgstr "Surfaces de valeur nulle ignorées dans les calculs :"
 
 #: ../raster/r.surf.area/main.c:153
 msgid "Plan area used in calculation:"
@@ -30818,13 +30825,8 @@ msgid "LOS"
 msgstr ""
 
 #: ../raster/r.viewshed/main.cpp:108
-#, fuzzy
 msgid "Computes the viewshed of a point on an elevation raster map."
 msgstr ""
-"#-#-#-#-#  grassmods_fr.po (grassmods_fr)  #-#-#-#-#\n"
-"Nom de la couche raster cible\n"
-"#-#-#-#-#  grassmods_fr.po (grassmods_fr)  #-#-#-#-#\n"
-"Nom de la couche raster de sortie"
 
 #: ../raster/r.viewshed/main.cpp:109
 msgid "Default format: NULL (invisible), vertical angle wrt viewpoint (visible)."
@@ -31025,9 +31027,8 @@ msgid "Running the program in-memory mode requires memory beyond the capability 
 msgstr ""
 
 #: ../raster/r.viewshed/viewshed.cpp:188 ../raster/r.viewshed/viewshed.cpp:441
-#, fuzzy
 msgid "Start sweeping."
-msgstr "Lancement de la FFT ... "
+msgstr ""
 
 #: ../raster/r.viewshed/viewshed.cpp:227 ../raster/r.viewshed/viewshed.cpp:471
 #, fuzzy
@@ -31700,7 +31701,7 @@ msgid ""
 "Your choice: "
 msgstr ""
 "\n"
-"Votre choix :"
+"Votre choix : "
 
 #: ../raster/r.watershed/shed/basin_maps.c:72
 #: ../raster/r.watershed/shed/basin_maps.c:77
@@ -31893,7 +31894,7 @@ msgstr "5)kilomètres carrés, 6)cellules de couche raster, 7)unités de débit"
 #: ../raster/r.watershed/shed/com_line.c:149
 #, c-format
 msgid "Choose 1-7 or 0 to exit this program: "
-msgstr "Choisir une unité entre 1 et 7 ou 0 pour sortir de ce programme :"
+msgstr "Choisir une unité entre 1 et 7 ou 0 pour sortir de ce programme : "
 
 #: ../raster/r.watershed/shed/com_line.c:159
 msgid ""
@@ -31906,7 +31907,7 @@ msgstr ""
 #: ../raster/r.watershed/shed/com_line.c:161
 #, c-format
 msgid "be for it to be an exterior drainage basin: "
-msgstr "pour être un bassin de drainage exogène :"
+msgstr "pour être un bassin de drainage exogène : "
 
 #: ../raster/r.watershed/shed/com_line.c:227
 #, c-format
@@ -32186,7 +32187,7 @@ msgstr "Coordonnées pour la requête"
 
 #: ../raster/r.what/main.c:128
 msgid "Name of vector points map for query"
-msgstr "Nom de la carte vecteur points à interroger "
+msgstr "Nom de la carte vecteur points à interroger"
 
 #: ../raster/r.what/main.c:152
 msgid "Size of point cache"
@@ -32210,7 +32211,7 @@ msgstr "Activer le retour d'information du cache"
 
 #: ../raster/r.what/main.c:215
 msgid "Flag 'v' required option 'points'"
-msgstr "L'option 'v' nécessite l'option 'points' "
+msgstr "L'option 'v' nécessite l'option 'points'"
 
 #: ../raster/r.what/main.c:229
 #, c-format
@@ -32416,7 +32417,7 @@ msgstr "Calcule le gradient d'une carte raster 3D et sort les composantes du gra
 
 #: ../raster3d/r3.gradient/main.c:57
 msgid "Name for output 3D raster map(s)"
-msgstr "Nom  des cartes rasters 3D en sortie"
+msgstr "Nom des cartes rasters 3D en sortie"
 
 #: ../raster3d/r3.gradient/main.c:64
 msgid "Size of blocks"
@@ -32916,7 +32917,7 @@ msgstr "Créer explicitement un fichier 3D de valeurs NULL."
 
 #: ../raster3d/r3.out.ascii/main.c:78
 msgid "3D raster map to be converted to ASCII"
-msgstr "Carte raster 3D  à convertir en ASCII"
+msgstr "Carte raster 3D à convertir en ASCII"
 
 #: ../raster3d/r3.out.ascii/main.c:82
 msgid "Name for ASCII output file"
@@ -33161,7 +33162,9 @@ msgstr "write_vtk_unstructured_grid_cells: Écriture des cellules"
 #: ../raster3d/r3.out.vtk/writeVTKData.c:349
 #, c-format
 msgid "write_vtk_data: Writing Celldata %s with rows %i cols %i depths %i to vtk-ascii file"
-msgstr "write_vtk_data : Écriture des données de cellule %s avec %i  lignes %i colonnes %i profondeur vers un fichier vtk-ascii"
+msgstr ""
+"write_vtk_data : Écriture des données de cellule %s avec %i lignes %i "
+"colonnes %i profondeur vers un fichier vtk-ascii"
 
 #: ../raster3d/r3.out.vtk/writeVTKData.c:453
 msgid "Wrong 3D raster map values! Values should in between 0 and 255!"
@@ -47990,7 +47993,7 @@ msgstr "Île[%d]: %d\n"
 #: ../vector/v.what/what.c:1101
 #, c-format
 msgid "Island: %d In area: %d\n"
-msgstr "Île: %d  Dans entité surfacique: %d\n"
+msgstr "Île : %d Dans entité surfacique : %d\n"
 
 #: ../vector/v.what/what.c:1144
 #, c-format
