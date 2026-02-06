@@ -267,11 +267,11 @@ class SelectTest(TestCase):
         sel.run()
 
         try:
-            json.loads(sel.outputs.stdout)
+            actual_json = json.loads(sel.outputs.stdout)
+            reference_json = json.loads(out_json)
+            self.assertEqual(actual_json, reference_json)
         except ValueError:
             self.fail(msg="No JSON object could be decoded:\n" + sel.outputs.stdout)
-
-        self.assertLooksLike(reference=out_json, actual=sel.outputs.stdout)
 
 
 if __name__ == "__main__":
