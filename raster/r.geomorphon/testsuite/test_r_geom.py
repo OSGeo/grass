@@ -3,7 +3,7 @@ Name:       r.geomorphon tests
 Purpose:    Tests r.geomorphon input parsing.
             Uses NC Basic data set.
 
-Author:     Luca Delucchi, Markus Neteler
+Author:     Luca Delucchi, Markus Neteler, Sumit Chintanwar
 Copyright:  (C) 2017 by Luca Delucchi, Markus Neteler and the GRASS Development Team
 Licence:    This program is free software under the GNU General Public
             License (>=v2). Read the file COPYING that comes with GRASS
@@ -14,8 +14,30 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.script.core import read_command
 import grass.script as gs
+import unittest
+import os
+
+synth_out = """1	flat
+3	ridge
+4	shoulder
+6	slope
+8	footslope
+9	valley
+"""
+ele_out = """1	flat
+2	peak
+3	ridge
+4	shoulder
+5	spur
+6	slope
+7	hollow
+8	footslope
+9	valley
+10	pit
+"""
 
 
+@unittest.skipIf(os.getenv("CI") == "true", "Skipping slow tests in CI")
 class TestClipling(TestCase):
     inele = "elevation"
     insint = "synthetic_dem"
@@ -46,24 +68,52 @@ class TestClipling(TestCase):
         cls.del_temp_region()
 
     def test_ele(self):
-        """Test r.geomorphon with elevation data"""
         self.runModule(
             "r.geomorphon", elevation=self.inele, forms=self.outele, search=10
         )
-        self.assertRasterExists(self.outele)
-        # Check that various landform types are present
-        stats = read_command("r.stats", flags="n", input=self.outele)
-        self.assertIn("1", stats)  # flat should be present
+        category = read_command("r.category", map=self.outele)
+        self.assertEqual(first=ele_out, second=category)
+
+        stats = gs.parse_command("r.univar", flags="g", map=self.outele)
+        self.assertGreater(
+            float(stats["stddev"]),
+            1.0,
+            "Map has too little variation, algorithm might be failing to classify.",
+        )
+        mean_val = float(stats["mean"])
+        self.assertTrue(
+            5.0 < mean_val < 8.0, msg="Mean landform category is out of expected range"
+        )
 
     def test_sint(self):
         """Test r.geomorphon with synthetic data"""
         self.runModule(
             "r.geomorphon", elevation=self.insint, forms=self.outsint, search=10
         )
-        self.assertRasterExists(self.outsint)
-        # Check that output is generated
-        stats = read_command("r.stats", flags="n", input=self.outsint)
-        self.assertIn("1", stats)  # flat should be present
+        category = read_command("r.category", map=self.outsint)
+        self.assertEqual(first=synth_out, second=category)
+
+        info = gs.raster_info(self.insint)
+        x = info["west"] + 10
+        # Ensure vertical consistency in geomorphon results
+        values = []
+        for frac in [0.1, 0.3, 0.5, 0.7, 0.9]:
+            y = info["south"] + frac * (info["north"] - info["south"])
+            val = (
+                read_command(
+                    "r.what",
+                    map=self.outsint,
+                    coordinates=f"{x},{y}",
+                )
+                .strip()
+                .split("|")[-1]
+            )
+            values.append(val)
+
+        self.assertTrue(
+            all(v == values[0] for v in values),
+            "Geomorphon output varies along Y where terrain is invariant",
+        )
 
 
 class TestParameterValidation(TestCase):
@@ -118,31 +168,41 @@ class TestMultipleOutputs(TestCase):
         if existing:
             self.runModule("g.remove", flags="f", type="raster", name=existing)
 
-    def test_ternary_output(self):
-        """Test ternary pattern output"""
-        self.assertModule(
-            "r.geomorphon", elevation=self.inele, ternary="test_ternary", search=10
-        )
-        self.assertRasterExists("test_ternary")
-
-    def test_intensity_output(self):
-        """Test geometry output (intensity)"""
-        self.assertModule(
-            "r.geomorphon", elevation=self.inele, intensity="test_intensity", search=10
-        )
-        self.assertRasterExists("test_intensity")
-
-    def test_elongation_output(self):
-        """Test shape output (elongation)"""
+    def test_multiple_outputs_combined(self):
+        """Test multiple outputs in a single r.geomorphon call"""
         self.assertModule(
             "r.geomorphon",
             elevation=self.inele,
+            ternary="test_ternary",
+            intensity="test_intensity",
             elongation="test_elongation",
             search=10,
         )
+        self.assertRasterExists("test_ternary")
+        self.assertRasterExists("test_intensity")
         self.assertRasterExists("test_elongation")
 
+        stats = gs.parse_command("r.univar", flags="g", map="test_ternary")
+        self.assertGreaterEqual(float(stats["min"]), 0)
+        self.assertLessEqual(float(stats["max"]), 6560)
 
+        info = gs.raster_info("test_intensity")
+        self.assertEqual(info["datatype"], "FCELL")
+
+        stats_intensity = gs.parse_command("r.univar", flags="g", map="test_intensity")
+        self.assertGreater(float(stats_intensity["stddev"]), 0.0)
+
+        info_elongation = gs.raster_info("test_elongation")
+        self.assertEqual(info_elongation["datatype"], "FCELL")
+
+        stats_elongation = gs.parse_command(
+            "r.univar", flags="g", map="test_elongation"
+        )
+        self.assertGreaterEqual(float(stats_elongation["min"]), 0)
+        self.assertLess(float(stats_elongation["max"]), 100)
+
+
+@unittest.skipIf(os.getenv("CI") == "true", "Skipping slow tests in CI")
 class TestFlags(TestCase):
     """Test flags"""
 
@@ -158,7 +218,13 @@ class TestFlags(TestCase):
         cls.del_temp_region()
 
     def tearDown(self):
-        outputs = ["test_extended", "test_meters"]
+        outputs = [
+            "test_extended",
+            "test_meters",
+            "test_basic",
+            "test_cells",
+            "test_diff",
+        ]
         existing = [o for o in outputs if gs.find_file(name=o, element="cell")["file"]]
         if existing:
             self.runModule("g.remove", flags="f", type="raster", name=existing)
@@ -167,25 +233,58 @@ class TestFlags(TestCase):
         """Test extended form correction flag"""
         self.assertModule(
             "r.geomorphon",
+            elevation=self.inele,
+            forms="test_basic",
+            search=20,
+            overwrite=True,
+        )
+        self.assertModule(
+            "r.geomorphon",
             flags="e",
             elevation=self.inele,
             forms="test_extended",
-            search=10,
+            search=20,
+            overwrite=True,
         )
-        self.assertRasterExists("test_extended")
+        self.runModule(
+            "r.mapcalc",
+            expression="test_diff = if(test_basic != test_extended, 1, null())",
+            overwrite=True,
+        )
+
+        stats_diff = gs.parse_command("r.univar", flags="g", map="test_diff")
+        self.assertGreater(float(stats_diff["n"]), 0)
 
     def test_meter_units_flag(self):
         """Test using meters instead of cells for search units"""
         self.assertModule(
             "r.geomorphon",
+            elevation=self.inele,
+            forms="test_cells",
+            search=30,
+            overwrite=True,
+        )
+        self.assertModule(
+            "r.geomorphon",
             flags="m",
             elevation=self.inele,
             forms="test_meters",
-            search=30,  # 30 meters
+            search=30,
+            overwrite=True,
         )
-        self.assertRasterExists("test_meters")
+        category_meters = read_command("r.category", map="test_meters")
+        self.assertIn("flat", category_meters)
+
+        self.runModule(
+            "r.mapcalc",
+            expression="test_diff = if(test_cells != test_meters, 1, null())",
+            overwrite=True,
+        )
+        stats_diff = gs.parse_command("r.univar", flags="g", map="test_diff")
+        self.assertGreater(float(stats_diff["n"]), 0)
 
 
+@unittest.skipIf(os.getenv("CI") == "true", "Skipping slow tests in CI")
 class TestComparisonModes(TestCase):
     """Test different comparison modes for zenith/nadir line-of-sight"""
 
@@ -206,38 +305,47 @@ class TestComparisonModes(TestCase):
         if existing:
             self.runModule("g.remove", flags="f", type="raster", name=existing)
 
+    def _run_and_validate(self, name, comparison):
+        self.assertModule(
+            "r.geomorphon",
+            elevation=self.inele,
+            forms=name,
+            search=10,
+            comparison=comparison,
+        )
+
+        category = read_command("r.category", map=name)
+        self.assertIn("flat", category)
+
     def test_anglev1_mode(self):
         """Test anglev1 comparison mode (default)"""
-        self.assertModule(
-            "r.geomorphon",
-            elevation=self.inele,
-            forms="test_anglev1",
-            search=10,
-            comparison="anglev1",
-        )
-        self.assertRasterExists("test_anglev1")
+        self._run_and_validate("test_anglev1", "anglev1")
 
     def test_anglev2_mode(self):
-        """Test anglev2 comparison mode"""
-        self.assertModule(
-            "r.geomorphon",
-            elevation=self.inele,
-            forms="test_anglev2",
-            search=10,
-            comparison="anglev2",
+        self._run_and_validate("test_anglev1", "anglev1")
+        self._run_and_validate("test_anglev2", "anglev2")
+
+        self.runModule(
+            "r.mapcalc",
+            expression="test_diff = if(test_anglev1 != test_anglev2, 1, null())",
+            overwrite=True,
         )
-        self.assertRasterExists("test_anglev2")
+
+        stats = gs.parse_command("r.univar", flags="g", map="test_diff")
+        self.assertGreater(float(stats["n"]), 0)
 
     def test_anglev2_distance_mode(self):
-        """Test anglev2_distance comparison mode"""
-        self.assertModule(
-            "r.geomorphon",
-            elevation=self.inele,
-            forms="test_anglev2_dist",
-            search=10,
-            comparison="anglev2_distance",
+        self._run_and_validate("test_anglev1", "anglev1")
+        self._run_and_validate("test_anglev2_dist", "anglev2_distance")
+
+        self.runModule(
+            "r.mapcalc",
+            expression="test_diff = if(test_anglev1 != test_anglev2_dist, 1, null())",
+            overwrite=True,
         )
-        self.assertRasterExists("test_anglev2_dist")
+
+        stats = gs.parse_command("r.univar", flags="g", map="test_diff")
+        self.assertGreater(float(stats["n"]), 0)
 
 
 if __name__ == "__main__":
