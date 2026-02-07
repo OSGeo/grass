@@ -778,6 +778,32 @@ class GMFrame(wx.Frame):
         win.CentreOnScreen()
         win.Show()
 
+    def OnJupyterNotebook(self, event=None):
+        """Launch Jupyter Notebook interface."""
+        from jupyter_notebook.frame import JupyterFrame
+        from jupyter_notebook.dialogs import JupyterStartDialog
+
+        dlg = JupyterStartDialog(parent=self)
+        try:
+            if dlg.ShowModal() != wx.ID_OK:
+                return
+
+            values = dlg.GetValues()
+        finally:
+            dlg.Destroy()
+
+        if not values:
+            return
+
+        frame = JupyterFrame(
+            parent=self,
+            giface=self._giface,
+            workdir=values["directory"],
+            create_template=values["create_template"],
+        )
+        frame.CentreOnParent()
+        frame.Show()
+
     def OnPsMap(self, event=None, cmd=None):
         """Launch Cartographic Composer. See OnIClass documentation"""
         from psmap.frame import PsMapFrame
@@ -2296,6 +2322,18 @@ class GMFrame(wx.Frame):
             if hasattr(event, "Veto"):
                 event.Veto()
             return
+
+        # Stop all running Jupyter servers before destroying the GUI
+        from grass.workflows import JupyterEnvironment
+
+        try:
+            JupyterEnvironment.stop_all()
+        except RuntimeError as e:
+            wx.MessageBox(
+                _("Failed to stop Jupyter servers:\n{}").format(str(e)),
+                caption=_("Error"),
+                style=wx.ICON_ERROR | wx.OK,
+            )
 
         self.DisplayCloseAll()
 
