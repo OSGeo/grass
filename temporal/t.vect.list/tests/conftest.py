@@ -25,34 +25,35 @@ def space_time_vector_dataset(tmp_path_factory):
             n=80,
             w=0,
             e=120,
-            b=0,
-            t=50,
             res=10,
-            res3=10,
             env=session.env,
         )
         names = [f"precipitation_{i}" for i in range(1, 7)]
-        max_values = [550, 450, 320, 510, 300, 650]
-        for name, value in zip(names, max_values, strict=False):
-            gs.mapcalc(f"{name} = rand(0, {value})", seed=1, env=session.env)
+        coords = ["10|10", "20|20", "30|30"]
+        for name, coord in zip(names, coords, strict=False):
+            gs.write_command(
+                "v.in.ascii",
+                input="-",
+                stdin=coord,
+                output=name,
+                format="point",
+                env=session.env,
+            )
         dataset_name = "precipitation"
         gs.run_command(
             "t.create",
-            type="strds",
+            type="stvds",
             temporaltype="absolute",
             output=dataset_name,
             title="Precipitation",
             description="Random series generated for tests",
             env=session.env,
         )
-        dataset_file = tmp_path / "names.txt"
-        dataset_file.write_text("\n".join(names))
         gs.run_command(
             "t.register",
-            type="raster",
-            flags="i",
+            type="vector",
             input=dataset_name,
-            file=dataset_file,
+            maps=",".join(names),
             start="2001-01-01",
             increment="1 month",
             env=session.env,
