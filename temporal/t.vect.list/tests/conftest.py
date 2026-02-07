@@ -29,7 +29,7 @@ def space_time_vector_dataset(tmp_path_factory):
             env=session.env,
         )
         names = [f"precipitation_{i}" for i in range(1, 7)]
-        coords = ["10|10", "20|20", "30|30"]
+        coords = [f"{i * 10}|{i * 10}" for i in range(1, 7)]
         for name, coord in zip(names, coords, strict=False):
             gs.write_command(
                 "v.in.ascii",
