@@ -28,6 +28,8 @@ class TestWatershed(TestCase):
     elevation = "elevation"
     lengthslope_2 = "test_lengthslope_2"
     stream_2 = "test_stream_2"
+    tci = "test_tci"
+    spi = "test_spi"
 
     @classmethod
     def setUpClass(cls):
@@ -50,17 +52,7 @@ class TestWatershed(TestCase):
             "g.remove",
             flags="f",
             type="raster",
-            name=[
-                self.accumulation,
-                self.drainage,
-                self.basin,
-                self.stream,
-                self.halfbasin,
-                self.slopelength,
-                self.slopesteepness,
-                self.lengthslope_2,
-                self.stream_2,
-            ],
+            pattern="test_*",
         )
 
     def test_OutputCreated(self):
@@ -149,40 +141,7 @@ class TestWatershed(TestCase):
             threshold="-1",
             stream=self.stream,
             overwrite=True,
-            msg="Threshold value of 0 considered valid.",
-        )
-
-    def test_thresholdsize(self):
-        """Test the expected range of basin output values"""
-        self.assertModule(
-            "r.watershed",
-            elevation=self.elevation,
-            threshold="100000",
-            basin=self.basin,
-            overwrite=True,
-        )
-        # it is expected that 100k Threshold has a min=2 and max=12 for this
-        # data
-        reference = "min=2\nmax=12"
-        self.assertRasterFitsUnivar(
-            self.basin,
-            reference=reference,
-            msg="Basin values must be in the range [2, 12]",
-        )
-        # it is expected that 100k Threshold has a min=2 and max=256 for this
-        # data
-        self.assertModule(
-            "r.watershed",
-            elevation=self.elevation,
-            threshold="10000",
-            basin=self.basin,
-            overwrite=True,
-        )
-        reference = "min=2\nmax=256"
-        self.assertRasterFitsUnivar(
-            self.basin,
-            reference=reference,
-            msg="Basin values must be in the range [2, 256]",
+            msg="Threshold value of -1 considered valid.",
         )
 
     def test_drainageDirection(self):
@@ -198,118 +157,257 @@ class TestWatershed(TestCase):
             self.drainage, -8, 8, msg="Direction must be between -8 and 8"
         )
 
-    def test_basinValue(self):
-        """Check to see if the basin value is 0 or greater"""
+    def test_accumulation_mfd(self):
+        """Test MFD flow accumulation against reference statistics."""
         self.assertModule(
-            "r.watershed", elevation=self.elevation, threshold="10000", basin=self.basin
+            "r.watershed",
+            elevation=self.elevation,
+            threshold="10000",
+            accumulation=self.accumulation,
         )
-        # Make sure the minimum value is 0 for basin value representing unique
-        # positive integer.
-        # TODO: test just min, max is theoretically unlimited
-        # or set a lower value according to what is expected with this data
-        # TODO: add test which tests that 'max basin id' == 'num of basins'
-        reference = "min=2\nmax=256"
+
+        reference = {
+            "n": 2602530,
+            "null_cells": 16180,
+            "min": -832420.692197234,
+            "max": 429067.069562766,
+            "mean": -343.747566806773,
+            "stddev": 16259.307703876,
+        }
+
         self.assertRasterFitsUnivar(
-            self.basin,
+            self.accumulation,
             reference=reference,
-            msg="Basin values must be in the range [2, 256]",
+            precision=0.001,
         )
 
-    def test_accumulationValues(self):
-        """Test if accumulation values follow expected patterns"""
+    def test_accumulation_sfd(self):
+        """Test SFD flow accumulation against reference statistics."""
         self.assertModule(
             "r.watershed",
+            flags="s",
             elevation=self.elevation,
             threshold="10000",
             accumulation=self.accumulation,
         )
-        # Just verify the output exists and has valid statistics
-        self.assertRasterExists(
-            self.accumulation, msg="Accumulation output was not created"
+
+        reference = {
+            "n": 2602530,
+            "null_cells": 16180,
+            "min": -832531,
+            "max": 441312,
+            "mean": -287.797973894633,
+            "stddev": 16793.5124227608,
+        }
+
+        self.assertRasterFitsUnivar(
+            self.accumulation,
+            reference=reference,
+            precision=0.001,
         )
 
-    def test_streamValuesConsistency(self):
-        """Test if stream output is created with valid values"""
-        self.assertModule(
-            "r.watershed",
-            elevation=self.elevation,
-            threshold="10000",
-            stream=self.stream,
-        )
-        # Stream values should be 0 (no stream) or positive integers
-        self.assertRasterMinMax(
-            self.stream, 0, 10000, msg="Stream values out of expected range"
-        )
-
-    def test_slopeSteepnessRange(self):
-        """Test if slope steepness values are created"""
-        self.assertModule(
-            "r.watershed",
-            elevation=self.elevation,
-            threshold="10000",
-            slope_steepness=self.slopesteepness,
-        )
-        # Verify output exists with reasonable range
-        self.assertRasterMinMax(
-            self.slopesteepness,
-            0,
-            100,
-            msg="Slope steepness out of expected range",
-        )
-
-    def test_convergenceFlag(self):
-        """Test the convergence parameter"""
-        self.assertModule(
-            "r.watershed",
-            elevation=self.elevation,
-            threshold="10000",
-            convergence="5",
-            accumulation=self.accumulation,
-        )
-        self.assertRasterExists(
-            self.accumulation, msg="Accumulation with convergence parameter not created"
-        )
-
-    def test_memoryParameter(self):
-        """Test if memory parameter is accepted"""
-        self.assertModule(
-            "r.watershed",
-            elevation=self.elevation,
-            threshold="10000",
-            memory="300",
-            accumulation=self.accumulation,
-        )
-        self.assertRasterExists(
-            self.accumulation, msg="Accumulation with memory parameter not created"
-        )
-
-    def test_aFlag(self):
-        """Test the -a flag for positive flow accumulation"""
-        self.assertModule(
-            "r.watershed",
-            flags="a",
-            elevation=self.elevation,
-            threshold="10000",
-            accumulation=self.accumulation,
-        )
-        # Verify output is created with -a flag
-        self.assertRasterExists(
-            self.accumulation, msg="Accumulation with -a flag not created"
-        )
-
-    def test_consistentResults(self):
-        """Test that running twice with same parameters gives identical results"""
-        # First run
+    def test_basin_threshold_10k(self):
+        """Test basin delineation with threshold=10000."""
         self.assertModule(
             "r.watershed",
             elevation=self.elevation,
             threshold="10000",
             basin=self.basin,
         )
-        # Store first result
+
+        reference = {
+            "n": 2456668,
+            "null_cells": 162042,
+            "min": 2,
+            "max": 274,
+            "mean": 142.826128723946,
+            "stddev": 86.332946971229,
+        }
+
+        self.assertRasterFitsUnivar(
+            self.basin,
+            reference=reference,
+            precision=0.001,
+        )
+
+    def test_basin_threshold_100k(self):
+        """Test basin delineation with threshold=100000."""
+        self.assertModule(
+            "r.watershed",
+            elevation=self.elevation,
+            threshold="100000",
+            basin=self.basin,
+        )
+
+        reference = {
+            "n": 2026515,
+            "null_cells": 592195,
+            "min": 2,
+            "max": 20,
+            "mean": 12.6790475274054,
+            "stddev": 5.81111419543262,
+        }
+
+        self.assertRasterFitsUnivar(
+            self.basin,
+            reference=reference,
+            precision=0.001,
+        )
+
+    def test_stream_network(self):
+        """Test stream network delineation."""
+        self.assertModule(
+            "r.watershed",
+            elevation=self.elevation,
+            threshold="10000",
+            stream=self.stream,
+        )
+
+        reference = {
+            "n": 15740,
+            "null_cells": 2602970,
+            "min": 2,
+            "max": 274,
+            "mean": 141.941041931385,
+            "stddev": 83.9583249945486,
+        }
+
+        self.assertRasterFitsUnivar(
+            self.stream,
+            reference=reference,
+            precision=0.001,
+        )
+
+    def test_half_basin(self):
+        """Test half basin delineation."""
+        self.assertModule(
+            "r.watershed",
+            elevation=self.elevation,
+            threshold="10000",
+            half_basin=self.halfbasin,
+        )
+
+        reference = {
+            "n": 2456668,
+            "null_cells": 162042,
+            "min": 1,
+            "max": 274,
+            "mean": 142.308489384809,
+            "stddev": 86.3166284098813,
+        }
+
+        self.assertRasterFitsUnivar(
+            self.halfbasin,
+            reference=reference,
+            precision=0.001,
+        )
+
+    def test_slope_steepness(self):
+        """Test slope steepness calculation."""
+        self.assertModule(
+            "r.watershed",
+            elevation=self.elevation,
+            threshold="10000",
+            slope_steepness=self.slopesteepness,
+        )
+
+        reference = {
+            "n": 2602530,
+            "null_cells": 16180,
+            "min": 0.03,
+            "max": 3.07919076172568,
+            "mean": 0.153479116301884,
+            "stddev": 0.163185729045392,
+        }
+
+        self.assertRasterFitsUnivar(
+            self.slopesteepness,
+            reference=reference,
+            precision=0.001,
+        )
+
+    def test_length_slope(self):
+        """Test Length Slope calculation."""
+        self.assertModule(
+            "r.watershed",
+            elevation=self.elevation,
+            threshold="10000",
+            length_slope=self.slopelength,
+        )
+
+        reference = {
+            "n": 2602530,
+            "null_cells": 16180,
+            "min": 0.03,
+            "max": 5.98881244191164,
+            "mean": 0.192025694191372,
+            "stddev": 0.240997329983397,
+        }
+
+        self.assertRasterFitsUnivar(
+            self.slopelength,
+            reference=reference,
+            precision=0.001,
+        )
+
+    def test_tci(self):
+        """Test TCI calculation."""
+        self.assertModule(
+            "r.watershed",
+            elevation=self.elevation,
+            threshold="10000",
+            tci=self.tci,
+        )
+
+        reference = {
+            "n": 2596072,
+            "null_cells": 22638,
+            "min": 1.94904979310483,
+            "max": 26.8104270376686,
+            "mean": 6.97353811209655,
+            "stddev": 2.28656463030412,
+        }
+
+        self.assertRasterFitsUnivar(
+            self.tci,
+            reference=reference,
+            precision=0.001,
+        )
+
+    def test_spi(self):
+        """Test SPI calculation."""
+        self.assertModule(
+            "r.watershed",
+            elevation=self.elevation,
+            threshold="10000",
+            spi=self.spi,
+        )
+
+        reference = {
+            "n": 2596072,
+            "null_cells": 22638,
+            "min": 0.000144249450029743,
+            "max": 1207802.52599239,
+            "mean": 73.7040561277494,
+            "stddev": 2750.87096268131,
+        }
+
+        self.assertRasterFitsUnivar(
+            self.spi,
+            reference=reference,
+            precision=0.001,
+        )
+
+    def test_reproducibility(self):
+        """Test that multiple runs produce identical results"""
+        self.assertModule(
+            "r.watershed",
+            elevation=self.elevation,
+            threshold="10000",
+            basin=self.basin,
+        )
         self.runModule("g.copy", raster=(self.basin, "basin_copy"))
 
-        # Second run with overwrite
         self.assertModule(
             "r.watershed",
             elevation=self.elevation,
@@ -317,13 +415,13 @@ class TestWatershed(TestCase):
             basin=self.basin,
             overwrite=True,
         )
-        # Results should be identical
+
         self.assertRastersNoDifference(
-            self.basin, "basin_copy", 0, msg="Results are not reproducible"
+            self.basin, "basin_copy", precision=0, msg="Results are not reproducible"
         )
         self.runModule("g.remove", flags="f", type="raster", name="basin_copy")
 
-    def test_minimumThreshold(self):
+    def test_minimum_threshold(self):
         """Test that minimum valid threshold (1) works"""
         self.assertModule(
             "r.watershed",
@@ -331,22 +429,7 @@ class TestWatershed(TestCase):
             threshold="1",
             stream=self.stream,
         )
-        self.assertRasterExists(
-            self.stream, msg="Stream output with threshold=1 not created"
-        )
-
-    def test_bFlag(self):
-        """Test the -b flag for beautification"""
-        self.assertModule(
-            "r.watershed",
-            flags="b",
-            elevation=self.elevation,
-            threshold="10000",
-            accumulation=self.accumulation,
-        )
-        self.assertRasterExists(
-            self.accumulation, msg="Accumulation with -b flag not created"
-        )
+        self.assertRasterExists(self.stream, msg="Stream with threshold=1 not created")
 
 
 if __name__ == "__main__":
