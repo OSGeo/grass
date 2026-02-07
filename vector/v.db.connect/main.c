@@ -83,8 +83,10 @@ int main(int argc, char **argv)
     dbkey = G_define_standard_option(G_OPT_DB_KEYCOLUMN);
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
-    field_opt->description = _("Format: layer number[/layer name]");
-    field_opt->gisprompt = "new,layer,layer";
+    field_opt->description =
+        _("Layer number or name (format: layer number[/layer name])");
+    /* no gisprompt override: allow layer_number/layer_name without filename
+     * validation */
 
     sep_opt = G_define_standard_option(G_OPT_F_SEP);
     sep_opt->answer = NULL;
