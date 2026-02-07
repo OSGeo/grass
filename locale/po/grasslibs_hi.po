@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-31 15:57+0000\n"
-"PO-Revision-Date: 2026-02-05 20:05+0000\n"
+"PO-Revision-Date: 2026-02-06 14:23+0000\n"
 "Last-Translator: Abhimanyu  <abhimanyupg04@gmail.com>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grasslibs/hi/>\n"
 "Language: hi\n"
@@ -2055,7 +2055,7 @@ msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:744
 msgid "Coordinates"
-msgstr "कोआर्डिनेट"
+msgstr "निर्देशांक (Coordinates)"
 
 #: ../lib/gis/parser_standard_options.c:753
 msgid "Name of color table"

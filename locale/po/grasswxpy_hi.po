@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-31 15:57+0000\n"
-"PO-Revision-Date: 2026-02-05 21:57+0000\n"
+"PO-Revision-Date: 2026-02-06 14:23+0000\n"
 "Last-Translator: Abhimanyu  <abhimanyupg04@gmail.com>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/hi/>\n"
 "Language: hi\n"
@@ -351,7 +351,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:952 ../gui/wxpython/nviz/tools.py:828
 msgid "Decorations"
-msgstr ""
+msgstr "डेकोरेशन्स"
 
 #: ../gui/wxpython/animation/dialogs.py:957
 #: ../gui/wxpython/lmgr/layertree.py:771 ../gui/wxpython/tplot/frame.py:395
@@ -497,12 +497,12 @@ msgstr "अतिरिक्त विकल्प:"
 
 #: ../gui/wxpython/animation/dialogs.py:1290
 msgid "Consider adding '-sameq' or '-qscale 1' if not satisfied with video quality. Options depend on ffmpeg version."
-msgstr "वीडियो की गुणवत्ता से संतुष्ट न होने पर '-sameq' या '-qscale 1' जोड़ने पर विचार करें। विकल्प ffmpeg संस्करण पर निर्भर करते हैं।"
+msgstr "यदि वीडियो की गुणवत्ता से संतुष्ट नहीं हैं, तो '-sameq' या '-qscale 1' जोड़ने पर विचार करें। विकल्प ffmpeg संस्करण पर निर्भर करते हैं।"
 
 #: ../gui/wxpython/animation/dialogs.py:1322
 #, python-format
 msgid "Current frame rate: %.2f fps"
-msgstr ""
+msgstr "वर्तमान फ्रेम दर: %.2f fps"
 
 #: ../gui/wxpython/animation/dialogs.py:1449
 #, python-format
@@ -511,7 +511,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:1453
 msgid "Decoration image file is missing."
-msgstr ""
+msgstr "डेकोरेशन इमेज फ़ाइल गायब है।"
 
 #: ../gui/wxpython/animation/dialogs.py:1461
 #, python-format
@@ -1041,7 +1041,7 @@ msgstr ""
 
 #: ../gui/wxpython/core/settings.py:505
 msgid "Data point"
-msgstr ""
+msgstr "डेटा पॉइंट"
 
 #: ../gui/wxpython/core/settings.py:582
 msgid "animation"
@@ -1214,7 +1214,7 @@ msgstr ""
 
 #: ../gui/wxpython/core/toolboxes.py:457
 msgid "Custom toolboxes"
-msgstr ""
+msgstr "कस्टम टूलबॉक्स"
 
 #: ../gui/wxpython/core/toolboxes.py:485
 #, python-format
@@ -1328,7 +1328,7 @@ msgstr " पंक्ति %d:"
 
 #: ../gui/wxpython/datacatalog/catalog.py:55
 msgid "Data catalog"
-msgstr ""
+msgstr "डेटा कैटलॉग"
 
 #: ../gui/wxpython/datacatalog/catalog.py:217
 msgid "Choose GRASS project:"
@@ -1360,11 +1360,11 @@ msgstr ""
 
 #: ../gui/wxpython/datacatalog/catalog.py:353
 msgid "Create raster map from x,y,z data  [r.in.xyz]"
-msgstr ""
+msgstr "x,y,z डेटा से रास्टर मैप बनाएं [r.in.xyz]"
 
 #: ../gui/wxpython/datacatalog/catalog.py:359
 msgid "Create vector map from x,y,z data  [v.in.ascii]"
-msgstr ""
+msgstr "x,y,z डेटा से वेक्टर मैप बनाएं [v.in.ascii]"
 
 #: ../gui/wxpython/datacatalog/catalog.py:365
 msgid "Link external data"
@@ -1412,7 +1412,7 @@ msgstr ""
 
 #: ../gui/wxpython/datacatalog/frame.py:31
 msgid "Data Catalog"
-msgstr ""
+msgstr "डेटा कैटलॉग"
 
 #: ../gui/wxpython/datacatalog/frame.py:42
 msgid "Close GRASS Data Catalog"
@@ -1420,12 +1420,12 @@ msgstr "GRASS डेटा कैटलॉग बंद करें"
 
 #: ../gui/wxpython/datacatalog/g.gui.datacatalog.py:50
 msgid "Data Catalog - GRASS"
-msgstr ""
+msgstr "डेटा कैटलॉग - GRASS"
 
 #: ../gui/wxpython/datacatalog/infomanager.py:36
 #: ../gui/wxpython/datacatalog/toolbars.py:34
 msgid "Create new project"
-msgstr ""
+msgstr "नया प्रोजेक्ट बनाएं"
 
 #: ../gui/wxpython/datacatalog/infomanager.py:37
 msgid "Learn more"
@@ -1508,7 +1508,7 @@ msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:26
 msgid "Create new mapset in current project"
-msgstr ""
+msgstr "वर्तमान प्रोजेक्ट में नया मैपसेट बनाएं"
 
 #: ../gui/wxpython/datacatalog/toolbars.py:30
 msgid "Add an existing project"
@@ -1676,7 +1676,7 @@ msgstr ""
 #: ../gui/wxpython/datacatalog/tree.py:1343
 #, python-brace-format
 msgid "Copying <{name}>..."
-msgstr "{name} की प्रतिलिपि बनाई जा रही है…"
+msgstr "<{name}> को कॉपी किया जा रहा है..।"
 
 #: ../gui/wxpython/datacatalog/tree.py:1345
 #, python-brace-format
@@ -1685,7 +1685,7 @@ msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1359
 msgid "Copying completed"
-msgstr "कॉपी पूरी हो गई"
+msgstr "कॉपी करना पूर्ण हुआ"
 
 #: ../gui/wxpython/datacatalog/tree.py:1365
 msgid "Moving completed"
@@ -1712,7 +1712,7 @@ msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:1551
 msgid "Delete map"
-msgstr ""
+msgstr "मैप हटाएं"
 
 #: ../gui/wxpython/datacatalog/tree.py:1552
 #, python-brace-format
@@ -1737,7 +1737,7 @@ msgstr "&कांपी करें"
 
 #: ../gui/wxpython/datacatalog/tree.py:2095
 msgid "Copy &name"
-msgstr "कॉपी करें और नाम दें"
+msgstr "&name कॉपी करें"
 
 #: ../gui/wxpython/datacatalog/tree.py:2099
 #: ../gui/wxpython/datacatalog/tree.py:2142
@@ -2011,11 +2011,11 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/base.py:1464
 msgid "Delete selected record(s)"
-msgstr ""
+msgstr "चयनित रिकॉर्ड(ओं) को हटाएं"
 
 #: ../gui/wxpython/dbmgr/base.py:1465
 msgid "Delete all records"
-msgstr ""
+msgstr "सभी रिकॉर्ड हटाएं"
 
 #: ../gui/wxpython/dbmgr/base.py:1471 ../gui/wxpython/gui_core/dialogs.py:838
 #: ../gui/wxpython/gui_core/dialogs.py:896
@@ -2044,7 +2044,7 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/base.py:1480
 msgid "Delete selected features"
-msgstr ""
+msgstr "चयनित विशेषताओं को हटाएं"
 
 #: ../gui/wxpython/dbmgr/base.py:1488 ../gui/wxpython/dbmgr/base.py:2671
 #: ../gui/wxpython/gmodeler/dialogs.py:925
@@ -2098,7 +2098,7 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/base.py:1762 ../gui/wxpython/dbmgr/base.py:1812
 msgid "Delete records"
-msgstr ""
+msgstr "रिकॉर्ड्स हटाएं"
 
 #: ../gui/wxpython/dbmgr/base.py:1808
 #, python-format
@@ -2132,7 +2132,7 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/base.py:2353 ../gui/wxpython/dbmgr/sqlbuilder.py:105
 msgid "Database connection"
-msgstr ""
+msgstr "डेटाबेस कनेक्शन"
 
 #: ../gui/wxpython/dbmgr/base.py:2370
 #, python-format
@@ -2216,17 +2216,17 @@ msgstr "कॉलम का नाम"
 
 #: ../gui/wxpython/dbmgr/base.py:2993
 msgid "Data length"
-msgstr ""
+msgstr "डेटा की लंबाई"
 
 #: ../gui/wxpython/dbmgr/base.py:2993 ../gui/wxpython/gmodeler/panels.py:1351
 #: ../gui/wxpython/gmodeler/panels.py:1407
 msgid "Data type"
-msgstr ""
+msgstr "डेटा टाइप"
 
 #: ../gui/wxpython/dbmgr/base.py:3051 ../gui/wxpython/dbmgr/base.py:3203
 #: ../gui/wxpython/dbmgr/base.py:3471 ../gui/wxpython/gui_core/gselect.py:1483
 msgid "Database"
-msgstr ""
+msgstr "डेटाबेस"
 
 #: ../gui/wxpython/dbmgr/base.py:3051 ../gui/wxpython/dbmgr/base.py:3192
 #: ../gui/wxpython/dbmgr/base.py:3460
@@ -2332,7 +2332,7 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/base.py:3958
 msgid "Copy statistics the clipboard (Ctrl+C)"
-msgstr "सांख्यिकी को क्लिपबोर्ड पर कॉपी करें (Ctrl+C)"
+msgstr "आंकड़े क्लिपबोर्ड पर कॉपी करें (Ctrl+C)"
 
 #: ../gui/wxpython/dbmgr/base.py:4019
 msgid "Statistics is not support for DBF tables."
@@ -2366,7 +2366,7 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/dialogs.py:85
 msgid "Create table?"
-msgstr ""
+msgstr "टेबल बनाएं?"
 
 #: ../gui/wxpython/dbmgr/dialogs.py:107
 msgid "Close dialog on submit"
@@ -2382,7 +2382,7 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/dialogs.py:128
 msgid "Define attributes"
-msgstr ""
+msgstr "एट्रिब्यूट्स परिभाषित करें"
 
 #: ../gui/wxpython/dbmgr/dialogs.py:130
 msgid "Display attributes"
@@ -2446,7 +2446,7 @@ msgstr ""
 #: ../gui/wxpython/dbmgr/manager.py:112
 #, python-format
 msgid "Database connection for vector map <%s> is not defined in DB file. You can define new connection in 'Manage layers' tab."
-msgstr ""
+msgstr "वेक्टर मैप <%s> के लिए डेटाबेस कनेक्शन DB फ़ाइल में परिभाषित नहीं है। आप 'लेयर्स प्रबंधित करें' (Manage layers) टैब में नया कनेक्शन परिभाषित कर सकते हैं।"
 
 #: ../gui/wxpython/dbmgr/manager.py:121
 msgid "Please wait, loading attribute data..."
@@ -2538,7 +2538,7 @@ msgstr "दिखाने के लिए कॉलम (खंड चुने
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:478
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:632
 msgid "Constraint for query (WHERE clause)"
-msgstr "क्वेरी के लिए बाधा (WHERE क्लॉज)"
+msgstr "क्वेरी के लिए प्रतिबंध (WHERE क्लॉज)"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:502
 msgid "Verify"
@@ -2590,7 +2590,7 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:793
 msgid "Dbf driver does not support usage of SQL functions."
-msgstr ""
+msgstr "Dbf ड्राइवर SQL फ़ंक्शन्स के उपयोग का समर्थन नहीं करता है।"
 
 #: ../gui/wxpython/gcp/manager.py:147
 #: ../gui/wxpython/image2target/ii2t_manager.py:188
@@ -2660,12 +2660,12 @@ msgstr ""
 #: ../gui/wxpython/gcp/manager.py:565
 #: ../gui/wxpython/image2target/ii2t_manager.py:586
 msgid "Create group if none exists"
-msgstr ""
+msgstr "यदि कोई ग्रुप मौजूद नहीं है तो ग्रुप बनाएं"
 
 #: ../gui/wxpython/gcp/manager.py:573 ../gui/wxpython/iclass/dialogs.py:92
 #: ../gui/wxpython/image2target/ii2t_manager.py:594
 msgid "Create/edit group..."
-msgstr ""
+msgstr "ग्रुप बनाएं/संपादित करें..।"
 
 #: ../gui/wxpython/gcp/manager.py:576
 #: ../gui/wxpython/image2target/ii2t_manager.py:597
@@ -2874,6 +2874,8 @@ msgid ""
 "Could not calculate RMS Error.\n"
 "Possible error with m.transform."
 msgstr ""
+"RMS त्रुटि की गणना नहीं की जा सकी।\n"
+"m.transform के साथ संभावित त्रुटि।"
 
 #: ../gui/wxpython/gcp/manager.py:2135
 #: ../gui/wxpython/photo2image/ip2i_manager.py:1393
@@ -2881,6 +2883,8 @@ msgid ""
 "Could not calculate new extends.\n"
 "Possible error with m.transform."
 msgstr ""
+"नया विस्तार (extends) की गणना नहीं की जा सकी।\n"
+"m.transform के साथ संभावित त्रुटि।"
 
 #: ../gui/wxpython/gcp/manager.py:2264
 #: ../gui/wxpython/image2target/ii2t_manager.py:2205
@@ -2952,7 +2956,7 @@ msgstr ""
 #: ../gui/wxpython/gcp/manager.py:2595
 #: ../gui/wxpython/image2target/ii2t_manager.py:2544
 msgid "Create vector map group"
-msgstr ""
+msgstr "वेक्टर मैप ग्रुप बनाएं"
 
 #: ../gui/wxpython/gcp/manager.py:2663
 #: ../gui/wxpython/image2target/ii2t_manager.py:2622
@@ -3326,7 +3330,7 @@ msgstr "सूची में नया GCP जोड़ें"
 #: ../gui/wxpython/image2target/ii2t_toolbars.py:41
 #: ../gui/wxpython/photo2image/ip2i_toolbars.py:41
 msgid "Delete selected GCP"
-msgstr ""
+msgstr "चयनित GCP हटाएं"
 
 #: ../gui/wxpython/gcp/toolbars.py:42
 #: ../gui/wxpython/image2target/ii2t_toolbars.py:42
@@ -3434,7 +3438,7 @@ msgstr "टिप्पणी:"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:60
 msgid "Data properties"
-msgstr ""
+msgstr "डेटा गुण (Data properties)"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:103
 #: ../gui/wxpython/iclass/dialogs.py:269
@@ -3504,7 +3508,7 @@ msgstr ""
 #: ../gui/wxpython/gmodeler/dialogs.py:435
 #, python-format
 msgid "Data: %s"
-msgstr ""
+msgstr "डेटा: %s"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:444
 msgid "Command:"
@@ -3534,7 +3538,7 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/dialogs.py:531
 msgid "Condition"
-msgstr "स्थिति"
+msgstr "शर्त"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:539
 #: ../gui/wxpython/gmodeler/dialogs.py:668
@@ -3557,11 +3561,11 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/dialogs.py:582
 msgid "Define map series as condition for the loop"
-msgstr ""
+msgstr "लूप के लिए शर्त के रूप में मैप सीरीज़ परिभाषित करें"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:624
 msgid "Define series of maps"
-msgstr ""
+msgstr "मैप्स की सीरीज़ परिभाषित करें"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:647
 msgid "If-else properties"
@@ -3592,12 +3596,12 @@ msgstr ""
 #: ../gui/wxpython/gmodeler/dialogs.py:1075
 #: ../gui/wxpython/vdigit/dialogs.py:300
 msgid "Delete selected"
-msgstr ""
+msgstr "चयनित हटाएं"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:919
 #: ../gui/wxpython/vdigit/dialogs.py:304
 msgid "Delete all"
-msgstr ""
+msgstr "सभी हटाएं"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:983
 #: ../gui/wxpython/gui_core/gselect.py:2298
@@ -3617,7 +3621,7 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/dialogs.py:1204
 msgid "Delete intermediate data when finish"
-msgstr ""
+msgstr "समाप्त होने पर इंटरमीडिएट डेटा हटाएं"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:1212
 #: ../gui/wxpython/gmodeler/panels.py:1598
@@ -3715,7 +3719,7 @@ msgstr "<परिभाषित नहीं है>"
 
 #: ../gui/wxpython/gmodeler/model_items.py:865
 msgid "Condition: "
-msgstr "स्थिति: "
+msgstr "शर्त: "
 
 #: ../gui/wxpython/gmodeler/model_items.py:866
 msgid "Condition: not defined"
@@ -3786,12 +3790,12 @@ msgstr ""
 #: ../gui/wxpython/gmodeler/panels.py:797
 #: ../gui/wxpython/gmodeler/panels.py:938
 msgid "Current model is not empty. Do you want to store current settings to model file?"
-msgstr ""
+msgstr "वर्तमान मॉडल खाली नहीं है। क्या आप वर्तमान सेटिंग्स को मॉडल फ़ाइल में सहेजना चाहते हैं?"
 
 #: ../gui/wxpython/gmodeler/panels.py:801
 #: ../gui/wxpython/gmodeler/panels.py:942
 msgid "Create new model?"
-msgstr ""
+msgstr "नया मॉडल बनाएं?"
 
 #: ../gui/wxpython/gmodeler/panels.py:830
 msgid "Choose model file"
@@ -3857,7 +3861,7 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/panels.py:1255
 msgid "Delete intermediate data?"
-msgstr ""
+msgstr "इंटरमीडिएट डेटा हटाएं?"
 
 #: ../gui/wxpython/gmodeler/panels.py:1267
 msgid "Model is empty. Nothing to validate."
@@ -3902,7 +3906,7 @@ msgstr ""
 #: ../gui/wxpython/gmodeler/panels.py:1351
 #: ../gui/wxpython/gmodeler/panels.py:1413
 msgid "Default value"
-msgstr ""
+msgstr "डिफ़ॉल्ट मान"
 
 #: ../gui/wxpython/gmodeler/panels.py:1351
 #: ../gui/wxpython/gmodeler/panels.py:1419
@@ -4133,7 +4137,7 @@ msgstr ""
 #: ../gui/wxpython/lmgr/frame.py:629 ../gui/wxpython/main_window/frame.py:648
 #: ../gui/wxpython/nviz/tools.py:113
 msgid "Data"
-msgstr ""
+msgstr "डेटा"
 
 #: ../gui/wxpython/gmodeler/preferences.py:296
 msgid "Raster:"
@@ -4203,7 +4207,7 @@ msgstr "लेखक (Authors):"
 
 #: ../gui/wxpython/gmodeler/toolbars.py:47
 msgid "Create new model"
-msgstr ""
+msgstr "नया मॉडल बनाएं"
 
 #: ../gui/wxpython/gmodeler/toolbars.py:51
 msgid "Load model from file"
@@ -4304,11 +4308,11 @@ msgstr ""
 #: ../gui/wxpython/gui_core/dialogs.py:294
 #: ../gui/wxpython/gui_core/dialogs.py:448
 msgid "Create new vector map"
-msgstr ""
+msgstr "नया वेक्टर मैप बनाएं"
 
 #: ../gui/wxpython/gui_core/dialogs.py:320
 msgid "Create attribute table"
-msgstr ""
+msgstr "एट्रिब्यूट टेबल बनाएं"
 
 #: ../gui/wxpython/gui_core/dialogs.py:340
 #: ../gui/wxpython/gui_core/preferences.py:1242
@@ -4359,7 +4363,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/dialogs.py:690
 msgid "Create or edit imagery groups"
-msgstr ""
+msgstr "इमेजरी ग्रुप्स (imagery groups) बनाएं या संपादित करें"
 
 #: ../gui/wxpython/gui_core/dialogs.py:725
 msgid "Apply changes to selected group and close dialog"
@@ -4455,7 +4459,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/dialogs.py:1325
 #, python-format
 msgid "Creating of new group <%s> failed."
-msgstr ""
+msgstr "नया ग्रुप <%s> बनाना विफल रहा।"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1327
 #, python-format
@@ -4602,12 +4606,12 @@ msgstr ""
 #: ../gui/wxpython/gui_core/forms.py:614
 #: ../gui/wxpython/modules/mcalc_builder.py:177
 msgid "Copy"
-msgstr "कॉपी"
+msgstr "कॉपी करें"
 
 #: ../gui/wxpython/gui_core/forms.py:616
 #: ../gui/wxpython/modules/mcalc_builder.py:178
 msgid "Copy the current command string to the clipboard"
-msgstr "वर्तमान कमांड स्ट्रिंग को क्लिपबोर्ड में कॉपी करें"
+msgstr "वर्तमान कमांड स्ट्रिंग को क्लिपबोर्ड पर कॉपी करें"
 
 #: ../gui/wxpython/gui_core/forms.py:625
 msgid "Show manual page of the command (Ctrl+H)"
@@ -4808,7 +4812,7 @@ msgstr "लेखक"
 
 #: ../gui/wxpython/gui_core/ghelp.py:86
 msgid "Contributors"
-msgstr "योगदानकर्ताओं"
+msgstr "योगदानकर्ता"
 
 #: ../gui/wxpython/gui_core/ghelp.py:87
 msgid "Extra contributors"
@@ -4871,7 +4875,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/ghelp.py:439 ../gui/wxpython/gui_core/ghelp.py:444
 msgid "Country"
-msgstr ""
+msgstr "देश"
 
 #: ../gui/wxpython/gui_core/ghelp.py:439 ../gui/wxpython/gui_core/ghelp.py:443
 #: ../gui/wxpython/gui_core/ghelp.py:517
@@ -5098,7 +5102,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/gselect.py:1875
 #: ../gui/wxpython/gui_core/gselect.py:1920
 msgid "Creation options:"
-msgstr ""
+msgstr "निर्माण विकल्प:"
 
 #: ../gui/wxpython/gui_core/gselect.py:1790
 #: ../gui/wxpython/gui_core/gselect.py:1836
@@ -5316,7 +5320,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:459
 msgid "Data Catalog settings"
-msgstr ""
+msgstr "डेटा कैटलॉग सेटिंग्स"
 
 #: ../gui/wxpython/gui_core/preferences.py:464
 msgid "At startup load maps from current mapset only (in the Data tab)"
@@ -5401,11 +5405,11 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:888
 msgid "Default font for GRASS displays:"
-msgstr ""
+msgstr "GRASS डिस्प्ले के लिए डिफ़ॉल्ट फ़ॉन्ट:"
 
 #: ../gui/wxpython/gui_core/preferences.py:906
 msgid "Default display settings"
-msgstr ""
+msgstr "डिफ़ॉल्ट डिस्प्ले सेटिंग्स"
 
 #: ../gui/wxpython/gui_core/preferences.py:917
 msgid "Display driver:"
@@ -5485,7 +5489,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:1358
 msgid "Default raster settings"
-msgstr ""
+msgstr "डिफ़ॉल्ट रास्टर सेटिंग्स"
 
 #: ../gui/wxpython/gui_core/preferences.py:1371
 msgid "Make null cells opaque"
@@ -5493,11 +5497,11 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:1384
 msgid "Default color table"
-msgstr ""
+msgstr "डिफ़ॉल्ट रंग टेबल"
 
 #: ../gui/wxpython/gui_core/preferences.py:1422
 msgid "Default vector settings"
-msgstr ""
+msgstr "डिफ़ॉल्ट वेक्टर सेटिंग्स"
 
 #: ../gui/wxpython/gui_core/preferences.py:1429
 msgid "Display:"
@@ -5534,7 +5538,7 @@ msgstr "मानचित्र प्रदर्शन में चयनि
 
 #: ../gui/wxpython/gui_core/preferences.py:1676
 msgid "Data browser"
-msgstr ""
+msgstr "डेटा ब्राउज़र"
 
 #: ../gui/wxpython/gui_core/preferences.py:1683
 msgid "Left mouse double click:"
@@ -5550,7 +5554,7 @@ msgstr "तालिका से डेटा रिकॉर्ड हटा�
 
 #: ../gui/wxpython/gui_core/preferences.py:1749
 msgid "Create table"
-msgstr ""
+msgstr "टेबल बनाएं"
 
 #: ../gui/wxpython/gui_core/preferences.py:1783
 msgid "Projection"
@@ -5660,7 +5664,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:308
 msgid "Couldn't read file <{}>."
-msgstr "नई सीमाओं की गणना नहीं कर सका। m.transform में संभव त्रुटि।"
+msgstr "फ़ाइल <{}> नहीं पढ़ी जा सकी।"
 
 #: ../gui/wxpython/gui_core/pyedit.py:327
 msgid "Permission denied <{}>. Please change file permission for writing.{}"
@@ -5668,7 +5672,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:338
 msgid "Couldn't write file <{}>.{}"
-msgstr ""
+msgstr "फ़ाइल <{}> नहीं लिखी जा सकी।{}"
 
 #: ../gui/wxpython/gui_core/pyedit.py:362
 #: ../gui/wxpython/gui_core/pyedit.py:372
@@ -5726,7 +5730,7 @@ msgstr "ओवरराइट सक्रिय करें"
 
 #: ../gui/wxpython/gui_core/pyedit.py:664
 msgid "Deactivate overwrite"
-msgstr ""
+msgstr "ओवरराइट निष्क्रिय करें"
 
 #: ../gui/wxpython/gui_core/pyedit.py:883
 msgid "Simple Python Editor"
@@ -5763,7 +5767,7 @@ msgstr "'%s' कॉलम से कॉपी करें"
 
 #: ../gui/wxpython/gui_core/query.py:133
 msgid "Copy selected lines"
-msgstr "चयनित पंक्तियों को कॉपी करें"
+msgstr "चयनित लाइनें कॉपी करें"
 
 #: ../gui/wxpython/gui_core/query.py:138 ../gui/wxpython/gui_core/query.py:142
 #, python-format
@@ -5796,11 +5800,11 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/simplelmgr.py:157
 msgid "Copy map names to clipboard (top to bottom)"
-msgstr "मानचित्र नामों को क्लिपबोर्ड पर कॉपी करें (ऊपर से नीचे)"
+msgstr "मैप के नाम क्लिपबोर्ड पर कॉपी करें (ऊपर से नीचे)"
 
 #: ../gui/wxpython/gui_core/simplelmgr.py:158
 msgid "Copy map names to clipboard (bottom to top)"
-msgstr "मानचित्र नामों को क्लिपबोर्ड पर कॉपी करें (नीचे से ऊपर)"
+msgstr "मैप के नाम क्लिपबोर्ड पर कॉपी करें (नीचे से ऊपर)"
 
 #: ../gui/wxpython/gui_core/simplelmgr.py:307
 #: ../gui/wxpython/lmgr/layertree.py:1282
@@ -5954,7 +5958,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/toolbars.py:82
 msgid "Create histogram with d.histogram"
-msgstr ""
+msgstr "d.histogram के साथ हिस्टोग्राम बनाएं"
 
 #: ../gui/wxpython/gui_core/toolbars.py:84
 #: ../gui/wxpython/iscatt/toolbars.py:184 ../gui/wxpython/nviz/tools.py:2385
@@ -5985,7 +5989,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/vselect.py:134
 msgid "Create a new map"
-msgstr ""
+msgstr "एक नया मैप बनाएं"
 
 #: ../gui/wxpython/gui_core/vselect.py:267
 #, python-format
@@ -6066,7 +6070,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/widgets.py:1414
 msgid "Delete currently selected settings"
-msgstr ""
+msgstr "वर्तमान में चयनित सेटिंग्स हटाएं"
 
 #: ../gui/wxpython/gui_core/widgets.py:1433
 msgid "Load:"
@@ -6743,7 +6747,7 @@ msgstr "&नया"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:203
 msgid "Create a new Mapset in selected Location"
-msgstr ""
+msgstr "चयनित लोकेशन में एक नया मैपसेट (Mapset) बनाएं"
 
 #. GTC New location
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:208
@@ -6752,7 +6756,7 @@ msgstr ""
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:212
 msgid "Create a new location using location wizard. After location is created successfully, GRASS session is started."
-msgstr ""
+msgstr "लोकेशन विजार्ड का उपयोग करके एक नई लोकेशन बनाएं। लोकेशन सफलतापूर्वक बनने के बाद, GRASS सेशन शुरू हो जाता है।"
 
 #. GTC Rename location
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:221
@@ -6767,12 +6771,12 @@ msgstr ""
 #. GTC Delete location
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:228
 msgid "De&lete"
-msgstr ""
+msgstr "GTC लोकेशन हटाएं"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:230
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:842
 msgid "Delete selected location"
-msgstr ""
+msgstr "चयनित स्थान हटाएं"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:237
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:701
@@ -6783,7 +6787,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:244
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:812
 msgid "Delete selected mapset"
-msgstr ""
+msgstr "चयनित मानचित्र-सेट (mapset) हटाएं"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:299
 #, python-format
@@ -6837,7 +6841,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:1034
 #: ../gui/wxpython/startup/guiutils.py:134
 msgid "Create new mapset"
-msgstr ""
+msgstr "नया मैपसेट बनाएं"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:670
 #: ../gui/wxpython/startup/guiutils.py:653
@@ -6850,7 +6854,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:676
 #, python-format
 msgid "Data file <%(name)s> imported successfully. The location's default region was set from this imported map."
-msgstr ""
+msgstr "डेटा फ़ाइल <%(name)s> सफलतापूर्वक इंपोर्ट की गई। इस इंपोर्ट किए गए मैप से लोकेशन का डिफ़ॉल्ट क्षेत्र (region) सेट किया गया था।"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:692
 msgid ""
@@ -6867,6 +6871,9 @@ msgid ""
 "\n"
 "Enter new name:"
 msgstr ""
+"वर्तमान नाम: %s\n"
+"\n"
+"नया नाम दर्ज करें:"
 
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:716
 #, python-format
@@ -7036,12 +7043,16 @@ msgid ""
 "Could not calculate RMS Error.\n"
 "Possible error with i.ortho.transform."
 msgstr ""
+"RMS त्रुटि की गणना नहीं की जा सकी।\n"
+"i.ortho.transform के साथ संभावित त्रुटि।"
 
 #: ../gui/wxpython/image2target/ii2t_manager.py:2075
 msgid ""
 "Could not calculate new extends.\n"
 "Possible error with i.ortho.transform."
 msgstr ""
+"नया विस्तार (extends) की गणना नहीं की जा सकी।\n"
+"i.ortho.transform के साथ संभावित त्रुटि।"
 
 #: ../gui/wxpython/image2target/ii2t_manager.py:2322
 #: ../gui/wxpython/image2target/ii2t_manager.py:2343
@@ -7296,7 +7307,7 @@ msgstr ""
 
 #: ../gui/wxpython/iscatt/iscatt_core.py:142
 msgid "Computing of scatter plots failed."
-msgstr "स्कैटर प्लॉट की गणना विफल रही।"
+msgstr "स्कैटर प्लॉट्स की गणना विफल रही।"
 
 #: ../gui/wxpython/iscatt/iscatt_core.py:277
 msgid "Patching category raster conditions file failed."
@@ -7369,7 +7380,7 @@ msgstr "बहुभुज सीमा स्कैटर प्लॉट म�
 
 #: ../gui/wxpython/iscatt/toolbars.py:227
 msgid "Create selection polygon"
-msgstr ""
+msgstr "चयन पॉलीगॉन (selection polygon) बनाएं"
 
 #: ../gui/wxpython/iscatt/toolbars.py:228
 msgid "Add new vertex between last and first points of the boundary"
@@ -7440,7 +7451,7 @@ msgstr "मैप डिस्प्ले {} बंद करें"
 
 #: ../gui/wxpython/lmgr/frame.py:639 ../gui/wxpython/main_window/frame.py:693
 msgid "Console"
-msgstr "सांत्वना देना"
+msgstr "कंसोल"
 
 #: ../gui/wxpython/lmgr/frame.py:794 ../gui/wxpython/main_window/frame.py:922
 msgid "Map Swipe Tool"
@@ -7642,7 +7653,7 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/frame.py:2342 ../gui/wxpython/main_window/frame.py:2451
 msgid "Constrain map to region geometry?"
-msgstr "मानचित्र को क्षेत्र ज्यामिति तक सीमित करें?"
+msgstr "मैप को क्षेत्र की ज्यामिति (geometry) तक सीमित रखें?"
 
 #: ../gui/wxpython/lmgr/layertree.py:54
 msgid "Import data from WMS server"
@@ -7754,7 +7765,7 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/layertree.py:653 ../gui/wxpython/lmgr/layertree.py:784
 msgid "Create pack"
-msgstr ""
+msgstr "पैक बनाएं"
 
 #: ../gui/wxpython/lmgr/layertree.py:667 ../gui/wxpython/lmgr/layertree.py:800
 msgid "Make a copy in the current mapset"
@@ -7903,7 +7914,7 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/pyshell.py:74
 msgid "Delete all text from the shell"
-msgstr ""
+msgstr "शेल (shell) से सारा टेक्स्ट हटाएं"
 
 #: ../gui/wxpython/lmgr/pyshell.py:78
 msgid "Simple &editor"
@@ -7947,7 +7958,7 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/toolbars.py:46
 msgid "Create new workspace (Ctrl+N)"
-msgstr ""
+msgstr "नया वर्कस्पेस बनाएं (Ctrl+N)"
 
 #: ../gui/wxpython/lmgr/toolbars.py:49
 msgid "Open existing workspace file (Ctrl+O)"
@@ -8036,7 +8047,7 @@ msgstr "वेब सेवा मानचित्र जोड़ें"
 
 #: ../gui/wxpython/lmgr/toolbars.py:169
 msgid "Delete map layer"
-msgstr ""
+msgstr "मैप लेयर हटाएं"
 
 #: ../gui/wxpython/lmgr/toolbars.py:203
 msgid "Start new map display"
@@ -8097,11 +8108,11 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/workspace.py:73
 msgid "Current workspace is not empty. Do you want to store current settings to workspace file?"
-msgstr ""
+msgstr "वर्तमान वर्कस्पेस खाली नहीं है। क्या आप वर्तमान सेटिंग्स को वर्कस्पेस फ़ाइल में सहेजना चाहते हैं?"
 
 #: ../gui/wxpython/lmgr/workspace.py:77
 msgid "Create new workspace?"
-msgstr ""
+msgstr "नया वर्कस्पेस बनाएं?"
 
 #: ../gui/wxpython/lmgr/workspace.py:106
 msgid "Choose workspace file"
@@ -8135,6 +8146,8 @@ msgid ""
 "Current location is <%(loc)s>.\n"
 "Current mapset is <%(mapset)s>."
 msgstr ""
+"वर्तमान लोकेशन <%(loc)s> है।\n"
+"वर्तमान मैपसेट <%(mapset)s> है।"
 
 #: ../gui/wxpython/lmgr/workspace.py:180
 #, python-format
@@ -8288,7 +8301,7 @@ msgstr ""
 #: ../gui/wxpython/location_wizard/wizard.py:183
 #: ../gui/wxpython/location_wizard/wizard.py:2437
 msgid "Define new GRASS project"
-msgstr ""
+msgstr "नया GRASS प्रोजेक्ट परिभाषित करें"
 
 #: ../gui/wxpython/location_wizard/wizard.py:197
 msgid "Change"
@@ -8345,7 +8358,7 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:389
 msgid "Create a generic cartesian coordinate system (XY)"
-msgstr ""
+msgstr "एक सामान्य कार्टेशियन निर्देशांक प्रणाली (XY) बनाएं"
 
 #: ../gui/wxpython/location_wizard/wizard.py:392
 #: ../gui/wxpython/location_wizard/wizard.py:1521
@@ -8360,7 +8373,7 @@ msgstr ""
 #: ../gui/wxpython/location_wizard/wizard.py:398
 #: ../gui/wxpython/location_wizard/wizard.py:513
 msgid "Define custom CRS"
-msgstr ""
+msgstr "कस्टम CRS परिभाषित करें"
 
 #: ../gui/wxpython/location_wizard/wizard.py:409
 msgid "Additional methods:"
@@ -8399,7 +8412,7 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:857
 msgid "Datum with associated ellipsoid"
-msgstr ""
+msgstr "संबद्ध दीर्घवृत्ताभ (ellipsoid) के साथ डेटम"
 
 #: ../gui/wxpython/location_wizard/wizard.py:861
 msgid "Ellipsoid only"
@@ -8426,7 +8439,7 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:1081
 msgid "Datum code:"
-msgstr ""
+msgstr "डेटम कोड (Datum code):"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1242
 msgid "Specify ellipsoid"
@@ -8502,7 +8515,7 @@ msgstr ""
 #: ../gui/wxpython/location_wizard/wizard.py:2130
 #: ../gui/wxpython/location_wizard/wizard.py:2134
 msgid "Datum transform is required."
-msgstr ""
+msgstr "डेटम ट्रांसफ़ॉर्म आवश्यक है।"
 
 #: ../gui/wxpython/location_wizard/wizard.py:2178
 #: ../gui/wxpython/rlisetup/wizard.py:1947
@@ -8728,7 +8741,7 @@ msgstr "केंद्र बिंदु से डिस्प्ले आ�
 
 #: ../gui/wxpython/mapdisp/properties.py:157
 msgid "Constrain display resolution to computational region settings. Default value for new map displays can be set up in 'User GUI settings' dialog."
-msgstr "डिस्प्ले रिज़ॉल्यूशन को कम्प्यूटेशनल क्षेत्र सेटिंग्स तक सीमित रखें। नए मानचित्र डिस्प्ले के लिए डिफ़ॉल्ट मान 'उपयोगकर्ता जीयूआई सेटिंग्स' संवाद में सेट किया जा सकता है।"
+msgstr "डिस्प्ले रिज़ॉल्यूशन को कम्प्यूटेशनल क्षेत्र सेटिंग्स तक सीमित रखें। नए मैप डिस्प्ले के लिए डिफ़ॉल्ट मान 'यूजर GUI सेटिंग्स' डायलॉग में सेट किया जा सकता है।"
 
 #: ../gui/wxpython/mapdisp/properties.py:195
 msgid "Show computational extent"
@@ -8790,7 +8803,7 @@ msgstr ""
 
 #: ../gui/wxpython/mapdisp/statusbar.py:730
 msgid "Coordinates"
-msgstr "कोआर्डिनेट"
+msgstr "निर्देशांक (Coordinates)"
 
 #: ../gui/wxpython/mapdisp/statusbar.py:814
 msgid "Display extent"
@@ -8886,11 +8899,11 @@ msgstr ""
 
 #: ../gui/wxpython/mapdisp/toolbars.py:51
 msgid "Create bivariate scatterplot of raster maps"
-msgstr ""
+msgstr "रास्टर मैप्स का बाइवेरिएट (bivariate) स्कैटरप्लॉट बनाएं"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:55
 msgid "Create histogram of raster map"
-msgstr ""
+msgstr "रास्टर मैप का हिस्टोग्राम बनाएं"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:57
 msgid "Vector network analysis tool"
@@ -9105,7 +9118,7 @@ msgstr ""
 
 #: ../gui/wxpython/mapwin/buffered.py:281
 msgid "Copy coordinates to clipboard"
-msgstr "निर्देशांक को क्लिपबोर्ड पर कॉपी करें"
+msgstr "निर्देशांक क्लिपबोर्ड पर कॉपी करें"
 
 #: ../gui/wxpython/mapwin/buffered.py:315
 msgid "Resize and move legend"
@@ -9290,7 +9303,7 @@ msgstr ""
 
 #: ../gui/wxpython/modules/colorrules.py:870
 msgid "Create new color table for raster map"
-msgstr ""
+msgstr "रास्टर मैप के लिए नई रंग टेबल बनाएं"
 
 #: ../gui/wxpython/modules/colorrules.py:964
 msgid "Enter raster category values or percents"
@@ -9314,7 +9327,7 @@ msgstr ""
 
 #: ../gui/wxpython/modules/colorrules.py:1076
 msgid "Create new color rules for vector map"
-msgstr ""
+msgstr "वेक्टर मैप के लिए नए रंग नियम बनाएं"
 
 #: ../gui/wxpython/modules/colorrules.py:1088
 #: ../gui/wxpython/modules/colorrules.py:1670
@@ -9378,7 +9391,7 @@ msgstr ""
 #: ../gui/wxpython/modules/colorrules.py:1239
 #, python-format
 msgid "Database connection for vector map <%s> is not defined in DB file.  Do you want to create and connect new attribute table?"
-msgstr ""
+msgstr "वेक्टर मैप <%s> के लिए डेटाबेस कनेक्शन DB फ़ाइल में परिभाषित नहीं है। क्या आप एक नई एट्रिब्यूट टेबल बनाना और कनेक्ट करना चाहते हैं?"
 
 #: ../gui/wxpython/modules/colorrules.py:1244
 msgid "No database connection defined"
@@ -9636,11 +9649,11 @@ msgstr ""
 
 #: ../gui/wxpython/modules/import_export.py:754
 msgid "Define output format for vector data"
-msgstr ""
+msgstr "वेक्टर डेटा के लिए आउटपुट फ़ॉर्मेट परिभाषित करें"
 
 #: ../gui/wxpython/modules/import_export.py:756
 msgid "Define output format for raster data"
-msgstr ""
+msgstr "रास्टर डेटा के लिए आउटपुट फ़ॉर्मेट परिभाषित करें"
 
 #: ../gui/wxpython/modules/import_export.py:764
 msgid "Set external format and close dialog"
@@ -10172,7 +10185,7 @@ msgstr "एनिमेशन"
 
 #: ../gui/wxpython/nviz/tools.py:314
 msgid "Control View"
-msgstr "नियंत्रण दृश्य"
+msgstr "कंट्रोल व्यू"
 
 #: ../gui/wxpython/nviz/tools.py:336
 msgid "Adjusts the distance and angular perspective of the image viewpoint"
@@ -10272,7 +10285,7 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:753 ../gui/wxpython/nviz/tools.py:1435
 msgid "Constant surface"
-msgstr "स्थिर सतह"
+msgstr "स्थिर सतह (Constant surface)"
 
 #: ../gui/wxpython/nviz/tools.py:817
 msgid "Fringe"
@@ -10280,7 +10293,7 @@ msgstr ""
 
 #: ../gui/wxpython/nviz/tools.py:862 ../gui/wxpython/nviz/tools.py:1187
 msgid "Cutting planes"
-msgstr ""
+msgstr "कटिंग प्लेन्स (Cutting planes)"
 
 #: ../gui/wxpython/nviz/tools.py:939 ../gui/wxpython/nviz/tools.py:1206
 #: ../gui/wxpython/nviz/tools.py:1998
@@ -10416,7 +10429,7 @@ msgstr ""
 #: ../gui/wxpython/nviz/tools.py:1451 ../gui/wxpython/nviz/tools.py:2484
 #: ../gui/wxpython/nviz/tools.py:2546 ../gui/wxpython/psmap/dialogs.py:1859
 msgid "Delete"
-msgstr ""
+msgstr "हटाएं"
 
 #: ../gui/wxpython/nviz/tools.py:1463
 msgid "Fine resolution:"
@@ -11089,7 +11102,7 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:1819
 msgid "Data Type"
-msgstr ""
+msgstr "डेटा टाइप"
 
 #: ../gui/wxpython/psmap/dialogs.py:1846
 msgid "Manage vector maps"
@@ -11128,7 +11141,7 @@ msgstr "%s संपत्तियां"
 
 #: ../gui/wxpython/psmap/dialogs.py:2264
 msgid "Data selection"
-msgstr ""
+msgstr "डेटा चयन"
 
 #: ../gui/wxpython/psmap/dialogs.py:2277
 msgid "centroids"
@@ -11144,7 +11157,7 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:2312
 msgid "Database connection is not defined in DB file."
-msgstr ""
+msgstr "डेटाबेस कनेक्शन DB फ़ाइल में परिभाषित नहीं है।"
 
 #: ../gui/wxpython/psmap/dialogs.py:2314
 msgid "Select layer:"
@@ -11527,7 +11540,7 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:5881 ../gui/wxpython/psmap/dialogs.py:6392
 msgid "Counterclockwise rotation in degrees"
-msgstr ""
+msgstr "डिग्री में वामावर्त (Counterclockwise) घुमाव"
 
 #: ../gui/wxpython/psmap/dialogs.py:5982
 msgid ""
@@ -11886,7 +11899,7 @@ msgstr "मैप फ्रेम लगाने के लिए क्लि�
 
 #: ../gui/wxpython/psmap/toolbars.py:94
 msgid "Delete selected object"
-msgstr ""
+msgstr "चयनित ऑब्जेक्ट हटाएं"
 
 #: ../gui/wxpython/psmap/toolbars.py:96
 msgid "Show preview"
@@ -12006,7 +12019,7 @@ msgstr ""
 
 #: ../gui/wxpython/rdigit/dialogs.py:34
 msgid "Create new raster map"
-msgstr ""
+msgstr "नया रास्टर मैप बनाएं"
 
 #: ../gui/wxpython/rdigit/dialogs.py:54
 msgid "Name for new raster map:"
@@ -12115,11 +12128,11 @@ msgstr ""
 
 #: ../gui/wxpython/rlisetup/frame.py:159
 msgid "Create"
-msgstr ""
+msgstr "बनाएं"
 
 #: ../gui/wxpython/rlisetup/frame.py:160
 msgid "Create a new configuration file"
-msgstr ""
+msgstr "एक नई कॉन्फ़िगरेशन फ़ाइल बनाएं"
 
 #: ../gui/wxpython/rlisetup/frame.py:162
 msgid "Rename a configuration file"
@@ -12221,7 +12234,7 @@ msgstr ""
 
 #: ../gui/wxpython/rlisetup/wizard.py:72
 msgid "Create new configuration file for r.li modules"
-msgstr ""
+msgstr "r.li मॉड्यूल के लिए नई कॉन्फ़िगरेशन फ़ाइल बनाएं"
 
 #: ../gui/wxpython/rlisetup/wizard.py:137
 #, python-format
@@ -12230,7 +12243,7 @@ msgstr ""
 
 #: ../gui/wxpython/rlisetup/wizard.py:139
 msgid "Create new r.li configuration file?"
-msgstr ""
+msgstr "नई r.li कॉन्फ़िगरेशन फ़ाइल बनाएं?"
 
 #: ../gui/wxpython/rlisetup/wizard.py:155
 msgid "r.li.setup wizard canceled. Configuration file not created."
@@ -12258,7 +12271,7 @@ msgstr ""
 
 #: ../gui/wxpython/rlisetup/wizard.py:593
 msgid "Define sampling region (region for analysis)"
-msgstr ""
+msgstr "सैंपलिंग क्षेत्र (विश्लेषण के लिए क्षेत्र) परिभाषित करें"
 
 #: ../gui/wxpython/rlisetup/wizard.py:595
 #: ../gui/wxpython/rlisetup/wizard.py:982
@@ -12632,6 +12645,9 @@ msgid ""
 "\n"
 "Enter new name:"
 msgstr ""
+"वर्तमान नाम: {}\n"
+"\n"
+"नया नाम दर्ज करें:"
 
 #: ../gui/wxpython/startup/guiutils.py:256
 msgid ""
@@ -12696,7 +12712,7 @@ msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:396
 msgid "Delete selected mapsets"
-msgstr ""
+msgstr "चयनित मानचित्रों को हटाएं"
 
 #: ../gui/wxpython/startup/guiutils.py:409
 msgid "Error when deleting mapsets"
@@ -12743,7 +12759,7 @@ msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:481
 msgid "Delete selected projects"
-msgstr ""
+msgstr "चयनित परियोजनाएँ हटाएँ"
 
 #: ../gui/wxpython/startup/guiutils.py:494
 msgid "Error when deleting projects"
@@ -12790,7 +12806,7 @@ msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:546
 msgid "Delete selected GRASS database"
-msgstr ""
+msgstr "चयनित GRASS डेटाबेस हटाएं"
 
 #: ../gui/wxpython/startup/guiutils.py:558
 msgid "Error when deleting GRASS database"
@@ -12836,7 +12852,7 @@ msgstr ""
 #: ../gui/wxpython/startup/guiutils.py:659
 #, python-format
 msgid "Data file <%(name)s> imported successfully. The project's default region was set from this imported map."
-msgstr ""
+msgstr "डेटा फ़ाइल <%(name)s> सफलतापूर्वक इंपोर्ट की गई। इस इंपोर्ट किए गए मैप से प्रोजेक्ट का डिफ़ॉल्ट क्षेत्र (region) सेट किया गया था।"
 
 #: ../gui/wxpython/startup/guiutils.py:690
 #, python-format
@@ -12845,6 +12861,9 @@ msgid ""
 "Current project is <%(loc)s>.\n"
 "Current mapset is <%(mapset)s>."
 msgstr ""
+"वर्तमान GRASS डेटाबेस <%(dbase)s> है।\n"
+"वर्तमान प्रोजेक्ट <%(loc)s> है।\n"
+"वर्तमान मैपसेट <%(mapset)s> है।"
 
 #: ../gui/wxpython/startup/guiutils.py:708
 #, python-format
@@ -12852,11 +12871,13 @@ msgid ""
 "Current project is <%(loc)s>.\n"
 "Current mapset is <%(mapset)s>."
 msgstr ""
+"वर्तमान प्रोजेक्ट <%(loc)s> है।\n"
+"वर्तमान मैपसेट <%(mapset)s> है।"
 
 #: ../gui/wxpython/startup/guiutils.py:719
 #, python-format
 msgid "Current mapset is <%s>."
-msgstr ""
+msgstr "वर्तमान मैपसेट <%s> है।"
 
 #: ../gui/wxpython/startup/locdownload.py:152
 msgid "Download in progress, wait until it is finished 0%"
@@ -12925,7 +12946,7 @@ msgstr ""
 
 #: ../gui/wxpython/startup/locdownload.py:440
 msgid "Dataset Download"
-msgstr ""
+msgstr "डेटासेट डाउनलोड"
 
 #: ../gui/wxpython/startup/locdownload.py:448
 msgid "Download selected dataset"
@@ -12963,22 +12984,22 @@ msgstr ""
 #: ../gui/wxpython/tplot/frame.py:569
 #, python-format
 msgid "Dataset <%s> not found in temporal database"
-msgstr ""
+msgstr "टेम्पोरल डेटाबेस में डेटासेट <%s> नहीं मिला"
 
 #: ../gui/wxpython/timeline/frame.py:201 ../gui/wxpython/tplot/frame.py:455
 #: ../gui/wxpython/tplot/frame.py:593
 msgid "Datasets have different temporal type (absolute x relative), which is not allowed."
-msgstr ""
+msgstr "डेटासेट का टेम्पोरल टाइप भिन्न (पूर्ण बनाम सापेक्ष) है, जिसकी अनुमति नहीं है।"
 
 #: ../gui/wxpython/timeline/frame.py:222 ../gui/wxpython/tplot/frame.py:477
 #: ../gui/wxpython/tplot/frame.py:606
 msgid "Datasets have different time unit which is not allowed."
-msgstr ""
+msgstr "डेटासेट में अलग-अलग समय इकाइयाँ (time units) हैं, जिसकी अनुमति नहीं है।"
 
 #: ../gui/wxpython/timeline/frame.py:244
 #, python-brace-format
 msgid "Dataset <{name}> is empty"
-msgstr ""
+msgstr "डेटासेट <{name}> खाली है"
 
 #: ../gui/wxpython/timeline/frame.py:301
 #, python-format
@@ -13084,7 +13105,7 @@ msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:225
 msgid "Coordinates can be obtained for example by right-clicking on Map Display."
-msgstr "उदाहरण के लिए मानचित्र प्रदर्शन पर राइट-क्लिक करके निर्देशांक प्राप्त किए जा सकते हैं।"
+msgstr "उदाहरण के लिए मैप डिस्प्ले पर राइट-क्लिक करके निर्देशांक प्राप्त किए जा सकते हैं।"
 
 #: ../gui/wxpython/tplot/frame.py:232 ../gui/wxpython/tplot/frame.py:298
 msgid "Show simple linear regression line"
@@ -13221,7 +13242,7 @@ msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:1329
 msgid "Datasets have different number of values"
-msgstr ""
+msgstr "डेटासेट में मानों की संख्या भिन्न है"
 
 #: ../gui/wxpython/tplot/frame.py:1362
 #, python-brace-format
@@ -13501,11 +13522,11 @@ msgstr ""
 
 #: ../gui/wxpython/vdigit/preferences.py:583
 msgid "Delete existing feature(s)"
-msgstr ""
+msgstr "मौजूदा फीचर (features) हटाएं"
 
 #: ../gui/wxpython/vdigit/preferences.py:589
 msgid "Delete record from table"
-msgstr ""
+msgstr "टेबल से रिकॉर्ड हटाएं"
 
 #: ../gui/wxpython/vdigit/preferences.py:606
 msgid "Geometry attributes"
@@ -13649,11 +13670,11 @@ msgstr ""
 
 #: ../gui/wxpython/vdigit/toolbars.py:186
 msgid "Delete selected point(s), line(s), boundary(ies) or centroid(s) (Ctrl+D)"
-msgstr ""
+msgstr "चयनित बिंदु(ओं), रेखा(ओं), सीमा(ओं) या केन्द्रक(ओं) को मिटाएँ (Ctrl+D)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:193
 msgid "Delete selected area(s) (Ctrl+F)"
-msgstr ""
+msgstr "चयनित क्षेत्र (क्षेत्रों) को हटाएं (Ctrl+F)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:198
 msgid "Display/update attributes (Ctrl+K)"
@@ -13734,19 +13755,19 @@ msgstr "प्रतिच्छेदन पर चयनित रेखाए
 
 #: ../gui/wxpython/vdigit/toolbars.py:718
 msgid "Connect selected lines/boundaries"
-msgstr "चयनित लाइनों/सीमाओं को कनेक्ट करें"
+msgstr "चयनित लाइनों/सीमाओं को जोड़ें"
 
 #: ../gui/wxpython/vdigit/toolbars.py:723
 msgid "Copy categories"
-msgstr "श्रेणियाँ कॉपी करें"
+msgstr "श्रेणियां (categories) कॉपी करें"
 
 #: ../gui/wxpython/vdigit/toolbars.py:725
 msgid "Copy features from (background) vector map"
-msgstr "(पृष्ठभूमि) वेक्टर मानचित्र से सुविधाएँ कॉपी करें"
+msgstr "(पृष्ठभूमि) वेक्टर मैप से सुविधाएँ (features) कॉपी करें"
 
 #: ../gui/wxpython/vdigit/toolbars.py:730
 msgid "Copy attributes"
-msgstr "विशेषताएँ कॉपी करें"
+msgstr "एट्रिब्यूट्स कॉपी करें"
 
 #: ../gui/wxpython/vdigit/toolbars.py:732
 msgid "Feature type conversion"
@@ -13862,7 +13883,7 @@ msgstr ""
 #: ../gui/wxpython/vdigit/wxdigit.py:218
 #, python-format
 msgid "Database link %d not available. Operation canceled."
-msgstr ""
+msgstr "डेटाबेस लिंक %d उपलब्ध नहीं है। ऑपरेशन रद्द कर दिया गया।"
 
 #: ../gui/wxpython/vdigit/wxdigit.py:226
 #, python-format
@@ -13961,7 +13982,7 @@ msgstr ""
 
 #: ../gui/wxpython/vnet/dialogs.py:725
 msgid "Creating turntable..."
-msgstr ""
+msgstr "टर्नटेबल बनाया जा रहा है..।"
 
 #: ../gui/wxpython/vnet/dialogs.py:896
 msgid "Input vector map does not exist."
@@ -14043,7 +14064,7 @@ msgstr ""
 
 #: ../gui/wxpython/vnet/dialogs.py:1813
 msgid "Define Global Turn Costs"
-msgstr ""
+msgstr "ग्लोबल टर्न कॉस्ट्स परिभाषित करें"
 
 #: ../gui/wxpython/vnet/toolbars.py:50
 msgid "Insert points from Map Display"
@@ -14067,7 +14088,7 @@ msgstr "नया बिंदु जोड़ें"
 
 #: ../gui/wxpython/vnet/toolbars.py:60
 msgid "Delete selected point"
-msgstr ""
+msgstr "चयनित बिंदुओं को हटाएं"
 
 #: ../gui/wxpython/vnet/toolbars.py:123
 msgid "Execute analysis"
@@ -14131,7 +14152,7 @@ msgstr ""
 
 #: ../gui/wxpython/vnet/vnet_core.py:308
 msgid "Creation of turntable failed."
-msgstr ""
+msgstr "टर्नटेबल का निर्माण विफल रहा।"
 
 #: ../gui/wxpython/vnet/vnet_core.py:327
 msgid "Vector map with analysis result does not exist."
@@ -14336,7 +14357,7 @@ msgstr ""
 #: ../gui/wxpython/vnet/vnet_data.py:789
 #, python-format
 msgid "Cost isolines %s"
-msgstr "लागत समरेखाएं %s"
+msgstr "कॉस्ट आइसोलाइन्स %s"
 
 #: ../gui/wxpython/vnet/vnet_data.py:867
 msgid "Overwrite map layer"
@@ -14393,7 +14414,7 @@ msgstr ""
 #: ../gui/wxpython/web_services/dialogs.py:380
 #, python-format
 msgid "Connecting to <%s>..."
-msgstr "<%s> से कनेक्ट हो रहा है..।"
+msgstr "<%s> से कनेक्ट किया जा रहा है..।"
 
 #: ../gui/wxpython/web_services/dialogs.py:448
 msgid "Available web services"
@@ -14402,7 +14423,7 @@ msgstr "उपलब्ध वेब सेवाएँ (Available web services)
 #: ../gui/wxpython/web_services/dialogs.py:463
 #, python-format
 msgid "Connected to <%s>"
-msgstr "<%s> से जुड़ा हुआ"
+msgstr "<%s> से कनेक्ट किया गया"
 
 #: ../gui/wxpython/web_services/dialogs.py:470
 #, python-format
@@ -14533,11 +14554,11 @@ msgstr ""
 
 #: ../gui/wxpython/web_services/widgets.py:283
 msgid "Cubic interpolation"
-msgstr ""
+msgstr "क्यूबिक इंटरपोलेशन"
 
 #: ../gui/wxpython/web_services/widgets.py:284
 msgid "Cubic spline interpolation"
-msgstr ""
+msgstr "क्यूबिक स्पलाइन इंटरपोलेशन"
 
 #: ../gui/wxpython/web_services/widgets.py:291
 msgid "Maximum columns to request from server at time:"
@@ -14666,7 +14687,7 @@ msgstr "कॉपी (&C)"
 
 #: ../gui/wxpython/wxplot/dialogs.py:357
 msgid "Copy regression statistics the clipboard (Ctrl+C)"
-msgstr "प्रतिगमन सांख्यिकी को क्लिपबोर्ड पर कॉपी करें (Ctrl+C)"
+msgstr "रिग्रेशन आंकड़े क्लिपबोर्ड पर कॉपी करें (Ctrl+C)"
 
 #: ../gui/wxpython/wxplot/dialogs.py:385
 msgid "Regression statistics copied to clipboard"
@@ -14783,11 +14804,11 @@ msgstr "स्वचालित अक्ष स्केलिंग (Automati
 
 #: ../gui/wxpython/wxplot/dialogs.py:1216
 msgid "Custom min"
-msgstr ""
+msgstr "कस्टम न्यूनतम (Custom min)"
 
 #: ../gui/wxpython/wxplot/dialogs.py:1224
 msgid "Custom max"
-msgstr ""
+msgstr "कस्टम अधिकतम (Custom max)"
 
 #: ../gui/wxpython/wxplot/dialogs.py:1232
 msgid "Log scale"
