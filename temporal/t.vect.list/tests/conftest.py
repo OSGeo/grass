@@ -25,7 +25,10 @@ def space_time_vector_dataset(tmp_path_factory):
             n=80,
             w=0,
             e=120,
+            b=0,
+            t=50,
             res=10,
+            res3=10,
             env=session.env,
         )
         names = [f"precipitation_{i}" for i in range(1, 7)]
