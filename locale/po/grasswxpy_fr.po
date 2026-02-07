@@ -5,13 +5,13 @@
 # Eve (alias 'phyto') <dendrosociology[a]yahoo.co.uk>, 2006.
 # Vincent Bain <bain toraval.fr>, 2007, 2012.
 # Sylvain Maillard <sylvain.maillard gmail.com>, 2011-2015, 2017.
-# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-31 15:57+0000\n"
-"PO-Revision-Date: 2025-12-26 20:58+0000\n"
+"PO-Revision-Date: 2026-02-07 01:25+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/fr/>\n"
 "Language: fr\n"
@@ -488,8 +488,9 @@ msgid ""
 "Please install it first and make sure\n"
 "it's in the PATH variable."
 msgstr ""
-"Le programme 'ffmpeg' n'a pas été trouvé.Merci de l'installer et de vérifier\n"
-"qu'il ets dans le PATH."
+"Le programme 'ffmpeg' n'a pas été trouvé.\n"
+"Veuillez d'abord l'installer et vous assurer qu'il\n"
+"est dans la variable PATH."
 
 #: ../gui/wxpython/animation/dialogs.py:1276
 msgid "AVI file:"
@@ -1259,7 +1260,7 @@ msgstr "mètres"
 
 #: ../gui/wxpython/core/units.py:36 ../gui/wxpython/psmap/utils.py:110
 msgid "kilometers"
-msgstr "kilomètre"
+msgstr "kilomètres"
 
 #: ../gui/wxpython/core/units.py:37 ../gui/wxpython/psmap/utils.py:112
 msgid "miles"

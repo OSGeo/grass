@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-31 15:57+0000\n"
-"PO-Revision-Date: 2026-02-05 20:05+0000\n"
+"PO-Revision-Date: 2026-02-06 14:23+0000\n"
 "Last-Translator: Abhimanyu  <abhimanyupg04@gmail.com>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grassmods/hi/>\n"
 "Language: hi\n"
@@ -6068,7 +6068,7 @@ msgstr ""
 #: ../general/g.mapset/main.c:96 ../general/g.proj/main.c:218
 #: ../locale/scriptstrings/r.mask_to_translate.c:20
 msgid "Create"
-msgstr ""
+msgstr "बनाएं"
 
 #: ../general/g.mapset/main.c:101
 msgid "List available mapsets and exit"
@@ -15527,7 +15527,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast.export_to_translate.c:12
 #: ../raster/r.out.gdal/main.c:198
 msgid "Data type"
-msgstr ""
+msgstr "डेटा टाइप"
 
 #: ../locale/scriptstrings/t.rast.export_to_translate.c:13
 msgid "Supported only for GTiff"
@@ -17351,7 +17351,7 @@ msgstr ""
 #: ../misc/m.nviz.image/args.c:824 ../misc/m.nviz.image/args.c:836
 #: ../misc/m.nviz.image/args.c:847
 msgid "Cutting planes"
-msgstr ""
+msgstr "कटिंग प्लेन्स (Cutting planes)"
 
 #: ../misc/m.nviz.image/args.c:814
 msgid "Cutting plane x,y,z coordinates"
@@ -28312,7 +28312,7 @@ msgstr ""
 
 #: ../raster/r.stats/main.c:191 ../raster/r.stats/main.c:198
 msgid "Coordinates"
-msgstr "कोआर्डिनेट"
+msgstr "निर्देशांक (Coordinates)"
 
 #: ../raster/r.stats/main.c:195
 msgid "Print x and y (column and row)"
