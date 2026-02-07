@@ -13,6 +13,7 @@ for details.
 from __future__ import annotations
 
 import copy
+import json
 import os
 import sys
 import uuid
@@ -21,7 +22,11 @@ from datetime import datetime
 from pathlib import Path
 from grass.exceptions import FatalError
 
-from .abstract_dataset import AbstractDataset, AbstractDatasetComparisonKeyStartTime
+from .abstract_dataset import (
+    AbstractDataset,
+    AbstractDatasetComparisonKeyStartTime,
+    TemporalJSONEncoder,
+)
 from .core import (
     get_current_mapset,
     get_sql_template_path,
@@ -177,6 +182,46 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         self.temporal_extent.print_shell_info()
         self.spatial_extent.print_shell_info()
         self.metadata.print_shell_info()
+
+    def print_json(self) -> None:
+        """Print information about this class as JSON to stdout."""
+        obj = self._to_json_dict()
+        print(json.dumps(obj, cls=TemporalJSONEncoder, indent=4))
+
+    def _to_json_dict(self):
+        """Build a dict from getters for JSON output."""
+        base = self.base
+        t_ext = self.temporal_extent
+        s_ext = self.spatial_extent
+        meta = self.metadata
+
+        data = {
+            "id": base.get_id(),
+            "name": base.get_name(),
+            "mapset": base.get_mapset(),
+            "creator": base.get_creator(),
+            "temporal_type": base.get_ttype(),
+            "creation_time": base.get_ctime(),
+            "start_time": t_ext.get_start_time(),
+            "end_time": t_ext.get_end_time(),
+            "north": s_ext.get_north(),
+            "south": s_ext.get_south(),
+            "east": s_ext.get_east(),
+            "west": s_ext.get_west(),
+            "top": s_ext.get_top(),
+            "bottom": s_ext.get_bottom(),
+            "title": meta.get_title(),
+            "description": meta.get_description(),
+            "number_of_maps": meta.get_number_of_maps(),
+        }
+        if getattr(t_ext, "get_granularity", None):
+            data["granularity"] = t_ext.get_granularity()
+        if getattr(t_ext, "get_map_time", None):
+            data["map_time"] = t_ext.get_map_time()
+        if getattr(t_ext, "get_unit", None) and t_ext.get_unit() is not None:
+            data["unit"] = t_ext.get_unit()
+
+        return data
 
     def print_history(self) -> None:
         """Print history information about this class in human readable
