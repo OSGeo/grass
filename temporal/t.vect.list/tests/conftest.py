@@ -1,4 +1,4 @@
-"""Fixture for t.rast.list test"""
+"""Fixture for t.vect.list test"""
 
 import os
 from datetime import datetime
@@ -63,8 +63,8 @@ def space_time_vector_dataset(tmp_path_factory):
         yield SimpleNamespace(
             session=session,
             name=dataset_name,
-            raster_names=names,
-            full_raster_names=full_names,
+            vector_names=names,
+            full_vector_names=full_names,
             start_times=times,
             env=session,
         )
