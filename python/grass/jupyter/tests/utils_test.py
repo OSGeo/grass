@@ -1,11 +1,7 @@
 """Test Utils funcitons"""
 
-from pathlib import Path
-
 import pytest
-from unittest.mock import patch
 
-import grass.jupyter as gj
 from grass.jupyter.utils import get_region, get_location_proj_string
 
 IPython = pytest.importorskip("IPython", reason="IPython package not available")
