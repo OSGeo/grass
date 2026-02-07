@@ -7,6 +7,32 @@
 #include <grass/datetime.h>
 static void make_incr(DateTime *, int, int, DateTime *);
 
+/* Handles the "round == 0" branch for (to < dt->to): increment using all lost values */
+static void apply_round0_lost(DateTime *dt, int to, DateTime *incr)
+{
+    int pos;
+    int ndays;
+
+    if (datetime_is_absolute(dt))
+        ndays = datetime_days_in_year(dt->year, dt->positive);
+    else
+        ndays = 0;
+
+    for (pos = dt->to; pos > to; pos--) {
+        make_incr(incr, pos, pos, dt);
+        incr->year = dt->year;
+        incr->month = dt->month;
+        incr->day = dt->day + ndays / 2;
+        incr->hour = dt->hour;
+        incr->minute = dt->minute;
+        incr->second = dt->second;
+
+        datetime_increment(dt, incr);
+
+        if (ndays > 0 && pos == DATETIME_DAY)
+            break;
+    }
+}
 /* Returns 1 if any “lost” component between dt->to down to (to+1) is non-default */
 static int has_lost_non_default(const DateTime *dt, int to, int x)
 {
@@ -155,23 +181,7 @@ static void round_lost_precision(DateTime *dt, int to, int round)
      }
  
      if (round == 0) {
-         ndays = datetime_is_absolute(dt)
-                     ? datetime_days_in_year(dt->year, dt->positive)
-                     : 0;
- 
-         for (pos = dt->to; pos > to; pos--) {
-             make_incr(&incr, pos, pos, dt);
-             incr.year = dt->year;
-             incr.month = dt->month;
-             incr.day = dt->day + ndays / 2;
-             incr.hour = dt->hour;
-             incr.minute = dt->minute;
-             incr.second = dt->second;
-             datetime_increment(dt, &incr);
- 
-             if (ndays > 0 && pos == DATETIME_DAY)
-                 break;
-        }
+         apply_round0_lost(dt, to, &incr);
     }
  }
 
