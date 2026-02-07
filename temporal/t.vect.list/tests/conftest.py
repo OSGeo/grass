@@ -49,11 +49,14 @@ def space_time_vector_dataset(tmp_path_factory):
             description="Random series generated for tests",
             env=session.env,
         )
+        dataset_file = tmp_path / "names.txt"
+        dataset_file.write_text("\n".join(names))
         gs.run_command(
             "t.register",
             type="vector",
+            flags="i",
             input=dataset_name,
-            maps=",".join(names),
+            file=dataset_file,
             start="2001-01-01",
             increment="1 month",
             env=session.env,

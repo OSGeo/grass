@@ -74,7 +74,7 @@
 # % description: Output format
 # % required: no
 # % multiple: no
-# % options: plain,line,json,yaml,csv
+# % options: plain,json,yaml,csv
 # % guisection: Formatting
 # %end
 
@@ -177,7 +177,7 @@ def main():
         # value which is always there (see above). Having no default and producing
         # an error when set would be more clear and would fit with using different
         # defaults for plain and CSV formats.
-    elif (output_format == "line" or method == "comma") and separator == "|":
+    elif (method == "comma") and separator == "|":
         # Same as for CSV: Custom default needed.
         # Pipe is currently not supported at all.
         separator = ","
