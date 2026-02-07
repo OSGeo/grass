@@ -13,6 +13,7 @@ ipywidgets = pytest.importorskip(
     "ipywidgets", reason="ipywidgets package not available"
 )
 
+
 def test_get_region():
     """Test that get_region returns currnt computational region as dictionary."""
     region = get_region()
@@ -21,6 +22,7 @@ def test_get_region():
     assert "south" in region
     assert "east" in region
     assert "west" in region
+
 
 def test_get_location_proj_string():
     """Test that get_location_proj_string returns projection of environment in PROJ.4 format"""
