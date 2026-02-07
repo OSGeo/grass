@@ -177,10 +177,6 @@ def main():
         # value which is always there (see above). Having no default and producing
         # an error when set would be more clear and would fit with using different
         # defaults for plain and CSV formats.
-    elif (method == "comma") and separator == "|":
-        # Same as for CSV: Custom default needed.
-        # Pipe is currently not supported at all.
-        separator = ","
 
     # Make sure the temporal database exists
     tgis.init()
