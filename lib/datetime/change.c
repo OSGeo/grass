@@ -5,8 +5,39 @@
  * Read the file GPL.TXT coming with GRASS for details.
  */
 #include <grass/datetime.h>
-
 static void make_incr(DateTime *, int, int, DateTime *);
+
+/* Returns 1 if any “lost” component between dt->to down to (to+1) is non-default */
+static int has_lost_non_default(const DateTime *dt, int to, int x)
+{
+    int pos;
+
+    for (pos = dt->to; pos > to; pos--) {
+        switch (pos) {
+        case DATETIME_MONTH:
+            if (dt->month != x)
+                return 1;
+            break;
+        case DATETIME_DAY:
+            if (dt->day != x)
+                return 1;
+            break;
+        case DATETIME_HOUR:
+            if (dt->hour != x)
+                return 1;
+            break;
+        case DATETIME_MINUTE:
+            if (dt->minute != x)
+                return 1;
+            break;
+        case DATETIME_SECOND:
+            if (dt->second != (double)x)
+                return 1;
+            break;
+        }
+    }
+    return 0;
+}
 
 /*!
  * \brief
@@ -112,24 +143,7 @@ static void round_lost_precision(DateTime *dt, int to, int round)
      if (round > 0) {
          int x = datetime_is_absolute(dt) ? 1 : 0;
  
-         for (carry = 0, pos = dt->to; carry == 0 && pos > to; pos--) {
-             switch (pos) {
-             case DATETIME_MONTH:
-                 if (dt->month != x) carry = 1;
-                 break;
-             case DATETIME_DAY:
-                 if (dt->day != x) carry = 1;
-                 break;
-             case DATETIME_HOUR:
-                 if (dt->hour != 0) carry = 1;
-                 break;
-             case DATETIME_MINUTE:
-                 if (dt->minute != 0) carry = 1;
-                 break;
-             case DATETIME_SECOND:
-                 if (dt->second != 0) carry = 1;
-                 break;
-             }
+            carry = has_lost_non_default(dt, to, x);
          }
  
          if (carry) {
