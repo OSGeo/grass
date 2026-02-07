@@ -70,26 +70,22 @@ def test_in_session(tmp_path):
 def test_addon_path_multiple_dirs(tmp_path):
     """Test that get_commands scans multiple directories in GRASS_ADDON_PATH"""
 
-    dir_a = tmp_path / "addon_a"
-    dir_b = tmp_path / "addon_b"
-    dir_a.mkdir()
-    dir_b.mkdir()
-
-    bin_a = dir_a / "scripts"
-    bin_b = dir_b / "bin"
-    bin_a.mkdir()
-    bin_b.mkdir()
+    test_dirs = [
+        (tmp_path / "addon_a", "my_custom_cmd_a"),
+        (tmp_path / "addon_b", "my_custom_cmd_b"),
+    ]
 
     ext = ".py" if sys.platform == "win32" else ""
-    script_a = f"my_custom_cmd_a{ext}"
-    script_b = f"my_custom_cmd_b{ext}"
 
-    for folder, script in [(bin_a, script_a), (bin_b, script_b)]:
-        file_path = folder / script
-        file_path.write_text("#!/bin/sh\necho 'Test ADDON PATH'", encoding="utf-8")
+    for path, cmd_name in test_dirs:
+        path.mkdir()
+        file_path = path / f"{cmd_name}{ext}"
+        file_path.write_text(
+            "#!/usr/bin/env python3\nprint('Test ADDON PATH')", encoding="utf-8"
+        )
         file_path.chmod(stat.S_IRWXU)
 
-    new_path = f"{dir_a}{os.pathsep}{dir_b}"
+    new_path = os.pathsep.join(str(p) for p, _ in test_dirs)
     env = os.environ.copy()
     env["GRASS_ADDON_PATH"] = new_path
 

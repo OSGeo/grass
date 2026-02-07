@@ -234,16 +234,20 @@ def get_commands(*, env=None):
                 else:
                     cmd.append(fname)
 
-    # Add addon path if it exists
-    search_paths = [gisbase]
-    if env.get("GRASS_ADDON_BASE"):
-        search_paths.append(env["GRASS_ADDON_BASE"])
-    if env.get("GRASS_ADDON_PATH"):
-        search_paths.extend([p for p in env["GRASS_ADDON_PATH"].split(os.pathsep) if p])
+    for directory in ("bin", "scripts"):
+        scan(gisbase, directory)
 
-    for base_dir in search_paths:
-        for directory in ("bin", "scripts"):
-            scan(base_dir, directory)
+    # Add addon path if it exists
+    if env.get("GRASS_ADDON_BASE"):
+        addon_base = env["GRASS_ADDON_BASE"]
+        scan(addon_base, "bin")
+        if not sys.platform.startswith("win"):
+            scan(addon_base, "scripts")
+
+    if env.get("GRASS_ADDON_PATH"):
+        for path in env["GRASS_ADDON_PATH"].split(os.pathsep):
+            if path:
+                scan(path, "")
 
     return set(cmd), scripts
 
