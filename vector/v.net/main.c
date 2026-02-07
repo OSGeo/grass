@@ -24,6 +24,7 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 #include "proto.h"
+#include <grass/gjson.h>
 
 int main(int argc, char **argv)
 {
@@ -172,7 +173,7 @@ int main(int argc, char **argv)
         turntable(&opt);
     }
     else { /* report */
-        report(In, afield, nfield, act);
+        report(In, afield, nfield, act, opt.format->answer);
     }
 
     if (In)
