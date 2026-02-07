@@ -214,20 +214,6 @@ def main():
         # Pipe is currently not supported at all.
         separator = ","
 
-    if output_format == "line" or method == "comma":
-        columns_list = columns.split(",")
-        if len(columns_list) > 1:
-            gs.fatal(
-                message_option_value_excludes_option_value(
-                    option_name="format",
-                    option_value=output_format,
-                    excluded_option_name="columns",
-                    excluded_option_value=columns,
-                    reason=_("Only one column is allowed (not {num_columns})").format(
-                        num_columns=len(columns_list)
-                    ),
-                )
-            )
     # Make sure the temporal database exists
     tgis.init()
 
