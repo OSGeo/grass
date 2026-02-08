@@ -9,6 +9,23 @@
 static int _datetime_add_field(DateTime *, DateTime *, int);
 static int _datetime_subtract_field(DateTime *, DateTime *, int);
 
+/* NEW helpers to reduce cognitive complexity */
+static int subtract_relative_field(DateTime *src, DateTime *incr, int field);
+static int subtract_absolute_field(DateTime *src, DateTime *incr, int field);
+
+static int subtract_rel_second(DateTime *src, DateTime *incr);
+static int subtract_rel_minute(DateTime *src, DateTime *incr);
+static int subtract_rel_hour(DateTime *src, DateTime *incr);
+static int subtract_rel_day(DateTime *src, DateTime *incr);
+static int subtract_rel_month(DateTime *src, DateTime *incr);
+static int subtract_rel_year(DateTime *src, DateTime *incr);
+
+static int subtract_abs_second(DateTime *src, DateTime *incr);
+static int subtract_abs_minute(DateTime *src, DateTime *incr);
+static int subtract_abs_hour(DateTime *src, DateTime *incr);
+static int subtract_abs_day(DateTime *src, DateTime *incr);
+static int subtract_abs_month(DateTime *src, DateTime *incr);
+static int subtract_abs_year(DateTime *src, DateTime *incr);
 /*****************************************************************/
 #if 0  /* unused */
 static double _debug_decimal(DateTime * dt)
@@ -152,219 +169,11 @@ int datetime_increment(DateTime *src, DateTime *incr)
  */
 static int _datetime_subtract_field(DateTime *src, DateTime *incr, int field)
 {
+    if (src->mode == DATETIME_RELATIVE)
+        return subtract_relative_field(src, incr, field);
 
-    if (src->mode == DATETIME_RELATIVE) {
-        DateTime srcinc, tinc;
-        int borrow = 0;
-
-        datetime_copy(&tinc, src);
-        datetime_copy(&srcinc, incr);
-        switch (field) {
-        case DATETIME_SECOND:
-            /* no "-1" here - remember seconds is floating point */
-            /* might result in over borrowing, so have to check */
-            if (src->second < incr->second) {
-                if ((int)(incr->second - src->second) ==
-                    (incr->second - src->second)) { /* diff is integer */
-                    borrow = 1 + (incr->second - src->second - 1) / 60;
-                }
-                else
-                    borrow = 1 + (incr->second - src->second) / 60;
-                src->second += borrow * 60;
-            }
-            src->second -= incr->second;
-            if (borrow) {
-                srcinc.minute = borrow;
-                _datetime_subtract_field(src, &srcinc, DATETIME_MINUTE);
-            }
-            break;
-
-        case DATETIME_MINUTE:
-            if (src->minute < incr->minute) {
-                borrow = 1 + (incr->minute - src->minute - 1) / 60;
-                src->minute += borrow * 60;
-            }
-            src->minute -= incr->minute;
-            if (borrow) {
-                srcinc.hour = borrow;
-                _datetime_subtract_field(src, &srcinc, DATETIME_HOUR);
-            }
-            break;
-
-        case DATETIME_HOUR:
-            if (src->hour < incr->hour) {
-                borrow = 1 + (incr->hour - src->hour - 1) / 24;
-                src->hour += borrow * 24;
-            }
-            src->hour -= incr->hour;
-            if (borrow) {
-                srcinc.day = borrow;
-                _datetime_subtract_field(src, &srcinc, DATETIME_DAY);
-            }
-            break;
-
-        case DATETIME_DAY:
-            if (src->day < incr->day) { /* SIGN CHANGE */
-                src->day = incr->day - src->day;
-                datetime_invert_sign(src);
-                tinc.day = 0;
-                src->hour = 0;
-                src->minute = 0;
-                src->second = 0.0;
-                datetime_increment(src, &tinc); /* no sign change */
-            }
-            else
-                src->day -= incr->day;
-            break;
-
-        case DATETIME_MONTH:
-            if (src->month < incr->month) {
-                borrow = 1 + (incr->month - src->month - 1) / 12;
-                src->month += borrow * 12;
-            }
-            src->month -= incr->month;
-            if (borrow) {
-                srcinc.year = borrow;
-                _datetime_subtract_field(src, &srcinc, DATETIME_YEAR);
-            }
-            break;
-
-        case DATETIME_YEAR:
-            if (src->year < incr->year) { /* SIGN CHANGE */
-                src->year = incr->year - src->year;
-                datetime_invert_sign(src);
-                tinc.year = 0;
-                src->month = 0;
-                datetime_increment(src, &tinc); /* no sign change */
-            }
-            else
-                src->year -= incr->year;
-            break;
-        }
-    }
-
-    else if (src->mode == DATETIME_ABSOLUTE) {
-        DateTime srcinc, tinc, cpsrc;
-        int i, newdays, borrow = 0;
-
-        datetime_copy(&srcinc, incr); /* makes srcinc valid incr */
-        switch (field) {
-        case DATETIME_SECOND:
-            if (src->second < incr->second) {
-                borrow = 1 + (incr->second - src->second - 1) / 60;
-                src->second += borrow * 60;
-            }
-            src->second -= incr->second;
-            if (borrow) {
-                srcinc.minute = borrow;
-                _datetime_subtract_field(src, &srcinc, DATETIME_MINUTE);
-            }
-            break;
-
-        case DATETIME_MINUTE:
-            if (src->minute < incr->minute) {
-                borrow = 1 + (incr->minute - src->minute - 1) / 60;
-                src->minute += borrow * 60;
-            }
-            src->minute -= incr->minute;
-            if (borrow) {
-                srcinc.hour = borrow;
-                _datetime_subtract_field(src, &srcinc, DATETIME_HOUR);
-            }
-            break;
-
-        case DATETIME_HOUR:
-            if (src->hour < incr->hour) {
-                borrow = 1 + (incr->hour - src->hour - 1) / 24;
-                src->hour += borrow * 24;
-            }
-            src->hour -= incr->hour;
-            if (borrow) {
-                srcinc.day = borrow;
-                _datetime_subtract_field(src, &srcinc, DATETIME_DAY);
-            }
-            break;
-
-        case DATETIME_DAY:
-
-            if (src->day <= incr->day) {
-                datetime_copy(&cpsrc, src);
-                datetime_change_from_to(&cpsrc, DATETIME_YEAR, DATETIME_MONTH,
-                                        -1);
-                datetime_set_increment_type(&cpsrc, &tinc);
-                tinc.month = 1;
-                newdays = src->day;
-                while (newdays <= incr->day) {
-                    _datetime_subtract_field(&cpsrc, &tinc, DATETIME_MONTH);
-                    newdays += datetime_days_in_month(cpsrc.year, cpsrc.month,
-                                                      cpsrc.positive);
-                    borrow++;
-                }
-                src->day = newdays;
-            }
-            src->day -= incr->day;
-            if (borrow) {
-                /*
-                   src->year = cpsrc.year;
-                   src->month = cpsrc.month;
-                   src->positive = cpsrc.positive;
-                 */
-                /* check here & below - srcinc may be a day-second interval -
-                 * mess anything up? */
-                srcinc.month = borrow;
-                _datetime_subtract_field(src, &srcinc, DATETIME_MONTH);
-            }
-            break;
-
-        case DATETIME_MONTH:
-            if (src->month <= incr->month) {
-                borrow = 1 + (incr->month - src->month) / 12;
-                src->month += borrow * 12;
-            }
-            src->month -= incr->month;
-            if (borrow) {
-                srcinc.year = borrow;
-                _datetime_subtract_field(src, &srcinc, DATETIME_YEAR);
-            }
-            break;
-
-        case DATETIME_YEAR:
-            if (src->year <= incr->year) { /* SIGN CHANGE */
-                datetime_set_increment_type(src, &tinc);
-                tinc.positive = src->positive;
-                if (datetime_in_interval_year_month(tinc.to)) {
-                    tinc.month = src->month - 1; /* convert to REL */
-                    src->year = incr->year - src->year + 1;
-                    /* +1 to skip 0 */
-                    datetime_invert_sign(src);
-                    tinc.year = 0;
-                    src->month = 1;
-                    datetime_increment(src, &tinc); /* no sign change */
-                }
-                else {                       /* have to convert to days */
-                    tinc.day = src->day - 1; /* convert to REL */
-                    for (i = src->month - 1; i > 0; i--) {
-                        tinc.day +=
-                            datetime_days_in_month(src->year, i, src->positive);
-                    }
-                    tinc.hour = src->hour;
-                    tinc.minute = src->minute;
-                    tinc.second = src->second;
-                    src->year = incr->year - src->year + 1;
-                    /* +1 to skip 0 */
-                    datetime_invert_sign(src);
-                    src->month = 1;
-                    src->day = 1;
-                    src->hour = src->minute = 0;
-                    src->second = 0;
-                    datetime_increment(src, &tinc); /* no sign change */
-                }
-            }
-            else
-                src->year -= incr->year;
-            break;
-        }
-    }
+    if (src->mode == DATETIME_ABSOLUTE)
+        return subtract_absolute_field(src, incr, field);
 
     return 0;
 }
@@ -494,3 +303,327 @@ static int _datetime_add_field(DateTime *src, DateTime *incr, int field)
 
     return 0;
 }
+
+/* ---------------- NEW: RELATIVE dispatcher ---------------- */
+static int subtract_relative_field(DateTime *src, DateTime *incr, int field)
+{
+    switch (field) {
+    case DATETIME_SECOND:
+        return subtract_rel_second(src, incr);
+    case DATETIME_MINUTE:
+        return subtract_rel_minute(src, incr);
+    case DATETIME_HOUR:
+        return subtract_rel_hour(src, incr);
+    case DATETIME_DAY:
+        return subtract_rel_day(src, incr);
+    case DATETIME_MONTH:
+        return subtract_rel_month(src, incr);
+    case DATETIME_YEAR:
+        return subtract_rel_year(src, incr);
+    default:
+        return 0;
+    }
+}
+
+static int subtract_rel_second(DateTime *src, DateTime *incr)
+{
+    DateTime srcinc;
+    int borrow = 0;
+
+    datetime_copy(&srcinc, incr);
+
+    if (src->second < incr->second) {
+        double diff = incr->second - src->second;
+
+        /* keep original integer-diff special case */
+        if ((int)diff == diff)
+            borrow = 1 + (diff - 1) / 60;
+        else
+            borrow = 1 + diff / 60;
+
+        src->second += borrow * 60;
+    }
+
+    src->second -= incr->second;
+
+    if (borrow) {
+        srcinc.minute = borrow;
+        _datetime_subtract_field(src, &srcinc, DATETIME_MINUTE);
+    }
+    return 0;
+}
+
+static int subtract_rel_minute(DateTime *src, DateTime *incr)
+{
+    DateTime srcinc;
+    int borrow = 0;
+
+    datetime_copy(&srcinc, incr);
+
+    if (src->minute < incr->minute) {
+        borrow = 1 + (incr->minute - src->minute - 1) / 60;
+        src->minute += borrow * 60;
+    }
+    src->minute -= incr->minute;
+
+    if (borrow) {
+        srcinc.hour = borrow;
+        _datetime_subtract_field(src, &srcinc, DATETIME_HOUR);
+    }
+    return 0;
+}
+
+static int subtract_rel_hour(DateTime *src, DateTime *incr)
+{
+    DateTime srcinc;
+    int borrow = 0;
+
+    datetime_copy(&srcinc, incr);
+
+    if (src->hour < incr->hour) {
+        borrow = 1 + (incr->hour - src->hour - 1) / 24;
+        src->hour += borrow * 24;
+    }
+    src->hour -= incr->hour;
+
+    if (borrow) {
+        srcinc.day = borrow;
+        _datetime_subtract_field(src, &srcinc, DATETIME_DAY);
+    }
+    return 0;
+}
+
+static int subtract_rel_day(DateTime *src, DateTime *incr)
+{
+    DateTime tinc;
+
+    /* keep original sign-change behavior exactly */
+    if (src->day < incr->day) { /* SIGN CHANGE */
+        datetime_copy(&tinc, src);
+        src->day = incr->day - src->day;
+        datetime_invert_sign(src);
+        tinc.day = 0;
+        src->hour = 0;
+        src->minute = 0;
+        src->second = 0.0;
+        datetime_increment(src, &tinc); /* no sign change */
+        return 0;
+    }
+
+    src->day -= incr->day;
+    return 0;
+}
+
+static int subtract_rel_month(DateTime *src, DateTime *incr)
+{
+    DateTime srcinc;
+    int borrow = 0;
+
+    datetime_copy(&srcinc, incr);
+
+    if (src->month < incr->month) {
+        borrow = 1 + (incr->month - src->month - 1) / 12;
+        src->month += borrow * 12;
+    }
+    src->month -= incr->month;
+
+    if (borrow) {
+        srcinc.year = borrow;
+        _datetime_subtract_field(src, &srcinc, DATETIME_YEAR);
+    }
+    return 0;
+}
+
+static int subtract_rel_year(DateTime *src, DateTime *incr)
+{
+    DateTime tinc;
+
+    /* keep original sign-change behavior exactly */
+    if (src->year < incr->year) { /* SIGN CHANGE */
+        datetime_copy(&tinc, src);
+        src->year = incr->year - src->year;
+        datetime_invert_sign(src);
+        tinc.year = 0;
+        src->month = 0;
+        datetime_increment(src, &tinc); /* no sign change */
+        return 0;
+    }
+
+    src->year -= incr->year;
+    return 0;
+}
+
+/* ---------------- NEW: ABSOLUTE dispatcher ---------------- */
+static int subtract_absolute_field(DateTime *src, DateTime *incr, int field)
+{
+    switch (field) {
+    case DATETIME_SECOND:
+        return subtract_abs_second(src, incr);
+    case DATETIME_MINUTE:
+        return subtract_abs_minute(src, incr);
+    case DATETIME_HOUR:
+        return subtract_abs_hour(src, incr);
+    case DATETIME_DAY:
+        return subtract_abs_day(src, incr);
+    case DATETIME_MONTH:
+        return subtract_abs_month(src, incr);
+    case DATETIME_YEAR:
+        return subtract_abs_year(src, incr);
+    default:
+        return 0;
+    }
+}
+
+static int subtract_abs_second(DateTime *src, DateTime *incr)
+{
+    DateTime srcinc;
+    int borrow = 0;
+
+    datetime_copy(&srcinc, incr); /* makes srcinc valid incr */
+
+    if (src->second < incr->second) {
+        borrow = 1 + (incr->second - src->second - 1) / 60;
+        src->second += borrow * 60;
+    }
+    src->second -= incr->second;
+
+    if (borrow) {
+        srcinc.minute = borrow;
+        _datetime_subtract_field(src, &srcinc, DATETIME_MINUTE);
+    }
+    return 0;
+}
+
+static int subtract_abs_minute(DateTime *src, DateTime *incr)
+{
+    DateTime srcinc;
+    int borrow = 0;
+
+    datetime_copy(&srcinc, incr);
+
+    if (src->minute < incr->minute) {
+        borrow = 1 + (incr->minute - src->minute - 1) / 60;
+        src->minute += borrow * 60;
+    }
+    src->minute -= incr->minute;
+
+    if (borrow) {
+        srcinc.hour = borrow;
+        _datetime_subtract_field(src, &srcinc, DATETIME_HOUR);
+    }
+    return 0;
+}
+
+static int subtract_abs_hour(DateTime *src, DateTime *incr)
+{
+    DateTime srcinc;
+    int borrow = 0;
+
+    datetime_copy(&srcinc, incr);
+
+    if (src->hour < incr->hour) {
+        borrow = 1 + (incr->hour - src->hour - 1) / 24;
+        src->hour += borrow * 24;
+    }
+    src->hour -= incr->hour;
+
+    if (borrow) {
+        srcinc.day = borrow;
+        _datetime_subtract_field(src, &srcinc, DATETIME_DAY);
+    }
+    return 0;
+}
+
+static int subtract_abs_day(DateTime *src, DateTime *incr)
+{
+    DateTime srcinc, tinc, cpsrc;
+    int newdays, borrow = 0;
+
+    datetime_copy(&srcinc, incr);
+
+    if (src->day <= incr->day) {
+        datetime_copy(&cpsrc, src);
+        datetime_change_from_to(&cpsrc, DATETIME_YEAR, DATETIME_MONTH, -1);
+        datetime_set_increment_type(&cpsrc, &tinc);
+        tinc.month = 1;
+
+        newdays = src->day;
+        while (newdays <= incr->day) {
+            _datetime_subtract_field(&cpsrc, &tinc, DATETIME_MONTH);
+            newdays += datetime_days_in_month(cpsrc.year, cpsrc.month,
+                                              cpsrc.positive);
+            borrow++;
+        }
+        src->day = newdays;
+    }
+
+    src->day -= incr->day;
+
+    if (borrow) {
+        srcinc.month = borrow;
+        _datetime_subtract_field(src, &srcinc, DATETIME_MONTH);
+    }
+    return 0;
+}
+
+static int subtract_abs_month(DateTime *src, DateTime *incr)
+{
+    DateTime srcinc;
+    int borrow = 0;
+
+    datetime_copy(&srcinc, incr);
+
+    if (src->month <= incr->month) {
+        borrow = 1 + (incr->month - src->month) / 12;
+        src->month += borrow * 12;
+    }
+    src->month -= incr->month;
+
+    if (borrow) {
+        srcinc.year = borrow;
+        _datetime_subtract_field(src, &srcinc, DATETIME_YEAR);
+    }
+    return 0;
+}
+
+static int subtract_abs_year(DateTime *src, DateTime *incr)
+{
+    DateTime tinc;
+    int i;
+
+    if (src->year <= incr->year) { /* SIGN CHANGE */
+        datetime_set_increment_type(src, &tinc);
+        tinc.positive = src->positive;
+
+        if (datetime_in_interval_year_month(tinc.to)) {
+            tinc.month = src->month - 1; /* convert to REL */
+            src->year = incr->year - src->year + 1; /* +1 to skip 0 */
+            datetime_invert_sign(src);
+            tinc.year = 0;
+            src->month = 1;
+            datetime_increment(src, &tinc); /* no sign change */
+        }
+        else { /* have to convert to days */
+            tinc.day = src->day - 1; /* convert to REL */
+            for (i = src->month - 1; i > 0; i--) {
+                tinc.day += datetime_days_in_month(src->year, i, src->positive);
+            }
+            tinc.hour = src->hour;
+            tinc.minute = src->minute;
+            tinc.second = src->second;
+
+            src->year = incr->year - src->year + 1; /* +1 to skip 0 */
+            datetime_invert_sign(src);
+            src->month = 1;
+            src->day = 1;
+            src->hour = src->minute = 0;
+            src->second = 0;
+            datetime_increment(src, &tinc); /* no sign change */
+        }
+        return 0;
+    }
+
+    src->year -= incr->year;
+    return 0;
+}
+
