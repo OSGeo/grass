@@ -273,15 +273,16 @@ static void normalize_year_day(DateTime *dt)
            datetime_days_in_month(dt->year, dt->month, dt->positive)) {
         dt->day -= datetime_days_in_month(dt->year, dt->month, dt->positive);
 
-        if (dt->month == 12) {
+        if (dt->month == 12) { /* carry to year */
             dt->year++;
-            if (dt->year == 0)
-                dt->year = 1;
+
+            /* avoid extra nested if (S134) */
+            dt->year = (dt->year == 0) ? 1 : dt->year;
+
             dt->month = 1;
         }
-        else {
+        else /* no carry to year */
             dt->month++;
-        }
     }
 }
 
