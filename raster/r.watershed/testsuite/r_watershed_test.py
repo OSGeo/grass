@@ -167,12 +167,12 @@ class TestWatershed(TestCase):
         )
 
         reference = {
-            "n": 2602530,
-            "null_cells": 16180,
-            "min": -832420.692197234,
-            "max": 429067.069562766,
-            "mean": -343.747566806773,
-            "stddev": 16259.307703876,
+            "n": 2025000,
+            "null_cells": 0,
+            "min": -638532.804697762,
+            "max": 330838.090289589,
+            "mean": -262.230525740842,
+            "stddev": 13021.2714575589,
         }
 
         self.assertRasterFitsUnivar(
@@ -192,12 +192,12 @@ class TestWatershed(TestCase):
         )
 
         reference = {
-            "n": 2602530,
-            "null_cells": 16180,
-            "min": -832531,
-            "max": 441312,
-            "mean": -287.797973894633,
-            "stddev": 16793.5124227608,
+            "n": 2025000,
+            "null_cells": 0,
+            "min": -638659,
+            "max": 332088,
+            "mean": -211.916512098765,
+            "stddev": 13234.9430084911,
         }
 
         self.assertRasterFitsUnivar(
@@ -216,12 +216,12 @@ class TestWatershed(TestCase):
         )
 
         reference = {
-            "n": 2456668,
-            "null_cells": 162042,
+            "n": 1879336,
+            "null_cells": 145664,
             "min": 2,
-            "max": 274,
-            "mean": 142.826128723946,
-            "stddev": 86.332946971229,
+            "max": 256,
+            "mean": 123.411570895252,
+            "stddev": 83.5230038874193,
         }
 
         self.assertRasterFitsUnivar(
@@ -240,12 +240,12 @@ class TestWatershed(TestCase):
         )
 
         reference = {
-            "n": 2026515,
-            "null_cells": 592195,
+            "n": 1554577,
+            "null_cells": 470423,
             "min": 2,
-            "max": 20,
-            "mean": 12.6790475274054,
-            "stddev": 5.81111419543262,
+            "max": 12,
+            "mean": 7.06497651772797,
+            "stddev": 3.5766222698306,
         }
 
         self.assertRasterFitsUnivar(
@@ -264,12 +264,12 @@ class TestWatershed(TestCase):
         )
 
         reference = {
-            "n": 15740,
-            "null_cells": 2602970,
+            "n": 12656,
+            "null_cells": 2012344,
             "min": 2,
-            "max": 274,
-            "mean": 141.941041931385,
-            "stddev": 83.9583249945486,
+            "max": 256,
+            "mean": 122.276074589128,
+            "stddev": 79.4923046646631,
         }
 
         self.assertRasterFitsUnivar(
@@ -288,12 +288,12 @@ class TestWatershed(TestCase):
         )
 
         reference = {
-            "n": 2456668,
-            "null_cells": 162042,
+            "n": 1879336,
+            "null_cells": 145664,
             "min": 1,
-            "max": 274,
-            "mean": 142.308489384809,
-            "stddev": 86.3166284098813,
+            "max": 256,
+            "mean": 122.882656959692,
+            "stddev": 83.5268097330046,
         }
 
         self.assertRasterFitsUnivar(
@@ -312,12 +312,12 @@ class TestWatershed(TestCase):
         )
 
         reference = {
-            "n": 2602530,
-            "null_cells": 16180,
+            "n": 2025000,
+            "null_cells": 0,
             "min": 0.03,
-            "max": 3.07919076172568,
-            "mean": 0.153479116301884,
-            "stddev": 0.163185729045392,
+            "max": 4.41823404686636,
+            "mean": 0.156939437643538,
+            "stddev": 0.20267971226026,
         }
 
         self.assertRasterFitsUnivar(
@@ -336,12 +336,12 @@ class TestWatershed(TestCase):
         )
 
         reference = {
-            "n": 2602530,
-            "null_cells": 16180,
+            "n": 2025000,
+            "null_cells": 0,
             "min": 0.03,
-            "max": 5.98881244191164,
-            "mean": 0.192025694191372,
-            "stddev": 0.240997329983397,
+            "max": 7.68844387178161,
+            "mean": 0.200451120710677,
+            "stddev": 0.296414490325605,
         }
 
         self.assertRasterFitsUnivar(
@@ -360,12 +360,12 @@ class TestWatershed(TestCase):
         )
 
         reference = {
-            "n": 2596072,
-            "null_cells": 22638,
-            "min": 1.94904979310483,
-            "max": 26.8104270376686,
-            "mean": 6.97353811209655,
-            "stddev": 2.28656463030412,
+            "n": 2019304,
+            "null_cells": 5696,
+            "min": 1.1460354442537,
+            "max": 26.8009283618635,
+            "mean": 6.82155488487583,
+            "stddev": 2.63011648211108,
         }
 
         self.assertRasterFitsUnivar(
@@ -384,12 +384,12 @@ class TestWatershed(TestCase):
         )
 
         reference = {
-            "n": 2596072,
-            "null_cells": 22638,
+            "n": 2019304,
+            "null_cells": 5696,
             "min": 0.000144249450029743,
-            "max": 1207802.52599239,
-            "mean": 73.7040561277494,
-            "stddev": 2750.87096268131,
+            "max": 1286492.83164802,
+            "mean": 115.490128734994,
+            "stddev": 4273.12317493444,
         }
 
         self.assertRasterFitsUnivar(
