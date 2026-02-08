@@ -17,37 +17,98 @@ It acts as a high-level orchestrator that integrates:
 - a working directory manager (template creation and file discovery)
 - a Jupyter server instance (start, stop, URL management)
 - registration of running servers in a global server registry
+- registration of cleanup routines to stop servers on:
+  - Normal interpreter exit
+  - SIGINT (e.g., Ctrl+C)
+  - SIGTERM (e.g., kill from shell)
+- stopping all servers on global cleanup (e.g., GRASS shutdown).
 
 Designed for use within GRASS GUI tools or scripting environments.
 """
 
+import atexit
+import signal
+import sys
+
 from grass.workflows.directory import JupyterDirectoryManager
 from grass.workflows.server import JupyterServerInstance, JupyterServerRegistry
+from grass.workflows.utils import is_jupyter_installed, is_wx_html2_available
+
+
+_cleanup_registered = False
+
+
+def _register_global_cleanup():
+    """Register cleanup handlers once at module level.
+
+    This ensures that all Jupyter servers are properly stopped when:
+    - The program exits normally (atexit)
+    - SIGINT is received (Ctrl+C)
+    - SIGTERM is received (kill command)
+
+    Signal handlers are process-global, so we register them only once
+    and have them clean up all servers via the registry.
+    """
+    global _cleanup_registered
+    if _cleanup_registered:
+        return
+
+    def cleanup_all():
+        """Stop all registered servers."""
+        try:
+            JupyterServerRegistry.get().stop_all_servers()
+        except Exception:
+            pass
+
+    def handle_signal(signum, frame):
+        """Handle termination signals."""
+        cleanup_all()
+        sys.exit(0)
+
+    atexit.register(cleanup_all)
+    signal.signal(signal.SIGINT, handle_signal)
+    signal.signal(signal.SIGTERM, handle_signal)
+    _cleanup_registered = True
 
 
 class JupyterEnvironment:
-    """Orchestrates directory manager and server startup/shutdown."""
+    """Orchestrates directory manager and Jupyter server lifecycle.
 
-    def __init__(self, workdir, create_template):
+    :param workdir: Directory for notebooks
+    :param create_template: Whether to create template notebooks
+    :param integrated: If False, server is intended to be opened in external browser.
+                       If True, server is integrated into GRASS GUI and will be
+                       automatically stopped on GUI exit.
+    """
+
+    def __init__(self, workdir, create_template, integrated):
         self.directory = JupyterDirectoryManager(workdir, create_template)
         self.server = JupyterServerInstance(workdir)
+        self.integrated = integrated
 
     def setup(self):
         """Prepare files and start server."""
+        if not is_jupyter_installed():
+            raise RuntimeError(_("Jupyter Notebook is not installed"))
+
+        if self.integrated and not is_wx_html2_available():
+            raise RuntimeError(_("wx.html2 (WebView) support is not available"))
+
         # Prepare files
         self.directory.prepare_files()
 
         # Start server
-        self.server.start_server()
+        self.server.start_server(self.integrated)
 
         # Register server in global registry
-        JupyterServerRegistry.get().register(self.server)
+        if self.integrated:
+            _register_global_cleanup()
+            JupyterServerRegistry.get().register(self.server)
 
     def stop(self):
-        """Stop server and unregister it."""
-        try:
+        """Stop server only if integrated."""
+        if self.integrated:
             self.server.stop_server()
-        finally:
             JupyterServerRegistry.get().unregister(self.server)
 
     @classmethod
