@@ -182,11 +182,33 @@ static int _datetime_subtract_field(DateTime *src, DateTime *incr, int field)
 
 /* When absolute is zero, all fields carry toward the future */
 /* When absolute is one, sign of datetime is ignored */
+/* NEW helpers for _datetime_carry() */
+static void carry_day_second(DateTime *dt);
+static void maybe_temp_sign_year(DateTime *dt, int absolute);
+static void normalize_year_month(DateTime *dt);
+static void normalize_year_day(DateTime *dt);
+static void undo_temp_sign_year(DateTime *dt, int absolute);
+
 static int _datetime_carry(DateTime *dt, int absolute)
+{
+    carry_day_second(dt);
+
+    maybe_temp_sign_year(dt, absolute);
+
+    if (dt->from == DATETIME_YEAR && dt->to >= DATETIME_MONTH)
+        normalize_year_month(dt);
+
+    if (dt->mode == DATETIME_ABSOLUTE && dt->to > DATETIME_MONTH)
+        normalize_year_day(dt);
+
+    undo_temp_sign_year(dt, absolute);
+
+    return 0;
+}
+static void carry_day_second(DateTime *dt)
 {
     int i, carry;
 
-    /* normalize day-sec (same for ABSOLUTE & RELATIVE) */
     for (i = dt->to; i > dt->from && i > DATETIME_DAY; i--) {
         switch (i) {
         case DATETIME_SECOND:
@@ -212,67 +234,67 @@ static int _datetime_carry(DateTime *dt, int absolute)
             break;
         }
     }
+}
 
-    /* give year a SIGN, temporarily */
-    if (!absolute && !dt->positive && dt->mode == DATETIME_ABSOLUTE) {
+static void maybe_temp_sign_year(DateTime *dt, int absolute)
+{
+    if (!absolute && !dt->positive && dt->mode == DATETIME_ABSOLUTE)
         dt->year = -dt->year;
+}
+
+static void normalize_year_month(DateTime *dt)
+{
+    int carry;
+
+    if (dt->mode == DATETIME_ABSOLUTE) {
+        if (dt->month > 12) {
+            carry = (dt->month - 1) / 12;
+            dt->year += carry;
+            if (dt->year == 0)
+                dt->year = 1;
+            dt->month -= carry * 12;
+        }
     }
+    else {
+        if (dt->month >= 12) {
+            carry = dt->month / 12;
+            dt->year += carry;
+            dt->month -= carry * 12;
+        }
+    }
+}
 
-    if (dt->from == DATETIME_YEAR && dt->to >= DATETIME_MONTH) {
+static void normalize_year_day(DateTime *dt)
+{
+    while (dt->day >
+           datetime_days_in_month(dt->year, dt->month, dt->positive)) {
+        dt->day -= datetime_days_in_month(dt->year, dt->month, dt->positive);
 
-        /* normalize yr-mo */
-        if (dt->mode == DATETIME_ABSOLUTE) {
-            if (dt->month > 12) {             /* month will never be zero */
-                carry = (dt->month - 1) / 12; /* no carry until 13 */
-                dt->year += carry;
-                if (dt->year == 0)
-                    dt->year = 1;
-                dt->month -= carry * 12;
-                /*
-                   if(dt->month == 0) dt->month = 1;
-                   shouldn't happen */
-            }
+        if (dt->month == 12) {
+            dt->year++;
+            if (dt->year == 0)
+                dt->year = 1;
+            dt->month = 1;
         }
         else {
-            if (dt->month >= 12) {
-                carry = dt->month / 12;
-                dt->year += carry;
-                dt->month -= carry * 12;
-            }
+            dt->month++;
         }
     }
+}
 
-    /* normalize yr-day */
-    if (dt->mode == DATETIME_ABSOLUTE && dt->to > DATETIME_MONTH) {
-
-        while (dt->day >
-               datetime_days_in_month(dt->year, dt->month, dt->positive)) {
-            dt->day -=
-                datetime_days_in_month(dt->year, dt->month, dt->positive);
-            if (dt->month == 12) { /* carry to year */
-                dt->year++;
-                if (dt->year == 0)
-                    dt->year = 1;
-                dt->month = 1;
-            }
-            else /* no carry to year */
-                dt->month++;
-
-        } /* end while */
-    } /* end if */
-
-    /* undo giving year a SIGN, temporarily */
+static void undo_temp_sign_year(DateTime *dt, int absolute)
+{
     if (!absolute && dt->mode == DATETIME_ABSOLUTE) {
         if (dt->year < 0) {
             dt->year = -dt->year;
             dt->positive = 0;
         }
-        else
+        else {
             dt->positive = 1;
+        }
     }
-
-    return 0;
 }
+
 
 static int _datetime_add_field(DateTime *src, DateTime *incr, int field)
 {
