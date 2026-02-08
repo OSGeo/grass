@@ -1,4 +1,4 @@
-FROM alpine:3.21@sha256:c3f8e73fdb79deaebaa2037150150191b9dcbfba68b4a46d70103204c53f4709 as common
+FROM alpine:3.23@sha256:25109184c71bdad752c8312a8623239686a9a2071e8825f20acb8f2198c3f659 AS common
 
 # Based on:
 # https://github.com/mundialis/docker-grass-gis/blob/master/Dockerfile
@@ -59,7 +59,7 @@ ENV GRASS_RUN_PACKAGES="\
       python3 \
       pdal \
       pdal-dev \
-      postgresql15-client \
+      postgresql18-client \
       proj-util \
       sqlite \
       sqlite-libs \
@@ -80,7 +80,7 @@ RUN echo "Install main packages";\
     apk add --no-cache $GRASS_RUN_PACKAGES
 
 
-FROM common as build
+FROM common AS build
 
 # ================
 # CONFIG VARIABLES
@@ -168,6 +168,7 @@ RUN echo "  => Configure and compile grass" && \
     ldconfig /etc/ld.so.conf.d
 
 # Build the GDAL-GRASS plugin
+# renovate: datasource=github-tags depName=OSGeo/gdal-grass
 ARG GDAL_GRASS_VERSION=2.0.0
 RUN git clone --branch $GDAL_GRASS_VERSION --depth 1 https://github.com/OSGeo/gdal-grass.git /src/gdal-grass
 WORKDIR /src/gdal-grass
@@ -187,7 +188,8 @@ RUN cp /usr/local/grass/gui/wxpython/xml/module_items.xml module_items.xml; \
     mkdir -p /usr/local/grass/gui/wxpython/xml/; \
     mv module_items.xml /usr/local/grass/gui/wxpython/xml/module_items.xml;
 
-FROM common as grass
+
+FROM common AS grass
 
 # GRASS GIS specific
 # allow work with MAPSETs that are not owned by current user
