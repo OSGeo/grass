@@ -11,19 +11,19 @@ static int relate_geos(struct Map_info *, const GEOSGeometry *, int, int,
                        const char *, int);
 
 int line_relate_geos(struct Map_info *AIn, const GEOSGeometry *BGeom, int aline,
-                     int operator, const char * relate)
+                     int operator, const char *relate)
 {
     return relate_geos(AIn, BGeom, aline, operator, relate, 0);
 }
 
 int area_relate_geos(struct Map_info *AIn, const GEOSGeometry *BGeom, int aarea,
-                     int operator, const char * relate)
+                     int operator, const char *relate)
 {
     return relate_geos(AIn, BGeom, aarea, operator, relate, 1);
 }
 
 int relate_geos(struct Map_info *AIn, const GEOSGeometry *BGeom, int afid,
-                int operator, const char * relate, int area)
+                int operator, const char *relate, int area)
 {
     GEOSGeometry *AGeom = NULL;
     int found;
