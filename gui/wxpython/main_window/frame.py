@@ -907,18 +907,16 @@ class GMFrame(wx.Frame):
         self.mainnotebook.AddPage(gmodeler_panel, _("Graphical Modeler"))
 
     def OnJupyterNotebook(self, event=None, cmd=None):
-        """Launch Jupyter Notebook interface."""
-        from jupyter_notebook.panel import JupyterPanel
         from jupyter_notebook.dialogs import JupyterStartDialog
 
         dlg = JupyterStartDialog(parent=self)
-        result = dlg.ShowModal()
 
-        if result != wx.ID_OK:
+        if dlg.ShowModal() != wx.ID_OK:
             dlg.Destroy()
             return
 
         values = dlg.GetValues()
+        action = dlg.action
         dlg.Destroy()
 
         if not values:
@@ -927,19 +925,49 @@ class GMFrame(wx.Frame):
         workdir = values["directory"]
         create_template = values["create_template"]
 
-        jupyter_panel = JupyterPanel(
-            parent=self,
-            giface=self._giface,
-            statusbar=self.statusbar,
-            dockable=True,
-            workdir=workdir,
-            create_template=create_template,
-        )
-        jupyter_panel.SetUpPage(self, self.mainnotebook)
-        jupyter_panel.SetUpNotebookInterface()
+        if action == "integrated":
+            # Embedded notebook mode: create JupyterPanel and start server within it
+            from jupyter_notebook.panel import JupyterPanel
 
-        # add map display panel to notebook and make it current
-        self.mainnotebook.AddPage(jupyter_panel, _("Jupyter Notebook"))
+            panel = JupyterPanel(
+                parent=self,
+                giface=self._giface,
+                statusbar=self.statusbar,
+                dockable=True,
+                workdir=workdir,
+                create_template=create_template,
+            )
+            panel.SetUpPage(self, self.mainnotebook)
+            panel.SetUpNotebookInterface()
+
+            self.mainnotebook.AddPage(panel, _("Jupyter Notebook"))
+
+        elif action == "browser":
+            # External browser mode: set up environment, open URL and update status
+            from grass.workflows.environment import JupyterEnvironment
+
+            jupyter_env = JupyterEnvironment(
+                workdir=workdir, create_template=create_template, integrated=False
+            )
+            try:
+                jupyter_env.setup()
+            except Exception as e:
+                wx.MessageBox(
+                    _("Failed to start Jupyter environment:\n{}").format(str(e)),
+                    _("Startup Error"),
+                    wx.ICON_ERROR,
+                )
+                return
+
+            self.SetStatusText(
+                _(
+                    "Jupyter server started in browser at {url} (PID: {pid}), directory: {dir}"
+                ).format(
+                    url=jupyter_env.server.server_url,
+                    pid=jupyter_env.server.pid,
+                    dir=str(workdir),
+                )
+            )
 
     def OnPsMap(self, event=None, cmd=None):
         """Launch Cartographic Composer. See OnIClass documentation"""
@@ -2442,7 +2470,7 @@ class GMFrame(wx.Frame):
             return
 
         # Stop all running Jupyter servers before destroying the GUI
-        from grass.workflows import JupyterEnvironment
+        from grass.workflows.environment import JupyterEnvironment
 
         try:
             JupyterEnvironment.stop_all()
@@ -2452,6 +2480,7 @@ class GMFrame(wx.Frame):
                 caption=_("Error"),
                 style=wx.ICON_ERROR | wx.OK,
             )
+
         self.DisplayCloseAll()
 
         self._auimgr.UnInit()

@@ -47,37 +47,52 @@ class JupyterAuiNotebook(aui.AuiNotebook):
 
         self.Bind(aui.EVT_AUINOTEBOOK_PAGE_CLOSE, self.OnPageClose)
 
-    def _inject_javascript(self, event):
+    def _hide_top_ui(self, event):
         """
-        Inject JavaScript into the Jupyter notebook page to hide top UI bars.
+        Inject CSS via JS into the Jupyter page to hide top UI elements.
 
-        Works for:
+        Works for both:
         - Jupyter Notebook 6 and older (classic interface)
-        - Jupyter Notebook 7+ (Jupyter Lab interface)
+        - Jupyter Notebook 7+ (Lab interface)
 
-        This is called once the WebView has fully loaded the Jupyter page.
+        This method is called once the WebView has fully loaded the page.
+        Some UI elements may be created dynamically after page load,
+        so the script ensures the CSS/JS is applied once elements exist.
+        Duplicate injection is prevented by checking for a unique style ID.
         """
         webview = event.GetEventObject()
-        js = """
-        var interval = setInterval(function() {
-            // --- Jupyter Notebook 7+ (new UI) ---
-            var topPanel = document.getElementById('top-panel-wrapper');
-            var menuPanel = document.getElementById('menu-panel-wrapper');
-            if (topPanel) topPanel.style.display = 'none';
-            if (menuPanel) menuPanel.style.display = 'none';
 
-            // --- Jupyter Notebook 6 and older (classic UI) ---
-            var headerContainer = document.getElementById('header-container');
-            var menubar = document.getElementById('menubar');
-            if (headerContainer) headerContainer.style.display = 'none';
-            if (menubar) menubar.style.display = 'none';
+        # CSS rules to hide panels and interface switcher
+        css = """
+        /* Notebook 7+ (Lab UI) */
+        #top-panel-wrapper { display: none !important; }
+        #menu-panel-wrapper { display: none !important; }
 
-            // --- Stop once everything is hidden ---
-            if ((topPanel || headerContainer) && (menuPanel || menubar)) {
-                clearInterval(interval);
-            }
-        }, 500);
+        /* Interface switcher ("Open in...") */
+        .jp-InterfaceSwitcher { display: none !important; }
+
+        /* remove top spacing left by hidden panels */
+        .lm-Panel { top: 0 !important; }
+
+        /* Notebook 6 and older (classic UI) */
+        #header-container { display: none !important; }
+        #menubar { display: none !important; }
         """
+
+        # JavaScript that injects the CSS once
+        js = f"""
+        (function() {{
+            if (document.getElementById('grass-hide-ui')) {{
+                return;
+            }}
+
+            var style = document.createElement('style');
+            style.id = 'grass-hide-ui';
+            style.innerHTML = `{css}`;
+            document.head.appendChild(style);
+        }})();
+        """
+
         webview.RunScript(js)
 
     def AddPage(self, url, title):
@@ -88,7 +103,7 @@ class JupyterAuiNotebook(aui.AuiNotebook):
         """
         browser = html.WebView.New(self)
         wx.CallAfter(browser.LoadURL, url)
-        wx.CallAfter(browser.Bind, html.EVT_WEBVIEW_LOADED, self._inject_javascript)
+        wx.CallAfter(browser.Bind, html.EVT_WEBVIEW_LOADED, self._hide_top_ui)
         super().AddPage(browser, title)
 
     def OnPageClose(self, event):
