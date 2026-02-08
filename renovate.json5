@@ -30,6 +30,7 @@
     "baseBranchPatterns" : [
       "$default",
       "releasebranch_8_4",
+      "releasebranch_8_5",
     ],
 
     // enable Nix lock file update (flake.lock)
