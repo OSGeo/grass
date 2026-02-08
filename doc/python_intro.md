@@ -293,7 +293,7 @@ of GRASS. The [grass.pygrass.gis](https://grass.osgeo.org/grass-stable/manuals/l
 module provides functions to create, manage, and delete GRASS projects and
 mapsets. The core classes include [Gisdbase](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.gis.html#pygrass.gis.Gisdbase),
 [Location](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.gis.html#pygrass.gis.Location),
-and [Mapset](https://grass.osgeo.org/grass85/manuals/libpython/pygrass.gis.html#pygrass.gis.Mapset).
+and [Mapset](https://grass.osgeo.org/grass86/manuals/libpython/pygrass.gis.html#pygrass.gis.Mapset).
 
 The [Gisdbase](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.gis.html#pygrass.gis.Gisdbase)
 class provides access to the GRASS database
@@ -333,7 +333,7 @@ print(location.name)
 mapsets = location.mapsets()
 ```
 
-The [Mapset](https://grass.osgeo.org/grass85/manuals/libpython/pygrass.gis.html#pygrass.gis.Mapset)
+The [Mapset](https://grass.osgeo.org/grass86/manuals/libpython/pygrass.gis.html#pygrass.gis.Mapset)
 object provides access to the specific mapset and its layers.
 
 ```python
