@@ -48,7 +48,9 @@ class JupyterPanel(wx.Panel, MainPageBase):
         self.workdir = workdir
         self.SetName("Jupyter")
 
-        self.env = JupyterEnvironment(self.workdir, create_template)
+        self.env = JupyterEnvironment(
+            workdir=self.workdir, create_template=create_template, integrated=True
+        )
 
         self.toolbar = JupyterToolbar(parent=self)
         self.aui_notebook = JupyterAuiNotebook(parent=self)
@@ -78,7 +80,7 @@ class JupyterPanel(wx.Panel, MainPageBase):
             )
             return
 
-        # Load notebook tabs
+        # Load notebook tabs in embedded AUI notebook
         for fname in self.env.directory.files:
             try:
                 url = self.env.server.get_url(fname.name)

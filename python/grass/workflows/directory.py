@@ -159,9 +159,10 @@ class JupyterDirectoryManager:
         shutil.copyfile(source_path, dest_path)
 
     def create_welcome_notebook(self, file_name="welcome.ipynb"):
-        """
+        r"""
         Create a welcome Jupyter notebook in the working directory with
-        the placeholder '${NOTEBOOK_DIR}' replaced by the actual path.
+        the placeholders '${NOTEBOOK_DIR}' replaced by the actual working dir
+        and \${NOTEBOOK_MAPSET}'replaced by actual mapset path
 
         :param file_name: Name of the template file to copy (str)
         :return: Path to the created template file (Path)
@@ -176,6 +177,19 @@ class JupyterDirectoryManager:
         # Replace the placeholder '${NOTEBOOK_DIR}' with actual working directory path
         content = content.replace(
             "${NOTEBOOK_DIR}", str(self._workdir).replace("\\", "/")
+        )
+
+        # Replace the placeholder \${NOTEBOOK_MAPSET}' by actual mapset path
+        env = gs.gisenv()
+        mapset_path = Path(
+            env["GISDBASE"],
+            env["LOCATION_NAME"],
+            env["MAPSET"],
+        )
+
+        content = content.replace(
+            "${NOTEBOOK_MAPSET}",
+            str(mapset_path).replace("\\", "/"),
         )
 
         # Save the modified content back to the template file

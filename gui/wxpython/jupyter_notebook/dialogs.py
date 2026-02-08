@@ -16,7 +16,6 @@ This program is free software under the GNU General Public License
 
 import os
 from pathlib import Path
-
 import wx
 
 from grass.workflows.directory import get_default_jupyter_workdir
@@ -47,9 +46,7 @@ class JupyterStartDialog(wx.Dialog):
         self.radio_custom = wx.RadioButton(self, label=_("Select another directory:"))
 
         self.dir_picker = wx.DirPickerCtrl(
-            self,
-            message=_("Choose a working directory"),
-            style=wx.DIRP_USE_TEXTCTRL | wx.DIRP_DIR_MUST_EXIST,
+            self, message=_("Choose a working directory"), style=wx.DIRP_USE_TEXTCTRL
         )
         self.dir_picker.Enable(False)
 
@@ -83,14 +80,27 @@ class JupyterStartDialog(wx.Dialog):
 
         sizer.Add(options_sizer, 0, wx.EXPAND | wx.LEFT | wx.RIGHT, 10)
 
-        btns = self.CreateSeparatedButtonSizer(wx.OK | wx.CANCEL)
-        sizer.Add(btns, 0, wx.EXPAND | wx.ALL, 10)
+        # Buttons section
+        btn_sizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.SetSizer(sizer)
+        btn_cancel = wx.Button(self, wx.ID_CANCEL, label=_("Cancel"))
+        btn_sizer.Add(btn_cancel, 0, wx.ALL, 5)
+        btn_browser = wx.Button(self, label=_("Open Notebook in Browser"))
+        btn_sizer.Add(btn_browser, 0, wx.ALL, 5)
+        btn_integrated = wx.Button(self, label=_("Open Integrated Notebook"))
+        btn_sizer.Add(btn_integrated, 0, wx.ALL, 5)
 
+        sizer.Add(btn_sizer, 0, wx.ALIGN_CENTER | wx.ALL, 10)
+
+        # Bind events
         self.radio_default.Bind(wx.EVT_RADIOBUTTON, self.OnRadioToggle)
         self.radio_custom.Bind(wx.EVT_RADIOBUTTON, self.OnRadioToggle)
 
+        btn_cancel.Bind(wx.EVT_BUTTON, self.OnCancel)
+        btn_browser.Bind(wx.EVT_BUTTON, self.OnOpenInBrowser)
+        btn_integrated.Bind(wx.EVT_BUTTON, self.OnOpenIntegrated)
+
+        self.SetSizer(sizer)
         self.Fit()
         self.Layout()
         self.SetMinSize(self.GetSize())
@@ -105,13 +115,27 @@ class JupyterStartDialog(wx.Dialog):
         if self.radio_custom.GetValue():
             path = Path(self.dir_picker.GetPath())
 
-            if not os.access(path, os.W_OK) or not os.access(path, os.X_OK):
+            # create directory if it does not exist
+            if not path.exists():
+                try:
+                    path.mkdir(parents=True, exist_ok=True)
+                except OSError:
+                    wx.MessageBox(
+                        _("Cannot create the selected directory."),
+                        _("Error"),
+                        wx.ICON_ERROR,
+                    )
+                    return None
+
+            # permission check
+            if not os.access(path, os.W_OK | os.X_OK):
                 wx.MessageBox(
                     _("You do not have permission to write to the selected directory."),
                     _("Error"),
                     wx.ICON_ERROR,
                 )
                 return None
+
             self.selected_dir = path
         else:
             self.selected_dir = self.default_dir
@@ -120,3 +144,18 @@ class JupyterStartDialog(wx.Dialog):
             "directory": self.selected_dir,
             "create_template": self.checkbox_template.GetValue(),
         }
+
+    def OnCancel(self, event):
+        self.EndModal(wx.ID_CANCEL)
+
+    def OnOpenIntegrated(self, event):
+        if not self.GetValues():
+            return
+        self.action = "integrated"
+        self.EndModal(wx.ID_OK)
+
+    def OnOpenInBrowser(self, event):
+        if not self.GetValues():
+            return
+        self.action = "browser"
+        self.EndModal(wx.ID_OK)
