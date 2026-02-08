@@ -247,13 +247,16 @@ static void normalize_year_month(DateTime *dt)
     int carry;
 
     if (dt->mode == DATETIME_ABSOLUTE) {
-        if (dt->month > 12) {
-            carry = (dt->month - 1) / 12;
-            dt->year += carry;
-            if (dt->year == 0)
-                dt->year = 1;
-            dt->month -= carry * 12;
-        }
+        if (dt->month > 12) {             /* month will never be zero */
+    carry = (dt->month - 1) / 12; /* no carry until 13 */
+    dt->year += carry;
+
+    /* avoid an extra nested if (S134) */
+    dt->year = (dt->year == 0) ? 1 : dt->year;
+
+    dt->month -= carry * 12;
+}
+
     }
     else {
         if (dt->month >= 12) {
