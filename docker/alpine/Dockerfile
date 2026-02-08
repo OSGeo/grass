@@ -80,7 +80,7 @@ RUN echo "Install main packages";\
     apk add --no-cache $GRASS_RUN_PACKAGES
 
 
-FROM common as build
+FROM common AS build
 
 # ================
 # CONFIG VARIABLES
@@ -187,7 +187,8 @@ RUN cp /usr/local/grass/gui/wxpython/xml/module_items.xml module_items.xml; \
     mkdir -p /usr/local/grass/gui/wxpython/xml/; \
     mv module_items.xml /usr/local/grass/gui/wxpython/xml/module_items.xml;
 
-FROM common as grass
+
+FROM common AS grass
 
 # GRASS GIS specific
 # allow work with MAPSETs that are not owned by current user
