@@ -59,7 +59,7 @@ ENV GRASS_RUN_PACKAGES="\
       python3 \
       pdal \
       pdal-dev \
-      postgresql15-client \
+      postgresql18-client \
       proj-util \
       sqlite \
       sqlite-libs \
