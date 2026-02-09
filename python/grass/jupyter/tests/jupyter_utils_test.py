@@ -10,7 +10,7 @@ ipywidgets = pytest.importorskip(
 )
 
 
-def test_get_region():
+def test_get_region(session):
     """Test that get_region returns currnt computational region as dictionary."""
     region = get_region()
     assert isinstance(region, dict)
@@ -20,9 +20,8 @@ def test_get_region():
     assert "west" in region
 
 
-def test_get_location_proj_string():
+def test_get_location_proj_string(simple_dataset):
     """Test that get_location_proj_string returns projection of environment in PROJ.4 format"""
     projection = get_location_proj_string()
     assert isinstance(projection, str)
-    assert projection != ""
     assert "+proj=" in projection
