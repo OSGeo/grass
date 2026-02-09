@@ -24,6 +24,19 @@ static int is_digit(char);
 static void skip_space(const char **);
 static int get_int(const char **, int *, int *);
 static int get_double(const char **, double *, int *, int *);
+static int apply_relative_fields(DateTime *dt, int from, int to,
+                                 int year, int month, int day,
+                                 int hour, int minute, double second);
+typedef struct {
+    int to;
+    int fracsec;
+    int tz;
+    int have_tz;
+    int bc;
+    int year, month, day;
+    int hour, minute;
+    double second;
+} AbsParsed;
 
 static int parse_abs_date(const char **p, AbsParsed *a);
 static int parse_abs_time_and_tz(const char **p, AbsParsed *a);
@@ -54,18 +67,6 @@ int datetime_scan(DateTime *dt, const char *buf)
 
 static const char *month_names[] = {"jan", "feb", "mar", "apr", "may", "jun",
                                     "jul", "aug", "sep", "oct", "nov", "dec"};
-
-
-typedef struct {
-    int to;
-    int fracsec;
-    int tz;
-    int have_tz;
-    int bc;
-    int year, month, day;
-    int hour, minute;
-    double second;
-} AbsParsed;
 
 static int scan_absolute(DateTime *dt, const char *buf)
 {
@@ -156,6 +157,19 @@ static int scan_relative(DateTime *dt, const char *buf)
         return 0;
     if (datetime_set_type(dt, DATETIME_RELATIVE, from, to, fracsec))
         return 0;
+    if (!apply_relative_fields(dt, from, to, year, month, day, hour, minute, second))
+        return 0;
+    if (neg)
+        datetime_set_negative(dt);
+
+    return 1;
+}
+static int apply_relative_fields(DateTime *dt, int from, int to,
+                                 int year, int month, int day,
+                                 int hour, int minute, double second)
+{
+    int pos;
+
     for (pos = from; pos <= to; pos++) {
         switch (pos) {
         case DATETIME_YEAR:
@@ -184,11 +198,10 @@ static int scan_relative(DateTime *dt, const char *buf)
             break;
         }
     }
-    if (neg)
-        datetime_set_negative(dt);
-
     return 1;
 }
+
+
 
 static int is_space(char c)
 {
