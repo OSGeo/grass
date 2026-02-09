@@ -25,6 +25,9 @@ static void skip_space(const char **);
 static int get_int(const char **, int *, int *);
 static int get_double(const char **, double *, int *, int *);
 
+static int parse_abs_date(const char **p, AbsParsed *a);
+static int parse_abs_time_and_tz(const char **p, AbsParsed *a);
+static int apply_abs_fields(DateTime *dt, const AbsParsed *a);
 /*!
  * \brief
  *
@@ -52,115 +55,49 @@ int datetime_scan(DateTime *dt, const char *buf)
 static const char *month_names[] = {"jan", "feb", "mar", "apr", "may", "jun",
                                     "jul", "aug", "sep", "oct", "nov", "dec"};
 
+
+typedef struct {
+    int to;
+    int fracsec;
+    int tz;
+    int have_tz;
+    int bc;
+    int year, month, day;
+    int hour, minute;
+    double second;
+} AbsParsed;
+
 static int scan_absolute(DateTime *dt, const char *buf)
 {
-    char word[1024];
-    int n;
-    int ndigits;
-    int tz = 0;
-    int have_tz = 0;
-    int bc = 0;
-    int to, fracsec = 0;
-    int year, month, day = 0, hour, minute;
-    double second;
-    const char *p;
+    const char *p = buf;
+    AbsParsed a;
 
-    p = buf;
+    memset(&a, 0, sizeof(a));
+    a.to = DATETIME_YEAR;
+
     if (!more(&p))
         return 0;
 
-    if (!get_int(&p, &n, &ndigits)) { /* no day, so must be month, like Jan */
-        if (!get_word(&p, word))
-            return 0;
-        if (!which_month(word, &month))
-            return 0;
-        if (!get_int(&p, &year, &ndigits)) /* year following the month */
-            return 0;
-        to = DATETIME_MONTH;
-        if (is_bc(&p))
-            bc = 1;
-        goto set;
-    }
+    if (!parse_abs_date(&p, &a))
+        return 0;
 
-    bc = is_bc(&p);
-    if (bc || !get_word(&p, word)) { /* just a year */
-        year = n;
-        to = DATETIME_YEAR;
-        goto set;
-    }
-    to = DATETIME_DAY; /* must be at least: day Mon year [bc] */
-    day = n;
-    if (!which_month(word, &month))
+    if (!parse_abs_time_and_tz(&p, &a))
         return 0;
-    if (!get_int(&p, &year, &ndigits))
-        return 0;
-    if (is_bc(&p))
-        bc = 1;
 
-    /* now for the time */
-    if (!get_int(&p, &hour, &ndigits))
-        goto set;
-    to = DATETIME_HOUR;
-    if (*p != ':')
-        goto set;
-    p++;
-    if (!get_int(&p, &minute, &ndigits))
+    if (more(&p))
         return 0;
-    if (ndigits != 2)
-        return 0;
-    to = DATETIME_MINUTE;
-    if (*p != ':')
-        goto timezone;
-    p++;
-    if (!get_double(&p, &second, &ndigits, &fracsec))
-        return 0;
-    if (ndigits != 2)
-        return 0;
-    to = DATETIME_SECOND;
 
-timezone:
-    if (!get_word(&p, word))
-        goto set;
-    if (!scan_tz(word, &tz))
+    if (datetime_set_type(dt, DATETIME_ABSOLUTE,
+                          DATETIME_YEAR, a.to, a.fracsec))
         return 0;
-    have_tz = 1;
 
-set:
-    if (more(&p)) /* make sure there isn't anything else */
+    if (!apply_abs_fields(dt, &a))
         return 0;
-    if (datetime_set_type(dt, DATETIME_ABSOLUTE, DATETIME_YEAR, to, fracsec))
-        return 0;
-    for (n = DATETIME_YEAR; n <= to; n++) {
-        switch (n) {
-        case DATETIME_YEAR:
-            if (datetime_set_year(dt, year))
-                return 0;
-            break;
-        case DATETIME_MONTH:
-            if (datetime_set_month(dt, month))
-                return 0;
-            break;
-        case DATETIME_DAY:
-            if (datetime_set_day(dt, day))
-                return 0;
-            break;
-        case DATETIME_HOUR:
-            if (datetime_set_hour(dt, hour))
-                return 0;
-            break;
-        case DATETIME_MINUTE:
-            if (datetime_set_minute(dt, minute))
-                return 0;
-            break;
-        case DATETIME_SECOND:
-            if (datetime_set_second(dt, second))
-                return 0;
-            break;
-        }
-    }
-    if (bc)
+
+    if (a.bc)
         datetime_set_negative(dt);
-    if (have_tz && datetime_set_timezone(dt, tz))
+
+    if (a.have_tz && datetime_set_timezone(dt, a.tz))
         return 0;
 
     return 1;
