@@ -18,6 +18,8 @@ ARG GDAL_VERSION=3.12.1
 ARG PDAL_VERSION=2.9.2
 # renovate: datasource=github-tags depName=OSGeo/gdal-grass
 ARG GDAL_GRASS_VERSION=2.0.0
+# renovate: datasource=pypi depName=wxPython
+ARG WXPYTHON_VERSION=4.2.4
 
 # Have build parameters as build arguments?
 # ARG LDFLAGS="-s -Wl,--no-undefined -lblas"
@@ -339,7 +341,7 @@ RUN echo "Installing GRASS GUI packages: $GRASS_GUI_PACKAGES" \
     $GRASS_GUI_PACKAGES \
     && python3 -m pip install  -U --break-system-packages --no-cache-dir --upgrade \
     -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-24.04 \
-    wxpython \
+    "wxpython==${WXPYTHON_VERSION}" \
     # Clean up
     && pip cache purge \
     && apt-get autoremove -y \
