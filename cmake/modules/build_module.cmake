@@ -143,7 +143,7 @@ function(build_module)
     add_library(${G_NAME} ${${G_NAME}_SRCS})
     set_target_properties(
       ${G_NAME}
-      PROPERTIES FOLDER "GRASS libraries"
+      PROPERTIES FOLDER "GRASS Libraries"
                  VERSION ${GRASS_VERSION_NUMBER}
                  SOVERSION ${GRASS_VERSION_MAJOR}
                  EXPORT_NAME ${_libname})
