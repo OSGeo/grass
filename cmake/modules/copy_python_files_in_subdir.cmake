@@ -46,6 +46,6 @@ function(copy_python_files_in_subdir dir_name dst_prefix)
               "${OUTDIR}/${dst_prefix}/${dir_name}"
       COMMAND ${CMAKE_COMMAND} -E copy ${PY_FILES}
               "${OUTDIR}/${dst_prefix}/${dir_name}")
-    set_target_properties(python_${targ_name} PROPERTIES FOLDER lib/python)
+    set_target_properties(python_${targ_name} PROPERTIES FOLDER Python/API)
   endif()
 endfunction()
