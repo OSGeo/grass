@@ -27,6 +27,9 @@ static int ll_wrap(struct Cell_head *cellhd);
 static int ll_check_ns(struct Cell_head *cellhd);
 static int ll_check_ew(struct Cell_head *cellhd);
 
+static double absd(double x);
+static void warn_subtle_rounding(const char *what, double val);
+static void debug_seconds(const char *what, double seconds);
 static void check_ns_ew_3d_input(const struct Cell_head *cellhd,
                                  int row_flag, int col_flag);
 static void check_tb_3d_input(const struct Cell_head *cellhd, int depth_flag);
@@ -418,15 +421,8 @@ static int ll_check_ns(struct Cell_head *cellhd)
         diff = -diff;
     if (cellhd->north < 90.0 && diff < 1.0) {
         G_verbose_message(_("%g cells missing to reach 90 degree north"), diff);
-        if (diff < llepsilon && diff > fpepsilon) {
-            G_verbose_message(
-                _("Subtle input data rounding error of north boundary (%g)"),
-                cellhd->north - 90.0);
-            /* check only, do not modify
-               cellhd->north = 90.0;
-               lladjust = 1;
-             */
-        }
+        if (diff < llepsilon && diff > fpepsilon)
+            warn_subtle_rounding("north", cellhd->north - 90.0);
     }
     if (cellhd->north > 90.0) {
         if (diff <= 0.5 + llepsilon) {
@@ -434,26 +430,16 @@ static int ll_check_ns(struct Cell_head *cellhd)
                                 diff);
 
             if (diff < llepsilon && diff > fpepsilon) {
-                G_verbose_message(_("Subtle input data rounding error of north "
-                                    "boundary (%g)"),
-                                  cellhd->north - 90.0);
-                G_debug(1, "North of north in seconds: %g",
-                        (cellhd->north - 90.0) * 3600);
-                /* check only, do not modify
-                   cellhd->north = 90.0;
-                   lladjust = 1;
-                 */
-            }
+                warn_subtle_rounding("north", cellhd->north - 90.0);
+                debug_seconds("North of north", (cellhd->north - 90.0) * 3600);
 
             diff = diff - 0.5;
-            if (diff < 0)
-                diff = -diff;
+            diff = absd(diff);
             if (diff < llepsilon && diff > fpepsilon) {
-                G_verbose_message(_("Subtle input data rounding error of north "
-                                    "boundary (%g)"),
-                                  cellhd->north - 90.0 - cellhd->ns_res / 2.0);
-                G_debug(1, "North of north + 0.5 cells in seconds: %g",
-                        (cellhd->north - 90.0 - cellhd->ns_res / 2.0) * 3600);
+                warn_subtle_rounding("north",
++                                     cellhd->north - 90.0 - cellhd->ns_res / 2.0);
++                debug_seconds("North of north + 0.5 cells",
++                              (cellhd->north - 90.0 - cellhd->ns_res / 2.0) * 3600);
                 /* check only, do not modify
                    cellhd->north = 90.0 + cellhd->ns_res / 2.0;
                    lladjust = 1;
@@ -466,46 +452,28 @@ static int ll_check_ns(struct Cell_head *cellhd)
 
     /* south */
     diff = (cellhd->south + 90) / cellhd->ns_res;
-    if (diff < 0)
-        diff = -diff;
+    diff = absd(diff);
     if (cellhd->south > -90.0 && diff < 1.0) {
         G_verbose_message(_("%g cells missing to reach 90 degree south"), diff);
-        if (diff < llepsilon && diff > fpepsilon) {
-            G_verbose_message(
-                _("Subtle input data rounding error of south boundary (%g)"),
-                cellhd->south + 90.0);
-            /* check only, do not modify
-               cellhd->south = -90.0;
-               lladjust = 1;
-             */
-        }
+        if (diff < llepsilon && diff > fpepsilon)
+            warn_subtle_rounding("south", cellhd->south + 90.0);
     }
     if (cellhd->south < -90.0) {
         if (diff <= 0.5 + llepsilon) {
             G_important_message(_("90 degree south is exceeded by %g cells"),
                                 diff);
-
             if (diff < llepsilon && diff > fpepsilon) {
-                G_verbose_message(_("Subtle input data rounding error of south "
-                                    "boundary (%g)"),
-                                  cellhd->south + 90);
-                G_debug(1, "South of south in seconds: %g",
-                        (-cellhd->south - 90) * 3600);
-                /* check only, do not modify
-                   cellhd->south = -90.0;
-                   lladjust = 1;
-                 */
+                warn_subtle_rounding("south", cellhd->south + 90.0);
+                debug_seconds("South of south", (-cellhd->south - 90.0) * 3600);
             }
 
             diff = diff - 0.5;
-            if (diff < 0)
-                diff = -diff;
+            diff = absd(diff);
             if (diff < llepsilon && diff > fpepsilon) {
-                G_verbose_message(_("Subtle input data rounding error of south "
-                                    "boundary (%g)"),
-                                  cellhd->south + 90 + cellhd->ns_res / 2.0);
-                G_debug(1, "South of south + 0.5 cells in seconds: %g",
-                        (-cellhd->south - 90 - cellhd->ns_res / 2.0) * 3600);
+                warn_subtle_rounding("south",
++                                     cellhd->south + 90.0 + cellhd->ns_res / 2.0);
++                debug_seconds("South of south + 0.5 cells",
++                              (-cellhd->south - 90.0 - cellhd->ns_res / 2.0) * 3600);
                 /* check only, do not modify
                    cellhd->south = -90.0 - cellhd->ns_res / 2.0;
                    lladjust = 1;
@@ -560,6 +528,23 @@ static int ll_check_ew(struct Cell_head *cellhd)
     }
 
     return lladjust;
+}
+
+
+static double absd(double x)
+{
+    return x < 0 ? -x : x;
+}
+
+static void warn_subtle_rounding(const char *what, double val)
+{
+    G_verbose_message(_("Subtle input data rounding error of %s boundary (%g)"),
+                      what, val);
+}
+
+static void debug_seconds(const char *what, double seconds)
+{
+    G_debug(1, "%s in seconds: %g", what, seconds);
 }
 
 /*!
