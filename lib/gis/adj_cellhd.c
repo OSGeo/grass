@@ -27,6 +27,9 @@ static int ll_wrap(struct Cell_head *cellhd);
 static int ll_check_ns(struct Cell_head *cellhd);
 static int ll_check_ew(struct Cell_head *cellhd);
 
+static void check_ns_input(const struct Cell_head *cellhd, int row_flag);
+static void check_ew_input(const struct Cell_head *cellhd, int col_flag);
+
 /*!
  * \brief Adjust cell header.
  *
@@ -52,28 +55,8 @@ void G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
 {
     double old_res;
 
-    if (!row_flag) {
-        if (cellhd->ns_res <= 0)
-            G_fatal_error(_("Illegal n-s resolution value: %g"),
-                          cellhd->ns_res);
-    }
-    else {
-        if (cellhd->rows <= 0)
-            G_fatal_error(_("Illegal number of rows: %d"
-                            " (resolution is %g)"),
-                          cellhd->rows, cellhd->ns_res);
-    }
-    if (!col_flag) {
-        if (cellhd->ew_res <= 0)
-            G_fatal_error(_("Illegal e-w resolution value: %g"),
-                          cellhd->ew_res);
-    }
-    else {
-        if (cellhd->cols <= 0)
-            G_fatal_error(_("Illegal number of columns: %d"
-                            " (resolution is %g)"),
-                          cellhd->cols, cellhd->ew_res);
-    }
+   check_ns_input(cellhd, row_flag);
+   check_ew_input(cellhd, col_flag);   
 
     /* check the edge values */
     if (cellhd->north <= cellhd->south) {
@@ -131,6 +114,34 @@ void G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
 
     ll_check_ns(cellhd);
     ll_check_ew(cellhd);
+}
+
+static void check_ns_input(const struct Cell_head *cellhd, int row_flag)
+{
+    if (!row_flag) {
+        if (cellhd->ns_res <= 0)
+            G_fatal_error(_("Illegal n-s resolution value: %g"), cellhd->ns_res);
+        return;
+    }
+
+    if (cellhd->rows <= 0)
+        G_fatal_error(_("Illegal number of rows: %d"
+                        " (resolution is %g)"),
+                      cellhd->rows, cellhd->ns_res);
+}
+
+static void check_ew_input(const struct Cell_head *cellhd, int col_flag)
+{
+    if (!col_flag) {
+        if (cellhd->ew_res <= 0)
+            G_fatal_error(_("Illegal e-w resolution value: %g"), cellhd->ew_res);
+        return;
+    }
+
+    if (cellhd->cols <= 0)
+        G_fatal_error(_("Illegal number of columns: %d"
+                        " (resolution is %g)"),
+                      cellhd->cols, cellhd->ew_res);
 }
 
 /*!
