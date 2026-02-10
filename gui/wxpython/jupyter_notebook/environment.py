@@ -1,38 +1,27 @@
-#
-# AUTHOR(S): Linda Karlovska <linda.karlovska@seznam.cz>
-#
-# PURPOSE:   Provides an orchestration layer for Jupyter Notebook environment.
-#
-# COPYRIGHT: (C) 2025 by Linda Karlovska and the GRASS Development Team
-#
-#            This program is free software under the GNU General Public
-#            License (>=v2). Read the file COPYING that comes with GRASS
-#            for details.
-
 """
-This module defines the `JupyterEnvironment` class, which coordinates
+@package jupyter_notebook.environment
+
+@brief Defines the high-level orchestrator which coordinates
 the setup and teardown of a Jupyter Notebook environment.
 
-It acts as a high-level orchestrator that integrates:
-- a working directory manager (template creation and file discovery)
-- a Jupyter server instance (start, stop, URL management)
-- registration of running servers in a global server registry
-- registration of cleanup routines to stop servers on:
-  - Normal interpreter exit
-  - SIGINT (e.g., Ctrl+C)
-  - SIGTERM (e.g., kill from shell)
-- stopping all servers on global cleanup (e.g., GRASS shutdown).
+Classes:
+ - environment::JupyterEnvironment
 
-Designed for use within GRASS GUI tools or scripting environments.
+(C) 2025 by the GRASS Development Team
+
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
+
+@author Linda Karlovska <linda.karlovska seznam.cz>
 """
 
 import atexit
 import signal
 import sys
 
-from grass.workflows.directory import JupyterDirectoryManager
-from grass.workflows.server import JupyterServerInstance, JupyterServerRegistry
-from grass.workflows.utils import is_jupyter_installed, is_wx_html2_available
+from .directory import JupyterDirectoryManager
+from .server import JupyterServerInstance, JupyterServerRegistry
+from .utils import is_jupyter_installed, is_wx_html2_available
 
 
 _cleanup_registered = False

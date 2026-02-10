@@ -4,7 +4,7 @@
 @brief Integration of Jupyter Notebook to GUI.
 
 Classes:
- - dialog::JupyterStartDialog
+ - dialogs::JupyterStartDialog
 
 (C) 2025 by the GRASS Development Team
 
@@ -14,11 +14,10 @@ This program is free software under the GNU General Public License
 @author Linda Karlovska <linda.karlovska seznam.cz>
 """
 
-import os
 from pathlib import Path
 import wx
 
-from grass.workflows.directory import get_default_jupyter_workdir
+from .directory import get_default_jupyter_workdir
 
 
 class JupyterStartDialog(wx.Dialog):
@@ -115,22 +114,18 @@ class JupyterStartDialog(wx.Dialog):
         if self.radio_custom.GetValue():
             path = Path(self.dir_picker.GetPath())
 
-            # create directory if it does not exist
-            if not path.exists():
-                try:
-                    path.mkdir(parents=True, exist_ok=True)
-                except OSError:
-                    wx.MessageBox(
-                        _("Cannot create the selected directory."),
-                        _("Error"),
-                        wx.ICON_ERROR,
-                    )
-                    return None
+            try:
+                # create directory if missing
+                path.mkdir(parents=True, exist_ok=True)
 
-            # permission check
-            if not os.access(path, os.W_OK | os.X_OK):
+                # write permission test
+                test_file = path / ".grass_write_test"
+                test_file.touch()
+                test_file.unlink()
+
+            except OSError:
                 wx.MessageBox(
-                    _("You do not have permission to write to the selected directory."),
+                    _("Cannot create or write to the selected directory."),
                     _("Error"),
                     wx.ICON_ERROR,
                 )
@@ -138,7 +133,7 @@ class JupyterStartDialog(wx.Dialog):
 
             self.selected_dir = path
         else:
-            self.selected_dir = self.default_dir
+            self.selected_dir = Path(self.default_dir)
 
         return {
             "directory": self.selected_dir,

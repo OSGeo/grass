@@ -1,38 +1,19 @@
-#
-# AUTHOR(S): Linda Karlovska <linda.karlovska@seznam.cz>
-#
-# PURPOSE:   Provides a simple interface for launching and managing
-#            a local Jupyter server.
-#
-# COPYRIGHT: (C) 2025 by Linda Karlovska and the GRASS Development Team
-#
-#            This program is free software under the GNU General Public
-#            License (>=v2). Read the file COPYING that comes with GRASS
-#            for details.
-
 """
-This module provides a simple interface for launching and managing
+@package jupyter_notebook.server
+
+@brief Simple interface for launching and managing
 a local Jupyter server.
 
 Classes:
-- `JupyterServerInstance`: Manages a single Jupyter Notebook server instance.
-- `JupyterServerRegistry`: Manages multiple `JupyterServerInstance` objects
-  and provides methods to start, track, and stop active servers.
+ - server::JupyterServerInstance
+ - server:: JupyterServerRegistry
 
-Features of `JupyterServerInstance`:
-- Checks if Jupyter Notebook is installed.
-- Finds an available local port.
-- Starts the server with proper subprocess management.
-- Verifies that the server is running and accessible.
-- Provides the URL to access served files.
-- Tracks and manages the server PID and process object.
-- Stops the server cleanly, preventing zombie processes.
+(C) 2025 by the GRASS Development Team
 
-Features of `JupyterServerRegistry`:
-- Thread-safe registration and unregistration of server instances
-- Keeps track of all active server instances.
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
 
-Designed for use within GRASS GUI tools or scripting environments.
+@author Linda Karlovska <linda.karlovska seznam.cz>
 """
 
 import socket
