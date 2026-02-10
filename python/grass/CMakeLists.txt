@@ -3,7 +3,6 @@ set(PYDIRS
     exceptions
     experimental
     grassdb
-    workflows
     gunittest
     imaging
     jupyter

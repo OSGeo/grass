@@ -19,8 +19,8 @@ from pathlib import Path
 import wx
 
 from main_window.page import MainPageBase
-from grass.workflows.environment import JupyterEnvironment
 
+from .environment import JupyterEnvironment
 from .notebook import JupyterAuiNotebook
 from .toolbars import JupyterToolbar
 
