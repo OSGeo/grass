@@ -2,6 +2,9 @@
 
 import pytest
 
+import grass.script as gs
+import os
+
 from grass.jupyter.utils import get_region, get_location_proj_string
 
 IPython = pytest.importorskip("IPython", reason="IPython package not available")
@@ -10,17 +13,24 @@ ipywidgets = pytest.importorskip(
 )
 
 
-def test_get_region(session):
+def test_get_region(tmp_path):
     """Test that get_region returns currnt computational region as dictionary."""
-    region = get_region(session.env)
-    assert isinstance(region, dict)
-    assert "north" in region
-    assert "south" in region
-    assert "east" in region
-    assert "west" in region
+    project = tmp_path / "test_project"
+    gs.create_project(project)
+    with gs.setup.init(project) as session:
+        region = get_region(session.env)
+        assert isinstance(region, dict)
+        assert "north" in region
+        assert "south" in region
+        assert "east" in region
+        assert "west" in region
 
 
-def test_get_location_proj_string(simple_dataset):
+def test_get_location_proj_string(tmp_path):
     """Test that get_location_proj_string returns projection of environment in PROJ.4 format"""
-    projection = get_location_proj_string()
-    assert "+proj=" in projection
+    project = tmp_path / "test_project_proj"
+    gs.create_project(project)
+    with gs.setup.init(project) as session:
+        gs.run_command("g.proj", flags="c", epsg="4326")
+        projection = get_location_proj_string()
+        assert "+proj=" in projection
