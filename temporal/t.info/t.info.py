@@ -38,15 +38,9 @@
 # % options: strds, str3ds, stvds, raster, raster_3d, vector
 # %end
 
-# %option
-# % key: format
-# % type: string
-# % label: Output format
-# % description: Output format (plain, shell, or json)
+# %option G_OPT_F_FORMAT
+# % options: plain,json,shell
 # % descriptions: plain;Human readable text output;shell;Shell script style text output;json;JSON (JavaScript Object Notation)
-# % options: plain, shell, json
-# % answer: plain
-# % required: no
 # % guisection: Print
 # %end
 
