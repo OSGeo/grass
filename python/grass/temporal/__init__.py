@@ -190,6 +190,7 @@ from .univar_statistics import (
     print_gridded_dataset_univar_statistics,
     print_vector_dataset_univar_statistics,
 )
+from .utils import TemporalJSONEncoder
 
 __all__ = [
     "AbsoluteTemporalExtent",
@@ -253,6 +254,7 @@ __all__ = [
     "TemporalAlgebraLexer",
     "TemporalAlgebraParser",
     "TemporalExtent",
+    "TemporalJSONEncoder",
     "TemporalOperatorLexer",
     "TemporalOperatorParser",
     "TemporalRaster3DAlgebraParser",
