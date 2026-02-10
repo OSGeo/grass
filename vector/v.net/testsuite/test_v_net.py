@@ -1,55 +1,65 @@
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.script.core import read_command
+from grass.tools import Tools
 import json
-
 
 class TestVNet(TestCase):
     network = "test_vnet"
 
     def tearDown(self):
         """Remove viewshed map after each test method"""
-        # TODO: eventually, removing maps should be handled through testing framework functions
         self.runModule("g.remove", flags="f", type="vector", name=self.network)
 
     def test_nreport_json(self):
-        """Test nreport operation JSON output"""
-        self.runModule("v.net", input="streets", output=self.network, operation="nodes")
-        output = read_command(
-            "v.net",
+        self.runModule("v.net", input="streets", points="schools", 
+                       output=self.network, operation="connect", 
+                       threshold=400, flags="c")
+        
+        tools = Tools(quiet=True)
+        result = tools.v_net(
             input=self.network,
             operation="nreport",
             node_layer=2,
-            format="json",
-        ).strip()
+            format="json"
+        )
 
-        self.assertTrue(output, "nreport produced no output on stdout")
         try:
-            data = json.loads(output)
+            data = json.loads(result.text)
         except json.JSONDecodeError:
-            self.fail(f"nreport produced invalid JSON: {output}")
+            self.fail(f"nreport produced invalid JSON: {result.text}")
 
-        self.assertIsInstance(data, list, "nreport output must be a JSON array")
+        self.assertIsInstance(data, list)
+        self.assertGreater(len(data), 0, "nreport output is empty")
+        
+        first_row = data[0]
+        self.assertIn("node_cat", first_row)
+        self.assertIn("lines", first_row)
+        
+        self.assertIsInstance(first_row["node_cat"], int)
+        self.assertIsInstance(first_row["lines"], list)
+        self.assertGreater(len(first_row["lines"]), 0)
 
     def test_report_json(self):
-        """Test report operation JSON output"""
-        output = read_command(
-            "v.net",
+        tools = Tools(quiet=True)
+        result = tools.v_net(
             input="streets",
             operation="report",
             arc_layer=1,
             node_layer=2,
-            format="json",
-        ).strip()
+            format="json"
+        )
+        
+        try:
+            data = json.loads(result.text)
+        except json.JSONDecodeError:
+            self.fail(f"report produced invalid JSON: {result.text}")
 
-        self.assertTrue(output, "report produced no output on stdout")
-
-        data = json.loads(output)
-        self.assertIsInstance(data, list, "report output must be a JSON array")
-        if len(data) > 0:
-            self.assertIn(
-                "line_cat", data[0], "Key 'line_cat' not found in JSON output"
-            )
+        self.assertIsInstance(data, list)
+        self.assertGreater(len(data), 0, "report output is empty")
+        
+        self.assertIn("line_cat", data[0])
+        self.assertIsInstance(data[0]["line_cat"], int)
 
     def test_nodes(self):
         """Test"""
