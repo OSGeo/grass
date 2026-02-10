@@ -22,17 +22,33 @@ Designed for use within GRASS GUI tools or scripting environments.
 """
 
 import shutil
+import subprocess
 
 
 def is_jupyter_installed():
-    """Check if Jupyter Notebook is installed.
+    """Check if Jupyter Notebook is installed and functional.
 
     Uses shutil.which() to check if 'jupyter' command is available in PATH.
     Works on all platforms (Windows, Linux, macOS).
 
     :return: True if Jupyter Notebook is installed and available, False otherwise.
     """
-    return shutil.which("jupyter") is not None
+    # Check if 'jupyter' CLI exists
+    jupyter_cmd = shutil.which("jupyter")
+    if not jupyter_cmd:
+        return False
+
+    # Check if 'jupyter notebook' subcommand works
+    try:
+        subprocess.run(
+            [jupyter_cmd, "notebook", "--version"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=True,
+        )
+        return True
+    except Exception:
+        return False
 
 
 def is_wx_html2_available():
