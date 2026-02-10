@@ -778,31 +778,102 @@ class GMFrame(wx.Frame):
         win.CentreOnScreen()
         win.Show()
 
+    def _show_jupyter_missing_message(self):
+        wx.MessageBox(
+            _(
+                "To use notebooks in GRASS, you need to have the Jupyter Notebook "
+                "package installed. Please install it and restart GRASS."
+            ),
+            _("Jupyter Notebook not available"),
+            wx.OK | wx.ICON_INFORMATION,
+            parent=self,
+        )
+
+    def _show_html2_missing_message(self):
+        wx.MessageBox(
+            _(
+                "Jupyter Notebook integration requires wxPython with wx.html2 "
+                "(WebView) support enabled.\n\n"
+                "Install wxPython/wxWidgets with HTML2/WebView support or use "
+                "Jupyter externally in a browser."
+            ),
+            _("Jupyter Notebook not available"),
+            wx.OK | wx.ICON_INFORMATION,
+            parent=self,
+        )
+
     def OnJupyterNotebook(self, event=None):
         """Launch Jupyter Notebook interface."""
-        from jupyter_notebook.frame import JupyterFrame
+        from grass.workflows.utils import (
+            is_jupyter_installed,
+            is_wx_html2_available,
+        )
         from jupyter_notebook.dialogs import JupyterStartDialog
 
-        dlg = JupyterStartDialog(parent=self)
-        try:
-            if dlg.ShowModal() != wx.ID_OK:
-                return
+        # global requirement (always needed)
+        if not is_jupyter_installed():
+            self._show_jupyter_missing_message()
+            return
 
-            values = dlg.GetValues()
-        finally:
+        dlg = JupyterStartDialog(parent=self)
+
+        if dlg.ShowModal() != wx.ID_OK:
             dlg.Destroy()
+            return
+
+        values = dlg.GetValues()
+        action = dlg.action
+        dlg.Destroy()
 
         if not values:
             return
 
-        frame = JupyterFrame(
-            parent=self,
-            giface=self._giface,
-            workdir=values["directory"],
-            create_template=values["create_template"],
-        )
-        frame.CentreOnParent()
-        frame.Show()
+        workdir = values["directory"]
+        create_template = values["create_template"]
+
+        if action == "integrated":
+            # Embedded notebook mode: create JupyterFrame and start server within it
+            if not is_wx_html2_available():
+                self._show_html2_missing_message()
+                return
+
+            from jupyter_notebook.frame import JupyterFrame
+
+            frame = JupyterFrame(
+                parent=self,
+                giface=self._giface,
+                workdir=workdir,
+                create_template=create_template,
+            )
+            frame.CentreOnParent()
+            frame.Show()
+
+        elif action == "browser":
+            # External browser mode: set up environment, open URL and update status
+            from grass.workflows.environment import JupyterEnvironment
+
+            jupyter_env = JupyterEnvironment(
+                workdir=workdir, create_template=create_template, integrated=False
+            )
+            try:
+                jupyter_env.setup()
+            except Exception as e:
+                wx.MessageBox(
+                    _("Failed to start Jupyter environment:\n{}").format(str(e)),
+                    _("Startup Error"),
+                    wx.ICON_ERROR,
+                )
+                return
+
+            self.SetStatusText(
+                _(
+                    "Jupyter server started in browser at {url} (PID: {pid}), directory: {dir}"
+                ).format(
+                    url=jupyter_env.server.server_url,
+                    pid=jupyter_env.server.pid,
+                    dir=str(workdir),
+                )
+            )
 
     def OnPsMap(self, event=None, cmd=None):
         """Launch Cartographic Composer. See OnIClass documentation"""
@@ -2324,7 +2395,7 @@ class GMFrame(wx.Frame):
             return
 
         # Stop all running Jupyter servers before destroying the GUI
-        from grass.workflows import JupyterEnvironment
+        from grass.workflows.environment import JupyterEnvironment
 
         try:
             JupyterEnvironment.stop_all()
