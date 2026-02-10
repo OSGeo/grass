@@ -14,11 +14,12 @@ This program is free software under the GNU General Public License
 @author Linda Karlovska <linda.karlovska seznam.cz>
 """
 
-import os
+from pathlib import Path
 import wx
 
 from core import globalvar
-from jupyter_notebook.panel import JupyterPanel
+
+from .panel import JupyterPanel
 
 
 class JupyterFrame(wx.Frame):
@@ -38,8 +39,8 @@ class JupyterFrame(wx.Frame):
 
         self.SetName("JupyterFrame")
 
-        icon_path = os.path.join(globalvar.ICONDIR, "grass.ico")
-        self.SetIcon(wx.Icon(icon_path, wx.BITMAP_TYPE_ICO))
+        icon_path = Path(globalvar.ICONDIR) / "grass.ico"
+        self.SetIcon(wx.Icon(str(icon_path), wx.BITMAP_TYPE_ICO))
 
         self.statusbar = self.CreateStatusBar(number=1)
 

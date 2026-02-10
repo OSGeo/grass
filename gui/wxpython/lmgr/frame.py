@@ -804,7 +804,7 @@ class GMFrame(wx.Frame):
 
     def OnJupyterNotebook(self, event=None):
         """Launch Jupyter Notebook interface."""
-        from grass.workflows.utils import (
+        from jupyter_notebook.utils import (
             is_jupyter_installed,
             is_wx_html2_available,
         )
@@ -850,7 +850,7 @@ class GMFrame(wx.Frame):
 
         elif action == "browser":
             # External browser mode: set up environment, open URL and update status
-            from grass.workflows.environment import JupyterEnvironment
+            from jupyter_notebook.environment import JupyterEnvironment
 
             jupyter_env = JupyterEnvironment(
                 workdir=workdir, create_template=create_template, integrated=False
@@ -2395,7 +2395,7 @@ class GMFrame(wx.Frame):
             return
 
         # Stop all running Jupyter servers before destroying the GUI
-        from grass.workflows.environment import JupyterEnvironment
+        from jupyter_notebook.environment import JupyterEnvironment
 
         try:
             JupyterEnvironment.stop_all()

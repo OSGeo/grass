@@ -9,12 +9,14 @@ include $(MODULE_TOPDIR)/include/Make/Python.make
 DSTDIR = $(GUIDIR)/wxpython
 
 SRCFILES := $(wildcard icons/*.py xml/*) \
-	$(wildcard animation/*.py core/*.py datacatalog/*.py jupyter_notebook/*.py history/*.py dbmgr/*.py gcp/*.py gmodeler/*.py \
-	gui_core/*.py iclass/*.py lmgr/*.py location_wizard/*.py main_window/*.py mapwin/*.py mapdisp/*.py \
-	mapswipe/*.py modules/*.py nviz/*.py psmap/*.py rdigit/*.py \
-	rlisetup/*.py startup/*.py timeline/*.py vdigit/*.py \
-	vnet/*.py web_services/*.py wxplot/*.py iscatt/*.py tplot/*.py photo2image/*.py image2target/*.py) \
-	wxgui.py README.md
+    $(wildcard animation/*.py core/*.py datacatalog/*.py jupyter_notebook/*.py history/*.py dbmgr/*.py gcp/*.py gmodeler/*.py \
+    gui_core/*.py iclass/*.py lmgr/*.py location_wizard/*.py main_window/*.py mapwin/*.py mapdisp/*.py \
+    mapswipe/*.py modules/*.py nviz/*.py psmap/*.py rdigit/*.py \
+    rlisetup/*.py startup/*.py timeline/*.py vdigit/*.py \
+    vnet/*.py web_services/*.py wxplot/*.py iscatt/*.py tplot/*.py photo2image/*.py image2target/*.py) \
+    $(wildcard jupyter_notebook/template_notebooks/*.ipynb) \
+    wxgui.py README.md
+
 
 DSTFILES := $(patsubst %,$(DSTDIR)/%,$(SRCFILES)) \
 	$(patsubst %.py,$(DSTDIR)/%.pyc,$(filter %.py,$(SRCFILES)))
@@ -25,7 +27,7 @@ PYDSTDIRS := $(patsubst %,$(DSTDIR)/%,animation core datacatalog jupyter_noteboo
 	vnet timeline iscatt tplot photo2image image2target)
 
 
-DSTDIRS := $(patsubst %,$(DSTDIR)/%,icons xml)
+DSTDIRS := $(patsubst %,$(DSTDIR)/%,icons xml jupyter_notebook/template_notebooks)
 
 default: $(DSTFILES)
 ifndef CROSS_COMPILING

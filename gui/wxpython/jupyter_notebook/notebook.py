@@ -4,7 +4,7 @@
 @brief Manages the jupyter notebook widget.
 
 Classes:
- - page::JupyterAuiNotebook
+ - notebook::JupyterAuiNotebook
 
 (C) 2025 by the GRASS Development Team
 
