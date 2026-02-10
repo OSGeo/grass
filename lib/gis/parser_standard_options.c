@@ -93,6 +93,7 @@
    - G_OPT_F_BIN_INPUT
    - G_OPT_F_OUTPUT
    - G_OPT_F_SEP
+   - G_OPT_F_FORMAT
 
    - colors
    - G_OPT_C
