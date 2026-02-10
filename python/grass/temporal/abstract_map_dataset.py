@@ -12,12 +12,11 @@ for details.
 
 from abc import ABCMeta, abstractmethod
 from datetime import datetime
-import json
 
 import grass.script as gs
 from grass.exceptions import ImplementationError
 
-from .abstract_dataset import AbstractDataset, TemporalJSONEncoder
+from .abstract_dataset import AbstractDataset
 from .core import (
     get_current_mapset,
     get_enable_mapset_check,
@@ -342,58 +341,21 @@ class AbstractMapDataset(AbstractDataset):
         if self.is_topology_build():
             self.print_topology_shell_info()
 
-    def print_json(self) -> None:
-        """Print information about this object as JSON to stdout."""
-        obj = self._to_json_dict()
-        print(json.dumps(obj, cls=TemporalJSONEncoder, indent=4))
-
     def _to_json_dict(self):
-        """Build a dict from getters for JSON output."""
-        base = self.base
-        t_ext = self.temporal_extent
-        s_ext = self.spatial_extent
-        meta = self.metadata
+        """Build a dictionary from internal metadata storage for JSON output.
 
-        data = {
-            "id": base.get_id(),
-            "name": base.get_name(),
-            "mapset": base.get_mapset(),
-            "creator": base.get_creator(),
-            "temporal_type": base.get_ttype(),
-            "creation_time": base.get_ctime(),
-            "start_time": t_ext.get_start_time(),
-            "end_time": t_ext.get_end_time(),
-            "north": s_ext.get_north(),
-            "south": s_ext.get_south(),
-            "east": s_ext.get_east(),
-            "west": s_ext.get_west(),
-            "top": s_ext.get_top(),
-            "bottom": s_ext.get_bottom(),
-        }
-        if getattr(base, "get_layer", None) and base.get_layer() is not None:
-            data["layer"] = base.get_layer()
-        if getattr(t_ext, "get_unit", None) and t_ext.get_unit() is not None:
-            data["unit"] = t_ext.get_unit()
+        Extends the base implementation by adding information about
+        space-time datasets that this map is registered in.
 
-        meta_keys = [
-            ("datatype", "get_datatype"),
-            ("cols", "get_cols"),
-            ("rows", "get_rows"),
-            ("number_of_cells", "get_number_of_cells"),
-            ("nsres", "get_nsres"),
-            ("ewres", "get_ewres"),
-            ("min", "get_min"),
-            ("max", "get_max"),
-        ]
-        for key, getter in meta_keys:
-            if hasattr(meta, getter):
-                val = getattr(meta, getter)()
-                if val is not None:
-                    data[key] = val
+        :return: Complete metadata dictionary including STDS registration info
+        """
+        # Get base metadata from parent class (uses dict-merge approach)
+        data = super()._to_json_dict()
 
+        # Add map-specific information: which STDSs is this map registered in?
         datasets = self.get_registered_stds()
         if datasets:
-            data["registered_datasets"] = list(datasets)
+            data["registered_datasets"] = sorted(list(datasets))
 
         return data
 
