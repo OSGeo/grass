@@ -906,8 +906,42 @@ class GMFrame(wx.Frame):
         # add map display panel to notebook and make it current
         self.mainnotebook.AddPage(gmodeler_panel, _("Graphical Modeler"))
 
+    def _show_jupyter_missing_message(self):
+        wx.MessageBox(
+            _(
+                "To use notebooks in GRASS, you need to have the Jupyter Notebook "
+                "package installed. Please install it and restart GRASS."
+            ),
+            _("Jupyter Notebook not available"),
+            wx.OK | wx.ICON_INFORMATION,
+            parent=self,
+        )
+
+    def _show_html2_missing_message(self):
+        wx.MessageBox(
+            _(
+                "Jupyter Notebook integration requires wxPython with wx.html2 "
+                "(WebView) support enabled.\n\n"
+                "Install wxPython/wxWidgets with HTML2/WebView support or use "
+                "Jupyter externally in a browser."
+            ),
+            _("Jupyter Notebook not available"),
+            wx.OK | wx.ICON_INFORMATION,
+            parent=self,
+        )
+
     def OnJupyterNotebook(self, event=None, cmd=None):
+        """Launch Jupyter Notebook interface."""
+        from grass.workflows.utils import (
+            is_jupyter_installed,
+            is_wx_html2_available,
+        )
         from jupyter_notebook.dialogs import JupyterStartDialog
+
+        # global requirement (always needed)
+        if not is_jupyter_installed():
+            self._show_jupyter_missing_message()
+            return
 
         dlg = JupyterStartDialog(parent=self)
 
@@ -926,6 +960,11 @@ class GMFrame(wx.Frame):
         create_template = values["create_template"]
 
         if action == "integrated":
+            # Embedded notebook mode: create JupyterFrame and start server within it
+            if not is_wx_html2_available():
+                self._show_html2_missing_message()
+                return
+
             # Embedded notebook mode: create JupyterPanel and start server within it
             from jupyter_notebook.panel import JupyterPanel
 
