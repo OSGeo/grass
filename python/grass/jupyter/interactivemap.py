@@ -19,6 +19,7 @@ import base64
 import json
 from pathlib import Path
 from .reprojection_renderer import ReprojectionRenderer
+from .legend import parse_colors, generate_legend_html
 
 from .utils import (
     get_region_bounds_latlon,
@@ -367,6 +368,65 @@ class InteractiveMap:
         """
         self.raster_name.append(name)
         Raster(name, title=title, renderer=self._renderer, **kwargs).add_to(self.map)
+
+    def add_legend(self, raster_name, title=None, position="bottomright", **kwargs):
+        """Add a legend for a raster layer.
+
+        This method generates a legend based on the raster's color table
+        using r.colors.out. The legend is displayed as an HTML overlay
+        on the map.
+
+        :param str raster_name: Name of the raster map to create legend for
+        :param str title: Title to display in the legend (defaults to raster name)
+        :param str position: Position of the legend on the map
+                            (e.g., "bottomright", "topleft")
+        :param kwargs: Additional keyword arguments:
+                      - max_items: Maximum number of items to display for
+                                   continuous rasters (default: 12)
+        """
+        if title is None:
+            title = raster_name
+
+        max_items = kwargs.get("max_items", 12)
+
+        # Parse color table
+        parsed = parse_colors(raster_name)
+
+        # Generate HTML
+        legend_html = generate_legend_html(parsed, title=title, max_items=max_items)
+
+        # Add to map based on backend
+        if self._folium:
+            # For folium, use a custom HTML element
+            from branca.element import (  # pylint: disable=import-outside-toplevel
+                Element,
+            )
+
+            legend_element = Element(legend_html)
+            # Get the HTML representation
+            html_repr = legend_element._repr_html_()  # pylint: disable=protected-access
+
+            # Create a macro to add the legend to the map
+            macro = f"""
+            {{% macro html(this, kwargs) %}}
+            <div id='maplegend' class='maplegend'
+                style='position: absolute; z-index:9999; background-color:rgba(255, 255, 255, 0.8);
+                border-radius:6px; padding: 10px; font-size:14px; {position}: 10px; bottom: 20px;'>
+            {html_repr}
+            </div>
+            {{% endmacro %}}
+            """
+            legend = Element(macro)
+            self.map.get_root().add_child(legend)
+
+        else:
+            # For ipyleaflet, use WidgetControl
+            legend_widget = self._ipywidgets.HTML(value=legend_html)
+            legend_control = self._ipyleaflet.WidgetControl(
+                widget=legend_widget, position=position
+            )
+            self.map.add(legend_control)
+
 
     def add_layer_control(self, **kwargs):
         """Add layer control to display.
