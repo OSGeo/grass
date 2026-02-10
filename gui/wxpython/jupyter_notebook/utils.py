@@ -1,24 +1,18 @@
-#
-# AUTHOR(S): Linda Karlovska <linda.karlovska@seznam.cz>
-#
-# PURPOSE:   Provides utils related to launching and managing
-#            a local Jupyter server.
-#
-# COPYRIGHT: (C) 2025 by Linda Karlovska and the GRASS Development Team
-#
-#            This program is free software under the GNU General Public
-#            License (>=v2). Read the file COPYING that comes with GRASS
-#            for details.
-
 """
-This module provides utils for launching and managing
-a local Jupyter server.
+@package jupyter_notebook.utils
+
+@brief wxGUI Jupyter toolbars classes
 
 Functions:
-- `is_jupyter_installed()`: Check if Jupyter Notebook is installed on the system.
+- `is_jupyter_installed()`: Check if Jupyter Notebook is installed on the system and functional.
 - `is_wx_html2_available()`: Check if wx.html2 module is available.
 
-Designed for use within GRASS GUI tools or scripting environments.
+(C) 2025 by the GRASS Development Team
+
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
+
+@author Linda Karlovska <linda.karlovska seznam.cz>
 """
 
 import shutil

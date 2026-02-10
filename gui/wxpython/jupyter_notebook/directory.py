@@ -1,26 +1,18 @@
-#
-# AUTHOR(S): Linda Karlovska <linda.karlovska@seznam.cz>
-#
-# PURPOSE:   Provides an interface for managing notebook working directory.
-#
-# COPYRIGHT: (C) 2025 by Linda Karlovska and the GRASS Development Team
-#
-#            This program is free software under the GNU General Public
-#            License (>=v2). Read the file COPYING that comes with GRASS
-#            for details.
-
 """
-This module defines a class `JupyterDirectoryManager` that provides functionality
-for working with Jupyter Notebook files stored within the current working directory.
+@package jupyter_notebook.directory
 
-Features:
-- Creates a working directory if it does not exist
-- Generates default template files
-- Lists existing files in a working directory
-- Imports files from external locations
-- Exports files to external locations
+@brief Simple interface for working with Jupyter Notebook files stored within
+the current working directory.
 
-Designed for use within GRASS GUI tools or scripting environments.
+Classes:
+ - directory::JupyterDirectoryManager
+
+(C) 2025 by the GRASS Development Team
+
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
+
+@author Linda Karlovska <linda.karlovska seznam.cz>
 """
 
 import os
