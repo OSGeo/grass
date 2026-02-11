@@ -231,18 +231,7 @@ function(_build_addon)
       endif()
     endforeach()
 
-    set(_extra_link_libs)
-    if(UNIX)
-      # On UNIX-like platforms some math symbols require linking libm.
-      # Create the LIBM target if needed and link it unconditionally.
-      find_M()
-      if(TARGET LIBM)
-        list(APPEND _extra_link_libs LIBM)
-      endif()
-    endif()
-
-    target_link_libraries(${G_NAME} ${G_GRASSLIBS} ${G_DEPENDS} ${opt_depends}
-                          ${_extra_link_libs})
+    target_link_libraries(${G_NAME} ${G_GRASSLIBS} ${G_DEPENDS} ${opt_depends})
 
     install(TARGETS ${G_NAME} DESTINATION ${install_dest})
   endif()
