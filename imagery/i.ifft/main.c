@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
     int i, j;       /* Loop control variables */
     int rows, cols; /* number of rows & columns */
     long totsize;   /* Total number of data points */
-    double(
+    double (
         *data)[2]; /* Data structure containing real & complex values of FFT */
 
     G_gisinit(argv[0]);

@@ -8,7 +8,7 @@
 #define STR_LEN              1024
 #define BUFSZ                256
 
-enum OutputFormat { PLAIN, SHELL, JSON };
+enum OutputFormat { PLAIN, SHELL, JSON, CSV, NONE };
 
 /* level1.c */
 int level_one_info(struct Map_info *);

@@ -17,12 +17,12 @@ pytest utils/test_generate_last_commit_file.py
 @author Tomas Zigo <tomas.zigo slovanet.sk>
 """
 
-import os
 import json
+import os
 import subprocess
+from pathlib import Path
 
 import pytest
-from pathlib import Path
 
 from .generate_last_commit_file import COMMIT_DATE_FORMAT
 

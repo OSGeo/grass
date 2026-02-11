@@ -428,7 +428,7 @@ int map_type(const char *name, int mod)
     }
 }
 
-int open_map(const char *name, int mod, int row, int col)
+int open_map(const char *name, int mod, int row, int col, int thread_num UNUSED)
 {
     int i;
     const char *mapset;

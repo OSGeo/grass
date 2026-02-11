@@ -23,6 +23,7 @@ import os
 import re
 import copy
 from multiprocessing import Process, Queue, cpu_count
+from pathlib import Path
 
 import wx
 
@@ -354,7 +355,7 @@ class DataCatalogTree(TreeView):
         dbs = UserSettings.Get(
             group="datacatalog", key="grassdbs", subkey="listAsString"
         )
-        return [db for db in dbs.split(",") if os.path.isdir(db)]
+        return [db for db in dbs.split(",") if Path(db).is_dir()]
 
     def _saveGrassDBs(self):
         """Save current grass dbs in tree to settings"""

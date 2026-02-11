@@ -181,7 +181,7 @@ def get_default_git_log(src_dir, datetime_format="%A %b %d %H:%M:%S %Y"):
     """
     return {
         "commit": "unknown",
-        "date": datetime.fromtimestamp(os.path.getmtime(src_dir)).strftime(
+        "date": datetime.fromtimestamp(Path(src_dir).stat().st_mtime).strftime(
             datetime_format
         ),
     }

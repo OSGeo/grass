@@ -9,11 +9,11 @@ authors:
 GRASS Python interface provides libraries to use GRASS tools, create scripts,
 and access the GRASS data structures. The Python interface consists of
 three main libraries:
-*[grass.tools](https://grass.osgeo.org/grass-stable/manuals/libpython/tools_index.html)*
+*[grass.tools](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.tools.html)*
 provides a Python interface to GRASS tools,
-*[grass.script](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script_intro.html)*
+*[grass.script](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html)*
 handles GRASS projects and sessions in Python,
-and *[grass.pygrass](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_index.html)*
+and *[grass.pygrass](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.pygrass.html)*
 enables a fine-grained access to the GRASS data structures.
 
 ## Scripting
@@ -65,7 +65,7 @@ tools.r_slope_aspect(elevation="elevation", slope="slope")
 
 ### Running tools
 
-Tools can be accessed through a *[grass.tool.Tools](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.tools.html#grass.tools.Tools)*
+Tools can be accessed through a *[grass.tools.Tools](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.tools.html#grass.tools.Tools)*
 object from *grass.tools* which is created either within an active GRASS
 session or with a session passed as a parameter (see above).
 Here, we create the *Tools* object assuming an active session:
@@ -183,7 +183,7 @@ we can use the *text* attribute:
 print(tools.g_region(flags="p").text)
 ```
 
-The documentation of *[grass.tool.support.ToolResult](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.tools.html#grass.tools.support.ToolResult)*
+The documentation of *[grass.tools.support.ToolResult](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.tools.html#grass.tools.support.ToolResult)*
 provides an overview of all the attributes and text processing functions,
 such as *text_split* function and *comma_items* attribute.
 
@@ -216,8 +216,8 @@ tools.g_region(n=elevation.shape[0], s=0, e=elevation.shape[1], w=0, res=1)
 accumulation = tools.r_watershed(elevation=elevation, accumulation=np.array)
 ```
 
-Additional APIs, *[grass.script.array](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html#script.array.array)*
-and *[grass.script.array3d](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html#script.array.array3d)*,
+Additional APIs, *[grass.script.array](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html#grass.script.array.array)*
+and *[grass.script.array3d](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html#grass.script.array.array3d)*,
 provide you with full control over read and writing data
 between GRASS raster maps and NumPy arrays, including 3D raster maps.
 The following example demonstrates reading an existing GRASS raster into a NumPy
@@ -293,7 +293,7 @@ of GRASS. The [grass.pygrass.gis](https://grass.osgeo.org/grass-stable/manuals/l
 module provides functions to create, manage, and delete GRASS projects and
 mapsets. The core classes include [Gisdbase](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.gis.html#pygrass.gis.Gisdbase),
 [Location](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.gis.html#pygrass.gis.Location),
-and [Mapset](https://grass.osgeo.org/grass85/manuals/libpython/pygrass.gis.html#pygrass.gis.Mapset).
+and [Mapset](https://grass.osgeo.org/grass86/manuals/libpython/pygrass.gis.html#pygrass.gis.Mapset).
 
 The [Gisdbase](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.gis.html#pygrass.gis.Gisdbase)
 class provides access to the GRASS database
@@ -333,7 +333,7 @@ print(location.name)
 mapsets = location.mapsets()
 ```
 
-The [Mapset](https://grass.osgeo.org/grass85/manuals/libpython/pygrass.gis.html#pygrass.gis.Mapset)
+The [Mapset](https://grass.osgeo.org/grass86/manuals/libpython/pygrass.gis.html#pygrass.gis.Mapset)
 object provides access to the specific mapset and its layers.
 
 ```python
@@ -427,19 +427,19 @@ direct read and write access to raster data with the
 module. The core classes include [RasterRow](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rasterrow),
 [RasterRowIO](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rasterrowio),
 and [RasterSegment](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rastersegment).
-Each class provides a different level of access to the raster data with its own set
-of read and write capabilities, as shown in the table below.
+Each class provides a different level of access to the raster data with its own
+set of read and write capabilities, as shown in the table below.
 
-| Class          | Description                                             | Read | Write |
-|----------------|-------------------------------------------------------- |-------|------|
-| [RasterRow](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rasterrow)    | Read write access to raster row data.                       | :rabbit2: Random  | :rabbit2: Sequential |
-| [RasterRowIO](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rasterrowio)  | Fast read only access to raster row data.                   | :rabbit2: Cached | :x: No |
-| [RasterSegment](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rastersegment) | Simultaneous read write access to tiled raster segments stored on disk.       | :turtle: Cached | :turtle: Random |
+| Class | Description | Read | Write |
+| ----- | ----------- | ---- | ----- |
+| [RasterRow](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rasterrow) | Read write access to raster row data. | :rabbit2: Random | :rabbit2: Sequential |
+| [RasterRowIO](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rasterrowio) | Fast read only access to raster row data. | :rabbit2: Cached | :x: No |
+| [RasterSegment](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rastersegment) | Simultaneous read write access to tiled raster segments stored on disk. | :turtle: Cached | :turtle: Random |
 
 The [RasterRow](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_raster.html#rasterrow)
 class allows for either read or write access to raster row data
-and provides methods to access raster state and metadata. To read all rows of the
-`elevation` raster:
+and provides methods to access raster state and metadata.
+To read all rows of the `elevation` raster:
 
 ```python
 from grass.pygrass import raster
@@ -497,8 +497,8 @@ module provides direct read and write access to vector data in GRASS.
 The core classes include [Vector](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.Vector)
 and [VectorTopo](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_vector.html#vectortopo-label).
 
-| Class          | Description  |
-|----------------|--------------|
+| Class | Description |
+| ----- | ----------- |
 | [Vector](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.Vector) | Provides basic information about vector data. |
 | [VectorTopo](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_vector.html#vectortopo-label) | Read and write access to vector data. |
 
@@ -547,7 +547,7 @@ To build a geometry object, you can use the geometry class in the
 module.
 
 | Geometry Class | Description |
-|----------------|-------------|
+| -------------- | ----------- |
 | [Area](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Area) | Represents the topological composition of a closed ring of boundaries and a centroid. |
 | [Boundary](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Boundary) | Represents the border line to describe an area. |
 | [Centroid](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Centroid) | Represents a centroid feature in a vector map. |

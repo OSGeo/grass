@@ -2,7 +2,6 @@
 
 import pytest
 
-
 from grass.exceptions import CalledModuleError
 
 

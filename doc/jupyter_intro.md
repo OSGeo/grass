@@ -266,7 +266,7 @@ For complete documentation on the `grass.tools` package, see the
 library documentation page.
 
 For complete documentation on the `grass.script` package, see the
-[grass.script](https://grass.osgeo.org/grass-stable/manuals/libpython/script_intro.html)
+[grass.script](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html)
 library documentation page.
 
 ## Tutorials
