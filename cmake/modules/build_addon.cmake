@@ -231,7 +231,18 @@ function(_build_addon)
       endif()
     endforeach()
 
-    target_link_libraries(${G_NAME} ${G_GRASSLIBS} ${G_DEPENDS} ${opt_depends})
+    set(_extra_link_libs)
+    if(UNIX)
+      # On UNIX-like platforms some math symbols require linking libm.
+      # Create the LIBM target if needed and link it unconditionally.
+      find_M()
+      if(TARGET LIBM)
+        list(APPEND _extra_link_libs LIBM)
+      endif()
+    endif()
+
+    target_link_libraries(${G_NAME} ${G_GRASSLIBS} ${G_DEPENDS} ${opt_depends}
+                          ${_extra_link_libs})
 
     install(TARGETS ${G_NAME} DESTINATION ${install_dest})
   endif()
@@ -338,5 +349,19 @@ macro(find_OpenMP)
   find_package(OpenMP)
   if(OpenMP_FOUND AND MSVC AND CMAKE_VERSION VERSION_LESS "3.30")
     add_compile_options(-openmp:llvm)
+  endif()
+endmacro()
+
+macro(find_M)
+  if(UNIX AND NOT TARGET LIBM)
+    find_library(MATH_LIBRARY m)
+    add_library(LIBM INTERFACE IMPORTED GLOBAL)
+    if(MATH_LIBRARY)
+      set_property(TARGET LIBM PROPERTY INTERFACE_LINK_LIBRARIES ${MATH_LIBRARY})
+    else()
+      # Fallback: allow the linker to resolve -lm by name.
+      set_property(TARGET LIBM PROPERTY INTERFACE_LINK_LIBRARIES m)
+    endif()
+    set(LIBM LIBM)
   endif()
 endmacro()
