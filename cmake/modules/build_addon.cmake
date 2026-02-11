@@ -362,6 +362,5 @@ macro(find_M)
       # Fallback: allow the linker to resolve -lm by name.
       set_property(TARGET LIBM PROPERTY INTERFACE_LINK_LIBRARIES m)
     endif()
-    set(LIBM LIBM)
   endif()
 endmacro()
