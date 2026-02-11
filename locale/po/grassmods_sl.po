@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_sl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-03 15:41+0000\n"
+"POT-Creation-Date: 2026-01-31 15:57+0000\n"
 "PO-Revision-Date: 2025-07-26 01:37+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Slovenian <https://weblate.osgeo.org/projects/grass-gis/grassmods/sl/>\n"
@@ -19,13 +19,13 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3;\n"
 "X-Generator: Weblate 5.4.3\n"
 
-#: ../db/db.columns/main.c:47 ../db/db.copy/main.c:104
+#: ../db/db.columns/main.c:50 ../db/db.copy/main.c:104
 #: ../db/db.describe/main.c:65 ../db/db.select/main.c:77
 #, fuzzy, c-format
 msgid "Table <%s> not found in database <%s> using driver <%s>"
 msgstr "Ne morem odpreti baze podatkov %s z gonilnikom %s"
 
-#: ../db/db.columns/main.c:54 ../db/db.createdb/main.c:38
+#: ../db/db.columns/main.c:57 ../db/db.createdb/main.c:38
 #: ../db/db.databases/main.c:47 ../db/db.describe/main.c:71
 #: ../db/db.dropdb/main.c:39 ../db/db.execute/main.c:68
 #: ../db/db.select/main.c:106 ../db/db.tables/main.c:45
@@ -34,12 +34,12 @@ msgstr "Ne morem odpreti baze podatkov %s z gonilnikom %s"
 #: ../raster/r.stream.extract/close.c:176 ../vector/v.db.connect/main.c:337
 #: ../vector/v.db.connect/main.c:480 ../vector/v.edit/select.c:505
 #: ../vector/v.out.svg/main.c:152 ../vector/v.out.vtk/writeVTK.c:640
-#: ../vector/v.profile/main.c:434 ../vector/v.profile/main.c:600
+#: ../vector/v.profile/main.c:469 ../vector/v.profile/main.c:635
 #, fuzzy, c-format
 msgid "Unable to start driver <%s>"
 msgstr "Ne morem zagnati gonilnika '%s'."
 
-#: ../db/db.columns/main.c:59 ../db/db.describe/main.c:76
+#: ../db/db.columns/main.c:62 ../db/db.describe/main.c:76
 #: ../db/db.execute/main.c:74 ../db/db.select/main.c:112
 #: ../db/db.tables/main.c:50 ../display/d.vect.thematic/main.c:299
 #: ../display/d.vect/opt.c:152
@@ -47,22 +47,22 @@ msgstr "Ne morem zagnati gonilnika '%s'."
 msgid "Unable to open database <%s>"
 msgstr "Ime izhodnega rastrskega sloja"
 
-#: ../db/db.columns/main.c:65 ../db/db.describe/main.c:82
+#: ../db/db.columns/main.c:68 ../db/db.describe/main.c:82
 #: ../doc/examples/vector/v.example/main.c:143
 #: ../scripts/db.univar/db.univar.py:129 ../vector/v.db.connect/main.c:350
 #: ../vector/v.extract/main.c:233 ../vector/v.in.ascii/main.c:447
-#: ../vector/v.info/print.c:229 ../vector/v.out.ogr/main.c:718
+#: ../vector/v.info/print.c:236 ../vector/v.out.ogr/main.c:718
 #: ../vector/v.out.postgis/table.c:41 ../vector/v.out.svg/main.c:165
 #: ../vector/v.out.vtk/writeVTK.c:651 ../vector/v.patch/main.c:169
-#: ../vector/v.patch/main.c:215 ../vector/v.profile/main.c:447
-#: ../vector/v.profile/main.c:611 ../vector/v.random/main.c:282
+#: ../vector/v.patch/main.c:215 ../vector/v.profile/main.c:482
+#: ../vector/v.profile/main.c:646 ../vector/v.random/main.c:282
 #: ../vector/v.random/main.c:314 ../vector/v.reclass/main.c:189
 #: ../vector/v.to.db/main.c:151 ../vector/v.to.db/main.c:179
 #, fuzzy, c-format, python-format
 msgid "Unable to describe table <%s>"
 msgstr "Ne morem opisati tabele"
 
-#: ../db/db.columns/main.c:73 ../db/db.describe/main.c:54
+#: ../db/db.columns/main.c:76 ../db/db.describe/main.c:54
 #: ../db/db.describe/main.c:59 ../db/db.select/main.c:118
 #: ../db/db.select/main.c:219 ../db/db.select/main.c:272
 #: ../general/g.list/list.c:89 ../general/g.mapset/main.c:175
@@ -76,16 +76,17 @@ msgstr "Ne morem opisati tabele"
 #: ../vector/v.category/main.c:333 ../vector/v.class/main.c:223
 #: ../vector/v.class/main.c:264 ../vector/v.class/main.c:271
 #: ../vector/v.db.connect/main.c:148 ../vector/v.distance/main.c:310
-#: ../vector/v.info/print.c:863 ../vector/v.vect.stats/main.c:284
-#: ../vector/v.what.rast/main.c:144 ../vector/v.what/main.c:226
-#: ../vector/v.what/what.c:510 ../vector/v.what/what.c:654
-#: ../vector/v.what/what.c:707 ../vector/v.what/what.c:900
-#: ../vector/v.what/what.c:1039 ../vector/v.what/what.c:1160
+#: ../vector/v.info/print.c:903 ../vector/v.profile/main.c:296
+#: ../vector/v.vect.stats/main.c:284 ../vector/v.what.rast/main.c:144
+#: ../vector/v.what/main.c:226 ../vector/v.what/what.c:510
+#: ../vector/v.what/what.c:654 ../vector/v.what/what.c:707
+#: ../vector/v.what/what.c:900 ../vector/v.what/what.c:1039
+#: ../vector/v.what/what.c:1160
 #, fuzzy
 msgid "Failed to initialize JSON array. Out of memory?"
 msgstr "Ne morem izračunati centroida območja."
 
-#: ../db/db.columns/main.c:98 ../db/db.connect/main.c:243
+#: ../db/db.columns/main.c:169 ../db/db.connect/main.c:243
 #: ../general/g.findfile/main.c:36 ../general/g.list/list.c:140
 #: ../general/g.mapset/main.c:38 ../general/g.mapsets/list.c:34
 #: ../misc/m.measure/main.c:182 ../raster/r.distance/report.c:138
@@ -93,106 +94,49 @@ msgstr "Ne morem izračunati centroida območja."
 #: ../raster/r.regression.multi/main.c:696
 #: ../raster/r.stats.quantile/main.c:472 ../raster/r.volume/main.c:448
 #: ../raster3d/r3.info/main.c:993 ../vector/v.class/main.c:379
-#: ../vector/v.db.connect/main.c:430 ../vector/v.vect.stats/main.c:863
-#: ../vector/v.what.rast/main.c:694 ../vector/v.what/main.c:321
+#: ../vector/v.db.connect/main.c:430 ../vector/v.profile/main.c:885
+#: ../vector/v.vect.stats/main.c:863 ../vector/v.what.rast/main.c:694
+#: ../vector/v.what/main.c:321
 msgid "Failed to serialize JSON to pretty format."
 msgstr ""
 
-#: ../db/db.columns/main.c:133 ../db/db.connect/main.c:48
-#: ../db/db.copy/main.c:34 ../db/db.createdb/main.c:66
-#: ../db/db.databases/main.c:94 ../db/db.describe/main.c:185
-#: ../db/db.drivers/main.c:68 ../db/db.dropdb/main.c:67
-#: ../db/db.execute/main.c:134 ../db/db.login/main.c:39
-#: ../db/db.select/main.c:465 ../db/db.tables/main.c:98
-#: ../locale/scriptstrings/db.dropcolumn_to_translate.c:2
-#: ../locale/scriptstrings/db.droptable_to_translate.c:2
-#: ../locale/scriptstrings/db.in.ogr_to_translate.c:2
-#: ../locale/scriptstrings/db.out.ogr_to_translate.c:2
-#: ../locale/scriptstrings/db.test_to_translate.c:2
-#: ../locale/scriptstrings/db.univar_to_translate.c:2
-#: ../locale/scriptstrings/t.vect.db.select_to_translate.c:5
-#: ../locale/scriptstrings/v.db.addcolumn_to_translate.c:4
-#: ../locale/scriptstrings/v.db.addtable_to_translate.c:4
-#: ../locale/scriptstrings/v.db.dropcolumn_to_translate.c:4
-#: ../locale/scriptstrings/v.db.droprow_to_translate.c:4
-#: ../locale/scriptstrings/v.db.droptable_to_translate.c:4
-#: ../locale/scriptstrings/v.db.join_to_translate.c:4
-#: ../locale/scriptstrings/v.db.reconnect.all_to_translate.c:4
-#: ../locale/scriptstrings/v.db.renamecolumn_to_translate.c:4
-#: ../locale/scriptstrings/v.db.update_to_translate.c:4
-#: ../locale/scriptstrings/v.what.vect_to_translate.c:4
-#: ../vector/v.db.connect/main.c:61 ../vector/v.db.select/main.c:99
-#: ../vector/v.distance/main.c:127 ../vector/v.in.db/main.c:53
-#: ../vector/v.to.db/main.c:39 ../vector/v.vect.stats/main.c:138
+#: ../db/db.columns/main.c:205
 #, fuzzy
-msgid "database"
-msgstr "ime baze podatkov"
+msgid "Print type information about the columns"
+msgstr "Izpiše vrednosti v stilu lupinskega skripta"
 
-#: ../db/db.columns/main.c:134 ../db/db.connect/main.c:49
-#: ../db/db.copy/main.c:35 ../db/db.createdb/main.c:67
-#: ../db/db.databases/main.c:95 ../db/db.describe/main.c:187
-#: ../db/db.dropdb/main.c:68 ../db/db.execute/main.c:135
-#: ../db/db.select/main.c:466 ../db/db.tables/main.c:99
-#: ../locale/scriptstrings/db.dropcolumn_to_translate.c:3
-#: ../locale/scriptstrings/db.droptable_to_translate.c:3
-#: ../locale/scriptstrings/db.in.ogr_to_translate.c:4
-#: ../locale/scriptstrings/db.out.ogr_to_translate.c:5
-#: ../locale/scriptstrings/db.test_to_translate.c:3
-#: ../locale/scriptstrings/db.univar_to_translate.c:4
-#: ../locale/scriptstrings/t.vect.db.select_to_translate.c:3
-#: ../locale/scriptstrings/v.db.addcolumn_to_translate.c:3
-#: ../locale/scriptstrings/v.db.addtable_to_translate.c:3
-#: ../locale/scriptstrings/v.db.dropcolumn_to_translate.c:3
-#: ../locale/scriptstrings/v.db.droprow_to_translate.c:3
-#: ../locale/scriptstrings/v.db.droptable_to_translate.c:3
-#: ../locale/scriptstrings/v.db.join_to_translate.c:3
-#: ../locale/scriptstrings/v.db.reconnect.all_to_translate.c:3
-#: ../locale/scriptstrings/v.db.renamecolumn_to_translate.c:3
-#: ../locale/scriptstrings/v.db.univar_to_translate.c:4
-#: ../locale/scriptstrings/v.db.update_to_translate.c:3
-#: ../locale/scriptstrings/v.what.strds_to_translate.c:7
-#: ../locale/scriptstrings/v.what.vect_to_translate.c:7
-#: ../vector/v.class/main.c:55 ../vector/v.db.connect/main.c:60
-#: ../vector/v.db.select/main.c:98 ../vector/v.distance/main.c:128
-#: ../vector/v.to.db/main.c:38 ../vector/v.univar/main.c:97
-#: ../vector/v.vect.stats/main.c:137 ../vector/v.what.rast/main.c:82
-#: ../vector/v.what.rast3/main.c:70
+#: ../db/db.columns/main.c:207
 #, fuzzy
-msgid "attribute table"
-msgstr "Izpiši etikete kategorij"
-
-#: ../db/db.columns/main.c:135
-#, fuzzy
-msgid "List all columns for a given table."
+msgid "Print the name and the type of all the columns for a given table."
 msgstr "naštej vse kolone (spremenljivke) za dano tabelo"
 
-#: ../db/db.columns/main.c:138 ../db/db.connect/main.c:57
-#: ../db/db.connect/main.c:66 ../db/db.connect/main.c:118
-#: ../db/db.describe/main.c:181 ../db/db.login/main.c:90
-#: ../display/d.mon/main.c:118 ../display/d.mon/main.c:124
-#: ../display/d.mon/main.c:130 ../general/g.findfile/main.c:95
-#: ../general/g.list/main.c:104 ../general/g.list/main.c:116
-#: ../general/g.list/main.c:146 ../general/g.list/main.c:152
-#: ../general/g.list/main.c:162 ../general/g.list/main.c:171
-#: ../general/g.mapset/main.c:90 ../general/g.mapset/main.c:102
-#: ../general/g.mapset/main.c:108 ../general/g.mapsets/main.c:111
-#: ../general/g.mapsets/main.c:115 ../general/g.mapsets/main.c:121
-#: ../general/g.mapsets/main.c:127 ../general/g.proj/main.c:76
-#: ../general/g.proj/main.c:81 ../general/g.proj/main.c:90
-#: ../general/g.proj/main.c:96 ../general/g.proj/main.c:105
-#: ../general/g.proj/main.c:111 ../general/g.proj/main.c:120
-#: ../general/g.proj/main.c:175 ../general/g.proj/main.c:229
-#: ../general/g.region/main.c:91 ../general/g.region/main.c:97
-#: ../general/g.region/main.c:102 ../general/g.region/main.c:108
-#: ../general/g.region/main.c:113 ../general/g.region/main.c:118
-#: ../general/g.region/main.c:124 ../general/g.region/main.c:132
-#: ../general/g.region/main.c:137 ../general/g.region/main.c:143
-#: ../general/g.region/main.c:151 ../general/g.region/main.c:157
-#: ../general/g.region/main.c:392 ../general/g.version/main.c:124
-#: ../imagery/i.group/main.c:91 ../imagery/i.group/main.c:102
-#: ../imagery/i.group/main.c:107 ../imagery/i.group/main.c:115
-#: ../imagery/i.signatures/main.c:122 ../imagery/i.signatures/main.c:128
-#: ../imagery/i.signatures/main.c:160
+#: ../db/db.columns/main.c:208 ../db/db.columns/main.c:226
+#: ../db/db.connect/main.c:57 ../db/db.connect/main.c:66
+#: ../db/db.connect/main.c:118 ../db/db.describe/main.c:181
+#: ../db/db.login/main.c:90 ../display/d.mon/main.c:118
+#: ../display/d.mon/main.c:124 ../display/d.mon/main.c:130
+#: ../general/g.findfile/main.c:95 ../general/g.list/main.c:104
+#: ../general/g.list/main.c:116 ../general/g.list/main.c:146
+#: ../general/g.list/main.c:152 ../general/g.list/main.c:162
+#: ../general/g.list/main.c:171 ../general/g.mapset/main.c:90
+#: ../general/g.mapset/main.c:102 ../general/g.mapset/main.c:108
+#: ../general/g.mapsets/main.c:111 ../general/g.mapsets/main.c:115
+#: ../general/g.mapsets/main.c:121 ../general/g.mapsets/main.c:127
+#: ../general/g.proj/main.c:76 ../general/g.proj/main.c:81
+#: ../general/g.proj/main.c:90 ../general/g.proj/main.c:96
+#: ../general/g.proj/main.c:105 ../general/g.proj/main.c:111
+#: ../general/g.proj/main.c:120 ../general/g.proj/main.c:175
+#: ../general/g.proj/main.c:229 ../general/g.region/main.c:91
+#: ../general/g.region/main.c:97 ../general/g.region/main.c:102
+#: ../general/g.region/main.c:108 ../general/g.region/main.c:113
+#: ../general/g.region/main.c:118 ../general/g.region/main.c:124
+#: ../general/g.region/main.c:132 ../general/g.region/main.c:137
+#: ../general/g.region/main.c:143 ../general/g.region/main.c:151
+#: ../general/g.region/main.c:157 ../general/g.region/main.c:392
+#: ../general/g.version/main.c:124 ../imagery/i.group/main.c:91
+#: ../imagery/i.group/main.c:102 ../imagery/i.group/main.c:107
+#: ../imagery/i.group/main.c:115 ../imagery/i.signatures/main.c:122
+#: ../imagery/i.signatures/main.c:128 ../imagery/i.signatures/main.c:160
 #: ../locale/scriptstrings/g.extension_to_translate.c:17
 #: ../locale/scriptstrings/g.extension_to_translate.c:19
 #: ../locale/scriptstrings/g.extension_to_translate.c:21
@@ -230,7 +174,7 @@ msgstr "naštej vse kolone (spremenljivke) za dano tabelo"
 #: ../vector/v.in.ogr/main.c:358 ../vector/v.info/parse.c:24
 #: ../vector/v.info/parse.c:29 ../vector/v.info/parse.c:34
 #: ../vector/v.info/parse.c:39 ../vector/v.info/parse.c:44
-#: ../vector/v.info/parse.c:53 ../vector/v.to.db/parse.c:118
+#: ../vector/v.info/parse.c:54 ../vector/v.to.db/parse.c:118
 #: ../vector/v.to.db/parse.c:125 ../vector/v.to.db/parse.c:130
 #: ../vector/v.to.db/parse.c:136 ../vector/v.to.db/parse.c:141
 #: ../vector/v.to.db/parse.c:147 ../vector/v.univar/main.c:152
@@ -241,6 +185,93 @@ msgstr "naštej vse kolone (spremenljivke) za dano tabelo"
 #: ../vector/v.what/main.c:134 ../vector/v.what/main.c:142
 msgid "Print"
 msgstr ""
+
+#: ../db/db.columns/main.c:212 ../db/db.select/main.c:412
+#: ../db/db.select/main.c:419 ../db/db.select/main.c:422
+#: ../db/db.select/main.c:435 ../db/db.select/main.c:445
+#: ../db/db.select/main.c:456 ../general/g.gisenv/main.c:93
+#: ../general/g.gisenv/main.c:98 ../vector/v.db.select/main.c:130
+#: ../vector/v.db.select/main.c:134 ../vector/v.db.select/main.c:140
+#: ../vector/v.db.select/main.c:143 ../vector/v.db.select/main.c:161
+#: ../vector/v.db.select/main.c:166 ../vector/v.profile/main.c:194
+#: ../vector/v.profile/main.c:197 ../vector/v.profile/main.c:206
+#: ../vector/v.profile/main.c:215
+#, fuzzy
+msgid "Format"
+msgstr "Izhodni sloj"
+
+#: ../db/db.columns/main.c:216 ../db/db.connect/main.c:48
+#: ../db/db.copy/main.c:34 ../db/db.createdb/main.c:66
+#: ../db/db.databases/main.c:94 ../db/db.describe/main.c:185
+#: ../db/db.drivers/main.c:68 ../db/db.dropdb/main.c:67
+#: ../db/db.execute/main.c:134 ../db/db.login/main.c:39
+#: ../db/db.select/main.c:465 ../db/db.tables/main.c:98
+#: ../locale/scriptstrings/db.dropcolumn_to_translate.c:2
+#: ../locale/scriptstrings/db.droptable_to_translate.c:2
+#: ../locale/scriptstrings/db.in.ogr_to_translate.c:2
+#: ../locale/scriptstrings/db.out.ogr_to_translate.c:2
+#: ../locale/scriptstrings/db.test_to_translate.c:2
+#: ../locale/scriptstrings/db.univar_to_translate.c:2
+#: ../locale/scriptstrings/t.vect.db.select_to_translate.c:5
+#: ../locale/scriptstrings/v.db.addcolumn_to_translate.c:4
+#: ../locale/scriptstrings/v.db.addtable_to_translate.c:4
+#: ../locale/scriptstrings/v.db.dropcolumn_to_translate.c:4
+#: ../locale/scriptstrings/v.db.droprow_to_translate.c:4
+#: ../locale/scriptstrings/v.db.droptable_to_translate.c:4
+#: ../locale/scriptstrings/v.db.join_to_translate.c:4
+#: ../locale/scriptstrings/v.db.reconnect.all_to_translate.c:4
+#: ../locale/scriptstrings/v.db.renamecolumn_to_translate.c:4
+#: ../locale/scriptstrings/v.db.update_to_translate.c:4
+#: ../locale/scriptstrings/v.what.vect_to_translate.c:4
+#: ../vector/v.db.connect/main.c:61 ../vector/v.db.select/main.c:99
+#: ../vector/v.distance/main.c:127 ../vector/v.in.db/main.c:53
+#: ../vector/v.to.db/main.c:39 ../vector/v.vect.stats/main.c:138
+#, fuzzy
+msgid "database"
+msgstr "ime baze podatkov"
+
+#: ../db/db.columns/main.c:217 ../db/db.connect/main.c:49
+#: ../db/db.copy/main.c:35 ../db/db.createdb/main.c:67
+#: ../db/db.databases/main.c:95 ../db/db.describe/main.c:187
+#: ../db/db.dropdb/main.c:68 ../db/db.execute/main.c:135
+#: ../db/db.select/main.c:466 ../db/db.tables/main.c:99
+#: ../locale/scriptstrings/db.dropcolumn_to_translate.c:3
+#: ../locale/scriptstrings/db.droptable_to_translate.c:3
+#: ../locale/scriptstrings/db.in.ogr_to_translate.c:4
+#: ../locale/scriptstrings/db.out.ogr_to_translate.c:5
+#: ../locale/scriptstrings/db.test_to_translate.c:3
+#: ../locale/scriptstrings/db.univar_to_translate.c:4
+#: ../locale/scriptstrings/t.vect.db.select_to_translate.c:3
+#: ../locale/scriptstrings/v.db.addcolumn_to_translate.c:3
+#: ../locale/scriptstrings/v.db.addtable_to_translate.c:3
+#: ../locale/scriptstrings/v.db.dropcolumn_to_translate.c:3
+#: ../locale/scriptstrings/v.db.droprow_to_translate.c:3
+#: ../locale/scriptstrings/v.db.droptable_to_translate.c:3
+#: ../locale/scriptstrings/v.db.join_to_translate.c:3
+#: ../locale/scriptstrings/v.db.reconnect.all_to_translate.c:3
+#: ../locale/scriptstrings/v.db.renamecolumn_to_translate.c:3
+#: ../locale/scriptstrings/v.db.univar_to_translate.c:4
+#: ../locale/scriptstrings/v.db.update_to_translate.c:3
+#: ../locale/scriptstrings/v.what.strds_to_translate.c:7
+#: ../locale/scriptstrings/v.what.vect_to_translate.c:7
+#: ../vector/v.class/main.c:55 ../vector/v.db.connect/main.c:60
+#: ../vector/v.db.select/main.c:98 ../vector/v.distance/main.c:128
+#: ../vector/v.to.db/main.c:38 ../vector/v.univar/main.c:97
+#: ../vector/v.vect.stats/main.c:137 ../vector/v.what.rast/main.c:82
+#: ../vector/v.what.rast3/main.c:70
+#, fuzzy
+msgid "attribute table"
+msgstr "Izpiši etikete kategorij"
+
+#: ../db/db.columns/main.c:218
+#, fuzzy
+msgid "List all columns for a given table."
+msgstr "naštej vse kolone (spremenljivke) za dano tabelo"
+
+#: ../db/db.columns/main.c:257 ../general/g.mapsets/main.c:166
+#, fuzzy
+msgid "Separator is part of the format."
+msgstr "Vnesi pogoje v enem od naslednjih formatov:\n"
 
 #: ../db/db.connect/main.c:50 ../db/db.drivers/main.c:69
 #: ../db/db.login/main.c:40
@@ -332,12 +363,13 @@ msgstr ""
 #: ../vector/v.category/main.c:942 ../vector/v.class/main.c:257
 #: ../vector/v.class/main.c:348 ../vector/v.db.connect/main.c:302
 #: ../vector/v.db.connect/main.c:395 ../vector/v.distance/main.c:1578
-#: ../vector/v.info/print.c:821 ../vector/v.info/print.c:857
-#: ../vector/v.univar/main.c:630 ../vector/v.vect.stats/main.c:800
-#: ../vector/v.what.rast/main.c:628 ../vector/v.what/what.c:202
-#: ../vector/v.what/what.c:273 ../vector/v.what/what.c:441
-#: ../vector/v.what/what.c:541 ../vector/v.what/what.c:682
-#: ../vector/v.what/what.c:730 ../vector/v.what/what.c:935
+#: ../vector/v.info/print.c:861 ../vector/v.info/print.c:897
+#: ../vector/v.profile/main.c:801 ../vector/v.univar/main.c:630
+#: ../vector/v.vect.stats/main.c:800 ../vector/v.what.rast/main.c:628
+#: ../vector/v.what/what.c:202 ../vector/v.what/what.c:273
+#: ../vector/v.what/what.c:441 ../vector/v.what/what.c:541
+#: ../vector/v.what/what.c:682 ../vector/v.what/what.c:730
+#: ../vector/v.what/what.c:935
 #, fuzzy
 msgid "Failed to initialize JSON object. Out of memory?"
 msgstr "Ime izhodnega rastrskega sloja"
@@ -521,7 +553,7 @@ msgstr "Navedi vse baze podatkov za določeni gonilnik in lokacijo"
 #: ../raster/r.what.color/main.c:290 ../raster/r.what/main.c:620
 #: ../vector/v.category/main.c:320 ../vector/v.category/main.c:989
 #: ../vector/v.distance/main.c:1799 ../vector/v.info/main.c:106
-#: ../vector/v.info/print.c:288 ../vector/v.info/print.c:904
+#: ../vector/v.info/print.c:306 ../vector/v.info/print.c:946
 #: ../vector/v.to.db/report.c:515 ../vector/v.univar/main.c:821
 #, fuzzy
 msgid "Failed to initialize pretty JSON string."
@@ -779,19 +811,6 @@ msgstr "Vhodni sloj vsebuje linije."
 #, fuzzy
 msgid "Name of table to query"
 msgstr "Ime rastrskega sloja, ki bo uporabljen za <%s>"
-
-#: ../db/db.select/main.c:412 ../db/db.select/main.c:419
-#: ../db/db.select/main.c:422 ../db/db.select/main.c:435
-#: ../db/db.select/main.c:445 ../db/db.select/main.c:456
-#: ../general/g.gisenv/main.c:93 ../general/g.gisenv/main.c:98
-#: ../vector/v.db.select/main.c:130 ../vector/v.db.select/main.c:134
-#: ../vector/v.db.select/main.c:140 ../vector/v.db.select/main.c:143
-#: ../vector/v.db.select/main.c:161 ../vector/v.db.select/main.c:166
-#: ../vector/v.profile/main.c:186 ../vector/v.profile/main.c:189
-#: ../vector/v.profile/main.c:198
-#, fuzzy
-msgid "Format"
-msgstr "Izhodni sloj"
 
 #: ../db/db.select/main.c:416
 #, fuzzy
@@ -1723,7 +1742,7 @@ msgstr ""
 #: ../display/d.rast.num/main.c:77 ../display/d.rast/main.c:53
 #: ../display/d.redraw/main.c:39 ../display/d.rgb/main.c:54
 #: ../display/d.rhumbline/main.c:42 ../display/d.text/main.c:136
-#: ../display/d.title/main.c:48 ../display/d.vect.chart/main.c:63
+#: ../display/d.title/main.c:48 ../display/d.vect.chart/main.c:85
 #: ../display/d.vect.thematic/main.c:88 ../display/d.vect/main.c:72
 #: ../display/d.where/main.c:44 ../general/g.cairocomp/main.c:200
 #: ../general/g.mkfontcap/main.c:64 ../general/g.pnmcomp/main.c:282
@@ -1748,7 +1767,7 @@ msgstr ""
 #: ../display/d.grid/main.c:51 ../display/d.legend.vect/main.c:49
 #: ../display/d.legend/main.c:77 ../display/d.linegraph/main.c:224
 #: ../display/d.northarrow/main.c:48 ../display/d.text/main.c:137
-#: ../display/d.title/main.c:49 ../display/d.vect.chart/main.c:64
+#: ../display/d.title/main.c:49 ../display/d.vect.chart/main.c:86
 #: ../display/d.vect.thematic/main.c:89
 #: ../locale/scriptstrings/d.rast.leg_to_translate.c:3
 msgid "cartography"
@@ -2313,7 +2332,7 @@ msgstr "L: od  S: do  D: zaključi\n"
 #: ../vector/v.in.dxf/main.c:62 ../vector/v.in.lidar/main.c:134
 #: ../vector/v.in.ogr/main.c:210 ../vector/v.in.pdal/main.cpp:129
 #: ../vector/v.in.region/main.c:40 ../vector/v.info/main.c:42
-#: ../vector/v.info/print.c:687 ../vector/v.kcv/main.c:53
+#: ../vector/v.info/print.c:727 ../vector/v.kcv/main.c:53
 #: ../vector/v.kernel/main.c:106 ../vector/v.label.sa/main.c:38
 #: ../vector/v.label/main.c:59 ../vector/v.lidar.correction/main.c:70
 #: ../vector/v.lidar.edgedetection/main.c:75
@@ -2336,7 +2355,7 @@ msgstr "L: od  S: do  D: zaključi\n"
 #: ../vector/v.out.svg/main.c:76 ../vector/v.out.vtk/main.c:45
 #: ../vector/v.outlier/main.c:68 ../vector/v.overlay/main.c:62
 #: ../vector/v.parallel/main.c:48 ../vector/v.patch/main.c:73
-#: ../vector/v.perturb/main.c:62 ../vector/v.profile/main.c:155
+#: ../vector/v.perturb/main.c:62 ../vector/v.profile/main.c:163
 #: ../vector/v.proj/main.c:71 ../vector/v.qcount/main.c:59
 #: ../vector/v.random/main.c:98 ../vector/v.reclass/main.c:67
 #: ../vector/v.rectify/main.c:67 ../vector/v.sample/main.c:73
@@ -2388,7 +2407,7 @@ msgstr "Nobena grafična naprava ni izbrana"
 #: ../vector/v.lrs/v.lrs.segment/main.c:138
 #: ../vector/v.lrs/v.lrs.where/main.c:126
 #: ../vector/v.lrs/v.lrs.where/main.c:135 ../vector/v.outlier/main.c:176
-#: ../vector/v.profile/main.c:371 ../vector/v.profile/main.c:375
+#: ../vector/v.profile/main.c:402 ../vector/v.profile/main.c:406
 #: ../vector/v.surf.bspline/main.c:260 ../vector/v.surf.bspline/main.c:336
 #: ../vector/v.vect.stats/main.c:319 ../vector/v.vect.stats/main.c:327
 #, fuzzy, c-format, python-format
@@ -2396,7 +2415,7 @@ msgid "Vector map <%s> not found"
 msgstr "Ne najdem vhodnega vektorja <%s>"
 
 #: ../display/d.extract/main.c:101 ../display/d.path/main.c:190
-#: ../display/d.vect.chart/main.c:244
+#: ../display/d.vect.chart/main.c:334
 #: ../doc/examples/vector/v.example/main.c:88 ../general/g.region/main.c:579
 #: ../general/manage/lister/vector.c:32 ../misc/m.nviz.image/vector.c:301
 #: ../raster/r.carve/main.c:157 ../raster/r.cost/main.c:599
@@ -2448,8 +2467,8 @@ msgstr "Ne najdem vhodnega vektorja <%s>"
 #: ../vector/v.patch/main.c:133 ../vector/v.patch/main.c:152
 #: ../vector/v.patch/main.c:188 ../vector/v.patch/main.c:335
 #: ../vector/v.patch/main.c:413 ../vector/v.perturb/main.c:160
-#: ../vector/v.perturb/main.c:190 ../vector/v.profile/main.c:382
-#: ../vector/v.profile/main.c:406 ../vector/v.proj/main.c:284
+#: ../vector/v.perturb/main.c:190 ../vector/v.profile/main.c:413
+#: ../vector/v.profile/main.c:441 ../vector/v.proj/main.c:284
 #: ../vector/v.qcount/main.c:101 ../vector/v.random/main.c:202
 #: ../vector/v.reclass/main.c:113 ../vector/v.rectify/main.c:152
 #: ../vector/v.sample/main.c:120 ../vector/v.segment/main.c:107
@@ -2509,7 +2528,7 @@ msgstr "Ime izhodnega rastrskega sloja"
 #: ../vector/v.outlier/main.c:237 ../vector/v.outlier/main.c:243
 #: ../vector/v.overlay/main.c:230 ../vector/v.parallel/main.c:151
 #: ../vector/v.patch/main.c:344 ../vector/v.patch/main.c:349
-#: ../vector/v.perturb/main.c:170 ../vector/v.profile/main.c:560
+#: ../vector/v.perturb/main.c:170 ../vector/v.profile/main.c:595
 #: ../vector/v.proj/main.c:481 ../vector/v.qcount/main.c:127
 #: ../vector/v.random/main.c:227 ../vector/v.reclass/main.c:117
 #: ../vector/v.rectify/main.c:219 ../vector/v.sample/main.c:159
@@ -3166,6 +3185,7 @@ msgid "Layout"
 msgstr ""
 
 #: ../display/d.legend.vect/main.c:77 ../display/d.legend/main.c:97
+#: ../display/d.vect.chart/main.c:172
 msgid "Legend title"
 msgstr ""
 
@@ -3988,7 +4008,7 @@ msgstr "Ime izhodnega rastrskega sloja"
 #: ../raster/r.recode/main.c:89 ../raster3d/r3.out.vtk/main.c:422
 #: ../vector/v.edit/main.c:82 ../vector/v.net/main.c:99
 #: ../vector/v.out.ascii/main.c:129 ../vector/v.out.vtk/main.c:172
-#: ../vector/v.profile/main.c:340
+#: ../vector/v.profile/main.c:371
 #, fuzzy, c-format
 msgid "Unable to open file <%s>"
 msgstr "Ne morem odpreti cellfile za [%s]"
@@ -4266,7 +4286,7 @@ msgstr "ne morem odpreti razpona za datoteko %s"
 
 #: ../display/d.profile/main.c:194 ../raster/r.profile/main.c:58
 #: ../raster/r.transect/main.c:103 ../raster3d/r3.cross.rast/main.c:230
-#: ../vector/v.profile/main.c:156
+#: ../vector/v.profile/main.c:164
 #, fuzzy
 msgid "profile"
 msgstr "Vhodni sloj"
@@ -4433,7 +4453,7 @@ msgid "List of categories or values to be displayed"
 msgstr "Ime rastrskega sloja, ki bo uporabljen za <%s>"
 
 #: ../display/d.rast/main.c:70 ../display/d.rast/main.c:87
-#: ../display/d.vect.chart/main.c:74 ../display/d.vect.chart/main.c:77
+#: ../display/d.vect.chart/main.c:96 ../display/d.vect.chart/main.c:99
 #: ../display/d.vect.thematic/main.c:100 ../display/d.vect.thematic/main.c:145
 #: ../display/d.vect/main.c:83 ../display/d.vect/main.c:107
 #: ../display/d.vect/main.c:110 ../display/d.vect/main.c:113
@@ -4504,8 +4524,8 @@ msgstr "Ime rastrskega sloja, ki bo uporabljen za <%s>"
 #: ../vector/v.out.lidar/main.c:486 ../vector/v.out.lidar/main.c:586
 #: ../vector/v.out.ogr/args.c:12 ../vector/v.out.ogr/args.c:22
 #: ../vector/v.out.ogr/args.c:116 ../vector/v.out.postgis/args.c:15
-#: ../vector/v.out.postgis/args.c:19 ../vector/v.profile/main.c:167
-#: ../vector/v.profile/main.c:170 ../vector/v.profile/main.c:175
+#: ../vector/v.out.postgis/args.c:19 ../vector/v.profile/main.c:175
+#: ../vector/v.profile/main.c:178 ../vector/v.profile/main.c:183
 #: ../vector/v.random/main.c:120 ../vector/v.random/main.c:124
 #: ../vector/v.random/main.c:127 ../vector/v.random/main.c:130
 #: ../vector/v.reclass/main.c:78 ../vector/v.reclass/main.c:83
@@ -4724,71 +4744,103 @@ msgstr "ne morem prebrati regije <%s> v <%s>"
 msgid "Unable to open temporary file <%s>"
 msgstr "Vrednost, ki bo prirejena NULL vrednosti"
 
-#: ../display/d.vect.chart/main.c:65
+#: ../display/d.vect.chart/main.c:87
 #, fuzzy
 msgid "chart maps"
 msgstr "Vhodni sloj"
 
-#: ../display/d.vect.chart/main.c:67
+#: ../display/d.vect.chart/main.c:89
 #, fuzzy
 msgid "Displays charts of vector data in the active frame on the graphics monitor."
 msgstr "Izbere pisavo v kateri bo tekst zapisan na grafičnem monitorju"
 
-#: ../display/d.vect.chart/main.c:86
+#: ../display/d.vect.chart/main.c:108
 #, fuzzy
 msgid "Chart type"
 msgstr "Tip objektov"
 
-#: ../display/d.vect.chart/main.c:87 ../display/d.vect.chart/main.c:97
-#: ../display/d.vect.chart/main.c:105 ../display/d.vect.chart/main.c:112
-#: ../display/d.vect.chart/main.c:117 ../display/d.vect.chart/main.c:123
-#: ../display/d.vect.chart/main.c:128 ../display/d.vect.chart/main.c:146
+#: ../display/d.vect.chart/main.c:109 ../display/d.vect.chart/main.c:119
+#: ../display/d.vect.chart/main.c:127 ../display/d.vect.chart/main.c:134
+#: ../display/d.vect.chart/main.c:139 ../display/d.vect.chart/main.c:145
+#: ../display/d.vect.chart/main.c:150 ../display/d.vect.chart/main.c:197
 #, fuzzy
 msgid "Chart properties"
 msgstr "Tip objektov"
 
-#: ../display/d.vect.chart/main.c:91
+#: ../display/d.vect.chart/main.c:113
 #, fuzzy
 msgid "Attribute columns containing data"
 msgstr "Vhodni sloj vsebuje linije."
 
-#: ../display/d.vect.chart/main.c:96
+#: ../display/d.vect.chart/main.c:118
 msgid "Column used for pie chart size"
 msgstr ""
 
-#: ../display/d.vect.chart/main.c:104
+#: ../display/d.vect.chart/main.c:126
 msgid "Size of chart (diameter for pie, total width for bar)"
 msgstr ""
 
-#: ../display/d.vect.chart/main.c:111
+#: ../display/d.vect.chart/main.c:133
 msgid "Scale for size (to get size in pixels)"
 msgstr ""
 
-#: ../display/d.vect.chart/main.c:116
+#: ../display/d.vect.chart/main.c:138
 #, fuzzy
 msgid "Outline color"
 msgstr " nv barva\n"
 
-#: ../display/d.vect.chart/main.c:122
+#: ../display/d.vect.chart/main.c:144
 msgid "Colors used to fill charts"
 msgstr ""
 
-#: ../display/d.vect.chart/main.c:127
+#: ../display/d.vect.chart/main.c:149
 msgid "Center the bar chart around a data point"
 msgstr ""
 
-#: ../display/d.vect.chart/main.c:136
+#: ../display/d.vect.chart/main.c:158
 msgid "Maximum value used for bar plot reference"
 msgstr ""
 
-#: ../display/d.vect.chart/main.c:141 ../display/d.vect.thematic/main.c:221
+#: ../display/d.vect.chart/main.c:163 ../display/d.vect.thematic/main.c:221
 msgid "Create legend information and send to stdout"
 msgstr ""
 
-#: ../display/d.vect.chart/main.c:145
+#: ../display/d.vect.chart/main.c:164 ../display/d.vect.chart/main.c:171
+#: ../display/d.vect.chart/main.c:180 ../display/d.vect.chart/main.c:187
+#: ../display/d.vect.chart/main.c:192 ../display/d.vect.thematic/main.c:184
+#: ../display/d.vect.thematic/main.c:196 ../display/d.vect.thematic/main.c:206
+#: ../display/d.vect.thematic/main.c:216 ../display/d.vect.thematic/main.c:222
+#: ../display/d.vect.thematic/main.c:228 ../display/d.vect.thematic/main.c:237
+#: ../display/d.vect.thematic/main.c:242 ../display/d.vect/main.c:201
+#: ../display/d.vect/main.c:211 ../display/d.vect/main.c:219
+#: ../display/d.vect/main.c:332
+msgid "Legend"
+msgstr ""
+
+#: ../display/d.vect.chart/main.c:181
+#, fuzzy
+msgid "Legend symbol size"
+msgstr "Zapiši vmesne točke v liniji."
+
+#: ../display/d.vect.chart/main.c:186 ../display/d.vect.thematic/main.c:227
+#, fuzzy
+msgid "Do not draw map, only output the legend information"
+msgstr "Izpiši etikete kategorij"
+
+#: ../display/d.vect.chart/main.c:191 ../display/d.vect.thematic/main.c:241
+#: ../display/d.vect/main.c:331
+msgid "Do not show this layer in vector legend"
+msgstr ""
+
+#: ../display/d.vect.chart/main.c:196
 #, fuzzy
 msgid "Create 3D charts"
 msgstr "Prepiši izhod"
+
+#: ../display/d.vect.chart/main.c:311
+#, fuzzy, c-format
+msgid "Unable to open GRASS_LEGEND_FILE <%s> for writing"
+msgstr "Ne morem odpreti cellfile za [%s]"
 
 #: ../display/d.vect.chart/plot.c:34 ../display/d.vect.thematic/plot1.c:108
 #: ../display/d.vect/shape.c:41 ../doc/examples/vector/v.example/main.c:110
@@ -4826,7 +4878,7 @@ msgstr "Povezava z bazo podatkov ni definirana\n"
 #: ../vector/v.in.ascii/main.c:359 ../vector/v.in.db/main.c:169
 #: ../vector/v.in.db/main.c:315 ../vector/v.in.dxf/write_vect.c:214
 #: ../vector/v.in.ogr/main.c:1167 ../vector/v.in.ogr/main.c:1216
-#: ../vector/v.info/print.c:221 ../vector/v.kcv/main.c:126
+#: ../vector/v.info/print.c:228 ../vector/v.kcv/main.c:126
 #: ../vector/v.label.sa/labels.c:78 ../vector/v.label/main.c:277
 #: ../vector/v.lrs/v.lrs.create/main.c:298
 #: ../vector/v.lrs/v.lrs.create/main.c:307 ../vector/v.mkgrid/main.c:294
@@ -4840,8 +4892,8 @@ msgstr "Povezava z bazo podatkov ni definirana\n"
 #: ../vector/v.out.vtk/writeVTK.c:645 ../vector/v.overlay/main.c:255
 #: ../vector/v.overlay/main.c:439 ../vector/v.patch/main.c:161
 #: ../vector/v.patch/main.c:199 ../vector/v.patch/main.c:368
-#: ../vector/v.patch/main.c:450 ../vector/v.profile/main.c:440
-#: ../vector/v.profile/main.c:605 ../vector/v.random/main.c:243
+#: ../vector/v.patch/main.c:450 ../vector/v.profile/main.c:475
+#: ../vector/v.profile/main.c:640 ../vector/v.random/main.c:243
 #: ../vector/v.random/main.c:273 ../vector/v.reclass/main.c:133
 #: ../vector/v.sample/main.c:175 ../vector/v.select/copy_tabs.c:80
 #: ../vector/v.surf.bspline/crosscorr.c:132 ../vector/v.surf.bspline/main.c:389
@@ -5014,15 +5066,6 @@ msgstr ""
 msgid "Point and centroid symbol"
 msgstr ""
 
-#: ../display/d.vect.thematic/main.c:184 ../display/d.vect.thematic/main.c:196
-#: ../display/d.vect.thematic/main.c:206 ../display/d.vect.thematic/main.c:216
-#: ../display/d.vect.thematic/main.c:222 ../display/d.vect.thematic/main.c:228
-#: ../display/d.vect.thematic/main.c:237 ../display/d.vect.thematic/main.c:242
-#: ../display/d.vect/main.c:201 ../display/d.vect/main.c:211
-#: ../display/d.vect/main.c:219 ../display/d.vect/main.c:332
-msgid "Legend"
-msgstr ""
-
 #: ../display/d.vect.thematic/main.c:189
 #, fuzzy
 msgid "Legend symbol for lines"
@@ -5046,17 +5089,8 @@ msgstr ""
 msgid "Output legend file"
 msgstr "Naslov izhodnega rastrskega sloja"
 
-#: ../display/d.vect.thematic/main.c:227
-#, fuzzy
-msgid "Do not draw map, only output the legend information"
-msgstr "Izpiši etikete kategorij"
-
 #: ../display/d.vect.thematic/main.c:234
 msgid "When printing legend info, include extended statistical info from classification algorithm"
-msgstr ""
-
-#: ../display/d.vect.thematic/main.c:241 ../display/d.vect/main.c:331
-msgid "Do not show this layer in vector legend"
 msgstr ""
 
 #: ../display/d.vect.thematic/main.c:253
@@ -5725,17 +5759,19 @@ msgid "My first vector module"
 msgstr "Ime obstoječega rastrskega sloja."
 
 #: ../doc/examples/vector/v.example/main.c:82 ../vector/v.cluster/main.c:137
-#: ../vector/v.profile/main.c:378
+#: ../vector/v.profile/main.c:409
 #, fuzzy
 msgid "Unable to set predetermined vector open level"
 msgstr "Ime izhodnega vektorskega točkovnega sloja"
 
-#: ../doc/examples/vector/v.example/main.c:176 ../vector/v.profile/main.c:708
+#: ../doc/examples/vector/v.example/main.c:176 ../vector/v.profile/main.c:749
+#: ../vector/v.profile/main.c:822
 #, fuzzy, c-format
 msgid "Unable to get attribute data for cat %d"
 msgstr "Ne morem izbrati (select) podatkov iz tabele"
 
-#: ../doc/examples/vector/v.example/main.c:185 ../vector/v.profile/main.c:717
+#: ../doc/examples/vector/v.example/main.c:185 ../vector/v.profile/main.c:759
+#: ../vector/v.profile/main.c:831
 #, fuzzy, c-format
 msgid "Error while retrieving database record for cat %d"
 msgstr "Za vrstico (cat = %d) ni zapisa (record)<"
@@ -6374,8 +6410,7 @@ msgstr "Ascii rastrski sloj, ki ga nameravate uvoziti"
 
 #: ../general/g.list/main.c:122 ../general/g.version/main.c:121
 #: ../imagery/i.group/main.c:88 ../raster/r.info/main.c:112
-#: ../raster/r.proj/main.c:203 ../vector/v.info/parse.c:48
-#: ../vector/v.univar/main.c:149
+#: ../raster/r.proj/main.c:203 ../vector/v.univar/main.c:149
 msgid "plain;Human readable text output;shell;shell script style text output;json;JSON (JavaScript Object Notation);"
 msgstr ""
 
@@ -6623,11 +6658,6 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Unknown operation '%s'"
 msgstr "Nepoznan tip"
-
-#: ../general/g.mapsets/main.c:166
-#, fuzzy
-msgid "Separator is part of the format."
-msgstr "Vnesi pogoje v enem od naslednjih formatov:\n"
 
 #: ../general/g.mapsets/main.c:236 ../general/g.mapsets/main.c:271
 #, fuzzy, c-format
@@ -8522,8 +8552,8 @@ msgstr "Resolucija izhodnega sloja"
 #: ../vector/v.in.ogr/main.c:315 ../vector/v.in.ogr/main.c:365
 #: ../vector/v.in.ogr/main.c:372 ../vector/v.in.ogr/main.c:413
 #: ../vector/v.out.ascii/args.c:35 ../vector/v.out.ascii/args.c:81
-#: ../vector/v.profile/main.c:221 ../vector/v.profile/main.c:226
-#: ../vector/v.profile/main.c:232
+#: ../vector/v.profile/main.c:238 ../vector/v.profile/main.c:243
+#: ../vector/v.profile/main.c:249
 #, fuzzy
 msgid "Output"
 msgstr "Izhodni sloj"
@@ -16466,24 +16496,20 @@ msgid "A numerical suffix separated by an underscore will be attached to create 
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:16
-msgid "Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'count' for numerical suffix with a specific number of digits (default %05)"
-msgstr ""
-
-#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:17
 msgid "The minimum and maximum value of the occurrence of accumulated values, these values will be used if the min/max space time raster datasets are not specified"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:18
+#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:17
 msgid "The user defined values that indicate start, intermediate and end status in the indicator output space time raster dataset"
+msgstr ""
+
+#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:18
+#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:20
+msgid "Register empty maps in the output space time raster dataset, otherwise they will be deleted"
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:19
 #: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:21
-msgid "Register empty maps in the output space time raster dataset, otherwise they will be deleted"
-msgstr ""
-
-#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:20
-#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:22
 msgid "Reverse time direction in cyclic accumulation"
 msgstr ""
 
@@ -16509,28 +16535,24 @@ msgid "The granularity for accumulation '1 day'"
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:15
-msgid "Suffix to add to the basename. Set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)"
-msgstr ""
-
-#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:16
 msgid "Use these limits in case lower and/or upper input space time raster datasets are not defined or contain NULL values"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:17
+#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:16
 #, fuzzy
 msgid "Scale factor for input space time raster dataset"
 msgstr "Ime izhodnega rastrskega sloja"
 
-#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:18
+#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:17
 #, fuzzy
 msgid "Shift factor for input space time raster dataset"
 msgstr "Ime izhodnega rastrskega sloja"
 
-#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:19
+#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:18
 msgid "This method will be applied to compute the accumulative values from the input maps in a single granule"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:20
+#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:19
 msgid "Growing Degree Days or Winkler indices; Mean: sum(input maps)/(number of input maps); Biologically Effective Degree Days; Huglin Heliothermal index"
 msgstr ""
 
@@ -16548,20 +16570,7 @@ msgid "Type of the space time dataset from which aggregation will be copied"
 msgstr "Ime novega rastrskega sloja."
 
 #: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:10
-#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:8
-#: ../locale/scriptstrings/t.rast.algebra_to_translate.c:9
-#: ../locale/scriptstrings/t.rast.contour_to_translate.c:9
-#: ../locale/scriptstrings/t.rast.extract_to_translate.c:9
-#: ../locale/scriptstrings/t.rast.gapfill_to_translate.c:9
-#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:19
-#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:10
-#: ../locale/scriptstrings/t.rast3d.extract_to_translate.c:9
-#: ../locale/scriptstrings/t.vect.extract_to_translate.c:8
-msgid "Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)"
-msgstr ""
-
-#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:11
-#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:10
+#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:9
 #: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:10
 #: ../locale/scriptstrings/t.rast.series_to_translate.c:7
 #: ../locale/scriptstrings/t.vect.what.strds_to_translate.c:8
@@ -16569,27 +16578,27 @@ msgstr ""
 msgid "Aggregate operation to be performed on the raster maps"
 msgstr "Ime vhodnega rastrskega sloja"
 
-#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:12
-#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:11
+#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:11
+#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:10
 msgid "Offset that is used to create the output map ids, output map id is generated as: basename_ (count + offset)"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:13
-#: ../locale/scriptstrings/t.rast.algebra_to_translate.c:10
-#: ../locale/scriptstrings/t.rast.extract_to_translate.c:10
+#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:12
+#: ../locale/scriptstrings/t.rast.algebra_to_translate.c:9
+#: ../locale/scriptstrings/t.rast.extract_to_translate.c:9
 #: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:9
 #, fuzzy
 msgid "Number of r.mapcalc processes to run in parallel"
 msgstr "Število točk najbližjih točk, ki bodo upoštevane"
 
-#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:14
-#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:14
-#: ../locale/scriptstrings/t.rast.algebra_to_translate.c:12
-#: ../locale/scriptstrings/t.rast.extract_to_translate.c:11
+#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:13
+#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:13
+#: ../locale/scriptstrings/t.rast.algebra_to_translate.c:11
+#: ../locale/scriptstrings/t.rast.extract_to_translate.c:10
 #: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:10
-#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:25
+#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:24
 #: ../locale/scriptstrings/t.rast3d.algebra_to_translate.c:12
-#: ../locale/scriptstrings/t.rast3d.extract_to_translate.c:11
+#: ../locale/scriptstrings/t.rast3d.extract_to_translate.c:10
 #: ../locale/scriptstrings/t.rast3d.mapcalc_to_translate.c:11
 #, fuzzy
 msgid "Register Null maps"
@@ -16604,16 +16613,16 @@ msgstr "Izpiši rastrske sloje v vhodni \"location\" in končaj"
 msgid "Either a numerical suffix or the start time (s-flag) separated by an underscore will be attached to create a unique identifier"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:9
+#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:8
 msgid "Aggregation granularity, format absolute time \"x years, x months, x weeks, x days, x hours, x minutes, x seconds\" or an integer value for relative time"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:12
+#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:11
 #, fuzzy
 msgid "Number of r.series processes to run in parallel"
 msgstr "Število točk najbližjih točk, ki bodo upoštevane"
 
-#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:13
+#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:12
 #: ../locale/scriptstrings/t.rast.series_to_translate.c:10
 msgid "The maximum number of open files allowed for each r.series process"
 msgstr ""
@@ -16628,7 +16637,7 @@ msgstr "Preoblikuje rastrski sloj v vektorskega."
 msgid "r.mapcalc expression for temporal and spatial analysis of space time raster datasets"
 msgstr "Izpiši rastrske sloje v vhodni \"location\" in končaj"
 
-#: ../locale/scriptstrings/t.rast.algebra_to_translate.c:11
+#: ../locale/scriptstrings/t.rast.algebra_to_translate.c:10
 #: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:11
 #: ../locale/scriptstrings/t.rast3d.algebra_to_translate.c:11
 #: ../locale/scriptstrings/t.rast3d.mapcalc_to_translate.c:12
@@ -16636,12 +16645,12 @@ msgstr "Izpiši rastrske sloje v vhodni \"location\" in končaj"
 msgid "Check the spatial topology of temporally related maps and process only spatially related maps"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.algebra_to_translate.c:13
+#: ../locale/scriptstrings/t.rast.algebra_to_translate.c:12
 #: ../locale/scriptstrings/t.rast3d.algebra_to_translate.c:13
 msgid "Use granularity sampling instead of the temporal topology approach"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.algebra_to_translate.c:14
+#: ../locale/scriptstrings/t.rast.algebra_to_translate.c:13
 #: ../locale/scriptstrings/t.select_to_translate.c:9
 msgid "Perform a dry run, compute all dependencies and module calls but don't run them"
 msgstr ""
@@ -16724,44 +16733,44 @@ msgstr ""
 msgid "contour"
 msgstr "Kontrast"
 
-#: ../locale/scriptstrings/t.rast.contour_to_translate.c:10
+#: ../locale/scriptstrings/t.rast.contour_to_translate.c:9
 #: ../raster/r.contour/main.c:101
 msgid "Increment between contour levels"
 msgstr "Razmak med sosednjima plastnicama"
 
-#: ../locale/scriptstrings/t.rast.contour_to_translate.c:11
+#: ../locale/scriptstrings/t.rast.contour_to_translate.c:10
 #: ../raster/r.contour/main.c:109
 #, fuzzy
 msgid "List of contour levels"
 msgstr "Spisek vrednosti plastnic"
 
-#: ../locale/scriptstrings/t.rast.contour_to_translate.c:12
+#: ../locale/scriptstrings/t.rast.contour_to_translate.c:11
 #: ../raster/r.contour/main.c:116
 msgid "Minimum contour level"
 msgstr "Najmanjša vrednost plastnice"
 
-#: ../locale/scriptstrings/t.rast.contour_to_translate.c:13
+#: ../locale/scriptstrings/t.rast.contour_to_translate.c:12
 #: ../raster/r.contour/main.c:123
 msgid "Maximum contour level"
 msgstr "Največja vrednost plastnice"
 
-#: ../locale/scriptstrings/t.rast.contour_to_translate.c:14
+#: ../locale/scriptstrings/t.rast.contour_to_translate.c:13
 #: ../raster/r.contour/main.c:132
 msgid "Minimum number of points for a contour line (0 -> no limit)"
 msgstr "Najmanjše število točk, ki bodo gradile linijo plastnice (od 0 do neskončno)"
 
-#: ../locale/scriptstrings/t.rast.contour_to_translate.c:15
+#: ../locale/scriptstrings/t.rast.contour_to_translate.c:14
 msgid "Number of r.contour processes to run in parallel, more than 1 process works only in conjunction with flag -t"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.contour_to_translate.c:16
-#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:13
+#: ../locale/scriptstrings/t.rast.contour_to_translate.c:15
+#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:12
 #, fuzzy
 msgid "Register empty vector maps"
 msgstr "Vhodni rastrski sloj"
 
-#: ../locale/scriptstrings/t.rast.contour_to_translate.c:17
-#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:14
+#: ../locale/scriptstrings/t.rast.contour_to_translate.c:16
+#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:13
 #, fuzzy
 msgid "Do not create attribute tables"
 msgstr "Ne ustvari tabele z atributi."
@@ -16859,12 +16868,12 @@ msgstr ""
 msgid "Replaces gaps in a space time raster dataset with interpolated raster maps."
 msgstr "Preoblikuje rastrski sloj v vektorskega."
 
-#: ../locale/scriptstrings/t.rast.gapfill_to_translate.c:10
+#: ../locale/scriptstrings/t.rast.gapfill_to_translate.c:9
 #, fuzzy
 msgid "Number of interpolation processes to run in parallel"
 msgstr "Število točk najbližjih točk, ki bodo upoštevane"
 
-#: ../locale/scriptstrings/t.rast.gapfill_to_translate.c:11
+#: ../locale/scriptstrings/t.rast.gapfill_to_translate.c:10
 msgid "Assign the space time raster dataset start and end time to the output map"
 msgstr ""
 
@@ -17007,31 +17016,31 @@ msgstr "Ne morem izračunati centroida območja."
 msgid "Neighborhood"
 msgstr "Velikost okolice (neighbourhood)"
 
-#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:20
+#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:19
 #, fuzzy
 msgid "Set semantic labels"
 msgstr "Vpiši ime sloja"
 
-#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:21
+#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:20
 msgid "input;copy semantic labels from input to output;method;append method name to input label if existing, otherwise use method name"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:22
+#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:21
 #, fuzzy
 msgid "Number of r.neighbor processes to run in parallel"
 msgstr "Število točk najbližjih točk, ki bodo upoštevane"
 
-#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:23
+#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:22
 #: ../raster/r.neighbors/main.c:288
 msgid "Use circular neighborhood"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:24
+#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:23
 #, fuzzy
 msgid "Extend existing space time raster dataset"
 msgstr "Ime rastrskega sloja, ki bo uporabljen za <%s>"
 
-#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:26
+#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:25
 #, fuzzy
 msgid "Ignore the current region settings and use the raster map regions"
 msgstr "Prilagodi trenutno regijo z vhodnemu rastrskemu sloju"
@@ -17115,46 +17124,46 @@ msgstr "Preoblikuje rastrski sloj v vektorskega."
 msgid "Output feature type"
 msgstr "Tip objektov"
 
-#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:11
+#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:10
 #: ../raster/r.to.vect/main.c:95
 #, fuzzy
 msgid "Name of attribute column to store value"
 msgstr "Ime rastrskega sloja, ki bo uporabljen za <%s>"
 
-#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:12
+#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:11
 msgid "Number of r.to.vect processes to run in parallel, more than 1 process works only in conjunction with flag -t"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:15
+#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:14
 #: ../raster/r.to.vect/main.c:101
 #, fuzzy
 msgid "Smooth corners of area features"
 msgstr "Zglajeni koti"
 
-#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:16
+#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:15
 #: ../raster/r.to.vect/main.c:111
 #, fuzzy
 msgid "Write raster values as z coordinate"
 msgstr "Uporabljam koordinate središča sloja\n"
 
-#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:17
+#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:16
 #: ../raster/r.to.vect/main.c:112
 #, fuzzy
 msgid "Table is not created. Currently supported only for points."
 msgstr "Izpiši podprte formate in končaj"
 
-#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:18
+#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:17
 #: ../raster/r.to.vect/main.c:118 ../vector/v.proj/main.c:139
 #, fuzzy
 msgid "Do not build vector topology"
 msgstr "Rastrski sloj, ki ga nameravate uvoziti"
 
-#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:19
+#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:18
 #: ../raster/r.to.vect/main.c:96
 msgid "Name must be SQL compliant"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:20
+#: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:19
 #: ../raster/r.to.vect/main.c:105
 msgid "Use raster values as categories instead of unique sequence (CELL only)"
 msgstr "Za kategorije uporabi rastrske vrednosti namesto zaporedja edinstvenih števil (le za rastrski tip CELL)"
@@ -17247,7 +17256,7 @@ msgid "Algebraic expression for temporal and spatial analysis of space time 3D r
 msgstr "Izpiši rastrske sloje v vhodni \"location\" in končaj"
 
 #: ../locale/scriptstrings/t.rast3d.algebra_to_translate.c:10
-#: ../locale/scriptstrings/t.rast3d.extract_to_translate.c:10
+#: ../locale/scriptstrings/t.rast3d.extract_to_translate.c:9
 #: ../locale/scriptstrings/t.rast3d.mapcalc_to_translate.c:10
 #, fuzzy
 msgid "Number of r3.mapcalc processes to run in parallel"
@@ -17597,11 +17606,11 @@ msgstr ""
 msgid "Extracts a subset of a space time vector dataset."
 msgstr "Ime rastrskega sloja"
 
-#: ../locale/scriptstrings/t.vect.extract_to_translate.c:9
+#: ../locale/scriptstrings/t.vect.extract_to_translate.c:8
 msgid "The number of v.extract processes to run in parallel. Use only if database backend is used which supports concurrent writing"
 msgstr ""
 
-#: ../locale/scriptstrings/t.vect.extract_to_translate.c:10
+#: ../locale/scriptstrings/t.vect.extract_to_translate.c:9
 #, fuzzy
 msgid "Register empty maps"
 msgstr "Vhodni rastrski sloj"
@@ -23402,8 +23411,8 @@ msgstr "Ime lokacije (location) iz katere naj povzamem projekcijo za GCP transfo
 #: ../raster/r.in.gdal/main.c:225 ../raster/r.in.pdal/main.cpp:258
 #: ../raster/r.in.pdal/main.cpp:272 ../raster/r.in.pdal/main.cpp:402
 #: ../vector/v.in.pdal/main.cpp:221 ../vector/v.in.pdal/main.cpp:230
-#: ../vector/v.in.pdal/main.cpp:243 ../vector/v.info/print.c:739
-#: ../vector/v.info/print.c:743
+#: ../vector/v.in.pdal/main.cpp:243 ../vector/v.info/print.c:779
+#: ../vector/v.info/print.c:783
 #, fuzzy
 msgid "Projection"
 msgstr "Rišem ..."
@@ -27251,7 +27260,7 @@ msgstr ""
 "regije)"
 
 #: ../raster/r.profile/main.c:59 ../raster/r.transect/main.c:104
-#: ../vector/v.profile/main.c:157
+#: ../vector/v.profile/main.c:165
 #, fuzzy
 msgid "transect"
 msgstr "Ime izhodne datoteke"
@@ -36396,390 +36405,391 @@ msgstr "Zapisujem novo datoteko...\n"
 msgid "Unable to process extension:%s"
 msgstr "ne morem odpreti <%s>"
 
-#: ../scripts/g.extension/g.extension.py:257
+#: ../scripts/g.extension/g.extension.py:258
 msgid ""
 "Failed to get Git version.\n"
 "{}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:263
+#: ../scripts/g.extension/g.extension.py:264
 #, fuzzy
 msgid "Failed to get Git version."
 msgstr "ne morem posodobiti meja"
 
-#: ../scripts/g.extension/g.extension.py:293
+#: ../scripts/g.extension/g.extension.py:294
 msgid "Could not found Git. Please install it."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:302
+#: ../scripts/g.extension/g.extension.py:303
 #, fuzzy
 msgid "Cannot write to working directory {}."
 msgstr "Ne morem ustvariti indeksa"
 
-#: ../scripts/g.extension/g.extension.py:360
+#: ../scripts/g.extension/g.extension.py:361
 #, python-brace-format
 msgid "Branch <{branch}> not found in repository <{url}>"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:386
-#: ../scripts/g.extension/g.extension.py:2784
+#: ../scripts/g.extension/g.extension.py:387
+#: ../scripts/g.extension/g.extension.py:2868
 #, python-brace-format
 msgid ""
 "Failed to get addons files list from the Git repository <{repo_path}>.\n"
 "{error}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:411
+#: ../scripts/g.extension/g.extension.py:412
 msgid "No addon named <{}> found in the repository."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:515
+#: ../scripts/g.extension/g.extension.py:516
 #, python-brace-format
 msgid ""
 "Failed to get branch from the Git repository <{repo_path}>.\n"
 "{error}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:538
+#: ../scripts/g.extension/g.extension.py:539
 msgid "Cannot retrieve organization and repository from URL: <{}>."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:576
+#: ../scripts/g.extension/g.extension.py:577
 #, python-brace-format
 msgid "Download file from <{url}>, failed. File is not on the server or check your internet connection."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:589
+#: ../scripts/g.extension/g.extension.py:590
 #, python-format
 msgid "'%s' required. Please install '%s' first."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:653
+#: ../scripts/g.extension/g.extension.py:654
 msgid "List of installed extensions (toolboxes):"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:655
+#: ../scripts/g.extension/g.extension.py:656
 msgid "List of installed extensions (modules):"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:659
+#: ../scripts/g.extension/g.extension.py:660
 #, fuzzy
 msgid "No extension (toolbox) installed"
 msgstr "Ime nove lokacije (location), ki bo ustvarjena"
 
-#: ../scripts/g.extension/g.extension.py:661
+#: ../scripts/g.extension/g.extension.py:662
 #, fuzzy
 msgid "No extension (module) installed"
 msgstr "Ime nove lokacije (location), ki bo ustvarjena"
 
-#: ../scripts/g.extension/g.extension.py:736
+#: ../scripts/g.extension/g.extension.py:737
 #, fuzzy
 msgid "List of available extensions (toolboxes):"
 msgstr "Izpiši podprte formate in končaj"
 
-#: ../scripts/g.extension/g.extension.py:751
+#: ../scripts/g.extension/g.extension.py:752
 #, fuzzy
 msgid "List of available extensions (modules):"
 msgstr "Izpiši podprte formate in končaj"
 
-#: ../scripts/g.extension/g.extension.py:777
-#: ../scripts/g.extension/g.extension.py:807
+#: ../scripts/g.extension/g.extension.py:778
+#: ../scripts/g.extension/g.extension.py:808
 #, fuzzy
 msgid "Unable to fetch addons metadata file"
 msgstr "Ne morem izbrati (select) podatkov iz tabele"
 
-#: ../scripts/g.extension/g.extension.py:882
+#: ../scripts/g.extension/g.extension.py:883
 #, python-brace-format
 msgid "Unable to parse '{url}'. Trying to scan Git repository (may take some time)..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:930
+#: ../scripts/g.extension/g.extension.py:931
 msgid "Fetching list of extensions from GRASS-Addons SVN repository (be patient)..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:937
+#: ../scripts/g.extension/g.extension.py:938
 msgid "Flag 'c' ignored, addons metadata file not available"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:939
+#: ../scripts/g.extension/g.extension.py:940
 msgid "Flag 'g' ignored, addons metadata file not available"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:944
-#: ../scripts/g.extension/g.extension.py:979
+#: ../scripts/g.extension/g.extension.py:945
+#: ../scripts/g.extension/g.extension.py:980
 #, python-format
 msgid "Checking for '%s' modules..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:952
-#: ../scripts/g.extension/g.extension.py:986
+#: ../scripts/g.extension/g.extension.py:953
+#: ../scripts/g.extension/g.extension.py:987
 #, fuzzy, python-format
 msgid "Unable to fetch '%s'"
 msgstr "Ne morem izpisati baz podatkov."
 
-#: ../scripts/g.extension/g.extension.py:1154
+#: ../scripts/g.extension/g.extension.py:1155
 #, fuzzy
 msgid "$GISBASE not defined"
 msgstr "ime tabele"
 
-#: ../scripts/g.extension/g.extension.py:1158
+#: ../scripts/g.extension/g.extension.py:1159
 #, python-format
 msgid "Extension <%s> already installed. Re-installing..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1169
+#: ../scripts/g.extension/g.extension.py:1170
 #, fuzzy, python-format
 msgid "Installing toolbox <%s>..."
 msgstr "Zapisujem novo datoteko...\n"
 
-#: ../scripts/g.extension/g.extension.py:1179
+#: ../scripts/g.extension/g.extension.py:1180
 #, fuzzy
 msgid "Nothing to install"
 msgstr "Ničesar nisem našel.\n"
 
-#: ../scripts/g.extension/g.extension.py:1212
+#: ../scripts/g.extension/g.extension.py:1213
 msgid "Installation failed, sorry. Please check above error messages."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1215
+#: ../scripts/g.extension/g.extension.py:1216
 #, fuzzy
 msgid "Updating extensions metadata file..."
 msgstr "Zapisujem novo datoteko...\n"
 
-#: ../scripts/g.extension/g.extension.py:1219
+#: ../scripts/g.extension/g.extension.py:1220
 #, fuzzy
 msgid "Updating extension modules metadata file..."
 msgstr "Zapisujem novo datoteko...\n"
 
-#: ../scripts/g.extension/g.extension.py:1226
+#: ../scripts/g.extension/g.extension.py:1227
 #, python-format
 msgid "Installation of <%s> successfully finished"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1232
+#: ../scripts/g.extension/g.extension.py:1233
 msgid "This add-on module will not function until you set the GRASS_ADDON_BASE environment variable (see \"g.manual variables\")"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1267
+#: ../scripts/g.extension/g.extension.py:1268
 #, fuzzy
 msgid "Unable to read addons metadata file from the remote server"
 msgstr "Ime rastrskega sloja"
 
-#: ../scripts/g.extension/g.extension.py:1277
+#: ../scripts/g.extension/g.extension.py:1278
 msgid "No addons metadata available"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1280
+#: ../scripts/g.extension/g.extension.py:1281
 #, python-format
 msgid "No addons metadata available for <%s>"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1337
+#: ../scripts/g.extension/g.extension.py:1338
 #, fuzzy, python-brace-format
 msgid "Unable to read addons metadata file from the remote server: {0}"
 msgstr "Ime rastrskega sloja"
 
-#: ../scripts/g.extension/g.extension.py:1343
+#: ../scripts/g.extension/g.extension.py:1344
 #, fuzzy, python-format, python-brace-format
 msgid "Unable to parse '%s': {0}"
 msgstr "ne morem odpreti <%s>"
 
-#: ../scripts/g.extension/g.extension.py:1526
+#: ../scripts/g.extension/g.extension.py:1527
 #, fuzzy, python-brace-format
 msgid "No metadata available for module '{name}': {error}"
 msgstr "Izpiše vrednosti v stilu lupinskega skripta"
 
-#: ../scripts/g.extension/g.extension.py:1595
+#: ../scripts/g.extension/g.extension.py:1596
 msgid "Downloading precompiled GRASS Addons <{}>..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1688
+#: ../scripts/g.extension/g.extension.py:1689
 msgid "svn not found but needed to fetch AddOns from an SVN repository"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1695
-#: ../scripts/g.extension/g.extension.py:1729
+#: ../scripts/g.extension/g.extension.py:1696
+#: ../scripts/g.extension/g.extension.py:1730
 #, fuzzy, python-format
 msgid "GRASS Addons <%s> not found"
 msgstr "ne najdem regije <%s>"
 
-#: ../scripts/g.extension/g.extension.py:1818
+#: ../scripts/g.extension/g.extension.py:1819
 #, fuzzy, python-brace-format
 msgid "ZIP file is unreadable: {0}"
 msgstr "Vhodna datoteka je prenosljiva.\n"
 
-#: ../scripts/g.extension/g.extension.py:1848
+#: ../scripts/g.extension/g.extension.py:1849
 #: ../scripts/r.unpack/r.unpack.py:119 ../scripts/v.unpack/v.unpack.py:131
 msgid "Extracting may be unsafe; consider updating Python"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1854
+#: ../scripts/g.extension/g.extension.py:1855
 #, python-brace-format
 msgid "Archive file is unreadable: {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1871
+#: ../scripts/g.extension/g.extension.py:1872
 #, python-brace-format
 msgid "Type of source identified as '{source}'."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1874
-#: ../scripts/g.extension/g.extension.py:1883
-#: ../scripts/g.extension/g.extension.py:1890
+#: ../scripts/g.extension/g.extension.py:1875
+#: ../scripts/g.extension/g.extension.py:1884
+#: ../scripts/g.extension/g.extension.py:1891
 #, python-brace-format
 msgid "Fetching <{name}> from <{url}> (be patient)..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1905
+#: ../scripts/g.extension/g.extension.py:1906
 #, python-brace-format
 msgid "Expected default branch not found. Trying again from <{url}>..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1913
+#: ../scripts/g.extension/g.extension.py:1914
 #, python-brace-format
 msgid "Extension <{name}> not found. Please check 'url' and 'branch' options"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1918
+#: ../scripts/g.extension/g.extension.py:1919
 #, fuzzy
 msgid "Extension <{}> not found"
 msgstr "ne najdem regije <%s>"
 
-#: ../scripts/g.extension/g.extension.py:1946
+#: ../scripts/g.extension/g.extension.py:1947
 #, python-brace-format
 msgid "Unknown extension (addon) source type '{0}'. Please report this to the grass-user mailing list."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1974
+#: ../scripts/g.extension/g.extension.py:1976
 #, fuzzy
 msgid "Path to the source code:"
 msgstr "Ime datoteke s filtrom"
 
-#: ../scripts/g.extension/g.extension.py:1994
+#: ../scripts/g.extension/g.extension.py:1998
 msgid "Module name not found. Check module Makefile syntax (PGM variable)."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2069
+#: ../scripts/g.extension/g.extension.py:2150
 #, fuzzy
 msgid "To compile run:"
 msgstr "Nepoznan tip"
 
-#: ../scripts/g.extension/g.extension.py:2071
+#: ../scripts/g.extension/g.extension.py:2152
 msgid "To install run:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2079
+#: ../scripts/g.extension/g.extension.py:2160
 #, fuzzy
 msgid "Compiling..."
 msgstr "Rišem ..."
 
-#: ../scripts/g.extension/g.extension.py:2081
+#: ../scripts/g.extension/g.extension.py:2162
 msgid "Please install GRASS development package"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2084
+#: ../scripts/g.extension/g.extension.py:2165
+#: ../scripts/g.extension/g.extension.py:2168
 msgid "Compilation failed, sorry. Please check above error messages."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2098
+#: ../scripts/g.extension/g.extension.py:2182
 #, fuzzy
 msgid "Installing..."
 msgstr "lokacija baze podatkov"
 
-#: ../scripts/g.extension/g.extension.py:2189
+#: ../scripts/g.extension/g.extension.py:2273
 #, fuzzy
 msgid "List of removed files:"
 msgstr "Spisek vrednosti plastnic"
 
-#: ../scripts/g.extension/g.extension.py:2191
+#: ../scripts/g.extension/g.extension.py:2275
 #, fuzzy
 msgid "Files to be removed:"
 msgstr "Rastrski sloj, ki ga nameravate uvoziti"
 
-#: ../scripts/g.extension/g.extension.py:2197
+#: ../scripts/g.extension/g.extension.py:2281
 #, fuzzy
 msgid "Updating addons metadata file..."
 msgstr "Zapisujem novo datoteko...\n"
 
-#: ../scripts/g.extension/g.extension.py:2201
+#: ../scripts/g.extension/g.extension.py:2285
 #, fuzzy, python-format
 msgid "Extension <%s> successfully uninstalled."
 msgstr "Ime izhodnega rastrskega sloja"
 
-#: ../scripts/g.extension/g.extension.py:2204
+#: ../scripts/g.extension/g.extension.py:2288
 #, python-format
 msgid "Toolbox <%s> not removed. Re-run '%s' with '-f' flag to force removal"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2209
+#: ../scripts/g.extension/g.extension.py:2293
 #, python-format
 msgid "Extension <%s> not removed. Re-run '%s' with '-f' flag to force removal"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2258
+#: ../scripts/g.extension/g.extension.py:2342
 #, fuzzy, python-format
 msgid "Extension <%s> not found"
 msgstr "ne najdem regije <%s>"
 
-#: ../scripts/g.extension/g.extension.py:2362
+#: ../scripts/g.extension/g.extension.py:2446
 #, python-brace-format
 msgid "Unable to create '{filename}': {error}. Is the GRASS documentation package installed? Installation continues, but documentation may not look right."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2381
+#: ../scripts/g.extension/g.extension.py:2465
 #, fuzzy, python-format
 msgid "Unable to create '%s': %s"
 msgstr "Ne morem odpreti cellfile za [%s]"
 
-#: ../scripts/g.extension/g.extension.py:2409
+#: ../scripts/g.extension/g.extension.py:2493
 #, fuzzy, python-format
 msgid "Manual page for <%s> updated"
 msgstr "Rastrski sloj za površino"
 
-#: ../scripts/g.extension/g.extension.py:2416
+#: ../scripts/g.extension/g.extension.py:2500
 #, fuzzy, python-format
 msgid "Unable to read manual page: %s"
 msgstr "ne morem odpreti <%s>"
 
-#: ../scripts/g.extension/g.extension.py:2461
+#: ../scripts/g.extension/g.extension.py:2545
 #, fuzzy, python-format
 msgid "Unable for write manual page: %s"
 msgstr "Ne morem odpreti cellfile za [%s]"
 
-#: ../scripts/g.extension/g.extension.py:2481
+#: ../scripts/g.extension/g.extension.py:2565
 msgid "GRASS_ADDON_BASE is not defined, installing to {}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2488
+#: ../scripts/g.extension/g.extension.py:2572
 #, python-brace-format
 msgid "You don't have permission to install extension to <{0}>. Try to run {1} with administrator rights (su or sudo)."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2580
+#: ../scripts/g.extension/g.extension.py:2664
 #, python-brace-format
 msgid "Identified {0} as known hosting service"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2585
+#: ../scripts/g.extension/g.extension.py:2669
 #, python-brace-format
 msgid "Not using {service} as known hosting service because the URL ends with '{suffix}'"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2602
+#: ../scripts/g.extension/g.extension.py:2686
 #, python-brace-format
 msgid "Will use the following URL for download: {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2633
+#: ../scripts/g.extension/g.extension.py:2717
 #, fuzzy, python-brace-format
 msgid "Cannot open URL <{url}>: {error}"
 msgstr "ne morem odpreti %s"
 
-#: ../scripts/g.extension/g.extension.py:2839
+#: ../scripts/g.extension/g.extension.py:2923
 msgid "Flag '{}' is relevant only to 'operation=add'. Ignoring this flag."
 msgstr ""
 
-#: ../scripts/g.extension/testsuite/test_addons_download.py:231
+#: ../scripts/g.extension/testsuite/test_addons_download.py:236
 #, fuzzy
 msgid "No metadata available for module '{}':"
 msgstr "Izpiše vrednosti v stilu lupinskega skripta"
@@ -38880,17 +38890,12 @@ msgstr "Ne najdem vhodne datoteke %s\n"
 msgid "Error removing centroids"
 msgstr "Zapisujem novo datoteko...\n"
 
-#: ../scripts/v.to.lines/v.to.lines.py:189
+#: ../scripts/v.to.lines/v.to.lines.py:186
 #, fuzzy
-msgid "Error removing table from layer 1"
+msgid "Error removing table from layer 2"
 msgstr "Za vrstico (cat = %d) ni zapisa (record)<"
 
-#: ../scripts/v.to.lines/v.to.lines.py:192 ../vector/v.select/copy_tabs.c:52
-#, fuzzy, c-format, python-format
-msgid "No table for layer %d"
-msgstr "Za vrstico (cat = %d) ni zapisa (record)<"
-
-#: ../scripts/v.to.lines/v.to.lines.py:207
+#: ../scripts/v.to.lines/v.to.lines.py:201
 #, fuzzy
 msgid "Error adding categories"
 msgstr "Ne najdem vhodne datoteke %s\n"
@@ -39025,27 +39030,27 @@ msgstr "Vpiši ime baze podatkov"
 msgid "Default TGIS database is not set"
 msgstr "Vpiši ime baze podatkov"
 
-#: ../vector/v.buffer/geos.c:19 ../vector/v.profile/main.c:60
+#: ../vector/v.buffer/geos.c:19 ../vector/v.profile/main.c:63
 #, fuzzy
 msgid "Invalid GEOS geometry!"
 msgstr "neveljavna regija: %s"
 
-#: ../vector/v.buffer/geos.c:25 ../vector/v.profile/main.c:66
+#: ../vector/v.buffer/geos.c:25 ../vector/v.profile/main.c:69
 msgid "No coordinates in GEOS geometry (can be ok for negative distance)!"
 msgstr ""
 
-#: ../vector/v.buffer/geos.c:34 ../vector/v.profile/main.c:75
+#: ../vector/v.buffer/geos.c:34 ../vector/v.profile/main.c:78
 #, fuzzy, c-format
 msgid "Invalid x coordinate %f"
 msgstr "neveljavna regija: %s"
 
-#: ../vector/v.buffer/geos.c:36 ../vector/v.profile/main.c:77
+#: ../vector/v.buffer/geos.c:36 ../vector/v.profile/main.c:80
 #, fuzzy, c-format
 msgid "Invalid y coordinate %f"
 msgstr "neveljavna regija: %s"
 
-#: ../vector/v.buffer/geos.c:106 ../vector/v.profile/main.c:95
-#: ../vector/v.profile/main.c:106
+#: ../vector/v.buffer/geos.c:106 ../vector/v.profile/main.c:98
+#: ../vector/v.profile/main.c:109
 msgid "Corrupt GEOS geometry"
 msgstr ""
 
@@ -43881,213 +43886,225 @@ msgstr "Izpiše vrednosti v stilu lupinskega skripta"
 msgid "Print only topology info"
 msgstr ""
 
+#: ../vector/v.info/parse.c:48
+msgid "plain;Human readable text output;shell;shell script style text output;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values);"
+msgstr ""
+
+#: ../vector/v.info/parse.c:84
+msgid "format=csv is only valid with -c flag."
+msgstr ""
+
 #: ../vector/v.info/print.c:32 ../vector/v.info/print.c:34
 #, c-format
 msgid "%s"
 msgstr "%s"
 
-#: ../vector/v.info/print.c:194
+#: ../vector/v.info/print.c:198
 #, fuzzy, c-format
 msgid "Database connection for map <%s> is not defined in DB file"
 msgstr "Povezava z bazo podatkov ni definirana\n"
 
-#: ../vector/v.info/print.c:200
+#: ../vector/v.info/print.c:204
 #, fuzzy, c-format
 msgid "Column names and types for database connection of layer <%s>:\n"
 msgstr "Povezava z bazo podatkov ni definirana\n"
 
-#: ../vector/v.info/print.c:208
+#: ../vector/v.info/print.c:215
 #, fuzzy, c-format
 msgid "Database connection not defined for layer <%s> of <%s>"
 msgstr "Povezava z bazo podatkov ni definirana\n"
 
-#: ../vector/v.info/print.c:214
+#: ../vector/v.info/print.c:221
 #, fuzzy, c-format
 msgid "Unable to open driver <%s>"
 msgstr "Ime izhodnega rastrskega sloja"
 
-#: ../vector/v.info/print.c:586
+#: ../vector/v.info/print.c:252
+msgid "format=shell is not valid with -c flag."
+msgstr ""
+
+#: ../vector/v.info/print.c:626
 msgid "Name:"
 msgstr ""
 
-#: ../vector/v.info/print.c:588
+#: ../vector/v.info/print.c:628
 msgid "Mapset:"
 msgstr ""
 
-#: ../vector/v.info/print.c:591
+#: ../vector/v.info/print.c:631
 #, fuzzy
 msgid "Project:"
 msgstr "Rišem ..."
 
-#: ../vector/v.info/print.c:593
+#: ../vector/v.info/print.c:633
 #, fuzzy
 msgid "Database:"
 msgstr "ime baze podatkov"
 
-#: ../vector/v.info/print.c:596
+#: ../vector/v.info/print.c:636
 msgid "Title:"
 msgstr ""
 
-#: ../vector/v.info/print.c:598
+#: ../vector/v.info/print.c:638
 msgid "Map scale:"
 msgstr ""
 
-#: ../vector/v.info/print.c:601
+#: ../vector/v.info/print.c:641
 #, fuzzy
 msgid "Name of creator:"
 msgstr "Ime rastrskega sloja"
 
-#: ../vector/v.info/print.c:603
+#: ../vector/v.info/print.c:643
 msgid "Organization:"
 msgstr ""
 
-#: ../vector/v.info/print.c:605
+#: ../vector/v.info/print.c:645
 msgid "Source date:"
 msgstr ""
 
-#: ../vector/v.info/print.c:611
+#: ../vector/v.info/print.c:651
 msgid "Timestamp (first layer): "
 msgstr ""
 
-#: ../vector/v.info/print.c:615
+#: ../vector/v.info/print.c:655
 msgid "Timestamp (first layer): none"
 msgstr ""
 
-#: ../vector/v.info/print.c:622 ../vector/v.info/print.c:644
-#: ../vector/v.info/print.c:681
+#: ../vector/v.info/print.c:662 ../vector/v.info/print.c:684
+#: ../vector/v.info/print.c:721
 #, fuzzy
 msgid "Map format:"
 msgstr "Izhodni sloj"
 
-#: ../vector/v.info/print.c:627
+#: ../vector/v.info/print.c:667
 #, fuzzy
 msgid "OGR layer:"
 msgstr "Vpiši ime sloja"
 
-#: ../vector/v.info/print.c:629
+#: ../vector/v.info/print.c:669
 #, fuzzy
 msgid "OGR datasource:"
 msgstr "ime baze podatkov"
 
-#: ../vector/v.info/print.c:632 ../vector/v.info/print.c:659
+#: ../vector/v.info/print.c:672 ../vector/v.info/print.c:699
 #, fuzzy
 msgid "Feature type:"
 msgstr "Tip objektov"
 
-#: ../vector/v.info/print.c:649
+#: ../vector/v.info/print.c:689
 #, fuzzy
 msgid "DB table:"
 msgstr "Ime datoteke s filtrom"
 
-#: ../vector/v.info/print.c:651
+#: ../vector/v.info/print.c:691
 msgid "DB name:"
 msgstr ""
 
-#: ../vector/v.info/print.c:655
+#: ../vector/v.info/print.c:695
 #, fuzzy
 msgid "Geometry column:"
 msgstr " Število kolon\n"
 
-#: ../vector/v.info/print.c:665 ../vector/v.info/print.c:673
+#: ../vector/v.info/print.c:705 ../vector/v.info/print.c:713
 #, fuzzy
 msgid "Topology:"
 msgstr "Rastrski sloj, ki ga nameravate uvoziti"
 
-#: ../vector/v.info/print.c:666
+#: ../vector/v.info/print.c:706
 msgid "schema:"
 msgstr ""
 
-#: ../vector/v.info/print.c:670
+#: ../vector/v.info/print.c:710
 #, fuzzy
 msgid "Topology column:"
 msgstr "ne najdem regije <%s>"
 
-#: ../vector/v.info/print.c:687
+#: ../vector/v.info/print.c:727
 #, fuzzy
 msgid "Type of map"
 msgstr "Ime datoteke s filtrom"
 
-#: ../vector/v.info/print.c:688
+#: ../vector/v.info/print.c:728
 #, fuzzy
 msgid "level"
 msgstr "Ime rastrskega sloja"
 
-#: ../vector/v.info/print.c:693
+#: ../vector/v.info/print.c:733
 #, fuzzy
 msgid "Number of points:"
 msgstr " Število vrstic\n"
 
-#: ../vector/v.info/print.c:695
+#: ../vector/v.info/print.c:735
 #, fuzzy
 msgid "Number of centroids:"
 msgstr " Število vrstic\n"
 
-#: ../vector/v.info/print.c:698
+#: ../vector/v.info/print.c:738
 #, fuzzy
 msgid "Number of lines:"
 msgstr " Število vrstic\n"
 
-#: ../vector/v.info/print.c:700
+#: ../vector/v.info/print.c:740
 #, fuzzy
 msgid "Number of boundaries:"
 msgstr " Število vrstic\n"
 
-#: ../vector/v.info/print.c:703
+#: ../vector/v.info/print.c:743
 #, fuzzy
 msgid "Number of areas:"
 msgstr " Število vrstic\n"
 
-#: ../vector/v.info/print.c:704
+#: ../vector/v.info/print.c:744
 #, fuzzy
 msgid "Number of islands:"
 msgstr " Število kolon\n"
 
-#: ../vector/v.info/print.c:709
+#: ../vector/v.info/print.c:749
 #, fuzzy
 msgid "Number of faces:"
 msgstr " Število vrstic\n"
 
-#: ../vector/v.info/print.c:710
+#: ../vector/v.info/print.c:750
 #, fuzzy
 msgid "Number of kernels:"
 msgstr " Število vrstic\n"
 
-#: ../vector/v.info/print.c:714
+#: ../vector/v.info/print.c:754
 #, fuzzy
 msgid "Number of volumes:"
 msgstr " Število kolon\n"
 
-#: ../vector/v.info/print.c:715
+#: ../vector/v.info/print.c:755
 #, fuzzy
 msgid "Number of holes:"
 msgstr " Število vrstic\n"
 
-#: ../vector/v.info/print.c:720
+#: ../vector/v.info/print.c:760
 msgid "Map is 3D:"
 msgstr ""
 
-#: ../vector/v.info/print.c:721
+#: ../vector/v.info/print.c:761
 msgid "No"
 msgstr ""
 
-#: ../vector/v.info/print.c:721
+#: ../vector/v.info/print.c:761
 msgid "Yes"
 msgstr ""
 
-#: ../vector/v.info/print.c:723
+#: ../vector/v.info/print.c:763
 #, fuzzy
 msgid "Number of dblinks:"
 msgstr " Število vrstic\n"
 
-#: ../vector/v.info/print.c:740
+#: ../vector/v.info/print.c:780
 msgid "zone"
 msgstr ""
 
-#: ../vector/v.info/print.c:772
+#: ../vector/v.info/print.c:812
 msgid "Digitization threshold"
 msgstr ""
 
-#: ../vector/v.info/print.c:774
+#: ../vector/v.info/print.c:814
 msgid "Comment"
 msgstr ""
 
@@ -47927,7 +47944,7 @@ msgstr "Uvozi binarno rastrsko datoteko v GRASS-ov rastrski sloj."
 msgid "Name for output VTK file"
 msgstr "Ime izhodne datoteke"
 
-#: ../vector/v.out.vtk/main.c:67 ../vector/v.profile/main.c:197
+#: ../vector/v.out.vtk/main.c:67 ../vector/v.profile/main.c:205
 #, fuzzy
 msgid "Number of significant digits"
 msgstr "Število decimalk (le za \"floating point\" podatke)"
@@ -48464,173 +48481,177 @@ msgstr ""
 msgid "normalsv: save of uninitialized block"
 msgstr ""
 
-#: ../vector/v.profile/main.c:158
+#: ../vector/v.profile/main.c:166
 #, fuzzy
 msgid "Vector map profiling tool"
 msgstr "Ne najdem vhodnega vektorja <%s>"
 
-#: ../vector/v.profile/main.c:174
+#: ../vector/v.profile/main.c:182
 #, fuzzy
 msgid "Use features only from specified layer"
 msgstr "Izpiši pozicijo sonca v stilu lupinskega skripta"
 
-#: ../vector/v.profile/main.c:185
+#: ../vector/v.profile/main.c:193
 #, fuzzy
 msgid "Path to output text file or - for stdout"
 msgstr "Ascii rastrski sloj, ki ga nameravate uvoziti"
 
-#: ../vector/v.profile/main.c:206
+#: ../vector/v.profile/main.c:212
+msgid "plain;Plain text with pipe separator;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
+msgstr ""
+
+#: ../vector/v.profile/main.c:223
 #, fuzzy
 msgid "Buffer (tolerance) for points in map units"
 msgstr "Največja razdalja med točkami in enotami karte."
 
-#: ../vector/v.profile/main.c:207
+#: ../vector/v.profile/main.c:224
 msgid "How far points can be from sampling line"
 msgstr ""
 
-#: ../vector/v.profile/main.c:218
+#: ../vector/v.profile/main.c:235
 #, fuzzy
 msgid "Name for profile line and buffer output map"
 msgstr "Ime izhodnega rastrskega sloja"
 
-#: ../vector/v.profile/main.c:220
+#: ../vector/v.profile/main.c:237
 #, fuzzy
 msgid "Profile line and buffer around it will be written"
 msgstr "Ime izhodnega vektorskega sloja"
 
-#: ../vector/v.profile/main.c:225
+#: ../vector/v.profile/main.c:242
 #, fuzzy
 msgid "Do not print column names"
 msgstr "Ime rastrskega sloja"
 
-#: ../vector/v.profile/main.c:230
+#: ../vector/v.profile/main.c:247
 #, fuzzy
 msgid "Do not print 3D vector data (z values)"
 msgstr "Znak, ki bo predstavljal NULL vrednosti"
 
-#: ../vector/v.profile/main.c:231
+#: ../vector/v.profile/main.c:248
 msgid "Only affects 3D vectors"
 msgstr ""
 
-#: ../vector/v.profile/main.c:238
+#: ../vector/v.profile/main.c:255
 #, fuzzy
 msgid "Coordinates for profiling line nodes"
 msgstr ""
 "koordinata v x smeri (točka za katero želite izračun, privzeto: središče\n"
 "regije)"
 
-#: ../vector/v.profile/main.c:239
+#: ../vector/v.profile/main.c:256
 msgid "Specify profiling line vertices and nodes"
 msgstr ""
 
-#: ../vector/v.profile/main.c:240 ../vector/v.profile/main.c:252
-#: ../vector/v.profile/main.c:263 ../vector/v.profile/main.c:271
+#: ../vector/v.profile/main.c:257 ../vector/v.profile/main.c:269
+#: ../vector/v.profile/main.c:280 ../vector/v.profile/main.c:288
 #, fuzzy
 msgid "Profiling line"
 msgstr "Ustvari točke vzdolž vhodnih linij."
 
-#: ../vector/v.profile/main.c:250
+#: ../vector/v.profile/main.c:267
 #, fuzzy
 msgid "Profiling line map"
 msgstr "Ustvari točke vzdolž vhodnih linij."
 
-#: ../vector/v.profile/main.c:251
+#: ../vector/v.profile/main.c:268
 #, fuzzy
 msgid "Vector map containing profiling line"
 msgstr "Vhodni sloj vsebuje linije."
 
-#: ../vector/v.profile/main.c:260
+#: ../vector/v.profile/main.c:277
 msgid "WHERE conditions for input profile line map"
 msgstr ""
 
-#: ../vector/v.profile/main.c:262
+#: ../vector/v.profile/main.c:279
 msgid "Use to select only one line from profiling line map"
 msgstr ""
 
-#: ../vector/v.profile/main.c:270
+#: ../vector/v.profile/main.c:287
 #, fuzzy
 msgid "Profiling line map layer"
 msgstr "Ustvari točke vzdolž vhodnih linij."
 
-#: ../vector/v.profile/main.c:294
+#: ../vector/v.profile/main.c:325
 #, fuzzy
 msgid "Layer 0 not supported"
 msgstr "Tip zapisa kolone ni podprt"
 
-#: ../vector/v.profile/main.c:300
+#: ../vector/v.profile/main.c:331
 msgid "Failed to interpreter 'dp' parameter as an integer"
 msgstr ""
 
-#: ../vector/v.profile/main.c:306
+#: ../vector/v.profile/main.c:337
 #, fuzzy
 msgid "Tolerance value must be greater than 0"
 msgstr "navedena morata biti 2 sloja"
 
-#: ../vector/v.profile/main.c:311
+#: ../vector/v.profile/main.c:342
 #, fuzzy, c-format
 msgid "<%s> is not a valid vector map name"
 msgstr "Ime izhodnega rastrskega sloja"
 
-#: ../vector/v.profile/main.c:316
+#: ../vector/v.profile/main.c:347
 msgid "No input profile map name provided, but WHERE conditions for it have been set"
 msgstr ""
 
-#: ../vector/v.profile/main.c:322
+#: ../vector/v.profile/main.c:353
 msgid "Profile input coordinates and vector map are provided. Please provide only one of them"
 msgstr ""
 
-#: ../vector/v.profile/main.c:327
+#: ../vector/v.profile/main.c:358
 msgid "No profile input coordinates nor vector map are provided. Please provide one of them"
 msgstr ""
 
-#: ../vector/v.profile/main.c:366
+#: ../vector/v.profile/main.c:397
 #, fuzzy
 msgid "At least profile start and end coordinates are required!"
 msgstr "Koordinate poizvedovanja"
 
-#: ../vector/v.profile/main.c:397 ../vector/v.profile/main.c:414
+#: ../vector/v.profile/main.c:432 ../vector/v.profile/main.c:449
 #, fuzzy, c-format
 msgid "No database connection defined for map <%s> layer %d, but WHERE condition is provided"
 msgstr "Povezava z bazo podatkov ni definirana\n"
 
-#: ../vector/v.profile/main.c:456 ../vector/v.profile/main.c:621
+#: ../vector/v.profile/main.c:491 ../vector/v.profile/main.c:656
 #, fuzzy
 msgid "No features match Your query"
 msgstr "Ime vhodnega rastrskega sloja"
 
-#: ../vector/v.profile/main.c:461 ../vector/v.profile/main.c:476
+#: ../vector/v.profile/main.c:496 ../vector/v.profile/main.c:511
 msgid "Your query matches more than one record in input profiling map. Currently it's not supported. Enhance WHERE conditions to get only one line."
 msgstr ""
 
-#: ../vector/v.profile/main.c:469
+#: ../vector/v.profile/main.c:504
 #, fuzzy
 msgid "Error while initialising line list"
 msgstr "Ime vhodnega rastrskega sloja"
 
-#: ../vector/v.profile/main.c:483
+#: ../vector/v.profile/main.c:518
 #, fuzzy
 msgid "Error while reading vector feature from profile line map"
 msgstr "Ime vhodnega rastrskega sloja"
 
-#: ../vector/v.profile/main.c:500
+#: ../vector/v.profile/main.c:535
 msgid "Your input profile map contains more than one line. Currently it's not supported. Provide WHERE conditions to get only one line."
 msgstr ""
 
-#: ../vector/v.profile/main.c:522
+#: ../vector/v.profile/main.c:557
 msgid "Failed to convert GRASS line to GEOS line"
 msgstr ""
 
-#: ../vector/v.profile/main.c:531
+#: ../vector/v.profile/main.c:566
 #, fuzzy
 msgid "Buffering failed"
 msgstr "Berem dig datoteko...\n"
 
-#: ../vector/v.profile/main.c:580
+#: ../vector/v.profile/main.c:615
 #, fuzzy, c-format
 msgid "Vector map <%s> does not have cat's defined on layer %d"
 msgstr "Ne najdem vhodnega vektorja <%s>"
 
-#: ../vector/v.profile/main.c:757
+#: ../vector/v.profile/main.c:791 ../vector/v.profile/main.c:892
 msgid "Can not write data portion to provided output"
 msgstr ""
 
@@ -49271,6 +49292,11 @@ msgstr ""
 #, fuzzy
 msgid "Do not skip features without category"
 msgstr "%-5d mrtvih kategorij točk preskočenih\n"
+
+#: ../vector/v.select/copy_tabs.c:52
+#, fuzzy, c-format
+msgid "No table for layer %d"
+msgstr "Za vrstico (cat = %d) ni zapisa (record)<"
 
 #: ../vector/v.select/copy_tabs.c:69
 #, fuzzy, c-format
@@ -51957,10 +51983,6 @@ msgstr "Vhodni sloj"
 
 #, fuzzy
 #~ msgid "Print stats in shell script style"
-#~ msgstr "Izpiše vrednosti v stilu lupinskega skripta"
-
-#, fuzzy
-#~ msgid "Print raster3d information in shell style"
 #~ msgstr "Izpiše vrednosti v stilu lupinskega skripta"
 
 #, fuzzy

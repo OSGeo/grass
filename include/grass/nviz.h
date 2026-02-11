@@ -31,7 +31,6 @@
 #include <OpenGL/CGLCurrent.h>
 #include <OpenGL/OpenGL.h>
 #endif
-#include <ApplicationServices/ApplicationServices.h>
 
 #else /* make sure only one platform defined */
 #error Unsupported platform, or confused platform defines...

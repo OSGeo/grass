@@ -1,10 +1,10 @@
-# syntax=docker/dockerfile:1.20@sha256:26147acbda4f14c5add9946e2fd2ed543fc402884fd75146bd342a7f6271dc1d
+# syntax=docker/dockerfile:1.21@sha256:27f9262d43452075f3c410287a2c43f5ef1bf7ec2bb06e8c9eeb1b8d453087bc
 
 # Note: This file must be kept in sync in ./Dockerfile and ./docker/ubuntu/Dockerfile.
 #       Changes to this file must be copied over to the other file.
 ARG GUI=without
 
-FROM ubuntu:24.04@sha256:c35e29c9450151419d9448b0fd75374fec4fff364a27f176fb458d472dfc9e54 AS common_start
+FROM ubuntu:24.04@sha256:cd1dba651b3080c3686ecf4e3c4220f026b521fb76978881737d24f200828b2b AS common_start
 
 ARG BASE_NAME="ubuntu:24.04"
 ARG PYTHON_VERSION=3.12
@@ -18,6 +18,8 @@ ARG GDAL_VERSION=3.12.1
 ARG PDAL_VERSION=2.9.2
 # renovate: datasource=github-tags depName=OSGeo/gdal-grass
 ARG GDAL_GRASS_VERSION=2.0.0
+# renovate: datasource=pypi depName=wxPython
+ARG WXPYTHON_VERSION=4.2.4
 
 # Have build parameters as build arguments?
 # ARG LDFLAGS="-s -Wl,--no-undefined -lblas"
@@ -339,7 +341,7 @@ RUN echo "Installing GRASS GUI packages: $GRASS_GUI_PACKAGES" \
     $GRASS_GUI_PACKAGES \
     && python3 -m pip install  -U --break-system-packages --no-cache-dir --upgrade \
     -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-24.04 \
-    wxpython \
+    "wxpython==${WXPYTHON_VERSION}" \
     # Clean up
     && pip cache purge \
     && apt-get autoremove -y \
@@ -363,19 +365,19 @@ RUN make -j $NUMTHREADS distclean || echo "nothing to clean" \
     && ./configure $GRASS_CONFIG \
     && make -j $NUMTHREADS \
     && make install && ldconfig \
-    && rm -rf /usr/local/grass85/demolocation \
-    && cp /usr/local/grass85/gui/wxpython/xml/module_items.xml module_items.xml
+    && rm -rf /usr/local/grass86/demolocation \
+    && cp /usr/local/grass86/gui/wxpython/xml/module_items.xml module_items.xml
 
 FROM build_grass AS build_grass_with_gui_built
 RUN echo "GUI selected, skipping GUI related cleanup"
 
 FROM build_grass AS build_grass_without_gui_built
 RUN echo "No GUI selected, removing GUI related files" \
-    && rm -rf /usr/local/grass85/fonts \
-    && rm -rf /usr/local/grass85/gui \
-    && rm -rf /usr/local/grass85/docs/html \
-    && rm -rf /usr/local/grass85/docs/mkdocs \
-    && rm -rf /usr/local/grass85/share
+    && rm -rf /usr/local/grass86/fonts \
+    && rm -rf /usr/local/grass86/gui \
+    && rm -rf /usr/local/grass86/docs/html \
+    && rm -rf /usr/local/grass86/docs/mkdocs \
+    && rm -rf /usr/local/grass86/share
 
 # hadolint ignore=DL3006
 FROM build_grass_${GUI}_gui_built AS build_grass_plugin
@@ -480,11 +482,11 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
 
 # Copy GRASS, GDAL-GRASS-plugin and compiled dependencies from build image
 COPY --link --from=build_grass_plugin /usr/local /usr/local
-COPY --link --from=build_grass_plugin /src/grass_build/module_items.xml /usr/local/grass85/gui/wxpython/xml/module_items.xml
+COPY --link --from=build_grass_plugin /src/grass_build/module_items.xml /usr/local/grass86/gui/wxpython/xml/module_items.xml
 # COPY --link --from=datum_grids /tmp/cdn.proj.org/*.tif /usr/share/proj/
 
 # Create generic GRASS lib name regardless of version number
-RUN ln -sf /usr/local/grass85 /usr/local/grass \
+RUN ln -sf /usr/local/grass86 /usr/local/grass \
     && ldconfig
 
 # show GRASS, PROJ, GDAL etc versions
