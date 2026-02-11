@@ -78,6 +78,7 @@ jobs:
               GUI=with
 
     permissions:
+      artifact-metadata: write # For actions/attest-build-provenance
       attestations: write
       contents: read
       id-token: write
