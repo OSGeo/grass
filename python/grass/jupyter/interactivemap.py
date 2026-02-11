@@ -427,7 +427,6 @@ class InteractiveMap:
             )
             self.map.add(legend_control)
 
-
     def add_layer_control(self, **kwargs):
         """Add layer control to display.
 
