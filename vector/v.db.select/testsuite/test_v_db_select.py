@@ -158,6 +158,12 @@ out_where = """1076|366545504|324050.96875|1077|1076|Zwe|366545512.376|324050.97
 1290|63600420|109186.835938|1291|1290|Zwe|63600422.4739|109186.832069
 """
 
+out_extent = """n=201971.859459
+s=148158.109538
+w=123971.194990
+e=209096.266022
+"""
+
 out_sep = """1076,366545504,324050.96875,1077,1076,Zwe,366545512.376,324050.97237
 1123,1288.555298,254.393951,1124,1123,Zwe,1288.546525,254.393964
 1290,63600420,109186.835938,1291,1290,Zwe,63600422.4739,109186.832069
@@ -232,6 +238,17 @@ class SelectTest(TestCase):
         sel.run()
         self.assertLooksLike(reference=out_where, actual=sel.outputs.stdout)
 
+    def testExtent(self):
+        """Testing v.db.select extent output with -r flag"""
+        sel = SimpleModule(
+            "v.db.select",
+            flags="r",
+            map=self.invect,
+            where="{col}='{val}'".format(col=self.col, val=self.val),
+        )
+        sel.run()
+        self.assertLooksLike(reference=out_extent, actual=sel.outputs.stdout)
+
     def testSeparator(self):
         sel = SimpleModule(
             "v.db.select",
@@ -271,7 +288,7 @@ class SelectTest(TestCase):
         except ValueError:
             self.fail(msg="No JSON object could be decoded:\n" + sel.outputs.stdout)
 
-        self.assertLooksLike(reference=out_json, actual=sel.outputs.stdout)
+        self.assertEqual(json.loads(out_json), json.loads(sel.outputs.stdout))
 
 
 if __name__ == "__main__":
