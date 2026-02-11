@@ -190,7 +190,7 @@ from .univar_statistics import (
     print_gridded_dataset_univar_statistics,
     print_vector_dataset_univar_statistics,
 )
-from .utils import TemporalJSONEncoder
+from grass.script.utils import TemporalJSONEncoder
 
 __all__ = [
     "AbsoluteTemporalExtent",
