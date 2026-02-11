@@ -381,6 +381,118 @@ class InteractiveMap:
         else:
             self.layer_control_object = self._ipyleaflet.LayersControl(**kwargs)
 
+    def add_legend(self, raster, position="bottomright"):
+        import subprocess
+
+        # Getting all in-built colour scheme for elevations
+        all_colours = subprocess.check_output(f"r.colors.out map={raster}", shell=True).decode("utf-8").strip()
+        colors = {}
+        last_ht = None
+        for colour in all_colours.split("\n"):
+            if "nv" in colour or "default" in colour:
+                continue
+            elev_col_info = colour.split()
+            ht = float(elev_col_info[0])
+            rgb = elev_col_info[1]
+            label = f"{last_ht:.1f} - {ht:.1f} m" if last_ht else f"≤ {ht:.1f} m"
+            colors[label] = f"rgb({rgb.replace(':', ',')})"
+            last_ht = ht
+
+        # Position Coordinates
+        position_map = {
+            "topright": "top: 5px; right: 5px;",
+            "topleft": "top: 5px; left: 5px;",
+            "bottomright": "bottom: 5px; right: 5px;",
+            "bottomleft": "bottom: 5px; left: 5px;"
+        }
+        pos_style = position_map.get(position)
+
+        # Creating legend
+        legend_html = f"""
+        <div style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: absolute;
+            {pos_style}
+            z-index: 9999;
+            min-width: 130px;
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            color: black;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 12px;
+        ">
+            <div style="
+                background: rgba(255, 255, 255, 0.5)
+                font-size: 14px;
+                font-weight: bold;
+                padding-bottom: 6px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                color: black;
+            ">
+                {raster.capitalize()} Map
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+        """
+
+        for label, color in colors.items():
+            legend_html += f"""
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="
+                        width: 20px;
+                        height: 20px;
+                        background: {color};
+                        border-radius: 4px;
+                        border: 1px solid rgba(255,255,255,0.5);
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                    "></div>
+                    <span style="color: black;">{label}</span>
+                </div>
+            """
+
+        legend_html += """
+            </div>
+        </div>
+        """
+
+        if self._ipyleaflet:
+            import ipywidgets as widgets
+            from ipyleaflet import WidgetControl
+            legend_widget = widgets.HTML(value=legend_html)
+            control = WidgetControl(widget=legend_widget, position=position)
+            self.map.add(control)
+            return self
+
+        elif self._folium:
+            from branca.element import MacroElement
+            from jinja2 import Template
+
+            class Legend(MacroElement):
+                def __init__(self, html):
+                    super().__init__()
+                    self.html = html
+                    self._name = "Legend"
+
+                def render(self, **kwargs):
+                    template = Template("""
+                        {% macro html(this, kwargs) %}
+                            {{ this.html|safe }}
+                        {% endmacro %}
+                    """)
+                    return template.module.html(self)
+
+            self.map.get_root().add_child(Legend(legend_html))
+            return self
+
+
+        else:
+            return self
+
     def setup_drawing_interface(self):
         """Sets up the drawing interface for users
         to interactively draw and manage geometries on the map.
