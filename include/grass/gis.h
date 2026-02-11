@@ -361,7 +361,7 @@ typedef enum {
     G_OPT_T_SUFFIX, /*!< The suffix type for new maps in a space time dataset */
     G_OPT_T_TYPE,   /*!< The temporal type of a space time dataset */
     G_OPT_T_WHERE,  /*!< A temporal GIS framework SQL WHERE statement */
-    G_OPT_T_SAMPLE, /*!< Temporal sample methods */
+    G_OPT_T_SAMPLE  /*!< Temporal sample methods */
 } STD_OPT;
 
 /*!
