@@ -3,7 +3,6 @@
 import pytest
 
 import grass.script as gs
-import os
 
 from grass.jupyter.utils import get_region, get_location_proj_string
 
@@ -30,7 +29,7 @@ def test_get_location_proj_string(tmp_path):
     """Test that get_location_proj_string returns projection of environment in PROJ.4 format"""
     project = tmp_path / "test_project_proj"
     gs.create_project(project)
-    with gs.setup.init(project) as session:
+    with gs.setup.init(project):
         gs.run_command("g.proj", flags="c", epsg="4326")
         projection = get_location_proj_string()
         assert "+proj=" in projection
