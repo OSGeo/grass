@@ -129,7 +129,7 @@ jobs:
             pytest ^
             pytest-timeout
         # Obfuscated usage of GitHub Actions features, Windows CMD shell limits analysis
-        shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}"" # zizmor: ignore[obfuscation]
+        shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}"" # zizmor: ignore[misfeature]
       - name: Run pytest with a single worker
         run: |
           call %OSGEO4W_ROOT%\opt\grass\etc\env.bat
@@ -140,7 +140,7 @@ jobs:
             --junitxml=pytest.junit.xml ^
             -k "not testsuite"
         # Obfuscated usage of GitHub Actions features, Windows CMD shell limits analysis
-        shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}"" # zizmor: ignore[obfuscation]
+        shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}"" # zizmor: ignore[misfeature]
       - name: Run pytest with a single worker (for gunittest-based tests)
         run: |
           call %OSGEO4W_ROOT%\opt\grass\etc\env.bat
@@ -152,7 +152,7 @@ jobs:
             @.github/workflows/pytest_args_gunittest.txt ^
             --junitxml=pytest.gunittest.junit.xml
         # Obfuscated usage of GitHub Actions features, Windows CMD shell limits analysis
-        shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}"" # zizmor: ignore[obfuscation]
+        shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}"" # zizmor: ignore[misfeature]
 
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
