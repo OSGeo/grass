@@ -281,3 +281,68 @@ def test_create_crs_epsg(tmp_path, epsg_code):
     result_dict = json.loads(result.stdout)
     assert result_dict["id"]["authority"] == "EPSG"
     assert result_dict["id"]["code"] == epsg_code
+
+
+def test_subcommand_run_vector_import_export(tmp_path):
+    geojson_file = tmp_path / "test_vect.geojson"
+    export_file = tmp_path / "export_vect.gpkg"
+
+    with open(geojson_file, "w") as f:
+        f.write(
+            '{"type": "FeatureCollection","features": [{"type": "Feature","properties": {"name": "Test"},"geometry": {"type": "Point","coordinates": [1, 1]}}]}'
+        )
+
+    assert (
+        main(
+            [
+                "run",
+                "--import-vector",
+                str(geojson_file),
+                "--export-vector",
+                f"test_vect={export_file}",
+                "v.info",
+                "map=test_vect",
+            ]
+        )
+        == 0
+    )
+
+    assert export_file.exists()
+
+
+def test_subcommand_run_vector_link(tmp_path):
+    geojson_file = tmp_path / "test_link.geojson"
+    with open(geojson_file, "w") as f:
+        f.write(
+            '{"type": "FeatureCollection","features": [{"type": "Feature","properties": {"name": "Test"},"geometry": {"type": "Point","coordinates": [1, 1]}}]}'
+        )
+
+    assert (
+        main(["run", "--link-vector", str(geojson_file), "v.info", "map=test_link"])
+        == 0
+    )
+
+
+def test_subcommand_run_raster_output_export(tmp_path):
+    out_dir = tmp_path / "output_maps"
+    out_dir.mkdir()
+    export_file = tmp_path / "export_rast.tif"
+
+    assert (
+        main(
+            [
+                "run",
+                "--link-output",
+                str(out_dir),
+                "--export-raster",
+                f"new_map={export_file}",
+                "r.mapcalc",
+                "expression=new_map=1",
+            ]
+        )
+        == 0
+    )
+
+    assert export_file.exists()
+
+    assert (out_dir / "new_map.tif").exists()

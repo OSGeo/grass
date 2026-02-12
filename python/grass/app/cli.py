@@ -52,25 +52,83 @@ def subcommand_run_tool(args, tool_args: list, print_help: bool) -> int:
             project_name = "project"
             project_path = Path(tmp_dir_name) / project_name
             gs.create_project(project_path, crs=args.crs)
+
         with gs.setup.init(project_path) as session:
+            if args.import_vector:
+                fpath = Path(args.import_vector)
+                try:
+                    gs.run_command("v.import", input=str(fpath), output=fpath.stem)
+                except ScriptError as e:
+                    print(f"Error importing vector: {e}", file=sys.stderr)
+                    return 1
+
+            if args.link_vector:
+                fpath = Path(args.link_vector)
+                try:
+                    gs.run_command("v.external", input=str(fpath), output=fpath.stem)
+                except ScriptError as e:
+                    print(f"Error linking vector: {e}", file=sys.stderr)
+                    return 1
+
+            if args.link_output:
+                out_dir = Path(args.link_output)
+                try:
+                    gs.run_command(
+                        "r.external.out", directory=str(out_dir), format="GTiff"
+                    )
+                except ScriptError as e:
+                    print(f"Error setting external output: {e}", file=sys.stderr)
+                    return 1
+
             tools = Tools(
                 session=session, capture_output=False, consistent_return_value=True
             )
+
+            return_code = 0
+
             try:
-                # From here, we return the subprocess return code regardless of its
-                # value. Error states are handled through exceptions.
                 if print_help:
-                    # We consumed the help flag, so we need to add it explicitly.
                     return tools.call_cmd([*command, "--help"]).returncode
-                if any(item in command for item in SPECIAL_FLAGS):
-                    # This is here basically because of how --json behaves,
-                    # two JSON flags are accepted, but --json currently overridden by
-                    # other special flags, so later use of --json in tools will fail
-                    # with the other flags active.
+                elif any(item in command for item in SPECIAL_FLAGS):
                     return tools.call_cmd(command).returncode
-                return tools.run_cmd(command).returncode
+                else:
+                    return_code = tools.run_cmd(command).returncode
+
             except subprocess.CalledProcessError as error:
-                return error.returncode
+                return_code = error.returncode
+
+            if return_code == 0:
+                if args.export_raster:
+                    if "=" in args.export_raster:
+                        map_name, out_file = args.export_raster.split("=", 1)
+                        try:
+                            gs.run_command(
+                                "r.out.gdal", input=map_name, output=out_file
+                            )
+                        except ScriptError as e:
+                            print(f"Error exporting raster: {e}", file=sys.stderr)
+                            return 1
+                    else:
+                        print(
+                            "Error: --export-raster format must be 'map=file'",
+                            file=sys.stderr,
+                        )
+
+                if args.export_vector:
+                    if "=" in args.export_vector:
+                        map_name, out_file = args.export_vector.split("=", 1)
+                        try:
+                            gs.run_command("v.out.ogr", input=map_name, output=out_file)
+                        except ScriptError as e:
+                            print(f"Error exporting vector: {e}", file=sys.stderr)
+                            return 1
+                    else:
+                        print(
+                            "Error: --export-vector format must be 'map=file'",
+                            file=sys.stderr,
+                        )
+
+            return return_code
 
 
 def subcommand_create_project(args) -> int:
@@ -254,6 +312,34 @@ def main(args=None, program=None):
     run_subparser.add_argument("--crs", type=str, help="CRS to use for computations")
     run_subparser.add_argument(
         "--project", type=str, help="project to use for computations"
+    )
+
+    run_subparser.add_argument(
+        "--import-vector",
+        type=str,
+        help="Import a vector file (v.import) before execution",
+    )
+    run_subparser.add_argument(
+        "--link-vector",
+        type=str,
+        help="Link a vector file (v.external) before execution",
+    )
+
+    run_subparser.add_argument(
+        "--export-raster",
+        type=str,
+        help='Export a raster map after execution (e.g. --export-raster="map=file.tif")',
+    )
+    run_subparser.add_argument(
+        "--export-vector",
+        type=str,
+        help='Export a vector map after execution (e.g. --export-vector="map=file.gpkg")',
+    )
+
+    run_subparser.add_argument(
+        "--link-output",
+        type=str,
+        help="Direct raster output to an external directory (r.external.out)",
     )
     run_subparser.set_defaults(func=subcommand_run_tool)
 
