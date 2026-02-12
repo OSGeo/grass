@@ -29,6 +29,7 @@ set(img_files
 
 add_custom_target(wxpython_docs DEPENDS grass_gis LIB_PYTHON)
 add_dependencies(GUI_WXPYTHON wxpython_docs)
+set_target_properties(wxpython_docs PROPERTIES FOLDER GUI)
 
 generate_docs_list(
   TARGET wxpython_docs

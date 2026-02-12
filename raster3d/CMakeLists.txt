@@ -32,6 +32,8 @@ add_custom_target(
   DEPENDS ${raster3d_modules_list}
   COMMENT "All temporal modules are built.")
 
+set_target_properties(ALL_RASTER3D_MODULES PROPERTIES FOLDER Misc)
+
 if(WITH_DOCS)
   generate_docs(raster3dintro TARGET ALL_RASTER3D_MODULES)
 endif()

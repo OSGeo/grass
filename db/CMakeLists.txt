@@ -16,6 +16,7 @@ add_custom_target(
   ALL_DATABASE_MODULES ALL
   DEPENDS ${db_modules_list}
   COMMENT "All database modules are built.")
+set_target_properties(ALL_DATABASE_MODULES PROPERTIES FOLDER Misc)
 
 if(WITH_DOCS)
   generate_docs(databaseintro TARGET ALL_DATABASE_MODULES)
