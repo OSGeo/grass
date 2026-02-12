@@ -3,7 +3,7 @@
 
 Name:		grass
 Version:	8.4.2
-Release:	2%{?dist}
+Release:	4%{?dist}
 Summary:	GRASS GIS - Geographic Resources Analysis Support System
 
 %if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
@@ -30,6 +30,9 @@ Source0:	https://grass.osgeo.org/%{name}%{shortver}/source/%{name}-%{version}.ta
 
 # fix pkgconfig file
 Patch 0:	grass-pkgconfig.patch
+
+# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+ExcludeArch: %{ix86}
 
 BuildRequires:	bison
 %if %{with flexiblas}
@@ -331,6 +334,12 @@ fi
 %{_libdir}/%{name}%{shortver}/include
 
 %changelog
+* Fri Jan 16 2026 Fedora Release Engineering <releng@fedoraproject.org> - 8.4.2-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
+
+* Wed Jan 14 2026 Elliott Sales de Andrade <quantum.analyst@gmail.com> - 8.4.2-3
+- Drop support for i686
+
 * Sun Nov 23 2025 Sandro Mani <manisandro@gmail.com> - 8.4.2-2
 - Rebuild (gdal)
 
