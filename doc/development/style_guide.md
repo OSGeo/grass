@@ -1022,7 +1022,7 @@ programming practice (e.g. always checking if memory was allocated) and/or
 improves portability.
 
 - Memory management: `G_malloc()`, `G_calloc()`, `G_realloc()`, `G_free()`
-- Environmental variables: `G_getenv()`, `G_setenv()`, `G_unsetenv()`
+- Environment variables: `G_getenv()`, `G_setenv()`, `G_unsetenv()`
 - File seek: `G_fseek()`, `G_ftell()`
 - Printing: `G_asprintf()`, `G_vsaprintf()`, `G_vfaprintf()`, ...
 
