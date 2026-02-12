@@ -23,6 +23,7 @@ class TestRSimWater(TestCase):
     reference_discharge_default = "discharge_default"
     reference_depth_complex = "depth_complex"
     reference_discharge_complex = "discharge_complex"
+    reference_depth_infil = "depth_infil"
 
     @classmethod
     def setUpClass(cls):
@@ -50,7 +51,7 @@ class TestRSimWater(TestCase):
         )
         cls.runModule(
             "r.mapcalc",
-            expression=f"{cls.infil} = if (x() < 636500 && y() > 223500, 0.001, 0)",
+            expression=f"{cls.infil} = if (x() > 636500 && y() > 223500, 10, 0)",
         )
         cls.runModule(
             "r.unpack",
@@ -61,6 +62,11 @@ class TestRSimWater(TestCase):
             "r.unpack",
             input="data/discharge_complex.pack",
             output=cls.reference_discharge_complex,
+        )
+        cls.runModule(
+            "r.unpack",
+            input="data/depth_infil.pack",
+            output=cls.reference_depth_infil,
         )
 
     @classmethod
@@ -195,6 +201,28 @@ class TestRSimWater(TestCase):
             f"{self.discharge}.15",
             reference=self.reference_discharge_complex,
             precision="0.000001",
+        )
+
+    def test_infiltration(self):
+        """Test r.sim.water execution with infiltration"""
+        # Run the r.sim.water simulation
+        self.assertModule(
+            "r.sim.water",
+            elevation=self.elevation,
+            dx=self.dx,
+            dy=self.dy,
+            rain=self.infil,
+            infil=self.infil,
+            depth=self.depth,
+            niterations=30,
+            random_seed=1,
+        )
+
+        # Assert that the output rasters exist
+        self.assertRasterExists(self.depth)
+        # Assert that the output rasters are the same
+        self.assertRastersEqual(
+            self.depth, reference=self.reference_depth_infil, precision="0.000001"
         )
 
 
