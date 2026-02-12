@@ -51,6 +51,8 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 
     def setUp(self):
         """Make sure we are not dealing with some old files"""
+        g_gisenv = SimpleModule("g.gisenv", set="DEBUG=1")
+        self.assertModule(g_gisenv)
         if self.install_prefix.exists():
             files = [path.name for path in self.install_prefix.iterdir()]
             if files:
@@ -60,6 +62,8 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 
     def tearDown(self):
         """Remove created files"""
+        g_gisenv = SimpleModule("g.gisenv", set="DEBUG=0")
+        self.assertModule(g_gisenv)
         silent_rmtree(str(self.install_prefix))
 
     @unittest.skipIf(is_cmake, "currently not supported by CMake build")
@@ -234,6 +238,10 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         self.assertTrue(gextension.outputs.stderr)
         self.assertNotIn(
             _("No metadata available for module '{}':").format(extension),
+            gextension.outputs.stderr,
+        )
+        self.assertIn(
+            f"Addon name <{extension}> has been installed with only an HTML manual page.",
             gextension.outputs.stderr,
         )
 
