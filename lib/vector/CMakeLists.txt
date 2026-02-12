@@ -24,8 +24,7 @@ build_library_in_subdir(
   GEOS::geos_c)
 
 target_include_directories(grass_vector
-  INTERFACE $<TARGET_PROPERTY:GDAL::GDAL,INTERFACE_INCLUDE_DIRECTORIES>
-            $<TARGET_PROPERTY:GDAL::GDAL,INTERFACE_INCLUDE_DIRECTORIES>/gdal)
+  INTERFACE $<TARGET_PROPERTY:GDAL::GDAL,INTERFACE_INCLUDE_DIRECTORIES>)
 if(TARGET PostgreSQL::PostgreSQL)
   target_link_libraries(grass_vector PRIVATE PostgreSQL::PostgreSQL)
   target_include_directories(grass_vector
