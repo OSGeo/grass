@@ -10,9 +10,10 @@ msgstr ""
 "Project-Id-Version: grasswxpy_it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-31 15:57+0000\n"
-"PO-Revision-Date: 2025-08-26 13:29+0000\n"
+"PO-Revision-Date: 2026-02-09 03:56+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
-"Language-Team: Italian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/it/>\n"
+"Language-Team: Italian <https://weblate.osgeo.org/projects/grass-gis/"
+"grasswxpy-8-5/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -49,7 +50,7 @@ msgstr "Numero inconsistente di mappe, controllare i dati di input. "
 
 #: ../gui/wxpython/animation/controller.py:502
 msgid "No animation to export."
-msgstr "Nessuna animazione da esportare"
+msgstr "Nessuna animazione da esportare."
 
 #: ../gui/wxpython/animation/controller.py:540
 msgid "Preparing export, please wait..."
