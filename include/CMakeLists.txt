@@ -14,6 +14,7 @@ foreach(srch ${SRCHS})
 endforeach()
 
 add_custom_target(copy_header DEPENDS ${include_depends} LIB_PYTHON)
+set_target_properties(copy_header PROPERTIES FOLDER Misc)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/grass/version.h.in
                "${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}/grass/version.h")
