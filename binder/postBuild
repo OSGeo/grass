@@ -14,6 +14,7 @@ set -e
     --with-opengl-libs=/usr/include/GL \
     --with-proj-share=/usr/share/proj \
     --with-readline \
+    --without-pdal \
     --with-sqlite=yes
 make
 
