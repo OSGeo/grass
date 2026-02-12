@@ -139,6 +139,9 @@ class TplotFrame(wx.Frame):
         tgis.stop_subprocesses()
 
     def onClose(self, evt):
+        self.close(evt)
+
+    def close(self, evt=None):
         if self._giface.GetMapDisplay():
             self.coorval.OnClose()
             self.cats.OnClose()
