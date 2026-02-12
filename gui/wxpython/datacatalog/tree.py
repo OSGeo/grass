@@ -405,7 +405,7 @@ class DataCatalogTree(TreeView):
         return [db for db in dbs if Path(db).is_dir()]
 
     def _saveGrassDBs(self):
-        """Save current grass dbs in tree to settings using NEW 'items' format.
+        """Save current grass dbs in tree to settings using 'items' format.
 
         Preserves existing labels when saving.
         """
