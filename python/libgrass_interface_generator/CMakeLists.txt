@@ -120,7 +120,7 @@ foreach(module ${MODULES})
     VERBATIM)
 
   add_custom_target(${${module}_TARGET_NAME} ALL DEPENDS ${output_file})
-  set_target_properties(${${module}_TARGET_NAME} PROPERTIES FOLDER lib/python)
+  set_target_properties(${${module}_TARGET_NAME} PROPERTIES FOLDER "Python/GRASS Libraries Interface")
   install(FILES ${output_file} DESTINATION ${GRASS_INSTALL_PYDIR}/grass/lib)
 
 endforeach()
