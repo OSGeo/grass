@@ -27,6 +27,7 @@ from pathlib import Path
 import wx
 from wx.lib.newevent import NewEvent
 
+from grass.pydispatch.signal import Signal
 from grass.script.utils import try_rmdir, legalize_vector_name
 from grass.utils.download import download_and_extract, name_from_url, DownloadError
 from grass.grassdb.checks import is_location_valid
@@ -89,17 +90,18 @@ LOCATIONS = [
 
 class RedirectText:
     def __init__(self, window):
-        self.out = window
+        self.window = window
 
     def write(self, string):
         try:
-            if self.out:
+            if self.window.message:
                 string = self._wrap_string(string)
                 height = self._get_height(string)
-                wx.CallAfter(self.out.SetLabel, string)
+                wx.CallAfter(self.window.message.SetLabel, string)
+                # Show Data Catalog info bar messsage
+                wx.CallAfter(self.window.ShowInfoBarMessage, string)
                 self._resize(height)
         except (RuntimeError, AttributeError):
-            # window closed or destroyed
             pass
 
     def flush(self):
@@ -124,7 +126,7 @@ class RedirectText:
         :return int: widget height
         """
         n_lines = string.count("\n")
-        attr = self.out.GetClassDefaultAttributes()
+        attr = self.window.message.GetClassDefaultAttributes()
         font_size = attr.font.GetPointSize()
         return int((n_lines + 2) * font_size // 0.75)  # 1 px = 0.75 pt
 
@@ -133,11 +135,11 @@ class RedirectText:
 
         :param int height: widget height
         """
-        wx.CallAfter(self.out.GetParent().SetMinSize, (-1, -1))
-        wx.CallAfter(self.out.SetMinSize, (-1, height))
+        wx.CallAfter(self.window.message.GetParent().SetMinSize, (-1, -1))
+        wx.CallAfter(self.window.message.SetMinSize, (-1, height))
         wx.CallAfter(
-            self.out.GetParent().parent.sizer.Fit,
-            self.out.GetParent().parent,
+            self.window.message.GetParent().parent.sizer.Fit,
+            self.window.message.GetParent().parent,
         )
 
 
@@ -227,7 +229,12 @@ class LocationDownloadPanel(wx.Panel):
         self.database = database
         self.locations = locations
         self._abort_btn_label = _("Abort")
-        self._abort_btn_tooltip = _("Abort download")
+        self._abort_btn_tooltip = _("Abort download location")
+        self._infobar_message_btn_id = wx.NewIdRef()
+        self._infobar_message_btns = {
+            "addBtn": None,
+            "removeBtn": None,
+        }
 
         self.label = StaticText(
             parent=self, label=_("Select sample project to download:")
@@ -237,13 +244,14 @@ class LocationDownloadPanel(wx.Panel):
         self.choice = wx.Choice(parent=self, choices=choices)
 
         self.choice.Bind(wx.EVT_CHOICE, self.OnChangeChoice)
-        self.parent.download_button.Bind(wx.EVT_BUTTON, self.OnDownload)
+        if hasattr(self.parent, "download_button"):
+            self.parent.download_button.Bind(wx.EVT_BUTTON, self.OnDownload)
         # TODO: add button for a link to an associated website?
         # TODO: add thumbnail for each location?
 
         # TODO: messages copied from gis_set.py, need this as API?
         self.message = StaticText(parent=self, size=(-1, 50))
-        sys.stdout = RedirectText(self.message)
+        sys.stdout = RedirectText(window=self)
 
         # It is not clear if all wx versions supports color, so try-except.
         # The color itself may not be correct for all platforms/system settings
@@ -301,8 +309,40 @@ class LocationDownloadPanel(wx.Panel):
             self.parent.download_button.SetLabel(label)
             self.parent.download_button.SetToolTip(tooltip)
 
+    def _terminateDownloadCallback(self, event):
+        """Terminate download callback
+
+        :param object event: event object
+        """
+        self._infobar_message_btns["addBtn"] = True
+        if self._download_in_progress:
+            self.thread.Terminate()
+            # Clean up after urllib urlretrieve which is used internally
+            # in grass.utils.
+            from urllib import request  # pylint: disable=import-outside-toplevel
+
+            self._download_in_progress = False
+            request.urlcleanup()
+            sys.stdout.write("Download aborted")
+            self.thread = gThread()
+            self._change_download_btn_label()
+            self.parent.Show(True)
+            self._infobar_message_btns.update(
+                dict(zip(("addBtn", "removeBtn"), (False, True))),
+            )
+
+    def OnAbort(self, event):
+        """Info bar widget abort button event handler
+
+        :param object event: event object
+        """
+        self._terminateDownloadCallback(event)
+
     def OnDownload(self, event):
         """Handle user-initiated action of download"""
+        self._infobar_message_btns.update(
+            dict(zip(("addBtn", "removeBtn"), (True, False))),
+        )
         button_label = self.parent.download_button.GetLabel()
         if button_label in {_("Download"), _("Do&wnload")}:
             self._change_download_btn_label(
@@ -317,6 +357,32 @@ class LocationDownloadPanel(wx.Panel):
         else:
             self.parent.OnCancel()
 
+    def ShowInfoBarMessage(self, message, buttons=None):
+        """Show progress of downloading new location Data Catalog info
+        message
+
+        :param str message: text message
+        :param list buttons: list of info bar widget buttons
+                             [(button_label, button_click_event_handler),...]
+        """
+        if hasattr(self.parent, "showInfoBarMessage"):
+            self.parent.showInfoBarMessage.emit(
+                message=message,
+                buttons=(
+                    [
+                        {
+                            "id": self._infobar_message_btn_id,
+                            "label": self._abort_btn_label,
+                            "handler": self.OnAbort,
+                            "btnsAction": self._infobar_message_btns,
+                        }
+                    ]
+                    if buttons is None
+                    else buttons
+                ),
+            )
+            self._infobar_message_btns["addBtn"] = False
+
     def DownloadItem(self, item):
         """Download the selected item"""
         Debug.msg(1, "DownloadItem: %s" % item)
@@ -330,11 +396,15 @@ class LocationDownloadPanel(wx.Panel):
                     "Project name {name} already exists in {path}, download canceled"
                 ).format(name=dirname, path=self.database)
             )
+            self._infobar_message_btns.update(
+                dict(zip(("addBtn", "removeBtn"), (False, True))),
+            )
             self._change_download_btn_label()
             return
 
         def download_complete_callback(event):
             self._download_in_progress = False
+            self._infobar_message_btns["addBtn"] = True
             errors = event.ret
             if errors:
                 self._error(_("Download failed: %s") % errors)
@@ -342,22 +412,17 @@ class LocationDownloadPanel(wx.Panel):
                 self._last_downloaded_location_name = dirname
                 self._warning(
                     _(
-                        "Download completed. The downloaded sample data is available "
-                        "now in the data tree"
+                        "Download completed. The downloaded sample data is listed "
+                        "in the location/mapset tree."
                     )
                 )
+                self.parent.newLocationIsDownloaded.emit()
+            self._infobar_message_btns.update(
+                dict(zip(("addBtn", "removeBtn"), (False, True))),
+            )
             self._change_download_btn_label()
-
-        def terminate_download_callback(event):
-            # Clean up after urllib urlretrieve which is used internally
-            # in grass.utils.
-            from urllib import request  # pylint: disable=import-outside-toplevel
-
-            self._download_in_progress = False
-            request.urlcleanup()
-            sys.stdout.write("Download aborted")
-            self.thread = gThread()
-            self._change_download_btn_label()
+            if errors:
+                self.parent.Show(True)
 
         self._download_in_progress = True
         self._warning(_("Download in progress, wait until it is finished"))
@@ -367,8 +432,9 @@ class LocationDownloadPanel(wx.Panel):
             name=dirname,
             database=self.database,
             ondone=download_complete_callback,
-            onterminate=terminate_download_callback,
+            onterminate=self._terminateDownloadCallback,
         )
+        wx.CallLater(1000, self.parent.Show, False)
 
     def OnChangeChoice(self, event):
         """React to user changing the selection"""
@@ -378,6 +444,7 @@ class LocationDownloadPanel(wx.Panel):
     def CheckItem(self, item):
         """Check what user selected and report potential issues"""
         # similar code as in DownloadItem
+        self._infobar_message_btns["addBtn"] = True
         url = item["url"]
         dirname = location_name_from_url(url)
         destination = os.path.join(self.database, dirname)
@@ -387,8 +454,12 @@ class LocationDownloadPanel(wx.Panel):
                     name=dirname
                 )
             )
-            self.parent.download_button.SetLabel(label=_("Download"))
+            self._infobar_message_btns["addBtn"] = False
+            if hasattr(self.parent, "download_button"):
+                self.parent.download_button.SetLabel(label=_("Download"))
             return
+        if hasattr(self.parent, "dismissShowInfoBarMessage"):
+            self.parent.dismissShowInfoBarMessage.emit()
         self._clearMessage()
 
     def GetLocation(self):
@@ -443,11 +514,20 @@ class LocationDownloadDialog(wx.Dialog):
         :param title: window title if the default is not appropriate
         """
         wx.Dialog.__init__(self, parent=parent, title=title)
-        cancel_button = Button(self, id=wx.ID_CANCEL)
+
+        self.newLocationIsDownloaded = Signal(
+            "LocationDownloadDialog.newLocationIsDownloaded"
+        )
+        self.showInfoBarMessage = Signal("LocationDownloadDialog.showInfoBarMessage")
+        self.dismissShowInfoBarMessage = Signal(
+            "LocationDownloadDialog.dismissShowInfoBarMessage"
+        )
+
+        self.cancel_button = Button(self, id=wx.ID_CANCEL)
         self.download_button = Button(parent=self, id=wx.ID_ANY, label=_("Do&wnload"))
         self.download_button.SetToolTip(_("Download selected dataset"))
         self.panel = LocationDownloadPanel(parent=self, database=database)
-        cancel_button.Bind(wx.EVT_BUTTON, self.OnCancel)
+        self.cancel_button.Bind(wx.EVT_BUTTON, self.OnCancel)
         self.Bind(wx.EVT_CLOSE, self.OnCancel)
 
         self.sizer = wx.BoxSizer(wx.VERTICAL)
@@ -455,7 +535,7 @@ class LocationDownloadDialog(wx.Dialog):
 
         button_sizer = wx.StdDialogButtonSizer()
         button_sizer.Add(
-            cancel_button,
+            self.cancel_button,
             proportion=0,
             flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
             border=5,
@@ -502,7 +582,8 @@ class LocationDownloadDialog(wx.Dialog):
             self.panel._change_download_btn_label()
 
         if event:
-            self.EndModal(wx.ID_CANCEL)
+            self.dismissShowInfoBarMessage.emit()
+            self.Destroy()
 
 
 def main():
@@ -514,12 +595,21 @@ def main():
     app = wx.App()
 
     if len(sys.argv) == 2 or sys.argv[2] == "dialog":
-        window = LocationDownloadDialog(parent=None, database=database)
-        window.ShowModal()
-        location = window.GetLocation()
-        if location:
-            print(location)
-        window.Destroy()
+
+        def new_location_is_downloaded():
+            # Reset stdout
+            sys.stdout = sys.__stdout__
+            print(window.GetLocation())
+
+        def on_close(event):
+            parent_window.Destroy()
+
+        parent_window = wx.Dialog(parent=None)
+        window = LocationDownloadDialog(parent=parent_window, database=database)
+        window.Bind(wx.EVT_CLOSE, on_close)
+        window.cancel_button.Bind(wx.EVT_BUTTON, on_close)
+        window.newLocationIsDownloaded.connect(new_location_is_downloaded)
+        window.Show()
     elif sys.argv[2] == "panel":
         window = wx.Dialog(parent=None)
         panel = LocationDownloadPanel(parent=window, database=database)
