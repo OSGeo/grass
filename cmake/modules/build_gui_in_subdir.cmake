@@ -99,7 +99,7 @@ function(build_gui_in_subdir dir_name)
       "${G_TARGET_NAME};${modules_list}"
       CACHE INTERNAL "list of modules")
 
-  set_target_properties(${G_TARGET_NAME} PROPERTIES FOLDER gui)
+  set_target_properties(${G_TARGET_NAME} PROPERTIES FOLDER "Tools/GUI (Scripts)")
 
   if(WIN32)
     install(PROGRAMS ${OUTDIR}/${GRASS_INSTALL_SCRIPTDIR}/${G_TARGET_NAME}.bat
