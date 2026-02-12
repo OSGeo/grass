@@ -20,10 +20,28 @@
 /**
  * \brief Initialize segment structure and open segment file.
  *
- * Initializes the <b>seg</b> structure and prepares a temporary file.
- * This fn is a wrapper for Segment_format() and Segment_init()
+ * Initializes the *seg* structure and prepares a temporary file.
  *
- * <b>Note:</b> The file with name fname will be created anew.
+ * This function is a wrapper for Segment_format_nofill(),
+ * Segment_init(), all-in-memory mode initialization, and temporary
+ * file handling.
+ *
+ * The values are not guaranteed to be initialized to zero or NULL.
+ * You need to initialize them if needed. Typically, initialization
+ * is done when loading values from existing raster map.
+ *
+ * The number of non-segmented rows and columns (*nrows* and *ncols*)
+ * is typically a computational region.
+ *
+ * The number of segments to keep in memory is automatically adjusted
+ * if it is larger than number of total segments required.
+ *
+ * In case of an error, a specific warning will be printed (using
+ * G_warning()) and a negative number will be returned.
+ * In case out of memory occurs in all-in-memory mode,
+ * G_fatal_error() is called.
+ *
+ * <b>Note:</b> The file with name *fname* will be created anew.
  *
  * \param[in,out] SEG segment
  * \param[in] fname file name
@@ -57,6 +75,7 @@ int Segment_open(SEGMENT *SEG, char *fname, off_t nrows, off_t ncols, int srows,
         SEG->len = len;
         SEG->nseg = nseg;
         SEG->cache = G_calloc(sizeof(char) * SEG->nrows * SEG->ncols, SEG->len);
+        /* scb is used to decide if we are in the all-in-memory mode */
         SEG->scb = NULL;
         SEG->open = 1;
 
