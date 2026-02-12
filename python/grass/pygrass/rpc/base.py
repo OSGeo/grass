@@ -186,7 +186,9 @@ class RPCServerBase:
         except (EOFError, OSError, FatalError) as e:
             # The pipe was closed by the checker thread because
             # the server process was killed
-            raise FatalError("Exception raised: " + str(e) + " Message: " + message)
+            raise FatalError(
+                "Exception raised: " + str(e) + " Message: " + message
+            ) from e
 
     def stop(self):
         """Stop the check thread, the libgis server and close the pipe

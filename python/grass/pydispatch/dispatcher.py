@@ -213,18 +213,18 @@ def disconnect(receiver, signal=Any, sender=Any, weak=True):
     try:
         signals = connections[senderkey]
         receivers = signals[signal]
-    except KeyError:
+    except KeyError as e:
         raise errors.DispatcherKeyError(
             """No receivers found for signal %r from sender %r""" % (signal, sender)
-        )
+        ) from e
     try:
         # also removes from receivers
         _removeOldBackRefs(senderkey, signal, receiver, receivers)
-    except ValueError:
+    except ValueError as e:
         raise errors.DispatcherKeyError(
             """No connection to receiver %s for signal %s from sender %s"""
             % (receiver, signal, sender)
-        )
+        ) from e
     _cleanupConnections(senderkey, signal)
 
 

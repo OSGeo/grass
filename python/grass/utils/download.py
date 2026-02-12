@@ -114,7 +114,7 @@ def extract_zip(name, directory, tmpdir):
             extract_dir=extract_dir, target_dir=directory, files=files
         )
     except zipfile.BadZipfile as error:
-        raise DownloadError(_("ZIP file is unreadable: {0}").format(error))
+        raise DownloadError(_("ZIP file is unreadable: {0}").format(error)) from error
 
 
 # modified copy from g.extension
@@ -173,9 +173,9 @@ def download_and_extract(source, reporthook=None):
                     url=source,
                     code=err,
                 ),
-            )
-        except URLError:
-            raise DownloadError(url_error_message.format(url=source))
+            ) from err
+        except URLError as e:
+            raise DownloadError(url_error_message.format(url=source)) from e
 
         if not re.search(
             response_content_type_header_pattern, headers.get("content-type", "")
@@ -200,9 +200,9 @@ def download_and_extract(source, reporthook=None):
                     url=source,
                     code=err,
                 ),
-            )
-        except URLError:
-            raise DownloadError(url_error_message.format(url=source))
+            ) from err
+        except URLError as e:
+            raise DownloadError(url_error_message.format(url=source)) from e
         extract_tar(name=archive_name, directory=directory, tmpdir=tmpdir)
     else:
         # probably programmer error

@@ -34,14 +34,14 @@ class NvizTask:
         self.filename = filename
         try:
             gxwXml = ProcessWorkspaceFile(ET.parse(self.filename))
-        except Exception:
+        except Exception as e:
             raise GException(
                 _(
                     "Reading workspace file <%s> failed.\n"
                     "Invalid file, unable to parse XML document."
                 )
                 % filename
-            )
+            ) from e
         # for display in gxwXml.displays:
         # pprint(display)
         # for layer in gxwXml.layers:

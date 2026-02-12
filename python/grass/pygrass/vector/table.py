@@ -858,10 +858,10 @@ class Link:
                 return psycopg2.connect(db)
             except ImportError:
                 er = "You need to install psycopg2 to connect with this table."
-                raise ImportError(er)
+                raise ImportError(er) from None
 
         str_err = "Driver is not supported yet, pleas use: sqlite or pg"
-        raise TypeError(str_err)
+        raise TypeError(str_err) from None
 
     def table(self):
         """Return a Table object.
@@ -1209,7 +1209,7 @@ class Table:
                 "The SQL statement is not correct:\n%r,\n"
                 "values: %r,\n"
                 "SQL error: %s" % (sqlc, values, str(exc))
-            )
+            ) from exc
 
     def exist(self, cursor=None):
         """Return True if the table already exists in the DB, False otherwise

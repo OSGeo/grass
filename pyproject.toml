@@ -119,7 +119,6 @@ ignore = [
     "B026",    # star-arg-unpacking-after-keyword-arg
     "B028",    # no-explicit-stacklevel
     "B034",    # re-sub-positional-args
-    "B904",    # raise-without-from-inside-except
     "B909",    # loop-iterator-mutation
     "BLE001",  # blind-except
     "C414",    # unnecessary-double-cast-or-process
