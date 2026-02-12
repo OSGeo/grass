@@ -1,13 +1,27 @@
 # #for i18N support
 
-file(GLOB init_HTMLFILES "*.html")
 add_custom_target(ADD_INIT_DOCS ALL COMMENT "Generate init docs.")
+set_target_properties(ADD_INIT_DOCS PROPERTIES FOLDER Docs)
 
 if(WITH_DOCS)
-  foreach(html_file ${init_HTMLFILES})
-    get_filename_component(filename ${html_file} NAME_WLE)
-    generate_html(TARGET ADD_INIT_DOCS NAME ${filename})
-  endforeach()
+
+  generate_docs_list(
+    TARGET ADD_INIT_DOCS
+    DOC_FILES
+      grass
+      helptext
+      variables
+    IMG_FILES
+      grass_start.png
+      grassdb.png
+      help_project_structure.png
+      location-add.png
+      location-download.png
+      location.png
+      mapset.png
+      raster-import.png
+      vector-import.png)
+
 endif()
 
 # START_UP is the variable used in grass.py, grass.sh.in and grass.bat.in
@@ -28,8 +42,8 @@ endif()
 mark_as_advanced(gdal_share_dir)
 
 file(TO_NATIVE_PATH "${gdal_share_dir}/gdal" GDAL_DATA)
-get_filename_component(GDAL_DIR ${GDAL_LIBRARY} PATH)
-get_filename_component(GDAL_DIR ${GDAL_DIR} PATH)
+get_filename_component(GDAL_DIR "${GDAL_LIBRARY}" PATH)
+get_filename_component(GDAL_DIR "${GDAL_DIR}" PATH)
 
 file(TO_NATIVE_PATH ${GDAL_DIR}/bin DEPS_DLL_PATH)
 list(APPEND DLL_PATH_LIST ${DEPS_DLL_PATH})
@@ -131,11 +145,7 @@ file(WRITE ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/VERSIONNUMBER
 install(FILES ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/VERSIONNUMBER
         DESTINATION ${GRASS_INSTALL_ETCDIR})
 
-execute_process(
-  COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/version.sed "${GRASS_VERSION_NUMBER}"
-          "${GRASS_VERSION_DATE}" ""
-  INPUT_FILE ${CMAKE_CURRENT_SOURCE_DIR}/license.txt
-  OUTPUT_FILE ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/license)
+configure_file(license.txt "${OUTDIR}/${GRASS_INSTALL_ETCDIR}/license" @ONLY)
 
 install(FILES ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/license
         DESTINATION ${GRASS_INSTALL_ETCDIR})

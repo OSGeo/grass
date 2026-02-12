@@ -88,9 +88,9 @@
 # %end
 
 import sys
+from contextlib import nullcontext
 
 import grass.script as gs
-from contextlib import nullcontext
 
 ############################################################################
 

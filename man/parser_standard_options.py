@@ -12,9 +12,8 @@ import contextlib
 import os
 import re
 import sys
-
-from typing import IO, TYPE_CHECKING
 from collections import defaultdict
+from typing import IO, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from collections.abc import Generator
@@ -152,7 +151,7 @@ def write_markdown_option(md: list, name: str, option: dict, keys: list) -> None
                 "\nTo use the value in Python:\n",
                 "```python",
                 f'{key_aka_name} = options["{key_aka_name}"]',
-                "```"
+                "```",
                 # Example from user perspective.
                 "\nWhat a tool user (caller) may write:\n",
                 "```python",

@@ -108,8 +108,11 @@ void filldir(int fe, int fd, int nl, struct band3 *bnd, struct metrics *m)
     dir = G_calloc(bnd->ns, sizeof(CELL));
     bufsz = bnd->ns * sizeof(CELL);
 
-    lseek(fe, 0, SEEK_SET);
-    lseek(fd, 0, SEEK_SET);
+    if (lseek(fe, 0, SEEK_SET) == -1 || lseek(fd, 0, SEEK_SET) == -1) {
+        int err = errno;
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+    }
     advance_band3(fe, bnd);
     for (i = 0; i < nl; i++) {
         G_percent(i, nl, 5);

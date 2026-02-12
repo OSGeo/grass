@@ -1,4 +1,4 @@
-FROM alpine:3.22@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412 as common
+FROM alpine:3.23@sha256:25109184c71bdad752c8312a8623239686a9a2071e8825f20acb8f2198c3f659 AS common
 
 # Based on:
 # https://github.com/mundialis/docker-grass-gis/blob/master/Dockerfile
@@ -56,7 +56,7 @@ ENV GRASS_RUN_PACKAGES="\
       openjpeg \
       pdal \
       pdal-dev \
-      postgresql15-client \
+      postgresql18-client \
       proj-util \
       py3-numpy \
       py3-pillow \
@@ -169,7 +169,7 @@ RUN echo "  => Configure and compile grass" && \
 
 # Build the GDAL-GRASS plugin
 # renovate: datasource=github-tags depName=OSGeo/gdal-grass
-ARG GDAL_GRASS_VERSION=1.0.4
+ARG GDAL_GRASS_VERSION=2.0.0
 RUN git clone --branch $GDAL_GRASS_VERSION --depth 1 https://github.com/OSGeo/gdal-grass.git /src/gdal-grass
 WORKDIR /src/gdal-grass
 RUN cmake -B build -DAUTOLOAD_DIR=/usr/lib/gdalplugins -DBUILD_TESTING=OFF && \
@@ -177,7 +177,7 @@ RUN cmake -B build -DAUTOLOAD_DIR=/usr/lib/gdalplugins -DBUILD_TESTING=OFF && \
     cmake --install build
 
 # Get rid of version number here, restore in next stage via symbolic link
-RUN mv /usr/local/grass85 /usr/local/grass
+RUN mv /usr/local/grass86 /usr/local/grass
 
 # Reduce the image size - Remove unnecessary grass files
 RUN cp /usr/local/grass/gui/wxpython/xml/module_items.xml module_items.xml; \
@@ -214,7 +214,7 @@ COPY docker/testdata/test_grass_session.py docker/alpine/grass_tests.sh /scripts
 
 # run GRASS python session and scan the test LAZ file; some cleanup
 # also show installed version
-RUN ln -sf /usr/local/grass /usr/local/grass85; \
+RUN ln -sf /usr/local/grass /usr/local/grass86; \
     rm -rf /tmp/grasstest_epsg_25832; \
     $SHELL /scripts/grass_tests.sh; \
     python /scripts/test_grass_session.py && rm -rf /tmp/grasstest_epsg_25832; \

@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     char *temp;
     FILE *fd, *ft;
     int cf, direction, sz;
-    struct Cell_head cellhd;
+    struct Cell_head cellhd = {0};
     struct History history;
     void *rast, *rast_ptr;
     int row, col;

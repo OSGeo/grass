@@ -1,0 +1,77 @@
+@PACKAGE_INIT@
+
+set(_GRASS_supported_components
+    arraystats
+    bitmap
+    btree
+    btree2
+    cairodriver
+    calc
+    ccmath
+    cdhc
+    cluster
+    datetime
+    dbmibase
+    dbmiclient
+    dbmidriver
+    dbstubs
+    dgl
+    dig2
+    display
+    driver
+    dspf
+    gis
+    gmath
+    gpde
+    gproj
+    htmldriver
+    imagery
+    interpdata
+    interpfl
+    iortho
+    iostream
+    lidar
+    linkm
+    lrs
+    manage
+    neta
+    nviz
+    ogsf
+    parson
+    pngdriver
+    psdriver
+    qtree
+    raster
+    raster3d
+    rli
+    rowio
+    rtree
+    segment
+    shape
+    sim
+    sqlp
+    stats
+    symb
+    temporal
+    vector
+    vedit)
+
+foreach(_comp ${GRASS_FIND_COMPONENTS})
+  if(NOT _comp IN_LIST _GRASS_supported_components)
+    set(GRASS_FOUND False)
+    set(GRASS_NOT_FOUND_MESSAGE "Unsupported component: ${_comp}")
+  endif()
+  include("${CMAKE_CURRENT_LIST_DIR}/GRASS_${_comp}Targets.cmake")
+endforeach()
+
+set(GRASS_VERSION_DATE "@GRASS_VERSION_DATE@")
+set(GRASS_VERSION_GIT "@GRASS_VERSION_GIT@")
+set(GRASS_VERSION_STRING "@GRASS_VERSION_NUMBER@")
+set(GRASS_CMAKE_DIR "@CMAKE_INSTALL_PREFIX@/@GRASS_INSTALL_ETCDIR@/cmake")
+set(GRASS_UTILS_DIR "@CMAKE_INSTALL_PREFIX@/@GRASS_INSTALL_UTILSDIR@")
+
+set(GRASS_GDAL_INCLUDE_DIR "@GDAL_INCLUDE_DIR@")
+set(GRASS_PROJ_INCLUDE_DIRS "@PROJ_INCLUDE_DIRS@")
+set(GRASS_ZLIB_INCLUDE_DIR "@ZLIB_INCLUDE_DIR@")
+set(GRASS_PostgreSQL_INCLUDE_DIR "@PostgreSQL_INCLUDE_DIR@")
+set(GRASS_WITH_POSTGRES @WITH_POSTGRES@)

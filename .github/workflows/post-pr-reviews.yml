@@ -4,7 +4,10 @@ name: Post PR code suggestions
 on:
   # zizmor: ignore[dangerous-triggers] Only selected workflows, and whitelisted input values are used
   workflow_run:
-    workflows: ["ClangFormat Check", "Python Code Quality"]
+    workflows:
+      - "Additional checks"
+      - "ClangFormat Check"
+      - "Python Code Quality"
     types:
       - completed
 permissions: {}
@@ -20,14 +23,15 @@ jobs:
     steps:
       - name: Create a .git directory needed by reviewdog
         run: git init
-      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         id: diff
         continue-on-error: true
         with:
           name: diff
           github-token: ${{ github.token }}
           run-id: ${{github.event.workflow_run.id }}
-      - uses: reviewdog/action-setup@d8edfce3dd5e1ec6978745e801f9c50b5ef80252 # v1.4.0
+      - uses: reviewdog/action-setup@d8a7baabd7f3e8544ee4dbde3ee41d0011c3a93f # v1.5.0
+      - run: reviewdog -version
       - name: Check what tools have suggestions to post
         # Using this pattern to have expected file names explicitly named
         id: tools
@@ -48,6 +52,7 @@ jobs:
           INPUT_TOOL_NAMES: >-
             black
             clang-format
+            pre-commit
             ruff
       - name: Post Black suggestions
         if: ${{ steps.tools.outputs.black == 'true' }}
@@ -80,6 +85,24 @@ jobs:
               -reporter="github-pr-review" < "${TMPFILE}"
         env:
           INPUT_TOOL_NAME: clang-format
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CI_COMMIT: ${{ github.event.workflow_run.head_sha }}
+          CI_REPO_OWNER: ${{ github.event.workflow_run.repository.owner.login }}
+          CI_REPO_NAME: ${{ github.event.workflow_run.repository.name }}
+          # CI_PULL_REQUEST: "" # Populated from reviewdog's "-guess" flag since hard to get
+      - name: Post pre-commit suggestions
+        if: ${{ steps.tools.outputs.pre-commit == 'true' }}
+        run: |
+          TMPFILE="diff-${INPUT_TOOL_NAME}.patch"
+          GITHUB_ACTIONS="" reviewdog \
+              -name="${INPUT_TOOL_NAME:-reviewdog-suggester}" \
+              -f=diff \
+              -f.diff.strip=1 \
+              -filter-mode=nofilter \
+              -guess \
+              -reporter="github-pr-review" < "${TMPFILE}"
+        env:
+          INPUT_TOOL_NAME: pre-commit
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CI_COMMIT: ${{ github.event.workflow_run.head_sha }}
           CI_REPO_OWNER: ${{ github.event.workflow_run.repository.owner.login }}

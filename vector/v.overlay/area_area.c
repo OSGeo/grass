@@ -25,7 +25,7 @@ static int cmp_int(const void *a, const void *b)
 
 int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
               struct Map_info *Out, struct field_info *Fi, dbDriver *driver,
-              int operator, int * ofield, ATTRIBUTES *attr, struct ilist *BList,
+              int operator, int *ofield, ATTRIBUTES *attr, struct ilist *BList,
               double snap)
 {
     int ret, input, line, nlines, area, nareas;
