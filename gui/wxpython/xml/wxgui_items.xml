@@ -1,22 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE wxgui_items SYSTEM "wxgui_items.dtd">
 <wxgui-items>
-  <wxgui-item name="PyEdit">
-    <label>Simple Python Editor</label>
-    <handler>OnSimpleEditor</handler>
-    <description>Launches Simple Python Editor.</description>
-  </wxgui-item>
-  <wxgui-item name="LaunchScript">
-    <label>Launch script</label>
-    <handler>OnRunScript</handler>
-    <description>Launches script file.</description>
-  </wxgui-item>
-  <wxgui-item name="JupyterNotebook">
-    <label>Jupyter Notebook</label>
-    <handler>OnJupyterNotebook</handler>
-    <description>Launch Jupyter Notebook interface.</description>
-    <keywords>general,gui,notebook,python,jupyter</keywords>
-    <icon>jupyter</icon>
+  <wxgui-item name="Georectify">
+    <label>Georectify</label>
+    <handler>OnGCPManager</handler>
+    <related-module>g.gui.gcp</related-module>
+    <description>Manage Ground Control Points for Georectification</description>
+    <icon>georectify</icon>
   </wxgui-item>
   <wxgui-item name="GraphicalModeler">
     <label>Graphical modeler</label>
@@ -30,13 +20,6 @@
     <label>Run model</label>
     <handler>OnRunModel</handler>
     <description>Run model prepared by Graphical modeler</description>
-  </wxgui-item>
-  <wxgui-item name="Georectify">
-    <label>Georectify</label>
-    <handler>OnGCPManager</handler>
-    <related-module>g.gui.gcp</related-module>
-    <description>Manage Ground Control Points for Georectification</description>
-    <icon>georectify</icon>
   </wxgui-item>
   <wxgui-item name="AnimationTool">
     <label>Animation tool</label>
@@ -73,6 +56,23 @@
     <related-module>g.gui.mapswipe</related-module>
     <description>Launch Map Swipe</description>
     <keywords>general,gui,display</keywords>
+  </wxgui-item>
+  <wxgui-item name="LaunchScript">
+    <label>Launch script</label>
+    <handler>OnRunScript</handler>
+    <description>Launches script file.</description>
+  </wxgui-item>
+  <wxgui-item name="JupyterNotebook">
+    <label>Jupyter Notebook</label>
+    <handler>OnJupyterNotebook</handler>
+    <description>Launch Jupyter Notebook interface.</description>
+    <keywords>general,gui,notebook,python,jupyter</keywords>
+    <icon>jupyter</icon>
+  </wxgui-item>
+  <wxgui-item name="PyEdit">
+    <label>Simple Python Editor</label>
+    <handler>OnSimpleEditor</handler>
+    <description>Launches Simple Python Editor.</description>
   </wxgui-item>
   <wxgui-item name="CloseGUI">
     <label>Close GUI</label>
