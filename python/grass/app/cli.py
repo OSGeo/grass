@@ -52,7 +52,39 @@ def subcommand_run_tool(args, tool_args: list, print_help: bool) -> int:
             project_name = "project"
             project_path = Path(tmp_dir_name) / project_name
             gs.create_project(project_path, crs=args.crs)
+
         with gs.setup.init(project_path) as session:
+            if args.link_raster:
+                fpath = Path(args.link_raster)
+                try:
+                    gs.run_command("r.external", input=str(fpath), output=fpath.stem)
+                except ScriptError as e:
+                    print(f"Error linking raster: {e}", file=sys.stderr)
+                    return 1
+
+            if args.import_raster:
+                fpath = Path(args.import_raster)
+                try:
+                    gs.run_command("r.import", input=str(fpath), output=fpath.stem)
+                except ScriptError as e:
+                    print(f"Error importing raster: {e}", file=sys.stderr)
+                    return 1
+
+            if args.region:
+                if "=" in args.region:
+                    key, value = args.region.split("=", 1)
+                    try:
+                        gs.run_command("g.region", **{key: value})
+                    except ScriptError as e:
+                        print(f"Error setting region: {e}", file=sys.stderr)
+                        return 1
+                else:
+                    print(
+                        _("Error: --region must be in 'key=value' format"),
+                        file=sys.stderr,
+                    )
+                    return 1
+
             tools = Tools(
                 session=session, capture_output=False, consistent_return_value=True
             )
@@ -254,6 +286,22 @@ def main(args=None, program=None):
     run_subparser.add_argument("--crs", type=str, help="CRS to use for computations")
     run_subparser.add_argument(
         "--project", type=str, help="project to use for computations"
+    )
+
+    run_subparser.add_argument(
+        "--region",
+        type=str,
+        help='Set temporary computational region (e.g. --region="raster=name")',
+    )
+    run_subparser.add_argument(
+        "--import-raster",
+        type=str,
+        help="Import a raster file (r.import) before execution",
+    )
+    run_subparser.add_argument(
+        "--link-raster",
+        type=str,
+        help="Link a raster file (r.external) before execution",
     )
     run_subparser.set_defaults(func=subcommand_run_tool)
 

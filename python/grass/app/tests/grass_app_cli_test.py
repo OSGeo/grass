@@ -5,6 +5,7 @@ import sys
 import pytest
 
 from grass.app.cli import main
+from unittest.mock import patch
 
 
 def test_cli_help_runs():
@@ -281,3 +282,46 @@ def test_create_crs_epsg(tmp_path, epsg_code):
     result_dict = json.loads(result.stdout)
     assert result_dict["id"]["authority"] == "EPSG"
     assert result_dict["id"]["code"] == epsg_code
+
+
+def test_subcommand_run_with_region():
+    """Check that --region argument sets the computational region"""
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "grass.app",
+            "run",
+            "--region",
+            "rows=50",
+            "g.region",
+            "-p",
+            "format=json",
+        ],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    region = json.loads(result.stdout)
+    assert region["rows"] == 50
+
+
+def test_subcommand_run_with_region_invalid():
+    """Check that invalid --region argument format errors out nicely"""
+    assert main(["run", "--region", "rows", "g.region", "-p"]) == 1
+
+
+def test_subcommand_run_import_raster_mocked():
+    """Check that --import-raster argument is passed to run_command"""
+    with patch("grass.script.run_command") as mock_run:
+        main(["run", "--import-raster", "test.tif", "g.region", "-p"])
+
+        mock_run.assert_any_call("r.import", input="test.tif", output="test")
+
+
+def test_subcommand_run_link_raster_mocked():
+    """Check that --link-raster argument is passed to run_command"""
+    with patch("grass.script.run_command") as mock_run:
+        main(["run", "--link-raster", "test.tif", "g.region", "-p"])
+
+        mock_run.assert_any_call("r.external", input="test.tif", output="test")
