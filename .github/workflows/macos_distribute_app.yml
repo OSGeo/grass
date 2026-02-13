@@ -37,7 +37,7 @@ jobs:
           - "arm64"
         include:
           - name: "x86_64"
-            os: macos-13
+            os: macos-15-intel
             deployment_target: 10.13
           - name: "arm64"
             os: macos-14
