@@ -57,7 +57,7 @@ No programming knowledge is needed — all translation work happens through
 
 Translations are automatically submitted to the GRASS repository as pull requests.
 For help or questions, join the
-[GRASS development community on Discourse](https://discourse.osgeo.org/c/grass/developer/61).
+[GRASS user community on Discourse](https://discourse.osgeo.org/c/grass/grass-user/70).
 
 See [locale/README.md](locale/README.md) for more technical details about the
 translation process.
