@@ -7,7 +7,7 @@ the current working directory.
 Classes:
  - directory::JupyterDirectoryManager
 
-(C) 2025 by the GRASS Development Team
+(C) 2026 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.

@@ -1,13 +1,13 @@
 """
 @package jupyter_notebook.environment
 
-@brief Defines the high-level orchestrator which coordinates
+@brief High-level orchestrator which coordinates
 the setup and teardown of a Jupyter Notebook environment.
 
 Classes:
  - environment::JupyterEnvironment
 
-(C) 2025 by the GRASS Development Team
+(C) 2026 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.

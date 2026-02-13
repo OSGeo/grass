@@ -1,13 +1,13 @@
 """
 @package jupyter_notebook.utils
 
-@brief wxGUI Jupyter toolbars classes
+@brief wxGUI Jupyter utils
 
 Functions:
 - `is_jupyter_installed()`: Check if Jupyter Notebook is installed on the system and functional.
 - `is_wx_html2_available()`: Check if wx.html2 module is available.
 
-(C) 2025 by the GRASS Development Team
+(C) 2026 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
