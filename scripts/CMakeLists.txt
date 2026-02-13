@@ -152,4 +152,4 @@ add_custom_target(
   DEPENDS v.to.lines)
 add_dependencies(r.in.wms r.in.wms_files)
 
-set_target_properties(r.in.wms_files PROPERTIES FOLDER scripts)
+set_target_properties(r.in.wms_files PROPERTIES FOLDER "Tools/Raster")

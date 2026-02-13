@@ -133,7 +133,7 @@ jobs:
           path: bandit.sarif
 
       - name: Upload SARIF File into Security Tab
-        uses: github/codeql-action/upload-sarif@19b2f06db2b6f5108140aeb04014ef02b648f789 # v4.31.11
+        uses: github/codeql-action/upload-sarif@b20883b0cd1f46c72ae0ba6d1090936928f9fa30 # v4.32.0
         with:
           sarif_file: bandit.sarif
 
@@ -156,40 +156,40 @@ jobs:
         run: |
           echo "${HOME}/install/bin" >> "${GITHUB_PATH}"
 
-      - name: Run Pylint on grass package
-        # Until slower checks (like similarity) are reenabled, running in one step is faster
-        if: false
-        run: |
-          PYTHONPATH="$(grass --config python_path):$PYTHONPATH"
-          LD_LIBRARY_PATH="$(grass --config path)/lib:$LD_LIBRARY_PATH"
-          export PYTHONPATH
-          export LD_LIBRARY_PATH
-          pylint --persistent=no --py-version=${{ env.MIN_PYTHON_VERSION }} --jobs="$(nproc)" grass
+      # - name: Run Pylint on grass package
+      #   # Until slower checks (like similarity) are reenabled, running in one step is faster
+      #   if: false
+      #   run: |
+      #     PYTHONPATH="$(grass --config python_path):$PYTHONPATH"
+      #     LD_LIBRARY_PATH="$(grass --config path)/lib:$LD_LIBRARY_PATH"
+      #     export PYTHONPATH
+      #     export LD_LIBRARY_PATH
+      #     pylint --persistent=no --py-version=${{ env.MIN_PYTHON_VERSION }} --jobs="$(nproc)" grass
 
-      - name: Run Pylint on other files using pytest
-        # Until slower checks (like similarity) are reenabled, running in one step is faster
-        if: false
-        run: |
-          pipx inject --include-apps pylint pytest
-          pipx inject pylint pytest-pylint pytest-github-actions-annotate-failures pytest-timeout
-          PYTHONPATH="$(grass --config python_path):$PYTHONPATH"
-          LD_LIBRARY_PATH="$(grass --config path)/lib:$LD_LIBRARY_PATH"
-          export PYTHONPATH
-          export LD_LIBRARY_PATH
-          pytest --pylint -m pylint --pylint-jobs="$(nproc)" \
-            --pylint-ignore-patterns="${{ env.PylintIgnore }}"
-        env:
-          PylintIgnore: "python/.*,gui/.*"
+      # - name: Run Pylint on other files using pytest
+      #   # Until slower checks (like similarity) are reenabled, running in one step is faster
+      #   if: false
+      #   run: |
+      #     pipx inject --include-apps pylint pytest
+      #     pipx inject pylint pytest-pylint pytest-github-actions-annotate-failures pytest-timeout
+      #     PYTHONPATH="$(grass --config python_path):$PYTHONPATH"
+      #     LD_LIBRARY_PATH="$(grass --config path)/lib:$LD_LIBRARY_PATH"
+      #     export PYTHONPATH
+      #     export LD_LIBRARY_PATH
+      #     pytest --pylint -m pylint --pylint-jobs="$(nproc)" \
+      #       --pylint-ignore-patterns="${{ env.PylintIgnore }}"
+      #   env:
+      #     PylintIgnore: "python/.*,gui/.*"
 
-      - name: Run Pylint on wxGUI
-        # Until slower checks (like similarity) are reenabled, running in one step is faster
-        if: false
-        run: |
-          PYTHONPATH="$(grass --config python_path):$PYTHONPATH"
-          LD_LIBRARY_PATH="$(grass --config path)/lib:$LD_LIBRARY_PATH"
-          export PYTHONPATH
-          export LD_LIBRARY_PATH
-          pylint --persistent=no --py-version="${MIN_PYTHON_VERSION}" --jobs="$(nproc)" gui
+      # - name: Run Pylint on wxGUI
+      #   # Until slower checks (like similarity) are reenabled, running in one step is faster
+      #   if: false
+      #   run: |
+      #     PYTHONPATH="$(grass --config python_path):$PYTHONPATH"
+      #     LD_LIBRARY_PATH="$(grass --config path)/lib:$LD_LIBRARY_PATH"
+      #     export PYTHONPATH
+      #     export LD_LIBRARY_PATH
+      #     pylint --persistent=no --py-version="${MIN_PYTHON_VERSION}" --jobs="$(nproc)" gui
 
       - name: Run Pylint all in one pass
         run: |

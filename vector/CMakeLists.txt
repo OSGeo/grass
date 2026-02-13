@@ -110,6 +110,8 @@ add_custom_target(
   DEPENDS ${vector_modules_list}
   COMMENT "All vector modules are built.")
 
+set_target_properties(ALL_VECTOR_MODULES PROPERTIES FOLDER Misc)
+
 if(WITH_DOCS)
   generate_docs(vectorintro TARGET ALL_VECTOR_MODULES)
   generate_docs(lrs
