@@ -186,6 +186,7 @@ function(_build_addon)
         WORLD_EXECUTE)
 
     add_custom_target(${G_NAME} ALL)
+    target_sources(${G_NAME} PRIVATE ${G_SRC_DIR}/${G_NAME}.py)
 
     if(WIN32)
       install(PROGRAMS ${OUTDIR}/${GRASSAddon_ScriptDIR}/${G_NAME}.bat
@@ -285,6 +286,7 @@ function(_build_addon)
       COMMENT "Creating ${OUT_HTML_FILE}")
 
     add_custom_target(${G_NAME}-docs ALL DEPENDS ${G_NAME} ${_out_html_file})
+    target_sources(${G_NAME}-docs PRIVATE ${html_doc} ${md_doc} ${img_files})
 
     install(FILES ${_out_html_file} DESTINATION ${GRASSAddon_DocDIR})
   endif()
