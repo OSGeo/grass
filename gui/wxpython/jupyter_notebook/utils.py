@@ -22,9 +22,6 @@ import subprocess
 def is_jupyter_installed():
     """Check if Jupyter Notebook is installed and functional.
 
-    Uses shutil.which() to check if 'jupyter' command is available in PATH.
-    Works on all platforms (Windows, Linux, macOS).
-
     :return: True if Jupyter Notebook is installed and available, False otherwise.
     """
     # Check if 'jupyter' CLI exists
