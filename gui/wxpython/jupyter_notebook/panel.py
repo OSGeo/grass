@@ -1,12 +1,12 @@
 """
 @package jupyter_notebook.panel
 
-@brief Integration of Jupyter Notebook to GUI.
+@brief Panel for integration of Jupyter Notebook to GUI.
 
 Classes:
  - panel::JupyterPanel
 
-(C) 2025 by the GRASS Development Team
+(C) 2026 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
