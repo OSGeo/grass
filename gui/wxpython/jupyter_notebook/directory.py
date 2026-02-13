@@ -16,7 +16,6 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import json
 import shutil
 from pathlib import Path
 
@@ -150,80 +149,95 @@ class JupyterDirectoryManager:
         # Copy the file to the destination
         shutil.copyfile(source_path, dest_path)
 
-    def create_welcome_notebook(self, file_name="welcome.ipynb"):
-        r"""
-        Create a welcome Jupyter notebook in the working directory with
-        the placeholders '${NOTEBOOK_DIR}' replaced by the actual working dir
-        and \${NOTEBOOK_MAPSET}'replaced by actual mapset path
-
-        :param file_name: Name of the template file to copy (str)
-        :return: Path to the created template file (Path)
+    def _create_from_template(
+        self,
+        template_name: str,
+        target_name: str | None = None,
+        replacements: dict[str, str] | None = None,
+    ):
         """
-        # Copy template file to the working directory
-        template_path = Path(__file__).parent / "template_notebooks" / file_name
-        template_copy = self.import_file(template_path)
+        Create a notebook from a template and optionally replace placeholders.
 
-        # Load the template file
-        content = template_copy.read_text(encoding="utf-8")
+        The template file is treated as plain text. If ``replacements`` is provided,
+        each ``key -> value`` pair is replaced in the file content.
 
-        # Replace the placeholder '${NOTEBOOK_DIR}' with actual working directory path
-        content = content.replace(
-            "${NOTEBOOK_DIR}", str(self._workdir).replace("\\", "/")
-        )
+        If ``target_name`` is None, the template is copied using ``self.import_file()``.
+        Otherwise, a new file with the given name is created in the working directory.
 
-        # Replace the placeholder \${NOTEBOOK_MAPSET}' by actual mapset path
+        :param template_name: Template filename located in ``template_notebooks``.
+        :param target_name: Optional target filename for the new notebook.
+        :param replacements: Optional mapping of placeholder strings to replacement values.
+        :return: Path to the created notebook file (Path).
+        :raises FileExistsError: If target file already exists.
+        """
+        # Locate the template file inside the package
+        template_path = Path(__file__).parent / "template_notebooks" / template_name
+
+        # Determine target path (copy vs. create new file)
+        if target_name is None:
+            target_path = self.import_file(template_path)
+        else:
+            target_path = self.workdir / target_name
+
+            # Prevent accidental overwrite
+            if target_path.exists():
+                raise FileExistsError(_("File '{}' already exists").format(target_name))
+
+        # Load template content as plain text
+        content = template_path.read_text(encoding="utf-8")
+
+        # Replace placeholders if provided
+        if replacements:
+            for key, value in replacements.items():
+                content = content.replace(key, value)
+
+        # Write the processed content to the target file
+        target_path.write_text(content, encoding="utf-8")
+
+        return target_path
+
+    def create_welcome_notebook(self, template_name="welcome.ipynb"):
+        """
+        Create a welcome notebook with working directory and mapset placeholders replaced.
+
+        :param template_name: Template filename (default: ``welcome.ipynb``).
+        :return: Path to the created notebook (Path).
+        """
+        # Prepare placeholder replacements
         env = gs.gisenv()
-        mapset_path = Path(
-            env["GISDBASE"],
-            env["LOCATION_NAME"],
-            env["MAPSET"],
-        )
+        mapset_path = Path(env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"])
+        replacements = {
+            "${NOTEBOOK_DIR}": str(self._workdir).replace("\\", "/"),
+            "${NOTEBOOK_MAPSET}": str(mapset_path).replace("\\", "/"),
+        }
 
-        content = content.replace(
-            "${NOTEBOOK_MAPSET}",
-            str(mapset_path).replace("\\", "/"),
-        )
-
-        # Save the modified content back to the template file
-        template_copy.write_text(content, encoding="utf-8")
-        return template_copy
+        # Create notebook from template
+        return self._create_from_template(template_name, replacements=replacements)
 
     def create_new_notebook(self, new_name, template_name="new.ipynb"):
         """
-        Create a new Jupyter notebook in the working directory using a specified template.
+        Create a new notebook from a template with only mapset placeholder replaced.
 
-        This method copies the content of a template notebook (default: 'new.ipynb')
-        and saves it as a new file with the user-defined name in the current working directory.
-
-        :param new_name: Desired filename of the new notebook (must end with '.ipynb',
-                        or it will be automatically appended) (str).
-        :param template_name: Name of the template file to use (default: 'new.ipynb') (str).
-        :return: Path to the newly created notebook (Path).
-        :raises ValueError: If the provided name is empty.
-        :raises FileExistsError: If a notebook with the same name already exists.
-        :raises FileNotFoundError: If the specified template file does not exist.
+        :param new_name: Desired notebook filename.
+        :param template_name: Template filename (default: ``new.ipynb``).
+        :return: Path to the created notebook (Path).
+        :raises ValueError: If name is empty.
+        :raises FileExistsError: If file already exists.
         """
+        # Validate notebook name
         if not new_name:
             raise ValueError(_("Notebook name must not be empty"))
 
+        # Ensure .ipynb extension
         if not new_name.endswith(".ipynb"):
             new_name += ".ipynb"
 
-        target_path = self.workdir / new_name
+        # Replace only mapset placeholder
+        env = gs.gisenv()
+        mapset_path = Path(env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"])
+        replacements = {
+            "${NOTEBOOK_MAPSET}": str(mapset_path).replace("\\", "/"),
+        }
 
-        if target_path.exists():
-            raise FileExistsError(_("File '{}' already exists").format(new_name))
-
-        # Load the template notebook content
-        template_path = Path(__file__).parent / "template_notebooks" / template_name
-        with open(template_path, encoding="utf-8") as f:
-            content = json.load(f)
-
-        # Save the content to the new notebook file
-        with open(target_path, "w", encoding="utf-8") as f:
-            json.dump(content, f, indent=2)
-
-        # Register the new file internally
-        self._files.append(target_path)
-
-        return target_path
+        # Create notebook from template under the new name
+        return self._create_from_template(template_name, new_name, replacements)
