@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-31 15:57+0000\n"
-"PO-Revision-Date: 2026-02-07 14:08+0000\n"
+"PO-Revision-Date: 2026-02-12 04:48+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/"
 "grasswxpy-8-5/fr/>\n"
@@ -971,7 +971,7 @@ msgstr "Étiquette inconnue %s"
 #: ../gui/wxpython/core/render.py:182
 #, python-format
 msgid "<%(name)s>: layer type <%(type)s> is not supported"
-msgstr "<%(name)s>: le type de couche <%(type)s> n'est pas pris en charge"
+msgstr "<%(name)s> : le type de couche <%(type)s> n'est pas pris en charge"
 
 #: ../gui/wxpython/core/render.py:201
 #, python-format
@@ -1350,7 +1350,7 @@ msgstr ""
 #: ../gui/wxpython/core/workspace.py:2000
 #, python-format
 msgid " row %d:"
-msgstr "ligne %d:"
+msgstr " ligne %d :"
 
 #: ../gui/wxpython/datacatalog/catalog.py:55
 msgid "Data catalog"
@@ -1507,7 +1507,7 @@ msgstr "{string} GRASS a démarré dans un projet temporaire. Pour continuer, ut
 
 #: ../gui/wxpython/datacatalog/infomanager.py:94
 msgid "Switch to last used mapset"
-msgstr ""
+msgstr "Basculer vers le dernier jeu de cartes utilisé"
 
 #: ../gui/wxpython/datacatalog/infomanager.py:96
 #, python-brace-format
@@ -1815,9 +1815,8 @@ msgstr "&Renommer le jeu de cartes"
 #: ../gui/wxpython/datacatalog/tree.py:2170
 #: ../gui/wxpython/datacatalog/tree.py:2201
 #: ../gui/wxpython/datacatalog/tree.py:2236
-#, fuzzy
 msgid "Re&load maps"
-msgstr "Recharger les cartes"
+msgstr "Recharger &les cartes"
 
 #: ../gui/wxpython/datacatalog/tree.py:2174
 msgid "&Copy path to mapset"
@@ -6154,7 +6153,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/widgets.py:128
 msgid " (...)"
-msgstr "(...)"
+msgstr " (...)"
 
 #: ../gui/wxpython/gui_core/widgets.py:885
 #, python-format
@@ -6173,9 +6172,10 @@ msgid "Fulltext search"
 msgstr "Recherche plein texte"
 
 #: ../gui/wxpython/gui_core/widgets.py:1264
-#, fuzzy
 msgid "Type to search in all tools. Press Enter for next match."
-msgstr "Tapez pour effectuer une recherche dans tous les outils. Appuyez sur la touche Entrée pour obtenir la correspondance suivante."
+msgstr ""
+"Tapez pour effectuer une recherche dans tous les outils. Appuyez sur la "
+"touche Entrée pour obtenir la correspondance suivante."
 
 #: ../gui/wxpython/gui_core/widgets.py:1326
 msgid "Searching, please type more characters."
@@ -7960,7 +7960,7 @@ msgstr "Désélectionner les couches sélectionnées."
 
 #: ../gui/wxpython/lmgr/layertree.py:525
 msgid "3D view properties"
-msgstr " Paramètres de la vue 3D"
+msgstr "Paramètres de la vue 3D"
 
 #: ../gui/wxpython/lmgr/layertree.py:535
 msgid "Zoom to selected map(s)"
@@ -8363,8 +8363,9 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/lmgr/workspace.py:149
+#, fuzzy
 msgid "Proceed with opening of the workspace?"
-msgstr ""
+msgstr "Procéder à l'ouverture de l'espace de travail ?"
 
 #: ../gui/wxpython/lmgr/workspace.py:160
 #, python-format
@@ -8580,7 +8581,7 @@ msgstr "Sélectionner le système de coordonnées de référence (SCR)"
 
 #: ../gui/wxpython/location_wizard/wizard.py:375
 msgid "Select CRS from a list by EPSG or description"
-msgstr ""
+msgstr "Sélectionner le SCR dans une liste par EPSG ou par description"
 
 #: ../gui/wxpython/location_wizard/wizard.py:384
 #: ../gui/wxpython/location_wizard/wizard.py:1439
@@ -8589,7 +8590,7 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:389
 msgid "Create a generic cartesian coordinate system (XY)"
-msgstr ""
+msgstr "Créer un système de coordonnées cartésiennes générique (XY)"
 
 #: ../gui/wxpython/location_wizard/wizard.py:392
 #: ../gui/wxpython/location_wizard/wizard.py:1521
@@ -8658,7 +8659,7 @@ msgstr "Vous devez entrer une valeur pour %s"
 #: ../gui/wxpython/location_wizard/wizard.py:953
 #, python-format
 msgid " Enter parameters for %s projection "
-msgstr "Entrez les paramètres pour la projection %s"
+msgstr " Entrez les paramètres pour la projection %s "
 
 #: ../gui/wxpython/location_wizard/wizard.py:1050
 msgid "Specify geodetic datum"
@@ -8817,7 +8818,7 @@ msgstr "Fichier <%s> non trouvé."
 
 #: ../gui/wxpython/location_wizard/wizard.py:2760
 msgid "WKT string missing."
-msgstr ""
+msgstr "Chaîne WKT manquante."
 
 #: ../gui/wxpython/main_window/frame.py:161
 msgid "There were some issues when loading menu or Tools:"
@@ -11396,7 +11397,7 @@ msgstr "Bas"
 
 #: ../gui/wxpython/psmap/dialogs.py:1860
 msgid "Properties..."
-msgstr " Propriétés ..."
+msgstr "Propriétés..."
 
 #: ../gui/wxpython/psmap/dialogs.py:2091
 msgid "Raster map settings"
@@ -14713,7 +14714,7 @@ msgstr "Modifier le point"
 
 #: ../gui/wxpython/web_services/dialogs.py:106
 msgid " Server settings "
-msgstr "Paramètres du serveur "
+msgstr " Paramètres du serveur "
 
 #: ../gui/wxpython/web_services/dialogs.py:109
 msgid "Server:"
@@ -14737,7 +14738,7 @@ msgstr "Cacher les paramètres avancés de connexion"
 
 #: ../gui/wxpython/web_services/dialogs.py:135
 msgid " Layer Manager Settings "
-msgstr "Paramètres du gestionnaire de couches "
+msgstr " Paramètres du gestionnaire de couches "
 
 #: ../gui/wxpython/web_services/dialogs.py:139
 msgid "Output layer name:"
@@ -14780,7 +14781,7 @@ msgstr "Ajouter les couches web service sélectionnées dans l'arborescence des 
 
 #: ../gui/wxpython/web_services/dialogs.py:646
 msgid "Web service layer properties"
-msgstr " Propriétés de la couche web service"
+msgstr "Propriétés de la couche web service"
 
 #: ../gui/wxpython/web_services/dialogs.py:695
 msgid "&OK"
@@ -14858,7 +14859,7 @@ msgstr "Impossible de récupérer les données.\n"
 
 #: ../gui/wxpython/web_services/widgets.py:135
 msgid " Requested data settings "
-msgstr "Paramètres de données demandées"
+msgstr " Paramètres de données demandées "
 
 #: ../gui/wxpython/web_services/widgets.py:163
 msgid "Request"

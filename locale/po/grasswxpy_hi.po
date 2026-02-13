@@ -7,24 +7,29 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-31 15:57+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-02-11 07:01+0000\n"
+"Last-Translator: Abhimanyu  <abhimanyupg04@gmail.com>\n"
+"Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/"
+"grasswxpy-8-5/hi/>\n"
 "Language: hi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: ../gui/wxpython/animation/controller.py:244
 #: ../gui/wxpython/animation/dialogs.py:858
 #, python-format
 msgid "Maximum number of animations is %d."
-msgstr ""
+msgstr "एनिमेशन की अधिकतम संख्या %d है।"
 
 #: ../gui/wxpython/animation/controller.py:270
 #: ../gui/wxpython/animation/dialogs.py:911
 msgid "More animations are using one window. Please select different window for each animation."
 msgstr ""
+"अधिक एनिमेशन एक ही विंडो का उपयोग कर रहे हैं। कृपया प्रत्येक एनिमेशन के लिए "
+"अलग विंडो चुनें।"
 
 #: ../gui/wxpython/animation/controller.py:309
 #: ../gui/wxpython/animation/dialogs.py:755
@@ -32,23 +37,23 @@ msgstr ""
 #: ../gui/wxpython/psmap/dialogs.py:1508 ../gui/wxpython/psmap/dialogs.py:1587
 #: ../gui/wxpython/psmap/dialogs.py:5125 ../gui/wxpython/wxplot/dialogs.py:573
 msgid "Invalid input"
-msgstr ""
+msgstr "अमान्य निवेश"
 
 #: ../gui/wxpython/animation/controller.py:447
 msgid "Failed to display legend."
-msgstr ""
+msgstr "लेजेंड दिखाने में फेल।"
 
 #: ../gui/wxpython/animation/controller.py:477
 msgid "Inconsistent number of maps, please check input data."
-msgstr ""
+msgstr "मैप्स की संख्या अलग-अलग है, कृपया इनपुट डेटा चेक करें।"
 
 #: ../gui/wxpython/animation/controller.py:502
 msgid "No animation to export."
-msgstr ""
+msgstr "एक्सपोर्ट करने के लिए कोई एनिमेशन नहीं है।"
 
 #: ../gui/wxpython/animation/controller.py:540
 msgid "Preparing export, please wait..."
-msgstr ""
+msgstr "एक्सपोर्ट तैयार है, कृपया इंतज़ार करें..।"
 
 #: ../gui/wxpython/animation/controller.py:589
 #: ../gui/wxpython/animation/frame.py:630
@@ -63,7 +68,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/controller.py:621
 msgid "Exporting animation, please wait..."
-msgstr ""
+msgstr "एनिमेशन निर्यात हो रहा है, कृपया प्रतीक्षा करें..।"
 
 #: ../gui/wxpython/animation/data.py:48 ../gui/wxpython/lmgr/layertree.py:1177
 #: ../gui/wxpython/mapdisp/frame.py:313 ../gui/wxpython/mapdisp/frame.py:416
@@ -79,16 +84,16 @@ msgstr ""
 
 #: ../gui/wxpython/animation/data.py:68
 msgid "No animation name selected."
-msgstr ""
+msgstr "कोई एनिमेशन नाम चयनित नहीं है।"
 
 #: ../gui/wxpython/animation/data.py:135
 msgid "No workspace file selected."
-msgstr ""
+msgstr "कोई कार्यक्षेत्र फ़ाइल चयनित नहीं है।"
 
 #: ../gui/wxpython/animation/data.py:138
 #, python-format
 msgid "File %s not found"
-msgstr ""
+msgstr "फ़ाइल %s नहीं मिली"
 
 #: ../gui/wxpython/animation/data.py:147
 #, python-format
@@ -101,52 +106,52 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:138
 msgid "Simple mode"
-msgstr ""
+msgstr "सरल मोड"
 
 #: ../gui/wxpython/animation/dialogs.py:143
 msgid "Frame duration:"
-msgstr ""
+msgstr "फ़्रेम अवधि:"
 
 #: ../gui/wxpython/animation/dialogs.py:144
 #: ../gui/wxpython/animation/dialogs.py:179
 msgid "ms"
-msgstr ""
+msgstr "एमएस"
 
 #: ../gui/wxpython/animation/dialogs.py:170
 msgid "Temporal mode"
-msgstr ""
+msgstr "अस्थायी मोड"
 
 #: ../gui/wxpython/animation/dialogs.py:175
 msgid "Time unit:"
-msgstr ""
+msgstr "समय इकाई:"
 
 #: ../gui/wxpython/animation/dialogs.py:177
 msgid "Duration of time unit:"
-msgstr ""
+msgstr "समय की अवधि की इकाई:"
 
 #: ../gui/wxpython/animation/dialogs.py:243
 msgid "year"
-msgstr ""
+msgstr "वर्ष"
 
 #: ../gui/wxpython/animation/dialogs.py:244
 msgid "month"
-msgstr ""
+msgstr "महीना"
 
 #: ../gui/wxpython/animation/dialogs.py:245
 msgid "day"
-msgstr ""
+msgstr "दिन"
 
 #: ../gui/wxpython/animation/dialogs.py:246
 msgid "hour"
-msgstr ""
+msgstr "घंटा"
 
 #: ../gui/wxpython/animation/dialogs.py:247
 msgid "minute"
-msgstr ""
+msgstr "मिनट"
 
 #: ../gui/wxpython/animation/dialogs.py:248
 msgid "second"
-msgstr ""
+msgstr "सेकंड"
 
 #: ../gui/wxpython/animation/dialogs.py:313
 msgid "Animation speed is too high."
@@ -159,7 +164,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:353
 msgid "Edit animation"
-msgstr ""
+msgstr "एनीमेशन संपादित करें"
 
 #: ../gui/wxpython/animation/dialogs.py:364
 #: ../gui/wxpython/animation/dialogs.py:1892
@@ -168,7 +173,7 @@ msgstr ""
 #: ../gui/wxpython/mapdisp/properties.py:380
 #: ../gui/wxpython/vdigit/preferences.py:129
 msgid "General"
-msgstr ""
+msgstr "जनरल"
 
 #: ../gui/wxpython/animation/dialogs.py:365
 msgid "Advanced"
@@ -176,23 +181,23 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:391
 msgid "top left"
-msgstr ""
+msgstr "ऊपरी बायाँ"
 
 #: ../gui/wxpython/animation/dialogs.py:392
 msgid "top right"
-msgstr ""
+msgstr "ऊपरी दायाँ"
 
 #: ../gui/wxpython/animation/dialogs.py:393
 msgid "bottom left"
-msgstr ""
+msgstr "बायाँ नीचे"
 
 #: ../gui/wxpython/animation/dialogs.py:394
 msgid "bottom right"
-msgstr ""
+msgstr "नीचे दायां"
 
 #: ../gui/wxpython/animation/dialogs.py:410
 msgid "Select 2D or 3D view"
-msgstr ""
+msgstr "2D या 3D व्यू चुनें"
 
 #: ../gui/wxpython/animation/dialogs.py:415
 #: ../gui/wxpython/gmodeler/preferences.py:730
@@ -202,31 +207,33 @@ msgstr ""
 #: ../gui/wxpython/gui_core/widgets.py:1462
 #: ../gui/wxpython/vnet/dialogs.py:1679
 msgid "Name:"
-msgstr ""
+msgstr "नाम:"
 
 #: ../gui/wxpython/animation/dialogs.py:420
 msgid "Window position:"
-msgstr ""
+msgstr "विंडो की स्थिति:"
 
 #: ../gui/wxpython/animation/dialogs.py:425
 msgid "View mode:"
-msgstr ""
+msgstr "दृश्य मोड:"
 
 #: ../gui/wxpython/animation/dialogs.py:433
 msgid ""
 "For 3D animation, please select only one space-time dataset\n"
 "or one series of map layers."
 msgstr ""
+"3D एनिमेशन के लिए, कृपया केवल एक स्पेस-टाइम डेटासेट या मैप लेयर्स की एक "
+"सीरीज़ चुनें।"
 
 #: ../gui/wxpython/animation/dialogs.py:464
 #: ../gui/wxpython/psmap/dialogs.py:3449
 msgid "Show raster legend"
-msgstr ""
+msgstr "रास्टर संकेतिका दिखाएं"
 
 #: ../gui/wxpython/animation/dialogs.py:466
 #: ../gui/wxpython/lmgr/layertree.py:84
 msgid "Set options"
-msgstr ""
+msgstr "विकल्प निर्धारित करें"
 
 #: ../gui/wxpython/animation/dialogs.py:483
 msgid "3D view parameters"
@@ -234,7 +241,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:492
 msgid "Workspace file:"
-msgstr ""
+msgstr "कार्यक्षेत्र फ़ाइल:"
 
 #: ../gui/wxpython/animation/dialogs.py:493
 msgid "Choose workspace file to import 3D view parameters"
@@ -264,15 +271,15 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:502
 msgid "Parameter for animation:"
-msgstr ""
+msgstr "एनिमेशन के लिए पैरामीटर:"
 
 #: ../gui/wxpython/animation/dialogs.py:527
 msgid "Set spatial extent in 2D view"
-msgstr ""
+msgstr "2D दृश्य में स्थानिक विस्तार निर्धारित करें"
 
 #: ../gui/wxpython/animation/dialogs.py:531
 msgid "Use saved region:"
-msgstr ""
+msgstr "सहेजे गए क्षेत्र का उपयोग करें:"
 
 #: ../gui/wxpython/animation/dialogs.py:540
 msgid "Animate region change"
@@ -280,36 +287,38 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:549
 msgid "End region:"
-msgstr ""
+msgstr "समाप्त क्षेत्र:"
 
 #: ../gui/wxpython/animation/dialogs.py:555
 msgid "Zoom value:"
-msgstr ""
+msgstr "ज़ूम मान:"
 
 #: ../gui/wxpython/animation/dialogs.py:557
 msgid "N-S/E-W distances in map units used to gradually reduce region."
 msgstr ""
+"क्षेत्र को धीरे-धीरे कम करने के लिए उपयोग की जाने वाली मानचित्र इकाइयों में "
+"उत्तर-दक्षिण/पूर्व-पश्चिम दूरियाँ।"
 
 #: ../gui/wxpython/animation/dialogs.py:565
 msgid "N-S:"
-msgstr ""
+msgstr "उत्तर-दक्षिण:"
 
 #: ../gui/wxpython/animation/dialogs.py:572
 msgid "E-W:"
-msgstr ""
+msgstr "पूर्व-पश्चिम:"
 
 #: ../gui/wxpython/animation/dialogs.py:684
 msgid "Only one series or space-time dataset is accepted for 3D mode."
-msgstr ""
+msgstr "3D मोड के लिए केवल एक श्रृंखला या स्पेस-टाइम डेटासेट ही स्वीकार्य है।"
 
 #: ../gui/wxpython/animation/dialogs.py:692
 msgid "No map series or space-time dataset added."
-msgstr ""
+msgstr "कोई मानचित्र श्रृंखला या स्पेस-टाइम डेटासेट नहीं जोड़ा गया।"
 
 #: ../gui/wxpython/animation/dialogs.py:732
 #: ../gui/wxpython/animation/dialogs.py:744
 msgid "Region information is not complete"
-msgstr ""
+msgstr "क्षेत्र की जानकारी पूरी नहीं है"
 
 #: ../gui/wxpython/animation/dialogs.py:765
 msgid "Add, edit or remove animations"
@@ -317,7 +326,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:774
 msgid "List of animations"
-msgstr ""
+msgstr "एनिमेशन की सूची"
 
 #: ../gui/wxpython/animation/dialogs.py:786 ../gui/wxpython/dbmgr/base.py:2435
 #: ../gui/wxpython/psmap/dialogs.py:1825
@@ -326,7 +335,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:788
 msgid "Edit"
-msgstr ""
+msgstr "संपादित करें"
 
 #: ../gui/wxpython/animation/dialogs.py:790
 #: ../gui/wxpython/animation/dialogs.py:1032
@@ -334,17 +343,17 @@ msgstr ""
 #: ../gui/wxpython/gui_core/simplelmgr.py:515
 #: ../gui/wxpython/lmgr/layertree.py:450 ../gui/wxpython/rlisetup/frame.py:157
 msgid "Remove"
-msgstr ""
+msgstr "हटाएं"
 
 #: ../gui/wxpython/animation/dialogs.py:932
 #: ../gui/wxpython/animation/toolbars.py:46
 msgid "Export animation"
-msgstr ""
+msgstr "एनिमेशन निर्यात करें"
 
 #: ../gui/wxpython/animation/dialogs.py:950
 #: ../gui/wxpython/psmap/dialogs.py:638
 msgid "Format"
-msgstr ""
+msgstr "प्रारूप"
 
 #: ../gui/wxpython/animation/dialogs.py:952 ../gui/wxpython/nviz/tools.py:828
 msgid "Decorations"
@@ -353,7 +362,7 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:957
 #: ../gui/wxpython/lmgr/layertree.py:771 ../gui/wxpython/tplot/frame.py:395
 msgid "Export"
-msgstr ""
+msgstr "निर्यात"
 
 #: ../gui/wxpython/animation/dialogs.py:1018
 msgid "Add image"
@@ -378,22 +387,22 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:1066
 msgid "Font settings:"
-msgstr ""
+msgstr "फ़ॉन्ट सेटिंग्स:"
 
 #: ../gui/wxpython/animation/dialogs.py:1071
 msgid "Sample text"
-msgstr ""
+msgstr "नमूना पाठ"
 
 #: ../gui/wxpython/animation/dialogs.py:1078
 #: ../gui/wxpython/gui_core/preferences.py:601
 #: ../gui/wxpython/gui_core/preferences.py:613
 #: ../gui/wxpython/gui_core/preferences.py:893
 msgid "Set font"
-msgstr ""
+msgstr "फ़ॉन्ट सेट करें"
 
 #: ../gui/wxpython/animation/dialogs.py:1092
 msgid "Image file:"
-msgstr ""
+msgstr "छवि फ़ाइल:"
 
 #: ../gui/wxpython/animation/dialogs.py:1093
 msgid "Choose image file"
@@ -401,21 +410,23 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:1106
 msgid "Text:"
-msgstr ""
+msgstr "पाठ:"
 
 #: ../gui/wxpython/animation/dialogs.py:1126
 msgid "Placement as percentage of screen coordinates (X: 0, Y: 0 is top left):"
 msgstr ""
+"स्क्रीन निर्देशांकों के प्रतिशत के रूप में प्लेसमेंट (X: 0, Y: 0 ऊपर बाईं ओर "
+"है):"
 
 #: ../gui/wxpython/animation/dialogs.py:1142
 #: ../gui/wxpython/psmap/dialogs.py:320
 msgid "X:"
-msgstr ""
+msgstr "X:"
 
 #: ../gui/wxpython/animation/dialogs.py:1147
 #: ../gui/wxpython/psmap/dialogs.py:321
 msgid "Y:"
-msgstr ""
+msgstr "Y:"
 
 #: ../gui/wxpython/animation/dialogs.py:1161
 msgid "AVI"
@@ -423,37 +434,37 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:1161
 msgid "SWF"
-msgstr ""
+msgstr "SWF"
 
 #: ../gui/wxpython/animation/dialogs.py:1161
 msgid "animated GIF"
-msgstr ""
+msgstr "एनिमेटेड GIF"
 
 #: ../gui/wxpython/animation/dialogs.py:1161
 msgid "image sequence"
-msgstr ""
+msgstr "छवि अनुक्रम"
 
 #: ../gui/wxpython/animation/dialogs.py:1168
 msgid "Export to:"
-msgstr ""
+msgstr "इसमें निर्यात करें:"
 
 #: ../gui/wxpython/animation/dialogs.py:1185 ../gui/wxpython/nviz/tools.py:679
 msgid "File prefix:"
-msgstr ""
+msgstr "फ़ाइल उपसर्ग:"
 
 #: ../gui/wxpython/animation/dialogs.py:1186
 msgid "animation_"
-msgstr ""
+msgstr "एनिमेशन_"
 
 #: ../gui/wxpython/animation/dialogs.py:1187 ../gui/wxpython/nviz/tools.py:692
 msgid "File format:"
-msgstr ""
+msgstr "फ़ाइल प्रारूप:"
 
 #: ../gui/wxpython/animation/dialogs.py:1194
 #: ../gui/wxpython/gui_core/gselect.py:1580
 #: ../gui/wxpython/gui_core/gselect.py:1668
 msgid "Directory:"
-msgstr ""
+msgstr "निर्देशिका:"
 
 #: ../gui/wxpython/animation/dialogs.py:1195
 msgid "Choose directory for export"
@@ -461,7 +472,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:1222
 msgid "GIF file:"
-msgstr ""
+msgstr "GIF फ़ाइल:"
 
 #: ../gui/wxpython/animation/dialogs.py:1223
 #: ../gui/wxpython/animation/dialogs.py:1246
@@ -471,14 +482,14 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:1245
 msgid "SWF file:"
-msgstr ""
+msgstr "SWF फ़ाइल:"
 
 #: ../gui/wxpython/animation/dialogs.py:1267
 msgid ""
 "Program 'ffmpeg' was not found.\n"
 "Please install it first and make sure\n"
 "it's in the PATH variable."
-msgstr ""
+msgstr "प्रोग्राम 'ffmpeg' नहीं मिला।"
 
 #: ../gui/wxpython/animation/dialogs.py:1276
 msgid "AVI file:"
@@ -486,7 +497,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:1283
 msgid "Video codec:"
-msgstr ""
+msgstr "वीडियो कोडेक:"
 
 #: ../gui/wxpython/animation/dialogs.py:1286
 msgid "Additional options:"
@@ -504,7 +515,7 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:1449
 #, python-format
 msgid "File %s not found."
-msgstr ""
+msgstr "फ़ाइल"
 
 #: ../gui/wxpython/animation/dialogs.py:1453
 msgid "Decoration image file is missing."
@@ -513,41 +524,41 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:1461
 #, python-format
 msgid "Directory %s not found."
-msgstr ""
+msgstr "निर्देशिका"
 
 #: ../gui/wxpython/animation/dialogs.py:1463
 msgid "Export directory is missing."
-msgstr ""
+msgstr "निर्यात निर्देशिका गायब है।"
 
 #: ../gui/wxpython/animation/dialogs.py:1522
 #: ../gui/wxpython/psmap/dialogs.py:5719 ../gui/wxpython/psmap/dialogs.py:5782
 #: ../gui/wxpython/psmap/toolbars.py:101
 msgid "Image"
-msgstr ""
+msgstr "छवि"
 
 #: ../gui/wxpython/animation/dialogs.py:1522
 #: ../gui/wxpython/psmap/dialogs.py:5212 ../gui/wxpython/psmap/dialogs.py:5217
 #: ../gui/wxpython/psmap/toolbars.py:97
 msgid "Text"
-msgstr ""
+msgstr "पाठ"
 
 #: ../gui/wxpython/animation/dialogs.py:1522
 msgid "Time stamp"
-msgstr ""
+msgstr "समय स्टाम्प"
 
 #: ../gui/wxpython/animation/dialogs.py:1546
 #, python-brace-format
 msgid "Exported file directory '{base_dir}' does not exist."
-msgstr ""
+msgstr "निर्यातित फ़ाइल निर्देशिका '"
 
 #: ../gui/wxpython/animation/dialogs.py:1549
 msgid "Export file is missing."
-msgstr ""
+msgstr "निर्यात फ़ाइल गायब है।"
 
 #: ../gui/wxpython/animation/dialogs.py:1569
 #, python-brace-format
 msgid "Exported animation file <{file}> exists. Do you want to overwrite it?"
-msgstr ""
+msgstr "निर्यातित एनिमेशन फ़ाइल <"
 
 #: ../gui/wxpython/animation/dialogs.py:1574
 #: ../gui/wxpython/datacatalog/tree.py:161 ../gui/wxpython/gcp/manager.py:1737
@@ -556,7 +567,7 @@ msgstr ""
 #: ../gui/wxpython/modules/colorrules.py:675
 #: ../gui/wxpython/rdigit/dialogs.py:114
 msgid "Overwrite?"
-msgstr ""
+msgstr "अधिलेखित करें?"
 
 #: ../gui/wxpython/animation/dialogs.py:1651
 msgid "Add space-time dataset layer"
@@ -564,39 +575,39 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:1673
 msgid "Multiple raster maps"
-msgstr ""
+msgstr "एकाधिक रास्टर मानचित्र"
 
 #: ../gui/wxpython/animation/dialogs.py:1674
 msgid "Multiple vector maps"
-msgstr ""
+msgstr "एकाधिक वेक्टर मानचित्र"
 
 #: ../gui/wxpython/animation/dialogs.py:1675
 msgid "Multiple 3D raster maps"
-msgstr ""
+msgstr "एकाधिक 3D रास्टर मानचित्र"
 
 #: ../gui/wxpython/animation/dialogs.py:1676
 msgid "Space time raster dataset"
-msgstr ""
+msgstr "स्पेस टाइम रास्टर डेटासेट"
 
 #: ../gui/wxpython/animation/dialogs.py:1677
 msgid "Space time vector dataset"
-msgstr ""
+msgstr "स्पेस टाइम वेक्टर डेटासेट"
 
 #: ../gui/wxpython/animation/dialogs.py:1678
 msgid "Space time 3D raster dataset"
-msgstr ""
+msgstr "स्पेस टाइम 3D रास्टर डेटासेट"
 
 #: ../gui/wxpython/animation/dialogs.py:1717
 msgid "Input data type:"
-msgstr ""
+msgstr "इनपुट डेटा प्रकार:"
 
 #: ../gui/wxpython/animation/dialogs.py:1794
 msgid "Select raster/vector maps."
-msgstr ""
+msgstr "रास्टर/वेक्टर मानचित्र चुनें।"
 
 #: ../gui/wxpython/animation/dialogs.py:1822
 msgid "Please select maps or dataset first."
-msgstr ""
+msgstr "कृपया पहले मानचित्र या डेटासेट चुनें।"
 
 #: ../gui/wxpython/animation/dialogs.py:1852
 msgid "Animation Tool settings"
@@ -611,20 +622,20 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:1916
 msgid "Number of parallel processes:"
-msgstr ""
+msgstr "समानांतर प्रक्रियाओं की संख्या:"
 
 #: ../gui/wxpython/animation/dialogs.py:1937
 msgid "Text foreground color:"
-msgstr ""
+msgstr "पाठ का अग्रभूमि रंग:"
 
 #: ../gui/wxpython/animation/dialogs.py:1953
 msgid "Text background color:"
-msgstr ""
+msgstr "पाठ का पृष्ठभूमि रंग:"
 
 #: ../gui/wxpython/animation/dialogs.py:1978
 #: ../gui/wxpython/timeline/frame.py:310
 msgid "Time"
-msgstr ""
+msgstr "समय"
 
 #: ../gui/wxpython/animation/dialogs.py:1986
 msgid "Absolute time format:"
@@ -636,19 +647,22 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:2022
 msgid "Learn more about formatting options"
-msgstr ""
+msgstr "फ़ॉर्मेटिंग विकल्पों के बारे में और जानें"
 
 #: ../gui/wxpython/animation/dialogs.py:2036
 msgid "Display instances with no data"
-msgstr ""
+msgstr "बिना डेटा वाले उदाहरणों को प्रदर्शित करें"
 
 #: ../gui/wxpython/animation/dialogs.py:2039
 msgid "When animating instant-based data which have irregular timestamps you can display 'no data frame' (checked option) or keep last frame."
 msgstr ""
+"अनियमित टाइमस्टैम्प वाले इंस्टेंट-आधारित डेटा को एनिमेट करते समय आप 'नो डेटा "
+"फ्रेम' प्रदर्शित कर सकते हैं (चेक किया गया विकल्प) या पिछला फ्रेम रख सकते "
+"हैं।"
 
 #: ../gui/wxpython/animation/dialogs.py:2070
 msgid "Invalid"
-msgstr ""
+msgstr "अमान्य"
 
 #: ../gui/wxpython/animation/frame.py:50
 msgid "Animation Tool"
@@ -656,7 +670,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/frame.py:172 ../gui/wxpython/mapswipe/frame.py:266
 msgid "Main Toolbar"
-msgstr ""
+msgstr "मुख्य टूलबार"
 
 #: ../gui/wxpython/animation/frame.py:191
 msgid "Animation Toolbar"
@@ -666,11 +680,11 @@ msgstr ""
 #: ../gui/wxpython/main_window/frame.py:598
 #: ../gui/wxpython/mapswipe/frame.py:310
 msgid "Misc Toolbar"
-msgstr ""
+msgstr "विविध टूलबार"
 
 #: ../gui/wxpython/animation/frame.py:314
 msgid "Loading data"
-msgstr ""
+msgstr "डेटा लोड हो रहा है"
 
 #: ../gui/wxpython/animation/frame.py:323
 #, python-brace-format
@@ -680,7 +694,7 @@ msgstr ""
 #: ../gui/wxpython/animation/frame.py:636
 #, python-format
 msgid "to %(to)s"
-msgstr ""
+msgstr "तक"
 
 #: ../gui/wxpython/animation/g.gui.animation.py:93
 #, python-format
@@ -696,58 +710,63 @@ msgstr ""
 msgid ""
 "Reading workspace file <%s> failed.\n"
 "Invalid file, unable to parse XML document."
-msgstr ""
+msgstr "कार्यक्षेत्र फ़ाइल पढ़ रहा है <"
 
 #: ../gui/wxpython/animation/nviztask.py:53
 #, python-format
 msgid "No 3d view information in workspace file <%s>."
-msgstr ""
+msgstr "कार्यक्षेत्र फ़ाइल < में कोई 3D दृश्य जानकारी नहीं है"
 
 #: ../gui/wxpython/animation/nviztask.py:301
 msgid "Please add only one layer in the list."
-msgstr ""
+msgstr "कृपया सूची में केवल एक परत जोड़ें।"
 
 #: ../gui/wxpython/animation/nviztask.py:305
 msgid "No map series nor space-time dataset is added."
-msgstr ""
+msgstr "कोई मानचित्र श्रृंखला या स्पेस-टाइम डेटासेट नहीं जोड़ा गया है।"
 
 #: ../gui/wxpython/animation/provider.py:451
 msgid "Rendering map layers"
-msgstr ""
+msgstr "मानचित्र परतों को रेंडर किया जा रहा है"
 
 #: ../gui/wxpython/animation/provider.py:569
 msgid "Overlaying map layers"
-msgstr ""
+msgstr "मानचित्र परतों को ओवरले किया जा रहा है"
 
 #: ../gui/wxpython/animation/provider.py:800
 #, python-brace-format
 msgid "Directory {t} not removed."
-msgstr ""
+msgstr "निर्देशिका"
 
 #: ../gui/wxpython/animation/temporal_manager.py:109
 msgid "It is not allowed to display data with different temporal types (absolute and relative)."
 msgstr ""
+"विभिन्न लौकिक प्रकारों (निरपेक्ष और सापेक्ष) वाले डेटा को प्रदर्शित करने की "
+"अनुमति नहीं है।"
 
 #: ../gui/wxpython/animation/temporal_manager.py:123
 #, python-format
 msgid "It is not allowed to display data with different units (%s)."
-msgstr ""
+msgstr "विभिन्न इकाइयों वाले डेटा को प्रदर्शित करने की अनुमति नहीं है ("
 
 #: ../gui/wxpython/animation/temporal_manager.py:136
 msgid "You are going to display data with different temporal types of maps (interval and point). It is recommended to use data of one temporal type to avoid confusion."
 msgstr ""
+"आप मानचित्रों के विभिन्न लौकिक प्रकारों (अंतराल और बिंदु) के साथ डेटा "
+"प्रदर्शित करने जा रहे हैं। भ्रम से बचने के लिए एक ही लौकिक प्रकार के डेटा का "
+"उपयोग करने की अनुशंसा की जाती है।"
 
 #: ../gui/wxpython/animation/temporal_manager.py:249
 #: ../gui/wxpython/animation/utils.py:72 ../gui/wxpython/animation/utils.py:80
 #: ../gui/wxpython/timeline/frame.py:497 ../gui/wxpython/tplot/frame.py:1158
 #, python-format
 msgid "Space time dataset <%s> not found."
-msgstr ""
+msgstr "स्पेस टाइम डेटासेट <"
 
 #: ../gui/wxpython/animation/temporal_manager.py:344
 #, python-format
 msgid "Topology of Space time dataset %s is invalid."
-msgstr ""
+msgstr "स्पेस टाइम डेटासेट की टोपोलॉजी"
 
 #: ../gui/wxpython/animation/toolbars.py:28
 msgid "Change animation speed"
@@ -755,27 +774,27 @@ msgstr ""
 
 #: ../gui/wxpython/animation/toolbars.py:29
 msgid "Play forward"
-msgstr ""
+msgstr "आगे चलाएं"
 
 #: ../gui/wxpython/animation/toolbars.py:30
 msgid "Play back"
-msgstr ""
+msgstr "पीछे चलाएं"
 
 #: ../gui/wxpython/animation/toolbars.py:31 ../gui/wxpython/nviz/tools.py:579
 msgid "Stop"
-msgstr ""
+msgstr "रोकें"
 
 #: ../gui/wxpython/animation/toolbars.py:32 ../gui/wxpython/nviz/tools.py:577
 msgid "Pause"
-msgstr ""
+msgstr "विराम"
 
 #: ../gui/wxpython/animation/toolbars.py:33
 msgid "Repeat"
-msgstr ""
+msgstr "दोहराएं"
 
 #: ../gui/wxpython/animation/toolbars.py:35
 msgid "Play back and forward"
-msgstr ""
+msgstr "पीछे और आगे चलाएं"
 
 #: ../gui/wxpython/animation/toolbars.py:42
 #: ../gui/wxpython/animation/toolbars.py:43
@@ -794,41 +813,46 @@ msgstr ""
 #: ../gui/wxpython/lmgr/layertree.py:2145 ../gui/wxpython/mapswipe/frame.py:459
 #, python-format
 msgid "Map <%s> not found."
-msgstr ""
+msgstr "मानचित्र <"
 
 #: ../gui/wxpython/animation/utils.py:187
 msgid "The number of maps in space-time datasets has to be the same."
-msgstr ""
+msgstr "स्पेस-टाइम डेटासेट्स में मानचित्रों की संख्या समान होनी चाहिए।"
 
 #: ../gui/wxpython/animation/utils.py:193
 msgid "The temporal type (absolute/relative) of space-time datasets has to be the same."
 msgstr ""
+"स्पेस-टाइम डेटासेट्स का लौकिक प्रकार (निरपेक्ष/सापेक्ष) समान होना चाहिए।"
 
 #: ../gui/wxpython/animation/utils.py:201
 msgid "The map type (point/interval) of space-time datasets has to be the same."
-msgstr ""
+msgstr "स्पेस-टाइम डेटासेट्स का मानचित्र प्रकार (बिंदु/अंतराल) समान होना चाहिए।"
 
 #: ../gui/wxpython/animation/utils.py:209
 msgid "The temporal extents of maps in space-time datasets have to be the same."
-msgstr ""
+msgstr "स्पेस-टाइम डेटासेट्स में मानचित्रों के लौकिक विस्तार समान होने चाहिए।"
 
 #: ../gui/wxpython/animation/utils.py:219
 msgid "The number of maps to animate has to be the same for each map series."
 msgstr ""
+"एनिमेट करने के लिए मानचित्रों की संख्या प्रत्येक मानचित्र श्रृंखला के लिए समा"
+"न होनी चाहिए।"
 
 #: ../gui/wxpython/animation/utils.py:227
 msgid "The number of maps to animate has to be the same as the number of maps in temporal dataset."
-msgstr ""
+msgstr "to animateचाहिए।"
 
 #: ../gui/wxpython/core/debug.py:46
 #, python-brace-format
 msgid "Wx debug level {0}."
-msgstr ""
+msgstr "Wx डिबग स्तर"
 
 #: ../gui/wxpython/core/debug.py:51
 #, python-brace-format
 msgid "WARNING: Ignoring unsupported wx debug level (must be >=0 and <=5). {0}\n"
 msgstr ""
+"चेतावनी: असमर्थित wx डिबग स्तर को अनदेखा किया जा रहा है (स्तर >=0 और <=5 होना"
+" चाहिए)।\n"
 
 #: ../gui/wxpython/core/gcmd.py:123 ../gui/wxpython/core/workspace.py:1742
 #: ../gui/wxpython/gmodeler/panels.py:690
@@ -852,48 +876,48 @@ msgstr ""
 #: ../gui/wxpython/startup/guiutils.py:308
 #: ../gui/wxpython/vdigit/dialogs.py:270 ../gui/wxpython/vdigit/dialogs.py:451
 msgid "Error"
-msgstr ""
+msgstr "त्रुटि"
 
 #: ../gui/wxpython/core/gcmd.py:136
 msgid "Reason"
-msgstr ""
+msgstr "कारण"
 
 #: ../gui/wxpython/core/gcmd.py:146 ../gui/wxpython/core/workspace.py:1756
 #: ../gui/wxpython/gmodeler/model_convert.py:238
 #: ../gui/wxpython/mapwin/buffered.py:2153
 #: ../gui/wxpython/wxplot/dialogs.py:940
 msgid "Warning"
-msgstr ""
+msgstr "चेतावनी"
 
 #: ../gui/wxpython/core/gcmd.py:153
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:714
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:760
 #: ../gui/wxpython/lmgr/frame.py:2320 ../gui/wxpython/main_window/frame.py:2429
 msgid "Message"
-msgstr ""
+msgstr "संदेश"
 
 #: ../gui/wxpython/core/gcmd.py:435
 msgid "Execution failed:"
-msgstr ""
+msgstr "निष्पादन विफल रहा:"
 
 #: ../gui/wxpython/core/gcmd.py:439 ../gui/wxpython/core/render.py:1091
 #: ../gui/wxpython/core/render.py:1098 ../gui/wxpython/core/render.py:1105
 msgid "Details:"
-msgstr ""
+msgstr "विवरण:"
 
 #: ../gui/wxpython/core/gcmd.py:441 ../gui/wxpython/core/gcmd.py:448
 msgid "Error: "
-msgstr ""
+msgstr "त्रुटि: "
 
 #: ../gui/wxpython/core/gcmd.py:527
 #, python-format
 msgid "Unable to execute command: '%s'"
-msgstr ""
+msgstr "कमांड निष्पादित करने में असमर्थ: '"
 
 #: ../gui/wxpython/core/gcmd.py:778 ../gui/wxpython/gui_core/forms.py:2991
 #, python-format
 msgid "Error in %s"
-msgstr ""
+msgstr "इसमें त्रुटि"
 
 #: ../gui/wxpython/core/gconsole.py:581
 #, python-format
@@ -902,12 +926,12 @@ msgid ""
 "%(cmd)s\n"
 "\n"
 "Option <%(opt)s>: read from standard input is not supported by wxGUI"
-msgstr ""
+msgstr "कमांड चलाने में असमर्थ:"
 
 #: ../gui/wxpython/core/gconsole.py:618
 #, python-format
 msgid "Module <%s> not found."
-msgstr ""
+msgstr "मॉड्यूल <"
 
 #: ../gui/wxpython/core/gconsole.py:757 ../gui/wxpython/gmodeler/panels.py:314
 #, python-format
@@ -925,11 +949,12 @@ msgstr ""
 #: ../gui/wxpython/gmodeler/panels.py:323 ../gui/wxpython/gui_core/ghelp.py:263
 #: ../gui/wxpython/startup/guiutils.py:586
 msgid "unknown"
-msgstr ""
+msgstr "अज्ञात"
 
 #: ../gui/wxpython/core/gconsole.py:772
 msgid "Please note that the data are left in inconsistent state and may be corrupted"
 msgstr ""
+"कृपया ध्यान दें कि डेटा असंगत स्थिति में छोड़ दिया गया है और दूषित हो सकता है"
 
 #: ../gui/wxpython/core/gconsole.py:776
 msgid "Command aborted"
@@ -947,7 +972,7 @@ msgstr ""
 #: ../gui/wxpython/core/menutree.py:139
 #, python-format
 msgid "Unknown tag %s"
-msgstr ""
+msgstr "अज्ञात टैग"
 
 #: ../gui/wxpython/core/render.py:182
 #, python-format
@@ -962,42 +987,42 @@ msgstr ""
 #: ../gui/wxpython/core/render.py:202
 #, python-format
 msgid "Details: %s\n"
-msgstr ""
+msgstr "विवरण:\n"
 
 #: ../gui/wxpython/core/render.py:284
 #, python-format
 msgid "Unsupported map layer type '%s'"
-msgstr ""
+msgstr "असमर्थित मानचित्र परत प्रकार '"
 
 #: ../gui/wxpython/core/render.py:694
 #, python-format
 msgid "Rendering failed: %s"
-msgstr ""
+msgstr "रेंडरिंग विफल रही:"
 
 #: ../gui/wxpython/core/render.py:742
 msgid "Rendering aborted"
-msgstr ""
+msgstr "रेंडरिंग रद्द कर दी गई"
 
 #: ../gui/wxpython/core/render.py:774
 msgid "Downloading data "
-msgstr ""
+msgstr "डेटा डाउनलोड हो रहा है "
 
 #: ../gui/wxpython/core/render.py:783
 msgid "Rendering & "
-msgstr ""
+msgstr "रेंडरिंग "
 
 #: ../gui/wxpython/core/render.py:783
 msgid "Rendering..."
-msgstr ""
+msgstr "रेंडरिंग..।"
 
 #: ../gui/wxpython/core/render.py:826
 msgid "Trying to recover from default region..."
-msgstr ""
+msgstr "डिफ़ॉल्ट रीजन से रिकवर करने की कोशिश कर रहा हूँ..।"
 
 #: ../gui/wxpython/core/render.py:851
 #, python-format
 msgid "GRASS tool '%s' not found. Unable to start map display window."
-msgstr ""
+msgstr "GRASS टूल '%s' नहीं मिला. मैप डिस्प्ले विंडो शुरू नहीं हो पा रही है।"
 
 #: ../gui/wxpython/core/render.py:890
 #, python-format
@@ -1010,29 +1035,32 @@ msgstr ""
 #, python-format
 msgid "Error: Unable to open '%(file)s'. Reason: %(ret)s. wxGUI exited.\n"
 msgstr ""
+"एरर: '%(file)s' नहीं खुल पा रहा है। कारण: %(ret)s. wxGUI बंद हो गया है।\n"
 
 #: ../gui/wxpython/core/render.py:1089
 #, python-format
 msgid "Unable to zoom to raster map <%s>."
-msgstr ""
+msgstr "रास्टर मैप्स पर ज़ूम करने में असमर्थ<%s>।"
 
 #: ../gui/wxpython/core/render.py:1096
 #, python-format
 msgid "Unable to zoom to vector map <%s>."
-msgstr ""
+msgstr "वेक्टर मैप पर ज़ूम नहीं कर पा रहे हैं<%s>।"
 
 #: ../gui/wxpython/core/render.py:1103
 #, python-format
 msgid "Unable to zoom to 3d raster map <%s>."
-msgstr ""
+msgstr "3D रास्टर मैप पर ज़ूम नहीं कर पा रहे हैं <%s>।"
 
 #: ../gui/wxpython/core/render.py:1110
 msgid "Unable to get current geographic extent. Force quitting wxGUI. Please manually run g.region to fix the problem."
 msgstr ""
+"अभी का ज्योग्राफिक एक्सटेंट नहीं मिल पा रहा है। wxGUI को ज़बरदस्ती बंद कर रहा"
+" हूँ। प्रॉब्लम ठीक करने के लिए कृपया g.region को मैन्युअली चलाएँ।"
 
 #: ../gui/wxpython/core/settings.py:439
 msgid "Segment break"
-msgstr ""
+msgstr "खंड विच्छेद"
 
 #: ../gui/wxpython/core/settings.py:505
 msgid "Data point"
@@ -1040,7 +1068,7 @@ msgstr ""
 
 #: ../gui/wxpython/core/settings.py:582
 msgid "animation"
-msgstr ""
+msgstr "एनीमेशन"
 
 #: ../gui/wxpython/core/settings.py:786
 msgid "Collapse all except PERMANENT and current"
@@ -1060,15 +1088,15 @@ msgstr ""
 
 #: ../gui/wxpython/core/settings.py:790
 msgid "Expand all"
-msgstr ""
+msgstr "सभी विस्तृत करें"
 
 #: ../gui/wxpython/core/settings.py:795 ../gui/wxpython/dbmgr/base.py:1455
 msgid "Edit selected record"
-msgstr ""
+msgstr "चयनित रिकॉर्ड को संपादित करें"
 
 #: ../gui/wxpython/core/settings.py:796
 msgid "Display selected"
-msgstr ""
+msgstr "चयनित को प्रदर्शित करें"
 
 #: ../gui/wxpython/core/settings.py:807
 msgid "Classic (labels only)"
@@ -1080,7 +1108,7 @@ msgstr ""
 
 #: ../gui/wxpython/core/settings.py:809
 msgid "Expert (tool names only)"
-msgstr ""
+msgstr "विशेषज्ञ (केवल टूल के नाम)"
 
 #: ../gui/wxpython/core/settings.py:815
 msgid "Basic top"
@@ -1092,71 +1120,71 @@ msgstr ""
 
 #: ../gui/wxpython/core/settings.py:817
 msgid "List left"
-msgstr ""
+msgstr "बाईं ओर सूची"
 
 #: ../gui/wxpython/core/settings.py:825
 msgid "Zoom and recenter"
-msgstr ""
+msgstr "ज़ूम करें और पुनर्केंद्रित करें"
 
 #: ../gui/wxpython/core/settings.py:826
 msgid "Zoom to mouse cursor"
-msgstr ""
+msgstr "माउस कर्सर पर ज़ूम करें"
 
 #: ../gui/wxpython/core/settings.py:827
 msgid "Nothing"
-msgstr ""
+msgstr "कुछ नहीं"
 
 #: ../gui/wxpython/core/settings.py:830
 msgid "Scroll forward to zoom in"
-msgstr ""
+msgstr "ज़ूम इन करने के लिए आगे स्क्रॉल करें"
 
 #: ../gui/wxpython/core/settings.py:831
 msgid "Scroll back to zoom in"
-msgstr ""
+msgstr "ज़ूम इन करने के लिए पीछे स्क्रॉल करें"
 
 #: ../gui/wxpython/core/settings.py:866 ../gui/wxpython/core/settings.py:880
 msgid "box"
-msgstr ""
+msgstr "बॉक्स"
 
 #: ../gui/wxpython/core/settings.py:867
 msgid "sphere"
-msgstr ""
+msgstr "गोला"
 
 #: ../gui/wxpython/core/settings.py:868
 msgid "cube"
-msgstr ""
+msgstr "घन"
 
 #: ../gui/wxpython/core/settings.py:869
 msgid "diamond"
-msgstr ""
+msgstr "हीरा"
 
 #: ../gui/wxpython/core/settings.py:870
 msgid "aster"
-msgstr ""
+msgstr "एस्टर"
 
 #: ../gui/wxpython/core/settings.py:871
 msgid "gyro"
-msgstr ""
+msgstr "जाइरो"
 
 #: ../gui/wxpython/core/settings.py:872
 msgid "histogram"
-msgstr ""
+msgstr "हिस्टोग्राम"
 
 #: ../gui/wxpython/core/settings.py:879
 msgid "cross"
-msgstr ""
+msgstr "क्रॉस"
 
 #: ../gui/wxpython/core/settings.py:881
 msgid "circle"
-msgstr ""
+msgstr "वृत्त"
 
 #: ../gui/wxpython/core/settings.py:885
 msgid "Script package"
-msgstr ""
+msgstr "स्क्रिप्ट पैकेज"
 
 #: ../gui/wxpython/core/settings.py:886
 msgid "PyGRASS"
-msgstr ""
+msgstr "पाईग्रास"
 
 #: ../gui/wxpython/core/settings.py:931
 #, python-brace-format
@@ -1164,11 +1192,13 @@ msgid ""
 "Unable to read settings file <{path}>:\n"
 "{err}"
 msgstr ""
+"सेटिंग्स फ़ाइल <{path}> पढ़ने में असमर्थ:\n"
+"{err}"
 
 #: ../gui/wxpython/core/settings.py:965
 #, python-format
 msgid "Unable to read settings file <%s>\n"
-msgstr ""
+msgstr "सेटिंग्स फ़ाइल <%s> पढ़ने में असमर्थ\n"
 
 #: ../gui/wxpython/core/settings.py:971
 #, python-format
@@ -1177,10 +1207,13 @@ msgid ""
 "\t\tDetails: %(detail)s\n"
 "\t\tLine: '%(line)s'\n"
 msgstr ""
+"त्रुटि: फ़ाइल <%(file)s> से सेटिंग्स पढ़ने में विफल।\n"
+"\t\tविवरण: %(detail)s\n"
+"\t\tपंक्ति: '%(line)s'\n"
 
 #: ../gui/wxpython/core/settings.py:989
 msgid "Unable to create settings directory"
-msgstr ""
+msgstr "सेटिंग्स निर्देशिका बनाने में असमर्थ"
 
 #: ../gui/wxpython/core/settings.py:998
 #, python-format
@@ -1189,23 +1222,28 @@ msgid ""
 "\n"
 "Details: %(detail)s"
 msgstr ""
+"फ़ाइल <%(file)s> में सेटिंग्स लिखना विफल रहा।\n"
+"\n"
+"विवरण: %(detail)s"
 
 #: ../gui/wxpython/core/settings.py:1104
 msgid "Unable to set "
-msgstr ""
+msgstr "सेट करने में असमर्थ "
 
 #: ../gui/wxpython/core/settings.py:1142 ../gui/wxpython/core/settings.py:1163
 #, python-format
 msgid "Unable to parse settings '%s'"
-msgstr ""
+msgstr "सेटिंग्स '%s' पार्स करने में असमर्थ"
 
 #: ../gui/wxpython/core/toolboxes.py:197
 msgid "Unable to parse user toolboxes XML files. Default files will be loaded."
 msgstr ""
+"उपयोगकर्ता टूलबॉक्स एक्सएमएल (XML) फ़ाइलों को पार्स करने में असमर्थ। डिफ़ॉल्"
+"ट फ़ाइलें लोड की जाएंगी।"
 
 #: ../gui/wxpython/core/toolboxes.py:240
 msgid "Unable to create toolboxes directory."
-msgstr ""
+msgstr "टूलबॉक्स निर्देशिका बनाने में असमर्थ।"
 
 #: ../gui/wxpython/core/toolboxes.py:457
 msgid "Custom toolboxes"
@@ -1215,6 +1253,7 @@ msgstr ""
 #, python-format
 msgid "List of addons cannot be obtained because g.extension failed. Details: %s"
 msgstr ""
+"एड-ऑन की सूची प्राप्त नहीं की जा सकती क्योंकि g.extension विफल रहा। विवरण: %s"
 
 #: ../gui/wxpython/core/toolboxes.py:545
 msgid "Addons"
@@ -1222,57 +1261,57 @@ msgstr ""
 
 #: ../gui/wxpython/core/toolboxes.py:617
 msgid "Module not installed"
-msgstr ""
+msgstr "मॉड्यूल स्थापित नहीं है"
 
 #: ../gui/wxpython/core/units.py:34 ../gui/wxpython/vdigit/preferences.py:196
 msgid "map units"
-msgstr ""
+msgstr "मानचित्र इकाइयाँ"
 
 #: ../gui/wxpython/core/units.py:35 ../gui/wxpython/psmap/utils.py:109
 msgid "meters"
-msgstr ""
+msgstr "मीटर"
 
 #: ../gui/wxpython/core/units.py:36 ../gui/wxpython/psmap/utils.py:110
 msgid "kilometers"
-msgstr ""
+msgstr "किलोमीटर"
 
 #: ../gui/wxpython/core/units.py:37 ../gui/wxpython/psmap/utils.py:112
 msgid "miles"
-msgstr ""
+msgstr "मील"
 
 #: ../gui/wxpython/core/units.py:38 ../gui/wxpython/psmap/utils.py:111
 msgid "feet"
-msgstr ""
+msgstr "फीट"
 
 #: ../gui/wxpython/core/units.py:42
 msgid "sq map units"
-msgstr ""
+msgstr "वर्ग मानचित्र इकाइयाँ"
 
 #: ../gui/wxpython/core/units.py:43
 msgid "sq meters"
-msgstr ""
+msgstr "वर्ग मीटर"
 
 #: ../gui/wxpython/core/units.py:44
 msgid "sq kilometers"
-msgstr ""
+msgstr "वर्ग किलोमीटर"
 
 #: ../gui/wxpython/core/units.py:45
 msgid "acres"
-msgstr ""
+msgstr "एकड़"
 
 #: ../gui/wxpython/core/units.py:46
 msgid "hectares"
-msgstr ""
+msgstr "हेक्टेयर"
 
 #: ../gui/wxpython/core/utils.py:61
 #, python-format
 msgid "Syntax error: %s"
-msgstr ""
+msgstr "सिंटैक्स त्रुटि: %s"
 
 #: ../gui/wxpython/core/utils.py:345
 #, python-format
 msgid "Vector map <%(map)s>: %(msg)s\n"
-msgstr ""
+msgstr "वेक्टर मानचित्र <%(map)s>:%(msg)s\n"
 
 #: ../gui/wxpython/core/utils.py:840
 #, python-format
@@ -1284,21 +1323,21 @@ msgstr ""
 #: ../gui/wxpython/core/utils.py:846
 #, python-format
 msgid "Duplicated key: %s\n"
-msgstr ""
+msgstr "डुप्लिकेट कुंजी: %s\n"
 
 #: ../gui/wxpython/core/utils.py:850
 #, python-brace-format
 msgid "Unable to open file '{name}': {error}\n"
-msgstr ""
+msgstr "फ़ाइल '{name}' खोलने में असमर्थ: {error}\n"
 
 #: ../gui/wxpython/core/utils.py:875
 #, python-brace-format
 msgid "Unable to create file '{name}': {error}\n"
-msgstr ""
+msgstr "फ़ाइल '{name}' बनाने में असमर्थ: {error}\n"
 
 #: ../gui/wxpython/core/utils.py:949 ../gui/wxpython/gui_core/forms.py:1917
 msgid "Select Color"
-msgstr ""
+msgstr "रंग चुनें"
 
 #: ../gui/wxpython/core/workspace.py:1741
 #, python-format

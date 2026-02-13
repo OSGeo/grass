@@ -7,14 +7,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-31 15:57+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-02-11 07:01+0000\n"
+"Last-Translator: Abhimanyu  <abhimanyupg04@gmail.com>\n"
+"Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/"
+"grassmods-8-5/hi/>\n"
 "Language: hi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: ../db/db.columns/main.c:50 ../db/db.copy/main.c:104
 #: ../db/db.describe/main.c:65 ../db/db.select/main.c:77
@@ -191,7 +193,7 @@ msgstr ""
 #: ../vector/v.profile/main.c:197 ../vector/v.profile/main.c:206
 #: ../vector/v.profile/main.c:215
 msgid "Format"
-msgstr ""
+msgstr "प्रारूप"
 
 #: ../db/db.columns/main.c:216 ../db/db.connect/main.c:48
 #: ../db/db.copy/main.c:34 ../db/db.createdb/main.c:66
@@ -1635,7 +1637,7 @@ msgstr ""
 #: ../display/d.text/main.c:174 ../display/d.text/main.c:182
 #: ../display/d.text/main.c:256 ../display/d.text/main.c:261
 msgid "Text"
-msgstr ""
+msgstr "पाठ"
 
 #: ../display/d.barscale/main.c:77
 msgid "Display north-arrow symbol."
@@ -2732,7 +2734,7 @@ msgstr ""
 
 #: ../display/d.histogram/main.c:81
 msgid "histogram"
-msgstr ""
+msgstr "हिस्टोग्राम"
 
 #: ../display/d.histogram/main.c:82 ../imagery/i.cca/main.c:84
 #: ../locale/scriptstrings/d.correlate_to_translate.c:3
@@ -9736,7 +9738,7 @@ msgstr ""
 #: ../raster/r.sunmask/main.c:180 ../raster/r.sunmask/main.c:188
 #: ../raster/r.sunmask/main.c:197 ../raster/r.sunmask/main.c:206
 msgid "Time"
-msgstr ""
+msgstr "समय"
 
 #: ../imagery/i.landsat.toar/main.c:209
 msgid "Scale factor for output"
@@ -13343,7 +13345,7 @@ msgstr ""
 #: ../raster/r.colors/edit_colors.c:152 ../raster/r.null/main.c:109
 #: ../vector/v.colors/main.c:121
 msgid "Remove"
-msgstr ""
+msgstr "हटाएं"
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:32
 msgid "Operate on toolboxes instead of single modules (experimental)"
@@ -17040,7 +17042,7 @@ msgstr ""
 #: ../misc/m.nviz.image/args.c:91 ../misc/m.nviz.image/args.c:105
 #: ../misc/m.nviz.image/args.c:115
 msgid "Image"
-msgstr ""
+msgstr "छवि"
 
 #: ../misc/m.nviz.image/args.c:113
 msgid "Size (width, height) of output image"
@@ -17764,19 +17766,19 @@ msgstr ""
 
 #: ../ps/ps.map/do_scalebar.c:190
 msgid "meters"
-msgstr ""
+msgstr "मीटर"
 
 #: ../ps/ps.map/do_scalebar.c:192
 msgid "kilometers"
-msgstr ""
+msgstr "किलोमीटर"
 
 #: ../ps/ps.map/do_scalebar.c:194
 msgid "feet"
-msgstr ""
+msgstr "फीट"
 
 #: ../ps/ps.map/do_scalebar.c:196
 msgid "miles"
-msgstr ""
+msgstr "मील"
 
 #: ../ps/ps.map/do_scalebar.c:198
 msgid "nautical miles"
@@ -18527,7 +18529,7 @@ msgstr ""
 
 #: ../raster/r.circle/main.c:52 ../vector/v.buffer/main.c:220
 msgid "circle"
-msgstr ""
+msgstr "वृत्त"
 
 #: ../raster/r.circle/main.c:53
 msgid "Creates a raster map containing concentric rings around a given point."
@@ -19304,7 +19306,7 @@ msgstr ""
 #: ../raster/r.cost/main.c:209 ../raster/r.cost/main.c:227
 #: ../raster/r.walk/main.c:264 ../raster/r.walk/main.c:282
 msgid "Stop"
-msgstr ""
+msgstr "रोकें"
 
 #: ../raster/r.cost/main.c:214 ../raster/r.walk/main.c:269
 msgid "Name of starting raster points map"
@@ -21091,7 +21093,7 @@ msgstr ""
 #: ../raster/r.proj/main.c:625 ../raster/r.proj/main.c:729
 #, c-format
 msgid "Error in %s"
-msgstr ""
+msgstr "इसमें त्रुटि"
 
 #: ../raster/r.horizon/main.c:1190
 #, c-format
@@ -24341,7 +24343,7 @@ msgstr ""
 
 #: ../raster/r.out.mpeg/main.c:107
 msgid "animation"
-msgstr ""
+msgstr "एनीमेशन"
 
 #: ../raster/r.out.mpeg/main.c:109
 msgid "Converts raster map series to MPEG movie."
@@ -26419,7 +26421,7 @@ msgstr ""
 
 #: ../raster/r.resamp.filter/main.c:430
 msgid "box"
-msgstr ""
+msgstr "बॉक्स"
 
 #: ../raster/r.resamp.filter/main.c:431
 msgid "gauss"
@@ -40366,7 +40368,7 @@ msgstr ""
 
 #: ../vector/v.info/print.c:626
 msgid "Name:"
-msgstr ""
+msgstr "नाम:"
 
 #: ../vector/v.info/print.c:628
 msgid "Mapset:"

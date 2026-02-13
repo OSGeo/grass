@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-31 15:57+0000\n"
-"PO-Revision-Date: 2026-02-07 14:08+0000\n"
+"PO-Revision-Date: 2026-02-09 17:01+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/"
 "grassmods-8-5/fr/>\n"
@@ -6351,9 +6351,11 @@ msgid "Comma-separated list of extra directories to scan for Freetype-compatible
 msgstr "Liste séparée par des virgules des répertoires supplémentaires à scanner pour des polices compatibles Freetype en même temps que ceux par défaut (voir la documentation)"
 
 #: ../general/g.mkfontcap/main.c:99
-#, fuzzy, c-format
+#, c-format
 msgid "Fontcap file %s already exists; use --overwrite flag if you wish to overwrite it"
-msgstr "Le fichier fontcap %s existe déjà; utilisez l'option -%c si vous voulez l'écraser"
+msgstr ""
+"Le fichier fontcap %s existe déjà ; utilisez l'option --overwrite si vous "
+"voulez l'écraser"
 
 #: ../general/g.mkfontcap/main.c:112
 msgid "This GRASS installation was compiled without Freetype support, extradirs parameter ignored"
@@ -6530,9 +6532,9 @@ msgid "Project <%s> created"
 msgstr "Projet <%s> créé"
 
 #: ../general/g.proj/create.c:18
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create project <%s>: %s"
-msgstr "Impossible de créer le fichier <%s>"
+msgstr "Impossible de créer le projet <%s> : %s"
 
 #: ../general/g.proj/create.c:21
 #, c-format
@@ -7884,9 +7886,9 @@ msgid "Unsupported/unreadable format in control file (found igeom=%ld)"
 msgstr ""
 
 #: ../imagery/i.atcorr/iwave.cpp:8036
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported iwave value: %d"
-msgstr "Version de GRASS %s non supportée"
+msgstr "Valeur iwave non supportée : %d"
 
 #: ../imagery/i.atcorr/main.cpp:327
 msgid "Negative visibility!"
@@ -8375,12 +8377,12 @@ msgstr ""
 #: ../imagery/i.cluster/main.c:272
 #, c-format
 msgid " Number of initial classes:    %d"
-msgstr "  Nombre de classes initiales: \t%d"
+msgstr " Nombre de classes initiales : \t%d"
 
 #: ../imagery/i.cluster/main.c:274
 #, c-format
 msgid " [from signature file %s]"
-msgstr "[à partir du fichier de signature %s]"
+msgstr " [à partir du fichier de signature %s]"
 
 #: ../imagery/i.cluster/main.c:276
 #, c-format
@@ -8516,7 +8518,7 @@ msgstr ""
 #: ../imagery/i.cluster/print1.c:13
 #, c-format
 msgid " means  "
-msgstr "moyennes"
+msgstr " moyennes  "
 
 #: ../imagery/i.cluster/print1.c:17
 #, c-format
@@ -8541,7 +8543,7 @@ msgstr "  moyennes "
 #: ../imagery/i.cluster/print2.c:28
 #, c-format
 msgid "  stddev"
-msgstr "écart-type"
+msgstr "  écart-type"
 
 #: ../imagery/i.cluster/print3.c:14
 #, c-format
@@ -9322,9 +9324,9 @@ msgid "No input raster maps defined"
 msgstr ""
 
 #: ../imagery/i.group/main.c:326 ../imagery/i.group/main.c:368
-#, fuzzy, c-format
+#, c-format
 msgid "Raster map <%s> not found. Skipped."
-msgstr "Carte raster <{}> non trouvée. Ignorée."
+msgstr "Carte raster <%s> non trouvée. Ignorée."
 
 #: ../imagery/i.group/main.c:332
 #, c-format
@@ -16379,7 +16381,7 @@ msgstr "Ajoute les centroïdes manquants aux contours fermés."
 #: ../locale/scriptstrings/v.centroids_to_translate.c:3
 #: ../vector/v.category/main.c:857
 msgid "centroid"
-msgstr " centroïde"
+msgstr "centroïde"
 
 #: ../locale/scriptstrings/v.centroids_to_translate.c:4
 #: ../locale/scriptstrings/v.clip_to_translate.c:4
@@ -19016,7 +19018,7 @@ msgstr "Entrez une règle dans l'un des formats suivants:\n"
 #: ../raster/r.colors/rules.c:177
 #, c-format
 msgid " val color\n"
-msgstr "val couleur\n"
+msgstr " val couleur\n"
 
 #: ../raster/r.colors/rules.c:178
 #, c-format
@@ -25232,7 +25234,7 @@ msgstr ""
 
 #: ../raster/r.profile/main.c:241
 msgid " RGB color"
-msgstr "Couleur RGB"
+msgstr " Couleur RGB"
 
 #: ../raster/r.profile/main.c:262
 #, c-format
@@ -29977,9 +29979,8 @@ msgid "flowStream opened: len=%lld\n"
 msgstr ""
 
 #: ../raster/r.terraflow/main.cpp:591
-#, fuzzy
 msgid "jumping to flow accumulation computation\n"
-msgstr "Nom du raster 3D des accumulations de flux en sortie"
+msgstr ""
 
 #: ../raster/r.terraflow/sweep.cpp:192
 msgid "Sweeping..."
@@ -31883,11 +31884,11 @@ msgstr "Quelle unité de mesure allez-vous utiliser pour le seuil du bassin :"
 
 #: ../raster/r.watershed/shed/com_line.c:146
 msgid " 1) acres,          2) meters sq., 3) miles sq., 4) hectares,"
-msgstr "1) acres, 2)mètres carrés, 3) miles carrés, 4)hectares,"
+msgstr " 1) acres, 2) mètres carrés, 3) miles carrés, 4) hectares,"
 
 #: ../raster/r.watershed/shed/com_line.c:148
 msgid " 5) kilometers sq., 6) map cells,  7) overland flow units"
-msgstr "5)kilomètres carrés, 6)cellules de couche raster, 7)unités de débit"
+msgstr " 5) kilomètres carrés, 6) cellules de couche raster, 7) unités de débit"
 
 #: ../raster/r.watershed/shed/com_line.c:149
 #, c-format
@@ -33554,7 +33555,7 @@ msgstr ""
 #, fuzzy, python-brace-format
 #| msgid "Unable to set projection"
 msgid "Unable to get the project: {error}"
-msgstr "Impossible de définir la projection"
+msgstr "Impossible d'obtenir le projet : {error}"
 
 #: ../scripts/g.download.project/g.download.project.py:119
 msgid "Searching for valid project..."

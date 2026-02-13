@@ -2,19 +2,21 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2026.
+# Abhimanyu <abhimanyupg04@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-31 15:57+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"POT-Creation-Date: 2026-02-09 19:55+0000\n"
+"PO-Revision-Date: 2026-02-11 07:01+0000\n"
+"Last-Translator: Abhimanyu  <abhimanyupg04@gmail.com>\n"
+"Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grasslibs-8-5/hi/>\n"
 "Language: hi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: ../lib/arraystats/class.c:22
 #, c-format
@@ -1024,7 +1026,7 @@ msgstr ""
 
 #: ../lib/gis/error.c:348
 msgid "unknown"
-msgstr ""
+msgstr "अज्ञात"
 
 #: ../lib/gis/error.c:366
 msgid "WARNING: "
@@ -2559,7 +2561,7 @@ msgstr ""
 #. GTC: localized units
 #: ../lib/gis/units.c:230
 msgid "meters"
-msgstr ""
+msgstr "मीटर"
 
 #. GTC: localized units
 #: ../lib/gis/units.c:232
@@ -2579,7 +2581,7 @@ msgstr ""
 #. GTC: localized units
 #: ../lib/gis/units.c:245
 msgid "kilometers"
-msgstr ""
+msgstr "किलोमीटर"
 
 #. GTC: localized units
 #: ../lib/gis/units.c:247
@@ -2589,7 +2591,7 @@ msgstr ""
 #. GTC: localized area units
 #: ../lib/gis/units.c:254
 msgid "acres"
-msgstr ""
+msgstr "एकड़"
 
 #. GTC: localized area units
 #: ../lib/gis/units.c:256
@@ -2599,7 +2601,7 @@ msgstr ""
 #. GTC: localized area units
 #: ../lib/gis/units.c:266
 msgid "hectares"
-msgstr ""
+msgstr "हेक्टेयर"
 
 #. GTC: localized area units
 #: ../lib/gis/units.c:268
@@ -2619,7 +2621,7 @@ msgstr ""
 #. GTC: localized units
 #: ../lib/gis/units.c:284
 msgid "miles"
-msgstr ""
+msgstr "मील"
 
 #. GTC: localized units
 #: ../lib/gis/units.c:286
@@ -2639,7 +2641,7 @@ msgstr ""
 #. GTC: localized units, do not confuse with US feet
 #: ../lib/gis/units.c:299
 msgid "feet"
-msgstr ""
+msgstr "फीट"
 
 #. GTC: localized units, do not confuse with US foot
 #: ../lib/gis/units.c:301
@@ -2694,7 +2696,7 @@ msgstr ""
 #. GTC: localized time units
 #: ../lib/gis/units.c:339
 msgid "year"
-msgstr ""
+msgstr "वर्ष"
 
 #. GTC: localized time units
 #: ../lib/gis/units.c:345
@@ -2704,7 +2706,7 @@ msgstr ""
 #. GTC: localized time units
 #: ../lib/gis/units.c:347
 msgid "month"
-msgstr ""
+msgstr "महीना"
 
 #. GTC: localized time units
 #: ../lib/gis/units.c:353
@@ -2714,7 +2716,7 @@ msgstr ""
 #. GTC: localized time units
 #: ../lib/gis/units.c:355
 msgid "day"
-msgstr ""
+msgstr "दिन"
 
 #. GTC: localized time units
 #: ../lib/gis/units.c:361
@@ -2724,7 +2726,7 @@ msgstr ""
 #. GTC: localized time units
 #: ../lib/gis/units.c:363
 msgid "hour"
-msgstr ""
+msgstr "घंटा"
 
 #. GTC: localized time units
 #: ../lib/gis/units.c:369
@@ -2734,7 +2736,7 @@ msgstr ""
 #. GTC: localized time units
 #: ../lib/gis/units.c:371
 msgid "minute"
-msgstr ""
+msgstr "मिनट"
 
 #. GTC: localized time units
 #: ../lib/gis/units.c:377
@@ -2744,7 +2746,7 @@ msgstr ""
 #. GTC: localized time units
 #: ../lib/gis/units.c:379
 msgid "second"
-msgstr ""
+msgstr "सेकंड"
 
 #: ../lib/gis/view.c:166
 #, c-format
