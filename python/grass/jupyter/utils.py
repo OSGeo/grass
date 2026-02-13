@@ -309,20 +309,18 @@ def estimate_resolution(
 
     :return estimate: estimated resolution of raster in destination environment
     """
-    output = gs.read_command(
-        "r.proj",
+    tools = Tools(env=env)
+    result = tools.r_proj(
         flags="g",
         input=raster,
         mapset=mapset,
         project=location,
         dbase=dbase,
-        env=env,
-    ).strip()
-    params = gs.parse_key_val(output, vsep=" ")
-    output = gs.read_command("g.region", flags="ug", env=env, **params)
-    keyval = gs.parse_key_val(output, val_type=float)
-    cell_ns = (keyval["n"] - keyval["s"]) / keyval["rows"]
-    cell_ew = (keyval["e"] - keyval["w"]) / keyval["cols"]
+    )
+    params = gs.parse_key_val(result.text.strip(), vsep=" ")
+    region = tools.g_region(flags="u", format="json", **params).json
+    cell_ns = (region["n"] - region["s"]) / region["rows"]
+    cell_ew = (region["e"] - region["w"]) / region["cols"]
     return (cell_ew + cell_ns) / 2.0
 
 
@@ -357,15 +355,14 @@ def set_target_region(src_env, tgt_env):
     to_proj = get_location_proj_string(env=tgt_env)
     new_region = reproject_region(region, from_proj, to_proj)
     # Set region to match original region extent
-    gs.run_command(
-        "g.region",
+    tools = Tools(env=tgt_env)
+    tools.g_region(
         n=new_region["north"],
         s=new_region["south"],
         e=new_region["east"],
         w=new_region["west"],
         rows=new_region["rows"],
         cols=new_region["cols"],
-        env=tgt_env,
     )
 
 
@@ -425,7 +422,8 @@ def save_vector(name, geo_json):
         for each in geo_json["features"]:
             each["properties"].clear()
         json.dump(geo_json, temp_file)
-    gs.run_command("v.import", input=temp_filename, output=name)
+    tools = Tools()
+    tools.v_import(input=temp_filename, output=name)
     os.remove(temp_filename)
 
 
@@ -448,28 +446,31 @@ def get_number_of_cores(requested, env=None):
     return min(requested, max(1, num_cores - 1))
 
 
-def get_region_bounds_latlon():
+def get_region_bounds_latlon(env=None):
     """Gets the current computational region bounds in latlon.
 
+    :param env: optional environment dictionary
     :return list of tuples: represent the southwest and northeast
                             corners of the region in (latitude, longitude) format.
     """
-    region = gs.parse_command("g.region", flags="gbp")
+    tools = Tools(env=env)
+    region = tools.g_region(flags="gbp", format="json").json
     return [
         (float(region["ll_s"]), float(region["ll_w"])),
         (float(region["ll_n"]), float(region["ll_e"])),
     ]
 
 
-def update_region(region):
+def update_region(region, env=None):
     """Updates the computational region bounds.
 
     :param dict region: region dictionary
+    :param env: optional environment dictionary
     :return: the new region
     """
-    current = gs.region()
-    return gs.parse_command(
-        "g.region",
+    current = gs.region(env=env)
+    tools = Tools(env=env)
+    return tools.g_region(
         flags="p" if gs.locn_is_latlong() else "pa",
         n=region["north"],
         s=region["south"],
@@ -478,7 +479,7 @@ def update_region(region):
         nsres=current["nsres"],
         ewres=current["ewres"],
         format="json",
-    )
+    ).json
 
 
 def save_gif(
