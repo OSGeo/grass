@@ -64,7 +64,7 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>node</term></tig></langSet>
-                <langSet xml:lang="fr"><tig><term/></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>noeud</term></tig></langSet>
             </termEntry>
             <termEntry id="coordinate reference system, we use CRS instead of SRS https://en.wikipedia.org/wiki/Spatial_reference_system">
                 <langSet xml:lang="en"><tig><term>CRS</term></tig></langSet>
@@ -114,7 +114,7 @@
             </termEntry>
             <termEntry id="1">
                 <langSet xml:lang="en"><tig><term>line</term></tig></langSet>
-                <langSet xml:lang="fr"><tig><term/></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>ligne</term></tig></langSet>
                 <descrip>Line of a file</descrip>
             </termEntry>
             <termEntry id="Feature type">
@@ -137,12 +137,12 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>line</term></tig></langSet>
-                <langSet xml:lang="fr"><tig><term></term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term/></tig></langSet>
                 <descrip>Feature type</descrip>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>JavaScript Object Notation</term></tig></langSet>
-                <langSet xml:lang="fr"><tig><term></term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>JavaScript Object Notation</term></tig></langSet>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>quantile</term></tig></langSet>
@@ -163,6 +163,46 @@
                 <langSet xml:lang="fr"><tig><term>netCDF</term></tig></langSet>
                 <note from="translator">File format</note>
                 <descrip>File format, Network Common Data Form, with lowercase n when not at the beginning of a sentence (in English)</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>unsupported</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>non supportée</term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>Data Catalog</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term></term></tig></langSet>
+                <descrip>In GUI</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>Map Displays</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term></term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>columns</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term></term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>module</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term></term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>tool</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term></term></tig></langSet>
+                <descrip>What each of our individual algorithms/programs are called. Were previously known as modules.</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>column</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term></term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>map display</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term></term></tig></langSet>
+                <note from="translator">GUI concept, where the map is shown</note>
+                <descrip>GUI concept, where the map is shown</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>mapset</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>jeu de cartes</term></tig></langSet>
             </termEntry>
         </body>
     </text>

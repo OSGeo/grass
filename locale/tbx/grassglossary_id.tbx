@@ -137,32 +137,72 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>JSON</term></tig></langSet>
-                <langSet xml:lang="id"><tig><term></term></tig></langSet>
+                <langSet xml:lang="id"><tig><term/></tig></langSet>
                 <descrip>JavaScript Object Notation, should be in uppercase</descrip>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>line</term></tig></langSet>
-                <langSet xml:lang="id"><tig><term></term></tig></langSet>
+                <langSet xml:lang="id"><tig><term/></tig></langSet>
                 <descrip>Feature type</descrip>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>quantile</term></tig></langSet>
-                <langSet xml:lang="id"><tig><term></term></tig></langSet>
+                <langSet xml:lang="id"><tig><term/></tig></langSet>
                 <note from="translator">Statistical measure</note>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>raster</term></tig></langSet>
-                <langSet xml:lang="id"><tig><term></term></tig></langSet>
+                <langSet xml:lang="id"><tig><term/></tig></langSet>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>JavaScript Object Notation</term></tig></langSet>
-                <langSet xml:lang="id"><tig><term></term></tig></langSet>
+                <langSet xml:lang="id"><tig><term/></tig></langSet>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>netCDF</term></tig></langSet>
-                <langSet xml:lang="id"><tig><term></term></tig></langSet>
+                <langSet xml:lang="id"><tig><term/></tig></langSet>
                 <note from="translator">File format</note>
                 <descrip>File format, Network Common Data Form, with lowercase n when not at the beginning of a sentence (in English)</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>unsupported</term></tig></langSet>
+                <langSet xml:lang="id"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>Data Catalog</term></tig></langSet>
+                <langSet xml:lang="id"><tig><term></term></tig></langSet>
+                <descrip>In GUI</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>Map Displays</term></tig></langSet>
+                <langSet xml:lang="id"><tig><term></term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>columns</term></tig></langSet>
+                <langSet xml:lang="id"><tig><term></term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>module</term></tig></langSet>
+                <langSet xml:lang="id"><tig><term></term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>tool</term></tig></langSet>
+                <langSet xml:lang="id"><tig><term></term></tig></langSet>
+                <descrip>What each of our individual algorithms/programs are called. Were previously known as modules.</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>map display</term></tig></langSet>
+                <langSet xml:lang="id"><tig><term></term></tig></langSet>
+                <note from="translator">GUI concept, where the map is shown</note>
+                <descrip>GUI concept, where the map is shown</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>column</term></tig></langSet>
+                <langSet xml:lang="id"><tig><term></term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>mapset</term></tig></langSet>
+                <langSet xml:lang="id"><tig><term></term></tig></langSet>
             </termEntry>
         </body>
     </text>

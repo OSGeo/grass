@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_tr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-31 15:57+0000\n"
+"POT-Creation-Date: 2026-02-07 15:45+0000\n"
 "PO-Revision-Date: 2025-07-26 01:37+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Turkish <https://weblate.osgeo.org/projects/grass-gis/grassmods/tr/>\n"
@@ -346,8 +346,8 @@ msgstr ""
 #: ../general/g.version/main.c:134 ../misc/m.measure/main.c:87
 #: ../raster/r.describe/dumplist.c:38 ../raster/r.distance/report.c:211
 #: ../raster/r.distance/report.c:218 ../raster/r.distance/report.c:225
-#: ../raster/r.info/main.c:147 ../raster/r.proj/main.c:481
-#: ../raster/r.regression.line/main.c:101
+#: ../raster/r.info/main.c:147 ../raster/r.kappa/print_json.c:25
+#: ../raster/r.proj/main.c:481 ../raster/r.regression.line/main.c:101
 #: ../raster/r.regression.multi/main.c:197
 #: ../raster/r.regression.multi/main.c:566
 #: ../raster/r.stats.quantile/main.c:430 ../raster/r.stats.quantile/main.c:447
@@ -3172,17 +3172,21 @@ msgstr ""
 #: ../raster/r.in.xyz/main.c:225 ../raster/r.in.xyz/main.c:236
 #: ../raster/r.in.xyz/main.c:246 ../raster/r.random/main.c:65
 #: ../raster/r.random/main.c:71 ../raster/r.random/main.c:95
-#: ../raster/r.random/main.c:101 ../raster/r.sim/r.sim.sediment/main.c:157
-#: ../raster/r.sim/r.sim.sediment/main.c:165
+#: ../raster/r.random/main.c:101 ../raster/r.sim/r.sim.sediment/main.c:135
+#: ../raster/r.sim/r.sim.sediment/main.c:142
+#: ../raster/r.sim/r.sim.sediment/main.c:163
 #: ../raster/r.sim/r.sim.sediment/main.c:171
-#: ../raster/r.sim/r.sim.water/main.c:137
-#: ../raster/r.sim/r.sim.water/main.c:145
-#: ../raster/r.sim/r.sim.water/main.c:152
-#: ../raster/r.sim/r.sim.water/main.c:161
+#: ../raster/r.sim/r.sim.sediment/main.c:177
+#: ../raster/r.sim/r.sim.water/main.c:129
+#: ../raster/r.sim/r.sim.water/main.c:136
+#: ../raster/r.sim/r.sim.water/main.c:143
+#: ../raster/r.sim/r.sim.water/main.c:151
+#: ../raster/r.sim/r.sim.water/main.c:158
 #: ../raster/r.sim/r.sim.water/main.c:167
-#: ../raster/r.sim/r.sim.water/main.c:175
-#: ../raster/r.sim/r.sim.water/main.c:182
-#: ../raster/r.sim/r.sim.water/main.c:188 ../raster/r.spread/main.c:121
+#: ../raster/r.sim/r.sim.water/main.c:173
+#: ../raster/r.sim/r.sim.water/main.c:181
+#: ../raster/r.sim/r.sim.water/main.c:188
+#: ../raster/r.sim/r.sim.water/main.c:194 ../raster/r.spread/main.c:121
 #: ../raster/r.spread/main.c:136 ../raster/r.spread/main.c:147
 #: ../raster/r.spread/main.c:162 ../raster/r.spread/main.c:175
 #: ../raster/r.spread/main.c:187 ../raster/r.spread/main.c:200
@@ -8014,19 +8018,19 @@ msgstr "Çıktı raster haritasının adı"
 #: ../raster/r.resamp.rst/main.c:178 ../raster/r.resamp.rst/main.c:184
 #: ../raster/r.resamp.rst/main.c:191 ../raster/r.resamp.rst/main.c:198
 #: ../raster/r.resamp.rst/main.c:204 ../raster/r.resamp.rst/main.c:267
-#: ../raster/r.sim/r.sim.sediment/main.c:178
-#: ../raster/r.sim/r.sim.sediment/main.c:185
-#: ../raster/r.sim/r.sim.sediment/main.c:192
-#: ../raster/r.sim/r.sim.sediment/main.c:199
-#: ../raster/r.sim/r.sim.sediment/main.c:206
-#: ../raster/r.sim/r.sim.sediment/main.c:214
-#: ../raster/r.sim/r.sim.sediment/main.c:221
-#: ../raster/r.sim/r.sim.water/main.c:194
-#: ../raster/r.sim/r.sim.water/main.c:201
-#: ../raster/r.sim/r.sim.water/main.c:208
-#: ../raster/r.sim/r.sim.water/main.c:215
-#: ../raster/r.sim/r.sim.water/main.c:223
-#: ../raster/r.sim/r.sim.water/main.c:310 ../raster/r.spread/main.c:287
+#: ../raster/r.sim/r.sim.sediment/main.c:184
+#: ../raster/r.sim/r.sim.sediment/main.c:191
+#: ../raster/r.sim/r.sim.sediment/main.c:198
+#: ../raster/r.sim/r.sim.sediment/main.c:205
+#: ../raster/r.sim/r.sim.sediment/main.c:212
+#: ../raster/r.sim/r.sim.sediment/main.c:220
+#: ../raster/r.sim/r.sim.sediment/main.c:227
+#: ../raster/r.sim/r.sim.water/main.c:200
+#: ../raster/r.sim/r.sim.water/main.c:207
+#: ../raster/r.sim/r.sim.water/main.c:214
+#: ../raster/r.sim/r.sim.water/main.c:221
+#: ../raster/r.sim/r.sim.water/main.c:229
+#: ../raster/r.sim/r.sim.water/main.c:316 ../raster/r.spread/main.c:287
 #: ../raster/r.spread/main.c:298 ../raster/r.spread/main.c:309
 #: ../raster/r.sun/main.c:399 ../raster/r.sun/main.c:409
 #: ../raster/r.sun/main.c:419 ../raster/r.sun/main.c:429
@@ -8711,21 +8715,21 @@ msgstr ""
 #: ../imagery/i.eb.hsebal01/main.c:144 ../imagery/i.eb.hsebal01/main.c:151
 #: ../imagery/i.eb.hsebal01/main.c:158 ../imagery/i.eb.hsebal01/main.c:165
 #: ../imagery/i.eb.hsebal01/main.c:172
-#: ../raster/r.sim/r.sim.sediment/main.c:228
-#: ../raster/r.sim/r.sim.sediment/main.c:236
-#: ../raster/r.sim/r.sim.sediment/main.c:248
-#: ../raster/r.sim/r.sim.sediment/main.c:257
-#: ../raster/r.sim/r.sim.sediment/main.c:275
-#: ../raster/r.sim/r.sim.sediment/main.c:300
-#: ../raster/r.sim/r.sim.water/main.c:231
-#: ../raster/r.sim/r.sim.water/main.c:239
-#: ../raster/r.sim/r.sim.water/main.c:251
-#: ../raster/r.sim/r.sim.water/main.c:260
-#: ../raster/r.sim/r.sim.water/main.c:278
-#: ../raster/r.sim/r.sim.water/main.c:288
-#: ../raster/r.sim/r.sim.water/main.c:296
-#: ../raster/r.sim/r.sim.water/main.c:305
-#: ../raster/r.sim/r.sim.water/main.c:335 ../vector/v.surf.rst/main.c:165
+#: ../raster/r.sim/r.sim.sediment/main.c:234
+#: ../raster/r.sim/r.sim.sediment/main.c:242
+#: ../raster/r.sim/r.sim.sediment/main.c:254
+#: ../raster/r.sim/r.sim.sediment/main.c:263
+#: ../raster/r.sim/r.sim.sediment/main.c:281
+#: ../raster/r.sim/r.sim.sediment/main.c:306
+#: ../raster/r.sim/r.sim.water/main.c:237
+#: ../raster/r.sim/r.sim.water/main.c:245
+#: ../raster/r.sim/r.sim.water/main.c:257
+#: ../raster/r.sim/r.sim.water/main.c:266
+#: ../raster/r.sim/r.sim.water/main.c:284
+#: ../raster/r.sim/r.sim.water/main.c:294
+#: ../raster/r.sim/r.sim.water/main.c:302
+#: ../raster/r.sim/r.sim.water/main.c:311
+#: ../raster/r.sim/r.sim.water/main.c:341 ../vector/v.surf.rst/main.c:165
 #: ../vector/v.surf.rst/main.c:170 ../vector/v.surf.rst/main.c:193
 #: ../vector/v.surf.rst/main.c:268 ../vector/v.surf.rst/main.c:274
 #: ../vector/v.surf.rst/main.c:282 ../vector/v.surf.rst/main.c:291
@@ -22958,10 +22962,15 @@ msgstr ""
 msgid "Cannot open file <%s> to write header"
 msgstr "<%s> dosyası üstbilgi yazmak için açılamıyor"
 
-#: ../raster/r.kappa/print_json.c:19
+#: ../raster/r.kappa/print_json.c:21
 #, fuzzy, c-format
 msgid "Cannot open file <%s> to write JSON output"
 msgstr "<%s> dosyası üstbilgi yazmak için açılamıyor"
+
+#: ../raster/r.kappa/print_json.c:131
+#, fuzzy
+msgid "Failed to serialize JSON"
+msgstr "<%s> dosyası oluşturulamıyor"
 
 #: ../raster/r.kappa/print_kappa.c:16
 #, c-format
@@ -27377,181 +27386,188 @@ msgstr ""
 msgid "Name of water depth raster map [m]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:132
-#: ../raster/r.sim/r.sim.water/main.c:126
+#: ../raster/r.sim/r.sim.sediment/main.c:133
+#: ../raster/r.sim/r.sim.water/main.c:127
 msgid "Name of x-derivatives raster map [m/m]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:136
-#: ../raster/r.sim/r.sim.water/main.c:130
+#: ../raster/r.sim/r.sim.sediment/main.c:134
+#: ../raster/r.sim/r.sim.sediment/main.c:141
+#: ../raster/r.sim/r.sim.water/main.c:128
+#: ../raster/r.sim/r.sim.water/main.c:135
+msgid "Computed from elevation map if not given"
+msgstr ""
+
+#: ../raster/r.sim/r.sim.sediment/main.c:140
+#: ../raster/r.sim/r.sim.water/main.c:134
 msgid "Name of y-derivatives raster map [m/m]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:141
+#: ../raster/r.sim/r.sim.sediment/main.c:147
 msgid "Name of detachment capacity coefficient raster map [s/m]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:146
+#: ../raster/r.sim/r.sim.sediment/main.c:152
 msgid "Name of transport capacity coefficient raster map [s]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:151
+#: ../raster/r.sim/r.sim.sediment/main.c:157
 msgid "Name of critical shear stress raster map [Pa]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:156
-#: ../raster/r.sim/r.sim.water/main.c:166
+#: ../raster/r.sim/r.sim.sediment/main.c:162
+#: ../raster/r.sim/r.sim.water/main.c:172
 msgid "Name of Manning's n raster map"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:164
-#: ../raster/r.sim/r.sim.water/main.c:174
+#: ../raster/r.sim/r.sim.sediment/main.c:170
+#: ../raster/r.sim/r.sim.water/main.c:180
 msgid "Manning's n unique value"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:170
-#: ../raster/r.sim/r.sim.water/main.c:187
+#: ../raster/r.sim/r.sim.sediment/main.c:176
+#: ../raster/r.sim/r.sim.water/main.c:193
 msgid "Name of sampling locations vector points map"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:177
+#: ../raster/r.sim/r.sim.sediment/main.c:183
 msgid "Name for output transport capacity raster map [kg/ms]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:183
+#: ../raster/r.sim/r.sim.sediment/main.c:189
 msgid "Name for output transport limited erosion-deposition raster map [kg/m2s]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:191
+#: ../raster/r.sim/r.sim.sediment/main.c:197
 msgid "Name for output sediment concentration raster map [particle/m3]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:198
+#: ../raster/r.sim/r.sim.sediment/main.c:204
 msgid "Name for output sediment flux raster map [kg/ms]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:205
+#: ../raster/r.sim/r.sim.sediment/main.c:211
 msgid "Name for output erosion-deposition raster map [kg/m2s]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:212
+#: ../raster/r.sim/r.sim.sediment/main.c:218
 msgid "Name for sampling points output text file. For each observation vector point the time series of sediment transport is stored."
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:220
-#: ../raster/r.sim/r.sim.water/main.c:214
+#: ../raster/r.sim/r.sim.sediment/main.c:226
+#: ../raster/r.sim/r.sim.water/main.c:220
 msgid "Base name of the output walkers vector points map"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:227
+#: ../raster/r.sim/r.sim.sediment/main.c:233
 msgid "Number of walkers"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:235
-#: ../raster/r.sim/r.sim.water/main.c:238
+#: ../raster/r.sim/r.sim.sediment/main.c:241
+#: ../raster/r.sim/r.sim.water/main.c:244
 msgid "Time used for iterations [minutes]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:244
-#: ../raster/r.sim/r.sim.water/main.c:247
+#: ../raster/r.sim/r.sim.sediment/main.c:250
+#: ../raster/r.sim/r.sim.water/main.c:253
 msgid "Minimum time step for the simulation [seconds]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:246
-#: ../raster/r.sim/r.sim.water/main.c:249
+#: ../raster/r.sim/r.sim.sediment/main.c:252
+#: ../raster/r.sim/r.sim.water/main.c:255
 msgid "A larger minimum time step substantially reduces processing time, but at the cost of accuracy"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:256
-#: ../raster/r.sim/r.sim.water/main.c:259
+#: ../raster/r.sim/r.sim.sediment/main.c:262
+#: ../raster/r.sim/r.sim.water/main.c:265
 msgid "Time interval for creating output maps [minutes]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:274
-#: ../raster/r.sim/r.sim.water/main.c:277
+#: ../raster/r.sim/r.sim.sediment/main.c:280
+#: ../raster/r.sim/r.sim.water/main.c:283
 msgid "Water diffusion constant"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:281
-#: ../raster/r.sim/r.sim.water/main.c:316
+#: ../raster/r.sim/r.sim.sediment/main.c:287
+#: ../raster/r.sim/r.sim.water/main.c:322
 msgid "Seed for random number generator"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:283
-#: ../raster/r.sim/r.sim.water/main.c:318
+#: ../raster/r.sim/r.sim.sediment/main.c:289
+#: ../raster/r.sim/r.sim.water/main.c:324
 msgid "The same seed can be used to obtain same results or random seed can be generated by other means."
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:288
-#: ../raster/r.sim/r.sim.water/main.c:323
+#: ../raster/r.sim/r.sim.sediment/main.c:294
+#: ../raster/r.sim/r.sim.water/main.c:329
 msgid "Generate random seed"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:290
-#: ../raster/r.sim/r.sim.water/main.c:325
+#: ../raster/r.sim/r.sim.sediment/main.c:296
+#: ../raster/r.sim/r.sim.water/main.c:331
 msgid "Automatically generates random seed for random number generator (use when you don't want to provide the seed option)"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:299
-#: ../raster/r.sim/r.sim.water/main.c:334
+#: ../raster/r.sim/r.sim.sediment/main.c:305
+#: ../raster/r.sim/r.sim.water/main.c:340
 #, fuzzy
 msgid "Number of threads which will be used for parallel computation."
 msgstr "<%s> için kullanılacak katman sayısı"
 
-#: ../raster/r.sim/r.sim.sediment/main.c:307
-#: ../raster/r.sim/r.sim.water/main.c:342
+#: ../raster/r.sim/r.sim.sediment/main.c:314
+#: ../raster/r.sim/r.sim.water/main.c:350
 #, c-format
 msgid "Generated random seed (-s): %ld"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:312
-#: ../raster/r.sim/r.sim.water/main.c:347 ../raster/r.surf.fractal/main.c:68
+#: ../raster/r.sim/r.sim.sediment/main.c:319
+#: ../raster/r.sim/r.sim.water/main.c:355 ../raster/r.surf.fractal/main.c:68
 #: ../raster/r.surf.gauss/main.c:69 ../raster/r.surf.random/main.c:118
 #, c-format
 msgid "Read random seed from %s option: %ld"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:368
-#: ../raster/r.sim/r.sim.water/main.c:418 ../vector/v.surf.rst/main.c:413
+#: ../raster/r.sim/r.sim.sediment/main.c:375
+#: ../raster/r.sim/r.sim.water/main.c:426 ../vector/v.surf.rst/main.c:413
 #, c-format
 msgid "<%d> is not valid number of threads. Number of threads will be set on <%d>"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:374
-#: ../raster/r.sim/r.sim.water/main.c:424 ../raster/r.sun/main.c:594
+#: ../raster/r.sim/r.sim.sediment/main.c:381
+#: ../raster/r.sim/r.sim.water/main.c:432 ../raster/r.sun/main.c:594
 #: ../vector/v.surf.rst/main.c:427
 msgid "Parallel processing disabled due to active mask."
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:382
-#: ../raster/r.sim/r.sim.water/main.c:432
+#: ../raster/r.sim/r.sim.sediment/main.c:389
+#: ../raster/r.sim/r.sim.water/main.c:440
 #, c-format
 msgid "Number of threads: %d"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:397
-#: ../raster/r.sim/r.sim.water/main.c:526
+#: ../raster/r.sim/r.sim.sediment/main.c:404
+#: ../raster/r.sim/r.sim.water/main.c:534
 msgid "More than 100 files are going to be created !!!!!"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:403
-#: ../raster/r.sim/r.sim.water/main.c:532
+#: ../raster/r.sim/r.sim.sediment/main.c:410
+#: ../raster/r.sim/r.sim.water/main.c:540
 #, c-format
 msgid "default nwalk=%d, rwalk=%f"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:412
-#: ../raster/r.sim/r.sim.water/main.c:542
+#: ../raster/r.sim/r.sim.sediment/main.c:419
+#: ../raster/r.sim/r.sim.water/main.c:550
 #, c-format
 msgid "Using metric conversion factor %f, step=%f"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:422
+#: ../raster/r.sim/r.sim.sediment/main.c:429
 msgid "You are not outputting any raster or site files"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:426
-#: ../raster/r.sim/r.sim.water/main.c:556 ../vector/v.surf.rst/main.c:688
+#: ../raster/r.sim/r.sim.sediment/main.c:432
+#: ../raster/r.sim/r.sim.water/main.c:563 ../vector/v.surf.rst/main.c:688
 #: ../vector/v.surf.rst/main.c:760 ../vector/v.vol.rst/main.c:911
 msgid "Input failed"
 msgstr "Girdi hatalı"
@@ -27569,67 +27585,67 @@ msgstr ""
 msgid "Overland flow hydrologic simulation using path sampling method (SIMWE)."
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:136
+#: ../raster/r.sim/r.sim.water/main.c:142
 msgid "Name of rainfall excess rate (rain-infilt) raster map [mm/hr]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:144
+#: ../raster/r.sim/r.sim.water/main.c:150
 msgid "Rainfall excess rate unique value [mm/hr]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:151
+#: ../raster/r.sim/r.sim.water/main.c:157
 msgid "Name of runoff infiltration rate raster map [mm/hr]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:160
+#: ../raster/r.sim/r.sim.water/main.c:166
 msgid "Runoff infiltration rate unique value [mm/hr]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:181
+#: ../raster/r.sim/r.sim.water/main.c:187
 msgid "Name of flow controls raster map (permeability ratio 0-1)"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:193
+#: ../raster/r.sim/r.sim.water/main.c:199
 msgid "Name for output water depth raster map [m]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:200
+#: ../raster/r.sim/r.sim.water/main.c:206
 msgid "Name for output water discharge raster map [m3/s]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:207
+#: ../raster/r.sim/r.sim.water/main.c:213
 msgid "Name for output simulation error raster map [m]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:221
+#: ../raster/r.sim/r.sim.water/main.c:227
 msgid "Name for sampling points output text file. For each observation vector point the time series of water discharge is stored."
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:230
+#: ../raster/r.sim/r.sim.water/main.c:236
 msgid "Number of walkers, default is twice the number of cells"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:285
+#: ../raster/r.sim/r.sim.water/main.c:291
 msgid "Threshold water depth [m]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:287
+#: ../raster/r.sim/r.sim.water/main.c:293
 msgid "Diffusion increases after this water depth is reached"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:295
+#: ../raster/r.sim/r.sim.water/main.c:301
 msgid "Diffusion increase constant"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:304
+#: ../raster/r.sim/r.sim.water/main.c:310
 msgid "Weighting factor for water flow velocity vector"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:309
+#: ../raster/r.sim/r.sim.water/main.c:315
 msgid "Time-series output"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:552
+#: ../raster/r.sim/r.sim.water/main.c:560
 msgid "You are not outputting any raster maps"
 msgstr ""
 
@@ -27646,74 +27662,74 @@ msgstr "Raster harita yazılamıyor"
 msgid "Cannot write raster maps"
 msgstr "Raster haritalar yazılamıyor"
 
-#: ../raster/r.sim/simlib/input.c:113
+#: ../raster/r.sim/simlib/input.c:123
 msgid "Manning's n raster map not found and manin_val undefined, choose one to be allowed to process"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:232
+#: ../raster/r.sim/simlib/input.c:242
 msgid "Zero value in Mannings n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:295
+#: ../raster/r.sim/simlib/input.c:305
 msgid "Infiltration exceeds the rainfall rate everywhere! No overland flow."
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:298
+#: ../raster/r.sim/simlib/input.c:308
 #, fuzzy
 msgid "No values in the elevation raster."
 msgstr "Yükselti raster haritası adı"
 
-#: ../raster/r.sim/simlib/input.c:333
+#: ../raster/r.sim/simlib/input.c:343
 #, c-format
 msgid ""
 "Min elevation \t= %.2f m\n"
 "Max elevation \t= %.2f m\n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:335
+#: ../raster/r.sim/simlib/input.c:345
 #, c-format
 msgid "Mean Source Rate (rainf. excess or sediment) \t= %f m/s or kg/m2s \n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:338
+#: ../raster/r.sim/simlib/input.c:348
 #, c-format
 msgid "Mean flow velocity \t= %f m/s\n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:342
+#: ../raster/r.sim/simlib/input.c:352
 #, c-format
 msgid "Mean Mannings \t= %f\n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:344
+#: ../raster/r.sim/simlib/input.c:354
 msgid "Mean Mannings \t= undefined (chmean is zero)\n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:348
+#: ../raster/r.sim/simlib/input.c:358
 #, c-format
 msgid "Number of iterations \t= %d cell\n"
 msgid_plural "Number of iterations \t= %d cells\n"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../raster/r.sim/simlib/input.c:351
+#: ../raster/r.sim/simlib/input.c:361
 #, c-format
 msgid "Time step \t= %.2f s\n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:353
+#: ../raster/r.sim/simlib/input.c:363
 #, c-format
 msgid ""
 "Sigmax \t= %f\n"
 "Max velocity \t= %f m/s\n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:354
+#: ../raster/r.sim/simlib/input.c:364
 #, c-format
 msgid "Time step used \t= %.2f s\n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:407
+#: ../raster/r.sim/simlib/input.c:417
 msgid "Unable to write et file"
 msgstr ""
 
