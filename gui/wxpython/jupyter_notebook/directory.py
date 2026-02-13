@@ -198,7 +198,7 @@ class JupyterDirectoryManager:
 
     def create_welcome_notebook(self, template_name="welcome.ipynb"):
         """
-        Create a welcome notebook with working directory and mapset placeholders replaced.
+        Create a welcome notebook with working directory and mapset path placeholders replaced.
 
         :param template_name: Template filename (default: ``welcome.ipynb``).
         :return: Path to the created notebook (Path).
@@ -207,8 +207,8 @@ class JupyterDirectoryManager:
         env = gs.gisenv()
         mapset_path = Path(env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"])
         replacements = {
-            "${NOTEBOOK_DIR}": str(self._workdir).replace("\\", "/"),
-            "${NOTEBOOK_MAPSET}": str(mapset_path).replace("\\", "/"),
+            "${WORKING_DIR}": str(self._workdir).replace("\\", "/"),
+            "${MAPSET_PATH}": str(mapset_path).replace("\\", "/"),
         }
 
         # Create notebook from template
@@ -216,7 +216,7 @@ class JupyterDirectoryManager:
 
     def create_new_notebook(self, new_name, template_name="new.ipynb"):
         """
-        Create a new notebook from a template with only mapset placeholder replaced.
+        Create a new notebook from a template with only mapset path placeholder replaced.
 
         :param new_name: Desired notebook filename.
         :param template_name: Template filename (default: ``new.ipynb``).
@@ -236,7 +236,7 @@ class JupyterDirectoryManager:
         env = gs.gisenv()
         mapset_path = Path(env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"])
         replacements = {
-            "${NOTEBOOK_MAPSET}": str(mapset_path).replace("\\", "/"),
+            "${MAPSET_PATH}": str(mapset_path).replace("\\", "/"),
         }
 
         # Create notebook from template under the new name
