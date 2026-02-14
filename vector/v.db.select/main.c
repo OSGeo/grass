@@ -337,11 +337,7 @@ int main(int argc, char **argv)
         root_value = G_json_value_init_object();
         root_object = G_json_value_get_object(root_value);
 
-        if (flags.region->answer) {
-            /* Extent output - structure will be built later */
-        }
-        else {
-            /* Build info.columns structure */
+        if (!flags.region->answer) {
             G_JSON_Value *info_value = G_json_value_init_object();
             info_object = G_json_value_get_object(info_value);
             columns_value = G_json_value_init_array();
@@ -370,7 +366,6 @@ int main(int argc, char **argv)
             G_json_object_set_value(info_object, "columns", columns_value);
             G_json_object_set_value(root_object, "info", info_value);
 
-            /* Initialize records array */
             records_value = G_json_value_init_array();
             records_array = G_json_array(records_value);
         }
@@ -441,9 +436,8 @@ int main(int argc, char **argv)
                  * Plain, vertical (optional): v7: \\ \r \n, v8 also: \t \f \b
                  */
                 if (flags.escape->answer) {
-                    /* Note: Parson library handles JSON escaping automatically,
-                     * so we only escape for non-JSON formats when flag is set
-                     */
+                    // Parson library handles JSON escaping automatically,
+                    // so we only escape for non-JSON formats when flag is set.
                     if (strchr(str, '\\'))
                         str = G_str_replace(str, "\\", "\\\\");
                     if (strchr(str, '\r'))
