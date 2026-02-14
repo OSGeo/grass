@@ -85,12 +85,12 @@ class JupyterServerInstance:
 
     def start_server(self, integrated=True):
         """
-        Start a Jupyter server in the given directory on a free port.
+        Start a Jupyter server in the working directory on a free port.
 
         :param integrated:
             - If False, the notebook is launched in the default web browser (external, no GUI integration).
             - If True (default), the server runs headless and is intended for integration into the GRASS GUI (suitable for embedded WebView).
-        :raises RuntimeError: If Jupyter is not installed, the directory is invalid,
+        :raises RuntimeError: If Jupyter is not installed, the working directory is invalid,
                             or the server fails to start.
         """
         # Validation checks
@@ -116,7 +116,12 @@ class JupyterServerInstance:
         # Check if Jupyter is available in PATH
         jupyter = shutil.which("jupyter")
         if not jupyter:
-            raise RuntimeError(_("Jupyter executable not found in PATH"))
+            raise RuntimeError(
+                _(
+                    "Jupyter executable not found in PATH. "
+                    "Please install Jupyter Notebook and ensure it is available in your system PATH."
+                )
+            )
 
         # Build command to start Jupyter Notebook server
         cmd = [
@@ -144,7 +149,11 @@ class JupyterServerInstance:
             self.pid = self.proc.pid
 
         except (OSError, ValueError, subprocess.SubprocessError) as e:
-            raise RuntimeError(_("Failed to start Jupyter server: {}").format(e)) from e
+            raise RuntimeError(
+                _(
+                    "Failed to start Jupyter server. Ensure all dependencies are installed and accessible: {}"
+                ).format(e)
+            ) from e
 
         # Check if the server is up
         if not self.is_server_running():
@@ -157,7 +166,12 @@ class JupyterServerInstance:
                 pass
 
             self._reset_state()
-            raise RuntimeError(_("Jupyter server failed to start"))
+            raise RuntimeError(
+                _(
+                    "Failed to start Jupyter server. "
+                    "Check for port conflicts, missing dependencies, or insufficient permissions."
+                )
+            )
 
     def stop_server(self):
         """Stop the Jupyter server, ensuring no zombie processes.
