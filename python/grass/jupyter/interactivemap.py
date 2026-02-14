@@ -382,21 +382,33 @@ class InteractiveMap:
             self.layer_control_object = self._ipyleaflet.LayersControl(**kwargs)
 
     def add_legend(self, raster, position="bottomright"):
-        import subprocess
+        from grass.tools import Tools
+        import json
 
-        # Getting all in-built colour scheme for elevations
-        all_colours = subprocess.check_output(f"r.colors.out map={raster}", shell=True).decode("utf-8").strip()
-        colors = {}
-        last_ht = None
-        for colour in all_colours.split("\n"):
-            if "nv" in colour or "default" in colour:
-                continue
-            elev_col_info = colour.split()
-            ht = float(elev_col_info[0])
-            rgb = elev_col_info[1]
-            label = f"{last_ht:.1f} - {ht:.1f} m" if last_ht else f"≤ {ht:.1f} m"
-            colors[label] = f"rgb({rgb.replace(':', ',')})"
-            last_ht = ht
+        tools = Tools()
+        # Retrieving all the colors based on the above set color scheme
+        color_maps = tools.r_colors_out(map=raster, format='json')["table"]
+        # Each color width relative to total width of strip in percentage
+        color_width = 100/len(color_maps)
+        finished = 0
+        colors = []
+        for item in color_maps:
+            color=[]
+            for i in range(2):
+                color.append(item["color"] + f" {str(finished)}%")
+                if i != 1:
+                    finished += color_width
+            colors.extend(color)
+
+        css_gradient = ", ".join(colors)
+
+        # Setting some interval ticks to compare values relatively.
+        info = tools.r_info(map=raster, format='json').stdout
+        info = json.loads(info)
+        minv = float(info["min"])
+        maxv = float(info["max"])
+        num_ticks = len(color_maps) if len(color_maps) < 7 else 6
+        ticks = [minv + i * (maxv - minv) / (num_ticks - 1) for i in range(num_ticks)] if num_ticks > 1 else [minv]
 
         # Position Coordinates
         position_map = {
@@ -410,13 +422,10 @@ class InteractiveMap:
         # Creating legend
         legend_html = f"""
         <div style="
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            width: 300px;
             position: absolute;
             {pos_style}
             z-index: 9999;
-            min-width: 130px;
             padding: 5px;
             background: rgba(255, 255, 255, 0.3);
             backdrop-filter: blur(8px);
@@ -428,35 +437,24 @@ class InteractiveMap:
             font-size: 12px;
         ">
             <div style="
-                background: rgba(255, 255, 255, 0.5)
                 font-size: 14px;
                 font-weight: bold;
-                padding-bottom: 6px;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
                 color: black;
             ">
-                {raster.capitalize()} Map
+                {info.get("title", raster.capitalize() + " Map")}
             </div>
-            <div style="display: flex; flex-direction: column; gap: 6px;">
-        """
 
-        for label, color in colors.items():
-            legend_html += f"""
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="
-                        width: 20px;
-                        height: 20px;
-                        background: {color};
-                        border-radius: 4px;
-                        border: 1px solid rgba(255,255,255,0.5);
-                        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                    "></div>
-                    <span style="color: black;">{label}</span>
-                </div>
-            """
-
-        legend_html += """
+            <div style="
+                height: 15px;
+                border-radius: 6px;
+                border: 1px solid #999;
+                background: linear-gradient(to right, {css_gradient});
+            "></div>
+            
+            <div style="display: flex; justify-content: space-between;">
+                {''.join([f'<span>{round(t,1)}</span>' for t in ticks])}
             </div>
+        
         </div>
         """
 
@@ -469,7 +467,8 @@ class InteractiveMap:
             return self
 
         elif self._folium:
-            from branca.element import MacroElement
+            import folium
+            from folium.map import MacroElement
             from jinja2 import Template
 
             class Legend(MacroElement):
@@ -477,18 +476,19 @@ class InteractiveMap:
                     super().__init__()
                     self.html = html
                     self._name = "Legend"
-
-                def render(self, **kwargs):
-                    template = Template("""
-                        {% macro html(this, kwargs) %}
-                            {{ this.html|safe }}
+                    self._template = Template("""
+                        {% macro script(this, kwargs) %}
+                        var legend = $(`{{ this.html | safe }}`);
+                        $('body').append(legend);
                         {% endmacro %}
                     """)
-                    return template.module.html(self)
 
-            self.map.get_root().add_child(Legend(legend_html))
+                def render(self, **kwargs):
+                    super().render(**kwargs)
+
+            legend = Legend(legend_html)
+            self.map.add_child(legend)
             return self
-
 
         else:
             return self
