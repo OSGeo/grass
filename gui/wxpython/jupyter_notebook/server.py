@@ -104,14 +104,14 @@ class JupyterServerInstance:
                 _("Working directory is not writable: {}").format(self.workdir)
             )
 
-        if self.proc and self.is_alive():
+        if self.is_alive():
             raise RuntimeError(
                 _("Server is already running on port {}").format(self.port)
             )
 
         # Find free port and build server url
         self.port = JupyterServerInstance.find_free_port()
-        self.server_url = "http://localhost:{}".format(self.port)
+        self.server_url = "http://127.0.0.1:{}".format(self.port)
 
         # Check if Jupyter is available in PATH
         jupyter = shutil.which("jupyter")
@@ -143,10 +143,8 @@ class JupyterServerInstance:
             )
             self.pid = self.proc.pid
 
-        except Exception as e:
-            raise RuntimeError(
-                _("Failed to start Jupyter server: {}").format(str(e))
-            ) from e
+        except (OSError, ValueError, subprocess.SubprocessError) as e:
+            raise RuntimeError(_("Failed to start Jupyter server: {}").format(e)) from e
 
         # Check if the server is up
         if not self.is_server_running():
@@ -154,7 +152,8 @@ class JupyterServerInstance:
             try:
                 self.proc.kill()
                 self.proc.wait()
-            except Exception:
+                self.proc.wait(timeout=3)
+            except (OSError, subprocess.SubprocessError):
                 pass
 
             self._reset_state()
@@ -166,33 +165,28 @@ class JupyterServerInstance:
         :raises RuntimeError: If the server cannot be stopped.
         """
         if not self.proc or not self.pid:
-            return  # Already stopped, nothing to do
+            return
 
-        if self.proc.poll() is None:  # Still running
-            try:
-                self.proc.terminate()  # Send SIGTERM
-                self.proc.wait(timeout=5)  # Wait up to 5 seconds, reap zombie
-            except subprocess.TimeoutExpired:
-                # Force kill if terminate doesn't work
-                self.proc.kill()  # Send SIGKILL
-                self.proc.wait()  # Still need to reap after kill
-            except Exception as e:
-                # Even if there's an error, try to reap the zombie
+        try:
+            if self.proc.poll() is None:  # Still running
                 try:
-                    self.proc.wait(timeout=1)
-                except Exception:
-                    pass
-                raise RuntimeError(
-                    _("Error stopping Jupyter server (PID {}): {}").format(
-                        self.pid, str(e)
-                    )
-                ) from e
-        else:
-            # Process already terminated, just reap it
-            self.proc.wait()
+                    self.proc.terminate()  # Send SIGTERM
+                    self.proc.wait(timeout=5)  # Wait up to 5 seconds, reap zombie
+                except subprocess.TimeoutExpired:
+                    # Force kill if terminate doesn't work
+                    self.proc.kill()  # Send SIGKILL
+                    self.proc.wait()  # Still need to reap after kill
+            else:
+                # already finished, just reap
+                self.proc.wait()
+        except (OSError, subprocess.SubprocessError) as e:
+            raise RuntimeError(
+                _("Error stopping Jupyter server (PID {}): {}").format(self.pid, e)
+            ) from e
 
-        # Clean up internal state
-        self._reset_state()
+        finally:
+            # Clean up internal state
+            self._reset_state()
 
     def get_url(self, file_name):
         """Return full URL to a file served by this server.
@@ -250,6 +244,8 @@ class JupyterServerRegistry:
 
     def stop_all_servers(self):
         """Stop all registered servers."""
+        errors = []
+
         with self._servers_lock:
             servers = list(self.servers)
             self.servers.clear()
@@ -257,5 +253,10 @@ class JupyterServerRegistry:
         for server in servers:
             try:
                 server.stop_server()
-            except Exception:
-                pass
+            except Exception as e:
+                errors.append(str(e))
+
+        if errors:
+            raise RuntimeError(
+                _("Some Jupyter servers failed to stop:\n{}").format("\n".join(errors))
+            )
