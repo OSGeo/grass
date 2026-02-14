@@ -182,6 +182,71 @@ Following example generates a vector map with turntable:
 v.net operation=turntable in=railroads out=railroads_ttb
 ```
 
+### Produce node count in JSON format
+
+The **format** option allows choosing the output style.
+By default, **plain** text is used.
+Choosing **json** will produce a structured output,
+which is particularly useful for automated scripts and testing.
+
+Generating nodes and getting the result in JSON:
+
+```sh
+v.net input=streets points=schools output=streets_net operation=connect threshold=400 -c
+
+# verify result
+v.net input=streets_net operation=nreport format=json
+```
+
+#### Example Output
+
+```json
+[
+ {
+        "node_cat": 166,
+        "lines": [
+            49912
+        ]
+    },
+    {
+        "node_cat": 167,
+        "lines": [
+            49913
+        ]
+    }
+]
+```
+
+### Produce Report in JSON format
+
+The **report** operation provides details about the arcs in the network.
+Using the **-c** flag ensures that new categories are assigned to the nodes,
+providing a complete connectivity report in JSON format.
+
+```sh
+v.net  input=streets operation=nodes output=streets_nodes -c
+
+# verify result
+v.net input=streets_nodes operation=report format=json
+```
+
+#### Example output
+
+```json
+[
+    {
+        "line_cat": 49745,
+        "start_node_cat": 41812,
+        "end_node_cat": 19875
+    },
+    {
+        "line_cat": 49746,
+        "start_node_cat": 15789,
+        "end_node_cat": 41813
+    }
+]
+```
+
 ## SEE ALSO
 
 *[g.gui.vdigit](g.gui.vdigit.md), [v.edit](v.edit.md), [Vector Network
