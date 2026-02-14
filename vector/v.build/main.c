@@ -19,6 +19,7 @@
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
+#include <grass/gjson.h>
 
 int main(int argc, char *argv[])
 {
@@ -29,9 +30,18 @@ int main(int argc, char *argv[])
     int i, build, dump, sdump, cdump, fdump;
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
     char *opt_desc;
+    struct Option *format_opt;
 
     G_gisinit(argv[0]);
 
+    format_opt = G_define_option();
+    format_opt->key = "format";
+    format_opt->type = TYPE_STRING;
+    format_opt->required = NO;
+    format_opt->options = "plain,json";
+    format_opt->answer = "plain";
+    format_opt->description = _("Output format");
+    
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("topology"));
@@ -123,6 +133,8 @@ int main(int argc, char *argv[])
     }
     /* dump topology */
     if (dump || sdump || cdump || fdump) {
+        int is_json = (strcmp(format_opt->answer, "json") == 0);
+        struct G_json *json_root = NULL;
         if (!build) {
             Vect_set_open_level(2);
 
@@ -133,9 +145,20 @@ int main(int argc, char *argv[])
         if (dump)
             Vect_topo_dump(&Map, stdout);
 
-        if (sdump)
-            Vect_sidx_dump(&Map, stdout);
+        if (is_json) {
+            G_json_initialize();
+            if (sdump) {
+                G_json_object_set_string(NULL, "module", "v.build");
+                G_json_object_set_string(NULL, "map", map_opt->answer);
+                G_json_object_set_string(NULL, "type", "spatial_index_dump");
 
+                printf("%s\n", G_json_finalize_object());
+            }
+            else{
+                if (sdump)
+                    Vect_sidx_dump(&Map, stdout);
+            }
+        }
         if (cdump)
             Vect_cidx_dump(&Map, stdout);
 
