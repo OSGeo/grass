@@ -38,6 +38,12 @@
 # % options: strds, str3ds, stvds, raster, raster_3d, vector
 # %end
 
+# %option G_OPT_F_FORMAT
+# % options: plain,json,shell
+# % descriptions: plain;Human readable text output;shell;Shell script style text output;json;JSON (JavaScript Object Notation)
+# % guisection: Print
+# %end
+
 # %flag
 # % key: g
 # % description: Print in shell script style
@@ -65,6 +71,7 @@ def main():
 
     name = options["input"]
     type_ = options["type"]
+    format_ = options["format"]
     shellstyle = flags["g"]
     system = flags["d"]
     history = flags["h"]
@@ -119,7 +126,9 @@ def main():
         dataset.print_history()
         return
 
-    if shellstyle:
+    if format_ == "json":
+        dataset.print_json()
+    elif format_ == "shell" or shellstyle:
         dataset.print_shell_info()
     else:
         dataset.print_info()

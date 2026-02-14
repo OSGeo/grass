@@ -19,6 +19,8 @@ for details.
 
 from __future__ import annotations
 
+import datetime
+import json
 import os
 import shutil
 import locale
@@ -693,3 +695,32 @@ def append_random(name, suffix_length=None, total_length=None):
     # The following can be shorter with random.choices from Python 3.6.
     suffix = "".join(random.choice(allowed_chars) for _ in range(suffix_length))
     return "{name}_{suffix}".format(**locals())
+
+
+class TemporalJSONEncoder(json.JSONEncoder):
+    """Custom JSON encoder with datetime support for GRASS GIS.
+
+    Handles serialization of datetime objects to ISO 8601 format strings.
+    Can be used across GRASS modules that need JSON output with temporal data.
+
+    Example:
+
+    .. code-block:: pycon
+
+        >>> import json
+        >>> from datetime import datetime
+        >>> data = {"timestamp": datetime(2024, 1, 15, 10, 30)}
+        >>> json.dumps(data, cls=TemporalJSONEncoder)
+        '{"timestamp": "2024-01-15T10:30:00"}'
+    """
+
+    def default(self, obj):
+        """Override default JSON encoding for datetime objects.
+
+        :param obj: Object to encode
+        :return: ISO 8601 formatted string for datetime objects,
+                 or calls parent encoder for other types
+        """
+        if isinstance(obj, datetime.datetime):
+            return obj.isoformat()
+        return super().default(obj)
