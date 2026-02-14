@@ -193,7 +193,10 @@ build_program_in_subdir(
 build_library_in_subdir(
   gpde
   HEADERS
-  "N_*.h"
+  N_gwflow.h
+  N_heatflow.h
+  N_pde.h
+  N_solute_transport.h
   DEPENDS
   grass_gis
   grass_raster
