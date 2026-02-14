@@ -72,9 +72,9 @@ class JupyterPanel(wx.Panel, MainPageBase):
         """Setup Jupyter notebook environment and load initial notebooks."""
         try:
             self.env.setup()
-        except Exception as e:
+        except RuntimeError as e:
             wx.MessageBox(
-                _("Failed to start Jupyter environment:\n{}").format(str(e)),
+                _("Failed to start Jupyter environment:\n{}").format(e),
                 _("Startup Error"),
                 wx.ICON_ERROR,
             )
@@ -86,7 +86,7 @@ class JupyterPanel(wx.Panel, MainPageBase):
                 url = self.env.server.get_url(fname.name)
             except RuntimeError as e:
                 wx.MessageBox(
-                    _("Failed to get Jupyter server URLt:\n{}").format(str(e)),
+                    _("Failed to get Jupyter server URL:\n{}").format(e),
                     _("Startup Error"),
                     wx.ICON_ERROR,
                 )
@@ -124,7 +124,7 @@ class JupyterPanel(wx.Panel, MainPageBase):
             self.aui_notebook.SetSelection(self.aui_notebook.GetPageCount() - 1)
         except RuntimeError as e:
             wx.MessageBox(
-                _("Failed to get Jupyter server URL:\n{}").format(str(e)),
+                _("Failed to get Jupyter server URL:\n{}").format(e),
                 _("URL Error"),
                 wx.ICON_ERROR,
             )
@@ -150,9 +150,9 @@ class JupyterPanel(wx.Panel, MainPageBase):
             path = self.env.directory.import_file(source_path, new_name=new_name)
             self.Open(path.name)
             self.SetStatusText(_("File '{}' imported and opened.").format(path.name), 0)
-        except Exception as e:
+        except (FileNotFoundError, ValueError, FileExistsError) as e:
             wx.MessageBox(
-                _("Failed to import file:\n{}").format(str(e)),
+                _("Failed to import file:\n{}").format(e),
                 _("Notebook Import Error"),
                 wx.ICON_ERROR | wx.OK,
             )
@@ -239,9 +239,9 @@ class JupyterPanel(wx.Panel, MainPageBase):
                 self.SetStatusText(
                     _("File {} exported to {}.").format(file_name, destination_path), 0
                 )
-            except Exception as e:
+            except (FileNotFoundError, FileExistsError) as e:
                 wx.MessageBox(
-                    _("Failed to export file:\n{}").format(str(e)),
+                    _("Failed to export file:\n{}").format(e),
                     caption=_("Notebook Export Error"),
                     style=wx.ICON_ERROR | wx.OK,
                 )
@@ -266,9 +266,9 @@ class JupyterPanel(wx.Panel, MainPageBase):
 
             try:
                 path = self.env.directory.create_new_notebook(new_name=name)
-            except Exception as e:
+            except (FileExistsError, ValueError) as e:
                 wx.MessageBox(
-                    _("Failed to create notebook:\n{}").format(str(e)),
+                    _("Failed to create notebook:\n{}").format(e),
                     caption=_("Notebook Creation Error"),
                     style=wx.ICON_ERROR | wx.OK,
                 )
@@ -308,7 +308,7 @@ class JupyterPanel(wx.Panel, MainPageBase):
         except RuntimeError as e:
             wx.MessageBox(
                 _("Failed to stop Jupyter server at {url} (PID: {pid}):\n{err}").format(
-                    url=url, pid=pid, err=str(e)
+                    url=url, pid=pid, err=e
                 ),
                 caption=_("Error"),
                 style=wx.ICON_ERROR | wx.OK,

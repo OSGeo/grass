@@ -38,7 +38,7 @@ def is_jupyter_installed():
             check=True,
         )
         return True
-    except Exception:
+    except (FileNotFoundError, subprocess.CalledProcessError, OSError):
         return False
 
 
