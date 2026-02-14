@@ -1,3 +1,5 @@
+import re
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.script.core import read_command, parse_command
@@ -114,12 +116,56 @@ class TestVDbConnect(TestCase):
         ).splitlines()
         self.assertEqual(actual, expected)
 
-    def test_layer_number_name_syntax_no_warning(self):
-        """layer=number/name should not trigger filename validation warnings"""
-        m = SimpleModule("v.db.connect", map="bridges", layer="1/bridges", flags="c")
+    def _assert_no_layer_filename_warning(self, stderr):
+        """Assert stderr does not contain the parser 'illegal filename' regression."""
+        stderr = stderr or ""
+        self.assertIsNone(
+            re.search(r"illegal filename", stderr, re.IGNORECASE),
+            msg=stderr,
+        )
+        self.assertIsNone(
+            re.search(r"character\s*<\s*/\s*>\s*not allowed", stderr, re.IGNORECASE),
+            msg=stderr,
+        )
+
+    def _columns_output(self, layer_arg=None):
+        """Run v.db.connect -c and return stdout lines (column list)."""
+        args = {"map": "bridges", "flags": "c"}
+        if layer_arg is not None:
+            args["layer"] = layer_arg
+        m = SimpleModule("v.db.connect", **args)
         self.assertModule(m)
-        self.assertNotIn("Illegal filename", m.outputs.stderr)
-        self.assertNotIn("Character </> not allowed", m.outputs.stderr)
+        self._assert_no_layer_filename_warning(m.outputs.stderr)
+        return m.outputs.stdout.strip().splitlines()
+
+    def test_layer_number_only(self):
+        """layer=1 (number only) works and produces column list"""
+        lines = self._columns_output(layer_arg="1")
+        self.assertGreater(len(lines), 0)
+        self.assertIn("INTEGER|cat", lines)
+
+    def test_layer_number_slash_name(self):
+        """layer=1/bridges (number/name) works like layer=1 with no warning"""
+        ref_lines = self._columns_output(layer_arg="1")
+        lines = self._columns_output(layer_arg="1/bridges")
+        self.assertEqual(
+            lines,
+            ref_lines,
+            "layer=1/bridges should produce same columns as layer=1",
+        )
+
+    # -p regression coverage: original warning was triggered during parsing for 1/name
+    def test_layer_number_slash_name_print(self):
+        """layer=1/bridges works with -p (print) without illegal-filename warning"""
+        m = SimpleModule("v.db.connect", map="bridges", layer="1/bridges", flags="p")
+        self.assertModule(m)
+        self._assert_no_layer_filename_warning(m.outputs.stderr)
+
+    def test_layer_name_only(self):
+        """layer=bridges (name only) works and matches layer=1 output"""
+        ref_lines = self._columns_output(layer_arg="1")
+        lines = self._columns_output(layer_arg="bridges")
+        self.assertEqual(lines, ref_lines)
 
     def test_columns_json(self):
         """Test -c flag with JSON format"""

@@ -85,8 +85,14 @@ int main(int argc, char **argv)
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
     field_opt->description =
         _("Layer number or name (format: layer number[/layer name])");
-    /* no gisprompt override: allow layer_number/layer_name without filename
-     * validation */
+    /* Clear gisprompt so the parser does not apply filename-style validation
+     * (G_legal_filename) to the layer option. G_OPT_V_FIELD defaults to
+     * gisprompt "old,layer,layer", which causes values like "1/bridges" to
+     * trigger "Illegal filename ... Character </> not allowed". This module
+     * documents and uses layer number[/layer name] (see -p/-g output and
+     * Vect_open_old2); the C code parses the string (atoi, strchr) and never
+     * treats it as a file path. */
+    field_opt->gisprompt = NULL;
 
     sep_opt = G_define_standard_option(G_OPT_F_SEP);
     sep_opt->answer = NULL;
