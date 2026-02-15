@@ -9,7 +9,7 @@ under \href{https://www.gnu.org/licenses/gpl-2.0.html}{GPL 2.0}.
 
 This document describes a number of Windows batch, javascript and
 \texttt{.hta} files that may be used in conjunction with R. Each is self
-contained and independent of the others. Each requires no installation -
+-contained and independent of the others. Each requires no installation -
 just place it on the Windows path\footnote{To display the Windows path
   enter \texttt{path} at the Windows \texttt{cmd} line.}.
 
@@ -44,7 +44,7 @@ The purpose of R.bat is to facilitate the use of R from the Windows
 There is no need to modify the Windows PATH or to set any environment
 variables for standard configurations of R. It will automatically locate
 R (and Rtools and MiKTeX if installed) and then run \texttt{R.exe},
-\texttt{Rgui.exe} or other command.
+\texttt{Rgui.exe} or other commands.
 
 It is a self contained no-install script with no dependencies so just
 place it anywhere on your Windows path.
@@ -132,7 +132,7 @@ are the paths to the directories holding the \texttt{R}, \texttt{MiKTeX}
 and \texttt{Rtools} binaries.
 
 \texttt{R\_CMD} indicates the subcommand or if no subcommand specified
-then is derived from the name of the script. For example if the script
+then is derived from the name of the script. For example, if the script
 were renamed \texttt{Rgui.bat} then if no subcommand were specified it
 would default to \texttt{gui}.
 
@@ -194,7 +194,7 @@ and then enter the same set command into the new window. Now any use of
 R in the original window will use the default version and in the new
 version will use the specified version.
 
-One can change the registry entry permanently to refer to a particlar
+One can change the registry entry permanently to refer to a particular
 version like this:
 
 \begin{verbatim}
@@ -293,7 +293,7 @@ The set statements are documented in the source of the file itself.
 
 \texttt{movedir.bat} and \texttt{copydir.bat} move or copy the packages
 from one library to another. If used to transfer packages from one
-version of R to another it is recommended that the user run
+version of R to another, it is recommended that the user run
 \texttt{upgrade.packages()} in the target. For example, assuming the
 default location for the user libraries:
 
