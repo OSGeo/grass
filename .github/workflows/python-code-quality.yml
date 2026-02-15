@@ -157,7 +157,7 @@ jobs:
           echo "${HOME}/install/bin" >> "${GITHUB_PATH}"
 
       # - name: Run Pylint on grass package
-      #   # Until slower checks (like similarity) are reenabled, running in one step is faster
+      #   # Until slower checks (like similarity) are enabled, running in one step is faster
       #   if: false
       #   run: |
       #     PYTHONPATH="$(grass --config python_path):$PYTHONPATH"
@@ -167,7 +167,7 @@ jobs:
       #     pylint --persistent=no --py-version=${{ env.MIN_PYTHON_VERSION }} --jobs="$(nproc)" grass
 
       # - name: Run Pylint on other files using pytest
-      #   # Until slower checks (like similarity) are reenabled, running in one step is faster
+      #   # Until slower checks (like similarity) are re-enabled, running in one step is faster
       #   if: false
       #   run: |
       #     pipx inject --include-apps pylint pytest
@@ -182,7 +182,7 @@ jobs:
       #     PylintIgnore: "python/.*,gui/.*"
 
       # - name: Run Pylint on wxGUI
-      #   # Until slower checks (like similarity) are reenabled, running in one step is faster
+      #   # Until slower checks (like similarity) are re-enabled, running in one step is faster
       #   if: false
       #   run: |
       #     PYTHONPATH="$(grass --config python_path):$PYTHONPATH"
