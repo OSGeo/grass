@@ -58,6 +58,37 @@ Manual](https://grass.osgeo.org/programming8/vlibTopology.html), section
 ```sh
 v.build map=urbanarea option=dump
 ```
+### JSON Output Support
+
+The format=json option allows users to obtain topology and index information in a structured format. This is particularly useful for automation, parsing with tools like jq, or integration with external GIS applications.
+
+Example of dumping spatial and category indices in JSON format:
+
+```sh
+v.build map=roadsmajor option=sdump,cdump format=json
+```
+Example JSON output snippet:
+```json
+{
+    "nodes": [
+        {
+            "node_id": 263,
+            "n_lines": 1
+        },
+        {
+            "node_id": 264,
+            "n_lines": 1
+        }
+    ],
+    "action_c": "category_index_dump",
+    "categories": [
+        {
+            "layer": 1,
+            "n_cats": 355
+        }
+    ]
+}
+```
 
 ## SEE ALSO
 
