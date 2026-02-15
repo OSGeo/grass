@@ -70,6 +70,7 @@ Layer      0  number of unique cats:       1  number of cats:       2  number of
         """Remove created vector map and temporary files, then delete the temp region."""
         gs.run_command("g.remove", type="vector", flags="f", name="test_3x3_map")
         cls.del_temp_region()
+
     def test_vbuild_output(self):
         """Compare the v.build output (build_module) to the expected output."""
         # Run v.build (with multiple dump options) and store its output in a class variable.
@@ -86,6 +87,7 @@ Layer      0  number of unique cats:       1  number of cats:       2  number of
             [line for line in output_lines if not line.startswith("Map:")]
         )
         self.assertMultiLineEqual(filtered_output, self.vbuild_output)
+
     def test_vbuild_json_output(self):
         output = gs.read_command(
             "v.build",
@@ -94,32 +96,33 @@ Layer      0  number of unique cats:       1  number of cats:       2  number of
             format="json",
             quiet=True,
         )
-        
+
         data = json.loads(output)
 
         self.assertIsInstance(data, dict)
-        self.assertEqual(data.get('module'), "v.build")
-        
-        self.assertIn('nodes', data)
-        self.assertIsInstance(data['nodes'], list)
-        self.assertEqual(len(data['nodes']), 2)
-        
-        for node in data['nodes']:
-            self.assertIsInstance(node.get('node_id'), int)
-            self.assertIsInstance(node.get('n_lines'), int)
-            self.assertGreater(node['node_id'], 0)
+        self.assertEqual(data.get("module"), "v.build")
 
-        self.assertIn('categories', data)
-        self.assertIsInstance(data['categories'], list)
-        self.assertEqual(len(data['categories']), 1)
-        
-        cat_info = data['categories'][0]
-        self.assertEqual(cat_info.get('layer'), 0)
-        self.assertEqual(cat_info.get('n_cats'), 2)
-        self.assertIsInstance(cat_info.get('n_cats'), int)
+        self.assertIn("nodes", data)
+        self.assertIsInstance(data["nodes"], list)
+        self.assertEqual(len(data["nodes"]), 2)
 
-        self.assertEqual(data.get('type'), "spatial_index_dump")
-        self.assertEqual(data.get('action_c'), "category_index_dump")
+        for node in data["nodes"]:
+            self.assertIsInstance(node.get("node_id"), int)
+            self.assertIsInstance(node.get("n_lines"), int)
+            self.assertGreater(node["node_id"], 0)
+
+        self.assertIn("categories", data)
+        self.assertIsInstance(data["categories"], list)
+        self.assertEqual(len(data["categories"]), 1)
+
+        cat_info = data["categories"][0]
+        self.assertEqual(cat_info.get("layer"), 0)
+        self.assertEqual(cat_info.get("n_cats"), 2)
+        self.assertIsInstance(cat_info.get("n_cats"), int)
+
+        self.assertEqual(data.get("type"), "spatial_index_dump")
+        self.assertEqual(data.get("action_c"), "category_index_dump")
+
 
 if __name__ == "__main__":
     test()
