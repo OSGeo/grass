@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     format_opt->options = "plain,json";
     format_opt->answer = "plain";
     format_opt->description = _("Output format");
-    
+
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("topology"));
@@ -153,8 +153,10 @@ int main(int argc, char *argv[])
         }
         if (dump) {
             if (is_json) {
-                G_json_object_set_number(root_obj, "n_lines", Vect_get_num_lines(&Map));
-            } else {
+                G_json_object_set_number(root_obj, "n_lines",
+                                         Vect_get_num_lines(&Map));
+            }
+            else {
                 Vect_topo_dump(&Map, stdout);
             }
         }
@@ -164,33 +166,37 @@ int main(int argc, char *argv[])
                 G_JSON_Array *nodes_array;
                 int n_nodes, i;
 
-                G_json_object_set_string(root_obj, "type", "spatial_index_dump");
-                
+                G_json_object_set_string(root_obj, "type",
+                                         "spatial_index_dump");
+
                 nodes_val = G_json_value_init_array();
                 nodes_array = G_json_array(nodes_val);
 
                 n_nodes = Vect_get_num_nodes(&Map);
-                
+
                 for (i = 1; i <= n_nodes; i++) {
                     G_JSON_Value *node_val = G_json_value_init_object();
                     G_JSON_Object *node_obj = G_json_object(node_val);
-                    
-                    if (!node_val) continue;
+
+                    if (!node_val)
+                        continue;
 
                     G_json_object_set_number(node_obj, "node_id", i);
-                    G_json_object_set_number(node_obj, "n_lines", Vect_get_node_n_lines(&Map, i));
-                    
+                    G_json_object_set_number(node_obj, "n_lines",
+                                             Vect_get_node_n_lines(&Map, i));
+
                     G_json_array_append_value(nodes_array, node_val);
                 }
                 G_json_object_set_value(root_obj, "nodes", nodes_val);
-            } 
+            }
             else {
                 Vect_sidx_dump(&Map, stdout);
             }
         }
         if (cdump) {
             if (is_json) {
-                G_json_object_set_string(root_obj, "action_c", "category_index_dump");  
+                G_json_object_set_string(root_obj, "action_c",
+                                         "category_index_dump");
                 G_JSON_Value *layers_val = G_json_value_init_array();
                 G_JSON_Array *layers_array = G_json_array(layers_val);
 
@@ -198,24 +204,30 @@ int main(int argc, char *argv[])
                 for (int i = 0; i < n_layers; i++) {
                     G_JSON_Value *layer_val = G_json_value_init_object();
                     G_JSON_Object *layer_obj = G_json_object(layer_val);
-                    
+
                     int layer_num = Vect_cidx_get_field_number(&Map, i);
                     G_json_object_set_number(layer_obj, "layer", layer_num);
-                    G_json_object_set_number(layer_obj, "n_cats", Vect_cidx_get_num_cats_by_index(&Map, i));
-                    
+                    G_json_object_set_number(
+                        layer_obj, "n_cats",
+                        Vect_cidx_get_num_cats_by_index(&Map, i));
+
                     G_json_array_append_value(layers_array, layer_val);
                 }
                 G_json_object_set_value(root_obj, "categories", layers_val);
-            } else {
+            }
+            else {
                 Vect_cidx_dump(&Map, stdout);
             }
         }
 
         if (fdump) {
             if (is_json) {
-                G_json_object_set_string(root_obj, "action_f", "feature_index_dump");
-                G_json_object_set_number(root_obj, "n_features", Vect_get_num_lines(&Map));
-            } else {
+                G_json_object_set_string(root_obj, "action_f",
+                                         "feature_index_dump");
+                G_json_object_set_number(root_obj, "n_features",
+                                         Vect_get_num_lines(&Map));
+            }
+            else {
                 Vect_fidx_dump(&Map, stdout);
             }
         }
