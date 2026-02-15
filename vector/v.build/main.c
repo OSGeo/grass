@@ -159,7 +159,34 @@ int main(int argc, char *argv[])
             }
         }
         if (sdump) {
-            Vect_sidx_dump(&Map, stdout);
+            if (is_json) {
+                G_JSON_Value *nodes_val;
+                G_JSON_Array *nodes_array;
+                int n_nodes, i;
+
+                G_json_object_set_string(root_obj, "type", "spatial_index_dump");
+                
+                nodes_val = G_json_value_init_array();
+                nodes_array = G_json_array(nodes_val);
+
+                n_nodes = Vect_get_num_nodes(&Map);
+                
+                for (i = 1; i <= n_nodes; i++) {
+                    G_JSON_Value *node_val = G_json_value_init_object();
+                    G_JSON_Object *node_obj = G_json_object(node_val);
+                    
+                    if (!node_val) continue;
+
+                    G_json_object_set_number(node_obj, "node_id", i);
+                    G_json_object_set_number(node_obj, "n_lines", Vect_get_node_n_lines(&Map, i));
+                    
+                    G_json_array_append_value(nodes_array, node_val);
+                }
+                G_json_object_set_value(root_obj, "nodes", nodes_val);
+            } 
+            else {
+                Vect_sidx_dump(&Map, stdout);
+            }
         }
         if (cdump) {
             if (is_json) {
