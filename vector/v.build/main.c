@@ -134,7 +134,10 @@ int main(int argc, char *argv[])
     /* dump topology */
     if (dump || sdump || cdump || fdump) {
         int is_json = (strcmp(format_opt->answer, "json") == 0);
-        struct G_json *json_root = NULL;
+
+        G_JSON_Value *root_value = NULL;
+        G_JSON_Object *root_obj = NULL;
+
         if (!build) {
             Vect_set_open_level(2);
 
@@ -142,28 +145,61 @@ int main(int argc, char *argv[])
                 G_fatal_error(_("Unable to open vector map <%s>"),
                               map_opt->answer);
         }
-        if (dump)
-            Vect_topo_dump(&Map, stdout);
-
         if (is_json) {
-            G_json_initialize();
-            if (sdump) {
-                G_json_object_set_string(NULL, "module", "v.build");
-                G_json_object_set_string(NULL, "map", map_opt->answer);
-                G_json_object_set_string(NULL, "type", "spatial_index_dump");
-
-                printf("%s\n", G_json_finalize_object());
-            }
-            else{
-                if (sdump)
-                    Vect_sidx_dump(&Map, stdout);
+            root_value = G_json_value_init_object();
+            root_obj = G_json_object(root_value);
+            G_json_object_set_string(root_obj, "module", "v.build");
+            G_json_object_set_string(root_obj, "map", map_opt->answer);
+        }
+        if (dump) {
+            if (is_json) {
+                G_json_object_set_number(root_obj, "n_lines", Vect_get_num_lines(&Map));
+            } else {
+                Vect_topo_dump(&Map, stdout);
             }
         }
-        if (cdump)
-            Vect_cidx_dump(&Map, stdout);
+        if (sdump) {
+            Vect_sidx_dump(&Map, stdout);
+        }
+        if (cdump) {
+            if (is_json) {
+                G_json_object_set_string(root_obj, "action_c", "category_index_dump");  
+                G_JSON_Value *layers_val = G_json_value_init_array();
+                G_JSON_Array *layers_array = G_json_array(layers_val);
 
-        if (fdump)
-            Vect_fidx_dump(&Map, stdout);
+                int n_layers = Vect_cidx_get_num_fields(&Map);
+                for (int i = 0; i < n_layers; i++) {
+                    G_JSON_Value *layer_val = G_json_value_init_object();
+                    G_JSON_Object *layer_obj = G_json_object(layer_val);
+                    
+                    int layer_num = Vect_cidx_get_field_number(&Map, i);
+                    G_json_object_set_number(layer_obj, "layer", layer_num);
+                    G_json_object_set_number(layer_obj, "n_cats", Vect_cidx_get_num_cats_by_index(&Map, i));
+                    
+                    G_json_array_append_value(layers_array, layer_val);
+                }
+                G_json_object_set_value(root_obj, "categories", layers_val);
+            } else {
+                Vect_cidx_dump(&Map, stdout);
+            }
+        }
+
+        if (fdump) {
+            if (is_json) {
+                G_json_object_set_string(root_obj, "action_f", "feature_index_dump");
+                G_json_object_set_number(root_obj, "n_features", Vect_get_num_lines(&Map));
+            } else {
+                Vect_fidx_dump(&Map, stdout);
+            }
+        }
+        if (root_value) {
+            char *json_str = G_json_serialize_to_string_pretty(root_value);
+            if (json_str) {
+                fprintf(stdout, "%s\n", json_str);
+                G_json_free_serialized_string(json_str);
+            }
+            G_json_value_free(root_value);
+        }
     }
 
     if (err_opt->answer) {
