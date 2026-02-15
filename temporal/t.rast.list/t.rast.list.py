@@ -74,13 +74,9 @@
 # % multiple: no
 # %end
 
-# %option
-# % key: format
-# % type: string
-# % description: Output format
-# % required: no
-# % multiple: no
+# %option G_OPT_F_FORMAT
 # % options: plain,line,json,yaml,csv
+# % descriptions: plain;Plain text output;line;Comma separated list of map names;json;JSON (JavaScript Object Notation);yaml;YAML (YAML Ain't Markup Language);csv;CSV (Comma Separated Values);
 # % guisection: Formatting
 # %end
 

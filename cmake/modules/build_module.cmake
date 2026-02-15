@@ -32,7 +32,7 @@ function(build_module)
   endforeach()
 
   if(NOT G_SRC_REGEX)
-    set(G_SRC_REGEX "*.c")
+    set(G_SRC_REGEX "*.[ch]")
   endif()
 
   if(NOT G_SRC_DIR)
@@ -171,7 +171,7 @@ function(build_module)
   get_property(MODULE_LIST GLOBAL PROPERTY MODULE_LIST)
   set_property(GLOBAL PROPERTY MODULE_LIST "${MODULE_LIST};${G_NAME}")
 
-  add_dependencies(${G_NAME} copy_header)
+  add_dependencies(${G_NAME} INCLUDE_HEADERS)
 
   foreach(G_OPTIONAL_DEPEND ${G_OPTIONAL_DEPENDS})
     if(TARGET ${G_OPTIONAL_DEPEND})
@@ -290,4 +290,11 @@ function(build_module)
     install(TARGETS ${G_NAME} DESTINATION ${install_dest})
   endif()
 
+  set(_headers ${G_HEADERS})
+  list(TRANSFORM _headers PREPEND "${G_SRC_DIR}/")
+  file(GLOB _docs_files
+       LIST_DIRECTORIES FALSE
+       ${G_SRC_DIR}/*.html ${G_SRC_DIR}/*.md
+       ${G_SRC_DIR}/*.png ${G_SRC_DIR}/*.jpg)
+  target_sources(${G_NAME} PRIVATE ${_headers} ${_docs_files})
 endfunction()
