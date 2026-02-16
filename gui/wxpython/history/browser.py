@@ -19,6 +19,7 @@ for details.
 """
 
 from datetime import datetime
+from pathlib import Path
 
 import wx
 import wx.lib.scrolledpanel as SP
@@ -245,6 +246,48 @@ class HistoryInfoPanel(SP.ScrolledPanel):
 
         self.region_settings_box.Show()
 
+    def _get_saved_region_name(self, history_region):
+        """Find if history region matches any saved region in MAPSET/windows directory."""
+        env = gs.gisenv()
+        windows_dir = (
+            Path(env["GISDBASE"]) / env["LOCATION_NAME"] / env["MAPSET"] / "windows"
+        )
+
+        if not windows_dir.exists():
+            return None
+
+        for region_file in windows_dir.iterdir():
+            if not region_file.is_file():
+                continue
+
+            region_name = region_file.name
+
+            try:
+                saved_region = gs.parse_command(
+                    "g.region", region=region_name, flags="g"
+                )
+
+                if self._compare_regions(history_region, saved_region):
+                    return region_name
+            except Exception:
+                continue
+
+        return None
+
+    def _compare_regions(self, r1, r2):
+        """Compare two region dictionaries for equality."""
+        keys = ["n", "s", "e", "w", "nsres", "ewres", "rows", "cols"]
+
+        for k in keys:
+            try:
+                v1 = float(r1.get(k, 0))
+                v2 = float(r2.get(k, 0))
+                if abs(v1 - v2) > 1e-8:
+                    return False
+            except (ValueError, TypeError):
+                return False
+        return True
+
     def _updateRegionSettingsMatch(self):
         """Update text, icon and button dealing with region update"""
         self.sizer_region_settings_match.Clear(True)
@@ -253,6 +296,20 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         history_region = self.region_settings
         current_region = self._get_current_region()
         region_matches = history_region == current_region
+        saved_name = self._get_saved_region_name(history_region)
+
+        region_label = saved_name or _("Not set")
+
+        self.sizer_region_settings_match.Add(
+            StaticText(
+                parent=self.region_settings_box,
+                id=wx.ID_ANY,
+                label=_("Region name: {}").format(region_label),
+            ),
+            proportion=0,
+            flag=wx.ALIGN_CENTER_VERTICAL | wx.RIGHT,
+            border=15,
+        )
 
         # Icon and button according to the condition
         if region_matches:
