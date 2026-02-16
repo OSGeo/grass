@@ -1,5 +1,4 @@
 #include "simlib.h"
-#include <grass/gis.h>
 
 /**
  * \brief Computes dx and dy slope components
