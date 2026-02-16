@@ -15,49 +15,9 @@ This program is free software under the GNU General Public License
 @author Linda Karlovska <linda.karlovska seznam.cz>
 """
 
-import atexit
-import signal
-import sys
-
 from .directory import JupyterDirectoryManager
 from .server import JupyterServerInstance, JupyterServerRegistry
 from .utils import is_jupyter_installed, is_wx_html2_available
-
-
-_cleanup_registered = False
-
-
-def _register_global_cleanup():
-    """Register cleanup handlers once at module level.
-
-    This ensures that all Jupyter servers are properly stopped when:
-    - The program exits normally (atexit)
-    - SIGINT is received (Ctrl+C)
-    - SIGTERM is received (kill command)
-
-    Signal handlers are process-global, so we register them only once
-    and have them clean up all servers via the registry.
-    """
-    global _cleanup_registered
-    if _cleanup_registered:
-        return
-
-    def cleanup_all():
-        """Stop all registered servers."""
-        try:
-            JupyterServerRegistry.get().stop_all_servers()
-        except Exception:
-            pass
-
-    def handle_signal(signum, frame):
-        """Handle termination signals."""
-        cleanup_all()
-        sys.exit(0)
-
-    atexit.register(cleanup_all)
-    signal.signal(signal.SIGINT, handle_signal)
-    signal.signal(signal.SIGTERM, handle_signal)
-    _cleanup_registered = True
 
 
 class JupyterEnvironment:
@@ -89,16 +49,10 @@ class JupyterEnvironment:
         # Start server
         self.server.start_server(self.integrated)
 
-        # Register server in global registry
-        if self.integrated:
-            _register_global_cleanup()
-            JupyterServerRegistry.get().register(self.server)
-
     def stop(self):
         """Stop server only if integrated."""
-        if self.integrated:
-            self.server.stop_server()
-            JupyterServerRegistry.get().unregister(self.server)
+        self.server.stop_server()
+        JupyterServerRegistry.get().unregister(self.server)
 
     @classmethod
     def stop_all(cls):
