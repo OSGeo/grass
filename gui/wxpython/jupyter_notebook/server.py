@@ -16,6 +16,9 @@ This program is free software under the GNU General Public License
 @author Linda Karlovska <linda.karlovska seznam.cz>
 """
 
+import atexit
+import signal
+import sys
 import socket
 import time
 import subprocess
@@ -25,10 +28,46 @@ import shutil
 import pathlib
 
 
+_cleanup_registered = False
+
+
+def _register_global_cleanup():
+    """Register cleanup handlers once at module level.
+
+    This ensures that all Jupyter servers are properly stopped when:
+    - The program exits normally (atexit)
+    - SIGINT is received (Ctrl+C)
+    - SIGTERM is received (kill command)
+
+    Signal handlers are process-global, so we register them only once
+    and have them clean up all servers via the registry.
+    """
+    global _cleanup_registered
+    if _cleanup_registered:
+        return
+
+    def cleanup_all():
+        """Stop all registered servers."""
+        try:
+            JupyterServerRegistry.get().stop_all_servers()
+        except Exception:
+            pass
+
+    def handle_signal(signum, frame):
+        """Handle termination signals."""
+        cleanup_all()
+        sys.exit(0)
+
+    atexit.register(cleanup_all)
+    signal.signal(signal.SIGINT, handle_signal)
+    signal.signal(signal.SIGTERM, handle_signal)
+    _cleanup_registered = True
+
+
 class JupyterServerInstance:
     """Manage the lifecycle of a Jupyter server instance."""
 
-    def __init__(self, workdir, integrated=True):
+    def __init__(self, workdir):
         """Initialize Jupyter server instance.
 
         :param workdir: Working directory for the Jupyter server (str).
@@ -37,6 +76,12 @@ class JupyterServerInstance:
 
         self.proc = None
         self._reset_state()
+
+        # Register this instance in the global registry
+        JupyterServerRegistry.get().register(self)
+
+        # Set up global cleanup handlers (only once)
+        _register_global_cleanup()
 
     def _reset_state(self):
         """Reset internal state related to the server."""
@@ -127,8 +172,8 @@ class JupyterServerInstance:
         cmd = [
             jupyter,
             "notebook",
-            "--NotebookApp.token=''",
-            "--NotebookApp.password=''",
+            "--NotebookApp.token=",
+            "--NotebookApp.password=",
             "--port",
             str(self.port),
             "--notebook-dir",
@@ -202,6 +247,12 @@ class JupyterServerInstance:
             # Clean up internal state
             self._reset_state()
 
+        # Unregister from global registry
+        try:
+            JupyterServerRegistry.get().unregister(self)
+        except Exception:
+            pass
+
     def get_url(self, file_name):
         """Return full URL to a file served by this server.
 
@@ -219,7 +270,7 @@ class JupyterServerInstance:
 
 
 class JupyterServerRegistry:
-    """Thread-safe registry of running JupyterServerInstance objects. Track integrated servers only."""
+    """Thread-safe registry of running JupyterServerInstance objects."""
 
     _instance = None
     _lock = threading.Lock()
@@ -252,19 +303,25 @@ class JupyterServerRegistry:
                 self.servers.append(server)
 
     def unregister(self, server):
-        """Unregister a server instance."""
+        """Unregister a server instance.
+
+        :param server: JupyterServerInstance to unregister.
+        """
         with self._servers_lock:
             self.servers = [s for s in self.servers if s != server]
 
     def stop_all_servers(self):
-        """Stop all registered servers."""
+        """Stop all registered servers.
+
+        Continues attempting to stop all servers even if some fail.
+        """
         errors = []
 
         with self._servers_lock:
-            servers = list(self.servers)
-            self.servers.clear()
+            # Copy list to avoid modification during iteration
+            servers_to_stop = self.servers[:]
 
-        for server in servers:
+        for server in servers_to_stop:
             try:
                 server.stop_server()
             except Exception as e:
