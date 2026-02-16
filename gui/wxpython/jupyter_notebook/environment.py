@@ -17,7 +17,6 @@ This program is free software under the GNU General Public License
 
 from .directory import JupyterDirectoryManager
 from .server import JupyterServerInstance, JupyterServerRegistry
-from .utils import is_jupyter_installed, is_wx_html2_available
 
 
 class JupyterEnvironment:
@@ -25,32 +24,22 @@ class JupyterEnvironment:
 
     :param workdir: Directory for notebooks
     :param create_template: Whether to create template notebooks
-    :param integrated: If False, server is intended to be opened in external browser.
-                       If True, server is integrated into GRASS GUI and will be
-                       automatically stopped on GUI exit.
     """
 
-    def __init__(self, workdir, create_template, integrated):
+    def __init__(self, workdir, create_template):
         self.directory = JupyterDirectoryManager(workdir, create_template)
         self.server = JupyterServerInstance(workdir)
-        self.integrated = integrated
 
     def setup(self):
         """Prepare files and start server."""
-        if not is_jupyter_installed():
-            raise RuntimeError(_("Jupyter Notebook is not installed"))
-
-        if self.integrated and not is_wx_html2_available():
-            raise RuntimeError(_("wx.html2 (WebView) support is not available"))
-
         # Prepare files
         self.directory.prepare_files()
 
         # Start server
-        self.server.start_server(self.integrated)
+        self.server.start_server()
 
     def stop(self):
-        """Stop server only if integrated."""
+        """Stop server and unregister it."""
         self.server.stop_server()
         JupyterServerRegistry.get().unregister(self.server)
 
@@ -58,3 +47,18 @@ class JupyterEnvironment:
     def stop_all(cls):
         """Stop all running Jupyter servers and unregister them."""
         JupyterServerRegistry.get().stop_all_servers()
+
+    @property
+    def server_url(self):
+        """Get server URL."""
+        return self.server.server_url if self.server else None
+
+    @property
+    def pid(self):
+        """Get server process ID."""
+        return self.server.pid if self.server else None
+
+    @property
+    def workdir(self):
+        """Get working directory."""
+        return self.directory.workdir if self.directory else None
