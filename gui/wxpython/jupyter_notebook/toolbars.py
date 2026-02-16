@@ -55,7 +55,10 @@ class JupyterToolbar(BaseToolbar):
                 label=_("Export notebook"),
             ),
             "docking": BaseIcons["docking"],
-            "quit": BaseIcons["quit"],
+            "quit": MetaIcon(
+                img="quit",
+                label=_("Stop server"),
+            ),
         }
         data = (
             (

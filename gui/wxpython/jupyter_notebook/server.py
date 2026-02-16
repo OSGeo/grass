@@ -128,13 +128,10 @@ class JupyterServerInstance:
 
         return False
 
-    def start_server(self, integrated=True):
+    def start_server(self):
         """
         Start a Jupyter server in the working directory on a free port.
 
-        :param integrated:
-            - If False, the notebook is launched in the default web browser (external, no GUI integration).
-            - If True (default), the server runs headless and is intended for integration into the GRASS GUI (suitable for embedded WebView).
         :raises RuntimeError: If Jupyter is not installed, the working directory is invalid,
                             or the server fails to start.
         """
@@ -172,6 +169,7 @@ class JupyterServerInstance:
         cmd = [
             jupyter,
             "notebook",
+            "--no-browser",
             "--NotebookApp.token=",
             "--NotebookApp.password=",
             "--port",
@@ -179,9 +177,6 @@ class JupyterServerInstance:
             "--notebook-dir",
             self.workdir,
         ]
-
-        if integrated:
-            cmd.insert(2, "--no-browser")
 
         # Start server
         try:

@@ -17,15 +17,26 @@ This program is free software under the GNU General Public License
 import wx
 from wx.lib.agw import aui
 
+# Try to import html2, but it might not be available
 try:
-    import wx.html2 as html  # wx.html2 is available in wxPython 4.0 and later
-except ImportError as e:
-    raise RuntimeError(_("wx.html2 is required for Jupyter integration.")) from e
+    import wx.html2 as html
+
+    WX_HTML2_AVAILABLE = True
+except ImportError:
+    WX_HTML2_AVAILABLE = False
+    html = None
 
 from gui_core.wrap import SimpleTabArt
 
 
 class JupyterAuiNotebook(aui.AuiNotebook):
+    """AUI Notebook for managing Jupyter notebook tabs with embedded WebView.
+
+    Note: This class requires wx.html2.WebView to be available and functional.
+    If wx.html2 is not available or WebView.New() raises NotImplementedError,
+    the AddPage method will raise an exception.
+    """
+
     def __init__(
         self,
         parent,
@@ -37,9 +48,15 @@ class JupyterAuiNotebook(aui.AuiNotebook):
     ):
         """
         Wrapper for the notebook widget that manages notebook pages.
+
+        :raises ImportError: If wx.html2 is not available
         """
+
+        if not WX_HTML2_AVAILABLE:
+            msg = "wx.html2 is not available"
+            raise ImportError(msg)
+
         self.parent = parent
-        self.webview = None
 
         super().__init__(parent=self.parent, id=wx.ID_ANY, agwStyle=agwStyle)
 
@@ -100,6 +117,8 @@ class JupyterAuiNotebook(aui.AuiNotebook):
         Add a new aui notebook page with a Jupyter WebView.
         :param url: URL of the Jupyter file (str).
         :param title: Tab title (str).
+
+        :raises NotImplementedError: If wx.html2.WebView is not functional on this system
         """
         browser = html.WebView.New(self)
         wx.CallAfter(browser.LoadURL, url)
