@@ -6,6 +6,7 @@
 Functions:
 - `is_jupyter_installed()`: Check if Jupyter Notebook is installed on the system and functional.
 - `is_wx_html2_available()`: Check if wx.html2 module is available.
+- `get_default_jupyter_workdir()`: Return the default working directory for Jupyter notebooks.
 
 (C) 2026 by the GRASS Development Team
 
@@ -17,6 +18,9 @@ This program is free software under the GNU General Public License
 
 import shutil
 import subprocess
+from pathlib import Path
+
+import grass.script as gs
 
 
 def is_jupyter_installed():
@@ -56,3 +60,14 @@ def is_wx_html2_available():
         return True
     except (ImportError, ModuleNotFoundError):
         return False
+
+
+def get_default_jupyter_workdir():
+    """
+    Return the default working directory for Jupyter notebooks associated
+    with the current GRASS mapset.
+    :return: Path to the default notebook working directory (Path)
+    """
+    env = gs.gisenv()
+    mapset_path = Path(env["GISDBASE"]) / env["LOCATION_NAME"] / env["MAPSET"]
+    return mapset_path / "notebooks"

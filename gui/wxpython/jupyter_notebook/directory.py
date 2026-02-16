@@ -20,17 +20,7 @@ import shutil
 from pathlib import Path
 
 import grass.script as gs
-
-
-def get_default_jupyter_workdir():
-    """
-    Return the default working directory for Jupyter notebooks associated
-    with the current GRASS mapset.
-    :return: Path to the default notebook working directory (Path)
-    """
-    env = gs.gisenv()
-    mapset_path = Path(env["GISDBASE"]) / env["LOCATION_NAME"] / env["MAPSET"]
-    return mapset_path / "notebooks"
+from .utils import get_default_jupyter_workdir
 
 
 class JupyterDirectoryManager:
@@ -72,7 +62,7 @@ class JupyterDirectoryManager:
         """
         Populate the list of files in the working directory.
         """
-        # Find all .ipynb files in the notebooks directory
+        # Find all .ipynb files in the working directory
         self._files = [f for f in self._workdir.iterdir() if f.suffix == ".ipynb"]
 
         if self._create_template and not self._files:
@@ -157,12 +147,6 @@ class JupyterDirectoryManager:
     ):
         """
         Create a notebook from a template and optionally replace placeholders.
-
-        The template file is treated as plain text. If ``replacements`` is provided,
-        each ``key -> value`` pair is replaced in the file content.
-
-        If ``target_name`` is None, the template is copied using ``self.import_file()``.
-        Otherwise, a new file with the given name is created in the working directory.
 
         :param template_name: Template filename located in ``template_notebooks``.
         :param target_name: Optional target filename for the new notebook.
