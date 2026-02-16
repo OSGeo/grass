@@ -15,6 +15,61 @@ extend-exclude = '''
 )
 '''
 
+[tool.codespell]
+ignore-words-list = [
+    "BLOC",   # Seems unused
+    "Bui",
+    "Collet",
+    "Flor",
+    "Greif",
+    "Hart",
+    "Huld",
+    "Linke",
+    "OnText",
+    "Tripel",
+    "ans",    # TODO: Replace with a word
+    "anull",
+    "datas",
+    "delt",
+    "flor",
+    "indx",
+    "inout",
+    "linz",
+    "lsat",
+    "makin",
+    "nin",
+    "parm",
+    "parms",
+    "siz",
+    "vizual",
+]
+quiet-level = 3
+skip = [
+    "config.guess",
+    "gui/icons/grass.desktop",
+    "gui/wxpython/xml/grass-gxw.dtd",     # TODO
+    "lib/cdhc/doc/goodness.ps",
+    "lib/datetime/README",
+    "lib/external/ccmath/C01-matrix",
+    "lib/fonts/fonts/hersh.o*",           # TODO
+    "lib/gis/FIPS.code",                  # TODO
+    "lib/gis/datumtransform.table",       # TODO
+    "lib/gis/ellipse.table",              # TODO
+    "lib/gis/renamed_options",
+    "lib/proj/*.table",                   # TODO
+    "lib/rst/interp_float/print_tre",     # TODO
+    "lib/rst/interp_float/print_tree",    # TODO
+    "locale/*.po",
+    "locale/*.pot",
+    "locale/*.tbx",
+    "mswindows/GRASS-Installer.nsi.tmpl", # TODO
+    "raster/r.walk/TODO",                 # TODO
+    "rpm/grass.spec",                     # TODO
+    "utils/fix_typos.sh",
+    "utils/release.yml",                  # TODO
+    '*.dox',                              # TODO
+]
+
 [tool.ruff]
 required-version = ">=0.8.0"
 
@@ -420,8 +475,8 @@ known-first-party = ["grass"]
 "scripts/g.extension/g.extension.py" = ["PLW1514", "PTH208", "SIM115"]
 "scripts/g.search.modules/g.search.modules.py" = ["PLW1514"]
 "scripts/i.in.spotvgt/i.in.spotvgt.py" = ["PLW1514"]
-"scripts/i.oif/i.oif*.py" = ["SIM115"]
 "scripts/i.oif/i.oif.py" = ["PLW1514"]
+"scripts/i.oif/i.oif*.py" = ["SIM115"]
 "scripts/i.pansharpen/i.pansharpen.py" = ["PLW1514"]
 "scripts/i.spectral/i.spectral.py" = ["PLW1514"]
 "scripts/m.proj/m.proj.py" = ["PLW1514", "SIM115"]

@@ -97,7 +97,7 @@ struct kdtrav {
     int first;                /*!< little helper flag */
 };
 
-/*! creae a new k-d tree */
+/*! create a new k-d tree */
 struct kdtree *kdtree_create(char ndims, /*!< number of dimensions */
                              int *btol   /*!< optional balancing tolerance */
 );
