@@ -17,7 +17,7 @@ This program is free software under the GNU General Public License
 from pathlib import Path
 import wx
 
-from .directory import get_default_jupyter_workdir
+from .utils import get_default_jupyter_workdir
 
 
 class JupyterStartDialog(wx.Dialog):
