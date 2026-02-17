@@ -84,7 +84,8 @@ def generate_legend_html(parsed, title="Legend", max_items=12):
 
     html = [
         (
-            '<div style="'
+            '<div class="maplegend leaflet-control" style="'
+            "pointer-events: auto;"
             "background: #fff;"
             "padding: 8px 10px;"
             "border: 1px solid #ccc;"
