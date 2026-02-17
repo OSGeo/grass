@@ -37,21 +37,26 @@ class JupyterStartDialog(wx.Dialog):
         dir_box = wx.StaticBox(self, label=_("Notebook working directory"))
         dir_sizer = wx.StaticBoxSizer(dir_box, wx.VERTICAL)
 
-        self.radio_default = wx.RadioButton(
+        self.radio_custom = wx.RadioButton(
             self,
-            label=_("Use default: {}").format(self.default_dir),
+            label=_("Select directory:"),
             style=wx.RB_GROUP,
         )
-        self.radio_custom = wx.RadioButton(self, label=_("Select another directory:"))
+        self.radio_custom.SetValue(True)  # Default selection
 
         self.dir_picker = wx.DirPickerCtrl(
             self, message=_("Choose a working directory"), style=wx.DIRP_USE_TEXTCTRL
         )
-        self.dir_picker.Enable(False)
+        self.dir_picker.Enable(True)  # Enabled by default
 
-        dir_sizer.Add(self.radio_default, 0, wx.ALL, 5)
+        self.radio_default = wx.RadioButton(
+            self,
+            label=_("Use default: {}").format(self.default_dir),
+        )
+
         dir_sizer.Add(self.radio_custom, 0, wx.ALL, 5)
         dir_sizer.Add(self.dir_picker, 0, wx.EXPAND | wx.ALL, 5)
+        dir_sizer.Add(self.radio_default, 0, wx.ALL, 5)
         sizer.Add(dir_sizer, 0, wx.EXPAND | wx.ALL, 10)
 
         # Template preference section
