@@ -4,6 +4,7 @@ from grass.script.core import read_command
 from grass.tools import Tools
 import json
 
+
 class TestVNet(TestCase):
     network = "test_vnet"
 
@@ -12,16 +13,19 @@ class TestVNet(TestCase):
         self.runModule("g.remove", flags="f", type="vector", name=self.network)
 
     def test_nreport_json(self):
-        self.runModule("v.net", input="streets", points="schools", 
-                       output=self.network, operation="connect", 
-                       threshold=400, flags="c")
-        
+        self.runModule(
+            "v.net",
+            input="streets",
+            points="schools",
+            output=self.network,
+            operation="connect",
+            threshold=400,
+            flags="c",
+        )
+
         tools = Tools(quiet=True)
         result = tools.v_net(
-            input=self.network,
-            operation="nreport",
-            node_layer=2,
-            format="json"
+            input=self.network, operation="nreport", node_layer=2, format="json"
         )
 
         try:
@@ -31,11 +35,11 @@ class TestVNet(TestCase):
 
         self.assertIsInstance(data, list)
         self.assertGreater(len(data), 0, "nreport output is empty")
-        
+
         first_row = data[0]
         self.assertIn("node_cat", first_row)
         self.assertIn("lines", first_row)
-        
+
         self.assertIsInstance(first_row["node_cat"], int)
         self.assertIsInstance(first_row["lines"], list)
         self.assertGreater(len(first_row["lines"]), 0)
@@ -47,9 +51,10 @@ class TestVNet(TestCase):
             operation="report",
             arc_layer=1,
             node_layer=2,
-            format="json"
+            format="json",
         )
-        
+        # ,,\
+
         try:
             data = json.loads(result.text)
         except json.JSONDecodeError:
@@ -57,7 +62,7 @@ class TestVNet(TestCase):
 
         self.assertIsInstance(data, list)
         self.assertGreater(len(data), 0, "report output is empty")
-        
+
         self.assertIn("line_cat", data[0])
         self.assertIsInstance(data[0]["line_cat"], int)
 
