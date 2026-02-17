@@ -15,20 +15,24 @@ This program is free software under the GNU General Public License
 """
 
 from pathlib import Path
+
 import wx
 
 from core import globalvar
-
-from .panel import JupyterPanel
+from jupyter_notebook.panel import JupyterPanel, JupyterBrowserPanel
 
 
 class JupyterFrame(wx.Frame):
-    """Main window for the Jupyter Notebook interface."""
+    """Main window for the Jupyter Notebook interface in multi-window GUI.
+
+    Supports both integrated (embedded WebView) and browser (external) modes.
+    """
 
     def __init__(
         self,
         parent,
         giface,
+        action="integrated",
         workdir=None,
         create_template=False,
         id=wx.ID_ANY,
@@ -43,20 +47,83 @@ class JupyterFrame(wx.Frame):
         self.SetIcon(wx.Icon(str(icon_path), wx.BITMAP_TYPE_ICO))
 
         self.statusbar = self.CreateStatusBar(number=1)
+        self.panel = None
 
-        self.panel = JupyterPanel(
-            parent=self,
-            giface=giface,
-            workdir=workdir,
-            create_template=create_template,
-            statusbar=self.statusbar,
-        )
-        self.panel.SetUpNotebookInterface()
+        # Try integrated mode first if requested
+        if action == "integrated":
+            try:
+                self.panel = JupyterPanel(
+                    parent=self,
+                    giface=giface,
+                    workdir=workdir,
+                    create_template=create_template,
+                    statusbar=self.statusbar,
+                    dockable=False,
+                )
 
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self.panel, 1, wx.EXPAND)
-        self.SetSizer(sizer)
+                # Setup environment and load notebooks
+                if not self.panel.SetUpEnvironment():
+                    self.panel.Destroy()
+                    self.panel = None
+                    self.Close()
+                    return
 
-        self.SetSize((800, 600))
+            except NotImplementedError as e:
+                # WebView.New() raised NotImplementedError - not functional
+                if self.panel:
+                    self.panel.Destroy()
+                    self.panel = None
 
-        self.Bind(wx.EVT_CLOSE, self.panel.OnCloseWindow)
+                response = wx.MessageBox(
+                    _(
+                        "Integrated mode failed: wx.html2.WebView is not functional on this system.\n"
+                        "Error: {}\n\n"
+                        "Would you like to open Jupyter Notebook in your external browser instead?"
+                    ).format(str(e)),
+                    _("WebView Not Supported"),
+                    wx.ICON_ERROR | wx.YES_NO,
+                )
+
+                if response == wx.YES:
+                    action = "browser"
+                else:
+                    self.Close()
+                    return
+
+        # Browser mode
+        if action == "browser":
+            self.panel = JupyterBrowserPanel(
+                parent=self,
+                giface=giface,
+                workdir=workdir,
+                create_template=create_template,
+                statusbar=self.statusbar,
+                dockable=False,
+            )
+
+            # Setup environment and open in browser
+            if not self.panel.SetUpEnvironment():
+                self.panel.Destroy()
+                self.panel = None
+                self.Close()
+                return
+
+        self._layout()
+
+    def _layout(self):
+        if self.panel:
+            sizer = wx.BoxSizer(wx.VERTICAL)
+            sizer.Add(self.panel, 1, wx.EXPAND)
+            self.SetSizer(sizer)
+
+            self.SetSize((800, 600))
+
+            self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
+
+    def OnCloseWindow(self, event):
+        if self.panel and hasattr(self.panel, "OnCloseWindow"):
+            self.panel.OnCloseWindow(event)
+
+            if event.GetVeto():
+                return
+        self.Destroy()
