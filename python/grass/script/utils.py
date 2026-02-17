@@ -457,8 +457,19 @@ def get_lib_path(modname, libname=None):
         idx = cwd.find(modname)
         if idx < 0:
             return None
-        path = "{cwd}{sep}etc{sep}{modname}".format(
-            cwd=cwd[: idx + len(modname)], sep=sep, modname=modname
+
+        from grass.app.runtime import RuntimePaths
+
+        runtime_paths = RuntimePaths(set_env_variables=True)
+
+        path = (
+            "{cwd}{sep}build{sep}output{sep}etc{sep}{modname}".format(
+                cwd=cwd[: idx + len(modname)], sep=sep, modname=modname
+            )
+            if runtime_paths.is_cmake_build
+            else "{cwd}{sep}etc{sep}{modname}".format(
+                cwd=cwd[: idx + len(modname)], sep=sep, modname=modname
+            )
         )
         if libname:
             path += "{pathsep}{cwd}{sep}etc{sep}{modname}{sep}{libname}".format(
