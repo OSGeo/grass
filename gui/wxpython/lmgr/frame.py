@@ -789,19 +789,6 @@ class GMFrame(wx.Frame):
             parent=self,
         )
 
-    def _show_html2_missing_message(self):
-        wx.MessageBox(
-            _(
-                "Jupyter Notebook integration requires wxPython with wx.html2 "
-                "(WebView) support enabled.\n\n"
-                "Install wxPython/wxWidgets with HTML2/WebView support or use "
-                "Jupyter externally in a browser."
-            ),
-            _("Jupyter Notebook not available"),
-            wx.OK | wx.ICON_INFORMATION,
-            parent=self,
-        )
-
     def OnJupyterNotebook(self, event=None):
         """Launch Jupyter Notebook interface."""
         from jupyter_notebook.utils import (
@@ -832,48 +819,35 @@ class GMFrame(wx.Frame):
         create_template = values["create_template"]
 
         if action == "integrated":
-            # Embedded notebook mode: create JupyterFrame and start server within it
+            # Embedded notebook mode: requires wx.html2 for WebView
             if not is_wx_html2_available():
-                self._show_html2_missing_message()
-                return
-
-            from jupyter_notebook.frame import JupyterFrame
-
-            frame = JupyterFrame(
-                parent=self,
-                giface=self._giface,
-                workdir=workdir,
-                create_template=create_template,
-            )
-            frame.CentreOnParent()
-            frame.Show()
-
-        elif action == "browser":
-            # External browser mode: set up environment, open URL and update status
-            from jupyter_notebook.environment import JupyterEnvironment
-
-            jupyter_env = JupyterEnvironment(
-                workdir=workdir, create_template=create_template, integrated=False
-            )
-            try:
-                jupyter_env.setup()
-            except Exception as e:
-                wx.MessageBox(
-                    _("Failed to start Jupyter environment:\n{}").format(str(e)),
-                    _("Startup Error"),
-                    wx.ICON_ERROR,
+                # Offer fallback to browser mode
+                response = wx.MessageBox(
+                    _(
+                        "Integrated mode requires wx.html2.WebView which is not available on this system.\n\n"
+                        "Would you like to open Jupyter Notebook in your external browser instead?"
+                    ),
+                    _("Integrated Mode Not Available"),
+                    wx.ICON_WARNING | wx.YES_NO,
                 )
-                return
 
-            self.SetStatusText(
-                _(
-                    "Jupyter server started in browser at {url} (PID: {pid}), directory: {dir}"
-                ).format(
-                    url=jupyter_env.server.server_url,
-                    pid=jupyter_env.server.pid,
-                    dir=str(workdir),
-                )
-            )
+                if response == wx.YES:
+                    action = "browser"
+                else:
+                    return
+
+        from jupyter_notebook.frame import JupyterFrame
+
+        # Create and show the Jupyter frame
+        frame = JupyterFrame(
+            parent=self,
+            giface=self._giface,
+            action=action,
+            workdir=workdir,
+            create_template=create_template,
+        )
+        frame.CentreOnParent()
+        frame.Show()
 
     def OnPsMap(self, event=None, cmd=None):
         """Launch Cartographic Composer. See OnIClass documentation"""
