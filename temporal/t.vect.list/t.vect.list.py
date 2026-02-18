@@ -173,12 +173,12 @@ def main():
         # value which is always there (see above). Having no default and producing
         # an error when set would be more clear and would fit with using different
         # defaults for plain and CSV formats.
-    elif output_format == "line" and separator == "|":
+    elif (output_format == "line" or method == "comma") and separator == "|":
         # Same as for CSV: Custom default needed.
         # Pipe is currently not supported at all.
         separator = ","
 
-    if output_format == "line":
+    if output_format == "line" or method == "comma":
         columns_list = columns.split(",")
         if len(columns_list) > 1:
             gs.fatal(
