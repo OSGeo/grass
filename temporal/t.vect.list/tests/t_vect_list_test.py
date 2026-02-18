@@ -15,7 +15,7 @@ yaml = pytest.importorskip("yaml", reason="PyYAML package not available")
 def test_defaults(space_time_vector_dataset):
     """Check that the module runs with default parameters"""
     tools = Tools(session=space_time_vector_dataset.session)
-    result = tools.t_vect_list(input=space_time_vector_dataset.name, format=None)
+    result = tools.t_vect_list(input=space_time_vector_dataset.name)
     assert result.returncode == 0
 
 
