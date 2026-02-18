@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-07 15:45+0000\n"
-"PO-Revision-Date: 2026-02-09 07:03+0000\n"
+"POT-Creation-Date: 2026-02-14 18:00+0000\n"
+"PO-Revision-Date: 2026-02-18 03:40+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grassmods/fr/>\n"
 "Language: fr\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.16\n"
 
 #: ../db/db.columns/main.c:50 ../db/db.copy/main.c:104
 #: ../db/db.describe/main.c:65 ../db/db.select/main.c:77
@@ -54,7 +54,7 @@ msgstr "Impossible d'ouvrir la base de données <%s>"
 
 #: ../db/db.columns/main.c:68 ../db/db.describe/main.c:82
 #: ../doc/examples/vector/v.example/main.c:143
-#: ../scripts/db.univar/db.univar.py:129 ../vector/v.db.connect/main.c:350
+#: ../scripts/db.univar/db.univar.py:125 ../vector/v.db.connect/main.c:350
 #: ../vector/v.extract/main.c:233 ../vector/v.in.ascii/main.c:447
 #: ../vector/v.info/print.c:236 ../vector/v.out.ogr/main.c:718
 #: ../vector/v.out.postgis/table.c:41 ../vector/v.out.svg/main.c:165
@@ -295,8 +295,8 @@ msgstr "Afficher les paramètres de connexion courants en mode shell et quitter 
 #: ../db/db.connect/main.c:64 ../general/g.proj/main.c:85
 #: ../general/g.region/main.c:149 ../general/g.version/main.c:114
 #: ../imagery/i.group/main.c:113
-#: ../locale/scriptstrings/db.univar_to_translate.c:11
-#: ../locale/scriptstrings/v.db.univar_to_translate.c:11
+#: ../locale/scriptstrings/db.univar_to_translate.c:10
+#: ../locale/scriptstrings/v.db.univar_to_translate.c:10
 #: ../misc/m.measure/main.c:76 ../raster/r.proj/main.c:236
 #: ../raster/r.regression.line/main.c:83
 #: ../raster/r.regression.multi/main.c:179
@@ -374,8 +374,8 @@ msgstr "Échec de l'initialisation de l'objet JSON. Mémoire insuffisante ?"
 #: ../raster/r.regression.multi/main.c:213
 #: ../raster/r.univar/r.univar_main.c:220
 #: ../raster/r.univar/r3.univar_main.c:176
-#: ../scripts/db.univar/db.univar.py:122
-#: ../scripts/v.db.univar/v.db.univar.py:99 ../vector/v.univar/main.c:177
+#: ../scripts/db.univar/db.univar.py:118
+#: ../scripts/v.db.univar/v.db.univar.py:95 ../vector/v.univar/main.c:177
 #: ../vector/v.what/main.c:195
 msgid "Flag 'g' is deprecated and will be removed in a future release. Please use format=shell instead."
 msgstr ""
@@ -537,9 +537,8 @@ msgstr "Lister toutes les bases de données pour un pilote et un secteur donnés
 #: ../vector/v.distance/main.c:1799 ../vector/v.info/main.c:106
 #: ../vector/v.info/print.c:306 ../vector/v.info/print.c:946
 #: ../vector/v.to.db/report.c:515 ../vector/v.univar/main.c:821
-#, fuzzy
 msgid "Failed to initialize pretty JSON string."
-msgstr "Impossible de fermer la couche : couche d'entrée introuvable"
+msgstr "Échec de l'initialisation d'une chaîne JSON formatée."
 
 #: ../db/db.describe/main.c:165
 msgid "Print column names only instead of full column descriptions"
@@ -773,10 +772,8 @@ msgid "Name of table to query"
 msgstr "Nom de la table à interroger"
 
 #: ../db/db.select/main.c:416
-#, fuzzy
-#| msgid "Vertical record separator (requires -v flag)"
 msgid "Vertical record separator (requires -v flag [deprecated] or format=vertical)"
-msgstr "Séparateur vertical d'enregistrements (requiert l'option -v)."
+msgstr "Séparateur vertical d'enregistrements (requiert l'option -v [obsolète] ou format=vertical)"
 
 #: ../db/db.select/main.c:440 ../locale/scriptstrings/i.oif_to_translate.c:5
 #: ../locale/scriptstrings/r.out.xyz_to_translate.c:7
@@ -828,9 +825,8 @@ msgid "Separator is part of the format"
 msgstr ""
 
 #: ../db/db.select/main.c:542
-#, fuzzy
 msgid "Vertical separator is part of the format"
-msgstr "Entrer une règle dans un des formats suivants :"
+msgstr "Le séparateur vertical fait partie du format"
 
 #: ../db/db.select/main.c:544 ../vector/v.db.select/main.c:204
 msgid "Null value is part of the format"
@@ -1254,7 +1250,7 @@ msgstr "Type inconnu"
 msgid "OGR layer <%s> not found"
 msgstr "Couche OGR <%s> non trouvée"
 
-#: ../db/drivers/ogr/execute.c:77 ../scripts/db.univar/db.univar.py:137
+#: ../db/drivers/ogr/execute.c:77 ../scripts/db.univar/db.univar.py:133
 #: ../vector/v.colors.out/make_colors.c:42 ../vector/v.colors/scan_attr.c:34
 #: ../vector/v.db.connect/main.c:487 ../vector/v.distance/main.c:574
 #: ../vector/v.distance/main.c:616 ../vector/v.in.db/main.c:195
@@ -2224,7 +2220,7 @@ msgstr "Aucune sortie graphique n'est sélectionnée"
 #: ../general/g.region/main.c:569 ../misc/m.nviz.image/vector.c:83
 #: ../raster/r.carve/main.c:153 ../raster/r.cost/main.c:357
 #: ../raster/r.walk/main.c:460 ../scripts/r.mask/r.mask.py:173
-#: ../scripts/v.db.univar/v.db.univar.py:80
+#: ../scripts/v.db.univar/v.db.univar.py:76
 #: ../scripts/v.dissolve/v.dissolve.py:578 ../scripts/v.pack/v.pack.py:62
 #: ../scripts/v.report/v.report.py:85 ../vector/v.clean/test/topocheck.c:62
 #: ../vector/v.colors/main.c:252 ../vector/v.edit/main.c:161
@@ -11142,9 +11138,6 @@ msgid "reverse error (source)"
 msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.transform/main.c:479
-#: ../locale/scriptstrings/db.univar_to_translate.c:7
-#: ../locale/scriptstrings/t.rast.list_to_translate.c:14
-#: ../locale/scriptstrings/v.db.univar_to_translate.c:7
 #: ../misc/m.transform/main.c:345 ../raster/r.viewshed/main.cpp:443
 #: ../raster/r.viewshed/main.cpp:452 ../vector/v.out.ascii/args.c:56
 msgid "Output format"
@@ -12376,9 +12369,9 @@ msgstr ""
 
 #: ../imagery/i.svm.train/main.c:433 ../imagery/i.svm.train/main.c:450
 #: ../imagery/i.svm.train/main.c:462
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write trained model to file '%s'."
-msgstr "Impossible d'écrire le fichier segment"
+msgstr "Impossible d'écrire le modèle entraîné dans le fichier '%s'."
 
 #: ../imagery/i.svm.train/main.c:443
 #, fuzzy, c-format
@@ -13268,18 +13261,18 @@ msgstr "Nom de la colonne d'attributs sur laquelle calculer les statistiques (do
 msgid "Percentile to calculate (requires extended statistics flag)"
 msgstr "Percentile à calculer (nécessite l'option statistiques étendues)"
 
-#: ../locale/scriptstrings/db.univar_to_translate.c:8
-#: ../locale/scriptstrings/v.db.univar_to_translate.c:8
+#: ../locale/scriptstrings/db.univar_to_translate.c:7
+#: ../locale/scriptstrings/v.db.univar_to_translate.c:7
 msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);shell;Shell script style for Bash eval"
 msgstr ""
 
-#: ../locale/scriptstrings/db.univar_to_translate.c:9
-#: ../locale/scriptstrings/v.db.univar_to_translate.c:9
+#: ../locale/scriptstrings/db.univar_to_translate.c:8
+#: ../locale/scriptstrings/v.db.univar_to_translate.c:8
 msgid "Extended statistics (quartiles and 90th percentile)"
 msgstr "Statistiques étendues (quartiles et percentile 90)"
 
-#: ../locale/scriptstrings/db.univar_to_translate.c:10
-#: ../locale/scriptstrings/v.db.univar_to_translate.c:10
+#: ../locale/scriptstrings/db.univar_to_translate.c:9
+#: ../locale/scriptstrings/v.db.univar_to_translate.c:9
 msgid "Print stats in shell script style [deprecated]"
 msgstr "Afficher les statistiques en style script shell [obsolète]"
 
@@ -15722,6 +15715,10 @@ msgstr ""
 
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:13
 msgid "The granule to be used for listing. The granule must be specified as string eg.: absolute time \"1 months\" or relative time \"1\""
+msgstr ""
+
+#: ../locale/scriptstrings/t.rast.list_to_translate.c:14
+msgid "plain;Plain text output;line;Comma separated list of map names;json;JSON (JavaScript Object Notation);yaml;YAML (YAML Ain't Markup Language);csv;CSV (Comma Separated Values);"
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:18
@@ -23482,9 +23479,9 @@ msgstr "L'exécution parallèle n'est pas prise en charge pour l'amorçage aléa
 #: ../raster/r.resamp.filter/main.c:488 ../raster/r.resamp.interp/main.c:126
 #: ../raster/r.series/main.c:225 ../raster/r.slope.aspect/main.c:303
 #: ../raster/r.texture/main.c:318 ../raster/r.univar/r.univar_main.c:247
-#, fuzzy, c-format
+#, c-format
 msgid "<%d> is not valid number of nprocs."
-msgstr "Nombre invalide d'étapes: %s"
+msgstr "<%d> n'est pas un nombre valide de nprocs."
 
 #: ../raster/r.mapcalc/main.c:272
 msgid "Floating point error(s) occurred in the calculation"
@@ -27628,13 +27625,8 @@ msgid "Infiltration exceeds the rainfall rate everywhere! No overland flow."
 msgstr ""
 
 #: ../raster/r.sim/simlib/input.c:308
-#, fuzzy
 msgid "No values in the elevation raster."
-msgstr ""
-"#-#-#-#-#  grassmods_fr.po (grassmods_fr)  #-#-#-#-#\n"
-"Nom de la couche raster cible\n"
-"#-#-#-#-#  grassmods_fr.po (grassmods_fr)  #-#-#-#-#\n"
-"Nom de la couche raster de sortie"
+msgstr "Aucune valeur dans le raster d'élévation."
 
 #: ../raster/r.sim/simlib/input.c:343
 #, c-format
@@ -33514,35 +33506,35 @@ msgstr ""
 msgid "RESULT: OK"
 msgstr ""
 
-#: ../scripts/db.univar/db.univar.py:86
+#: ../scripts/db.univar/db.univar.py:82
 msgid "'sort' not found: sorting in memory"
 msgstr ""
 
-#: ../scripts/db.univar/db.univar.py:135
+#: ../scripts/db.univar/db.univar.py:131
 #: ../vector/v.colors.out/make_colors.c:45 ../vector/v.colors/scan_attr.c:37
 #, c-format, python-format
 msgid "Column <%s> is not numeric"
 msgstr ""
 
-#: ../scripts/db.univar/db.univar.py:140
+#: ../scripts/db.univar/db.univar.py:136
 #, python-format
 msgid "Calculation for column <%s> of table <%s>..."
 msgstr ""
 
-#: ../scripts/db.univar/db.univar.py:141
+#: ../scripts/db.univar/db.univar.py:137
 msgid "Reading column values..."
 msgstr ""
 
-#: ../scripts/db.univar/db.univar.py:168
+#: ../scripts/db.univar/db.univar.py:164
 #, python-format
 msgid "Table <%s> contains no data."
 msgstr ""
 
-#: ../scripts/db.univar/db.univar.py:172
+#: ../scripts/db.univar/db.univar.py:168
 msgid "Calculating statistics..."
 msgstr ""
 
-#: ../scripts/db.univar/db.univar.py:196
+#: ../scripts/db.univar/db.univar.py:192
 msgid "No non-null values found"
 msgstr ""
 
@@ -35640,7 +35632,7 @@ msgstr ""
 msgid "Column <{column_name}> not found in table <{table_name}>"
 msgstr "Colonne <{column_name}> non trouvée dans la table <{table_name}>"
 
-#: ../scripts/v.db.univar/v.db.univar.py:85
+#: ../scripts/v.db.univar/v.db.univar.py:81
 #, python-format
 msgid "No attribute table linked to layer <%s>"
 msgstr ""
@@ -40471,9 +40463,9 @@ msgid "Number of incorrect boundaries: %d"
 msgstr ""
 
 #: ../vector/v.in.ogr/main.c:1838
-#, fuzzy, c-format
+#, c-format
 msgid "Number of centroids outside area: %d"
-msgstr "Nombre de centroïdes en dehors de surfaces: %d"
+msgstr "Nombre de centroïdes en dehors de surfaces : %d"
 
 #: ../vector/v.in.ogr/main.c:1844
 #, fuzzy, c-format
@@ -41128,7 +41120,7 @@ msgstr "%s: Impossible de lire le fichier de définition de police, utilisation 
 #: ../vector/v.label.sa/font.c:59
 #, c-format
 msgid "%s: No font definition file"
-msgstr "%s: Aucun fichier de définition de police"
+msgstr "%s : Aucun fichier de définition de police"
 
 #: ../vector/v.label.sa/labels.c:68
 #, c-format

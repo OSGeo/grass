@@ -10,7 +10,7 @@
 #            License (>=v2). Read the file COPYING that comes with GRASS
 #            for details.
 
-"""Utility functions warpping existing processes in a suitable way"""
+"""Utility functions wrapping existing processes in a suitable way"""
 
 from collections.abc import Mapping
 import tempfile

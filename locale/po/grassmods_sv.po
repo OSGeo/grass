@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-07 15:45+0000\n"
+"POT-Creation-Date: 2026-02-14 18:00+0000\n"
 "PO-Revision-Date: 2026-01-08 02:38+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
@@ -48,7 +48,7 @@ msgstr "Det går inte att öppna databasen <%s>"
 
 #: ../db/db.columns/main.c:68 ../db/db.describe/main.c:82
 #: ../doc/examples/vector/v.example/main.c:143
-#: ../scripts/db.univar/db.univar.py:129 ../vector/v.db.connect/main.c:350
+#: ../scripts/db.univar/db.univar.py:125 ../vector/v.db.connect/main.c:350
 #: ../vector/v.extract/main.c:233 ../vector/v.in.ascii/main.c:447
 #: ../vector/v.info/print.c:236 ../vector/v.out.ogr/main.c:718
 #: ../vector/v.out.postgis/table.c:41 ../vector/v.out.svg/main.c:165
@@ -288,8 +288,8 @@ msgstr "Skriv ut aktuella anslutningsparametrar med skal-stil och avsluta [för�
 #: ../db/db.connect/main.c:64 ../general/g.proj/main.c:85
 #: ../general/g.region/main.c:149 ../general/g.version/main.c:114
 #: ../imagery/i.group/main.c:113
-#: ../locale/scriptstrings/db.univar_to_translate.c:11
-#: ../locale/scriptstrings/v.db.univar_to_translate.c:11
+#: ../locale/scriptstrings/db.univar_to_translate.c:10
+#: ../locale/scriptstrings/v.db.univar_to_translate.c:10
 #: ../misc/m.measure/main.c:76 ../raster/r.proj/main.c:236
 #: ../raster/r.regression.line/main.c:83
 #: ../raster/r.regression.multi/main.c:179
@@ -367,8 +367,8 @@ msgstr "Misslyckades med att initiera JSON-objekt. Har du slut på minne?"
 #: ../raster/r.regression.multi/main.c:213
 #: ../raster/r.univar/r.univar_main.c:220
 #: ../raster/r.univar/r3.univar_main.c:176
-#: ../scripts/db.univar/db.univar.py:122
-#: ../scripts/v.db.univar/v.db.univar.py:99 ../vector/v.univar/main.c:177
+#: ../scripts/db.univar/db.univar.py:118
+#: ../scripts/v.db.univar/v.db.univar.py:95 ../vector/v.univar/main.c:177
 #: ../vector/v.what/main.c:195
 msgid "Flag 'g' is deprecated and will be removed in a future release. Please use format=shell instead."
 msgstr "Flaggan \"g\" är föråldrad och kommer att tas bort i en framtida version. Använd format=shell istället."
@@ -1249,7 +1249,7 @@ msgstr "Okänd typ"
 msgid "OGR layer <%s> not found"
 msgstr "OGR-lager <%s> hittades inte"
 
-#: ../db/drivers/ogr/execute.c:77 ../scripts/db.univar/db.univar.py:137
+#: ../db/drivers/ogr/execute.c:77 ../scripts/db.univar/db.univar.py:133
 #: ../vector/v.colors.out/make_colors.c:42 ../vector/v.colors/scan_attr.c:34
 #: ../vector/v.db.connect/main.c:487 ../vector/v.distance/main.c:574
 #: ../vector/v.distance/main.c:616 ../vector/v.in.db/main.c:195
@@ -2219,7 +2219,7 @@ msgstr "Ingen grafikenhet vald"
 #: ../general/g.region/main.c:569 ../misc/m.nviz.image/vector.c:83
 #: ../raster/r.carve/main.c:153 ../raster/r.cost/main.c:357
 #: ../raster/r.walk/main.c:460 ../scripts/r.mask/r.mask.py:173
-#: ../scripts/v.db.univar/v.db.univar.py:80
+#: ../scripts/v.db.univar/v.db.univar.py:76
 #: ../scripts/v.dissolve/v.dissolve.py:578 ../scripts/v.pack/v.pack.py:62
 #: ../scripts/v.report/v.report.py:85 ../vector/v.clean/test/topocheck.c:62
 #: ../vector/v.colors/main.c:252 ../vector/v.edit/main.c:161
@@ -11137,9 +11137,6 @@ msgid "reverse error (source)"
 msgstr "omvänt fel (källa)"
 
 #: ../imagery/i.ortho.photo/i.ortho.transform/main.c:479
-#: ../locale/scriptstrings/db.univar_to_translate.c:7
-#: ../locale/scriptstrings/t.rast.list_to_translate.c:14
-#: ../locale/scriptstrings/v.db.univar_to_translate.c:7
 #: ../misc/m.transform/main.c:345 ../raster/r.viewshed/main.cpp:443
 #: ../raster/r.viewshed/main.cpp:452 ../vector/v.out.ascii/args.c:56
 msgid "Output format"
@@ -13242,18 +13239,18 @@ msgstr "Namn på den attributkolumn som statistiken ska beräknas på (måste va
 msgid "Percentile to calculate (requires extended statistics flag)"
 msgstr "Percentil att beräkna (kräver flagga för utökad statistik)"
 
-#: ../locale/scriptstrings/db.univar_to_translate.c:8
-#: ../locale/scriptstrings/v.db.univar_to_translate.c:8
+#: ../locale/scriptstrings/db.univar_to_translate.c:7
+#: ../locale/scriptstrings/v.db.univar_to_translate.c:7
 msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);shell;Shell script style for Bash eval"
 msgstr "plain;Utdata i klartext;json;JSON (JavaScript Object Notation);skal;Shell script-stil för Bash-eval"
 
-#: ../locale/scriptstrings/db.univar_to_translate.c:9
-#: ../locale/scriptstrings/v.db.univar_to_translate.c:9
+#: ../locale/scriptstrings/db.univar_to_translate.c:8
+#: ../locale/scriptstrings/v.db.univar_to_translate.c:8
 msgid "Extended statistics (quartiles and 90th percentile)"
 msgstr "Utökad statistik (kvartiler och 90:e percentilen)"
 
-#: ../locale/scriptstrings/db.univar_to_translate.c:10
-#: ../locale/scriptstrings/v.db.univar_to_translate.c:10
+#: ../locale/scriptstrings/db.univar_to_translate.c:9
+#: ../locale/scriptstrings/v.db.univar_to_translate.c:9
 msgid "Print stats in shell script style [deprecated]"
 msgstr "Skriv ut statistik i skalskriptformat [föråldrat]"
 
@@ -15685,6 +15682,12 @@ msgstr "Metod som används för datalistning"
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:13
 msgid "The granule to be used for listing. The granule must be specified as string eg.: absolute time \"1 months\" or relative time \"1\""
 msgstr "Det granulat som ska användas för listning. Granulatet måste anges som en sträng, t.ex.: absolut tid \"1 månader\" eller relativ tid \"1\""
+
+#: ../locale/scriptstrings/t.rast.list_to_translate.c:14
+#, fuzzy
+#| msgid "plain;Human readable text output;shell;shell script style text output;json;JSON (JavaScript Object Notation);"
+msgid "plain;Plain text output;line;Comma separated list of map names;json;JSON (JavaScript Object Notation);yaml;YAML (YAML Ain't Markup Language);csv;CSV (Comma Separated Values);"
+msgstr "vanlig;mänsklig läsbar textutmatning;skal;textutmatning i skalskriptstil;json;JSON (JavaScript Object Notation);"
 
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:18
 #: ../locale/scriptstrings/t.rast.univar_to_translate.c:16
@@ -33393,35 +33396,35 @@ msgstr "EXECUTE: OK"
 msgid "RESULT: OK"
 msgstr "RESULTAT: OK"
 
-#: ../scripts/db.univar/db.univar.py:86
+#: ../scripts/db.univar/db.univar.py:82
 msgid "'sort' not found: sorting in memory"
 msgstr "\"sort\" hittades inte: sortering i minnet"
 
-#: ../scripts/db.univar/db.univar.py:135
+#: ../scripts/db.univar/db.univar.py:131
 #: ../vector/v.colors.out/make_colors.c:45 ../vector/v.colors/scan_attr.c:37
 #, c-format, python-format
 msgid "Column <%s> is not numeric"
 msgstr "Kolumn <%s> är inte numerisk"
 
-#: ../scripts/db.univar/db.univar.py:140
+#: ../scripts/db.univar/db.univar.py:136
 #, python-format
 msgid "Calculation for column <%s> of table <%s>..."
 msgstr "Beräkning för kolumn <%s> i tabell <%s>..."
 
-#: ../scripts/db.univar/db.univar.py:141
+#: ../scripts/db.univar/db.univar.py:137
 msgid "Reading column values..."
 msgstr "Läser kolumnvärden..."
 
-#: ../scripts/db.univar/db.univar.py:168
+#: ../scripts/db.univar/db.univar.py:164
 #, python-format
 msgid "Table <%s> contains no data."
 msgstr "Tabell <%s> innehåller inga data."
 
-#: ../scripts/db.univar/db.univar.py:172
+#: ../scripts/db.univar/db.univar.py:168
 msgid "Calculating statistics..."
 msgstr "Beräkning av statistik..."
 
-#: ../scripts/db.univar/db.univar.py:196
+#: ../scripts/db.univar/db.univar.py:192
 msgid "No non-null values found"
 msgstr "Inga icke-nullvärden hittades"
 
@@ -35554,7 +35557,7 @@ msgstr "Det går inte att byta namn på kolumn <%s> eftersom den behövs för at
 msgid "Column <{column_name}> not found in table <{table_name}>"
 msgstr "Kolumnen <{column_name}> finns inte i tabellen <{table_name}>"
 
-#: ../scripts/v.db.univar/v.db.univar.py:85
+#: ../scripts/v.db.univar/v.db.univar.py:81
 #, python-format
 msgid "No attribute table linked to layer <%s>"
 msgstr "Ingen attributtabell kopplad till lager <%s>"

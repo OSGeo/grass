@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-07 15:45+0000\n"
+"POT-Creation-Date: 2026-02-14 18:00+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Korean <https://weblate.osgeo.org/projects/grass-gis/grassmods/ko/>\n"
@@ -48,7 +48,7 @@ msgstr "데이터베이스 <%s>를 열 수 없습니다"
 
 #: ../db/db.columns/main.c:68 ../db/db.describe/main.c:82
 #: ../doc/examples/vector/v.example/main.c:143
-#: ../scripts/db.univar/db.univar.py:129 ../vector/v.db.connect/main.c:350
+#: ../scripts/db.univar/db.univar.py:125 ../vector/v.db.connect/main.c:350
 #: ../vector/v.extract/main.c:233 ../vector/v.in.ascii/main.c:447
 #: ../vector/v.info/print.c:236 ../vector/v.out.ogr/main.c:718
 #: ../vector/v.out.postgis/table.c:41 ../vector/v.out.svg/main.c:165
@@ -288,8 +288,8 @@ msgstr "지역정보를 셸 스크립트 형식으로 출력합니다"
 #: ../db/db.connect/main.c:64 ../general/g.proj/main.c:85
 #: ../general/g.region/main.c:149 ../general/g.version/main.c:114
 #: ../imagery/i.group/main.c:113
-#: ../locale/scriptstrings/db.univar_to_translate.c:11
-#: ../locale/scriptstrings/v.db.univar_to_translate.c:11
+#: ../locale/scriptstrings/db.univar_to_translate.c:10
+#: ../locale/scriptstrings/v.db.univar_to_translate.c:10
 #: ../misc/m.measure/main.c:76 ../raster/r.proj/main.c:236
 #: ../raster/r.regression.line/main.c:83
 #: ../raster/r.regression.multi/main.c:179
@@ -367,8 +367,8 @@ msgstr ""
 #: ../raster/r.regression.multi/main.c:213
 #: ../raster/r.univar/r.univar_main.c:220
 #: ../raster/r.univar/r3.univar_main.c:176
-#: ../scripts/db.univar/db.univar.py:122
-#: ../scripts/v.db.univar/v.db.univar.py:99 ../vector/v.univar/main.c:177
+#: ../scripts/db.univar/db.univar.py:118
+#: ../scripts/v.db.univar/v.db.univar.py:95 ../vector/v.univar/main.c:177
 #: ../vector/v.what/main.c:195
 msgid "Flag 'g' is deprecated and will be removed in a future release. Please use format=shell instead."
 msgstr ""
@@ -1241,7 +1241,7 @@ msgstr "알려지지 않은 유형"
 msgid "OGR layer <%s> not found"
 msgstr ""
 
-#: ../db/drivers/ogr/execute.c:77 ../scripts/db.univar/db.univar.py:137
+#: ../db/drivers/ogr/execute.c:77 ../scripts/db.univar/db.univar.py:133
 #: ../vector/v.colors.out/make_colors.c:42 ../vector/v.colors/scan_attr.c:34
 #: ../vector/v.db.connect/main.c:487 ../vector/v.distance/main.c:574
 #: ../vector/v.distance/main.c:616 ../vector/v.in.db/main.c:195
@@ -2212,7 +2212,7 @@ msgstr ""
 #: ../general/g.region/main.c:569 ../misc/m.nviz.image/vector.c:83
 #: ../raster/r.carve/main.c:153 ../raster/r.cost/main.c:357
 #: ../raster/r.walk/main.c:460 ../scripts/r.mask/r.mask.py:173
-#: ../scripts/v.db.univar/v.db.univar.py:80
+#: ../scripts/v.db.univar/v.db.univar.py:76
 #: ../scripts/v.dissolve/v.dissolve.py:578 ../scripts/v.pack/v.pack.py:62
 #: ../scripts/v.report/v.report.py:85 ../vector/v.clean/test/topocheck.c:62
 #: ../vector/v.colors/main.c:252 ../vector/v.edit/main.c:161
@@ -11167,9 +11167,6 @@ msgid "reverse error (source)"
 msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.transform/main.c:479
-#: ../locale/scriptstrings/db.univar_to_translate.c:7
-#: ../locale/scriptstrings/t.rast.list_to_translate.c:14
-#: ../locale/scriptstrings/v.db.univar_to_translate.c:7
 #: ../misc/m.transform/main.c:345 ../raster/r.viewshed/main.cpp:443
 #: ../raster/r.viewshed/main.cpp:452 ../vector/v.out.ascii/args.c:56
 msgid "Output format"
@@ -13299,18 +13296,18 @@ msgstr ""
 msgid "Percentile to calculate (requires extended statistics flag)"
 msgstr ""
 
+#: ../locale/scriptstrings/db.univar_to_translate.c:7
+#: ../locale/scriptstrings/v.db.univar_to_translate.c:7
+msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);shell;Shell script style for Bash eval"
+msgstr ""
+
 #: ../locale/scriptstrings/db.univar_to_translate.c:8
 #: ../locale/scriptstrings/v.db.univar_to_translate.c:8
-msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);shell;Shell script style for Bash eval"
+msgid "Extended statistics (quartiles and 90th percentile)"
 msgstr ""
 
 #: ../locale/scriptstrings/db.univar_to_translate.c:9
 #: ../locale/scriptstrings/v.db.univar_to_translate.c:9
-msgid "Extended statistics (quartiles and 90th percentile)"
-msgstr ""
-
-#: ../locale/scriptstrings/db.univar_to_translate.c:10
-#: ../locale/scriptstrings/v.db.univar_to_translate.c:10
 #, fuzzy
 #| msgid "Print region info in shell script style"
 msgid "Print stats in shell script style [deprecated]"
@@ -15749,6 +15746,10 @@ msgstr ""
 
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:13
 msgid "The granule to be used for listing. The granule must be specified as string eg.: absolute time \"1 months\" or relative time \"1\""
+msgstr ""
+
+#: ../locale/scriptstrings/t.rast.list_to_translate.c:14
+msgid "plain;Plain text output;line;Comma separated list of map names;json;JSON (JavaScript Object Notation);yaml;YAML (YAML Ain't Markup Language);csv;CSV (Comma Separated Values);"
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:18
@@ -33479,35 +33480,35 @@ msgstr ""
 msgid "RESULT: OK"
 msgstr ""
 
-#: ../scripts/db.univar/db.univar.py:86
+#: ../scripts/db.univar/db.univar.py:82
 msgid "'sort' not found: sorting in memory"
 msgstr ""
 
-#: ../scripts/db.univar/db.univar.py:135
+#: ../scripts/db.univar/db.univar.py:131
 #: ../vector/v.colors.out/make_colors.c:45 ../vector/v.colors/scan_attr.c:37
 #, c-format, python-format
 msgid "Column <%s> is not numeric"
 msgstr ""
 
-#: ../scripts/db.univar/db.univar.py:140
+#: ../scripts/db.univar/db.univar.py:136
 #, python-format
 msgid "Calculation for column <%s> of table <%s>..."
 msgstr ""
 
-#: ../scripts/db.univar/db.univar.py:141
+#: ../scripts/db.univar/db.univar.py:137
 msgid "Reading column values..."
 msgstr ""
 
-#: ../scripts/db.univar/db.univar.py:168
+#: ../scripts/db.univar/db.univar.py:164
 #, python-format
 msgid "Table <%s> contains no data."
 msgstr ""
 
-#: ../scripts/db.univar/db.univar.py:172
+#: ../scripts/db.univar/db.univar.py:168
 msgid "Calculating statistics..."
 msgstr ""
 
-#: ../scripts/db.univar/db.univar.py:196
+#: ../scripts/db.univar/db.univar.py:192
 msgid "No non-null values found"
 msgstr ""
 
@@ -35610,7 +35611,7 @@ msgstr "열 <%s>의 이름은 입력 벡터 지도에 연결된 테이블 <%s>�
 msgid "Column <{column_name}> not found in table <{table_name}>"
 msgstr ""
 
-#: ../scripts/v.db.univar/v.db.univar.py:85
+#: ../scripts/v.db.univar/v.db.univar.py:81
 #, python-format
 msgid "No attribute table linked to layer <%s>"
 msgstr ""

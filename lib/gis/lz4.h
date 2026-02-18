@@ -396,7 +396,7 @@ LZ4LIB_API int LZ4_freeStream(LZ4_stream_t *streamPtr);
  *  it's necessary to initialize it first, using LZ4_initStream().
  *
  *  After init, start any new stream with LZ4_resetStream_fast().
- *  A same LZ4_stream_t can be re-used multiple times consecutively
+ *  A same LZ4_stream_t can be reused multiple times consecutively
  *  and compress multiple streams,
  *  provided that it starts each new stream with LZ4_resetStream_fast().
  *
@@ -431,7 +431,7 @@ LZ4LIB_API int LZ4_loadDict(LZ4_stream_t *streamPtr, const char *dictionary,
  * Same as LZ4_loadDict(),
  * but uses a bit more cpu to reference the dictionary content more thoroughly.
  * This is expected to slightly improve compression ratio.
- * The extra-cpu cost is likely worth it if the dictionary is re-used across
+ * The extra-cpu cost is likely worth it if the dictionary is reused across
  * multiple sessions.
  * @return loaded dictionary size, in bytes (note: only the last 64 KB are
  *         loaded)
@@ -441,7 +441,7 @@ LZ4LIB_API int LZ4_loadDictSlow(LZ4_stream_t *streamPtr, const char *dictionary,
 
 /*! LZ4_attach_dictionary() : stable since v1.10.0
  *
- *  This allows efficient re-use of a static dictionary multiple times.
+ *  This allows efficient reuse of a static dictionary multiple times.
  *
  *  Rather than re-loading the dictionary buffer into a working context before
  *  each compression, or copying a pre-loaded dictionary's LZ4_stream_t into a
@@ -530,7 +530,7 @@ typedef union LZ4_streamDecode_u LZ4_streamDecode_t; /* tracking context */
 
 /*! LZ4_createStreamDecode() and LZ4_freeStreamDecode() :
  *  creation / destruction of streaming decompression tracking context.
- *  A tracking context can be re-used multiple times.
+ *  A tracking context can be reused multiple times.
  */
 #if !defined(                                                                              \
     RC_INVOKED) /* https://docs.microsoft.com/en-us/windows/win32/menurc/predefined-macros \
@@ -542,7 +542,7 @@ LZ4LIB_API int LZ4_freeStreamDecode(LZ4_streamDecode_t *LZ4_stream);
 #endif
 
 /*! LZ4_setStreamDecode() :
- * An LZ4_streamDecode_t context can be allocated once and re-used multiple
+ * An LZ4_streamDecode_t context can be allocated once and reused multiple
  * times. Use this function to start decompression of a new stream of blocks.
  * A dictionary can optionally be set. Use NULL or size 0 for a reset order.
  * Dictionary is presumed stable : it must remain accessible and unmodified

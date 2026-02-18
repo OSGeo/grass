@@ -28,7 +28,7 @@ doctest.SkipDocTestCase = type(
 
 def load_tests(loader, tests, ignore):
     # TODO: this must be somewhere when doctest is called, not here
-    # TODO: ultimate solution is not to use _ as a buildin in lib/python
+    # TODO: ultimate solution is not to use _ as a builtin in lib/python
     # for now it is the only place where it works
     grass.gunittest.utils.do_doctest_gettext_workaround()
 
