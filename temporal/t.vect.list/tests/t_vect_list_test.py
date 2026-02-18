@@ -81,13 +81,13 @@ def test_csv(space_time_vector_dataset, separator, delimiter):
     """Check CSV can be parsed with different separators"""
     tools = Tools(session=space_time_vector_dataset.session)
     columns = ["name", "start_time"]
-    text = tools.t_vect_list(
+    result = tools.t_vect_list(
         input=space_time_vector_dataset.name,
         columns=columns,
         format="csv",
         separator=separator,
-    ).stdout
-    io_string = io.StringIO(text)
+    )
+    io_string = io.StringIO(result.stdout)
     reader = csv.DictReader(
         io_string,
         delimiter=delimiter,
