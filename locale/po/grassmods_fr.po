@@ -14,16 +14,15 @@ msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-31 15:57+0000\n"
-"PO-Revision-Date: 2026-02-09 17:01+0000\n"
+"PO-Revision-Date: 2026-02-18 03:40+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
-"Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/"
-"grassmods-8-5/fr/>\n"
+"Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grassmods-8-5/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.16\n"
 
 #: ../db/db.columns/main.c:50 ../db/db.copy/main.c:104
 #: ../db/db.describe/main.c:65 ../db/db.select/main.c:77
@@ -538,9 +537,8 @@ msgstr "Lister toutes les bases de données pour un pilote et un secteur donnés
 #: ../vector/v.distance/main.c:1799 ../vector/v.info/main.c:106
 #: ../vector/v.info/print.c:306 ../vector/v.info/print.c:946
 #: ../vector/v.to.db/report.c:515 ../vector/v.univar/main.c:821
-#, fuzzy
 msgid "Failed to initialize pretty JSON string."
-msgstr "Impossible de fermer la couche : couche d'entrée introuvable"
+msgstr "Échec de l'initialisation d'une chaîne JSON formatée."
 
 #: ../db/db.describe/main.c:165
 msgid "Print column names only instead of full column descriptions"
@@ -774,10 +772,8 @@ msgid "Name of table to query"
 msgstr "Nom de la table à interroger"
 
 #: ../db/db.select/main.c:416
-#, fuzzy
-#| msgid "Vertical record separator (requires -v flag)"
 msgid "Vertical record separator (requires -v flag [deprecated] or format=vertical)"
-msgstr "Séparateur vertical d'enregistrements (requiert l'option -v)."
+msgstr "Séparateur vertical d'enregistrements (requiert l'option -v [obsolète] ou format=vertical)"
 
 #: ../db/db.select/main.c:440 ../locale/scriptstrings/i.oif_to_translate.c:5
 #: ../locale/scriptstrings/r.out.xyz_to_translate.c:7
@@ -829,9 +825,8 @@ msgid "Separator is part of the format"
 msgstr ""
 
 #: ../db/db.select/main.c:542
-#, fuzzy
 msgid "Vertical separator is part of the format"
-msgstr "Entrer une règle dans un des formats suivants :"
+msgstr "Le séparateur vertical fait partie du format"
 
 #: ../db/db.select/main.c:544 ../vector/v.db.select/main.c:204
 msgid "Null value is part of the format"
@@ -12377,9 +12372,9 @@ msgstr ""
 
 #: ../imagery/i.svm.train/main.c:433 ../imagery/i.svm.train/main.c:450
 #: ../imagery/i.svm.train/main.c:462
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write trained model to file '%s'."
-msgstr "Impossible d'écrire le fichier segment"
+msgstr "Impossible d'écrire le modèle entraîné dans le fichier '%s'."
 
 #: ../imagery/i.svm.train/main.c:443
 #, fuzzy, c-format
@@ -23480,9 +23475,9 @@ msgstr "L'exécution parallèle n'est pas prise en charge pour l'amorçage aléa
 #: ../raster/r.resamp.filter/main.c:488 ../raster/r.resamp.interp/main.c:126
 #: ../raster/r.series/main.c:225 ../raster/r.slope.aspect/main.c:303
 #: ../raster/r.texture/main.c:318 ../raster/r.univar/r.univar_main.c:247
-#, fuzzy, c-format
+#, c-format
 msgid "<%d> is not valid number of nprocs."
-msgstr "Nombre invalide d'étapes: %s"
+msgstr "<%d> n'est pas un nombre valide de nprocs."
 
 #: ../raster/r.mapcalc/main.c:272
 msgid "Floating point error(s) occurred in the calculation"
@@ -27619,13 +27614,8 @@ msgid "Infiltration exceeds the rainfall rate everywhere! No overland flow."
 msgstr ""
 
 #: ../raster/r.sim/simlib/input.c:298
-#, fuzzy
 msgid "No values in the elevation raster."
-msgstr ""
-"#-#-#-#-#  grassmods_fr.po (grassmods_fr)  #-#-#-#-#\n"
-"Nom de la couche raster cible\n"
-"#-#-#-#-#  grassmods_fr.po (grassmods_fr)  #-#-#-#-#\n"
-"Nom de la couche raster de sortie"
+msgstr "Aucune valeur dans le raster d'élévation."
 
 #: ../raster/r.sim/simlib/input.c:333
 #, c-format
@@ -40463,9 +40453,9 @@ msgid "Number of incorrect boundaries: %d"
 msgstr ""
 
 #: ../vector/v.in.ogr/main.c:1838
-#, fuzzy, c-format
+#, c-format
 msgid "Number of centroids outside area: %d"
-msgstr "Nombre de centroïdes en dehors de surfaces: %d"
+msgstr "Nombre de centroïdes en dehors de surfaces : %d"
 
 #: ../vector/v.in.ogr/main.c:1844
 #, fuzzy, c-format
@@ -41120,7 +41110,7 @@ msgstr "%s: Impossible de lire le fichier de définition de police, utilisation 
 #: ../vector/v.label.sa/font.c:59
 #, c-format
 msgid "%s: No font definition file"
-msgstr "%s: Aucun fichier de définition de police"
+msgstr "%s : Aucun fichier de définition de police"
 
 #: ../vector/v.label.sa/labels.c:68
 #, c-format
