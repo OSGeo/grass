@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-07 15:45+0000\n"
-"PO-Revision-Date: 2026-02-12 04:49+0000\n"
+"POT-Creation-Date: 2026-02-14 18:00+0000\n"
+"PO-Revision-Date: 2026-02-18 03:40+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/fr/>\n"
 "Language: fr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.16\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: ../gui/wxpython/animation/controller.py:244
@@ -1585,36 +1585,36 @@ msgstr "Impossible de lire les cartes du projet <{l}>."
 msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
 msgstr "La carte <{name}> de type <{elem}> existe déjà dans le jeu de cartes <{mapset}>. Voulez-vous l'écraser ?"
 
-#: ../gui/wxpython/datacatalog/tree.py:185
+#: ../gui/wxpython/datacatalog/tree.py:214
 msgid "name unknown"
 msgstr "nom inconnu"
 
-#: ../gui/wxpython/datacatalog/tree.py:187
+#: ../gui/wxpython/datacatalog/tree.py:216
 #, python-brace-format
 msgid "{name}  (current)"
 msgstr "{name}  (actuel)"
 
-#: ../gui/wxpython/datacatalog/tree.py:189
+#: ../gui/wxpython/datacatalog/tree.py:218
 #, python-brace-format
 msgid "{name}  (in use, owner: {owner})"
 msgstr "{name}  (en cours d'utilisation, propriétaire : {owner})"
 
-#: ../gui/wxpython/datacatalog/tree.py:193
+#: ../gui/wxpython/datacatalog/tree.py:222
 #, python-brace-format
 msgid "{name}  (in use)"
 msgstr "{name}  (en cours d'utilisation)"
 
-#: ../gui/wxpython/datacatalog/tree.py:195
+#: ../gui/wxpython/datacatalog/tree.py:224
 #, python-brace-format
 msgid "{name}  (owner: {owner})"
 msgstr "{name}  (propriétaire : {owner})"
 
-#: ../gui/wxpython/datacatalog/tree.py:199
+#: ../gui/wxpython/datacatalog/tree.py:228
 #, python-brace-format
 msgid "{name}"
 msgstr "{name}"
 
-#: ../gui/wxpython/datacatalog/tree.py:893
+#: ../gui/wxpython/datacatalog/tree.py:956
 #, python-brace-format
 msgid ""
 "Map <{map_name}@{map_mapset}> is not in the current project. To be able to display it you need to switch to <{map_location}> project. Note that if you switch there all current Map Displays will be closed.\n"
@@ -1622,246 +1622,270 @@ msgid ""
 "Do you want to switch anyway?"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:903
+#: ../gui/wxpython/datacatalog/tree.py:966
 msgid "Map in a different project"
 msgstr "Carte dans un autre projet"
 
-#: ../gui/wxpython/datacatalog/tree.py:1022
+#: ../gui/wxpython/datacatalog/tree.py:1085
 #, python-brace-format
 msgid "{c} maps marked for moving."
 msgstr "{c} cartes marquées pour le déplacement."
 
-#: ../gui/wxpython/datacatalog/tree.py:1024
+#: ../gui/wxpython/datacatalog/tree.py:1087
 #, python-brace-format
 msgid "Map <{layer}> marked for moving."
 msgstr "Carte <{layer}> marquée pour suppression."
 
-#: ../gui/wxpython/datacatalog/tree.py:1037
+#: ../gui/wxpython/datacatalog/tree.py:1100
 #, python-brace-format
 msgid "{c} maps marked for copying."
 msgstr "{c} cartes marquées pour la copie."
 
-#: ../gui/wxpython/datacatalog/tree.py:1039
+#: ../gui/wxpython/datacatalog/tree.py:1102
 #, python-brace-format
 msgid "Map <{layer}> marked for copying."
 msgstr "Carte <{layer}> marquée pour copie."
 
-#: ../gui/wxpython/datacatalog/tree.py:1054
-#: ../gui/wxpython/datacatalog/tree.py:1391
+#: ../gui/wxpython/datacatalog/tree.py:1117
+#: ../gui/wxpython/datacatalog/tree.py:1470
 msgid "New name"
 msgstr "Nouveau nom"
 
-#: ../gui/wxpython/datacatalog/tree.py:1055
+#: ../gui/wxpython/datacatalog/tree.py:1118
 msgid "Rename map"
 msgstr "Renommer la carte"
 
-#: ../gui/wxpython/datacatalog/tree.py:1204
+#: ../gui/wxpython/datacatalog/tree.py:1283
 msgid "Cannot rename mapset"
 msgstr "Impossible de renommer le jeu de cartes"
 
-#: ../gui/wxpython/datacatalog/tree.py:1217
+#: ../gui/wxpython/datacatalog/tree.py:1296
 #, fuzzy, python-brace-format
 msgid "Renaming mapset <{oldmapset}> to <{newmapset}> completed"
 msgstr "Renommage du jeu de cartes <{oldmapset}> en <{newmapset}> terminé"
 
-#: ../gui/wxpython/datacatalog/tree.py:1229
+#: ../gui/wxpython/datacatalog/tree.py:1308
 msgid "Cannot rename location"
 msgstr "Impossible de renommer le projet"
 
-#: ../gui/wxpython/datacatalog/tree.py:1241
+#: ../gui/wxpython/datacatalog/tree.py:1320
 #, fuzzy, python-brace-format
 msgid "Renaming project <{oldlocation}> to <{newlocation}> completed"
 msgstr "Renommer le projet <{oldlocation}> en <{newlocation}> terminé"
 
-#: ../gui/wxpython/datacatalog/tree.py:1253
+#: ../gui/wxpython/datacatalog/tree.py:1332
 #, python-brace-format
 msgid "Renaming map <{name}>..."
 msgstr "Renommage de {name} ..."
 
-#: ../gui/wxpython/datacatalog/tree.py:1263
+#: ../gui/wxpython/datacatalog/tree.py:1342
 #, python-brace-format
 msgid "{cmd} -- completed"
 msgstr "{cmd} -- terminé"
 
-#: ../gui/wxpython/datacatalog/tree.py:1279
+#: ../gui/wxpython/datacatalog/tree.py:1358
 msgid "No map selected for copying."
 msgstr "Aucune carte sélectionnée pour la copie."
 
-#: ../gui/wxpython/datacatalog/tree.py:1281
+#: ../gui/wxpython/datacatalog/tree.py:1360
 msgid "No map selected for moving."
 msgstr "Aucune carte sélectionnée pour le déplacement."
 
-#: ../gui/wxpython/datacatalog/tree.py:1303
-#: ../gui/wxpython/datacatalog/tree.py:1322
+#: ../gui/wxpython/datacatalog/tree.py:1382
+#: ../gui/wxpython/datacatalog/tree.py:1401
 #, python-brace-format
 msgid "New name for <{n}>"
 msgstr "Nouveau nom pour <{n}>"
 
-#: ../gui/wxpython/datacatalog/tree.py:1306
-#: ../gui/wxpython/datacatalog/tree.py:1325
-#: ../gui/wxpython/datacatalog/tree.py:1392
+#: ../gui/wxpython/datacatalog/tree.py:1385
+#: ../gui/wxpython/datacatalog/tree.py:1404
+#: ../gui/wxpython/datacatalog/tree.py:1471
 msgid "Select new name"
 msgstr "Sélectionner un nouveau nom"
 
-#: ../gui/wxpython/datacatalog/tree.py:1343
+#: ../gui/wxpython/datacatalog/tree.py:1422
 #, python-brace-format
 msgid "Copying <{name}>..."
 msgstr "Copie de <{name}> ..."
 
-#: ../gui/wxpython/datacatalog/tree.py:1345
+#: ../gui/wxpython/datacatalog/tree.py:1424
 #, python-brace-format
 msgid "Moving <{name}>..."
 msgstr "Déplacement de <{name}> ..."
 
-#: ../gui/wxpython/datacatalog/tree.py:1359
+#: ../gui/wxpython/datacatalog/tree.py:1438
 msgid "Copying completed"
 msgstr "Copie terminé"
 
-#: ../gui/wxpython/datacatalog/tree.py:1365
+#: ../gui/wxpython/datacatalog/tree.py:1444
 msgid "Moving completed"
 msgstr "Déplacement terminé"
 
-#: ../gui/wxpython/datacatalog/tree.py:1381
+#: ../gui/wxpython/datacatalog/tree.py:1460
 msgid "Reprojection is not implemented for 3D rasters"
 msgstr "La reprojection n'est pas implémentée pour les cartes raster 3D"
 
-#: ../gui/wxpython/datacatalog/tree.py:1462
-#: ../gui/wxpython/datacatalog/tree.py:1582
+#: ../gui/wxpython/datacatalog/tree.py:1541
+#: ../gui/wxpython/datacatalog/tree.py:1661
 msgid "g.remove completed"
 msgstr "g.remove terminé"
 
-#: ../gui/wxpython/datacatalog/tree.py:1546
+#: ../gui/wxpython/datacatalog/tree.py:1625
 #, python-brace-format
 msgid "Do you really want to delete map(s) <{m}>?"
 msgstr "Voulez-vous vraiment supprimer la ou les cartes <{m}> ?"
 
-#: ../gui/wxpython/datacatalog/tree.py:1550
+#: ../gui/wxpython/datacatalog/tree.py:1629
 #, python-brace-format
 msgid "Do you really want to delete {n} maps?"
 msgstr "Voulez-vous vraiment supprimer {n} cartes ?"
 
-#: ../gui/wxpython/datacatalog/tree.py:1551
+#: ../gui/wxpython/datacatalog/tree.py:1630
 msgid "Delete map"
 msgstr "Supprimer la carte"
 
-#: ../gui/wxpython/datacatalog/tree.py:1552
+#: ../gui/wxpython/datacatalog/tree.py:1631
 #, python-brace-format
 msgid "Deleting {name}..."
 msgstr "Suppression de {name} ..."
 
-#: ../gui/wxpython/datacatalog/tree.py:1743
+#: ../gui/wxpython/datacatalog/tree.py:1822
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr "Pour déplacer ou copier des cartes depuis d'autres jeux de cartes, débloquez l'édition d'autres jeux de cartes"
 
-#: ../gui/wxpython/datacatalog/tree.py:1757
+#: ../gui/wxpython/datacatalog/tree.py:1836
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr "Pour déplacer ou copier des cartes vers un autre projet, veuillez les glisser vers un jeu de cartes dans le projet de destination"
 
-#: ../gui/wxpython/datacatalog/tree.py:2085
+#: ../gui/wxpython/datacatalog/tree.py:2164
 msgid "&Cut"
 msgstr "&Couper"
 
-#: ../gui/wxpython/datacatalog/tree.py:2091 ../gui/wxpython/history/tree.py:219
+#: ../gui/wxpython/datacatalog/tree.py:2170 ../gui/wxpython/history/tree.py:219
 msgid "&Copy"
 msgstr "&Copier"
 
-#: ../gui/wxpython/datacatalog/tree.py:2095
+#: ../gui/wxpython/datacatalog/tree.py:2174
 msgid "Copy &name"
 msgstr "Copier le &nom"
 
-#: ../gui/wxpython/datacatalog/tree.py:2099
-#: ../gui/wxpython/datacatalog/tree.py:2142
-#: ../gui/wxpython/datacatalog/tree.py:2246
+#: ../gui/wxpython/datacatalog/tree.py:2178
+#: ../gui/wxpython/datacatalog/tree.py:2221
+#: ../gui/wxpython/datacatalog/tree.py:2346
 msgid "&Paste"
 msgstr "&Coller"
 
 #. GTC Delete mapset
-#: ../gui/wxpython/datacatalog/tree.py:2105
+#: ../gui/wxpython/datacatalog/tree.py:2184
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:242
 msgid "&Delete"
 msgstr "&Effacer"
 
 #. GTC Rename mapset
-#: ../gui/wxpython/datacatalog/tree.py:2110 ../gui/wxpython/dbmgr/base.py:2490
+#: ../gui/wxpython/datacatalog/tree.py:2189 ../gui/wxpython/dbmgr/base.py:2490
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:235
 msgid "&Rename"
 msgstr "&Renommer"
 
-#: ../gui/wxpython/datacatalog/tree.py:2123
+#: ../gui/wxpython/datacatalog/tree.py:2202
 msgid "&Display layers"
 msgstr "Afficher les couches"
 
-#: ../gui/wxpython/datacatalog/tree.py:2125
+#: ../gui/wxpython/datacatalog/tree.py:2204
 msgid "&Display layer"
 msgstr "Afficher la couche"
 
-#: ../gui/wxpython/datacatalog/tree.py:2129
+#: ../gui/wxpython/datacatalog/tree.py:2208
 msgid "Show &metadata"
 msgstr "Montrer les &métadonnées"
 
-#: ../gui/wxpython/datacatalog/tree.py:2148
+#: ../gui/wxpython/datacatalog/tree.py:2227
 msgid "&Switch mapset"
 msgstr "Changer de jeux de cartes"
 
-#: ../gui/wxpython/datacatalog/tree.py:2158
+#: ../gui/wxpython/datacatalog/tree.py:2237
 msgid "&Delete mapset"
 msgstr "&Supprimer le jeu de cartes"
 
-#: ../gui/wxpython/datacatalog/tree.py:2164
+#: ../gui/wxpython/datacatalog/tree.py:2243
 msgid "&Rename mapset"
 msgstr "&Renommer le jeu de cartes"
 
-#: ../gui/wxpython/datacatalog/tree.py:2170
-#: ../gui/wxpython/datacatalog/tree.py:2201
-#: ../gui/wxpython/datacatalog/tree.py:2236
+#: ../gui/wxpython/datacatalog/tree.py:2249
+#: ../gui/wxpython/datacatalog/tree.py:2280
+#: ../gui/wxpython/datacatalog/tree.py:2336
 msgid "Re&load maps"
 msgstr "Recharger &les cartes"
 
-#: ../gui/wxpython/datacatalog/tree.py:2174
+#: ../gui/wxpython/datacatalog/tree.py:2253
 msgid "&Copy path to mapset"
 msgstr "&Copier le chemin vers le jeu de cartes"
 
-#: ../gui/wxpython/datacatalog/tree.py:2185
+#: ../gui/wxpython/datacatalog/tree.py:2264
 msgid "&Create mapset"
 msgstr "&Créer un jeu de cartes"
 
-#: ../gui/wxpython/datacatalog/tree.py:2189
+#: ../gui/wxpython/datacatalog/tree.py:2268
 msgid "&Delete project"
 msgstr "Supprimer le projet"
 
-#: ../gui/wxpython/datacatalog/tree.py:2195
+#: ../gui/wxpython/datacatalog/tree.py:2274
 msgid "&Rename project"
 msgstr "&Renommer le projet"
 
-#: ../gui/wxpython/datacatalog/tree.py:2214
+#: ../gui/wxpython/datacatalog/tree.py:2299
+#, fuzzy
+#| msgid "Change mapset"
+msgid "Change Label"
+msgstr "Changer de jeu de cartes"
+
+#: ../gui/wxpython/datacatalog/tree.py:2299
+#, fuzzy
+#| msgid "Set label"
+msgid "Set Label"
+msgstr "Définir l'étiquette"
+
+#: ../gui/wxpython/datacatalog/tree.py:2308
+#: ../gui/wxpython/datacatalog/tree.py:2399
+#, fuzzy
+#| msgid "Remove table"
+msgid "Remove Label"
+msgstr "Supprimer une table"
+
+#: ../gui/wxpython/datacatalog/tree.py:2314
 msgid "&Create new project (location)"
 msgstr "&Créer un nouveau projet (secteur)"
 
-#: ../gui/wxpython/datacatalog/tree.py:2218
+#: ../gui/wxpython/datacatalog/tree.py:2318
 msgid "&Download sample project (location)"
 msgstr "Télécharger le projet (secteur) d'exemple"
 
-#: ../gui/wxpython/datacatalog/tree.py:2223
+#: ../gui/wxpython/datacatalog/tree.py:2323
 msgid "&Remove GRASS database from data catalog"
 msgstr "Supprimer la base de données GRASS du catalogue de données"
 
-#: ../gui/wxpython/datacatalog/tree.py:2230
+#: ../gui/wxpython/datacatalog/tree.py:2330
 msgid "&Delete GRASS database from disk"
 msgstr "&Supprimer la base de données GRASS du disque"
 
-#: ../gui/wxpython/datacatalog/tree.py:2260
+#: ../gui/wxpython/datacatalog/tree.py:2360
 msgid "&Delete projects (locations)"
 msgstr "Supprimer les projets (Secteurs)"
 
-#: ../gui/wxpython/datacatalog/tree.py:2272
+#: ../gui/wxpython/datacatalog/tree.py:2372
 msgid "&Delete mapsets"
 msgstr "Supprimer les jeux de cartes"
 
-#: ../gui/wxpython/datacatalog/tree.py:2278
+#: ../gui/wxpython/datacatalog/tree.py:2378
 msgid "&Copy paths to mapsets"
 msgstr "&Copier les chemins vers les jeux de cartes"
 
-#: ../gui/wxpython/datacatalog/tree.py:2288 ../gui/wxpython/history/tree.py:233
+#: ../gui/wxpython/datacatalog/tree.py:2396
+#, python-brace-format
+msgid "Remove label '{label}' for this database?"
+msgstr "Supprimer l'étiquette '{label}' pour cette base de données ?"
+
+#: ../gui/wxpython/datacatalog/tree.py:2418 ../gui/wxpython/history/tree.py:233
 msgid "No available options"
 msgstr "Aucune option disponible"
 
@@ -11950,9 +11974,8 @@ msgid ""
 "{title} Please install it to create PDF.\n"
 "\n"
 msgstr ""
-"Le programme ps2pdf n'est pas disponible. Merci de l'installer pour permettre la création de fichiers PDF.\n"
+"{title} Veuillez l'installer pour créer des PDF.\n"
 "\n"
-" %s"
 
 #: ../gui/wxpython/psmap/frame.py:471
 msgid ""
@@ -15910,9 +15933,6 @@ msgstr ""
 #~ msgid "Change location and mapset"
 #~ msgstr "Choisir une secteur de travail et un jeu de cartes"
 
-#~ msgid "Change mapset"
-#~ msgstr "Changer de jeu de cartes"
-
 #~ msgid "Change or report categories"
 #~ msgstr "Modifier ou rendre compte des catégories"
 
@@ -18520,17 +18540,11 @@ msgstr ""
 #~ msgid "Remove outliers in point sets"
 #~ msgstr "Supprimer les points aberrants"
 
-#~ msgid "Remove table"
-#~ msgstr "Supprimer une table"
-
 #~ msgid "Remove vector legend"
 #~ msgstr "Supprimer la légende des vecteurs"
 
 #~ msgid "Removes a vector feature from a vector map through attribute selection."
 #~ msgstr "Supprime une entité d'une carte vecteur par sélection de ses attributs."
-
-#~ msgid "Removes an existing database."
-#~ msgstr "Supprimer une base de données existante."
 
 #~ msgid "Removes data base element files from the user's current mapset using the search pattern."
 #~ msgstr "Supprimer les fichiers éléments de base de données du jeu de données courant de l'utilisateur"

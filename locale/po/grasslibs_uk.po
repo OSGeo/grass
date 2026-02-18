@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_uk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-07 15:45+0000\n"
+"POT-Creation-Date: 2026-02-14 18:00+0000\n"
 "PO-Revision-Date: 2025-08-23 20:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Ukrainian <https://weblate.osgeo.org/projects/grass-gis/grasslibs/uk/>\n"
@@ -1708,493 +1708,493 @@ msgstr ""
 msgid "Used as"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:155
+#: ../lib/gis/parser_standard_options.c:156
 msgid "SQL SELECT statement"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:157
+#: ../lib/gis/parser_standard_options.c:158
 msgid "Example: select * from towns where population > 10000"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:166
+#: ../lib/gis/parser_standard_options.c:167
 msgid "WHERE conditions of SQL statement without 'where' keyword"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:167
+#: ../lib/gis/parser_standard_options.c:168
 msgid "Example: income < 1000 and population >= 10000"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:175
+#: ../lib/gis/parser_standard_options.c:176
 msgid "Name of attribute table"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:184
+#: ../lib/gis/parser_standard_options.c:185
 msgid "Name of database driver"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:193
+#: ../lib/gis/parser_standard_options.c:194
 msgid "Name of database"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:202
+#: ../lib/gis/parser_standard_options.c:203
 msgid "Database schema"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:203
+#: ../lib/gis/parser_standard_options.c:204
 msgid "Do not use this option if schemas are not supported by driver/database server"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:212
+#: ../lib/gis/parser_standard_options.c:213
 msgid "Name of attribute column"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:221
+#: ../lib/gis/parser_standard_options.c:222
 msgid "Name of attribute column(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:230
+#: ../lib/gis/parser_standard_options.c:231
 msgid "Name of key column"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:231
+#: ../lib/gis/parser_standard_options.c:232
 msgid "Must refer to an integer column"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:243
+#: ../lib/gis/parser_standard_options.c:244
 msgid "Name of input imagery group"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:251
+#: ../lib/gis/parser_standard_options.c:252
 msgid "Name of input imagery subgroup"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:268
+#: ../lib/gis/parser_standard_options.c:269
 msgid "Maximum memory to be used (in MB)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:269
+#: ../lib/gis/parser_standard_options.c:270
 msgid "Cache size for raster rows"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:277
+#: ../lib/gis/parser_standard_options.c:278
 msgid "Name of input raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:286
+#: ../lib/gis/parser_standard_options.c:287
 msgid "Name of input raster map(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:294
+#: ../lib/gis/parser_standard_options.c:295
 msgid "Name for output raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:303
+#: ../lib/gis/parser_standard_options.c:304
 msgid "Name for output raster map(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:311
+#: ../lib/gis/parser_standard_options.c:312
 msgid "Name of raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:320
+#: ../lib/gis/parser_standard_options.c:321
 msgid "Name of raster map(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:328
+#: ../lib/gis/parser_standard_options.c:329
 msgid "Name of base raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:336
+#: ../lib/gis/parser_standard_options.c:337
 msgid "Name of cover raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:344
+#: ../lib/gis/parser_standard_options.c:345
 msgid "Name of input elevation raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:353
+#: ../lib/gis/parser_standard_options.c:354
 msgid "Name of input elevation raster map(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:360
+#: ../lib/gis/parser_standard_options.c:361
 msgid "Type of raster map to be created"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:361
+#: ../lib/gis/parser_standard_options.c:362
 msgid "Storage type for resultant raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:364
+#: ../lib/gis/parser_standard_options.c:365
 msgid "Integer"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:364
+#: ../lib/gis/parser_standard_options.c:365
 msgid "Single precision floating point"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:365
+#: ../lib/gis/parser_standard_options.c:366
 msgid "Double precision floating point"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:371
+#: ../lib/gis/parser_standard_options.c:372
 msgid "Sampling interpolation method"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:375
+#: ../lib/gis/parser_standard_options.c:376
 msgid "Nearest-neighbor interpolation"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:376
+#: ../lib/gis/parser_standard_options.c:377
 msgid "Bicubic interpolation"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:376
+#: ../lib/gis/parser_standard_options.c:377
 msgid "Bilinear interpolation"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:385
+#: ../lib/gis/parser_standard_options.c:386
 msgid "Name of input basename raster map(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:394
+#: ../lib/gis/parser_standard_options.c:395
 msgid "Name for output basename raster map(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:404
+#: ../lib/gis/parser_standard_options.c:405
 msgid "Name of input 3D raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:413
+#: ../lib/gis/parser_standard_options.c:414
 msgid "Name of input 3D raster map(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:421
+#: ../lib/gis/parser_standard_options.c:422
 msgid "Name for output 3D raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:429
+#: ../lib/gis/parser_standard_options.c:430
 msgid "Name of 3D raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:438
+#: ../lib/gis/parser_standard_options.c:439
 msgid "Name of 3D raster map(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:447
+#: ../lib/gis/parser_standard_options.c:448
 msgid "Data type used in the output raster3d map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:456
+#: ../lib/gis/parser_standard_options.c:457
 msgid "Number of digits used as mantissa in the internal map storage, 0 -23 for float, 0 - 52 for double, max or default"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:467
+#: ../lib/gis/parser_standard_options.c:468
 msgid "The compression method used in the output raster3d map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:476
+#: ../lib/gis/parser_standard_options.c:477
 msgid "The dimensions of the tiles used in the output raster3d map (XxYxZ or default: 16x16x8)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:487
+#: ../lib/gis/parser_standard_options.c:488
 msgid "Name of input vector map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:488
-#: ../lib/gis/parser_standard_options.c:515
+#: ../lib/gis/parser_standard_options.c:489
+#: ../lib/gis/parser_standard_options.c:516
 msgid "Or data source for direct OGR access"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:497
+#: ../lib/gis/parser_standard_options.c:498
 msgid "Name of input vector map(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:498
+#: ../lib/gis/parser_standard_options.c:499
 msgid "Or data source(s) for direct OGR access"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:506
+#: ../lib/gis/parser_standard_options.c:507
 msgid "Name for output vector map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:514
+#: ../lib/gis/parser_standard_options.c:515
 msgid "Name of vector map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:524
+#: ../lib/gis/parser_standard_options.c:525
 msgid "Name of vector map(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:533
-#: ../lib/gis/parser_standard_options.c:542
+#: ../lib/gis/parser_standard_options.c:534
+#: ../lib/gis/parser_standard_options.c:543
 msgid "Input feature type"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:549
+#: ../lib/gis/parser_standard_options.c:550
 msgid "Layer number or name"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:551
+#: ../lib/gis/parser_standard_options.c:552
 msgid "Vector features can have category values in different layers. This number determines which layer to use. When used with direct OGR access this is the layer name."
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:561
+#: ../lib/gis/parser_standard_options.c:562
 msgid "Layer number or name ('-1' for all layers)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:563
+#: ../lib/gis/parser_standard_options.c:564
 msgid "A single vector map can be connected to multiple database tables. This number determines which table to use. When used with direct OGR access this is the layer name."
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:572
+#: ../lib/gis/parser_standard_options.c:573
 msgid "Category value"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:580
+#: ../lib/gis/parser_standard_options.c:581
 msgid "Category values"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:581
-#: ../lib/gis/parser_standard_options.c:596
+#: ../lib/gis/parser_standard_options.c:582
+#: ../lib/gis/parser_standard_options.c:597
 msgid "Example: 1,3,7-9,13"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:588
+#: ../lib/gis/parser_standard_options.c:589
 msgid "Feature id"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:595
+#: ../lib/gis/parser_standard_options.c:596
 msgid "Feature ids"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:606
-#: ../lib/gis/parser_standard_options.c:614
+#: ../lib/gis/parser_standard_options.c:607
+#: ../lib/gis/parser_standard_options.c:615
 msgid "Name of input file"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:622
+#: ../lib/gis/parser_standard_options.c:623
 msgid "Name for output file"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:631
+#: ../lib/gis/parser_standard_options.c:632
 msgid "Field separator"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:633
+#: ../lib/gis/parser_standard_options.c:634
 msgid "Special characters: pipe, comma, space, tab, newline"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:644
-#: ../lib/gis/parser_standard_options.c:654
-msgid "Color"
+#: ../lib/gis/parser_standard_options.c:641
+msgid "Output format"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:645
-msgid "Either a standard color name or R:G:B triplet"
+#: ../lib/gis/parser_standard_options.c:644
+msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:656
+#: ../lib/gis/parser_standard_options.c:666
+msgid "Color"
+msgstr ""
+
+#: ../lib/gis/parser_standard_options.c:657
+msgid "Either a standard color name or R:G:B triplet"
+msgstr ""
+
+#: ../lib/gis/parser_standard_options.c:668
 msgid "Either a standard color name, R:G:B triplet, or \"none\""
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:666
+#: ../lib/gis/parser_standard_options.c:678
 msgid "Color format"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:667
+#: ../lib/gis/parser_standard_options.c:679
 msgid "Color format for output values."
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:670
+#: ../lib/gis/parser_standard_options.c:682
 msgid "output color in HEX format"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:670
+#: ../lib/gis/parser_standard_options.c:682
 msgid "output color in RGB format"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:671
+#: ../lib/gis/parser_standard_options.c:683
 msgid "output color in HSV format (experimental)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:672
+#: ../lib/gis/parser_standard_options.c:684
 msgid "output color in colon-separated RGB format"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:683
+#: ../lib/gis/parser_standard_options.c:695
 msgid "Name of input directory"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:692
+#: ../lib/gis/parser_standard_options.c:704
 msgid "Units"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:701
+#: ../lib/gis/parser_standard_options.c:713
 msgid "Data type(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:711
+#: ../lib/gis/parser_standard_options.c:723
 msgid "Name of mapset (default: current search path)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:712
+#: ../lib/gis/parser_standard_options.c:724
 msgid "'.' for current mapset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:720
+#: ../lib/gis/parser_standard_options.c:732
 msgid "Project (location) name"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:721
+#: ../lib/gis/parser_standard_options.c:733
 msgid "Project name (not path to project)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:731
+#: ../lib/gis/parser_standard_options.c:743
 msgid "GRASS database directory"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:732
+#: ../lib/gis/parser_standard_options.c:744
 msgid "Default: path to the current GRASS database"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:744
+#: ../lib/gis/parser_standard_options.c:756
 msgid "Coordinates"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:753
+#: ../lib/gis/parser_standard_options.c:765
 msgid "Name of color table"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:764
+#: ../lib/gis/parser_standard_options.c:776
 msgid "String representing NULL value"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:773
+#: ../lib/gis/parser_standard_options.c:785
 msgid "Name of saved region"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:788
+#: ../lib/gis/parser_standard_options.c:800
 msgid "Number of threads for parallel computing"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:789
+#: ../lib/gis/parser_standard_options.c:801
 msgid "0: use OpenMP default; >0: use nprocs; <0: use MAX-nprocs"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:797
+#: ../lib/gis/parser_standard_options.c:809
 msgid "Seed value for the random number generator"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:799
+#: ../lib/gis/parser_standard_options.c:811
 msgid "Using the same seed ensures identical results, while a randomly generated seed produces different outcomes in each run."
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:811
+#: ../lib/gis/parser_standard_options.c:823
 msgid "Name of the input space time dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:820
+#: ../lib/gis/parser_standard_options.c:832
 msgid "Name of the input space time datasets"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:828
+#: ../lib/gis/parser_standard_options.c:840
 msgid "Name of the output space time dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:836
+#: ../lib/gis/parser_standard_options.c:848
 msgid "Name of the input space time raster dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:845
+#: ../lib/gis/parser_standard_options.c:857
 msgid "Name of the input space time raster datasets"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:853
+#: ../lib/gis/parser_standard_options.c:865
 msgid "Name of the output space time raster dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:862
+#: ../lib/gis/parser_standard_options.c:874
 msgid "Name of the output space time raster datasets"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:870
+#: ../lib/gis/parser_standard_options.c:882
 msgid "Name of the input space time vector dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:879
+#: ../lib/gis/parser_standard_options.c:891
 msgid "Name of the input space time vector datasets"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:887
+#: ../lib/gis/parser_standard_options.c:899
 msgid "Name of the output space time vector dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:895
+#: ../lib/gis/parser_standard_options.c:907
 msgid "Name of the input space time raster3d dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:904
+#: ../lib/gis/parser_standard_options.c:916
 msgid "Name of the input space time raster3d datasets"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:912
+#: ../lib/gis/parser_standard_options.c:924
 msgid "Name of the output space time raster3d dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:921
+#: ../lib/gis/parser_standard_options.c:933
 msgid "Type of the input space time dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:929
+#: ../lib/gis/parser_standard_options.c:941
 msgid "Name of the input map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:938
+#: ../lib/gis/parser_standard_options.c:950
 msgid "Name of the input maps"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:947
+#: ../lib/gis/parser_standard_options.c:959
 msgid "Type of the input map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:955
+#: ../lib/gis/parser_standard_options.c:967
 #, c-format
 msgid "Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %%05)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:968
+#: ../lib/gis/parser_standard_options.c:980
 msgid "The temporal type of the space time dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:975
+#: ../lib/gis/parser_standard_options.c:987
 msgid "WHERE conditions of SQL statement without 'where' keyword used in the temporal GIS framework"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:977
+#: ../lib/gis/parser_standard_options.c:989
 msgid "Example: start_time > '2001-01-01 12:30:00'"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:988
+#: ../lib/gis/parser_standard_options.c:1000
 msgid "The method to be used for sampling the input dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:995
-msgid "Output format"
-msgstr ""
-
-#: ../lib/gis/parser_standard_options.c:998
-msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);"
-msgstr ""
-
-#: ../lib/gis/parser_standard_options.c:1033
+#: ../lib/gis/parser_standard_options.c:1034
 msgid "Do not create attribute table"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:1037
+#: ../lib/gis/parser_standard_options.c:1038
 msgid "Do not build topology"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:1039
+#: ../lib/gis/parser_standard_options.c:1040
 msgid "Advantageous when handling a large number of points"
 msgstr ""
 
