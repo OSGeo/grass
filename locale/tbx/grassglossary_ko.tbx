@@ -170,39 +170,70 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>Data Catalog</term></tig></langSet>
-                <langSet xml:lang="ko"><tig><term></term></tig></langSet>
+                <langSet xml:lang="ko"><tig><term/></tig></langSet>
                 <descrip>In GUI</descrip>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>Map Displays</term></tig></langSet>
-                <langSet xml:lang="ko"><tig><term></term></tig></langSet>
+                <langSet xml:lang="ko"><tig><term/></tig></langSet>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>columns</term></tig></langSet>
-                <langSet xml:lang="ko"><tig><term></term></tig></langSet>
+                <langSet xml:lang="ko"><tig><term/></tig></langSet>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>module</term></tig></langSet>
-                <langSet xml:lang="ko"><tig><term></term></tig></langSet>
+                <langSet xml:lang="ko"><tig><term/></tig></langSet>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>tool</term></tig></langSet>
-                <langSet xml:lang="ko"><tig><term></term></tig></langSet>
+                <langSet xml:lang="ko"><tig><term/></tig></langSet>
                 <descrip>What each of our individual algorithms/programs are called. Were previously known as modules.</descrip>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>column</term></tig></langSet>
-                <langSet xml:lang="ko"><tig><term></term></tig></langSet>
+                <langSet xml:lang="ko"><tig><term/></tig></langSet>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>map display</term></tig></langSet>
-                <langSet xml:lang="ko"><tig><term></term></tig></langSet>
+                <langSet xml:lang="ko"><tig><term/></tig></langSet>
                 <note from="translator">GUI concept, where the map is shown</note>
                 <descrip>GUI concept, where the map is shown</descrip>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>mapset</term></tig></langSet>
+                <langSet xml:lang="ko"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>threads</term></tig></langSet>
                 <langSet xml:lang="ko"><tig><term></term></tig></langSet>
+                <descrip>thread of execution, component of a process</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>extent</term></tig></langSet>
+                <langSet xml:lang="ko"><tig><term></term></tig></langSet>
+                <note from="translator">Emprise ou étendue</note>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>vector map</term></tig></langSet>
+                <langSet xml:lang="ko"><tig><term></term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>vector</term></tig></langSet>
+                <langSet xml:lang="ko"><tig><term></term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>centroids</term></tig></langSet>
+                <langSet xml:lang="ko"><tig><term></term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>area</term></tig></langSet>
+                <langSet xml:lang="ko"><tig><term></term></tig></langSet>
+            </termEntry>
+            <termEntry id="1">
+                <langSet xml:lang="en"><tig><term>area</term></tig></langSet>
+                <langSet xml:lang="ko"><tig><term></term></tig></langSet>
+                <descrip>The geometry type</descrip>
             </termEntry>
         </body>
     </text>
