@@ -163,6 +163,13 @@ class array(np.memmap):
             if kind == "f":
                 flags = "f"
             elif kind in "biu":
+                if size == 8:
+                    raise ValueError(
+                        _(
+                            "64-bit integers are not supported by GRASS raster maps. "
+                            "Use dtype=numpy.int32 or a smaller integer type."
+                        )
+                    )
                 flags = "i"
             else:
                 raise ValueError(_("Invalid kind <%s>") % kind)
@@ -218,6 +225,14 @@ class array(np.memmap):
                 raise ValueError(_("Invalid FP size <%d>") % size)
             size = None
         elif kind in "biu":
+            if size == 8:
+                raise ValueError(
+                    _(
+                        "64-bit integers are not supported by GRASS raster maps. "
+                        "Cast to a supported type before writing, e.g., "
+                        "array.astype(numpy.int32)"
+                    )
+                )
             if size not in {1, 2, 4}:
                 raise ValueError(_("Invalid integer size <%d>") % size)
             flags = None
@@ -291,6 +306,13 @@ class array3d(np.memmap):
             if kind == "f":
                 flags = None  # default is double
             elif kind in "biu":
+                if size == 8:
+                    raise ValueError(
+                        _(
+                            "64-bit integers are not supported by GRASS 3D raster "
+                            "maps. Use dtype=numpy.int32 or a smaller integer type."
+                        )
+                    )
                 flags = "i"
             else:
                 raise ValueError(_("Invalid kind <%s>") % kind)
@@ -342,7 +364,15 @@ class array3d(np.memmap):
             if size not in {4, 8}:
                 raise ValueError(_("Invalid FP size <%d>") % size)
         elif kind in "biu":
-            if size not in {1, 2, 4, 8}:
+            if size == 8:
+                raise ValueError(
+                    _(
+                        "64-bit integers are not supported by GRASS 3D raster maps. "
+                        "Cast to a supported type before writing, e.g., "
+                        "array.astype(numpy.int32)"
+                    )
+                )
+            if size not in {1, 2, 4}:
                 raise ValueError(_("Invalid integer size <%d>") % size)
             flags = "i"
         else:

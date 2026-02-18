@@ -26,6 +26,21 @@ def session_3x4(tmp_path):
         yield session
 
 
+@pytest.fixture
+def session_3d(tmp_path):
+    """Set up a GRASS session with a 3D region and 3D rasters."""
+    project = tmp_path / "test_project_3d"
+    gs.create_project(project)
+    with (
+        gs.setup.init(project, env=os.environ.copy()) as session,
+        Tools(session=session) as tools,
+    ):
+        tools.g_region(n=2, s=0, e=3, w=0, res3=1, b=0, t=2)
+        tools.r3_mapcalc(expression="float3d = float(row() + col() + depth())")
+        tools.r3_mapcalc(expression="double3d = double(row() + col() + depth())")
+        yield session
+
+
 class TestArrayDtypeAutoDetection:
     """Test automatic dtype detection when reading raster maps."""
 
@@ -89,22 +104,24 @@ class TestArrayWriteReadRoundTrip:
         np.testing.assert_array_equal(arr, arr2)
 
 
+class TestArrayInt64Rejected:
+    """Test that 64-bit integers are rejected with actionable error messages."""
+
+    def test_read_with_int64_dtype_raises(self, session_3x4):
+        """Passing dtype=int64 with a mapname should raise ValueError."""
+        with pytest.raises(ValueError, match="64-bit integers are not supported"):
+            garray.array(mapname="int_map", dtype=np.int64, env=session_3x4.env)
+
+    def test_write_int64_array_raises(self, session_3x4):
+        """Writing an int64 array should raise ValueError with cast hint."""
+        arr = garray.array(dtype=np.int64, env=session_3x4.env)
+        arr[:] = np.arange(12, dtype=np.int64).reshape(3, 4)
+        with pytest.raises(ValueError, match=r"array\.astype"):
+            arr.write(mapname="should_fail", overwrite=True)
+
+
 class TestArray3dDtypeAutoDetection:
     """Test automatic dtype detection for 3D raster arrays."""
-
-    @pytest.fixture
-    def session_3d(self, tmp_path):
-        """Session with a 3D region and 3D rasters."""
-        project = tmp_path / "test_project_3d"
-        gs.create_project(project)
-        with (
-            gs.setup.init(project, env=os.environ.copy()) as session,
-            Tools(session=session) as tools,
-        ):
-            tools.g_region(rows=2, cols=3, tbres=1, t=2, b=0)
-            tools.r3_mapcalc(expression="float3d = float(row() + col() + depth())")
-            tools.r3_mapcalc(expression="double3d = double(row() + col() + depth())")
-            yield session
 
     def test_auto_detect_fcell_3d(self, session_3d):
         """Reading an FCELL 3D map without dtype should give float32."""
@@ -125,3 +142,19 @@ class TestArray3dDtypeAutoDetection:
         """Empty 3D array without mapname should default to float64."""
         arr = garray.array3d(env=session_3d.env)
         assert arr.dtype == np.float64
+
+
+class TestArray3dInt64Rejected:
+    """Test that 64-bit integers are rejected for 3D arrays."""
+
+    def test_read_3d_with_int64_dtype_raises(self, session_3d):
+        """Passing dtype=int64 with a 3D mapname should raise ValueError."""
+        with pytest.raises(ValueError, match="64-bit integers are not supported"):
+            garray.array3d(mapname="double3d", dtype=np.int64, env=session_3d.env)
+
+    def test_write_3d_int64_array_raises(self, session_3d):
+        """Writing a 3D int64 array should raise ValueError with cast hint."""
+        arr = garray.array3d(dtype=np.int64, env=session_3d.env)
+        arr[:] = np.arange(12, dtype=np.int64).reshape(2, 2, 3)
+        with pytest.raises(ValueError, match=r"array\.astype"):
+            arr.write(mapname="should_fail_3d", overwrite=True)
