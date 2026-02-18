@@ -69,8 +69,8 @@
 # %end
 
 # %option G_OPT_F_FORMAT
-# % options: plain,json,yaml,csv
-# % descriptions: plain;Plain text output;json;JSON (JavaScript Object Notation);yaml;YAML (YAML Ain't Markup Language);csv;CSV (Comma Separated Values);
+# % options: plain,line,json,yaml,csv
+# % descriptions: plain;Plain text output;line;Comma separated list of map names;json;JSON (JavaScript Object Notation);yaml;YAML (YAML Ain't Markup Language);csv;CSV (Comma Separated Values);
 # % guisection: Formatting
 # %end
 
@@ -173,46 +173,25 @@ def main():
         # value which is always there (see above). Having no default and producing
         # an error when set would be more clear and would fit with using different
         # defaults for plain and CSV formats.
+    elif output_format == "line" and separator == "|":
+        # Same as for CSV: Custom default needed.
+        # Pipe is currently not supported at all.
+        separator = ","
 
-    if output_format == "csv":
-        if len(separator) > 1:
+    if output_format == "line":
+        columns_list = columns.split(",")
+        if len(columns_list) > 1:
             gs.fatal(
                 message_option_value_excludes_option_value(
                     option_name="format",
                     option_value=output_format,
-                    excluded_option_name="separator",
-                    excluded_option_value=separator,
-                    reason=_(
-                        "A standard CSV separator (delimiter) is only one character "
-                        "long"
+                    excluded_option_name="columns",
+                    excluded_option_value=columns,
+                    reason=_("Only one column is allowed (not {num_columns})").format(
+                        num_columns=len(columns_list)
                     ),
                 )
             )
-        if separator == "|":
-            # We use comma as the default for separator, so we override the pipe.
-            # This does not allow for users to generate CSV with pipe, but unlike
-            # the C API, the Python interface specs does not allow resetting the default
-            # except for setting it to an empty string which does not have a precedence
-            # in the current code and the behavior is unclear.
-            separator = ","
-
-    if output_format in {"json", "yaml"} and header:
-        gs.fatal(
-            message_option_value_excludes_flag(
-                option_name="format",
-                option_value=output_format,
-                flag_name="u",
-                reason=_("Column names are always included"),
-            )
-        )
-        # We ignore when separator is set for JSON and YAML because of the default
-        # value which is always there (see above). Having no default and producing
-        # an error when set would be more clear and would fit with using different
-        # defaults for plain and CSV formats.
-    elif (output_format == "line" or method == "comma") and separator == "|":
-        # Same as for CSV: Custom default needed.
-        # Pipe is currently not supported at all.
-        separator = ","
 
     # Make sure the temporal database exists
     tgis.init()
