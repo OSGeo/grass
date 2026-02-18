@@ -130,11 +130,11 @@ class _tempfile:
 
 class array(np.memmap):
     # pylint: disable-next=signature-differs; W0222
-    def __new__(cls, mapname=None, null=None, dtype=np.double, env=None):
+    def __new__(cls, mapname=None, null=None, dtype=None, env=None):
         """Define new numpy array
 
         :param cls:
-        :param dtype: data type (default: numpy.double)
+        :param dtype: data type (based on map type, fallbacks to numpy.double)
         :param env: environment
         """
         reg = gcore.region(env=env)
@@ -144,6 +144,19 @@ class array(np.memmap):
 
         tempfile = _tempfile(env)
         if mapname:
+            if not dtype:
+                try:
+                    map_type = gcore.parse_command(
+                        "r.info", map=mapname, format="json", env=env
+                    )["datatype"]
+                    if map_type == "CELL":
+                        dtype = np.int32
+                    elif map_type == "FCELL":
+                        dtype = np.float32
+                    elif map_type == "DCELL":
+                        dtype = np.float64
+                except CalledModuleError:
+                    dtype = np.double
             kind = np.dtype(dtype).kind
             size = np.dtype(dtype).itemsize
 
@@ -170,7 +183,11 @@ class array(np.memmap):
             )
 
         self = np.memmap.__new__(
-            cls, filename=tempfile.filename, dtype=dtype, mode="r+", shape=shape
+            cls,
+            filename=tempfile.filename,
+            dtype=dtype or np.double,
+            mode="r+",
+            shape=shape,
         )
 
         self.tempfile = tempfile
@@ -242,11 +259,11 @@ class array(np.memmap):
 
 class array3d(np.memmap):
     # pylint: disable-next=signature-differs; W0222
-    def __new__(cls, mapname=None, null=None, dtype=np.double, env=None):
+    def __new__(cls, mapname=None, null=None, dtype=None, env=None):
         """Define new 3d numpy array
 
         :param cls:
-        :param dtype: data type (default: numpy.double)
+        :param dtype: data type (based on map type, fallbacks to numpy.double)
         :param env: environment
         """
         reg = gcore.region(True)
@@ -257,6 +274,17 @@ class array3d(np.memmap):
 
         tempfile = _tempfile()
         if mapname:
+            if not dtype:
+                try:
+                    map_type = gcore.parse_command(
+                        "r3.info", map=mapname, format="json", env=env
+                    )["datatype"]
+                    if map_type == "FCELL":
+                        dtype = np.float32
+                    elif map_type == "DCELL":
+                        dtype = np.float64
+                except CalledModuleError:
+                    dtype = np.double
             kind = np.dtype(dtype).kind
             size = np.dtype(dtype).itemsize
 
@@ -283,7 +311,11 @@ class array3d(np.memmap):
             )
 
         self = np.memmap.__new__(
-            cls, filename=tempfile.filename, dtype=dtype, mode="r+", shape=shape
+            cls,
+            filename=tempfile.filename,
+            dtype=dtype or np.double,
+            mode="r+",
+            shape=shape,
         )
 
         self.tempfile = tempfile
