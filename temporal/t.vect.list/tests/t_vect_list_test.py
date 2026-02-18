@@ -3,11 +3,10 @@
 import csv
 import datetime
 import io
-import json
 
 import pytest
 
-import grass.script as gs
+from grass.tools import Tools
 
 yaml = pytest.importorskip("yaml", reason="PyYAML package not available")
 
@@ -15,40 +14,31 @@ yaml = pytest.importorskip("yaml", reason="PyYAML package not available")
 @pytest.mark.needs_solo_run
 def test_defaults(space_time_vector_dataset):
     """Check that the module runs with default parameters"""
-    gs.run_command(
-        "t.vect.list",
-        input=space_time_vector_dataset.name,
-        env=space_time_vector_dataset.session.env,
-    )
+    tools = Tools(session=space_time_vector_dataset.session)
+    result = tools.t_vect_list(input=space_time_vector_dataset.name, format=None)
+    assert result.returncode == 0
 
 
 @pytest.mark.needs_solo_run
 def test_line(space_time_vector_dataset):
     """Line format can be parsed with column=name"""
-    names = (
-        gs.read_command(
-            "t.vect.list",
-            input=space_time_vector_dataset.name,
-            format="line",
-            env=space_time_vector_dataset.session.env,
-            columns="name",
-        )
-        .strip()
-        .split(",")
+    tools = Tools(session=space_time_vector_dataset.session)
+    result = tools.t_vect_list(
+        input=space_time_vector_dataset.name,
+        format="line",
+        columns="name",
     )
+    names = result.stdout.strip().split(",")
     assert names == space_time_vector_dataset.vector_names
 
 
 @pytest.mark.needs_solo_run
 def test_json(space_time_vector_dataset):
     """Check JSON can be parsed and contains the right values"""
-    result = json.loads(
-        gs.read_command(
-            "t.vect.list",
-            input=space_time_vector_dataset.name,
-            format="json",
-            env=space_time_vector_dataset.session.env,
-        )
+    tools = Tools(session=space_time_vector_dataset.session)
+    result = tools.t_vect_list(
+        input=space_time_vector_dataset.name,
+        format="json",
     )
     assert "data" in result
     assert "metadata" in result
@@ -63,14 +53,13 @@ def test_json(space_time_vector_dataset):
 @pytest.mark.needs_solo_run
 def test_yaml(space_time_vector_dataset):
     """Check YAML can be parsed and contains the right values"""
-    result = yaml.safe_load(
-        gs.read_command(
-            "t.vect.list",
-            input=space_time_vector_dataset.name,
-            format="yaml",
-            env=space_time_vector_dataset.session.env,
-        )
+    tools = Tools(session=space_time_vector_dataset.session)
+    result = tools.t_vect_list(
+        input=space_time_vector_dataset.name,
+        format="yaml",
     )
+    result = yaml.safe_load(result.stdout)
+
     assert "data" in result
     assert "metadata" in result
     for item in result["data"]:
@@ -90,15 +79,14 @@ def test_yaml(space_time_vector_dataset):
 )
 def test_csv(space_time_vector_dataset, separator, delimiter):
     """Check CSV can be parsed with different separators"""
+    tools = Tools(session=space_time_vector_dataset.session)
     columns = ["name", "start_time"]
-    text = gs.read_command(
-        "t.vect.list",
+    text = tools.t_vect_list(
         input=space_time_vector_dataset.name,
         columns=columns,
         format="csv",
         separator=separator,
-        env=space_time_vector_dataset.session.env,
-    )
+    ).stdout
     io_string = io.StringIO(text)
     reader = csv.DictReader(
         io_string,
