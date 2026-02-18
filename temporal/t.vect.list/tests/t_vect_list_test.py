@@ -23,6 +23,23 @@ def test_defaults(space_time_vector_dataset):
 
 
 @pytest.mark.needs_solo_run
+def test_line(space_time_vector_dataset):
+    """Line format can be parsed with column=name"""
+    names = (
+        gs.read_command(
+            "t.vect.list",
+            input=space_time_vector_dataset.name,
+            format="line",
+            env=space_time_vector_dataset.session.env,
+            columns="name",
+        )
+        .strip()
+        .split(",")
+    )
+    assert names == space_time_vector_dataset.vector_names
+
+
+@pytest.mark.needs_solo_run
 def test_json(space_time_vector_dataset):
     """Check JSON can be parsed and contains the right values"""
     result = json.loads(
