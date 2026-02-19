@@ -13,6 +13,7 @@ except ImportError:
     yaml = None
 
 import grass.script as gs
+from grass.tools import Tools
 
 
 @pytest.mark.needs_solo_run
@@ -250,11 +251,7 @@ def test_no_header_accepted(space_time_raster_dataset, output_format):
     ],
 )
 def test_no_header_rejected(space_time_raster_dataset, output_format):
-    """Check that the no column names flag is rejected
-
-    Given how the format dependencies are handled, this will run even
-    when YAML support is missing.
-    """
+    """Check that the no column names flag is rejected"""
     return_code = gs.run_command(
         "t.rast.list",
         input=space_time_raster_dataset.name,
@@ -264,6 +261,31 @@ def test_no_header_rejected(space_time_raster_dataset, output_format):
         env=space_time_raster_dataset.session.env,
     )
     assert return_code != 0
+
+
+@pytest.mark.needs_solo_run
+@pytest.mark.parametrize(
+    "output_format",
+    [
+        "json",
+        pytest.param(
+            "yaml",
+            marks=pytest.mark.skipif(
+                yaml is None, reason="PyYAML package not available"
+            ),
+        ),
+    ],
+)
+def test_separator_rejected(space_time_raster_dataset, output_format):
+    """Check that the separator option is rejected"""
+    tools = Tools(session=space_time_raster_dataset.session)
+    returncode = tools.t_rast_list(
+        input=space_time_raster_dataset.name,
+        format=output_format,
+        separator=",",
+        errors="status",
+    )
+    assert returncode != 0
 
 
 @pytest.mark.needs_solo_run

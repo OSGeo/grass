@@ -110,3 +110,28 @@ def test_csv(space_time_vector_dataset, separator, delimiter):
     assert len(data) == len(space_time_vector_dataset.vector_names)
     for row in data:
         assert len(row) == len(columns)
+
+
+@pytest.mark.needs_solo_run
+@pytest.mark.parametrize(
+    "output_format",
+    [
+        "json",
+        pytest.param(
+            "yaml",
+            marks=pytest.mark.skipif(
+                yaml is None, reason="PyYAML package not available"
+            ),
+        ),
+    ],
+)
+def test_separator_rejected(space_time_vector_dataset, output_format):
+    """Check that the separator option is rejected"""
+    tools = Tools(session=space_time_vector_dataset.session)
+    returncode = tools.t_rast_list(
+        input=space_time_vector_dataset.name,
+        format=output_format,
+        separator=",",
+        errors="status",
+    )
+    assert returncode != 0
