@@ -23,15 +23,20 @@ def test_defaults(space_time_vector_dataset):
 
 
 @pytest.mark.needs_solo_run
-def test_line(space_time_vector_dataset):
+@pytest.mark.parametrize(
+    ("separator", "delimiter"),
+    [(None, ","), (",", ","), ("pipe", "|")],
+)
+def test_line(space_time_vector_dataset, separator, delimiter):
     """Line format can be parsed with column=name"""
     tools = Tools(session=space_time_vector_dataset.session)
     result = tools.t_vect_list(
         input=space_time_vector_dataset.name,
         format="line",
         columns="name",
+        separator=separator,
     )
-    names = result.stdout.strip().split(",")
+    names = result.stdout.strip().split(delimiter)
     assert names == space_time_vector_dataset.vector_names
 
 

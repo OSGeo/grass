@@ -26,7 +26,11 @@ def test_defaults(space_time_raster_dataset):
 
 
 @pytest.mark.needs_solo_run
-def test_line(space_time_raster_dataset):
+@pytest.mark.parametrize(
+    ("separator", "delimiter"),
+    [(None, ","), (",", ","), ("pipe", "|")],
+)
+def test_line(space_time_raster_dataset, separator, delimiter):
     """Line format can be parsed and contains full names by default"""
     names = (
         gs.read_command(
@@ -34,9 +38,10 @@ def test_line(space_time_raster_dataset):
             input=space_time_raster_dataset.name,
             format="line",
             env=space_time_raster_dataset.session.env,
+            separator=separator,
         )
         .strip()
-        .split(",")
+        .split(delimiter)
     )
     assert names == space_time_raster_dataset.full_raster_names
 
