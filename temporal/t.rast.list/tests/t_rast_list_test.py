@@ -87,7 +87,8 @@ def test_yaml(space_time_raster_dataset):
 
 @pytest.mark.needs_solo_run
 @pytest.mark.parametrize(
-    ("separator", "delimiter"), [(None, ","), (",", ","), (";", ";"), ("tab", "\t")]
+    ("separator", "delimiter"),
+    [(None, ","), (",", ","), (";", ";"), ("tab", "\t"), ("pipe", "|")],
 )
 def test_csv(space_time_raster_dataset, separator, delimiter):
     """Check CSV can be parsed with different separators"""
