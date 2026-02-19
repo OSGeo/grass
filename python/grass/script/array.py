@@ -164,12 +164,11 @@ class array(np.memmap):
                 flags = "f"
             elif kind in "biu":
                 if size == 8:
-                    raise ValueError(
-                        _(
-                            "64-bit integers are not supported by GRASS raster maps. "
-                            "Use dtype=numpy.int32 or a smaller integer type."
-                        )
+                    message = (
+                        "64-bit integers are not supported by GRASS raster maps. "
+                        "Use dtype=numpy.int32 or a smaller integer type."
                     )
+                    raise ValueError(message)
                 flags = "i"
             else:
                 raise ValueError(_("Invalid kind <%s>") % kind)
@@ -226,13 +225,13 @@ class array(np.memmap):
             size = None
         elif kind in "biu":
             if size == 8:
-                raise ValueError(
-                    _(
-                        "64-bit integers are not supported by GRASS raster maps. "
-                        "Cast to a supported type before writing, e.g., "
-                        "array.astype(numpy.int32)"
-                    )
+                message = (
+                    "64-bit integers are not supported by GRASS raster maps. "
+                    "Cast to a supported type before writing, e.g., "
+                    "array.astype(numpy.int32)"
                 )
+                raise ValueError(message)
+
             if size not in {1, 2, 4}:
                 raise ValueError(_("Invalid integer size <%d>") % size)
             flags = None
