@@ -281,13 +281,13 @@ class array3d(np.memmap):
         :param dtype: data type (based on map type, fallbacks to numpy.double)
         :param env: environment
         """
-        reg = gcore.region(True)
+        reg = gcore.region(True, env=env)
         r = reg["rows3"]
         c = reg["cols3"]
         d = reg["depths"]
         shape = (d, r, c)
 
-        tempfile = _tempfile()
+        tempfile = _tempfile(env=env)
         if mapname:
             if not dtype:
                 try:
