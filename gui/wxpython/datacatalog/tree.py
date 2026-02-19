@@ -2084,6 +2084,14 @@ class DataCatalogTree(TreeView):
             wx.TheClipboard.SetData(do)
             wx.TheClipboard.Close()
 
+    def OnCopyGrassDbPath(self, event):
+        """Copy path to GRASS database"""
+        if wx.TheClipboard.Open():
+            do = wx.TextDataObject()
+            do.SetText(self.selected_grassdb[0].data["name"])
+            wx.TheClipboard.SetData(do)
+            wx.TheClipboard.Close()
+
     def OnReloadLocation(self, event):
         """Reload all mapsets in selected location"""
         node = self.selected_location[0]
@@ -2302,6 +2310,10 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, label_text)
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, lambda e: self.EditLabel(self.GetSelections()[0]), item)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Copy Full Database Path"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCopyGrassDbPath, item)
 
         # Remove Label (only if its exists)
         if has_label:
