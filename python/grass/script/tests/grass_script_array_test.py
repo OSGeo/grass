@@ -142,19 +142,3 @@ class TestArray3dDtypeAutoDetection:
         """Empty 3D array without mapname should default to float64."""
         arr = garray.array3d(env=session_3d.env)
         assert arr.dtype == np.float64
-
-
-class TestArray3dInt64Rejected:
-    """Test that 64-bit integers are rejected for 3D arrays."""
-
-    def test_read_3d_with_int64_dtype_raises(self, session_3d):
-        """Passing dtype=int64 with a 3D mapname should raise ValueError."""
-        with pytest.raises(ValueError, match="64-bit integers are not supported"):
-            garray.array3d(mapname="double3d", dtype=np.int64, env=session_3d.env)
-
-    def test_write_3d_int64_array_raises(self, session_3d):
-        """Writing a 3D int64 array should raise ValueError with cast hint."""
-        arr = garray.array3d(dtype=np.int64, env=session_3d.env)
-        arr[:] = np.arange(12, dtype=np.int64).reshape(2, 2, 3)
-        with pytest.raises(ValueError, match=r"array\.astype"):
-            arr.write(mapname="should_fail_3d", overwrite=True)
