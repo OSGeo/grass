@@ -104,6 +104,14 @@ jobs:
         env:
           STEPS_GET_EXCLUDE_OUTPUTS_EXTRA_EXCLUDE: ${{ steps.get-exclude.outputs.extra-exclude }}
 
+      - name: Set up Python
+        if: ${{ matrix.config == 'ubuntu-24.04' }}
+        uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3 # v5.2.0
+        with:
+          python-version: 3.13
+          cache: pip # zizmor: ignore[cache-poisoning] This workflow is not used for release artifacts
+          allow-prereleases: true
+
       - name: Get dependencies
         run: |
           sudo apt-get update -y
@@ -112,6 +120,13 @@ jobs:
           sudo apt-get update -y
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
+
+      - name: Install Python dependencies
+        if: ${{ matrix.config == 'ubuntu-24.04' }}
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r .github/workflows/python_requirements.txt
+          pip install -r .github/workflows/optional_requirements.txt
 
       - name: Create installation directory
         run: |
