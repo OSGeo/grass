@@ -6,9 +6,12 @@ import io
 
 import pytest
 
-from grass.tools import Tools
+try:
+    import yaml
+except ImportError:
+    yaml = None
 
-yaml = pytest.importorskip("yaml", reason="PyYAML package not available")
+from grass.tools import Tools
 
 
 @pytest.mark.needs_solo_run
@@ -50,6 +53,7 @@ def test_json(space_time_vector_dataset):
     assert names == space_time_vector_dataset.vector_names
 
 
+@pytest.mark.skipif(yaml is None, reason="PyYAML package not available")
 @pytest.mark.needs_solo_run
 def test_yaml(space_time_vector_dataset):
     """Check YAML can be parsed and contains the right values"""

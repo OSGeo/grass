@@ -7,9 +7,12 @@ import json
 
 import pytest
 
-import grass.script as gs
+try:
+    import yaml
+except ImportError:
+    yaml = None
 
-yaml = pytest.importorskip("yaml", reason="PyYAML package not available")
+import grass.script as gs
 
 
 @pytest.mark.needs_solo_run
@@ -58,6 +61,7 @@ def test_json(space_time_raster_dataset):
     assert names == space_time_raster_dataset.raster_names
 
 
+@pytest.mark.skipif(yaml is None, reason="PyYAML package not available")
 @pytest.mark.needs_solo_run
 def test_yaml(space_time_raster_dataset):
     """Check JSON can be parsed and contains the right values"""
@@ -227,7 +231,18 @@ def test_no_header_accepted(space_time_raster_dataset, output_format):
 
 
 @pytest.mark.needs_solo_run
-@pytest.mark.parametrize("output_format", ["json", "yaml"])
+@pytest.mark.parametrize(
+    "output_format",
+    [
+        "json",
+        pytest.param(
+            "yaml",
+            marks=pytest.mark.skipif(
+                yaml is None, reason="PyYAML package not available"
+            ),
+        ),
+    ],
+)
 def test_no_header_rejected(space_time_raster_dataset, output_format):
     """Check that the no column names flag is rejected
 
