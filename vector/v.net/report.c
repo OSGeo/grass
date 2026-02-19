@@ -6,7 +6,7 @@
 #include <grass/gjson.h>
 
 int report(struct Map_info *In, int afield, int nfield, int action,
-           const char *format)
+           enum OutputFormat format)
 {
     int i, j, line, nlines, ltype, node, nnodes;
     int cat_line, cat_node[2];
@@ -25,9 +25,11 @@ int report(struct Map_info *In, int afield, int nfield, int action,
 
     if (action == TOOL_REPORT) {
         struct boxlist *List;
+
         G_JSON_Value *root_value = NULL;
         G_JSON_Array *root_array = NULL;
-        if (format && strcmp(format, "json") == 0) {
+
+        if (format == FORMAT_JSON) {
             root_value = G_json_value_init_array();
             root_array = G_json_array(root_value);
         }
@@ -109,10 +111,13 @@ int report(struct Map_info *In, int afield, int nfield, int action,
 
         List = Vect_new_list();
 
-        G_JSON_Value *root_val = (format && strcmp(format, "json") == 0)
-                                     ? G_json_value_init_array()
-                                     : NULL;
-        G_JSON_Array *root_arr = G_json_array(root_val);
+        G_JSON_Value *root_val = NULL;
+        G_JSON_Array *root_arr = NULL;
+
+        if (format == FORMAT_JSON) {
+            root_val = G_json_value_init_array();
+            root_arr = G_json_array(root_val);
+        }
 
         for (i = 1; i <= nlines; i++) {
 
