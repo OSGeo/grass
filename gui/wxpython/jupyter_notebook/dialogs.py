@@ -17,7 +17,7 @@ This program is free software under the GNU General Public License
 from pathlib import Path
 import wx
 
-from .utils import get_default_jupyter_storage
+from .utils import get_project_jupyter_storage
 from .directory import WELCOME_NOTEBOOK_NAME
 
 
@@ -31,9 +31,7 @@ class JupyterStartDialog(wx.Dialog):
         """
         super().__init__(parent, title=_("Start Jupyter Notebook"), size=(500, 300))
 
-        self.default_storage = get_default_jupyter_storage()
-
-        self.selected_storage = self.default_storage
+        self.project_storage = get_project_jupyter_storage()
         self.create_template = True
 
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -54,14 +52,14 @@ class JupyterStartDialog(wx.Dialog):
         )
         self.storage_picker.Enable(True)  # Enabled by default
 
-        self.radio_default = wx.RadioButton(
+        self.radio_project = wx.RadioButton(
             self,
-            label=_("Save in project: {}").format(self.default_storage),
+            label=_("Save in project: {}").format(self.project_storage),
         )
 
         storage_sizer.Add(self.radio_custom, 0, wx.ALL, 5)
         storage_sizer.Add(self.storage_picker, 0, wx.EXPAND | wx.ALL, 5)
-        storage_sizer.Add(self.radio_default, 0, wx.ALL, 5)
+        storage_sizer.Add(self.radio_project, 0, wx.ALL, 5)
         sizer.Add(storage_sizer, 0, wx.EXPAND | wx.ALL, 10)
 
         # Template preference section
@@ -102,7 +100,7 @@ class JupyterStartDialog(wx.Dialog):
         sizer.Add(btn_sizer, 0, wx.ALIGN_CENTER | wx.ALL, 10)
 
         # Bind events
-        self.radio_default.Bind(wx.EVT_RADIOBUTTON, self.OnRadioToggle)
+        self.radio_project.Bind(wx.EVT_RADIOBUTTON, self.OnRadioToggle)
         self.radio_custom.Bind(wx.EVT_RADIOBUTTON, self.OnRadioToggle)
 
         btn_cancel.Bind(wx.EVT_BUTTON, self.OnCancel)
@@ -149,7 +147,7 @@ class JupyterStartDialog(wx.Dialog):
 
             self.selected_storage = path
         else:
-            self.selected_storage = Path(self.default_storage)
+            self.selected_storage = Path(self.project_storage)
 
         return {
             "storage": self.selected_storage,
