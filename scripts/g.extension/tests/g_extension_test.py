@@ -1,10 +1,8 @@
-"""Test g.extension"""
+"""Test g.extension (re-enabled for Windows per https://github.com/OSGeo/grass/issues/7080)."""
 
 import pytest
-import sys
 
 
-@pytest.mark.skipif(sys.platform.startswith("win"), reason="Temporarily disable tests.")
 # This should cover both C and Python tools.
 @pytest.mark.parametrize("name", ["r.stream.distance", "r.lake.series"])
 def test_install(tools, name):
