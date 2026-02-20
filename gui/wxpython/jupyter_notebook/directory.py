@@ -20,7 +20,7 @@ import shutil
 from pathlib import Path
 
 import grass.script as gs
-from .utils import get_default_jupyter_workdir
+from .utils import get_default_jupyter_storage
 
 
 # Template notebook filenames
@@ -41,7 +41,7 @@ class JupyterDirectoryManager:
         :param create_template: If a welcome notebook should be created or not
         :raises PermissionError: If the working directory is not writable
         """
-        self._workdir = workdir or get_default_jupyter_workdir()
+        self._workdir = workdir or get_default_jupyter_storage()
         self._workdir.mkdir(parents=True, exist_ok=True)
 
         if not os.access(self._workdir, os.W_OK):

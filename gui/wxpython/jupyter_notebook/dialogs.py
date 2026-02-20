@@ -17,48 +17,52 @@ This program is free software under the GNU General Public License
 from pathlib import Path
 import wx
 
-from .utils import get_default_jupyter_workdir
+from .utils import get_default_jupyter_storage
 from .directory import WELCOME_NOTEBOOK_NAME
 
 
 class JupyterStartDialog(wx.Dialog):
     """Dialog for selecting Jupyter startup options."""
 
-    def __init__(self, parent):
+    def __init__(self, parent: wx.Window) -> None:
+        """Initialize the Jupyter startup dialog.
+
+        :param parent: Parent window
+        """
         super().__init__(parent, title=_("Start Jupyter Notebook"), size=(500, 300))
 
-        self.default_dir = get_default_jupyter_workdir()
+        self.default_storage = get_default_jupyter_storage()
 
-        self.selected_dir = self.default_dir
+        self.selected_storage = self.default_storage
         self.create_template = True
 
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        # Working directory section
-        dir_box = wx.StaticBox(self, label=_("Notebook working directory"))
-        dir_sizer = wx.StaticBoxSizer(dir_box, wx.VERTICAL)
+        # Jupyter storage section
+        storage_box = wx.StaticBox(self, label=_("Where to Save Notebooks"))
+        storage_sizer = wx.StaticBoxSizer(storage_box, wx.VERTICAL)
 
         self.radio_custom = wx.RadioButton(
             self,
-            label=_("Select directory:"),
+            label=_("Choose custom directory:"),
             style=wx.RB_GROUP,
         )
         self.radio_custom.SetValue(True)  # Default selection
 
-        self.dir_picker = wx.DirPickerCtrl(
-            self, message=_("Choose a working directory"), style=wx.DIRP_USE_TEXTCTRL
+        self.storage_picker = wx.DirPickerCtrl(
+            self, message=_("Select notebook directory"), style=wx.DIRP_USE_TEXTCTRL
         )
-        self.dir_picker.Enable(True)  # Enabled by default
+        self.storage_picker.Enable(True)  # Enabled by default
 
         self.radio_default = wx.RadioButton(
             self,
-            label=_("Use default: {}").format(self.default_dir),
+            label=_("Save in project: {}").format(self.default_storage),
         )
 
-        dir_sizer.Add(self.radio_custom, 0, wx.ALL, 5)
-        dir_sizer.Add(self.dir_picker, 0, wx.EXPAND | wx.ALL, 5)
-        dir_sizer.Add(self.radio_default, 0, wx.ALL, 5)
-        sizer.Add(dir_sizer, 0, wx.EXPAND | wx.ALL, 10)
+        storage_sizer.Add(self.radio_custom, 0, wx.ALL, 5)
+        storage_sizer.Add(self.storage_picker, 0, wx.EXPAND | wx.ALL, 5)
+        storage_sizer.Add(self.radio_default, 0, wx.ALL, 5)
+        sizer.Add(storage_sizer, 0, wx.EXPAND | wx.ALL, 10)
 
         # Template preference section
         options_box = wx.StaticBox(self, label=_("Options"))
@@ -111,14 +115,20 @@ class JupyterStartDialog(wx.Dialog):
         self.SetMinSize(self.GetSize())
         self.CentreOnParent()
 
-    def OnRadioToggle(self, event):
-        """Enable/disable directory picker based on user choice."""
-        self.dir_picker.Enable(self.radio_custom.GetValue())
+    def OnRadioToggle(self, event: wx.Event) -> None:
+        """Enable/disable storage picker based on user choice.
 
-    def GetValues(self):
-        """Return selected working directory and template preference."""
+        :param event: Radio button event
+        """
+        self.storage_picker.Enable(self.radio_custom.GetValue())
+
+    def GetValues(self) -> dict[str, Path | bool] | None:
+        """Return selected storage and template preference.
+
+        :return: Dictionary with 'storage' and 'create_template' keys, or None on error
+        """
         if self.radio_custom.GetValue():
-            path = Path(self.dir_picker.GetPath())
+            path = Path(self.storage_picker.GetPath())
 
             try:
                 # create directory if missing
@@ -137,25 +147,37 @@ class JupyterStartDialog(wx.Dialog):
                 )
                 return None
 
-            self.selected_dir = path
+            self.selected_storage = path
         else:
-            self.selected_dir = Path(self.default_dir)
+            self.selected_storage = Path(self.default_storage)
 
         return {
-            "directory": self.selected_dir,
+            "storage": self.selected_storage,
             "create_template": self.checkbox_template.GetValue(),
         }
 
-    def OnCancel(self, event):
+    def OnCancel(self, event: wx.Event) -> None:
+        """Handle cancel button click.
+
+        :param event: Button click event
+        """
         self.EndModal(wx.ID_CANCEL)
 
-    def OnOpenIntegrated(self, event):
+    def OnOpenIntegrated(self, event: wx.Event) -> None:
+        """Handle integrated mode button click.
+
+        :param event: Button click event
+        """
         if not self.GetValues():
             return
         self.action = "integrated"
         self.EndModal(wx.ID_OK)
 
-    def OnOpenInBrowser(self, event):
+    def OnOpenInBrowser(self, event: wx.Event) -> None:
+        """Handle browser mode button click.
+
+        :param event: Button click event
+        """
         if not self.GetValues():
             return
         self.action = "browser"
