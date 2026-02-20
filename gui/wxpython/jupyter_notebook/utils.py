@@ -6,7 +6,7 @@
 Functions:
 - `is_jupyter_installed()`: Check if Jupyter Notebook is installed on the system and functional.
 - `is_wx_html2_available()`: Check if wx.html2 module is available.
-- `get_default_jupyter_storage()`: Return the default storage for Jupyter notebooks.
+- `get_project_jupyter_storage()`: Return the storage for Jupyter notebooks associated with the current GRASS project.
 
 (C) 2026 by the GRASS Development Team
 
@@ -62,11 +62,11 @@ def is_wx_html2_available() -> bool:
         return False
 
 
-def get_default_jupyter_storage() -> Path:
-    """Return the default jupyter storage for Jupyter notebooks associated
+def get_project_jupyter_storage() -> Path:
+    """Return the storage for Jupyter notebooks associated
     with the current GRASS project.
 
-    :return: Path to the default jupyter storage
+    :return: Path to the project jupyter storage
     """
     env = gs.gisenv()
     project_path = Path(env["GISDBASE"]) / env["LOCATION_NAME"]
