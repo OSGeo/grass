@@ -67,12 +67,12 @@ def _register_global_cleanup():
 class JupyterServerInstance:
     """Manage the lifecycle of a Jupyter server instance."""
 
-    def __init__(self, workdir):
+    def __init__(self, storage):
         """Initialize Jupyter server instance.
 
-        :param workdir: Working directory for the Jupyter server (str).
+        :param storage: Storage of notebooks for the Jupyter server (str).
         """
-        self.workdir = workdir
+        self.storage = storage
 
         self.proc = None
         self._reset_state()
@@ -130,20 +130,20 @@ class JupyterServerInstance:
 
     def start_server(self):
         """
-        Start a Jupyter server in the working directory on a free port.
+        Start a Jupyter server in the notebook storage on a free port.
 
-        :raises RuntimeError: If Jupyter is not installed, the working directory is invalid,
+        :raises RuntimeError: If Jupyter is not installed, the notebook storage is invalid,
                             or the server fails to start.
         """
         # Validation checks
-        if not pathlib.Path(self.workdir).is_dir():
+        if not pathlib.Path(self.storage).is_dir():
             raise RuntimeError(
-                _("Working directory does not exist: {}").format(self.workdir)
+                _("Notebook storage does not exist: {}").format(self.storage)
             )
 
-        if not os.access(self.workdir, os.W_OK):
+        if not os.access(self.storage, os.W_OK):
             raise RuntimeError(
-                _("Working directory is not writable: {}").format(self.workdir)
+                _("Notebook storage is not writable: {}").format(self.storage)
             )
 
         if self.is_alive():
@@ -175,7 +175,7 @@ class JupyterServerInstance:
             "--port",
             str(self.port),
             "--notebook-dir",
-            self.workdir,
+            self.storage,
         ]
 
         # Start server

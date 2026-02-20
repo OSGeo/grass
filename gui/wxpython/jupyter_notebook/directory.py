@@ -5,7 +5,7 @@
 the current working directory.
 
 Classes:
- - directory::JupyterDirectoryManager
+ - directory::JupyterStorageManager
 
 (C) 2026 by the GRASS Development Team
 
@@ -28,44 +28,43 @@ WELCOME_NOTEBOOK_NAME = "welcome.ipynb"
 NEW_NOTEBOOK_TEMPLATE_NAME = "new.ipynb"
 
 
-class JupyterDirectoryManager:
-    """Manage a Jupyter notebook working directory."""
+class JupyterStorageManager:
+    """Manage Jupyter notebook storage."""
 
     def __init__(
-        self, workdir: Path | None = None, create_template: bool = False
+        self, storage: Path | None = None, create_template: bool = False
     ) -> None:
-        """Initialize the Jupyter notebook directory.
+        """Initialize the Jupyter notebook storage.
 
-        :param workdir: Optional custom working directory. If not provided,
-                        the default working directory is used
+        :param storage: Optional custom storage path. If not provided,
+                        the default project storage is used
         :param create_template: If a welcome notebook should be created or not
-        :raises PermissionError: If the working directory is not writable
+        :raises PermissionError: If the storage is not writable
         """
-        self._workdir = workdir or get_project_jupyter_storage()
-        self._workdir.mkdir(parents=True, exist_ok=True)
+        self._storage = storage or get_project_jupyter_storage()
+        self._storage.mkdir(parents=True, exist_ok=True)
 
-        if not os.access(self._workdir, os.W_OK):
-            raise PermissionError(
-                _("Cannot write to the working directory: {}").format(self._workdir)
-            )
+        if not os.access(self._storage, os.W_OK):
+            msg = "Cannot write to the storage: {}"
+            raise PermissionError(_(msg).format(self._storage))
 
         self._files = []
         self._create_template = create_template
 
     @property
-    def workdir(self) -> Path:
-        """Return path to the working directory."""
-        return self._workdir
+    def storage(self) -> Path:
+        """Return path to the storage."""
+        return self._storage
 
     @property
     def files(self) -> list[Path]:
-        """Return list of file paths."""
+        """Return list of notebook files."""
         return self._files
 
     def prepare_files(self) -> None:
-        """Populate the list of files in the working directory."""
-        # Find all .ipynb files in the working directory
-        self._files = [f for f in self._workdir.iterdir() if f.suffix == ".ipynb"]
+        """Populate the list of files in the storage."""
+        # Find all .ipynb files in the storage
+        self._files = [f for f in self._storage.iterdir() if f.suffix == ".ipynb"]
 
         if self._create_template and not self._files:
             self.create_welcome_notebook()
@@ -73,13 +72,13 @@ class JupyterDirectoryManager:
     def import_file(
         self, source_path: Path, new_name: str | None = None, overwrite: bool = False
     ) -> Path:
-        """Import an existing notebook file to the working directory.
+        """Import an existing notebook file to the storage.
 
         :param source_path: Path to the source .ipynb file to import
         :param new_name: New name for the imported file (with .ipynb extension),
                          if not provided, original filename is used
         :param overwrite: Whether to overwrite an existing file with the same name
-        :return: Path to the copied file in the working directory
+        :return: Path to the copied file in the storage
         :raises FileNotFoundError: If the source_path does not exist
         :raises FileExistsError: If the target already exists and overwrite=False
         :raises ValueError: If source file doesn't have .ipynb extension
@@ -93,13 +92,13 @@ class JupyterDirectoryManager:
                 _("Source file must have .ipynb extension: {}").format(source)
             )
 
-        # Ensure the working directory exists
+        # Determine target name
         target_name = new_name or source.name
         if not target_name.endswith(".ipynb"):
             target_name += ".ipynb"
 
-        # Create the target path in the working directory
-        target_path = self._workdir / target_name
+        # Create the target path in the storage
+        target_path = self._storage / target_name
 
         # Check if the target file already exists
         if target_path.exists() and not overwrite:
@@ -118,16 +117,16 @@ class JupyterDirectoryManager:
     def export_file(
         self, file_name: str, destination_path: Path, overwrite: bool = False
     ) -> None:
-        """Export a file from the working directory to an external location.
+        """Export a file from the storage to an external location.
 
         :param file_name: Name of the file (e.g., "example.ipynb")
-        :param destination_path: Full file path or target directory to export the file to
+        :param destination_path: Full file path or target location to export the file to
         :param overwrite: If True, allows overwriting an existing file at the destination
         :raises FileNotFoundError: If the source file does not exist or is not a .ipynb file
         :raises FileExistsError: If the destination file exists and overwrite is False
         """
         # Validate the file name and ensure it has .ipynb extension
-        source_path = self._workdir / file_name
+        source_path = self._storage / file_name
         if not source_path.exists() or source_path.suffix != ".ipynb":
             raise FileNotFoundError(_("File not found: {}").format(source_path))
 
@@ -167,7 +166,7 @@ class JupyterDirectoryManager:
         if target_name is None:
             target_path = self.import_file(template_path)
         else:
-            target_path = self.workdir / target_name
+            target_path = self.storage / target_name
 
             # Prevent accidental overwrite
             if target_path.exists():
@@ -189,7 +188,7 @@ class JupyterDirectoryManager:
     def create_welcome_notebook(
         self, template_name: str = WELCOME_NOTEBOOK_NAME
     ) -> Path:
-        """Create a welcome notebook with working directory and mapset path placeholders replaced.
+        """Create a welcome notebook with storage and mapset path placeholders replaced.
 
         :param template_name: Template filename
         :return: Path to the created notebook
@@ -198,7 +197,7 @@ class JupyterDirectoryManager:
         env = gs.gisenv()
         mapset_path = Path(env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"])
         replacements = {
-            "${WORKING_DIR}": str(self._workdir).replace("\\", "/"),
+            "${STORAGE_PATH}": str(self._storage).replace("\\", "/"),
             "${MAPSET_PATH}": str(mapset_path).replace("\\", "/"),
         }
 
