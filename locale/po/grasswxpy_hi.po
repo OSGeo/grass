@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-14 18:00+0000\n"
-"PO-Revision-Date: 2026-02-11 07:01+0000\n"
+"PO-Revision-Date: 2026-02-20 05:33+0000\n"
 "Last-Translator: Abhimanyu  <abhimanyupg04@gmail.com>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/hi/>\n"
 "Language: hi\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.16\n"
 
 #, python-format
 msgid "Maximum number of animations is %d."
@@ -930,7 +930,7 @@ msgstr "रंग चुनें"
 
 #, python-format
 msgid "Unable to open file <%s> for reading."
-msgstr ""
+msgstr "पढ़ने के लिए फ़ाइल <%s> खोलने में असमर्थ।"
 
 #, python-format
 msgid ""
@@ -939,6 +939,10 @@ msgid ""
 "\n"
 "Number of skipped lines: %(line)d"
 msgstr ""
+"फ़ाइल <%(file)s> से सेटिंग्स पढ़ते समय कुछ पंक्तियाँ छोड़ दी गईं।\n"
+"विवरण के लिए 'कमांड आउटपुट' विंडो देखें।\n"
+"\n"
+"छोड़ी गई पंक्तियों की संख्या: %(line)d"
 
 #, python-format
 msgid " row %d:"
@@ -951,22 +955,22 @@ msgid "Choose GRASS project:"
 msgstr "GRASS प्रोजेक्ट चुनें:"
 
 msgid "Link external raster data  [r.external]"
-msgstr ""
+msgstr "बाहरी रास्टर डेटा लिंक करें [r.external]"
 
 msgid "Link external vector data  [v.external]"
-msgstr ""
+msgstr "बाहरी वेक्टर डेटा लिंक करें [v.external]"
 
 msgid "Set raster output format  [r.external.out]"
-msgstr ""
+msgstr "रास्टर आउटपुट फॉर्मेट सेट करें [r.external.out]"
 
 msgid "Set vector output format  [v.external.out]"
-msgstr ""
+msgstr "वेक्टर आउटपुट फॉर्मेट सेट करें [v.external.out]"
 
 msgid "Unpack GRASS raster map  [r.unpack]"
-msgstr ""
+msgstr "GRASS रास्टर मानचित्र अनपैक करें [r.unpack]"
 
 msgid "Unpack GRASS vector map  [v.unpack]"
-msgstr ""
+msgstr "GRASS वेक्टर मानचित्र अनपैक करें [v.unpack]"
 
 msgid "Create raster map from x,y,z data  [r.in.xyz]"
 msgstr "x,y,z डेटा से रास्टर मैप बनाएं [r.in.xyz]"
@@ -975,16 +979,16 @@ msgid "Create vector map from x,y,z data  [v.in.ascii]"
 msgstr "x,y,z डेटा से वेक्टर मैप बनाएं [v.in.ascii]"
 
 msgid "Link external data"
-msgstr ""
+msgstr "बाहरी डेटा लिंक करें"
 
 msgid "More options..."
-msgstr ""
+msgstr "अधिक विकल्प..।"
 
 msgid "Reprojection"
-msgstr ""
+msgstr "रिप्रोजेक्शन"
 
 msgid "Reproject"
-msgstr ""
+msgstr "पुनः प्रोजेक्ट करें"
 
 msgid "Reproject raster"
 msgstr ""
@@ -997,15 +1001,17 @@ msgid ""
 "Map layer <{ml}> needs to be reprojected.\n"
 "Please review and modify reprojection parameters:"
 msgstr ""
+"मानचित्र परत <{ml}> को पुनः प्रोजेक्ट करने की आवश्यकता है।\n"
+"कृपया रिप्रोजेक्शन मापदंडों की समीक्षा करें और संशोधित करें:"
 
 msgid "Estimated resolution:"
-msgstr ""
+msgstr "अनुमानित रिज़ॉल्यूशन:"
 
 msgid "Resampling method:"
-msgstr ""
+msgstr "रीसैंपलिंग विधि:"
 
 msgid "Maximum segment length:"
-msgstr ""
+msgstr "अधिकतम खंड लंबाई:"
 
 msgid "Data Catalog"
 msgstr "डेटा कैटलॉग"
@@ -1020,7 +1026,7 @@ msgid "Create new project"
 msgstr "नया प्रोजेक्ट बनाएं"
 
 msgid "Learn more"
-msgstr ""
+msgstr "अधिक जानें"
 
 #, python-brace-format
 msgid ""
@@ -1028,6 +1034,9 @@ msgid ""
 "\n"
 "You are currently in mapset PERMANENT in default project {loc} which uses WGS 84 (EPSG:4326). Consider creating a new project with a CRS specific to your area. You can do it now or anytime later from the toolbar above."
 msgstr ""
+"GRASS आपको प्रोजेक्ट्स (लोकेशन) का उपयोग करके अपने डेटा को व्यवस्थित करने में मदद करता है जिसमें मैपसेट्स (सबप्रोजेक्ट्स) होते हैं। एक प्रोजेक्ट का सारा डेटा एक ही कोऑर्डिनेट रेफरेंस सिस्टम (CRS) में होता है।\n"
+"\n"
+"आप वर्तमान में डिफ़ॉल्ट प्रोजेक्ट {loc} के मैपसेट PERMANENT में हैं जो WGS 84 (EPSG:4326) का उपयोग करता है। अपने क्षेत्र के लिए विशिष्ट CRS के साथ एक नया प्रोजेक्ट बनाने पर विचार करें। आप इसे अभी या बाद में कभी भी ऊपर टूलबार से कर सकते हैं।"
 
 msgid "Import vector data"
 msgstr ""
@@ -1041,26 +1050,29 @@ msgid ""
 "\n"
 "To import data, go to the toolbar above or use the buttons below."
 msgstr ""
+"आपने सफलतापूर्वक एक नया प्रोजेक्ट {loc} बनाया है। वर्तमान में आप इसके PERMANENT मैपसेट में हैं जिसका उपयोग आपके बेस मैप्स को संग्रहीत करने के लिए किया जाता है ताकि वे अन्य मैपसेट्स में आसानी से उपलब्ध हो सकें। आप प्रोजेक्ट के नाम पर राइट क्लिक करके विभिन्न कार्यों के लिए नए मैपसेट बना सकते हैं।\n"
+"\n"
+"डेटा इम्पोर्ट करने के लिए, ऊपर टूलबार पर जाएँ या नीचे दिए गए बटनों का उपयोग करें।"
 
 msgid "Loading of Data catalog content took rather long. To prevent delay, you can enable loading of current mapset only. You can change that later in GUI Settings, General tab."
-msgstr ""
+msgstr "डेटा कैटलॉग सामग्री लोड होने में काफी समय लगा। देरी को रोकने के लिए, आप केवल वर्तमान मैपसेट की लोडिंग सक्षम कर सकते हैं। आप इसे बाद में GUI सेटिंग्स, सामान्य (General) टैब में बदल सकते हैं।"
 
 msgid "Enable loading current mapset only"
-msgstr ""
+msgstr "केवल वर्तमान मैपसेट की लोडिंग सक्षम करें"
 
 msgid "No change, don't ask me again"
-msgstr ""
+msgstr "कोई बदलाव नहीं, मुझसे दोबारा न पूछें"
 
 #, python-brace-format
 msgid "{string} GRASS has started in a temporary project. To continue, use Data Catalog below to switch to a different project."
-msgstr ""
+msgstr "{string} GRASS एक अस्थायी प्रोजेक्ट में शुरू हुआ है। जारी रखने के लिए, किसी अन्य प्रोजेक्ट पर स्विच करने के लिए नीचे डेटा कैटलॉग (Data Catalog) का उपयोग करें।"
 
 msgid "Switch to last used mapset"
 msgstr ""
 
 #, python-brace-format
 msgid "Last used mapset in path '{mapsetpath}' is currently in use. GRASS has started in a temporary project. To continue, use Data Catalog below to switch to a different project or remove lock file and switch to the last used mapset."
-msgstr ""
+msgstr "पथ '{mapsetpath}' में अंतिम बार उपयोग किया गया मैपसेट वर्तमान में उपयोग में है। GRASS एक अस्थायी प्रोजेक्ट में शुरू हुआ है। जारी रखने के लिए, किसी अन्य प्रोजेक्ट पर स्विच करने के लिए नीचे डेटा कैटलॉग (Data Catalog) का उपयोग करें या लॉक फ़ाइल हटा दें और अंतिम बार उपयोग किए गए मैपसेट पर स्विच करें।"
 
 #, python-brace-format
 msgid "Last used mapset in path '{mapsetpath}' does not exist."
@@ -1068,17 +1080,17 @@ msgstr ""
 
 #, python-brace-format
 msgid "Last used mapset in path '{mapsetpath}' is invalid."
-msgstr ""
+msgstr "पथ '{mapsetpath}' में अंतिम बार उपयोग किया गया मैपसेट अमान्य है।"
 
 #, python-brace-format
 msgid "Last used mapset in path '{mapsetpath}' has different owner {owner}."
-msgstr ""
+msgstr "पथ '{mapsetpath}' में अंतिम बार उपयोग किया गया मैपसेट का मालिक {owner} भिन्न है।"
 
 msgid "Reload GRASS projects"
-msgstr ""
+msgstr "GRASS प्रोजेक्ट्स को पुनः लोड करें"
 
 msgid "Reload current GRASS mapset only"
-msgstr ""
+msgstr "केवल वर्तमान GRASS मैपसेट को पुनः लोड करें"
 
 msgid "Create new mapset in current project"
 msgstr "वर्तमान प्रोजेक्ट में नया मैपसेट बनाएं"
@@ -1087,53 +1099,53 @@ msgid "Add an existing project"
 msgstr "एक मौजूदा परियोजना जोड़ें"
 
 msgid "Download sample project"
-msgstr ""
+msgstr "नमूना प्रोजेक्ट डाउनलोड करें"
 
 msgid "Import raster data  [r.import]"
-msgstr ""
+msgstr "रास्टर डेटा इम्पोर्ट करें [r.import]"
 
 msgid "Import vector data  [v.import]"
-msgstr ""
+msgstr "वेक्टर डेटा इम्पोर्ट करें [v.import]"
 
 msgid "Select another import option"
-msgstr ""
+msgstr "अन्य इम्पोर्ट विकल्प चुनें"
 
 msgid "Search"
-msgstr ""
+msgstr "खोजें"
 
 msgid "Type to search database by map type or name. Use Python regular expressions to refine your search."
-msgstr ""
+msgstr "नक्शे के प्रकार या नाम से डेटाबेस खोजने के लिए टाइप करें। अपनी खोज को परिशोधित करने के लिए पायथन रेगुलर एक्सप्रेशन (Python regular expressions) का उपयोग करें।"
 
 #, python-brace-format
 msgid "Failed to read mapsets from project <{l}>."
-msgstr ""
+msgstr "प्रोजेक्ट <{l}> से मैपसेट्स पढ़ने में विफल।"
 
 #, python-brace-format
 msgid "Failed to read maps from project <{l}>."
-msgstr ""
+msgstr "प्रोजेक्ट <{l}> से मैप्स पढ़ने में विफल।"
 
 #, python-brace-format
 msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
-msgstr ""
+msgstr "{elem} प्रकार का मानचित्र <{name}> पहले से ही मैपसेट <{mapset}> में मौजूद है। क्या आप इसे ओवरराइट करना चाहते हैं?"
 
 msgid "name unknown"
-msgstr ""
+msgstr "नाम अज्ञात"
 
 #, python-brace-format
 msgid "{name}  (current)"
-msgstr ""
+msgstr "{name} (वर्तमान)"
 
 #, python-brace-format
 msgid "{name}  (in use, owner: {owner})"
-msgstr ""
+msgstr "{name} (उपयोग में है, मालिक: {owner})"
 
 #, python-brace-format
 msgid "{name}  (in use)"
-msgstr ""
+msgstr "{name} (उपयोग में है)"
 
 #, python-brace-format
 msgid "{name}  (owner: {owner})"
-msgstr ""
+msgstr "{name} (मालिक: {owner})"
 
 #, python-brace-format
 msgid "{name}"
@@ -1145,9 +1157,12 @@ msgid ""
 "\n"
 "Do you want to switch anyway?"
 msgstr ""
+"मानचित्र <{map_name}@{map_mapset}> वर्तमान प्रोजेक्ट में नहीं है। इसे प्रदर्शित करने के लिए आपको <{map_location}> प्रोजेक्ट पर स्विच करना होगा। ध्यान दें कि यदि आप वहां स्विच करते हैं तो सभी वर्तमान मानचित्र प्रदर्शन (Map Displays) बंद हो जाएंगे।\n"
+"\n"
+"क्या आप फिर भी स्विच करना चाहते हैं?"
 
 msgid "Map in a different project"
-msgstr ""
+msgstr "<{n}> के लिए नया नाम"
 
 #, python-brace-format
 msgid "{c} maps marked for moving."
@@ -1163,13 +1178,13 @@ msgstr ""
 
 #, python-brace-format
 msgid "Map <{layer}> marked for copying."
-msgstr ""
+msgstr "मानचित्र <{layer}> को कॉपी करने के लिए चिह्नित किया गया।"
 
 msgid "New name"
-msgstr ""
+msgstr "नया नाम"
 
 msgid "Rename map"
-msgstr ""
+msgstr "मानचित्र का नाम बदलें"
 
 msgid "Cannot rename mapset"
 msgstr "मैपसेट का नाम नहीं बदला जा सकता"
@@ -1201,7 +1216,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "New name for <{n}>"
-msgstr ""
+msgstr "<{n}> के लिए नया नाम"
 
 msgid "Select new name"
 msgstr ""
