@@ -972,7 +972,7 @@ class GMFrame(wx.Frame):
                 giface=self._giface,
                 statusbar=self.statusbar,
                 dockable=True,
-                workdir=storage,
+                storage=storage,
                 create_template=create_template,
             )
             panel.SetUpPage(self, self.mainnotebook)
@@ -1017,7 +1017,7 @@ class GMFrame(wx.Frame):
                 giface=self._giface,
                 statusbar=self.statusbar,
                 dockable=True,
-                workdir=storage,
+                storage=storage,
                 create_template=create_template,
             )
             panel.SetUpPage(self, self.mainnotebook)
