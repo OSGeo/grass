@@ -8,6 +8,7 @@ set(gui_lib_DIRS
     lmgr
     location_wizard
     main_window
+    jupyter_notebook
     mapdisp
     mapwin
     modules
