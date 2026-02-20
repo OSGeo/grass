@@ -1,11 +1,11 @@
 """
-@package jupyter_notebook.directory
+@package jupyter_notebook.storage
 
 @brief Simple interface for working with Jupyter Notebook files stored within
-the current working directory.
+the current storage.
 
 Classes:
- - directory::JupyterStorageManager
+ - storage::JupyterStorageManager
 
 (C) 2026 by the GRASS Development Team
 
@@ -37,7 +37,7 @@ class JupyterStorageManager:
         """Initialize the Jupyter notebook storage.
 
         :param storage: Optional custom storage path. If not provided,
-                        the default project storage is used
+                        the project storage is used
         :param create_template: If a welcome notebook should be created or not
         :raises PermissionError: If the storage is not writable
         """

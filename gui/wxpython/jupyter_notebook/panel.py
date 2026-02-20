@@ -84,7 +84,7 @@ class JupyterPanel(wx.Panel, MainPageBase):
     def SetUpEnvironment(self):
         """Setup integrated Jupyter notebook environment and load initial notebooks.
 
-        - Prepares notebook files in the working directory
+        - Prepares notebook files in the notebook storage
         - Starts the Jupyter server
         - Loads all existing notebooks as tabs in the embedded browser
 
@@ -102,7 +102,7 @@ class JupyterPanel(wx.Panel, MainPageBase):
             return False
 
         # Load notebook tabs in embedded AUI notebook
-        for fname in self.env.directory.files:
+        for fname in self.env.files:
             try:
                 url = self.env.server.get_url(fname.name)
             except RuntimeError as e:
@@ -166,13 +166,13 @@ class JupyterPanel(wx.Panel, MainPageBase):
             self.SetStatusText(_("File '{}' opened.").format(file_name), 0)
 
     def Import(self, source_path, new_name=None):
-        """Import a .ipynb file into working directory and open it in a new tab.
+        """Import a .ipynb file into notebook storage and open it in a new tab.
 
         :param source_path: Path to the source .ipynb file to be imported
         :param new_name: Optional new name for the imported file
         """
         try:
-            path = self.env.directory.import_file(source_path, new_name=new_name)
+            path = self.env.storage_manager.import_file(source_path, new_name=new_name)
             self.Open(path.name)
             self.SetStatusText(_("File '{}' imported and opened.").format(path.name), 0)
         except (FileNotFoundError, ValueError, FileExistsError) as e:
@@ -183,10 +183,10 @@ class JupyterPanel(wx.Panel, MainPageBase):
             )
 
     def OnImport(self, event=None):
-        """Import an existing Jupyter notebook file into the working directory.
+        """Import an existing Jupyter notebook file into notebook storage.
 
         Prompts user to select a .ipynb file:
-        - If the file is already in the notebook directory: switch to it or open it
+        - If the file is already in the notebook storage: switch to it or open it
         - If the file is from elsewhere: import and open it (prompt for new name if needed)
         """
         # Open file dialog to select an existing Jupyter notebook file
@@ -204,19 +204,19 @@ class JupyterPanel(wx.Panel, MainPageBase):
             file_name = source_path.name
             target_path = self.env.storage / file_name
 
-            # File is already in the working directory
+            # File is already in the storage
             if source_path.resolve() == target_path.resolve():
                 self.OpenOrSwitch(file_name)
                 return
 
-            # File is from outside the working directory
+            # File is from outside the storage
             new_name = None
             if target_path.exists():
                 # Prompt user for a new name if the notebook already exists
                 with wx.TextEntryDialog(
                     self,
                     message=_(
-                        "File '{}' already exists in working directory.\nPlease enter a new name:"
+                        "File '{}' already exists in notebook storage.\nPlease enter a new name:"
                     ).format(file_name),
                     caption=_("Rename File"),
                     value="{}_copy".format(file_name.removesuffix(".ipynb")),
@@ -255,7 +255,7 @@ class JupyterPanel(wx.Panel, MainPageBase):
             destination_path = Path(dlg.GetPath())
 
             try:
-                self.env.directory.export_file(
+                self.env.storage_manager.export_file(
                     file_name, destination_path, overwrite=True
                 )
                 self.SetStatusText(
@@ -269,7 +269,7 @@ class JupyterPanel(wx.Panel, MainPageBase):
                 )
 
     def OnCreate(self, event=None):
-        """Create a new empty Jupyter notebook in the working directory and open it."""
+        """Create a new empty Jupyter notebook in the notebook storage and open it."""
         with wx.TextEntryDialog(
             self,
             message=_("Enter a name for the new notebook:"),
@@ -284,7 +284,7 @@ class JupyterPanel(wx.Panel, MainPageBase):
                 return
 
             try:
-                path = self.env.directory.create_new_notebook(new_name=name)
+                path = self.env.storage_manager.create_new_notebook(new_name=name)
             except (FileExistsError, ValueError) as e:
                 wx.MessageBox(
                     _("Failed to create notebook:\n{}").format(e),
