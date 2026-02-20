@@ -15,25 +15,27 @@ This program is free software under the GNU General Public License
 @author Linda Karlovska <linda.karlovska seznam.cz>
 """
 
-from .directory import JupyterStorageManager
+from pathlib import Path
+
+from .storage import JupyterStorageManager
 from .server import JupyterServerInstance, JupyterServerRegistry
 
 
 class JupyterEnvironment:
-    """Orchestrates directory manager and Jupyter server lifecycle.
+    """Orchestrates storage manager and Jupyter server lifecycle.
 
-    :param storage: Directory for notebooks
+    :param storage: Storage for notebooks
     :param create_template: Whether to create template notebooks
     """
 
     def __init__(self, storage, create_template):
-        self.directory = JupyterStorageManager(storage, create_template)
+        self.storage_manager = JupyterStorageManager(storage, create_template)
         self.server = JupyterServerInstance(storage)
 
     def setup(self):
         """Prepare files and start server."""
         # Prepare files
-        self.directory.prepare_files()
+        self.storage_manager.prepare_files()
 
         # Start server
         self.server.start_server()
@@ -61,4 +63,9 @@ class JupyterEnvironment:
     @property
     def storage(self):
         """Get Jupyter notebook storage."""
-        return self.directory.storage if self.directory else None
+        return self.storage_manager.storage if self.storage_manager else None
+
+    @property
+    def files(self) -> list[Path]:
+        """Return list of notebook files."""
+        return self.storage_manager.files if self.storage_manager else []
