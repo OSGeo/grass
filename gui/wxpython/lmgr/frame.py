@@ -815,7 +815,7 @@ class GMFrame(wx.Frame):
         if not values:
             return
 
-        workdir = values["directory"]
+        storage = values["storage"]
         create_template = values["create_template"]
 
         if action == "integrated":
@@ -843,7 +843,7 @@ class GMFrame(wx.Frame):
             parent=self,
             giface=self._giface,
             action=action,
-            workdir=workdir,
+            workdir=storage,
             create_template=create_template,
         )
         frame.CentreOnParent()
