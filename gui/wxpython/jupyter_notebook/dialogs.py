@@ -18,6 +18,7 @@ from pathlib import Path
 import wx
 
 from .utils import get_default_jupyter_workdir
+from .directory import WELCOME_NOTEBOOK_NAME
 
 
 class JupyterStartDialog(wx.Dialog):
@@ -67,9 +68,9 @@ class JupyterStartDialog(wx.Dialog):
         self.checkbox_template.SetValue(True)
         self.checkbox_template.SetToolTip(
             _(
-                "If selected, a welcome notebook (welcome.ipynb) will be created,\n"
+                "If selected, a welcome notebook ({}) will be created,\n"
                 "but only if the selected directory contains no .ipynb files."
-            )
+            ).format(WELCOME_NOTEBOOK_NAME)
         )
         options_sizer.Add(self.checkbox_template, 0, wx.ALL, 5)
 
