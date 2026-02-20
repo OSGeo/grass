@@ -23,6 +23,11 @@ import grass.script as gs
 from .utils import get_default_jupyter_workdir
 
 
+# Template notebook filenames
+WELCOME_NOTEBOOK_NAME = "welcome.ipynb"
+NEW_NOTEBOOK_TEMPLATE_NAME = "new.ipynb"
+
+
 class JupyterDirectoryManager:
     """Manage a Jupyter notebook working directory."""
 
@@ -180,11 +185,11 @@ class JupyterDirectoryManager:
 
         return target_path
 
-    def create_welcome_notebook(self, template_name="welcome.ipynb"):
+    def create_welcome_notebook(self, template_name=WELCOME_NOTEBOOK_NAME):
         """
         Create a welcome notebook with working directory and mapset path placeholders replaced.
 
-        :param template_name: Template filename (default: ``welcome.ipynb``).
+        :param template_name: Template filename (default: WELCOME_NOTEBOOK_NAME).
         :return: Path to the created notebook (Path).
         """
         # Prepare placeholder replacements
@@ -198,12 +203,12 @@ class JupyterDirectoryManager:
         # Create notebook from template
         return self._create_from_template(template_name, replacements=replacements)
 
-    def create_new_notebook(self, new_name, template_name="new.ipynb"):
+    def create_new_notebook(self, new_name, template_name=NEW_NOTEBOOK_TEMPLATE_NAME):
         """
         Create a new notebook from a template with only mapset path placeholder replaced.
 
         :param new_name: Desired notebook filename.
-        :param template_name: Template filename (default: ``new.ipynb``).
+        :param template_name: Template filename (default: NEW_NOTEBOOK_TEMPLATE_NAME).
         :return: Path to the created notebook (Path).
         :raises ValueError: If name is empty.
         :raises FileExistsError: If file already exists.
