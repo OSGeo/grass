@@ -843,7 +843,7 @@ class GMFrame(wx.Frame):
             parent=self,
             giface=self._giface,
             action=action,
-            workdir=storage,
+            storage=storage,
             create_template=create_template,
         )
         frame.CentreOnParent()

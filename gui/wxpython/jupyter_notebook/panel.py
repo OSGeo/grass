@@ -48,7 +48,7 @@ class JupyterPanel(wx.Panel, MainPageBase):
         title=_("Jupyter Notebook"),
         statusbar=None,
         dockable=False,
-        workdir=None,
+        storage=None,
         create_template=False,
         **kwargs,
     ):
@@ -62,7 +62,7 @@ class JupyterPanel(wx.Panel, MainPageBase):
 
         # Create environment in integrated mode (requires wx.html2)
         self.env = JupyterEnvironment(
-            workdir=workdir,
+            storage=storage,
             create_template=create_template,
         )
 
@@ -116,10 +116,12 @@ class JupyterPanel(wx.Panel, MainPageBase):
             self.aui_notebook.AddPage(url=url, title=fname.name)
 
         self.SetStatusText(
-            _("Jupyter server started at {url} (PID: {pid}), directory: {dir}").format(
+            _(
+                "Jupyter server running at {url} (PID: {pid}) | Storage: {storage}"
+            ).format(
                 url=self.env.server_url,
                 pid=self.env.pid,
-                dir=self.env.workdir,
+                storage=self.env.storage,
             )
         )
         return True
@@ -200,7 +202,7 @@ class JupyterPanel(wx.Panel, MainPageBase):
 
             source_path = Path(dlg.GetPath())
             file_name = source_path.name
-            target_path = self.env.workdir / file_name
+            target_path = self.env.storage / file_name
 
             # File is already in the working directory
             if source_path.resolve() == target_path.resolve():
@@ -359,7 +361,7 @@ class JupyterBrowserPanel(wx.Panel, MainPageBase):
         id=wx.ID_ANY,
         statusbar=None,
         dockable=False,
-        workdir=None,
+        storage=None,
         create_template=False,
         **kwargs,
     ):
@@ -371,7 +373,7 @@ class JupyterBrowserPanel(wx.Panel, MainPageBase):
         self.statusbar = statusbar
         self.SetName("JupyterBrowser")
 
-        self.env = JupyterEnvironment(workdir=workdir, create_template=create_template)
+        self.env = JupyterEnvironment(storage=storage, create_template=create_template)
 
         self._layout()
 
@@ -448,9 +450,19 @@ class JupyterBrowserPanel(wx.Panel, MainPageBase):
         # Update UI with server info
         self.url_text.SetLabel(_("Server URL: {}").format(self.env.server_url))
         self.pid_text.SetLabel(_("Process ID: {}").format(self.env.pid))
-        self.dir_text.SetLabel(_("Notebook storage {}").format(self.env.workdir))
+        self.dir_text.SetLabel(_("Notebook Storage: {}").format(self.env.storage))
 
         self.Layout()
+
+        self.SetStatusText(
+            _(
+                "Jupyter server running at {url} (PID: {pid}) | Storage: {storage}"
+            ).format(
+                url=self.env.server_url,
+                pid=self.env.pid,
+                storage=self.env.storage,
+            )
+        )
 
         # Open in default browser
         webbrowser.open(self.env.server_url)

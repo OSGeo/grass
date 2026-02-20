@@ -15,20 +15,20 @@ This program is free software under the GNU General Public License
 @author Linda Karlovska <linda.karlovska seznam.cz>
 """
 
-from .directory import JupyterDirectoryManager
+from .directory import JupyterStorageManager
 from .server import JupyterServerInstance, JupyterServerRegistry
 
 
 class JupyterEnvironment:
     """Orchestrates directory manager and Jupyter server lifecycle.
 
-    :param workdir: Directory for notebooks
+    :param storage: Directory for notebooks
     :param create_template: Whether to create template notebooks
     """
 
-    def __init__(self, workdir, create_template):
-        self.directory = JupyterDirectoryManager(workdir, create_template)
-        self.server = JupyterServerInstance(workdir)
+    def __init__(self, storage, create_template):
+        self.directory = JupyterStorageManager(storage, create_template)
+        self.server = JupyterServerInstance(storage)
 
     def setup(self):
         """Prepare files and start server."""
@@ -59,6 +59,6 @@ class JupyterEnvironment:
         return self.server.pid if self.server else None
 
     @property
-    def workdir(self):
-        """Get working directory."""
-        return self.directory.workdir if self.directory else None
+    def storage(self):
+        """Get Jupyter notebook storage."""
+        return self.directory.storage if self.directory else None

@@ -33,7 +33,7 @@ class JupyterFrame(wx.Frame):
         parent,
         giface,
         action="integrated",
-        workdir=None,
+        storage=None,
         create_template=False,
         id=wx.ID_ANY,
         title=_("Jupyter Notebook"),
@@ -55,7 +55,7 @@ class JupyterFrame(wx.Frame):
                 self.panel = JupyterPanel(
                     parent=self,
                     giface=giface,
-                    workdir=workdir,
+                    storage=storage,
                     create_template=create_template,
                     statusbar=self.statusbar,
                     dockable=False,
@@ -95,7 +95,7 @@ class JupyterFrame(wx.Frame):
             self.panel = JupyterBrowserPanel(
                 parent=self,
                 giface=giface,
-                workdir=workdir,
+                storage=storage,
                 create_template=create_template,
                 statusbar=self.statusbar,
                 dockable=False,
