@@ -59,9 +59,10 @@ int invert(struct One_Sig *s, int nbands, int *ik, int *jk, double *det)
     double dx, dy, v;
 
     /* copy lower half to upper half */
-    for (k = 0; k < nbands; k++)
+    for (k = 0; k < nbands; k++) {
         for (j = 0; j < k; j++)
             s->var[j][k] = s->var[k][j];
+    }
 
     /* invert */
     *det = 1.0;
@@ -79,48 +80,54 @@ int invert(struct One_Sig *s, int nbands, int *ik, int *jk, double *det)
                     max = v;
                 }
             }
-            /*330 */ }
-            if (max == 0.0)
-                return -1; /* ill conditioned matrix */
+        } /*330 */
 
-            if (ik[k] != k) { /* 351 */
-                int kk = ik[k];
+        if (max == 0.0)
+            return -1; /* ill conditioned matrix */
 
-                for (j = 0; j < nbands; j++) { /* 350 */
-                    v = s->var[k][j];
-                    s->var[k][j] = s->var[kk][j];
-                    s->var[kk][j] = -v;
-                /*350 */ }
-            /*351 */ }
-            if (jk[k] != k) { /* 361 */
-                int jj = jk[k];
+        if (ik[k] != k) { /* 351 */
+            int kk = ik[k];
 
-                for (i = 0; i < nbands; i++) { /* 360 */
-                    v = s->var[i][k];
-                    s->var[i][k] = s->var[i][jj];
-                    s->var[i][jj] = -v;
-                /*360 */ }
-            /*361 */ }
-            for (j = 0; j < nbands; j++)
-                if (j != k)
-                    s->var[j][k] /= -max;
+            for (j = 0; j < nbands; j++) { /* 350 */
+                v = s->var[k][j];
+                s->var[k][j] = s->var[kk][j];
+                s->var[kk][j] = -v;
+            } /*350 */
 
-            for (j = 0; j < nbands; j++)
-                if (j != k) {
-                    v = s->var[j][k];
-                    for (i = 0; i < nbands; i++)
-                        if (i != k)
-                            s->var[j][i] += v * s->var[k][i];
+        } /*351 */
+        if (jk[k] != k) { /* 361 */
+            int jj = jk[k];
+
+            for (i = 0; i < nbands; i++) { /* 360 */
+                v = s->var[i][k];
+                s->var[i][k] = s->var[i][jj];
+                s->var[i][jj] = -v;
+            } /*360 */
+        } /*361 */
+        for (j = 0; j < nbands; j++) {
+            if (j != k)
+                s->var[j][k] /= -max;
+        }
+
+        for (j = 0; j < nbands; j++) {
+
+            if (j != k) {
+                v = s->var[j][k];
+                for (i = 0; i < nbands; i++) {
+                    if (i != k)
+                        s->var[j][i] += v * s->var[k][i];
                 }
+            }
+        }
 
-            for (j = 0; j < nbands; j++)
-                if (j != k)
-                    s->var[k][j] /= max;
+        for (j = 0; j < nbands; j++) {
+            if (j != k)
+                s->var[k][j] /= max;
+        }
 
-            *det *= max;
-            s->var[k][k] = 1.0 / max;
-            /*30 */
-    }
+        *det *= max;
+        s->var[k][k] = 1.0 / max;
+    } /*30 */
 
     /* zero means non-invertible */
     if (*det == 0.0)
@@ -137,23 +144,25 @@ int invert(struct One_Sig *s, int nbands, int *ik, int *jk, double *det)
     for (k = nbands - 1; k >= 0; k--) { /* 530 */
         j = ik[k];
 
-        if (j > k)
+        if (j > k) {
+
             for (i = 0; i < nbands; i++) { /* 510 */
                 v = s->var[i][k];
                 s->var[i][k] = -(s->var[i][j]);
                 s->var[i][j] = v;
-                /*510 */ }
+            } /*510 */
+        }
 
         i = jk[k];
 
-        if (i > k)
+        if (i > k) {
             for (j = 0; j < nbands; j++) { /* 520 */
                 v = s->var[k][j];
                 s->var[k][j] = -(s->var[i][j]);
                 s->var[i][j] = v;
-                /*520 */ }
-        /*530 */
-    }
+            } /*520 */
+        }
+    } /*530 */
 
     return 1;
 }
