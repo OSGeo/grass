@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-09 19:55+0000\n"
-"PO-Revision-Date: 2026-02-18 03:40+0000\n"
+"PO-Revision-Date: 2026-02-19 23:54+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grassmods-8-5/fr/>\n"
 "Language: fr\n"
@@ -51,10 +51,8 @@ msgstr "Échec de la sérialisation du format JSON avec mis en forme (pretty for
 msgid "Print type information about the columns"
 msgstr "Afficher les informations du raster3d en format shell"
 
-#, fuzzy
-#| msgid "List all columns for a given table."
 msgid "Print the name and the type of all the columns for a given table."
-msgstr "Lister toutes les colonnes d'une table."
+msgstr "Afficher le nom et le type de toutes les colonnes d'une table donnée."
 
 msgid "Print"
 msgstr "Afficher"
@@ -23008,10 +23006,9 @@ msgstr ""
 msgid "Copying to final destination..."
 msgstr ""
 
-#, fuzzy, python-brace-format
-#| msgid "Path to the export directory"
+#, python-brace-format
 msgid "Path to the project now <{path}>"
-msgstr "Chemin vers le répertoire d'export"
+msgstr "Chemin d'accès au projet maintenant <{path}>"
 
 #, python-format
 msgid "%s not defined"
