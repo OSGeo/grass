@@ -943,7 +943,7 @@ class GMFrame(wx.Frame):
         if not values:
             return
 
-        workdir = values["directory"]
+        storage = values["storage"]
         create_template = values["create_template"]
 
         if action == "integrated":
@@ -972,7 +972,7 @@ class GMFrame(wx.Frame):
                 giface=self._giface,
                 statusbar=self.statusbar,
                 dockable=True,
-                workdir=workdir,
+                workdir=storage,
                 create_template=create_template,
             )
             panel.SetUpPage(self, self.mainnotebook)
@@ -1017,7 +1017,7 @@ class GMFrame(wx.Frame):
                 giface=self._giface,
                 statusbar=self.statusbar,
                 dockable=True,
-                workdir=workdir,
+                workdir=storage,
                 create_template=create_template,
             )
             panel.SetUpPage(self, self.mainnotebook)
@@ -1026,7 +1026,7 @@ class GMFrame(wx.Frame):
             self.mainnotebook.AddPage(
                 panel,
                 _("Jupyter Browser - {}").format(
-                    workdir.name if workdir else "default"
+                    storage.name if storage else "default"
                 ),
             )
             self.mainnotebook.SetSelection(self.mainnotebook.GetPageCount() - 1)

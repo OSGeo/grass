@@ -448,7 +448,7 @@ class JupyterBrowserPanel(wx.Panel, MainPageBase):
         # Update UI with server info
         self.url_text.SetLabel(_("Server URL: {}").format(self.env.server_url))
         self.pid_text.SetLabel(_("Process ID: {}").format(self.env.pid))
-        self.dir_text.SetLabel(_("Working directory: {}").format(self.env.workdir))
+        self.dir_text.SetLabel(_("Notebook storage {}").format(self.env.workdir))
 
         self.Layout()
 

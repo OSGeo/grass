@@ -6,7 +6,7 @@
 Functions:
 - `is_jupyter_installed()`: Check if Jupyter Notebook is installed on the system and functional.
 - `is_wx_html2_available()`: Check if wx.html2 module is available.
-- `get_default_jupyter_workdir()`: Return the default working directory for Jupyter notebooks.
+- `get_default_jupyter_storage()`: Return the default storage for Jupyter notebooks.
 
 (C) 2026 by the GRASS Development Team
 
@@ -23,10 +23,10 @@ from pathlib import Path
 import grass.script as gs
 
 
-def is_jupyter_installed():
+def is_jupyter_installed() -> bool:
     """Check if Jupyter Notebook is installed and functional.
 
-    :return: True if Jupyter Notebook is installed and available, False otherwise.
+    :return: True if Jupyter Notebook is installed and available, False otherwise
     """
     # Check if 'jupyter' CLI exists
     jupyter_cmd = shutil.which("jupyter")
@@ -46,14 +46,14 @@ def is_jupyter_installed():
         return False
 
 
-def is_wx_html2_available():
+def is_wx_html2_available() -> bool:
     """Check whether wx.html2 (WebView) support is available.
 
     This can be missing on some platforms or distributions (e.g. Gentoo)
     when wxPython or the underlying wxWidgets library is built without
     HTML2/WebView support.
 
-    :return: True if wxPython/wxWidgets html2 module is available, False otherwise.
+    :return: True if wxPython/wxWidgets html2 module is available, False otherwise
     """
     try:
         __import__("wx.html2")
@@ -62,12 +62,12 @@ def is_wx_html2_available():
         return False
 
 
-def get_default_jupyter_workdir():
-    """
-    Return the default working directory for Jupyter notebooks associated
-    with the current GRASS mapset.
-    :return: Path to the default notebook working directory (Path)
+def get_default_jupyter_storage() -> Path:
+    """Return the default jupyter storage for Jupyter notebooks associated
+    with the current GRASS project.
+
+    :return: Path to the default jupyter storage
     """
     env = gs.gisenv()
-    mapset_path = Path(env["GISDBASE"]) / env["LOCATION_NAME"] / env["MAPSET"]
-    return mapset_path / "notebooks"
+    project_path = Path(env["GISDBASE"]) / env["LOCATION_NAME"]
+    return project_path / "notebooks"
