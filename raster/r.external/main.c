@@ -18,9 +18,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <math.h>
-#include <string.h>
 
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     GDALRasterBandH hBand;
     struct GModule *module;
     struct {
-        struct Option *input, *source, *output, *band, *title;
+        struct Option *input, *source, *output, *band, *title, *map_names_file;
     } parm;
     struct {
         struct Flag *o, *j, *f, *e, *h, *v, *t, *a, *m, *r;
@@ -90,6 +90,13 @@ int main(int argc, char *argv[])
     parm.title->required = NO;
     parm.title->description = _("Title for resultant raster map");
     parm.title->guisection = _("Metadata");
+
+    parm.map_names_file = G_define_standard_option(G_OPT_F_OUTPUT);
+    parm.map_names_file->key = "map_names_file";
+    parm.map_names_file->required = NO;
+    parm.map_names_file->description =
+        _("Name of the output file that contains the linked map names");
+    parm.map_names_file->guisection = _("Metadata");
 
     flag.f = G_define_flag();
     flag.f->key = 'f';
@@ -227,6 +234,14 @@ int main(int argc, char *argv[])
 
     G_verbose_message(_("Proceeding with import..."));
 
+    FILE *map_names_file = NULL;
+    if (parm.map_names_file->answer) {
+        map_names_file = fopen(parm.map_names_file->answer, "w");
+        if (map_names_file == NULL)
+            G_fatal_error(_("Unable to open the map names output file <%s>"),
+                          parm.map_names_file->answer);
+    }
+
     if (max_band > min_band) {
         if (I_find_group(output) == 1)
             G_warning(
@@ -264,6 +279,9 @@ int main(int argc, char *argv[])
         create_map(input, band, output2, &cellhd, &info, title, flip);
         transfer_colormap(hBand, output2);
 
+        if (map_names_file)
+            fprintf(map_names_file, "%s\n", output2);
+
         G_free(output2);
         G_free(title2);
     }
@@ -280,6 +298,9 @@ int main(int argc, char *argv[])
         I_put_group(output);
         G_message(_("Imagery group <%s> created"), output);
     }
+
+    if (map_names_file)
+        fclose(map_names_file);
 
     exit(EXIT_SUCCESS);
 }
