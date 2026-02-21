@@ -23,6 +23,7 @@
 #include <pdal/Options.hpp>
 #include <pdal/io/LasReader.hpp>
 #include <pdal/io/LasHeader.hpp>
+#include <pdal/SpatialReference.hpp>
 #if defined(__clang__)
 #pragma clang diagnostic pop
 #endif
@@ -31,7 +32,7 @@
 #if (PDAL_VERSION_MAJOR >= 2 && PDAL_VERSION_MINOR > 4) || \
     (PDAL_VERSION_MAJOR == 2 && PDAL_VERSION_MINOR == 4 && \
      PDAL_VERSION_PATCH == 3)
-#define PDAL_USE_NOSRS 1
+#define R_IN_PDAL_USE_NOSRS 1
 #endif
 
 extern "C" {
@@ -40,7 +41,7 @@ extern "C" {
 #include "string_list.h"
 }
 
-#ifdef PDAL_USE_NOSRS
+#ifdef R_IN_PDAL_USE_NOSRS
 void get_extent(struct StringList *, double *, double *, double *, double *,
                 double *, double *, bool);
 void print_extent(struct StringList *, bool);
@@ -51,5 +52,7 @@ void get_extent(struct StringList *, double *, double *, double *, double *,
 void print_extent(struct StringList *);
 void print_lasinfo(struct StringList *);
 #endif
+void get_reprojected_extent(pdal::SpatialReference &, double *, double *,
+                            double *, double *, double *, double *);
 
 #endif // INFO_H
