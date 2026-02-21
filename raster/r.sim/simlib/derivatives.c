@@ -1,4 +1,5 @@
 #include "simlib.h"
+
 /**
  * \brief Computes dx and dy slope components
  *
@@ -20,6 +21,11 @@ void derivatives(const Geometry *geometry, float **elevation, double **dx,
     H = (geometry->stepx / geometry->conv) * 8.0;
     V = (geometry->stepy / geometry->conv) * 8.0;
 
+#if defined(_OPENMP)
+#pragma omp parallel for default(none) schedule(static) \
+    shared(geometry, elevation, dx, dy, H, V)           \
+    private(col, c1, c2, c3, c4, c5, c6, c7, c8, c9)
+#endif
     for (row = 0; row < geometry->my; row++) {
         for (col = 0; col < geometry->mx; col++) {
 
