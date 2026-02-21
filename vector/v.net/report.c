@@ -77,7 +77,7 @@ int report(struct Map_info *In, int afield, int nfield, int action,
                     G_warning(_("%d points found: %g %g %g line category: %d"),
                               nnodes, x, y, z, cat_line);
             }
-            if (root_array) {
+            if (format == FORMAT_JSON) {
                 G_JSON_Value *item_value = G_json_value_init_object();
                 G_JSON_Object *item_obj = G_json_object(item_value);
 
@@ -94,7 +94,7 @@ int report(struct Map_info *In, int afield, int nfield, int action,
             }
         }
 
-        if (root_value) {
+        if (format == FORMAT_JSON) {
             char *json_str = G_json_serialize_to_string_pretty(root_value);
             if (json_str) {
                 fprintf(stdout, "%s\n", json_str);
@@ -180,7 +180,7 @@ int report(struct Map_info *In, int afield, int nfield, int action,
                                 }
                             }
                         }
-                        if (root_arr) {
+                        if (format == FORMAT_JSON) {
                             G_json_object_set_value(
                                 G_json_value_get_object(item_val), "lines",
                                 lines_val);
@@ -192,7 +192,7 @@ int report(struct Map_info *In, int afield, int nfield, int action,
                 }
             }
         }
-        if (root_val) {
+        if (format == FORMAT_JSON) {
             char *s = G_json_serialize_to_string_pretty(root_val);
             if (s) {
                 fprintf(stdout, "%s\n", s);
