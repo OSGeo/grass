@@ -136,7 +136,7 @@ static const char *GRASS_copyright UNUSED = "GRASS GNU GPL licensed Software";
 #define WKT_FILE         "PROJ_WKT"
 #define SRID_FILE        "PROJ_SRID"
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 #define CONFIG_DIR "GRASS8"
 #else
 #define CONFIG_DIR ".grass8"
