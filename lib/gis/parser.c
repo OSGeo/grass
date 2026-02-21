@@ -1639,11 +1639,32 @@ void split_opts(void)
     }
 }
 
+static int G__option_num_tuple_items(const struct Option *opt);
+
+int G__option_num_tuple_items(const struct Option *opt)
+{
+    // If empty, it cannot be considered a tuple.
+    if (!opt->key_desc)
+        return 0;
+
+    int n_items = 1;
+    const char *ptr;
+
+    for (ptr = opt->key_desc; *ptr != '\0'; ptr++)
+        if (*ptr == ',')
+            n_items++;
+
+    // Only one item is not considered a tuple.
+    if (n_items == 1)
+        return 0;
+    // Only two and more items are a tuple.
+    return n_items;
+}
+
 void check_multiple_opts(void)
 {
     struct Option *opt;
     const char *ptr;
-    int n_commas;
     int n;
     char *err;
 
@@ -1655,20 +1676,20 @@ void check_multiple_opts(void)
     while (opt) {
         /* "-" is reserved from standard input/output */
         if (opt->answer && strcmp(opt->answer, "-") && opt->key_desc) {
-            /* count commas */
-            n_commas = 1;
-            for (ptr = opt->key_desc; *ptr != '\0'; ptr++)
-                if (*ptr == ',')
-                    n_commas++;
-            /* count items */
+            int expected_items = G__option_num_tuple_items(opt);
+            // For the computation, we actually use number of items in general
+            // regardless of whether it is a tuple or not. (This can be removed
+            // with some tests in place. No need to test for 1.)
+            expected_items = expected_items ? expected_items : 1;
+            // actual number of items
             for (n = 0; opt->answers[n] != NULL; n++)
                 ;
             /* if not correct multiple of items */
-            if (n % n_commas) {
+            if (n % expected_items) {
                 G_asprintf(&err,
                            _("Option <%s> must be provided in multiples of %d\n"
                              "\tYou provided %d item(s): %s"),
-                           opt->key, n_commas, n, opt->answer);
+                           opt->key, expected_items, n, opt->answer);
                 append_error(err);
             }
         }
