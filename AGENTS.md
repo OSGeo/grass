@@ -100,9 +100,16 @@ Test files follow two patterns:
 - `*/testsuite/` directories — gunittest style (slightly less preferred, but
   required when tests need large external datasets)
 
-pytest configuration is in `pyproject.toml`. Tests require a running GRASS
-session with a project/mapset; see existing `conftest.py` files for session
-fixture patterns using `gs.create_project()` and `gs.setup.init()`.
+pytest configuration is in `pyproject.toml`. pytest tests require a running
+GRASS session with a project/mapset; see
+`raster/r.slope.aspect/tests/conftest.py` for a representative session
+fixture. For new pytest tests, use `grass.tools` with `Tools`: the `Tools`
+object needs `session=session` (or `env=session.env`) at creation, but
+individual tool calls do not need `env`. When using `grass.script` in
+pytest, every call (`gs.run_command()`, `gs.parse_command()`, etc.) must
+pass `env=session.env` explicitly. gunittest-style tests (`testsuite/`) run
+in an existing GRASS session and need neither `Tools` setup nor `env`
+passing.
 
 ## Linting and Formatting
 
@@ -138,9 +145,11 @@ Four primary packages:
   Use this in `grass.script` itself and code that `grass.script` depends on.
 - `grass.tools` — preferred interface for new code and new tests; provides a
   `Tools` class with direct Python attribute access to GRASS tools (e.g.,
-  `tools.r_slope_aspect(...)`). Do not use in `grass.script` or anything
-  `grass.script` depends on (circular dependency). Not to be confused with
-  the object-oriented API of `grass.pygrass`.
+  `tools.r_slope_aspect(...)`). Most existing code uses `grass.script`
+  (`gs.run_command()` etc.), so expect to see both. Do not use `grass.tools`
+  in `grass.script` or anything `grass.script` depends on (circular
+  dependency). Not to be confused with the object-oriented API of
+  `grass.pygrass`.
 - `grass.pygrass` — object-oriented API; provides `Raster`, `Vector` classes
   and a lower-level module interface
 - `grass.temporal` — space-time dataset (STRDS/STVDS) management. Import as
@@ -151,8 +160,11 @@ Four primary packages:
 Each tool (e.g., `raster/r.slope.aspect/`) contains:
 
 - `main.c` (or `<name>.py` for Python scripts) — entry point
-- `Makefile` — follows a standard template including
-  `$(MODULE_TOPDIR)/include/Make/Module.make`
+- `Makefile` — follows a standard template; see
+  `raster/r.slope.aspect/Makefile` (C tool) and `scripts/r.mask/Makefile`
+  (Python script) for examples
+- `CMakeLists.txt` — CMake build definition; see
+  `raster/r.colors.out/CMakeLists.txt` for an example
 - `<name>.md` — documentation source (no header/footer; Markdown rendered by
   MkDocs)
 - `<name>.html` — documentation in HTML format; must be committed alongside
@@ -201,6 +213,10 @@ miss.
 - Use `str.format()` for translatable user messages (not f-strings):
   `gs.warning(_("Map <{}> not found.").format(name))`
 - Use f-strings for non-translatable strings
+- In tool code (not Python libraries): use `gs.fatal()` to exit with error,
+  `gs.warning()` for warnings, `gs.message()` for informational output.
+  Use `print()` only for text data output (e.g., results the user pipes
+  elsewhere); never for messages to the user.
 - Data is organized in **projects** (formerly called "locations") and mapsets
 
 ### C
@@ -235,7 +251,8 @@ Markup conventions:
 
 Tools must use the GRASS parser for parameters. Use standard options
 (`G_OPT_R_INPUT`, `G_OPT_V_OUTPUT`, etc.) instead of defining common
-parameters from scratch. Prefer a `format` option over multiple exclusive
+parameters from scratch. The full list of standard options is generated from
+`lib/gis/parser_standard_options.c`. Prefer a `format` option over multiple exclusive
 flags for output format selection. Output must always go to the current
 mapset. Tools must not overwrite existing maps unless the user provides
 `--overwrite`.
@@ -256,3 +273,10 @@ message rules:
 - Use plain ASCII only, no double spaces after periods
 - Write in imperative mood (e.g., "Add support for X", not "Added" or "Adds")
 - Do not add AI co-authors; the human author is responsible for the code
+
+## AI Use Policy
+
+See `CONTRIBUTING.md` for the full AI use policy. Key points: AI-assisted
+development is acceptable, but contributors must test all code, understand
+their submissions, and disclose AI assistance when substantial algorithms
+or logic were AI-generated.
