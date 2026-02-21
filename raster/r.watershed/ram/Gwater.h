@@ -84,6 +84,8 @@ extern char ls_name[GNAME_MAX], st_name[GNAME_MAX], sl_name[GNAME_MAX],
 extern char wat_name[GNAME_MAX], asp_name[GNAME_MAX], tci_name[GNAME_MAX],
     spi_name[GNAME_MAX];
 extern char arm_name[GNAME_MAX], dis_name[GNAME_MAX];
+extern char wat_input_name[GNAME_MAX], asp_input_name[GNAME_MAX];
+extern char wat_input_flag, asp_input_flag;
 extern char ele_flag, pit_flag, run_flag, dis_flag, ob_flag, flat_flag,
     rtn_flag;
 extern char wat_flag, asp_flag, arm_flag, ril_flag, dep_flag, tci_flag,

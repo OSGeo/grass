@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "Gwater.h"
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -21,6 +22,7 @@ int init_vars(int argc, char *argv[])
     G_gisinit(argv[0]);
     /* input */
     ele_flag = pit_flag = run_flag = ril_flag = rtn_flag = 0;
+    wat_input_flag = asp_input_flag = 0;
     /* output */
     wat_flag = asp_flag = tci_flag = spi_flag = atanb_flag = 0;
     bas_flag = seg_flag = haf_flag = 0;
@@ -49,6 +51,10 @@ int init_vars(int argc, char *argv[])
             ele_flag++;
         else if (sscanf(argv[r], "accumulation=%s", wat_name) == 1)
             wat_flag++;
+        else if (sscanf(argv[r], "accumulation_input=%s", wat_input_name) == 1)
+            wat_input_flag++;
+        else if (sscanf(argv[r], "drainage_input=%s", asp_input_name) == 1)
+            asp_input_flag++;
         else if (sscanf(argv[r], "tci=%s", tci_name) == 1)
             tci_flag++;
         else if (sscanf(argv[r], "spi=%s", spi_name) == 1)
@@ -105,6 +111,19 @@ int init_vars(int argc, char *argv[])
         else
             usage(argv[0]);
     }
+    if (wat_input_flag && asp_input_flag) {
+        if (wat_input_flag != 1 || asp_input_flag != 1) {
+            G_fatal_error(_("Both accumulation_input and drainage_input must "
+                            "be specified together"));
+        }
+        /* Cannot use certain options with input maps */
+        if (pit_flag || run_flag || rtn_flag) {
+            G_fatal_error(_("Cannot use depression, flow, or retention maps "
+                            "with accumulation_input and drainage_input"));
+        }
+        G_message(_("Using existing accumulation and drainage maps - skipping "
+                    "flow calculation"));
+    }
     if (mfd == 1 && (c_fac < 1 || c_fac > 10)) {
         G_fatal_error("Convergence factor must be between 1 and 10.");
     }
@@ -120,6 +139,11 @@ int init_vars(int argc, char *argv[])
         tot_parts++;
     if (bas_thres > 0)
         tot_parts++;
+
+    /* Reduce total parts if skipping flow calculation */
+    if (wat_input_flag && asp_input_flag) {
+        tot_parts -= 2; /* Skip A* and accumulation sections */
+    }
     G_message(_("SECTION 1a (of %1d): Initiating Memory."), tot_parts);
     this_mapset = G_mapset();
     if (sl_flag || sg_flag || ls_flag)
@@ -169,6 +193,150 @@ int init_vars(int argc, char *argv[])
     swale = flag_create(nrows, ncols);
     in_list = flag_create(nrows, ncols);
     worked = flag_create(nrows, ncols);
+
+    if (wat_input_flag && asp_input_flag) {
+        int input_fd;
+        DCELL *wat_buf;
+        CELL *asp_buf;
+
+        G_message(_("Reading existing accumulation map: %s"), wat_input_name);
+        input_fd = Rast_open_old(wat_input_name, "");
+        wat_buf = Rast_allocate_d_buf();
+
+        for (r = 0; r < nrows; r++) {
+            G_percent(r, nrows, 2);
+            Rast_get_d_row(input_fd, wat_buf, r);
+            for (c = 0; c < ncols; c++) {
+                seg_idx = SEG_INDEX(wat_seg, r, c);
+                if (Rast_is_d_null_value(&wat_buf[c])) {
+                    Rast_set_d_null_value(&wat[seg_idx], 1);
+                    FLAG_SET(worked, r, c);
+                    FLAG_SET(in_list, r, c);
+                }
+                else {
+                    wat[seg_idx] = wat_buf[c];
+                }
+            }
+        }
+        G_percent(nrows, nrows, 2);
+        Rast_close(input_fd);
+        G_free(wat_buf);
+
+        G_message(_("Reading existing drainage direction map: %s"),
+                  asp_input_name);
+        input_fd = Rast_open_old(asp_input_name, "");
+        asp_buf = Rast_allocate_c_buf();
+
+        for (r = 0; r < nrows; r++) {
+            G_percent(r, nrows, 2);
+            Rast_get_c_row(input_fd, asp_buf, r);
+            for (c = 0; c < ncols; c++) {
+                seg_idx = SEG_INDEX(asp_seg, r, c);
+                if (Rast_is_c_null_value(&asp_buf[c])) {
+                    Rast_set_c_null_value(&asp[seg_idx], 1);
+                }
+                else {
+                    asp[seg_idx] = asp_buf[c];
+                }
+            }
+        }
+        G_percent(nrows, nrows, 2);
+        Rast_close(input_fd);
+        G_free(asp_buf);
+
+        /* Read elevation for other calculations */
+        fd = Rast_open_old(ele_name, "");
+        ele_map_type = Rast_get_map_type(fd);
+        ele_size = Rast_cell_size(ele_map_type);
+        elebuf = Rast_allocate_buf(ele_map_type);
+
+        if (ele_map_type == FCELL_TYPE || ele_map_type == DCELL_TYPE)
+            ele_scale = 1000;
+        if (flat_flag)
+            ele_scale = 10000;
+
+        do_points = 0; /* No A* processing needed */
+        for (r = 0; r < nrows; r++) {
+            Rast_get_row(fd, elebuf, r, ele_map_type);
+            ptr = elebuf;
+            for (c = 0; c < ncols; c++) {
+                seg_idx = SEG_INDEX(alt_seg, r, c);
+
+                if (!Rast_is_null_value(ptr, ele_map_type)) {
+                    if (ele_map_type == CELL_TYPE) {
+                        alt_value = *((CELL *)ptr);
+                        alt_value *= ele_scale;
+                    }
+                    else if (ele_map_type == FCELL_TYPE) {
+                        dvalue = *((FCELL *)ptr);
+                        dvalue *= ele_scale;
+                        alt_value = ele_round(dvalue);
+                    }
+                    else if (ele_map_type == DCELL_TYPE) {
+                        dvalue = *((DCELL *)ptr);
+                        dvalue *= ele_scale;
+                        alt_value = ele_round(dvalue);
+                    }
+                    alt[seg_idx] = alt_value;
+                    if (er_flag) {
+                        r_h[seg_idx] = alt_value;
+                    }
+                }
+                else {
+                    Rast_set_c_null_value(&alt[seg_idx], 1);
+                    if (er_flag) {
+                        Rast_set_c_null_value(&r_h[seg_idx], 1);
+                    }
+                }
+
+                if (atanb_flag) {
+                    Rast_set_d_null_value(&sca[seg_idx], 1);
+                    Rast_set_d_null_value(&tanb[seg_idx], 1);
+                }
+                ptr = G_incr_void_ptr(ptr, ele_size);
+            }
+        }
+        Rast_close(fd);
+        G_free(elebuf);
+
+        /*  Initialize RUSLE s_l array when using input maps */
+        if (er_flag) {
+            s_l = (double *)G_malloc(size_array(&s_l_seg, nrows, ncols) *
+                                     sizeof(double));
+            /* Initialize s_l with half_res for all cells */
+            for (r = 0; r < nrows; r++) {
+                for (c = 0; c < ncols; c++) {
+                    seg_idx = SEG_INDEX(s_l_seg, r, c);
+                    s_l[seg_idx] = half_res;
+                }
+            }
+
+            if (sg_flag) {
+                s_g = (double *)G_malloc(size_array(&s_g_seg, nrows, ncols) *
+                                         sizeof(double));
+            }
+            if (ls_flag) {
+                l_s = (double *)G_malloc(size_array(&l_s_seg, nrows, ncols) *
+                                         sizeof(double));
+            }
+        }
+        /* Mark swales from drainage direction if needed for basin delineation
+         */
+        if (bas_thres > 0) {
+            for (r = 0; r < nrows; r++) {
+                for (c = 0; c < ncols; c++) {
+                    seg_idx = SEG_INDEX(wat_seg, r, c);
+                    if (!Rast_is_d_null_value(&wat[seg_idx]) &&
+                        fabs(wat[seg_idx]) >= bas_thres) {
+                        FLAG_SET(swale, r, c);
+                    }
+                }
+            }
+        }
+
+        G_message(_("Skipping flow calculation - using existing maps"));
+        return 0;
+    }
 
     /* open elevation input */
     fd = Rast_open_old(ele_name, "");
@@ -238,8 +406,8 @@ int init_vars(int argc, char *argv[])
     G_free(elebuf);
     MASK_flag = (do_points < (size_t)nrows * ncols);
 
-    /* read flow accumulation from input map flow: amount of overland flow per
-     * cell */
+    /* read flow accumulation from input map flow: amount of overland flow
+     * per cell */
     if (run_flag) {
         dbuf = Rast_allocate_d_buf();
         fd = Rast_open_old(run_name, "");
