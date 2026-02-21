@@ -163,6 +163,12 @@ out_sep = """1076,366545504,324050.96875,1077,1076,Zwe,366545512.376,324050.9723
 1290,63600420,109186.835938,1291,1290,Zwe,63600422.4739,109186.832069
 """
 
+# format=csv quotes text fields (RFC 4180); separator=comma does not add quotes
+out_sep_csv = """1076,366545504,324050.96875,1077,1076,"Zwe",366545512.376,324050.97237
+1123,1288.555298,254.393951,1124,1123,"Zwe",1288.546525,254.393964
+1290,63600420,109186.835938,1291,1290,"Zwe",63600422.4739,109186.832069
+"""
+
 out_json = """\
 {"info":
 {"columns":[
@@ -254,6 +260,40 @@ class SelectTest(TestCase):
         sel.run()
         self.assertLooksLike(reference=out_sep, actual=sel.outputs.stdout)
 
+    def testFormatCsv(self):
+        """Test format=csv output matches expected CSV (same style as testComma)."""
+        sel = SimpleModule(
+            "v.db.select",
+            flags="c",
+            map=self.invect,
+            where="{col}='{val}'".format(col=self.col, val=self.val),
+            format="csv",
+        )
+        sel.run()
+        self.assertLooksLike(reference=out_sep_csv, actual=sel.outputs.stdout)
+
+    def testJSONExtent(self):
+        """Test JSON output with -r (region extent) contains extent object."""
+        import json
+
+        sel = SimpleModule(
+            "v.db.select",
+            format="json",
+            map=self.invect,
+            where="{col}='{val}'".format(col=self.col, val=self.val),
+            flags="r",
+        )
+        sel.run()
+        try:
+            data = json.loads(sel.outputs.stdout)
+        except ValueError:
+            self.fail(msg="No JSON object could be decoded:\n" + sel.outputs.stdout)
+        self.assertIn("extent", data)
+        ext = data["extent"]
+        for key in ("n", "s", "w", "e"):
+            self.assertIn(key, ext, msg="extent must have n,s,w,e")
+            self.assertIsInstance(ext[key], (int, float))
+
     def testJSON(self):
         """Test that JSON can be decoded and formatted exactly as expected"""
         import json
@@ -267,11 +307,11 @@ class SelectTest(TestCase):
         sel.run()
 
         try:
-            json.loads(sel.outputs.stdout)
+            actual_json = json.loads(sel.outputs.stdout)
         except ValueError:
             self.fail(msg="No JSON object could be decoded:\n" + sel.outputs.stdout)
-
-        self.assertLooksLike(reference=out_json, actual=sel.outputs.stdout)
+        reference_json = json.loads(out_json)
+        self.assertEqual(actual_json, reference_json)
 
 
 if __name__ == "__main__":
