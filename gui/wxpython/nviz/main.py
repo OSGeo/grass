@@ -17,6 +17,8 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <KratochAnna seznam.cz> (Google SoC 2011)
 """
 
+# pylint: disable=W0611
+
 errorMsg = ""
 
 try:

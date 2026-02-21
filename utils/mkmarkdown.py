@@ -23,12 +23,6 @@ import sys
 import urllib.parse as urlparse
 from pathlib import Path
 
-try:
-    import grass.script as gs
-except ImportError:
-    # During compilation GRASS
-    gs = None
-
 from mkdocs import (
     get_addon_path,
     get_last_git_commit,
