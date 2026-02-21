@@ -63,9 +63,8 @@ class Testrr(TestCase):
         )
         self.assertRasterMinMax(
             map=tile,
-            refmin=74.75374,
-            refmax=156.3299,
-            msg="tile-000-000 in degrees must be between 74.75374 and 156.3299",
+            refmin=74.75373,
+            refmax=156.3300,
         )
 
     def test_minmax(self):
@@ -80,9 +79,8 @@ class Testrr(TestCase):
         )
         self.assertRasterMinMax(
             map=tile1,
-            refmin=55.57879,
-            refmax=144.2673,
-            msg="tile-000-001 in degrees must be between 55.57879 and 144.2673",
+            refmin=55.57878,
+            refmax=144.2674,
         )
 
 

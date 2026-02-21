@@ -20,7 +20,7 @@ from unittest.util import safe_repr
 
 from grass.pygrass.modules import Module
 from grass.exceptions import CalledModuleError
-from grass.script import text_to_string, encode, decode
+from grass.script import text_to_string, encode, decode, parse_command
 
 from .gmodules import call_module, SimpleModule
 from .checkers import (
@@ -523,24 +523,22 @@ class TestCase(unittest.TestCase):
         To check that more statistics have certain values use
         `assertRasterFitsUnivar()` or `assertRasterFitsInfo()`
         """
-        stdout = call_module("r.info", map=map, flags="r")
-        actual = text_to_keyvalue(stdout, sep="=")
-        if refmin > actual["min"]:
+        actual = parse_command("r.info", map=map, format="json")
+        min_mismatch = (
+            ((actual["min"] is None) != (refmin is None))
+            # previous check only passes if both values are None or not None
+            # at the same time, hence just checking one here is sufficient
+            or (actual["min"] is not None and refmin > actual["min"])
+        )
+        max_mismatch = ((actual["max"] is None) != (refmax is None)) or (
+            actual["max"] is not None and refmax < actual["max"]
+        )
+
+        if min_mismatch or max_mismatch:
             stdmsg = (
-                "The actual minimum ({a}) is smaller than the reference"
-                " one ({r}) for raster map {m}"
-                " (with maximum {o})".format(
-                    a=actual["min"], r=refmin, m=map, o=actual["max"]
-                )
-            )
-            self.fail(self._formatMessage(msg, stdmsg))
-        if refmax < actual["max"]:
-            stdmsg = (
-                "The actual maximum ({a}) is greater than the reference"
-                " one ({r}) for raster map {m}"
-                " (with minimum {o})".format(
-                    a=actual["max"], r=refmax, m=map, o=actual["min"]
-                )
+                f"The actual limits for raster map {map}, are not within the specified limits.\n"
+                f"Actual: minimum={actual['min']}, maximum={actual['max']}\n"
+                f"Reference: minimum={refmin}, maximum={refmax}\n"
             )
             self.fail(self._formatMessage(msg, stdmsg))
 
