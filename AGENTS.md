@@ -15,7 +15,8 @@ GUI, tests). Tools follow a `<type>.<name>` naming convention: `r.*` (raster),
 
 On the `main` branch, Autotools and CMake are equivalent. Older release
 branches support Autotools only, and full documentation builds (MkDocs) also
-require Autotools.
+require Autotools. See `INSTALL.md` for full build instructions including
+dependencies and configuration options.
 
 **Autotools:**
 
@@ -105,39 +106,15 @@ fixture patterns using `gs.create_project()` and `gs.setup.init()`.
 
 ## Linting and Formatting
 
-**Python — format and check:**
+See `doc/development/style_guide.md` for full formatting and style rules.
+Quick reference:
 
 ```bash
 ruff format                       # format Python files
-ruff check .                      # lint
 ruff check . --fix                # lint and auto-fix
-```
-
-**C/C++ — format:**
-
-```bash
 clang-format -i <file.c>         # format a C file
+pre-commit run --all-files        # run all checks (recommended)
 ```
-
-**Pre-commit (recommended — runs both Python and C formatting automatically):**
-
-```bash
-pre-commit install                # install hooks once per repo
-pre-commit run --all-files        # run all hooks manually
-pre-commit run --files raster/r.sometool/*  # run on specific files
-```
-
-**Additional checks:**
-
-```bash
-flake8 python_file.py             # PEP8 compliance check
-pylint <file.py>                  # additional static analysis (not a primary compliance tool)
-codespell .                       # spell check
-```
-
-Non-compliance with ruff/flake8 rules is mainly a legacy GUI code issue. New
-code is expected to be clean. Pylint is an extra linter for finding specific
-issues beyond what ruff catches; full Pylint compliance is not enforced.
 
 ## Architecture
 
@@ -196,6 +173,10 @@ some areas.
 
 ## Key Coding Conventions
 
+For full conventions, see `doc/development/style_guide.md`. The following
+highlights rules that are especially important or easy for AI agents to
+miss.
+
 ### Comments (all languages)
 
 - No decorative comment banners or dividers (e.g., `# ---- Section ----`).
@@ -220,19 +201,6 @@ some areas.
 - Use `str.format()` for translatable user messages (not f-strings):
   `gs.warning(_("Map <{}> not found.").format(name))`
 - Use f-strings for non-translatable strings
-- When using `grass.script`: use `gs.run_command()`, `gs.parse_command()`,
-  `gs.read_command()` rather than `subprocess` directly
-- When using `grass.tools`: use the `Tools` class with a session context
-  manager
-- Use `gs.fatal()` to exit with error, `gs.warning()` for warnings,
-  `gs.message()` for info; never `print()` for informational output
-- Wrap region changes in `gs.RegionManager()` context manager to avoid side
-  effects
-- Wrap mask changes in `gs.MaskManager()` context manager
-- Use `gs.append_node_pid("tmp_name")` for temporary map names; register
-  cleanup with `atexit`
-- Never change the global computational region from a tool without using a
-  context manager
 - Data is organized in **projects** (formerly called "locations") and mapsets
 
 ### C
@@ -250,7 +218,8 @@ some areas.
 
 Each tool must have both `<tool>.md` and `<tool>.html` committed to the
 repository. The `.md` is the source of truth; the `.html` provides basic HTML
-access and must be kept in sync.
+access and must be kept in sync. See `doc/development/style_guide.md` for
+full markup conventions.
 
 Required sections in the `.md`: `## DESCRIPTION`, `## SEE ALSO`, `## AUTHORS`
 Suggested: `## NOTES`, `## EXAMPLES`
@@ -277,20 +246,13 @@ Tool name prefixes: `r.` (raster), `v.` (vector), `g.` (general), `d.`
 
 ## Commit Messages
 
-Commit messages must start with a prefix that matches the category regexps
-defined in `utils/release.yml` (e.g., `r.slope.aspect:`, `grass.script:`,
-`CI:`). After the prefix, the message should start with a capital letter —
-unless the first word is an identifier that is conventionally lowercase (e.g.,
-a tool name like `r.info` or a Python name like `gs`). Use plain ASCII only
-and no double spaces after periods. Write the message in imperative mood
-(e.g., "Add support for X", not "Added" or "Adds"). Do not add AI co-authors;
-the human author is responsible for the code.
+See `doc/development/github_guide.md` for the full Git workflow. Commit
+message rules:
 
-## Development Documentation
-
-Developer guides are in `doc/` and `doc/development/`:
-
-- `doc/development/style_guide.md` — coding style for Python, C/C++, and
-  tool documentation
-- `doc/development/github_guide.md` — Git workflow and pull request process
-- `doc/development/branching_how-to.md` — branch management
+- Start with a prefix matching the category regexps in `utils/release.yml`
+  (e.g., `r.slope.aspect:`, `grass.script:`, `CI:`)
+- After the prefix, start with a capital letter — unless the first word is an
+  identifier that is conventionally lowercase (e.g., `r.info` or `gs`)
+- Use plain ASCII only, no double spaces after periods
+- Write in imperative mood (e.g., "Add support for X", not "Added" or "Adds")
+- Do not add AI co-authors; the human author is responsible for the code
