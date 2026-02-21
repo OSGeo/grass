@@ -533,7 +533,7 @@ int tie_up(void)
                                  IPoints[i]);
         }
 
-        distmin = INFINITY;
+        sscanf("inf", "%lf", &distmin);
         xmin = x;
         ymin = y;
 
