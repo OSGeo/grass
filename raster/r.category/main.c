@@ -221,19 +221,21 @@ int main(int argc, char *argv[])
             Rast_close(fd);
         }
 
-        /* load cats from rules file */
+        /* load cats or json from rules file */
         if (parm.file->answer) {
             FILE *fp;
-            char **tokens;
-            int ntokens;
-            char *e1;
-            char *e2;
+            int is_json = 0;
 
             if (strcmp("-", parm.file->answer) == 0) {
                 from_stdin = TRUE;
                 fp = stdin;
             }
             else {
+                const char *ext = strrchr(parm.file->answer, '.');
+                if (ext != NULL && strcmp(ext, ".json") == 0) {
+                    is_json = 1;
+                }
+
                 fp = fopen(parm.file->answer, "r");
                 if (!fp)
                     G_fatal_error(_("Unable to open file <%s>"),
@@ -242,52 +244,141 @@ int main(int argc, char *argv[])
 
             Rast_init_cats("", &cats);
 
-            for (;;) {
-                char buf[1024];
-                DCELL d1, d2;
-                int parse_error = 0;
-
-                if (!G_getl2(buf, sizeof(buf), fp))
-                    break;
-
-                G_debug(1, "rule input (separator: <%s>): <%s>", fs, buf);
-                tokens = G_tokenize(buf, fs);
-                ntokens = G_number_of_tokens(tokens);
-                G_debug(1, "tokens found: <%d>", ntokens);
-
-                if (ntokens == 3) {
-                    d1 = strtod(tokens[0], &e1);
-                    d2 = strtod(tokens[1], &e2);
-                    G_debug(
-                        1,
-                        "d1: <%f>, d2: <%f>, tokens[0]: <%s>, tokens[1]: <%s>",
-                        d1, d2, tokens[0], tokens[1]);
-                    if (*e1 == 0 && *e2 == 0)
-                        Rast_set_d_cat(&d1, &d2, tokens[2], &cats);
-                    else
-                        parse_error = 1;
+            if (!from_stdin && !is_json) {
+                // Read first character to check if it's JSON
+                char first_char;
+                if (fread(&first_char, 1, 1, fp) == 1) {
+                    while (first_char == ' ' || first_char == '\n' ||
+                           first_char == '\r' || first_char == '\t') {
+                        if (fread(&first_char, 1, 1, fp) != 1)
+                            break;
+                    }
+                    if (first_char == '[' || first_char == '{') {
+                        is_json = 1;
+                    }
+                    rewind(fp);
                 }
-                else if (ntokens == 2) {
-                    d1 = strtod(tokens[0], &e1);
-                    G_debug(1, "d1: <%f>, tokens[0]: <%s>, tokens[1]: <%s>", d1,
-                            tokens[0], tokens[1]);
-                    if (*e1 == 0)
-                        Rast_set_d_cat(&d1, &d1, tokens[1], &cats);
-                    else
-                        parse_error = 1;
-                }
-                else if (!strlen(buf))
-                    continue;
-                else
-                    parse_error = 1;
-
-                if (parse_error)
-                    G_fatal_error(_("Incorrect format of input rules. "
-                                    "Is the first column numeric? Or check "
-                                    "separators. Invalid line is:\n%s"),
-                                  buf);
             }
-            G_free_tokens(tokens);
+
+            if (is_json) {
+                // Read entire file into memory for JSON parsing
+                fseek(fp, 0, SEEK_END);
+                long file_size = ftell(fp);
+                rewind(fp);
+
+                char *file_contents = G_malloc(file_size + 1);
+                if (fread(file_contents, 1, file_size, fp) !=
+                    (size_t)file_size) {
+                    G_fatal_error(_("Failed to read JSON file"));
+                }
+                file_contents[file_size] = '\0';
+
+                // Parse JSON
+                G_JSON_Value *json_value = G_json_parse(file_contents);
+                if (json_value == NULL) {
+                    G_free(file_contents);
+                    G_fatal_error(
+                        _("Failed to parse JSON file. Invalid JSON format."));
+                }
+
+                if (G_json_value_get_type(json_value) != G_JSONArray) {
+                    G_json_value_free(json_value);
+                    G_free(file_contents);
+                    G_fatal_error(
+                        _("JSON file must contain an array at the root level"));
+                }
+
+                G_JSON_Array *json_array = G_json_array(json_value);
+                int array_size = G_json_array_get_count(json_array);
+
+                for (int i = 0; i < array_size; i++) {
+                    G_JSON_Value *item_value =
+                        G_json_array_get_value(json_array, i);
+
+                    if (G_json_value_get_type(item_value) != G_JSONObject) {
+                        G_json_value_free(json_value);
+                        G_free(file_contents);
+                        G_fatal_error(
+                            _("Each item in JSON array must be an object"));
+                    }
+
+                    G_JSON_Object *item = G_json_object(item_value);
+
+                    double category_num =
+                        G_json_object_get_number(item, "category");
+
+                    const char *label = G_json_object_get_string(item, "label");
+                    if (label == NULL) {
+                        G_json_value_free(json_value);
+                        G_free(file_contents);
+                        G_fatal_error(_("JSON object missing required "
+                                        "'description' field"));
+                    }
+
+                    DCELL d1 = category_num;
+                    Rast_set_d_cat(&d1, &d1, label, &cats);
+
+                    G_debug(1, "JSON: Set category %f to '%s'", category_num,
+                            label);
+                }
+
+                G_json_value_free(json_value);
+                G_free(file_contents);
+            }
+            else {
+                char **tokens;
+                int ntokens;
+                char *e1;
+                char *e2;
+
+                for (;;) {
+                    char buf[1024];
+                    DCELL d1, d2;
+                    int parse_error = 0;
+
+                    if (!G_getl2(buf, sizeof(buf), fp))
+                        break;
+
+                    G_debug(1, "rule input (separator: <%s>): <%s>", fs, buf);
+                    tokens = G_tokenize(buf, fs);
+                    ntokens = G_number_of_tokens(tokens);
+                    G_debug(1, "tokens found: <%d>", ntokens);
+
+                    if (ntokens == 3) {
+                        d1 = strtod(tokens[0], &e1);
+                        d2 = strtod(tokens[1], &e2);
+                        G_debug(1,
+                                "d1: <%f>, d2: <%f>, tokens[0]: <%s>, "
+                                "tokens[1]: <%s>",
+                                d1, d2, tokens[0], tokens[1]);
+                        if (*e1 == 0 && *e2 == 0)
+                            Rast_set_d_cat(&d1, &d2, tokens[2], &cats);
+                        else
+                            parse_error = 1;
+                    }
+                    else if (ntokens == 2) {
+                        d1 = strtod(tokens[0], &e1);
+                        G_debug(1, "d1: <%f>, tokens[0]: <%s>, tokens[1]: <%s>",
+                                d1, tokens[0], tokens[1]);
+                        if (*e1 == 0)
+                            Rast_set_d_cat(&d1, &d1, tokens[1], &cats);
+                        else
+                            parse_error = 1;
+                    }
+                    else if (!strlen(buf))
+                        continue;
+                    else
+                        parse_error = 1;
+
+                    if (parse_error)
+                        G_fatal_error(_("Incorrect format of input rules. "
+                                        "Is the first column numeric? Or check "
+                                        "separators. Invalid line is:\n%s"),
+                                      buf);
+                }
+                G_free_tokens(tokens);
+            }
+
             Rast_write_cats(name, &cats);
 
             if (!from_stdin)

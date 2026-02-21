@@ -61,6 +61,8 @@ extern double G_json_object_dotget_number(G_JSON_Object *, const char *);
 extern G_JSON_Status G_json_object_dotset_null(G_JSON_Object *object,
                                                const char *name);
 extern G_JSON_Array *G_json_array(const G_JSON_Value *);
+extern G_JSON_Value *G_json_parse(const char *);
+extern int G_json_array_get_count(const G_JSON_Array *);
 extern G_JSON_Value *G_json_array_get_value(const G_JSON_Array *, size_t);
 extern const char *G_json_array_get_string(const G_JSON_Array *, size_t);
 extern double G_json_array_get_number(const G_JSON_Array *, size_t);
