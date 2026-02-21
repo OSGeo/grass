@@ -16,7 +16,7 @@
             </termEntry>
             <termEntry id="The name of this project. Do not use GRASS GIS for 8.5 and later">
                 <langSet xml:lang="en"><tig><term>GRASS</term></tig></langSet>
-                <langSet xml:lang="es"><tig><term/></tig></langSet>
+                <langSet xml:lang="es"><tig><term>GRASS</term></tig></langSet>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>Raster</term></tig></langSet>
@@ -24,7 +24,7 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>Feature</term></tig></langSet>
-                <langSet xml:lang="es"><tig><term/></tig></langSet>
+                <langSet xml:lang="es"><tig><term>Elemento</term></tig></langSet>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>Standard deviation</term></tig></langSet>
@@ -155,7 +155,7 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>JSON</term></tig></langSet>
-                <langSet xml:lang="es"><tig><term/></tig></langSet>
+                <langSet xml:lang="es"><tig><term>JSON</term></tig></langSet>
                 <descrip>JavaScript Object Notation, should be in uppercase</descrip>
             </termEntry>
             <termEntry>
@@ -206,33 +206,33 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>threads</term></tig></langSet>
-                <langSet xml:lang="es"><tig><term></term></tig></langSet>
+                <langSet xml:lang="es"><tig><term/></tig></langSet>
                 <descrip>thread of execution, component of a process</descrip>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>extent</term></tig></langSet>
-                <langSet xml:lang="es"><tig><term></term></tig></langSet>
+                <langSet xml:lang="es"><tig><term/></tig></langSet>
                 <note from="translator">Emprise ou étendue</note>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>vector map</term></tig></langSet>
-                <langSet xml:lang="es"><tig><term></term></tig></langSet>
+                <langSet xml:lang="es"><tig><term/></tig></langSet>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>vector</term></tig></langSet>
-                <langSet xml:lang="es"><tig><term></term></tig></langSet>
+                <langSet xml:lang="es"><tig><term/></tig></langSet>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>centroids</term></tig></langSet>
-                <langSet xml:lang="es"><tig><term></term></tig></langSet>
+                <langSet xml:lang="es"><tig><term/></tig></langSet>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>area</term></tig></langSet>
-                <langSet xml:lang="es"><tig><term></term></tig></langSet>
+                <langSet xml:lang="es"><tig><term/></tig></langSet>
             </termEntry>
             <termEntry id="1">
                 <langSet xml:lang="en"><tig><term>area</term></tig></langSet>
-                <langSet xml:lang="es"><tig><term></term></tig></langSet>
+                <langSet xml:lang="es"><tig><term/></tig></langSet>
                 <descrip>The geometry type</descrip>
             </termEntry>
         </body>
