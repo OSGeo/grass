@@ -143,6 +143,7 @@ For customization of error handling, please refer to the [documentation](https:/
     stable in version 8.5. Although no major changes for *grass.tools* are
     expected, if you require completely stable API, consider instead
     [other ways of accessing tools](#additional-ways-to-access-tools).
+    If you want to migrate to grass.tools, check the [migration guide](migration_to_grass_tools_python_api.md).
 
 Available tools and their parameters are listed in the tool documentation:
 
