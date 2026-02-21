@@ -3,12 +3,14 @@
 @author Soeren Gebbert
 """
 
+import json
 import unittest
 import sys
 
 from subprocess import check_output
 
 from grass.gunittest.case import TestCase
+from grass.gunittest.gmodules import SimpleModule
 
 
 class TestGdalImport(TestCase):
@@ -348,6 +350,23 @@ test_gdal_import_map.0000000105
 
         self.assertRasterFitsInfo(
             raster="test_gdal_import_map", reference=info_string, precision=3
+        )
+
+    def test_semantic_label_from_gdal_band_metadata(self):
+        """Semantic label is set from GDAL band description/name when present"""
+        self.assertModule(
+            "r.in.gdal",
+            input="data/elevation.tif",
+            output="test_gdal_import_map",
+            flags="o",
+        )
+        info = SimpleModule("r.info", map="test_gdal_import_map", format="json")
+        self.assertModule(info)
+        out = json.loads(info.outputs.stdout)
+        self.assertEqual(
+            out.get("semantic_label"),
+            "elevation",
+            "Semantic label should be set from GDAL band description",
         )
 
 
