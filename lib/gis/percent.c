@@ -70,30 +70,33 @@ void G_percent(long n, long d, int s)
     if (format == G_INFO_FORMAT_SILENT || G_verbose() < 1)
         return;
 
-    if (n <= 0 || n >= d || x > st->prev + s) {
-        st->prev = x;
+#pragma omp critical
+    {
+        if (n <= 0 || n >= d || x > st->prev + s) {
+            st->prev = x;
 
-        if (ext_percent) {
-            ext_percent(x);
-        }
-        else {
-            if (format == G_INFO_FORMAT_STANDARD) {
-                fprintf(stderr, "%4d%%\b\b\b\b\b", x);
+            if (ext_percent) {
+                ext_percent(x);
             }
             else {
-                if (format == G_INFO_FORMAT_PLAIN) {
-                    if (x == 100)
-                        fprintf(stderr, "%d\n", x);
-                    else
-                        fprintf(stderr, "%d..", x);
+                if (format == G_INFO_FORMAT_STANDARD) {
+                    fprintf(stderr, "%4d%%\b\b\b\b\b", x);
                 }
-                else { /* GUI */
-                    if (st->first) {
-                        fprintf(stderr, "\n");
+                else {
+                    if (format == G_INFO_FORMAT_PLAIN) {
+                        if (x == 100)
+                            fprintf(stderr, "%d\n", x);
+                        else
+                            fprintf(stderr, "%d..", x);
                     }
-                    fprintf(stderr, "GRASS_INFO_PERCENT: %d\n", x);
-                    fflush(stderr);
-                    st->first = 0;
+                    else { /* GUI */
+                        if (st->first) {
+                            fprintf(stderr, "\n");
+                        }
+                        fprintf(stderr, "GRASS_INFO_PERCENT: %d\n", x);
+                        fflush(stderr);
+                        st->first = 0;
+                    }
                 }
             }
         }
@@ -104,7 +107,10 @@ void G_percent(long n, long d, int s)
             ext_percent(100);
         }
         else if (format == G_INFO_FORMAT_STANDARD) {
-            fprintf(stderr, "\n");
+#pragma omp critical
+            {
+                fprintf(stderr, "\n");
+            }
         }
         st->prev = -1;
         st->first = 1;
@@ -165,21 +171,29 @@ void G_progress(long n, int s)
     if (format == G_INFO_FORMAT_SILENT || G_verbose() < 1)
         return;
 
-    if (n == s && n == 1) {
-        if (format == G_INFO_FORMAT_PLAIN)
-            fprintf(stderr, "\n");
-        else if (format != G_INFO_FORMAT_GUI)
-            fprintf(stderr, "\r");
-        return;
-    }
+    {
+        if (n == s && n == 1) {
+#pragma omp critical
+            {
+                if (format == G_INFO_FORMAT_PLAIN)
+                    fprintf(stderr, "\n");
+                else if (format != G_INFO_FORMAT_GUI)
+                    fprintf(stderr, "\r");
+            }
+            return;
+        }
 
-    if (n % s == 0) {
-        if (format == G_INFO_FORMAT_PLAIN)
-            fprintf(stderr, "%ld..", n);
-        else if (format == G_INFO_FORMAT_GUI)
-            fprintf(stderr, "GRASS_INFO_PROGRESS: %ld\n", n);
-        else
-            fprintf(stderr, "%10ld\b\b\b\b\b\b\b\b\b\b", n);
+        if (n % s == 0) {
+#pragma omp critical
+            {
+                if (format == G_INFO_FORMAT_PLAIN)
+                    fprintf(stderr, "%ld..", n);
+                else if (format == G_INFO_FORMAT_GUI)
+                    fprintf(stderr, "GRASS_INFO_PROGRESS: %ld\n", n);
+                else
+                    fprintf(stderr, "%10ld\b\b\b\b\b\b\b\b\b\b", n);
+            }
+        }
     }
 }
 
