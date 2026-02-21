@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
         struct Option *map1, *map2, *units;
     } parm;
     struct {
-        struct Flag *w;
+        struct Flag *w, *j;
     } flag;
 
     fill =
@@ -90,6 +90,10 @@ int main(int argc, char *argv[])
     flag.w->key = 'w';
     flag.w->description = _("Wide report, 132 columns (default: 80)");
 
+    flag.j = G_define_flag();
+    flag.j->key = 'j';
+    flag.j->description = _("Generate JSON output");
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
@@ -121,8 +125,13 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Raster map <%s> not found"), map2name);
 
     make_coin();
-    print_coin(*parm.units->answer, flag.w->answer ? 132 : 80, 0);
 
+    if (flag.j->answer) {
+        print_json(*parm.units->answer);
+    }
+    else {
+        print_coin(*parm.units->answer, flag.w->answer ? 132 : 80, 0);
+    }
     remove(dumpname);
     remove(statname);
 

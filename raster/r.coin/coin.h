@@ -61,6 +61,7 @@ int collapse(long *, int);
 /* print_coin.c */
 int print_coin(int, int, int);
 
+void print_json(char);
 /* print_hdr.c */
 int print_coin_hdr(int);
 
