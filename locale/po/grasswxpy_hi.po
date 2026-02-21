@@ -2,20 +2,21 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2026.
+# Abhimanyu <abhimanyupg04@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-09 19:55+0000\n"
-"PO-Revision-Date: 2026-02-11 07:01+0000\n"
-"Last-Translator: Abhimanyu  <abhimanyupg04@gmail.com>\n"
+"PO-Revision-Date: 2026-02-20 05:34+0000\n"
+"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grasswxpy-8-5/hi/>\n"
 "Language: hi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.16\n"
 
 #, python-format
 msgid "Maximum number of animations is %d."
@@ -39,22 +40,24 @@ msgstr "एक्सपोर्ट करने के लिए कोई ए�
 msgid "Preparing export, please wait..."
 msgstr "एक्सपोर्ट तैयार है, कृपया इंतज़ार करें..।"
 
-#, python-format
+#, fuzzy, python-format
 msgid "%(from)s %(dash)s %(to)s"
-msgstr ""
+msgstr "%(से)s %(डैश)s %(तक)s"
 
-#, python-format
+#, fuzzy, python-format
 msgid "%(start)s %(unit)s"
-msgstr ""
+msgstr "%(प्रारंभ)s %(इकाई)s"
 
 msgid "Exporting animation, please wait..."
 msgstr "एनिमेशन निर्यात हो रहा है, कृपया प्रतीक्षा करें..।"
 
+#, fuzzy
 msgid "2D view"
-msgstr ""
+msgstr "2D व्यू"
 
+#, fuzzy
 msgid "3D view"
-msgstr ""
+msgstr "3D व्यू"
 
 msgid "No animation name selected."
 msgstr "कोई एनिमेशन नाम चयनित नहीं है।"
@@ -66,12 +69,13 @@ msgstr "कोई कार्यक्षेत्र फ़ाइल चयन
 msgid "File %s not found"
 msgstr "फ़ाइल %s नहीं मिली"
 
-#, python-format
+#, fuzzy, python-format
 msgid "Animation %d"
-msgstr ""
+msgstr "हिन्दी"
 
+#, fuzzy
 msgid "Adjust speed of animation"
-msgstr ""
+msgstr "एनीमेशन की गति समायोजित करें"
 
 msgid "Simple mode"
 msgstr "सरल मोड"
@@ -109,11 +113,13 @@ msgstr "मिनट"
 msgid "second"
 msgstr "सेकंड"
 
+#, fuzzy
 msgid "Animation speed is too high."
-msgstr ""
+msgstr "एनिमेशन की गति बहुत अधिक है।"
 
+#, fuzzy
 msgid "Add new animation"
-msgstr ""
+msgstr "नया एनीमेशन जोड़ें"
 
 msgid "Edit animation"
 msgstr "एनीमेशन संपादित करें"
@@ -121,8 +127,9 @@ msgstr "एनीमेशन संपादित करें"
 msgid "General"
 msgstr "जनरल"
 
+#, fuzzy
 msgid "Advanced"
-msgstr ""
+msgstr "उन्नत"
 
 msgid "top left"
 msgstr "ऊपरी बायाँ"
@@ -159,17 +166,20 @@ msgstr "रास्टर संकेतिका दिखाएं"
 msgid "Set options"
 msgstr "विकल्प निर्धारित करें"
 
+#, fuzzy
 msgid "3D view parameters"
-msgstr ""
+msgstr "3D व्यू पैरामीटर्स"
 
 msgid "Workspace file:"
 msgstr "कार्यक्षेत्र फ़ाइल:"
 
+#, fuzzy
 msgid "Choose workspace file to import 3D view parameters"
-msgstr ""
+msgstr "3D व्यू पैरामीटर इंपोर्ट करने के लिए वर्कस्पेस फ़ाइल चुनें"
 
+#, fuzzy
 msgid "Browse"
-msgstr ""
+msgstr "ब्राउज़ करें"
 
 msgid "Parameter for animation:"
 msgstr "एनिमेशन के लिए पैरामीटर:"
@@ -180,8 +190,9 @@ msgstr "2D दृश्य में स्थानिक विस्तार
 msgid "Use saved region:"
 msgstr "सहेजे गए क्षेत्र का उपयोग करें:"
 
+#, fuzzy
 msgid "Animate region change"
-msgstr ""
+msgstr "क्षेत्र परिवर्तन को एनिमेट करें"
 
 msgid "End region:"
 msgstr "समाप्त क्षेत्र:"
@@ -207,14 +218,16 @@ msgstr "कोई मानचित्र श्रृंखला या स�
 msgid "Region information is not complete"
 msgstr "क्षेत्र की जानकारी पूरी नहीं है"
 
+#, fuzzy
 msgid "Add, edit or remove animations"
-msgstr ""
+msgstr "एनिमेशन जोड़ें, संपादित करें या हटाएं"
 
 msgid "List of animations"
 msgstr "एनिमेशन की सूची"
 
+#, fuzzy
 msgid "Add"
-msgstr ""
+msgstr "जोड़ें"
 
 msgid "Edit"
 msgstr "संपादित करें"
@@ -228,26 +241,32 @@ msgstr "एनिमेशन निर्यात करें"
 msgid "Format"
 msgstr "प्रारूप"
 
+#, fuzzy
 msgid "Decorations"
-msgstr ""
+msgstr "डेकोरेशन्स"
 
 msgid "Export"
 msgstr "निर्यात"
 
+#, fuzzy
 msgid "Add image"
-msgstr ""
+msgstr "छवि जोड़ें"
 
+#, fuzzy
 msgid "Add text"
-msgstr ""
+msgstr "पाठ जोड़ें"
 
+#, fuzzy
 msgid "Add time stamp"
-msgstr ""
+msgstr "टाइम स्टैम्प जोड़ें"
 
+#, fuzzy
 msgid "Add time stamp, image or text decoration by one of the buttons above."
-msgstr ""
+msgstr "ऊपर दिए गए बटनों में से किसी एक से टाइम स्टैम्प, इमेज या टेक्स्ट डेकोरेशन जोड़ें।"
 
+#, fuzzy
 msgid "Add image or text decoration by one of the buttons above."
-msgstr ""
+msgstr "ऊपर दिए गए बटनों में से किसी एक द्वारा छवि या पाठ सजावट जोड़ें।"
 
 msgid "Font settings:"
 msgstr "फ़ॉन्ट सेटिंग्स:"
@@ -261,8 +280,9 @@ msgstr "फ़ॉन्ट सेट करें"
 msgid "Image file:"
 msgstr "छवि फ़ाइल:"
 
+#, fuzzy
 msgid "Choose image file"
-msgstr ""
+msgstr "छवि फ़ाइल चुनें"
 
 msgid "Text:"
 msgstr "पाठ:"
@@ -276,8 +296,9 @@ msgstr "X:"
 msgid "Y:"
 msgstr "Y:"
 
+#, fuzzy
 msgid "AVI"
-msgstr ""
+msgstr "AVI"
 
 msgid "SWF"
 msgstr "SWF"
@@ -303,14 +324,16 @@ msgstr "फ़ाइल प्रारूप:"
 msgid "Directory:"
 msgstr "निर्देशिका:"
 
+#, fuzzy
 msgid "Choose directory for export"
-msgstr ""
+msgstr "निर्यात के लिए निर्देशिका चुनें"
 
 msgid "GIF file:"
 msgstr "GIF फ़ाइल:"
 
+#, fuzzy
 msgid "Choose file to save animation"
-msgstr ""
+msgstr "एनीमेशन सहेजने के लिए फ़ाइल चुनें"
 
 msgid "SWF file:"
 msgstr "SWF फ़ाइल:"
@@ -321,28 +344,32 @@ msgid ""
 "it's in the PATH variable."
 msgstr "प्रोग्राम 'ffmpeg' नहीं मिला।"
 
+#, fuzzy
 msgid "AVI file:"
-msgstr ""
+msgstr "AVI फ़ाइल:"
 
 msgid "Video codec:"
 msgstr "वीडियो कोडेक:"
 
+#, fuzzy
 msgid "Additional options:"
-msgstr ""
+msgstr "अतिरिक्त विकल्प:"
 
+#, fuzzy
 msgid "Consider adding '-sameq' or '-qscale 1' if not satisfied with video quality. Options depend on ffmpeg version."
-msgstr ""
+msgstr "यदि वीडियो की गुणवत्ता से संतुष्ट नहीं हैं, तो '-sameq' या '-qscale 1' जोड़ने पर विचार करें। विकल्प ffmpeg संस्करण पर निर्भर करते हैं।"
 
-#, python-format
+#, fuzzy, python-format
 msgid "Current frame rate: %.2f fps"
-msgstr ""
+msgstr "वर्तमान फ्रेम दर: %.2f fps"
 
 #, python-format
 msgid "File %s not found."
 msgstr "फ़ाइल"
 
+#, fuzzy
 msgid "Decoration image file is missing."
-msgstr ""
+msgstr "डेकोरेशन इमेज फ़ाइल गायब है।"
 
 #, python-format
 msgid "Directory %s not found."
@@ -374,8 +401,9 @@ msgstr "निर्यातित एनिमेशन फ़ाइल <"
 msgid "Overwrite?"
 msgstr "अधिलेखित करें?"
 
+#, fuzzy
 msgid "Add space-time dataset layer"
-msgstr ""
+msgstr "स्पेस-टाइम डेटासेट परत जोड़ें"
 
 msgid "Multiple raster maps"
 msgstr "एकाधिक रास्टर मानचित्र"
@@ -404,11 +432,13 @@ msgstr "रास्टर/वेक्टर मानचित्र चुन
 msgid "Please select maps or dataset first."
 msgstr "कृपया पहले मानचित्र या डेटासेट चुनें।"
 
+#, fuzzy
 msgid "Animation Tool settings"
-msgstr ""
+msgstr "एनिमेशन टूल सेटिंग्स (Animation Tool settings)"
 
+#, fuzzy
 msgid "Background color:"
-msgstr ""
+msgstr "पृष्ठभूमि का रंग:"
 
 msgid "Number of parallel processes:"
 msgstr "समानांतर प्रक्रियाओं की संख्या:"
@@ -422,11 +452,13 @@ msgstr "पाठ का पृष्ठभूमि रंग:"
 msgid "Time"
 msgstr "समय"
 
+#, fuzzy
 msgid "Absolute time format:"
-msgstr ""
+msgstr "निरपेक्ष समय प्रारूप:"
 
+#, fuzzy
 msgid "Click and then press key up or down to preview different date and time formats. Type custom format string."
-msgstr ""
+msgstr "विभिन्न दिनांक और समय स्वरूपों का पूर्वावलोकन करने के लिए क्लिक करें और फिर 'अप' या 'डाउन' की दबाएं। कस्टम फ़ॉर्मेट स्ट्रिंग टाइप करें।"
 
 msgid "Learn more about formatting options"
 msgstr "फ़ॉर्मेटिंग विकल्पों के बारे में और जानें"
@@ -440,14 +472,16 @@ msgstr "अनियमित टाइमस्टैम्प वाले इ
 msgid "Invalid"
 msgstr "अमान्य"
 
+#, fuzzy
 msgid "Animation Tool"
-msgstr ""
+msgstr "एनिमेशन टूल (Animation Tool)"
 
 msgid "Main Toolbar"
 msgstr "मुख्य टूलबार"
 
+#, fuzzy
 msgid "Animation Toolbar"
-msgstr ""
+msgstr "एनिमेशन टूलबार (Animation Toolbar)"
 
 msgid "Misc Toolbar"
 msgstr "विविध टूलबार"
@@ -455,20 +489,21 @@ msgstr "विविध टूलबार"
 msgid "Loading data"
 msgstr "डेटा लोड हो रहा है"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid " ({c} out of {p})"
-msgstr ""
+msgstr " ({c} में से {p})"
 
 #, python-format
 msgid "to %(to)s"
 msgstr "तक"
 
-#, python-format
+#, fuzzy, python-format
 msgid "%s=, %s=, %s= and %s= are mutually exclusive."
-msgstr ""
+msgstr "%s=, %s=, %s= और %s= परस्पर अनन्य हैं।"
 
+#, fuzzy
 msgid "Animation Tool - GRASS"
-msgstr ""
+msgstr "एनिमेशन टूल - GRASS"
 
 #, python-format
 msgid ""
@@ -514,8 +549,9 @@ msgstr "स्पेस टाइम डेटासेट <"
 msgid "Topology of Space time dataset %s is invalid."
 msgstr "स्पेस टाइम डेटासेट की टोपोलॉजी"
 
+#, fuzzy
 msgid "Change animation speed"
-msgstr ""
+msgstr "एनीमेशन गति बदलें"
 
 msgid "Play forward"
 msgstr "आगे चलाएं"
@@ -535,14 +571,17 @@ msgstr "दोहराएं"
 msgid "Play back and forward"
 msgstr "पीछे और आगे चलाएं"
 
+#, fuzzy
 msgid "Add, edit or remove animation"
-msgstr ""
+msgstr "एनीमेशन जोड़ें, संपादित करें या निकालें"
 
+#, fuzzy
 msgid "Add space-time dataset or series of map layers"
-msgstr ""
+msgstr "स्पेस-टाइम डेटासेट या मानचित्र परतों की श्रृंखला जोड़ें"
 
+#, fuzzy
 msgid "Add space-time dataset or series of map layers for animation"
-msgstr ""
+msgstr "एनीमेशन के लिए स्पेस-टाइम डेटासेट या मानचित्र परतों की श्रृंखला जोड़ें"
 
 #, python-format
 msgid "Map <%s> not found."
@@ -615,13 +654,13 @@ msgstr "कमांड चलाने में असमर्थ:"
 msgid "Module <%s> not found."
 msgstr "मॉड्यूल <"
 
-#, python-format
+#, fuzzy, python-format
 msgid "%d sec"
-msgstr ""
+msgstr "%d सेकंड"
 
-#, python-format
+#, fuzzy, python-format
 msgid "%(min)d min %(sec)d sec"
-msgstr ""
+msgstr "%(min)d मिनट %(sec)d सेकंड"
 
 msgid "unknown"
 msgstr "अज्ञात"
@@ -629,27 +668,29 @@ msgstr "अज्ञात"
 msgid "Please note that the data are left in inconsistent state and may be corrupted"
 msgstr "कृपया ध्यान दें कि डेटा असंगत स्थिति में छोड़ दिया गया है और दूषित हो सकता है"
 
+#, fuzzy
 msgid "Command aborted"
-msgstr ""
+msgstr "आदेश निरस्त कर दिया गया"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Command ended with non-zero return code {returncode}"
-msgstr ""
+msgstr "कमांड गैर-शून्य रिटर्न कोड {रिटर्नकोड} के साथ समाप्त हुआ"
 
+#, fuzzy
 msgid "Command finished"
-msgstr ""
+msgstr "कमांड समाप्त"
 
 #, python-format
 msgid "Unknown tag %s"
 msgstr "अज्ञात टैग"
 
-#, python-format
+#, fuzzy, python-format
 msgid "<%(name)s>: layer type <%(type)s> is not supported"
-msgstr ""
+msgstr "<%(name)s>: लेयर प्रकार <%(type)s> समर्थित नहीं है"
 
-#, python-format
+#, fuzzy, python-format
 msgid "Command '%s' failed\n"
-msgstr ""
+msgstr "कमांड '%s' विफल रहा\n"
 
 #, python-format
 msgid "Details: %s\n"
@@ -682,11 +723,13 @@ msgstr "डिफ़ॉल्ट रीजन से रिकवर करन�
 msgid "GRASS tool '%s' not found. Unable to start map display window."
 msgstr "GRASS टूल '%s' नहीं मिला. मैप डिस्प्ले विंडो शुरू नहीं हो पा रही है।"
 
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "\n"
 "ERROR: Unable to read WIND file: %s\n"
 msgstr ""
+"\n"
+"त्रुटि: WIND फ़ाइल पढ़ने में असमर्थ: %s\n"
 
 #, python-format
 msgid "Error: Unable to open '%(file)s'. Reason: %(ret)s. wxGUI exited.\n"
@@ -710,23 +753,28 @@ msgstr "अभी का ज्योग्राफिक एक्सटें
 msgid "Segment break"
 msgstr "खंड विच्छेद"
 
+#, fuzzy
 msgid "Data point"
-msgstr ""
+msgstr "डेटा पॉइंट"
 
 msgid "animation"
 msgstr "एनीमेशन"
 
+#, fuzzy
 msgid "Collapse all except PERMANENT and current"
-msgstr ""
+msgstr "PERMANENT और वर्तमान को छोड़कर सभी को संक्षिप्त करें"
 
+#, fuzzy
 msgid "Collapse all except PERMANENT"
-msgstr ""
+msgstr "PERMANENT को छोड़कर सभी को संक्षिप्त करें"
 
+#, fuzzy
 msgid "Collapse all except current"
-msgstr ""
+msgstr "वर्तमान को छोड़कर सभी को संक्षिप्त करें"
 
+#, fuzzy
 msgid "Collapse all"
-msgstr ""
+msgstr "सभी को संक्षिप्त करें"
 
 msgid "Expand all"
 msgstr "सभी विस्तृत करें"
@@ -737,20 +785,24 @@ msgstr "चयनित रिकॉर्ड को संपादित क�
 msgid "Display selected"
 msgstr "चयनित को प्रदर्शित करें"
 
+#, fuzzy
 msgid "Classic (labels only)"
-msgstr ""
+msgstr "क्लासिक (केवल लेबल)"
 
+#, fuzzy
 msgid "Combined (labels and tool names)"
-msgstr ""
+msgstr "संयुक्त (लेबल और उपकरण नाम)"
 
 msgid "Expert (tool names only)"
 msgstr "विशेषज्ञ (केवल टूल के नाम)"
 
+#, fuzzy
 msgid "Basic top"
-msgstr ""
+msgstr "बुनियादी ऊपर"
 
+#, fuzzy
 msgid "Basic left"
-msgstr ""
+msgstr "बुनियादी बायां"
 
 msgid "List left"
 msgstr "बाईं ओर सूची"
@@ -851,15 +903,17 @@ msgstr "उपयोगकर्ता टूलबॉक्स एक्सए�
 msgid "Unable to create toolboxes directory."
 msgstr "टूलबॉक्स निर्देशिका बनाने में असमर्थ।"
 
+#, fuzzy
 msgid "Custom toolboxes"
-msgstr ""
+msgstr "कस्टम टूलबॉक्स"
 
 #, python-format
 msgid "List of addons cannot be obtained because g.extension failed. Details: %s"
 msgstr "एड-ऑन की सूची प्राप्त नहीं की जा सकती क्योंकि g.extension विफल रहा। विवरण: %s"
 
+#, fuzzy
 msgid "Addons"
-msgstr ""
+msgstr "ऐडऑन्स"
 
 msgid "Module not installed"
 msgstr "मॉड्यूल स्थापित नहीं है"
@@ -902,11 +956,13 @@ msgstr "सिंटैक्स त्रुटि: %s"
 msgid "Vector map <%(map)s>: %(msg)s\n"
 msgstr "वेक्टर मानचित्र <%(map)s>:%(msg)s\n"
 
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "%s: line skipped - unable to parse '%s'\n"
 "Reason: %s\n"
 msgstr ""
+"%s: लाइन छोड़ दी गई - '%s' को पार्स करने में असमर्थ\n"
+"कारण: %s\n"
 
 #, python-format
 msgid "Duplicated key: %s\n"
@@ -925,7 +981,7 @@ msgstr "रंग चुनें"
 
 #, python-format
 msgid "Unable to open file <%s> for reading."
-msgstr ""
+msgstr "पढ़ने के लिए फ़ाइल <%s> खोलने में असमर्थ।"
 
 #, python-format
 msgid ""
@@ -934,52 +990,60 @@ msgid ""
 "\n"
 "Number of skipped lines: %(line)d"
 msgstr ""
+"फ़ाइल <%(file)s> से सेटिंग्स पढ़ते समय कुछ पंक्तियाँ छोड़ दी गईं।\n"
+"विवरण के लिए 'कमांड आउटपुट' विंडो देखें।\n"
+"\n"
+"छोड़ी गई पंक्तियों की संख्या: %(line)d"
 
-#, python-format
+#, fuzzy, python-format
 msgid " row %d:"
-msgstr ""
+msgstr " पंक्ति %d:"
 
+#, fuzzy
 msgid "Data catalog"
-msgstr ""
+msgstr "डेटा कैटलॉग"
 
+#, fuzzy
 msgid "Choose GRASS project:"
-msgstr ""
+msgstr "GRASS प्रोजेक्ट चुनें:"
 
 msgid "Link external raster data  [r.external]"
-msgstr ""
+msgstr "बाहरी रास्टर डेटा लिंक करें [r.external]"
 
 msgid "Link external vector data  [v.external]"
-msgstr ""
+msgstr "बाहरी वेक्टर डेटा लिंक करें [v.external]"
 
 msgid "Set raster output format  [r.external.out]"
-msgstr ""
+msgstr "रास्टर आउटपुट फॉर्मेट सेट करें [r.external.out]"
 
 msgid "Set vector output format  [v.external.out]"
-msgstr ""
+msgstr "वेक्टर आउटपुट फॉर्मेट सेट करें [v.external.out]"
 
 msgid "Unpack GRASS raster map  [r.unpack]"
-msgstr ""
+msgstr "GRASS रास्टर मानचित्र अनपैक करें [r.unpack]"
 
 msgid "Unpack GRASS vector map  [v.unpack]"
-msgstr ""
+msgstr "GRASS वेक्टर मानचित्र अनपैक करें [v.unpack]"
 
+#, fuzzy
 msgid "Create raster map from x,y,z data  [r.in.xyz]"
-msgstr ""
+msgstr "x,y,z डेटा से रास्टर मैप बनाएं [r.in.xyz]"
 
+#, fuzzy
 msgid "Create vector map from x,y,z data  [v.in.ascii]"
-msgstr ""
+msgstr "x,y,z डेटा से वेक्टर मैप बनाएं [v.in.ascii]"
 
 msgid "Link external data"
-msgstr ""
+msgstr "बाहरी डेटा लिंक करें"
 
 msgid "More options..."
-msgstr ""
+msgstr "अधिक विकल्प..।"
 
 msgid "Reprojection"
-msgstr ""
+msgstr "रिप्रोजेक्शन"
 
 msgid "Reproject"
-msgstr ""
+msgstr "पुनः प्रोजेक्ट करें"
 
 msgid "Reproject raster"
 msgstr ""
@@ -992,30 +1056,36 @@ msgid ""
 "Map layer <{ml}> needs to be reprojected.\n"
 "Please review and modify reprojection parameters:"
 msgstr ""
+"मानचित्र परत <{ml}> को पुनः प्रोजेक्ट करने की आवश्यकता है।\n"
+"कृपया रिप्रोजेक्शन मापदंडों की समीक्षा करें और संशोधित करें:"
 
 msgid "Estimated resolution:"
-msgstr ""
+msgstr "अनुमानित रिज़ॉल्यूशन:"
 
 msgid "Resampling method:"
-msgstr ""
+msgstr "रीसैंपलिंग विधि:"
 
 msgid "Maximum segment length:"
-msgstr ""
+msgstr "अधिकतम खंड लंबाई:"
 
+#, fuzzy
 msgid "Data Catalog"
-msgstr ""
+msgstr "डेटा कैटलॉग"
 
+#, fuzzy
 msgid "Close GRASS Data Catalog"
-msgstr ""
+msgstr "GRASS डेटा कैटलॉग बंद करें"
 
+#, fuzzy
 msgid "Data Catalog - GRASS"
-msgstr ""
+msgstr "डेटा कैटलॉग - GRASS"
 
+#, fuzzy
 msgid "Create new project"
-msgstr ""
+msgstr "नया प्रोजेक्ट बनाएं"
 
 msgid "Learn more"
-msgstr ""
+msgstr "अधिक जानें"
 
 #, python-brace-format
 msgid ""
@@ -1023,6 +1093,9 @@ msgid ""
 "\n"
 "You are currently in mapset PERMANENT in default project {loc} which uses WGS 84 (EPSG:4326). Consider creating a new project with a CRS specific to your area. You can do it now or anytime later from the toolbar above."
 msgstr ""
+"GRASS आपको प्रोजेक्ट्स (लोकेशन) का उपयोग करके अपने डेटा को व्यवस्थित करने में मदद करता है जिसमें मैपसेट्स (सबप्रोजेक्ट्स) होते हैं। एक प्रोजेक्ट का सारा डेटा एक ही कोऑर्डिनेट रेफरेंस सिस्टम (CRS) में होता है।\n"
+"\n"
+"आप वर्तमान में डिफ़ॉल्ट प्रोजेक्ट {loc} के मैपसेट PERMANENT में हैं जो WGS 84 (EPSG:4326) का उपयोग करता है। अपने क्षेत्र के लिए विशिष्ट CRS के साथ एक नया प्रोजेक्ट बनाने पर विचार करें। आप इसे अभी या बाद में कभी भी ऊपर टूलबार से कर सकते हैं।"
 
 msgid "Import vector data"
 msgstr ""
@@ -1036,26 +1109,29 @@ msgid ""
 "\n"
 "To import data, go to the toolbar above or use the buttons below."
 msgstr ""
+"आपने सफलतापूर्वक एक नया प्रोजेक्ट {loc} बनाया है। वर्तमान में आप इसके PERMANENT मैपसेट में हैं जिसका उपयोग आपके बेस मैप्स को संग्रहीत करने के लिए किया जाता है ताकि वे अन्य मैपसेट्स में आसानी से उपलब्ध हो सकें। आप प्रोजेक्ट के नाम पर राइट क्लिक करके विभिन्न कार्यों के लिए नए मैपसेट बना सकते हैं।\n"
+"\n"
+"डेटा इम्पोर्ट करने के लिए, ऊपर टूलबार पर जाएँ या नीचे दिए गए बटनों का उपयोग करें।"
 
 msgid "Loading of Data catalog content took rather long. To prevent delay, you can enable loading of current mapset only. You can change that later in GUI Settings, General tab."
-msgstr ""
+msgstr "डेटा कैटलॉग सामग्री लोड होने में काफी समय लगा। देरी को रोकने के लिए, आप केवल वर्तमान मैपसेट की लोडिंग सक्षम कर सकते हैं। आप इसे बाद में GUI सेटिंग्स, सामान्य (General) टैब में बदल सकते हैं।"
 
 msgid "Enable loading current mapset only"
-msgstr ""
+msgstr "केवल वर्तमान मैपसेट की लोडिंग सक्षम करें"
 
 msgid "No change, don't ask me again"
-msgstr ""
+msgstr "कोई बदलाव नहीं, मुझसे दोबारा न पूछें"
 
 #, python-brace-format
 msgid "{string} GRASS has started in a temporary project. To continue, use Data Catalog below to switch to a different project."
-msgstr ""
+msgstr "{string} GRASS एक अस्थायी प्रोजेक्ट में शुरू हुआ है। जारी रखने के लिए, किसी अन्य प्रोजेक्ट पर स्विच करने के लिए नीचे डेटा कैटलॉग (Data Catalog) का उपयोग करें।"
 
 msgid "Switch to last used mapset"
 msgstr ""
 
 #, python-brace-format
 msgid "Last used mapset in path '{mapsetpath}' is currently in use. GRASS has started in a temporary project. To continue, use Data Catalog below to switch to a different project or remove lock file and switch to the last used mapset."
-msgstr ""
+msgstr "पथ '{mapsetpath}' में अंतिम बार उपयोग किया गया मैपसेट वर्तमान में उपयोग में है। GRASS एक अस्थायी प्रोजेक्ट में शुरू हुआ है। जारी रखने के लिए, किसी अन्य प्रोजेक्ट पर स्विच करने के लिए नीचे डेटा कैटलॉग (Data Catalog) का उपयोग करें या लॉक फ़ाइल हटा दें और अंतिम बार उपयोग किए गए मैपसेट पर स्विच करें।"
 
 #, python-brace-format
 msgid "Last used mapset in path '{mapsetpath}' does not exist."
@@ -1063,72 +1139,74 @@ msgstr ""
 
 #, python-brace-format
 msgid "Last used mapset in path '{mapsetpath}' is invalid."
-msgstr ""
+msgstr "पथ '{mapsetpath}' में अंतिम बार उपयोग किया गया मैपसेट अमान्य है।"
 
 #, python-brace-format
 msgid "Last used mapset in path '{mapsetpath}' has different owner {owner}."
-msgstr ""
+msgstr "पथ '{mapsetpath}' में अंतिम बार उपयोग किया गया मैपसेट का मालिक {owner} भिन्न है।"
 
 msgid "Reload GRASS projects"
-msgstr ""
+msgstr "GRASS प्रोजेक्ट्स को पुनः लोड करें"
 
 msgid "Reload current GRASS mapset only"
-msgstr ""
+msgstr "केवल वर्तमान GRASS मैपसेट को पुनः लोड करें"
 
+#, fuzzy
 msgid "Create new mapset in current project"
-msgstr ""
+msgstr "वर्तमान प्रोजेक्ट में नया मैपसेट बनाएं"
 
+#, fuzzy
 msgid "Add an existing project"
-msgstr ""
+msgstr "एक मौजूदा परियोजना जोड़ें"
 
 msgid "Download sample project"
-msgstr ""
+msgstr "नमूना प्रोजेक्ट डाउनलोड करें"
 
 msgid "Import raster data  [r.import]"
-msgstr ""
+msgstr "रास्टर डेटा इम्पोर्ट करें [r.import]"
 
 msgid "Import vector data  [v.import]"
-msgstr ""
+msgstr "वेक्टर डेटा इम्पोर्ट करें [v.import]"
 
 msgid "Select another import option"
-msgstr ""
+msgstr "अन्य इम्पोर्ट विकल्प चुनें"
 
 msgid "Search"
-msgstr ""
+msgstr "खोजें"
 
 msgid "Type to search database by map type or name. Use Python regular expressions to refine your search."
-msgstr ""
+msgstr "नक्शे के प्रकार या नाम से डेटाबेस खोजने के लिए टाइप करें। अपनी खोज को परिशोधित करने के लिए पायथन रेगुलर एक्सप्रेशन (Python regular expressions) का उपयोग करें।"
 
 #, python-brace-format
 msgid "Failed to read mapsets from project <{l}>."
-msgstr ""
+msgstr "प्रोजेक्ट <{l}> से मैपसेट्स पढ़ने में विफल।"
 
 #, python-brace-format
 msgid "Failed to read maps from project <{l}>."
-msgstr ""
+msgstr "प्रोजेक्ट <{l}> से मैप्स पढ़ने में विफल।"
 
 #, python-brace-format
 msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
-msgstr ""
+msgstr "{elem} प्रकार का मानचित्र <{name}> पहले से ही मैपसेट <{mapset}> में मौजूद है। क्या आप इसे ओवरराइट करना चाहते हैं?"
 
 msgid "name unknown"
-msgstr ""
+msgstr "नाम अज्ञात"
 
 #, python-brace-format
 msgid "{name}  (current)"
-msgstr ""
+msgstr "{name} (वर्तमान)"
 
 #, python-brace-format
 msgid "{name}  (in use, owner: {owner})"
-msgstr ""
+msgstr "{name} (उपयोग में है, मालिक: {owner})"
 
 #, python-brace-format
 msgid "{name}  (in use)"
-msgstr ""
+msgstr "{name} (उपयोग में है)"
 
 #, python-brace-format
 msgid "{name}  (owner: {owner})"
-msgstr ""
+msgstr "{name} (मालिक: {owner})"
 
 #, python-brace-format
 msgid "{name}"
@@ -1140,9 +1218,12 @@ msgid ""
 "\n"
 "Do you want to switch anyway?"
 msgstr ""
+"मानचित्र <{map_name}@{map_mapset}> वर्तमान प्रोजेक्ट में नहीं है। इसे प्रदर्शित करने के लिए आपको <{map_location}> प्रोजेक्ट पर स्विच करना होगा। ध्यान दें कि यदि आप वहां स्विच करते हैं तो सभी वर्तमान मानचित्र प्रदर्शन (Map Displays) बंद हो जाएंगे।\n"
+"\n"
+"क्या आप फिर भी स्विच करना चाहते हैं?"
 
 msgid "Map in a different project"
-msgstr ""
+msgstr "<{n}> के लिए नया नाम"
 
 #, python-brace-format
 msgid "{c} maps marked for moving."
@@ -1158,23 +1239,25 @@ msgstr ""
 
 #, python-brace-format
 msgid "Map <{layer}> marked for copying."
-msgstr ""
+msgstr "मानचित्र <{layer}> को कॉपी करने के लिए चिह्नित किया गया।"
 
 msgid "New name"
-msgstr ""
+msgstr "नया नाम"
 
 msgid "Rename map"
-msgstr ""
+msgstr "मानचित्र का नाम बदलें"
 
+#, fuzzy
 msgid "Cannot rename mapset"
-msgstr ""
+msgstr "मैपसेट का नाम नहीं बदला जा सकता"
 
 #, python-brace-format
 msgid "Renaming mapset <{oldmapset}> to <{newmapset}> completed"
 msgstr ""
 
+#, fuzzy
 msgid "Cannot rename location"
-msgstr ""
+msgstr "स्थान का नाम नहीं बदला जा सकता"
 
 #, python-brace-format
 msgid "Renaming project <{oldlocation}> to <{newlocation}> completed"
@@ -1196,21 +1279,22 @@ msgstr ""
 
 #, python-brace-format
 msgid "New name for <{n}>"
-msgstr ""
+msgstr "<{n}> के लिए नया नाम"
 
 msgid "Select new name"
 msgstr ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Copying <{name}>..."
-msgstr ""
+msgstr "<{name}> को कॉपी किया जा रहा है..।"
 
 #, python-brace-format
 msgid "Moving <{name}>..."
 msgstr ""
 
+#, fuzzy
 msgid "Copying completed"
-msgstr ""
+msgstr "कॉपी करना पूर्ण हुआ"
 
 msgid "Moving completed"
 msgstr ""
@@ -1229,8 +1313,9 @@ msgstr ""
 msgid "Do you really want to delete {n} maps?"
 msgstr ""
 
+#, fuzzy
 msgid "Delete map"
-msgstr ""
+msgstr "मैप हटाएं"
 
 #, python-brace-format
 msgid "Deleting {name}..."
@@ -1242,79 +1327,101 @@ msgstr ""
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr ""
 
+#, fuzzy
 msgid "&Cut"
-msgstr ""
+msgstr "&काटें"
 
+#, fuzzy
 msgid "&Copy"
-msgstr ""
+msgstr "&कांपी करें"
 
+#, fuzzy
 msgid "Copy &name"
-msgstr ""
+msgstr "&name कॉपी करें"
 
+#, fuzzy
 msgid "&Paste"
-msgstr ""
+msgstr "&चिपकाएं"
 
 #. GTC Delete mapset
+#, fuzzy
 msgid "&Delete"
-msgstr ""
+msgstr "&हटाएं"
 
 #. GTC Rename mapset
+#, fuzzy
 msgid "&Rename"
-msgstr ""
+msgstr "&नाम बदलें"
 
+#, fuzzy
 msgid "&Display layers"
-msgstr ""
+msgstr "&लेयर्स दिखाएं"
 
+#, fuzzy
 msgid "&Display layer"
-msgstr ""
+msgstr "&लेयर दिखाएं"
 
 msgid "Show &metadata"
 msgstr ""
 
+#, fuzzy
 msgid "&Switch mapset"
-msgstr ""
+msgstr "&मैपसेट बदलें"
 
+#, fuzzy
 msgid "&Delete mapset"
-msgstr ""
+msgstr "&मैपसेट हटाएं"
 
+#, fuzzy
 msgid "&Rename mapset"
-msgstr ""
+msgstr "&मैपसेट का नाम बदलें"
 
 msgid "Re&load maps"
 msgstr ""
 
+#, fuzzy
 msgid "&Copy path to mapset"
-msgstr ""
+msgstr "&म्यापसेट के पॅंथ की कांपी करें"
 
+#, fuzzy
 msgid "&Create mapset"
-msgstr ""
+msgstr "&मैपसेट बनाएं"
 
+#, fuzzy
 msgid "&Delete project"
-msgstr ""
+msgstr "&प्रोजेक्ट हटाएं"
 
+#, fuzzy
 msgid "&Rename project"
-msgstr ""
+msgstr "&प्रोजेक्ट का नाम बदलें"
 
+#, fuzzy
 msgid "&Create new project (location)"
-msgstr ""
+msgstr "&नया प्रोजेक्ट (लोकेशन) बनाएं"
 
+#, fuzzy
 msgid "&Download sample project (location)"
-msgstr ""
+msgstr "&नमूना प्रोजेक्ट (लोकेशन) डाउनलोड करें"
 
+#, fuzzy
 msgid "&Remove GRASS database from data catalog"
-msgstr ""
+msgstr "&डेटा कैटलॉग से GRASS डेटाबेस हटाएं"
 
+#, fuzzy
 msgid "&Delete GRASS database from disk"
-msgstr ""
+msgstr "&GRASS डेटाबेस को डिस्क से हटाएं"
 
+#, fuzzy
 msgid "&Delete projects (locations)"
-msgstr ""
+msgstr "&प्रोजेक्ट्स (लोकेशन) हटाएं"
 
+#, fuzzy
 msgid "&Delete mapsets"
-msgstr ""
+msgstr "&Delete mapsets"
 
+#, fuzzy
 msgid "&Copy paths to mapsets"
-msgstr ""
+msgstr "&म्यापसेट्स के कांपी पॄंथ करें"
 
 msgid "No available options"
 msgstr ""
@@ -1322,16 +1429,17 @@ msgstr ""
 msgid "Loading data..."
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "Attribute table <%s> not found. For creating the table switch to 'Manage layers' tab."
-msgstr ""
+msgstr "एट्रिब्यूट टेबल <%s> नहीं मिली। टेबल बनाने के लिए 'Manage layers' (परत प्रबंधित करें) टैब पर जाएं।"
 
-#, python-format
+#, fuzzy, python-format
 msgid "Column <%(column)s> not found in in the table <%(table)s>."
-msgstr ""
+msgstr "कॉलम <%(कॉलम)s> तालिका <%(तालिका)s> में नहीं मिला।"
 
+#, fuzzy
 msgid "Can display only 256 columns."
-msgstr ""
+msgstr "केवल 256 कॉलम प्रदर्शित कर सकते हैं।"
 
 #, python-brace-format
 msgid "Incorrect encoding {enc} used. Set encoding in GUI Settings or set GRASS_DB_ENCODING variable."
@@ -1367,8 +1475,9 @@ msgstr ""
 msgid "Sort descending"
 msgstr ""
 
+#, fuzzy
 msgid "Calculate (only numeric columns)"
-msgstr ""
+msgstr "गणना करें (केवल संख्यात्मक कॉलम)"
 
 msgid "Field calculator"
 msgstr ""
@@ -1376,17 +1485,20 @@ msgstr ""
 msgid "Statistics"
 msgstr ""
 
+#, fuzzy
 msgid "Add column"
-msgstr ""
+msgstr "कॉलम जोड़ें"
 
+#, fuzzy
 msgid "Area size"
-msgstr ""
+msgstr "क्षेत्र का आकार (Area size)"
 
 msgid "Line length"
 msgstr ""
 
+#, fuzzy
 msgid "Compactness of an area"
-msgstr ""
+msgstr "किसी क्षेत्र की सघनता"
 
 msgid "Fractal dimension of boundary defining a polygon"
 msgstr ""
@@ -1406,25 +1518,27 @@ msgstr ""
 msgid "Line azimuth"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "Add column to table <%s>"
-msgstr ""
+msgstr "तालिका <1%s> में कॉलम जोड़ें"
 
 msgid "Unable to add column to the table. No column name defined."
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "Column <%(column)s> already exists in table <%(table)s>."
-msgstr ""
+msgstr "कॉलम <%(कॉलम)s> पहले से ही तालिका <%(तालिका)s> में मौजूद है।"
 
+#, fuzzy
 msgid "Attribute data - right-click to edit/manage records"
-msgstr ""
+msgstr "विशेषता डेटा - रिकॉर्ड्स को संपादित/प्रबंधित करने के लिए राइट-क्लिक करें"
 
 msgid "Table"
 msgstr ""
 
+#, fuzzy
 msgid " (read-only)"
-msgstr ""
+msgstr " (केवल पढ़ने के लिए)"
 
 msgid "SQL Query"
 msgstr ""
@@ -1432,15 +1546,17 @@ msgstr ""
 msgid "Simple"
 msgstr ""
 
+#, fuzzy
 msgid "Apply SELECT statement and reload data records"
-msgstr ""
+msgstr "SELECT स्टेटमेंट लागू करें और डेटा रिकॉर्ड रीलोड करें"
 
 #, python-format
 msgid "Example: %s"
 msgstr ""
 
+#, fuzzy
 msgid "Builder"
-msgstr ""
+msgstr "बिल्डर"
 
 msgid "SQL Builder"
 msgstr ""
@@ -1448,11 +1564,13 @@ msgstr ""
 msgid "Insert new record"
 msgstr ""
 
+#, fuzzy
 msgid "Delete selected record(s)"
-msgstr ""
+msgstr "चयनित रिकॉर्ड(ओं) को हटाएं"
 
+#, fuzzy
 msgid "Delete all records"
-msgstr ""
+msgstr "सभी रिकॉर्ड हटाएं"
 
 msgid "Select all"
 msgstr ""
@@ -1469,8 +1587,9 @@ msgstr ""
 msgid "Extract selected features"
 msgstr ""
 
+#, fuzzy
 msgid "Delete selected features"
-msgstr ""
+msgstr "चयनित विशेषताओं को हटाएं"
 
 msgid "Reload"
 msgstr ""
@@ -1492,13 +1611,13 @@ msgstr ""
 msgid "Record with category number %d already exists in the table."
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "Category number (column %s) is missing."
-msgstr ""
+msgstr "हिन्दी"
 
-#, python-format
+#, fuzzy, python-format
 msgid "Column '%(column)s' does not exist."
-msgstr ""
+msgstr "स्तंभ '%(column)s' मौजूद नहीं है।"
 
 #, python-format
 msgid ""
@@ -1510,12 +1629,13 @@ msgstr ""
 msgid "Selected data records (%d) will be permanently deleted from table. Do you want to delete them?"
 msgstr ""
 
+#, fuzzy
 msgid "Delete records"
-msgstr ""
+msgstr "रिकॉर्ड्स हटाएं"
 
-#, python-format
+#, fuzzy, python-format
 msgid "All data records (%d) will be permanently deleted from table. Do you want to delete them?"
-msgstr ""
+msgstr "हिन्दी"
 
 msgid "Nothing to extract."
 msgstr ""
@@ -1538,15 +1658,17 @@ msgid ""
 "%s"
 msgstr ""
 
+#, fuzzy
 msgid "Database connection"
-msgstr ""
+msgstr "डेटाबेस कनेक्शन"
 
 #, python-format
 msgid "Table <%s> - right-click to delete column(s)"
 msgstr ""
 
+#, fuzzy
 msgid "Column"
-msgstr ""
+msgstr "स्तंभ"
 
 msgid "Type"
 msgstr ""
@@ -1598,17 +1720,21 @@ msgstr ""
 msgid "Drop also linked attribute table (%s)"
 msgstr ""
 
+#, fuzzy
 msgid "Column name"
-msgstr ""
+msgstr "कॉलम का नाम"
 
+#, fuzzy
 msgid "Data length"
-msgstr ""
+msgstr "डेटा की लंबाई"
 
+#, fuzzy
 msgid "Data type"
-msgstr ""
+msgstr "डेटा टाइप"
 
+#, fuzzy
 msgid "Database"
-msgstr ""
+msgstr "डेटाबेस"
 
 msgid "Driver"
 msgstr ""
@@ -1619,8 +1745,9 @@ msgstr ""
 msgid "Layer"
 msgstr ""
 
+#, fuzzy
 msgid "Add layer"
-msgstr ""
+msgstr "परत जोड़ें"
 
 msgid "Layer description"
 msgstr ""
@@ -1640,14 +1767,17 @@ msgstr ""
 msgid "Table name"
 msgstr ""
 
+#, fuzzy
 msgid "&Create table"
-msgstr ""
+msgstr "&तालिका बनाएं"
 
+#, fuzzy
 msgid "&Add layer"
-msgstr ""
+msgstr "परत जोड़ें"
 
+#, fuzzy
 msgid "&Set default"
-msgstr ""
+msgstr "&डिफ़ॉल्ट सेट करें"
 
 msgid "Remove layer"
 msgstr ""
@@ -1655,14 +1785,16 @@ msgstr ""
 msgid "Layer to remove"
 msgstr ""
 
+#, fuzzy
 msgid "&Remove layer"
-msgstr ""
+msgstr "&लेयर हटाएं"
 
 msgid "Modify layer"
 msgstr ""
 
+#, fuzzy
 msgid "&Modify layer"
-msgstr ""
+msgstr "&लेयर संशोधित करें"
 
 msgid ""
 "Unable to get list of tables.\n"
@@ -1683,8 +1815,9 @@ msgstr ""
 msgid "Field statistics"
 msgstr ""
 
+#, fuzzy
 msgid "Copy statistics the clipboard (Ctrl+C)"
-msgstr ""
+msgstr "आंकड़े क्लिपबोर्ड पर कॉपी करें (Ctrl+C)"
 
 msgid "Statistics is not support for DBF tables."
 msgstr ""
@@ -1710,11 +1843,13 @@ msgid ""
 "Do you want to create a new attribute table and defined a link to vector map <%s>?"
 msgstr ""
 
+#, fuzzy
 msgid "Create table?"
-msgstr ""
+msgstr "टेबल बनाएं?"
 
+#, fuzzy
 msgid "Close dialog on submit"
-msgstr ""
+msgstr "सबमिट करने पर डायलॉग बंद करें"
 
 msgid "No attributes found"
 msgstr ""
@@ -1722,30 +1857,34 @@ msgstr ""
 msgid "Update attributes"
 msgstr ""
 
+#, fuzzy
 msgid "Define attributes"
-msgstr ""
+msgstr "एट्रिब्यूट्स परिभाषित करें"
 
 msgid "Display attributes"
 msgstr ""
 
+#, fuzzy
 msgid "&Reload"
-msgstr ""
+msgstr "&पुनः लोड करें"
 
+#, fuzzy
 msgid "&Submit"
-msgstr ""
+msgstr "&जमा करें"
 
 msgid "Feature id:"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "Column <%(col)s>: Value '%(value)s' needs to be entered as %(type)s."
-msgstr ""
+msgstr "कॉलम <%(col)s>: मान '%(value)s' को %(type)s के रूप में दर्ज किया जाना चाहिए।"
 
 msgid "Unknown"
 msgstr ""
 
+#, fuzzy
 msgid "Category"
-msgstr ""
+msgstr "श्रेणी"
 
 msgid "YYYY-MM-DD"
 msgstr ""
@@ -1758,25 +1897,28 @@ msgstr ""
 msgid "Loading attribute data for vector map <%s>..."
 msgstr ""
 
+#, fuzzy
 msgid "Attribute Table Manager - GRASS"
-msgstr ""
+msgstr "एट्रिब्यूट टेबल मैनेजर - GRASS"
 
+#, fuzzy
 msgid "Attribute Table Manager"
-msgstr ""
+msgstr "एट्रिब्यूट टेबल मैनेजर (Attribute Table Manager)"
 
 #, python-brace-format
 msgid "{document} (read-only)"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "Database connection for vector map <%s> is not defined in DB file. You can define new connection in 'Manage layers' tab."
-msgstr ""
+msgstr "वेक्टर मैप <%s> के लिए डेटाबेस कनेक्शन DB फ़ाइल में परिभाषित नहीं है। आप 'लेयर्स प्रबंधित करें' (Manage layers) टैब में नया कनेक्शन परिभाषित कर सकते हैं।"
 
 msgid "Please wait, loading attribute data..."
 msgstr ""
 
+#, fuzzy
 msgid "Browse data"
-msgstr ""
+msgstr "डेटा ब्राउज़ करें"
 
 msgid "Manage tables"
 msgstr ""
@@ -1784,8 +1926,9 @@ msgstr ""
 msgid "Manage layers"
 msgstr ""
 
+#, fuzzy
 msgid "Close Attribute Table Manager"
-msgstr ""
+msgstr "एट्रिब्यूट टेबल मैनेजर बंद करें"
 
 msgid "Reload currently selected attribute data"
 msgstr ""
@@ -1799,14 +1942,17 @@ msgstr ""
 msgid "Set SQL statement to default"
 msgstr ""
 
+#, fuzzy
 msgid "Apply SQL statement"
-msgstr ""
+msgstr "SQL स्टेटमेंट लागू करें"
 
+#, fuzzy
 msgid "Close the dialog"
-msgstr ""
+msgstr "डायलॉग बंद करें"
 
+#, fuzzy
 msgid "Columns"
-msgstr ""
+msgstr "कॉलम"
 
 msgid "Interactive insertion"
 msgstr ""
@@ -1826,18 +1972,21 @@ msgstr ""
 msgid "Go to:"
 msgstr ""
 
+#, fuzzy
 msgid "Close dialog on apply"
-msgstr ""
+msgstr "लागू करने पर डायलॉग बंद करें"
 
 #, python-format
 msgid "GRASS SQL Builder (%(type)s) - <%(map)s>"
 msgstr ""
 
+#, fuzzy
 msgid "Column to show (SELECT clause)"
-msgstr ""
+msgstr "दिखाने के लिए कॉलम (खंड चुनें)"
 
+#, fuzzy
 msgid "Constraint for query (WHERE clause)"
-msgstr ""
+msgstr "क्वेरी के लिए प्रतिबंध (WHERE क्लॉज)"
 
 msgid "Verify"
 msgstr ""
@@ -1861,11 +2010,13 @@ msgstr ""
 msgid "SQL statement is valid"
 msgstr ""
 
+#, fuzzy
 msgid "Column to set (SET clause)"
-msgstr ""
+msgstr "सेट करने के लिए कॉलम (SET क्लॉज)"
 
+#, fuzzy
 msgid "Calculate column value to set"
-msgstr ""
+msgstr "सेट करने के लिए कॉलम मान की गणना करें"
 
 msgid "Functions"
 msgstr ""
@@ -1876,8 +2027,9 @@ msgstr ""
 msgid "SQL statement applied"
 msgstr ""
 
+#, fuzzy
 msgid "Dbf driver does not support usage of SQL functions."
-msgstr ""
+msgstr "Dbf ड्राइवर SQL फ़ंक्शन्स के उपयोग का समर्थन नहीं करता है।"
 
 msgid "Setup for georectification"
 msgstr ""
@@ -1915,14 +2067,17 @@ msgstr ""
 msgid "Select/create group:"
 msgstr ""
 
+#, fuzzy
 msgid "Create group if none exists"
-msgstr ""
+msgstr "यदि कोई ग्रुप मौजूद नहीं है तो ग्रुप बनाएं"
 
+#, fuzzy
 msgid "Create/edit group..."
-msgstr ""
+msgstr "ग्रुप बनाएं/संपादित करें..।"
 
+#, fuzzy
 msgid "Add vector map to group..."
-msgstr ""
+msgstr "समूह में वेक्टर मानचित्र जोड़ें..।"
 
 msgid "Extension for output maps:"
 msgstr ""
@@ -1963,9 +2118,9 @@ msgstr ""
 msgid "Manage Ground Control Points"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "At least %d GCPs required. Operation canceled."
-msgstr ""
+msgstr "कम से कम %d GCPs आवश्यक हैं। ऑपरेशन रद्द कर दिया गया।"
 
 msgid "source"
 msgstr ""
@@ -2036,21 +2191,29 @@ msgstr ""
 msgid "Save ground control points?"
 msgstr ""
 
+#, fuzzy
 msgid ""
 "Could not calculate RMS Error.\n"
 "Possible error with m.transform."
 msgstr ""
+"RMS त्रुटि की गणना नहीं की जा सकी।\n"
+"m.transform के साथ संभावित त्रुटि।"
 
+#, fuzzy
 msgid ""
 "Could not calculate new extends.\n"
 "Possible error with m.transform."
 msgstr ""
+"नया विस्तार (extends) की गणना नहीं की जा सकी।\n"
+"m.transform के साथ संभावित त्रुटि।"
 
+#, fuzzy
 msgid "Adjust source display to target display"
-msgstr ""
+msgstr "स्रोत डिस्प्ले को लक्ष्य डिस्प्ले में समायोजित करें"
 
+#, fuzzy
 msgid "Adjust target display to source display"
-msgstr ""
+msgstr "लक्ष्य डिस्प्ले को स्रोत डिस्प्ले में समायोजित करें"
 
 msgid "use"
 msgstr ""
@@ -2070,14 +2233,16 @@ msgstr ""
 msgid "Forward error"
 msgstr ""
 
+#, fuzzy
 msgid "Backward error"
-msgstr ""
+msgstr "पश्चगामी त्रुटि"
 
 msgid "Invalid coordinate value. Operation canceled."
 msgstr ""
 
+#, fuzzy
 msgid "Create vector map group"
-msgstr ""
+msgstr "वेक्टर मैप ग्रुप बनाएं"
 
 msgid "Select vector map(s) to add to group:"
 msgstr ""
@@ -2100,14 +2265,17 @@ msgstr ""
 msgid "target N:"
 msgstr ""
 
+#, fuzzy
 msgid "Apply changes for the current session"
-msgstr ""
+msgstr "वर्तमान सत्र के लिए परिवर्तन लागू करें"
 
+#, fuzzy
 msgid "Apply and save changes to user settings file (default for next sessions)"
-msgstr ""
+msgstr "परिवर्तन लागू करें और उपयोगकर्ता सेटिंग्स फ़ाइल में सहेजें (अगले सत्रों के लिए डिफ़ॉल्ट)"
 
+#, fuzzy
 msgid "Close dialog"
-msgstr ""
+msgstr "डायलॉग बंद करें"
 
 msgid "Symbology"
 msgstr ""
@@ -2127,17 +2295,21 @@ msgstr ""
 msgid "Symbol settings"
 msgstr ""
 
+#, fuzzy
 msgid "Color:"
-msgstr ""
+msgstr "रंग:"
 
+#, fuzzy
 msgid "Color for high RMS error:"
-msgstr ""
+msgstr "उच्च RMS त्रुटि के लिए रंग:"
 
+#, fuzzy
 msgid "Color for selected GCP:"
-msgstr ""
+msgstr "चयनित GCP के लिए रंग:"
 
+#, fuzzy
 msgid "Color for unused GCPs:"
-msgstr ""
+msgstr "अप्रयुक्त GCP के लिए रंग:"
 
 msgid "Show unused GCPs"
 msgstr ""
@@ -2154,14 +2326,17 @@ msgstr ""
 msgid "Select rectification order"
 msgstr ""
 
+#, fuzzy
 msgid "1st order"
-msgstr ""
+msgstr "1st ऑर्डर"
 
+#, fuzzy
 msgid "2nd order"
-msgstr ""
+msgstr "2nd ऑर्डर"
 
+#, fuzzy
 msgid "3rd order"
-msgstr ""
+msgstr "3rd ऑर्डर"
 
 msgid "Select interpolation method:"
 msgstr ""
@@ -2205,8 +2380,9 @@ msgstr ""
 msgid "Nothing to render (empty map). Operation canceled."
 msgstr ""
 
+#, fuzzy
 msgid "Choose a file name to save the image (no need to add extension)"
-msgstr ""
+msgstr "छवि सहेजने के लिए एक फ़ाइल नाम चुनें (विस्तार जोड़ने की कोई आवश्यकता नहीं है)"
 
 msgid "Page setup"
 msgstr ""
@@ -2245,14 +2421,17 @@ msgstr ""
 msgid "Forward: %(forw)s, Backward: %(back)s"
 msgstr ""
 
+#, fuzzy
 msgid "Add new GCP to the list"
-msgstr ""
+msgstr "सूची में नया GCP जोड़ें"
 
+#, fuzzy
 msgid "Delete selected GCP"
-msgstr ""
+msgstr "चयनित GCP हटाएं"
 
+#, fuzzy
 msgid "Clear selected GCP"
-msgstr ""
+msgstr "चयनित GCP साफ़ करें"
 
 msgid "Recalculate RMS error"
 msgstr ""
@@ -2269,8 +2448,9 @@ msgstr ""
 msgid "Set map canvas for "
 msgstr ""
 
+#, fuzzy
 msgid " / Zoom to map"
-msgstr ""
+msgstr " मानचित्र पर ज़ूम करें"
 
 msgid "Update GCP coordinates"
 msgstr ""
@@ -2290,8 +2470,9 @@ msgstr ""
 msgid "Set comment"
 msgstr ""
 
+#, fuzzy
 msgid "Add control point"
-msgstr ""
+msgstr "नियंत्रण बिंदु जोड़ें"
 
 msgid "Remove control point"
 msgstr ""
@@ -2308,11 +2489,13 @@ msgstr ""
 msgid "Label:"
 msgstr ""
 
+#, fuzzy
 msgid "Comment:"
-msgstr ""
+msgstr "टिप्पणी:"
 
+#, fuzzy
 msgid "Data properties"
-msgstr ""
+msgstr "डेटा गुण (Data properties)"
 
 msgid "Name of raster map:"
 msgstr ""
@@ -2326,27 +2509,36 @@ msgstr ""
 msgid "Type of element:"
 msgstr ""
 
+#, fuzzy
 msgid "Add GRASS command to the model"
-msgstr ""
+msgstr "मॉडल में GRASS कमांड जोड़ें"
 
+#, fuzzy
 msgid "Command"
-msgstr ""
+msgstr "आज्ञा"
 
 msgid "Label and comment"
 msgstr ""
 
+#, fuzzy
 msgid ""
 "Command not defined.\n"
 "\n"
 "Unable to add new action to the model."
 msgstr ""
+"कमांड परिभाषित नहीं है.\n"
+"\n"
+"मॉडल में नई क्रिया जोड़ने में असमर्थ।"
 
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "'%s' is not a GRASS tool.\n"
 "\n"
 "Unable to add new action to the model."
 msgstr ""
+"'%s' एक GRASS टूल नहीं है।\n"
+"\n"
+"मॉडल में नई क्रिया जोड़ने में असमर्थ।"
 
 msgid "Relation properties"
 msgstr ""
@@ -2354,12 +2546,13 @@ msgstr ""
 msgid "From"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "Data: %s"
-msgstr ""
+msgstr "डेटा: %s"
 
+#, fuzzy
 msgid "Command:"
-msgstr ""
+msgstr "कमांड :"
 
 msgid "Option:"
 msgstr ""
@@ -2379,8 +2572,9 @@ msgid ""
 "Unable to add relation."
 msgstr ""
 
+#, fuzzy
 msgid "Condition"
-msgstr ""
+msgstr "शर्त"
 
 msgid "Label"
 msgstr ""
@@ -2394,11 +2588,13 @@ msgstr ""
 msgid "Series"
 msgstr ""
 
+#, fuzzy
 msgid "Define map series as condition for the loop"
-msgstr ""
+msgstr "लूप के लिए शर्त के रूप में मैप सीरीज़ परिभाषित करें"
 
+#, fuzzy
 msgid "Define series of maps"
-msgstr ""
+msgstr "मैप्स की सीरीज़ परिभाषित करें"
 
 msgid "If-else properties"
 msgstr ""
@@ -2419,11 +2615,13 @@ msgstr ""
 msgid "Delete variables"
 msgstr ""
 
+#, fuzzy
 msgid "Delete selected"
-msgstr ""
+msgstr "चयनित हटाएं"
 
+#, fuzzy
 msgid "Delete all"
-msgstr ""
+msgstr "सभी हटाएं"
 
 msgid "No"
 msgstr ""
@@ -2434,11 +2632,13 @@ msgstr ""
 msgid "Model parameters"
 msgstr ""
 
+#, fuzzy
 msgid "Delete intermediate data when finish"
-msgstr ""
+msgstr "समाप्त होने पर इंटरमीडिएट डेटा हटाएं"
 
+#, fuzzy
 msgid "&Run"
-msgstr ""
+msgstr "&चलाएं"
 
 msgid "Variables"
 msgstr ""
@@ -2484,8 +2684,9 @@ msgstr ""
 msgid "Raster maps"
 msgstr ""
 
+#, fuzzy
 msgid "3D raster maps"
-msgstr ""
+msgstr "3D रास्टर मैप्स"
 
 msgid "Vector maps"
 msgstr ""
@@ -2501,14 +2702,17 @@ msgstr ""
 msgid "Module {task_name} in your model contains parameterized flags. Actinia does not support parameterized flags. The following flags are therefore not being written in the generated JSON: {flags}"
 msgstr ""
 
+#, fuzzy
 msgid "<not defined>"
-msgstr ""
+msgstr "<परिभाषित नहीं है>"
 
+#, fuzzy
 msgid "Condition: "
-msgstr ""
+msgstr "शर्त: "
 
+#, fuzzy
 msgid "Condition: not defined"
-msgstr ""
+msgstr "शर्त: परिभाषित नहीं"
 
 msgid "if-else"
 msgstr ""
@@ -2522,8 +2726,9 @@ msgstr ""
 msgid "Script editor"
 msgstr ""
 
+#, fuzzy
 msgid "Command output"
-msgstr ""
+msgstr "कमांड आउटपुट"
 
 msgid "{} script contains local modifications"
 msgstr ""
@@ -2534,9 +2739,9 @@ msgstr ""
 msgid "Model computation finished"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "%d intermediate maps deleted from current mapset"
-msgstr ""
+msgstr "वर्तमान मैपसेट से %d इंटरमीडिएट मैप हटा दिए गए"
 
 #, python-format
 msgid ""
@@ -2556,21 +2761,24 @@ msgstr ""
 msgid "Unable to open file <%s> for writing."
 msgstr ""
 
+#, fuzzy
 msgid "Current model is not empty. Do you want to store current settings to model file?"
-msgstr ""
+msgstr "वर्तमान मॉडल खाली नहीं है। क्या आप वर्तमान सेटिंग्स को मॉडल फ़ाइल में सहेजना चाहते हैं?"
 
+#, fuzzy
 msgid "Create new model?"
-msgstr ""
+msgstr "नया मॉडल बनाएं?"
 
+#, fuzzy
 msgid "Choose model file"
-msgstr ""
+msgstr "मॉडल फ़ाइल चुनें"
 
 msgid "GRASS Model File (*.gxm)|*.gxm"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "%(items)d items (%(actions)d actions) loaded into model"
-msgstr ""
+msgstr "%(आइटम) और आइटम (%(एक्शन) और एक्शन) मॉडल में लोड किए गए"
 
 #, python-format
 msgid "Model file <%s> already exists. Do you want to overwrite this file?"
@@ -2583,8 +2791,9 @@ msgstr ""
 msgid "File <%s> saved"
 msgstr ""
 
+#, fuzzy
 msgid "Choose file to save current model"
-msgstr ""
+msgstr "वर्तमान मॉडल को सहेजने के लिए फ़ाइल चुनें"
 
 msgid "File already exists"
 msgstr ""
@@ -2593,8 +2802,9 @@ msgstr ""
 msgid "Model exported to <%s>"
 msgstr ""
 
+#, fuzzy
 msgid "Add comment"
-msgstr ""
+msgstr "टिप्पणी जोड़ें"
 
 msgid "Empty comment. Nothing to add to the model."
 msgstr ""
@@ -2606,8 +2816,9 @@ msgstr ""
 msgid "Do you want to permanently delete data?%s"
 msgstr ""
 
+#, fuzzy
 msgid "Delete intermediate data?"
-msgstr ""
+msgstr "इंटरमीडिएट डेटा हटाएं?"
 
 msgid "Model is empty. Nothing to validate."
 msgstr ""
@@ -2640,8 +2851,9 @@ msgstr ""
 msgid "List of variables - right-click to delete"
 msgstr ""
 
+#, fuzzy
 msgid "Default value"
-msgstr ""
+msgstr "डिफ़ॉल्ट मान"
 
 msgid "Description"
 msgstr ""
@@ -2649,8 +2861,9 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
+#, fuzzy
 msgid "Add new variable"
-msgstr ""
+msgstr "नया चर जोड़ें"
 
 msgid "integer"
 msgstr ""
@@ -2673,8 +2886,9 @@ msgstr ""
 msgid "dir"
 msgstr ""
 
+#, fuzzy
 msgid "Add new variable to the model"
-msgstr ""
+msgstr "मॉडल में नया चर जोड़ें"
 
 msgid "List of items - right-click to delete"
 msgstr ""
@@ -2726,8 +2940,9 @@ msgstr ""
 msgid "JSON file (*.json)|*.json"
 msgstr ""
 
+#, fuzzy
 msgid "Choose file to save"
-msgstr ""
+msgstr "सहेजने के लिए फ़ाइल चुनें"
 
 #, python-format
 msgid "File <%s> already exists. Do you want to overwrite this file?"
@@ -2758,8 +2973,9 @@ msgstr ""
 msgid "GRASS API:"
 msgstr ""
 
+#, fuzzy
 msgid "Color"
-msgstr ""
+msgstr "रंग"
 
 msgid "Valid:"
 msgstr ""
@@ -2779,14 +2995,16 @@ msgstr ""
 msgid "Height:"
 msgstr ""
 
+#, fuzzy
 msgid "Data"
-msgstr ""
+msgstr "डेटा"
 
 msgid "Raster:"
 msgstr ""
 
+#, fuzzy
 msgid "3D raster:"
-msgstr ""
+msgstr "3D रास्टर:"
 
 msgid "Vector:"
 msgstr ""
@@ -2797,8 +3015,9 @@ msgstr ""
 msgid "Loop"
 msgstr ""
 
+#, fuzzy
 msgid "Comment"
-msgstr ""
+msgstr "टिप्पणी"
 
 msgid "Model properties"
 msgstr ""
@@ -2806,26 +3025,32 @@ msgstr ""
 msgid "Metadata"
 msgstr ""
 
+#, fuzzy
 msgid "Commands"
-msgstr ""
+msgstr "आदेशों"
 
+#, fuzzy
 msgid "Allow output files to overwrite existing files"
-msgstr ""
+msgstr "आउटपुट फ़ाइलों को मौजूदा फ़ाइलों को अधिलेखित (overwrite) करने की अनुमति दें"
 
+#, fuzzy
 msgid "Apply properties"
-msgstr ""
+msgstr "गुण (properties) लागू करें"
 
+#, fuzzy
 msgid "Close dialog and ignore changes"
-msgstr ""
+msgstr "डायलॉग बंद करें और परिवर्तनों को नज़रअंदाज़ करें"
 
 msgid "Description:"
 msgstr ""
 
+#, fuzzy
 msgid "Author(s):"
-msgstr ""
+msgstr "लेखक (Authors):"
 
+#, fuzzy
 msgid "Create new model"
-msgstr ""
+msgstr "नया मॉडल बनाएं"
 
 msgid "Load model from file"
 msgstr ""
@@ -2839,20 +3064,24 @@ msgstr ""
 msgid "Export model to Python script"
 msgstr ""
 
+#, fuzzy
 msgid "Add GRASS tool (module) to model"
-msgstr ""
+msgstr "मॉडल में GRASS टूल (मॉड्यूल) जोड़ें"
 
+#, fuzzy
 msgid "Add data to model"
-msgstr ""
+msgstr "मॉडल में डेटा जोड़ें"
 
 msgid "Manually define relation between data and commands"
 msgstr ""
 
+#, fuzzy
 msgid "Add loop/series to model"
-msgstr ""
+msgstr "मॉडल में लूप/सीरीज जोड़ें"
 
+#, fuzzy
 msgid "Add comment to model"
-msgstr ""
+msgstr "मॉडल में टिप्पणी जोड़ें"
 
 msgid "Run model"
 msgstr ""
@@ -2896,14 +3125,17 @@ msgstr ""
 msgid "Name of vector map is missing."
 msgstr ""
 
+#, fuzzy
 msgid "Create new vector map"
-msgstr ""
+msgstr "नया वेक्टर मैप बनाएं"
 
+#, fuzzy
 msgid "Create attribute table"
-msgstr ""
+msgstr "एट्रिब्यूट टेबल बनाएं"
 
+#, fuzzy
 msgid "Add created map into layer tree"
-msgstr ""
+msgstr "निर्मित मानचित्र को परत ट्री (layer tree) में जोड़ें"
 
 msgid "Name of new vector map is missing."
 msgstr ""
@@ -2937,17 +3169,21 @@ msgstr ""
 msgid "Name cannot begin with '.' and must not contain space, quotes, '/', ''', '@', ',', '=', '*', and all other non-alphanumeric characters."
 msgstr ""
 
+#, fuzzy
 msgid "Create or edit imagery groups"
-msgstr ""
+msgstr "इमेजरी ग्रुप्स (imagery groups) बनाएं या संपादित करें"
 
+#, fuzzy
 msgid "Apply changes to selected group and close dialog"
-msgstr ""
+msgstr "चयनित समूह (selected group) में परिवर्तन लागू करें और डायलॉग बंद करें"
 
+#, fuzzy
 msgid "Apply changes to selected group"
-msgstr ""
+msgstr "चयनित समूह (selected group) में परिवर्तन लागू करें"
 
+#, fuzzy
 msgid "Close dialog, changes are not applied"
-msgstr ""
+msgstr "डायलॉग बंद करें, परिवर्तन लागू नहीं किए गए हैं"
 
 msgid "Put here a regular expression. Characters '.*' stand for anything, character '^' stands for the beginning and '$' for the end."
 msgstr ""
@@ -2973,11 +3209,13 @@ msgstr ""
 msgid "Remove selected layer(s) from list."
 msgstr ""
 
+#, fuzzy
 msgid "Check maps from group to be included into subgroup."
-msgstr ""
+msgstr "उपसमूह में शामिल किए जाने वाले समूह के मानचित्रों की जाँच करें।"
 
+#, fuzzy
 msgid "Add selected map layers into group"
-msgstr ""
+msgstr "चयनित मानचित्र परतों को समूह में जोड़ें"
 
 #, python-format
 msgid "Group <%s> was changed, do you want to apply changes?"
@@ -3005,13 +3243,13 @@ msgstr ""
 msgid "Group <%s> was successfully changed."
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "Creating of new group <%s> failed."
-msgstr ""
+msgstr "नया ग्रुप <%s> बनाना विफल रहा।"
 
-#, python-format
+#, fuzzy, python-format
 msgid "Changing of group <%s> failed."
-msgstr ""
+msgstr "हिन्दी"
 
 msgid "No group selected."
 msgstr ""
@@ -3022,8 +3260,9 @@ msgstr ""
 msgid "Use fully-qualified map names"
 msgstr ""
 
+#, fuzzy
 msgid "3D raster"
-msgstr ""
+msgstr "3D रास्टर"
 
 msgid "Map type:"
 msgstr ""
@@ -3062,8 +3301,9 @@ msgstr ""
 msgid "SQL Query Utility"
 msgstr ""
 
+#, fuzzy
 msgid " SQL statement "
-msgstr ""
+msgstr " एसक्यूएल कथन "
 
 msgid "Symbols"
 msgstr ""
@@ -3083,8 +3323,9 @@ msgstr ""
 msgid "Do you want to quit GRASS?"
 msgstr ""
 
+#, fuzzy
 msgid "Close GUI"
-msgstr ""
+msgstr "GUI बंद करें"
 
 msgid "Font settings"
 msgstr ""
@@ -3092,8 +3333,9 @@ msgstr ""
 msgid "Select font:"
 msgstr ""
 
+#, fuzzy
 msgid "Character encoding:"
-msgstr ""
+msgstr "करैक्टर एन्कोडिंग:"
 
 msgid "Font size:"
 msgstr ""
@@ -3104,33 +3346,39 @@ msgstr ""
 msgid "Enter parameters for '"
 msgstr ""
 
+#, fuzzy
 msgid "Close this window without executing the command (Ctrl+Q)"
-msgstr ""
+msgstr "कमांड निष्पादित किए बिना इस विंडो को बंद करें (Ctrl+Q)"
 
 msgid "Run the command (Ctrl+R)"
 msgstr ""
 
+#, fuzzy
 msgid "Copy"
-msgstr ""
+msgstr "कॉपी करें"
 
+#, fuzzy
 msgid "Copy the current command string to the clipboard"
-msgstr ""
+msgstr "वर्तमान कमांड स्ट्रिंग को क्लिपबोर्ड पर कॉपी करें"
 
 msgid "Show manual page of the command (Ctrl+H)"
 msgstr ""
 
+#, fuzzy
 msgid "Add created map(s) into layer tree"
-msgstr ""
+msgstr "निर्मित मानचित्रों को परत ट्री (layer tree) में जोड़ें"
 
+#, fuzzy
 msgid "Close dialog on finish"
-msgstr ""
+msgstr "समाप्त होने पर डायलॉग बंद करें"
 
+#, fuzzy
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
-msgstr ""
+msgstr "कमांड सफलतापूर्वक समाप्त होने पर डायलॉग बंद करें। इस सेटिंग्स को प्राथमिकताएँ (Preferences) डायलॉग ('कमांड' टैब) में बदलें।"
 
-#, python-format
+#, fuzzy, python-format
 msgid "'%s' copied to clipboard"
-msgstr ""
+msgstr "'%s' क्लिपबोर्ड पर कॉपी किया गया"
 
 msgid "Required"
 msgstr ""
@@ -3162,18 +3410,20 @@ msgstr ""
 msgid "Transparent"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "Choose %s"
-msgstr ""
+msgstr "हिन्दी"
 
+#, fuzzy
 msgid "&Load"
-msgstr ""
+msgstr "&लोड करें"
 
 msgid "Load and edit content of a file"
 msgstr ""
 
+#, fuzzy
 msgid "&Save as"
-msgstr ""
+msgstr "&इस रूप में सहेजें"
 
 msgid "Save content to a file for further use"
 msgstr ""
@@ -3225,33 +3475,38 @@ msgstr ""
 msgid "Unable to parse command '%s'"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "%(cmd)s: parameter '%(key)s' not available"
-msgstr ""
+msgstr "%(cmd)s: पैरामीटर '%(key)s' उपलब्ध नहीं है"
 
 msgid "Try to set up GRASS_ADDON_PATH or GRASS_ADDON_BASE variable."
 msgstr ""
 
+#, fuzzy
 msgid "About GRASS"
-msgstr ""
+msgstr "GRASS के बारे में"
 
 msgid "Info"
 msgstr ""
 
+#, fuzzy
 msgid "Copyright"
-msgstr ""
+msgstr "कॉपीराइट"
 
 msgid "License"
 msgstr ""
 
+#, fuzzy
 msgid "Citation"
-msgstr ""
+msgstr "उद्धरण"
 
+#, fuzzy
 msgid "Authors"
-msgstr ""
+msgstr "लेखक"
 
+#, fuzzy
 msgid "Contributors"
-msgstr ""
+msgstr "योगदानकर्ता"
 
 msgid "Extra contributors"
 msgstr ""
@@ -3271,18 +3526,20 @@ msgstr ""
 msgid "Official GRASS site:"
 msgstr ""
 
+#, fuzzy
 msgid "Code Revision"
-msgstr ""
+msgstr "कोड संशोधन"
 
+#, fuzzy
 msgid "Build Date"
-msgstr ""
+msgstr "निर्माण तिथि"
 
 msgid "Language"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "%s file missing"
-msgstr ""
+msgstr "%s फ़ाइल गायब है"
 
 #, python-brace-format
 msgid "Unable to provide citation suggestion, see GRASS website instead. The error was: {0}"
@@ -3295,8 +3552,9 @@ msgstr ""
 msgid "Lines:"
 msgstr ""
 
+#, fuzzy
 msgid "Country"
-msgstr ""
+msgstr "देश"
 
 msgid "E-mail"
 msgstr ""
@@ -3310,47 +3568,51 @@ msgstr ""
 msgid "Nation"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "   %d translated"
-msgstr ""
+msgstr "   %d अनुवादित"
 
-#, python-format
+#, fuzzy, python-format
 msgid "   %d fuzzy"
-msgstr ""
+msgstr "   %d फजी"
 
-#, python-format
+#, fuzzy, python-format
 msgid "   %d untranslated"
-msgstr ""
+msgstr "   %d अनुवाद नहीं किया गया"
 
-#, python-format
+#, fuzzy, python-format
 msgid "%d translated"
-msgstr ""
+msgstr "%d अनुवादित"
 
 #, python-format
 msgid "File <%s> not found"
 msgstr ""
 
+#, fuzzy
 msgid "&Next"
-msgstr ""
+msgstr "&अगला"
 
+#, fuzzy
 msgid "&Previous"
-msgstr ""
+msgstr "&पिछला"
 
+#, fuzzy
 msgid "Clear prompt and output window"
-msgstr ""
+msgstr "प्रॉम्प्ट और आउटपुट विंडो साफ़ करें"
 
 msgid "Save output to a file"
 msgstr ""
 
+#, fuzzy
 msgid "Abort running command"
-msgstr ""
+msgstr "चल रही कमांड रद्द करें"
 
 msgid "Save file as..."
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "%(txt)s (*.txt)|*.txt|%(files)s (*)|*"
-msgstr ""
+msgstr "%(txt)s (*.txt)|*.txt|%(files)s (*)|*"
 
 msgid "Files"
 msgstr ""
@@ -3365,9 +3627,9 @@ msgid ""
 "Details: %(error)s"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "Command output saved into '%s'"
-msgstr ""
+msgstr "कमांड आउटपुट '%s' में सहेजा गया"
 
 msgid "Not selectable element"
 msgstr ""
@@ -3397,8 +3659,9 @@ msgstr ""
 msgid "No table linked to layer <{}>."
 msgstr ""
 
+#, fuzzy
 msgid "Choose GIS Data Directory"
-msgstr ""
+msgstr "GIS डेटा निर्देशिका चुनें"
 
 msgid "Output settings"
 msgstr ""
@@ -3421,8 +3684,9 @@ msgstr ""
 msgid "Source type"
 msgstr ""
 
+#, fuzzy
 msgid "All files"
-msgstr ""
+msgstr "सभी फ़ाइलें"
 
 msgid "ZIP files"
 msgstr ""
@@ -3439,17 +3703,20 @@ msgstr ""
 msgid "File:"
 msgstr ""
 
+#, fuzzy
 msgid "Choose file to import"
-msgstr ""
+msgstr "आयात करने के लिए फ़ाइल चुनें"
 
+#, fuzzy
 msgid "Choose input directory"
-msgstr ""
+msgstr "इनपुट निर्देशिका चुनें"
 
 msgid "Extension:"
 msgstr ""
 
+#, fuzzy
 msgid "Choose file"
-msgstr ""
+msgstr "फ़ाइल चुनें"
 
 msgid "Feature type:"
 msgstr ""
@@ -3460,8 +3727,9 @@ msgstr ""
 msgid "topological"
 msgstr ""
 
+#, fuzzy
 msgid "Creation options:"
-msgstr ""
+msgstr "निर्माण विकल्प:"
 
 msgid "Format:"
 msgstr ""
@@ -3527,8 +3795,9 @@ msgstr ""
 msgid "GRASS module '%s' not found. Unable to start map display window."
 msgstr ""
 
+#, fuzzy
 msgid "Adva&nced search..."
-msgstr ""
+msgstr "उन्नत खोज (&n)..।"
 
 #, python-format
 msgid "Do advanced search using %s tool"
@@ -3537,8 +3806,9 @@ msgstr ""
 msgid "Double-click to run selected tool"
 msgstr ""
 
+#, fuzzy
 msgid "&Run..."
-msgstr ""
+msgstr "&चलाएं..।"
 
 msgid "Run selected tool from the tree"
 msgstr ""
@@ -3553,8 +3823,9 @@ msgstr ""
 msgid "Documentation for %s is now open in the web browser"
 msgstr ""
 
+#, fuzzy
 msgid "&Recent Files"
-msgstr ""
+msgstr "&हाल की फ़ाइलें"
 
 msgid "User settings"
 msgstr ""
@@ -3565,8 +3836,9 @@ msgstr ""
 msgid "Revert settings to default"
 msgstr ""
 
+#, fuzzy
 msgid "Apply changes for the current session only and close"
-msgstr ""
+msgstr "केवल वर्तमान सत्र के लिए परिवर्तन लागू करें और बंद करें"
 
 msgid "Save for this session only"
 msgstr ""
@@ -3583,14 +3855,17 @@ msgstr ""
 msgid "Layer Manager settings"
 msgstr ""
 
+#, fuzzy
 msgid "Ask when removing map layer from layer tree"
-msgstr ""
+msgstr "लेयर ट्री (layer tree) से मानचित्र परत हटाते समय पूछें"
 
+#, fuzzy
 msgid "Ask when quitting wxGUI or closing display"
-msgstr ""
+msgstr "wxGUI से बाहर निकलते समय या डिस्प्ले बंद करते समय पूछें"
 
+#, fuzzy
 msgid "Automatically copy selected text to clipboard (in the Console tab)"
-msgstr ""
+msgstr "चयनित टेक्स्ट को स्वचालित रूप से क्लिपबोर्ड पर कॉपी करें (कंसोल टैब में)"
 
 msgid "Layout settings"
 msgstr ""
@@ -3616,11 +3891,13 @@ msgstr ""
 msgid "History"
 msgstr ""
 
+#, fuzzy
 msgid "Data Catalog settings"
-msgstr ""
+msgstr "डेटा कैटलॉग सेटिंग्स"
 
+#, fuzzy
 msgid "At startup load maps from current mapset only (in the Data tab)"
-msgstr ""
+msgstr "स्टार्टअप पर केवल वर्तमान मैपसेट (mapset) से मैप लोड करें (डेटा टैब में)"
 
 msgid "Workspace settings"
 msgstr ""
@@ -3634,11 +3911,13 @@ msgstr ""
 msgid "Region settings"
 msgstr ""
 
+#, fuzzy
 msgid "Align region to resolution"
-msgstr ""
+msgstr "क्षेत्र को रिज़ॉल्यूशन के साथ संरेखित करें"
 
+#, fuzzy
 msgid "Appearance"
-msgstr ""
+msgstr "प्रकटन (Appearance)"
 
 msgid "Window layout settings"
 msgstr ""
@@ -3658,11 +3937,13 @@ msgstr ""
 msgid "Language settings"
 msgstr ""
 
+#, fuzzy
 msgid "Choose language (requires to save and GRASS restart):"
-msgstr ""
+msgstr "भाषा चुनें (सहेजने और GRASS पुनरारंभ करने की आवश्यकता है):"
 
+#, fuzzy
 msgid "Appearance settings"
-msgstr ""
+msgstr "प्रकटन सेटिंग्स (Appearance settings)"
 
 msgid "Element list:"
 msgstr ""
@@ -3679,11 +3960,13 @@ msgstr ""
 msgid "Tool dialog style:"
 msgstr ""
 
+#, fuzzy
 msgid "Default font for GRASS displays:"
-msgstr ""
+msgstr "GRASS डिस्प्ले के लिए डिफ़ॉल्ट फ़ॉन्ट:"
 
+#, fuzzy
 msgid "Default display settings"
-msgstr ""
+msgstr "डिफ़ॉल्ट डिस्प्ले सेटिंग्स"
 
 msgid "Display driver:"
 msgstr ""
@@ -3691,11 +3974,13 @@ msgstr ""
 msgid "Statusbar mode:"
 msgstr ""
 
+#, fuzzy
 msgid "Align region extent based on display size"
-msgstr ""
+msgstr "डिस्प्ले आकार के आधार पर क्षेत्र विस्तार को संरेखित करें"
 
+#, fuzzy
 msgid "Constrain display resolution to computational settings"
-msgstr ""
+msgstr "डिस्प्ले रिज़ॉल्यूशन को कम्प्यूटेशनल सेटिंग्स तक सीमित रखें"
 
 msgid "Enable auto-rendering"
 msgstr ""
@@ -3712,20 +3997,24 @@ msgstr ""
 msgid "Mouse scrolling direction:"
 msgstr ""
 
+#, fuzzy
 msgid "Advanced display settings"
-msgstr ""
+msgstr "उन्नत प्रदर्शन सेटिंग्स"
 
+#, fuzzy
 msgid "3D view depth buffer (possible values are 16, 24, 32):"
-msgstr ""
+msgstr "3D व्यू डेप्थ बफर (संभावित मान 16, 24, 32 हैं):"
 
 msgid "Tool dialog settings"
 msgstr ""
 
+#, fuzzy
 msgid "Close dialog when completed successfully"
-msgstr ""
+msgstr "सफलतापूर्वक पूरा होने पर डायलॉग बंद करें"
 
+#, fuzzy
 msgid "Allow interactive input"
-msgstr ""
+msgstr "संवादात्मक इनपुट की अनुमति दें"
 
 msgid "Verbosity level:"
 msgstr ""
@@ -3739,17 +4028,20 @@ msgstr ""
 msgid "Layers"
 msgstr ""
 
+#, fuzzy
 msgid "Default raster settings"
-msgstr ""
+msgstr "डिफ़ॉल्ट रास्टर सेटिंग्स"
 
 msgid "Make null cells opaque"
 msgstr ""
 
+#, fuzzy
 msgid "Default color table"
-msgstr ""
+msgstr "डिफ़ॉल्ट रंग टेबल"
 
+#, fuzzy
 msgid "Default vector settings"
-msgstr ""
+msgstr "डिफ़ॉल्ट वेक्टर सेटिंग्स"
 
 msgid "Display:"
 msgstr ""
@@ -3757,8 +4049,9 @@ msgstr ""
 msgid "Feature color:"
 msgstr ""
 
+#, fuzzy
 msgid "Area fill color:"
-msgstr ""
+msgstr "क्षेत्र भरण रंग (Area fill color):"
 
 msgid "Random colors according to category number "
 msgstr ""
@@ -3766,17 +4059,20 @@ msgstr ""
 msgid "Symbol:"
 msgstr ""
 
+#, fuzzy
 msgid "Attributes"
-msgstr ""
+msgstr "विशेषताएँ (Attributes)"
 
 msgid "Line width (in pixels):"
 msgstr ""
 
+#, fuzzy
 msgid "Automatically highlight selected features in map display"
-msgstr ""
+msgstr "मानचित्र प्रदर्शन में चयनित विशेषताओं (selected features) को स्वचालित रूप से हाइलाइट करें"
 
+#, fuzzy
 msgid "Data browser"
-msgstr ""
+msgstr "डेटा ब्राउज़र"
 
 msgid "Left mouse double click:"
 msgstr ""
@@ -3784,11 +4080,13 @@ msgstr ""
 msgid "Encoding (e.g. utf-8, ascii, iso8859-1, koi8-r):"
 msgstr ""
 
+#, fuzzy
 msgid "Ask when deleting data record(s) from table"
-msgstr ""
+msgstr "तालिका से डेटा रिकॉर्ड हटाते समय पूछें"
 
+#, fuzzy
 msgid "Create table"
-msgstr ""
+msgstr "टेबल बनाएं"
 
 msgid "Projection"
 msgstr ""
@@ -3796,6 +4094,7 @@ msgstr ""
 msgid "Projection statusbar settings"
 msgstr ""
 
+#, fuzzy
 msgid ""
 "\n"
 "Note: This only controls the coordinates displayed in the lower-left of the Map Display\n"
@@ -3803,6 +4102,8 @@ msgid ""
 "coordinate reference system in any way. You will need to enable the Projection check box in the drop-down\n"
 "menu located at the bottom of the Map Display window.\n"
 msgstr ""
+"\n"
+"ध्यान दें: यह केवल मानचित्र प्रदर्शन विंडो के स्टेटस बार के निचले-बाएँ कोने में प्रदर्शित निर्देशांकों को नियंत्रित करता है। यह पूरी तरह से दिखावटी है और किसी भी तरह से कार्यशील परियोजना के समन्वय संदर्भ प्रणाली को प्रभावित नहीं करता है। आपको मानचित्र प्रदर्शन विंडो के निचले भाग में स्थित ड्रॉप-डाउन मेनू में प्रोजेक्शन चेक बॉक्स को सक्षम करना होगा।\n"
 
 msgid "EPSG code:"
 msgstr ""
@@ -3816,11 +4117,13 @@ msgstr ""
 msgid "Load EPSG codes (be patient), enter EPSG code or insert PROJ string directly."
 msgstr ""
 
+#, fuzzy
 msgid "&Load EPSG codes"
-msgstr ""
+msgstr "&EPSG कोड लोड करें"
 
+#, fuzzy
 msgid "Coordinates format"
-msgstr ""
+msgstr "निर्देशांक प्रारूप"
 
 msgid "Lat/long projections"
 msgstr ""
@@ -3852,13 +4155,14 @@ msgstr ""
 msgid "Manage access to mapsets"
 msgstr ""
 
+#, fuzzy
 msgid ""
 "Check a mapset to make it accessible, uncheck it to hide it.\n"
 "  Notes:\n"
 "    - The current mapset is always accessible.\n"
 "    - You may only write to the current mapset.\n"
 "    - You may only write to mapsets which you own."
-msgstr ""
+msgstr "↵"
 
 msgid "Owner"
 msgstr ""
@@ -3869,17 +4173,20 @@ msgstr ""
 msgid "Permission denied <{}>. Please change file permission for reading."
 msgstr ""
 
+#, fuzzy
 msgid "Couldn't read file <{}>."
-msgstr ""
+msgstr "फ़ाइल <{}> नहीं पढ़ी जा सकी।"
 
 msgid "Permission denied <{}>. Please change file permission for writing.{}"
 msgstr ""
 
+#, fuzzy
 msgid "Couldn't write file <{}>.{}"
-msgstr ""
+msgstr "फ़ाइल <{}> नहीं लिखी जा सकी।{}"
 
+#, fuzzy
 msgid " Unable to launch Python script."
-msgstr ""
+msgstr " पायथन स्क्रिप्ट लॉन्च नहीं हो पा रही है।"
 
 msgid "Open file"
 msgstr ""
@@ -3915,11 +4222,13 @@ msgstr ""
 msgid "Run (Ctrl+R)"
 msgstr ""
 
+#, fuzzy
 msgid "Activate overwrite"
-msgstr ""
+msgstr "ओवरराइट सक्रिय करें"
 
+#, fuzzy
 msgid "Deactivate overwrite"
-msgstr ""
+msgstr "ओवरराइट निष्क्रिय करें"
 
 msgid "Simple Python Editor"
 msgstr ""
@@ -3936,31 +4245,35 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
+#, fuzzy
 msgid "Copy all to clipboard"
-msgstr ""
+msgstr "सभी को क्लिपबोर्ड पर कॉपी करें"
 
 msgid "Redirect to console"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "Copy from '%s' column"
-msgstr ""
+msgstr "'%s' कॉलम से कॉपी करें"
 
+#, fuzzy
 msgid "Copy selected lines"
-msgstr ""
+msgstr "चयनित लाइनें कॉपी करें"
 
-#, python-format
+#, fuzzy, python-format
 msgid "Copy '%s'"
-msgstr ""
+msgstr "'%s' कॉपी करें"
 
+#, fuzzy
 msgid "Copy line"
-msgstr ""
+msgstr "लाइन कॉपी करें"
 
 msgid "Query results:"
 msgstr ""
 
+#, fuzzy
 msgid " "
-msgstr ""
+msgstr " "
 
 msgid "east, north"
 msgstr ""
@@ -3971,11 +4284,13 @@ msgstr ""
 msgid "Toolbar"
 msgstr ""
 
+#, fuzzy
 msgid "Copy map names to clipboard (top to bottom)"
-msgstr ""
+msgstr "मैप के नाम क्लिपबोर्ड पर कॉपी करें (ऊपर से नीचे)"
 
+#, fuzzy
 msgid "Copy map names to clipboard (bottom to top)"
-msgstr ""
+msgstr "मैप के नाम क्लिपबोर्ड पर कॉपी करें (नीचे से ऊपर)"
 
 #, python-format
 msgid "Set opacity of <%s>"
@@ -3999,17 +4314,21 @@ msgstr ""
 msgid "Edit layer properties"
 msgstr ""
 
+#, fuzzy
 msgid "Change layer opacity"
-msgstr ""
+msgstr "परत अस्पष्टता बदलें"
 
+#, fuzzy
 msgid "Change opacity"
-msgstr ""
+msgstr "अस्पष्टता बदलें"
 
+#, fuzzy
 msgid "Add 3D raster map layer"
-msgstr ""
+msgstr "3D रास्टर मैप परत जोड़ें"
 
+#, fuzzy
 msgid "Add RGB map layer"
-msgstr ""
+msgstr "RGB मैप परत जोड़ें"
 
 msgid "Display map"
 msgstr ""
@@ -4074,20 +4393,24 @@ msgstr ""
 msgid "Quit"
 msgstr ""
 
+#, fuzzy
 msgid "Add raster map layer"
-msgstr ""
+msgstr "रास्टर मानचित्र परत जोड़ें"
 
+#, fuzzy
 msgid "Add vector map layer"
-msgstr ""
+msgstr "वेक्टर मानचित्र परत जोड़ें"
 
+#, fuzzy
 msgid "Add map elements"
-msgstr ""
+msgstr "मानचित्र तत्व जोड़ें"
 
 msgid "Overlay elements like scale and legend onto map"
 msgstr ""
 
+#, fuzzy
 msgid "Create histogram with d.histogram"
-msgstr ""
+msgstr "d.histogram के साथ हिस्टोग्राम बनाएं"
 
 msgid "Settings"
 msgstr ""
@@ -4095,8 +4418,9 @@ msgstr ""
 msgid "Map Display Settings"
 msgstr ""
 
+#, fuzzy
 msgid "(Un)dock"
-msgstr ""
+msgstr "(अन)डॉक करें"
 
 msgid "category"
 msgstr ""
@@ -4107,8 +4431,9 @@ msgstr ""
 msgid "Select features"
 msgstr ""
 
+#, fuzzy
 msgid "Create a new map"
-msgstr ""
+msgstr "एक नया मैप बनाएं"
 
 #, python-format
 msgid "Selected map <%s> has been disabled for rendering. Operation canceled."
@@ -4138,8 +4463,9 @@ msgid ""
 "Reason: %s"
 msgstr ""
 
+#, fuzzy
 msgid " (...)"
-msgstr ""
+msgstr " (...)"
 
 #, python-format
 msgid "Name <%(name)s> is not a valid name for GRASS map. Please use only ASCII characters excluding %(chars)s and space."
@@ -4166,8 +4492,9 @@ msgstr ""
 msgid "Save current settings"
 msgstr ""
 
+#, fuzzy
 msgid "Delete currently selected settings"
-msgstr ""
+msgstr "वर्तमान में चयनित सेटिंग्स हटाएं"
 
 msgid "Load:"
 msgstr ""
@@ -4192,29 +4519,37 @@ msgstr ""
 msgid "Unable to save settings"
 msgstr ""
 
+#, fuzzy
 msgid "Clear"
-msgstr ""
+msgstr "साफ़ करें"
 
+#, fuzzy
 msgid "&Clear"
-msgstr ""
+msgstr "&साफ़ करें"
 
+#, fuzzy
 msgid "Cancel"
-msgstr ""
+msgstr "रद्द करें"
 
+#, fuzzy
 msgid "&Cancel"
-msgstr ""
+msgstr "&रद्द करें"
 
+#, fuzzy
 msgid "Close"
-msgstr ""
+msgstr "बंद करें"
 
+#, fuzzy
 msgid "&Close"
-msgstr ""
+msgstr "&बंद करें"
 
+#, fuzzy
 msgid "Apply"
-msgstr ""
+msgstr "लागू करें"
 
+#, fuzzy
 msgid "&Apply"
-msgstr ""
+msgstr "&लागू करें"
 
 msgid "Timestamp:"
 msgstr ""
@@ -4264,8 +4599,9 @@ msgstr ""
 msgid "General info"
 msgstr ""
 
+#, fuzzy
 msgid "Computational region during command execution"
-msgstr ""
+msgstr "कमांड निष्पादन के दौरान कम्प्यूटेशनल क्षेत्र"
 
 msgid "Update current region"
 msgstr ""
@@ -4279,8 +4615,9 @@ msgstr ""
 msgid "History browser"
 msgstr ""
 
+#, fuzzy
 msgid "&Export history"
-msgstr ""
+msgstr "&इतिहास एक्सपोर्ट करें"
 
 msgid "Export history of executed commands to a file"
 msgstr ""
@@ -4296,8 +4633,9 @@ msgstr ""
 msgid "{txt} (*.txt)|*.txt|{files} (*)|*"
 msgstr ""
 
+#, fuzzy
 msgid "Command history saved to '{}'"
-msgstr ""
+msgstr "कमांड इतिहास '{}' में सहेजा गया"
 
 msgid "No time info"
 msgstr ""
@@ -4329,11 +4667,13 @@ msgstr ""
 msgid "Double-click to open the tool"
 msgstr ""
 
+#, fuzzy
 msgid "&Remove"
-msgstr ""
+msgstr "&हटाएं"
 
+#, fuzzy
 msgid "Cannot be parsed into command"
-msgstr ""
+msgstr "कमांड में पार्स नहीं किया जा सकता"
 
 msgid "Do you really want to remove <{}> command?"
 msgstr ""
@@ -4344,11 +4684,13 @@ msgstr ""
 msgid "Removing <{}>"
 msgstr ""
 
+#, fuzzy
 msgid "<{}> removed"
-msgstr ""
+msgstr "<{}> हटा दिया गया"
 
+#, fuzzy
 msgid "Command <{}> copied to clipboard"
-msgstr ""
+msgstr "कमांड <{}> क्लिपबोर्ड पर कॉपी किया गया"
 
 msgid "Failed to copy command to clipboard"
 msgstr ""
@@ -4391,14 +4733,17 @@ msgstr ""
 msgid "Name of map is missing."
 msgstr ""
 
+#, fuzzy
 msgid "Class manager"
-msgstr ""
+msgstr "क्लास मैनेजर"
 
+#, fuzzy
 msgid "Classes"
-msgstr ""
+msgstr "क्लासेस"
 
+#, fuzzy
 msgid "Class name"
-msgstr ""
+msgstr "क्लास का नाम"
 
 msgid "Please use only ASCII characters."
 msgstr ""
@@ -4474,11 +4819,13 @@ msgstr ""
 msgid "Training Areas Display"
 msgstr ""
 
+#, fuzzy
 msgid "Adjust Training Area Display to Preview Display"
-msgstr ""
+msgstr "प्रशिक्षण क्षेत्र डिस्प्ले को पूर्वावलोकन डिस्प्ले में समायोजित करें"
 
+#, fuzzy
 msgid "Adjust Preview display to Training Area Display"
-msgstr ""
+msgstr "पूर्वावलोकन डिस्प्ले को प्रशिक्षण क्षेत्र डिस्प्ले में समायोजित करें"
 
 msgid "Display synchronization ON"
 msgstr ""
@@ -4486,8 +4833,9 @@ msgstr ""
 msgid "Display synchronization OFF"
 msgstr ""
 
+#, fuzzy
 msgid "All changes will be lost. Do you want to continue?"
-msgstr ""
+msgstr "सभी परिवर्तन नष्ट हो जाएंगे। क्या आप जारी रखना चाहते हैं?"
 
 msgid "Import vector map"
 msgstr ""
@@ -4514,9 +4862,9 @@ msgstr ""
 msgid "No training areas to export."
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "%d training areas (%d classes) exported to vector map <%s>."
-msgstr ""
+msgstr "%d ट्रेनिंग एरिया (और क्लास) को वेक्टर मैप में एक्सपोर्ट किया गया।"
 
 msgid "Failed to create temporary vector map."
 msgstr ""
@@ -4528,8 +4876,9 @@ msgstr ""
 msgid "No area in category %s. Category skipped."
 msgstr ""
 
+#, fuzzy
 msgid "Analysis failed."
-msgstr ""
+msgstr "विश्लेषण विफल रहा।"
 
 msgid "results"
 msgstr ""
@@ -4546,11 +4895,13 @@ msgstr ""
 msgid "Signatures are not valid. Recalculate them and then try again."
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "A signature file named %s already exists.\n"
 "Do you want to replace it?"
 msgstr ""
+"%s नाम की सिग्नेचर फ़ाइल पहले से मौजूद है।\n"
+"क्या आप इसे बदलना चाहते हैं?"
 
 msgid "No imagery group selected. Operation canceled."
 msgstr ""
@@ -4587,8 +4938,9 @@ msgstr ""
 msgid "Loading training map <%s>..."
 msgstr ""
 
+#, fuzzy
 msgid "Coincident plots"
-msgstr ""
+msgstr "संपाती प्लॉट"
 
 msgid "Histograms"
 msgstr ""
@@ -4631,14 +4983,16 @@ msgstr ""
 msgid "Training"
 msgstr ""
 
+#, fuzzy
 msgid "/ Zoom to map"
-msgstr ""
+msgstr "/ मानचित्र पर ज़ूम करें"
 
 msgid "std dev"
 msgstr ""
 
+#, fuzzy
 msgid "Add raster map"
-msgstr ""
+msgstr "रास्टर मानचित्र जोड़ें"
 
 #, python-format
 msgid "Unknown iconset '%s', using default 'grass'...\n"
@@ -4648,20 +5002,24 @@ msgstr ""
 msgid "Unable to load icon theme. Reason: %s. Quitting wxGUI..."
 msgstr ""
 
+#, fuzzy
 msgid "1. Select GRASS database directory"
-msgstr ""
+msgstr "1. GRASS डेटाबेस डायरेक्टरी चुनें"
 
+#, fuzzy
 msgid "2. Select GRASS Location"
-msgstr ""
+msgstr "2. GRASS लोकेशन चुनें"
 
+#, fuzzy
 msgid "3. Select GRASS Mapset"
-msgstr ""
+msgstr "3. GRASS मैपसेट चुनें"
 
 msgid "GRASS database directory contains Locations."
 msgstr ""
 
+#, fuzzy
 msgid "All data in one Location is in the same  coordinate reference system (projection). One Location can be one project. Location contains Mapsets."
-msgstr ""
+msgstr "एक लोकेशन का सारा डेटा एक ही समन्वय संदर्भ प्रणाली (coordinate reference system) यानी प्रोजेक्शन (projection) में होता है। एक लोकेशन एक प्रोजेक्ट हो सकता है। लोकेशन में मैपसेट्स (Mapsets) होते हैं।"
 
 msgid "Mapset contains GIS data related to one project, task within one project, subregion or user."
 msgstr ""
@@ -4669,22 +5027,26 @@ msgstr ""
 msgid "Start &GRASS session"
 msgstr ""
 
+#, fuzzy
 msgid "&Browse"
-msgstr ""
+msgstr "&ब्राउल़ करें"
 
 #. GTC New mapset
+#, fuzzy
 msgid "&New"
-msgstr ""
+msgstr "&नया"
 
+#, fuzzy
 msgid "Create a new Mapset in selected Location"
-msgstr ""
+msgstr "चयनित लोकेशन में एक नया मैपसेट (Mapset) बनाएं"
 
 #. GTC New location
 msgid "N&ew"
 msgstr ""
 
+#, fuzzy
 msgid "Create a new location using location wizard. After location is created successfully, GRASS session is started."
-msgstr ""
+msgstr "लोकेशन विजार्ड का उपयोग करके एक नई लोकेशन बनाएं। लोकेशन सफलतापूर्वक बनने के बाद, GRASS सेशन शुरू हो जाता है।"
 
 #. GTC Rename location
 msgid "Ren&ame"
@@ -4694,17 +5056,20 @@ msgid "Rename selected location"
 msgstr ""
 
 #. GTC Delete location
+#, fuzzy
 msgid "De&lete"
-msgstr ""
+msgstr "GTC लोकेशन हटाएं"
 
+#, fuzzy
 msgid "Delete selected location"
-msgstr ""
+msgstr "चयनित स्थान हटाएं"
 
 msgid "Rename selected mapset"
 msgstr ""
 
+#, fuzzy
 msgid "Delete selected mapset"
-msgstr ""
+msgstr "चयनित मानचित्र-सेट (mapset) हटाएं"
 
 #, python-format
 msgid "GRASS %s startup%s"
@@ -4742,8 +5107,9 @@ msgstr ""
 msgid "New mapset:"
 msgstr ""
 
+#, fuzzy
 msgid "Create new mapset"
-msgstr ""
+msgstr "नया मैपसेट बनाएं"
 
 #, python-format
 msgid ""
@@ -4751,9 +5117,9 @@ msgid ""
 "Reason: %(msg)s"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "Data file <%(name)s> imported successfully. The location's default region was set from this imported map."
-msgstr ""
+msgstr "डेटा फ़ाइल <%(name)s> सफलतापूर्वक इंपोर्ट की गई। इस इंपोर्ट किए गए मैप से लोकेशन का डिफ़ॉल्ट क्षेत्र (region) सेट किया गया था।"
 
 msgid ""
 "Mapset <PERMANENT> is required for valid GRASS location.\n"
@@ -4761,12 +5127,15 @@ msgid ""
 "This mapset cannot be renamed."
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Current name: %s\n"
 "\n"
 "Enter new name:"
 msgstr ""
+"वर्तमान नाम: %s\n"
+"\n"
+"नया नाम दर्ज करें:"
 
 #, python-format
 msgid ""
@@ -4870,11 +5239,12 @@ msgstr ""
 msgid "Lock file found"
 msgstr ""
 
+#, fuzzy
 msgid ""
 "ARE YOU REALLY SURE?\n"
 "\n"
 "If you really are running another GRASS session doing this could corrupt your data. Have another look in the processor manager just to be sure..."
-msgstr ""
+msgstr "are you dearसेसर मैनेजर में एक बार फिर देख लें..।"
 
 #, python-format
 msgid ""
@@ -4896,22 +5266,28 @@ msgstr ""
 msgid "Writing CONTROL_POINTS file failed"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "CONTROL_POINTS file saved for group <%s>"
-msgstr ""
+msgstr "हिन्दी"
 
 msgid "Reading CONTROL_POINTS file failed"
 msgstr ""
 
+#, fuzzy
 msgid ""
 "Could not calculate RMS Error.\n"
 "Possible error with i.ortho.transform."
 msgstr ""
+"RMS त्रुटि की गणना नहीं की जा सकी।\n"
+"i.ortho.transform के साथ संभावित त्रुटि।"
 
+#, fuzzy
 msgid ""
 "Could not calculate new extends.\n"
 "Possible error with i.ortho.transform."
 msgstr ""
+"नया विस्तार (extends) की गणना नहीं की जा सकी।\n"
+"i.ortho.transform के साथ संभावित त्रुटि।"
 
 msgid "source Z"
 msgstr ""
@@ -4951,9 +5327,9 @@ msgstr ""
 msgid "Scatter plot with same band combination (regardless x y order) is already displayed."
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "Band <%s> is not CELL (integer) type.\n"
-msgstr ""
+msgstr "बैंड <%s> CELL (इंटीजर) प्रकार का नहीं है।\n"
 
 msgid "Scatter plot cannot be added.\n"
 msgstr ""
@@ -5002,8 +5378,9 @@ msgstr ""
 msgid "Loading ctypes libs failed: %s"
 msgstr ""
 
+#, fuzzy
 msgid "Add scatter plots"
-msgstr ""
+msgstr "स्कैटर प्लॉट्स जोड़ें"
 
 msgid "x axis:"
 msgstr ""
@@ -5011,8 +5388,9 @@ msgstr ""
 msgid "y axis:"
 msgstr ""
 
+#, fuzzy
 msgid "Bands of scatter plots to be added (x y):"
-msgstr ""
+msgstr "जोड़ने के लिए स्कैटर प्लॉट के बैंड (x y):"
 
 msgid "No scatter plots selected."
 msgstr ""
@@ -5040,8 +5418,9 @@ msgstr ""
 msgid "Selection polygon color:"
 msgstr ""
 
+#, fuzzy
 msgid "Color of selection polygon vertex:"
-msgstr ""
+msgstr "चयन पॉलीगॉन वर्टेक्स का रंग:"
 
 msgid "Selected area color:"
 msgstr ""
@@ -5073,8 +5452,9 @@ msgstr ""
 msgid "Set color"
 msgstr ""
 
+#, fuzzy
 msgid "Change opacity level"
-msgstr ""
+msgstr "अस्पष्टता स्तर बदलें"
 
 msgid "Hide"
 msgstr ""
@@ -5097,9 +5477,9 @@ msgstr ""
 msgid "Export class raster"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "Change opacity of class <%s>"
-msgstr ""
+msgstr "हिन्दी"
 
 msgid "Empty name was inserted."
 msgstr ""
@@ -5107,8 +5487,9 @@ msgstr ""
 msgid "Select category for editing."
 msgstr ""
 
+#, fuzzy
 msgid "Computing of scatter plots failed."
-msgstr ""
+msgstr "स्कैटर प्लॉट्स की गणना विफल रही।"
 
 msgid "Patching category raster conditions file failed."
 msgstr ""
@@ -5132,8 +5513,9 @@ msgstr ""
 msgid "Zoom to scatter plot extend"
 msgstr ""
 
+#, fuzzy
 msgid "Add scatter plot"
-msgstr ""
+msgstr "स्कैटर प्लॉट जोड़ें"
 
 msgid "Select area with polygon"
 msgstr ""
@@ -5156,17 +5538,21 @@ msgstr ""
 msgid "Exclude selected area from class"
 msgstr ""
 
+#, fuzzy
 msgid "Add new vertex"
-msgstr ""
+msgstr "नया वर्टेक्स जोड़ें"
 
+#, fuzzy
 msgid "Add new vertex to polygon boundary scatter plot"
-msgstr ""
+msgstr "बहुभुज सीमा स्कैटर प्लॉट में नया वर्टेक्स जोड़ें"
 
+#, fuzzy
 msgid "Create selection polygon"
-msgstr ""
+msgstr "चयन पॉलीगॉन (selection polygon) बनाएं"
 
+#, fuzzy
 msgid "Add new vertex between last and first points of the boundary"
-msgstr ""
+msgstr "सीमा के अंतिम और पहले बिंदुओं के बीच नया वर्टेक्स जोड़ें"
 
 msgid "Move vertex"
 msgstr ""
@@ -5183,8 +5569,9 @@ msgstr ""
 msgid "Remove polygon (click on scatter plot for removing it's polygon)"
 msgstr ""
 
+#, fuzzy
 msgid "Add class"
-msgstr ""
+msgstr "क्लास जोड़ें"
 
 msgid "Remove selected class"
 msgstr ""
@@ -5201,8 +5588,9 @@ msgstr ""
 msgid "Tools Toolbar"
 msgstr ""
 
+#, fuzzy
 msgid "3D view Toolbar"
-msgstr ""
+msgstr "3D व्यू टूलबार"
 
 msgid "Rename current Map Display"
 msgstr ""
@@ -5211,21 +5599,24 @@ msgstr ""
 msgid "Map Display {number}"
 msgstr ""
 
+#, fuzzy
 msgid "Close Map Display {}"
-msgstr ""
+msgstr "मैप डिस्प्ले {} बंद करें"
 
+#, fuzzy
 msgid "Console"
-msgstr ""
+msgstr "कंसोल"
 
 msgid "Map Swipe Tool"
 msgstr ""
 
+#, fuzzy
 msgid "Choose model to run"
-msgstr ""
+msgstr "चलाने के लिए मॉडल चुनें"
 
-#, python-format
+#, fuzzy, python-format
 msgid "Command '%s' not yet implemented in the WxGUI. Try adding it as a command layer instead."
-msgstr ""
+msgstr "कमांड '%s' अभी तक WxGUI में लागू नहीं किया गया है। इसके बजाय इसे कमांड लेयर के रूप में जोड़ने का प्रयास करें।"
 
 msgid "Selected map layer is not vector."
 msgstr ""
@@ -5233,8 +5624,9 @@ msgstr ""
 msgid "Editing is allowed only for vector maps from the current mapset."
 msgstr ""
 
+#, fuzzy
 msgid "Choose script file to run"
-msgstr ""
+msgstr "चलाने के लिए स्क्रिप्ट फ़ाइल चुनें"
 
 msgid "Python script (*.py)|*.py|Bash script (*.sh)|*.sh"
 msgstr ""
@@ -5276,8 +5668,9 @@ msgid ""
 "\"%s\""
 msgstr ""
 
+#, fuzzy
 msgid "Changes current working directory for this GUI."
-msgstr ""
+msgstr "इस GUI के लिए वर्तमान कार्यशील निर्देशिका बदलता है।"
 
 msgid "Usage: cd [directory]"
 msgstr ""
@@ -5291,8 +5684,9 @@ msgstr ""
 msgid "More than one parameter provided."
 msgstr ""
 
+#, fuzzy
 msgid "Choose a working directory"
-msgstr ""
+msgstr "कार्यशील निर्देशिका चुनें"
 
 msgid "System Info"
 msgstr ""
@@ -5300,20 +5694,24 @@ msgstr ""
 msgid "GRASS version"
 msgstr ""
 
+#, fuzzy
 msgid "Code revision"
-msgstr ""
+msgstr "कोड संशोधन"
 
+#, fuzzy
 msgid "Build date"
-msgstr ""
+msgstr "निर्माण तिथि"
 
+#, fuzzy
 msgid "Build platform"
-msgstr ""
+msgstr "निर्माण प्लेटफार्म"
 
 msgid "Platform"
 msgstr ""
 
+#, fuzzy
 msgid "Close all Map Displays"
-msgstr ""
+msgstr "सभी मैप डिस्प्ले बंद करें"
 
 msgid "Enter new name:"
 msgstr ""
@@ -5334,8 +5732,9 @@ msgstr ""
 msgid "Unable to start Temporal Plot Tool."
 msgstr ""
 
+#, fuzzy
 msgid "Add selected map layers into layer tree"
-msgstr ""
+msgstr "चयनित मानचित्र परतों को परत ट्री (layer tree) में जोड़ें"
 
 #, python-format
 msgid "Unsupported map layer type <%s>."
@@ -5366,56 +5765,70 @@ msgstr ""
 msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
 msgstr ""
 
+#, fuzzy
 msgid "Constrain map to region geometry?"
-msgstr ""
+msgstr "मैप को क्षेत्र की ज्यामिति (geometry) तक सीमित रखें?"
 
 msgid "Import data from WMS server"
 msgstr ""
 
+#, fuzzy
 msgid "Add command layer"
-msgstr ""
+msgstr "कमांड परत जोड़ें"
 
+#, fuzzy
 msgid "Add HIS map layer"
-msgstr ""
+msgstr "HIS मैप परत जोड़ें"
 
+#, fuzzy
 msgid "Add shaded relief map layer"
-msgstr ""
+msgstr "छायादार राहत (shaded relief) मानचित्र परत जोड़ें"
 
+#, fuzzy
 msgid "Add raster flow arrows"
-msgstr ""
+msgstr "रास्टर प्रवाह तीर जोड़ें"
 
+#, fuzzy
 msgid "Add raster cell numbers"
-msgstr ""
+msgstr "रास्टर सेल संख्याएं जोड़ें"
 
+#, fuzzy
 msgid "Add thematic (choropleth) vector map layer"
-msgstr ""
+msgstr "विषयगत (choropleth) वेक्टर मानचित्र परत जोड़ें"
 
+#, fuzzy
 msgid "Add thematic chart layer"
-msgstr ""
+msgstr "विषयगत चार्ट परत जोड़ें"
 
+#, fuzzy
 msgid "Add grid layer"
-msgstr ""
+msgstr "ग्रिड परत जोड़ें"
 
+#, fuzzy
 msgid "Add geodesic line layer"
-msgstr ""
+msgstr "जियोडेसिक रेखा परत जोड़ें"
 
+#, fuzzy
 msgid "Add rhumbline layer"
-msgstr ""
+msgstr "रंबलाइन (rhumbline) परत जोड़ें"
 
+#, fuzzy
 msgid "Add labels"
-msgstr ""
+msgstr "लेबल जोड़ें"
 
 msgid "Note that 3D raster data are rendered only in 3D view mode"
 msgstr ""
 
+#, fuzzy
 msgid "Add WMS layer."
-msgstr ""
+msgstr "WMS परत जोड़ें।"
 
 msgid "Editing mode"
 msgstr ""
 
+#, fuzzy
 msgid "Background vector map"
-msgstr ""
+msgstr "पृष्ठभूमि वेक्टर मानचित्र"
 
 msgid "Map Layers"
 msgstr ""
@@ -5423,14 +5836,16 @@ msgstr ""
 msgid "Rename"
 msgstr ""
 
+#, fuzzy
 msgid "Check selected layers"
-msgstr ""
+msgstr "चयनित परतों की जाँच करें"
 
 msgid "Uncheck selected layers"
 msgstr ""
 
+#, fuzzy
 msgid "3D view properties"
-msgstr ""
+msgstr "3D व्यू गुण"
 
 msgid "Zoom to selected map(s)"
 msgstr ""
@@ -5441,8 +5856,9 @@ msgstr ""
 msgid "Set computational region from selected map(s)"
 msgstr ""
 
+#, fuzzy
 msgid "Align computational region to selected map"
-msgstr ""
+msgstr "गणना क्षेत्र को चयनित मानचित्र के साथ संरेखित करें"
 
 msgid "Export common formats"
 msgstr ""
@@ -5450,8 +5866,9 @@ msgstr ""
 msgid "Export PostGIS"
 msgstr ""
 
+#, fuzzy
 msgid "Create pack"
-msgstr ""
+msgstr "पैक बनाएं"
 
 msgid "Make a copy in the current mapset"
 msgstr ""
@@ -5498,8 +5915,9 @@ msgstr ""
 msgid "Vector map"
 msgstr ""
 
+#, fuzzy
 msgid "3D raster map"
-msgstr ""
+msgstr "3D रास्टर मैप"
 
 #, python-format
 msgid "Unsupported map type <%s>"
@@ -5513,9 +5931,9 @@ msgstr ""
 msgid "Make a copy of %s <%s>"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "%s <%s> already exists in the current mapset. Do you want to overwrite it?"
-msgstr ""
+msgstr "%s <%s> मौजूदा मैपसेट में पहले से मौजूद है। क्या आप इसे ओवरराइट करना चाहते हैं?"
 
 #, python-format
 msgid "Unable to make copy of <%s>"
@@ -5540,11 +5958,13 @@ msgstr ""
 msgid "Layer group:"
 msgstr ""
 
+#, fuzzy
 msgid "Click to edit layer settings"
-msgstr ""
+msgstr "लेयर सेटिंग्स संपादित करने के लिए क्लिक करें"
 
+#, fuzzy
 msgid "(double click to set properties)"
-msgstr ""
+msgstr "(गुण सेट करने के लिए डबल क्लिक करें)"
 
 msgid "Please wait, updating data..."
 msgstr ""
@@ -5561,8 +5981,9 @@ msgstr ""
 msgid "Type %s to add raster or vector to the layer tree."
 msgstr ""
 
+#, fuzzy
 msgid "Delete all text from the shell"
-msgstr ""
+msgstr "शेल (shell) से सारा टेक्स्ट हटाएं"
 
 msgid "Simple &editor"
 msgstr ""
@@ -5588,14 +6009,16 @@ msgstr ""
 msgid "Left mouse click to remove the raster mask"
 msgstr ""
 
+#, fuzzy
 msgid "Are you sure that you want to remove the current raster mask?"
-msgstr ""
+msgstr "क्या आप वाकई वर्तमान रास्टर मास्क (raster mask) को हटाना चाहते हैं?"
 
 msgid "Remove raster mask"
 msgstr ""
 
+#, fuzzy
 msgid "Create new workspace (Ctrl+N)"
-msgstr ""
+msgstr "नया वर्कस्पेस बनाएं (Ctrl+N)"
 
 msgid "Open existing workspace file (Ctrl+O)"
 msgstr ""
@@ -5612,29 +6035,37 @@ msgstr ""
 msgid "Save workspace"
 msgstr ""
 
+#, fuzzy
 msgid "Add multiple raster or vector map layers (Ctrl+Shift+L)"
-msgstr ""
+msgstr "एकाधिक रास्टर या वेक्टर मानचित्र परतें जोड़ें (Ctrl+Shift+L)"
 
+#, fuzzy
 msgid "Add raster map layer (Ctrl+Shift+R)"
-msgstr ""
+msgstr "रास्टर मानचित्र परत जोड़ें (Ctrl+Shift+R)"
 
+#, fuzzy
 msgid "Add various raster map layers (RGB, HIS, shaded relief...)"
-msgstr ""
+msgstr "विभिन्न रास्टर मानचित्र परतें जोड़ें (RGB, HIS, छायादार राहत...)"
 
+#, fuzzy
 msgid "Add vector map layer (Ctrl+Shift+V)"
-msgstr ""
+msgstr "वेक्टर मानचित्र परत जोड़ें (Ctrl+Shift+V)"
 
+#, fuzzy
 msgid "Add various vector map layers (thematic, chart...)"
-msgstr ""
+msgstr "विभिन्न वेक्टर मानचित्र परतें जोड़ें (विषयगत, चार्ट...)"
 
+#, fuzzy
 msgid "Add web service layer (WMS, WMTS, NASA OnEarth)"
-msgstr ""
+msgstr "वेब सेवा परत (WMS, WMTS, NASA OnEarth) जोड़ें"
 
+#, fuzzy
 msgid "Add group"
-msgstr ""
+msgstr "समूह जोड़ें"
 
+#, fuzzy
 msgid "Add various overlays"
-msgstr ""
+msgstr "विभिन्न ओवरले जोड़ें"
 
 msgid "Remove selected map layer(s) from layer tree"
 msgstr ""
@@ -5645,23 +6076,29 @@ msgstr ""
 msgid "Show attribute data for selected vector map"
 msgstr ""
 
+#, fuzzy
 msgid "Add multiple map layers"
-msgstr ""
+msgstr "एकाधिक मानचित्र परतें जोड़ें"
 
+#, fuzzy
 msgid "Add various raster maps"
-msgstr ""
+msgstr "विभिन्न रास्टर मानचित्र जोड़ें"
 
+#, fuzzy
 msgid "Add vector map"
-msgstr ""
+msgstr "वेक्टर मानचित्र जोड़ें"
 
+#, fuzzy
 msgid "Add various vector maps"
-msgstr ""
+msgstr "विभिन्न वेक्टर मानचित्र जोड़ें"
 
+#, fuzzy
 msgid "Add web service map"
-msgstr ""
+msgstr "वेब सेवा मानचित्र जोड़ें"
 
+#, fuzzy
 msgid "Delete map layer"
-msgstr ""
+msgstr "मैप लेयर हटाएं"
 
 msgid "Start new map display"
 msgstr ""
@@ -5672,8 +6109,9 @@ msgstr ""
 msgid "Georectifier"
 msgstr ""
 
+#, fuzzy
 msgid "Cartographic Composer"
-msgstr ""
+msgstr "कार्टोग्राफिक कंपोजर"
 
 msgid "Launch user-defined script"
 msgstr ""
@@ -5696,8 +6134,9 @@ msgstr ""
 msgid "Generate command for m.nviz.image based on current state"
 msgstr ""
 
+#, fuzzy
 msgid "3D view mode settings"
-msgstr ""
+msgstr "3D व्यू मोड सेटिंग्स"
 
 msgid "Show 3D view mode settings dialog"
 msgstr ""
@@ -5705,14 +6144,17 @@ msgstr ""
 msgid "Show 3D view mode manual"
 msgstr ""
 
+#, fuzzy
 msgid "Current workspace is not empty. Do you want to store current settings to workspace file?"
-msgstr ""
+msgstr "वर्तमान वर्कस्पेस खाली नहीं है। क्या आप वर्तमान सेटिंग्स को वर्कस्पेस फ़ाइल में सहेजना चाहते हैं?"
 
+#, fuzzy
 msgid "Create new workspace?"
-msgstr ""
+msgstr "नया वर्कस्पेस बनाएं?"
 
+#, fuzzy
 msgid "Choose workspace file"
-msgstr ""
+msgstr "वर्कस्पेस फ़ाइल चुनें"
 
 msgid "GRASS Workspace File (*.gxw)|*.gxw"
 msgstr ""
@@ -5732,11 +6174,13 @@ msgstr ""
 msgid "Proceed with opening of the workspace?"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Current location is <%(loc)s>.\n"
 "Current mapset is <%(mapset)s>."
 msgstr ""
+"वर्तमान लोकेशन <%(loc)s> है।\n"
+"वर्तमान मैपसेट <%(mapset)s> है।"
 
 #, python-format
 msgid ""
@@ -5748,8 +6192,9 @@ msgstr ""
 msgid "Please wait, loading workspace..."
 msgstr ""
 
+#, fuzzy
 msgid "Choose file to save current workspace"
-msgstr ""
+msgstr "वर्तमान कार्यक्षेत्र को सहेजने के लिए फ़ाइल चुनें"
 
 #, python-format
 msgid "Workspace file <%s> already exists. Do you want to overwrite this file?"
@@ -5776,8 +6221,9 @@ msgstr ""
 msgid "Set default region extent and resolution"
 msgstr ""
 
+#, fuzzy
 msgid "&Set region"
-msgstr ""
+msgstr "&क्षेत्र सेट करें"
 
 msgid "Invalid location selected."
 msgstr ""
@@ -5785,37 +6231,40 @@ msgstr ""
 msgid "Invalid region"
 msgstr ""
 
+#, fuzzy
 msgid "Click here to show 3D settings"
-msgstr ""
+msgstr "3D सेटिंग्स देखने के लिए यहाँ क्लिक करें"
 
+#, fuzzy
 msgid "Click here to hide 3D settings"
-msgstr ""
+msgstr "3D सेटिंग्स छिपाने के लिए यहाँ क्लिक करें"
 
 #, python-format
 msgid "Rows: %d"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "Cols: %d"
-msgstr ""
+msgstr "कॉलम: %d"
 
-#, python-format
+#, fuzzy, python-format
 msgid "Cells: %d"
-msgstr ""
+msgstr "हिन्दी"
 
 #, python-format
 msgid "Depth: %d"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "3D Cells: %d"
-msgstr ""
+msgstr "3D सेल्स: %d"
 
 msgid "Top"
 msgstr ""
 
+#, fuzzy
 msgid "Bottom"
-msgstr ""
+msgstr "नीचे"
 
 msgid "T-B resolution"
 msgstr ""
@@ -5848,14 +6297,17 @@ msgstr ""
 msgid "Select from list of datum transformations"
 msgstr ""
 
+#, fuzzy
 msgid "Define new GRASS project"
-msgstr ""
+msgstr "नया GRASS प्रोजेक्ट परिभाषित करें"
 
+#, fuzzy
 msgid "Change"
-msgstr ""
+msgstr "बदलें"
 
+#, fuzzy
 msgid "(optional)"
-msgstr ""
+msgstr "(वैकल्पिक)"
 
 msgid "Name of project directory in GIS Data Directory"
 msgstr ""
@@ -5875,8 +6327,9 @@ msgstr ""
 msgid "Existing project path"
 msgstr ""
 
+#, fuzzy
 msgid "Choose GRASS data directory:"
-msgstr ""
+msgstr "GRASS डेटा निर्देशिका चुनें:"
 
 msgid "Title of the project is limited only to one line and 256 characters. The rest of the text will be ignored."
 msgstr ""
@@ -5890,8 +6343,9 @@ msgstr ""
 msgid "Read CRS from a georeferenced data file"
 msgstr ""
 
+#, fuzzy
 msgid "Create a generic cartesian coordinate system (XY)"
-msgstr ""
+msgstr "एक सामान्य कार्टेशियन निर्देशांक प्रणाली (XY) बनाएं"
 
 msgid "Specify CRS using WKT string"
 msgstr ""
@@ -5899,14 +6353,17 @@ msgstr ""
 msgid "Specify CRS using PROJ.4 string"
 msgstr ""
 
+#, fuzzy
 msgid "Define custom CRS"
-msgstr ""
+msgstr "कस्टम CRS परिभाषित करें"
 
+#, fuzzy
 msgid "Additional methods:"
-msgstr ""
+msgstr "अतिरिक्त विधियाँ:"
 
+#, fuzzy
 msgid "Code"
-msgstr ""
+msgstr "कोड"
 
 msgid "Projection code:"
 msgstr ""
@@ -5918,14 +6375,16 @@ msgstr ""
 msgid "Unable to read list: %s"
 msgstr ""
 
+#, fuzzy
 msgid "Choose projection parameters"
-msgstr ""
+msgstr "प्रोजेक्शन पैरामीटर चुनें"
 
 msgid "Select datum or ellipsoid (next page)"
 msgstr ""
 
+#, fuzzy
 msgid "Datum with associated ellipsoid"
-msgstr ""
+msgstr "संबद्ध दीर्घवृत्ताभ (ellipsoid) के साथ डेटम"
 
 msgid "Ellipsoid only"
 msgstr ""
@@ -5934,9 +6393,9 @@ msgstr ""
 msgid "You must enter a value for %s"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid " Enter parameters for %s projection "
-msgstr ""
+msgstr " %s प्रोजेक्शन के लिए पैरामीटर दर्ज करें "
 
 msgid "Specify geodetic datum"
 msgstr ""
@@ -5944,8 +6403,9 @@ msgstr ""
 msgid "Ellipsoid"
 msgstr ""
 
+#, fuzzy
 msgid "Datum code:"
-msgstr ""
+msgstr "डेटम कोड (Datum code):"
 
 msgid "Specify ellipsoid"
 msgstr ""
@@ -5980,8 +6440,9 @@ msgstr ""
 msgid "Parameters"
 msgstr ""
 
+#, fuzzy
 msgid "Choose IAU Code"
-msgstr ""
+msgstr "IAU कोड चुनें"
 
 msgid "Path to the IAU-codes file:"
 msgstr ""
@@ -5989,8 +6450,9 @@ msgstr ""
 msgid "IAU code:"
 msgstr ""
 
+#, fuzzy
 msgid "Choose IAU codes file"
-msgstr ""
+msgstr "IAU कोड फ़ाइल चुनें"
 
 #, python-brace-format
 msgid "Unable to read IAU codes: {0}"
@@ -5999,8 +6461,9 @@ msgstr ""
 msgid "Enter PROJ.4 parameters string:"
 msgstr ""
 
+#, fuzzy
 msgid "Datum transform is required."
-msgstr ""
+msgstr "डेटम ट्रांसफ़ॉर्म आवश्यक है।"
 
 msgid "Summary"
 msgstr ""
@@ -6058,11 +6521,13 @@ msgstr ""
 msgid "No project provided. Operation canceled."
 msgstr ""
 
+#, fuzzy
 msgid "Close workspace"
-msgstr ""
+msgstr "वर्कस्पेस बंद करें"
 
+#, fuzzy
 msgid "Code editor"
-msgstr ""
+msgstr "कोड एडिटर"
 
 #, python-format
 msgid ""
@@ -6167,11 +6632,13 @@ msgstr ""
 msgid "Enable/disable auto-rendering"
 msgstr ""
 
+#, fuzzy
 msgid "Align region extent based on display size from center point. Default value for new map displays can be set up in 'User GUI settings' dialog."
-msgstr ""
+msgstr "केंद्र बिंदु से डिस्प्ले आकार के आधार पर क्षेत्र विस्तार को संरेखित करें। नए मानचित्र प्रदर्शनों के लिए डिफ़ॉल्ट मान 'उपयोगकर्ता GUI सेटिंग्स' संवाद में सेट किया जा सकता है।"
 
+#, fuzzy
 msgid "Constrain display resolution to computational region settings. Default value for new map displays can be set up in 'User GUI settings' dialog."
-msgstr ""
+msgstr "डिस्प्ले रिज़ॉल्यूशन को कम्प्यूटेशनल क्षेत्र सेटिंग्स तक सीमित रखें। नए मैप डिस्प्ले के लिए डिफ़ॉल्ट मान 'यूजर GUI सेटिंग्स' डायलॉग में सेट किया जा सकता है।"
 
 msgid "Show computational extent"
 msgstr ""
@@ -6198,8 +6665,9 @@ msgstr ""
 msgid "Map scale"
 msgstr ""
 
+#, fuzzy
 msgid "As everyone's monitors and resolutions are set differently these values are not true map scales, but should get you into the right neighborhood."
-msgstr ""
+msgstr "चूंकि हर किसी के मॉनिटर और रिज़ॉल्यूशन अलग-अलग सेट होते हैं, इसलिए ये मान वास्तविक मानचित्र पैमाने (map scales) नहीं हैं, लेकिन आपको सही अंदाजे तक पहुँचा देने चाहिए।"
 
 msgid "Go to XY coordinates"
 msgstr ""
@@ -6213,14 +6681,16 @@ msgstr ""
 msgid "Display geometry"
 msgstr ""
 
+#, fuzzy
 msgid "Coordinates"
-msgstr ""
+msgstr "निर्देशांक (Coordinates)"
 
 msgid "Display extent"
 msgstr ""
 
+#, fuzzy
 msgid "Computational region"
-msgstr ""
+msgstr "कम्प्यूटेशनल क्षेत्र"
 
 msgid "Map window test frame"
 msgstr ""
@@ -6256,20 +6726,25 @@ msgstr ""
 msgid "Select features interactively from vector map"
 msgstr ""
 
+#, fuzzy
 msgid "Add scale bar"
-msgstr ""
+msgstr "स्केल बार जोड़ें"
 
+#, fuzzy
 msgid "Add raster legend"
-msgstr ""
+msgstr "रास्टर लीजेंड जोड़ें"
 
+#, fuzzy
 msgid "Add vector legend"
-msgstr ""
+msgstr "वेक्टर लीजेंड जोड़ें"
 
+#, fuzzy
 msgid "Add north arrow"
-msgstr ""
+msgstr "उत्तर दिशा तीर जोड़ें"
 
+#, fuzzy
 msgid "Analyze map"
-msgstr ""
+msgstr "मानचित्र का विश्लेषण करें"
 
 msgid "Measuring, profiling, histogramming, ..."
 msgstr ""
@@ -6283,11 +6758,13 @@ msgstr ""
 msgid "Profile surface map"
 msgstr ""
 
+#, fuzzy
 msgid "Create bivariate scatterplot of raster maps"
-msgstr ""
+msgstr "रास्टर मैप्स का बाइवेरिएट (bivariate) स्कैटरप्लॉट बनाएं"
 
+#, fuzzy
 msgid "Create histogram of raster map"
-msgstr ""
+msgstr "रास्टर मैप का हिस्टोग्राम बनाएं"
 
 msgid "Vector network analysis tool"
 msgstr ""
@@ -6304,14 +6781,17 @@ msgstr ""
 msgid "Drag with mouse, hold Ctrl down for different mode or Shift to accelerate"
 msgstr ""
 
+#, fuzzy
 msgid "Click mouse to zoom"
-msgstr ""
+msgstr "ज़ूम करने के लिए माउस क्लिक करें"
 
+#, fuzzy
 msgid "Click mouse to unzoom"
-msgstr ""
+msgstr "अनज़ूम करने के लिए माउस क्लिक करें"
 
+#, fuzzy
 msgid "3D view mode not available"
-msgstr ""
+msgstr "3D व्यू मोड उपलब्ध नहीं है"
 
 #, python-format
 msgid "Reason: %s"
@@ -6372,8 +6852,9 @@ msgstr ""
 msgid "Swipe mode"
 msgstr ""
 
+#, fuzzy
 msgid "Choose view mode"
-msgstr ""
+msgstr "व्यू मोड चुनें"
 
 msgid "Switch orientation"
 msgstr ""
@@ -6384,9 +6865,9 @@ msgstr ""
 msgid "Measuring finished"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "Click and drag with left mouse button to measure.%sDouble click with left button to clear."
-msgstr ""
+msgstr "मापने के लिए माउस के बाएँ बटन से क्लिक करें और खींचें।%sसाफ़ करने के लिए बाएँ बटन से डबल क्लिक करें।"
 
 msgid "Measuring distance"
 msgstr ""
@@ -6418,9 +6899,9 @@ msgstr ""
 msgid "Units not recognized, measurement failed."
 msgstr ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Area: {area} {unit}\n"
-msgstr ""
+msgstr "क्षेत्र: {area} {unit}\n"
 
 #, python-format
 msgid ""
@@ -6444,8 +6925,9 @@ msgid ""
 "                                        Handler was unregistered"
 msgstr ""
 
+#, fuzzy
 msgid "Copy coordinates to clipboard"
-msgstr ""
+msgstr "निर्देशांक क्लिपबोर्ड पर कॉपी करें"
 
 msgid "Resize and move legend"
 msgstr ""
@@ -6509,18 +6991,20 @@ msgstr ""
 msgid "Property does not exist: %s"
 msgstr ""
 
+#, fuzzy
 msgid "Check all"
-msgstr ""
+msgstr "सभी चुनें"
 
+#, fuzzy
 msgid "Clear all"
-msgstr ""
+msgstr "सभी साफ़ करें"
 
 msgid "Enter vector attribute values"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "Bad color format '%s'. Use color format '0:0:0'"
-msgstr ""
+msgstr "खराब रंग प्रारूप '%s'। रंग प्रारूप '0:0:0' का उपयोग करें।"
 
 msgid "Select raster map:"
 msgstr ""
@@ -6531,8 +7015,9 @@ msgstr ""
 msgid "Import or export color table:"
 msgstr ""
 
+#, fuzzy
 msgid "Choose file to load color table"
-msgstr ""
+msgstr "रंग तालिका लोड करने के लिए फ़ाइल चुनें"
 
 msgid "Load"
 msgstr ""
@@ -6540,8 +7025,9 @@ msgstr ""
 msgid "Type filename or click to choose file and load color table"
 msgstr ""
 
+#, fuzzy
 msgid "Choose file to save color table"
-msgstr ""
+msgstr "रंग तालिका सहेजने के लिए फ़ाइल चुनें"
 
 msgid "Type filename or click to choose file and save color table"
 msgstr ""
@@ -6549,8 +7035,9 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
+#, fuzzy
 msgid "&Set"
-msgstr ""
+msgstr "&सेट करें"
 
 msgid "Load color table:"
 msgstr ""
@@ -6581,8 +7068,9 @@ msgstr ""
 msgid "Invalid rule value '%s'. Unable to apply color table."
 msgstr ""
 
+#, fuzzy
 msgid "Create new color table for raster map"
-msgstr ""
+msgstr "रास्टर मैप के लिए नई रंग टेबल बनाएं"
 
 msgid "Enter raster category values or percents"
 msgstr ""
@@ -6597,8 +7085,9 @@ msgstr ""
 msgid "Enter raster category values or percents (%(range)s = %(min)d-%(max)d)"
 msgstr ""
 
+#, fuzzy
 msgid "Create new color rules for vector map"
-msgstr ""
+msgstr "वेक्टर मैप के लिए नए रंग नियम बनाएं"
 
 msgid "Enter vector attribute values or percents:"
 msgstr ""
@@ -6612,8 +7101,9 @@ msgstr ""
 msgid "Layer:"
 msgstr ""
 
+#, fuzzy
 msgid "Attribute column:"
-msgstr ""
+msgstr "विशेषता कॉलम (Attribute column):"
 
 msgid "Load color from column:"
 msgstr ""
@@ -6636,15 +7126,16 @@ msgstr ""
 msgid "Use color column instead of color table:"
 msgstr ""
 
+#, fuzzy
 msgid "Add GRASSRGB column to current attribute table."
-msgstr ""
+msgstr "वर्तमान विशेषता तालिका (attribute table) में GRASSRGB कॉलम जोड़ें।"
 
 msgid "Import or export color table"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "Database connection for vector map <%s> is not defined in DB file.  Do you want to create and connect new attribute table?"
-msgstr ""
+msgstr "वेक्टर मैप <%s> के लिए डेटाबेस कनेक्शन DB फ़ाइल में परिभाषित नहीं है। क्या आप एक नई एट्रिब्यूट टेबल बनाना और कनेक्ट करना चाहते हैं?"
 
 msgid "No database connection defined"
 msgstr ""
@@ -6653,9 +7144,9 @@ msgstr ""
 msgid "Selected map <%(map)s> is not in current mapset <%(mapset)s>. Attribute table cannot be edited."
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "%s column already exists."
-msgstr ""
+msgstr "%s कॉलम पहले से मौजूद है।"
 
 msgid "Please wait, loading data from attribute table..."
 msgstr ""
@@ -6693,8 +7184,9 @@ msgstr ""
 msgid "Options"
 msgstr ""
 
+#, fuzzy
 msgid "&Install"
-msgstr ""
+msgstr "&इंस्टॉल करें"
 
 msgid "Install selected add-ons GRASS tool"
 msgstr ""
@@ -6708,9 +7200,9 @@ msgstr ""
 msgid "Fetching list of tools from GRASS-Addons (be patient)..."
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "%d extensions loaded"
-msgstr ""
+msgstr "%d एक्सटेंशन लोड किए गए"
 
 msgid "Install"
 msgstr ""
@@ -6785,8 +7277,9 @@ msgstr ""
 msgid "Override projection check (use current location's projection)"
 msgstr ""
 
+#, fuzzy
 msgid "&Import"
-msgstr ""
+msgstr "&इंपोर्ट करें"
 
 msgid "Import selected layers"
 msgstr ""
@@ -6811,14 +7304,17 @@ msgstr ""
 msgid "Link external raster data"
 msgstr ""
 
+#, fuzzy
 msgid "Add linked layers into layer tree"
-msgstr ""
+msgstr "लिंक की गई परतों को परत ट्री में जोड़ें"
 
+#, fuzzy
 msgid "Add imported layers into layer tree"
-msgstr ""
+msgstr "आयातित परतों को परत ट्री में जोड़ें"
 
+#, fuzzy
 msgid "&Link"
-msgstr ""
+msgstr "&लिंक"
 
 msgid "Link selected layers"
 msgstr ""
@@ -6832,11 +7328,13 @@ msgstr ""
 msgid "Link external vector data"
 msgstr ""
 
+#, fuzzy
 msgid "Define output format for vector data"
-msgstr ""
+msgstr "वेक्टर डेटा के लिए आउटपुट फ़ॉर्मेट परिभाषित करें"
 
+#, fuzzy
 msgid "Define output format for raster data"
-msgstr ""
+msgstr "रास्टर डेटा के लिए आउटपुट फ़ॉर्मेट परिभाषित करें"
 
 msgid "Set external format and close dialog"
 msgstr ""
@@ -6847,8 +7345,9 @@ msgstr ""
 msgid "Import DXF layers"
 msgstr ""
 
+#, fuzzy
 msgid "Choose DXF file to import"
-msgstr ""
+msgstr "आयात करने के लिए DXF फ़ाइल चुनें"
 
 msgid "No layers selected."
 msgstr ""
@@ -6862,14 +7361,16 @@ msgstr ""
 msgid "Layers to be reprojected"
 msgstr ""
 
+#, fuzzy
 msgid "&Import && reproject"
-msgstr ""
+msgstr "&इंपोर्ट && रीप्रोजेक्ट करें"
 
 msgid "Reproject selected layers"
 msgstr ""
 
+#, fuzzy
 msgid "3D Raster Map Calculator"
-msgstr ""
+msgstr "3D रास्टर मैप कैलकुलेटर"
 
 msgid "mapcalc statement"
 msgstr ""
@@ -6985,8 +7486,9 @@ msgstr ""
 msgid "Integer seed for rand() function"
 msgstr ""
 
+#, fuzzy
 msgid "Add created raster map into layer tree"
-msgstr ""
+msgstr "निर्मित रास्टर मैप को परत ट्री (layer tree) में जोड़ें"
 
 msgid "You must enter the name of a new raster map to create."
 msgstr ""
@@ -6994,18 +7496,20 @@ msgstr ""
 msgid "You must enter an expression to create a new raster map."
 msgstr ""
 
+#, fuzzy
 msgid "Choose a file name to save the expression"
-msgstr ""
+msgstr "एक्सप्रेशन सहेजने के लिए एक फ़ाइल नाम चुनें"
 
 msgid "Expression file (*)|*"
 msgstr ""
 
+#, fuzzy
 msgid "Choose a file name to load the expression"
-msgstr ""
+msgstr "एक्सप्रेशन लोड करने के लिए एक फ़ाइल नाम चुनें"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "'{cmd}' copied to clipboard"
-msgstr ""
+msgstr "'{cmd}' क्लिपबोर्ड पर कॉपी किया गया"
 
 msgid "Opening 3D view was not successful. Please try to change the value of depth buffer in GUI Settings dialog > tab Map Display > Advanced and restart GUI."
 msgstr ""
@@ -7066,8 +7570,9 @@ msgstr ""
 msgid "Unable to unload 3d raster map"
 msgstr ""
 
+#, fuzzy
 msgid "3d raster map"
-msgstr ""
+msgstr "3d रास्टर मैप"
 
 msgid "unloaded successfully"
 msgstr ""
@@ -7102,8 +7607,9 @@ msgstr ""
 msgid "constant#"
 msgstr ""
 
+#, fuzzy
 msgid "3D view default settings"
-msgstr ""
+msgstr "3D व्यू डिफ़ॉल्ट सेटिंग्स"
 
 msgid "Revert settings to default, changes are not applied"
 msgstr ""
@@ -7153,11 +7659,13 @@ msgstr ""
 msgid "z:"
 msgstr ""
 
+#, fuzzy
 msgid "Brightness:"
-msgstr ""
+msgstr "चमक:"
 
+#, fuzzy
 msgid "Ambient:"
-msgstr ""
+msgstr "परिवेश (Ambient):"
 
 msgid "Surface"
 msgstr ""
@@ -7183,8 +7691,9 @@ msgstr ""
 msgid "resolution:"
 msgstr ""
 
+#, fuzzy
 msgid "Coarse mode:"
-msgstr ""
+msgstr "कोर्स मोड:"
 
 msgid "style:"
 msgstr ""
@@ -7207,8 +7716,9 @@ msgstr ""
 msgid "Vector points"
 msgstr ""
 
+#, fuzzy
 msgid "Automatic size"
-msgstr ""
+msgstr "स्वचालित आकार (Automatic size)"
 
 msgid "Icon size is set automatically based on landscape dimensions."
 msgstr ""
@@ -7216,21 +7726,25 @@ msgstr ""
 msgid "Marker:"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "3D view settings saved to file <%s>."
-msgstr ""
+msgstr "3D व्यू सेटिंग्स फ़ाइल <%s> में सहेजी गई।"
 
+#, fuzzy
 msgid "Analysis"
-msgstr ""
+msgstr "विश्लेषण"
 
+#, fuzzy
 msgid "Animation"
-msgstr ""
+msgstr "एनिमेशन"
 
+#, fuzzy
 msgid "Control View"
-msgstr ""
+msgstr "कंट्रोल व्यू"
 
+#, fuzzy
 msgid "Adjusts the distance and angular perspective of the image viewpoint"
-msgstr ""
+msgstr "छवि दृष्टिकोण की दूरी और कोणीय परिप्रेक्ष्य को समायोजित करता है"
 
 msgid "Tilts the plane of the surface from the horizontal"
 msgstr ""
@@ -7238,11 +7752,13 @@ msgstr ""
 msgid "Tilt:"
 msgstr ""
 
+#, fuzzy
 msgid "Adjusts the viewing height above the surface (angle of view automatically adjusts to maintain the same center of view)"
-msgstr ""
+msgstr "सतह के ऊपर देखने की ऊंचाई को समायोजित करता है (दृष्टि का केंद्र बनाए रखने के लिए दृष्टि का कोण स्वचालित रूप से समायोजित हो जाता है)"
 
+#, fuzzy
 msgid "Adjusts the relative height of features above the plane of the surface"
-msgstr ""
+msgstr "सतह के समतल से ऊपर की विशेषताओं की सापेक्ष ऊंचाई को समायोजित करता है"
 
 msgid "Look:"
 msgstr ""
@@ -7250,8 +7766,9 @@ msgstr ""
 msgid "here"
 msgstr ""
 
+#, fuzzy
 msgid "Allows you to select a point on the surface that becomes the new center of view. Click on the button and then on the surface."
-msgstr ""
+msgstr "यह आपको सतह पर एक बिंदु चुनने की अनुमति देता है जो दृश्य का नया केंद्र बन जाता है। बटन पर क्लिक करें और फिर सतह पर क्लिक करें।"
 
 msgid "center"
 msgstr ""
@@ -7292,23 +7809,27 @@ msgstr ""
 msgid "Save image sequence"
 msgstr ""
 
+#, fuzzy
 msgid "Choose a directory:"
-msgstr ""
+msgstr "एक निर्देशिका चुनें:"
 
+#, fuzzy
 msgid "Choose a directory for images"
-msgstr ""
+msgstr "छवियों के लिए एक निर्देशिका चुनें"
 
 msgid "Generated files names will look like this: prefix_1.ppm, prefix_2.ppm, ..."
 msgstr ""
 
+#, fuzzy
 msgid "Constant surface"
-msgstr ""
+msgstr "स्थिर सतह (Constant surface)"
 
 msgid "Fringe"
 msgstr ""
 
+#, fuzzy
 msgid "Cutting planes"
-msgstr ""
+msgstr "कटिंग प्लेन्स (Cutting planes)"
 
 msgid "Shading:"
 msgstr ""
@@ -7325,8 +7846,9 @@ msgstr ""
 msgid "Use draw settings for all loaded surfaces"
 msgstr ""
 
+#, fuzzy
 msgid "Change wire color"
-msgstr ""
+msgstr "तार का रंग बदलें"
 
 msgid "Surface attributes"
 msgstr ""
@@ -7349,8 +7871,9 @@ msgstr ""
 msgid "Position"
 msgstr ""
 
+#, fuzzy
 msgid "Changes the x, y, and z position of the current surface"
-msgstr ""
+msgstr "वर्तमान सतह की x, y और z स्थिति बदलता है"
 
 msgid "Reset"
 msgstr ""
@@ -7358,8 +7881,9 @@ msgstr ""
 msgid "Reset to default position"
 msgstr ""
 
+#, fuzzy
 msgid "Active cutting plane:"
-msgstr ""
+msgstr "सक्रिय कटिंग प्लेन:"
 
 msgid "clear"
 msgstr ""
@@ -7403,8 +7927,9 @@ msgstr ""
 msgid "New"
 msgstr ""
 
+#, fuzzy
 msgid "Delete"
-msgstr ""
+msgstr "हटाएं"
 
 msgid "Fine resolution:"
 msgstr ""
@@ -7481,17 +8006,20 @@ msgstr ""
 msgid "Light source position"
 msgstr ""
 
+#, fuzzy
 msgid "Adjusts the light height"
-msgstr ""
+msgstr "प्रकाश की ऊंचाई को समायोजित करता है"
 
 msgid "Light color and intensity"
 msgstr ""
 
+#, fuzzy
 msgid "Adjusts the brightness of the light"
-msgstr ""
+msgstr "प्रकाश की चमक को समायोजित करता है"
 
+#, fuzzy
 msgid "Adjusts the ambient light"
-msgstr ""
+msgstr "परिवेश प्रकाश को समायोजित करता है"
 
 msgid "Edges with fringe"
 msgstr ""
@@ -7514,11 +8042,13 @@ msgstr ""
 msgid "North Arrow"
 msgstr ""
 
+#, fuzzy
 msgid "Arrow length (in map units):"
-msgstr ""
+msgstr "तीर की लंबाई (मानचित्र इकाइयों में):"
 
+#, fuzzy
 msgid "Arrow color:"
-msgstr ""
+msgstr "तीर का रंग (Arrow color):"
 
 msgid "Place arrow"
 msgstr ""
@@ -7538,8 +8068,9 @@ msgstr ""
 msgid "Do you want to record new animation without saving the previous one?"
 msgstr ""
 
+#, fuzzy
 msgid "Animation already exists"
-msgstr ""
+msgstr "एनिमेशन पहले से मौजूद है"
 
 msgid "No file prefix given."
 msgstr ""
@@ -7620,9 +8151,9 @@ msgstr ""
 msgid "Vector map is 2D"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "%(features)d features (%(points)d points)"
-msgstr ""
+msgstr "और विशेषताएं (%(points) अंक)"
 
 msgid "on surface"
 msgstr ""
@@ -7651,24 +8182,27 @@ msgstr ""
 msgid "Easting (X):"
 msgstr ""
 
+#, fuzzy
 msgid "Bottom edge:"
-msgstr ""
+msgstr "निचला किनारा:"
 
 msgid "Top edge:"
 msgstr ""
 
+#, fuzzy
 msgid "Adjusts the distance and direction of the image viewpoint"
-msgstr ""
+msgstr "छवि दृष्टिकोण की दूरी और दिशा को समायोजित करता है"
 
+#, fuzzy
 msgid "Adjusts the light direction. Click and drag the puck to change the light direction."
-msgstr ""
+msgstr "प्रकाश की दिशा समायोजित करता है। प्रकाश की दिशा बदलने के लिए पक (puck) को क्लिक करें और खींचें।"
 
 msgid "This module requires the NumPy module, which could not be imported. It probably is not installed (it's not part of the standard Python distribution). See the Numeric Python site (https://numpy.org) for information on downloading source or binaries."
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "3d raster map <%s> not found"
-msgstr ""
+msgstr "3d रास्टर मैप <%s> नहीं मिला"
 
 msgid "Please provide a group name to process"
 msgstr ""
@@ -7688,8 +8222,9 @@ msgstr ""
 msgid "Manage Location of Fiducial Points on a Scanned Photo"
 msgstr ""
 
+#, fuzzy
 msgid "A POINTS file exists, renaming it to POINTS_BAK"
-msgstr ""
+msgstr "एक POINTS फ़ाइल मौजूद है, इसे POINTS_BAK के रूप में बदला जा रहा है"
 
 msgid "Opening CAMERA file failed"
 msgstr ""
@@ -7749,14 +8284,17 @@ msgstr ""
 msgid "Font:"
 msgstr ""
 
+#, fuzzy
 msgid "Choose color:"
-msgstr ""
+msgstr "रंग चुनें:"
 
+#, fuzzy
 msgid "Close dialog and apply changes"
-msgstr ""
+msgstr "डायलॉग बंद करें और परिवर्तन लागू करें"
 
+#, fuzzy
 msgid "Apply changes"
-msgstr ""
+msgstr "परिवर्तन लागू करें"
 
 msgid "Units"
 msgstr ""
@@ -7827,8 +8365,9 @@ msgstr ""
 msgid "Map scale and center"
 msgstr ""
 
+#, fuzzy
 msgid "Center:"
-msgstr ""
+msgstr "केंद्र:"
 
 msgid "E:"
 msgstr ""
@@ -7839,16 +8378,18 @@ msgstr ""
 msgid "Scale:"
 msgstr ""
 
+#, fuzzy
 msgid "1 :"
-msgstr ""
+msgstr "1 :"
 
 msgid "Map max resolution (dpi):"
 msgstr ""
 
 #. GTC Line around legend or map frame
 #. GTC  Line around legend or map frame
+#, fuzzy
 msgid "Border"
-msgstr ""
+msgstr "सीमा"
 
 msgid "draw border around map frame"
 msgstr ""
@@ -7876,8 +8417,9 @@ msgstr ""
 msgid "Invalid scale or map center!"
 msgstr ""
 
+#, fuzzy
 msgid "Choose raster map"
-msgstr ""
+msgstr "रास्टर मैप चुनें"
 
 msgid "no raster map"
 msgstr ""
@@ -7888,8 +8430,9 @@ msgstr ""
 msgid "Please, create map frame first."
 msgstr ""
 
+#, fuzzy
 msgid "Add map"
-msgstr ""
+msgstr "मानचित्र जोड़ें"
 
 msgid "areas"
 msgstr ""
@@ -7900,8 +8443,9 @@ msgstr ""
 msgid "points"
 msgstr ""
 
+#, fuzzy
 msgid "Data Type"
-msgstr ""
+msgstr "डेटा टाइप"
 
 msgid "Manage vector maps"
 msgstr ""
@@ -7924,12 +8468,13 @@ msgstr ""
 msgid "Vector maps settings"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "%s properties"
-msgstr ""
+msgstr "%s संपत्तियां"
 
+#, fuzzy
 msgid "Data selection"
-msgstr ""
+msgstr "डेटा चयन"
 
 msgid "centroids"
 msgstr ""
@@ -7940,8 +8485,9 @@ msgstr ""
 msgid "Layer selection"
 msgstr ""
 
+#, fuzzy
 msgid "Database connection is not defined in DB file."
-msgstr ""
+msgstr "डेटाबेस कनेक्शन DB फ़ाइल में परिभाषित नहीं है।"
 
 msgid "Select layer:"
 msgstr ""
@@ -7952,8 +8498,9 @@ msgstr ""
 msgid "Use current mask"
 msgstr ""
 
+#, fuzzy
 msgid "Colors"
-msgstr ""
+msgstr "रंग"
 
 msgid "Outline"
 msgstr ""
@@ -7979,8 +8526,9 @@ msgstr ""
 msgid "No effect for fill color from table column"
 msgstr ""
 
+#, fuzzy
 msgid "Color of lines:"
-msgstr ""
+msgstr "लाइनों का रंग:"
 
 msgid "Size and style"
 msgstr ""
@@ -7991,8 +8539,9 @@ msgstr ""
 msgid "Type filename or click browse to choose file"
 msgstr ""
 
+#, fuzzy
 msgid "Choose a file"
-msgstr ""
+msgstr "एक फ़ाइल चुनें"
 
 msgid "Size"
 msgstr ""
@@ -8024,11 +8573,13 @@ msgstr ""
 msgid "Line style"
 msgstr ""
 
+#, fuzzy
 msgid "Choose line style:"
-msgstr ""
+msgstr "रेखा शैली चुनें:"
 
+#, fuzzy
 msgid "Choose linecap:"
-msgstr ""
+msgstr "लाइनकैप चुनें:"
 
 msgid "Pattern"
 msgstr ""
@@ -8036,8 +8587,9 @@ msgstr ""
 msgid "use pattern:"
 msgstr ""
 
+#, fuzzy
 msgid "Choose pattern file:"
-msgstr ""
+msgstr "पैटर्न फ़ाइल चुनें:"
 
 msgid "pattern line width (pts):"
 msgstr ""
@@ -8057,9 +8609,9 @@ msgstr ""
 msgid "select raster"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "%(rast)s: type %(type)s"
-msgstr ""
+msgstr "%(rast)s: प्रकार %(type)s"
 
 msgid "Type of legend"
 msgstr ""
@@ -8070,8 +8622,9 @@ msgstr ""
 msgid "continuous color gradient legend (floating point map)"
 msgstr ""
 
+#, fuzzy
 msgid "Advanced legend settings"
-msgstr ""
+msgstr "उन्नत लीजेंड सेटिंग्स"
 
 msgid "draw \"no data\" box"
 msgstr ""
@@ -8088,8 +8641,9 @@ msgstr ""
 msgid "Source vector maps"
 msgstr ""
 
+#, fuzzy
 msgid "Choose vector maps and their order in legend"
-msgstr ""
+msgstr "वेक्टर मैप और लीजेंड में उनका क्रम चुनें"
 
 msgid "Edit label"
 msgstr ""
@@ -8108,16 +8662,20 @@ msgid ""
 "in front of the legend text"
 msgstr ""
 
+#, fuzzy
 msgid "Columns:"
-msgstr ""
+msgstr "कॉलम:"
 
 msgid "column span:"
 msgstr ""
 
+#, fuzzy
 msgid ""
 "Column separation distance between the left edges\n"
 "of two columns in a multicolumn legend"
 msgstr ""
+"बाएं किनारों के बीच स्तंभ पृथक्करण दूरी\n"
+"एक बहुस्तंभ किंवदंती में दो स्तंभों का"
 
 msgid "Edit legend label:"
 msgstr ""
@@ -8131,8 +8689,9 @@ msgstr ""
 msgid "Mapinfo settings"
 msgstr ""
 
+#, fuzzy
 msgid "Color settings"
-msgstr ""
+msgstr "रंग सेटिंग्स"
 
 msgid "use border color:"
 msgstr ""
@@ -8197,8 +8756,9 @@ msgstr ""
 msgid "vertical (pts):"
 msgstr ""
 
+#, fuzzy
 msgid " Reference point"
-msgstr ""
+msgstr " संदर्भ बिंदु"
 
 msgid "Text rotation"
 msgstr ""
@@ -8209,8 +8769,9 @@ msgstr ""
 msgid "No text entered!"
 msgstr ""
 
+#, fuzzy
 msgid "Choose a directory with images"
-msgstr ""
+msgstr "छवियों वाली एक निर्देशिका चुनें"
 
 msgid "Note: only EPS format supported"
 msgstr ""
@@ -8221,8 +8782,9 @@ msgstr ""
 msgid "Rotation angle (deg):"
 msgstr ""
 
+#, fuzzy
 msgid "Counterclockwise rotation in degrees"
-msgstr ""
+msgstr "डिग्री में वामावर्त (Counterclockwise) घुमाव"
 
 msgid ""
 "PIL\n"
@@ -8243,8 +8805,9 @@ msgstr ""
 msgid "North Arrow settings"
 msgstr ""
 
+#, fuzzy
 msgid "Compute convergence"
-msgstr ""
+msgstr "अभिसरण की गणना करें"
 
 msgid "Symbol"
 msgstr ""
@@ -8295,9 +8858,9 @@ msgid ""
 "'Preview' functionality won't work."
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "Characters on position %s are not supported by ISO-8859-1 (Latin 1) encoding which is required by module ps.map."
-msgstr ""
+msgstr "हिन्दी"
 
 msgid "Not all characters are supported by ISO-8859-1 (Latin 1) encoding which is required by module ps.map."
 msgstr ""
@@ -8333,9 +8896,9 @@ msgid ""
 " "
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "%(prg)s exited with return code %(code)s"
-msgstr ""
+msgstr "%(prg)s रिटर्न कोड %(code)s के साथ एग्जिट हुआ"
 
 msgid "PDF generated"
 msgstr ""
@@ -8399,14 +8962,16 @@ msgstr ""
 msgid "NORTH ARROW"
 msgstr ""
 
+#, fuzzy
 msgid "Click and drag to resize object"
-msgstr ""
+msgstr "ऑब्जेक्ट का आकार बदलने के लिए क्लिक करें और खींचें"
 
 msgid "labels: "
 msgstr ""
 
+#, fuzzy
 msgid "Cartographic Composer - GRASS"
-msgstr ""
+msgstr "कार्टोग्राफिक कंपोजर - GRASS"
 
 #, python-format
 msgid ""
@@ -8490,11 +9055,13 @@ msgstr ""
 msgid "Zoom to full extent"
 msgstr ""
 
+#, fuzzy
 msgid "Click and drag to place map frame"
-msgstr ""
+msgstr "मैप फ्रेम लगाने के लिए क्लिक करें और खींचें"
 
+#, fuzzy
 msgid "Delete selected object"
-msgstr ""
+msgstr "चयनित ऑब्जेक्ट हटाएं"
 
 msgid "Show preview"
 msgstr ""
@@ -8511,17 +9078,21 @@ msgstr ""
 msgid "Rectangle"
 msgstr ""
 
+#, fuzzy
 msgid "Add overlays"
-msgstr ""
+msgstr "ओवरले जोड़ें"
 
+#, fuzzy
 msgid "Add simple graphics: points"
-msgstr ""
+msgstr "सरल ग्राफिक्स जोड़ें: बिंदु"
 
+#, fuzzy
 msgid "Add simple graphics: lines"
-msgstr ""
+msgstr "सरल ग्राफिक्स जोड़ें: रेखाएं"
 
+#, fuzzy
 msgid "Add simple graphics: rectangles"
-msgstr ""
+msgstr "सरल ग्राफिक्स जोड़ें: आयत"
 
 msgid "inch"
 msgstr ""
@@ -8577,8 +9148,9 @@ msgstr ""
 msgid "Failed to set default color table for edited raster map"
 msgstr ""
 
+#, fuzzy
 msgid "Create new raster map"
-msgstr ""
+msgstr "नया रास्टर मैप बनाएं"
 
 msgid "Name for new raster map:"
 msgstr ""
@@ -8599,8 +9171,9 @@ msgstr ""
 msgid "Raster map <{}> not found in current mapset."
 msgstr ""
 
+#, fuzzy
 msgid "Base raster map <{}> not found in current mapset."
-msgstr ""
+msgstr "वर्तमान मानचित्रसेट में आधार रास्टर मानचित्र <{}> नहीं मिला।"
 
 msgid "Raster Digitizer - GRASS"
 msgstr ""
@@ -8626,8 +9199,9 @@ msgstr ""
 msgid "Set drawing color (not raster cell color)"
 msgstr ""
 
+#, fuzzy
 msgid "Cell value:"
-msgstr ""
+msgstr "सेल मान:"
 
 msgid "Width of currently digitized line or diameter of a digitized point in map units."
 msgstr ""
@@ -8642,11 +9216,11 @@ msgstr ""
 msgid "View and modify the configuration file '{name}'"
 msgstr ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Are you sure that you want modify r.li configuration file {name}?\n"
 "You could broke the configuration file..."
-msgstr ""
+msgstr "क्या आप वाकई r.li कॉन्फ़िगरेशन फ़ाइल {name} को संशोधित करना चाहते हैं? आप कॉन्फ़िगरेशन फ़ाइल को खराब कर सकते हैं..।"
 
 msgid "WARNING"
 msgstr ""
@@ -8654,17 +9228,20 @@ msgstr ""
 msgid "Setup for r.li modules"
 msgstr ""
 
+#, fuzzy
 msgid "Available sampling area configuration files"
-msgstr ""
+msgstr "उपलब्ध सैंपलिंग क्षेत्र (sampling area) कॉन्फ़िगरेशन फ़ाइलें"
 
 msgid "Remove a configuration file"
 msgstr ""
 
+#, fuzzy
 msgid "Create"
-msgstr ""
+msgstr "बनाएं"
 
+#, fuzzy
 msgid "Create a new configuration file"
-msgstr ""
+msgstr "एक नई कॉन्फ़िगरेशन फ़ाइल बनाएं"
 
 msgid "Rename a configuration file"
 msgstr ""
@@ -8736,15 +9313,17 @@ msgstr ""
 msgid "Draw sampling region by polygon. Right Double click to end drawing"
 msgstr ""
 
+#, fuzzy
 msgid "Create new configuration file for r.li modules"
-msgstr ""
+msgstr "r.li मॉड्यूल के लिए नई कॉन्फ़िगरेशन फ़ाइल बनाएं"
 
 #, python-format
 msgid "Do you want to create r.li configuration file <%s>?"
 msgstr ""
 
+#, fuzzy
 msgid "Create new r.li configuration file?"
-msgstr ""
+msgstr "नई r.li कॉन्फ़िगरेशन फ़ाइल बनाएं?"
 
 msgid "r.li.setup wizard canceled. Configuration file not created."
 msgstr ""
@@ -8764,8 +9343,9 @@ msgstr ""
 msgid "Vector map layer to use to select areas"
 msgstr ""
 
+#, fuzzy
 msgid "Define sampling region (region for analysis)"
-msgstr ""
+msgstr "सैंपलिंग क्षेत्र (विश्लेषण के लिए क्षेत्र) परिभाषित करें"
 
 msgid "Whole map layer"
 msgstr ""
@@ -8795,8 +9375,9 @@ msgstr ""
 msgid "Insert sampling frame parameter"
 msgstr ""
 
+#, fuzzy
 msgid "Column of upper left corner"
-msgstr ""
+msgstr "ऊपरी बाएँ कोने का स्तंभ"
 
 msgid "Row of upper left corner"
 msgstr ""
@@ -8821,8 +9402,9 @@ msgid ""
 "overlaid vector map"
 msgstr ""
 
+#, fuzzy
 msgid "Choose a method"
-msgstr ""
+msgstr "एक विधि चुनें"
 
 msgid "Use keyboard to enter sampling area"
 msgstr ""
@@ -8845,20 +9427,25 @@ msgstr ""
 msgid "Select if use area by area"
 msgstr ""
 
+#, fuzzy
 msgid "All the features will be used"
-msgstr ""
+msgstr "सभी विशेषताओं (features) का उपयोग किया जाएगा"
 
+#, fuzzy
 msgid "Analysing all vector features..."
-msgstr ""
+msgstr "सभी वेक्टर विशेषताओं (vector features) का विश्लेषण किया जा रहा है..।"
 
+#, fuzzy
 msgid "Analysing vector"
-msgstr ""
+msgstr "वेक्टर का विश्लेषण (Analysing vector)"
 
+#, fuzzy
 msgid "All feature are been analyzed."
-msgstr ""
+msgstr "सभी विशेषताओं (features) का विश्लेषण किया गया है।"
 
+#, fuzzy
 msgid "An error occurred"
-msgstr ""
+msgstr "एक त्रुटि हुई"
 
 msgid "Draw sampling regions"
 msgstr ""
@@ -8876,8 +9463,9 @@ msgstr ""
 msgid "Select type of shape"
 msgstr ""
 
+#, fuzzy
 msgid "Circle"
-msgstr ""
+msgstr "सर्कल"
 
 msgid "Width size (in cells)?"
 msgstr ""
@@ -8906,8 +9494,9 @@ msgstr ""
 msgid "Systematic non contiguous"
 msgstr ""
 
+#, fuzzy
 msgid "Centered over sites"
-msgstr ""
+msgstr "साइटों पर केंद्रित"
 
 msgid "What number of Sampling Units to use?"
 msgstr ""
@@ -8954,8 +9543,9 @@ msgstr ""
 msgid "Select sample area 1 of "
 msgstr ""
 
+#, fuzzy
 msgid "Configuration file name:"
-msgstr ""
+msgstr "कॉन्फ़िगरेशन फ़ाइल का नाम:"
 
 msgid "Raster name:"
 msgstr ""
@@ -9017,23 +9607,27 @@ msgstr ""
 msgid "Do you want to import {} to the newly created project?"
 msgstr ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Cannot rename mapset <{mapset}> for the following reason:\n"
 "\n"
 "{reason}\n"
 "\n"
 "No mapset will be renamed."
-msgstr ""
+msgstr "↵"
 
 msgid "Unable to rename selected mapset"
 msgstr ""
 
+#, fuzzy
 msgid ""
 "Current name: {}\n"
 "\n"
 "Enter new name:"
 msgstr ""
+"वर्तमान नाम: {}\n"
+"\n"
+"नया नाम दर्ज करें:"
 
 msgid ""
 "Unable to rename mapset.\n"
@@ -9041,14 +9635,14 @@ msgid ""
 "{}"
 msgstr ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Cannot rename project <{location}> for the following reasons:\n"
 "\n"
 "{reasons}\n"
 "\n"
 "No project will be renamed."
-msgstr ""
+msgstr "↵"
 
 msgid "Unable to rename selected project"
 msgstr ""
@@ -9062,7 +9656,7 @@ msgid ""
 "{}"
 msgstr ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Cannot delete one or more mapsets for the following reasons:\n"
 "\n"
@@ -9070,6 +9664,11 @@ msgid ""
 "\n"
 "No mapsets will be deleted."
 msgstr ""
+"निम्नलिखित कारणों से एक या अधिक मानचित्र सेट नहीं हटाए जा सकते:\n"
+"\n"
+"{कारण}\n"
+"\n"
+"कोई भी मानचित्र सेट नहीं हटाया जाएगा।"
 
 msgid "Unable to delete selected mapsets"
 msgstr ""
@@ -9083,8 +9682,9 @@ msgid ""
 "All maps included in these mapsets will be permanently deleted!"
 msgstr ""
 
+#, fuzzy
 msgid "Delete selected mapsets"
-msgstr ""
+msgstr "चयनित मानचित्रों को हटाएं"
 
 msgid "Error when deleting mapsets"
 msgstr ""
@@ -9098,7 +9698,7 @@ msgid ""
 "Deleting of mapsets was interrupted."
 msgstr ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Cannot delete one or more projects for the following reasons:\n"
 "\n"
@@ -9106,6 +9706,11 @@ msgid ""
 "\n"
 "No projects will be deleted."
 msgstr ""
+"निम्नलिखित कारणों से एक या अधिक प्रोजेक्ट हटाए नहीं जा सकते:\n"
+"\n"
+"{कारण}\n"
+"\n"
+"कोई भी प्रोजेक्ट नहीं हटाया जाएगा।"
 
 msgid "Unable to delete selected projects"
 msgstr ""
@@ -9119,8 +9724,9 @@ msgid ""
 "All mapsets included in these projects will be permanently deleted!"
 msgstr ""
 
+#, fuzzy
 msgid "Delete selected projects"
-msgstr ""
+msgstr "चयनित परियोजनाएँ हटाएँ"
 
 msgid "Error when deleting projects"
 msgstr ""
@@ -9134,7 +9740,7 @@ msgid ""
 "Deleting of projects was interrupted."
 msgstr ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Cannot delete GRASS database from disk for the following reason:\n"
 "\n"
@@ -9142,6 +9748,11 @@ msgid ""
 "\n"
 "GRASS database will not be deleted."
 msgstr ""
+"निम्नलिखित कारण से डिस्क से GRASS डेटाबेस को हटाया नहीं जा सकता:\n"
+"\n"
+"{कारण}\n"
+"\n"
+"GRASS डेटाबेस को नहीं हटाया जाएगा।"
 
 msgid "Unable to delete selected GRASS database"
 msgstr ""
@@ -9155,8 +9766,9 @@ msgid ""
 "The directory will be permanently deleted!"
 msgstr ""
 
+#, fuzzy
 msgid "Delete selected GRASS database"
-msgstr ""
+msgstr "चयनित GRASS डेटाबेस हटाएं"
 
 msgid "Error when deleting GRASS database"
 msgstr ""
@@ -9193,26 +9805,31 @@ msgid ""
 " Details: {error}."
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "Data file <%(name)s> imported successfully. The project's default region was set from this imported map."
-msgstr ""
+msgstr "डेटा फ़ाइल <%(name)s> सफलतापूर्वक इंपोर्ट की गई। इस इंपोर्ट किए गए मैप से प्रोजेक्ट का डिफ़ॉल्ट क्षेत्र (region) सेट किया गया था।"
 
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Current GRASS database is <%(dbase)s>.\n"
 "Current project is <%(loc)s>.\n"
 "Current mapset is <%(mapset)s>."
 msgstr ""
+"वर्तमान GRASS डेटाबेस <%(dbase)s> है।\n"
+"वर्तमान प्रोजेक्ट <%(loc)s> है।\n"
+"वर्तमान मैपसेट <%(mapset)s> है।"
 
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Current project is <%(loc)s>.\n"
 "Current mapset is <%(mapset)s>."
 msgstr ""
+"वर्तमान प्रोजेक्ट <%(loc)s> है।\n"
+"वर्तमान मैपसेट <%(mapset)s> है।"
 
-#, python-format
+#, fuzzy, python-format
 msgid "Current mapset is <%s>."
-msgstr ""
+msgstr "वर्तमान मैपसेट <%s> है।"
 
 msgid "Download in progress, wait until it is finished 0%"
 msgstr ""
@@ -9224,11 +9841,13 @@ msgstr ""
 msgid "Downloaded project is not valid"
 msgstr ""
 
+#, fuzzy
 msgid "Abort"
-msgstr ""
+msgstr "रद्द करें"
 
+#, fuzzy
 msgid "Abort download"
-msgstr ""
+msgstr "डाउनलोड रद्द करें"
 
 msgid "Select sample project to download:"
 msgstr ""
@@ -9260,8 +9879,9 @@ msgstr ""
 msgid "Project named {name} already exists, rename it first"
 msgstr ""
 
+#, fuzzy
 msgid "Dataset Download"
-msgstr ""
+msgstr "डेटासेट डाउनलोड"
 
 msgid "Download selected dataset"
 msgstr ""
@@ -9278,28 +9898,32 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
+#, fuzzy
 msgid "3D plot of spatio-temporal extents"
-msgstr ""
+msgstr "स्पैटियो-टेम्पोरल एक्सटेंट्स का 3D प्लॉट"
 
+#, fuzzy
 msgid "3D plot of spatio-temporal extents (matplotlib >= 1.0.0)"
-msgstr ""
+msgstr "of spatio-temporal extents0)"
 
 msgid "Select space time dataset(s):"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "Dataset <%s> not found in temporal database"
-msgstr ""
+msgstr "टेम्पोरल डेटाबेस में डेटासेट <%s> नहीं मिला"
 
+#, fuzzy
 msgid "Datasets have different temporal type (absolute x relative), which is not allowed."
-msgstr ""
+msgstr "डेटासेट का टेम्पोरल टाइप भिन्न (पूर्ण बनाम सापेक्ष) है, जिसकी अनुमति नहीं है।"
 
+#, fuzzy
 msgid "Datasets have different time unit which is not allowed."
-msgstr ""
+msgstr "डेटासेट में अलग-अलग समय इकाइयाँ (time units) हैं, जिसकी अनुमति नहीं है।"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Dataset <{name}> is empty"
-msgstr ""
+msgstr "डेटासेट <{name}> खाली है"
 
 #, python-format
 msgid "X [%s]"
@@ -9323,8 +9947,9 @@ msgstr ""
 msgid "Please specify the space time dataset <%s>."
 msgstr ""
 
+#, fuzzy
 msgid "Ambiguous dataset name"
-msgstr ""
+msgstr "अस्पष्ट डेटासेट नाम"
 
 #, python-format
 msgid "Space time raster dataset: %s"
@@ -9357,10 +9982,13 @@ msgstr ""
 msgid "WARNING: invalid topology"
 msgstr ""
 
+#, fuzzy
 msgid ""
 "\n"
 "Press Del to dismiss."
 msgstr ""
+"\n"
+"खारिज करने के लिए Del दबाएँ।"
 
 msgid "Timeline Tool - GRASS"
 msgstr ""
@@ -9380,8 +10008,9 @@ msgstr ""
 msgid "X and Y coordinates separated by comma:"
 msgstr ""
 
+#, fuzzy
 msgid "Coordinates can be obtained for example by right-clicking on Map Display."
-msgstr ""
+msgstr "उदाहरण के लिए मैप डिस्प्ले पर राइट-क्लिक करके निर्देशांक प्राप्त किए जा सकते हैं।"
 
 msgid "Show simple linear regression line"
 msgstr ""
@@ -9418,8 +10047,9 @@ msgstr ""
 msgid "Path for output CSV file with plotted data"
 msgstr ""
 
+#, fuzzy
 msgid "CVS path"
-msgstr ""
+msgstr "सीवीएस पथ"
 
 msgid "Do you want the CSV header?"
 msgstr ""
@@ -9427,12 +10057,13 @@ msgstr ""
 msgid "Invalid input coordinates"
 msgstr ""
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Category {ca} is not on vector map {ma} and it will be not used"
-msgstr ""
+msgstr "हिन्दी"
 
+#, fuzzy
 msgid "Both coordinates and categories are set, coordinates will be used. The use categories remove text from coordinate form"
-msgstr ""
+msgstr "निर्देशांक और श्रेणियां दोनों सेट हैं, निर्देशांक का उपयोग किया जाएगा। श्रेणियों का उपयोग समन्वय प्रपत्र से टेक्स्ट हटा देता है"
 
 msgid "With Vector temporal dataset you have to select an attribute column"
 msgstr ""
@@ -9483,8 +10114,9 @@ msgstr ""
 msgid "Invalid input temporal dataset"
 msgstr ""
 
+#, fuzzy
 msgid "Datasets have different number of values"
-msgstr ""
+msgstr "डेटासेट में मानों की संख्या भिन्न है"
 
 #, python-brace-format
 msgid "Value for {date} is {val}"
@@ -9508,14 +10140,16 @@ msgstr ""
 msgid "List of categories - right-click to delete"
 msgstr ""
 
+#, fuzzy
 msgid "Add new category"
-msgstr ""
+msgstr "नयी श्रेणी जोड़ें"
 
 msgid "Ignore changes and close dialog"
 msgstr ""
 
+#, fuzzy
 msgid "Apply changes and close dialog"
-msgstr ""
+msgstr "परिवर्तन लागू करें और डायलॉग बंद करें"
 
 #, python-format
 msgid ""
@@ -9527,9 +10161,9 @@ msgstr ""
 msgid "Unable to update vector map."
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "%d lines selected for z bulk-labeling"
-msgstr ""
+msgstr "z बल्क-लेबलिंग के लिए %d लाइनें चुनी गईं"
 
 msgid "Set value"
 msgstr ""
@@ -9583,11 +10217,13 @@ msgstr ""
 msgid "Digitization settings"
 msgstr ""
 
+#, fuzzy
 msgid "Apply changes for this session"
-msgstr ""
+msgstr "इस सत्र के लिए परिवर्तन लागू करें"
 
+#, fuzzy
 msgid "Close dialog and save changes to user settings file"
-msgstr ""
+msgstr "डायलॉग बंद करें और यूजर सेटिंग्स फ़ाइल में परिवर्तन सहेजें"
 
 msgid "Line width"
 msgstr ""
@@ -9617,23 +10253,27 @@ msgstr ""
 msgid "Select only features inside of selection bounding box"
 msgstr ""
 
+#, fuzzy
 msgid "By default are selected all features overlapping selection bounding box "
-msgstr ""
+msgstr "· "
 
+#, fuzzy
 msgid "Check for duplicates"
-msgstr ""
+msgstr "डुप्लिकेट के लिए जाँचें"
 
 msgid "Digitize lines/boundaries"
 msgstr ""
 
+#, fuzzy
 msgid "Break lines at intersection"
-msgstr ""
+msgstr "प्रतिच्छेदन पर रेखाएं तोड़ें"
 
 msgid "Digitize areas"
 msgstr ""
 
+#, fuzzy
 msgid "Close boundary (snap to the start node)"
-msgstr ""
+msgstr "सीमा बंद करें (स्टार्ट नोड पर स्नैप करें)"
 
 msgid "Save changes"
 msgstr ""
@@ -9644,8 +10284,9 @@ msgstr ""
 msgid "Query tool"
 msgstr ""
 
+#, fuzzy
 msgid "Choose query tool"
-msgstr ""
+msgstr "क्वेरी टूल चुनें"
 
 msgid "Select by box"
 msgstr ""
@@ -9671,14 +10312,17 @@ msgstr ""
 msgid "Digitize new feature"
 msgstr ""
 
+#, fuzzy
 msgid "Add new record into table"
-msgstr ""
+msgstr "तालिका में नया रिकॉर्ड जोड़ें"
 
+#, fuzzy
 msgid "Category number"
-msgstr ""
+msgstr "श्रेणी संख्या"
 
+#, fuzzy
 msgid "Category mode"
-msgstr ""
+msgstr "श्रेणी मोड"
 
 msgid "Manual entry"
 msgstr ""
@@ -9689,11 +10333,13 @@ msgstr ""
 msgid "No category"
 msgstr ""
 
+#, fuzzy
 msgid "Delete existing feature(s)"
-msgstr ""
+msgstr "मौजूदा फीचर (features) हटाएं"
 
+#, fuzzy
 msgid "Delete record from table"
-msgstr ""
+msgstr "टेबल से रिकॉर्ड हटाएं"
 
 msgid "Geometry attributes"
 msgstr ""
@@ -9719,23 +10365,29 @@ msgstr ""
 msgid "Highlight (duplicates)"
 msgstr ""
 
+#, fuzzy
 msgid "Boundary (no area)"
-msgstr ""
+msgstr "सीमा (कोई क्षेत्र नहीं)"
 
+#, fuzzy
 msgid "Boundary (one area)"
-msgstr ""
+msgstr "सीमा (एक क्षेत्र)"
 
+#, fuzzy
 msgid "Boundary (two areas)"
-msgstr ""
+msgstr "सीमा (दो क्षेत्र)"
 
+#, fuzzy
 msgid "Centroid (in area)"
-msgstr ""
+msgstr "सेंट्रॉइड (क्षेत्र में)"
 
+#, fuzzy
 msgid "Centroid (outside area)"
-msgstr ""
+msgstr "सेंट्रॉइड (क्षेत्र के बाहर)"
 
+#, fuzzy
 msgid "Centroid (duplicate in area)"
-msgstr ""
+msgstr "सेंट्रॉइड (क्षेत्र में डुप्लिकेट)"
 
 msgid "Node (one line)"
 msgstr ""
@@ -9746,8 +10398,9 @@ msgstr ""
 msgid "Vertex"
 msgstr ""
 
+#, fuzzy
 msgid "Area (closed boundary + centroid)"
-msgstr ""
+msgstr "क्षेत्र (बंद सीमा + केन्द्रक/centroid)"
 
 msgid "Direction"
 msgstr ""
@@ -9787,17 +10440,20 @@ msgstr ""
 msgid "Digitize new area (boundary without category) (Ctrl+A)"
 msgstr ""
 
+#, fuzzy
 msgid "Add new vertex to line or boundary (Ctrl+V)"
-msgstr ""
+msgstr "रेखा या सीमा में नया वर्टेक्स जोड़ें (Ctrl+V)"
 
 msgid "Left: Select; Ctrl+Left: Unselect; Right: Confirm"
 msgstr ""
 
+#, fuzzy
 msgid "Delete selected point(s), line(s), boundary(ies) or centroid(s) (Ctrl+D)"
-msgstr ""
+msgstr "चयनित बिंदु(ओं), रेखा(ओं), सीमा(ओं) या केन्द्रक(ओं) को मिटाएँ (Ctrl+D)"
 
+#, fuzzy
 msgid "Delete selected area(s) (Ctrl+F)"
-msgstr ""
+msgstr "चयनित क्षेत्र (क्षेत्रों) को हटाएं (Ctrl+F)"
 
 msgid "Display/update attributes (Ctrl+K)"
 msgstr ""
@@ -9835,8 +10491,9 @@ msgstr ""
 msgid "Show Vector Digitizer manual"
 msgstr ""
 
+#, fuzzy
 msgid "Additional tools (copy, flip, connect, etc.)"
-msgstr ""
+msgstr "अतिरिक्त उपकरण (कॉपी, फ्लिप, कनेक्ट, आदि)"
 
 msgid "Undo (Ctrl+Z)"
 msgstr ""
@@ -9853,20 +10510,25 @@ msgstr ""
 msgid "No vector map is open for editing. Please select firsta vector map from the combo box."
 msgstr ""
 
+#, fuzzy
 msgid "Break selected lines/boundaries at intersection"
-msgstr ""
+msgstr "प्रतिच्छेदन पर चयनित रेखाएं/सीमाएं तोड़ें"
 
+#, fuzzy
 msgid "Connect selected lines/boundaries"
-msgstr ""
+msgstr "चयनित लाइनों/सीमाओं को जोड़ें"
 
+#, fuzzy
 msgid "Copy categories"
-msgstr ""
+msgstr "श्रेणियां (categories) कॉपी करें"
 
+#, fuzzy
 msgid "Copy features from (background) vector map"
-msgstr ""
+msgstr "(पृष्ठभूमि) वेक्टर मैप से सुविधाएँ (features) कॉपी करें"
 
+#, fuzzy
 msgid "Copy attributes"
-msgstr ""
+msgstr "एट्रिब्यूट्स कॉपी करें"
 
 msgid "Feature type conversion"
 msgstr ""
@@ -9954,9 +10616,9 @@ msgstr ""
 msgid "Reading feature id %d failed. Operation canceled."
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "Database link %d not available. Operation canceled."
-msgstr ""
+msgstr "डेटाबेस लिंक %d उपलब्ध नहीं है। ऑपरेशन रद्द कर दिया गया।"
 
 #, python-format
 msgid "Unable to start database driver <%s>. Operation canceled."
@@ -10001,14 +10663,16 @@ msgstr ""
 msgid "Point list toolbar"
 msgstr ""
 
+#, fuzzy
 msgid "Analysis toolbar"
-msgstr ""
+msgstr "विश्लेषण टूलबार (Analysis toolbar)"
 
 msgid "Points for analysis:"
 msgstr ""
 
+#, fuzzy
 msgid "Analysis settings:"
-msgstr ""
+msgstr "विश्लेषण सेटिंग्स:"
 
 msgid "Points"
 msgstr ""
@@ -10019,8 +10683,9 @@ msgstr ""
 msgid "Iso lines:"
 msgstr ""
 
+#, fuzzy
 msgid "Add vector map into layer tree"
-msgstr ""
+msgstr "वेक्टर मानचित्र को परत ट्री (layer tree) में जोड़ें"
 
 msgid "Input tables"
 msgstr ""
@@ -10031,17 +10696,20 @@ msgstr ""
 msgid "Loading tables..."
 msgstr ""
 
+#, fuzzy
 msgid "Creating turntable..."
-msgstr ""
+msgstr "टर्नटेबल बनाया जा रहा है..।"
 
 msgid "Input vector map does not exist."
 msgstr ""
 
+#, fuzzy
 msgid "Analysing..."
-msgstr ""
+msgstr "विश्लेषण किया जा रहा है..।"
 
+#, fuzzy
 msgid "Computing nodes..."
-msgstr ""
+msgstr "कंप्यूटिंग नोड्स..।"
 
 msgid "Other settings"
 msgstr ""
@@ -10049,12 +10717,13 @@ msgstr ""
 msgid "Point style:"
 msgstr ""
 
+#, fuzzy
 msgid "Analysis result style:"
-msgstr ""
+msgstr "विश्लेषण परिणाम शैली (Analysis result style):"
 
-#, python-format
+#, fuzzy, python-format
 msgid "Color table style %s:"
-msgstr ""
+msgstr "रंग टेबल स्टाइल %s:"
 
 #, python-format
 msgid "Invert colors %s:"
@@ -10063,17 +10732,21 @@ msgstr ""
 msgid "Line color:"
 msgstr ""
 
+#, fuzzy
 msgid "Color for unused point:"
-msgstr ""
+msgstr "अप्रयुक्त पॉइंट के लिए रंग:"
 
+#, fuzzy
 msgid "Color for Start/From/Source/Used point:"
-msgstr ""
+msgstr "प्रारंभ/से/स्रोत/उपयोग किए गए पॉइंट के लिए रंग:"
 
+#, fuzzy
 msgid "Color for End/To/Sink point:"
-msgstr ""
+msgstr "अंत/से/सिंक पॉइंट के लिए रंग:"
 
+#, fuzzy
 msgid "Color for selected point:"
-msgstr ""
+msgstr "चयनित पॉइंट के लिए रंग:"
 
 msgid "Point size:"
 msgstr ""
@@ -10093,26 +10766,32 @@ msgstr ""
 msgid "Edit intersection turns costs"
 msgstr ""
 
+#, fuzzy
 msgid "Define Global Turn Costs"
-msgstr ""
+msgstr "ग्लोबल टर्न कॉस्ट्स परिभाषित करें"
 
 msgid "Insert points from Map Display"
 msgstr ""
 
+#, fuzzy
 msgid "Activate snapping to nodes"
-msgstr ""
+msgstr "नोड्स पर स्नैपिंग सक्रिय करें"
 
+#, fuzzy
 msgid "Activate mode for turns editing"
-msgstr ""
+msgstr "टर्न्स एडिटिंग के लिए मोड सक्रिय करें"
 
+#, fuzzy
 msgid "Activate mode for global turns editing"
-msgstr ""
+msgstr "ग्लोबल टर्न्स एडिटिंग के लिए मोड सक्रिय करें"
 
+#, fuzzy
 msgid "Add new point"
-msgstr ""
+msgstr "नया बिंदु जोड़ें"
 
+#, fuzzy
 msgid "Delete selected point"
-msgstr ""
+msgstr "चयनित बिंदुओं को हटाएं"
 
 msgid "Execute analysis"
 msgstr ""
@@ -10135,8 +10814,9 @@ msgstr ""
 msgid "Next analysis result"
 msgstr ""
 
+#, fuzzy
 msgid "Available analyses"
-msgstr ""
+msgstr "उपलब्ध विश्लेषण (Available analyses)"
 
 msgid "Unable to perform analysis."
 msgstr ""
@@ -10160,8 +10840,9 @@ msgstr ""
 msgid "Overwrite vector map"
 msgstr ""
 
+#, fuzzy
 msgid "Creation of turntable failed."
-msgstr ""
+msgstr "टर्नटेबल का निर्माण विफल रहा।"
 
 msgid "Vector map with analysis result does not exist."
 msgstr ""
@@ -10236,17 +10917,17 @@ msgstr ""
 msgid "unique categories layer"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "Chosen %s '%s' does not exist in vector map '%s'.\n"
-msgstr ""
+msgstr "चुना गया %s '%s' वेक्टर मैप '%s' में मौजूद नहीं है।\n"
 
-#, python-format
+#, fuzzy, python-format
 msgid "Choose existing %s.\n"
-msgstr ""
+msgstr "↵\n"
 
-#, python-format
+#, fuzzy, python-format
 msgid "Chosen column '%s' does not exist in attribute table of layer '%s' of vector map '%s'.\n"
-msgstr ""
+msgstr "चुना गया कॉलम '%s' वेक्टर मैप '%s' की लेयर '%s' की एट्रिब्यूट टेबल में मौजूद नहीं है।\n"
 
 msgid "topology"
 msgstr ""
@@ -10260,20 +10941,23 @@ msgstr ""
 msgid "new point"
 msgstr ""
 
+#, fuzzy
 msgid "Arc forward/both direction(s) cost column:"
-msgstr ""
+msgstr "आर्क फॉरवर्ड/दोनों दिशा(ओ) का लागत कॉलम (Arc forward/both direction(s) cost column):"
 
 msgid "arc forward/both"
 msgstr ""
 
+#, fuzzy
 msgid "Arc backward direction cost column:"
-msgstr ""
+msgstr "आर्क बैकवर्ड डायरेक्शन कॉस्ट कॉलम (Arc backward direction cost column):"
 
 msgid "arc backward"
 msgstr ""
 
+#, fuzzy
 msgid "Arcs' cost column (for both directions):"
-msgstr ""
+msgstr "आर्क्स (Arcs) का लागत कॉलम (दोनों दिशाओं के लिए):"
 
 msgid "arc"
 msgstr ""
@@ -10317,9 +11001,9 @@ msgstr ""
 msgid "Shortest distance via the network %s"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "Cost isolines %s"
-msgstr ""
+msgstr "कॉस्ट आइसोलाइन्स %s"
 
 msgid "Overwrite map layer"
 msgstr ""
@@ -10330,17 +11014,20 @@ msgstr ""
 msgid "Edit point"
 msgstr ""
 
+#, fuzzy
 msgid " Server settings "
-msgstr ""
+msgstr " सर्वर सेटिंग्स "
 
 msgid "Server:"
 msgstr ""
 
+#, fuzzy
 msgid "&Connect"
-msgstr ""
+msgstr "&जुड़ें"
 
+#, fuzzy
 msgid "Connect to the server"
-msgstr ""
+msgstr "सर्वर से कनेक्ट करें"
 
 msgid "Show advanced connection settings"
 msgstr ""
@@ -10348,8 +11035,9 @@ msgstr ""
 msgid "Hide advanced connection settings"
 msgstr ""
 
+#, fuzzy
 msgid " Layer Manager Settings "
-msgstr ""
+msgstr " लेयर मैनेजर सेटिंग्स "
 
 msgid "Output layer name:"
 msgstr ""
@@ -10360,32 +11048,36 @@ msgstr ""
 msgid "Password:"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid "Connecting to <%s>..."
-msgstr ""
+msgstr "<%s> से कनेक्ट किया जा रहा है..।"
 
+#, fuzzy
 msgid "Available web services"
-msgstr ""
+msgstr "उपलब्ध वेब सेवाएँ (Available web services)"
 
-#, python-format
+#, fuzzy, python-format
 msgid "Connected to <%s>"
-msgstr ""
+msgstr "<%s> से कनेक्ट किया गया"
 
 #, python-format
 msgid "Unable to connect to <%s>"
 msgstr ""
 
+#, fuzzy
 msgid "Add web service layer"
-msgstr ""
+msgstr "वेब सेवा परत जोड़ें"
 
+#, fuzzy
 msgid "Add selected web service layers as map layer into layer tree"
-msgstr ""
+msgstr "चयनित वेब सेवा परतों को मानचित्र परत के रूप में परत ट्री (layer tree) में जोड़ें"
 
 msgid "Web service layer properties"
 msgstr ""
 
+#, fuzzy
 msgid "&OK"
-msgstr ""
+msgstr "&ठीक है"
 
 msgid "Name for output raster map:"
 msgstr ""
@@ -10411,11 +11103,13 @@ msgstr ""
 msgid "Overwrite existing raster map"
 msgstr ""
 
+#, fuzzy
 msgid "Choose named region:"
-msgstr ""
+msgstr "नामित क्षेत्र चुनें:"
 
+#, fuzzy
 msgid "&Save layer"
-msgstr ""
+msgstr "&लेयर सहेजें"
 
 msgid "Save web service layer as raster map"
 msgstr ""
@@ -10440,8 +11134,9 @@ msgstr ""
 msgid "Unable to fetch data.\n"
 msgstr ""
 
+#, fuzzy
 msgid " Requested data settings "
-msgstr ""
+msgstr " अनुरोधित डेटा सेटिंग्स "
 
 msgid "Request"
 msgstr ""
@@ -10452,8 +11147,9 @@ msgstr ""
 msgid "Source projection:"
 msgstr ""
 
+#, fuzzy
 msgid "Advanced request settings"
-msgstr ""
+msgstr "उन्नत अनुरोध सेटिंग्स"
 
 msgid "Order of layers in raster"
 msgstr ""
@@ -10467,11 +11163,13 @@ msgstr ""
 msgid "Linear interpolation"
 msgstr ""
 
+#, fuzzy
 msgid "Cubic interpolation"
-msgstr ""
+msgstr "क्यूबिक इंटरपोलेशन"
 
+#, fuzzy
 msgid "Cubic spline interpolation"
-msgstr ""
+msgstr "क्यूबिक स्पलाइन इंटरपोलेशन"
 
 msgid "Maximum columns to request from server at time:"
 msgstr ""
@@ -10482,8 +11180,9 @@ msgstr ""
 msgid "Do not request transparent data"
 msgstr ""
 
+#, fuzzy
 msgid "Additional query parameters for server:"
-msgstr ""
+msgstr "सर्वर के लिए अतिरिक्त क्वेरी पैरामीटर:"
 
 #, python-format
 msgid ""
@@ -10491,11 +11190,13 @@ msgid ""
 "from <%s>:\n"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "%s web service was not found in fetched capabilities file from <%s>:\n"
 "%s\n"
 msgstr ""
+"<%s> से मिली कैपेबिलिटीज़ फ़ाइल में %s वेब सर्विस नहीं मिली:\n"
+"%s\n"
 
 msgid "Source image format"
 msgstr ""
@@ -10509,11 +11210,13 @@ msgstr ""
 msgid "Select source projection.\n"
 msgstr ""
 
+#, fuzzy
 msgid "Choose output layer name.\n"
-msgstr ""
+msgstr "आउटपुट लेयर का नाम चुनें।\n"
 
+#, fuzzy
 msgid "Add default"
-msgstr ""
+msgstr "डिफ़ॉल्ट जोड़ें"
 
 #, python-format
 msgid ""
@@ -10563,11 +11266,13 @@ msgstr ""
 msgid "Number of bins (for FP maps)"
 msgstr ""
 
+#, fuzzy
 msgid "C&opy"
-msgstr ""
+msgstr "कॉपी (&C)"
 
+#, fuzzy
 msgid "Copy regression statistics the clipboard (Ctrl+C)"
-msgstr ""
+msgstr "रिग्रेशन आंकड़े क्लिपबोर्ड पर कॉपी करें (Ctrl+C)"
 
 msgid "Regression statistics copied to clipboard"
 msgstr ""
@@ -10614,8 +11319,9 @@ msgstr ""
 msgid "Weight:"
 msgstr ""
 
+#, fuzzy
 msgid "Apply changes for the current session and close dialog"
-msgstr ""
+msgstr "वर्तमान सत्र के लिए परिवर्तन लागू करें और डायलॉग बंद करें"
 
 #, python-format
 msgid "Plot text sizes saved to file '%s'."
@@ -10639,8 +11345,9 @@ msgstr ""
 msgid "Scatterplot points"
 msgstr ""
 
+#, fuzzy
 msgid "Axis settings"
-msgstr ""
+msgstr "अक्ष विन्यास"
 
 msgid "X-Axis"
 msgstr ""
@@ -10651,14 +11358,17 @@ msgstr ""
 msgid "Scale"
 msgstr ""
 
+#, fuzzy
 msgid "Automatic axis scaling, custom max and min, or scale matches data range (min)"
-msgstr ""
+msgstr "स्वचालित अक्ष स्केलिंग (Automatic axis scaling), कस्टम अधिकतम और न्यूनतम, या डेटा रेंज (न्यूनतम) से मेल खाने वाला स्केल"
 
+#, fuzzy
 msgid "Custom min"
-msgstr ""
+msgstr "कस्टम न्यूनतम (Custom min)"
 
+#, fuzzy
 msgid "Custom max"
-msgstr ""
+msgstr "कस्टम अधिकतम (Custom max)"
 
 msgid "Log scale"
 msgstr ""
@@ -10691,8 +11401,9 @@ msgstr ""
 msgid "Raster cell values"
 msgstr ""
 
+#, fuzzy
 msgid "Cell counts"
-msgstr ""
+msgstr "सेल की संख्या"
 
 #, python-format
 msgid "Histogram of image group <%s>"
@@ -10712,8 +11423,9 @@ msgstr ""
 msgid "Percent of total cells"
 msgstr ""
 
+#, fuzzy
 msgid "Area"
-msgstr ""
+msgstr "क्षेत्र (Area)"
 
 msgid "Statistics for Map(s) Histogrammed"
 msgstr ""
@@ -10735,8 +11447,9 @@ msgstr ""
 msgid "Distance along transect"
 msgstr ""
 
+#, fuzzy
 msgid "Cell values"
-msgstr ""
+msgstr "सेल मान"
 
 msgid "Not all points of profile lie inside computational region."
 msgstr ""
@@ -10750,11 +11463,13 @@ msgstr ""
 msgid "Nothing to profile"
 msgstr ""
 
+#, fuzzy
 msgid "Choose prefix for file(s) where to save profile values..."
-msgstr ""
+msgstr "प्रोफ़ाइल मानों को सहेजने के लिए फ़ाइल(फ़ाइलों) के लिए प्रीफ़िक्स चुनें..।"
 
+#, fuzzy
 msgid "Comma separated value (*.csv)|*.csv"
-msgstr ""
+msgstr "अल्पविराम से अलग किया गया मान (*.csv)|*.csv"
 
 msgid "Overwrite file?"
 msgstr ""
@@ -10765,11 +11480,13 @@ msgid ""
 "Reason: %s"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "%d files created:\n"
 "%s"
 msgstr ""
+"%d फ़ाइलें बनाई गईं:\n"
+"%s"
 
 msgid "No files generated."
 msgstr ""
@@ -10780,25 +11497,28 @@ msgstr ""
 msgid "GRASS Bivariate Scatterplot Tool"
 msgstr ""
 
+#, fuzzy
 msgid "Bivariate Scatterplot"
-msgstr ""
+msgstr "द्विचर स्कैटरप्लॉट"
 
 msgid "Nothing to plot."
 msgstr ""
 
+#, fuzzy
 msgid "At least 2 raster maps must be specified"
-msgstr ""
+msgstr "कम से कम 2 रास्टर मैप्स (raster maps) निर्दिष्ट किए जाने चाहिए"
 
+#, fuzzy
 msgid "Bivariate Scatterplot of "
-msgstr ""
+msgstr "· "
 
 #, python-format
 msgid "Raster <%s> cell values"
 msgstr ""
 
-#, python-format
+#, fuzzy, python-format
 msgid ": %s"
-msgstr ""
+msgstr ": %s"
 
 msgid "Regression Statistics for Scatterplot(s)"
 msgstr ""
