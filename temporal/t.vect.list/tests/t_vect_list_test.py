@@ -6,9 +6,12 @@ import io
 
 import pytest
 
-from grass.tools import Tools
+try:
+    import yaml
+except ImportError:
+    yaml = None
 
-yaml = pytest.importorskip("yaml", reason="PyYAML package not available")
+from grass.tools import Tools
 
 
 @pytest.mark.needs_solo_run
@@ -20,15 +23,20 @@ def test_defaults(space_time_vector_dataset):
 
 
 @pytest.mark.needs_solo_run
-def test_line(space_time_vector_dataset):
+@pytest.mark.parametrize(
+    ("separator", "delimiter"),
+    [(None, ","), (",", ","), ("pipe", "|")],
+)
+def test_line(space_time_vector_dataset, separator, delimiter):
     """Line format can be parsed with column=name"""
     tools = Tools(session=space_time_vector_dataset.session)
     result = tools.t_vect_list(
         input=space_time_vector_dataset.name,
         format="line",
         columns="name",
+        separator=separator,
     )
-    names = result.stdout.strip().split(",")
+    names = result.stdout.strip().split(delimiter)
     assert names == space_time_vector_dataset.vector_names
 
 
@@ -50,6 +58,7 @@ def test_json(space_time_vector_dataset):
     assert names == space_time_vector_dataset.vector_names
 
 
+@pytest.mark.skipif(yaml is None, reason="PyYAML package not available")
 @pytest.mark.needs_solo_run
 def test_yaml(space_time_vector_dataset):
     """Check YAML can be parsed and contains the right values"""
@@ -75,7 +84,8 @@ def test_yaml(space_time_vector_dataset):
 
 @pytest.mark.needs_solo_run
 @pytest.mark.parametrize(
-    ("separator", "delimiter"), [(None, ","), (",", ","), (";", ";"), ("tab", "\t")]
+    ("separator", "delimiter"),
+    [(None, ","), (",", ","), (";", ";"), ("tab", "\t"), ("pipe", "|")],
 )
 def test_csv(space_time_vector_dataset, separator, delimiter):
     """Check CSV can be parsed with different separators"""
@@ -100,3 +110,28 @@ def test_csv(space_time_vector_dataset, separator, delimiter):
     assert len(data) == len(space_time_vector_dataset.vector_names)
     for row in data:
         assert len(row) == len(columns)
+
+
+@pytest.mark.needs_solo_run
+@pytest.mark.parametrize(
+    "output_format",
+    [
+        "json",
+        pytest.param(
+            "yaml",
+            marks=pytest.mark.skipif(
+                yaml is None, reason="PyYAML package not available"
+            ),
+        ),
+    ],
+)
+def test_separator_rejected(space_time_vector_dataset, output_format):
+    """Check that the separator option is rejected"""
+    tools = Tools(session=space_time_vector_dataset.session)
+    returncode = tools.t_rast_list(
+        input=space_time_vector_dataset.name,
+        format=output_format,
+        separator=",",
+        errors="status",
+    )
+    assert returncode != 0
