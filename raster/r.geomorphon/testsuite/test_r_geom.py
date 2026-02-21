@@ -13,6 +13,11 @@ Licence:    This program is free software under the GNU General Public
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.script.core import read_command
+import json
+import os
+from grass.script import core as gcore
+import tempfile
+import pathlib
 
 synth_out = """1	flat
 3	ridge
@@ -77,6 +82,41 @@ class TestClipling(TestCase):
         )
         category = read_command("r.category", map=self.outsint)
         self.assertEqual(first=synth_out, second=category)
+
+    def test_profile_json(self):
+        # ensure region is set to the test elevation
+        self.runModule("g.region", raster=self.inele)
+        region = gcore.region()
+        east = float(region.get("east", region["e"]))
+        west = float(region.get("west", region["w"]))
+        north = float(region.get("north", region["n"]))
+        south = float(region.get("south", region["s"]))
+        e = (east + west) / 2.0
+        n = (north + south) / 2.0
+        fd, tmp = tempfile.mkstemp(prefix="rgeom_profile_", suffix=".json")
+        os.close(fd)
+        try:
+            self.runModule(
+                "r.geomorphon",
+                elevation=self.inele,
+                search=3,
+                profiledata=tmp,
+                profileformat="json",
+                coordinates=(e, n),
+                overwrite=True,
+            )
+            self.assertTrue(pathlib.Path(tmp).exists())
+            self.assertGreater(pathlib.Path(tmp).stat().st_size, 0)
+            with open(tmp, encoding="utf-8") as fh:
+                data = json.load(fh)
+            # basic sanity checks on JSON structure
+            self.assertIn("final_results", data)
+            self.assertIn("computation_parameters", data)
+            self.assertIsInstance(data["final_results"], dict)
+            self.assertIsInstance(data["computation_parameters"], dict)
+        finally:
+            if pathlib.Path(tmp).exists():
+                os.remove(tmp)
 
 
 if __name__ == "__main__":
