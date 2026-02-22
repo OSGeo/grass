@@ -374,6 +374,10 @@ int main(int argc, char **argv)
                                          db_sqltype_name(sql_type));
 
                 int c_type = db_sqltype_to_Ctype(sql_type);
+
+                // Same rules as for quoting, i.e., number only as
+                // JSON or Python would see it and not numeric which may
+                // include, e.g., date.
                 G_json_object_set_boolean(
                     col_object, "is_number",
                     (c_type == DB_C_TYPE_INT || c_type == DB_C_TYPE_DOUBLE));
