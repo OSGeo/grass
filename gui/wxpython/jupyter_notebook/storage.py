@@ -4,6 +4,9 @@
 @brief Simple interface for working with Jupyter Notebook files stored within
 the current storage.
 
+Functions:
+- `get_project_jupyter_storage()`: Return the storage for Jupyter notebooks associated with the current GRASS project.
+
 Classes:
  - storage::JupyterStorageManager
 
@@ -20,12 +23,28 @@ import shutil
 from pathlib import Path
 
 import grass.script as gs
-from .utils import get_project_jupyter_storage
 
+
+# Template directory
+TEMPLATE_DIR = Path(__file__).parent / "template_notebooks"
 
 # Template notebook filenames
 WELCOME_NOTEBOOK_NAME = "welcome.ipynb"
 NEW_NOTEBOOK_TEMPLATE_NAME = "new.ipynb"
+
+# Jupyter storage directory name within the project structure
+JUPYTER_STORAGE_DIR_NAME = "notebooks"
+
+
+def get_project_jupyter_storage() -> Path:
+    """Return the storage for Jupyter notebooks associated
+    with the current GRASS project.
+
+    :return: Path to the project jupyter storage
+    """
+    env = gs.gisenv()
+    project_path = Path(env["GISDBASE"]) / env["LOCATION_NAME"]
+    return project_path / JUPYTER_STORAGE_DIR_NAME
 
 
 class JupyterStorageManager:
@@ -37,7 +56,7 @@ class JupyterStorageManager:
         """Initialize the Jupyter notebook storage.
 
         :param storage: Optional custom storage path. If not provided,
-                        the project storage is used
+                        the default project storage is used
         :param create_template: If a welcome notebook should be created or not
         :raises PermissionError: If the storage is not writable
         """
@@ -153,14 +172,14 @@ class JupyterStorageManager:
     ) -> Path:
         """Create a notebook from a template and optionally replace placeholders.
 
-        :param template_name: Template filename located in ``template_notebooks``
+        :param template_name: Template filename located in TEMPLATE_DIR
         :param target_name: Optional target filename for the new notebook
         :param replacements: Optional mapping of placeholder strings to replacement values
         :return: Path to the created notebook file
         :raises FileExistsError: If target file already exists
         """
         # Locate the template file inside the package
-        template_path = Path(__file__).parent / "template_notebooks" / template_name
+        template_path = TEMPLATE_DIR / template_name
 
         # Determine target path (copy vs. create new file)
         if target_name is None:

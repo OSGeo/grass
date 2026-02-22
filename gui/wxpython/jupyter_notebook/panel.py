@@ -42,16 +42,28 @@ class JupyterPanel(wx.Panel, MainPageBase):
 
     def __init__(
         self,
-        parent,
+        parent: wx.Window,
         giface,
-        id=wx.ID_ANY,
-        title=_("Jupyter Notebook"),
-        statusbar=None,
-        dockable=False,
-        storage=None,
-        create_template=False,
+        id: int = wx.ID_ANY,
+        title: str = _("Jupyter Notebook"),
+        statusbar: wx.StatusBar | None = None,
+        dockable: bool = False,
+        storage: Path | None = None,
+        create_template: bool = False,
         **kwargs,
-    ):
+    ) -> None:
+        """Initialize Jupyter panel with integrated notebook interface.
+
+        :param parent: Parent window
+        :param giface: GRASS interface
+        :param id: Window ID
+        :param title: Panel title
+        :param statusbar: Optional status bar for messages
+        :param dockable: Whether the panel can be docked
+        :param storage: Storage path for notebooks
+        :param create_template: Whether to create template notebooks
+        :param kwargs: Additional arguments passed to wx.Panel
+        """
         super().__init__(parent=parent, id=id, **kwargs)
         MainPageBase.__init__(self, dockable)
 
@@ -71,7 +83,8 @@ class JupyterPanel(wx.Panel, MainPageBase):
 
         self._layout()
 
-    def _layout(self):
+    def _layout(self) -> None:
+        """Setup panel layout."""
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.toolbar, proportion=0, flag=wx.EXPAND)
         sizer.Add(self.aui_notebook, proportion=1, flag=wx.EXPAND)
@@ -81,14 +94,14 @@ class JupyterPanel(wx.Panel, MainPageBase):
         sizer.Fit(self)
         self.Layout()
 
-    def SetUpEnvironment(self):
+    def SetUpEnvironment(self) -> bool:
         """Setup integrated Jupyter notebook environment and load initial notebooks.
 
         - Prepares notebook files in the notebook storage
         - Starts the Jupyter server
         - Loads all existing notebooks as tabs in the embedded browser
 
-        :return: bool: True if setup was successful, False otherwise
+        :return: True if setup was successful, False otherwise
         """
         try:
             # Prepare files and start server
@@ -126,7 +139,7 @@ class JupyterPanel(wx.Panel, MainPageBase):
         )
         return True
 
-    def Switch(self, file_name):
+    def Switch(self, file_name: str) -> bool:
         """Switch to existing notebook tab.
 
         :param file_name: Name of the .ipynb file (e.g., 'example.ipynb')
@@ -138,7 +151,7 @@ class JupyterPanel(wx.Panel, MainPageBase):
                 return True
         return False
 
-    def Open(self, file_name):
+    def Open(self, file_name: str) -> None:
         """Open a Jupyter notebook in a new tab and switch to it.
 
         :param file_name: Name of the .ipynb file (e.g., 'example.ipynb')
@@ -154,7 +167,7 @@ class JupyterPanel(wx.Panel, MainPageBase):
                 wx.ICON_ERROR,
             )
 
-    def OpenOrSwitch(self, file_name):
+    def OpenOrSwitch(self, file_name: str) -> None:
         """Switch to .ipynb file if open, otherwise open it.
 
         :param file_name: Name of the .ipynb file (e.g., 'example.ipynb')
@@ -165,7 +178,7 @@ class JupyterPanel(wx.Panel, MainPageBase):
             self.Open(file_name)
             self.SetStatusText(_("File '{}' opened.").format(file_name), 0)
 
-    def Import(self, source_path, new_name=None):
+    def Import(self, source_path: Path, new_name: str | None = None) -> None:
         """Import a .ipynb file into notebook storage and open it in a new tab.
 
         :param source_path: Path to the source .ipynb file to be imported
@@ -182,12 +195,14 @@ class JupyterPanel(wx.Panel, MainPageBase):
                 wx.ICON_ERROR | wx.OK,
             )
 
-    def OnImport(self, event=None):
+    def OnImport(self, event: wx.Event | None = None) -> None:
         """Import an existing Jupyter notebook file into notebook storage.
 
         Prompts user to select a .ipynb file:
         - If the file is already in the notebook storage: switch to it or open it
         - If the file is from elsewhere: import and open it (prompt for new name if needed)
+
+        :param event: Toolbar event
         """
         # Open file dialog to select an existing Jupyter notebook file
         with wx.FileDialog(
@@ -230,8 +245,11 @@ class JupyterPanel(wx.Panel, MainPageBase):
             # Perform the import and open the notebook
             self.Import(source_path, new_name=new_name)
 
-    def OnExport(self, event=None):
-        """Export the currently opened Jupyter notebook to a user-selected location."""
+    def OnExport(self, event: wx.Event | None = None) -> None:
+        """Export the currently opened Jupyter notebook to a user-selected location.
+
+        :param event: Toolbar event
+        """
         current_page = self.aui_notebook.GetSelection()
         if current_page == wx.NOT_FOUND:
             wx.MessageBox(
@@ -268,8 +286,11 @@ class JupyterPanel(wx.Panel, MainPageBase):
                     style=wx.ICON_ERROR | wx.OK,
                 )
 
-    def OnCreate(self, event=None):
-        """Create a new empty Jupyter notebook in the notebook storage and open it."""
+    def OnCreate(self, event: wx.Event | None = None) -> None:
+        """Create a new empty Jupyter notebook in the notebook storage and open it.
+
+        :param event: Toolbar event
+        """
         with wx.TextEntryDialog(
             self,
             message=_("Enter a name for the new notebook:"),
@@ -297,10 +318,12 @@ class JupyterPanel(wx.Panel, MainPageBase):
             self.Open(path.name)
             self.SetStatusText(_("New file '{}' created.").format(path.name), 0)
 
-    def OnCloseWindow(self, event=None):
-        """Cleanup when panel is being closed (called by parent notebook).
+    def OnCloseWindow(self, event: wx.Event | None = None) -> None:
+        """Cleanup when panel is being closed.
 
         This method is called by mainnotebook when the tab is being closed.
+
+        :param event: Close event
         """
         confirm = wx.MessageBox(
             _("Do you really want to close this tab and stop the Jupyter server?"),
@@ -338,12 +361,18 @@ class JupyterPanel(wx.Panel, MainPageBase):
 
         self._onCloseWindow(event)
 
-    def SetStatusText(self, *args):
-        """Set text in the status bar."""
+    def SetStatusText(self, *args) -> None:
+        """Set text in the status bar.
+
+        :param args: Arguments passed to statusbar.SetStatusText
+        """
         self.statusbar.SetStatusText(*args)
 
-    def GetStatusBar(self):
-        """Get statusbar."""
+    def GetStatusBar(self) -> wx.StatusBar | None:
+        """Get statusbar.
+
+        :return: Status bar or None if not available
+        """
         return self.statusbar
 
 
@@ -356,15 +385,26 @@ class JupyterBrowserPanel(wx.Panel, MainPageBase):
 
     def __init__(
         self,
-        parent,
-        giface,
-        id=wx.ID_ANY,
-        statusbar=None,
-        dockable=False,
-        storage=None,
-        create_template=False,
+        parent: wx.Window,
+        giface,  # GrassInterface type
+        id: int = wx.ID_ANY,
+        statusbar: wx.StatusBar | None = None,
+        dockable: bool = False,
+        storage: Path | None = None,
+        create_template: bool = False,
         **kwargs,
-    ):
+    ) -> None:
+        """Initialize Jupyter browser panel.
+
+        :param parent: Parent window
+        :param giface: GRASS interface
+        :param id: Window ID
+        :param statusbar: Optional status bar for messages
+        :param dockable: Whether the panel can be docked
+        :param storage: Storage path for notebooks
+        :param create_template: Whether to create template notebooks
+        :param kwargs: Additional arguments passed to wx.Panel
+        """
         super().__init__(parent=parent, id=id, **kwargs)
         MainPageBase.__init__(self, dockable)
 
@@ -377,7 +417,7 @@ class JupyterBrowserPanel(wx.Panel, MainPageBase):
 
         self._layout()
 
-    def _layout(self):
+    def _layout(self) -> None:
         """Create simple layout with message and controls."""
         main_sizer = wx.BoxSizer(wx.VERTICAL)
         main_sizer.AddStretchSpacer(1)
@@ -430,12 +470,11 @@ class JupyterBrowserPanel(wx.Panel, MainPageBase):
         self.SetSizer(main_sizer)
         self.Layout()
 
-    def SetUpEnvironment(self):
+    def SetUpEnvironment(self) -> bool:
         """Setup Jupyter environment and open in browser.
 
-        :return: bool: True if setup was successful, False otherwis
+        :return: True if setup was successful, False otherwise
         """
-
         try:
             # Prepare files and start server
             self.env.setup()
@@ -469,13 +508,19 @@ class JupyterBrowserPanel(wx.Panel, MainPageBase):
 
         return True
 
-    def OnOpenBrowser(self, event):
-        """Re-open the Jupyter server URL in browser."""
+    def OnOpenBrowser(self, event: wx.Event) -> None:
+        """Re-open the Jupyter server URL in browser.
+
+        :param event: Button click event
+        """
         if self.env and self.env.server and self.env.server_url:
             webbrowser.open(self.env.server_url)
 
-    def OnStop(self, event):
-        """Stop the Jupyter server and close the tab."""
+    def OnStop(self, event: wx.Event) -> None:
+        """Stop the Jupyter server and close the tab.
+
+        :param event: Button click event
+        """
         if self.env:
             # Get server info before stopping
             url = self.env.server_url
@@ -504,10 +549,12 @@ class JupyterBrowserPanel(wx.Panel, MainPageBase):
                     wx.ICON_ERROR,
                 )
 
-    def OnCloseWindow(self, event=None):
-        """Cleanup when panel is being closed (called by parent notebook).
+    def OnCloseWindow(self, event: wx.Event | None = None) -> None:
+        """Cleanup when panel is being closed.
 
         This method is called by mainnotebook when the tab is being closed.
+
+        :param event: Close event
         """
         confirm = wx.MessageBox(
             _("Do you really want to close this tab and stop the Jupyter server?"),
@@ -545,11 +592,17 @@ class JupyterBrowserPanel(wx.Panel, MainPageBase):
 
         self._onCloseWindow(event)
 
-    def SetStatusText(self, *args):
-        """Set text in the status bar."""
+    def SetStatusText(self, *args) -> None:
+        """Set text in the status bar.
+
+        :param args: Arguments passed to statusbar.SetStatusText
+        """
         if self.statusbar:
             self.statusbar.SetStatusText(*args)
 
-    def GetStatusBar(self):
-        """Get status bar."""
+    def GetStatusBar(self) -> wx.StatusBar | None:
+        """Get status bar.
+
+        :return: Status bar or None if not available
+        """
         return self.statusbar
