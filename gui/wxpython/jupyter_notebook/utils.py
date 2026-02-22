@@ -6,7 +6,6 @@
 Functions:
 - `is_jupyter_installed()`: Check if Jupyter Notebook is installed on the system and functional.
 - `is_wx_html2_available()`: Check if wx.html2 module is available.
-- `get_project_jupyter_storage()`: Return the storage for Jupyter notebooks associated with the current GRASS project.
 
 (C) 2026 by the GRASS Development Team
 
@@ -18,9 +17,6 @@ This program is free software under the GNU General Public License
 
 import shutil
 import subprocess
-from pathlib import Path
-
-import grass.script as gs
 
 
 def is_jupyter_installed() -> bool:
@@ -60,14 +56,3 @@ def is_wx_html2_available() -> bool:
         return True
     except (ImportError, ModuleNotFoundError):
         return False
-
-
-def get_project_jupyter_storage() -> Path:
-    """Return the storage for Jupyter notebooks associated
-    with the current GRASS project.
-
-    :return: Path to the project jupyter storage
-    """
-    env = gs.gisenv()
-    project_path = Path(env["GISDBASE"]) / env["LOCATION_NAME"]
-    return project_path / "notebooks"

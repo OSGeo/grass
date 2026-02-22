@@ -15,6 +15,7 @@ This program is free software under the GNU General Public License
 """
 
 import sys
+from typing import Any
 
 import wx
 
@@ -25,9 +26,13 @@ from icons.icon import MetaIcon
 
 
 class JupyterToolbar(BaseToolbar):
-    """Jupyter toolbar"""
+    """Toolbar for integrated Jupyter notebook interface."""
 
-    def __init__(self, parent):
+    def __init__(self, parent: wx.Window) -> None:
+        """Initialize Jupyter toolbar.
+
+        :param parent: Parent window
+        """
         BaseToolbar.__init__(self, parent)
 
         # workaround for http://trac.wxwidgets.org/ticket/13888
@@ -39,8 +44,11 @@ class JupyterToolbar(BaseToolbar):
         # realize the toolbar
         self.Realize()
 
-    def _toolbarData(self):
-        """Toolbar data"""
+    def _toolbarData(self) -> tuple[Any, ...]:
+        """Build toolbar data structure.
+
+        :return: Toolbar data tuple containing tool definitions
+        """
         icons = {
             "create": MetaIcon(
                 img="create",
