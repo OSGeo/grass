@@ -39,19 +39,19 @@ class JupyterAuiNotebook(aui.AuiNotebook):
 
     def __init__(
         self,
-        parent,
-        agwStyle=aui.AUI_NB_DEFAULT_STYLE
+        parent: wx.Window,
+        agwStyle: int = aui.AUI_NB_DEFAULT_STYLE
         | aui.AUI_NB_CLOSE_ON_ACTIVE_TAB
         | aui.AUI_NB_TAB_EXTERNAL_MOVE
         | aui.AUI_NB_BOTTOM
         | wx.NO_BORDER,
-    ):
-        """
-        Wrapper for the notebook widget that manages notebook pages.
+    ) -> None:
+        """Initialize AUI notebook for Jupyter with WebView tabs.
 
+        :param parent: Parent window
+        :param agwStyle: AUI notebook style flags
         :raises ImportError: If wx.html2 is not available
         """
-
         if not WX_HTML2_AVAILABLE:
             msg = "wx.html2 is not available"
             raise ImportError(msg)
@@ -64,9 +64,8 @@ class JupyterAuiNotebook(aui.AuiNotebook):
 
         self.Bind(aui.EVT_AUINOTEBOOK_PAGE_CLOSE, self.OnPageClose)
 
-    def _hide_top_ui(self, event):
-        """
-        Inject CSS via JS into the Jupyter page to hide top UI elements.
+    def _hide_top_ui(self, event: html.WebViewEvent) -> None:
+        """Inject CSS via JS into the Jupyter page to hide top UI elements.
 
         Works for both:
         - Jupyter Notebook 6 and older (classic interface)
@@ -76,6 +75,8 @@ class JupyterAuiNotebook(aui.AuiNotebook):
         Some UI elements may be created dynamically after page load,
         so the script ensures the CSS/JS is applied once elements exist.
         Duplicate injection is prevented by checking for a unique style ID.
+
+        :param event: WebView loaded event
         """
         webview = event.GetEventObject()
 
@@ -112,12 +113,11 @@ class JupyterAuiNotebook(aui.AuiNotebook):
 
         webview.RunScript(js)
 
-    def AddPage(self, url, title):
-        """
-        Add a new aui notebook page with a Jupyter WebView.
-        :param url: URL of the Jupyter file (str).
-        :param title: Tab title (str).
+    def AddPage(self, url: str, title: str) -> None:
+        """Add a new AUI notebook page with a Jupyter WebView.
 
+        :param url: URL of the Jupyter file
+        :param title: Tab title
         :raises NotImplementedError: If wx.html2.WebView is not functional on this system
         """
         browser = html.WebView.New(self)
@@ -125,8 +125,11 @@ class JupyterAuiNotebook(aui.AuiNotebook):
         wx.CallAfter(browser.Bind, html.EVT_WEBVIEW_LOADED, self._hide_top_ui)
         super().AddPage(browser, title)
 
-    def OnPageClose(self, event):
-        """Close the aui notebook page with confirmation dialog."""
+    def OnPageClose(self, event: aui.AuiNotebookEvent) -> None:
+        """Close the AUI notebook page with confirmation dialog.
+
+        :param event: Notebook page close event
+        """
         index = event.GetSelection()
         title = self.GetPageText(index)
 

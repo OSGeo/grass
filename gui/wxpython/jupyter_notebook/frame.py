@@ -30,15 +30,26 @@ class JupyterFrame(wx.Frame):
 
     def __init__(
         self,
-        parent,
+        parent: wx.Window,
         giface,
-        action="integrated",
-        storage=None,
-        create_template=False,
-        id=wx.ID_ANY,
-        title=_("Jupyter Notebook"),
+        action: str = "integrated",
+        storage: Path | None = None,
+        create_template: bool = False,
+        id: int = wx.ID_ANY,
+        title: str = _("Jupyter Notebook"),
         **kwargs,
-    ):
+    ) -> None:
+        """Initialize Jupyter frame.
+
+        :param parent: Parent window
+        :param giface: GRASS interface
+        :param action: Mode - "integrated" or "browser"
+        :param storage: Storage path for notebooks
+        :param create_template: Whether to create template notebooks
+        :param id: Window ID
+        :param title: Frame title
+        :param kwargs: Additional arguments passed to wx.Frame
+        """
         super().__init__(parent=parent, id=id, title=title, **kwargs)
 
         self.SetName("JupyterFrame")
@@ -110,7 +121,8 @@ class JupyterFrame(wx.Frame):
 
         self._layout()
 
-    def _layout(self):
+    def _layout(self) -> None:
+        """Setup frame layout and size."""
         if self.panel:
             sizer = wx.BoxSizer(wx.VERTICAL)
             sizer.Add(self.panel, 1, wx.EXPAND)
@@ -120,7 +132,11 @@ class JupyterFrame(wx.Frame):
 
             self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
-    def OnCloseWindow(self, event):
+    def OnCloseWindow(self, event: wx.CloseEvent) -> None:
+        """Handle window close event.
+
+        :param event: Close event
+        """
         if self.panel and hasattr(self.panel, "OnCloseWindow"):
             self.panel.OnCloseWindow(event)
 

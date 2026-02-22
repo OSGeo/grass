@@ -25,13 +25,16 @@ import subprocess
 import threading
 import os
 import shutil
-import pathlib
+from pathlib import Path
+
+
+from types import FrameType
 
 
 _cleanup_registered = False
 
 
-def _register_global_cleanup():
+def _register_global_cleanup() -> None:
     """Register cleanup handlers once at module level.
 
     This ensures that all Jupyter servers are properly stopped when:
@@ -46,15 +49,19 @@ def _register_global_cleanup():
     if _cleanup_registered:
         return
 
-    def cleanup_all():
+    def cleanup_all() -> None:
         """Stop all registered servers."""
         try:
             JupyterServerRegistry.get().stop_all_servers()
         except Exception:
             pass
 
-    def handle_signal(signum, frame):
-        """Handle termination signals."""
+    def handle_signal(signum: int, frame: FrameType | None) -> None:
+        """Handle termination signals.
+
+        :param signum: Signal number
+        :param frame: Current stack frame
+        """
         cleanup_all()
         sys.exit(0)
 
@@ -67,10 +74,10 @@ def _register_global_cleanup():
 class JupyterServerInstance:
     """Manage the lifecycle of a Jupyter server instance."""
 
-    def __init__(self, storage):
+    def __init__(self, storage: Path) -> None:
         """Initialize Jupyter server instance.
 
-        :param storage: Storage of notebooks for the Jupyter server (str).
+        :param storage: Storage path for notebooks
         """
         self.storage = storage
 
@@ -83,7 +90,7 @@ class JupyterServerInstance:
         # Set up global cleanup handlers (only once)
         _register_global_cleanup()
 
-    def _reset_state(self):
+    def _reset_state(self) -> None:
         """Reset internal state related to the server."""
         self.pid = None
         self.port = None
@@ -91,30 +98,30 @@ class JupyterServerInstance:
         self.proc = None
 
     @staticmethod
-    def find_free_port():
+    def find_free_port() -> int:
         """Find a free port on the local machine.
 
-        :return: A free port number (int).
+        :return: A free port number
         """
         with socket.socket() as sock:
             sock.bind(("127.0.0.1", 0))
             return sock.getsockname()[1]
 
-    def is_alive(self):
+    def is_alive(self) -> bool:
         """Check if the server process is still running.
 
-        :return: True if process is running, False otherwise (bool).
+        :return: True if process is running, False otherwise
         """
         if not self.proc:
             return False
         return self.proc.poll() is None
 
-    def is_server_running(self, retries=50, delay=0.2):
+    def is_server_running(self, retries: int = 50, delay: float = 0.2) -> bool:
         """Check if the server is responding on the given port.
 
-        :param retries: Number of retries before giving up (int).
-        :param delay: Delay between retries in seconds (float).
-        :return: True if the server is up, False otherwise (bool).
+        :param retries: Number of retries before giving up
+        :param delay: Delay between retries in seconds
+        :return: True if the server is up, False otherwise
         """
         if not self.port:
             return False
@@ -128,15 +135,14 @@ class JupyterServerInstance:
 
         return False
 
-    def start_server(self):
-        """
-        Start a Jupyter server in the notebook storage on a free port.
+    def start_server(self) -> None:
+        """Start a Jupyter server in the notebook storage on a free port.
 
         :raises RuntimeError: If Jupyter is not installed, the notebook storage is invalid,
-                            or the server fails to start.
+                            or the server fails to start
         """
         # Validation checks
-        if not pathlib.Path(self.storage).is_dir():
+        if not Path(self.storage).is_dir():
             raise RuntimeError(
                 _("Notebook storage does not exist: {}").format(self.storage)
             )
@@ -213,10 +219,10 @@ class JupyterServerInstance:
                 )
             )
 
-    def stop_server(self):
+    def stop_server(self) -> None:
         """Stop the Jupyter server, ensuring no zombie processes.
 
-        :raises RuntimeError: If the server cannot be stopped.
+        :raises RuntimeError: If the server cannot be stopped
         """
         if not self.proc or not self.pid:
             return
@@ -248,12 +254,12 @@ class JupyterServerInstance:
         except Exception:
             pass
 
-    def get_url(self, file_name):
+    def get_url(self, file_name: str) -> str:
         """Return full URL to a file served by this server.
 
-        :param file_name: Name of the file (e.g. 'example.ipynb') (str).
-        :return: Full URL to access the file (str).
-        :raises RuntimeError: If server is not running or URL not set.
+        :param file_name: Name of the file (e.g. 'example.ipynb')
+        :return: Full URL to access the file
+        :raises RuntimeError: If server is not running or URL not set
         """
         if not self.server_url:
             raise RuntimeError(_("Server URL is not set. Start the server first."))
@@ -267,14 +273,14 @@ class JupyterServerInstance:
 class JupyterServerRegistry:
     """Thread-safe registry of running JupyterServerInstance objects."""
 
-    _instance = None
-    _lock = threading.Lock()
+    _instance: "JupyterServerRegistry | None" = None
+    _lock: threading.Lock = threading.Lock()
 
     @classmethod
-    def get(cls):
+    def get(cls) -> "JupyterServerRegistry":
         """Get the singleton registry instance (thread-safe).
 
-        :return: The JupyterServerRegistry singleton instance.
+        :return: The JupyterServerRegistry singleton instance
         """
         if cls._instance is None:
             with cls._lock:
@@ -283,32 +289,34 @@ class JupyterServerRegistry:
                     cls._instance = cls()
         return cls._instance
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the registry."""
-        self.servers = []
-        self._servers_lock = threading.Lock()
+        self.servers: list[JupyterServerInstance] = []
+        self._servers_lock: threading.Lock = threading.Lock()
 
-    def register(self, server):
+    def register(self, server: JupyterServerInstance) -> None:
         """Register a server instance.
 
-        :param server: JupyterServerInstance to register.
+        :param server: JupyterServerInstance to register
         """
         with self._servers_lock:
             if server not in self.servers:
                 self.servers.append(server)
 
-    def unregister(self, server):
+    def unregister(self, server: JupyterServerInstance) -> None:
         """Unregister a server instance.
 
-        :param server: JupyterServerInstance to unregister.
+        :param server: JupyterServerInstance to unregister
         """
         with self._servers_lock:
             self.servers = [s for s in self.servers if s != server]
 
-    def stop_all_servers(self):
+    def stop_all_servers(self) -> None:
         """Stop all registered servers.
 
         Continues attempting to stop all servers even if some fail.
+
+        :raises RuntimeError: If any servers failed to stop
         """
         errors = []
 

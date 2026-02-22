@@ -17,8 +17,7 @@ This program is free software under the GNU General Public License
 from pathlib import Path
 import wx
 
-from .utils import get_project_jupyter_storage
-from .storage import WELCOME_NOTEBOOK_NAME
+from .storage import WELCOME_NOTEBOOK_NAME, get_project_jupyter_storage
 
 
 class JupyterStartDialog(wx.Dialog):

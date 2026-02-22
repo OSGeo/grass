@@ -1004,7 +1004,6 @@ class GMFrame(wx.Frame):
                 else:
                     return
             else:
-                # Success!
                 self.mainnotebook.AddPage(panel, _("Jupyter Notebook (Integrated)"))
                 return
 
