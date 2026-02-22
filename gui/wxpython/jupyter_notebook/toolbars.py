@@ -70,17 +70,17 @@ class JupyterToolbar(BaseToolbar):
         }
         data = (
             (
-                ("create", icons["create"].label.rsplit(" ", 1)[0]),
+                ("create", icons["create"].label),
                 icons["create"],
                 self.parent.OnCreate,
             ),
             (
-                ("open", icons["open"].label.rsplit(" ", 1)[0]),
+                ("open", icons["open"].label),
                 icons["open"],
                 self.parent.OnImport,
             ),
             (
-                ("save", icons["save"].label.rsplit(" ", 1)[0]),
+                ("save", icons["save"].label),
                 icons["save"],
                 self.parent.OnExport,
             ),
