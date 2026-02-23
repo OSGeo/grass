@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-09 19:55+0000\n"
+"POT-Creation-Date: 2026-02-21 17:40+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grassmods/es/>\n"
@@ -10070,6 +10070,9 @@ msgstr "Método usado para enlistar datos"
 
 msgid "The granule to be used for listing. The granule must be specified as string eg.: absolute time \"1 months\" or relative time \"1\""
 msgstr "El gránulo que se usará para enlistar. El gránulo debe ser especificado como cadena ej.: tiempo absoluto \"1 months\" o tiempo relativo \"1\""
+
+msgid "plain;Plain text output;line;Comma separated list of map names;json;JSON (JavaScript Object Notation);yaml;YAML (YAML Ain't Markup Language);csv;CSV (Comma Separated Values);"
+msgstr ""
 
 msgid "Suppress printing of column names"
 msgstr "Suprime el mostrado de los nombres de columnas"

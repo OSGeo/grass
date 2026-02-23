@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-09 19:55+0000\n"
-"PO-Revision-Date: 2026-02-19 23:54+0000\n"
+"POT-Creation-Date: 2026-02-21 17:40+0000\n"
+"PO-Revision-Date: 2026-02-23 23:51+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grassmods-8-5/fr/>\n"
 "Language: fr\n"
@@ -7917,9 +7917,9 @@ msgstr "Impossible d'écrire le modèle entraîné dans le fichier '%s'."
 msgid "Unable to write trained model to file '%s'. Error code: %d"
 msgstr "Impossible de créer le fichier temporaire <%s> -- erreur numéro = %d"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write history information for <%s>"
-msgstr "Impossible d'écrire la carte vecteur <%s>"
+msgstr "Impossible d'écrire l'historique pour <%s>"
 
 msgid "Training successfully complete"
 msgstr "Entraînement complété avec succès"
@@ -8260,9 +8260,8 @@ msgstr ""
 msgid "erase"
 msgstr ""
 
-#, fuzzy
 msgid "Either a standard color name or R:G:B triplet"
-msgstr "Couleur du texte, une couleur GRASS standard ou triplet R:G:B"
+msgstr "Soit un nom de couleur standard ou un triplet R:G:B"
 
 msgid "Prints a graph of the correlation between raster maps (in pairs)."
 msgstr "Afficher un graphique des corrélations entre les cartes raster (par paires)."
@@ -9116,7 +9115,7 @@ msgid "Downloads and imports data from OGC WMS and OGC WMTS web mapping servers.
 msgstr ""
 
 msgid "OGC web services"
-msgstr "web service OGC"
+msgstr "services web OGC"
 
 msgid "OGC WMS"
 msgstr ""
@@ -9537,9 +9536,8 @@ msgstr "Écarter <trim> pourcent des plus petites et <trim> pourcent des plus gr
 msgid "Number of parallel processes to launch"
 msgstr "Nombre de process à lancer en parallèle"
 
-#, fuzzy
 msgid "Creates a copy of a space time raster dataset."
-msgstr "Extraire une partie d'un jeu de données raster temporel."
+msgstr "Crée une copie d'un jeu de données raster spatio-temporel."
 
 msgid "temporal"
 msgstr "temporel"
@@ -9920,6 +9918,9 @@ msgid "Method used for data listing"
 msgstr ""
 
 msgid "The granule to be used for listing. The granule must be specified as string eg.: absolute time \"1 months\" or relative time \"1\""
+msgstr ""
+
+msgid "plain;Plain text output;line;Comma separated list of map names;json;JSON (JavaScript Object Notation);yaml;YAML (YAML Ain't Markup Language);csv;CSV (Comma Separated Values);"
 msgstr ""
 
 msgid "Suppress printing of column names"
@@ -10557,9 +10558,8 @@ msgstr "Numéro de couche ou nom."
 msgid "Name of attribute column used to dissolve features"
 msgstr "Nom de la colonne d'attributs utilisée pour dissoudre les contours communs"
 
-#, fuzzy
 msgid "Names of attribute columns to get aggregate statistics for"
-msgstr "Nom de la colonne d'attributs à mettre à jour"
+msgstr "Noms des colonnes d'attribut pour lesquelles obtenir des statistiques agrégées"
 
 msgid "One column name or SQL expression per method if result columns are specified"
 msgstr ""
@@ -10573,16 +10573,15 @@ msgstr ""
 msgid "Default is all available basic statistics for a given backend (for sql backend: avg, count, max, min, sum)"
 msgstr ""
 
-#, fuzzy
 msgid "New attribute column names for aggregate statistics results"
-msgstr "Nom de la colonne d'attributs à mettre à jour"
+msgstr "Nouveaux noms de colonnes d'attributs pour les résultats des statistiques agrégées"
 
 msgid "Defaults to aggregate column name and statistics name and can contain type"
 msgstr ""
 
 #, fuzzy
 msgid "Backend for attribute aggregation"
-msgstr "Affiche l'information attributaire"
+msgstr "Back-end pour l’agrégation des attributs"
 
 msgid "Default is sql unless the provided aggregate methods are for univar"
 msgstr ""
@@ -10686,9 +10685,8 @@ msgstr "URL de base commençant par 'http' et finissant par '?'"
 msgid "Comma separated names of data layers to download"
 msgstr "Noms des couches à télécharger séparés par des virgules"
 
-#, fuzzy
 msgid "Name of data layers to import"
-msgstr "Fichier de couches à importer"
+msgstr "Nom des couches de données à importer"
 
 msgid "Specify alternate spatial reference system (example: EPSG:4326)"
 msgstr "Spécifier un système de coordonnées de référence alternatif (exemple : EPSG:4326)"
@@ -11440,9 +11438,9 @@ msgstr ""
 msgid "Can't open eps file <%s>"
 msgstr ""
 
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to read eps file <%s>"
-msgstr "Impossible de créer le fichier <%s>"
+msgstr "Échec de la lecture du fichier eps <%s>"
 
 #, c-format
 msgid "Bounding box in eps file <%s> was not found"
@@ -11792,7 +11790,6 @@ msgstr ""
 msgid "virtual raster"
 msgstr ""
 
-#, fuzzy
 msgid "Build a VRT (Virtual Raster) from the list of input raster maps."
 msgstr "Construire un VRT (raster virtuel) à partir de la liste de cartes raster d'entrée."
 
@@ -11886,9 +11883,9 @@ msgstr ""
 msgid "Invalid depth value '%s' - using default."
 msgstr ""
 
-#, fuzzy, c-format
+#, c-format
 msgid "Lat/Long project is not supported by %s. Please reproject map first."
-msgstr "Projection lat/long non gérée pour le moment."
+msgstr "Le projet Lat/Long n'est pas pris en charge par %s. Veuillez reprojeter la carte d'abord."
 
 msgid "Writing raster map..."
 msgstr ""
@@ -11933,10 +11930,8 @@ msgstr "Coefficient d'étiquette dynamique"
 msgid "Two pairs of category multiplier and offsets, for $1 and $2"
 msgstr "Deux paires de multiplicateurs et décalage de catégorie, for $1 et $2"
 
-#, fuzzy
-#| msgid "Graphics format for output file"
 msgid "Color format for output values or none."
-msgstr "Format graphique du fichier en sortie"
+msgstr "Format de couleur pour les valeurs de sortie ou none (aucun)."
 
 msgid "The usage of 'format' for dynamic labeling is deprecated and will be removed in a future release. Please use the 'label_format' parameter instead."
 msgstr "L'utilisation du paramètre 'format' pour l'étiquetage dynamique est obsolète et sera retirée dans une prochaine version. Utilisez plutôt le paramètre 'label_format'."
@@ -11963,10 +11958,9 @@ msgstr ""
 msgid "Unable to read category file of raster map <%s> in <%s>"
 msgstr "Impossible de lire le fichier de catégorie de la carte raster <%s> dans <%s>"
 
-#, fuzzy, c-format
-#| msgid "Unable to read color table for raster map <%s>"
+#, c-format
 msgid "Unable to read colors for input map %s"
-msgstr "Impossible de lire la table de couleur pour la carte raster <%s>"
+msgstr "Impossible de lire les couleurs de la carte d'entrée %s"
 
 msgid "The map is floating point! Ignoring cats list, using values list"
 msgstr ""
@@ -12059,15 +12053,13 @@ msgstr ""
 msgid "Valid range for option <%s> is 0 <= value < 1"
 msgstr ""
 
-#, fuzzy, c-format
-#| msgid "3D raster map <%s> not found"
+#, c-format
 msgid "Input raster name <%s> is too long"
-msgstr "carte raster 3D <%s> non trouvée"
+msgstr "Le nom du raster d'entrée <%s> est trop long"
 
-#, fuzzy, c-format
-#| msgid "File <%s> not found"
+#, c-format
 msgid "Title <%s> is too long"
-msgstr "Fichier <%s> non trouvé"
+msgstr "Le titre <%s> est trop long"
 
 #, c-format
 msgid "%d clump."
@@ -12120,7 +12112,6 @@ msgstr ""
 msgid "Unexpected output from r.stats"
 msgstr ""
 
-#, fuzzy
 msgid "Unable to open tempfile"
 msgstr "Impossible d'ouvrir le fichier temporaire"
 
@@ -32156,9 +32147,8 @@ msgstr "Titre de la carte vectorielle"
 msgid "Date when the source map was originally produced"
 msgstr "Date à laquelle la carte source a été produite à l'origine"
 
-#, fuzzy
 msgid "Vector map scale number (e.g., 24000)"
-msgstr "Numéro de l'échelle de la carte vectorielle (par exemple, 24000)"
+msgstr "Numéro d'échelle de la carte vecteur (par exemple, 24000)"
 
 #, fuzzy
 msgid "Vector map projection zone"
@@ -32177,7 +32167,6 @@ msgstr "Ligne de commande à enregistrer dans le fichier historique des cartes v
 msgid "Replace comment instead of appending it"
 msgstr "Remplacer le commentaire au lieu de l'ajouter"
 
-#, fuzzy
 msgid "Replace command line instead of appending it"
 msgstr "Remplacer la ligne de commande au lieu de l'ajouter"
 
@@ -32403,10 +32392,8 @@ msgstr "Le lissage est par défaut de 0.1, sauf si l'option smooth_column est sp
 msgid "Name of the attribute column with smoothing parameters"
 msgstr "Nom de la colonne attributaire contenant les paramètres de lissage"
 
-#, fuzzy
-#| msgid "Minimum distance between points (to remove almost identical points)"
 msgid "Minimum distance between points (to remove almost identical points). Default value is half of  the smaller resolution of the current region"
-msgstr "Distance minimum entre les points en unités carte (pour supprimer les points quasi-identiques)"
+msgstr "Distance minimale entre les points (pour supprimer les points quasi-identiques). La valeur par défaut est la moitié de la plus petite résolution de la région actuelle"
 
 msgid "Maximum distance between points on isoline (to insert additional points)"
 msgstr "Distance maximum entre les points des courbes de niveau en unités carte (pour insérer des points supplémentaires)"
@@ -32705,9 +32692,8 @@ msgstr ""
 msgid "Print only"
 msgstr ""
 
-#, fuzzy
 msgid "Print header"
-msgstr "Lister les couches disponibles et quitter"
+msgstr "Imprimer l'en-tête"
 
 msgid "Only print SQL statements"
 msgstr ""
@@ -32889,9 +32875,8 @@ msgstr ""
 msgid "Name of column used as raster category labels"
 msgstr ""
 
-#, fuzzy
 msgid "Raster value (for use=value)"
-msgstr "Valeurs du raster a utiliser pour le masque"
+msgstr "Valeur du raster (pour use=value)"
 
 #, c-format
 msgid "Cache size must be at least 1 MiB, changing %d to 1"
@@ -32981,7 +32966,7 @@ msgstr "Impossible de créer la carte vecteur <%s>"
 
 #, fuzzy, c-format
 msgid "Number of centroids selected from vector map <%s>: %d"
-msgstr "Impossible de créer la carte vecteur <%s>"
+msgstr "Nombre de centroïdes sélectionnés dans la carte vecteur <%s> : %d"
 
 #, c-format
 msgid "Pass %d of %d:"
@@ -33069,15 +33054,13 @@ msgstr ""
 msgid "Format: parameter:column, e.g. xshift:xs,yshift:ys,zrot:zr"
 msgstr ""
 
-#, fuzzy, c-format
-#| msgid "3D vector map <%s> not found"
+#, c-format
 msgid "Input vector map name <%s> is too long"
-msgstr "Carte vecteur 3D <%s> non trouvée"
+msgstr "Le nom de la carte vecteur d'entrée <%s> est trop long"
 
-#, fuzzy, c-format
-#| msgid "Output vector map extent"
+#, c-format
 msgid "Output vector map name <%s> is too long"
-msgstr "Afficher l'emprise de la carte vecteur"
+msgstr "Le nom de la carte vecteur de sortie <%s> est trop long"
 
 #, c-format
 msgid "Columns require a valid layer. Please use '%s' parameter."
@@ -33431,9 +33414,9 @@ msgstr "Impossible d'ouvrir %s en écriture"
 msgid "Error writing cell (%d,%d,%d) with value %f"
 msgstr ""
 
-#, fuzzy, c-format
+#, c-format
 msgid "Error closing output file %s"
-msgstr "Erreur en fermant le fichier de sortie %s"
+msgstr "Erreur lors de la fermeture du fichier de sortie %s"
 
 #, c-format
 msgid "3D raster map <%s> created"

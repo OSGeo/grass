@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-09 19:55+0000\n"
+"POT-Creation-Date: 2026-02-21 17:40+0000\n"
 "PO-Revision-Date: 2025-08-23 20:17+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/grasslibs/de/>\n"
@@ -1542,6 +1542,14 @@ msgstr "Feld-Trennzeichen"
 msgid "Special characters: pipe, comma, space, tab, newline"
 msgstr ""
 
+#, fuzzy
+#| msgid "Input format error"
+msgid "Output format"
+msgstr "Eingabe-Formatfehler"
+
+msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);"
+msgstr ""
+
 msgid "Color"
 msgstr "Farben"
 
@@ -1688,14 +1696,6 @@ msgid "Example: start_time > '2001-01-01 12:30:00'"
 msgstr ""
 
 msgid "The method to be used for sampling the input dataset"
-msgstr ""
-
-#, fuzzy
-#| msgid "Input format error"
-msgid "Output format"
-msgstr "Eingabe-Formatfehler"
-
-msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);"
 msgstr ""
 
 msgid "Do not create attribute table"

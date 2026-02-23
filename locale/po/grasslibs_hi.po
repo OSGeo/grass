@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-09 19:55+0000\n"
+"POT-Creation-Date: 2026-02-21 17:40+0000\n"
 "PO-Revision-Date: 2026-02-19 23:54+0000\n"
 "Last-Translator: Abhimanyu  <abhimanyupg04@gmail.com>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grasslibs-8-5/hi/>\n"
@@ -1484,6 +1484,12 @@ msgstr ""
 msgid "Special characters: pipe, comma, space, tab, newline"
 msgstr ""
 
+msgid "Output format"
+msgstr ""
+
+msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);"
+msgstr ""
+
 msgid "Color"
 msgstr ""
 
@@ -1627,12 +1633,6 @@ msgid "Example: start_time > '2001-01-01 12:30:00'"
 msgstr ""
 
 msgid "The method to be used for sampling the input dataset"
-msgstr ""
-
-msgid "Output format"
-msgstr ""
-
-msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);"
 msgstr ""
 
 msgid "Do not create attribute table"

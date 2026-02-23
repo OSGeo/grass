@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-09 19:55+0000\n"
+"POT-Creation-Date: 2026-02-21 17:40+0000\n"
 "PO-Revision-Date: 2026-01-08 02:38+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
@@ -9890,6 +9890,11 @@ msgstr "Metod som används för datalistning"
 
 msgid "The granule to be used for listing. The granule must be specified as string eg.: absolute time \"1 months\" or relative time \"1\""
 msgstr "Det granulat som ska användas för listning. Granulatet måste anges som en sträng, t.ex.: absolut tid \"1 månader\" eller relativ tid \"1\""
+
+#, fuzzy
+#| msgid "plain;Human readable text output;shell;shell script style text output;json;JSON (JavaScript Object Notation);"
+msgid "plain;Plain text output;line;Comma separated list of map names;json;JSON (JavaScript Object Notation);yaml;YAML (YAML Ain't Markup Language);csv;CSV (Comma Separated Values);"
+msgstr "vanlig;mänsklig läsbar textutmatning;skal;textutmatning i skalskriptstil;json;JSON (JavaScript Object Notation);"
 
 msgid "Suppress printing of column names"
 msgstr "Undertrycka utskrift av kolumnnamn"

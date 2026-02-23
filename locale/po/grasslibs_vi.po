@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_vi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-09 19:55+0000\n"
+"POT-Creation-Date: 2026-02-21 17:40+0000\n"
 "PO-Revision-Date: 2025-08-23 20:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Vietnamese <https://weblate.osgeo.org/projects/grass-gis/grasslibs/vi/>\n"
@@ -1508,6 +1508,12 @@ msgstr ""
 msgid "Special characters: pipe, comma, space, tab, newline"
 msgstr ""
 
+msgid "Output format"
+msgstr ""
+
+msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);"
+msgstr ""
+
 msgid "Color"
 msgstr ""
 
@@ -1651,12 +1657,6 @@ msgid "Example: start_time > '2001-01-01 12:30:00'"
 msgstr ""
 
 msgid "The method to be used for sampling the input dataset"
-msgstr ""
-
-msgid "Output format"
-msgstr ""
-
-msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);"
 msgstr ""
 
 msgid "Do not create attribute table"
