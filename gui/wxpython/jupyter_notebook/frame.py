@@ -79,7 +79,7 @@ class JupyterFrame(wx.Frame):
                     self.Close()
                     return
 
-            except NotImplementedError as e:
+            except NotImplementedError:
                 # WebView.New() raised NotImplementedError - not functional
                 if self.panel:
                     self.panel.Destroy()
@@ -87,10 +87,9 @@ class JupyterFrame(wx.Frame):
 
                 response = wx.MessageBox(
                     _(
-                        "Integrated mode failed: wx.html2.WebView is not functional on this system.\n"
-                        "Error: {}\n\n"
+                        "Integrated mode failed: wx.html2.WebView is not functional on this system.\n\n"
                         "Would you like to open Jupyter Notebook in your external browser instead?"
-                    ).format(str(e)),
+                    ),
                     _("WebView Not Supported"),
                     wx.ICON_ERROR | wx.YES_NO,
                 )
