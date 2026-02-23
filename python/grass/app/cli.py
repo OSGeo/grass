@@ -68,13 +68,18 @@ def subcommand_run_tool(args, tool_args: list, print_help: bool) -> int:
                     # other special flags, so later use of --json in tools will fail
                     # with the other flags active.
                     return tools.call_cmd(command).returncode
-                
+
                 if args.region:
                     try:
                         gs.run_command("g.region", raster=args.region, env=session.env)
-                        print(f"Temporary computational region set: raster={args.region}")
+                        print(
+                            f"Temporary computational region set: raster={args.region}"
+                        )
                     except ScriptError as e:
-                        print(f"Error setting region '{args.region}': {e}", file=sys.stderr)
+                        print(
+                            f"Error setting region '{args.region}': {e}",
+                            file=sys.stderr,
+                        )
                         return 1
                 return tools.run_cmd(command).returncode
             except subprocess.CalledProcessError as error:
@@ -264,9 +269,9 @@ def main(args=None, program=None):
         "--project", type=str, help="project to use for computations"
     )
     run_subparser.add_argument(
-    "--region",
-    type=str,
-    help="Set temporary computational region before running the tool (e.g., raster=name)",
+        "--region",
+        type=str,
+        help="Set temporary computational region before running the tool (e.g., raster=name)",
     )
     run_subparser.set_defaults(func=subcommand_run_tool)
 

@@ -8,7 +8,6 @@ from grass.app.cli import main
 
 from unittest.mock import patch, MagicMock
 from grass.app.cli import subcommand_run_tool
-from grass.app.cli import Tools
 
 
 def test_cli_help_runs():
@@ -55,12 +54,15 @@ def test_subcommand_run_tool_regular_run():
     """Check that a tool runs without error"""
     assert main(["run", "g.region", "-p"]) == 0
 
+
 @pytest.mark.skipif(sys.platform.startswith("win"), reason="Unix only")
 @patch("grass.app.cli.Tools.run_cmd")
 @patch("grass.app.cli.gs.run_command")
 @patch("grass.app.cli.gs.create_project")
 @patch("grass.app.cli.gs.setup.init")
-def test_run_tool_with_region(mock_init, mock_create_project, mock_run_command, mock_tools_run_cmd):
+def test_run_tool_with_region(
+    mock_init, mock_create_project, mock_run_command, mock_tools_run_cmd
+):
     """Verify that providing --region calls g.region before running the tool."""
     # Mock GRASS session
     mock_session = MagicMock()
@@ -79,7 +81,9 @@ def test_run_tool_with_region(mock_init, mock_create_project, mock_run_command, 
     subcommand_run_tool(Args, tool_args=[], print_help=False)
 
     # g.region should be called with the correct raster and environment
-    mock_run_command.assert_any_call("g.region", raster="elevation", env=mock_session.env)
+    mock_run_command.assert_any_call(
+        "g.region", raster="elevation", env=mock_session.env
+    )
 
 
 @pytest.mark.skipif(sys.platform.startswith("win"), reason="Unix only")
@@ -87,7 +91,9 @@ def test_run_tool_with_region(mock_init, mock_create_project, mock_run_command, 
 @patch("grass.app.cli.gs.run_command")
 @patch("grass.app.cli.gs.create_project")
 @patch("grass.app.cli.gs.setup.init")
-def test_run_tool_without_region(mock_init, mock_create_project, mock_run_command, mock_tools_run_cmd):
+def test_run_tool_without_region(
+    mock_init, mock_create_project, mock_run_command, mock_tools_run_cmd
+):
     """Verify that omitting --region does NOT call g.region."""
     # Mock GRASS session
     mock_session = MagicMock()
@@ -108,6 +114,7 @@ def test_run_tool_without_region(mock_init, mock_create_project, mock_run_comman
     # g.region should never be called
     for call in mock_run_command.call_args_list:
         assert call[0][0] != "g.region"
+
 
 def test_subcommand_run_tool_failure_run():
     """Check that a tool produces non-zero return code"""
