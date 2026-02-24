@@ -36,7 +36,6 @@ class JupyterFrame(wx.Frame):
         storage: Path | None = None,
         create_template: bool = False,
         id: int = wx.ID_ANY,
-        title: str = _("Jupyter Notebook"),
         **kwargs,
     ) -> None:
         """Initialize Jupyter frame.
@@ -47,9 +46,11 @@ class JupyterFrame(wx.Frame):
         :param storage: Storage path for notebooks
         :param create_template: Whether to create template notebooks
         :param id: Window ID
-        :param title: Frame title
         :param kwargs: Additional arguments passed to wx.Frame
         """
+        # Set title based on mode and storage
+        title = self._format_title(action, storage)
+
         super().__init__(parent=parent, id=id, title=title, **kwargs)
 
         self.SetName("JupyterFrame")
@@ -59,66 +60,112 @@ class JupyterFrame(wx.Frame):
 
         self.statusbar = self.CreateStatusBar(number=1)
         self.panel = None
+        self.storage = storage
+        self.giface = giface
 
         # Try integrated mode first if requested
         if action == "integrated":
-            try:
-                self.panel = JupyterPanel(
-                    parent=self,
-                    giface=giface,
-                    storage=storage,
-                    create_template=create_template,
-                    statusbar=self.statusbar,
-                    dockable=False,
-                )
+            success = self._setup_integrated_mode(storage, create_template)
+            if success:
+                self._layout()
+                return
 
-                # Setup environment and load notebooks
-                if not self.panel.SetUpEnvironment():
-                    self.panel.Destroy()
-                    self.panel = None
-                    self.Close()
-                    return
+            # Integrated mode failed, offer browser fallback
+            response = wx.MessageBox(
+                _(
+                    "Integrated mode failed: wx.html2.WebView is not functional on this system.\n\n"
+                    "Would you like to open Jupyter Notebook in your external browser instead?"
+                ),
+                _("WebView Not Supported"),
+                wx.ICON_ERROR | wx.YES_NO,
+            )
 
-            except NotImplementedError:
-                # WebView.New() raised NotImplementedError - not functional
-                if self.panel:
-                    self.panel.Destroy()
-                    self.panel = None
+            if response == wx.YES:
+                action = "browser"
+                # Update title for browser mode
+                self.SetTitle(self._format_title("browser", storage))
+            else:
+                self.Close()
+                return
 
-                response = wx.MessageBox(
-                    _(
-                        "Integrated mode failed: wx.html2.WebView is not functional on this system.\n\n"
-                        "Would you like to open Jupyter Notebook in your external browser instead?"
-                    ),
-                    _("WebView Not Supported"),
-                    wx.ICON_ERROR | wx.YES_NO,
-                )
-
-                if response == wx.YES:
-                    action = "browser"
-                else:
-                    self.Close()
-                    return
-
-        # Browser mode
+        # Set up browser mode
         if action == "browser":
-            self.panel = JupyterBrowserPanel(
+            success = self._setup_browser_mode(storage, create_template)
+            if success:
+                self._layout()
+            else:
+                self.Close()
+
+    def _format_title(self, mode: str, storage: Path | None) -> str:
+        """Format frame title with mode and storage path.
+
+        :param mode: Mode name - "integrated" or "browser"
+        :param storage: Storage path for notebooks
+        :return: Formatted title string
+        """
+        if storage:
+            mode_name = _("Integrated") if mode == "integrated" else _("Browser")
+            # Show full absolute path
+            return _("Jupyter Notebook ({}) - {}").format(mode_name, storage.resolve())
+        return _("Jupyter Notebook")
+
+    def _setup_integrated_mode(
+        self, storage: Path | None, create_template: bool
+    ) -> bool:
+        """Setup integrated Jupyter panel. Returns True on success.
+
+        :param storage: Storage path for notebooks
+        :param create_template: Whether to create template notebooks
+        :return: True if setup succeeded, False otherwise
+        """
+        try:
+            self.panel = JupyterPanel(
                 parent=self,
-                giface=giface,
+                giface=self.giface,
                 storage=storage,
                 create_template=create_template,
                 statusbar=self.statusbar,
                 dockable=False,
             )
 
-            # Setup environment and open in browser
+            # Setup environment and load notebooks
             if not self.panel.SetUpEnvironment():
                 self.panel.Destroy()
                 self.panel = None
-                self.Close()
-                return
+                return False
 
-        self._layout()
+            return True
+
+        except NotImplementedError:
+            # WebView.New() raised NotImplementedError - not functional
+            if self.panel:
+                self.panel.Destroy()
+                self.panel = None
+            return False
+
+    def _setup_browser_mode(self, storage: Path | None, create_template: bool) -> bool:
+        """Setup browser-based Jupyter panel. Returns True on success.
+
+        :param storage: Storage path for notebooks
+        :param create_template: Whether to create template notebooks
+        :return: True if setup succeeded, False otherwise
+        """
+        self.panel = JupyterBrowserPanel(
+            parent=self,
+            giface=self.giface,
+            storage=storage,
+            create_template=create_template,
+            statusbar=self.statusbar,
+            dockable=False,
+        )
+
+        # Setup environment and open in browser
+        if not self.panel.SetUpEnvironment():
+            self.panel.Destroy()
+            self.panel = None
+            return False
+
+        return True
 
     def _layout(self) -> None:
         """Setup frame layout and size."""
