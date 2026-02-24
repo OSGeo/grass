@@ -21,10 +21,10 @@ dependencies and configuration options.
 **Autotools:**
 
 ```bash
-CFLAGS="-g -Wall" ./configure    # configure with debug flags
-make                              # compile everything
-make install                      # install
-make libs                         # compile libraries only (faster for tool development)
+CFLAGS="-g -Wall" ./configure  # configure with debug flags
+make  # compile everything
+make install  # install
+make libs  # compile libraries only
 ```
 
 **CMake:**
@@ -67,12 +67,6 @@ For coverage reporting, two additional variables are needed (used by
 ```bash
 export INITIAL_GISBASE="$(grass --config path)"
 export INITIAL_PWD="${PWD}"
-```
-
-**Run all pytest tests:**
-
-```bash
-pytest
 ```
 
 **Run tests for a specific tool:**
@@ -203,6 +197,8 @@ miss.
 - Strongly prefer plain ASCII for comments; use Unicode only when necessary.
   For Python docstrings and Doxygen comments, plain ASCII is still preferred
   but Unicode is more acceptable.
+- Inline comments in code examples must be separated from code by exactly
+  two spaces (e.g., `x = 1  # comment`).
 
 ### Tests
 
