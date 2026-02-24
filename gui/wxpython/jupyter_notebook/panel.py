@@ -386,7 +386,7 @@ class JupyterBrowserPanel(wx.Panel, MainPageBase):
     def __init__(
         self,
         parent: wx.Window,
-        giface,  # GrassInterface type
+        giface,
         id: int = wx.ID_ANY,
         statusbar: wx.StatusBar | None = None,
         dockable: bool = False,

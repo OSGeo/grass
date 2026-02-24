@@ -41,7 +41,7 @@ class JupyterStartDialog(wx.Dialog):
 
         self.radio_custom = wx.RadioButton(
             self,
-            label=_("Choose custom directory:"),
+            label=_("Choose custom directory (leave empty for current directory):"),
             style=wx.RB_GROUP,
         )
         self.radio_custom.SetValue(True)  # Default selection
@@ -125,7 +125,13 @@ class JupyterStartDialog(wx.Dialog):
         :return: Dictionary with 'storage' and 'create_template' keys, or None on error
         """
         if self.radio_custom.GetValue():
-            path = Path(self.storage_picker.GetPath())
+            path_str = self.storage_picker.GetPath()
+
+            # Convert empty or "." to absolute current directory
+            if not path_str or path_str == ".":
+                path = Path.cwd()
+            else:
+                path = Path(path_str).resolve()
 
             try:
                 # create directory if missing
@@ -146,7 +152,7 @@ class JupyterStartDialog(wx.Dialog):
 
             self.selected_storage = path
         else:
-            self.selected_storage = Path(self.project_storage)
+            self.selected_storage = Path(self.project_storage).resolve()
 
         return {
             "storage": self.selected_storage,
