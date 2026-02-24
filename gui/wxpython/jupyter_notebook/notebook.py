@@ -113,6 +113,37 @@ class JupyterAuiNotebook(aui.AuiNotebook):
 
         webview.RunScript(js)
 
+    def _on_navigating(self, event):
+        """Handle navigation events - open external links in system browser.
+
+        :param event: WebView navigating event
+        """
+        import webbrowser
+        from urllib.parse import urlparse
+
+        url = event.GetURL()
+        parsed = urlparse(url)
+
+        # Allow navigation within Jupyter (localhost)
+        if parsed.hostname in {"localhost", "127.0.0.1", None}:
+            event.Skip()
+            return
+
+        # Open external links in system browser (new window)
+        event.Veto()
+        webbrowser.open_new(url)
+
+    def _on_new_window(self, event):
+        """Handle links that try to open in new window.
+
+        :param event: WebView new window event
+        """
+        import webbrowser
+
+        url = event.GetURL()
+        event.Veto()  # Don't open new WebView window
+        webbrowser.open_new(url)
+
     def AddPage(self, url: str, title: str) -> None:
         """Add a new AUI notebook page with a Jupyter WebView.
 
@@ -123,6 +154,8 @@ class JupyterAuiNotebook(aui.AuiNotebook):
         browser = html.WebView.New(self)
         wx.CallAfter(browser.LoadURL, url)
         wx.CallAfter(browser.Bind, html.EVT_WEBVIEW_LOADED, self._hide_top_ui)
+        wx.CallAfter(browser.Bind, html.EVT_WEBVIEW_NAVIGATING, self._on_navigating)
+        wx.CallAfter(browser.Bind, html.EVT_WEBVIEW_NEWWINDOW, self._on_new_window)
         super().AddPage(browser, title)
 
     def OnPageClose(self, event: aui.AuiNotebookEvent) -> None:
