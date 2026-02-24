@@ -1,0 +1,115 @@
+/**
+ * \file octree.c
+ * \brief Octree spatial indexing library
+ *
+ * \author GRASS Development Team
+ *
+ * \par Overview
+ * This library provides an octree spatial data structure for efficient 3D point
+ * indexing and spatial queries. An octree recursively subdivides 3D space into
+ * eight octants, enabling fast nearest neighbor searches and range queries.
+ *
+ * \par Purpose
+ * The octree library is designed to:
+ * - Efficiently store and index 3D point data
+ * - Perform fast spatial queries (nearest neighbors, radius searches)
+ * - Support dynamic insertion of points
+ * - Optimize memory usage through adaptive subdivision
+ *
+ * \par Octree vs KD-Tree
+ * - Octree: Subdivides space into octants, better for uniformly distributed data
+ * - KD-Tree: Splits space along data dimensions, better for clustered data
+ * - Octree can handle dynamic insertion more efficiently than KD-Tree
+ * - KD-Tree may require rebalancing after insertions, while octree adapts naturally
+ * - KD-Tree is often faster for low-dimensional data, while octree excels in 3D spatial indexing
+ *
+ * \par Usage
+ *
+ * \section octree_create Creating an Octree
+ *
+ * Initialize an octree with spatial bounds:
+ * \code{.c}
+ * struct octree *tree;
+ * double min[3] = {0.0, 0.0, 0.0};
+ * double max[3] = {100.0, 100.0, 100.0};
+ * int max_points_per_node = 10;
+ *
+ * tree = octree_new(min, max, max_points_per_node);
+ * \endcode
+ *
+ * \section octree_insert Inserting Points
+ *
+ * Add 3D points to the octree:
+ * \code{.c}
+ * double point[3] = {25.5, 30.2, 15.8};
+ * int point_id = 42;
+ *
+ * octree_insert(tree, point, point_id);
+ *
+ * // Insert multiple points
+ * for (int i = 0; i < num_points; i++) {
+ *     double coords[3] = {x[i], y[i], z[i]};
+ *     octree_insert(tree, coords, i);
+ * }
+ * \endcode
+ *
+ * \section octree_query Querying Points Within Radius
+ *
+ * Find all points within a specified radius from a query point:
+ * \code{.c}
+ * double query_point[3] = {50.0, 50.0, 50.0};
+ * double search_radius = 10.0;
+ * struct octree_result *results;
+ * int num_results;
+ *
+ * // Perform radius search
+ * num_results = octree_search_radius(tree, query_point, search_radius, &results);
+ *
+ * // Process results
+ * for (int i = 0; i < num_results; i++) {
+ *     int found_id = results[i].point_id;
+ *     double distance = results[i].distance;
+ *     printf("Point ID: %d, Distance: %f\n", found_id, distance);
+ * }
+ *
+ * // Free results
+ * octree_free_results(results);
+ * \endcode
+ *
+ * \section octree_nearest Nearest Neighbor Search
+ *
+ * Find the k nearest neighbors:
+ * \code{.c}
+ * double query_point[3] = {75.0, 25.0, 50.0};
+ * int k = 5;
+ * struct octree_result *neighbors;
+ * int num_found;
+ *
+ * num_found = octree_knn(tree, query_point, k, &neighbors);
+ *
+ * for (int i = 0; i < num_found; i++) {
+ *     printf("Neighbor %d: ID=%d, Distance=%f\n",
+ *            i, neighbors[i].point_id, neighbors[i].distance);
+ * }
+ *
+ * octree_free_results(neighbors);
+ * \endcode
+ *
+ * \section octree_cleanup Cleanup
+ *
+ * Free octree memory when done:
+ * \code{.c}
+ * octree_free(tree);
+ * \endcode
+ *
+ * \par Performance Considerations
+ * - Choose max_points_per_node based on data density (typical values: 8-32)
+ * - Larger values reduce tree depth but increase search time per node
+ * - Smaller values increase memory overhead but improve query performance
+ * - Ensure octree bounds encompass all data points for optimal performance
+ *
+ * \par Thread Safety
+ * The octree structure is not thread-safe by default. For concurrent access,
+ * use external synchronization (e.g., mutexes) or consider using thread-local
+ * copies of the octree. The library does not provide built-in locking mechanisms.
+ */
