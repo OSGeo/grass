@@ -3,6 +3,18 @@
 Instructions for AI assistants and agents working with code in this
 repository.
 
+After writing or modifying code, self-review it before presenting it.
+Review as a human PR reviewer would: Is the reasoning behind each line
+sound? Is this line actually needed? Where did this code come from? Will
+this be hard to maintain? What if this needed to change later? Code,
+comments, and commit messages should anticipate these questions — not by
+adding explanatory fluff, but by making the code itself clear and
+well-reasoned. If a line cannot be justified, change or remove it rather
+than inventing a rationale for keeping it.
+
+Do not present code you cannot explain. When generating substantial
+algorithms or logic, note this to the human so they can disclose it.
+
 ## Overview
 
 GRASS is a large, multi-language geospatial processing engine. The codebase
@@ -270,14 +282,6 @@ message rules:
   identifier that is conventionally lowercase (e.g., `r.info` or `gs`)
 - Use plain ASCII only, no double spaces after periods
 - Write in imperative mood (e.g., "Add support for X", not "Added" or "Adds")
-- Do not add AI co-authors; the human author is responsible for the code.
-  However, larger use of AI should be acknowledged in the commit message
-  and/or PR description, similarly to how a book or a discussion with a
-  human collaborator would be acknowledged.
-
-## AI Use Policy
-
-See `CONTRIBUTING.md` for the full AI use policy. Key points: AI-assisted
-development is acceptable, but contributors must test all code, understand
-their submissions, and disclose AI assistance when substantial algorithms
-or logic were AI-generated.
+- Larger use of AI should be acknowledged in the commit message and/or PR
+  description, but not as a co-author, similarly to how a book or a
+  discussion with a human collaborator would be acknowledged.
