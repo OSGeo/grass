@@ -51,10 +51,7 @@ def parse_colors(mapname):
             value = float(parts[0])
             rgb = tuple(map(int, parts[1].split(":")))
 
-            if is_categorical:
-                label = f"Class {int(value)}"
-            else:
-                label = f"{value:g}"
+            label = f"Class {int(value)}" if is_categorical else f"{value:g}"
 
             items.append({"value": value, "label": label, "rgb": rgb})
 
