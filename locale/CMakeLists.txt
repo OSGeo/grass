@@ -102,7 +102,7 @@ set(generate_mo_file_targets ${po_file_names})
 list(TRANSFORM generate_mo_file_targets PREPEND "generate_mo_files_")
 
 add_custom_target(generate_mo_files_dir ALL COMMENT "Create locale directory")
-set_target_properties(generate_mo_files_dir PROPERTIES FOLDER locale)
+set_target_properties(generate_mo_files_dir PROPERTIES FOLDER Locale)
 add_custom_command(
   TARGET generate_mo_files_dir
   PRE_BUILD
@@ -131,9 +131,9 @@ foreach(_locale ${_locales})
             ${OUTDIR}/${GRASS_INSTALL_LOCALEDIR}/${_locale}/LC_MESSAGES
     BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_LOCALEDIR}/${_locale}/LC_MESSAGES)
 
-  set_target_properties(${_locale}_LC_MESSAGES_dir PROPERTIES FOLDER locale)
+  set_target_properties(${_locale}_LC_MESSAGES_dir PROPERTIES FOLDER Locale)
   set_target_properties(generate_mo_files_dir_${_locale} PROPERTIES FOLDER
-                                                                    locale)
+                                                                    Locale)
 endforeach()
 unset(_locales)
 
@@ -149,7 +149,7 @@ foreach(po_file ${po_files})
     DEPENDS ${_locale}_LC_MESSAGES_dir
     COMMENT "Generate mo files")
   set_target_properties(generate_mo_files_${po_file_name} PROPERTIES FOLDER
-                                                                     locale)
+                                                                     Locale)
   add_custom_command(
     TARGET generate_mo_files_${po_file_name}
     POST_BUILD
@@ -168,6 +168,8 @@ add_custom_command(
   COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE}
           ${CMAKE_CURRENT_SOURCE_DIR}/grass_po_stats.py
   BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_MISCDIR}/translation_status.json)
+
+set_target_properties(translation_statistics PROPERTIES FOLDER Locale)
 
 install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_LOCALEDIR}/
         DESTINATION ${GRASS_INSTALL_LOCALEDIR})
