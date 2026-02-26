@@ -46,7 +46,11 @@ Build outputs go to `bin.$ARCH/` and `dist.$ARCH/` directories.
 
 ## Running Tests
 
-Tests require a built and installed GRASS with the `grass` binary on `PATH`.
+Tests require a built and installed GRASS with the `grass` binary on `PATH`
+and test dependencies (pytest, numpy, etc.) installed in the Python
+environment. If using a virtual environment (venv, conda, pipenv, etc.),
+it likely needs to be activated before running tests.
+
 If running from a local build (not a system install), add the binary directory
 to PATH first:
 
@@ -88,11 +92,24 @@ only way to use larger datasets like the `nc_spm` sample dataset):
 python -m grass.gunittest.main --grassdata /path/to/grassdata --location location --location-type xyz
 ```
 
+## Writing Tests
+
+Write new tests in pytest unless the test requires the NC SPM sample dataset
+(a real-world dataset used for integration tests).
+
 Test files follow two patterns:
 
-- `*/tests/*_test.py` or `*/tests/test_*.py` — pytest style (preferred for new tests)
-- `*/testsuite/` directories — gunittest style (slightly less preferred, but
-  required when tests need large external datasets)
+- `*/tests/*_test.py` or `*/tests/test_*.py` — pytest style (use this for
+  new tests); `*_test.py` is more common
+- `*/testsuite/test_*.py` — gunittest style (use only when the test requires
+  the NC SPM sample dataset)
+
+Test file names must include the tool name with underscores
+(e.g., `r_slope_aspect` for *r.slope.aspect*). If a tool has multiple
+test files, add the tested feature or domain (e.g.,
+`r_slope_aspect_angles_test.py`, `r_slope_aspect_memory_test.py`).
+Tests of libraries, packages, and modules should have the full name of the
+unit included with the added feature or domain info if needed.
 
 pytest configuration is in `pyproject.toml`. pytest tests require a running
 GRASS session with a project/mapset; see
@@ -104,6 +121,30 @@ pytest, every call (`gs.run_command()`, `gs.parse_command()`, etc.) must
 pass `env=session.env` explicitly. gunittest-style tests (`testsuite/`) run
 in an existing GRASS session and need neither `Tools` setup nor `env`
 passing.
+
+With `grass.tools`, numpy arrays can be passed as raster inputs (the array
+is written to a temporary raster matching the computation region) and
+requested as outputs using the `parameter=np.array` pattern (e.g.,
+`depth=np.array`).
+
+Test data can be created in several ways: `r.mapcalc` raster algebra
+expressions (e.g., `elevation = 6 - col()`), numpy arrays, GRASS tools
+that generate synthetic data (e.g., `r.surf.fractal` for elevation-like
+surfaces), and import tools like `r.in.ascii`, `v.in.ascii` (CSV
+coordinates), or standard format importers (e.g., GeoJSON for vector data).
+When the goal is to get a numpy array result in Python (rather than
+creating a named raster in the project), `r.mapcalc.simple`
+(`r_mapcalc_simple`) is easier to use than `r.mapcalc`. To convert an
+existing raster to a numpy array, use the `grass.script.array` API.
+
+When writing tests, check the tool's documentation file (`.md`) to
+understand parameters and expected behavior.
+
+Test all hypotheses about tool behavior that the tests rely on — whether
+inferred from code, general knowledge, or promised by the documentation.
+Run each hypothesis as a test before relying on it or writing a comment
+which claims it is true. Report any discrepancy between documented
+and actual behavior.
 
 ## Linting and Formatting
 
@@ -258,6 +299,10 @@ mapset. Tools must not overwrite existing maps unless the user provides
 Tool name prefixes: `r.` (raster), `v.` (vector), `g.` (general), `d.`
 (display), `i.` (imagery), `t.` (temporal), `r3.` (3D raster), `db.`
 (database), `m.` (miscellaneous), `ps.` (PostScript).
+
+To quickly check a tool's parameters, flags, and defaults, run
+`grass run <tool> --help`. For full structured detail (types, required/optional,
+descriptions), use `grass run <tool> --interface-description` (XML output).
 
 ## Commit Messages
 
