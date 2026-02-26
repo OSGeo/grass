@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-14 18:00+0000\n"
+"POT-Creation-Date: 2026-02-21 21:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -6654,7 +6654,7 @@ msgid "create project"
 msgstr ""
 
 #: ../general/g.proj/main.c:70
-msgid "Prints or modifies GRASS projection information files (in various co-ordinate system descriptions)."
+msgid "Prints or modifies GRASS projection information files (in various coordinate system descriptions)."
 msgstr ""
 
 #: ../general/g.proj/main.c:72
@@ -6738,7 +6738,7 @@ msgid "Datum"
 msgstr ""
 
 #: ../general/g.proj/main.c:186
-msgid "Datum (overrides any datum specified in input co-ordinate system)"
+msgid "Datum (overrides any datum specified in input coordinate system)"
 msgstr ""
 
 #: ../general/g.proj/main.c:188
@@ -6755,7 +6755,7 @@ msgid "\"0\" for unspecified or \"-1\" to list and exit"
 msgstr ""
 
 #: ../general/g.proj/main.c:205
-msgid "Force override of datum transformation information in input co-ordinate system"
+msgid "Force override of datum transformation information in input coordinate system"
 msgstr ""
 
 #: ../general/g.proj/main.c:210 ../raster/r.null/main.c:75
@@ -15097,6 +15097,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.vect.list_to_translate.c:8
 #: ../locale/scriptstrings/t.vect.list_to_translate.c:14
 #: ../locale/scriptstrings/t.vect.list_to_translate.c:16
+#: ../locale/scriptstrings/t.vect.list_to_translate.c:18
 #: ../locale/scriptstrings/t.vect.univar_to_translate.c:9
 #: ../locale/scriptstrings/t.vect.univar_to_translate.c:12
 #: ../raster/r.kappa/main.c:107 ../raster/r.kappa/main.c:112
@@ -15129,7 +15130,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast3d.list_to_translate.c:13
 #: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:11
 #: ../locale/scriptstrings/t.vect.db.select_to_translate.c:8
-#: ../locale/scriptstrings/t.vect.list_to_translate.c:13
+#: ../locale/scriptstrings/t.vect.list_to_translate.c:15
 #: ../locale/scriptstrings/t.vect.univar_to_translate.c:8
 msgid "Field separator character between the output columns"
 msgstr ""
@@ -15636,6 +15637,7 @@ msgid "The granule to be used for listing. The granule must be specified as stri
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:14
+#: ../locale/scriptstrings/t.vect.list_to_translate.c:13
 msgid "plain;Plain text output;line;Comma separated list of map names;json;JSON (JavaScript Object Notation);yaml;YAML (YAML Ain't Markup Language);csv;CSV (Comma Separated Values);"
 msgstr ""
 
@@ -15643,7 +15645,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast.univar_to_translate.c:16
 #: ../locale/scriptstrings/t.rast3d.list_to_translate.c:15
 #: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:14
-#: ../locale/scriptstrings/t.vect.list_to_translate.c:15
+#: ../locale/scriptstrings/t.vect.list_to_translate.c:17
 #: ../locale/scriptstrings/t.vect.univar_to_translate.c:11
 msgid "Suppress printing of column names"
 msgstr ""
@@ -42146,7 +42148,7 @@ msgid "centrality measures"
 msgstr ""
 
 #: ../vector/v.net.centrality/main.c:100
-msgid "Computes degree, centrality, betweeness, closeness and eigenvector centrality measures in the network."
+msgid "Computes degree, centrality, betweenness, closeness and eigenvector centrality measures in the network."
 msgstr ""
 
 #: ../vector/v.net.centrality/main.c:148

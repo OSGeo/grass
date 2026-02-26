@@ -8,7 +8,7 @@ check_include_file(termios.h HAVE_TERMIOS_H)
 if(NOT MSVC)
   check_include_file(unistd.h HAVE_UNISTD_H)
 else()
-  # unistd.h in stocked in thirdparty/msvc/
+  # unistd.h in stocked in thirdparty/msvc/ # codespell:ignore thirdparty
   set(HAVE_UNISTD_H 1)
 endif()
 check_include_file(values.h HAVE_VALUES_H)
@@ -24,7 +24,6 @@ check_include_file(g2c.h HAVE_G2C_H)
 check_include_file(f2c.h HAVE_F2C_H)
 check_include_file(cblas.h HAVE_CBLAS_H)
 check_include_file(cblas-atlas.h HAVE_CBLAS_ATLAS_H)
-
 
 if(MSVC)
   set(HAVE_PTHREAD_H 0)

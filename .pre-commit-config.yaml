@@ -100,3 +100,17 @@ repos:
     rev: v3.6.1
     hooks:
       - id: editorconfig-checker
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.4.1
+    hooks:
+      - id: codespell
+        # TODO: Remove these exclusions, they are just not fixed completely yet, nor ignored
+        exclude_types:
+          - c
+          - c++
+          - csv
+          - html
+          - markdown
+          - python
+          - tex
+          - xml
