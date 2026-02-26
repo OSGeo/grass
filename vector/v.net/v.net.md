@@ -182,55 +182,22 @@ Following example generates a vector map with turntable:
 v.net operation=turntable in=railroads out=railroads_ttb
 ```
 
-### Produce node count in JSON format
+### Report
 
-The **format** option allows choosing the output style.
-By default, **plain** text is used.
-Choosing **json** will produce a structured output,
-which is particularly useful for automated scripts and testing.
-
-Generating nodes and getting the result in JSON:
+The *report* operation prints a report of network connections:
+{line_category start_point_category end_point_category}.
 
 ```sh
-v.net input=streets points=schools output=streets_net operation=connect threshold=400 -c
-
-# verify result
-v.net input=streets_net operation=nreport format=json
+v.net input=streets_net operation=report
 ```
 
-#### Example Output
-
-```json
-[
- {
-        "node_cat": 166,
-        "lines": [
-            49912
-        ]
-    },
-    {
-        "node_cat": 167,
-        "lines": [
-            49913
-        ]
-    }
-]
-```
-
-### Produce Report in JSON format
-
-The **report** operation provides details about the arcs in the network.
-Using the **-c** flag ensures that new categories are assigned to the nodes,
-providing a complete connectivity report in JSON format.
+To produce the report in JSON format:
 
 ```sh
-v.net  input=streets operation=nodes output=streets_nodes -c
-
-# verify result
-v.net input=streets_nodes operation=report format=json
+v.net input=streets_net operation=report format=json
 ```
 
-#### Example output
+Example JSON report output:
 
 ```json
 [
@@ -243,6 +210,33 @@ v.net input=streets_nodes operation=report format=json
         "line_cat": 49746,
         "start_node_cat": 15789,
         "end_node_cat": 41813
+    }
+]
+```
+
+### Node report
+
+The *nreport* operation prints a report of nodes
+and their connected lines:
+{point_category line_category[,line_category...]}.
+
+To produce the node report in JSON format:
+
+```sh
+v.net input=streets_net operation=nreport format=json
+```
+
+Example JSON node report output:
+
+```json
+[
+    {
+        "node_cat": 166,
+        "lines": [49912]
+    },
+    {
+        "node_cat": 167,
+        "lines": [49912, 49913]
     }
 ]
 ```

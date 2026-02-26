@@ -33,10 +33,10 @@ int main(int argc, char **argv)
     struct Map_info *In = NULL, *Out = NULL, *Points = NULL;
 
     FILE *file_arcs;
-
     int afield, nfield;
     int act;
     double thresh;
+    enum OutputFormat format;
 
     char message[4096];
 
@@ -54,7 +54,7 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    parse_arguments(&opt, &afield, &nfield, &thresh, &act);
+    parse_arguments(&opt, &afield, &nfield, &thresh, &act, &format);
 
     In = Points = Out = NULL;
     file_arcs = NULL;
@@ -173,7 +173,7 @@ int main(int argc, char **argv)
         turntable(&opt);
     }
     else { /* report */
-        report(In, afield, nfield, act, opt.format->answer);
+        report(In, afield, nfield, act, format);
     }
 
     if (In)
