@@ -6,11 +6,10 @@ repository.
 After writing or modifying code, self-review it before presenting it.
 Review as a human PR reviewer would: Is the reasoning behind each line
 sound? Is this line actually needed? Where did this code come from? Will
-this be hard to maintain? What if this needed to change later? Code,
-comments, and commit messages should anticipate these questions — not by
-adding explanatory fluff, but by making the code itself clear and
-well-reasoned. If a line cannot be justified, change or remove it rather
-than inventing a rationale for keeping it.
+this be hard to maintain? What if this will need to be changed later?
+Make every line of code, comments, and commit messages clear and
+well-reasoned. Justify each line by improving the code itself. Remove
+or change any line that lacks a strong justification.
 
 Do not present code you cannot explain. When generating substantial
 algorithms or logic, note this to the human so they can disclose it.
