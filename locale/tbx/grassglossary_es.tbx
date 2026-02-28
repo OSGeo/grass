@@ -235,6 +235,30 @@
                 <langSet xml:lang="es"><tig><term/></tig></langSet>
                 <descrip>The geometry type</descrip>
             </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>space-time</term></tig></langSet>
+                <langSet xml:lang="es"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>dataset</term></tig></langSet>
+                <langSet xml:lang="es"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>layers</term></tig></langSet>
+                <langSet xml:lang="es"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>space-time</term></tig></langSet>
+                <langSet xml:lang="es"><tig><term></term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>dataset</term></tig></langSet>
+                <langSet xml:lang="es"><tig><term></term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>layers</term></tig></langSet>
+                <langSet xml:lang="es"><tig><term></term></tig></langSet>
+            </termEntry>
         </body>
     </text>
 </martif>
