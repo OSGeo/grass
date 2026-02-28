@@ -919,13 +919,18 @@ class GMFrame(wx.Frame):
 
     def _add_jupyter_panel_to_notebook(self, panel, mode_name, storage):
         """Add Jupyter panel to notebook with tooltip."""
+        tooltip = str(storage.resolve())
+
+        # Store tooltip as panel attribute (persists through undock/dock)
+        panel.page_tooltip = tooltip
+
         self.mainnotebook.AddPage(
             panel,
             _("Jupyter Notebook ({}) - {}").format(mode_name, storage.resolve().name),
         )
 
         page_idx = self.mainnotebook.GetPageCount() - 1
-        self.mainnotebook.SetPageTooltip(page_idx, str(storage.resolve()))
+        self.mainnotebook.SetPageTooltip(page_idx, tooltip)
 
     def _setup_jupyter_integrated_mode(self, storage, create_template):
         """Setup integrated Jupyter panel. Returns True on success."""
