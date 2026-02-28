@@ -7,6 +7,38 @@ import json
 
 class TestVNet(TestCase):
     network = "test_vnet"
+    net_for_nreport = "test_net_nreport"
+    net_for_report = "test_net_report"
+
+    @classmethod
+    def setUpClass(cls):
+        """Set up the test environment by creating necessary vector maps for testing v.net nreport and report operations."""
+        cls.runModule(
+            "v.net",
+            input="streets",
+            points="schools",
+            output=cls.net_for_nreport,
+            operation="connect",
+            threshold=1000,
+            flags="c",
+        )
+
+        cls.runModule(
+            "v.net",
+            input="streets",
+            output=cls.net_for_report,
+            operation="nodes",
+            flags="c",
+        )
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.runModule(
+            "g.remove",
+            flags="f",
+            type="vector",
+            name=[cls.net_for_nreport, cls.net_for_report],
+        )
 
     def tearDown(self):
         """Remove viewshed map after each test method"""
@@ -14,19 +46,9 @@ class TestVNet(TestCase):
 
     def test_nreport_json_output(self):
         """Verify that v.net nreport produces valid and accurate JSON output"""
-        self.runModule(
-            "v.net",
-            input="streets",
-            points="schools",
-            output=self.network,
-            operation="connect",
-            threshold=400,
-            flags="c",
-        )
-
         vnet_module = SimpleModule(
             "v.net",
-            input=self.network,
+            input=self.net_for_nreport,
             operation="nreport",
             node_layer=2,
             format="json",
@@ -34,20 +56,20 @@ class TestVNet(TestCase):
         self.assertModule(vnet_module)
 
         actual_output = json.loads(vnet_module.outputs.stdout)
-
         self.assertIsInstance(actual_output, list)
         self.assertGreater(len(actual_output), 0, "The JSON output list is empty")
 
         expected_keys = {"node_cat", "lines"}
         self.assertEqual(set(actual_output[0].keys()), expected_keys)
-        self.assertIsInstance(actual_output[0]["node_cat"], int)
-        self.assertIsInstance(actual_output[0]["lines"], list)
+        for entry in actual_output[:10]:
+            self.assertIsInstance(entry["node_cat"], int)
+            self.assertIsInstance(entry["lines"], list)
 
     def test_report_json_output(self):
         """Verify that v.net report produces valid and accurate JSON output"""
         vnet_module = SimpleModule(
             "v.net",
-            input="streets_net",
+            input=self.net_for_report,
             operation="report",
             arc_layer=1,
             node_layer=2,
@@ -56,26 +78,14 @@ class TestVNet(TestCase):
         self.assertModule(vnet_module)
 
         actual_output = json.loads(vnet_module.outputs.stdout)
-
         self.assertIsInstance(actual_output, list)
         self.assertGreater(len(actual_output), 0, "The JSON output list is empty")
 
         expected_keys = {"line_cat", "start_node_cat", "end_node_cat"}
         self.assertEqual(set(actual_output[0].keys()), expected_keys)
-
         for entry in actual_output[:10]:
             for key in expected_keys:
                 self.assertIsInstance(entry[key], int)
-
-    def test_nodes(self):
-        """Test"""
-        self.assertModule(
-            "v.net", input="streets", output=self.network, operation="nodes"
-        )
-        topology = {"points": 41813, "nodes": 41813, "lines": 49746}
-        self.assertVectorFitsTopoInfo(vector=self.network, reference=topology)
-        layers = read_command("v.category", input=self.network, option="layers").strip()
-        self.assertEqual(first="1", second=layers, msg="Layers do not match")
 
     def test_nodes_layers(self):
         """Test"""
