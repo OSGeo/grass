@@ -415,11 +415,16 @@ class JupyterBrowserPanel(wx.Panel, MainPageBase):
 
         self.env = JupyterEnvironment(storage=storage, create_template=create_template)
 
+        self.toolbar = JupyterToolbar(parent=self, minimal=True)
+
         self._layout()
 
     def _layout(self) -> None:
         """Create simple layout with message and controls."""
         main_sizer = wx.BoxSizer(wx.VERTICAL)
+
+        # Toolbar at the top
+        main_sizer.Add(self.toolbar, flag=wx.EXPAND)
         main_sizer.AddStretchSpacer(1)
 
         # Info icon and message
