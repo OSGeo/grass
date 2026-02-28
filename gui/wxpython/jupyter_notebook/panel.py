@@ -503,8 +503,11 @@ class JupyterBrowserPanel(wx.Panel, MainPageBase):
             )
         )
 
-        # Open in default browser
-        webbrowser.open(self.env.server_url)
+        # Open template notebook if available, otherwise open directory
+        if self.env.template_url:
+            webbrowser.open_new(self.env.template_url)
+        else:
+            webbrowser.open_new(self.env.server_url)
 
         return True
 
