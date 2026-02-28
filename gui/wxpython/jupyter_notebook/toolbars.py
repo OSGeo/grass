@@ -28,12 +28,14 @@ from icons.icon import MetaIcon
 class JupyterToolbar(BaseToolbar):
     """Toolbar for integrated Jupyter notebook interface."""
 
-    def __init__(self, parent: wx.Window) -> None:
+    def __init__(self, parent: wx.Window, minimal: bool = False) -> None:
         """Initialize Jupyter toolbar.
 
         :param parent: Parent window
+        :param minimal: If True, show only Undock and Stop buttons
         """
         BaseToolbar.__init__(self, parent)
+        self.minimal = minimal
 
         # workaround for http://trac.wxwidgets.org/ticket/13888
         if sys.platform == "darwin" and not CheckWxVersion([4, 2, 1]):
@@ -50,24 +52,52 @@ class JupyterToolbar(BaseToolbar):
         :return: Toolbar data tuple containing tool definitions
         """
         icons = {
-            "create": MetaIcon(
-                img="create",
-                label=_("Create new notebook"),
-            ),
-            "open": MetaIcon(
-                img="open",
-                label=_("Import notebook"),
-            ),
-            "save": MetaIcon(
-                img="save",
-                label=_("Export notebook"),
-            ),
             "docking": BaseIcons["docking"],
             "quit": MetaIcon(
                 img="quit",
                 label=_("Stop server"),
             ),
         }
+
+        # Minimal mode: only Undock and Stop
+        if self.minimal:
+            data = ()
+            if self.parent.IsDockable():
+                data += (
+                    (
+                        ("docking", icons["docking"].label),
+                        icons["docking"],
+                        self.parent.OnDockUndock,
+                        wx.ITEM_CHECK,
+                    ),
+                )
+            data += (
+                (
+                    ("quit", icons["quit"].label),
+                    icons["quit"],
+                    self.parent.OnCloseWindow,
+                ),
+            )
+            return self._getToolbarData(data)
+
+        # Full mode: all buttons
+        icons.update(
+            {
+                "create": MetaIcon(
+                    img="create",
+                    label=_("Create new notebook"),
+                ),
+                "open": MetaIcon(
+                    img="open",
+                    label=_("Import notebook"),
+                ),
+                "save": MetaIcon(
+                    img="save",
+                    label=_("Export notebook"),
+                ),
+            }
+        )
+
         data = (
             (
                 ("create", icons["create"].label),
