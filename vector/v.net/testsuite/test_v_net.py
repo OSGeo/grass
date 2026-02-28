@@ -42,6 +42,7 @@ class TestVNet(TestCase):
 
     def tearDown(self):
         """Remove viewshed map after each test method"""
+        # TODO: eventually, removing maps should be handled through testing framework functions
         self.runModule("g.remove", flags="f", type="vector", name=self.network)
 
     def test_nreport_json_output(self):
