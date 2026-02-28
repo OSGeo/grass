@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE martif PUBLIC "ISO 12200:1999A//DTD MARTIF core (DXFcdV04)//EN" "TBXcdv04.dtd">
+<martif type="TBX" xml:lang="en">
+    <martifHeader>
+        <fileDesc>
+            <sourceDesc>
+                <p>Translate Toolkit</p>
+            </sourceDesc>
+        </fileDesc>
+    </martifHeader>
+    <text>
+        <body>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>Vector</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term>Vector</term></tig></langSet>
+            </termEntry>
+            <termEntry id="The name of this project. Do not use GRASS GIS for 8.5 and later">
+                <langSet xml:lang="en"><tig><term>GRASS</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>Raster</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>Feature</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>Standard deviation</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+                <descrip>https://en.wikipedia.org/wiki/Standard_deviation</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>topology</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>legend</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>kilometers</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+                <note from="translator">Localized units</note>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>layer</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>meters</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+                <descrip>Localized units</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>project</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+                <note from="translator">A project, previously called a location in GRASS.</note>
+            </termEntry>
+            <termEntry id="Need to distinguish between meanings of map, and the verb.">
+                <langSet xml:lang="en"><tig><term>map</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>node</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>label</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry id="coordinate reference system, we use CRS instead of SRS https://en.wikipedia.org/wiki/Spatial_reference_system">
+                <langSet xml:lang="en"><tig><term>CRS</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+                <descrip>coordinate reference system, we use CRS instead of SRS https://en.wikipedia.org/wiki/Spatial_reference_systeM</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>vertex</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>Coordinates</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>Projection</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>polygon</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term>polygon</term></tig></langSet>
+                <descrip>Feature type</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>line</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+                <descrip>Feature type1</descrip>
+            </termEntry>
+            <termEntry id="1">
+                <langSet xml:lang="en"><tig><term>line</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term>line</term></tig></langSet>
+                <descrip>Feature type</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>point</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term>point</term></tig></langSet>
+                <descrip>Feature type</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>face</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term>face</term></tig></langSet>
+                <descrip>Feature type</descrip>
+            </termEntry>
+            <termEntry id="1">
+                <langSet xml:lang="en"><tig><term>line</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+                <descrip>Line of a file</descrip>
+            </termEntry>
+            <termEntry id="Feature type">
+                <langSet xml:lang="en"><tig><term>line</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>coordinate reference system</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+                <descrip>We use CRS instead of SRS https://en.wikipedia.org/wiki/Spatial_reference_system</descrip>
+            </termEntry>
+            <termEntry id="1">
+                <langSet xml:lang="en"><tig><term>coordinate reference system</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+                <descrip>We use CRS instead of SRS https://en.wikipedia.org/wiki/Spatial_reference_system</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>CRS</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>line</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+                <descrip>Feature type</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>quantile</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+                <note from="translator">Statistical measure</note>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>raster</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>JSON</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+                <descrip>JavaScript Object Notation, should be in uppercase</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>JavaScript Object Notation</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>netCDF</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+                <note from="translator">File format</note>
+                <descrip>File format, Network Common Data Form, with lowercase n when not at the beginning of a sentence (in English)</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>unsupported</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>Data Catalog</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+                <descrip>In GUI</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>Map Displays</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>columns</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>module</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>tool</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+                <descrip>What each of our individual algorithms/programs are called. Were previously known as modules.</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>column</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>map display</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+                <note from="translator">GUI concept, where the map is shown</note>
+                <descrip>GUI concept, where the map is shown</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>mapset</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>threads</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term></term></tig></langSet>
+                <descrip>thread of execution, component of a process</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>extent</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term></term></tig></langSet>
+                <note from="translator">Emprise ou étendue</note>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>vector map</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term></term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>vector</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term></term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>centroids</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term></term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>area</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term></term></tig></langSet>
+            </termEntry>
+            <termEntry id="1">
+                <langSet xml:lang="en"><tig><term>area</term></tig></langSet>
+                <langSet xml:lang="hu"><tig><term></term></tig></langSet>
+                <descrip>The geometry type</descrip>
+            </termEntry>
+        </body>
+    </text>
+</martif>

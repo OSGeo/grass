@@ -1,0 +1,6747 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2026.
+# Abhimanyu <abhimanyupg04@gmail.com>, 2026.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-14 18:00+0000\n"
+"PO-Revision-Date: 2026-02-20 05:33+0000\n"
+"Last-Translator: Abhimanyu  <abhimanyupg04@gmail.com>\n"
+"Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grasslibs/hi/>\n"
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.16\n"
+
+#, c-format
+msgid "Unknown algorithm '%s'"
+msgstr "अज्ञात एल्गोरिदम '%s'"
+
+msgid "Classification algorithm failed"
+msgstr ""
+
+msgid "Equiprobable classbreaks currently limited to 10 classes"
+msgstr ""
+
+#, c-format
+msgid "There are classbreaks outside the range min-max. Number of classes reduced to %i, but using probabilities for %i classes."
+msgstr ""
+
+msgid "Cairo_Bitmap: Failed to create source"
+msgstr ""
+
+msgid "Unable to open display"
+msgstr ""
+
+msgid "Unable to obtain visual"
+msgstr ""
+
+#, c-format
+msgid "Unknown file extension: %s"
+msgstr ""
+
+#, c-format
+msgid "cairo: collecting to file '%s'"
+msgstr ""
+
+#, c-format
+msgid "cairo: image size %dx%d"
+msgstr ""
+
+msgid "Unknown Cairo surface type"
+msgstr ""
+
+#, c-format
+msgid "Failed to initialize Cairo surface (width: %d, height: %d): %s"
+msgstr ""
+
+#, c-format
+msgid "Unable to open file: %s"
+msgstr ""
+
+msgid "Failed to create cairo surface"
+msgstr ""
+
+#, c-format
+msgid "Cairo: unable to open input file <%s>"
+msgstr ""
+
+#, c-format
+msgid "Cairo: invalid input file <%s>"
+msgstr ""
+
+#, c-format
+msgid "Cairo: Invalid BMP header for <%s>"
+msgstr ""
+
+#, c-format
+msgid "Cairo: error reading BMP file <%s>: unexpected end of file"
+msgstr ""
+
+#, c-format
+msgid "Cairo: error reading BMP file <%s>: %s"
+msgstr ""
+
+#, c-format
+msgid "Cairo: unexpected EOF reading <%s>"
+msgstr ""
+
+#, c-format
+msgid "Cairo: input file has incorrect dimensions: expected: %dx%d got: %dx%d"
+msgstr ""
+
+#, c-format
+msgid "Cairo: unable to open input mask file <%s>"
+msgstr ""
+
+#, c-format
+msgid "Cairo: invalid input mask file <%s>"
+msgstr ""
+
+#, c-format
+msgid "Cairo: unexpected EOF reading mask <%s>"
+msgstr ""
+
+#, c-format
+msgid "Cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d"
+msgstr ""
+
+#, c-format
+msgid "Unable to open input file <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to read input file <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to parse input file <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to convert from <%s> to UTF-8"
+msgstr ""
+
+msgid "Some characters could not be converted to UTF-8"
+msgstr ""
+
+#, c-format
+msgid "Cairo: unable to open output file <%s>"
+msgstr ""
+
+#, c-format
+msgid "Cairo: unable to open mask file <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to open output file <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to write output file <%s>"
+msgstr ""
+
+#, c-format
+msgid "produced by i.cluster"
+msgstr ""
+
+#, c-format
+msgid "Not enough data points (%d) in cluster"
+msgstr ""
+
+msgid "Programmer error"
+msgstr ""
+
+msgid "<NULL error message>"
+msgstr ""
+
+msgid "dbmi: Protocol error"
+msgstr ""
+
+msgid "dbmi: Out of Memory"
+msgstr ""
+
+#, c-format
+msgid "dbmi: %s() not implemented"
+msgstr ""
+
+#, c-format
+msgid "dbmi: Invalid procedure %d"
+msgstr ""
+
+msgid "db_set_index_column_name(): invalid column number"
+msgstr ""
+
+msgid "db_get_index_column_name(): invalid column number"
+msgstr ""
+
+#, c-format
+msgid "Illegal table map name <%s>. May not contain '.' or 'NULL'."
+msgstr ""
+
+#, c-format
+msgid "Illegal table map name <%s>. Must start with a letter."
+msgstr ""
+
+#, c-format
+msgid "Illegal table map name <%s>. Character <%c> not allowed."
+msgstr ""
+
+#, c-format
+msgid "Unable to read file '%s'"
+msgstr ""
+
+#, c-format
+msgid "Login file (%s) corrupted (line: %s)"
+msgstr ""
+
+#, c-format
+msgid "Unable to write file '%s'"
+msgstr ""
+
+#, c-format
+msgid "DB connection <%s/%s> already exists and will be overwritten"
+msgstr ""
+
+#, c-format
+msgid "DB connection <%s/%s> already exists. Re-run '%s' with '--%s' flag to overwrite existing settings."
+msgstr ""
+
+msgid ""
+"\n"
+"++ Running column unit tests ++"
+msgstr ""
+
+msgid ""
+"\n"
+"-- column unit tests failure --"
+msgstr ""
+
+msgid ""
+"\n"
+"-- column unit tests finished successfully --"
+msgstr ""
+
+msgid ""
+"\n"
+"++ Run test copy column ++"
+msgstr ""
+
+msgid ""
+"\n"
+"++ Test copy column finished ++"
+msgstr ""
+
+msgid "Choose the unit tests to run"
+msgstr ""
+
+msgid "Choose the integration tests to run"
+msgstr ""
+
+msgid "Run all unit tests"
+msgstr ""
+
+msgid "Run all integration tests"
+msgstr ""
+
+msgid "Run all unit and integration tests"
+msgstr ""
+
+msgid "Performs unit and integration tests for the dbmi base library"
+msgstr ""
+
+msgid ""
+"\n"
+"++ Running table unit tests ++"
+msgstr ""
+
+msgid ""
+"\n"
+"-- Table unit tests failure --"
+msgstr ""
+
+msgid ""
+"\n"
+"-- Table unit tests finished successfully --"
+msgstr ""
+
+msgid "db_convert_Cstring_to_value(): unrecognized sqltype"
+msgstr ""
+
+msgid "db_convert_value_into_string(): unrecongized sqltype-type"
+msgstr ""
+
+msgid "fetch: table has wrong number of columns"
+msgstr ""
+
+msgid "send data: invalid C-type"
+msgstr ""
+
+#, c-format
+msgid "Unable to describe table <%s>"
+msgstr ""
+
+#, c-format
+msgid "Array of values to select from column <%s> is empty"
+msgstr ""
+
+#, c-format
+msgid "Unable to start driver <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to open database <%s> by driver <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to get list tables in database <%s>"
+msgstr ""
+
+#, c-format
+msgid "Table <%s> already exists in database and will be overwritten"
+msgstr ""
+
+#, c-format
+msgid "Table <%s> already exists in database <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to open select cursor: '%s'"
+msgstr ""
+
+#, c-format
+msgid "Column <%s> is not integer"
+msgstr ""
+
+#, c-format
+msgid "Column <%s> not found"
+msgstr ""
+
+#, c-format
+msgid "Unable to create table <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to fetch data from table <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unknown column type (column <%s>)"
+msgstr ""
+
+#, c-format
+msgid "Unable open database <%s> by driver <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to drop table: '%s'"
+msgstr ""
+
+msgid "Missing column name"
+msgstr ""
+
+msgid "Missing key column name"
+msgstr ""
+
+#, c-format
+msgid "Unable select records from table <%s>"
+msgstr ""
+
+msgid "Key column type is not integer"
+msgstr ""
+
+#, c-format
+msgid "Table name too long: <%s>"
+msgstr ""
+
+#, c-format
+msgid "DBMI-%s driver error:"
+msgstr ""
+
+#, c-format
+msgid "DBMI-%s driver file reading error: %s"
+msgstr ""
+
+#, c-format
+msgid "Unsupported icon %d"
+msgstr ""
+
+#, c-format
+msgid "Both %s and %s are defined. %s will be ignored."
+msgstr ""
+
+#, c-format
+msgid "Neither %s (managed by d.mon command) nor %s (used for direct rendering) defined"
+msgstr ""
+
+#, c-format
+msgid "Unknown display driver <%s>"
+msgstr ""
+
+#, c-format
+msgid "Using display driver <%s>..."
+msgstr ""
+
+#, c-format
+msgid "GRASS_NOTIFY command <%s> failed"
+msgstr ""
+
+#, c-format
+msgid "String <%s> is too long"
+msgstr ""
+
+#, c-format
+msgid "[%s]: No such color"
+msgstr ""
+
+#, c-format
+msgid "Font name <%s> is too long"
+msgstr ""
+
+#, c-format
+msgid "%s: Unable to read font definition file; use the default"
+msgstr ""
+
+#, c-format
+msgid "%s: No font definition file"
+msgstr ""
+
+msgid "general"
+msgstr ""
+
+msgid "json"
+msgstr ""
+
+msgid "unit test"
+msgstr ""
+
+msgid "Performs unit tests for the gjson library"
+msgstr ""
+
+msgid ""
+"\n"
+"++ Running gjson wrapper unit tests ++"
+msgstr ""
+
+msgid ""
+"\n"
+"-- gjson wrapper unit tests failure --"
+msgstr ""
+
+msgid ""
+"\n"
+"-- gjson wrapper unit tests finished successfully --"
+msgstr ""
+
+#, c-format
+msgid "Illegal n-s resolution value: %g"
+msgstr ""
+
+#, c-format
+msgid "Illegal number of rows: %d (resolution is %g)"
+msgstr ""
+
+#, c-format
+msgid "Illegal e-w resolution value: %g"
+msgstr ""
+
+#, c-format
+msgid "Illegal number of columns: %d (resolution is %g)"
+msgstr ""
+
+#, c-format
+msgid "North must be north of South, but %g (north) <= %g (south"
+msgstr ""
+
+#, c-format
+msgid "North must be larger than South, but %g (north) <= %g (south"
+msgstr ""
+
+#, c-format
+msgid "East must be larger than West, but %g (east) <= %g (west)"
+msgstr ""
+
+msgid "Invalid coordinates: negative number of columns"
+msgstr ""
+
+msgid "Invalid coordinates: negative number of rows"
+msgstr ""
+
+msgid "NS resolution has been changed"
+msgstr ""
+
+msgid "EW resolution has been changed"
+msgstr ""
+
+msgid "NS and EW resolutions are different"
+msgstr ""
+
+#, c-format
+msgid "Illegal n-s resolution value for 3D: %g"
+msgstr ""
+
+#, c-format
+msgid "Illegal number of rows for 3D: %d (resolution is %g)"
+msgstr ""
+
+#, c-format
+msgid "Illegal e-w resolution value for 3D: %g"
+msgstr ""
+
+#, c-format
+msgid "Illegal number of columns for 3D: %d (resolution is %g)"
+msgstr ""
+
+#, c-format
+msgid "Illegal t-b resolution value: %g"
+msgstr ""
+
+#, c-format
+msgid "Illegal depths value: %d"
+msgstr ""
+
+#, c-format
+msgid "Top must be larger than Bottom, but %g (top) <= %g (bottom)"
+msgstr ""
+
+msgid "Invalid coordinates: negative number of depths"
+msgstr ""
+
+#, c-format
+msgid "East (%.15g) is not larger than West (%.15g)"
+msgstr ""
+
+#, c-format
+msgid "Illegal latitude for North: %g"
+msgstr ""
+
+#, c-format
+msgid "Illegal latitude for South: %g"
+msgstr ""
+
+#, c-format
+msgid "Illegal longitude for West: %g"
+msgstr ""
+
+#, c-format
+msgid "Illegal longitude for East: %g"
+msgstr ""
+
+#, c-format
+msgid "NS extent does not match NS resolution: %g cells difference"
+msgstr ""
+
+#, c-format
+msgid "%g cells missing to reach 90 degree north"
+msgstr ""
+
+#, c-format
+msgid "Subtle input data rounding error of north boundary (%g)"
+msgstr ""
+
+#, c-format
+msgid "90 degree north is exceeded by %g cells"
+msgstr ""
+
+#, c-format
+msgid "%g cells missing to reach 90 degree south"
+msgstr ""
+
+#, c-format
+msgid "Subtle input data rounding error of south boundary (%g)"
+msgstr ""
+
+#, c-format
+msgid "90 degree south is exceeded by %g cells"
+msgstr ""
+
+#, c-format
+msgid "EW extent does not match EW resolution: %g cells difference"
+msgstr ""
+
+#, c-format
+msgid "360 degree EW extent is exceeded by %g cells (East: %g, West: %g)"
+msgstr ""
+
+#, c-format
+msgid "%g cells missing to cover 360 degree EW extent"
+msgstr ""
+
+msgid "Invalid NS resolution"
+msgstr ""
+
+msgid "Invalid EW resolution"
+msgstr ""
+
+msgid "Invalid North"
+msgstr ""
+
+msgid "Invalid South"
+msgstr ""
+
+msgid "Invalid West"
+msgstr ""
+
+msgid "Invalid East"
+msgstr ""
+
+#, c-format
+msgid "NS resolution rounded from %s to %s"
+msgstr ""
+
+#, c-format
+msgid "North rounded from %s to %s"
+msgstr ""
+
+#, c-format
+msgid "South adjusted from %s to %s"
+msgstr ""
+
+#, c-format
+msgid "South rounded from %s to %s"
+msgstr ""
+
+#, c-format
+msgid "North adjusted from %s to %s"
+msgstr ""
+
+#, c-format
+msgid "EW resolution rounded from %s to %s"
+msgstr ""
+
+#, c-format
+msgid "West rounded from %s to %s"
+msgstr ""
+
+#, c-format
+msgid "East adjusted from %s to %s"
+msgstr ""
+
+#, c-format
+msgid "East rounded from %s to %s"
+msgstr ""
+
+#, c-format
+msgid "West adjusted from %s to %s"
+msgstr ""
+
+#, c-format
+msgid "Current region rows: %d, cols: %d"
+msgstr ""
+
+#, c-format
+msgid "G_malloc: unable to allocate %lu bytes of memory at %s:%d"
+msgstr ""
+
+#, c-format
+msgid "G_calloc: unable to allocate %lu * %lu bytes of memory at %s:%d"
+msgstr ""
+
+#, c-format
+msgid "G_realloc: unable to allocate %lu bytes of memory at %s:%d"
+msgstr ""
+
+#, c-format
+msgid "Failed to print %s"
+msgstr ""
+
+#, c-format
+msgid "Failed to parse string specifier: %s"
+msgstr ""
+
+#, c-format
+msgid "Format specifier exceeds the buffer size (%d)"
+msgstr ""
+
+msgid "GRASS needs to be compiled with BZIP2 for BZIP2 compression"
+msgstr ""
+
+msgid "No source buffer"
+msgstr ""
+
+msgid "No destination buffer"
+msgstr ""
+
+#, c-format
+msgid "Invalid source buffer size %d"
+msgstr ""
+
+#, c-format
+msgid "Invalid destination buffer size %d"
+msgstr ""
+
+#, c-format
+msgid "BZIP2 version %s compression error %d"
+msgstr ""
+
+#, c-format
+msgid "BZIP2 version %s decompression error %d"
+msgstr ""
+
+#, c-format
+msgid "Got uncompressed size %d, expected %d"
+msgstr ""
+
+msgid "LZ4 compression error"
+msgstr ""
+
+msgid "LZ4 decompression error"
+msgstr ""
+
+#, c-format
+msgid "ZLIB compression error %d: %s"
+msgstr ""
+
+#, c-format
+msgid "ZLIB decompression error %d: %s"
+msgstr ""
+
+msgid "GRASS needs to be compiled with ZSTD for ZSTD compression"
+msgstr ""
+
+#, c-format
+msgid "ZSTD compression error %d: %s"
+msgstr ""
+
+msgid "no description"
+msgstr ""
+
+msgid "Unable to open color rule"
+msgstr ""
+
+msgid "range: map values"
+msgstr ""
+
+#, c-format
+msgid "range: %g to %g"
+msgstr ""
+
+msgid "Unable to open color descriptions"
+msgstr ""
+
+#, c-format
+msgid "Unknown color format '%s'"
+msgstr ""
+
+msgid "Request for unsupported compressor"
+msgstr ""
+
+msgid "No destination buffer allocated"
+msgstr ""
+
+#, c-format
+msgid "Invalid read size %d"
+msgstr ""
+
+#, c-format
+msgid "Unable to read %d bytes: end of file"
+msgstr ""
+
+#, c-format
+msgid "Unable to read %d bytes: %s"
+msgstr ""
+
+msgid "Unable to write compression flag"
+msgstr ""
+
+#, c-format
+msgid "Unable to write %d bytes: nothing written"
+msgstr ""
+
+#, c-format
+msgid "Unable to write %d bytes: %s"
+msgstr ""
+
+#, c-format
+msgid "unable to open datum table file: %s"
+msgstr ""
+
+#, c-format
+msgid "error in datum table file, line %d"
+msgstr ""
+
+#, c-format
+msgid "Cannot open debug file '%s'"
+msgstr ""
+
+#, c-format
+msgid "%s: shouldn't happen: code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"
+msgstr ""
+
+#, c-format
+msgid "%s complete. %s"
+msgstr ""
+
+msgid "No active GRASS session: GISRC environment variable not set"
+msgstr ""
+
+#, c-format
+msgid "Incomplete GRASS session: Variable '%s' not set"
+msgstr ""
+
+msgid "unknown"
+msgstr "अज्ञात"
+
+msgid "WARNING: "
+msgstr ""
+
+#, c-format
+msgid "ERROR: "
+msgstr ""
+
+#, c-format
+msgid "Data element '%s/%s' was found in more mapsets (also found in <%s>)"
+msgstr ""
+
+#, c-format
+msgid "Using <%s@%s>..."
+msgstr ""
+
+#, c-format
+msgid "Unable to open ellipsoid table file <%s>"
+msgstr ""
+
+#, c-format
+msgid "Invalid a: field '%s' in file %s in <%s>"
+msgstr ""
+
+#, c-format
+msgid "Invalid ellipsoid '%s' in file %s in <%s>"
+msgstr ""
+
+#, c-format
+msgid "Invalid es: field '%s' in file %s in <%s>"
+msgstr ""
+
+#, c-format
+msgid "No ellipsoid info given in file %s in <%s>"
+msgstr ""
+
+#, c-format
+msgid "<%s> file not found for location <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to open input file <%s>: %s"
+msgstr ""
+
+#, c-format
+msgid "Error closing output file <%s>: %s"
+msgstr ""
+
+#, c-format
+msgid "Unable to open element file <%s> for <%s@%s>"
+msgstr ""
+
+#, c-format
+msgid "Region file %s/%s/%s is empty"
+msgstr ""
+
+#, c-format
+msgid "Module built against version %s but trying to use version %s. In case of errors you need to rebuild the module against GRASS version %s."
+msgstr ""
+
+#, c-format
+msgid "Module built against version %s but trying to use version %s. You need to rebuild GRASS or untangle multiple installations."
+msgstr ""
+
+#, c-format
+msgid "MAPSET %s - permission denied"
+msgstr ""
+
+#, c-format
+msgid "MAPSET %s not found at %s"
+msgstr ""
+
+msgid "System not initialized. Programmer forgot to call G_gisinit()."
+msgstr ""
+
+msgid "Unable to determine user's home directory"
+msgstr ""
+
+#, c-format
+msgid "Failed to create directory [%s]"
+msgstr ""
+
+#, c-format
+msgid "Unable to open output file <%s>: %s"
+msgstr ""
+
+#, c-format
+msgid "Error writing file <%s>: %s"
+msgstr ""
+
+#, c-format
+msgid "Error reading file <%s>: %s"
+msgstr ""
+
+#, c-format
+msgid "Error closing input file <%s>: %s"
+msgstr ""
+
+#, c-format
+msgid "Illegal filename <%s>. Cannot start with '.' or be 'NULL'."
+msgstr ""
+
+#, c-format
+msgid "Illegal filename <%s>. Character <%c> not allowed.\n"
+msgstr ""
+
+#, c-format
+msgid "Output raster map name <%s> is not valid map name"
+msgstr ""
+
+#, c-format
+msgid "Raster map <%s> not found"
+msgstr ""
+
+#, c-format
+msgid "Output raster map <%s> is used as input"
+msgstr ""
+
+#, c-format
+msgid "no %s files available in current mapset\n"
+msgstr ""
+
+#, c-format
+msgid "no %s files available in mapset <%s>\n"
+msgstr ""
+
+#, c-format
+msgid "%s files available in mapset <%s>:\n"
+msgstr ""
+
+msgid "G_list: Unknown element type"
+msgstr ""
+
+#, c-format
+msgid "LOCATION <%s> not available"
+msgstr ""
+
+#, c-format
+msgid "gettimeofday failed: %s"
+msgstr ""
+
+msgid "Pseudo-random number generator not seeded"
+msgstr ""
+
+#, c-format
+msgid "Unable to open directory %s"
+msgstr ""
+
+#, c-format
+msgid "Location <%s> doesn't exist"
+msgstr ""
+
+msgid "MAPSET is not set"
+msgstr ""
+
+#, c-format
+msgid "MAPSET <%s> not available"
+msgstr ""
+
+#, c-format
+msgid "Unable to make mapset element %s (%s): %s"
+msgstr ""
+
+#, c-format
+msgid "Unable to access mapset element %s (%s): %s"
+msgstr ""
+
+msgid "Attempt to create read-only temporary file"
+msgstr ""
+
+#, c-format
+msgid "Unrecognised access mode: %o"
+msgstr ""
+
+msgid "This location has no description."
+msgstr ""
+
+msgid "Option is NULL."
+msgstr ""
+
+msgid "Option key is NULL."
+msgstr ""
+
+#, c-format
+msgid "One thread is set up for parallel computing."
+msgid_plural "%d threads are set up for parallel computing."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "GRASS is not compiled with OpenMP support, parallel computation is disabled. Only one thread will be used."
+msgstr ""
+
+#, c-format
+msgid "G__open(read): mapset <%s> doesn't match xmapset <%s>"
+msgstr ""
+
+#, c-format
+msgid "G__open(read): Unable to open '%s': %s"
+msgstr ""
+
+#, c-format
+msgid "G__open(write): xmapset <%s> != G_mapset() <%s>"
+msgstr ""
+
+#, c-format
+msgid "G__open(write): Unable to open '%s': %s"
+msgstr ""
+
+#, c-format
+msgid "File read/write operation failed: %s (%d)"
+msgstr ""
+
+#, c-format
+msgid "G__open_misc(read): mapset <%s> doesn't match xmapset <%s>"
+msgstr ""
+
+#, c-format
+msgid "G__open_misc(write): xmapset <%s> != G_mapset() <%s>"
+msgstr ""
+
+msgid "Bug in UI description. Missing module description"
+msgstr ""
+
+msgid "Bug in UI description. Missing option key"
+msgstr ""
+
+#, c-format
+msgid "Bug in UI description. Option key <%s> is not valid"
+msgstr ""
+
+#, c-format
+msgid "Bug in UI description. Description for option <%s> missing"
+msgstr ""
+
+#, c-format
+msgid "Bug in UI description. Option '%s' in <%s> does not exist"
+msgstr ""
+
+msgid "Use either --quiet or --verbose flag, not both. Assuming --verbose."
+msgstr ""
+
+msgid "Use either --quiet or --verbose flag, not both. Assuming --quiet."
+msgstr ""
+
+msgid "Use either --qq or --verbose flag, not both. Assuming --qq."
+msgstr ""
+
+#, c-format
+msgid "Sorry <%s> is not a valid option"
+msgstr ""
+
+msgid "Your installation doesn't include GUI, exiting."
+msgstr ""
+
+msgid "ERROR"
+msgstr ""
+
+msgid "Unable to determine program name"
+msgstr ""
+
+#, c-format
+msgid "%s: Sorry, <%c> is not a valid flag"
+msgstr ""
+
+#, c-format
+msgid "Please update the usage of <%s>: flag <%c> has been renamed to <%s>"
+msgstr ""
+
+#, c-format
+msgid "Please update the usage of <%s>: flag <%c> has been renamed to option <%s>"
+msgstr ""
+
+#, c-format
+msgid "%s: Sorry, <%s=> is ambiguous"
+msgstr ""
+
+#, c-format
+msgid "Option <%s=> matches"
+msgstr ""
+
+#, c-format
+msgid "Please update the usage of <%s>: option <%s> has been renamed to flag <%s>"
+msgstr ""
+
+#, c-format
+msgid "Please update the usage of <%s>: option <%s> has been renamed to flag <%c>"
+msgstr ""
+
+#, c-format
+msgid "Please update the usage of <%s>: option <%s> has been renamed to <%s>"
+msgstr ""
+
+#, c-format
+msgid "%s: Sorry, <%s> is not a valid parameter"
+msgstr ""
+
+#, c-format
+msgid "<%s> is an abbreviation for <%s>"
+msgstr ""
+
+#, c-format
+msgid "Option <%s> does not accept multiple answers"
+msgstr ""
+
+#, c-format
+msgid ""
+"Illegal range syntax for parameter <%s>\n"
+"\tPresented as: %s"
+msgstr ""
+
+#, c-format
+msgid ""
+"Value <%s> out of range for parameter <%s>\n"
+"\tLegal range: %s"
+msgstr ""
+
+#, c-format
+msgid "Missing value for parameter <%s>"
+msgstr ""
+
+#, c-format
+msgid "Invalid value <%s> for parameter <%s>"
+msgstr ""
+
+#, c-format
+msgid ""
+"Value <%s> ambiguous for parameter <%s>\n"
+"\tValid options: %s"
+msgstr ""
+
+#, c-format
+msgid ""
+"Required parameter <%s> not set:\n"
+"\t(%s)"
+msgstr ""
+
+#, c-format
+msgid ""
+"Option <%s> must be provided in multiples of %d\n"
+"\tYou provided %d item(s): %s"
+msgstr ""
+
+#, c-format
+msgid "option <%s>: <%s> exists. To overwrite, use the --overwrite flag"
+msgstr ""
+
+#, c-format
+msgid "%s= is not a separator option"
+msgstr ""
+
+#, c-format
+msgid "No separator given for %s="
+msgstr ""
+
+#, c-format
+msgid "%s= is not a file option"
+msgstr ""
+
+#, c-format
+msgid "Opening multiple files not supported for %s="
+msgstr ""
+
+#, c-format
+msgid "Unable to open %s file <%s>: %s"
+msgstr ""
+
+#, c-format
+msgid "Unable to create %s file <%s>: %s"
+msgstr ""
+
+msgid "Internal error: option or flag not found"
+msgstr ""
+
+#, c-format
+msgid "%s and <%s>"
+msgstr ""
+
+#, c-format
+msgid "%s or <%s>"
+msgstr ""
+
+#, c-format
+msgid "Options %s are mutually exclusive"
+msgstr ""
+
+#, c-format
+msgid "At least one of the following options is required: %s"
+msgstr ""
+
+#, c-format
+msgid "Option <%s> requires at least one of %s"
+msgstr ""
+
+#, c-format
+msgid "Option <%s> requires %s"
+msgstr ""
+
+#, c-format
+msgid "Option <%s> requires all of %s"
+msgstr ""
+
+#, c-format
+msgid "Option <%s> is mutually exclusive with all of %s"
+msgstr ""
+
+#, c-format
+msgid "Either all or none of %s must be given"
+msgstr ""
+
+#, c-format
+msgid "Internal error: invalid rule type: %d"
+msgstr ""
+
+msgid "Internal error: the number of options is < 0"
+msgstr ""
+
+msgid "Description:"
+msgstr ""
+
+msgid "Keywords:"
+msgstr ""
+
+msgid "Usage:"
+msgstr ""
+
+msgid "ERROR: Option key not defined"
+msgstr ""
+
+msgid "Flags:"
+msgstr ""
+
+msgid "Allow output files to overwrite existing files"
+msgstr "आउटपुट फ़ाइलों को मौजूदा फ़ाइलों को अधिलेखित (overwrite) करने की अनुमति दें"
+
+msgid "Print usage summary"
+msgstr ""
+
+msgid "Verbose module output"
+msgstr ""
+
+msgid "Quiet module output"
+msgstr ""
+
+msgid "Super quiet module output"
+msgstr ""
+
+msgid "Force launching GUI dialog"
+msgstr ""
+
+msgid "Parameters:"
+msgstr ""
+
+#, c-format
+msgid "  %*s   default: %s\n"
+msgstr ""
+
+#, c-format
+msgid "  %*s   options: "
+msgstr ""
+
+msgid "NAME"
+msgstr ""
+
+msgid "KEYWORDS"
+msgstr ""
+
+msgid "SYNOPSIS"
+msgstr ""
+
+msgid "Flags"
+msgstr ""
+
+msgid "Parameters"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "Default"
+msgstr ""
+
+#, c-format
+msgid "Input string not understood: <%s>. Multiple '@' chars?"
+msgstr ""
+
+msgid "Allowed values"
+msgstr ""
+
+msgid "Very quiet module output"
+msgstr ""
+
+msgid "Used as"
+msgstr ""
+
+msgid "SQL SELECT statement"
+msgstr ""
+
+msgid "Example: select * from towns where population > 10000"
+msgstr ""
+
+msgid "WHERE conditions of SQL statement without 'where' keyword"
+msgstr ""
+
+msgid "Example: income < 1000 and population >= 10000"
+msgstr ""
+
+msgid "Name of attribute table"
+msgstr ""
+
+msgid "Name of database driver"
+msgstr ""
+
+msgid "Name of database"
+msgstr ""
+
+msgid "Database schema"
+msgstr ""
+
+msgid "Do not use this option if schemas are not supported by driver/database server"
+msgstr ""
+
+msgid "Name of attribute column"
+msgstr ""
+
+msgid "Name of attribute column(s)"
+msgstr ""
+
+msgid "Name of key column"
+msgstr ""
+
+msgid "Must refer to an integer column"
+msgstr ""
+
+msgid "Name of input imagery group"
+msgstr ""
+
+msgid "Name of input imagery subgroup"
+msgstr ""
+
+msgid "Maximum memory to be used (in MB)"
+msgstr ""
+
+msgid "Cache size for raster rows"
+msgstr ""
+
+msgid "Name of input raster map"
+msgstr ""
+
+msgid "Name of input raster map(s)"
+msgstr ""
+
+msgid "Name for output raster map"
+msgstr ""
+
+msgid "Name for output raster map(s)"
+msgstr ""
+
+msgid "Name of raster map"
+msgstr ""
+
+msgid "Name of raster map(s)"
+msgstr ""
+
+msgid "Name of base raster map"
+msgstr ""
+
+msgid "Name of cover raster map"
+msgstr ""
+
+msgid "Name of input elevation raster map"
+msgstr ""
+
+msgid "Name of input elevation raster map(s)"
+msgstr ""
+
+msgid "Type of raster map to be created"
+msgstr ""
+
+msgid "Storage type for resultant raster map"
+msgstr ""
+
+msgid "Integer"
+msgstr ""
+
+msgid "Single precision floating point"
+msgstr ""
+
+msgid "Double precision floating point"
+msgstr ""
+
+msgid "Sampling interpolation method"
+msgstr ""
+
+msgid "Nearest-neighbor interpolation"
+msgstr ""
+
+msgid "Bicubic interpolation"
+msgstr ""
+
+msgid "Bilinear interpolation"
+msgstr ""
+
+msgid "Name of input basename raster map(s)"
+msgstr ""
+
+msgid "Name for output basename raster map(s)"
+msgstr ""
+
+msgid "Name of input 3D raster map"
+msgstr ""
+
+msgid "Name of input 3D raster map(s)"
+msgstr ""
+
+msgid "Name for output 3D raster map"
+msgstr ""
+
+msgid "Name of 3D raster map"
+msgstr ""
+
+msgid "Name of 3D raster map(s)"
+msgstr ""
+
+msgid "Data type used in the output raster3d map"
+msgstr ""
+
+msgid "Number of digits used as mantissa in the internal map storage, 0 -23 for float, 0 - 52 for double, max or default"
+msgstr ""
+
+msgid "The compression method used in the output raster3d map"
+msgstr ""
+
+msgid "The dimensions of the tiles used in the output raster3d map (XxYxZ or default: 16x16x8)"
+msgstr ""
+
+msgid "Name of input vector map"
+msgstr ""
+
+msgid "Or data source for direct OGR access"
+msgstr ""
+
+msgid "Name of input vector map(s)"
+msgstr ""
+
+msgid "Or data source(s) for direct OGR access"
+msgstr ""
+
+msgid "Name for output vector map"
+msgstr ""
+
+msgid "Name of vector map"
+msgstr ""
+
+msgid "Name of vector map(s)"
+msgstr ""
+
+msgid "Input feature type"
+msgstr ""
+
+msgid "Layer number or name"
+msgstr ""
+
+msgid "Vector features can have category values in different layers. This number determines which layer to use. When used with direct OGR access this is the layer name."
+msgstr ""
+
+msgid "Layer number or name ('-1' for all layers)"
+msgstr ""
+
+msgid "A single vector map can be connected to multiple database tables. This number determines which table to use. When used with direct OGR access this is the layer name."
+msgstr ""
+
+msgid "Category value"
+msgstr ""
+
+msgid "Category values"
+msgstr ""
+
+msgid "Example: 1,3,7-9,13"
+msgstr ""
+
+msgid "Feature id"
+msgstr ""
+
+msgid "Feature ids"
+msgstr ""
+
+msgid "Name of input file"
+msgstr ""
+
+msgid "Name for output file"
+msgstr ""
+
+msgid "Field separator"
+msgstr ""
+
+msgid "Special characters: pipe, comma, space, tab, newline"
+msgstr ""
+
+msgid "Output format"
+msgstr ""
+
+msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);"
+msgstr ""
+
+msgid "Color"
+msgstr "रंग"
+
+msgid "Either a standard color name or R:G:B triplet"
+msgstr ""
+
+msgid "Either a standard color name, R:G:B triplet, or \"none\""
+msgstr ""
+
+msgid "Color format"
+msgstr ""
+
+msgid "Color format for output values."
+msgstr ""
+
+msgid "output color in HEX format"
+msgstr ""
+
+msgid "output color in RGB format"
+msgstr ""
+
+msgid "output color in HSV format (experimental)"
+msgstr ""
+
+msgid "output color in colon-separated RGB format"
+msgstr ""
+
+msgid "Name of input directory"
+msgstr ""
+
+msgid "Units"
+msgstr ""
+
+msgid "Data type(s)"
+msgstr ""
+
+msgid "Name of mapset (default: current search path)"
+msgstr ""
+
+msgid "'.' for current mapset"
+msgstr ""
+
+msgid "Project (location) name"
+msgstr ""
+
+msgid "Project name (not path to project)"
+msgstr ""
+
+msgid "GRASS database directory"
+msgstr ""
+
+msgid "Default: path to the current GRASS database"
+msgstr ""
+
+msgid "Coordinates"
+msgstr "निर्देशांक (Coordinates)"
+
+msgid "Name of color table"
+msgstr ""
+
+msgid "String representing NULL value"
+msgstr ""
+
+msgid "Name of saved region"
+msgstr ""
+
+msgid "Number of threads for parallel computing"
+msgstr ""
+
+msgid "0: use OpenMP default; >0: use nprocs; <0: use MAX-nprocs"
+msgstr ""
+
+msgid "Seed value for the random number generator"
+msgstr ""
+
+msgid "Using the same seed ensures identical results, while a randomly generated seed produces different outcomes in each run."
+msgstr ""
+
+msgid "Name of the input space time dataset"
+msgstr ""
+
+msgid "Name of the input space time datasets"
+msgstr ""
+
+msgid "Name of the output space time dataset"
+msgstr ""
+
+msgid "Name of the input space time raster dataset"
+msgstr ""
+
+msgid "Name of the input space time raster datasets"
+msgstr ""
+
+msgid "Name of the output space time raster dataset"
+msgstr ""
+
+msgid "Name of the output space time raster datasets"
+msgstr ""
+
+msgid "Name of the input space time vector dataset"
+msgstr ""
+
+msgid "Name of the input space time vector datasets"
+msgstr ""
+
+msgid "Name of the output space time vector dataset"
+msgstr ""
+
+msgid "Name of the input space time raster3d dataset"
+msgstr ""
+
+msgid "Name of the input space time raster3d datasets"
+msgstr ""
+
+msgid "Name of the output space time raster3d dataset"
+msgstr ""
+
+msgid "Type of the input space time dataset"
+msgstr ""
+
+msgid "Name of the input map"
+msgstr ""
+
+msgid "Name of the input maps"
+msgstr ""
+
+msgid "Type of the input map"
+msgstr ""
+
+#, c-format
+msgid "Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %%05)"
+msgstr ""
+
+msgid "The temporal type of the space time dataset"
+msgstr ""
+
+msgid "WHERE conditions of SQL statement without 'where' keyword used in the temporal GIS framework"
+msgstr ""
+
+msgid "Example: start_time > '2001-01-01 12:30:00'"
+msgstr ""
+
+msgid "The method to be used for sampling the input dataset"
+msgstr ""
+
+msgid "Do not create attribute table"
+msgstr ""
+
+msgid "Do not build topology"
+msgstr ""
+
+msgid "Advantageous when handling a large number of points"
+msgstr ""
+
+msgid "Multiple outputs are not supported by WPS 1.0.0"
+msgstr ""
+
+#, c-format
+msgid "Unable to open file <%s> for reading"
+msgstr ""
+
+#, c-format
+msgid "Unable to fetch security info for <%s>"
+msgstr ""
+
+msgid "Latitude-Longitude"
+msgstr ""
+
+msgid "Other Projection"
+msgstr ""
+
+msgid "Unknown projection"
+msgstr ""
+
+#, c-format
+msgid "Syntax error in cell header, line %d: %s"
+msgstr ""
+
+msgid "Duplicate projection field"
+msgstr ""
+
+#, c-format
+msgid "Invalid projection field: %s"
+msgstr ""
+
+msgid "Duplicate zone field"
+msgstr ""
+
+#, c-format
+msgid "Invalid zone field: %s"
+msgstr ""
+
+#, c-format
+msgid "Field <%s> missing"
+msgstr ""
+
+msgid "Duplicate north field"
+msgstr ""
+
+#, c-format
+msgid "Invalid north field: %s"
+msgstr ""
+
+msgid "Duplicate south field"
+msgstr ""
+
+#, c-format
+msgid "Invalid south field: %s"
+msgstr ""
+
+msgid "Duplicate east field"
+msgstr ""
+
+#, c-format
+msgid "Invalid east field: %s"
+msgstr ""
+
+msgid "Duplicate west field"
+msgstr ""
+
+#, c-format
+msgid "Invalid west field: %s"
+msgstr ""
+
+msgid "Duplicate top field"
+msgstr ""
+
+#, c-format
+msgid "Invalid top field: %s"
+msgstr ""
+
+msgid "Duplicate bottom field"
+msgstr ""
+
+#, c-format
+msgid "Invalid bottom field: %s"
+msgstr ""
+
+msgid "Duplicate e-w resolution field"
+msgstr ""
+
+#, c-format
+msgid "Invalid e-w resolution field: %s"
+msgstr ""
+
+msgid "Duplicate 3D e-w resolution field"
+msgstr ""
+
+#, c-format
+msgid "Invalid 3D e-w resolution field: %s"
+msgstr ""
+
+msgid "Duplicate n-s resolution field"
+msgstr ""
+
+#, c-format
+msgid "Invalid n-s resolution field: %s"
+msgstr ""
+
+msgid "Duplicate 3D n-s resolution field"
+msgstr ""
+
+#, c-format
+msgid "Invalid 3D n-s resolution field: %s"
+msgstr ""
+
+msgid "Duplicate t-b resolution field"
+msgstr ""
+
+#, c-format
+msgid "Invalid t-b resolution field: %s"
+msgstr ""
+
+msgid "Duplicate rows field"
+msgstr ""
+
+#, c-format
+msgid "Invalid rows field: %s"
+msgstr ""
+
+msgid "Duplicate 3D rows field"
+msgstr ""
+
+#, c-format
+msgid "Invalid 3D rows field: %s"
+msgstr ""
+
+msgid "Duplicate cols field"
+msgstr ""
+
+#, c-format
+msgid "Invalid cols field: %s"
+msgstr ""
+
+msgid "Duplicate 3D cols field"
+msgstr ""
+
+#, c-format
+msgid "Invalid 3D cols field: %s"
+msgstr ""
+
+msgid "Duplicate depths field"
+msgstr ""
+
+#, c-format
+msgid "Invalid depths field: %s"
+msgstr ""
+
+msgid "Duplicate format field"
+msgstr ""
+
+#, c-format
+msgid "Invalid format field: %s"
+msgstr ""
+
+msgid "Duplicate compressed field"
+msgstr ""
+
+#, c-format
+msgid "Invalid compressed field: %s"
+msgstr ""
+
+msgid "Seek offset out of range"
+msgstr ""
+
+#, c-format
+msgid "CreateProcess() failed: error = %d"
+msgstr ""
+
+#, c-format
+msgid "G_spawn: unable to redirect descriptor %d"
+msgstr ""
+
+#, c-format
+msgid "G_spawn: unable to open file %s"
+msgstr ""
+
+msgid "G_spawn: unable to execute command"
+msgstr ""
+
+#, c-format
+msgid "G_spawn: unable to restore signal %d"
+msgstr ""
+
+#, c-format
+msgid "G_spawn: unable to reset signal %d"
+msgstr ""
+
+#, c-format
+msgid "G_spawn: unable to ignore signal %d"
+msgstr ""
+
+#, c-format
+msgid "G_spawn: unable to block signal %d"
+msgstr ""
+
+#, c-format
+msgid "G_spawn: unable to unblock signal %d"
+msgstr ""
+
+#, c-format
+msgid "G_spawn: unable to duplicate descriptor %d to %d"
+msgstr ""
+
+#, c-format
+msgid "Unable to create a new process: %s"
+msgstr ""
+
+#, c-format
+msgid "Unable to change directory to %s"
+msgstr ""
+
+#, c-format
+msgid "Unable to execute command '%s': %s"
+msgstr ""
+
+#, c-format
+msgid "Unable to create timestamp file for %s map <%s@%s>"
+msgstr ""
+
+#, c-format
+msgid "Invalid timestamp specified for %s map <%s@%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to open timestamp file for %s map <%s@%s>"
+msgstr ""
+
+#, c-format
+msgid "Invalid timestamp file for %s map <%s@%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to open timestamp file for vector map <%s@%s>"
+msgstr ""
+
+#, c-format
+msgid "Invalid timestamp file for vector map <%s@%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to create timestamp file for vector map <%s@%s>"
+msgstr ""
+
+#, c-format
+msgid "Invalid timestamp specified for vector map <%s@%s>"
+msgstr ""
+
+msgid "parse error"
+msgstr ""
+
+#. GTC: localized area units
+msgid "square units"
+msgstr ""
+
+#. GTC: localized area units
+msgid "square unit"
+msgstr ""
+
+#. GTC: localized units
+msgid "units"
+msgstr ""
+
+#. GTC: localized units
+msgid "unit"
+msgstr ""
+
+#. GTC: localized area units
+msgid "square meters"
+msgstr ""
+
+#. GTC: localized area units
+msgid "square meter"
+msgstr ""
+
+#. GTC: localized units
+msgid "meters"
+msgstr "मीटर"
+
+#. GTC: localized units
+msgid "meter"
+msgstr ""
+
+#. GTC: localized area units
+msgid "square kilometers"
+msgstr ""
+
+#. GTC: localized area units
+msgid "square kilometer"
+msgstr ""
+
+#. GTC: localized units
+msgid "kilometers"
+msgstr "किलोमीटर"
+
+#. GTC: localized units
+msgid "kilometer"
+msgstr ""
+
+#. GTC: localized area units
+msgid "acres"
+msgstr "एकड़"
+
+#. GTC: localized area units
+msgid "acre"
+msgstr ""
+
+#. GTC: localized area units
+msgid "hectares"
+msgstr "हेक्टेयर"
+
+#. GTC: localized area units
+msgid "hectare"
+msgstr ""
+
+#. GTC: localized area units
+msgid "square miles"
+msgstr ""
+
+#. GTC: localized area units
+msgid "square mile"
+msgstr ""
+
+#. GTC: localized units
+msgid "miles"
+msgstr "मील"
+
+#. GTC: localized units
+msgid "mile"
+msgstr ""
+
+#. GTC: localized area units, do not confuse with US feet
+msgid "square feet"
+msgstr ""
+
+#. GTC: localized area units, do not confuse with US foot
+msgid "square foot"
+msgstr ""
+
+#. GTC: localized units, do not confuse with US feet
+msgid "feet"
+msgstr "फीट"
+
+#. GTC: localized units, do not confuse with US foot
+msgid "foot"
+msgstr ""
+
+#. GTC: localized area units, do not confuse with feet
+msgid "square US feet"
+msgstr ""
+
+#. GTC: localized area units, do not confuse with foot
+msgid "square US foot"
+msgstr ""
+
+#. GTC: localized units, do not confuse with feet
+msgid "US feet"
+msgstr ""
+
+#. GTC: localized units, do not confuse with foot
+msgid "US foot"
+msgstr ""
+
+#. GTC: localized area units
+msgid "square degrees"
+msgstr ""
+
+#. GTC: localized area units
+msgid "square degree"
+msgstr ""
+
+#. GTC: localized units
+msgid "degrees"
+msgstr ""
+
+#. GTC: localized units
+msgid "degree"
+msgstr ""
+
+#. GTC: localized time units
+msgid "years"
+msgstr ""
+
+#. GTC: localized time units
+msgid "year"
+msgstr "वर्ष"
+
+#. GTC: localized time units
+msgid "months"
+msgstr ""
+
+#. GTC: localized time units
+msgid "month"
+msgstr "महीना"
+
+#. GTC: localized time units
+msgid "days"
+msgstr ""
+
+#. GTC: localized time units
+msgid "day"
+msgstr "दिन"
+
+#. GTC: localized time units
+msgid "hours"
+msgstr ""
+
+#. GTC: localized time units
+msgid "hour"
+msgstr "घंटा"
+
+#. GTC: localized time units
+msgid "minutes"
+msgstr ""
+
+#. GTC: localized time units
+msgid "minute"
+msgstr "मिनट"
+
+#. GTC: localized time units
+msgid "seconds"
+msgstr ""
+
+#. GTC: localized time units
+msgid "second"
+msgstr "सेकंड"
+
+#, c-format
+msgid "Unable to open %s for writing"
+msgstr ""
+
+#, c-format
+msgid "Unable to open %s for reading"
+msgstr ""
+
+#, c-format
+msgid "GRASS window when view was saved:\n"
+msgstr ""
+
+#, c-format
+msgid " Window saved in \"%s\" is completely outside of current GRASS window."
+msgstr ""
+
+#, c-format
+msgid " Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
+msgstr ""
+
+msgid "Task already has a worker"
+msgstr ""
+
+#, c-format
+msgid "File writing error in %s() %d:%s"
+msgstr ""
+
+msgid "    taking FFT of image..."
+msgstr ""
+
+msgid "    computing del**2 g..."
+msgstr ""
+
+msgid "    taking FFT of del**2 g..."
+msgstr ""
+
+msgid "    multiplying transforms..."
+msgstr ""
+
+msgid "    taking inverse FFT..."
+msgstr ""
+
+msgid "Matrix dimensions out of range"
+msgstr ""
+
+msgid "Matrix is not initialised fully."
+msgstr ""
+
+msgid "Unable to allocate space for matrix copy"
+msgstr ""
+
+msgid "Input matrix is uninitialized"
+msgstr ""
+
+msgid "First scalar multiplier must be non-zero"
+msgstr ""
+
+msgid "One or both input matrices uninitialised"
+msgstr ""
+
+msgid "Matrix order does not match"
+msgstr ""
+
+msgid "Unable to allocate space for matrix sum"
+msgstr ""
+
+msgid "Unable to allocate space for matrix product"
+msgstr ""
+
+msgid "Input: one or both data matrices uninitialised"
+msgstr ""
+
+msgid "Principal matrix is not properly dimensioned"
+msgstr ""
+
+msgid "Input: you must have at least one array to solve"
+msgstr ""
+
+msgid "Could not allocate space for solution matrix"
+msgstr ""
+
+msgid "Could not allocate space for working matrix"
+msgstr ""
+
+msgid "Matrix (or submatrix is singular). Solution undetermined"
+msgstr ""
+
+msgid "Problem in LA routine."
+msgstr ""
+
+msgid "Procedure not yet available for selected matrix type"
+msgstr ""
+
+msgid "Matrix is not square. Cannot determine inverse"
+msgstr ""
+
+msgid "Unable to allocate space for matrix"
+msgstr ""
+
+msgid "Matrix is singular"
+msgstr ""
+
+msgid "Problem in LA procedure."
+msgstr ""
+
+msgid "Element array has not been allocated"
+msgstr ""
+
+msgid "Specified element is outside array bounds"
+msgstr ""
+
+msgid "Specified matrix column index is outside range"
+msgstr ""
+
+msgid "Matrix is not initialised"
+msgstr ""
+
+msgid "Could not allocate space for vector structure"
+msgstr ""
+
+msgid "Specified matrix row index is outside range"
+msgstr ""
+
+msgid "Specified row index is outside range"
+msgstr ""
+
+msgid "Specified column index is outside range"
+msgstr ""
+
+msgid "Unknown vector type."
+msgstr ""
+
+msgid "Input matrix and vector have differing dimensions1"
+msgstr ""
+
+msgid "Output vector is uninitialized"
+msgstr ""
+
+msgid "Vectors are not of the same type"
+msgstr ""
+
+msgid "Output vector is of incorrect type"
+msgstr ""
+
+msgid "Matrices not allowed"
+msgstr ""
+
+msgid "Vectors have differing dimensions"
+msgstr ""
+
+msgid "Output vector has incorrect dimension"
+msgstr ""
+
+msgid "Vector dimensions out of range"
+msgstr ""
+
+msgid "Row/column out of range"
+msgstr ""
+
+msgid "Output vector is not the same type as others"
+msgstr ""
+
+msgid "Vector structure is not initialised"
+msgstr ""
+
+msgid "Input format error"
+msgstr ""
+
+#, c-format
+msgid "sparse Jacobi -- iteration %5i error %g\n"
+msgstr ""
+
+#, c-format
+msgid "sparse SOR -- iteration %5i error %g\n"
+msgstr ""
+
+#, c-format
+msgid "Jacobi -- iteration %5i error %g\n"
+msgstr ""
+
+#, c-format
+msgid "SOR -- iteration %5i error %g\n"
+msgstr ""
+
+msgid "Starting direct gauss elimination solver"
+msgstr ""
+
+msgid "Starting direct lu decomposition solver"
+msgstr ""
+
+msgid "Starting cholesky decomposition solver"
+msgstr ""
+
+msgid "Unable to solve the linear equation system"
+msgstr ""
+
+#, c-format
+msgid "Decomposition failed at row %i and col %i"
+msgstr ""
+
+#, c-format
+msgid "Sparse PCG -- iteration %i error  %g\n"
+msgstr ""
+
+#, c-format
+msgid "PCG -- iteration %i error  %g\n"
+msgstr ""
+
+#, c-format
+msgid "Sparse CG -- iteration %i error  %g\n"
+msgstr ""
+
+#, c-format
+msgid "CG -- iteration %i error  %g\n"
+msgstr ""
+
+#, c-format
+msgid "Sparse BiCGStab -- iteration %i error  %g\n"
+msgstr ""
+
+#, c-format
+msgid "BiCGStab -- iteration %i error  %g\n"
+msgstr ""
+
+msgid ""
+"\n"
+"++ Running blas level 2 benchmark ++"
+msgstr ""
+
+msgid ""
+"\n"
+"++ Running blas level 3 benchmark ++"
+msgstr ""
+
+msgid ""
+"\n"
+"++ Running direct solver benchmark ++"
+msgstr ""
+
+msgid ""
+"\n"
+"++ Running krylov solver benchmark ++"
+msgstr ""
+
+msgid ""
+"\n"
+"++ Running blas level 1 unit tests ++"
+msgstr ""
+
+msgid ""
+"\n"
+"-- blas level 1 unit tests failure --"
+msgstr ""
+
+msgid ""
+"\n"
+"-- blas level 1 unit tests finished successfully --"
+msgstr ""
+
+msgid ""
+"\n"
+"++ Running blas level 2 unit tests ++"
+msgstr ""
+
+msgid ""
+"\n"
+"-- blas level 2 unit tests failure --"
+msgstr ""
+
+msgid ""
+"\n"
+"-- blas level 2 unit tests finished successfully --"
+msgstr ""
+
+msgid ""
+"\n"
+"++ Running blas level 3 unit tests ++"
+msgstr ""
+
+msgid ""
+"\n"
+"-- blas level 3 unit tests failure --"
+msgstr ""
+
+msgid ""
+"\n"
+"-- blas level 3 unit tests finished successfully --"
+msgstr ""
+
+msgid ""
+"\n"
+"++ Running ccmath wrapper unit tests ++"
+msgstr ""
+
+msgid ""
+"\n"
+"-- ccmath wrapper unit tests failure --"
+msgstr ""
+
+msgid ""
+"\n"
+"-- ccmath wrapper unit tests finished successfully --"
+msgstr ""
+
+msgid "The size of the matrices and vectors for benchmarking"
+msgstr ""
+
+msgid "Choose solver benchmark"
+msgstr ""
+
+msgid "Choose blas benchmark"
+msgstr ""
+
+msgid "Performs benchmarks, unit and integration tests for the gmath library"
+msgstr ""
+
+msgid ""
+"\n"
+"++ Running matrix conversion unit tests ++"
+msgstr ""
+
+msgid ""
+"\n"
+"-- Matrix conversion unit tests failure --"
+msgstr ""
+
+msgid ""
+"\n"
+"-- Matrix conversion unit tests finished successfully --"
+msgstr ""
+
+msgid ""
+"\n"
+"++ Running solver unit tests ++"
+msgstr ""
+
+msgid ""
+"\n"
+"-- Solver unit tests failure --"
+msgstr ""
+
+msgid ""
+"\n"
+"-- Solver unit tests finished successfully --"
+msgstr ""
+
+#, c-format
+msgid "Reading raster map <%s> into memory"
+msgstr ""
+
+msgid "N_array_2d * array is empty"
+msgstr ""
+
+#, c-format
+msgid "Write 2d array to raster map <%s>"
+msgstr ""
+
+#, c-format
+msgid "3D raster map <%s> not found"
+msgstr ""
+
+#, c-format
+msgid "Unable to open 3D raster map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Read g3d map <%s> into the memory"
+msgstr ""
+
+#, c-format
+msgid "Error closing g3d file <%s>"
+msgstr ""
+
+#, c-format
+msgid "Error opening g3d map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Write 3d array to g3d map <%s>"
+msgstr ""
+
+#, c-format
+msgid "The total sum of the water budget: %g\n"
+msgstr ""
+
+#, c-format
+msgid "The total sum of the water budget is significantly larger then 0: %g\n"
+msgstr ""
+
+msgid "The calculation time in seconds"
+msgstr ""
+
+msgid "Performs unit and integration tests for gpde library"
+msgstr ""
+
+#, c-format
+msgid "html: collecting to file '%s'"
+msgstr ""
+
+#, c-format
+msgid "html: image size %dx%d"
+msgstr ""
+
+#, c-format
+msgid "html: type '%s'"
+msgstr ""
+
+#, c-format
+msgid "Unable to find file [%s] of group [%s in %s]"
+msgstr ""
+
+#, c-format
+msgid "Unable to open file [%s] of group [%s in %s]"
+msgstr ""
+
+#, c-format
+msgid "Unable to find file [%s] for subgroup [%s] of group [%s in %s]"
+msgstr ""
+
+#, c-format
+msgid "Unable to open file [%s] for subgroup [%s] of group [%s in %s]"
+msgstr ""
+
+#, c-format
+msgid "Unable to create file [%s] of group [%s in %s]"
+msgstr ""
+
+#, c-format
+msgid "Unable to create file [%s] for subgroup [%s] of group [%s in %s]"
+msgstr ""
+
+msgid "Calculating forward transformation coefficients"
+msgstr ""
+
+msgid "Calculating backward transformation coefficients"
+msgstr ""
+
+#, c-format
+msgid "%s: out of memory"
+msgstr ""
+
+#, c-format
+msgid "No areas in category %d"
+msgstr ""
+
+#, c-format
+msgid "Raster map <%s@%s> in subgroup <%s> does not exist"
+msgstr ""
+
+#, c-format
+msgid "Raster map <%s@%s> in group <%s> does not exist"
+msgstr ""
+
+#, c-format
+msgid "Subgroup <%s> does not have enough files (it has %d files)"
+msgstr ""
+
+#, c-format
+msgid "Group <%s> does not have enough files (it has %d files)"
+msgstr ""
+
+#, c-format
+msgid "Get area %d failed"
+msgstr ""
+
+msgid "Perimeter computation failed"
+msgstr ""
+
+msgid "Invalid polygon"
+msgstr ""
+
+msgid "Outlined area is too large."
+msgstr ""
+
+#, c-format
+msgid "Unable to open output signature file '%s'"
+msgstr ""
+
+msgid "prepare_signature: outline has odd number of points."
+msgstr ""
+
+#, c-format
+msgid "prepare_signature: scan line %d has odd number of points."
+msgstr ""
+
+msgid "signature: perimeter points out of order."
+msgstr ""
+
+#, c-format
+msgid "Data error preparing signatures: value (%d) > num of cats (%d)"
+msgstr ""
+
+msgid "Band index out of range"
+msgstr ""
+
+msgid "Cell category value out of range"
+msgstr ""
+
+#, c-format
+msgid "Unable to write header into category raster condition file <%s>."
+msgstr ""
+
+#, c-format
+msgid "Unable to write into category raster condition file <%s>."
+msgstr ""
+
+#, c-format
+msgid "Unable to open category raster conditions file <%s>."
+msgstr ""
+
+#, c-format
+msgid "Unable to find patch raster <%s>."
+msgstr ""
+
+#, c-format
+msgid "Resolutions of patch <%s> and patched file <%s> are not same."
+msgstr ""
+
+#, c-format
+msgid "Corrupted  category raster conditions file <%s> (fseek failed)"
+msgstr ""
+
+#, c-format
+msgid "Unable to write into category raster conditions file <%s>"
+msgstr ""
+
+msgid "Unable to read from category raster condition file."
+msgstr ""
+
+msgid "Invalid size of category raster conditions file."
+msgstr ""
+
+msgid "Data inconsistent. Value computed for scatter plot is out of initialized range."
+msgstr ""
+
+#, c-format
+msgid "Unable to find raster <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to open raster <%s>"
+msgstr ""
+
+#, c-format
+msgid "Raster <%s> type is not <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to read range of raster <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to open category raster condition file <%s>"
+msgstr ""
+
+msgid "Corrupted category raster conditions file (fseek failed)"
+msgstr ""
+
+#, c-format
+msgid "group <%s> is empty\n"
+msgstr ""
+
+#, c-format
+msgid "group <%s> references the following raster maps\n"
+msgstr ""
+
+#, c-format
+msgid "subgroup <%s> of group <%s> is empty\n"
+msgstr ""
+
+#, c-format
+msgid "subgroup <%s> of group <%s> references the following raster maps\n"
+msgstr ""
+
+#, c-format
+msgid "%s is not in the current mapset (%s)"
+msgstr ""
+
+#, c-format
+msgid "%s removed"
+msgstr ""
+
+#, c-format
+msgid "Unable to remove %s signature"
+msgstr ""
+
+#, c-format
+msgid "%s is missing"
+msgstr ""
+
+#, c-format
+msgid "Unable to copy <%s> to current mapset as <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to rename <%s> to <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to open control point file for group [%s in %s]"
+msgstr ""
+
+#, c-format
+msgid "Bad format in control point file for group [%s in %s]"
+msgstr ""
+
+#, c-format
+msgid "Unable to create control point file for group [%s in %s]"
+msgstr ""
+
+msgid "Invalid signature file"
+msgstr ""
+
+msgid "Invalid signature file version"
+msgstr ""
+
+msgid "Invalid signature file: semantic label length limit exceeded"
+msgstr ""
+
+msgid "Signature file does not contain bands"
+msgstr ""
+
+msgid "Invalid signature file: Original class value presence not readable"
+msgstr ""
+
+#, c-format
+msgid "Unable to read target file for group [%s]"
+msgstr ""
+
+msgid "WARNING"
+msgstr ""
+
+msgid "Exiting..."
+msgstr ""
+
+msgid "Usage"
+msgstr ""
+
+msgid "print this help message"
+msgstr ""
+
+msgid "show version information and exit"
+msgstr ""
+
+msgid "create given database, project or mapset if it doesn't exist"
+msgstr ""
+
+msgid "exit after creation of project or mapset. Only with -c flag"
+msgstr ""
+
+msgid "force removal of .gislock if exists (use with care!). Only with --text flag"
+msgstr ""
+
+msgid "use text based interface (skip graphical welcome screen)"
+msgstr ""
+
+msgid "and set as default"
+msgstr ""
+
+msgid "use text based interface (show graphical welcome screen)"
+msgstr ""
+
+msgid "use $DEFAULT_GUI graphical user interface"
+msgstr ""
+
+msgid "print GRASS configuration parameters"
+msgstr ""
+
+msgid "options: arch,build,compiler,date,path,python_path,revision,svn_revision,version"
+msgstr ""
+
+msgid "initial GRASS database directory"
+msgstr ""
+
+msgid "directory containing GRASS projects"
+msgstr ""
+
+msgid "initial GRASS project (location)"
+msgstr ""
+
+msgid "directory containing mapsets with one common coordinate reference system"
+msgstr ""
+
+msgid "initial GRASS mapset"
+msgstr ""
+
+msgid "fully qualified initial mapset directory"
+msgstr ""
+
+msgid "Environment variables relevant for startup"
+msgstr ""
+
+msgid "set root path for configuration directory"
+msgstr ""
+
+msgid "select GUI (text, gui, gtext)"
+msgstr ""
+
+msgid "set html web browser for help pages"
+msgstr ""
+
+msgid "set additional path(s) to local GRASS modules or user scripts"
+msgstr ""
+
+msgid "set additional GISBASE for locally installed GRASS Addons"
+msgstr ""
+
+msgid "set Python interpreter name to override 'python'"
+msgstr ""
+
+msgid "execute GRASS module or script"
+msgstr ""
+
+msgid "provided executable will be executed in GRASS session"
+msgstr ""
+
+msgid "GRASS module, script or any other executable"
+msgstr ""
+
+msgid "parameters of the executable"
+msgstr ""
+
+msgid "standard flags"
+msgstr ""
+
+msgid "deprecated, use --tmp-project instead"
+msgstr ""
+
+msgid "location was renamed to project"
+msgstr ""
+
+msgid "create temporary project (use with the --exec flag)"
+msgstr ""
+
+msgid "created in a temporary directory and deleted at exit"
+msgstr ""
+
+msgid "create temporary mapset (use with the --exec flag)"
+msgstr ""
+
+msgid "created in the specified project and deleted at exit"
+msgstr ""
+
+msgid "timeout for acquiring a mapset lock"
+msgstr ""
+
+msgid "time for which the process will attempt to get a lock in seconds"
+msgstr ""
+
+msgid "Failed to create configuration directory '{}' with error: {}"
+msgstr ""
+
+#, python-brace-format
+msgid "Unable to create temporary directory <{tmpdir_name}>! Exiting."
+msgstr ""
+
+#, python-brace-format
+msgid "Invalid line in RC file ({file}): '{line}' ({error})\n"
+msgstr ""
+
+#, python-brace-format
+msgid "Empty RC file ({file})"
+msgstr ""
+
+#, python-format
+msgid "GUI <%s> not supported in this version"
+msgstr ""
+
+msgid ""
+"The python command does not work as expected.\n"
+"Please check your installation or set the GRASS_PYTHON environment variable."
+msgstr ""
+
+msgid "GRASS GUI not found. Please check your installation."
+msgstr ""
+
+msgid ""
+"{}\n"
+"Switching to text based interface mode."
+msgstr ""
+
+msgid ""
+"It appears that the X Windows system is not active.\n"
+"A graphical based user interface is not supported.\n"
+"(DISPLAY variable is not set.)\n"
+"Switching to text based interface mode."
+msgstr ""
+
+msgid "Error creating project: {}"
+msgstr ""
+
+#, python-brace-format
+msgid "Unable to create new project because the project <{location}> already exists."
+msgstr ""
+
+#, python-brace-format
+msgid "Unable to create new project <{location}> because <{path}> is a file."
+msgstr ""
+
+#, python-brace-format
+msgid "Unable to create new project <{location}> because the directory <{path}> already exists."
+msgstr ""
+
+#, python-brace-format
+msgid "Unable to create new project in the directory <{path}> for an unknown reason."
+msgstr ""
+
+msgid "Mapset <{}> already exists. Unable to create a new temporary mapset of that name."
+msgstr ""
+
+msgid "Mapset <{}> already exists."
+msgstr ""
+
+msgid "A new mapset can be created using '-c' flag."
+msgstr ""
+
+msgid "Maybe you meant a different directory."
+msgstr ""
+
+msgid "Provide CRS to create a project"
+msgstr ""
+
+msgid "Creating new GRASS project <{}>..."
+msgstr ""
+
+#, python-brace-format
+msgid "Unable to create new mapset <{mapset}> because <{path}> is a file."
+msgstr ""
+
+msgid "The mapset <{}> is missing the WIND file (computational region). It will be fixed now. Note that this warning may become an error in future versions."
+msgstr ""
+
+#, python-brace-format
+msgid "No CRS is needed for creating mapset <{mapset}>, but <{geofile}> was provided as CRS. Did you mean to create a new project?"
+msgstr ""
+
+msgid "Creating new GRASS mapset <{}>..."
+msgstr ""
+
+msgid "GRASS database directory, project and mapset not set properly. Use GUI or command line to set them."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Error reading data path information from g.gisenv.\n"
+"GISDBASE={gisdbase}\n"
+"LOCATION_NAME={location}\n"
+"MAPSET={mapset}\n"
+"\n"
+"Check the <{file}> file."
+msgstr ""
+
+msgid "Building user fontcap..."
+msgstr ""
+
+msgid "The SHELL variable is not set"
+msgstr ""
+
+#, python-brace-format
+msgid "Unsupported shell <{sh}>: {env_file}"
+msgstr ""
+
+#, python-format
+msgid "Executing <%s> ..."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Execution of <{cmd}> failed:\n"
+"{error}"
+msgstr ""
+
+#, python-format
+msgid "Execution of <%s> finished."
+msgstr ""
+
+#, python-brace-format
+msgid "Unable to close GUI. {0}"
+msgstr ""
+
+#, python-format
+msgid "Welcome to GRASS %s"
+msgstr ""
+
+msgid "GRASS homepage:"
+msgstr ""
+
+#. GTC Running through: SHELL NAME
+msgid "This version running through:"
+msgstr ""
+
+msgid "Help is available with the command:"
+msgstr ""
+
+msgid "See the licence terms with:"
+msgstr ""
+
+msgid "See citation options with:"
+msgstr ""
+
+msgid "If required, restart the GUI with:"
+msgstr ""
+
+msgid "Start the GUI with:"
+msgstr ""
+
+msgid "When ready to quit enter:"
+msgstr ""
+
+msgid "2D and 3D raster masks present"
+msgstr ""
+
+msgid "Raster mask present"
+msgstr ""
+
+msgid "3D raster mask present"
+msgstr ""
+
+msgid "Done."
+msgstr ""
+
+msgid "Goodbye from GRASS"
+msgstr ""
+
+msgid "Please install the GRASS development package"
+msgstr ""
+
+#, python-format
+msgid "Parameter <%s> not supported"
+msgstr ""
+
+#, python-format
+msgid "use mapset %(metavar)s"
+msgstr ""
+
+#, python-format
+msgid "use temporary mapset in project %(metavar)s"
+msgstr ""
+
+msgid "path to mapset (or project if creating one)"
+msgstr ""
+
+msgid "use temporary mapset"
+msgstr ""
+
+#, python-format
+msgid "use temporary project with %(metavar)s (EPSG, georeferenced file, ...)"
+msgstr ""
+
+msgid "mapset locking timeout in seconds"
+msgstr ""
+
+msgid "remove lock if present"
+msgstr ""
+
+msgid "Option --tmp-location is deprecated, use --tmp-project instead\n"
+msgstr ""
+
+msgid "execute module or script (followed by executable with arguments)"
+msgstr ""
+
+msgid "Flag -e requires also flag -c"
+msgstr ""
+
+msgid "Flag -c requires name of project or mapset"
+msgstr ""
+
+msgid "Either --tmp-project or --tmp-mapset can be used, not both"
+msgstr ""
+
+msgid "Coordinate reference system argument (e.g. EPSG) is needed for --tmp-project"
+msgstr ""
+
+msgid "Only one argument (e.g. EPSG) is needed for --tmp-project, mapset name <{}> provided"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Unable to start GRASS. You have the choice to:\n"
+" - Launch the graphical user interface with the '--gui' switch\n"
+"     {cmd_name} --gui\n"
+" - Launch with path to the project/mapset as an argument\n"
+"     {cmd_name} /path/to/project/mapset`\n"
+" - Create a project with '-c' and launch in its PERMANENT mapset\n"
+"     {cmd_name} -c EPSG:number /path/to/project\n"
+"     {cmd_name} -c geofile /path/to/project\n"
+" - Create manually the GISRC file ({gisrcrc})\n"
+" - Use '--help' for further options\n"
+"     {cmd_name} --help\n"
+"See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
+msgstr ""
+
+msgid "Starting GRASS..."
+msgstr ""
+
+msgid "Failed to start GRASS, grassdata directory cannot be found or created."
+msgstr ""
+
+msgid "Failed to start GRASS, no default project to copy in the installation or copying failed."
+msgstr ""
+
+#, python-format
+msgid "Launching <%s> GUI in the background, please wait..."
+msgstr ""
+
+#, python-format
+msgid "Failed to start shell '%s'"
+msgstr ""
+
+#, c-format
+msgid "Usage: %s file pid"
+msgstr ""
+
+msgid "Concurrent mapset locking is not supported on Windows"
+msgstr ""
+
+#, c-format
+msgid "Unable to write lockfile %s (%s)"
+msgstr ""
+
+#, c-format
+msgid "Unable to access table <%s>"
+msgstr ""
+
+#, c-format
+msgid "<%s> created in database."
+msgstr ""
+
+#, c-format
+msgid "<%s> has not been created in database."
+msgstr ""
+
+#, c-format
+msgid "Copying %s <%s> to current mapset as <%s>"
+msgstr ""
+
+#, c-format
+msgid "%s copied"
+msgstr ""
+
+msgid "String for secondary color table has been truncated"
+msgstr ""
+
+#, c-format
+msgid "%s: invalid index %d"
+msgstr ""
+
+#, c-format
+msgid "Removing %s <%s>"
+msgstr ""
+
+#, c-format
+msgid "Vector map <%s> not found"
+msgstr ""
+
+msgid "Unable to delete vector map"
+msgstr ""
+
+#, c-format
+msgid "Unable to remove %s element"
+msgstr ""
+
+#, c-format
+msgid "Unable to remove %s"
+msgstr ""
+
+#, c-format
+msgid "<%s> nothing removed"
+msgstr ""
+
+#, c-format
+msgid "Rename %s <%s> to <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to rename vector map <%s> to <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to rename %s"
+msgstr ""
+
+#, c-format
+msgid "%s renamed"
+msgstr ""
+
+#, c-format
+msgid "<%s> nothing renamed"
+msgstr ""
+
+#, c-format
+msgid "%s to be %s"
+msgstr ""
+
+msgid "Raster"
+msgstr ""
+
+msgid "Vector"
+msgstr ""
+
+msgid "Region"
+msgstr ""
+
+msgid "Group"
+msgstr ""
+
+#, c-format
+msgid "Unable to open data base element list '%s'"
+msgstr ""
+
+#, c-format
+msgid "Format error: file ('%s') line (%d) - %s"
+msgstr ""
+
+msgid "Unable to define new light"
+msgstr ""
+
+msgid "Maximum surfaces loaded!"
+msgstr ""
+
+msgid "Maximum vector line maps loaded!"
+msgstr ""
+
+#, c-format
+msgid "Error loading vector map <%s>"
+msgstr ""
+
+msgid "Maximum vector point maps loaded!"
+msgstr ""
+
+msgid "Maximum volumes loaded!"
+msgstr ""
+
+#, c-format
+msgid "Error loading 3d raster map <%s>"
+msgstr ""
+
+msgid "Nviz_new_map_obj(): unsupported data type"
+msgstr ""
+
+#, c-format
+msgid "Invalid color (%s), using \"white\" as default"
+msgstr ""
+
+msgid "Unable to set focus"
+msgstr ""
+
+#, c-format
+msgid "Unable to get function address for %s"
+msgstr ""
+
+msgid "Bad server connection"
+msgstr ""
+
+msgid "Unable to get visual info"
+msgstr ""
+
+msgid "Unable to create rendering context"
+msgstr ""
+
+#, c-format
+msgid "Unable to choose pixel format (CGL error = %d)"
+msgstr ""
+
+#, c-format
+msgid "Unable to create context (CGL error = %d)"
+msgstr ""
+
+msgid "Unable to register window class"
+msgstr ""
+
+msgid "Unable to create window"
+msgstr ""
+
+#, c-format
+msgid "Unable to set current context (CGL error = %d)"
+msgstr ""
+
+#, c-format
+msgid "Incomplete framebuffer status (status = %d)"
+msgstr ""
+
+msgid "Need at least 3 keyframes for spline"
+msgstr ""
+
+msgid "Need at least 2 keyframes for interpolation"
+msgstr ""
+
+#, c-format
+msgid "Unable to open file <%s> for writing"
+msgstr ""
+
+msgid "Check no. of frames requested and keyframes marked"
+msgstr ""
+
+msgid "Unknown icon marker, using \"sphere\""
+msgstr ""
+
+#, c-format
+msgid "Unable to open vector map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to read vector map <%s>"
+msgstr ""
+
+#, c-format
+msgid "No points from vector map <%s> fall within current region"
+msgstr ""
+
+#, c-format
+msgid "Vector map <%s> loaded (%d points)"
+msgstr ""
+
+#, c-format
+msgid "Database connection not defined for layer %d"
+msgstr ""
+
+#, c-format
+msgid "Loading thematic points layer <%s>..."
+msgstr ""
+
+#, c-format
+msgid "No color rule defined for category %d"
+msgstr ""
+
+#, c-format
+msgid "Invalid color definition (%s)"
+msgstr ""
+
+#, c-format
+msgid "%d points without category. Unable to determine color rules for features without category."
+msgstr ""
+
+#, c-format
+msgid "no category info"
+msgstr ""
+
+#, c-format
+msgid "no data"
+msgstr ""
+
+#, c-format
+msgid "Raster map <%s> is outside of current region. Load failed."
+msgstr ""
+
+msgid "GS_load_att_map(): Out of memory. Unable to load map"
+msgstr ""
+
+msgid "Loading failed"
+msgstr ""
+
+msgid "Error finding range"
+msgstr ""
+
+#, c-format
+msgid "Loading raster map <%s>..."
+msgstr ""
+
+#, c-format
+msgid "Color table range doesn't match data (mincol=%d, maxcol=%d"
+msgstr ""
+
+#, c-format
+msgid "Translating colors from raster map <%s>..."
+msgstr ""
+
+msgid "View not saved by this program,there may be some inconsistencies"
+msgstr ""
+
+msgid "Bitmap mismatch"
+msgstr ""
+
+msgid "Unable to get image of current GL screen"
+msgstr ""
+
+msgid "Unable to write view"
+msgstr ""
+
+msgid "Max. number of labels reached!"
+msgstr ""
+
+#, c-format
+msgid "Unable to read color file of raster map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to read category file of raster map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to read fp range of raster map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to read range of raster map <%s>"
+msgstr ""
+
+msgid "Range request error for legend"
+msgstr ""
+
+msgid "Unable to show discrete FP range (use list)"
+msgstr ""
+
+msgid "Too many categories to show as discrete!"
+msgstr ""
+
+msgid "Try using smaller font!"
+msgstr ""
+
+#, c-format
+msgid "Color Material: %d"
+msgstr ""
+
+#, c-format
+msgid "gsd_rot(): %c is an invalid axis specification. Rotation ignored. Please advise GRASS developers of this error"
+msgstr ""
+
+msgid "Cut-plane points mismatch between surfaces. Check resolution(s)."
+msgstr ""
+
+msgid "Unable to process vector map - out of memory"
+msgstr ""
+
+msgid "Maximum number of datasets exceeded"
+msgstr ""
+
+#, c-format
+msgid "No features from vector map <%s> fall within current region"
+msgstr ""
+
+#, c-format
+msgid "Vector map <%s> loaded (%d features)"
+msgstr ""
+
+#, c-format
+msgid "Loading thematic vector layer <%s>..."
+msgstr ""
+
+#, c-format
+msgid "%d features without category. Unable to determine color rules for features without category."
+msgstr ""
+
+#, c-format
+msgid "Loading 3d raster map <%s>..."
+msgstr ""
+
+msgid "Maximum number of datafiles exceeded"
+msgstr ""
+
+#, c-format
+msgid "Unable to read range of 3D raster map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to close 3D raster map <%s>"
+msgstr ""
+
+msgid "Out of matrix stack space"
+msgstr ""
+
+msgid "Tried to pop an empty stack"
+msgstr ""
+
+msgid "png: truecolor status enabled"
+msgstr ""
+
+msgid "png: truecolor status disabled"
+msgstr ""
+
+#, c-format
+msgid "png: collecting to file '%s'"
+msgstr ""
+
+#, c-format
+msgid "png: image size %dx%d"
+msgstr ""
+
+msgid "Unable to read PNG"
+msgstr ""
+
+msgid "Unable to allocate PNG structure"
+msgstr ""
+
+msgid "Unable to read PNG file"
+msgstr ""
+
+msgid "Input PNG file is not 8-bit"
+msgstr ""
+
+#, c-format
+msgid "Input PNG file has incorrect dimensions: expected: %dx%d got: %lux%lu"
+msgstr ""
+
+msgid "Input PNG file is not RGBA"
+msgstr ""
+
+msgid "Input PNG file is not indexed color"
+msgstr ""
+
+msgid "Input PNG file has invalid palette"
+msgstr ""
+
+#, c-format
+msgid "PNG: invalid input file %s"
+msgstr ""
+
+#, c-format
+msgid "PNG: invalid input mask file %s"
+msgstr ""
+
+msgid "Unable to write PNG"
+msgstr ""
+
+msgid "Unable to write PNG file"
+msgstr ""
+
+#, c-format
+msgid "Unable to open output PNG file <%s>"
+msgstr ""
+
+msgid "Unable parse GRASS PROJ_INFO file"
+msgstr ""
+
+msgid "Unable get PROJ.4-style parameter string"
+msgstr ""
+
+#, c-format
+msgid "OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
+msgstr ""
+
+#, c-format
+msgid "OGR can't get WKT-style parameter string (OGR Error code was %d)"
+msgstr ""
+
+#, c-format
+msgid "Updating spatial reference with embedded proj4 definition failed. Proj4 definition: <%s>"
+msgstr ""
+
+msgid "Updating spatial reference with embedded proj4 definition"
+msgstr ""
+
+msgid "No projection name! Projection parameters likely to be meaningless."
+msgstr ""
+
+#, c-format
+msgid "Unable to open datum table file <%s>"
+msgstr ""
+
+#, c-format
+msgid "Error in datum table file <%s>, line %d"
+msgstr ""
+
+#, c-format
+msgid "proj_create() failed for '%s'"
+msgstr ""
+
+#, c-format
+msgid "Invalid west longitude %g"
+msgstr ""
+
+#, c-format
+msgid "Invalid east longitude %g"
+msgstr ""
+
+#, c-format
+msgid "Invalid south latitude %g"
+msgstr ""
+
+#, c-format
+msgid "Invalid north latitude %g"
+msgstr ""
+
+#, c-format
+msgid "South %g is larger than north %g"
+msgstr ""
+
+#, c-format
+msgid "Unrecognized SRID '%s'"
+msgstr ""
+
+#, c-format
+msgid "Unrecognized WKT '%s'"
+msgstr ""
+
+msgid "Unable to create PROJ object"
+msgstr ""
+
+msgid "Input coordinate system is NULL"
+msgstr ""
+
+msgid "Input coordinate system definition is NULL"
+msgstr ""
+
+msgid "A custom pipeline requires input and output projection info"
+msgstr ""
+
+#, c-format
+msgid "The transformation pipeline contains an '%s' step. Remove this step if easting and northing are swapped in the output."
+msgstr ""
+
+#, c-format
+msgid "Unable to determine area of interest for '%s'"
+msgstr ""
+
+#, c-format
+msgid "Input CRS not available for '%s'"
+msgstr ""
+
+#, c-format
+msgid "Output CRS not available for '%s'"
+msgstr ""
+
+#, c-format
+msgid "Found %d possible transformations"
+msgstr ""
+
+#, c-format
+msgid "proj_normalize_for_visualization() failed for operation %d"
+msgstr ""
+
+#, c-format
+msgid "Operation %d:"
+msgstr ""
+
+#, c-format
+msgid "Description: %s"
+msgstr ""
+
+#, c-format
+msgid "Area of use: %s"
+msgstr ""
+
+#, c-format
+msgid "Accuracy within area of use: %g m"
+msgstr ""
+
+#, c-format
+msgid "Remarks: %s"
+msgstr ""
+
+#, c-format
+msgid "Scope: %s"
+msgstr ""
+
+msgid "PROJ string:"
+msgstr ""
+
+msgid "See also output of:"
+msgstr ""
+
+#, c-format
+msgid "Please provide the appropriate PROJ string with the %s option"
+msgstr ""
+
+#, c-format
+msgid "proj_normalize_for_visualization() failed for '%s'"
+msgstr ""
+
+#, c-format
+msgid "No PROJ definition for normalized version of '%s'"
+msgstr ""
+
+msgid "Selected PROJ pipeline:"
+msgstr ""
+
+#, c-format
+msgid "%s"
+msgstr ""
+
+msgid "No input projection"
+msgstr ""
+
+msgid "No transformation object"
+msgstr ""
+
+#, c-format
+msgid "proj_trans() failed: %s"
+msgstr ""
+
+#, c-format
+msgid "proj_trans() failed: %d"
+msgstr ""
+
+#, c-format
+msgid "Invalid ellipsoid <%s> in file"
+msgstr ""
+
+msgid "No secondary ellipsoid descriptor (rf, es or b) in file"
+msgstr ""
+
+msgid "Invalid ellipsoid descriptors (a, rf, es or b) in file"
+msgstr ""
+
+msgid "No ellipsoid info given in file"
+msgstr ""
+
+#, c-format
+msgid "Invalid zone %s specified"
+msgstr ""
+
+msgid "Unable to initialise PROJ with the following parameter list:"
+msgstr ""
+
+msgid "Option input overflowed option table"
+msgstr ""
+
+#, c-format
+msgid "Unable to initialize pj cause: %s"
+msgstr ""
+
+msgid "Input Projection Parameters"
+msgstr ""
+
+msgid "Input Unit Factor"
+msgstr ""
+
+msgid "Output Projection Parameters"
+msgstr ""
+
+msgid "Output Unit Factor"
+msgstr ""
+
+msgid "ps: truecolor status enabled"
+msgstr ""
+
+msgid "ps: truecolor status disabled"
+msgstr ""
+
+#, c-format
+msgid "ps: collecting to file '%s'"
+msgstr ""
+
+#, c-format
+msgid "ps: image size %dx%d"
+msgstr ""
+
+#, c-format
+msgid "Rast__null_bitstream_size: cols (%d) is negative"
+msgstr ""
+
+#, c-format
+msgid "Unable to open automatic mask <%s>"
+msgstr ""
+
+#, c-format
+msgid "Category support for <%s@%s> missing"
+msgstr ""
+
+#, c-format
+msgid "Category support for <%s@%s> invalid"
+msgstr ""
+
+#, c-format
+msgid "Category support for vector map <%s@%s> missing"
+msgstr ""
+
+#, c-format
+msgid "Category support for vector map <%s@%s> invalid"
+msgstr ""
+
+#, c-format
+msgid "Unable to open %s file for map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to flush file %s for raster map %s: %s"
+msgstr ""
+
+#, c-format
+msgid "Unable to close file %s for raster map %s: %s"
+msgstr ""
+
+#, c-format
+msgid "Invalid descriptor: %d"
+msgstr ""
+
+#, c-format
+msgid "Unable to rename null file '%s' to '%s': %s"
+msgstr ""
+
+#, c-format
+msgid "Unable to rename cell file '%s' to '%s': %s"
+msgstr ""
+
+msgid "unable to write f_format file for CELL maps"
+msgstr ""
+
+#, c-format
+msgid "Rast_make_random_colors: min (%d) > max (%d)"
+msgstr ""
+
+msgid "missing"
+msgstr ""
+
+msgid "invalid"
+msgstr ""
+
+#, c-format
+msgid "Color support for <%s@%s> %s"
+msgstr ""
+
+msgid "syntax error in the color rule"
+msgstr ""
+
+msgid "syntax error in the color format"
+msgstr ""
+
+msgid "percentage not in range 0-100"
+msgstr ""
+
+msgid "invalid value"
+msgstr ""
+
+msgid "unknown error"
+msgstr ""
+
+#, c-format
+msgid "bad rule (%s): [%s]"
+msgstr ""
+
+msgid "Unknown error reading color rule"
+msgstr ""
+
+#, c-format
+msgid "Unable to load color rules <%s>"
+msgstr ""
+
+#, c-format
+msgid "Qualified name <%s> doesn't match mapset <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to create <%s> file for map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Fail of initial read of compressed file [%s in %s]"
+msgstr ""
+
+#, c-format
+msgid "Fail of initial read of compressed null file [%s in %s]"
+msgstr ""
+
+msgid "Unable to open GDAL file"
+msgstr ""
+
+#, c-format
+msgid "Invalid map type <%d>"
+msgstr ""
+
+#, c-format
+msgid "Unable to get <%s> driver"
+msgstr ""
+
+#, c-format
+msgid "Unable to create <%s> dataset using <%s> driver"
+msgstr ""
+
+#, c-format
+msgid "Driver <%s> does not support direct writing. Using MEM driver for intermediate dataset."
+msgstr ""
+
+msgid "Unable to get in-memory raster driver"
+msgstr ""
+
+#, c-format
+msgid "Unable to create <%s> dataset using memory driver"
+msgstr ""
+
+#, c-format
+msgid "Driver <%s> does not support creating rasters"
+msgstr ""
+
+msgid "Unable to set geo transform"
+msgstr ""
+
+msgid "Unable to set projection"
+msgstr ""
+
+#, c-format
+msgid "Unable to create cell_misc/%s/gdal file"
+msgstr ""
+
+#, c-format
+msgid "Error writing cell_misc/%s/gdal file"
+msgstr ""
+
+#, c-format
+msgid "Unable to create output file <%s> using driver <%s>"
+msgstr ""
+
+msgid "However, that raster map is missing. Perhaps, it was deleted by mistake."
+msgstr ""
+
+msgid "However, header file of that raster map can't be opened. It seems that it was corrupted after creating the reclass raster map."
+msgstr ""
+
+#, c-format
+msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s>. %s"
+msgstr ""
+
+#, c-format
+msgid "Unable to open header file for raster map <%s@%s>. It seems that some previous step failed and created an incomplete raster map."
+msgstr ""
+
+#, c-format
+msgid "Reading raster map <%s@%s> request for row %d is outside region"
+msgstr ""
+
+#, c-format
+msgid "Error seeking fp raster data file for row %d of <%s>: %s"
+msgstr ""
+
+#, c-format
+msgid "Error uncompressing fp raster data for row %d of <%s>: error code %d"
+msgstr ""
+
+#, c-format
+msgid "Error seeking raster data file for row %d of <%s>: %s"
+msgstr ""
+
+#, c-format
+msgid "Error reading raster data for row %d of <%s>: %s"
+msgstr ""
+
+#, c-format
+msgid "Error uncompressing raster data for row %d of <%s>"
+msgstr ""
+
+#, c-format
+msgid "Error reading raster data for row %d of <%s>"
+msgstr ""
+
+#, c-format
+msgid "Error reading raster data via GDAL for row %d of <%s>"
+msgstr ""
+
+#, c-format
+msgid "Error seeking compressed null data for row %d of <%s>"
+msgstr ""
+
+#, c-format
+msgid "Error reading compressed null data for row %d of <%s>"
+msgstr ""
+
+#, c-format
+msgid "Error uncompressing null data for row %d of <%s>"
+msgstr ""
+
+#, c-format
+msgid "Error seeking null row %d for <%s>"
+msgstr ""
+
+#, c-format
+msgid "Error reading null row %d for <%s>"
+msgstr ""
+
+#, c-format
+msgid "Histogram for [%s in %s] missing (run r.support)"
+msgstr ""
+
+#, c-format
+msgid "Can't read histogram for [%s in %s]"
+msgstr ""
+
+#, c-format
+msgid "Invalid histogram file for [%s in %s]"
+msgstr ""
+
+#, c-format
+msgid "Unable to create histogram file for <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to get history information for <%s@%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to write history information for <%s>"
+msgstr ""
+
+#, c-format
+msgid "generated by %s"
+msgstr ""
+
+msgid "Raster library not initialized. Programmer forgot to call Rast_init()."
+msgstr ""
+
+#, c-format
+msgid "Unknown compression method <%s>, using default %s"
+msgstr ""
+
+#, c-format
+msgid "No compression is not supported for GRASS raster maps, using default %s"
+msgstr ""
+
+#, c-format
+msgid "This GRASS version does not support %s compression, using default %s"
+msgstr ""
+
+#, c-format
+msgid "Unknown interpolation method: %s"
+msgstr ""
+
+msgid "Failed to initialize JSON object. Out of memory?"
+msgstr ""
+
+msgid "Failed to initialize JSON array. Out of memory?"
+msgstr ""
+
+msgid "Failed to serialize JSON to pretty format."
+msgstr ""
+
+#, c-format
+msgid "<%s> in mapset <%s>"
+msgstr ""
+
+msgid "none"
+msgstr ""
+
+msgid "not known"
+msgstr ""
+
+msgid "Single thread processing enforced due to raster mask being present."
+msgstr ""
+
+msgid "EmbedGivenNulls: wrong data type"
+msgstr ""
+
+msgid "Rast_set_null_value: wrong data type!"
+msgstr ""
+
+#, c-format
+msgid "Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@%s> which does not exist"
+msgstr ""
+
+#, c-format
+msgid "Error reading reclass file for raster map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Error reading map type for raster map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Raster map <%s@%s>: format field in header file invalid"
+msgstr ""
+
+#, c-format
+msgid "Compression with %s is not supported in this GRASS GIS installation"
+msgstr ""
+
+#, c-format
+msgid "Raster map <%s> is in different projection than current region. Found <%s>, should be <%s>."
+msgstr ""
+
+#, c-format
+msgid "Raster map <%s> is in different zone (%d) than current region (%d)"
+msgstr ""
+
+#, c-format
+msgid "Raster map <%s>: bytes per cell (%d) too large"
+msgstr ""
+
+#, c-format
+msgid "Unable to open %s file for raster map <%s@%s>"
+msgstr ""
+
+#, c-format
+msgid "Error reading format for <%s@%s>"
+msgstr ""
+
+msgid "Unable to create GDAL link"
+msgstr ""
+
+#, c-format
+msgid "Raster map <%s> is not in the current mapset (%s)"
+msgstr ""
+
+#, c-format
+msgid "<%s> is an illegal file name"
+msgstr ""
+
+#, c-format
+msgid "No temp files available: %s"
+msgstr ""
+
+#, c-format
+msgid "Raster map <%s> does not exist in the current mapset (%s)"
+msgstr ""
+
+msgid "Rast_set_fp_type(): can only be called with FCELL_TYPE or DCELL_TYPE"
+msgstr ""
+
+#, c-format
+msgid "Raster map <%s> not found in mapset <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to find '%s'"
+msgstr ""
+
+#, c-format
+msgid "Invalid type: field '%s' in file '%s'"
+msgstr ""
+
+#, c-format
+msgid "Missing type: field in file '%s'"
+msgstr ""
+
+#, c-format
+msgid "Raster map <%s> is not xdr: byte_order: %s"
+msgstr ""
+
+msgid "Rast_set_quant_rules() can be called only for raster maps opened for reading"
+msgstr ""
+
+#, c-format
+msgid "Unable to create header file for <%s>"
+msgstr ""
+
+#, c-format
+msgid "Error writing uncompressed FP data for row %d of <%s>: %s"
+msgstr ""
+
+#, c-format
+msgid "Error writing compressed FP data for row %d of <%s>: %s"
+msgstr ""
+
+#, c-format
+msgid "Error writing compressed data for row %d of <%s>: %s"
+msgstr ""
+
+#, c-format
+msgid "Error writing uncompressed data for row %d of <%s>: %s"
+msgstr ""
+
+#, c-format
+msgid "Error writing data via GDAL for row %d of <%s>"
+msgstr ""
+
+msgid "GDAL output doesn't support writing null rows separately"
+msgstr ""
+
+#, c-format
+msgid "No null file for <%s>"
+msgstr ""
+
+#, c-format
+msgid "Error writing compressed null data for row %d of <%s>: %s"
+msgstr ""
+
+#, c-format
+msgid "Error writing null row %d of <%s>"
+msgstr ""
+
+#, c-format
+msgid "Error writing null row %d of <%s>: %s"
+msgstr ""
+
+#, c-format
+msgid "put_raster_row: raster map <%s> not open for write - request ignored"
+msgstr ""
+
+msgid "put_raster_row: unopened file descriptor - request ignored"
+msgstr ""
+
+#, c-format
+msgid "category information for [%s] in [%s] missing or invalid"
+msgstr ""
+
+msgid "G_put_title - can't create a temp file"
+msgstr ""
+
+#, c-format
+msgid "category information for [%s] in [%s] invalid"
+msgstr ""
+
+msgid "G_put_title - can't reopen temp file"
+msgstr ""
+
+#, c-format
+msgid "can't write category information for [%s] in [%s]"
+msgstr ""
+
+#, c-format
+msgid "Floating data range for raster map <%s> is empty"
+msgstr ""
+
+#, c-format
+msgid "Integer data range for raster map <%s> is empty"
+msgstr ""
+
+#, c-format
+msgid "Attempt to open quantization table for CELL raster map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Quantization file for raster map <%s> is missing"
+msgstr ""
+
+#, c-format
+msgid "Quantization file for raster map <%s> is empty"
+msgstr ""
+
+#, c-format
+msgid "Unable to read fp range for raster map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Raster map <%s> is empty"
+msgstr ""
+
+#, c-format
+msgid "Unable to write quant rules: raster map <%s> is integer"
+msgstr ""
+
+#, c-format
+msgid "Unable to write quant rules for raster map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to read fp range file for <%s>"
+msgstr ""
+
+#, c-format
+msgid "Missing fp range file for <%s> (run r.support -s)"
+msgstr ""
+
+#, c-format
+msgid "Unable to read quant rules for raster map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to read range file for <%s>"
+msgstr ""
+
+#, c-format
+msgid "Missing range file for <%s> (run r.support -s)"
+msgstr ""
+
+#, c-format
+msgid "Unable to read stats file for <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to write range file for <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to write stats file for <%s>"
+msgstr ""
+
+msgid "Semantic label is too long"
+msgstr ""
+
+#, c-format
+msgid "Character '%c' not allowed in a semantic label."
+msgstr ""
+
+#, c-format
+msgid "Unable to read <%s> for raster map <%s@%s>"
+msgstr ""
+
+#, c-format
+msgid "Error closing <%s> metadata file for raster map <%s@%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to create <%s> metadata file for raster map <%s@%s>"
+msgstr ""
+
+#, c-format
+msgid "Error reading beginning of header file for <%s@%s>: %s"
+msgstr ""
+
+#, c-format
+msgid "Too many reclass categories for <%s@%s>"
+msgstr ""
+
+#, c-format
+msgid "Illegal reclass format in header file for <%s@%s>: %s"
+msgstr ""
+
+#, c-format
+msgid "File too short, reading line %d"
+msgstr ""
+
+#, c-format
+msgid "Line too long: %s..."
+msgstr ""
+
+#, c-format
+msgid "Format is not key:value: %s"
+msgstr ""
+
+#, c-format
+msgid "Unknown key at line: %s"
+msgstr ""
+
+#, c-format
+msgid "Mapset not read, only raster name: %s"
+msgstr ""
+
+#, c-format
+msgid "Raster name not read, only mapset: %s"
+msgstr ""
+
+msgid "Raster name and mapset not read"
+msgstr ""
+
+msgid "Illegal reclass request"
+msgstr ""
+
+msgid "Illegal reclass type"
+msgstr ""
+
+#, c-format
+msgid "Unable to create header file for <%s@%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to create dependency file in <%s@%s>"
+msgstr ""
+
+#, c-format
+msgid "Reading integer failed on line: %s (after reading min: %d)"
+msgstr ""
+
+#, c-format
+msgid "First entry (min) not read yet and reading integer failed on line: %s"
+msgstr ""
+
+msgid "Unknown interpolation type"
+msgstr ""
+
+msgid "\"no data\" label found; setting to zero"
+msgstr ""
+
+msgid "Rast_set_window() called while window split"
+msgstr ""
+
+msgid "Rast_set_read_window(): projection/zone differs from that of currently open raster maps"
+msgstr ""
+
+#, c-format
+msgid "Input window changed while maps are open for read. Map name <%s>"
+msgstr ""
+
+#, c-format
+msgid "Output window changed while maps are open for write. Map name <%s>"
+msgstr ""
+
+#, c-format
+msgid "Tile raster map <%s> not found"
+msgstr ""
+
+msgid "A virtual raster can not contain itself"
+msgstr ""
+
+msgid "Internal error: Rast_get_window() called with split window. Use Rast_get_input_window() or Rast_get_output_window() instead."
+msgstr ""
+
+msgid "Internal error: Rast_window_rows() called with split window. Use Rast_input_window_rows() or Rast_output_window_rows() instead."
+msgstr ""
+
+msgid "Internal error: Rast_window_cols() called with split window. Use Rast_input_window_cols() or Rast_output_window_cols() instead."
+msgstr ""
+
+#, c-format
+msgid "Unable to write history for 3D raster map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to move temp raster map <%s> to 3D raster map <%s>"
+msgstr ""
+
+msgid "Unable to flush all tiles"
+msgstr ""
+
+msgid "Unable to flush index"
+msgstr ""
+
+msgid "Unable to position file"
+msgstr ""
+
+#, c-format
+msgid "Unable to write header for 3D raster map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to create 3D raster map <%s>"
+msgstr ""
+
+msgid "Error in cache"
+msgstr ""
+
+#, c-format
+msgid "mapset <%s> is not the current mapset"
+msgstr ""
+
+#, c-format
+msgid "can't get history information for [%s] in mapset [%s]"
+msgstr ""
+
+#, c-format
+msgid "Adding rule: %lf - %lf"
+msgstr ""
+
+#, c-format
+msgid "%s: illegal value spec"
+msgstr ""
+
+msgid "Rast3d_open_cell_old_no_header: error in Rast3d_mask_open_old"
+msgstr ""
+
+msgid "Rast3d_open_cell_old_no_header: error in Rast3d_malloc"
+msgstr ""
+
+msgid "Rast3d_open_cell_old_no_header: error in G_open_old"
+msgstr ""
+
+msgid "Rast3d_open_cell_old: error in Rast3d_open_cell_old_no_header"
+msgstr ""
+
+msgid "Rast3d_open_cell_old: can't rewind file"
+msgstr ""
+
+msgid "Rast3d_open_cell_old: error in Rast3d_read_header"
+msgstr ""
+
+msgid "Rast3d_open_cell_old: projection does not match window projection"
+msgstr ""
+
+msgid "Rast3d_open_cell_old: zone does not match window zone"
+msgstr ""
+
+msgid "Rast3d_open_cell_old: can't read header"
+msgstr ""
+
+msgid "Rast3d_open_cell_old: index does not fit into long"
+msgstr ""
+
+msgid "Rast3d_open_cell_old: error in Rast3d_malloc"
+msgstr ""
+
+msgid "Rast3d_open_cell_old: error in Rast3d_fill_header"
+msgstr ""
+
+msgid "Rast3d_open_cell_new: error in Rast3d_mask_open_old"
+msgstr ""
+
+msgid "Rast3d_open_cell_new: error in Rast3d_malloc"
+msgstr ""
+
+#, c-format
+msgid "map <%s> is not in the current mapset"
+msgstr ""
+
+msgid "Rast3d_open_cell_new: could not open file"
+msgstr ""
+
+msgid "Rast3d_open_cell_new: can't write header"
+msgstr ""
+
+msgid "Rast3d_open_cell_new: error in Rast3d_fill_header"
+msgstr ""
+
+msgid "Rast3d_get_standard3d_params: precision value invalid"
+msgstr ""
+
+msgid "Rast3d_get_standard3d_params: tile dimension value invalid"
+msgstr ""
+
+msgid "Window replacing the default"
+msgstr ""
+
+#, c-format
+msgid "Unable to open range file for [%s in %s]"
+msgstr ""
+
+#, c-format
+msgid "Error reading range file for [%s in %s]"
+msgstr ""
+
+#, c-format
+msgid "Unable to open range file for <%s>"
+msgstr ""
+
+msgid "raster3d"
+msgstr ""
+
+msgid "Out of memory"
+msgstr ""
+
+#, c-format
+msgid "Mask raster map <%s> not found"
+msgstr ""
+
+msgid "Bitmap mask created"
+msgstr ""
+
+#, c-format
+msgid "Overshoot - increase in tension suggested. Overshoot occurs at (%d,%d) cell. Z-value %f, zmin %f, zmax %f."
+msgstr ""
+
+#, c-format
+msgid "First change your rows number to nsizr! %d %d"
+msgstr ""
+
+#, c-format
+msgid "First change your cols number to nsizc %d %d"
+msgstr ""
+
+#, c-format
+msgid "RST library temporary file reading error: %s"
+msgstr ""
+
+msgid "Temporarily changing the region to desired resolution..."
+msgstr ""
+
+#, c-format
+msgid "First change your rows number(%d) to %d"
+msgstr ""
+
+#, c-format
+msgid "First change your columns number(%d) to %d"
+msgstr ""
+
+msgid "No color table for input raster map -- will not create color table"
+msgstr ""
+
+msgid "Changing the region back to initial..."
+msgstr ""
+
+msgid "Taking too long to find points for interpolation - please change the region to area where your points are. Continuing calculations..."
+msgstr ""
+
+msgid "Starting parallel work"
+msgstr ""
+
+#, c-format
+msgid "Vector map <%s> is not 3D"
+msgstr ""
+
+msgid "Loading data from attribute table ..."
+msgstr ""
+
+#, c-format
+msgid "Data type of column <%s> must be numeric"
+msgstr ""
+
+msgid "Reading features from vector map ..."
+msgstr ""
+
+#, c-format
+msgid "Database record for cat %d not found"
+msgstr ""
+
+msgid "Negative value of smoothing detected: sm must be >= 0"
+msgstr ""
+
+msgid "Strip exists with insufficient data"
+msgstr ""
+
+#, c-format
+msgid "There are points outside specified 2D/3D region - %d points ignored"
+msgstr ""
+
+#, c-format
+msgid "Ignoring %d points (too dense)"
+msgstr ""
+
+#, c-format
+msgid "%d points given for interpolation (after thinning) is less than given NPMIN=%d"
+msgstr ""
+
+msgid "Zero points in the given region"
+msgstr ""
+
+#, c-format
+msgid "Segmentation parameters set to invalid values: npmin= %d, segmax= %d for smooth connection of segments, npmin > segmax (see manual)"
+msgstr ""
+
+#, c-format
+msgid "There are less than %d points for interpolation. No segmentation is necessary, to run the program faster set segmax=%d (see manual)"
+msgstr ""
+
+#, c-format
+msgid "Number of points from vector map %d"
+msgstr ""
+
+#, c-format
+msgid "Number of points outside of 2D/3D region %d"
+msgstr ""
+
+#, c-format
+msgid "Number of points being used %d"
+msgstr ""
+
+msgid "Some points outside of region (ignored)"
+msgstr ""
+
+msgid "Unable to allocate memory"
+msgstr ""
+
+#, c-format
+msgid "Unable to insert %f,%f,%f a = %d"
+msgstr ""
+
+msgid "Cannot write files"
+msgstr ""
+
+msgid "Segment format: file size too large"
+msgstr ""
+
+msgid "Please recompile with Large File Support (LFS)"
+msgstr ""
+
+msgid "Using memory cache"
+msgstr ""
+
+msgid "Using disk cache"
+msgstr ""
+
+msgid "Segment file name is NULL"
+msgstr ""
+
+msgid "Segment file exists already"
+msgstr ""
+
+msgid "Unable to create segment file"
+msgstr ""
+
+msgid "Could not write segment file"
+msgstr ""
+
+msgid "Illegal segment configuration parameter(s)"
+msgstr ""
+
+msgid "Unable to re-open segment file"
+msgstr ""
+
+msgid "Could not read segment file"
+msgstr ""
+
+#, c-format
+msgid "Cannot read symbol line coordinates: %s"
+msgstr ""
+
+#, c-format
+msgid "Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"
+msgstr ""
+
+#, c-format
+msgid "Cannot find/open symbol: '%s'"
+msgstr ""
+
+#, c-format
+msgid "Incorrect symbol color: '%s', using default."
+msgstr ""
+
+#, c-format
+msgid "Mapset <%s> does not exist."
+msgstr ""
+
+msgid "Programmer error - only SQLite driver is currently supported"
+msgstr ""
+
+msgid "Attempt to read points of nonexistent area"
+msgstr ""
+
+msgid "Attempt to read points of nonexistent isle"
+msgstr ""
+
+msgid "GRASS is not compiled with PostgreSQL support"
+msgstr ""
+
+#, c-format
+msgid "Attempt to read topo for dead area (%d)"
+msgstr ""
+
+#, c-format
+msgid "Attempt to read topo for dead isle (%d)"
+msgstr ""
+
+#, c-format
+msgid "%d errors in category string"
+msgstr ""
+
+msgid "Mixed area and other type requested for vector array"
+msgstr ""
+
+msgid "Not enough space in vector array"
+msgstr ""
+
+#, c-format
+msgid "Unable to select record from table <%s> (key %s, where %s)"
+msgstr ""
+
+#, c-format
+msgid "Error reading ASCII file: (bad type) [%s]"
+msgstr ""
+
+#, c-format
+msgid "Error reading ASCII file: (unknown type) [%s]"
+msgstr ""
+
+msgid "End of ASCII file reached before end of coordinates"
+msgstr ""
+
+#, c-format
+msgid "Error reading ASCII file: (bad point) [%s]"
+msgstr ""
+
+#, c-format
+msgid "Unparsable longitude value: [%s]"
+msgstr ""
+
+#, c-format
+msgid "Unparsable latitude value: [%s]"
+msgstr ""
+
+msgid "End of ASCII file reached before end of categories"
+msgstr ""
+
+#, c-format
+msgid "Error reading categories: [%s]"
+msgstr ""
+
+msgid "Unable to copy points"
+msgstr ""
+
+#, c-format
+msgid "Vector map <%s> is 2D. %d 3D features (faces or kernels) skipped."
+msgstr ""
+
+#, c-format
+msgid ""
+"Unexpected data in vector header:\n"
+"[%s]"
+msgstr ""
+
+#, c-format
+msgid "Unknown keyword <%s> in vector head"
+msgstr ""
+
+#, c-format
+msgid "Column <%s> does not exist"
+msgstr ""
+
+msgid "Available columns:"
+msgstr ""
+
+msgid "Export cancelled"
+msgstr ""
+
+#, c-format
+msgid "Unknown type of column <%s>, export cancelled"
+msgstr ""
+
+#, c-format
+msgid "Unable to select record from table <%s> (key %s, column %s)"
+msgstr ""
+
+#, c-format
+msgid "Unknown feature type %d"
+msgstr ""
+
+#, c-format
+msgid "Feature has more categories. Only one category (%d) is exported."
+msgstr ""
+
+#, c-format
+msgid "Cannot select attributes for cat = %d"
+msgstr ""
+
+msgid "Unable to fetch data from table"
+msgstr ""
+
+#, c-format
+msgid "Column <%s> not found in table <%s>"
+msgstr ""
+
+#, c-format
+msgid "Column <%s>: unsupported data type"
+msgstr ""
+
+msgid "Unknown format"
+msgstr ""
+
+msgid "Topology not available, unable to process areas"
+msgstr ""
+
+#, c-format
+msgid "Unable to get boundary of area id %d"
+msgstr ""
+
+#, c-format
+msgid "Unable to get boundary of isle id %d (area id %d)"
+msgstr ""
+
+#, c-format
+msgid "%d features without category skipped. To export also features without category use '%s=-1'."
+msgstr ""
+
+#, c-format
+msgid "Attempt to access feature with invalid id (%d)"
+msgstr ""
+
+#, c-format
+msgid "Unable to determine bbox for feature %d"
+msgstr ""
+
+#, c-format
+msgid "Attempt to access area with invalid id (%d)"
+msgstr ""
+
+#, c-format
+msgid "Unable to determine bbox for area %d"
+msgstr ""
+
+#, c-format
+msgid "Unable to determine bbox for isle %d"
+msgstr ""
+
+#, c-format
+msgid "Topology not available for vector map <%s>. Registering primitives..."
+msgstr ""
+
+msgid "Unable to read vector map"
+msgstr ""
+
+#, c-format
+msgid "Intersections: %d"
+msgstr ""
+
+msgid "Break polygons: Bug in binary tree!"
+msgstr ""
+
+#, c-format
+msgid "Failed to create xpnt temporary file: %s"
+msgstr ""
+
+msgid "Breaking polygons (pass 1: select break points)..."
+msgstr ""
+
+#, c-format
+msgid "File reading error in %s() %d:%s"
+msgstr ""
+
+msgid "Breaking polygons (pass 2: break at selected points)..."
+msgstr ""
+
+#, c-format
+msgid "Breaks: %d"
+msgstr ""
+
+msgid "Point not in search tree!"
+msgstr ""
+
+#, c-format
+msgid "Removed lines: %d"
+msgstr ""
+
+#, c-format
+msgid "Removed bridges: %d"
+msgstr ""
+
+msgid "Line is not looped"
+msgstr ""
+
+#, c-format
+msgid "Unexpected result of line_intersection() res = %d"
+msgstr ""
+
+msgid "Next edge was visited (right) but it is not the first one !!! breaking loop"
+msgstr ""
+
+msgid "Next edge was visited (left) but it is not the first one !!! breaking loop"
+msgstr ""
+
+msgid "side != 0 feature not implemented"
+msgstr ""
+
+msgid "zero area size"
+msgstr ""
+
+msgid "Line was not closed"
+msgstr ""
+
+msgid "Vect_get_point_in_poly() failed"
+msgstr ""
+
+msgid "Requested format is not compiled in this version"
+msgstr ""
+
+msgid "Area of size = 0.0 (less than 4 vertices) ignored"
+msgstr ""
+
+msgid "Unable to add area (map closed, topo saved)"
+msgstr ""
+
+msgid "Unable to add isle (map closed, topo saved)"
+msgstr ""
+
+msgid "Area of size = 0.0 ignored"
+msgstr ""
+
+msgid "Request to find area outside nonexistent isle"
+msgstr ""
+
+msgid "Larger bbox but smaller area!!!"
+msgstr ""
+
+msgid "Checking for topological errors..."
+msgstr ""
+
+#, c-format
+msgid "Number of lines of length zero: %d"
+msgstr ""
+
+#, c-format
+msgid "Number of boundaries of length zero: %d"
+msgstr ""
+
+#, c-format
+msgid "Number of boundary intersections: %d"
+msgstr ""
+
+msgid "Skipping further checks because of incorrect boundaries"
+msgstr ""
+
+#, c-format
+msgid "Number of redundant holes: %d"
+msgstr ""
+
+#, c-format
+msgid "Unable to open spatial index file for vector map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Building topology for vector map <%s>..."
+msgstr ""
+
+msgid "Topology was built"
+msgstr ""
+
+#, c-format
+msgid "Number of nodes: %d"
+msgstr ""
+
+#, c-format
+msgid "Number of primitives: %d"
+msgstr ""
+
+#, c-format
+msgid "Number of points: %d"
+msgstr ""
+
+#, c-format
+msgid "Number of lines: %d"
+msgstr ""
+
+#, c-format
+msgid "Number of boundaries: %d"
+msgstr ""
+
+#, c-format
+msgid "Number of centroids: %d"
+msgstr ""
+
+#, c-format
+msgid "Number of faces: %d"
+msgstr ""
+
+#, c-format
+msgid "Number of kernels: %d"
+msgstr ""
+
+#, c-format
+msgid "Number of areas: %d"
+msgstr ""
+
+#, c-format
+msgid "Number of isles: %d"
+msgstr ""
+
+#, c-format
+msgid "Number of areas without centroid: %d"
+msgstr ""
+
+#, c-format
+msgid "Number of centroids exceeds number of areas: %d > %d"
+msgstr ""
+
+#, c-format
+msgid "Number of incorrect boundaries: %d"
+msgstr ""
+
+#, c-format
+msgid "Number of centroids outside area: %d"
+msgstr ""
+
+#, c-format
+msgid "Number of duplicate centroids: %d"
+msgstr ""
+
+msgid "Number of areas: -"
+msgstr ""
+
+msgid "Number of isles: -"
+msgstr ""
+
+#, c-format
+msgid "Unable to create topo file for vector map <%s>"
+msgstr ""
+
+msgid "Error writing out topo file"
+msgstr ""
+
+msgid "Unable to build spatial index from topology, vector map is not opened at topology level 2"
+msgstr ""
+
+#, c-format
+msgid "%s is no longer supported"
+msgstr ""
+
+msgid "Spatial index not available, can not be saved"
+msgstr ""
+
+#, c-format
+msgid "Unable to create spatial index file for vector map <%s>"
+msgstr ""
+
+msgid "Error writing out spatial index file"
+msgstr ""
+
+msgid "Registering primitives..."
+msgstr ""
+
+#, c-format
+msgid "One primitive registered"
+msgid_plural "%d primitives registered"
+msgstr[0] ""
+msgstr[1] ""
+
+#, c-format
+msgid "One vertex registered"
+msgid_plural "%d vertices registered"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Building areas..."
+msgstr ""
+
+#, c-format
+msgid "One area built"
+msgid_plural "%d areas built"
+msgstr[0] ""
+msgstr[1] ""
+
+#, c-format
+msgid "One isle built"
+msgid_plural "%d isles built"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Attaching islands..."
+msgstr ""
+
+msgid "Attaching centroids..."
+msgstr ""
+
+msgid "Empty OGR layer, nothing to build"
+msgstr ""
+
+#, c-format
+msgid "Feature table <%s> has no primary key defined"
+msgstr ""
+
+msgid "Random read is not supported by OGR for this layer. Unable to build topology."
+msgstr ""
+
+#, c-format
+msgid "Using external data format '%s' (feature type '%s')"
+msgstr ""
+
+#, c-format
+msgid "Unable to open fidx file for write <%s>"
+msgstr ""
+
+msgid "No DB connection"
+msgstr ""
+
+msgid "Random read is not supported for this layer. Unable to build topology."
+msgstr ""
+
+msgid "Building pseudo-topology over simple features..."
+msgstr ""
+
+#, c-format
+msgid "Building topology from PostGIS topology schema <%s>..."
+msgstr ""
+
+#, c-format
+msgid "Inconsistency in topology: number of nodes %d (should be %d)"
+msgstr ""
+
+msgid "Cleaning-up topology schema..."
+msgstr ""
+
+msgid "Updating faces..."
+msgstr ""
+
+msgid "Updating edges..."
+msgstr ""
+
+msgid "Inconsistency in topology detected. Dead line found."
+msgstr ""
+
+msgid "Updating TopoGeometry data..."
+msgstr ""
+
+msgid "Unable to open PG file"
+msgstr ""
+
+#, c-format
+msgid "Unsupported topo geometry type %d"
+msgstr ""
+
+#, c-format
+msgid "Unable to create <%s.%s>"
+msgstr ""
+
+msgid "Unable to write nodes, offset array mismatch"
+msgstr ""
+
+msgid "Unable to write nodes"
+msgstr ""
+
+#, c-format
+msgid "Inconsistency in topology: number of boundaries %d (should be %d)"
+msgstr ""
+
+msgid "Unable to write lines"
+msgstr ""
+
+#, c-format
+msgid "Topology for centroid %d not available. Area %d skipped"
+msgstr ""
+
+msgid "Create simple features topology from topogeometry data..."
+msgstr ""
+
+#, c-format
+msgid "Unable to build simple features from topogeometry data. Unsupported type %d."
+msgstr ""
+
+#, c-format
+msgid "Unable to calculate centroid for area %d"
+msgstr ""
+
+#, c-format
+msgid "Feature type %d not supported"
+msgstr ""
+
+#, c-format
+msgid "Feature %d without geometry skipped"
+msgstr ""
+
+#, c-format
+msgid "OGR feature type %d not supported"
+msgstr ""
+
+#, c-format
+msgid "One feature without geometry skipped"
+msgid_plural "%d features without geometry skipped"
+msgstr[0] ""
+msgstr[1] ""
+
+#, c-format
+msgid "%s: Native format unsupported"
+msgstr ""
+
+msgid "Feature index is built only for non-native formats. Nothing to dump."
+msgstr ""
+
+msgid "Vect_new_cats_struct(): Out of memory"
+msgstr ""
+
+#, c-format
+msgid "Too many categories (%d), unable to set cat %d (layer %d)"
+msgstr ""
+
+#, c-format
+msgid "Unable to convert category string '%s' (from '%s') to category range"
+msgstr ""
+
+msgid "Layer number must be > 0 for category constraints"
+msgstr ""
+
+#, c-format
+msgid "'%s' and '%s' parameters were supplied, cats will be ignored"
+msgstr ""
+
+#, c-format
+msgid "Loading categories from table <%s>..."
+msgstr ""
+
+#, c-format
+msgid "One category loaded"
+msgid_plural "%d categories loaded"
+msgstr[0] ""
+msgstr[1] ""
+
+#, c-format
+msgid "No categories selected with '%s' option"
+msgstr ""
+
+#, c-format
+msgid "%d errors in '%s' option"
+msgstr ""
+
+msgid "Category index is not up to date"
+msgstr ""
+
+msgid "Layer index out of range"
+msgstr ""
+
+msgid "Category index out of range"
+msgstr ""
+
+msgid "Mixing IDs of areas and primitives"
+msgstr ""
+
+#, c-format
+msgid "Unable to create category index file for vector map <%s>"
+msgstr ""
+
+msgid "Error writing out category index file"
+msgstr ""
+
+#, c-format
+msgid "Unable to open category index file for vector map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Modifications: %d"
+msgstr ""
+
+#, c-format
+msgid "Unable to create vector map <%s>"
+msgstr ""
+
+msgid "Copying features failed"
+msgstr ""
+
+#, c-format
+msgid "Unable to open %s file"
+msgstr ""
+
+#, c-format
+msgid "Unable to close vector <%s>"
+msgstr ""
+
+#, c-format
+msgid "Invalid request for writing frmt file - map format is %d"
+msgstr ""
+
+#, c-format
+msgid "Link to vector map <%s> created"
+msgstr ""
+
+#, c-format
+msgid "Unable to create '%s': %s"
+msgstr ""
+
+#, c-format
+msgid "Unable to copy '%s': %s"
+msgstr ""
+
+#, c-format
+msgid "Unable to copy table <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to drop table <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to save feature index file for vector map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to close cursor %s"
+msgstr ""
+
+#, c-format
+msgid "Vector map name <%s> is too long"
+msgstr ""
+
+msgid "Layer constraint ignored for non-native vector formats"
+msgstr ""
+
+#, c-format
+msgid "Unable to copy features. Input vector map <%s> is not open"
+msgstr ""
+
+#, c-format
+msgid "Unable to create PostGIS layer <%s>"
+msgstr ""
+
+#, c-format
+msgid "Vector map <%s> not open on topological level. Areas will be skipped!"
+msgstr ""
+
+msgid "Copying features..."
+msgstr ""
+
+#, c-format
+msgid "Copying features (%s)..."
+msgstr ""
+
+msgid "Writing new feature failed"
+msgstr ""
+
+#, c-format
+msgid "%d features without category or from different layer skipped"
+msgstr ""
+
+msgid "Exporting nodes..."
+msgstr ""
+
+#, c-format
+msgid "Writing node %d failed"
+msgstr ""
+
+msgid "Exporting areas..."
+msgstr ""
+
+#, c-format
+msgid "Writing area %d failed"
+msgstr ""
+
+#, c-format
+msgid "%d areas without category or from different layer skipped"
+msgstr ""
+
+#, c-format
+msgid "Unable to copy table <%s> for layer %d from <%s> to <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to add database link for vector map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to open database <%s> with driver <%s>"
+msgstr ""
+
+msgid "Unable to create index"
+msgstr ""
+
+#, c-format
+msgid "Unable to grant privileges on table <%s>"
+msgstr ""
+
+msgid "Changed"
+msgstr ""
+
+msgid "Removed"
+msgstr ""
+
+msgid "Selected"
+msgstr ""
+
+#, c-format
+msgid "%s lines: %d"
+msgstr ""
+
+#, c-format
+msgid "%s dangles: %d"
+msgstr ""
+
+msgid "Trying to add more edges to the planar_graph than the initial allocation size allows"
+msgstr ""
+
+#, c-format
+msgid "Name <%s> is not SQL compliant. Must start with a letter."
+msgstr ""
+
+msgid "Layer number must be 1 or greater"
+msgstr ""
+
+msgid "Unable to add attribute link, vector map is not opened in WRITE mode"
+msgstr ""
+
+msgid "Unable to add attribute link"
+msgstr ""
+
+msgid "Unable to write attribute links"
+msgstr ""
+
+msgid "Unable to write database links"
+msgstr ""
+
+msgid "Database connection not defined. Skipping."
+msgstr ""
+
+msgid "More DB links defined for input vector map. Using only first DB link for output."
+msgstr ""
+
+#, c-format
+msgid "Layer number %d or name <%s> already exists"
+msgstr ""
+
+#, c-format
+msgid ""
+"Default driver / database set to:\n"
+"driver: %s\n"
+"database: %s"
+msgstr ""
+
+msgid "Default driver is not set"
+msgstr ""
+
+msgid "Default database is not set"
+msgstr ""
+
+#, c-format
+msgid "Requested dblink %d, maximum link number %d"
+msgstr ""
+
+#, c-format
+msgid "Error in rule on row %d in <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to open OGR data source '%s'"
+msgstr ""
+
+#, c-format
+msgid "Unable to open OGR layer <%s>"
+msgstr ""
+
+#, c-format
+msgid "Feature table <%s> has no primary key defined. Unable to define DB links."
+msgstr ""
+
+msgid "GRASS not compiled with PostgreSQL support"
+msgstr ""
+
+msgid "Unknown vector map format"
+msgstr ""
+
+#, c-format
+msgid "Unable to create database definition file for vector map <%s>"
+msgstr ""
+
+msgid "Bug: attempt to update map which is not in current mapset"
+msgstr ""
+
+msgid "vector map is not opened"
+msgstr ""
+
+#, c-format
+msgid "Vect_read_line_geos(): feature id %d is not reasonable (max features in vector map <%s>: %d)"
+msgstr ""
+
+msgid "only native format supported"
+msgstr ""
+
+msgid "Attempt to read dead line"
+msgstr ""
+
+#, c-format
+msgid "Vect_read_area_geos(): unable to read area id %d"
+msgstr ""
+
+#, c-format
+msgid "Vect_read_area_geos(): unable to read isle id %d of area id %d"
+msgstr ""
+
+#, c-format
+msgid "Unable to read line offset %ld"
+msgstr ""
+
+#, c-format
+msgid "Attempt to read points of nonexistent area id %d"
+msgstr ""
+
+#, c-format
+msgid "Unable to read feature id %d"
+msgstr ""
+
+msgid "GngFlatten error"
+msgstr ""
+
+msgid "Unable to add network arc"
+msgstr ""
+
+#, c-format
+msgid "dglShortestPath error: %s"
+msgstr ""
+
+#, c-format
+msgid "Unable to create header file for vector map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to open header file of vector <%s>"
+msgstr ""
+
+#, c-format
+msgid "Corrupted row in head: %s"
+msgstr ""
+
+#, c-format
+msgid "Unknown keyword '%s' in vector head"
+msgstr ""
+
+msgid "3D not supported by Vect_segment_intersection()"
+msgstr ""
+
+msgid "Vect_segment_intersection() ERROR (collinear vertical segments)"
+msgstr ""
+
+msgid "Vect_segment_intersection() ERROR (collinear non vertical segments)"
+msgstr ""
+
+msgid "Error while adding point to array. Out of memory"
+msgstr ""
+
+#, c-format
+msgid "Illegal vector map name <%s>. May not contain '.' or 'NULL'."
+msgstr ""
+
+#, c-format
+msgid "Illegal vector map name <%s>. Must start with a letter."
+msgstr ""
+
+#, c-format
+msgid "Illegal vector map name <%s>. Character '%c' not allowed."
+msgstr ""
+
+#, c-format
+msgid "Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."
+msgstr ""
+
+#, c-format
+msgid "Output vector map name <%s> is not in the current mapset (%s)"
+msgstr ""
+
+#, c-format
+msgid "Output vector map name <%s> is not SQL compliant"
+msgstr ""
+
+#, c-format
+msgid "Output vector map <%s> is used as input"
+msgstr ""
+
+msgid "Map structure was never initialized"
+msgstr ""
+
+msgid "Map structure has been closed"
+msgstr ""
+
+#, c-format
+msgid "Vector map <%s> is not open at topological level"
+msgstr ""
+
+#, c-format
+msgid "Invalid node id: %d"
+msgstr ""
+
+#, c-format
+msgid "Nodes not available for line %d"
+msgstr ""
+
+#, c-format
+msgid "Areas not available for line %d"
+msgstr ""
+
+#, c-format
+msgid "Line %d is not a boundary"
+msgstr ""
+
+#, c-format
+msgid "Topology info not available for feature %d"
+msgstr ""
+
+msgid "Index out of range in"
+msgstr ""
+
+msgid "Segment outside line, no segment created"
+msgstr ""
+
+msgid "Vector map name is not SQL compliant"
+msgstr ""
+
+#, c-format
+msgid "Unable to find vector map <%s> in <%s>"
+msgstr ""
+
+#, c-format
+msgid "Vector map <%s> already exists and will be overwritten"
+msgstr ""
+
+#, c-format
+msgid "Unable to delete vector map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to copy vector map <%s> to <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to delete table <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to create index for table <%s>, key <%s>"
+msgstr ""
+
+#, c-format
+msgid "Ignoring invalid mapset: %s"
+msgstr ""
+
+#, c-format
+msgid "Invalid vector map name <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to open header file for vector map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to find table <%s> linked to vector map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Table <%s> linked to vector map <%s> does not exist"
+msgstr ""
+
+#, c-format
+msgid "Unable to open directory '%s'"
+msgstr ""
+
+#, c-format
+msgid "Filepath '%s/%s' exceeds max length"
+msgstr ""
+
+#, c-format
+msgid "Unable to delete file '%s'"
+msgstr ""
+
+#, c-format
+msgid "Unable to rename directory '%s' to '%s'"
+msgstr ""
+
+#, c-format
+msgid "Unable to remove directory '%s': %s"
+msgstr ""
+
+#, c-format
+msgid "%d lines merged"
+msgstr ""
+
+#, c-format
+msgid "%d new lines"
+msgstr ""
+
+#, c-format
+msgid "%d boundaries merged"
+msgstr ""
+
+#, c-format
+msgid "%d new boundaries"
+msgstr ""
+
+#, c-format
+msgid "%d lines and boundaries merged"
+msgstr ""
+
+#, c-format
+msgid "%d new lines and boundaries"
+msgstr ""
+
+#, c-format
+msgid "Unable to find point with defined unique category for node <%d>."
+msgstr ""
+
+#, c-format
+msgid ""
+"There exists more than one point on node <%d> with unique category in field  <%d>.\n"
+"The unique category layer may not be valid."
+msgstr ""
+
+msgid "Wrong line direction in Vect_net_get_line_cost()"
+msgstr ""
+
+msgid "Building graph..."
+msgstr ""
+
+msgid "Unable to build network graph"
+msgstr ""
+
+msgid "Forward costs column not specified"
+msgstr ""
+
+msgid "Turntable field < 1"
+msgstr ""
+
+#, c-format
+msgid "Turntable column <%s> not found in table <%s>"
+msgstr ""
+
+#, c-format
+msgid "Data type of column <%s> not supported (must be numeric)"
+msgstr ""
+
+msgid "Setting node costs..."
+msgstr ""
+
+#, c-format
+msgid "Database record for node %d (cat = %d) not found (cost set to 0)"
+msgstr ""
+
+msgid "Cannot add network arc for virtual node connection."
+msgstr ""
+
+#, c-format
+msgid ""
+"There exists more than one point of node <%d> with unique category field  <%d>.\n"
+"The unique categories layer is not valid therefore you will probably get incorrect results."
+msgstr ""
+
+#, c-format
+msgid ""
+"Unable to find point representing intersection <%d> in unique categories field <%d>.\n"
+"Cost for the intersection was set to 0.\n"
+"The unique categories layer is not valid therefore you will probably get incorrect results."
+msgstr ""
+
+#, c-format
+msgid ""
+"Unable to find node for point representing intersection <%d> in unique categories field <%d>.\n"
+"Cost for the intersection was set to 0.\n"
+"The unique categories layer is not valid therefore you will probably get incorrect results."
+msgstr ""
+
+#, c-format
+msgid "Database record for turn with cat = %d is not found. (The turn was skipped."
+msgstr ""
+
+msgid "Cannot add network arc representing turn."
+msgstr ""
+
+msgid "Arc field < 1"
+msgstr ""
+
+msgid "Registering arcs..."
+msgstr ""
+
+#, c-format
+msgid ""
+"Line with id <%d> has more unique categories defined in field <%d>.\n"
+"The unique categories layer is not valid therefore you will probably get incorrect results."
+msgstr ""
+
+#, c-format
+msgid "Database record for line %d (cat = %d, forward/both direction(s)) not found (cost was set to 0)"
+msgstr ""
+
+#, c-format
+msgid "Database record for line %d (cat = %d, backward direction) not found(cost was set to 0)"
+msgstr ""
+
+msgid "Flattening the graph..."
+msgstr ""
+
+msgid "Graph was built"
+msgstr ""
+
+#, c-format
+msgid "Database record for line %d (cat = %d, forward/both direction(s)) not found (forward/both direction(s) of line skipped)"
+msgstr ""
+
+#, c-format
+msgid "Database record for line %d (cat = %d, backward direction) not found(direction of line skipped)"
+msgstr ""
+
+msgid "Cannot add network arc"
+msgstr ""
+
+#, c-format
+msgid "Programmer requested unknown access level %d"
+msgstr ""
+
+#, c-format
+msgid "Vector map <%s> not found in current mapset"
+msgstr ""
+
+msgid "Temporary vector maps can be accessed only in the current mapset"
+msgstr ""
+
+msgid "Vector map which is not in the current mapset cannot be opened for update"
+msgstr ""
+
+#, c-format
+msgid "Unable to read header file of vector map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to open topology file for vector map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to open vector map <%s> on level %d. Try to rebuild vector topology with v.build."
+msgstr ""
+
+#, c-format
+msgid "Building topology for OGR layer <%s> from datasource '%s'..."
+msgstr ""
+
+#, c-format
+msgid "Unable to open vector map <%s> on level %d"
+msgstr ""
+
+#, c-format
+msgid "Unable to open history file for vector map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to create vector map: <%s> is not in the current mapset (%s)"
+msgstr ""
+
+#, c-format
+msgid "Unable to create vector map: <%s> is not SQL compliant"
+msgstr ""
+
+#, c-format
+msgid "Unable to open history file of vector map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Using OGR/%s format"
+msgstr ""
+
+msgid "Using PostGIS Topology format"
+msgstr ""
+
+msgid "Using PostGIS format"
+msgstr ""
+
+msgid "Using native format"
+msgstr ""
+
+#, c-format
+msgid "Unable to stat file <%s>"
+msgstr ""
+
+#, c-format
+msgid "unknown %d (update Vect_maptype_info)"
+msgstr ""
+
+msgid "Size of 'coor' file differs from value saved in topology file"
+msgstr ""
+
+#, c-format
+msgid "Please rebuild topology for vector map <%s@%s>"
+msgstr ""
+
+msgid "Size of 'coor' file differs from value saved in sidx file"
+msgstr ""
+
+msgid "Unable to open OGR file"
+msgstr ""
+
+msgid "OGR output also detected, using OGR"
+msgstr ""
+
+#, c-format
+msgid "Unable to open coor file for vector map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Coor file of vector map <%s@%s> is larger than it should be (%<PRId64> bytes excess)"
+msgstr ""
+
+#, c-format
+msgid "Coor file of vector <%s@%s> is shorter than it should be (%<PRId64> bytes missing)."
+msgstr ""
+
+msgid "OGR datasource not defined"
+msgstr ""
+
+msgid "OGR layer not defined"
+msgstr ""
+
+#, c-format
+msgid "OGR layer <%s> not found"
+msgstr ""
+
+#, c-format
+msgid "OGR transaction with layer <%s> failed to start"
+msgstr ""
+
+#, c-format
+msgid "Unable to open feature index file for vector map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to get OGR driver <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to create OGR data source '%s'"
+msgstr ""
+
+#, c-format
+msgid "OGR layer <%s> already exists and will be overwritten"
+msgstr ""
+
+#, c-format
+msgid "Unable to delete OGR layer <%s>"
+msgstr ""
+
+#, c-format
+msgid "OGR layer <%s> already exists in datasource '%s'"
+msgstr ""
+
+#, c-format
+msgid "Feature index format version %d.%d is not supported by this release. Try to rebuild topology or upgrade GRASS."
+msgstr ""
+
+#, c-format
+msgid "Your GRASS version does not fully support feature index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
+msgstr ""
+
+msgid "Connection string not defined"
+msgstr ""
+
+msgid "PostGIS feature table not defined"
+msgstr ""
+
+msgid "No feature tables found in database."
+msgstr ""
+
+#, c-format
+msgid "Feature table <%s> not found in 'geometry_columns'"
+msgstr ""
+
+msgid "Topology schema not found."
+msgstr ""
+
+#, c-format
+msgid "PostGIS layer <%s.%s> already exists and will be overwritten"
+msgstr ""
+
+#, c-format
+msgid "Unable to delete PostGIS layer <%s>"
+msgstr ""
+
+#, c-format
+msgid "PostGIS layer <%s.%s> already exists in database '%s'"
+msgstr ""
+
+msgid "No key column detected."
+msgstr ""
+
+#, c-format
+msgid "Execution failed: %s"
+msgstr ""
+
+#, c-format
+msgid "PostGIS topology schema <%s> dropped"
+msgstr ""
+
+msgid "Connection to PostgreSQL database failed. Try to set up username/password by db.login."
+msgstr ""
+
+msgid "Unable to get database name"
+msgstr ""
+
+#, c-format
+msgid "<%s> is not PostGIS database. DB table 'spatial_ref_sys' not found."
+msgstr ""
+
+#, c-format
+msgid "PostGIS Topology extension not found in the database <%s>"
+msgstr ""
+
+msgid "Empty bounding box"
+msgstr ""
+
+#, c-format
+msgid "Inconsistency in topology: unable to read node %d"
+msgstr ""
+
+#, c-format
+msgid "Inconsistency in topology: node %d - unexpected feature type %d"
+msgstr ""
+
+#, c-format
+msgid "Area %d without boundary detected"
+msgstr ""
+
+#, c-format
+msgid "Isle %d without boundary detected"
+msgstr ""
+
+msgid "Unable to get map bounding box from topology"
+msgstr ""
+
+#, c-format
+msgid ""
+"Unable to parse map bounding box:\n"
+"%s"
+msgstr ""
+
+#, c-format
+msgid "Different number of nodes detected (%d, %d)"
+msgstr ""
+
+#, c-format
+msgid "Different number of areas detected (%d, %d)"
+msgstr ""
+
+msgid "To be implemented: isles not attached in Topo-Geo-only mode"
+msgstr ""
+
+#, c-format
+msgid "Inconsistency in topology: number of points %d (should be %d)"
+msgstr ""
+
+#, c-format
+msgid "Inconsistency in topology: number of lines %d (should be %d)"
+msgstr ""
+
+#, c-format
+msgid "Inconsistency in topology: number of centroids %d (should be %d)"
+msgstr ""
+
+msgid "unknown operator"
+msgstr ""
+
+msgid "Overlay: line/boundary types not supported by AND operator"
+msgstr ""
+
+msgid "Overlay: area x area types not supported by AND operator"
+msgstr ""
+
+msgid "Unable to find point in polygon"
+msgstr ""
+
+msgid "conditions failed"
+msgstr ""
+
+msgid "for this format/level not supported"
+msgstr ""
+
+msgid "Vector map is not open for reading"
+msgstr ""
+
+#, c-format
+msgid "Unable to read feature %d from vector map <%s>"
+msgstr ""
+
+msgid "Line index is out of range"
+msgstr ""
+
+msgid "Node index is out of range"
+msgstr ""
+
+msgid "Area index is out of range"
+msgstr ""
+
+msgid "Isle index is out of range"
+msgstr ""
+
+#, c-format
+msgid "Attempt to access dead feature %d"
+msgstr ""
+
+#, c-format
+msgid "Unable to get feature geometry, fid %ld"
+msgstr ""
+
+msgid "Feature without geometry. Skipped."
+msgstr ""
+
+msgid "OGR feature without ID"
+msgstr ""
+
+#, c-format
+msgid "OGR feature type '%s' not supported"
+msgstr ""
+
+#, c-format
+msgid "Unexpected feature type (%d) - should be (%d)"
+msgstr ""
+
+#, c-format
+msgid "Feature %ld without geometry skipped"
+msgstr ""
+
+#, c-format
+msgid "Requesting invalid feature from cache (%d). Number of features in cache: %d"
+msgstr ""
+
+#, c-format
+msgid "Feature %d: unexpected type (%d) - should be %d"
+msgstr ""
+
+msgid "No geometry or topo geometry column defined"
+msgstr ""
+
+msgid "Random access not supported. Primary key not defined."
+msgstr ""
+
+msgid "Inconsistency in topology: detected centroid (should be point)"
+msgstr ""
+
+msgid "Inconsistency in topology: detected boundary (should be line)"
+msgstr ""
+
+#, c-format
+msgid "Invalid WKB content: %d bytes"
+msgstr ""
+
+msgid "Reading EWKB with 4-dimensional coordinates (XYZM) is not supported"
+msgstr ""
+
+#, c-format
+msgid "Unsupported feature type %d"
+msgstr ""
+
+msgid "Length of input WKB is too small"
+msgstr ""
+
+#, c-format
+msgid "Invalid cache index %d (max: %d)"
+msgstr ""
+
+#, c-format
+msgid "Corrupted data. %s."
+msgstr ""
+
+msgid "Corrupted data"
+msgstr ""
+
+#, c-format
+msgid "Unable to parse '%s'"
+msgstr ""
+
+#, c-format
+msgid ""
+"Execution failed: %s (...)\n"
+"Reason: %s"
+msgstr ""
+
+#, c-format
+msgid ""
+"Execution failed: %s\n"
+"Reason: %s"
+msgstr ""
+
+#, c-format
+msgid ""
+"Unable to read features. Reason:\n"
+"%s"
+msgstr ""
+
+#, c-format
+msgid "Unable to construct centroid for area %d. Skipped."
+msgstr ""
+
+#, c-format
+msgid "Centroid %d: invalid area %d"
+msgstr ""
+
+msgid "Area is composed of dead boundary"
+msgstr ""
+
+#, c-format
+msgid "%d areas of total size %g removed"
+msgstr ""
+
+msgid "Could not delete line from coor"
+msgstr ""
+
+msgid "dissolve_neighbour > 0, failed to build new area"
+msgstr ""
+
+msgid "Dissolve with neighbour area: corrupt topology"
+msgstr ""
+
+msgid "Failed to build new area"
+msgstr ""
+
+msgid "Failed to build new isle"
+msgstr ""
+
+msgid "Dissolve with outer isle: corrupt topology"
+msgstr ""
+
+msgid "Area merging failed"
+msgstr ""
+
+#, c-format
+msgid "Removed duplicates: %d"
+msgstr ""
+
+#, c-format
+msgid "Unable to delete item %d from spatial index"
+msgstr ""
+
+#, c-format
+msgid "Unknown Simple Features type (%d)"
+msgstr ""
+
+msgid "No connection defined"
+msgstr ""
+
+msgid "Unable to get number of simple features"
+msgstr ""
+
+#, c-format
+msgid "Unable to report simple features for vector map <%s>"
+msgstr ""
+
+msgid "Snap vertices Pass 1: select points"
+msgstr ""
+
+msgid "Snap vertices Pass 2: assign anchor vertices"
+msgstr ""
+
+msgid "Snap vertices Pass 3: snap to assigned points"
+msgstr ""
+
+#, c-format
+msgid "Snapped vertices: %d"
+msgstr ""
+
+#, c-format
+msgid "New vertices: %d"
+msgstr ""
+
+#, c-format
+msgid "Unable to create temporary file <%s>: %s"
+msgstr ""
+
+#, c-format
+msgid "Unable to remove temporary file <%s>: %s"
+msgstr ""
+
+msgid "Reading features..."
+msgstr ""
+
+#, c-format
+msgid "Unable to write feature in vector map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to rewrite feature/offset %<PRId64> in vector map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to delete feature/offset %<PRId64> from vector map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unable to restore feature/offset %<PRId64> in vector map <%s>"
+msgstr ""
+
+#, c-format
+msgid "Vector map <%s> is not opened"
+msgstr ""
+
+#, c-format
+msgid "Vector map <%s> is not opened in write mode"
+msgstr ""
+
+#, c-format
+msgid "Attempt to access feature with invalid id (%<PRId64>)"
+msgstr ""
+
+#, c-format
+msgid "Attempt to access alive feature %d"
+msgstr ""
+
+#, c-format
+msgid "%s: Area %d does not exist"
+msgstr ""
+
+#, c-format
+msgid "Attempt to access dead area %d"
+msgstr ""
+
+msgid "Unable to rewrite feature (incompatible feature types)"
+msgstr ""
+
+#, c-format
+msgid "Invalid offset (%<PRId64>)"
+msgstr ""
+
+msgid "Unable to delete feature"
+msgstr ""
+
+#, c-format
+msgid "Creating field <%s> failed"
+msgstr ""
+
+#, c-format
+msgid "Unsupported geometry type (%d)"
+msgstr ""
+
+#, c-format
+msgid "Unable to create OGR layer <%s> in '%s'"
+msgstr ""
+
+#, c-format
+msgid "More layers defined, using driver <%s> and database <%s>"
+msgstr ""
+
+msgid "Database connection not defined. Unable to write attributes."
+msgstr ""
+
+#, c-format
+msgid "No category defined for layer %d"
+msgstr ""
+
+#, c-format
+msgid "Feature has more categories, using category %d (from layer %d)"
+msgstr ""
+
+msgid "Feature is not a point. Skipping."
+msgstr ""
+
+msgid "Feature is not a line. Skipping."
+msgstr ""
+
+msgid "Feature is not a polygon. Skipping."
+msgstr ""
+
+msgid "Feature is not a face. Skipping."
+msgstr ""
+
+#, c-format
+msgid "Unsupported feature type (%d)"
+msgstr ""
+
+msgid "Boundary is not closed. Feature skipped."
+msgstr ""
+
+msgid "Unable to writes feature attributes"
+msgstr ""
+
+#, c-format
+msgid "Feature without category of layer %d"
+msgstr ""
+
+#, c-format
+msgid "Unable to select attributes for category %d"
+msgstr ""
+
+#, c-format
+msgid "No database record for category %d, no attributes will be written"
+msgstr ""
+
+#, c-format
+msgid "Unable to create field <%s>"
+msgstr ""
+
+#, c-format
+msgid "Unsupported column type %d"
+msgstr ""
+
+#, c-format
+msgid "Unable to rewrite feature %d"
+msgstr ""
+
+#, c-format
+msgid "Unable to delete feature (%s) %d"
+msgstr ""
+
+msgid "Boundary is not closed. Skipping."
+msgstr ""
+
+#, c-format
+msgid "Building spatial index on <%s>..."
+msgstr ""
+
+#, c-format
+msgid "Schema <%s> doesn't exist, created"
+msgstr ""
+
+#, c-format
+msgid "Creating topology schema <%s>..."
+msgstr ""
+
+#, c-format
+msgid "Adding new topology column <%s>..."
+msgstr ""
+
+msgid "Unable to create new PostGIS feature table"
+msgstr ""
+
+msgid "Unable to create new PostGIS topology schema"
+msgstr ""
+
+#, c-format
+msgid "Point skipped (output feature type: %s)"
+msgstr ""
+
+#, c-format
+msgid "Line skipped (output feature type: %s)"
+msgstr ""
+
+#, c-format
+msgid "Centroid skipped (output feature type: %s)"
+msgstr ""
+
+#, c-format
+msgid "Boundary skipped (output feature type: %s)"
+msgstr ""
+
+#, c-format
+msgid "Face skipped (output feature type: %s)"
+msgstr ""
+
+#, c-format
+msgid "Invalid feature type (%d) for nodes"
+msgstr ""
+
+msgid "PostGIS topology schema not defined"
+msgstr ""
+
+msgid "Trying to insert 3D data into feature table which store 2D data only"
+msgstr ""
+
+msgid "Trying to insert 2D data into feature table which store 3D data only"
+msgstr ""
+
+msgid "Unable to insert topological element into PostGIS Topology schema"
+msgstr ""
+
+#, c-format
+msgid "FID column must be integer, column <%s> ignored!"
+msgstr ""
+
+msgid "Invalid value for FID column: NULL"
+msgstr ""
+
+#, c-format
+msgid "Invalid feature %d (max: %d)"
+msgstr ""
+
+#, c-format
+msgid "Invalid feature type (%d) for node"
+msgstr ""
+
+#, c-format
+msgid "Invalid node %d (%d)"
+msgstr ""
+
+#, c-format
+msgid "Unable to determine next left/right edge for edge %d"
+msgstr ""
+
+msgid "Unable to insert new edge. Topology not available."
+msgstr ""
+
+msgid "Invalid topology"
+msgstr ""
+
+#, c-format
+msgid "Attempt to access non-existing feature %d"
+msgstr ""
+
+msgid "Unable to determine next left/right edge"
+msgstr ""
+
+msgid "Unable to create new face"
+msgstr ""
+
+#, c-format
+msgid "Unable to delete node %d"
+msgstr ""
+
+msgid "Unable to calculate centroid for area"
+msgstr ""
+
+msgid "Attempt to delete dead feature"
+msgstr ""
+
+#, c-format
+msgid "Unsupported vector map format (%d)"
+msgstr ""
+
+#, c-format
+msgid "This version of GRASS (%d.%d) is too old to read this category index format. Try to rebuild topology or upgrade GRASS to at least version %d."
+msgstr ""
+
+msgid "Writing to file loaded to memory not supported"
+msgstr ""
+
+msgid "Unable to load file to memory, file not open"
+msgstr ""
+
+msgid "Vector memory mode not supported, using 'AUTO'"
+msgstr ""
+
+#, c-format
+msgid "Vector format not recognized: %s"
+msgstr ""
+
+#, c-format
+msgid "Line <%s> is too long"
+msgstr ""
+
+#, c-format
+msgid "Vector format '%s' not supported"
+msgstr ""
+
+#, c-format
+msgid "Format definition is not correct: %s"
+msgstr ""
+
+msgid "Unable read topology for nodes"
+msgstr ""
+
+#, c-format
+msgid "Unable to read topology for node %d"
+msgstr ""
+
+msgid "Unable read topology for lines"
+msgstr ""
+
+#, c-format
+msgid "Unable to read topology for line %d"
+msgstr ""
+
+msgid "Unable to read topo for areas"
+msgstr ""
+
+#, c-format
+msgid "Unable read topology for area %d"
+msgstr ""
+
+msgid "Unable to read topology for isles"
+msgstr ""
+
+#, c-format
+msgid "Unable to read topology for isle %d"
+msgstr ""
+
+msgid "Unable to write head to plus file"
+msgstr ""
+
+msgid "Unable to write nodes to plus file"
+msgstr ""
+
+msgid "Unable to write lines to plus file"
+msgstr ""
+
+msgid "Unable to write areas to plus file"
+msgstr ""
+
+msgid "Unable to write isles to plus file"
+msgstr ""
+
+#, c-format
+msgid "Line %d already has area/isle %d to left"
+msgstr ""
+
+#, c-format
+msgid "Line %d already has area/isle %d to right"
+msgstr ""
+
+msgid "Isle already registered in area"
+msgstr ""
+
+msgid "Attempt to delete isle from dead area"
+msgstr ""
+
+#, c-format
+msgid "Attempt to delete not registered isle %d from area %d"
+msgstr ""
+
+msgid "Attempt to delete dead area"
+msgstr ""
+
+#, c-format
+msgid "Dead centroid %d registered for area (bug in the vector library)"
+msgstr ""
+
+#, c-format
+msgid "Attempt to delete area %d info from dead isle %d"
+msgstr ""
+
+#, c-format
+msgid "Attempt to delete isle %d info from dead area %d"
+msgstr ""
+
+#, c-format
+msgid "Attempt to delete not registered line %d from node %d"
+msgstr ""
+
+#, c-format
+msgid "Attempt to read line angle for the line which is not connected to the node: node %d, line %d"
+msgstr ""
+
+#, c-format
+msgid "This version of GRASS (%d.%d) is too old to read this topology format. Try to rebuild topology or upgrade GRASS to at least version %d."
+msgstr ""
+
+#, c-format
+msgid "Your GRASS version does not fully support topology format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
+msgstr ""
+
+#, c-format
+msgid "Old topology format version %d.%d is not supported by this release. Try to rebuild topology using v.build or v.build.all module."
+msgstr ""
+
+msgid "Vector exceeds supported file size limit"
+msgstr ""
+
+#, c-format
+msgid "Unable to find '%x' in %s"
+msgstr ""
+
+#, c-format
+msgid "Unable to delete node %d from spatial index"
+msgstr ""
+
+#, c-format
+msgid "Unable to delete line %d from spatial index"
+msgstr ""
+
+msgid "Attempt to delete sidx for dead area"
+msgstr ""
+
+#, c-format
+msgid "Unable to delete area %d from spatial index"
+msgstr ""
+
+#, c-format
+msgid "Unable to delete isle %d from spatial index"
+msgstr ""
+
+msgid "Topology file must be written before spatial index file"
+msgstr ""
+
+#, c-format
+msgid "This version of GRASS (%d.%d) is too old to read this spatial index format. Try to rebuild topology or upgrade GRASS to at least version %d."
+msgstr ""
+
+#, c-format
+msgid "Your GRASS version does not fully support spatial index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
+msgstr ""
+
+#, c-format
+msgid "Spatial index format version %d.%d is not supported by this release. Please rebuild topology."
+msgstr ""
+
+msgid "Unable to open test.tmp file"
+msgstr ""
+
+#, c-format
+msgid "Error in read/write portable double, byte_order = %d Written: %.16e3E Read: %.16e3E"
+msgstr ""
+
+#, c-format
+msgid "Error in read/write portable float, byte_order = %d Written: %.8e3E Read: %.8e3E"
+msgstr ""
+
+#, c-format
+msgid "Error in read/write portable off_t, byte_order = %d Written: %lu Read: %lu"
+msgstr ""
+
+#, c-format
+msgid "Error in read/write portable long, byte_order = %d Written: %lu Read: %lu"
+msgstr ""
+
+#, c-format
+msgid "Error in read/write portable int, byte_order = %d Written: %d Read: %d"
+msgstr ""
+
+#, c-format
+msgid "Error in read/write portable short, byte_order = %d Written: %d Read: %d"
+msgstr ""
+
+#, c-format
+msgid "Error in read/write portable char, byte_order = %d Written: %d Read: %d"
+msgstr ""
+
+msgid "Computing minimum spanning tree..."
+msgstr ""
+
+#, c-format
+msgid "Unable to open select cursor: %s"
+msgstr ""
+
+#, c-format
+msgid "Point %d is not connected!"
+msgstr ""
+
+#, c-format
+msgid "'%s' must be > 0"
+msgstr ""
+
+msgid "'where' and 'cats' parameters were supplied, cat will be ignored"
+msgstr ""
+
+msgid "Unable to load data from database"
+msgstr ""
+
+msgid "Problem loading category values"
+msgstr ""
+
+msgid ""
+"\n"
+"++ Running basic unit tests ++"
+msgstr ""
+
+msgid ""
+"\n"
+"-- Basic rtree unit tests failure --"
+msgstr ""
+
+msgid ""
+"\n"
+"-- Basic rtree unit tests finished successfully --"
+msgstr ""
+
+msgid "Unit tests for the vector rtree library"
+msgstr ""
+
+#, c-format
+msgid "Unable to set category %d for (feature id %d)"
+msgstr ""
+
+#, c-format
+msgid "Attempt to delete dead feature (%d)"
+msgstr ""
+
+#, c-format
+msgid "No area found for centroid %d"
+msgstr ""
+
+#, c-format
+msgid "Duplicate centroid %d, unable to delete area"
+msgstr ""
+
+#, c-format
+msgid "Area %d without centroid"
+msgstr ""
+
+#, c-format
+msgid "Area %d has no boundaries"
+msgstr ""
+
+msgid "Unknown query tool"
+msgstr ""

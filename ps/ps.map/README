@@ -137,7 +137,7 @@ The following p.map requests have been modified in ps.map:
 
     comments (has the following additional sub-requests)
       where x y (positions the comments x and y inches from the left and top
-	edges of the page - optonal - default is immediately below the last
+	edges of the page - optional - default is immediately below the last
 	item printed, starting at the left edge of the map)
       font fontname (optional - default = Helvetica)
       fontsize fontsize (optional - default = 10)
@@ -160,7 +160,7 @@ The following p.map requests have been modified in ps.map:
 	font is proportional to the size of the icon.  The default icon
 	size is 1.0, which is equivalent to a fontsize of 10.)
 
-    vector (except the stye sub-request uses the first color for
+    vector (except the style sub-request uses the first color for
 	    all non-zero characters in the line pattern)
 
 
@@ -186,7 +186,7 @@ The following new script requests have been added:
     mapinfo
       where x y (positions the information about the scale, the grid, and
 	the region x and y inches from the left and top edges of the page -
-	optonal - default is immediately below the map, starting at the
+	optional - default is immediately below the map, starting at the
 	left edge of the map)
       font fontname (optional - default = Helvetica)
       fontsize fontsize (optional - default = 10)
@@ -198,7 +198,7 @@ The following new script requests have been added:
 
     vlegend
       where x y (positions the vector legend x and y inches from the left
-	and top edges of the page - optonal - default is immediately below the
+	and top edges of the page - optional - default is immediately below the
 	map_info, starting at the left edge of the map)
       font fontname (optional - default = Helvetica)
       fontsize fontsize (optional - default = 10)

@@ -186,6 +186,7 @@ function(_build_addon)
         WORLD_EXECUTE)
 
     add_custom_target(${G_NAME} ALL)
+    target_sources(${G_NAME} PRIVATE ${G_SRC_DIR}/${G_NAME}.py)
 
     if(WIN32)
       install(PROGRAMS ${OUTDIR}/${GRASSAddon_ScriptDIR}/${G_NAME}.bat
@@ -285,6 +286,7 @@ function(_build_addon)
       COMMENT "Creating ${OUT_HTML_FILE}")
 
     add_custom_target(${G_NAME}-docs ALL DEPENDS ${G_NAME} ${_out_html_file})
+    target_sources(${G_NAME}-docs PRIVATE ${html_doc} ${md_doc} ${img_files})
 
     install(FILES ${_out_html_file} DESTINATION ${GRASSAddon_DocDIR})
   endif()
@@ -338,5 +340,18 @@ macro(find_OpenMP)
   find_package(OpenMP)
   if(OpenMP_FOUND AND MSVC AND CMAKE_VERSION VERSION_LESS "3.30")
     add_compile_options(-openmp:llvm)
+  endif()
+endmacro()
+
+macro(find_M)
+  if(UNIX AND NOT TARGET LIBM)
+    find_library(MATH_LIBRARY m)
+    add_library(LIBM INTERFACE IMPORTED GLOBAL)
+    if(MATH_LIBRARY)
+      set_property(TARGET LIBM PROPERTY INTERFACE_LINK_LIBRARIES ${MATH_LIBRARY})
+    else()
+      # Fallback: allow the linker to resolve -lm by name.
+      set_property(TARGET LIBM PROPERTY INTERFACE_LINK_LIBRARIES m)
+    endif()
   endif()
 endmacro()

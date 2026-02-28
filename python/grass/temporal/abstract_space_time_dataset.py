@@ -624,7 +624,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return True
 
-    def sample_by_dataset(self, stds, method=None, spatial: bool = False, dbif=None):
+    def sample_by_dataset(
+        self, stds, method=None, spatial: bool = False, dbif=None, where=None
+    ):
         """Sample this space time dataset with the temporal topology
         of a second space time dataset
 
@@ -749,6 +751,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                        The returned map objects will have temporal and
                        spatial extents
         :param dbif: The database interface to be used
+        :param where: Temporal WHERE condition to filter input STRDS
 
         :return: A list of lists of map objects or None in case nothing was
                 found None
@@ -806,8 +809,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         tb = SpatioTemporalTopologyBuilder()
         spatial = "2D" if spatial else None
 
-        mapsA = self.get_registered_maps_as_objects(dbif=dbif)
-        mapsB = stds.get_registered_maps_as_objects_with_gaps(dbif=dbif)
+        mapsA = self.get_registered_maps_as_objects(where=where, dbif=dbif)
+        mapsB = stds.get_registered_maps_as_objects_with_gaps(where=where, dbif=dbif)
         tb.build(mapsB, mapsA, spatial)
 
         obj_list = []

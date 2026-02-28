@@ -8,7 +8,7 @@ check_include_file(termios.h HAVE_TERMIOS_H)
 if(NOT MSVC)
   check_include_file(unistd.h HAVE_UNISTD_H)
 else()
-  # unistd.h in stocked in thirdparty/msvc/
+  # unistd.h in stocked in thirdparty/msvc/ # codespell:ignore thirdparty
   set(HAVE_UNISTD_H 1)
 endif()
 check_include_file(values.h HAVE_VALUES_H)
@@ -24,7 +24,6 @@ check_include_file(g2c.h HAVE_G2C_H)
 check_include_file(f2c.h HAVE_F2C_H)
 check_include_file(cblas.h HAVE_CBLAS_H)
 check_include_file(cblas-atlas.h HAVE_CBLAS_ATLAS_H)
-
 
 if(MSVC)
   set(HAVE_PTHREAD_H 0)
@@ -184,30 +183,3 @@ check_symbol_definitions(
   DEFINITIONS
   _GNU_SOURCE
   _BSD_SOURCE)
-
-# set(HAVE_PBUFFERS 0) set(HAVE_PIXMAPS 0) if(WITH_OPENGL) try_compile(
-# HAVE_PBUFFERS ${CMAKE_CURRENT_BINARY_DIR}
-# ${CMAKE_SOURCE_DIR}/cmake/tests/have_pbuffer.c CMAKE_FLAGS
-# "-DINCLUDE_DIRECTORIES:PATH=${OPENGL_INCLUDE_DIR}" "-w"
-# "-DLINK_LIBRARIES:STRING=${OPENGL_LIBRARIES}" OUTPUT_VARIABLE
-# COMPILE_HAVE_PBUFFERS) if(NOT COMPILE_HAVE_PBUFFERS) message( FATAL_ERROR
-# "Performing Test HAVE_PBUFFERS - Failed\n
-# COMPILE_OUTPUT:${COMPILE_HAVE_PBUFFERS}\n" ) else() message(STATUS "Performing
-# Test HAVE_PBUFFERS - Success") set(HAVE_PBUFFERS 1) endif()
-#
-# try_compile( HAVE_PIXMAPS ${CMAKE_CURRENT_BINARY_DIR}
-# ${CMAKE_SOURCE_DIR}/cmake/tests/have_pixmaps.c CMAKE_FLAGS
-# "-DINCLUDE_DIRECTORIES:PATH=${OPENGL_INCLUDE_DIR}" "-w"
-# "-DLINK_LIBRARIES:STRING=${OPENGL_LIBRARIES}" OUTPUT_VARIABLE
-# COMPILE_HAVE_PIXMAPS)
-#
-# if(NOT COMPILE_HAVE_PIXMAPS) message( FATAL_ERROR "Performing Test
-# HAVE_PIXMAPS - Failed\n COMPILE_OUTPUT:${COMPILE_HAVE_PIXMAPS}\n" ) else()
-# message(STATUS "Performing Test HAVE_PIXMAPS - Success") set(HAVE_PIXMAPS 1)
-# endif()
-#
-# endif(WITH_OPENGL)
-#
-# set(OPENGL_X11 0) set(OPENGL_AQUA 0) set(OPENGL_WINDOWS 0) if(WITH_OPENGL)
-# if(APPLE) set(OPENGL_AQUA 1) set(OPENGL_AGL 1) elseif(WIN32)
-# set(OPENGL_WINDOWS 1) else() set(OPENGL_X11 1) endif() endif()

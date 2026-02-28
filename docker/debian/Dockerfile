@@ -10,7 +10,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # define versions to be used (PDAL is not available on Debian, so we compile it here)
 # https://github.com/PDAL/PDAL/releases
 # renovate: datasource=github-tags depName=PDAL/PDAL
-ARG PDAL_VERSION=2.9.2
+ARG PDAL_VERSION=2.10.0
 
 SHELL ["/bin/bash", "-c"]
 
@@ -191,7 +191,7 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1
 ENV PROJ_NETWORK=ON
 
 # Create generic GRASS lib name regardless of version number
-RUN ln -sf /usr/local/grass85 /usr/local/grass
+RUN ln -sf /usr/local/grass86 /usr/local/grass
 
 # show GRASS, PROJ, GDAL etc versions
 RUN grass --tmp-project EPSG:4326 --exec g.version -rge && \
