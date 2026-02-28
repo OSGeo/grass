@@ -17,7 +17,7 @@ This program is free software under the GNU General Public License
 
 from pathlib import Path
 
-from .storage import JupyterStorageManager
+from .storage import JupyterStorageManager, WELCOME_NOTEBOOK_NAME
 from .server import JupyterServerInstance, JupyterServerRegistry
 
 
@@ -82,3 +82,19 @@ class JupyterEnvironment:
         :return: List of notebook file paths
         """
         return self.storage_manager.files if self.storage_manager else []
+
+    @property
+    def template_url(self) -> str | None:
+        """Get URL to welcome notebook if it exists.
+
+        :return: URL to welcome.ipynb if it exists, None otherwise
+        """
+        if not self.server_url:
+            return None
+
+        # Check if welcome notebook exists
+        template_path = Path(self.storage_manager.storage) / WELCOME_NOTEBOOK_NAME
+        if template_path.exists():
+            return "{}/notebooks/{}".format(self.server_url, WELCOME_NOTEBOOK_NAME)
+
+        return None
