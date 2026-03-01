@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-09 19:55+0000\n"
-"PO-Revision-Date: 2026-02-19 23:54+0000\n"
+"POT-Creation-Date: 2026-02-21 17:40+0000\n"
+"PO-Revision-Date: 2026-02-23 23:51+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs-8-5/fr/>\n"
 "Language: fr\n"
@@ -108,10 +108,9 @@ msgstr "Cairo : impossible d'ouvrir le fichier de masque <%s> en entrée"
 msgid "Cairo: invalid input mask file <%s>"
 msgstr "Cairo : fichier de masque en entrée <%s> invalide"
 
-#, fuzzy, c-format
-#| msgid "Cairo: unable to open mask file <%s>"
+#, c-format
 msgid "Cairo: unexpected EOF reading mask <%s>"
-msgstr "Cairo : impossible d'ouvrir le fichier de masque <%s>"
+msgstr "Cairo : fin de fichier (EOF) inattendu lors de la lecture du masque <%s>"
 
 #, c-format
 msgid "Cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d"
@@ -1523,6 +1522,12 @@ msgstr "Séparateur de champ"
 msgid "Special characters: pipe, comma, space, tab, newline"
 msgstr "Caractères spéciaux : 'pipe', virgule, espace, tabulation, nouvelle ligne"
 
+msgid "Output format"
+msgstr "Format de sortie"
+
+msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);"
+msgstr "plain;Sortie en texte brut;json;JSON (JavaScript Object Notation);"
+
 msgid "Color"
 msgstr "Couleur"
 
@@ -1669,12 +1674,6 @@ msgstr "Exemple : start_time > '2001-01-01 12:30:00'"
 
 msgid "The method to be used for sampling the input dataset"
 msgstr "La méthode à utiliser pour échantillonner le jeu de donénes en entrée"
-
-msgid "Output format"
-msgstr "Format de sortie"
-
-msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);"
-msgstr "plain;Sortie en texte brut;json;JSON (JavaScript Object Notation);"
 
 msgid "Do not create attribute table"
 msgstr "Ne pas créer la table d'attributs"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-09 19:55+0000\n"
+"POT-Creation-Date: 2026-02-21 17:40+0000\n"
 "PO-Revision-Date: 2026-02-11 07:01+0000\n"
 "Last-Translator: Abhimanyu  <abhimanyupg04@gmail.com>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grassmods-8-5/hi/>\n"
@@ -9840,6 +9840,9 @@ msgid "Method used for data listing"
 msgstr ""
 
 msgid "The granule to be used for listing. The granule must be specified as string eg.: absolute time \"1 months\" or relative time \"1\""
+msgstr ""
+
+msgid "plain;Plain text output;line;Comma separated list of map names;json;JSON (JavaScript Object Notation);yaml;YAML (YAML Ain't Markup Language);csv;CSV (Comma Separated Values);"
 msgstr ""
 
 msgid "Suppress printing of column names"
