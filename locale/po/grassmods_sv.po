@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-14 18:00+0000\n"
+"POT-Creation-Date: 2026-02-28 15:43+0000\n"
 "PO-Revision-Date: 2026-01-08 02:38+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
@@ -3942,7 +3942,9 @@ msgstr "projektion"
 msgid "create project"
 msgstr "skapa projekt"
 
-msgid "Prints or modifies GRASS projection information files (in various co-ordinate system descriptions)."
+#, fuzzy
+#| msgid "Prints or modifies GRASS projection information files (in various co-ordinate system descriptions)."
+msgid "Prints or modifies GRASS projection information files (in various coordinate system descriptions)."
 msgstr "Skriver ut eller ändrar GRASS-projektionsinformationsfiler (i olika beskrivningar av koordinatsystem)."
 
 msgid "Can also be used to create new GRASS projects."
@@ -4002,7 +4004,9 @@ msgstr "Lista koder för given myndighet, t.ex. EPSG, och avsluta"
 msgid "Datum"
 msgstr "Datum"
 
-msgid "Datum (overrides any datum specified in input co-ordinate system)"
+#, fuzzy
+#| msgid "Datum (overrides any datum specified in input co-ordinate system)"
+msgid "Datum (overrides any datum specified in input coordinate system)"
 msgstr "Datum (åsidosätter eventuellt datum som anges i inmatat koordinatsystem)"
 
 msgid "Accepts standard GRASS datum codes, or \"list\" to list and exit"
@@ -4014,7 +4018,9 @@ msgstr "Indexnummer för parametrar för datumtransformation"
 msgid "\"0\" for unspecified or \"-1\" to list and exit"
 msgstr "\"0\" för ospecificerat eller \"-1\" för att lista och avsluta"
 
-msgid "Force override of datum transformation information in input co-ordinate system"
+#, fuzzy
+#| msgid "Force override of datum transformation information in input co-ordinate system"
+msgid "Force override of datum transformation information in input coordinate system"
 msgstr "Force override av information om datumtransformation i inmatat koordinatsystem"
 
 msgid "Modify"
@@ -29607,7 +29613,9 @@ msgstr "Typ av funktion"
 msgid "centrality measures"
 msgstr "mått på centralitet"
 
-msgid "Computes degree, centrality, betweeness, closeness and eigenvector centrality measures in the network."
+#, fuzzy
+#| msgid "Computes degree, centrality, betweeness, closeness and eigenvector centrality measures in the network."
+msgid "Computes degree, centrality, betweenness, closeness and eigenvector centrality measures in the network."
 msgstr "Beräknar mått på grad, centralitet, mellanhet, närhet och egenvektorcentralitet i nätverket."
 
 msgid "Name of degree centrality column"

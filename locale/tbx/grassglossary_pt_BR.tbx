@@ -206,34 +206,58 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>threads</term></tig></langSet>
-                <langSet xml:lang="pt_BR"><tig><term></term></tig></langSet>
+                <langSet xml:lang="pt_BR"><tig><term/></tig></langSet>
                 <descrip>thread of execution, component of a process</descrip>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>extent</term></tig></langSet>
-                <langSet xml:lang="pt_BR"><tig><term></term></tig></langSet>
+                <langSet xml:lang="pt_BR"><tig><term/></tig></langSet>
                 <note from="translator">Emprise ou étendue</note>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>vector map</term></tig></langSet>
-                <langSet xml:lang="pt_BR"><tig><term></term></tig></langSet>
+                <langSet xml:lang="pt_BR"><tig><term/></tig></langSet>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>vector</term></tig></langSet>
-                <langSet xml:lang="pt_BR"><tig><term></term></tig></langSet>
+                <langSet xml:lang="pt_BR"><tig><term/></tig></langSet>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>centroids</term></tig></langSet>
-                <langSet xml:lang="pt_BR"><tig><term></term></tig></langSet>
+                <langSet xml:lang="pt_BR"><tig><term/></tig></langSet>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>area</term></tig></langSet>
-                <langSet xml:lang="pt_BR"><tig><term></term></tig></langSet>
+                <langSet xml:lang="pt_BR"><tig><term/></tig></langSet>
             </termEntry>
             <termEntry id="1">
                 <langSet xml:lang="en"><tig><term>area</term></tig></langSet>
-                <langSet xml:lang="pt_BR"><tig><term></term></tig></langSet>
+                <langSet xml:lang="pt_BR"><tig><term/></tig></langSet>
                 <descrip>The geometry type</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>space-time</term></tig></langSet>
+                <langSet xml:lang="pt_BR"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>dataset</term></tig></langSet>
+                <langSet xml:lang="pt_BR"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>layers</term></tig></langSet>
+                <langSet xml:lang="pt_BR"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>space-time</term></tig></langSet>
+                <langSet xml:lang="pt_BR"><tig><term></term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>dataset</term></tig></langSet>
+                <langSet xml:lang="pt_BR"><tig><term></term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>layers</term></tig></langSet>
+                <langSet xml:lang="pt_BR"><tig><term></term></tig></langSet>
             </termEntry>
         </body>
     </text>
