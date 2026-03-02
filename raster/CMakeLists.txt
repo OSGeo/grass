@@ -241,8 +241,8 @@ build_program_in_subdir(
   grass_bitmap
   ${LIBM})
 
-build_program_in_subdir(r.geomorphon DEPENDS grass_gis grass_raster grass_gmath
-                        ${LIBM})
+build_program_in_subdir(r.geomorphon DEPENDS grass_gis grass_raster grass_parson
+                        grass_gmath ${LIBM})
 
 build_program_in_subdir(r.grow.distance DEPENDS grass_gis grass_raster ${LIBM})
 
