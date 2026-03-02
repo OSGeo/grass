@@ -77,7 +77,7 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>label</term></tig></langSet>
-                <langSet xml:lang="fr"><tig><term/></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>étiquette</term></tig></langSet>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>Coordinates</term></tig></langSet>
@@ -137,7 +137,7 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>line</term></tig></langSet>
-                <langSet xml:lang="fr"><tig><term/></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>ligne</term></tig></langSet>
                 <descrip>Feature type</descrip>
             </termEntry>
             <termEntry>
@@ -179,7 +179,7 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>columns</term></tig></langSet>
-                <langSet xml:lang="fr"><tig><term/></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>colonnes</term></tig></langSet>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>module</term></tig></langSet>
@@ -187,12 +187,12 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>tool</term></tig></langSet>
-                <langSet xml:lang="fr"><tig><term/></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>outil</term></tig></langSet>
                 <descrip>What each of our individual algorithms/programs are called. Were previously known as modules.</descrip>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>column</term></tig></langSet>
-                <langSet xml:lang="fr"><tig><term/></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>colonne</term></tig></langSet>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>map display</term></tig></langSet>
@@ -206,7 +206,7 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>threads</term></tig></langSet>
-                <langSet xml:lang="fr"><tig><term></term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term/></tig></langSet>
                 <descrip>thread of execution, component of a process</descrip>
             </termEntry>
             <termEntry>
@@ -235,6 +235,30 @@
                 <langSet xml:lang="en"><tig><term>area</term></tig></langSet>
                 <langSet xml:lang="fr"><tig><term>surface</term></tig></langSet>
                 <descrip>The geometry type</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>space-time</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>spatiotemporel</term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>dataset</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>jeu de données</term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>layers</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>couches</term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>space-time</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>spatiotemporel</term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>dataset</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>jeu de données</term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>layers</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>couches</term></tig></langSet>
             </termEntry>
         </body>
     </text>

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-14 18:00+0000\n"
+"POT-Creation-Date: 2026-02-28 15:43+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grassmods/es/>\n"
@@ -3988,7 +3988,9 @@ msgstr "proyección"
 msgid "create project"
 msgstr "crear localización"
 
-msgid "Prints or modifies GRASS projection information files (in various co-ordinate system descriptions)."
+#, fuzzy
+#| msgid "Prints or modifies GRASS projection information files (in various co-ordinate system descriptions)."
+msgid "Prints or modifies GRASS projection information files (in various coordinate system descriptions)."
 msgstr "Muestra o modifica archivos de información de proyección de GRASS (en varias descripciones de sistema de coordenadas)."
 
 #, fuzzy
@@ -4057,7 +4059,9 @@ msgstr ""
 msgid "Datum"
 msgstr "Datum"
 
-msgid "Datum (overrides any datum specified in input co-ordinate system)"
+#, fuzzy
+#| msgid "Datum (overrides any datum specified in input co-ordinate system)"
+msgid "Datum (overrides any datum specified in input coordinate system)"
 msgstr "Datum (anula cualquier datum especificado en sistema de coordenadas de entrada)"
 
 msgid "Accepts standard GRASS datum codes, or \"list\" to list and exit"
@@ -4069,7 +4073,9 @@ msgstr "Número de índice de los parámetros de transformación del Datum"
 msgid "\"0\" for unspecified or \"-1\" to list and exit"
 msgstr " \"0\" para sin especificar o \"-1\" para listar y salir"
 
-msgid "Force override of datum transformation information in input co-ordinate system"
+#, fuzzy
+#| msgid "Force override of datum transformation information in input co-ordinate system"
+msgid "Force override of datum transformation information in input coordinate system"
 msgstr "Forzar a ignorar la información de transformación del datum en el sistema de coordenadas de entrada"
 
 msgid "Modify"
@@ -30017,7 +30023,9 @@ msgstr "Tipo de elemento"
 msgid "centrality measures"
 msgstr "medidas de centralidad"
 
-msgid "Computes degree, centrality, betweeness, closeness and eigenvector centrality measures in the network."
+#, fuzzy
+#| msgid "Computes degree, centrality, betweeness, closeness and eigenvector centrality measures in the network."
+msgid "Computes degree, centrality, betweenness, closeness and eigenvector centrality measures in the network."
 msgstr "Calcula grados, centralidad, intermediación -betweeness-, proximidad y las medidas de la centralidad del eigenvector en la red."
 
 msgid "Name of degree centrality column"
