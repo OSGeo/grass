@@ -1,19 +1,12 @@
 """Test Utils funcitons"""
 
-import pytest
-
 import grass.script as gs
 
 from grass.jupyter.utils import get_region, get_location_proj_string
 
-IPython = pytest.importorskip("IPython", reason="IPython package not available")
-ipywidgets = pytest.importorskip(
-    "ipywidgets", reason="ipywidgets package not available"
-)
-
 
 def test_get_region(tmp_path):
-    """Test that get_region returns currnt computational region as dictionary."""
+    """Test that get_region returns current computational region as dictionary."""
     project = tmp_path / "test_project"
     gs.create_project(project)
     with gs.setup.init(project) as session:
@@ -26,7 +19,7 @@ def test_get_region(tmp_path):
 
 
 def test_get_location_proj_string(tmp_path):
-    """Test that get_location_proj_string returns projection of environment in PROJ.4 format"""
+    """Test that get_location_proj_string returns the projection of the environment in PROJ.4 format."""
     project = tmp_path / "test_project_proj"
     gs.create_project(project)
     with gs.setup.init(project):
