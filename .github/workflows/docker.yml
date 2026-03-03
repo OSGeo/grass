@@ -1,4 +1,3 @@
-
 ---
 name: Docker
 
@@ -79,6 +78,7 @@ jobs:
               GUI=with
 
     permissions:
+      artifact-metadata: write # For actions/attest-build-provenance
       attestations: write
       contents: read
       id-token: write
@@ -174,14 +174,14 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN  }}
       - name: Build and push
         id: docker_build
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
         with:
           push: ${{ github.event_name != 'pull_request' }}
           context: .
-          file: docker/${{ matrix.os }}/Dockerfile
           build-args: ${{ matrix.build_args }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          file: ${{ matrix.dockerfile }}
           annotations: ${{ steps.meta.outputs.annotations }}
           provenance: mode=max
           sbom: true
