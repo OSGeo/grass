@@ -19,7 +19,7 @@ ARG PDAL_VERSION=2.10.0
 # renovate: datasource=github-tags depName=OSGeo/gdal-grass
 ARG GDAL_GRASS_VERSION=2.0.0
 # renovate: datasource=pypi depName=wxPython
-ARG WXPYTHON_VERSION=4.2.4
+ARG WXPYTHON_VERSION=4.2.5
 
 # Have build parameters as build arguments?
 # ARG LDFLAGS="-s -Wl,--no-undefined -lblas"
