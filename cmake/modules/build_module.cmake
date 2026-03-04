@@ -32,7 +32,7 @@ function(build_module)
   endforeach()
 
   if(NOT G_SRC_REGEX)
-    set(G_SRC_REGEX "*.c")
+    set(G_SRC_REGEX "*.[ch]")
   endif()
 
   if(NOT G_SRC_DIR)
@@ -105,12 +105,28 @@ function(build_module)
 
   if(G_EXE)
     add_executable(${G_NAME} ${${G_NAME}_SRCS})
-    if("${G_NAME}" MATCHES "^v.*")
-      set_target_properties(${G_NAME} PROPERTIES FOLDER vector)
-    elseif("${G_NAME}" MATCHES "^r.*")
-      set_target_properties(${G_NAME} PROPERTIES FOLDER raster)
+    if("${G_NAME}" MATCHES "^v[\.]")
+      set_target_properties(${G_NAME} PROPERTIES FOLDER Tools/Vector)
+    elseif("${G_NAME}" MATCHES "^r[\.]")
+      set_target_properties(${G_NAME} PROPERTIES FOLDER Tools/Raster)
+    elseif("${G_NAME}" MATCHES "^d[\.]")
+      set_target_properties(${G_NAME} PROPERTIES FOLDER Tools/Display)
+    elseif("${G_NAME}" MATCHES "^db[\.]")
+      set_target_properties(${G_NAME} PROPERTIES FOLDER Tools/Database)
+    elseif("${G_NAME}" MATCHES "^g[\.]")
+      set_target_properties(${G_NAME} PROPERTIES FOLDER Tools/General)
+    elseif("${G_NAME}" MATCHES "^i[\.]")
+      set_target_properties(${G_NAME} PROPERTIES FOLDER Tools/Imagery)
+    elseif("${G_NAME}" MATCHES "^m[\.]")
+      set_target_properties(${G_NAME} PROPERTIES FOLDER Tools/Miscellaneous)
+    elseif("${G_NAME}" MATCHES "^ps[\.]")
+      set_target_properties(${G_NAME} PROPERTIES FOLDER Tools/PostScript)
+    elseif("${G_NAME}" MATCHES "^r3[\.]")
+      set_target_properties(${G_NAME} PROPERTIES FOLDER "Tools/Raster 3D")
+    elseif("${G_NAME}" MATCHES "^t[\.]")
+       set_target_properties(${G_NAME} PROPERTIES FOLDER Tools/Temporal)
     else()
-      set_target_properties(${G_NAME} PROPERTIES FOLDER bin)
+      set_target_properties(${G_NAME} PROPERTIES FOLDER Binaries)
     endif()
     set(default_html_file_name ${G_NAME})
     set(PGM_NAME ${G_NAME})
@@ -127,7 +143,7 @@ function(build_module)
     add_library(${G_NAME} ${${G_NAME}_SRCS})
     set_target_properties(
       ${G_NAME}
-      PROPERTIES FOLDER lib
+      PROPERTIES FOLDER "GRASS Libraries"
                  VERSION ${GRASS_VERSION_NUMBER}
                  SOVERSION ${GRASS_VERSION_MAJOR}
                  EXPORT_NAME ${_libname})
@@ -155,7 +171,7 @@ function(build_module)
   get_property(MODULE_LIST GLOBAL PROPERTY MODULE_LIST)
   set_property(GLOBAL PROPERTY MODULE_LIST "${MODULE_LIST};${G_NAME}")
 
-  add_dependencies(${G_NAME} copy_header)
+  add_dependencies(${G_NAME} INCLUDE_HEADERS)
 
   foreach(G_OPTIONAL_DEPEND ${G_OPTIONAL_DEPENDS})
     if(TARGET ${G_OPTIONAL_DEPEND})
@@ -274,4 +290,11 @@ function(build_module)
     install(TARGETS ${G_NAME} DESTINATION ${install_dest})
   endif()
 
+  set(_headers ${G_HEADERS})
+  list(TRANSFORM _headers PREPEND "${G_SRC_DIR}/")
+  file(GLOB _docs_files
+       LIST_DIRECTORIES FALSE
+       ${G_SRC_DIR}/*.html ${G_SRC_DIR}/*.md
+       ${G_SRC_DIR}/*.png ${G_SRC_DIR}/*.jpg)
+  target_sources(${G_NAME} PRIVATE ${_headers} ${_docs_files})
 endfunction()

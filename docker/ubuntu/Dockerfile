@@ -4,20 +4,22 @@
 #       Changes to this file must be copied over to the other file.
 ARG GUI=without
 
-FROM ubuntu:24.04@sha256:cd1dba651b3080c3686ecf4e3c4220f026b521fb76978881737d24f200828b2b AS common_start
+FROM ubuntu:24.04@sha256:d1e2e92c075e5ca139d51a140fff46f84315c0fdce203eab2807c7e495eff4f9 AS common_start
 
 ARG BASE_NAME="ubuntu:24.04"
 ARG PYTHON_VERSION=3.12
 # renovate: datasource=github-tags depName=libgeos/geos
 ARG GEOS_VERSION=3.14.1
 # renovate: datasource=github-tags depName=OSGeo/PROJ
-ARG PROJ_VERSION=9.7.1
+ARG PROJ_VERSION=9.8.0
 # renovate: datasource=github-tags depName=OSGeo/gdal
-ARG GDAL_VERSION=3.12.1
+ARG GDAL_VERSION=3.12.2
 # renovate: datasource=github-tags depName=PDAL/PDAL
-ARG PDAL_VERSION=2.9.2
+ARG PDAL_VERSION=2.10.0
 # renovate: datasource=github-tags depName=OSGeo/gdal-grass
 ARG GDAL_GRASS_VERSION=2.0.0
+# renovate: datasource=pypi depName=wxPython
+ARG WXPYTHON_VERSION=4.2.5
 
 # Have build parameters as build arguments?
 # ARG LDFLAGS="-s -Wl,--no-undefined -lblas"
@@ -339,7 +341,7 @@ RUN echo "Installing GRASS GUI packages: $GRASS_GUI_PACKAGES" \
     $GRASS_GUI_PACKAGES \
     && python3 -m pip install  -U --break-system-packages --no-cache-dir --upgrade \
     -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-24.04 \
-    wxpython \
+    "wxpython==${WXPYTHON_VERSION}" \
     # Clean up
     && pip cache purge \
     && apt-get autoremove -y \
@@ -363,19 +365,19 @@ RUN make -j $NUMTHREADS distclean || echo "nothing to clean" \
     && ./configure $GRASS_CONFIG \
     && make -j $NUMTHREADS \
     && make install && ldconfig \
-    && rm -rf /usr/local/grass85/demolocation \
-    && cp /usr/local/grass85/gui/wxpython/xml/module_items.xml module_items.xml
+    && rm -rf /usr/local/grass86/demolocation \
+    && cp /usr/local/grass86/gui/wxpython/xml/module_items.xml module_items.xml
 
 FROM build_grass AS build_grass_with_gui_built
 RUN echo "GUI selected, skipping GUI related cleanup"
 
 FROM build_grass AS build_grass_without_gui_built
 RUN echo "No GUI selected, removing GUI related files" \
-    && rm -rf /usr/local/grass85/fonts \
-    && rm -rf /usr/local/grass85/gui \
-    && rm -rf /usr/local/grass85/docs/html \
-    && rm -rf /usr/local/grass85/docs/mkdocs \
-    && rm -rf /usr/local/grass85/share
+    && rm -rf /usr/local/grass86/fonts \
+    && rm -rf /usr/local/grass86/gui \
+    && rm -rf /usr/local/grass86/docs/html \
+    && rm -rf /usr/local/grass86/docs/mkdocs \
+    && rm -rf /usr/local/grass86/share
 
 # hadolint ignore=DL3006
 FROM build_grass_${GUI}_gui_built AS build_grass_plugin
@@ -480,11 +482,11 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
 
 # Copy GRASS, GDAL-GRASS-plugin and compiled dependencies from build image
 COPY --link --from=build_grass_plugin /usr/local /usr/local
-COPY --link --from=build_grass_plugin /src/grass_build/module_items.xml /usr/local/grass85/gui/wxpython/xml/module_items.xml
+COPY --link --from=build_grass_plugin /src/grass_build/module_items.xml /usr/local/grass86/gui/wxpython/xml/module_items.xml
 # COPY --link --from=datum_grids /tmp/cdn.proj.org/*.tif /usr/share/proj/
 
 # Create generic GRASS lib name regardless of version number
-RUN ln -sf /usr/local/grass85 /usr/local/grass \
+RUN ln -sf /usr/local/grass86 /usr/local/grass \
     && ldconfig
 
 # show GRASS, PROJ, GDAL etc versions

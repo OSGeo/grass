@@ -123,11 +123,17 @@ int main(int argc, char *argv[])
 
     parm.dxin = G_define_standard_option(G_OPT_R_INPUT);
     parm.dxin->key = "dx";
-    parm.dxin->description = _("Name of x-derivatives raster map [m/m]");
+    parm.dxin->required = NO;
+    parm.dxin->label = _("Name of x-derivatives raster map [m/m]");
+    parm.dxin->description = _("Computed from elevation map if not given");
+    parm.dxin->guisection = _("Input");
 
     parm.dyin = G_define_standard_option(G_OPT_R_INPUT);
     parm.dyin->key = "dy";
-    parm.dyin->description = _("Name of y-derivatives raster map [m/m]");
+    parm.dyin->required = NO;
+    parm.dyin->label = _("Name of y-derivatives raster map [m/m]");
+    parm.dyin->description = _("Computed from elevation map if not given");
+    parm.dyin->guisection = _("Input");
 
     parm.rain = G_define_standard_option(G_OPT_R_INPUT);
     parm.rain->key = "rain";
@@ -333,6 +339,8 @@ int main(int argc, char *argv[])
     parm.threads->description =
         _("Number of threads which will be used for parallel computation.");
     parm.threads->guisection = _("Parameters");
+
+    G_option_collective(parm.dxin, parm.dyin, NULL);
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -550,8 +558,7 @@ int main(int argc, char *argv[])
     if ((outputs.depth == NULL) && (outputs.disch == NULL) &&
         (outputs.err == NULL))
         G_warning(_("You are not outputting any raster maps"));
-    ret_val =
-        input_data(geometry.my, geometry.mx, &sim, &inputs, &outputs, &grids);
+    ret_val = input_data(&geometry, &sim, &inputs, &outputs, &grids);
     if (ret_val != 1)
         G_fatal_error(_("Input failed"));
 

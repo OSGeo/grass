@@ -59,50 +59,50 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
 
     if (parm.operator->answer[0] == 'e')
-        operator= OP_EQUALS;
+        operator = OP_EQUALS;
 
     else if (parm.operator->answer[0] == 'd') {
         /* operator = OP_DISJOINT; */
-        operator= OP_INTERSECTS;
+        operator = OP_INTERSECTS;
 
         flag.reverse->answer = YES;
     }
     else if (parm.operator->answer[0] == 'i')
-        operator= OP_INTERSECTS;
+        operator = OP_INTERSECTS;
 
     else if (parm.operator->answer[0] == 't')
-        operator= OP_TOUCHES;
+        operator = OP_TOUCHES;
 
     else if (parm.operator->answer[0] == 'c' && parm.operator->answer[1] == 'r')
-        operator= OP_CROSSES;
+        operator = OP_CROSSES;
 
     else if (parm.operator->answer[0] == 'w')
-        operator= OP_WITHIN;
+        operator = OP_WITHIN;
 
     else if (parm.operator->answer[0] == 'c' && parm.operator->answer[1] == 'o')
-        operator= OP_CONTAINS;
+        operator = OP_CONTAINS;
 
     else if (parm.operator->answer[0] == 'o') {
         if (strcmp(parm.operator->answer, "overlaps") == 0)
-            operator= OP_OVERLAPS;
+            operator = OP_OVERLAPS;
 
         else
-            operator= OP_OVERLAP;
+            operator = OP_OVERLAP;
     }
     else if (parm.operator->answer[0] == 'r')
-        operator= OP_RELATE;
+        operator = OP_RELATE;
 
     else
         G_fatal_error(_("Unknown operator '%s'"), parm.operator->answer);
 
 #ifdef HAVE_GEOS
-    if (operator== OP_RELATE && !parm.relate->answer) {
+    if (operator == OP_RELATE && !parm.relate->answer) {
         G_fatal_error(_("Required parameter <%s> not set"), parm.relate->key);
     }
 #else
-    if (operator!= OP_OVERLAP) {
+    if (operator != OP_OVERLAP) {
         G_warning(_("Operator can only be 'overlap'"));
-        operator= OP_OVERLAP;
+        operator = OP_OVERLAP;
     }
 #endif
     for (iopt = 0; iopt < 2; iopt++) {

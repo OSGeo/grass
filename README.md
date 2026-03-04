@@ -11,6 +11,7 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5176030.svg)](https://doi.org/10.5281/zenodo.5176030)
 [![Discourse](https://img.shields.io/badge/discourse-forum-blue?logo=discourse)](https://discourse.osgeo.org/c/grass/62)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/OSGeo/grass/main?labpath=doc%2Fexamples%2Fnotebooks%2Fjupyter_example.ipynb)  
+[![Translation status](https://weblate.osgeo.org/widget/grass-gis/svg-badge.svg)](https://weblate.osgeo.org/engage/grass-gis/)  
 [![Powered by NumFOCUS](https://img.shields.io/badge/powered%20by-NumFOCUS-orange.svg?style=flat&colorA=E1523D&colorB=007D8A)](http://numfocus.org)
 [![Hosted by OSGeo](https://img.shields.io/badge/hosted%20by-OSGeo-4cb05b.svg?style=flat&labelColor=00393f)](https://www.osgeo.org/)
 
@@ -71,9 +72,13 @@ or explore [GRASS commercial support](https://grass.osgeo.org/support/commercial
 
 ## Contributing
 
-All contributions are welcome! Join GRASS developer community on [Discourse](https://discourse.osgeo.org/c/grass/developer/61)
-to discuss your plans or simply open
-a [pull request](https://github.com/OSGeo/grass/pulls).
+All contributions are welcome! You can contribute to GRASS in multiple ways:
+
+- **Code contributions**: Join GRASS developer community on [Discourse](https://discourse.osgeo.org/c/grass/developer/61)
+  to discuss your plans or simply open a [pull request](https://github.com/OSGeo/grass/pulls).
+- **Translations**: Help make GRASS accessible in your language through [Weblate](https://weblate.osgeo.org/projects/grass-gis/).
+  No coding skills required!
+
 See [CONTRIBUTING file](CONTRIBUTING.md) for more details.
 
 ## Compiling GRASS

@@ -11,7 +11,7 @@ method, to provide robustness necessary for spatially variable
 conditions and high resolutions (Mitas and Mitasova 1998). Key inputs of
 the model include the following raster maps: elevation (*elevation*
 \[m\]), flow gradient given by the first-order partial derivatives of
-elevation field ( *dx* and *dy*), overland flow water depth
+elevation field (*dx* and *dy* raster maps are optional), overland flow water depth
 (*water_depth* \[m\]), detachment capacity coefficient
 (*detachment_coeff* \[s/m\]), transport capacity coefficient
 (*transport_coeff* \[s\]), critical shear stress (*shear_stress* \[Pa\])
