@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <grass/gjson.h>
 #include "local_proto.h"
 
 #define JSON_MIN_INDENT 1
@@ -251,46 +252,96 @@ static const char *format_token_common(const struct token *t)
  */
 static unsigned write_json(FILE *f)
 {
-    unsigned i, indent = JSON_MIN_INDENT;
+    unsigned i;
+    G_JSON_Value *root_value = NULL;
+    G_JSON_Object *obj = NULL;
+    G_JSON_Object *obj_stack[MAX_STACK_ELEMS];
+    unsigned obj_depth = 0;
+    char *serialized = NULL;
+    unsigned ok = 0;
 
-    WRITE_VAL(f, "%s\n", "{");
+    root_value = G_json_value_init_object();
+    if (!root_value)
+        goto cleanup;
+    obj = G_json_object(root_value);
+    if (!obj)
+        goto cleanup;
+
     for (i = 0; i < size; i++) {
-        const char *val;
-
-        /* Add a comma unless there is no data tokens immediately after. */
-        const char *comma =
-            (i + 1 == size) || (i + 1 < size && token[i + 1].type == T_ESO)
-                ? ""
-                : ",";
-
         switch (token[i].type) {
-        case T_SSO:
-            WRITE_INDENT(f, indent);
-            indent++;
-            WRITE_VAL(f, "\"%s\": {\n", token[i].key);
+        case T_SSO: {
+            G_JSON_Value *sub_value;
+            G_JSON_Object *sub_obj;
+
+            if (obj_depth == MAX_STACK_ELEMS)
+                goto cleanup;
+            sub_value = G_json_value_init_object();
+            if (!sub_value)
+                goto cleanup;
+            if (G_json_object_set_value(obj, token[i].key, sub_value) !=
+                G_JSONSuccess) {
+                G_json_value_free(sub_value);
+                goto cleanup;
+            }
+            sub_obj = G_json_object(sub_value);
+            if (!sub_obj)
+                goto cleanup;
+            obj_stack[obj_depth++] = obj;
+            obj = sub_obj;
             continue;
+        }
         case T_ESO:
-            if (indent == JSON_MIN_INDENT)
-                return 0;
-            indent--;
-            WRITE_INDENT(f, indent);
-            WRITE_VAL(f, "}%s\n", comma);
+            if (obj_depth == 0)
+                goto cleanup;
+            obj = obj_stack[--obj_depth];
+            continue;
+        case T_BLN:
+            if (G_json_object_set_boolean(obj, token[i].key,
+                                          token[i].int_val ? 1 : 0) !=
+                G_JSONSuccess)
+                goto cleanup;
+            continue;
+        case T_INT:
+            if (G_json_object_set_number(obj, token[i].key, token[i].int_val) !=
+                G_JSONSuccess)
+                goto cleanup;
+            continue;
+        case T_STR:
+            if (G_json_object_set_string(obj, token[i].key, token[i].str_val) !=
+                G_JSONSuccess)
+                goto cleanup;
+            continue;
+        case T_DBL:
+        case T_MTR:
+            if (isnan(token[i].dbl_val)) {
+                if (G_json_object_set_null(obj, token[i].key) != G_JSONSuccess)
+                    goto cleanup;
+            }
+            else if (G_json_object_set_number(obj, token[i].key,
+                                              token[i].dbl_val) !=
+                     G_JSONSuccess)
+                goto cleanup;
             continue;
         default:
-            val = quote_val(token[i].type, format_token_common(token + i));
-            break;
+            goto cleanup;
         }
-        if (!val)
-            return 0;
-        WRITE_INDENT(f, indent);
-        WRITE_VAL(f, "\"%s\": ", token[i].key);
-        WRITE_VAL(f, "%s", val);
-        WRITE_VAL(f, "%s\n", comma);
     }
-    if (indent != JSON_MIN_INDENT || overflow)
-        return 0;
-    WRITE_VAL(f, "%s\n", "}");
-    return 1;
+    if (obj_depth != 0 || overflow)
+        goto cleanup;
+
+    serialized = G_json_serialize_to_string_pretty(root_value);
+    if (!serialized)
+        goto cleanup;
+    if (fprintf(f, "%s\n", serialized) < 0)
+        goto cleanup;
+    ok = 1;
+
+cleanup:
+    if (serialized)
+        G_json_free_serialized_string(serialized);
+    if (root_value)
+        G_json_value_free(root_value);
+    return ok;
 }
 
 static unsigned write_yaml(FILE *f)
