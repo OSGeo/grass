@@ -70,6 +70,7 @@ struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
     int i, j, k;
 
     new_rtree = (struct RTree *)malloc(sizeof(struct RTree));
+    assert(new_rtree);[[]
 
     new_rtree->fd = fd;
     new_rtree->rootpos = rootpos;
@@ -96,6 +97,8 @@ struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
                           MAXCARD * new_rtree->branchsize;
 
     /* create empty root node */
+    /* pointer must still be valid; defensive check for static analysis */
+    assert(new_rtree);
     n = RTreeAllocNode(new_rtree, 0);
     new_rtree->rootlevel = n->level = 0; /* leaf */
 
@@ -110,14 +113,18 @@ struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
 
         /* initialize node buffer */
         new_rtree->nb = calloc(MAXLEVEL, sizeof(struct NodeBuffer *));
+        assert(new_rtree->nb);
         new_rtree->nb[0] =
             calloc(MAXLEVEL * NODE_BUFFER_SIZE, sizeof(struct NodeBuffer));
+        assert(new_rtree->nb[0]);
         for (i = 1; i < MAXLEVEL; i++) {
             new_rtree->nb[i] = new_rtree->nb[i - 1] + NODE_BUFFER_SIZE;
         }
 
         new_rtree->used = malloc(MAXLEVEL * sizeof(int *));
+        assert(new_rtree->used);
         new_rtree->used[0] = malloc(MAXLEVEL * NODE_BUFFER_SIZE * sizeof(int));
+        assert(new_rtree->used[0]);
         for (i = 0; i < MAXLEVEL; i++) {
             if (i)
                 new_rtree->used[i] = new_rtree->used[i - 1] + NODE_BUFFER_SIZE;
@@ -180,6 +187,7 @@ struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
 
     /* initialize temp variables */
     new_rtree->ns = malloc(MAXLEVEL * sizeof(struct nstack));
+    assert(new_rtree->ns);
 
     new_rtree->p.cover[0].boundary = RTreeAllocBoundary(new_rtree);
     new_rtree->p.cover[1].boundary = RTreeAllocBoundary(new_rtree);
@@ -189,6 +197,7 @@ struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
     new_rtree->c.rect.boundary = RTreeAllocBoundary(new_rtree);
 
     new_rtree->BranchBuf = malloc((MAXCARD + 1) * sizeof(struct RTree_Branch));
+    assert(new_rtree->BranchBuf);
     for (i = 0; i <= MAXCARD; i++) {
         new_rtree->BranchBuf[i].rect.boundary = RTreeAllocBoundary(new_rtree);
     }

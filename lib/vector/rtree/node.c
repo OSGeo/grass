@@ -76,6 +76,9 @@ struct RTree_Node *RTreeAllocNode(struct RTree *t, int level)
     int i;
     struct RTree_Node *n;
 
+    /* ensure tree pointer is valid as it is used for initialization */
+    assert(t);
+
     n = (struct RTree_Node *)malloc(sizeof(struct RTree_Node));
     assert(n);
 
