@@ -122,15 +122,21 @@ static void resamp_unweighted(void)
         row_map[row] = (int)floor(Rast_northing_to_row(y, &src_w) + 0.5);
     }
 
-    /* Calculate chunk size based on memory_mb */
+    /* Calculate chunk size: subtract per-thread input buffer cost first
+     * (following r.resamp.filter memory budgeting logic) */
     {
-        size_t row_size = dst_w.cols * sizeof(DCELL);
+        size_t in_buf_size =
+            (size_t)nprocs * src_w.cols * sizeof(DCELL) * row_scale;
         size_t total_mem_bytes = (size_t)memory_mb * 1024 * 1024;
+        size_t out_buf_size;
 
-        if (row_size > 0)
-            chunk_size = total_mem_bytes / row_size;
+        /* safety check: if input buffers exceed budget, set output to 0 */
+        if (total_mem_bytes <= in_buf_size)
+            out_buf_size = 0;
         else
-            chunk_size = dst_w.rows;
+            out_buf_size = total_mem_bytes - in_buf_size;
+
+        chunk_size = out_buf_size / (dst_w.cols * sizeof(DCELL));
     }
     if (chunk_size < nprocs)
         chunk_size = nprocs;
@@ -270,15 +276,21 @@ static void resamp_weighted(void)
         row_map[row] = Rast_northing_to_row(y, &src_w);
     }
 
-    /* Calculate chunk size */
+    /* Calculate chunk size: subtract per-thread input buffer cost first
+     * (following r.resamp.filter memory budgeting logic) */
     {
-        size_t row_size = dst_w.cols * sizeof(DCELL);
+        size_t in_buf_size =
+            (size_t)nprocs * src_w.cols * sizeof(DCELL) * row_scale;
         size_t total_mem_bytes = (size_t)memory_mb * 1024 * 1024;
+        size_t out_buf_size;
 
-        if (row_size > 0)
-            chunk_size = total_mem_bytes / row_size;
+        /* safety check: if input buffers exceed budget, set output to 0 */
+        if (total_mem_bytes <= in_buf_size)
+            out_buf_size = 0;
         else
-            chunk_size = dst_w.rows;
+            out_buf_size = total_mem_bytes - in_buf_size;
+
+        chunk_size = out_buf_size / (dst_w.cols * sizeof(DCELL));
     }
     if (chunk_size < nprocs)
         chunk_size = nprocs;
