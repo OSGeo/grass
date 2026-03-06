@@ -266,7 +266,7 @@ def get_initial_command_info(env_run):
     mask3d_name = f"RASTER3D_MASK@{env['MAPSET']}"
 
     # Computational region settings
-    region_settings = gs.region(env=env_run)
+    region_settings = gs.region(region3d=True, env=env_run)
 
     # Finalize the command info dictionary
     return {
