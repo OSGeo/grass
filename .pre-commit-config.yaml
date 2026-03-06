@@ -75,7 +75,7 @@ repos:
                 .*/testsuite/.*
           )
   - repo: https://github.com/pre-commit/mirrors-clang-format
-    rev: v20.1.8
+    rev: v21.1.8
     hooks:
       - id: clang-format
         types_or: [c, c++, javascript, json, objective-c]
@@ -104,3 +104,17 @@ repos:
     rev: v3.6.1
     hooks:
       - id: editorconfig-checker
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.4.1
+    hooks:
+      - id: codespell
+        # TODO: Remove these exclusions, they are just not fixed completely yet, nor ignored
+        exclude_types:
+          - c
+          - c++
+          - csv
+          - html
+          - markdown
+          - python
+          - tex
+          - xml

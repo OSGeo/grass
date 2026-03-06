@@ -149,7 +149,7 @@ build_library_in_subdir(cluster DEPENDS grass_imagery grass_gis grass_raster)
 
 build_library_in_subdir(rowio DEPENDS grass_gis)
 
-build_library_in_subdir(segment DEPENDS grass_gis) # addeed DEPENDS grass_gis
+build_library_in_subdir(segment DEPENDS grass_gis) # added DEPENDS grass_gis
                                                    # for uninstd.h
 
 add_subdirectory(rst)
