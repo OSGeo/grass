@@ -80,6 +80,10 @@ void RTreeFreeRect(struct RTree_Rect *r)
  */
 RectReal *RTreeAllocBoundary(struct RTree *t)
 {
+    assert(t);
+    /* rectsize should be set correctly by tree initialization */
+    assert(t->rectsize > 0);
+
     RectReal *boundary = (RectReal *)malloc(t->rectsize);
 
     assert(boundary);
