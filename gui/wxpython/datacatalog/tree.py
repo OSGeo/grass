@@ -924,7 +924,7 @@ class DataCatalogTree(TreeView):
         ):
             self._popupMenuGrassDb()
         elif len(self.selected_grassdb) > 1 and not self.selected_location[0]:
-            self._popupMenuEmpty()
+            self._popupMenuMultipleGrassDbs()
         elif len(self.selected_location) > 1 and not self.selected_mapset[0]:
             self._popupMenuMultipleLocations()
         elif len(self.selected_mapset) > 1:
@@ -2084,6 +2084,15 @@ class DataCatalogTree(TreeView):
             wx.TheClipboard.SetData(do)
             wx.TheClipboard.Close()
 
+    def OnCopyGrassDbPath(self, event):
+        """Copy path to GRASS database"""
+        if wx.TheClipboard.Open():
+            do = wx.TextDataObject()
+            paths = [db.data["name"] for db in self.selected_grassdb]
+            do.SetText(",".join(paths))
+            wx.TheClipboard.SetData(do)
+            wx.TheClipboard.Close()
+
     def OnReloadLocation(self, event):
         """Reload all mapsets in selected location"""
         node = self.selected_location[0]
@@ -2303,6 +2312,10 @@ class DataCatalogTree(TreeView):
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, lambda e: self.EditLabel(self.GetSelections()[0]), item)
 
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Copy Full Database Path"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCopyGrassDbPath, item)
+
         # Remove Label (only if its exists)
         if has_label:
             item = wx.MenuItem(menu, wx.ID_ANY, _("Remove Label"))
@@ -2363,6 +2376,15 @@ class DataCatalogTree(TreeView):
         if self._restricted:
             item.Enable(False)
 
+        self.PopupMenu(menu)
+        menu.Destroy()
+
+    def _popupMenuMultipleGrassDbs(self):
+        """Create popup menu for multiple selected grass databases"""
+        menu = Menu()
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Copy Full Database Path(s)"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCopyGrassDbPath, item)
         self.PopupMenu(menu)
         menu.Destroy()
 
