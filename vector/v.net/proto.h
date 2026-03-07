@@ -13,14 +13,18 @@ struct opt {
     struct Option *file;
     struct Option *type;
     struct Flag *cats_flag, *snap_flag;
+    struct Option *format;
 };
+
+enum OutputFormat { FORMAT_PLAIN, FORMAT_JSON };
 
 /* arcs.c */
 int create_arcs(FILE *, struct Map_info *, struct Map_info *, int, int);
 
 /* argc.c */
 void define_options(struct opt *);
-void parse_arguments(const struct opt *, int *, int *, double *, int *);
+void parse_arguments(const struct opt *, int *, int *, double *, int *,
+                     enum OutputFormat *);
 
 /* connect.c */
 int connect_arcs(struct Map_info *, struct Map_info *, struct Map_info *, int,
@@ -30,6 +34,6 @@ int connect_arcs(struct Map_info *, struct Map_info *, struct Map_info *, int,
 int nodes(struct Map_info *, struct Map_info *, int, int);
 
 /* report.c */
-int report(struct Map_info *, int, int, int);
+int report(struct Map_info *, int, int, int, enum OutputFormat);
 
 void turntable(struct opt *);

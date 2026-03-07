@@ -182,6 +182,65 @@ Following example generates a vector map with turntable:
 v.net operation=turntable in=railroads out=railroads_ttb
 ```
 
+### Report
+
+The *report* operation prints a report of network connections:
+{line_category start_point_category end_point_category}.
+
+```sh
+v.net input=streets_net operation=report
+```
+
+To produce the report in JSON format:
+
+```sh
+v.net input=streets_net operation=report format=json
+```
+
+Example JSON report output:
+
+```json
+[
+    {
+        "line_cat": 49745,
+        "start_node_cat": 41812,
+        "end_node_cat": 19875
+    },
+    {
+        "line_cat": 49746,
+        "start_node_cat": 15789,
+        "end_node_cat": 41813
+    }
+]
+```
+
+### Node report
+
+The *nreport* operation prints a report of nodes
+and their connected lines:
+{point_category line_category[,line_category...]}.
+
+To produce the node report in JSON format:
+
+```sh
+v.net input=streets_net operation=nreport format=json
+```
+
+Example JSON node report output:
+
+```json
+[
+    {
+        "node_cat": 166,
+        "lines": [49912]
+    },
+    {
+        "node_cat": 167,
+        "lines": [49912, 49913]
+    }
+]
+```
+
 ## SEE ALSO
 
 *[g.gui.vdigit](g.gui.vdigit.md), [v.edit](v.edit.md), [Vector Network
