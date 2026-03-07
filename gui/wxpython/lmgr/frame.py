@@ -778,6 +778,77 @@ class GMFrame(wx.Frame):
         win.CentreOnScreen()
         win.Show()
 
+    def _show_jupyter_missing_message(self):
+        wx.MessageBox(
+            _(
+                "To use notebooks in GRASS, you need to have the Jupyter Notebook "
+                "package installed. Please install it and restart GRASS."
+            ),
+            _("Jupyter Notebook not available"),
+            wx.OK | wx.ICON_INFORMATION,
+            parent=self,
+        )
+
+    def OnJupyterNotebook(self, event=None):
+        """Launch Jupyter Notebook interface."""
+        from jupyter_notebook.utils import (
+            is_jupyter_installed,
+            is_wx_html2_available,
+        )
+        from jupyter_notebook.dialogs import JupyterStartDialog
+
+        # global requirement (always needed)
+        if not is_jupyter_installed():
+            self._show_jupyter_missing_message()
+            return
+
+        dlg = JupyterStartDialog(parent=self)
+
+        if dlg.ShowModal() != wx.ID_OK:
+            dlg.Destroy()
+            return
+
+        values = dlg.GetValues()
+        action = dlg.action
+        dlg.Destroy()
+
+        if not values:
+            return
+
+        storage = values["storage"]
+        create_template = values["create_template"]
+
+        if action == "integrated":
+            # Embedded notebook mode: requires wx.html2 for WebView
+            if not is_wx_html2_available():
+                # Offer fallback to browser mode
+                response = wx.MessageBox(
+                    _(
+                        "Integrated mode requires wx.html2.WebView which is not available on this system.\n\n"
+                        "Would you like to open Jupyter Notebook in your external browser instead?"
+                    ),
+                    _("Integrated Mode Not Available"),
+                    wx.ICON_WARNING | wx.YES_NO,
+                )
+
+                if response == wx.YES:
+                    action = "browser"
+                else:
+                    return
+
+        from jupyter_notebook.frame import JupyterFrame
+
+        # Create and show the Jupyter frame
+        frame = JupyterFrame(
+            parent=self,
+            giface=self._giface,
+            action=action,
+            storage=storage,
+            create_template=create_template,
+        )
+        frame.CentreOnParent()
+        frame.Show()
+
     def OnPsMap(self, event=None, cmd=None):
         """Launch Cartographic Composer. See OnIClass documentation"""
         from psmap.frame import PsMapFrame
@@ -2296,6 +2367,18 @@ class GMFrame(wx.Frame):
             if hasattr(event, "Veto"):
                 event.Veto()
             return
+
+        # Stop all running Jupyter servers before destroying the GUI
+        from jupyter_notebook.environment import JupyterEnvironment
+
+        try:
+            JupyterEnvironment.stop_all()
+        except RuntimeError as e:
+            wx.MessageBox(
+                _("Failed to stop Jupyter servers:\n{}").format(str(e)),
+                caption=_("Error"),
+                style=wx.ICON_ERROR | wx.OK,
+            )
 
         self.DisplayCloseAll()
 
