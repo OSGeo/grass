@@ -10,3 +10,4 @@ def session(tmp_path):
 
     with gs.setup.init(project, env=os.environ.copy()) as session:
         yield session.env
+        
