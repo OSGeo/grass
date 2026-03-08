@@ -7,4 +7,3 @@ def test_rasterExists(session):
 
     assert rasterExists("test_map", env=session)
     assert not rasterExists("missing_map", env=session)
-    
