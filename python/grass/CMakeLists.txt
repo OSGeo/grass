@@ -18,11 +18,11 @@ set(PYDIRS
     pygrass/shell
     pygrass/tests
     pygrass/vector
+    pytest
     script
     semantic_label
     temporal
     temporal/ply
-    testing
     tools
     utils)
 
