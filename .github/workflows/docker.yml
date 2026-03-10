@@ -180,6 +180,7 @@ jobs:
           context: .
           build-args: ${{ matrix.build_args }}
           tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           file: ${{ matrix.dockerfile }}
           annotations: ${{ steps.meta.outputs.annotations }}
           provenance: mode=max
