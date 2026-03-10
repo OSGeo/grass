@@ -73,11 +73,6 @@ jobs:
       contents: write
       pull-requests: write
 
-    # Preventing overlapping runs
-    concurrency:
-      group: periodic-i18n
-      cancel-in-progress: false
-
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Create URL to the run output
