@@ -88,7 +88,7 @@ int G_adjust_window_ll(struct Cell_head *cellhd);
 #endif
 
 #if __has_attribute(malloc) && defined(__GNUC__) && (__GNUC__ >= 11)
-#define G_ATTR_MALLOC __attribute__((malloc), (malloc(G_free, 1)))
+#define G_ATTR_MALLOC __attribute__ ((malloc, malloc(G_free, 1)))
 #elif __has_attribute(malloc)
 #define G_ATTR_MALLOC __attribute__((malloc))
 #else
@@ -118,10 +118,10 @@ int G_adjust_window_ll(struct Cell_head *cellhd);
 #define G_REALLOC_ATTR G_ATTR_ALLOC_SIZE1(4)
 #define G_FREE_ATTR    G_ATTR_OWNSHIP_TAKE
 
+void G_free(void *) G_FREE_ATTR;
 void *G__malloc(const char *, int, size_t) G_MALLOC_ATTR;
 void *G__calloc(const char *, int, size_t, size_t) G_CALLOC_ATTR;
 void *G__realloc(const char *, int, void *, size_t) G_REALLOC_ATTR;
-void G_free(void *) G_FREE_ATTR;
 
 #ifndef G_incr_void_ptr
 void *G_incr_void_ptr(const void *, size_t);
