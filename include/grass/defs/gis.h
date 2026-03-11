@@ -88,7 +88,7 @@ int G_adjust_window_ll(struct Cell_head *cellhd);
 #endif
 
 #if __has_attribute(malloc) && defined(__GNUC__) && (__GNUC__ >= 11)
-#define G_ATTR_MALLOC __attribute__((malloc, (malloc(G_free, 1))))
+#define G_ATTR_MALLOC __attribute__((malloc), (malloc(G_free, 1)))
 #elif __has_attribute(malloc)
 #define G_ATTR_MALLOC __attribute__((malloc))
 #else
