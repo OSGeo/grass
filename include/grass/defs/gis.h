@@ -88,11 +88,17 @@ int G_adjust_window_ll(struct Cell_head *cellhd);
 #endif
 
 #if __has_attribute(malloc) && defined(__GNUC__) && (__GNUC__ >= 11)
-#define G_ATTR_MALLOC __attribute__ ((malloc, malloc(G_free, 1)))
+#define G_ATTR_MALLOC __attribute__((malloc, malloc(G_free, 1)))
 #elif __has_attribute(malloc)
 #define G_ATTR_MALLOC __attribute__((malloc))
 #else
 #define G_ATTR_MALLOC
+#endif
+
+#if __has_attribute(returns_nonnull)
+#define G_ATTR_RET_NONNULL __attribute__((returns_nonnull))
+#else
+#define G_ATTR_RET_NONNULL
 #endif
 
 #if __has_attribute(alloc_size)
@@ -113,9 +119,11 @@ int G_adjust_window_ll(struct Cell_head *cellhd);
 #define G_ATTR_OWNSHIP_TAKE
 #endif
 
-#define G_MALLOC_ATTR  G_ATTR_MALLOC G_ATTR_ALLOC_SIZE1(3) G_ATTR_OWNSHIP_RET
-#define G_CALLOC_ATTR  G_ATTR_MALLOC G_ATTR_ALLOC_SIZE2(3, 4) G_ATTR_OWNSHIP_RET
-#define G_REALLOC_ATTR G_ATTR_ALLOC_SIZE1(4)
+#define G_MALLOC_ATTR \
+    G_ATTR_MALLOC G_ATTR_ALLOC_SIZE1(3) G_ATTR_OWNSHIP_RET G_ATTR_RET_NONNULL
+#define G_CALLOC_ATTR \
+    G_ATTR_MALLOC G_ATTR_ALLOC_SIZE2(3, 4) G_ATTR_OWNSHIP_RET G_ATTR_RET_NONNULL
+#define G_REALLOC_ATTR G_ATTR_ALLOC_SIZE1(4) G_ATTR_RET_NONNULL
 #define G_FREE_ATTR    G_ATTR_OWNSHIP_TAKE
 
 void G_free(void *) G_FREE_ATTR;
