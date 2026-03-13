@@ -8,8 +8,8 @@ Review as a human PR reviewer would: Is the reasoning behind each line
 sound? Is this line actually needed? Where did this code come from? Will
 this be hard to maintain? What if this will need to be changed later?
 Make every line of code, comments, and commit messages clear and
-well-reasoned. Justify each line by improving the code itself. Remove
-or change any line that lacks a strong justification.
+well-reasoned. Evaluate each line. Remove or change any line that
+lacks a strong justification. Don't invent justifications.
 
 Do not present code you cannot explain. When generating substantial
 algorithms or logic, note this to the human so they can disclose it.
