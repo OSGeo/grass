@@ -21,198 +21,197 @@ msgstr ""
 
 #, c-format
 msgid "Unknown algorithm '%s'"
-msgstr ""
+msgstr "অজ্ঞাত অ্যালগরিদম '%s'"
 
 msgid "Classification algorithm failed"
-msgstr ""
+msgstr "শ্রেণিবিন্যাস অ্যালগরিদম ব্যর্থ হয়েছে"
 
 msgid "Equiprobable classbreaks currently limited to 10 classes"
-msgstr ""
+msgstr "সম্ভাব্য ক্লাস ব্রেক বর্তমানে ১০টি ক্লাসের মধ্যে সীমাবদ্ধ"
 
 #, c-format
 msgid "There are classbreaks outside the range min-max. Number of classes reduced to %i, but using probabilities for %i classes."
-msgstr ""
+msgstr "সর্বনিম্ন-সর্বোচ্চ সীমার বাইরে ক্লাস ব্রেক রয়েছে। ক্লাসের সংখ্যা %i তে কমানো হয়েছে, কিন্তু %i টি ক্লাসের জন্য সম্ভাবনা ব্যবহার করা হচ্ছে।"
 
 msgid "Cairo_Bitmap: Failed to create source"
-msgstr ""
+msgstr "Cairo_Bitmap: সোর্স তৈরি করতে ব্যর্থ"
 
 msgid "Unable to open display"
-msgstr ""
+msgstr "ডিসপ্লে খুলতে অক্ষম"
 
 msgid "Unable to obtain visual"
-msgstr ""
+msgstr "ভিজ্যুয়াল পেতে অক্ষম"
 
 #, c-format
 msgid "Unknown file extension: %s"
-msgstr ""
+msgstr "অজ্ঞাত ফাইল এক্সটেনশন: %s"
 
 #, c-format
 msgid "cairo: collecting to file '%s'"
-msgstr ""
+msgstr "cairo: '%s' ফাইলে সংগ্রহ করা হচ্ছে"
 
 #, c-format
 msgid "cairo: image size %dx%d"
-msgstr ""
+msgstr "cairo: ছবির আকার %dx%d"
 
 msgid "Unknown Cairo surface type"
-msgstr ""
+msgstr "অজ্ঞাত Cairo সারফেসের ধরন"
 
 #, c-format
 msgid "Failed to initialize Cairo surface (width: %d, height: %d): %s"
-msgstr ""
+msgstr "Cairo সারফেস ইনিশিয়ালাইজ করতে ব্যর্থ (প্রস্থ: %d, উচ্চতা: %d): %s"
 
-#, fuzzy, c-format
-#| msgid "Unable to rename %s"
+#, c-format
 msgid "Unable to open file: %s"
-msgstr "%sপুনঃনামকরন করতে অক্ষম"
+msgstr "ফাইল খুলতে অক্ষম: %s"
 
 msgid "Failed to create cairo surface"
-msgstr ""
+msgstr "cairo সারফেস তৈরি করতে ব্যর্থ"
 
 #, c-format
 msgid "Cairo: unable to open input file <%s>"
-msgstr ""
+msgstr "Cairo: ইনপুট ফাইল <%s> খুলতে অক্ষম"
 
 #, c-format
 msgid "Cairo: invalid input file <%s>"
-msgstr ""
+msgstr "Cairo: ইনপুট ফাইল <%s> অবৈধ"
 
 #, c-format
 msgid "Cairo: Invalid BMP header for <%s>"
-msgstr ""
+msgstr "Cairo: <%s> এর জন্য অবৈধ BMP হেডার"
 
 #, c-format
 msgid "Cairo: error reading BMP file <%s>: unexpected end of file"
-msgstr ""
+msgstr "Cairo: BMP ফাইল <%s> পড়তে ত্রুটি: ফাইলের অপ্রত্যাশিত সমাপ্তি"
 
 #, c-format
 msgid "Cairo: error reading BMP file <%s>: %s"
-msgstr ""
+msgstr "Cairo: BMP ফাইল <%s> পড়তে ত্রুটি: %s"
 
 #, c-format
 msgid "Cairo: unexpected EOF reading <%s>"
-msgstr ""
+msgstr "Cairo: <%s> পড়ার সময় অপ্রত্যাশিত EOF"
 
 #, c-format
 msgid "Cairo: input file has incorrect dimensions: expected: %dx%d got: %dx%d"
-msgstr ""
+msgstr "Cairo: ইনপুট ফাইলের ডায়মেনশন সঠিক নয়: প্রত্যাশিত: %dx%d পাওয়া গেছে: %dx%d"
 
 #, c-format
 msgid "Cairo: unable to open input mask file <%s>"
-msgstr ""
+msgstr "Cairo: ইনপুট মাস্ক ফাইল <%s> খুলতে অক্ষম"
 
 #, c-format
 msgid "Cairo: invalid input mask file <%s>"
-msgstr ""
+msgstr "Cairo: অবৈধ ইনপুট মাস্ক ফাইল <%s>"
 
 #, c-format
 msgid "Cairo: unexpected EOF reading mask <%s>"
-msgstr ""
+msgstr "Cairo: মাস্ক <%s> পড়ার সময় অপ্রত্যাশিত EOF"
 
 #, c-format
 msgid "Cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d"
-msgstr ""
+msgstr "Cairo: ইনপুট মাস্ক ফাইলের ডায়মেনশন সঠিক নয়: প্রত্যাশিত: %dx%d পাওয়া গেছে: %dx%d"
 
 #, c-format
 msgid "Unable to open input file <%s>"
-msgstr ""
+msgstr "ইনপুট ফাইল <%s> খুলতে অক্ষম"
 
 #, c-format
 msgid "Unable to read input file <%s>"
-msgstr ""
+msgstr "ইনপুট ফাইল <%s> পড়তে অক্ষম"
 
 #, c-format
 msgid "Unable to parse input file <%s>"
-msgstr ""
+msgstr "ইনপুট ফাইল <%s> পার্স করতে অক্ষম"
 
 #, c-format
 msgid "Unable to convert from <%s> to UTF-8"
-msgstr ""
+msgstr "<%s> থেকে UTF-8 এ রূপান্তর করতে অক্ষম"
 
 msgid "Some characters could not be converted to UTF-8"
-msgstr ""
+msgstr "কিছু ক্যারেক্টার UTF-8 এ রূপান্তর করা যায়নি"
 
 #, c-format
 msgid "Cairo: unable to open output file <%s>"
-msgstr ""
+msgstr "Cairo: আউটপুট ফাইল <%s> খুলতে অক্ষম"
 
 #, c-format
 msgid "Cairo: unable to open mask file <%s>"
-msgstr ""
+msgstr "Cairo: মাস্ক ফাইল <%s> খুলতে অক্ষম"
 
 #, c-format
 msgid "Unable to open output file <%s>"
-msgstr ""
+msgstr "আউটপুট ফাইল <%s> খুলতে অক্ষম"
 
 #, c-format
 msgid "Unable to write output file <%s>"
-msgstr ""
+msgstr "আউটপুট ফাইল <%s> লিখতে অক্ষম"
 
 #, c-format
 msgid "produced by i.cluster"
-msgstr ""
+msgstr "i.cluster দ্বারা প্রস্তুতকৃত"
 
 #, c-format
 msgid "Not enough data points (%d) in cluster"
-msgstr ""
+msgstr "ক্লাস্টারে পর্যাপ্ত ডাটা পয়েন্ট (%d) নেই"
 
 msgid "Programmer error"
-msgstr ""
+msgstr "প্রোগ্রামার ত্রুটি"
 
 msgid "<NULL error message>"
 msgstr "<NULL error message>"
 
 msgid "dbmi: Protocol error"
-msgstr ""
+msgstr "dbmi: প্রোটোকল ত্রুটি"
 
 msgid "dbmi: Out of Memory"
-msgstr ""
+msgstr "dbmi: মেমোরি শেষ"
 
 #, c-format
 msgid "dbmi: %s() not implemented"
-msgstr ""
+msgstr "dbmi: %s() ইমপ্লিমেন্ট করা হয়নি"
 
 #, c-format
 msgid "dbmi: Invalid procedure %d"
-msgstr ""
+msgstr "dbmi: অবৈধ প্রসিডিউর %d"
 
 msgid "db_set_index_column_name(): invalid column number"
-msgstr ""
+msgstr "db_set_index_column_name(): অবৈধ কলাম নম্বর"
 
 msgid "db_get_index_column_name(): invalid column number"
-msgstr ""
+msgstr "db_get_index_column_name(): অবৈধ কলাম নম্বর"
 
 #, c-format
 msgid "Illegal table map name <%s>. May not contain '.' or 'NULL'."
-msgstr ""
+msgstr "অবৈধ টেবিল ম্যাপ নাম <%s>। এতে '.' অথবা 'NULL' থাকা যাবে না।"
 
 #, c-format
 msgid "Illegal table map name <%s>. Must start with a letter."
-msgstr ""
+msgstr "অবৈধ টেবিল ম্যাপ নাম <%s>। অবশ্যই একটি অক্ষর দিয়ে শুরু হতে হবে।"
 
 #, c-format
 msgid "Illegal table map name <%s>. Character <%c> not allowed."
-msgstr ""
+msgstr "অবৈধ টেবিল ম্যাপ নাম <%s>। ক্যারেক্টার <%c> অনুমোদিত নয়।"
 
 #, c-format
 msgid "Unable to read file '%s'"
-msgstr ""
+msgstr "'%s' ফাইলটি পড়তে অক্ষম"
 
 #, c-format
 msgid "Login file (%s) corrupted (line: %s)"
-msgstr ""
+msgstr "লগইন ফাইল (%s) ত্রুটিপূর্ণ (লাইন: %s)"
 
 #, c-format
 msgid "Unable to write file '%s'"
-msgstr ""
+msgstr "'%s' ফাইলে লিখতে অক্ষম"
 
 #, c-format
 msgid "DB connection <%s/%s> already exists and will be overwritten"
-msgstr ""
+msgstr "ডাটাবেস সংযোগ <%s/%s> ইতিমধ্যে বিদ্যমান এবং ওভাররাইট করা হবে"
 
 #, c-format
 msgid "DB connection <%s/%s> already exists. Re-run '%s' with '--%s' flag to overwrite existing settings."
-msgstr ""
+msgstr "ডাটাবেস সংযোগ <%s/%s> ইতিমধ্যে বিদ্যমান। বর্তমান সেটিংস ওভাররাইট করতে '--%s' ফ্ল্যাগ সহ '%s' পুনরায় চালান।"
 
 msgid ""
 "\n"
@@ -240,22 +239,22 @@ msgid ""
 msgstr ""
 
 msgid "Choose the unit tests to run"
-msgstr ""
+msgstr "চালানোর জন্য ইউনিট টেস্টগুলো নির্বাচন করুন"
 
 msgid "Choose the integration tests to run"
-msgstr ""
+msgstr "চালানোর জন্য ইন্টিগ্রেশন টেস্টগুলো নির্বাচন করুন"
 
 msgid "Run all unit tests"
-msgstr ""
+msgstr "সব ইউনিট টেস্ট চালান"
 
 msgid "Run all integration tests"
-msgstr ""
+msgstr "সব ইন্টিগ্রেশন টেস্ট চালান"
 
 msgid "Run all unit and integration tests"
-msgstr ""
+msgstr "সব ইউনিট এবং ইন্টিগ্রেশন টেস্ট চালান"
 
 msgid "Performs unit and integration tests for the dbmi base library"
-msgstr ""
+msgstr "dbmi বেস লাইব্রেরির জন্য ইউনিট এবং ইন্টিগ্রেশন টেস্ট সম্পাদন করে"
 
 msgid ""
 "\n"
@@ -273,158 +272,158 @@ msgid ""
 msgstr ""
 
 msgid "db_convert_Cstring_to_value(): unrecognized sqltype"
-msgstr ""
+msgstr "db_convert_Cstring_to_value(): অপরিচিত sqltype"
 
 msgid "db_convert_value_into_string(): unrecongized sqltype-type"
-msgstr ""
+msgstr "db_convert_value_into_string(): অপরিচিত sqltype-type"
 
 msgid "fetch: table has wrong number of columns"
-msgstr ""
+msgstr "fetch: টেবিলে ভুল সংখ্যক কলাম রয়েছে"
 
 msgid "send data: invalid C-type"
-msgstr ""
+msgstr "send data: অবৈধ C-type"
 
 #, c-format
 msgid "Unable to describe table <%s>"
-msgstr ""
+msgstr "টেবিল <%s> বর্ণনা করতে অক্ষম"
 
 #, c-format
 msgid "Array of values to select from column <%s> is empty"
-msgstr ""
+msgstr "<%s> কলাম থেকে নির্বাচন করার জন্য মানগুলোর অ্যারে ফাঁকা"
 
 #, c-format
 msgid "Unable to start driver <%s>"
-msgstr ""
+msgstr "ড্রাইভার <%s> শুরু করতে অক্ষম"
 
 #, c-format
 msgid "Unable to open database <%s> by driver <%s>"
-msgstr ""
+msgstr "ড্রাইভার <%s> দ্বারা ডাটাবেস <%s> খুলতে অক্ষম"
 
 #, c-format
 msgid "Unable to get list tables in database <%s>"
-msgstr ""
+msgstr "ডাটাবেস <%s> এ টেবিলের তালিকা পেতে অক্ষম"
 
 #, c-format
 msgid "Table <%s> already exists in database and will be overwritten"
-msgstr ""
+msgstr "টেবিল <%s> ডাটাবেসে ইতিমধ্যে বিদ্যমান এবং ওভাররাইট করা হবে"
 
 #, c-format
 msgid "Table <%s> already exists in database <%s>"
-msgstr ""
+msgstr "টেবিল <%s> ডাটাবেস <%s> এ ইতিমধ্যে বিদ্যমান"
 
 #, c-format
 msgid "Unable to open select cursor: '%s'"
-msgstr ""
+msgstr "select কার্সার খুলতে অক্ষম: '%s'"
 
 #, c-format
 msgid "Column <%s> is not integer"
-msgstr ""
+msgstr "কলাম <%s> ইন্টিজার (পূর্ণসংখ্যা) নয়"
 
 #, c-format
 msgid "Column <%s> not found"
-msgstr ""
+msgstr "কলাম <%s> পাওয়া যায়নি"
 
 #, c-format
 msgid "Unable to create table <%s>"
-msgstr ""
+msgstr "টেবিল <%s> তৈরি করতে অক্ষম"
 
 #, c-format
 msgid "Unable to fetch data from table <%s>"
-msgstr ""
+msgstr "টেবিল <%s> থেকে ডাটা আনতে (fetch) অক্ষম"
 
 #, c-format
 msgid "Unknown column type (column <%s>)"
-msgstr ""
+msgstr "অজ্ঞাত কলামের ধরন (কলাম <%s>)"
 
 #, c-format
 msgid "Unable open database <%s> by driver <%s>"
-msgstr ""
+msgstr "ড্রাইভার <%s> দ্বারা ডাটাবেস <%s> খুলতে অক্ষম"
 
 #, c-format
 msgid "Unable to drop table: '%s'"
-msgstr ""
+msgstr "টেবিল ড্রপ করতে অক্ষম: '%s'"
 
 msgid "Missing column name"
-msgstr ""
+msgstr "কলামের নাম অনুপস্থিত"
 
 msgid "Missing key column name"
-msgstr ""
+msgstr "কি (key) কলামের নাম অনুপস্থিত"
 
 #, c-format
 msgid "Unable select records from table <%s>"
-msgstr ""
+msgstr "টেবিল <%s> থেকে রেকর্ড নির্বাচন করতে অক্ষম"
 
 msgid "Key column type is not integer"
-msgstr ""
+msgstr "কি (key) কলামের ধরন ইন্টিজার নয়"
 
 #, c-format
 msgid "Table name too long: <%s>"
-msgstr ""
+msgstr "টেবিলের নাম খুব বড়: <%s>"
 
 #, c-format
 msgid "DBMI-%s driver error:"
-msgstr ""
+msgstr "DBMI-%s ড্রাইভার ত্রুটি:"
 
 #, c-format
 msgid "DBMI-%s driver file reading error: %s"
-msgstr ""
+msgstr "DBMI-%s ড্রাইভার ফাইল পড়তে ত্রুটি: %s"
 
 #, c-format
 msgid "Unsupported icon %d"
-msgstr ""
+msgstr "অসমর্থিত আইকন %d"
 
 #, c-format
 msgid "Both %s and %s are defined. %s will be ignored."
-msgstr ""
+msgstr "%s এবং %s উভয়ই সংজ্ঞায়িত। %s উপেক্ষা করা হবে।"
 
 #, c-format
 msgid "Neither %s (managed by d.mon command) nor %s (used for direct rendering) defined"
-msgstr ""
+msgstr "%s (d.mon কমান্ড দ্বারা পরিচালিত) এবং %s (সরাসরি রেন্ডারিংয়ের জন্য ব্যবহৃত) কোনটিই সংজ্ঞায়িত নয়"
 
 #, c-format
 msgid "Unknown display driver <%s>"
-msgstr ""
+msgstr "অজ্ঞাত ডিসপ্লে ড্রাইভার <%s>"
 
 #, c-format
 msgid "Using display driver <%s>..."
-msgstr ""
+msgstr "ডিসপ্লে ড্রাইভার <%s> ব্যবহার করা হচ্ছে..."
 
 #, c-format
 msgid "GRASS_NOTIFY command <%s> failed"
-msgstr ""
+msgstr "GRASS_NOTIFY কমান্ড <%s> ব্যর্থ হয়েছে"
 
 #, c-format
 msgid "String <%s> is too long"
-msgstr ""
+msgstr "স্ট্রিং <%s> খুব বড়"
 
 #, c-format
 msgid "[%s]: No such color"
-msgstr ""
+msgstr "[%s]: এমন কোন রঙ নেই"
 
 #, fuzzy, c-format
 #| msgid "Vector map <%s> not found"
 msgid "Font name <%s> is too long"
-msgstr "ভেক্টর ম্যাপ <%s> পাওয়া যায় নি"
+msgstr "ফন্টের নাম <%s> খুব বড়"
 
 #, c-format
 msgid "%s: Unable to read font definition file; use the default"
-msgstr ""
+msgstr "%s: ফন্ট ডেফিনিশন ফাইল পড়তে অক্ষম; ডিফল্টটি ব্যবহার করুন"
 
 #, c-format
 msgid "%s: No font definition file"
-msgstr ""
+msgstr "%s: কোন ফন্ট ডেফিনিশন ফাইল নেই"
 
 msgid "general"
-msgstr ""
+msgstr "সাধারণ"
 
 msgid "json"
-msgstr ""
+msgstr "json"
 
 msgid "unit test"
-msgstr ""
+msgstr "ইউনিট টেস্ট"
 
 msgid "Performs unit tests for the gjson library"
-msgstr ""
+msgstr "gjson লাইব্রেরির জন্য ইউনিট টেস্ট সম্পাদন করে"
 
 msgid ""
 "\n"
@@ -443,77 +442,77 @@ msgstr ""
 
 #, c-format
 msgid "Illegal n-s resolution value: %g"
-msgstr ""
+msgstr "অবৈধ n-s রেজোলিউশন মান: %g"
 
 #, c-format
 msgid "Illegal number of rows: %d (resolution is %g)"
-msgstr ""
+msgstr "সারির অবৈধ সংখ্যা: %d (রেজোলিউশন হলো %g)"
 
 #, c-format
 msgid "Illegal e-w resolution value: %g"
-msgstr ""
+msgstr "অবৈধ e-w রেজোলিউশন মান: %g"
 
 #, c-format
 msgid "Illegal number of columns: %d (resolution is %g)"
-msgstr ""
+msgstr "কলামের অবৈধ সংখ্যা: %d (রেজোলিউশন হলো %g)"
 
 #, c-format
 msgid "North must be north of South, but %g (north) <= %g (south"
-msgstr ""
+msgstr "উত্তর অবশ্যই দক্ষিণের উত্তরে হতে হবে, কিন্তু %g (উত্তর) <= %g (দক্ষিণ"
 
 #, c-format
 msgid "North must be larger than South, but %g (north) <= %g (south"
-msgstr ""
+msgstr "উত্তর অবশ্যই দক্ষিণের চেয়ে বড় হতে হবে, কিন্তু %g (উত্তর) <= %g (দক্ষিণ"
 
 #, c-format
 msgid "East must be larger than West, but %g (east) <= %g (west)"
-msgstr ""
+msgstr "পূর্ব অবশ্যই পশ্চিমের চেয়ে বড় হতে হবে, কিন্তু %g (পূর্ব) <= %g (পশ্চিম)"
 
 msgid "Invalid coordinates: negative number of columns"
-msgstr ""
+msgstr "অবৈধ স্থানাঙ্ক: কলামের সংখ্যা ঋণাত্মক"
 
 msgid "Invalid coordinates: negative number of rows"
-msgstr ""
+msgstr "অবৈধ স্থানাঙ্ক: সারির সংখ্যা ঋণাত্মক"
 
 msgid "NS resolution has been changed"
-msgstr ""
+msgstr "NS রেজোলিউশন পরিবর্তন করা হয়েছে"
 
 msgid "EW resolution has been changed"
-msgstr ""
+msgstr "EW রেজোলিউশন পরিবর্তন করা হয়েছে"
 
 msgid "NS and EW resolutions are different"
-msgstr ""
+msgstr "NS এবং EW রেজোলিউশন আলাদা"
 
 #, c-format
 msgid "Illegal n-s resolution value for 3D: %g"
-msgstr ""
+msgstr "3D এর জন্য অবৈধ n-s রেজোলিউশন মান: %g"
 
 #, c-format
 msgid "Illegal number of rows for 3D: %d (resolution is %g)"
-msgstr ""
+msgstr "3D এর জন্য সারির অবৈধ সংখ্যা: %d (রেজোলিউশন হলো %g)"
 
 #, c-format
 msgid "Illegal e-w resolution value for 3D: %g"
-msgstr ""
+msgstr "3D এর জন্য অবৈধ e-w রেজোলিউশন মান: %g"
 
 #, c-format
 msgid "Illegal number of columns for 3D: %d (resolution is %g)"
-msgstr ""
+msgstr "3D এর জন্য কলামের অবৈধ সংখ্যা: %d (রেজোলিউশন হলো %g)"
 
 #, c-format
 msgid "Illegal t-b resolution value: %g"
-msgstr ""
+msgstr "অবৈধ t-b রেজোলিউশন মান: %g"
 
 #, c-format
 msgid "Illegal depths value: %d"
-msgstr ""
+msgstr "অবৈধ গভীরতার মান: %d"
 
 #, c-format
 msgid "Top must be larger than Bottom, but %g (top) <= %g (bottom)"
-msgstr ""
+msgstr "শীর্ষ অবশ্যই তলদেশের চেয়ে বড় হতে হবে, কিন্তু %g (শীর্ষ) <= %g (তলদেশ)"
 
 msgid "Invalid coordinates: negative number of depths"
-msgstr ""
+msgstr "অবৈধ স্থানাঙ্ক: গভীরতার সংখ্যা ঋণাত্মক"
 
 #, c-format
 msgid "East (%.15g) is not larger than West (%.15g)"
