@@ -11,15 +11,15 @@ ARG PYTHON_VERSION=3.12
 # renovate: datasource=github-tags depName=libgeos/geos
 ARG GEOS_VERSION=3.14.1
 # renovate: datasource=github-tags depName=OSGeo/PROJ
-ARG PROJ_VERSION=9.7.1
+ARG PROJ_VERSION=9.8.0
 # renovate: datasource=github-tags depName=OSGeo/gdal
-ARG GDAL_VERSION=3.12.1
+ARG GDAL_VERSION=3.12.2
 # renovate: datasource=github-tags depName=PDAL/PDAL
 ARG PDAL_VERSION=2.10.0
 # renovate: datasource=github-tags depName=OSGeo/gdal-grass
 ARG GDAL_GRASS_VERSION=2.0.0
 # renovate: datasource=pypi depName=wxPython
-ARG WXPYTHON_VERSION=4.2.4
+ARG WXPYTHON_VERSION=4.2.5
 
 # Have build parameters as build arguments?
 # ARG LDFLAGS="-s -Wl,--no-undefined -lblas"
