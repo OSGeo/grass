@@ -74,6 +74,8 @@ add_custom_target(
     ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/mkmarkdown.py
     ${OUTDIR}/${GRASS_INSTALL_UTILSDIR})
 
+set_target_properties(python_doc_utils PROPERTIES FOLDER Docs)
+
 install(
   PROGRAMS
     ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/g.html2man.py

@@ -13,7 +13,7 @@ For an introduction to map CRSs (and the PROJ library), see the manual page of
 
 <h2>NOTES</h2>
 
-If <b>output</b> is not specified it is set to be the same as input map
+If <b>output</b> is not specified, it is set to be the same as input map
 name.
 
 <br>
@@ -21,17 +21,17 @@ If <b>mapset</b> is not specified, its name is assumed to be the same
 as the current mapset's name.
 
 <br>
-If <b>dbase</b> is not specified it is assumed to be the current
+If <b>dbase</b> is not specified, it is assumed to be the current
 database. The user only has to specify <b>dbase</b> if the source
 project is stored in another separate GRASS database.
 
 <br>
-If <b>smax</b> is set to <b>0</b> the automated vertex densification is
+If <b>smax</b> is set to <b>0,</b> the automated vertex densification is
 disabled (not recommended).
 
 <p>
 <em>v.proj</em> supports general datum transformations, making use of the
-<em>PROJ</em> co-ordinate system translation library.
+<em>PROJ</em> coordinate system translation library.
 
 <p>When projecting into a latlon project, east coordinates are wrapped
 by the proj4 library to fit into the range -180,180. This is in most cases
@@ -49,7 +49,7 @@ vertex densification (as an alternative, <em><a href="v.split.html">v.split</a><
 could be used before reprojecting. Without vertex densification, depending on
 the source and target CRS (Coordinate Reference System), geometries can be
 substantially deformed (straight lines become curves, squares become
-trapezoids, etc). The densification of linear features can help to avoid
+trapezoids, etc.). The densification of linear features can help to avoid
 topological errors.
 
 <h2>EXAMPLE</h2>

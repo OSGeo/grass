@@ -225,11 +225,13 @@ set(HTML2MAN ${CMAKE_BINARY_DIR}/utils/g.html2man.py)
 set(env_path "$ENV{PATH}")
 
 if(WIN32)
-  set(sep "\;")
+  set(sep "\\\;")
   string(REPLACE ";" "${sep}" env_path "${env_path}")
+  set(env_pythonpath "$ENV{PYTHONPATH}")
+  string(REPLACE ";" "${sep}" env_pythonpath "${env_pythonpath}")
   set(grass_env_command
     ${CMAKE_COMMAND} -E env "PATH=${BIN_DIR}${sep}${SCRIPTS_DIR}${sep}${env_path}${sep}${LIB_DIR}"
-    "PYTHONPATH=${ETC_PYTHON_DIR}${sep}${GUI_WXPYTHON_DIR}${sep}$ENV{PYTHONPATH}"
+    "PYTHONPATH=${ETC_PYTHON_DIR}${sep}${GUI_WXPYTHON_DIR}${sep}${env_pythonpath}"
     "GRASS_PYTHON=${PYTHON_EXECUTABLE}" "GISBASE=${RUN_GISBASE_NATIVE}" "GISRC=${GISRC}" "LC_ALL=C" "LANG=C"
     "ARCH=${BUILD_ARCH}" "ARCH_DISTDIR=${RUN_GISBASE_NATIVE}"
     "LANGUAGE=C" "MODULE_TOPDIR=${MODULE_TOPDIR}" "HTMLDIR=${DOC_DIR}"
@@ -286,6 +288,7 @@ add_custom_target(
   ALL_MODULES
   DEPENDS ${modules_list}
   COMMENT "Building all modules.")
+set_target_properties(ALL_MODULES PROPERTIES FOLDER Misc)
 
 if(WITH_GUI)
   add_subdirectory(gui)
@@ -307,6 +310,7 @@ add_custom_target(
   BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
   COMMENT "Creating thumbnails"
   DEPENDS ALL_MODULES)
+set_target_properties(r_colors_thumbnails PROPERTIES FOLDER Misc)
 install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
         DESTINATION ${GRASS_INSTALL_DOCDIR})
 
@@ -342,3 +346,5 @@ write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/GRASSConfigVersion.
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/GRASSConfig.cmake
               ${CMAKE_CURRENT_BINARY_DIR}/GRASSConfigVersion.cmake
         DESTINATION ${GRASS_INSTALL_CMAKECONFDIR}/GRASS)
+
+set_property(GLOBAL PROPERTY USE_FOLDERS YES)
