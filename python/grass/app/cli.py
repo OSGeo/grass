@@ -130,7 +130,7 @@ def subcommand_create_project(args) -> int:
 
 def add_mapset_subparser(subparsers):
     mapset_subparser = subparsers.add_parser("mapset", help="mapset related operations")
-    mapset_subparsers = mapset_subparser.add_subparsers(dest="mapset_comm§and")
+    mapset_subparsers = mapset_subparser.add_subparsers(dest="mapset_command")
 
     subparser = mapset_subparsers.add_parser("create", help="create a new mapset")
     subparser.add_argument("path", help="path to the new mapset")
@@ -336,6 +336,7 @@ def main(args=None, program=None):
         help="Define external format for vector output (v.external.out)",
     )
     run_subparser.set_defaults(func=subcommand_run_tool)
+
     add_project_subparser(subparsers)
     add_mapset_subparser(subparsers)
 
