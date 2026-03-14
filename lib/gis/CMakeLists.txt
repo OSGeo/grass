@@ -13,8 +13,8 @@ endif()
 
 if(MSVC)
   set(grass_gis_DEFS "${grass_gis_DEFS};-D_USE_MATH_DEFINES=1")
-  set(gislib_INCLUDES "../../msvc")
-  list(APPEND gislib_SRCS "../../msvc/dirent.c;../../msvc/fcntl.c")
+  set(gislib_INCLUDES "${PROJECT_SOURCE_DIR}/msvc")
+  list(APPEND gislib_SRCS "${PROJECT_SOURCE_DIR}/msvc/dirent.c;${PROJECT_SOURCE_DIR}/msvc/fcntl.c")
 endif()
 
 build_module(
@@ -33,7 +33,7 @@ build_module(
   Intl::Intl
   PostgreSQL::PostgreSQL
   Threads::Threads
-  OPENMP
+  OpenMP::OpenMP_C
   ZSTD
   DEFS
   "${grass_gis_DEFS}")

@@ -25,6 +25,9 @@ $(DSTDIR)/resource_paths.py: resource_paths.py
 	-e 's#@GISBASE_INSTALL_PATH@##' \
 	-e 's#@GRASS_INSTALL_CMAKECONFDIR@##' \
 	-e 's#@GRASS_INSTALL_CMAKEMODULEDIR@##' \
+	-e 's#@CMAKE_PREFIX_PATH@##' \
+	-e 's#@CMAKE_C_COMPILER@##' \
+	-e 's#@CMAKE_CXX_COMPILER@##' \
 	-e 's#@GRASS_PREFIX@#$(RUN_GISBASE)#' \
 	-e 's#@GRASS_VERSION_GIT@#$(GRASS_VERSION_GIT)#' \
 	-e 's#@GRASS_VERSION_MAJOR@#$(GRASS_VERSION_MAJOR)#' \
