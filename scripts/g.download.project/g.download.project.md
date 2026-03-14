@@ -16,7 +16,7 @@ Download and unpack the full North Carolina sample project into the
 user's HOME directory:
 
 ```sh
-g.download.project url=https://grass.osgeo.org/sampledata/north_carolina/nc_spm_full_v2alpha2.tar.gz path=$HOME
+g.download.project url=https://grass.osgeo.org/sampledata/north_carolina/nc_spm_full_v2beta1.tar.gz path=$HOME
 ```
 
 ### Download the full GRASS sample project in a temporary session
@@ -25,7 +25,7 @@ In a temporary session, download and unpack the full North Carolina
 sample project into the user's HOME directory:
 
 ```sh
-grass --tmp-project XY --exec g.download.project url=https://grass.osgeo.org/sampledata/north_carolina/nc_spm_full_v2alpha2.tar.gz path=$HOME
+grass --tmp-project XY --exec g.download.project url=https://grass.osgeo.org/sampledata/north_carolina/nc_spm_full_v2beta1.tar.gz path=$HOME
 ```
 
 ## SEE ALSO

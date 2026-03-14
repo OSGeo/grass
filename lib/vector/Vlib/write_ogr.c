@@ -23,7 +23,6 @@
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 
-#ifdef HAVE_OGR
 #include <ogr_api.h>
 #include <cpl_string.h>
 
@@ -34,7 +33,6 @@ static off_t write_feature(struct Map_info *, int, const struct line_pnts **,
 static int write_attributes(dbDriver *, int, const struct field_info *,
                             OGRLayerH, OGRFeatureH);
 static int sqltype_to_ogrtype(int);
-#endif
 
 /*!
    \brief Writes feature on level 1 (OGR interface)
@@ -64,12 +62,7 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
                         const struct line_pnts *points,
                         const struct line_cats *cats)
 {
-#ifdef HAVE_OGR
     return write_feature(Map, type, &points, 1, cats);
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-    return -1;
-#endif
 }
 
 /*!
@@ -91,7 +84,6 @@ off_t V1_rewrite_line_ogr(struct Map_info *Map, off_t offset, int type,
                           const struct line_cats *cats)
 {
     G_debug(3, "V1_rewrite_line_ogr(): type=%d offset=%" PRId64, type, offset);
-#ifdef HAVE_OGR
     if (type != V1_read_line_ogr(Map, NULL, NULL, offset)) {
         G_warning(_("Unable to rewrite feature (incompatible feature types)"));
         return -1;
@@ -101,10 +93,6 @@ off_t V1_rewrite_line_ogr(struct Map_info *Map, off_t offset, int type,
     V1_delete_line_ogr(Map, offset);
 
     return V1_write_line_ogr(Map, type, points, cats);
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-    return -1;
-#endif
 }
 
 /*!
@@ -118,7 +106,6 @@ off_t V1_rewrite_line_ogr(struct Map_info *Map, off_t offset, int type,
  */
 int V1_delete_line_ogr(struct Map_info *Map, off_t offset)
 {
-#ifdef HAVE_OGR
     struct Format_info_ogr *ogr_info;
 
     G_debug(3, "V1_delete_line_ogr(), offset = %lu", (unsigned long)offset);
@@ -142,13 +129,8 @@ int V1_delete_line_ogr(struct Map_info *Map, off_t offset)
     }
 
     return 0;
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-    return -1;
-#endif
 }
 
-#ifdef HAVE_OGR
 /*!
    \brief Writes area on topological level (OGR Simple Features
    interface, internal use only)
@@ -688,5 +670,3 @@ int sqltype_to_ogrtype(int sqltype)
 
     return ogrtype;
 }
-
-#endif /* HAVE_OGR */

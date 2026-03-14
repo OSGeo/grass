@@ -133,7 +133,8 @@ see: <https://help.github.com/en/articles/creating-releases>.
 ### Tag release
 
 Before creating the tag, it is a good idea to see if the CI jobs are not failing.
-Check on [GitHub Actions](https://github.com/OSGeo/grass/actions) or use GitHub CLI:
+Check on [GitHub Actions](https://github.com/OSGeo/grass/actions)
+or use GitHub CLI:
 
 ```bash
 gh run list --branch releasebranch_8_4
@@ -332,7 +333,11 @@ wget https://github.com/OSGeo/grass/releases/download/${VERSION}/ChangeLog.gz \
 Fetch a tarball from GitHub we also publish on OSGeo servers:
 
 ```bash
-wget https://github.com/OSGeo/grass/archive/${VERSION}.tar.gz -O grass-${VERSION}.tar.gz
+wget https://github.com/OSGeo/grass/releases/download/${VERSION}/grass-${VERSION}.tar.gz \
+    -O grass-${VERSION}.tar.gz
+wget https://github.com/OSGeo/grass/releases/download/${VERSION}/grass-${VERSION}.tar.gz.sha256 \
+    -O grass-${VERSION}.tar.gz.sha256
+sha256sum -c grass-${VERSION}.tar.gz.sha256
 md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 ```
 
@@ -398,7 +403,7 @@ Update the GRASS version at <https://github.com/landam/wingrass-maintenance-scri
 - On release (including RC) update
   [releases.csv](https://github.com/landam/wingrass-maintenance-scripts/blob/master/releases.csv)
   and
-  [grass_packager_release.bat](https://github.com/landam/wingrass-maintenance-scripts/blob/master/grass_packager_release.bat#L12)
+  [grass_packager_release.bat](https://github.com/landam/wingrass-maintenance-scripts/blob/fffcd91fb3d1c99854e6e64d1c0361622c7eb83b/grass_packager_release.bat#L12)
 
 Example for 8.3.0RC1: [commit](https://github.com/landam/wingrass-maintenance-scripts/commit/c47b0f30051108bd2e8b52d183e97930c24dfafd)
 

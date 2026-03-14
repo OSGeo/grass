@@ -17,6 +17,7 @@ class TestRGrow(TestCase):
     mapShrunkOutput = "lakes_shrunk_100m"
     mapNoNULL = "elevation"
     mapShrunkNoNULL = "elevation_shrunk"
+    mapGrownSmallRadius = "lakes_grown_small_radius"
 
     @classmethod
     def setUpClass(cls):
@@ -31,7 +32,12 @@ class TestRGrow(TestCase):
             "g.remove",
             flags="f",
             type="raster",
-            name=(cls.mapGrownOutput, cls.mapShrunkOutput, cls.mapShrunkNoNULL),
+            name=(
+                cls.mapGrownOutput,
+                cls.mapShrunkOutput,
+                cls.mapShrunkNoNULL,
+                cls.mapGrownSmallRadius,
+            ),
         )
         cls.del_temp_region()
 
@@ -61,6 +67,18 @@ class TestRGrow(TestCase):
         shrined_range = SimpleModule("r.describe", flags="i", _map=self.mapShrunkNoNULL)
         self.runModule(shrined_range)
         self.assertLooksLike(shrinked_string, str(shrined_range.outputs.stdout).strip())
+
+    def test_grow_small_radius(self):
+        """Grow test for small radius involving scientific notation
+        Based on https://github.com/OSGeo/grass/pull/6737"""
+        module = SimpleModule(
+            "r.grow",
+            input=self.mapName,
+            output=self.mapGrownSmallRadius,
+            radius=0.00000002,
+        )
+        self.assertModule(module)
+        self.assertRasterExists(self.mapGrownSmallRadius)
 
 
 if __name__ == "__main__":

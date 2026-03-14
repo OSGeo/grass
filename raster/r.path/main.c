@@ -342,6 +342,9 @@ int main(int argc, char **argv)
                 else if (type == -2) {
                     break;
                 }
+                else if (!(type & GV_POINT)) {
+                    continue;
+                }
                 if (!Vect_point_in_box(Points->x[0], Points->y[0], 0, &box))
                     continue;
 

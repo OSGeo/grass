@@ -984,7 +984,7 @@ class Settings:
         dirPath = GetSettingsPath()
         if not Path(dirPath).exists():
             try:
-                os.mkdir(dirPath)
+                Path(dirPath).mkdir()
             except OSError:
                 GError(_("Unable to create settings directory"))
                 return None

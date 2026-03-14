@@ -252,7 +252,7 @@ void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
 
     /*AV*/
     if (!v5dCreate(fileout, NumTimes, NumVars, rows, cols, Nl,
-                   (const char(*)[10])VarName, TimeStamp, DateStamp,
+                   (const char (*)[10])VarName, TimeStamp, DateStamp,
                    CompressMode, Projection, ProjArgs, Vertical, VertArgs))
         G_fatal_error(_("Unable to create V5D file <%s>"), fileout);
 

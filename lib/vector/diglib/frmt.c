@@ -60,11 +60,9 @@ int dig_read_frmt_ascii(FILE *dascii, struct Format_info *finfo)
             ptr++;
 
         if (G_strcasecmp(buf1, "FORMAT") == 0) {
-#ifdef HAVE_OGR
             if (G_strcasecmp(ptr, "ogr") == 0) {
                 frmt = GV_FORMAT_OGR;
             }
-#endif
 #ifdef HAVE_POSTGRES
             if (G_strcasecmp(ptr, "postgis") == 0) {
                 frmt = GV_FORMAT_POSTGIS;
@@ -78,14 +76,7 @@ int dig_read_frmt_ascii(FILE *dascii, struct Format_info *finfo)
     }
 
     /* init format info values */
-#ifdef HAVE_OGR
     G_zero(&(finfo->ogr), sizeof(struct Format_info_ogr));
-#else
-    if (frmt == GV_FORMAT_OGR) {
-        G_warning(_("Vector format '%s' not supported"), ptr);
-        return -1;
-    }
-#endif
 
 #ifdef HAVE_POSTGRES
     G_zero(&(finfo->pg), sizeof(struct Format_info_pg));
@@ -115,7 +106,6 @@ int dig_read_frmt_ascii(FILE *dascii, struct Format_info *finfo)
         while (*ptr == ' ')
             ptr++;
 
-#ifdef HAVE_OGR
         if (frmt == GV_FORMAT_OGR) {
             if (G_strcasecmp(buf1, "DSN") == 0)
                 finfo->ogr.dsn = G_store(ptr);
@@ -124,7 +114,6 @@ int dig_read_frmt_ascii(FILE *dascii, struct Format_info *finfo)
             if (G_strcasecmp(buf1, "WHERE") == 0)
                 finfo->ogr.where = G_store(ptr);
         }
-#endif
 #ifdef HAVE_POSTGRES
         if (frmt == GV_FORMAT_POSTGIS) {
             if (G_strcasecmp(buf1, "CONNINFO") == 0)

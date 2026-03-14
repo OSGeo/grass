@@ -40,7 +40,7 @@ Computing univariate statistics of a 3D raster with randomly generated values:
 g.region n=10 s=0 w=0 e=10 b=0 t=10 res=1 res3=1 -p3
 
 # generate random map
-r3.mapcalc "random_0_1 = rand(0., 1)" -s
+r3.mapcalc "random_0_1 = rand(0., 1)"
 
 # compute univariate statistics, along with extended statistics
 r3.univar -e map=random_0_1 percentile=98

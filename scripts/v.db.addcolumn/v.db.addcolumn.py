@@ -41,7 +41,6 @@
 # %end
 
 import atexit
-import os
 from pathlib import Path
 import re
 
@@ -53,9 +52,10 @@ rm_files = []
 
 def cleanup():
     for file in rm_files:
-        if os.path.isfile(file):
+        file = Path(file)
+        if file.is_file():
             try:
-                os.remove(file)
+                file.unlink()
             except Exception as e:
                 gs.warning(
                     _("Unable to remove file {file}: {message}").format(

@@ -233,17 +233,17 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
                 continue
 
             is_there = False
-            for _elem in elem:
+            for elem_ in elem:
                 cmp_text = None
                 if cmp_type == "attribute":
-                    if add_arg in _elem.attrib:
-                        cmp_text = _elem.attrib[add_arg]
+                    if add_arg in elem_.attrib:
+                        cmp_text = elem_.attrib[add_arg]
 
                 elif cmp_type == "element_content":
-                    cmp_text = _elem.text
+                    cmp_text = elem_.text
 
                 elif cmp_type == "child_element_content":
-                    cmp = _elem.find(self.xml_ns.Ns(add_arg))
+                    cmp = elem_.find(self.xml_ns.Ns(add_arg))
                     if cmp is not None:
                         cmp_text = cmp.text
 

@@ -10,12 +10,12 @@
 import os
 
 from build_rest import (
-    rest_dir,
     grass_version,
-    write_rest_header,
+    replace_file,
+    rest_dir,
     write_rest_cmd_overview,
     write_rest_footer,
-    replace_file,
+    write_rest_header,
 )
 
 os.chdir(rest_dir)

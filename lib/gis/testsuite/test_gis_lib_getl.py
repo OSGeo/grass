@@ -3,8 +3,8 @@
 @author Vaclav Petras
 """
 
-import os
 import ctypes
+import os
 import unittest
 from pathlib import Path
 

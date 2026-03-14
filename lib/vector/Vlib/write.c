@@ -59,7 +59,7 @@ static int restore_dummy(struct Map_info *Map UNUSED, off_t offset UNUSED,
     return -1;
 }
 
-#if !defined HAVE_OGR || !defined HAVE_POSTGRES
+#if !defined HAVE_POSTGRES
 static int format(struct Map_info *Map UNUSED, off_t line UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
@@ -93,16 +93,9 @@ static off_t format_l2(struct Map_info *Map UNUSED, off_t line UNUSED,
 static off_t (*Vect_write_line_array[][3])(struct Map_info *, int,
                                            const struct line_pnts *,
                                            const struct line_cats *) = {
-    {write_dummy, V1_write_line_nat, V2_write_line_nat}
-#ifdef HAVE_OGR
-    ,
+    {write_dummy, V1_write_line_nat, V2_write_line_nat},
     {write_dummy, V1_write_line_ogr, V2_write_line_sfa},
     {write_dummy, V1_write_line_ogr, V2_write_line_sfa}
-#else
-    ,
-    {write_dummy, format_l, format_l},
-    {write_dummy, format_l, format_l}
-#endif
 #ifdef HAVE_POSTGRES
     ,
     {write_dummy, V1_write_line_pg, V2_write_line_pg}
@@ -115,16 +108,9 @@ static off_t (*Vect_write_line_array[][3])(struct Map_info *, int,
 static off_t (*Vect_rewrite_line_array[][3])(struct Map_info *, off_t, int,
                                              const struct line_pnts *,
                                              const struct line_cats *) = {
-    {rewrite_dummy, V1_rewrite_line_nat, V2_rewrite_line_nat}
-#ifdef HAVE_OGR
-    ,
+    {rewrite_dummy, V1_rewrite_line_nat, V2_rewrite_line_nat},
     {rewrite_dummy, V1_rewrite_line_ogr, V2_rewrite_line_sfa},
     {rewrite_dummy, V1_rewrite_line_ogr, V2_rewrite_line_sfa}
-#else
-    ,
-    {rewrite_dummy, format_l2, format_l2},
-    {rewrite_dummy, format_l2, format_l2}
-#endif
 #ifdef HAVE_POSTGRES
     ,
     {rewrite_dummy, V1_rewrite_line_pg, V2_rewrite_line_pg}
@@ -135,16 +121,9 @@ static off_t (*Vect_rewrite_line_array[][3])(struct Map_info *, off_t, int,
 };
 
 static int (*Vect_delete_line_array[][3])(struct Map_info *, off_t) = {
-    {delete_dummy, V1_delete_line_nat, V2_delete_line_nat}
-#ifdef HAVE_OGR
-    ,
+    {delete_dummy, V1_delete_line_nat, V2_delete_line_nat},
     {delete_dummy, V1_delete_line_ogr, V2_delete_line_sfa},
     {delete_dummy, V1_delete_line_ogr, V2_delete_line_sfa}
-#else
-    ,
-    {delete_dummy, format, format},
-    {delete_dummy, format, format}
-#endif
 #ifdef HAVE_POSTGRES
     ,
     {delete_dummy, V1_delete_line_pg, V2_delete_line_pg}
@@ -155,16 +134,9 @@ static int (*Vect_delete_line_array[][3])(struct Map_info *, off_t) = {
 };
 
 static int (*Vect_restore_line_array[][3])(struct Map_info *, off_t, off_t) = {
-    {restore_dummy, V1_restore_line_nat, V2_restore_line_nat}
-#ifdef HAVE_OGR
-    ,
+    {restore_dummy, V1_restore_line_nat, V2_restore_line_nat},
     {restore_dummy, restore_dummy, restore_dummy},
     {restore_dummy, restore_dummy, restore_dummy}
-#else
-    ,
-    {restore_dummy, format2, format2},
-    {restore_dummy, format2, format2}
-#endif
 #ifdef HAVE_POSTGRES
     ,
     {restore_dummy, restore_dummy, restore_dummy}

@@ -10,7 +10,8 @@ equation, provides robustness necessary for spatially variable
 conditions and high resolutions (Mitas and Mitasova 1998). The key
 inputs of the model include elevation (**elevation** raster map), flow
 gradient vector given by first-order partial derivatives of elevation
-field (**dx** and **dy** raster maps), rainfall excess rate (**rain**
+field (**dx** and **dy** raster maps are optional),
+rainfall excess rate (**rain**
 raster map or **rain_value** single value) and a surface roughness
 coefficient given by Manning's n (**man** raster map or **man_value**
 single value). Partial derivatives raster maps can be computed along
@@ -74,7 +75,7 @@ solution can be analysed using the output error raster file \[m\]. This
 error is a function of the number of particles used in the simulation
 and can be reduced by increasing the number of walkers given by
 parameter **nwalkers**. Duration of simulation is controlled by the
-**niterations** parameter. The default value is 10 minutes, reaching the
+**duration** parameter. The default value is 10 minutes, reaching the
 steady-state may require much longer time, depending on the time step,
 complexity of terrain, land cover and size of the area. Output walker,
 water depth and discharge maps can be saved during simulation using the

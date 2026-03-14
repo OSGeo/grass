@@ -29,13 +29,8 @@
 
 #include "local_proto.h"
 
-#ifdef HAVE_GDAL
 #include <gdal_version.h> /* needed for FID detection */
-#endif                    /* HAVE_GDAL */
-
-#ifdef HAVE_OGR
 #include <ogr_api.h>
-#endif
 
 #ifdef HAVE_POSTGRES
 #define NOPG_UNUSED
@@ -747,9 +742,6 @@ static int read_dblinks_ogr(struct Map_info *Map)
 
     dbl = Map->dblnk;
     G_debug(3, "Searching for FID column in OGR DB");
-#ifndef HAVE_OGR
-    G_warning(_("GRASS is not compiled with OGR support"));
-#else
     int nLayers;
     char *ogr_fid_col;
 
@@ -795,7 +787,6 @@ static int read_dblinks_ogr(struct Map_info *Map)
                     Map->fInfo.ogr.layer_name, ogr_fid_col, Map->fInfo.ogr.dsn,
                     "ogr");
     return 1;
-#endif /* HAVE_GDAL */
 }
 
 static int read_dblinks_pg(struct Map_info *Map NOPG_UNUSED)

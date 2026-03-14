@@ -81,7 +81,7 @@ class MetaIcon:
                 id=self.imagepath, client=wx.ART_TOOLBAR, size=size
             )
         elif self.type == "img":
-            if os.path.isfile(self.imagepath) and os.path.getsize(self.imagepath):
+            if Path(self.imagepath).is_file() and Path(self.imagepath).stat().st_size:
                 if size and len(size) == 2:
                     image = wx.Image(name=self.imagepath)
                     image.Rescale(size[0], size[1])

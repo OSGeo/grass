@@ -57,7 +57,6 @@ import sys
 import tempfile
 import unicodedata
 import uuid
-
 from pathlib import Path
 from typing import TYPE_CHECKING, Literal, NoReturn
 
@@ -382,12 +381,12 @@ def create_grass_config_dir() -> str:
     except (RuntimeError, NotADirectoryError) as e:
         fatal(f"{e}")
 
-    if not os.path.isdir(directory):
+    if not Path(directory).is_dir():
         try:
-            os.makedirs(directory)
+            Path(directory).mkdir(parents=True)
         except OSError as e:
             # Can happen as a race condition
-            if e.errno != errno.EEXIST or not os.path.isdir(directory):
+            if e.errno != errno.EEXIST or not Path(directory).is_dir():
                 fatal(
                     _(
                         "Failed to create configuration directory '{}' with error: {}"
@@ -415,7 +414,7 @@ def create_tmp(user, gis_lock) -> str:
     if tmp:
         tmpdir = os.path.join(tmp, tmpdir_name)
         try:
-            os.mkdir(tmpdir, 0o700)
+            Path(tmpdir).mkdir(mode=0o700)
         except:  # noqa: E722
             tmp = None
 
@@ -424,7 +423,7 @@ def create_tmp(user, gis_lock) -> str:
             tmp = ttmp
             tmpdir = os.path.join(tmp, tmpdir_name)
             try:
-                os.mkdir(tmpdir, 0o700)
+                Path(tmpdir).mkdir(mode=0o700)
             except:  # noqa: E722
                 tmp = None
             if tmp:
@@ -697,11 +696,11 @@ def cannot_create_location_reason(gisdbase: StrPath, location: str) -> str:
             " the project <{location}>"
             " already exists."
         ).format(**locals())
-    if os.path.isfile(path):
+    if Path(path).is_file():
         return _(
             "Unable to create new project <{location}> because <{path}> is a file."
         ).format(**locals())
-    if os.path.isdir(path):
+    if Path(path).is_dir():
         return _(
             "Unable to create new project <{location}> because"
             " the directory <{path}>"
@@ -843,7 +842,7 @@ def set_mapset(
             else:
                 # 'location_name' is a valid GRASS location,
                 # create new mapset
-                if os.path.isfile(path):
+                if Path(path).is_file():
                     # not a valid mapset, but dir exists, assuming
                     # broken/incomplete mapset
                     fatal(
@@ -852,7 +851,7 @@ def set_mapset(
                             " because <{path}> is a file."
                         ).format(mapset=mapset, path=path)
                     )
-                elif os.path.isdir(path):
+                elif Path(path).is_dir():
                     # not a valid mapset, but dir exists, assuming
                     # broken/incomplete mapset
                     warning(
@@ -875,7 +874,7 @@ def set_mapset(
                     if not tmp_mapset:
                         message(_("Creating new GRASS mapset <{}>...").format(mapset))
                     # create mapset directory
-                    os.mkdir(path)
+                    Path(path).mkdir()
                     if tmp_mapset:
                         # The tmp location is handled by (re-)using the
                         # tmpdir, but we need to take care of the tmp
@@ -2182,7 +2181,7 @@ def main() -> None:
     GRASS_VERSION_MAJOR = runtime_paths.version_major
     GRASS_VERSION_GIT = runtime_paths.grass_version_git
     gisbase = runtime_paths.gisbase
-    if not os.path.isdir(gisbase):
+    if not Path(gisbase).is_dir():
         gisbase = get_install_path(gisbase)
         # Set the main prefix again.
         # See also grass.script.setup.setup_runtime_env.

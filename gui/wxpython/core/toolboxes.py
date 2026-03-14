@@ -153,9 +153,9 @@ def getMenudataFile(userRootFile, newFile, fallback):
             )
         else:
             # if newer files -> generate new
-            menudataTime = os.path.getmtime(menudataFile)
+            menudataTime = Path(menudataFile).stat().st_mtime
             if _getUserToolboxesFile():
-                if os.path.getmtime(_getUserToolboxesFile()) > menudataTime:
+                if Path(_getUserToolboxesFile()).stat().st_mtime > menudataTime:
                     _debug(
                         2,
                         (
@@ -165,7 +165,7 @@ def getMenudataFile(userRootFile, newFile, fallback):
                     )
                     generateNew = True
             if userRootFile:
-                if os.path.getmtime(userRootFile) > menudataTime:
+                if Path(userRootFile).stat().st_mtime > menudataTime:
                     _debug(
                         2,
                         (
@@ -229,7 +229,7 @@ def _createPath(path):
     """Creates path (for toolboxes) if it doesn't exist'"""
     if not Path(path).exists():
         try:
-            os.mkdir(path)
+            Path(path).mkdir()
         except OSError as e:
             # we cannot use GError or similar because the gui doesn't start at
             # all
@@ -331,8 +331,8 @@ def _indent(elem, level=0):
             elem.text = i + "  "
         if not elem.tail or not elem.tail.strip():
             elem.tail = i
-        for _elem in elem:
-            _indent(_elem, level + 1)
+        for elem_ in elem:
+            _indent(elem_, level + 1)
         if not elem.tail or not elem.tail.strip():
             elem.tail = i
     elif level and (not elem.tail or not elem.tail.strip()):

@@ -23,7 +23,10 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 from grass.gunittest.main import test
 from grass.gunittest.utils import silent_rmtree
+from grass.app.runtime import RuntimePaths
 
+runtime_paths = RuntimePaths()
+is_cmake = runtime_paths.is_cmake_build
 ms_windows = sys.platform == "win32" or sys.platform == "cygwin"
 
 
@@ -59,6 +62,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         """Remove created files"""
         silent_rmtree(str(self.install_prefix))
 
+    @unittest.skipIf(is_cmake, "currently not supported by CMake build")
     @unittest.skipIf(ms_windows, "currently not supported on MS Windows")
     def test_github_install(self):
         """Test installing extension from github"""
@@ -76,6 +80,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
             if file.suffix != ".html":
                 self.assertModule(str(file), help=True)
 
+    @unittest.skipIf(is_cmake, "currently not supported by CMake build")
     @unittest.skipIf(ms_windows, "currently not supported on MS Windows")
     def test_gitlab_install(self):
         """Test installing extension from gitlab"""

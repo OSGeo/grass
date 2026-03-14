@@ -1,8 +1,7 @@
 ---
+title: MySQL Database Driver
 description: MySQL DATABASE DRIVER
 ---
-
-# MySQL DATABASE DRIVER
 
 MySQL database driver enables GRASS to store vector attributes in MySQL
 server.

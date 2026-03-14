@@ -141,7 +141,7 @@ static void initialize_map(expression *e)
     e->data.map.idx = G_malloc(threads * sizeof(int));
     for (int t = 0; t < threads; t++) {
         e->data.map.idx[t] = open_map(e->data.map.name, e->data.map.mod,
-                                      e->data.map.row, e->data.map.col);
+                                      e->data.map.row, e->data.map.col, t);
     }
 }
 
@@ -386,6 +386,8 @@ void execute(expr_list *ee)
         expression *e = l->exp;
         const char *var;
 
+        num_exprs++;
+
         if (e->type != expr_type_binding && e->type != expr_type_function)
             G_fatal_error("internal error: execute: invalid type: %d", e->type);
 
@@ -398,7 +400,6 @@ void execute(expr_list *ee)
             G_fatal_error(_("output map <%s> exists. To overwrite, "
                             "use the --overwrite flag"),
                           var);
-        num_exprs++;
     }
 
     /* Create a array of expreesion and stored it in heap */
@@ -473,14 +474,15 @@ void execute(expr_list *ee)
             current_row[tid] = row;
             for (i = 0; i < num_exprs; i++) {
                 expression *e = exp_arr[i];
-                int fd;
                 evaluate(e);
+            }
 #pragma omp ordered
-                {
+            {
+                for (i = 0; i < num_exprs; i++) {
+                    expression *e = exp_arr[i];
                     /* write out values to a file row by row */
                     if (e->type == expr_type_binding) {
-                        fd = e->data.bind.fd;
-                        put_map_row(fd, e->buf[tid], e->res_type);
+                        put_map_row(e->data.bind.fd, e->buf[tid], e->res_type);
                     }
                 }
             }

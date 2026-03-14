@@ -7,9 +7,9 @@ Created on March 11, 2025
 """
 
 import argparse
-from xml.dom import minidom  # noqa: S408
 import urllib.parse
 from pathlib import Path
+from xml.dom import minidom  # noqa: S408
 
 
 def check_url_version(url: str, version: str) -> str:

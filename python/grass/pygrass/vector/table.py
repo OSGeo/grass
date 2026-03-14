@@ -847,8 +847,7 @@ class Link:
                 sqlite3.register_adapter(t, int)
             dbpath = get_path(self.database, self.table_name)
             dbdirpath = os.path.split(dbpath)[0]
-            if not Path(dbdirpath).exists():
-                os.mkdir(dbdirpath)
+            Path(dbdirpath).mkdir(exist_ok=True)
             return sqlite3.connect(dbpath)
         if driver == "pg":
             try:

@@ -63,7 +63,7 @@ def write_file(name, contents):
 
 def try_mkdir(path):
     try:
-        os.mkdir(path)
+        Path(path).mkdir()
     except OSError:
         pass
 
@@ -103,7 +103,7 @@ def get_files(man_dir, cls=None, ignore_gui=True, extension: str = "html"):
 
 def write_header(f: IO, title, ismain=False, body_width="99%", template: str = "html"):
     if template == "html":
-        from build_html import header1_tmpl, macosx_tmpl, header2_tmpl
+        from build_html import header1_tmpl, header2_tmpl, macosx_tmpl
     else:
         from build_md import header1_tmpl, header2_tmpl
     f.write(header1_tmpl.substitute(title=title))

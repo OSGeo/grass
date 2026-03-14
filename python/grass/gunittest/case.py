@@ -645,10 +645,10 @@ class TestCase(unittest.TestCase):
             if the file is accessible for reading since we expect that user
             wants to look at created files.
         """
-        if not os.path.isfile(filename):
+        if not Path(filename).is_file():
             stdmsg = "File %s does not exist" % filename
             self.fail(self._formatMessage(msg, stdmsg))
-        if not skip_size_check and not os.path.getsize(filename):
+        if not skip_size_check and not Path(filename).stat().st_size:
             stdmsg = "File %s is empty" % filename
             self.fail(self._formatMessage(msg, stdmsg))
         if not skip_access_check and not os.access(filename, os.R_OK):

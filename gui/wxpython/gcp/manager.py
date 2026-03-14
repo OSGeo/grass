@@ -2411,7 +2411,7 @@ class GCPList(ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
         self.DeleteAllItems()
 
         self.render = False
-        if os.path.isfile(self.gcp.file["points"]):
+        if Path(self.gcp.file["points"]).is_file():
             self.gcp.ReadGCPs()
         else:
             # 3 gcp is minimum
@@ -2636,7 +2636,7 @@ class VectGroup(wx.Dialog):
         #
         self.listMap = CheckListBox(parent=self, id=wx.ID_ANY, choices=vectlist)
 
-        if os.path.isfile(self.vgrpfile):
+        if Path(self.vgrpfile).is_file():
             with open(self.vgrpfile) as f:
                 checked = []
                 for line in f:
@@ -2705,8 +2705,7 @@ class VectGroup(wx.Dialog):
 
         dirname = os.path.dirname(self.vgrpfile)
 
-        if not Path(dirname).exists():
-            os.makedirs(dirname)
+        Path(dirname).mkdir(parents=True, exist_ok=True)
 
         with open(self.vgrpfile, mode="w") as f:
             f.writelines(vect + "\n" for vect in vgrouplist)

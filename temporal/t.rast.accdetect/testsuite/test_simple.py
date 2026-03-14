@@ -24,7 +24,6 @@ class TestRasterExtraction(TestCase):
         for i in range(1, 101):
             cls.runModule(
                 "r.mapcalc",
-                flags="s",
                 overwrite=True,
                 expression="a_mapcalc{nu} = rand(1,10)".format(nu=i),
             )

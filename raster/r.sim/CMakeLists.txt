@@ -10,7 +10,7 @@ build_library_in_subdir(
   grass_gmath
   ${LIBM}
   OPTIONAL_DEPENDS
-  OPENMP
+  OpenMP::OpenMP_C
   HEADERS
   "simlib.h")
 
@@ -23,9 +23,9 @@ build_program_in_subdir(
   grass_sim
   grass_vector
   OPTIONAL_DEPENDS
-  OPENMP
+  OpenMP::OpenMP_C
   INCLUDES
-  "../simlib")
+  "${CMAKE_CURRENT_SOURCE_DIR}/../simlib")
 
 build_program_in_subdir(
   r.sim.sediment
@@ -36,6 +36,6 @@ build_program_in_subdir(
   grass_sim
   grass_vector
   OPTIONAL_DEPENDS
-  OPENMP
+  OpenMP::OpenMP_C
   INCLUDES
-  "../simlib")
+  "${CMAKE_CURRENT_SOURCE_DIR}/../simlib")

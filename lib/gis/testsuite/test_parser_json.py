@@ -8,11 +8,12 @@ for details.
 @author Soeren Gebbert
 """
 
+import json
 import subprocess
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.utils import xfail_windows
 from grass.script import decode
-import json
 
 
 class TestParserJson(TestCase):
