@@ -11,6 +11,8 @@
 
 """Legend generation for raster layers in interactive maps"""
 
+import operator
+
 import grass.script as gs
 
 
@@ -35,6 +37,8 @@ def parse_colors(mapname):
     is_categorical = datatype == "CELL"
 
     raw = gs.read_command("r.colors.out", map=mapname)
+    if raw is None:
+        raw = ""
     lines = raw.strip().splitlines()
 
     items = []
@@ -48,10 +52,16 @@ def parse_colors(mapname):
         elif parts[0] == "default":
             default = tuple(map(int, parts[1].split(":")))
         else:
-            value = float(parts[0])
+            # Handle percentage-based rules (e.g., '100%') by stripping the '%'
+            val_str = parts[0].rstrip("%")
+            value = float(val_str)
             rgb = tuple(map(int, parts[1].split(":")))
 
-            label = f"Class {int(value)}" if is_categorical else f"{value:g}"
+            label = (
+                f"Class {int(value)}"
+                if is_categorical
+                else (f"{value:g}%" if parts[0].endswith("%") else f"{value:g}")
+            )
 
             items.append({"value": value, "label": label, "rgb": rgb})
 
@@ -122,20 +132,45 @@ def _generate_continuous_html(items, title):
     if not items:
         return ""
 
+    # Sort items by value to ensure strictly ascending order
+    items = sorted(items, key=operator.itemgetter("value"))
+
     # Build CSS gradient stops
     min_val = items[0]["value"]
     max_val = items[-1]["value"]
     val_range = max_val - min_val if max_val != min_val else 1
 
-    gradient_stops = []
-    # Reverse items so stops go from top (0%) to bottom (100%)
-    for item in reversed(items):
-        r, g, b = item["rgb"]
-        # Calculate position as percentage (0% is top/max, 100% is bottom/min)
-        pct = 100 - ((item["value"] - min_val) / val_range * 100)
-        gradient_stops.append(f"rgb({r},{g},{b}) {pct:.1f}%")
+    # Ipywidgets HTML sanitizer aggressively strips linear-gradient().
+    # To ensure cross-frontend compatibility, we manually interpolate the
+    # color scale into 50 stacked solid-color div blocks.
+    def get_interpolated_color(val):
+        if val <= items[0]["value"]:
+            return items[0]["rgb"]
+        if val >= items[-1]["value"]:
+            return items[-1]["rgb"]
+        for i in range(len(items) - 1):
+            if items[i]["value"] <= val <= items[i + 1]["value"]:
+                v1, v2 = items[i]["value"], items[i + 1]["value"]
+                r1, g1, b1 = items[i]["rgb"]
+                r2, g2, b2 = items[i + 1]["rgb"]
+                ratio = (val - v1) / (v2 - v1) if v2 > v1 else 0
+                return (
+                    int(r1 + (r2 - r1) * ratio),
+                    int(g1 + (g2 - g1) * ratio),
+                    int(b1 + (b2 - b1) * ratio),
+                )
+        return items[-1]["rgb"]
 
-    gradient_css = ", ".join(gradient_stops)
+    gradient_html_blocks = []
+    steps = 50
+    for i in range(steps):
+        # Top of the bar is max_val, bottom is min_val
+        val = max_val - (i / max(1, steps - 1)) * val_range
+        r, g, b = get_interpolated_color(val)
+        gradient_html_blocks.append(
+            f'<div style="flex-grow: 1; background: rgb({r},{g},{b});"></div>'
+        )
+    gradient_blocks_html = "".join(gradient_html_blocks)
 
     # Select tick labels (show ~5 evenly spaced labels)
     num_ticks = min(5, len(items))
@@ -179,9 +214,11 @@ def _generate_continuous_html(items, title):
         # Gradient bar
         (
             '<div style="width: 20px; height: 150px; '
-            f"background: linear-gradient(to bottom, {gradient_css}); "
-            'border: 1px solid #000;"></div>'
+            "display: flex; flex-direction: column; "
+            'border: 1px solid #000;">'
         ),
+        gradient_blocks_html,
+        "</div>",
         # Tick labels
         '<div style="position: relative; width: 60px; height: 150px;">',
         "\n".join(ticks_html),
