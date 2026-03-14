@@ -92,7 +92,7 @@ def subcommand_run_tool(args, tool_args: list, print_help: bool) -> int:
                     for out_r in args.out_raster:
                         gs.run_command(
                             "r.external.out",
-                            directory=out_r, 
+                            directory=out_r,
                             env=session.env,
                             errors="status",
                         )
@@ -311,25 +311,29 @@ def main(args=None, program=None):
     run_subparser.add_argument(
         "--project", type=str, help="project to use for computations"
     )
-    run_subparser.add_argument("--link-raster", type=str, nargs="+",help="Link a raster file "
-    "(r.external) before execution")
     run_subparser.add_argument(
-        "--link-vector", 
-        type=str, 
+        "--link-raster",
+        type=str,
         nargs="+",
-        help="Link a vector file (v.external) before execution"
+        help="Link a raster file (r.external) before execution",
     )
     run_subparser.add_argument(
-        "--out-raster", 
-        type=str, 
+        "--link-vector",
+        type=str,
         nargs="+",
-        help="Define external format for raster output (r.external.out)"
+        help="Link a vector file (v.external) before execution",
     )
     run_subparser.add_argument(
-        "--out-vector", 
-        type=str, 
+        "--out-raster",
+        type=str,
         nargs="+",
-        help="Define external format for vector output (v.external.out)"
+        help="Define external format for raster output (r.external.out)",
+    )
+    run_subparser.add_argument(
+        "--out-vector",
+        type=str,
+        nargs="+",
+        help="Define external format for vector output (v.external.out)",
     )
     run_subparser.set_defaults(func=subcommand_run_tool)
     add_project_subparser(subparsers)
