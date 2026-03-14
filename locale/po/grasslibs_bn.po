@@ -61,7 +61,7 @@ msgstr "অজ্ঞাত Cairo সারফেসের ধরন"
 msgid "Failed to initialize Cairo surface (width: %d, height: %d): %s"
 msgstr "Cairo সারফেস ইনিশিয়ালাইজ করতে ব্যর্থ (প্রস্থ: %d, উচ্চতা: %d): %s"
 
-#, c-format
+#,fuzzy, c-format
 msgid "Unable to open file: %s"
 msgstr "ফাইল খুলতে অক্ষম: %s"
 
