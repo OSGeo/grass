@@ -45,9 +45,9 @@ int exact_checks(GDALDataType export_datatype, const char *name,
     fd = Rast_open_old(name, mapset);
 
     /* Create GRASS raster buffer */
-    void *bufer = Rast_allocate_buf(maptype);
+    void *buffer = Rast_allocate_buf(maptype);
 
-    if (bufer == NULL) {
+    if (buffer == NULL) {
         G_warning(_("Unable to allocate buffer for reading raster map"));
         return -1;
     }
@@ -72,12 +72,12 @@ int exact_checks(GDALDataType export_datatype, const char *name,
 
         for (row = 0; row < rows; row++) {
 
-            Rast_get_row(fd, bufer, row, maptype);
+            Rast_get_row(fd, buffer, row, maptype);
             for (col = 0; col < cols; col++) {
-                FCELL fval = ((FCELL *)bufer)[col];
+                FCELL fval = ((FCELL *)buffer)[col];
 
                 if (Rast_is_f_null_value(&fval)) {
-                    ((FCELL *)bufer)[col] = fnullval;
+                    ((FCELL *)buffer)[col] = fnullval;
                     n_nulls++;
                 }
                 else {
@@ -104,12 +104,12 @@ int exact_checks(GDALDataType export_datatype, const char *name,
 
         for (row = 0; row < rows; row++) {
 
-            Rast_get_row(fd, bufer, row, maptype);
+            Rast_get_row(fd, buffer, row, maptype);
             for (col = 0; col < cols; col++) {
-                DCELL dval = ((DCELL *)bufer)[col];
+                DCELL dval = ((DCELL *)buffer)[col];
 
                 if (Rast_is_d_null_value(&dval)) {
-                    ((DCELL *)bufer)[col] = dnullval;
+                    ((DCELL *)buffer)[col] = dnullval;
                     n_nulls++;
                 }
                 else {
@@ -136,20 +136,20 @@ int exact_checks(GDALDataType export_datatype, const char *name,
 
         for (row = 0; row < rows; row++) {
 
-            Rast_get_row(fd, bufer, row, maptype);
+            Rast_get_row(fd, buffer, row, maptype);
             for (col = 0; col < cols; col++) {
-                if (Rast_is_c_null_value(&((CELL *)bufer)[col])) {
-                    ((CELL *)bufer)[col] = inullval;
+                if (Rast_is_c_null_value(&((CELL *)buffer)[col])) {
+                    ((CELL *)buffer)[col] = inullval;
                     n_nulls++;
                 }
                 else {
-                    if (((CELL *)bufer)[col] == inullval) {
+                    if (((CELL *)buffer)[col] == inullval) {
                         nodatavalmatch = 1;
                     }
-                    if (dfCellMin > ((CELL *)bufer)[col])
-                        dfCellMin = ((CELL *)bufer)[col];
-                    if (dfCellMax < ((CELL *)bufer)[col])
-                        dfCellMax = ((CELL *)bufer)[col];
+                    if (dfCellMin > ((CELL *)buffer)[col])
+                        dfCellMin = ((CELL *)buffer)[col];
+                    if (dfCellMax < ((CELL *)buffer)[col])
+                        dfCellMax = ((CELL *)buffer)[col];
                 }
             }
             G_percent(row + 1, rows, 2);
@@ -207,7 +207,7 @@ int exact_checks(GDALDataType export_datatype, const char *name,
 
     Rast_close(fd);
 
-    G_free(bufer);
+    G_free(buffer);
 
     return ret;
 }
@@ -376,9 +376,9 @@ int export_band(GDALDatasetH hMEMDS, int band, const char *name,
     }
 
     /* Create GRASS raster buffer */
-    void *bufer = Rast_allocate_buf(maptype);
+    void *buffer = Rast_allocate_buf(maptype);
 
-    if (bufer == NULL) {
+    if (buffer == NULL) {
         G_warning(_("Unable to allocate buffer for reading raster map"));
         return -1;
     }
@@ -402,10 +402,10 @@ int export_band(GDALDatasetH hMEMDS, int band, const char *name,
 
         for (row = 0; row < rows; row++) {
 
-            Rast_get_row(fd, bufer, row, maptype);
+            Rast_get_row(fd, buffer, row, maptype);
             for (col = 0; col < cols; col++) {
-                if (Rast_is_f_null_value(&((FCELL *)bufer)[col])) {
-                    ((FCELL *)bufer)[col] = fnullval;
+                if (Rast_is_f_null_value(&((FCELL *)buffer)[col])) {
+                    ((FCELL *)buffer)[col] = fnullval;
                     if (n_nulls == 0) {
                         GDALSetRasterNoDataValue(hBand, nodataval);
                     }
@@ -413,7 +413,7 @@ int export_band(GDALDatasetH hMEMDS, int band, const char *name,
                 }
             }
 
-            if (GDALRasterIO(hBand, GF_Write, 0, row, cols, 1, bufer, cols, 1,
+            if (GDALRasterIO(hBand, GF_Write, 0, row, cols, 1, buffer, cols, 1,
                              datatype, 0, 0) >= CE_Failure) {
                 G_warning(_("Unable to write GDAL raster file"));
                 return -1;
@@ -430,10 +430,10 @@ int export_band(GDALDatasetH hMEMDS, int band, const char *name,
 
         for (row = 0; row < rows; row++) {
 
-            Rast_get_row(fd, bufer, row, maptype);
+            Rast_get_row(fd, buffer, row, maptype);
             for (col = 0; col < cols; col++) {
-                if (Rast_is_d_null_value(&((DCELL *)bufer)[col])) {
-                    ((DCELL *)bufer)[col] = dnullval;
+                if (Rast_is_d_null_value(&((DCELL *)buffer)[col])) {
+                    ((DCELL *)buffer)[col] = dnullval;
                     if (n_nulls == 0) {
                         GDALSetRasterNoDataValue(hBand, nodataval);
                     }
@@ -441,7 +441,7 @@ int export_band(GDALDatasetH hMEMDS, int band, const char *name,
                 }
             }
 
-            if (GDALRasterIO(hBand, GF_Write, 0, row, cols, 1, bufer, cols, 1,
+            if (GDALRasterIO(hBand, GF_Write, 0, row, cols, 1, buffer, cols, 1,
                              datatype, 0, 0) >= CE_Failure) {
                 G_warning(_("Unable to write GDAL raster file"));
                 return -1;
@@ -458,10 +458,10 @@ int export_band(GDALDatasetH hMEMDS, int band, const char *name,
 
         for (row = 0; row < rows; row++) {
 
-            Rast_get_row(fd, bufer, row, maptype);
+            Rast_get_row(fd, buffer, row, maptype);
             for (col = 0; col < cols; col++) {
-                if (Rast_is_c_null_value(&((CELL *)bufer)[col])) {
-                    ((CELL *)bufer)[col] = inullval;
+                if (Rast_is_c_null_value(&((CELL *)buffer)[col])) {
+                    ((CELL *)buffer)[col] = inullval;
                     if (n_nulls == 0) {
                         GDALSetRasterNoDataValue(hBand, nodataval);
                     }
@@ -469,7 +469,7 @@ int export_band(GDALDatasetH hMEMDS, int band, const char *name,
                 }
             }
 
-            if (GDALRasterIO(hBand, GF_Write, 0, row, cols, 1, bufer, cols, 1,
+            if (GDALRasterIO(hBand, GF_Write, 0, row, cols, 1, buffer, cols, 1,
                              datatype, 0, 0) >= CE_Failure) {
                 G_warning(_("Unable to write GDAL raster file"));
                 return -1;
@@ -482,7 +482,7 @@ int export_band(GDALDatasetH hMEMDS, int band, const char *name,
 
     Rast_close(fd);
 
-    G_free(bufer);
+    G_free(buffer);
 
     return ret;
 }

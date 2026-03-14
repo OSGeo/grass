@@ -62,7 +62,7 @@ jobs:
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
       - name: Invert inclusion list to an exclusion list
@@ -155,7 +155,7 @@ jobs:
 
       - name: Cache GRASS Sample Dataset
         id: cached-data
-        uses: actions/cache/restore@8b402f58fbc84540c8b491a91e594a4576fec3d7 # v5.0.2
+        uses: actions/cache/restore@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
         with:
           path: sample-data/nc_spm_full_v2beta1.tar.gz
           key: nc_spm_full_v2beta1.tar.gz
@@ -171,7 +171,7 @@ jobs:
             nc_spm_full_v2beta1.tar.gz"
 
       - name: Save GRASS Sample Dataset to cache
-        uses: actions/cache/save@8b402f58fbc84540c8b491a91e594a4576fec3d7 # v5.0.2
+        uses: actions/cache/save@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
         if: steps.cached-data.outputs.cache-hit != 'true'
         with:
           path: sample-data/nc_spm_full_v2beta1.tar.gz
@@ -185,7 +185,7 @@ jobs:
 
       - name: Make HTML test report available
         if: ${{ always() }}
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: testreport-${{ matrix.os }}-${{ matrix.config }}-${{ matrix.extra-include }}
           path: testreport

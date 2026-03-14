@@ -32,7 +32,7 @@ build_library_in_subdir(
   grass_gproj
   grass_parson
   OPTIONAL_DEPENDS
-  OPENMP)
+  OpenMP::OpenMP_C)
 
 if(TARGET LAPACKE)
   target_link_libraries(grass_raster PRIVATE LAPACKE)
@@ -62,7 +62,7 @@ build_library_in_subdir(
   CBLAS::CBLAS
   FFTW
   LAPACKE::LAPACKE
-  OPENMP)
+  OpenMP::OpenMP_C)
 
 build_library_in_subdir(linkm)
 
@@ -149,7 +149,7 @@ build_library_in_subdir(cluster DEPENDS grass_imagery grass_gis grass_raster)
 
 build_library_in_subdir(rowio DEPENDS grass_gis)
 
-build_library_in_subdir(segment DEPENDS grass_gis) # addeed DEPENDS grass_gis
+build_library_in_subdir(segment DEPENDS grass_gis) # added DEPENDS grass_gis
                                                    # for uninstd.h
 
 add_subdirectory(rst)
@@ -193,7 +193,10 @@ build_program_in_subdir(
 build_library_in_subdir(
   gpde
   HEADERS
-  "N_*.h"
+  N_gwflow.h
+  N_heatflow.h
+  N_pde.h
+  N_solute_transport.h
   DEPENDS
   grass_gis
   grass_raster
@@ -201,7 +204,7 @@ build_library_in_subdir(
   grass_gmath
   ${LIBM}
   OPTIONAL_DEPENDS
-  OPENMP)
+  OpenMP::OpenMP_C)
 
 build_library_in_subdir(dspf DEPENDS grass_gis)
 

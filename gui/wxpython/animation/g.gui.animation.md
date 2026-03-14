@@ -1,9 +1,8 @@
 ---
+title: g.gui.animation
 description: wxGUI Animation tool
 index: topic_GUI|GUI
 ---
-
-# wxGUI Animation tool
 
 ## DESCRIPTION
 

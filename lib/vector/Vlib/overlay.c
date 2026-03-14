@@ -63,7 +63,7 @@ int Vect_overlay(struct Map_info *AMap, int atype, struct ilist *AList,
                  struct ilist *AAList, /* map A */
                  struct Map_info *BMap, int btype, struct ilist *BList,
                  struct ilist *BAList, /* map B */
-                 int operator, struct Map_info * OMap)
+                 int operator, struct Map_info *OMap)
 { /* output map */
     switch (operator) {
     case GV_O_AND:
