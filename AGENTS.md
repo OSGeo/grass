@@ -125,7 +125,10 @@ passing.
 With `grass.tools`, numpy arrays can be passed as raster inputs (the array
 is written to a temporary raster matching the computation region) and
 requested as outputs using the `parameter=np.array` pattern (e.g.,
-`depth=np.array`).
+`depth=np.array`). For tools that read from stdin (e.g., `r.in.ascii`),
+pass an `io.StringIO` object as the parameter value (e.g.,
+`input=StringIO(ascii_text)`); `Tools` converts it to `-` and pipes the
+content automatically.
 
 Test data can be created in several ways: `r.mapcalc` raster algebra
 expressions (e.g., `elevation = 6 - col()`), numpy arrays, GRASS tools
@@ -229,7 +232,9 @@ miss.
 
 ### Comments (all languages)
 
-- No decorative comment banners or dividers (e.g., `# ---- Section ----`).
+- No decorative comment banners or dividers (e.g., `# ---- Section ----`)
+  except the top-level comment in tools with author and copyright in Python
+  scripts.
 - No double space after a sentence-ending period.
 - Write full sentences with proper capitalization, not stubs or all-lowercase
   fragments.
