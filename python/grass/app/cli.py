@@ -68,6 +68,42 @@ def subcommand_run_tool(args, tool_args: list, print_help: bool) -> int:
                     # other special flags, so later use of --json in tools will fail
                     # with the other flags active.
                     return tools.call_cmd(command).returncode
+                if args.link_raster:
+                    for raster in args.link_raster:
+                        gs.run_command(
+                            "r.external",
+                            input=raster,
+                            output=Path(raster).stem,
+                            flags="o",
+                            env=session.env,
+                            errors="status",
+                        )
+                if args.link_vector:
+                    for vector in args.link_vector:
+                        gs.run_command(
+                            "v.external",
+                            input=vector,
+                            output=Path(vector).stem,
+                            flags="o",
+                            env=session.env,
+                            errors="status",
+                        )
+                if args.out_raster:
+                    for out_r in args.out_raster:
+                        gs.run_command(
+                            "r.external.out",
+                            directory=out_r, 
+                            env=session.env,
+                            errors="status",
+                        )
+                if args.out_vector:
+                    for out_v in args.out_vector:
+                        gs.run_command(
+                            "v.external.out",
+                            output=out_v,
+                            env=session.env,
+                            errors="status",
+                        )
                 return tools.run_cmd(command).returncode
             except subprocess.CalledProcessError as error:
                 return error.returncode
@@ -94,7 +130,7 @@ def subcommand_create_project(args) -> int:
 
 def add_mapset_subparser(subparsers):
     mapset_subparser = subparsers.add_parser("mapset", help="mapset related operations")
-    mapset_subparsers = mapset_subparser.add_subparsers(dest="mapset_command")
+    mapset_subparsers = mapset_subparser.add_subparsers(dest="mapset_comm§and")
 
     subparser = mapset_subparsers.add_parser("create", help="create a new mapset")
     subparser.add_argument("path", help="path to the new mapset")
@@ -224,6 +260,26 @@ def add_project_subparser(subparsers):
         action="store_true",
         help="overwrite existing project",
     )
+    create_parser.add_argument(
+        "--link-raster",
+        action="append",
+        help="link a raster map to the project (can be used multiple times)",
+    )
+    create_parser.add_argument(
+        "--link-vector",
+        action="append",
+        help="link a vector map to the project (can be used multiple times)",
+    )
+    create_parser.add_argument(
+        "--out-raster",
+        action="append",
+        help="define external format for raster output (can be used multiple times)",
+    )
+    create_parser.add_argument(
+        "--out-vector",
+        action="append",
+        help="define external format for vector output (can be used multiple times)",
+    )
     create_parser.set_defaults(func=subcommand_create_project)
 
 
@@ -255,8 +311,27 @@ def main(args=None, program=None):
     run_subparser.add_argument(
         "--project", type=str, help="project to use for computations"
     )
+    run_subparser.add_argument("--link-raster", type=str, nargs="+",help="Link a raster file "
+    "(r.external) before execution")
+    run_subparser.add_argument(
+        "--link-vector", 
+        type=str, 
+        nargs="+",
+        help="Link a vector file (v.external) before execution"
+    )
+    run_subparser.add_argument(
+        "--out-raster", 
+        type=str, 
+        nargs="+",
+        help="Define external format for raster output (r.external.out)"
+    )
+    run_subparser.add_argument(
+        "--out-vector", 
+        type=str, 
+        nargs="+",
+        help="Define external format for vector output (v.external.out)"
+    )
     run_subparser.set_defaults(func=subcommand_run_tool)
-
     add_project_subparser(subparsers)
     add_mapset_subparser(subparsers)
 
