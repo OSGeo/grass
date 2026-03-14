@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-21 17:40+0000\n"
-"PO-Revision-Date: 2026-02-23 23:51+0000\n"
+"PO-Revision-Date: 2026-03-09 07:15+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs-8-5/fr/>\n"
 "Language: fr\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.16\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #, c-format
 msgid "Unknown algorithm '%s'"
@@ -67,7 +67,7 @@ msgstr "Échec d'initialisation de la surface Cairo (largeur : %d, hauteur : %
 
 #, c-format
 msgid "Unable to open file: %s"
-msgstr "Impossible d'ouvrir le fichier: %s"
+msgstr "Impossible d'ouvrir le fichier : %s"
 
 msgid "Failed to create cairo surface"
 msgstr "Échec de création de la surface cairo"
@@ -88,7 +88,7 @@ msgstr "Cairo : en-tête BMP invalide pour <%s>"
 msgid "Cairo: error reading BMP file <%s>: unexpected end of file"
 msgstr ""
 
-#, fuzzy, c-format
+#, c-format
 msgid "Cairo: error reading BMP file <%s>: %s"
 msgstr "Cairo : erreur de lecture du fichier BMP <%s> : %s"
 
@@ -333,7 +333,7 @@ msgstr "La table <%s> existe déjà dans la base de données <%s>"
 
 #, c-format
 msgid "Unable to open select cursor: '%s'"
-msgstr "Impossible d'ouvrir le curseur de sélection: '%s'"
+msgstr "Impossible d'ouvrir le curseur de sélection : '%s'"
 
 #, c-format
 msgid "Column <%s> is not integer"
@@ -426,7 +426,7 @@ msgstr "Le nom de la police <%s> est trop long"
 
 #, c-format
 msgid "%s: Unable to read font definition file; use the default"
-msgstr "%s: Impossible de lire le fichier de définition de police, utilisation de celle par défaut"
+msgstr "%s : Impossible de lire le fichier de définition des polices ; utilisation de la police par défaut"
 
 #, c-format
 msgid "%s: No font definition file"
@@ -663,15 +663,15 @@ msgstr "Région actuelle %d lignes, %d colonnes"
 
 #, c-format
 msgid "G_malloc: unable to allocate %lu bytes of memory at %s:%d"
-msgstr "G_malloc: impossible d'allouer %lu octets de mémoire à %s:%d"
+msgstr "G_malloc : impossible d'allouer %lu octets de mémoire à %s:%d"
 
 #, c-format
 msgid "G_calloc: unable to allocate %lu * %lu bytes of memory at %s:%d"
-msgstr "G_calloc: impossible d'allouer %lu * %lu octets de mémoire à %s:%d"
+msgstr "G_calloc : impossible d'allouer %lu * %lu octets de mémoire à %s:%d"
 
 #, c-format
 msgid "G_realloc: unable to allocate %lu bytes of memory at %s:%d"
-msgstr "G_realloc: impossible d'allouer %lu octets de mémoire à %s:%d"
+msgstr "G_realloc : impossible d'allouer %lu octets de mémoire à %s:%d"
 
 #, c-format
 msgid "Failed to print %s"
@@ -786,7 +786,7 @@ msgstr "Impossible d'écrire %d octets : %s"
 
 #, c-format
 msgid "unable to open datum table file: %s"
-msgstr "impossible d'ouvrir le fichier de datums: %s"
+msgstr "impossible d'ouvrir le fichier de la table des datums : %s"
 
 #, c-format
 msgid "error in datum table file, line %d"
@@ -805,7 +805,7 @@ msgid "%s complete. %s"
 msgstr "%s terminé. %s"
 
 msgid "No active GRASS session: GISRC environment variable not set"
-msgstr "Aucune session GRASS active : La variable d'environnement GISRC n'est pas définie."
+msgstr "Aucune session GRASS active : La variable d'environnement GISRC n'est pas définie"
 
 #, c-format
 msgid "Incomplete GRASS session: Variable '%s' not set"
@@ -815,7 +815,7 @@ msgid "unknown"
 msgstr "inconnu"
 
 msgid "WARNING: "
-msgstr "ATTENTION: "
+msgstr "AVERTISSEMENT : "
 
 #, c-format
 msgid "ERROR: "
@@ -944,7 +944,7 @@ msgid "%s files available in mapset <%s>:\n"
 msgstr "%s fichiers disponibles dans le jeu de données <%s> :\n"
 
 msgid "G_list: Unknown element type"
-msgstr "G_list: type d'élément inconnu"
+msgstr "G_list : Type d'élément inconnu"
 
 #, c-format
 msgid "LOCATION <%s> not available"
@@ -978,7 +978,7 @@ msgstr "Impossible de créer l'élément %s du jeu de cartes %s : %s"
 
 #, c-format
 msgid "Unable to access mapset element %s (%s): %s"
-msgstr "Impossible d'accéder à l'élément %s du jeu de données (%s): %s"
+msgstr "Impossible d'accéder à l'élément %s du jeu de cartes (%s) : %s"
 
 msgid "Attempt to create read-only temporary file"
 msgstr "Tentative de création d'un fichier temporaire en lecture-seule"
@@ -1049,7 +1049,7 @@ msgstr "Bug dans l'interface de description. La description de l'option <%s> est
 
 #, c-format
 msgid "Bug in UI description. Option '%s' in <%s> does not exist"
-msgstr "Bug dans l'interface de description. L'option  '%s'  n'existe pas dans <%s>"
+msgstr "Bug dans la description de l'interface utilisateur. L'option  '%s'  n'existe pas dans <%s>"
 
 msgid "Use either --quiet or --verbose flag, not both. Assuming --verbose."
 msgstr "Utiliser le drapeau soit --quiet soit --verbose, pas les deux ; --verbose supposé."
@@ -1880,19 +1880,19 @@ msgstr "G_spawn: impossible de réinitialiser le signal %d"
 
 #, c-format
 msgid "G_spawn: unable to ignore signal %d"
-msgstr "G_spawn: impossible d'ignorer le signal %d"
+msgstr "G_spawn : impossible d'ignorer le signal %d"
 
 #, c-format
 msgid "G_spawn: unable to block signal %d"
-msgstr "G_spawn: impossible d'ignorer le signal %d"
+msgstr "G_spawn : impossible de bloquer le signal %d"
 
 #, c-format
 msgid "G_spawn: unable to unblock signal %d"
-msgstr "G_spawn: impossible de débloquer le signal %d"
+msgstr "G_spawn : impossible de débloquer le signal %d"
 
 #, c-format
 msgid "G_spawn: unable to duplicate descriptor %d to %d"
-msgstr "G_spawn: impossible de dupliquer le descripteur %d vers %d"
+msgstr "G_spawn : impossible de dupliquer le descripteur %d vers %d"
 
 #, c-format
 msgid "Unable to create a new process: %s"
@@ -2131,11 +2131,11 @@ msgstr "fenêtre GRASS quand la vue a été sauvegardée :\n"
 
 #, c-format
 msgid " Window saved in \"%s\" is completely outside of current GRASS window."
-msgstr "La fenêtre sauvegardée dans \"%s\" est complètement en dehors de la fenêtre GRASS courante."
+msgstr " La fenêtre sauvegardée dans \"%s\" est complètement en dehors de la fenêtre GRASS courante."
 
 #, c-format
 msgid " Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
-msgstr "Seulement %d%% de la fenêtre sauvegardée dans \"%s\" chevauche(nt) la fenêtre GRASS courante."
+msgstr " Seulement %d%% de la fenêtre sauvegardée dans \"%s\" chevauche(nt) la fenêtre GRASS courante."
 
 msgid "Task already has a worker"
 msgstr "La tâche a déjà un processus"
@@ -2187,7 +2187,7 @@ msgid "Unable to allocate space for matrix product"
 msgstr "Allocation d'espace mémoire impossible pour le produit matriciel"
 
 msgid "Input: one or both data matrices uninitialised"
-msgstr "Entrée: une ou deux matrices de données non initialisées"
+msgstr "Entrée : une ou les deux matrices de données non initialisées"
 
 msgid "Principal matrix is not properly dimensioned"
 msgstr "La matrice principale n'est pas correctement dimensionnée"
@@ -2661,7 +2661,7 @@ msgstr "Valeur de catégorie en dehors des limites"
 
 #, c-format
 msgid "Unable to write header into category raster condition file <%s>."
-msgstr "Impossible d'écrire l'en-tête du fichier <%s> de catégorie  du raster."
+msgstr "Impossible d'écrire l'en-tête du fichier <%s> de catégorie du raster."
 
 #, c-format
 msgid "Unable to write into category raster condition file <%s>."
