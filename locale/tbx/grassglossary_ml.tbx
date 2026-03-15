@@ -249,15 +249,29 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>space-time</term></tig></langSet>
-                <langSet xml:lang="ml"><tig><term></term></tig></langSet>
+                <langSet xml:lang="ml"><tig><term/></tig></langSet>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>dataset</term></tig></langSet>
-                <langSet xml:lang="ml"><tig><term></term></tig></langSet>
+                <langSet xml:lang="ml"><tig><term/></tig></langSet>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>layers</term></tig></langSet>
+                <langSet xml:lang="ml"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>MySQL</term></tig></langSet>
+                <langSet xml:lang="ml"><tig><term/></tig></langSet>
+                <note from="translator">Name of a relational database management system</note>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>Support Vector Machine</term></tig></langSet>
                 <langSet xml:lang="ml"><tig><term></term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>SVM</term></tig></langSet>
+                <langSet xml:lang="ml"><tig><term></term></tig></langSet>
+                <descrip>Support Vector Machine</descrip>
             </termEntry>
         </body>
     </text>
