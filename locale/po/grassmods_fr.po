@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-28 15:43+0000\n"
-"PO-Revision-Date: 2026-02-23 22:29+0000\n"
+"POT-Creation-Date: 2026-03-14 15:46+0000\n"
+"PO-Revision-Date: 2026-03-09 07:09+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grassmods/fr/>\n"
 "Language: fr\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.16\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #, c-format
 msgid "Table <%s> not found in database <%s> using driver <%s>"
@@ -395,7 +395,7 @@ msgid "System tables instead of user tables"
 msgstr ""
 
 msgid "Lists all tables for a given database."
-msgstr "Lister toutes les tables d'une base de données"
+msgstr "Liste toutes les tables d'une base de données donnée."
 
 #, c-format
 msgid "Column '%s' already exists (duplicate name)"
@@ -577,7 +577,7 @@ msgstr ""
 
 #, c-format
 msgid "MySQL driver: column '%s', type %d is not supported"
-msgstr "Pilote MySQL: colonne '%s', type de donnée %d non géré"
+msgstr "Pilote MySQL : colonne '%s', type de donnée %d n'est pas supporté"
 
 #, c-format
 msgid "column '%s' : type BIGINT is stored as integer (4 bytes) some data may be damaged"
@@ -602,7 +602,7 @@ msgid "Unable to scan timestamp: "
 msgstr ""
 
 msgid "Unknown timestamp format: "
-msgstr "Format d'étiquette date&heure inconnu: "
+msgstr "Format d'horodatage inconnu : "
 
 msgid "Unable to scan date: "
 msgstr ""
@@ -817,9 +817,9 @@ msgstr ""
 msgid "Disabling SQLite locking"
 msgstr ""
 
-#, fuzzy, c-format
+#, c-format
 msgid "The sqlite config option '%s' is not supported"
-msgstr "Type d'entité '%s' non supporté"
+msgstr "L'option de configuration SQLite '%s' n'est pas prise en charge"
 
 msgid "Unable to open database:"
 msgstr ""
@@ -1797,8 +1797,8 @@ msgstr ""
 #, c-format
 msgid "The last point will be ignored"
 msgid_plural "The last %d points will be ignored"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Le dernier point sera ignoré"
+msgstr[1] "Les derniers %d points seront ignorés"
 
 #, c-format
 msgid "Scale X labels cannot be used with this range of data (%f, %f)"
@@ -1982,9 +1982,9 @@ msgstr ""
 msgid "Unable to create file <%s>"
 msgstr "Impossible de créer le fichier <%s>"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write to file <%s>"
-msgstr "Impossible de créer le fichier <%s>"
+msgstr "Échec de l'écriture dans le fichier <%s>"
 
 #, c-format
 msgid "Unable to delete file <%s>"
@@ -2138,7 +2138,7 @@ msgstr ""
 
 #, c-format
 msgid "Node %d: %f %f\n"
-msgstr "Noeud %d: %f %f\n"
+msgstr "Noeud %d : %f %f\n"
 
 #, c-format
 msgid "Destination unreachable\n"
@@ -2222,6 +2222,7 @@ msgstr ""
 msgid "Illegal value for skip factor"
 msgstr ""
 
+#, fuzzy
 msgid "Magnitude is only supported for GRASS and compass aspect maps."
 msgstr "La magnitude n'est gérée que pour les couches GRASS d'aspect"
 
@@ -2298,7 +2299,7 @@ msgid "[%s]: illegal value specified"
 msgstr ""
 
 msgid "Redraws the content of currently selected monitor."
-msgstr "Redessiner le contenu de l'écran actuellement sélectionné"
+msgstr "Redessiner le contenu de l'écran actuellement sélectionné."
 
 msgid "No graphics device selected. Use d.mon to select graphics device."
 msgstr ""
@@ -2481,7 +2482,7 @@ msgstr "Impossible d'ouvrir la base de données <%s> avec le pilote <%s>"
 
 #, c-format
 msgid "Unable to open select cursor: '%s'"
-msgstr "Impossible d'ouvrir le curseur de sélection: '%s'"
+msgstr "Impossible d'ouvrir le curseur de sélection : '%s'"
 
 #, c-format
 msgid "Unable to read symbol <%s>, unable to display points"
@@ -11425,7 +11426,7 @@ msgid "feet"
 msgstr "pied"
 
 msgid "miles"
-msgstr "mile"
+msgstr "miles"
 
 msgid "nautical miles"
 msgstr "miles nautiques"
@@ -14272,7 +14273,7 @@ msgstr ""
 
 #, c-format
 msgid "Unable to open file: %s"
-msgstr "Impossible d'ouvrir le fichier: %s"
+msgstr "Impossible d'ouvrir le fichier : %s"
 
 #, c-format
 msgid "Unexpected end of file while reading %s"
@@ -18376,7 +18377,7 @@ msgstr ""
 msgid "Number of walkers"
 msgstr ""
 
-msgid "Time used for iterations [minutes]"
+msgid "Duration of the simulated water flow [minutes]"
 msgstr ""
 
 msgid "Minimum time step for the simulation [seconds]"
@@ -28722,7 +28723,7 @@ msgstr "Valeur maximum dans la couche de sortie : %e"
 
 #, c-format
 msgid "%s: Unable to read font definition file; use the default"
-msgstr "%s: Impossible de lire le fichier de définition de police, utilisation de celle par défaut"
+msgstr "%s : Impossible de lire le fichier de définition des polices ; utilisation de la police par défaut"
 
 #, c-format
 msgid "%s: No font definition file"
