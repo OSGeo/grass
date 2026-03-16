@@ -274,7 +274,7 @@ library documentation page.
 Starting with GRASS version 8.5, the GUI provides integrated support for launching
 and managing Jupyter Notebooks directly from the interface.
 This allows you to seamlessly combine interactive Python notebooks
-with your GRASS workflow.
+with your GUI workflow.
 
 ### Getting Started
 
