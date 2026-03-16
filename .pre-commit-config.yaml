@@ -40,12 +40,16 @@ repos:
                 python/libgrass_interface_generator/ctypesgen/|
                 lib/fonts/fonts/.*
           )
-      - id: destroyed-symlinks
-      - id: check-symlinks
-      - id: check-toml
-      - id: check-xml
+      - id: check-case-conflict
+      # - id: check-executables-have-shebangs # Nice to have once fixes applied
       - id: check-json
       - id: check-merge-conflict
+      # - id: check-shebang-scripts-are-executable # Nice to have once fixes applied
+      - id: check-symlinks
+      - id: check-toml
+      - id: check-vcs-permalinks
+      - id: check-xml
+      - id: destroyed-symlinks
       - id: detect-private-key
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.

@@ -260,6 +260,24 @@
                 <langSet xml:lang="en"><tig><term>layers</term></tig></langSet>
                 <langSet xml:lang="fr"><tig><term>couches</term></tig></langSet>
             </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>MySQL</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term/></tig></langSet>
+                <note from="translator">Name of a relational database management system</note>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>Support Vector Machine</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>Séparateur à vaste marge</term></tig></langSet>
+                <note from="translator">Ou machine à vecteurs de support, mais on va choisir le terme plus précis et évocateur en français, séparateur à vaste marge&#13;
+https://vitrinelinguistique.oqlf.gouv.qc.ca/fiche-gdt/fiche/26579673/machine-a-vecteurs-de-support</note>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>SVM</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>SVM</term></tig></langSet>
+                <note from="translator">SVM pour séparateur à vaste marge, sinon MVS si machine à vecteurs de support. On choisi SVM pour le terme plus précis et évocateur en français.&#13;
+https://vitrinelinguistique.oqlf.gouv.qc.ca/fiche-gdt/fiche/26579673/machine-a-vecteurs-de-support</note>
+                <descrip>Support Vector Machine</descrip>
+            </termEntry>
         </body>
     </text>
 </martif>
