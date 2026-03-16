@@ -66,6 +66,10 @@
 #include <grass/gjson.h>
 #include "r.proj.h"
 
+#define PACKAGE "grassmods"
+
+#include <omp.h>
+
 /* modify this table to add new methods */
 struct menu menu[] = {
     {p_nearest, "nearest", "nearest neighbor"},
@@ -79,6 +83,28 @@ struct menu menu[] = {
 
 static char *make_ipol_list(void);
 static char *make_ipol_desc(void);
+
+
+/* Custom Interpolation for RAM Bypass - Lock-Free */
+void interpolate_ram(void *full_map, void *obufptr, int cell_type, 
+                     double col_idx, double row_idx, struct Cell_head *incellhd) 
+{
+    int c = (int)floor(col_idx);
+    int r = (int)floor(row_idx);
+    int cell_size = Rast_cell_size(cell_type);
+
+    /* Boundary check */
+    if (r < 0 || r >= incellhd->rows || c < 0 || c >= incellhd->cols) {
+        Rast_set_null_value(obufptr, 1, cell_type);
+        return;
+    }
+
+    /* Direct memory access - Thread Safe for Reads */
+    unsigned char *src = (unsigned char *)full_map + 
+                         (((size_t)r * incellhd->cols + c) * cell_size);
+    memcpy(obufptr, src, cell_size);
+}
+
 
 int main(int argc, char **argv)
 {
@@ -671,7 +697,6 @@ int main(int argc, char **argv)
     cell_type = Rast_get_map_type(fdi);
     ibuffer = readcell(fdi, memory->answer);
     Rast_close(fdi);
-
     /* And switch back to original location */
     G_switch_env();
     Rast_set_output_window(&outcellhd);
@@ -702,58 +727,73 @@ int main(int argc, char **argv)
     xcoord2 = outcellhd.west + (outcellhd.ew_res / 2);
     ycoord2 = outcellhd.north - (outcellhd.ns_res / 2);
 
-    G_important_message(_("Projecting..."));
+
+    /* --- RAM BYPASS START --- */
+    /* 1. Allocate a flat buffer for the entire input map in RAM */
+    size_t total_cells = (size_t)incellhd.rows * incellhd.cols;
+
+    /* Simple memory safety check */
+    double memory_mb = (double)(total_cells * cell_size) / (1024.0 * 1024.0);
+    G_debug(1, "Bypass buffer requires %.2f MB of RAM", memory_mb);
+
+    if (memory_mb > 4000) { 
+        G_warning(_("Input map requires %.2f MB of RAM for parallel processing. "
+                    "If this causes a crash, reduce the region size with g.region."), 
+                memory_mb);
+    }
+    /* Proceed with allocation */
+    void *full_map_array = G_malloc(total_cells * cell_size);
+    
+    if (!full_map_array)
+        G_fatal_error("Insufficient RAM for bypass. Try a smaller region.");
+
+    G_important_message(_("Loading map into RAM buffer for parallel bypass..."));
+    
+    /* 2. Sequential load (Single-threaded, library-safe) */
+    /* ibuffer is already loaded by readcell, but we move it to a flat array 
+       so we can access it lock-free without the readcell tile cache logic */
+    for (int r = 0; r < incellhd.rows; r++) {
+        void *row_ptr = (void *)((unsigned char *)full_map_array + ((size_t)r * incellhd.cols * cell_size));
+        /* We use the already-loaded cache here, but single-threaded */
+        interpolate(ibuffer, row_ptr, cell_type, 0.0, (double)r, &incellhd);
+        G_percent(r, incellhd.rows - 1, 5);
+    }
+
+    G_important_message(_("Projecting (Lock-Free Parallel)..."));
+    
+    #pragma omp parallel for private(row, col) schedule(dynamic)
     for (row = 0; row < outcellhd.rows; row++) {
-        /* obufptr = obuffer */;
-
-        G_percent(row, outcellhd.rows - 1, 2);
-
-#if 0
-        /* parallelization does not always work,
-         * segfaults in the interpolation functions
-         * can happen */
-#pragma omp parallel for schedule(static)
-#endif
+        void *local_obuffer = Rast_allocate_output_buf(cell_type);
+        double local_y = outcellhd.north - (outcellhd.ns_res / 2) - (row * outcellhd.ns_res);
+        double local_x_start = outcellhd.west + (outcellhd.ew_res / 2);
 
         for (col = 0; col < outcellhd.cols; col++) {
-            void *obufptr =
-                (void *)((const unsigned char *)obuffer + col * cell_size);
+            void *obufptr = (void *)((unsigned char *)local_obuffer + (size_t)col * cell_size);
+            double x1 = local_x_start + (col * outcellhd.ew_res);
+            double y1 = local_y;
 
-            double xcoord1 = xcoord2 + (col)*outcellhd.ew_res;
-            double ycoord1 = ycoord2;
-
-            /* project coordinates in output matrix to       */
-            /* coordinates in input matrix                   */
-            if (GPJ_transform(&oproj, &iproj, &tproj, PJ_FWD, &xcoord1,
-                              &ycoord1, NULL) < 0) {
-                G_fatal_error(_("Error in %s"), "GPJ_transform()");
+            if (GPJ_transform(&oproj, &iproj, &tproj, PJ_FWD, &x1, &y1, NULL) < 0) {
                 Rast_set_null_value(obufptr, 1, cell_type);
+            } else {
+                double c_idx = (x1 - incellhd.west) / incellhd.ew_res;
+                double r_idx = (incellhd.north - y1) / incellhd.ns_res;
+
+                /* CALL OUR LOCK-FREE RAM INTERPOLATOR */
+                interpolate_ram(full_map_array, obufptr, cell_type, c_idx, r_idx, &incellhd);
             }
-            else {
-                /* convert to row/column indices of input matrix */
-
-                /* column index in input matrix */
-                double col_idx = (xcoord1 - incellhd.west) / incellhd.ew_res;
-
-                /* row index in input matrix    */
-                double row_idx = (incellhd.north - ycoord1) / incellhd.ns_res;
-
-                /* and resample data point               */
-                interpolate(ibuffer, obufptr, cell_type, col_idx, row_idx,
-                            &incellhd);
-            }
-
-            /* obufptr = G_incr_void_ptr(obufptr, cell_size); */
         }
 
-        Rast_put_row(fdo, obuffer, cell_type);
-
-        xcoord2 = outcellhd.west + (outcellhd.ew_res / 2);
-        ycoord2 -= outcellhd.ns_res;
+        #pragma omp critical
+        {
+            Rast_put_row(fdo, local_obuffer, cell_type);
+        }
+        G_free(local_obuffer);
     }
+    /*RAM BYPASS END*/
 
     Rast_close(fdo);
     release_cache(ibuffer);
+    G_free(full_map_array); /* Clean up our bypass buffer */
 
     if (have_colors > 0) {
         Rast_write_colors(mapname, G_mapset(), &colr);
@@ -811,3 +851,4 @@ char *make_ipol_desc(void)
 
     return buf;
 }
+
