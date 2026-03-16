@@ -17,3 +17,4 @@ $(DSTDIR):
 
 $(DSTDIR)/%: % | $(DSTDIR)
 	$(INSTALL_DATA) $< $@
+
