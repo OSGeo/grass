@@ -316,7 +316,7 @@ In Browser Mode, Jupyter opens in your system's default web browser. This mode p
 ![Integrated Mode - Jupyter embedded directly in GRASS GUI](jupyter_integrated_mode.png)
 
 In Integrated Mode, Jupyter notebooks are embedded directly in the GRASS GUI window
-using the wx.html2 library. This mode offers:
+(if the wx.html2 library is available). This mode offers:
 
 - Jupyter interface embedded as a native GRASS GUI tab
 - Seamless integration with other GRASS tools and panels
