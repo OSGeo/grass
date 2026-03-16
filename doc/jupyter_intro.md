@@ -269,7 +269,7 @@ For complete documentation on the `grass.script` package, see the
 [grass.script](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html)
 library documentation page.
 
-## Using Jupyter Notebooks from GRASS GUI
+## Using Jupyter Notebooks from GUI
 
 Starting with GRASS version 8.5, the GUI provides integrated support for launching
 and managing Jupyter Notebooks directly from the interface.
