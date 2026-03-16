@@ -736,10 +736,13 @@ int main(int argc, char **argv)
     double memory_mb = (double)(total_cells * cell_size) / (1024.0 * 1024.0);
     G_debug(1, "Bypass buffer requires %.2f MB of RAM", memory_mb);
 
-    if (memory_mb > 4000) { 
-        G_warning(_("Input map requires %.2f MB of RAM for parallel processing. "
-                    "If this causes a crash, reduce the region size with g.region."), 
-                memory_mb);
+    double user_limit_mb = atof(memory->answer);
+    if (memory_mb > user_limit_mb) {
+        G_warning(_("Input map requires %.2f MB of RAM for parallel processing, "
+                    "which exceeds the current memory limit (%.0f MB)."),
+                  memory_mb, user_limit_mb);
+        G_important_message(_("The process may crash if system RAM is insufficient. "
+                              "Increase the 'memory' option or use g.region to reduce the area."));
     }
     /* Proceed with allocation */
     void *full_map_array = G_malloc(total_cells * cell_size);
