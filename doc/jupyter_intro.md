@@ -6,59 +6,70 @@ authors:
 
 # Jupyter notebooks introduction
 
-The `grass.jupyter` Python package provides a [Jupyter](https://jupyter.org/)
-notebook interface to GRASS. It includes modules for creating map figures,
-interactive web maps, visualizing data series and time series, and generating
-3D visualizations.
+GRASS can be used directly in Jupyter notebooks, allowing you to combine
+interactive Python code, visualizations, and documentation in one place.
+This is ideal for geospatial analysis, teaching, and reproducible research.
 
-## Ways to Use Jupyter with GRASS
+With GRASS in [Jupyter](https://jupyter.org/), you can:
+
+- Run GRASS tools and analyses interactively
+
+- Create maps and 3D visualizations
+
+- Document your workflow step-by-step
+
+- Share reproducible analyses
+
+## How to Get Started
 
 There are several ways to work with GRASS in Jupyter notebooks,
 each suited to different workflows and requirements:
 
-### 1. GUI Integration (GRASS 8.5+)
+### GUI Integration (GRASS 8.5+)
 
-Launch Jupyter directly from the GUI with pre-configured sessions and templates.
-This is the easiest way to get started—no manual setup required.
+If you are a user who prefers working through a GUI environment,
+you may launch Jupyter directly from the GUI with pre-configured
+sessions and templates. This is the easiest way to get started—no manual
+setup required, you only need to have Jupyter installed locally.
+There are two available launching modes: integrated mode and
+browser mode. See [Using Jupyter Notebooks from GRASS GUI](https://grass.osgeo.org/grass-stable/manuals/wxGUI.jupyter.html)
+for details.
 
-- **Best for:** Users who prefer GUI workflows and want quick access to notebooks
-- **Setup:** No configuration needed; launches from **File → Jupyter Notebook**
-- **Learn more:** [Using Jupyter Notebooks from GRASS GUI](https://grass.osgeo.org/grass-stable/manuals/wxGUI.jupyter.html)
+### Local Jupyter Server
 
-### 2. Local Jupyter Server
+If you are a regular Jupyter notebook user and want full control
+over your environment and packages, you can use your GRASS
+installation (8.4+) and run a local Jupyter server instance.
+Then you can run your cells either in the browser or in an
+IDE with Jupyter support (e.g., VS Code, PyCharm).
+Tutorials:
+[Get started with GRASS & Python in Jupyter (Unix/Linux)](https://grass-tutorials.osgeo.org/content/tutorials/get_started/fast_track_grass_and_python.html)
+and [Get started on Windows](https://grass-tutorials.osgeo.org/content/tutorials/get_started/JupyterOnWindows_OSGeo4W_Tutorial.html).
 
-Run Jupyter on your own machine with a local GRASS installation.
-This gives you full control over your environment and packages.
+### Google Colab
 
-- **Best for:** Regular GRASS users who want to integrate notebooks
-into their existing workflow
-- **Requirements:** GRASS 8.4+ and Jupyter installed locally
-- **Tutorial:** [Get started with GRASS & Python in Jupyter (Unix/Linux)](https://grass-tutorials.osgeo.org/content/tutorials/get_started/fast_track_grass_and_python.html)
-  | [Get started on Windows](https://grass-tutorials.osgeo.org/content/tutorials/get_started/JupyterOnWindows_OSGeo4W_Tutorial.html)
+If you want to make quick experiments and do not have a local GRASS
+installation, you can run GRASS notebooks in the cloud using
+Google Colaboratory. It is ideal for notebook sharing and
+reproducibility, with free access to computing resources including GPUs.
+The only requirement is a Google account.
+Tutorial: [Get started with GRASS in Google Colab](https://grass-tutorials.osgeo.org/content/tutorials/get_started/grass_gis_in_google_colab.html).
 
-### 3. Google Colab
+### Binder
 
-Run GRASS notebooks in the cloud using Google Colaboratory—no installation required.
-Free access to computing resources including GPUs.
-Ideal for sharing and reproducibility.
+If you want to make demonstrations, run examples at workshops, etc.,
+and do not have a local GRASS installation, you can launch
+GRASS notebooks directly from your browser using Binder.
+No account needed.
+Try it now: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/OSGeo/grass/main?labpath=doc%2Fexamples%2Fnotebooks%2Fjupyter_tutorial.ipynb)
 
-- **Best for:** Quick experiments, teaching, sharing workflows,
-or users without local GRASS installation
-- **Requirements:** Google account only
-- **Tutorial:** [Get started with GRASS in Google Colab](https://grass-tutorials.osgeo.org/content/tutorials/get_started/grass_gis_in_google_colab.html)
+## Working with grass.jupyter
 
-### 4. Binder
-
-Launch interactive GRASS notebooks directly from your browser using Binder.
-No installation or account needed.
-
-- **Best for:** Trying GRASS without installation, workshops, demonstrations
-- **Requirements:** None—runs entirely in your browser
-- **Try it now:** [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/OSGeo/grass/main?labpath=doc%2Fexamples%2Fnotebooks%2Fjupyter_tutorial.ipynb)
-
----
-
-## Getting Started with grass.jupyter
+Once you have Jupyter running (using any method above), use
+the `grass.jupyter` package providing a Jupyter
+notebook interface to GRASS. It includes modules for creating map figures,
+interactive web maps, visualizing data series and time series, and generating
+3D visualizations.
 
 If you don't have a project yet, create a new one first:
 
