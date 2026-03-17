@@ -78,6 +78,7 @@ def subcommand_run_tool(args, tool_args: list, print_help: bool) -> int:
                             env=session.env,
                             errors="status",
                         )
+                        gs.run_command("g.list", type="raster", env=session.env)
                 if args.link_vector:
                     for vector in args.link_vector:
                         gs.run_command(
@@ -90,19 +91,25 @@ def subcommand_run_tool(args, tool_args: list, print_help: bool) -> int:
                         )
                 if args.out_raster:
                     for out_r in args.out_raster:
+                        abs_out_path = os.path.abspath(out_r)
+                        Path(abs_out_path).mkdir(exist_ok=True, parents=True)
                         gs.run_command(
                             "r.external.out",
-                            directory=out_r,
+                            directory=abs_out_path,
                             env=session.env,
                             errors="status",
+                            format="GTiff",
                         )
                 if args.out_vector:
                     for out_v in args.out_vector:
+                        abs_out_path = os.path.abspath(out_v)
+                        Path(abs_out_path).mkdir(exist_ok=True, parents=True)
                         gs.run_command(
                             "v.external.out",
                             output=out_v,
                             env=session.env,
                             errors="status",
+                            format="GPKG",
                         )
                 return tools.run_cmd(command).returncode
             except subprocess.CalledProcessError as error:
