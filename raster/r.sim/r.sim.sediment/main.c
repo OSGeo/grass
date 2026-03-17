@@ -234,11 +234,12 @@ int main(int argc, char *argv[])
     parm.nwalk->guisection = _("Parameters");
 
     parm.niter = G_define_option();
-    parm.niter->key = "niterations";
+    parm.niter->key = "duration";
     parm.niter->type = TYPE_INTEGER;
     parm.niter->answer = NITER;
     parm.niter->required = NO;
-    parm.niter->description = _("Time used for iterations [minutes]");
+    parm.niter->description =
+        _("Duration of the simulated water flow [minutes]");
     parm.niter->guisection = _("Parameters");
 
     parm.mintimestep = G_define_option();
