@@ -133,7 +133,7 @@ nav:
       - Command line:
           - Command line introduction: command_line_intro.md
           - The grass command: grass.md
-          - Environmental variables: variables.md
+          - Environment variables: variables.md
       - Python: python_intro.md
       - Jupyter notebooks: jupyter_intro.md
       - Graphical user interface:
