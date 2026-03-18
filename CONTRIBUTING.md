@@ -23,6 +23,8 @@ Contributors must:
 - **Write clear, concise PR descriptions** in your own words.
 - **Use your own voice** in GitHub issues and PR discussions.
 - **Take responsibility** for code quality, correctness, and maintainability.
+  Self-review AI-generated code before submitting — question whether each
+  change is justified and remove what is not.
 
 ### Disclosure
 
