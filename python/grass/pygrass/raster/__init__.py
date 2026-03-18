@@ -123,10 +123,10 @@ class RasterRow(RasterAbstractBase):
         >>> with RasterRow(test_raster_name) as elev:
         ...     for row in elev:
         ...         row
-        Buffer([11, 21, 31, 41], dtype=int32)
-        Buffer([12, 22, 32, 42], dtype=int32)
-        Buffer([13, 23, 33, 43], dtype=int32)
-        Buffer([14, 24, 34, 44], dtype=int32)
+        Buffer([11, 21, 31, 41])
+        Buffer([12, 22, 32, 42])
+        Buffer([13, 23, 33, 43])
+        Buffer([14, 24, 34, 44])
 
         >>> elev.is_open()
         False
@@ -147,9 +147,9 @@ class RasterRow(RasterAbstractBase):
         >>> elev = RasterRow(test_raster_name)
         >>> elev.open()
         >>> elev[0]
-        Buffer([11, 21, 31, 41], dtype=int32)
+        Buffer([11, 21, 31, 41])
         >>> elev.get_row(0)
-        Buffer([11, 21, 31, 41], dtype=int32)
+        Buffer([11, 21, 31, 41])
 
         """
         if row_buffer is None:
@@ -271,10 +271,10 @@ class RasterRowIO(RasterRow):
             >>> elev.open("r")
             >>> for row in elev:
             ...     row
-            Buffer([11, 21, 31, 41], dtype=int32)
-            Buffer([12, 22, 32, 42], dtype=int32)
-            Buffer([13, 23, 33, 43], dtype=int32)
-            Buffer([14, 24, 34, 44], dtype=int32)
+            Buffer([11, 21, 31, 41])
+            Buffer([12, 22, 32, 42])
+            Buffer([13, 23, 33, 43])
+            Buffer([14, 24, 34, 44])
 
             >>> elev.close()
 
@@ -368,10 +368,10 @@ class RasterSegment(RasterAbstractBase):
             >>> elev.open("r")
             >>> for row in elev:
             ...     row
-            Buffer([11, 21, 31, 41], dtype=int32)
-            Buffer([12, 22, 32, 42], dtype=int32)
-            Buffer([13, 23, 33, 43], dtype=int32)
-            Buffer([14, 24, 34, 44], dtype=int32)
+            Buffer([11, 21, 31, 41])
+            Buffer([12, 22, 32, 42])
+            Buffer([13, 23, 33, 43])
+            Buffer([14, 24, 34, 44])
 
             >>> elev.close()
 
@@ -379,10 +379,10 @@ class RasterSegment(RasterAbstractBase):
             >>> with RasterSegment(test_raster_name) as elev:
             ...     for row in elev:
             ...         row
-            Buffer([11, 21, 31, 41], dtype=int32)
-            Buffer([12, 22, 32, 42], dtype=int32)
-            Buffer([13, 23, 33, 43], dtype=int32)
-            Buffer([14, 24, 34, 44], dtype=int32)
+            Buffer([11, 21, 31, 41])
+            Buffer([12, 22, 32, 42])
+            Buffer([13, 23, 33, 43])
+            Buffer([14, 24, 34, 44])
 
         """
         if row_buffer is None:
@@ -411,10 +411,10 @@ class RasterSegment(RasterAbstractBase):
         >>> map_b.open("r")
         >>> for row in map_b:
         ...     row
-        Buffer([1011, 1021, 1031, 1041], dtype=int32)
-        Buffer([1012, 1022, 1032, 1042], dtype=int32)
-        Buffer([1013, 1023, 1033, 1043], dtype=int32)
-        Buffer([1014, 1024, 1034, 1044], dtype=int32)
+        Buffer([1011, 1021, 1031, 1041])
+        Buffer([1012, 1022, 1032, 1042])
+        Buffer([1013, 1023, 1033, 1043])
+        Buffer([1014, 1024, 1034, 1044])
         >>> map_b.close()
 
         """
