@@ -2089,7 +2089,7 @@ class DataCatalogTree(TreeView):
         if wx.TheClipboard.Open():
             do = wx.TextDataObject()
             paths = [db.data["name"] for db in self.selected_grassdb]
-            do.SetText(",".join(paths))
+            do.SetText("\n".join(paths))
             wx.TheClipboard.SetData(do)
             wx.TheClipboard.Close()
 
@@ -2100,6 +2100,21 @@ class DataCatalogTree(TreeView):
         self.UpdateCurrentDbLocationMapsetNode()
         self.RefreshNode(node, recursive=True)
         self.ExpandNode(node, recursive=False)
+
+    def OnCopyLocationPath(self, event):
+        """Copy path to project (location)"""
+        if wx.TheClipboard.Open():
+            do = wx.TextDataObject()
+            text = []
+            for i in range(len(self.selected_location)):
+                path = os.path.join(
+                    self.selected_grassdb[i].data["name"],
+                    self.selected_location[i].data["name"],
+                )
+                text.append(path)
+            do.SetText("\n".join(text))
+            wx.TheClipboard.SetData(do)
+            wx.TheClipboard.Close()
 
     def OnReloadGrassdb(self, event):
         """Reload all mapsets in selected grass db"""
@@ -2259,7 +2274,7 @@ class DataCatalogTree(TreeView):
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnReloadMapset, item)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy path to mapset"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy path"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCopyMapsetPath, item)
 
@@ -2290,6 +2305,10 @@ class DataCatalogTree(TreeView):
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnReloadLocation, item)
 
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Copy path"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCopyLocationPath, item)
+
         self.PopupMenu(menu)
         menu.Destroy()
 
@@ -2312,7 +2331,7 @@ class DataCatalogTree(TreeView):
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, lambda e: self.EditLabel(self.GetSelections()[0]), item)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("Copy Full Database Path"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Copy path"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCopyGrassDbPath, item)
 
@@ -2376,13 +2395,17 @@ class DataCatalogTree(TreeView):
         if self._restricted:
             item.Enable(False)
 
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Copy paths"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCopyLocationPath, item)
+
         self.PopupMenu(menu)
         menu.Destroy()
 
     def _popupMenuMultipleGrassDbs(self):
         """Create popup menu for multiple selected grass databases"""
         menu = Menu()
-        item = wx.MenuItem(menu, wx.ID_ANY, _("Copy Full Database Path(s)"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Copy paths"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCopyGrassDbPath, item)
         self.PopupMenu(menu)
@@ -2397,7 +2420,7 @@ class DataCatalogTree(TreeView):
         if self._restricted:
             item.Enable(False)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy paths to mapsets"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy paths"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCopyMapsetPath, item)
 
