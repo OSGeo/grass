@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-14 18:00+0000\n"
+"POT-Creation-Date: 2026-03-14 15:46+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Czech <https://weblate.osgeo.org/projects/grass-gis/grassmods/cs/>\n"
@@ -3969,7 +3969,7 @@ msgstr "projekce"
 msgid "create project"
 msgstr "Zdrojová projekce"
 
-msgid "Prints or modifies GRASS projection information files (in various co-ordinate system descriptions)."
+msgid "Prints or modifies GRASS projection information files (in various coordinate system descriptions)."
 msgstr ""
 
 msgid "Can also be used to create new GRASS projects."
@@ -4034,7 +4034,7 @@ msgstr ""
 msgid "Datum"
 msgstr ""
 
-msgid "Datum (overrides any datum specified in input co-ordinate system)"
+msgid "Datum (overrides any datum specified in input coordinate system)"
 msgstr ""
 
 msgid "Accepts standard GRASS datum codes, or \"list\" to list and exit"
@@ -4046,8 +4046,9 @@ msgstr ""
 msgid "\"0\" for unspecified or \"-1\" to list and exit"
 msgstr ""
 
-msgid "Force override of datum transformation information in input co-ordinate system"
-msgstr ""
+#, fuzzy
+msgid "Force override of datum transformation information in input coordinate system"
+msgstr "Přepokladem je kartézský souřadnicový systém"
 
 msgid "Modify"
 msgstr "Upravit"
@@ -18513,8 +18514,8 @@ msgstr ""
 msgid "Number of walkers"
 msgstr "Počet chodců"
 
-msgid "Time used for iterations [minutes]"
-msgstr "Čas použitý pro opakování [minuty]"
+msgid "Duration of the simulated water flow [minutes]"
+msgstr ""
 
 msgid "Minimum time step for the simulation [seconds]"
 msgstr ""
@@ -29944,8 +29945,10 @@ msgstr "Typ prvku"
 msgid "centrality measures"
 msgstr ""
 
-msgid "Computes degree, centrality, betweeness, closeness and eigenvector centrality measures in the network."
-msgstr ""
+#, fuzzy
+#| msgid "Computes vertex connectivity between two sets of nodes in the network."
+msgid "Computes degree, centrality, betweenness, closeness and eigenvector centrality measures in the network."
+msgstr "Počítá konektivitu vrcholů mezi dvěma skupinami uzlů v síti"
 
 msgid "Name of degree centrality column"
 msgstr ""
@@ -34320,6 +34323,9 @@ msgstr "Náhled BMP obrázku pomocí ovladače PNG."
 
 msgid "Image file"
 msgstr "Soubory obrazové skupiny"
+
+#~ msgid "Time used for iterations [minutes]"
+#~ msgstr "Čas použitý pro opakování [minuty]"
 
 #, fuzzy
 #~| msgid "OGR driver <%s> not available"
@@ -39768,10 +39774,6 @@ msgstr "Soubory obrazové skupiny"
 
 #, fuzzy
 #~ msgid "Transformation grid's destination coordinate system name"
-#~ msgstr "Přepokladem je kartézský souřadnicový systém"
-
-#, fuzzy
-#~ msgid "Transformation grid's input coordinate system name"
 #~ msgstr "Přepokladem je kartézský souřadnicový systém"
 
 #, fuzzy

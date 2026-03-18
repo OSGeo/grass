@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-14 18:00+0000\n"
+"POT-Creation-Date: 2026-03-14 15:46+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Italian <https://weblate.osgeo.org/projects/grass-gis/grassmods/it/>\n"
@@ -3963,7 +3963,7 @@ msgstr "proiezione"
 msgid "create project"
 msgstr "Proiezione della sorgente"
 
-msgid "Prints or modifies GRASS projection information files (in various co-ordinate system descriptions)."
+msgid "Prints or modifies GRASS projection information files (in various coordinate system descriptions)."
 msgstr ""
 
 #, fuzzy
@@ -4032,7 +4032,7 @@ msgstr ""
 msgid "Datum"
 msgstr "Datum"
 
-msgid "Datum (overrides any datum specified in input co-ordinate system)"
+msgid "Datum (overrides any datum specified in input coordinate system)"
 msgstr ""
 
 msgid "Accepts standard GRASS datum codes, or \"list\" to list and exit"
@@ -4044,8 +4044,9 @@ msgstr ""
 msgid "\"0\" for unspecified or \"-1\" to list and exit"
 msgstr ""
 
-msgid "Force override of datum transformation information in input co-ordinate system"
-msgstr ""
+#, fuzzy
+msgid "Force override of datum transformation information in input coordinate system"
+msgstr "Lettura dell'input in corso ..."
 
 msgid "Modify"
 msgstr "Modifica"
@@ -18506,8 +18507,8 @@ msgstr ""
 msgid "Number of walkers"
 msgstr "Numero di walker"
 
-msgid "Time used for iterations [minutes]"
-msgstr "Tempo usato per le iterazioni [minuti]"
+msgid "Duration of the simulated water flow [minutes]"
+msgstr ""
 
 msgid "Minimum time step for the simulation [seconds]"
 msgstr ""
@@ -29802,7 +29803,7 @@ msgstr "Tipo di elemento"
 msgid "centrality measures"
 msgstr ""
 
-msgid "Computes degree, centrality, betweeness, closeness and eigenvector centrality measures in the network."
+msgid "Computes degree, centrality, betweenness, closeness and eigenvector centrality measures in the network."
 msgstr ""
 
 msgid "Name of degree centrality column"
@@ -34095,6 +34096,9 @@ msgstr "Visualizza immagini BMP dal driver PNG."
 
 msgid "Image file"
 msgstr "File immagine"
+
+#~ msgid "Time used for iterations [minutes]"
+#~ msgstr "Tempo usato per le iterazioni [minuti]"
 
 #~ msgid ""
 #~ "WGS84 grid output not possible as this location does not contain\n"
@@ -39382,10 +39386,6 @@ msgstr "File immagine"
 #, fuzzy
 #~ msgid "Transformation grid's destination coordinate system name"
 #~ msgstr "Si assume un sistema di coordinate cartesiane"
-
-#, fuzzy
-#~ msgid "Transformation grid's input coordinate system name"
-#~ msgstr "Lettura dell'input in corso ..."
 
 #, fuzzy
 #~ msgid "Transparency of the raster IQR band"

@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-14 18:00+0000\n"
-"PO-Revision-Date: 2026-02-20 05:33+0000\n"
+"POT-Creation-Date: 2026-03-14 15:46+0000\n"
+"PO-Revision-Date: 2026-03-09 07:09+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/fr/>\n"
 "Language: fr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.16\n"
+"X-Generator: Weblate 5.16.2\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #, python-format
@@ -403,7 +403,7 @@ msgid "Space time vector dataset"
 msgstr "Jeu de données vecteur temporel"
 
 msgid "Space time 3D raster dataset"
-msgstr "Ajouter un je de données raster 3D temporel"
+msgstr "Ajouter un jeu de données raster 3D temporel"
 
 msgid "Input data type:"
 msgstr "Type de données d'entrée :"
@@ -605,7 +605,7 @@ msgid "Details:"
 msgstr "Détails :"
 
 msgid "Error: "
-msgstr "Erreur :"
+msgstr "Erreur : "
 
 #, python-format
 msgid "Unable to execute command: '%s'"
@@ -683,10 +683,10 @@ msgid "Rendering aborted"
 msgstr "Annulation du rendu"
 
 msgid "Downloading data "
-msgstr "Téléchargement des données ..."
+msgstr "Téléchargement des données "
 
 msgid "Rendering & "
-msgstr "Générer (l'affichage)"
+msgstr "Générer (l'affichage) "
 
 msgid "Rendering..."
 msgstr "Rendu en cours ..."
@@ -712,7 +712,7 @@ msgstr "Erreur : impossible d'ouvrir '%(file)s'. Raison : %(ret)s. Sortie de wxG
 
 #, python-format
 msgid "Unable to zoom to raster map <%s>."
-msgstr "Impossible de zoomer sur la carte raster : %s"
+msgstr "Impossible de zoomer sur la carte raster <%s>."
 
 #, python-format
 msgid "Unable to zoom to vector map <%s>."
@@ -837,9 +837,9 @@ msgid ""
 "\t\tDetails: %(detail)s\n"
 "\t\tLine: '%(line)s'\n"
 msgstr ""
-"Erreur : la lecture des paramètres depuis le fichier <%(file)s> a échoué.\n"
-"\t\tDétails: %(detail)s\n"
-"\t\tLigne: '%(line)s'\n"
+"Erreur : La lecture des paramètres depuis le fichier <%(file)s> a échoué.\n"
+"\t\tDétails : %(detail)s\n"
+"\t\tLigne : '%(line)s'\n"
 
 msgid "Unable to create settings directory"
 msgstr "Impossible de créer le dossier de paramètres"
@@ -890,7 +890,7 @@ msgid "kilometers"
 msgstr "kilomètres"
 
 msgid "miles"
-msgstr "mile"
+msgstr "miles"
 
 msgid "feet"
 msgstr "pied"
@@ -932,11 +932,11 @@ msgstr "Paramètre en double : %s\n"
 
 #, python-brace-format
 msgid "Unable to open file '{name}': {error}\n"
-msgstr "Impossible d'ouvrir le fichier '{name}': {error}\n"
+msgstr "Impossible d'ouvrir le fichier '{name}' : {error}\n"
 
 #, python-brace-format
 msgid "Unable to create file '{name}': {error}\n"
-msgstr "Impossible de créer le fichier '{name}': {error}\n"
+msgstr "Impossible de créer le fichier '{name}' : {error}\n"
 
 msgid "Select Color"
 msgstr "Choisir la couleur"
@@ -1859,7 +1859,7 @@ msgid "Reload currently selected attribute data"
 msgstr "Recharger les données attributaires actuellement sélectionnées"
 
 msgid "Reload all attribute data (drop current selection)"
-msgstr "Recharger toutes les données attributaires (annule la sélection actuelle) "
+msgstr "Recharger toutes les données attributaires (annule la sélection actuelle)"
 
 msgid "Query"
 msgstr "Requête"
@@ -2333,7 +2333,7 @@ msgstr "Erreur RMS"
 
 #, python-format
 msgid "Forward: %(forw)s, Backward: %(back)s"
-msgstr "Prograde : %(forw)s, Rétrograde: %(back)s"
+msgstr "Prograde : %(forw)s, Rétrograde : %(back)s"
 
 msgid "Add new GCP to the list"
 msgstr ""
