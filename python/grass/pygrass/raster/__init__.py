@@ -122,11 +122,11 @@ class RasterRow(RasterAbstractBase):
 
         >>> with RasterRow(test_raster_name) as elev:
         ...     for row in elev:
-        ...         row
-        Buffer([11, 21, 31, 41]...)  # doctest: +ELLIPSIS
-        Buffer([12, 22, 32, 42]...)  # doctest: +ELLIPSIS
-        Buffer([13, 23, 33, 43]...)  # doctest: +ELLIPSIS
-        Buffer([14, 24, 34, 44]...)  # doctest: +ELLIPSIS
+        ...         row  # doctest: +ELLIPSIS
+        Buffer([11, 21, 31, 41]...)
+        Buffer([12, 22, 32, 42]...)
+        Buffer([13, 23, 33, 43]...)
+        Buffer([14, 24, 34, 44]...)
 
         >>> elev.is_open()
         False
@@ -146,10 +146,10 @@ class RasterRow(RasterAbstractBase):
 
         >>> elev = RasterRow(test_raster_name)
         >>> elev.open()
-        >>> elev[0]
-        Buffer([11, 21, 31, 41]...)  # doctest: +ELLIPSIS
-        >>> elev.get_row(0)
-        Buffer([11, 21, 31, 41]...)  # doctest: +ELLIPSIS
+        >>> elev[0]  # doctest: +ELLIPSIS
+        Buffer([11, 21, 31, 41]...)
+        >>> elev.get_row(0)  # doctest: +ELLIPSIS
+        Buffer([11, 21, 31, 41]...)
 
         """
         if row_buffer is None:
@@ -270,11 +270,11 @@ class RasterRowIO(RasterRow):
             >>> elev = RasterRowIO(test_raster_name)
             >>> elev.open("r")
             >>> for row in elev:
-            ...     row
-            Buffer([11, 21, 31, 41]...)  # doctest: +ELLIPSIS
-            Buffer([12, 22, 32, 42]...)  # doctest: +ELLIPSIS
-            Buffer([13, 23, 33, 43]...)  # doctest: +ELLIPSIS
-            Buffer([14, 24, 34, 44]...)  # doctest: +ELLIPSIS
+            ...     row  # doctest: +ELLIPSIS
+            Buffer([11, 21, 31, 41]...)
+            Buffer([12, 22, 32, 42]...)
+            Buffer([13, 23, 33, 43]...)
+            Buffer([14, 24, 34, 44]...)
 
             >>> elev.close()
 
@@ -367,22 +367,22 @@ class RasterSegment(RasterAbstractBase):
             >>> elev = RasterRowIO(test_raster_name)
             >>> elev.open("r")
             >>> for row in elev:
-            ...     row
-            Buffer([11, 21, 31, 41]...)  # doctest: +ELLIPSIS
-            Buffer([12, 22, 32, 42]...)  # doctest: +ELLIPSIS
-            Buffer([13, 23, 33, 43]...)  # doctest: +ELLIPSIS
-            Buffer([14, 24, 34, 44]...)  # doctest: +ELLIPSIS
+            ...     row  # doctest: +ELLIPSIS
+            Buffer([11, 21, 31, 41]...)
+            Buffer([12, 22, 32, 42]...)
+            Buffer([13, 23, 33, 43]...)
+            Buffer([14, 24, 34, 44]...)
 
             >>> elev.close()
 
 
             >>> with RasterSegment(test_raster_name) as elev:
             ...     for row in elev:
-            ...         row
-            Buffer([11, 21, 31, 41]...)  # doctest: +ELLIPSIS
-            Buffer([12, 22, 32, 42]...)  # doctest: +ELLIPSIS
-            Buffer([13, 23, 33, 43]...)  # doctest: +ELLIPSIS
-            Buffer([14, 24, 34, 44]...)  # doctest: +ELLIPSIS
+            ...         row  # doctest: +ELLIPSIS
+            Buffer([11, 21, 31, 41]...)
+            Buffer([12, 22, 32, 42]...)
+            Buffer([13, 23, 33, 43]...)
+            Buffer([14, 24, 34, 44]...)
 
         """
         if row_buffer is None:
@@ -410,11 +410,11 @@ class RasterSegment(RasterAbstractBase):
         >>> map_b = RasterSegment(test_raster_name + "_segment")
         >>> map_b.open("r")
         >>> for row in map_b:
-        ...     row
-        Buffer([1011, 1021, 1031, 1041]...)  # doctest: +ELLIPSIS
-        Buffer([1012, 1022, 1032, 1042]...)  # doctest: +ELLIPSIS
-        Buffer([1013, 1023, 1033, 1043]...)  # doctest: +ELLIPSIS
-        Buffer([1014, 1024, 1034, 1044]...)  # doctest: +ELLIPSIS
+        ...     row  # doctest: +ELLIPSIS
+        Buffer([1011, 1021, 1031, 1041]...)
+        Buffer([1012, 1022, 1032, 1042]...)
+        Buffer([1013, 1023, 1033, 1043]...)
+        Buffer([1014, 1024, 1034, 1044]...)
         >>> map_b.close()
 
         """
@@ -479,11 +479,11 @@ class RasterSegment(RasterAbstractBase):
             >>> map_b = RasterSegment(test_raster_name + "_segment")
             >>> map_b.open("r")
             >>> for row in map_b:
-            ...     row
-            Buffer([111., 121., 131., 141.]...)  # doctest: +ELLIPSIS
-            Buffer([112., 122., 132., 142.]...)  # doctest: +ELLIPSIS
-            Buffer([113., 123., 133., 143.]...)  # doctest: +ELLIPSIS
-            Buffer([114., 124., 134., 144.]...)  # doctest: +ELLIPSIS
+            ...     row  # doctest: +ELLIPSIS
+            Buffer([111., 121., 131., 141.]...)
+            Buffer([112., 122., 132., 142.]...)
+            Buffer([113., 123., 133., 143.]...)
+            Buffer([114., 124., 134., 144.]...)
             >>> map_b.close()
 
         """
