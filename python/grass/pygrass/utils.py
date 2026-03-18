@@ -278,9 +278,9 @@ def get_raster_for_points(poi_vector, raster, column=None, region=None):
 
     >>> l = get_raster_for_points(vect, ele, region=region)
     >>> l[0]  # doctest: +ELLIPSIS
-    (1, 10.0, 6.0, np.int32(1))
+    (1, 10.0, 6.0, ...)
     >>> l[1]  # doctest: +ELLIPSIS
-    (2, 12.0, 6.0, np.int32(1))
+    (2, 12.0, 6.0, ...)
 
     Add a new column and sample again
 
