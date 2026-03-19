@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-14 15:46+0000\n"
-"PO-Revision-Date: 2026-03-09 07:09+0000\n"
+"PO-Revision-Date: 2026-03-17 12:28+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs/fr/>\n"
 "Language: fr\n"
@@ -1007,7 +1007,7 @@ msgstr "GRASS n'est pas compilé avec le support OpenMP, le calcul parallèle es
 
 #, c-format
 msgid "G__open(read): mapset <%s> doesn't match xmapset <%s>"
-msgstr "G__open(read): mapset <%s> ne correspond pas à xmapset <%s>"
+msgstr "G__open(read) : mapset <%s> ne correspond pas à xmapset <%s>"
 
 #, c-format
 msgid "G__open(read): Unable to open '%s': %s"
@@ -1015,7 +1015,7 @@ msgstr "G_open(read) : impossible d'ouvrir '%s' : %s"
 
 #, c-format
 msgid "G__open(write): xmapset <%s> != G_mapset() <%s>"
-msgstr "G__open(write): xmapset <%s> != G_mapset() <%s>"
+msgstr "G__open(write) : xmapset <%s> != G_mapset() <%s>"
 
 #, c-format
 msgid "G__open(write): Unable to open '%s': %s"
@@ -1027,11 +1027,11 @@ msgstr "L'opération de lecture/écriture du fichier a échoué : %s (%d)"
 
 #, c-format
 msgid "G__open_misc(read): mapset <%s> doesn't match xmapset <%s>"
-msgstr "G__open_misc(read): mapset <%s> ne correspond pas à xmapset <%s>"
+msgstr "G__open_misc(read) : mapset <%s> ne correspond pas à xmapset <%s>"
 
 #, c-format
 msgid "G__open_misc(write): xmapset <%s> != G_mapset() <%s>"
-msgstr "G__open_misc(write): xmapset <%s> != G_mapset() <%s>"
+msgstr "G__open_misc(write) : xmapset <%s> != G_mapset() <%s>"
 
 msgid "Bug in UI description. Missing module description"
 msgstr "Bug dans l'interface de description. Module description manquant"
@@ -1049,7 +1049,7 @@ msgstr "Bug dans l'interface de description. La description de l'option <%s> est
 
 #, c-format
 msgid "Bug in UI description. Option '%s' in <%s> does not exist"
-msgstr "Bug dans la description de l'interface utilisateur. L'option  '%s'  n'existe pas dans <%s>"
+msgstr "Bug dans la description de l'interface utilisateur. L'option '%s' n'existe pas dans <%s>"
 
 msgid "Use either --quiet or --verbose flag, not both. Assuming --verbose."
 msgstr "Utiliser le drapeau soit --quiet soit --verbose, pas les deux ; --verbose supposé."
@@ -1079,11 +1079,11 @@ msgstr "%s : désolé, <%c> n'est pas une option valide"
 
 #, c-format
 msgid "Please update the usage of <%s>: flag <%c> has been renamed to <%s>"
-msgstr "Veuillez mettre à jour l'utilisation de <%s> : l'option <%s> a été renommée en <%s>"
+msgstr "Veuillez mettre à jour l'utilisation de <%s> : l'option <%c> a été renommée en <%s>"
 
 #, c-format
 msgid "Please update the usage of <%s>: flag <%c> has been renamed to option <%s>"
-msgstr "Veuillez mettre à jour l'utilisation de <%s> : l'option <%s> a été renommée en l’option <%s>"
+msgstr "Veuillez mettre à jour l'utilisation de <%s> : l'option <%c> a été renommée en l’option <%s>"
 
 #, c-format
 msgid "%s: Sorry, <%s=> is ambiguous"
@@ -1099,7 +1099,7 @@ msgstr "Veuillez mettre à jour l'utilisation de <%s> : l'option <%s> a été r
 
 #, c-format
 msgid "Please update the usage of <%s>: option <%s> has been renamed to flag <%c>"
-msgstr "Veuillez mettre à jour l'utilisation de <%s> : l'option <%s> a été renommée en <%s>"
+msgstr "Veuillez mettre à jour l'utilisation de <%s> : l'option <%s> a été renommée en <%c>"
 
 #, c-format
 msgid "Please update the usage of <%s>: option <%s> has been renamed to <%s>"
@@ -1493,7 +1493,7 @@ msgid "Layer number or name ('-1' for all layers)"
 msgstr "Numéro ou nom de la couche ('-1' pour toutes les couches)"
 
 msgid "A single vector map can be connected to multiple database tables. This number determines which table to use. When used with direct OGR access this is the layer name."
-msgstr "Une carte vecteur peut être connectée à plusieurs tables de base de  données. Ce nombre détermine la table à utiliser. Lorsque utilisé avec OGR en accès direct, il s'agit du nom de la couche."
+msgstr "Une carte vecteur peut être connectée à plusieurs tables de base de données. Ce nombre détermine la table à utiliser. Lorsque utilisé avec OGR en accès direct, il s'agit du nom de la couche."
 
 msgid "Category value"
 msgstr "Valeur de la catégorie"
@@ -1502,10 +1502,10 @@ msgid "Category values"
 msgstr "Valeurs de catégorie"
 
 msgid "Example: 1,3,7-9,13"
-msgstr "Exemple: 1,3,7-9,13"
+msgstr "Exemple : 1,3,7-9,13"
 
 msgid "Feature id"
-msgstr "Id d'entité"
+msgstr "Id de l'entité"
 
 msgid "Feature ids"
 msgstr "Id d'entités"
@@ -1857,26 +1857,26 @@ msgstr "Index de recherche en dehors des limites"
 
 #, c-format
 msgid "CreateProcess() failed: error = %d"
-msgstr "CreateProcess() a échoué: erreur = %d"
+msgstr "CreateProcess() a échoué : erreur = %d"
 
 #, c-format
 msgid "G_spawn: unable to redirect descriptor %d"
-msgstr "G_spawn: impossible de rediriger le descripteur %d"
+msgstr "G_spawn : impossible de rediriger le descripteur %d"
 
 #, c-format
 msgid "G_spawn: unable to open file %s"
-msgstr "G_spawn: impossible d'ouvrir le fichier %s"
+msgstr "G_spawn : impossible d'ouvrir le fichier %s"
 
 msgid "G_spawn: unable to execute command"
 msgstr "G_spawn : impossible d'exécuter la commande"
 
 #, c-format
 msgid "G_spawn: unable to restore signal %d"
-msgstr "G_spawn: impossible de restaurer le signal %d"
+msgstr "G_spawn : impossible de restaurer le signal %d"
 
 #, c-format
 msgid "G_spawn: unable to reset signal %d"
-msgstr "G_spawn: impossible de réinitialiser le signal %d"
+msgstr "G_spawn : impossible de réinitialiser le signal %d"
 
 #, c-format
 msgid "G_spawn: unable to ignore signal %d"
@@ -2193,7 +2193,7 @@ msgid "Principal matrix is not properly dimensioned"
 msgstr "La matrice principale n'est pas correctement dimensionnée"
 
 msgid "Input: you must have at least one array to solve"
-msgstr "Entrée: vous devez disposer d'au moins un tableau à résoudre"
+msgstr "Entrée : vous devez disposer d'au moins un tableau à résoudre"
 
 msgid "Could not allocate space for solution matrix"
 msgstr "Impossible d'allouer de l'espace pour la matrice solution"
