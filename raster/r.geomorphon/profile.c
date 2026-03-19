@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "local_proto.h"
+#include <grass/gjson.h>
 
 #define JSON_MIN_INDENT 1
 #define YAML_MIN_INDENT 0
@@ -251,45 +252,128 @@ static const char *format_token_common(const struct token *t)
  */
 static unsigned write_json(FILE *f)
 {
-    unsigned i, indent = JSON_MIN_INDENT;
+    unsigned i;
+    G_JSON_Value *stack_vals[MAX_STACK_ELEMS];
+    unsigned stack_top = 0;
+    G_JSON_Value *root = G_json_value_init_object();
+    if (!root)
+        return 0;
+    stack_vals[stack_top++] = root;
 
-    WRITE_VAL(f, "%s\n", "{");
     for (i = 0; i < size; i++) {
-        const char *val;
-
-        /* Add a comma unless there is no data tokens immediately after. */
-        const char *comma =
-            (i + 1 == size) || (i + 1 < size && token[i + 1].type == T_ESO)
-                ? ""
-                : ",";
+        G_JSON_Object *parent = G_json_object(stack_vals[stack_top - 1]);
+        if (!parent) {
+            G_json_value_free(root);
+            return 0;
+        }
 
         switch (token[i].type) {
-        case T_SSO:
-            WRITE_INDENT(f, indent);
-            indent++;
-            WRITE_VAL(f, "\"%s\": {\n", token[i].key);
-            continue;
-        case T_ESO:
-            if (indent == JSON_MIN_INDENT)
+        case T_SSO: {
+            if (stack_top >= MAX_STACK_ELEMS) {
+                G_json_value_free(root);
                 return 0;
-            indent--;
-            WRITE_INDENT(f, indent);
-            WRITE_VAL(f, "}%s\n", comma);
-            continue;
-        default:
-            val = quote_val(token[i].type, format_token_common(token + i));
+            }
+            G_JSON_Value *obj = G_json_value_init_object();
+            if (!obj) {
+                G_json_value_free(root);
+                return 0;
+            }
+            if (G_json_object_set_value(parent, token[i].key, obj) !=
+                G_JSONSuccess) {
+                G_json_value_free(obj);
+                G_json_value_free(root);
+                return 0;
+            }
+            stack_vals[stack_top++] = obj;
+        } break;
+        case T_ESO:
+            if (stack_top <= 1) {
+                /* can't pop root */
+                G_json_value_free(root);
+                return 0;
+            }
+            stack_top--;
             break;
-        }
-        if (!val)
+        case T_BLN:
+            if (G_json_object_set_boolean(parent, token[i].key,
+                                          token[i].int_val ? 1 : 0) !=
+                G_JSONSuccess) {
+                G_json_value_free(root);
+                return 0;
+            }
+            break;
+        case T_INT:
+            if (G_json_object_set_number(parent, token[i].key,
+                                         (double)token[i].int_val) !=
+                G_JSONSuccess) {
+                G_json_value_free(root);
+                return 0;
+            }
+            break;
+        case T_DBL:
+            if (isnan(token[i].dbl_val)) {
+                if (G_json_object_set_null(parent, token[i].key) !=
+                    G_JSONSuccess) {
+                    G_json_value_free(root);
+                    return 0;
+                }
+            }
+            else {
+                if (G_json_object_set_number(parent, token[i].key,
+                                             token[i].dbl_val) !=
+                    G_JSONSuccess) {
+                    G_json_value_free(root);
+                    return 0;
+                }
+            }
+            break;
+        case T_MTR:
+            if (isnan(token[i].dbl_val)) {
+                if (G_json_object_set_null(parent, token[i].key) !=
+                    G_JSONSuccess) {
+                    G_json_value_free(root);
+                    return 0;
+                }
+            }
+            else {
+                if (G_json_object_set_number(parent, token[i].key,
+                                             token[i].dbl_val) !=
+                    G_JSONSuccess) {
+                    G_json_value_free(root);
+                    return 0;
+                }
+            }
+            break;
+        case T_STR:
+            if (G_json_object_set_string(parent, token[i].key,
+                                         token[i].str_val) != G_JSONSuccess) {
+                G_json_value_free(root);
+                return 0;
+            }
+            break;
+        default:
+            G_json_value_free(root);
             return 0;
-        WRITE_INDENT(f, indent);
-        WRITE_VAL(f, "\"%s\": ", token[i].key);
-        WRITE_VAL(f, "%s", val);
-        WRITE_VAL(f, "%s\n", comma);
+        }
     }
-    if (indent != JSON_MIN_INDENT || overflow)
+
+    if (stack_top != 1 || overflow) {
+        G_json_value_free(root);
         return 0;
-    WRITE_VAL(f, "%s\n", "}");
+    }
+
+    char *s = G_json_serialize_to_string_pretty(root);
+    if (!s) {
+        G_json_value_free(root);
+        return 0;
+    }
+    if (fprintf(f, "%s\n", s) < 0) {
+        G_json_free_serialized_string(s);
+        G_json_value_free(root);
+        return 0;
+    }
+    G_json_free_serialized_string(s);
+    G_json_value_free(root);
     return 1;
 }
 
