@@ -316,9 +316,12 @@ Tool name prefixes: `r.` (raster), `v.` (vector), `g.` (general), `d.`
 (display), `i.` (imagery), `t.` (temporal), `r3.` (3D raster), `db.`
 (database), `m.` (miscellaneous), `ps.` (PostScript).
 
-To quickly check a tool's parameters, flags, and defaults, run
-`grass run <tool> --help`. For full structured detail (types, required/optional,
-descriptions), use `grass run <tool> --interface-description` (XML output).
+To check a tool's parameters, flags, and defaults, run
+`grass run <tool> --help`. For Python type annotations showing which
+parameters accept `np.ndarray`, `io.StringIO`, etc., use
+`grass run <tool> --md-description` and look at the "Python (grass.tools)"
+section. For full structured detail in XML, use
+`grass run <tool> --interface-description`.
 
 ## Commit Messages
 
