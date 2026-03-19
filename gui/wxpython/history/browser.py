@@ -19,7 +19,6 @@ for details.
 """
 
 from datetime import datetime
-import json
 
 import wx
 import wx.lib.scrolledpanel as SP
@@ -233,9 +232,30 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         self.sizer_region_settings_grid.Clear(True)
 
         self.region_settings = command_info["region"]
+
+        Display_Order = [
+            "n",
+            "s",
+            "e",
+            "w",
+            "nsres",
+            "ewres",
+            "rows",
+            "cols",
+            "t",
+            "b",
+            "tbres",
+            "nsres3",
+            "ewres3",
+            "rows3",
+            "cols3",
+            "depths",
+        ]
+
         idx = 0
-        for key, value in self.region_settings.items():
-            if self._region_settings_filter(key):
+        for key in Display_Order:
+            if key in self.region_settings:
+                value = self.region_settings[key]
                 self.sizer_region_settings_grid.Add(
                     StaticText(
                         parent=self.region_settings_box,
@@ -263,42 +283,37 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         self.region_settings_box.Show()
 
     def _get_saved_region_name(self, history_region):
-        """Find if history region matches any saved region in the current mapset."""
+        """Find if history region matches any saved region in the entire project."""
         try:
-            res = self.tools.g_list(type="region", mapset=".", format="json")
-            regions = json.loads(res.stdout)
-            region_names = [r["name"] for r in regions]
-        except Exception:
+            res = self.tools.g_list(type="region", mapset="*", format="json")
+            region_names = [r["name"] for r in res]
+        except (KeyError, TypeError):
             return None
 
         for region_name in region_names:
             region_name = region_name.strip()
-            if not region_name:
-                continue
-            try:
-                saved_region = self.tools.g_region(
-                    region=region_name, flags="u3", format="shell"
-                ).keyval
+            if region_name:
+                try:
+                    saved_region = self.tools.g_region(
+                        region=region_name, flags="u3", format="shell"
+                    ).keyval
 
-                if self._compare_regions(history_region, saved_region):
-                    return region_name
-            except Exception:
-                continue
+                    if self._compare_regions(history_region, saved_region):
+                        return region_name
+                except AttributeError:
+                    continue
 
         return None
 
     def _compare_regions(self, r1, r2):
         """Compare two region dictionaries for equality."""
-        skip_keys = {"projection", "zone", "cells", "cells3"}
-
         for k, v in r1.items():
-            if k in skip_keys:
-                continue
-            try:
-                if abs(float(v) - float(r2[k])) > 1e-8:
+            if self._region_settings_filter(k):
+                try:
+                    if abs(float(v) - float(r2[k])) > 1e-8:
+                        return False
+                except (KeyError, ValueError, TypeError):
                     return False
-            except (KeyError, ValueError, TypeError):
-                return False
         return True
 
     def _updateRegionSettingsMatch(self):
@@ -312,17 +327,17 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         region_matches = self._compare_regions(history_region, current_region)
         saved_name = self._get_saved_region_name(history_region)
 
-        region_label = saved_name or _("Not set")
-
-        self.sizer_region_name.Add(
-            StaticText(
-                parent=self.region_settings_box,
-                id=wx.ID_ANY,
-                label=_("Region name: {}").format(region_label),
-            ),
-            proportion=0,
-            flag=wx.ALIGN_CENTER_VERTICAL,
-        )
+        if saved_name:
+            self.sizer_region_name.Add(
+                StaticText(
+                    parent=self.region_settings_box,
+                    id=wx.ID_ANY,
+                    label=_("Region name: {}").format(saved_name),
+                ),
+                proportion=0,
+                flag=wx.ALIGN_CENTER_VERTICAL | wx.RIGHT,
+                border=10,
+            )
 
         # Icon and button according to the condition
         if region_matches:
@@ -396,11 +411,24 @@ class HistoryInfoPanel(SP.ScrolledPanel):
 
     def _get_history_region(self):
         """Get computational region settings of executed command."""
+        valid_keys = {
+            "n",
+            "s",
+            "e",
+            "w",
+            "nsres",
+            "ewres",
+            "t",
+            "b",
+            "tbres",
+            "nsres3",
+            "ewres3",
+        }
+
         return {
             key: value
             for key, value in self.region_settings.items()
-            if self._region_settings_filter(key)
-            and key not in {"rows3", "cols3", "depths"}
+            if key in valid_keys
         }
 
     def OnUpdateRegion(self, event):
