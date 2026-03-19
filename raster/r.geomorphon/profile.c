@@ -317,9 +317,8 @@ static unsigned write_json(FILE *f)
                 if (G_json_object_set_null(obj, token[i].key) != G_JSONSuccess)
                     goto cleanup;
             }
-            else if (G_json_object_set_number(obj, token[i].key,
-                                              token[i].dbl_val) !=
-                     G_JSONSuccess)
+            else if (G_json_object_set_number(
+                         obj, token[i].key, token[i].dbl_val) != G_JSONSuccess)
                 goto cleanup;
             continue;
         default:
