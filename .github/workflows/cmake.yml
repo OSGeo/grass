@@ -78,7 +78,8 @@ jobs:
           cmake --install "${GITHUB_WORKSPACE}/build" --verbose
       - name: Add the bin directory to PATH
         run: |
-          echo "${HOME}/install/bin" >> "${GITHUB_PATH}"
+          GRASS_BIN=$(dirname $(which grass))
+          echo "$GRASS_BIN" >> "${GITHUB_PATH}"
       - name: Print installed versions
         if: always()
         run: .github/workflows/print_versions.sh
