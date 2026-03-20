@@ -150,6 +150,7 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         self.sizer_region_settings = wx.StaticBoxSizer(
             self.region_settings_box, wx.VERTICAL
         )
+
         self.sizer_region_name = wx.BoxSizer(wx.HORIZONTAL)
         self.sizer_region_settings.Add(
             self.sizer_region_name,
@@ -157,6 +158,7 @@ class HistoryInfoPanel(SP.ScrolledPanel):
             flag=wx.ALL | wx.EXPAND,
             border=5,
         )
+
         self.sizer_region_settings_match = wx.BoxSizer(wx.HORIZONTAL)
         self.sizer_region_settings.Add(
             self.sizer_region_settings_match,
@@ -182,9 +184,6 @@ class HistoryInfoPanel(SP.ScrolledPanel):
     def _general_info_filter(self, key, value):
         filter_keys = ["timestamp", "runtime", "status"]
         return key in filter_keys or ((key in {"mask2d", "mask3d"}) and value is True)
-
-    def _region_settings_filter(self, key):
-        return key not in {"projection", "zone", "cells", "cells3"}
 
     def _updateGeneralInfoBox(self, command_info):
         """Update a static box for displaying general info about the command.
@@ -308,12 +307,11 @@ class HistoryInfoPanel(SP.ScrolledPanel):
     def _compare_regions(self, r1, r2):
         """Compare two region dictionaries for equality."""
         for k, v in r1.items():
-            if self._region_settings_filter(k):
-                try:
-                    if abs(float(v) - float(r2[k])) > 1e-8:
-                        return False
-                except (KeyError, ValueError, TypeError):
+            try:
+                if abs(float(v) - float(r2[k])) > 1e-8:
                     return False
+            except (KeyError, ValueError, TypeError):
+                return False
         return True
 
     def _updateRegionSettingsMatch(self):
