@@ -301,9 +301,6 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
             } /* DEFined area */
         }
     }
-    if (grids->inf != NULL && smax < infmax)
-        G_warning(_("Infiltration exceeds the rainfall rate everywhere! No "
-                    "overland flow."));
     if (n == 0) {
         G_fatal_error(_("No values in the elevation raster."));
     }
@@ -387,8 +384,6 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
                 /*if(v1[k][l]*v1[k][l]+v2[k][l]*v2[k][l] > cellsize, warning,
                  *napocitaj ak viac ako 10%a*/
                 /* THIS IS CORRECT SOLUTION currently commented out */
-                if (grids->inf)
-                    grids->inf[k][l] *= settings->timesec;
                 if (inputs->wdepth)
                     grids->gama[k][l] = 0.;
                 if (outputs->et) {
