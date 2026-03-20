@@ -178,7 +178,7 @@ class TestRSimWater(TestCase):
             infil=self.infil,
             depth=self.depth,
             discharge=self.discharge,
-            niterations=15,
+            duration=15,
             output_step=5,
             diffusion_coeff=0.9,
             hmax=0.25,
@@ -214,7 +214,7 @@ class TestRSimWater(TestCase):
             rain=self.infil,
             infil=self.infil,
             depth=self.depth,
-            niterations=30,
+            duration=30,
             random_seed=1,
         )
 
