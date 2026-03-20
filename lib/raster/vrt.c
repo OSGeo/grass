@@ -187,6 +187,11 @@ int Rast_get_vrt_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
     tmpbuf = Rast_allocate_input_buf(data_type);
     have_tile = 0;
 
+    /* parallelised reading of the real raster maps
+     * constituting a GRASS virtual raster
+     * causes IO read errors and segmentation faults:
+     * enforce reading of the differen rasters in only one thread */
+#pragma omp critical
     for (i = 0; i < vrt->tlist->n_values; i++) {
         struct tileinfo *p = &ti[vrt->tlist->value[i]];
 
