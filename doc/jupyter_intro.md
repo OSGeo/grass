@@ -6,70 +6,28 @@ authors:
 
 # Jupyter notebooks introduction
 
-GRASS can be used directly in Jupyter notebooks, allowing you to combine
-interactive Python code, visualizations, and documentation in one place.
-This is ideal for geospatial analysis, teaching, and reproducible research.
-
-With GRASS in [Jupyter](https://jupyter.org/), you can:
-
-- Run GRASS tools and analyses interactively
-
-- Create maps and 3D visualizations
-
-- Document your workflow step-by-step
-
-- Share reproducible analyses
+GRASS can be used directly in [Jupyter](https://jupyter.org/)
+notebooks, allowing you to combine interactive Python code,
+visualizations, and documentation in one place.
 
 ## How to Get Started
 
-There are several ways to work with GRASS in Jupyter notebooks,
-each suited to different workflows and requirements:
+You can work with GRASS in Jupyter notebooks in several ways.
+See these tutorials for setup instructions:
 
-### GUI Integration (GRASS 8.5+)
-
-If you are a user who prefers working through a GUI environment,
-you may launch Jupyter directly from the GUI with pre-configured
-sessions and templates. This is the easiest way to get started—no manual
-setup required, you only need to have Jupyter installed locally.
-There are two available launching modes: integrated mode and
-browser mode. See [Using Jupyter Notebooks from GRASS GUI](https://grass.osgeo.org/grass-stable/manuals/wxGUI.jupyter.html)
-for details.
-
-### Local Jupyter Server
-
-If you are a regular Jupyter notebook user and want full control
-over your environment and packages, you can use your GRASS
-installation (8.4+) and run a local Jupyter server instance.
-Then you can run your cells either in the browser or in an
-IDE with Jupyter support (e.g., VS Code, PyCharm).
-Tutorials:
-[Get started with GRASS & Python in Jupyter (Unix/Linux)](https://grass-tutorials.osgeo.org/content/tutorials/get_started/fast_track_grass_and_python.html)
-and [Get started on Windows](https://grass-tutorials.osgeo.org/content/tutorials/get_started/JupyterOnWindows_OSGeo4W_Tutorial.html).
-
-### Google Colab
-
-If you want to make quick experiments and do not have a local GRASS
-installation, you can run GRASS notebooks in the cloud using
-Google Colaboratory. It is ideal for notebook sharing and
-reproducibility, with free access to computing resources including GPUs.
-The only requirement is a Google account.
-Tutorial: [Get started with GRASS in Google Colab](https://grass-tutorials.osgeo.org/content/tutorials/get_started/grass_gis_in_google_colab.html).
-
-### Binder
-
-If you want to make demonstrations, run examples at workshops, etc.,
-and do not have a local GRASS installation, you can launch
-GRASS notebooks directly from your browser using Binder.
-No account needed.
-Try it now: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/OSGeo/grass/main?labpath=doc%2Fexamples%2Fnotebooks%2Fjupyter_tutorial.ipynb)
+- [Using Jupyter Notebooks from GRASS GUI](https://grass.osgeo.org/grass-stable/manuals/wxGUI.jupyter.html)
+(GRASS 8.5+)
+- [Get started with GRASS & Python in Jupyter (Unix/Linux)](https://grass-tutorials.osgeo.org/content/tutorials/get_started/fast_track_grass_and_python.html)
+- [Get started on Windows](https://grass-tutorials.osgeo.org/content/tutorials/get_started/JupyterOnWindows_OSGeo4W_Tutorial.html)
+- [Get started with GRASS in Google Colab](https://grass-tutorials.osgeo.org/content/tutorials/get_started/grass_gis_in_google_colab.html)
+- Try it now: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/OSGeo/grass/main?labpath=doc%2Fexamples%2Fnotebooks%2Fjupyter_tutorial.ipynb)
 
 ## Working with grass.jupyter
 
-Once you have Jupyter running (using any method above), use
-the `grass.jupyter` package providing a Jupyter
-notebook interface to GRASS. It includes modules for creating map figures,
-interactive web maps, visualizing data series and time series, and generating
-3D visualizations.
+Once you have Jupyter running (using any method above),
+use the `grass.jupyter` package to create map figures,
+interactive web maps, visualize data series and time series,
+and generate 3D visualizations.
 
 If you don't have a project yet, create a new one first:
 
