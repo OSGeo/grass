@@ -6,10 +6,28 @@ authors:
 
 # Jupyter notebooks introduction
 
-The `grass.jupyter` Python package provides a [Jupyter](https://jupyter.org/)
-notebook interface to GRASS. It includes modules for creating map figures,
-interactive web maps, visualizing data series and time series, and generating
-3D visualizations.
+GRASS can be used directly in [Jupyter](https://jupyter.org/)
+notebooks, allowing you to combine interactive Python code,
+visualizations, and documentation in one place.
+
+## How to Get Started
+
+You can work with GRASS in Jupyter notebooks in several ways.
+See these tutorials for setup instructions:
+
+- [Using Jupyter Notebooks from GRASS GUI](https://grass.osgeo.org/grass-stable/manuals/wxGUI.jupyter.html)
+(GRASS 8.5+)
+- [Get started with GRASS & Python in Jupyter (Unix/Linux)](https://grass-tutorials.osgeo.org/content/tutorials/get_started/fast_track_grass_and_python.html)
+- [Get started on Windows](https://grass-tutorials.osgeo.org/content/tutorials/get_started/JupyterOnWindows_OSGeo4W_Tutorial.html)
+- [Get started with GRASS in Google Colab](https://grass-tutorials.osgeo.org/content/tutorials/get_started/grass_gis_in_google_colab.html)
+- Try it now: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/OSGeo/grass/main?labpath=doc%2Fexamples%2Fnotebooks%2Fjupyter_tutorial.ipynb)
+
+## Working with grass.jupyter
+
+Once you have Jupyter running (using any method above),
+use the `grass.jupyter` package to create map figures,
+interactive web maps, visualize data series and time series,
+and generate 3D visualizations.
 
 If you don't have a project yet, create a new one first:
 
@@ -268,10 +286,3 @@ library documentation page.
 For complete documentation on the `grass.script` package, see the
 [grass.script](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html)
 library documentation page.
-
-## Tutorials
-
-- [Get started with GRASS in Jupyter Notebooks on Windows](https://grass-tutorials.osgeo.org/content/tutorials/get_started/JupyterOnWindows_OSGeo4W_Tutorial.html)
-- [Get started with GRASS & Python in Jupyter Notebooks (Unix/Linux)](https://grass-tutorials.osgeo.org/content/tutorials/get_started/fast_track_grass_and_python.html)
-- [Get started with GRASS in Google Colab](https://grass-tutorials.osgeo.org/content/tutorials/get_started/grass_gis_in_google_colab.html)
-- Run `grass.jupyter` tutorial on Binder: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/OSGeo/grass/main?labpath=doc%2Fexamples%2Fnotebooks%2Fjupyter_tutorial.ipynb)

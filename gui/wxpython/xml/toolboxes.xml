@@ -22,10 +22,14 @@
       <subtoolbox name="ManageMaps"/>
       <subtoolbox name="MapTypeConversions"/>
       <separator/>
-      <wxgui-item name="Georectify"/>
+      <wxgui-item name="PyEdit"/>
+      <wxgui-item name="LaunchScript"/>
+      <wxgui-item name="JupyterNotebook"/>
       <separator/>
       <wxgui-item name="GraphicalModeler"/>
       <wxgui-item name="RunModel"/>
+      <separator/>
+      <wxgui-item name="Georectify"/>
       <separator/>
       <module-item name="m.nviz.image">
         <label>3D image rendering</label>
@@ -38,9 +42,6 @@
       <separator/>
       <wxgui-item name="CartographicComposer"/>
       <wxgui-item name="MapSwipe"/>
-      <separator/>
-      <wxgui-item name="LaunchScript"/>
-      <wxgui-item name="PyEdit"/>
       <separator/>
       <wxgui-item name="CloseGUI"/>
       <wxgui-item name="Quit"/>

@@ -906,6 +906,152 @@ class GMFrame(wx.Frame):
         # add map display panel to notebook and make it current
         self.mainnotebook.AddPage(gmodeler_panel, _("Graphical Modeler"))
 
+    def _show_jupyter_missing_message(self):
+        wx.MessageBox(
+            _(
+                "To use notebooks in GRASS, you need to have the Jupyter Notebook "
+                "package installed. Please install it and restart GRASS."
+            ),
+            _("Jupyter Notebook not available"),
+            wx.OK | wx.ICON_INFORMATION,
+            parent=self,
+        )
+
+    def _add_jupyter_panel_to_notebook(self, panel, mode_name, storage):
+        """Add Jupyter panel to notebook with tooltip."""
+        tooltip = str(storage.resolve())
+
+        # Store tooltip as panel attribute (persists through undock/dock)
+        panel.page_tooltip = tooltip
+
+        self.mainnotebook.AddPage(
+            panel,
+            _("Jupyter Notebook ({}) - {}").format(mode_name, storage.resolve().name),
+        )
+
+        page_idx = self.mainnotebook.GetPageCount() - 1
+        self.mainnotebook.SetPageTooltip(page_idx, tooltip)
+
+    def _setup_jupyter_integrated_mode(self, storage, create_template):
+        """Setup integrated Jupyter panel. Returns True on success."""
+        from jupyter_notebook.panel import JupyterPanel
+
+        panel = JupyterPanel(
+            parent=self.mainnotebook,
+            giface=self._giface,
+            statusbar=self.statusbar,
+            dockable=True,
+            storage=storage,
+            create_template=create_template,
+        )
+        panel.SetUpPage(self, self.mainnotebook)
+
+        try:
+            if not panel.SetUpEnvironment():
+                panel.Destroy()
+                return False
+
+        except NotImplementedError:
+            panel.Destroy()
+            return False
+
+        # Success - add panel to notebook
+        self._add_jupyter_panel_to_notebook(panel, _("Integrated"), storage)
+        return True
+
+    def _setup_jupyter_browser_mode(self, storage, create_template):
+        """Setup browser-based Jupyter panel."""
+        from jupyter_notebook.panel import JupyterBrowserPanel
+
+        panel = JupyterBrowserPanel(
+            parent=self.mainnotebook,
+            giface=self._giface,
+            statusbar=self.statusbar,
+            dockable=True,
+            storage=storage,
+            create_template=create_template,
+        )
+        panel.SetUpPage(self, self.mainnotebook)
+
+        # Setup environment FIRST (before adding to UI)
+        if not panel.SetUpEnvironment():
+            panel.Destroy()
+            return
+
+        # Success - add panel to notebook
+        self._add_jupyter_panel_to_notebook(panel, _("Browser"), storage)
+
+    def OnJupyterNotebook(self, event=None, cmd=None):
+        """Launch Jupyter Notebook interface."""
+        from jupyter_notebook.utils import (
+            is_jupyter_installed,
+            is_wx_html2_available,
+        )
+        from jupyter_notebook.dialogs import JupyterStartDialog
+
+        # global requirement (always needed)
+        if not is_jupyter_installed():
+            self._show_jupyter_missing_message()
+            return
+
+        dlg = JupyterStartDialog(parent=self)
+
+        if dlg.ShowModal() != wx.ID_OK:
+            dlg.Destroy()
+            return
+
+        values = dlg.GetValues()
+        action = dlg.action
+        dlg.Destroy()
+
+        if not values:
+            return
+
+        storage = values["storage"]
+        create_template = values["create_template"]
+
+        # Check integrated mode requirements and offer fallback
+        if action == "integrated":
+            if not is_wx_html2_available():
+                response = wx.MessageBox(
+                    _(
+                        "Integrated mode requires wx.html2.WebView which is not available on this system.\n\n"
+                        "Would you like to open Jupyter Notebook in your external browser instead?"
+                    ),
+                    _("Integrated Mode Not Available"),
+                    wx.ICON_WARNING | wx.YES_NO,
+                )
+
+                if response == wx.YES:
+                    action = "browser"
+                else:
+                    return
+
+        # Try integrated mode
+        if action == "integrated":
+            success = self._setup_jupyter_integrated_mode(storage, create_template)
+            if success:
+                return  # Successfully set up integrated mode
+
+            # Integrated mode failed, offer browser fallback
+            response = wx.MessageBox(
+                _(
+                    "Integrated mode failed: wx.html2.WebView is not functional on this system.\n\n"
+                    "Would you like to open Jupyter Notebook in your external browser instead?"
+                ),
+                _("WebView Not Supported"),
+                wx.ICON_ERROR | wx.YES_NO,
+            )
+
+            if response == wx.YES:
+                action = "browser"
+            else:
+                return
+
+        # Set up browser mode
+        if action == "browser":
+            self._setup_jupyter_browser_mode(storage, create_template)
+
     def OnPsMap(self, event=None, cmd=None):
         """Launch Cartographic Composer. See OnIClass documentation"""
         from psmap.frame import PsMapFrame
@@ -2405,6 +2551,18 @@ class GMFrame(wx.Frame):
             if hasattr(event, "Veto"):
                 event.Veto()
             return
+
+        # Stop all running Jupyter servers before destroying the GUI
+        from jupyter_notebook.environment import JupyterEnvironment
+
+        try:
+            JupyterEnvironment.stop_all()
+        except RuntimeError as e:
+            wx.MessageBox(
+                _("Failed to stop Jupyter servers:\n{}").format(str(e)),
+                caption=_("Error"),
+                style=wx.ICON_ERROR | wx.OK,
+            )
 
         self.DisplayCloseAll()
 
