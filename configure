@@ -4981,10 +4981,10 @@ GRASS_BIN="${DSTDIR}/bin.${ARCH}"
 
 GRASS_VERSION_FILE=include/VERSION
 GRASS_VERSION_GIT_FILE=include/VERSION_GIT
-GRASS_VERSION_MAJOR=`sed -n 1p "${GRASS_VERSION_FILE}"`
-GRASS_VERSION_MINOR=`sed -n 2p "${GRASS_VERSION_FILE}"`
-GRASS_VERSION_RELEASE=`sed -n 3p "${GRASS_VERSION_FILE}"`
-GRASS_VERSION_DATE=`sed -n 4p "${GRASS_VERSION_FILE}"`
+GRASS_VERSION_MAJOR=`sed -n 1p "${SRCDIR}/${GRASS_VERSION_FILE}"`
+GRASS_VERSION_MINOR=`sed -n 2p "${SRCDIR}/${GRASS_VERSION_FILE}"`
+GRASS_VERSION_RELEASE=`sed -n 3p "${SRCDIR}/${GRASS_VERSION_FILE}"`
+GRASS_VERSION_DATE=`sed -n 4p "${SRCDIR}/${GRASS_VERSION_FILE}"`
 GRASS_VERSION_NUMBER=`echo ${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_VERSION_RELEASE}`
 NAME_VER=`echo ${GRASS_VERSION_NUMBER} | sed 's/\..*//'`
 
@@ -5038,25 +5038,13 @@ printf "%s\n" "no" >&6; }
 fi
 
 
-as_ac_File=`printf "%s\n" "ac_cv_file_$GRASS_VERSION_GIT_FILE" | sed "$as_sed_sh"`
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $GRASS_VERSION_GIT_FILE" >&5
-printf %s "checking for $GRASS_VERSION_GIT_FILE... " >&6; }
-
-test "$cross_compiling" = yes &&
-  as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
-if test -r "$GRASS_VERSION_GIT_FILE"; then
-  eval "$as_ac_File=yes"
-else
-  eval "$as_ac_File=no"
-fi
-eval ac_res=\$$as_ac_File
-	       { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
-printf "%s\n" "$ac_res" >&6; }
-if eval test \"x\$"$as_ac_File"\" = x"yes"
+if test -f "${SRCDIR}/${GRASS_VERSION_GIT_FILE}"
 then :
-
+  ac_cv_file_include_VERSION_GIT=yes
+else case e in #(
+  e) ac_cv_file_include_VERSION_GIT=no ;;
+esac
 fi
-
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for GRASS headers commit date" >&5
 printf %s "checking for GRASS headers commit date... " >&6; }
 if test "$GIT" != "no" ; then
@@ -5076,9 +5064,9 @@ if test "$GIT" != "no" ; then
 fi
 if test $GRASS_VERSION_GIT == "exported" && \
    test "$ac_cv_file_include_VERSION_GIT" == "yes"; then
-      GRASS_HEADERS_GIT_HASH=$(sed -n 1p "${GRASS_VERSION_GIT_FILE}")
+      GRASS_HEADERS_GIT_HASH=$(sed -n 1p "${SRCDIR}/${GRASS_VERSION_GIT_FILE}")
       GRASS_VERSION_GIT=$GRASS_HEADERS_GIT_HASH
-      GRASS_HEADERS_GIT_DATE=$(sed -n 2p "${GRASS_VERSION_GIT_FILE}")
+      GRASS_HEADERS_GIT_DATE=$(sed -n 2p "${SRCDIR}/${GRASS_VERSION_GIT_FILE}")
 fi
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $GRASS_HEADERS_GIT_DATE" >&5
 printf "%s\n" "$GRASS_HEADERS_GIT_DATE" >&6; }
@@ -5160,30 +5148,13 @@ if test -z "$with_macosx_sdk" ; then
   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
 else
-  as_ac_File=`printf "%s\n" "ac_cv_file_$with_macosx_sdk/SDKSettings.plist" | sed "$as_sed_sh"`
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $with_macosx_sdk/SDKSettings.plist" >&5
-printf %s "checking for $with_macosx_sdk/SDKSettings.plist... " >&6; }
-
-test "$cross_compiling" = yes &&
-  as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
-if test -r "$with_macosx_sdk/SDKSettings.plist"; then
-  eval "$as_ac_File=yes"
-else
-  eval "$as_ac_File=no"
-fi
-eval ac_res=\$$as_ac_File
-	       { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
-printf "%s\n" "$ac_res" >&6; }
-if eval test \"x\$"$as_ac_File"\" = x"yes"
+  if test -f "$with_macosx_sdk/SDKSettings.plist"
 then :
-
-    MACOSX_SDK="-isysroot $with_macosx_sdk"
+  MACOSX_SDK="-isysroot $with_macosx_sdk"
 else case e in #(
-  e)
-    as_fn_error $? "*** specified SDK does not exist or is not a SDK" "$LINENO" 5 ;;
+  e) as_fn_error $? "*** specified SDK does not exist or is not a SDK" "$LINENO" 5 ;;
 esac
 fi
-
   LDFLAGS="$LDFLAGS $MACOSX_SDK"
   CFLAGS="$CFLAGS $MACOSX_SDK"
   CXXFLAGS="$CXXFLAGS $MACOSX_SDK"

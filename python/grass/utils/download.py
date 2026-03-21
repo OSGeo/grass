@@ -24,8 +24,10 @@ from urllib.parse import urlparse
 from urllib.request import urlretrieve
 
 
-reponse_content_type_header_pattern = re.compile(r"application/(zip|octet-stream)")
-reponse_content_disposition_header_pattern = re.compile(r"attachment; filename=.*.zip$")
+response_content_type_header_pattern = re.compile(r"application/(zip|octet-stream)")
+response_content_disposition_header_pattern = re.compile(
+    r"attachment; filename=.*.zip$"
+)
 
 
 def debug(*args, **kwargs):
@@ -176,9 +178,9 @@ def download_and_extract(source, reporthook=None):
             raise DownloadError(url_error_message.format(url=source))
 
         if not re.search(
-            reponse_content_type_header_pattern, headers.get("content-type", "")
+            response_content_type_header_pattern, headers.get("content-type", "")
         ) and not re.search(
-            reponse_content_disposition_header_pattern,
+            response_content_disposition_header_pattern,
             headers.get("content-disposition", ""),
         ):
             raise DownloadError(

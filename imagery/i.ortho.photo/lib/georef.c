@@ -5,7 +5,7 @@
 /* TODO: replace with imagery lib I_compute_georef_equations() */
 
 static int floating_exception;
-static void catch (int);
+static void catch(int);
 static double determinant(double, double, double, double, double, double,
                           double, double, double);
 
@@ -166,7 +166,7 @@ static double determinant(double a, double b, double c, double d, double e,
     return a * (e * i - f * h) - b * (d * i - f * g) + c * (d * h - e * g);
 }
 
-static void catch (int n)
+static void catch(int n)
 {
     floating_exception = 1;
     signal(n, catch);

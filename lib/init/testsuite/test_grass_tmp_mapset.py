@@ -30,7 +30,7 @@ class TestTmpMapset(unittest.TestCase):
 
     # TODO: here we need a name of or path to the main GRASS executable
     # TODO: support OSGeo4W executable with:
-    # executable = "grass" if os.name != "nt" else "grass85.bat"
+    # executable = "grass" if os.name != "nt" else "grass86.bat"
     executable = "grass" if os.name != "nt" else "grass.bat"
     # an arbitrary, but identifiable and fairly unique name
     location = "test_tmp_mapset_xy"

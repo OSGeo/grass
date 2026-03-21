@@ -149,10 +149,10 @@ AC_SUBST(GRASS_BIN)
 
 GRASS_VERSION_FILE=include/VERSION
 GRASS_VERSION_GIT_FILE=include/VERSION_GIT
-GRASS_VERSION_MAJOR=`sed -n 1p "${GRASS_VERSION_FILE}"`
-GRASS_VERSION_MINOR=`sed -n 2p "${GRASS_VERSION_FILE}"`
-GRASS_VERSION_RELEASE=`sed -n 3p "${GRASS_VERSION_FILE}"`
-GRASS_VERSION_DATE=`sed -n 4p "${GRASS_VERSION_FILE}"`
+GRASS_VERSION_MAJOR=`sed -n 1p "${SRCDIR}/${GRASS_VERSION_FILE}"`
+GRASS_VERSION_MINOR=`sed -n 2p "${SRCDIR}/${GRASS_VERSION_FILE}"`
+GRASS_VERSION_RELEASE=`sed -n 3p "${SRCDIR}/${GRASS_VERSION_FILE}"`
+GRASS_VERSION_DATE=`sed -n 4p "${SRCDIR}/${GRASS_VERSION_FILE}"`
 GRASS_VERSION_NUMBER=`echo ${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_VERSION_RELEASE}`
 NAME_VER=`echo ${GRASS_VERSION_NUMBER} | sed 's/\..*//'`
 changequote(,)
@@ -165,7 +165,9 @@ GRASS_VERSION_GIT="exported"
 GRASS_HEADERS_GIT_HASH="${GRASS_VERSION_NUMBER}"
 GRASS_HEADERS_GIT_DATE=`date -u +%FT%T%z | sed 's/\(..\)$/:\1/'`
 AC_PATH_PROG(GIT, git, no)
-AC_CHECK_FILE([$GRASS_VERSION_GIT_FILE])
+AS_IF([test -f "${SRCDIR}/${GRASS_VERSION_GIT_FILE}"],
+      [ac_cv_file_include_VERSION_GIT=yes],
+      [ac_cv_file_include_VERSION_GIT=no])
 AC_MSG_CHECKING(for GRASS headers commit date)
 if test "$GIT" != "no" ; then
    GRASS_VERSION_GIT=`$GIT rev-parse --short HEAD 2>/dev/null`
@@ -184,9 +186,9 @@ if test "$GIT" != "no" ; then
 fi
 if test $GRASS_VERSION_GIT == "exported" && \
    test "$ac_cv_file_include_VERSION_GIT" == "yes"; then
-      GRASS_HEADERS_GIT_HASH=$(sed -n 1p "${GRASS_VERSION_GIT_FILE}")
+      GRASS_HEADERS_GIT_HASH=$(sed -n 1p "${SRCDIR}/${GRASS_VERSION_GIT_FILE}")
       GRASS_VERSION_GIT=$GRASS_HEADERS_GIT_HASH
-      GRASS_HEADERS_GIT_DATE=$(sed -n 2p "${GRASS_VERSION_GIT_FILE}")
+      GRASS_HEADERS_GIT_DATE=$(sed -n 2p "${SRCDIR}/${GRASS_VERSION_GIT_FILE}")
 fi
 AC_MSG_RESULT($GRASS_HEADERS_GIT_DATE)
 
@@ -254,9 +256,9 @@ MACOSX_SDK=
 if test -z "$with_macosx_sdk" ; then
   AC_MSG_RESULT(no)
 else
-  AC_CHECK_FILE($with_macosx_sdk/SDKSettings.plist, [
-    MACOSX_SDK="-isysroot $with_macosx_sdk"],[
-    AC_MSG_ERROR([*** specified SDK does not exist or is not a SDK])])
+  AS_IF([test -f "$with_macosx_sdk/SDKSettings.plist"],
+    [MACOSX_SDK="-isysroot $with_macosx_sdk"],
+    [AC_MSG_ERROR([*** specified SDK does not exist or is not a SDK])])
   LDFLAGS="$LDFLAGS $MACOSX_SDK"
   CFLAGS="$CFLAGS $MACOSX_SDK"
   CXXFLAGS="$CXXFLAGS $MACOSX_SDK"

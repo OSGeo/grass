@@ -31,7 +31,7 @@ build_program(
   Readline::Readline
   Readline::History
   Threads::Threads
-  OPENMP)
+  OpenMP::OpenMP_C)
 
 build_program(
   NAME

@@ -27,7 +27,9 @@ if [ "$LIB_NAME" == "gdal" ]; then
         -DGDAL_USE_GIF=ON \
         -DGDAL_USE_HDF5=ON \
         -DGDAL_USE_JPEG=ON \
-        -DGDAL_USE_LZMA=ON \
+        -DGDAL_USE_LIBLZMA=ON \
+        -DGDAL_USE_LIBXERCESC=ON \
+        -DGDAL_USE_LIBXML2=ON \
         -DGDAL_USE_NETCDF=ON \
         -DGDAL_USE_OPENJPEG=ON \
         -DGDAL_USE_PNG=ON \
@@ -36,8 +38,6 @@ if [ "$LIB_NAME" == "gdal" ]; then
         -DGDAL_USE_SQLITE3=ON \
         -DGDAL_USE_TIFF=ON \
         -DGDAL_USE_WEBP=ON \
-        -DGDAL_USE_XERCES=ON \
-        -DGDAL_USE_XML2=ON \
         -DGDAL_USE_ZSTD=ON \
         -DPython_NumPy_INCLUDE_DIRS="$(python3 -c "import numpy; print(numpy.get_include())")"
 fi

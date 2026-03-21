@@ -320,6 +320,7 @@ typedef enum {
     G_OPT_F_BIN_INPUT, /*!< old binary input file */
     G_OPT_F_OUTPUT,    /*!< new output file */
     G_OPT_F_SEP,       /*!< data field separator */
+    G_OPT_F_FORMAT,    /*!< set output format to plain text or JSON */
 
     G_OPT_C,        /*!< color */
     G_OPT_CN,       /*!< color or none */
@@ -357,11 +358,10 @@ typedef enum {
     G_OPT_STDS_TYPE, /*!< the type of a space time dataset: strds, str3ds, stvds
                       */
     G_OPT_MAP_TYPE,  /*!< The type of an input map: raster, vect, rast3d */
-    G_OPT_T_TYPE,    /*!< The temporal type of a space time dataset */
-    G_OPT_T_WHERE,   /*!< A temporal GIS framework SQL WHERE statement */
-    G_OPT_T_SAMPLE,  /*!< Temporal sample methods */
-
-    G_OPT_F_FORMAT, /*!< set output format to plain text or JSON */
+    G_OPT_T_SUFFIX, /*!< The suffix type for new maps in a space time dataset */
+    G_OPT_T_TYPE,   /*!< The temporal type of a space time dataset */
+    G_OPT_T_WHERE,  /*!< A temporal GIS framework SQL WHERE statement */
+    G_OPT_T_SAMPLE  /*!< Temporal sample methods */
 } STD_OPT;
 
 /*!
