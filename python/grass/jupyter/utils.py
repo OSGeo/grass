@@ -357,15 +357,14 @@ def set_target_region(src_env, tgt_env):
     to_proj = get_location_proj_string(env=tgt_env)
     new_region = reproject_region(region, from_proj, to_proj)
     # Set region to match original region extent
-    gs.run_command(
-        "g.region",
+    tools = Tools(env=tgt_env)
+    tools.g_region(
         n=new_region["north"],
         s=new_region["south"],
         e=new_region["east"],
         w=new_region["west"],
         rows=new_region["rows"],
         cols=new_region["cols"],
-        env=tgt_env,
     )
 
 
@@ -454,7 +453,8 @@ def get_region_bounds_latlon():
     :return list of tuples: represent the southwest and northeast
                             corners of the region in (latitude, longitude) format.
     """
-    region = gs.parse_command("g.region", flags="gbp")
+    tools = Tools()
+    region = tools.g_region(flags="bp", format="json").json
     return [
         (float(region["ll_s"]), float(region["ll_w"])),
         (float(region["ll_n"]), float(region["ll_e"])),
