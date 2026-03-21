@@ -77,8 +77,8 @@ jobs:
         run: |
           cmake --install "${GITHUB_WORKSPACE}/build" --verbose
           GRASS_BIN=$(dirname "$(which grass)")
-          echo "$GRASS_BIN" >> "${GITHUB_PATH}"
-          export PATH="GRASS_BIN:$PATH"
+          echo "$GRASS_BIN" >> ${GITHUB_PATH}
+          export PATH="$GRASS_BIN:$PATH"
           which grass  # to verify it works
       - name: Print installed versions
         if: always()
