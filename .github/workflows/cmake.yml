@@ -73,13 +73,12 @@ jobs:
       - name: Build
         run: |
           cmake --build build --verbose -j"$(nproc)"
-      - name: Install and add to PATH
+      - name: Install
         run: |
           cmake --install "${GITHUB_WORKSPACE}/build" --verbose
-          GRASS_BIN=$(dirname "$(which grass)")
-          echo "$GRASS_BIN" >> ${GITHUB_PATH}
-          export PATH="$GRASS_BIN:$PATH"
-          which grass  # to verify it works
+      - name: Add the bin directory to PATH
+        run: |
+          echo "${HOME}/install/bin" >> "${GITHUB_PATH}"
       - name: Print installed versions
         if: always()
         run: .github/workflows/print_versions.sh
