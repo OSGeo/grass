@@ -9,6 +9,16 @@ void define_options(struct opt *opt)
 {
     char *desc;
 
+    opt->format = G_define_standard_option(G_OPT_F_FORMAT);
+    opt->format->key = "format";
+    if (!opt->format->description)
+        opt->format->description = _("Output format");
+    opt->format->descriptions = _("plain;Human readable text output;"
+                                  "json;JSON (JavaScript Object Notation)");
+    opt->format->options = "plain,json";
+    opt->format->answer = "plain";
+    opt->format->guisection = _("Print");
+
     opt->input = G_define_standard_option(G_OPT_V_INPUT);
     opt->input->required = NO;
     opt->input->label = _("Name of input vector line map (arcs)");
@@ -123,7 +133,7 @@ void define_options(struct opt *opt)
 }
 
 void parse_arguments(const struct opt *opt, int *afield, int *nfield,
-                     double *thresh, int *act)
+                     double *thresh, int *act, enum OutputFormat *format)
 {
     *afield = atoi(opt->afield_opt->answer);
     *nfield = atoi(opt->nfield_opt->answer);
@@ -143,6 +153,13 @@ void parse_arguments(const struct opt *opt, int *afield, int *nfield,
         *act = TOOL_TURNTABLE;
     else
         G_fatal_error(_("Unknown operation"));
+
+    if (strcmp(opt->format->answer, "json") == 0) {
+        *format = FORMAT_JSON;
+    }
+    else {
+        *format = FORMAT_PLAIN;
+    }
 
     if (*act == TOOL_NODES || *act == TOOL_CONNECT || *act == TOOL_REPORT ||
         *act == TOOL_NREPORT || *act == TOOL_TURNTABLE) {
