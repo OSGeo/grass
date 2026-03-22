@@ -544,8 +544,7 @@ class AbstractMapDataset(AbstractDataset):
                 self.write_timestamp_to_grass()
             else:
                 self.msgr.warning(
-                    ("Skipping timestamp write for <%s> (different mapset)")
-                    % self.get_map_id()
+                    f"Skipping timestamp write for {self.get_map_id()} (different mapset)"
                 )
 
     def set_relative_time(self, start_time, end_time, unit) -> bool:
