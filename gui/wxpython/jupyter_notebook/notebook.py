@@ -86,8 +86,11 @@ class JupyterAuiNotebook(aui.AuiNotebook):
         #top-panel-wrapper { display: none !important; }
         #menu-panel-wrapper { display: none !important; }
 
-        /* Interface switcher ("Open in...") */
-        .jp-InterfaceSwitcher { display: none !important; }
+        /* Interface switcher - hides any interface switching UI elements
+        (e.g., dropdown menu "Open In..." when nbclassic is installed,
+        JupyterLab button when only jupyter lab is installed, or other
+        interface options that may be added in future Jupyter versions) */
+        [data-jp-item-name="interfaceSwitcher"] { display: none !important; }
 
         /* remove top spacing left by hidden panels */
         .lm-Panel { top: 0 !important; }
