@@ -15,8 +15,9 @@
  *
  *****************************************************************************/
 
+#ifndef __STDC_NO_ATOMICS__
 #include <stdatomic.h>
-#include <stdbool.h>
+#endif
 
 #include <grass/gis.h>
 
@@ -39,12 +40,21 @@ static void *G__parson_malloc(size_t size)
 
 #undef G_PARSON_MALLOC_ATTR
 
+#if defined __STDC_NO_ATOMICS__
+static volatile int parson_initialized = 0;
+#else
 typedef enum { UNINITIALIZED, INITIALIZING, INITIALIZED } init_state_t;
-
 static _Atomic int parson_init_state = UNINITIALIZED;
+#endif
 
 void ensure_parson_initialized(void)
 {
+#if defined __STDC_NO_ATOMICS__
+    if (!parson_initialized) {
+        json_set_allocation_functions(G__parson_malloc, G_free);
+        parson_initialized = 1;
+    }
+#else
     if (atomic_load_explicit(&parson_init_state, memory_order_acquire) ==
         INITIALIZED) {
         return;
@@ -65,6 +75,7 @@ void ensure_parson_initialized(void)
                INITIALIZED)
             ;
     }
+#endif
 }
 
 /* *************************************************************** */
