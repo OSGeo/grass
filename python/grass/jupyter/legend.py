@@ -36,34 +36,29 @@ def parse_colors(mapname):
     datatype = info.get("datatype", "CELL")
     is_categorical = datatype == "CELL"
 
-    raw = gs.read_command("r.colors.out", map=mapname)
-    if raw is None:
-        raw = ""
-    lines = raw.strip().splitlines()
+    from grass.tools import Tools
+
+    tools = Tools()
+
+    color_data = tools.r_colors_out(map=mapname, format="json", color_format="triplet")
 
     items = []
     nv = None
     default = None
 
-    for line in lines:
-        parts = line.split()
-        if parts[0] == "nv":
-            nv = tuple(map(int, parts[1].split(":")))
-        elif parts[0] == "default":
-            default = tuple(map(int, parts[1].split(":")))
-        else:
-            # Handle percentage-based rules (e.g., '100%') by stripping the '%'
-            val_str = parts[0].rstrip("%")
-            value = float(val_str)
-            rgb = tuple(map(int, parts[1].split(":")))
+    if "nv" in color_data:
+        nv = tuple(map(int, color_data["nv"].split(":")))
+    if "default" in color_data:
+        default = tuple(map(int, color_data["default"].split(":")))
 
-            label = (
-                f"Class {int(value)}"
-                if is_categorical
-                else (f"{value:g}%" if parts[0].endswith("%") else f"{value:g}")
-            )
+    for entry in color_data.get("table", []):
+        value = float(entry["value"])
+        rgb = tuple(map(int, entry["color"].split(":")))
 
-            items.append({"value": value, "label": label, "rgb": rgb})
+        # JSON format outputs actual breakpoint numerical values directly
+        label = f"Class {int(value)}" if is_categorical else f"{value:g}"
+
+        items.append({"value": value, "label": label, "rgb": rgb})
 
     return {
         "type": "categorical" if is_categorical else "continuous",
