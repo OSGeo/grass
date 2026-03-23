@@ -241,8 +241,8 @@ int main(int argc, char *argv[])
             }
 
             Rast_init_cats("", &cats);
-		/* Preserves existing metadata (like title)*/
-	    Rast_read_cats(name, G_mapset(), &cats);
+            /* Preserves existing metadata (like title)*/
+            Rast_read_cats(name, G_mapset(), &cats);
 
             for (;;) {
                 char buf[1024];
