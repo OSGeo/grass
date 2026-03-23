@@ -40,7 +40,9 @@ def parse_colors(mapname):
 
     tools = Tools()
 
-    color_data = tools.r_colors_out(map=mapname, format="json", color_format="triplet")
+    color_data = tools.r_colors_out(
+        map=mapname, format="json", color_format="triplet"
+    ).json
 
     items = []
     nv = None
