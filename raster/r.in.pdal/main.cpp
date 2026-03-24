@@ -371,6 +371,21 @@ int main(int argc, char *argv[])
     user_dimension_opt->description = _("PDAL dimension name");
     user_dimension_opt->guisection = _("Selection");
 
+    Option *point_table_capacity_opt = G_define_option();
+
+    point_table_capacity_opt->key = "point_table_capacity";
+    point_table_capacity_opt->type = TYPE_INTEGER;
+    point_table_capacity_opt->required = NO;
+    point_table_capacity_opt->answer = const_cast<char *>("10000");
+
+    point_table_capacity_opt->description =
+        _("Set capacity of point table used for buffering points during "
+          "processing. "
+          "Increasing this value may improve performance for large datasets, "
+          "but also increases memory usage. Default is 10,000 points, which "
+          "should be sufficient for most cases.");
+    point_table_capacity_opt->guisection = _("Performance");
+
     Flag *extents_flag = G_define_flag();
 
     extents_flag->key = 'e';
@@ -796,9 +811,13 @@ int main(int argc, char *argv[])
     binning_writer.set_output_scale(output_scale);
     binning_writer.setInput(grass_filter);
     // stream_filter.setInput(*last_stage);
-    //  there is no difference between 1 and 10k points in memory
-    //  consumption, so using 10k in case it is faster for some cases
-    pdal::point_count_t point_table_capacity = 10000;
+    // there is no difference between 1 and 10k points in memory
+    // consumption, so using 10k in case it is faster for some cases
+    // Added user option to set point table capacity to a higher value, which
+    // may improve performance for large datasets but also increases memory
+    // usage
+    pdal::point_count_t point_table_capacity =
+        atoi(point_table_capacity_opt->answer);
     pdal::FixedPointTable point_table(point_table_capacity);
     try {
         binning_writer.prepare(point_table);
@@ -815,7 +834,17 @@ int main(int argc, char *argv[])
     }
     else if (!reproject_flag->answer) {
         pdal::SpatialReference spatial_reference =
-            merge_filter.getSpatialReference();
+            point_table.spatialReference();
+        /* COPC and some other readers only populate the point table SRS after
+         * execute(); fall back to reading it from the reader stages directly.
+         */
+        if (spatial_reference.empty()) {
+            for (pdal::Stage *reader : readers) {
+                spatial_reference = reader->getSpatialReference();
+                if (!spatial_reference.empty())
+                    break;
+            }
+        }
         if (spatial_reference.empty())
             G_fatal_error(_("The input dataset has undefined projection"));
         std::string dataset_wkt = spatial_reference.getWKT();

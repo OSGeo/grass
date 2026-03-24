@@ -39,7 +39,13 @@ class GrassRasterWriter : public pdal::NoFilenameWriter,
 class GrassRasterWriter : public pdal::Writer, public pdal::Streamable {
 #endif
 public:
-    GrassRasterWriter() : n_processed(0) {}
+    GrassRasterWriter()
+        : n_processed(0), region_(nullptr), point_binning_(nullptr),
+          bin_index_nodes_(nullptr), rtype_(FCELL_TYPE), cols_(0), scale_(1.0),
+          dim_to_import_(pdal::Dimension::Id::Z), base_segment_(nullptr),
+          input_region_(nullptr), base_raster_data_type_(FCELL_TYPE)
+    {
+    }
 
     std::string getName() const { return "writers.grassbinning"; }
 
@@ -105,8 +111,8 @@ public:
         int arr_col = (int)((x - region_->west) / region_->ew_res);
 
         if (arr_row >= region_->rows || arr_col >= region_->cols) {
-            G_message(_("A point on the edge of computational region detected. "
-                        "Ignoring."));
+            G_debug(3, "A point on the edge of computational region detected. "
+                       "Ignoring.");
             return false;
         }
 
