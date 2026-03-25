@@ -28,7 +28,7 @@ build_library_in_subdir(
   "r.li.daemon")
 
 if(WITH_DOCS)
-  generate_html(TARGET grass_rli NAME r.li)
+  generate_docs(r.li TARGET grass_rli)
 endif()
 
 foreach(SUBDIR ${SUBDIRS1})

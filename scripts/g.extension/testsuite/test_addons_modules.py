@@ -76,7 +76,7 @@ class TestModulesFromDifferentSources(TestCase):
 
     def setUp(self):
         """Make sure we are not dealing with some old files"""
-        if os.path.exists(self.install_prefix):
+        if Path(self.install_prefix).exists():
             files = [p.name for p in Path(self.install_prefix).iterdir()]
             if files:
                 msg = "Install prefix path '{}' contains files {}".format(

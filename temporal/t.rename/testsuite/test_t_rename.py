@@ -34,12 +34,8 @@ class TestRenameSTDS(TestCase):
         )
 
         # Generate data
-        cls.runModule(
-            "r.mapcalc", flags="s", expression="prec_1 = rand(0, 550)", overwrite=True
-        )
-        cls.runModule(
-            "r.mapcalc", flags="s", expression="prec_2 = rand(0, 450)", overwrite=True
-        )
+        cls.runModule("r.mapcalc", expression="prec_1 = rand(0, 550)", overwrite=True)
+        cls.runModule("r.mapcalc", expression="prec_2 = rand(0, 450)", overwrite=True)
 
         # We need to create three space time dataset
         cls.runModule(

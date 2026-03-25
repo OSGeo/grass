@@ -36,7 +36,6 @@ import wx
 # we get annoying "Debug: Adding duplicate image handler for 'Windows bitmap file'"
 # during start up, remove when not needed
 import wx.adv
-import wx.html
 
 try:
     import wx.lib.agw.advancedsplash as SC

@@ -145,42 +145,42 @@ void prof_pattern(const double o_elevation, const PATTERN *p)
 
     prof_sso("pattern");
     for (i = 0; i < NUM_DIRS; i++)
-        prof_int(dirname[i], p->pattern[i]);
+        prof_int(direction_name[i], p->pattern[i]);
     prof_eso();
 
     prof_sso("rel_elevation_m");
     for (i = 0; i < NUM_DIRS; i++)
-        prof_mtr(dirname[i], p->elevation[i]);
+        prof_mtr(direction_name[i], p->elevation[i]);
     prof_eso();
 
     prof_sso("abs_elevation_m");
     for (i = 0; i < NUM_DIRS; i++)
-        prof_mtr(dirname[i], o_elevation + p->elevation[i]);
+        prof_mtr(direction_name[i], o_elevation + p->elevation[i]);
     prof_eso();
 
     prof_sso("distance_m");
     for (i = 0; i < NUM_DIRS; i++)
-        prof_mtr(dirname[i], p->distance[i]);
+        prof_mtr(direction_name[i], p->distance[i]);
     prof_eso();
 
     prof_sso("offset_easting_m");
     for (i = 0; i < NUM_DIRS; i++)
-        prof_mtr(dirname[i], p->x[i]);
+        prof_mtr(direction_name[i], p->x[i]);
     prof_eso();
 
     prof_sso("offset_northing_m");
     for (i = 0; i < NUM_DIRS; i++)
-        prof_mtr(dirname[i], p->y[i]);
+        prof_mtr(direction_name[i], p->y[i]);
     prof_eso();
 
     prof_sso("easting");
     for (i = 0; i < NUM_DIRS; i++)
-        prof_dbl(dirname[i], p->e[i]);
+        prof_dbl(direction_name[i], p->e[i]);
     prof_eso();
 
     prof_sso("northing");
     for (i = 0; i < NUM_DIRS; i++)
-        prof_dbl(dirname[i], p->n[i]);
+        prof_dbl(direction_name[i], p->n[i]);
     prof_eso();
 }
 

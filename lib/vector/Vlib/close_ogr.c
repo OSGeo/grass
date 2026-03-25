@@ -18,9 +18,7 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-#ifdef HAVE_OGR
 #include <ogr_api.h>
-#endif
 
 #include "local_proto.h"
 
@@ -34,7 +32,6 @@
  */
 int V1_close_ogr(struct Map_info *Map)
 {
-#ifdef HAVE_OGR
     struct Format_info_ogr *ogr_info;
 
     G_debug(3, "V1_close_ogr() name = %s mapset = %s", Map->name, Map->mapset);
@@ -73,10 +70,6 @@ int V1_close_ogr(struct Map_info *Map)
         G_free_tokens(ogr_info->layer_options);
 
     return 0;
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-    return -1;
-#endif
 }
 
 /*!
@@ -89,7 +82,6 @@ int V1_close_ogr(struct Map_info *Map)
  */
 int V2_close_ogr(struct Map_info *Map)
 {
-#ifdef HAVE_OGR
     struct Format_info_ogr *ogr_info;
 
     G_debug(3, "V2_close_ogr() name = %s mapset = %s", Map->name, Map->mapset);
@@ -107,8 +99,4 @@ int V2_close_ogr(struct Map_info *Map)
     Vect__free_offset(&(ogr_info->offset));
 
     return 0;
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-    return -1;
-#endif
 }

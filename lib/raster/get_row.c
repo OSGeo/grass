@@ -93,7 +93,7 @@ static void read_data_fp_compressed(int fd, int row, unsigned char *data_buf,
     size_t bufsize = fcb->cellhd.cols * fcb->nbytes;
     int ret;
 
-    if (lseek(fcb->data_fd, t1, SEEK_SET) < 0)
+    if (lseek(fcb->data_fd, t1, SEEK_SET) == -1)
         G_fatal_error(
             _("Error seeking fp raster data file for row %d of <%s>: %s"), row,
             fcb->name, strerror(errno));
@@ -138,7 +138,7 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
     unsigned char *cmp, *cmp2;
     int n;
 
-    if (lseek(fcb->data_fd, t1, SEEK_SET) < 0)
+    if (lseek(fcb->data_fd, t1, SEEK_SET) == -1)
         G_fatal_error(
             _("Error seeking raster data file for row %d of <%s>: %s"), row,
             fcb->name, strerror(errno));
@@ -201,7 +201,6 @@ static void read_data_uncompressed(int fd, int row, unsigned char *data_buf,
                       fcb->name);
 }
 
-#ifdef HAVE_GDAL
 static void read_data_gdal(int fd, int row, unsigned char *data_buf,
                            int *nbytes)
 {
@@ -236,18 +235,15 @@ static void read_data_gdal(int fd, int row, unsigned char *data_buf,
             _("Error reading raster data via GDAL for row %d of <%s>"), row,
             fcb->name);
 }
-#endif
 
 static void read_data(int fd, int row, unsigned char *data_buf, int *nbytes)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
 
-#ifdef HAVE_GDAL
     if (fcb->gdal) {
         read_data_gdal(fd, row, data_buf, nbytes);
         return;
     }
-#endif
 
     if (!fcb->cellhd.compressed)
         read_data_uncompressed(fd, row, data_buf, nbytes);
@@ -341,7 +337,6 @@ static void cell_values_double(int fd, const unsigned char *data UNUSED,
     }
 }
 
-#ifdef HAVE_GDAL
 static void gdal_values_int(int fd, const unsigned char *data,
                             const COLUMN_MAPPING *cmap, int nbytes, void *cell,
                             int n)
@@ -369,12 +364,9 @@ static void gdal_values_int(int fd, const unsigned char *data,
         case GDT_Byte:
             c[i] = *(GByte *)d;
             break;
-/* GDT_Int8 was introduced in GDAL 3.7 */
-#if GDAL_VERSION_NUM >= GDAL_COMPUTE_VERSION(3, 7, 0)
         case GDT_Int8:
             c[i] = *(int8_t *)d;
             break;
-#endif
         case GDT_Int16:
             c[i] = *(GInt16 *)d;
             break;
@@ -448,7 +440,6 @@ static void gdal_values_double(int fd UNUSED, const unsigned char *data,
         cmapold = cmap[i];
     }
 }
-#endif
 
 /* transfer_to_cell_XY takes bytes from fcb->data, converts these bytes with
    the appropriate procedure (e.g. XDR or byte reordering) into type X
@@ -464,20 +455,16 @@ static void transfer_to_cell_XX(int fd, void *cell)
     static void (*cell_values_type[3])(
         int, const unsigned char *, const COLUMN_MAPPING *, int, void *,
         int) = {cell_values_int, cell_values_float, cell_values_double};
-#ifdef HAVE_GDAL
     static void (*gdal_values_type[3])(
         int, const unsigned char *, const COLUMN_MAPPING *, int, void *,
         int) = {gdal_values_int, gdal_values_float, gdal_values_double};
-#endif
     struct fileinfo *fcb = &R__.fileinfo[fd];
 
-#ifdef HAVE_GDAL
     if (fcb->gdal)
         (gdal_values_type[fcb->map_type])(fd, fcb->data, fcb->col_map,
                                           fcb->cur_nbytes, cell,
                                           R__.rd_window.cols);
     else
-#endif
         (cell_values_type[fcb->map_type])(fd, fcb->data, fcb->col_map,
                                           fcb->cur_nbytes, cell,
                                           R__.rd_window.cols);
@@ -854,7 +841,7 @@ static int read_null_bits_compressed(int null_fd, unsigned char *flags, int row,
     unsigned char *compressed_buf;
     int res;
 
-    if (lseek(null_fd, t1, SEEK_SET) < 0)
+    if (lseek(null_fd, t1, SEEK_SET) == -1)
         G_fatal_error(
             _("Error seeking compressed null data for row %d of <%s>"), row,
             fcb->name);
@@ -914,7 +901,7 @@ int Rast__read_null_bits(int fd, int row, unsigned char *flags)
 
     offset = (off_t)size * R;
 
-    if (lseek(null_fd, offset, SEEK_SET) < 0)
+    if (lseek(null_fd, offset, SEEK_SET) == -1)
         G_fatal_error(_("Error seeking null row %d for <%s>"), R, fcb->name);
 
     if (read(null_fd, flags, size) != size)
@@ -982,8 +969,6 @@ static void get_null_value_row_nomask(int fd, char *flags, int row)
 
 /*--------------------------------------------------------------------------*/
 
-#ifdef HAVE_GDAL
-
 static void get_null_value_row_gdal(int fd, char *flags, int row)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
@@ -1003,8 +988,6 @@ static void get_null_value_row_gdal(int fd, char *flags, int row)
 
     G_free(tmp_buf);
 }
-
-#endif
 
 /*--------------------------------------------------------------------------*/
 
@@ -1039,13 +1022,11 @@ static void embed_mask(char *flags, int row)
 
 static void get_null_value_row(int fd, char *flags, int row, int with_mask)
 {
-#ifdef HAVE_GDAL
     struct fileinfo *fcb = &R__.fileinfo[fd];
 
     if (fcb->gdal)
         get_null_value_row_gdal(fd, flags, row);
     else
-#endif
         get_null_value_row_nomask(fd, flags, row);
 
     if (with_mask)

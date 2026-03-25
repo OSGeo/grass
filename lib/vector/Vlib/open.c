@@ -55,7 +55,7 @@ static int open_new_dummy(struct Map_info *Map UNUSED, const char *name UNUSED,
     return 0;
 }
 
-#if !defined HAVE_OGR || !defined HAVE_POSTGRES
+#if !defined HAVE_POSTGRES
 static int format_old(struct Map_info *Map UNUSED, int update UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
@@ -73,16 +73,9 @@ static int format_new(struct Map_info *Map UNUSED, const char *name UNUSED,
 static int Open_level = 0;
 
 static int (*Open_old_array[][2])(struct Map_info *,
-                                  int) = {{open_old_dummy, V1_open_old_nat}
-#ifdef HAVE_OGR
-                                          ,
+                                  int) = {{open_old_dummy, V1_open_old_nat},
                                           {open_old_dummy, V1_open_old_ogr},
                                           {open_old_dummy, V1_open_old_ogr}
-#else
-                                          ,
-                                          {open_old_dummy, format_old},
-                                          {open_old_dummy, format_old}
-#endif
 #ifdef HAVE_POSTGRES
                                           ,
                                           {open_old_dummy, V1_open_old_pg}
@@ -94,16 +87,9 @@ static int (*Open_old_array[][2])(struct Map_info *,
 
 static int (*Open_new_array[][2])(struct Map_info *Map, const char *name,
                                   int with_z) = {
-    {open_new_dummy, V1_open_new_nat}
-#ifdef HAVE_OGR
-    ,
+    {open_new_dummy, V1_open_new_nat},
     {open_new_dummy, V1_open_new_ogr},
     {open_new_dummy, V1_open_new_ogr}
-#else
-    ,
-    {open_new_dummy, format_new},
-    {open_new_dummy, format_new}
-#endif
 #ifdef HAVE_POSTGRES
     ,
     {open_new_dummy, V1_open_new_pg}
@@ -413,7 +399,6 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
                     Vect_get_full_name(Map));
             }
         }
-#ifdef HAVE_OGR
         /* open OGR specific support files */
         if (level == 2 && Map->format == GV_FORMAT_OGR) {
             if (V2_open_old_ogr(Map) < 0) {
@@ -421,7 +406,6 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
                 level = 1;
             }
         }
-#endif
 #ifdef HAVE_POSTGRES
         /* open OGR (pseudo-topology access only) specific support
          * files */

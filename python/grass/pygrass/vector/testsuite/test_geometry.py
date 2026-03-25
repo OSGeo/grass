@@ -4,7 +4,6 @@ Created on Thu Jun 19 14:13:53 2014
 @author: pietro
 """
 
-import sys
 import unittest
 
 import numpy as np
@@ -125,7 +124,6 @@ class LineTestCase(TestCase):
         self.assertEqual(len(Line()), 0)
         self.assertEqual(len(Line([(0, 0), (1, 1)])), 2)
 
-    @unittest.skipIf(sys.version_info[:2] < (2, 7), "Require Python >= 2.7")
     def test_getitem(self):
         """Test __getitem__ magic method"""
         line = Line([(0, 0), (1, 1), (2, 2), (3, 3), (4, 4)])
@@ -138,7 +136,6 @@ class LineTestCase(TestCase):
         with self.assertRaises(IndexError):
             line[5]
 
-    @unittest.skipIf(sys.version_info[:2] < (2, 7), "Require Python >= 2.7")
     def test_setitem(self):
         """Test __setitem__ magic method"""
         line = Line([(0, 0), (1, 1)])
@@ -146,7 +143,6 @@ class LineTestCase(TestCase):
         line[0] = (10, 10)
         self.assertTupleEqual(line[0].coords(), (10.0, 10.0))
 
-    @unittest.skipIf(sys.version_info[:2] < (2, 7), "Require Python >= 2.7")
     def test_get_pnt(self):
         """Test get_pnt method"""
         line = Line([(0, 0), (1, 1)])
@@ -341,7 +337,7 @@ class AreaTestCase(TestCase):
             )
         )
 
-        for boundary, i in zip(boundaries, range(4)):
+        for boundary, i in zip(boundaries, range(4), strict=True):
             self.assertEqual(len(boundary.to_wkb()), 41)
             self.assertEqual(boundary.to_wkt(), string_list[i])
 

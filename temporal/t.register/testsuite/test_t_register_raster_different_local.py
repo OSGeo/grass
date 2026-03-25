@@ -72,7 +72,6 @@ class TestRegisterDifferentLocal(TestCase):
             # Generate data
             cls.runModule(
                 "r.mapcalc",
-                flags="s",
                 expression=f"prec_{raster_map_id + 1} = rand(0, {parameters[0]})",
                 overwrite=True,
             )

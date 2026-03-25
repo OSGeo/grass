@@ -4,9 +4,9 @@
 # Distributed under the terms of the GNU General Public License v2 or later
 
 import re
-from textwrap import TextWrapper
-import sys
 import subprocess
+import sys
+from textwrap import TextWrapper
 
 rev_range = ""
 

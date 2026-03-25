@@ -32,7 +32,7 @@ function(build_module)
   endforeach()
 
   if(NOT G_SRC_REGEX)
-    set(G_SRC_REGEX "*.c")
+    set(G_SRC_REGEX "*.[ch]")
   endif()
 
   if(NOT G_SRC_DIR)
@@ -105,12 +105,28 @@ function(build_module)
 
   if(G_EXE)
     add_executable(${G_NAME} ${${G_NAME}_SRCS})
-    if("${G_NAME}" MATCHES "^v.*")
-      set_target_properties(${G_NAME} PROPERTIES FOLDER vector)
-    elseif("${G_NAME}" MATCHES "^r.*")
-      set_target_properties(${G_NAME} PROPERTIES FOLDER raster)
+    if("${G_NAME}" MATCHES "^v[\.]")
+      set_target_properties(${G_NAME} PROPERTIES FOLDER Tools/Vector)
+    elseif("${G_NAME}" MATCHES "^r[\.]")
+      set_target_properties(${G_NAME} PROPERTIES FOLDER Tools/Raster)
+    elseif("${G_NAME}" MATCHES "^d[\.]")
+      set_target_properties(${G_NAME} PROPERTIES FOLDER Tools/Display)
+    elseif("${G_NAME}" MATCHES "^db[\.]")
+      set_target_properties(${G_NAME} PROPERTIES FOLDER Tools/Database)
+    elseif("${G_NAME}" MATCHES "^g[\.]")
+      set_target_properties(${G_NAME} PROPERTIES FOLDER Tools/General)
+    elseif("${G_NAME}" MATCHES "^i[\.]")
+      set_target_properties(${G_NAME} PROPERTIES FOLDER Tools/Imagery)
+    elseif("${G_NAME}" MATCHES "^m[\.]")
+      set_target_properties(${G_NAME} PROPERTIES FOLDER Tools/Miscellaneous)
+    elseif("${G_NAME}" MATCHES "^ps[\.]")
+      set_target_properties(${G_NAME} PROPERTIES FOLDER Tools/PostScript)
+    elseif("${G_NAME}" MATCHES "^r3[\.]")
+      set_target_properties(${G_NAME} PROPERTIES FOLDER "Tools/Raster 3D")
+    elseif("${G_NAME}" MATCHES "^t[\.]")
+       set_target_properties(${G_NAME} PROPERTIES FOLDER Tools/Temporal)
     else()
-      set_target_properties(${G_NAME} PROPERTIES FOLDER bin)
+      set_target_properties(${G_NAME} PROPERTIES FOLDER Binaries)
     endif()
     set(default_html_file_name ${G_NAME})
     set(PGM_NAME ${G_NAME})
@@ -123,12 +139,16 @@ function(build_module)
         CACHE INTERNAL "list of modules")
 
   else()
+    string(REPLACE "grass_" "" _libname ${G_NAME})
     add_library(${G_NAME} ${${G_NAME}_SRCS})
     set_target_properties(
       ${G_NAME}
-      PROPERTIES FOLDER lib
+      PROPERTIES FOLDER "GRASS Libraries"
                  VERSION ${GRASS_VERSION_NUMBER}
-                 SOVERSION ${GRASS_VERSION_MAJOR})
+                 SOVERSION ${GRASS_VERSION_MAJOR}
+                 EXPORT_NAME ${_libname})
+
+    add_library(GRASS::${_libname} ALIAS ${G_NAME})
 
     # TODO: check when and where the export header files are needed
     set(export_file_name
@@ -139,6 +159,7 @@ function(build_module)
 
     generate_export_header(${G_NAME} STATIC_DEFINE "STATIC_BUILD"
                            EXPORT_FILE_NAME ${export_file_name})
+    add_dependencies(${G_NAME} python_doc_utils)
   endif()
 
   if(G_HTML_FILE_NAME)
@@ -150,7 +171,7 @@ function(build_module)
   get_property(MODULE_LIST GLOBAL PROPERTY MODULE_LIST)
   set_property(GLOBAL PROPERTY MODULE_LIST "${MODULE_LIST};${G_NAME}")
 
-  add_dependencies(${G_NAME} copy_header)
+  add_dependencies(${G_NAME} INCLUDE_HEADERS)
 
   foreach(G_OPTIONAL_DEPEND ${G_OPTIONAL_DEPENDS})
     if(TARGET ${G_OPTIONAL_DEPEND})
@@ -174,8 +195,8 @@ function(build_module)
     if(${G_NAME}_INCLUDE_DIRS)
       list(REMOVE_DUPLICATES ${G_NAME}_INCLUDE_DIRS)
     endif()
-
-    target_include_directories(${G_NAME} PUBLIC ${${G_NAME}_INCLUDE_DIRS})
+    target_include_directories(
+      ${G_NAME} PUBLIC "$<BUILD_INTERFACE:${${G_NAME}_INCLUDE_DIRS}>")
   endforeach()
 
   foreach(G_DEF ${G_DEFS})
@@ -205,18 +226,8 @@ function(build_module)
         target_compile_definitions(${G_NAME} PRIVATE "${interface_def}")
       endif()
       target_link_libraries(${G_NAME} PRIVATE ${dep})
-    elseif(OpenMP_C_FOUND)
-      target_link_libraries(${G_NAME} PRIVATE OpenMP::OpenMP_C)
     endif()
   endforeach()
-
-  # To use this property later in build_docs
-  set(PGM_EXT "")
-  if(WIN32)
-    if(G_EXE)
-      set(PGM_EXT ".exe")
-    endif()
-  endif()
 
   set(G_HTML_FILE_NAME "${HTML_FILE_NAME}.html")
   set(html_file_search ${G_SRC_DIR}/${G_HTML_FILE_NAME})
@@ -225,61 +236,30 @@ function(build_module)
   endif()
 
   if(WITH_DOCS AND NOT G_NO_DOCS)
-    set(HTML_FILE)
+
+    set(html_file)
     if(EXISTS ${html_file_search})
-      set(HTML_FILE ${html_file_search})
-      install(FILES ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${G_HTML_FILE_NAME}
-              DESTINATION ${GRASS_INSTALL_DOCDIR})
+      set(html_file ${html_file_search})
     endif()
 
-    if(NOT HTML_FILE)
+    if(NOT html_file)
       return()
     endif()
 
-    get_filename_component(HTML_FILE_NAME ${HTML_FILE} NAME)
-    get_filename_component(PGM_SOURCE_DIR ${HTML_FILE} PATH)
+    get_filename_component(HTML_FILE_NAME ${html_file} NAME)
+    get_filename_component(PGM_SOURCE_DIR ${html_file} PATH)
 
     string(REPLACE ".html" "" PGM_NAME "${HTML_FILE_NAME}")
-    string(REPLACE ".html" ".tmp.html" TMP_HTML_NAME ${HTML_FILE_NAME})
-    set(TMP_HTML_FILE ${CMAKE_CURRENT_BINARY_DIR}/${TMP_HTML_NAME})
-    set(OUT_HTML_FILE ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${HTML_FILE_NAME})
-
-    set(PGM_EXT "")
-    if(WIN32)
-      set(PGM_EXT ".exe")
-    endif()
 
     if(RUN_HTML_DESCR)
-      set(html_descr_command
-            ${G_NAME}${PGM_EXT}  --html-description < ${NULL_DEVICE} | ${SEARCH_COMMAND}
-            ${HTML_SEARCH_STR})
-    else()
-      set(html_descr_command ${CMAKE_COMMAND} -E echo)
+      set(HTML_DESCR "HTML_DESCR")
     endif()
 
-    file(
-      GLOB IMG_FILES
-      LIST_DIRECTORIES FALSE
-      ${G_SRC_DIR}/*.png ${G_SRC_DIR}/*.jpg)
-    if(IMG_FILES)
-      set(copy_images_command ${CMAKE_COMMAND} -E copy ${IMG_FILES}
-                              ${OUTDIR}/${GRASS_INSTALL_DOCDIR})
-      install(FILES ${IMG_FILES} DESTINATION ${GRASS_INSTALL_DOCDIR})
-    endif()
-
-    add_custom_command(
+    generate_docs(${PGM_NAME}
       TARGET ${G_NAME}
-      POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy ${G_SRC_DIR}/${G_HTML_FILE_NAME}
-              ${CMAKE_CURRENT_BINARY_DIR}/${G_HTML_FILE_NAME}
-      COMMAND ${grass_env_command} ${html_descr_command} > ${TMP_HTML_FILE}
-      COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${MKHTML_PY} ${PGM_NAME}
-              > ${OUT_HTML_FILE}
-      COMMAND ${copy_images_command}
-      COMMAND ${CMAKE_COMMAND} -E remove ${TMP_HTML_FILE}
-              ${CMAKE_CURRENT_BINARY_DIR}/${G_HTML_FILE_NAME}
-      COMMENT "Creating ${OUT_HTML_FILE}")
-    install(FILES ${OUT_HTML_FILE} DESTINATION ${GRASS_INSTALL_DOCDIR})
+      SOURCEDIR ${PGM_SOURCE_DIR}
+      ${HTML_DESCR})
+
   endif() # WITH_DOCS
 
   foreach(test_SOURCE ${G_TEST_SOURCES})
@@ -289,6 +269,32 @@ function(build_module)
     message("[build_module] ADDING TEST ${G_NAME}-test")
   endforeach()
 
-  install(TARGETS ${G_NAME} DESTINATION ${install_dest})
+  if(NOT G_EXE)
+    string(REPLACE "grass_" "" _libname ${G_NAME})
+    install(
+      TARGETS ${G_NAME}
+      EXPORT ${_libname}Targets
+      LIBRARY DESTINATION ${install_dest}
+      ARCHIVE DESTINATION ${install_dest}
+      RUNTIME DESTINATION ${G_RUNTIME_OUTPUT_DIR}
+      INCLUDES
+      DESTINATION ${GRASS_INSTALL_INCLUDEDIR})
 
+    install(
+      EXPORT ${_libname}Targets
+      FILE GRASS_${_libname}Targets.cmake
+      DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/GRASS
+      NAMESPACE GRASS::
+      EXPORT_LINK_INTERFACE_LIBRARIES)
+  else()
+    install(TARGETS ${G_NAME} DESTINATION ${install_dest})
+  endif()
+
+  set(_headers ${G_HEADERS})
+  list(TRANSFORM _headers PREPEND "${G_SRC_DIR}/")
+  file(GLOB _docs_files
+       LIST_DIRECTORIES FALSE
+       ${G_SRC_DIR}/*.html ${G_SRC_DIR}/*.md
+       ${G_SRC_DIR}/*.png ${G_SRC_DIR}/*.jpg)
+  target_sources(${G_NAME} PRIVATE ${_headers} ${_docs_files})
 endfunction()

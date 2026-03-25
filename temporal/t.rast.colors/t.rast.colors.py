@@ -102,9 +102,11 @@
 # % guisection: Define
 # %end
 
+from pathlib import Path
+
 import grass.script as gs
 from grass.exceptions import CalledModuleError
-from pathlib import Path
+
 ############################################################################
 
 

@@ -35,15 +35,15 @@ void print_cli_flag(FILE *file, const char *key, const char *label,
     fprintf(file, "\n");
     if (label != NULL) {
         fprintf(file, "%s", indent);
-        G__md_print_escaped(file, "\t");
-        G__md_print_escaped(file, label);
+        G__md_print_escaped(file, "\t", indent);
+        G__md_print_escaped(file, label, indent);
         fprintf(file, MD_NEWLINE);
         fprintf(file, "\n");
     }
     if (description != NULL) {
         fprintf(file, "%s", indent);
-        G__md_print_escaped(file, "\t");
-        G__md_print_escaped(file, description);
+        G__md_print_escaped(file, "\t", indent);
+        G__md_print_escaped(file, description, indent);
     }
 }
 
@@ -82,8 +82,8 @@ void print_cli_option(FILE *file, const struct Option *opt, const char *indent)
     fprintf(file, "\n");
     if (opt->label) {
         fprintf(file, "%s", indent);
-        G__md_print_escaped(file, "\t");
-        G__md_print_escaped(file, opt->label);
+        G__md_print_escaped(file, "\t", indent);
+        G__md_print_escaped(file, opt->label, indent);
     }
     if (opt->description) {
         if (opt->label) {
@@ -91,15 +91,15 @@ void print_cli_option(FILE *file, const struct Option *opt, const char *indent)
             fprintf(file, "\n");
         }
         fprintf(file, "%s", indent);
-        G__md_print_escaped(file, "\t");
-        G__md_print_escaped(file, opt->description);
+        G__md_print_escaped(file, "\t", indent);
+        G__md_print_escaped(file, opt->description, indent);
     }
 
     if (opt->options) {
         fprintf(file, MD_NEWLINE);
         fprintf(file, "\n");
         fprintf(file, "%s", indent);
-        G__md_print_escaped(file, "\t");
+        G__md_print_escaped(file, "\t", indent);
         fprintf(file, "%s: *", _("Allowed values"));
         G__md_print_escaped_for_options(file, opt->options);
         fprintf(file, "*");
@@ -109,10 +109,10 @@ void print_cli_option(FILE *file, const struct Option *opt, const char *indent)
         fprintf(file, MD_NEWLINE);
         fprintf(file, "\n");
         fprintf(file, "%s", indent);
-        G__md_print_escaped(file, "\t");
+        G__md_print_escaped(file, "\t", indent);
         fprintf(file, "%s:", _("Default"));
         fprintf(file, " *");
-        G__md_print_escaped(file, opt->def);
+        G__md_print_escaped(file, opt->def, indent);
         fprintf(file, "*");
     }
 
@@ -137,19 +137,19 @@ void print_cli_option(FILE *file, const struct Option *opt, const char *indent)
                         thumbnails = "northarrows";
 
                     if (thumbnails) {
-                        G__md_print_escaped(file, "\t\t");
+                        G__md_print_escaped(file, "\t\t", indent);
                         fprintf(file, "![%s](%s/%s.png) ", opt->opts[i],
                                 thumbnails, opt->opts[i]);
                     }
                     else {
-                        G__md_print_escaped(file, "\t\t");
+                        G__md_print_escaped(file, "\t\t", indent);
                     }
                 }
-                G__md_print_escaped(file, "\t");
+                G__md_print_escaped(file, "\t", indent);
                 fprintf(file, "**");
-                G__md_print_escaped(file, opt->opts[i]);
+                G__md_print_escaped(file, opt->opts[i], indent);
                 fprintf(file, "**: ");
-                G__md_print_escaped(file, opt->descs[i]);
+                G__md_print_escaped(file, opt->descs[i], indent);
             }
             i++;
         }

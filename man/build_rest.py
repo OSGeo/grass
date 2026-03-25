@@ -281,7 +281,7 @@ def write_file(name, contents):
 
 def try_mkdir(path):
     try:
-        os.mkdir(path)
+        Path(path).mkdir()
     except OSError:
         pass
 
@@ -289,8 +289,8 @@ def try_mkdir(path):
 def replace_file(name):
     temp = name + ".tmp"
     if (
-        os.path.exists(name)
-        and os.path.exists(temp)
+        Path(name).exists()
+        and Path(temp).exists()
         and read_file(name) == read_file(temp)
     ):
         os.remove(temp)

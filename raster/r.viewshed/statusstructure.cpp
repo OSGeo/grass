@@ -37,6 +37,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <algorithm>
 #include <assert.h>
 
 extern "C" {

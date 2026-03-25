@@ -32,6 +32,7 @@ import sys
 import time
 import shutil
 import fileinput
+from pathlib import Path
 
 from grass.script.utils import try_remove
 from grass.script import core as grass
@@ -614,9 +615,9 @@ class MapApp(wx.App):
         #    self.timer.Stop()
         #    return
 
-        # todo: events
+        # TODO: events
         try:
-            currentCmdFileTime = os.path.getmtime(monFile["cmd"])
+            currentCmdFileTime = Path(monFile["cmd"]).stat().st_mtime
             if currentCmdFileTime > self.cmdTimeStamp:
                 self.timer.Stop()
                 self.cmdTimeStamp = currentCmdFileTime

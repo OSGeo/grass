@@ -17,6 +17,7 @@
  *
  **************************************************************/
 
+#include <errno.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -279,7 +280,10 @@ int main(int argc, char *argv[])
 
     /* Remove old lock */
     snprintf(path, sizeof(path), "%s/.gislock", mapset_old_path);
-    remove(path);
+    if (remove(path) != 0) {
+        G_warning(_("Failed to remove old lock file <%s>: %s"), path,
+                  strerror(errno));
+    }
 
     G_free(mapset_old_path);
 

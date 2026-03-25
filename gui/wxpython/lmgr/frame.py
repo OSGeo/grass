@@ -1223,7 +1223,7 @@ class GMFrame(wx.Frame):
         if not filename:
             return False
 
-        if not os.path.exists(filename):
+        if not Path(filename).exists():
             GError(
                 parent=self,
                 message=_("Script file '%s' doesn't exist. Operation canceled.")
@@ -1462,8 +1462,9 @@ class GMFrame(wx.Frame):
             sys.stderr.write(_("Unable to get GRASS version\n"))
 
         # check also OSGeo4W on MS Windows
-        if sys.platform == "win32" and not os.path.exists(
-            os.path.join(os.getenv("GISBASE"), "WinGRASS-README.url")
+        if (
+            sys.platform == "win32"
+            and not Path(os.getenv("GISBASE"), "WinGRASS-README.url").exists()
         ):
             osgeo4w = " (OSGeo4W)"
         else:

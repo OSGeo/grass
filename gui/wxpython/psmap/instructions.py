@@ -817,7 +817,11 @@ class PageSetup(InstructionObject):
         instr = {}
         self.cats = ["Width", "Height", "Left", "Right", "Top", "Bottom"]
         self.subInstr = dict(
-            zip(["width", "height", "left", "right", "top", "bottom"], self.cats)
+            zip(
+                ["width", "height", "left", "right", "top", "bottom"],
+                self.cats,
+                strict=True,
+            )
         )
 
         if instruction == "paper":  # just for sure
@@ -866,7 +870,7 @@ class PageSetup(InstructionObject):
         sizeDict = {}
         #     cats = self.subInstr[ 'Width', 'Height', 'Left', 'Right', 'Top', 'Bottom']
         for line in paperStr.strip().split("\n"):
-            d = dict(zip(self.cats, line.split()[1:]))
+            d = dict(zip(self.cats, line.split()[1:], strict=False))
             sizeDict[line.split()[0]] = d
 
         return sizeDict
@@ -1131,7 +1135,7 @@ class Image(InstructionObject):
             except (IndexError, ValueError):
                 GError(_("Failed to read instruction %s") % instruction)
                 return False
-        if not os.path.exists(instr["epsfile"]):
+        if not Path(instr["epsfile"]).exists():
             GError(
                 _("Failed to read instruction %(inst)s: file %(file)s not found.")
                 % {"inst": instruction, "file": instr["epsfile"]}

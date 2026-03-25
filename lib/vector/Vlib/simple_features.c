@@ -33,12 +33,10 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
+#include <ogr_api.h>
+
 #ifdef HAVE_POSTGRES
 #include "pg_local_proto.h"
-#endif
-
-#ifdef HAVE_OGR
-#include <ogr_api.h>
 #endif
 
 static int check_sftype(const struct line_pnts *, int, SF_FeatureType, int);
@@ -304,7 +302,6 @@ int Vect_sfa_get_num_features(struct Map_info *Map)
     nfeat = 0;
     if (Map->format == GV_FORMAT_OGR || Map->format == GV_FORMAT_OGR_DIRECT) {
         /* OGR */
-#ifdef HAVE_OGR
         const struct Format_info_ogr *ogr_info;
 
         ogr_info = &(Map->fInfo.ogr);
@@ -313,10 +310,6 @@ int Vect_sfa_get_num_features(struct Map_info *Map)
             return -1;
 
         return OGR_L_GetFeatureCount(ogr_info->layer, TRUE);
-#else
-        G_fatal_error(_("GRASS is not compiled with OGR support"));
-        return -1;
-#endif
     }
     else if (Map->format == GV_FORMAT_POSTGIS &&
              !Map->fInfo.pg.toposchema_name) {

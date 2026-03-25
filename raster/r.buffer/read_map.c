@@ -48,8 +48,9 @@ int read_input_map(char *input, char *mapset, int ZEROFLAG)
     mincol = window.cols;
     maxcol = 0;
 
-    G_message(_("Reading input raster map <%s>..."),
-              G_fully_qualified_name(input, mapset));
+    char *mname = G_fully_qualified_name(input, mapset);
+    G_message(_("Reading input raster map <%s>..."), mname);
+    G_free(mname);
 
     count_rows_with_data = 0;
 

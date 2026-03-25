@@ -185,7 +185,7 @@ class TestTemporalVectorAlgebra(TestCase):
         self.assertTrue(D.is_in_db())
         D.select()
         D.print_info()
-        maplist = D.get_registered_maps_as_objects()
+        D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))

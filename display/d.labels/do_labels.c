@@ -334,7 +334,7 @@ int show_it(void)
     fprintf(stdout, "L 5\n");
     for (i = 0; i < 5; i++)
         fprintf(stdout, " %f %f\n", xarr[i], yarr[i]);
-        /* d.labels labfile | v.in.ascii -n out=labbox format=standard */
+    /* d.labels labfile | v.in.ascii -n out=labbox format=standard */
 #endif
 
     /* draw boxes */

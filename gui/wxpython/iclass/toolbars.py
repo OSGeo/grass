@@ -264,7 +264,7 @@ class IClassToolbar(BaseToolbar):
 
     def SetCategories(self, catNames, catIdx):
         self.choice.Clear()
-        for name, idx in zip(catNames, catIdx):
+        for name, idx in zip(catNames, catIdx, strict=False):
             self.choice.Append(name, idx)
 
     def GetSelectedCategoryName(self):

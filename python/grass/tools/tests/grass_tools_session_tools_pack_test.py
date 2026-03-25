@@ -11,12 +11,12 @@ from grass.tools import Tools, ToolError
 
 
 def test_pack_input_output_tool_name_function(
-    xy_dataset_session, rows_raster_file3x2, tmp_path
+    xy_dataset_session, rows_raster_file3x2: Path, tmp_path: Path
 ):
     """Check input and output pack files work with tool name call"""
     tools = Tools(session=xy_dataset_session)
     tools.g_region(rows=3, cols=3)
-    assert os.path.exists(rows_raster_file3x2)
+    assert rows_raster_file3x2.exists()
     output_file = tmp_path / "file.grass_raster"
     tools.r_slope_aspect(elevation=rows_raster_file3x2, slope=output_file)
     assert output_file.exists()
@@ -29,7 +29,7 @@ def test_pack_input_output_tool_name_function(
 
 @pytest.mark.parametrize("parameter_type", [str, Path])
 def test_pack_input_output_tool_name_function_string_value(
-    xy_dataset_session, rows_raster_file3x2, tmp_path, parameter_type
+    xy_dataset_session, rows_raster_file3x2: Path, tmp_path: Path, parameter_type
 ):
     """Check input and output pack files work string a parameter
 
@@ -38,7 +38,7 @@ def test_pack_input_output_tool_name_function_string_value(
     """
     tools = Tools(session=xy_dataset_session)
     tools.g_region(rows=3, cols=3)
-    assert os.path.exists(rows_raster_file3x2)
+    assert rows_raster_file3x2.exists()
     output_file = tmp_path / "file.grass_raster"
     tools.r_slope_aspect(
         elevation=parameter_type(rows_raster_file3x2), slope=parameter_type(output_file)
@@ -52,12 +52,12 @@ def test_pack_input_output_tool_name_function_string_value(
 
 
 def test_pack_input_output_with_name_and_parameter_call(
-    xy_dataset_session, rows_raster_file3x2, tmp_path
+    xy_dataset_session, rows_raster_file3x2: Path, tmp_path: Path
 ):
     """Check input and output pack files work with tool name as string"""
     tools = Tools(session=xy_dataset_session)
     tools.g_region(rows=3, cols=3)
-    assert os.path.exists(rows_raster_file3x2)
+    assert rows_raster_file3x2.exists()
     output_file = tmp_path / "file.grass_raster"
     tools.run("r.slope.aspect", elevation=rows_raster_file3x2, slope=output_file)
     assert output_file.exists()
@@ -69,11 +69,11 @@ def test_pack_input_output_with_name_and_parameter_call(
 
 
 def test_pack_input_output_with_subprocess_run_like_call(
-    xy_dataset_session, rows_raster_file3x2, tmp_path
+    xy_dataset_session, rows_raster_file3x2: Path, tmp_path: Path
 ):
     """Check input and output pack files work with command as list"""
     tools = Tools(session=xy_dataset_session)
-    assert os.path.exists(rows_raster_file3x2)
+    assert rows_raster_file3x2.exists()
     output_file = tmp_path / "file.grass_raster"
     tools.run_cmd(
         [
@@ -340,11 +340,13 @@ def test_repeated_output(xy_dataset_session, rows_raster_file3x2, tmp_path):
     assert output_file.exists()
 
 
-def test_output_without_overwrite(xy_dataset_session, rows_raster_file3x2, tmp_path):
+def test_output_without_overwrite(
+    xy_dataset_session, rows_raster_file3x2: Path, tmp_path: Path
+):
     """Check input and output pack files work with tool name call"""
     tools = Tools(session=xy_dataset_session)
     tools.g_region(rows=3, cols=3)
-    assert os.path.exists(rows_raster_file3x2)
+    assert rows_raster_file3x2.exists()
     output_file = tmp_path / "file.grass_raster"
     tools.r_slope_aspect(elevation=rows_raster_file3x2, slope=output_file)
     with pytest.raises(ToolError, match=r"[Oo]verwrite"):
@@ -353,12 +355,12 @@ def test_output_without_overwrite(xy_dataset_session, rows_raster_file3x2, tmp_p
 
 
 def test_output_with_object_level_overwrite(
-    xy_dataset_session, rows_raster_file3x2, tmp_path
+    xy_dataset_session, rows_raster_file3x2: Path, tmp_path: Path
 ):
     """Check input and output pack files work with tool name call"""
     tools = Tools(session=xy_dataset_session, overwrite=True)
     tools.g_region(rows=3, cols=3)
-    assert os.path.exists(rows_raster_file3x2)
+    assert rows_raster_file3x2.exists()
     output_file = tmp_path / "file.grass_raster"
     tools.r_slope_aspect(elevation=rows_raster_file3x2, slope=output_file)
     # Same call the second time.
@@ -367,12 +369,12 @@ def test_output_with_object_level_overwrite(
 
 
 def test_output_with_function_level_overwrite(
-    xy_dataset_session, rows_raster_file3x2, tmp_path
+    xy_dataset_session, rows_raster_file3x2: Path, tmp_path: Path
 ):
     """Check input and output pack files work with tool name call"""
     tools = Tools(session=xy_dataset_session)
     tools.g_region(rows=3, cols=3)
-    assert os.path.exists(rows_raster_file3x2)
+    assert rows_raster_file3x2.exists()
     output_file = tmp_path / "file.grass_raster"
     tools.r_slope_aspect(elevation=rows_raster_file3x2, slope=output_file)
     # Same call the second time.
@@ -382,7 +384,7 @@ def test_output_with_function_level_overwrite(
     assert output_file.exists()
 
 
-def test_non_existent_pack_input(xy_dataset_session, tmp_path):
+def test_non_existent_pack_input(xy_dataset_session, tmp_path: Path):
     """Check input and output pack files work with tool name call"""
     tools = Tools(session=xy_dataset_session)
     tools.g_region(rows=3, cols=3)
@@ -400,7 +402,7 @@ def test_non_existent_pack_input(xy_dataset_session, tmp_path):
 
 
 def test_non_existent_output_pack_directory(
-    xy_dataset_session, rows_raster_file3x2, tmp_path
+    xy_dataset_session, rows_raster_file3x2: Path, tmp_path: Path
 ):
     """Check input and output pack files work with tool name call"""
     tools = Tools(session=xy_dataset_session)
@@ -416,7 +418,7 @@ def test_non_existent_output_pack_directory(
         tools.r_slope_aspect(elevation=rows_raster_file3x2, slope=output_file)
 
 
-def test_wrong_parameter(xy_dataset_session, rows_raster_file3x2, tmp_path):
+def test_wrong_parameter(xy_dataset_session, rows_raster_file3x2: Path, tmp_path: Path):
     """Check wrong parameter causes standard exception
 
     Since the tool is called to process its parameters with pack IO,
@@ -432,7 +434,7 @@ def test_wrong_parameter(xy_dataset_session, rows_raster_file3x2, tmp_path):
         )
 
 
-def test_direct_r_unpack_to_data(xy_dataset_session, rows_raster_file3x2):
+def test_direct_r_unpack_to_data(xy_dataset_session, rows_raster_file3x2: Path):
     """Check that we can r.unpack data as usual"""
     tools = Tools(session=xy_dataset_session, use_cache=True)
     tools.g_region(rows=3, cols=3)
@@ -444,7 +446,9 @@ def test_direct_r_unpack_to_data(xy_dataset_session, rows_raster_file3x2):
     )["name"]
 
 
-def test_direct_r_unpack_to_pack(xy_dataset_session, rows_raster_file3x2, tmp_path):
+def test_direct_r_unpack_to_pack(
+    xy_dataset_session, rows_raster_file3x2: Path, tmp_path: Path
+):
     """Check that roundtrip from existing packed raster to new packed raster works"""
     tools = Tools(session=xy_dataset_session, use_cache=True)
     tools.g_region(rows=3, cols=3)
@@ -460,7 +464,7 @@ def test_direct_r_unpack_to_pack(xy_dataset_session, rows_raster_file3x2, tmp_pa
     )["name"]
 
 
-def test_direct_r_pack_from_data(xy_dataset_session, tmp_path):
+def test_direct_r_pack_from_data(xy_dataset_session, tmp_path: Path):
     """Check that we can r.pack data as usual"""
     tools = Tools(session=xy_dataset_session, use_cache=True)
     tools.g_region(rows=3, cols=3)
@@ -481,7 +485,9 @@ def test_direct_r_pack_from_data(xy_dataset_session, tmp_path):
     assert tools.g_findfile(element="raster", file="data_1", format="json")["name"]
 
 
-def test_direct_r_pack_from_pack(xy_dataset_session, rows_raster_file3x2, tmp_path):
+def test_direct_r_pack_from_pack(
+    xy_dataset_session, rows_raster_file3x2: Path, tmp_path: Path
+):
     """Check that roundtrip from existing packed raster to raster works"""
     tools = Tools(session=xy_dataset_session, use_cache=True)
     tools.g_region(rows=3, cols=3)
@@ -508,7 +514,7 @@ def test_direct_r_pack_from_pack(xy_dataset_session, rows_raster_file3x2, tmp_pa
 
 
 def test_clean_after_tool_failure_with_context_and_try(
-    xy_dataset_session, rows_raster_file3x2, tmp_path
+    xy_dataset_session, rows_raster_file3x2: Path, tmp_path: Path
 ):
     """Check we delete imported input when we fail after that import.
 
@@ -531,7 +537,7 @@ def test_clean_after_tool_failure_with_context_and_try(
 
 
 def test_clean_after_tool_failure_with_context_and_raises(
-    xy_dataset_session, rows_raster_file3x2, tmp_path
+    xy_dataset_session, rows_raster_file3x2: Path, tmp_path: Path
 ):
     """Check input and output pack files work with tool name call
 
@@ -552,7 +558,7 @@ def test_clean_after_tool_failure_with_context_and_raises(
 
 
 def test_clean_after_tool_failure_without_context(
-    xy_dataset_session, rows_raster_file3x2, tmp_path
+    xy_dataset_session, rows_raster_file3x2: Path, tmp_path: Path
 ):
     """Check we delete imported input when we fail after that import.
 
@@ -570,7 +576,7 @@ def test_clean_after_tool_failure_without_context(
 
 
 def test_clean_after_tool_failure_without_context_with_use_cache(
-    xy_dataset_session, rows_raster_file3x2, tmp_path
+    xy_dataset_session, rows_raster_file3x2: Path, tmp_path: Path
 ):
     """Check we don't delete imported input even after failure when asked.
 
@@ -593,7 +599,7 @@ def test_clean_after_tool_failure_without_context_with_use_cache(
 
 
 def test_clean_after_call_failure_with_context_and_try(
-    xy_dataset_session, rows_raster_file3x2, tmp_path
+    xy_dataset_session, rows_raster_file3x2: Path, tmp_path: Path
 ):
     """Check we delete imported input when we fail after that import.
 
@@ -621,7 +627,7 @@ def test_clean_after_call_failure_with_context_and_try(
 
 
 def test_clean_after_call_failure_with_context_and_raises(
-    xy_dataset_session, rows_raster_file3x2, tmp_path
+    xy_dataset_session, rows_raster_file3x2: Path, tmp_path: Path
 ):
     """Check input and output pack files work with tool name call
 
@@ -644,7 +650,7 @@ def test_clean_after_call_failure_with_context_and_raises(
 
 
 def test_clean_after_call_failure_without_context(
-    xy_dataset_session, rows_raster_file3x2, tmp_path
+    xy_dataset_session, rows_raster_file3x2: Path, tmp_path: Path
 ):
     """Check we delete imported input when we fail after that import.
 
@@ -666,7 +672,7 @@ def test_clean_after_call_failure_without_context(
 
 
 def test_clean_after_call_failure_without_context_with_use_cache(
-    xy_dataset_session, rows_raster_file3x2, tmp_path
+    xy_dataset_session, rows_raster_file3x2: Path, tmp_path: Path
 ):
     """Check we don't delete imported input even after failure when asked.
 
@@ -693,18 +699,20 @@ def test_clean_after_call_failure_without_context_with_use_cache(
 
 
 def test_workflow_create_project_and_run_general_crs(
-    tmp_path, ones_raster_file_epsg3358
+    tmp_path: Path, ones_raster_file_epsg3358
 ):
     """Check workflow with create project"""
     project = tmp_path / "project"
     raster = tmp_path / "raster.grass_raster"
     gs.create_project(project, crs=ones_raster_file_epsg3358)
     with (
-        gs.setup.init(project) as session,
+        gs.setup.init(project, env=os.environ.copy()) as session,
         Tools(session=session) as tools,
     ):
         assert tools.g_region(flags="p", format="json")["crs"]["type"] == "other"
-        assert tools.g_proj(flags="p", format="json")["srid"] == "EPSG:3358"
+        result_dict = tools.g_proj(flags="p", format="projjson")
+        assert result_dict["id"]["authority"] == "EPSG"
+        assert result_dict["id"]["code"] == 3358
         tools.g_region(raster=ones_raster_file_epsg3358)
         assert tools.g_region(flags="p", format="json")["cells"] == 4 * 5
         tools.r_mapcalc_simple(
@@ -720,17 +728,21 @@ def test_workflow_create_project_and_run_general_crs(
     assert raster.is_file()
 
 
-def test_workflow_create_project_and_run_ll_crs(tmp_path, ones_raster_file_epsg4326):
+def test_workflow_create_project_and_run_ll_crs(
+    tmp_path: Path, ones_raster_file_epsg4326
+):
     """Check workflow with create project"""
     project = tmp_path / "project"
     raster = tmp_path / "raster.grass_raster"
     gs.create_project(project, crs=ones_raster_file_epsg4326)
     with (
-        gs.setup.init(project) as session,
+        gs.setup.init(project, env=os.environ.copy()) as session,
         Tools(session=session) as tools,
     ):
         assert tools.g_region(flags="p", format="json")["crs"]["type"] == "ll"
-        assert tools.g_proj(flags="p", format="json")["srid"] == "EPSG:4326"
+        result_dict = tools.g_proj(flags="p", format="projjson")
+        assert result_dict["id"]["authority"] == "EPSG"
+        assert result_dict["id"]["code"] == 4326
         tools.g_region(raster=ones_raster_file_epsg4326)
         assert tools.g_region(flags="p", format="json")["cells"] == 4 * 5
         tools.r_mapcalc_simple(
@@ -746,13 +758,15 @@ def test_workflow_create_project_and_run_ll_crs(tmp_path, ones_raster_file_epsg4
     assert raster.is_file()
 
 
-def test_workflow_create_project_and_run_xy_crs(tmp_path, rows_raster_file4x5):
+def test_workflow_create_project_and_run_xy_crs(
+    tmp_path: Path, rows_raster_file4x5: Path
+):
     """Check workflow with create project"""
     project = tmp_path / "project"
     raster = tmp_path / "raster.grass_raster"
     gs.create_project(project, crs=rows_raster_file4x5)
     with (
-        gs.setup.init(project) as session,
+        gs.setup.init(project, env=os.environ.copy()) as session,
         Tools(session=session) as tools,
     ):
         assert tools.g_region(flags="p", format="json")["crs"]["type"] == "xy"

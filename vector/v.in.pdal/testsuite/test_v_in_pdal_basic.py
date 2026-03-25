@@ -9,11 +9,11 @@ Licence:   This program is free software under the GNU General Public
            for details.
 """
 
-import os
 import shutil
+import unittest
+from pathlib import Path
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-import unittest
 
 
 class BasicTest(TestCase):
@@ -61,8 +61,7 @@ class BasicTest(TestCase):
             type="vector",
             name=(cls.vector_points, cls.vector_generated),
         )
-        if os.path.isfile(cls.las_file):
-            os.remove(cls.las_file)
+        Path(cls.las_file).unlink(missing_ok=True)
         cls.del_temp_region()
 
     def tearDown(self):

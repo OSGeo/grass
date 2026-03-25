@@ -2254,7 +2254,6 @@ INCLUDE_FILE_PATTERNS  =
 PREDEFINED             = HAVE_GEOS \
                          HAVE_LIBBLAS \
                          HAVE_LIBLAPACK \
-                         HAVE_OGR \
                          HAVE_TIFFIO_H \
                          NOPG_UNUSED= \
                          NO_NLS_UNUSED= \

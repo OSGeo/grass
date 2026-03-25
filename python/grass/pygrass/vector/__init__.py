@@ -1,4 +1,5 @@
-from os.path import join, exists
+from os.path import join
+from pathlib import Path
 import grass.lib.gis as libgis
 import ctypes
 
@@ -248,7 +249,7 @@ class Vector(Info):
         """
         loc = Location()
         path = join(loc.path(), self.mapset, "vector", self.name, "colr")
-        return bool(exists(path))
+        return bool(Path(path).exists())
 
 
 # =============================================

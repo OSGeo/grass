@@ -6,11 +6,10 @@ Created on March 11, 2025
 @author: Corey White
 """
 
-import os
 import argparse
-from xml.dom import minidom  # noqa: S408
 import urllib.parse
 from pathlib import Path
+from xml.dom import minidom  # noqa: S408
 
 
 def check_url_version(url: str, version: str) -> str:
@@ -96,7 +95,7 @@ def main():
     # Check arguments
     args = parser.parse_args()
     mkdocs_sitemap = args.mkdocs_sitemap
-    if not os.path.exists(mkdocs_sitemap):
+    if not Path(mkdocs_sitemap).exists():
         error_message = "MKDocs sitemap.xml does not exist"
         raise FileNotFoundError(error_message)
 

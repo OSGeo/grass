@@ -647,7 +647,7 @@ class GroupPage(TitledPage):
             self.grassdatabase, self.xylocation, self.xymapset, "vector"
         )
 
-        if os.path.exists(vector_dir):
+        if Path(vector_dir).exists():
             dlg = VectGroup(
                 parent=self,
                 id=wx.ID_ANY,
@@ -1104,7 +1104,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         }
 
         # make a backup of the current points file
-        if os.path.exists(self.file["points"]):
+        if Path(self.file["points"]).exists():
             shutil.copy(self.file["points"], self.file["points_bak"])
 
         # polynomial order transformation for georectification
@@ -1928,10 +1928,10 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 self.SaveGCPs(None)
             elif ret == wx.NO:
                 # restore POINTS file from backup
-                if os.path.exists(self.file["points_bak"]):
+                if Path(self.file["points_bak"]).exists():
                     shutil.copy(self.file["points_bak"], self.file["points"])
 
-            if os.path.exists(self.file["points_bak"]):
+            if Path(self.file["points_bak"]).exists():
                 os.unlink(self.file["points_bak"])
 
             self.SrcMap.Clean()
@@ -2411,7 +2411,7 @@ class GCPList(ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
         self.DeleteAllItems()
 
         self.render = False
-        if os.path.isfile(self.gcp.file["points"]):
+        if Path(self.gcp.file["points"]).is_file():
             self.gcp.ReadGCPs()
         else:
             # 3 gcp is minimum
@@ -2636,7 +2636,7 @@ class VectGroup(wx.Dialog):
         #
         self.listMap = CheckListBox(parent=self, id=wx.ID_ANY, choices=vectlist)
 
-        if os.path.isfile(self.vgrpfile):
+        if Path(self.vgrpfile).is_file():
             with open(self.vgrpfile) as f:
                 checked = []
                 for line in f:
@@ -2705,8 +2705,7 @@ class VectGroup(wx.Dialog):
 
         dirname = os.path.dirname(self.vgrpfile)
 
-        if not os.path.exists(dirname):
-            os.makedirs(dirname)
+        Path(dirname).mkdir(parents=True, exist_ok=True)
 
         with open(self.vgrpfile, mode="w") as f:
             f.writelines(vect + "\n" for vect in vgrouplist)

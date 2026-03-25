@@ -92,7 +92,7 @@ int export_areas_single(struct Map_info *In, int field, int donocat,
     /* get category index for given field */
     findex = Vect_cidx_get_field_index(In, field);
     if (findex == -1) {
-        G_fatal_error(_("Unable to export multi-features. No category index "
+        G_fatal_error(_("Unable to export features. No category index "
                         "for layer %d."),
                       field);
     }
@@ -104,6 +104,7 @@ int export_areas_single(struct Map_info *In, int field, int donocat,
         G_message(_("Exporting features with category..."));
 
     /* select attributes ordered by category value */
+    key_col_index = -1;
     if (doatt) {
         db_init_string(&dbstring);
         snprintf(buf, sizeof(buf), "SELECT * FROM %s ORDER BY %s ASC",
@@ -135,7 +136,7 @@ int export_areas_single(struct Map_info *In, int field, int donocat,
         G_percent(cat_index, n_cats, 5);
 
         /* get area's category */
-        if (!(ci->cat[cat_index][1] & GV_CENTROID))
+        if (!(ci->cat[cat_index][1] & GV_AREA))
             continue;
 
         cat = ci->cat[cat_index][0];
@@ -144,12 +145,9 @@ int export_areas_single(struct Map_info *In, int field, int donocat,
             G_fatal_error(_("Category index is not sorted ascending by cat!"));
         last_cat = cat;
 
-        centroid = ci->cat[cat_index][2];
-
-        area = Vect_get_centroid_area(In, centroid);
-
+        area = ci->cat[cat_index][2];
         if (area < 1) {
-            /* centroid not in area or duplicate centroid */
+            /* invalid area, should not happen */
             continue;
         }
 
@@ -246,11 +244,11 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
                        int outer_ring_ccw)
 {
     int i, n_exported, area, centroid;
-    int cat, last_cat, db_cat, line, findex, ipart;
+    int cat, last_cat, db_cat, findex, ipart;
 
     struct line_pnts *Points;
     struct line_cats *Cats;
-    struct ilist *line_list, *lcats;
+    struct ilist *area_list, *acats;
 
     struct Cat_index *ci;
     int cat_index, n_cats;
@@ -267,8 +265,8 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
-    line_list = Vect_new_list();
-    lcats = Vect_new_list();
+    area_list = Vect_new_list();
+    acats = Vect_new_list();
 
     n_exported = 0;
 
@@ -332,10 +330,10 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
         last_cat = cat;
 
         /* collect all features with current cat */
-        Vect_reset_list(line_list);
+        Vect_reset_list(area_list);
         while (cat_index < n_cats && ci->cat[cat_index][0] == cat) {
-            if (ci->cat[cat_index][1] & GV_CENTROID) {
-                Vect_list_append(line_list, ci->cat[cat_index][2]);
+            if (ci->cat[cat_index][1] & GV_AREA) {
+                Vect_list_append(area_list, ci->cat[cat_index][2]);
             }
             cat_index++;
         }
@@ -344,23 +342,18 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
         Ogr_geometry = OGR_G_CreateGeometry(wkbtype);
 
         /* build simple features geometry, go through all parts */
-        for (ipart = 0; ipart < line_list->n_values; ipart++) {
-            line = line_list->value[ipart];
-            G_debug(3, "cat=%d, line=%d -> part=%d", cat, line, ipart);
+        for (ipart = 0; ipart < area_list->n_values; ipart++) {
+            area = area_list->value[ipart];
+            G_debug(3, "cat=%d, area=%d -> part=%d", cat, area, ipart);
 
-            /* get centroid's category */
-            Vect_read_line(In, NULL, Cats, line);
+            /* get areas's category */
+            Vect_get_area_cats(In, area, Cats);
             /* check for category consistency */
-            Vect_field_cat_get(Cats, field, lcats);
-            if (!Vect_val_in_list(lcats, cat))
+            Vect_field_cat_get(Cats, field, acats);
+            if (!Vect_val_in_list(acats, cat))
                 G_fatal_error(_("Unable to create multi-feature. "
-                                "Category %d not found in line %d, field %d"),
-                              cat, line, field);
-
-            /* find corresponding area */
-            area = Vect_get_centroid_area(In, line);
-            if (area <= 0)
-                continue;
+                                "Category %d not found in area %d, field %d"),
+                              cat, area, field);
 
             /* create polygon from area */
             Ogr_geometry_part =
@@ -470,8 +463,8 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
 
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);
-    Vect_destroy_list(line_list);
-    Vect_destroy_list(lcats);
+    Vect_destroy_list(area_list);
+    Vect_destroy_list(acats);
 
     return n_exported;
 }

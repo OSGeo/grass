@@ -98,8 +98,8 @@ def main(ext):
 
 if __name__ == "__main__":
     from build import (
-        write_footer,
         grass_version,
+        write_footer,
     )
 
     main("html")

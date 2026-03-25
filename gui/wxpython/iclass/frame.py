@@ -22,6 +22,7 @@ import copy
 import os
 import tempfile
 from ctypes import byref, pointer
+from pathlib import Path
 
 import wx
 
@@ -1252,7 +1253,7 @@ class IClassMapPanel(DoubleMapPanel):
         dlg = IClassSignatureFileDialog(self, file=self.sigFile)
 
         if dlg.ShowModal() == wx.ID_OK:
-            if os.path.exists(dlg.GetFileName(fullPath=True)):
+            if Path(dlg.GetFileName(fullPath=True)).exists():
                 qdlg = wx.MessageDialog(
                     parent=self,
                     message=_(

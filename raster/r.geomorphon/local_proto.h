@@ -86,7 +86,7 @@ const char *form_long_name(const FORMS);
 
 /* pattern */
 int calc_pattern(PATTERN *pattern, int row, int cur_row, int col, const int);
-extern const char *dirname[];
+extern const char *direction_name[];
 
 /* geom */
 void generate_ternary_codes(void);

@@ -59,10 +59,14 @@ def test_v_colors_out_with_p_flag(vector_color_dataset):
 
 def validate_common_json_structure(data):
     """Validate the common structure and content of the JSON output."""
-    assert isinstance(data, list), "Output data should be a list of entries."
-    assert len(data) == 8, (
-        "The length of the output JSON does not match the expected value of 8."
+    assert isinstance(data, dict), "Output data should be a dictionary."
+    assert "table" in data, "Expected 'table' key in JSON output."
+    assert isinstance(data["table"], list), "'table' should be a list of entries."
+    assert len(data["table"]) == 6, (
+        "The 'table' list length does not match the expected value of 6."
     )
+    assert "nv" in data, "Expected 'nv' key in JSON output."
+    assert "default" in data, "Expected 'default' key in JSON output."
 
 
 def test_v_colors_out_json_with_default_option(vector_color_dataset):
@@ -70,16 +74,18 @@ def test_v_colors_out_json_with_default_option(vector_color_dataset):
     session = vector_color_dataset
     data = gs.parse_command("v.colors.out", map="a", format="json", env=session.env)
     validate_common_json_structure(data)
-    expected = [
-        {"value": 1, "color": "#00BFBF"},
-        {"value": 20.8, "color": "#00FF00"},
-        {"value": 40.6, "color": "#FFFF00"},
-        {"value": 60.4, "color": "#FF7F00"},
-        {"value": 80.2, "color": "#BF7F3F"},
-        {"value": 100, "color": "#C8C8C8"},
-        {"value": "nv", "color": "#FFFFFF"},
-        {"value": "default", "color": "#FFFFFF"},
-    ]
+    expected = {
+        "table": [
+            {"value": 1, "color": "#00BFBF"},
+            {"value": 20.8, "color": "#00FF00"},
+            {"value": 40.6, "color": "#FFFF00"},
+            {"value": 60.4, "color": "#FF7F00"},
+            {"value": 80.2, "color": "#BF7F3F"},
+            {"value": 100, "color": "#C8C8C8"},
+        ],
+        "nv": "#FFFFFF",
+        "default": "#FFFFFF",
+    }
     assert expected == data, f"test failed: expected {expected} but got {data}"
 
 
@@ -90,16 +96,18 @@ def test_v_colors_out_json_with_triplet_option(vector_color_dataset):
         "v.colors.out", map="a", format="json", color_format="triplet", env=session.env
     )
     validate_common_json_structure(data)
-    expected = [
-        {"value": 1, "color": "0:191:191"},
-        {"value": 20.8, "color": "0:255:0"},
-        {"value": 40.6, "color": "255:255:0"},
-        {"value": 60.4, "color": "255:127:0"},
-        {"value": 80.2, "color": "191:127:63"},
-        {"value": 100, "color": "200:200:200"},
-        {"value": "nv", "color": "255:255:255"},
-        {"value": "default", "color": "255:255:255"},
-    ]
+    expected = {
+        "table": [
+            {"value": 1, "color": "0:191:191"},
+            {"value": 20.8, "color": "0:255:0"},
+            {"value": 40.6, "color": "255:255:0"},
+            {"value": 60.4, "color": "255:127:0"},
+            {"value": 80.2, "color": "191:127:63"},
+            {"value": 100, "color": "200:200:200"},
+        ],
+        "nv": "255:255:255",
+        "default": "255:255:255",
+    }
     assert expected == data, f"test failed: expected {expected} but got {data}"
 
 
@@ -114,16 +122,18 @@ def test_v_colors_out_json_with_rgb_option(vector_color_dataset):
         env=session.env,
     )
     validate_common_json_structure(data)
-    expected = [
-        {"value": 1, "color": "rgb(0, 191, 191)"},
-        {"value": 20.8, "color": "rgb(0, 255, 0)"},
-        {"value": 40.6, "color": "rgb(255, 255, 0)"},
-        {"value": 60.4, "color": "rgb(255, 127, 0)"},
-        {"value": 80.2, "color": "rgb(191, 127, 63)"},
-        {"value": 100, "color": "rgb(200, 200, 200)"},
-        {"value": "nv", "color": "rgb(255, 255, 255)"},
-        {"value": "default", "color": "rgb(255, 255, 255)"},
-    ]
+    expected = {
+        "table": [
+            {"value": 1, "color": "rgb(0, 191, 191)"},
+            {"value": 20.8, "color": "rgb(0, 255, 0)"},
+            {"value": 40.6, "color": "rgb(255, 255, 0)"},
+            {"value": 60.4, "color": "rgb(255, 127, 0)"},
+            {"value": 80.2, "color": "rgb(191, 127, 63)"},
+            {"value": 100, "color": "rgb(200, 200, 200)"},
+        ],
+        "nv": "rgb(255, 255, 255)",
+        "default": "rgb(255, 255, 255)",
+    }
     assert expected == data, f"test failed: expected {expected} but got {data}"
 
 
@@ -138,16 +148,18 @@ def test_v_colors_out_json_with_hex_option(vector_color_dataset):
         env=session.env,
     )
     validate_common_json_structure(data)
-    expected = [
-        {"value": 1, "color": "#00BFBF"},
-        {"value": 20.8, "color": "#00FF00"},
-        {"value": 40.6, "color": "#FFFF00"},
-        {"value": 60.4, "color": "#FF7F00"},
-        {"value": 80.2, "color": "#BF7F3F"},
-        {"value": 100, "color": "#C8C8C8"},
-        {"value": "nv", "color": "#FFFFFF"},
-        {"value": "default", "color": "#FFFFFF"},
-    ]
+    expected = {
+        "table": [
+            {"value": 1, "color": "#00BFBF"},
+            {"value": 20.8, "color": "#00FF00"},
+            {"value": 40.6, "color": "#FFFF00"},
+            {"value": 60.4, "color": "#FF7F00"},
+            {"value": 80.2, "color": "#BF7F3F"},
+            {"value": 100, "color": "#C8C8C8"},
+        ],
+        "nv": "#FFFFFF",
+        "default": "#FFFFFF",
+    }
     assert expected == data, f"test failed: expected {expected} but got {data}"
 
 
@@ -162,14 +174,16 @@ def test_v_colors_out_json_with_hsv_option(vector_color_dataset):
         env=session.env,
     )
     validate_common_json_structure(data)
-    expected = [
-        {"value": 1, "color": "hsv(180, 100, 74)"},
-        {"value": 20.8, "color": "hsv(120, 100, 100)"},
-        {"value": 40.6, "color": "hsv(60, 100, 100)"},
-        {"value": 60.4, "color": "hsv(29, 100, 100)"},
-        {"value": 80.2, "color": "hsv(30, 67, 74)"},
-        {"value": 100, "color": "hsv(0, 0, 78)"},
-        {"value": "nv", "color": "hsv(0, 0, 100)"},
-        {"value": "default", "color": "hsv(0, 0, 100)"},
-    ]
+    expected = {
+        "table": [
+            {"value": 1, "color": "hsv(180, 100, 74)"},
+            {"value": 20.8, "color": "hsv(120, 100, 100)"},
+            {"value": 40.6, "color": "hsv(60, 100, 100)"},
+            {"value": 60.4, "color": "hsv(29, 100, 100)"},
+            {"value": 80.2, "color": "hsv(30, 67, 74)"},
+            {"value": 100, "color": "hsv(0, 0, 78)"},
+        ],
+        "nv": "hsv(0, 0, 100)",
+        "default": "hsv(0, 0, 100)",
+    }
     assert expected == data, f"test failed: expected {expected} but got {data}"

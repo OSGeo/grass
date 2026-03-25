@@ -19,13 +19,11 @@ build_library_in_subdir(
 
 add_subdirectory(proj)
 
-build_library_in_subdir(external/parson NAME grass_parson HEADERS "gjson.h" "parson.h")
+build_library_in_subdir(external/parson NAME grass_parson HEADERS "gjson.h")
 build_program_in_subdir(external/parson/test NAME test.gjson.lib DEPENDS grass_gis grass_parson)
 
 build_library_in_subdir(
   raster
-  DEFS
-  "-DGDAL_LINK=1"
   DEPENDS
   ${LIBM}
   GDAL::GDAL
@@ -34,7 +32,7 @@ build_library_in_subdir(
   grass_gproj
   grass_parson
   OPTIONAL_DEPENDS
-  OPENMP)
+  OpenMP::OpenMP_C)
 
 if(TARGET LAPACKE)
   target_link_libraries(grass_raster PRIVATE LAPACKE)
@@ -64,7 +62,7 @@ build_library_in_subdir(
   CBLAS::CBLAS
   FFTW
   LAPACKE::LAPACKE
-  OPENMP)
+  OpenMP::OpenMP_C)
 
 build_library_in_subdir(linkm)
 
@@ -88,7 +86,7 @@ build_library_in_subdir(
   grass_driver
   grass_gis
   INCLUDES
-  "./driver")
+  "${CMAKE_CURRENT_SOURCE_DIR}/driver")
 add_custom_command(
   TARGET grass_psdriver
   POST_BUILD
@@ -104,7 +102,7 @@ build_library_in_subdir(
   grass_gis
   grass_driver
   INCLUDES
-  "./driver")
+  "${CMAKE_CURRENT_SOURCE_DIR}/driver")
 
 set(_grass_display_DEFS)
 
@@ -151,7 +149,7 @@ build_library_in_subdir(cluster DEPENDS grass_imagery grass_gis grass_raster)
 
 build_library_in_subdir(rowio DEPENDS grass_gis)
 
-build_library_in_subdir(segment DEPENDS grass_gis) # addeed DEPENDS grass_gis
+build_library_in_subdir(segment DEPENDS grass_gis) # added DEPENDS grass_gis
                                                    # for uninstd.h
 
 add_subdirectory(rst)
@@ -195,7 +193,10 @@ build_program_in_subdir(
 build_library_in_subdir(
   gpde
   HEADERS
-  "N_*.h"
+  N_gwflow.h
+  N_heatflow.h
+  N_pde.h
+  N_solute_transport.h
   DEPENDS
   grass_gis
   grass_raster
@@ -203,7 +204,7 @@ build_library_in_subdir(
   grass_gmath
   ${LIBM}
   OPTIONAL_DEPENDS
-  OPENMP)
+  OpenMP::OpenMP_C)
 
 build_library_in_subdir(dspf DEPENDS grass_gis)
 

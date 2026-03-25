@@ -50,25 +50,29 @@ which includes the following options:
     The shortened JSON output looks like:
 
     ```json
-    [
-        {
-            "value": 6388,
-            "color": "#0D0887"
-        },
-        {
-            "value": 662,
-            "color": "#4F02A2"
-        },
-        {
-            "value": 9097,
-            "color": "#5E01A6"
-        },
-        {
-            "value": 20,
-            "color": "#6200A7"
-        },
-        ...
-    ]
+    {
+        "table": [
+            {
+                "value": 6388,
+                "color": "#0D0887"
+            },
+            {
+                "value": 662,
+                "color": "#4F02A2"
+            },
+            {
+                "value": 9097,
+                "color": "#5E01A6"
+            },
+            {
+                "value": 20,
+                "color": "#6200A7"
+            },
+            ...
+        ],
+        "nv": "#FFFFFF",
+        "default": "#FFFFFF"
+    }
     ```
 
 ## SEE ALSO

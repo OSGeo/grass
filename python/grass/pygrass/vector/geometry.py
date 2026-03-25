@@ -220,7 +220,7 @@ class Attrs:
 
     def __dict__(self):
         """Return a dict of the attribute table row."""
-        return dict(zip(self.keys(), self.values()))
+        return dict(zip(self.keys(), self.values(), strict=True))
 
     def values(self):
         """Return the values of the attribute table row.

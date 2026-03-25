@@ -1,13 +1,13 @@
 import os
-from pathlib import Path
 from io import StringIO
+from pathlib import Path
 
 import pytest
 
-from grass.script import MaskManager
-from grass.tools import Tools
 from grass.exceptions import CalledModuleError
 from grass.experimental import MapsetSession
+from grass.script import MaskManager
+from grass.tools import Tools
 
 
 def test_reclass_as_mask_correct_state(session):
