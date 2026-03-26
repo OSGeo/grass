@@ -31,6 +31,11 @@ from grass.grassdb.create import create_mapset
 from grass.exceptions import ScriptError
 from grass.tools import Tools
 
+COMMAND_MAP = {
+    "list": "g.list",
+    "slope": "r.slope.aspect",
+}
+
 # Special flags supported besides help and --json which does not need special handling:
 SPECIAL_FLAGS = [
     "--interface-description",
@@ -43,7 +48,8 @@ SPECIAL_FLAGS = [
 
 
 def subcommand_run_tool(args, tool_args: list, print_help: bool) -> int:
-    command = [args.tool, *tool_args]
+    resolved_tool = COMMAND_MAP.get(args.tool, args.tool)
+    command = [resolved_tool, *tool_args]
     with ExitStack() as stack:
         if args.project:
             project_path = Path(args.project)
