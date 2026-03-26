@@ -126,7 +126,7 @@ class ExtentTest(TestCase):
 
     @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")
     def test_override_extent(self):
-        """Test extent matches input 3358 data"""
+        """Test extent matches input 3358 data with override flag"""
         tools = Tools()
         extent = tools.r_in_pdal(input=self.point_file_3358, flags="go").text
         extent = gs.parse_key_val(extent, vsep=" ", val_type=float)

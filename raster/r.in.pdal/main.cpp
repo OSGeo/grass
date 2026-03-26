@@ -722,7 +722,6 @@ int main(int argc, char *argv[])
     std::vector<pdal::Stage *> readers;
     pdal::StageFactory factory;
     pdal::MergeFilter merge_filter;
-    pdal::SpatialReference spatial_reference;
     bool need_to_reproject = false;
     /* loop of input files */
     for (int i = 0; i < infiles.num_items; i++) {
@@ -755,7 +754,8 @@ int main(int argc, char *argv[])
         if (!over_flag->answer) {
             pdal::PointTable table;
             reader->prepare(table);
-            spatial_reference = reader->getSpatialReference();
+            pdal::SpatialReference spatial_reference =
+                reader->getSpatialReference();
             if (spatial_reference.empty())
                 G_fatal_error(_("The input dataset has undefined projection"));
             std::string dataset_wkt = spatial_reference.getWKT();
@@ -779,7 +779,6 @@ int main(int argc, char *argv[])
     pdal::Stage *last_stage = &merge_filter;
     pdal::ReprojectionFilter reprojection_filter;
 
-    // we reproject when requested regardless of the input projection
     if (need_to_reproject) {
         G_message(_("Reprojecting the input to the project's CRS"));
         char *proj_wkt = location_projection_as_wkt(false);

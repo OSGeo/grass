@@ -9,7 +9,6 @@
  *
  */
 #include <cmath>
-#include <stdbool.h>
 
 #include <pdal/filters/ReprojectionFilter.hpp>
 #include <pdal/io/BufferReader.hpp>
@@ -112,7 +111,9 @@ void get_extent(struct StringList *infiles, double *min_x, double *max_x,
         }
     }
 }
-/* Reproject 4 points representing bounding box using PDAL pipeline */
+/* Reproject bounding box from the input CRS to the project CRS using PDAL.
+ * Points are sampled along bbox edges (not just corners) to account for
+ * reprojection curvature. */
 void get_reprojected_extent(pdal::SpatialReference &spatial_reference,
                             double *min_x, double *max_x, double *min_y,
                             double *max_y, double *min_z, double *max_z)
@@ -174,7 +175,6 @@ void get_reprojected_extent(pdal::SpatialReference &spatial_reference,
     reproject->execute(table);
 
     for (pdal::PointId i = 0; i < view->size(); ++i) {
-
         double x = view->getFieldAs<double>(pdal::Dimension::Id::X, i);
         double y = view->getFieldAs<double>(pdal::Dimension::Id::Y, i);
         double z = view->getFieldAs<double>(pdal::Dimension::Id::Z, i);
