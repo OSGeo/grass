@@ -8,7 +8,6 @@ from grass.tools import Tools
 class TestRSimWater(TestCase):
     """Test r.sim.water"""
 
-    # Set up the necessary raster maps for testing
     elevation = "elevation"
     dx = "tmp_dx"
     dy = "tmp_dy"
@@ -103,7 +102,6 @@ class TestRSimWater(TestCase):
 
     def test_default(self):
         """Test r.sim.water execution with defaults"""
-        # Run the r.sim.water simulation
         self.assertModule(
             "r.sim.water",
             elevation=self.elevation,
@@ -113,11 +111,8 @@ class TestRSimWater(TestCase):
             discharge=self.discharge,
             random_seed=1,
         )
-
-        # Assert that the output rasters exist
         self.assertRasterExists(self.depth)
         self.assertRasterExists(self.discharge)
-        # Assert that the output rasters are the same
         self.assertRastersEqual(
             self.depth, reference=self.reference_depth_default, precision="0.000001"
         )
@@ -140,10 +135,8 @@ class TestRSimWater(TestCase):
             random_seed=1,
         )
 
-        # Assert that the output rasters exist
         self.assertRasterExists(self.depth)
         self.assertRasterExists(self.discharge)
-        # Assert that the output rasters are the same
         self.assertRastersEqual(
             self.depth, reference=self.reference_depth_default, precision="0.001"
         )
@@ -166,7 +159,6 @@ class TestRSimWater(TestCase):
 
     def test_complex(self):
         """Test r.sim.water execution with more complex inputs"""
-        # Run the r.sim.water simulation
         self.assertModule(
             "r.sim.water",
             flags="t",
@@ -186,12 +178,9 @@ class TestRSimWater(TestCase):
             hbeta=0.6,
             random_seed=1,
         )
-
-        # Assert that the output rasters exist
         self.assertRasterExists(f"{self.depth}.05")
         self.assertRasterExists(f"{self.depth}.10")
         self.assertRasterExists(f"{self.depth}.15")
-        # Assert that the output rasters are the same
         self.assertRastersEqual(
             f"{self.depth}.15",
             reference=self.reference_depth_complex,
@@ -204,8 +193,8 @@ class TestRSimWater(TestCase):
         )
 
     def test_infiltration(self):
-        """Test r.sim.water execution with infiltration"""
-        # Run the r.sim.water simulation
+        """Test r.sim.water execution with infiltration.
+        Use the same value for rain and infiltration."""
         self.assertModule(
             "r.sim.water",
             elevation=self.elevation,
@@ -217,10 +206,7 @@ class TestRSimWater(TestCase):
             duration=30,
             random_seed=1,
         )
-
-        # Assert that the output rasters exist
         self.assertRasterExists(self.depth)
-        # Assert that the output rasters are the same
         self.assertRastersEqual(
             self.depth, reference=self.reference_depth_infil, precision="0.000001"
         )
@@ -230,7 +216,6 @@ class TestRSimWater(TestCase):
 class TestRSimWaterLarge(TestCase):
     """Test r.sim.water with large region"""
 
-    # Set up the necessary raster maps for testing
     elevation = "elevation"
     dx = "tmp_dx"
     dy = "tmp_dy"
@@ -256,7 +241,6 @@ class TestRSimWaterLarge(TestCase):
 
     def test_default(self):
         """Test r.sim.water execution with defaults"""
-        # Run the r.sim.water simulation
         self.assertModule(
             "r.sim.water",
             elevation=self.elevation,
