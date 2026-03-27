@@ -4,6 +4,12 @@
 #
 # MODULE:       t.rast.aggregate
 # AUTHOR(S):    Soeren Gebbert
+#!/usr/bin/env python3
+
+############################################################################
+#
+# MODULE:       t.rast.aggregate
+# AUTHOR(S):    Soeren Gebbert
 #
 # PURPOSE:      Temporally aggregates the maps of a space time raster dataset by a user defined granularity.
 # COPYRIGHT:    (C) 2011-2017 by the GRASS Development Team
@@ -100,6 +106,11 @@
 # %end
 
 # %flag
+# % key: e
+# % description: Extend existing space time raster dataset
+# %end
+
+# %flag
 # % key: n
 # % description: Register Null maps
 # %end
@@ -120,6 +131,8 @@ def main():
     gran = options["granularity"]
     base = options["basename"]
     register_null = flags["n"]
+    extend = flags["e"]
+    overwrite = gs.overwrite()
     method = options["method"]
     sampling = options["sampling"]
     offset = options["offset"]
@@ -144,8 +157,24 @@ def main():
         dbif.close()
         gs.fatal(_("Space time raster dataset <%s> is empty") % input)
 
-    # We will create the strds later, but need to check here
-    tgis.check_new_stds(output, "strds", dbif, gs.overwrite())
+    # Check if output exists
+    # If extending, skip the new STDS check
+    mapset = tgis.get_current_mapset()
+    output_id = output + "@" + mapset
+    output_strds = tgis.SpaceTimeRasterDataset(output_id)
+    output_exists = output_strds.is_in_db(dbif)
+
+    if extend and not output_exists:
+        gs.fatal(
+            _(
+                "Space time raster dataset <%s> does not exist. "
+                "Cannot extend a non-existing dataset."
+            )
+            % output
+        )
+
+    if not extend:
+        tgis.check_new_stds(output, "strds", dbif=dbif, overwrite=overwrite)
 
     start_time = map_list[0].temporal_extent.get_start_time()
 
@@ -195,22 +224,26 @@ def main():
         method=method,
         nprocs=nprocs,
         spatial=None,
-        overwrite=gs.overwrite(),
+        overwrite=overwrite,
         file_limit=file_limit,
     )
 
     if output_list:
-        temporal_type, semantic_type, title, description = sp.get_initial_values()
-        output_strds = tgis.open_new_stds(
-            output,
-            "strds",
-            temporal_type,
-            title,
-            description,
-            semantic_type,
-            dbif,
-            gs.overwrite(),
-        )
+        if not output_exists or (overwrite and not extend):
+            temporal_type, semantic_type, title, description = sp.get_initial_values()
+            output_strds = tgis.open_new_stds(
+                output,
+                "strds",
+                temporal_type,
+                title,
+                description,
+                semantic_type,
+                dbif,
+                overwrite,
+            )
+        elif output_exists and extend:
+            output_strds = tgis.open_old_stds(output, "strds", dbif)
+
         register_null = not register_null
 
         tgis.register_map_object_list(
@@ -226,9 +259,14 @@ def main():
         output_strds.set_aggregation_type(method)
         output_strds.metadata.update(dbif)
 
+        # Update command history if extending existing STRDS
+        if output_exists:
+            output_strds.update_command_string(dbif=dbif)
+
     dbif.close()
 
 
 if __name__ == "__main__":
     options, flags = gs.parser()
     main()
+

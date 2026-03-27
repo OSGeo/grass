@@ -236,9 +236,49 @@ class TestAggregationAbsolute(TestCase):
         # print lister.outputs.stdout
         maps = "b_101" + os.linesep
         self.assertEqual(maps, lister.outputs.stdout)
+    def test_extend_existing_strds(self):
+        """Test extending existing STRDS with -e flag"""
+        # First run — create initial result with first 3 months
+        self.assertModule(
+            "t.rast.aggregate",
+            input="A",
+            output="B",
+            basename="b",
+            granularity="1 month",
+            method="average",
+            sampling=["contains"],
+        )
+
+        # Verify initial result
+        info = SimpleModule("t.info", flags="g", input="B")
+        tinfo_string = """aggregation_type=average
+                          number_of_maps=3"""
+        self.assertModuleKeyValue(
+            module=info, reference=tinfo_string, precision=2, sep="="
+        )
+
+        # Second run — extend existing STRDS with -e flag
+        self.assertModule(
+            "t.rast.aggregate",
+            flags="e",
+            input="A",
+            output="B",
+            basename="b_ext",
+            granularity="1 month",
+            method="average",
+            sampling=["contains"],
+            overwrite=True,
+        )
+
+        # Verify STRDS was extended
+        lister = SimpleModule("t.rast.list", input="B", columns="name", flags="u")
+        self.runModule(lister)
+        self.assertIn("b_ext", lister.outputs.stdout)
 
 
 if __name__ == "__main__":
     from grass.gunittest.main import test
 
     test()
+
+
