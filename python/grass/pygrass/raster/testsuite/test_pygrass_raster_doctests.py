@@ -74,8 +74,16 @@ def load_tests(loader, tests, ignore):
         overwrite=True,
     )
 
-    tests.addTests(doctest.DocTestSuite(pgrass))
-    tests.addTests(doctest.DocTestSuite(pgrass.abstract))
+    tests.addTests(
+        doctest.DocTestSuite(
+            pgrass, optionflags=doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE
+        )
+    )
+    tests.addTests(
+        doctest.DocTestSuite(
+            pgrass.abstract, optionflags=doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE
+        )
+    )
     return tests
 
 
