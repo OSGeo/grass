@@ -4,12 +4,6 @@
 #
 # MODULE:       t.rast.aggregate
 # AUTHOR(S):    Soeren Gebbert
-#!/usr/bin/env python3
-
-############################################################################
-#
-# MODULE:       t.rast.aggregate
-# AUTHOR(S):    Soeren Gebbert
 #
 # PURPOSE:      Temporally aggregates the maps of a space time raster dataset by a user defined granularity.
 # COPYRIGHT:    (C) 2011-2017 by the GRASS Development Team
