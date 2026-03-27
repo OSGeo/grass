@@ -3,6 +3,17 @@
 Instructions for AI assistants and agents working with code in this
 repository.
 
+After writing or modifying code, self-review it before presenting it.
+Review as a human PR reviewer would: Is the reasoning behind each line
+sound? Is this line actually needed? Where did this code come from? Will
+this be hard to maintain? What if this will need to be changed later?
+Make every line of code, comments, and commit messages clear and
+well-reasoned. Evaluate each line. Remove or change any line that
+lacks a strong justification. Don't invent justifications.
+
+Do not present code you cannot explain. When generating substantial
+algorithms or logic, note this to the human so they can disclose it.
+
 ## Overview
 
 GRASS is a large, multi-language geospatial processing engine. The codebase
@@ -125,7 +136,10 @@ passing.
 With `grass.tools`, numpy arrays can be passed as raster inputs (the array
 is written to a temporary raster matching the computation region) and
 requested as outputs using the `parameter=np.array` pattern (e.g.,
-`depth=np.array`).
+`depth=np.array`). For tools that read from stdin (e.g., `r.in.ascii`),
+pass an `io.StringIO` object as the parameter value (e.g.,
+`input=StringIO(ascii_text)`); `Tools` converts it to `-` and pipes the
+content automatically.
 
 Test data can be created in several ways: `r.mapcalc` raster algebra
 expressions (e.g., `elevation = 6 - col()`), numpy arrays, GRASS tools
@@ -229,7 +243,9 @@ miss.
 
 ### Comments (all languages)
 
-- No decorative comment banners or dividers (e.g., `# ---- Section ----`).
+- No decorative comment banners or dividers (e.g., `# ---- Section ----`)
+  except the top-level comment in tools with author and copyright in Python
+  scripts.
 - No double space after a sentence-ending period.
 - Write full sentences with proper capitalization, not stubs or all-lowercase
   fragments.
@@ -300,9 +316,12 @@ Tool name prefixes: `r.` (raster), `v.` (vector), `g.` (general), `d.`
 (display), `i.` (imagery), `t.` (temporal), `r3.` (3D raster), `db.`
 (database), `m.` (miscellaneous), `ps.` (PostScript).
 
-To quickly check a tool's parameters, flags, and defaults, run
-`grass run <tool> --help`. For full structured detail (types, required/optional,
-descriptions), use `grass run <tool> --interface-description` (XML output).
+To check a tool's parameters, flags, and defaults, run
+`grass run <tool> --help`. For Python type annotations showing which
+parameters accept `np.ndarray`, `io.StringIO`, etc., use
+`grass run <tool> --md-description` and look at the "Python (grass.tools)"
+section. For full structured detail in XML, use
+`grass run <tool> --interface-description`.
 
 ## Commit Messages
 
@@ -315,14 +334,6 @@ message rules:
   identifier that is conventionally lowercase (e.g., `r.info` or `gs`)
 - Use plain ASCII only, no double spaces after periods
 - Write in imperative mood (e.g., "Add support for X", not "Added" or "Adds")
-- Do not add AI co-authors; the human author is responsible for the code.
-  However, larger use of AI should be acknowledged in the commit message
-  and/or PR description, similarly to how a book or a discussion with a
-  human collaborator would be acknowledged.
-
-## AI Use Policy
-
-See `CONTRIBUTING.md` for the full AI use policy. Key points: AI-assisted
-development is acceptable, but contributors must test all code, understand
-their submissions, and disclose AI assistance when substantial algorithms
-or logic were AI-generated.
+- Larger use of AI should be acknowledged in the commit message and/or PR
+  description, but not as a co-author, similarly to how a book or a
+  discussion with a human collaborator would be acknowledged.

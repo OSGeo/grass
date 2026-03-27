@@ -127,20 +127,22 @@ jobs:
         run: echo "Translation files were not changed"
       - name: Double check if files are modified
         run: git status --ignored
+      # if the changed files step fails (files differ), then open a PR with updated translations
       - name: Create Pull Request
         if: ${{ steps.changed-files.outcome == 'failure' }}
         id: cpr
         uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8.1.0
         with:
           commit-message: "locale: Update translation files"
-          branch: periodic/update-i18n
-          title: "locale: Update translation files"
+          branch: periodic/update-i18n-${{ github.run_id }}
+          title: "locale: Update translation files (${{ github.run_number }})"
           body: |
             This updates the .pot template files, as well as all language-specific .po files
             if the option was selected.
             [Workflow run summary](${{ steps.vars.outputs.run-url }})
 
             Automated changes by [create-pull-request](https://github.com/peter-evans/create-pull-request) GitHub action
+
       - name: Check outputs
         if: ${{ steps.changed-files.outcome == 'failure' && steps.cpr.outputs.pull-request-number }}
         run: |

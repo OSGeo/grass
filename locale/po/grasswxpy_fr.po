@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-21 21:15+0000\n"
-"PO-Revision-Date: 2026-02-23 22:29+0000\n"
+"POT-Creation-Date: 2026-03-14 15:46+0000\n"
+"PO-Revision-Date: 2026-03-19 22:50+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/fr/>\n"
 "Language: fr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.16\n"
+"X-Generator: Weblate 5.16.2\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #, python-format
@@ -605,7 +605,7 @@ msgid "Details:"
 msgstr "Détails :"
 
 msgid "Error: "
-msgstr "Erreur :"
+msgstr "Erreur : "
 
 #, python-format
 msgid "Unable to execute command: '%s'"
@@ -683,10 +683,10 @@ msgid "Rendering aborted"
 msgstr "Annulation du rendu"
 
 msgid "Downloading data "
-msgstr "Téléchargement des données ..."
+msgstr "Téléchargement des données "
 
 msgid "Rendering & "
-msgstr "Générer (l'affichage)"
+msgstr "Générer (l'affichage) "
 
 msgid "Rendering..."
 msgstr "Rendu en cours ..."
@@ -712,7 +712,7 @@ msgstr "Erreur : impossible d'ouvrir '%(file)s'. Raison : %(ret)s. Sortie de wxG
 
 #, python-format
 msgid "Unable to zoom to raster map <%s>."
-msgstr "Impossible de zoomer sur la carte raster : %s"
+msgstr "Impossible de zoomer sur la carte raster <%s>."
 
 #, python-format
 msgid "Unable to zoom to vector map <%s>."
@@ -837,9 +837,9 @@ msgid ""
 "\t\tDetails: %(detail)s\n"
 "\t\tLine: '%(line)s'\n"
 msgstr ""
-"Erreur : la lecture des paramètres depuis le fichier <%(file)s> a échoué.\n"
-"\t\tDétails: %(detail)s\n"
-"\t\tLigne: '%(line)s'\n"
+"Erreur : La lecture des paramètres depuis le fichier <%(file)s> a échoué.\n"
+"\t\tDétails : %(detail)s\n"
+"\t\tLigne : '%(line)s'\n"
 
 msgid "Unable to create settings directory"
 msgstr "Impossible de créer le dossier de paramètres"
@@ -890,7 +890,7 @@ msgid "kilometers"
 msgstr "kilomètres"
 
 msgid "miles"
-msgstr "mile"
+msgstr "miles"
 
 msgid "feet"
 msgstr "pied"
@@ -932,11 +932,11 @@ msgstr "Paramètre en double : %s\n"
 
 #, python-brace-format
 msgid "Unable to open file '{name}': {error}\n"
-msgstr "Impossible d'ouvrir le fichier '{name}': {error}\n"
+msgstr "Impossible d'ouvrir le fichier '{name}' : {error}\n"
 
 #, python-brace-format
 msgid "Unable to create file '{name}': {error}\n"
-msgstr "Impossible de créer le fichier '{name}': {error}\n"
+msgstr "Impossible de créer le fichier '{name}' : {error}\n"
 
 msgid "Select Color"
 msgstr "Choisir la couleur"
@@ -1021,7 +1021,7 @@ msgid "Estimated resolution:"
 msgstr "Résolution estimée :"
 
 msgid "Resampling method:"
-msgstr "Méthode de ré-échantillonnage : "
+msgstr "Méthode de ré-échantillonnage :"
 
 msgid "Maximum segment length:"
 msgstr "Longueur maximale d'un segment :"
@@ -1398,7 +1398,7 @@ msgid "Unknown value"
 msgstr "Valeur inconnue"
 
 msgid "Unable to decode value. Set encoding in GUI preferences ('Attributes')."
-msgstr "Valeur impossible à décoder. Fixer l'encodage dans les préférences du GUI ('Attributs')"
+msgstr "Valeur impossible à décoder. Fixer l'encodage dans les préférences du GUI ('Attributs')."
 
 #, python-format
 msgid ""
@@ -1408,7 +1408,7 @@ msgid ""
 msgstr ""
 "Erreur au chargement des données attributaires. Numéro d'enregistrement %(rec)d. Impossible de convertir la valeur '%(val)s' dans la colonne clé (%(key)s) en nombre entier.\n"
 "\n"
-"Détails: %(detail)s"
+"Détails : %(detail)s"
 
 msgid "Sort ascending"
 msgstr "Tri ascendant"
@@ -1571,7 +1571,7 @@ msgid "All data records (%d) will be permanently deleted from table. Do you want
 msgstr "Tous les enregistrements (%d) seront définitivement supprimés de la table. Souhaitez-vous les supprimer ?"
 
 msgid "Nothing to extract."
-msgstr "Rien à extraire"
+msgstr "Rien à extraire."
 
 msgid "Nothing to delete."
 msgstr "Rien à supprimer."
@@ -1755,7 +1755,7 @@ msgid "Statistics is not support for DBF tables."
 msgstr "Les statistiques ne sont pas suportées pour les tables DBF."
 
 msgid "Unable to calculate statistics."
-msgstr "Impossible de calculer les statistiques"
+msgstr "Impossible de calculer les statistiques."
 
 #, python-format
 msgid "Unable to calculate statistics. Invalid number of lines %d (should be %d)."
@@ -1859,7 +1859,7 @@ msgid "Reload currently selected attribute data"
 msgstr "Recharger les données attributaires actuellement sélectionnées"
 
 msgid "Reload all attribute data (drop current selection)"
-msgstr "Recharger toutes les données attributaires (annule la sélection actuelle) "
+msgstr "Recharger toutes les données attributaires (annule la sélection actuelle)"
 
 msgid "Query"
 msgstr "Requête"
@@ -2056,10 +2056,10 @@ msgid ""
 "East: %(coor0)s \n"
 "North: %(coor1)s"
 msgstr ""
-"Fixer les coordonnées %(coor)s pour le GCP no. %(key)s? \n"
+"Fixer les coordonnées %(coor)s pour le GCP no. %(key)s ? \n"
 "\n"
-"Est: %(coor0)s \n"
-"Nord: %(coor1)s"
+"Est : %(coor0)s \n"
+"Nord : %(coor1)s"
 
 msgid "Writing POINTS file failed"
 msgstr "Échec de l'écriture du fichier POINTS"
@@ -2333,7 +2333,7 @@ msgstr "Erreur RMS"
 
 #, python-format
 msgid "Forward: %(forw)s, Backward: %(back)s"
-msgstr "Prograde : %(forw)s, Rétrograde: %(back)s"
+msgstr "Prograde : %(forw)s, Rétrograde : %(back)s"
 
 msgid "Add new GCP to the list"
 msgstr ""
@@ -2358,7 +2358,7 @@ msgid "Reload GCPs from POINTS file"
 msgstr ""
 
 msgid "Set map canvas for "
-msgstr "Définir la trame de carte pour"
+msgstr "Définir la trame de carte pour "
 
 msgid " / Zoom to map"
 msgstr " / Zoomer sur la carte"
@@ -2601,7 +2601,7 @@ msgstr "vide"
 
 #, python-brace-format
 msgid "Details: unsupported tag name '{0}'."
-msgstr "Détail : nom d'option non supportée '{0}'"
+msgstr "Détail : nom d'option non supportée '{0}'."
 
 #, python-brace-format
 msgid "Module {task_name} in your model contains parameterized flags. Actinia does not support parameterized flags. The following flags are therefore not being written in the generated JSON: {flags}"
@@ -2611,7 +2611,7 @@ msgid "<not defined>"
 msgstr "<non défini>"
 
 msgid "Condition: "
-msgstr "Condition :"
+msgstr "Condition : "
 
 msgid "Condition: not defined"
 msgstr "Condition : non définie"
@@ -3091,7 +3091,7 @@ msgid "List of maps:"
 msgstr "Liste des cartes :"
 
 msgid "Select map layers and add them to the list."
-msgstr "Sélectionner la couche et l'ajouter à la liste"
+msgstr "Sélectionner les couches de la carte et les ajouter à la liste."
 
 msgid "Remove selected layer(s) from list."
 msgstr "Suprimer la(les) couche(s) sélectionnée(s) de la liste."
@@ -3345,7 +3345,7 @@ msgid "Save input as..."
 msgstr "Enregistrer le fichier sous ..."
 
 msgid "No dataset given."
-msgstr "Pas de jeu de données précisé"
+msgstr "Aucun jeu de données fourni."
 
 #, python-format
 msgid "Unable to parse command '%s'"
@@ -3422,7 +3422,7 @@ msgid "Lines:"
 msgstr "Lignes :"
 
 msgid "Country"
-msgstr "MPays"
+msgstr "Pays"
 
 msgid "E-mail"
 msgstr "Courriel"
@@ -3492,7 +3492,7 @@ msgid ""
 msgstr ""
 "Impossible d'écrire le fichier '%(path)s'.\n"
 "\n"
-"Détails: %(error)s"
+"Détails : %(error)s"
 
 #, python-format
 msgid "Command output saved into '%s'"
@@ -3810,7 +3810,7 @@ msgid "Height of map selection popup window (in pixels):"
 msgstr "Hauteur de fenêtre popup de sélection de carte (en pixels) :"
 
 msgid "Icon theme (requires GUI restart):"
-msgstr "Thème d'icônes (requiert le redémarrage du GUI)"
+msgstr "Thème d'icônes (requiert le redémarrage du GUI) :"
 
 msgid "Tool dialog style:"
 msgstr ""
@@ -3898,7 +3898,7 @@ msgid "Area fill color:"
 msgstr "Couleur de remplissage :"
 
 msgid "Random colors according to category number "
-msgstr "Couleur aléatoire selon le numéro de catégorie"
+msgstr "Couleur aléatoire selon le numéro de catégorie "
 
 msgid "Symbol:"
 msgstr "Symbole :"
@@ -3947,7 +3947,7 @@ msgstr ""
 " en bas de la fenêtre de carte.\n"
 
 msgid "EPSG code:"
-msgstr "Code EPSG : "
+msgstr "Code EPSG :"
 
 msgid "PROJ string (required):"
 msgstr "Chaîne PROJ (requise) :"
@@ -4020,7 +4020,7 @@ msgid "Couldn't read file <{}>."
 msgstr "Impossible de lire le fichier <{}>."
 
 msgid "Permission denied <{}>. Please change file permission for writing.{}"
-msgstr "Permission refusée <{}>. Veuillez modifier les permissions du ficher pour autoriser l’écriture."
+msgstr "Permission refusée <{}>. Veuillez modifier les permissions du ficher pour autoriser l’écriture.{}"
 
 msgid "Couldn't write file <{}>.{}"
 msgstr "Impossible d'écrire le fichier <{}>.{}"
@@ -4286,7 +4286,7 @@ msgid ""
 msgstr ""
 "Impossible de créer la nouvelle carte vecteur.\n"
 "\n"
-"Raison: %s"
+"Raison : %s"
 
 msgid " (...)"
 msgstr " (...)"
@@ -4401,7 +4401,7 @@ msgid "East-west resolution:"
 msgstr "Résolution Est-Ouest :"
 
 msgid "Number of rows:"
-msgstr "Nombre de lignes:"
+msgstr "Nombre de lignes :"
 
 msgid "Number of columns:"
 msgstr "Nombre de colonnes :"
@@ -4675,7 +4675,7 @@ msgid "Unable to copy vector features from <%s>"
 msgstr "Impossible de copier l'entité vectorielle depuis <%s>"
 
 msgid "Unable to open temporary vector map"
-msgstr "Impossible d'ouvrir la carte vecteur temporaire."
+msgstr "Impossible d'ouvrir la carte vecteur temporaire"
 
 msgid "No training areas to export."
 msgstr "Pas de zones d'entrainement à exporter."
@@ -5540,7 +5540,7 @@ msgid "If ~ (tilde) is present as the first directory on the path, it is replace
 msgstr "Si ~ (tilde) est présent comme premier dossier du chemin, il sera remplacé par le dossier utilisateur."
 
 msgid "More than one parameter provided."
-msgstr "PLus d'un paramètre fourni."
+msgstr "Plus d'un paramètre fourni."
 
 msgid "Choose a working directory"
 msgstr "Choisir un dossier de travail"
@@ -5582,6 +5582,7 @@ msgstr ""
 "\n"
 "Raison : %s"
 
+#, fuzzy
 msgid "Unable to start Timeline Tool."
 msgstr "Impossible de démarrer l'outil Temporel"
 
@@ -5639,7 +5640,7 @@ msgid "Add shaded relief map layer"
 msgstr "Ajouter une carte en relief ombré"
 
 msgid "Add raster flow arrows"
-msgstr "Ajouter des flèches de flux (raster) "
+msgstr "Ajouter des flèches de flux (raster)"
 
 msgid "Add raster cell numbers"
 msgstr "Ajouter le numéro des cellules (raster)"
@@ -6086,7 +6087,7 @@ msgid "Bottom"
 msgstr "Base"
 
 msgid "T-B resolution"
-msgstr "Résolution verticale "
+msgstr "Résolution verticale"
 
 msgid "North"
 msgstr "Nord"
@@ -6177,7 +6178,7 @@ msgid "Code"
 msgstr "Code"
 
 msgid "Projection code:"
-msgstr "Code de la projection "
+msgstr "Code de la projection :"
 
 msgid "Search in description:"
 msgstr "Rechercher dans la description :"
@@ -6225,10 +6226,10 @@ msgid "Planetary bodies"
 msgstr "Corps planétaire"
 
 msgid "Ellipsoid code:"
-msgstr "Code de l'ellipsoïde : "
+msgstr "Code de l'ellipsoïde :"
 
 msgid "Georeferenced file:"
-msgstr "Fichier géo-référencé : "
+msgstr "Fichier géo-référencé :"
 
 msgid "Select georeferenced file"
 msgstr "Sélectionner un fichier géo-référencé"
@@ -7155,7 +7156,7 @@ msgid "Name for output GRASS map"
 msgstr "Nom de la carte GRASS"
 
 msgid "Projection of following layers do not match with projection of current location. "
-msgstr "La projection des couches suivante n'est pas cohérente avec la projection du secteur courant."
+msgstr "La projection des couches suivante n'est pas cohérente avec la projection du secteur courant. "
 
 msgid "Layers to be reprojected"
 msgstr "Couche à reprojeter"
@@ -7454,7 +7455,7 @@ msgid "Light"
 msgstr "Lumière"
 
 msgid "z:"
-msgstr "z : "
+msgstr "z :"
 
 msgid "Brightness:"
 msgstr "Luminosité :"
@@ -7590,7 +7591,7 @@ msgid "Frame rate (FPS):"
 msgstr "Taux de rafraichissement (FPS) :"
 
 msgid "Frames are recorded with given frequency (FPS). "
-msgstr "Les images sont enregistrées à la fréquence donnée (FPS)."
+msgstr "Les images sont enregistrées à la fréquence donnée (FPS). "
 
 msgid "Save image sequence"
 msgstr "Enregistrer la séquence d'image"
@@ -7830,7 +7831,7 @@ msgid "Scale bar"
 msgstr "Barre d'échelle"
 
 msgid "Scale bar length (in map units):"
-msgstr "Longueur de la barre d'échelle (en unités de carte) : "
+msgstr "Longueur de la barre d'échelle (en unités de carte) :"
 
 msgid "Scale bar color:"
 msgstr "Couleur de la barre d'échelle :"
@@ -8013,16 +8014,16 @@ msgid "target Y"
 msgstr "Y cible"
 
 msgid "source X:"
-msgstr "X source : "
+msgstr "X source :"
 
 msgid "target X:"
-msgstr "X cible : "
+msgstr "X cible :"
 
 msgid "source Y:"
-msgstr "Y source : "
+msgstr "Y source :"
 
 msgid "target Y:"
-msgstr "Y cible : "
+msgstr "Y cible :"
 
 msgid "GRASS Manage Location of Tick Points on a Scanned Photo"
 msgstr "Gestion de l'emplacement des points d'accroche sur une photo scannée - GRASS"
@@ -8473,7 +8474,7 @@ msgid "Number of segments:"
 msgstr "Nombre de segments :"
 
 msgid "Label every "
-msgstr "Étiqueter tout"
+msgstr "Étiqueter tout "
 
 msgid "segments"
 msgstr "segments"
@@ -8725,7 +8726,7 @@ msgid "Click and drag to resize object"
 msgstr "Cliquez-déposez pour redimensionner l'objet"
 
 msgid "labels: "
-msgstr "étiquettes :"
+msgstr "étiquettes : "
 
 msgid "Cartographic Composer - GRASS"
 msgstr "Composeur de cartes - GRASS"
@@ -9341,7 +9342,7 @@ msgid "Number row strates:"
 msgstr "Nombre de lignes :"
 
 msgid "Number column strates:"
-msgstr "Nombre de colonnes : "
+msgstr "Nombre de colonnes :"
 
 msgid "Invalid mapset name"
 msgstr "Nom de jeu de cartes invalide"
@@ -9670,7 +9671,7 @@ msgid "Dataset <%s> not found in temporal database"
 msgstr "Jeux de données <%s> non trouvé dans la base temporelle"
 
 msgid "Datasets have different temporal type (absolute x relative), which is not allowed."
-msgstr "Les jeux de données ont des types temporels (absolut x relatif) différents, ce qui n'ets pas permis. "
+msgstr "Les jeux de données ont des types temporels (absolut x relatif) différents, ce qui n'ets pas permis."
 
 msgid "Datasets have different time unit which is not allowed."
 msgstr "Les jeux de données ont des unités de temps différentes, ce qui n'est pas permis."
@@ -9851,7 +9852,7 @@ msgid "File exists"
 msgstr "Le fichier existe"
 
 msgid "Please change name of output CSV file or "
-msgstr "Merci de modifier le nom du fichier CSV de sortie ou"
+msgstr "Merci de modifier le nom du fichier CSV de sortie ou "
 
 msgid "Incorrect coordinates format, should be: x,y"
 msgstr "Format de coordonnées incorrect, devrait être : x,y"
@@ -10006,7 +10007,7 @@ msgid "Select only features inside of selection bounding box"
 msgstr "Ne sélectionner que les entités contenues dans la boîte de sélection"
 
 msgid "By default are selected all features overlapping selection bounding box "
-msgstr "Par défaut sont sélectionnées toutes les entités chevauchent la boîte de sélection"
+msgstr "Par défaut sont sélectionnées toutes les entités chevauchent la boîte de sélection "
 
 msgid "Check for duplicates"
 msgstr "Vérifier les doublons"
@@ -10191,7 +10192,7 @@ msgid "Display/update attributes (Ctrl+K)"
 msgstr "Afficher/mettre à jour les attributs (Ctrl+K)"
 
 msgid "Left: Select"
-msgstr "Gauche : Sélectionner "
+msgstr "Gauche : Sélectionner"
 
 msgid "Display/update categories (Ctrl+J)"
 msgstr "Afficher/mettre à jour les catégories (Ctrl+J)"
@@ -10611,7 +10612,7 @@ msgid ""
 "Do you really want to activate snapping and overwrite it? "
 msgstr ""
 "La carte temporaire '%s' a été modifiée en dehors de l'outil d'analyse vectorielle.\n"
-"Voulez-vous vraiment activer le magnétisme et l'écraser ?"
+"Voulez-vous vraiment activer le magnétisme et l'écraser ? "
 
 msgid "Overwrite map"
 msgstr "Écraser la carte ?"
@@ -10791,7 +10792,7 @@ msgid "&OK"
 msgstr "&OK"
 
 msgid "Name for output raster map:"
-msgstr "Nom pour la carte raster en sortie : "
+msgstr "Nom pour la carte raster en sortie :"
 
 msgid "Export region"
 msgstr "Exporter une région"
@@ -11203,7 +11204,7 @@ msgid "At least 2 raster maps must be specified"
 msgstr "Au moins 2 cartes raster doivent être spécifiées"
 
 msgid "Bivariate Scatterplot of "
-msgstr "Nuage de points bivarié de"
+msgstr "Nuage de points bivarié de "
 
 #, python-format
 msgid "Raster <%s> cell values"

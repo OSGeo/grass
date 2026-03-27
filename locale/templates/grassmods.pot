@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-28 15:43+0000\n"
+"POT-Creation-Date: 2026-03-21 15:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1951,7 +1951,7 @@ msgstr ""
 #: ../raster/r.univar/r.univar_main.c:165 ../raster/r.uslek/main.c:52
 #: ../raster/r.usler/main.c:52 ../raster/r.viewshed/main.cpp:103
 #: ../raster/r.volume/main.c:87 ../raster/r.walk/main.c:212
-#: ../raster/r.water.outlet/main.c:58 ../raster/r.watershed/front/main.c:75
+#: ../raster/r.water.outlet/main.c:58 ../raster/r.watershed/front/main.c:77
 #: ../raster/r.what.color/main.c:190 ../raster/r.what/main.c:111
 #: ../raster3d/r3.cross.rast/main.c:231 ../raster3d/r3.to.rast/main.c:259
 #: ../vector/v.neighbors/main.c:121 ../vector/v.sample/main.c:75
@@ -7953,7 +7953,7 @@ msgstr ""
 #: ../raster/r.sim/r.sim.water/main.c:214
 #: ../raster/r.sim/r.sim.water/main.c:221
 #: ../raster/r.sim/r.sim.water/main.c:229
-#: ../raster/r.sim/r.sim.water/main.c:316 ../raster/r.spread/main.c:287
+#: ../raster/r.sim/r.sim.water/main.c:317 ../raster/r.spread/main.c:287
 #: ../raster/r.spread/main.c:298 ../raster/r.spread/main.c:309
 #: ../raster/r.sun/main.c:399 ../raster/r.sun/main.c:409
 #: ../raster/r.sun/main.c:419 ../raster/r.sun/main.c:429
@@ -8634,20 +8634,20 @@ msgstr ""
 #: ../imagery/i.eb.hsebal01/main.c:158 ../imagery/i.eb.hsebal01/main.c:165
 #: ../imagery/i.eb.hsebal01/main.c:172
 #: ../raster/r.sim/r.sim.sediment/main.c:234
-#: ../raster/r.sim/r.sim.sediment/main.c:242
-#: ../raster/r.sim/r.sim.sediment/main.c:254
-#: ../raster/r.sim/r.sim.sediment/main.c:263
-#: ../raster/r.sim/r.sim.sediment/main.c:281
-#: ../raster/r.sim/r.sim.sediment/main.c:306
+#: ../raster/r.sim/r.sim.sediment/main.c:243
+#: ../raster/r.sim/r.sim.sediment/main.c:255
+#: ../raster/r.sim/r.sim.sediment/main.c:264
+#: ../raster/r.sim/r.sim.sediment/main.c:282
+#: ../raster/r.sim/r.sim.sediment/main.c:307
 #: ../raster/r.sim/r.sim.water/main.c:237
-#: ../raster/r.sim/r.sim.water/main.c:245
-#: ../raster/r.sim/r.sim.water/main.c:257
-#: ../raster/r.sim/r.sim.water/main.c:266
-#: ../raster/r.sim/r.sim.water/main.c:284
-#: ../raster/r.sim/r.sim.water/main.c:294
-#: ../raster/r.sim/r.sim.water/main.c:302
-#: ../raster/r.sim/r.sim.water/main.c:311
-#: ../raster/r.sim/r.sim.water/main.c:341 ../vector/v.surf.rst/main.c:165
+#: ../raster/r.sim/r.sim.water/main.c:246
+#: ../raster/r.sim/r.sim.water/main.c:258
+#: ../raster/r.sim/r.sim.water/main.c:267
+#: ../raster/r.sim/r.sim.water/main.c:285
+#: ../raster/r.sim/r.sim.water/main.c:295
+#: ../raster/r.sim/r.sim.water/main.c:303
+#: ../raster/r.sim/r.sim.water/main.c:312
+#: ../raster/r.sim/r.sim.water/main.c:342 ../vector/v.surf.rst/main.c:165
 #: ../vector/v.surf.rst/main.c:170 ../vector/v.surf.rst/main.c:193
 #: ../vector/v.surf.rst/main.c:268 ../vector/v.surf.rst/main.c:274
 #: ../vector/v.surf.rst/main.c:282 ../vector/v.surf.rst/main.c:291
@@ -12560,13 +12560,13 @@ msgstr ""
 #: ../imagery/i.vi/main.c:138 ../imagery/i.vi/main.c:145
 #: ../imagery/i.vi/main.c:152 ../imagery/i.vi/main.c:159
 #: ../imagery/i.vi/main.c:167 ../imagery/i.vi/main.c:175
-#: ../raster/r.watershed/front/main.c:87 ../raster/r.watershed/front/main.c:95
-#: ../raster/r.watershed/front/main.c:102
-#: ../raster/r.watershed/front/main.c:109
-#: ../raster/r.watershed/front/main.c:117
-#: ../raster/r.watershed/front/main.c:124
-#: ../raster/r.watershed/front/main.c:131
-#: ../raster/r.watershed/front/main.c:139
+#: ../raster/r.watershed/front/main.c:89 ../raster/r.watershed/front/main.c:97
+#: ../raster/r.watershed/front/main.c:104
+#: ../raster/r.watershed/front/main.c:111
+#: ../raster/r.watershed/front/main.c:119
+#: ../raster/r.watershed/front/main.c:126
+#: ../raster/r.watershed/front/main.c:133
+#: ../raster/r.watershed/front/main.c:141
 msgid "Inputs"
 msgstr ""
 
@@ -13812,7 +13812,7 @@ msgstr ""
 #: ../raster/r.terraflow/main.cpp:458 ../raster/r.topidx/main.c:38
 #: ../raster/r.topmodel/main.c:49 ../raster/r.uslek/main.c:53
 #: ../raster/r.usler/main.c:53 ../raster/r.water.outlet/main.c:59
-#: ../raster/r.watershed/front/main.c:76 ../raster3d/r3.flow/main.c:176
+#: ../raster/r.watershed/front/main.c:78 ../raster3d/r3.flow/main.c:176
 #: ../raster3d/r3.gwflow/main.c:169
 msgid "hydrology"
 msgstr ""
@@ -15168,7 +15168,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:3
 #: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:3
 #: ../raster/r.series.accumulate/main.c:78 ../raster/r.terraflow/main.cpp:460
-#: ../raster/r.watershed/front/main.c:78
+#: ../raster/r.watershed/front/main.c:80
 msgid "accumulation"
 msgstr ""
 
@@ -18174,7 +18174,7 @@ msgid "PSmap: do_scale(): shouldn't happen"
 msgstr ""
 
 #: ../raster/r.basins.fill/main.c:54 ../raster/r.water.outlet/main.c:60
-#: ../raster/r.watershed/front/main.c:77
+#: ../raster/r.watershed/front/main.c:79
 msgid "watershed"
 msgstr ""
 
@@ -27245,110 +27245,110 @@ msgstr ""
 msgid "Number of walkers"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:241
-#: ../raster/r.sim/r.sim.water/main.c:244
-msgid "Time used for iterations [minutes]"
+#: ../raster/r.sim/r.sim.sediment/main.c:242
+#: ../raster/r.sim/r.sim.water/main.c:245
+msgid "Duration of the simulated water flow [minutes]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:250
-#: ../raster/r.sim/r.sim.water/main.c:253
+#: ../raster/r.sim/r.sim.sediment/main.c:251
+#: ../raster/r.sim/r.sim.water/main.c:254
 msgid "Minimum time step for the simulation [seconds]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:252
-#: ../raster/r.sim/r.sim.water/main.c:255
+#: ../raster/r.sim/r.sim.sediment/main.c:253
+#: ../raster/r.sim/r.sim.water/main.c:256
 msgid "A larger minimum time step substantially reduces processing time, but at the cost of accuracy"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:262
-#: ../raster/r.sim/r.sim.water/main.c:265
+#: ../raster/r.sim/r.sim.sediment/main.c:263
+#: ../raster/r.sim/r.sim.water/main.c:266
 msgid "Time interval for creating output maps [minutes]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:280
-#: ../raster/r.sim/r.sim.water/main.c:283
+#: ../raster/r.sim/r.sim.sediment/main.c:281
+#: ../raster/r.sim/r.sim.water/main.c:284
 msgid "Water diffusion constant"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:287
-#: ../raster/r.sim/r.sim.water/main.c:322
+#: ../raster/r.sim/r.sim.sediment/main.c:288
+#: ../raster/r.sim/r.sim.water/main.c:323
 msgid "Seed for random number generator"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:289
-#: ../raster/r.sim/r.sim.water/main.c:324
+#: ../raster/r.sim/r.sim.sediment/main.c:290
+#: ../raster/r.sim/r.sim.water/main.c:325
 msgid "The same seed can be used to obtain same results or random seed can be generated by other means."
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:294
-#: ../raster/r.sim/r.sim.water/main.c:329
+#: ../raster/r.sim/r.sim.sediment/main.c:295
+#: ../raster/r.sim/r.sim.water/main.c:330
 msgid "Generate random seed"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:296
-#: ../raster/r.sim/r.sim.water/main.c:331
+#: ../raster/r.sim/r.sim.sediment/main.c:297
+#: ../raster/r.sim/r.sim.water/main.c:332
 msgid "Automatically generates random seed for random number generator (use when you don't want to provide the seed option)"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:305
-#: ../raster/r.sim/r.sim.water/main.c:340
+#: ../raster/r.sim/r.sim.sediment/main.c:306
+#: ../raster/r.sim/r.sim.water/main.c:341
 msgid "Number of threads which will be used for parallel computation."
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:314
-#: ../raster/r.sim/r.sim.water/main.c:350
+#: ../raster/r.sim/r.sim.sediment/main.c:315
+#: ../raster/r.sim/r.sim.water/main.c:351
 #, c-format
 msgid "Generated random seed (-s): %ld"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:319
-#: ../raster/r.sim/r.sim.water/main.c:355 ../raster/r.surf.fractal/main.c:68
+#: ../raster/r.sim/r.sim.sediment/main.c:320
+#: ../raster/r.sim/r.sim.water/main.c:356 ../raster/r.surf.fractal/main.c:68
 #: ../raster/r.surf.gauss/main.c:69 ../raster/r.surf.random/main.c:118
 #, c-format
 msgid "Read random seed from %s option: %ld"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:375
-#: ../raster/r.sim/r.sim.water/main.c:426 ../vector/v.surf.rst/main.c:413
+#: ../raster/r.sim/r.sim.sediment/main.c:376
+#: ../raster/r.sim/r.sim.water/main.c:427 ../vector/v.surf.rst/main.c:413
 #, c-format
 msgid "<%d> is not valid number of threads. Number of threads will be set on <%d>"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:381
-#: ../raster/r.sim/r.sim.water/main.c:432 ../raster/r.sun/main.c:594
+#: ../raster/r.sim/r.sim.sediment/main.c:382
+#: ../raster/r.sim/r.sim.water/main.c:433 ../raster/r.sun/main.c:594
 #: ../vector/v.surf.rst/main.c:427
 msgid "Parallel processing disabled due to active mask."
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:389
-#: ../raster/r.sim/r.sim.water/main.c:440
+#: ../raster/r.sim/r.sim.sediment/main.c:390
+#: ../raster/r.sim/r.sim.water/main.c:441
 #, c-format
 msgid "Number of threads: %d"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:404
-#: ../raster/r.sim/r.sim.water/main.c:534
+#: ../raster/r.sim/r.sim.sediment/main.c:405
+#: ../raster/r.sim/r.sim.water/main.c:535
 msgid "More than 100 files are going to be created !!!!!"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:410
-#: ../raster/r.sim/r.sim.water/main.c:540
+#: ../raster/r.sim/r.sim.sediment/main.c:411
+#: ../raster/r.sim/r.sim.water/main.c:541
 #, c-format
 msgid "default nwalk=%d, rwalk=%f"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:419
-#: ../raster/r.sim/r.sim.water/main.c:550
+#: ../raster/r.sim/r.sim.sediment/main.c:420
+#: ../raster/r.sim/r.sim.water/main.c:551
 #, c-format
 msgid "Using metric conversion factor %f, step=%f"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:429
+#: ../raster/r.sim/r.sim.sediment/main.c:430
 msgid "You are not outputting any raster or site files"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:432
-#: ../raster/r.sim/r.sim.water/main.c:563 ../vector/v.surf.rst/main.c:688
+#: ../raster/r.sim/r.sim.sediment/main.c:433
+#: ../raster/r.sim/r.sim.water/main.c:564 ../vector/v.surf.rst/main.c:688
 #: ../vector/v.surf.rst/main.c:760 ../vector/v.vol.rst/main.c:911
 msgid "Input failed"
 msgstr ""
@@ -27406,27 +27406,27 @@ msgstr ""
 msgid "Number of walkers, default is twice the number of cells"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:291
+#: ../raster/r.sim/r.sim.water/main.c:292
 msgid "Threshold water depth [m]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:293
+#: ../raster/r.sim/r.sim.water/main.c:294
 msgid "Diffusion increases after this water depth is reached"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:301
+#: ../raster/r.sim/r.sim.water/main.c:302
 msgid "Diffusion increase constant"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:310
+#: ../raster/r.sim/r.sim.water/main.c:311
 msgid "Weighting factor for water flow velocity vector"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:315
+#: ../raster/r.sim/r.sim.water/main.c:316
 msgid "Time-series output"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:560
+#: ../raster/r.sim/r.sim.water/main.c:561
 msgid "You are not outputting any raster maps"
 msgstr ""
 
@@ -27559,15 +27559,15 @@ msgstr ""
 #: ../raster/r.slope.aspect/main.c:252 ../raster/r.terraflow/main.cpp:73
 #: ../raster/r.terraflow/main.cpp:81 ../raster/r.terraflow/main.cpp:90
 #: ../raster/r.terraflow/main.cpp:99 ../raster/r.terraflow/main.cpp:108
-#: ../raster/r.terraflow/main.cpp:153 ../raster/r.watershed/front/main.c:146
-#: ../raster/r.watershed/front/main.c:153
-#: ../raster/r.watershed/front/main.c:159
-#: ../raster/r.watershed/front/main.c:166
-#: ../raster/r.watershed/front/main.c:172
-#: ../raster/r.watershed/front/main.c:178
-#: ../raster/r.watershed/front/main.c:185
-#: ../raster/r.watershed/front/main.c:192
-#: ../raster/r.watershed/front/main.c:199 ../vector/v.surf.bspline/main.c:131
+#: ../raster/r.terraflow/main.cpp:153 ../raster/r.watershed/front/main.c:148
+#: ../raster/r.watershed/front/main.c:155
+#: ../raster/r.watershed/front/main.c:161
+#: ../raster/r.watershed/front/main.c:168
+#: ../raster/r.watershed/front/main.c:174
+#: ../raster/r.watershed/front/main.c:180
+#: ../raster/r.watershed/front/main.c:187
+#: ../raster/r.watershed/front/main.c:194
+#: ../raster/r.watershed/front/main.c:201 ../vector/v.surf.bspline/main.c:131
 #: ../vector/v.surf.bspline/main.c:136 ../vector/v.surf.rst/main.c:176
 #: ../vector/v.surf.rst/main.c:202 ../vector/v.surf.rst/main.c:208
 #: ../vector/v.surf.rst/main.c:214 ../vector/v.surf.rst/main.c:220
@@ -28519,7 +28519,7 @@ msgstr ""
 msgid "Elevation raster map is NULL but accumulation map is not NULL"
 msgstr ""
 
-#: ../raster/r.stream.extract/main.c:78 ../raster/r.watershed/front/main.c:80
+#: ../raster/r.stream.extract/main.c:78 ../raster/r.watershed/front/main.c:82
 msgid "stream network"
 msgstr ""
 
@@ -29693,11 +29693,11 @@ msgstr ""
 msgid "Name for output topographic convergence index (tci) raster map"
 msgstr ""
 
-#: ../raster/r.terraflow/main.cpp:115 ../raster/r.watershed/front/main.c:214
+#: ../raster/r.terraflow/main.cpp:115 ../raster/r.watershed/front/main.c:216
 msgid "SFD (D8) flow (default is MFD)"
 msgstr ""
 
-#: ../raster/r.terraflow/main.cpp:117 ../raster/r.watershed/front/main.c:216
+#: ../raster/r.terraflow/main.cpp:117 ../raster/r.watershed/front/main.c:218
 msgid "SFD: single flow direction, MFD: multiple flow direction"
 msgstr ""
 
@@ -30282,7 +30282,7 @@ msgstr ""
 msgid "wetness"
 msgstr ""
 
-#: ../raster/r.topidx/main.c:40 ../raster/r.watershed/front/main.c:82
+#: ../raster/r.topidx/main.c:40 ../raster/r.watershed/front/main.c:84
 msgid "topographic index"
 msgstr ""
 
@@ -31041,160 +31041,160 @@ msgstr ""
 msgid "Ignoring point outside computation region: %.4f,%.4f"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:79
+#: ../raster/r.watershed/front/main.c:81
 msgid "drainage"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:81
+#: ../raster/r.watershed/front/main.c:83
 msgid "stream power index"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:84
+#: ../raster/r.watershed/front/main.c:86
 msgid "Calculates hydrological parameters and RUSLE factors."
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:91
+#: ../raster/r.watershed/front/main.c:93
 msgid "Name of input depressions raster map"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:93
+#: ../raster/r.watershed/front/main.c:95
 msgid "All non-NULL and non-zero cells are considered as real depressions"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:100
+#: ../raster/r.watershed/front/main.c:102
 msgid "Name of input raster representing amount of overland flow per cell"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:106
+#: ../raster/r.watershed/front/main.c:108
 msgid "Name of input raster map percent of disturbed land"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:107
-#: ../raster/r.watershed/front/main.c:136
+#: ../raster/r.watershed/front/main.c:109
+#: ../raster/r.watershed/front/main.c:138
 msgid "For USLE"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:113
+#: ../raster/r.watershed/front/main.c:115
 msgid "Name of input raster map blocking overland surface flow"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:114
+#: ../raster/r.watershed/front/main.c:116
 msgid "For USLE. All non-NULL and non-zero cells are considered as blocking terrain."
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:122
+#: ../raster/r.watershed/front/main.c:124
 msgid "Name of input raster map with percentages for flow accumulation."
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:128
+#: ../raster/r.watershed/front/main.c:130
 msgid "Minimum size of exterior watershed basin"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:135
+#: ../raster/r.watershed/front/main.c:137
 msgid "Maximum length of surface flow in map units"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:143
+#: ../raster/r.watershed/front/main.c:145
 msgid "Name for output accumulation raster map"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:144
+#: ../raster/r.watershed/front/main.c:146
 msgid "Number of cells that drain through each cell"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:151
+#: ../raster/r.watershed/front/main.c:153
 msgid "Name for output topographic index ln(a / tan(b)) map"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:157
+#: ../raster/r.watershed/front/main.c:159
 msgid "Name for output stream power index a * tan(b)"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:163
+#: ../raster/r.watershed/front/main.c:165
 msgid "Name for output drainage direction raster map"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:164
+#: ../raster/r.watershed/front/main.c:166
 msgid "Directions numbered from 1 to 8"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:170
+#: ../raster/r.watershed/front/main.c:172
 msgid "Name for output basins raster map"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:176
+#: ../raster/r.watershed/front/main.c:178
 msgid "Name for output stream segments raster map"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:182
+#: ../raster/r.watershed/front/main.c:184
 msgid "Name for output half basins raster map"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:183
+#: ../raster/r.watershed/front/main.c:185
 msgid "Each half-basin is given a unique value"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:189
+#: ../raster/r.watershed/front/main.c:191
 msgid "Name for output slope length raster map"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:190
+#: ../raster/r.watershed/front/main.c:192
 msgid "Slope length and steepness (LS) factor for USLE"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:196
+#: ../raster/r.watershed/front/main.c:198
 msgid "Name for output slope steepness raster map"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:197
+#: ../raster/r.watershed/front/main.c:199
 msgid "Slope steepness (S) factor for USLE"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:206
+#: ../raster/r.watershed/front/main.c:208
 msgid "Convergence factor for MFD (1-10)"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:208
+#: ../raster/r.watershed/front/main.c:210
 msgid "1 = most diverging flow, 10 = most converging flow. Recommended: 5"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:221
+#: ../raster/r.watershed/front/main.c:223
 msgid "Allow only horizontal and vertical flow of water"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:225
+#: ../raster/r.watershed/front/main.c:227
 msgid "Enable disk swap memory option: Operation is slow"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:227
+#: ../raster/r.watershed/front/main.c:229
 msgid "Only needed if memory requirements exceed available RAM; see manual on how to calculate memory requirements"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:233
+#: ../raster/r.watershed/front/main.c:235
 msgid "Use positive flow accumulation even for likely underestimates"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:235
+#: ../raster/r.watershed/front/main.c:237
 msgid "See manual for a detailed description of flow accumulation output"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:239
+#: ../raster/r.watershed/front/main.c:241
 msgid "Beautify flat areas"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:241
+#: ../raster/r.watershed/front/main.c:243
 msgid "Flow direction in flat areas is modified to look prettier"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:260
+#: ../raster/r.watershed/front/main.c:262
 msgid "The basin threshold must be a positive number."
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:282
+#: ../raster/r.watershed/front/main.c:284
 msgid "Beautify flat areas is not yet supported for disk swap mode"
 msgstr ""
 
-#: ../raster/r.watershed/front/main.c:314
+#: ../raster/r.watershed/front/main.c:316
 #, c-format
 msgid "Subprocess failed with exit code %d"
 msgstr ""
