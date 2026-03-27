@@ -236,6 +236,7 @@ class TestAggregationAbsolute(TestCase):
         # print lister.outputs.stdout
         maps = "b_101" + os.linesep
         self.assertEqual(maps, lister.outputs.stdout)
+
     def test_extend_existing_strds(self):
         """Test extending existing STRDS with -e flag"""
         # First run — create initial result with first 3 months
@@ -280,5 +281,3 @@ if __name__ == "__main__":
     from grass.gunittest.main import test
 
     test()
-
-

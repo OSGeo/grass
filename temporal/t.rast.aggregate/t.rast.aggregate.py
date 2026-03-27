@@ -269,4 +269,3 @@ def main():
 if __name__ == "__main__":
     options, flags = gs.parser()
     main()
-
