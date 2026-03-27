@@ -225,10 +225,12 @@
             <termEntry>
                 <langSet xml:lang="en"><tig><term>centroids</term></tig></langSet>
                 <langSet xml:lang="it"><tig><term/></tig></langSet>
+                <descrip>Vector feature type</descrip>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>area</term></tig></langSet>
                 <langSet xml:lang="it"><tig><term/></tig></langSet>
+                <descrip>Mathematical/geometry meaning, like the area of a square is d^2</descrip>
             </termEntry>
             <termEntry id="1">
                 <langSet xml:lang="en"><tig><term>area</term></tig></langSet>
@@ -266,12 +268,52 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>Support Vector Machine</term></tig></langSet>
-                <langSet xml:lang="it"><tig><term></term></tig></langSet>
+                <langSet xml:lang="it"><tig><term/></tig></langSet>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>SVM</term></tig></langSet>
-                <langSet xml:lang="it"><tig><term></term></tig></langSet>
+                <langSet xml:lang="it"><tig><term/></tig></langSet>
                 <descrip>Support Vector Machine</descrip>
+            </termEntry>
+            <termEntry id="geometry type, plural">
+                <langSet xml:lang="en"><tig><term>areas</term></tig></langSet>
+                <langSet xml:lang="it"><tig><term/></tig></langSet>
+                <descrip>The geometry type, plural</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>lines</term></tig></langSet>
+                <langSet xml:lang="it"><tig><term/></tig></langSet>
+                <descrip>Feature type, plural</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>boundary</term></tig></langSet>
+                <langSet xml:lang="it"><tig><term/></tig></langSet>
+                <descrip>Vector feature type</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>boundaries</term></tig></langSet>
+                <langSet xml:lang="it"><tig><term/></tig></langSet>
+                <descrip>Vector feature type</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>feature</term></tig></langSet>
+                <langSet xml:lang="it"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>features</term></tig></langSet>
+                <langSet xml:lang="it"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>computational region</term></tig></langSet>
+                <langSet xml:lang="it"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>raster mask</term></tig></langSet>
+                <langSet xml:lang="it"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>nodes</term></tig></langSet>
+                <langSet xml:lang="it"><tig><term></term></tig></langSet>
             </termEntry>
         </body>
     </text>

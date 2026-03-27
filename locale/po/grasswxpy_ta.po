@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-14 15:46+0000\n"
+"POT-Creation-Date: 2026-03-21 15:56+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Tamil <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/ta/>\n"
@@ -1286,8 +1286,10 @@ msgstr ""
 msgid "Re&load maps"
 msgstr ""
 
-msgid "&Copy path to mapset"
-msgstr ""
+#, fuzzy
+#| msgid "&Copy"
+msgid "&Copy path"
+msgstr "&நகலெடு"
 
 msgid "&Create mapset"
 msgstr ""
@@ -1297,6 +1299,9 @@ msgid "&Delete project"
 msgstr "தேர்ந்தெடுக்கப்பட்டுள்ளதை அழி"
 
 msgid "&Rename project"
+msgstr ""
+
+msgid "Copy path"
 msgstr ""
 
 msgid "Change Label"
@@ -1323,11 +1328,16 @@ msgstr ""
 msgid "&Delete projects (locations)"
 msgstr ""
 
+msgid "Copy paths"
+msgstr ""
+
 msgid "&Delete mapsets"
 msgstr ""
 
-msgid "&Copy paths to mapsets"
-msgstr ""
+#, fuzzy
+#| msgid "&Copy"
+msgid "&Copy paths"
+msgstr "&நகலெடு"
 
 #, python-brace-format
 msgid "Remove label '{label}' for this database?"

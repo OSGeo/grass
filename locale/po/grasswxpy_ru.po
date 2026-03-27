@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-14 15:46+0000\n"
+"POT-Creation-Date: 2026-03-21 15:56+0000\n"
 "PO-Revision-Date: 2023-06-28 19:08+0000\n"
 "Last-Translator: Sergey Kazorin <kazorin@basealt.ru>\n"
 "Language-Team: Russian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/ru/>\n"
@@ -1346,7 +1346,7 @@ msgid "Re&load maps"
 msgstr "Пере&загрузить карты"
 
 #, fuzzy
-msgid "&Copy path to mapset"
+msgid "&Copy path"
 msgstr "&Создать набор"
 
 msgid "&Create mapset"
@@ -1359,6 +1359,11 @@ msgstr "&Удалить набор"
 #, fuzzy
 msgid "&Rename project"
 msgstr "&Переименовать набор"
+
+#, fuzzy
+#| msgid "CVS path"
+msgid "Copy path"
+msgstr "Путь к CVS"
 
 #, fuzzy
 #| msgid "Change mapset"
@@ -1393,11 +1398,15 @@ msgstr "&Удалить базу данных GRASS с диска"
 msgid "&Delete projects (locations)"
 msgstr "&Удалить области"
 
+#, fuzzy
+msgid "Copy paths"
+msgstr "&Создать набор"
+
 msgid "&Delete mapsets"
 msgstr "&Удалить наборы"
 
 #, fuzzy
-msgid "&Copy paths to mapsets"
+msgid "&Copy paths"
 msgstr "&Создать набор"
 
 #, fuzzy, python-brace-format
@@ -11487,6 +11496,10 @@ msgid ""
 msgstr ""
 "Уравнение регрессии для растровых карт <%(rast1)s> и <%(rast2)s>:\n"
 "\n"
+
+#, fuzzy
+#~ msgid "&Copy paths to mapsets"
+#~ msgstr "&Создать набор"
 
 #~ msgid "Generate random seed for rand()"
 #~ msgstr "Сгенерируйте случайное значение для rand()"

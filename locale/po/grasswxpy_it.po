@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-14 15:46+0000\n"
+"POT-Creation-Date: 2026-03-21 15:56+0000\n"
 "PO-Revision-Date: 2026-02-09 03:56+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Italian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/it/>\n"
@@ -1323,7 +1323,9 @@ msgstr "&Rinomina mapset"
 msgid "Re&load maps"
 msgstr ""
 
-msgid "&Copy path to mapset"
+#, fuzzy
+#| msgid "&Copy path to mapset"
+msgid "&Copy path"
 msgstr "&Copia percorso al mapset"
 
 msgid "&Create mapset"
@@ -1334,6 +1336,11 @@ msgstr "&Elimina progetto"
 
 msgid "&Rename project"
 msgstr "&Rinomina progetto"
+
+#, fuzzy
+#| msgid "CVS path"
+msgid "Copy path"
+msgstr "percorso CSV"
 
 #, fuzzy
 #| msgid "Change mapset"
@@ -1366,11 +1373,18 @@ msgstr "&Elimana di database di GRASS dal disco"
 msgid "&Delete projects (locations)"
 msgstr "&Elimina progetti (locations)"
 
+#, fuzzy
+#| msgid "&Copy path to mapset"
+msgid "Copy paths"
+msgstr "&Copia percorso al mapset"
+
 msgid "&Delete mapsets"
 msgstr "&Elimina mapsets"
 
-msgid "&Copy paths to mapsets"
-msgstr "&Copia percorsi ai mapsets"
+#, fuzzy
+#| msgid "&Copy path to mapset"
+msgid "&Copy paths"
+msgstr "&Copia percorso al mapset"
 
 #, fuzzy, python-brace-format
 #| msgid "Removes an existing database."
@@ -11344,6 +11358,9 @@ msgid ""
 "Regression equation for raster map <%(rast1)s> vs. <%(rast2)s>:\n"
 "\n"
 msgstr ""
+
+#~ msgid "&Copy paths to mapsets"
+#~ msgstr "&Copia percorsi ai mapsets"
 
 #, fuzzy
 #~ msgid "Do you want to create a new project (also known as location)?"
