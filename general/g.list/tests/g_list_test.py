@@ -3,6 +3,7 @@ import sys
 import pytest
 
 import grass.script as gs
+from grass.exceptions import CalledModuleError
 from grass.tools import Tools
 
 
@@ -176,6 +177,24 @@ def test_human_readable_output(simple_dataset):
     assert actual == plain_actual
 
 
+@pytest.mark.parametrize(
+    "flags, message_parts",
+    [
+        ("pt", ["-p", "-t"]),
+        ("ft", ["-f", "-t"]),
+        ("pf", ["-p", "-f"]),
+        ("re", ["-r", "-e"]),
+    ],
+)
+def test_exclusive_flags(simple_dataset, flags, message_parts):
+    """Test that mutually exclusive flags for g.list fail with CalledModuleError."""
+    with pytest.raises(CalledModuleError) as excinfo:
+        gs.run_command("g.list", flags=flags, type="raster", env=simple_dataset.env)
+
+    for part in message_parts:
+        assert part in excinfo.value.errors
+        
+        
 @pytest.mark.xfail(
     sys.platform == "win32",
     reason="map titles are not listed",
@@ -305,3 +324,12 @@ def test_no_json_output(simple_dataset):
     )
     assert not result
     assert list(result) == []
+
+
+def test_invalid_format_combination(simple_dataset):
+    """Test that invalid format combinations fail with CalledModuleError."""
+    with pytest.raises(CalledModuleError) as excinfo:
+        gs.run_command(
+            "g.list", type="raster", format="plain", flags="t", env=simple_dataset.env
+        )
+    assert "format=plain" in excinfo.value.errors
