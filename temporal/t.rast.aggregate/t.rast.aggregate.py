@@ -159,13 +159,14 @@ def main():
     output_exists = output_strds.is_in_db(dbif)
 
     if extend and not output_exists:
-        gs.fatal(
+        gs.warning(
             _(
                 "Space time raster dataset <%s> does not exist. "
                 "Cannot extend a non-existing dataset."
             )
             % output
         )
+        extend = False  # fall back to creating new STRDS
 
     if not extend:
         tgis.check_new_stds(output, "strds", dbif=dbif, overwrite=overwrite)
