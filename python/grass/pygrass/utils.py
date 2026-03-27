@@ -277,9 +277,9 @@ def get_raster_for_points(poi_vector, raster, column=None, region=None):
     Sample the raster layer at the given points, return a list of values
 
     >>> l = get_raster_for_points(vect, ele, region=region)
-    >>> l[0]  # doctest: +ELLIPSIS
+    >>> l[0]  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
     (1, 10.0, 6.0, ...)
-    >>> l[1]  # doctest: +ELLIPSIS
+    >>> l[1]  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
     (2, 12.0, 6.0, ...)
 
     Add a new column and sample again
@@ -295,9 +295,9 @@ def get_raster_for_points(poi_vector, raster, column=None, region=None):
     Filters('SELECT value, Utils_test_raster FROM test_vect_2;')
     >>> cur = vect.table.execute()
     >>> r = cur.fetchall()
-    >>> r[0]  # doctest: +ELLIPSIS
+    >>> r[0]  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
     (10.0, 1.0)
-    >>> r[1]  # doctest: +ELLIPSIS
+    >>> r[1]  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
     (12.0, 1.0)
     >>> vect.close()
     >>> remove("test_vect_2", "vect")

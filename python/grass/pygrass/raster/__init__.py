@@ -122,7 +122,7 @@ class RasterRow(RasterAbstractBase):
 
         >>> with RasterRow(test_raster_name) as elev:
         ...     for row in elev:
-        ...         row  # doctest: +ELLIPSIS
+        ...         row  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
         Buffer([11, 21, 31, 41]...)
         Buffer([12, 22, 32, 42]...)
         Buffer([13, 23, 33, 43]...)
@@ -146,9 +146,9 @@ class RasterRow(RasterAbstractBase):
 
         >>> elev = RasterRow(test_raster_name)
         >>> elev.open()
-        >>> elev[0]  # doctest: +ELLIPSIS
+        >>> elev[0]  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
         Buffer([11, 21, 31, 41]...)
-        >>> elev.get_row(0)  # doctest: +ELLIPSIS
+        >>> elev.get_row(0)  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
         Buffer([11, 21, 31, 41]...)
 
         """
@@ -270,7 +270,7 @@ class RasterRowIO(RasterRow):
             >>> elev = RasterRowIO(test_raster_name)
             >>> elev.open("r")
             >>> for row in elev:
-            ...     row  # doctest: +ELLIPSIS
+            ...     row  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
             Buffer([11, 21, 31, 41]...)
             Buffer([12, 22, 32, 42]...)
             Buffer([13, 23, 33, 43]...)
@@ -367,7 +367,7 @@ class RasterSegment(RasterAbstractBase):
             >>> elev = RasterRowIO(test_raster_name)
             >>> elev.open("r")
             >>> for row in elev:
-            ...     row  # doctest: +ELLIPSIS
+            ...     row  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
             Buffer([11, 21, 31, 41]...)
             Buffer([12, 22, 32, 42]...)
             Buffer([13, 23, 33, 43]...)
@@ -378,7 +378,7 @@ class RasterSegment(RasterAbstractBase):
 
             >>> with RasterSegment(test_raster_name) as elev:
             ...     for row in elev:
-            ...         row  # doctest: +ELLIPSIS
+            ...         row  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
             Buffer([11, 21, 31, 41]...)
             Buffer([12, 22, 32, 42]...)
             Buffer([13, 23, 33, 43]...)
@@ -410,7 +410,7 @@ class RasterSegment(RasterAbstractBase):
         >>> map_b = RasterSegment(test_raster_name + "_segment")
         >>> map_b.open("r")
         >>> for row in map_b:
-        ...     row  # doctest: +ELLIPSIS
+        ...     row  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
         Buffer([1011, 1021, 1031, 1041]...)
         Buffer([1012, 1022, 1032, 1042]...)
         Buffer([1013, 1023, 1033, 1043]...)
@@ -479,7 +479,7 @@ class RasterSegment(RasterAbstractBase):
             >>> map_b = RasterSegment(test_raster_name + "_segment")
             >>> map_b.open("r")
             >>> for row in map_b:
-            ...     row  # doctest: +ELLIPSIS
+            ...     row  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
             Buffer([111., 121., 131., 141.]...)
             Buffer([112., 122., 132., 142.]...)
             Buffer([113., 123., 133., 143.]...)
