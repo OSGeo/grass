@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-21 15:56+0000\n"
+"POT-Creation-Date: 2026-03-28 15:48+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grassmods/es/>\n"
@@ -2258,7 +2258,6 @@ msgstr "Número de dígitos significativos (coma flotante solamente)"
 msgid "Get text color from cell color value"
 msgstr "Obtener color de texto del valor de color de la celda"
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -20628,7 +20627,6 @@ msgstr "Demasiadas categorías (encontradas: %i, máximo: %i). Intente rescalar 
 msgid "Input raster must be of type CELL."
 msgstr "Mapa ráster de entrada debe ser de tipo CELL."
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
