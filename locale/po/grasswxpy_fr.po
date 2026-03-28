@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-21 17:40+0000\n"
-"PO-Revision-Date: 2026-03-19 22:50+0000\n"
+"PO-Revision-Date: 2026-03-27 22:16+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasswxpy-8-5/fr/>\n"
 "Language: fr\n"
@@ -2811,9 +2811,8 @@ msgstr "PyWPS"
 msgid "actinia"
 msgstr "actinia"
 
-#, fuzzy
 msgid "Python script type:"
-msgstr "Script Python"
+msgstr "Type de script Python :"
 
 #, fuzzy
 msgid "{} script is locally modified. Refresh will discard all changes. Do you really want to continue?"
@@ -3280,7 +3279,7 @@ msgid "&Save as"
 msgstr "Enregi&strer sous"
 
 msgid "Save content to a file for further use"
-msgstr "Enregistrer le contenue dans un fichier pour une utilisation future."
+msgstr "Enregistrer le contenu dans un fichier pour une utilisation ultérieure"
 
 msgid "or enter values directly:"
 msgstr "ou entrer les valeurs manuellement :"
@@ -3785,7 +3784,7 @@ msgid "Element list:"
 msgstr "Liste d'éléments :"
 
 msgid "Menu style (requires to save and GUI restart):"
-msgstr "Style de menu (requiert le redémarrage de l'interface graphique)"
+msgstr "Style de menu (nécessite de sauvegarder et de redémarrer l'interface graphique) :"
 
 msgid "Height of map selection popup window (in pixels):"
 msgstr "Hauteur de fenêtre popup de sélection de carte (en pixels) :"
@@ -4253,7 +4252,7 @@ msgid "Failed to query vector map(s) <%s>."
 msgstr "Échec d'interrogation de la carte vecteur <%s>."
 
 msgid "No features selected"
-msgstr "Pas d'objets sélectionnée."
+msgstr "Aucune entité sélectionnée"
 
 #, python-format
 msgid "Vector map <%s> was created"
@@ -4492,7 +4491,7 @@ msgid "Failed to copy command to clipboard"
 msgstr "Impossible de copier la commande dans le presse-papiers"
 
 msgid "Select imagery group"
-msgstr "Sélectionner un groupe d'images :"
+msgstr "Sélectionner un groupe d'images"
 
 msgid "Name of imagery group is missing."
 msgstr "Le nom du groupe d'images est manquant."
@@ -5175,7 +5174,7 @@ msgid ""
 "Multiple of bands ranges <%s:%d * %s:%d = %d> is higher than maximum limit <%d>.\n"
 msgstr ""
 "Le nuage de point ne peut pas être ajouté.\n"
-"La multiplication des plages de bandes <%s:%d * %s:%d = %d> est supérieure à la limite maximale <%d>.\n"
+"La multiplication des plages de bandes <%s :%d * %s :%d = %d> est supérieure à la limite maximale <%d>.\n"
 
 #, python-format
 msgid ""
@@ -5184,10 +5183,10 @@ msgid ""
 "\n"
 "Do you really want to add this scatter plot?"
 msgstr ""
-"La multiplication des étendues de bandes <%s:%d * %s:%d = %d> est supérieure à la limite recommandée <%d>.\n"
-"Il est fortement conseillé de réduire la plage des bandes (ex : en utilisant r.rescale) en dessous du seuil recommandé.\n"
+"La multiplication des étendues de bandes <%s :%d * %s :%d = %d> est supérieure à la limite recommandée <%d>.\n"
+"Il est fortement conseillé de réduire la plage des bandes (ex : en utilisant r.rescale) en dessous du seuil recommandé.\n"
 "\n"
-"Voulez-vous vraiment ajouter ce nuage de poitns ?"
+"Voulez-vous vraiment ajouter ce nuage de poitns ?"
 
 msgid ""
 "In order to select arrea in scatter plot, you have to select class first.\n"
@@ -5565,17 +5564,17 @@ msgstr ""
 
 #, fuzzy
 msgid "Unable to start Timeline Tool."
-msgstr "Impossible de démarrer l'outil Temporel"
+msgstr "Impossible de démarrer l'outil Temporel."
 
 msgid "Unable to start Temporal Plot Tool."
-msgstr "Impossible de démarrer l'outil d'affichage temporel"
+msgstr "Impossible de démarrer l'outil d'affichage temporel."
 
 msgid "Add selected map layers into layer tree"
 msgstr "Ajouter les cartes sélectionnées dans l'arborescence des couches"
 
 #, python-format
 msgid "Unsupported map layer type <%s>."
-msgstr "Type de couche <%s> non pris en charge"
+msgstr "Type de couche <%s> non pris en charge."
 
 msgid "Note that cell values can only be displayed for regions of less than 10,000 cells."
 msgstr "A noter que les valeurs des cellules ne peuvent être affichées que pour les régions de moins de 10 000 cellules."
@@ -5666,7 +5665,7 @@ msgid "Check selected layers"
 msgstr ""
 
 msgid "Uncheck selected layers"
-msgstr "Désélectionner les couches sélectionnées."
+msgstr "Désélectionner les couches sélectionnées"
 
 msgid "3D view properties"
 msgstr "Paramètres de la vue 3D"
@@ -6430,10 +6429,10 @@ msgid "Enable/disable auto-rendering"
 msgstr "Activer/désactiver le rendu automatique"
 
 msgid "Align region extent based on display size from center point. Default value for new map displays can be set up in 'User GUI settings' dialog."
-msgstr "Aligner l'emprise de la région sur la taille de l'affichage depuis le point central. La valeur par défaut pour les nouveaux affichages peut être définie dans la boîte de dialogue 'Paramètres de l'interface utilisateur'"
+msgstr "Aligner l'emprise de la région sur la taille de l'affichage depuis le point central. La valeur par défaut pour les nouveaux affichages peut être définie dans la boîte de dialogue 'Paramètres de l'interface utilisateur'."
 
 msgid "Constrain display resolution to computational region settings. Default value for new map displays can be set up in 'User GUI settings' dialog."
-msgstr "Contraindre la résolution d'affichage aux paramètres de la région calculée. La valeur par défaut pour les nouveaux affichages de cartes peut être définie dans la boîte de dialogue 'Paramètres de l'interface utilisateur'"
+msgstr "Contraindre la résolution d'affichage aux paramètres de la région calculée. La valeur par défaut pour les nouveaux affichages de cartes peut être définie dans la boîte de dialogue 'Paramètres de l'interface utilisateur'."
 
 msgid "Show computational extent"
 msgstr "Afficher les limites de calculs"
@@ -6955,7 +6954,7 @@ msgid "Please select column to save values to."
 msgstr "Sélectionner la colonne où enregistrer les valeurs."
 
 msgid "No color column defined. Operation canceled."
-msgstr "Pas de colonne de couleur définie. Opération annulée"
+msgstr "Pas de colonne de couleur définie. Opération annulée."
 
 msgid "Thematic mapping for vector map in 3D view"
 msgstr "Carte thématique pour la carte vecteur dans la vue 3D"
@@ -7259,10 +7258,8 @@ msgstr "Insérer une carte raster existante"
 msgid "Insert mapcalc function"
 msgstr "insérer une fonction mapcalc"
 
-#, fuzzy
-#| msgid "Random cells"
 msgid "Random seed:"
-msgstr "Cellules aléatoires"
+msgstr "Graine aléatoire :"
 
 msgid "Integer seed for rand() function"
 msgstr "Graine en entier pour la fonction rand()"
@@ -7424,10 +7421,10 @@ msgid "Fly-through"
 msgstr "Survol"
 
 msgid "Move exag:"
-msgstr "Exagération du déplacement"
+msgstr "Exagération du déplacement :"
 
 msgid "Turn exag:"
-msgstr "Exagération des virages"
+msgstr "Exagération des virages :"
 
 msgid "Lighting"
 msgstr "Éclairage"
@@ -8126,13 +8123,13 @@ msgid "N:"
 msgstr "N :"
 
 msgid "Scale:"
-msgstr "Échelle"
+msgstr "Échelle :"
 
 msgid "1 :"
 msgstr "1 :"
 
 msgid "Map max resolution (dpi):"
-msgstr "Résolution max de carte (dpi)"
+msgstr "Résolution maximale de la carte (dpi) :"
 
 #. GTC Line around legend or map frame
 #. GTC  Line around legend or map frame
@@ -8410,7 +8407,9 @@ msgstr "largeur de colonne :"
 msgid ""
 "Column separation distance between the left edges\n"
 "of two columns in a multicolumn legend"
-msgstr "Espacement de colonne entre le limite"
+msgstr ""
+"Distance de séparation des colonnes entre les bords gauches\n"
+"de deux colonnes dans une légende à plusieurs colonnes"
 
 msgid "Edit legend label:"
 msgstr "Éditer l'étiquette de légende :"
@@ -8558,7 +8557,7 @@ msgid "Outline color:"
 msgstr "Couleur de mise en valeur:"
 
 msgid "Fill color:"
-msgstr "Remplir par la couleur"
+msgstr "Couleur de remplissage :"
 
 msgid "Size and Rotation"
 msgstr "Taille et rotation"
@@ -8576,7 +8575,7 @@ msgid "Rectangle settings"
 msgstr "Paramètres du rectangle"
 
 msgid "Line width in points"
-msgstr "Épaisseur de ligne en points :"
+msgstr "Épaisseur de ligne en points"
 
 msgid "Vector labels"
 msgstr "Étiquettes vecteur"
@@ -8912,7 +8911,7 @@ msgstr "Merci d'indiquer un nom pour la nouvelle carte raster"
 
 #, python-format
 msgid "Raster map <%s> already exists in the current mapset. Do you want to overwrite it?"
-msgstr "La carte raster <%s> existe déjà dans le jeu de cartes courant.  Voulez-vous l'écraser ?"
+msgstr "La carte raster <%s> existe déjà dans le jeu de cartes courant. Voulez-vous l'écraser ?"
 
 msgid "Raster map <{}> not found in current mapset."
 msgstr "Carte raster <{}> non trouvée dans le jeu de cartes actuel."
@@ -9284,7 +9283,7 @@ msgid "Raster name:"
 msgstr "Nom du raster :"
 
 msgid "Vector name:"
-msgstr "Nom du vecteur"
+msgstr "Nom du vecteur :"
 
 msgid "Region type:"
 msgstr "Type de région :"
@@ -9805,7 +9804,7 @@ msgid "With Vector temporal dataset you have to select an attribute column"
 msgstr "Vous devez sélectionner une colonne d'attributs pour le jeux de donnees vecteur temporel"
 
 msgid "Difference number of vector layers and maps in the vector temporal dataset"
-msgstr "Différence entre le nombre de couches vecteur et de cartes dans le  jeux de données vecteur temporel"
+msgstr "Différence entre le nombre de couches vecteur et de cartes dans le jeux de données vecteur temporel"
 
 #, python-brace-format
 msgid "No connection between vector map {vmap} and layer {la}"
@@ -10596,7 +10595,7 @@ msgstr ""
 "Voulez-vous vraiment activer le magnétisme et l'écraser ? "
 
 msgid "Overwrite map"
-msgstr "Écraser la carte ?"
+msgstr "Écraser la carte"
 
 #, python-format
 msgid "Module <%s> does not support turns costs."
@@ -10782,7 +10781,7 @@ msgid "Map display"
 msgstr "Affichage des cartes"
 
 msgid "Named region"
-msgstr "Région nommée :"
+msgstr "Région nommée"
 
 msgid "Extent and resolution are based on Map Display geometry."
 msgstr "L'emprise et la résolution sont basées sur la géométrie de l'écran d'affichage."
