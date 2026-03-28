@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-21 17:40+0000\n"
+"POT-Creation-Date: 2026-03-28 15:38+0000\n"
 "PO-Revision-Date: 2026-03-27 22:16+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs-8-5/fr/>\n"
@@ -5138,9 +5138,11 @@ msgid_plural "%d primitives registered"
 msgstr[0] "Une primitive référencée"
 msgstr[1] "%d primitives référencées"
 
-#, c-format
+#, fuzzy, c-format
+#| msgid "One vertex registered"
+#| msgid_plural "%d vertices registered"
 msgid "One vertex registered"
-msgid_plural "%d vertices registered"
+msgid_plural "%<PRId64> vertices registered"
 msgstr[0] "%d sommet référencé"
 msgstr[1] "%d sommets référencés"
 

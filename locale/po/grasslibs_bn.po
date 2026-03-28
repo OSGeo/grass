@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_bn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-21 17:40+0000\n"
+"POT-Creation-Date: 2026-03-28 15:38+0000\n"
 "PO-Revision-Date: 2026-03-14 11:21+0000\n"
 "Last-Translator: Faysal Mahmud  <faysalmahmud4300@gmail.com>\n"
 "Language-Team: Bengali <https://weblate.osgeo.org/projects/grass-gis/grasslibs-8-5/bn/>\n"
@@ -5040,7 +5040,7 @@ msgstr[1] ""
 
 #, c-format
 msgid "One vertex registered"
-msgid_plural "%d vertices registered"
+msgid_plural "%<PRId64> vertices registered"
 msgstr[0] ""
 msgstr[1] ""
 
