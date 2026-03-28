@@ -35,7 +35,7 @@ def get_location_proj_string(env=None):
     return tools.g_proj(flags="fp", format="proj4").text
 
 
-def reproject_region(region, from_proj, to_proj):
+def reproject_region(region, from_proj, to_proj, env=None):
     """Reproject boundary of region from one projection to another.
 
     :param dict region: region to reproject as a dictionary with long key names
@@ -47,6 +47,7 @@ def reproject_region(region, from_proj, to_proj):
     :return dict region: reprojected region as a dictionary with long key names
     """
     region = region.copy()
+    tools = Tools(env=env)
     # reproject all corners, otherwise reproj. region may be underestimated
     # even better solution would be reprojecting vector region like in r.import
     proj_input = (
@@ -55,28 +56,25 @@ def reproject_region(region, from_proj, to_proj):
         f"{region['east']} {region['south']}\n"
         f"{region['west']} {region['south']}\n"
     )
-    proc = gs.start_command(
-        "m.proj",
-        input="-",
-        separator=" , ",
-        proj_in=from_proj,
-        proj_out=to_proj,
-        flags="d",
-        stdin=gs.PIPE,
-        stdout=gs.PIPE,
-        stderr=gs.PIPE,
-    )
-    proj_output, stderr = proc.communicate(proj_input)
-    if proc.returncode:
-        raise RuntimeError(
-            _("Encountered error while running m.proj: {}").format(stderr)
+    
+    with tempfile.NamedTemporaryFile(mode="w+t") as temp_file:
+        temp_file.write(proj_input)
+        temp_file.flush()
+
+        tools = Tools(env=env)
+        result = tools.m_proj(
+            input=temp_file.name,
+            separator=",",
+            proj_in=from_proj,
+            proj_out=to_proj,
+            flags="d",
         )
-    output = proj_output.splitlines()
+        output = result.text.splitlines()
     # get the largest bbox
     latitude_list = []
     longitude_list = []
     for row in output:
-        longitude, latitude, unused = row.split(" ")
+        longitude, latitude, unused = row.split(",")
         longitude_list.append(float(longitude))
         latitude_list.append(float(latitude))
     region["east"] = max(longitude_list)
@@ -355,17 +353,16 @@ def set_target_region(src_env, tgt_env):
     region = get_region(env=src_env)
     from_proj = get_location_proj_string(src_env)
     to_proj = get_location_proj_string(env=tgt_env)
-    new_region = reproject_region(region, from_proj, to_proj)
+    new_region = reproject_region(region, from_proj, to_proj, env=src_env)
     # Set region to match original region extent
-    gs.run_command(
-        "g.region",
+    tools = Tools(env=tgt_env)
+    tools.g_region(
         n=new_region["north"],
         s=new_region["south"],
         e=new_region["east"],
         w=new_region["west"],
         rows=new_region["rows"],
         cols=new_region["cols"],
-        env=tgt_env,
     )
 
 
