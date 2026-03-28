@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-14 15:46+0000\n"
+"POT-Creation-Date: 2026-03-21 15:56+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/es/>\n"
@@ -1329,7 +1329,7 @@ msgid "Re&load maps"
 msgstr ""
 
 #, fuzzy
-msgid "&Copy path to mapset"
+msgid "&Copy path"
 msgstr "&Crear mapset"
 
 msgid "&Create mapset"
@@ -1342,6 +1342,11 @@ msgstr "&Borrar mapset"
 #, fuzzy
 msgid "&Rename project"
 msgstr "&Renombrar mapset"
+
+#, fuzzy
+#| msgid "Copy map"
+msgid "Copy path"
+msgstr "Copiar mapa"
 
 #, fuzzy
 #| msgid "Change mapset"
@@ -1376,11 +1381,15 @@ msgstr "&Borrar la base de datos de GRASS del disco"
 msgid "&Delete projects (locations)"
 msgstr "&Borrar localizaciones"
 
+#, fuzzy
+msgid "Copy paths"
+msgstr "&Crear mapset"
+
 msgid "&Delete mapsets"
 msgstr "&Borrar mapsets"
 
 #, fuzzy
-msgid "&Copy paths to mapsets"
+msgid "&Copy paths"
 msgstr "&Crear mapset"
 
 #, fuzzy, python-brace-format
@@ -11380,6 +11389,10 @@ msgstr ""
 "Ecuación de regresión de mapa ráster <%(rast1)s> vs. <%(rast2)s>:\n"
 "\n"
 
+#, fuzzy
+#~ msgid "&Copy paths to mapsets"
+#~ msgstr "&Crear mapset"
+
 #~ msgid "Generate random seed for rand()"
 #~ msgstr "Generar semilla aleatoria para rand()"
 
@@ -12273,9 +12286,6 @@ msgstr ""
 
 #~ msgid "Copy a table. Either 'from_table' (optionally with 'where') can be used or 'select' option, but not 'from_table' and 'select' at the same time."
 #~ msgstr "Copia una tabla. Se puede usar tanto la opción 'from_table' (opcionalmente con 'where') como 'select', pero no ambas al mismo tiempo."
-
-#~ msgid "Copy map"
-#~ msgstr "Copiar mapa"
 
 #~ msgid "Copy table"
 #~ msgstr "Copiar tabla"
