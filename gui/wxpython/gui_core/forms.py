@@ -620,6 +620,18 @@ class TaskFrame(wx.Frame):
         )
         self.btn_clipboard.Bind(wx.EVT_BUTTON, self.OnCopyCommand)
 
+        # copy in python syntax
+        self.btn_copy_python = Button(
+            parent=self.panel, id=wx.ID_ANY, label=_("Copy in Python")
+        )
+        self.btn_copy_python.SetToolTip(
+            _("Copy the command in Python gs.run_command() syntax")
+        )
+        btnsizer.Add(
+            self.btn_copy_python, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER, border=10
+        )
+        self.btn_copy_python.Bind(wx.EVT_BUTTON, self.OnCopyPython)
+
         # help
         self.btn_help = Button(parent=self.panel, id=wx.ID_HELP)
         self.btn_help.SetToolTip(_("Show manual page of the command (Ctrl+H)"))
@@ -888,6 +900,67 @@ class TaskFrame(wx.Frame):
             wx.TheClipboard.SetData(cmddata)
             wx.TheClipboard.Close()
             self.SetStatusText(_("'%s' copied to clipboard") % (cmdstring))
+
+    def OnCopyPython(self, event):
+        """Copy the command in Python syntax with keyword handling"""
+        import keyword
+
+        cmdlist = self.createCmd(ignoreErrors=True)
+        if not cmdlist or len(cmdlist) < 1:
+            return
+
+        module_name = cmdlist[0]
+        module_name = module_name.removesuffix(".py")
+
+        flags = ""
+        python_params = []
+        # Dictionary for keys that Python can't handle as direct arguments
+        illegal_keys = {}
+
+        for item in cmdlist[1:]:
+            if item.startswith("--"):
+                val = item.lstrip("-")
+                if val in ("overwrite", "o"):
+                    python_params.append("overwrite=True")
+                elif val == "verbose":
+                    python_params.append("verbose=True")
+                elif val == "quiet":
+                    python_params.append("quiet=True")
+                else:
+                    python_params.append(f"{val}=True")
+            elif item.startswith("-"):
+                flags += item.lstrip("-")
+            elif "=" in item:
+                k, v = item.split("=", 1)
+                # If key is a keyword (from, in) or contains dots/dashes,
+                # put it into the 'illegal' dictionary
+                if keyword.iskeyword(k) or not k.isidentifier():
+                    illegal_keys[k] = v
+                else:
+                    python_params.append(f"{k}={v!r}")
+
+        # Build the command string
+        py_cmd = f"gs.run_command('{module_name}'"
+
+        if flags:
+            py_cmd += f", flags='{flags}'"
+
+        if python_params:
+            py_cmd += ", " + ", ".join(python_params)
+
+        if illegal_keys:
+            # Safe unpacking: **{'from': 'val', 'to': 'val'}
+            py_cmd += f", **{illegal_keys!r}"
+
+        py_cmd += ")"
+
+        # Copy to clipboard
+        cmddata = wx.TextDataObject()
+        cmddata.SetText(py_cmd)
+        if wx.TheClipboard.Open():
+            wx.TheClipboard.SetData(cmddata)
+            wx.TheClipboard.Close()
+            self.SetStatusText(_("Python syntax copied to clipboard"))
 
     def OnCancel(self, event):
         """Cancel button pressed"""
