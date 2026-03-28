@@ -32,7 +32,7 @@ def test_reproject_region(session_with_data):
         "west": 0.0,
         "rows": 10,
         "cols": 10
-        }
+    }
     p_in = "+proj=merc +a=6378137 +b=6378137 +units=m +type=crs"
     p_out = "+proj=longlat +datum=WGS84 +type=crs"
     res = reproject_region(reg, p_in, p_out, env=session_with_data.env)
