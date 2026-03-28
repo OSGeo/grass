@@ -2086,6 +2086,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         if connection_state_changed:
             dbif.close()
+        return True
 
     @staticmethod
     def snap_map_list(maps):
