@@ -193,8 +193,8 @@ def test_exclusive_flags(simple_dataset, flags, message_parts):
 
     for part in message_parts:
         assert part in excinfo.value.errors
-        
-        
+
+
 @pytest.mark.xfail(
     sys.platform == "win32",
     reason="map titles are not listed",
