@@ -178,7 +178,7 @@ def test_human_readable_output(simple_dataset):
 
 
 @pytest.mark.parametrize(
-    "flags, message_parts",
+    ("flags", "message_parts"),
     [
         ("pt", ["-p", "-t"]),
         ("ft", ["-f", "-t"]),
