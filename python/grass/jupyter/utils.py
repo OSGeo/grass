@@ -56,7 +56,6 @@ def reproject_region(region, from_proj, to_proj, env=None):
         f"{region['east']} {region['south']}\n"
         f"{region['west']} {region['south']}\n"
     )
-    
     with tempfile.NamedTemporaryFile(mode="w+t") as temp_file:
         temp_file.write(proj_input)
         temp_file.flush()
