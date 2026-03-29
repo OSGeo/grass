@@ -227,7 +227,7 @@ def subcommand_show_help(args):
 def subcommand_show_man(args):
     return call_g_manual(entry=args.page, flags="m")
 
-#dddadasd
+
 def add_project_subparser(subparsers):
     project_parser = subparsers.add_parser("project", help="project operations")
     project_subparsers = project_parser.add_subparsers(dest="project_command")
@@ -318,19 +318,27 @@ def main(args=None, program=None):
         "--project", type=str, help="project to use for computations"
     )
     run_subparser.add_argument(
-        "--link-raster", type=str,action="append",
+        "--link-raster",
+        type=str,
+        action="append",
         help="Link a raster file (r.external) before execution",
     )
     run_subparser.add_argument(
-        "--link-vector",type=str,action="append",
+        "--link-vector",
+        type=str,
+        action="append",
         help="Link a vector file (v.external) before execution",
     )
     run_subparser.add_argument(
-        "--out-raster",type=str,action="append",
+        "--out-raster",
+        type=str,
+        action="append",
         help="Define external format for raster output (r.external.out)",
     )
     run_subparser.add_argument(
-        "--out-vector",type=str,action="append",
+        "--out-vector",
+        type=str,
+        action="append",
         help="Define external format for vector output (v.external.out)",
     )
     run_subparser.set_defaults(func=subcommand_run_tool)
