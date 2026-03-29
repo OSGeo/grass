@@ -154,10 +154,14 @@ def main():
     # Check if output exists using unified library function.
     # extend-if-exists: if -e flag is set and STRDS exists, open it;
     # if -e flag is set but STRDS does not exist, create it silently.
+    mapset = tgis.get_current_mapset()
+    output_id = output + "@" + mapset
+    check_strds = tgis.SpaceTimeRasterDataset(output_id)
+    output_exists = check_strds.is_in_db(dbif)
+
     output_strds = tgis.check_new_stds(
         output, "strds", dbif=dbif, overwrite=overwrite, extend=extend
     )
-    output_exists = output_strds.is_in_db(dbif)
 
     start_time = map_list[0].temporal_extent.get_start_time()
 
@@ -239,6 +243,10 @@ def main():
             sp.get_relative_time_unit(),
             dbif,
         )
+
+        # Refresh the STRDS object from the database to get the updated
+        # map count and extents before modifying the metadata
+        output_strds.select(dbif)
 
         # Update the raster metadata table entries with aggregation type
         output_strds.set_aggregation_type(method)
