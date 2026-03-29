@@ -60,6 +60,8 @@ import codecs
 from threading import Thread
 from pathlib import Path
 
+import json
+import keyword
 import wx
 
 import wx.lib.colourselect as csel
@@ -610,27 +612,64 @@ class TaskFrame(wx.Frame):
             self.Bind(wx.EVT_MENU, self.OnRun, id=wx.ID_OK)
             accelTableList.append((wx.ACCEL_CTRL, ord("R"), wx.ID_OK))
 
-        # copy
-        self.btn_clipboard = Button(parent=self.panel, id=wx.ID_ANY, label=_("Copy"))
-        self.btn_clipboard.SetToolTip(
-            _("Copy the current command string to the clipboard")
-        )
-        btnsizer.Add(
-            self.btn_clipboard, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER, border=10
-        )
-        self.btn_clipboard.Bind(wx.EVT_BUTTON, self.OnCopyCommand)
+        # --- Split Copy Button ---
+        self.copyMenu = wx.Menu()
+        # Note: We include Shell command in the menu too, for clarity
+        item_shell = self.copyMenu.Append(wx.ID_ANY, _("Copy as Shell command"))
+        item_script = self.copyMenu.Append(wx.ID_ANY, _("Copy as Python (Script API)"))
+        item_tools = self.copyMenu.Append(wx.ID_ANY, _("Copy as Python (Tools API)"))
+        item_pygrass = self.copyMenu.Append(wx.ID_ANY, _("Copy as Python (PyGRASS)"))
+        item_json = self.copyMenu.Append(wx.ID_ANY, _("Copy as JSON"))
 
-        # copy in python syntax
-        self.btn_copy_python = Button(
-            parent=self.panel, id=wx.ID_ANY, label=_("Copy in Python")
+        # Bind menu items
+        self.Bind(wx.EVT_MENU, self.OnCopyCommand, item_shell)
+        self.Bind(wx.EVT_MENU, self.OnCopyPython, item_script)
+        self.Bind(wx.EVT_MENU, self.OnCopyPythonTools, item_tools)
+        self.Bind(wx.EVT_MENU, self.OnCopyPygrass, item_pygrass)
+        self.Bind(wx.EVT_MENU, self.OnCopyJSON, item_json)
+
+        # --- Split Copy Button Section ---
+        # A horizontal sizer to combine the main button and the arrow button
+        copy_sizer = wx.BoxSizer(wx.HORIZONTAL)
+
+        # 1. Main Copy button (triggers Shell command copy by default)
+        self.btn_copy = Button(parent=self.panel, id=wx.ID_ANY, label=_("Copy"))
+        self.btn_copy.SetToolTip(_("Copy as Shell command"))
+        self.btn_copy.Bind(wx.EVT_BUTTON, self.OnCopyCommand)
+
+        # 2. Arrow button (triggers the dropdown menu)
+        # Using a fixed width (25) ensures it looks like a standard menu arrow
+        self.btn_copy_menu = Button(
+            parent=self.panel, id=wx.ID_ANY, label="▼", size=(25, -1)
         )
-        self.btn_copy_python.SetToolTip(
-            _("Copy the command in Python gs.run_command() syntax")
-        )
+        self.btn_copy_menu.SetToolTip(_("More copy formats"))
+        self.btn_copy_menu.Bind(wx.EVT_BUTTON, self.OnShowCopyMenu)
+
+        # Add both buttons to the internal horizontal sizer.
+        # We use wx.EXPAND to force both buttons to have the same height.
+        copy_sizer.Add(self.btn_copy, proportion=0, flag=wx.EXPAND)
+        copy_sizer.Add(self.btn_copy_menu, proportion=0, flag=wx.EXPAND)
+
+        # Add the combined split-button to the main button sizer.
+        # We use wx.ALIGN_CENTER_VERTICAL here to align it with other buttons (Run, Help, etc.)
         btnsizer.Add(
-            self.btn_copy_python, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER, border=10
+            copy_sizer, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL, border=10
         )
-        self.btn_copy_python.Bind(wx.EVT_BUTTON, self.OnCopyPython)
+
+        # Paste button
+        # Create the Paste button to populate the dialog from a JSON string
+        self.btn_paste = Button(parent=self.panel, id=wx.ID_ANY, label=_("Paste"))
+        self.btn_paste.SetToolTip(
+            _("Paste parameters from JSON string in the clipboard")
+        )
+        self.btn_paste.Bind(wx.EVT_BUTTON, self.OnPaste)
+
+        btnsizer.Add(
+            self.btn_paste,
+            proportion=0,
+            flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL,
+            border=10,
+        )
 
         # help
         self.btn_help = Button(parent=self.panel, id=wx.ID_HELP)
@@ -883,6 +922,13 @@ class TaskFrame(wx.Frame):
         event = wxCmdAbort(aborted=True)
         wx.PostEvent(self._gconsole, event)
 
+    def OnShowCopyMenu(self, event):
+        """Show the copy formats popup menu"""
+        button = event.GetEventObject()
+        pos = button.GetPosition()
+        size = button.GetSize()
+        self.panel.PopupMenu(self.copyMenu, wx.Point(pos.x, pos.y + size.height))
+
     def OnCopyCommand(self, event):
         """Copy the command"""
         cmddata = wx.TextDataObject()
@@ -903,21 +949,172 @@ class TaskFrame(wx.Frame):
 
     def OnCopyPython(self, event):
         """Copy the command in Python syntax with keyword handling"""
-        import keyword
 
-        cmdlist = self.createCmd(ignoreErrors=True)
-        if not cmdlist or len(cmdlist) < 1:
+        cmd = self.createCmd(ignoreErrors=True)
+        if not cmd or len(cmd) < 1:
             return
 
-        module_name = cmdlist[0]
-        module_name = module_name.removesuffix(".py")
+        module_name = cmd[0]
 
+        # Build the command string
+        py_cmd = f"gs.run_command('{module_name}', "
+        py_cmd += self._get_formatted_params(cmd)
+
+        # Copy to clipboard
+        self._toClipboard(py_cmd)
+
+    def OnCopyPythonTools(self, event):
+        """Copy command in Tools API syntax"""
+        cmd = self.createCmd(ignoreErrors=True)
+        if not cmd or len(cmd) < 1:
+            return
+
+        # Replace dots with underscores to match the Tools API method names
+        # e.g., v.distance -> v_distance, v.in.ascii -> v_in_ascii
+        module_name = cmd[0].replace(".", "_")
+
+        py_cmd = f"Tools().{module_name}("
+        py_cmd += self._get_formatted_params(cmd)
+
+        self._toClipboard(py_cmd)
+
+    def OnCopyPygrass(self, event):
+        """Copy command in PyGRASS syntax"""
+        cmd = self.createCmd(ignoreErrors=True)
+        if not cmd or len(cmd) < 1:
+            return
+
+        module_name = cmd[0]
+
+        py_cmd = f"Module('{module_name}', "
+        py_cmd += self._get_formatted_params(cmd)
+
+        self._toClipboard(py_cmd)
+
+    def OnCopyJSON(self, event):
+        """Copy parameters as JSON string"""
+        cmd = self.createCmd(ignoreErrors=True)
+        if not cmd or len(cmd) < 1:
+            return
+
+        data = {"module": cmd[0], "params": self._extract_params_dict(cmd)}
+        self._toClipboard(json.dumps(data, indent=4))
+        self.SetStatusText(_("JSON copied to clipboard"))
+
+    def OnPaste(self, event):
+        """Populate dialog fields from JSON string in the clipboard"""
+        tdo = wx.TextDataObject()
+        if not (wx.TheClipboard.Open() and wx.TheClipboard.GetData(tdo)):
+            if wx.TheClipboard.IsOpened():
+                wx.TheClipboard.Close()
+            return
+        wx.TheClipboard.Close()
+
+        try:
+            data = json.loads(tdo.GetText())
+            new_params = data.get("params", data)
+            target_flags_str = new_params.get("flags", "")
+            found_any = False
+
+            # Process both Parameters and Flags in one unified logic
+            for porf in self.task.params + self.task.flags:
+                name = porf.get("name")
+                is_flag = porf in self.task.flags
+
+                # Determine the value to set
+                val = None
+                if name in new_params:
+                    val = new_params[name]
+                elif is_flag:
+                    # Absent flags default to False unless found in the 'flags' string
+                    val = bool(
+                        len(name) == 1 and name in target_flags_str.replace("-", "")
+                    )
+                else:
+                    # Absent parameters revert to their standard default values
+                    val = porf.get("default", "")
+
+                if val is None:
+                    continue
+
+                # Update internal task state
+                clean_val = str(val) if not isinstance(val, bool) else val
+                porf["value"] = val
+
+                # Update GUI Widgets
+                for w_id in porf.get("wxId", []):
+                    if not w_id:
+                        continue
+                    win = self.FindWindowById(w_id)
+                    if not win or win.GetName() == "ModelParam":
+                        continue
+
+                    # Specialized Widget Handling
+                    if isinstance(win, wx.CheckBox):
+                        if not is_flag and porf.get("prompt") == "color":
+                            win.SetValue(clean_val == "none")
+                        elif not is_flag:  # Multi-selection checkboxes
+                            try:
+                                idx = porf["wxId"].index(w_id)
+                                values = porf.get("values", [])
+                                if idx < len(values):
+                                    win.SetValue(
+                                        str(values[idx]) in str(clean_val).split(",")
+                                    )
+                            except (ValueError, IndexError):
+                                pass
+                        else:  # Standard Boolean Flag
+                            win.SetValue(
+                                val
+                                if isinstance(val, bool)
+                                else str(val).lower() in ("true", "1", "yes")
+                            )
+
+                    elif isinstance(win, wx.SpinCtrl):
+                        try:
+                            win.SetValue(int(float(clean_val)))
+                        except ValueError:
+                            pass
+
+                    elif (
+                        win.GetName() == "GetColour"
+                        and clean_val
+                        and clean_val != "none"
+                    ):
+                        col, lab = utils.color_resolve(clean_val)
+                        if hasattr(win, "SetColour"):
+                            win.SetColour(col)
+                            if hasattr(win, "SetLabel"):
+                                win.SetLabel(lab)
+                            win.Refresh()
+                    elif isinstance(win, wx.Choice):
+                        win.SetStringSelection(str(clean_val))
+                    elif hasattr(win, "SetValue"):
+                        # Standard TextCtrl / ComboBox
+                        try:
+                            win.SetValue(str(clean_val))
+                        except (TypeError, ValueError):
+                            pass
+
+                    found_any = True
+
+            if found_any:
+                self.updateValuesHook()
+                self.SetStatusText(_("Parameters pasted from clipboard."))
+            else:
+                self.SetStatusText(_("No matching parameters found in clipboard."))
+
+        except Exception as e:
+            wx.MessageBox(_("Paste Error: {}").format(e), _("Error"), wx.ICON_ERROR)
+
+    def _get_formatted_params(self, cmd):
+        """Helper to format parameters for Python calls, handling illegal keywords"""
         flags = ""
         python_params = []
         # Dictionary for keys that Python can't handle as direct arguments
         illegal_keys = {}
 
-        for item in cmdlist[1:]:
+        for item in cmd[1:]:
             if item.startswith("--"):
                 val = item.lstrip("-")
                 if val in {"overwrite", "o"}:
@@ -940,10 +1137,10 @@ class TaskFrame(wx.Frame):
                     python_params.append(f"{k}={v!r}")
 
         # Build the command string
-        py_cmd = f"gs.run_command('{module_name}'"
+        py_cmd = ""
 
         if flags:
-            py_cmd += f", flags='{flags}'"
+            py_cmd += f"flags='{flags}'"
 
         if python_params:
             py_cmd += ", " + ", ".join(python_params)
@@ -953,14 +1150,44 @@ class TaskFrame(wx.Frame):
             py_cmd += f", **{illegal_keys!r}"
 
         py_cmd += ")"
+        return py_cmd
 
-        # Copy to clipboard
-        cmddata = wx.TextDataObject()
-        cmddata.SetText(py_cmd)
-        if wx.TheClipboard.Open():
-            wx.TheClipboard.SetData(cmddata)
-            wx.TheClipboard.Close()
-            self.SetStatusText(_("Python syntax copied to clipboard"))
+    def _extract_params_dict(self, cmd):
+        """Extracts a dictionary of parameters from the cmd list (skips flags)"""
+
+        flags = ""
+        python_params = []
+
+        for item in cmd[1:]:
+            if item.startswith("--"):
+                val = item.lstrip("-")
+                if val in {"overwrite", "o"}:
+                    python_params.append("overwrite=True")
+                elif val == "verbose":
+                    python_params.append("verbose=True")
+                elif val == "quiet":
+                    python_params.append("quiet=True")
+                else:
+                    python_params.append(f"{val}=True")
+            elif item.startswith("-"):
+                flags += item.lstrip("-")
+            elif "=" in item:
+                k, v = item.split("=", 1)
+                python_params.append(f"{k}={v}")
+        params = {"flags": flags}
+        for item in python_params:
+            if "=" in item:
+                k, v = item.split("=", 1)
+                params[k] = v
+        return params
+
+    def _toClipboard(self, text):
+        """Stores text string into the system clipboard"""
+        if not wx.TheClipboard.IsOpened():
+            if wx.TheClipboard.Open():
+                wx.TheClipboard.SetData(wx.TextDataObject(text))
+                wx.TheClipboard.Close()
+                self.SetStatusText(_("%s copied to clipboard") % text)
 
     def OnCancel(self, event):
         """Cancel button pressed"""
