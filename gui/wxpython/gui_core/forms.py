@@ -920,7 +920,7 @@ class TaskFrame(wx.Frame):
         for item in cmdlist[1:]:
             if item.startswith("--"):
                 val = item.lstrip("-")
-                if val in ("overwrite", "o"):
+                if val in {"overwrite", "o"}:
                     python_params.append("overwrite=True")
                 elif val == "verbose":
                     python_params.append("verbose=True")
