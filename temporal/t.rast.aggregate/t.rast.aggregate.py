@@ -151,25 +151,13 @@ def main():
         dbif.close()
         gs.fatal(_("Space time raster dataset <%s> is empty") % input)
 
-    # Check if output exists
-    # If extending, skip the new STDS check
-    mapset = tgis.get_current_mapset()
-    output_id = output + "@" + mapset
-    output_strds = tgis.SpaceTimeRasterDataset(output_id)
+    # Check if output exists using unified library function.
+    # extend-if-exists: if -e flag is set and STRDS exists, open it;
+    # if -e flag is set but STRDS does not exist, create it silently.
+    output_strds = tgis.check_new_stds(
+        output, "strds", dbif=dbif, overwrite=overwrite, extend=extend
+    )
     output_exists = output_strds.is_in_db(dbif)
-
-    if extend and not output_exists:
-        gs.warning(
-            _(
-                "Space time raster dataset <%s> does not exist. "
-                "Cannot extend a non-existing dataset."
-            )
-            % output
-        )
-        extend = False  # fall back to creating new STRDS
-
-    if not extend:
-        tgis.check_new_stds(output, "strds", dbif=dbif, overwrite=overwrite)
 
     start_time = map_list[0].temporal_extent.get_start_time()
 
@@ -224,7 +212,11 @@ def main():
     )
 
     if output_list:
-        if not output_exists or (overwrite and not extend):
+        if output_exists and extend:
+            # extend-if-exists: reuse already-opened existing STRDS
+            pass
+        else:
+            # Create new STRDS or overwrite existing one
             temporal_type, semantic_type, title, description = sp.get_initial_values()
             output_strds = tgis.open_new_stds(
                 output,
@@ -236,8 +228,6 @@ def main():
                 dbif,
                 overwrite,
             )
-        elif output_exists and extend:
-            output_strds = tgis.open_old_stds(output, "strds", dbif)
 
         register_null = not register_null
 
@@ -254,8 +244,9 @@ def main():
         output_strds.set_aggregation_type(method)
         output_strds.metadata.update(dbif)
 
-        # Update command history if extending existing STRDS
-        if output_exists:
+        # Update the command history. When extending, only update if the
+        # command string is not already recorded to avoid duplication.
+        if not output_exists or extend:
             output_strds.update_command_string(dbif=dbif)
 
     dbif.close()

@@ -88,7 +88,9 @@ def open_old_stds(name, type, dbif=None):
 ###############################################################################
 
 
-def check_new_stds(name, type, dbif=None, overwrite: bool = False):
+def check_new_stds(
+    name, type, dbif=None, overwrite: bool = False, extend: bool = False
+):
     """Check if a new space time dataset of a specific type can be created
 
     :param name: The name of the new space time dataset
@@ -96,6 +98,7 @@ def check_new_stds(name, type, dbif=None, overwrite: bool = False):
                  stvds, raster, vector, raster3d)
     :param dbif: The temporal database interface to be used
     :param overwrite: Flag to allow overwriting
+    :param extend: Flag to extend an existing space time dataset if it exists
 
     :return: A space time dataset object that must be filled with
             content before insertion in the temporal database
@@ -104,7 +107,6 @@ def check_new_stds(name, type, dbif=None, overwrite: bool = False):
     """
 
     # Get the current mapset to create the id of the space time dataset
-
     mapset = get_current_mapset()
     msgr = get_tgis_message_interface()
 
@@ -135,14 +137,21 @@ def check_new_stds(name, type, dbif=None, overwrite: bool = False):
 
     dbif, connection_state_changed = init_dbif(dbif)
 
-    if sp.is_in_db(dbif) and overwrite is False:
-        msgr.fatal(
-            _(
-                "Space time %(sp)s dataset <%(name)s> is already in the"
-                " database. Use the overwrite flag."
+    if sp.is_in_db(dbif):
+        if extend:
+            sp.select(dbif)
+            if connection_state_changed:
+                dbif.close()
+            return sp
+        if overwrite is False:
+            msgr.fatal(
+                _(
+                    "Space time %(sp)s dataset <%(name)s> is already in the"
+                    " database. Use the overwrite flag."
+                )
+                % {"sp": sp.get_new_map_instance(None).get_type(), "name": name}
             )
-            % {"sp": sp.get_new_map_instance(None).get_type(), "name": name}
-        )
+
     if connection_state_changed:
         dbif.close()
 
