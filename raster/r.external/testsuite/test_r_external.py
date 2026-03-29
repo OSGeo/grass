@@ -134,6 +134,83 @@ class TestGdalImport(TestCase):
             raster="test_external_map", reference=univar_string, precision=3
         )
 
+    def test_link_raster_simple(self):
+        self.assertModule(
+            "r.external",
+            input="data/elevation.asc",
+            output="test_external_map",
+            flags="e",
+        )
+
+        self.runModule("g.region", raster="test_external_map")
+
+    def test_link_raster_with_title(self):
+        self.assertModule(
+            "r.external",
+            input="data/elevation.asc",
+            output="test_external_map",
+            title="Test Elevation Map",
+            flags="e",
+        )
+
+    def test_link_raster_overwrite(self):
+        self.runModule(
+            "r.external",
+            input="data/elevation.asc",
+            output="test_external_map",
+            flags="e",
+        )
+
+        self.assertModule(
+            "r.external",
+            input="data/elevation.asc",
+            output="test_external_map",
+            flags="e",
+            overwrite=True,
+        )
+
+    def test_invalid_input_fails(self):
+        self.assertModuleFail(
+            "r.external",
+            input="non_existent_file.tif",
+            output="should_not_exist",
+            flags="e",
+        )
+
+    def test_link_multiple_rasters(self):
+        self.runModule("g.remove", type="raster", name="map_1", flags="f")
+        self.runModule("g.remove", type="raster", name="map_2", flags="f")
+
+        self.assertModule(
+            "r.external", input="data/elevation.asc", output="map_1", flags="e"
+        )
+
+        self.assertModule(
+            "r.external", input="data/elevation.asc", output="map_2", flags="e"
+        )
+
+    def test_link_sequential_calls(self):
+        self.runModule("g.remove", type="raster", name="first_map", flags="f")
+        self.runModule("g.remove", type="raster", name="second_map", flags="f")
+
+        self.runModule(
+            "r.external", input="data/elevation.asc", output="first_map", flags="e"
+        )
+
+        self.assertModule(
+            "r.external", input="data/elevation.asc", output="second_map", flags="e"
+        )
+
+    def test_link_with_project_context(self):
+        self.assertModule(
+            "r.external",
+            input="data/elevation.asc",
+            output="test_external_map",
+            flags="e",
+        )
+
+        self.runModule("g.list", type="raster", pattern="test_external_map")
+
     def test_netCDF_3d_1(self):
         self.assertModule(
             "r.external",
