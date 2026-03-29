@@ -239,7 +239,7 @@ class TestAggregationAbsolute(TestCase):
 
     def test_extend_existing_strds(self):
         """Test extending existing STRDS with -e flag"""
-        # First run — create initial result with first 3 months
+        # First run — create initial result with 3 monthly maps
         self.assertModule(
             "t.rast.aggregate",
             input="A",
@@ -250,15 +250,20 @@ class TestAggregationAbsolute(TestCase):
             sampling=["contains"],
         )
 
-        # Verify initial result
-        info = SimpleModule("t.info", flags="g", input="B")
+        # Verify initial STRDS has 3 maps
         tinfo_string = """aggregation_type=average
                           number_of_maps=3"""
+        info = SimpleModule("t.info", flags="g", input="B")
         self.assertModuleKeyValue(
             module=info, reference=tinfo_string, precision=2, sep="="
         )
 
-        # Second run — extend existing STRDS with -e flag
+        # Record original map names before extending
+        lister = SimpleModule("t.rast.list", input="B", columns="name", flags="u")
+        self.runModule(lister)
+        original_maps = lister.outputs.stdout
+
+        # Second run — extend existing STRDS with -e flag using different basename
         self.assertModule(
             "t.rast.aggregate",
             flags="e",
@@ -271,10 +276,32 @@ class TestAggregationAbsolute(TestCase):
             overwrite=True,
         )
 
-        # Verify STRDS was extended
+        # Verify new maps were added
         lister = SimpleModule("t.rast.list", input="B", columns="name", flags="u")
         self.runModule(lister)
-        self.assertIn("b_ext", lister.outputs.stdout)
+        extended_maps = lister.outputs.stdout
+
+        # Check that at least one map with the new basename prefix exists
+        # (avoids hardcoding year or map count — works for any time range)
+        extended_map_list = extended_maps.strip().split(os.linesep)
+        b_ext_maps = [m for m in extended_map_list if m.startswith("b_ext")]
+        self.assertTrue(
+            len(b_ext_maps) > 0,
+            "No maps with basename b_ext found in extended STRDS",
+        )
+
+        # Check original maps are still present (STRDS was not overwritten)
+        for original_map in original_maps.strip().split(os.linesep):
+            self.assertIn(original_map, extended_maps)
+
+        # Check total map count increased (original 3 + extended 3 = 6)
+        info = SimpleModule("t.info", flags="g", input="B")
+        self.assertModuleKeyValue(
+            module=info,
+            reference="number_of_maps=6",
+            precision=2,
+            sep="=",
+        )
 
 
 if __name__ == "__main__":
