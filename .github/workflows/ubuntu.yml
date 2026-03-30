@@ -12,12 +12,11 @@ on:
       - releasebranch_*
   pull_request:
 
-permissions:
-  contents: read
-  actions: read
-
 jobs:
   ubuntu:
+    permissions:
+      contents: read
+      actions: read
     concurrency:
       group: >-
         ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{
