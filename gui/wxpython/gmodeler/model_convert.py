@@ -969,14 +969,15 @@ if __name__ == "__main__":
             # check for variables
             formattedVar = False
             for var in variables["vars"]:
-                pattern = re.compile("%{" + var + "}")
-                found = pattern.search(value)
+                # curly braces are optional
+                pattern = re.compile("%{?" + var + "}?")
+                found = pattern.search(parameterizedValue)
                 if found:
                     foundVar = True
                     if found.end() != len(value):
                         formattedVar = True
                         parameterizedValue = pattern.sub(
-                            "{options['" + var + "']}", value
+                            "{options['" + var + "']}", parameterizedValue
                         )
                     else:
                         parameterizedValue = f'options["{var}"]'
