@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_uk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-21 21:15+0000\n"
+"POT-Creation-Date: 2026-03-21 15:56+0000\n"
 "PO-Revision-Date: 2017-05-23 21:08+0200\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian (https://www.transifex.com/grass-gis/teams/45198/uk/)\n"
@@ -1275,7 +1275,7 @@ msgstr ""
 msgid "Re&load maps"
 msgstr ""
 
-msgid "&Copy path to mapset"
+msgid "&Copy path"
 msgstr ""
 
 msgid "&Create mapset"
@@ -1285,6 +1285,9 @@ msgid "&Delete project"
 msgstr ""
 
 msgid "&Rename project"
+msgstr ""
+
+msgid "Copy path"
 msgstr ""
 
 msgid "Change Label"
@@ -1311,10 +1314,13 @@ msgstr ""
 msgid "&Delete projects (locations)"
 msgstr ""
 
+msgid "Copy paths"
+msgstr ""
+
 msgid "&Delete mapsets"
 msgstr ""
 
-msgid "&Copy paths to mapsets"
+msgid "&Copy paths"
 msgstr ""
 
 #, python-brace-format

@@ -403,7 +403,7 @@ Update the GRASS version at <https://github.com/landam/wingrass-maintenance-scri
 - On release (including RC) update
   [releases.csv](https://github.com/landam/wingrass-maintenance-scripts/blob/master/releases.csv)
   and
-  [grass_packager_release.bat](https://github.com/landam/wingrass-maintenance-scripts/blob/master/grass_packager_release.bat#L12)
+  [grass_packager_release.bat](https://github.com/landam/wingrass-maintenance-scripts/blob/fffcd91fb3d1c99854e6e64d1c0361622c7eb83b/grass_packager_release.bat#L12)
 
 Example for 8.3.0RC1: [commit](https://github.com/landam/wingrass-maintenance-scripts/commit/c47b0f30051108bd2e8b52d183e97930c24dfafd)
 

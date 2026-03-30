@@ -60,7 +60,7 @@
             </termEntry>
             <termEntry id="Need to distinguish between meanings of map, and the verb.">
                 <langSet xml:lang="en"><tig><term>map</term></tig></langSet>
-                <langSet xml:lang="fr"><tig><term/></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>carte</term></tig></langSet>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>node</term></tig></langSet>
@@ -226,10 +226,12 @@
             <termEntry>
                 <langSet xml:lang="en"><tig><term>centroids</term></tig></langSet>
                 <langSet xml:lang="fr"><tig><term>centroïdes</term></tig></langSet>
+                <descrip>Vector feature type</descrip>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>area</term></tig></langSet>
                 <langSet xml:lang="fr"><tig><term>aire</term></tig></langSet>
+                <descrip>Mathematical/geometry meaning, like the area of a square is d^2</descrip>
             </termEntry>
             <termEntry id="1">
                 <langSet xml:lang="en"><tig><term>area</term></tig></langSet>
@@ -259,6 +261,65 @@
             <termEntry>
                 <langSet xml:lang="en"><tig><term>layers</term></tig></langSet>
                 <langSet xml:lang="fr"><tig><term>couches</term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>MySQL</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term/></tig></langSet>
+                <note from="translator">Name of a relational database management system</note>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>Support Vector Machine</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>Séparateur à vaste marge</term></tig></langSet>
+                <note from="translator">Ou machine à vecteurs de support, mais on va choisir le terme plus précis et évocateur en français, séparateur à vaste marge&#13;
+https://vitrinelinguistique.oqlf.gouv.qc.ca/fiche-gdt/fiche/26579673/machine-a-vecteurs-de-support</note>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>SVM</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>SVM</term></tig></langSet>
+                <note from="translator">SVM pour séparateur à vaste marge, sinon MVS si machine à vecteurs de support. On choisi SVM pour le terme plus précis et évocateur en français.&#13;
+https://vitrinelinguistique.oqlf.gouv.qc.ca/fiche-gdt/fiche/26579673/machine-a-vecteurs-de-support</note>
+                <descrip>Support Vector Machine</descrip>
+            </termEntry>
+            <termEntry id="geometry type, plural">
+                <langSet xml:lang="en"><tig><term>areas</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>surfaces</term></tig></langSet>
+                <descrip>The geometry type, plural</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>lines</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>lignes</term></tig></langSet>
+                <descrip>Feature type, plural</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>boundary</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>contour</term></tig></langSet>
+                <descrip>Vector feature type</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>boundaries</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>contours</term></tig></langSet>
+                <descrip>Vector feature type</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>feature</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>entité</term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>features</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>entités</term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>computational region</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>région de calculs</term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>raster mask</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>masque raster</term></tig></langSet>
+                <note from="translator">To review, this or masque de raster</note>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>nodes</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>nœuds</term></tig></langSet>
             </termEntry>
         </body>
     </text>
