@@ -4,7 +4,7 @@
  * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original
  *               contributor)
  *               Hamish Bowman <hamish_b yahoo.com>
- *               Chopra (OpenMP parallelization)
+ *                Chopra (OpenMP parallelization)
  * PURPOSE:
  * COPYRIGHT:    (C) 2006-2007 by the GRASS Development Team
  *
