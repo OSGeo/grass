@@ -1,6 +1,11 @@
 import grass.script as gs
 from grass.tools import Tools
-from grass.jupyter.utils import get_region, get_location_proj_string, reproject_region, set_target_region
+from grass.jupyter.utils import (
+    get_region,
+    get_location_proj_string,
+    reproject_region,
+    set_target_region,
+)
 
 
 def test_get_region(session_with_data):
@@ -31,7 +36,7 @@ def test_reproject_region(session_with_data):
         "east": 100000.0,
         "west": 0.0,
         "rows": 10,
-        "cols": 10
+        "cols": 10,
     }
     p_in = "+proj=merc +a=6378137 +b=6378137 +units=m +type=crs"
     p_out = "+proj=longlat +datum=WGS84 +type=crs"
