@@ -1,6 +1,6 @@
 import grass.script as gs
 from grass.tools import Tools
-from grass.jupyter.utils import *
+from grass.jupyter.utils import get_region, get_location_proj_string, reproject_region, set_target_region
 
 
 def test_get_region(session_with_data):
