@@ -60,6 +60,22 @@
 # %end
 
 # %option
+# % key: granularity
+# % type: string
+# % description: Aggregation granularity, format absolute time "x years, x months, x weeks, x days, x hours, x minutes, x seconds" or an integer value for relative time
+# % required: no
+# % multiple: no
+# %end
+
+# %option
+# % key: start
+# % type: string
+# % description: Start time for granule alignment (format: "YYYY-MM-DD HH:MM:SS")
+# % required: no
+# % multiple: no
+# %end
+
+# %option
 # % key: region_relation
 # % description: Process only maps with this spatial relation to the current computational region
 # % guisection: Selection
@@ -101,7 +117,6 @@ import grass.script as gs
 def main():
     # Get the options and flags
     options, flags = gs.parser()
-
     # lazy imports
     import grass.temporal as tgis
 
@@ -150,6 +165,8 @@ def main():
         rast_region=rast_region,
         region_relation=region_relation,
         nprocs=nprocs,
+        granularity=options["granularity"] or None,
+        start=options["start"] or None,
     )
 
 

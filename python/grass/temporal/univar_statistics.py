@@ -8,7 +8,20 @@ Usage:
     import grass.temporal as tgis
 
     tgis.print_gridded_dataset_univar_statistics(
-        type, input, output, where, extended, no_header, fs, rast_region
+        "strds",
+        input,
+        output,
+        where,
+        extended,
+        percentile=percentile,
+        no_header=no_header,
+        fs=separator,
+        zones=zones,
+        rast_region=rast_region,
+        region_relation=region_relation,
+        nprocs=nprocs,
+        granularity=options["granularity"] or None,
+        start=options["start"] or None,
     )
 
 ..
@@ -21,6 +34,7 @@ for details.
 :authors: Soeren Gebbert
 """
 
+from .datetime_math import adjust_datetime_to_granularity, increment_datetime_by_string
 from multiprocessing import Pool
 from subprocess import PIPE
 
@@ -125,6 +139,8 @@ def print_gridded_dataset_univar_statistics(
     zones=None,
     percentile=None,
     nprocs: int = 1,
+    granularity: str | None = None,
+    start: str | None = None,
 ) -> None:
     """Print univariate statistics for a space time raster or raster3d dataset.
 
@@ -174,6 +190,46 @@ def print_gridded_dataset_univar_statistics(
         spatial_extent=spatial_extent,
         spatial_relation=region_relation,
     )
+
+    # When the user asks for granularity, we group maps into time windows
+    # and later feed each group as a comma-joined list to r.univar.
+    # No new rasters written to disk — that's the whole point of this feature.
+    granule_groups = None
+    if granularity and rows:
+        # Snap the start of the first window to the requested granularity
+        # unless the user gave an explicit start time
+        if start:
+            from datetime import datetime as _dt
+
+            # try dateutil first, fall back to a basic format
+            try:
+                from dateutil import parser as _dp
+
+                win_start = _dp.parse(start)
+            except ImportError:
+                win_start = _dt.strptime(start, "%Y-%m-%d %H:%M:%S")
+        else:
+            win_start = adjust_datetime_to_granularity(
+                rows[0]["start_time"], granularity
+            )
+
+        # last map's end_time can be None for point-in-time maps — fall back to start
+        last = rows[-1]
+        win_end_global = last["end_time"] or last["start_time"]
+
+        # walk through time and collect which maps fall inside each window
+        granule_groups = []
+        t = win_start
+        while t < win_end_global:
+            t_end = increment_datetime_by_string(t, granularity)
+            group = [
+                row
+                for row in rows
+                if row["start_time"] >= t and row["start_time"] < t_end
+            ]
+            if group:
+                granule_groups.append((t, t_end, group))
+            t = t_end
 
     if not rows and rows != [""]:
         dbif.close()
@@ -250,14 +306,30 @@ def print_gridded_dataset_univar_statistics(
     )
 
     nprocs = max(nprocs, 1)
-    if nprocs == 1:
+    if granule_groups is not None:
+        # granularity mode: each group of maps gets merged into one r.univar call.
+        # r.univar handles multiple maps natively — no temp files, no aggregate step.
+        # Output row uses the granule window as start/end, not individual map ids.
+        strings = []
+        for win_start, win_end, group in granule_groups:
+            map_ids = ",".join(row["id"] for row in group)
+
+            # fake a row dict that compute_univar_stats can work with —
+            # id becomes the map list, timestamps become the granule bounds
+            synthetic_row = {
+                "id": map_ids,
+                "start_time": win_start,
+                "end_time": win_end,
+                # granule rows carry no single semantic label; leave it blank
+                "semantic_label": None,
+            }
+            result = compute_univar_stats(synthetic_row, univar_module, fs, rast_region)
+            if result:
+                strings.append(result)
+
+    elif nprocs == 1:
         strings = [
-            compute_univar_stats(
-                row,
-                univar_module,
-                fs,
-            )
-            for row in rows
+            compute_univar_stats(row, univar_module, fs, rast_region) for row in rows
         ]
     else:
         with Pool(min(nprocs, len(rows))) as pool:

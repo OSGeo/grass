@@ -550,6 +550,96 @@ d_1@stbl||2001-01-01 00:00:00|2001-04-01 00:00:00|100|100|100|100|0|0|0|960000|2
                 self.assertLooksLike(ref_line, res_line)
 
 
+class TestRasterUnivarGranularity(TestCase):
+    """Tests for the granularity aggregation option added in #3042.
+    Four maps registered 3 months apart (Jan, Apr, Jul, Oct 2001),
+    values 100/200/300/400 - chosen so the expected stats are dead simple
+    to verify by hand."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.use_temp_region()
+        cls.runModule("g.region", s=0, n=80, w=0, e=120, res=1)
+        for i, val in enumerate([100, 200, 300, 400], start=1):
+            cls.runModule(
+                "r.mapcalc",
+                expression=f"gran_test_{i} = {val}",
+                overwrite=True,
+            )
+        cls.runModule(
+            "t.create",
+            type="strds",
+            temporaltype="absolute",
+            output="gran_A",
+            title="granularity test",
+            description="granularity test",
+            overwrite=True,
+        )
+        cls.runModule(
+            "t.register",
+            flags="i",
+            type="raster",
+            input="gran_A",
+            maps="gran_test_1,gran_test_2,gran_test_3,gran_test_4",
+            start="2001-01-01",
+            increment="3 months",
+            overwrite=True,
+        )
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.runModule("t.remove", flags="df", type="strds", inputs="gran_A")
+        cls.del_temp_region()
+
+    def test_granularity_6months(self):
+        """6-month windows should collapse 4 maps into 2 rows"""
+        t_rast_univar = SimpleModule(
+            "t.rast.univar",
+            input="gran_A",
+            granularity="6 months",
+            verbose=True,
+        )
+        self.assertModule(t_rast_univar)
+        lines = [l for l in t_rast_univar.outputs.stdout.strip().split("\n") if l]
+        # header + 2 data rows
+        self.assertEqual(len(lines), 3)
+        # first granule: Jan-Jul, mean of 100+200 = 150
+        self.assertIn("2001-01-01 00:00:00", lines[1])
+        self.assertIn("2001-07-01 00:00:00", lines[1])
+        self.assertIn("150", lines[1])
+        # second granule: Jul-Jan, mean of 300+400 = 350
+        self.assertIn("2001-07-01 00:00:00", lines[2])
+        self.assertIn("2002-01-01 00:00:00", lines[2])
+        self.assertIn("350", lines[2])
+
+    def test_granularity_1year(self):
+        """1-year window should collapse all 4 maps into a single row"""
+        t_rast_univar = SimpleModule(
+            "t.rast.univar",
+            input="gran_A",
+            granularity="1 year",
+            verbose=True,
+        )
+        self.assertModule(t_rast_univar)
+        lines = [l for l in t_rast_univar.outputs.stdout.strip().split("\n") if l]
+        # header + 1 data row
+        self.assertEqual(len(lines), 2)
+        self.assertIn("2001-01-01 00:00:00", lines[1])
+        self.assertIn("2002-01-01 00:00:00", lines[1])
+        self.assertIn("250", lines[1])
+
+    def test_no_granularity_unchanged(self):
+        """Without granularity the output should still be one row per map"""
+        t_rast_univar = SimpleModule(
+            "t.rast.univar",
+            input="gran_A",
+            verbose=True,
+        )
+        self.assertModule(t_rast_univar)
+        lines = [l for l in t_rast_univar.outputs.stdout.strip().split("\n") if l]
+        self.assertEqual(len(lines), 5)  # header + 4 maps
+
+
 if __name__ == "__main__":
     from grass.gunittest.main import test
 
