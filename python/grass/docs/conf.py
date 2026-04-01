@@ -127,8 +127,8 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = "Python library documentation"
-copyright = "2025, GRASS Development Team"
+project = "GRASS Python Library"
+copyright = "2026, GRASS Development Team"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

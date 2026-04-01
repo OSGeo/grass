@@ -135,7 +135,7 @@ MacOSX users may go here to download precompiled libraries etc.:
 
 ---
 
-© _GRASS Development Team 1997-2025_
+© _GRASS Development Team 1997-2026_
 
 Please report bugs here:
 [https://grass.osgeo.org/contribute/](https://grass.osgeo.org/contribute/)
