@@ -43,8 +43,9 @@ def _run_slope_aspect(width, height, overlap, processes, elevation):
     grid.run()
 
 
-def _run_slope_aspect_clean(width, height, overlap, processes,
-                             elevation, mapset_prefix, clean):
+def _run_slope_aspect_clean(
+    width, height, overlap, processes, elevation, mapset_prefix, clean
+):
     """Module-level helper for r.slope.aspect with clean option"""
     grid = GridModule(
         "r.slope.aspect",
