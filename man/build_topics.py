@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # generates topics.html and topic_*.html
-# (c) 2012-2025 by the GRASS Development Team
+# (c) 2012-2026 by the GRASS Development Team
 
 import glob
 import os
