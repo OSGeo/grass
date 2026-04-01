@@ -221,9 +221,7 @@ def test_tiling(tmp_path, width, height, processes):
         surface = "surface"
         gs.run_command("r.surf.fractal", output=surface)
         run_in_subprocess(
-            functools.partial(
-                _run_slope_aspect, width, height, 2, processes, surface
-            )
+            functools.partial(_run_slope_aspect, width, height, 2, processes, surface)
         )
         info = gs.raster_info("slope")
         assert info["min"] > 0
