@@ -14,6 +14,9 @@ permissions: {}
 
 jobs:
   ubuntu:
+    permissions:
+      contents: read
+      actions: read
     concurrency:
       group: >-
         ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{
@@ -172,7 +175,9 @@ jobs:
 
       - name: Save GRASS Sample Dataset to cache
         uses: actions/cache/save@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
-        if: steps.cached-data.outputs.cache-hit != 'true'
+        # Fix: do not write to cache on pull_request events to prevent cache poisoning.
+        # Fork PRs can otherwise overwrite shared cache keys used by main branch runs.
+        if: steps.cached-data.outputs.cache-hit != 'true' && github.event_name != 'pull_request'
         with:
           path: sample-data/nc_spm_full_v2beta1.tar.gz
           key: nc_spm_full_v2beta1.tar.gz
