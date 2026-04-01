@@ -197,12 +197,8 @@ def test_patching_backend(tmp_path, patch_backend):
         gs.run_command(
             "v.to.rast", input=points, output=reference, type="point", use="cat"
         )
-        run_in_subprocess(
-            functools.partial(_run_patch_backend, patch_backend, points)
-        )
-        mean_ref = float(
-            gs.parse_command("r.univar", map=reference, flags="g")["mean"]
-        )
+        run_in_subprocess(functools.partial(_run_patch_backend, patch_backend, points))
+        mean_ref = float(gs.parse_command("r.univar", map=reference, flags="g")["mean"])
         mean = float(gs.parse_command("r.univar", map="output", flags="g")["mean"])
         assert abs(mean - mean_ref) < 0.0001
 
