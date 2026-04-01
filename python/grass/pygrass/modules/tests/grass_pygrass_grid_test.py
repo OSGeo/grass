@@ -163,8 +163,13 @@ def test_cleans(tmp_path, clean, surface):
         run_in_subprocess(
             functools.partial(
                 _run_slope_aspect_clean,
-                10, 5, 0, max_processes(),
-                surface, mapset_prefix, clean,
+                10,
+                5,
+                0,
+                max_processes(),
+                surface,
+                mapset_prefix,
+                clean,
             )
         )
         prefixed = 0
