@@ -1,5 +1,6 @@
 """Test main functions of PyGRASS GridModule"""
 
+import functools
 import multiprocessing
 
 import pytest
@@ -20,14 +21,73 @@ def max_processes():
     return min(multiprocessing.cpu_count(), 4)
 
 
-# GridModule uses C libraries which can easily initialize only once
-# and thus can't easily change location/mapset, so we use a subprocess
-# to separate individual GridModule calls.
 def run_in_subprocess(function):
     """Run function in a separate process"""
     process = multiprocessing.Process(target=function)
     process.start()
     process.join()
+
+
+def _run_slope_aspect(width, height, overlap, processes, elevation):
+    """Module-level helper for r.slope.aspect GridModule"""
+    grid = GridModule(
+        "r.slope.aspect",
+        width=width,
+        height=height,
+        overlap=overlap,
+        processes=processes,
+        elevation=elevation,
+        slope="slope",
+        aspect="aspect",
+    )
+    grid.run()
+
+
+def _run_slope_aspect_clean(width, height, overlap, processes,
+                             elevation, mapset_prefix, clean):
+    """Module-level helper for r.slope.aspect with clean option"""
+    grid = GridModule(
+        "r.slope.aspect",
+        width=width,
+        height=height,
+        overlap=overlap,
+        processes=processes,
+        elevation=elevation,
+        slope="slope",
+        aspect="aspect",
+        mapset_prefix=mapset_prefix,
+    )
+    grid.run(clean=clean)
+
+
+def _run_patch_backend(patch_backend, points):
+    """Module-level helper for v.to.rast GridModule"""
+    grid = GridModule(
+        "v.to.rast",
+        width=10,
+        height=5,
+        overlap=0,
+        patch_backend=patch_backend,
+        processes=max_processes(),
+        input=points,
+        output="output",
+        type="point",
+        use="cat",
+    )
+    grid.run()
+
+
+def _run_patching_error(processes, backend, surface):
+    """Module-level helper for r.surf.fractal GridModule"""
+    grid = GridModule(
+        "r.surf.fractal",
+        overlap=0,
+        processes=processes,
+        output=surface,
+        patch_backend=backend,
+        debug=True,
+    )
+    grid.run()
 
 
 @xfail_mp_spawn
@@ -39,34 +99,17 @@ def test_processes(tmp_path, processes):
     gs.create_project(project)
     with gs.setup.init(project):
         gs.run_command("g.region", s=0, n=50, w=0, e=50, res=1)
-
         surface = "surface"
         gs.run_command("r.surf.fractal", output=surface)
-
-        def run_grid_module():
-            grid = GridModule(
-                "r.slope.aspect",
-                width=10,
-                height=5,
-                overlap=2,
-                processes=processes,
-                elevation=surface,
-                slope="slope",
-                aspect="aspect",
-            )
-            grid.run()
-
-        run_in_subprocess(run_grid_module)
-
+        run_in_subprocess(
+            functools.partial(_run_slope_aspect, 10, 5, 2, processes, surface)
+        )
         info = gs.raster_info("slope")
         assert info["min"] > 0
 
 
-# @pytest.mark.parametrize("split", [False])  # True does not work.
-
-
 @xfail_mp_spawn
-@pytest.mark.parametrize("width", [5, 10, 50])  # None does not work.
+@pytest.mark.parametrize("width", [5, 10, 50])
 @pytest.mark.parametrize("height", [5, 10, 50])
 def test_tiling_schemes(tmp_path, width, height):
     """Check that different shapes of tiles work"""
@@ -74,25 +117,13 @@ def test_tiling_schemes(tmp_path, width, height):
     gs.create_project(project)
     with gs.setup.init(project):
         gs.run_command("g.region", s=0, n=50, w=0, e=50, res=1)
-
         surface = "surface"
         gs.run_command("r.surf.fractal", output=surface)
-
-        def run_grid_module():
-            grid = GridModule(
-                "r.slope.aspect",
-                width=width,
-                height=height,
-                overlap=2,
-                processes=max_processes(),
-                elevation=surface,
-                slope="slope",
-                aspect="aspect",
+        run_in_subprocess(
+            functools.partial(
+                _run_slope_aspect, width, height, 2, max_processes(), surface
             )
-            grid.run()
-
-        run_in_subprocess(run_grid_module)
-
+        )
         info = gs.raster_info("slope")
         assert info["min"] > 0
 
@@ -107,22 +138,11 @@ def test_overlaps(tmp_path, overlap):
         gs.run_command("g.region", s=0, n=50, w=0, e=50, res=1)
         surface = "surface"
         gs.run_command("r.surf.fractal", output=surface)
-
-        def run_grid_module():
-            grid = GridModule(
-                "r.slope.aspect",
-                width=10,
-                height=5,
-                overlap=overlap,
-                processes=max_processes(),
-                elevation=surface,
-                slope="slope",
-                aspect="aspect",
+        run_in_subprocess(
+            functools.partial(
+                _run_slope_aspect, 10, 5, overlap, max_processes(), surface
             )
-            grid.run()
-
-        run_in_subprocess(run_grid_module)
-
+        )
         info = gs.raster_info("slope")
         assert info["min"] > 0
 
@@ -139,31 +159,19 @@ def test_cleans(tmp_path, clean, surface):
         gs.run_command("g.region", s=0, n=50, w=0, e=50, res=1)
         if surface == "surface":
             gs.run_command("r.surf.fractal", output=surface)
-
-        def run_grid_module():
-            grid = GridModule(
-                "r.slope.aspect",
-                width=10,
-                height=5,
-                overlap=0,
-                processes=max_processes(),
-                elevation=surface,
-                slope="slope",
-                aspect="aspect",
-                mapset_prefix=mapset_prefix,
+        run_in_subprocess(
+            functools.partial(
+                _run_slope_aspect_clean,
+                10, 5, 0, max_processes(),
+                surface, mapset_prefix, clean,
             )
-            grid.run(clean=clean)
-
-        run_in_subprocess(run_grid_module)
-
+        )
         prefixed = 0
         for item in project.iterdir():
             if item.is_dir():
                 if clean:
-                    # We know right away something is wrong.
                     assert not item.name.startswith(mapset_prefix), "Mapset not cleaned"
                 else:
-                    # We need to see if there is at least one prefixed mapset.
                     prefixed += int(item.name.startswith(mapset_prefix))
         if not clean:
             assert prefixed, "Not even one prefixed mapset"
@@ -177,32 +185,18 @@ def test_patching_backend(tmp_path, patch_backend):
     gs.create_project(project)
     with gs.setup.init(project):
         gs.run_command("g.region", s=0, n=50, w=0, e=50, res=1)
-
         points = "points"
         reference = "reference"
         gs.run_command("v.random", output=points, npoints=100)
         gs.run_command(
             "v.to.rast", input=points, output=reference, type="point", use="cat"
         )
-
-        def run_grid_module():
-            grid = GridModule(
-                "v.to.rast",
-                width=10,
-                height=5,
-                overlap=0,
-                patch_backend=patch_backend,
-                processes=max_processes(),
-                input=points,
-                output="output",
-                type="point",
-                use="cat",
-            )
-            grid.run()
-
-        run_in_subprocess(run_grid_module)
-
-        mean_ref = float(gs.parse_command("r.univar", map=reference, flags="g")["mean"])
+        run_in_subprocess(
+            functools.partial(_run_patch_backend, patch_backend, points)
+        )
+        mean_ref = float(
+            gs.parse_command("r.univar", map=reference, flags="g")["mean"]
+        )
         mean = float(gs.parse_command("r.univar", map="output", flags="g")["mean"])
         assert abs(mean - mean_ref) < 0.0001
 
@@ -222,25 +216,13 @@ def test_tiling(tmp_path, width, height, processes):
     gs.create_project(project)
     with gs.setup.init(project):
         gs.run_command("g.region", s=0, n=50, w=0, e=50, res=1)
-
         surface = "surface"
         gs.run_command("r.surf.fractal", output=surface)
-
-        def run_grid_module():
-            grid = GridModule(
-                "r.slope.aspect",
-                width=width,
-                height=height,
-                overlap=2,
-                processes=processes,
-                elevation=surface,
-                slope="slope",
-                aspect="aspect",
+        run_in_subprocess(
+            functools.partial(
+                _run_slope_aspect, width, height, 2, processes, surface
             )
-            grid.run()
-
-        run_in_subprocess(run_grid_module)
-
+        )
         info = gs.raster_info("slope")
         assert info["min"] > 0
 
@@ -264,19 +246,8 @@ def test_patching_error(tmp_path, processes, backend):
     with gs.setup.init(project):
         gs.run_command("g.region", s=0, n=10, w=0, e=10, res=0.1)
         surface = "fractal"
-
-        def run_grid_module():
-            grid = GridModule(
-                "r.surf.fractal",
-                overlap=0,
-                processes=processes,
-                output=surface,
-                patch_backend=backend,
-                debug=True,
-            )
-            grid.run()
-
-        run_in_subprocess(run_grid_module)
-
+        run_in_subprocess(
+            functools.partial(_run_patching_error, processes, backend, surface)
+        )
         info = gs.parse_command("r.univar", flags="g", map=surface)
         assert int(info["null_cells"]) == 0
