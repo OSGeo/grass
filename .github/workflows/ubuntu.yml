@@ -158,7 +158,7 @@ jobs:
 
       - name: Cache GRASS Sample Dataset
         id: cached-data
-        uses: actions/cache/restore@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
+        uses: actions/cache/restore@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
         with:
           path: sample-data/nc_spm_full_v2beta1.tar.gz
           key: nc_spm_full_v2beta1.tar.gz
@@ -174,7 +174,7 @@ jobs:
             nc_spm_full_v2beta1.tar.gz"
 
       - name: Save GRASS Sample Dataset to cache
-        uses: actions/cache/save@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
+        uses: actions/cache/save@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
         # Fix: do not write to cache on pull_request events to prevent cache poisoning.
         # Fork PRs can otherwise overwrite shared cache keys used by main branch runs.
         if: steps.cached-data.outputs.cache-hit != 'true' && github.event_name != 'pull_request'
