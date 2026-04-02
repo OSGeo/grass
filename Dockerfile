@@ -15,7 +15,7 @@ ARG PROJ_VERSION=9.8.0
 # renovate: datasource=github-tags depName=OSGeo/gdal
 ARG GDAL_VERSION=3.12.3
 # renovate: datasource=github-tags depName=PDAL/PDAL
-ARG PDAL_VERSION=2.10.0
+ARG PDAL_VERSION=2.10.1
 # renovate: datasource=github-tags depName=OSGeo/gdal-grass
 ARG GDAL_GRASS_VERSION=2.0.0
 # renovate: datasource=pypi depName=wxPython
