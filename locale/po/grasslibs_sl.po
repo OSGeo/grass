@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the GRASS package.
 # Copyright (C) 2004 GRASS Development Team
 # Miha Staut <mihastaut@yahoo.co.uk>, 2005.
-# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_sl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-14 18:00+0000\n"
-"PO-Revision-Date: 2025-08-23 20:18+0000\n"
+"POT-Creation-Date: 2026-03-21 15:56+0000\n"
+"PO-Revision-Date: 2026-03-22 08:14+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Slovenian <https://weblate.osgeo.org/projects/grass-gis/grasslibs/sl/>\n"
 "Language: sl\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #, fuzzy, c-format
 msgid "Unknown algorithm '%s'"
@@ -659,7 +659,7 @@ msgstr ""
 
 #, fuzzy, c-format
 msgid "Current region rows: %d, cols: %d"
-msgstr "Trenutna vrstica null vrednosti v spominu %d\\n"
+msgstr "Trenutna vrstica null vrednosti v spominu %d"
 
 #, c-format
 msgid "G_malloc: unable to allocate %lu bytes of memory at %s:%d"

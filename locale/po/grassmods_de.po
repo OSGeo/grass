@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-14 18:00+0000\n"
+"POT-Creation-Date: 2026-03-21 15:56+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/grassmods/de/>\n"
@@ -3966,8 +3966,10 @@ msgstr "Projektion"
 msgid "create project"
 msgstr "erzeuge Location"
 
-msgid "Prints or modifies GRASS projection information files (in various co-ordinate system descriptions)."
-msgstr ""
+#, fuzzy
+#| msgid "Prints and manipulates GRASS projection information files."
+msgid "Prints or modifies GRASS projection information files (in various coordinate system descriptions)."
+msgstr "Ausgabe und Manipulation von GRASS Projektionsinformationsdateien."
 
 #, fuzzy
 msgid "Can also be used to create new GRASS projects."
@@ -4035,7 +4037,9 @@ msgstr ""
 msgid "Datum"
 msgstr "Datum"
 
-msgid "Datum (overrides any datum specified in input co-ordinate system)"
+#, fuzzy
+#| msgid "Datum (overrides any datum specified in input co-ordinate system)"
+msgid "Datum (overrides any datum specified in input coordinate system)"
 msgstr "Datum (übersteuere Datumsangaben in der Eingabedatei)"
 
 msgid "Accepts standard GRASS datum codes, or \"list\" to list and exit"
@@ -4047,7 +4051,9 @@ msgstr "Index der Datumtransformations-Parameter"
 msgid "\"0\" for unspecified or \"-1\" to list and exit"
 msgstr "\"0\" für nicht spezifiziert oder \"-1\" um alle aufzulisten und sich zu beenden"
 
-msgid "Force override of datum transformation information in input co-ordinate system"
+#, fuzzy
+#| msgid "Force override of datum transformation information in input co-ordinate system"
+msgid "Force override of datum transformation information in input coordinate system"
 msgstr "Erzwinge das Übersteuern der Datumtransformationsinformation des Eingabe Koordinatensystems."
 
 msgid "Modify"
@@ -18524,8 +18530,8 @@ msgstr ""
 msgid "Number of walkers"
 msgstr "Anzahl der Agenten."
 
-msgid "Time used for iterations [minutes]"
-msgstr "Zeit verwendet für die Iterationen [Minuten]"
+msgid "Duration of the simulated water flow [minutes]"
+msgstr ""
 
 msgid "Minimum time step for the simulation [seconds]"
 msgstr ""
@@ -29872,7 +29878,9 @@ msgstr "Art des Vektorobjekts"
 msgid "centrality measures"
 msgstr ""
 
-msgid "Computes degree, centrality, betweeness, closeness and eigenvector centrality measures in the network."
+#, fuzzy
+#| msgid "Computes degree, centrality, betweeness, closeness and eigenvector centrality measures in the network."
+msgid "Computes degree, centrality, betweenness, closeness and eigenvector centrality measures in the network."
 msgstr "Berechnet Degree, Centrality, Betweenness, Closeness and Eigenvektor centrality Werte im Netzwerk."
 
 msgid "Name of degree centrality column"
@@ -34175,6 +34183,9 @@ msgstr "Zeige BMP Bilder von dem PNG-Treiber."
 msgid "Image file"
 msgstr "Bild-Datei"
 
+#~ msgid "Time used for iterations [minutes]"
+#~ msgstr "Zeit verwendet für die Iterationen [Minuten]"
+
 #~ msgid ""
 #~ "WGS84 grid output not possible as this location does not contain\n"
 #~ "datum transformation parameters. Try running g.setproj."
@@ -34195,9 +34206,6 @@ msgstr "Bild-Datei"
 #, fuzzy
 #~ msgid "WGS84 output not possible as this project does not contain datum transformation parameters. Try running g.setproj."
 #~ msgstr "WGS84 Ausgabe nicht möglich, da diese Location keine Datumstransformationsparameter enthält. Versuchen Sie g.setproj."
-
-#~ msgid "Prints and manipulates GRASS projection information files."
-#~ msgstr "Ausgabe und Manipulation von GRASS Projektionsinformationsdateien."
 
 #, fuzzy
 #~ msgid "Print 'flat' output with no linebreaks (applies to PROJ.4 output)"

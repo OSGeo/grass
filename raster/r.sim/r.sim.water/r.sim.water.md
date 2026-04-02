@@ -75,7 +75,7 @@ solution can be analysed using the output error raster file \[m\]. This
 error is a function of the number of particles used in the simulation
 and can be reduced by increasing the number of walkers given by
 parameter **nwalkers**. Duration of simulation is controlled by the
-**niterations** parameter. The default value is 10 minutes, reaching the
+**duration** parameter. The default value is 10 minutes, reaching the
 steady-state may require much longer time, depending on the time step,
 complexity of terrain, land cover and size of the area. Output walker,
 water depth and discharge maps can be saved during simulation using the

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-14 18:00+0000\n"
+"POT-Creation-Date: 2026-03-21 15:56+0000\n"
 "PO-Revision-Date: 2014-05-03 16:44-0400\n"
 "Last-Translator: Huidae Cho <grass4u@gmail.com>\n"
 "Language-Team: Korean <grass-translations@lists.osgeo.org>\n"
@@ -1288,7 +1288,7 @@ msgstr ""
 msgid "Re&load maps"
 msgstr ""
 
-msgid "&Copy path to mapset"
+msgid "&Copy path"
 msgstr ""
 
 msgid "&Create mapset"
@@ -1301,6 +1301,11 @@ msgstr "레코드를 삭제합니다"
 #, fuzzy
 msgid "&Rename project"
 msgstr "이름 바꾸기(&R)"
+
+#, fuzzy
+#| msgid "Copy"
+msgid "Copy path"
+msgstr "복사"
 
 msgid "Change Label"
 msgstr ""
@@ -1330,10 +1335,13 @@ msgstr ""
 msgid "&Delete projects (locations)"
 msgstr "선택된 로케이션을 삭제합니다"
 
+msgid "Copy paths"
+msgstr ""
+
 msgid "&Delete mapsets"
 msgstr ""
 
-msgid "&Copy paths to mapsets"
+msgid "&Copy paths"
 msgstr ""
 
 #, fuzzy, python-brace-format
