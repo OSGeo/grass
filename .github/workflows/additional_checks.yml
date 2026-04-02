@@ -27,7 +27,7 @@ jobs:
       contents: read
     env:
       # renovate: datasource=pypi depName=prek
-      PREK_VERSION: 0.3.4
+      PREK_VERSION: 0.3.8
 
     steps:
       - name: Checkout repository contents
@@ -81,7 +81,7 @@ jobs:
         run: rm --verbose -f release_notes_sample.md core_modules_with_last_commit.json
       - name: "Cache pre-commit/prek"
         # Not used for releases, only for running pre-commit
-        uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3  # zizmor: ignore[cache-poisoning]
+        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4  # zizmor: ignore[cache-poisoning]
         with:
           path: |-
             ~/.cache/prek
