@@ -151,17 +151,16 @@ def main():
         dbif.close()
         gs.fatal(_("Space time raster dataset <%s> is empty") % input)
 
-    # Check if output exists using unified library function.
-    # extend-if-exists: if -e flag is set and STRDS exists, open it;
-    # if -e flag is set but STRDS does not exist, create it silently.
-    mapset = tgis.get_current_mapset()
-    output_id = output + "@" + mapset
-    check_strds = tgis.SpaceTimeRasterDataset(output_id)
-    output_exists = check_strds.is_in_db(dbif)
-
-    output_strds = tgis.check_new_stds(
+    # Check if output can be opened as requested before processing starts.
+    # This is a lightweight check that does not create or open the dataset.
+    tgis.check_open_output_stds(
         output, "strds", dbif=dbif, overwrite=overwrite, extend=extend
     )
+
+    # Record whether output already exists for use after processing
+    mapset = tgis.get_current_mapset()
+    output_id = output + "@" + mapset
+    output_exists = tgis.SpaceTimeRasterDataset(output_id).is_in_db(dbif)
 
     start_time = map_list[0].temporal_extent.get_start_time()
 
@@ -214,24 +213,20 @@ def main():
         overwrite=overwrite,
         file_limit=file_limit,
     )
-
     if output_list:
-        if output_exists and extend:
-            # extend-if-exists: reuse already-opened existing STRDS
-            pass
-        else:
-            # Create new STRDS or overwrite existing one
-            temporal_type, semantic_type, title, description = sp.get_initial_values()
-            output_strds = tgis.open_new_stds(
-                output,
-                "strds",
-                temporal_type,
-                title,
-                description,
-                semantic_type,
-                dbif,
-                overwrite,
-            )
+        # Open or create the output STRDS after processing succeeds
+        temporal_type, semantic_type, title, description = sp.get_initial_values()
+        output_strds = tgis.open_output_stds(
+            output,
+            "strds",
+            temporal_type,
+            title,
+            description,
+            semantic_type,
+            dbif,
+            overwrite,
+            extend,
+        )
 
         register_null = not register_null
 
@@ -243,11 +238,8 @@ def main():
             sp.get_relative_time_unit(),
             dbif,
         )
-
-        # Refresh the STRDS object from the database to get the updated
-        # map count and extents before modifying the metadata
+        # Refresh STRDS object to reflect newly registered maps
         output_strds.select(dbif)
-
         # Update the raster metadata table entries with aggregation type
         output_strds.set_aggregation_type(method)
         output_strds.metadata.update(dbif)

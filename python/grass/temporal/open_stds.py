@@ -88,9 +88,7 @@ def open_old_stds(name, type, dbif=None):
 ###############################################################################
 
 
-def check_new_stds(
-    name, type, dbif=None, overwrite: bool = False, extend: bool = False
-):
+def check_new_stds(name, type, dbif=None, overwrite: bool = False):
     """Check if a new space time dataset of a specific type can be created
 
     :param name: The name of the new space time dataset
@@ -98,7 +96,6 @@ def check_new_stds(
                  stvds, raster, vector, raster3d)
     :param dbif: The temporal database interface to be used
     :param overwrite: Flag to allow overwriting
-    :param extend: Flag to extend an existing space time dataset if it exists
 
     :return: A space time dataset object that must be filled with
             content before insertion in the temporal database
@@ -138,11 +135,6 @@ def check_new_stds(
     dbif, connection_state_changed = init_dbif(dbif)
 
     if sp.is_in_db(dbif):
-        if extend:
-            sp.select(dbif)
-            if connection_state_changed:
-                dbif.close()
-            return sp
         if overwrite is False:
             msgr.fatal(
                 _(
@@ -151,6 +143,150 @@ def check_new_stds(
                 )
                 % {"sp": sp.get_new_map_instance(None).get_type(), "name": name}
             )
+
+    if connection_state_changed:
+        dbif.close()
+
+    return sp
+
+
+###############################################################################
+
+
+def check_open_output_stds(
+    name, type, dbif=None, overwrite: bool = False, extend: bool = False
+):
+    """Check if an output space time dataset can be opened as requested.
+
+    This is a lightweight check run before main processing starts.
+    It does not create or open the dataset, only validates the request.
+
+    :param name: The name of the output space time dataset
+    :param type: The type of the space time dataset (strds, str3ds, stvds)
+    :param dbif: The temporal database interface to be used
+    :param overwrite: Flag to allow overwriting existing dataset
+    :param extend: Flag to extend an existing dataset if it exists
+
+    This function will raise a FatalError in case of an error.
+    """
+    mapset = get_current_mapset()
+    msgr = get_tgis_message_interface()
+
+    if name.find("@") < 0:
+        id = name + "@" + mapset
+    else:
+        n, m = name.split("@")
+        if mapset != m:
+            msgr.fatal(
+                _("Space time datasets can only be created in the current mapset")
+            )
+        id = name
+
+    if type in {"strds", "rast", "raster"}:
+        sp = dataset_factory("strds", id)
+    elif type in {"str3ds", "raster3d", "rast3d", "raster_3d"}:
+        sp = dataset_factory("str3ds", id)
+    elif type in {"stvds", "vect", "vector"}:
+        sp = dataset_factory("stvds", id)
+    else:
+        msgr.fatal(_("Unknown type: %s") % (type))
+
+    dbif, connection_state_changed = init_dbif(dbif)
+
+    if sp.is_in_db(dbif):
+        if not extend and not overwrite:
+            if connection_state_changed:
+                dbif.close()
+            msgr.fatal(
+                _(
+                    "Space time %(sp)s dataset <%(name)s> is already in the"
+                    " database. Use the overwrite flag."
+                )
+                % {"sp": sp.get_new_map_instance(None).get_type(), "name": name}
+            )
+
+    if connection_state_changed:
+        dbif.close()
+
+
+###############################################################################
+
+
+def open_output_stds(
+    name,
+    type,
+    temporaltype,
+    title,
+    descr,
+    semantic,
+    dbif=None,
+    overwrite: bool = False,
+    extend: bool = False,
+):
+    """Open or create an output space time dataset after main processing.
+
+    If extend is True and the dataset exists, opens and returns it.
+    Otherwise creates a new dataset (deleting existing if overwrite is True).
+
+    :param name: The name of the output space time dataset
+    :param type: The type of the space time dataset (strds, str3ds, stvds)
+    :param temporaltype: The temporal type (relative or absolute)
+    :param title: The title
+    :param descr: The dataset description
+    :param semantic: Semantical information
+    :param dbif: The temporal database interface to be used
+    :param overwrite: Flag to allow overwriting
+    :param extend: Flag to extend an existing dataset if it exists
+
+    :return: The opened or created space time dataset
+    """
+    dbif, connection_state_changed = init_dbif(dbif)
+    msgr = get_tgis_message_interface()
+
+    mapset = get_current_mapset()
+    id = name + "@" + mapset if name.find("@") < 0 else name
+
+    if type in {"strds", "rast", "raster"}:
+        sp = dataset_factory("strds", id)
+    elif type in {"str3ds", "raster3d", "rast3d", "raster_3d"}:
+        sp = dataset_factory("str3ds", id)
+    elif type in {"stvds", "vect", "vector"}:
+        sp = dataset_factory("stvds", id)
+    else:
+        msgr.fatal(_("Unknown type: %s") % (type))
+    if extend and sp.is_in_db(dbif):
+        # extend-if-exists: load and return existing dataset
+        sp.select(dbif)
+        if connection_state_changed:
+            dbif.close()
+        return sp
+
+    # Create new or overwrite existing
+    if sp.is_in_db(dbif):
+        msgr.warning(
+            _(
+                "Overwriting space time %(sp)s dataset <%(name)s> and "
+                "unregistering all maps"
+            )
+            % {"sp": sp.get_new_map_instance(None).get_type(), "name": name}
+        )
+        id = sp.get_id()
+        sp.delete(dbif)
+        sp = sp.get_new_instance(id)
+
+    msgr.verbose(
+        _("Creating a new space time %s dataset")
+        % sp.get_new_map_instance(None).get_type()
+    )
+
+    sp.set_initial_values(
+        temporal_type=temporaltype,
+        semantic_type=semantic,
+        title=title,
+        description=descr,
+    )
+
+    sp.insert(dbif)
 
     if connection_state_changed:
         dbif.close()
