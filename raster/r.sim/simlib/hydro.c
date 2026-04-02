@@ -181,7 +181,8 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                         }
 
                         if (grids->zz[k][l] != UNDEF) {
-                            if (grids->inf[k][l] != UNDEF) {
+                            if (grids->inf[k][l] != UNDEF &&
+                                grids->inf[k][l] > 0) {
                                 // Walker's contribution to water depth in this
                                 // cell for this timestep [m]
                                 double decr = factor * sim->w[lw].m;
