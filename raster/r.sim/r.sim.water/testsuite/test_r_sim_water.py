@@ -88,6 +88,7 @@ class TestRSimWater(TestCase):
                 cls.infil,
                 cls.reference_depth_complex,
                 cls.reference_discharge_complex,
+                cls.reference_depth_infil,
             ],
         )
 

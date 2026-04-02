@@ -130,11 +130,14 @@ void main_loop(const Setup *setup, const Geometry *geometry,
             /*                               .... propagate one step */
             /* ************************************************************ */
 
-            // addac used to be multiplied by 0.5 in 1st iteration
-            // for trapezoid rule, but this had very little effect,
-            // but we keep the names for historical reasons
+            // the trapezoid rule could be removed (has very little effect),
+            // still kept to not alter results
+            // but factor (not addac) is used for infiltration
             addac = factor;
             conn = (double)nblock / (double)iblock;
+            if (i == 1) {
+                addac = factor * .5;
+            }
             nwalka = 0;
             sim->nstack = 0;
 
@@ -181,7 +184,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                             if (grids->inf[k][l] != UNDEF) {
                                 // Walker's contribution to water depth in this
                                 // cell for this timestep [m]
-                                double decr = addac * sim->w[lw].m;
+                                double decr = factor * sim->w[lw].m;
                                 // Compare with the depth the cell can absorb
                                 // this timestep [m]
                                 if (grids->inf[k][l] * setup->deltap > decr) {
