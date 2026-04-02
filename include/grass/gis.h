@@ -20,6 +20,7 @@
 /*============================= Include Files ==============================*/
 
 /* System include files */
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdarg.h>
 
@@ -57,6 +58,26 @@ static const char *GRASS_copyright UNUSED = "GRASS GNU GPL licensed Software";
 #define FALLTHROUGH __attribute__((__fallthrough__))
 #else
 #define FALLTHROUGH ((void)0)
+#endif
+
+/*!
+    \def G_HAS_ATOMICS
+    \brief A macro that signals whether C11 atomic operations are supported.
+ */
+#if __STDC_VERSION__ < 201112L || defined(__STDC_NO_ATOMICS__)
+#define G_HAS_ATOMICS 0
+#else
+#define G_HAS_ATOMICS 1
+#endif
+
+/*!
+    \def G_USE_PROGRESS_NG
+    \brief A macro indicating if concurrency progress reporting can be used.
+ */
+#if defined(G_HAS_ATOMICS) && defined(HAVE_PTHREAD_H)
+#define G_USE_PROGRESS_NG 1
+#else
+#define G_USE_PROGRESS_NG 0
 #endif
 
 /* GRASS version, GRASS date, git short hash of last change in GRASS headers
@@ -726,6 +747,49 @@ struct ilist {
      */
     int alloc_values;
 };
+
+#if defined(G_USE_PROGRESS_NG)
+/*!
+   \brief Opaque handle that owns telemetry state for one progress-reporting
+   stream.
+
+   A `GProgressContext` isolates queued events, progress thresholds, and the
+   optional consumer thread used by the `G_progress_context_*()` APIs so that
+   concurrent operations can report progress independently.
+*/
+typedef struct GProgressContext GProgressContext;
+
+/*!
+   \brief Snapshot of a progress update delivered to sink callbacks.
+
+   `GProgressEvent` reports the completed and total work units for a queued
+   progress emission, together with the derived percentage in the range
+   `0.0 ... 100.0` and a terminal flag that becomes `true` once completion
+   reaches the declared total.
+*/
+typedef struct {
+    size_t completed;
+    size_t total;
+    double percent;   // 0.0 ... 100.0
+    bool is_terminal; // completed >= total and total > 0
+} GProgressEvent;
+
+typedef void (*GProgressCallback)(const GProgressEvent *event, void *user_data);
+typedef void (*GLogCallback)(const char *message, void *user_data);
+
+/*!
+   \brief Callback bundle used to receive progress and log output.
+
+   `GProgressSink` lets callers redirect telemetry emitted by the progress
+   APIs. Each callback is optional; when present, it receives the supplied
+   `user_data` pointer unchanged for every event dispatched through the sink.
+*/
+typedef struct {
+    GProgressCallback on_progress; // optional
+    GLogCallback on_log;           // optional
+    void *user_data;               // opaque sink context
+} GProgressSink;
+#endif // G_USE_PROGRESS_NG
 
 /*============================== Prototypes ================================*/
 
