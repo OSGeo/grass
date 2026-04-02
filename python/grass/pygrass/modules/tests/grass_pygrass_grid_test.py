@@ -6,7 +6,22 @@ import multiprocessing
 import pytest
 
 import grass.script as gs
-from grass.pygrass.modules.grid import GridModule
+
+
+def _run_grid_module(module_name, run_kwargs=None, **kwargs):
+    if run_kwargs is None:
+        run_kwargs = {}
+
+    import grass.script as gs
+
+    # Initialize GRASS in subprocess
+    gs.setup.init()
+
+    from grass.pygrass.modules.grid.grid import GridModule
+
+    grid = GridModule(module_name, **kwargs)
+    grid.run(**run_kwargs)
+
 
 xfail_mp_spawn = pytest.mark.xfail(
     multiprocessing.get_start_method() == "spawn",
@@ -29,26 +44,6 @@ def run_in_subprocess(function):
     process = multiprocessing.Process(target=function)
     process.start()
     process.join()
-
-
-def _run_grid_module(module_name, run_kwargs=None, **kwargs):
-    """Module-level helper to run GridModule in a subprocess.
-
-    Args:
-        module_name: Name of the GRASS module to run
-        run_kwargs: Optional dict of keyword arguments to pass to grid.run()
-        **kwargs: Keyword arguments to pass to GridModule
-    """
-    if run_kwargs is None:
-        run_kwargs = {}
-
-    import grass.script as gs
-
-    # Ensure region exists in subprocess
-    gs.run_command("g.region", flags="p")
-
-    grid = GridModule(module_name, **kwargs)
-    grid.run(**run_kwargs)
 
 
 @xfail_mp_spawn
