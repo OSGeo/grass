@@ -12,6 +12,7 @@ def _run_grid_module(module_name, project, run_kwargs=None, **kwargs):
     if run_kwargs is None:
         run_kwargs = {}
 
+    import sys
     import grass.script as gs
 
     # Initialize GRASS in subprocess
@@ -19,14 +20,18 @@ def _run_grid_module(module_name, project, run_kwargs=None, **kwargs):
 
     from grass.pygrass.modules.grid.grid import GridModule
 
-    grid = GridModule(module_name, **kwargs)
-    grid.run(**run_kwargs)
+    try:
+        grid = GridModule(module_name, **kwargs)
+        grid.run(**run_kwargs)
+    except Exception as e:
+        print(f"GridModule failed: {e}", file=sys.stderr)
+        sys.exit(1)
 
 
 xfail_mp_spawn = pytest.mark.xfail(
     multiprocessing.get_start_method() == "spawn",
     reason="Multiprocessing using 'spawn' start method requires pickable functions",
-    raises=AttributeError,
+    raises=RuntimeError,
     strict=True,
 )
 
@@ -47,7 +52,9 @@ def run_in_subprocess(function):
     process.start()
     process.join()
 
-    # Do NOT raise error here — let test handle failures
+    if process.exitcode != 0:
+        msg = f"Subprocess failed with exit code {process.exitcode}"
+        raise RuntimeError(msg)
     return process.exitcode
 
 
