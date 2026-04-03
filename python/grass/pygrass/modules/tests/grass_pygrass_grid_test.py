@@ -8,14 +8,14 @@ import pytest
 import grass.script as gs
 
 
-def _run_grid_module(module_name, run_kwargs=None, **kwargs):
+def _run_grid_module(module_name, project, run_kwargs=None, **kwargs):
     if run_kwargs is None:
         run_kwargs = {}
 
     import grass.script as gs
 
     # Initialize GRASS in subprocess
-    gs.setup.init()
+    gs.setup.init(project)
 
     from grass.pygrass.modules.grid.grid import GridModule
 
@@ -39,11 +39,17 @@ def max_processes():
 # GridModule uses C libraries which can easily initialize only once
 # and thus can't easily change location/mapset, so we use a subprocess
 # to separate individual GridModule calls.
+
+
 def run_in_subprocess(function):
     """Run function in a separate process"""
     process = multiprocessing.Process(target=function)
     process.start()
     process.join()
+
+    if process.exitcode != 0:
+        msg = f"Subprocess failed with exit code {process.exitcode}"
+        raise RuntimeError(msg)
 
 
 @xfail_mp_spawn
@@ -63,6 +69,7 @@ def test_processes(tmp_path, processes):
             functools.partial(
                 _run_grid_module,
                 "r.slope.aspect",
+                project=project,
                 width=10,
                 height=5,
                 overlap=2,
@@ -97,6 +104,7 @@ def test_tiling_schemes(tmp_path, width, height):
             functools.partial(
                 _run_grid_module,
                 "r.slope.aspect",
+                project=project,
                 width=width,
                 height=height,
                 overlap=2,
@@ -126,6 +134,7 @@ def test_overlaps(tmp_path, overlap):
             functools.partial(
                 _run_grid_module,
                 "r.slope.aspect",
+                project=project,
                 width=10,
                 height=5,
                 overlap=overlap,
@@ -157,6 +166,7 @@ def test_cleans(tmp_path, clean, surface):
             functools.partial(
                 _run_grid_module,
                 "r.slope.aspect",
+                project=project,
                 run_kwargs={"clean": clean},
                 width=10,
                 height=5,
@@ -202,6 +212,7 @@ def test_patching_backend(tmp_path, patch_backend):
             functools.partial(
                 _run_grid_module,
                 "v.to.rast",
+                project=project,
                 width=10,
                 height=5,
                 overlap=0,
@@ -242,6 +253,7 @@ def test_tiling(tmp_path, width, height, processes):
             functools.partial(
                 _run_grid_module,
                 "r.slope.aspect",
+                project=project,
                 width=width,
                 height=height,
                 overlap=2,
@@ -280,6 +292,7 @@ def test_patching_error(tmp_path, processes, backend):
             functools.partial(
                 _run_grid_module,
                 "r.surf.fractal",
+                project=project,
                 overlap=0,
                 processes=processes,
                 output=surface,
