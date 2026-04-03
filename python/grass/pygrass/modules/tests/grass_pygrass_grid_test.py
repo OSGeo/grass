@@ -47,8 +47,8 @@ def run_in_subprocess(function):
     process.start()
     process.join()
 
-    if process.exitcode != 0:
-        msg = f"Subprocess failed with exit code {process.exitcode}"
+    if process.exitcode not in {0, None}:
+        msg = "Subprocess failed with exit code {}".format(process.exitcode)
         raise RuntimeError(msg)
 
 
