@@ -141,7 +141,7 @@ def mapcalc(
     :param kwargs:
     """
 
-    if seed == "auto":
+    if seed == "auto" or (seed is None and "rand(" in exp):
         seed = hash((os.getpid(), time.time())) % (2**32)
 
     t = string.Template(exp)
@@ -218,7 +218,7 @@ def mapcalc_start(
     :return: Popen object
     """
 
-    if seed == "auto":
+    if seed == "auto" or (seed is None and "rand(" in exp):
         seed = hash((os.getpid(), time.time())) % (2**32)
 
     t = string.Template(exp)
