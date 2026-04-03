@@ -46,13 +46,12 @@ def max_processes():
 # to separate individual GridModule calls.
 
 
-def run_in_subprocess(function):
+def run_in_subprocess(function, check=True):
     """Run function in a separate process"""
     process = multiprocessing.Process(target=function)
     process.start()
     process.join()
-
-    if process.exitcode != 0:
+    if check and process.exitcode != 0:
         msg = f"Subprocess failed with exit code {process.exitcode}"
         raise RuntimeError(msg)
     return process.exitcode
@@ -165,6 +164,7 @@ def test_cleans(tmp_path, clean, surface):
     gs.create_project(project)
     with gs.setup.init(project):
         gs.run_command("g.region", s=0, n=50, w=0, e=50, res=1)
+
         if surface == "surface":
             gs.run_command("r.surf.fractal", output=surface)
 
@@ -182,7 +182,8 @@ def test_cleans(tmp_path, clean, surface):
                 slope="slope",
                 aspect="aspect",
                 mapset_prefix=mapset_prefix,
-            )
+            ),
+            check=(surface != "non_exist_surface"),
         )
 
         prefixed = 0
