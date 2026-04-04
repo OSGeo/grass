@@ -18,10 +18,21 @@ for details.
 :authors: Soeren Gebbert
 """
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from .abstract_map_dataset import AbstractMapDataset
-from .abstract_space_time_dataset import AbstractSpaceTimeDataset
-from .core import get_current_mapset, get_tgis_message_interface, init_dbif
+from .core import (
+    SQLDatabaseInterfaceConnection,
+    get_current_mapset,
+    get_tgis_message_interface,
+    init_dbif,
+)
 from .factory import dataset_factory
+
+if TYPE_CHECKING:
+    from .abstract_space_time_dataset import AbstractSpaceTimeDataset
 
 ###############################################################################
 
@@ -207,7 +218,7 @@ def _ensure_id(name: str) -> str:
 def check_open_output_stds(
     name: str,
     type: str,
-    dbif=None,
+    dbif: SQLDatabaseInterfaceConnection | None = None,
     overwrite: bool = False,
     extend: bool = False,
 ) -> bool:
@@ -268,7 +279,7 @@ def open_output_stds(
     title: str,
     descr: str,
     semantic: str,
-    dbif=None,
+    dbif: SQLDatabaseInterfaceConnection | None = None,
     overwrite: bool = False,
     extend: bool = False,
 ):
