@@ -155,13 +155,13 @@ def check_new_stds(name, type, dbif=None, overwrite: bool = False):
 
 
 def _get_stds(stds_id: str, stds_type: str) -> AbstractSpaceTimeDataset:
-    """Return an initialized SpaceTimeDataset (STDS).
+    """Return an initialized AbstractSpaceTimeDataset (STDS).
 
     :param stds_id: The id of the space time dataset (name@mapset)
     :param stds_type: The type of the space time dataset (strds, str3ds, stvds,
                       raster, vector, raster3d)
 
-    :return: A space time dataset object
+    :return: An AbstractSpaceTimeDataset object
 
     This function will raise a FatalError in case of an unknown type.
     """
