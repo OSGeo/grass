@@ -19,6 +19,7 @@ for details.
 """
 
 from .abstract_map_dataset import AbstractMapDataset
+from .abstract_space_time_dataset import AbstractSpaceTimeDataset
 from .core import get_current_mapset, get_tgis_message_interface, init_dbif
 from .factory import dataset_factory
 
@@ -153,7 +154,7 @@ def check_new_stds(name, type, dbif=None, overwrite: bool = False):
 ###############################################################################
 
 
-def _get_stds(stds_id: str, stds_type: str):
+def _get_stds(stds_id: str, stds_type: str) -> AbstractSpaceTimeDataset:
     """Return an initialized SpaceTimeDataset (STDS).
 
     :param stds_id: The id of the space time dataset (name@mapset)
