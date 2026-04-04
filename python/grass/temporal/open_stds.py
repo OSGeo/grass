@@ -153,9 +153,63 @@ def check_new_stds(name, type, dbif=None, overwrite: bool = False):
 ###############################################################################
 
 
+def _get_stds(stds_id: str, stds_type: str):
+    """Return an initialized SpaceTimeDataset (STDS).
+
+    :param stds_id: The id of the space time dataset (name@mapset)
+    :param stds_type: The type of the space time dataset (strds, str3ds, stvds,
+                      raster, vector, raster3d)
+
+    :return: A space time dataset object
+
+    This function will raise a FatalError in case of an unknown type.
+    """
+    msgr = get_tgis_message_interface()
+    supported_stds_types = {
+        "strds": "strds",
+        "rast": "strds",
+        "raster": "strds",
+        "str3ds": "str3ds",
+        "raster3d": "str3ds",
+        "rast3d": "str3ds",
+        "raster_3d": "str3ds",
+        "stvds": "stvds",
+        "vect": "stvds",
+        "vector": "stvds",
+    }
+    if stds_type not in supported_stds_types:
+        msgr.fatal(_("Unknown type: %s") % (stds_type))
+    return dataset_factory(supported_stds_types[stds_type], stds_id)
+
+
+###############################################################################
+
+
+def _ensure_id(name: str) -> str:
+    """Return a fully qualified id (name@mapset) for the given name.
+
+    If the name already contains a mapset, it is returned as is.
+    Otherwise, the current mapset is appended.
+
+    :param name: The name of the space time dataset
+
+    :return: The fully qualified id (name@mapset)
+    """
+    if "@" not in name:
+        return f"{name}@{get_current_mapset()}"
+    return name
+
+
+###############################################################################
+
+
 def check_open_output_stds(
-    name, type, dbif=None, overwrite: bool = False, extend: bool = False
-):
+    name: str,
+    type: str,
+    dbif=None,
+    overwrite: bool = False,
+    extend: bool = False,
+) -> bool:
     """Check if an output space time dataset can be opened as requested.
 
     This is a lightweight check run before main processing starts.
@@ -166,34 +220,26 @@ def check_open_output_stds(
     :param dbif: The temporal database interface to be used
     :param overwrite: Flag to allow overwriting existing dataset
     :param extend: Flag to extend an existing dataset if it exists
+    :return: True if the output dataset already exists, False otherwise
 
     This function will raise a FatalError in case of an error.
     """
-    mapset = get_current_mapset()
     msgr = get_tgis_message_interface()
 
-    if name.find("@") < 0:
-        id = name + "@" + mapset
-    else:
-        n, m = name.split("@")
-        if mapset != m:
+    if "@" in name:
+        _, m = name.split("@")
+        if m != get_current_mapset():
             msgr.fatal(
                 _("Space time datasets can only be created in the current mapset")
             )
-        id = name
 
-    if type in {"strds", "rast", "raster"}:
-        sp = dataset_factory("strds", id)
-    elif type in {"str3ds", "raster3d", "rast3d", "raster_3d"}:
-        sp = dataset_factory("str3ds", id)
-    elif type in {"stvds", "vect", "vector"}:
-        sp = dataset_factory("stvds", id)
-    else:
-        msgr.fatal(_("Unknown type: %s") % (type))
+    id = _ensure_id(name)
+    sp = _get_stds(id, type)
 
     dbif, connection_state_changed = init_dbif(dbif)
+    output_exists = sp.is_in_db(dbif)
 
-    if sp.is_in_db(dbif):
+    if output_exists:
         if not extend and not overwrite:
             if connection_state_changed:
                 dbif.close()
@@ -208,17 +254,19 @@ def check_open_output_stds(
     if connection_state_changed:
         dbif.close()
 
+    return output_exists
+
 
 ###############################################################################
 
 
 def open_output_stds(
-    name,
-    type,
-    temporaltype,
-    title,
-    descr,
-    semantic,
+    name: str,
+    type: str,
+    temporaltype: str,
+    title: str,
+    descr: str,
+    semantic: str,
     dbif=None,
     overwrite: bool = False,
     extend: bool = False,
@@ -243,17 +291,9 @@ def open_output_stds(
     dbif, connection_state_changed = init_dbif(dbif)
     msgr = get_tgis_message_interface()
 
-    mapset = get_current_mapset()
-    id = name + "@" + mapset if name.find("@") < 0 else name
+    id = _ensure_id(name)
+    sp = _get_stds(id, type)
 
-    if type in {"strds", "rast", "raster"}:
-        sp = dataset_factory("strds", id)
-    elif type in {"str3ds", "raster3d", "rast3d", "raster_3d"}:
-        sp = dataset_factory("str3ds", id)
-    elif type in {"stvds", "vect", "vector"}:
-        sp = dataset_factory("stvds", id)
-    else:
-        msgr.fatal(_("Unknown type: %s") % (type))
     if extend and sp.is_in_db(dbif):
         # extend-if-exists: load and return existing dataset
         sp.select(dbif)

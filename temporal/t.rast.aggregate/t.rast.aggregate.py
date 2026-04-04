@@ -153,14 +153,9 @@ def main():
 
     # Check if output can be opened as requested before processing starts.
     # This is a lightweight check that does not create or open the dataset.
-    tgis.check_open_output_stds(
+    output_exists = tgis.check_open_output_stds(
         output, "strds", dbif=dbif, overwrite=overwrite, extend=extend
     )
-
-    # Record whether output already exists for use after processing
-    mapset = tgis.get_current_mapset()
-    output_id = output + "@" + mapset
-    output_exists = tgis.SpaceTimeRasterDataset(output_id).is_in_db(dbif)
 
     start_time = map_list[0].temporal_extent.get_start_time()
 
