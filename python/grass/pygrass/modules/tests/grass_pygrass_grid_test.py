@@ -183,7 +183,8 @@ def test_cleans(tmp_path, clean, surface):
                 aspect="aspect",
                 mapset_prefix=mapset_prefix,
             ),
-            check=(surface != "non_exist_surface"),
+            check=multiprocessing.get_start_method() == "spawn"
+            or surface != "non_exist_surface",
         )
 
         prefixed = 0
