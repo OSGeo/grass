@@ -57,7 +57,6 @@ def run_in_subprocess(function, check=True):
     return process.exitcode
 
 
-@xfail_mp_spawn
 @pytest.mark.needs_solo_run
 @pytest.mark.parametrize("processes", list(range(1, max_processes() + 1)) + [None])
 def test_processes(tmp_path, processes):
