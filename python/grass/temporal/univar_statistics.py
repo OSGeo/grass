@@ -21,7 +21,6 @@ Usage:
         region_relation=region_relation,
         nprocs=nprocs,
         granularity=options["granularity"] or None,
-        start=options["start"] or None,
     )
 
 ..
@@ -140,7 +139,6 @@ def print_gridded_dataset_univar_statistics(
     percentile=None,
     nprocs: int = 1,
     granularity: str | None = None,
-    start: str | None = None,
 ) -> None:
     """Print univariate statistics for a space time raster or raster3d dataset.
 
@@ -190,29 +188,9 @@ def print_gridded_dataset_univar_statistics(
         spatial_extent=spatial_extent,
         spatial_relation=region_relation,
     )
-
-    # When the user asks for granularity, we group maps into time windows
-    # and later feed each group as a comma-joined list to r.univar.
-    # No new rasters written to disk — that's the whole point of this feature.
     granule_groups = None
     if granularity and rows:
-        # Snap the start of the first window to the requested granularity
-        # unless the user gave an explicit start time
-        if start:
-            from datetime import datetime as _dt
-
-            # try dateutil first, fall back to a basic format
-            try:
-                from dateutil import parser as _dp
-
-                win_start = _dp.parse(start)
-            except ImportError:
-                win_start = _dt.strptime(start, "%Y-%m-%d %H:%M:%S")
-        else:
-            win_start = adjust_datetime_to_granularity(
-                rows[0]["start_time"], granularity
-            )
-
+        win_start = adjust_datetime_to_granularity(rows[0]["start_time"], granularity)
         # last map's end_time can be None for point-in-time maps — fall back to start
         last = rows[-1]
         win_end_global = last["end_time"] or last["start_time"]
