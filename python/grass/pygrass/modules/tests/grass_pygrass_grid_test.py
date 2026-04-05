@@ -31,7 +31,7 @@ def _run_grid_module(module_name, project, run_kwargs=None, **kwargs):
 xfail_mp_spawn = pytest.mark.xfail(
     multiprocessing.get_start_method() == "spawn",
     reason="Multiprocessing using 'spawn' start method requires pickable functions",
-    raises=RuntimeError,
+    raises=AttributeError,
     strict=True,
 )
 
