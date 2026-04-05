@@ -163,7 +163,6 @@ def test_cleans(tmp_path, clean, surface):
     gs.create_project(project)
     with gs.setup.init(project):
         gs.run_command("g.region", s=0, n=50, w=0, e=50, res=1)
-
         if surface == "surface":
             gs.run_command("r.surf.fractal", output=surface)
 
