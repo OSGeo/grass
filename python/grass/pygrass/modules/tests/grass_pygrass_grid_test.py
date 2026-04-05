@@ -28,14 +28,6 @@ def _run_grid_module(module_name, project, run_kwargs=None, **kwargs):
         sys.exit(1)
 
 
-xfail_mp_spawn = pytest.mark.xfail(
-    multiprocessing.get_start_method() == "spawn",
-    reason="Multiprocessing using 'spawn' start method requires pickable functions",
-    raises=AttributeError,
-    strict=True,
-)
-
-
 def max_processes():
     """Get max useful number of parallel processes to run"""
     return min(multiprocessing.cpu_count(), 4)
@@ -91,7 +83,6 @@ def test_processes(tmp_path, processes):
 # @pytest.mark.parametrize("split", [False])  # True does not work.
 
 
-@xfail_mp_spawn
 @pytest.mark.parametrize("width", [5, 10, 50])  # None does not work.
 @pytest.mark.parametrize("height", [5, 10, 50])
 def test_tiling_schemes(tmp_path, width, height):
@@ -123,7 +114,6 @@ def test_tiling_schemes(tmp_path, width, height):
         assert info["min"] > 0
 
 
-@xfail_mp_spawn
 @pytest.mark.parametrize("overlap", [0, 1, 2, 5])
 def test_overlaps(tmp_path, overlap):
     """Check that overlap accepts different values"""
@@ -153,7 +143,6 @@ def test_overlaps(tmp_path, overlap):
         assert info["min"] > 0
 
 
-@xfail_mp_spawn
 @pytest.mark.parametrize("clean", [True, False])
 @pytest.mark.parametrize("surface", ["surface", "non_exist_surface"])
 def test_cleans(tmp_path, clean, surface):
@@ -198,7 +187,6 @@ def test_cleans(tmp_path, clean, surface):
             assert prefixed, "Not even one prefixed mapset"
 
 
-@xfail_mp_spawn
 @pytest.mark.parametrize("patch_backend", [None, "r.patch", "RasterRow"])
 def test_patching_backend(tmp_path, patch_backend):
     """Check patching backend works"""
@@ -236,7 +224,6 @@ def test_patching_backend(tmp_path, patch_backend):
         assert abs(mean - mean_ref) < 0.0001
 
 
-@xfail_mp_spawn
 @pytest.mark.parametrize(
     ("width", "height", "processes"),
     [
@@ -274,7 +261,6 @@ def test_tiling(tmp_path, width, height, processes):
         assert info["min"] > 0
 
 
-@xfail_mp_spawn
 @pytest.mark.needs_solo_run
 @pytest.mark.parametrize(
     ("processes", "backend"),
