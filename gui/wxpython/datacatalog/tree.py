@@ -2019,6 +2019,34 @@ class DataCatalogTree(TreeView):
             # temp gisrc file must be deleted onDone
             self._giface.RunCmd(cmd, env=env, onDone=done, userData=gisrc)
 
+    def OnShowProjection(self, event):
+        """Show projection of selected location"""
+
+        def done(event):
+            gs.try_remove(event.userData)
+
+        cmd = ["g.proj", "-p"]
+        gisrc, env = gs.create_environment(
+            self.selected_grassdb[0].data["name"],
+            self.selected_location[0].data["name"],
+            "PERMANENT",
+        )
+        self._giface.RunCmd(cmd, env=env, onDone=done, userData=gisrc)
+
+    def OnShowRegion(self, event):
+        """Show region of selected mapset"""
+
+        def done(event):
+            gs.try_remove(event.userData)
+
+        cmd = ["g.region", "-p3"]
+        gisrc, env = gs.create_environment(
+            self.selected_grassdb[0].data["name"],
+            self.selected_location[0].data["name"],
+            self.selected_mapset[0].data["name"],
+        )
+        self._giface.RunCmd(cmd, env=env, onDone=done, userData=gisrc)
+
     def OnCopyName(self, event):
         """Copy layer name to clipboard"""
         if wx.TheClipboard.Open():
@@ -2264,6 +2292,10 @@ class DataCatalogTree(TreeView):
         if self._restricted:
             item.Enable(False)
 
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Show region"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnShowRegion, item)
+
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename mapset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRenameMapset, item)
@@ -2294,6 +2326,10 @@ class DataCatalogTree(TreeView):
         self.Bind(wx.EVT_MENU, self.OnDeleteLocation, item)
         if self._restricted:
             item.Enable(False)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Show projection"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnShowProjection, item)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename project"))
         menu.AppendItem(item)

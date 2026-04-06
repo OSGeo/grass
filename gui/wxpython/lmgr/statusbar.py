@@ -21,6 +21,7 @@ import wx
 
 import grass.script as gs
 
+import json
 from core.gcmd import RunCommand
 from core.watchdog import watchdog_used
 from gui_core.wrap import Button
@@ -34,9 +35,10 @@ class SbMain:
         self.giface = giface
         self.widget = wx.StatusBar(self.parent, id=wx.ID_ANY)
         self.widget.SetMinHeight(24)
-        self.widget.SetFieldsCount(2)
-        self.widget.SetStatusWidths([-1, 100])
+        self.widget.SetFieldsCount(3)
+        self.widget.SetStatusWidths([-1, 100, 100])
         self.mask = SbMask(self.widget, self.giface)
+        self.crs = SbCRS(self.widget, self.giface)
         self.widget.Bind(wx.EVT_SIZE, self.OnSize)
         self._repositionStatusbar()
 
@@ -54,9 +56,15 @@ class SbMain:
         rect1.y += 1
         self.mask.GetWidget().SetRect(rect1)
 
+        rect2 = self.GetWidget().GetFieldRect(2)
+        rect2.x += 1
+        rect2.y += 1
+        self.crs.GetWidget().SetRect(rect2)
+
     def Refresh(self):
-        """Refresh statusbar. So far it refreshes just a mask."""
+        """Refresh statusbar"""
         self.mask.Refresh()
+        self.crs.Refresh()
 
     def OnSize(self, event):
         """Adjust main window statusbar on changing size"""
@@ -155,3 +163,59 @@ class SbMask:
             action="delete",
             element="raster",
         )
+
+
+class SbCRS:
+    """Button to show the EPSG code if available, otherwise 'Custom CRS'.
+    Clicking it prints Coordinate Reference System (CRS) information for
+    the current project to the console.
+    """
+
+    def __init__(self, parent, giface):
+        self.name = "crs"
+        self.giface = giface
+        self.widget = Button(
+            parent=parent, id=wx.ID_ANY, label=_("Custom CRS"), style=wx.NO_BORDER
+        )
+        self.widget.Bind(wx.EVT_BUTTON, self.OnShowProjection)
+        self.widget.SetToolTip(
+            tip=_("Left mouse click to print detailed projection info")
+        )
+
+        self.giface.currentMapsetChanged.connect(self.Refresh)
+        self.Refresh()
+
+    def Show(self):
+        self.widget.Show()
+
+    def Hide(self):
+        self.widget.Hide()
+
+    def GetWidget(self):
+        """Returns underlying widget.
+
+        :return: widget or None if doesn't exist
+        """
+        return self.widget
+
+    def Refresh(self):
+        """Fetch the EPSG code, or display 'Custom CRS' if not found"""
+
+        label = _("Custom CRS")
+
+        try:
+            proj_str = gs.read_command(
+                "g.proj", flags="p", format="projjson", quiet=True
+            )
+            if proj_str:
+                proj_info = json.loads(proj_str)
+                if "id" in proj_info and proj_info["id"].get("authority") == "EPSG":
+                    label = f"EPSG: {proj_info['id']['code']}"
+        except (TypeError, KeyError, json.JSONDecodeError):
+            pass
+
+        self.widget.SetLabel(label)
+        self.Show()
+
+    def OnShowProjection(self, event):
+        self.giface.RunCmd(["g.proj", "-p"])
