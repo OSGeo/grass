@@ -537,15 +537,14 @@ class AbstractMapDataset(AbstractDataset):
                 dbif.close()
 
                 # write to timestamp only if its the same mapset, otherwise show a warning and skip the write to avoid inconsistencies between the temporal database and the grass file system --> supposed to fix issue 3394
-            if (
-                get_enable_timestamp_write()
-                and self.get_mapset() == get_current_mapset()
-            ):
-                self.write_timestamp_to_grass()
-            else:
+            if self.get_mapset() != get_current_mapset():
                 self.msgr.warning(
                     f"Skipping timestamp write for {self.get_map_id()} (different mapset)"
                 )
+                return
+
+            if get_enable_timestamp_write():
+                self.write_timestamp_to_grass()
 
     def set_relative_time(self, start_time, end_time, unit) -> bool:
         """Set the relative time interval
@@ -664,6 +663,12 @@ class AbstractMapDataset(AbstractDataset):
 
             if connection_state_changed:
                 dbif.close()
+
+            if self.get_mapset() != get_current_mapset():
+                self.msgr.warning(
+                    f"Skipping timestamp write for {self.get_map_id()} (different mapset)"
+                )
+                return
 
             if get_enable_timestamp_write():
                 self.write_timestamp_to_grass()
