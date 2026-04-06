@@ -146,15 +146,14 @@ def check_new_stds(name, type, dbif=None, overwrite: bool = False):
 
     dbif, connection_state_changed = init_dbif(dbif)
 
-    if sp.is_in_db(dbif):
-        if overwrite is False:
-            msgr.fatal(
-                _(
-                    "Space time %(sp)s dataset <%(name)s> is already in the"
-                    " database. Use the overwrite flag."
-                )
-                % {"sp": sp.get_new_map_instance(None).get_type(), "name": name}
+    if sp.is_in_db(dbif) and not overwrite:
+        msgr.fatal(
+            _(
+                "Space time %(sp)s dataset <%(name)s> is already in the"
+                " database. Use the overwrite flag."
             )
+            % {"sp": sp.get_new_map_instance(None).get_type(), "name": name}
+        )
 
     if connection_state_changed:
         dbif.close()
@@ -238,30 +237,22 @@ def check_open_output_stds(
     """
     msgr = get_tgis_message_interface()
 
-    if "@" in name:
-        _, m = name.split("@")
-        if m != get_current_mapset():
-            msgr.fatal(
-                _("Space time datasets can only be created in the current mapset")
-            )
-
     id = _ensure_id(name)
     sp = _get_stds(id, type)
 
     dbif, connection_state_changed = init_dbif(dbif)
     output_exists = sp.is_in_db(dbif)
 
-    if output_exists:
-        if not extend and not overwrite:
-            if connection_state_changed:
-                dbif.close()
-            msgr.fatal(
-                _(
-                    "Space time %(sp)s dataset <%(name)s> is already in the"
-                    " database. Use the overwrite flag."
-                )
-                % {"sp": sp.get_new_map_instance(None).get_type(), "name": name}
+    if output_exists and not extend and not overwrite:
+        if connection_state_changed:
+            dbif.close()
+        msgr.fatal(
+            _(
+                "Space time %(sp)s dataset <%(name)s> is already in the"
+                " database. Use the overwrite flag."
             )
+            % {"sp": sp.get_new_map_instance(None).get_type(), "name": name}
+        )
 
     if connection_state_changed:
         dbif.close()

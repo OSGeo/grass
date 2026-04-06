@@ -291,17 +291,14 @@ class TestAggregationAbsolute(TestCase):
         )
 
         # Check original maps are still present (STRDS was not overwritten)
-        for original_map in original_maps.strip().split(os.linesep):
-            self.assertIn(original_map, extended_maps)
+        original_map_set = set(original_maps.strip().split(os.linesep))
+        self.assertTrue(
+            original_map_set.issubset(extended_maps.strip().split(os.linesep)),
+            "Original maps are missing from extended STRDS",
+        )
 
         # Check total map count increased (original 3 + extended 3 = 6)
-        info = SimpleModule("t.info", flags="g", input="B")
-        self.assertModuleKeyValue(
-            module=info,
-            reference="number_of_maps=6",
-            precision=2,
-            sep="=",
-        )
+        self.assertEqual(len(extended_maps.strip().split(os.linesep)), 6)
 
 
 if __name__ == "__main__":
