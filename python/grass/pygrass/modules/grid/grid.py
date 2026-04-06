@@ -633,9 +633,7 @@ class GridModule:
                     "ewres": "%f" % reg.ewres,
                 }
 
-                new_mset = (
-                    self.msetstr % (self.start_row + row, self.start_col + col),
-                )
+                new_mset = self.msetstr % (self.start_row + row, self.start_col + col)
                 works.append(
                     (
                         bbox,
