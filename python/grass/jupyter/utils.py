@@ -21,6 +21,7 @@ import multiprocessing
 from pathlib import Path
 import grass.script as gs
 from grass.tools import Tools
+from io import StringIO
 
 
 def get_region(env=None):
