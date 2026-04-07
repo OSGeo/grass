@@ -373,9 +373,9 @@ def cmd_exe(args):
       the mapset.
 
     """
-    bbox, mapnames, gisrc_src, gisrc_dst, cmd, groups = args
+    bbox, mapnames, gisrc_src, gisrc_dst, cmd, groups, env = args
     src, dst = get_mapset(gisrc_src, gisrc_dst)
-    env = os.environ.copy()
+    env = env.copy()
     env["GISRC"] = gisrc_dst
     shell = sys.platform == "win32"
     if mapnames:
@@ -642,6 +642,7 @@ class GridModule:
                         write_gisrc(gdst, ldst, new_mset),
                         cmd,
                         groups,
+                        os.environ.copy(),
                     )
                 )
         return works
