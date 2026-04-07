@@ -1,5 +1,6 @@
 import grass.script as gs
 from grass.tools import Tools
+import pytest
 from grass.jupyter.utils import (
     get_region,
     get_location_proj_string,
@@ -53,17 +54,21 @@ def test_set_target_region(session_with_data, tmp_path):
     """Check setting a target region in a newly created environment"""
     gisdbase = str(tmp_path)
 
-    # Helper to quickly spin up isolated GRASS locations
-    def make_env(loc_name, epsg):
-        _, env = gs.create_environment(gisdbase, loc_name, "PERMANENT")
-        gs.create_location(gisdbase, loc_name, epsg=epsg, overwrite=True)
-        full_env = session_with_data.env.copy()
-        full_env["GISRC"] = env["GISRC"]
-        return full_env
+    base_env = session_with_data.env
 
-    # Setup Source and Target
-    src_env = make_env("src_loc", "3857")
-    tgt_env = make_env("tgt_loc", "4326")
+    # setup source environment 
+    _, src_base_env = gs.create_environment(gisdbase, "src_loc", "PERMANENT")
+    gs.create_project(gisdbase, "src_loc", epsg="3857", overwrite=True)
+
+    src_env = base_env.copy()
+    src_env["GISRC"] = src_base_env["GISRC"]
+
+    # setup target environment
+    _, tgt_base_env = gs.create_environment(gisdbase, "tgt_loc", "PERMANENT")
+    gs.create_project(gisdbase, "tgt_loc", epsg="4326", overwrite=True)
+    
+    tgt_env = base_env.copy()
+    tgt_env["GISRC"] = tgt_base_env["GISRC"]
 
     # Add data to source, then execute function
     Tools(env=src_env).g_region(n=1000, s=0, e=1000, w=0, rows=10, cols=10)
@@ -72,5 +77,7 @@ def test_set_target_region(session_with_data, tmp_path):
     # Verify
     res = get_region(env=tgt_env)
     assert isinstance(res, dict)
-    assert "north" in res
-    assert "south" in res
+    assert res["north"] == pytest.approx(0.008983, rel=1e-4) 
+    assert res["south"] == pytest.approx(0.0, rel=1e-4)
+    assert res["east"] == pytest.approx(0.008983, rel=1e-4)
+    assert res["west"] == pytest.approx(0.0, rel=1e-4)

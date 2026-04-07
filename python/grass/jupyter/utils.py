@@ -41,13 +41,13 @@ def reproject_region(region, from_proj, to_proj, env=None):
     :param dict region: region to reproject as a dictionary with long key names
                     output of get_region
     :param str from_proj: PROJ.4 string of region; output of get_location_proj_string
-    :param str in_proj: PROJ.4 string of target location;
+    :param str to_proj: PROJ.4 string of target location;
                     output of get_location_proj_string
+    :param str env: environment
 
     :return dict region: reprojected region as a dictionary with long key names
     """
     region = region.copy()
-    tools = Tools(env=env)
     # reproject all corners, otherwise reproj. region may be underestimated
     # even better solution would be reprojecting vector region like in r.import
     proj_input = (
@@ -62,7 +62,7 @@ def reproject_region(region, from_proj, to_proj, env=None):
 
         tools = Tools(env=env)
         result = tools.m_proj(
-            input=temp_file.name,
+            input=StringIO(proj_input),
             separator=",",
             proj_in=from_proj,
             proj_out=to_proj,
