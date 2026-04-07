@@ -2121,6 +2121,113 @@ def create_project(
         )
 
 
+def create_mapset(
+    path=None,
+    name=None,
+    *,
+    overwrite=False,
+    initialize_db=True,
+    env=None,
+):
+    """Create a new mapset in an existing project
+
+    The project must already exist. The mapset inherits the CRS from the
+    project's PERMANENT mapset.
+
+    By default, the database connection is initialized (equivalent to
+    ``db.connect -c``), so the mapset is ready for use with vector attribute
+    data. Set *initialize_db* to False to skip this step.
+
+    The path can be provided in several ways:
+
+    * Full path to the new mapset in an existing project::
+
+          create_mapset("/home/user/grassdata/project/new_mapset")
+
+    * Path to an existing project with the mapset name as *name*::
+
+          create_mapset("/home/user/grassdata/project", name="new_mapset")
+
+    * Mapset name only, using the current session's project::
+
+          create_mapset(name="new_mapset")
+          create_mapset(name="new_mapset", env=session.env)
+
+    :param str path: path to the new mapset or to the project if *name* is given;
+                     can be omitted when *name* is given and a session is active
+    :param str name: mapset name to create
+    :param bool overwrite: True to overwrite an existing mapset (WARNING:
+                           ALL DATA from existing mapset ARE DELETED!)
+    :param bool initialize_db: True to initialize the default database
+                               connection in the new mapset (default True)
+    :param dict env: environment for the session; if not provided,
+                     ``os.environ`` is used
+
+    :raises ~grass.exceptions.ScriptError:
+        Raise :py:exc:`~grass.exceptions.ScriptError` when neither *path* nor
+        *name* is provided, when *name* is given without *path* and no session
+        is active, when the project does not exist, when the mapset already
+        exists (and *overwrite* is False), or when an OS-level error occurs.
+    """
+    from grass.grassdb.create import create_mapset as grassdb_create_mapset
+
+    if env is None:
+        env = os.environ
+
+    if path is not None and name:
+        path = Path(path) / name
+    elif path is None and name:
+        if not env.get("GISRC"):
+            msg = "No active session. Provide path or start a session first"
+            raise ScriptError(msg)
+        gisenv_data = gisenv(env=env)
+        path = Path(gisenv_data["GISDBASE"]) / gisenv_data["LOCATION_NAME"] / name
+    elif path is None and not name:
+        msg = "Either path or name must be provided"
+        raise ScriptError(msg)
+
+    mapset_path = resolve_mapset_path(path=path)
+
+    if not legal_name(mapset_path.mapset):
+        msg = f"Illegal mapset name <{mapset_path.mapset}>"
+        raise ScriptError(msg)
+
+    project_dir = mapset_path.path.parent
+    if not project_dir.exists():
+        msg = f"Project <{mapset_path.location}> does not exist in <{mapset_path.directory}>"
+        raise ScriptError(msg)
+
+    permanent_dir = project_dir / "PERMANENT"
+    if not permanent_dir.exists():
+        msg = f"Project <{mapset_path.location}> is not a valid project (missing PERMANENT mapset)"
+        raise ScriptError(msg)
+
+    if mapset_path.mapset == "PERMANENT":
+        msg = "Cannot create PERMANENT mapset (it is managed by the project)"
+        raise ScriptError(msg)
+
+    if mapset_path.path.exists():
+        if not overwrite:
+            msg = f"Mapset <{mapset_path.mapset}> already exists in project <{mapset_path.location}>"
+            raise ScriptError(msg)
+        shutil.rmtree(mapset_path.path)
+
+    try:
+        grassdb_create_mapset(
+            mapset_path.directory, mapset_path.location, mapset_path.mapset
+        )
+    except OSError as e:
+        raise ScriptError(repr(e))
+
+    if initialize_db:
+        from grass.script import setup
+        from grass.tools import Tools
+
+        with setup.init(mapset_path.path, env=env.copy()) as session:
+            tools = Tools(session=session)
+            tools.db_connect(flags="c")
+
+
 def _set_location_description(path, location, text):
     """Set description (aka title aka MYNAME) for a location
 
