@@ -5,7 +5,6 @@ import os
 import pytest
 
 import grass.script as gs
-from grass.exceptions import ScriptError
 from grass.tools import Tools
 
 
@@ -52,7 +51,7 @@ def test_create_mapset_usable(project_path):
 def test_create_mapset_no_overwrite(project_path):
     """Check that existing mapset raises error without overwrite."""
     gs.create_mapset(project_path, name="new_mapset")
-    with pytest.raises(ScriptError, match="already exists"):
+    with pytest.raises(ValueError, match="already exists"):
         gs.create_mapset(project_path, name="new_mapset")
 
 
@@ -75,7 +74,7 @@ def test_create_mapset_overwrite(project_path):
 
 def test_create_mapset_nonexistent_project(tmp_path):
     """Check error when project does not exist."""
-    with pytest.raises(ScriptError, match="does not exist"):
+    with pytest.raises(ValueError, match="does not exist"):
         gs.create_mapset(tmp_path / "nonexistent" / "new_mapset")
 
 
@@ -83,20 +82,20 @@ def test_create_mapset_invalid_project(tmp_path):
     """Check error when project directory exists but has no PERMANENT mapset."""
     invalid_project = tmp_path / "invalid_project"
     invalid_project.mkdir()
-    with pytest.raises(ScriptError, match="PERMANENT"):
+    with pytest.raises(ValueError, match="PERMANENT"):
         gs.create_mapset(invalid_project, name="new_mapset")
 
 
 def test_create_mapset_permanent_rejected(project_path):
     """Check that creating PERMANENT mapset is rejected."""
-    with pytest.raises(ScriptError, match="PERMANENT"):
+    with pytest.raises(ValueError, match="PERMANENT"):
         gs.create_mapset(project_path, name="PERMANENT")
 
 
 @pytest.mark.parametrize("name", [".hidden", "has space", "with@at"])
 def test_create_mapset_illegal_name(project_path, name):
     """Check that illegal mapset names are rejected."""
-    with pytest.raises(ScriptError, match="Illegal"):
+    with pytest.raises(ValueError, match="Illegal"):
         gs.create_mapset(project_path, name=name, initialize_db=False)
 
 
@@ -122,13 +121,13 @@ def test_create_mapset_name_only(project_path):
 @pytest.mark.usefixtures("mock_no_session")
 def test_create_mapset_name_only_no_session():
     """Check that name-only fails without an active session."""
-    with pytest.raises(ScriptError, match="No active session"):
+    with pytest.raises(ValueError, match="No active session"):
         gs.create_mapset(name="new_mapset")
 
 
 def test_create_mapset_no_arguments():
     """Check that calling without path or name raises an error."""
-    with pytest.raises(ScriptError, match="Either path or name"):
+    with pytest.raises(ValueError, match="Either path or name"):
         gs.create_mapset()
 
 
