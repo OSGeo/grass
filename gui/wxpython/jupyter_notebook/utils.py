@@ -6,6 +6,7 @@
 Functions:
 - `is_jupyter_installed()`: Check if Jupyter Notebook is installed on the system and functional.
 - `is_wx_html2_available()`: Check if wx.html2 module is available.
+- `is_webview2_available()`: Check if wx.html2.WebView uses Microsoft Edge WebView2 on Windows.
 
 (C) 2026 by the GRASS Development Team
 
@@ -15,6 +16,7 @@ This program is free software under the GNU General Public License
 @author Linda Karlovska <linda.karlovska seznam.cz>
 """
 
+import sys
 import shutil
 import subprocess
 
@@ -56,3 +58,25 @@ def is_wx_html2_available() -> bool:
         return True
     except (ImportError, ModuleNotFoundError):
         return False
+
+
+def is_webview2_available() -> bool:
+    """Check whether wx.html2.WebView uses Microsoft Edge WebView2 on Windows.
+
+    On Windows, wx.html2.WebView can fall back to the Internet Explorer (MSHTML)
+    engine if WebView2 runtime is not installed, which is not compatible with
+    modern Jupyter Notebook/Lab interfaces. On Linux/macOS, the backend is
+    assumed to be usable (WebKit-based).
+
+    :return: True if WebView2 (Edge) is available or non-Windows platform,
+             False otherwise
+    """
+    if sys.platform.startswith("win"):
+        try:
+            import wx.html2 as html
+
+            info = html.WebView.GetBackendVersionInfo()
+            return info.GetName().lower() == "edge"
+        except Exception:
+            return False
+    return True
