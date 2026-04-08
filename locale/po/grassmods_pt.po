@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_pt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-14 18:00+0000\n"
+"POT-Creation-Date: 2026-03-28 15:48+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese <https://weblate.osgeo.org/projects/grass-gis/grassmods/pt/>\n"
@@ -2238,7 +2238,6 @@ msgstr "Número de dígitos significativos (apenas ponto flutuante)"
 msgid "Get text color from cell color value"
 msgstr "Usar cor do texto a partir da cor da célula"
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -3928,7 +3927,7 @@ msgstr ""
 msgid "create project"
 msgstr ""
 
-msgid "Prints or modifies GRASS projection information files (in various co-ordinate system descriptions)."
+msgid "Prints or modifies GRASS projection information files (in various coordinate system descriptions)."
 msgstr ""
 
 msgid "Can also be used to create new GRASS projects."
@@ -3993,7 +3992,7 @@ msgstr ""
 msgid "Datum"
 msgstr ""
 
-msgid "Datum (overrides any datum specified in input co-ordinate system)"
+msgid "Datum (overrides any datum specified in input coordinate system)"
 msgstr ""
 
 msgid "Accepts standard GRASS datum codes, or \"list\" to list and exit"
@@ -4005,7 +4004,7 @@ msgstr ""
 msgid "\"0\" for unspecified or \"-1\" to list and exit"
 msgstr ""
 
-msgid "Force override of datum transformation information in input co-ordinate system"
+msgid "Force override of datum transformation information in input coordinate system"
 msgstr ""
 
 msgid "Modify"
@@ -18367,7 +18366,7 @@ msgstr ""
 msgid "Number of walkers"
 msgstr ""
 
-msgid "Time used for iterations [minutes]"
+msgid "Duration of the simulated water flow [minutes]"
 msgstr ""
 
 msgid "Minimum time step for the simulation [seconds]"
@@ -20340,7 +20339,6 @@ msgstr "Categorias demais (encontrei: %i, máx: %i). Tente rescalonar ou reclass
 msgid "Input raster must be of type CELL."
 msgstr ""
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
@@ -29565,7 +29563,7 @@ msgstr "Tipo de feição"
 msgid "centrality measures"
 msgstr ""
 
-msgid "Computes degree, centrality, betweeness, closeness and eigenvector centrality measures in the network."
+msgid "Computes degree, centrality, betweenness, closeness and eigenvector centrality measures in the network."
 msgstr ""
 
 msgid "Name of degree centrality column"

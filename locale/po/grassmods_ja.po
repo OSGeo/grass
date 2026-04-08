@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-14 18:00+0000\n"
+"POT-Creation-Date: 2026-03-28 15:48+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Japanese <https://weblate.osgeo.org/projects/grass-gis/grassmods/ja/>\n"
@@ -2248,7 +2248,6 @@ msgstr "小数点以下の有効桁数"
 msgid "Get text color from cell color value"
 msgstr ""
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -3952,7 +3951,7 @@ msgstr "投影法"
 msgid "create project"
 msgstr "ソース投影"
 
-msgid "Prints or modifies GRASS projection information files (in various co-ordinate system descriptions)."
+msgid "Prints or modifies GRASS projection information files (in various coordinate system descriptions)."
 msgstr ""
 
 msgid "Can also be used to create new GRASS projects."
@@ -4020,7 +4019,7 @@ msgstr ""
 msgid "Datum"
 msgstr "データ"
 
-msgid "Datum (overrides any datum specified in input co-ordinate system)"
+msgid "Datum (overrides any datum specified in input coordinate system)"
 msgstr ""
 
 msgid "Accepts standard GRASS datum codes, or \"list\" to list and exit"
@@ -4032,8 +4031,9 @@ msgstr "データ変換パラメーターのインデックスナンバー"
 msgid "\"0\" for unspecified or \"-1\" to list and exit"
 msgstr "未指定には \"0\" または リストと終了には \"-1\""
 
-msgid "Force override of datum transformation information in input co-ordinate system"
-msgstr ""
+#, fuzzy
+msgid "Force override of datum transformation information in input coordinate system"
+msgstr "読込中 ... "
 
 msgid "Modify"
 msgstr "変更"
@@ -18454,7 +18454,7 @@ msgstr ""
 msgid "Number of walkers"
 msgstr ""
 
-msgid "Time used for iterations [minutes]"
+msgid "Duration of the simulated water flow [minutes]"
 msgstr ""
 
 msgid "Minimum time step for the simulation [seconds]"
@@ -20427,7 +20427,6 @@ msgstr ""
 msgid "Input raster must be of type CELL."
 msgstr ""
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
@@ -29683,8 +29682,10 @@ msgstr ""
 msgid "centrality measures"
 msgstr ""
 
-msgid "Computes degree, centrality, betweeness, closeness and eigenvector centrality measures in the network."
-msgstr ""
+#, fuzzy
+#| msgid "Computing betweenness and/or closeness centrality measure"
+msgid "Computes degree, centrality, betweenness, closeness and eigenvector centrality measures in the network."
+msgstr "媒介性そして/または近接性の中心性測定を計算します"
 
 msgid "Name of degree centrality column"
 msgstr "列名"
@@ -39256,10 +39257,6 @@ msgstr "画像ファイル"
 #, fuzzy
 #~ msgid "Transformation grid's destination coordinate system name"
 #~ msgstr "デカルト座標系（直行座標）を想定"
-
-#, fuzzy
-#~ msgid "Transformation grid's input coordinate system name"
-#~ msgstr "読込中 ... "
 
 #, fuzzy
 #~ msgid "Transport coefficient"

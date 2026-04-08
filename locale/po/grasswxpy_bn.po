@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_bn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-14 18:00+0000\n"
+"POT-Creation-Date: 2026-03-28 15:49+0000\n"
 "PO-Revision-Date: 2018-09-28 23:33+0200\n"
 "Last-Translator: \n"
 "Language-Team: Bengali (https://www.transifex.com/grass-gis/teams/45198/bn/)\n"
@@ -1281,7 +1281,7 @@ msgstr ""
 msgid "Re&load maps"
 msgstr ""
 
-msgid "&Copy path to mapset"
+msgid "&Copy path"
 msgstr ""
 
 msgid "&Create mapset"
@@ -1292,6 +1292,9 @@ msgid "&Delete project"
 msgstr " সমস্ত লেখ্য লুপ্তকরুন"
 
 msgid "&Rename project"
+msgstr ""
+
+msgid "Copy path"
 msgstr ""
 
 msgid "Change Label"
@@ -1318,10 +1321,13 @@ msgstr ""
 msgid "&Delete projects (locations)"
 msgstr ""
 
+msgid "Copy paths"
+msgstr ""
+
 msgid "&Delete mapsets"
 msgstr ""
 
-msgid "&Copy paths to mapsets"
+msgid "&Copy paths"
 msgstr ""
 
 #, python-brace-format

@@ -4,225 +4,229 @@
 # transifex generated, 2017
 #
 # Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
+# Faysal Mahmud <faysalmahmud4300@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_bn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-14 18:00+0000\n"
-"PO-Revision-Date: 2025-08-23 20:17+0000\n"
-"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
+"POT-Creation-Date: 2026-03-28 15:48+0000\n"
+"PO-Revision-Date: 2026-03-14 11:20+0000\n"
+"Last-Translator: Faysal Mahmud  <faysalmahmud4300@gmail.com>\n"
 "Language-Team: Bengali <https://weblate.osgeo.org/projects/grass-gis/grasslibs/bn/>\n"
 "Language: bn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #, c-format
 msgid "Unknown algorithm '%s'"
-msgstr ""
+msgstr "অজ্ঞাত অ্যালগরিদম '%s'"
 
 msgid "Classification algorithm failed"
-msgstr ""
+msgstr "শ্রেণিবিন্যাস অ্যালগরিদম ব্যর্থ হয়েছে"
 
 msgid "Equiprobable classbreaks currently limited to 10 classes"
-msgstr ""
+msgstr "সম্ভাব্য ক্লাস ব্রেক বর্তমানে ১০ টি ক্লাসের মধ্যে সীমাবদ্ধ"
 
 #, c-format
 msgid "There are classbreaks outside the range min-max. Number of classes reduced to %i, but using probabilities for %i classes."
-msgstr ""
+msgstr "সর্বনিম্ন-সর্বোচ্চ সীমার বাইরে ক্লাস ব্রেক রয়েছে। ক্লাসের সংখ্যা %i তে কমানো হয়েছে, কিন্তু %i টি ক্লাসের জন্য সম্ভাবনা ব্যবহার করা হচ্ছে।"
 
 msgid "Cairo_Bitmap: Failed to create source"
-msgstr ""
+msgstr "Cairo_Bitmap: সোর্স তৈরি করতে ব্যর্থ"
 
 msgid "Unable to open display"
-msgstr ""
+msgstr "ডিসপ্লে খুলতে অক্ষম"
 
 msgid "Unable to obtain visual"
-msgstr ""
+msgstr "ভিজ্যুয়াল পেতে অক্ষম"
 
 #, c-format
 msgid "Unknown file extension: %s"
-msgstr ""
+msgstr "অজ্ঞাত ফাইল এক্সটেনশন: %s"
 
 #, c-format
 msgid "cairo: collecting to file '%s'"
-msgstr ""
+msgstr "cairo: '%s' ফাইলে সংগ্রহ করা হচ্ছে"
 
 #, c-format
 msgid "cairo: image size %dx%d"
-msgstr ""
+msgstr "cairo: ছবির আকার %dx%d"
 
 msgid "Unknown Cairo surface type"
-msgstr ""
+msgstr "অজ্ঞাত Cairo সারফেসের ধরন"
 
 #, c-format
 msgid "Failed to initialize Cairo surface (width: %d, height: %d): %s"
-msgstr ""
+msgstr "Cairo সারফেস ইনিশিয়ালাইজ করতে ব্যর্থ (প্রস্থ: %d, উচ্চতা: %d): %s"
 
-#, fuzzy, c-format
-#| msgid "Unable to rename %s"
+#, c-format
 msgid "Unable to open file: %s"
-msgstr "%sপুনঃনামকরন করতে অক্ষম"
+msgstr "ফাইল খুলতে অক্ষম: %s"
 
 msgid "Failed to create cairo surface"
-msgstr ""
+msgstr "cairo সারফেস তৈরি করতে ব্যর্থ"
 
 #, c-format
 msgid "Cairo: unable to open input file <%s>"
-msgstr ""
+msgstr "Cairo: ইনপুট ফাইল <%s> খুলতে অক্ষম"
 
 #, c-format
 msgid "Cairo: invalid input file <%s>"
-msgstr ""
+msgstr "Cairo: ইনপুট ফাইল <%s> অবৈধ"
 
 #, c-format
 msgid "Cairo: Invalid BMP header for <%s>"
-msgstr ""
+msgstr "Cairo: <%s> এর জন্য অবৈধ BMP হেডার"
 
 #, c-format
 msgid "Cairo: error reading BMP file <%s>: unexpected end of file"
-msgstr ""
+msgstr "Cairo: BMP ফাইল <%s> পড়তে ত্রুটি: ফাইলের অপ্রত্যাশিত সমাপ্তি"
 
 #, c-format
 msgid "Cairo: error reading BMP file <%s>: %s"
-msgstr ""
+msgstr "Cairo: BMP ফাইল <%s> পড়তে ত্রুটি: %s"
 
 #, c-format
 msgid "Cairo: unexpected EOF reading <%s>"
-msgstr ""
+msgstr "Cairo: <%s> পড়ার সময় অপ্রত্যাশিত EOF"
 
 #, c-format
 msgid "Cairo: input file has incorrect dimensions: expected: %dx%d got: %dx%d"
-msgstr ""
+msgstr "Cairo: ইনপুট ফাইলের ডায়মেনশন সঠিক নয়: প্রত্যাশিত: %dx%d পাওয়া গেছে: %dx%d"
 
 #, c-format
 msgid "Cairo: unable to open input mask file <%s>"
-msgstr ""
+msgstr "Cairo: ইনপুট মাস্ক ফাইল <%s> খুলতে অক্ষম"
 
 #, c-format
 msgid "Cairo: invalid input mask file <%s>"
-msgstr ""
+msgstr "Cairo: অবৈধ ইনপুট মাস্ক ফাইল <%s>"
 
 #, c-format
 msgid "Cairo: unexpected EOF reading mask <%s>"
-msgstr ""
+msgstr "Cairo: মাস্ক <%s> পড়ার সময় অপ্রত্যাশিত EOF"
 
 #, c-format
 msgid "Cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d"
-msgstr ""
+msgstr "Cairo: ইনপুট মাস্ক ফাইলের ডায়মেনশন সঠিক নয়: প্রত্যাশিত: %dx%d পাওয়া গেছে: %dx%d"
 
 #, c-format
 msgid "Unable to open input file <%s>"
-msgstr ""
+msgstr "ইনপুট ফাইল <%s> খুলতে অক্ষম"
 
 #, c-format
 msgid "Unable to read input file <%s>"
-msgstr ""
+msgstr "ইনপুট ফাইল <%s> পড়তে অক্ষম"
 
 #, c-format
 msgid "Unable to parse input file <%s>"
-msgstr ""
+msgstr "ইনপুট ফাইল <%s> পার্স করতে অক্ষম"
 
 #, c-format
 msgid "Unable to convert from <%s> to UTF-8"
-msgstr ""
+msgstr "<%s> থেকে UTF-8 এ রূপান্তর করতে অক্ষম"
 
 msgid "Some characters could not be converted to UTF-8"
-msgstr ""
+msgstr "কিছু ক্যারেক্টার UTF-8 এ রূপান্তর করা যায়নি"
 
 #, c-format
 msgid "Cairo: unable to open output file <%s>"
-msgstr ""
+msgstr "Cairo: আউটপুট ফাইল <%s> খুলতে অক্ষম"
 
 #, c-format
 msgid "Cairo: unable to open mask file <%s>"
-msgstr ""
+msgstr "Cairo: মাস্ক ফাইল <%s> খুলতে অক্ষম"
 
 #, c-format
 msgid "Unable to open output file <%s>"
-msgstr ""
+msgstr "আউটপুট ফাইল <%s> খুলতে অক্ষম"
 
 #, c-format
 msgid "Unable to write output file <%s>"
-msgstr ""
+msgstr "আউটপুট ফাইল <%s> লিখতে অক্ষম"
 
 #, c-format
 msgid "produced by i.cluster"
-msgstr ""
+msgstr "i.cluster দ্বারা প্রস্তুতকৃত"
 
 #, c-format
 msgid "Not enough data points (%d) in cluster"
-msgstr ""
+msgstr "ক্লাস্টারে পর্যাপ্ত ডাটা পয়েন্ট (%d) নেই"
 
 msgid "Programmer error"
-msgstr ""
+msgstr "প্রোগ্রামার ত্রুটি"
 
 msgid "<NULL error message>"
 msgstr "<NULL error message>"
 
 msgid "dbmi: Protocol error"
-msgstr ""
+msgstr "dbmi: প্রোটোকল ত্রুটি"
 
 msgid "dbmi: Out of Memory"
-msgstr ""
+msgstr "dbmi: মেমোরি শেষ"
 
 #, c-format
 msgid "dbmi: %s() not implemented"
-msgstr ""
+msgstr "dbmi: %s() ইমপ্লিমেন্ট করা হয়নি"
 
 #, c-format
 msgid "dbmi: Invalid procedure %d"
-msgstr ""
+msgstr "dbmi: অবৈধ প্রসিডিউর %d"
 
 msgid "db_set_index_column_name(): invalid column number"
-msgstr ""
+msgstr "db_set_index_column_name(): অবৈধ কলাম নম্বর"
 
 msgid "db_get_index_column_name(): invalid column number"
-msgstr ""
+msgstr "db_get_index_column_name(): অবৈধ কলাম নম্বর"
 
 #, c-format
 msgid "Illegal table map name <%s>. May not contain '.' or 'NULL'."
-msgstr ""
+msgstr "অবৈধ টেবিল ম্যাপ নাম <%s>। এতে '.' অথবা 'NULL' থাকা যাবে না।"
 
 #, c-format
 msgid "Illegal table map name <%s>. Must start with a letter."
-msgstr ""
+msgstr "অবৈধ টেবিল ম্যাপ নাম <%s>। অবশ্যই একটি অক্ষর দিয়ে শুরু হতে হবে।"
 
 #, c-format
 msgid "Illegal table map name <%s>. Character <%c> not allowed."
-msgstr ""
+msgstr "অবৈধ টেবিল ম্যাপ নাম <%s>। ক্যারেক্টার <%c> অনুমোদিত নয়।"
 
 #, c-format
 msgid "Unable to read file '%s'"
-msgstr ""
+msgstr "'%s' ফাইলটি পড়তে অক্ষম"
 
 #, c-format
 msgid "Login file (%s) corrupted (line: %s)"
-msgstr ""
+msgstr "লগইন ফাইল (%s) ত্রুটিপূর্ণ (লাইন: %s)"
 
 #, c-format
 msgid "Unable to write file '%s'"
-msgstr ""
+msgstr "'%s' ফাইলে লিখতে অক্ষম"
 
 #, c-format
 msgid "DB connection <%s/%s> already exists and will be overwritten"
-msgstr ""
+msgstr "ডাটাবেস সংযোগ <%s/%s> ইতিমধ্যে বিদ্যমান এবং ওভাররাইট করা হবে"
 
 #, c-format
 msgid "DB connection <%s/%s> already exists. Re-run '%s' with '--%s' flag to overwrite existing settings."
-msgstr ""
+msgstr "ডাটাবেস সংযোগ <%s/%s> ইতিমধ্যে বিদ্যমান। বর্তমান সেটিংস ওভাররাইট করতে '--%s' ফ্ল্যাগ সহ '%s' পুনরায় চালান।"
 
 msgid ""
 "\n"
 "++ Running column unit tests ++"
 msgstr ""
+"\n"
+"++ কলাম ইউনিট পরীক্ষা চালানো ++"
 
 msgid ""
 "\n"
 "-- column unit tests failure --"
 msgstr ""
+"\n"
+"-- কলাম ইউনিট পরীক্ষা ব্যর্থতা --"
 
 msgid ""
 "\n"
@@ -5036,7 +5040,7 @@ msgstr[1] ""
 
 #, c-format
 msgid "One vertex registered"
-msgid_plural "%d vertices registered"
+msgid_plural "%<PRId64> vertices registered"
 msgstr[0] ""
 msgstr[1] ""
 

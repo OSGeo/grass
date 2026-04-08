@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_fi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-14 18:00+0000\n"
+"POT-Creation-Date: 2026-03-28 15:49+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Finnish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/fi/>\n"
@@ -1281,7 +1281,7 @@ msgstr ""
 msgid "Re&load maps"
 msgstr ""
 
-msgid "&Copy path to mapset"
+msgid "&Copy path"
 msgstr ""
 
 msgid "&Create mapset"
@@ -1292,6 +1292,9 @@ msgid "&Delete project"
 msgstr "Poista valitut"
 
 msgid "&Rename project"
+msgstr ""
+
+msgid "Copy path"
 msgstr ""
 
 msgid "Change Label"
@@ -1322,10 +1325,13 @@ msgstr ""
 msgid "&Delete projects (locations)"
 msgstr "Poista valittu paikka"
 
+msgid "Copy paths"
+msgstr ""
+
 msgid "&Delete mapsets"
 msgstr ""
 
-msgid "&Copy paths to mapsets"
+msgid "&Copy paths"
 msgstr ""
 
 #, python-brace-format
