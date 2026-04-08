@@ -684,7 +684,7 @@ class GridModule:
             for wrk in self.get_works():
                 cmd_exe(wrk)
         else:
-            mltp.get_context("spawn")
+            ctx = mltp.get_context("spawn")
 
             ctx.set_executable(sys.executable)
             pool = ctx.Pool(processes=self.processes)
