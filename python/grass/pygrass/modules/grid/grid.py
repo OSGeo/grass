@@ -685,16 +685,16 @@ class GridModule:
                 cmd_exe(wrk)
         else:
             ctx = mltp.get_context("spawn")
-ctx.set_executable(sys.executable)
-pool = ctx.Pool(processes=self.processes)
-result = pool.map_async(cmd_exe, self.get_works())
-result.wait()
-pool.close()
-pool.join()
-if not result.successful():
+            ctx.set_executable(sys.executable)
+            pool = ctx.Pool(processes=self.processes)
+            result = pool.map_async(cmd_exe, self.get_works())
+            result.wait()
+            pool.close()
+            pool.join()
+            if not result.successful():
                 raise RuntimeError(_("Execution of subprocesses was not successful"))
 
-if patch:
+        if patch:
             if self.move:
                 os.environ["GISRC"] = self.gisrc_dst
                 self.n_mset.current()
@@ -711,7 +711,7 @@ if patch:
             else:
                 self.patch()
 
-if self.log:
+        if self.log:
             # record in the temp directory
             from grass.lib.gis import G_tempfile
 
@@ -725,7 +725,7 @@ if self.log:
                     fil = open(os.path.join(dirpath, self.out_prefix + par.value), "w+")
                     fil.close()
 
-def _clean(self):
+    def _clean(self):
         """Cleanup temporary data"""
         self.clean_location()
         self.rm_tiles()
@@ -738,7 +738,7 @@ def _clean(self):
             sht.rmtree(os.path.join(self.move, "PERMANENT"))
             sht.rmtree(os.path.join(self.move, self.mset.name))
 
-def patch(self):
+    def patch(self):
         """Patch the final results."""
         bboxes = split_region_tiles(width=self.width, height=self.height)
         noutputs = 0
@@ -774,7 +774,7 @@ def patch(self):
                 msg += ". Use <{}.simple> instead".format(self.module.name)
             raise RuntimeError(msg)
 
-def rm_tiles(self):
+    def rm_tiles(self):
         """Remove all the tiles."""
         # if split, remove tiles
         if self.inlist:
