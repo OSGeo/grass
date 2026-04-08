@@ -27,6 +27,9 @@ static int test_insert_triggers_subdivision(void);
 static int test_insert_points_into_all_octants(void);
 static int test_insert_duplicate_points(void);
 static int test_insert_boundary_point(void);
+static int test_insert_after_subdivision(void);
+static int test_insert_many_duplicates(void);
+static int test_insert_out_of_bounds(void);
 
 /* ************************************************************************* */
 /* Perform the insert_point unit tests ************************************ */
@@ -43,6 +46,9 @@ int unit_test_insert_point(void)
     sum += test_insert_points_into_all_octants();
     sum += test_insert_duplicate_points();
     sum += test_insert_boundary_point();
+    sum += test_insert_after_subdivision();
+    sum += test_insert_many_duplicates();
+    sum += test_insert_out_of_bounds();
 
     if (sum > 0)
         G_warning(_("\n-- insert_point unit tests failure --"));
@@ -64,7 +70,12 @@ static int test_insert_single_point(void)
     OctreeNode *root = create_octree_node(0.0, 10.0, 0.0, 10.0, 0.0, 10.0);
     Point3D p = {5.0, 5.0, 5.0};
 
-    insert_point(root, p);
+    int ret = insert_point(root, p);
+
+    if (ret != 0) {
+        G_warning("insert_point returned %d, expected 0", ret);
+        sum++;
+    }
 
     if (root->point_count != 1) {
         G_warning("Expected point_count 1, got %zu", root->point_count);
@@ -143,7 +154,7 @@ static int test_insert_triggers_subdivision(void)
         insert_point(root, p);
     }
 
-    /* After subdivision, root should have children */
+    /* After subdivision, root should have at least one child */
     int has_children = 0;
 
     for (int i = 0; i < 8; i++) {
@@ -208,7 +219,7 @@ static int test_insert_points_into_all_octants(void)
         insert_point(root, octant_points[i]);
     }
 
-    /* Verify all 8 children exist */
+    /* Verify children exist for all 8 octants */
     for (int i = 0; i < 8; i++) {
         if (root->children[i] == NULL) {
             G_warning("Expected child[%d] to exist after octant insertion", i);
@@ -293,6 +304,120 @@ static int test_insert_boundary_point(void)
 
     if (root->point_count != 3) {
         G_warning("Expected point_count 3 after max corner insert, got %zu",
+                  root->point_count);
+        sum++;
+    }
+
+    free_octree(root);
+    return sum;
+}
+
+/* ************************************************************************* */
+/* Test continued insertion after subdivision (was a NULL deref bug) ****** */
+/* ************************************************************************* */
+static int test_insert_after_subdivision(void)
+{
+    int sum = 0;
+
+    G_message("\t * testing insertion after subdivision\n");
+
+    OctreeNode *root = create_octree_node(0.0, 10.0, 0.0, 10.0, 0.0, 10.0);
+
+    /* Trigger subdivision */
+    for (int i = 0; i <= MAX_POINTS_PER_NODE; i++) {
+        Point3D p = {(double)i * 0.9, (double)i * 0.9, (double)i * 0.9};
+        insert_point(root, p);
+    }
+
+    /* Verify subdivision happened */
+    int has_children = 0;
+
+    for (int i = 0; i < 8; i++) {
+        if (root->children[i] != NULL) {
+            has_children = 1;
+            break;
+        }
+    }
+
+    if (!has_children) {
+        G_warning("Subdivision did not happen");
+        return 1;
+    }
+
+    /* Insert more points after subdivision; this must not crash */
+    for (int i = 0; i < 20; i++) {
+        Point3D p = {(double)(i % 10), (double)((i * 3) % 10),
+                     (double)((i * 7) % 10)};
+        int ret = insert_point(root, p);
+
+        if (ret != 0) {
+            G_warning("insert_point returned %d for in-bounds point", ret);
+            sum++;
+        }
+    }
+
+    free_octree(root);
+    return sum;
+}
+
+/* ************************************************************************* */
+/* Test that many coincident points do not cause infinite recursion ******* */
+/* ************************************************************************* */
+static int test_insert_many_duplicates(void)
+{
+    int sum = 0;
+
+    G_message("\t * testing many coincident points (depth limit)\n");
+
+    OctreeNode *root = create_octree_node(0.0, 10.0, 0.0, 10.0, 0.0, 10.0);
+
+    /* Insert many identical points, well past MAX_POINTS_PER_NODE.
+       Without the depth limit, this would recurse infinitely. */
+    int count = MAX_POINTS_PER_NODE * 5;
+
+    for (int i = 0; i < count; i++) {
+        Point3D p = {3.0, 3.0, 3.0};
+        int ret = insert_point(root, p);
+
+        if (ret != 0) {
+            G_warning("insert_point returned %d for duplicate point %d", ret,
+                      i);
+            sum++;
+        }
+    }
+
+    free_octree(root);
+    return sum;
+}
+
+/* ************************************************************************* */
+/* Test that out-of-bounds points are rejected ***************************** */
+/* ************************************************************************* */
+static int test_insert_out_of_bounds(void)
+{
+    int sum = 0;
+
+    G_message("\t * testing out-of-bounds point rejection\n");
+
+    OctreeNode *root = create_octree_node(0.0, 10.0, 0.0, 10.0, 0.0, 10.0);
+
+    Point3D outside = {-1.0, 5.0, 5.0};
+
+    if (insert_point(root, outside) != -1) {
+        G_warning("Expected -1 for point with x below min_x");
+        sum++;
+    }
+
+    Point3D above = {5.0, 5.0, 15.0};
+
+    if (insert_point(root, above) != -1) {
+        G_warning("Expected -1 for point with z above max_z");
+        sum++;
+    }
+
+    /* Verify no points were stored */
+    if (root->point_count != 0) {
+        G_warning("Expected point_count 0 after rejected inserts, got %zu",
                   root->point_count);
         sum++;
     }

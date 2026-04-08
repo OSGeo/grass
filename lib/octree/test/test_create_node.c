@@ -26,6 +26,7 @@ static int test_create_node_bounds(void);
 static int test_create_node_children_null(void);
 static int test_create_node_zero_bounds(void);
 static int test_create_node_negative_bounds(void);
+static int test_create_node_lazy_allocation(void);
 
 /* ************************************************************************* */
 /* Perform the create_octree_node unit tests ****************************** */
@@ -41,6 +42,7 @@ int unit_test_create_node(void)
     sum += test_create_node_children_null();
     sum += test_create_node_zero_bounds();
     sum += test_create_node_negative_bounds();
+    sum += test_create_node_lazy_allocation();
 
     if (sum > 0)
         G_warning(_("\n-- create_octree_node unit tests failure --"));
@@ -72,8 +74,8 @@ static int test_create_node_basic(void)
         sum++;
     }
 
-    if (node->points == NULL) {
-        G_warning("Expected non-NULL points array");
+    if (node->depth != 0) {
+        G_warning("Expected depth 0, got %d", node->depth);
         sum++;
     }
 
@@ -201,6 +203,46 @@ static int test_create_node_negative_bounds(void)
     }
     if (node->min_z != -50.0 || node->max_z != -10.0) {
         G_warning("Negative z bounds not preserved");
+        sum++;
+    }
+
+    free_octree(node);
+    return sum;
+}
+
+/* ************************************************************************* */
+/* Test that points array is lazily allocated (NULL until first insert) *** */
+/* ************************************************************************* */
+static int test_create_node_lazy_allocation(void)
+{
+    int sum = 0;
+
+    G_message("\t * testing lazy allocation of points array\n");
+
+    OctreeNode *node = create_octree_node(0.0, 10.0, 0.0, 10.0, 0.0, 10.0);
+
+    if (node->points != NULL) {
+        G_warning("Expected NULL points array before first insert");
+        sum++;
+    }
+
+    if (node->point_capacity != 0) {
+        G_warning("Expected point_capacity 0, got %zu", node->point_capacity);
+        sum++;
+    }
+
+    /* After one insert, points should be allocated */
+    Point3D p = {5.0, 5.0, 5.0};
+    insert_point(node, p);
+
+    if (node->points == NULL) {
+        G_warning("Expected non-NULL points array after insert");
+        sum++;
+    }
+
+    if (node->point_capacity < 1) {
+        G_warning("Expected point_capacity >= 1, got %zu",
+                  node->point_capacity);
         sum++;
     }
 
