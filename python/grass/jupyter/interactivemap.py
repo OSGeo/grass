@@ -34,25 +34,26 @@ from .utils import (
 
 def get_backend(interactive_map):
     """Identifies if interactive_map is of type folium.Map
-     or ipyleaflet.Map. Returns "folium" or "ipyleaflet" or
+    or ipyleaflet.Map. Returns "folium" or "ipyleaflet" or
     raises ValueError if the map is unsupported type.
     """
     try:
         import folium  # pylint: disable=import-outside-toplevel
+
         if isinstance(interactive_map, folium.Map):
             return "folium"
     except ImportError:
         pass
     try:
-        import ipyleaflet # pylint: disable=import-outside-toplevel
+        import ipyleaflet  # pylint: disable=import-outside-toplevel
+
         if isinstance(interactive_map, ipyleaflet.Map):
             return "ipyleaflet"
     except ImportError:
         pass
     # If neither library works, raise an error instead of returning unknown
-    error_msg = "No supported mapping backend found"
+    error_msg = "Provided object is not a supported mapping backend (folium.Map or ipyleaflet.Map)."
     raise ValueError(error_msg)
-
 
 
 class Layer:  # pylint: disable=too-few-public-methods
