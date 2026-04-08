@@ -151,7 +151,7 @@ def get_mapset(gisrc_src, gisrc_dst):
     return src, dst
 
 
-def copy_groups(groups, gisrc_src, gisrc_dst, processes, region=None):
+def copy_groups(groups, gisrc_src, gisrc_dst, processes, region=None, env=None):
     """Copy group from one mapset to another, crop the raster to the region
 
     :param groups: a list of strings with the group that must be copied
@@ -172,7 +172,8 @@ def copy_groups(groups, gisrc_src, gisrc_dst, processes, region=None):
     def rmloc(r):
         return r.split("@")[0] if "@" in r else r
 
-    env = os.environ.copy()
+    if env is None:
+        env = os.environ.copy()
     # instantiate modules
     get_grp = Module("i.group", flags="lg", stdout_=sub.PIPE, run_=False)
     set_grp = Module("i.group")
@@ -391,7 +392,7 @@ def cmd_exe(args):
         lcmd = ["g.region", *["%s=%s" % (k, v) for k, v in bbox.items()]]
         sub.Popen(lcmd, shell=shell, env=env).wait()
     if groups:
-        copy_groups(groups, gisrc_src, gisrc_dst, processes=1)
+        copy_groups(groups, gisrc_src, gisrc_dst, processes=1, env=env)
     # run the grass command
     sub.Popen(get_cmd(cmd), shell=shell, env=env).wait()
     # remove temp GISRC
@@ -522,6 +523,7 @@ class GridModule:
                     self.gisrc_dst,
                     processes=self.processes,
                     region=self.region,
+                    env=self.env,
                 )
         self.bboxes = split_region_in_overlapping_tiles(
             region=region, width=self.width, height=self.height, overlap=overlap
@@ -682,15 +684,17 @@ class GridModule:
             for wrk in self.get_works():
                 cmd_exe(wrk)
         else:
-            pool = mltp.Pool(processes=self.processes)
-            result = pool.map_async(cmd_exe, self.get_works())
-            result.wait()
-            pool.close()
-            pool.join()
-            if not result.successful():
+            ctx = mltp.get_context("spawn")
+ctx.set_executable(sys.executable)
+pool = ctx.Pool(processes=self.processes)
+result = pool.map_async(cmd_exe, self.get_works())
+result.wait()
+pool.close()
+pool.join()
+if not result.successful():
                 raise RuntimeError(_("Execution of subprocesses was not successful"))
 
-        if patch:
+if patch:
             if self.move:
                 os.environ["GISRC"] = self.gisrc_dst
                 self.n_mset.current()
@@ -707,7 +711,7 @@ class GridModule:
             else:
                 self.patch()
 
-        if self.log:
+if self.log:
             # record in the temp directory
             from grass.lib.gis import G_tempfile
 
@@ -721,7 +725,7 @@ class GridModule:
                     fil = open(os.path.join(dirpath, self.out_prefix + par.value), "w+")
                     fil.close()
 
-    def _clean(self):
+def _clean(self):
         """Cleanup temporary data"""
         self.clean_location()
         self.rm_tiles()
@@ -734,7 +738,7 @@ class GridModule:
             sht.rmtree(os.path.join(self.move, "PERMANENT"))
             sht.rmtree(os.path.join(self.move, self.mset.name))
 
-    def patch(self):
+def patch(self):
         """Patch the final results."""
         bboxes = split_region_tiles(width=self.width, height=self.height)
         noutputs = 0
@@ -770,7 +774,7 @@ class GridModule:
                 msg += ". Use <{}.simple> instead".format(self.module.name)
             raise RuntimeError(msg)
 
-    def rm_tiles(self):
+def rm_tiles(self):
         """Remove all the tiles."""
         # if split, remove tiles
         if self.inlist:
