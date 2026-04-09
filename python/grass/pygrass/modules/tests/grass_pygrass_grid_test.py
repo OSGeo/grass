@@ -2,7 +2,7 @@
 
 import functools
 import multiprocessing
-
+import sys
 import pytest
 
 import grass.script as gs
@@ -40,7 +40,9 @@ def max_processes():
 
 def run_in_subprocess(function, check=True):
     """Run function in a separate process"""
-    process = multiprocessing.Process(target=function)
+    ctx = multiprocessing.get_context("spawn")
+    ctx.set_executable(sys.executable)  # force user's Python, not GRASS's
+    process = ctx.Process(target=function)
     process.start()
     process.join()
     if check and process.exitcode != 0:

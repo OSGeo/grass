@@ -374,23 +374,28 @@ def cmd_exe(args):
       the mapset.
 
     """
-    bbox, mapnames, gisrc_src, gisrc_dst, cmd, groups, env = args
+
+    bbox, mapnames, gisrc_src, gisrc_dst, cmd, groups, env_from_args = args
     src, dst = get_mapset(gisrc_src, gisrc_dst)
-    env = env.copy()
+
+    env = env_from_args.copy()
     env["GISRC"] = gisrc_dst
+
     shell = sys.platform == "win32"
+
     if mapnames:
         inputs = dict(cmd["inputs"])
-        # reset the inputs to
+
         for key in mapnames:
             inputs[key] = mapnames[key]
         cmd["inputs"] = inputs.items()
-        # set the region to the tile
-        sub.Popen(["g.region", "raster=%s" % key], shell=shell, env=env).wait()
+
+        first_map = list(mapnames.values())[0]
+        sub.Popen(["g.region", f"raster={first_map}"], shell=shell, env=env).wait()
     else:
-        # set the computational region
         lcmd = ["g.region", *["%s=%s" % (k, v) for k, v in bbox.items()]]
         sub.Popen(lcmd, shell=shell, env=env).wait()
+
     if groups:
         copy_groups(groups, gisrc_src, gisrc_dst, processes=1, env=env)
     # run the grass command
