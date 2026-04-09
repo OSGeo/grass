@@ -24,20 +24,23 @@ def test_get_region(session_with_data):
 
 def test_get_rendering_size():
     """Test rendering size calculations."""
-    region = {"n": 4, "s": 0, "e": 8, "w": 0}
+    wide_region = {"n": 4, "s": 0, "e": 8, "w": 0}
+    tall_region = {"n": 8, "s": 0, "e": 4, "w": 0}
 
     # both provided
     assert get_rendering_size({}, 800, 600) == (800, 600)
 
     # width only
-    width, height = get_rendering_size(region, 800, None)
-    assert width == 800
-    assert height == 400
+    assert get_rendering_size(wide_region, 800, None) == (800, 400)
 
     # height only
-    width, height = get_rendering_size(region, None, 400)
-    assert width == 800
-    assert height == 400
+    assert get_rendering_size(wide_region, None, 400) == (800, 400)
+
+    # neither provided - wide region
+    assert get_rendering_size(wide_region, None, None) == (600, 300)
+
+    # neither provided - tall region
+    assert get_rendering_size(tall_region, None, None) == (200, 400)
 
 
 @pytest.mark.parametrize(
