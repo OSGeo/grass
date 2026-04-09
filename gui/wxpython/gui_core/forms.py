@@ -61,7 +61,6 @@ from threading import Thread
 from pathlib import Path
 
 import json
-import keyword
 import wx
 
 import wx.lib.colourselect as csel
@@ -957,8 +956,7 @@ class TaskFrame(wx.Frame):
         module_name = cmd[0]
 
         # Build the command string
-        py_cmd = f"gs.run_command('{module_name}', "
-        py_cmd += self._get_formatted_params(cmd)
+        py_cmd = f"gs.run_command('{module_name}', " + gtask.cmd_to_python_args(cmd)
 
         # Copy to clipboard
         self._toClipboard(py_cmd)
@@ -973,8 +971,7 @@ class TaskFrame(wx.Frame):
         # e.g., v.distance -> v_distance, v.in.ascii -> v_in_ascii
         module_name = cmd[0].replace(".", "_")
 
-        py_cmd = f"Tools().{module_name}("
-        py_cmd += self._get_formatted_params(cmd)
+        py_cmd = f"Tools().{module_name}(" + gtask.cmd_to_python_args(cmd)
 
         self._toClipboard(py_cmd)
 
@@ -986,8 +983,7 @@ class TaskFrame(wx.Frame):
 
         module_name = cmd[0]
 
-        py_cmd = f"Module('{module_name}', "
-        py_cmd += self._get_formatted_params(cmd)
+        py_cmd = f"Module('{module_name}', " + gtask.cmd_to_python_args(cmd)
 
         self._toClipboard(py_cmd)
 
@@ -997,7 +993,7 @@ class TaskFrame(wx.Frame):
         if not cmd or len(cmd) < 1:
             return
 
-        data = {"module": cmd[0], "params": self._extract_params_dict(cmd)}
+        data = {"module": cmd[0], "params": gtask.cmd_to_dict(cmd)}
         self._toClipboard(json.dumps(data, indent=4))
         self.SetStatusText(_("JSON copied to clipboard"))
 
@@ -1012,7 +1008,11 @@ class TaskFrame(wx.Frame):
 
         try:
             data = json.loads(tdo.GetText())
+            if not isinstance(data, dict):
+                raise ValueError(_("Pasted data is not a valid JSON object."))
             new_params = data.get("params", data)
+            if not isinstance(new_params, dict):
+                raise ValueError(_("Pasted parameters are not a valid JSON object."))
             target_flags_str = new_params.get("flags", "")
             found_any = False
 
@@ -1104,82 +1104,8 @@ class TaskFrame(wx.Frame):
             else:
                 self.SetStatusText(_("No matching parameters found in clipboard."))
 
-        except Exception as e:
+        except (json.JSONDecodeError, ValueError) as e:
             wx.MessageBox(_("Paste Error: {}").format(e), _("Error"), wx.ICON_ERROR)
-
-    def _get_formatted_params(self, cmd):
-        """Helper to format parameters for Python calls, handling illegal keywords"""
-        flags = ""
-        python_params = []
-        # Dictionary for keys that Python can't handle as direct arguments
-        illegal_keys = {}
-
-        for item in cmd[1:]:
-            if item.startswith("--"):
-                val = item.lstrip("-")
-                if val in {"overwrite", "o"}:
-                    python_params.append("overwrite=True")
-                elif val == "verbose":
-                    python_params.append("verbose=True")
-                elif val == "quiet":
-                    python_params.append("quiet=True")
-                else:
-                    python_params.append(f"{val}=True")
-            elif item.startswith("-"):
-                flags += item.lstrip("-")
-            elif "=" in item:
-                k, v = item.split("=", 1)
-                # If key is a keyword (from, in) or contains dots/dashes,
-                # put it into the 'illegal' dictionary
-                if keyword.iskeyword(k) or not k.isidentifier():
-                    illegal_keys[k] = v
-                else:
-                    python_params.append(f"{k}={v!r}")
-
-        # Build the command string
-        py_cmd = ""
-
-        if flags:
-            py_cmd += f"flags='{flags}'"
-
-        if python_params:
-            py_cmd += ", " + ", ".join(python_params)
-
-        if illegal_keys:
-            # Safe unpacking: **{'from': 'val', 'to': 'val'}
-            py_cmd += f", **{illegal_keys!r}"
-
-        py_cmd += ")"
-        return py_cmd
-
-    def _extract_params_dict(self, cmd):
-        """Extracts a dictionary of parameters from the cmd list (skips flags)"""
-
-        flags = ""
-        python_params = []
-
-        for item in cmd[1:]:
-            if item.startswith("--"):
-                val = item.lstrip("-")
-                if val in {"overwrite", "o"}:
-                    python_params.append("overwrite=True")
-                elif val == "verbose":
-                    python_params.append("verbose=True")
-                elif val == "quiet":
-                    python_params.append("quiet=True")
-                else:
-                    python_params.append(f"{val}=True")
-            elif item.startswith("-"):
-                flags += item.lstrip("-")
-            elif "=" in item:
-                k, v = item.split("=", 1)
-                python_params.append(f"{k}={v}")
-        params = {"flags": flags}
-        for item in python_params:
-            if "=" in item:
-                k, v = item.split("=", 1)
-                params[k] = v
-        return params
 
     def _toClipboard(self, text):
         """Stores text string into the system clipboard"""
