@@ -495,6 +495,7 @@ class GridModule:
             )
         else:
             self.patch_backend = patch_backend
+        self.env = os.environ.copy()
         self.gisrc_src = os.environ["GISRC"]
         self.n_mset, self.gisrc_dst = None, None
         self.estimate_tile_size()
@@ -644,7 +645,7 @@ class GridModule:
                         write_gisrc(gdst, ldst, new_mset),
                         cmd,
                         groups,
-                        os.environ.copy(),
+                        self.env,
                     )
                 )
         return works
