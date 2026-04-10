@@ -24,7 +24,6 @@ import time
 import subprocess
 import threading
 import os
-import shutil
 from pathlib import Path
 
 
@@ -161,31 +160,13 @@ class JupyterServerInstance:
         self.port = JupyterServerInstance.find_free_port()
         self.server_url = "http://127.0.0.1:{}".format(self.port)
 
-        # Resolve Jupyter executable based on platform
-        if sys.platform.startswith("win"):
-            python = os.environ.get("GRASS_PYTHON")
-            if not python:
-                raise RuntimeError(
-                    _(
-                        "GRASS_PYTHON environment variable is not set. "
-                        "Cannot locate Python executable."
-                    )
-                )
-            executable = [python, "-m", "notebook"]
-        else:
-            jupyter = shutil.which("jupyter")
-            if not jupyter:
-                raise RuntimeError(
-                    _(
-                        "Jupyter executable not found in PATH. "
-                        "Please install Jupyter Notebook and ensure it is available in your system PATH."
-                    )
-                )
-            executable = [jupyter, "notebook"]
+        # Resolve Jupyter executable
+        python = os.environ.get("GRASS_PYTHON") or sys.executable
 
         cmd = [
-            *executable,
-            "--no-browser",
+            python,
+            "-m",
+            "notebook",
             "--NotebookApp.token=",
             "--NotebookApp.password=",
             "--port",
