@@ -388,18 +388,17 @@ def cmd_exe(args):
 
         for key in mapnames:
             inputs[key] = mapnames[key]
-        cmd["inputs"] = inputs.items()
-
+        cmd["inputs"] = list(inputs.items())
         first_map = list(mapnames.values())[0]
         sub.Popen(["g.region", f"raster={first_map}"], shell=shell, env=env).wait()
     else:
         lcmd = ["g.region", *["%s=%s" % (k, v) for k, v in bbox.items()]]
-        sub.Popen(lcmd, shell=shell, env=env).wait()
+        sub.Popen(lcmd, shell=False, env=env).wait()
 
     if groups:
         copy_groups(groups, gisrc_src, gisrc_dst, processes=1, env=env)
     # run the grass command
-    sub.Popen(get_cmd(cmd), shell=shell, env=env).wait()
+    sub.Popen(get_cmd(cmd), shell=False, env=env).wait()
     # remove temp GISRC
     Path(gisrc_dst).unlink()
 
@@ -623,6 +622,8 @@ class GridModule:
         else:
             ldst, gdst = self.mset.location, self.mset.gisdbase
         cmd = self.module.get_dict()
+        cmd["inputs"] = list(cmd["inputs"])
+        cmd["outputs"] = list(cmd["outputs"])
         groups = list(select(self.module.inputs, "group"))
         for row, box_row in enumerate(self.bboxes):
             for col, box in enumerate(box_row):
