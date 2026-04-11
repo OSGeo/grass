@@ -399,6 +399,12 @@ def cmd_exe(args):
         copy_groups(groups, gisrc_src, gisrc_dst, processes=1, env=env)
     # run the grass command
     sub.Popen(get_cmd(cmd), shell=False, env=env).wait()
+
+    ret = sub.Popen(get_cmd(cmd), shell=False, env=env).wait()
+    if ret != 0:
+        cmd_name = get_cmd(cmd)[0]
+        msg = f"GRASS command failed with exit code {ret}: {cmd_name}"
+        raise RuntimeError(msg)
     # remove temp GISRC
     Path(gisrc_dst).unlink()
 
@@ -677,7 +683,7 @@ class GridModule:
         with contextlib.ExitStack() as stack:
             if clean:
                 stack.callback(self._clean)
-            self._actual_run(patch=patch)
+                self._actual_run(patch=patch)
 
 
 def _actual_run(self, patch):
