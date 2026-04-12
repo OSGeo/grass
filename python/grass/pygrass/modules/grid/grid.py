@@ -151,7 +151,7 @@ def get_mapset(gisrc_src, gisrc_dst):
     return src, dst
 
 
-def copy_groups(groups, gisrc_src, gisrc_dst, processes, region=None, env=None):
+def copy_groups(groups, gisrc_src, gisrc_dst, processes, region=None):
     """Copy group from one mapset to another, crop the raster to the region
 
     :param groups: a list of strings with the group that must be copied
@@ -172,8 +172,7 @@ def copy_groups(groups, gisrc_src, gisrc_dst, processes, region=None, env=None):
     def rmloc(r):
         return r.split("@")[0] if "@" in r else r
 
-    if env is None:
-        env = os.environ.copy()
+    env = os.environ.copy()
     # instantiate modules
     get_grp = Module("i.group", flags="lg", stdout_=sub.PIPE, run_=False)
     set_grp = Module("i.group")
@@ -374,37 +373,27 @@ def cmd_exe(args):
       the mapset.
 
     """
-
-    bbox, mapnames, gisrc_src, gisrc_dst, cmd, groups, env_from_args = args
+    bbox, mapnames, gisrc_src, gisrc_dst, cmd, groups = args
     src, dst = get_mapset(gisrc_src, gisrc_dst)
-
-    env = env_from_args.copy()
+    env = os.environ.copy()
     env["GISRC"] = gisrc_dst
-
     shell = sys.platform == "win32"
-
     if mapnames:
         inputs = dict(cmd["inputs"])
-
+        # reset the inputs to
         for key in mapnames:
             inputs[key] = mapnames[key]
         cmd["inputs"] = list(inputs.items())
-        first_map = list(mapnames.values())[0]
-        sub.Popen(["g.region", f"raster={first_map}"], shell=shell, env=env).wait()
+        # set the region to the tile
+        sub.Popen(["g.region", "raster=%s" % key], shell=shell, env=env).wait()
     else:
+        # set the computational region
         lcmd = ["g.region", *["%s=%s" % (k, v) for k, v in bbox.items()]]
-        sub.Popen(lcmd, shell=False, env=env).wait()
-
+        sub.Popen(lcmd, shell=shell, env=env).wait()
     if groups:
-        copy_groups(groups, gisrc_src, gisrc_dst, processes=1, env=env)
+        copy_groups(groups, gisrc_src, gisrc_dst, processes=1)
     # run the grass command
-    sub.Popen(get_cmd(cmd), shell=False, env=env).wait()
-
-    ret = sub.Popen(get_cmd(cmd), shell=False, env=env).wait()
-    if ret != 0:
-        cmd_name = get_cmd(cmd)[0]
-        msg = f"GRASS command failed with exit code {ret}: {cmd_name}"
-        raise RuntimeError(msg)
+    sub.Popen(get_cmd(cmd), shell=shell, env=env).wait()
     # remove temp GISRC
     Path(gisrc_dst).unlink()
 
@@ -505,7 +494,6 @@ class GridModule:
             )
         else:
             self.patch_backend = patch_backend
-        self.env = os.environ.copy()
         self.gisrc_src = os.environ["GISRC"]
         self.n_mset, self.gisrc_dst = None, None
         self.estimate_tile_size()
@@ -534,7 +522,6 @@ class GridModule:
                     self.gisrc_dst,
                     processes=self.processes,
                     region=self.region,
-                    env=self.env,
                 )
         self.bboxes = split_region_in_overlapping_tiles(
             region=region, width=self.width, height=self.height, overlap=overlap
@@ -643,7 +630,7 @@ class GridModule:
                         inms[key] = "%s@%s" % (self.inlist[key][indx], self.mset.name)
                 # set the computational region, prepare the region parameters
                 bbox = {
-                    **{k[0]: str(v) for k, v in box.items()[:-2]},
+                    **{k[0]: str(v) for k, v in list(box.items())[:-2]},
                     "nsres": "%f" % reg.nsres,
                     "ewres": "%f" % reg.ewres,
                 }
@@ -657,7 +644,6 @@ class GridModule:
                         write_gisrc(gdst, ldst, new_mset),
                         cmd,
                         groups,
-                        self.env,
                     )
                 )
         return works
@@ -683,124 +669,114 @@ class GridModule:
         with contextlib.ExitStack() as stack:
             if clean:
                 stack.callback(self._clean)
-                self._actual_run(patch=patch)
+            self._actual_run(patch=patch)
 
+    def _actual_run(self, patch):
+        """Run the GRASS command
 
-def _actual_run(self, patch):
-    """Run the GRASS command
+        :param patch: set False if you does not want to patch the results
+        """
+        self.module.flags.overwrite = True
+        self.define_mapset_inputs()
 
-    :param patch: set False if you does not want to patch the results
-    """
-    self.module.flags.overwrite = True
-    self.define_mapset_inputs()
-
-    if self.debug:
-        for wrk in self.get_works():
-            cmd_exe(wrk)
-    else:
-        ctx = mltp.get_context("spawn")
-        ctx.set_executable(sys.executable)
-        pool = ctx.Pool(processes=self.processes)
-        result = pool.map_async(cmd_exe, self.get_works())
-        result.wait()
-        pool.close()
-        pool.join()
-        if not result.successful():
-            try:
-                result.get()
-            except Exception as e:
-                msg = f"Subprocess error: {e}"
-                raise RuntimeError(msg) from e
-            raise RuntimeError(_("Execution of subprocesses was not successful"))
-
-    if patch:
-        if self.move:
-            os.environ["GISRC"] = self.gisrc_dst
-            self.n_mset.current()
-            self.patch()
-            os.environ["GISRC"] = self.gisrc_src
-            self.mset.current()
-            routputs = [
-                self.out_prefix + o for o in select(self.module.outputs, "raster")
-            ]
-            copy_rasters(
-                routputs,
-                self.gisrc_dst,
-                self.gisrc_src,
-                processes=self.processes,
-            )
+        if self.debug:
+            for wrk in self.get_works():
+                cmd_exe(wrk)
         else:
-            self.patch()
+            ctx = mltp.get_context("spawn")
+            ctx.set_executable(sys.executable)
+            pool = ctx.Pool(processes=self.processes)
+            result = pool.map_async(cmd_exe, self.get_works())
+            result.wait()
+            pool.close()
+            pool.join()
+            if not result.successful():
+                raise RuntimeError(_("Execution of subprocesses was not successful"))
 
-    if self.log:
-        from grass.lib.gis import G_tempfile
-
-        tmp, dummy = os.path.split(G_tempfile())
-        tmpdir = os.path.join(tmp, self.module.name)
-        for k in self.module.outputs:
-            par = self.module.outputs[k]
-            if par.typedesc == "raster" and par.value:
-                dirpath = os.path.join(tmpdir, par.name)
-                Path(dirpath).mkdir(parents=True, exist_ok=True)
-                fil = open(os.path.join(dirpath, self.out_prefix + par.value), "w+")
-                fil.close()
-
-
-def _clean(self):
-    """Cleanup temporary data"""
-    self.clean_location()
-    self.rm_tiles()
-    if self.n_mset:
-        gisdbase, location = os.path.split(self.move)
-        self.clean_location(Location(location, gisdbase))
-        # rm temporary gis_rc
-        Path(self.gisrc_dst).unlink()
-        self.gisrc_dst = None
-        sht.rmtree(os.path.join(self.move, "PERMANENT"))
-        sht.rmtree(os.path.join(self.move, self.mset.name))
-
-
-def patch(self):
-    """Patch the final results."""
-    bboxes = split_region_tiles(width=self.width, height=self.height)
-    noutputs = 0
-    for otmap in self.module.outputs:
-        otm = self.module.outputs[otmap]
-        if otm.typedesc == "raster" and otm.value:
-            if self.patch_backend == "RasterRow":
-                rpatch_map(
-                    raster=otm.value,
-                    mapset=self.mset.name,
-                    mset_str=self.msetstr,
-                    bbox_list=bboxes,
-                    overwrite=self.module.flags.overwrite,
-                    start_row=self.start_row,
-                    start_col=self.start_col,
-                    prefix=self.out_prefix,
+        if patch:
+            if self.move:
+                os.environ["GISRC"] = self.gisrc_dst
+                self.n_mset.current()
+                self.patch()
+                os.environ["GISRC"] = self.gisrc_src
+                self.mset.current()
+                # copy the outputs from dst => src
+                routputs = [
+                    self.out_prefix + o for o in select(self.module.outputs, "raster")
+                ]
+                copy_rasters(
+                    routputs, self.gisrc_dst, self.gisrc_src, processes=self.processes
                 )
             else:
-                rpatch_map_r_patch_backend(
-                    raster=otm.value,
-                    mset_str=self.msetstr,
-                    bbox_list=bboxes,
-                    overwrite=self.module.flags.overwrite,
-                    start_row=self.start_row,
-                    start_col=self.start_col,
-                    prefix=self.out_prefix,
-                    processes=self.processes,
-                )
-            noutputs += 1
-    if noutputs < 1:
-        msg = "No raster output option defined for <{}>".format(self.module.name)
-        if self.module.name == "r.mapcalc":
-            msg += ". Use <{}.simple> instead".format(self.module.name)
-        raise RuntimeError(msg)
+                self.patch()
 
+        if self.log:
+            # record in the temp directory
+            from grass.lib.gis import G_tempfile
 
-def rm_tiles(self):
-    """Remove all the tiles."""
-    # if split, remove tiles
-    if self.inlist:
-        grm = Module("g.remove")
-        for key in self.inlist:
-            grm(flags="f", type="raster", name=self.inlist[key])
+            tmp, dummy = os.path.split(G_tempfile())
+            tmpdir = os.path.join(tmp, self.module.name)
+            for k in self.module.outputs:
+                par = self.module.outputs[k]
+                if par.typedesc == "raster" and par.value:
+                    dirpath = os.path.join(tmpdir, par.name)
+                    Path(dirpath).mkdir(parents=True, exist_ok=True)
+                    fil = open(os.path.join(dirpath, self.out_prefix + par.value), "w+")
+                    fil.close()
+
+    def _clean(self):
+        """Cleanup temporary data"""
+        self.clean_location()
+        self.rm_tiles()
+        if self.n_mset:
+            gisdbase, location = os.path.split(self.move)
+            self.clean_location(Location(location, gisdbase))
+            # rm temporary gis_rc
+            Path(self.gisrc_dst).unlink()
+            self.gisrc_dst = None
+            sht.rmtree(os.path.join(self.move, "PERMANENT"))
+            sht.rmtree(os.path.join(self.move, self.mset.name))
+
+    def patch(self):
+        """Patch the final results."""
+        bboxes = split_region_tiles(width=self.width, height=self.height)
+        noutputs = 0
+        for otmap in self.module.outputs:
+            otm = self.module.outputs[otmap]
+            if otm.typedesc == "raster" and otm.value:
+                if self.patch_backend == "RasterRow":
+                    rpatch_map(
+                        raster=otm.value,
+                        mapset=self.mset.name,
+                        mset_str=self.msetstr,
+                        bbox_list=bboxes,
+                        overwrite=self.module.flags.overwrite,
+                        start_row=self.start_row,
+                        start_col=self.start_col,
+                        prefix=self.out_prefix,
+                    )
+                else:
+                    rpatch_map_r_patch_backend(
+                        raster=otm.value,
+                        mset_str=self.msetstr,
+                        bbox_list=bboxes,
+                        overwrite=self.module.flags.overwrite,
+                        start_row=self.start_row,
+                        start_col=self.start_col,
+                        prefix=self.out_prefix,
+                        processes=self.processes,
+                    )
+                noutputs += 1
+        if noutputs < 1:
+            msg = "No raster output option defined for <{}>".format(self.module.name)
+            if self.module.name == "r.mapcalc":
+                msg += ". Use <{}.simple> instead".format(self.module.name)
+            raise RuntimeError(msg)
+
+    def rm_tiles(self):
+        """Remove all the tiles."""
+        # if split, remove tiles
+        if self.inlist:
+            grm = Module("g.remove")
+            for key in self.inlist:
+                grm(flags="f", type="raster", name=self.inlist[key])
