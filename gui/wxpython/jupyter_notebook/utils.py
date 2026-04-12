@@ -4,7 +4,7 @@
 @brief wxGUI Jupyter utils
 
 Functions:
-- `is_jupyter_installed()`: Check if Jupyter Notebook is installed on the system and functional.
+- `is_jupyter_notebook_installed()`: Check if Jupyter Notebook is installed on the system and functional.
 - `is_wx_html2_available()`: Check if wx.html2 module is available.
 - `is_webview2_available()`: Check if wx.html2.WebView uses Microsoft Edge WebView2 on Windows.
 
@@ -21,7 +21,7 @@ import sys
 import subprocess
 
 
-def is_jupyter_installed() -> bool:
+def is_jupyter_notebook_installed() -> bool:
     """Check if Jupyter Notebook is installed and functional.
 
     :return: True if Jupyter Notebook is installed and available, False otherwise
@@ -70,8 +70,7 @@ def is_webview2_available() -> bool:
         try:
             import wx.html2 as html
 
-            info = html.WebView.GetBackendVersionInfo()
-            return info.GetName().lower() == "edge"
+            return html.WebView.IsBackendAvailable(html.WebViewBackendEdge)
         except Exception:
             return False
     return True

@@ -906,7 +906,7 @@ class GMFrame(wx.Frame):
         # add map display panel to notebook and make it current
         self.mainnotebook.AddPage(gmodeler_panel, _("Graphical Modeler"))
 
-    def _show_jupyter_missing_message(self):
+    def _show_jupyter_notebook_missing_message(self):
         wx.MessageBox(
             _(
                 "To use notebooks in GRASS, you need to have the Jupyter Notebook "
@@ -984,15 +984,15 @@ class GMFrame(wx.Frame):
     def OnJupyterNotebook(self, event=None, cmd=None):
         """Launch Jupyter Notebook interface."""
         from jupyter_notebook.utils import (
-            is_jupyter_installed,
+            is_jupyter_notebook_installed,
             is_wx_html2_available,
             is_webview2_available,
         )
         from jupyter_notebook.dialogs import JupyterStartDialog
 
         # global requirement (always needed)
-        if not is_jupyter_installed():
-            self._show_jupyter_missing_message()
+        if not is_jupyter_notebook_installed():
+            self._show_jupyter_notebook_missing_message()
             return
 
         dlg = JupyterStartDialog(parent=self)
