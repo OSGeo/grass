@@ -778,7 +778,7 @@ class GMFrame(wx.Frame):
         win.CentreOnScreen()
         win.Show()
 
-    def _show_jupyter_missing_message(self):
+    def _show_jupyter_notebook_missing_message(self):
         wx.MessageBox(
             _(
                 "To use notebooks in GRASS, you need to have the Jupyter Notebook "
@@ -792,14 +792,15 @@ class GMFrame(wx.Frame):
     def OnJupyterNotebook(self, event=None):
         """Launch Jupyter Notebook interface."""
         from jupyter_notebook.utils import (
-            is_jupyter_installed,
+            is_jupyter_notebook_installed,
             is_wx_html2_available,
+            is_webview2_available,
         )
         from jupyter_notebook.dialogs import JupyterStartDialog
 
         # global requirement (always needed)
-        if not is_jupyter_installed():
-            self._show_jupyter_missing_message()
+        if not is_jupyter_notebook_installed():
+            self._show_jupyter_notebook_missing_message()
             return
 
         dlg = JupyterStartDialog(parent=self)
@@ -818,15 +819,26 @@ class GMFrame(wx.Frame):
         storage = values["storage"]
         create_template = values["create_template"]
 
+        # Check integrated mode requirements and offer fallback
         if action == "integrated":
-            # Embedded notebook mode: requires wx.html2 for WebView
+            message = None
+
             if not is_wx_html2_available():
-                # Offer fallback to browser mode
+                message = _(
+                    "Integrated mode requires wx.html2.WebView, which is not available on this system.\n\n"
+                    "This can happen if wxPython or wxWidgets were built without HTML2/WebView support."
+                )
+            elif not is_webview2_available():
+                message = _(
+                    "Integrated mode requires Microsoft Edge WebView2 runtime on Windows.\n\n"
+                    "It is missing or not properly configured on this system."
+                )
+
+            if message is not None:
                 response = wx.MessageBox(
                     _(
-                        "Integrated mode requires wx.html2.WebView which is not available on this system.\n\n"
-                        "Would you like to open Jupyter Notebook in your external browser instead?"
-                    ),
+                        "{message}\n\nWould you like to open Jupyter Notebook in your external browser instead?"
+                    ).format(message=message),
                     _("Integrated Mode Not Available"),
                     wx.ICON_WARNING | wx.YES_NO,
                 )
