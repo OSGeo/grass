@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-28 15:38+0000\n"
+"POT-Creation-Date: 2026-04-11 22:07+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Czech <https://weblate.osgeo.org/projects/grass-gis/grassmods/cs/>\n"
@@ -2251,6 +2251,7 @@ msgstr "Počet míst za desetinnou čárkou (pouze pro mapy s plovoucí desetinn
 msgid "Get text color from cell color value"
 msgstr ""
 
+#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -20510,6 +20511,7 @@ msgstr "Příliš mnoho kategorií (nalezeno: %i, max: %i). Zkuste změnit měř
 msgid "Input raster must be of type CELL."
 msgstr ""
 
+#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
