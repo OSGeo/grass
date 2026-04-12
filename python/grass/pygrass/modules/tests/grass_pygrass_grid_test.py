@@ -45,6 +45,7 @@ def run_in_subprocess(function, check=True):
     process = ctx.Process(target=function)
     process.start()
     process.join()
+    print(f"Worker exitcode: {process.exitcode}", flush=True)
     if check and process.exitcode != 0:
         msg = f"Subprocess failed with exit code {process.exitcode}"
         raise RuntimeError(msg)
