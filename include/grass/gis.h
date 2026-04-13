@@ -49,14 +49,14 @@
 static const char *GRASS_copyright G_UNUSED = "GRASS GNU GPL licensed Software";
 
 /*!
-    \def FALLTHROUGH
+    \def G_FALLTHROUGH
     \brief A macro for a fallthrough statement attribute
  */
 #if (defined(__GNUC__) && __GNUC__ >= 7) || \
     (defined(__clang__) && __clang_major__ >= 12)
-#define FALLTHROUGH __attribute__((__fallthrough__))
+#define G_FALLTHROUGH __attribute__((__fallthrough__))
 #else
-#define FALLTHROUGH ((void)0)
+#define G_FALLTHROUGH ((void)0)
 #endif
 
 /* GRASS version, GRASS date, git short hash of last change in GRASS headers
