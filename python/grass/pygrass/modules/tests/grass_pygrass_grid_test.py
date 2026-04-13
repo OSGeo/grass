@@ -24,7 +24,10 @@ def _run_grid_module(module_name, project, run_kwargs=None, **kwargs):
         grid = GridModule(module_name, **kwargs)
         grid.run(**run_kwargs)
     except Exception as e:
-        print(f"GridModule failed: {e}", file=sys.stderr)
+        import traceback
+
+        traceback.print_exc()
+        print("GridModule failed: " + str(e), file=sys.stderr)
         sys.exit(1)
 
 
@@ -45,7 +48,6 @@ def run_in_subprocess(function, check=True):
     process = ctx.Process(target=function)
     process.start()
     process.join()
-    print(f"Worker exitcode: {process.exitcode}", flush=True)
     if check and process.exitcode != 0:
         msg = f"Subprocess failed with exit code {process.exitcode}"
         raise RuntimeError(msg)
