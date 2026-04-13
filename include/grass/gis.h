@@ -36,17 +36,17 @@
 #endif
 
 /*!
-    \def UNUSED
+    \def G_UNUSED
     \brief A macro for an attribute, if attached to a variable,
            indicating that the variable is not used
 */
 #if (defined(__GNUC__) || defined(__APPLE__)) && !defined(_MSC_VER)
-#define UNUSED __attribute__((unused))
+#define G_UNUSED __attribute__((unused))
 #else
-#define UNUSED
+#define G_UNUSED
 #endif
 
-static const char *GRASS_copyright UNUSED = "GRASS GNU GPL licensed Software";
+static const char *GRASS_copyright G_UNUSED = "GRASS GNU GPL licensed Software";
 
 /*!
     \def FALLTHROUGH

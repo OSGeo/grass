@@ -41,7 +41,7 @@ static void build_stmt_id(const void *, int, int, const struct Plus_head *,
 static int create_simple_feature_from_topo(struct Map_info *);
 #define NOPG_UNUSED
 #else
-#define NOPG_UNUSED UNUSED
+#define NOPG_UNUSED G_UNUSED
 #endif
 
 /*!

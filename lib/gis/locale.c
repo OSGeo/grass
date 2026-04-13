@@ -23,7 +23,7 @@
 #if defined(HAVE_LIBINTL_H) && defined(USE_NLS)
 #define NO_NLS_UNUSED
 #else
-#define NO_NLS_UNUSED UNUSED
+#define NO_NLS_UNUSED G_UNUSED
 #endif
 
 void G_init_locale(void)
