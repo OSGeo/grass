@@ -282,7 +282,6 @@ class TestAggregationAbsolute(TestCase):
         extended_maps = lister.outputs.stdout
 
         # Check that at least one map with the new basename prefix exists
-        # (avoids hardcoding year or map count — works for any time range)
         extended_map_list = extended_maps.strip().split(os.linesep)
         b_ext_maps = [m for m in extended_map_list if m.startswith("b_ext")]
         self.assertTrue(
