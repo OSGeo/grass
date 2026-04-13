@@ -4,7 +4,11 @@ This module tests utility functions used throughout grass.jupyter.
 Tests cover region management, coordinate transformation, querying and rendering size calculations.
 """
 
+import os
 import pytest
+import grass.script as gs
+from grass.tools import Tools
+
 from grass.jupyter.utils import (
     get_region,
     reproject_region,
@@ -14,20 +18,31 @@ from grass.jupyter.utils import (
 )
 
 
+@pytest.fixture
+def session_projected(tmp_path):
+    """Fixture providing a projected (EPSG:26917) GRASS session."""
+    project = tmp_path / "projected"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy()) as session:
+        tools = Tools(session=session)
+        tools.g_proj(flags="c", epsg=26917)
+        tools.g_region(s=0, n=5, w=0, e=2, res=1)
+        yield session
+
+
 class TestGetRegion:
     """Tests for get_region function.
     This function returns the current computational region as a dictionary. It is used in every rendering operation throughout grass.jupyter.
-
     """
 
-    def test_returns_dict(self, session_with_data):
-        """Test that get_region returns a dictionary."""
+    def test_get_region_structure_and_values(self, session_with_data):
+        """Test that get_region returns a correct region dictionary."""
         region = get_region(env=session_with_data.env)
+
+        # Test it returns a dictionary
         assert isinstance(region, dict)
 
-    def test_has_required_keys(self, session_with_data):
-        """Test that region dict contains all required keys."""
-        region = get_region(env=session_with_data.env)
+        # Test required keys exist
         required_keys = [
             "north",
             "south",
@@ -41,29 +56,17 @@ class TestGetRegion:
         for key in required_keys:
             assert key in region, f"Region missing required key: {key}"
 
-    def test_north_greater_than_south(self, session_with_data):
-        """Test that north coordinate is greater than south coordinate."""
-        region = get_region(env=session_with_data.env)
+        # Test coordinate boundaries
         assert region["north"] > region["south"], (
             "North coordinate should be greater than south"
         )
-
-    def test_east_greater_than_west(self, session_with_data):
-        """Test that east coordinate is greater than south coordinate."""
-        region = get_region(env=session_with_data.env)
         assert region["east"] > region["west"], (
             "East coordinate should be greater than west"
         )
 
-    def test_postive_resolution(self, session_with_data):
-        """Test that resolution values are positive."""
-        region = get_region(env=session_with_data.env)
+        # Test positive resolution and dimensions
         assert region["nsres"] > 0
         assert region["ewres"] > 0
-
-    def test_positive_dimensions(self, session_with_data):
-        """Test that rows and columns are positive integers."""
-        region = get_region(env=session_with_data.env)
         assert region["rows"] > 0
         assert region["cols"] > 0
         assert isinstance(region["rows"], int)
@@ -75,31 +78,23 @@ class TestGetLocationProjString:
     This function returns the projection of the current location
     in PROJ.4 format. Used in all reprojection operations."""
 
-    def test_returns_string(self, session_with_data):
-        """Test that function returns a string."""
+    def test_xy_returns_unprojected_string(self, session_with_data):
+        """Test that an XY location returns an unprojected string indication."""
         proj_string = get_location_proj_string(env=session_with_data.env)
+
         assert isinstance(proj_string, str), (
             "get_location_proj_string should return a string"
         )
-
-    def test_non_empty_string(self, session_with_data):
-        """Test that required string is not empty"""
-        proj_string = get_location_proj_string(env=session_with_data.env)
         assert len(proj_string) > 0, "PROJ string should not be empty"
-
-    def test_contains_proj_keyword(self, session_with_data):
-        """Test that PROJ string contains projection information.
-
-        Note: For XY (unprojected) locations, the string will be
-        'XY location (unprojected)' instead of a PROJ.4 string.
-        """
-        proj_string = get_location_proj_string(env=session_with_data.env)
-        # Check for either PROJ.4 format or XY location
-        is_proj4 = "+proj=" in proj_string
-        is_xy = "XY location" in proj_string or "unprojected" in proj_string
-        assert is_proj4 or is_xy, (
-            "PROJ string should contain projection info or indicate XY location"
+        assert "XY location" in proj_string or "unprojected" in proj_string, (
+            "XY location should be identified"
         )
+
+    def test_projected_contains_proj_keyword(self, session_projected):
+        """Test that a projected location returns a PROJ.4 format string."""
+        proj_string = get_location_proj_string(env=session_projected.env)
+
+        assert "+proj=" in proj_string, "Projected PROJ.4 string should contain +proj="
 
 
 class TestGetRenderingSize:
@@ -170,35 +165,53 @@ class TestGetNumberOfCores:
     parallel operations.
     """
 
+    def _clear_nprocs(self, env):
+        try:
+            gs.run_command("g.gisenv", unset="NPROCS", env=env)
+        except Exception:
+            pass
+
     def test_returns_positive_integer(self, session_with_data):
         """Test that function returns a positive integer."""
+        self._clear_nprocs(session_with_data.env)
         cores = get_number_of_cores(4, env=session_with_data.env)
         assert isinstance(cores, int), "Should return an integer"
         assert cores > 0, "Should return at least 1 core"
 
     def test_respects_requested_cores(self, session_with_data):
         """Test that function respects reasonable requested core count."""
+        self._clear_nprocs(session_with_data.env)
         cores = get_number_of_cores(2, env=session_with_data.env)
         assert cores >= 1, "Should return at least 1 core"
         assert cores <= 2, "Should not exceed requested cores"
 
-    def test_minimum_one_core(self, session_with_data):
-        """Test that function handles zero or negative requested cores.
+    def test_returns_zero_on_zero_request(self, session_with_data):
+        """Test that function handles zero requested cores by returning zero.
 
-        Note: The function may return 0 if requested is 0, which is
-        the actual behavior. This test documents that behavior.
+        Note: The function returns 0 when requested is 0, which is
+        the actual documented behavior of the upstream function.
         """
+        self._clear_nprocs(session_with_data.env)
         cores = get_number_of_cores(0, env=session_with_data.env)
-        # Function returns 0 when requested is 0 (actual behavior)
-        assert cores >= 0, "Should return non-negative value"
+        assert cores == 0, "Should return exactly 0 when requested is 0"
 
     def test_caps_at_available_cores(self, session_with_data):
         """Test that function doesn't exceed available system cores."""
         import multiprocessing
 
+        self._clear_nprocs(session_with_data.env)
         max_cores = multiprocessing.cpu_count()
         cores = get_number_of_cores(9999, env=session_with_data.env)
         assert cores <= max_cores, "Should not exceed available system cores"
+
+    def test_respects_nprocs_env_var(self, session_with_data):
+        """Test that NPROCS variable bypasses other logic."""
+        gs.run_command("g.gisenv", set="NPROCS=42", env=session_with_data.env)
+        try:
+            cores = get_number_of_cores(2, env=session_with_data.env)
+            assert cores == 42, "Given NPROCS is checked first, it should return 42"
+        finally:
+            self._clear_nprocs(session_with_data.env)
 
 
 class TestReprojectRegion:
@@ -206,35 +219,21 @@ class TestReprojectRegion:
 
     This function reprojects region boundaries from one projection
     to another. Critical for InteractiveMap coordinate transformation.
-
-    Note: These tests are skipped for XY (unprojected) locations since
-    reprojection requires valid PROJ.4 strings.
     """
 
-    def test_returns_dict(self, session_with_data):
+    def test_returns_dict(self, session_projected):
         """Test that function returns a dictionary."""
-        region = get_region(env=session_with_data.env)
-        from_proj = get_location_proj_string(env=session_with_data.env)
-
-        # Skip test for XY locations (no valid projection)
-        if "XY location" in from_proj or "unprojected" in from_proj:
-            pytest.skip("Cannot reproject XY (unprojected) location")
-
-        # Reproject to WGS84
+        region = get_region(env=session_projected.env)
+        from_proj = get_location_proj_string(env=session_projected.env)
         to_proj = "+proj=longlat +datum=WGS84 +no_defs"
 
         reprojected = reproject_region(region, from_proj, to_proj)
         assert isinstance(reprojected, dict), "reproject_region should return a dict"
 
-    def test_has_same_keys(self, session_with_data):
-        """Test that reprojected region has same keys as input."""
-        region = get_region(env=session_with_data.env)
-        from_proj = get_location_proj_string(env=session_with_data.env)
-
-        # Skip test for XY locations
-        if "XY location" in from_proj or "unprojected" in from_proj:
-            pytest.skip("Cannot reproject XY (unprojected) location")
-
+    def test_has_same_keys(self, session_projected):
+        """Test that reprojected region has same boundary keys as input."""
+        region = get_region(env=session_projected.env)
+        from_proj = get_location_proj_string(env=session_projected.env)
         to_proj = "+proj=longlat +datum=WGS84 +no_defs"
 
         reprojected = reproject_region(region, from_proj, to_proj)
@@ -245,15 +244,10 @@ class TestReprojectRegion:
         assert "east" in reprojected
         assert "west" in reprojected
 
-    def test_north_still_greater_than_south(self, session_with_data):
+    def test_north_still_greater_than_south(self, session_projected):
         """Test that coordinate relationships are preserved after reprojection."""
-        region = get_region(env=session_with_data.env)
-        from_proj = get_location_proj_string(env=session_with_data.env)
-
-        # Skip test for XY locations
-        if "XY location" in from_proj or "unprojected" in from_proj:
-            pytest.skip("Cannot reproject XY (unprojected) location")
-
+        region = get_region(env=session_projected.env)
+        from_proj = get_location_proj_string(env=session_projected.env)
         to_proj = "+proj=longlat +datum=WGS84 +no_defs"
 
         reprojected = reproject_region(region, from_proj, to_proj)
@@ -261,15 +255,10 @@ class TestReprojectRegion:
             "North should still be greater than south after reprojection"
         )
 
-    def test_coordinates_changed(self, session_with_data):
+    def test_coordinates_changed(self, session_projected):
         """Test that coordinates actually change during reprojection."""
-        region = get_region(env=session_with_data.env)
-        from_proj = get_location_proj_string(env=session_with_data.env)
-
-        # Skip test for XY locations
-        if "XY location" in from_proj or "unprojected" in from_proj:
-            pytest.skip("Cannot reproject XY (unprojected) location")
-
+        region = get_region(env=session_projected.env)
+        from_proj = get_location_proj_string(env=session_projected.env)
         to_proj = "+proj=longlat +datum=WGS84 +no_defs"
 
         # Only test if projections are different
