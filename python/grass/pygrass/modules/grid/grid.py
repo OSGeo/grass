@@ -683,13 +683,19 @@ class GridModule:
             for wrk in self.get_works():
                 cmd_exe(wrk)
         else:
-            pool = mltp.Pool(processes=self.processes)
+            ctx = mltp.get_context("spawn")
+            ctx.set_executable(sys.executable)
+            pool = ctx.Pool(processes=self.processes)
             result = pool.map_async(cmd_exe, self.get_works())
             result.wait()
             pool.close()
             pool.join()
             if not result.successful():
-                raise RuntimeError(_("Execution of subprocesses was not successful"))
+                try:
+                    result.get()
+                except Exception as e:
+                    msg = f"Worker failed with: {e}"
+                    raise RuntimeError(msg) from e
 
         if patch:
             if self.move:

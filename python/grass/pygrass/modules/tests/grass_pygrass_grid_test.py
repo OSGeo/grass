@@ -13,9 +13,23 @@ def _run_grid_module(module_name, project, run_kwargs=None, **kwargs):
         run_kwargs = {}
 
     import sys
+    import os
+
+    gisbase = os.environ.get("GISBASE", "")
+    if gisbase:
+        # Add GRASS's Python lib paths so grass.lib (C extensions) can be found
+        grass_python_paths = [
+            p for p in sys.path if p and p.startswith(os.path.join(gisbase, "Python"))
+        ]
+        for p in grass_python_paths:
+            if p not in sys.path:
+                sys.path.insert(0, p)
+        os.environ["PYTHONPATH"] = os.pathsep.join(
+            grass_python_paths + [p for p in sys.path if p]
+        )
+
     import grass.script as gs
 
-    # Initialize GRASS in subprocess
     gs.setup.init(project)
 
     from grass.pygrass.modules.grid.grid import GridModule
