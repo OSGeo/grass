@@ -21,7 +21,8 @@ from grass.jupyter.utils import (
 @pytest.fixture(scope="module")
 def session_projected(tmp_path_factory):
     """Fixture providing a projected (EPSG:26917) GRASS session."""
-    project = tmp_path_factory.mktemp("projected")
+    tmp_path = tmp_path_factory.mktemp("projected")
+    project = tmp_path / "test"
     gs.create_project(project)
     with gs.setup.init(project, env=os.environ.copy()) as session:
         tools = Tools(session=session)
