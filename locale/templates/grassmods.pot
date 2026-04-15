@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-28 15:48+0000\n"
+"POT-Creation-Date: 2026-04-11 17:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4099,6 +4099,7 @@ msgstr ""
 msgid "Get text color from cell color value"
 msgstr ""
 
+#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #: ../display/d.rast.num/main.c:211 ../raster/r.thin/io.c:110
@@ -29885,6 +29886,7 @@ msgstr ""
 msgid "Input raster must be of type CELL."
 msgstr ""
 
+#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #: ../raster/r.thin/io.c:112 ../raster/r.thin/io.c:188

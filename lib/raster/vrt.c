@@ -170,15 +170,24 @@ void Rast_close_vrt(struct R_vrt *vrt)
  * move to get_row.c as read_data_vrt() ? */
 int Rast_get_vrt_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
 {
-    struct fileinfo *fcb = &R__.fileinfo[fd];
-    struct R_vrt *vrt = fcb->vrt;
-    struct tileinfo *ti = vrt->tileinfo;
+    struct R_vrt *vrt;
+    struct tileinfo *ti;
     struct Cell_head *rd_window = &R__.rd_window;
     double rown, rows;
     int i, j;
     int have_tile;
     void *tmpbuf;
     size_t size = Rast_cell_size(data_type);
+
+    // R__.fileinfo can be reallocated by concurrent open/close calls,
+    // so we extract the vrt pointer under the same lock that protects the I/O
+    // below. This expects callers to open the raster once per thread before
+    // entering any parallel code.
+#pragma omp critical(raster_vrt_read)
+    {
+        vrt = R__.fileinfo[fd].vrt;
+    }
+    ti = vrt->tileinfo;
 
     rown = rd_window->north - rd_window->ns_res * row;
     rows = rd_window->north - rd_window->ns_res * (row + 1);
@@ -187,6 +196,13 @@ int Rast_get_vrt_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
     tmpbuf = Rast_allocate_input_buf(data_type);
     have_tile = 0;
 
+    /* parallelised reading of the real raster maps
+     * constituting a GRASS virtual raster
+     * causes IO read errors and segmentation faults:
+     * enforce reading of the different rasters in only one thread
+     * Serialize the entire open/read/close cycle for each tile
+     * because they all access the non-thread-safe global R__.fileinfo array. */
+#pragma omp critical(raster_vrt_read)
     for (i = 0; i < vrt->tlist->n_values; i++) {
         struct tileinfo *p = &ti[vrt->tlist->value[i]];
 
