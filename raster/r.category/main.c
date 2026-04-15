@@ -228,6 +228,8 @@ int main(int argc, char *argv[])
             int ntokens;
             char *e1;
             char *e2;
+            struct Categories existing_cats;
+            char *existing_title;
 
             if (strcmp("-", parm.file->answer) == 0) {
                 from_stdin = TRUE;
@@ -243,20 +245,15 @@ int main(int argc, char *argv[])
             /* Preserve the existing title from the destination map so that
              * setting categories does not silently erase a title set earlier
              * (e.g. via r.support title=...). */
-            {
-                struct Categories existing_cats;
-                char *existing_title;
-
-                if (Rast_read_cats(name, G_mapset(), &existing_cats) >= 0) {
-                    existing_title = G_store(existing_cats.title);
-                    Rast_free_cats(&existing_cats);
-                }
-                else {
-                    existing_title = G_store("");
-                }
-                Rast_init_cats(existing_title, &cats);
-                G_free(existing_title);
+            if (Rast_read_cats(name, G_mapset(), &existing_cats) >= 0) {
+                existing_title = G_store(Rast_get_cats_title(&existing_cats));
+                Rast_free_cats(&existing_cats);
             }
+            else {
+                existing_title = G_store("");
+            }
+            Rast_init_cats(existing_title, &cats);
+            G_free(existing_title);
 
             for (;;) {
                 char buf[1024];

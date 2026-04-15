@@ -1,11 +1,13 @@
 """Tests of r.category"""
 
+import io
 import json
 
 import pytest
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
+from grass.tools import Tools
 
 
 def test_r_category_plain_output(simple_dataset):
@@ -343,20 +345,18 @@ def test_r_category_rules_preserves_title(simple_dataset):
     """Test that rules= does not erase a title previously set with r.support."""
 
     session = simple_dataset
+    tools = Tools(session=session)
     title = "USGS National Land Cover"
 
-    gs.run_command("r.support", map="test", title=title, env=session.env)
-    gs.write_command(
-        "r.category",
+    tools.r_support(map="test", title=title)
+    tools.r_category(
         map="test",
-        rules="-",
+        rules=io.StringIO("1:trees\n2:water\n"),
         separator=":",
-        stdin="1:trees\n2:water\n",
-        env=session.env,
     )
 
     info = json.loads(
-        gs.read_command("r.info", map="test", flags="e", format="json", env=session.env)
+        gs.read_command("r.info", map="test", format="json", env=session.env)
     )
     assert info["title"] == title, (
         f"Expected title '{title}', but r.category rules= overwrote it with '{info['title']}'"
