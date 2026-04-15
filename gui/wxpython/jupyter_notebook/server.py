@@ -23,7 +23,6 @@ import socket
 import time
 import subprocess
 import threading
-import os
 from pathlib import Path
 
 
@@ -141,15 +140,21 @@ class JupyterServerInstance:
                             or the server fails to start
         """
         # Validation checks
-        if not Path(self.storage).is_dir():
+        if not self.storage.is_dir():
             raise RuntimeError(
                 _("Notebook storage does not exist: {}").format(self.storage)
             )
 
-        if not os.access(self.storage, os.W_OK):
+        write_check = self.storage / ".jupyter_notebook_write_check_{}".format(
+            time.time_ns()
+        )
+        try:
+            write_check.touch(exist_ok=False)
+            write_check.unlink()
+        except OSError as error:
             raise RuntimeError(
                 _("Notebook storage is not writable: {}").format(self.storage)
-            )
+            ) from error
 
         if self.is_alive():
             raise RuntimeError(
@@ -160,11 +165,9 @@ class JupyterServerInstance:
         self.port = JupyterServerInstance.find_free_port()
         self.server_url = "http://127.0.0.1:{}".format(self.port)
 
-        # Resolve Jupyter executable
-        python = os.environ.get("GRASS_PYTHON") or sys.executable
-
+        # Build command to start Jupyter server
         cmd = [
-            python,
+            sys.executable,
             "-m",
             "notebook",
             "--NotebookApp.token=",
