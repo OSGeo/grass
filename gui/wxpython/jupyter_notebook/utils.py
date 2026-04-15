@@ -16,7 +16,6 @@ This program is free software under the GNU General Public License
 @author Linda Karlovska <linda.karlovska seznam.cz>
 """
 
-import os
 import sys
 import subprocess
 
@@ -26,10 +25,9 @@ def is_jupyter_notebook_installed() -> bool:
 
     :return: True if Jupyter Notebook is installed and available, False otherwise
     """
-    python = os.environ.get("GRASS_PYTHON") or sys.executable
     try:
         subprocess.run(
-            [python, "-m", "notebook", "--version"],
+            [sys.executable, "-m", "notebook", "--version"],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
             check=True,
