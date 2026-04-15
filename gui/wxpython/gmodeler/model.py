@@ -486,7 +486,8 @@ class Model:
                 sval = pattern.search(value)
                 if not sval:
                     continue
-                var = sval.group(2).strip()[2:-1]  # strip '%{...}'
+                s = sval.group(2).strip()
+                var = s[2:-1] if s.startswith("%{") else s[1:]  # strip curly braces only if present
                 found = False
                 for v in variables:
                     if var.startswith(v):
@@ -561,7 +562,8 @@ class Model:
             pattern = re.compile(r"(.*)(%\{.+})(.*)")
             sval = pattern.search(data)
             if sval:
-                var = sval.group(2).strip()[2:-1]  # ignore '%{...}'
+                s = sval.group(2).strip()
+                var = s[2:-1] if s.startswith("%{") else s[1:]  # strip curly braces only if present
                 cmd = item.GetLog(string=False)[0]
                 errList.append(cmd + ": " + _("undefined variable '%s'") % var)
 
