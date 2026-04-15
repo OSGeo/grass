@@ -539,7 +539,8 @@ class Model:
             write = False
             variables = self.GetVariables()
             for variable in variables:
-                pattern = re.compile("%{" + variable + "}")
+                # curly braces are optional
+                pattern = re.compile("%{?" + variable + "}?")
                 value = ""
                 if params and "variables" in params:
                     for p in params["variables"]["params"]:
@@ -690,7 +691,8 @@ class Model:
                 # substitute variables in condition
                 variables = self.GetVariables()
                 for variable in variables:
-                    pattern = re.compile("%{" + variable + "}")
+                    # curly braces are optional
+                    pattern = re.compile("%{?" + variable + "}?")
                     if not pattern.search(cond):
                         continue
                     value = ""
@@ -713,7 +715,8 @@ class Model:
                 # split condition
                 # TODO: this part needs some better solution
                 condVar, condText = (x.strip() for x in re.split(r"\s* in \s*", cond))
-                pattern = re.compile("%{" + condVar + "}")
+                # curly braces are optional
+                pattern = re.compile("%{?" + condVar + "}?")
                 # for vars()[condVar] in eval(condText): ?
                 vlist = []
                 if condText[0] == "`" and condText[-1] == "`":
