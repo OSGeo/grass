@@ -341,7 +341,6 @@ def test_r_category_with_json_output_color(simple_dataset):
 
 def test_r_category_rules_preserves_title(simple_dataset):
     """Test that rules= does not erase a title previously set with r.support."""
-    import os
 
     session = simple_dataset
     title = "USGS National Land Cover"
@@ -356,17 +355,11 @@ def test_r_category_rules_preserves_title(simple_dataset):
         env=session.env,
     )
 
-    # Read the title directly from the cats file (line 1, after the category count).
-    gisenv = gs.gisenv(env=session.env)
-    cats_path = os.path.join(
-        gisenv["GISDBASE"], gisenv["LOCATION_NAME"], gisenv["MAPSET"], "cats", "test"
+    info = json.loads(
+        gs.read_command("r.info", map="test", flags="e", format="json", env=session.env)
     )
-    with open(cats_path) as f:
-        f.readline()  # skip "# N categories" line
-        actual_title = f.readline().strip()
-
-    assert actual_title == title, (
-        f"Expected title '{title}', but r.category rules= overwrote it with '{actual_title}'"
+    assert info["title"] == title, (
+        f"Expected title '{title}', but r.category rules= overwrote it with '{info['title']}'"
     )
 
 
