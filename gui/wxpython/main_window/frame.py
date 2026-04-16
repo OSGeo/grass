@@ -906,17 +906,6 @@ class GMFrame(wx.Frame):
         # add map display panel to notebook and make it current
         self.mainnotebook.AddPage(gmodeler_panel, _("Graphical Modeler"))
 
-    def _show_jupyter_notebook_missing_message(self):
-        wx.MessageBox(
-            _(
-                "To use notebooks in GRASS, you need to have the Jupyter Notebook "
-                "package installed. Please install it and restart GRASS."
-            ),
-            _("Jupyter Notebook not available"),
-            wx.OK | wx.ICON_INFORMATION,
-            parent=self,
-        )
-
     def _add_jupyter_panel_to_notebook(self, panel, mode_name, storage):
         """Add Jupyter panel to notebook with tooltip."""
         tooltip = str(storage.resolve())
@@ -984,16 +973,21 @@ class GMFrame(wx.Frame):
     def OnJupyterNotebook(self, event=None, cmd=None):
         """Launch Jupyter Notebook interface."""
         from jupyter_notebook.utils import (
-            is_jupyter_notebook_installed,
+            ensure_notebook_module_available,
+            ensure_webview2_backend_available,
+            is_notebook_module_available,
             is_wx_html2_available,
-            is_webview2_available,
         )
         from jupyter_notebook.dialogs import JupyterStartDialog
 
         # global requirement (always needed)
-        if not is_jupyter_notebook_installed():
-            self._show_jupyter_notebook_missing_message()
-            return
+        if not is_notebook_module_available():
+            if not ensure_notebook_module_available(
+                parent=self,
+                report_error=GError,
+                report_info=GMessage,
+            ):
+                return
 
         dlg = JupyterStartDialog(parent=self)
 
@@ -1020,11 +1014,19 @@ class GMFrame(wx.Frame):
                     "Integrated mode requires wx.html2.WebView, which is not available on this system.\n\n"
                     "This can happen if wxPython or wxWidgets were built without HTML2/WebView support."
                 )
-            elif not is_webview2_available():
-                message = _(
-                    "Integrated mode requires Microsoft Edge WebView2 runtime on Windows.\n\n"
-                    "It is missing or not properly configured on this system."
+            elif sys.platform.startswith("win"):
+                webview2_status = ensure_webview2_backend_available(
+                    parent=self,
+                    report_error=GError,
+                    report_info=GMessage,
                 )
+                if webview2_status == "restart-required":
+                    return
+                if webview2_status == "unavailable":
+                    message = _(
+                        "Integrated mode requires Microsoft Edge WebView2 runtime on Windows.\n\n"
+                        "It is missing or not properly configured on this system."
+                    )
 
             if message is not None:
                 response = wx.MessageBox(
