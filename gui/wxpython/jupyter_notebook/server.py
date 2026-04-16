@@ -166,10 +166,13 @@ class JupyterServerInstance:
         self.server_url = "http://127.0.0.1:{}".format(self.port)
 
         # Build command to start Jupyter server
+        # Use the current Python interpreter to avoid PATH/env mismatches
+        # (especially on Windows) between GRASS and a separate jupyter executable.
         cmd = [
             sys.executable,
             "-m",
             "notebook",
+            "--no-browser",
             "--NotebookApp.token=",
             "--NotebookApp.password=",
             "--port",
