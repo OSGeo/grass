@@ -44,26 +44,26 @@
  */
 #define MAX_OPEN_LEVEL 2
 
-static int open_old_dummy(struct Map_info *Map UNUSED, int update UNUSED)
+static int open_old_dummy(struct Map_info *Map G_UNUSED, int update G_UNUSED)
 {
     return 0;
 }
 
-static int open_new_dummy(struct Map_info *Map UNUSED, const char *name UNUSED,
-                          int with_z UNUSED)
+static int open_new_dummy(struct Map_info *Map G_UNUSED,
+                          const char *name G_UNUSED, int with_z G_UNUSED)
 {
     return 0;
 }
 
 #if !defined HAVE_POSTGRES
-static int format_old(struct Map_info *Map UNUSED, int update UNUSED)
+static int format_old(struct Map_info *Map G_UNUSED, int update G_UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 
-static int format_new(struct Map_info *Map UNUSED, const char *name UNUSED,
-                      int with_z UNUSED)
+static int format_new(struct Map_info *Map G_UNUSED, const char *name G_UNUSED,
+                      int with_z G_UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;

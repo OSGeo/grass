@@ -321,7 +321,7 @@ void Nviz_init_rotation(void)
    \param lateral type of movement
 
  */
-void Nviz_flythrough(nv_data *data UNUSED, float *fly_info, int *scale,
+void Nviz_flythrough(nv_data *data G_UNUSED, float *fly_info, int *scale,
                      int lateral)
 {
     float dir[3], from[4], cur_from[4], cur_dir[4];
