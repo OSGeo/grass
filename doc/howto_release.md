@@ -228,6 +228,12 @@ GitHub and further modify as needed.
 Older release description may or may not be a good inspiration:
 <https://github.com/OSGeo/grass/releases>.
 
+To see a list of new add-ons since the last release, filter the merged pull
+requests in the
+[GRASS addons repository](https://github.com/OSGeo/grass-addons/pulls?q=sort%3Aupdated-desc+is%3Apr+is%3Aopen+sort%3Aupdated-desc+is%3Apr+is%3Aclosed+label%3A%22new+addon%22+).
+To filter the list by date, enter the release date of the previous release in
+the search field (e.g., `closed:>2025-11-21`).
+
 If RC, mark it as a pre-release, check:
 
 ```text
@@ -332,7 +338,11 @@ wget https://github.com/OSGeo/grass/releases/download/${VERSION}/ChangeLog.gz \
 Fetch a tarball from GitHub we also publish on OSGeo servers:
 
 ```bash
-wget https://github.com/OSGeo/grass/archive/${VERSION}.tar.gz -O grass-${VERSION}.tar.gz
+wget https://github.com/OSGeo/grass/releases/download/${VERSION}/grass-${VERSION}.tar.gz \
+    -O grass-${VERSION}.tar.gz
+wget https://github.com/OSGeo/grass/releases/download/${VERSION}/grass-${VERSION}.tar.gz.sha256 \
+    -O grass-${VERSION}.tar.gz.sha256
+sha256sum -c grass-${VERSION}.tar.gz.sha256
 md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 ```
 
@@ -395,7 +405,7 @@ Update the GRASS version at <https://github.com/landam/wingrass-maintenance-scri
 
 - On major or minor version change (on release branch creation) update
   [dev_packages.csv](https://github.com/landam/wingrass-maintenance-scripts/blob/master/dev_packages.csv)
-- On release (inluding RC) update
+- On release (including RC) update
   [releases.csv](https://github.com/landam/wingrass-maintenance-scripts/blob/master/releases.csv)
   and
   [grass_packager_release.bat](https://github.com/landam/wingrass-maintenance-scripts/blob/master/grass_packager_release.bat#L12)
@@ -537,7 +547,7 @@ Add release to history page:
   - <grass-user@lists.osgeo.org>
 
 If final release, send out an announcement (press release)
-which is a shortened version of release desciption and website news item.
+which is a shortened version of release description and website news item.
 Note: Do not use relative links.
 
 - Our main mailing lists:
