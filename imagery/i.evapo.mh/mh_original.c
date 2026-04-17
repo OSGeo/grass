@@ -5,7 +5,7 @@
 
 /*Hargreaves et al, 1985. */
 double mh_original(double ra, double tavg, double tmax, double tmin,
-                   double p UNUSED)
+                   double p G_UNUSED)
 {
     double td, result;
 
