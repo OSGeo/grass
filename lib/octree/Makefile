@@ -4,8 +4,6 @@ include $(MODULE_TOPDIR)/include/Make/Vars.make
 
 LIB = OCTREE
 
-MOD_OBJS := $(filter-out main.o,$(AUTO_OBJS))
-
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 
 HEADERS := $(ARCH_INCDIR)/octree.h

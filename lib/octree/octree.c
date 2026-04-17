@@ -1,3 +1,5 @@
+#include <math.h>
+
 #include <grass/gis.h>
 
 #include "octree.h"
@@ -78,23 +80,34 @@ static OctreeNode *create_child_node(OctreeNode *parent, int index)
     return child;
 }
 
-/* Ensure the points array has room for at least the requested capacity */
+/* Ensure the points array has room for at least the requested capacity.
+   Grows geometrically so repeated inserts at a max-depth leaf (e.g., many
+   coincident points) stay amortized O(1) instead of O(n) per insert. */
 static void ensure_points_capacity(OctreeNode *node, size_t needed)
 {
     if (node->point_capacity >= needed)
         return;
 
-    size_t new_cap =
-        needed > MAX_POINTS_PER_NODE ? needed : MAX_POINTS_PER_NODE;
+    size_t new_cap = node->point_capacity == 0 ? (size_t)MAX_POINTS_PER_NODE
+                                               : node->point_capacity * 2;
+    if (new_cap < needed)
+        new_cap = needed;
+
     node->points =
         (Point3D *)G_realloc(node->points, sizeof(Point3D) * new_cap);
     node->point_capacity = new_cap;
 }
 
 /* Insert a point into the octree.
-   Returns 0 on success, -1 if the point is outside the node bounds. */
+   Returns 0 on success, -1 if the point is outside the node bounds or has
+   non-finite coordinates. */
 int insert_point(OctreeNode *node, Point3D point)
 {
+    /* Reject non-finite coordinates: NaN compares false against any bound,
+       which would otherwise silently bypass the bounds check below. */
+    if (!isfinite(point.x) || !isfinite(point.y) || !isfinite(point.z))
+        return -1;
+
     /* Validate that the point is within bounds */
     if (point.x < node->min_x || point.x > node->max_x ||
         point.y < node->min_y || point.y > node->max_y ||

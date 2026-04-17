@@ -12,6 +12,7 @@
  *
  *****************************************************************************/
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -30,6 +31,8 @@ static int test_insert_boundary_point(void);
 static int test_insert_after_subdivision(void);
 static int test_insert_many_duplicates(void);
 static int test_insert_out_of_bounds(void);
+static int test_insert_non_finite(void);
+static int test_insert_capacity_growth(void);
 
 /* ************************************************************************* */
 /* Perform the insert_point unit tests ************************************ */
@@ -49,6 +52,8 @@ int unit_test_insert_point(void)
     sum += test_insert_after_subdivision();
     sum += test_insert_many_duplicates();
     sum += test_insert_out_of_bounds();
+    sum += test_insert_non_finite();
+    sum += test_insert_capacity_growth();
 
     if (sum > 0)
         G_warning(_("\n-- insert_point unit tests failure --"));
@@ -419,6 +424,108 @@ static int test_insert_out_of_bounds(void)
     if (root->point_count != 0) {
         G_warning("Expected point_count 0 after rejected inserts, got %zu",
                   root->point_count);
+        sum++;
+    }
+
+    free_octree(root);
+    return sum;
+}
+
+/* ************************************************************************* */
+/* Test that non-finite coordinates (NaN, infinity) are rejected *********** */
+/* ************************************************************************* */
+static int test_insert_non_finite(void)
+{
+    int sum = 0;
+
+    G_message("\t * testing non-finite coordinate rejection\n");
+
+    OctreeNode *root = create_octree_node(0.0, 10.0, 0.0, 10.0, 0.0, 10.0);
+
+    Point3D nan_point = {NAN, 5.0, 5.0};
+
+    if (insert_point(root, nan_point) != -1) {
+        G_warning("Expected -1 for NaN x coordinate");
+        sum++;
+    }
+
+    Point3D inf_point = {5.0, INFINITY, 5.0};
+
+    if (insert_point(root, inf_point) != -1) {
+        G_warning("Expected -1 for infinite y coordinate");
+        sum++;
+    }
+
+    Point3D neg_inf = {5.0, 5.0, -INFINITY};
+
+    if (insert_point(root, neg_inf) != -1) {
+        G_warning("Expected -1 for -infinity z coordinate");
+        sum++;
+    }
+
+    if (root->point_count != 0) {
+        G_warning("Expected point_count 0 after rejecting non-finite, got %zu",
+                  root->point_count);
+        sum++;
+    }
+
+    free_octree(root);
+    return sum;
+}
+
+/* ************************************************************************* */
+/* Test geometric capacity growth at max depth (no O(n^2) realloc) ******** */
+/* ************************************************************************* */
+static int test_insert_capacity_growth(void)
+{
+    int sum = 0;
+
+    G_message("\t * testing geometric capacity growth with many duplicates\n");
+
+    OctreeNode *root = create_octree_node(0.0, 10.0, 0.0, 10.0, 0.0, 10.0);
+
+    /* Insert enough coincident points to push a max-depth leaf well past
+       MAX_POINTS_PER_NODE and exercise multiple capacity doublings. */
+    int count = MAX_POINTS_PER_NODE * 20;
+
+    for (int i = 0; i < count; i++) {
+        Point3D p = {7.0, 7.0, 7.0};
+
+        if (insert_point(root, p) != 0) {
+            G_warning("insert_point failed on duplicate %d", i);
+            sum++;
+        }
+    }
+
+    /* Descend to the deepest leaf holding these points and verify the
+       capacity grew geometrically (>= count, and at least double the
+       previous power-of-two threshold). */
+    OctreeNode *n = root;
+
+    while (n != NULL && n->points == NULL) {
+        OctreeNode *next = NULL;
+
+        for (int i = 0; i < 8; i++) {
+            if (n->children[i] != NULL) {
+                next = n->children[i];
+                break;
+            }
+        }
+        n = next;
+    }
+
+    if (n == NULL) {
+        G_warning("Could not locate leaf holding duplicates");
+        sum++;
+    }
+    else if (n->point_count != (size_t)count) {
+        G_warning("Expected leaf point_count %d, got %zu", count,
+                  n->point_count);
+        sum++;
+    }
+    else if (n->point_capacity < n->point_count) {
+        G_warning("Leaf capacity %zu < count %zu", n->point_capacity,
+                  n->point_count);
         sum++;
     }
 

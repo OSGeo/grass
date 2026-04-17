@@ -2,7 +2,7 @@
  * \file octree.c
  * \brief Octree spatial indexing library
  *
- * \author GRASS Development Team
+ * \author Corey White and GRASS Development Team
  *
  * \par Overview
  * This library provides an octree spatial data structure for efficient 3D point
