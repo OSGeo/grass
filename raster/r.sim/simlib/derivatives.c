@@ -1,5 +1,4 @@
 #include "simlib.h"
-
 /**
  * \brief Computes dx and dy slope components
  *
