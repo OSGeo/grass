@@ -1,5 +1,4 @@
-/**
- * \file octree.c
+/*! \page octree GRASS Octree library
  * \brief Octree spatial indexing library
  *
  * \author Corey White and GRASS Development Team
