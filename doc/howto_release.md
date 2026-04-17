@@ -19,7 +19,7 @@ _Note: Some later steps in this text are to be done by the development coordinat
 Update your remotes and switch to branch:
 
 ```bash
-git fetch --prune upstream && git checkout releasebranch_8_4
+git fetch --prune upstream && git checkout releasebranch_8_5
 ```
 
 Confirm that you are on the right branch and have no local changes
@@ -32,7 +32,7 @@ git status
 git diff
 git diff --staged
 # Should give no output:
-git log upstream/releasebranch_8_4..HEAD
+git log upstream/releasebranch_8_5..HEAD
 # There should be no commits which are not visible on GitHub:
 git log --max-count=5
 ```
@@ -42,15 +42,15 @@ Above, you confirmed you have no local commits, so this should happen
 without rebasing any local commits, i.e., it should just add the new commits:
 
 ```bash
-git rebase upstream/releasebranch_8_4
+git rebase upstream/releasebranch_8_5
 ```
 
 Verify the result:
 
 ```bash
 # Should give no output:
-git log upstream/releasebranch_8_4..HEAD
-git log HEAD..upstream/releasebranch_8_4
+git log upstream/releasebranch_8_5..HEAD
+git log HEAD..upstream/releasebranch_8_5
 # Should give exactly the same as last commits visible on GitHub:
 git log --max-count=5
 ```
@@ -137,7 +137,7 @@ Check on [GitHub Actions](https://github.com/OSGeo/grass/actions)
 or use GitHub CLI:
 
 ```bash
-gh run list --branch releasebranch_8_4
+gh run list --branch releasebranch_8_5
 ```
 
 Some time was needed to run the checks, so before getting back to creating the tag,
@@ -186,7 +186,7 @@ good results for the first release candidate because it contains contributor han
 and can identify new contributors, so use with the _api_ backend, e.g.:
 
 ```bash
-python ./utils/generate_release_notes.py api releasebranch_8_4 8.3.0 $VERSION
+python ./utils/generate_release_notes.py api releasebranch_8_5 8.4.0 $VERSION
 ```
 
 #### Micro releases
@@ -196,7 +196,7 @@ PRs while the backports are usually direct commits without PRs.
 The _git log_ command operates on commits, so use use the _log_ backend:
 
 ```bash
-python ./utils/generate_release_notes.py log releasebranch_8_4 8.4.0 $VERSION
+python ./utils/generate_release_notes.py log releasebranch_8_5 8.5.0 $VERSION
 ```
 
 #### Between RCs and from last RC to final release
@@ -205,7 +205,7 @@ In between RCs and between last RC and final release, the _log_ backend is usefu
 for showing updates since the last RC:
 
 ```bash
-python ./utils/generate_release_notes.py log releasebranch_8_4 8.4.0RC1 $VERSION
+python ./utils/generate_release_notes.py log releasebranch_8_5 8.5.0RC1 $VERSION
 ```
 
 #### Finalizing the release notes
@@ -302,7 +302,7 @@ git fetch upstream
 Get the tagged source code, e.g. (modify the tag as needed):
 
 ```bash
-git checkout 8.4.0RC1
+git checkout 8.5.0RC1
 ```
 
 Create the Bash variables for version numbers:
@@ -497,20 +497,20 @@ For new branches and final releases (see additional instructions in the repo):
 
 ```bash
      set MAJOR=8
-     set MINOR=4
+     set MINOR=5
      set PATCH=0RC1
 ```
 
 - Update addons (grass_addons.sh) rules, eg.
 
 ```bash
-     compile $GIT_PATH/grass8 $GISBASE_PATH/grass840RC1  $ADDON_PATH/grass840RC1/addons
+     compile $GIT_PATH/grass8 $GISBASE_PATH/grass850RC1  $ADDON_PATH/grass850RC1/addons
 ```
 
 - Modify grass_copy_wwwroot.sh accordingly, eg.
 
 ```bash
-     copy_addon 840RC1 8.4.0RC1
+     copy_addon 850RC1 8.5.0RC1
 ```
 
 ### Update grass.osgeo.org
