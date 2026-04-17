@@ -21,5 +21,6 @@
 int unit_test_create_node(void);
 int unit_test_insert_point(void);
 int unit_test_free_octree(void);
+int unit_test_query(void);
 
 #endif /* TEST_OCTREE_H */

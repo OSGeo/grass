@@ -108,6 +108,8 @@ repos:
     rev: v2.4.2
     hooks:
       - id: codespell
+        args:
+          - --ignore-words-list=LOD # lib/octree/octreelib.dox:85
         # TODO: Remove these exclusions, they are just not fixed completely yet, nor ignored
         exclude_types:
           - c

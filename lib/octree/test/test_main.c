@@ -20,19 +20,14 @@
 
 #include "test_octree.h"
 
-/*- Parameters and global variables -----------------------------------------*/
 typedef struct {
     struct Flag *testunit, *full;
 } paramType;
 
 paramType param;
 
-/*- prototypes --------------------------------------------------------------*/
 static void set_params(void);
 
-/* ************************************************************************* */
-/* Set up the arguments we are expecting ********************************** */
-/* ************************************************************************* */
 void set_params(void)
 {
     param.testunit = G_define_flag();
@@ -44,9 +39,6 @@ void set_params(void)
     param.full->description = _("Run all unit and integration tests");
 }
 
-/* ************************************************************************* */
-/* ************************************************************************* */
-/* ************************************************************************* */
 int main(int argc, char *argv[])
 {
     struct GModule *module;
@@ -69,6 +61,7 @@ int main(int argc, char *argv[])
         returnstat += unit_test_create_node();
         returnstat += unit_test_insert_point();
         returnstat += unit_test_free_octree();
+        returnstat += unit_test_query();
     }
 
     if (returnstat != 0)

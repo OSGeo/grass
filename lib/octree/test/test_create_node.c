@@ -29,13 +29,13 @@ static int test_create_node_negative_bounds(void);
 static int test_create_node_lazy_allocation(void);
 
 /* ************************************************************************* */
-/* Perform the create_octree_node unit tests ****************************** */
+/* Perform the octree_create_node unit tests ****************************** */
 /* ************************************************************************* */
 int unit_test_create_node(void)
 {
     int sum = 0;
 
-    G_message(_("\n++ Running create_octree_node unit tests ++"));
+    G_message(_("\n++ Running octree_create_node unit tests ++"));
 
     sum += test_create_node_basic();
     sum += test_create_node_bounds();
@@ -45,9 +45,9 @@ int unit_test_create_node(void)
     sum += test_create_node_lazy_allocation();
 
     if (sum > 0)
-        G_warning(_("\n-- create_octree_node unit tests failure --"));
+        G_warning(_("\n-- octree_create_node unit tests failure --"));
     else
-        G_message(_("\n-- create_octree_node unit tests finished "
+        G_message(_("\n-- octree_create_node unit tests finished "
                     "successfully --"));
 
     return sum;
@@ -62,10 +62,10 @@ static int test_create_node_basic(void)
 
     G_message("\t * testing basic node creation\n");
 
-    OctreeNode *node = create_octree_node(0.0, 10.0, 0.0, 10.0, 0.0, 10.0);
+    OctreeNode *node = octree_create_node(0.0, 10.0, 0.0, 10.0, 0.0, 10.0);
 
     if (node == NULL) {
-        G_warning("create_octree_node returned NULL");
+        G_warning("octree_create_node returned NULL");
         return 1;
     }
 
@@ -79,7 +79,7 @@ static int test_create_node_basic(void)
         sum++;
     }
 
-    free_octree(node);
+    octree_free(node);
     return sum;
 }
 
@@ -97,7 +97,7 @@ static int test_create_node_bounds(void)
     double min_z = 0.0, max_z = 100.0;
 
     OctreeNode *node =
-        create_octree_node(min_x, max_x, min_y, max_y, min_z, max_z);
+        octree_create_node(min_x, max_x, min_y, max_y, min_z, max_z);
 
     if (node->min_x != min_x) {
         G_warning("Expected min_x %f, got %f", min_x, node->min_x);
@@ -124,7 +124,7 @@ static int test_create_node_bounds(void)
         sum++;
     }
 
-    free_octree(node);
+    octree_free(node);
     return sum;
 }
 
@@ -137,7 +137,7 @@ static int test_create_node_children_null(void)
 
     G_message("\t * testing that children are initialized to NULL\n");
 
-    OctreeNode *node = create_octree_node(0.0, 10.0, 0.0, 10.0, 0.0, 10.0);
+    OctreeNode *node = octree_create_node(0.0, 10.0, 0.0, 10.0, 0.0, 10.0);
 
     for (int i = 0; i < 8; i++) {
         if (node->children[i] != NULL) {
@@ -146,7 +146,7 @@ static int test_create_node_children_null(void)
         }
     }
 
-    free_octree(node);
+    octree_free(node);
     return sum;
 }
 
@@ -159,10 +159,10 @@ static int test_create_node_zero_bounds(void)
 
     G_message("\t * testing node creation with zero-sized bounds\n");
 
-    OctreeNode *node = create_octree_node(5.0, 5.0, 5.0, 5.0, 5.0, 5.0);
+    OctreeNode *node = octree_create_node(5.0, 5.0, 5.0, 5.0, 5.0, 5.0);
 
     if (node == NULL) {
-        G_warning("create_octree_node returned NULL for zero-sized bounds");
+        G_warning("octree_create_node returned NULL for zero-sized bounds");
         return 1;
     }
 
@@ -172,7 +172,7 @@ static int test_create_node_zero_bounds(void)
         sum++;
     }
 
-    free_octree(node);
+    octree_free(node);
     return sum;
 }
 
@@ -186,10 +186,10 @@ static int test_create_node_negative_bounds(void)
     G_message("\t * testing node creation with negative bounds\n");
 
     OctreeNode *node =
-        create_octree_node(-100.0, -50.0, -200.0, -100.0, -50.0, -10.0);
+        octree_create_node(-100.0, -50.0, -200.0, -100.0, -50.0, -10.0);
 
     if (node == NULL) {
-        G_warning("create_octree_node returned NULL for negative bounds");
+        G_warning("octree_create_node returned NULL for negative bounds");
         return 1;
     }
 
@@ -206,7 +206,7 @@ static int test_create_node_negative_bounds(void)
         sum++;
     }
 
-    free_octree(node);
+    octree_free(node);
     return sum;
 }
 
@@ -219,7 +219,7 @@ static int test_create_node_lazy_allocation(void)
 
     G_message("\t * testing lazy allocation of points array\n");
 
-    OctreeNode *node = create_octree_node(0.0, 10.0, 0.0, 10.0, 0.0, 10.0);
+    OctreeNode *node = octree_create_node(0.0, 10.0, 0.0, 10.0, 0.0, 10.0);
 
     if (node->points != NULL) {
         G_warning("Expected NULL points array before first insert");
@@ -232,8 +232,8 @@ static int test_create_node_lazy_allocation(void)
     }
 
     /* After one insert, points should be allocated */
-    Point3D p = {5.0, 5.0, 5.0};
-    insert_point(node, p);
+    OctreePoint3D p = {5.0, 5.0, 5.0};
+    octree_insert_point(node, p);
 
     if (node->points == NULL) {
         G_warning("Expected non-NULL points array after insert");
@@ -246,6 +246,6 @@ static int test_create_node_lazy_allocation(void)
         sum++;
     }
 
-    free_octree(node);
+    octree_free(node);
     return sum;
 }

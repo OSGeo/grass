@@ -35,22 +35,22 @@
  * \code{.c}
  * OctreeNode *tree;
  *
- * tree = create_octree_node(0.0, 100.0, 0.0, 100.0, 0.0, 100.0);
+ * tree = octree_create_node(0.0, 100.0, 0.0, 100.0, 0.0, 100.0);
  * \endcode
  *
  * \section octree_insert Inserting Points
  *
  * Add 3D points to the octree:
  * \code{.c}
- * Point3D p = {25.5, 30.2, 15.8};
+ * OctreePoint3D p = {25.5, 30.2, 15.8};
  *
- * if (insert_point(tree, p) != 0)
- *     G_warning("Point is outside octree bounds");
+ * if (octree_insert_point(tree, p) != 0)
+ *     G_warning("Point is outside octree bounds or non-finite");
  *
  * // Insert multiple points
  * for (int i = 0; i < num_points; i++) {
- *     Point3D pt = {x[i], y[i], z[i]};
- *     insert_point(tree, pt);
+ *     OctreePoint3D pt = {x[i], y[i], z[i]};
+ *     octree_insert_point(tree, pt);
  * }
  * \endcode
  *
@@ -58,28 +58,71 @@
  *
  * Free octree memory when done:
  * \code{.c}
- * free_octree(tree);
+ * octree_free(tree);
  * \endcode
+ *
+ * \section octree_query Querying
+ *
+ * Four read-only accessors are provided for traversal and level-of-detail
+ * rendering:
+ *
+ * - octree_query_box() visits every point inside an axis-aligned box,
+ *   pruning subtrees whose bounding box does not intersect the query. Pass
+ *   a NULL visitor to count matches without a callback.
+ * - octree_visit_to_depth() invokes a visitor once per terminal node: a
+ *   true leaf or a node whose depth reaches the requested cap. Intended
+ *   for LOD rendering -- pick the depth from the current zoom level and
+ *   emit one primitive per visited node.
+ * - octree_subtree_count() returns the cached total number of points in a
+ *   node's subtree. O(1).
+ * - octree_subtree_representative() returns the cached count together with
+ *   the centroid of all points in the subtree; useful inside an
+ *   octree_visit_to_depth() callback to produce a single drawable
+ *   representative per LOD cell.
+ *
+ * All accept NULL for the root and return a sentinel rather than crashing.
+ * Visitor callbacks may return non-zero to abort iteration early. Point
+ * pointers passed to visitors alias internal storage and must not be
+ * retained across tree modifications.
+ *
+ * \par Future: frustum-pruned Level of Detail (LOD) traversal
+ * octree_visit_to_depth() does not prune by a query box; callers that
+ * filter inside the visitor still pay traversal cost for every subtree.
+ * For view-frustum rendering this matters: the per-frame cost should scale
+ * with what is visible, not with total tree size. A combined primitive
+ * (depth-limited traversal with box pruning at the internal-node level) is
+ * intentionally not yet provided. The preferred shape -- hard-coded bbox
+ * filter vs. caller-supplied "should I descend?" predicate -- depends on
+ * the first real consumer (e.g., the NVIZ point-cloud LOD path in
+ * lib/ogsf). Add it when that consumer lands, shaped to its actual needs.
  *
  * \par Depth Limit
  * The tree enforces a maximum depth of OCTREE_MAX_DEPTH (21) to prevent
  * infinite recursion when many points share the same coordinates. At max
- * depth, leaf nodes grow beyond MAX_POINTS_PER_NODE as needed.
+ * depth, leaf nodes grow beyond OCTREE_MAX_POINTS_PER_NODE as needed.
  *
  * \par Bounds Validation
- * insert_point() returns -1 if the point is outside the node's bounding box,
- * and 0 on success.
+ * octree_insert_point() returns -1 if the point is outside the node's
+ * bounding box or has non-finite (NaN/infinity) coordinates, and 0 on
+ * success.
  *
  * \par Memory Management
- * Points arrays are allocated lazily on first insertion and grow as needed
- * using G_realloc(). Child nodes are created on demand (only the octants
- * that actually receive points are allocated).
+ * Points arrays are allocated lazily on first insertion and grow
+ * geometrically (doubling) using G_realloc(). Child nodes are created on
+ * demand (only the octants that actually receive points are allocated).
+ * Each node also caches the total point count of its subtree, updated
+ * during insertion, so octree_subtree_count() is O(1).
  *
  * \par Performance Considerations
- * - Choose MAX_POINTS_PER_NODE based on data density (typical values: 8-32)
- * - Larger values reduce tree depth but increase search time per node
- * - Smaller values increase memory overhead but improve query performance
- * - Ensure octree bounds encompass all data points for optimal performance
+ * - Choose OCTREE_MAX_POINTS_PER_NODE based on data density (typical
+ *   values: 8-32). Larger values reduce tree depth but increase search
+ *   time per node; smaller values increase memory overhead but improve
+ *   query performance.
+ * - Ensure octree bounds encompass all data points for optimal performance.
+ * - octree_subtree_count() is O(1) thanks to the per-node cache.
+ * - octree_subtree_representative() returns count in O(1) but the centroid
+ *   is O(subtree size); do not call it per-frame on a large subtree
+ *   without caching the result in the caller.
  *
  * \par Thread Safety
  * The octree structure is not thread-safe. For concurrent access, use
