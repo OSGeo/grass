@@ -229,6 +229,12 @@ GitHub and further modify as needed.
 Older release description may or may not be a good inspiration:
 <https://github.com/OSGeo/grass/releases>.
 
+To see a list of new add-ons since the last release, filter the merged pull
+requests in the
+[GRASS addons repository](https://github.com/OSGeo/grass-addons/pulls?q=sort%3Aupdated-desc+is%3Apr+is%3Aopen+sort%3Aupdated-desc+is%3Apr+is%3Aclosed+label%3A%22new+addon%22+).
+To filter the list by date, enter the release date of the previous release in
+the search field (e.g., `closed:>2025-11-21`).
+
 If RC, mark it as a pre-release, check:
 
 ```text
