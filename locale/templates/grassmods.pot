@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 22:07+0000\n"
+"POT-Creation-Date: 2026-04-18 17:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1882,7 +1882,7 @@ msgstr ""
 #: ../raster/r.describe/main.c:53 ../raster/r.distance/main.c:34
 #: ../raster/r.drain/main.c:110 ../raster/r.external.out/main.c:234
 #: ../raster/r.external/main.c:58 ../raster/r.fill.dir/main.c:87
-#: ../raster/r.fill.stats/main.c:765 ../raster/r.flow/main.c:414
+#: ../raster/r.fill.stats/main.c:766 ../raster/r.flow/main.c:414
 #: ../raster/r.geomorphon/main.c:115 ../raster/r.grow.distance/main.c:145
 #: ../raster/r.gwflow/main.c:221 ../raster/r.his/main.c:66
 #: ../raster/r.horizon/main.c:179 ../raster/r.in.ascii/main.c:69
@@ -2129,7 +2129,7 @@ msgstr ""
 #: ../vector/v.clean/test/topocheck.c:41 ../vector/v.cluster/main.c:82
 #: ../vector/v.colors.out/main.c:48 ../vector/v.colors/main.c:57
 #: ../vector/v.db.connect/main.c:59 ../vector/v.db.select/main.c:97
-#: ../vector/v.decimate/main.c:116 ../vector/v.delaunay/main.c:85
+#: ../vector/v.decimate/main.c:117 ../vector/v.delaunay/main.c:85
 #: ../vector/v.distance/main.c:125 ../vector/v.drape/main.c:55
 #: ../vector/v.edit/main.c:55 ../vector/v.external.out/main.c:40
 #: ../vector/v.external/main.c:49 ../vector/v.extract/main.c:77
@@ -2237,7 +2237,7 @@ msgstr ""
 #: ../vector/v.cluster/main.c:140 ../vector/v.colors.out/make_colors.c:23
 #: ../vector/v.colors.out/scan_cats.c:19 ../vector/v.colors/main.c:276
 #: ../vector/v.db.connect/main.c:217 ../vector/v.db.select/main.c:268
-#: ../vector/v.decimate/main.c:267 ../vector/v.delaunay/main.c:120
+#: ../vector/v.decimate/main.c:268 ../vector/v.delaunay/main.c:120
 #: ../vector/v.distance/main.c:398 ../vector/v.distance/main.c:421
 #: ../vector/v.drape/main.c:141 ../vector/v.edit/main.c:176
 #: ../vector/v.edit/main.c:251 ../vector/v.external/main.c:215
@@ -2305,7 +2305,7 @@ msgstr ""
 #: ../vector/v.buffer/main.c:401 ../vector/v.build.polylines/main.c:157
 #: ../vector/v.build/main.c:156 ../vector/v.clean/main.c:296
 #: ../vector/v.clean/main.c:303 ../vector/v.cluster/main.c:200
-#: ../vector/v.decimate/main.c:387 ../vector/v.delaunay/main.c:126
+#: ../vector/v.decimate/main.c:388 ../vector/v.delaunay/main.c:126
 #: ../vector/v.distance/main.c:446 ../vector/v.drape/main.c:156
 #: ../vector/v.edit/main.c:107 ../vector/v.edit/main.c:124
 #: ../vector/v.external/main.c:167 ../vector/v.extract/main.c:409
@@ -4178,7 +4178,7 @@ msgstr ""
 #: ../vector/v.clean/main.c:63 ../vector/v.db.select/main.c:108
 #: ../vector/v.db.select/main.c:111 ../vector/v.db.select/main.c:114
 #: ../vector/v.db.select/main.c:121 ../vector/v.db.select/main.c:172
-#: ../vector/v.decimate/main.c:142 ../vector/v.decimate/main.c:145
+#: ../vector/v.decimate/main.c:143 ../vector/v.decimate/main.c:146
 #: ../vector/v.drape/main.c:66 ../vector/v.drape/main.c:69
 #: ../vector/v.drape/main.c:72 ../vector/v.drape/main.c:77
 #: ../vector/v.edit/args.c:24 ../vector/v.edit/args.c:29
@@ -4599,7 +4599,7 @@ msgstr ""
 #: ../raster/r.to.vect/main.c:300 ../raster/r.walk/main.c:776
 #: ../raster/r.walk/main.c:840 ../vector/v.colors.out/scan_cats.c:31
 #: ../vector/v.colors/scan_cats.c:24 ../vector/v.colors/scan_z.c:38
-#: ../vector/v.decimate/main.c:402 ../vector/v.info/level1.c:41
+#: ../vector/v.decimate/main.c:403 ../vector/v.info/level1.c:41
 #: ../vector/v.label.sa/labels.c:140 ../vector/v.label/main.c:292
 #: ../vector/v.out.lidar/main.c:731 ../vector/v.perturb/main.c:200
 #: ../vector/v.to.3d/trans2.c:84 ../vector/v.to.3d/trans3.c:86
@@ -4932,7 +4932,7 @@ msgstr[1] ""
 
 #: ../display/d.vect/main.c:75 ../general/g.region/main.c:70
 #: ../raster/r.random/main.c:57 ../vector/v.cluster/main.c:86
-#: ../vector/v.decimate/main.c:123 ../vector/v.edit/main.c:62
+#: ../vector/v.decimate/main.c:124 ../vector/v.edit/main.c:62
 #: ../vector/v.external/main.c:54 ../vector/v.in.ascii/main.c:70
 #: ../vector/v.in.dxf/main.c:65 ../vector/v.in.lidar/main.c:137
 #: ../vector/v.info/main.c:48 ../vector/v.patch/main.c:75
@@ -5323,12 +5323,12 @@ msgstr ""
 #: ../raster/r.compress/main.c:333 ../raster/r.cost/main.c:364
 #: ../raster/r.cost/main.c:391 ../raster/r.cost/main.c:711
 #: ../raster/r.cross/main.c:101 ../raster/r.distance/parse.c:76
-#: ../raster/r.distance/parse.c:85 ../raster/r.fill.stats/main.c:1026
+#: ../raster/r.distance/parse.c:85 ../raster/r.fill.stats/main.c:1027
 #: ../raster/r.flow/flow_io.c:67 ../raster/r.flow/flow_io.c:245
 #: ../raster/r.geomorphon/memory.c:47 ../raster/r.info/main.c:140
 #: ../raster/r.kappa/main.c:173 ../raster/r.kappa/stats.c:33
 #: ../raster/r.kappa/stats.c:40 ../raster/r.mapcalc/map.c:513
-#: ../raster/r.mapcalc/map.c:817 ../raster/r.mapcalc/map3.c:720
+#: ../raster/r.mapcalc/map.c:817 ../raster/r.mapcalc/map3.c:721
 #: ../raster/r.null/main.c:129 ../raster/r.reclass/main.c:80
 #: ../raster/r.report/parse.c:276 ../raster/r.ros/main.c:362
 #: ../raster/r.ros/main.c:373 ../raster/r.ros/main.c:377
@@ -7991,7 +7991,7 @@ msgstr ""
 #: ../imagery/i.atcorr/main.cpp:626 ../imagery/i.landsat.acca/algorithm.c:387
 #: ../imagery/i.landsat.acca/main.c:56 ../imagery/i.landsat.acca/tools.c:125
 #: ../imagery/i.landsat.toar/main.c:401 ../imagery/i.landsat.toar/main.c:542
-#: ../raster/r.mapcalc/map3.c:519 ../raster/r.random/random.c:40
+#: ../raster/r.mapcalc/map3.c:520 ../raster/r.random/random.c:40
 #: ../raster/r.random/random.c:43
 #, c-format
 msgid "Unable to open raster map <%s>"
@@ -8001,7 +8001,7 @@ msgstr ""
 #: ../imagery/i.landsat.acca/algorithm.c:236
 #: ../imagery/i.landsat.acca/algorithm.c:395
 #: ../imagery/i.landsat.acca/tools.c:135 ../imagery/i.landsat.toar/main.c:566
-#: ../raster/r.mapcalc/map3.c:611 ../raster/r.sunhours/main.c:335
+#: ../raster/r.mapcalc/map3.c:612 ../raster/r.sunhours/main.c:335
 #: ../raster/r.sunhours/main.c:346 ../raster/r.sunhours/main.c:357
 #, c-format
 msgid "Unable to create raster map <%s>"
@@ -13908,7 +13908,7 @@ msgid "Fills no-data areas in raster maps using spline interpolation."
 msgstr ""
 
 #: ../locale/scriptstrings/r.fillnulls_to_translate.c:3
-#: ../raster/r.contour/main.c:88 ../raster/r.fill.stats/main.c:766
+#: ../raster/r.contour/main.c:88 ../raster/r.fill.stats/main.c:767
 #: ../raster/r.random.surface/main.c:57 ../raster/r.resamp.bspline/main.c:78
 #: ../raster/r.surf.area/main.c:76 ../raster/r.surf.contour/main.c:60
 #: ../raster/r.surf.fractal/main.c:38 ../raster/r.surf.gauss/main.c:39
@@ -13920,7 +13920,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.fillnulls_to_translate.c:5
 #: ../locale/scriptstrings/t.rast.gapfill_to_translate.c:3
-#: ../raster/r.fill.stats/main.c:767 ../raster/r.resamp.bspline/main.c:80
+#: ../raster/r.fill.stats/main.c:768 ../raster/r.resamp.bspline/main.c:80
 #: ../raster/r.resamp.interp/main.c:87 ../raster/r.series.interp/main.c:74
 #: ../raster/r.surf.contour/main.c:61 ../raster/r.surf.idw/main.c:103
 #: ../vector/v.surf.bspline/main.c:92 ../vector/v.surf.idw/main.c:86
@@ -13936,7 +13936,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.fillnulls_to_translate.c:7
 #: ../locale/scriptstrings/t.rast.gapfill_to_translate.c:6
-#: ../raster/r.fill.stats/main.c:769 ../raster/r.resamp.bspline/main.c:84
+#: ../raster/r.fill.stats/main.c:770 ../raster/r.resamp.bspline/main.c:84
 #: ../vector/v.surf.rst/main.c:152 ../vector/v.vol.rst/main.c:224
 msgid "no-data filling"
 msgstr ""
@@ -14749,7 +14749,7 @@ msgstr ""
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:5
 #: ../raster/r.in.lidar/main.c:112 ../raster/r.in.pdal/main.cpp:92
 #: ../raster/r.in.xyz/main.c:160 ../raster3d/r3.in.lidar/main.c:161
-#: ../vector/v.decimate/main.c:117 ../vector/v.in.lidar/main.c:136
+#: ../vector/v.decimate/main.c:118 ../vector/v.in.lidar/main.c:136
 #: ../vector/v.in.pdal/main.cpp:131 ../vector/v.lidar.correction/main.c:71
 #: ../vector/v.lidar.edgedetection/main.c:76
 #: ../vector/v.lidar.growing/main.c:74 ../vector/v.out.lidar/main.c:468
@@ -15567,7 +15567,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast.extract_to_translate.c:3
 #: ../locale/scriptstrings/t.rast3d.extract_to_translate.c:3
 #: ../locale/scriptstrings/t.vect.extract_to_translate.c:3
-#: ../vector/v.decimate/main.c:120 ../vector/v.extract/main.c:78
+#: ../vector/v.decimate/main.c:121 ../vector/v.extract/main.c:78
 #: ../vector/v.outlier/main.c:70
 msgid "extract"
 msgstr ""
@@ -16199,7 +16199,7 @@ msgid "Prints attributes of vector maps registered in a space time vector datase
 msgstr ""
 
 #: ../locale/scriptstrings/t.vect.db.select_to_translate.c:6
-#: ../vector/v.decimate/main.c:121 ../vector/v.extract/main.c:79
+#: ../vector/v.decimate/main.c:122 ../vector/v.extract/main.c:79
 #: ../vector/v.outlier/main.c:71
 msgid "select"
 msgstr ""
@@ -20237,193 +20237,193 @@ msgstr ""
 msgid "Spatial weights neighborhood (cells):"
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:768 ../raster/r.surf.idw/main.c:104
+#: ../raster/r.fill.stats/main.c:769 ../raster/r.surf.idw/main.c:104
 #: ../vector/v.surf.idw/main.c:87
 msgid "IDW"
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:770
+#: ../raster/r.fill.stats/main.c:771
 msgid "Rapidly fills 'no data' cells (NULLs) of a raster map with interpolated values (IDW)."
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:779
+#: ../raster/r.fill.stats/main.c:780
 msgid "Raster map with data gaps to fill"
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:784
+#: ../raster/r.fill.stats/main.c:785
 msgid "Name of result output map"
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:789
+#: ../raster/r.fill.stats/main.c:790
 msgid "Name of uncertainty output map"
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:798
+#: ../raster/r.fill.stats/main.c:799
 msgid "Distance threshold (default: in cells) for interpolation"
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:807
+#: ../raster/r.fill.stats/main.c:808
 msgid "Statistic for interpolated cell values"
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:818
+#: ../raster/r.fill.stats/main.c:819
 msgid "Minimum input data value to include in interpolation"
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:827
+#: ../raster/r.fill.stats/main.c:828
 msgid "Maximum input data value to include in interpolation"
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:836
+#: ../raster/r.fill.stats/main.c:837
 msgid "Power coefficient for IDW interpolation"
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:846
+#: ../raster/r.fill.stats/main.c:847
 msgid "Minimum number of data cells within search radius"
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:851
+#: ../raster/r.fill.stats/main.c:852
 msgid "Interpret distance as map units, not number of cells"
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:855
+#: ../raster/r.fill.stats/main.c:856
 msgid "Keep (preserve) original cell values"
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:856
+#: ../raster/r.fill.stats/main.c:857
 msgid "By default original values are smoothed"
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:860
+#: ../raster/r.fill.stats/main.c:861
 msgid "Just print the spatial weights matrix"
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:864
+#: ../raster/r.fill.stats/main.c:865
 msgid "Just print estimated memory usage"
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:869
+#: ../raster/r.fill.stats/main.c:870
 msgid "Single precision floating point output"
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:881
+#: ../raster/r.fill.stats/main.c:882
 msgid "You are working with lat/lon data."
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:882
+#: ../raster/r.fill.stats/main.c:883
 msgid "This module uses a straight-line distance metric."
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:883
+#: ../raster/r.fill.stats/main.c:884
 msgid "Expect inaccuracies."
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:898
+#: ../raster/r.fill.stats/main.c:899
 msgid "Result map name cannot be identical with uncertainty map name."
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:908
+#: ../raster/r.fill.stats/main.c:909
 msgid "Maximum distance must be larger than zero."
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:912
+#: ../raster/r.fill.stats/main.c:913
 #, c-format
 msgid "Maximum distance must be at least '%.6f' (W-E resolution)."
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:918
+#: ../raster/r.fill.stats/main.c:919
 #, c-format
 msgid "Maximum distance must be at least '%.6f' (S-N resolution)."
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:924
+#: ../raster/r.fill.stats/main.c:925
 #, c-format
 msgid "Maximum distance must be at least '%.6f' (W-E and S-N resolution)."
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:930
+#: ../raster/r.fill.stats/main.c:931
 #, c-format
 msgid "Maximum distance too large. Adjusted to '%.6f' (diagonal of current region)."
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:941
+#: ../raster/r.fill.stats/main.c:942
 msgid "Maximum distance must be at least one cell."
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:947
+#: ../raster/r.fill.stats/main.c:948
 #, c-format
 msgid "Maximum distance too large. Adjusted to '%lu' cells (diagonal of current region)."
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:955
+#: ../raster/r.fill.stats/main.c:956
 msgid "Minimum number of cells must be at least '1'."
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:958
+#: ../raster/r.fill.stats/main.c:959
 msgid "Specified minimum number of cells unreachable with current settings."
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:964
+#: ../raster/r.fill.stats/main.c:965
 msgid "Value for 'minimum' must be smaller than value for 'maximum'."
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:969
+#: ../raster/r.fill.stats/main.c:970
 msgid "The 'power' option has no effect in any mode other than 'wmean'."
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:980
+#: ../raster/r.fill.stats/main.c:981
 msgid ""
 "The specified maximum distance cannot be resolved to whole cells\n"
 " at the current resolution settings."
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:992
+#: ../raster/r.fill.stats/main.c:993
 #, c-format
 msgid "W-E size of neighborhood is %lu cells."
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:993
+#: ../raster/r.fill.stats/main.c:994
 #, c-format
 msgid "S-N size of neighborhood is %lu cells."
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:996
+#: ../raster/r.fill.stats/main.c:997
 msgid "Neighborhood cannot be smaller than 3 cells in X or Y direction."
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:1050
+#: ../raster/r.fill.stats/main.c:1051
 #, c-format
 msgid "Input data range is %f to %f.\n"
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:1067
+#: ../raster/r.fill.stats/main.c:1068
 #, c-format
 msgid "Input data type is integer but interpolation mode is '%s'."
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:1071
+#: ../raster/r.fill.stats/main.c:1072
 msgid "Output type changed to floating point (single)."
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:1075
+#: ../raster/r.fill.stats/main.c:1076
 msgid "Output type changed to floating point (double)."
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:1081
+#: ../raster/r.fill.stats/main.c:1082
 #, c-format
 msgid "Ignoring '%c' flag. Output data type will be integer."
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:1111
+#: ../raster/r.fill.stats/main.c:1112
 #, c-format
 msgid "Input data type is '%s' (%i bytes) and output data type is '%s' (%i bytes)."
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:1251
+#: ../raster/r.fill.stats/main.c:1252
 msgid "Interpolating:"
 msgstr ""
 
-#: ../raster/r.fill.stats/main.c:1384
+#: ../raster/r.fill.stats/main.c:1385
 #, c-format
 msgid "Processing time was %ih%im%is."
 msgstr ""
@@ -22554,7 +22554,7 @@ msgstr ""
 msgid "Number of header lines to skip at top of input file"
 msgstr ""
 
-#: ../raster/r.in.xyz/main.c:253 ../vector/v.decimate/main.c:141
+#: ../raster/r.in.xyz/main.c:253 ../vector/v.decimate/main.c:142
 #: ../vector/v.in.lidar/main.c:196 ../vector/v.in.pdal/main.cpp:191
 msgid "Filter range for z data (min,max)"
 msgstr ""
@@ -23236,8 +23236,8 @@ msgstr ""
 #: ../raster/r.mapcalc/expression.c:354 ../raster/r.mapcalc/map.c:283
 #: ../raster/r.mapcalc/map.c:489 ../raster/r.mapcalc/map.c:530
 #: ../raster/r.mapcalc/map.c:633 ../raster/r.mapcalc/map3.c:240
-#: ../raster/r.mapcalc/map3.c:426 ../raster/r.mapcalc/map3.c:471
-#: ../raster/r.mapcalc/map3.c:567
+#: ../raster/r.mapcalc/map3.c:426 ../raster/r.mapcalc/map3.c:472
+#: ../raster/r.mapcalc/map3.c:568
 #, c-format
 msgid "Invalid map modifier: '%c'"
 msgstr ""
@@ -23357,7 +23357,7 @@ msgstr ""
 msgid "Unable to close raster map <%s@%s>"
 msgstr ""
 
-#: ../raster/r.mapcalc/map3.c:639
+#: ../raster/r.mapcalc/map3.c:640
 msgid "Unable to close output raster map"
 msgstr ""
 
@@ -24398,8 +24398,8 @@ msgstr ""
 msgid "Error reading wildcard"
 msgstr ""
 
-#: ../raster/r.out.mpeg/main.c:460 ../raster/r.out.mpeg/write.c:324
-#: ../raster/r.out.mpeg/write.c:331
+#: ../raster/r.out.mpeg/main.c:460 ../raster/r.out.mpeg/write.c:325
+#: ../raster/r.out.mpeg/write.c:332
 #, c-format
 msgid "Failed to remove temporary file <%s>: %s"
 msgstr ""
@@ -24412,11 +24412,11 @@ msgstr ""
 msgid "Unable to open output file"
 msgstr ""
 
-#: ../raster/r.out.mpeg/write.c:204
+#: ../raster/r.out.mpeg/write.c:205
 msgid "Unable to create temporary files."
 msgstr ""
 
-#: ../raster/r.out.mpeg/write.c:209
+#: ../raster/r.out.mpeg/write.c:210
 #, c-format
 msgid "Directory <%s> too long"
 msgstr ""
@@ -37310,141 +37310,141 @@ msgstr ""
 msgid "Unable to open database <%s> with driver <%s>"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:118 ../vector/v.generalize/main.c:77
+#: ../vector/v.decimate/main.c:119 ../vector/v.generalize/main.c:77
 msgid "generalization"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:119
+#: ../vector/v.decimate/main.c:120
 msgid "decimation"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:122 ../vector/v.in.db/main.c:54
+#: ../vector/v.decimate/main.c:123 ../vector/v.in.db/main.c:54
 #: ../vector/v.kcv/main.c:55 ../vector/v.normal/main.c:72
 #: ../vector/v.out.lidar/main.c:469
 msgid "points"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:125
+#: ../vector/v.decimate/main.c:126
 msgid "Decimates a point cloud"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:126
+#: ../vector/v.decimate/main.c:127
 msgid "Copies points from one vector to another while applying different decimations"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:154
+#: ../vector/v.decimate/main.c:155
 msgid "Throw away every n-th point"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:156
+#: ../vector/v.decimate/main.c:157
 msgid "For example, 5 will import 80 percent of points. If not specified, all points are copied"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:158 ../vector/v.decimate/main.c:169
-#: ../vector/v.decimate/main.c:179 ../vector/v.decimate/main.c:188
+#: ../vector/v.decimate/main.c:159 ../vector/v.decimate/main.c:170
+#: ../vector/v.decimate/main.c:180 ../vector/v.decimate/main.c:189
 msgid "Count"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:165
+#: ../vector/v.decimate/main.c:166
 msgid "Preserve only every n-th point"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:167
+#: ../vector/v.decimate/main.c:168
 msgid "For example, 4 will import 25 percent of points. If not specified, all points are copied"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:176 ../vector/v.in.lidar/main.c:258
+#: ../vector/v.decimate/main.c:177 ../vector/v.in.lidar/main.c:258
 msgid "Skip first n points"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:178 ../vector/v.in.lidar/main.c:260
+#: ../vector/v.decimate/main.c:179 ../vector/v.in.lidar/main.c:260
 msgid "Skips the given number of points at the beginning."
 msgstr ""
 
-#: ../vector/v.decimate/main.c:186
+#: ../vector/v.decimate/main.c:187
 msgid "Copy only n points"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:187
+#: ../vector/v.decimate/main.c:188
 msgid "Copies only the given number of points"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:194
+#: ../vector/v.decimate/main.c:195
 msgid "Minimal difference of z values"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:196
+#: ../vector/v.decimate/main.c:197
 msgid "Minimal difference between z values in grid-based decimation"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:197 ../vector/v.decimate/main.c:208
-#: ../vector/v.decimate/main.c:213 ../vector/v.decimate/main.c:219
-#: ../vector/v.decimate/main.c:224 ../vector/v.decimate/main.c:229
+#: ../vector/v.decimate/main.c:198 ../vector/v.decimate/main.c:209
+#: ../vector/v.decimate/main.c:214 ../vector/v.decimate/main.c:220
+#: ../vector/v.decimate/main.c:225 ../vector/v.decimate/main.c:230
 msgid "Grid"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:204
+#: ../vector/v.decimate/main.c:205
 msgid "Preserve only n points per grid cell"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:206
+#: ../vector/v.decimate/main.c:207
 msgid "Preserves only the given number of points per grid cell in grid-based decimation"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:212
+#: ../vector/v.decimate/main.c:213
 msgid "Apply grid-based decimation"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:218
+#: ../vector/v.decimate/main.c:219
 msgid "Use only first point in grid cell during grid-based decimation"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:223
+#: ../vector/v.decimate/main.c:224
 msgid "Only one point per cat in grid cell"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:228
+#: ../vector/v.decimate/main.c:229
 msgid "Use z in grid decimation"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:233
+#: ../vector/v.decimate/main.c:234
 msgid "Store only the coordinates, throw away categories"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:235
+#: ../vector/v.decimate/main.c:236
 msgid "Do not story any categories even if they are present in input data"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:236 ../vector/v.decimate/main.c:239
-#: ../vector/v.decimate/main.c:242 ../vector/v.in.lidar/main.c:307
+#: ../vector/v.decimate/main.c:237 ../vector/v.decimate/main.c:240
+#: ../vector/v.decimate/main.c:243 ../vector/v.in.lidar/main.c:307
 #: ../vector/v.in.lidar/main.c:314 ../vector/v.in.lidar/main.c:317
 msgid "Speed"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:271
+#: ../vector/v.decimate/main.c:272
 #, c-format
 msgid "Input layer must be set to a particular layer, not <%s>, when using <%s> option or <-%c> flag"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:289 ../vector/v.in.lidar/main.c:442
+#: ../vector/v.decimate/main.c:290 ../vector/v.in.lidar/main.c:442
 #: ../vector/v.in.pdal/filters.c:65
 #, c-format
 msgid "Invalid zrange <%s>"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:313
+#: ../vector/v.decimate/main.c:314
 msgid "Cannot use z for decimation, input is not 3D"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:315
+#: ../vector/v.decimate/main.c:316
 msgid "Cannot select by z range, input is not 3D"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:339 ../vector/v.in.lidar/main.c:618
+#: ../vector/v.decimate/main.c:340 ../vector/v.in.lidar/main.c:618
 msgid "Settings for count-based decimation are not valid"
 msgstr ""
 
-#: ../vector/v.decimate/main.c:345
+#: ../vector/v.decimate/main.c:346
 msgid "Settings for count-based decimation would cause it to do nothing and no other options has been set."
 msgstr ""
 
