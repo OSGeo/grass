@@ -96,4 +96,4 @@ Sample JSON output for `metric=length`:
 
 ## AUTHORS
 
-Anna Petrasova, NC State University
+Anna Petrasova, NCSU GeoForAll Laboratory

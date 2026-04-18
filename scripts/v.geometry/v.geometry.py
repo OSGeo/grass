@@ -17,6 +17,7 @@
 # % keyword: vector
 # % keyword: geometry
 # % keyword: metric
+# % keyword: parallel
 # %end
 
 # %option G_OPT_V_MAP
@@ -46,6 +47,9 @@
 # % description: Units (one per metric, positional; unspecified metrics use defaults)
 # %end
 
+# %option G_OPT_M_NPROCS
+# %end
+
 # %option G_OPT_F_SEP
 # % answer: {NULL}
 # %end
@@ -56,13 +60,9 @@
 # % descriptions: plain;Plain text with pipe separator by default;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)
 # %end
 
-# %flag
-# % key: c
-# % description: Include totals in the output where supported by the metric
-# %end
-
 import csv
 import json
+import os
 import sys
 from concurrent.futures import ThreadPoolExecutor
 
@@ -122,6 +122,36 @@ def _rename_keys(mapping):
     return {_VTODB_KEY_RENAMES.get(k, k): v for k, v in mapping.items()}
 
 
+def _available_cpus():
+    """Number of CPUs this process may actually use.
+
+    Prefers affinity-aware sources over ``os.cpu_count()``, which reports
+    the host total and overcounts in containers and cgroup-limited jobs.
+    """
+    if hasattr(os, "process_cpu_count"):  # Python 3.13+
+        return os.process_cpu_count() or 1
+    if hasattr(os, "sched_getaffinity"):  # Linux
+        return len(os.sched_getaffinity(0))
+    return os.cpu_count() or 1
+
+
+def _resolve_nprocs(nprocs):
+    """Resolve G_OPT_M_NPROCS into a worker count for ThreadPoolExecutor.
+
+    Mirrors the semantics of G_set_omp_num_threads() in
+    lib/gis/omp_threads.c: 0 means use all available cores, a positive
+    number is used as-is, a negative number means cpu_count + nprocs
+    (clamped to at least 1). Belongs in a library helper eventually.
+    """
+    nprocs = int(nprocs)
+    if nprocs > 0:
+        return nprocs
+    available = _available_cpus()
+    if nprocs == 0:
+        return available
+    return max(1, available + nprocs)
+
+
 def _run_vtodb(metric, unit, common_kwargs):
     """Run v.to.db for a single metric and return the parsed JSON result."""
     vtodb_option = METRIC_TO_VTODB_OPTION[metric]
@@ -162,7 +192,7 @@ def _merge_results(results):
 
 
 def main():
-    options, flags = gs.parser()
+    options, _flags = gs.parser()
 
     metrics = options["metric"].split(",")
     groups = {METRIC_GROUPS[m] for m in metrics} - {"any"}
@@ -192,26 +222,24 @@ def main():
     # Pad with None so every metric has a corresponding entry.
     units_list.extend([None] * (len(metrics) - len(units_list)))
 
-    flag_str = "p"
-    if flags["c"]:
-        flag_str += "c"
-
     # v.to.db requires the "columns" parameter even in print-only mode, but
-    # does not use it for JSON or plain output labels; any valid name works.
+    # does not use it for JSON or plain output; any valid name works.
     common_kwargs = {
         "map": options["map"],
         "type": options["type"],
         "layer": options["layer"],
-        "columns": "value",
-        "flags": flag_str,
+        "columns": "unused",
+        "flags": "p",
     }
 
     if len(metrics) == 1:
         results = [_run_vtodb(metrics[0], units_list[0], common_kwargs)]
     else:
         # Submit all metrics concurrently but collect results in metric
-        # order so downstream column/field ordering is deterministic.
-        with ThreadPoolExecutor() as executor:
+        # order so downstream column/field ordering is deterministic. Cap
+        # at len(metrics); extra workers just sit idle.
+        max_workers = min(_resolve_nprocs(options["nprocs"]), len(metrics))
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
             futures = [
                 executor.submit(_run_vtodb, m, u, common_kwargs)
                 for m, u in zip(metrics, units_list, strict=True)

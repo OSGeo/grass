@@ -52,9 +52,9 @@ def test_line_metrics(session):
     assert "azimuth" in record
 
 
-def test_count_totals_flag(session):
+def test_count_totals(session):
     tools = Tools(session=session.session)
-    result = tools.v_geometry(map="points", metric="count", flags="c")
+    result = tools.v_geometry(map="points", metric="count")
     assert result["totals"]["count"] == 3
 
 
@@ -68,9 +68,7 @@ def test_coordinates(session):
 def test_multiple_metrics_totals(session):
     """Totals from different metrics are merged."""
     tools = Tools(session=session.session)
-    result = tools.v_geometry(
-        map="grid", metric="area,count", type="centroid", flags="c"
-    )
+    result = tools.v_geometry(map="grid", metric="area,count", type="centroid")
     assert result["totals"]["area"] == pytest.approx(10000.0)
     assert result["totals"]["count"] == 4
 
@@ -105,11 +103,24 @@ def test_plain_format(session):
 
 
 def test_csv_format(session):
+    """Also verifies that nprocs does not affect output."""
     tools = Tools(session=session.session)
-    result = tools.v_geometry(map="grid", metric="area", format="csv")
-    lines = result.stdout.splitlines()
-    assert lines[0] == "category,area"
+    serial = tools.v_geometry(
+        map="grid",
+        metric="area,perimeter,compactness",
+        format="csv",
+        nprocs=1,
+    )
+    lines = serial.stdout.splitlines()
+    assert lines[0] == "category,area,perimeter,compactness"
     assert len(lines) == 5
+    parallel = tools.v_geometry(
+        map="grid",
+        metric="area,perimeter,compactness",
+        format="csv",
+        nprocs=2,
+    )
+    assert serial.stdout == parallel.stdout
 
 
 def test_csv_rejects_multichar_separator(session):
