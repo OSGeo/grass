@@ -24,8 +24,9 @@ double dig_x_intersect(double beg_x, double end_x, double beg_y, double end_y,
 
     /* assumes beg_y != end_y */
 
-    /* sort for numerical stability */
-    if (end_x < beg_x || (end_x == beg_x && end_y < beg_y)) {
+    /* sort for numerical stability
+     * ray along X for given Y -> sort by Y */
+    if (end_y < beg_y || (end_y == beg_y && end_x < beg_x)) {
         b = end_x;
         end_x = beg_x;
         beg_x = b;
