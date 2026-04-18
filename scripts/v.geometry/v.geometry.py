@@ -222,6 +222,21 @@ def main():
     # Pad with None so every metric has a corresponding entry.
     units_list.extend([None] * (len(metrics) - len(units_list)))
 
+    output_format = options["format"]
+    separator = gs.separator(options["separator"])
+    if output_format == "csv":
+        if not separator:
+            separator = ","
+        elif len(separator) > 1:
+            gs.fatal(
+                _(
+                    "A standard CSV separator (delimiter) is only one character "
+                    "long, got: {}"
+                ).format(separator)
+            )
+    elif output_format == "plain" and not separator:
+        separator = "|"
+
     # v.to.db requires the "columns" parameter even in print-only mode, but
     # does not use it for JSON or plain output; any valid name works.
     common_kwargs = {
@@ -246,37 +261,43 @@ def main():
             ]
             results = [f.result() for f in futures]
 
+        # count's records cover every feature; family metrics emit records
+        # only for cat-bearing features of their family. Align count's cat
+        # set to the other metrics so merged records share one schema.
+        if "count" in metrics:
+            count_idx = metrics.index("count")
+            other_cats = {
+                record["category"]
+                for m, r in zip(metrics, results, strict=True)
+                if m != "count"
+                for record in r.get("records", [])
+            }
+            aligned = [
+                record
+                for record in results[count_idx].get("records", [])
+                if record["category"] in other_cats
+            ]
+            results[count_idx]["records"] = aligned
+            results[count_idx]["totals"]["count"] = sum(r["count"] for r in aligned)
+
     result = _merge_results(results)
 
-    output_format = options["format"]
     if output_format == "json":
         print(json.dumps(result, indent=4))
         return 0
 
-    separator = gs.separator(options["separator"])
     records = result["records"]
     if not records:
         return 0
     columns = list(records[0].keys())
 
     if output_format == "csv":
-        if not separator:
-            separator = ","
-        elif len(separator) > 1:
-            gs.fatal(
-                _(
-                    "A standard CSV separator (delimiter) is only one character "
-                    "long, got: {}"
-                ).format(separator)
-            )
         # Force LF endings; csv.writer defaults to CRLF, which compounds
         # with text-mode stdout's newline translation on some platforms.
         writer = csv.writer(sys.stdout, delimiter=separator, lineterminator="\n")
         writer.writerow(columns)
         writer.writerows([record.get(c, "") for c in columns] for record in records)
     else:  # plain
-        if not separator:
-            separator = "|"
         print(separator.join(columns))
         for record in records:
             print(separator.join(str(record.get(c, "")) for c in columns))

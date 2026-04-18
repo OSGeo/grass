@@ -40,6 +40,12 @@ families (area, line, point); the `count` metric is universal and can
 be combined with any of them. Run *v.geometry* separately for each
 feature type if you need metrics from more than one family.
 
+When `count` is combined with another metric (for example
+`metric=area,count`), the count is aligned to the categories covered
+by that metric. Categories that only appear in the count result are
+dropped so every merged record carries both values, and the reported
+count total reflects only the aligned features.
+
 ## EXAMPLES
 
 Report area sizes of geology polygons in hectares:

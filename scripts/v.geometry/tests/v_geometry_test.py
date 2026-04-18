@@ -14,7 +14,7 @@ def test_area_metrics(session):
     one call so the merged-record and key-rename behaviors are both
     covered without paying for extra subprocess spawns.
     """
-    tools = Tools(session=session.session)
+    tools = Tools(session=session)
     result = tools.v_geometry(
         map="grid", metric="area,perimeter,compactness,fractal_dimension,bbox"
     )
@@ -33,7 +33,7 @@ def test_area_metrics(session):
 
 
 def test_area_hectares(session):
-    tools = Tools(session=session.session)
+    tools = Tools(session=session)
     result = tools.v_geometry(map="grid", metric="area", units="hectares")
     for record in result["records"]:
         assert record["area"] == pytest.approx(0.25)
@@ -42,7 +42,7 @@ def test_area_hectares(session):
 
 def test_line_metrics(session):
     """Line-family metrics on a straight line from (0,0) to (100,100)."""
-    tools = Tools(session=session.session)
+    tools = Tools(session=session)
     result = tools.v_geometry(map="line", metric="length,sinuosity,azimuth")
     record = result["records"][0]
     assert record["length"] == pytest.approx(math.sqrt(2.0) * 100.0, rel=1e-6)
@@ -53,13 +53,13 @@ def test_line_metrics(session):
 
 
 def test_count_totals(session):
-    tools = Tools(session=session.session)
+    tools = Tools(session=session)
     result = tools.v_geometry(map="points", metric="count")
     assert result["totals"]["count"] == 3
 
 
 def test_coordinates(session):
-    tools = Tools(session=session.session)
+    tools = Tools(session=session)
     result = tools.v_geometry(map="points", metric="coordinates")
     coords = {(record["x"], record["y"]) for record in result["records"]}
     assert coords == {(10.0, 20.0), (30.0, 40.0), (50.0, 60.0)}
@@ -67,7 +67,7 @@ def test_coordinates(session):
 
 def test_multiple_metrics_totals(session):
     """Totals from different metrics are merged."""
-    tools = Tools(session=session.session)
+    tools = Tools(session=session)
     result = tools.v_geometry(map="grid", metric="area,count", type="centroid")
     assert result["totals"]["area"] == pytest.approx(10000.0)
     assert result["totals"]["count"] == 4
@@ -75,7 +75,7 @@ def test_multiple_metrics_totals(session):
 
 def test_per_metric_units(session):
     """Each metric gets its own unit via positional correspondence."""
-    tools = Tools(session=session.session)
+    tools = Tools(session=session)
     result = tools.v_geometry(
         map="grid", metric="area,perimeter", units="hectares,kilometers"
     )
@@ -88,14 +88,14 @@ def test_per_metric_units(session):
 
 def test_partial_units(session):
     """Fewer units than metrics: extra metrics use defaults."""
-    tools = Tools(session=session.session)
+    tools = Tools(session=session)
     result = tools.v_geometry(map="grid", metric="area,perimeter", units="hectares")
     assert result["units"]["area"] == "hectares"
     assert result["units"]["perimeter"] == "meters"
 
 
 def test_plain_format(session):
-    tools = Tools(session=session.session)
+    tools = Tools(session=session)
     result = tools.v_geometry(map="grid", metric="area", format="plain")
     lines = result.stdout.splitlines()
     assert lines[0] == "category|area"
@@ -104,7 +104,7 @@ def test_plain_format(session):
 
 def test_csv_format(session):
     """Also verifies that nprocs does not affect output."""
-    tools = Tools(session=session.session)
+    tools = Tools(session=session)
     serial = tools.v_geometry(
         map="grid",
         metric="area,perimeter,compactness",
@@ -124,13 +124,44 @@ def test_csv_format(session):
 
 
 def test_csv_rejects_multichar_separator(session):
-    tools = Tools(session=session.session)
+    tools = Tools(session=session)
     with pytest.raises(Exception, match="CSV separator"):
         tools.v_geometry(map="grid", metric="area", format="csv", separator="--")
 
 
 def test_mixed_feature_types_rejected(session):
     """Mixing metrics from different feature-type families fails cleanly."""
-    tools = Tools(session=session.session)
+    tools = Tools(session=session)
     with pytest.raises(Exception, match="different feature types"):
         tools.v_geometry(map="grid", metric="area,length")
+
+
+def test_count_combined_aligns_with_family(session):
+    """count combined with another metric filters to its cat set.
+
+    Mixed map features:
+    - Area cat 1 (50x50 = 2500): one feature.
+    - Area cat 2: two non-overlapping 40x50 features (total area 4000,
+      count 2) — verifies that repeated cats aggregate correctly.
+    - Line cat 10: must be dropped from count (not in area's cats).
+    - Three un-categorized boundaries: v.to.db option=count reports
+      them as cat=-1, which must also be dropped.
+
+    Expected after alignment:
+    - Records for cats 1 and 2 only, both carrying area and count.
+    - totals["count"] = 3 (1 for cat 1, 2 for cat 2), not polluted by
+      the line or the cat=-1 boundaries.
+    """
+    tools = Tools(session=session)
+    result = tools.v_geometry(map="mixed", metric="area,count")
+
+    records_by_cat = {record["category"]: record for record in result["records"]}
+    assert set(records_by_cat) == {1, 2}
+
+    assert records_by_cat[1]["area"] == pytest.approx(2500.0)
+    assert records_by_cat[1]["count"] == 1
+    assert records_by_cat[2]["area"] == pytest.approx(4000.0)
+    assert records_by_cat[2]["count"] == 2
+
+    assert result["totals"]["area"] == pytest.approx(6500.0)
+    assert result["totals"]["count"] == 3
