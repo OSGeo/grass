@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-28 15:38+0000\n"
+"POT-Creation-Date: 2026-04-11 22:07+0000\n"
 "PO-Revision-Date: 2026-03-22 08:14+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grasslibs-8-5/hi/>\n"
@@ -5123,7 +5123,7 @@ msgstr[1] ""
 
 #, c-format
 msgid "One vertex registered"
-msgid_plural "%<PRId64> vertices registered"
+msgid_plural "%d vertices registered"
 msgstr[0] ""
 msgstr[1] ""
 

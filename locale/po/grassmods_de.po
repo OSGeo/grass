@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-28 15:38+0000\n"
+"POT-Creation-Date: 2026-04-11 22:07+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/grassmods/de/>\n"
@@ -2246,6 +2246,7 @@ msgstr "Anzahl der signifikanten Stellen (nur Fließkommazahlen)"
 msgid "Get text color from cell color value"
 msgstr "Hole Textfarbe von der Farbtabelle der Zelle."
 
+#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -20517,6 +20518,7 @@ msgstr "Zu viele Kategorien (gefunden %i, Max: %i). Versuchen Sie die Karte zu r
 msgid "Input raster must be of type CELL."
 msgstr ""
 
+#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
