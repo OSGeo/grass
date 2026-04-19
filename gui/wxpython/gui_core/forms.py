@@ -627,7 +627,6 @@ class TaskFrame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnCopyPygrass, item_pygrass)
         self.Bind(wx.EVT_MENU, self.OnCopyJSON, item_json)
 
-        # --- Split Copy Button Section ---
         # A horizontal sizer to combine the main button and the arrow button
         copy_sizer = wx.BoxSizer(wx.HORIZONTAL)
 
@@ -636,24 +635,54 @@ class TaskFrame(wx.Frame):
         self.btn_copy.SetToolTip(_("Copy as Shell command"))
         self.btn_copy.Bind(wx.EVT_BUTTON, self.OnCopyCommand)
 
-        # 2. Arrow button (triggers the dropdown menu)
-        # Using a fixed width (25) ensures it looks like a standard menu arrow
+        # Get standard button dimensions to ensure the arrow segment matches
+        standard_size = self.btn_copy.GetBestSize()
+        btn_h = standard_size.height
+        arrow_btn_w = 24
+
+        # 2. Create a truly transparent 16x16 chevron icon using RGBA
+        icon_size = 16
+        # Start with a fully transparent bitmap (alpha=0)
+        bmp = wx.Bitmap.FromRGBA(icon_size, icon_size, red=0, green=0, blue=0, alpha=0)
+
+        mdc = wx.MemoryDC(bmp)
+        gc = wx.GCDC(mdc)  # GCDC provides smoother (anti-aliased) lines
+
+        # Draw the "v" shape (chevron)
+        # Use system button text color for automatic Light/Dark mode support
+        text_color = wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNTEXT)
+        gc.SetPen(wx.Pen(text_color, 2))
+
+        # On Windows, text baseline is 2 pixels higher, so we shift the arrow up
+        y_offset = -2 if sys.platform.startswith("win") else 0
+
+        # Coordinates for perfect centering in a 16x16 canvas:
+        # We start the arms at 8 and the tip at 13.
+        # This aligns the tip with the baseline of the letters.
+        gc.DrawLine(4, 8 + y_offset, 8, 13 + y_offset)
+        gc.DrawLine(8, 13 + y_offset, 12, 8 + y_offset)
+
+        del gc
+        mdc.SelectObject(wx.NullBitmap)
+
+        # 3. The Arrow Button segment
+        # Using a standard Button class to inherit native hover and click effects
         self.btn_copy_menu = Button(
-            parent=self.panel, id=wx.ID_ANY, label="▼", size=(25, -1)
+            parent=self.panel, id=wx.ID_ANY, size=(arrow_btn_w, btn_h)
         )
+        self.btn_copy_menu.SetBitmap(bmp)
         self.btn_copy_menu.SetToolTip(_("More copy formats"))
         self.btn_copy_menu.Bind(wx.EVT_BUTTON, self.OnShowCopyMenu)
 
-        # Add both buttons to the internal horizontal sizer.
-        # We use wx.EXPAND to force both buttons to have the same height.
-        copy_sizer.Add(self.btn_copy, proportion=0, flag=wx.EXPAND)
-        copy_sizer.Add(self.btn_copy_menu, proportion=0, flag=wx.EXPAND)
+        # 4. Using a small negative border to pull the buttons closer on Windows.
+        btn_glue = -1 if sys.platform.startswith("win") else 0
 
-        # Add the combined split-button to the main button sizer.
-        # We use wx.ALIGN_CENTER_VERTICAL here to align it with other buttons (Run, Help, etc.)
-        btnsizer.Add(
-            copy_sizer, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL, border=10
-        )
+        # 5. Assembly
+        copy_sizer.Add(self.btn_copy, 0, wx.EXPAND)
+        copy_sizer.Add(self.btn_copy_menu, 0, wx.EXPAND | wx.LEFT, border=btn_glue)
+
+        # Final addition to the main button row with standard 10px outer margin
+        btnsizer.Add(copy_sizer, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, border=10)
 
         # Paste button
         # Create the Paste button to populate the dialog from a JSON string
@@ -1067,7 +1096,7 @@ class TaskFrame(wx.Frame):
                             win.SetValue(
                                 val
                                 if isinstance(val, bool)
-                                else str(val).lower() in ("true", "1", "yes")
+                                else str(val).lower() in {"true", "1", "yes"}
                             )
 
                     elif isinstance(win, wx.SpinCtrl):

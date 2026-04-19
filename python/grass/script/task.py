@@ -306,8 +306,8 @@ class processTask:
         self.task.name = self.root.get("name", default="unknown")
 
         # keywords
-        for keyword in self._get_node_text(self.root, "keywords").split(","):
-            self.task.keywords.append(keyword.strip())
+        for kw in self._get_node_text(self.root, "keywords").split(","):
+            self.task.keywords.append(kw.strip())
 
         self.task.label = self._get_node_text(self.root, "label")
         self.task.description = self._get_node_text(self.root, "description")
