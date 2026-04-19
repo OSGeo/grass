@@ -162,8 +162,8 @@ int Vect__intersect_y_line_with_poly(const struct line_pnts *Points, double y,
             if (a == b)
                 continue;
 
-            p = (d - c) / (b - a);
-            x = c + p * (y - a);
+            p = (y - a) / (b - a); /* always within [0, 1] */
+            x = c + p * (d - c);
 
             if (0 > Vect_append_point(Inter, x, y, 0))
                 return -1;
@@ -217,8 +217,8 @@ int Vect__intersect_x_line_with_poly(const struct line_pnts *Points, double x,
             if (a == b)
                 continue;
 
-            p = (d - c) / (b - a);
-            y = c + p * (x - a);
+            p = (x - a) / (b - a); /* always within [0, 1] */
+            y = c + p * (d - c);
 
             if (0 > Vect_append_point(Inter, x, y, 0))
                 return -1;
@@ -584,6 +584,9 @@ int Vect_get_point_in_poly_isl(const struct line_pnts *Points,
     }
 
     /* get centroid, center of gravity of the polygon line, not the area */
+    /* original version, does not consider isles
+     * the centroid can be inside an isle or completely outside of the area
+     * for very thin polygons, the centroid might be on the boundary */
     Vect_find_poly_centroid(Points, &cent_x, &cent_y);
     /* is it w/in poly? */
     point_in_sles = 0;
@@ -603,6 +606,9 @@ int Vect_get_point_in_poly_isl(const struct line_pnts *Points,
     }
 
     /* get centroid, center of gravity of the area */
+    /* new version, considers isles
+     * the centroid can still be inside an isle or completely outside of the
+     * area for very thin polygons, the centroid might be on the boundary */
     Vect_find_poly_centroid_cog(Points, IPoints, n_isles, &cent_x, &cent_y);
     /* is it w/in poly? */
     point_in_sles = 0;

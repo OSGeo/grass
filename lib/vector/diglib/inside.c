@@ -43,9 +43,10 @@ double dig_x_intersect(double beg_x, double end_x, double beg_y, double end_y,
      *
      * simplify a + b * Y:
      * a + b * Y = beg_x - b * beg_y + b * Y
-     * a + b * Y = beg_x + b * (Y - beg_y) */
+     * a + b * Y = beg_x + b * (Y - beg_y)
+     * a + b * Y = beg_x + (end_x - beg_x) * (Y - beg_y) / (end_y - beg_y) */
 
-    b = (end_x - beg_x) / (end_y - beg_y);
+    b = (Y - beg_y) / (end_y - beg_y); /* always within [0, 1] */
 
-    return beg_x + b * (Y - beg_y);
+    return beg_x + b * (end_x - beg_x);
 }
