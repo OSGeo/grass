@@ -168,6 +168,8 @@ class JupyterServerInstance:
         # Build command to start Jupyter server
         # Use the current Python interpreter to avoid PATH/env mismatches
         # (especially on Windows) between GRASS and a separate jupyter executable.
+        # We intentionally run `-m notebook` instead of `-m jupyter notebook`
+        # to avoid an extra launcher layer which can fail for Standalone Windows installer
         cmd = [
             sys.executable,
             "-m",
@@ -178,7 +180,7 @@ class JupyterServerInstance:
             "--port",
             str(self.port),
             "--notebook-dir",
-            self.storage,
+            str(self.storage),
         ]
 
         # Start server
