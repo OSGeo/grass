@@ -55,11 +55,63 @@ def max_processes():
 # to separate individual GridModule calls.
 
 
+def _run_with_env(env, sys_path, function):
+    """Set environment and sys.path then run function (for spawn subprocess)"""
+    import os
+    from pathlib import Path
+    import sys
+
+    os.environ.update(env)
+    gisbase = env.get("GISBASE", "")
+    # Put GRASS installed paths FIRST so grass.lib (C extensions) are found
+    # before the development grass package which has no grass.lib
+    if gisbase:
+        # Ensure grass.lib (C extensions) are findable by putting etc/python first
+        etc_python = os.path.join(gisbase, "etc", "python")
+        # etc_python MUST be at index 0 so installed grass.lib (C extension)
+        # wins over source checkout grass package which has no grass.lib
+        grass_paths = [
+            p for p in sys_path if p and p.startswith(gisbase) and p != etc_python
+        ]
+        # Exclude ANY path that has a "grass" subdirectory and is not under
+        # GISBASE -- such paths pollute the grass namespace package and hide
+        # grass.lib (C extensions) which only exist in the installed GRASS.
+        other_paths = [
+            p
+            for p in sys_path
+            if p and not p.startswith(gisbase) and not Path(p, "grass").is_dir()
+        ]
+        sys.path[:] = [etc_python] + grass_paths + other_paths
+        # CRITICAL: grass was already imported during subprocess unpickling
+        # using the parent's sys.path (spawn sends it automatically).
+        # grass.__path__ therefore points to the source checkout which has
+        # no grass.lib. Clear all grass.* from sys.modules so they get
+        # re-imported cleanly using the corrected sys.path above.
+        for key in list(sys.modules.keys()):
+            if key == "grass" or key.startswith("grass."):
+                del sys.modules[key]
+        if hasattr(os, "add_dll_directory"):
+            for dll_dir in [
+                os.path.join(gisbase, "bin"),
+                os.path.join(gisbase, "lib"),
+                os.path.join(gisbase, "extrabin"),
+            ]:
+                if Path(dll_dir).is_dir():
+                    os.add_dll_directory(dll_dir)
+    else:
+        sys.path[:] = sys_path
+    function()
+
+
 def run_in_subprocess(function, check=True):
     """Run function in a separate process"""
     ctx = multiprocessing.get_context("spawn")
     ctx.set_executable(sys.executable)  # force user's Python, not GRASS's
-    process = ctx.Process(target=function)
+    import os
+
+    process = ctx.Process(
+        target=_run_with_env, args=(dict(os.environ), list(sys.path), function)
+    )
     process.start()
     process.join()
     if check and process.exitcode != 0:
@@ -189,8 +241,9 @@ def test_cleans(tmp_path, clean, surface):
                 aspect="aspect",
                 mapset_prefix=mapset_prefix,
             ),
-            check=multiprocessing.get_start_method() == "spawn"
-            or surface != "non_exist_surface",
+            # Don't check exit code when surface is intentionally missing;
+            # the subprocess is expected to fail in that case.
+            check=surface != "non_exist_surface",
         )
 
         prefixed = 0

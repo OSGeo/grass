@@ -352,6 +352,15 @@ def get_cmd(cmdd):
     ]
 
 
+def _grass_worker_init():
+    """Initialize GRASS environment in spawned worker processes (Windows/spawn)."""
+    gisbase = os.environ.get("GISBASE", "")
+    if gisbase and gisbase not in sys.path:
+        etc_python = os.path.join(gisbase, "etc", "python")
+        if etc_python not in sys.path:
+            sys.path.insert(0, etc_python)
+
+
 def cmd_exe(args):
     """Create a mapset, and execute a cmd inside.
 
@@ -685,7 +694,7 @@ class GridModule:
         else:
             ctx = mltp.get_context("spawn")
             ctx.set_executable(sys.executable)
-            pool = ctx.Pool(processes=self.processes)
+            pool = ctx.Pool(processes=self.processes, initializer=_grass_worker_init)
             result = pool.map_async(cmd_exe, self.get_works())
             result.wait()
             pool.close()
