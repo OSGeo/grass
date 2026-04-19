@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-14 15:46+0000\n"
+"POT-Creation-Date: 2026-04-11 17:57+0000\n"
 "PO-Revision-Date: 2026-03-05 11:44+0000\n"
 "Last-Translator: Abhimanyu  <abhimanyupg04@gmail.com>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/hi/>\n"
@@ -1303,7 +1303,9 @@ msgstr "&मैपसेट का नाम बदलें"
 msgid "Re&load maps"
 msgstr "RRee&&llooaadd  mmaappss"
 
-msgid "&Copy path to mapset"
+#, fuzzy
+#| msgid "&Copy path to mapset"
+msgid "&Copy path"
 msgstr "&म्यापसेट के पॅंथ की कांपी करें"
 
 msgid "&Create mapset"
@@ -1314,6 +1316,11 @@ msgstr "&प्रोजेक्ट हटाएं"
 
 msgid "&Rename project"
 msgstr "&प्रोजेक्ट का नाम बदलें"
+
+#, fuzzy
+#| msgid "CVS path"
+msgid "Copy path"
+msgstr "सीवीएस पथ"
 
 msgid "Change Label"
 msgstr "लेबल बदलें"
@@ -1339,11 +1346,18 @@ msgstr "&GRASS डेटाबेस को डिस्क से हटाए�
 msgid "&Delete projects (locations)"
 msgstr "&प्रोजेक्ट्स (लोकेशन) हटाएं"
 
+#, fuzzy
+#| msgid "&Copy path to mapset"
+msgid "Copy paths"
+msgstr "&म्यापसेट के पॅंथ की कांपी करें"
+
 msgid "&Delete mapsets"
 msgstr "&Delete mapsets"
 
-msgid "&Copy paths to mapsets"
-msgstr "&म्यापसेट्स के कांपी पॄंथ करें"
+#, fuzzy
+#| msgid "&Copy path to mapset"
+msgid "&Copy paths"
+msgstr "&म्यापसेट के पॅंथ की कांपी करें"
 
 #, python-brace-format
 msgid "Remove label '{label}' for this database?"
@@ -10902,3 +10916,6 @@ msgid ""
 msgstr ""
 "रेखापुंज मानचित्र <%(rast1)s> बनाम <%(rast2)s> के लिए प्रतिगमन समीकरण:\\n\\n\n"
 "\n"
+
+#~ msgid "&Copy paths to mapsets"
+#~ msgstr "&म्यापसेट्स के कांपी पॄंथ करें"

@@ -10,7 +10,7 @@
 #include "glob.h"
 #include "local_proto.h"
 
-int getmaprow(int fd, void *buf, int row, int len UNUSED)
+int getmaprow(int fd, void *buf, int row, int len G_UNUSED)
 {
     Rast_get_d_row(fd, (DCELL *)buf, row);
     return 1;

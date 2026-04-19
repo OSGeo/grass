@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GRASS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-14 15:46+0000\n"
+"POT-Creation-Date: 2026-04-11 17:57+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Chinese (Simplified) <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/zh_Hans/>\n"
@@ -1290,8 +1290,9 @@ msgstr ""
 msgid "Re&load maps"
 msgstr ""
 
-msgid "&Copy path to mapset"
-msgstr ""
+#, fuzzy
+msgid "&Copy path"
+msgstr "设置地图集权限"
 
 msgid "&Create mapset"
 msgstr ""
@@ -1303,6 +1304,11 @@ msgstr "删除选中项目"
 #, fuzzy
 msgid "&Rename project"
 msgstr "投影管理"
+
+#, fuzzy
+#| msgid "Copy table"
+msgid "Copy path"
+msgstr "拷贝数据表"
 
 #, fuzzy
 #| msgid "Change mapset"
@@ -1337,11 +1343,16 @@ msgstr ""
 msgid "&Delete projects (locations)"
 msgstr "删除选定地点"
 
+#, fuzzy
+#| msgid "Copy categories"
+msgid "Copy paths"
+msgstr "复制类别"
+
 msgid "&Delete mapsets"
 msgstr ""
 
 #, fuzzy
-msgid "&Copy paths to mapsets"
+msgid "&Copy paths"
 msgstr "设置地图集权限"
 
 #, python-brace-format
@@ -11682,9 +11693,6 @@ msgstr ""
 
 #~ msgid "Copies available data files in the current mapset search path to the user's current mapset."
 #~ msgstr "将用户当前地图集搜索路径下可用数据文件拷贝到用户当前的地图集。"
-
-#~ msgid "Copy table"
-#~ msgstr "拷贝数据表"
 
 #, fuzzy
 #~ msgid "Copying"
