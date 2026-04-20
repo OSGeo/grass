@@ -6,7 +6,7 @@
  * PURPOSE:     This file contains definitions of variables and data types
  *              for use with most, if not all, Grass programs. This file is
  *              usually included in every Grass program.
- * COPYRIGHT:   (C) 2000-2025 by the GRASS Development Team
+ * COPYRIGHT:   (C) 2000-2026 by the GRASS Development Team
  *
  *              This program is free software under the GNU General Public
  *              License (>=v2). Read the file COPYING that comes with GRASS
@@ -36,27 +36,27 @@
 #endif
 
 /*!
-    \def UNUSED
+    \def G_UNUSED
     \brief A macro for an attribute, if attached to a variable,
            indicating that the variable is not used
 */
 #if (defined(__GNUC__) || defined(__APPLE__)) && !defined(_MSC_VER)
-#define UNUSED __attribute__((unused))
+#define G_UNUSED __attribute__((unused))
 #else
-#define UNUSED
+#define G_UNUSED
 #endif
 
-static const char *GRASS_copyright UNUSED = "GRASS GNU GPL licensed Software";
+static const char *GRASS_copyright G_UNUSED = "GRASS GNU GPL licensed Software";
 
 /*!
-    \def FALLTHROUGH
+    \def G_FALLTHROUGH
     \brief A macro for a fallthrough statement attribute
  */
 #if (defined(__GNUC__) && __GNUC__ >= 7) || \
     (defined(__clang__) && __clang_major__ >= 12)
-#define FALLTHROUGH __attribute__((__fallthrough__))
+#define G_FALLTHROUGH __attribute__((__fallthrough__))
 #else
-#define FALLTHROUGH ((void)0)
+#define G_FALLTHROUGH ((void)0)
 #endif
 
 /* GRASS version, GRASS date, git short hash of last change in GRASS headers
@@ -136,7 +136,7 @@ static const char *GRASS_copyright UNUSED = "GRASS GNU GPL licensed Software";
 #define WKT_FILE         "PROJ_WKT"
 #define SRID_FILE        "PROJ_SRID"
 
-#ifdef __MINGW32__
+#if defined(__MINGW32__) || defined(__APPLE__)
 #define CONFIG_DIR "GRASS8"
 #else
 #define CONFIG_DIR ".grass8"

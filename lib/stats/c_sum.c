@@ -1,7 +1,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-void c_sum(DCELL *result, DCELL *values, int n, const void *closure UNUSED)
+void c_sum(DCELL *result, DCELL *values, int n, const void *closure G_UNUSED)
 {
     DCELL sum;
     int count;
@@ -24,7 +24,8 @@ void c_sum(DCELL *result, DCELL *values, int n, const void *closure UNUSED)
         *result = sum;
 }
 
-void w_sum(DCELL *result, DCELL (*values)[2], int n, const void *closure UNUSED)
+void w_sum(DCELL *result, DCELL (*values)[2], int n,
+           const void *closure G_UNUSED)
 {
     DCELL sum;
     DCELL count;

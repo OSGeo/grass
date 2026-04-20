@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-21 15:56+0000\n"
-"PO-Revision-Date: 2026-03-27 18:44+0000\n"
+"POT-Creation-Date: 2026-04-11 17:57+0000\n"
+"PO-Revision-Date: 2026-04-09 14:56+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grassmods/fr/>\n"
 "Language: fr\n"
@@ -1448,6 +1448,7 @@ msgstr "Erreur : %s\n"
 msgid "paint labels"
 msgstr ""
 
+#, fuzzy
 msgid "Displays text labels (created with v.label) to the active frame on the graphics monitor."
 msgstr "Affiche des étiquettes de texte (créées avec v.label) dans le moniteur actif"
 
@@ -2222,9 +2223,8 @@ msgstr ""
 msgid "Illegal value for skip factor"
 msgstr ""
 
-#, fuzzy
 msgid "Magnitude is only supported for GRASS and compass aspect maps."
-msgstr "La magnitude n'est gérée que pour les couches GRASS d'aspect"
+msgstr "La magnitude n'est prise en charge que pour les cartes d’exposition (aspect) de type GRASS (grass) et boussole (compass)."
 
 msgid "Scale option requires magnitude_map"
 msgstr ""
@@ -3930,10 +3930,8 @@ msgstr "projection"
 msgid "create project"
 msgstr "créer un projet"
 
-#, fuzzy
-#| msgid "Prints and manipulates GRASS projection information files."
 msgid "Prints or modifies GRASS projection information files (in various coordinate system descriptions)."
-msgstr "Affiche et manipule les fichiers d'information de projection GRASS"
+msgstr "Affiche ou modifie les fichiers d'informations de projection GRASS (dans diverses descriptions de systèmes de coordonnées)."
 
 msgid "Can also be used to create new GRASS projects."
 msgstr ""
@@ -7670,7 +7668,7 @@ msgid "Name for output raster map holding goodness of fit (lower is better)"
 msgstr ""
 
 msgid "Size of submatrix to process at one time"
-msgstr "Taille de la sous-matrice à traiter simultanément."
+msgstr "Taille de la sous-matrice à traiter en une seule fois"
 
 msgid "Use maximum likelihood estimation (instead of smap)"
 msgstr "Utiliser l'estimation plus grande ressemblance 'maximum likelihood' (à la place de l'estimation SMAP)"
@@ -7783,9 +7781,8 @@ msgstr ""
 msgid "Train a Support Vector Machine"
 msgstr ""
 
-#, fuzzy
 msgid "Map with training labels or target values"
-msgstr "Carte avec des étiquettes d'apprentissage ou des valeurs cibles."
+msgstr "Carte avec des étiquettes d'apprentissage ou des valeurs cibles"
 
 #, fuzzy
 msgid "Type of SVM"
@@ -7899,9 +7896,8 @@ msgstr "Impossible d'obtenir la plage de valeurs pour la carte raster <%s@%s>"
 msgid "Invalid value range for raster map <%s@%s>"
 msgstr "Plage de valeurs non valide pour la carte raster <%s@%s>"
 
-#, fuzzy
 msgid "Reading training data"
-msgstr "Lecture des données d'entrée ..."
+msgstr "Lecture des données d’apprentissage"
 
 #, c-format
 msgid "SVM parameter validation returned an error: %s\n"

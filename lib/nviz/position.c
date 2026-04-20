@@ -117,7 +117,7 @@ int Nviz_set_focus_map(int type, int id)
    \param data nviz data [unused]
    \param x,y,z focus coordinates
  */
-int Nviz_get_focus(nv_data *data UNUSED, float *x, float *y, float *z)
+int Nviz_get_focus(nv_data *data G_UNUSED, float *x, float *y, float *z)
 {
     float realto[3];
 
@@ -138,7 +138,7 @@ int Nviz_get_focus(nv_data *data UNUSED, float *x, float *y, float *z)
    \param data nviz data [unused]
    \param x, y, z focus coordinates
  */
-int Nviz_set_focus(nv_data *data UNUSED, float x, float y, float z)
+int Nviz_set_focus(nv_data *data G_UNUSED, float x, float y, float z)
 {
     float realto[3];
 
@@ -157,7 +157,7 @@ int Nviz_set_focus(nv_data *data UNUSED, float x, float y, float z)
 
    \param data nviz data [unused]
  */
-int Nviz_has_focus(nv_data *data UNUSED)
+int Nviz_has_focus(nv_data *data G_UNUSED)
 {
     float realto[3];
 
@@ -183,7 +183,7 @@ float Nviz_get_xyrange(nv_data *data)
    \param data nviz data [unused]
    \param min,max z range
  */
-int Nviz_get_zrange(nv_data *data UNUSED, float *min, float *max)
+int Nviz_get_zrange(nv_data *data G_UNUSED, float *min, float *max)
 {
     GS_get_zrange_nz(min, max);
     return 1;
@@ -194,7 +194,7 @@ int Nviz_get_zrange(nv_data *data UNUSED, float *min, float *max)
 
    \param data nviz data [unused]
  */
-float Nviz_get_longdim(nv_data *data UNUSED)
+float Nviz_get_longdim(nv_data *data G_UNUSED)
 {
     float dim;
 
