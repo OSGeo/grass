@@ -2292,10 +2292,6 @@ class DataCatalogTree(TreeView):
         if self._restricted:
             item.Enable(False)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("Show region"))
-        menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, self.OnShowRegion, item)
-
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename mapset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRenameMapset, item)
@@ -2305,6 +2301,11 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("Re&load maps"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnReloadMapset, item)
+
+        menu.AppendSeparator()
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Show computational region"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnShowRegion, item)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy path"))
         menu.AppendItem(item)
@@ -2327,10 +2328,6 @@ class DataCatalogTree(TreeView):
         if self._restricted:
             item.Enable(False)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("Show projection"))
-        menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, self.OnShowProjection, item)
-
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename project"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRenameLocation, item)
@@ -2340,6 +2337,11 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("Re&load maps"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnReloadLocation, item)
+
+        menu.AppendSeparator()
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Show projection info"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnShowProjection, item)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("Copy path"))
         menu.AppendItem(item)

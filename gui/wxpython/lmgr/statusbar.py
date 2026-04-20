@@ -209,8 +209,9 @@ class SbCRS:
             )
             if proj_str:
                 proj_info = json.loads(proj_str)
-                if "id" in proj_info and proj_info["id"].get("authority") == "EPSG":
-                    label = f"EPSG: {proj_info['id']['code']}"
+                proj_id = proj_info.get("id", {})
+                if proj_id.get("authority") == "EPSG" and proj_id.get("code"):
+                    label = f"EPSG: {proj_id['code']}"
         except (TypeError, KeyError, json.JSONDecodeError):
             pass
 
