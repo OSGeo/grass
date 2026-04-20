@@ -2020,7 +2020,7 @@ class DataCatalogTree(TreeView):
             self._giface.RunCmd(cmd, env=env, onDone=done, userData=gisrc)
 
     def OnShowProjection(self, event):
-        """Show projection of selected location"""
+        """Show projection info of selected project (location)"""
 
         def done(event):
             gs.try_remove(event.userData)
@@ -2034,7 +2034,7 @@ class DataCatalogTree(TreeView):
         self._giface.RunCmd(cmd, env=env, onDone=done, userData=gisrc)
 
     def OnShowRegion(self, event):
-        """Show region of selected mapset"""
+        """Show computational region of selected mapset"""
 
         def done(event):
             gs.try_remove(event.userData)
