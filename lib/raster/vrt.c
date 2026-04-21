@@ -228,7 +228,9 @@ int Rast_get_vrt_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
                 p1 = (unsigned char *)buf + size * p->clist->value[j];
                 p2 = (unsigned char *)tmpbuf + size * p->clist->value[j];
 
-                memcpy(p1, p2, size);
+                if (!Rast_is_null_value(p2, data_type)) {
+                    memcpy(p1, p2, size);
+                }
             }
             have_tile = 1;
         }
