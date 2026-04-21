@@ -225,7 +225,6 @@ int Rast_get_vrt_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
 
             /* restrict to start and end col ? */
             for (j = 0; j < p->clist->n_values; j++) {
-                memcpy(p1, p2, size);
                 p1 = (unsigned char *)buf + size * p->clist->value[j];
                 p2 = (unsigned char *)tmpbuf + size * p->clist->value[j];
 
