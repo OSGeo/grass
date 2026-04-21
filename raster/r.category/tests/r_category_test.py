@@ -355,9 +355,7 @@ def test_r_category_rules_preserves_title(simple_dataset):
         separator=":",
     )
 
-    info = json.loads(
-        gs.read_command("r.info", map="test", format="json", env=session.env)
-    )
+    info = json.loads(tools.r_info(map="test", format="json").text)
     assert info["title"] == title, (
         f"Expected title '{title}', but r.category rules= overwrote it with '{info['title']}'"
     )
