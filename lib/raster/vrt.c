@@ -123,9 +123,9 @@ struct R_vrt *Rast_get_vrt(const char *vname, const char *vmapset)
 
                 if (rd_window->proj == PROJECTION_LL) {
                     while (east > p->cellhd.east)
-                        east -= 360;
+                        east -= 360.0;
                     while (east < p->cellhd.west)
-                        east += 360;
+                        east += 360.0;
                 }
                 if (east >= p->cellhd.west && east < p->cellhd.east)
                     G_ilist_add(p->clist, col);
@@ -205,28 +205,12 @@ int Rast_get_vrt_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
 #pragma omp critical(raster_vrt_read)
     for (i = 0; i < vrt->tlist->n_values; i++) {
         struct tileinfo *p = &ti[vrt->tlist->value[i]];
-        double tile_west, tile_east;
-
-        tile_west = p->cellhd.west;
-        tile_east = p->cellhd.east;
-
-        if (R__.rd_window.proj == PROJECTION_LL) {
-            /* longitude wrapping of the tile into the current
-             * reading window */
-            while (tile_west > rd_window->east) {
-                tile_west -= 360.0;
-                tile_east -= 360.0;
-            }
-            while (tile_east < rd_window->west) {
-                tile_west += 360.0;
-                tile_east += 360.0;
-            }
-        }
 
         /* open the tile only if it overlaps with the current reading
          * row and the current reading EW extents */
         if (p->cellhd.north > rows && p->cellhd.south <= rown &&
-            tile_west < p->cellhd.east && tile_east > p->cellhd.west) {
+            p->cellhd.west < rd_window->east &&
+            p->cellhd.east > rd_window->west) {
             int tfd;
             void *p1, *p2;
 
