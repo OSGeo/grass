@@ -23,7 +23,7 @@
 /* numerically safe floating point average
  * works best with A < B */
 #define FP_AVG(A, B)                                                 \
-    (((A) > 0 && (B) < 0) || ((A) < 0 && (B) > 0) ? ((A) + (B) / 2.) \
+    (((A) > 0 && (B) < 0) || ((A) < 0 && (B) > 0) ? (((A) + (B)) / 2.) \
                                                   : ((A) + ((B) - (A)) / 2.))
 
 struct Slink {
