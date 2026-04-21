@@ -18,7 +18,7 @@
 
 #include "R.h"
 
-int cmp_wnd(const void *a, const void *b)
+static int cmp_wnd(const void *a, const void *b)
 {
     struct Cell_head *cellhda = &((struct tileinfo *)a)->cellhd;
     struct Cell_head *cellhdb = &((struct tileinfo *)b)->cellhd;
@@ -225,24 +225,11 @@ int Rast_get_vrt_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
 
             /* restrict to start and end col ? */
             for (j = 0; j < p->clist->n_values; j++) {
+                memcpy(p1, p2, size);
                 p1 = (unsigned char *)buf + size * p->clist->value[j];
                 p2 = (unsigned char *)tmpbuf + size * p->clist->value[j];
 
-                if (!Rast_is_null_value(p2, data_type)) {
-                    switch (data_type) {
-                    case CELL_TYPE:
-                        *(CELL *)p1 = *(CELL *)p2;
-                        break;
-                    case FCELL_TYPE:
-                        *(FCELL *)p1 = *(FCELL *)p2;
-                        break;
-                    case DCELL_TYPE:
-                        *(DCELL *)p1 = *(DCELL *)p2;
-                        break;
-                    default:
-                        break;
-                    }
-                }
+                memcpy(p1, p2, size);
             }
             have_tile = 1;
         }
