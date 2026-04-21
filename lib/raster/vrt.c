@@ -223,8 +223,6 @@ int Rast_get_vrt_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
             Rast_get_row_nomask(tfd, tmpbuf, row, data_type);
             Rast_unopen(tfd);
 
-            p1 = buf;
-            p2 = tmpbuf;
             /* restrict to start and end col ? */
             for (j = 0; j < p->clist->n_values; j++) {
                 p1 = (unsigned char *)buf + size * p->clist->value[j];
