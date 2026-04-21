@@ -26,7 +26,7 @@ jobs:
           - "3.10"
           - "3.13"
           - "3.14"
-      fail-fast: false
+      fail-fast: true
 
     runs-on: ${{ matrix.os }}
     env:
