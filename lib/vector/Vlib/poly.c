@@ -22,7 +22,7 @@
 
 /* numerically safe floating point average
  * works best with A < B */
-#define FP_AVG(A, B)                                                 \
+#define FP_AVG(A, B)                                                   \
     (((A) > 0 && (B) < 0) || ((A) < 0 && (B) > 0) ? (((A) + (B)) / 2.) \
                                                   : ((A) + ((B) - (A)) / 2.))
 
@@ -42,9 +42,6 @@ static void destroy_links(struct link_head *, struct Slink *);
 static int Vect__divide_and_conquer(struct Slink *, const struct line_pnts *,
                                     struct link_head *, double *, double *,
                                     int);
-int Vect_find_poly_centroid_cog(const struct line_pnts *,
-                                const struct line_pnts **, int, double *,
-                                double *);
 
 /*!
    \brief Get point inside area and outside all islands.
@@ -442,7 +439,7 @@ int Vect_find_poly_centroid_cog(const struct line_pnts *Points,
                                 double *cent_x, double *cent_y)
 {
     struct bound_box box;
-    double x, y, meanx, meany, meanz;
+    double x, y, meanx, meany;
     double *xp, *yp;
     double w, tot_w;
     int i, isle;
@@ -453,7 +450,7 @@ int Vect_find_poly_centroid_cog(const struct line_pnts *Points,
     Vect_line_box(Points, &box);
     x = (box.W + box.E) / 2.;
     y = (box.S + box.N) / 2.;
-    meanx = meany = meanz = 0.;
+    meanx = meany = 0.;
     tot_w = 0.;
 
     *cent_x = x;
