@@ -52,13 +52,13 @@ def install_notebook_package() -> None:
 def get_wxpython_version() -> str | None:
     """Get current wxPython version string.
 
-    :return: Installed wxPython version, or None if wx is not importable
+    :return: Installed wxPython version, or None if version is not exposed
     """
-    try:
-        import wx
+    import wx
 
+    try:
         return str(wx.__version__)
-    except Exception:
+    except AttributeError:
         return None
 
 
