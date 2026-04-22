@@ -1,7 +1,8 @@
 ## DESCRIPTION
 
 *r.reclass.area* removes areas (pixel clumps) from a raster map 
-that are smaller than a user specified **lower** area size (in hectares).
+that are smaller than a user specified **lower** area size and/or
+greater than a user specified **upper** theshold (both in hectares).
 
 *r.reclass.area* provides two **method**s for filtering:
 
