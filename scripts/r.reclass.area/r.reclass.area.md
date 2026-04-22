@@ -3,15 +3,23 @@
 *r.reclass.area* removes areas (pixel clumps) from a raster map 
 that are smaller than a user specified **lower** area size (in hectares).
 
-If the **-c** flag is used, *r.reclass.area* will skip the creation of a
-clumped raster and assume that the input raster is already clumped.
-
 *r.reclass.area* provides two **method**s for filtering:
 
-- *reclass*
-- *rmarea*
- removes areas (pixel clumps) from a raster map 
-that are greater or lesser than a user specified area size (in hectares).
+- *reclass* - raster based filtering
+- *rmarea* - vector based filtering
+
+With the *reclass* method, the input raster map is clumped and
+then reclassified using the clump size. With the **-m** flag,
+*reclass* method will remove small areas already during clumping,
+using the *minsize* option there. If the **-c** flag is used,
+*r.reclass.area* will skip the creation of a clumped raster and
+assume that the input raster map is already clumped.
+
+The *rmarea* method converts the raster map to vector and removes
+areas outside the given thresholds using [v.clean](v.clean.md) and
+[v.edit](v.edit.md). With the **-v** flag the **output** is the
+filtered vector map instead of a raster.
+
 
 ## EXAMPLES
 
@@ -48,10 +56,12 @@ r.reclass.area input=zipcodes output=zipcodes_minor1000ha lesser=1000 method=rma
 
 ## SEE ALSO
 
-*[r.reclass](r.reclass.md), [r.clump](r.clump.md),
-[r.stats](r.stats.md), [v.clean](v.clean.md)*
+*[r.clump](r.clump.md), [r.reclass](r.reclass.md),
+[r.stats](r.stats.md), [v.to.rast](v.to.rast.md),
+[v.clean](v.clean.md), [v.edit](v.edit.md)*
 
 ## AUTHORS
 
 NRCS,  
 Markus Neteler
+Stefan Blumentath
