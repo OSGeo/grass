@@ -14,7 +14,7 @@
 #               for details.
 #
 #############################################################################
-# 02/2026: rewrite with Tools API and new options (Eric Goddard)
+# 04/2026: rewrite with Tools API and new options (Stefan Blumentrath)
 # 10/2013: added option to use a pre-clumped input map (Eric Goddard)
 # 8/2012: added fp maps support, cleanup, removed tabs AK
 # 3/2007: added label support MN
