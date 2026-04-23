@@ -59,6 +59,26 @@ static const char *GRASS_copyright G_UNUSED = "GRASS GNU GPL licensed Software";
 #define G_FALLTHROUGH ((void)0)
 #endif
 
+/*!
+    \def G_HAVE_ATOMICS
+    \brief A macro that signals whether C11 atomic operations are supported.
+ */
+#if __STDC_VERSION__ < 201112L || defined(__STDC_NO_ATOMICS__)
+#define G_HAVE_ATOMICS 0
+#else
+#define G_HAVE_ATOMICS 1
+#endif
+
+/*!
+    \def G_USE_PROGRESS_NG
+    \brief A macro indicating if concurrency progress reporting can be used.
+ */
+#if defined(G_HAVE_ATOMICS) && defined(HAVE_PTHREAD_H)
+#define G_USE_PROGRESS_NG 1
+#else
+#define G_USE_PROGRESS_NG 0
+#endif
+
 /* GRASS version, GRASS date, git short hash of last change in GRASS headers
  * (and anything else in include)
  */
@@ -726,6 +746,16 @@ struct ilist {
      */
     int alloc_values;
 };
+
+/*!
+   \brief Opaque handle that owns telemetry state for one progress-reporting
+   stream.
+
+   A `GProgressContext` isolates queued events, progress thresholds, and the
+   optional consumer thread used by the `G_progress_context_*()` APIs so that
+   concurrent operations can report progress independently.
+*/
+typedef struct GProgressContext GProgressContext;
 
 /*============================== Prototypes ================================*/
 
