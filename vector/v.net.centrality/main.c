@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("network"));
     G_add_keyword(_("centrality measures"));
     module->description =
-        _("Computes degree, centrality, betweeness, closeness and eigenvector "
+        _("Computes degree, centrality, betweenness, closeness and eigenvector "
           "centrality measures in the network.");
 
     /* Define the different options as defined in gis.h */

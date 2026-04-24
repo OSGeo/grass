@@ -7,7 +7,7 @@
 
 -- SPACETIME_REGISTER_TABLE is a placeholder for specific stds map register table name (SQL compliant)
 -- SPACETIME_ID is a placeholder for specific stds id: name@mapset
--- for TGIS < 3 the lines for semantic lables get replaced / commented out
+-- for TGIS < 3 the lines for semantic labels get replaced / commented out
 
 UPDATE strds_metadata
    SET

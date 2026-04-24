@@ -33,13 +33,12 @@ build_library_in_subdir(
   grass_interpdata
   ${LIBM}
   OPTIONAL_DEPENDS
-  OPENMP
+  OpenMP::OpenMP_C
   HEADERS
   "interpf.h")
 
 target_include_directories(grass_interpfl
-  INTERFACE $<TARGET_PROPERTY:GDAL::GDAL,INTERFACE_INCLUDE_DIRECTORIES>
-            $<TARGET_PROPERTY:GDAL::GDAL,INTERFACE_INCLUDE_DIRECTORIES>/gdal)
+  INTERFACE $<TARGET_PROPERTY:GDAL::GDAL,INTERFACE_INCLUDE_DIRECTORIES>)
 if(TARGET PostgreSQL::PostgreSQL)
   target_include_directories(grass_interpfl
     INTERFACE $<TARGET_PROPERTY:PostgreSQL::PostgreSQL,INTERFACE_INCLUDE_DIRECTORIES>)

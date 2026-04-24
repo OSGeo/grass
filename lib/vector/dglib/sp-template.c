@@ -42,7 +42,7 @@
 
 #include <grass/gis.h>
 
-int DGL_SP_CACHE_INITIALIZE_FUNC(dglGraph_s *pgraph UNUSED,
+int DGL_SP_CACHE_INITIALIZE_FUNC(dglGraph_s *pgraph G_UNUSED,
                                  dglSPCache_s *pCache, dglInt32_t nStart)
 {
     pCache->nStartNode = nStart;
@@ -58,7 +58,8 @@ int DGL_SP_CACHE_INITIALIZE_FUNC(dglGraph_s *pgraph UNUSED,
     return 0;
 }
 
-void DGL_SP_CACHE_RELEASE_FUNC(dglGraph_s *pgraph UNUSED, dglSPCache_s *pCache)
+void DGL_SP_CACHE_RELEASE_FUNC(dglGraph_s *pgraph G_UNUSED,
+                               dglSPCache_s *pCache)
 {
     if (pCache->pvVisited)
         avl_destroy(pCache->pvVisited, dglTreeTouchI32Cancel);

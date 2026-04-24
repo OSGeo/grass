@@ -110,6 +110,8 @@ add_custom_target(
   DEPENDS ${vector_modules_list}
   COMMENT "All vector modules are built.")
 
+set_target_properties(ALL_VECTOR_MODULES PROPERTIES FOLDER Misc)
+
 if(WITH_DOCS)
   generate_docs(vectorintro TARGET ALL_VECTOR_MODULES)
   generate_docs(lrs
@@ -191,7 +193,8 @@ build_program_in_subdir(
   grass_dbmiclient
   grass_dbmidriver
   grass_gis
-  grass_vector)
+  grass_vector
+  grass_parson)
 
 build_program_in_subdir(
   v.decimate
@@ -712,7 +715,7 @@ build_program_in_subdir(
   grass_raster
   ${LIBM}
   OPTIONAL_DEPENDS
-  OPENMP)
+  OpenMP::OpenMP_C)
 
 build_program_in_subdir(
   v.transform
