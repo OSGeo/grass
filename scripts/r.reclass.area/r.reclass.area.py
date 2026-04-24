@@ -7,7 +7,7 @@
 #               Converted to Python by Glynn Clements
 #               Added rmarea method by Luca Delucchi
 # PURPOSE:      Reclasses a raster map greater or less than user specified area size (in hectares)
-# COPYRIGHT:    (C) 1999,2008,2014 by the GRASS Development Team
+# COPYRIGHT:    (C) 1999-2026 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
@@ -127,11 +127,11 @@ TEMP_PREFIX = gs.tempname(12)
 
 
 def cleanup() -> None:
-    """Delete temporary maps."""
+    """Delete all temporary maps."""
     tools = Tools(capture_output=False)
     tools.g_remove(
         flags="fb",
-        type=["raster", "vector"] if options["method"] == "rmarea" else "raster",
+        type="all",
         pattern=f"{TEMP_PREFIX}_*",
         superquiet=True,
     )
@@ -203,11 +203,14 @@ def reclass(
     expected_fields_number = 4
     verbose_message = _("Generating a reclass map with area size")
     range_filter_message = ""
+
+    # Define lower threshold
     if lower:
         range_filter_message += _(" larger than or equal to %f hectares...") % lower
     else:
         lower = -inf
 
+    # Define upper threshold
     if upper:
         if range_filter_message:
             range_filter_message += " and"
@@ -219,6 +222,7 @@ def reclass(
     recfile = f"{TEMP_PREFIX}_recl"
     sflags = "aln"
     if input_map:
+        # For non-null clumps r.stats should produce 5 columns
         expected_fields_number = 5
         stats_input = (clump_map, input_map)
         if gs.raster_info(input_map)["datatype"] in {"FCELL", "DCELL"}:
@@ -264,21 +268,30 @@ def rmarea(
     return_vector: bool = False,
 ) -> None:
     """Perform vector based filtering."""
-    # transform user input from hectares to map units (kept this for future)
-    # thresh = thresh * 10000.0 / (float(coef)**2)
-    # grass.debug("Threshold: %d, coeff linear: %s, coef squared: %d" %
-    # (thresh, coef, (float(coef)**2)), 0)
-
-    # transform user input from hectares to meters because currently v.clean
-    # rmarea accept only meters as threshold
     tools = Tools(capture_output=False)
 
+    if gs.raster_info(input_map)["datatype"] != "CELL":
+        gs.warning(
+            _("Raster map <%s> is not of type 'CELL'. Results may not be as expected."),
+        )
+
+    # Setup temporary map names with pattern
     vectfile = f"{TEMP_PREFIX}_vect"
     cleanfile = f"{TEMP_PREFIX}_clean"
     edit_vector = vectfile
 
-    tools.r_to_vect(input=input_map, output=vectfile, type="area", quiet=True)
+    # Convert input map to vector raster values as category
+    tools.r_to_vect(
+        flags="v",
+        input=input_map,
+        output=vectfile,
+        type="area",
+        quiet=True,
+    )
 
+    # Apply lower threshold
+    # transform user input from hectares to meters because currently v.clean
+    # rmarea accept only meters as threshold
     if lower:
         lower *= 10000.0
         tools.v_clean(
@@ -290,6 +303,7 @@ def rmarea(
         )
         edit_vector = cleanfile
 
+    # Apply upper threshold
     if upper:
         tools.v_to_db(
             map=edit_vector,
@@ -300,15 +314,18 @@ def rmarea(
             quiet=True,
         )
         tools.v_edit(
-            map=edit_vector, tool="delete", where=f"area_ha >= {upper}", superquiet=True
+            map=edit_vector,
+            tool="delete",
+            where=f"area_ha >= {upper}",
+            superquiet=True,
         )
 
+    # Produce final output map (raster / vector)
     if not return_vector:
         tools.v_to_rast(
             input=edit_vector,
             output=output_map,
-            use="attr",
-            attrcolumn="value",
+            use="cat",
             quiet=True,
         )
     else:
@@ -327,7 +344,7 @@ def main() -> None:
     if not gs.find_file(options["input"])["name"]:
         gs.fatal(_("Raster map <%s> not found") % options["input"])
 
-    # check for unsupported locations
+    # Check for unsupported locations
     resolution = check_projection()
 
     # Give deprecation warnings
@@ -340,12 +357,14 @@ def main() -> None:
         )
         options["lower" if options["mode"] == "greater" else "upper"] = options["value"]
 
+    # Define filter thresholds
     lower = float(options["lower"]) if options["lower"] else None
     upper = float(options["upper"]) if options["upper"] else None
-    # Compute clump map if neede
+
+    # Compute clump map if needed
     clump_map = (
-        options["input_map"]
-        if flags["c"]
+        options["input"]
+        if flags["c"] or options["method"] == "rmarea"
         else get_clumpfile(
             options["input"],
             resolution=resolution,
@@ -356,13 +375,11 @@ def main() -> None:
 
     # Filter clumped map
     filter_method = (
-        partial(reclass, input_map=options["input"] if not flags["c"] else None)
+        partial(reclass, input_map=options["input"])
         if options["method"] == "reclass"
         else partial(rmarea, return_vector=flags["v"])
     )
     filter_method(clump_map, options["output"], lower=lower, upper=upper)
-
-    gs.message(_("Generating output raster map <%s>...") % options["output"])
 
 
 if __name__ == "__main__":
