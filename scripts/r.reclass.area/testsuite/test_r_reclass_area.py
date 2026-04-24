@@ -19,6 +19,7 @@ class TestReclassArea(TestCase):
     value = "20"
     upper = "4000"
     lower = "20"
+    map_list = []
 
     @classmethod
     def setUpClass(cls):
@@ -30,9 +31,9 @@ class TestReclassArea(TestCase):
         cls.del_temp_region()
         cls.runModule(
             "g.remove",
-            type="raster",
+            type="all",
             flags="f",
-            name=(cls.output),  # + "Greater", cls.output + "Lesser"),
+            name=cls.map_list,
         )
 
     def test_reclassGreater(self):
@@ -45,6 +46,7 @@ class TestReclassArea(TestCase):
             mode="greater",
             method="reclass",
         )
+        self.map_list.append(self.output + "Greater")
         self.assertRasterMinMax(
             map=self.output + "Greater",
             refmin=200,
@@ -61,6 +63,7 @@ class TestReclassArea(TestCase):
             lower=self.lower,
             method="reclass",
         )
+        self.map_list.append(f"{self.output}_lower")
         self.assertRasterMinMax(
             map=f"{self.output}_lower",
             refmin=200,
@@ -78,6 +81,7 @@ class TestReclassArea(TestCase):
             mode="lesser",
             method="reclass",
         )
+        self.map_list.append(self.output + "Lesser")
         self.assertRasterMinMax(
             map=self.output + "Lesser",
             refmin=900,
@@ -94,6 +98,7 @@ class TestReclassArea(TestCase):
             upper=self.upper,
             method="reclass",
         )
+        self.map_list.append(f"{self.output}_upper")
         self.assertRasterMinMax(
             map=f"{self.output}_upper",
             refmin=262,
@@ -111,6 +116,7 @@ class TestReclassArea(TestCase):
             upper=self.upper,
             method="reclass",
         )
+        self.map_list.append(f"{self.output}_lower_upper")
         self.assertRasterMinMax(
             map=f"{self.output}_lower_upper",
             refmin=200,
@@ -127,10 +133,11 @@ class TestReclassArea(TestCase):
             lower=self.lower,
             method="rmarea",
         )
+        self.map_list.append(f"{self.output}_rmarea_lower")
         self.assertRasterMinMax(
             map=f"{self.output}_rmarea_lower",
-            refmin=1,
-            refmax=11,
+            refmin=217,
+            refmax=946,
             msg="Range of data: min = 1  max = 11",
         )
 
@@ -143,10 +150,11 @@ class TestReclassArea(TestCase):
             upper=self.upper,
             method="rmarea",
         )
+        self.map_list.append(f"{self.output}_rmarea_upper")
         self.assertRasterMinMax(
             map=f"{self.output}_rmarea_upper",
-            refmin=1,
-            refmax=13,
+            refmin=262,
+            refmax=948,
             msg="Range of data: min = 1  max = 13",
         )
 
@@ -161,6 +169,7 @@ class TestReclassArea(TestCase):
             upper=self.upper,
             method="rmarea",
         )
+        self.map_list.append(f"{self.output}_rmarea_lower_upper")
 
     def test_rmaea_lower_upper_vector(self):
         """Testing r.reclass.area with rmarea, lower and upper."""
@@ -173,6 +182,7 @@ class TestReclassArea(TestCase):
             upper=self.upper,
             method="rmarea",
         )
+        self.map_list.append(f"{self.output}_rmarea_lower_upper")
         # self.assertRasterMinMax(
         #    map=f"{self.output}_rmarea_lower_upper",
         #    refmin=200,
