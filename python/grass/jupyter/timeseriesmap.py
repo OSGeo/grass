@@ -18,8 +18,6 @@ from datetime import datetime
 import grass.script as gs
 from grass.tools import Tools
 
-import grass.temporal as tgis
-
 from .region import RegionManagerForTimeSeries
 from .baseseriesmap import BaseSeriesMap
 
@@ -104,12 +102,12 @@ class TimeSeriesMap(BaseSeriesMap):
 
     def __init__(
         self,
-        width: float | None = None,
-        height: float | None = None,
+        width: float = 600,
+        height: float = 600,
         env: dict | None = None,
         use_region: bool = False,
         saved_region: dict | None = None,
-    ):
+    ) -> None:
         """Create an instance of the TimeSeriesMap visualizations class.
 
         :param int width: width of map in pixels
@@ -121,6 +119,12 @@ class TimeSeriesMap(BaseSeriesMap):
                             this region is then used for rendering
         """
         super().__init__(width, height, env)
+
+        # TGIS requires a GRASS session thus lazy import here
+        global tgis
+        import grass.temporal as tgis  # noqa: PLC0415
+
+        tgis.init()
 
         self._fill_gaps = None
         self._legend = None
@@ -178,7 +182,6 @@ class TimeSeriesMap(BaseSeriesMap):
             self._check_number_of_timesteps(
                 self._stds.temporal_extent.start_time,
                 self._stds.temporal_extent.end_time,
-                self._granularity,
             )
             map_list = self._stds.get_registered_maps_as_objects_by_granularity(
                 self._granularity,
@@ -191,7 +194,6 @@ class TimeSeriesMap(BaseSeriesMap):
             self._check_number_of_timesteps(
                 map_list[0].temporal_extent.start_time,
                 map_list[-1].temporal_extent.end_time,
-                self._granularity,
             )
             map_list = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity(
                 map_list,
@@ -199,8 +201,13 @@ class TimeSeriesMap(BaseSeriesMap):
                 map_list[-1].get_temporal_extent().start_time,
                 self._granularity,
             )
-        self._layers = [raster.get_id() for raster in map_list]
-        self._labels = [raster.get_temporal_extent().start_time for raster in map_list]
+        self._layers = []
+        self._labels = []
+        for map_layer in map_list:
+            if isinstance(map_layer, list):
+                map_layer = next(iter(map_layer))
+            self._layers.append(map_layer.get_id())
+            self._labels.append(str(map_layer.get_temporal_extent().start_time))
 
     def _add_map_series(
         self,
