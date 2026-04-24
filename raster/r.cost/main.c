@@ -839,13 +839,13 @@ int main(int argc, char *argv[])
         old_min_cost = costs.cost_out;
         if (!Rast_is_d_null_value(&old_min_cost)) {
             if (pres_cell->min_cost > old_min_cost) {
-                delete (pres_cell);
+                delete(pres_cell);
                 pres_cell = get_lowest();
                 continue;
             }
         }
         if (FLAG_GET(visited, pres_cell->row, pres_cell->col)) {
-            delete (pres_cell);
+            delete(pres_cell);
             pres_cell = get_lowest();
             continue;
         }
@@ -1227,7 +1227,7 @@ int main(int argc, char *argv[])
             break;
 
         ct = pres_cell;
-        delete (pres_cell);
+        delete(pres_cell);
         pres_cell = get_lowest();
 
         if (ct == pres_cell)

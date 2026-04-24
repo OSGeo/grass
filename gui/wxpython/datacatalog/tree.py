@@ -178,9 +178,38 @@ class DataCatalogNode(DictFilterNode):
     def __init__(self, data=None):
         super().__init__(data=data)
 
+    @staticmethod
+    def _shorten_path(path, max_parts=4):
+        sep = "\\" if "\\" in path else "/"
+
+        parts = [p for p in path.split(sep) if p]
+
+        if len(parts) <= max_parts:
+            return path
+
+        head = [parts[0]]
+        tail = parts[-(max_parts - 1) :]
+        shortened_parts = head + ["…"] + tail
+
+        result = sep.join(shortened_parts)
+        if path.startswith(sep):
+            result = sep + result
+
+        return result
+
     @property
     def label(self):
         data = self.data
+
+        if data["type"] == "grassdb":
+            path = data["name"]
+            grassdbs = UserSettings.Get(group="datacatalog", key="grassdbs") or {}
+            items = grassdbs.get("items", [])
+            for item in items:
+                if item["path"] == path and item["label"]:
+                    return item["label"]
+            return self._shorten_path(path, max_parts=4)
+
         if data["type"] == "mapset":
             owner = data["owner"] or _("name unknown")
             if data["current"]:
@@ -277,6 +306,13 @@ class DataCatalogTree(TreeView):
             self.grassdatabases.append(currentDB)
             self._saveGrassDBs()
 
+        # Onetime upgrade of grassdbs settings from old format to new format
+        items = (UserSettings.Get(group="datacatalog", key="grassdbs") or {}).get(
+            "items", []
+        )
+        if self.grassdatabases != [item["path"] for item in items]:
+            self._saveGrassDBs()
+
         self.beginDrag = Signal("DataCatalogTree.beginDrag")
         self.endDrag = Signal("DataCatalogTree.endDrag")
         self.startEdit = Signal("DataCatalogTree.startEdit")
@@ -351,28 +387,55 @@ class DataCatalogTree(TreeView):
 
     def _getValidSavedGrassDBs(self):
         """Returns list of GRASS databases from settings.
-        Returns only existing directories."""
-        dbs = UserSettings.Get(
-            group="datacatalog", key="grassdbs", subkey="listAsString"
-        )
-        return [db for db in dbs.split(",") if Path(db).is_dir()]
+
+        Returns only existing directories. Reads from new 'items' format,
+        falls back to legacy 'listAsString' if items doesn't exist.
+        """
+        grassdbs = UserSettings.Get(group="datacatalog", key="grassdbs") or {}
+        items = grassdbs.get("items")
+        if items:
+            # Extract paths from items list
+            dbs = [item["path"] for item in items]
+        else:
+            # Fallback to OLD format
+            list_as_string = UserSettings.Get(
+                group="datacatalog", key="grassdbs", subkey="listAsString"
+            )
+            dbs = list_as_string.split(",") if list_as_string else []
+        return [db for db in dbs if Path(db).is_dir()]
 
     def _saveGrassDBs(self):
-        """Save current grass dbs in tree to settings"""
-        UserSettings.Set(
-            group="datacatalog",
-            key="grassdbs",
-            subkey="listAsString",
-            value=",".join(self.grassdatabases),
-        )
+        """Save current grass dbs in tree to settings using 'items' format.
+
+        Preserves existing labels when saving.
+        """
+        grassdbs = UserSettings.Get(group="datacatalog", key="grassdbs") or {}
+
+        existing_items = grassdbs.get("items", [])
+        label_map = {
+            item["path"]: item["label"]
+            for item in existing_items
+            if isinstance(item, dict)
+        }
+
+        items = []
+        for db in self.grassdatabases:
+            items.append({"path": db, "label": label_map.get(db)})
+
+        grassdbs["items"] = items
+
+        UserSettings.Set(group="datacatalog", key="grassdbs", value=grassdbs)
+
         grassdbSettings = {}
         UserSettings.ReadSettingsFile(settings=grassdbSettings)
+
         if "datacatalog" not in grassdbSettings:
-            grassdbSettings["datacatalog"] = UserSettings.Get(group="datacatalog")
-        # update only dbs
+            grassdbSettings["datacatalog"] = UserSettings.Get(group="datacatalog") or {}
+
         grassdbSettings["datacatalog"]["grassdbs"] = UserSettings.Get(
             group="datacatalog", key="grassdbs"
         )
+
         UserSettings.SaveToFile(grassdbSettings)
 
     def _reloadMapsetNode(self, mapset_node):
@@ -861,7 +924,7 @@ class DataCatalogTree(TreeView):
         ):
             self._popupMenuGrassDb()
         elif len(self.selected_grassdb) > 1 and not self.selected_location[0]:
-            self._popupMenuEmpty()
+            self._popupMenuMultipleGrassDbs()
         elif len(self.selected_location) > 1 and not self.selected_mapset[0]:
             self._popupMenuMultipleLocations()
         elif len(self.selected_mapset) > 1:
@@ -1155,11 +1218,8 @@ class DataCatalogTree(TreeView):
         """Start label editing"""
         self.DefineItems([node])
 
-        # Not allowed for grassdb node
-        if node.data["type"] == "grassdb":
-            event.Veto()
         # Check selected mapset
-        elif node.data["type"] == "mapset":
+        if node.data["type"] == "mapset":
             if self._restricted or get_reason_mapset_not_removable(
                 self.selected_grassdb[0].data["name"],
                 self.selected_location[0].data["name"],
@@ -1188,7 +1248,26 @@ class DataCatalogTree(TreeView):
         Debug.msg(1, "End label edit {name}".format(name=old_name))
         new_name = event.GetLabel()
 
-        if node.data["type"] in {"raster", "raster_3d", "vector"}:
+        if node.data["type"] == "grassdb":
+            path = node.data["name"]
+            newname = event.GetLabel().strip()
+
+            grassdbs = UserSettings.Get(group="datacatalog", key="grassdbs") or {}
+            items = grassdbs.get("items", [])
+
+            for item in items:
+                if item["path"] == path:
+                    item["label"] = newname or None
+                    break
+
+            grassdbs["items"] = items
+            UserSettings.Set(group="datacatalog", key="grassdbs", value=grassdbs)
+            UserSettings.SaveToFile()
+
+            event.Veto()
+            self.RefreshNode(node, recursive=False)
+
+        elif node.data["type"] in {"raster", "raster_3d", "vector"}:
             self.Rename(old_name, new_name)
 
         elif node.data["type"] == "mapset":
@@ -1940,6 +2019,34 @@ class DataCatalogTree(TreeView):
             # temp gisrc file must be deleted onDone
             self._giface.RunCmd(cmd, env=env, onDone=done, userData=gisrc)
 
+    def OnShowProjection(self, event):
+        """Show projection info of selected project (location)"""
+
+        def done(event):
+            gs.try_remove(event.userData)
+
+        cmd = ["g.proj", "-p"]
+        gisrc, env = gs.create_environment(
+            self.selected_grassdb[0].data["name"],
+            self.selected_location[0].data["name"],
+            "PERMANENT",
+        )
+        self._giface.RunCmd(cmd, env=env, onDone=done, userData=gisrc)
+
+    def OnShowRegion(self, event):
+        """Show computational region of selected mapset"""
+
+        def done(event):
+            gs.try_remove(event.userData)
+
+        cmd = ["g.region", "-p3"]
+        gisrc, env = gs.create_environment(
+            self.selected_grassdb[0].data["name"],
+            self.selected_location[0].data["name"],
+            self.selected_mapset[0].data["name"],
+        )
+        self._giface.RunCmd(cmd, env=env, onDone=done, userData=gisrc)
+
     def OnCopyName(self, event):
         """Copy layer name to clipboard"""
         if wx.TheClipboard.Open():
@@ -2005,6 +2112,15 @@ class DataCatalogTree(TreeView):
             wx.TheClipboard.SetData(do)
             wx.TheClipboard.Close()
 
+    def OnCopyGrassDbPath(self, event):
+        """Copy path to GRASS database"""
+        if wx.TheClipboard.Open():
+            do = wx.TextDataObject()
+            paths = [db.data["name"] for db in self.selected_grassdb]
+            do.SetText("\n".join(paths))
+            wx.TheClipboard.SetData(do)
+            wx.TheClipboard.Close()
+
     def OnReloadLocation(self, event):
         """Reload all mapsets in selected location"""
         node = self.selected_location[0]
@@ -2012,6 +2128,21 @@ class DataCatalogTree(TreeView):
         self.UpdateCurrentDbLocationMapsetNode()
         self.RefreshNode(node, recursive=True)
         self.ExpandNode(node, recursive=False)
+
+    def OnCopyLocationPath(self, event):
+        """Copy path to project (location)"""
+        if wx.TheClipboard.Open():
+            do = wx.TextDataObject()
+            text = []
+            for i in range(len(self.selected_location)):
+                path = os.path.join(
+                    self.selected_grassdb[i].data["name"],
+                    self.selected_location[i].data["name"],
+                )
+                text.append(path)
+            do.SetText("\n".join(text))
+            wx.TheClipboard.SetData(do)
+            wx.TheClipboard.Close()
 
     def OnReloadGrassdb(self, event):
         """Reload all mapsets in selected grass db"""
@@ -2171,7 +2302,12 @@ class DataCatalogTree(TreeView):
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnReloadMapset, item)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy path to mapset"))
+        menu.AppendSeparator()
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Show computational region"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnShowRegion, item)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy path"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCopyMapsetPath, item)
 
@@ -2202,6 +2338,15 @@ class DataCatalogTree(TreeView):
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnReloadLocation, item)
 
+        menu.AppendSeparator()
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Show projection info"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnShowProjection, item)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Copy path"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCopyLocationPath, item)
+
         self.PopupMenu(menu)
         menu.Destroy()
 
@@ -2210,6 +2355,31 @@ class DataCatalogTree(TreeView):
         menu = Menu()
         genv = gisenv()
         currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
+
+        node = self.selected_grassdb[0]
+        db_path = node.data["name"]
+
+        grassdbs = UserSettings.Get(group="datacatalog", key="grassdbs") or {}
+        items = grassdbs.get("items", [])
+        has_label = any(item["path"] == db_path and item["label"] for item in items)
+        label_text = _("Change Label") if has_label else _("Set Label")
+
+        # Set Label / Change Label
+        item = wx.MenuItem(menu, wx.ID_ANY, label_text)
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, lambda e: self.EditLabel(self.GetSelections()[0]), item)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Copy path"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCopyGrassDbPath, item)
+
+        # Remove Label (only if its exists)
+        if has_label:
+            item = wx.MenuItem(menu, wx.ID_ANY, _("Remove Label"))
+            menu.AppendItem(item)
+            self.Bind(wx.EVT_MENU, lambda e: self.OnRemoveLabel(db_path), item)
+
+        menu.AppendSeparator()
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Create new project (location)"))
         menu.AppendItem(item)
@@ -2263,6 +2433,19 @@ class DataCatalogTree(TreeView):
         if self._restricted:
             item.Enable(False)
 
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Copy paths"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCopyLocationPath, item)
+
+        self.PopupMenu(menu)
+        menu.Destroy()
+
+    def _popupMenuMultipleGrassDbs(self):
+        """Create popup menu for multiple selected grass databases"""
+        menu = Menu()
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Copy paths"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCopyGrassDbPath, item)
         self.PopupMenu(menu)
         menu.Destroy()
 
@@ -2275,12 +2458,42 @@ class DataCatalogTree(TreeView):
         if self._restricted:
             item.Enable(False)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy paths to mapsets"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy paths"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCopyMapsetPath, item)
 
         self.PopupMenu(menu)
         menu.Destroy()
+
+    def OnRemoveLabel(self, path):
+        """Remove label for database."""
+        grassdbs = UserSettings.Get(group="datacatalog", key="grassdbs") or {}
+        items = grassdbs.get("items", [])
+
+        for item in items:
+            if item["path"] == path:
+                label_name = item.get("label", path)
+
+                dlg = wx.MessageDialog(
+                    self,
+                    message=_("Remove label '{label}' for this database?").format(
+                        label=label_name
+                    ),
+                    caption=_("Remove Label"),
+                    style=wx.YES_NO | wx.ICON_QUESTION,
+                )
+
+                if dlg.ShowModal() == wx.ID_YES:
+                    item["label"] = None
+                    grassdbs["items"] = items
+                    UserSettings.Set(
+                        group="datacatalog", key="grassdbs", value=grassdbs
+                    )
+                    UserSettings.SaveToFile()
+                    self.RefreshNode(self.selected_grassdb[0], recursive=False)
+
+                dlg.Destroy()
+                break
 
     def _popupMenuEmpty(self):
         """Create empty popup when multiple different types of items are selected"""

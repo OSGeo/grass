@@ -18,7 +18,6 @@ libjpeg-dev
 liblapack-dev
 libncurses5-dev
 libnetcdf-dev
-libpdal-dev
 libpng-dev
 libpq-dev
 libproj-dev

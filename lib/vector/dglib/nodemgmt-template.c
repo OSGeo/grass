@@ -23,7 +23,7 @@
 #include <grass/gis.h>
 
 int DGL_ADD_NODE_FUNC(dglGraph_s *pgraph, dglInt32_t nId,
-                      void *pvNodeAttr UNUSED, dglInt32_t nFlags UNUSED)
+                      void *pvNodeAttr G_UNUSED, dglInt32_t nFlags G_UNUSED)
 {
     DGL_T_NODEITEM_TYPE *pNodeItem;
     dglInt32_t *pnode;
@@ -191,7 +191,7 @@ int DGL_DEL_NODE_INEDGE_FUNC(dglGraph_s *pgraph, dglInt32_t nNode,
 }
 #endif
 
-int DGL_DEL_NODE_FUNC(dglGraph_s *pgraph, dglInt32_t nNodeId UNUSED)
+int DGL_DEL_NODE_FUNC(dglGraph_s *pgraph, dglInt32_t nNodeId G_UNUSED)
 {
 #if defined(_DGL_V1)
     pgraph->iErrno = DGL_ERR_NotSupported;
@@ -396,7 +396,7 @@ dglInt32_t *DGL_GET_NODE_OUTEDGESET_FUNC(dglGraph_s *pgraph, dglInt32_t *pnode)
 }
 
 dglInt32_t *DGL_GET_NODE_INEDGESET_FUNC(dglGraph_s *pgraph,
-                                        dglInt32_t *pnode UNUSED)
+                                        dglInt32_t *pnode G_UNUSED)
 {
 #if defined(_DGL_V1)
     pgraph->iErrno = DGL_ERR_NotSupported;

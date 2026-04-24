@@ -1,9 +1,8 @@
 ---
+title: g.gui.gmodeler
 description: wxGUI Graphical Modeler
 index: topic_GUI|GUI
 ---
-
-# wxGUI Graphical Modeler
 
 ## DESCRIPTION
 

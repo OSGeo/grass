@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-17 15:43+0000\n"
+"POT-Creation-Date: 2026-04-18 16:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1550,36 +1550,36 @@ msgstr ""
 msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:185
+#: ../gui/wxpython/datacatalog/tree.py:214
 msgid "name unknown"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:187
+#: ../gui/wxpython/datacatalog/tree.py:216
 #, python-brace-format
 msgid "{name}  (current)"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:189
+#: ../gui/wxpython/datacatalog/tree.py:218
 #, python-brace-format
 msgid "{name}  (in use, owner: {owner})"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:193
+#: ../gui/wxpython/datacatalog/tree.py:222
 #, python-brace-format
 msgid "{name}  (in use)"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:195
+#: ../gui/wxpython/datacatalog/tree.py:224
 #, python-brace-format
 msgid "{name}  (owner: {owner})"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:199
+#: ../gui/wxpython/datacatalog/tree.py:228
 #, python-brace-format
 msgid "{name}"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:893
+#: ../gui/wxpython/datacatalog/tree.py:956
 #, python-brace-format
 msgid ""
 "Map <{map_name}@{map_mapset}> is not in the current project. To be able to display it you need to switch to <{map_location}> project. Note that if you switch there all current Map Displays will be closed.\n"
@@ -1587,246 +1587,274 @@ msgid ""
 "Do you want to switch anyway?"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:903
+#: ../gui/wxpython/datacatalog/tree.py:966
 msgid "Map in a different project"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1022
+#: ../gui/wxpython/datacatalog/tree.py:1085
 #, python-brace-format
 msgid "{c} maps marked for moving."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1024
+#: ../gui/wxpython/datacatalog/tree.py:1087
 #, python-brace-format
 msgid "Map <{layer}> marked for moving."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1037
+#: ../gui/wxpython/datacatalog/tree.py:1100
 #, python-brace-format
 msgid "{c} maps marked for copying."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1039
+#: ../gui/wxpython/datacatalog/tree.py:1102
 #, python-brace-format
 msgid "Map <{layer}> marked for copying."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1054
-#: ../gui/wxpython/datacatalog/tree.py:1391
+#: ../gui/wxpython/datacatalog/tree.py:1117
+#: ../gui/wxpython/datacatalog/tree.py:1470
 msgid "New name"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1055
+#: ../gui/wxpython/datacatalog/tree.py:1118
 msgid "Rename map"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1204
+#: ../gui/wxpython/datacatalog/tree.py:1283
 msgid "Cannot rename mapset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1217
+#: ../gui/wxpython/datacatalog/tree.py:1296
 #, python-brace-format
 msgid "Renaming mapset <{oldmapset}> to <{newmapset}> completed"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1229
+#: ../gui/wxpython/datacatalog/tree.py:1308
 msgid "Cannot rename location"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1241
+#: ../gui/wxpython/datacatalog/tree.py:1320
 #, python-brace-format
 msgid "Renaming project <{oldlocation}> to <{newlocation}> completed"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1253
+#: ../gui/wxpython/datacatalog/tree.py:1332
 #, python-brace-format
 msgid "Renaming map <{name}>..."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1263
+#: ../gui/wxpython/datacatalog/tree.py:1342
 #, python-brace-format
 msgid "{cmd} -- completed"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1279
+#: ../gui/wxpython/datacatalog/tree.py:1358
 msgid "No map selected for copying."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1281
+#: ../gui/wxpython/datacatalog/tree.py:1360
 msgid "No map selected for moving."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1303
-#: ../gui/wxpython/datacatalog/tree.py:1322
+#: ../gui/wxpython/datacatalog/tree.py:1382
+#: ../gui/wxpython/datacatalog/tree.py:1401
 #, python-brace-format
 msgid "New name for <{n}>"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1306
-#: ../gui/wxpython/datacatalog/tree.py:1325
-#: ../gui/wxpython/datacatalog/tree.py:1392
+#: ../gui/wxpython/datacatalog/tree.py:1385
+#: ../gui/wxpython/datacatalog/tree.py:1404
+#: ../gui/wxpython/datacatalog/tree.py:1471
 msgid "Select new name"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1343
+#: ../gui/wxpython/datacatalog/tree.py:1422
 #, python-brace-format
 msgid "Copying <{name}>..."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1345
+#: ../gui/wxpython/datacatalog/tree.py:1424
 #, python-brace-format
 msgid "Moving <{name}>..."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1359
+#: ../gui/wxpython/datacatalog/tree.py:1438
 msgid "Copying completed"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1365
+#: ../gui/wxpython/datacatalog/tree.py:1444
 msgid "Moving completed"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1381
+#: ../gui/wxpython/datacatalog/tree.py:1460
 msgid "Reprojection is not implemented for 3D rasters"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1462
-#: ../gui/wxpython/datacatalog/tree.py:1582
+#: ../gui/wxpython/datacatalog/tree.py:1541
+#: ../gui/wxpython/datacatalog/tree.py:1661
 msgid "g.remove completed"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1546
+#: ../gui/wxpython/datacatalog/tree.py:1625
 #, python-brace-format
 msgid "Do you really want to delete map(s) <{m}>?"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1550
+#: ../gui/wxpython/datacatalog/tree.py:1629
 #, python-brace-format
 msgid "Do you really want to delete {n} maps?"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1551
+#: ../gui/wxpython/datacatalog/tree.py:1630
 msgid "Delete map"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1552
+#: ../gui/wxpython/datacatalog/tree.py:1631
 #, python-brace-format
 msgid "Deleting {name}..."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1743
+#: ../gui/wxpython/datacatalog/tree.py:1822
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1757
+#: ../gui/wxpython/datacatalog/tree.py:1836
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2085
+#: ../gui/wxpython/datacatalog/tree.py:2188
 msgid "&Cut"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2091 ../gui/wxpython/history/tree.py:219
+#: ../gui/wxpython/datacatalog/tree.py:2194 ../gui/wxpython/history/tree.py:219
 msgid "&Copy"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2095
+#: ../gui/wxpython/datacatalog/tree.py:2198
 msgid "Copy &name"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2099
-#: ../gui/wxpython/datacatalog/tree.py:2142
-#: ../gui/wxpython/datacatalog/tree.py:2246
+#: ../gui/wxpython/datacatalog/tree.py:2202
+#: ../gui/wxpython/datacatalog/tree.py:2245
+#: ../gui/wxpython/datacatalog/tree.py:2378
 msgid "&Paste"
 msgstr ""
 
 #. GTC Delete mapset
-#: ../gui/wxpython/datacatalog/tree.py:2105
+#: ../gui/wxpython/datacatalog/tree.py:2208
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:242
 msgid "&Delete"
 msgstr ""
 
 #. GTC Rename mapset
-#: ../gui/wxpython/datacatalog/tree.py:2110 ../gui/wxpython/dbmgr/base.py:2490
+#: ../gui/wxpython/datacatalog/tree.py:2213 ../gui/wxpython/dbmgr/base.py:2490
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:235
 msgid "&Rename"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2123
+#: ../gui/wxpython/datacatalog/tree.py:2226
 msgid "&Display layers"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2125
+#: ../gui/wxpython/datacatalog/tree.py:2228
 msgid "&Display layer"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2129
+#: ../gui/wxpython/datacatalog/tree.py:2232
 msgid "Show &metadata"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2148
+#: ../gui/wxpython/datacatalog/tree.py:2251
 msgid "&Switch mapset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2158
+#: ../gui/wxpython/datacatalog/tree.py:2261
 msgid "&Delete mapset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2164
+#: ../gui/wxpython/datacatalog/tree.py:2267
 msgid "&Rename mapset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2170
-#: ../gui/wxpython/datacatalog/tree.py:2201
-#: ../gui/wxpython/datacatalog/tree.py:2236
+#: ../gui/wxpython/datacatalog/tree.py:2273
+#: ../gui/wxpython/datacatalog/tree.py:2304
+#: ../gui/wxpython/datacatalog/tree.py:2368
 msgid "Re&load maps"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2174
-msgid "&Copy path to mapset"
+#: ../gui/wxpython/datacatalog/tree.py:2277
+msgid "&Copy path"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2185
+#: ../gui/wxpython/datacatalog/tree.py:2288
 msgid "&Create mapset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2189
+#: ../gui/wxpython/datacatalog/tree.py:2292
 msgid "&Delete project"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2195
+#: ../gui/wxpython/datacatalog/tree.py:2298
 msgid "&Rename project"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2214
+#: ../gui/wxpython/datacatalog/tree.py:2308
+#: ../gui/wxpython/datacatalog/tree.py:2334
+msgid "Copy path"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:2327
+msgid "Change Label"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:2327
+msgid "Set Label"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:2340
+#: ../gui/wxpython/datacatalog/tree.py:2444
+msgid "Remove Label"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:2346
 msgid "&Create new project (location)"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2218
+#: ../gui/wxpython/datacatalog/tree.py:2350
 msgid "&Download sample project (location)"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2223
+#: ../gui/wxpython/datacatalog/tree.py:2355
 msgid "&Remove GRASS database from data catalog"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2230
+#: ../gui/wxpython/datacatalog/tree.py:2362
 msgid "&Delete GRASS database from disk"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2260
+#: ../gui/wxpython/datacatalog/tree.py:2392
 msgid "&Delete projects (locations)"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2272
+#: ../gui/wxpython/datacatalog/tree.py:2398
+#: ../gui/wxpython/datacatalog/tree.py:2408
+msgid "Copy paths"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:2417
 msgid "&Delete mapsets"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2278
-msgid "&Copy paths to mapsets"
+#: ../gui/wxpython/datacatalog/tree.py:2423
+msgid "&Copy paths"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2288 ../gui/wxpython/history/tree.py:233
+#: ../gui/wxpython/datacatalog/tree.py:2441
+#, python-brace-format
+msgid "Remove label '{label}' for this database?"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:2463 ../gui/wxpython/history/tree.py:233
 msgid "No available options"
 msgstr ""
 
@@ -6358,11 +6386,11 @@ msgstr ""
 msgid "Classes"
 msgstr ""
 
-#: ../gui/wxpython/iclass/dialogs.py:398 ../gui/wxpython/iscatt/frame.py:405
+#: ../gui/wxpython/iclass/dialogs.py:398 ../gui/wxpython/iscatt/frame.py:403
 msgid "Class name"
 msgstr ""
 
-#: ../gui/wxpython/iclass/dialogs.py:430 ../gui/wxpython/iscatt/frame.py:442
+#: ../gui/wxpython/iclass/dialogs.py:430 ../gui/wxpython/iscatt/frame.py:440
 msgid "Please use only ASCII characters."
 msgstr ""
 
@@ -6419,7 +6447,7 @@ msgid ""
 "There is no class yet, do you want to create one?"
 msgstr ""
 
-#: ../gui/wxpython/iclass/digit.py:95 ../gui/wxpython/iscatt/controllers.py:452
+#: ../gui/wxpython/iclass/digit.py:95 ../gui/wxpython/iscatt/controllers.py:450
 msgid "No class selected"
 msgstr ""
 
@@ -7073,27 +7101,27 @@ msgid ""
 "Do you want to continue using Interactive Scatter Plot Tool with this region?"
 msgstr ""
 
-#: ../gui/wxpython/iscatt/controllers.py:302
+#: ../gui/wxpython/iscatt/controllers.py:300
 msgid "Scatter plot with same band combination (regardless x y order) is already displayed."
 msgstr ""
 
-#: ../gui/wxpython/iscatt/controllers.py:317
+#: ../gui/wxpython/iscatt/controllers.py:315
 #, python-format
 msgid "Band <%s> is not CELL (integer) type.\n"
 msgstr ""
 
-#: ../gui/wxpython/iscatt/controllers.py:321
+#: ../gui/wxpython/iscatt/controllers.py:319
 msgid "Scatter plot cannot be added.\n"
 msgstr ""
 
-#: ../gui/wxpython/iscatt/controllers.py:330
+#: ../gui/wxpython/iscatt/controllers.py:328
 #, python-format
 msgid ""
 "Scatter plot cannot be added.\n"
 "Multiple of bands ranges <%s:%d * %s:%d = %d> is higher than maximum limit <%d>.\n"
 msgstr ""
 
-#: ../gui/wxpython/iscatt/controllers.py:348
+#: ../gui/wxpython/iscatt/controllers.py:346
 #, python-format
 msgid ""
 "Multiple of bands ranges <%s:%d * %s:%d = %d> is higher than recommended limit <%d>.\n"
@@ -7102,31 +7130,31 @@ msgid ""
 "Do you really want to add this scatter plot?"
 msgstr ""
 
-#: ../gui/wxpython/iscatt/controllers.py:447
+#: ../gui/wxpython/iscatt/controllers.py:445
 msgid ""
 "In order to select arrea in scatter plot, you have to select class first.\n"
 "\n"
 "There is no class yet, do you want to create one?"
 msgstr ""
 
-#: ../gui/wxpython/iscatt/controllers.py:487
+#: ../gui/wxpython/iscatt/controllers.py:485
 #, python-format
 msgid ""
 "Error occurred during computation of scatter plot category:\n"
 "%s"
 msgstr ""
 
-#: ../gui/wxpython/iscatt/controllers.py:786
+#: ../gui/wxpython/iscatt/controllers.py:784
 #, python-format
 msgid "Export scatter plot raster of class <%s>"
 msgstr ""
 
-#: ../gui/wxpython/iscatt/controllers.py:805
+#: ../gui/wxpython/iscatt/controllers.py:803
 #, python-format
 msgid "Scatter plot raster of class <%s> exported to raster map <%s>."
 msgstr ""
 
-#: ../gui/wxpython/iscatt/controllers.py:810
+#: ../gui/wxpython/iscatt/controllers.py:808
 #, python-format
 msgid ""
 "Export of scatter plot raster of class <%s> to map <%s> failed.\n"
@@ -7216,61 +7244,61 @@ msgstr ""
 msgid "Interactive Scatter Plot Tool"
 msgstr ""
 
-#: ../gui/wxpython/iscatt/frame.py:386
+#: ../gui/wxpython/iscatt/frame.py:384
 msgid "scatter plot"
 msgstr ""
 
-#: ../gui/wxpython/iscatt/frame.py:466
+#: ../gui/wxpython/iscatt/frame.py:464
 msgid "Maximum limit of categories number was reached."
 msgstr ""
 
-#: ../gui/wxpython/iscatt/frame.py:561
+#: ../gui/wxpython/iscatt/frame.py:559
 msgid "Rename class"
 msgstr ""
 
-#: ../gui/wxpython/iscatt/frame.py:564
+#: ../gui/wxpython/iscatt/frame.py:562
 msgid "Set color"
 msgstr ""
 
-#: ../gui/wxpython/iscatt/frame.py:567 ../gui/wxpython/lmgr/layertree.py:500
+#: ../gui/wxpython/iscatt/frame.py:565 ../gui/wxpython/lmgr/layertree.py:500
 #: ../gui/wxpython/lmgr/layertree.py:598
 msgid "Change opacity level"
 msgstr ""
 
-#: ../gui/wxpython/iscatt/frame.py:570
+#: ../gui/wxpython/iscatt/frame.py:568
 msgid "Hide"
 msgstr ""
 
-#: ../gui/wxpython/iscatt/frame.py:570
+#: ../gui/wxpython/iscatt/frame.py:568
 msgid "Show"
 msgstr ""
 
-#: ../gui/wxpython/iscatt/frame.py:580
+#: ../gui/wxpython/iscatt/frame.py:578
 msgid "Move to top"
 msgstr ""
 
-#: ../gui/wxpython/iscatt/frame.py:585
+#: ../gui/wxpython/iscatt/frame.py:583
 msgid "Move to bottom"
 msgstr ""
 
-#: ../gui/wxpython/iscatt/frame.py:592
+#: ../gui/wxpython/iscatt/frame.py:590
 msgid "Move category up"
 msgstr ""
 
-#: ../gui/wxpython/iscatt/frame.py:597
+#: ../gui/wxpython/iscatt/frame.py:595
 msgid "Move category down"
 msgstr ""
 
-#: ../gui/wxpython/iscatt/frame.py:604
+#: ../gui/wxpython/iscatt/frame.py:602
 msgid "Export class raster"
 msgstr ""
 
-#: ../gui/wxpython/iscatt/frame.py:676
+#: ../gui/wxpython/iscatt/frame.py:674
 #, python-format
 msgid "Change opacity of class <%s>"
 msgstr ""
 
-#: ../gui/wxpython/iscatt/frame.py:704
+#: ../gui/wxpython/iscatt/frame.py:702
 msgid "Empty name was inserted."
 msgstr ""
 
