@@ -227,7 +227,7 @@ label_t *labels_init(struct params *p, int *n_labels)
  * @param The charset to use [unused]
  * @param The label to which we want to create a skyline
  */
-static int label_skyline(FT_Face face, const char *charset UNUSED,
+static int label_skyline(FT_Face face, const char *charset G_UNUSED,
                          label_t *label)
 {
     int i, len;
