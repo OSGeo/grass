@@ -1,6 +1,6 @@
 ## DESCRIPTION
 
-*r.reclass.area* removes areas (pixel clumps) from a raster map 
+*r.reclass.area* removes areas (pixel clumps) from a raster map
 that are smaller than a user specified **lower** area size and/or
 greater than a user specified **upper** theshold (both in hectares).
 
@@ -20,7 +20,6 @@ The *rmarea* method converts the raster map to vector and removes
 areas outside the given thresholds using [v.clean](v.clean.md) and
 [v.edit](v.edit.md). With the **-v** flag the **output** is the
 filtered vector map instead of a raster.
-
 
 ## EXAMPLES
 
