@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 17:57+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Tamil <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/ta/>\n"
@@ -1286,6 +1286,9 @@ msgstr ""
 msgid "Re&load maps"
 msgstr ""
 
+msgid "Show computational region"
+msgstr ""
+
 #, fuzzy
 #| msgid "&Copy"
 msgid "&Copy path"
@@ -1299,6 +1302,9 @@ msgid "&Delete project"
 msgstr "தேர்ந்தெடுக்கப்பட்டுள்ளதை அழி"
 
 msgid "&Rename project"
+msgstr ""
+
+msgid "Show projection info"
 msgstr ""
 
 msgid "Copy path"
@@ -5626,6 +5632,12 @@ msgid "Are you sure that you want to remove the current raster mask?"
 msgstr ""
 
 msgid "Remove raster mask"
+msgstr ""
+
+msgid "Custom CRS"
+msgstr ""
+
+msgid "Left mouse click to print detailed projection info"
 msgstr ""
 
 msgid "Create new workspace (Ctrl+N)"

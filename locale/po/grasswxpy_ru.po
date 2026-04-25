@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 17:57+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: 2023-06-28 19:08+0000\n"
 "Last-Translator: Sergey Kazorin <kazorin@basealt.ru>\n"
 "Language-Team: Russian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/ru/>\n"
@@ -1346,6 +1346,11 @@ msgid "Re&load maps"
 msgstr "Пере&загрузить карты"
 
 #, fuzzy
+#| msgid "Show computational region extent"
+msgid "Show computational region"
+msgstr "Показать размер расчётного фрагмента"
+
+#, fuzzy
 msgid "&Copy path"
 msgstr "&Создать набор"
 
@@ -1359,6 +1364,11 @@ msgstr "&Удалить набор"
 #, fuzzy
 msgid "&Rename project"
 msgstr "&Переименовать набор"
+
+#, fuzzy
+#| msgid "Choose projection"
+msgid "Show projection info"
+msgstr "Выберите проекцию"
 
 #, fuzzy
 #| msgid "CVS path"
@@ -5984,6 +5994,16 @@ msgstr ""
 #| msgid "Save raster map"
 msgid "Remove raster mask"
 msgstr "Сохранить растровую карту"
+
+#, fuzzy
+#| msgid "Custom min"
+msgid "Custom CRS"
+msgstr "Заданный минимум"
+
+#, fuzzy
+#| msgid "Please select first the raster map"
+msgid "Left mouse click to print detailed projection info"
+msgstr "Сначала выберите растровую карту"
 
 msgid "Create new workspace (Ctrl+N)"
 msgstr "Создать новый проект (Ctrl+N)"
@@ -12105,9 +12125,6 @@ msgstr ""
 
 #~ msgid "Choose method of specifying georeferencing parameters"
 #~ msgstr "Выберите метод определения параметров привязки"
-
-#~ msgid "Choose projection"
-#~ msgstr "Выберите проекцию"
 
 #~ msgid "Classifies attribute data, e.g. for thematic mapping"
 #~ msgstr "Классификация атрибутивных данных. Например, для тематического отображения"
