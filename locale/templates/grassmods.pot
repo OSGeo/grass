@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-18 16:10+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -514,7 +514,7 @@ msgstr ""
 
 #: ../db/db.describe/main.c:140 ../general/g.proj/output.c:343
 #: ../general/g.region/main.c:990 ../general/g.version/main.c:384
-#: ../imagery/i.group/main.c:301 ../raster/r.category/main.c:412
+#: ../imagery/i.group/main.c:301 ../raster/r.category/main.c:422
 #: ../raster/r.describe/dumplist.c:71 ../raster/r.info/main.c:1000
 #: ../raster/r.mask.status/main.c:111 ../raster/r.object.geometry/main.c:402
 #: ../raster/r.profile/main.c:320 ../raster/r.proj/main.c:366
@@ -3721,7 +3721,7 @@ msgstr ""
 #: ../general/g.pnmcomp/main.c:260 ../imagery/i.atcorr/6s.cpp:54
 #: ../imagery/i.ortho.photo/i.ortho.transform/main.c:413
 #: ../misc/m.nviz.script/main.c:198 ../misc/m.transform/main.c:273
-#: ../raster/r.category/main.c:239 ../raster/r.horizon/main.c:430
+#: ../raster/r.category/main.c:240 ../raster/r.horizon/main.c:430
 #: ../raster/r.in.lidar/main.c:670 ../raster/r.out.ascii/main.c:159
 #: ../raster/r.out.ppm3/main.c:134 ../raster/r.profile/main.c:224
 #: ../raster/r.recode/main.c:89 ../raster3d/r3.out.vtk/main.c:422
@@ -18499,7 +18499,7 @@ msgstr ""
 msgid "Raster map <%s> not found in current mapset"
 msgstr ""
 
-#: ../raster/r.category/main.c:214 ../raster/r.category/main.c:307
+#: ../raster/r.category/main.c:214 ../raster/r.category/main.c:317
 #: ../raster/r.mapcalc/map.c:232 ../raster/r.mapcalc/map3.c:193
 #: ../raster/r.report/parse.c:297
 #, c-format
@@ -18511,28 +18511,28 @@ msgstr ""
 msgid "Category table for <%s> set from <%s>"
 msgstr ""
 
-#: ../raster/r.category/main.c:285
+#: ../raster/r.category/main.c:295
 #, c-format
 msgid ""
 "Incorrect format of input rules. Is the first column numeric? Or check separators. Invalid line is:\n"
 "%s"
 msgstr ""
 
-#: ../raster/r.category/main.c:344
+#: ../raster/r.category/main.c:354
 #, c-format
 msgid "Unable to read category file of raster map <%s> in <%s>"
 msgstr ""
 
-#: ../raster/r.category/main.c:350
+#: ../raster/r.category/main.c:360
 #, c-format
 msgid "Unable to read colors for input map %s"
 msgstr ""
 
-#: ../raster/r.category/main.c:367
+#: ../raster/r.category/main.c:377
 msgid "The map is floating point! Ignoring cats list, using values list"
 msgstr ""
 
-#: ../raster/r.category/main.c:389
+#: ../raster/r.category/main.c:399
 msgid "Parameter 'values' is required for floating point map!"
 msgstr ""
 
@@ -19215,7 +19215,7 @@ msgid "Writing attributes..."
 msgstr ""
 
 #: ../raster/r.contour/main.c:215 ../raster3d/r3.flow/flowline.c:61
-#: ../vector/v.overlay/area_area.c:434 ../vector/v.overlay/line_area.c:452
+#: ../vector/v.overlay/area_area.c:439 ../vector/v.overlay/line_area.c:452
 #: ../vector/v.to.points/write.c:59
 #, c-format
 msgid "Unable to insert new record: '%s'"
@@ -40104,7 +40104,7 @@ msgstr ""
 msgid "The order of features in input layer <%s> has changed"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1630 ../vector/v.overlay/area_area.c:305
+#: ../vector/v.in.ogr/main.c:1630 ../vector/v.overlay/area_area.c:307
 msgid "Writing centroids..."
 msgstr ""
 
@@ -44220,18 +44220,18 @@ msgid_plural "%d boundaries snapped"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../vector/v.overlay/area_area.c:228
+#: ../vector/v.overlay/area_area.c:230
 #, c-format
 msgid "Querying vector map <%s>..."
 msgstr ""
 
-#: ../vector/v.overlay/area_area.c:292 ../vector/v.overlay/area_area.c:375
-#: ../vector/v.overlay/area_area.c:405 ../vector/v.overlay/line_area.c:391
+#: ../vector/v.overlay/area_area.c:294 ../vector/v.overlay/area_area.c:380
+#: ../vector/v.overlay/area_area.c:410 ../vector/v.overlay/line_area.c:391
 #: ../vector/v.overlay/line_area.c:421
 msgid "Attribute not found"
 msgstr ""
 
-#: ../vector/v.overlay/area_area.c:466
+#: ../vector/v.overlay/area_area.c:471
 msgid "Copying results to final output map..."
 msgstr ""
 

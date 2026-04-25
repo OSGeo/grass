@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-18 16:10+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1722,139 +1722,147 @@ msgstr ""
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2188
+#: ../gui/wxpython/datacatalog/tree.py:2216
 msgid "&Cut"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2194 ../gui/wxpython/history/tree.py:219
+#: ../gui/wxpython/datacatalog/tree.py:2222 ../gui/wxpython/history/tree.py:219
 msgid "&Copy"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2198
+#: ../gui/wxpython/datacatalog/tree.py:2226
 msgid "Copy &name"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2202
-#: ../gui/wxpython/datacatalog/tree.py:2245
-#: ../gui/wxpython/datacatalog/tree.py:2378
+#: ../gui/wxpython/datacatalog/tree.py:2230
+#: ../gui/wxpython/datacatalog/tree.py:2273
+#: ../gui/wxpython/datacatalog/tree.py:2416
 msgid "&Paste"
 msgstr ""
 
 #. GTC Delete mapset
-#: ../gui/wxpython/datacatalog/tree.py:2208
+#: ../gui/wxpython/datacatalog/tree.py:2236
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:242
 msgid "&Delete"
 msgstr ""
 
 #. GTC Rename mapset
-#: ../gui/wxpython/datacatalog/tree.py:2213 ../gui/wxpython/dbmgr/base.py:2490
+#: ../gui/wxpython/datacatalog/tree.py:2241 ../gui/wxpython/dbmgr/base.py:2490
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:235
 msgid "&Rename"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2226
+#: ../gui/wxpython/datacatalog/tree.py:2254
 msgid "&Display layers"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2228
+#: ../gui/wxpython/datacatalog/tree.py:2256
 msgid "&Display layer"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2232
+#: ../gui/wxpython/datacatalog/tree.py:2260
 msgid "Show &metadata"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2251
+#: ../gui/wxpython/datacatalog/tree.py:2279
 msgid "&Switch mapset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2261
+#: ../gui/wxpython/datacatalog/tree.py:2289
 msgid "&Delete mapset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2267
+#: ../gui/wxpython/datacatalog/tree.py:2295
 msgid "&Rename mapset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2273
-#: ../gui/wxpython/datacatalog/tree.py:2304
-#: ../gui/wxpython/datacatalog/tree.py:2368
+#: ../gui/wxpython/datacatalog/tree.py:2301
+#: ../gui/wxpython/datacatalog/tree.py:2337
+#: ../gui/wxpython/datacatalog/tree.py:2406
 msgid "Re&load maps"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2277
+#: ../gui/wxpython/datacatalog/tree.py:2306
+msgid "Show computational region"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:2310
 msgid "&Copy path"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2288
+#: ../gui/wxpython/datacatalog/tree.py:2321
 msgid "&Create mapset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2292
+#: ../gui/wxpython/datacatalog/tree.py:2325
 msgid "&Delete project"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2298
+#: ../gui/wxpython/datacatalog/tree.py:2331
 msgid "&Rename project"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2308
-#: ../gui/wxpython/datacatalog/tree.py:2334
-msgid "Copy path"
-msgstr ""
-
-#: ../gui/wxpython/datacatalog/tree.py:2327
-msgid "Change Label"
-msgstr ""
-
-#: ../gui/wxpython/datacatalog/tree.py:2327
-msgid "Set Label"
-msgstr ""
-
-#: ../gui/wxpython/datacatalog/tree.py:2340
-#: ../gui/wxpython/datacatalog/tree.py:2444
-msgid "Remove Label"
+#: ../gui/wxpython/datacatalog/tree.py:2342
+msgid "Show projection info"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:2346
+#: ../gui/wxpython/datacatalog/tree.py:2372
+msgid "Copy path"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:2365
+msgid "Change Label"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:2365
+msgid "Set Label"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:2378
+#: ../gui/wxpython/datacatalog/tree.py:2482
+msgid "Remove Label"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:2384
 msgid "&Create new project (location)"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2350
+#: ../gui/wxpython/datacatalog/tree.py:2388
 msgid "&Download sample project (location)"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2355
+#: ../gui/wxpython/datacatalog/tree.py:2393
 msgid "&Remove GRASS database from data catalog"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2362
+#: ../gui/wxpython/datacatalog/tree.py:2400
 msgid "&Delete GRASS database from disk"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2392
+#: ../gui/wxpython/datacatalog/tree.py:2430
 msgid "&Delete projects (locations)"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2398
-#: ../gui/wxpython/datacatalog/tree.py:2408
+#: ../gui/wxpython/datacatalog/tree.py:2436
+#: ../gui/wxpython/datacatalog/tree.py:2446
 msgid "Copy paths"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2417
+#: ../gui/wxpython/datacatalog/tree.py:2455
 msgid "&Delete mapsets"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2423
+#: ../gui/wxpython/datacatalog/tree.py:2461
 msgid "&Copy paths"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2441
+#: ../gui/wxpython/datacatalog/tree.py:2479
 #, python-brace-format
 msgid "Remove label '{label}' for this database?"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2463 ../gui/wxpython/history/tree.py:233
+#: ../gui/wxpython/datacatalog/tree.py:2501 ../gui/wxpython/history/tree.py:233
 msgid "No available options"
 msgstr ""
 
@@ -7941,21 +7949,29 @@ msgstr ""
 msgid "Vector map <%s> added"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/statusbar.py:80 ../gui/wxpython/nviz/tools.py:1047
+#: ../gui/wxpython/lmgr/statusbar.py:88 ../gui/wxpython/nviz/tools.py:1047
 #: ../gui/wxpython/nviz/tools.py:2943 ../gui/wxpython/psmap/dialogs.py:2408
 msgid "Mask"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/statusbar.py:84
+#: ../gui/wxpython/lmgr/statusbar.py:92
 msgid "Left mouse click to remove the raster mask"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/statusbar.py:139
+#: ../gui/wxpython/lmgr/statusbar.py:147
 msgid "Are you sure that you want to remove the current raster mask?"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/statusbar.py:140
+#: ../gui/wxpython/lmgr/statusbar.py:148
 msgid "Remove raster mask"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/statusbar.py:178 ../gui/wxpython/lmgr/statusbar.py:204
+msgid "Custom CRS"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/statusbar.py:182
+msgid "Left mouse click to print detailed projection info"
 msgstr ""
 
 #: ../gui/wxpython/lmgr/toolbars.py:46
