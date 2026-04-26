@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-28 15:48+0000\n"
+"POT-Creation-Date: 2026-04-11 17:57+0000\n"
 "PO-Revision-Date: 2026-03-22 08:14+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grassmods/hi/>\n"
@@ -2231,6 +2231,7 @@ msgstr "महत्वपूर्ण अंकों की संख्या
 msgid "Get text color from cell color value"
 msgstr "सेल रंग मान से टेक्स्ट का रंग प्राप्त करें"
 
+#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -20219,6 +20220,7 @@ msgstr "बहुत सारी श्रेणियाँ (मिलीं: 
 msgid "Input raster must be of type CELL."
 msgstr "इनपुट रैस्टर सेल प्रकार का होना चाहिए।"
 
+#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
