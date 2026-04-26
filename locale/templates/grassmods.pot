@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-18 17:26+0000\n"
+"POT-Creation-Date: 2026-04-26 12:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19213,7 +19213,7 @@ msgid "Writing attributes..."
 msgstr ""
 
 #: ../raster/r.contour/main.c:215 ../raster3d/r3.flow/flowline.c:61
-#: ../vector/v.overlay/area_area.c:434 ../vector/v.overlay/line_area.c:452
+#: ../vector/v.overlay/area_area.c:439 ../vector/v.overlay/line_area.c:452
 #: ../vector/v.to.points/write.c:59
 #, c-format
 msgid "Unable to insert new record: '%s'"
@@ -40102,7 +40102,7 @@ msgstr ""
 msgid "The order of features in input layer <%s> has changed"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1630 ../vector/v.overlay/area_area.c:305
+#: ../vector/v.in.ogr/main.c:1630 ../vector/v.overlay/area_area.c:307
 msgid "Writing centroids..."
 msgstr ""
 
@@ -44218,18 +44218,18 @@ msgid_plural "%d boundaries snapped"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../vector/v.overlay/area_area.c:228
+#: ../vector/v.overlay/area_area.c:230
 #, c-format
 msgid "Querying vector map <%s>..."
 msgstr ""
 
-#: ../vector/v.overlay/area_area.c:292 ../vector/v.overlay/area_area.c:375
-#: ../vector/v.overlay/area_area.c:405 ../vector/v.overlay/line_area.c:391
+#: ../vector/v.overlay/area_area.c:294 ../vector/v.overlay/area_area.c:380
+#: ../vector/v.overlay/area_area.c:410 ../vector/v.overlay/line_area.c:391
 #: ../vector/v.overlay/line_area.c:421
 msgid "Attribute not found"
 msgstr ""
 
-#: ../vector/v.overlay/area_area.c:466
+#: ../vector/v.overlay/area_area.c:471
 msgid "Copying results to final output map..."
 msgstr ""
 
