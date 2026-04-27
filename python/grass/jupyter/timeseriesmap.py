@@ -103,7 +103,7 @@ class TimeSeriesMap(BaseSeriesMap):
     def __init__(
         self,
         width: float = 600,
-        height: float = 600,
+        height: float = 400,
         env: dict | None = None,
         use_region: bool = False,
         saved_region: dict | None = None,
