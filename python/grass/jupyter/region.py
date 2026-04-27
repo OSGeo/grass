@@ -340,7 +340,7 @@ class RegionManagerForTimeSeries:
         self._use_region = use_region
         self._saved_region = saved_region
 
-    def set_region_from_timeseries(self) -> None:
+    def set_region_from_timeseries(self, stds: object | None = None) -> None:
         """Sets computational region for rendering.
 
         This function sets the computation region from the extent of
@@ -359,14 +359,16 @@ class RegionManagerForTimeSeries:
         if self._use_region:
             # use current
             return
+        if not stds:
+            raise RuntimeError(_("No SpaceTimeDataset provided to set region from."))
         # Set grass region from STDS extent
         params = {
-            "n": self._stds.spatial_extent.north,
-            "s": self._stds.spatial_extent.south,
-            "e": self._stds.spatial_extent.east,
-            "w": self._stds.spatial_extent.west,
+            "n": stds.spatial_extent.north,
+            "s": stds.spatial_extent.south,
+            "e": stds.spatial_extent.east,
+            "w": stds.spatial_extent.west,
         }
-        region_dict = self._stds.metadata.__dict__["D"]
+        region_dict = stds.metadata.__dict__["D"]
         for resolution in ("nsres", "ewres"):
             resolution_value = region_dict.get(f"{resolution}_min")
             if resolution_value:
