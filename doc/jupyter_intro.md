@@ -217,7 +217,7 @@ tools.r_sim_water(
     dx="dx",
     dy="dy",
     depth="depth",
-    niterations=30)
+    duration=30)
 
 # Create a time series
 tools.t_create(

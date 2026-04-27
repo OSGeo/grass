@@ -25,7 +25,7 @@
 
 struct Point *P_Read_Raster_Region_masked(SEGMENT *mask_seg,
                                           struct Cell_head *Original,
-                                          struct bound_box output_box UNUSED,
+                                          struct bound_box output_box G_UNUSED,
                                           struct bound_box General,
                                           int *num_points, int dim_vect,
                                           double mean)

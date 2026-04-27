@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-14 18:00+0000\n"
+"POT-Creation-Date: 2026-04-11 17:57+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/pt_BR/>\n"
@@ -1318,8 +1318,10 @@ msgstr ""
 msgid "Re&load maps"
 msgstr ""
 
-msgid "&Copy path to mapset"
-msgstr ""
+#, fuzzy
+#| msgid "&Copy"
+msgid "&Copy path"
+msgstr "&Copiar"
 
 msgid "&Create mapset"
 msgstr ""
@@ -1330,6 +1332,11 @@ msgstr "&Excluir projeto"
 #, fuzzy
 msgid "&Rename project"
 msgstr "Gerenciar projeções"
+
+#, fuzzy
+#| msgid "CVS path"
+msgid "Copy path"
+msgstr "Caminho CVS"
 
 #, fuzzy
 #| msgid "Change mapset"
@@ -1362,10 +1369,17 @@ msgstr ""
 msgid "&Delete projects (locations)"
 msgstr "&Excluir projetos (locations)"
 
+#, fuzzy
+#| msgid "CVS path"
+msgid "Copy paths"
+msgstr "Caminho CVS"
+
 msgid "&Delete mapsets"
 msgstr ""
 
-msgid "&Copy paths to mapsets"
+#, fuzzy
+#| msgid "&Copy paths to mapsets"
+msgid "&Copy paths"
 msgstr "&Copiar caminho aos mapsets"
 
 #, fuzzy, python-brace-format

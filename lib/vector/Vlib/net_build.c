@@ -48,7 +48,7 @@
 int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
                              int nfield, int tfield, int tucfield,
                              const char *afcol, const char *abcol,
-                             const char *ncol, int geo, int algorithm UNUSED)
+                             const char *ncol, int geo, int algorithm G_UNUSED)
 {
     /* TODO very long function, split into smaller ones */
     int i, j, from, to, line, nlines, nnodes, ret, type, cat, skipped, cfound;

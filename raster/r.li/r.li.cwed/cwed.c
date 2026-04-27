@@ -709,7 +709,7 @@ free_exit:
 }
 
 int addCoppia(Coppie *cc, generic_cell ce1, generic_cell ce2, double pe,
-              long tc, long *siz UNUSED)
+              long tc, long *siz G_UNUSED)
 {
     generic_cell cs;
     long it = 0;

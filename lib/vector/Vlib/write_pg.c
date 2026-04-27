@@ -82,7 +82,7 @@ static struct line_pnts *Points;
 
 #define NOPG_UNUSED
 #else
-#define NOPG_UNUSED UNUSED
+#define NOPG_UNUSED G_UNUSED
 #endif
 
 /*!
@@ -228,7 +228,7 @@ off_t V1_rewrite_line_pg(struct Map_info *Map NOPG_UNUSED, off_t offset,
  */
 off_t V2_rewrite_line_pg(struct Map_info *Map NOPG_UNUSED, off_t line, int type,
                          const struct line_pnts *points NOPG_UNUSED,
-                         const struct line_cats *cats UNUSED)
+                         const struct line_cats *cats G_UNUSED)
 {
     G_debug(3, "V2_rewrite_line_pg(): line=%d type=%d", (int)line, type);
 #ifdef HAVE_POSTGRES

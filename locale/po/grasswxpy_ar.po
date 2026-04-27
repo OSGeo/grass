@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-14 18:00+0000\n"
+"POT-Creation-Date: 2026-04-11 17:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -1274,7 +1274,7 @@ msgstr ""
 msgid "Re&load maps"
 msgstr ""
 
-msgid "&Copy path to mapset"
+msgid "&Copy path"
 msgstr ""
 
 msgid "&Create mapset"
@@ -1284,6 +1284,9 @@ msgid "&Delete project"
 msgstr ""
 
 msgid "&Rename project"
+msgstr ""
+
+msgid "Copy path"
 msgstr ""
 
 msgid "Change Label"
@@ -1310,10 +1313,13 @@ msgstr ""
 msgid "&Delete projects (locations)"
 msgstr ""
 
+msgid "Copy paths"
+msgstr ""
+
 msgid "&Delete mapsets"
 msgstr ""
 
-msgid "&Copy paths to mapsets"
+msgid "&Copy paths"
 msgstr ""
 
 #, python-brace-format

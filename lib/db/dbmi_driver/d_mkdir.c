@@ -48,7 +48,7 @@ int db_driver_mkdir(const char *path, int mode, int parentdirs)
 
 /* make a directory if it doesn't exist */
 /* this routine could be made more intelligent as to why it failed */
-static int make_dir(const char *path, int mode UNUSED)
+static int make_dir(const char *path, int mode G_UNUSED)
 {
     if (db_isdir(path) == DB_OK)
         return DB_OK;
