@@ -69,7 +69,7 @@ class BaseSeriesMap:
     Base class for SeriesMap and TimeSeriesMap
     """
 
-    def __init__(self, width=None, height=None, env=None):
+    def __init__(self, width: int = 600, height: int = 400, env=None):
         """Creates an instance of the visualizations class.
 
         :param int width: width of map in pixels
