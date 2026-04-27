@@ -102,20 +102,21 @@ class TimeSeriesMap(BaseSeriesMap):
 
     def __init__(
         self,
-        width: float = 600,
-        height: float = 400,
+        width: int = 600,
+        height: int = 400,
         env: dict | None = None,
         use_region: bool = False,
-        saved_region: dict | None = None,
+        saved_region: str | None = None,
     ) -> None:
         """Create an instance of the TimeSeriesMap visualizations class.
 
         :param int width: width of map in pixels
         :param int height: height of map in pixels
         :param str env: environment
-        :param use_region: if True, use either current or provided saved region,
+        :param bool use_region: if True, use either current or
+                          provided saved region,
                           else derive region from rendered layers
-        :param saved_region: if name of saved_region is provided,
+        :param str saved_region: if name of saved_region is provided,
                             this region is then used for rendering
         """
         super().__init__(width, height, env)
@@ -254,7 +255,7 @@ class TimeSeriesMap(BaseSeriesMap):
             self._labels[i]: self._layers[i] for i in range(len(self._labels))
         }
         # Update Region
-        self._region_manager.set_region_from_timeseries()
+        self._region_manager.set_region_from_timeseries(self._stds)
         self._indices = self._labels
 
     def add_raster_series(
