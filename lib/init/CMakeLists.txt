@@ -13,7 +13,7 @@ endif()
 # START_UP is the variable used in grass.py, grass.sh.in and grass.bat.in
 set(START_UP ${PROJECT_NAME_LOWER})
 if(WIN32)
-  set(START_UP "${START_UP}${GRASS_VERSION_NUMBER}.py")
+  set(START_UP "${START_UP}_main.py")
   set(script_file_name "grass.bat")
   set(script_input_file_name ${script_file_name}.in)
 else()
