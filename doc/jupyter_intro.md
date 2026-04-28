@@ -32,18 +32,22 @@ Now you can import raster or vector data with [r.import](r.import.md)
 and [v.import](v.import.md).
 The following examples will use the [North Carolina dataset](https://grass.osgeo.org/download/data/#NorthCarolinaDataset).
 
+<!-- markdownlint-disable MD046 -->
 !!! grass-tip "Importing packages"
-    <!-- markdownlint-disable-next-line MD046 -->
+
     To import the grass.script and grass.jupyter packages, you need to tell
     Python where the GRASS Python package is unless you are running a notebook
     in a GRASS session.
-    <!-- markdownlint-disable-next-line MD046 -->
+
     ```python
     import sys
+    import subprocess
+
     sys.path.append(
         subprocess.check_output(["grass", "--config", "python_path"], text=True).strip()
     )
     ```
+<!-- markdown-restore -->
 
 !!! grass-tip "Mapsets"
     If not specified otherwise in the `gj.init` function, the session will
@@ -213,7 +217,7 @@ tools.r_sim_water(
     dx="dx",
     dy="dy",
     depth="depth",
-    niterations=30)
+    duration=30)
 
 # Create a time series
 tools.t_create(
@@ -262,7 +266,7 @@ For complete documentation on the `grass.tools` package, see the
 library documentation page.
 
 For complete documentation on the `grass.script` package, see the
-[grass.script](https://grass.osgeo.org/grass-stable/manuals/libpython/script_intro.html)
+[grass.script](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html)
 library documentation page.
 
 ## Tutorials

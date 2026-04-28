@@ -37,6 +37,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <algorithm>
 #include <assert.h>
 
 extern "C" {
@@ -58,7 +59,7 @@ extern "C" {
    If doCurv is set we need to consider the curvature of the
    earth */
 float get_vertical_angle(Viewpoint vp, StatusNode sn, surface_type elev,
-                         int doCurv UNUSED)
+                         int doCurv G_UNUSED)
 {
 
     /*determine the difference in elevation, based on the curvature */

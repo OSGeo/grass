@@ -8,8 +8,8 @@ title: Getting Started
 ## What is GRASS?
 
 [GRASS](https://grass.osgeo.org/) is a geospatial processing engine for
-advance analysis and visualization of geospatial data. GRASS is a free and open source
-software, released under the [GNU GPL](https://www.gnu.org/licenses/gpl.html).
+advance analysis and visualization of geospatial data.
+GRASS is a free and open source software, released under the [GNU GPL](https://www.gnu.org/licenses/gpl.html).
 
 <!-- markdownlint-disable-next-line MD013 -->
 [:material-download: Download GRASS](https://grass.osgeo.org/download/){ .md-button }[Grow GRASS :octicons-heart-fill-24:](https://opencollective.com/grass/contribute){ .md-button .gs-support-button}
@@ -25,9 +25,11 @@ through processing raster, vector, 3D raster, and temporal data.
 
 ## Interfaces
 
-GRASS provides a number of [interfaces](interfaces_overview.md) for interacting with
-the tools and developing computational workflows. The most common interfaces are:
+GRASS provides a number of [interfaces](interfaces_overview.md) for interacting
+with the tools and developing computational workflows.
+The most common interfaces are:
 
+<!-- markdownlint-disable-next-line line-length -->
 - [Command line](interfaces_overview.md#command-line), also know as terminal or shell
 - [Python](interfaces_overview.md#python)
 - [Jupyter Notebooks](interfaces_overview.md#jupyter-notebooks)
@@ -42,7 +44,7 @@ New to geospatial processing or familiar with different geospatial software?
 Discover how GRASS approaches geospatial modeling.
 
 <!-- markdownlint-disable-next-line line-length -->
-[Explore key concepts :material-arrow-right-bold:](grass_database.md){ .md-button }
+[Explore key concepts :material-arrow-right-bold:](grass_projects.md){ .md-button }
 
 ## Development
 

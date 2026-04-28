@@ -17,6 +17,7 @@ Classes:
  - widgets::EmailValidator
  - widgets::TimeISOValidator
  - widgets::MapValidator
+ - widgets::MapNameValidator
  - widgets::NTCValidator
  - widgets::SimpleValidator
  - widgets::GenericValidator
@@ -56,6 +57,7 @@ import string
 import re
 from bisect import bisect
 from datetime import datetime
+from pathlib import Path
 from core.globalvar import wxPythonPhoenix
 
 import wx
@@ -65,10 +67,8 @@ from wx.lib.stattext import GenStaticText
 from wx.lib.wordwrap import wordwrap
 
 if wxPythonPhoenix:
-    import wx.adv
     from wx.adv import OwnerDrawnComboBox
 else:
-    import wx.combo
     from wx.combo import OwnerDrawnComboBox
 try:
     import wx.lib.agw.flatnotebook as FN
@@ -891,6 +891,31 @@ class MapValidator(GenericValidator):
         GenericValidator.__init__(self, grass.legal_name, _mapNameValidationFailed)
 
 
+class MapNameValidator(BaseValidator):
+    """Validator for map name input
+
+    See G_legal_filename()
+    """
+
+    def __init__(self):
+        BaseValidator.__init__(self)
+
+    def _validate(self, win):
+        """Validate input"""
+        text = win.GetValue()
+        if text:
+            if not grass.legal_name(text):
+                self._notvalid()
+                return False
+
+        self._valid()
+        return True
+
+    def Clone(self):
+        """Clone validator"""
+        return MapNameValidator()
+
+
 class GenericMultiValidator(Validator):
     """This validator checks conditions and calls callbacks
     in case the condition is not fulfilled.
@@ -1556,7 +1581,7 @@ class ManageSettingsWidget(wx.Panel):
         """
 
         data = {}
-        if not os.path.exists(self.settingsFile):
+        if not Path(self.settingsFile).exists():
             return data
 
         try:
@@ -1713,7 +1738,7 @@ class PictureComboBox(OwnerDrawnComboBox):
             return self.bitmaps[name]
 
         path = self._getPath(name)
-        if os.path.exists(path):
+        if Path(path).exists():
             bitmap = wx.Bitmap(path)
             self.bitmaps[name] = bitmap
             return bitmap

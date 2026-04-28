@@ -43,7 +43,7 @@ def get_possible_database_path():
 
     # find possible database path
     for candidate in candidates:
-        if os.path.exists(candidate):
+        if Path(candidate).exists():
             for subdir in next(os.walk(candidate))[1]:
                 if "grassdata" in subdir.lower():
                     return os.path.join(candidate, subdir)
@@ -67,7 +67,7 @@ def create_database_directory():
 
     # Create "grassdata" directory
     try:
-        os.mkdir(path)
+        Path(path).mkdir()
         return path
     except OSError:
         pass
@@ -83,10 +83,10 @@ def create_database_directory():
     # another GRASS instance will find the data created by the first
     # one which is desired in the "try out GRASS" use case we are
     # aiming towards."
-    if os.path.exists(path):
+    if Path(path).exists():
         return path
     try:
-        os.mkdir(path)
+        Path(path).mkdir()
         return path
     except OSError:
         pass
@@ -103,7 +103,7 @@ def _get_startup_location_in_distribution():
     startup_location = os.path.join(gisbase, "demolocation")
 
     # Find out if startup location exists
-    if os.path.exists(startup_location):
+    if Path(startup_location).exists():
         return startup_location
     return None
 
@@ -292,7 +292,7 @@ def lock_mapset(
         process_id = os.getpid()
     if not env:
         env = os.environ
-    if not os.path.exists(mapset_path):
+    if not Path(mapset_path).exists():
         raise MapsetLockingException(_("Path '{}' doesn't exist").format(mapset_path))
     if not os.access(mapset_path, os.W_OK):
         error = _("Path '{}' not accessible.").format(mapset_path)

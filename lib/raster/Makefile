@@ -7,13 +7,8 @@ include $(MODULE_TOPDIR)/include/Make/Lib.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
 LIBES = $(OPENMP_LIBPATH) $(OPENMP_LIB)
-EXTRA_INC = $(OPENMP_INCPATH)
+EXTRA_INC = $(OPENMP_INCPATH) $(PROJINC) $(GDALCFLAGS)
 EXTRA_CFLAGS = $(OPENMP_CFLAGS)
-
-ifneq ($(GDAL_LINK),)
-EXTRA_CFLAGS += -DGDAL_LINK=1
-EXTRA_INC += $(PROJINC) $(GDALCFLAGS)
-endif
 
 default: lib
 

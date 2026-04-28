@@ -350,7 +350,7 @@ def layerListToCmdsMatrix(layerList):
         else:
             cmdsForComposition.append([layer.cmd] * count)
 
-    return list(zip(*cmdsForComposition))
+    return list(zip(*cmdsForComposition, strict=False))
 
 
 def sampleCmdMatrixAndCreateNames(cmdMatrix, sampledSeries, regions):

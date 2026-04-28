@@ -908,7 +908,7 @@ void(tavl_assert_insert)(struct tavl_table *table, void *item)
 
 /* Asserts that |tavl_delete()| really removes |item| from |table|,
    and returns the removed item. */
-void *(tavl_assert_delete)(struct tavl_table *table, void *item)
+void *(tavl_assert_delete)(struct tavl_table * table, void *item)
 {
     void *p = tavl_delete(table, item);
 

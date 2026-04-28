@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 #include <grass/glocale.h>
 
 #include "global.h"
@@ -59,8 +59,8 @@ int main(int argc, char *argv[])
     int do_sort;
 
     enum OutputFormat format;
-    JSON_Array *root_array;
-    JSON_Value *root_value;
+    G_JSON_Array *root_array;
+    G_JSON_Value *root_value;
 
     /* printf format */
     char fmt[20];
@@ -258,8 +258,8 @@ int main(int argc, char *argv[])
 
     if (strcmp(option.format->answer, "json") == 0) {
         format = JSON;
-        root_value = json_value_init_array();
-        root_array = json_array(root_value);
+        root_value = G_json_value_init_array();
+        root_array = G_json_array(root_value);
     }
     else if (strcmp(option.format->answer, "csv") == 0) {
         format = CSV;
@@ -422,13 +422,13 @@ int main(int argc, char *argv[])
 
     if (format == JSON) {
         char *serialized_string = NULL;
-        serialized_string = json_serialize_to_string_pretty(root_value);
+        serialized_string = G_json_serialize_to_string_pretty(root_value);
         if (serialized_string == NULL) {
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         }
         puts(serialized_string);
-        json_free_serialized_string(serialized_string);
-        json_value_free(root_value);
+        G_json_free_serialized_string(serialized_string);
+        G_json_value_free(root_value);
     }
 
     exit(EXIT_SUCCESS);

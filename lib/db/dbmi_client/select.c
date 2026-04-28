@@ -122,7 +122,6 @@ int db_select_int(dbDriver *driver, const char *tab, const char *col,
 
     /* allocate */
     alloc = 1000;
-    val = (int *)G_malloc(alloc * sizeof(int));
 
     if (where == NULL || strlen(where) == 0)
         G_asprintf(&buf, "SELECT %s FROM %s", col, tab);
@@ -147,11 +146,14 @@ int db_select_int(dbDriver *driver, const char *tab, const char *col,
     type = db_get_column_sqltype(column);
     type = db_sqltype_to_Ctype(type);
 
+    val = (int *)G_malloc(alloc * sizeof(int));
     /* fetch the data */
     count = 0;
     while (1) {
-        if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
+        if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK) {
+            G_free(val);
             return (-1);
+        }
 
         if (!more)
             break;
@@ -173,6 +175,7 @@ int db_select_int(dbDriver *driver, const char *tab, const char *col,
             val[count] = (int)db_get_value_double(value);
             break;
         default:
+            G_free(val);
             return (-1);
         }
         count++;

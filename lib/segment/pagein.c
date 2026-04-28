@@ -15,7 +15,10 @@
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>
+
 #include <grass/gis.h>
+#include <grass/glocale.h>
+
 #include "local_proto.h"
 
 /**
@@ -87,7 +90,12 @@ int seg_pagein(SEGMENT *SEG, int n)
     /* read in the segment */
     SEG->scb[cur].n = n;
     SEG->scb[cur].dirty = 0;
-    SEG->seek(SEG, SEG->scb[cur].n, 0);
+    if (SEG->seek(SEG, SEG->scb[cur].n, 0) == -1) {
+        int err = errno;
+        G_warning(_("File read/write operation failed: %s (%d)"), strerror(err),
+                  err);
+        return -1;
+    }
 
     read_result = read(SEG->fd, SEG->scb[cur].buf, SEG->size);
 

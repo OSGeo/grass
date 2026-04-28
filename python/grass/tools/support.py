@@ -40,6 +40,8 @@ except ImportError:
     # ga is present as well because that's the only import-time failure we expect.
     ga = None
 
+from .importexport import ImporterExporter
+
 
 class ParameterConverter:
     """Converts parameter values to strings and facilitates flow of the data."""
@@ -51,6 +53,7 @@ class ParameterConverter:
         self.stdin = None
         self.result = None
         self.temporary_rasters = []
+        self.import_export = None
 
     def process_parameters(self, kwargs):
         """Converts high level parameter values to strings.
@@ -81,6 +84,24 @@ class ParameterConverter:
             elif isinstance(value, StringIO):
                 kwargs[key] = "-"
                 self.stdin = value.getvalue()
+            elif self.import_export is None and ImporterExporter.is_recognized_file(
+                value
+            ):
+                self.import_export = True
+        if self.import_export is None:
+            self.import_export = False
+
+    def process_parameter_list(self, command):
+        """Converts or at least processes parameters passed as list of strings"""
+        for item in command:
+            split_ = item.split("=", maxsplit=1)
+            value = split_[1] if len(split_) > 1 else item
+            if self.import_export is None and ImporterExporter.is_recognized_file(
+                value
+            ):
+                self.import_export = True
+        if self.import_export is None:
+            self.import_export = False
 
     def translate_objects_to_data(self, kwargs, env):
         """Convert NumPy arrays to GRASS data"""

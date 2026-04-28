@@ -57,7 +57,7 @@ def get_tempfile_name(suffix, create=False):
 
     if not create:
         # remove empty file to have a clean state later
-        os.remove(name)
+        Path(name).unlink()
     return name
 
 
@@ -276,7 +276,7 @@ class Layer:
 
     def IsRendered(self) -> bool:
         """!Check if layer was rendered (if the image file exists)"""
-        return bool(os.path.exists(self.mapfile))
+        return bool(Path(self.mapfile).exists())
 
     def SetType(self, ltype):
         """Set layer type"""
@@ -354,7 +354,7 @@ class MapLayer(Layer):
     def __init__(self, *args, **kwargs):
         """Represents map layer in the map canvas"""
         Layer.__init__(self, *args, **kwargs)
-        if self.type in {"vector", "thememap"}:
+        if self.type in {"vector", "thememap", "themechart"}:
             self._legrow = get_tempfile_name(suffix=".legrow", create=True)
         else:
             self._legrow = ""
@@ -425,11 +425,11 @@ class RenderLayerMgr(wx.EvtHandler):
         env_cmd = env.copy()
         env_cmd.update(self._render_env)
         env_cmd["GRASS_RENDER_FILE"] = self.layer.mapfile
-        if self.layer.GetType() in {"vector", "thememap"}:
+        if self.layer.GetType() in {"vector", "thememap", "themechart"}:
             if not self.layer._legrow:
                 self.layer._legrow = grass.tempfile(create=True)
-            if os.path.isfile(self.layer._legrow):
-                os.remove(self.layer._legrow)
+            if (p := Path(self.layer._legrow)).is_file():
+                p.unlink()
             env_cmd["GRASS_LEGEND_FILE"] = text_to_string(self.layer._legrow)
 
         cmd_render = copy.deepcopy(cmd)
@@ -531,8 +531,8 @@ class RenderMapMgr(wx.EvtHandler):
         self.layers = []
 
         # re-render from scratch
-        if os.path.exists(self.Map.mapfile):
-            os.remove(self.Map.mapfile)
+        if (p := Path(self.Map.mapfile)).is_file():
+            p.unlink()
 
     def _checkRenderedSizes(self, env, layers):
         """Check if rendering size in current env differs from size of
@@ -663,7 +663,7 @@ class RenderMapMgr(wx.EvtHandler):
             if layer.GetType() == "overlay":
                 continue
 
-            if os.path.isfile(layer.mapfile):
+            if Path(layer.mapfile).is_file():
                 maps.append(layer.mapfile)
                 masks.append(layer.maskfile)
                 opacities.append(str(layer.opacity))
@@ -704,11 +704,11 @@ class RenderMapMgr(wx.EvtHandler):
         new_legend = []
         with open(self.Map.legfile, "w") as outfile:
             for layer in reversed(self.layers):
-                if layer.GetType() not in {"vector", "thememap"}:
+                if layer.GetType() not in {"vector", "thememap", "themechart"}:
                     continue
 
-                if os.path.isfile(layer._legrow) and not layer.hidden:
-                    line = Path(layer._legrow).read_text()
+                if (p := Path(layer._legrow)).is_file() and not layer.hidden:
+                    line = p.read_text()
                     outfile.write(line)
                     new_legend.append(line)
 
@@ -1414,11 +1414,10 @@ class Map:
             # it as it is, although it does not really fit with the
             # new system (but probably works well enough)
             for f in glob.glob(basefile):
-                os.remove(f)
+                Path(f).unlink()
 
-        if layer.GetType() in {"vector", "thememap"}:
-            if os.path.isfile(layer._legrow):
-                os.remove(layer._legrow)
+        if layer.GetType() in {"vector", "thememap", "themechart"}:
+            Path(layer._legrow).unlink(missing_ok=True)
 
         list_.remove(layer)
 
@@ -1534,8 +1533,8 @@ class Map:
             for layer in self.layers:
                 if layer.name == name:
                     retlayer = layer
-                    os.remove(layer.mapfile)
-                    os.remove(layer.maskfile)
+                    Path(layer.mapfile).unlink()
+                    Path(layer.maskfile).unlink()
                     self.layers.remove(layer)
                     return retlayer
         # del by id

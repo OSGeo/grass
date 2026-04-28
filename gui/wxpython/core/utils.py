@@ -22,13 +22,14 @@ import shlex
 import re
 import inspect
 import operator
+from pathlib import Path
 from string import digits
 from typing import TYPE_CHECKING
 
 
 from grass.script import core as grass
 from grass.script import task as gtask
-from grass.app.runtime import get_grass_config_dir
+from grass.app.runtime import get_grass_config_dir_for_version
 
 from core.gcmd import RunCommand
 from core.debug import Debug
@@ -610,8 +611,9 @@ def GetListOfMapsets(dbase, location, selectable=False):
             listOfMapsets += line.split(" ")
     else:
         for mapset in glob.glob(os.path.join(dbase, location, "*")):
-            if os.path.isdir(mapset) and os.path.isfile(
-                os.path.join(dbase, location, mapset, "WIND")
+            if (
+                Path(mapset).is_dir()
+                and Path(dbase, location, mapset, "WIND").is_file()
             ):
                 listOfMapsets.append(os.path.basename(mapset))
 
@@ -798,7 +800,9 @@ vectorFormatExtension = {
 def GetSettingsPath():
     """Get full path to the settings directory"""
     version_major, version_minor, _ = grass.version()["version"].split(".")
-    return get_grass_config_dir(version_major, version_minor, os.environ)
+    return get_grass_config_dir_for_version(
+        version_major, version_minor, env=os.environ
+    )
 
 
 def StoreEnvVariable(key, value=None, envFile=None):
@@ -824,7 +828,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
     # read env file
     environ = {}
     lineSkipped = []
-    if os.path.exists(envFile):
+    if Path(envFile).exists():
         try:
             with open(envFile) as fd:
                 for line in fd:

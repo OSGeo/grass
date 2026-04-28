@@ -176,12 +176,12 @@ class MapsetWatchdog:
         )
         for element, directory in self._elements_dirs:
             path = os.path.join(mapset_path, directory)
-            if not os.path.exists(path):
+            if not Path(path).exists():
                 try:
-                    os.mkdir(path)
+                    Path(path).mkdir()
                 except OSError:
                     pass
-            if os.path.exists(path):
+            if Path(path).exists():
                 self._observer.schedule(
                     MapWatch(self._patterns, element, self._evt_handler),
                     path=path,

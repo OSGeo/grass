@@ -11,7 +11,7 @@ static int reclass_text(char *text, struct Reclass *reclass, int next);
 
 char *maskinfo(void)
 {
-    struct Reclass reclass;
+    struct Reclass reclass = {0};
     char *results;
     char text[2 * GNAME_MAX + GMAPSET_MAX];
     int next;
@@ -24,6 +24,7 @@ char *maskinfo(void)
         return G_store("none");
     if (Rast_get_reclass(mask_name, mask_mapset, &reclass) <= 0) {
         snprintf(text, sizeof(text), "%s in %s", mask_name, mask_mapset);
+        Rast_free_reclass(&reclass);
         return append(results, text);
     }
 

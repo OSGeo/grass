@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include <grass/glocale.h>
 
@@ -57,7 +58,41 @@ static expr_list *parse_file(const char *filename)
     return res;
 }
 
-/****************************************************************************/
+static bool has_rand_expr(const expression *e)
+{
+    if (!e)
+        return 0;
+
+    switch (e->type) {
+    case expr_type_function:
+        if (strcmp(e->data.func.name, "rand") == 0)
+            return 1;
+        // args is 1-indexed (likely from yacc parser conventions)
+        for (int i = 1; i <= e->data.func.argc; i++) {
+            if (has_rand_expr(e->data.func.args[i]))
+                return 1;
+        }
+        return 0;
+
+    case expr_type_binding:
+        return has_rand_expr(e->data.bind.val);
+
+    case expr_type_variable:
+        return has_rand_expr(e->data.var.bind);
+
+    default:
+        return 0;
+    }
+}
+
+static bool expr_list_has_rand(const expr_list *list)
+{
+    for (; list; list = list->next) {
+        if (has_rand_expr(list->exp))
+            return 1;
+    }
+    return 0;
+}
 
 int main(int argc, char **argv)
 {
@@ -112,8 +147,11 @@ int main(int argc, char **argv)
 
     random = G_define_flag();
     random->key = 's';
+    random->label =
+        _("Generate random seed (result is non-deterministic) [deprecated]");
     random->description =
-        _("Generate random seed (result is non-deterministic)");
+        _("This flag is deprecated and will be removed in a future release. "
+          "Seeding is automatic or use parameter seed.");
 
     describe = G_define_flag();
     describe->key = 'l';
@@ -153,17 +191,24 @@ int main(int argc, char **argv)
     if (!result)
         G_fatal_error(_("parse error"));
 
+    bool has_rand = expr_list_has_rand(result);
     if (seed->answer) {
         seed_value = atol(seed->answer);
         G_srand48(seed_value);
         seeded = 1;
         G_debug(3, "Read random seed from seed=: %ld", seed_value);
     }
-
-    if (random->answer) {
-        seed_value = G_srand48_auto();
-        seeded = 1;
-        G_debug(3, "Generated random seed (-s): %ld", seed_value);
+    else {
+        if (has_rand) {
+            seed_value = G_srand48_auto();
+            seeded = 1;
+            G_debug(3, "Automatically generated random seed: %ld", seed_value);
+        }
+        if (random->answer) {
+            G_verbose_message(_("Flag 's' is deprecated and will be removed in "
+                                "a future release. "
+                                "Seeding is automatic or use parameter seed."));
+        }
     }
 
     /* Set the global variable of the region setup approach */
@@ -200,11 +245,11 @@ int main(int argc, char **argv)
         nprocs->answer = "1";
         G_verbose_message(_("r3.mapcalc does not support parallel execution."));
     }
-    else if ((seeded) && (threads != 1)) {
+    else if ((threads != 1) && (has_rand)) {
         threads = 1;
         nprocs->answer = "1";
         G_verbose_message(
-            _("Parallel execution is not supported for random seed."));
+            _("Parallel execution is not supported with rand() function"));
     }
 
     /* Ensure the proper number of threads is assigned */

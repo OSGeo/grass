@@ -123,8 +123,8 @@ def main():
 
     # We need to skip the first line, since r.covar prints the number of values
     lines = s.splitlines()
-    for i, row in zip(bands, lines[1:]):
-        for j, cell in zip(bands, row.split(" ")):
+    for i, row in zip(bands, lines[1:], strict=False):
+        for j, cell in zip(bands, row.split(" "), strict=False):
             correlation[i, j] = float(cell)
 
     # Calculate all combinations

@@ -47,6 +47,7 @@ import sys
 import shutil
 import tarfile
 import atexit
+from pathlib import Path
 
 from grass.script.utils import diff_files, try_rmdir
 from grass.script import core as grass
@@ -67,7 +68,7 @@ def main():
     grass.debug("tmp_dir = %s" % tmp_dir)
 
     # check if the input file exists
-    if not os.path.exists(infile):
+    if not Path(infile).exists():
         grass.fatal(_("File <%s> not found") % infile)
 
     # copy the files to tmp dir
@@ -130,9 +131,9 @@ def main():
         grass.warning(_("Extracting may be unsafe; consider updating Python"))
         tar.extractall()
     tar.close()
-    if os.path.exists(os.path.join(data_name, "coor")):
+    if Path(data_name, "coor").exists():
         pass
-    elif os.path.exists(os.path.join(data_name, "cell")):
+    elif Path(data_name, "cell").exists():
         grass.fatal(
             _("This GRASS pack file contains raster data. Use r.unpack to unpack <%s>")
             % map_name
@@ -145,8 +146,8 @@ def main():
     loc_proj_units = os.path.join(mset_dir, "..", "PERMANENT", "PROJ_UNITS")
 
     skip_projection_check = False
-    if not os.path.exists(os.path.join(tmp_dir, "PROJ_INFO")):
-        if os.path.exists(loc_proj):
+    if not Path(tmp_dir, "PROJ_INFO").exists():
+        if Path(loc_proj).exists():
             grass.fatal(
                 _(
                     "PROJ_INFO file is missing, unpack vector map in XY (unprojected) "
@@ -206,7 +207,7 @@ def main():
     # copy file
     shutil.copytree(data_name, new_dir)
     # exist fromdb
-    if os.path.exists(fromdb):
+    if Path(fromdb).exists():
         # the db connection in the output mapset
         dbconn = grassdb.db_connection(force=True)
         todb = dbconn["database"]
@@ -216,14 +217,10 @@ def main():
         dbnlist = dbln.readlines()
         dbln.close()
         # check if dbf or sqlite directory exists
-        if dbconn["driver"] == "dbf" and not os.path.exists(
-            os.path.join(mset_dir, "dbf")
-        ):
-            os.mkdir(os.path.join(mset_dir, "dbf"))
-        elif dbconn["driver"] == "sqlite" and not os.path.exists(
-            os.path.join(mset_dir, "sqlite")
-        ):
-            os.mkdir(os.path.join(mset_dir, "sqlite"))
+        if dbconn["driver"] == "dbf" and not Path(mset_dir, "dbf").exists():
+            Path(mset_dir, "dbf").mkdir()
+        elif dbconn["driver"] == "sqlite" and not Path(mset_dir, "sqlite").exists():
+            Path(mset_dir, "sqlite").mkdir()
         # for each old connection
         for t in dbnlist:
             # it split the line of each connection, to found layer number and key

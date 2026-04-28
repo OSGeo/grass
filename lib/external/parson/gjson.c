@@ -16,158 +16,211 @@
  *****************************************************************************/
 
 #include "gjson.h"
+#include "parson.h"
+
+typedef struct json_object_t G_json_object_t;
+typedef struct json_array_t G_json_array_t;
+typedef struct json_value_t G_json_value_t;
 
 /* *************************************************************** */
 /* ***** WRAPPER FOR PARSON FUNCTIONS USED IN GRASS ************** */
 /* *************************************************************** */
 
-JSON_Value *G_json_value_init_object(void)
+G_JSON_Value *G_json_value_init_object(void)
 {
-    return json_value_init_object();
+    return (G_JSON_Value *)json_value_init_object();
 }
 
-JSON_Value *G_json_value_init_array(void)
+G_JSON_Value *G_json_value_init_array(void)
 {
-    return json_value_init_array();
+    return (G_JSON_Value *)json_value_init_array();
 }
 
-JSON_Object *G_json_value_get_object(const JSON_Value *value)
+G_JSON_Value_Type G_json_value_get_type(const G_JSON_Value *value)
 {
-    return json_value_get_object(value);
+    return json_value_get_type((const JSON_Value *)value);
 }
 
-JSON_Object *G_json_object(const JSON_Value *value)
+G_JSON_Object *G_json_value_get_object(const G_JSON_Value *value)
 {
-    return json_object(value);
+    return (G_JSON_Object *)json_value_get_object((const JSON_Value *)value);
 }
-JSON_Object *G_json_object_get_object(const JSON_Object *object,
+
+G_JSON_Object *G_json_object(const G_JSON_Value *value)
+{
+    return (G_JSON_Object *)json_object((const JSON_Value *)value);
+}
+
+G_JSON_Object *G_json_object_get_object(const G_JSON_Object *object,
+                                        const char *name)
+{
+    return (G_JSON_Object *)json_object_get_object((const JSON_Object *)object,
+                                                   name);
+}
+
+G_JSON_Array *G_json_object_get_array(const G_JSON_Object *object,
                                       const char *name)
 {
-    return json_object_get_object(object, name);
+    return (G_JSON_Array *)json_object_get_array((const JSON_Object *)object,
+                                                 name);
 }
-JSON_Array *G_json_object_get_array(const JSON_Object *object, const char *name)
+
+G_JSON_Value *G_json_object_get_value(const G_JSON_Object *object,
+                                      const char *name)
 {
-    return json_object_get_array(object, name);
+    return (G_JSON_Value *)json_object_get_value((const JSON_Object *)object,
+                                                 name);
 }
-JSON_Value *G_json_object_get_value(const JSON_Object *object, const char *name)
-{
-    return json_object_get_value(object, name);
-}
-const char *G_json_object_get_string(const JSON_Object *object,
+
+const char *G_json_object_get_string(const G_JSON_Object *object,
                                      const char *name)
 {
-    return json_object_get_string(object, name);
-}
-double G_json_object_get_number(const JSON_Object *object, const char *name)
-{
-    return json_object_get_number(object, name);
-}
-int G_json_object_get_boolean(const JSON_Object *object, const char *name)
-{
-    return json_object_get_boolean(object, name);
-}
-JSON_Value *G_json_object_get_wrapping_value(const JSON_Object *object)
-{
-    return json_object_get_wrapping_value(object);
-}
-JSON_Status G_json_object_set_value(JSON_Object *object, const char *name,
-                                    JSON_Value *value)
-{
-    return json_object_set_value(object, name, value);
-}
-JSON_Status G_json_object_set_string(JSON_Object *object, const char *name,
-                                     const char *string)
-{
-    return json_object_set_string(object, name, string);
-}
-JSON_Status G_json_object_set_number(JSON_Object *object, const char *name,
-                                     double number)
-{
-    return json_object_set_number(object, name, number);
-}
-JSON_Status G_json_object_set_boolean(JSON_Object *object, const char *name,
-                                      int boolean)
-{
-    return json_object_set_boolean(object, name, boolean);
-}
-JSON_Status G_json_object_set_null(JSON_Object *object, const char *name)
-{
-    return json_object_set_null(object, name);
-}
-JSON_Status G_json_object_dotset_string(JSON_Object *object, const char *name,
-                                        const char *string)
-{
-    return json_object_dotset_string(object, name, string);
-}
-const char *G_json_object_dotget_string(JSON_Object *object, const char *name)
-{
-    return json_object_dotget_string(object, name);
-}
-JSON_Status G_json_object_dotset_number(JSON_Object *object, const char *name,
-                                        double number)
-{
-    return json_object_dotset_number(object, name, number);
-}
-double G_json_object_dotget_number(JSON_Object *object, const char *name)
-{
-    return json_object_dotget_number(object, name);
-}
-JSON_Array *G_json_array(const JSON_Value *value)
-{
-    return json_array(value);
-}
-JSON_Value *G_json_array_get_value(const JSON_Array *array, size_t index)
-{
-    return json_array_get_value(array, index);
-}
-const char *G_json_array_get_string(const JSON_Array *array, size_t index)
-{
-    return json_array_get_string(array, index);
-}
-double G_json_array_get_number(const JSON_Array *array, size_t index)
-{
-    return json_array_get_number(array, index);
-}
-int G_json_array_get_boolean(const JSON_Array *array, size_t index)
-{
-    return json_array_get_boolean(array, index);
+    return json_object_get_string((const JSON_Object *)object, name);
 }
 
-JSON_Status G_json_array_append_value(JSON_Array *array, JSON_Value *value)
+double G_json_object_get_number(const G_JSON_Object *object, const char *name)
 {
-    return json_array_append_value(array, value);
+    return json_object_get_number((const JSON_Object *)object, name);
 }
 
-JSON_Status G_json_array_append_string(JSON_Array *array, const char *string)
+int G_json_object_get_boolean(const G_JSON_Object *object, const char *name)
 {
-    return json_array_append_string(array, string);
+    return json_object_get_boolean((const JSON_Object *)object, name);
 }
 
-JSON_Status G_json_array_append_number(JSON_Array *array, double number)
+G_JSON_Value *G_json_object_get_wrapping_value(const G_JSON_Object *object)
 {
-    return json_array_append_number(array, number);
+    return (G_JSON_Value *)json_object_get_wrapping_value(
+        (const JSON_Object *)object);
+}
+G_JSON_Status G_json_object_set_value(G_JSON_Object *object, const char *name,
+                                      G_JSON_Value *value)
+{
+    return json_object_set_value((JSON_Object *)object, name,
+                                 (JSON_Value *)value);
+}
+G_JSON_Status G_json_object_set_string(G_JSON_Object *object, const char *name,
+                                       const char *string)
+{
+    return json_object_set_string((JSON_Object *)object, name, string);
+}
+G_JSON_Status G_json_object_set_number(G_JSON_Object *object, const char *name,
+                                       double number)
+{
+    return json_object_set_number((JSON_Object *)object, name, number);
+}
+G_JSON_Status G_json_object_set_boolean(G_JSON_Object *object, const char *name,
+                                        int boolean)
+{
+    return json_object_set_boolean((JSON_Object *)object, name, boolean);
 }
 
-JSON_Status G_json_array_append_boolean(JSON_Array *array, int boolean)
+G_JSON_Status G_json_object_set_null(G_JSON_Object *object, const char *name)
 {
-    return json_array_append_boolean(array, boolean);
+    return json_object_set_null((JSON_Object *)object, name);
 }
 
-JSON_Status G_json_array_append_null(JSON_Array *array)
+G_JSON_Status G_json_object_dotset_string(G_JSON_Object *object,
+                                          const char *name, const char *string)
 {
-    return json_array_append_null(array);
+    return json_object_dotset_string((JSON_Object *)object, name, string);
 }
 
-char *G_json_serialize_to_string_pretty(const JSON_Value *value)
+const char *G_json_object_dotget_string(G_JSON_Object *object, const char *name)
 {
-    return json_serialize_to_string_pretty(value);
+    return json_object_dotget_string((JSON_Object *)object, name);
+}
+
+G_JSON_Status G_json_object_dotset_number(G_JSON_Object *object,
+                                          const char *name, double number)
+{
+    return json_object_dotset_number((JSON_Object *)object, name, number);
+}
+
+double G_json_object_dotget_number(G_JSON_Object *object, const char *name)
+{
+    return json_object_dotget_number((JSON_Object *)object, name);
+}
+
+G_JSON_Status G_json_object_dotset_null(G_JSON_Object *object, const char *name)
+{
+    return json_object_dotset_null((JSON_Object *)object, name);
+}
+
+G_JSON_Array *G_json_array(const G_JSON_Value *value)
+{
+    return (G_JSON_Array *)json_array((const JSON_Value *)value);
+}
+
+G_JSON_Value *G_json_array_get_value(const G_JSON_Array *array, size_t index)
+{
+    return (G_JSON_Value *)json_array_get_value((const JSON_Array *)array,
+                                                index);
+}
+
+const char *G_json_array_get_string(const G_JSON_Array *array, size_t index)
+{
+    return json_array_get_string((const JSON_Array *)array, index);
+}
+
+double G_json_array_get_number(const G_JSON_Array *array, size_t index)
+{
+    return json_array_get_number((const JSON_Array *)array, index);
+}
+
+int G_json_array_get_boolean(const G_JSON_Array *array, size_t index)
+{
+    return json_array_get_boolean((const JSON_Array *)array, index);
+}
+
+G_JSON_Status G_json_array_append_value(G_JSON_Array *array,
+                                        G_JSON_Value *value)
+{
+    return json_array_append_value((JSON_Array *)array, (JSON_Value *)value);
+}
+
+G_JSON_Status G_json_array_append_string(G_JSON_Array *array,
+                                         const char *string)
+{
+    return json_array_append_string((JSON_Array *)array, string);
+}
+
+G_JSON_Status G_json_array_append_number(G_JSON_Array *array, double number)
+{
+    return json_array_append_number((JSON_Array *)array, number);
+}
+
+G_JSON_Status G_json_array_append_boolean(G_JSON_Array *array, int boolean)
+{
+    return json_array_append_boolean((JSON_Array *)array, boolean);
+}
+
+G_JSON_Status G_json_array_append_null(G_JSON_Array *array)
+{
+    return json_array_append_null((JSON_Array *)array);
+}
+
+void G_json_set_float_serialization_format(const char *format)
+{
+    json_set_float_serialization_format(format);
+}
+
+char *G_json_serialize_to_string_pretty(const G_JSON_Value *value)
+{
+    return json_serialize_to_string_pretty((const JSON_Value *)value);
+}
+
+char *G_json_serialize_to_string(const G_JSON_Value *value)
+{
+    return json_serialize_to_string((const JSON_Value *)value);
 }
 
 void G_json_free_serialized_string(char *string)
 {
     json_free_serialized_string(string);
 }
-void G_json_value_free(JSON_Value *value)
+
+void G_json_value_free(G_JSON_Value *value)
 {
-    json_value_free(value);
+    json_value_free((JSON_Value *)value);
 }

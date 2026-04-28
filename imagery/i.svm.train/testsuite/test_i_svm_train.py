@@ -9,10 +9,10 @@ Licence:   This program is free software under the GNU General Public
            for details.
 """
 
-import os
 import unittest
 import ctypes
 import shutil
+from pathlib import Path
 
 from grass.script import core as grass
 from grass.gunittest.case import TestCase
@@ -210,19 +210,19 @@ class IOValidationTest(TestCase):
         cpath = ctypes.create_string_buffer(GPATH_MAX)
         G_file_name_misc(cpath, sigdir, "version", sigfile, self.mapset_name)
         misc_file = utils.decode(cpath.value)
-        self.assertTrue(os.path.isfile(misc_file))
+        self.assertTrue(Path(misc_file).is_file())
         G_file_name_misc(cpath, sigdir, "sig", sigfile, self.mapset_name)
         misc_file = utils.decode(cpath.value)
-        self.assertTrue(os.path.isfile(misc_file))
+        self.assertTrue(Path(misc_file).is_file())
         G_file_name_misc(cpath, sigdir, "cats", sigfile, self.mapset_name)
         misc_file = utils.decode(cpath.value)
-        self.assertTrue(os.path.isfile(misc_file))
+        self.assertTrue(Path(misc_file).is_file())
         G_file_name_misc(cpath, sigdir, "colr", sigfile, self.mapset_name)
         misc_file = utils.decode(cpath.value)
-        self.assertTrue(os.path.isfile(misc_file))
+        self.assertTrue(Path(misc_file).is_file())
         G_file_name_misc(cpath, sigdir, "history", sigfile, self.mapset_name)
         misc_file = utils.decode(cpath.value)
-        self.assertTrue(os.path.isfile(misc_file))
+        self.assertTrue(Path(misc_file).is_file())
 
     @unittest.skipIf(shutil.which("i.svm.train") is None, "i.svm.train not found.")
     def test_dont_fail_if_misc_files_missing(self):
@@ -243,19 +243,19 @@ class IOValidationTest(TestCase):
         cpath = ctypes.create_string_buffer(GPATH_MAX)
         G_file_name_misc(cpath, sigdir, "version", sigfile, self.mapset_name)
         misc_file = utils.decode(cpath.value)
-        self.assertTrue(os.path.isfile(misc_file))
+        self.assertTrue(Path(misc_file).is_file())
         G_file_name_misc(cpath, sigdir, "sig", sigfile, self.mapset_name)
         misc_file = utils.decode(cpath.value)
-        self.assertTrue(os.path.isfile(misc_file))
+        self.assertTrue(Path(misc_file).is_file())
         G_file_name_misc(cpath, sigdir, "cats", sigfile, self.mapset_name)
         misc_file = utils.decode(cpath.value)
-        self.assertTrue(os.path.isfile(misc_file))
+        self.assertTrue(Path(misc_file).is_file())
         G_file_name_misc(cpath, sigdir, "colr", sigfile, self.mapset_name)
         misc_file = utils.decode(cpath.value)
-        self.assertFalse(os.path.isfile(misc_file))
+        self.assertFalse(Path(misc_file).is_file())
         G_file_name_misc(cpath, sigdir, "history", sigfile, self.mapset_name)
         misc_file = utils.decode(cpath.value)
-        self.assertTrue(os.path.isfile(misc_file))
+        self.assertTrue(Path(misc_file).is_file())
 
     @unittest.skipIf(shutil.which("i.svm.train") is None, "i.svm.train not found.")
     def test_rescaling(self):
@@ -276,23 +276,23 @@ class IOValidationTest(TestCase):
         cpath = ctypes.create_string_buffer(GPATH_MAX)
         G_file_name_misc(cpath, sigdir, "version", sigfile, self.mapset_name)
         misc_file = utils.decode(cpath.value)
-        self.assertTrue(os.path.isfile(misc_file))
+        self.assertTrue(Path(misc_file).is_file())
         G_file_name_misc(cpath, sigdir, "sig", sigfile, self.mapset_name)
         misc_file = utils.decode(cpath.value)
-        self.assertTrue(os.path.isfile(misc_file))
+        self.assertTrue(Path(misc_file).is_file())
         G_file_name_misc(cpath, sigdir, "cats", sigfile, self.mapset_name)
         misc_file = utils.decode(cpath.value)
-        self.assertTrue(os.path.isfile(misc_file))
+        self.assertTrue(Path(misc_file).is_file())
         G_file_name_misc(cpath, sigdir, "colr", sigfile, self.mapset_name)
         misc_file = utils.decode(cpath.value)
-        self.assertFalse(os.path.isfile(misc_file))
+        self.assertFalse(Path(misc_file).is_file())
         G_file_name_misc(cpath, sigdir, "history", sigfile, self.mapset_name)
         misc_file = utils.decode(cpath.value)
-        self.assertTrue(os.path.isfile(misc_file))
+        self.assertTrue(Path(misc_file).is_file())
         G_file_name_misc(cpath, sigdir, "scale", sigfile, self.mapset_name)
         misc_file = utils.decode(cpath.value)
-        self.assertTrue(os.path.isfile(misc_file))
-        with open(misc_file) as rf:
+        self.assertTrue(Path(misc_file).is_file())
+        with Path(misc_file).open() as rf:
             lines = rf.readlines()
             M, R = lines[0].strip().split(" ")
             self.assertTrue(float(M) > -1 and float(M) < 1)

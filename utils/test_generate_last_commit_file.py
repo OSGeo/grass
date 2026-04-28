@@ -17,9 +17,10 @@ pytest utils/test_generate_last_commit_file.py
 @author Tomas Zigo <tomas.zigo slovanet.sk>
 """
 
-import os
 import json
+import os
 import subprocess
+from pathlib import Path
 
 import pytest
 
@@ -38,7 +39,7 @@ def read_json_file(json_file):
 
 
 def test_json_file_exists(json_file):
-    assert os.path.exists(json_file) is True
+    assert Path(json_file).exists() is True
 
 
 @pytest.mark.depends(on=["test_json_file_exists"])

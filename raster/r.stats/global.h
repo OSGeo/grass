@@ -1,6 +1,6 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 
 #define SORT_DEFAULT 0
 #define SORT_ASC     1
@@ -24,10 +24,10 @@ extern struct Categories *labels;
 
 /* cell_stats.c */
 int cell_stats(int[], int, int, int, int, int, char *, enum OutputFormat,
-               JSON_Array *);
+               G_JSON_Array *);
 
 /* raw_stats.c */
-int raw_stats(int[], int, int, int, enum OutputFormat, JSON_Array *);
+int raw_stats(int[], int, int, int, enum OutputFormat, G_JSON_Array *);
 
 /* stats.c */
 int initialize_cell_stats(int);
@@ -39,4 +39,4 @@ int update_cell_stats(CELL **, int, double);
 int sort_cell_stats(int);
 int print_node_count(void);
 int print_cell_stats(char *, int, int, int, int, char *, enum OutputFormat,
-                     JSON_Array *);
+                     G_JSON_Array *);

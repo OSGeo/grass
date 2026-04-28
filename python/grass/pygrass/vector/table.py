@@ -7,6 +7,7 @@ Created on Wed Aug  8 15:29:21 2012
 import ctypes
 import os
 from collections import OrderedDict
+from pathlib import Path
 
 import numpy as np
 from sqlite3 import OperationalError
@@ -458,7 +459,7 @@ class Columns:
         )
         sqlcode = [
             sql.ADD_COL.format(tname=self.tname, cname=cn, ctype=ct)
-            for cn, ct in zip(col_name, col_type)
+            for cn, ct in zip(col_name, col_type, strict=True)
         ]
         cur = self.conn.cursor()
         cur.executescript("\n".join(sqlcode))
@@ -846,8 +847,7 @@ class Link:
                 sqlite3.register_adapter(t, int)
             dbpath = get_path(self.database, self.table_name)
             dbdirpath = os.path.split(dbpath)[0]
-            if not os.path.exists(dbdirpath):
-                os.mkdir(dbdirpath)
+            Path(dbdirpath).mkdir(exist_ok=True)
             return sqlite3.connect(dbpath)
         if driver == "pg":
             try:

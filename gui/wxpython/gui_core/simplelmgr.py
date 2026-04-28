@@ -157,7 +157,7 @@ class SimpleLayerManager(wx.Panel):
             _("Copy map names to clipboard (top to bottom)"),
             _("Copy map names to clipboard (bottom to top)"),
         ]
-        for label, text in zip(labels, texts):
+        for label, text in zip(labels, texts, strict=True):
             id = NewId()
             self.Bind(
                 wx.EVT_MENU,

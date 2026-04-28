@@ -1171,7 +1171,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             view["position"]["y"],
             iview["height"]["value"],
         ) = self._display.GetViewpointPosition()
-        for key, val in zip(("x", "y", "z"), self._display.GetViewdir()):
+        for key, val in zip(("x", "y", "z"), self._display.GetViewdir(), strict=False):
             iview["dir"][key] = val
 
         iview["dir"]["use"] = True

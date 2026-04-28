@@ -151,14 +151,15 @@ struct fringe_data *Nviz_new_fringe(nv_data *data, int id, unsigned long color,
                                     double elev, int nw, int ne, int sw, int se)
 {
     int num;
-    int *surf;
+    int *surf = NULL;
     struct fringe_data *f;
 
     if (!GS_surf_exists(id)) {
         /* select first surface from the list */
         surf = GS_get_surf_list(&num);
-        if (num < 1)
+        if (!surf) {
             return NULL;
+        }
         id = surf[0];
         G_free(surf);
     }
@@ -194,14 +195,15 @@ struct fringe_data *Nviz_set_fringe(nv_data *data, int id, unsigned long color,
                                     double elev, int nw, int ne, int sw, int se)
 {
     int i, num;
-    int *surf;
+    int *surf = NULL;
     struct fringe_data *f;
 
     if (!GS_surf_exists(id)) {
         /* select first surface from the list */
         surf = GS_get_surf_list(&num);
-        if (num < 1)
+        if (!surf) {
             return NULL;
+        }
         id = surf[0];
         G_free(surf);
     }

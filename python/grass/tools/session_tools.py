@@ -17,8 +17,88 @@ from __future__ import annotations
 import os
 
 import grass.script as gs
+from grass.exceptions import CalledModuleError
 
+from .importexport import ImporterExporter
 from .support import ParameterConverter, ToolFunctionResolver, ToolResult
+
+
+class ToolError(CalledModuleError):
+    """Raised when a tool run ends with error (typically a non-zero return code)
+
+    Inherits from *subprocess.CalledProcessError* to make it easy to transition from
+    or combine with code which is using the *subprocess* package.
+    Inherits from CalledModuleError to make it easy to transition code with except
+    statements around *grass.script.run_command*-style tool calls, but new code should
+    not rely on that.
+    """
+
+    def __init__(
+        self, tool: str, cmd: list, returncode: int, errors: str | None = None
+    ):
+        """Create an exception with a full error message based on the parameters.
+
+        Best results are provided when *errors* is a single line string, aiming at a
+        short and clear message. In case *errors* is `None`, additional text is
+        provided to help the user find the error message, assuming that there is one
+        somewhere. If *errors* is an empty string, it assumes that stderr was produced
+        and reports that in the resulting message. A single line message may be
+        modified to provide the best possible error message assuming it is a standard
+        fatal error message produced by a GRASS tool describing best what went wrong.
+        For multiline error messages, no assumptions are made, so the information
+        about the tool run is printed first and then the error message.
+
+        :param tool: tool name (for interface compatibility with *CalledModuleError*)
+        :param cmd: string or list of strings forming the actual (underlying) command
+        :param returncode: process returncode (assuming non-zero)
+        :param errors: errors provided by the tool (typically stderr)
+
+        Expect changes to the *tool* parameter and the corresponding attribute.
+        """
+        # CalledProcessError has undocumented constructor
+        super().__init__(tool, cmd, returncode, errors)
+        errors_first = False
+        # If provided, we assume errors are the actual tool errors with details, i.e.,
+        # the captured stderr of the tool.
+        if errors is None:
+            # If the stderr was passed to the caller process instead of being capured
+            # by the subprocess caller function, the stderr will be above
+            # the traceback in the command line, but in notebooks or when testing,
+            # the stderr will be somewhere else than the traceback.
+            errors = "See errors above the traceback or in the error output (stderr)."
+        elif errors == "":
+            errors = "No error output was produced"
+        elif "\n" not in errors.strip():
+            errors_first = True
+            # Remove end of line if any (and all other extra whitespace) and remove
+            # error prefix in English.
+            errors = errors.strip().removeprefix("ERROR: ")
+        # Short, one line error message from stderr makes a good error message as the
+        # first line of the exception text (shown by itself e.g. by pytest).
+        # When not clear what is in, include the run details first and the potentially
+        # long stderr afterwards.
+        # While return code would be semantically better with a colon, there is already
+        # a lot of colons in the resulting message (one after the exception type,
+        # one likely from stderr, and another one depending on the order), so no colon
+        # might be slightly easier to read.
+        if errors_first:
+            self.msg = (
+                f"{errors}\nRun `{cmd}` ended with an error (return code {returncode})"
+            )
+        else:
+            self.msg = (
+                f"Run `{cmd}` ended with an error (return code {returncode}):\n{errors}"
+            )
+        self.tool = tool
+
+    def __reduce__(self):
+        return (
+            self.__class__,
+            (self.tool, self.cmd, self.returncode, self.errors),
+        )
+
+    def __str__(self):
+        return self.msg
 
 
 class Tools:
@@ -115,6 +195,55 @@ class Tools:
 
     >>> result.text
     ''
+
+    Although using arrays incurs an overhead cost compared to using only
+    in-project data, the array interface provides a convenient workflow
+    when NumPy arrays are used with other array functions.
+
+    If a tool accepts a single raster input or output, a native GRASS raster pack
+    format can be used in the same way as an in-project raster or NumPy array.
+    GRASS native rasters are recognized by `.grass_raster`, `.grr`, and `.rpack`
+    extensions. All approaches can be combined in one workflow:
+
+    >>> with Tools(session=session) as tools:
+    ...     tools.r_slope_aspect(
+    ...         elevation=np.ones((2, 3)), slope="slope.grass_raster", aspect="aspect"
+    ...     )
+    ...     statistics = tools.r_univar(map="slope.grass_raster", format="json")
+    >>> # File now exists
+    >>> from pathlib import Path
+    >>> Path("slope.grass_raster").is_file()
+    True
+    >>> # In-project raster now exists
+    >>> tools.r_info(map="aspect", format="json")["cells"]
+    6
+
+    When the *Tools* object is used as a context manager, in-project data created as
+    part of handling the raster files will be cached and will not be imported again
+    when used in the following steps. The cache is cleared at the end of the context.
+    When the *Tools* object is not used as a context manager, the cashing can be
+    enabled by `use_cache=True`. Explicitly enabled cache requires explicit cleanup:
+
+    >>> tools = Tools(session=session, use_cache=True)
+    >>> tools.r_univar(map="slope.grass_raster", format="json")["cells"]
+    6
+    >>> tools.r_info(map="slope.grass_raster", format="json")["cells"]
+    6
+    >>> tools.cleanup()
+
+    Notably, the above code works also with `use_cache=False` (or the default),
+    but the file will be imported twice, once for each tool call, so using
+    context manager or managing the cache explicitly is good for reducing the
+    overhead which the external rasters bring compared to using in-project data.
+
+    For parallel processing, create separate Tools objects. Each Tools instance
+    can operate with the same or different sessions or environments, as well as with
+    :py:class:`grass.script.RegionManager` and :py:class:`grass.script.MaskManager`.
+    When working exclusively with data within a project, objects are lightweight
+    and add negligible overhead compared to direct subprocess calls.
+    Using NumPy or out-of-project native GRASS raster files, adds computational
+    and IO cost, but generally not more than the cost of the same operation done
+    directly without the aid of a Tools object.
     """
 
     def __init__(
@@ -130,6 +259,7 @@ class Tools:
         capture_output=True,
         capture_stderr=None,
         consistent_return_value=False,
+        use_cache=None,
     ):
         """
         If session is provided and has an env attribute, it is used to execute tools.
@@ -150,7 +280,7 @@ class Tools:
         verbose one wins.
 
         In case a tool run fails, indicating that by non-zero return code,
-        *grass.exceptions.CalledModuleError* exception is raised by default. This can
+        *grass.tools.ToolError* exception is raised by default. This can
         be changed by passing, e.g., `errors="ignore"`. The *errors* parameter
         is passed to the *grass.script.handle_errors* function which determines
         the specific behavior.
@@ -174,6 +304,13 @@ class Tools:
         Additionally, this can be used to obtain both NumPy arrays and text outputs
         from a tool call.
 
+        While using of cache is primarily driven by the use of the object as
+        a context manager, cashing can be explicitly enabled or disabled with
+        the *use_cache* parameter. The cached data is kept in the current
+        mapset so that it is available as tool inputs. Without a context manager,
+        explicit `use_cache=True` requires explicit call to *cleanup* to remove
+        the data from the current mapset.
+
         If *env* or other *Popen* arguments are provided to one of the tool running
         functions, the constructor parameters except *errors* are ignored.
         """
@@ -196,6 +333,11 @@ class Tools:
             self._capture_stderr = capture_stderr
         self._name_resolver = None
         self._consistent_return_value = consistent_return_value
+        self._importer_exporter = None
+        # Decides if we delete at each run or only at the end of context.
+        self._delete_on_context_exit = False
+        # User request to keep the data.
+        self._use_cache = use_cache
 
     def _modified_env_if_needed(self):
         """Get the environment for subprocesses
@@ -270,10 +412,11 @@ class Tools:
         )
 
         # We approximate original kwargs with the possibly-modified kwargs.
-        result = self.run_cmd(
+        result = self._run_cmd(
             args,
-            tool_kwargs=kwargs,
+            tool_kwargs=kwargs,  # We send the original kwargs for error reporting.
             input=object_parameter_handler.stdin,
+            parameter_converter=object_parameter_handler,
             **popen_options,
         )
         use_objects = object_parameter_handler.translate_data_to_objects(
@@ -299,24 +442,87 @@ class Tools:
         command: list[str],
         *,
         input: str | bytes | None = None,
+        parameter_converter: ParameterConverter | None = None,
         tool_kwargs: dict | None = None,
         **popen_options,
     ):
         """Run a tool by passing its name and parameters a list of strings.
 
-        The function may perform additional processing on the parameters.
+        The function will perform additional processing on the parameters
+        such as importing GRASS native raster files to in-project data.
 
         :param command: list of strings to execute as the command
         :param input: text input for the standard input of the tool
+        :param **popen_options: additional options for :py:func:`subprocess.Popen`
+        """
+        return self._run_cmd(command, input=input, **popen_options)
+
+    def _run_cmd(
+        self,
+        command: list[str],
+        *,
+        input: str | bytes | None = None,
+        parameter_converter: ParameterConverter | None = None,
+        tool_kwargs: dict | None = None,
+        **popen_options,
+    ):
+        """Run a tool by passing its name and parameters a list of strings.
+
+        If parameters were already processed using a *ParameterConverter* instance,
+        the instance can be passed as the *parameter_converter* parameter, avoiding
+        re-processing.
+
+        :param command: list of strings to execute as the command
+        :param input: text input for the standard input of the tool
+        :param parameter_converter: a Parameter converter instance if already used
         :param tool_kwargs: named tool arguments used for error reporting (experimental)
         :param **popen_options: additional options for :py:func:`subprocess.Popen`
         """
-        return self.call_cmd(
-            command,
-            tool_kwargs=tool_kwargs,
-            input=input,
-            **popen_options,
-        )
+        # Compute the environment for subprocesses and store it for later use.
+        if "env" not in popen_options:
+            popen_options["env"] = self._modified_env_if_needed()
+
+        if parameter_converter is None:
+            # Parameters were not processed yet, so process them now.
+            parameter_converter = ParameterConverter()
+            parameter_converter.process_parameter_list(command[1:])
+        try:
+            # Processing parameters for import and export is costly, so we do it
+            # only when we previously determined there might be such parameters.
+            if parameter_converter.import_export:
+                if self._importer_exporter is None:
+                    # The importer exporter instance may be reused in later calls
+                    # based on how the cache is used.
+                    self._importer_exporter = ImporterExporter(
+                        run_function=self.call, run_cmd_function=self.call_cmd
+                    )
+                command = self._importer_exporter.process_parameter_list(
+                    command, **popen_options
+                )
+                # The command now has external files replaced with in-project data,
+                # so now we import the data.
+                self._importer_exporter.import_data(env=popen_options["env"])
+            result = self.call_cmd(
+                command,
+                tool_kwargs=tool_kwargs,  # used in error reporting
+                input=input,
+                **popen_options,
+            )
+            if parameter_converter.import_export:
+                # Exporting data inherits the overwrite flag from the command
+                # if provided, otherwise it is driven by the environment.
+                overwrite = None
+                if "--o" in command or "--overwrite" in command:
+                    overwrite = True
+                self._importer_exporter.export_data(
+                    env=popen_options["env"], overwrite=overwrite
+                )
+        finally:
+            if parameter_converter.import_export:
+                if not self._delete_on_context_exit and not self._use_cache:
+                    # Delete the in-project data after each call.
+                    self._importer_exporter.cleanup(env=popen_options["env"])
+        return result
 
     def call(self, tool_name_: str, /, **kwargs):
         """Run a tool by specifying its name as a string and parameters.
@@ -342,7 +548,7 @@ class Tools:
         defaults and return value.
 
         :param command: list of strings to execute as the command
-        :param tool_kwargs: named tool arguments used for error reporting (experimental)
+        :param tool_kwargs: named tool arguments used for error reporting
         :param input: text input for the standard input of the tool
         :param **popen_options: additional options for :py:func:`subprocess.Popen`
         """
@@ -389,6 +595,8 @@ class Tools:
                 kwargs=tool_kwargs or {},
                 stderr=stderr,
                 handler=self._errors,
+                exception=ToolError,
+                env=popen_options["env"],
             )
         if not self._consistent_return_value and not result.stdout:
             return None
@@ -423,7 +631,14 @@ class Tools:
 
         :returns: reference to the object (self)
         """
+        self._delete_on_context_exit = True
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
         """Exit the context manager context."""
+        if not self._use_cache:
+            self.cleanup()
+
+    def cleanup(self):
+        if self._importer_exporter is not None:
+            self._importer_exporter.cleanup(env=self._modified_env_if_needed())

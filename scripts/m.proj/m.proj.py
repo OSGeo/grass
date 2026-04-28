@@ -19,7 +19,7 @@ COPYRIGHT: (c) 2006-2019 Hamish Bowman, and the GRASS Development Team
 # notes:
 #  - cs2cs expects "x y" data so be sure to send it "lon lat" not "lat lon"
 #  - if you send cs2cs a third data column, beware it might be treated as "z"
-# todo:
+# TODO:
 #  - `cut` away x,y columns into a temp file, feed to cs2cs, then `paste`
 #    back to input file. see method in v.in.garmin.sh. that way additional
 #    numeric and string columns would survive the trip, and 3rd column would
@@ -99,8 +99,8 @@ COPYRIGHT: (c) 2006-2019 Hamish Bowman, and the GRASS Development Team
 # %end
 
 import sys
-import os
 import threading
+from pathlib import Path
 from grass.script.utils import separator, parse_key_val, encode, decode
 from grass.script import core as gcore
 
@@ -221,7 +221,7 @@ def main():
         inf = sys.stdin
     else:
         infile = input
-        if not os.path.exists(infile):
+        if not Path(infile).exists():
             gcore.fatal(_("Unable to read input data"))
         inf = open(infile)
         gcore.debug("input file=[%s]" % infile)

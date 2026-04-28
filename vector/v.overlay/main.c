@@ -170,16 +170,16 @@ int main(int argc, char *argv[])
         table_type = GV_MTABLE;
 
     if (operator_opt->answer[0] == 'a')
-        operator= OP_AND;
+        operator = OP_AND;
 
     else if (operator_opt->answer[0] == 'o')
-        operator= OP_OR;
+        operator = OP_OR;
 
     else if (operator_opt->answer[0] == 'n')
-        operator= OP_NOT;
+        operator = OP_NOT;
 
     else if (operator_opt->answer[0] == 'x')
-        operator= OP_XOR;
+        operator = OP_XOR;
 
     else
         G_fatal_error(_("Unknown operator '%s'"), operator_opt->answer);
@@ -215,7 +215,7 @@ int main(int argc, char *argv[])
 
     /* OP_OR, OP_XOR is not supported for lines,
        mostly because I'am not sure if they make enough sense */
-    if (type[0] == GV_LINE && (operator== OP_OR || operator== OP_XOR))
+    if (type[0] == GV_LINE && (operator == OP_OR || operator == OP_XOR))
         G_fatal_error(_("Operator '%s' is not supported for type line"),
                       operator_opt->answer);
 
@@ -475,7 +475,7 @@ int main(int argc, char *argv[])
                     db_append_string(&col_defs, buf);
                     break;
                 case DB_SQL_TYPE_TEXT:
-                    db_append_string(&col_defs, "varchar(250)");
+                    db_append_string(&col_defs, "text");
                     break;
                 case DB_SQL_TYPE_SMALLINT:
                 case DB_SQL_TYPE_INTEGER:

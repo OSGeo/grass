@@ -48,7 +48,8 @@ void fatalError(char *errorMsg)
     if (map != NULL) {
         /* should unopen map here! */
         if (!Rast3d_close(map))
-            fatalError(_("Unable to close 3D raster map"));
+            Rast3d_fatal_error("%s (%s)", errorMsg,
+                               _("Unable to close 3D raster map"));
     }
 
     Rast3d_fatal_error("%s", errorMsg);
@@ -84,7 +85,7 @@ void setParams(void)
 /*---------------------------------------------------------------------------*/
 /* Set up the input and output file names from the user's responses
  */
-void getParams(char **input, char **output, int *decim UNUSED)
+void getParams(char **input, char **output, int *decim G_UNUSED)
 {
     *input = param.input->answer;
     *output = param.output->answer;
@@ -251,7 +252,7 @@ void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
 
     /*AV*/
     if (!v5dCreate(fileout, NumTimes, NumVars, rows, cols, Nl,
-                   (const char(*)[10])VarName, TimeStamp, DateStamp,
+                   (const char (*)[10])VarName, TimeStamp, DateStamp,
                    CompressMode, Projection, ProjArgs, Vertical, VertArgs))
         G_fatal_error(_("Unable to create V5D file <%s>"), fileout);
 

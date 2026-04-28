@@ -78,6 +78,9 @@ hooks:
 extra_css:
   - grassdocs.css
 
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js
+
 # Plugins
 plugins:
   - search
@@ -108,6 +111,8 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.arithmatex:
+      generic: true
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
@@ -153,7 +158,7 @@ nav:
           - List of components: wxGUI.components.md
 
   - Key concepts:
-      - GRASS projects: grass_database.md
+      - GRASS projects: grass_projects.md
       - Raster overview: rasterintro.md
       - 3D raster overview: raster3dintro.md
       - Vector overview: vectorintro.md
@@ -201,3 +206,4 @@ not_in_nav: |
   grass-sqlite.md
   wxpyimgview.md
   ximgview.md
+  grass_database.md

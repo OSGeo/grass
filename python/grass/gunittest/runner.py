@@ -72,13 +72,6 @@ class TextTestResult(grass.gunittest.result.TestResult, unittest.TextTestResult)
 
     def stopTestRun(self) -> None:
         super().stopTestRun()
-        self.printErrors()
-        self.stream.writeln(self.separator2)
-        run = self.testsRun
-        self.stream.write("Ran %d test%s" % (run, (run != 1 and "s") or ""))
-        if self.time_taken:
-            self.stream.write(" in %.3fs" % (self.time_taken))
-        self.stream.writeln()
 
         expectedFails = unexpectedSuccesses = skipped = 0
         results = map(

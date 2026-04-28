@@ -31,7 +31,7 @@ def _check_value(param, value):
     def check_string(value):
         """Function to check that a string parameter is already a string"""
         if param.type in string:
-            if type(value) in (int, float):
+            if type(value) in {int, float}:
                 value = str(value)
             if type(value) not in string:
                 msg = "The Parameter <%s> require a string, %s instead is provided: %r"

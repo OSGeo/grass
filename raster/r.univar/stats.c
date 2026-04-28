@@ -11,7 +11,7 @@
  *
  */
 
-#include <grass/parson.h>
+#include <grass/gjson.h>
 #include "globals.h"
 
 /* *************************************************************** */
@@ -84,26 +84,26 @@ void free_univar_stat_struct(univar_stat *stats)
 /* *************************************************************** */
 int print_stats(univar_stat *stats, enum OutputFormat format)
 {
-    JSON_Value *root_value = NULL, *zone_value = NULL;
-    JSON_Array *root_array = NULL;
-    JSON_Object *zone_object = NULL;
+    G_JSON_Value *root_value = NULL, *zone_value = NULL;
+    G_JSON_Array *root_array = NULL;
+    G_JSON_Object *zone_object = NULL;
 
     if (format == JSON) {
         if (zone_info.n_zones) {
-            root_value = json_value_init_array();
+            root_value = G_json_value_init_array();
             if (root_value == NULL) {
                 G_fatal_error(
                     _("Failed to initialize JSON array. Out of memory?"));
             }
-            root_array = json_array(root_value);
+            root_array = G_json_array(root_value);
         }
         else {
-            zone_value = json_value_init_object();
+            zone_value = G_json_value_init_object();
             if (zone_value == NULL) {
                 G_fatal_error(
                     _("Failed to initialize JSON object. Out of memory?"));
             }
-            zone_object = json_object(zone_value);
+            zone_object = G_json_object(zone_value);
         }
     }
 
@@ -142,12 +142,12 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
         G_trim_decimal(sum_str);
 
         if (format == JSON && zone_info.n_zones) {
-            zone_value = json_value_init_object();
+            zone_value = G_json_value_init_object();
             if (zone_value == NULL) {
                 G_fatal_error(
                     _("Failed to initialize JSON object. Out of memory?"));
             }
-            zone_object = json_object(zone_value);
+            zone_object = G_json_object(zone_value);
         }
         if (zone_info.n_zones) {
             int z_cat = z + zone_info.min;
@@ -162,8 +162,8 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
                         Rast_get_c_cat(&z_cat, &(zone_info.cats)));
                 break;
             case JSON:
-                json_object_set_number(zone_object, "zone", z_cat);
-                json_object_set_string(
+                G_json_object_set_number(zone_object, "zone", z_cat);
+                G_json_object_set_string(
                     zone_object, "zone_label",
                     Rast_get_c_cat(&z_cat, &(zone_info.cats)));
                 break;
@@ -208,57 +208,57 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
             fprintf(stdout, "sum=%s\n", sum_str);
             break;
         case JSON:
-            json_object_set_number(zone_object, "n", stats[z].n);
-            json_object_set_number(zone_object, "null_cells",
-                                   stats[z].size - stats[z].n);
-            json_object_set_number(zone_object, "cells", stats[z].size);
+            G_json_object_set_number(zone_object, "n", stats[z].n);
+            G_json_object_set_number(zone_object, "null_cells",
+                                     stats[z].size - stats[z].n);
+            G_json_object_set_number(zone_object, "cells", stats[z].size);
 
             if (isfinite(stats[z].min))
-                json_object_set_number(zone_object, "min", stats[z].min);
+                G_json_object_set_number(zone_object, "min", stats[z].min);
             else
-                json_object_set_null(zone_object, "min");
+                G_json_object_set_null(zone_object, "min");
 
             if (isfinite(stats[z].max))
-                json_object_set_number(zone_object, "max", stats[z].max);
+                G_json_object_set_number(zone_object, "max", stats[z].max);
             else
-                json_object_set_null(zone_object, "max");
+                G_json_object_set_null(zone_object, "max");
 
             if (isfinite(stats[z].max - stats[z].min))
-                json_object_set_number(zone_object, "range",
-                                       stats[z].max - stats[z].min);
+                G_json_object_set_number(zone_object, "range",
+                                         stats[z].max - stats[z].min);
             else
-                json_object_set_null(zone_object, "range");
+                G_json_object_set_null(zone_object, "range");
 
             if (isfinite(mean))
-                json_object_set_number(zone_object, "mean", mean);
+                G_json_object_set_number(zone_object, "mean", mean);
             else
-                json_object_set_null(zone_object, "mean");
+                G_json_object_set_null(zone_object, "mean");
 
             if (isfinite(stats[z].sum_abs / stats[z].n))
-                json_object_set_number(zone_object, "mean_of_abs",
-                                       stats[z].sum_abs / stats[z].n);
+                G_json_object_set_number(zone_object, "mean_of_abs",
+                                         stats[z].sum_abs / stats[z].n);
             else
-                json_object_set_null(zone_object, "mean_of_abs");
+                G_json_object_set_null(zone_object, "mean_of_abs");
 
             if (isfinite(stdev))
-                json_object_set_number(zone_object, "stddev", stdev);
+                G_json_object_set_number(zone_object, "stddev", stdev);
             else
-                json_object_set_null(zone_object, "stddev");
+                G_json_object_set_null(zone_object, "stddev");
 
             if (isfinite(variance))
-                json_object_set_number(zone_object, "variance", variance);
+                G_json_object_set_number(zone_object, "variance", variance);
             else
-                json_object_set_null(zone_object, "variance");
+                G_json_object_set_null(zone_object, "variance");
 
             if (isfinite(var_coef))
-                json_object_set_number(zone_object, "coeff_var", var_coef);
+                G_json_object_set_number(zone_object, "coeff_var", var_coef);
             else
-                json_object_set_null(zone_object, "coeff_var");
+                G_json_object_set_null(zone_object, "coeff_var");
 
             if (isfinite(stats[z].sum))
-                json_object_set_number(zone_object, "sum", stats[z].sum);
+                G_json_object_set_number(zone_object, "sum", stats[z].sum);
             else
-                json_object_set_null(zone_object, "sum");
+                G_json_object_set_null(zone_object, "sum");
 
             break;
         case CSV:
@@ -362,21 +362,21 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
                 break;
             case JSON:
                 if (isfinite(quartile_25))
-                    json_object_set_number(zone_object, "first_quartile",
-                                           quartile_25);
+                    G_json_object_set_number(zone_object, "first_quartile",
+                                             quartile_25);
                 else
-                    json_object_set_null(zone_object, "first_quartile");
+                    G_json_object_set_null(zone_object, "first_quartile");
 
                 if (isfinite(median))
-                    json_object_set_number(zone_object, "median", median);
+                    G_json_object_set_number(zone_object, "median", median);
                 else
-                    json_object_set_null(zone_object, "median");
+                    G_json_object_set_null(zone_object, "median");
 
                 if (isfinite(quartile_75))
-                    json_object_set_number(zone_object, "third_quartile",
-                                           quartile_75);
+                    G_json_object_set_number(zone_object, "third_quartile",
+                                             quartile_75);
                 else
-                    json_object_set_null(zone_object, "third_quartile");
+                    G_json_object_set_null(zone_object, "third_quartile");
 
                 break;
             case CSV:
@@ -384,18 +384,18 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
                 break;
             }
 
-            JSON_Value *percentiles_array_value = NULL,
-                       *percentile_value = NULL;
-            JSON_Array *percentiles_array = NULL;
-            JSON_Object *percentile_object = NULL;
+            G_JSON_Value *percentiles_array_value = NULL,
+                         *percentile_value = NULL;
+            G_JSON_Array *percentiles_array = NULL;
+            G_JSON_Object *percentile_object = NULL;
 
             if (format == JSON) {
-                percentiles_array_value = json_value_init_array();
+                percentiles_array_value = G_json_value_init_array();
                 if (percentiles_array_value == NULL) {
                     G_fatal_error(
                         _("Failed to initialize JSON array. Out of memory?"));
                 }
-                percentiles_array = json_array(percentiles_array_value);
+                percentiles_array = G_json_array(percentiles_array_value);
             }
 
             for (i = 0; i < stats[z].n_perc; i++) {
@@ -434,27 +434,27 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
                             quartile_perc[i]);
                     break;
                 case JSON:
-                    percentile_value = json_value_init_object();
+                    percentile_value = G_json_value_init_object();
                     if (percentile_value == NULL) {
                         G_fatal_error(_("Failed to initialize JSON object. "
                                         "Out of memory?"));
                     }
-                    percentile_object = json_object(percentile_value);
+                    percentile_object = G_json_object(percentile_value);
 
                     if (isfinite(stats[z].perc[i]))
-                        json_object_set_number(percentile_object, "percentile",
-                                               stats[z].perc[i]);
+                        G_json_object_set_number(
+                            percentile_object, "percentile", stats[z].perc[i]);
                     else
-                        json_object_set_null(percentile_object, "percentile");
+                        G_json_object_set_null(percentile_object, "percentile");
 
                     if (isfinite(quartile_perc[i]))
-                        json_object_set_number(percentile_object, "value",
-                                               quartile_perc[i]);
+                        G_json_object_set_number(percentile_object, "value",
+                                                 quartile_perc[i]);
                     else
-                        json_object_set_null(percentile_object, "value");
+                        G_json_object_set_null(percentile_object, "value");
 
-                    json_array_append_value(percentiles_array,
-                                            percentile_value);
+                    G_json_array_append_value(percentiles_array,
+                                              percentile_value);
                     break;
                 case CSV:
                     /* already addressed in print_stats_table */
@@ -463,8 +463,8 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
             }
 
             if (format == JSON) {
-                json_object_set_value(zone_object, "percentiles",
-                                      percentiles_array_value);
+                G_json_object_set_value(zone_object, "percentiles",
+                                        percentiles_array_value);
             }
 
             G_free((void *)quartile_perc);
@@ -476,30 +476,30 @@ int print_stats(univar_stat *stats, enum OutputFormat format)
         /* if (!(param.shell_style->answer))
            G_message("\n"); */
         if (format == JSON && zone_info.n_zones) {
-            json_array_append_value(root_array, zone_value);
+            G_json_array_append_value(root_array, zone_value);
         }
     }
 
     if (format == JSON) {
         char *serialized_string = NULL;
         if (zone_info.n_zones) {
-            serialized_string = json_serialize_to_string_pretty(root_value);
+            serialized_string = G_json_serialize_to_string_pretty(root_value);
         }
         else {
-            serialized_string = json_serialize_to_string_pretty(zone_value);
+            serialized_string = G_json_serialize_to_string_pretty(zone_value);
         }
 
         if (serialized_string == NULL) {
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         }
         puts(serialized_string);
-        json_free_serialized_string(serialized_string);
+        G_json_free_serialized_string(serialized_string);
 
         if (zone_info.n_zones) {
-            json_value_free(root_value);
+            G_json_value_free(root_value);
         }
         else {
-            json_value_free(zone_value);
+            G_json_value_free(zone_value);
         }
     }
 

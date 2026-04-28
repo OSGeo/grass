@@ -1,6 +1,5 @@
-file(COPY desc.table DESTINATION etc/proj)
-file(COPY parms.table DESTINATION etc/proj)
-file(COPY units.table DESTINATION etc/proj)
+install(FILES desc.table parms.table units.table
+        DESTINATION ${GRASS_INSTALL_ETCDIR}/proj)
 
 set(grass_gproj_SOURCES convert.c datum.c do_proj.c ellipse.c get_proj.c)
 if(MINGW)
@@ -18,6 +17,8 @@ build_module(
   SOURCES
   "${grass_gproj_SOURCES}"
   INCLUDES
-  "../driver")
+  "${CMAKE_CURRENT_SOURCE_DIR}/../driver")
 
-target_include_directories(grass_gproj PUBLIC ${GDAL_INCLUDE_DIR} ${PROJ_INCLUDE_DIRS})
+target_include_directories(grass_gproj
+  INTERFACE $<TARGET_PROPERTY:GDAL::GDAL,INTERFACE_INCLUDE_DIRECTORIES>
+            $<TARGET_PROPERTY:PROJ::proj,INTERFACE_INCLUDE_DIRECTORIES>)

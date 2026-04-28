@@ -189,6 +189,12 @@ class TestRegion(TestCase):
             "rows": 620,
             "cols": 1630,
             "cells": 1010600,
+            "crs": {
+                "name": "Lambert Conformal Conic",
+                "type": "other",
+                "type_code": 99,
+                "zone": None,
+            },
         }
 
         output = call_module("g.region", flags="p", format="json")
@@ -240,6 +246,12 @@ class TestRegion(TestCase):
             "ll_e": -75.36388301356145,
             "ll_clon": -79.91588285974797,
             "ll_clat": 35.17852919352317,
+            "crs": {
+                "name": "Lambert Conformal Conic",
+                "type": "other",
+                "type_code": 99,
+                "zone": None,
+            },
         }
 
         output = call_module("g.region", flags="plectwmn3b", format="json")

@@ -17,8 +17,6 @@
 #############################################################################
 
 
-import os
-import sys
 import unittest
 from pathlib import Path
 
@@ -72,13 +70,7 @@ class TestDisplay(TestCase):
         """
         for f in self.files:
             f = Path(f)
-            if sys.version_info < (3, 8):
-                try:
-                    os.remove(f)
-                except FileNotFoundError:
-                    pass
-            else:
-                f.unlink(missing_ok=True)
+            f.unlink(missing_ok=True)
 
     @unittest.skipIf(not can_import_folium(), "Cannot import folium")
     def test_basic(self):
@@ -123,6 +115,26 @@ class TestDisplay(TestCase):
         button = interactive_map.setup_computational_region_interface()
         interactive_map._controllers[button].activate()
         self.assertIsNotNone(interactive_map._controllers[button].save_button_control)
+
+    @unittest.skipIf(not can_import_folium(), "Cannot import folium")
+    def test_nonexistent_raster_error(self):
+        """Test that adding non-existent raster raises clear error"""
+        interactive_map = gj.InteractiveMap()
+        with self.assertRaises(ValueError) as context:
+            interactive_map.add_raster("xelevation")
+        msg = str(context.exception).lower()
+        self.assertIn("raster", msg)
+        self.assertIn("xelevation", msg)
+
+    @unittest.skipIf(not can_import_folium(), "Cannot import folium")
+    def test_nonexistent_vector_error(self):
+        """Test that adding non-existent vector raises clear error"""
+        interactive_map = gj.InteractiveMap()
+        with self.assertRaises(ValueError) as context:
+            interactive_map.add_vector("xroadsmajor")
+        msg = str(context.exception).lower()
+        self.assertIn("vector", msg)
+        self.assertIn("xroadsmajor", msg)
 
 
 if __name__ == "__main__":

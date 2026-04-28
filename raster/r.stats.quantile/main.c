@@ -363,10 +363,10 @@ static void print_quantiles(char *fs, char *name, enum OutputFormat format)
 {
     int cat, quant;
     struct basecat *bc;
-    JSON_Value *root_value = NULL, *cat_value = NULL, *percentiles_value = NULL,
-               *percentile_value = NULL;
-    JSON_Array *root_array = NULL, *percentiles_array = NULL;
-    JSON_Object *cat_object = NULL, *percentile_object = NULL;
+    G_JSON_Value *root_value = NULL, *cat_value = NULL,
+                 *percentiles_value = NULL, *percentile_value = NULL;
+    G_JSON_Array *root_array = NULL, *percentiles_array = NULL;
+    G_JSON_Object *cat_object = NULL, *percentile_object = NULL;
 
     G_message(_("Printing quantiles"));
 

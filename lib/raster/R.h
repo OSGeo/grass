@@ -1,8 +1,7 @@
 #include <grass/config.h>
 #include <grass/gis.h>
-#ifdef HAVE_GDAL
+
 #include <gdal.h>
-#endif
 
 #define XDR_FLOAT_NBYTES  4
 #define XDR_DOUBLE_NBYTES 8
@@ -22,18 +21,14 @@ struct GDAL_link {
     DCELL null_val;
     int hflip;
     int vflip;
-#ifdef HAVE_GDAL
     GDALDatasetH data;
     GDALRasterBandH band;
     GDALDataType type;
-#endif
 };
 
-#ifdef HAVE_GDAL
 extern CPLErr Rast_gdal_raster_IO(GDALRasterBandH, GDALRWFlag, int, int, int,
                                   int, void *, int, int, GDALDataType, int,
                                   int);
-#endif
 
 struct tileinfo /* Information for tiles */
 {

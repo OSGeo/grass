@@ -17,29 +17,30 @@
  *
  **************************************************************/
 
+#include <errno.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 #include <grass/spawn.h>
 
 enum OutputFormat { PLAIN, JSON };
 
 // Function to serialize and print JSON value
-static void serialize_and_print_json_object(JSON_Value *root_value)
+static void serialize_and_print_json_object(G_JSON_Value *root_value)
 {
-    char *serialized_string = json_serialize_to_string_pretty(root_value);
+    char *serialized_string = G_json_serialize_to_string_pretty(root_value);
     if (!serialized_string) {
-        json_value_free(root_value);
+        G_json_value_free(root_value);
         G_fatal_error(_("Failed to serialize JSON to pretty format."));
     }
 
     puts(serialized_string);
-    json_free_serialized_string(serialized_string);
-    json_value_free(root_value);
+    G_json_free_serialized_string(serialized_string);
+    G_json_value_free(root_value);
 }
 
 int main(int argc, char *argv[])
@@ -60,8 +61,8 @@ int main(int argc, char *argv[])
     const char *shell;
     char path[GPATH_MAX];
     enum OutputFormat format;
-    JSON_Object *root_object = NULL;
-    JSON_Value *root_value = NULL;
+    G_JSON_Object *root_object = NULL;
+    G_JSON_Value *root_value = NULL;
 
     G_gisinit(argv[0]);
 
@@ -112,12 +113,12 @@ int main(int argc, char *argv[])
     if (strcmp(opt.format->answer, "json") == 0) {
         format = JSON;
 
-        root_value = json_value_init_object();
+        root_value = G_json_value_init_object();
         if (root_value == NULL) {
             G_fatal_error(
                 _("Failed to initialize JSON object. Out of memory?"));
         }
-        root_object = json_object(root_value);
+        root_object = G_json_object(root_value);
     }
     else {
         format = PLAIN;
@@ -135,8 +136,8 @@ int main(int argc, char *argv[])
             break;
 
         case JSON:
-            json_object_set_string(root_object, "project", location_old);
-            json_object_set_string(root_object, "mapset", mapset_old);
+            G_json_object_set_string(root_object, "project", location_old);
+            G_json_object_set_string(root_object, "mapset", mapset_old);
             serialize_and_print_json_object(root_value);
             break;
         }
@@ -160,22 +161,22 @@ int main(int argc, char *argv[])
     if (flag.list->answer) {
         char **ms;
         int nmapsets;
-        JSON_Array *mapsets_array = NULL;
-        JSON_Value *mapsets_value = NULL;
+        G_JSON_Array *mapsets_array = NULL;
+        G_JSON_Value *mapsets_value = NULL;
 
         G_setenv_nogisrc("LOCATION_NAME", location_new);
         G_setenv_nogisrc("GISDBASE", gisdbase_new);
 
         ms = G_get_available_mapsets();
         if (format == JSON) {
-            mapsets_value = json_value_init_array();
+            mapsets_value = G_json_value_init_array();
             if (mapsets_value == NULL) {
                 G_fatal_error(
                     _("Failed to initialize JSON array. Out of memory?"));
             }
-            mapsets_array = json_array(mapsets_value);
+            mapsets_array = G_json_array(mapsets_value);
 
-            json_object_set_string(root_object, "project", location_new);
+            G_json_object_set_string(root_object, "project", location_new);
         }
 
         for (nmapsets = 0; ms[nmapsets]; nmapsets++) {
@@ -186,7 +187,7 @@ int main(int argc, char *argv[])
                     break;
 
                 case JSON:
-                    json_array_append_string(mapsets_array, ms[nmapsets]);
+                    G_json_array_append_string(mapsets_array, ms[nmapsets]);
                     break;
                 }
             }
@@ -197,7 +198,7 @@ int main(int argc, char *argv[])
             break;
 
         case JSON:
-            json_object_set_value(root_object, "mapsets", mapsets_value);
+            G_json_object_set_value(root_object, "mapsets", mapsets_value);
             serialize_and_print_json_object(root_value);
             break;
         }
@@ -279,7 +280,10 @@ int main(int argc, char *argv[])
 
     /* Remove old lock */
     snprintf(path, sizeof(path), "%s/.gislock", mapset_old_path);
-    remove(path);
+    if (remove(path) != 0) {
+        G_warning(_("Failed to remove old lock file <%s>: %s"), path,
+                  strerror(errno));
+    }
 
     G_free(mapset_old_path);
 

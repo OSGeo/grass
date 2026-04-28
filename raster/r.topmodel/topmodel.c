@@ -1,6 +1,7 @@
 #include <math.h>
 #include <grass/raster.h>
 #include <grass/spawn.h>
+#include <grass/gis.h>
 #include <grass/glocale.h>
 #include "global.h"
 
@@ -80,6 +81,8 @@ void create_topidxstats(char *topidx, int ntopidxclasses, char *outtopidxstats)
         fprintf(fp, "%10.3e %10.3e\n", atb[i], Aatb_r[i] / total_ncells);
 
     fclose(fp);
+    G_free(Aatb_r);
+    G_free(atb);
 }
 
 /* Calculate the areal average of topographic index */

@@ -25,7 +25,7 @@ static int cmp_int(const void *a, const void *b)
 
 int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
               struct Map_info *Out, struct field_info *Fi, dbDriver *driver,
-              int operator, int * ofield, ATTRIBUTES *attr, struct ilist *BList,
+              int operator, int *ofield, ATTRIBUTES *attr, struct ilist *BList,
               double snap)
 {
     int ret, input, line, nlines, area, nareas;
@@ -79,6 +79,8 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
             Vect_select_lines_by_box(Tmp, &box, GV_BOUNDARY, boxlist);
 
             if (boxlist->n_values > 0) {
+                int npoints_org;
+
                 Vect_reset_list(reflist);
                 for (j = 0; j < boxlist->n_values; j++) {
                     int aline = boxlist->id[j];
@@ -90,17 +92,26 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                 }
 
                 /* snap bline to alines */
+                npoints_org = Points->n_points;
                 if (Vect_snap_line(Tmp, reflist, Points, snap, 0, NULL, NULL)) {
-                    /* rewrite bline */
+                    Vect_line_prune(Points);
+                    if (Points->n_points < 2) {
+                        G_message(_("Line with %d points reduced to %d point, "
+                                    "deleting line."),
+                                  npoints_org, Points->n_points);
+                        Vect_delete_line(Tmp, line);
+                    }
+                    else {
+                        /* rewrite bline */
 #if 0
-                    Vect_delete_line(Tmp, line);
-                    ret = Vect_write_line(Tmp, GV_BOUNDARY, Points, Cats);
-                    G_ilist_add(BList, ret);
+                        Vect_delete_line(Tmp, line);
+                        ret = Vect_write_line(Tmp, GV_BOUNDARY, Points, Cats);
+                        G_ilist_add(BList, ret);
 #else
-                    ret =
-                        Vect_rewrite_line(Tmp, line, GV_BOUNDARY, Points, Cats);
+                        ret = Vect_rewrite_line(Tmp, line, GV_BOUNDARY, Points,
+                                                Cats);
 #endif
-
+                    }
                     snapped_lines++;
                     G_debug(3, "line %d snapped", line);
                 }
@@ -194,6 +205,8 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
     Vect_spatial_index_init(&si, 0);
     ncentr = nareas;
     for (ocentr = 1; ocentr <= ncentr; ocentr++) {
+        if (!Centr[ocentr].valid)
+            continue;
         box.N = box.S = Centr[ocentr].y;
         box.E = box.W = Centr[ocentr].x;
         box.T = box.B = 0;
@@ -299,6 +312,9 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
         int i;
 
         G_percent(area, nareas, 1);
+
+        if (!Centr[area].valid)
+            continue;
 
         /* check the condition */
         switch (operator) {

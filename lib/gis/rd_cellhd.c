@@ -113,7 +113,7 @@ void G__read_Cell_head_array(char **array, struct Cell_head *cellhd)
     cellhd->cols3 = 0;
     cellhd->depths = 1;
     cellhd->proj = -1;
-    cellhd->zone = -1;
+    cellhd->zone = 0;
     cellhd->compressed = -1;
     cellhd->ew_res = 0.0;
     cellhd->ew_res3 = 1.0;

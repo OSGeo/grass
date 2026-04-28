@@ -400,7 +400,8 @@ int Rast_option_to_interp_type(const struct Option *);
 /* mask_info.c */
 char *Rast_mask_info(void);
 char *Rast_mask_name(void);
-bool Rast_mask_status(char *, char *, bool *, char *, char *);
+bool Rast_mask_status(char *, char *, bool *, char[GNAME_MAX],
+                      char[GMAPSET_MAX]);
 int Rast__mask_info(char *, char *);
 bool Rast_mask_is_present(void);
 int Rast_disable_omp_on_mask(int);
@@ -558,7 +559,8 @@ bool Rast_legal_semantic_label(const char *);
 int Rast_map_to_img_str(char *, int, unsigned char *);
 
 /* reclass.c */
-int Rast_is_reclass(const char *, const char *, char *, char *);
+int Rast_is_reclass(const char *, const char *, char[GNAME_MAX],
+                    char[GMAPSET_MAX]);
 int Rast_is_reclassed_to(const char *, const char *, int *, char ***);
 int Rast_get_reclass(const char *, const char *, struct Reclass *);
 void Rast_free_reclass(struct Reclass *);

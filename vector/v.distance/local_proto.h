@@ -1,6 +1,6 @@
 #include <grass/vector.h>
 #include <grass/dbmi.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 
 #ifndef _LOCAL_PROTO_
 #define _LOCAL_PROTO_
@@ -66,6 +66,6 @@ int line2area(struct Map_info *To, struct line_pnts *Points, int type, int area,
 
 /* print.c */
 int print_upload(NEAR *, UPLOAD *, int, dbCatValArray *, dbCatVal *, char *,
-                 enum OutputFormat, JSON_Object *);
+                 enum OutputFormat, G_JSON_Object *);
 
 #endif

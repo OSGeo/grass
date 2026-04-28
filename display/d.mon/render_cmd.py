@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
+import glob
 import os
 import sys
-import glob
 import tempfile
 from pathlib import Path
 
+from grass.exceptions import CalledModuleError
 from grass.script import core as grass
 from grass.script import task as gtask
-from grass.exceptions import CalledModuleError
 
 non_rendering_modules = (
     "d.colorlist",
@@ -73,7 +73,7 @@ def render(cmd, mapfile):
         grass.run_command(cmd[0], env=env, **cmd[1])
         # display driver can generate a blank map file unnecessarily for
         # non-rendering modules; delete it
-        if cmd[0] in non_rendering_modules and os.path.exists(mapfile):
+        if cmd[0] in non_rendering_modules and Path(mapfile).exists():
             remove_mapfile(mapfile)
 
     except CalledModuleError as e:
@@ -198,7 +198,7 @@ if __name__ == "__main__":
         render(cmd, mapfile)
 
     update_cmd_file(os.path.join(path, "cmd"), cmd, mapfile)
-    if cmd[0] == "d.erase" and os.path.exists(legfile):
+    if cmd[0] == "d.erase" and Path(legfile).exists():
         os.remove(legfile)
 
     sys.exit(0)

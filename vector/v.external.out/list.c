@@ -3,9 +3,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-#ifdef HAVE_OGR
 #include "ogr_api.h"
-#endif /* HAVE_OGR */
 
 static int cmp(const void *, const void *);
 static char **format_list(int *, size_t *);
@@ -25,7 +23,6 @@ char **format_list(int *count, size_t *len)
     if (len)
         *len = 0;
 
-#ifdef HAVE_OGR
     char buf[2000];
 
     OGRSFDriverH Ogr_driver;
@@ -55,8 +52,7 @@ char **format_list(int *count, size_t *len)
     /* order formats by name */
     if (list)
         qsort(list, *count, sizeof(char *), cmp);
-#endif
-#if defined HAVE_POSTGRES && !defined HAVE_OGR
+#if defined HAVE_POSTGRES
     list = G_realloc(list, ((*count) + 1) * sizeof(char *));
     list[(*count)++] = G_store("PostgreSQL");
     if (len)
@@ -75,7 +71,7 @@ char *format_options(void)
     ret = NULL;
     list = format_list(&count, &len);
 
-    if (list && len > 0) {
+    if (list) {
         ret = G_malloc((len + 1) * sizeof(char)); /* \0 */
         *ret = '\0';
         for (i = 0; i < count; i++) {

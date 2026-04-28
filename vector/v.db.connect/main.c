@@ -48,9 +48,9 @@ int main(int argc, char **argv)
     struct Map_info Map;
     char *sep;
     enum OutputFormat format;
-    JSON_Value *root_value = NULL, *conn_value = NULL;
-    JSON_Array *root_array = NULL;
-    JSON_Object *conn_object = NULL;
+    G_JSON_Value *root_value = NULL, *conn_value = NULL;
+    G_JSON_Array *root_array = NULL;
+    G_JSON_Object *conn_object = NULL;
     int skip_header = 0;
 
     /* set up the options and flags for the command line parser */
@@ -126,14 +126,10 @@ int main(int argc, char **argv)
         _("Delete connection for certain layer (not the table)");
 
     G_gisinit(argv[0]);
+    G_option_exclusive(print, columns, NULL); // -p and -c exclusive
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
-
-    // ignore -c flag if both -p and -c flags are given
-    if (print->answer && columns->answer) {
-        columns->answer = 0;
-    }
 
     // If no format option is specified, preserve backward compatibility
     if (format_opt->answer == NULL || format_opt->answer[0] == '\0') {

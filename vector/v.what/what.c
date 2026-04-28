@@ -18,7 +18,7 @@ static int nlines = 50;
 static void F_generate(const char *drvname, const char *dbname,
                        const char *tblname, const char *key, int keyval,
                        enum OutputFormat format, char **form, char *columns,
-                       JSON_Object *attribute_object)
+                       G_JSON_Object *attribute_object)
 {
     int col, ncols, sqltype, more;
     char buf[5000];
@@ -175,13 +175,13 @@ void coord2bbox(double east, double north, double maxdist,
 
 void write_cats(struct Map_info *Map, int field, struct line_cats *Cats,
                 int showextra, enum OutputFormat format, char *columns,
-                JSON_Array *cats_array, int show_connection)
+                G_JSON_Array *cats_array, int show_connection)
 {
     int i, j;
     char *formbuf1;
     char *formbuf2;
-    JSON_Value *cat_value = NULL, *attribute_value = NULL;
-    JSON_Object *cat_object = NULL, *attribute_object = NULL;
+    G_JSON_Value *cat_value = NULL, *attribute_value = NULL;
+    G_JSON_Object *cat_object = NULL, *attribute_object = NULL;
 
     if (Cats->n_cats == 0)
         return;
@@ -313,7 +313,7 @@ void write_cats(struct Map_info *Map, int field, struct line_cats *Cats,
 void what(struct Map_info *Map, int nvects, char **vect, double east,
           double north, double maxdist, int qtype, int topo, int showextra,
           enum OutputFormat format, int multiple, int *field, char *columns,
-          JSON_Array *root_array, int show_connection)
+          G_JSON_Array *root_array, int show_connection)
 {
     struct line_pnts *Points;
     struct line_cats *Cats;
@@ -323,13 +323,13 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
     double sqm_to_sqft;
     char buf[1000], *str;
     int i, j;
-    JSON_Value *map_value = NULL, *nodes_value = NULL, *node_value = NULL,
-               *features_value = NULL, *feature_value = NULL,
-               *cats_value = NULL, *line_value = NULL, *lines_value = NULL;
-    JSON_Object *map_object = NULL, *node_object = NULL, *feature_object = NULL,
-                *line_object = NULL;
-    JSON_Array *nodes_array = NULL, *features_array = NULL, *cats_array = NULL,
-               *lines_array = NULL;
+    G_JSON_Value *map_value = NULL, *nodes_value = NULL, *node_value = NULL,
+                 *features_value = NULL, *feature_value = NULL,
+                 *cats_value = NULL, *line_value = NULL, *lines_value = NULL;
+    G_JSON_Object *map_object = NULL, *node_object = NULL,
+                  *feature_object = NULL, *line_object = NULL;
+    G_JSON_Array *nodes_array = NULL, *features_array = NULL,
+                 *cats_array = NULL, *lines_array = NULL;
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
@@ -446,7 +446,9 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                                         north);
         }
 
-        strcpy(buf, vect[i]);
+        if (G_strlcpy(buf, vect[i], sizeof(buf)) >= sizeof(buf)) {
+            G_fatal_error(_("Vector name <%s> is too long"), vect[i]);
+        }
         if ((str = strchr(buf, '@')))
             *str = 0;
 

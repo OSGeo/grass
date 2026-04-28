@@ -43,13 +43,13 @@ CELL *cell, *mask;
 double *rowlook, *collook, *lat_diff, /* distances between latitudes */
     ew2;
 
-short ll; /* TRUE if latitude-longitude projection */
+int ll; /* TRUE if latitude-longitude projection */
 
 /* function pointers for LL function substitutes */
 
-int first_west(EW *, SHORT);
-int first_west_LL(EW *, SHORT);
-int (*init_row_search)(EW *, SHORT); /* function pointer */
+int first_west(EW *, int);
+int first_west_LL(EW *, int);
+int (*init_row_search)(EW *, int); /* function pointer */
 
 int completed_row(EW *);
 int completed_row_LL(EW *);
@@ -57,21 +57,21 @@ int completed_row_LL(EW *);
 /* function pointer */
 int (*comp_row_search)(EW *);
 
-int find_neighbors(EW *, NEIGHBOR *, SHORT, SHORT, int, SHORT *);
-int find_neighbors_LL(EW *, NEIGHBOR *, SHORT, SHORT, int, SHORT *);
+int find_neighbors(EW *, NEIGHBOR *, int, int, int, int *);
+int find_neighbors_LL(EW *, NEIGHBOR *, int, int, int, int *);
 
 /* function pointer */
-int (*locate_neighbors)(EW *, NEIGHBOR *, SHORT, SHORT, int, SHORT *);
+int (*locate_neighbors)(EW *, NEIGHBOR *, int, int, int, int *);
 
-int exhaust_search(EW *, NEIGHBOR *, SHORT, SHORT);
-int exhaust_search_LL(EW *, NEIGHBOR *, SHORT, SHORT);
+int exhaust_search(EW *, NEIGHBOR *, int, int);
+int exhaust_search_LL(EW *, NEIGHBOR *, int, int);
 
 /* function pointer */
-int (*exhaust_row)(EW *, NEIGHBOR *, SHORT, SHORT);
+int (*exhaust_row)(EW *, NEIGHBOR *, int, int);
 
-double offset_distance(SHORT);
-double offset_distance_LL(SHORT);
-double (*check_offset)(SHORT); /* function pointer */
+double offset_distance(int);
+double offset_distance_LL(int);
+double (*check_offset)(int); /* function pointer */
 
 static int error_flag = 0;
 static char *input;
@@ -80,8 +80,8 @@ static char *output;
 int main(int argc, char **argv)
 {
     MELEMENT *rowlist;
-    SHORT nrows, ncols;
-    SHORT datarows;
+    int nrows, ncols;
+    int datarows;
     int npoints;
     struct GModule *module;
     struct History history;
@@ -199,7 +199,7 @@ int main(int argc, char **argv)
 /*      calculations depends on the projection type; function   */
 /*      pointers are set dependent on projection type           */
 
-int lookup_and_function_ptrs(SHORT nrows, SHORT ncols)
+int lookup_and_function_ptrs(int nrows, int ncols)
 {
     double a, e2; /* used to control geodetic distance calculations */
 
@@ -232,7 +232,7 @@ int lookup_and_function_ptrs(SHORT nrows, SHORT ncols)
 /*      a matrix by interpolating from a given set of           */
 /*      irregularly spaced data points                          */
 
-int interpolate(MELEMENT rowlist[], SHORT nrows, SHORT ncols, SHORT datarows,
+int interpolate(MELEMENT rowlist[], int nrows, int ncols, int datarows,
                 int npoints, int out_fd, int maskfd)
 {
     extern CELL *cell;
@@ -240,7 +240,7 @@ int interpolate(MELEMENT rowlist[], SHORT nrows, SHORT ncols, SHORT datarows,
     MELEMENT *Rptr;
     EW *search, *ewptr, *current_row, /* start row for north/south search */
         *lastrow;                     /* last element in search array */
-    SHORT row, col;
+    int row, col;
     NEIGHBOR *nbr_head, *Nptr;
     double sum1, sum2;
 
@@ -325,13 +325,13 @@ int interpolate(MELEMENT rowlist[], SHORT nrows, SHORT ncols, SHORT datarows,
 /*      to be interpolated using data value of its neighbors    */
 
 int make_neighbors_list(
-    EW *firstrow, EW *lastrow, EW *curr_row, SHORT row, SHORT col,
+    EW *firstrow, EW *lastrow, EW *curr_row, int row, int col,
     NEIGHBOR *head, /* head points to dummy plus npoints neighbors */
     int npoints)
 {
     extern CELL *cell;
 
-    SHORT neighbors = 0,          /* number of neighbors in current list */
+    int neighbors = 0,            /* number of neighbors in current list */
         nsearch = 1, ssearch = 1; /* expand search north and south */
     EW *north, *south;
 
@@ -393,11 +393,11 @@ int make_neighbors_list(
 /******* END OF FUNCTION "MAKE_NEIGHBORS_LIST" ******************/
 
 int search(EW **ewptr, /* double-indirection !! */
-           NEIGHBOR *head, SHORT row, SHORT col, int npoints, SHORT *neighbors,
-           EW *boundary, SHORT south /* search proceeds southward if == 1 */
+           NEIGHBOR *head, int row, int col, int npoints, int *neighbors,
+           EW *boundary, int south /* search proceeds southward if == 1 */
 )
 {
-    SHORT new = 0; /* no prior search in first row in list */
+    int new = 0; /* no prior search in first row in list */
     EW *current, *prior;
 
     /* reset ewptr if row it points to has been thoroughly searched */
@@ -410,7 +410,7 @@ int search(EW **ewptr, /* double-indirection !! */
     prior = NULL;
 
     /* process rows where search has already been initiated */
-    while (!new &&current) {
+    while (!new && current) {
         (*locate_neighbors)(current, head, row, col, npoints, neighbors);
         prior = current;
         current = next_row(current, boundary, &new, south);
@@ -442,7 +442,7 @@ int search(EW **ewptr, /* double-indirection !! */
 }
 
 int exhaust(EW **ewptr, /* double-indirection !! */
-            NEIGHBOR *head, SHORT row, SHORT col)
+            NEIGHBOR *head, int row, int col)
 {
     EW *current;
 
@@ -469,7 +469,7 @@ int exhaust(EW **ewptr, /* double-indirection !! */
     return 0;
 }
 
-double offset_distance(SHORT offset)
+double offset_distance(int offset)
 {
     return (offset * offset); /* compare squared distances in this case */
 }
@@ -483,8 +483,8 @@ int completed_row(EW *ewptr)
 }
 
 EW *next_row(EW *ewptr,
-             EW *boundary, /* row boundary of map in search direction */
-             SHORT *new, SHORT south /* search proceeds southward if == 1 */
+             EW *boundary,       /* row boundary of map in search direction */
+             int *new, int south /* search proceeds southward if == 1 */
 )
 {
     if (ewptr->next)
@@ -505,7 +505,7 @@ EW *next_row(EW *ewptr,
 /*      by locating the two data closest to the specified column in     */
 /*      a linked list of row data                                       */
 
-int first_west(EW *ewptr, SHORT col)
+int first_west(EW *ewptr, int col)
 {
     if (ewptr->start == NULL) { /* no data in this row */
         ewptr->west = ewptr->east = NULL;
@@ -525,8 +525,8 @@ int first_west(EW *ewptr, SHORT col)
 /*      This function evaluates nearest neighbor status for a given     */
 /*      datum and resets the row search pointer based on the result     */
 
-int find_neighbors(EW *ewptr, NEIGHBOR *nbr_head, SHORT row, SHORT col,
-                   int npoints, SHORT *neighbors)
+int find_neighbors(EW *ewptr, NEIGHBOR *nbr_head, int row, int col, int npoints,
+                   int *neighbors)
 {
     MELEMENT **Mptr;  /* double indirection !! */
     int westward = 1; /* 1 if west of interpolation point */
@@ -559,7 +559,7 @@ int find_neighbors(EW *ewptr, NEIGHBOR *nbr_head, SHORT row, SHORT col,
 /*      This function exhausts all possible nearest neighhbors          */
 /*      within the row indexed by the ew search pointer                 */
 
-int exhaust_search(EW *ewptr, NEIGHBOR *nbr_head, SHORT row, SHORT col)
+int exhaust_search(EW *ewptr, NEIGHBOR *nbr_head, int row, int col)
 {
     double distance;
 
@@ -586,7 +586,7 @@ int exhaust_search(EW *ewptr, NEIGHBOR *nbr_head, SHORT row, SHORT col)
 /************************************************************************/
 /*      triangulate returns the square of the hypoteneuse               */
 
-double triangulate(MELEMENT *Mptr, SHORT row, SHORT col)
+double triangulate(MELEMENT *Mptr, int row, int col)
 {
     extern double *rowlook, *collook;
     int rowoff, coloff;
@@ -653,7 +653,7 @@ int sort_neighbors(NEIGHBOR *nbr_head, double distance)
 }
 
 int free_row_lists(/* frees indexed row lists of data */
-                   MELEMENT *rowlist, SHORT nrows)
+                   MELEMENT *rowlist, int nrows)
 {
     int i;
     MELEMENT *Mptr, *prev;
@@ -674,11 +674,11 @@ int free_row_lists(/* frees indexed row lists of data */
 MELEMENT *row_lists(
     /* Search and make array-indexed doubly-linked lists of original data points
      */
-    SHORT rows, SHORT cols, /* total rows and columns in window */
-    SHORT *datarows,        /* number of rows with non-zero input data */
-    int *npts,              /* number of data points available */
-    int fd,                 /* file descriptor, input */
-    CELL *cell              /* array of data for a single row */
+    int rows, int cols, /* total rows and columns in window */
+    int *datarows,      /* number of rows with non-zero input data */
+    int *npts,          /* number of data points available */
+    int fd,             /* file descriptor, input */
+    CELL *cell          /* array of data for a single row */
 )
 {
     int row, col;        /* row and column indices */
@@ -737,7 +737,7 @@ MELEMENT *row_lists(
 /*      Lookup tables containing distance squared (in units of ns.res)  */
 /*      are created for later use in selecting nearest neighbors        */
 
-int lookup_tables(SHORT nrows, SHORT ncols)
+int lookup_tables(int nrows, int ncols)
 {
     extern double *rowlook, *collook, ew2;
     extern struct Cell_head window;

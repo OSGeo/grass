@@ -9,7 +9,7 @@
 /*      by locating the two data closest to the specified column in     */
 /*      a linked list of row data                                       */
 
-int first_west_LL(EW *ewptr, SHORT col)
+int first_west_LL(EW *ewptr, int col)
 {
     if (ewptr->start == NULL) /* no data in this row */
         ewptr->walive = ewptr->ealive = FALSE;
@@ -31,7 +31,7 @@ int first_west_LL(EW *ewptr, SHORT col)
     return 0;
 }
 
-double offset_distance_LL(SHORT offset)
+double offset_distance_LL(int offset)
 {
     extern double *lat_diff;
 
@@ -46,13 +46,13 @@ int completed_row_LL(EW *ewptr)
     return (!ewptr->walive && !ewptr->ealive);
 }
 
-int find_neighbors_LL(EW *ewptr, NEIGHBOR *nbr_head, SHORT row, SHORT col,
-                      int npoints, SHORT *neighbors)
+int find_neighbors_LL(EW *ewptr, NEIGHBOR *nbr_head, int row, int col,
+                      int npoints, int *neighbors)
 {
     MELEMENT **Mptr;  /* double indirection !! */
     int westward = 1; /* 1 if west of interpolation point */
     double distance;
-    short *active; /* TRUE if active search in this direction */
+    int *active; /* TRUE if active search in this direction */
 
     active = &ewptr->walive; /* TRUE if searching west in this row */
     Mptr = &ewptr->west;     /* process search west first, then east */
@@ -84,7 +84,7 @@ int find_neighbors_LL(EW *ewptr, NEIGHBOR *nbr_head, SHORT row, SHORT col,
 /*      This function exhausts all possible nearest neighhbors          */
 /*      within the row indexed by the ew search pointer                 */
 
-int exhaust_search_LL(EW *ewptr, NEIGHBOR *nbr_head, SHORT row, SHORT col)
+int exhaust_search_LL(EW *ewptr, NEIGHBOR *nbr_head, int row, int col)
 {
     double distance;
 
@@ -129,7 +129,7 @@ int extend_east(EW *ewptr)
     return 0;
 }
 
-double distance_LL(SHORT row, SHORT col, MELEMENT *Mptr)
+double distance_LL(int row, int col, MELEMENT *Mptr)
 {
     extern double *rowlook, *collook;
 
@@ -142,13 +142,13 @@ double distance_LL(SHORT row, SHORT col, MELEMENT *Mptr)
 /*      Lookup tables storing pre-processed latitude and longitude data */
 /*      are created for later use in selecting nearest neighbors        */
 
-int LL_lookup_tables(SHORT nrows, SHORT ncols)
+int LL_lookup_tables(int nrows, int ncols)
 {
     extern double *rowlook, *collook, *lat_diff;
     extern struct Cell_head window;
     double *nextrow, *nextcol, *next_diff,
         lon = 0., lat = window.north - (0.5 * window.ns_res);
-    SHORT i;
+    int i;
 
     nextrow = rowlook = (double *)G_calloc(nrows, sizeof(double));
     for (i = 0; i < nrows; i++, nextrow++, lat -= window.ns_res)

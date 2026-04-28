@@ -165,7 +165,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    /* read the elevation points from the input sites file */
+    /* read the vector points from the input map */
     read_sites(parm.input->answer, parm.dfield->answer, parm.col->answer,
                flag.noindex->answer);
 

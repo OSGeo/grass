@@ -11,6 +11,6 @@ enum OutputFormat {
 
 /* what.c */
 void what(struct Map_info *, int, char **, double, double, double, int, int,
-          int, enum OutputFormat, int, int *, char *, JSON_Array *, int);
+          int, enum OutputFormat, int, int *, char *, G_JSON_Array *, int);
 
 #endif

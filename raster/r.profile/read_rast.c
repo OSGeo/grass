@@ -10,12 +10,13 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 #include "local_proto.h"
 
 int read_rast(double east, double north, double dist, int fd, int coords,
               RASTER_MAP_TYPE data_type, FILE *fp, char *null_string,
-              enum OutputFormat format, JSON_Array *array, ColorFormat clr_frmt)
+              enum OutputFormat format, G_JSON_Array *array,
+              ColorFormat clr_frmt)
 {
     static DCELL *dcell;
     static int cur_row = -1;
@@ -24,12 +25,12 @@ int read_rast(double east, double north, double dist, int fd, int coords,
     static struct Cell_head window;
     int row, col;
     int outofbounds = FALSE;
-    JSON_Object *object;
-    JSON_Value *value;
+    G_JSON_Object *object;
+    G_JSON_Value *value;
 
     if (format == JSON) {
-        value = json_value_init_object();
-        object = json_object(value);
+        value = G_json_value_init_object();
+        object = G_json_object(value);
     }
 
     if (!dcell) {
@@ -56,10 +57,10 @@ int read_rast(double east, double north, double dist, int fd, int coords,
     switch (format) {
     case JSON:
         if (coords) {
-            json_object_set_number(object, "easting", east);
-            json_object_set_number(object, "northing", north);
+            G_json_object_set_number(object, "easting", east);
+            G_json_object_set_number(object, "northing", north);
         }
-        json_object_set_number(object, "distance", dist);
+        G_json_object_set_number(object, "distance", dist);
         break;
     case PLAIN:
         if (coords)
@@ -78,7 +79,7 @@ int read_rast(double east, double north, double dist, int fd, int coords,
     if (outofbounds || Rast_is_d_null_value(&dcell[col])) {
         switch (format) {
         case JSON:
-            json_object_set_null(object, "value");
+            G_json_object_set_null(object, "value");
             break;
         case PLAIN:
             fprintf(fp, " %s", null_string);
@@ -93,7 +94,7 @@ int read_rast(double east, double north, double dist, int fd, int coords,
             int dvalue = (int)dcell[col];
             switch (format) {
             case JSON:
-                json_object_set_number(object, "value", dvalue);
+                G_json_object_set_number(object, "value", dvalue);
                 break;
             case PLAIN:
                 fprintf(fp, " %d", dvalue);
@@ -106,7 +107,7 @@ int read_rast(double east, double north, double dist, int fd, int coords,
         else {
             switch (format) {
             case JSON:
-                json_object_set_number(object, "value", dcell[col]);
+                G_json_object_set_number(object, "value", dcell[col]);
                 break;
             case PLAIN:
                 fprintf(fp, " %f", dcell[col]);
@@ -131,7 +132,7 @@ int read_rast(double east, double north, double dist, int fd, int coords,
         switch (format) {
         case JSON:
             G_color_to_str(red, green, blue, clr_frmt, color_str);
-            json_object_set_string(object, "color", color_str);
+            G_json_object_set_string(object, "color", color_str);
             break;
         case PLAIN:
             if (clr_frmt != TRIPLET) {
@@ -155,7 +156,7 @@ int read_rast(double east, double north, double dist, int fd, int coords,
 
     switch (format) {
     case JSON:
-        json_array_append_value(array, value);
+        G_json_array_append_value(array, value);
         break;
     case PLAIN:
     case CSV:

@@ -39,7 +39,7 @@
 
 int seg_seek_fast(const SEGMENT *SEG, int n, int index)
 {
-    if (lseek((SEG)->fd, SEG_SEEK_FAST(SEG, n, index), SEEK_SET) == (off_t)-1) {
+    if (lseek((SEG)->fd, SEG_SEEK_FAST(SEG, n, index), SEEK_SET) == -1) {
         G_fatal_error("Segment seek: %s", strerror(errno));
     }
 
@@ -48,7 +48,7 @@ int seg_seek_fast(const SEGMENT *SEG, int n, int index)
 
 int seg_seek_slow(const SEGMENT *SEG, int n, int index)
 {
-    if (lseek((SEG)->fd, SEG_SEEK_SLOW(SEG, n, index), SEEK_SET) == (off_t)-1) {
+    if (lseek((SEG)->fd, SEG_SEEK_SLOW(SEG, n, index), SEEK_SET) == -1) {
         G_fatal_error("Segment seek: %s", strerror(errno));
     }
 

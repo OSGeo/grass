@@ -13,7 +13,6 @@ COPYRIGHT: (C) 2022 Maris Nartiss, and by the GRASS Development Team
 """
 
 import grass.lib.vector as libvect
-
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
