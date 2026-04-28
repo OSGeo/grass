@@ -44,8 +44,6 @@ function(build_script_in_subdir dir_name)
     set(script_ext ".py")
   endif()
 
-  set(HTML_FILE ${G_SRC_DIR}/${G_NAME}.html)
-
   configure_file(
     ${G_SRC_DIR}/${G_NAME}.py
     ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${G_NAME}${script_ext} COPYONLY)
@@ -78,7 +76,6 @@ function(build_script_in_subdir dir_name)
       ${CMAKE_SOURCE_DIR}/cmake/locale_strings.cmake
     DEPENDS g.parser)
 
-  set(HTML_FILE_NAME ${G_NAME})
   set(OUT_HTML_FILE "")
 
   if(WITH_DOCS AND NOT G_NO_DOCS)
@@ -90,17 +87,17 @@ function(build_script_in_subdir dir_name)
       install(FILES ${IMG_FILES} DESTINATION ${GRASS_INSTALL_DOCDIR})
     endif()
 
-    set(out_html_file ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${G_NAME}.html)
+    set(OUT_HTML_FILE ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${G_NAME}.html)
 
     generate_docs(${G_NAME}
-      OUTPUT ${out_html_file}
+      OUTPUT ${OUT_HTML_FILE}
       SOURCEDIR ${G_SRC_DIR}
       DEST_DIR ${G_DEST_DIR}
       DEPENDS ${TRANSLATE_C_FILE} LIB_PYTHON)
 
   endif() # WITH_DOCS
 
-  add_custom_target(${G_NAME} DEPENDS ${TRANSLATE_C_FILE} ${out_html_file})
+  add_custom_target(${G_NAME} DEPENDS ${TRANSLATE_C_FILE} ${OUT_HTML_FILE})
 
   set(modules_list
       "${G_NAME};${modules_list}"
