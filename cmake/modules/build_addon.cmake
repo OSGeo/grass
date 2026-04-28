@@ -53,7 +53,7 @@ if(WIN32)
 else()
   set(null_device /dev/null)
   set(search_command grep -v)
-  set(html_search_str "\'</body>\|</html>\|</div> <!-- end container -->\'")
+  set(html_search_str "'</body>\|</html>\|</div>.<!--.end.container.-->'")
   set(sep ":")
 endif()
 
