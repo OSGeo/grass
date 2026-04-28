@@ -106,7 +106,7 @@ function(generate_docs name)
     set(py "")
     set(null_device /dev/null)
     set(search_cmd grep -v)
-    set(html_search_str "\'</body>\|</html>\|</div> <!-- end container -->\'")
+    set(html_search_str "'</body>\|</html>\|</div>.<!--.end.container.-->'")
   endif()
 
   if(D_HTML_DESCR)
