@@ -1191,10 +1191,14 @@ void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
             (k + 1), arrayNumInt, angle_deg, shad_filename);
 
         int j;
+        GProgressContext *ctx =
+            G_progress_context_create(hor_row_end - hor_row_start, 2);
 
 #pragma omp parallel for schedule(static, 1) default(shared)
         for (j = hor_row_start; j < hor_row_end; j++) {
+#ifndef G_USE_PROGRESS_NG
             G_percent(j - hor_row_start, hor_numrows - 1, 2);
+#endif
             for (int i = hor_col_start; i < hor_col_end; i++) {
                 OriginPoint origin_point;
                 OriginAngle origin_angle;
@@ -1237,7 +1241,9 @@ void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
 
                 } /* undefs */
             } /* end of loop over columns */
+            G_progress_update(ctx);
         } /* end of parallel section */
+        G_progress_context_destroy(ctx);
 
         G_debug(1, "OUTGR() starts...");
         OUTGR(settings, shad_filename, cellhd);
