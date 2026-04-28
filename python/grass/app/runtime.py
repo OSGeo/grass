@@ -227,7 +227,7 @@ def append_left_main_executable_paths(paths, install_path):
 
     # Without FHS, scripts are separated like in the source code.
     path = os.path.join(install_path, "scripts")
-    if os.path.exists(path):
+    if Path(path).exists():
         paths.appendleft(path)
 
 
