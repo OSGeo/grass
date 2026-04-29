@@ -618,7 +618,7 @@ class TaskFrame(wx.Frame):
         item_script = self.copyMenu.Append(wx.ID_ANY, _("Copy as Python (Script API)"))
         item_tools = self.copyMenu.Append(wx.ID_ANY, _("Copy as Python (Tools API)"))
         item_pygrass = self.copyMenu.Append(wx.ID_ANY, _("Copy as Python (PyGRASS)"))
-        item_json = self.copyMenu.Append(wx.ID_ANY, _("Copy as JSON"))
+        item_json = self.copyMenu.Append(wx.ID_ANY, _("Copy as JSON settings"))
 
         # Bind menu items
         self.Bind(wx.EVT_MENU, self.OnCopyCommand, item_shell)
@@ -638,31 +638,18 @@ class TaskFrame(wx.Frame):
         # Get standard button dimensions to ensure the arrow segment matches
         standard_size = self.btn_copy.GetBestSize()
         btn_h = standard_size.height
-        arrow_btn_w = 24
+        arrow_btn_w = 23
 
-        # 2. Create a truly transparent 16x16 chevron icon using RGBA
-        icon_size = 16
-        # Start with a fully transparent bitmap (alpha=0)
+        icon_size = 23
         bmp = wx.Bitmap.FromRGBA(icon_size, icon_size, red=0, green=0, blue=0, alpha=0)
 
         mdc = wx.MemoryDC(bmp)
-        gc = wx.GCDC(mdc)  # GCDC provides smoother (anti-aliased) lines
+        renderer = wx.RendererNative.Get()
 
-        # Draw the "v" shape (chevron)
-        # Use system button text color for automatic Light/Dark mode support
-        text_color = wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNTEXT)
-        gc.SetPen(wx.Pen(text_color, 2))
+        rect = wx.Rect(0, 0, icon_size, icon_size)
 
-        # On Windows, text baseline is 2 pixels higher, so we shift the arrow up
-        y_offset = -2 if sys.platform.startswith("win") else 0
+        renderer.DrawDropArrow(self.panel, mdc, rect, wx.CONTROL_FLAT)
 
-        # Coordinates for perfect centering in a 16x16 canvas:
-        # We start the arms at 8 and the tip at 13.
-        # This aligns the tip with the baseline of the letters.
-        gc.DrawLine(4, 8 + y_offset, 8, 13 + y_offset)
-        gc.DrawLine(8, 13 + y_offset, 12, 8 + y_offset)
-
-        del gc
         mdc.SelectObject(wx.NullBitmap)
 
         # 3. The Arrow Button segment
@@ -686,7 +673,9 @@ class TaskFrame(wx.Frame):
 
         # Paste button
         # Create the Paste button to populate the dialog from a JSON string
-        self.btn_paste = Button(parent=self.panel, id=wx.ID_ANY, label=_("Paste"))
+        self.btn_paste = Button(
+            parent=self.panel, id=wx.ID_ANY, label=_("Paste JSON settings")
+        )
         self.btn_paste.SetToolTip(
             _("Paste parameters from JSON string in the clipboard")
         )
@@ -1039,6 +1028,23 @@ class TaskFrame(wx.Frame):
             data = json.loads(tdo.GetText())
             if not isinstance(data, dict):
                 raise ValueError(_("Pasted data is not a valid JSON object."))
+
+            pasted_module = data.get("module")
+            current_module = self.task.get_name()
+
+            if pasted_module and pasted_module != current_module:
+                confirm = wx.MessageBox(
+                    _(
+                        "You are pasting settings from module '%(pasted)s' into module '%(current)s'. "
+                        "Only matching parameters will be updated. Continue?"
+                    )
+                    % {"pasted": pasted_module, "current": current_module},
+                    _("Module Mismatch"),
+                    wx.YES_NO | wx.ICON_WARNING,
+                )
+                if confirm != wx.YES:
+                    return
+
             new_params = data.get("params", data)
             if not isinstance(new_params, dict):
                 raise ValueError(_("Pasted parameters are not a valid JSON object."))
@@ -1133,8 +1139,17 @@ class TaskFrame(wx.Frame):
             else:
                 self.SetStatusText(_("No matching parameters found in clipboard."))
 
-        except (json.JSONDecodeError, ValueError) as e:
-            wx.MessageBox(_("Paste Error: {}").format(e), _("Error"), wx.ICON_ERROR)
+        except json.JSONDecodeError:
+            wx.MessageBox(
+                _(
+                    "The clipboard does not contain valid JSON data. "
+                    "Please ensure you have copied the settings correctly."
+                ),
+                _("Invalid Data"),
+                wx.ICON_ERROR,
+            )
+        except ValueError as e:
+            wx.MessageBox(str(e), _("Paste Error"), wx.ICON_ERROR)
 
     def _toClipboard(self, text):
         """Stores text string into the system clipboard"""
