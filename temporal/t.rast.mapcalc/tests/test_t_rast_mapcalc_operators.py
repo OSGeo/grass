@@ -25,7 +25,7 @@ def test_start_time_end_time_operators(mapcalc_session, assert_tinfo):
         tools,
         "precip_abs3",
         {
-            "number_of_maps": 6,
+            "number_of_maps": 3,
             "temporal_type": "absolute",
             "name": "precip_abs3",
         },
@@ -47,7 +47,7 @@ def test_start_time_components(mapcalc_session, assert_tinfo):
     assert_tinfo(
         tools,
         "precip_abs3",
-        {"number_of_maps": 6, "name": "precip_abs3"},
+        {"number_of_maps": 3, "name": "precip_abs3"},
     )
 
 
@@ -66,7 +66,7 @@ def test_end_time_components(mapcalc_session, assert_tinfo):
     assert_tinfo(
         tools,
         "precip_abs3",
-        {"number_of_maps": 6, "name": "precip_abs3"},
+        {"number_of_maps": 3, "name": "precip_abs3"},
     )
 
 
@@ -85,7 +85,7 @@ def test_start_doy_dow_operators(mapcalc_session, assert_tinfo):
     assert_tinfo(
         tools,
         "precip_abs3",
-        {"number_of_maps": 6, "name": "precip_abs3"},
+        {"number_of_maps": 3, "name": "precip_abs3"},
     )
 
 
@@ -104,7 +104,7 @@ def test_end_doy_dow_operators(mapcalc_session, assert_tinfo):
     assert_tinfo(
         tools,
         "precip_abs3",
-        {"number_of_maps": 6, "name": "precip_abs3"},
+        {"number_of_maps": 3, "name": "precip_abs3"},
     )
 
 
@@ -121,5 +121,5 @@ def test_map_comparison_operator(mapcalc_session, assert_tinfo):
     assert_tinfo(
         tools,
         "precip_abs3",
-        {"name": "precip_abs3", "number_of_maps": 6},
+        {"name": "precip_abs3", "number_of_maps": 3},
     )

@@ -16,7 +16,7 @@ from grass.tools import Tools
 
 @pytest.fixture(scope="session")
 def mapcalc_session(tmp_path_factory):
-    """GRASS session with prec_1..prec_6 rasters and precip_abs1/2 STRDS.
+    """GRASS session with prec_1..prec_3 rasters and precip_abs1/2 STRDS.
 
     Session-scoped: setup (region, rasters, STRDS, TGIS init) runs once for
     the whole test run. Tests use overwrite=True for their outputs and
@@ -30,14 +30,7 @@ def mapcalc_session(tmp_path_factory):
         tools = Tools(session=session, overwrite=True)
         tools.g_gisenv(set="TGIS_USE_CURRENT_MAPSET=1")
         tools.g_region(s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10)
-        for name, val in [
-            ("prec_1", 550),
-            ("prec_2", 450),
-            ("prec_3", 320),
-            ("prec_4", 510),
-            ("prec_5", 300),
-            ("prec_6", 650),
-        ]:
+        for name, val in [("prec_1", 550), ("prec_2", 450), ("prec_3", 320)]:
             tools.r_mapcalc(expression=f"{name} = rand(0, {val})", seed=1)
         for name in ("precip_abs1", "precip_abs2"):
             tools.t_create(
@@ -51,14 +44,14 @@ def mapcalc_session(tmp_path_factory):
             flags="i",
             type="raster",
             input="precip_abs1",
-            maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6",
+            maps="prec_1,prec_2,prec_3",
             start="2001-01-01",
             increment="3 months",
         )
         tools.t_register(
             type="raster",
             input="precip_abs2",
-            maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6",
+            maps="prec_1,prec_2,prec_3",
         )
         yield session
 

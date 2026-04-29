@@ -28,7 +28,7 @@ def test_basic_addition(mapcalc_session, assert_tinfo):
         tools,
         "precip_abs3",
         {
-            "number_of_maps": 6,
+            "number_of_maps": 3,
             "temporal_type": "absolute",
             "name": "precip_abs3",
         },
@@ -65,7 +65,7 @@ def test_division_with_three_inputs(mapcalc_session, assert_tinfo):
         tools,
         "precip_abs4",
         {
-            "number_of_maps": 6,
+            "number_of_maps": 3,
             "temporal_type": "absolute",
             "name": "precip_abs4",
         },
@@ -106,7 +106,7 @@ def test_null_multiplication_with_null_flag(mapcalc_session, assert_tinfo):
     assert_tinfo(
         tools,
         "precip_abs4",
-        {"name": "precip_abs4", "number_of_maps": 6},
+        {"name": "precip_abs4", "number_of_maps": 3},
     )
 
 
@@ -115,7 +115,7 @@ def test_failure_on_missing_map(mapcalc_session):
 
     Hides prec_1 by renaming it so that the STRDS still references the name
     but the raster does not resolve. The rename is restored in a finally
-    block so subsequent tests in this module-scoped session see prec_1.
+    block so subsequent tests in the shared session see prec_1.
     """
     tools = Tools(session=mapcalc_session, overwrite=True)
     tools.g_rename(raster="prec_1,prec_1_hidden")
