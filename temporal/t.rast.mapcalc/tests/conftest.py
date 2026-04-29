@@ -1,9 +1,5 @@
 """Fixtures for t.rast.mapcalc tests.
 
-Each fixture creates its own temporary GRASS project and session, following
-the pattern from temporal/t.rast.list/tests/conftest.py. Tests do NOT rely
-on a pre-existing GRASS session.
-
 (C) 2025 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -11,7 +7,6 @@ for details.
 """
 
 import os
-from types import SimpleNamespace
 
 import pytest
 
@@ -19,93 +14,65 @@ import grass.script as gs
 from grass.tools import Tools
 
 
-def _setup_maps(session):
-    """Create region, prec_* rasters, and STRDS precip_abs1, precip_abs2.
+@pytest.fixture(scope="session")
+def mapcalc_session(tmp_path_factory):
+    """GRASS session with prec_1..prec_6 rasters and precip_abs1/2 STRDS.
 
-    Uses Tools(session=session) so the Tools instance manages the session
-    environment; no explicit env= is passed.
+    Session-scoped: setup (region, rasters, STRDS, TGIS init) runs once for
+    the whole test run. Tests use overwrite=True for their outputs and
+    test_failure_on_missing_map restores its rename in a finally block, so
+    sharing across modules is safe.
     """
-    tools = Tools(session=session, overwrite=True)
-    tools.g_gisenv(set="TGIS_USE_CURRENT_MAPSET=1")
-    tools.g_region(
-        s=0,
-        n=80,
-        w=0,
-        e=120,
-        b=0,
-        t=50,
-        res=10,
-        res3=10,
-    )
-    # Create raster maps with seeded random values
-    for name, val in [
-        ("prec_1", 550),
-        ("prec_2", 450),
-        ("prec_3", 320),
-        ("prec_4", 510),
-        ("prec_5", 300),
-        ("prec_6", 650),
-    ]:
-        tools.r_mapcalc(expression=f"{name} = rand(0, {val})", seed=1)
-
-    # Create STRDS datasets
-    tools.t_create(
-        type="strds",
-        temporaltype="absolute",
-        output="precip_abs1",
-        title="A test",
-        description="A test",
-    )
-    tools.t_create(
-        type="strds",
-        temporaltype="absolute",
-        output="precip_abs2",
-        title="A test",
-        description="A test",
-    )
-    # Register maps with temporal information
-    tools.t_register(
-        flags="i",
-        type="raster",
-        input="precip_abs1",
-        maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6",
-        start="2001-01-01",
-        increment="3 months",
-    )
-    tools.t_register(
-        type="raster",
-        input="precip_abs2",
-        maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6",
-    )
-
-
-@pytest.fixture(scope="module")
-def mapcalc_session_basic(tmp_path_factory):
-    """Create a GRASS session with STRDS data for basic tests.
-
-    Creates a temporary GRASS project and initializes a session. The session
-    and all data are cleaned up automatically when the context exits.
-    Follows the pattern from temporal/t.rast.list/tests/conftest.py.
-    """
-    tmp_path = tmp_path_factory.mktemp("t_rast_mapcalc_basic")
+    tmp_path = tmp_path_factory.mktemp("t_rast_mapcalc")
     project = tmp_path / "test"
     gs.create_project(project)
     with gs.setup.init(project, env=os.environ.copy()) as session:
-        _setup_maps(session)
-        # Yield SimpleNamespace with env for backward compatibility with tests
-        yield SimpleNamespace(session=session, env=session.env)
+        tools = Tools(session=session, overwrite=True)
+        tools.g_gisenv(set="TGIS_USE_CURRENT_MAPSET=1")
+        tools.g_region(s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10)
+        for name, val in [
+            ("prec_1", 550),
+            ("prec_2", 450),
+            ("prec_3", 320),
+            ("prec_4", 510),
+            ("prec_5", 300),
+            ("prec_6", 650),
+        ]:
+            tools.r_mapcalc(expression=f"{name} = rand(0, {val})", seed=1)
+        for name in ("precip_abs1", "precip_abs2"):
+            tools.t_create(
+                type="strds",
+                temporaltype="absolute",
+                output=name,
+                title="A test",
+                description="A test",
+            )
+        tools.t_register(
+            flags="i",
+            type="raster",
+            input="precip_abs1",
+            maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6",
+            start="2001-01-01",
+            increment="3 months",
+        )
+        tools.t_register(
+            type="raster",
+            input="precip_abs2",
+            maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6",
+        )
+        yield session
 
 
-@pytest.fixture(scope="module")
-def mapcalc_session_operators(tmp_path_factory):
-    """Create a GRASS session with STRDS data for operator tests.
+@pytest.fixture
+def assert_tinfo():
+    """Return a helper that checks t.info -g output against expected key/value pairs."""
 
-    Identical structure to mapcalc_session_basic but creates a separate
-    project to isolate operator tests from basic tests.
-    """
-    tmp_path = tmp_path_factory.mktemp("t_rast_mapcalc_operators")
-    project = tmp_path / "test"
-    gs.create_project(project)
-    with gs.setup.init(project, env=os.environ.copy()) as session:
-        _setup_maps(session)
-        yield SimpleNamespace(session=session, env=session.env)
+    def _assert(tools, strds_name, expected):
+        actual = tools.t_info(type="strds", input=strds_name, flags="g").keyval
+        for key, value in expected.items():
+            assert key in actual, f"missing key {key!r} in t.info output"
+            assert actual[key] == value, (
+                f"{key}: expected {value!r}, got {actual[key]!r}"
+            )
+
+    return _assert
