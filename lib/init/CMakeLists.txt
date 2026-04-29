@@ -52,22 +52,29 @@ list(APPEND DLL_PATH_LIST ${DEPS_DLL_PATH})
 set(GRASS_PYDIR ${GRASS_INSTALL_PYDIR_RUNTIME_PATH})
 if(WIN32)
   configure_file(grass.py ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/${START_UP} @ONLY)
-else()
-  configure_file(grass.py ${OUTDIR}/${CMAKE_INSTALL_BINDIR}/${START_UP} @ONLY)
-endif()
 
-set(GRASS_PYDIR ${GRASS_INSTALL_PYDIR_PATH})
-configure_file(grass.py ${CMAKE_CURRENT_BINARY_DIR}/${START_UP} @ONLY)
-unset(GRASS_PYDIR)
+  set(GRASS_PYDIR ${GRASS_INSTALL_PYDIR_PATH})
+  configure_file(grass.py ${CMAKE_CURRENT_BINARY_DIR}/${START_UP} @ONLY)
+  unset(GRASS_PYDIR)
 
-install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${START_UP}
-        DESTINATION ${CMAKE_INSTALL_BINDIR})
+  install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${START_UP}
+	  DESTINATION ${GRASS_INSTALL_ETCDIR})
 
-file(TO_NATIVE_PATH "${OUTDIR}/${GISBASE_DIR}" gisbase_init_dir)
+  file(TO_NATIVE_PATH ${GISBASE_DIR} gisbase_init_dir)
 
-if(WIN32)
   set(GRASS_PYTHON ${PYTHON_EXECUTABLE})
   configure_file(${script_input_file_name} ${OUTDIR}/${CMAKE_INSTALL_BINDIR}/${script_file_name} @ONLY)
+  install(PROGRAMS ${OUTDIR}/${CMAKE_INSTALL_BINDIR}/${script_file_name}
+          DESTINATION ${CMAKE_INSTALL_BINDIR})
+else()
+  configure_file(grass.py ${OUTDIR}/${CMAKE_INSTALL_BINDIR}/${START_UP} @ONLY)
+
+  set(GRASS_PYDIR ${GRASS_INSTALL_PYDIR_PATH})
+  configure_file(grass.py ${CMAKE_CURRENT_BINARY_DIR}/${START_UP} @ONLY)
+  unset(GRASS_PYDIR)
+
+  install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${START_UP}
+          DESTINATION ${CMAKE_INSTALL_BINDIR})
 endif()
 
 file(TO_NATIVE_PATH ${OUTDIR}/${GRASS_INSTALL_BINDIR} grass_dll_dir)
