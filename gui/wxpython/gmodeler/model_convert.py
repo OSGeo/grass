@@ -57,7 +57,7 @@ class BaseModelConverter(ABC):
             cond = item.GetLabel()
             for variable in self.model.GetVariables():
                 # curly braces are optional
-                pattern = re.compile("%{?" + variable + "}?")
+                pattern = re.compile(r"%(?:\{" + variable + r"\}|" + variable + r")")
                 if pattern.search(cond):
                     value = variables[variable].get("value", "")
                     if variables[variable].get("type", "string") == "string":
@@ -971,7 +971,7 @@ if __name__ == "__main__":
             formattedVar = False
             for var in variables["vars"]:
                 # curly braces are optional
-                pattern = re.compile("%{?" + var + "}?")
+                pattern = re.compile(r"%(?:\{" + var + r"\}|" + var + r")")
                 found = pattern.search(parameterizedValue)
                 if found:
                     foundVar = True

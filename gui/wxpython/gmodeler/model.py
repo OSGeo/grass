@@ -541,7 +541,7 @@ class Model:
             variables = self.GetVariables()
             for variable in variables:
                 # curly braces are optional
-                pattern = re.compile("%{?" + variable + "}?")
+                pattern = re.compile(r"%(?:\{" + variable + r"\}|" + variable + r")")
                 value = ""
                 if params and "variables" in params:
                     for p in params["variables"]["params"]:
@@ -694,7 +694,7 @@ class Model:
                 variables = self.GetVariables()
                 for variable in variables:
                     # curly braces are optional
-                    pattern = re.compile("%{?" + variable + "}?")
+                    pattern = re.compile(r"%(?:\{" + variable + r"\}|" + variable + r")")
                     if not pattern.search(cond):
                         continue
                     value = ""
@@ -718,7 +718,7 @@ class Model:
                 # TODO: this part needs some better solution
                 condVar, condText = (x.strip() for x in re.split(r"\s* in \s*", cond))
                 # curly braces are optional
-                pattern = re.compile("%{?" + condVar + "}?")
+                pattern = re.compile(r"%(?:\{" + condVar + r"\}|" + condVar + r")")
                 # for vars()[condVar] in eval(condText): ?
                 vlist = []
                 if condText[0] == "`" and condText[-1] == "`":

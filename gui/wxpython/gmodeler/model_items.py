@@ -348,7 +348,7 @@ class ModelAction(ModelObject, ogl.DividedShape):
             # order variables by length
             for variable in sorted(variables, key=len, reverse=True):
                 # curly braces are optional
-                pattern = re.compile("%{?" + variable + "}?")
+                pattern = re.compile(r"%(?:\{" + variable + r"\}|" + variable + r")")
                 value = ""
                 if substitute and "variables" in substitute:
                     for p in substitute["variables"]["params"]:
