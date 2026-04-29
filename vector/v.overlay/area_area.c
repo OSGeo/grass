@@ -205,6 +205,8 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
     Vect_spatial_index_init(&si, 0);
     ncentr = nareas;
     for (ocentr = 1; ocentr <= ncentr; ocentr++) {
+        if (!Centr[ocentr].valid)
+            continue;
         box.N = box.S = Centr[ocentr].y;
         box.E = box.W = Centr[ocentr].x;
         box.T = box.B = 0;
@@ -310,6 +312,9 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
         int i;
 
         G_percent(area, nareas, 1);
+
+        if (!Centr[area].valid)
+            continue;
 
         /* check the condition */
         switch (operator) {
