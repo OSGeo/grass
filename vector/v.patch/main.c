@@ -239,11 +239,11 @@ int main(int argc, char *argv[])
 
                         snprintf(tmpbuf, sizeof(tmpbuf), ",%s",
                                  db_get_column_name(column_out));
-                        if (strlen(colnames) + strlen(tmpbuf) >= DB_SQL_MAX) {
+                        if (G_strlcat(colnames, tmpbuf, sizeof(colnames)) >=
+                            sizeof(colnames)) {
                             G_fatal_error(
                                 _("Too many columns to copy the table"));
                         }
-                        G_strlcat(colnames, tmpbuf, DB_SQL_MAX);
                     }
                 }
             }
