@@ -623,7 +623,7 @@ int copy_records(dbDriver *driver_in, dbString *table_name_in,
 
     if (colnames && *colnames) {
         if (snprintf(tmpbuf, sizeof(tmpbuf), "select %s from ", colnames) >=
-            sizeof(tmpbuf)) {
+            (int)sizeof(tmpbuf)) {
             G_fatal_error(_("Too many columns to copy records"));
         }
     }
