@@ -203,7 +203,7 @@ if the string values are convertible,
 bringing the output processing closer to JSON:
 
 ```python
-result = tools.run("g.region", flags="c", format="shell").keyval
+result = tools.g_region(flags="c", format="shell").keyval
 # Returns: {"center_easting": 0.5, "center_northing": 0.5}
 ```
 
@@ -335,14 +335,14 @@ This usage pattern can be replaced by direct use of Python formatting capabiliti
 for example an f-strings:
 
 ```python
-tools.r_mapcalc(f"{sum_raster} = {input_1} + {input_2}")
+tools.r_mapcalc(expression=f"{sum_raster} = {input_1} + {input_2}")
 ```
 
 For simple expressions and limited number of input rasters,
 the *r.mapcalc.simple* tool provides an alternative syntax:
 
 ```python
-tools.r_mapcalc_simple("A + B", a=input_1, b=input_2, output=sum_raster)
+tools.r_mapcalc_simple(expression="A + B", a=input_1, b=input_2, output=sum_raster)
 ```
 
 For *r.mapcalc.simple*, the parametrized inputs need to be rasters and
