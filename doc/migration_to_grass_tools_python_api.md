@@ -33,8 +33,8 @@ Tool names become Python function names of a *Tools* object,
 all parameters become keyword arguments, and you get consistent,
 smart return values regardless of what the tool outputs.
 The result is code that reads more naturally and requires less mental overhead
-when reading as the tool names are more prominent
-and special configuration is concenterated in one place.
+because the tool names are more prominent
+and special configuration is concentrated in one place.
 
 Key advantages of *grass.tools*:
 
@@ -186,7 +186,7 @@ result = tools.run("g.region", flags="c").stdout
 ### From *parse_command* to smart result objects
 
 The *parse_command* function parses key-value output from tools,
-and newly also JSON, based on the function call parameters.
+and more recently JSON, depending on the parameters.
 Shell format returns strings, while JSON format returns proper numbers.
 With *grass.tools*, you get automatic type conversion
 and can access parsed data directly.
@@ -235,7 +235,7 @@ The *write_command* function pipes text to a tool's standard input
 using a special *stdin* parameter along with *input="-"*
 which is required by the tools (but standardized across tools).
 This syntax requires two different parameters to set the input in addition
-to the usage of dedicated function name.
+to using a dedicated function name.
 
 The *run_command* family approach:
 
@@ -275,7 +275,7 @@ tools.run(
 
 ## Replacing convenience wrapper functions
 
-Beyond the core **_command* functions, *grass.script* provides various convenience
+Beyond the core `*_command` functions, *grass.script* provides various convenience
 wrappers to mitigate different shortcomings of the *run_command* family approach.
 These can be replaced with direct tool calls using JSON format.
 
@@ -288,7 +288,7 @@ namely from better tool defaults (e.g., printing more in JSON)
 and from more consistent tool behavior (e.g., tools accepting `format="json"`).
 
 Not using the wrappers also makes it clear that any special parameters,
-such as a session, need to be passes to each relevant call.
+such as a session, need to be passed to each relevant call.
 While this is obvious for the tools, it is less obvious when the wrappers are used.
 
 ### From *mapcalc* to *r.mapcalc*
@@ -307,7 +307,7 @@ tools.r_mapcalc(expression="a = 1")
 ```
 
 For longer expressions (which would hit the operating system limit on the length
-of subprocess parameter list), you can use an *StringIO* object:
+of subprocess parameter list), you can use a *StringIO* object:
 
 ```python
 tools.r_mapcalc(file=io.StringIO("a = 1"))
@@ -315,11 +315,11 @@ tools.r_mapcalc(file=io.StringIO("a = 1"))
 
 While this requires you to make a decision about the parameter,
 depending on the length of the expression as well as specifying the parameter explicitly,
-the same approach works for any tools with a potentially long parameter value
-without relying on an a dedicated wrapper (e.g., *r.series*).
+the same approach also works for other tools that accept potentially long
+parameter values (e.g., *r.series*), without needing a tool-specific wrapper.
 In practice, the decision should be easy: all generated expressions should
 use the *file* parameter,
-while expressions written as Python string literal over couple lines
+while expressions written as a Python string literal over a couple of lines
 can use the simpler *expression* parameter.
 
 ### Replacing *mapcalc* usage of string templates
@@ -478,7 +478,7 @@ returncode = result.returncode
 
 While the new tool call above involves more objects,
 namely a separate *Tools* object and also tool result object,
-an actual tool call in the code may be quite straigforward:
+an actual tool call in the code may be quite straightforward:
 
 ```python
 returncode = tools.r_mask_status(flags="t").returncode
@@ -526,7 +526,7 @@ tools.r_random_surface(output="surface", seed=42)
 This approach is particularly useful in scripts where you frequently recreate outputs
 during development and testing,
 but are not ready to turn your script into a GRASS tool in Python
-which provide the overwrite settings automatically.
+which provides the overwrite settings automatically.
 For many scripts, this means that overwrite setting is limited to one line
 rather than being present in every tool call.
 
@@ -618,8 +618,9 @@ from *run_command* to *grass.tools* syntax for a script
 which explicitly sets up and passes a session to tool calls.
 (A code for an analytical GRASS tool will typically leave out the session
 handling completely relying on the parent session.
-Scripts may only setup the a global session without passing it explicitly.
-Consequently, your code may be much simpler.)
+Scripts can simply set up a global session and rely on it implicitly,
+without passing it to each call. Consequently, your actual code may be much
+simpler, then this example.)
 
 ### Old approach using run_command functions
 
