@@ -13,7 +13,6 @@
 
 #include <math.h>
 #include <grass/gis.h>
-#include <geodesic.h>
 
 static struct state {
     struct Cell_head window;
@@ -27,7 +26,6 @@ static struct state {
     double north_value;
     double north;
     double (*darea0)(double);
-    struct geod_geodesic g;
 } state;
 
 static struct state *st = &state;
@@ -124,23 +122,23 @@ double G_area_of_cell_at_row(int row)
  */
 int G_begin_polygon_area_calculations(void)
 {
-    double a, e2, f;
+    double a, e2;
     double factor;
 
     if ((st->projection = G_projection()) == PROJECTION_LL) {
         G_get_ellipsoid_parameters(&a, &e2);
-        f = 1.0 - sqrt(1.0 - e2);
-        /* GeographicLib */
-        geod_init(&st->g, a, f);
-        /* G_begin_ellipsoid_polygon_area(a, e2); */
+        G_begin_ellipsoid_polygon_area(a, e2);
+
         return 2;
     }
     factor = G_database_units_to_meters_factor();
     if (factor > 0.0) {
         st->units_to_meters_squared = factor * factor;
+
         return 1;
     }
     st->units_to_meters_squared = 1.0;
+
     return 0;
 }
 
@@ -169,20 +167,7 @@ double G_area_of_polygon(const double *x, const double *y, int n)
     double area = 0;
 
     if (st->projection == PROJECTION_LL) {
-        double pP;
-        int i;
-        struct geod_polygon p;
-
-        geod_polygon_init(&p, FALSE);
-        /* GeographicLib does not need a closed ring,
-         * see example for geod_polygonarea() in geodesic.h */
-        /* add points in reverse order */
-        i = n;
-        while (--i)
-            geod_polygon_addpoint(&st->g, &p, (double)y[i], (double)x[i]);
-        geod_polygon_compute(&st->g, &p, FALSE, TRUE, &area, &pP);
-
-        /* area = G_ellipsoid_polygon_area(x, y, n); */
+        area = G_ellipsoid_polygon_area(x, y, n);
     }
     else
         area =
