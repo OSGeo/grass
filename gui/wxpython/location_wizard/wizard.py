@@ -197,7 +197,11 @@ class DatabasePage(TitledPage):
         self.bbrowse = self.MakeButton(_("Change"))
 
         # text controls
-        self.tgisdbase = self.MakeLabel(grassdatabase)
+        # Show long paths with middle ellipsis and full value in tooltip
+        self.tgisdbase = self.MakeLabel(
+            text=grassdatabase, style=wx.ST_ELLIPSIZE_MIDDLE, tooltip=grassdatabase
+        )
+        self.tgisdbase.SetMaxSize((400, -1))
         self.tlocation = self.MakeTextCtrl("newProject")
         self.tlocation.SetFocus()
 
@@ -274,7 +278,7 @@ class DatabasePage(TitledPage):
         )
         self.sizer.Add(
             self.tgisdbase,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND,
             border=5,
             pos=(6, 1),
         )
@@ -332,6 +336,7 @@ class DatabasePage(TitledPage):
         if dlg.ShowModal() == wx.ID_OK:
             self.grassdatabase = dlg.GetPath()
             self.tgisdbase.SetLabel(self.grassdatabase)
+            self.tgisdbase.SetToolTip(self.grassdatabase)
 
         dlg.Destroy()
 
@@ -2502,6 +2507,14 @@ class LocationWizard(wx.Object):
         self.wizard.FitToPage(self.datumpage)
         size = self.wizard.GetPageSize()
         self.wizard.SetPageSize((size[0], size[1] + 75))
+        # Allow user to resize while keeping sensible minimum size
+        cur_size = self.wizard.GetSize()
+        try:
+            # Set size hints (min size) to current size
+            self.wizard.SetSizeHints(cur_size[0], cur_size[1])
+        except Exception:
+            # Fallback for environments not supporting SetSizeHints
+            self.wizard.SetMinSize(cur_size)
 
         # new location created?
         self.location = None
@@ -2795,9 +2808,19 @@ class WizardWithHelpButton(Wizard):
         if globalvar.wxPythonPhoenix:
             Wizard.__init__(self)
             self.SetExtraStyle(wx.adv.WIZARD_EX_HELPBUTTON)
-            self.Create(parent=parent, id=id, title=title)
+            self.Create(
+                parent=parent,
+                id=id,
+                title=title,
+                style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER | wx.MAXIMIZE_BOX,
+            )
         else:
             pre = wiz.PreWizard()
             pre.SetExtraStyle(wx.wizard.WIZARD_EX_HELPBUTTON)
-            pre.Create(parent=parent, id=id, title=title)
+            pre.Create(
+                parent=parent,
+                id=id,
+                title=title,
+                style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER | wx.MAXIMIZE_BOX,
+            )
             self.PostCreate(pre)
