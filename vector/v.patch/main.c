@@ -622,10 +622,10 @@ int copy_records(dbDriver *driver_in, dbString *table_name_in,
     db_init_string(&sql);
 
     if (colnames && *colnames) {
-        if (strlen(colnames) + strlen("select  from ") >= DB_SQL_MAX) {
+        if (snprintf(tmpbuf, sizeof(tmpbuf), "select %s from ", colnames) >=
+            sizeof(tmpbuf)) {
             G_fatal_error(_("Too many columns to copy records"));
         }
-        snprintf(tmpbuf, sizeof(tmpbuf), "select %s from ", colnames);
     }
     else
         snprintf(tmpbuf, sizeof(tmpbuf), "select * from ");
