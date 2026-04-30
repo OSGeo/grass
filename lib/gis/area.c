@@ -27,7 +27,6 @@ static struct state {
     double north_value;
     double north;
     double (*darea0)(double);
-    double (*darea0)(double);
     struct geod_geodesic g;
 } state;
 
