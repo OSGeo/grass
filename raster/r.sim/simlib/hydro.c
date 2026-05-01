@@ -48,22 +48,29 @@ void main_loop(const Setup *setup, const Geometry *geometry,
     double conn;
     double addac;
 
+    // nblock is reserved for Monte Carlo replicas. A future
+    // change will allow nblock > 1, give each replica an
+    // rwalk-sized walker subset and potentially run replicas concurrently and
+    // reduce into the shared grids after the iblock loop. The factor and
+    // conn formulas below already encode that design (factor's denominator
+    // (rwalk * nblock) equals total walkers; conn = nblock/iblock scales a
+    // sequential cumulative partial sum to an estimator of the eventual
+    // total). With nblock = 1 today, the loop is a no-op wrapper and conn
+    // collapses to 1.0. The historical auto-split based on a static MAXW
+    // cap was removed: it broke per-block walker accounting (rwalk was not
+    // actually divided), produced biased depth/discharge for users.
     int nblock = 1;
 
     double stxm = geometry->stepx * (double)(geometry->mx + 1) - geometry->xmin;
     double stym = geometry->stepy * (double)(geometry->my + 1) - geometry->ymin;
     double deldif = sqrt(setup->deltap) * settings->frac; /* diffuse factor */
 
-    if (sim->maxwa > (MAXW - geometry->mx * geometry->my)) {
-        nblock = 1 + sim->maxwa / (MAXW - geometry->mx * geometry->my);
-        sim->maxwa = sim->maxwa / nblock;
-    }
     double factor =
         setup->deltap * setup->sisum / (sim->rwalk * (double)nblock);
 
     G_debug(2, " deldif, factor %f %e", deldif, factor);
     G_debug(2, " maxwa, nblock %d %d", sim->maxwa, nblock);
-    G_debug(2, "rwalk,sisum: %f %f", sim->rwalk, setup->sisum);
+    G_debug(2, "rwalk, sisum: %f %f", sim->rwalk, setup->sisum);
 
     for (iblock = 1; iblock <= nblock; iblock++) {
         int lw = 0;
@@ -101,7 +108,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
             }
         }
         sim->nwalk = lw;
-        G_debug(2, " nwalk, maxw %d %d", sim->nwalk, MAXW);
+        G_debug(2, " nwalk %d", sim->nwalk);
         G_debug(2, " walkwe (walk weight),frac %f %f", walkwe, settings->frac);
 
         sim->nwalka = 0;
@@ -385,12 +392,18 @@ void main_loop(const Setup *setup, const Geometry *geometry,
            }
            } */
 
+        // Per-block sample for the Monte Carlo standard-deviation estimator
+        // over nblock replicas, matching the original Fortran: accumulate
+        // (gama * conn)^2 here, then finalize as sqrt(|gammas/nblock - gama^2|)
+        // after the iblock loop closes. With nblock = 1 there is only one
+        // sample and the finalized value is zero everywhere; the map becomes
+        // meaningful once nblocks > 1 will be allowed.
         if (outputs->err != NULL) {
             for (k = 0; k < geometry->my; k++) {
                 for (l = 0; l < geometry->mx; l++) {
                     if (grids->zz[k][l] != UNDEF) {
                         double d1 = grids->gama[k][l] * (double)conn;
-                        grids->gammas[k][l] += pow(d1, 3. / 5.);
+                        grids->gammas[k][l] += d1 * d1;
                     } /* DEFined area */
                 }
             }
@@ -399,6 +412,21 @@ void main_loop(const Setup *setup, const Geometry *geometry,
             erod(grids->gama, setup, geometry, grids);
     }
     /*                       ........ end of iblock loop */
+
+    // Finalize the err map as the sample standard deviation of the per-block
+    // estimators of the final field: sqrt(|E[X^2] - E[X]^2|), where each X
+    // is gama * (nblock/iblock) recorded at the end of block iblock.
+    if (outputs->err != NULL) {
+        for (k = 0; k < geometry->my; k++) {
+            for (l = 0; l < geometry->mx; l++) {
+                if (grids->zz[k][l] != UNDEF) {
+                    double mean_sq = grids->gama[k][l] * grids->gama[k][l];
+                    double mean_of_sq = grids->gammas[k][l] / (double)nblock;
+                    grids->gammas[k][l] = sqrt(fabs(mean_of_sq - mean_sq));
+                }
+            }
+        }
+    }
 
     /* Write final maps here because we know the last time stamp here */
     if (!settings->ts) {
