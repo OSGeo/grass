@@ -183,7 +183,6 @@ int Rast_get_vrt_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
     // so we extract the vrt pointer under the same lock that protects the I/O
     // below. This expects callers to open the raster once per thread before
     // entering any parallel code.
-
 #pragma omp critical(raster_vrt_read)
     {
         vrt = R__.fileinfo[fd].vrt;
