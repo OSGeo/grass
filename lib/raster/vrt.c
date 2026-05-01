@@ -11,11 +11,6 @@
    \author Markus Metz
  */
 
-#if defined(__clang__)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-parameter"
-#pragma clang diagnostic ignored "-Wunknown-pragmas"
-#endif
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/gprojects.h>
