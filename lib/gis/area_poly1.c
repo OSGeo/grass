@@ -16,9 +16,12 @@
 #include <geodesic.h>
 #include "pi.h"
 
-#define TWOPI M_PI + M_PI
+#define TWOPI             M_PI + M_PI
+
+#define USE_GEOGRAPHICLIB 1
 
 static struct state {
+#ifndef USE_GEOGRAPHICLIB
     double QA, QB, QC;
     double QbarA, QbarB, QbarC, QbarD;
 
@@ -28,12 +31,14 @@ static struct state {
 
     double E; /** Area of the earth */
 
+#else
     struct geod_geodesic g; /** GeographicLib */
+#endif
 } state;
 
 static struct state *st = &state;
 
-#if 0
+#ifndef USE_GEOGRAPHICLIB
 static double Q(double x)
 {
     double sinx, sinx2;
@@ -69,6 +74,7 @@ static double Qbar(double x)
  */
 void G_begin_ellipsoid_polygon_area(double a, double e2)
 {
+#ifdef USE_GEOGRAPHICLIB
     double f;
 
     /* GeographicLib */
@@ -76,7 +82,7 @@ void G_begin_ellipsoid_polygon_area(double a, double e2)
     f = 1.0 - sqrt(1.0 - e2);
     geod_init(&st->g, a, f);
 
-#if 0
+#else
     double e4, e6;
 
     /* GRASS native */
@@ -149,6 +155,7 @@ double G_ellipsoid_polygon_area(const double *lon, const double *lat, int n)
 {
     double area;
 
+#ifdef USE_GEOGRAPHICLIB
     /* GeographicLib */
     struct geod_polygon p;
     double pP;
@@ -161,9 +168,12 @@ double G_ellipsoid_polygon_area(const double *lon, const double *lat, int n)
     i = n;
     while (--i)
         geod_polygon_addpoint(&st->g, &p, (double)lat[i], (double)lon[i]);
+    /* The area returned is signed
+     * with counter-clockwise traversal being treated as positive. */
     geod_polygon_compute(&st->g, &p, FALSE, TRUE, &area, &pP);
+    area = fabs(area);
 
-#if 0
+#else
     double x1, y1, x2, y2, dx, dy;
     double Qbar1, Qbar2;
     /* threshold for dy, should be between 1e-4 and 1e-7 */
