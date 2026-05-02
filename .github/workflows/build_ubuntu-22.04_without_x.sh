@@ -19,9 +19,12 @@ fi
 # Adding -Werror to make's CFLAGS is a workaround for configuring with
 # an old version of configure, which issues compiler warnings and
 # errors out. This may be removed with upgraded configure.in file.
+# this build is without openmp
+# openmp pragmas will be unknown to the compiler and cause errors
+# with -Werror, avoid these errors with -Wno-error=unknown-pragmas
 makecmd="make"
 if [[ "$#" -eq 2 ]]; then
-    makecmd="make CFLAGS='$CFLAGS $2' CXXFLAGS='$CXXFLAGS $2'"
+    makecmd="make CFLAGS='$CFLAGS $2 -Wno-error=unknown-pragmas' CXXFLAGS='$CXXFLAGS $2 -Wno-error=unknown-pragmas'"
 fi
 
 # non-existent variables as an errors
