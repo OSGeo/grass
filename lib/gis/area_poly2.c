@@ -24,11 +24,19 @@
  */
 double G_planimetric_polygon_area(const double *x, const double *y, int n)
 {
-    double x1, y1, x2, y2;
+    double x1, y1, x2, y2, xshift, yshift;
     double area;
 
-    x2 = x[n - 1];
-    y2 = y[n - 1];
+    /* get a reference point
+     * do not overdo it, the first point would be good enough
+     * particularly for small polygons
+     * shift coordinates towards this reference point to make
+     * calculation of the signed area more robust */
+    xshift = (x[0] + x[n / 2]) / 2.;
+    yshift = (y[0] + y[n / 2]) / 2.;
+
+    x2 = x[n - 1] - xshift;
+    y2 = y[n - 1] - yshift;
 
     area = 0;
     while (--n >= 0) {
@@ -37,6 +45,9 @@ double G_planimetric_polygon_area(const double *x, const double *y, int n)
 
         x2 = *x++;
         y2 = *y++;
+
+        x2 -= xshift;
+        y2 -= yshift;
 
         area += (y2 + y1) * (x2 - x1);
     }
