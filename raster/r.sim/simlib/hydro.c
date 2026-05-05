@@ -45,7 +45,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
 {
     int i, l, k;
     int iblock;
-    double conn;
+    double conn = 1.0;
     double addac;
 
     // nblock is reserved for Monte Carlo replicas. A future
@@ -114,6 +114,10 @@ void main_loop(const Setup *setup, const Geometry *geometry,
         sim->nwalka = 0;
         int nwalka = 0;
 
+        // conn scales the cumulative partial sum in gama into an estimator
+        // of the eventual total when blocks run sequentially.
+        conn = (double)nblock / (double)iblock;
+
         /* ********************************************************** */
         /*       main loop over the projection time */
         /* *********************************************************** */
@@ -138,7 +142,6 @@ void main_loop(const Setup *setup, const Geometry *geometry,
             /* ************************************************************ */
 
             addac = factor;
-            conn = (double)nblock / (double)iblock;
             if (i == 1) {
                 addac = factor * .5;
             }
@@ -337,7 +340,6 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                     erod(grids->gama, setup, geometry,
                          grids); /* divergence of gama field */
 
-                conn = (double)nblock / (double)iblock;
                 int itime = (int)(i * setup->deltap * setup->timec);
                 int ii = output_data(itime, conn, setup, geometry, settings,
                                      sim, inputs, outputs, grids);
@@ -430,7 +432,9 @@ void main_loop(const Setup *setup, const Geometry *geometry,
 
     /* Write final maps here because we know the last time stamp here */
     if (!settings->ts) {
-        conn = (double)nblock / (double)iblock;
+        // All blocks have completed; gama is the eventual cumulative total,
+        // so no extrapolation is needed.
+        conn = 1.0;
         int itime = (int)(i * setup->deltap * setup->timec);
         int ii = output_data(itime, conn, setup, geometry, settings, sim,
                              inputs, outputs, grids);
