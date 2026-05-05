@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GRASS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 17:57+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Chinese (Simplified) <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/zh_Hans/>\n"
@@ -1291,6 +1291,11 @@ msgid "Re&load maps"
 msgstr ""
 
 #, fuzzy
+#| msgid "Computational region"
+msgid "Show computational region"
+msgstr "可计算区域"
+
+#, fuzzy
 msgid "&Copy path"
 msgstr "设置地图集权限"
 
@@ -1304,6 +1309,11 @@ msgstr "删除选中项目"
 #, fuzzy
 msgid "&Rename project"
 msgstr "投影管理"
+
+#, fuzzy
+#| msgid "Choose projection"
+msgid "Show projection info"
+msgstr "选择投影"
 
 #, fuzzy
 #| msgid "Copy table"
@@ -5780,6 +5790,14 @@ msgstr ""
 #| msgid "Develop raster map"
 msgid "Remove raster mask"
 msgstr "栅格地图开发"
+
+#, fuzzy
+#| msgid "Custom min"
+msgid "Custom CRS"
+msgstr "指定最小值"
+
+msgid "Left mouse click to print detailed projection info"
+msgstr ""
 
 msgid "Create new workspace (Ctrl+N)"
 msgstr "创建新工作区(Ctrl+N)"
@@ -11505,9 +11523,6 @@ msgstr ""
 
 #~ msgid "Choose method of specifying georeferencing parameters"
 #~ msgstr "选择定义地理配准参数的方式"
-
-#~ msgid "Choose projection"
-#~ msgstr "选择投影"
 
 #~ msgid "Classify attribute data"
 #~ msgstr "数据属性分类"

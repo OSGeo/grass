@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 17:57+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Japanese <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/ja/>\n"
@@ -1322,6 +1322,11 @@ msgid "Re&load maps"
 msgstr ""
 
 #, fuzzy
+#| msgid "Show computational extent"
+msgid "Show computational region"
+msgstr "計算範囲表示"
+
+#, fuzzy
 #| msgid "&Copy"
 msgid "&Copy path"
 msgstr "コピー &C"
@@ -1336,6 +1341,11 @@ msgstr "レコード削除"
 #, fuzzy
 msgid "&Rename project"
 msgstr "投影法の管理 "
+
+#, fuzzy
+#| msgid "Choose projection"
+msgid "Show projection info"
+msgstr "投影法の選択 "
 
 #, fuzzy
 #| msgid "Copy map"
@@ -5849,6 +5859,14 @@ msgstr ""
 #| msgid "Develop raster map"
 msgid "Remove raster mask"
 msgstr "ラスターマップの作成"
+
+#, fuzzy
+#| msgid "Custom min"
+msgid "Custom CRS"
+msgstr "ユーザ定義最小値"
+
+msgid "Left mouse click to print detailed projection info"
+msgstr ""
 
 msgid "Create new workspace (Ctrl+N)"
 msgstr "新しいワークスペース作成 (Ctrl+N)"
@@ -11557,9 +11575,6 @@ msgstr ""
 
 #~ msgid "Choose method of specifying georeferencing parameters"
 #~ msgstr "地理参照パラメータの定義方法の選択"
-
-#~ msgid "Choose projection"
-#~ msgstr "投影法の選択 "
 
 #~ msgid "Classifies attribute data, e.g. for thematic mapping"
 #~ msgstr "主題図作成等の属性データの分類"
