@@ -103,11 +103,13 @@ int dig_find_area_poly(struct line_pnts *Points, double *totalarea)
     x = Points->x;
     y = Points->y;
 
-    /* get a reference point
-     * do not overdo it, the first point would be good enough
-     * particularly for small polygons
-     * shift coordinates towards this reference point to make
-     * calculation of the signed area more robust */
+    /* Get a reference point close to the polygon as new origin.
+     * Do not overdo it, the first point would be good enough,
+     * particularly for small polygons.
+     * Shift coordinates towards this reference point to make
+     * calculation of the signed area more robust by increasing the
+     * accuracy for given fp precision limits.
+     * See also G_planimetric_polygon_area() in lib/gis/area_poly2.c */
     mid = Points->n_points / 2;
     xshift = (x[0] + x[mid]) / 2.;
     yshift = (y[0] + y[mid]) / 2.;
