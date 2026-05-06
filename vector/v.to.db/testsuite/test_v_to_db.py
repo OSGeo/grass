@@ -20,9 +20,14 @@ class TestVToDb(TestCase):
                 m_obs, e_obs = math.frexp(d1[k1])
                 m_ref, e_ref = math.frexp(d2[k1])
                 self.assertEqual(e_obs, e_ref)
-                # confident in the double fp calculations?
-                # use 12 instead of 7 decimal places
-                self.assertAlmostEqual(m_obs, m_ref, places=12)
+                # use 12 instead of default 7 decimal places
+                # for reliable double precision fp results
+                self.assertAlmostEqual(
+                    m_obs,
+                    m_ref,
+                    places=12,
+                    msg=f"Comparing mantissas of {d1[k1]} and {d1[k1]}",
+                )
             else:
                 self.assertEqual(d1[k1], d2[k1])
 

@@ -28,12 +28,14 @@ double G_planimetric_polygon_area(const double *x, const double *y, int n)
     double area;
 
     /* Get a reference point close to the polygon as new origin.
-     * Do not overdo it, the first point would be good enough,
-     * particularly for small polygons.
+     * The first point would be good enough, particularly for small
+     * polygons. The average of the first and the mid-point is a fast
+     * approximation of a reference point with reduced distance to the
+     * ring's vertices, also for larger rings.
      * Shift coordinates towards this reference point to make
      * calculation of the signed area more robust by increasing the
      * accuracy for given fp precision limits.
-     * See also dig_find_area_poly() in lib/vector/diglib/poly.c */
+     * Keep in sync with dig_find_area_poly() in lib/vector/diglib/poly.c */
     xshift = (x[0] + x[n / 2]) / 2.;
     yshift = (y[0] + y[n / 2]) / 2.;
 
