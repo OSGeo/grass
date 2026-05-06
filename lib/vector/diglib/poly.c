@@ -114,14 +114,9 @@ int dig_find_area_poly(struct line_pnts *Points, double *totalarea)
      * accuracy for given fp precision limits.
      *
      * Considering the basic formula
-     *    area += (x2 - x1) * (y2 + 1))
-     * the shift is in theory only needed for addition, not subtraction.
-     * Currently, x coordinates are subtracted and y coordinates are added.
-     * The reverse, adding x and subtracting y, is also correct,
-     * it simply reverts the sign. If for some reason the formula would
-     * be changed in the future by adding x and subtracting y,
-     * the current shift for both x and y would guarantee that
-     * the results stay correct (with reversed sign).
+     *    area += (x2 - x1) * (y2 + y1)
+     * the shift is in theory only needed for addition, not subtraction,
+     * but does no harm and is kept for symmetry treating x and y coords.
      *
      * Keep in sync with G_planimetric_polygon_area() in lib/gis/area_poly2.c */
 

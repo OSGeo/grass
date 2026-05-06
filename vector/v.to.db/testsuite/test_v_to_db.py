@@ -26,7 +26,7 @@ class TestVToDb(TestCase):
                     m_obs,
                     m_ref,
                     places=12,
-                    msg=f"Comparing mantissas of {d1[k1]} and {d1[k1]}",
+                    msg=f"Comparing mantissas of {d1[k1]} and {d2[k1]}",
                 )
             else:
                 self.assertEqual(d1[k1], d2[k1])
