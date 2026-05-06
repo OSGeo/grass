@@ -49,7 +49,6 @@ int G_begin_cell_area_calculations(void)
 
     G_get_set_window(&st->window);
     if ((st->projection = st->window.proj) == PROJECTION_LL) {
-
         G_get_ellipsoid_parameters(&a, &e2);
         if (e2) {
             G_begin_zone_area_on_ellipsoid(a, e2, st->window.ew_res / 360.0);
