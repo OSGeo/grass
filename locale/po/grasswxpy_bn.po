@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_bn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 17:57+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: 2018-09-28 23:33+0200\n"
 "Last-Translator: \n"
 "Language-Team: Bengali (https://www.transifex.com/grass-gis/teams/45198/bn/)\n"
@@ -1281,6 +1281,9 @@ msgstr ""
 msgid "Re&load maps"
 msgstr ""
 
+msgid "Show computational region"
+msgstr ""
+
 msgid "&Copy path"
 msgstr ""
 
@@ -1292,6 +1295,9 @@ msgid "&Delete project"
 msgstr " সমস্ত লেখ্য লুপ্তকরুন"
 
 msgid "&Rename project"
+msgstr ""
+
+msgid "Show projection info"
 msgstr ""
 
 msgid "Copy path"
@@ -5610,6 +5616,12 @@ msgid "Are you sure that you want to remove the current raster mask?"
 msgstr ""
 
 msgid "Remove raster mask"
+msgstr ""
+
+msgid "Custom CRS"
+msgstr ""
+
+msgid "Left mouse click to print detailed projection info"
 msgstr ""
 
 msgid "Create new workspace (Ctrl+N)"

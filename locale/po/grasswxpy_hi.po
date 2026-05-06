@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 17:57+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: 2026-03-05 11:44+0000\n"
 "Last-Translator: Abhimanyu  <abhimanyupg04@gmail.com>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/hi/>\n"
@@ -1304,6 +1304,11 @@ msgid "Re&load maps"
 msgstr "RRee&&llooaadd  mmaappss"
 
 #, fuzzy
+#| msgid "Show computational region extent"
+msgid "Show computational region"
+msgstr "कम्प्यूटेशनल क्षेत्र की सीमा दिखाएँ"
+
+#, fuzzy
 #| msgid "&Copy path to mapset"
 msgid "&Copy path"
 msgstr "&म्यापसेट के पॅंथ की कांपी करें"
@@ -1316,6 +1321,11 @@ msgstr "&प्रोजेक्ट हटाएं"
 
 msgid "&Rename project"
 msgstr "&प्रोजेक्ट का नाम बदलें"
+
+#, fuzzy
+#| msgid "Source projection:"
+msgid "Show projection info"
+msgstr "स्रोत प्रक्षेपण:"
 
 #, fuzzy
 #| msgid "CVS path"
@@ -5661,6 +5671,16 @@ msgstr "क्या आप वाकई वर्तमान रास्ट�
 
 msgid "Remove raster mask"
 msgstr "रैस्टर मास्क हटाएँ"
+
+#, fuzzy
+#| msgid "Custom min"
+msgid "Custom CRS"
+msgstr "कस्टम न्यूनतम (Custom min)"
+
+#, fuzzy
+#| msgid "Left mouse click to remove the raster mask"
+msgid "Left mouse click to print detailed projection info"
+msgstr "रैस्टर मास्क को हटाने के लिए बायाँ माउस क्लिक करें"
 
 msgid "Create new workspace (Ctrl+N)"
 msgstr "नया वर्कस्पेस बनाएं (Ctrl+N)"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_tr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 17:57+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: 2010-12-01 03:06+0200\n"
 "Last-Translator: Fatih <bounfat@gmail.com>\n"
 "Language-Team: Türkçe <grass-translations@lists.osgeo.org>\n"
@@ -1292,6 +1292,11 @@ msgid "Re&load maps"
 msgstr ""
 
 #, fuzzy
+#| msgid "clip to computational region in target location"
+msgid "Show computational region"
+msgstr "hedef konumdaki hesaplama bölgesini kırp"
+
+#, fuzzy
 #| msgid "Copy table"
 msgid "&Copy path"
 msgstr "Tabloyu kopyala"
@@ -1306,6 +1311,11 @@ msgstr "Kayıtları sil"
 #, fuzzy
 msgid "&Rename project"
 msgstr "Projeksiyonları yönet"
+
+#, fuzzy
+#| msgid "Show vector lines"
+msgid "Show projection info"
+msgstr "Vektör çizgileri göster"
 
 #, fuzzy
 #| msgid "Copy table"
@@ -5725,6 +5735,12 @@ msgstr ""
 #| msgid "Develop raster map"
 msgid "Remove raster mask"
 msgstr "Raster harita geliştir"
+
+msgid "Custom CRS"
+msgstr ""
+
+msgid "Left mouse click to print detailed projection info"
+msgstr ""
 
 msgid "Create new workspace (Ctrl+N)"
 msgstr ""

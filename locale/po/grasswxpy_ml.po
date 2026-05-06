@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 17:57+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Mohammed Rashad <rashadkm@gmail.com>\n"
 "Language-Team: Malayalam <grass-translations@lists.osgeo.org>\n"
@@ -1281,6 +1281,9 @@ msgstr ""
 msgid "Re&load maps"
 msgstr ""
 
+msgid "Show computational region"
+msgstr ""
+
 msgid "&Copy path"
 msgstr ""
 
@@ -1293,6 +1296,9 @@ msgstr ""
 #, fuzzy
 msgid "&Rename project"
 msgstr "നാമം മാറ്റുക"
+
+msgid "Show projection info"
+msgstr ""
 
 msgid "Copy path"
 msgstr ""
@@ -5670,6 +5676,12 @@ msgstr ""
 #| msgid "Remove vertex"
 msgid "Remove raster mask"
 msgstr "അഗ്രം എടുത്തു കളയുക"
+
+msgid "Custom CRS"
+msgstr ""
+
+msgid "Left mouse click to print detailed projection info"
+msgstr ""
 
 msgid "Create new workspace (Ctrl+N)"
 msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-25 16:03+0000\n"
+"POT-Creation-Date: 2026-05-02 15:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1345,7 +1345,7 @@ msgstr ""
 #: ../raster/r.to.vect/main.c:245 ../vector/v.decimate/copy_tab.c:116
 #: ../vector/v.extract/copy_tab.c:121 ../vector/v.mkgrid/main.c:368
 #: ../vector/v.mkgrid/main.c:429 ../vector/v.overlay/main.c:621
-#: ../vector/v.patch/main.c:387 ../vector/v.random/main.c:302
+#: ../vector/v.patch/main.c:391 ../vector/v.random/main.c:302
 #: ../vector/v.select/copy_tabs.c:85
 msgid "Unable to create index"
 msgstr ""
@@ -2273,8 +2273,8 @@ msgstr ""
 #: ../vector/v.out.pov/main.c:101 ../vector/v.out.svg/main.c:139
 #: ../vector/v.overlay/main.c:196 ../vector/v.parallel/main.c:146
 #: ../vector/v.patch/main.c:133 ../vector/v.patch/main.c:152
-#: ../vector/v.patch/main.c:188 ../vector/v.patch/main.c:335
-#: ../vector/v.patch/main.c:413 ../vector/v.perturb/main.c:160
+#: ../vector/v.patch/main.c:188 ../vector/v.patch/main.c:339
+#: ../vector/v.patch/main.c:417 ../vector/v.perturb/main.c:160
 #: ../vector/v.perturb/main.c:190 ../vector/v.profile/main.c:413
 #: ../vector/v.profile/main.c:441 ../vector/v.proj/main.c:284
 #: ../vector/v.qcount/main.c:101 ../vector/v.random/main.c:202
@@ -2335,7 +2335,7 @@ msgstr ""
 #: ../vector/v.net.visibility/main.c:74 ../vector/v.outlier/main.c:232
 #: ../vector/v.outlier/main.c:237 ../vector/v.outlier/main.c:243
 #: ../vector/v.overlay/main.c:230 ../vector/v.parallel/main.c:151
-#: ../vector/v.patch/main.c:344 ../vector/v.patch/main.c:349
+#: ../vector/v.patch/main.c:348 ../vector/v.patch/main.c:353
 #: ../vector/v.perturb/main.c:170 ../vector/v.profile/main.c:595
 #: ../vector/v.proj/main.c:481 ../vector/v.qcount/main.c:127
 #: ../vector/v.random/main.c:227 ../vector/v.reclass/main.c:117
@@ -4561,8 +4561,8 @@ msgstr ""
 #: ../vector/v.out.postgis/table.c:34 ../vector/v.out.svg/main.c:159
 #: ../vector/v.out.vtk/writeVTK.c:645 ../vector/v.overlay/main.c:255
 #: ../vector/v.overlay/main.c:439 ../vector/v.patch/main.c:161
-#: ../vector/v.patch/main.c:199 ../vector/v.patch/main.c:368
-#: ../vector/v.patch/main.c:450 ../vector/v.profile/main.c:475
+#: ../vector/v.patch/main.c:199 ../vector/v.patch/main.c:372
+#: ../vector/v.patch/main.c:454 ../vector/v.profile/main.c:475
 #: ../vector/v.profile/main.c:640 ../vector/v.random/main.c:243
 #: ../vector/v.random/main.c:273 ../vector/v.reclass/main.c:133
 #: ../vector/v.sample/main.c:175 ../vector/v.select/copy_tabs.c:80
@@ -19200,7 +19200,7 @@ msgstr ""
 #: ../vector/v.in.ascii/main.c:435 ../vector/v.in.dxf/write_vect.c:242
 #: ../vector/v.in.lidar/attributes.c:144 ../vector/v.in.ogr/main.c:1180
 #: ../vector/v.mkgrid/main.c:372 ../vector/v.mkgrid/main.c:433
-#: ../vector/v.overlay/main.c:625 ../vector/v.patch/main.c:391
+#: ../vector/v.overlay/main.c:625 ../vector/v.patch/main.c:395
 #: ../vector/v.random/main.c:307 ../vector/v.reclass/main.c:327
 #: ../vector/v.sample/main.c:196 ../vector/v.select/copy_tabs.c:88
 #: ../vector/v.to.points/main.c:224
@@ -35166,7 +35166,7 @@ msgstr ""
 msgid "Creating table with columns (%s)..."
 msgstr ""
 
-#: ../scripts/v.db.addtable/v.db.addtable.py:138 ../vector/v.patch/main.c:381
+#: ../scripts/v.db.addtable/v.db.addtable.py:138 ../vector/v.patch/main.c:385
 #: ../vector/v.sample/main.c:189
 #, c-format, python-format
 msgid "Unable to create table <%s>"
@@ -36080,19 +36080,19 @@ msgid "Snapping boundaries..."
 msgstr ""
 
 #: ../vector/v.buffer/main.c:797 ../vector/v.in.ogr/main.c:1461
-#: ../vector/v.patch/main.c:534
+#: ../vector/v.patch/main.c:538
 msgid "Breaking polygons..."
 msgstr ""
 
 #: ../vector/v.buffer/main.c:800 ../vector/v.buffer/main.c:807
 #: ../vector/v.delaunay/main.c:144 ../vector/v.in.ogr/main.c:1467
 #: ../vector/v.in.ogr/main.c:1482 ../vector/v.overlay/area_area.c:138
-#: ../vector/v.patch/main.c:538 ../vector/v.patch/main.c:555
+#: ../vector/v.patch/main.c:542 ../vector/v.patch/main.c:559
 msgid "Removing duplicates..."
 msgstr ""
 
 #: ../vector/v.buffer/main.c:804 ../vector/v.in.ogr/main.c:1478
-#: ../vector/v.patch/main.c:551
+#: ../vector/v.patch/main.c:555
 msgid "Breaking boundaries..."
 msgstr ""
 
@@ -36101,12 +36101,12 @@ msgid "Cleaning boundaries at nodes"
 msgstr ""
 
 #: ../vector/v.buffer/main.c:819 ../vector/v.in.ogr/main.c:1502
-#: ../vector/v.patch/main.c:570 ../vector/v.voronoi/clean_topo.c:85
+#: ../vector/v.patch/main.c:574 ../vector/v.voronoi/clean_topo.c:85
 msgid "Removing dangles..."
 msgstr ""
 
 #: ../vector/v.buffer/main.c:822 ../vector/v.in.ogr/main.c:1517
-#: ../vector/v.patch/main.c:576 ../vector/v.voronoi/clean_topo.c:87
+#: ../vector/v.patch/main.c:580 ../vector/v.voronoi/clean_topo.c:87
 msgid "Removing bridges..."
 msgstr ""
 
@@ -40072,17 +40072,17 @@ msgstr ""
 msgid "Cleaning polygons"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1444 ../vector/v.patch/main.c:529
+#: ../vector/v.in.ogr/main.c:1444 ../vector/v.patch/main.c:533
 #, c-format
 msgid "Snapping boundaries (threshold = %.3e)..."
 msgstr ""
 
 #: ../vector/v.in.ogr/main.c:1486 ../vector/v.overlay/area_area.c:141
-#: ../vector/v.patch/main.c:559
+#: ../vector/v.patch/main.c:563
 msgid "Cleaning boundaries at nodes..."
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1492 ../vector/v.patch/main.c:566
+#: ../vector/v.in.ogr/main.c:1492 ../vector/v.patch/main.c:570
 msgid "Merging boundaries..."
 msgstr ""
 
@@ -44458,89 +44458,97 @@ msgstr ""
 msgid "Missing attribute table for vector map <%s>"
 msgstr ""
 
-#: ../vector/v.patch/main.c:253
-#, c-format
-msgid "Missing table for <%s>"
+#: ../vector/v.patch/main.c:245
+msgid "Too many columns to copy the table"
 msgstr ""
 
 #: ../vector/v.patch/main.c:257
 #, c-format
+msgid "Missing table for <%s>"
+msgstr ""
+
+#: ../vector/v.patch/main.c:261
+#, c-format
 msgid "Key (category) column names differ: <%s> from <%s> and <%s> from <%s>"
 msgstr ""
 
-#: ../vector/v.patch/main.c:265
+#: ../vector/v.patch/main.c:269
 #, c-format
 msgid "Number of columns differ: %d in <%s> and %d in <%s>"
 msgstr ""
 
-#: ../vector/v.patch/main.c:291
+#: ../vector/v.patch/main.c:295
 #, c-format
 msgid "No column <%s> in input map <%s>"
 msgstr ""
 
-#: ../vector/v.patch/main.c:301
+#: ../vector/v.patch/main.c:305
 #, c-format
 msgid "Column types differ:  <%s> from <%s> is <%s> and <%s> from <%s> is <%s>"
 msgstr ""
 
-#: ../vector/v.patch/main.c:312
+#: ../vector/v.patch/main.c:316
 msgid "Length of string columns differ"
 msgstr ""
 
-#: ../vector/v.patch/main.c:326
+#: ../vector/v.patch/main.c:330
 msgid "Key column not found"
 msgstr ""
 
-#: ../vector/v.patch/main.c:338
+#: ../vector/v.patch/main.c:342
 msgid "The output map is not 3D"
 msgstr ""
 
-#: ../vector/v.patch/main.c:407
+#: ../vector/v.patch/main.c:411
 #, c-format
 msgid "Patching vector map <%s>..."
 msgstr ""
 
-#: ../vector/v.patch/main.c:430
+#: ../vector/v.patch/main.c:434
 #, c-format
 msgid "Error reading vector map <%s> - some data may not be correct"
 msgstr ""
 
-#: ../vector/v.patch/main.c:592
+#: ../vector/v.patch/main.c:596
 #, c-format
 msgid "Building topology for vector map <%s>..."
 msgstr ""
 
-#: ../vector/v.patch/main.c:598
+#: ../vector/v.patch/main.c:602
 msgid "Intersections at borders will have to be snapped"
 msgstr ""
 
-#: ../vector/v.patch/main.c:599
+#: ../vector/v.patch/main.c:603
 msgid "Lines common between files will have to be edited"
 msgstr ""
 
-#: ../vector/v.patch/main.c:600
+#: ../vector/v.patch/main.c:604
 msgid "The header information also may have to be edited"
 msgstr ""
 
-#: ../vector/v.patch/main.c:602
+#: ../vector/v.patch/main.c:606
 #, c-format
 msgid "%d vector maps patched"
 msgstr ""
 
-#: ../vector/v.patch/main.c:629
+#: ../vector/v.patch/main.c:627
+msgid "Too many columns to copy records"
+msgstr ""
+
+#: ../vector/v.patch/main.c:637
 #, c-format
 msgid "Cannot open select cursor: '%s'"
 msgstr ""
 
-#: ../vector/v.patch/main.c:641
+#: ../vector/v.patch/main.c:649
 msgid "Cannot fetch row"
 msgstr ""
 
-#: ../vector/v.patch/main.c:692
+#: ../vector/v.patch/main.c:700
 msgid "Unknown column type"
 msgstr ""
 
-#: ../vector/v.patch/main.c:700
+#: ../vector/v.patch/main.c:708
 #, c-format
 msgid "Cannot insert new record: '%s'"
 msgstr ""
