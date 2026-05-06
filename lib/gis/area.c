@@ -11,7 +11,6 @@
  * \author Original author CERL
  */
 
-#include <math.h>
 #include <grass/gis.h>
 
 static struct state {
@@ -131,6 +130,7 @@ int G_begin_polygon_area_calculations(void)
 
         return 2;
     }
+
     factor = G_database_units_to_meters_factor();
     if (factor > 0.0) {
         st->units_to_meters_squared = factor * factor;
@@ -169,9 +169,10 @@ double G_area_of_polygon(const double *x, const double *y, int n)
     if (st->projection == PROJECTION_LL) {
         area = G_ellipsoid_polygon_area(x, y, n);
     }
-    else
+    else {
         area =
             G_planimetric_polygon_area(x, y, n) * st->units_to_meters_squared;
+    }
 
     return area;
 }
