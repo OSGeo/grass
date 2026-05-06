@@ -433,6 +433,8 @@ int Vect_find_poly_centroid(const struct line_pnts *points, double *cent_x,
 
    \return 0 on success
    \return -1 on error
+
+   \since version 8.6
  */
 int Vect_find_poly_centroid_cog(const struct line_pnts *Points,
                                 const struct line_pnts **IPoints, int n_isles,
