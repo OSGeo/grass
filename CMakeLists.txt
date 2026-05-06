@@ -154,8 +154,7 @@ option(WITH_FHS "Install with FHS" OFF)
 include(check_target)
 include(CheckDependentLibraries)
 
-include(get_host_arch)
-get_host_arch(BUILD_ARCH)
+set(BUILD_ARCH ${CMAKE_HOST_SYSTEM_PROCESSOR})
 
 # Setup GRASS install directories
 include(GRASSInstallDirs)
