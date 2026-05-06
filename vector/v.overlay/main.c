@@ -10,7 +10,7 @@
  *               OGR support by Martin Landa <landa.martin gmail.com>
  *               Markus Metz
  * PURPOSE:
- * COPYRIGHT:    (C) 2003-2016 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2026 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -36,10 +36,10 @@ int main(int argc, char *argv[])
 {
     int i, j, input, line, nlines, operator;
     int type[2], field[2], ofield[3];
-    double snap_thresh;
+    double snap_thresh, area_minsize;
     struct GModule *module;
     struct Option *in_opt[2], *out_opt, *type_opt[2], *field_opt[2],
-        *ofield_opt, *operator_opt, *snap_opt;
+        *ofield_opt, *operator_opt, *snap_opt, *minsize_opt;
     struct Flag *table_flag;
     struct Map_info In[2], Out, Tmp;
     struct line_pnts *Points, *Points2;
@@ -142,6 +142,13 @@ int main(int argc, char *argv[])
     snap_opt->type = TYPE_DOUBLE;
     snap_opt->answer = "1e-8";
 
+    minsize_opt = G_define_option();
+    minsize_opt->key = "minsize";
+    minsize_opt->label = _("Minimum size of areas to keep in square meters");
+    minsize_opt->description = _("Enable with minsize > 0");
+    minsize_opt->type = TYPE_DOUBLE;
+    minsize_opt->answer = "0";
+
     table_flag = G_define_standard_flag(G_FLG_V_TABLE);
     table_flag->guisection = _("Attributes");
 
@@ -220,6 +227,7 @@ int main(int argc, char *argv[])
                       operator_opt->answer);
 
     snap_thresh = atof(snap_opt->answer);
+    area_minsize = atof(minsize_opt->answer);
 
     Points = Vect_new_line_struct();
     Points2 = Vect_new_line_struct();
@@ -635,7 +643,7 @@ int main(int argc, char *argv[])
     /* AREA x AREA */
     if (type[0] == GV_AREA) {
         area_area(In, field, &Tmp, &Out, Fi, driver, operator, ofield, attr,
-                  BList, snap_thresh);
+                  BList, snap_thresh, area_minsize);
     }
     else { /* LINE x AREA */
         line_area(In, field, &Tmp, &Out, Fi, driver, operator, ofield, attr,
