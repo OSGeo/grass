@@ -108,10 +108,23 @@ int dig_find_area_poly(struct line_pnts *Points, double *totalarea)
      * polygons. The average of the first and the mid-point is a fast
      * approximation of a reference point with reduced distance to the
      * ring's vertices, also for larger rings.
+     *
      * Shift coordinates towards this reference point to make
      * calculation of the signed area more robust by increasing the
      * accuracy for given fp precision limits.
+     *
+     * Considering the basic formula
+     *    area += (x2 - x1) * (y2 + 1))
+     * the shift is in theory only needed for addition, not subtraction.
+     * Currently, x coordinates are subtracted and y coordinates are added.
+     * The reverse, adding x and subtracting y, is also correct,
+     * it simply reverts the sign. If for some reason the formula would
+     * be changed in the future by adding x and subtracting y,
+     * the current shift for both x and y would guarantee that
+     * the results stay correct (with reversed sign).
+     *
      * Keep in sync with G_planimetric_polygon_area() in lib/gis/area_poly2.c */
+
     mid = Points->n_points / 2;
     xshift = (x[0] + x[mid]) / 2.;
     yshift = (y[0] + y[mid]) / 2.;
