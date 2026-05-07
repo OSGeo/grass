@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 17:57+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: 2026-02-09 03:56+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Italian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/it/>\n"
@@ -1324,6 +1324,11 @@ msgid "Re&load maps"
 msgstr ""
 
 #, fuzzy
+#| msgid "Show computational region extent"
+msgid "Show computational region"
+msgstr "Mostra l'estensione della region computazionale"
+
+#, fuzzy
 #| msgid "&Copy path to mapset"
 msgid "&Copy path"
 msgstr "&Copia percorso al mapset"
@@ -1336,6 +1341,11 @@ msgstr "&Elimina progetto"
 
 msgid "&Rename project"
 msgstr "&Rinomina progetto"
+
+#, fuzzy
+#| msgid "Choose projection"
+msgid "Show projection info"
+msgstr "Scegli la proiezione"
 
 #, fuzzy
 #| msgid "CVS path"
@@ -5934,6 +5944,16 @@ msgstr "Sei sicuro che vuoi rimuovere la MASK?"
 #| msgid "Save raster map"
 msgid "Remove raster mask"
 msgstr "Salva raster"
+
+#, fuzzy
+#| msgid "Custom min"
+msgid "Custom CRS"
+msgstr "Personalizza min"
+
+#, fuzzy
+#| msgid "Please select first the raster map"
+msgid "Left mouse click to print detailed projection info"
+msgstr "Selezionare prima il raster"
 
 msgid "Create new workspace (Ctrl+N)"
 msgstr "Crea nuovo ambiente di lavoro (Ctrl+N)"
@@ -11902,9 +11922,6 @@ msgstr ""
 
 #~ msgid "Choose method of specifying georeferencing parameters"
 #~ msgstr "Scegli metodo per specificare i parametri di georeferenziazione"
-
-#~ msgid "Choose projection"
-#~ msgstr "Scegli la proiezione"
 
 #~ msgid "Classifies attribute data, e.g. for thematic mapping"
 #~ msgstr "Classifica i dati degli attributi, es. per mappe tematiche"
