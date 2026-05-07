@@ -19,7 +19,6 @@ This program is free software under the GNU General Public License
 @author start stvds support Matej Krejci
 """
 
-import os
 from itertools import cycle
 from pathlib import Path
 import numpy as np
@@ -1001,7 +1000,7 @@ class TplotFrame(wx.Frame):
         self.init()
         self.csvpath = self.csvButton.GetValue()
         self.header = self.headerCheck.IsChecked()
-        if os.path.exists(self.csvpath) and not self.overwrite:
+        if Path(self.csvpath).exists() and not self.overwrite:
             dlg = wx.MessageDialog(
                 self,
                 _("{pa} already exists, do you want to overwrite?").format(

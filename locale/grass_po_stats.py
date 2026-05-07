@@ -16,13 +16,11 @@
 
 from __future__ import annotations
 
-import codecs
 import glob
 import json
 import os
 import subprocess
 import sys
-
 from pathlib import Path
 
 
@@ -76,8 +74,8 @@ def read_msgfmt_statistics(msg, lgood, lfuzzy, lbad):
 
 def langDefinition(fil: str) -> str:
     lang: str | list[str] = ""
-    with codecs.open(fil, encoding="utf-8", errors="replace", mode="r") as f:
-        for line in f.readlines():
+    with open(fil, encoding="utf-8", errors="replace") as f:
+        for line in f:
             if '"Language-Team:' in line:
                 lang = line.split(" ")[1:-1]
                 break
@@ -155,7 +153,7 @@ def main(in_dirpath, out_josonpath):
     languages = read_po_files(in_dirpath)
     stats = get_stats(languages, in_dirpath)
 
-    if os.path.exists(out_josonpath):
+    if Path(out_josonpath).exists():
         os.remove(out_josonpath)
     writejson(stats, out_josonpath)
 

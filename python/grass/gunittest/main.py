@@ -232,9 +232,9 @@ def main():
 
     if not gisdbase:
         return "GISDBASE (grassdata directory) cannot be empty string\n"
-    if not os.path.exists(gisdbase):
+    if not Path(gisdbase).exists():
         return f"GISDBASE (grassdata directory) <{gisdbase}> does not exist\n"
-    if not os.path.exists(os.path.join(gisdbase, location)):
+    if not Path(gisdbase, location).exists():
         return (
             f"GRASS Location <{location}>"
             f" does not exist in GRASS Database <{gisdbase}>\n"

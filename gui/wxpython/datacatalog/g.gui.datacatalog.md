@@ -1,9 +1,8 @@
 ---
+title: g.gui.datacatalog
 description: wxGUI Data Catalog
 index: topic_GUI|GUI
 ---
-
-# wxGUI Data Catalog
 
 ## DESCRIPTION
 
@@ -16,6 +15,8 @@ Data Catalog allows you to:
 - browse GRASS 2D/3D raster and vector maps
 - rename, copy, move and delete GRASS maps including reprojection
   between different projects
+- set labels for a GRASS database (directory with GRASS projects) with
+  long paths for easier identification
 - drag and drop maps for copying and moving
 - searching and filtering maps using regular expressions
 - display map in current project

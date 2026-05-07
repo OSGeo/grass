@@ -41,6 +41,7 @@ def dataset_mapcalculator(
     nprocs: int = 1,
     register_null: bool = False,
     spatial: bool = False,
+    where=None,
 ):
     """Perform map-calculations of maps from different space time
     raster/raster3d datasets, using a specific sampling method
@@ -96,6 +97,7 @@ def dataset_mapcalculator(
            mapcalc processing
     :param register_null: Set this number True to register empty maps
     :param spatial: Check spatial overlap
+    :param where: Temporal WHERE condition to filter input STRDS
     """
 
     # We need a database interface for fast computation
@@ -148,7 +150,7 @@ def dataset_mapcalculator(
         has_samples = False
         for dataset in input_list:
             list = dataset.sample_by_dataset(
-                stds=first_input, method=method, spatial=spatial, dbif=dbif
+                stds=first_input, method=method, spatial=spatial, dbif=dbif, where=where
             )
 
             # In case samples are not found
@@ -202,7 +204,7 @@ def dataset_mapcalculator(
     else:
         input_list.insert(0, first_input)
         for dataset in input_list:
-            list = dataset.get_registered_maps_as_objects(dbif=dbif)
+            list = dataset.get_registered_maps_as_objects(where=where, dbif=dbif)
 
             if list is None or len(list) < 1:
                 dbif.close()
@@ -416,7 +418,7 @@ def _run_mapcalc2d(expr) -> None:
     """Helper function to run r.mapcalc in parallel"""
     try:
         gs.run_command(
-            "r.mapcalc", expression=expr, overwrite=gs.overwrite(), quiet=True
+            "r.mapcalc", expression=expr, nprocs=1, overwrite=gs.overwrite(), quiet=True
         )
     except CalledModuleError:
         sys.exit(1)

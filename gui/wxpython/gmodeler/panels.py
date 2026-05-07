@@ -901,7 +901,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
         if filename[-4:] != ".gxm":
             filename += ".gxm"
 
-        if os.path.exists(filename):
+        if Path(filename).exists():
             dlg = wx.MessageDialog(
                 parent=self,
                 message=_(
@@ -1742,7 +1742,7 @@ class PythonPanel(wx.Panel):
         if filename[-len(file_ext) - 1 :] != f".{file_ext}":
             filename += f".{file_ext}"
 
-        if os.path.exists(filename):
+        if Path(filename).exists():
             dlg = wx.MessageDialog(
                 self,
                 message=_(

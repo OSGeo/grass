@@ -111,7 +111,7 @@ def create_mapset(database, location=None, mapset=None):
         mapset,
     )
     # create an empty directory
-    os.mkdir(path)
+    Path(path).mkdir()
     _directory_to_mapset(path)
     # set permissions to u+rw,go+r (disabled; why?)
     # os.chmod(os.path.join(database,location,mapset,'WIND'), 0644)

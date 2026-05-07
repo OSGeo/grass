@@ -16,9 +16,10 @@ add_custom_target(
   ALL_DATABASE_MODULES ALL
   DEPENDS ${db_modules_list}
   COMMENT "All database modules are built.")
+set_target_properties(ALL_DATABASE_MODULES PROPERTIES FOLDER Misc)
 
 if(WITH_DOCS)
-  generate_html(TARGET ALL_DATABASE_MODULES NAME databaseintro)
+  generate_docs(databaseintro TARGET ALL_DATABASE_MODULES)
 endif()
 
 set(db_drivers grass_gis)
@@ -65,7 +66,7 @@ build_program_in_subdir(db.login DEPENDS grass_gis grass_dbmibase
 add_dependencies(db.login ${db_drivers})
 
 build_program_in_subdir(db.select DEPENDS grass_gis grass_dbmibase
-                        grass_dbmiclient grass_dbmidriver)
+                        grass_dbmiclient grass_dbmidriver grass_parson)
 add_dependencies(db.select ${db_drivers})
 
 build_program_in_subdir(db.tables DEPENDS grass_gis grass_dbmibase

@@ -396,6 +396,11 @@ static int close_new(int fd, int ok)
         if (fcb->null_row_ptr) { /* compressed nulls */
             fcb->null_row_ptr[fcb->cellhd.rows] =
                 lseek(fcb->null_fd, 0L, SEEK_CUR);
+            if (fcb->null_row_ptr[fcb->cellhd.rows] == -1) {
+                int err = errno;
+                G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                              strerror(err), err);
+            }
             Rast__write_null_row_ptrs(fd, fcb->null_fd);
         }
 
@@ -437,6 +442,11 @@ static int close_new(int fd, int ok)
 
         if (fcb->open_mode == OPEN_NEW_COMPRESSED) { /* auto compression */
             fcb->row_ptr[fcb->cellhd.rows] = lseek(fcb->data_fd, 0L, SEEK_CUR);
+            if (fcb->row_ptr[fcb->cellhd.rows] == -1) {
+                int err = errno;
+                G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                              strerror(err), err);
+            }
             Rast__write_row_ptrs(fd);
         }
 
@@ -531,6 +541,11 @@ void Rast__close_null(int fd)
 
     if (fcb->null_row_ptr) { /* compressed nulls */
         fcb->null_row_ptr[fcb->cellhd.rows] = lseek(fcb->null_fd, 0L, SEEK_CUR);
+        if (fcb->null_row_ptr[fcb->cellhd.rows] == -1) {
+            int err = errno;
+            G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                          strerror(err), err);
+        }
         Rast__write_null_row_ptrs(fd, fcb->null_fd);
         G_free(fcb->null_row_ptr);
     }

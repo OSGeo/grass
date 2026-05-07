@@ -107,8 +107,10 @@ real-install: | $(DESTDIR) $(DESTDIR)$(INST_DIR) $(DESTDIR)$(UNIX_BIN)
 	-rm $(DESTDIR)$(INST_DIR)/$(RESOURCE_PATHS)
 	$(MAKE) $(DESTDIR)$(INST_DIR)/$(RESOURCE_PATHS)
 
+ifndef CROSS_COMPILING
 	-rm $(DESTDIR)$(INST_DIR)/$(FONTCAP)
 	$(MAKE) $(DESTDIR)$(INST_DIR)/$(FONTCAP)
+endif
 
 	-rm $(DESTDIR)$(INST_DIR)/$(TMPGISRC)
 	$(MAKE) $(DESTDIR)$(INST_DIR)/$(TMPGISRC)
@@ -137,6 +139,11 @@ $(DESTDIR)$(INST_DIR)/$(RESOURCE_PATHS): $(ARCH_DISTDIR)/resource_paths.py
 	sed \
 	-e 's#'@CONFIG_PROJSHARE@'#$(PROJSHARE)#' \
 	-e 's#'@GISBASE_INSTALL_PATH@'##' \
+	-e 's#'@GRASS_INSTALL_CMAKECONFDIR@'##' \
+	-e 's#'@GRASS_INSTALL_CMAKEMODULEDIR@'##' \
+	-e 's#'@CMAKE_PREFIX_PATH@'##' \
+	-e 's#'@CMAKE_C_COMPILER@'##' \
+	-e 's#'@CMAKE_CXX_COMPILER@'##' \
 	-e 's#'@GRASS_PREFIX@'#$(INST_DIR)#' \
 	-e 's#'@GRASS_VERSION_GIT@'#$(GRASS_VERSION_GIT)#' \
 	-e 's#'@GRASS_VERSION_MAJOR@'#$(GRASS_VERSION_MAJOR)#' \
@@ -157,6 +164,7 @@ $(DESTDIR)$(INST_DIR)/$(RESOURCE_PATHS): $(ARCH_DISTDIR)/resource_paths.py
 	-e 's#'@GRASS_MISCDIR@'##' \
 	-e 's#'@GRASS_MKDOCSDIR@'#docs/mkdocs#' \
 	$< > $@
+	$(PYTHON) -m py_compile $@
 
 define fix_gisbase
 sed -e 's#$(GISBASE)#$(INST_DIR)#g' $< > $@

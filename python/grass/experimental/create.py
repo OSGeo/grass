@@ -1,7 +1,7 @@
 """Likely going into grass.grassdb.create"""
 
-import pathlib
 import tempfile
+from pathlib import Path
 
 from grass.grassdb.checks import (
     mapset_exists,
@@ -65,7 +65,7 @@ def create_temporary_mapset(path, location=None) -> MapsetPath:
     The user of this function is responsible for deleting the contents of the
     temporary directory and the directory itself when done with it.
     """
-    path = pathlib.Path(path)
+    path = Path(path)
     if location:
         path /= location
     tmp_dir = tempfile.mkdtemp(dir=path)

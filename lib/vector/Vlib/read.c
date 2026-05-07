@@ -19,24 +19,26 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-static int read_dummy(struct Map_info *Map UNUSED,
-                      struct line_pnts *line_p UNUSED,
-                      struct line_cats *line_c UNUSED)
+static int read_dummy(struct Map_info *Map G_UNUSED,
+                      struct line_pnts *line_p G_UNUSED,
+                      struct line_cats *line_c G_UNUSED)
 {
     G_warning("Vect_read_line() %s", _("for this format/level not supported"));
     return -1;
 }
 
-#if !defined HAVE_OGR || !defined HAVE_POSTGRES
-static int format(struct Map_info *Map UNUSED, struct line_pnts *line_p UNUSED,
-                  struct line_cats *line_c UNUSED)
+#if !defined HAVE_POSTGRES
+static int format(struct Map_info *Map G_UNUSED,
+                  struct line_pnts *line_p G_UNUSED,
+                  struct line_cats *line_c G_UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 
-static int format2(struct Map_info *Map UNUSED, struct line_pnts *line_p UNUSED,
-                   struct line_cats *line_c UNUSED, int line UNUSED)
+static int format2(struct Map_info *Map G_UNUSED,
+                   struct line_pnts *line_p G_UNUSED,
+                   struct line_cats *line_c G_UNUSED, int line G_UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
@@ -45,16 +47,9 @@ static int format2(struct Map_info *Map UNUSED, struct line_pnts *line_p UNUSED,
 
 static int (*Read_next_line_array[][3])(struct Map_info *, struct line_pnts *,
                                         struct line_cats *) = {
-    {read_dummy, V1_read_next_line_nat, V2_read_next_line_nat}
-#ifdef HAVE_OGR
-    ,
+    {read_dummy, V1_read_next_line_nat, V2_read_next_line_nat},
     {read_dummy, V1_read_next_line_ogr, V2_read_next_line_ogr},
     {read_dummy, V1_read_next_line_ogr, V2_read_next_line_ogr}
-#else
-    ,
-    {read_dummy, format, format},
-    {read_dummy, format, format}
-#endif
 #ifdef HAVE_POSTGRES
     ,
     {read_dummy, V1_read_next_line_pg, V2_read_next_line_pg}
@@ -65,21 +60,14 @@ static int (*Read_next_line_array[][3])(struct Map_info *, struct line_pnts *,
 };
 
 static int (*Read_line_array[])(struct Map_info *, struct line_pnts *,
-                                struct line_cats *, int) = {V2_read_line_nat
-#ifdef HAVE_OGR
-                                                            ,
-                                                            V2_read_line_sfa,
-                                                            V2_read_line_sfa
-#else
-                                                            ,
-                                                            format2, format2
-#endif
+                                struct line_cats *, int) = {
+    V2_read_line_nat, V2_read_line_sfa, V2_read_line_sfa
 #ifdef HAVE_POSTGRES
-                                                            ,
-                                                            V2_read_line_pg
+    ,
+    V2_read_line_pg
 #else
-                                                            ,
-                                                            format2
+    ,
+    format2
 #endif
 };
 

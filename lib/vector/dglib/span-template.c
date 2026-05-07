@@ -229,8 +229,8 @@ dfs_error:
  */
 int DGL_SPAN_MINIMUM_SPANNING_FUNC(dglGraph_s *pgraphIn, dglGraph_s *pgraphOut,
                                    dglInt32_t nVertex,
-                                   dglSpanClip_fn fnClip UNUSED,
-                                   void *pvClipArg UNUSED)
+                                   dglSpanClip_fn fnClip G_UNUSED,
+                                   void *pvClipArg G_UNUSED)
 {
     dglInt32_t *pHead, *pTail, *pEdgeset, *pEdge;
     dglHeap_s FrontEdgeHeap;

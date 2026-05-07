@@ -45,40 +45,36 @@ which includes the following options:
     The JSON output looks like:
 
     ```json
-    [
-        {
-            "value": 55.578792572021484,
-            "color": "#00BFBF"
-        },
-        {
-            "value": 75.729006957999999,
-            "color": "#00FF00"
-        },
-        {
-            "value": 95.879221344000001,
-            "color": "#FFFF00"
-        },
-        {
-            "value": 116.02943573,
-            "color": "#FF7F00"
-        },
-        {
-            "value": 136.179650116,
-            "color": "#BF7F3F"
-        },
-        {
-            "value": 156.32986450195312,
-            "color": "#141414"
-        },
-        {
-            "value": "nv",
-            "color": "#FFFFFF"
-        },
-        {
-            "value": "default",
-            "color": "#FFFFFF"
-        }
-    ]
+    {
+        "table": [
+            {
+                "value": 55.578792572021484,
+                "color": "#00BFBF"
+            },
+            {
+                "value": 75.729006957999999,
+                "color": "#00FF00"
+            },
+            {
+                "value": 95.879221344000001,
+                "color": "#FFFF00"
+            },
+            {
+                "value": 116.02943573,
+                "color": "#FF7F00"
+            },
+            {
+                "value": 136.179650116,
+                "color": "#BF7F3F"
+            },
+            {
+                "value": 156.32986450195312,
+                "color": "#141414"
+            }
+        ],
+        "nv": "#FFFFFF",
+        "default": "#FFFFFF"
+    }
     ```
 
 ## SEE ALSO

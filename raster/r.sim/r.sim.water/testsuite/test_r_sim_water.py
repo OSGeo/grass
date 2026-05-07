@@ -2,6 +2,8 @@ import unittest
 
 from grass.gunittest.case import TestCase
 
+from grass.tools import Tools
+
 
 class TestRSimWater(TestCase):
     """Test r.sim.water"""
@@ -11,7 +13,10 @@ class TestRSimWater(TestCase):
     dx = "tmp_dx"
     dy = "tmp_dy"
     depth = "tmp_depth"
+    depth2 = "tmp_depth2"
     discharge = "tmp_discharge"
+    diff_depth = "tmp_diff_depth"
+    diff_discharge = "tmp_diff_discharge"
     rain = "tmp_rain"
     mannings = "tmp_mannings"
     infil = "tmp_infil"
@@ -72,6 +77,8 @@ class TestRSimWater(TestCase):
                 cls.dy,
                 cls.reference_depth_default,
                 cls.reference_discharge_default,
+                cls.diff_depth,
+                cls.diff_discharge,
                 cls.rain,
                 cls.mannings,
                 cls.infil,
@@ -115,6 +122,59 @@ class TestRSimWater(TestCase):
             precision="0.000001",
         )
 
+    def test_nodxdy(self):
+        """Test r.sim.water execution without dx/dy.
+        Lowered precision because internally derived dx/dy
+        are double precision (as opposed to floats in r.slope.aspect),
+        causing small differences in simulated depth."""
+        self.assertModule(
+            "r.sim.water",
+            elevation=self.elevation,
+            depth=self.depth,
+            discharge=self.discharge,
+            random_seed=1,
+            nprocs=1,
+        )
+
+        # Assert that the output rasters exist
+        self.assertRasterExists(self.depth)
+        self.assertRasterExists(self.discharge)
+        # Assert that the output rasters are the same
+        self.assertRastersEqual(
+            self.depth, reference=self.reference_depth_default, precision="0.001"
+        )
+        self.assertRastersEqual(
+            self.discharge,
+            reference=self.reference_discharge_default,
+            precision="0.001",
+        )
+        tools = Tools()
+        tools.r_mapcalc(
+            expression=f"{self.diff_depth} =  abs({self.depth} - {self.reference_depth_default})",
+        )
+        stats = tools.r_univar(map=self.diff_depth, format="json")
+        self.assertAlmostEqual(stats["sum"], 0, delta=1e-4)
+        tools.r_mapcalc(
+            expression=f"{self.diff_discharge} = abs({self.discharge} - {self.reference_discharge_default})",
+        )
+        stats = tools.r_univar(map=self.diff_discharge, format="json")
+        self.assertAlmostEqual(stats["sum"], 0, delta=1e-3)
+
+        # test parallelized dxdy
+        # lower precision because parallelization affects random number generator
+        self.assertModule(
+            "r.sim.water",
+            elevation=self.elevation,
+            depth=self.depth2,
+            random_seed=1,
+            nprocs=2,
+        )
+        self.assertRastersEqual(
+            self.depth2,
+            reference=self.reference_depth_default,
+            precision="0.02",
+        )
+
     def test_complex(self):
         """Test r.sim.water execution with more complex inputs"""
         # Run the r.sim.water simulation
@@ -129,7 +189,7 @@ class TestRSimWater(TestCase):
             infil=self.infil,
             depth=self.depth,
             discharge=self.discharge,
-            niterations=15,
+            duration=15,
             output_step=5,
             diffusion_coeff=0.9,
             hmax=0.25,

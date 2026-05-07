@@ -14,12 +14,12 @@
 #############################################################################
 from __future__ import annotations
 
-import os
-from pathlib import Path
 import fnmatch
-import re
-from typing import TYPE_CHECKING
 import operator
+import os
+import re
+from pathlib import Path
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -225,8 +225,8 @@ def main(ext):
 
 if __name__ == "__main__":
     from build import (
-        write_footer,
         grass_version,
+        write_footer,
     )
 
     img_files_html = main("html")

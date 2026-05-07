@@ -6,7 +6,8 @@
  * 5|6|7 */
 static int nextr[NUM_DIRS] = {-1, -1, -1, 0, 1, 1, 1, 0};
 static int nextc[NUM_DIRS] = {1, 0, -1, -1, -1, 0, 1, 1};
-const char *dirname[NUM_DIRS] = {"NE", "N", "NW", "W", "SW", "S", "SE", "E"};
+const char *direction_name[NUM_DIRS] = {"NE", "N", "NW", "W",
+                                        "SW", "S", "SE", "E"};
 
 /*
  * A more thorough comparison using a few factors of different priority
@@ -125,7 +126,7 @@ int calc_pattern(PATTERN *pattern, int row, int cur_row, int col,
             zenith_easting = nadir_easting = target_easting;
             pattern->e[i] = cur_easting;
             pattern->n[i] = cur_northing;
-            prof_sso(dirname[i]);
+            prof_sso(direction_name[i]);
         }
         while (cur_distance < search_distance) {
             if (cur_row + j * nextr[i] < 0 ||

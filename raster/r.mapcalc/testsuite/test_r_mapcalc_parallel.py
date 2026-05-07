@@ -93,17 +93,6 @@ class TestRandFunction(TestCase):
         self.assertModule("r.mapcalc", expression="nonrand_cell = 200", nprocs=THREADS)
         self.to_remove.append("nonrand_cell")
 
-    def test_seed_required(self):
-        """Test that seed is required when rand() is used
-
-        This test can, and probably should, generate an error message.
-        """
-        self.assertModuleFail(
-            "r.mapcalc", expression="rand_x = rand(1, 200)", nprocs=THREADS
-        )
-        # TODO: assert map not exists but it would be handy here
-        # TODO: test that error message was generated
-
     def test_seed_cell(self):
         """Test given seed with CELL against reference map"""
         seed = 500
@@ -167,18 +156,16 @@ class TestRandFunction(TestCase):
         )
         self.rinfo_contains_number("rand_fcell", seed)
 
-    def test_auto_seed(self):
-        """Test that two runs with -s does not give same maps"""
+    def test_new_auto_seed(self):
+        """Test that two runs with autoseeding do not give same maps"""
         self.assertModule(
             "r.mapcalc",
-            flags="s",
             expression="rand_auto_1 = rand(1., 2)",
             nprocs=THREADS,
         )
         self.to_remove.append("rand_auto_1")
         self.assertModule(
             "r.mapcalc",
-            flags="s",
             expression="rand_auto_2 = rand(1., 2)",
             nprocs=THREADS,
         )
@@ -186,6 +173,29 @@ class TestRandFunction(TestCase):
         self.assertRastersDifference(
             "rand_auto_1",
             "rand_auto_2",
+            statistics={"min": -1, "max": 1, "mean": 0},
+            precision=0.5,
+        )  # low precision, we have few cells
+
+    def test_legacy_auto_seed(self):
+        """Test that two runs with -s do not give same maps"""
+        self.assertModule(
+            "r.mapcalc",
+            flags="s",
+            expression="rand_auto_3 = rand(1., 2)",
+            nprocs=THREADS,
+        )
+        self.to_remove.append("rand_auto_3")
+        self.assertModule(
+            "r.mapcalc",
+            flags="s",
+            expression="rand_auto_4 = rand(1., 2)",
+            nprocs=THREADS,
+        )
+        self.to_remove.append("rand_auto_4")
+        self.assertRastersDifference(
+            "rand_auto_3",
+            "rand_auto_4",
             statistics={"min": -1, "max": 1, "mean": 0},
             precision=0.5,
         )  # low precision, we have few cells
@@ -218,7 +228,7 @@ class TestBasicOperations(TestCase):
 
     def test_difference_of_the_same_map_double(self):
         """Test zero difference of map with itself"""
-        self.runModule("r.mapcalc", flags="s", expression="a = rand(1.0, 200)")
+        self.runModule("r.mapcalc", expression="a = rand(1.0, 200)")
         self.to_remove.append("a")
         self.assertModule("r.mapcalc", expression="diff_a_a = a - a", nprocs=THREADS)
         self.to_remove.append("diff_a_a")
@@ -226,7 +236,7 @@ class TestBasicOperations(TestCase):
 
     def test_difference_of_the_same_map_float(self):
         """Test zero difference of map with itself"""
-        self.runModule("r.mapcalc", flags="s", expression="af = rand(float(1), 200)")
+        self.runModule("r.mapcalc", expression="af = rand(float(1), 200)")
         self.to_remove.append("af")
         self.assertModule(
             "r.mapcalc", expression="diff_af_af = af - af", nprocs=THREADS
@@ -236,7 +246,7 @@ class TestBasicOperations(TestCase):
 
     def test_difference_of_the_same_map_int(self):
         """Test zero difference of map with itself"""
-        self.runModule("r.mapcalc", flags="s", expression="ai = rand(1, 200)")
+        self.runModule("r.mapcalc", expression="ai = rand(1, 200)")
         self.to_remove.append("ai")
         self.assertModule(
             "r.mapcalc", expression="diff_ai_ai = ai - ai", nprocs=THREADS

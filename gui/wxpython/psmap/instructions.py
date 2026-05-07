@@ -1135,7 +1135,7 @@ class Image(InstructionObject):
             except (IndexError, ValueError):
                 GError(_("Failed to read instruction %s") % instruction)
                 return False
-        if not os.path.exists(instr["epsfile"]):
+        if not Path(instr["epsfile"]).exists():
             GError(
                 _("Failed to read instruction %(inst)s: file %(file)s not found.")
                 % {"inst": instruction, "file": instr["epsfile"]}

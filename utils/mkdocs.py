@@ -49,6 +49,18 @@ def set_proxy():
         )
 
 
+def source_is_remote():
+    """Check if the source code comes from a remote repository.
+
+    Returns True when SOURCE_URL is set and does not point to an existing
+    local path (assuming a non-existent path means a remote URL)
+    and False otherwise (assuming no SOURCE_URL or local directory
+    means compilation from local sources).
+    """
+    source_url = os.getenv("SOURCE_URL", "")
+    return source_url and not Path(source_url).exists()
+
+
 def get_version_branch(major_version, addons_git_repo_url):
     """Check if version branch for the current GRASS version exists,
     if not, take branch for the previous version
@@ -60,7 +72,7 @@ def get_version_branch(major_version, addons_git_repo_url):
     :return version_branch str: version branch
     """
     version_branch = f"grass{major_version}"
-    if gs:
+    if source_is_remote():
         branch = gs.Popen(
             [
                 "git",
@@ -135,8 +147,8 @@ def get_last_git_commit(src_dir, top_dir, pgm, addon_path, major_version):
             commit=process_result.stdout.decode(),
             src_dir=src_dir,
         )
-    if gs:
-        # Addons installation
+    if source_is_remote():
+        # Addon installed from a remote source without local Git history.
         return get_git_commit_from_rest_api_for_addon_repo(
             addon_path=addon_path, src_dir=src_dir, pgm=pgm, major_version=major_version
         )
@@ -181,7 +193,7 @@ def get_default_git_log(src_dir, datetime_format="%A %b %d %H:%M:%S %Y"):
     """
     return {
         "commit": "unknown",
-        "date": datetime.fromtimestamp(os.path.getmtime(src_dir)).strftime(
+        "date": datetime.fromtimestamp(Path(src_dir).stat().st_mtime).strftime(
             datetime_format
         ),
     }
@@ -276,7 +288,7 @@ def get_git_commit_from_file(
         top_dir,
         "core_modules_with_last_commit.json",
     )
-    if os.path.exists(json_file_path):
+    if Path(json_file_path).exists():
         with open(json_file_path) as f:
             core_modules_with_last_commit = json.load(f)
         if pgm in core_modules_with_last_commit:
@@ -400,6 +412,10 @@ def get_addon_path(base_url, pgm, major_version):
     if not Path(addons_base_dir).exists():
         Path(addons_base_dir).mkdir(parents=True, exist_ok=True)
     if not grass_addons_dir.exists():
+        if not source_is_remote():
+            # Cloning the addons index repo from base_url requires
+            # network. Skip it when the addon source is local.
+            return None
         try:
             with tempfile.TemporaryDirectory(dir=addons_base_dir) as tmpdir:
                 tmp_clone_path = Path(tmpdir) / "grass-addons"

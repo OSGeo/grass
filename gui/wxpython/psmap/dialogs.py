@@ -4972,7 +4972,7 @@ class ScalebarDialog(PsmapDialog):
             os.path.join(globalvar.IMGDIR, "scalebar-simple.png"),
         )
         for item, path in zip(["fancy", "simple"], imagePath, strict=True):
-            bitmap = EmptyBitmap(0, 0) if not os.path.exists(path) else wx.Bitmap(path)
+            bitmap = EmptyBitmap(0, 0) if not Path(path).exists() else wx.Bitmap(path)
             self.sbCombo.Append(item="", bitmap=bitmap, clientData=item[0])
         # self.sbCombo.Append(
         #     item="simple",
@@ -5988,7 +5988,7 @@ class ImageDialog(PsmapDialog):
             return
         basePath = self.imagePanel.image["dir"].GetValue()
         file = os.path.join(basePath, imageName)
-        if not os.path.exists(file):
+        if not Path(file).exists():
             return
 
         if os.path.splitext(file)[1].lower() == ".eps":

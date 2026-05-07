@@ -17,6 +17,7 @@ import os
 import shutil
 import tempfile
 import weakref
+from pathlib import Path
 
 from grass.tools import Tools
 from grass.tools.support import ToolFunctionResolver
@@ -120,7 +121,7 @@ class Map:
 
         if filename:
             self._filename = filename
-            if not read_file and os.path.exists(self._filename):
+            if not read_file and Path(self._filename).exists():
                 os.remove(self._filename)
         else:
             self._filename = os.path.join(self._tmpdir.name, "map.png")

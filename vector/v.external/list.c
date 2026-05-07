@@ -6,9 +6,8 @@
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 
-#ifdef HAVE_OGR
 #include "ogr_api.h"
-#endif
+
 #ifdef HAVE_POSTGRES
 #include <libpq-fe.h>
 #endif
@@ -18,9 +17,7 @@ static int cmp(const void *, const void *);
 static char **format_list(int *, size_t *);
 static char *feature_type(const char *);
 
-#ifdef HAVE_OGR
 static int list_layers_ogr(FILE *, const char *, char **, int);
-#endif /* HAVE_OGR */
 #ifdef HAVE_POSTGRES
 static int list_layers_pg(FILE *, const char *, char **, int);
 #endif /* HAVE_POSTGRES */
@@ -40,7 +37,6 @@ char **format_list(int *count, size_t *len)
     if (len)
         *len = 0;
 
-#ifdef HAVE_OGR
     char buf[2000];
 
     OGRSFDriverH Ogr_driver;
@@ -66,8 +62,7 @@ char **format_list(int *count, size_t *len)
     /* order formats by name */
     if (list)
         qsort(list, *count, sizeof(char *), cmp);
-#endif
-#if defined HAVE_POSTGRES && !defined HAVE_OGR
+#if defined HAVE_POSTGRES
     list = G_realloc(list, ((*count) + 1) * sizeof(char *));
     list[(*count)++] = G_store("PostgreSQL");
     if (len)
@@ -114,11 +109,7 @@ int list_layers(FILE *fd, const char *dsn, char **layer, int print_types,
         G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
 #endif
     }
-#ifdef HAVE_OGR
     return list_layers_ogr(fd, dsn, layer, print_types);
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-#endif
 
     return -1;
 }
@@ -239,7 +230,6 @@ int list_layers_pg(FILE *fd, const char *conninfo, char **table,
 }
 #endif /* HAVE_POSTGRES */
 
-#ifdef HAVE_OGR
 int list_layers_ogr(FILE *fd, const char *dsn, char **layer, int print_types)
 {
     int i, ret;
@@ -353,4 +343,3 @@ int list_layers_ogr(FILE *fd, const char *dsn, char **layer, int print_types)
 
     return ret;
 }
-#endif /* HAVE_OGR */

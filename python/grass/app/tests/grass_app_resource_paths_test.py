@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 
 import pytest
 
@@ -37,5 +37,5 @@ def test_value_not_empty(name):
 @pytest.mark.parametrize("name", ["GRASS_PREFIX"])
 def test_value_is_directory(name):
     value = getattr(resource_paths, name)
-    assert os.path.exists(value)
-    assert os.path.isdir(value)
+    assert Path(value).exists()
+    assert Path(value).is_dir()

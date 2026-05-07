@@ -1,9 +1,9 @@
 """Test environment and GIS environment functions"""
 
+import json
 import os
 import subprocess
 import sys
-import json
 from textwrap import dedent
 
 import pytest

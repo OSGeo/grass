@@ -15,7 +15,10 @@
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
+
 #include <grass/gis.h>
+#include <grass/glocale.h>
+
 #include "local_proto.h"
 
 /*      buf is CELL *   WRAT code       */
@@ -61,7 +64,12 @@ int Segment_put_row(const SEGMENT *SEG, const void *buf, off_t row)
 
     for (col = 0; col < ncols; col += scols) {
         SEG->address(SEG, row, col, &n, &index);
-        SEG->seek(SEG, n, index);
+        if (SEG->seek(SEG, n, index) == -1) {
+            int err = errno;
+            G_warning(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+            return -1;
+        }
 
         if ((result = write(SEG->fd, buf, size)) != size) {
             G_warning("Segment_put_row write error %s", strerror(errno));
@@ -81,7 +89,12 @@ int Segment_put_row(const SEGMENT *SEG, const void *buf, off_t row)
 
     if ((size = SEG->spill * SEG->len)) {
         SEG->address(SEG, row, col, &n, &index);
-        SEG->seek(SEG, n, index);
+        if (SEG->seek(SEG, n, index) == -1) {
+            int err = errno;
+            G_warning(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+            return -1;
+        }
 
         if (write(SEG->fd, buf, size) != size) {
             G_warning("Segment_put_row final write error: %s", strerror(errno));

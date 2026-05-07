@@ -36,7 +36,7 @@ class TestOIF(TestCase):
     @classmethod
     def tearDownClass(cls):
         """Clean up the test environment by removing created maps and files."""
-        if os.path.exists(cls.output_file):
+        if Path(cls.output_file).exists():
             os.remove(cls.output_file)
 
         cls.runModule(
@@ -125,7 +125,7 @@ class TestOIF(TestCase):
         )
 
         self.assertTrue(
-            os.path.exists(self.output_file), msg="Output file was not created."
+            Path(self.output_file).exists(), msg="Output file was not created."
         )
 
         content = Path(self.output_file).read_text()

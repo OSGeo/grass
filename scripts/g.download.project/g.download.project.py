@@ -70,7 +70,7 @@ def find_location_in_directory(path, recurse=0):
     """
     assert recurse >= 0
     full_paths = [os.path.join(path, i) for i in os.listdir(path)]
-    candidates = sorted([i for i in full_paths if os.path.isdir(i)])
+    candidates = sorted([i for i in full_paths if Path(i).is_dir()])
     for candidate in candidates:
         if is_location_valid(candidate):
             return candidate

@@ -31,6 +31,7 @@ import queue as Queue
 
 import codecs
 import locale
+from pathlib import Path
 
 import wx
 from wx.lib.newevent import NewEvent
@@ -607,11 +608,11 @@ class GConsole(wx.EvtHandler):
                     if sys.platform == "win32":
                         pyFile += ".py"
                     pyPath = os.path.join(os.environ["GISBASE"], "scripts", pyFile)
-                    if not os.path.exists(pyPath):
+                    if not Path(pyPath).exists():
                         pyPath = os.path.join(
                             os.environ["GRASS_ADDON_BASE"], "scripts", pyFile
                         )
-                    if not os.path.exists(pyPath):
+                    if not Path(pyPath).exists():
                         GError(
                             parent=self._guiparent,
                             message=_("Module <%s> not found.") % command[0],

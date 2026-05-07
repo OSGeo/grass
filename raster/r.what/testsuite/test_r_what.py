@@ -11,8 +11,8 @@ Licence:    This program is free software under the GNU General Public
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
-import os
 import json
+from pathlib import Path
 
 
 class TestRasterWhat(TestCase):
@@ -465,8 +465,7 @@ class TestRasterWhat(TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
-        if os.path.isfile("result.csv"):
-            os.remove("result.csv")
+        Path("result.csv").unlink(missing_ok=True)
 
     def test_raster_what_points(self):
         """Testing r.what runs successfully with input coordinates given as a vector points map"""
@@ -509,15 +508,13 @@ class TestRasterWhat(TestCase):
             flags="n",
         )
         self.assertFileExists(filename="result.csv", msg="CSV file was not created")
-        if os.path.isfile("result.csv"):
-            file = open("result.csv")
-            fileData = file.read()
+        if (result_path := Path("result.csv")).is_file():
+            fileData = result_path.read_text()
             self.assertLooksLike(
                 actual=fileData,
                 reference=self.refrence_csv,
                 msg="test_raster_what_csv did't run successfully",
             )
-            file.close()
 
     def test_raster_what_points_flag_i(self):
         """Testing r.what runs successfully with flag i"""

@@ -9,7 +9,7 @@ Created on Thu Aug  9 14:04:12 2012
 """
 # utilities for generating REST indices
 # utilities for generating HTML indices
-# (C) 2003-2025 by Luca Delucchi and the GRASS Development Team
+# (C) 2003-2026 by Luca Delucchi and the GRASS Development Team
 
 import os
 import string
@@ -170,7 +170,7 @@ footer_tmpl = string.Template(
 --------------
 
 :doc:`Manual main page <index>` \| :doc:`Full Index <full_index>`
- 2003-2025 `GRASS Development Team <https://grass.osgeo.org>`_, GRASS ${grass_version} Reference Manual
+ 2003-2026 `GRASS Development Team <https://grass.osgeo.org>`_, GRASS ${grass_version} Reference Manual
 """  # noqa: E501
 )
 
@@ -281,7 +281,7 @@ def write_file(name, contents):
 
 def try_mkdir(path):
     try:
-        os.mkdir(path)
+        Path(path).mkdir()
     except OSError:
         pass
 
@@ -289,8 +289,8 @@ def try_mkdir(path):
 def replace_file(name):
     temp = name + ".tmp"
     if (
-        os.path.exists(name)
-        and os.path.exists(temp)
+        Path(name).exists()
+        and Path(temp).exists()
         and read_file(name) == read_file(temp)
     ):
         os.remove(temp)

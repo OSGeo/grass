@@ -7,7 +7,7 @@ from grass.gunittest.utils import xfail_windows
 class TestNeighbors(TestCase):
     """
 
-    Used dataset: nc_spm_full_v2alphav2
+    Used dataset: nc_spm_full_v2beta1
 
     Test cases:
     test_sequential: Test output with sequential filter type
