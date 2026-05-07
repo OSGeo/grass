@@ -1,4 +1,5 @@
 import json
+import math
 from itertools import zip_longest
 
 from grass.gunittest.case import TestCase
@@ -16,7 +17,17 @@ class TestVToDb(TestCase):
         self.assertEqual(set(d1.keys()), set(d2.keys()))
         for k1 in d1:
             if isinstance(d1[k1], float):
-                self.assertAlmostEqual(d1[k1], d2[k1], places=6)
+                m_obs, e_obs = math.frexp(d1[k1])
+                m_ref, e_ref = math.frexp(d2[k1])
+                self.assertEqual(e_obs, e_ref)
+                # use 12 instead of default 7 decimal places
+                # for reliable double precision fp results
+                self.assertAlmostEqual(
+                    m_obs,
+                    m_ref,
+                    places=12,
+                    msg=f"Comparing mantissas of {d1[k1]} and {d2[k1]}",
+                )
             else:
                 self.assertEqual(d1[k1], d2[k1])
 
