@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 17:57+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Greek <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/el/>\n"
@@ -1285,6 +1285,9 @@ msgstr ""
 msgid "Re&load maps"
 msgstr ""
 
+msgid "Show computational region"
+msgstr ""
+
 msgid "&Copy path"
 msgstr ""
 
@@ -1298,6 +1301,11 @@ msgstr "Διαγραφή εγγραφών"
 #, fuzzy
 msgid "&Rename project"
 msgstr "Μετεονομασ&ία"
+
+#, fuzzy
+#| msgid "Show vector points"
+msgid "Show projection info"
+msgstr "Προβολή διανυσματικών σημείων"
 
 #, fuzzy
 #| msgid "Copy"
@@ -5692,6 +5700,12 @@ msgstr ""
 #| msgid "Raster maps"
 msgid "Remove raster mask"
 msgstr "Χάρτες raster"
+
+msgid "Custom CRS"
+msgstr ""
+
+msgid "Left mouse click to print detailed projection info"
+msgstr ""
 
 msgid "Create new workspace (Ctrl+N)"
 msgstr ""

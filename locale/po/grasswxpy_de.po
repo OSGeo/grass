@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 17:57+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/de/>\n"
@@ -1326,6 +1326,11 @@ msgid "Re&load maps"
 msgstr ""
 
 #, fuzzy
+#| msgid "Show computational extent"
+msgid "Show computational region"
+msgstr "Zeige den Arbeitsbereich"
+
+#, fuzzy
 msgid "&Copy path"
 msgstr "&Mapset erstellen"
 
@@ -1341,6 +1346,11 @@ msgstr "&Mapset löschen"
 #| msgid "&Rename mapset"
 msgid "&Rename project"
 msgstr "&Mapset umbenennen"
+
+#, fuzzy
+#| msgid "Choose projection"
+msgid "Show projection info"
+msgstr "Wählen Sie eine Projektion"
 
 #, fuzzy
 #| msgid "Copy map"
@@ -5922,6 +5932,14 @@ msgstr ""
 #| msgid "Develop raster map"
 msgid "Remove raster mask"
 msgstr "Rasterkarten pflegen"
+
+#, fuzzy
+#| msgid "Custom min"
+msgid "Custom CRS"
+msgstr "Benutzer Min"
+
+msgid "Left mouse click to print detailed projection info"
+msgstr ""
 
 msgid "Create new workspace (Ctrl+N)"
 msgstr "Erzeuge neuen Workspace (Ctrl+N)"
@@ -11759,9 +11777,6 @@ msgstr ""
 
 #~ msgid "Choose method of specifying georeferencing parameters"
 #~ msgstr "Wählen Sie eine Methode, um die Parameter der Georeferenzierung zuwählen"
-
-#~ msgid "Choose projection"
-#~ msgstr "Wählen Sie eine Projektion"
 
 #~ msgid "Classifies attribute data, e.g. for thematic mapping"
 #~ msgstr "Klassifiziert Attributdaten, z.B. für thematische Karten."

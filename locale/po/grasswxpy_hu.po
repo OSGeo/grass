@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 17:57+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Hungarian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/hu/>\n"
@@ -1315,6 +1315,11 @@ msgid "Re&load maps"
 msgstr ""
 
 #, fuzzy
+#| msgid "Zoom to computational region extent"
+msgid "Show computational region"
+msgstr "Nagyítás a számítási tartomány terjedelmére"
+
+#, fuzzy
 #| msgid "&Copy"
 msgid "&Copy path"
 msgstr "Másolás"
@@ -1329,6 +1334,11 @@ msgstr "Rekordok törlése"
 #, fuzzy
 msgid "&Rename project"
 msgstr "Átvetítés"
+
+#, fuzzy
+#| msgid "Choose projection"
+msgid "Show projection info"
+msgstr "Válasszon vetületet"
 
 #, fuzzy
 #| msgid "CVS path"
@@ -5805,6 +5815,14 @@ msgstr ""
 #| msgid "Save raster map"
 msgid "Remove raster mask"
 msgstr "Raszter térkép mentés"
+
+#, fuzzy
+#| msgid "custom"
+msgid "Custom CRS"
+msgstr "egyéni"
+
+msgid "Left mouse click to print detailed projection info"
+msgstr ""
 
 msgid "Create new workspace (Ctrl+N)"
 msgstr "Új munkaterület létrehozás (Ctrl N)"
@@ -11365,9 +11383,6 @@ msgstr ""
 
 #~ msgid "Choose method for creating a new location"
 #~ msgstr "Válasszon módszert az új hely létrehozásához"
-
-#~ msgid "Choose projection"
-#~ msgstr "Válasszon vetületet"
 
 #~ msgid "Clear command prompt content"
 #~ msgstr "Parancs prompt tartalmának törlése"
