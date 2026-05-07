@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_pt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 17:57+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/pt/>\n"
@@ -1296,6 +1296,11 @@ msgid "Re&load maps"
 msgstr ""
 
 #, fuzzy
+#| msgid "Show computational extent"
+msgid "Show computational region"
+msgstr "Exibir extensão computacional"
+
+#, fuzzy
 #| msgid "Copy table"
 msgid "&Copy path"
 msgstr "Copiar tabla"
@@ -1310,6 +1315,11 @@ msgstr "Apagar registos"
 #, fuzzy
 msgid "&Rename project"
 msgstr "Gestão de projecções"
+
+#, fuzzy
+#| msgid "Projection code:"
+msgid "Show projection info"
+msgstr "Código de projecção:"
 
 #, fuzzy
 #| msgid "Copy table"
@@ -5703,6 +5713,14 @@ msgstr ""
 #| msgid "Develop raster map"
 msgid "Remove raster mask"
 msgstr "Desenvolver mapa raster"
+
+#, fuzzy
+#| msgid "Custom min"
+msgid "Custom CRS"
+msgstr "Mínimo Personalizado"
+
+msgid "Left mouse click to print detailed projection info"
+msgstr ""
 
 msgid "Create new workspace (Ctrl+N)"
 msgstr ""
