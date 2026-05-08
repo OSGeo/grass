@@ -37,7 +37,8 @@ import wx
 # during start up, remove when not needed
 import wx.adv
 
-# Patch: fix GTK-CRITICAL assertion width/height >= -1 
+
+# Patch: fix GTK-CRITICAL assertion width/height >= -1
 def _patch_gtk_size():
     _orig = wx.Window.DoMoveWindow
     def _safe(self, x, y, w, h):
