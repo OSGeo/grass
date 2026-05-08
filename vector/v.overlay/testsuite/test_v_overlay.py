@@ -13,13 +13,13 @@ class TestVOverlay(TestCase):
             "v.extract",
             input="boundary_county",
             output="boundary_county_extract1",
-            where="NAME in ('CURRITUCK', 'COLUMBUS')",
+            where="NAME in ('CURRITUCK')",
         )
         gs.run_command(
             "v.extract",
             input="boundary_county",
             output="boundary_county_extract2",
-            where="NAME not in ('CURRITUCK', 'COLUMBUS')",
+            where="NAME in ('CAMDEN')",
         )
         # modify extract 1
         gs.run_command(
@@ -68,14 +68,14 @@ class TestVOverlay(TestCase):
             sep="=",
             precision=0.1,
             reference={
-                "nodes": 12067,
-                "primitives": 21060,
+                "nodes": 1050,
+                "primitives": 1802,
                 "points": 0,
                 "lines": 0,
-                "boundaries": 18053,
-                "centroids": 3007,
-                "areas": 6156,
-                "islands": 170,
+                "boundaries": 1572,
+                "centroids": 230,
+                "areas": 529,
+                "islands": 7,
             },
         )
 
@@ -102,14 +102,14 @@ class TestVOverlay(TestCase):
             sep="=",
             precision=0.1,
             reference={
-                "nodes": 13733,
-                "primitives": 24393,
+                "nodes": 1232,
+                "primitives": 2164,
                 "points": 0,
                 "lines": 0,
-                "boundaries": 20563,
-                "centroids": 3830,
-                "areas": 6999,
-                "islands": 169,
+                "boundaries": 1847,
+                "centroids": 317,
+                "areas": 622,
+                "islands": 7,
             },
         )
 
