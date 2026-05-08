@@ -45,6 +45,7 @@ def patch_gtk_size():
         return orig(self, x, y, max(w, 0), max(h, 0))
     wx.Window.DoMoveWindow = _safe
 
+
 patch_gtk_size()
 
 try:
