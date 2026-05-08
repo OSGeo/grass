@@ -41,6 +41,7 @@ import wx.adv
 # Patch: fix GTK-CRITICAL assertion width/height >= -1
 def _patch_gtk_size():
     _orig = wx.Window.DoMoveWindow
+
     def _safe(self, x, y, w, h):
         return orig(self, x, y, max(w, 0), max(h, 0))
 
