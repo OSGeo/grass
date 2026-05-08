@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_sl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-26 12:47+0000\n"
+"POT-Creation-Date: 2026-05-08 19:11+0000\n"
 "PO-Revision-Date: 2025-07-26 01:37+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Slovenian <https://weblate.osgeo.org/projects/grass-gis/grassmods/sl/>\n"
@@ -34990,6 +34990,10 @@ msgstr ""
 msgid "Missing attribute table for vector map <%s>"
 msgstr "Ime izhodnega rastrskega sloja"
 
+#, fuzzy
+msgid "Too many columns to copy the table"
+msgstr "Ime rastrskega sloja"
+
 #, fuzzy, c-format
 msgid "Missing table for <%s>"
 msgstr "Uporabljam koordinate središča sloja\n"
@@ -35046,6 +35050,10 @@ msgstr ""
 #, fuzzy, c-format
 msgid "%d vector maps patched"
 msgstr "%d enot je bilo posodobljenih\n"
+
+#, fuzzy
+msgid "Too many columns to copy records"
+msgstr "Ime rastrskega sloja"
 
 #, fuzzy, c-format
 msgid "Cannot open select cursor: '%s'"
