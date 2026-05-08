@@ -42,7 +42,8 @@ import wx.adv
 def _patch_gtk_size():
     _orig = wx.Window.DoMoveWindow
     def _safe(self, x, y, w, h):
-        return _orig(self, x, y, max(w, 0), max(h, 0))
+        return orig(self, x, y, max(w, 0), max(h, 0))
+
     wx.Window.DoMoveWindow = _safe
 
 _patch_gtk_size()
