@@ -38,17 +38,15 @@ import wx
 import wx.adv
 
 
-# Patch: fix GTK-CRITICAL assertion width/height >= -1
-def _patch_gtk_size():
-    _orig = wx.Window.DoMoveWindow
-
+# Fix GTK-CRITICAL assertion width/height >= -1
+def patch_gtk_size():
+    orig = wx.Window.DoMoveWindow
     def _safe(self, x, y, w, h):
         return orig(self, x, y, max(w, 0), max(h, 0))
-
+    
     wx.Window.DoMoveWindow = _safe
 
-
-_patch_gtk_size()
+patch_gtk_size()
 
 try:
     import wx.lib.agw.advancedsplash as SC
