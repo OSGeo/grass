@@ -1060,15 +1060,15 @@ else
     AC_MSG_ERROR([*** Unable to locate PDAL package.])
   fi
 
-  PDAL_LIBS=`${PKG_CONFIG} --libs "${pdal}"`
-  PDAL_INC=`${PKG_CONFIG} --cflags "${pdal}"`
+  PDAL_LIBS=`pdal-config --libs`
+  PDAL_CPPFLAGS=`pdal-config --cxxflags`
   USE_PDAL=1
 
   PDAL=
   ac_save_libs="$LIBS"
   ac_save_cflags="$CFLAGS"
   LIBS="$LIBS $PDAL_LIBS"
-  CFLAGS="$CFLAGS $PDAL_CFLAGS"
+  CPPFLAGS="$CPPFLAGS $PDAL_CPPFLAGS"
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <pdal/PointTable.hpp>
   #include <pdal/Streamable.hpp>
   class St:public pdal::Streamable {};]], [[pdal::PointTable table;]])],
@@ -1084,7 +1084,6 @@ fi
 
 AC_SUBST(PDAL_LIBS)
 AC_SUBST(PDAL_CPPFLAGS)
-AC_SUBST(PDAL_INC)
 AC_SUBST(USE_PDAL)
 
 AC_LANG_POP(C++)

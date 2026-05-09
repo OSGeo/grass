@@ -710,7 +710,6 @@ NETCDF_CFLAGS
 NETCDF_LIBS
 NETCDF_CONFIG
 USE_PDAL
-PDAL_INC
 PDAL_CPPFLAGS
 PDAL_LIBS
 USE_LIBLAS
@@ -10578,15 +10577,15 @@ printf "%s\n" "yes" >&6; }
     as_fn_error $? "*** Unable to locate PDAL package." "$LINENO" 5
   fi
 
-  PDAL_LIBS=`${PKG_CONFIG} --libs "${pdal}"`
-  PDAL_INC=`${PKG_CONFIG} --cflags "${pdal}"`
+  PDAL_LIBS=`pdal-config --libs`
+  PDAL_CPPFLAGS=`pdal-config --cxxflags`
   USE_PDAL=1
 
   PDAL=
   ac_save_libs="$LIBS"
   ac_save_cflags="$CFLAGS"
   LIBS="$LIBS $PDAL_LIBS"
-  CFLAGS="$CFLAGS $PDAL_CFLAGS"
+  CPPFLAGS="$CPPFLAGS $PDAL_CPPFLAGS"
 
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
@@ -10620,7 +10619,6 @@ printf "%s\n" "#define HAVE_PDAL 1" >>confdefs.h
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}
 fi
-
 
 
 
