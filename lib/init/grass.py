@@ -394,7 +394,9 @@ def create_grass_config_dir() -> str:
                 )
         # TODO: remove with next major or minor release after GRASS 8.5 (8.6 or 9.0)
         if MACOS:
-            old_mac_dir = os.path.join(os.getenv("HOME"), f".grass{GRASS_VERSION_MAJOR}")
+            old_mac_dir = os.path.join(
+                os.getenv("HOME"), f".grass{GRASS_VERSION_MAJOR}"
+            )
             if Path(old_mac_dir).is_dir():
                 try:
                     shutil.copy(os.path.join(old_mac_dir, "rc"), directory)
