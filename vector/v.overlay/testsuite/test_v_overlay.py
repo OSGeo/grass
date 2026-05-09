@@ -48,7 +48,9 @@ class TestVOverlay(TestCase):
         """
         Overlay two input vectors and compare the output to the expected output.
         The output will have many very small areas.
-        This test would fail"""
+        This test would fail in GRASS84 with a too small number of centroids.
+        Since GRASS84, calculation for centroids has been improved for
+        edge cases like very small areas."""
         gs.run_command(
             "v.overlay",
             ainput="boundary_county_extract1_buffer_in",
@@ -81,7 +83,8 @@ class TestVOverlay(TestCase):
 
     def test_voverlay_withcleaning(self):
         """Overlay two input vectors and compare the output to the expected output.
-        The output will have many very small areas"""
+        The output will have many very small areas.
+        This is a test for the cleaning options snap and minsize"""
         gs.run_command(
             "v.overlay",
             ainput="boundary_county_extract1_buffer_in",
