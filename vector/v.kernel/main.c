@@ -635,7 +635,8 @@ int main(int argc, char **argv)
 }
 
 /* Read points to array return number of points */
-int read_points(struct Map_info *In, double ***coordinate, double dsize UNUSED)
+int read_points(struct Map_info *In, double ***coordinate,
+                double dsize G_UNUSED)
 {
     int line, nlines, npoints, ltype, i = 0;
     double **xySites;

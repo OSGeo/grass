@@ -40,7 +40,7 @@
 #endif
 #include "helpers.h"
 
-void dglResetStats(dglGraph_s *pgraph UNUSED)
+void dglResetStats(dglGraph_s *pgraph G_UNUSED)
 {
 #ifdef DGL_STATS
     pgraph->clkAddEdge = 0;
@@ -1046,7 +1046,7 @@ int dglMinimumSpanning(dglGraph_s *pgraphInput, dglGraph_s *pgraphOutput,
     return nRet;
 }
 
-void dglFreeSPReport(dglGraph_s *pgraph UNUSED, dglSPReport_s *pSPReport)
+void dglFreeSPReport(dglGraph_s *pgraph G_UNUSED, dglSPReport_s *pSPReport)
 {
     int iArc;
 
@@ -1450,7 +1450,7 @@ int dglEdgeset_T_Initialize(dglEdgesetTraverser_s *pT, dglGraph_s *pGraph,
     return -pGraph->iErrno;
 }
 
-void dglEdgeset_T_Release(dglEdgesetTraverser_s *pT UNUSED)
+void dglEdgeset_T_Release(dglEdgesetTraverser_s *pT G_UNUSED)
 {
 }
 
@@ -1507,7 +1507,7 @@ int dglIOContextInitialize(dglGraph_s *pG, dglIOContext_s *pIO)
     return 0;
 }
 
-void dglIOContextRelease(dglIOContext_s *pIO UNUSED)
+void dglIOContextRelease(dglIOContext_s *pIO G_UNUSED)
 {
 }
 

@@ -26,8 +26,8 @@
  * Edge Traversing
  */
 int DGL_EDGE_T_INITIALIZE_FUNC(dglGraph_s *pGraph,
-                               dglEdgeTraverser_s *pT UNUSED,
-                               dglEdgePrioritizer_s *pEP UNUSED)
+                               dglEdgeTraverser_s *pT G_UNUSED,
+                               dglEdgePrioritizer_s *pEP G_UNUSED)
 {
 #if defined(_DGL_V1)
     pGraph->iErrno = DGL_ERR_NotSupported;
@@ -277,7 +277,7 @@ int DGL_EDGESET_T_INITIALIZE_FUNC(dglGraph_s *pGraph, dglEdgesetTraverser_s *pT,
     return 0;
 }
 
-void DGL_EDGESET_T_RELEASE_FUNC(dglEdgesetTraverser_s *pT UNUSED)
+void DGL_EDGESET_T_RELEASE_FUNC(dglEdgesetTraverser_s *pT G_UNUSED)
 {
 }
 

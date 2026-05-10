@@ -36,7 +36,7 @@ jobs:
       # renovate: datasource=pypi depName=bandit
       BANDIT_VERSION: "1.9.4"
       # renovate: datasource=pypi depName=ruff
-      RUFF_VERSION: "0.14.14"
+      RUFF_VERSION: "0.15.7"
 
     runs-on: ${{ matrix.os }}
     permissions:
@@ -145,7 +145,7 @@ jobs:
         run: |
           echo "MAKEFLAGS=-j$(nproc)" >> "${GITHUB_ENV}"
 
-      - uses: rui314/setup-mold@725a8794d15fc7563f59595bd9556495c0564878 # v1
+      - uses: rui314/setup-mold@9c9c13bf4c3f1adef0cc596abc155580bcb04444 # v1
       - name: Build
         run: |
           ".github/workflows/build_${MATRIX_OS}.sh" "${HOME}/install"

@@ -284,15 +284,16 @@ set(ALL_SUBDIRS
 foreach(d ${ALL_SUBDIRS})
   add_subdirectory(${d})
 endforeach()
+
+if(WITH_GUI)
+  add_subdirectory(gui)
+endif()
+
 add_custom_target(
   ALL_MODULES
   DEPENDS ${modules_list}
   COMMENT "Building all modules.")
 set_target_properties(ALL_MODULES PROPERTIES FOLDER Misc)
-
-if(WITH_GUI)
-  add_subdirectory(gui)
-endif()
 
 if(WITH_DOCS)
   add_subdirectory(doc)

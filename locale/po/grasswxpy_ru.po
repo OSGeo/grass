@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-14 15:46+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: 2023-06-28 19:08+0000\n"
 "Last-Translator: Sergey Kazorin <kazorin@basealt.ru>\n"
 "Language-Team: Russian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/ru/>\n"
@@ -1346,7 +1346,12 @@ msgid "Re&load maps"
 msgstr "Пере&загрузить карты"
 
 #, fuzzy
-msgid "&Copy path to mapset"
+#| msgid "Show computational region extent"
+msgid "Show computational region"
+msgstr "Показать размер расчётного фрагмента"
+
+#, fuzzy
+msgid "&Copy path"
 msgstr "&Создать набор"
 
 msgid "&Create mapset"
@@ -1359,6 +1364,16 @@ msgstr "&Удалить набор"
 #, fuzzy
 msgid "&Rename project"
 msgstr "&Переименовать набор"
+
+#, fuzzy
+#| msgid "Choose projection"
+msgid "Show projection info"
+msgstr "Выберите проекцию"
+
+#, fuzzy
+#| msgid "CVS path"
+msgid "Copy path"
+msgstr "Путь к CVS"
 
 #, fuzzy
 #| msgid "Change mapset"
@@ -1393,11 +1408,15 @@ msgstr "&Удалить базу данных GRASS с диска"
 msgid "&Delete projects (locations)"
 msgstr "&Удалить области"
 
+#, fuzzy
+msgid "Copy paths"
+msgstr "&Создать набор"
+
 msgid "&Delete mapsets"
 msgstr "&Удалить наборы"
 
 #, fuzzy
-msgid "&Copy paths to mapsets"
+msgid "&Copy paths"
 msgstr "&Создать набор"
 
 #, fuzzy, python-brace-format
@@ -5975,6 +5994,16 @@ msgstr ""
 #| msgid "Save raster map"
 msgid "Remove raster mask"
 msgstr "Сохранить растровую карту"
+
+#, fuzzy
+#| msgid "Custom min"
+msgid "Custom CRS"
+msgstr "Заданный минимум"
+
+#, fuzzy
+#| msgid "Please select first the raster map"
+msgid "Left mouse click to print detailed projection info"
+msgstr "Сначала выберите растровую карту"
 
 msgid "Create new workspace (Ctrl+N)"
 msgstr "Создать новый проект (Ctrl+N)"
@@ -11488,6 +11517,10 @@ msgstr ""
 "Уравнение регрессии для растровых карт <%(rast1)s> и <%(rast2)s>:\n"
 "\n"
 
+#, fuzzy
+#~ msgid "&Copy paths to mapsets"
+#~ msgstr "&Создать набор"
+
 #~ msgid "Generate random seed for rand()"
 #~ msgstr "Сгенерируйте случайное значение для rand()"
 
@@ -12092,9 +12125,6 @@ msgstr ""
 
 #~ msgid "Choose method of specifying georeferencing parameters"
 #~ msgstr "Выберите метод определения параметров привязки"
-
-#~ msgid "Choose projection"
-#~ msgstr "Выберите проекцию"
 
 #~ msgid "Classifies attribute data, e.g. for thematic mapping"
 #~ msgstr "Классификация атрибутивных данных. Например, для тематического отображения"

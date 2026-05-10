@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ro\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-14 15:46+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Romanian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/ro/>\n"
@@ -1307,8 +1307,14 @@ msgstr ""
 msgid "Re&load maps"
 msgstr ""
 
-msgid "&Copy path to mapset"
-msgstr ""
+#, fuzzy
+#| msgid "Show computational extent"
+msgid "Show computational region"
+msgstr "Afișează extinderea regiunii de calcul"
+
+#, fuzzy
+msgid "&Copy path"
+msgstr "Gestionează accesul la mapset"
 
 msgid "&Create mapset"
 msgstr ""
@@ -1320,6 +1326,16 @@ msgstr "Șterge înregistrările"
 #, fuzzy
 msgid "&Rename project"
 msgstr "Gestionează proiecțiile"
+
+#, fuzzy
+#| msgid "Choose projection"
+msgid "Show projection info"
+msgstr "Alege proiecție"
+
+#, fuzzy
+#| msgid "Copy table"
+msgid "Copy path"
+msgstr "Copiază tabel"
 
 #, fuzzy
 #| msgid "Change mapset"
@@ -1354,11 +1370,16 @@ msgstr ""
 msgid "&Delete projects (locations)"
 msgstr "Șterge locație selectată"
 
+#, fuzzy
+#| msgid "Copy categories"
+msgid "Copy paths"
+msgstr "Copiază categorii"
+
 msgid "&Delete mapsets"
 msgstr ""
 
 #, fuzzy
-msgid "&Copy paths to mapsets"
+msgid "&Copy paths"
 msgstr "Gestionează accesul la mapset"
 
 #, python-brace-format
@@ -5848,6 +5869,14 @@ msgstr ""
 #| msgid "Develop raster map"
 msgid "Remove raster mask"
 msgstr "Dezvoltă harta raster"
+
+#, fuzzy
+#| msgid "Custom min"
+msgid "Custom CRS"
+msgstr "Personalizare minimă"
+
+msgid "Left mouse click to print detailed projection info"
+msgstr ""
 
 msgid "Create new workspace (Ctrl+N)"
 msgstr "Crează un spațiu de lucru nou (Ctrl+N)"
@@ -11565,9 +11594,6 @@ msgstr ""
 #~ msgid "Choose method of specifying georeferencing parameters"
 #~ msgstr "Alegeți metoda de specificare a parametrilor de georefențiere"
 
-#~ msgid "Choose projection"
-#~ msgstr "Alege proiecție"
-
 #~ msgid "Classifies attribute data, e.g. for thematic mapping"
 #~ msgstr "Clasifică datele de atribut, de ex. pentru cartografierea tematică"
 
@@ -11714,9 +11740,6 @@ msgstr ""
 
 #~ msgid "Convex hull"
 #~ msgstr "Înveliș convex"
-
-#~ msgid "Copy table"
-#~ msgstr "Copiază tabel"
 
 #~ msgid "Copy the current command string to the clipboard (Ctrl+C)"
 #~ msgstr "Copiază comanda curentă în clipboard (Ctrl+C)"

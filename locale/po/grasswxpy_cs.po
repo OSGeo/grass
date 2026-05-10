@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-14 15:46+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Czech <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/cs/>\n"
@@ -1306,8 +1306,14 @@ msgstr ""
 msgid "Re&load maps"
 msgstr ""
 
-msgid "&Copy path to mapset"
-msgstr ""
+#, fuzzy
+#| msgid "Computational region"
+msgid "Show computational region"
+msgstr "Výpočetní region"
+
+#, fuzzy
+msgid "&Copy path"
+msgstr "Správa přístupu do mapsetů"
 
 msgid "&Create mapset"
 msgstr ""
@@ -1319,6 +1325,16 @@ msgstr "Smazat záznamy"
 #, fuzzy
 msgid "&Rename project"
 msgstr "Správa kartografických zobrazení"
+
+#, fuzzy
+#| msgid "Choose projection"
+msgid "Show projection info"
+msgstr "Vybrat kartografické zobrazení"
+
+#, fuzzy
+#| msgid "Copy table"
+msgid "Copy path"
+msgstr "Kopírovat tabulku"
 
 #, fuzzy
 #| msgid "Change mapset"
@@ -1353,11 +1369,16 @@ msgstr ""
 msgid "&Delete projects (locations)"
 msgstr "Odstranit vybranou lokaci"
 
+#, fuzzy
+#| msgid "Copy categories"
+msgid "Copy paths"
+msgstr "Kopírovat kategorie"
+
 msgid "&Delete mapsets"
 msgstr ""
 
 #, fuzzy
-msgid "&Copy paths to mapsets"
+msgid "&Copy paths"
 msgstr "Správa přístupu do mapsetů"
 
 #, fuzzy, python-brace-format
@@ -5815,6 +5836,14 @@ msgstr ""
 #| msgid "Develop raster map"
 msgid "Remove raster mask"
 msgstr "Vytvořit rastrovou mapu"
+
+#, fuzzy
+#| msgid "Custom min"
+msgid "Custom CRS"
+msgstr "Volitelné minimum"
+
+msgid "Left mouse click to print detailed projection info"
+msgstr ""
 
 msgid "Create new workspace (Ctrl+N)"
 msgstr "Vytvořit novou pracovní plochu (Ctrl+N)"
@@ -11522,9 +11551,6 @@ msgstr ""
 #~ msgid "Choose method of specifying georeferencing parameters"
 #~ msgstr "Zvolte metodu nebo specifikujte parametry georeference"
 
-#~ msgid "Choose projection"
-#~ msgstr "Vybrat kartografické zobrazení"
-
 #~ msgid "Classifies attribute data, e.g. for thematic mapping"
 #~ msgstr "Klasifikuje atributová data, například pro tématické mapy"
 
@@ -11664,9 +11690,6 @@ msgstr ""
 
 #~ msgid "Copy a table. Either 'from_table' (optionally with 'where') can be used or 'select' option, but not 'from_table' and 'select' at the same time."
 #~ msgstr "Kopíruj tabulku. Použita může být buď volba 'from_table' (volitelně s 'where') nebo volba 'select', ale nikoliv 'from_table' a 'select' současně."
-
-#~ msgid "Copy table"
-#~ msgstr "Kopírovat tabulku"
 
 #~ msgid "Copy the current command string to the clipboard (Ctrl+C)"
 #~ msgstr "Kopírovat příkaz do schránky (Ctrl+C)"
