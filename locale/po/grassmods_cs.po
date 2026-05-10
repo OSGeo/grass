@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-28 15:43+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Czech <https://weblate.osgeo.org/projects/grass-gis/grassmods/cs/>\n"
@@ -18514,8 +18514,8 @@ msgstr ""
 msgid "Number of walkers"
 msgstr "Počet chodců"
 
-msgid "Time used for iterations [minutes]"
-msgstr "Čas použitý pro opakování [minuty]"
+msgid "Duration of the simulated water flow [minutes]"
+msgstr ""
 
 msgid "Minimum time step for the simulation [seconds]"
 msgstr ""
@@ -34323,6 +34323,9 @@ msgstr "Náhled BMP obrázku pomocí ovladače PNG."
 
 msgid "Image file"
 msgstr "Soubory obrazové skupiny"
+
+#~ msgid "Time used for iterations [minutes]"
+#~ msgstr "Čas použitý pro opakování [minuty]"
 
 #, fuzzy
 #~| msgid "OGR driver <%s> not available"

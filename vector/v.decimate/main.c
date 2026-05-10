@@ -30,7 +30,8 @@ struct DecimationContext {
     int unique_cats; /*!< TRUE or FALSE */
 };
 
-static int if_add_point(struct DecimationPoint *point, void *point_data UNUSED,
+static int if_add_point(struct DecimationPoint *point,
+                        void *point_data G_UNUSED,
                         struct DecimationPoint **point_list, size_t npoints,
                         void *context)
 {
@@ -56,8 +57,8 @@ struct WriteContext {
     int write_cats;
 };
 
-static void write_point(struct WriteContext *context, int cat UNUSED, double x,
-                        double y, double z, struct line_cats *cats)
+static void write_point(struct WriteContext *context, int cat G_UNUSED,
+                        double x, double y, double z, struct line_cats *cats)
 {
     if (Vect_append_point(context->line, x, y, z) != 1)
         G_fatal_error(

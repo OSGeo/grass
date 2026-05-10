@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-21 21:15+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Latvian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/lv/>\n"
@@ -1315,7 +1315,12 @@ msgid "Re&load maps"
 msgstr "Pārlādēt"
 
 #, fuzzy
-msgid "&Copy path to mapset"
+#| msgid "Show computational region extent"
+msgid "Show computational region"
+msgstr "Rādīt aprēķinu reģiona apjomu"
+
+#, fuzzy
+msgid "&Copy path"
 msgstr "&Izveidot jaunu karšu kopu"
 
 msgid "&Create mapset"
@@ -1328,6 +1333,16 @@ msgstr "&Dzēst karšu kopu"
 #, fuzzy
 msgid "&Rename project"
 msgstr "Pā&rsaukt karšu kopu"
+
+#, fuzzy
+#| msgid "Map projections"
+msgid "Show projection info"
+msgstr "Kartes projekcijas"
+
+#, fuzzy
+#| msgid "Copy &name"
+msgid "Copy path"
+msgstr "Kopēt &nosaukumu"
 
 #, fuzzy
 #| msgid "Change mapset"
@@ -1363,11 +1378,15 @@ msgstr "1. Izvēlieties GRASS datubāzes mapi"
 msgid "&Delete projects (locations)"
 msgstr "&Dzēst novietojumu"
 
+#, fuzzy
+msgid "Copy paths"
+msgstr "&Izveidot jaunu karšu kopu"
+
 msgid "&Delete mapsets"
 msgstr "&Dzēst karšu kopas"
 
 #, fuzzy
-msgid "&Copy paths to mapsets"
+msgid "&Copy paths"
 msgstr "&Izveidot jaunu karšu kopu"
 
 #, python-brace-format
@@ -5765,6 +5784,14 @@ msgstr ""
 #| msgid "Save raster map"
 msgid "Remove raster mask"
 msgstr "Saglabāt rastra karti"
+
+#, fuzzy
+#| msgid "custom"
+msgid "Custom CRS"
+msgstr "pielāgots"
+
+msgid "Left mouse click to print detailed projection info"
+msgstr ""
 
 msgid "Create new workspace (Ctrl+N)"
 msgstr ""
@@ -11084,6 +11111,10 @@ msgid ""
 "\n"
 msgstr ""
 
+#, fuzzy
+#~ msgid "&Copy paths to mapsets"
+#~ msgstr "&Izveidot jaunu karšu kopu"
+
 #~ msgid "Generate random seed for rand()"
 #~ msgstr "Ģenerēt rand() sēklu automātiski"
 
@@ -11740,9 +11771,6 @@ msgstr ""
 
 #~ msgid "Map legend"
 #~ msgstr "Kartes leģenda"
-
-#~ msgid "Map projections"
-#~ msgstr "Kartes projekcijas"
 
 #~ msgid "Map type conversions"
 #~ msgstr "Kartes tipa konvertēšana"

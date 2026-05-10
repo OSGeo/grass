@@ -41,7 +41,7 @@ static int merge_lists(struct ilist *alist, struct ilist *blist);
 
    \return number of selected primitives
  */
-int Vedit_select_by_query(struct Map_info *Map, int type, int layer UNUSED,
+int Vedit_select_by_query(struct Map_info *Map, int type, int layer G_UNUSED,
                           double thresh, int query, struct ilist *List)
 {
     int num, line, i;

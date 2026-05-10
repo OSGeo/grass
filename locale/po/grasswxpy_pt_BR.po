@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-21 21:15+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/pt_BR/>\n"
@@ -1318,8 +1318,15 @@ msgstr ""
 msgid "Re&load maps"
 msgstr ""
 
-msgid "&Copy path to mapset"
-msgstr ""
+#, fuzzy
+#| msgid "Show computational region extent"
+msgid "Show computational region"
+msgstr "Mostrar extensão da região computacional"
+
+#, fuzzy
+#| msgid "&Copy"
+msgid "&Copy path"
+msgstr "&Copiar"
 
 msgid "&Create mapset"
 msgstr ""
@@ -1330,6 +1337,16 @@ msgstr "&Excluir projeto"
 #, fuzzy
 msgid "&Rename project"
 msgstr "Gerenciar projeções"
+
+#, fuzzy
+#| msgid "Choose projection"
+msgid "Show projection info"
+msgstr "Escolha a projeção"
+
+#, fuzzy
+#| msgid "CVS path"
+msgid "Copy path"
+msgstr "Caminho CVS"
 
 #, fuzzy
 #| msgid "Change mapset"
@@ -1362,10 +1379,17 @@ msgstr ""
 msgid "&Delete projects (locations)"
 msgstr "&Excluir projetos (locations)"
 
+#, fuzzy
+#| msgid "CVS path"
+msgid "Copy paths"
+msgstr "Caminho CVS"
+
 msgid "&Delete mapsets"
 msgstr ""
 
-msgid "&Copy paths to mapsets"
+#, fuzzy
+#| msgid "&Copy paths to mapsets"
+msgid "&Copy paths"
 msgstr "&Copiar caminho aos mapsets"
 
 #, fuzzy, python-brace-format
@@ -5898,6 +5922,16 @@ msgstr ""
 #| msgid "Save raster map"
 msgid "Remove raster mask"
 msgstr "Salvar mapa raster"
+
+#, fuzzy
+#| msgid "Custom min"
+msgid "Custom CRS"
+msgstr "Min personalizado"
+
+#, fuzzy
+#| msgid "Please select first the raster map"
+msgid "Left mouse click to print detailed projection info"
+msgstr "Por favor, selecione primeiro o mapa raster"
 
 msgid "Create new workspace (Ctrl+N)"
 msgstr "Criar nova área de trabalho (Ctrl+N)"
@@ -11837,9 +11871,6 @@ msgstr ""
 
 #~ msgid "Choose method of specifying georeferencing parameters"
 #~ msgstr "Escolha o método de especificação de parâmetros de georreferenciamento"
-
-#~ msgid "Choose projection"
-#~ msgstr "Escolha a projeção"
 
 #~ msgid "Classifies attribute data, e.g. for thematic mapping"
 #~ msgstr "Classifica dados de atributos, por exemplo para mapeamento temático"

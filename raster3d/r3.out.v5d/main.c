@@ -85,7 +85,7 @@ void setParams(void)
 /*---------------------------------------------------------------------------*/
 /* Set up the input and output file names from the user's responses
  */
-void getParams(char **input, char **output, int *decim UNUSED)
+void getParams(char **input, char **output, int *decim G_UNUSED)
 {
     *input = param.input->answer;
     *output = param.output->answer;

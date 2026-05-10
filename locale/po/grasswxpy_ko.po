@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-21 21:15+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: 2014-05-03 16:44-0400\n"
 "Last-Translator: Huidae Cho <grass4u@gmail.com>\n"
 "Language-Team: Korean <grass-translations@lists.osgeo.org>\n"
@@ -1288,7 +1288,12 @@ msgstr ""
 msgid "Re&load maps"
 msgstr ""
 
-msgid "&Copy path to mapset"
+#, fuzzy
+#| msgid "Computational region"
+msgid "Show computational region"
+msgstr "계산 영역"
+
+msgid "&Copy path"
 msgstr ""
 
 msgid "&Create mapset"
@@ -1301,6 +1306,16 @@ msgstr "레코드를 삭제합니다"
 #, fuzzy
 msgid "&Rename project"
 msgstr "이름 바꾸기(&R)"
+
+#, fuzzy
+#| msgid "Source projection:"
+msgid "Show projection info"
+msgstr "원천 자료 투영:"
+
+#, fuzzy
+#| msgid "Copy"
+msgid "Copy path"
+msgstr "복사"
 
 msgid "Change Label"
 msgstr ""
@@ -1330,10 +1345,13 @@ msgstr ""
 msgid "&Delete projects (locations)"
 msgstr "선택된 로케이션을 삭제합니다"
 
+msgid "Copy paths"
+msgstr ""
+
 msgid "&Delete mapsets"
 msgstr ""
 
-msgid "&Copy paths to mapsets"
+msgid "&Copy paths"
 msgstr ""
 
 #, fuzzy, python-brace-format
@@ -5710,6 +5728,12 @@ msgstr ""
 #| msgid "Develop raster map"
 msgid "Remove raster mask"
 msgstr "래스터 지도 개발"
+
+msgid "Custom CRS"
+msgstr ""
+
+msgid "Left mouse click to print detailed projection info"
+msgstr ""
 
 msgid "Create new workspace (Ctrl+N)"
 msgstr ""
