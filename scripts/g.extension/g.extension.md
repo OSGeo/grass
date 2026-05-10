@@ -146,8 +146,7 @@ g.gisenv unset=ADDONS_BASE_URL
 
 Alternative servers are:
 
-* <https://ecodiv.earth/share> (Python extensions only)
-
+- <https://ecodiv.earth/share> (Python extensions only)
 
 Note, settings explained in this section are is honoured on MS-Windows only; on
 Linux/macOS it has no effect.
@@ -310,7 +309,6 @@ On Windows, it is now possible to point at an alternative server. However, note
 that this server should be set up using the same directory layout as the
 official WinGRASS server, namely `{base}/grass{MM}/addons/grass-{M.M.P}/`
 containing pre-compiled extensions as ZIP file, and a `modules.xml` listing.
-
 
 ## TROUBLESHOOTING
 

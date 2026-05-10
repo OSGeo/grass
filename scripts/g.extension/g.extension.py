@@ -2639,7 +2639,7 @@ def resolve_xmlurl_prefix(url, source=None):
     if source in {"official", "official_fork"}:
         # On MS-Windows only, the user can redirect both listing and install
         # to a custom addon server via the ADDONS_BASE_URL gisenv setting or
-        # the GRASS_ADDONS_BASE_URL env var. 
+        # the GRASS_ADDONS_BASE_URL env var.
         # On non-Windows, this override is intentionally not honoured
         override = None
         if sys.platform == "win32":
