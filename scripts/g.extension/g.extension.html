@@ -126,6 +126,46 @@ as well as any other extensions. The reason is that more things such
 as manual page are compiled, not only the source code (which is really
 necessary to compile just in case of C).
 
+<h3>Using an alternative addon server (MS-Windows)</h3>
+
+On MS-Windows, <em>g.extension</em> downloads precompiled addon ZIPs from the 
+official WinGRASS server (<code>http://wingrass.fsv.cvut.cz</code>) by default. 
+The base URL of the server can be redirected to a mirror or a private addon 
+server by setting <code>ADDONS_BASE_URL</code>. The setting affects both the 
+addon listing (<code>g.extension -l</code>, <code>-c</code>, <code>-g</code>) 
+and the install download URL, so listing and install always come from the same 
+place.
+
+<p>
+The setting can be applied in two ways:
+
+<ul>
+<li>From inside GRASS (persists across sessions, settable from the GUI's
+    variables panel as well):
+<div class="code"><pre>
+g.gisenv set="ADDONS_BASE_URL=https://your.server.example"
+</pre></div>
+</li>
+<li>
+	As a shell environment variable named <code>GRASS_ADDONS_BASE_URL</code> 
+	(useful for one-off shell sessions or CI jobs). The gisenv setting takes 
+	precedence over the environment variable; if neither is set, the default 
+	WinGRASS server is used.</li>
+</ul>
+
+<p>
+To revert to the default server, unset the value:
+
+<div class="code"><pre>
+g.gisenv unset=ADDONS_BASE_URL
+</pre></div>
+
+<p>
+Alternative servers are:
+<ul>
+<li><a href="https://ecodiv.earth/share">https://ecodiv.earth/share</a> (Python extensions only)</li>
+</ul>
+
 <h2>EXAMPLES</h2>
 
 <h3>Download and install of an extension</h3>
@@ -141,6 +181,35 @@ For convenience, a shorter syntax can be used:
 
 <div class="code"><pre>
 g.extension r.stream.distance
+</pre></div>
+
+<h3>Installing from an alternative addon server (MS-Windows)</h3>
+
+On MS-Windows, redirect the addon server to a mirror or private host
+once per session, then use <em>g.extension</em> normally — listing and install
+both go through the configured server.
+
+<div class="code"><pre>
+# Point at the alternative server (persists across GRASS sessions)
+g.gisenv set="ADDONS_BASE_URL=https://ecodiv.earth/share"
+
+# List what the alternative server provides
+g.extension -l
+
+# Install an extension from it
+g.extension extension=r.tpi
+
+# Revert to the default WinGRASS server
+g.gisenv unset=ADDONS_BASE_URL
+</pre></div>
+
+<p>
+For a one-off shell session, set the environment variable instead:
+
+<div class="code"><pre>
+# cmd.exe
+set GRASS_ADDONS_BASE_URL=https://ecodiv.earth/share
+g.extension extension=r.tpi
 </pre></div>
 
 <h3>Download and install of an extension when behind a proxy</h3>
@@ -204,8 +273,10 @@ In general, when a ZIP file or other archive is provided, the full URL can be us
 g.extension r.example url=http://example.com/.../r.example?format=zip
 </pre></div>
 
-Note that because of MS-Windows operating system architecture,
-only official repository is supported on this platform.
+On Windows, this will work also, but only when pointing at a server with
+pre-compiled addons and set up using the same directory layout as the
+official WinGRASS server, namely <code>{base}/grass{MM}/addons/grass-{M.M.P}/</code>
+containing one ZIP per extension and a <code>modules.xml</code> listing.
 
 <h3>Install a specific version from Addons</h3>
 
@@ -248,6 +319,12 @@ because there is no way of compiling the modules
 <!-- what does it mean?? -->
 (a Python replacement for Python scripts should be implemented).
 
+<p>
+On Windows, it is now possible to point at an alternative server. However, note
+that this server should be set up using the same directory layout as the
+official WinGRASS server, namely <code>{base}/grass{MM}/addons/grass-{M.M.P}/</code>
+containing pre-compiled extensions as ZIP file, and a <code>modules.xml</code> listing.
+
 <h2>TROUBLESHOOTING</h2>
 
 Since extensions have to be compiled on Unix based systems (Linux, Mac OSX etc.)
@@ -276,4 +353,5 @@ with the version number) must be installed.
 
 Markus Neteler (original shell script)<br>
 Martin Landa, Czech Technical University in Prague, Czech Republic (Python rewrite)<br>
-Vaclav Petras, <a href="https://geospatial.ncsu.edu/geoforall/">NCSU GeoForAll Lab</a> (support for general sources, partial refactoring)
+Vaclav Petras, <a href="https://geospatial.ncsu.edu/geoforall/">NCSU GeoForAll Lab</a> (support for general sources, partial refactoring)<br>
+Paulo van Breugel, HAS green academy (add option for Windows users to point at alternative repositories)
