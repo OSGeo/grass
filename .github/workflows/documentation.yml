@@ -140,8 +140,8 @@ jobs:
             --with-sqlite \
             --with-tiff \
             --with-zstd
-          make
-          make install
+          make -j"$(nproc)"
+          make -j"$(nproc)" install
 
       - name: Add the bin directory to PATH
         run: |
@@ -157,7 +157,7 @@ jobs:
       - name: Build Programmer's Manual with doxygen
         run: |
           cd grass
-          make htmldocs
+          make -j"$(nproc)" htmldocs
 
       - name: Make the doxygen results available (html)
         uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
@@ -237,7 +237,7 @@ jobs:
         run: |
           pip install -r "grass/python/grass/docs/requirements.txt"
           cd grass || exit
-          make sphinxdoclib
+          make -j"$(nproc)" sphinxdoclib
           ARCH="$(grass --config arch)"
           mv -v dist."${ARCH}/docs/html/libpython" "${MKDOCS_DIR}/site"
 
