@@ -148,6 +148,10 @@ Alternative servers are:
 
 * <https://ecodiv.earth/share> (Python extensions only)
 
+
+Note, settings explained in this section are is honoured on MS-Windows only; on
+Linux/macOS it has no effect.
+
 ## EXAMPLES
 
 ### Download and install of an extension

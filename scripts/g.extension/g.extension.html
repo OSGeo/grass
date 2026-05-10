@@ -146,11 +146,10 @@ The setting can be applied in two ways:
 g.gisenv set="ADDONS_BASE_URL=https://your.server.example"
 </pre></div>
 </li>
-<li>
-	As a shell environment variable named <code>GRASS_ADDONS_BASE_URL</code> 
-	(useful for one-off shell sessions or CI jobs). The gisenv setting takes 
-	precedence over the environment variable; if neither is set, the default 
-	WinGRASS server is used.</li>
+<li>As a shell environment variable named <code>GRASS_ADDONS_BASE_URL</code> (useful
+    for one-off shell sessions or CI jobs). The gisenv setting takes
+    precedence over the environment variable; if neither is set, the
+    default WinGRASS server is used.</li>
 </ul>
 
 <p>
@@ -165,6 +164,10 @@ Alternative servers are:
 <ul>
 <li><a href="https://ecodiv.earth/share">https://ecodiv.earth/share</a> (Python extensions only)</li>
 </ul>
+
+<p>
+Note, settings explained in this section are is honoured on MS-Windows only; on
+Linux/macOS it has no effect.
 
 <h2>EXAMPLES</h2>
 

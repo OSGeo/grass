@@ -8,7 +8,7 @@
 #               Vaclav Petras <wenzeslaus gmail com> (support for general sources)
 # PURPOSE:      Tool to download and install extensions into local installation
 #
-# COPYRIGHT:    (C) 2009-2025 by Markus Neteler, and the GRASS Development Team
+# COPYRIGHT:    (C) 2009-2026 by Markus Neteler, and the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -1188,7 +1188,9 @@ def install_extension(source=None, url=None, xmlurl=None, branch=None):
         ret1 = 0
         new_modules_ext = None
         if sys.platform == "win32":
-            ret1, new_modules_ext, new_files_ext = install_extension_win(extension)
+            ret1, new_modules_ext, new_files_ext = install_extension_win(
+                extension, url=url
+            )
         else:
             (
                 ret1,
@@ -1600,13 +1602,6 @@ def get_addons_base_url():
          CI / system administrators / one-off shell sessions.
       3. The built-in default ``http://wingrass.fsv.cvut.cz`` (the official
          WinGRASS server).
-
-    The returned URL has any trailing slash stripped so callers can append
-    path segments cleanly.
-
-    The same URL is used for both the Windows ZIP download path and the
-    addon listing (``modules.xml`` for ``g.extension -l/-c/-g``), so a user
-    who points this at a custom server gets a self-consistent view.
     """
     try:
         gisenv_value = gs.gisenv().get("ADDONS_BASE_URL")
@@ -1621,21 +1616,35 @@ def get_addons_base_url():
     return "http://wingrass.fsv.cvut.cz"
 
 
-def install_extension_win(name):
-    """Install extension on MS Windows"""
+def install_extension_win(name, url=None):
+    """Install extension on MS Windows."""
     gs.message(
         _("Downloading precompiled GRASS Addons <{}>...").format(options["extension"])
     )
 
-    # build base URL
-    base_url = (
-        f"{get_addons_base_url()}/"
-        f"grass{VERSION[0]}{VERSION[1]}/addons/"
-        f"grass-{VERSION[0]}.{VERSION[1]}.{VERSION[2]}"
-    )
+    # Resolve the final ZIP URL.
+    if url:
+        if not url.lower().endswith(".zip"):
+            gs.fatal(
+                _(
+                    "On MS-Windows, the 'url' option must point to a ZIP file "
+                    "(URL ending in '.zip'). To use a different addon server, "
+                    "set the ADDONS_BASE_URL gisenv variable or the "
+                    "GRASS_ADDONS_BASE_URL environment variable instead."
+                )
+            )
+        zip_url = url
+    else:
+        base = get_addons_base_url()
+        base_url = (
+            f"{base}/"
+            f"grass{VERSION[0]}{VERSION[1]}/addons/"
+            f"grass-{VERSION[0]}.{VERSION[1]}.{VERSION[2]}"
+        )
+        zip_url = f"{base_url}/{name}.zip"
 
     # resolve ZIP URL
-    source, url = resolve_source_code(url="{0}/{1}.zip".format(base_url, name))
+    source, url = resolve_source_code(url=zip_url)
 
     # to hide non-error messages from subprocesses
     outdev = open(os.devnull, "w") if gs.verbosity() <= 2 else sys.stdout
@@ -2628,18 +2637,18 @@ def resolve_xmlurl_prefix(url, source=None):
     """
     gs.debug("resolve_xmlurl_prefix(url={0}, source={1})".format(url, source))
     if source in {"official", "official_fork"}:
-        # If the user has overridden the addon server (via the
-        # ADDONS_BASE_URL gisenv setting or GRASS_ADDONS_BASE_URL env var),
-        # take the listing URL from the same base so listing and install are
-        # served from one consistent source. modules.xml lives next to the
-        # ZIP files in the per-patch directory.
+        # On MS-Windows only, the user can redirect both listing and install
+        # to a custom addon server via the ADDONS_BASE_URL gisenv setting or
+        # the GRASS_ADDONS_BASE_URL env var. 
+        # On non-Windows, this override is intentionally not honoured
         override = None
-        try:
-            override = gs.gisenv().get("ADDONS_BASE_URL") or os.environ.get(
-                "GRASS_ADDONS_BASE_URL"
-            )
-        except Exception:  # noqa: BLE001
-            override = os.environ.get("GRASS_ADDONS_BASE_URL")
+        if sys.platform == "win32":
+            try:
+                override = gs.gisenv().get("ADDONS_BASE_URL") or os.environ.get(
+                    "GRASS_ADDONS_BASE_URL"
+                )
+            except Exception:  # noqa: BLE001
+                override = os.environ.get("GRASS_ADDONS_BASE_URL")
         if override:
             override = override.rstrip("/")
             url = (
@@ -2979,7 +2988,7 @@ def main():
     if options["operation"] == "add":
         check_dirs()
         if sys.platform == "win32":
-            install_extension()
+            install_extension(url=original_url)
         else:
             if original_url == "" or flags["o"]:
                 # Query GitHub API only if extension will be downloaded
