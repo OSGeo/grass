@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-25 16:03+0000\n"
+"POT-Creation-Date: 2026-05-09 16:40+0000\n"
 "PO-Revision-Date: 2026-04-09 14:56+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/fr/>\n"
@@ -3254,10 +3254,43 @@ msgstr "Fermer la fenêtre sans exécuter la commande (Ctrl+Q)"
 msgid "Run the command (Ctrl+R)"
 msgstr "Exécuter la commande (Ctrl+R)"
 
+#, fuzzy
+#| msgid "Copy all to clipboard"
+msgid "Copy as Shell command"
+msgstr "Tout copier dans le presse-papier"
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (Script API)"
+msgstr "Script Python"
+
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+msgid "Copy as Python (PyGRASS)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector maps settings"
+msgid "Copy as JSON settings"
+msgstr "Paramètres de carte vecteur"
+
 msgid "Copy"
 msgstr "Copier"
 
-msgid "Copy the current command string to the clipboard"
+#, fuzzy
+#| msgid "Export common formats"
+msgid "More copy formats"
+msgstr "Exporter vers des formats standards"
+
+#, fuzzy
+#| msgid "Raster map settings"
+msgid "Paste JSON settings"
+msgstr "Paramètres de carte raster"
+
+#, fuzzy
+#| msgid "Copy the current command string to the clipboard"
+msgid "Paste parameters from JSON string in the clipboard"
 msgstr "Copier la chaîne de commande dans le presse-papier"
 
 msgid "Show manual page of the command (Ctrl+H)"
@@ -3274,6 +3307,50 @@ msgstr "Fermer la fenêtre de dialogue quand la commande se termine avec succès
 
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr "'%s' copié dans le presse-papier"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "JSON copied to clipboard"
+msgstr "'%s' copié dans le presse-papier"
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Modules"
+msgid "Module Mismatch"
+msgstr "Modules"
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid name"
+msgid "Invalid Data"
+msgstr "Nom invalide"
+
+#, fuzzy
+#| msgid "Error"
+msgid "Paste Error"
+msgstr "Erreur"
+
+#, fuzzy, python-format
+#| msgid "'%s' copied to clipboard"
+msgid "%s copied to clipboard"
 msgstr "'%s' copié dans le presse-papier"
 
 msgid "Required"
@@ -7220,6 +7297,9 @@ msgstr "Enregistrer l'expression dans un fichier"
 
 msgid "Load expression from file"
 msgstr "Charger une expression depuis un fichier"
+
+msgid "Copy the current command string to the clipboard"
+msgstr "Copier la chaîne de commande dans le presse-papier"
 
 msgid "exponent"
 msgstr "exposant"
@@ -13743,9 +13823,6 @@ msgstr ""
 
 #~ msgid "Module dialog settings"
 #~ msgstr "Paramètres des fenêtres de modules"
-
-#~ msgid "Modules"
-#~ msgstr "Modules"
 
 #~ msgid "Mosaic images"
 #~ msgstr "Mosaïquage d'images"

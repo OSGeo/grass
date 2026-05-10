@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GRASS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-25 16:03+0000\n"
+"POT-Creation-Date: 2026-05-09 16:40+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Chinese (Simplified) <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/zh_Hans/>\n"
@@ -3201,10 +3201,35 @@ msgstr "不执行命令而关闭窗口(Ctrl+Q)"
 msgid "Run the command (Ctrl+R)"
 msgstr "运行命令(Ctrl+R)"
 
+msgid "Copy as Shell command"
+msgstr ""
+
+msgid "Copy as Python (Script API)"
+msgstr ""
+
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+msgid "Copy as Python (PyGRASS)"
+msgstr ""
+
+#, fuzzy
+msgid "Copy as JSON settings"
+msgstr "无法获取栅格行\n"
+
 msgid "Copy"
 msgstr "复制"
 
-msgid "Copy the current command string to the clipboard"
+#, fuzzy
+#| msgid "Export common formats"
+msgid "More copy formats"
+msgstr "常见格式导出"
+
+#, fuzzy
+msgid "Paste JSON settings"
+msgstr "字体设置"
+
+msgid "Paste parameters from JSON string in the clipboard"
 msgstr ""
 
 msgid "Show manual page of the command (Ctrl+H)"
@@ -3221,6 +3246,50 @@ msgstr ""
 
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr "'%s'已复制到剪贴板"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "JSON copied to clipboard"
+msgstr "'%s'已复制到剪贴板"
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Modules"
+msgid "Module Mismatch"
+msgstr "模块"
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+#, fuzzy
+#| msgid "Input Data"
+msgid "Invalid Data"
+msgstr "输入数据"
+
+#, fuzzy
+#| msgid "Error"
+msgid "Paste Error"
+msgstr "错误"
+
+#, fuzzy, python-format
+#| msgid "'%s' copied to clipboard"
+msgid "%s copied to clipboard"
 msgstr "'%s'已复制到剪贴板"
 
 msgid "Required"
@@ -7131,6 +7200,9 @@ msgid "Save expression to file"
 msgstr ""
 
 msgid "Load expression from file"
+msgstr ""
+
+msgid "Copy the current command string to the clipboard"
 msgstr ""
 
 msgid "exponent"
@@ -12388,9 +12460,6 @@ msgstr ""
 #~ msgid "Imports older versions of GRASS vector maps."
 #~ msgstr "导入旧版GRASS矢量地图。"
 
-#~ msgid "Input Data"
-#~ msgstr "输入数据"
-
 #~ msgid "Input for supervised MLC"
 #~ msgstr "监督最大似然分类输入数据"
 
@@ -12571,10 +12640,6 @@ msgstr ""
 #~ msgid "Load map layers from GRC file to layer tree"
 #~ msgstr "从GRC文件加载地图层到图层列表"
 
-#, fuzzy
-#~ msgid "Load settings:"
-#~ msgstr "无法获取栅格行\n"
-
 #~ msgid "Load workspace from file"
 #~ msgstr "加载工作区文件"
 
@@ -12728,9 +12793,6 @@ msgstr ""
 
 #~ msgid "Module dialog settings"
 #~ msgstr "模块对话框设置"
-
-#~ msgid "Modules"
-#~ msgstr "模块"
 
 #~ msgid "Mosaic images"
 #~ msgstr "图象镶嵌"
