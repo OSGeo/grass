@@ -33,10 +33,10 @@ jobs:
           persist-credentials: false
 
       - name: Install nix
-        uses: DeterminateSystems/determinate-nix-action@1361e7900eb437fb341f0f226e8fbd9a0d8284fa # v3.17.2
+        uses: DeterminateSystems/determinate-nix-action@bafaa638b9d5ec0e7e3ac1a7fc80453ef1fd265f # v3.20.0
 
       - name: Setup cachix
-        uses: cachix/cachix-action@1eb2ef646ac0255473d23a5907ad7b04ce94065c # v17
+        uses: cachix/cachix-action@5f2d7c5294214f71b873db4b969586b980625e71 # v17
         with:
           name: osgeo-grass
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
