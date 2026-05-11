@@ -166,7 +166,8 @@ static int areas_new_cats_match(struct Map_info *In, int area1, int area2,
                     break;
                 }
                 case DB_C_TYPE_DOUBLE: {
-                    if (db_get_value_int(&val1) == db_get_value_double(&val2))
+                    if (db_get_value_double(&val1) ==
+                        db_get_value_double(&val2))
                         found = 1;
                     break;
                 }

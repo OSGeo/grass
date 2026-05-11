@@ -33,7 +33,6 @@ set(raster_modules_list
     r.in.gridatb
     r.in.lidar
     r.in.mat
-    r.in.pdal
     r.in.poly
     r.in.xyz
     r.info
@@ -145,8 +144,10 @@ add_custom_target(
   DEPENDS ${raster_modules_list}
   COMMENT "All raster modules are built.")
 
+set_target_properties(ALL_RASTER_MODULES PROPERTIES FOLDER Misc)
+
 if(WITH_DOCS)
-  generate_html(TARGET ALL_RASTER_MODULES NAME rasterintro)
+  generate_docs(rasterintro TARGET ALL_RASTER_MODULES)
 endif()
 
 build_program_in_subdir(r.basins.fill DEPENDS grass_gis grass_raster)
@@ -279,21 +280,24 @@ build_program_in_subdir(r.in.gridatb DEPENDS grass_gis grass_raster)
 
 build_program_in_subdir(r.in.mat DEPENDS grass_gis grass_raster)
 
-file(GLOB r_in_pdal_SOURCES "r.in.pdal/*.c" "r.in.pdal/*.cpp")
-build_program_in_subdir(
-  r.in.pdal
-  SOURCES
-  "${r_in_pdal_SOURCES}"
-  DEPENDS
-  grass_gis
-  grass_raster
-  grass_vector
-  grass_gmath
-  grass_segment
-  grass_gproj
-  ${LIBM}
-  PRIMARY_DEPENDS
-  ${PDAL})
+if(WITH_PDAL)
+  file(GLOB r_in_pdal_SOURCES "r.in.pdal/*.c" "r.in.pdal/*.cpp")
+  build_program_in_subdir(
+    r.in.pdal
+    SOURCES
+    "${r_in_pdal_SOURCES}"
+    DEPENDS
+    grass_gis
+    grass_raster
+    grass_vector
+    grass_gmath
+    grass_segment
+    grass_gproj
+    ${LIBM}
+    PRIMARY_DEPENDS
+    ${PDAL})
+  list(APPEND raster_modules_list r.in.pdal)
+endif()
 
 build_program_in_subdir(
   r.in.png
@@ -319,7 +323,7 @@ build_program_in_subdir(
   grass_raster
   grass_parson)
 
-build_program_in_subdir(r.kappa DEPENDS grass_gis grass_raster ${LIBM})
+build_program_in_subdir(r.kappa DEPENDS grass_gis grass_raster grass_parson ${LIBM})
 
 build_program_in_subdir(r.latlong DEPENDS grass_gis grass_raster grass_gproj)
 
@@ -335,7 +339,7 @@ build_program_in_subdir(
   grass_raster
   grass_rowio
   OPTIONAL_DEPENDS
-  OPENMP)
+  OpenMP::OpenMP_C)
 
 build_program_in_subdir(r.mode DEPENDS grass_gis grass_raster)
 
@@ -347,7 +351,7 @@ build_program_in_subdir(
   grass_stats
   ${LIBM}
   OPTIONAL_DEPENDS
-  OPENMP)
+  OpenMP::OpenMP_C)
 
 build_program_in_subdir(r.null DEPENDS grass_gis grass_raster)
 
@@ -409,7 +413,7 @@ build_program_in_subdir(
   ${LIBM})
 
 build_program_in_subdir(r.patch DEPENDS grass_gis grass_raster OPTIONAL_DEPENDS
-                        OPENMP)
+                        OpenMP::OpenMP_C)
 
 build_program_in_subdir(r.path DEPENDS grass_gis grass_raster grass_vector
                         ${LIBM})
@@ -426,7 +430,7 @@ build_program_in_subdir(
   grass_parson
   ${LIBM}
   OPTIONAL_DEPENDS
-  OPENMP)
+  OpenMP::OpenMP_C)
 
 build_program_in_subdir(r.quant DEPENDS grass_gis grass_raster)
 
@@ -479,7 +483,7 @@ build_program_in_subdir(
   grass_raster
   ${LIBM}
   OPTIONAL_DEPENDS
-  OPENMP)
+  OpenMP::OpenMP_C)
 
 build_program_in_subdir(
   r.resamp.interp
@@ -488,7 +492,7 @@ build_program_in_subdir(
   grass_raster
   ${LIBM}
   OPTIONAL_DEPENDS
-  OPENMP)
+  OpenMP::OpenMP_C)
 
 build_program_in_subdir(
   r.resamp.rst
@@ -518,7 +522,7 @@ build_program_in_subdir(
   grass_raster
   grass_stats
   OPTIONAL_DEPENDS
-  OPENMP)
+  OpenMP::OpenMP_C)
 
 build_program_in_subdir(
   r.series.accumulate
@@ -527,7 +531,7 @@ build_program_in_subdir(
   grass_raster
   grass_stats
   OPTIONAL_DEPENDS
-  OPENMP)
+  OpenMP::OpenMP_C)
 
 build_program_in_subdir(r.series.interp DEPENDS grass_gis grass_raster
                         grass_stats)
@@ -543,7 +547,7 @@ build_program_in_subdir(
   grass_raster
   ${LIBM}
   OPTIONAL_DEPENDS
-  OPENMP)
+  OpenMP::OpenMP_C)
 
 build_program_in_subdir(
   r.smooth.edgepreserve
@@ -553,7 +557,7 @@ build_program_in_subdir(
   grass_rowio
   ${LIBM}
   OPTIONAL_DEPENDS
-  OPENMP)
+  OpenMP::OpenMP_C)
 
 build_program_in_subdir(
   r.solute.transport
@@ -598,7 +602,7 @@ build_program_in_subdir(
   grass_gproj
   ${LIBM}
   OPTIONAL_DEPENDS
-  OPENMP)
+  OpenMP::OpenMP_C)
 
 build_program_in_subdir(r.sunhours DEPENDS grass_gis grass_raster grass_gproj
                         ${LIBM})

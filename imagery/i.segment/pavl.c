@@ -828,7 +828,7 @@ void(pavl_assert_insert)(struct pavl_table *table, void *item)
 
 /* Asserts that |pavl_delete()| really removes |item| from |table|,
    and returns the removed item. */
-void *(pavl_assert_delete)(struct pavl_table *table, void *item)
+void *(pavl_assert_delete)(struct pavl_table * table, void *item)
 {
     void *p = pavl_delete(table, item);
 

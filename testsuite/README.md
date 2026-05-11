@@ -1,5 +1,6 @@
 # Test suite
 
+<!-- markdownlint-disable-next-line line-length -->
 Tests are in directories `tests` and `testsuite` under each directory which has tests.
 This directory contains additional scripts and information to test functionality
 without a focus on a specific part of the code.

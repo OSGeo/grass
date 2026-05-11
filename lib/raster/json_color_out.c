@@ -93,6 +93,8 @@ static void write_json_rule(DCELL *val, DCELL *min, DCELL *max, int r, int g,
    \param fp file where to print color table rules
    \param perc TRUE for percentage output
    \param clr_frmt color format to be used (RBG, HEX, HSV, TRIPLET).
+
+   \since version 8.5
  */
 void Rast_print_json_colors(struct Colors *colors, DCELL min, DCELL max,
                             FILE *fp, int perc, ColorFormat clr_frmt)

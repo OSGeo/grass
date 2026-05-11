@@ -65,6 +65,27 @@ else:
 
 
 ###############################################################################
+# Register datetime adapters and converters for the temporal database
+def adapt_datetime_iso(value: datetime) -> str:
+    """Adapt datetime object to timezone-naive ISO 8601 string, assuming UTC.
+
+    Output strftime format ensures backwards compatibility with datetime
+    storage in the temporal database.
+    """
+    return value.strftime("%Y-%m-%d %H:%M:%S")
+
+
+def convert_datetime(value: bytes) -> datetime:
+    """Convert ISO 8601 string to timezone-naive datetime object, assuming UTC."""
+    return datetime.fromisoformat(value.decode())
+
+
+sqlite3.register_adapter(datetime, adapt_datetime_iso)
+sqlite3.register_converter("date", convert_datetime)
+sqlite3.register_converter("datetime", convert_datetime)
+sqlite3.register_converter("timestamp", convert_datetime)
+
+###############################################################################
 
 
 def profile_function(func) -> None:

@@ -95,6 +95,48 @@ class RuntimePaths:
         return self.env.get("GRASS_PROJSHARE", resource_paths.CONFIG_PROJSHARE)
 
     @property
+    def grass_cmake_config_dir(self):
+        return (
+            str(Path(self.prefix, resource_paths.GRASS_CMAKE_CONFIG))
+            if self.is_cmake_build
+            else ""
+        )
+
+    @property
+    def grass_cmake_module_dir(self):
+        return (
+            str(Path(self.prefix, resource_paths.GRASS_CMAKE_MODULES))
+            if self.is_cmake_build
+            else ""
+        )
+
+    @property
+    def grass_cmake_prefix_path(self):
+        return resource_paths.GRASS_CMAKE_PREFIX_PATH
+
+    @property
+    def grass_cmake_c_compiler(self):
+        return (
+            str(Path(resource_paths.GRASS_CMAKE_C_COMPILER))
+            if Path(resource_paths.GRASS_CMAKE_C_COMPILER).exists()
+            and self.is_cmake_build
+            else ""
+        )
+
+    @property
+    def grass_cmake_cxx_compiler(self):
+        return (
+            str(Path(resource_paths.GRASS_CMAKE_CXX_COMPILER))
+            if Path(resource_paths.GRASS_CMAKE_CXX_COMPILER).exists()
+            and self.is_cmake_build
+            else ""
+        )
+
+    @property
+    def is_cmake_build(self):
+        return resource_paths.GRASS_CMAKE_MODULES != ""
+
+    @property
     def prefix(self):
         if self._custom_prefix:
             return self._custom_prefix
@@ -167,9 +209,7 @@ def get_grass_config_dir_for_version(major_version, minor_version, *, env):
     if WINDOWS:
         config_dirname = f"GRASS{major_version}"
     elif MACOS:
-        config_dirname = os.path.join(
-            "Library", "GRASS", f"{major_version}.{minor_version}"
-        )
+        config_dirname = os.path.join("Library", "GRASS", f"GRASS{major_version}")
     else:
         config_dirname = f".grass{major_version}"
 
@@ -196,7 +236,11 @@ def append_left_addon_paths(paths, config_dir, env):
     # addons (base)
     addon_base = env.get("GRASS_ADDON_BASE")
     if not addon_base:
-        name = "addons" if not MACOS else "Addons"
+        name = (
+            "addons"
+            if not MACOS
+            else f"Addons{resource_paths.GRASS_VERSION_MAJOR}.{resource_paths.GRASS_VERSION_MINOR}"
+        )
         addon_base = os.path.join(config_dir, name)
         env["GRASS_ADDON_BASE"] = addon_base
 

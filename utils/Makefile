@@ -10,7 +10,7 @@ default: parsubdirs $(UTILSDIR)/mkdocs.py $(UTILSDIR)/mkhtml.py $(UTILSDIR)/mkma
 	$(UTILSDIR)/g.echo$(EXE)
 
 $(UTILSDIR)/mkdocs.py: mkdocs.py
-	$(INSTALL) $< $@
+	$(INSTALL_DATA) $< $@
 
 $(UTILSDIR)/mkhtml.py: mkhtml.py
 	$(INSTALL) $< $@
