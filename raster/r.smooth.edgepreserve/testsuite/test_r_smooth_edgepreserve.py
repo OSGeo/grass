@@ -155,7 +155,7 @@ class SmoothingTest(TestCase):
             function="exp",
             quiet=True,
         )
-        self.assertTrue(raster_info(out_map_d)["datatype"] == "DCELL")
+        self.assertEqual(raster_info(out_map_d)["datatype"], "DCELL")
         self.assertRastersEqual(out_map_d, self.ref_exp_f, precision=0.1)
 
     def test_quad_ram(self):
