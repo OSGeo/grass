@@ -98,8 +98,9 @@ class TestTmpMapset(unittest.TestCase):
             [self.executable, "--tmp-mapset", self.location, "--exec", "g.proj", "-p"]
         )
         for directory in os.listdir(self.location):
-            self.assertTrue(
-                directory in self.subdirs,
+            self.assertIn(
+                directory,
+                self.subdirs,
                 msg="Directory {directory} should have been deleted".format(**locals()),
             )
 
