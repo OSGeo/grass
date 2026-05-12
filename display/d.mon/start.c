@@ -115,8 +115,12 @@ char *start_wx(const char *name, const char *element, int width, int height,
     mapfile = (char *)G_malloc(GPATH_MAX);
     mapfile[0] = '\0';
 
-    snprintf(progname, sizeof(progname), "%s/gui/wxpython/mapdisp/main.py",
-             G_gisbase());
+    const char *wxdir = getenv("GRASS_GUIWXDIR");
+    if (!wxdir)
+        G_fatal_error(_("Incomplete GRASS session: Variable '%s' not set"),
+                      "GRASS_GUIWXDIR");
+
+    snprintf(progname, sizeof(progname), "%s/mapdisp/main.py", wxdir);
     snprintf(str_width, sizeof(str_width), "%d", width);
     snprintf(str_height, sizeof(str_height), "%d", height);
 
@@ -168,8 +172,8 @@ int start_mon(const char *name, const char *output, int select, int width,
     leg_file = G_store(file_path);
 
     /* create py file (renderer) */
-    snprintf(render_cmd_path, sizeof(render_cmd_path),
-             "%s/etc/d.mon/render_cmd.py", getenv("GISBASE"));
+    snprintf(render_cmd_path, sizeof(render_cmd_path), "%s/d.mon/render_cmd.py",
+             G_etcbin_dir());
     G_file_name(file_path, mon_path, "render.py", G_mapset());
     G_debug(1, "Monitor name=%s, pyfile = %s", name, file_path);
     if (1 != G_copy_file(render_cmd_path, file_path))

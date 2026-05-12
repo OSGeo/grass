@@ -39,14 +39,9 @@ void G_init_locale(void)
 #ifdef LC_MESSAGES
     setlocale(LC_MESSAGES, "");
 #endif
-    const char *gisbase = getenv("GISBASE");
+    const char *localedir = G_locale_dir();
 
-    if (gisbase && *gisbase) {
-        char localedir[GPATH_MAX];
-
-        strcpy(localedir, gisbase);
-        strcat(localedir, "/locale");
-
+    if (localedir && *localedir) {
         bindtextdomain("grasslibs", localedir);
         bindtextdomain("grassmods", localedir);
     }
