@@ -130,6 +130,9 @@ void main_loop(const Setup *setup, const Geometry *geometry,
             /*                               .... propagate one step */
             /* ************************************************************ */
 
+            // the trapezoid rule could be removed (has very little effect),
+            // still kept to not alter results
+            // but factor (not addac) is used for infiltration
             addac = factor;
             conn = (double)nblock / (double)iblock;
             if (i == 1) {
@@ -178,25 +181,36 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                         }
 
                         if (grids->zz[k][l] != UNDEF) {
-                            if (grids->inf[k][l] !=
-                                UNDEF) { /* infiltration part */
-                                if (grids->inf[k][l] - grids->si[k][l] > 0.) {
-
-                                    double decr = pow(
-                                        addac * sim->w[lw].m,
-                                        3. / 5.); /* decreasing factor in m */
-                                    if (grids->inf[k][l] > decr) {
-                                        grids->inf[k][l] -=
-                                            decr; /* decrease infilt. in cell
-                                                     and eliminate the walker */
+                            if (grids->inf[k][l] != UNDEF &&
+                                grids->inf[k][l] > 0) {
+                                // Walker's contribution to water depth in this
+                                // cell for this timestep [m]
+                                double decr = factor * sim->w[lw].m;
+                                // Compare with the depth the cell can absorb
+                                // this timestep [m]
+                                if (grids->inf[k][l] * setup->deltap > decr) {
+                                    // The cell can absorb the full walker.
+                                    // Reduce infiltration rate [m/s].
+                                    grids->inf[k][l] -= decr / setup->deltap;
+                                    // Eliminate the walker
+                                    sim->w[lw].m = 0.;
+                                    continue;
+                                }
+                                else {
+                                    // The cell can't absorb the full walker.
+                                    // Reduce the walker mass by the equivalent
+                                    // of what an infiltration-rate source would
+                                    // generate as walker weight.
+                                    sim->w[lw].m -= sim->rwalk *
+                                                    grids->inf[k][l] /
+                                                    setup->sisum;
+                                    // Cell's infiltration capacity is fully
+                                    // exhausted
+                                    grids->inf[k][l] = 0.;
+                                    // Eliminate walker if needed
+                                    if (sim->w[lw].m < 0.) {
                                         sim->w[lw].m = 0.;
-                                    }
-                                    else {
-                                        sim->w[lw].m -=
-                                            pow(grids->inf[k][l], 5. / 3.) /
-                                            addac; /* use just proportional part
-                                                      of the walker weight */
-                                        grids->inf[k][l] = 0.;
+                                        continue;
                                     }
                                 }
                             }
