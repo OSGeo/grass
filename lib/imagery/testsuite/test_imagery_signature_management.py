@@ -985,7 +985,7 @@ class SignaturesListByTypeTestCase(TestCase):
         # As temporary mapset is not in the search path, there must be
         # at least one sig file present
         # There could be more sigs if this is not an empty mapset
-        self.assertTrue(ret >= 1)
+        self.assertGreaterEqual(ret, 1)
         ret_list = list(map(utils.decode, sig_list[:ret]))
         golden = (
             f"{rnd_sig1}@{self.rnd_mapset_name}",
