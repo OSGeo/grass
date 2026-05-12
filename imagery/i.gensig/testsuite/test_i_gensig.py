@@ -154,7 +154,7 @@ class SuccessTest(TestCase):
         self.assertEqual(Sn.sig[2].have_color, 0)
         self.assertEqual(Sn.sig[2].npoints, 3)
         self.assertEqual(Sn.sig[2].oclass, 9)
-        self.assertTrue(abs(Sn.sig[2].mean[0] - 6.7) < 0.1)
+        self.assertLess(abs(Sn.sig[2].mean[0] - 6.7), 0.1)
         self.assertTrue(abs(Sn.sig[2].mean[1] - 8.3) < 0.1)
         self.assertTrue(abs(Sn.sig[2].var[0][0] - 0.043) < 0.01)
         self.assertTrue(abs(Sn.sig[2].var[1][1] - 0.3) < 0.1)
