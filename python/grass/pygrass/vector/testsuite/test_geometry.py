@@ -83,7 +83,7 @@ class PointTestCase(TestCase):
         self.assertFalse(point0 == point1)
         self.assertNotEqual(point0, (1, 0))
         self.assertTrue(point0 == point0)  # noqa: PLR0124 # pylint: disable=R0124
-        self.assertTrue(point0 == (0, 0))
+        self.assertEqual(point0, (0, 0))
 
     def test_repr(self):
         """Test __eq__"""
