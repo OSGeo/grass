@@ -144,6 +144,8 @@ add_custom_target(
   DEPENDS ${raster_modules_list}
   COMMENT "All raster modules are built.")
 
+set_target_properties(ALL_RASTER_MODULES PROPERTIES FOLDER Misc)
+
 if(WITH_DOCS)
   generate_docs(rasterintro TARGET ALL_RASTER_MODULES)
 endif()

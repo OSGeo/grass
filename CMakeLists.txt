@@ -284,14 +284,16 @@ set(ALL_SUBDIRS
 foreach(d ${ALL_SUBDIRS})
   add_subdirectory(${d})
 endforeach()
-add_custom_target(
-  ALL_MODULES
-  DEPENDS ${modules_list}
-  COMMENT "Building all modules.")
 
 if(WITH_GUI)
   add_subdirectory(gui)
 endif()
+
+add_custom_target(
+  ALL_MODULES
+  DEPENDS ${modules_list}
+  COMMENT "Building all modules.")
+set_target_properties(ALL_MODULES PROPERTIES FOLDER Misc)
 
 if(WITH_DOCS)
   add_subdirectory(doc)
@@ -309,6 +311,7 @@ add_custom_target(
   BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
   COMMENT "Creating thumbnails"
   DEPENDS ALL_MODULES)
+set_target_properties(r_colors_thumbnails PROPERTIES FOLDER Misc)
 install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
         DESTINATION ${GRASS_INSTALL_DOCDIR})
 
@@ -344,3 +347,5 @@ write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/GRASSConfigVersion.
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/GRASSConfig.cmake
               ${CMAKE_CURRENT_BINARY_DIR}/GRASSConfigVersion.cmake
         DESTINATION ${GRASS_INSTALL_CMAKECONFDIR}/GRASS)
+
+set_property(GLOBAL PROPERTY USE_FOLDERS YES)

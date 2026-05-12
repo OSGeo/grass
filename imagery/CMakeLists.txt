@@ -63,6 +63,8 @@ add_custom_target(
   DEPENDS ${imagery_modules_list}
   COMMENT "All imagery modules are built.")
 
+set_target_properties(ALL_IMAGERY_MODULES PROPERTIES FOLDER Misc)
+
 if(WITH_DOCS)
   generate_docs(imageryintro TARGET ALL_IMAGERY_MODULES)
 

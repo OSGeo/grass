@@ -44,8 +44,6 @@ function(build_script_in_subdir dir_name)
     set(script_ext ".py")
   endif()
 
-  set(HTML_FILE ${G_SRC_DIR}/${G_NAME}.html)
-
   configure_file(
     ${G_SRC_DIR}/${G_NAME}.py
     ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${G_NAME}${script_ext} COPYONLY)
@@ -78,7 +76,6 @@ function(build_script_in_subdir dir_name)
       ${CMAKE_SOURCE_DIR}/cmake/locale_strings.cmake
     DEPENDS g.parser)
 
-  set(HTML_FILE_NAME ${G_NAME})
   set(OUT_HTML_FILE "")
 
   if(WITH_DOCS AND NOT G_NO_DOCS)
@@ -90,23 +87,45 @@ function(build_script_in_subdir dir_name)
       install(FILES ${IMG_FILES} DESTINATION ${GRASS_INSTALL_DOCDIR})
     endif()
 
-    set(out_html_file ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${G_NAME}.html)
+    set(OUT_HTML_FILE ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${G_NAME}.html)
 
     generate_docs(${G_NAME}
-      OUTPUT ${out_html_file}
+      OUTPUT ${OUT_HTML_FILE}
       SOURCEDIR ${G_SRC_DIR}
       DEST_DIR ${G_DEST_DIR}
       DEPENDS ${TRANSLATE_C_FILE} LIB_PYTHON)
 
   endif() # WITH_DOCS
 
-  add_custom_target(${G_NAME} DEPENDS ${TRANSLATE_C_FILE} ${out_html_file})
+  add_custom_target(${G_NAME} DEPENDS ${TRANSLATE_C_FILE} ${OUT_HTML_FILE})
 
   set(modules_list
       "${G_NAME};${modules_list}"
       CACHE INTERNAL "list of modules")
 
-  set_target_properties(${G_NAME} PROPERTIES FOLDER scripts)
+  if("${G_NAME}" MATCHES "^v[\.]")
+    set_target_properties(${G_NAME} PROPERTIES FOLDER "Tools/Vector")
+  elseif("${G_NAME}" MATCHES "^r[\.]")
+    set_target_properties(${G_NAME} PROPERTIES FOLDER "Tools/Raster")
+  elseif("${G_NAME}" MATCHES "^d[\.]")
+    set_target_properties(${G_NAME} PROPERTIES FOLDER "Tools/Display")
+  elseif("${G_NAME}" MATCHES "^db[\.]")
+    set_target_properties(${G_NAME} PROPERTIES FOLDER "Tools/Database")
+  elseif("${G_NAME}" MATCHES "^g[\.]")
+    set_target_properties(${G_NAME} PROPERTIES FOLDER "Tools/General")
+  elseif("${G_NAME}" MATCHES "^i[\.]")
+    set_target_properties(${G_NAME} PROPERTIES FOLDER "Tools/Imagery")
+  elseif("${G_NAME}" MATCHES "^m[\.]")
+    set_target_properties(${G_NAME} PROPERTIES FOLDER "Tools/Miscellaneous")
+  elseif("${G_NAME}" MATCHES "^ps[\.]")
+    set_target_properties(${G_NAME} PROPERTIES FOLDER "Tools/PostScript")
+  elseif("${G_NAME}" MATCHES "^r3[\.]")
+    set_target_properties(${G_NAME} PROPERTIES FOLDER "Tools/Raster 3D")
+  elseif("${G_NAME}" MATCHES "^t[\.]")
+    set_target_properties(${G_NAME} PROPERTIES FOLDER "Tools/Temporal")
+  else()
+    set_target_properties(${G_NAME} PROPERTIES FOLDER "Binaries")
+  endif()
 
   if(WIN32)
     install(PROGRAMS ${OUTDIR}/${G_DEST_DIR}/${G_NAME}.bat
@@ -115,5 +134,13 @@ function(build_script_in_subdir dir_name)
 
   install(PROGRAMS ${OUTDIR}/${G_DEST_DIR}/${G_NAME}${script_ext}
           DESTINATION ${G_DEST_DIR})
+
+  file(GLOB _files
+       LIST_DIRECTORIES FALSE
+       ${G_SRC_DIR}/*.py
+       ${G_SRC_DIR}/*.html ${G_SRC_DIR}/*.md
+       ${G_SRC_DIR}/*.png ${G_SRC_DIR}/*.jpg)
+  target_sources(${G_NAME} PRIVATE ${_files})
+
 
 endfunction()

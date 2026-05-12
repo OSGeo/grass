@@ -15,6 +15,61 @@ extend-exclude = '''
 )
 '''
 
+[tool.codespell]
+ignore-words-list = [
+    "BLOC",   # Seems unused
+    "Bui",
+    "Collet",
+    "Flor",
+    "Greif",
+    "Hart",
+    "Huld",
+    "Linke",
+    "OnText",
+    "Tripel",
+    "ans",    # TODO: Replace with a word
+    "anull",
+    "datas",
+    "delt",
+    "flor",
+    "indx",
+    "inout",
+    "linz",
+    "lsat",
+    "makin",
+    "nin",
+    "parm",
+    "parms",
+    "siz",
+    "vizual",
+]
+quiet-level = 3
+skip = [
+    "config.guess",
+    "gui/icons/grass.desktop",
+    "gui/wxpython/xml/grass-gxw.dtd",     # TODO
+    "lib/cdhc/doc/goodness.ps",
+    "lib/datetime/README",
+    "lib/external/ccmath/C01-matrix",
+    "lib/fonts/fonts/hersh.o*",           # TODO
+    "lib/gis/FIPS.code",                  # TODO
+    "lib/gis/datumtransform.table",       # TODO
+    "lib/gis/ellipse.table",              # TODO
+    "lib/gis/renamed_options",
+    "lib/proj/*.table",                   # TODO
+    "lib/rst/interp_float/print_tre",     # TODO
+    "lib/rst/interp_float/print_tree",    # TODO
+    "locale/*.po",
+    "locale/*.pot",
+    "locale/*.tbx",
+    "mswindows/GRASS-Installer.nsi.tmpl", # TODO
+    "raster/r.walk/TODO",                 # TODO
+    "rpm/grass.spec",                     # TODO
+    "utils/fix_typos.sh",
+    "utils/release.yml",                  # TODO
+    '*.dox',                              # TODO
+]
+
 [tool.ruff]
 required-version = ">=0.8.0"
 
@@ -283,6 +338,7 @@ known-first-party = ["grass"]
 # Other ignores:
 "**.ipynb" = ["I001"]
 "**.py" = ["PYI066"]
+"**/tests/*.py" = ["RUF069"]
 "*/testsuite/**.py" = ["PT009", "PT027", "PLW1514"]
 "display/d.mon/render_cmd.py" = ["PLW1514"]
 "display/d.text/test.py" = ["PLW1514"]
@@ -294,7 +350,7 @@ known-first-party = ["grass"]
 "gui/wxpython/core/render.py" = ["PLW1514"]
 "gui/wxpython/core/settings.py" = ["PLW1514"]
 "gui/wxpython/core/toolboxes.py" = ["PLW1514"]
-"gui/wxpython/core/utils.py" = ["PLW1514"]
+"gui/wxpython/core/utils.py" = ["PLW1514", "RUF069"]
 "gui/wxpython/core/watchdog.py" = ["PLW1514"]
 "gui/wxpython/core/workspace.py" = ["PLW1514"]
 "gui/wxpython/dbmgr/base.py" = ["PLR6201", "PLW1514"]
@@ -312,7 +368,7 @@ known-first-party = ["grass"]
 "gui/wxpython/iclass/statistics.py" = ["A005"]
 "gui/wxpython/image2target/ii2t_gis_set.py" = ["PLW1514"]
 "gui/wxpython/image2target/ii2t_manager.py" = ["PLR6201", "PLW1514"]
-"gui/wxpython/iscatt/plots.py" = ["PLR6201"]
+"gui/wxpython/iscatt/plots.py" = ["PLR6201", "RUF069"]
 "gui/wxpython/location_wizard/wizard.py" = ["PLW1514"]
 "gui/wxpython/mapdisp/main.py" = ["PLW1514"]
 "gui/wxpython/modules/colorrules.py" = ["PLW1514"]
@@ -420,8 +476,8 @@ known-first-party = ["grass"]
 "scripts/g.extension/g.extension.py" = ["PLW1514", "PTH208", "SIM115"]
 "scripts/g.search.modules/g.search.modules.py" = ["PLW1514"]
 "scripts/i.in.spotvgt/i.in.spotvgt.py" = ["PLW1514"]
-"scripts/i.oif/i.oif*.py" = ["SIM115"]
 "scripts/i.oif/i.oif.py" = ["PLW1514"]
+"scripts/i.oif/i.oif*.py" = ["SIM115"]
 "scripts/i.pansharpen/i.pansharpen.py" = ["PLW1514"]
 "scripts/i.spectral/i.spectral.py" = ["PLW1514"]
 "scripts/m.proj/m.proj.py" = ["PLW1514", "SIM115"]

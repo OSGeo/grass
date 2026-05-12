@@ -23,6 +23,8 @@ Contributors must:
 - **Write clear, concise PR descriptions** in your own words.
 - **Use your own voice** in GitHub issues and PR discussions.
 - **Take responsibility** for code quality, correctness, and maintainability.
+  Self-review AI-generated code before submitting — question whether each
+  change is justified and remove what is not.
 
 ### Disclosure
 
@@ -40,6 +42,27 @@ Pull requests may be closed without review if they contain:
 
 Using AI to assist learning and development is encouraged.
 Using it to bypass understanding or submit work you cannot explain is not.
+
+## Translations
+
+Help make GRASS accessible in more languages!
+No programming knowledge is needed — all translation work happens through
+[Weblate](https://weblate.osgeo.org/projects/grass-gis/), a web-based platform.
+
+### Getting started with translations
+
+1. Create an [OSGeo UserID](https://www.osgeo.org/community/getting-started-osgeo/osgeo_userid/)
+2. Sign in to [OSGeo Weblate](https://weblate.osgeo.org/) with your OSGeo UserID
+3. Browse the [GRASS GIS translation project](https://weblate.osgeo.org/projects/grass-gis/)
+4. Select your language (or request a new one if it's not listed)
+5. Start translating! The web interface guides you through each message
+
+Translations are automatically submitted to the GRASS repository as pull requests.
+For help or questions, join the
+[GRASS user community on Discourse](https://discourse.osgeo.org/c/grass/grass-user/70).
+
+See [locale/README.md](locale/README.md) for more technical details about the
+translation process.
 
 ## Changing code and documentation
 

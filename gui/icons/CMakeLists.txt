@@ -12,6 +12,7 @@ add_custom_target(
           ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/icons
   COMMAND ${CMAKE_COMMAND} -E make_directory
           ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/images/symbols)
+set_target_properties(make_gui_icons_dirs PROPERTIES FOLDER GUI)
 
 set(output_icons)
 foreach(ICON ${GUI_ICONS})
@@ -50,6 +51,7 @@ foreach(ICON ${FLAGS_ICONS})
 endforeach()
 
 add_custom_target(gui_icons DEPENDS make_gui_icons_dirs ${output_icons})
+set_target_properties(gui_icons PROPERTIES FOLDER GUI)
 
 install(FILES ${GUI_ICONS} DESTINATION ${GRASS_INSTALL_GUIDIR}/icons)
 install(FILES ${GRASS_ICONS} DESTINATION ${GRASS_INSTALL_GUIDIR}/icons/grass)

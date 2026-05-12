@@ -42,12 +42,8 @@
 # % options: 0-100
 # % multiple: yes
 # %end
-# %option
-# % key: format
-# % type: string
-# % multiple: no
+# %option G_OPT_F_FORMAT
 # % options: plain,json,shell
-# % label: Output format
 # % descriptions: plain;Plain text output;json;JSON (JavaScript Object Notation);shell;Shell script style for Bash eval
 # %end
 # %flag

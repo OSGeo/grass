@@ -2070,7 +2070,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     "of the database does not match the current "
                     "mapset"
                 )
-                % ({"ds": self.get_id()}, {"type": self.get_type()})
+                % {"ds": self.get_id(), "type": self.get_type()}
             )
 
         if not check_granularity_string(gran, self.get_temporal_type()):
@@ -2107,6 +2107,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         if connection_state_changed:
             dbif.close()
+        return True
 
     @staticmethod
     def snap_map_list(maps):
@@ -2245,7 +2246,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     "of the database does not match the current "
                     "mapset"
                 )
-                % ({"ds": self.get_id()}, {"type": self.get_type()})
+                % {"ds": self.get_id(), "type": self.get_type()}
             )
 
         dbif, connection_state_changed = init_dbif(dbif)
@@ -2352,7 +2353,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     "of the database does not match the current "
                     "mapset"
                 )
-                % ({"ds": self.get_id()}, {"type": self.get_type()})
+                % {"ds": self.get_id(), "type": self.get_type()}
             )
 
         dbif, connection_state_changed = init_dbif(dbif)
