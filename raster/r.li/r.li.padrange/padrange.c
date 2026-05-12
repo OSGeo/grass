@@ -317,8 +317,8 @@ int calculate(int fd, struct area_entry *ad, double *result)
                       (((NS_DIST1 + NS_DIST2) / 2) / hd.rows);
 
         /* get min and max patch size */
-        min = INFINITY;
-        max = -INFINITY;
+        sscanf("inf", "%lf", &min);  /* inf */
+        sscanf("-inf", "%lf", &max); /* -inf */
         for (old_pid = 1; old_pid <= pid; old_pid++) {
             if (pst[old_pid].count > 0) {
                 area_p = cell_size_m * pst[old_pid].count / 10000;
@@ -561,8 +561,8 @@ int calculateD(int fd, struct area_entry *ad, double *result)
                       (((NS_DIST1 + NS_DIST2) / 2) / hd.rows);
 
         /* get min and max patch size */
-        min = INFINITY;
-        max = -INFINITY;
+        sscanf("inf", "%lf", &min);  /* inf */
+        sscanf("-inf", "%lf", &max); /* -inf */
         for (old_pid = 1; old_pid <= pid; old_pid++) {
             if (pst[old_pid].count > 0) {
                 area_p = cell_size_m * pst[old_pid].count / 10000;
@@ -805,8 +805,8 @@ int calculateF(int fd, struct area_entry *ad, double *result)
                       (((NS_DIST1 + NS_DIST2) / 2) / hd.rows);
 
         /* get min and max patch size */
-        min = INFINITY;
-        max = -INFINITY;
+        sscanf("inf", "%lf", &min);  /* inf */
+        sscanf("-inf", "%lf", &max); /* -inf */
         for (old_pid = 1; old_pid <= pid; old_pid++) {
             if (pst[old_pid].count > 0) {
                 area_p = cell_size_m * pst[old_pid].count / 10000;
