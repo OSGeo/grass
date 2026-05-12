@@ -1007,7 +1007,7 @@ class SignaturesListByTypeTestCase(TestCase):
         shutil.rmtree(sig_dir1)
         shutil.rmtree(sig_dir2)
         # There could be more sigs if this is not an empty mapset
-        self.assertTrue(ret >= 2)
+        self.assertGreaterEqual(ret, 2)
         ret_list = list(map(utils.decode, sig_list[:ret]))
         self.assertIn(golden[0], ret_list)
         self.assertIn(golden[1], ret_list)
