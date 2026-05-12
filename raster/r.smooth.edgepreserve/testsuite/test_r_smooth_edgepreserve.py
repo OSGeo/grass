@@ -109,7 +109,7 @@ class SmoothingTest(TestCase):
             function="exp",
             quiet=True,
         )
-        self.assertTrue(raster_info(out_map_i)["datatype"] == "CELL")
+        self.assertEqual(raster_info(out_map_i)["datatype"], "CELL")
         self.assertRastersEqual(out_map_i, self.ref_exp_i)
 
     def test_exp_f_ram(self):
