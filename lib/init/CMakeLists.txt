@@ -27,7 +27,7 @@ endif()
 # START_UP is the variable used in grass.py, grass.sh.in and grass.bat.in
 set(START_UP ${PROJECT_NAME_LOWER})
 if(WIN32)
-  set(START_UP "${START_UP}.py")
+  set(START_UP "${START_UP}_main.py")
   set(script_file_name "grass.bat")
   set(script_input_file_name ${script_file_name}.in)
 else()
@@ -50,16 +50,32 @@ list(APPEND DLL_PATH_LIST ${DEPS_DLL_PATH})
 
 # configure and install grass.py
 set(GRASS_PYDIR ${GRASS_INSTALL_PYDIR_RUNTIME_PATH})
-configure_file(grass.py ${OUTDIR}/${CMAKE_INSTALL_BINDIR}/${START_UP} @ONLY)
+if(WIN32)
+  configure_file(grass.py ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/${START_UP} @ONLY)
 
-set(GRASS_PYDIR ${GRASS_INSTALL_PYDIR_PATH})
-configure_file(grass.py ${CMAKE_CURRENT_BINARY_DIR}/${START_UP} @ONLY)
-unset(GRASS_PYDIR)
+  set(GRASS_PYDIR ${GRASS_INSTALL_PYDIR_PATH})
+  configure_file(grass.py ${CMAKE_CURRENT_BINARY_DIR}/${START_UP} @ONLY)
+  unset(GRASS_PYDIR)
 
-install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${START_UP}
-        DESTINATION ${CMAKE_INSTALL_BINDIR})
+  install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${START_UP}
+	  DESTINATION ${GRASS_INSTALL_ETCDIR})
 
-file(TO_NATIVE_PATH "${OUTDIR}/${GISBASE_DIR}" gisbase_init_dir)
+  file(TO_NATIVE_PATH ${GISBASE_DIR} gisbase_init_dir)
+
+  set(GRASS_PYTHON ${PYTHON_EXECUTABLE})
+  configure_file(${script_input_file_name} ${OUTDIR}/${CMAKE_INSTALL_BINDIR}/${script_file_name} @ONLY)
+  install(PROGRAMS ${OUTDIR}/${CMAKE_INSTALL_BINDIR}/${script_file_name}
+          DESTINATION ${CMAKE_INSTALL_BINDIR})
+else()
+  configure_file(grass.py ${OUTDIR}/${CMAKE_INSTALL_BINDIR}/${START_UP} @ONLY)
+
+  set(GRASS_PYDIR ${GRASS_INSTALL_PYDIR_PATH})
+  configure_file(grass.py ${CMAKE_CURRENT_BINARY_DIR}/${START_UP} @ONLY)
+  unset(GRASS_PYDIR)
+
+  install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${START_UP}
+          DESTINATION ${CMAKE_INSTALL_BINDIR})
+endif()
 
 file(TO_NATIVE_PATH ${OUTDIR}/${GRASS_INSTALL_BINDIR} grass_dll_dir)
 set(DLL_PATH_LIST)
