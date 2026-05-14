@@ -8,7 +8,7 @@ Core functions to be used in Python scripts.
 
     grass.parser()
 
-(C) 2008-2025 by the GRASS Development Team
+(C) 2008-2026 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -1851,7 +1851,7 @@ def parse_color(
 # check GRASS_OVERWRITE
 
 
-def overwrite():
+def overwrite() -> bool:
     """Return True if existing files may be overwritten"""
     owstr = "GRASS_OVERWRITE"
     return owstr in os.environ and os.environ[owstr] != "0"
@@ -1860,7 +1860,7 @@ def overwrite():
 # check GRASS_VERBOSE
 
 
-def verbosity():
+def verbosity() -> int:
     """Return the verbosity level selected by GRASS_VERBOSE
 
     Currently, there are 5 levels of verbosity:
@@ -2224,7 +2224,7 @@ def debug_level(force: bool = False, *, env: _Env = None):
 # TODO: Remove the pygrass backwards compatibility version of it?
 
 
-def legal_name(s):
+def legal_name(s: str) -> bool:
     """Checks if the string contains only allowed characters.
 
     This is the Python implementation of :func:`G_legal_filename()` function.

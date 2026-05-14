@@ -74,7 +74,7 @@ int cmp(const void *a, const void *b)
     return 0;
 }
 
-void output_edges(unsigned int n, int mode3d UNUSED, int type,
+void output_edges(unsigned int n, int mode3d G_UNUSED, int type,
                   struct Map_info *Out)
 {
     struct edge *e_start, *e;
@@ -119,7 +119,7 @@ void output_edges(unsigned int n, int mode3d UNUSED, int type,
 
 /* Print the ring of triangles about each vertex. */
 
-void output_triangles(unsigned int n, int mode3d UNUSED, int type,
+void output_triangles(unsigned int n, int mode3d G_UNUSED, int type,
                       struct Map_info *Out)
 {
     struct edge *e_start, *e, *next;

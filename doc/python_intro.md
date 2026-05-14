@@ -143,6 +143,7 @@ For customization of error handling, please refer to the [documentation](https:/
     stable in version 8.5. Although no major changes for *grass.tools* are
     expected, if you require completely stable API, consider instead
     [other ways of accessing tools](#additional-ways-to-access-tools).
+    If you want to migrate to grass.tools, check the [migration guide](migration_to_grass_tools_python_api.md).
 
 Available tools and their parameters are listed in the tool documentation:
 
@@ -293,7 +294,7 @@ of GRASS. The [grass.pygrass.gis](https://grass.osgeo.org/grass-stable/manuals/l
 module provides functions to create, manage, and delete GRASS projects and
 mapsets. The core classes include [Gisdbase](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.gis.html#pygrass.gis.Gisdbase),
 [Location](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.gis.html#pygrass.gis.Location),
-and [Mapset](https://grass.osgeo.org/grass85/manuals/libpython/pygrass.gis.html#pygrass.gis.Mapset).
+and [Mapset](https://grass.osgeo.org/grass86/manuals/libpython/pygrass.gis.html#pygrass.gis.Mapset).
 
 The [Gisdbase](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.gis.html#pygrass.gis.Gisdbase)
 class provides access to the GRASS database
@@ -333,7 +334,7 @@ print(location.name)
 mapsets = location.mapsets()
 ```
 
-The [Mapset](https://grass.osgeo.org/grass85/manuals/libpython/pygrass.gis.html#pygrass.gis.Mapset)
+The [Mapset](https://grass.osgeo.org/grass86/manuals/libpython/pygrass.gis.html#pygrass.gis.Mapset)
 object provides access to the specific mapset and its layers.
 
 ```python

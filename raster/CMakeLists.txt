@@ -144,6 +144,8 @@ add_custom_target(
   DEPENDS ${raster_modules_list}
   COMMENT "All raster modules are built.")
 
+set_target_properties(ALL_RASTER_MODULES PROPERTIES FOLDER Misc)
+
 if(WITH_DOCS)
   generate_docs(rasterintro TARGET ALL_RASTER_MODULES)
 endif()
@@ -321,7 +323,7 @@ build_program_in_subdir(
   grass_raster
   grass_parson)
 
-build_program_in_subdir(r.kappa DEPENDS grass_gis grass_raster ${LIBM})
+build_program_in_subdir(r.kappa DEPENDS grass_gis grass_raster grass_parson ${LIBM})
 
 build_program_in_subdir(r.latlong DEPENDS grass_gis grass_raster grass_gproj)
 
