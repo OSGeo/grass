@@ -272,8 +272,6 @@ static unsigned write_json(FILE *f)
             if (sub_val == NULL) {
                 G_fatal_error(
                     _("Failed to initialize JSON object. Out of memory?"));
-                G_json_value_free(root_val);
-                return 0;
             }
             G_JSON_Object *sub_obj = G_json_value_get_object(sub_val);
             G_json_object_set_value(cur, token[i].key, sub_val);

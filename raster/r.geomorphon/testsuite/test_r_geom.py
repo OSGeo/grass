@@ -10,10 +10,11 @@ Licence:    This program is free software under the GNU General Public
             for details.
 """
 
+import json
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.script.core import read_command
-import json
+from grass.tools import Tools
 
 synth_out = """1	flat
 3	ridge
@@ -258,6 +259,7 @@ class TestClipling(TestCase):
     insint = "synthetic_dem"
     outele = "ele_geomorph"
     outsint = "synth_geomorph"
+    tools = Tools()
 
     @classmethod
     def setUpClass(cls):
@@ -298,15 +300,15 @@ class TestClipling(TestCase):
 
     def test_json_profile(self):
         """Test JSON profile output structure and key values"""
-
-        out = read_command(
-            "r.geomorphon",
+        result = self.tools.r_geomorphon(
             elevation=self.inele,
             coordinates="636400,221100",
             profiledata="-",
             profileformat="json",
             search=10,
         )
+
+        out = result.stdout
 
         try:
             json_out = json.loads(out)
