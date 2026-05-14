@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 17:57+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: 2025-12-22 12:47+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/sv/>\n"
@@ -1314,6 +1314,11 @@ msgid "Re&load maps"
 msgstr "U&ppdatera kartor"
 
 #, fuzzy
+#| msgid "Show computational region extent"
+msgid "Show computational region"
+msgstr "Visa beräkningsregionens omfattning"
+
+#, fuzzy
 #| msgid "&Copy path to mapset"
 msgid "&Copy path"
 msgstr "&Kopiera sökväg till mapset"
@@ -1326,6 +1331,11 @@ msgstr "&Avsluta projekt"
 
 msgid "&Rename project"
 msgstr "&Rename-projekt"
+
+#, fuzzy
+#| msgid "Source projection:"
+msgid "Show projection info"
+msgstr "Källa projektion:"
 
 #, fuzzy
 #| msgid "CVS path"
@@ -5848,6 +5858,16 @@ msgstr "Är du säker på att du vill ta bort den aktuella rastermasken?"
 
 msgid "Remove raster mask"
 msgstr "Ta bort rastermask"
+
+#, fuzzy
+#| msgid "Custom min"
+msgid "Custom CRS"
+msgstr "Anpassad min"
+
+#, fuzzy
+#| msgid "Left mouse click to remove the raster mask"
+msgid "Left mouse click to print detailed projection info"
+msgstr "Vänster musklick för att ta bort rastermasken"
 
 msgid "Create new workspace (Ctrl+N)"
 msgstr "Skapa en ny arbetsyta (Ctrl+N)"
