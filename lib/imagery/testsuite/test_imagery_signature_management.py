@@ -985,7 +985,7 @@ class SignaturesListByTypeTestCase(TestCase):
         # As temporary mapset is not in the search path, there must be
         # at least one sig file present
         # There could be more sigs if this is not an empty mapset
-        self.assertTrue(ret >= 1)
+        self.assertGreaterEqual(ret, 1)
         ret_list = list(map(utils.decode, sig_list[:ret]))
         golden = (
             f"{rnd_sig1}@{self.rnd_mapset_name}",
@@ -1007,7 +1007,7 @@ class SignaturesListByTypeTestCase(TestCase):
         shutil.rmtree(sig_dir1)
         shutil.rmtree(sig_dir2)
         # There could be more sigs if this is not an empty mapset
-        self.assertTrue(ret >= 2)
+        self.assertGreaterEqual(ret, 2)
         ret_list = list(map(utils.decode, sig_list[:ret]))
         self.assertIn(golden[0], ret_list)
         self.assertIn(golden[1], ret_list)
@@ -1032,7 +1032,7 @@ class SignaturesListByTypeTestCase(TestCase):
         # As temporary mapset is not in the search path, there must be
         # at least one sig file present
         # There could be more sigs if this is not an empty mapset
-        self.assertTrue(ret >= 1)
+        self.assertGreaterEqual(ret, 1)
         ret_list = list(map(utils.decode, sig_list[:ret]))
         golden = (
             f"{rnd_sig1}@{self.rnd_mapset_name}",
@@ -1054,7 +1054,7 @@ class SignaturesListByTypeTestCase(TestCase):
         shutil.rmtree(sig_dir1)
         shutil.rmtree(sig_dir2)
         # There could be more sigs if this is not an empty mapset
-        self.assertTrue(ret >= 2)
+        self.assertGreaterEqual(ret, 2)
         ret_list = list(map(utils.decode, sig_list[:ret]))
         self.assertIn(golden[0], ret_list)
         self.assertIn(golden[1], ret_list)
@@ -1080,7 +1080,7 @@ class SignaturesListByTypeTestCase(TestCase):
         # As temporary mapset is not in the search path, there must be
         # at least one sig file present
         # There could be more sigs if this is not an empty mapset
-        self.assertTrue(ret >= 1)
+        self.assertGreaterEqual(ret, 1)
         ret_list = list(map(utils.decode, sig_list[:ret]))
         golden = (
             f"{rnd_sig1}@{self.rnd_mapset_name}",
@@ -1102,7 +1102,7 @@ class SignaturesListByTypeTestCase(TestCase):
         shutil.rmtree(sig_dir1)
         shutil.rmtree(sig_dir2)
         # There could be more sigs if this is not an empty mapset
-        self.assertTrue(ret >= 2)
+        self.assertGreaterEqual(ret, 2)
         ret_list = list(map(utils.decode, sig_list[:ret]))
         self.assertIn(golden[0], ret_list)
         self.assertIn(golden[1], ret_list)

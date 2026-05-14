@@ -109,7 +109,7 @@ class SmoothingTest(TestCase):
             function="exp",
             quiet=True,
         )
-        self.assertTrue(raster_info(out_map_i)["datatype"] == "CELL")
+        self.assertEqual(raster_info(out_map_i)["datatype"], "CELL")
         self.assertRastersEqual(out_map_i, self.ref_exp_i)
 
     def test_exp_f_ram(self):
@@ -132,7 +132,7 @@ class SmoothingTest(TestCase):
             function="exp",
             quiet=True,
         )
-        self.assertTrue(raster_info(out_map_f)["datatype"] == "FCELL")
+        self.assertEqual(raster_info(out_map_f)["datatype"], "FCELL")
         self.assertRastersEqual(out_map_f, self.ref_exp_f, precision=0.1)
 
     def test_exp_d_ram(self):
@@ -155,7 +155,7 @@ class SmoothingTest(TestCase):
             function="exp",
             quiet=True,
         )
-        self.assertTrue(raster_info(out_map_d)["datatype"] == "DCELL")
+        self.assertEqual(raster_info(out_map_d)["datatype"], "DCELL")
         self.assertRastersEqual(out_map_d, self.ref_exp_f, precision=0.1)
 
     def test_quad_ram(self):
