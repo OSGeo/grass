@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_pl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-14 18:00+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Polish <https://weblate.osgeo.org/projects/grass-gis/grassmods/pl/>\n"
@@ -3973,7 +3973,7 @@ msgstr ""
 msgid "create project"
 msgstr "Źródłowa projekcja"
 
-msgid "Prints or modifies GRASS projection information files (in various co-ordinate system descriptions)."
+msgid "Prints or modifies GRASS projection information files (in various coordinate system descriptions)."
 msgstr ""
 
 msgid "Can also be used to create new GRASS projects."
@@ -4041,7 +4041,7 @@ msgstr ""
 msgid "Datum"
 msgstr ""
 
-msgid "Datum (overrides any datum specified in input co-ordinate system)"
+msgid "Datum (overrides any datum specified in input coordinate system)"
 msgstr ""
 
 msgid "Accepts standard GRASS datum codes, or \"list\" to list and exit"
@@ -4053,8 +4053,9 @@ msgstr ""
 msgid "\"0\" for unspecified or \"-1\" to list and exit"
 msgstr ""
 
-msgid "Force override of datum transformation information in input co-ordinate system"
-msgstr ""
+#, fuzzy
+msgid "Force override of datum transformation information in input coordinate system"
+msgstr "Odczytywanie %s ..."
 
 msgid "Modify"
 msgstr "Zmodyfikuj"
@@ -18488,7 +18489,7 @@ msgstr ""
 msgid "Number of walkers"
 msgstr ""
 
-msgid "Time used for iterations [minutes]"
+msgid "Duration of the simulated water flow [minutes]"
 msgstr ""
 
 msgid "Minimum time step for the simulation [seconds]"
@@ -29811,7 +29812,7 @@ msgstr "Typ obiektu"
 msgid "centrality measures"
 msgstr ""
 
-msgid "Computes degree, centrality, betweeness, closeness and eigenvector centrality measures in the network."
+msgid "Computes degree, centrality, betweenness, closeness and eigenvector centrality measures in the network."
 msgstr ""
 
 msgid "Name of degree centrality column"
@@ -39071,10 +39072,6 @@ msgstr "Plik obrazu"
 #, fuzzy
 #~ msgid "Transformation grid's destination coordinate system name"
 #~ msgstr "Przyjmuje założenie, że jest to układ kartezjański"
-
-#, fuzzy
-#~ msgid "Transformation grid's input coordinate system name"
-#~ msgstr "Odczytywanie %s ..."
 
 #, fuzzy
 #~ msgid "Transparency of the raster IQR band"

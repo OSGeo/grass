@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-14 18:00+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Arabic <https://weblate.osgeo.org/projects/grass-gis/grassmods/ar/>\n"
@@ -4359,7 +4359,7 @@ msgstr "طباعة نوع الملف الراسترى فقط"
 msgid "create project"
 msgstr "%s لم يمكن فتح "
 
-msgid "Prints or modifies GRASS projection information files (in various co-ordinate system descriptions)."
+msgid "Prints or modifies GRASS projection information files (in various coordinate system descriptions)."
 msgstr ""
 
 #, fuzzy
@@ -4429,7 +4429,7 @@ msgstr ""
 msgid "Datum"
 msgstr ""
 
-msgid "Datum (overrides any datum specified in input co-ordinate system)"
+msgid "Datum (overrides any datum specified in input coordinate system)"
 msgstr ""
 
 msgid "Accepts standard GRASS datum codes, or \"list\" to list and exit"
@@ -4442,7 +4442,7 @@ msgstr "اسم ملف التنعيم"
 msgid "\"0\" for unspecified or \"-1\" to list and exit"
 msgstr ""
 
-msgid "Force override of datum transformation information in input co-ordinate system"
+msgid "Force override of datum transformation information in input coordinate system"
 msgstr ""
 
 msgid "Modify"
@@ -20573,7 +20573,7 @@ msgstr "اسم الخريطة الراسترية المدخلة"
 msgid "Number of walkers"
 msgstr "عدد الصفوف"
 
-msgid "Time used for iterations [minutes]"
+msgid "Duration of the simulated water flow [minutes]"
 msgstr ""
 
 msgid "Minimum time step for the simulation [seconds]"
@@ -32872,7 +32872,7 @@ msgstr "نوع المظهر"
 msgid "centrality measures"
 msgstr "حساب الظلال من نموذج الإرتفاعت الرقمى"
 
-msgid "Computes degree, centrality, betweeness, closeness and eigenvector centrality measures in the network."
+msgid "Computes degree, centrality, betweenness, closeness and eigenvector centrality measures in the network."
 msgstr ""
 
 #, fuzzy

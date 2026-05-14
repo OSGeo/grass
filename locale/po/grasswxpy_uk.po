@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_uk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-14 18:00+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: 2017-05-23 21:08+0200\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian (https://www.transifex.com/grass-gis/teams/45198/uk/)\n"
@@ -1275,7 +1275,10 @@ msgstr ""
 msgid "Re&load maps"
 msgstr ""
 
-msgid "&Copy path to mapset"
+msgid "Show computational region"
+msgstr ""
+
+msgid "&Copy path"
 msgstr ""
 
 msgid "&Create mapset"
@@ -1285,6 +1288,12 @@ msgid "&Delete project"
 msgstr ""
 
 msgid "&Rename project"
+msgstr ""
+
+msgid "Show projection info"
+msgstr ""
+
+msgid "Copy path"
 msgstr ""
 
 msgid "Change Label"
@@ -1311,10 +1320,13 @@ msgstr ""
 msgid "&Delete projects (locations)"
 msgstr ""
 
+msgid "Copy paths"
+msgstr ""
+
 msgid "&Delete mapsets"
 msgstr ""
 
-msgid "&Copy paths to mapsets"
+msgid "&Copy paths"
 msgstr ""
 
 #, python-brace-format
@@ -5597,6 +5609,12 @@ msgid "Are you sure that you want to remove the current raster mask?"
 msgstr ""
 
 msgid "Remove raster mask"
+msgstr ""
+
+msgid "Custom CRS"
+msgstr ""
+
+msgid "Left mouse click to print detailed projection info"
 msgstr ""
 
 msgid "Create new workspace (Ctrl+N)"

@@ -420,7 +420,7 @@ cleanup_exit:
 
    \return 0
  */
-int gvld_wire_isosurf(geovol *gvl UNUSED)
+int gvld_wire_isosurf(geovol *gvl G_UNUSED)
 {
     return (0);
 }

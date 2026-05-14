@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-14 18:00+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: 2025-12-22 12:47+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/sv/>\n"
@@ -1313,7 +1313,14 @@ msgstr "&Rename mapset"
 msgid "Re&load maps"
 msgstr "U&ppdatera kartor"
 
-msgid "&Copy path to mapset"
+#, fuzzy
+#| msgid "Show computational region extent"
+msgid "Show computational region"
+msgstr "Visa beräkningsregionens omfattning"
+
+#, fuzzy
+#| msgid "&Copy path to mapset"
+msgid "&Copy path"
 msgstr "&Kopiera sökväg till mapset"
 
 msgid "&Create mapset"
@@ -1324,6 +1331,16 @@ msgstr "&Avsluta projekt"
 
 msgid "&Rename project"
 msgstr "&Rename-projekt"
+
+#, fuzzy
+#| msgid "Source projection:"
+msgid "Show projection info"
+msgstr "Källa projektion:"
+
+#, fuzzy
+#| msgid "CVS path"
+msgid "Copy path"
+msgstr "CVS sökväg"
 
 #, fuzzy
 #| msgid "Change"
@@ -1355,11 +1372,18 @@ msgstr "&Radera GRASS-databasen från hårddisken"
 msgid "&Delete projects (locations)"
 msgstr "&Avveckla projekt (platser)"
 
+#, fuzzy
+#| msgid "&Copy path to mapset"
+msgid "Copy paths"
+msgstr "&Kopiera sökväg till mapset"
+
 msgid "&Delete mapsets"
 msgstr "&Radera kartor"
 
-msgid "&Copy paths to mapsets"
-msgstr "&Kopiera sökvägar till kartor"
+#, fuzzy
+#| msgid "&Copy path to mapset"
+msgid "&Copy paths"
+msgstr "&Kopiera sökväg till mapset"
 
 #, python-brace-format
 msgid "Remove label '{label}' for this database?"
@@ -5834,6 +5858,16 @@ msgstr "Är du säker på att du vill ta bort den aktuella rastermasken?"
 
 msgid "Remove raster mask"
 msgstr "Ta bort rastermask"
+
+#, fuzzy
+#| msgid "Custom min"
+msgid "Custom CRS"
+msgstr "Anpassad min"
+
+#, fuzzy
+#| msgid "Left mouse click to remove the raster mask"
+msgid "Left mouse click to print detailed projection info"
+msgstr "Vänster musklick för att ta bort rastermasken"
 
 msgid "Create new workspace (Ctrl+N)"
 msgstr "Skapa en ny arbetsyta (Ctrl+N)"
@@ -11241,6 +11275,9 @@ msgid ""
 msgstr ""
 "Regressionsekvation för rasterkartan <%(rast1)s> vs. <%(rast2)s>:\n"
 "\n"
+
+#~ msgid "&Copy paths to mapsets"
+#~ msgstr "&Kopiera sökvägar till kartor"
 
 #~ msgid "Generate random seed for rand()"
 #~ msgstr "Generera slumpmässigt frö för rand()"

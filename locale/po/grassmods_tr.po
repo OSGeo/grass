@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_tr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-14 18:00+0000\n"
+"POT-Creation-Date: 2026-04-25 16:03+0000\n"
 "PO-Revision-Date: 2025-07-26 01:37+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Turkish <https://weblate.osgeo.org/projects/grass-gis/grassmods/tr/>\n"
@@ -3944,8 +3944,10 @@ msgstr ""
 msgid "create project"
 msgstr "Kaynak projeksiyon"
 
-msgid "Prints or modifies GRASS projection information files (in various co-ordinate system descriptions)."
-msgstr ""
+#, fuzzy
+#| msgid "Prints and manipulates GRASS projection information files."
+msgid "Prints or modifies GRASS projection information files (in various coordinate system descriptions)."
+msgstr "GRASS projeksiyon bilgisi dosyalarını yazdırır ve düzenler"
 
 msgid "Can also be used to create new GRASS projects."
 msgstr ""
@@ -4012,7 +4014,7 @@ msgstr ""
 msgid "Datum"
 msgstr ""
 
-msgid "Datum (overrides any datum specified in input co-ordinate system)"
+msgid "Datum (overrides any datum specified in input coordinate system)"
 msgstr ""
 
 msgid "Accepts standard GRASS datum codes, or \"list\" to list and exit"
@@ -4024,8 +4026,9 @@ msgstr ""
 msgid "\"0\" for unspecified or \"-1\" to list and exit"
 msgstr ""
 
-msgid "Force override of datum transformation information in input co-ordinate system"
-msgstr ""
+#, fuzzy
+msgid "Force override of datum transformation information in input coordinate system"
+msgstr "Kartezyen koordinat sisteminde olduğu varsayılır"
 
 msgid "Modify"
 msgstr ""
@@ -18437,7 +18440,7 @@ msgstr ""
 msgid "Number of walkers"
 msgstr ""
 
-msgid "Time used for iterations [minutes]"
+msgid "Duration of the simulated water flow [minutes]"
 msgstr ""
 
 msgid "Minimum time step for the simulation [seconds]"
@@ -29656,7 +29659,7 @@ msgstr "Obje tipi"
 msgid "centrality measures"
 msgstr ""
 
-msgid "Computes degree, centrality, betweeness, closeness and eigenvector centrality measures in the network."
+msgid "Computes degree, centrality, betweenness, closeness and eigenvector centrality measures in the network."
 msgstr ""
 
 msgid "Name of degree centrality column"
@@ -33934,9 +33937,6 @@ msgstr "Görüntü dosyası"
 #~| msgid "Layer <%s> not available"
 #~ msgid "JSON output is not available."
 #~ msgstr "<%s> katmanı mevcut değil"
-
-#~ msgid "Prints and manipulates GRASS projection information files."
-#~ msgstr "GRASS projeksiyon bilgisi dosyalarını yazdırır ve düzenler"
 
 #, fuzzy, c-format
 #~| msgid "Unable to insert row: %s"
@@ -38268,10 +38268,6 @@ msgstr "Görüntü dosyası"
 
 #, fuzzy
 #~ msgid "Transformation grid's destination coordinate system name"
-#~ msgstr "Kartezyen koordinat sisteminde olduğu varsayılır"
-
-#, fuzzy
-#~ msgid "Transformation grid's input coordinate system name"
 #~ msgstr "Kartezyen koordinat sisteminde olduğu varsayılır"
 
 #, fuzzy
