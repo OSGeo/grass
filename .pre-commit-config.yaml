@@ -53,7 +53,7 @@ repos:
       - id: detect-private-key
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
-    rev: v0.15.7
+    rev: v0.15.13
     hooks:
       # Run the linter.
       - id: ruff-check
