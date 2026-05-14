@@ -12,6 +12,7 @@
  *               Jan-Oliver Wagner <jan intevation.de>,
  *               Radim Blazek <radim.blazek gmail.com>
  *               Aaron Saw Min Sern (OpenMP parallelization)
+ *               Akos Halmai (pairwise summation for dx & dy)
  * PURPOSE:      generates raster maps of slope, aspect, curvatures and
  *               first and second order partial derivatives from a raster map
  *               of true elevation values
@@ -594,6 +595,7 @@ int main(int argc, char *argv[])
             double pcurv, tcurv;
             double aspect, dnorm1, dx2, dy2, grad2, grad, dxy2;
             double key;
+            double key_sqrt;
             double slp_in_perc, slp_in_deg;
             int low, hi, test = 0;
             bool initialized = false;
@@ -808,13 +810,15 @@ int main(int argc, char *argv[])
                             c9 = c5;
                     }
 
-                    dx = ((c1 + c4 + c4 + c7) - (c3 + c6 + c6 + c9)) / H;
-                    dy = ((c7 + c8 + c8 + c9) - (c1 + c2 + c2 + c3)) / V;
+                    /* Pairwise summation reduces cancellation errors, this form handles edge cases more reliably. */
+                    dx = ((c1 + c7) + (c4 + c4) - ((c3 + c9) + (c6 + c6))) / H;
+                    dy = ((c7 + c9) + (c8 + c8) - ((c1 + c3) + (c2 + c2))) / V;
 
                     /* compute topographic parameters */
                     key = dx * dx + dy * dy;
-                    slp_in_perc = 100 * sqrt(key);
-                    slp_in_deg = atan(sqrt(key)) * radians_to_degrees;
+                    key_sqrt = sqrt(key);
+                    slp_in_perc = 100.0 * key_sqrt;
+                    slp_in_deg = radians_to_degrees * atan(key_sqrt);
 
                     /* now update min and max */
                     if (deg) {
