@@ -8,6 +8,7 @@ SUBDIRS = \
 	datetime \
 	gis \
 	proj \
+	external/parson \
 	raster \
 	gmath \
 	linkm \
