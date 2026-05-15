@@ -1818,6 +1818,36 @@ class PythonPanel(wx.Panel):
         try_remove(self.filename)
         self.filename = None
 
+        # store resolved variables
+        model = self.parent.GetModel()
+        run_params = getattr(model, "_runParams", None)
+        resolved = {}
+        if run_params and "variables" in run_params:
+            for p in run_params["variables"]["params"]:
+                name = p.get("name", "")
+                value = p.get("value", "")
+                if name and value:
+                    resolved[name] = value
+        
+        # display data if required
+        for data in model.GetData():
+            if not data.HasDisplay():
+                continue
+
+            # remove existing map layers first
+            layers = self.parent._giface.GetLayerList().GetLayersByName(data.GetResolvedValue(resolved))
+            if layers:
+                for layer in layers:
+                    self.parent._giface.GetLayerList().DeleteLayer(layer)
+
+            # add new map layer
+            self.parent._giface.GetLayerList().AddLayer(
+                ltype=data.GetPrompt(),
+                name=data.GetResolvedValue(resolved),
+                checked=True,
+                cmd=data.GetDisplayCmd(resolved),
+            )
+
     def OnChangeScriptType(self, event):
         new_script_type = self.script_type_box.GetStringSelection()
 
