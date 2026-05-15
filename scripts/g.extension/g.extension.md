@@ -115,6 +115,42 @@ extensions. The reason is that more things such as manual page are
 compiled, not only the source code (which is really necessary to compile
 just in case of C).
 
+### Using an alternative addon server (MS-Windows)
+
+On MS-Windows, *g.extension* downloads precompiled addon ZIPs from the
+official WinGRASS server (`http://wingrass.fsv.cvut.cz`) by default.
+The base URL of the server can be redirected to a mirror or a private
+addon server by setting `ADDONS_BASE_URL`. The setting affects both the
+addon listing (`g.extension -l`, `-c`, `-g`) and the install download
+URL, so listing and install always come from the same place.
+
+The setting can be applied in two ways:
+
+- From inside GRASS (persists across sessions, settable from the GUI's
+  variables panel as well):
+
+  ```sh
+  g.gisenv set="ADDONS_BASE_URL=https://your.server.example"
+  ```
+
+- As a shell environment variable named `GRASS_ADDONS_BASE_URL` (useful
+  for one-off shell sessions or CI jobs). The gisenv setting takes
+  precedence over the environment variable; if neither is set, the
+  default WinGRASS server is used.
+
+To revert to the default server, unset the value:
+
+```sh
+g.gisenv unset=ADDONS_BASE_URL
+```
+
+Alternative servers are:
+
+- <https://ecodiv.earth/share> (Python extensions only)
+
+Note, settings explained in this section are is honoured on MS-Windows only; on
+Linux/macOS it has no effect.
+
 ## EXAMPLES
 
 ### Download and install of an extension
@@ -130,6 +166,34 @@ convenience, a shorter syntax can be used:
 
 ```sh
 g.extension r.stream.distance
+```
+
+### Installing from an alternative addon server (MS-Windows)
+
+On MS-Windows, redirect the addon server to a mirror or private host
+once per session, then use *g.extension* normally — listing and install
+both go through the configured server.
+
+```sh
+# Point at the alternative server (persists across GRASS sessions)
+g.gisenv set="ADDONS_BASE_URL=https://ecodiv.earth/share"
+
+# List what the alternative server provides
+g.extension -l
+
+# Install an extension from it
+g.extension extension=r.tpi
+
+# Revert to the default WinGRASS server
+g.gisenv unset=ADDONS_BASE_URL
+```
+
+For a one-off shell session, set the environment variable instead:
+
+```sh
+# cmd.exe
+set GRASS_ADDONS_BASE_URL=https://ecodiv.earth/share
+g.extension extension=r.tpi
 ```
 
 ### Download and install of an extension when behind a proxy
@@ -198,8 +262,10 @@ can be used:
 g.extension r.example url=http://example.com/.../r.example?format=zip
 ```
 
-Note that because of MS-Windows operating system architecture, only
-official repository is supported on this platform.
+On Windows, this will work also, but only when pointing at a server with
+pre-compiled addons and set up using the same directory layout as the
+official WinGRASS server, namely `{base}/grass{MM}/addons/grass-{M.M.P}/`
+containing one ZIP per extension and a `modules.xml` listing.
 
 ### Install a specific version from Addons
 
@@ -239,6 +305,11 @@ On MS-Windows, only the official repository is working because there is
 no way of compiling the modules (a Python replacement for Python scripts
 should be implemented).
 
+On Windows, it is now possible to point at an alternative server. However, note
+that this server should be set up using the same directory layout as the
+official WinGRASS server, namely `{base}/grass{MM}/addons/grass-{M.M.P}/`
+containing pre-compiled extensions as ZIP file, and a `modules.xml` listing.
+
 ## TROUBLESHOOTING
 
 Since extensions have to be compiled on Unix based systems (Linux, Mac
@@ -269,3 +340,5 @@ Martin Landa, Czech Technical University in Prague, Czech Republic
 Vaclav Petras, [NCSU GeoForAll
 Lab](https://geospatial.ncsu.edu/geoforall/) (support for general
 sources, partial refactoring)
+Paulo van Breugel, HAS green academy (add option for Windows users to
+point at alternative repositories)
