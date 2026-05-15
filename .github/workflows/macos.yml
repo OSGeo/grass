@@ -15,7 +15,8 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
   cancel-in-progress: true
 
-permissions: {}
+permissions:
+  actions: read
 
 jobs:
   macos_build:
@@ -92,7 +93,215 @@ jobs:
         shell: micromamba-shell {0}
         run: source ./.github/workflows/print_versions.sh
 
-      - name: Run pytest with multiple workers in parallel
+      # ================================================================
+      # Prioritization infrastructure setup
+      # ================================================================
+      - name: Get PR ID
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "PR_ID=${{ github.event.number }}" >> "$GITHUB_ENV"
+          else
+            echo "PR_ID=none" >> "$GITHUB_ENV"
+          fi
+
+      - name: Install prioritization dependencies
+        shell: micromamba-shell {0}
+        run: |
+          micromamba install -y jq
+          python -m pip install --upgrade pytest-json-report
+
+      # ================================================================
+      # SECTION 1: pytest parallel (with prioritization + fallback)
+      # ================================================================
+      - name: Check if previous parallel artifacts exist
+        shell: micromamba-shell {0}
+        run: |
+          echo "FALLBACK_PARALLEL=false" >> "$GITHUB_ENV"
+
+          ARTIFACTS_RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" 2>/dev/null)
+
+          if [[ -z "$ARTIFACTS_RESPONSE" ]]; then
+            echo "API call failed. Setting fallback."
+            echo "FALLBACK_PARALLEL=true" >> "$GITHUB_ENV"
+            exit 0
+          fi
+
+          ARTIFACT_COUNT=$(echo "$ARTIFACTS_RESPONSE" \
+            | jq -r --arg NAME "pr_${PR_ID}_macos_parallel_results" \
+              '[.artifacts[] | select(.name==$NAME and .expired==false)] | length' 2>/dev/null) || true
+
+          echo "Found ${ARTIFACT_COUNT:-0} matching parallel artifact(s)."
+
+          if [[ "${ARTIFACT_COUNT:-0}" -gt 0 ]]; then
+            echo "PREV_PARALLEL_EXISTS=true" >> "$GITHUB_ENV"
+          else
+            echo "PREV_PARALLEL_EXISTS=false" >> "$GITHUB_ENV"
+          fi
+
+      - name: Retrieve previous parallel artifacts
+        if: env.FALLBACK_PARALLEL == 'false' && env.PREV_PARALLEL_EXISTS == 'true'
+        shell: micromamba-shell {0}
+        run: |
+          ARTIFACT_URL=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" \
+            | jq -r --arg NAME "pr_${PR_ID}_macos_parallel_results" \
+              '[.artifacts[] | select(.name==$NAME)] | sort_by(.created_at) | reverse | .[0].archive_download_url' 2>/dev/null)
+
+          if [[ -z "$ARTIFACT_URL" || "$ARTIFACT_URL" == "null" ]]; then
+            echo "Artifact URL not found. Setting fallback."
+            echo "FALLBACK_PARALLEL=true" >> "$GITHUB_ENV"
+            exit 0
+          fi
+
+          mkdir -p artifacts/pr_${PR_ID}/macos_prev
+          curl -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -o artifacts/pr_${PR_ID}/macos_prev/results.zip "$ARTIFACT_URL" 2>/dev/null
+
+          unzip -o artifacts/pr_${PR_ID}/macos_prev/results.zip \
+            -d artifacts/pr_${PR_ID}/macos_prev 2>/dev/null || {
+            echo "Unzip failed. Setting fallback."
+            echo "FALLBACK_PARALLEL=true" >> "$GITHUB_ENV"
+          }
+
+      - name: Run previously failed parallel tests first
+        if: env.FALLBACK_PARALLEL == 'false'
+        shell: micromamba-shell {0}
+        run: |
+          PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
+          LD_LIBRARY_PATH="$(grass --config path)/lib:${LD_LIBRARY_PATH}"
+          export PYTHONPATH LD_LIBRARY_PATH
+
+          PR_DIR="pr_${PR_ID}"
+          PREV_DIR="artifacts/${PR_DIR}/macos_prev"
+          CURR_DIR="artifacts/${PR_DIR}/macos"
+          mkdir -p "${CURR_DIR}"
+
+          FAILED_TESTS_FILE="${PREV_DIR}/failed_tests.txt"
+          TEMP_RESULTS="${CURR_DIR}/temp_test_results.json"
+
+          if [[ -s "${FAILED_TESTS_FILE}" ]]; then
+            echo "Re-running previously failed tests first:"
+            cat "${FAILED_TESTS_FILE}"
+
+            tr -d '\r' < "${FAILED_TESTS_FILE}" \
+              | sed '/^[[:space:]]*$/d' \
+              | grep -E '\.py::' > /tmp/failed_tests_clean.txt || true
+
+            if [[ -s /tmp/failed_tests_clean.txt ]]; then
+              grep -vE '(^-m(\s|$)|^-k(\s|$)|^-n(\s|$)|^--dist(\s|$))' \
+                .github/workflows/pytest_args_ci.txt > /tmp/pytest_args_ci_rerun.txt
+
+              pytest \
+                @/tmp/pytest_args_ci_rerun.txt \
+                --json-report --json-report-file="${TEMP_RESULTS}" \
+                @/tmp/failed_tests_clean.txt || true
+            fi
+          else
+            echo "No previously failed tests found."
+            echo '{"tests": []}' > "${TEMP_RESULTS}"
+          fi
+
+      - name: Check if parallel tests failed again
+        if: env.FALLBACK_PARALLEL == 'false'
+        shell: micromamba-shell {0}
+        run: |
+          PR_DIR="pr_${PR_ID}"
+          CURR_DIR="artifacts/${PR_DIR}/macos"
+          TEMP_RESULTS="${CURR_DIR}/temp_test_results.json"
+          FAILED_AGAIN_FILE="${CURR_DIR}/failed_again.txt"
+
+          if [[ -f "${TEMP_RESULTS}" ]]; then
+            jq -r '.tests | map(select(.outcome == "failed")) | .[].nodeid' \
+              "${TEMP_RESULTS}" > "${FAILED_AGAIN_FILE}" || true
+          else
+            : > "${FAILED_AGAIN_FILE}"
+          fi
+
+          if [[ -s "${FAILED_AGAIN_FILE}" ]]; then
+            echo "Previously failed tests are still failing:"
+            cat "${FAILED_AGAIN_FILE}"
+            exit 1
+          fi
+
+      - name: Collect all parallel test nodeids
+        if: env.FALLBACK_PARALLEL == 'false'
+        shell: micromamba-shell {0}
+        run: |
+          PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
+          LD_LIBRARY_PATH="$(grass --config path)/lib:${LD_LIBRARY_PATH}"
+          export PYTHONPATH LD_LIBRARY_PATH
+
+          PR_DIR="pr_${PR_ID}"
+          CURR_DIR="artifacts/${PR_DIR}/macos"
+          mkdir -p "${CURR_DIR}"
+
+          pytest --collect-only -q -k 'not testsuite' 2>/dev/null \
+            > "${CURR_DIR}/all_tests.txt" || true
+
+      - name: Identify remaining parallel tests
+        if: env.FALLBACK_PARALLEL == 'false'
+        shell: micromamba-shell {0}
+        run: |
+          PR_DIR="pr_${PR_ID}"
+          PREV_DIR="artifacts/${PR_DIR}/macos_prev"
+          CURR_DIR="artifacts/${PR_DIR}/macos"
+
+          ALL_TESTS_FILE="${CURR_DIR}/all_tests.txt"
+          FAILED_PREV="${PREV_DIR}/failed_tests.txt"
+          REMAINING_TESTS_FILE="${CURR_DIR}/remaining_tests.txt"
+
+          if [[ -s "${FAILED_PREV}" ]]; then
+            grep -v -F -f "${FAILED_PREV}" "${ALL_TESTS_FILE}" > "${REMAINING_TESTS_FILE}" || true
+            if [[ ! -s "${REMAINING_TESTS_FILE}" ]]; then
+              cp "${ALL_TESTS_FILE}" "${REMAINING_TESTS_FILE}"
+            fi
+          else
+            cp "${ALL_TESTS_FILE}" "${REMAINING_TESTS_FILE}"
+          fi
+
+      - name: Run remaining parallel tests (prioritized)
+        if: env.FALLBACK_PARALLEL == 'false'
+        shell: micromamba-shell {0}
+        run: |
+          PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
+          LD_LIBRARY_PATH="$(grass --config path)/lib:${LD_LIBRARY_PATH}"
+          export PYTHONPATH LD_LIBRARY_PATH
+
+          PR_DIR="pr_${PR_ID}"
+          CURR_DIR="artifacts/${PR_DIR}/macos"
+          mkdir -p "${CURR_DIR}"
+
+          OUT_JSON="${CURR_DIR}/test_results.json"
+          REMAINING_TESTS_FILE="${CURR_DIR}/remaining_tests.txt"
+
+          if [[ -s "${REMAINING_TESTS_FILE}" ]]; then
+            tr -d '\r' < "${REMAINING_TESTS_FILE}" \
+              | sed '/^[[:space:]]*$/d' \
+              | grep -v 'testsuite' \
+              | grep -E '\.py::' \
+              > /tmp/remaining_tests_clean.txt
+
+            grep -vE '(^-m(\s|$)|^-k(\s|$)|^--ignore=|^--ignore-glob=|^--norecursedirs=)' \
+              .github/workflows/pytest_args_ci.txt > /tmp/pytest_args_ci_clean.txt
+            grep -vE '(^-m(\s|$)|^-k(\s|$)|^--ignore=|^--ignore-glob=|^--norecursedirs=)' \
+              .github/workflows/pytest_args_parallel.txt > /tmp/pytest_args_parallel_clean.txt
+
+            pytest \
+              @/tmp/pytest_args_ci_clean.txt \
+              @/tmp/pytest_args_parallel_clean.txt \
+              --junitxml=pytest.xdist.junit.xml \
+              --json-report --json-report-file="${OUT_JSON}" \
+              @/tmp/remaining_tests_clean.txt || true
+          else
+            echo '{"tests": []}' > "${OUT_JSON}"
+          fi
+
+      - name: Run pytest parallel (fallback - original logic)
+        if: env.FALLBACK_PARALLEL == 'true'
         shell: micromamba-shell {0}
         run: |
           PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
@@ -104,6 +313,45 @@ jobs:
             @.github/workflows/pytest_args_parallel.txt \
             --junitxml=pytest.xdist.junit.xml \
             -k 'not testsuite'
+
+      - name: Extract and upload parallel results
+        if: always()
+        shell: micromamba-shell {0}
+        run: |
+          PR_DIR="pr_${PR_ID}"
+          CURR_DIR="artifacts/${PR_DIR}/macos"
+          RESULTS="${CURR_DIR}/test_results.json"
+          FAILED="${CURR_DIR}/failed_tests.txt"
+          PASSED="${CURR_DIR}/passed_tests.txt"
+
+          mkdir -p "${CURR_DIR}"
+
+          if [[ -f "${RESULTS}" ]]; then
+            jq -r '.tests | map(select(.outcome == "failed")) | .[].nodeid' \
+              "${RESULTS}" > "${FAILED}" 2>/dev/null || : > "${FAILED}"
+            jq -r '.tests | map(select(.outcome == "passed")) | .[].nodeid' \
+              "${RESULTS}" > "${PASSED}" 2>/dev/null || : > "${PASSED}"
+          else
+            : > "${FAILED}"
+            : > "${PASSED}"
+          fi
+
+      - name: Upload parallel test artifacts
+        if: always()
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: pr_${{ env.PR_ID }}_macos_parallel_results
+          path: |
+            artifacts/pr_${{ env.PR_ID }}/macos/all_tests.txt
+            artifacts/pr_${{ env.PR_ID }}/macos/failed_tests.txt
+            artifacts/pr_${{ env.PR_ID }}/macos/passed_tests.txt
+            artifacts/pr_${{ env.PR_ID }}/macos/test_results.json
+          retention-days: 7
+          if-no-files-found: ignore
+
+      # ================================================================
+      # SECTION 2: pytest solo (unchanged — no prioritization)
+      # ================================================================
       - name: Run pytest with a single worker (for tests marked with needs_solo_run)
         shell: micromamba-shell {0}
         run: |
@@ -116,7 +364,191 @@ jobs:
             @.github/workflows/pytest_args_not_parallel.txt \
             --junitxml=pytest.needs_solo_run.junit.xml \
             -k 'not testsuite'
-      - name: Run pytest with a single worker (for gunittest-based tests)
+
+      # ================================================================
+      # SECTION 3: pytest gunittest (with prioritization + fallback)
+      # ================================================================
+      - name: Check if previous gunittest artifacts exist
+        shell: micromamba-shell {0}
+        run: |
+          echo "FALLBACK_GUNITTEST=false" >> "$GITHUB_ENV"
+
+          ARTIFACTS_RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" 2>/dev/null)
+
+          if [[ -z "$ARTIFACTS_RESPONSE" ]]; then
+            echo "FALLBACK_GUNITTEST=true" >> "$GITHUB_ENV"
+            exit 0
+          fi
+
+          COUNT=$(echo "$ARTIFACTS_RESPONSE" \
+            | jq -r --arg NAME "pr_${PR_ID}_macos_gunittest_results" \
+              '[.artifacts[] | select(.name==$NAME and .expired==false)] | length' 2>/dev/null) || true
+
+          if [[ "${COUNT:-0}" -gt 0 ]]; then
+            echo "PREV_GUNITTEST_EXISTS=true" >> "$GITHUB_ENV"
+          else
+            echo "PREV_GUNITTEST_EXISTS=false" >> "$GITHUB_ENV"
+          fi
+
+      - name: Retrieve previous gunittest artifacts
+        if: env.FALLBACK_GUNITTEST == 'false' && env.PREV_GUNITTEST_EXISTS == 'true'
+        shell: micromamba-shell {0}
+        run: |
+          ARTIFACT_URL=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" \
+            | jq -r --arg NAME "pr_${PR_ID}_macos_gunittest_results" \
+              '[.artifacts[] | select(.name==$NAME)] | sort_by(.created_at) | reverse | .[0].archive_download_url' 2>/dev/null)
+
+          if [[ -z "$ARTIFACT_URL" || "$ARTIFACT_URL" == "null" ]]; then
+            echo "FALLBACK_GUNITTEST=true" >> "$GITHUB_ENV"
+            exit 0
+          fi
+
+          mkdir -p artifacts/pr_${PR_ID}/macos_gunittest_prev
+          curl -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -o artifacts/pr_${PR_ID}/macos_gunittest_prev/results.zip "$ARTIFACT_URL" 2>/dev/null
+
+          unzip -o artifacts/pr_${PR_ID}/macos_gunittest_prev/results.zip \
+            -d artifacts/pr_${PR_ID}/macos_gunittest_prev 2>/dev/null || {
+            echo "FALLBACK_GUNITTEST=true" >> "$GITHUB_ENV"
+          }
+
+      - name: Run previously failed gunittest tests first
+        if: env.FALLBACK_GUNITTEST == 'false'
+        shell: micromamba-shell {0}
+        run: |
+          PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
+          LD_LIBRARY_PATH="$(grass --config path)/lib:${LD_LIBRARY_PATH}"
+          export PYTHONPATH LD_LIBRARY_PATH
+
+          PR_DIR="pr_${PR_ID}"
+          PREV_DIR="artifacts/${PR_DIR}/macos_gunittest_prev"
+          CURR_DIR="artifacts/${PR_DIR}/macos_gunittest"
+          mkdir -p "${CURR_DIR}"
+
+          FAILED_TESTS_FILE="${PREV_DIR}/failed_tests.txt"
+          TEMP_RESULTS="${CURR_DIR}/temp_test_results.json"
+
+          if [[ -s "${FAILED_TESTS_FILE}" ]]; then
+            tr -d '\r' < "${FAILED_TESTS_FILE}" \
+              | sed '/^[[:space:]]*$/d' \
+              | grep -E '\.py::' > /tmp/gunittest_failed_clean.txt || true
+
+            if [[ ! -s /tmp/gunittest_failed_clean.txt ]]; then
+              echo '{"tests": []}' > "${TEMP_RESULTS}"
+              exit 0
+            fi
+
+            grep -vE '(^--ignore=|^--ignore-glob=|^--norecursedirs=|^-k(\s|$)|^-m(\s|$))' \
+              .github/workflows/pytest_args_ci.txt > /tmp/pytest_args_ci_gunittest_rerun.txt
+
+            pytest \
+              @/tmp/pytest_args_ci_gunittest_rerun.txt \
+              --json-report --json-report-file="${TEMP_RESULTS}" \
+              @/tmp/gunittest_failed_clean.txt || true
+          else
+            echo "No previous gunittest failed tests."
+            echo '{"tests": []}' > "${TEMP_RESULTS}"
+          fi
+
+      - name: Stop if gunittest failures repeat
+        if: env.FALLBACK_GUNITTEST == 'false'
+        shell: micromamba-shell {0}
+        run: |
+          PR_DIR="pr_${PR_ID}"
+          CURR_DIR="artifacts/${PR_DIR}/macos_gunittest"
+          TEMP_RESULTS="${CURR_DIR}/temp_test_results.json"
+          FAILED_AGAIN_FILE="${CURR_DIR}/failed_again.txt"
+
+          if [[ -f "${TEMP_RESULTS}" ]]; then
+            jq -r '.tests | map(select(.outcome == "failed")) | .[].nodeid' \
+              "${TEMP_RESULTS}" > "${FAILED_AGAIN_FILE}" || true
+          else
+            : > "${FAILED_AGAIN_FILE}"
+          fi
+
+          if [[ -s "${FAILED_AGAIN_FILE}" ]]; then
+            echo "gunittest tests still failing:"
+            cat "${FAILED_AGAIN_FILE}"
+            exit 1
+          fi
+
+      - name: Collect gunittest nodeids
+        if: env.FALLBACK_GUNITTEST == 'false'
+        shell: micromamba-shell {0}
+        run: |
+          PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
+          LD_LIBRARY_PATH="$(grass --config path)/lib:${LD_LIBRARY_PATH}"
+          export PYTHONPATH LD_LIBRARY_PATH
+
+          PR_DIR="pr_${PR_ID}"
+          CURR_DIR="artifacts/${PR_DIR}/macos_gunittest"
+          mkdir -p "${CURR_DIR}"
+
+          ALL_TESTS_FILE="${CURR_DIR}/all_tests.txt"
+
+          pytest @.github/workflows/pytest_args_gunittest.txt \
+            --collect-only -q 2>/dev/null > "${ALL_TESTS_FILE}" || true
+
+          tr -d '\r' < "${ALL_TESTS_FILE}" | grep -E '\.py::' > /tmp/gunittest_all_clean.txt || true
+          mv /tmp/gunittest_all_clean.txt "${ALL_TESTS_FILE}"
+
+      - name: Identify remaining gunittest tests
+        if: env.FALLBACK_GUNITTEST == 'false'
+        shell: micromamba-shell {0}
+        run: |
+          PR_DIR="pr_${PR_ID}"
+          PREV_DIR="artifacts/${PR_DIR}/macos_gunittest_prev"
+          CURR_DIR="artifacts/${PR_DIR}/macos_gunittest"
+
+          ALL_TESTS_FILE="${CURR_DIR}/all_tests.txt"
+          FAILED_PREV="${PREV_DIR}/failed_tests.txt"
+          REMAINING_TESTS_FILE="${CURR_DIR}/remaining_tests.txt"
+
+          if [[ -s "${FAILED_PREV}" ]]; then
+            tr -d '\r' < "${FAILED_PREV}" | sed '/^[[:space:]]*$/d' | grep -E '\.py::' \
+              > /tmp/gunittest_failed_prev_clean.txt || true
+            grep -v -F -f /tmp/gunittest_failed_prev_clean.txt "${ALL_TESTS_FILE}" \
+              > "${REMAINING_TESTS_FILE}" || true
+            if [[ ! -s "${REMAINING_TESTS_FILE}" ]]; then
+              cp "${ALL_TESTS_FILE}" "${REMAINING_TESTS_FILE}"
+            fi
+          else
+            cp "${ALL_TESTS_FILE}" "${REMAINING_TESTS_FILE}"
+          fi
+
+      - name: Run remaining gunittest tests (prioritized)
+        if: env.FALLBACK_GUNITTEST == 'false'
+        shell: micromamba-shell {0}
+        run: |
+          PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
+          LD_LIBRARY_PATH="$(grass --config path)/lib:${LD_LIBRARY_PATH}"
+          export PYTHONPATH LD_LIBRARY_PATH
+
+          PR_DIR="pr_${PR_ID}"
+          CURR_DIR="artifacts/${PR_DIR}/macos_gunittest"
+          OUT_JSON="${CURR_DIR}/test_results.json"
+          REMAINING="${CURR_DIR}/remaining_tests.txt"
+
+          if [[ ! -s "${REMAINING}" ]]; then
+            echo '{"tests": []}' > "${OUT_JSON}"
+            exit 0
+          fi
+
+          grep -vE '(^--ignore=|^--ignore-glob=|^--norecursedirs=|^-k(\s|$)|^-m(\s|$))' \
+            .github/workflows/pytest_args_ci.txt > /tmp/pytest_args_ci_gunittest_clean.txt
+
+          pytest \
+            @/tmp/pytest_args_ci_gunittest_clean.txt \
+            --junitxml=pytest.gunittest.junit.xml \
+            --json-report --json-report-file="${OUT_JSON}" \
+            @"${REMAINING}" || true
+
+      - name: Run pytest gunittest (fallback - original logic)
+        if: env.FALLBACK_GUNITTEST == 'true'
         shell: micromamba-shell {0}
         run: |
           PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
@@ -127,6 +559,41 @@ jobs:
             @.github/workflows/pytest_args_gunittest.txt \
             --junitxml=pytest.gunittest.junit.xml
 
+      - name: Extract gunittest results
+        if: always()
+        shell: micromamba-shell {0}
+        run: |
+          PR_DIR="pr_${PR_ID}"
+          CURR_DIR="artifacts/${PR_DIR}/macos_gunittest"
+          RESULTS="${CURR_DIR}/test_results.json"
+          FAILED="${CURR_DIR}/failed_tests.txt"
+          PASSED="${CURR_DIR}/passed_tests.txt"
+
+          mkdir -p "${CURR_DIR}"
+
+          if [[ -f "${RESULTS}" ]]; then
+            jq -r '.tests | map(select(.outcome == "failed")) | .[].nodeid' \
+              "${RESULTS}" > "${FAILED}" 2>/dev/null || : > "${FAILED}"
+            jq -r '.tests | map(select(.outcome == "passed")) | .[].nodeid' \
+              "${RESULTS}" > "${PASSED}" 2>/dev/null || : > "${PASSED}"
+          else
+            : > "${FAILED}"
+            : > "${PASSED}"
+          fi
+
+      - name: Upload gunittest artifacts
+        if: always()
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: pr_${{ env.PR_ID }}_macos_gunittest_results
+          path: |
+            artifacts/pr_${{ env.PR_ID }}/macos_gunittest/all_tests.txt
+            artifacts/pr_${{ env.PR_ID }}/macos_gunittest/failed_tests.txt
+            artifacts/pr_${{ env.PR_ID }}/macos_gunittest/passed_tests.txt
+            artifacts/pr_${{ env.PR_ID }}/macos_gunittest/test_results.json
+          retention-days: 7
+          if-no-files-found: ignore
+
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
         uses: codecov/test-results-action@0fa95f0e1eeaafde2c782583b36b28ad0d8c77d3 # v1.2.1
@@ -135,6 +602,9 @@ jobs:
           flags: macos-pytest-python
           token: ${{ secrets.CODECOV_TOKEN }}
 
+      # ================================================================
+      # SECTION 4: gunittest thorough (with prioritization + fallback)
+      # ================================================================
       - name: Cache GRASS Sample Dataset
         id: cached-data
         uses: actions/cache/restore@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
@@ -159,12 +629,350 @@ jobs:
           path: sample-data/nc_spm_full_v2beta1.tar.gz
           key: nc_spm_full_v2beta1.tar.gz
 
-      - name: Run gunittest tests
+      - name: Check if previous thorough artifacts exist
+        shell: micromamba-shell {0}
+        run: |
+          echo "FALLBACK_THOROUGH=false" >> "$GITHUB_ENV"
+
+          ARTIFACTS_RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" 2>/dev/null)
+
+          if [[ -z "$ARTIFACTS_RESPONSE" ]]; then
+            echo "FALLBACK_THOROUGH=true" >> "$GITHUB_ENV"
+            exit 0
+          fi
+
+          COUNT=$(echo "$ARTIFACTS_RESPONSE" \
+            | jq -r --arg NAME "pr_${PR_ID}_macos_gunittest_thorough_results" \
+              '[.artifacts[] | select(.name==$NAME and .expired==false)] | length' 2>/dev/null) || true
+
+          if [[ "${COUNT:-0}" -gt 0 ]]; then
+            echo "PREV_THOROUGH_EXISTS=true" >> "$GITHUB_ENV"
+          else
+            echo "PREV_THOROUGH_EXISTS=false" >> "$GITHUB_ENV"
+          fi
+
+      - name: Retrieve previous thorough artifacts
+        if: env.FALLBACK_THOROUGH == 'false' && env.PREV_THOROUGH_EXISTS == 'true'
+        shell: micromamba-shell {0}
+        run: |
+          ARTIFACT_URL=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" \
+            | jq -r --arg NAME "pr_${PR_ID}_macos_gunittest_thorough_results" \
+              '[.artifacts[] | select(.name==$NAME)] | sort_by(.created_at) | reverse | .[0].archive_download_url' 2>/dev/null)
+
+          if [[ -z "$ARTIFACT_URL" || "$ARTIFACT_URL" == "null" ]]; then
+            echo "FALLBACK_THOROUGH=true" >> "$GITHUB_ENV"
+            exit 0
+          fi
+
+          mkdir -p artifacts/pr_${PR_ID}/macos_gunittest_thorough_prev
+          curl -L -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -o artifacts/pr_${PR_ID}/macos_gunittest_thorough_prev/results.zip "$ARTIFACT_URL" 2>/dev/null
+
+          unzip -o artifacts/pr_${PR_ID}/macos_gunittest_thorough_prev/results.zip \
+            -d artifacts/pr_${PR_ID}/macos_gunittest_thorough_prev 2>/dev/null || {
+            echo "FALLBACK_THOROUGH=true" >> "$GITHUB_ENV"
+          }
+
+      - name: Clean previous thorough artifact test files
+        if: env.FALLBACK_THOROUGH == 'false' && env.PREV_THOROUGH_EXISTS == 'true'
+        shell: bash
+        run: |
+          PREV_DIR="artifacts/pr_${PR_ID}/macos_gunittest_thorough_prev"
+          find "${PREV_DIR}" -name "*.py" -path "*/testsuite/*" -delete 2>/dev/null || true
+          find "${PREV_DIR}" -name "*.sh" -path "*/testsuite/*" -delete 2>/dev/null || true
+
+      - name: Run previously failed thorough tests first (stop if repeat)
+        if: env.FALLBACK_THOROUGH == 'false' && env.PREV_THOROUGH_EXISTS == 'true'
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+
+          PR_DIR="pr_${PR_ID}"
+          PREV_DIR="artifacts/${PR_DIR}/macos_gunittest_thorough_prev"
+          CURR_DIR="artifacts/${PR_DIR}/macos_gunittest_thorough"
+          mkdir -p "${CURR_DIR}"
+
+          ALL="${CURR_DIR}/all_tests.txt"
+          FAILED_PREV="${PREV_DIR}/failed_tests.txt"
+
+          if [[ ! -f "${ALL}" ]]; then
+            find . -type f \( -path "*/testsuite/*.py" -o -path "*/testsuite/*.sh" \) \
+              -not -path "./artifacts/*" \
+              | sed 's|^\./||' | sort > "${ALL}"
+          fi
+
+          if [[ ! -s "${FAILED_PREV}" ]]; then
+            echo "No previous failed thorough list; skipping rerun."
+            exit 0
+          fi
+
+          tr -d '\r' < "${FAILED_PREV}" \
+            | sed '/^[[:space:]]*$/d' \
+            | sed 's|^\./||' \
+            | sed -E 's#^.*/(full_run|rerun_prev)/##' \
+            | sort -u > /tmp/failed_prev_clean.txt
+
+          sort -u "${ALL}" > /tmp/all_sorted.txt
+          comm -12 /tmp/all_sorted.txt /tmp/failed_prev_clean.txt > /tmp/failed_prev_valid.txt
+
+          VALID_COUNT=$(wc -l < /tmp/failed_prev_valid.txt)
+          echo "Previous failed (valid in repo): ${VALID_COUNT}"
+          cat /tmp/failed_prev_valid.txt
+
+          if [[ "${VALID_COUNT}" -eq 0 ]]; then
+            echo "No valid previously-failed test files. Skipping rerun."
+            exit 0
+          fi
+
+          comm -23 /tmp/all_sorted.txt /tmp/failed_prev_valid.txt > /tmp/exclude_only_failed.txt || true
+
+          TMP_CFG="/tmp/macos_gunittest_only_failed.cfg"
+          cp .github/workflows/macos_gunittest.cfg "${TMP_CFG}"
+
+          awk '
+            BEGIN { inserted=0 }
+            {
+              print $0
+              if (!inserted && $0 ~ /^exclude[[:space:]]*=/) {
+                while ((getline line < "/tmp/exclude_only_failed.txt") > 0) {
+                  gsub(/\r/, "", line)
+                  if (line ~ /^[[:space:]]*$/) continue
+                  print "    " line
+                }
+                close("/tmp/exclude_only_failed.txt")
+                inserted=1
+              }
+            }
+          ' "${TMP_CFG}" > "${TMP_CFG}.new"
+          mv "${TMP_CFG}.new" "${TMP_CFG}"
+
+          OUTDIR="${CURR_DIR}/rerun_prev"
+          mkdir -p "${OUTDIR}"
+
+          RERUN_RC=0
+          .github/workflows/test_thorough.sh \
+            --config "${TMP_CFG}" \
+            --output "${OUTDIR}" || RERUN_RC=$?
+
+          STILL_FAILING=0
+          while IFS= read -r kv; do
+            status="$(grep -E '^status=' "$kv" | head -n 1 | cut -d= -f2- || true)"
+            if [[ "${status}" == "failed" ]]; then
+              STILL_FAILING=$((STILL_FAILING + 1))
+              name="$(grep -E '^name=' "$kv" | head -n 1 | cut -d= -f2- || true)"
+              echo "STILL FAILING: ${name}"
+            fi
+          done < <(find "${OUTDIR}" -type f -name "test_keyvalue_result.txt" 2>/dev/null || true)
+
+          if [[ "${STILL_FAILING}" -gt 0 ]]; then
+            echo "ERROR: ${STILL_FAILING} previously-failed test(s) are STILL failing. Stopping."
+            exit 1
+          fi
+
+          echo "All previously-failed tests now pass. Continuing."
+        env:
+          SAMPLE_DATA_URL: "file://${{ github.workspace }}/sample-data/\
+            nc_spm_full_v2beta1.tar.gz"
+
+      - name: Collect all thorough test files
+        if: env.FALLBACK_THOROUGH == 'false'
+        shell: micromamba-shell {0}
+        run: |
+          PR_DIR="pr_${PR_ID}"
+          CURR_DIR="artifacts/${PR_DIR}/macos_gunittest_thorough"
+          mkdir -p "${CURR_DIR}"
+
+          ALL_FILE="${CURR_DIR}/all_tests.txt"
+
+          find . -type f \
+            \( -path "*/testsuite/*.py" -o -path "*/testsuite/*.sh" \) \
+            -not -path "./artifacts/*" \
+            | sed 's|^\./||' | sort > "${ALL_FILE}"
+
+      - name: Identify remaining thorough tests
+        if: env.FALLBACK_THOROUGH == 'false'
+        shell: micromamba-shell {0}
+        run: |
+          PR_DIR="pr_${PR_ID}"
+          CURR_DIR="artifacts/${PR_DIR}/macos_gunittest_thorough"
+          PREV_DIR="artifacts/${PR_DIR}/macos_gunittest_thorough_prev"
+
+          ALL="${CURR_DIR}/all_tests.txt"
+          REM="${CURR_DIR}/remaining_tests.txt"
+          FAILED_PREV="${PREV_DIR}/failed_tests.txt"
+
+          if [[ -s "${FAILED_PREV}" ]]; then
+            tr -d '\r' < "${FAILED_PREV}" \
+              | sed '/^[[:space:]]*$/d' \
+              | sed 's|^\./||' \
+              | sed -E 's#^.*/(full_run|rerun_prev)/##' \
+              | sort -u > /tmp/failed_prev_clean.txt
+
+            sort -u "${ALL}" > /tmp/all_sorted.txt
+            comm -12 /tmp/all_sorted.txt /tmp/failed_prev_clean.txt > /tmp/failed_prev_valid.txt
+            comm -23 /tmp/all_sorted.txt /tmp/failed_prev_valid.txt > "${REM}" || true
+
+            if [[ ! -s "${REM}" ]]; then
+              cp "${ALL}" "${REM}"
+            fi
+          else
+            cp "${ALL}" "${REM}"
+          fi
+
+      - name: Run remaining thorough tests (prioritized)
+        if: env.FALLBACK_THOROUGH == 'false'
+        shell: micromamba-shell {0}
+        run: |
+          set -euo pipefail
+
+          PR_DIR="pr_${PR_ID}"
+          CURR_DIR="artifacts/${PR_DIR}/macos_gunittest_thorough"
+          PREV_DIR="artifacts/${PR_DIR}/macos_gunittest_thorough_prev"
+
+          OUTDIR="${CURR_DIR}/full_run"
+          mkdir -p "${OUTDIR}"
+
+          FAILED_PREV="${PREV_DIR}/failed_tests.txt"
+
+          if [[ ! -s "${FAILED_PREV}" ]]; then
+            echo "No previous failed list; running full suite."
+            .github/workflows/test_thorough.sh \
+              --config .github/workflows/macos_gunittest.cfg \
+              --output "${OUTDIR}"
+            exit 0
+          fi
+
+          tr -d '\r' < "${FAILED_PREV}" \
+            | sed '/^[[:space:]]*$/d' \
+            | sed 's|^\./||' \
+            | sed -E 's#^.*/(full_run|rerun_prev)/##' \
+            | sort -u > /tmp/failed_prev_clean.txt
+
+          ALL="${CURR_DIR}/all_tests.txt"
+          if [[ -f "${ALL}" ]]; then
+            sort -u "${ALL}" > /tmp/all_sorted.txt
+            comm -12 /tmp/all_sorted.txt /tmp/failed_prev_clean.txt > /tmp/failed_prev_valid.txt
+          else
+            cp /tmp/failed_prev_clean.txt /tmp/failed_prev_valid.txt
+          fi
+
+          TMP_CFG="/tmp/macos_gunittest_remaining.cfg"
+          cp .github/workflows/macos_gunittest.cfg "${TMP_CFG}"
+
+          awk '
+            BEGIN { inserted=0 }
+            {
+              print $0
+              if (!inserted && $0 ~ /^exclude[[:space:]]*=/) {
+                while ((getline line < "/tmp/failed_prev_valid.txt") > 0) {
+                  gsub(/\r/, "", line)
+                  if (line ~ /^[[:space:]]*$/) continue
+                  print "    " line
+                }
+                close("/tmp/failed_prev_valid.txt")
+                inserted=1
+              }
+            }
+          ' "${TMP_CFG}" > "${TMP_CFG}.new"
+          mv "${TMP_CFG}.new" "${TMP_CFG}"
+
+          rm -rf "${HOME}/nc_spm_full_v2beta1" || true
+          .github/workflows/test_thorough.sh \
+            --config "${TMP_CFG}" \
+            --output "${OUTDIR}"
+        env:
+          SAMPLE_DATA_URL: "file://${{ github.workspace }}/sample-data/\
+            nc_spm_full_v2beta1.tar.gz"
+
+      - name: Run gunittest thorough (fallback - original logic)
+        if: env.FALLBACK_THOROUGH == 'true'
         shell: micromamba-shell {0}
         run: .github/workflows/test_thorough.sh --config .github/workflows/macos_gunittest.cfg
         env:
           SAMPLE_DATA_URL: "file://${{ github.workspace }}/sample-data/\
             nc_spm_full_v2beta1.tar.gz"
+
+      - name: Extract failed/passed thorough files
+        if: always()
+        shell: micromamba-shell {0}
+        run: |
+          PR_DIR="pr_${PR_ID}"
+          CURR_DIR="artifacts/${PR_DIR}/macos_gunittest_thorough"
+
+          FAILED="${CURR_DIR}/failed_tests.txt"
+          PASSED="${CURR_DIR}/passed_tests.txt"
+          mkdir -p "${CURR_DIR}"
+          : > "${FAILED}"
+          : > "${PASSED}"
+
+          for OUTDIR in "${CURR_DIR}/full_run" "${CURR_DIR}/rerun_prev"; do
+            if [[ ! -d "${OUTDIR}" ]]; then
+              continue
+            fi
+
+            while IFS= read -r kv; do
+              status="$(grep -E '^status=' "$kv" | head -n 1 | cut -d= -f2- || true)"
+              [[ -z "${status}" ]] && continue
+
+              file="$(grep -E '^file=' "$kv" | head -n 1 | cut -d= -f2- || true)"
+
+              if [[ -n "${file}" ]]; then
+                file="$(echo "${file}" | sed -E 's#^.*(full_run|rerun_prev)/##')"
+              fi
+
+              if [[ -z "${file}" ]]; then
+                kv_dir="$(dirname "$kv")"
+                test_name="$(basename "$kv_dir")"
+                testsuite_dir="$(dirname "$kv_dir")"
+                testsuite_dir_rel="$(echo "${testsuite_dir}" | sed -E "s|^${OUTDIR}/||")"
+
+                for ext in py sh; do
+                  candidate="${testsuite_dir_rel}/${test_name}.${ext}"
+                  if [[ -f "${candidate}" ]] || [[ -f "./${candidate}" ]]; then
+                    file="${candidate}"
+                    break
+                  fi
+                done
+
+                if [[ -z "${file}" ]]; then
+                  found="$(find . -type f \( -name "${test_name}.py" -o -name "${test_name}.sh" \) \
+                    \( -path "*/testsuite/*" -o -path "./testsuite/*" \) -not -path "./artifacts/*" \
+                    | head -n 1 | sed 's|^\./||' || true)"
+                  file="${found}"
+                fi
+              fi
+
+              target="$(echo "${file}" | tr -d '\r' | sed 's|^\./||' | sed 's|^[[:space:]]*||;s|[[:space:]]*$||')"
+
+              [[ -z "${target}" ]] && continue
+              [[ ! "${target}" == *"testsuite/"* ]] && continue
+
+              if [[ "${status}" == "failed" ]]; then
+                echo "${target}" >> "${FAILED}"
+              elif [[ "${status}" == "passed" ]]; then
+                echo "${target}" >> "${PASSED}"
+              fi
+            done < <(find "${OUTDIR}" -type f -name "test_keyvalue_result.txt" 2>/dev/null || true)
+          done
+
+          sort -u "${FAILED}" -o "${FAILED}"
+          sort -u "${PASSED}" -o "${PASSED}"
+
+      - name: Upload thorough artifacts
+        if: always()
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: pr_${{ env.PR_ID }}_macos_gunittest_thorough_results
+          path: |
+            artifacts/pr_${{ env.PR_ID }}/macos_gunittest_thorough/all_tests.txt
+            artifacts/pr_${{ env.PR_ID }}/macos_gunittest_thorough/failed_tests.txt
+            artifacts/pr_${{ env.PR_ID }}/macos_gunittest_thorough/passed_tests.txt
+          retention-days: 7
+          if-no-files-found: ignore
 
       - name: Make HTML test report available
         if: ${{ !cancelled() }}
