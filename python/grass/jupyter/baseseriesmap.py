@@ -22,10 +22,46 @@ import weakref
 import shutil
 import multiprocessing
 
+from functools import partial
+
 import grass.script as gs
 
 from .map import Map
 from .utils import get_number_of_cores, save_gif
+
+
+def _render_worker_base(
+    i: int,
+    tmpdir: str | None = None,
+    base_file: str | None = None,
+    width: int | None = None,
+    height: int | None = None,
+    calls: list | None = None,
+    indices: list | None = None,
+    env: dict | None = None,
+):
+    """Render a single layer.
+
+    Being at top-level, this function isolates rendering
+    from the BaseSeriesMap object or object derived from it,
+    because any of those objects contains any attribute that
+    creates a lock, parallel processing with spawn would fail,
+    if this function was part of the object itself.
+    """
+    filename = os.path.join(tmpdir, f"{i}.png")
+    shutil.copyfile(base_file, filename)
+    img = Map(
+        width=width,
+        height=height,
+        filename=filename,
+        use_region=True,
+        env=env,
+        read_file=True,
+    )
+    for grass_module, kwargs in calls[i]:
+        if grass_module is not None:
+            img.run(grass_module, **kwargs)
+    return indices[i], filename
 
 
 class BaseSeriesMap:
@@ -33,7 +69,7 @@ class BaseSeriesMap:
     Base class for SeriesMap and TimeSeriesMap
     """
 
-    def __init__(self, width=None, height=None, env=None):
+    def __init__(self, width: int = 600, height: int = 400, env=None):
         """Creates an instance of the visualizations class.
 
         :param int width: width of map in pixels
@@ -101,25 +137,8 @@ class BaseSeriesMap:
         for grass_module, kwargs in self._base_layer_calls:
             img.run(grass_module, **kwargs)
 
-    def _render_worker(self, i):
-        """Function to render a single layer."""
-        filename = os.path.join(self._tmpdir.name, f"{i}.png")
-        shutil.copyfile(self.base_file, filename)
-        img = Map(
-            width=self._width,
-            height=self._height,
-            filename=filename,
-            use_region=True,
-            env=self._env,
-            read_file=True,
-        )
-        for grass_module, kwargs in self._calls[i]:
-            if grass_module is not None:
-                img.run(grass_module, **kwargs)
-        return self._indices[i], filename
-
     def render(self):
-        """Renders image for each raster in series.
+        """Render an image for each map in series.
 
         Save PNGs to temporary directory. Must be run before creating a visualization
         (i.e. show or save).
@@ -136,6 +155,7 @@ class BaseSeriesMap:
         # Random name needed to avoid potential conflict with layer names
         random_name_base = gs.append_random("base", 8) + ".png"
         self.base_file = os.path.join(self._tmpdir.name, random_name_base)
+        base_file_path = os.path.join(self._tmpdir.name, random_name_base)
         img = Map(
             width=self._width,
             height=self._height,
@@ -151,9 +171,20 @@ class BaseSeriesMap:
         self._render_baselayers(img)
 
         # Render layers in respective classes
+
         cores = get_number_of_cores(len(tasks), env=self._env)
+        render_worker = partial(
+            _render_worker_base,
+            tmpdir=str(self._tmpdir.name),
+            base_file=base_file_path,
+            width=int(self._width),
+            height=int(self._height),
+            calls=self._calls,
+            indices=self._indices,
+            env=dict(self._env) if self._env else None,
+        )
         with multiprocessing.Pool(processes=cores) as pool:
-            results = pool.starmap(self._render_worker, tasks)
+            results = pool.starmap(render_worker, tasks)
 
         for i, filename in results:
             self._base_filename_dict[i] = filename
