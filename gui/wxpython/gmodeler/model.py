@@ -486,7 +486,8 @@ class Model:
                 sval = pattern.search(value)
                 if not sval:
                     continue
-                var = sval.group(2).strip()[2:-1]  # strip '%{...}'
+                s = sval.group(2).strip()
+                var = s[2:-1] if s.startswith("%{") else s[1:]  # strip curly braces only if present
                 found = False
                 for v in variables:
                     if var.startswith(v):
@@ -539,7 +540,8 @@ class Model:
             write = False
             variables = self.GetVariables()
             for variable in variables:
-                pattern = re.compile("%{" + variable + "}")
+                # curly braces are optional
+                pattern = re.compile(r"%(?:\{" + variable + r"\}|" + variable + r")")
                 value = ""
                 if params and "variables" in params:
                     for p in params["variables"]["params"]:
@@ -560,7 +562,8 @@ class Model:
             pattern = re.compile(r"(.*)(%\{.+})(.*)")
             sval = pattern.search(data)
             if sval:
-                var = sval.group(2).strip()[2:-1]  # ignore '%{...}'
+                s = sval.group(2).strip()
+                var = s[2:-1] if s.startswith("%{") else s[1:]  # strip curly braces only if present
                 cmd = item.GetLog(string=False)[0]
                 errList.append(cmd + ": " + _("undefined variable '%s'") % var)
 
@@ -690,7 +693,8 @@ class Model:
                 # substitute variables in condition
                 variables = self.GetVariables()
                 for variable in variables:
-                    pattern = re.compile("%{" + variable + "}")
+                    # curly braces are optional
+                    pattern = re.compile(r"%(?:\{" + variable + r"\}|" + variable + r")")
                     if not pattern.search(cond):
                         continue
                     value = ""
@@ -713,7 +717,8 @@ class Model:
                 # split condition
                 # TODO: this part needs some better solution
                 condVar, condText = (x.strip() for x in re.split(r"\s* in \s*", cond))
-                pattern = re.compile("%{" + condVar + "}")
+                # curly braces are optional
+                pattern = re.compile(r"%(?:\{" + condVar + r"\}|" + condVar + r")")
                 # for vars()[condVar] in eval(condText): ?
                 vlist = []
                 if condText[0] == "`" and condText[-1] == "`":
@@ -742,12 +747,9 @@ class Model:
 
         if delInterData:
             self.DeleteIntermediateData(log)
-
-        # discard values
-        if params:
-            for item in params.values():
-                for p in item["params"]:
-                    p["value"] = ""
+        
+        # store run params
+        self._runParams = params
 
     def DeleteIntermediateData(self, log):
         """Delete intermediate data"""

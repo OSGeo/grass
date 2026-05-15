@@ -56,7 +56,8 @@ class BaseModelConverter(ABC):
             # substitute condition
             cond = item.GetLabel()
             for variable in self.model.GetVariables():
-                pattern = re.compile("%{" + variable + "}")
+                # curly braces are optional
+                pattern = re.compile(r"%(?:\{" + variable + r"\}|" + variable + r")")
                 if pattern.search(cond):
                     value = variables[variable].get("value", "")
                     if variables[variable].get("type", "string") == "string":
@@ -969,14 +970,15 @@ if __name__ == "__main__":
             # check for variables
             formattedVar = False
             for var in variables["vars"]:
-                pattern = re.compile("%{" + var + "}")
-                found = pattern.search(value)
+                # curly braces are optional
+                pattern = re.compile(r"%(?:\{" + var + r"\}|" + var + r")")
+                found = pattern.search(parameterizedValue)
                 if found:
                     foundVar = True
                     if found.end() != len(value):
                         formattedVar = True
                         parameterizedValue = pattern.sub(
-                            "{options['" + var + "']}", value
+                            "{options['" + var + "']}", parameterizedValue
                         )
                     else:
                         parameterizedValue = f'options["{var}"]'
