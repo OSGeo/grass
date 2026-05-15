@@ -482,19 +482,29 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         shape.SetHasDisplay(event.IsChecked())
         self.frame.canvas.Refresh()
 
+        model = self.frame.GetModel()
+        run_params = getattr(model, "_runParams", None)
+        resolved = {}
+        if run_params and "variables" in run_params:
+            for p in run_params["variables"]["params"]:
+                name = p.get("name", "")
+                value = p.get("value", "")
+                if name and value:
+                    resolved[name] = value
+
         try:
             if event.IsChecked():
                 # add map layer to display
                 self.frame._giface.GetLayerList().AddLayer(
                     ltype=shape.GetPrompt(),
-                    name=shape.GetValue(),
+                    name=shape.GetResolvedValue(resolved),
                     checked=True,
-                    cmd=shape.GetDisplayCmd(),
+                    cmd=shape.GetDisplayCmd(resolved),
                 )
             else:
                 # remove map layer(s) from display
                 layers = self.frame._giface.GetLayerList().GetLayersByName(
-                    shape.GetValue()
+                    shape.GetResolvedValue(resolved)
                 )
                 for layer in layers:
                     self.frame._giface.GetLayerList().DeleteLayer(layer)
