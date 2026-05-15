@@ -747,12 +747,9 @@ class Model:
 
         if delInterData:
             self.DeleteIntermediateData(log)
-
-        # discard values
-        if params:
-            for item in params.values():
-                for p in item["params"]:
-                    p["value"] = ""
+        
+        # store run params
+        self._runParams = params
 
     def DeleteIntermediateData(self, log):
         """Delete intermediate data"""

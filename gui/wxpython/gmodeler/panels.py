@@ -408,13 +408,23 @@ class ModelerPanel(wx.Panel, MainPageBase):
         # delete intermediate data
         self._deleteIntermediateData()
 
+        # store resolved variables
+        run_params = getattr(self.model, "_runParams", None)
+        resolved = {}
+        if run_params and "variables" in run_params:
+            for p in run_params["variables"]["params"]:
+                name = p.get("name", "")
+                value = p.get("value", "")
+                if name and value:
+                    resolved[name] = value
+        
         # display data if required
         for data in self.model.GetData():
             if not data.HasDisplay():
                 continue
 
             # remove existing map layers first
-            layers = self._giface.GetLayerList().GetLayersByName(data.GetValue())
+            layers = self._giface.GetLayerList().GetLayersByName(data.GetResolvedValue(resolved))
             if layers:
                 for layer in layers:
                     self._giface.GetLayerList().DeleteLayer(layer)
@@ -422,10 +432,17 @@ class ModelerPanel(wx.Panel, MainPageBase):
             # add new map layer
             self._giface.GetLayerList().AddLayer(
                 ltype=data.GetPrompt(),
-                name=data.GetValue(),
+                name=data.GetResolvedValue(resolved),
                 checked=True,
-                cmd=data.GetDisplayCmd(),
+                cmd=data.GetDisplayCmd(resolved),
             )
+        
+        # discard values
+        if run_params:
+            for item in run_params.values():
+                for p in item["params"]:
+                    p["value"] = ""
+            del self.model._runParams
 
     def _switchPageHandler(self, event, notification):
         self._switchPage(notification=notification)
