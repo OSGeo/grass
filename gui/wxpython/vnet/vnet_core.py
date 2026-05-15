@@ -527,7 +527,8 @@ class VNETAnalyses:
                     GetNearestNodeCat(
                         e=coor[0],
                         n=coor[1],
-                        field=int(params["turn_cat_layer"], tresh=params["max_dist"]),
+                        layer=int(params["turn_cat_layer"]),
+                        tresh=params["max_dist"],
                         vectMap=params["input"],
                     )
                 )
