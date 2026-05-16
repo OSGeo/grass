@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "local_proto.h"
+#include <grass/gjson.h>
 
-#define JSON_MIN_INDENT 1
 #define YAML_MIN_INDENT 0
 #define XML_MIN_INDENT  1
 #define MAX_STR_LEN     GNAME_MAX
@@ -251,45 +251,91 @@ static const char *format_token_common(const struct token *t)
  */
 static unsigned write_json(FILE *f)
 {
-    unsigned i, indent = JSON_MIN_INDENT;
+    unsigned i;
+    G_JSON_Value *root_val;
+    G_JSON_Object *obj_stack[MAX_STACK_ELEMS];
+    int depth = 0;
 
-    WRITE_VAL(f, "%s\n", "{");
+    root_val = G_json_value_init_object();
+    if (root_val == NULL) {
+        G_fatal_error(_("Failed to initialize JSON object. Out of memory?"));
+    }
+
+    obj_stack[0] = G_json_value_get_object(root_val);
+
     for (i = 0; i < size; i++) {
-        const char *val;
-
-        /* Add a comma unless there is no data tokens immediately after. */
-        const char *comma =
-            (i + 1 == size) || (i + 1 < size && token[i + 1].type == T_ESO)
-                ? ""
-                : ",";
+        G_JSON_Object *cur = obj_stack[depth];
 
         switch (token[i].type) {
-        case T_SSO:
-            WRITE_INDENT(f, indent);
-            indent++;
-            WRITE_VAL(f, "\"%s\": {\n", token[i].key);
-            continue;
-        case T_ESO:
-            if (indent == JSON_MIN_INDENT)
+        case T_SSO: {
+            G_JSON_Value *sub_val = G_json_value_init_object();
+            if (sub_val == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON object. Out of memory?"));
+            }
+            G_JSON_Object *sub_obj = G_json_value_get_object(sub_val);
+            G_json_object_set_value(cur, token[i].key, sub_val);
+
+            if (depth < MAX_STACK_ELEMS - 1) {
+                obj_stack[++depth] = sub_obj;
+            }
+            else {
+                G_warning(_("JSON nesting exceeds maximum depth"));
+                G_json_value_free(root_val);
                 return 0;
-            indent--;
-            WRITE_INDENT(f, indent);
-            WRITE_VAL(f, "}%s\n", comma);
-            continue;
-        default:
-            val = quote_val(token[i].type, format_token_common(token + i));
+            }
             break;
         }
-        if (!val)
+        case T_ESO:
+            if (depth > 0) {
+                depth--;
+            }
+            else if (depth == 0) {
+                G_json_value_free(root_val);
+                return 0;
+            }
+            break;
+
+        case T_INT:
+            G_json_object_set_number(cur, token[i].key,
+                                     (double)token[i].int_val);
+            break;
+
+        case T_BLN:
+            G_json_object_set_boolean(cur, token[i].key, token[i].int_val);
+            break;
+
+        case T_DBL:
+        case T_MTR:
+            if (isnan(token[i].dbl_val))
+                G_json_object_set_null(cur, token[i].key);
+            else
+                G_json_object_set_number(cur, token[i].key, token[i].dbl_val);
+            break;
+
+        case T_STR:
+            G_json_object_set_string(cur, token[i].key, token[i].str_val);
+            break;
+        default:
+            G_json_value_free(root_val);
             return 0;
-        WRITE_INDENT(f, indent);
-        WRITE_VAL(f, "\"%s\": ", token[i].key);
-        WRITE_VAL(f, "%s", val);
-        WRITE_VAL(f, "%s\n", comma);
+        }
     }
-    if (indent != JSON_MIN_INDENT || overflow)
+    if (depth != 0 || overflow) {
+        G_json_value_free(root_val);
         return 0;
-    WRITE_VAL(f, "%s\n", "}");
+    }
+    char *json_str = G_json_serialize_to_string_pretty(root_val);
+    if (!json_str) {
+        G_json_value_free(root_val);
+        return 0;
+    }
+
+    fputs(json_str, f);
+    fputc('\n', f);
+
+    G_json_free_serialized_string(json_str);
+    G_json_value_free(root_val);
     return 1;
 }
 
