@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-25 16:03+0000\n"
+"POT-Creation-Date: 2026-05-09 16:40+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Greek <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/el/>\n"
@@ -3181,10 +3181,35 @@ msgstr "Κλείσιμο αυτού του παραθύρου δίχως να ε
 msgid "Run the command (Ctrl+R)"
 msgstr "Εκτέλεση της εντολής (Ctrl +R)"
 
+msgid "Copy as Shell command"
+msgstr ""
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (Script API)"
+msgstr "Python script"
+
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+msgid "Copy as Python (PyGRASS)"
+msgstr ""
+
+msgid "Copy as JSON settings"
+msgstr ""
+
 msgid "Copy"
 msgstr "Αντιγραφή"
 
-msgid "Copy the current command string to the clipboard"
+msgid "More copy formats"
+msgstr ""
+
+#, fuzzy
+#| msgid "User settings"
+msgid "Paste JSON settings"
+msgstr "Επιλογές Χρήστη"
+
+msgid "Paste parameters from JSON string in the clipboard"
 msgstr ""
 
 msgid "Show manual page of the command (Ctrl+H)"
@@ -3201,6 +3226,45 @@ msgstr ""
 
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr ""
+
+msgid "JSON copied to clipboard"
+msgstr ""
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+msgid "Module Mismatch"
+msgstr ""
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid input"
+msgid "Invalid Data"
+msgstr "Μη έγκυρη εισαγωγή"
+
+#, fuzzy
+#| msgid "Error"
+msgid "Paste Error"
+msgstr "Σφάλμα"
+
+#, python-format
+msgid "%s copied to clipboard"
 msgstr ""
 
 msgid "Required"
@@ -7024,6 +7088,9 @@ msgid "Save expression to file"
 msgstr ""
 
 msgid "Load expression from file"
+msgstr ""
+
+msgid "Copy the current command string to the clipboard"
 msgstr ""
 
 msgid "exponent"
