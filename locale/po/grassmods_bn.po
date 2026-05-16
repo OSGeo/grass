@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_bn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-26 12:47+0000\n"
+"POT-Creation-Date: 2026-05-08 19:11+0000\n"
 "PO-Revision-Date: 2026-03-14 11:21+0000\n"
 "Last-Translator: Faysal Mahmud  <faysalmahmud4300@gmail.com>\n"
 "Language-Team: Bengali <https://weblate.osgeo.org/projects/grass-gis/grassmods-8-5/bn/>\n"
@@ -31089,6 +31089,9 @@ msgstr ""
 msgid "Missing attribute table for vector map <%s>"
 msgstr ""
 
+msgid "Too many columns to copy the table"
+msgstr ""
+
 #, c-format
 msgid "Missing table for <%s>"
 msgstr ""
@@ -31141,6 +31144,9 @@ msgstr ""
 
 #, c-format
 msgid "%d vector maps patched"
+msgstr ""
+
+msgid "Too many columns to copy records"
 msgstr ""
 
 #, c-format

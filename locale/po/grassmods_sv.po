@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-26 12:47+0000\n"
+"POT-Creation-Date: 2026-05-08 19:11+0000\n"
 "PO-Revision-Date: 2026-01-08 02:38+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
@@ -31370,6 +31370,11 @@ msgstr "Lägga till filer i befintliga filer (överskrivning av befintliga filer
 msgid "Missing attribute table for vector map <%s>"
 msgstr "Attributtabell saknas för vektorkarta <%s>"
 
+#, fuzzy
+#| msgid "Too many units to place"
+msgid "Too many columns to copy the table"
+msgstr "För många enheter att placera"
+
 #, c-format
 msgid "Missing table for <%s>"
 msgstr "Tabell saknas för <%s>"
@@ -31423,6 +31428,11 @@ msgstr "Huvudinformationen kan också behöva redigeras"
 #, c-format
 msgid "%d vector maps patched"
 msgstr "%d Vektorkartor patchade"
+
+#, fuzzy
+#| msgid "Too many column names"
+msgid "Too many columns to copy records"
+msgstr "För många kolumnnamn"
 
 #, c-format
 msgid "Cannot open select cursor: '%s'"
