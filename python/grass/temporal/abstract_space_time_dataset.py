@@ -21,7 +21,10 @@ from datetime import datetime
 from pathlib import Path
 from grass.exceptions import FatalError
 
-from .abstract_dataset import AbstractDataset, AbstractDatasetComparisonKeyStartTime
+from .abstract_dataset import (
+    AbstractDataset,
+    AbstractDatasetComparisonKeyStartTime,
+)
 from .core import (
     get_current_mapset,
     get_sql_template_path,
@@ -177,6 +180,24 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         self.temporal_extent.print_shell_info()
         self.spatial_extent.print_shell_info()
         self.metadata.print_shell_info()
+
+    def _to_json_dict(self):
+        """Build a dictionary from internal metadata storage for JSON output.
+
+        Extends the base implementation by adding computed fields that are
+        present in shell output but not stored in the D dictionaries.
+        For example, semantic_labels is fetched on-the-fly via SQL.
+
+        :return: Complete metadata dictionary with computed fields included
+        """
+        data = super()._to_json_dict()
+
+        # Add computed fields from metadata that are in shell output
+        # but not in metadata.D (fetched on-the-fly via SQL)
+        if hasattr(self.metadata, "get_semantic_labels"):
+            data["semantic_labels"] = self.metadata.get_semantic_labels()
+
+        return data
 
     def print_history(self) -> None:
         """Print history information about this class in human readable
