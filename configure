@@ -9299,7 +9299,7 @@ proj_version="$proj_ver_major.$proj_ver_minor.$proj_ver_patch"
 if test "$(expr "$proj_ver_major" \>= 9)" = 1; then
   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: using PROJ version \"${proj_version}\"" >&5
 printf "%s\n" "using PROJ version \"${proj_version}\"" >&6; }
-else
+elif test "$cross_compiling" != "yes" ; then
   as_fn_error $? "*** PROJ version 9.0.0 or newer is required (found version \"${proj_version}\")" "$LINENO" 5
 fi
 
