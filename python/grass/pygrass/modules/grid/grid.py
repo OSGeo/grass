@@ -352,6 +352,15 @@ def get_cmd(cmdd):
     ]
 
 
+def _grass_worker_init():
+    """Initialize GRASS environment in spawned worker processes (Windows/spawn)."""
+    gisbase = os.environ.get("GISBASE", "")
+    if gisbase and gisbase not in sys.path:
+        etc_python = os.path.join(gisbase, "etc", "python")
+        if etc_python not in sys.path:
+            sys.path.insert(0, etc_python)
+
+
 def cmd_exe(args):
     """Create a mapset, and execute a cmd inside.
 
@@ -383,7 +392,7 @@ def cmd_exe(args):
         # reset the inputs to
         for key in mapnames:
             inputs[key] = mapnames[key]
-        cmd["inputs"] = inputs.items()
+        cmd["inputs"] = list(inputs.items())
         # set the region to the tile
         sub.Popen(["g.region", "raster=%s" % key], shell=shell, env=env).wait()
     else:
@@ -615,6 +624,8 @@ class GridModule:
         else:
             ldst, gdst = self.mset.location, self.mset.gisdbase
         cmd = self.module.get_dict()
+        cmd["inputs"] = list(cmd["inputs"])
+        cmd["outputs"] = list(cmd["outputs"])
         groups = list(select(self.module.inputs, "group"))
         for row, box_row in enumerate(self.bboxes):
             for col, box in enumerate(box_row):
@@ -628,14 +639,12 @@ class GridModule:
                         inms[key] = "%s@%s" % (self.inlist[key][indx], self.mset.name)
                 # set the computational region, prepare the region parameters
                 bbox = {
-                    **{k[0]: str(v) for k, v in box.items()[:-2]},
+                    **{k[0]: str(v) for k, v in list(box.items())[:-2]},
                     "nsres": "%f" % reg.nsres,
                     "ewres": "%f" % reg.ewres,
                 }
 
-                new_mset = (
-                    self.msetstr % (self.start_row + row, self.start_col + col),
-                )
+                new_mset = self.msetstr % (self.start_row + row, self.start_col + col)
                 works.append(
                     (
                         bbox,
@@ -683,13 +692,19 @@ class GridModule:
             for wrk in self.get_works():
                 cmd_exe(wrk)
         else:
-            pool = mltp.Pool(processes=self.processes)
+            ctx = mltp.get_context("spawn")
+            ctx.set_executable(sys.executable)
+            pool = ctx.Pool(processes=self.processes, initializer=_grass_worker_init)
             result = pool.map_async(cmd_exe, self.get_works())
             result.wait()
             pool.close()
             pool.join()
             if not result.successful():
-                raise RuntimeError(_("Execution of subprocesses was not successful"))
+                try:
+                    result.get()
+                except Exception as e:
+                    msg = f"Worker failed with: {e}"
+                    raise RuntimeError(msg) from e
 
         if patch:
             if self.move:

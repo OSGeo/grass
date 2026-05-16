@@ -745,6 +745,16 @@ class Module:
     def __repr__(self):
         return "Module(%r)" % self.name
 
+    def __getstate__(self):
+        """Make Module picklable by excluding unpicklable popen object."""
+        state = self.__dict__.copy()
+        state["_popen"] = None
+        return state
+
+    def __setstate__(self, state):
+        """Restore Module from pickled state."""
+        self.__dict__.update(state)
+
     @docstring_property(__doc__)
     def __doc__(self):
         """{cmd_name}({cmd_params})"""
