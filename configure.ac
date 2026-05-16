@@ -765,7 +765,7 @@ proj_version="$proj_ver_major.$proj_ver_minor.$proj_ver_patch"
 
 if test "$(expr "$proj_ver_major" \>= 9)" = 1; then
   AC_MSG_RESULT([using PROJ version "${proj_version}"])
-else
+elif test "$cross_compiling" != "yes" ; then
   AC_MSG_ERROR([*** PROJ version 9.0.0 or newer is required (found version "${proj_version}")])
 fi
 
