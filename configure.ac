@@ -963,7 +963,7 @@ else
   if test "$(expr "$gdal_version_major" \>= 3)" = 1 && \
       test "$(expr "$gdal_version_minor" \>= 7)" = 1; then
       AC_MSG_RESULT([using GDAL version "${gdal_version}"])
-  else
+  elif test "$cross_compiling" != "yes" ; then
       AC_MSG_ERROR([*** GDAL version 3.7 or newer is required (found version "${gdal_version}")])
   fi
 
