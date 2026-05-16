@@ -10345,7 +10345,7 @@ CPPFLAGS=$ac_save_cppflags
       test "$(expr "$gdal_version_minor" \>= 7)" = 1; then
       { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: using GDAL version \"${gdal_version}\"" >&5
 printf "%s\n" "using GDAL version \"${gdal_version}\"" >&6; }
-  else
+  elif test "$cross_compiling" != "yes" ; then
       as_fn_error $? "*** GDAL version 3.7 or newer is required (found version \"${gdal_version}\")" "$LINENO" 5
   fi
 
