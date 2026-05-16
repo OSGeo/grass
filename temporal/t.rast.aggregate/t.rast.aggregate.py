@@ -100,6 +100,11 @@
 # %end
 
 # %flag
+# % key: e
+# % description: Extend existing space time raster dataset
+# %end
+
+# %flag
 # % key: n
 # % description: Register Null maps
 # %end
@@ -120,6 +125,8 @@ def main():
     gran = options["granularity"]
     base = options["basename"]
     register_null = flags["n"]
+    extend = flags["e"]
+    overwrite = gs.overwrite()
     method = options["method"]
     sampling = options["sampling"]
     offset = options["offset"]
@@ -144,8 +151,11 @@ def main():
         dbif.close()
         gs.fatal(_("Space time raster dataset <%s> is empty") % input)
 
-    # We will create the strds later, but need to check here
-    tgis.check_new_stds(output, "strds", dbif, gs.overwrite())
+    # Check if output can be opened as requested before processing starts.
+    # This is a lightweight check that does not create or open the dataset.
+    output_exists = tgis.check_open_output_stds(
+        output, "strds", dbif=dbif, overwrite=overwrite, extend=extend
+    )
 
     start_time = map_list[0].temporal_extent.get_start_time()
 
@@ -195,13 +205,13 @@ def main():
         method=method,
         nprocs=nprocs,
         spatial=None,
-        overwrite=gs.overwrite(),
+        overwrite=overwrite,
         file_limit=file_limit,
     )
-
     if output_list:
+        # Open or create the output STRDS after processing succeeds
         temporal_type, semantic_type, title, description = sp.get_initial_values()
-        output_strds = tgis.open_new_stds(
+        output_strds = tgis.open_output_stds(
             output,
             "strds",
             temporal_type,
@@ -209,8 +219,10 @@ def main():
             description,
             semantic_type,
             dbif,
-            gs.overwrite(),
+            overwrite,
+            extend,
         )
+
         register_null = not register_null
 
         tgis.register_map_object_list(
@@ -221,10 +233,16 @@ def main():
             sp.get_relative_time_unit(),
             dbif,
         )
-
+        # Refresh STRDS object to reflect newly registered maps
+        output_strds.select(dbif)
         # Update the raster metadata table entries with aggregation type
         output_strds.set_aggregation_type(method)
         output_strds.metadata.update(dbif)
+
+        # Update the command history. When extending, only update if the
+        # command string is not already recorded to avoid duplication.
+        if not output_exists or extend:
+            output_strds.update_command_string(dbif=dbif)
 
     dbif.close()
 
