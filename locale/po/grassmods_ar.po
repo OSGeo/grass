@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-28 15:48+0000\n"
+"POT-Creation-Date: 2026-05-09 16:40+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Arabic <https://weblate.osgeo.org/projects/grass-gis/grassmods/ar/>\n"
@@ -2513,6 +2513,7 @@ msgstr "عدد الأرقام المميزة , النقط العشرية فقط"
 msgid "Get text color from cell color value"
 msgstr ""
 
+#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -22750,6 +22751,7 @@ msgstr ""
 msgid "Input raster must be of type CELL."
 msgstr "وصف مبسط للملف الراسترى المخرج"
 
+#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, fuzzy, c-format
@@ -34789,6 +34791,10 @@ msgstr ""
 msgid "Missing attribute table for vector map <%s>"
 msgstr "[%s]لم يتم فتح ملف الخلية ل "
 
+#, fuzzy
+msgid "Too many columns to copy the table"
+msgstr "<%s> اسم الملف المستخدم لل"
+
 #, fuzzy, c-format
 msgid "Missing table for <%s>"
 msgstr "استخدام احداثيات مركز الخريطة\n"
@@ -34845,6 +34851,9 @@ msgstr ""
 #, fuzzy, c-format
 msgid "%d vector maps patched"
 msgstr "%d حدثت من التسجيلات\n"
+
+msgid "Too many columns to copy records"
+msgstr ""
 
 #, fuzzy, c-format
 msgid "Cannot open select cursor: '%s'"

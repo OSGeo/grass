@@ -76,7 +76,7 @@ int load_rasters3d(const struct GParams *params, nv_data *data)
 
    \return number of defined isosurfaces
  */
-int add_isosurfs(const struct GParams *params, nv_data *data UNUSED)
+int add_isosurfs(const struct GParams *params, nv_data *data G_UNUSED)
 {
     int i;
     float level;
@@ -247,7 +247,7 @@ int add_isosurfs(const struct GParams *params, nv_data *data UNUSED)
     return 1;
 }
 
-int add_slices(const struct GParams *params, nv_data *data UNUSED)
+int add_slices(const struct GParams *params, nv_data *data G_UNUSED)
 {
     int i;
     int num, nvols, *vol_list, id, nslices, axis;

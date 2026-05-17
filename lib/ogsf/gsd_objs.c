@@ -1279,8 +1279,8 @@ int gsd_scalebar(float *pos2, float len, GLuint fontbase, unsigned long bar_clr,
  *                 Integer representing the color to use for the text.
  * @return 1
  */
-int gsd_scalebar_v2(float *pos, float len, GLuint fontbase UNUSED,
-                    unsigned long bar_clr, unsigned long text_clr UNUSED)
+int gsd_scalebar_v2(float *pos, float len, GLuint fontbase G_UNUSED,
+                    unsigned long bar_clr, unsigned long text_clr G_UNUSED)
 {
     float base[6][3];
     float Ntop[] = {0.0, 0.0, 1.0};

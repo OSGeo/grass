@@ -70,8 +70,8 @@ int main(int argc, char *argv[])
                           raster->answer, output->answer);
 }
 
-int patchAreaDistributionRANGE(int fd, char **par UNUSED, struct area_entry *ad,
-                               double *result)
+int patchAreaDistributionRANGE(int fd, char **par G_UNUSED,
+                               struct area_entry *ad, double *result)
 {
     double indice = 0;
     int ris = RLI_OK;

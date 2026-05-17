@@ -38,10 +38,10 @@ struct rgb_color palette[16] = {
 /* *************************************************************** */
 /* *************************************************************** */
 /* *************************************************************** */
-int plot1(struct Map_info *Map, int type, int area UNUSED,
+int plot1(struct Map_info *Map, int type, int area G_UNUSED,
           struct cat_list *Clist, const struct color_rgb *color,
           const struct color_rgb *fcolor, int chcat, SYMBOL *Symb,
-          int size UNUSED, int id_flag, int table_colors_flag,
+          int size G_UNUSED, int id_flag, int table_colors_flag,
           int cats_color_flag, char *rgb_column, int default_width,
           char *width_column, double width_scale)
 {

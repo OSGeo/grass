@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-28 15:48+0000\n"
+"POT-Creation-Date: 2026-05-09 16:40+0000\n"
 "PO-Revision-Date: 2026-03-22 08:14+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grassmods/hi/>\n"
@@ -2231,6 +2231,7 @@ msgstr "महत्वपूर्ण अंकों की संख्या
 msgid "Get text color from cell color value"
 msgstr "सेल रंग मान से टेक्स्ट का रंग प्राप्त करें"
 
+#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -20219,6 +20220,7 @@ msgstr "बहुत सारी श्रेणियाँ (मिलीं: 
 msgid "Input raster must be of type CELL."
 msgstr "इनपुट रैस्टर सेल प्रकार का होना चाहिए।"
 
+#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
@@ -31239,6 +31241,11 @@ msgstr "फ़ाइलों को मौजूदा फ़ाइल मे�
 msgid "Missing attribute table for vector map <%s>"
 msgstr "वेक्टर मानचित्र <%s> के लिए अनुपलब्ध विशेषता तालिका"
 
+#, fuzzy
+#| msgid "Too many units to place"
+msgid "Too many columns to copy the table"
+msgstr "रखने के लिए बहुत सारी इकाइयाँ"
+
 #, c-format
 msgid "Missing table for <%s>"
 msgstr "<%s> के लिए गुम तालिका"
@@ -31292,6 +31299,11 @@ msgstr "हेडर जानकारी को भी संपादित �
 #, c-format
 msgid "%d vector maps patched"
 msgstr "%d वेक्टर मानचित्र पैच किए गए"
+
+#, fuzzy
+#| msgid "Too many column names"
+msgid "Too many columns to copy records"
+msgstr "बहुत सारे स्तंभ नाम"
 
 #, c-format
 msgid "Cannot open select cursor: '%s'"

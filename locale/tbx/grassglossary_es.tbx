@@ -160,7 +160,7 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>netCDF</term></tig></langSet>
-                <langSet xml:lang="es"><tig><term/></tig></langSet>
+                <langSet xml:lang="es"><tig><term>netCDF</term></tig></langSet>
                 <note from="translator">File format</note>
                 <descrip>File format, Network Common Data Form, with lowercase n when not at the beginning of a sentence (in English)</descrip>
             </termEntry>
@@ -313,7 +313,7 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>nodes</term></tig></langSet>
-                <langSet xml:lang="es"><tig><term></term></tig></langSet>
+                <langSet xml:lang="es"><tig><term/></tig></langSet>
             </termEntry>
         </body>
     </text>

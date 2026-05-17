@@ -22,6 +22,7 @@ for details.
 import os
 import re
 import sys
+import keyword
 import xml.etree.ElementTree as ET
 from xml.parsers import expat
 
@@ -305,8 +306,8 @@ class processTask:
         self.task.name = self.root.get("name", default="unknown")
 
         # keywords
-        for keyword in self._get_node_text(self.root, "keywords").split(","):
-            self.task.keywords.append(keyword.strip())
+        for kw in self._get_node_text(self.root, "keywords").split(","):
+            self.task.keywords.append(kw.strip())
 
         self.task.label = self._get_node_text(self.root, "label")
         self.task.description = self._get_node_text(self.root, "description")
@@ -673,3 +674,85 @@ def cmdstring_to_tuple(cmd):
     :return: command as tuple
     """
     return cmdlist_to_tuple(split(cmd))
+
+
+def cmd_to_python_args(cmd):
+    """Format parameters for Python calls, handling illegal keywords.
+
+    :param cmd: list of command arguments (e.g. ['v.distance', 'from=map1', 'to=map2'])
+    :return: string of formatted Python arguments ending with a closing parenthesis ')'
+    """
+    flags = ""
+    python_params = []
+    # Dictionary for keys that Python can't handle as direct arguments
+    illegal_keys = {}
+
+    for item in cmd[1:]:
+        if item.startswith("--"):
+            val = item.lstrip("-")
+            if val in {"overwrite", "o"}:
+                python_params.append("overwrite=True")
+            elif val == "verbose":
+                python_params.append("verbose=True")
+            elif val == "quiet":
+                python_params.append("quiet=True")
+            else:
+                python_params.append(f"{val}=True")
+        elif item.startswith("-"):
+            flags += item.lstrip("-")
+        elif "=" in item:
+            k, v = item.split("=", 1)
+            # If key is a keyword (from, in) or contains dots/dashes,
+            # put it into the 'illegal' dictionary
+            if keyword.iskeyword(k) or not k.isidentifier():
+                illegal_keys[k] = v
+            else:
+                python_params.append(f"{k}={v!r}")
+
+    # Build the command string
+    args = []
+
+    if flags:
+        args.append(f"flags='{flags}'")
+
+    args.extend(python_params)
+
+    if illegal_keys:
+        # Safe unpacking: **{'from': 'val', 'to': 'val'}
+        args.append(f"**{illegal_keys!r}")
+
+    return ", ".join(args) + ")"
+
+
+def cmd_to_dict(cmd):
+    """Extract a dictionary of parameters from the cmd list.
+
+    :param cmd: list of command arguments
+    :return: dictionary of parameters and flags
+    """
+    flags = ""
+    python_params = []
+
+    for item in cmd[1:]:
+        if item.startswith("--"):
+            val = item.lstrip("-")
+            if val in {"overwrite", "o"}:
+                python_params.append("overwrite=True")
+            elif val == "verbose":
+                python_params.append("verbose=True")
+            elif val == "quiet":
+                python_params.append("quiet=True")
+            else:
+                python_params.append(f"{val}=True")
+        elif item.startswith("-"):
+            flags += item.lstrip("-")
+        elif "=" in item:
+            k, v = item.split("=", 1)
+            python_params.append(f"{k}={v}")
+
+    params = {"flags": flags}
+    for item in python_params:
+        if "=" in item:
+            k, v = item.split("=", 1)
+            params[k] = v
+    return params

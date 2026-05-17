@@ -137,7 +137,7 @@ public:
     {
         return (x.k == y.k);
     }
-    friend merge_key operator+(const merge_key &x, const merge_key &y UNUSED)
+    friend merge_key operator+(const merge_key &x, const merge_key &y G_UNUSED)
     {
         assert(0);
         return x;
@@ -533,7 +533,7 @@ em_buffer<T, Key>::~em_buffer()
 // memory (by a previous get_stream call, for instance) in order to
 // find its length
 template <class T, class Key>
-void em_buffer<T, Key>::check_name(unsigned int i UNUSED)
+void em_buffer<T, Key>::check_name(unsigned int i G_UNUSED)
 {
 
 #ifdef EMBUF_CHECK_NAME
