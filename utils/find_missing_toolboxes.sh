@@ -19,7 +19,7 @@ registered=$(
     } | sort -u
 )
 
-# Find tool directories: up to three levels deep anywhere in the tree, 
+# Find tool directories: up to three levels deep anywhere in the tree,
 # name matches the GRASS tool naming convention, and contains a Python script or C main.c.
 source_tools=$(
     find . -mindepth 2 -maxdepth 3 -type d -regex '.*/[a-z][a-z0-9]*\.[a-z][a-z0-9._]*' \
