@@ -19,9 +19,18 @@ registered=$(
     } | sort -u
 )
 
-# Find tool directories: one level deep anywhere in the tree, name matches the GRASS tool naming convention.
-source_tools=$(find . -mindepth 2 -maxdepth 2 -type d -regex '.*/[a-z][a-z0-9]*\.[a-z][a-z0-9._]*' \
-    | sed 's|.*/||' | sort -u)
+# Find tool directories: up to three levels deep anywhere in the tree, 
+# name matches the GRASS tool naming convention, and contains a Python script or C main.c.
+source_tools=$(
+    find . -mindepth 2 -maxdepth 3 -type d -regex '.*/[a-z][a-z0-9]*\.[a-z][a-z0-9._]*' \
+        | while IFS= read -r dir; do
+            name="${dir##*/}"
+            if [ -f "${dir}/${name}.py" ] || [ -f "${dir}/main.c" ]; then
+                echo "$name"
+            fi
+          done \
+        | sort -u
+)
 
 # Tools intentionally absent from the GUI menu.  One name per line so that grep -Fxf can match exactly.
 #   d.*  Display tools are called from the map display, not the module menu.
