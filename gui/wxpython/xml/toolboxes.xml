@@ -30,12 +30,24 @@
       <module-item name="m.nviz.image">
         <label>3D image rendering</label>
       </module-item>
+      <module-item name="m.nviz.script">
+        <label>3D visualization script</label>
+      </module-item>
       <wxgui-item name="AnimationTool"/>
       <separator/>
       <module-item name="m.cogo">
         <label>Bearing/distance to coordinates</label>
       </module-item>
+      <module-item name="m.measure">
+        <label>Measure map distances</label>
+      </module-item>
+      <module-item name="m.transform">
+        <label>Transform coordinates (affine)</label>
+      </module-item>
       <separator/>
+      <module-item name="ps.map">
+        <label>PostScript map output</label>
+      </module-item>
       <wxgui-item name="CartographicComposer"/>
       <wxgui-item name="MapSwipe"/>
       <separator/>
@@ -166,6 +178,25 @@
       <wxgui-item name="CorrectsScanningDistortions">
         <label>Corrects scanning distortions</label>
       </wxgui-item>
+      <separator/>
+      <module-item name="i.ortho.init">
+        <label>Initialize ortho parameters</label>
+      </module-item>
+      <module-item name="i.ortho.camera">
+        <label>Camera parameters</label>
+      </module-item>
+      <module-item name="i.ortho.elev">
+        <label>Elevation model for orthorectification</label>
+      </module-item>
+      <module-item name="i.ortho.target">
+        <label>Target group for orthorectification</label>
+      </module-item>
+      <module-item name="i.ortho.transform">
+        <label>Compute ortho transformation</label>
+      </module-item>
+      <module-item name="i.ortho.rectify">
+        <label>Orthorectify imagery</label>
+      </module-item>
     </items>
   </toolbox>
   <toolbox name="Volumes">
@@ -190,6 +221,18 @@
       </module-item>
       <module-item name="r3.gwflow">
         <label>Groundwater modeling</label>
+      </module-item>
+      <module-item name="r3.flow">
+        <label>3D flow lines</label>
+      </module-item>
+      <module-item name="r3.gradient">
+        <label>3D gradient</label>
+      </module-item>
+      <module-item name="r3.neighbors">
+        <label>3D neighborhood analysis</label>
+      </module-item>
+      <module-item name="r3.mkdspf">
+        <label>Create 3D display file</label>
       </module-item>
       <module-item name="v.vol.rst">
         <label>Interpolate 3D raster from points</label>
@@ -377,6 +420,12 @@
       <module-item name="r3.in.v5d">
         <label>Vis5D import</label>
       </module-item>
+      <module-item name="r3.in.lidar">
+        <label>LiDAR 3D import</label>
+      </module-item>
+      <module-item name="r3.in.xyz">
+        <label>XYZ to 3D raster series</label>
+      </module-item>
     </items>
   </toolbox>
   <toolbox name="ImportDatabaseTable">
@@ -468,6 +517,9 @@
       <module-item name="v.pack">
         <label>Pack vector map</label>
       </module-item>
+      <module-item name="v.out.lidar">
+        <label>Export to LiDAR format</label>
+      </module-item>
     </items>
   </toolbox>
   <toolbox name="Export3DRasterMaps">
@@ -484,6 +536,9 @@
       </module-item>
       <module-item name="r3.out.vtk">
         <label>VTK export</label>
+      </module-item>
+      <module-item name="r3.out.netcdf">
+        <label>NetCDF export</label>
       </module-item>
     </items>
   </toolbox>
@@ -569,6 +624,9 @@
       <module-item name="r.buffer">
         <label>Buffer rasters</label>
       </module-item>
+      <module-item name="r.buffer.lowmem">
+        <label>Buffer rasters (low memory)</label>
+      </module-item>
       <module-item name="r.circle">
         <label>Concentric circles</label>
       </module-item>
@@ -617,6 +675,13 @@
       <separator/>
       <wxgui-item name="CreateNewLocation"/>
       <wxgui-item name="CreateNewMapset"/>
+      <separator/>
+      <module-item name="g.download.project">
+        <label>Download project from web</label>
+      </module-item>
+      <module-item name="g.download.location">
+        <label>Download project from web (deprecated name)</label>
+      </module-item>
     </items>
   </toolbox>
   <toolbox name="MapProjections">
@@ -637,6 +702,10 @@
     <items>
       <wxgui-item name="InstallExtensionFromAddons"/>
       <wxgui-item name="ManageExtension"/>
+      <separator/>
+      <module-item name="g.extension.all">
+        <label>Rebuild or remove all addons</label>
+      </module-item>
     </items>
   </toolbox>
   <toolbox name="DevelopRasterMap">
@@ -694,6 +763,13 @@
       <module-item name="r.buildvrt">
         <label>Build a VRT (Virtual Raster)</label>
       </module-item>
+      <module-item name="r.tile">
+        <label>Tile raster map</label>
+      </module-item>
+      <separator/>
+      <module-item name="r.semantic.label">
+        <label>Manage semantic labels</label>
+      </module-item>
     </items>
   </toolbox>
   <toolbox name="ManageRasterColors">
@@ -719,6 +795,9 @@
       <module-item name="r.his">
         <label>RGB to HIS</label>
       </module-item>
+      <module-item name="r.rgb">
+        <label>Split raster into RGB</label>
+      </module-item>
     </items>
   </toolbox>
   <toolbox name="QueryRasterMaps">
@@ -729,6 +808,9 @@
       </module-item>
       <module-item name="r.what.color">
         <label>Query colors by value</label>
+      </module-item>
+      <module-item name="r.mask.status">
+        <label>Query mask status</label>
       </module-item>
     </items>
   </toolbox>
@@ -1143,6 +1225,15 @@
       <module-item name="r.coin">
         <label>Mutual category occurrences</label>
       </module-item>
+      <module-item name="r.mode">
+        <label>Modal category value</label>
+      </module-item>
+      <module-item name="r.statistics">
+        <label>Zonal statistics</label>
+      </module-item>
+      <module-item name="r.object.geometry">
+        <label>Object geometry statistics</label>
+      </module-item>
     </items>
   </toolbox>
   <toolbox name="DevelopVectorMap">
@@ -1188,6 +1279,15 @@
       <separator/>
       <module-item name="v.support">
         <label>Support file maintenance</label>
+      </module-item>
+      <module-item name="v.timestamp">
+        <label>Manage timestamp</label>
+      </module-item>
+      <module-item name="v.label.sa">
+        <label>Create labels with simulated annealing</label>
+      </module-item>
+      <module-item name="v.decimate">
+        <label>Decimate points</label>
       </module-item>
     </items>
   </toolbox>
@@ -1270,6 +1370,9 @@
       </module-item>
       <module-item name="v.to.3d">
         <label>2D vector to 3D vector</label>
+      </module-item>
+      <module-item name="v.to.lines">
+        <label>Convert areas or points to lines</label>
       </module-item>
     </items>
   </toolbox>
@@ -1433,6 +1536,12 @@
       <module-item name="v.what.rast">
         <label>Sample raster maps at point locations</label>
       </module-item>
+      <module-item name="v.what.rast3">
+        <label>Sample 3D raster at point locations</label>
+      </module-item>
+      <module-item name="v.what.strds">
+        <label>Sample temporal raster dataset at point locations</label>
+      </module-item>
       <module-item name="v.sample">
         <label>Sample raster neighborhood around points</label>
       </module-item>
@@ -1515,6 +1624,12 @@
       <wxgui-item name="CreateOrEditGroup"/>
       <module-item name="i.target">
         <label>Target group</label>
+      </module-item>
+      <module-item name="i.find">
+        <label>Find imagery files</label>
+      </module-item>
+      <module-item name="i.band.library">
+        <label>Semantic label library</label>
       </module-item>
       <separator/>
       <module-item name="i.image.mosaic">
@@ -1707,6 +1822,12 @@
       <module-item name="r3.timestamp">
         <label>Manage timestamp</label>
       </module-item>
+      <module-item name="r3.retile">
+        <label>Retile 3D raster</label>
+      </module-item>
+      <module-item name="r3.support">
+        <label>Support file maintenance</label>
+      </module-item>
     </items>
   </toolbox>
   <toolbox name="Raster3dMapTypeConversions">
@@ -1796,6 +1917,9 @@
       <module-item name="db.execute">
         <label>SQL statement</label>
       </module-item>
+      <module-item name="db.univar">
+        <label>Univariate statistics for table column</label>
+      </module-item>
     </items>
   </toolbox>
   <toolbox name="VectorDatabaseConnections">
@@ -1847,6 +1971,12 @@
       <module-item name="t.rast.to.rast3">
         <label>Convert raster dataset to 3D raster</label>
       </module-item>
+      <module-item name="t.rast.to.vect">
+        <label>Convert raster dataset to vector dataset</label>
+      </module-item>
+      <module-item name="t.rast.contour">
+        <label>Create contour lines from raster dataset</label>
+      </module-item>
       <separator/>
       <subtoolbox name="TemporalExtraction"/>
       <module-item name="t.vect.db.select">
@@ -1860,8 +1990,17 @@
       <module-item name="t.rast.mapcalc">
         <label>Raster calculations</label>
       </module-item>
+      <module-item name="t.rast.algebra">
+        <label>Temporal raster algebra</label>
+      </module-item>
       <module-item name="t.rast3d.mapcalc">
         <label>3D raster calculations</label>
+      </module-item>
+      <module-item name="t.rast3d.algebra">
+        <label>Temporal 3D raster algebra</label>
+      </module-item>
+      <module-item name="t.vect.algebra">
+        <label>Temporal vector algebra</label>
       </module-item>
       <separator/>
       <module-item name="t.rast.gapfill">
@@ -1904,6 +2043,13 @@
       <separator/>
       <module-item name="t.list">
         <label>List</label>
+      </module-item>
+      <separator/>
+      <module-item name="t.copy">
+        <label>Copy space time dataset</label>
+      </module-item>
+      <module-item name="t.upgrade">
+        <label>Upgrade temporal database</label>
       </module-item>
     </items>
   </toolbox>
@@ -1988,6 +2134,9 @@
       <module-item name="t.rast3d.extract">
         <label>Extract subset of 3D raster dataset</label>
       </module-item>
+      <module-item name="t.select">
+        <label>Select maps by temporal topology</label>
+      </module-item>
     </items>
   </toolbox>
   <toolbox name="TemporalAggregation">
@@ -2005,6 +2154,13 @@
       </module-item>
       <module-item name="t.rast.aggregate.ds">
         <label>Temporal aggregation by dataset</label>
+      </module-item>
+      <separator/>
+      <module-item name="t.rast.accumulate">
+        <label>Compute cyclic accumulations</label>
+      </module-item>
+      <module-item name="t.rast.accdetect">
+        <label>Detect accumulation patterns</label>
       </module-item>
     </items>
   </toolbox>
