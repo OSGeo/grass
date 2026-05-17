@@ -680,7 +680,7 @@ def cmd_to_python_args(cmd):
     """Format parameters for Python calls, handling illegal keywords.
 
     :param cmd: list of command arguments (e.g. ['v.distance', 'from=map1', 'to=map2'])
-    :return: string of formatted Python arguments ending with a closing parenthesis ')'
+    :return: string of formatted Python arguments
     """
     flags = ""
     python_params = []
@@ -721,7 +721,7 @@ def cmd_to_python_args(cmd):
         # Safe unpacking: **{'from': 'val', 'to': 'val'}
         args.append(f"**{illegal_keys!r}")
 
-    return ", ".join(args) + ")"
+    return ", ".join(args)
 
 
 def cmd_to_dict(cmd):
