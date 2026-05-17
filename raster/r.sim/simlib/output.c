@@ -94,9 +94,12 @@ void output_walker_as_vector(int tt_minutes, int ndigit,
     return;
 }
 
-/* Soeren 8. Mar 2011 TODO:
- * This function needs to be refractured and splittet into smaller parts */
-int output_data(int tt, double ft G_UNUSED, const Setup *setup,
+/* conn is the sequential-block extrapolation factor nblock/iblock: scales
+ * the cumulative partial sum in gama into an estimator of the eventual total
+ * for snapshots taken before all blocks have run. With nblock = 1 (or after
+ * the final block) conn = 1.0 and the output formulas are unchanged. err is
+ * written from gammas, which already has conn baked into its accumulator. */
+int output_data(int tt, double conn, const Setup *setup,
                 const Geometry *geometry, const Settings *settings,
                 const Simulation *sim, const Inputs *inputs,
                 const Outputs *outputs, const Grids *grids)
@@ -234,7 +237,7 @@ int output_data(int tt, double ft G_UNUSED, const Setup *setup,
                 if (grids->zz[i][j] == UNDEF || grids->gama[i][j] == UNDEF)
                     Rast_set_f_null_value(depth_cell + j, 1);
                 else {
-                    a1 = pow(grids->gama[i][j], 3. / 5.);
+                    a1 = pow(grids->gama[i][j] * conn, 3. / 5.);
                     depth_cell[j] = (FCELL)a1; /* add conv? */
                     gmax = amax1(gmax, a1);
                 }
@@ -248,7 +251,7 @@ int output_data(int tt, double ft G_UNUSED, const Setup *setup,
                     grids->cchez[i][j] == UNDEF)
                     Rast_set_f_null_value(disch_cell + j, 1);
                 else {
-                    a2 = geometry->step * grids->gama[i][j] *
+                    a2 = geometry->step * grids->gama[i][j] * conn *
                          grids->cchez[i][j];   /* cchez incl. sqrt(sinsl) */
                     disch_cell[j] = (FCELL)a2; /* add conv? */
                     dismax = amax1(dismax, a2);
@@ -274,7 +277,7 @@ int output_data(int tt, double ft G_UNUSED, const Setup *setup,
                 if (grids->zz[i][j] == UNDEF || grids->gama[i][j] == UNDEF)
                     Rast_set_f_null_value(conc_cell + j, 1);
                 else {
-                    conc_cell[j] = (FCELL)grids->gama[i][j];
+                    conc_cell[j] = (FCELL)(grids->gama[i][j] * conn);
                     /*      gsmax = amax1(gsmax, gama[i][j]); */
                 }
             }
@@ -287,7 +290,7 @@ int output_data(int tt, double ft G_UNUSED, const Setup *setup,
                     grids->slope[i][j] == UNDEF)
                     Rast_set_f_null_value(flux_cell + j, 1);
                 else {
-                    a2 = grids->gama[i][j] * grids->slope[i][j];
+                    a2 = grids->gama[i][j] * conn * grids->slope[i][j];
                     flux_cell[j] = (FCELL)a2;
                     dismax = amax1(dismax, a2);
                 }

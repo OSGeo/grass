@@ -8,7 +8,6 @@
 #include <stdio.h>
 
 #define EPS         1.e-7
-#define MAXW        7000000
 #define UNDEF       -9999
 
 #define NUM_THREADS "1"
@@ -57,7 +56,7 @@ typedef struct {
     int nwalka;            // Remaining walkers in an iteration
     int nstack;            // Number of output walkers
     struct point3D *stack; // Output 3D walkers
-    int maxwa;             // Number of input walkers per block
+    int maxwa;             // Number of total walkers
     double rwalk;      // Number of input walkers per block as double precision
     struct point3D *w; // Weight of walkers
     struct point2D *vavg; // Average velocity of walkers
@@ -149,7 +148,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                const Settings *settings, Simulation *sim,
                ObservationPoints *points, const Inputs *inputs,
                const Outputs *outputs, Grids *grids);
-int output_data(int, double, const Setup *setup, const Geometry *geometry,
+int output_data(int, double conn, const Setup *setup, const Geometry *geometry,
                 const Settings *settings, const Simulation *sim,
                 const Inputs *inputs, const Outputs *outputs,
                 const Grids *grids);
