@@ -158,6 +158,10 @@ def ensure_notebook_module_available(parent, report_error, report_info) -> bool:
                 "Automatic installation failed.\n\n"
                 "Please run this command manually in the same Python environment:\n"
                 "{command}\n\n"
+                "If your Python environment is externally managed, "
+                "pip may refuse to install packages. In that case, you have two options:\n"
+                "  1. {command} --break-system-packages\n"
+                "  2. sudo apt install jupyter-notebook\n\n"
                 "Details: {error}"
             ).format(
                 command="{} -m pip install notebook".format(sys.executable),

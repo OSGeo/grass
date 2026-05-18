@@ -6,14 +6,17 @@ authors:
 
 # Using Jupyter Notebooks from GUI
 
-Starting with GRASS 8.5, the GUI provides integrated support for launching
+Starting with GRASS 8.6, the GUI provides integrated support for launching
 and managing Jupyter Notebooks directly from the interface.
 This lets you combine interactive Python notebooks with your GUI workflow.
 
 ## Before You Start
 
-- Linux: no additional setup is currently required.
-- Windows: setup and dependency fixes are guided automatically by GRASS dialogs.
+- **Linux / macOS:** No additional setup is required in most cases.
+  On systems with an externally managed Python environment (e.g. Debian),
+  installing the `notebook` package may need extra steps —
+  see [Install Missing Notebook Package](#install-missing-notebook-package).
+- **Windows:** Setup and dependency fixes are guided automatically by GRASS dialogs.
   For details, see [Windows Setup Details](#windows-setup-details).
 
 ## Getting Started
@@ -35,11 +38,11 @@ The startup dialog lets you configure your notebook environment:
   a `welcome.ipynb` template notebook with GRASS-specific examples and
   quick-start code. Recommended for new users.
 
-### Display Modes
+## Display Modes
 
 After configuring the storage, choose how to interact with Jupyter notebooks:
 
-#### Browser Mode
+### Browser Mode
 
 ![Browser Mode - Jupyter opened in your default web browser](jupyter_browser_mode.png)
 
@@ -53,7 +56,7 @@ This mode provides:
 - A control panel in GRASS GUI showing server URL, PID, and storage location
 - Quick access to reopen the browser or stop the server
 
-#### Integrated Mode
+### Integrated Mode
 
 ![Integrated Mode - Jupyter embedded directly in GRASS GUI](jupyter_integrated_mode.png)
 
@@ -65,18 +68,20 @@ In Integrated Mode, Jupyter notebooks are embedded directly in the GRASS GUI win
 - Import/export notebooks, and create new notebooks from the toolbar
 - External links (documentation, tutorials) open in your system browser
 
-### Toolbar Actions
+#### Toolbar Actions
 
 The Integrated mode toolbar provides quick access to common operations:
 
 - **Create:** Create a new notebook with prepared GRASS module imports and session
-initialization
+  initialization
 - **Import:** Import existing .ipynb files into your notebook storage
 - **Export:** Export the current notebook to a different location
 - **Undock:** Open the notebook in a separate window (also available in
-the browser mode)
+  the browser mode)
 - **Stop:** Stop the Jupyter server and close the notebook (also available in
-the browser mode)
+  the browser mode)
+
+## Managing Sessions
 
 ### Multiple Notebook Sessions
 
@@ -92,6 +97,38 @@ GRASS automatically manages Jupyter server instances:
 - Servers are automatically stopped when GRASS exits
 - Multiple notebooks from the same storage share one server instance
 - Server information (URL, PID) is displayed in the interface
+
+## Troubleshooting
+
+### Install Missing Notebook Package
+
+If the `notebook` package is missing when you click **Launch Jupyter
+Notebook**, GRASS detects this automatically and opens a dialog that offers to
+install it. Clicking **Install** runs:
+
+```bash
+<GRASS Python> -m pip install notebook
+```
+
+in the current GRASS Python environment. After installation, the
+Jupyter Startup dialog opens normally.
+
+If the automatic installation fails, an error dialog displays the exact command
+you can run manually, along with guidance for your platform. On systems with an
+externally managed Python environment (e.g. Debian), pip may refuse to
+install packages. In that case you have two options:
+
+1. Allow pip to override the system restriction:
+
+   ```bash
+   <GRASS Python> -m pip install notebook --break-system-packages
+   ```
+
+2. Install the system package instead:
+
+   ```bash
+   sudo apt install jupyter-notebook
+   ```
 
 ### Command Used to Start Jupyter
 
@@ -111,7 +148,34 @@ This usually indicates a Python environment mismatch in the `jupyter` launcher
 path, where imported modules do not fully match the active GRASS Python runtime.
 Using `python -m notebook` avoids that extra launcher layer.
 
-### Tips
+## Windows Setup Details
+
+This section describes the Windows-specific setup.
+Users on Linux and macOS can skip this section.
+
+### Microsoft Edge WebView2 Runtime Support for Integrated Mode
+
+Integrated mode requires `wx.html2.WebView` with Microsoft Edge WebView2
+backend support. Even when `wx.html2.WebView` itself is available, some
+wxPython builds (including current OSGeo4W-based builds) are compiled without
+the WebView2 backend, so `wx.html2.WebView` falls back to the legacy Internet
+Explorer (MSHTML) engine, which is not compatible with modern Jupyter interfaces,
+and Integrated mode cannot start.
+
+When you choose Integrated mode and the WebView2 backend is not available,
+GRASS detects this and opens a dialog offering to reinstall wxPython using pip.
+The reinstall keeps the currently installed wxPython version, but fetches the
+pip wheel that includes WebView2 backend support. Clicking **Reinstall** runs:
+
+```bash
+<GRASS Python> -m pip install --force-reinstall wxpython==<current version>
+```
+
+Because the current GRASS session still uses the previously loaded wxPython
+build, a restart is required after reinstalling. After restart, Integrated mode
+should start successfully.
+
+## Tips
 
 - The `welcome.ipynb` template includes GRASS session initialization
   and practical examples of listing data, visualizing maps,
@@ -122,43 +186,3 @@ Using `python -m notebook` avoids that extra launcher layer.
 
 - Tab tooltips show the full storage path - useful when working with
   multiple storage locations
-
-## Windows Setup Details
-
-This section describes the Windows-specific setup.
-Users on Linux and macOS can skip this section.
-
-### Install Missing Notebook Package
-
-If the `notebook` package is missing when you click **Launch Jupyter
-Notebook**, GRASS detects this automatically and opens a dialog that offers to
-install it. Clicking **Install** runs:
-
-```bash
-<GRASS Python> -m pip install notebook
-```
-
-in the current GRASS Python environment. After installation, the
-Jupyter Startup dialog opens normally.
-
-If the automatic installation fails, an error dialog displays the exact command
-you can run manually in the GRASS Python console.
-
-### Microsoft Edge WebView2 Runtime Support for Integrated Mode
-
-Integrated mode requires `wx.html2.WebView` with Microsoft Edge WebView2
-backend support. Some wxPython builds (including current OSGeo4W-based
-builds) are compiled without WebView2 support, so Integrated mode cannot start.
-
-When you choose Integrated mode and WebView2 is not available, GRASS detects
-this and opens a dialog offering to reinstall wxPython using pip. The
-reinstall keeps the currently installed wxPython version, but fetches the pip
-wheel that includes WebView2 support. Clicking **Reinstall** runs:
-
-```bash
-<GRASS Python> -m pip install --force-reinstall wxpython==<current version>
-```
-
-Because the current GRASS session still uses the previously loaded wxPython
-build, a restart is required after reinstalling. After restart, Integrated mode
-should start successfully.
