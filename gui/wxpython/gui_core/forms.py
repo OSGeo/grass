@@ -615,12 +615,12 @@ class TaskFrame(wx.Frame):
         self.copyMenu = wx.Menu()
         # Note: We include Shell command in the menu too, for clarity
         item_shell = self.copyMenu.Append(wx.ID_ANY, _("Copy as Shell command"))
-        item_python = self.copyMenu.Append(wx.ID_ANY, _("Copy as Python (Tools API)"))
+        item_python = self.copyMenu.Append(wx.ID_ANY, _("Copy as Python"))
         item_json = self.copyMenu.Append(wx.ID_ANY, _("Copy as JSON settings"))
 
         # Bind menu items
         self.Bind(wx.EVT_MENU, self.OnCopyShellCommand, item_shell)
-        self.Bind(wx.EVT_MENU, self.OnCopyPythonTools, item_python)
+        self.Bind(wx.EVT_MENU, self.OnCopyPython, item_python)
         self.Bind(wx.EVT_MENU, self.OnCopyJSON, item_json)
 
         # A horizontal sizer to combine the main button and the arrow button
@@ -954,12 +954,45 @@ class TaskFrame(wx.Frame):
         config = wx.Config.Get()
         mode = config.Read("CmdPanel/CopyMode", "shell")
 
+        api_index = UserSettings.Get(group="cmd", key="pythonAPI", subkey="selection")
+        api_map = {0: "tools", 1: "script", 2: "pygrass"}
+        api_flavor = api_map.get(api_index, "tools")
+
         if mode == "shell":
             self.btn_copy.SetToolTip(_("Copy as Shell command"))
         elif mode == "python":
-            self.btn_copy.SetToolTip(_("Copy as Python (Tools API)"))
+            if api_flavor == "tools":
+                self.btn_copy.SetToolTip(_("Copy as Python (Tools API)"))
+            elif api_flavor == "script":
+                self.btn_copy.SetToolTip(_("Copy as Python (Script API)"))
+            else:
+                self.btn_copy.SetToolTip(_("Copy as Python (PyGRASS API)"))
         else:
             self.btn_copy.SetToolTip(_("Copy as JSON settings"))
+
+    def _getInlineFiles(self, cmd):
+        """Find inline file parameters and mark them in the command list.
+
+        :param cmd: list of command arguments
+        :return: dict mapping parameter name to its raw text content
+        """
+        inline_files = {}
+        for p in self.task.params:
+            if p.get("prompt") == "file" and "wxId" in p and len(p["wxId"]) > 1:
+                ifbb = self.FindWindowById(p["wxId"][1])
+                if ifbb and hasattr(ifbb, "GetValue"):
+                    text = ifbb.GetValue().strip()
+                    if text:
+                        param_name = p["name"]
+                        inline_files[param_name] = text
+
+                        # Mark the parameter in the command list for replacement
+                        for i, arg in enumerate(cmd):
+                            if arg.startswith(param_name + "="):
+                                cmd[i] = f"{param_name}=___INLINE_{param_name}___"
+                                break
+
+        return inline_files
 
     def OnCopyMain(self, event):
         """Route the main Copy button click to the last used method"""
@@ -969,7 +1002,7 @@ class TaskFrame(wx.Frame):
         if mode == "shell":
             self.OnCopyShellCommand(event)
         elif mode == "python":
-            self.OnCopyPythonTools(event)
+            self.OnCopyPython(event)
         else:
             self.OnCopyJSON(event)
 
@@ -992,71 +1025,93 @@ class TaskFrame(wx.Frame):
             wx.TheClipboard.Close()
             self.SetStatusText(_("'%s' copied to clipboard") % (cmdstring))
 
-    def OnCopyPythonTools(self, event):
-        """Copy the command in Python Tools API syntax"""
+    def OnCopyPython(self, event):
+        """Copy the command in the selected Python API syntax"""
         self._setCopyMode("python")
         cmd = self.createCmd(ignoreErrors=True)
         if not cmd or len(cmd) < 1:
             return
 
-        # Replace dots with underscores to match the Tools API method names
-        # e.g., v.distance -> v_distance, v.in.ascii -> v_in_ascii
-        module_name = cmd[0].replace(".", "_")
+        api_index = UserSettings.Get(group="cmd", key="pythonAPI", subkey="selection")
+        api_map = {0: "tools", 1: "script", 2: "pygrass"}
+        api_flavor = api_map.get(api_index, "tools")
 
+        module_name = cmd[0]
         # Find any inline file parameters
-        inline_files = {}
-        for p in self.task.params:
-            if p.get("prompt") == "file" and "wxId" in p and len(p["wxId"]) > 1:
-                ifbb = self.FindWindowById(p["wxId"][1])
-                if ifbb and hasattr(ifbb, "GetValue"):
-                    text = ifbb.GetValue().strip()
-                    if text:
-                        param_name = p["name"]
-                        inline_files[param_name] = text
-
-                        # Mark the parameter in the command list for replacement
-                        for i, arg in enumerate(cmd):
-                            if arg.startswith(param_name + "="):
-                                cmd[i] = f"{param_name}=___INLINE_{param_name}___"
-                                break
-
+        inline_files = self._getInlineFiles(cmd)
         args_str = gtask.cmd_to_python_args(cmd)
+
+        script_lines = []
 
         # Construct the final Python code
         if inline_files:
-            script_lines = ["import io", ""]
-
-            # Generate inline file variables
-            for param_name, text in inline_files.items():
-                var_name = f"{param_name}_txt"
-                script_lines.append(f"{var_name} = {text!r}")
+            if api_flavor == "tools":
+                script_lines.append("import io")
+            else:
+                script_lines.append("import tempfile")
 
             script_lines.append("")
 
+            # Generate inline file variables
+            for param_name, text in inline_files.items():
+                script_lines.append(f"{param_name}_txt = {text!r}")
+
+            script_lines.append("")
+
+            if api_flavor != "tools":
+                for param_name in inline_files:
+                    script_lines.extend(
+                        [
+                            "with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:",
+                            f"    f.write({param_name}_txt)",
+                            f"    {param_name}_file = f.name",
+                            "",
+                        ]
+                    )
+
             # Change the command arguments to use StringIO for inline file parameters
             for param_name in inline_files:
-                var_name = f"{param_name}_txt"
-                replace_str = f"io.StringIO({var_name})"
+                if api_flavor == "tools":
+                    replace_str = f"io.StringIO({param_name}_txt)"
+                else:
+                    replace_str = f"{param_name}_file"
 
                 args_str = args_str.replace(f'"___INLINE_{param_name}___"', replace_str)
                 args_str = args_str.replace(f"'___INLINE_{param_name}___'", replace_str)
 
-            script_lines.append(f"Tools().{module_name}({args_str})")
-            py_cmd = "\n".join(script_lines)
+        # Route to the appropriate API flavor
+        if api_flavor == "tools":
+            method_name = module_name.replace(".", "_")
+            call_str = f"Tools().{method_name}({args_str})"
+        elif api_flavor == "script":
+            call_str = f"gs.run_command('{module_name}', {args_str})"
         else:
-            py_cmd = f"Tools().{module_name}({args_str})"
+            call_str = f"Module('{module_name}', {args_str})"
+
+        script_lines.append(call_str)
+        py_cmd = "\n".join(script_lines)
 
         # Copy to clipboard
         self._toClipboard(py_cmd)
+        if inline_files:
+            self.SetStatusText(_("Python code copied to clipboard"))
 
     def OnCopyJSON(self, event):
-        """Copy parameters as JSON string"""
+        """Copy parameters as JSON string with inline text support"""
         self._setCopyMode("json")
         cmd = self.createCmd(ignoreErrors=True)
         if not cmd or len(cmd) < 1:
             return
 
-        data = {"module": cmd[0], "params": gtask.cmd_to_dict(cmd)}
+        inline_files = self._getInlineFiles(cmd)
+        params_dict = gtask.cmd_to_dict(cmd)
+
+        # Replace inline file parameter values with their raw text content
+        for param_name, text in inline_files.items():
+            if param_name in params_dict:
+                params_dict[param_name] = text
+
+        data = {"module": cmd[0], "params": params_dict}
         self._toClipboard(json.dumps(data, indent=4))
         self.SetStatusText(_("JSON copied to clipboard"))
 
@@ -1128,6 +1183,25 @@ class TaskFrame(wx.Frame):
                     win = self.FindWindowById(w_id)
                     if not win or win.GetName() == "ModelParam":
                         continue
+
+                    # Catch inline file parameters and set their content directly to the second widget
+                    if (
+                        not is_flag
+                        and porf.get("prompt") == "file"
+                        and len(porf.get("wxId", [])) > 1
+                    ):
+                        idx = porf["wxId"].index(w_id)
+                        if idx == 0:
+                            # First widget is the file path
+                            if hasattr(win, "SetValue"):
+                                win.SetValue("")
+                            continue
+                        if idx == 1:
+                            # Second widget is the file content
+                            if hasattr(win, "SetValue"):
+                                win.SetValue(str(clean_val))
+                            found_any = True
+                            continue
 
                     # Specialized Widget Handling
                     if isinstance(win, wx.CheckBox):
