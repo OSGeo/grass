@@ -109,7 +109,7 @@ def main():
     input = options["input"]
     zones = options["zones"]
     output = options["output"]
-    nprocs = int(options["nprocs"])
+    nprocs = gs.resolve_nprocs(options["nprocs"])
     where = options["where"]
     region_relation = options["region_relation"]
     extended = flags["e"]

@@ -1,10 +1,10 @@
-from multiprocessing import cpu_count, Process, Queue
+from multiprocessing import Process, Queue
 import time
 from xml.etree.ElementTree import fromstring
 
 from grass.exceptions import CalledModuleError, GrassError, ParameterError
 from grass.script.core import Popen, PIPE, use_temp_region, del_temp_region
-from grass.script.utils import decode
+from grass.script.utils import available_cpus, decode, resolve_nprocs
 from .docstring import docstring_property
 from .parameter import Parameter
 from .flag import Flag
@@ -231,12 +231,14 @@ class ParallelModuleQueue:
     def __init__(self, nprocs=1):
         """Constructor
 
-        :param nprocs: The maximum number of Module processes that
-                       can be run in parallel, default is 1, if None
-                       then use all the available CPUs.
+        :param nprocs: The maximum number of Module processes that can be
+                       run in parallel. A positive value is used as-is,
+                       ``0`` or ``None`` means use all available CPUs, and
+                       a negative value reserves that many CPUs (clamped
+                       to at least 1).
         :type nprocs: int
         """
-        nprocs = int(nprocs) if nprocs else cpu_count()
+        nprocs = resolve_nprocs(nprocs) if nprocs else available_cpus()
         self._num_procs = nprocs
         self._list = nprocs * [None]
         self._proc_count = 0

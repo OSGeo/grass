@@ -3,6 +3,7 @@
 import pytest
 
 import grass.script as gs
+from grass.script import utils as gutils
 
 
 def test_named_separators():
@@ -51,3 +52,16 @@ def test_KeyValue_values():
     # Raises AttributeError for non-existing attribute
     with pytest.raises(AttributeError):
         _ = kv.non_existing_attribute
+
+
+def test_resolve_nprocs(monkeypatch):
+    """Check G_OPT_M_NPROCS resolution: positive as-is, 0 = all, negative reserves."""
+    monkeypatch.setattr(gutils, "available_cpus", lambda: 8)
+    assert gs.resolve_nprocs(1) == 1
+    assert gs.resolve_nprocs(4) == 4
+    assert gs.resolve_nprocs("3") == 3
+    assert gs.resolve_nprocs(0) == 8
+    assert gs.resolve_nprocs(-2) == 6
+    assert gs.resolve_nprocs(-10) == 1
+    with pytest.raises(ValueError, match="invalid literal for int"):
+        gs.resolve_nprocs("not-a-number")

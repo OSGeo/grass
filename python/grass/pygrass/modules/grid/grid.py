@@ -8,7 +8,7 @@ from math import ceil
 from pathlib import Path
 
 from grass.script.setup import write_gisrc
-from grass.script import append_node_pid, legalize_vector_name
+from grass.script import append_node_pid, available_cpus, legalize_vector_name
 
 from grass.pygrass.gis import Mapset, Location
 from grass.pygrass.gis.region import Region
@@ -590,10 +590,7 @@ class GridModule:
         # so we try to estimate the number here as number of CPUs available
         processes = self.processes
         if processes is None:
-            try:
-                processes = len(os.sched_getaffinity(0))
-            except AttributeError:
-                processes = mltp.cpu_count()
+            processes = available_cpus()
         if self.width:
             n_tiles_x = ceil(region.cols / self.width)
             n_tiles_y = ceil(processes / n_tiles_x)
