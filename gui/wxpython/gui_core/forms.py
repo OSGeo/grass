@@ -1084,9 +1084,9 @@ class TaskFrame(wx.Frame):
             method_name = module_name.replace(".", "_")
             call_str = f"Tools().{method_name}({args_str})"
         elif api_flavor == "script":
-            call_str = f"gs.run_command('{module_name}', {args_str})"
+            call_str = f'gs.run_command("{module_name}", {args_str})'
         else:
-            call_str = f"Module('{module_name}', {args_str})"
+            call_str = f'Module("{module_name}", {args_str})'
 
         script_lines.append(call_str)
         py_cmd = "\n".join(script_lines)

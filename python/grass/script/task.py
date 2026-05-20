@@ -23,6 +23,7 @@ import os
 import re
 import sys
 import keyword
+import json
 import xml.etree.ElementTree as ET
 from xml.parsers import expat
 
@@ -679,7 +680,7 @@ def cmdstring_to_tuple(cmd):
 def cmd_to_python_args(cmd):
     """Format parameters for Python calls, handling illegal keywords.
 
-    :param cmd: list of command arguments (e.g. ['v.distance', 'from=map1', 'to=map2'])
+    :param cmd: list of command arguments (e.g. ["v.distance", "from=map1", "to=map2"])
     :return: string of formatted Python arguments
     """
     flags = ""
@@ -707,19 +708,21 @@ def cmd_to_python_args(cmd):
             if keyword.iskeyword(k) or not k.isidentifier():
                 illegal_keys[k] = v
             else:
-                python_params.append(f"{k}={v!r}")
+                # json.dumps() automatically handles quotes, backslashes, and newlines using double quotes.
+                # ensure_ascii=False keeps international characters human-readable
+                python_params.append(f"{k}={json.dumps(v, ensure_ascii=False)}")
 
     # Build the command string
     args = []
 
     if flags:
-        args.append(f"flags='{flags}'")
+        args.append(f'flags="{flags}"')
 
     args.extend(python_params)
 
     if illegal_keys:
-        # Safe unpacking: **{'from': 'val', 'to': 'val'}
-        args.append(f"**{illegal_keys!r}")
+        # Safe unpacking: **{"from": "val", "to": "val"}
+        args.append(f"**{json.dumps(illegal_keys, ensure_ascii=False)}")
 
     return ", ".join(args)
 
