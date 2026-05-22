@@ -1054,7 +1054,9 @@ class TaskFrame(wx.Frame):
 
             # Generate inline file variables
             for param_name, text in inline_files.items():
-                script_lines.append(f"{param_name}_txt = {text!r}")
+                script_lines.append(
+                    f"{param_name}_txt = {json.dumps(text, ensure_ascii=False)}"
+                )
 
             script_lines.append("")
 
@@ -1062,7 +1064,7 @@ class TaskFrame(wx.Frame):
                 for param_name in inline_files:
                     script_lines.extend(
                         [
-                            "with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:",
+                            'with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:',
                             f"    f.write({param_name}_txt)",
                             f"    {param_name}_file = f.name",
                             "",
