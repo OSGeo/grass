@@ -185,6 +185,8 @@ class HistoryBrowserTree(CTreeView):
         self.itemActivated.connect(self.OnDoubleClick)
         self.contextMenu.connect(self.OnRightClick)
 
+        self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
+
     def _resetSelectVariables(self):
         """Reset variables related to item selection."""
         self.selected_day = []
@@ -645,6 +647,34 @@ class HistoryBrowserTree(CTreeView):
             self._popupMenuCommand()
         else:
             self._popupMenuEmpty()
+
+    def OnKeyDown(self, event):
+        """Handle keyboard shortcuts for copying and deleting history entries."""
+        keycode = event.GetKeyCode()
+        control_down = event.ControlDown()
+
+        # Check if anything is selected
+        selected = self.GetSelected()
+        if not selected:
+            event.Skip()
+            return
+
+        # Check if a command node is selected (we don't want to allow copying/deleting day nodes)
+        node = selected[0]
+        if node.data.get("type") != COMMAND:
+            event.Skip()
+            return
+
+        # Ctrl+C -> Copy command to clipboard
+        if control_down and keycode == ord("C"):
+            self.OnCopyCmd(None)
+
+        # Ctrl+D or Delete key -> Remove command from history
+        elif (control_down and keycode == ord("D")) or keycode == wx.WXK_DELETE:
+            self.OnRemoveCmd(None)
+
+        else:
+            event.Skip()
 
     def OnDoubleClick(self, node):
         """Double click on item/node.
