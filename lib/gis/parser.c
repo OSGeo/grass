@@ -1724,7 +1724,8 @@ int check_overwrite(void)
                 for (i = 0; opt->answers[i]; i++) {
                     found = FALSE;
                     if (strcmp(element, "file") == 0) {
-                        if (access(opt->answers[i], F_OK) == 0)
+                        if (strcmp(opt->answers[i], "-") != 0 &&
+                            access(opt->answers[i], F_OK) == 0)
                             found = TRUE;
                     }
                     else if (strcmp(element, "mapset") != 0) {
