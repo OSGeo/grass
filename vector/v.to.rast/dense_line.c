@@ -274,3 +274,15 @@ void dense_line(double x1, double y1, double x2, double y2,
     }
     point(ix2, iy2);
 }
+
+/* point plotting, alternative to G_plot_point()
+ * x, y are col, row numbers */
+void plot_point(double east, double north)
+{
+    int x, y;
+
+    x = ifloor(X(G_adjust_easting(east, &st->window)) + 0.5);
+    y = ifloor(Y(north) + 0.5);
+
+    st->dot(x, y);
+}
