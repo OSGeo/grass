@@ -334,21 +334,27 @@ int draw_line(int type, int ltype, int line, const struct line_pnts *Points,
         /* use random or RGB column color if given, otherwise reset */
         /* centroids always use default color to stand out from underlying area
          */
-        if (custom_rgb && (ltype != GV_CENTROID)) {
-            primary_color->r = (unsigned char)red;
-            primary_color->g = (unsigned char)grn;
-            primary_color->b = (unsigned char)blu;
-            D_symbol2(Symb, x0, y0, primary_color, line_color);
+        if (Symb) {
+            if (custom_rgb && (ltype != GV_CENTROID)) {
+                primary_color->r = (unsigned char)red;
+                primary_color->g = (unsigned char)grn;
+                primary_color->b = (unsigned char)blu;
+                D_symbol2(Symb, x0, y0, primary_color, line_color);
+            }
+            else {
+                D_symbol(Symb, x0, y0, line_color, fill_color);
+            }
         }
-        else
-            D_symbol(Symb, x0, y0, line_color, fill_color);
-
         /* reset to defaults */
         var_size = size;
         rotation = 0.0;
     }
     else if (color || custom_rgb || zcolors) {
-        if (!cvarr_rgb && !cats_color_flag && !zcolors && !colors)
+        if (!color) {
+            G_warning("Color is null, assigning light gray.");
+            D_RGB_color(198, 198, 198);
+        }
+        else if (!cvarr_rgb && !cats_color_flag && !zcolors && !colors)
             D_RGB_color(color->r, color->g, color->b);
         else {
             if (custom_rgb)
@@ -385,5 +391,6 @@ int draw_line(int type, int ltype, int line, const struct line_pnts *Points,
         break;
     }
 
+    G_free(Symb);
     return 1;
 }
