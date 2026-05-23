@@ -209,6 +209,8 @@ class Formatter:
         elif tag in formats:
             spec = formats[tag]
             if is_string(spec):
+                if spec == "\n.br\n":
+                    spec = ".br "
                 self.fmt(spec, content)
             else:
                 (fmt, var) = spec
