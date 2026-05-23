@@ -3,12 +3,12 @@
  *
  * \brief GIS Library - Pseudo-random number generation
  *
- * (C) 2014 by the GRASS Development Team
+ * (C) 2014-2025 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author Glynn Clements
+ * \authors Glynn Clements, Maris Nartiss (thread safety)
  */
 
 #include <stdio.h>
@@ -18,6 +18,10 @@
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
+
+#ifdef HAVE_PTHREAD
+#include <pthread.h>
+#endif
 
 #ifdef HAVE_GETTIMEOFDAY
 #include <sys/time.h>
@@ -41,6 +45,10 @@ static const uint32 b0 = 0xB;
 
 static int seeded;
 
+#ifdef HAVE_PTHREAD
+static pthread_mutex_t lrand48_mutex = PTHREAD_MUTEX_INITIALIZER;
+#endif
+
 #define LO(x) ((x) & 0xFFFFU)
 #define HI(x) ((x) >> 16)
 
@@ -48,15 +56,27 @@ static int seeded;
  * \brief Seed the pseudo-random number generator
  *
  * \param[in] seedval 32-bit integer used to seed the PRNG
+ *
+ * In a multi-threaded program, call `G_srand48()` once from the main
+ * thread *before* starting the worker threads. Subsequent calls will
+ * reset global seed state used by all threads.
  */
 void G_srand48(long seedval)
 {
     uint32 x = (uint32) * (unsigned long *)&seedval;
 
+#ifdef HAVE_PTHREAD
+    pthread_mutex_lock(&lrand48_mutex);
+#endif
+
     x2 = (uint16)HI(x);
     x1 = (uint16)LO(x);
     x0 = (uint16)0x330E;
     seeded = 1;
+
+#ifdef HAVE_PTHREAD
+    pthread_mutex_unlock(&lrand48_mutex);
+#endif
 }
 
 /*!
@@ -64,6 +84,10 @@ void G_srand48(long seedval)
  *
  * A weak hash of the current time and PID is generated and used to
  * seed the PRNG
+ *
+ * In a multi-threaded program, call `G_srand48_auto()` once from the main
+ * thread *before* starting the worker threads. Subsequent calls will
+ * reset global seed state used by all threads.
  *
  * \return generated seed value passed to G_srand48()
  */
@@ -128,19 +152,32 @@ static void G__next(void)
 /*!
  * \brief Generate an integer in the range [0, 2^31)
  *
+ * This function is thread-safe.
+ *
  * \return the generated value
  */
 long G_lrand48(void)
 {
     uint32 r;
 
+#ifdef HAVE_PTHREAD
+    pthread_mutex_lock(&lrand48_mutex);
+#endif
+
     G__next();
     r = ((uint32)x2 << 15) | ((uint32)x1 >> 1);
+
+#ifdef HAVE_PTHREAD
+    pthread_mutex_unlock(&lrand48_mutex);
+#endif
+
     return (long)r;
 }
 
 /*!
  * \brief Generate an integer in the range [-2^31, 2^31)
+ *
+ * This function is thread-safe.
  *
  * \return the generated value
  */
@@ -148,19 +185,34 @@ long G_mrand48(void)
 {
     uint32 r;
 
+#ifdef HAVE_PTHREAD
+    pthread_mutex_lock(&lrand48_mutex);
+#endif
+
     G__next();
     r = ((uint32)x2 << 16) | ((uint32)x1);
+
+#ifdef HAVE_PTHREAD
+    pthread_mutex_unlock(&lrand48_mutex);
+#endif
+
     return (long)(int32)r;
 }
 
 /*!
  * \brief Generate a floating-point value in the range [0,1)
  *
+ * This function is thread-safe.
+ *
  * \return the generated value
  */
 double G_drand48(void)
 {
     double r = 0.0;
+
+#ifdef HAVE_PTHREAD
+    pthread_mutex_lock(&lrand48_mutex);
+#endif
 
     G__next();
     r += x2;
@@ -169,6 +221,11 @@ double G_drand48(void)
     r *= 0x10000;
     r += x0;
     r /= 281474976710656.0; /* 2^48 */
+
+#ifdef HAVE_PTHREAD
+    pthread_mutex_unlock(&lrand48_mutex);
+#endif
+
     return r;
 }
 
