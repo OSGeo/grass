@@ -333,23 +333,23 @@ char *substitute_variables(dbConnection *conn)
         return NULL;
 
     database = (char *)G_malloc(GPATH_MAX);
-    strcpy(database, conn->databaseName);
+    snprintf(database, GPATH_MAX, "%s", conn->databaseName);
 
-    strcpy(buf, database);
+    snprintf(buf, GPATH_MAX, "%s", database);
     c = (char *)strstr(buf, "$GISDBASE");
     if (c != NULL) {
         *c = '\0';
         snprintf(database, GPATH_MAX, "%s%s%s", buf, G_gisdbase(), c + 9);
     }
 
-    strcpy(buf, database);
+    snprintf(buf, GPATH_MAX, "%s", database);
     c = (char *)strstr(buf, "$LOCATION_NAME");
     if (c != NULL) {
         *c = '\0';
         snprintf(database, GPATH_MAX, "%s%s%s", buf, G_location(), c + 14);
     }
 
-    strcpy(buf, database);
+    snprintf(buf, GPATH_MAX, "%s", database);
     c = (char *)strstr(buf, "$MAPSET");
     if (c != NULL) {
         *c = '\0';
