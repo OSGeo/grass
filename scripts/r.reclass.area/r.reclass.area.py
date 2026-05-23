@@ -72,6 +72,11 @@
 # % description: Clumps including diagonal neighbors
 # %end
 
+# %flag
+# % key: n
+# % description: Create NULL map if no areas are left after reclass method
+# %end
+
 import sys
 import os
 import atexit
@@ -81,7 +86,7 @@ from grass.script.utils import decode, encode
 TMPRAST = []
 
 
-def reclass(inf, outf, lim, clump, diag, les):
+def reclass(inf, outf, lim, clump, diag, les, nodata=False):
     infile = inf
     outfile = outf
     lesser = les
@@ -160,17 +165,21 @@ def reclass(inf, outf, lim, clump, diag, les):
     p1.wait()
     p2.stdin.close()
     p2.wait()
+    expression = "$outfile = $recfile"
+    mapcalc_kwargs = {"outfile": outfile, "recfile": recfile}
     if p2.returncode != 0:
-        if lesser:
-            gs.fatal(
-                _("No areas of size less than or equal to %f hectares found.") % limit
-            )
+        msg = (
+            _("No areas of size less than or equal to {limit} hectares found.")
+            if lesser
+            else _("No areas of size greater than or equal to {limit} hectares found.")
+        )
+        if nodata is True:
+            gs.warning(msg.format(limit) + " " + _("Creating NULL raster..."))
+            expression = "$outfile = null()"
+            del mapcalc_kwargs["recfile"]
         else:
-            gs.fatal(
-                _("No areas of size greater than or equal to %f hectares found.")
-                % limit
-            )
-    gs.mapcalc("$outfile = $recfile", outfile=outfile, recfile=recfile)
+            gs.fatal(msg.format(limit))
+    gs.mapcalc(expression, **mapcalc_kwargs)
 
 
 def rmarea(infile, outfile, thresh, coef):
@@ -205,6 +214,7 @@ def main():
     method = options["method"]
     clumped = flags["c"]
     diagonal = flags["d"]
+    nodata = flags["n"]
 
     # check for unsupported locations
     in_proj = gs.parse_command("g.proj", flags="p", format="shell")
@@ -222,7 +232,9 @@ def main():
         gs.fatal(_("Raster map <%s> not found") % infile)
 
     if method == "reclass":
-        reclass(infile, outfile, limit, clumped, diagonal, mode == "lesser")
+        reclass(
+            infile, outfile, limit, clumped, diagonal, mode == "lesser", nodata=nodata
+        )
     elif method == "rmarea":
         rmarea(infile, outfile, limit, in_proj["meters"])
 
@@ -234,8 +246,11 @@ def cleanup():
     TMPRAST.reverse()  # reclassed map first
     for mapp in TMPRAST:
         if method == "rmarea":
-            gs.run_command("g.remove", flags="f", type="vector", name=mapp, quiet=True)
-        else:
+            if gs.find_file(name=mapp, element="vector")["file"]:
+                gs.run_command(
+                    "g.remove", flags="f", type="vector", name=mapp, quiet=True
+                )
+        elif gs.find_file(name=mapp, element="raster")["file"]:
             gs.run_command("g.remove", flags="f", type="raster", name=mapp, quiet=True)
 
 
