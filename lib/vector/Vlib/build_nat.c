@@ -12,13 +12,13 @@
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
  */
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <sys/types.h>
-#include <inttypes.h>
 #include <grass/glocale.h>
 #include <grass/vector.h>
+#include <inttypes.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
 
 static struct line_pnts *Points;
 
@@ -31,8 +31,7 @@ static struct line_pnts *Points;
    \return 1 on success
    \return 0 on error
  */
-int Vect_build_nat(struct Map_info *Map, int build)
-{
+int Vect_build_nat(struct Map_info *Map, int build) {
     struct Plus_head *plus;
     int i, s, type, line, counter;
     off_t offset;
@@ -85,8 +84,7 @@ int Vect_build_nat(struct Map_info *Map, int build)
             if (type == -1) {
                 G_warning(_("Unable to read vector map"));
                 return 0;
-            }
-            else if (type == -2) {
+            } else if (type == -2) {
                 break;
             }
 
@@ -120,7 +118,7 @@ int Vect_build_nat(struct Map_info *Map, int build)
                              "%d primitives registered", plus->n_lines),
                           plus->n_lines);
         G_verbose_message(n_("One vertex registered",
-                             "%" PRId64 " vertices registered", npoints),
+                             "%lld" PRId64 " vertices registered", npoints),
                           npoints);
 
         plus->built = GV_BUILD_BASE;
@@ -225,8 +223,7 @@ int Vect_build_nat(struct Map_info *Map, int build)
                     if (Area->centroid == 0) { /* first */
                         Area->centroid = line;
                         topo->area = area;
-                    }
-                    else { /* duplicate */
+                    } else { /* duplicate */
                         topo->area = -area;
                     }
                 }
