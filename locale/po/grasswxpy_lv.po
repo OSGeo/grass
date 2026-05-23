@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-25 16:03+0000\n"
+"POT-Creation-Date: 2026-05-09 16:40+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Latvian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/lv/>\n"
@@ -3226,10 +3226,41 @@ msgstr ""
 msgid "Run the command (Ctrl+R)"
 msgstr ""
 
+#, fuzzy
+#| msgid "Copy all to clipboard"
+msgid "Copy as Shell command"
+msgstr "Kopēt visu"
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (Script API)"
+msgstr "Python skripts"
+
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+msgid "Copy as Python (PyGRASS)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector maps settings"
+msgid "Copy as JSON settings"
+msgstr "Vektoru kartes iestatījumi"
+
 msgid "Copy"
 msgstr "Kopēt"
 
-msgid "Copy the current command string to the clipboard"
+#, fuzzy
+#| msgid "Export common formats"
+msgid "More copy formats"
+msgstr "Eksportēt populāros formātos"
+
+#, fuzzy
+#| msgid "Raster map settings"
+msgid "Paste JSON settings"
+msgstr "Rastra kartes iestatījumi"
+
+msgid "Paste parameters from JSON string in the clipboard"
 msgstr ""
 
 msgid "Show manual page of the command (Ctrl+H)"
@@ -3247,6 +3278,50 @@ msgstr ""
 #, python-format
 msgid "'%s' copied to clipboard"
 msgstr ""
+
+#, fuzzy
+#| msgid "Copy coordinates to clipboard"
+msgid "JSON copied to clipboard"
+msgstr "Kopēt koordinātas uz starpliktuvi"
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Modules"
+msgid "Module Mismatch"
+msgstr "Moduļi"
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid name"
+msgid "Invalid Data"
+msgstr "Nederīgs nosaukums"
+
+#, fuzzy
+#| msgid "Error"
+msgid "Paste Error"
+msgstr "Kļūda"
+
+#, fuzzy, python-format
+#| msgid "Copy coordinates to clipboard"
+msgid "%s copied to clipboard"
+msgstr "Kopēt koordinātas uz starpliktuvi"
 
 msgid "Required"
 msgstr "Obligāti"
@@ -7125,6 +7200,9 @@ msgstr "Saglabāt izteiksmi failā"
 
 msgid "Load expression from file"
 msgstr "Ielādēt izteiksmi no datnes"
+
+msgid "Copy the current command string to the clipboard"
+msgstr ""
 
 msgid "exponent"
 msgstr "eksponente"
@@ -11789,9 +11867,6 @@ msgstr ""
 
 #~ msgid "Modis quality control"
 #~ msgstr "Modis kvalitātes kontrole"
-
-#~ msgid "Modules"
-#~ msgstr "Moduļi"
 
 #~ msgid "Name for output vector map"
 #~ msgstr "Izvades vektordatu kartes nosaukums"

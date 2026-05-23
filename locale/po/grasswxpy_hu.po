@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-25 16:03+0000\n"
+"POT-Creation-Date: 2026-05-09 16:40+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Hungarian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/hu/>\n"
@@ -3228,10 +3228,41 @@ msgstr ""
 msgid "Run the command (Ctrl+R)"
 msgstr "Parancs futtatás (Ctrl+R)"
 
+#, fuzzy
+#| msgid "Copy all to clipboard"
+msgid "Copy as Shell command"
+msgstr "Minden másolása a vágólapra"
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (Script API)"
+msgstr "Python szkript"
+
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+msgid "Copy as Python (PyGRASS)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector maps settings"
+msgid "Copy as JSON settings"
+msgstr "Vektor térkép beállítások"
+
 msgid "Copy"
 msgstr "Másolás"
 
-msgid "Copy the current command string to the clipboard"
+msgid "More copy formats"
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster map settings"
+msgid "Paste JSON settings"
+msgstr "Raszter térkép beállítások"
+
+#, fuzzy
+#| msgid "Copy the current command string to the clipboard"
+msgid "Paste parameters from JSON string in the clipboard"
 msgstr "Aktuális parancs szövegének másolása a vágólapra"
 
 msgid "Show manual page of the command (Ctrl+H)"
@@ -3249,6 +3280,48 @@ msgstr ""
 #, python-format
 msgid "'%s' copied to clipboard"
 msgstr ""
+
+#, fuzzy
+#| msgid "'{cmd}' copied to clipboard"
+msgid "JSON copied to clipboard"
+msgstr "'{cmd}'-t a vágólapra másoltam"
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+msgid "Module Mismatch"
+msgstr ""
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid name"
+msgid "Invalid Data"
+msgstr "Hibás név"
+
+#, fuzzy
+#| msgid "Error"
+msgid "Paste Error"
+msgstr "Hiba"
+
+#, fuzzy, python-format
+#| msgid "'{cmd}' copied to clipboard"
+msgid "%s copied to clipboard"
+msgstr "'{cmd}'-t a vágólapra másoltam"
 
 msgid "Required"
 msgstr "Kötelező"
@@ -7171,6 +7244,9 @@ msgstr "Kifejezés mentése fájlba"
 
 msgid "Load expression from file"
 msgstr "Kifejezés betöltése fájlból"
+
+msgid "Copy the current command string to the clipboard"
+msgstr "Aktuális parancs szövegének másolása a vágólapra"
 
 msgid "exponent"
 msgstr "exponens"

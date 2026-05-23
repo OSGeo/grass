@@ -27,7 +27,7 @@ jobs:
       contents: read
     env:
       # renovate: datasource=pypi depName=prek
-      PREK_VERSION: 0.3.8
+      PREK_VERSION: 0.3.13
 
     steps:
       - name: Checkout repository contents
@@ -41,7 +41,7 @@ jobs:
         with:
           python-version: "3.14"
       - name: Install uv and restore its cache
-        uses: astral-sh/setup-uv@cec208311dfd045dd5311c1add060b2062131d57 # v8.0.0
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
         with:
           # To not have the last commit JSON and release notes files affected on
           # releases, if copying the contents displayed in the CI logs.

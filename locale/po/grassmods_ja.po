@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-25 16:03+0000\n"
+"POT-Creation-Date: 2026-05-09 16:40+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Japanese <https://weblate.osgeo.org/projects/grass-gis/grassmods/ja/>\n"
@@ -31420,6 +31420,11 @@ msgstr ""
 msgid "Missing attribute table for vector map <%s>"
 msgstr ""
 
+#, fuzzy
+#| msgid "Too many units to place"
+msgid "Too many columns to copy the table"
+msgstr "置くユニットが多すぎます"
+
 #, c-format
 msgid "Missing table for <%s>"
 msgstr ""
@@ -31473,6 +31478,11 @@ msgstr ""
 #, c-format
 msgid "%d vector maps patched"
 msgstr ""
+
+#, fuzzy
+#| msgid "Too many column names"
+msgid "Too many columns to copy records"
+msgstr "列名が多すぎます "
 
 #, c-format
 msgid "Cannot open select cursor: '%s'"

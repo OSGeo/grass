@@ -393,14 +393,17 @@ def create_grass_config_dir() -> str:
                     ).format(directory, e.strerror)
                 )
         # TODO: remove with next major or minor release after GRASS 8.5 (8.6 or 9.0)
-        old_mac_dir = os.path.join(os.getenv("HOME"), f".grass{GRASS_VERSION_MAJOR}")
-        if MACOS and Path(old_mac_dir).is_dir():
-            try:
-                shutil.copy(os.path.join(old_mac_dir, "rc"), directory)
-                shutil.copy(os.path.join(old_mac_dir, "wx.json"), directory)
-                shutil.copytree(os.path.join(old_mac_dir, "toolboxes"), directory)
-            except Exception:
-                pass
+        if MACOS:
+            old_mac_dir = os.path.join(
+                os.getenv("HOME"), f".grass{GRASS_VERSION_MAJOR}"
+            )
+            if Path(old_mac_dir).is_dir():
+                try:
+                    shutil.copy(os.path.join(old_mac_dir, "rc"), directory)
+                    shutil.copy(os.path.join(old_mac_dir, "wx.json"), directory)
+                    shutil.copytree(os.path.join(old_mac_dir, "toolboxes"), directory)
+                except Exception:
+                    pass
 
     return directory
 

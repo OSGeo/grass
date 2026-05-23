@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-25 16:03+0000\n"
+"POT-Creation-Date: 2026-05-09 16:40+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grassmods/es/>\n"
@@ -31791,6 +31791,11 @@ msgstr "Añadir archivos al existente (debe estar activada la sobrescritura de a
 msgid "Missing attribute table for vector map <%s>"
 msgstr ""
 
+#, fuzzy
+#| msgid "Too many units to place"
+msgid "Too many columns to copy the table"
+msgstr "Demasiadas unidades a situar"
+
 #, c-format
 msgid "Missing table for <%s>"
 msgstr ""
@@ -31844,6 +31849,11 @@ msgstr "La información de la cabecera también puede que tenga que ser editada"
 #, c-format
 msgid "%d vector maps patched"
 msgstr "%d mapas vectoriales parcheados"
+
+#, fuzzy
+#| msgid "Too many column names"
+msgid "Too many columns to copy records"
+msgstr "Demasiados nombres de columna"
 
 #, c-format
 msgid "Cannot open select cursor: '%s'"
