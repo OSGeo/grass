@@ -659,8 +659,14 @@ class HistoryBrowserTree(CTreeView):
             event.Skip()
             return
 
-        # Check if a command node is selected (we don't want to allow copying/deleting day nodes)
         node = selected[0]
+
+        # Map Enter / Return key to the same action as double-clicking the item
+        if keycode in {wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER}:
+            self.OnDoubleClick(node)
+            return
+
+        # Check if a command node is selected (we don't want to allow copying/deleting day nodes)
         if node.data.get("type") != COMMAND:
             event.Skip()
             return
