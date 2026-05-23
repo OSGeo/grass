@@ -272,6 +272,9 @@ class Settings:
                 "interactiveInput": {
                     "enabled": True,
                 },
+                "pythonAPI": {
+                    "selection": 0,
+                },
             },
             #
             # d.rast
@@ -800,6 +803,12 @@ class Settings:
             "grassenv",
             "verbose",
             "quiet",
+        )
+
+        self.internalSettings["cmd"]["pythonAPI"]["choices"] = (
+            _("Tools API"),
+            _("Script API"),
+            _("PyGRASS API"),
         )
 
         self.internalSettings["appearance"]["iconTheme"]["choices"] = ("grass",)
