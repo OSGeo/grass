@@ -4,6 +4,8 @@
  *
  * AUTHOR(S):    Original author Bill Brown, UIUC GIS Laboratory
  *               Brad Douglas <rez touchofmadness com>
+ *               Tomas Zigo <tomas zigo slovanet sk> (adding the option
+ *               to read width, depth values from vector map table columns)
  *
  * PURPOSE:      Takes vector stream data, converts it to 3D raster and
  *               subtracts a specified depth
@@ -58,10 +60,17 @@ int main(int argc, char **argv)
     struct Flag *noflat;
 
     const char *vmapset, *rmapset;
-    int infd, outfd;
+    unsigned int i;
+    int clen, infd, outfd;
+    int width_col_pos = 0, depth_col_pos = 1;
     struct Map_info Map;
     struct Map_info outMap;
     struct Cell_head win;
+    struct field_info *Fi = NULL;
+    dbDriver *driver = NULL;
+    dbString dbstr;
+    dbColumn *column = NULL;
+    char *columns[2] = {0};
 
     /* start GIS engine */
     G_gisinit(argv[0]);
@@ -90,6 +99,23 @@ int main(int argc, char **argv)
     parm.outvect->description =
         _("Name for output vector map for adjusted stream points");
 
+    parm.field = G_define_standard_option(G_OPT_V_FIELD);
+    parm.field->key = "field";
+    parm.field->label = _("Layer number");
+    parm.field->guisection = _("Optional");
+
+    parm.width_col = G_define_standard_option(G_OPT_DB_COLUMN);
+    parm.width_col->key = "width_column";
+    parm.width_col->description =
+        _("Name of column for 'width' parameter (data type must be numeric)");
+    parm.width_col->guisection = _("Optional");
+
+    parm.depth_col = G_define_standard_option(G_OPT_DB_COLUMN);
+    parm.depth_col->key = "depth_column";
+    parm.depth_col->description =
+        _("Name of column for 'depth' parameter (data type must be numeric)");
+    parm.depth_col->guisection = _("Optional");
+
     width = G_define_option();
     width->key = "width";
     width->type = TYPE_DOUBLE;
@@ -105,6 +131,9 @@ int main(int argc, char **argv)
     noflat->key = 'n';
     noflat->description = _("No flat areas allowed in flow direction");
 
+    /* GUI dependency */
+    parm.invect->guidependency = G_store(parm.field->key);
+
     /* parse options */
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -119,30 +148,28 @@ int main(int argc, char **argv)
     init_projection(&win, &parm.wrap);
 
     /* default width - one cell at center */
-    if (width->answer == NULL) {
-        parm.swidth =
-            G_distance((win.east + win.west) / 2, (win.north + win.south) / 2,
-                       ((win.east + win.west) / 2) + win.ew_res,
-                       (win.north + win.south) / 2);
+    if (!(width->answer)) {
+        parm.swidth = 0.0;
+        adjust_swidth(&win, &parm.swidth);
     }
     else {
-        if (sscanf(width->answer, "%lf", &parm.swidth) != 1) {
+        if (sscanf(width->answer, "%lf", &parm.swidth) != 1 ||
+            parm.swidth < 0.0) {
             G_warning(_("Invalid width value '%s' - using default."),
                       width->answer);
-            parm.swidth = G_distance((win.east + win.west) / 2,
-                                     (win.north + win.south) / 2,
-                                     ((win.east + win.west) / 2) + win.ew_res,
-                                     (win.north + win.south) / 2);
+            adjust_swidth(&win, &parm.swidth);
         }
     }
 
-    if (depth->answer == NULL)
-        parm.sdepth = 0.0;
+    if (!(depth->answer)) {
+        adjust_sdepth(&parm.sdepth);
+    }
     else {
-        if (sscanf(depth->answer, "%lf", &parm.sdepth) != 1) {
+        if (sscanf(depth->answer, "%lf", &parm.sdepth) != 1 ||
+            parm.sdepth < 0.0) {
             G_warning(_("Invalid depth value '%s' - using default."),
                       depth->answer);
-            parm.sdepth = 0.0;
+            adjust_sdepth(&parm.sdepth);
         }
     }
 
@@ -159,6 +186,53 @@ int main(int argc, char **argv)
     if ((rmapset = G_find_file2("cell", parm.inrast->answer, "")) == NULL)
         G_fatal_error(_("Raster map <%s> not found"), parm.inrast->answer);
 
+    /* Open database driver */
+    db_init_string(&dbstr);
+
+    if (parm.field->answer) {
+        Fi = Vect_get_field2(&Map, parm.field->answer);
+        if (!(Fi))
+            G_fatal_error(_("Database connection not defined for layer <%s>"),
+                          parm.field->answer);
+
+        driver = db_start_driver_open_database(Fi->driver, Fi->database);
+        if (!(driver))
+            G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+                          Fi->database, Fi->driver);
+
+        columns[width_col_pos] = parm.width_col->answer;
+        columns[depth_col_pos] = parm.depth_col->answer;
+
+        clen = sizeof(columns) / sizeof(columns[0]);
+        for (i = 0; i < clen; i++) {
+            if (columns[i]) {
+                /* Check if to_column exists and get its SQL type */
+                db_get_column(driver, Fi->table, columns[i], &column);
+
+                if (column) {
+                    db_free_column(column);
+                    column = NULL;
+                    int ctype = db_column_Ctype(driver, Fi->table, columns[i]);
+                    if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE) {
+                        /* Close db connection */
+                        db_close_database_shutdown_driver(driver);
+                        driver = NULL;
+                        G_fatal_error(
+                            _("Incompatible column type for <%s> column"),
+                            columns[i]);
+                    }
+                }
+                else {
+                    /* Close db connection */
+                    db_close_database_shutdown_driver(driver);
+                    driver = NULL;
+                    G_fatal_error(_("Column <%s> not found in table <%s>"),
+                                  columns[i], Fi->table);
+                }
+            }
+        }
+    }
+
     infd = Rast_open_old(parm.inrast->answer, rmapset);
 
     parm.raster_type = Rast_get_map_type(infd);
@@ -170,7 +244,8 @@ int main(int argc, char **argv)
     if (parm.outvect->answer)
         open_new_vect(&outMap, parm.outvect->answer);
 
-    enforce_downstream(infd, outfd, &Map, &outMap, &parm);
+    enforce_downstream(infd, outfd, &Map, &outMap, &parm, Fi, &width_col_pos,
+                       &depth_col_pos, columns, driver);
 
     Rast_close(infd);
     Rast_close(outfd);
