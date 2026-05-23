@@ -1,32 +1,51 @@
 ---
-description: GRASS variables and environment variables
+description: Environment variables and GRASS session variables
 ---
 
-# GRASS variables and environment variables
+# Environment variables and GRASS session variables
 
-A variable in scripting is a symbolic name that holds data which can be
-used and modified during script execution. Variables allow scripts to
-store and manipulate values dynamically, making them more flexible and
-reusable. In GRASS, there are two types of variables:
+A variable is a named value used to configure program behavior.
+Its scope and lifetime determine whether it affects a single running tool,
+a set of related processes, or an entire working session.
 
-- [shell environment](#setting-shell-environment-variables) variables,
-- [GRASS gisenv](#setting-grass-gisenv-variables) variables.
+In relation to an operating system and processes,
+GRASS recognizes two types of variables:
 
-There are a number of *shell* environment variable groups:
+- **environment variables**, which are managed by the operating system, and
+- **GRASS session variables**, which are managed by GRASS itself.
 
-- [variables for
-  rendering](#list-of-selected-grass-environment-variables-for-rendering)
-- [variables for internal
-  use](#list-of-selected-internal-grass-environment-variables)
+Environment variables are typically set in a shell, script, GRASS tool,
+or in system configuration.
+They are inherited by GRASS and any subprocesses it starts (including GRASS tools).
+Given how environment variables work, GRASS tools cannot set environment
+variables for other tools unless they call them as subprocesses.
+That's where GRASS session variables come in.
 
-*Note:* Any setting which needs to be modifiable by a GRASS module (e.g.
-MONITOR by *[d.mon](d.mon.md)*) has to be a GRASS gisenv variable.
+GRASS session variables can be set by GRASS tools and, at the same time,
+influence all tools within the same GRASS session. These variables are
+managed by GRASS using files in the background. The low level tool
+which can modify these variables is *[g.gisenv](g.gisenv.md)*, hence
+they are sometimes called as *gisenv* or *GIS environment* variables.
 
-## Setting shell environment variables
+From implementation perspective, any setting that is modified
+programmatically by a GRASS tool to affect other tools
+(for example, changing the active monitor with *[d.mon](d.mon.md)*)
+must be implemented as a GRASS session variable rather
+than an environment variable.
 
-Setting shell environment variables depends on the shell being used:  
-  
-Bash:
+## Setting environment variables
+
+Setting environment variables depends on the language, shell,
+or environment being used:
+
+Python:
+
+```python
+import os
+os.environ["VARIABLE"] = "value"
+```
+
+Bash and Zsh:
 
 ```sh
 export VARIABLE=value
@@ -38,48 +57,78 @@ Csh:
 setenv VARIABLE value
 ```
 
-Cmd.exe (Windows):
+cmd.exe (Windows):
 
-```sh
+```bat
 set VARIABLE=value
 ```
 
-To set up shell environment variables permanently:
+PowerShell (Windows):
 
-- To get personal BASH shell definitions (aliases, color listing option,
-  ...) into GRASS, store them in:  
-  `$HOME/.grass8/bashrc`
-- To get personal CSH shell definitions (aliases, color listing option,
-  ...) into GRASS, store them in:  
-  `$HOME/.grass8/cshrc`
+```powershell
+$Env:VARIABLE = "value"
+```
 
-## Setting GRASS gisenv variables
+To set up environment variables permanently, depends on your operating
+system and shell.
+For example, to get personal Bash shell definitions
+(aliases, color listing option, ...) into GRASS,
+store them in `$HOME/.grass8/bashrc`.
+
+## Setting GRASS session variables
 
 Use *[g.gisenv](g.gisenv.md)* within GRASS. This permanently predefines
 GRASS variables in the `$HOME/.grass8/rc` file (Linux, Mac, BSD, ...) or
 in the `%APPDATA%\Roaming\GRASS8\rc` file (Windows) after the current
 GRASS session is closed.  
   
-Usage:
+Usage in Bash and similar shell:
 
 ```sh
 g.gisenv set="VARIABLE=VALUE"
 ```
 
-It looks unusual with two equals signs, but *g.gisenv* serves dual duty
-for getting and setting GRASS variables.
+Or sometimes in a simpler, less robust way as:
+
+```sh
+g.gisenv set=VARIABLE=VALUE
+```
+
+In Python:
+
+```python
+tools.g_gisenv(set="VARIABLE=VALUE")
+```
+
+Especially notable with in the shell syntax without quotes,
+the syntax uses two equals signs with different roles.
+The first separates the tool **set** parameter from its value,
+while the second separates the variable name from its value.
+This allows *g.gisenv* to serve dual duty
+for both getting and setting GRASS session variables.
 
 If the user just specifies a variable name, it defaults to **get** mode.
 For example:
 
 ```sh
 g.gisenv MAPSET
-PERMANENT
 ```
 
-## List of selected (GRASS related) shell environment variables
+Or with explicit get parameter:
 
-> \[ To be set from the terminal shell or startup scripts \]
+```sh
+g.gisenv get=MAPSET
+```
+
+## List of selected environment variables
+
+The variables are set from the terminal shell or startup scripts.
+Several groups of GRASS-related environment variables exist:
+
+- runtime, session, and configuration variables,
+- [variables affecting **rendering**](#list-of-selected-environment-variables-for-rendering),
+  and
+- [variables intended for **internal or low-level control**](#list-of-selected-internal-and-low-level-environment-variables).
 
 GISBASE  
 directory where GRASS lives. This is set automatically by the startup
@@ -387,11 +436,11 @@ directory by setting one of the TMPDIR, TEMP or TMP environment
 variables Hence the wxGUI uses $TMPDIR if it is set, then $TEMP,
 otherwise /tmp.
 
-### List of selected GRASS environment variables for rendering
+### List of selected environment variables for rendering
 
-> \[ In addition to those which are understood by specific *[GRASS
-> display drivers](displaydrivers.md)*, the following variables affect
-> rendering. \]
+In addition to those which are understood by specific
+*[GRASS display drivers](displaydrivers.md)*, the following variables affect
+rendering.
 
 GRASS_RENDER_IMMEDIATE  
 tells the display library which driver to use; possible values:
@@ -432,12 +481,13 @@ For specific driver-related variables see:
 - *[PS (Postscript) display driver](psdriver.md)*
 - *[HTML display driver](htmldriver.md)*
 
-### List of selected internal GRASS environment variables
+### List of selected internal and low-level environment variables
 
-> \[ These variables are intended **for internal use only** by the GRASS
-> software to facilitate communication between the GIS engine, GRASS
-> scripts, and the GUI. The user should not set these in a GRASS
-> session. They are meant to be set locally for specific commands. \]
+These variables are intended **for internal use** by the GRASS
+software to facilitate communication between the libraries, tools, scripts,
+and the GUI. The user may use these as a last resort if there is no
+other fitting API available.
+They would be typically set in a script for a specific set of tools called as subprocesses.
 
 GRASS_OVERWRITE  
 \[all modules\]  
@@ -449,7 +499,7 @@ toggles map overwrite.
 This variable is automatically created by *[g.parser](g.parser.md)* so
 that the `--overwrite` option will be inherited by dependent modules as
 the script runs. Setting either the GRASS_OVERWRITE environment variable
-or the OVERWRITE gisenv variable detailed below will cause maps with
+or the OVERWRITE GRASS session variable detailed below will cause maps with
 identical names to be overwritten.
 
 GRASS_VERBOSE  
@@ -487,9 +537,9 @@ GRASS_MASK
 use the raster map specified by name as mask, instead of a raster called
 MASK in the current mapset.
 
-## List of selected GRASS gisenv variables
+## List of selected GRASS session variables
 
-> \[ Use *[g.gisenv](g.gisenv.md)* to get/set/unset/change them \]
+Use *[g.gisenv](g.gisenv.md)* to get/set/unset/change them.
 
 DEBUG  
 \[entire GRASS\]  
@@ -551,13 +601,13 @@ toggles map overwrite.
 This variable is automatically created by *[g.parser](g.parser.md)* so
 that the `--overwrite` option will be inherited by dependent modules as
 the script runs. Setting either the GRASS_OVERWRITE environment variable
-or the OVERWRITE gisenv variable detailed below will cause maps with
+or the OVERWRITE GRASS session variable detailed below will cause maps with
 identical names to be overwritten.
 
-## GRASS-related Files
+## GRASS-related files
 
 `$HOME/.grass8/rc`  
-stores the GRASS gisenv variables (not shell environment variables)
+stores the GRASS session variables (not shell environment variables)
 
 `$HOME/.grass8/bashrc`  
 stores the shell environment variables (Bash only)
@@ -577,6 +627,6 @@ See also GIS_ERROR_LOG variable.
 
 Note: On MS Windows the files are stored in `%APPDATA%`.
 
-## SEE ALSO
+## See also
 
 *[g.gisenv](g.gisenv.md), [g.parser](g.parser.md)*
