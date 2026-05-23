@@ -28,6 +28,7 @@ The addons are maintained by the GRASS community
 and are a great way to extend the functionality of GRASS.
 
 - [Addons](https://grass.osgeo.org/grass-stable/manuals/addons/)
+- [Template for addons](https://github.com/OSGeo/grass-addon-cookiecutter)
 
 ## Contributing
 
