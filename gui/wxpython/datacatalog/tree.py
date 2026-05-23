@@ -197,6 +197,30 @@ class DataCatalogNode(DictFilterNode):
 
         return result
 
+    def _get_epsg_code(self):
+        """Attempt to extract EPSG code using g.proj -g"""
+        if not self.parent or "name" not in self.parent.data:
+            return None
+
+        db_path = self.parent.data["name"]
+        loc_name = self.data["name"]
+
+        # Create temporary GISRC to read projection information without affecting global state
+        tmp_gisrc, env = gs.create_environment(db_path, loc_name, "PERMANENT")
+        env["GRASS_SKIP_MAPSET_OWNER_CHECK"] = "1"
+
+        # Use g.proj -g to get projection information in a parseable format
+        proj_info = gs.read_command("g.proj", flags="g", env=env, quiet=True)
+        gs.try_remove(tmp_gisrc)
+
+        if proj_info:
+            # Look for EPSG code in the output using regex
+            match = re.search(r"srid=EPSG:(\d+)", proj_info, re.IGNORECASE)
+            if match:
+                return match.group(1)
+
+        return None
+
     @property
     def label(self):
         data = self.data
@@ -340,6 +364,7 @@ class DataCatalogTree(TreeView):
         self.startEdit.connect(self.OnStartEditLabel)
         self.endEdit.connect(self.OnEditLabel)
         self.EnableWatchingMapset()
+        self.Bind(wx.EVT_TREE_ITEM_GETTOOLTIP, self.OnItemToolTip)
 
     def _resetSelectVariables(self):
         """Reset variables related to item selection."""
@@ -1058,6 +1083,31 @@ class DataCatalogTree(TreeView):
             else:
                 font.SetWeight(wx.FONTWEIGHT_NORMAL)
         return font
+
+    def OnItemToolTip(self, event):
+        """Fetch and display EPSG code natively when requested by the OS."""
+        item = event.GetItem()
+        if not item.IsOk():
+            event.Skip()
+            return
+
+        # Extract row text directly to handle virtualization mapping safely
+        item_text = self.GetItemText(item)
+
+        # Query the tree model for the location node matching the row text
+        nodes = self._model.SearchNodes(name=item_text, type="location")
+        if nodes:
+            node = nodes[0]
+            # Fetch EPSG code on-demand and cache it to eliminate duplicate disk reads
+            if "epsg" not in node.data:
+                node.data["epsg"] = node._get_epsg_code()
+
+            if node.data["epsg"]:
+                tip_text = _("EPSG:{epsg}").format(epsg=node.data["epsg"])
+                event.SetToolTip(tip_text)
+                return
+
+        event.Skip()
 
     def ExpandCurrentMapset(self):
         """Expand current mapset"""
