@@ -7,7 +7,7 @@ control for display management and access to command console.
 Classes:
  - frame::GMFrame
 
-(C) 2006-2015 by the GRASS Development Team
+(C) 2006-2025 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -75,6 +75,7 @@ from lmgr.pyshell import PyShellWindow
 from lmgr.giface import LayerManagerGrassInterface
 from mapdisp.frame import MapDisplay
 from datacatalog.catalog import DataCatalog
+from gui_core.dialogs import DirBrowseDialog
 from history.browser import HistoryBrowser
 from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog
@@ -755,6 +756,30 @@ class GMFrame(wx.Frame):
                     mapset,
                     show_confirmation=True,
                 )
+
+    def OnSetRStudioPath(self, event):
+        """Set RStudio path"""
+        dlg = DirBrowseDialog(
+            parent=self,
+            message=_("Set RStudio path:"),
+            caption=_("Set RStudio path"),
+        )
+
+        rstudio_path = UserSettings.Get(group="rstudio", key="path")
+        if rstudio_path:
+            dlg.SetValue(value=rstudio_path)
+
+        if dlg.ShowModal() == wx.ID_OK:
+            rstudio_path = dlg.GetValue()
+            UserSettings.Set(group="rstudio", key="path", value=rstudio_path)
+            fileSettings = {}
+            UserSettings.ReadSettingsFile(settings=fileSettings)
+            fileSettings["rstudio"] = UserSettings.Get(group="rstudio")
+            UserSettings.SaveToFile(fileSettings)
+            if rstudio_path not in os.environ["PATH"]:
+                os.environ["PATH"] += os.pathsep + rstudio_path
+
+        dlg.Destroy()
 
     def OnSettingsChanged(self):
         """Here can be functions which have to be called

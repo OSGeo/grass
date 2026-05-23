@@ -18,14 +18,16 @@ List of classes:
  - :class:`SymbolDialog`
  - :class:`QuitDialog`
  - :class:`DefaultFontDialog`
+ - :class:`DirBrowseDialog`
 
-(C) 2008-2016 by the GRASS Development Team
+(C) 2008-2025 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Martin Landa <landa.martin gmail.com>
 @author Anna Kratochvilova <kratochanna gmail.com> (GroupDialog, SymbolDialog)
+@author Tomas Zigo <tomas.zigo slovanet.sk> (DirBrowseDialog)
 """
 
 import os
@@ -33,6 +35,7 @@ import re
 from pathlib import Path
 
 import wx
+import wx.lib.filebrowsebutton as filebrowse
 
 from grass.script import core as grass
 from grass.script.utils import naturally_sorted, try_remove
@@ -47,7 +50,13 @@ from gui_core.gselect import (
     OgrTypeSelect,
     SubGroupSelect,
 )
-from gui_core.widgets import SingleSymbolPanel, SimpleValidator, MapValidator
+from gui_core.widgets import (
+    GenericValidator,
+    GListCtrl,
+    MapValidator,
+    SimpleValidator,
+    SingleSymbolPanel,
+)
 from core.settings import UserSettings
 from core.debug import Debug
 from core.utils import is_shell_running
@@ -2597,3 +2606,86 @@ class DefaultFontDialog(wx.Dialog):
         else:
             self.renderfont.SetBitmap(EmptyBitmap(size[0], size[1]))
         try_remove(self.tmp_file)
+
+
+class DirBrowseDialog(wx.Dialog):
+    """Simple dialog with DirBrowseButton widget."""
+
+    def __init__(
+        self,
+        parent,
+        message,
+        caption="",
+        defaultValue="",
+        validator=wx.DefaultValidator,
+        style=wx.OK | wx.CANCEL | wx.CENTRE,
+        textStyle=0,
+        textSize=(300, -1),
+        size=(400, -1),
+        **kwargs,
+    ):
+        wx.Dialog.__init__(
+            self, parent=parent, id=wx.ID_ANY, title=caption, size=size, **kwargs
+        )
+
+        vbox = wx.BoxSizer(wx.VERTICAL)
+
+        stline = StaticText(self, id=wx.ID_ANY, label=message)
+        vbox.Add(stline, proportion=0, flag=wx.EXPAND | wx.ALL, border=10)
+
+        self._dirBrowse = filebrowse.DirBrowseButton(
+            parent=self,
+            id=wx.ID_ANY,
+            labelText=_("Directory:"),
+            dialogTitle=_("Choose directory for export"),
+            buttonText=_("Browse"),
+            startDirectory=Path.cwd(),
+        )
+        self._dirBrowse.SetValidator(
+            GenericValidator(
+                condition=self._pathExists, callback=self._pathDoesNotExists
+            )
+        )
+        wx.CallAfter(self._dirBrowse.SetFocus)
+
+        vbox.Add(
+            self._dirBrowse,
+            proportion=0,
+            flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
+            border=10,
+        )
+
+        sizer = self.CreateSeparatedButtonSizer(style)
+        vbox.Add(sizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=10)
+
+        self.SetSizerAndFit(vbox)
+        self.SetSizeHints(size[0], size[1], -1, -1)
+
+        self.Bind(wx.EVT_BUTTON, self.OnPathValidation, self.FindWindow(id=wx.ID_OK))
+
+    def _pathExists(self, path):
+        return Path(path).exists()
+
+    def _pathDoesNotExists(self, ctrl):
+        GMessage(
+            parent=self,
+            message=_(
+                "RStudio path <{}> doesn't exists. Set correct path, please.".format(
+                    ctrl.GetValue()
+                )
+            ),
+        )
+
+    def OnPathValidation(self, event):
+        if self.Validate() and self.TransferDataFromWindow():
+            if self.IsModal():
+                self.EndModal(wx.ID_OK)
+            else:
+                self.SetReturnCode(wx.ID_OK)
+                self.Show(False)
+
+    def GetValue(self):
+        return self._dirBrowse.GetValue()
+
+    def SetValue(self, value):
+        self._dirBrowse.SetValue(value)
