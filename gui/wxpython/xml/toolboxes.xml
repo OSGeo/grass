@@ -82,6 +82,9 @@
       <module-item name="r.mask">
         <label>Mask</label>
       </module-item>
+      <module-item name="r.mask.status">
+        <label>Query mask status</label>
+      </module-item>
       <subtoolbox name="RasterMapCalculator"/>
       <subtoolbox name="NeighborhoodAnalysis"/>
       <subtoolbox name="OverlayRasters"/>
@@ -577,6 +580,17 @@
       <module-item name="g.remove">
         <label>Delete</label>
       </module-item>
+      <separator/>
+      <module-item name="g.download.project">
+        <label>Download project from web</label>
+      </module-item>
+      <module-item name="g.download.location">
+        <label>Download project from web (deprecated name)</label>
+      </module-item>
+      <separator/>
+      <module-item name="g.extension.all">
+        <label>Rebuild or remove all addons</label>
+      </module-item>
     </items>
   </toolbox>
   <toolbox name="MapTypeConversions">
@@ -808,9 +822,6 @@
       </module-item>
       <module-item name="r.what.color">
         <label>Query colors by value</label>
-      </module-item>
-      <module-item name="r.mask.status">
-        <label>Query mask status</label>
       </module-item>
     </items>
   </toolbox>
@@ -2209,6 +2220,29 @@
       <wxgui-item name="TimelineTool"/>
       <wxgui-item name="VDigit"/>
       <wxgui-item name="RDigit"/>
+    </items>
+  </toolbox>
+  <toolbox name="Other">
+    <label>Other</label>
+    <items>
+      <module-item name="m.measure">
+        <label>Measure map distances</label>
+      </module-item>
+      <module-item name="m.transform">
+        <label>Transform coordinates (affine)</label>
+      </module-item>
+      <module-item name="m.nviz.image">
+        <label>3D image rendering</label>
+      </module-item>
+      <module-item name="m.nviz.script">
+        <label>3D visualization script</label>
+      </module-item>
+      <module-item name="m.cogo">
+        <label>Bearing/distance to coordinates</label>
+      </module-item>
+      <module-item name="ps.map">
+        <label>PostScript map output</label>
+      </module-item>
     </items>
   </toolbox>
 </toolboxes>
