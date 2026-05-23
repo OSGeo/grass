@@ -26,7 +26,7 @@
 #include "local_proto.h"
 
 /* GRASS relative location of OGR co-ordinate system lookup tables */
-#define CSVDIR "/etc/proj/ogr_csv"
+#define CSVDIR "/proj/ogr_csv"
 
 static void DatumNameMassage(char **);
 
@@ -492,8 +492,8 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
                     /* use name of the projection as name for the coordinate
                      * system */
 
-                    snprintf(path, sizeof(path), "%s/etc/proj/projections",
-                             G_gisbase());
+                    snprintf(path, sizeof(path), "%s/proj/projections",
+                             G_etc_dir());
                     if (G_lookup_key_value_from_file(path, pszProj, name,
                                                      sizeof(name)) > 0)
                         G_set_key_value("name", name, *projinfo);
@@ -628,8 +628,7 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 
             /* use name of the projection as name for the coordinate system */
 
-            snprintf(path, sizeof(path), "%s/etc/proj/projections",
-                     G_gisbase());
+            snprintf(path, sizeof(path), "%s/proj/projections", G_etc_dir());
             if (G_lookup_key_value_from_file(path, pszProj, name,
                                              sizeof(name)) > 0)
                 G_set_key_value("name", name, *projinfo);
@@ -997,13 +996,13 @@ int GPJ_wkt_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 
 const char *GPJ_set_csv_loc(const char *name)
 {
-    const char *gisbase = G_gisbase();
+    const char *g_etc_dir = G_etc_dir();
     static char *buf = NULL;
 
     if (buf != NULL)
         G_free(buf);
 
-    G_asprintf(&buf, "%s%s/%s", gisbase, CSVDIR, name);
+    G_asprintf(&buf, "%s%s/%s", g_etc_dir, CSVDIR, name);
 
     return buf;
 }

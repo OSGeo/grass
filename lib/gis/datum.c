@@ -14,7 +14,7 @@
  *
  *****************************************************************************/
 
-#define DATUMTABLE "/etc/proj/datum.table"
+#define DATUMTABLE "/proj/datum.table"
 
 #include <unistd.h>
 #include <string.h>
@@ -148,7 +148,7 @@ void G_read_datum_table(void)
     if (G_is_initialized(&table.initialized))
         return;
 
-    snprintf(file, sizeof(file), "%s%s", G_gisbase(), DATUMTABLE);
+    snprintf(file, sizeof(file), "%s%s", G_etc_dir(), DATUMTABLE);
 
     fd = fopen(file, "r");
     if (!fd) {

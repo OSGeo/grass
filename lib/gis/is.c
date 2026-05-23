@@ -48,7 +48,7 @@ static int test_path_file(const char *path, const char *file)
  */
 int G_is_gisbase(const char *path)
 {
-    return test_path_file(path, "etc/element_list");
+    return test_path_file(path, "etc/echo");
 }
 
 /**

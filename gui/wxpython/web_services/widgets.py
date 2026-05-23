@@ -62,7 +62,7 @@ from gui_core.wrap import (
 import grass.script as gs
 from grass.pydispatch.signal import Signal
 
-rinwms_path = os.path.join(os.getenv("GISBASE"), "etc", "r.in.wms")
+rinwms_path = os.path.join(os.getenv("GRASS_ETCBINDIR"), "r.in.wms")
 if rinwms_path not in sys.path:
     sys.path.append(rinwms_path)
 

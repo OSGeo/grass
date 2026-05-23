@@ -318,7 +318,7 @@ static void load_rules_name(struct Colors *colors, const char *name, DCELL min,
 {
     char path[GPATH_MAX];
 
-    snprintf(path, sizeof(path), "%s/etc/colors/%s", G_gisbase(), name);
+    snprintf(path, sizeof(path), "%s/%s", G_colors_dir(), name);
 
     if (!load_rules_file(colors, path, min, max))
         G_fatal_error(_("Unable to load color rules <%s>"), name);

@@ -432,6 +432,6 @@ def get_desc(cmd):
 
 ############################################################################
 
-man_dir = os.path.join(os.environ["ARCH_DISTDIR"], "docs", "html")
+man_dir = os.path.join(os.environ["GRASS_DOCDIR"])
 
 ############################################################################

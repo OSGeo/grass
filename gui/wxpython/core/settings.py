@@ -105,7 +105,7 @@ class Settings:
     def _generateLocale(self):
         """Generate locales"""
         try:
-            locale_path = Path(os.environ["GISBASE"]) / "locale"
+            locale_path = Path(os.environ["GRASS_LOCALEDIR"])
             self.locs = [p.name for p in locale_path.iterdir() if p.is_dir()]
             self.locs.append("en")  # GRASS doesn't ship EN po files
             self.locs.sort()
