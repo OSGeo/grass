@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GRASS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-09 16:40+0000\n"
+"POT-Creation-Date: 2026-05-23 16:07+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Chinese (Simplified) <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/zh_Hans/>\n"
@@ -740,6 +740,17 @@ msgstr "编辑选中的记录"
 
 msgid "Display selected"
 msgstr "显示选中项目"
+
+msgid "Tools API"
+msgstr ""
+
+#, fuzzy
+msgid "Script API"
+msgstr "Python编辑器"
+
+#, fuzzy
+msgid "PyGRASS API"
+msgstr "GRASS帮助文件"
 
 msgid "Classic (labels only)"
 msgstr "经典（仅标签）"
@@ -3204,14 +3215,10 @@ msgstr "运行命令(Ctrl+R)"
 msgid "Copy as Shell command"
 msgstr ""
 
-msgid "Copy as Python (Script API)"
-msgstr ""
-
-msgid "Copy as Python (Tools API)"
-msgstr ""
-
-msgid "Copy as Python (PyGRASS)"
-msgstr ""
+#, fuzzy
+#| msgid "Copy table"
+msgid "Copy as Python"
+msgstr "拷贝数据表"
 
 #, fuzzy
 msgid "Copy as JSON settings"
@@ -3244,8 +3251,22 @@ msgstr ""
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr ""
 
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+msgid "Copy as Python (Script API)"
+msgstr ""
+
+msgid "Copy as Python (PyGRASS API)"
+msgstr ""
+
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr "'%s'已复制到剪贴板"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "Python code copied to clipboard"
 msgstr "'%s'已复制到剪贴板"
 
 #, fuzzy
@@ -3899,6 +3920,9 @@ msgstr "使用交互输入"
 
 msgid "Verbosity level:"
 msgstr "信息详细程度"
+
+msgid "Default Python API for copied commands:"
+msgstr ""
 
 msgid "Number of threads for parallel computing (supported tools only):"
 msgstr ""
