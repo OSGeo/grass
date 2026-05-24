@@ -113,7 +113,7 @@ def test_buffer_read_never_exceeds_declared_length(payload):
                 f"Truncation invariant violated: result is not a prefix of the original input. "
                 f"Result bytes: {result_bytes[:50]}..., Original bytes: {original_bytes[:50]}..."
             )
-        except (ValueError, OverflowError, MemoryError) as e:
+        except (ValueError, OverflowError, MemoryError):
             # Explicit rejection is also acceptable behavior
             pass
         except Exception as e:
@@ -133,11 +133,14 @@ def test_buffer_read_never_exceeds_declared_length(payload):
         )
 
 
-@pytest.mark.parametrize("payload", [
-    "A" * (GPATH_MAX * 2),
-    "B" * (GPATH_MAX * 10),
-    "/path/to/db/" + "x" * (GPATH_MAX * 3),
-])
+@pytest.mark.parametrize(
+    "payload",
+    [
+        "A" * (GPATH_MAX * 2),
+        "B" * (GPATH_MAX * 10),
+        "/path/to/db/" + "x" * (GPATH_MAX * 3),
+    ],
+)
 def test_multiple_strcpy_calls_all_bounded(payload):
     """
     Invariant: All strcpy calls in the function (there are multiple) must
