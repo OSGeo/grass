@@ -342,32 +342,30 @@ char *substitute_variables(dbConnection *conn)
 
     ret = snprintf(buf, GPATH_MAX, "%s", database);
     if (ret >= GPATH_MAX) {
-        G_fatal_error(
-            _("Database path too long (exceeds %d characters): %s"),
-            GPATH_MAX - 1, database);
+        G_fatal_error(_("Database path too long (exceeds %d characters): %s"),
+                      GPATH_MAX - 1, database);
     }
     c = (char *)strstr(buf, "$GISDBASE");
     if (c != NULL) {
         *c = '\0';
         ret = snprintf(database, GPATH_MAX, "%s%s%s", buf, G_gisdbase(), c + 9);
         if (ret >= GPATH_MAX) {
-            G_fatal_error(
-                _("Database path after $GISDBASE expansion too long "
-                  "(exceeds %d characters)"),
-                GPATH_MAX - 1);
+            G_fatal_error(_("Database path after $GISDBASE expansion too long "
+                            "(exceeds %d characters)"),
+                          GPATH_MAX - 1);
         }
     }
 
     ret = snprintf(buf, GPATH_MAX, "%s", database);
     if (ret >= GPATH_MAX) {
-        G_fatal_error(
-            _("Database path too long (exceeds %d characters): %s"),
-            GPATH_MAX - 1, database);
+        G_fatal_error(_("Database path too long (exceeds %d characters): %s"),
+                      GPATH_MAX - 1, database);
     }
     c = (char *)strstr(buf, "$LOCATION_NAME");
     if (c != NULL) {
         *c = '\0';
-        ret = snprintf(database, GPATH_MAX, "%s%s%s", buf, G_location(), c + 14);
+        ret =
+            snprintf(database, GPATH_MAX, "%s%s%s", buf, G_location(), c + 14);
         if (ret >= GPATH_MAX) {
             G_fatal_error(
                 _("Database path after $LOCATION_NAME expansion too long "
@@ -378,19 +376,17 @@ char *substitute_variables(dbConnection *conn)
 
     ret = snprintf(buf, GPATH_MAX, "%s", database);
     if (ret >= GPATH_MAX) {
-        G_fatal_error(
-            _("Database path too long (exceeds %d characters): %s"),
-            GPATH_MAX - 1, database);
+        G_fatal_error(_("Database path too long (exceeds %d characters): %s"),
+                      GPATH_MAX - 1, database);
     }
     c = (char *)strstr(buf, "$MAPSET");
     if (c != NULL) {
         *c = '\0';
         ret = snprintf(database, GPATH_MAX, "%s%s%s", buf, G_mapset(), c + 7);
         if (ret >= GPATH_MAX) {
-            G_fatal_error(
-                _("Database path after $MAPSET expansion too long "
-                  "(exceeds %d characters)"),
-                GPATH_MAX - 1);
+            G_fatal_error(_("Database path after $MAPSET expansion too long "
+                            "(exceeds %d characters)"),
+                          GPATH_MAX - 1);
         }
     }
 #ifdef __MINGW32__
