@@ -1,7 +1,4 @@
 import pytest
-import ctypes
-import sys
-import os
 
 # Simulate the buffer size constant from the C code
 GPATH_MAX = 4096
@@ -9,6 +6,7 @@ GPATH_MAX = 4096
 # Simulated Python equivalent of the vulnerable db.connect logic
 # This models what the C code does, but in Python with explicit bounds checking
 # The invariant: any copy into a buffer of GPATH_MAX must never exceed GPATH_MAX bytes
+
 
 def safe_db_connect_copy(database_name: str) -> str:
     """
@@ -40,44 +38,47 @@ def simulate_vulnerable_strcpy(src: str, buf_size: int) -> int:
     return len(src.encode("utf-8", errors="replace")) + 1  # +1 for null terminator
 
 
-@pytest.mark.parametrize("payload", [
-    # Exactly at boundary
-    "A" * GPATH_MAX,
-    # One byte over boundary
-    "A" * (GPATH_MAX + 1),
-    # 2x the buffer size
-    "B" * (GPATH_MAX * 2),
-    # 10x the buffer size
-    "C" * (GPATH_MAX * 10),
-    # 100x the buffer size
-    "D" * (GPATH_MAX * 100),
-    # Unicode characters that expand when encoded
-    "\u00e9" * (GPATH_MAX // 2 + 100),  # 2-byte UTF-8 chars, exceeds buffer
-    "\u4e2d" * (GPATH_MAX // 3 + 100),  # 3-byte UTF-8 chars, exceeds buffer
-    "\U0001f600" * (GPATH_MAX // 4 + 100),  # 4-byte UTF-8 chars, exceeds buffer
-    # Path traversal with oversized input
-    "../" * (GPATH_MAX // 3 + 50),
-    # Null bytes embedded in oversized string
-    "A" * 100 + "\x00" + "B" * (GPATH_MAX * 2),
-    # Special characters with oversized input
-    "/tmp/" + "x" * (GPATH_MAX * 3),
-    # Mixed content exceeding buffer
-    "database_name=" + "Z" * (GPATH_MAX * 5),
-    # Exactly GPATH_MAX - 1 (should be safe)
-    "E" * (GPATH_MAX - 1),
-    # Empty string (edge case)
-    "",
-    # Single character
-    "x",
-    # Whitespace padding oversized
-    " " * (GPATH_MAX * 4),
-    # Newlines and special chars oversized
-    "\n\r\t" * (GPATH_MAX + 500),
-    # SQL injection style oversized
-    "'; DROP TABLE users; --" + "A" * (GPATH_MAX * 2),
-    # Format string style oversized
-    "%s%n%x" * (GPATH_MAX // 6 + 100),
-])
+@pytest.mark.parametrize(
+    "payload",
+    [
+        # Exactly at boundary
+        "A" * GPATH_MAX,
+        # One byte over boundary
+        "A" * (GPATH_MAX + 1),
+        # 2x the buffer size
+        "B" * (GPATH_MAX * 2),
+        # 10x the buffer size
+        "C" * (GPATH_MAX * 10),
+        # 100x the buffer size
+        "D" * (GPATH_MAX * 100),
+        # Unicode characters that expand when encoded
+        "\u00e9" * (GPATH_MAX // 2 + 100),  # 2-byte UTF-8 chars, exceeds buffer
+        "\u4e2d" * (GPATH_MAX // 3 + 100),  # 3-byte UTF-8 chars, exceeds buffer
+        "\U0001f600" * (GPATH_MAX // 4 + 100),  # 4-byte UTF-8 chars, exceeds buffer
+        # Path traversal with oversized input
+        "../" * (GPATH_MAX // 3 + 50),
+        # Null bytes embedded in oversized string
+        "A" * 100 + "\x00" + "B" * (GPATH_MAX * 2),
+        # Special characters with oversized input
+        "/tmp/" + "x" * (GPATH_MAX * 3),
+        # Mixed content exceeding buffer
+        "database_name=" + "Z" * (GPATH_MAX * 5),
+        # Exactly GPATH_MAX - 1 (should be safe)
+        "E" * (GPATH_MAX - 1),
+        # Empty string (edge case)
+        "",
+        # Single character
+        "x",
+        # Whitespace padding oversized
+        " " * (GPATH_MAX * 4),
+        # Newlines and special chars oversized
+        "\n\r\t" * (GPATH_MAX + 500),
+        # SQL injection style oversized
+        "'; DROP TABLE users; --" + "A" * (GPATH_MAX * 2),
+        # Format string style oversized
+        "%s%n%x" * (GPATH_MAX // 6 + 100),
+    ],
+)
 def test_buffer_read_never_exceeds_declared_length(payload):
     """
     Invariant: Buffer reads/writes must never exceed GPATH_MAX bytes.
@@ -125,7 +126,7 @@ def test_buffer_read_never_exceeds_declared_length(payload):
     else:
         # Input fits within buffer, must succeed without modification
         result = safe_db_connect_copy(payload)
-        result_bytes = result.encode('utf-8', errors='replace')
+        result_bytes = result.encode("utf-8", errors="replace")
         # Invariant: safe input must still fit in buffer
         assert len(result_bytes) < GPATH_MAX, (
             f"Even safe-sized input overflowed buffer: result length {len(result_bytes)} "
