@@ -328,32 +328,70 @@ int main(int argc, char *argv[])
 char *substitute_variables(dbConnection *conn)
 {
     char *database, *c, buf[GPATH_MAX];
+    int ret;
 
     if (!conn->databaseName)
         return NULL;
 
     database = (char *)G_malloc(GPATH_MAX);
-    snprintf(database, GPATH_MAX, "%s", conn->databaseName);
+    ret = snprintf(database, GPATH_MAX, "%s", conn->databaseName);
+    if (ret >= GPATH_MAX) {
+        G_fatal_error(_("Database name too long (exceeds %d characters): %s"),
+                      GPATH_MAX - 1, conn->databaseName);
+    }
 
-    snprintf(buf, GPATH_MAX, "%s", database);
+    ret = snprintf(buf, GPATH_MAX, "%s", database);
+    if (ret >= GPATH_MAX) {
+        G_fatal_error(
+            _("Database path too long (exceeds %d characters): %s"),
+            GPATH_MAX - 1, database);
+    }
     c = (char *)strstr(buf, "$GISDBASE");
     if (c != NULL) {
         *c = '\0';
-        snprintf(database, GPATH_MAX, "%s%s%s", buf, G_gisdbase(), c + 9);
+        ret = snprintf(database, GPATH_MAX, "%s%s%s", buf, G_gisdbase(), c + 9);
+        if (ret >= GPATH_MAX) {
+            G_fatal_error(
+                _("Database path after $GISDBASE expansion too long "
+                  "(exceeds %d characters)"),
+                GPATH_MAX - 1);
+        }
     }
 
-    snprintf(buf, GPATH_MAX, "%s", database);
+    ret = snprintf(buf, GPATH_MAX, "%s", database);
+    if (ret >= GPATH_MAX) {
+        G_fatal_error(
+            _("Database path too long (exceeds %d characters): %s"),
+            GPATH_MAX - 1, database);
+    }
     c = (char *)strstr(buf, "$LOCATION_NAME");
     if (c != NULL) {
         *c = '\0';
-        snprintf(database, GPATH_MAX, "%s%s%s", buf, G_location(), c + 14);
+        ret = snprintf(database, GPATH_MAX, "%s%s%s", buf, G_location(), c + 14);
+        if (ret >= GPATH_MAX) {
+            G_fatal_error(
+                _("Database path after $LOCATION_NAME expansion too long "
+                  "(exceeds %d characters)"),
+                GPATH_MAX - 1);
+        }
     }
 
-    snprintf(buf, GPATH_MAX, "%s", database);
+    ret = snprintf(buf, GPATH_MAX, "%s", database);
+    if (ret >= GPATH_MAX) {
+        G_fatal_error(
+            _("Database path too long (exceeds %d characters): %s"),
+            GPATH_MAX - 1, database);
+    }
     c = (char *)strstr(buf, "$MAPSET");
     if (c != NULL) {
         *c = '\0';
-        snprintf(database, GPATH_MAX, "%s%s%s", buf, G_mapset(), c + 7);
+        ret = snprintf(database, GPATH_MAX, "%s%s%s", buf, G_mapset(), c + 7);
+        if (ret >= GPATH_MAX) {
+            G_fatal_error(
+                _("Database path after $MAPSET expansion too long "
+                  "(exceeds %d characters)"),
+                GPATH_MAX - 1);
+        }
     }
 #ifdef __MINGW32__
     if (strcmp(conn->driverName, "sqlite") == 0 ||
