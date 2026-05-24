@@ -17,18 +17,18 @@ def safe_db_connect_copy(database_name: str) -> str:
     If the input exceeds GPATH_MAX, it must be truncated or rejected.
     """
     if database_name is None:
-        raise ValueError("database_name cannot be None")
+        msg = "database_name cannot be None"
+        raise ValueError(msg)
     # Simulate buffer allocation of GPATH_MAX bytes
     buffer_size = GPATH_MAX
     # The vulnerable C code does strcpy without bounds checking.
     # A safe implementation MUST truncate or reject oversized input.
-    encoded = database_name.encode('utf-8', errors='replace')
+    encoded = database_name.encode("utf-8", errors="replace")
     # Enforce the invariant: never write more than buffer_size bytes
     if len(encoded) >= buffer_size:
         # Must truncate to fit within buffer (leaving room for null terminator)
-        encoded = encoded[:buffer_size - 1]
-    result = encoded.decode('utf-8', errors='replace')
-    return result
+        encoded = encoded[: buffer_size - 1]
+    return encoded.decode("utf-8", errors="replace")
 
 
 def simulate_vulnerable_strcpy(src: str, buf_size: int) -> int:
@@ -37,7 +37,7 @@ def simulate_vulnerable_strcpy(src: str, buf_size: int) -> int:
     In the vulnerable C code, this is unchecked.
     Returns the length of src in bytes (what strcpy would copy including null terminator).
     """
-    return len(src.encode('utf-8', errors='replace')) + 1  # +1 for null terminator
+    return len(src.encode("utf-8", errors="replace")) + 1  # +1 for null terminator
 
 
 @pytest.mark.parametrize("payload", [
@@ -100,7 +100,7 @@ def test_buffer_read_never_exceeds_declared_length(payload):
         try:
             result = safe_db_connect_copy(payload)
             # If it didn't raise, it must have truncated
-            result_bytes = result.encode('utf-8', errors='replace')
+            result_bytes = result.encode("utf-8", errors="replace")
             # Invariant: result must fit within buffer (with null terminator)
             assert len(result_bytes) < GPATH_MAX, (
                 f"Buffer overflow invariant violated: result length {len(result_bytes)} "
@@ -108,7 +108,7 @@ def test_buffer_read_never_exceeds_declared_length(payload):
                 f"{len(payload.encode('utf-8', errors='replace'))} bytes."
             )
             # Invariant: result must be a prefix of the original input (truncation, not corruption)
-            original_bytes = payload.encode('utf-8', errors='replace')
+            original_bytes = payload.encode("utf-8", errors="replace")
             assert original_bytes.startswith(result_bytes) or len(result_bytes) == 0, (
                 f"Truncation invariant violated: result is not a prefix of the original input. "
                 f"Result bytes: {result_bytes[:50]}..., Original bytes: {original_bytes[:50]}..."
@@ -150,7 +150,7 @@ def test_multiple_strcpy_calls_all_bounded(payload):
     for copy_number in range(1, 4):  # Three strcpy calls in the vulnerable code
         try:
             result = safe_db_connect_copy(payload)
-            result_bytes = result.encode('utf-8', errors='replace')
+            result_bytes = result.encode("utf-8", errors="replace")
             assert len(result_bytes) < GPATH_MAX, (
                 f"strcpy call #{copy_number} would overflow buffer: "
                 f"attempted to write {len(result_bytes) + 1} bytes into "
@@ -162,13 +162,16 @@ def test_multiple_strcpy_calls_all_bounded(payload):
             pass
 
 
-@pytest.mark.parametrize("database_name,expected_max_bytes", [
-    ("normal_db", GPATH_MAX - 1),
-    ("A" * (GPATH_MAX - 1), GPATH_MAX - 1),
-    ("A" * GPATH_MAX, GPATH_MAX - 1),       # Must be truncated
-    ("A" * (GPATH_MAX + 1), GPATH_MAX - 1), # Must be truncated
-    ("A" * (GPATH_MAX * 2), GPATH_MAX - 1), # Must be truncated
-])
+@pytest.mark.parametrize(
+    ("database_name", "expected_max_bytes"),
+    [
+        ("normal_db", GPATH_MAX - 1),
+        ("A" * (GPATH_MAX - 1), GPATH_MAX - 1),
+        ("A" * GPATH_MAX, GPATH_MAX - 1),  # Must be truncated
+        ("A" * (GPATH_MAX + 1), GPATH_MAX - 1),  # Must be truncated
+        ("A" * (GPATH_MAX * 2), GPATH_MAX - 1),  # Must be truncated
+    ],
+)
 def test_output_never_exceeds_max_buffer_size(database_name, expected_max_bytes):
     """
     Invariant: The output stored in the buffer must never exceed expected_max_bytes,
@@ -176,7 +179,7 @@ def test_output_never_exceeds_max_buffer_size(database_name, expected_max_bytes)
     """
     try:
         result = safe_db_connect_copy(database_name)
-        result_byte_length = len(result.encode('utf-8', errors='replace'))
+        result_byte_length = len(result.encode("utf-8", errors="replace"))
         assert result_byte_length <= expected_max_bytes, (
             f"Output exceeds maximum allowed buffer size. "
             f"Got {result_byte_length} bytes, maximum is {expected_max_bytes} bytes "
