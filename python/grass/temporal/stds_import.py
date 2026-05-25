@@ -344,6 +344,8 @@ def import_stds(
     # Create a new location based on the projection information and switch
     # into it
     old_env = gs.gisenv()
+    target_gisrc = None
+    old_gisrc = os.environ.get("GISRC")
     if location:
         try:
             proj4_string = Path(proj_file_name).read_text()
@@ -359,16 +361,17 @@ def import_stds(
                 _("Unable to create location %(l)s. Reason: %(e)s")
                 % {"l": location, "e": str(e)}
             )
-        # Switch to the new created location
+        # Create a temporary environment
         try:
-            gs.run_command(
-                "g.mapset",
-                mapset="PERMANENT",
-                project=location,
-                dbase=old_env["GISDBASE"],
+            target_gisrc, target_env = gs.create_environment(
+                old_env["GISDBASE"], location, "PERMANENT"
             )
-        except CalledModuleError:
-            gs.fatal(_("Unable to switch to location %s") % location)
+            os.environ["GISRC"] = target_gisrc
+        except OSError as e:
+            gs.fatal(
+                _("Unable to create environment for location %s. Reason: %s")
+                % (location, e)
+            )
         # create default database connection
         try:
             gs.run_command("t.connect", flags="d")
@@ -598,19 +601,18 @@ def import_stds(
             update_cmd_list=False,
         )
 
-        os.chdir(old_cwd)
     # Make sure the location is switched back correctly
     finally:
+        os.chdir(old_cwd)
         if location:
-            # Switch to the old location
-            try:
-                gs.run_command(
-                    "g.mapset",
-                    mapset=old_env["MAPSET"],
-                    project=old_env["LOCATION_NAME"],
-                    dbase=old_env["GISDBASE"],
-                )
-            except CalledModuleError:
-                gs.warning(_("Switching to original location failed"))
+            # Restore the original session
+            if old_gisrc is not None:
+                os.environ["GISRC"] = old_gisrc
+            else:
+                os.environ.pop("GISRC", None)
+
+            # Delete the temporary session file
+            if target_gisrc:
+                gs.try_remove(target_gisrc)
 
         gs.set_raise_on_error(old_state)
