@@ -31,49 +31,7 @@ from xml.etree import ElementTree as ET
 # g.*  Internal plumbing tools not meant for direct user interaction.
 # ---------------------------------------------------------------------------
 EXCLUDED = {
-    "d.background",
-    "d.barscale",
-    "d.colorlist",
-    "d.colortable",
-    "d.correlate",
-    "d.erase",
-    "d.extract",
-    "d.font",
-    "d.fontlist",
-    "d.frame",
-    "d.geodesic",
-    "d.graph",
-    "d.grid",
-    "d.his",
-    "d.histogram",
-    "d.info",
-    "d.labels",
-    "d.legend",
-    "d.legend.vect",
-    "d.linegraph",
-    "d.mon",
-    "d.northarrow",
-    "d.out.file",
-    "d.path",
-    "d.polar",
-    "d.profile",
-    "d.rast",
-    "d.rast.arrow",
-    "d.rast.leg",
-    "d.rast.num",
-    "d.redraw",
-    "d.rgb",
-    "d.rhumbline",
-    "d.shade",
-    "d.text",
-    "d.title",
-    "d.to.rast",
-    "d.vect",
-    "d.vect.chart",
-    "d.vect.thematic",
-    "d.what.rast",
-    "d.what.vect",
-    "d.where",
+    "d.*",
     "g.cairocomp",
     "g.dirseps",
     "g.filename",
@@ -144,6 +102,23 @@ def find_registered_tools(toolboxes: Path, wxgui_items: Path) -> set[str]:
     return registered
 
 
+def is_excluded(name: str) -> bool:
+    """Return True if *name* matches any entry in EXCLUDED.
+
+    Entries ending with '.*' are treated as prefix wildcards:
+    'g.*' matches any name beginning with 'g.'.
+    All other entries are matched literally.
+    """
+    for pattern in EXCLUDED:
+        if pattern.endswith(".*"):
+            prefix = pattern[:-1]  # strip the '*', keep 'g.'
+            if name.startswith(prefix):
+                return True
+        elif name == pattern:
+            return True
+    return False
+
+
 def main() -> int:
     root = Path(sys.argv[1]) if len(sys.argv) > 1 else Path.cwd()
 
@@ -161,7 +136,9 @@ def main() -> int:
     source_tools = find_source_tools(root)
     registered = find_registered_tools(toolboxes, wxgui_items)
 
-    missing = sorted(source_tools - registered - EXCLUDED)
+    missing = sorted(
+        name for name in source_tools - registered if not is_excluded(name)
+    )
 
     if not missing:
         print("All source tools are registered in toolboxes.xml.")
