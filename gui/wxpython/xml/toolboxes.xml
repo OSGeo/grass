@@ -27,27 +27,8 @@
       <wxgui-item name="GraphicalModeler"/>
       <wxgui-item name="RunModel"/>
       <separator/>
-      <module-item name="m.nviz.image">
-        <label>3D image rendering</label>
-      </module-item>
-      <module-item name="m.nviz.script">
-        <label>3D visualization script</label>
-      </module-item>
       <wxgui-item name="AnimationTool"/>
       <separator/>
-      <module-item name="m.cogo">
-        <label>Bearing/distance to coordinates</label>
-      </module-item>
-      <module-item name="m.measure">
-        <label>Measure map distances</label>
-      </module-item>
-      <module-item name="m.transform">
-        <label>Transform coordinates (affine)</label>
-      </module-item>
-      <separator/>
-      <module-item name="ps.map">
-        <label>PostScript map output</label>
-      </module-item>
       <wxgui-item name="CartographicComposer"/>
       <wxgui-item name="MapSwipe"/>
       <separator/>
@@ -2222,14 +2203,14 @@
       <wxgui-item name="RDigit"/>
     </items>
   </toolbox>
-  <toolbox name="Other">
-    <label>Other</label>
+  <toolbox name="Miscellaneous">
+    <label>Miscellaneous</label>
     <items>
+      <module-item name="m.cogo">
+        <label>Bearing/distance to coordinates</label>
+      </module-item>
       <module-item name="m.measure">
         <label>Measure map distances</label>
-      </module-item>
-      <module-item name="m.transform">
-        <label>Transform coordinates (affine)</label>
       </module-item>
       <module-item name="m.nviz.image">
         <label>3D image rendering</label>
@@ -2237,8 +2218,11 @@
       <module-item name="m.nviz.script">
         <label>3D visualization script</label>
       </module-item>
-      <module-item name="m.cogo">
-        <label>Bearing/distance to coordinates</label>
+      <module-item name="m.proj">
+        <label>Convert coordinates between projections</label>
+      </module-item>
+      <module-item name="m.transform">
+        <label>Transform coordinates (affine)</label>
       </module-item>
       <module-item name="ps.map">
         <label>PostScript map output</label>

@@ -13,7 +13,7 @@
     <subtoolbox name="Database"/>
     <subtoolbox name="Temporal"/>
     <subtoolbox name="GuiTools"/>
-    <subtoolbox name="Other"/>
+    <subtoolbox name="Miscellaneous"/>
     <user-toolboxes-list/>
     <addons/>
   </items>
