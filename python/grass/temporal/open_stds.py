@@ -217,6 +217,7 @@ def _ensure_id(name: str) -> str:
 def check_open_output_stds(
     name: str,
     type: str,
+    temporaltype: str | None = None,
     dbif: SQLDatabaseInterfaceConnection | None = None,
     overwrite: bool = False,
     extend: bool = False,
@@ -253,6 +254,35 @@ def check_open_output_stds(
             )
             % {"sp": sp.get_new_map_instance(None).get_type(), "name": name}
         )
+
+    if extend and not output_exists:
+        if connection_state_changed:
+            dbif.close()
+        msgr.fatal(
+            _(
+                "Space time dataset <%(name)s> does not exist. "
+                "Use the -e flag only with an existing dataset, "
+                "or remove the flag to create a new one."
+            )
+            % {"name": name}
+        )
+
+    if extend and output_exists and temporaltype is not None:
+        sp.select(dbif)
+        if sp.get_temporal_type() != temporaltype:
+            if connection_state_changed:
+                dbif.close()
+            msgr.fatal(
+                _(
+                    "Cannot extend space time dataset <%(name)s>: "
+                    "temporal type mismatch (existing: %(existing)s, new: %(new)s)"
+                )
+                % {
+                    "name": name,
+                    "existing": sp.get_temporal_type(),
+                    "new": temporaltype,
+                }
+            )
 
     if connection_state_changed:
         dbif.close()
@@ -298,8 +328,30 @@ def open_output_stds(
     sp = _get_stds(id, type)
 
     if extend and sp.is_in_db(dbif):
-        # extend-if-exists: load and return existing dataset
+        # Check mapset ownership
+        _stds_name, stds_mapset = id.split("@")
+        if stds_mapset != get_current_mapset():
+            if connection_state_changed:
+                dbif.close()
+            msgr.fatal(
+                _("Space time datasets can only be modified in the current mapset")
+            )
+        # Check temporal type compatibility
         sp.select(dbif)
+        if sp.get_temporal_type() != temporaltype:
+            if connection_state_changed:
+                dbif.close()
+            msgr.fatal(
+                _(
+                    "Cannot extend space time dataset <%(name)s>: "
+                    "temporal type mismatch (existing: %(existing)s, new: %(new)s)"
+                )
+                % {
+                    "name": name,
+                    "existing": sp.get_temporal_type(),
+                    "new": temporaltype,
+                }
+            )
         if connection_state_changed:
             dbif.close()
         return sp

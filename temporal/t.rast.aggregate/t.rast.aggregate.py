@@ -153,8 +153,14 @@ def main():
 
     # Check if output can be opened as requested before processing starts.
     # This is a lightweight check that does not create or open the dataset.
+    temporal_type, semantic_type, title, description = sp.get_initial_values()
     output_exists = tgis.check_open_output_stds(
-        output, "strds", dbif=dbif, overwrite=overwrite, extend=extend
+        output,
+        "strds",
+        dbif=dbif,
+        overwrite=overwrite,
+        extend=extend,
+        temporaltype=temporal_type,
     )
 
     start_time = map_list[0].temporal_extent.get_start_time()
@@ -210,7 +216,6 @@ def main():
     )
     if output_list:
         # Open or create the output STRDS after processing succeeds
-        temporal_type, semantic_type, title, description = sp.get_initial_values()
         output_strds = tgis.open_output_stds(
             output,
             "strds",
