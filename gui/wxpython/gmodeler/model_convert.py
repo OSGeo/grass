@@ -325,8 +325,10 @@ import tempfile
         )
         if self.grassAPI == "script":
             self.fd.write("from grass.script import run_command\n")
-        else:
+        elif self.grassAPI == "pygrass":
             self.fd.write("from grass.pygrass.modules import Module\n")
+        else:
+            self.fd.write("from grass.tools import Tools\n")
 
         self.fd.write(
             r"""from pywps import Process, LiteralInput, ComplexInput, ComplexOutput, Format
@@ -511,10 +513,16 @@ if __name__ == "__main__":
     def _writePythonAction(self, item, variables={}, intermediates=None):
         """Write model action to Python file"""
         task = GUI(show=None).ParseCommand(cmd=item.GetLog(string=False))
-        strcmd = "\n%s%s(" % (
-            " " * self.indent,
-            "run_command" if self.grassAPI == "script" else "Module",
-        )
+
+        if self.grassAPI == "script":
+            fn = "run_command"
+        elif self.grassAPI == "pygrass":
+            fn = "Module"
+        else:  # tools
+            fn = "tools.run"
+
+        strcmd = "\n%s%s(" % (" " * self.indent, fn)
+
         self.fd.write(
             strcmd + self._getPythonActionCmd(item, task, len(strcmd) - 1, variables)
         )
@@ -711,7 +719,7 @@ class ModelToPython(BaseModelConverter):
 
         :param fd: file descriptor
         :param model: model to translate
-        :param grassAPI: script or pygrass
+        :param grassAPI: script, pygrass or tools
         """
         self.fd = fd
         self.model = model
@@ -863,8 +871,11 @@ from grass.script import parser
         )
         if self.grassAPI == "script":
             self.fd.write("from grass.script import run_command\n")
-        else:
+        elif self.grassAPI == "pygrass":
             self.fd.write("from grass.pygrass.modules import Module\n")
+        else:
+            self.fd.write("from grass.tools import Tools\n")
+            self.fd.write("\ntools = Tools()\n")
 
         # cleanup()
         rast, vect, rast3d, msg = self.model.GetIntermediateData()
@@ -873,7 +884,12 @@ from grass.script import parser
 def cleanup():
 """
         )
-        run_command = "run_command" if self.grassAPI == "script" else "Module"
+        if self.grassAPI == "script":
+            run_command = "run_command"
+        elif self.grassAPI == "pygrass":
+            run_command = "Module"
+        else:  # tools
+            run_command = "tools.run"
         if rast:
             self.fd.write(
                 r"""    %s("g.remove", flags="f", type="raster",
@@ -938,10 +954,13 @@ if __name__ == "__main__":
     def _writePythonAction(self, item, variables={}, intermediates=None):
         """Write model action to Python file"""
         task = GUI(show=None).ParseCommand(cmd=item.GetLog(string=False))
-        strcmd = "%s%s(" % (
-            " " * self.indent,
-            "run_command" if self.grassAPI == "script" else "Module",
-        )
+        if self.grassAPI == "script":
+            fn = "run_command"
+        elif self.grassAPI == "pygrass":
+            fn = "Module"
+        else:
+            fn = "tools.run"
+        strcmd = "%s%s(" % (" " * self.indent, fn)
         self.fd.write(
             strcmd + self._getPythonActionCmd(item, task, len(strcmd), variables) + "\n"
         )
