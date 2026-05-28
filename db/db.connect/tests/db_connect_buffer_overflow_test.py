@@ -2,13 +2,14 @@ import pytest
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
+from grass.tools import Tools
 
 
 def test_db_connect_normal_database_name(session):
     """Test that db.connect works with normal database names."""
-    gs.run_command("db.connect", flags="d", env=session.env)
-
-    output = gs.parse_command("db.connect", flags="p", format="json", env=session.env)
+    tools = Tools(session=session)
+    tools.db_connect(flags="d")
+    output = tools.db_connect(flags="p", format="json")
     assert output["driver"] == "sqlite"
     assert "sqlite.db" in output["database"]
 
@@ -17,10 +18,9 @@ def test_db_connect_long_valid_database_name(session):
     """Test that db.connect works with long but valid database names."""
     long_name = "/tmp/" + "a" * 2000 + "/test.db"
 
+    tools = Tools(session=session)
     try:
-        gs.run_command(
-            "db.connect", driver="sqlite", database=long_name, env=session.env
-        )
+        tools.db_connect(driver="sqlite", database=long_name)
         output = gs.read_command("db.connect", flags="p", env=session.env)
         assert "test.db" in output
     except CalledModuleError as e:
@@ -37,11 +37,10 @@ def test_db_connect_overlong_database_name_rejected(session):
     """
     overlong_name = "/tmp/" + "x" * 4500 + "/test.db"
 
-    gs.run_command(
-        "db.connect", driver="sqlite", database=overlong_name, env=session.env
-    )
+    tools = Tools(session=session)
+    tools.db_connect(driver="sqlite", database=overlong_name)
     with pytest.raises(CalledModuleError, match=r"too long|exceeds.*characters"):
-        gs.run_command("db.connect", flags="p", env=session.env)
+        tools.db_connect(flags="p")
 
 
 def test_db_connect_variable_expansion_overflow(session):
@@ -62,23 +61,19 @@ def test_db_connect_variable_expansion_overflow(session):
         # Setting the connection stores the template without expanding it.
         # The overflow check runs in substitute_variables(), called only when
         # printing (-p), where variables are expanded and the buffer overflows.
-        gs.run_command(
-            "db.connect",
-            driver="sqlite",
-            database=overlong_template,
-            env=session.env,
-        )
+        tools = Tools(session=session)
+        tools.db_connect(driver="sqlite", database=overlong_template)
         with pytest.raises(CalledModuleError, match=r"too long|exceeds.*characters"):
-            gs.run_command("db.connect", flags="p", env=session.env)
+            tools.db_connect(flags="p")
 
 
 def test_db_connect_variable_expansion_normal(session):
     """Test that normal variable expansion works correctly."""
     template = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/test.db"
 
-    gs.run_command("db.connect", driver="sqlite", database=template, env=session.env)
-
-    output = gs.parse_command("db.connect", flags="p", format="json", env=session.env)
+    tools = Tools(session=session)
+    tools.db_connect(driver="sqlite", database=template)
+    output = tools.db_connect(flags="p", format="json")
     assert output["database_template"] == template
     assert "$GISDBASE" not in output["database"]
     assert "$LOCATION_NAME" not in output["database"]
