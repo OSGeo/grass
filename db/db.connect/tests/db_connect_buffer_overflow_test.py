@@ -30,13 +30,18 @@ def test_db_connect_long_valid_database_name(session):
 
 
 def test_db_connect_overlong_database_name_rejected(session):
-    """Test that db.connect rejects database names exceeding GPATH_MAX."""
+    """Test that printing a stored database name exceeding GPATH_MAX fails.
+
+    Setting the connection accepts any string without validation. The overflow
+    check fires in substitute_variables(), which is called only in print mode.
+    """
     overlong_name = "/tmp/" + "x" * 4500 + "/test.db"
 
+    gs.run_command(
+        "db.connect", driver="sqlite", database=overlong_name, env=session.env
+    )
     with pytest.raises(CalledModuleError, match=r"too long|exceeds.*characters"):
-        gs.run_command(
-            "db.connect", driver="sqlite", database=overlong_name, env=session.env
-        )
+        gs.run_command("db.connect", flags="p", env=session.env)
 
 
 def test_db_connect_variable_expansion_overflow(session):
@@ -54,13 +59,17 @@ def test_db_connect_variable_expansion_overflow(session):
             "$GISDBASE/" + "x" * padding_needed + "/$LOCATION_NAME/$MAPSET/test.db"
         )
 
+        # Setting the connection stores the template without expanding it.
+        # The overflow check runs in substitute_variables(), called only when
+        # printing (-p), where variables are expanded and the buffer overflows.
+        gs.run_command(
+            "db.connect",
+            driver="sqlite",
+            database=overlong_template,
+            env=session.env,
+        )
         with pytest.raises(CalledModuleError, match=r"too long|exceeds.*characters"):
-            gs.run_command(
-                "db.connect",
-                driver="sqlite",
-                database=overlong_template,
-                env=session.env,
-            )
+            gs.run_command("db.connect", flags="p", env=session.env)
 
 
 def test_db_connect_variable_expansion_normal(session):
