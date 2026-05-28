@@ -1461,7 +1461,7 @@ class WriteWorkspaceFile:
         self.indent -= 4
 
     def __writeNvizState(self, view, iview, light, constants):
-        """ "Save Nviz properties (view, light) to workspace
+        """Save Nviz properties (view, light) to workspace
 
         :param view: Nviz view properties
         :param iview: Nviz internal view properties
@@ -1730,7 +1730,11 @@ class ProcessGrcFile:
         :return: list of map layers
         """
         try:
-            file = open(self.filename)
+            with open(self.filename) as file:  # Changed to context manager
+                line_id = 1
+                for line in file:
+                    self.process_line(line.rstrip("\n"), line_id)
+                    line_id += 1
         except OSError:
             wx.MessageBox(
                 parent=parent,
@@ -1739,13 +1743,6 @@ class ProcessGrcFile:
                 style=wx.OK | wx.ICON_ERROR,
             )
             return []
-
-        line_id = 1
-        for line in file:
-            self.process_line(line.rstrip("\n"), line_id)
-            line_id += 1
-
-        file.close()
 
         if self.num_error > 0:
             wx.MessageBox(

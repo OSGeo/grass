@@ -27,7 +27,7 @@
 # %option
 # % key: dip
 # % type: double
-# % gisprompt: -90-90
+# % options: -90-90
 # % answer: 0.0
 # % description: Dip of plane in degrees
 # % required : yes
@@ -35,7 +35,7 @@
 # %option
 # % key: azimuth
 # % type: double
-# % gisprompt: 0-360
+# % options: 0-360
 # % answer: 0.0
 # % description: Azimuth of the plane in degrees
 # % required : yes

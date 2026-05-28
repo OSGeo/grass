@@ -1,4 +1,4 @@
-# How to release GRASS GIS binaries and source code
+# How to release GRASS binaries and source code
 
 ## Assumptions
 
@@ -80,7 +80,7 @@ For a release, change the version after the RC cycle to an official release:
 ```
 
 The script will compute the correct version string and print a message
-containing it into the terminal (e.g., "version: GRASS GIS 3.5.0RC1").
+containing it into the terminal (e.g., "version: GRASS 3.5.0RC1").
 
 Commit with a commit message suggested by the script, e.g.:
 
@@ -133,7 +133,8 @@ see: <https://help.github.com/en/articles/creating-releases>.
 ### Tag release
 
 Before creating the tag, it is a good idea to see if the CI jobs are not failing.
-Check on [GitHub Actions](https://github.com/OSGeo/grass/actions) or use GitHub CLI:
+Check on [GitHub Actions](https://github.com/OSGeo/grass/actions)
+or use GitHub CLI:
 
 ```bash
 gh run list --branch releasebranch_8_4
@@ -152,7 +153,7 @@ stored for annotated tags including a date; message is suggested by the
 `./utils/update_version.py` script):
 
 ```bash
-git tag $TAG -a -m "GRASS GIS $VERSION"
+git tag $TAG -a -m "GRASS $VERSION"
 ```
 
 List all tags (annotated will be at the top of both lists):
@@ -332,7 +333,11 @@ wget https://github.com/OSGeo/grass/releases/download/${VERSION}/ChangeLog.gz \
 Fetch a tarball from GitHub we also publish on OSGeo servers:
 
 ```bash
-wget https://github.com/OSGeo/grass/archive/${VERSION}.tar.gz -O grass-${VERSION}.tar.gz
+wget https://github.com/OSGeo/grass/releases/download/${VERSION}/grass-${VERSION}.tar.gz \
+    -O grass-${VERSION}.tar.gz
+wget https://github.com/OSGeo/grass/releases/download/${VERSION}/grass-${VERSION}.tar.gz.sha256 \
+    -O grass-${VERSION}.tar.gz.sha256
+sha256sum -c grass-${VERSION}.tar.gz.sha256
 md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 ```
 
@@ -395,10 +400,10 @@ Update the GRASS version at <https://github.com/landam/wingrass-maintenance-scri
 
 - On major or minor version change (on release branch creation) update
   [dev_packages.csv](https://github.com/landam/wingrass-maintenance-scripts/blob/master/dev_packages.csv)
-- On release (inluding RC) update
+- On release (including RC) update
   [releases.csv](https://github.com/landam/wingrass-maintenance-scripts/blob/master/releases.csv)
   and
-  [grass_packager_release.bat](https://github.com/landam/wingrass-maintenance-scripts/blob/master/grass_packager_release.bat#L12)
+  [grass_packager_release.bat](https://github.com/landam/wingrass-maintenance-scripts/blob/fffcd91fb3d1c99854e6e64d1c0361622c7eb83b/grass_packager_release.bat#L12)
 
 Example for 8.3.0RC1: [commit](https://github.com/landam/wingrass-maintenance-scripts/commit/c47b0f30051108bd2e8b52d183e97930c24dfafd)
 
@@ -537,7 +542,7 @@ Add release to history page:
   - <grass-user@lists.osgeo.org>
 
 If final release, send out an announcement (press release)
-which is a shortened version of release desciption and website news item.
+which is a shortened version of release description and website news item.
 Note: Do not use relative links.
 
 - Our main mailing lists:

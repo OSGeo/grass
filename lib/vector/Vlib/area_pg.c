@@ -92,7 +92,7 @@ PGresult *build_stmt(const struct Plus_head *plus,
         BLine = plus->Line[line];
         if (i > 0)
             strcat(stmt_id, ",");
-        sprintf(buf_id, "%d", (int)BLine->offset);
+        snprintf(buf_id, sizeof(buf_id), "%d", (int)BLine->offset);
         strcat(stmt_id, buf_id);
     }
     /* Not really working - why?

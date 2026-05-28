@@ -25,7 +25,6 @@
  *  \param minutes
  *  \return int
  */
-
 int datetime_get_local_timezone(int *minutes)
 {
     struct tm *local, *gm;
@@ -78,7 +77,6 @@ int datetime_get_local_timezone(int *minutes)
  *  \param dt
  *  \return void
  */
-
 void datetime_get_local_time(DateTime *dt)
 {
     time_t clock;

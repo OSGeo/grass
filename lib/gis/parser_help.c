@@ -145,19 +145,19 @@ static void usage(FILE *fp, int markers)
             if (n > maxlen)
                 maxlen = n;
 
-            strcpy(item, " ");
+            G_strlcpy(item, " ", sizeof(item));
             if (!opt->required)
-                strcat(item, "[");
-            strcat(item, opt->key);
-            strcat(item, "=");
-            strcat(item, key_desc);
+                G_strlcat(item, "[", sizeof(item));
+            G_strlcat(item, opt->key, sizeof(item));
+            G_strlcat(item, "=", sizeof(item));
+            G_strlcat(item, key_desc, sizeof(item));
             if (opt->multiple) {
-                strcat(item, "[,");
-                strcat(item, key_desc);
-                strcat(item, ",...]");
+                G_strlcat(item, "[,", sizeof(item));
+                G_strlcat(item, key_desc, sizeof(item));
+                G_strlcat(item, ",...]", sizeof(item));
             }
             if (!opt->required)
-                strcat(item, "]");
+                G_strlcat(item, "]", sizeof(item));
 
             len = show(fp, item, len);
 
@@ -165,20 +165,20 @@ static void usage(FILE *fp, int markers)
         }
     }
     if (new_prompt) {
-        strcpy(item, " [--overwrite]");
+        G_strlcpy(item, " [--overwrite]", sizeof(item));
         len = show(fp, item, len);
     }
 
-    strcpy(item, " [--help]");
+    G_strlcpy(item, " [--help]", sizeof(item));
     len = show(fp, item, len);
 
-    strcpy(item, " [--verbose]");
+    G_strlcpy(item, " [--verbose]", sizeof(item));
     len = show(fp, item, len);
 
-    strcpy(item, " [--quiet]");
+    G_strlcpy(item, " [--quiet]", sizeof(item));
     len = show(fp, item, len);
 
-    strcpy(item, " [--ui]");
+    G_strlcpy(item, " [--ui]", sizeof(item));
     len = show(fp, item, len);
 
     fprintf(fp, "\n");

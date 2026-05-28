@@ -26,6 +26,7 @@ Bug fix (9/12/2010) by Daniel:
       filter function short.
 
 """
+
 import os
 import sys
 import numpy as np
@@ -87,9 +88,9 @@ def interpolate_band(values, step=2.5):
 
     wavelengths = values_clean[:, 0]  # 1st column of input array
     responses = values_clean[:, 1]  # 2nd column
-    assert len(wavelengths) == len(
-        responses
-    ), "Number of wavelength slots and spectral responses are not equal!"
+    assert len(wavelengths) == len(responses), (
+        "Number of wavelength slots and spectral responses are not equal!"
+    )
 
     # spectral responses are written out with .4f in pretty_print()
     # anything smaller than 0.0001 will become 0.0000 -> discard with ...
@@ -254,72 +255,79 @@ def write_cpp(bands, values, sensor, folder):
             print("   %s (%inm - %inm)" % (bands[b], min_wavelength, max_wavelength))
 
     # writing...
-    outfile = open(os.path.join(folder, sensor + "_cpp_template.txt"), "w")
-    outfile.write("/* Following filter function created using create_iwave.py */\n\n")
-
-    # single band case
-    if len(bands) == 1:
-        outfile.write("void IWave::%s()\n{\n\n" % (sensor.lower()))
-        outfile.write("    /* %s of %s */\n" % (bands[0], sensor))
-        outfile.write("    static const float sr[%i] = {" % (len(filter_f)))
-        filter_text = pretty_print(filter_f)
-        outfile.write(filter_text)
-
-        # calculate wl slot for band start
-        # slots range from 250 to 4000 at 2.5 increments (total 1500)
-        s_start = int((limits[0] * 1000 - 250) / 2.5)
-
-        outfile.write("\n")
-        outfile.write("    ffu.wlinf = %.4ff;\n" % (limits[0]))
-        outfile.write("    ffu.wlsup = %.4ff;\n" % (limits[1]))
-        outfile.write("    int i = 0;\n")
-        outfile.write("    for(i = 0; i < %i; i++)\tffu.s[i] = 0;\n" % (s_start))
+    outpath = os.path.join(folder, sensor + "_cpp_template.txt")
+    with open(outpath, "w") as outfile:
         outfile.write(
-            "    for(i = 0; i < %i; i++)\tffu.s[%i+i] = sr[i];\n"
-            % (len(filter_f), s_start)
+            "/* Following filter function created using create_iwave.py */\n\n"
         )
-        outfile.write(
-            "    for(i = %i; i < 1501; i++)\tffu.s[i] = 0;\n"
-            % (s_start + len(filter_f))
-        )
-        outfile.write("}\n")
 
-    else:  # more than 1 band
-        outfile.write("void IWave::%s(int iwa)\n{\n\n" % (sensor.lower()))
-        # writing bands
-        for b in range(len(bands)):
-            outfile.write("    /* %s of %s */\n" % (bands[b], sensor))
+        # single band case
+        if len(bands) == 1:
+            outfile.write("void IWave::%s()\n{\n\n" % (sensor.lower()))
+            outfile.write("    /* %s of %s */\n" % (bands[0], sensor))
+            outfile.write("    static const float sr[%i] = {" % (len(filter_f)))
+            filter_text = pretty_print(filter_f)
+            outfile.write(filter_text)
+
+            # calculate wl slot for band start
+            # slots range from 250 to 4000 at 2.5 increments (total 1500)
+            s_start = int((limits[0] * 1000 - 250) / 2.5)
+
+            outfile.write("\n")
+            outfile.write("    ffu.wlinf = %.4ff;\n" % (limits[0]))
+            outfile.write("    ffu.wlsup = %.4ff;\n" % (limits[1]))
+            outfile.write("    int i = 0;\n")
+            outfile.write("    for(i = 0; i < %i; i++)\tffu.s[i] = 0;\n" % (s_start))
             outfile.write(
-                "    static const float sr%i[%i] = {\n" % (b + 1, len(filter_f[b]))
+                "    for(i = 0; i < %i; i++)\tffu.s[%i+i] = sr[i];\n"
+                % (len(filter_f), s_start)
             )
-            filter_text = pretty_print(filter_f[b])
-            outfile.write(filter_text + "\n    };\n\t\n")
-
-        # writing band limits
-        inf = ", ".join(["%.4f" % i[0] for i in limits])
-        sup = ", ".join(["%.4f" % i[1] for i in limits])
-
-        outfile.write("    static const float wli[%i] = {%s};\n" % (len(bands), inf))
-        outfile.write("    static const float wls[%i] = {%s};\n" % (len(bands), sup))
-
-        outfile.write("\n")
-        outfile.write("    ffu.wlinf = (float)wli[iwa-1];\n")
-        outfile.write("    ffu.wlsup = (float)wls[iwa-1];\n\n")
-
-        outfile.write("    int i;\n")
-        outfile.write("    for(i = 0; i < 1501; i++) ffu.s[i] = 0;\n\n")
-
-        outfile.write("    switch(iwa)\n    {\n")
-
-        # now start of case part...
-        for b in range(len(bands)):
-            s_start = int((limits[b][0] * 1000 - 250) / 2.5)
             outfile.write(
-                "    case %i: for(i = 0; i < %i; i++)  ffu.s[%i+i] = sr%i[i];\n"
-                % ((b + 1), len(filter_f[b]), s_start, (b + 1))
+                "    for(i = %i; i < 1501; i++)\tffu.s[i] = 0;\n"
+                % (s_start + len(filter_f))
             )
-            outfile.write("        break;\n")
-        outfile.write("    }\n}\n")
+            outfile.write("}\n")
+
+        else:  # more than 1 band
+            outfile.write("void IWave::%s(int iwa)\n{\n\n" % (sensor.lower()))
+            # writing bands
+            for b in range(len(bands)):
+                outfile.write("    /* %s of %s */\n" % (bands[b], sensor))
+                outfile.write(
+                    "    static const float sr%i[%i] = {\n" % (b + 1, len(filter_f[b]))
+                )
+                filter_text = pretty_print(filter_f[b])
+                outfile.write(filter_text + "\n    };\n\t\n")
+
+            # writing band limits
+            inf = ", ".join(["%.4f" % i[0] for i in limits])
+            sup = ", ".join(["%.4f" % i[1] for i in limits])
+
+            outfile.write(
+                "    static const float wli[%i] = {%s};\n" % (len(bands), inf)
+            )
+            outfile.write(
+                "    static const float wls[%i] = {%s};\n" % (len(bands), sup)
+            )
+
+            outfile.write("\n")
+            outfile.write("    ffu.wlinf = (float)wli[iwa-1];\n")
+            outfile.write("    ffu.wlsup = (float)wls[iwa-1];\n\n")
+
+            outfile.write("    int i;\n")
+            outfile.write("    for(i = 0; i < 1501; i++) ffu.s[i] = 0;\n\n")
+
+            outfile.write("    switch(iwa)\n    {\n")
+
+            # now start of case part...
+            for b in range(len(bands)):
+                s_start = int((limits[b][0] * 1000 - 250) / 2.5)
+                outfile.write(
+                    "    case %i: for(i = 0; i < %i; i++)  ffu.s[%i+i] = sr%i[i];\n"
+                    % ((b + 1), len(filter_f[b]), s_start, (b + 1))
+                )
+                outfile.write("        break;\n")
+            outfile.write("    }\n}\n")
 
 
 def main():

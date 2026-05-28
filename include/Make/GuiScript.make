@@ -27,8 +27,8 @@ ifndef CROSS_COMPILING
 	$(MAKE) $(CMDHTML)
 	-rm -f g.gui.*.tmp.html
 	$(MAKE) $(GUIHTML)
-#	$(MAKE) $(CMDMAN)
-#	$(MAKE) $(GUIMAN)
+	$(MAKE) $(CMDMAN)
+	$(MAKE) $(GUIMAN)
 endif
 
 $(HTMLDIR)/g.gui.%.html: g.gui.%.html g.gui.%.tmp.html | $(HTMLDIR)

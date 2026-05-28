@@ -23,6 +23,9 @@
 void check_create_import_opts(struct Option *, char *, FILE *);
 void check_create_export_opts(struct Option *, char *, FILE *);
 char *check_mapset_in_layer_name(char *, int);
+static char *str_json_escape(const char *str);
+static char *str_replace_free_buffer(char *buffer, const char old_char,
+                                     const char *new_str);
 
 /*!
    \brief This function generates actinia JSON process chain building blocks
@@ -293,7 +296,9 @@ char *G__json(void)
             else if (opt->answer) {
                 /* Check for input options */
                 fprintf(fp, "     {\"param\": \"%s\", ", opt->key);
-                fprintf(fp, "\"value\": \"%s\"}", opt->answer);
+                char *escaped_value = str_json_escape(opt->answer);
+                fprintf(fp, "\"value\": \"%s\"}", escaped_value);
+                G_free(escaped_value);
                 i++;
                 if (i < num_inputs) {
                     fprintf(fp, ",\n");
@@ -422,12 +427,16 @@ void check_create_import_opts(struct Option *opt, char *element, FILE *fp)
     fprintf(fp, "\"param\": \"%s\", ", opt->key);
     /* In case of import the mapset must be removed always */
     if (urlfound == 1) {
-        fprintf(fp, "\"value\": \"%s\"",
-                check_mapset_in_layer_name(tokens[0], has_import));
+        char *escaped_value =
+            str_json_escape(check_mapset_in_layer_name(tokens[0], has_import));
+        fprintf(fp, "\"value\": \"%s\"", escaped_value);
+        G_free(escaped_value);
     }
     else {
-        fprintf(fp, "\"value\": \"%s\"",
-                check_mapset_in_layer_name(opt->answer, has_import));
+        char *escaped_value = str_json_escape(
+            check_mapset_in_layer_name(opt->answer, has_import));
+        fprintf(fp, "\"value\": \"%s\"", escaped_value);
+        G_free(escaped_value);
     };
     fprintf(fp, "}");
 
@@ -484,12 +493,16 @@ void check_create_export_opts(struct Option *opt, char *element, FILE *fp)
 
     fprintf(fp, "\"param\": \"%s\", ", opt->key);
     if (has_file_export == 1) {
-        fprintf(fp, "\"value\": \"$file::%s\"",
-                check_mapset_in_layer_name(tokens[0], 1));
+        char *escaped_value =
+            str_json_escape(check_mapset_in_layer_name(tokens[0], 1));
+        fprintf(fp, "\"value\": \"$file::%s\"", escaped_value);
+        G_free(escaped_value);
     }
     else {
-        fprintf(fp, "\"value\": \"%s\"",
-                check_mapset_in_layer_name(tokens[0], 1));
+        char *escaped_value =
+            str_json_escape(check_mapset_in_layer_name(tokens[0], 1));
+        fprintf(fp, "\"value\": \"%s\"", escaped_value);
+        G_free(escaped_value);
     }
     fprintf(fp, "}");
 
@@ -526,4 +539,59 @@ char *check_mapset_in_layer_name(char *layer_name, int always_remove)
         return tokens[0];
 
     return layer_name;
+}
+
+/** \brief Replace *old_char* with *new_str* and free the *buffer* if needed
+ *
+ * Replaces *old_char* (one character) with *new_str* (a string) in *buffer*
+ * and returns the new string. If no replacements were made, returns pointer
+ * to the original *buffer* unchanged.
+ *
+ * In any case, returned string should be freed with G_free(), while
+ * the original *buffer* should not be freed. The *buffer* must be a heap
+ * allocated string.
+ *
+ * \param buffer the string to make replacements in
+ * \param old_char the character to replace
+ * \param new_str the replacement string
+ *
+ * \return a newly allocated string or *buffer* if no replacements were made
+ */
+static char *str_replace_free_buffer(char *buffer, const char old_char,
+                                     const char *new_str)
+{
+    // Check if the input string contains the character to replace to avoid
+    // allocation in G_str_replace.
+    if (strchr(buffer, old_char)) {
+        // The function takes strings, not chars.
+        char old_str[2] = {old_char, '\0'};
+        char *res = G_str_replace(buffer, old_str, new_str);
+        G_free(buffer);
+        return res;
+    }
+    return buffer;
+}
+
+/** \brief Escape a string for JSON.
+ *
+ * \param str the string to escape
+ *
+ * \return a newly allocated string that must be freed with G_free()
+ */
+static char *str_json_escape(const char *str)
+{
+    // Always duplicate the input string for code simplicity.
+    char *out = G_store(str);
+    // We test character presence to avoid duplicating the input string
+    // for every potential replacement.
+    // While formfeed and backspace are unlikely, we check for them to
+    // ensure valid JSON.
+    out = str_replace_free_buffer(out, '\\', "\\\\");
+    out = str_replace_free_buffer(out, '\r', "\\r");
+    out = str_replace_free_buffer(out, '\n', "\\n");
+    out = str_replace_free_buffer(out, '\t', "\\t");
+    out = str_replace_free_buffer(out, '\"', "\\\"");
+    out = str_replace_free_buffer(out, '\f', "\\f");
+    out = str_replace_free_buffer(out, '\b', "\\b");
+    return out;
 }

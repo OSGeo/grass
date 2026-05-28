@@ -38,7 +38,7 @@ struct rast_row {
    These pgms have header in format created by this function.
 
    \param region region to be pgm header generated for
-   \param [out] header header of pgm file
+   \param[out] header header of pgm file
  */
 static int get_cat_rast_header(struct Cell_head *region, char *header)
 {
@@ -94,6 +94,7 @@ int I_create_cat_rast(struct Cell_head *cat_rast_region, const char *cat_rast)
                (cat_rast_region->cols) / sizeof(unsigned char), f_cat_rast);
         if (ferror(f_cat_rast)) {
             fclose(f_cat_rast);
+            G_free(row_data);
             G_warning(
                 _("Unable to write into category raster condition file <%s>."),
                 cat_rast);
@@ -102,6 +103,7 @@ int I_create_cat_rast(struct Cell_head *cat_rast_region, const char *cat_rast)
     }
 
     fclose(f_cat_rast);
+    G_free(row_data);
     return 0;
 }
 
@@ -110,7 +112,7 @@ int I_create_cat_rast(struct Cell_head *cat_rast_region, const char *cat_rast)
 
    \param A pointer to intersected region
    \param B pointer to intersected region
-   \param [out] intersec pointer to intersection region of regions A B
+   \param[out] intersec pointer to intersection region of regions A B
    (relevant params of the region are: south, north, east, west)
 
    \return  0 if interaction exists
@@ -162,9 +164,9 @@ static int regions_intersecion(struct Cell_head *A, struct Cell_head *B,
 
    \param A pointer to intersected region
    \param B pointer to intersected region (A and B must have same resolution)
-   \param [out] A_bounds rows and cols numbers of A stored in
+   \param[out] A_bounds rows and cols numbers of A stored in
    south, north, east, west, which defines intersection of A and B
-   \param [out] B_bounds rows and cols numbers of B stored in
+   \param[out] B_bounds rows and cols numbers of B stored in
    south, north, east, west, which defines intersection of A and B
 
    \return  0 if interaction exists
@@ -302,6 +304,7 @@ int I_insert_patch_to_cat_rast(const char *patch_rast,
 
         Rast_close(fd_patch_rast);
         fclose(f_cat_rast);
+        G_free(patch_data);
 
         return -1;
     }
@@ -334,6 +337,7 @@ int I_insert_patch_to_cat_rast(const char *patch_rast,
             Rast_close(fd_patch_rast);
             G_free(null_chunk_row);
             fclose(f_cat_rast);
+            G_free(patch_data);
 
             return -1;
         }
@@ -345,6 +349,7 @@ int I_insert_patch_to_cat_rast(const char *patch_rast,
             Rast_close(fd_patch_rast);
             G_free(null_chunk_row);
             fclose(f_cat_rast);
+            G_free(patch_data);
 
             return -1;
         }
@@ -353,6 +358,7 @@ int I_insert_patch_to_cat_rast(const char *patch_rast,
     Rast_close(fd_patch_rast);
     G_free(null_chunk_row);
     fclose(f_cat_rast);
+    G_free(patch_data);
     return 0;
 }
 
@@ -363,7 +369,7 @@ int I_insert_patch_to_cat_rast(const char *patch_rast,
    \param bands_rows data represents data describig one row from raster band
    \param belongs_pix array which defines which pixels belongs to category
    (1 value) and which not (0 value)
-   \param [out] scatts pointer to scScatts struct of type SC_SCATT_DATA,
+   \param[out] scatts pointer to scScatts struct of type SC_SCATT_DATA,
    which are modified according to values in belongs_pix
    (represents scatter plot category)
  */
@@ -689,6 +695,9 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 {
     const char *mapset;
     char header[1024];
+    if (n_bands != scatts->n_bands || n_bands != scatt_conds->n_bands) {
+        return -1;
+    }
 
     int *fd_cats_rasts = G_malloc(scatt_conds->n_a_cats * sizeof(int));
     FILE **f_cats_rasts_conds =
@@ -697,8 +706,7 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
     struct rast_row *bands_rows = G_malloc(n_bands * sizeof(struct rast_row));
 
     RASTER_MAP_TYPE data_type;
-
-    int nrows, i_band, n_a_bands, band_id;
+    int nrows, i_band, n_a_bands = 0, band_id;
     int i_row, head_nchars, i_cat, id_cat;
 
     int *fd_bands = G_malloc(n_bands * sizeof(int));
@@ -712,10 +720,6 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 
     for (i_band = 0; i_band < n_bands; i_band++)
         bands_ids[i_band] = -1;
-
-    if (n_bands != scatts->n_bands || n_bands != scatt_conds->n_bands)
-        return -1;
-
     for (i_cat = 0; i_cat < scatts->n_a_cats; i_cat++)
         fd_cats_rasts[i_cat] = -1;
 
@@ -723,8 +727,6 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 
     get_needed_bands(scatt_conds, &b_needed_bands[0]);
     get_needed_bands(scatts, &b_needed_bands[0]);
-
-    n_a_bands = 0;
 
     /* open band rasters, which are needed for computation */
     for (band_id = 0; band_id < n_bands; band_id++) {
@@ -751,6 +753,9 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 
             data_type = Rast_get_map_type(fd_bands[n_a_bands]);
             if (data_type != CELL_TYPE) {
+                free_compute_scatts_data(
+                    fd_bands, bands_rows, n_a_bands, bands_ids, b_needed_bands,
+                    fd_cats_rasts, f_cats_rasts_conds, scatt_conds->n_a_cats);
                 G_warning(_("Raster <%s> type is not <%s>"), bands[band_id],
                           "CELL");
                 return -1;
@@ -801,6 +806,9 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
     for (i_cat = 0; i_cat < scatt_conds->n_a_cats; i_cat++)
         if (f_cats_rasts_conds[i_cat])
             if (fseek(f_cats_rasts_conds[i_cat], head_nchars, SEEK_SET) != 0) {
+                free_compute_scatts_data(
+                    fd_bands, bands_rows, n_a_bands, bands_ids, b_needed_bands,
+                    fd_cats_rasts, f_cats_rasts_conds, scatt_conds->n_a_cats);
                 G_warning(_("Corrupted category raster conditions file (fseek "
                             "failed)"));
                 return -1;
@@ -930,7 +938,6 @@ int I_apply_colormap(unsigned char *vals, unsigned char *vals_mask,
    \return 0 on success
    \return 1 on failure
  */
-
 int I_rasterize(double *polygon, int pol_n_pts, unsigned char val,
                 struct Cell_head *rast_region, unsigned char *rast)
 {
@@ -957,6 +964,8 @@ int I_rasterize(double *polygon, int pol_n_pts, unsigned char val,
             G_warning(
                 _("prepare_signature: scan line %d has odd number of points."),
                 (i + 1) / 2);
+            Vect_destroy_line_struct(pol);
+            G_free(perimeter.points);
             return 1;
         }
 
@@ -965,6 +974,8 @@ int I_rasterize(double *polygon, int pol_n_pts, unsigned char val,
 
         if (x0 > x1) {
             G_warning(_("signature: perimeter points out of order."));
+            Vect_destroy_line_struct(pol);
+            G_free(perimeter.points);
             return 1;
         }
 

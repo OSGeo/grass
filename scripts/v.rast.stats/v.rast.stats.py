@@ -156,8 +156,8 @@ def main():
     # save current settings:
     gs.use_temp_region()
 
-    # Temporarily aligning region resolution to $RASTER resolution
-    # keep boundary settings
+    # Align region cells with the first input raster,
+    # keeping the (approximate) extent settings.
     gs.run_command("g.region", align=rasters[0])
 
     # check if DBF driver used, in this case cut to 10 chars col names:

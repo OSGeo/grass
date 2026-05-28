@@ -18,7 +18,6 @@
  *  \param nameOut
  *  \return void
  */
-
 void Rast3d_change_precision(void *map, int precision, const char *nameOut)
 {
     void *map2;

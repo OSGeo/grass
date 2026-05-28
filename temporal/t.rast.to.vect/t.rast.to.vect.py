@@ -57,13 +57,7 @@
 # % multiple: no
 # %end
 
-# %option
-# % key: suffix
-# % type: string
-# % description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
-# % answer: gran
-# % required: no
-# % multiple: no
+# %option G_OPT_T_SUFFIX
 # %end
 
 # %option
@@ -199,7 +193,7 @@ def main(options, flags):
             nprocs = 1
             gs.warning(
                 _(
-                    "The number of parellel r.to.vect processes was "
+                    "The number of parallel r.to.vect processes was "
                     "reduced to 1 because of the table attribute "
                     "creation"
                 )

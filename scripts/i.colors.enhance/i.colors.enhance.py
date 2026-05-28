@@ -74,7 +74,7 @@ import grass.script as gs
 
 
 def get_percentile(map, percentiles):
-    # todo: generalize for any list length
+    # TODO: generalize for any list length
     val1 = percentiles[0]
     val2 = percentiles[1]
     values = "%s,%s" % (val1, val2)

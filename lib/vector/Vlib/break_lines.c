@@ -59,7 +59,6 @@ void Vect_break_lines(struct Map_info *Map, int type, struct Map_info *Err)
 
    \return number of intersections
  */
-
 int Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
                           struct ilist *List_ref, int type,
                           struct Map_info *Err)

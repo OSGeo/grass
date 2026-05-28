@@ -6,7 +6,7 @@
 #   grass ~/grassdata/nc_spm_08_grass7/user1
 
 if test "$GISBASE" = ""; then
- echo "You must be in GRASS GIS to run this program."
+ echo "You must be in GRASS to run this program."
  exit
 fi
 

@@ -25,7 +25,7 @@
  * year is 4 digit year
  * [bc] if present, indicates dates is BC
  * hour is 0-23 (24 hour clock)
- * mintue is 0-59
+ * minute is 0-59
  * second is 0-59.9999 (fractions of second allowed)
  * timezone is +hhmm or -hhmm (eg, -0600)
  *

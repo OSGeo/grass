@@ -254,42 +254,48 @@ int main(int argc, char *argv[])
                     continue;
 
                 if (col_sqltype[col] == DB_SQL_TYPE_INTEGER) {
-                    sprintf(sqlbuf, "ALTER TABLE %s ADD COLUMN %s integer",
-                            Fi->table, options.col[col]);
+                    snprintf(sqlbuf, sizeof(sqlbuf),
+                             "ALTER TABLE %s ADD COLUMN %s integer", Fi->table,
+                             options.col[col]);
                 }
                 else if (col_sqltype[col] == DB_SQL_TYPE_DOUBLE_PRECISION ||
                          col_sqltype[col] == DB_SQL_TYPE_REAL) {
-                    sprintf(sqlbuf,
-                            "ALTER TABLE %s ADD COLUMN %s double precision",
-                            Fi->table, options.col[col]);
+                    snprintf(sqlbuf, sizeof(sqlbuf),
+                             "ALTER TABLE %s ADD COLUMN %s double precision",
+                             Fi->table, options.col[col]);
                 }
                 else if (col_sqltype[col] == DB_SQL_TYPE_CHARACTER) {
                     if (qlength > 0) {
-                        sprintf(sqlbuf,
-                                "ALTER TABLE %s ADD COLUMN %s varchar(%d)",
-                                Fi->table, options.col[col], qlength);
+                        snprintf(sqlbuf, sizeof(sqlbuf),
+                                 "ALTER TABLE %s ADD COLUMN %s varchar(%d)",
+                                 Fi->table, options.col[col], qlength);
                     }
                     else {
-                        sprintf(sqlbuf, "ALTER TABLE %s ADD COLUMN %s text",
-                                Fi->table, options.col[col]);
+                        snprintf(sqlbuf, sizeof(sqlbuf),
+                                 "ALTER TABLE %s ADD COLUMN %s text", Fi->table,
+                                 options.col[col]);
                     }
                 }
                 else if (col_sqltype[col] == DB_SQL_TYPE_TEXT) {
-                    sprintf(sqlbuf, "ALTER TABLE %s ADD COLUMN %s text",
-                            Fi->table, options.col[col]);
+                    snprintf(sqlbuf, sizeof(sqlbuf),
+                             "ALTER TABLE %s ADD COLUMN %s text", Fi->table,
+                             options.col[col]);
                 }
                 else if (col_sqltype[col] == DB_SQL_TYPE_DATE) {
-                    sprintf(sqlbuf, "ALTER TABLE %s ADD COLUMN %s date",
-                            Fi->table, options.col[col]);
+                    snprintf(sqlbuf, sizeof(sqlbuf),
+                             "ALTER TABLE %s ADD COLUMN %s date", Fi->table,
+                             options.col[col]);
                 }
                 else if (col_sqltype[col] == DB_SQL_TYPE_TIME) {
-                    sprintf(sqlbuf, "ALTER TABLE %s ADD COLUMN %s time",
-                            Fi->table, options.col[col]);
+                    snprintf(sqlbuf, sizeof(sqlbuf),
+                             "ALTER TABLE %s ADD COLUMN %s time", Fi->table,
+                             options.col[col]);
                 }
                 else {
-                    sprintf(sqlbuf, "ALTER TABLE %s ADD COLUMN %s %s",
-                            Fi->table, options.col[col],
-                            db_sqltype_name(col_sqltype[col]));
+                    snprintf(sqlbuf, sizeof(sqlbuf),
+                             "ALTER TABLE %s ADD COLUMN %s %s", Fi->table,
+                             options.col[col],
+                             db_sqltype_name(col_sqltype[col]));
                 }
                 db_set_string(&stmt, sqlbuf);
                 if (db_execute_immediate(driver, &stmt) != DB_OK) {
@@ -406,7 +412,7 @@ int main(int argc, char *argv[])
     conv_units();
 
     if (options.print || options.total) {
-        report();
+        report(options.format);
     }
     else {
         update(&Map);

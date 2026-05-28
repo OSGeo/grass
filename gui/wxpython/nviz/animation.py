@@ -196,26 +196,25 @@ class Animation:
         self.currentFrame = 0
         self.mode = "save"
         for params in self.animationList:
-            if not self.stopSaving:
-                self.UpdateView(params)
-                number = ("{frame" + formatter + "}").format(frame=self.currentFrame)
-                filename = "{prefix}_{number}.{ext}".format(
-                    prefix=prefix, number=number, ext=self.formats[format]
-                )
-                filepath = os.path.join(path, filename)
-                self.mapWindow.SaveToFile(
-                    FileName=filepath,
-                    FileType=self.formats[format],
-                    width=size[0],
-                    height=size[1],
-                )
-                self.currentFrame += 1
-
-                wx.GetApp().Yield()
-                toolWin.UpdateFrameIndex(index=self.currentFrame, goToFrame=False)
-            else:
+            if self.stopSaving:
                 self.stopSaving = False
                 break
+            self.UpdateView(params)
+            number = ("{frame" + formatter + "}").format(frame=self.currentFrame)
+            filename = "{prefix}_{number}.{ext}".format(
+                prefix=prefix, number=number, ext=self.formats[format]
+            )
+            filepath = os.path.join(path, filename)
+            self.mapWindow.SaveToFile(
+                FileName=filepath,
+                FileType=self.formats[format],
+                width=size[0],
+                height=size[1],
+            )
+            self.currentFrame += 1
+
+            wx.GetApp().Yield()
+            toolWin.UpdateFrameIndex(index=self.currentFrame, goToFrame=False)
         self.animationSaved = True
         self.PostFinishedEvent()
 

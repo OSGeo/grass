@@ -2,7 +2,7 @@
  * r.in.pdal filtering functions
  * adapted from v.in.lidar
  *
- * Copyright 2011-2015 by Markus Metz, and The GRASS Development Team
+ * Copyright 2011-2015 by Markus Metz, and the GRASS Development Team
  * Authors:
  *  Markus Metz (r.in.lidar)
  *  Vaclav Petras (move code to a separate files)

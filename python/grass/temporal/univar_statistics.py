@@ -92,15 +92,15 @@ def compute_univar_stats(
                 eol = "\n"
             else:
                 eol = ""
-        string += f'{fs}{stats["mean"]}{fs}{stats["min"]}'
-        string += f'{fs}{stats["max"]}{fs}{stats["mean_of_abs"]}'
-        string += f'{fs}{stats["stddev"]}{fs}{stats["variance"]}'
-        string += f'{fs}{stats["coeff_var"]}{fs}{stats["sum"]}'
-        string += f'{fs}{stats["null_cells"]}{fs}{stats["n"]}'
-        string += f'{fs}{stats["n"]}'
+        string += f"{fs}{stats['mean']}{fs}{stats['min']}"
+        string += f"{fs}{stats['max']}{fs}{stats['mean_of_abs']}"
+        string += f"{fs}{stats['stddev']}{fs}{stats['variance']}"
+        string += f"{fs}{stats['coeff_var']}{fs}{stats['sum']}"
+        string += f"{fs}{stats['null_cells']}{fs}{stats['n']}"
+        string += f"{fs}{stats['n']}"
         if "median" in stats:
-            string += f'{fs}{stats["first_quartile"]}{fs}{stats["median"]}'
-            string += f'{fs}{stats["third_quartile"]}'
+            string += f"{fs}{stats['first_quartile']}{fs}{stats['median']}"
+            string += f"{fs}{stats['third_quartile']}"
             if stats_module.inputs.percentile:
                 for perc in stats_module.inputs.percentile:
                     perc_value = stats[
@@ -127,6 +127,7 @@ def print_gridded_dataset_univar_statistics(
     nprocs: int = 1,
 ) -> None:
     """Print univariate statistics for a space time raster or raster3d dataset.
+
     Returns None if the space time raster dataset is empty or if applied
     filters (where, region_relation) do not return any maps to process.
 
@@ -143,10 +144,11 @@ def print_gridded_dataset_univar_statistics(
            and use the raster map regions for univar statistical calculation.
     :param region_relation: Process only maps with the given spatial relation
            to the computational region. A string with one of the following values:
-           "overlaps": maps that spatially overlap ("intersect")
-                       within the provided spatial extent
-           "is_contained": maps that are fully within the provided spatial extent
-           "contains": maps that contain (fully cover) the provided spatial extent
+
+           - "overlaps": maps that spatially overlap ("intersect")
+             within the provided spatial extent
+           - "is_contained": maps that are fully within the provided spatial extent
+           - "contains": maps that contain (fully cover) the provided spatial extent
     :param zones: raster map with zones to calculate statistics for
     """
     # We need a database interface
@@ -247,6 +249,7 @@ def print_gridded_dataset_univar_statistics(
         run_=False,
     )
 
+    nprocs = max(nprocs, 1)
     if nprocs == 1:
         strings = [
             compute_univar_stats(

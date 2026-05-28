@@ -127,7 +127,7 @@ int do_grid_numbers(void)
     /* round grid to multiple of 10 */
     rounded_grid = 1;
     if (PS.w.proj != PROJECTION_LL) {
-        sprintf(num_text, "%d", PS.grid);
+        snprintf(num_text, sizeof(num_text), "%d", PS.grid);
         len = strlen(num_text);
         while (len-- && num_text[len] == '0')
             rounded_grid *= 10;
@@ -167,7 +167,8 @@ int do_grid_numbers(void)
             continue;
         if (y - PS.grid_fontsize < (int)PS.map_bot)
             continue;
-        sprintf(num_text, "%s", format_northing(g, rounded_grid));
+        snprintf(num_text, sizeof(num_text), "%s",
+                 format_northing(g, rounded_grid));
         text_box_path(x, y, LEFT, CENTER, num_text, 0);
         set_rgb_color(WHITE);
         fprintf(PS.fp, "F ");
@@ -200,7 +201,8 @@ int do_grid_numbers(void)
             continue;
         if (x + PS.grid_fontsize > (int)PS.map_right)
             continue;
-        sprintf(num_text, "%s", format_easting(g, rounded_grid));
+        snprintf(num_text, sizeof(num_text), "%s",
+                 format_easting(g, rounded_grid));
         vy = y - 0.7 * strlen(num_text) * PS.grid_fontsize - 2 * margin;
         vx = x - (int)(0.5 * (double)PS.grid_fontsize + 0.5) - margin;
         if (vx < hx && vy < hy)
@@ -226,7 +228,7 @@ static char *format_northing(double n, int round)
         G_format_northing(n, text, PS.w.proj);
     else {
         n = floor(n / round);
-        sprintf(text, "%.0f", n);
+        snprintf(text, sizeof(text), "%.0f", n);
     }
     return text;
 }
@@ -239,7 +241,7 @@ static char *format_easting(double e, int round)
         G_format_easting(e, text, PS.w.proj);
     else {
         e = floor(e / round);
-        sprintf(text, "%.0f", e);
+        snprintf(text, sizeof(text), "%.0f", e);
     }
     return text;
 }

@@ -65,7 +65,6 @@ double G_darea0_on_sphere(double lat)
  * \param[in] south
  * \return double
  */
-
 double G_area_for_zone_on_sphere(double north, double south)
 {
     return (G_darea0_on_sphere(north) - G_darea0_on_sphere(south));

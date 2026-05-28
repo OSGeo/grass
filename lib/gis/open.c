@@ -145,7 +145,6 @@ static int G__open(const char *element, const char *name, const char *mapset,
    \return open file descriptor (int)
    \return -1 could not open
  */
-
 int G_open_new(const char *element, const char *name)
 {
     return G__open(element, name, G_mapset(), 1);
@@ -187,14 +186,18 @@ int G_open_old(const char *element, const char *name, const char *mapset)
    \return open file descriptor (int)
    \return -1 could not open
  */
-
 int G_open_update(const char *element, const char *name)
 {
     int fd;
 
     fd = G__open(element, name, G_mapset(), 2);
     if (fd >= 0)
-        lseek(fd, 0L, SEEK_END);
+        if (lseek(fd, 0L, SEEK_END) == -1) {
+            int err = errno;
+            G_warning(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+            return -1;
+        }
 
     return fd;
 }
@@ -215,7 +218,6 @@ int G_open_update(const char *element, const char *name)
    \return open file descriptor (FILE *)
    \return NULL on error
  */
-
 FILE *G_fopen_new(const char *element, const char *name)
 {
     int fd;
@@ -282,7 +284,12 @@ FILE *G_fopen_append(const char *element, const char *name)
     fd = G__open(element, name, G_mapset(), 2);
     if (fd < 0)
         return (FILE *)0;
-    lseek(fd, 0L, SEEK_END);
+    if (lseek(fd, 0L, SEEK_END) == -1) {
+        int err = errno;
+        G_warning(_("File read/write operation failed: %s (%d)"), strerror(err),
+                  err);
+        return NULL;
+    }
 
     G_debug(2, "\tfile open: append (mode = a)");
     return fdopen(fd, "a");
@@ -310,7 +317,12 @@ FILE *G_fopen_modify(const char *element, const char *name)
     fd = G__open(element, name, G_mapset(), 2);
     if (fd < 0)
         return (FILE *)0;
-    lseek(fd, 0L, SEEK_END);
+    if (lseek(fd, 0L, SEEK_END) == -1) {
+        int err = errno;
+        G_warning(_("File read/write operation failed: %s (%d)"), strerror(err),
+                  err);
+        return NULL;
+    }
 
     G_debug(2, "\tfile open: modify (mode = r+)");
     return fdopen(fd, "r+");

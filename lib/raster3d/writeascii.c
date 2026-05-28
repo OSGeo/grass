@@ -15,7 +15,6 @@
  *  \param fname
  *  \return void
  */
-
 void Rast3d_write_ascii(void *map, const char *fname)
 {
     FILE *fp;

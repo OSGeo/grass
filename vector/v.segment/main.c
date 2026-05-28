@@ -391,12 +391,13 @@ int find_line(struct Map_info *Map, int lfield, int lcat)
         Vect_field_cat_get(Cats, lfield, cats);
         if (Vect_val_in_list(cats, lcat)) {
             Vect_destroy_list(cats);
+            Vect_destroy_cats_struct(Cats);
             return i;
         }
     }
 
     Vect_destroy_list(cats);
-
+    Vect_destroy_cats_struct(Cats);
     return 0;
 }
 

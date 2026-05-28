@@ -68,12 +68,8 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     int deflen;
     char proj_in[250], *datum, *params;
 
-#ifdef HAVE_PROJ_H
     PJ *pj;
     PJ_CONTEXT *pjc;
-#else
-    projPJ *pj;
-#endif
 
     proj_in[0] = '\0';
     info->zone = 0;
@@ -92,14 +88,14 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     }
     str = G_find_key_value("name", in_proj_keys);
     if (str != NULL) {
-        sprintf(proj_in, "%s", str);
+        snprintf(proj_in, sizeof(proj_in), "%s", str);
     }
     str = G_find_key_value("proj", in_proj_keys);
     if (str != NULL) {
-        sprintf(info->proj, "%s", str);
+        snprintf(info->proj, sizeof(info->proj), "%s", str);
     }
     if (strlen(info->proj) <= 0)
-        sprintf(info->proj, "ll");
+        snprintf(info->proj, sizeof(info->proj), "ll");
     str = G_find_key_value("init", in_proj_keys);
     if (str != NULL) {
         info->srid = G_store(str);
@@ -143,20 +139,21 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
         }
         else if (strcmp(in_proj_keys->key[i], "proj") == 0) {
             if (strcmp(in_proj_keys->value[i], "ll") == 0)
-                sprintf(buffa, "proj=longlat");
+                snprintf(buffa, sizeof(buffa), "proj=longlat");
             else
-                sprintf(buffa, "proj=%s", in_proj_keys->value[i]);
+                snprintf(buffa, sizeof(buffa), "proj=%s",
+                         in_proj_keys->value[i]);
 
             /* 'One-sided' PROJ.4 flags will have the value in
              * the key-value pair set to 'defined' and only the
              * key needs to be passed on. */
         }
         else if (strcmp(in_proj_keys->value[i], "defined") == 0)
-            sprintf(buffa, "%s", in_proj_keys->key[i]);
+            snprintf(buffa, sizeof(buffa), "%s", in_proj_keys->key[i]);
 
         else
-            sprintf(buffa, "%s=%s", in_proj_keys->key[i],
-                    in_proj_keys->value[i]);
+            snprintf(buffa, sizeof(buffa), "%s=%s", in_proj_keys->key[i],
+                     in_proj_keys->value[i]);
 
         alloc_options(buffa);
     }
@@ -172,11 +169,11 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
             info->zone = -info->zone;
 
             if (G_find_key_value("south", in_proj_keys) == NULL) {
-                sprintf(buffa, "south");
+                snprintf(buffa, sizeof(buffa), "south");
                 alloc_options(buffa);
             }
         }
-        sprintf(buffa, "zone=%d", info->zone);
+        snprintf(buffa, sizeof(buffa), "zone=%d", info->zone);
         alloc_options(buffa);
     }
 
@@ -185,30 +182,30 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
         /* Default values were returned but an ellipsoid name not recognised
          * by GRASS is present---perhaps it will be recognised by
          * PROJ.4 even though it wasn't by GRASS */
-        sprintf(buffa, "ellps=%s", str);
+        snprintf(buffa, sizeof(buffa), "ellps=%s", str);
         alloc_options(buffa);
     }
     else {
-        sprintf(buffa, "a=%.16g", a);
+        snprintf(buffa, sizeof(buffa), "a=%.16g", a);
         alloc_options(buffa);
         /* Cannot use es directly because the OSRImportFromProj4()
          * function in OGR only accepts b or rf as the 2nd parameter */
         if (es == 0)
-            sprintf(buffa, "b=%.16g", a);
+            snprintf(buffa, sizeof(buffa), "b=%.16g", a);
         else
-            sprintf(buffa, "rf=%.16g", rf);
+            snprintf(buffa, sizeof(buffa), "rf=%.16g", rf);
         alloc_options(buffa);
     }
     /* Workaround to stop PROJ reading values from defaults file when
      * rf (and sometimes ellps) is not specified */
     if (G_find_key_value("no_defs", in_proj_keys) == NULL) {
-        sprintf(buffa, "no_defs");
+        snprintf(buffa, sizeof(buffa), "no_defs");
         alloc_options(buffa);
     }
 
     /* If datum parameters are present in the PROJ_INFO keys, pass them on */
     if (GPJ__get_datum_params(in_proj_keys, &datum, &params) == 2) {
-        sprintf(buffa, "%s", params);
+        snprintf(buffa, sizeof(buffa), "%s", params);
         alloc_options(buffa);
         G_free(params);
 
@@ -218,7 +215,7 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     else if (datum != NULL) {
 
         if (GPJ_get_default_datum_params_by_name(datum, &params) > 0) {
-            sprintf(buffa, "%s", params);
+            snprintf(buffa, sizeof(buffa), "%s", params);
             alloc_options(buffa);
             returnval = 2;
             G_free(params);
@@ -227,7 +224,7 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
              * PROJ.4 even though it isn't recognised by GRASS */
         }
         else {
-            sprintf(buffa, "datum=%s", datum);
+            snprintf(buffa, sizeof(buffa), "datum=%s", datum);
             alloc_options(buffa);
             returnval = 3;
         }
@@ -238,44 +235,30 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
     }
     G_free(datum);
 
-#ifdef HAVE_PROJ_H
-#if PROJ_VERSION_MAJOR >= 6
     /* without type=crs, PROJ6 does not recognize what this is,
      * a crs or some kind of coordinate operation, falling through to
      * PJ_TYPE_OTHER_COORDINATE_OPERATION */
     alloc_options("type=crs");
-#endif
     pjc = proj_context_create();
     if (!(pj = proj_create_argv(pjc, nopt, opt_in))) {
-#else
-    /* Set finder function for locating datum conversion tables PK */
-    pj_set_finder(FINDERFUNC);
-
-    if (!(pj = pj_init(nopt, opt_in))) {
-#endif
         strcpy(
             buffa,
             _("Unable to initialise PROJ with the following parameter list:"));
         for (i = 0; i < nopt; i++) {
             char err[50];
 
-            sprintf(err, " +%s", opt_in[i]);
+            snprintf(err, sizeof(err), " +%s", opt_in[i]);
             strcat(buffa, err);
         }
         G_warning("%s", buffa);
-#ifndef HAVE_PROJ_H
-        G_warning(_("The PROJ error message: %s"), pj_strerrno(pj_errno));
-#endif
         return -1;
     }
 
-#ifdef HAVE_PROJ_H
     int perr = proj_errno(pj);
 
     if (perr)
-        G_fatal_error("PROJ 5 error %d", perr);
+        G_fatal_error("PROJ error %d", perr);
 
-#if PROJ_VERSION_MAJOR >= 6
     if (proj_get_type(pj) == PJ_TYPE_BOUND_CRS) {
         PJ *source_crs = proj_get_source_crs(pjc, pj);
         if (source_crs) {
@@ -283,8 +266,6 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
             pj = source_crs;
         }
     }
-#endif
-#endif
 
     info->pj = pj;
 
@@ -294,12 +275,12 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
 
     info->def = G_malloc(deflen + 1);
 
-    sprintf(buffa, "+%s ", opt_in[0]);
+    snprintf(buffa, sizeof(buffa), "+%s ", opt_in[0]);
     strcpy(info->def, buffa);
     G_free(opt_in[0]);
 
     for (i = 1; i < nopt; i++) {
-        sprintf(buffa, "+%s ", opt_in[i]);
+        snprintf(buffa, sizeof(buffa), "+%s ", opt_in[i]);
         strcat(info->def, buffa);
         G_free(opt_in[i]);
     }
@@ -309,11 +290,11 @@ int pj_get_kv(struct pj_info *info, const struct Key_Value *in_proj_keys,
 
 static void alloc_options(char *buffa)
 {
-    int nsize;
+    size_t nsize;
 
-    nsize = strlen(buffa);
-    opt_in[nopt++] = (char *)G_malloc(nsize + 1);
-    sprintf(opt_in[nopt - 1], "%s", buffa);
+    nsize = strlen(buffa) + 1;
+    opt_in[nopt++] = (char *)G_malloc(nsize);
+    snprintf(opt_in[nopt - 1], nsize, "%s", buffa);
     return;
 }
 
@@ -330,7 +311,6 @@ static void alloc_options(char *buffa)
  * \param info Pointer to a pj_info struct (which must already exist) into
  *        which the co-ordinate system definition will be placed
  * \param str input string with projection definition
- * \param in_units_keys PROJ_UNITS-style key-value pairs
  *
  * \return -1 on error (unable to initialise PROJ.4)
  *          1 on success
@@ -343,12 +323,8 @@ int pj_get_string(struct pj_info *info, char *str)
     char zonebuff[50], buffa[300];
     int deflen;
 
-#ifdef HAVE_PROJ_H
     PJ *pj;
     PJ_CONTEXT *pjc;
-#else
-    projPJ *pj;
-#endif
 
     info->zone = 0;
     info->proj[0] = '\0';
@@ -363,8 +339,8 @@ int pj_get_string(struct pj_info *info, char *str)
         /* Null Pointer or empty string is supplied for parameters,
          * implying latlong projection; just need to set proj
          * parameter and call pj_init PK */
-        sprintf(info->proj, "ll");
-        sprintf(buffa, "proj=latlong ellps=WGS84");
+        snprintf(info->proj, sizeof(info->proj), "ll");
+        snprintf(buffa, sizeof(buffa), "proj=latlong ellps=WGS84");
         alloc_options(buffa);
     }
     else {
@@ -389,7 +365,7 @@ int pj_get_string(struct pj_info *info, char *str)
                     }
 
                     if (strncmp("zone=", s, 5) == 0) {
-                        sprintf(zonebuff, "%s", s + 5);
+                        snprintf(zonebuff, sizeof(zonebuff), "%s", s + 5);
                         sscanf(zonebuff, "%d", &(info->zone));
                     }
 
@@ -398,14 +374,14 @@ int pj_get_string(struct pj_info *info, char *str)
                     }
 
                     if (strncmp("proj=", s, 5) == 0) {
-                        sprintf(info->proj, "%s", s + 5);
+                        snprintf(info->proj, sizeof(info->proj), "%s", s + 5);
                         if (strcmp(info->proj, "ll") == 0)
-                            sprintf(buffa, "proj=latlong");
+                            snprintf(buffa, sizeof(buffa), "proj=latlong");
                         else
-                            sprintf(buffa, "%s", s);
+                            snprintf(buffa, sizeof(buffa), "%s", s);
                     }
                     else {
-                        sprintf(buffa, "%s", s);
+                        snprintf(buffa, sizeof(buffa), "%s", s);
                     }
                     alloc_options(buffa);
                 }
@@ -414,13 +390,10 @@ int pj_get_string(struct pj_info *info, char *str)
         }
     }
 
-#ifdef HAVE_PROJ_H
-#if PROJ_VERSION_MAJOR >= 6
     /* without type=crs, PROJ6 does not recognize what this is,
      * a crs or some kind of coordinate operation, falling through to
      * PJ_TYPE_OTHER_COORDINATE_OPERATION */
     alloc_options("type=crs");
-#endif
     pjc = proj_context_create();
     if (!(pj = proj_create_argv(pjc, nopt, opt_in))) {
         G_warning(_("Unable to initialize pj cause: %s"),
@@ -428,7 +401,6 @@ int pj_get_string(struct pj_info *info, char *str)
         return -1;
     }
 
-#if PROJ_VERSION_MAJOR >= 6
     if (proj_get_type(pj) == PJ_TYPE_BOUND_CRS) {
         PJ *source_crs = proj_get_source_crs(pjc, pj);
         if (source_crs) {
@@ -436,17 +408,6 @@ int pj_get_string(struct pj_info *info, char *str)
             pj = source_crs;
         }
     }
-#endif
-#else
-    /* Set finder function for locating datum conversion tables PK */
-    pj_set_finder(FINDERFUNC);
-
-    if (!(pj = pj_init(nopt, opt_in))) {
-        G_warning(_("Unable to initialize pj cause: %s"),
-                  pj_strerrno(pj_errno));
-        return -1;
-    }
-#endif
     info->pj = pj;
 
     deflen = 0;
@@ -455,59 +416,18 @@ int pj_get_string(struct pj_info *info, char *str)
 
     info->def = G_malloc(deflen + 1);
 
-    sprintf(buffa, "+%s ", opt_in[0]);
+    snprintf(buffa, sizeof(buffa), "+%s ", opt_in[0]);
     strcpy(info->def, buffa);
     G_free(opt_in[0]);
 
     for (i = 1; i < nopt; i++) {
-        sprintf(buffa, "+%s ", opt_in[i]);
+        snprintf(buffa, sizeof(buffa), "+%s ", opt_in[i]);
         strcat(info->def, buffa);
         G_free(opt_in[i]);
     }
 
     return 1;
 }
-
-#ifndef HAVE_PROJ_H
-/* GPJ_get_equivalent_latlong(): only available with PROJ 4 API
- * with the new PROJ 5+ API, use pjold directly with PJ_FWD/PJ_INV
- * transformation
- */
-
-/**
- * \brief Define a latitude / longitude co-ordinate system with the same
- *        ellipsoid and datum parameters as an existing projected system
- *
- * This function is useful when projected co-ordinates need to be simply
- * converted to and from latitude / longitude.
- *
- * \param pjnew Pointer to pj_info struct for geographic co-ordinate system
- *        that will be created
- * \param pjold Pointer to pj_info struct for existing projected co-ordinate
- *        system
- *
- * \return 1 on success; -1 if there was an error (i.e. if the PROJ.4
- *         pj_latlong_from_proj() function returned NULL)
- **/
-
-int GPJ_get_equivalent_latlong(struct pj_info *pjnew, struct pj_info *pjold)
-{
-    char *deftmp;
-
-    pjnew->meters = 1.;
-    pjnew->zone = 0;
-    pjnew->def = NULL;
-    sprintf(pjnew->proj, "ll");
-    if ((pjnew->pj = pj_latlong_from_proj(pjold->pj)) == NULL)
-        return -1;
-
-    deftmp = pj_get_def(pjnew->pj, 1);
-    pjnew->def = G_store(deftmp);
-    pj_dalloc(deftmp);
-
-    return 1;
-}
-#endif
 
 /* set_proj_share()
  * 'finder function' for use with PROJ.4 pj_set_finder() function
@@ -535,7 +455,7 @@ const char *set_proj_share(const char *name)
         buf = G_malloc(buf_len);
     }
 
-    sprintf(buf, "%s/%s", projshare, name);
+    snprintf(buf, buf_len, "%s/%s", projshare, name);
 
     return buf;
 }

@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Please select a target for group [%s] first"), group);
     }
 
-    sprintf(buf, "%s/%s", G_gisdbase(), location);
+    snprintf(buf, sizeof(buf), "%s/%s", G_gisdbase(), location);
     if (access(buf, 0) != 0) {
         G_fatal_error(_("Target project (location) [%s] not found\n"),
                       location);

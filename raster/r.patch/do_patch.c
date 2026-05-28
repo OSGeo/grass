@@ -9,7 +9,6 @@
  * returns: 1 the result still contains nulls
  *          0 the result contains no zero nulls
  */
-
 int is_zero_value(void *rast, RASTER_MAP_TYPE data_type)
 {
 

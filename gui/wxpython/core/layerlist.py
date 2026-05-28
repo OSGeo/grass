@@ -38,8 +38,9 @@ class LayerList:
         layers = []
         for layer in self._list:
             if layer.IsSelected():
-                if activeOnly and layer.IsActive():
-                    layers.append(layer)
+                if activeOnly:
+                    if layer.IsActive():
+                        layers.append(layer)
                 else:
                     layers.append(layer)
         return layers
@@ -63,11 +64,7 @@ class LayerList:
 
         :param mapTypes: list of types
         """
-        layers = []
-        for layer in self._list:
-            if layer.mapType in mapTypes:
-                layers.append(layer)
-        return layers
+        return [layer for layer in self._list if layer.mapType in mapTypes]
 
     def AddNewLayer(
         self,
@@ -175,12 +172,12 @@ class Layer:
         Traceback (most recent call last):
         ...
         ValueError: Opacity must be an integer between 0 and 100, not 0.1.
-        >>> layer.name = 'blablabla'
+        >>> layer.name = "blablabla"
         Traceback (most recent call last):
         ...
         ValueError: To set layer name, the type of layer must be specified.
-        >>> layer.mapType = 'raster'
-        >>> layer.name = 'blablabla'
+        >>> layer.mapType = "raster"
+        >>> layer.name = "blablabla"
         Traceback (most recent call last):
         ...
         ValueError: Map <blablabla> not found.

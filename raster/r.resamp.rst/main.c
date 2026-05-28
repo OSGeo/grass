@@ -79,7 +79,7 @@ static int fdinp, fdsmooth = -1;
  * for output grid xmin ... - coordinates of corners of output grid
  *
  * subroutines input_data - input of data x,y,z (test function or measured
- * data) iterpolate - interpolation of z-values and derivatives to grid
+ * data) interpolate - interpolation of z-values and derivatives to grid
  * secpar_loop- computation of secondary(morphometric) parameters output -
  * output of gridded data and derivatives/sec.parameters check_at_points -
  * interpolation of z-values to given point x,y

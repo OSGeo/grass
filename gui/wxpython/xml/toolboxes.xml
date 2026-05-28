@@ -1584,6 +1584,9 @@
       <module-item name="r.mfilter">
         <label>Matrix/convolving filter</label>
       </module-item>
+      <module-item name="r.smooth.edgepreserve">
+        <label>Edge preserving smoothing</label>
+      </module-item>
     </items>
   </toolbox>
   <toolbox name="TransformImage">

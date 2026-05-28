@@ -624,10 +624,10 @@ int main(int argc, char *argv[])
 
         if (nbands > 1) {
             G_message(_("Importing band %d..."), band);
-            sprintf(output, "%s%0*d", outpre, bsize, band);
+            snprintf(output, sizeof(output), "%s%0*d", outpre, bsize, band);
         }
         else
-            sprintf(output, "%s", outpre);
+            snprintf(output, sizeof(output), "%s", outpre);
 
         fd = Rast_open_new(output, map_type);
 

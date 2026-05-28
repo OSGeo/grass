@@ -39,7 +39,6 @@ int begin_distance(int row)
  * Returns: first zone to occur (-1 if none)
  * Note: modifies distances structure (global)
  */
-
 int find_distances(int row)
 {
     int i;

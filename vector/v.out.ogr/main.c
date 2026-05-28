@@ -271,7 +271,6 @@ int main(int argc, char *argv[])
         projunits = G_get_projunits();
         projepsg = G_get_projepsg();
 
-#if GDAL_VERSION_MAJOR >= 3 && PROJ_VERSION_MAJOR >= 6
         char *indef = NULL, *inwkt = NULL;
 
         if ((indef = G_get_projsrid())) {
@@ -292,11 +291,9 @@ int main(int argc, char *argv[])
         if (inwkt && *inwkt) {
             Ogr_projection = OSRNewSpatialReference(inwkt);
         }
-#endif
         if (!Ogr_projection)
             Ogr_projection = GPJ_grass_to_osr2(projinfo, projunits, projepsg);
 
-#if GDAL_VERSION_MAJOR >= 3 && PROJ_VERSION_MAJOR >= 6
         if (Ogr_projection) {
             /* convert bound CRS */
             PJ *obj = NULL;
@@ -337,7 +334,6 @@ int main(int argc, char *argv[])
             if (inwkt)
                 CPLFree(inwkt);
         }
-#endif
 
         if (Ogr_projection == NULL)
             G_fatal_error(_("Unable to create OGR spatial reference"));
@@ -520,7 +516,7 @@ int main(int argc, char *argv[])
         hDriver = GDALGetDriver(i);
         G_debug(2, "driver %d : %s", i, GDALGetDriverShortName(hDriver));
         /* chg white space to underscore in OGR driver names */
-        sprintf(buf, "%s", GDALGetDriverShortName(hDriver));
+        snprintf(buf, sizeof(buf), "%s", GDALGetDriverShortName(hDriver));
         G_strchg(buf, ' ', '_');
         if (strcmp(buf, options.format->answer) == 0) {
             drn = i;
@@ -597,11 +593,11 @@ int main(int argc, char *argv[])
         char shape_geom[20];
 
         if ((otype & GV_POINTS) || (otype & GV_KERNEL))
-            sprintf(shape_geom, "POINTZ");
+            snprintf(shape_geom, sizeof(shape_geom), "POINTZ");
         if ((otype & GV_LINES))
-            sprintf(shape_geom, "ARCZ");
+            snprintf(shape_geom, sizeof(shape_geom), "ARCZ");
         if ((otype & GV_AREA) || (otype & GV_FACE))
-            sprintf(shape_geom, "POLYGONZ");
+            snprintf(shape_geom, sizeof(shape_geom), "POLYGONZ");
         /* check if the right LCO is already present */
         const char *shpt;
 

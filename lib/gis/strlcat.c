@@ -6,7 +6,7 @@
  * If available, G_strlcat() calls system strlcat(), otherwise it uses
  * implementation by Todd C. Miller of OpenBSD.
  *
- * Addition to GRASS GIS by Nicklas Larsson, 2024
+ * Addition to GRASS by Nicklas Larsson, 2024
  *
  * Original OpenBSD implementation notes:
  *
@@ -53,6 +53,8 @@ static size_t G__strlcat(char *restrict dst, const char *restrict src,
  *         created (the initial length of dst plus the length of src, not
  *         including the terminating NUL character). If the return value
  *         is >= dsize, truncation occurred.
+ *
+ * \since version 8.5
  */
 size_t G_strlcat(char *dst, const char *src, size_t dsize)
 {

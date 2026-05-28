@@ -201,10 +201,11 @@ char **G_list(int element, const char *gisbase, const char *location,
         G_fatal_error(_("G_list: Unknown element type"));
     }
 
-    buf = (char *)G_malloc(strlen(gisbase) + strlen(location) + strlen(mapset) +
-                           strlen(el) + 4);
+    size_t bufsize =
+        strlen(gisbase) + strlen(location) + strlen(mapset) + strlen(el) + 4;
+    buf = (char *)G_malloc(bufsize);
 
-    sprintf(buf, "%s/%s/%s/%s", gisbase, location, mapset, el);
+    snprintf(buf, bufsize, "%s/%s/%s/%s", gisbase, location, mapset, el);
 
     dirp = opendir(buf);
     G_free(buf);

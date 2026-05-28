@@ -95,14 +95,22 @@ FONTCAP = etc/fontcap
 TMPGISRC = demolocation/.grassrc$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
 PLATMAKE = include/Make/Platform.make
 GRASSMAKE = include/Make/Grass.make
+RESOURCE_PATHS = etc/python/grass/app/resource_paths.py
 
 real-install: | $(DESTDIR) $(DESTDIR)$(INST_DIR) $(DESTDIR)$(UNIX_BIN)
 	-tar cBCf $(GISBASE) - . | tar xBCf $(DESTDIR)$(INST_DIR) - 2>/dev/null
 	-rm $(DESTDIR)$(INST_DIR)/$(GRASS_NAME).tmp
+	-rm $(DESTDIR)$(INST_DIR)/$(RESOURCE_PATHS)
 	$(MAKE) $(STARTUP)
 
+	-rm $(DESTDIR)$(INST_DIR)/resource_paths.py
+	-rm $(DESTDIR)$(INST_DIR)/$(RESOURCE_PATHS)
+	$(MAKE) $(DESTDIR)$(INST_DIR)/$(RESOURCE_PATHS)
+
+ifndef CROSS_COMPILING
 	-rm $(DESTDIR)$(INST_DIR)/$(FONTCAP)
 	$(MAKE) $(DESTDIR)$(INST_DIR)/$(FONTCAP)
+endif
 
 	-rm $(DESTDIR)$(INST_DIR)/$(TMPGISRC)
 	$(MAKE) $(DESTDIR)$(INST_DIR)/$(TMPGISRC)
@@ -122,11 +130,28 @@ $(DESTDIR)$(INST_DIR) $(DESTDIR)$(UNIX_BIN):
 	$(MAKE_DIR_CMD) $@
 
 $(STARTUP): $(ARCH_DISTDIR)/$(GRASS_NAME).tmp
-	sed -e 's#'@GISBASE@'#'$(INST_DIR)'#g' \
-	    -e 's#'@LD_LIBRARY_PATH_VAR@'#'$(LD_LIBRARY_PATH_VAR)'#g' \
-	    -e 's#'@CONFIG_PROJSHARE@'#'$(PROJSHARE)'#g' \
+	sed -e 's#'@GRASS_PYDIR@'#'$(INST_DIR)/etc/python'#g' \
 	    $< > $@
 	-$(CHMOD) a+x $@
+
+$(DESTDIR)$(INST_DIR)/$(RESOURCE_PATHS): $(ARCH_DISTDIR)/resource_paths.py
+	sed \
+	-e 's#'@CONFIG_PROJSHARE@'#$(PROJSHARE)#' \
+	-e 's#'@GISBASE_INSTALL_PATH@'##' \
+	-e 's#'@GRASS_INSTALL_CMAKECONFDIR@'##' \
+	-e 's#'@GRASS_INSTALL_CMAKEMODULEDIR@'##' \
+	-e 's#'@CMAKE_PREFIX_PATH@'##' \
+	-e 's#'@CMAKE_C_COMPILER@'##' \
+	-e 's#'@CMAKE_CXX_COMPILER@'##' \
+	-e 's#'@GRASS_PREFIX@'#$(INST_DIR)#' \
+	-e 's#'@GRASS_VERSION_GIT@'#$(GRASS_VERSION_GIT)#' \
+	-e 's#'@GRASS_VERSION_MAJOR@'#$(GRASS_VERSION_MAJOR)#' \
+	-e 's#'@GRASS_VERSION_MINOR@'#$(GRASS_VERSION_MINOR)#' \
+	-e 's#'@GRASS_VERSION_NUMBER@'#$(GRASS_VERSION_NUMBER)#' \
+	-e 's#'@LD_LIBRARY_PATH_VAR@'#$(LD_LIBRARY_PATH_VAR)#' \
+	-e 's#'@START_UP@'#$(GRASS_NAME)#' \
+	$< > $@
+	$(PYTHON) -m py_compile $@
 
 define fix_gisbase
 sed -e 's#$(GISBASE)#$(INST_DIR)#g' $< > $@

@@ -170,11 +170,12 @@ struct ilist *select_lines(struct Map_info *Map, enum mode action_mode,
     if (params->reverse->answer) {
         reverse_selection(Map, type, &List);
     }
-
+    const char *mname = Vect_get_full_name(Map);
     G_message(n_("%d of %d feature selected from vector map <%s>",
                  "%d of %d features selected from vector map <%s>",
                  Vect_get_num_lines(Map)),
-              List->n_values, Vect_get_num_lines(Map), Vect_get_full_name(Map));
+              List->n_values, Vect_get_num_lines(Map), mname);
+    G_free((void *)mname);
 
     return List;
 }
@@ -259,6 +260,8 @@ int sel_by_cat(struct Map_info *Map, struct cat_list *cl_orig, int layer,
     }
 
     Vect_destroy_list(List_tmp1);
+    if (cl_orig == NULL)
+        Vect_destroy_cat_list(cl);
 
     return List->n_values;
 }
@@ -532,6 +535,7 @@ int sel_by_where(struct Map_info *Map, int layer, int type, char *where,
     }
 
     Vect_destroy_cat_list(cat_list);
+    Vect_destroy_field_info(Fi);
 
     return List->n_values;
 }

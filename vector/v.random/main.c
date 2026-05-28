@@ -147,12 +147,7 @@ int main(int argc, char *argv[])
     parm.zmax->answer = "0.0";
     parm.zmax->guisection = _("3D output");
 
-    parm.seed = G_define_option();
-    parm.seed->key = "seed";
-    parm.seed->type = TYPE_INTEGER;
-    parm.seed->required = NO;
-    parm.seed->description = _("The seed to initialize the random generator. "
-                               "If not set the process ID is used");
+    parm.seed = G_define_standard_option(G_OPT_M_SEED);
 
     parm.zcol = G_define_standard_option(G_OPT_DB_COLUMN);
     parm.zcol->label = _("Name of column for z values");

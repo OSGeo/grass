@@ -304,15 +304,15 @@ int draw_number(int row, int col, double number, int prec,
     /* maybe ugly, but works */
     if (map_type == CELL_TYPE) {
         if (!Rast_is_c_null_value(&cell))
-            sprintf(no, "%d", (int)number);
+            snprintf(no, sizeof(no), "%d", (int)number);
         else
-            sprintf(no, "Null");
+            snprintf(no, sizeof(no), "Null");
     }
     else {
         if (!Rast_is_d_null_value(&dcell))
-            sprintf(no, "%.*f", prec, number);
+            snprintf(no, sizeof(no), "%.*f", prec, number);
         else
-            sprintf(no, "Null");
+            snprintf(no, sizeof(no), "Null");
     }
     len = strlen(no);
 

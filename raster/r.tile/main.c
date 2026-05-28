@@ -132,7 +132,8 @@ int main(int argc, char *argv[])
         for (xtile = 0; xtile < xtiles; xtile++) {
             char name[GNAME_MAX];
 
-            sprintf(name, "%s-%03d-%03d", parm.rastout->answer, ytile, xtile);
+            snprintf(name, sizeof(name), "%s-%03d-%03d", parm.rastout->answer,
+                     ytile, xtile);
             outfiles[xtile] = Rast_open_new(name, map_type);
         }
 
@@ -170,7 +171,8 @@ static void write_support_files(int xtile, int ytile, int overlap)
     struct Colors colors;
     struct Categories cats;
 
-    sprintf(name, "%s-%03d-%03d", parm.rastout->answer, ytile, xtile);
+    snprintf(name, sizeof(name), "%s-%03d-%03d", parm.rastout->answer, ytile,
+             xtile);
 
     Rast_get_cellhd(name, G_mapset(), &cellhd);
 
@@ -192,7 +194,8 @@ static void write_support_files(int xtile, int ytile, int overlap)
     /* record map metadata/history info */
     G_debug(1, "Tile %d,%d of %s: writing %s", xtile, ytile,
             parm.rastin->answer, name);
-    sprintf(title, "Tile %d,%d of %s", xtile, ytile, parm.rastin->answer);
+    snprintf(title, sizeof(title), "Tile %d,%d of %s", xtile, ytile,
+             parm.rastin->answer);
     Rast_put_cell_title(name, title);
 
     Rast_short_history(name, "raster", &history);

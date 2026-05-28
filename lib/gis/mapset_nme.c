@@ -168,7 +168,7 @@ char **G_get_available_mapsets(void)
         char buf[GPATH_MAX];
         struct stat st;
 
-        sprintf(buf, "%s/%s/WIND", location, ent->d_name);
+        snprintf(buf, sizeof(buf), "%s/%s/WIND", location, ent->d_name);
 
         if (G_stat(buf, &st) != 0) {
             G_debug(4, "%s is not mapset", ent->d_name);

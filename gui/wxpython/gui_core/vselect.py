@@ -30,6 +30,7 @@ from core.gcmd import RunCommand
 from gui_core.wrap import Button, ListCtrl
 
 import grass.script as gs
+from grass.exceptions import ScriptError
 from grass.pydispatch.signal import Signal
 
 
@@ -302,7 +303,7 @@ class VectorSelectBase:
                 distance=threshold,
                 skip_attributes=True,
             )
-        except gs.ScriptError:
+        except ScriptError:
             GError(
                 parent=self, message=_("Failed to query vector map(s) <%s>.") % self.map
             )
@@ -332,9 +333,7 @@ class VectorSelectBase:
             GMessage(_("No features selected"))
             return
         lst = ""
-        for (
-            cat
-        ) in (
+        for cat in (
             self.selectedFeatures
         ):  # build text string of categories for v.extract input
             lst += str(cat["Category"]) + ","

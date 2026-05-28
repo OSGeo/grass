@@ -15,14 +15,12 @@ extern CELL v;
  * globals r: parm, region
  * globals w: fl, density, ew_dist, el, as, ds
  */
-
 void allocate_heap(void);
 
 /*
  * deallocate_heap: frees space for other processes, closes cts output files
  * globals r: parm, bitbar, lgfd, el, as, ew_dist
  */
-
 void deallocate_heap(void);
 
 void put_row_seg(layer, int /* l, row */);

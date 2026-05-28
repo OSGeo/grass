@@ -279,7 +279,7 @@ int GV_get_style(int id, int *mem, int *color, int *width, int *use_z)
    \param layer layer number for thematic mapping
    \param color color column name
    \param width width column name
-   \param colors pointer to Colors structure or NULL
+   \param color_rules pointer to Colors structure or NULL
 
    \return 1 on success
    \return -1 on error (point set not found)

@@ -502,8 +502,8 @@ void distribute_bnd_events(AMI_STREAM<AEvent> *bndEvents,
    solved by switching to radial sweep.  */
 unsigned long solve_in_memory(AMI_STREAM<AEvent> *eventList,
                               AMI_STREAM<AEvent> *enterBndEvents,
-                              double start_angle UNUSED,
-                              double end_angle UNUSED,
+                              double start_angle G_UNUSED,
+                              double end_angle G_UNUSED,
                               IOVisibilityGrid *visgrid, GridHeader *hd,
                               Viewpoint *vp, const ViewOptions &viewOptions)
 {
@@ -1089,7 +1089,7 @@ int is_center_gradient_occluded(AEvent *e, double gradient, Viewpoint *vp)
 }
 
 /***********************************************************************
-called when dropping an event e, high is the highest gradiant value
+called when dropping an event e, high is the highest gradient value
 //in its sector*/
 void print_dropped(AEvent *e, Viewpoint *vp, double high)
 {

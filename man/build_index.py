@@ -6,15 +6,15 @@
 #   Markus Neteler
 #   Glynn Clements
 
-import sys
 import os
+import sys
 
 from build import (
-    write_header,
+    grass_version,
+    replace_file,
     write_cmd_overview,
     write_footer,
-    replace_file,
-    grass_version,
+    write_header,
 )
 
 year = None
@@ -35,16 +35,11 @@ def build_index(ext):
     filename = f"index.{ext}"
     os.chdir(man_dir)
     with open(filename + ".tmp", "w") as f:
-        write_header(
-            f, f"GRASS GIS {grass_version} Reference Manual", True, template=ext
-        )
+        write_header(f, f"GRASS {grass_version} Reference Manual", True, template=ext)
         write_cmd_overview(f)
         write_footer(f, f"index.{ext}", year, template=ext)
     replace_file(filename)
 
 
 if __name__ == "__main__":
-
     build_index("html")
-
-    build_index("md")

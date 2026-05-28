@@ -155,7 +155,7 @@ void gsd_get_cplanes_state(int *onstate)
 
    Planes MUST be big enough to hold MAX_CPLANES Point4s
 
-   \param places surface coordinates, normal pointing away from visible side
+   \param planes surface coordinates, normal pointing away from visible side
 
    \return ADD
  */
@@ -244,7 +244,7 @@ void gsd_cplane_settrans(int num, float tx, float ty, float tz)
    \param surf2 second surface (geosurf) [unused]
    \param cpnum
  */
-void gsd_draw_cplane_fence(geosurf *surf1, geosurf *surf2 UNUSED, int cpnum)
+void gsd_draw_cplane_fence(geosurf *surf1, geosurf *surf2 G_UNUSED, int cpnum)
 {
     int was_on;
     float len, dir[3], bgn[2], end[2], px, py, fencenorm[3];

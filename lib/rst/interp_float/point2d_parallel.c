@@ -57,7 +57,6 @@
  * Alternative description:
  * ...calculate the maximum and RMS deviation caused by smoothing.
  */
-
 int IL_check_at_points_2d_cvdev(struct interp_params *params,
                                 struct quaddata *data, /*!< current region */
                                 double *b, /*!< solution of linear equations */

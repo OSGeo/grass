@@ -62,7 +62,6 @@ static double Qbar(double x)
  * \param a semi-major axis
  * \param e2 ellipsoid eccentricity squared
  */
-
 void G_begin_ellipsoid_polygon_area(double a, double e2)
 {
     double e4, e6;

@@ -143,8 +143,7 @@ class CatalogReprojectionDialog(wx.Dialog):
         dialogSizer.Add(optionsSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=10)
         helptext = StaticText(
             self.panel,
-            label="For more reprojection options,"
-            " please see {module}".format(
+            label="For more reprojection options, please see {module}".format(
                 module="r.proj" if self.etype == "raster" else "v.proj"
             ),
         )

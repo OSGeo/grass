@@ -43,7 +43,7 @@ static const char *login_filename(void)
 
     if (!file) {
         file = (char *)db_malloc(GPATH_MAX);
-        sprintf(file, "%s%cdblogin", G_config_path(), HOST_DIRSEP);
+        snprintf(file, GPATH_MAX, "%s%cdblogin", G_config_path(), HOST_DIRSEP);
     }
     return file;
 }
@@ -167,8 +167,9 @@ static int write_file(LOGIN *login)
 
     /* fchmod is not available on Windows */
     /* fchmod ( fileno(fd), S_IRUSR | S_IWUSR ); */
+#ifndef _MSC_VER
     chmod(file, S_IRUSR | S_IWUSR);
-
+#endif
     for (i = 0; i < login->n; i++) {
         fprintf(fd, "%s|%s", login->data[i].driver, login->data[i].database);
         if (login->data[i].user) {

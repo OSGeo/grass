@@ -19,6 +19,7 @@ SUBDIRS = \
 	script \
 	semantic_label \
 	temporal \
+	tools \
 	utils
 
 default: $(PYDIR)/__init__.py

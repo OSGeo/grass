@@ -12,6 +12,7 @@
 #include <grass/config.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <sys/types.h>
@@ -264,7 +265,7 @@ int G__make_mapset_element_misc(const char *dir, const char *name)
 
 static int check_owner(const struct stat *info)
 {
-#if defined(__MINGW32__) || defined(SKIP_MAPSET_OWN_CHK)
+#if defined(_WIN32) || defined(SKIP_MAPSET_OWN_CHK)
     return 1;
 #else
     const char *check = getenv("GRASS_SKIP_MAPSET_OWNER_CHECK");
@@ -323,7 +324,7 @@ int G_mapset_permissions2(const char *gisdbase, const char *location,
     char path[GPATH_MAX];
     struct stat info;
 
-    sprintf(path, "%s/%s/%s", gisdbase, location, mapset);
+    snprintf(path, sizeof(path), "%s/%s/%s", gisdbase, location, mapset);
 
     if (G_stat(path, &info) != 0)
         return -1;

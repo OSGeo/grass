@@ -1,12 +1,16 @@
 #ifndef _WHAT_H_
 #define _WHAT_H_
+#include <grass/gjson.h>
 
-#define OUTPUT_TEXT   0
-#define OUTPUT_SCRIPT 1
-#define OUTPUT_JSON   2
+enum OutputFormat {
+    PLAIN,
+    SHELL,
+    LEGACY_JSON /* For backward compatibility with the old JSON format */,
+    JSON /* New JSON format */
+};
 
 /* what.c */
 void what(struct Map_info *, int, char **, double, double, double, int, int,
-          int, int, int, int *, char *);
+          int, enum OutputFormat, int, int *, char *, G_JSON_Array *, int);
 
 #endif

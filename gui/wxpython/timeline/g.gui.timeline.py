@@ -24,7 +24,7 @@
 # % keyword: general
 # % keyword: GUI
 # % keyword: temporal
-# % keywords: plot
+# % keyword: plot
 # %end
 # %option G_OPT_STDS_INPUTS
 # % required: no
@@ -61,7 +61,7 @@ def main():
     app = wx.App()
     frame = TimelineFrame(
         parent=None,
-        title=_("Timeline Tool - GRASS GIS"),
+        title=_("Timeline Tool - GRASS"),
     )
     frame.SetDatasets(datasets)
     frame.Show3D(view3d)

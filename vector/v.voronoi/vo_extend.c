@@ -25,7 +25,6 @@
  *
  *    returns: 0 on error, 1 otherwise
  */
-
 int extend_line(double s, double n, double w, double e, double a, double b,
                 double c, double x, double y, double *c_x, double *c_y,
                 int knownPointAtLeft)

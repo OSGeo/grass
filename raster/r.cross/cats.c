@@ -53,12 +53,12 @@ static char *get_label(CELL cat, struct Categories *lbls)
     static char temp[256];
 
     if (Rast_is_c_null_value(&cat)) {
-        sprintf(lbl = temp, "NULL");
+        snprintf(lbl = temp, sizeof(temp), "NULL");
     }
     else {
         lbl = Rast_get_c_cat(&cat, lbls);
         if (*lbl == 0)
-            sprintf(lbl = temp, "category %d", cat);
+            snprintf(lbl = temp, sizeof(temp), "category %d", cat);
     }
 
     return lbl;

@@ -33,7 +33,7 @@ void G_putenv(const char *name, const char *value)
     char buf[1024];
 
 #if defined(HAVE_PUTENV)
-    sprintf(buf, "%s=%s", name, value);
+    snprintf(buf, sizeof(buf), "%s=%s", name, value);
     putenv(G_store(buf));
 #elif defined(HAVE_SETENV)
     setenv(name, value, 1);
@@ -64,13 +64,13 @@ void G_putenv(const char *name, const char *value)
             continue;
 
         G_free(env);
-        sprintf(buf, "%s=%s", name, value);
+        snprintf(buf, sizeof(buf), "%s=%s", name, value);
         environ[i] = G_store(buf);
 
         return;
     }
     environ = (char **)G_realloc(environ, (i + 2) * sizeof(char *));
-    sprintf(buf, "%s=%s", name, value);
+    snprintf(buf, sizeof(buf), "%s=%s", name, value);
     environ[i++] = G_store(buf);
     environ[i] = NULL;
 #endif

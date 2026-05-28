@@ -6,7 +6,6 @@
 /*
  * safe to call only during checkpoint(1)
  */
-
 int print_seed_means(FILE *fd, struct Cluster *C)
 {
     int band;

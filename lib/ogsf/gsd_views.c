@@ -141,7 +141,7 @@ void gsd_set_view(geoview * gv, geodisplay * gd)
    Establishes viewing & projection matrices
 
    \param gv view (geoview)
-   \param dp display (geodisplay)
+   \param gd display (geodisplay)
  */
 void gsd_set_view(geoview *gv, geodisplay *gd)
 {
@@ -368,7 +368,7 @@ void gsd_do_scale(int doexag)
 /*!
    \brief Convert real to model coordinates
 
-   \param point[in,out] 3d point (Point3)
+   \param[in,out] point 3d point (Point3)
  */
 void gsd_real2model(Point3 point)
 {
@@ -388,7 +388,7 @@ void gsd_real2model(Point3 point)
 /*!
    \brief Convert model to real coordinates
 
-   \param point[in,out] 3d point (x,y,z)
+   \param[in,out] point 3d point (x,y,z)
  */
 void gsd_model2real(Point3 point)
 {

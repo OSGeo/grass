@@ -44,7 +44,7 @@ def main():
     outfile = options["output"]
 
     # are we in LatLong location?
-    s = gs.read_command("g.proj", flags="j")
+    s = gs.read_command("g.proj", flags="p", format="proj4")
     kv = gs.parse_key_val(s)
     if kv["+proj"] != "longlat":
         gs.fatal(_("This module only operates in LatLong/WGS84 locations"))

@@ -4,7 +4,7 @@
 #define DIG___EXTERNS___
 
 /*!
-   \file include/vect/dig_externs.h
+   \file include/grass/vect/dig_externs.h
 
    \brief Function prototypes for diglib (part of vector library)
  */

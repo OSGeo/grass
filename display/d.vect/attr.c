@@ -101,8 +101,8 @@ int display_attr(struct Map_info *Map, int type, char *attrcol,
                 if (Cats->field[i] != lattr->field)
                     continue;
                 db_init_string(&stmt);
-                sprintf(buf, "select %s from %s where %s = %d", attrcol,
-                        fi->table, fi->key, Cats->cat[i]);
+                snprintf(buf, sizeof(buf), "select %s from %s where %s = %d",
+                         attrcol, fi->table, fi->key, Cats->cat[i]);
                 G_debug(2, "SQL: %s", buf);
                 db_append_string(&stmt, buf);
 

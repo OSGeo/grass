@@ -5,7 +5,6 @@
  (updated upon return to point to next stat)
  nl is the layer number (or level)
  */
-
 double area_sum(int *ns, int nl)
 {
     double area;

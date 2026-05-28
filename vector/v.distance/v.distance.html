@@ -64,7 +64,7 @@ If one or both of the input vector maps are 3D, the user is notified
 accordingly.
 
 <p>The <em>-p</em> flag prints the results to standard output. By default the
-output is in form of a linear matrix. If only only variable is upploaded and
+output is in form of a linear matrix. If only only variable is uploaded and
 a square matrix is desired, the user can set the <em>-s</em> flag.
 
 <h2>EXAMPLES</h2>
@@ -220,6 +220,46 @@ from_cat to_cat       dist
 5      70406.23   75538.87  274558.98     501.11          0 ...
 ...
 </pre></div>
+
+<h3>Print in JSON</h3>
+
+<div class="code"><pre>
+v.distance -p from=busroute_a to=busstopsall upload=dist,to_attr to_column=routes format=json
+</pre></div>
+
+<div class="code"><pre>
+[
+    {
+        "from_cat": 1,
+        "to_cat": 112,
+        "distances": [
+            {
+                "value": 0.1428123184481199,
+                "name": "dist"
+            },
+            {
+                "value": "8,A",
+                "name": "to_attr"
+            }
+        ]
+    },
+    {
+        "from_cat": 2,
+        "to_cat": 44,
+        "distances": [
+            {
+                "value": 0.10232660032693719,
+                "name": "dist"
+            },
+            {
+                "value": "9,A",
+                "name": "to_attr"
+            }
+        ]
+    }
+]
+</pre></div>
+
 
 <h2>SEE ALSO</h2>
 

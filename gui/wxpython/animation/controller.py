@@ -36,7 +36,6 @@ from animation.utils import (
     HashCmds,
 )
 from animation.data import AnimationData
-from itertools import starmap
 
 
 class AnimationController(wx.EvtHandler):
@@ -61,7 +60,7 @@ class AnimationController(wx.EvtHandler):
         self.bitmapPool = bitmapPool
         self.mapFilesPool = mapFilesPool
         self.bitmapProvider = provider
-        for anim, win in zip(self.animations, self.mapwindows):
+        for anim, win in zip(self.animations, self.mapwindows, strict=False):
             anim.SetCallbackUpdateFrame(
                 lambda index, dataId, win=win: self.UpdateFrame(index, win, dataId)
             )
@@ -369,7 +368,7 @@ class AnimationController(wx.EvtHandler):
                 if anim.viewMode == "3d":
                     regions = [None] * len(regions)
                 self.animations[i].SetFrames(
-                    list(starmap(HashCmds, zip(anim.cmdMatrix, regions)))
+                    list(map(HashCmds, anim.cmdMatrix, regions))
                 )
                 self.animations[i].SetActive(True)
         else:
@@ -528,7 +527,9 @@ class AnimationController(wx.EvtHandler):
         animWinIndex = []
         legends = [anim.legendCmd for anim in self.animationData]
         # determine position and sizes of bitmaps
-        for i, (win, anim) in enumerate(zip(self.mapwindows, self.animations)):
+        for i, (win, anim) in enumerate(
+            zip(self.mapwindows, self.animations, strict=False)
+        ):
             if anim.IsActive():
                 pos = win.GetPosition()
                 animWinPos.append(pos)

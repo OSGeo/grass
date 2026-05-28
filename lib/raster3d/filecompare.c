@@ -373,7 +373,6 @@ static void compareFilesNocache(void *map, void *map2)
  *  \param mapset2
  *  \return void
  */
-
 void Rast3d_compare_files(const char *f1, const char *mapset1, const char *f2,
                           const char *mapset2)
 {

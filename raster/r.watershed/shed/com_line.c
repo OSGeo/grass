@@ -237,11 +237,11 @@ int com_line_Gwater(INPUT *input, OUTPUT *output)
     if (input->slow)
         com_line_add(&(input->com_line_seg), " ba=", input->haf_name, NULL);
 
-        /*
-           This section queries the user about the armsed file input. If
-           you want to make this an option,  the code below "COMMENT2" needs to
-           be modified.
-         */
+    /*
+       This section queries the user about the armsed file input. If
+       you want to make this an option,  the code below "COMMENT2" needs to
+       be modified.
+     */
 
 #ifdef ARMSED
     G_message(_("\n%s must create a file of watershed basin relationships"),
@@ -274,8 +274,8 @@ int com_line_Gwater(INPUT *input, OUTPUT *output)
        r.stats), but the format is supposed to be "user-friendly" to
        hydrologists. For the stats to be created, the armsed file output needs
        to exist. For the stats to be an option in this program: 1) it should be
-       querried before the armsed file query, and 2) make the armsed file query
-       manditory if this option is invoked.
+       queried before the armsed file query, and 2) make the armsed file query
+       mandatory if this option is invoked.
      */
 
     G_message(_("\n%s will generate a lot of output.  Indicate a file"),

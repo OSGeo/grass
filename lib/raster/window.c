@@ -22,7 +22,6 @@
  *
  * \param window pointer to Cell_head
  */
-
 void Rast_get_window(struct Cell_head *window)
 {
     Rast__init_window();
@@ -41,7 +40,6 @@ void Rast_get_window(struct Cell_head *window)
  *
  * \param window pointer to Cell_head
  */
-
 void Rast_get_input_window(struct Cell_head *window)
 {
     Rast__init_window();
@@ -54,7 +52,6 @@ void Rast_get_input_window(struct Cell_head *window)
  *
  * \param window pointer to Cell_head
  */
-
 void Rast_get_output_window(struct Cell_head *window)
 {
     Rast__init_window();
@@ -203,7 +200,6 @@ int Rast_output_window_cols(void)
  *
  * \return row number
  */
-
 double Rast_northing_to_row(double north, const struct Cell_head *window)
 {
     return (window->north - north) / window->ns_res;
@@ -222,7 +218,6 @@ double Rast_northing_to_row(double north, const struct Cell_head *window)
  *
  * \return column number
  */
-
 double Rast_easting_to_col(double east, const struct Cell_head *window)
 {
     east = G_adjust_easting(east, window);

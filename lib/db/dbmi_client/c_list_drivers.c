@@ -43,5 +43,6 @@ const char *db_list_drivers(void)
         }
     }
 
+    db_free_dbmscap(list);
     return db_get_string(&drivernames);
 }

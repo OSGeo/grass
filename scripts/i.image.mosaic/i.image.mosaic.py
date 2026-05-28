@@ -33,6 +33,8 @@
 # %end
 # %option G_OPT_R_OUTPUT
 # %end
+# %option G_OPT_M_NPROCS
+# %end
 
 import grass.script as gs
 
@@ -63,6 +65,7 @@ def make_expression(i, count):
 def main():
     images = options["input"].split(",")
     output = options["output"]
+    nprocs = options["nprocs"]
 
     count = len(images)
     msg = _("Do not forget to set region properly to cover all images.")
@@ -79,11 +82,13 @@ def main():
 
     gs.message(_("Mosaicing %d images...") % count)
 
-    gs.mapcalc("$output = " + make_expression(1, count), output=output, **parms)
+    gs.mapcalc(
+        "$output = " + make_expression(1, count), nprocs=nprocs, output=output, **parms
+    )
 
     # modify the color table:
     p = gs.feed_command("r.colors", map=output, rules="-")
-    for img, offset in zip(images, offsets):
+    for img, offset in zip(images, offsets, strict=False):
         print(img, offset)
         copy_colors(p.stdin, img, offset)
     p.stdin.close()

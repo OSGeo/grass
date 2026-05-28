@@ -44,6 +44,9 @@
 # % answer: equal
 # %end
 
+# %option G_OPT_T_WHERE
+# %end
+
 # %option G_OPT_STRDS_OUTPUT
 # %end
 
@@ -91,6 +94,7 @@ def main():
     nprocs = int(options["nprocs"])
     register_null = flags["n"]
     spatial = flags["s"]
+    where = options.get("where")
 
     # Create the method list
     method = method.split(",")
@@ -108,6 +112,7 @@ def main():
         nprocs,
         register_null,
         spatial,
+        where,
     )
 
 

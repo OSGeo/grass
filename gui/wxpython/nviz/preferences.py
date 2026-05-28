@@ -38,9 +38,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
             self, parent=parent, title=title, giface=giface, settings=settings
         )
         self.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_nviz.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
 
         self.toolWin = self.parent.nviz

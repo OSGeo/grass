@@ -114,8 +114,8 @@ static int output(char *line, const char *date)
                     if (PS.cell_fd >= 0) {
                         char name[100];
 
-                        sprintf(name, "<%s> in mapset <%s>", PS.cell_name,
-                                PS.cell_mapset);
+                        snprintf(name, sizeof(name), "<%s> in mapset <%s>",
+                                 PS.cell_name, PS.cell_mapset);
                         apply(name, fmt, text);
                     }
                     else
@@ -171,6 +171,6 @@ static void apply(const char *buf, const char *fmt, char *text)
 {
     char temp[300];
 
-    sprintf(temp, fmt, buf);
+    snprintf(temp, sizeof(temp), fmt, buf);
     strcat(text, temp);
 }

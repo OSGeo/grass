@@ -196,7 +196,7 @@ int main(int argc, char *argv[])
         Headfax.linefax.litmodel = 2; /* gradient */
 
     /* open display file for writing */
-    sprintf(element, "grid3/%s/dsp", name->answer);
+    snprintf(element, sizeof(element), "grid3/%s/dsp", name->answer);
     if ((Headfax.dspfoutfp = G_fopen_new(element, dspout)) == NULL)
         G_fatal_error(_("Unable to open display file <%s>"), dspout);
 

@@ -238,7 +238,6 @@ void writeHeader(FILE *outputF)
 /*
  * read profiles
  */
-
 void processProfiles(int inputFile, FILE *outputF)
 {
     CELL *cell;

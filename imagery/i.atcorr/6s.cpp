@@ -251,7 +251,7 @@ void printOutput()
 TransformInput compute()
 {
     const double accu3 = 1e-07;
-    /* ---- initilialization         very liberal :) */
+    /* ---- initialization         very liberal :) */
     int i, j;
 
     double fr = 0;

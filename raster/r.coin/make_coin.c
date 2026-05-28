@@ -45,7 +45,7 @@ int make_coin(void)
     G_message(_("Tabulating Coincidence between '%s' and '%s'"), map1name,
               map2name);
 
-    sprintf(input, "input=%s,%s", map1name, map2name);
+    snprintf(input, sizeof(input), "input=%s,%s", map1name, map2name);
 
     args[0] = "r.stats";
     args[1] = "-anrc";

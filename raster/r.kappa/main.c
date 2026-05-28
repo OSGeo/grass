@@ -166,7 +166,9 @@ static void layer(const char *s)
     const char *mapset;
     int n;
 
-    strcpy(name, s);
+    if (G_strlcpy(name, s, sizeof(name)) >= sizeof(name)) {
+        G_fatal_error(_("Raster map name <%s> is too long"), s);
+    }
     if ((mapset = G_find_raster2(name, "")) == NULL)
         G_fatal_error(_("Raster map <%s> not found"), s);
 

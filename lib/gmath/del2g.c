@@ -39,7 +39,6 @@
  * \param w
  * \return int
  */
-
 int del2g(double *img[2], int size, double w)
 {
     double *g[2]; /* the filter function */

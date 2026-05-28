@@ -30,7 +30,6 @@
  * 3) position of centroids on the left and right side is checked and pruning
  *    is not done if centroid would be attached to another area
  */
-
 int prune(struct Map_info *Out, int otype, double thresh, struct Map_info *Err)
 {
     int line, type, nlines;

@@ -42,7 +42,7 @@
 
 #include <grass/gis.h>
 
-int DGL_SP_CACHE_INITIALIZE_FUNC(dglGraph_s *pgraph UNUSED,
+int DGL_SP_CACHE_INITIALIZE_FUNC(dglGraph_s *pgraph G_UNUSED,
                                  dglSPCache_s *pCache, dglInt32_t nStart)
 {
     pCache->nStartNode = nStart;
@@ -58,7 +58,8 @@ int DGL_SP_CACHE_INITIALIZE_FUNC(dglGraph_s *pgraph UNUSED,
     return 0;
 }
 
-void DGL_SP_CACHE_RELEASE_FUNC(dglGraph_s *pgraph UNUSED, dglSPCache_s *pCache)
+void DGL_SP_CACHE_RELEASE_FUNC(dglGraph_s *pgraph G_UNUSED,
+                               dglSPCache_s *pCache)
 {
     if (pCache->pvVisited)
         avl_destroy(pCache->pvVisited, dglTreeTouchI32Cancel);
@@ -554,9 +555,9 @@ int DGL_SP_DIJKSTRA_FUNC(dglGraph_s *pgraph, dglSPReport_s **ppReport,
         /*
          * Loop on departing edges:
          * Scan the edgeset and loads pedge at each iteration with next-edge.
-         * iWay == DGL_EDGESET_T_WAY_OUT then pedge is a out arc (departing from
-         * node) else ot is a in arc. V1 has no in-degree support so iWay is
-         * always OUT, V2/3 have in-degree support.
+         * iWay == DGL_EDGESET_T_WAY_OUT then pedge is an out arc (departing
+         * from node) else it is an in arc. V1 has no in-degree support so iWay
+         * is always OUT, V2/3 have in-degree support.
          *
          * This loop needs to be done also when destination is found, otherwise
          * the node is marked as visited but its departing edges are not added

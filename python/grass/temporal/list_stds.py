@@ -12,7 +12,7 @@ Usage:
 
 (C) 2012-2022 by the GRASS Development Team
 This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS GIS
+License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :authors: Soeren Gebbert
@@ -55,7 +55,7 @@ def get_dataset_list(
     :return: A dictionary with the rows of the SQL query for each
              available mapset
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> import grass.temporal as tgis
         >>> tgis.core.init()
@@ -78,7 +78,6 @@ def get_dataset_list(
         >>> for row in rows:
         ...     if row["name"] == name:
         ...         print(True)
-        ...
         True
         >>> stds_list = tgis.list_stds.get_dataset_list(
         ...     "strds",
@@ -90,7 +89,6 @@ def get_dataset_list(
         >>> for row in rows:
         ...     if row["name"] == name and row["mapset"] == mapset:
         ...         print(True)
-        ...
         True
         >>> check = sp.delete()
 
@@ -188,9 +186,7 @@ def _write_json(rows, column_names, file) -> None:
 
     dict_rows = []
     for row in rows:
-        new_row = {}
-        for key, value in zip(column_names, row):
-            new_row[key] = value
+        new_row = dict(zip(column_names, row, strict=True))
         dict_rows.append(new_row)
     meta = {"column_names": column_names}
     with _open_output_file(file) as stream:
@@ -221,9 +217,7 @@ def _write_yaml(rows, column_names, file=sys.stdout) -> None:
 
     dict_rows = []
     for row in rows:
-        new_row = {}
-        for key, value in zip(column_names, row):
-            new_row[key] = value
+        new_row = dict(zip(column_names, row, strict=True))
         dict_rows.append(new_row)
     meta = {"column_names": column_names}
     with _open_output_file(file) as stream:
@@ -286,17 +280,17 @@ def _get_get_registered_maps_as_objects_with_method(dataset, where, method, gran
         return dataset.get_registered_maps_as_objects(
             where=where, order="start_time", dbif=dbif
         )
-    if method == "gran":
-        if where:
-            msg = f"The where parameter is not supported with method={method}"
-            raise ValueError(msg)
-        if gran is not None and gran != "":
-            return dataset.get_registered_maps_as_objects_by_granularity(
-                gran=gran, dbif=dbif
-            )
-        return dataset.get_registered_maps_as_objects_by_granularity(dbif=dbif)
-    msg = f"Invalid method '{method}'"
-    raise ValueError(msg)
+    if method != "gran":
+        msg = f"Invalid method '{method}'"
+        raise ValueError(msg)
+    if where:
+        msg = f"The where parameter is not supported with method={method}"
+        raise ValueError(msg)
+    if gran is not None and gran != "":
+        return dataset.get_registered_maps_as_objects_by_granularity(
+            gran=gran, dbif=dbif
+        )
+    return dataset.get_registered_maps_as_objects_by_granularity(dbif=dbif)
 
 
 def _get_get_registered_maps_as_objects_delta_gran(
@@ -309,11 +303,10 @@ def _get_get_registered_maps_as_objects_delta_gran(
         return []
 
     if isinstance(maps[0], list):
-        if len(maps[0]) > 0:
-            first_time, unused = maps[0][0].get_temporal_extent_as_tuple()
-        else:
+        if len(maps[0]) <= 0:
             msgr.warning(_("Empty map list"))
             return []
+        first_time, unused = maps[0][0].get_temporal_extent_as_tuple()
     else:
         first_time, unused = maps[0].get_temporal_extent_as_tuple()
 
@@ -500,7 +493,7 @@ def list_maps_of_stds(
                   e.g: start_time < "2001-01-01" and end_time > "2001-01-01"
     :param separator: The field separator character between the columns
     :param method: String identifier to select a method out of cols,
-                   comma,delta or deltagaps
+                   comma, delta or deltagaps
     :param dbif: The database interface to be used
 
         - "cols" Print preselected columns specified by columns

@@ -1,5 +1,5 @@
 """
-Set global variables for objects in a GRASS GIS Spatial Database
+Set global variables for objects in a GRASS Spatial Database
 
 (C) 2020 by the GRASS Development Team
 This program is free software under the GNU General Public

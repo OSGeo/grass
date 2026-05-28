@@ -10,11 +10,10 @@
  *
  * \author Original author CERL
  */
-
 #include <unistd.h>
 #include <stdlib.h>
 
-#ifndef __MINGW32__
+#ifndef _WIN32
 #include <pwd.h>
 #endif
 
@@ -40,7 +39,7 @@ const char *G_whoami(void)
     if (G_is_initialized(&initialized))
         return name;
 
-#ifdef __MINGW32__
+#ifdef _WIN32
     name = getenv("USERNAME");
 #endif
     if (!name || !*name)
@@ -49,7 +48,7 @@ const char *G_whoami(void)
     if (!name || !*name)
         name = getenv("USER");
 
-#ifndef __MINGW32__
+#ifndef _WIN32
     if (!name || !*name) {
         struct passwd *p = getpwuid(getuid());
 

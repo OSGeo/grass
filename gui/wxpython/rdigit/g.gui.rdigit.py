@@ -83,7 +83,7 @@ def main():
     # define classes which needs imports as local
     # for longer definitions, a separate file would be a better option
     class RDigitMapDisplay(FrameMixin, MapPanel):
-        """Map display for wrapping map panel with r.digit mathods and frame methods"""
+        """Map display for wrapping map panel with r.digit methods and frame methods"""
 
         def __init__(
             self,
@@ -99,7 +99,7 @@ def main():
 
             # set system icon
             parent.SetIcon(
-                wx.Icon(os.path.join(ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO)
+                wx.Icon(os.path.join(ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
             )
 
             # bindings
@@ -230,7 +230,7 @@ def main():
         id=wx.ID_ANY,
         size=(850, 600),
         style=wx.DEFAULT_FRAME_STYLE,
-        title=_("Raster Digitizer - GRASS GIS"),
+        title=_("Raster Digitizer - GRASS"),
     )
     frame = RDigitMapDisplay(parent=frame, **kwargs)
     frame.Show()

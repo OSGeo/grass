@@ -26,7 +26,7 @@ char *create_pgfile(const char *dsn, const char *schema, const char *olink,
     fp = G_fopen_new("", filename);
     if (!fp)
         G_fatal_error(_("Unable to create <%s> file"), filename);
-    sprintf(buf, "GRASS_VECTOR_PGFILE=%s", filename);
+    snprintf(buf, sizeof(buf), "GRASS_VECTOR_PGFILE=%s", filename);
     putenv(G_store(buf));
     G_add_error_handler(file_handler, filename);
 

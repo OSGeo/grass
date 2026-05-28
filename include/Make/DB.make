@@ -10,7 +10,7 @@ include $(MODULE_TOPDIR)/include/Make/Compile.make
 
 dbmi: $(DBDRIVERDIR)/$(PGM)$(EXE) db_html
 
-db_html: $(HTMLDIR)/grass-$(PGM).html $(MANDIR)/grass-$(PGM).$(MANSECT) # $(MDDIR)/source/grass-$(PGM).md
+db_html: $(HTMLDIR)/grass-$(PGM).html $(MANDIR)/grass-$(PGM).$(MANSECT) $(MDDIR)/source/grass-$(PGM).md
 
 $(DBDRIVERDIR)/$(PGM)$(EXE): $(ARCH_OBJS) $(DEPENDENCIES)
 	$(call linker)

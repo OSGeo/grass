@@ -22,7 +22,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 
 enum OutputFormat { PLAIN, JSON };
 
@@ -64,9 +64,9 @@ int main(int argc, char *argv[])
     struct Cell_head cellhd;
 
     enum OutputFormat format;
-    JSON_Array *root_array;
-    JSON_Object *object;
-    JSON_Value *root_value, *object_value;
+    G_JSON_Array *root_array;
+    G_JSON_Object *object;
+    G_JSON_Value *root_value, *object_value;
 
     G_gisinit(argv[0]);
 
@@ -100,8 +100,8 @@ int main(int argc, char *argv[])
 
     if (strcmp(fmt_opt->answer, "json") == 0) {
         format = JSON;
-        root_value = json_value_init_array();
-        root_array = json_array(root_value);
+        root_value = G_json_value_init_array();
+        root_array = G_json_array(root_value);
     }
     else {
         format = PLAIN;
@@ -359,16 +359,17 @@ int main(int argc, char *argv[])
             fprintf(out_fp, "%f", mean_y);
             break;
         case JSON:
-            object_value = json_value_init_object();
-            object = json_object(object_value);
-            json_object_set_number(object, "category", min + i);
-            json_object_set_number(object, "area", obj_geos[i].area);
-            json_object_set_number(object, "perimeter", obj_geos[i].perimeter);
-            json_object_set_number(object, "compact_square", compact_square);
-            json_object_set_number(object, "compact_circle", compact_circle);
-            json_object_set_number(object, "fd", fd);
-            json_object_set_number(object, "mean_x", mean_x);
-            json_object_set_number(object, "mean_y", mean_y);
+            object_value = G_json_value_init_object();
+            object = G_json_object(object_value);
+            G_json_object_set_number(object, "category", min + i);
+            G_json_object_set_number(object, "area", obj_geos[i].area);
+            G_json_object_set_number(object, "perimeter",
+                                     obj_geos[i].perimeter);
+            G_json_object_set_number(object, "compact_square", compact_square);
+            G_json_object_set_number(object, "compact_circle", compact_circle);
+            G_json_object_set_number(object, "fd", fd);
+            G_json_object_set_number(object, "mean_x", mean_x);
+            G_json_object_set_number(object, "mean_y", mean_y);
             break;
         }
         /* object id: i + min */
@@ -390,19 +391,19 @@ int main(int argc, char *argv[])
             fprintf(out_fp, "\n");
             break;
         case JSON:
-            json_array_append_value(root_array, object_value);
+            G_json_array_append_value(root_array, object_value);
             break;
         }
     }
 
     if (format == JSON) {
-        char *serialized_string = json_serialize_to_string_pretty(root_value);
+        char *serialized_string = G_json_serialize_to_string_pretty(root_value);
         if (serialized_string == NULL) {
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         }
         puts(serialized_string);
-        json_free_serialized_string(serialized_string);
-        json_value_free(root_value);
+        G_json_free_serialized_string(serialized_string);
+        G_json_value_free(root_value);
     }
 
     if (out_fp != stdout)

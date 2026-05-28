@@ -25,7 +25,7 @@
 
 void parse(int argc, char *argv[], struct Parms *parms)
 {
-    struct Option *maps, *fs, *sort;
+    struct Option *maps, *fs, *sort, *frmt;
     struct Flag *labels, *overlap, *null;
     const char *name, *mapset;
 
@@ -35,7 +35,7 @@ void parse(int argc, char *argv[], struct Parms *parms)
         _("Name of two input raster maps for computing inter-class distances");
 
     fs = G_define_standard_option(G_OPT_F_SEP);
-    fs->answer = ":"; /* colon is default output fs */
+    fs->answer = NULL;
 
     sort = G_define_option();
     sort->key = "sort";
@@ -48,6 +48,12 @@ void parse(int argc, char *argv[], struct Parms *parms)
     G_asprintf((char **)&(sort->descriptions), "asc;%s;desc;%s",
                _("Sort by distance in ascending order"),
                _("Sort by distance in descending order"));
+
+    frmt = G_define_standard_option(G_OPT_F_FORMAT);
+    frmt->options = "plain,csv,json";
+    frmt->descriptions = ("plain;Human readable text output;"
+                          "csv;CSV (Comma Separated Values);"
+                          "json;JSON (JavaScript Object Notation);");
 
     labels = G_define_flag();
     labels->key = 'l';
@@ -80,6 +86,14 @@ void parse(int argc, char *argv[], struct Parms *parms)
     if (Rast_map_type(name, mapset) != CELL_TYPE)
         G_fatal_error(_("Raster map <%s> is not CELL"), name);
 
+    /* For backward compatibility */
+    if (!fs->answer) {
+        if (strcmp(frmt->answer, "csv") == 0)
+            fs->answer = "comma";
+        else
+            fs->answer = ":"; /* colon is default output fs */
+    }
+
     parms->map2.fullname = G_fully_qualified_name(name, mapset);
 
     parms->labels = labels->answer ? 1 : 0;
@@ -90,4 +104,14 @@ void parse(int argc, char *argv[], struct Parms *parms)
         parms->sort = strcmp(sort->answer, "asc") == 0 ? 1 : 2;
     else
         parms->sort = 0;
+
+    if (strcmp(frmt->answer, "json") == 0) {
+        parms->format = JSON;
+    }
+    else if (strcmp(frmt->answer, "csv") == 0) {
+        parms->format = CSV;
+    }
+    else {
+        parms->format = PLAIN;
+    }
 }

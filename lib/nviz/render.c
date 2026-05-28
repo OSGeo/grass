@@ -89,7 +89,7 @@ struct render_window *Nviz_new_render_window(void)
 /*!
    \brief Initialize render window
 
-   \param win pointer to render_window struct
+   \param rwin pointer to render_window struct
  */
 void Nviz_init_render_window(struct render_window *rwin)
 {
@@ -154,8 +154,8 @@ void Nviz_destroy_render_window(struct render_window *rwin)
    \return 0 on success
    \return -1 on error
  */
-int Nviz_create_render_window(struct render_window *rwin, void *display UNUSED,
-                              int width, int height)
+int Nviz_create_render_window(struct render_window *rwin,
+                              void *display G_UNUSED, int width, int height)
 {
 #if defined(OPENGL_X11)
     int attributeList[] = {GLX_RGBA,
@@ -317,7 +317,7 @@ int Nviz_create_render_window(struct render_window *rwin, void *display UNUSED,
 /*!
    \brief Make window current for rendering
 
-   \param win pointer to render_window struct
+   \param rwin pointer to render_window struct
 
    \return 1 on success
    \return 0 on failure

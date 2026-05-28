@@ -18,6 +18,7 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import copy
+from pathlib import Path
 
 import wx
 
@@ -41,7 +42,7 @@ iconPath = iconPathDefault
 
 # join paths
 try:
-    if iconPath and not os.path.exists(iconPath):
+    if iconPath and not Path(iconPath).exists():
         raise OSError
 
     for key, img in iconSet.items():
@@ -80,7 +81,7 @@ class MetaIcon:
                 id=self.imagepath, client=wx.ART_TOOLBAR, size=size
             )
         elif self.type == "img":
-            if os.path.isfile(self.imagepath) and os.path.getsize(self.imagepath):
+            if Path(self.imagepath).is_file() and Path(self.imagepath).stat().st_size:
                 if size and len(size) == 2:
                     image = wx.Image(name=self.imagepath)
                     image.Rescale(size[0], size[1])

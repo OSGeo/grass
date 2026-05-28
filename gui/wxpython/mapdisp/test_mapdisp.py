@@ -267,10 +267,11 @@ class Tester:
         self.controller = ProfileController(giface, window)
         self.controller.Start()
 
-        rasters = []
-        for layer in giface.GetLayerList().GetSelectedLayers():
-            if layer.maplayer.GetType() == "raster":
-                rasters.append(layer.maplayer.GetName())
+        rasters = [
+            layer.maplayer.GetName()
+            for layer in giface.GetLayerList().GetSelectedLayers()
+            if layer.maplayer.GetType() == "raster"
+        ]
 
         from wxplot.profile import ProfileFrame
 

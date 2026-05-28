@@ -415,7 +415,7 @@ int main(int argc, char *argv[])
 
     dmin = amin1(ew_res, ns_res) / 2;
     disk = n_rows * n_cols * sizeof(float);
-    sprintf(dminchar, "%lf", dmin);
+    snprintf(dminchar, sizeof(dminchar), "%lf", dmin);
 
     nsizr = n_rows;
     nsizc = n_cols;
@@ -576,7 +576,7 @@ int main(int argc, char *argv[])
                             f->driver);
         /* Create new table */
         db_zero_string(&sql);
-        sprintf(buf, "create table %s ( ", f->table);
+        snprintf(buf, sizeof(buf), "create table %s ( ", f->table);
         db_append_string(&sql, buf);
         db_append_string(&sql, GV_KEY_COLUMN);
         db_append_string(&sql, " integer");

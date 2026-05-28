@@ -132,19 +132,19 @@ def formatDist(distance, mapunits):
 
     Formats length numbers and units as a function of length.
 
-    >>> formatDist(20.56915, 'metres')
+    >>> formatDist(20.56915, "metres")
     (20.57, 'm')
-    >>> formatDist(6983.4591, 'metres')
+    >>> formatDist(6983.4591, "metres")
     (6.983, 'km')
-    >>> formatDist(0.59, 'feet')
+    >>> formatDist(0.59, "feet")
     (0.59, 'ft')
-    >>> formatDist(8562, 'feet')
+    >>> formatDist(8562, "feet")
     (1.622, 'miles')
-    >>> formatDist(0.48963, 'degrees')
+    >>> formatDist(0.48963, "degrees")
     (29.38, 'min')
-    >>> formatDist(20.2546, 'degrees')
+    >>> formatDist(20.2546, "degrees")
     (20.25, 'deg')
-    >>> formatDist(82.146, 'unknown')
+    >>> formatDist(82.146, "unknown")
     (82.15, 'units')
 
     Accepted map units are 'meters', 'metres', 'feet', 'degree'.

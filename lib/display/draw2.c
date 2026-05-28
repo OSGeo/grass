@@ -147,7 +147,6 @@ static void reduce_path(struct path *dst, const struct path *src, double eps)
  *  \param l left
  *  \param r right
  */
-
 void D_set_clip(double t, double b, double l, double r)
 {
     clip.left = min(l, r);
@@ -166,7 +165,6 @@ void D_set_clip(double t, double b, double l, double r)
  *
  *  \param ~
  */
-
 void D_clip_to_map(void)
 {
     double t, b, l, r;

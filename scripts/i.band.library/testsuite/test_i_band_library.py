@@ -1,5 +1,3 @@
-import os
-
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import call_module
@@ -9,7 +7,7 @@ class TestBandsSystemDefined(TestCase):
     @staticmethod
     def _number_of_bands(**kwargs):
         gbands = call_module("i.band.library", **kwargs)
-        return len(gbands.rstrip(os.linesep).split(os.linesep))
+        return len(gbands.splitlines())
 
     def test_number_system_defined(self):
         """Test number of valid band identifiers"""

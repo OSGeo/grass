@@ -42,3 +42,66 @@ int conv_units(void)
 
     return 0;
 }
+
+void get_unit_name(char *unit_name)
+{
+    char *tmp;
+    switch (options.option) {
+    case O_AREA:
+        switch (options.units) {
+        case U_MILES:
+            tmp = "square miles";
+            break;
+        case U_FEET:
+            tmp = "square feet";
+            break;
+        case U_KILOMETERS:
+            tmp = "square kilometers";
+            break;
+        case U_ACRES:
+            tmp = "acres";
+            break;
+        case U_HECTARES:
+            tmp = "hectares";
+            break;
+        case U_METERS:
+        default:
+            tmp = "square meters";
+            break;
+        }
+        break;
+    case O_LENGTH:
+    case O_PERIMETER:
+        switch (options.units) {
+        case U_MILES:
+            tmp = "miles";
+            break;
+        case U_FEET:
+            tmp = "feet";
+            break;
+        case U_KILOMETERS:
+            tmp = "kilometers";
+            break;
+        case U_METERS:
+        default:
+            tmp = "meters";
+            break;
+        }
+        break;
+    case O_AZIMUTH:
+        switch (options.units) {
+        case U_DEGREES:
+            tmp = "degrees";
+            break;
+        case U_RADIANS:
+        default:
+            tmp = "radians";
+            break;
+        }
+        break;
+    default:
+        tmp = "";
+        break;
+    }
+    strncpy(unit_name, tmp, 20);
+}

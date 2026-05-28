@@ -55,8 +55,8 @@ static double do_scale(char *text)
         else if (strncmp(unit1, "inch", 4) == 0 && u1 > 0)
             u2 = u1;
         if (u2 > 0) {
-            sprintf(text, "1 : %.0f",
-                    METERS_TO_INCHES * distance(PS.w.east, PS.w.west) / u2);
+            snprintf(text, sizeof(PS.scaletext), "1 : %.0f",
+                     METERS_TO_INCHES * distance(PS.w.east, PS.w.west) / u2);
             return u2;
         }
     }
@@ -70,7 +70,7 @@ static double do_scale(char *text)
     if (sscanf(text, "%ld : %ld%1s", &n1, &n2, dummy) == 2) {
         if (n1 <= 0 || n2 <= 0 || *dummy)
             OOPS();
-        sprintf(text, "%ld : %ld", n1, n2);
+        snprintf(text, sizeof(PS.scaletext), "%ld : %ld", n1, n2);
         return METERS_TO_INCHES * distance(PS.w.east, PS.w.west) * n1 / n2;
     }
 
@@ -125,7 +125,8 @@ static double do_scale(char *text)
         if (n2 != 1)
             strcat(unit2, "s");
 
-        sprintf(text, "%ld %s %s %ld %s", n1, unit1, equals, n2, unit2);
+        snprintf(text, sizeof(PS.scaletext), "%ld %s %s %ld %s", n1, unit1,
+                 equals, n2, unit2);
 
         return METERS_TO_INCHES * distance(PS.w.east, PS.w.west) * u1 / u2;
     }

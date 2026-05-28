@@ -109,11 +109,7 @@ class WMSCapabilities(CapabilitiesBase, WMSCapabilitiesTree):
         get_map_node = request_node.find(self.xml_ns.Ns("GetMap"))
         format_nodes = get_map_node.findall(self.xml_ns.Ns("Format"))
 
-        formats = []
-        for node in format_nodes:
-            formats.append(node.text)
-
-        return formats
+        return [node.text for node in format_nodes]
 
 
 class WMSLayer(LayerBase):
@@ -265,10 +261,10 @@ class WMTSLayer(LayerBase):
             return styles
 
         if param == "format":
-            formats = []
-            for frmt in self.layer_node.findall(self.xml_ns.NsWmts("Format")):
-                formats.append(frmt.text.strip())
-            return formats
+            return [
+                frmt.text.strip()
+                for frmt in self.layer_node.findall(self.xml_ns.NsWmts("Format"))
+            ]
 
         if param == "srs":
             return self.projs

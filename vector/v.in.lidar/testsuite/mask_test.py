@@ -9,6 +9,10 @@ Licence:   This program is free software under the GNU General Public
            for details.
 """
 
+from pathlib import Path
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
+
 POINTS = """\
 17.46938776,18.67346939,1
 20.93877551,17.44897959,2
@@ -77,11 +81,6 @@ C  1 1
 """
 
 
-import os
-from grass.gunittest.case import TestCase
-from grass.gunittest.main import test
-
-
 class VectorMaskTest(TestCase):
     """Test case for watershed module
 
@@ -118,8 +117,7 @@ class VectorMaskTest(TestCase):
         cls.runModule(
             "g.remove", flags="f", type="vector", name=(cls.points, cls.areas)
         )
-        if os.path.isfile(cls.las_file):
-            os.remove(cls.las_file)
+        Path(cls.las_file).unlink(missing_ok=True)
         cls.del_temp_region()
 
     def tearDown(self):

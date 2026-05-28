@@ -20,7 +20,6 @@
  *  \param max
  *  \return
  */
-
 void Rast_make_random_colors(struct Colors *colors, CELL min, CELL max)
 {
     unsigned char red, grn, blu;

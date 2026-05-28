@@ -56,7 +56,8 @@ void fatalError(char *errorMsg)
     if (map != NULL) {
         /* should unopen map here! */
         if (!Rast3d_close(map))
-            fatalError(_("Unable to close 3D raster map"));
+            Rast3d_fatal_error("%s (%s)", errorMsg,
+                               _("Unable to close 3D raster map"));
     }
 
     Rast3d_fatal_error("%s", errorMsg);
@@ -164,7 +165,7 @@ void writeHeaderString3(FILE *fp, char *valueString, const char *value)
 
 /*---------------------------------------------------------------------------*/
 
-/* Opens the output acsii file and writes the header.
+/* Opens the output ascii file and writes the header.
  * Returns the file handle for the output file.
  */
 FILE *openAscii(char *asciiFile, RASTER3D_Region region)

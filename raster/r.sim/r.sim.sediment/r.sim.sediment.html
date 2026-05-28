@@ -31,7 +31,7 @@ transport capacity limited erosion/deposition raster map
 can be viewed while the simulation continues. Sediment flow rate raster map
 <i>sediment_flux</i> [kg/ms], and net erosion/deposition raster map [kg/m<sup>2</sup>s]
 can take longer time depending on time step and simulation time.
-Simulation time is controlled by <i>niterations</i> [minutes] parameter.
+Simulation time is controlled by <i>duration</i> [minutes] parameter.
 <!-- Output files can be saved during simulation using <i>outiter</i> parameter
 defining simulation time step for writing output files. This option requires
 time series flag <i>-t</i>. Files are saved with suffix   containing
@@ -40,6 +40,10 @@ iteration number (e.g. name.500, name.1000, etc.) representing time in seconds.
 If the resulting erosion/deposition map is noisy, higher number of walkers,
 given by <i>nwalkers</i> should be used.
 <br>
+
+<p>
+Increasing the number of threads with <b>nprocs</b> does not really
+speed up the simulation.
 
 <!--
 <h2>NOTES</h2>

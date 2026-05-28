@@ -74,7 +74,6 @@ static void retileNocache(void *map, const char *nameOut, int tileX, int tileY,
  *  \param tileZ
  *  \return void
  */
-
 void Rast3d_retile(void *map, const char *nameOut, int tileX, int tileY,
                    int tileZ)
 {

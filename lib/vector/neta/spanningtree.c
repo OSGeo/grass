@@ -82,7 +82,7 @@ static int cmp_edge(const void *pa, const void *pb)
    \brief Get number of edges in the spanning forest
 
    \param graph input graph
-   \param[out] list of edges
+   \param[out] tree_list list of edges
 
    \return number of edges
    \return -1 on failure

@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# full path to the SDK to build with
+# sdk="/Library/Developer/CommandLineTools/SDKs/MacOSX10.13.sdk"
+
+# setting DEPLOYMENT_TARGET here is optional (MACOSX_DEPLOYMENT_TARGET
+# of the SDK is the default) this will set MACOSX_DEPLOYMENT_TARGET
+deployment_target=10.13
+
+# setting CONDA_REQ_FILE here is optional (files/conda-requirements-stable[arm64|x86_64].txt
+# is used by default)
+# conda_req_file="${this_script_dir}/files/conda-requirements-dev-x86_64.txt"
+
+cs_ident=""
+cs_keychain_profile=""
+cs_provisionprofile=""

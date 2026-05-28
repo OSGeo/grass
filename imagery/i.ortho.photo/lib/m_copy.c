@@ -4,7 +4,6 @@
 /*
  * m_copy: matrix equivalency (return a = b).
  */
-
 int m_copy(MATRIX *a, MATRIX *b)
 {
     register int r, c;

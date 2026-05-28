@@ -39,7 +39,7 @@ static int Tot_mem = 0;
    The other alternative may be to load to a tmp file
 
    \param grassname vector map name
-   \param[out] number of loaded features
+   \param[out] nlines number of loaded features
 
    \return pointer to geoline struct
    \return NULL on failure

@@ -88,7 +88,7 @@ static void format(char *buf, int d, int m, double s, char h)
     char temp[50];
     double ss;
 
-    sprintf(temp, "%f", s);
+    snprintf(temp, sizeof(temp), "%f", s);
     sscanf(temp, "%lf", &ss);
     if (ss >= 60) {
         ss = 0; /* force it to zero */
@@ -99,9 +99,9 @@ static void format(char *buf, int d, int m, double s, char h)
     }
 
     if (ss < 10.0)
-        sprintf(temp, "0%f", ss);
+        snprintf(temp, sizeof(temp), "0%f", ss);
     else
-        sprintf(temp, "%f", ss);
+        snprintf(temp, sizeof(temp), "%f", ss);
     G_trim_decimal(temp);
     if (strcmp(temp, "00") != 0 && strcmp(temp, "0") != 0)
         sprintf(buf, "%d:%02d:%s%c", d, m, temp, h);

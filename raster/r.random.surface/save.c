@@ -176,7 +176,7 @@ void SaveMap(int NumMap, int MapSeed)
     Rast_write_history(OutNames[NumMap], &history);
 
     strcpy(Label, Buf);
-    sprintf(String, " seed=%d", MapSeed);
+    snprintf(String, sizeof(String), " seed=%d", MapSeed);
     strcat(Label, String);
 
     /*
@@ -188,8 +188,9 @@ void SaveMap(int NumMap, int MapSeed)
     for (Index = 0; Index < CatInfo.NumCat; Index++) {
         if (CatInfo.NumValue[Index] != 0) {
             CatInfo.Average[Index] /= CatInfo.NumValue[Index];
-            sprintf(Label, "%+lf %+lf to %+lf", CatInfo.Average[Index],
-                    CatInfo.Min[Index], CatInfo.Max[Index]);
+            snprintf(Label, sizeof(Label), "%+lf %+lf to %+lf",
+                     CatInfo.Average[Index], CatInfo.Min[Index],
+                     CatInfo.Max[Index]);
             cat = Index + 1;
             Rast_set_c_cat(&cat, &cat, Label, &Cats);
         }

@@ -37,7 +37,7 @@
 #define KMAX     3
 #define KMIN     4
 
-/* re-use value */
+/* reuse value */
 #define KLOWER   0
 #define KUPPER   1
 #define MEAN     2
@@ -132,7 +132,7 @@ void acca_algorithm(Gfile *out, Gfile band[], int single_pass, int with_shadow,
               signa[KMEAN]);
     G_message(_("** Minimum: %.2lf K"), signa[KMIN]);
 
-    /* WARNING: re-use of the variable 'value' with new meaning */
+    /* WARNING: reuse of the variable 'value' with new meaning */
 
     /* step 14 */
 
@@ -389,7 +389,7 @@ void acca_second(Gfile *out, Gfile band, int review_warm, double upper,
     out->rast = Rast_allocate_buf(CELL_TYPE);
 
     /* Open to write */
-    sprintf(tmp.name, "_%d.BBB", getpid());
+    snprintf(tmp.name, sizeof(tmp.name), "_%d.BBB", getpid());
     tmp.rast = Rast_allocate_buf(CELL_TYPE);
     if ((tmp.fd = Rast_open_new(tmp.name, CELL_TYPE)) < 0)
         G_fatal_error(_("Unable to create raster map <%s>"), tmp.name);

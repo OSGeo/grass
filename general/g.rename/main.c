@@ -122,13 +122,13 @@ void update_reclass_maps(const char *name, const char *mapset)
         off_t ptr, l;
 
         G_message(" %s", *rmaps);
-        sprintf(buf3, "%s", *rmaps);
+        snprintf(buf3, sizeof(buf3), "%s", *rmaps);
         if ((str = strchr(buf3, '@'))) {
             *str = 0;
-            sprintf(buf2, "%s", str + 1);
+            snprintf(buf2, sizeof(buf2), "%s", str + 1);
         }
         else {
-            sprintf(buf2, "%s", mapset);
+            snprintf(buf2, sizeof(buf2), "%s", mapset);
         }
         G_file_name(buf1, "cellhd", buf3, buf2);
 

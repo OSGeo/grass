@@ -9,9 +9,9 @@ Read the file COPYING that comes with GRASS
 for details
 """
 
-import os
 import shutil
 import json
+from pathlib import Path
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -34,27 +34,27 @@ class PrintSignaturesTestCase(TestCase):
         cls.sigdirs = []
         # As signatures are created directly not via signature creation
         # tools, we must ensure signature directories exist
-        os.makedirs(f"{cls.mpath}/signatures/sig/", exist_ok=True)
-        os.makedirs(f"{cls.mpath}/signatures/sigset/", exist_ok=True)
-        os.makedirs(f"{cls.mpath}/signatures/libsvm/", exist_ok=True)
+        Path(f"{cls.mpath}/signatures/sig/").mkdir(exist_ok=True, parents=True)
+        Path(f"{cls.mpath}/signatures/sigset/").mkdir(exist_ok=True, parents=True)
+        Path(f"{cls.mpath}/signatures/libsvm/").mkdir(exist_ok=True, parents=True)
         # Fake signature of sig type
         cls.sig_name1 = tempname(10)
         sig_dir1 = f"{cls.mpath}/signatures/sig/{cls.sig_name1}"
-        os.makedirs(sig_dir1)
+        Path(sig_dir1).mkdir(parents=True)
         cls.sigdirs.append(sig_dir1)
         sigfile_name1 = f"{sig_dir1}/sig"
         open(sigfile_name1, "a").close()
         # Fake signature of sigset type
         cls.sig_name2 = tempname(10)
         sig_dir2 = f"{cls.mpath}/signatures/sigset/{cls.sig_name2}"
-        os.makedirs(sig_dir2)
+        Path(sig_dir2).mkdir(parents=True)
         cls.sigdirs.append(sig_dir2)
         sigfile_name2 = f"{sig_dir2}/sig"
         open(sigfile_name2, "a").close()
         # Fake signature of libsvm type
         cls.sig_name3 = tempname(10)
         sig_dir3 = f"{cls.mpath}/signatures/libsvm/{cls.sig_name3}"
-        os.makedirs(sig_dir3)
+        Path(sig_dir3).mkdir(parents=True)
         cls.sigdirs.append(sig_dir3)
         sigfile_name3 = f"{sig_dir3}/sig"
         open(sigfile_name3, "a").close()
@@ -151,48 +151,48 @@ class ManageSignaturesTestCase(TestCase):
         cls.sigdirs = []
         # As signatures are created directly not via signature creation
         # tools, we must ensure signature directories exist
-        os.makedirs(f"{cls.mpath}/signatures/sig/", exist_ok=True)
-        os.makedirs(f"{cls.mpath}/signatures/sigset/", exist_ok=True)
-        os.makedirs(f"{cls.mpath}/signatures/libsvm/", exist_ok=True)
+        Path(f"{cls.mpath}/signatures/sig/").mkdir(exist_ok=True, parents=True)
+        Path(f"{cls.mpath}/signatures/sigset/").mkdir(exist_ok=True, parents=True)
+        Path(f"{cls.mpath}/signatures/libsvm/").mkdir(exist_ok=True, parents=True)
         # sig
         cls.sig_name1 = tempname(10)
         sig_dir1 = f"{cls.mpath}/signatures/sig/{cls.sig_name1}"
-        os.makedirs(sig_dir1)
+        Path(sig_dir1).mkdir(parents=True)
         cls.sigdirs.append(sig_dir1)
         sigfile_name1 = f"{sig_dir1}/sig"
         open(sigfile_name1, "a").close()
         # sig
         cls.sig_name2 = tempname(10)
         sig_dir2 = f"{cls.mpath}/signatures/sig/{cls.sig_name2}"
-        os.makedirs(sig_dir2)
+        Path(sig_dir2).mkdir(parents=True)
         cls.sigdirs.append(sig_dir2)
         sigfile_name2 = f"{sig_dir2}/sig"
         open(sigfile_name2, "a").close()
         # sigset
         cls.sig_name3 = tempname(10)
         sig_dir3 = f"{cls.mpath}/signatures/sigset/{cls.sig_name3}"
-        os.makedirs(sig_dir3)
+        Path(sig_dir3).mkdir(parents=True)
         cls.sigdirs.append(sig_dir3)
         sigfile_name3 = f"{sig_dir3}/sig"
         open(sigfile_name3, "a").close()
         # sigset
         cls.sig_name4 = tempname(10)
         sig_dir4 = f"{cls.mpath}/signatures/sigset/{cls.sig_name4}"
-        os.makedirs(sig_dir4)
+        Path(sig_dir4).mkdir(parents=True)
         cls.sigdirs.append(sig_dir4)
         sigfile_name4 = f"{sig_dir4}/sig"
         open(sigfile_name4, "a").close()
         # libsvm
         cls.sig_name5 = tempname(10)
         sig_dir5 = f"{cls.mpath}/signatures/libsvm/{cls.sig_name5}"
-        os.makedirs(sig_dir5)
+        Path(sig_dir5).mkdir(parents=True)
         cls.sigdirs.append(sig_dir5)
         sigfile_name5 = f"{sig_dir5}/sig"
         open(sigfile_name5, "a").close()
         # libsvm
         cls.sig_name6 = tempname(10)
         sig_dir6 = f"{cls.mpath}/signatures/libsvm/{cls.sig_name6}"
-        os.makedirs(sig_dir6)
+        Path(sig_dir6).mkdir(parents=True)
         cls.sigdirs.append(sig_dir6)
         sigfile_name6 = f"{sig_dir6}/sig"
         open(sigfile_name6, "a").close()

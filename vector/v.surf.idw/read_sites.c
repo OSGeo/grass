@@ -12,7 +12,6 @@
  * Only uses floating point attributes.
  * mccauley
  */
-
 void read_sites(const char *name, const char *field_name, const char *col,
                 int noindex)
 {
@@ -34,14 +33,16 @@ void read_sites(const char *name, const char *field_name, const char *col,
                                                  only when column is
                                                  not defined */
     if (!col) {
+        const char *mname = Vect_get_full_name(&Map);
         if (!with_z)
             G_important_message(_("Input vector map <%s> is 2D - using "
                                   "categories to interpolate"),
-                                Vect_get_full_name(&Map));
+                                mname);
         else
             G_important_message(_("Input vector map <%s> is 3D - using "
                                   "z-coordinates to interpolate"),
-                                Vect_get_full_name(&Map));
+                                mname);
+        G_free((void *)mname);
     }
 
     if (col) {
@@ -57,13 +58,14 @@ void read_sites(const char *name, const char *field_name, const char *col,
             G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                           Fi->database, Fi->driver);
 
+        G_verbose_message("Using column <%s> for interpolation...", col);
         nrec = db_select_CatValArray(Driver, Fi->table, Fi->key, col, NULL,
                                      &cvarr);
         G_debug(3, "nrec = %d", nrec);
 
         ctype = cvarr.ctype;
         if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE)
-            G_fatal_error(_("Column type not supported"));
+            G_fatal_error(_("Column type of column <%s> is not numeric"), col);
 
         if (nrec < 0)
             G_fatal_error(_("Unable to select data from table"));
@@ -73,6 +75,7 @@ void read_sites(const char *name, const char *field_name, const char *col,
                           nrec);
 
         db_close_database_shutdown_driver(Driver);
+        Vect_destroy_field_info(Fi);
     }
 
     Points = Vect_new_line_struct();
@@ -124,4 +127,6 @@ void read_sites(const char *name, const char *field_name, const char *col,
     Vect_close(&Map);
 
     G_message(n_("%ld point loaded", "%ld points loaded", npoints), npoints);
+    Vect_destroy_line_struct(Points);
+    Vect_destroy_cats_struct(Cats);
 }

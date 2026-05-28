@@ -36,7 +36,6 @@ import wx
 # we get annoying "Debug: Adding duplicate image handler for 'Windows bitmap file'"
 # during start up, remove when not needed
 import wx.adv
-import wx.html
 
 try:
     import wx.lib.agw.advancedsplash as SC
@@ -63,7 +62,7 @@ class GMApp(wx.App):
         :return: True
         """
         # Internal and display name of the app (if supported by/on platform)
-        self.SetAppName("GRASS GIS")
+        self.SetAppName("GRASS")
         self.SetVendorName("The GRASS Development Team")
 
         # create splash screen

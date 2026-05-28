@@ -125,12 +125,12 @@ char *G_file_name_misc(char *path, const char *dir, const char *element,
 char *G_file_name_tmp(char *path, const char *element, const char *name,
                       const char *mapset)
 {
-    const char *env, *tmp_path;
+    const char *env;
+    char tmp_path[GPATH_MAX] = {0};
 
-    tmp_path = NULL;
     env = getenv("GRASS_VECTOR_TMPDIR_MAPSET");
     if (env && strcmp(env, "0") == 0) {
-        tmp_path = getenv("TMPDIR");
+        snprintf(tmp_path, GPATH_MAX, "%s", getenv("TMPDIR"));
     }
 
     return file_name(path, NULL, element, name, mapset, tmp_path);
@@ -142,12 +142,13 @@ char *G_file_name_tmp(char *path, const char *element, const char *name,
 
    By default the GRASS temporary directory is located at
    $LOCATION/$MAPSET/.tmp/$HOSTNAME/. If basedir is provided, the
-   temporary directory is located at <basedir>/.tmp/$HOSTNAME/.
+   temporary directory is located at \<basedir\>/.tmp/$HOSTNAME/.
 
    \param[out] path buffer to hold resultant full path to file
    \param element database element (eg, "cell", "cellhd", "vector", etc)
    \param name name of file to build path to (fully qualified names allowed)
    \param mapset mapset name
+   \param basedir
 
    \return pointer to <i>path</i> buffer
  */

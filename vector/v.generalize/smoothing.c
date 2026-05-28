@@ -535,7 +535,7 @@ int hermite(struct line_pnts *Points, double step, double angle_thresh,
  *
  * alpha, beta are 2 parameters which change the behaviour of the algorithm
  *
- * TODO: Add parameter iterations, so the runnining time is O(N^3 * log
+ * TODO: Add parameter iterations, so the running time is O(N^3 * log
  * iterations) instead of O(N^3 * itearations). Probably not needed, for many
  * iterations, the result is almost straight line
  */

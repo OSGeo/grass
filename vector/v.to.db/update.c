@@ -64,7 +64,8 @@ int update(struct Map_info *Map)
     /* create beginning of stmt */
     switch (options.option) {
     case O_CAT:
-        sprintf(buf1, "insert into %s ( %s ) values ", Fi->table, Fi->key);
+        snprintf(buf1, sizeof(buf1), "insert into %s ( %s ) values ", Fi->table,
+                 Fi->key);
         break;
     case O_COUNT:
     case O_LENGTH:
@@ -76,14 +77,15 @@ int update(struct Map_info *Map)
     case O_SLOPE:
     case O_SINUOUS:
     case O_AZIMUTH:
-        sprintf(buf1, "update %s set %s =", Fi->table, options.col[0]);
+        snprintf(buf1, sizeof(buf1), "update %s set %s =", Fi->table,
+                 options.col[0]);
         break;
     case O_COOR:
     case O_START:
     case O_END:
     case O_SIDES:
     case O_BBOX:
-        sprintf(buf1, "update %s set ", Fi->table);
+        snprintf(buf1, sizeof(buf1), "update %s set ", Fi->table);
         break;
     }
 
@@ -97,12 +99,12 @@ int update(struct Map_info *Map)
             continue;
         switch (options.option) {
         case O_CAT:
-            sprintf(buf2, "%s ( %d )", buf1, Values[i].cat);
+            snprintf(buf2, sizeof(buf2), "%s ( %d )", buf1, Values[i].cat);
             break;
 
         case O_COUNT:
-            sprintf(buf2, "%s %d where %s = %d", buf1, Values[i].count1,
-                    Fi->key, Values[i].cat);
+            snprintf(buf2, sizeof(buf2), "%s %d where %s = %d", buf1,
+                     Values[i].count1, Fi->key, Values[i].cat);
             break;
 
         case O_LENGTH:
@@ -111,25 +113,25 @@ int update(struct Map_info *Map)
         case O_SLOPE:
         case O_SINUOUS:
         case O_AZIMUTH:
-            sprintf(buf2, "%s %f where %s = %d", buf1, Values[i].d1, Fi->key,
-                    Values[i].cat);
+            snprintf(buf2, sizeof(buf2), "%s %f where %s = %d", buf1,
+                     Values[i].d1, Fi->key, Values[i].cat);
             break;
 
         case O_BBOX:
-            sprintf(buf2,
-                    "%s %s = %.15g, %s = %.15g, %s = %.15g, %s = %.15g where "
-                    "%s = %d",
-                    buf1, options.col[0], Values[i].d1, options.col[1],
-                    Values[i].d2, options.col[2], Values[i].d3, options.col[3],
-                    Values[i].d4, Fi->key, Values[i].cat);
+            snprintf(buf2, sizeof(buf2),
+                     "%s %s = %.15g, %s = %.15g, %s = %.15g, %s = %.15g where "
+                     "%s = %d",
+                     buf1, options.col[0], Values[i].d1, options.col[1],
+                     Values[i].d2, options.col[2], Values[i].d3, options.col[3],
+                     Values[i].d4, Fi->key, Values[i].cat);
             break;
 
         case O_COMPACT:
             /* perimeter / perimeter of equivalent circle
              *   perimeter of equivalent circle: 2.0 * sqrt(M_PI * area) */
             Values[i].d1 = Values[i].d2 / (2.0 * sqrt(M_PI * Values[i].d1));
-            sprintf(buf2, "%s %f where %s = %d", buf1, Values[i].d1, Fi->key,
-                    Values[i].cat);
+            snprintf(buf2, sizeof(buf2), "%s %f where %s = %d", buf1,
+                     Values[i].d1, Fi->key, Values[i].cat);
             break;
 
         case O_FD:
@@ -146,8 +148,8 @@ int update(struct Map_info *Map)
             if (Values[i].d1 == 1) /* log(1) == 0 */
                 Values[i].d1 += 0.000001;
             Values[i].d1 = 2.0 * log(Values[i].d2) / log(Values[i].d1);
-            sprintf(buf2, "%s %f where %s = %d", buf1, Values[i].d1, Fi->key,
-                    Values[i].cat);
+            snprintf(buf2, sizeof(buf2), "%s %f where %s = %d", buf1,
+                     Values[i].d1, Fi->key, Values[i].cat);
             break;
 
         case O_COOR:
@@ -164,79 +166,81 @@ int update(struct Map_info *Map)
                 continue;
             }
             if (options.col[2]) {
-                sprintf(buf2,
-                        "%s %s = %.15g, %s = %.15g, %s = %.15g where %s = %d",
-                        buf1, options.col[0], Values[i].d1, options.col[1],
-                        Values[i].d2, options.col[2], Values[i].d3, Fi->key,
-                        Values[i].cat);
+                snprintf(buf2, sizeof(buf2),
+                         "%s %s = %.15g, %s = %.15g, %s = %.15g where %s = %d",
+                         buf1, options.col[0], Values[i].d1, options.col[1],
+                         Values[i].d2, options.col[2], Values[i].d3, Fi->key,
+                         Values[i].cat);
             }
             else {
-                sprintf(buf2, "%s %s = %.15g, %s = %.15g  where %s = %d", buf1,
-                        options.col[0], Values[i].d1, options.col[1],
-                        Values[i].d2, Fi->key, Values[i].cat);
+                snprintf(buf2, sizeof(buf2),
+                         "%s %s = %.15g, %s = %.15g  where %s = %d", buf1,
+                         options.col[0], Values[i].d1, options.col[1],
+                         Values[i].d2, Fi->key, Values[i].cat);
             }
             break;
 
         case O_SIDES:
             if (Values[i].count1 == 1) {
                 if (Values[i].i1 >= 0)
-                    sprintf(left, "%d", Values[i].i1);
+                    snprintf(left, sizeof(left), "%d", Values[i].i1);
                 else
-                    sprintf(left, "-1"); /* NULL, no area/cat */
+                    snprintf(left, sizeof(left), "-1"); /* NULL, no area/cat */
             }
             else if (Values[i].count1 > 1) {
-                sprintf(left, "null");
+                snprintf(left, sizeof(left), "null");
             }
             else { /* Values[i].count1 == 0 */
                 /* It can be OK if the category is assigned to an element
                    type which is not GV_BOUNDARY */
                 /* -> TODO: print only if there is boundary with that cat */
-                sprintf(left, "null");
+                snprintf(left, sizeof(left), "null");
             }
 
             if (Values[i].count2 == 1) {
                 if (Values[i].i2 >= 0)
-                    sprintf(right, "%d", Values[i].i2);
+                    snprintf(right, sizeof(right), "%d", Values[i].i2);
                 else
-                    sprintf(right, "-1"); /* NULL, no area/cat */
+                    snprintf(right, sizeof(right),
+                             "-1"); /* NULL, no area/cat */
             }
             else if (Values[i].count2 > 1) {
-                sprintf(right, "null");
+                snprintf(right, sizeof(right), "null");
             }
             else { /* Values[i].count1 == 0 */
-                sprintf(right, "null");
+                snprintf(right, sizeof(right), "null");
             }
 
-            sprintf(buf2, "%s %s = %s, %s = %s  where %s = %d", buf1,
-                    options.col[0], left, options.col[1], right, Fi->key,
-                    Values[i].cat);
+            snprintf(buf2, sizeof(buf2), "%s %s = %s, %s = %s  where %s = %d",
+                     buf1, options.col[0], left, options.col[1], right, Fi->key,
+                     Values[i].cat);
 
             break;
 
         case O_QUERY:
             if (Values[i].null) {
-                sprintf(buf2, "%s null where %s = %d", buf1, Fi->key,
-                        Values[i].cat);
+                snprintf(buf2, sizeof(buf2), "%s null where %s = %d", buf1,
+                         Fi->key, Values[i].cat);
             }
             else {
                 switch (vstat.qtype) {
                 case (DB_C_TYPE_INT):
-                    sprintf(buf2, "%s %d where %s = %d", buf1, Values[i].i1,
-                            Fi->key, Values[i].cat);
+                    snprintf(buf2, sizeof(buf2), "%s %d where %s = %d", buf1,
+                             Values[i].i1, Fi->key, Values[i].cat);
                     break;
                 case (DB_C_TYPE_DOUBLE):
-                    sprintf(buf2, "%s %f where %s = %d", buf1, Values[i].d1,
-                            Fi->key, Values[i].cat);
+                    snprintf(buf2, sizeof(buf2), "%s %f where %s = %d", buf1,
+                             Values[i].d1, Fi->key, Values[i].cat);
                     break;
                 case (DB_C_TYPE_STRING):
                     db_set_string(&strval, Values[i].str1);
                     db_double_quote_string(&strval);
-                    sprintf(buf2, "%s '%s' where %s = %d", buf1,
-                            db_get_string(&strval), Fi->key, Values[i].cat);
+                    snprintf(buf2, sizeof(buf2), "%s '%s' where %s = %d", buf1,
+                             db_get_string(&strval), Fi->key, Values[i].cat);
                     break;
                 case (DB_C_TYPE_DATETIME):
-                    sprintf(buf2, "%s '%s' where %s = %d", buf1, Values[i].str1,
-                            Fi->key, Values[i].cat);
+                    snprintf(buf2, sizeof(buf2), "%s '%s' where %s = %d", buf1,
+                             Values[i].str1, Fi->key, Values[i].cat);
                     break;
                 }
             }

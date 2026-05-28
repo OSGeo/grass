@@ -13,7 +13,7 @@ Classes:
  - forms::GrassGUIApp
 
 This program is just a coarse approach to automatically build a GUI
-from a xml-based GRASS user interface description.
+from an xml-based GRASS user interface description.
 
 You need to have Python 2.4, wxPython 2.8 and python-xml.
 
@@ -60,6 +60,7 @@ import codecs
 from threading import Thread
 from pathlib import Path
 
+import json
 import wx
 
 import wx.lib.colourselect as csel
@@ -72,10 +73,7 @@ import xml.etree.ElementTree as ET
 if __name__ == "__main__":
     if os.getenv("GISBASE") is None:
         # intentionally not translatable
-        sys.exit(
-            "Failed to start. GRASS GIS is not running"
-            " or the installation is broken."
-        )
+        sys.exit("Failed to start. GRASS is not running or the installation is broken.")
     from grass.script.setup import set_gui_path
 
     set_gui_path()
@@ -84,6 +82,7 @@ from grass.pydispatch.signal import Signal
 
 from grass.script import core as grass
 from grass.script import task as gtask
+from grass.exceptions import ScriptError
 
 from core import globalvar
 from gui_core.widgets import (
@@ -103,6 +102,7 @@ from gui_core.widgets import (
     FormListbook,
     FormNotebook,
     PlacementValidator,
+    MapNameValidator,
 )
 from core.giface import Notification, StandaloneGrassInterface
 from gui_core.widgets import LayersList
@@ -196,11 +196,7 @@ class UpdateThread(Thread):
         map = pMap.get("value", "") if pMap else None
 
         # avoid running db.describe several times
-        cparams = {}
-        cparams[map] = {
-            "dbInfo": None,
-            "layers": None,
-        }
+        cparams = {map: {"dbInfo": None, "layers": None}}
 
         # update reference widgets
         for uid in p["wxId-bind"]:
@@ -211,10 +207,6 @@ class UpdateThread(Thread):
             name = win.GetName()
 
             # @todo: replace name by isinstance() and signals
-
-            pBind = self.task.get_param(uid, element="wxId", raiseError=False)
-            if pBind:
-                pBind["value"] = ""
 
             # set appropriate types in t.* modules and g.list/remove element
             # selections
@@ -340,6 +332,7 @@ class UpdateThread(Thread):
                         "vector": map,
                         "layer": layer,
                         "dbInfo": cparams[map]["dbInfo"],
+                        "setDefaultValue": False,
                     }
                 # table
                 elif driver and db:
@@ -347,10 +340,12 @@ class UpdateThread(Thread):
                         "table": pTable.get("value"),
                         "driver": driver,
                         "database": db,
+                        "setDefaultValue": False,
                     }
                 elif pTable:
                     self.data[win.GetParent().InsertTableColumns] = {
-                        "table": pTable.get("value")
+                        "table": pTable.get("value"),
+                        "setDefaultValue": False,
                     }
 
             elif name == "SubGroupSelect":
@@ -416,8 +411,8 @@ class UpdateQThread(Thread):
 
     requestId = 0
 
-    def __init__(self, parent, requestQ, resultQ, **kwds):
-        Thread.__init__(self, **kwds)
+    def __init__(self, parent, requestQ, resultQ, **kwargs):
+        Thread.__init__(self, **kwargs)
 
         self.parent = parent  # cmdPanel
         self.daemon = True
@@ -427,19 +422,19 @@ class UpdateQThread(Thread):
 
         self.start()
 
-    def Update(self, callable, *args, **kwds):
+    def Update(self, callable, *args, **kwargs):
         UpdateQThread.requestId += 1
 
         self.request = None
-        self.requestQ.put((UpdateQThread.requestId, callable, args, kwds))
+        self.requestQ.put((UpdateQThread.requestId, callable, args, kwargs))
 
         return UpdateQThread.requestId
 
     def run(self):
         while True:
-            requestId, callable, args, kwds = self.requestQ.get()
+            requestId, callable, args, kwargs = self.requestQ.get()
 
-            self.request = callable(*args, **kwds)
+            self.request = callable(*args, **kwargs)
 
             self.resultQ.put((requestId, self.request.run()))
 
@@ -506,9 +501,7 @@ class TaskFrame(wx.Frame):
 
         # icon
         self.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_dialog.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
 
         guisizer = wx.BoxSizer(wx.VERTICAL)
@@ -586,8 +579,10 @@ class TaskFrame(wx.Frame):
         self.btn_cancel.Bind(wx.EVT_BUTTON, self.OnCancel)
         # bind closing to ESC and CTRL+Q
         self.Bind(wx.EVT_MENU, self.OnCancel, id=wx.ID_CANCEL)
-        accelTableList = [(wx.ACCEL_NORMAL, wx.WXK_ESCAPE, wx.ID_CANCEL)]
-        accelTableList.append((wx.ACCEL_CTRL, ord("Q"), wx.ID_CANCEL))
+        accelTableList = [
+            (wx.ACCEL_NORMAL, wx.WXK_ESCAPE, wx.ID_CANCEL),
+            (wx.ACCEL_CTRL, ord("Q"), wx.ID_CANCEL),
+        ]
         # TODO: bind Ctrl-t for tile windows here (trac #2004)
 
         if self.get_dcmd is not None:  # A callback has been set up
@@ -616,15 +611,78 @@ class TaskFrame(wx.Frame):
             self.Bind(wx.EVT_MENU, self.OnRun, id=wx.ID_OK)
             accelTableList.append((wx.ACCEL_CTRL, ord("R"), wx.ID_OK))
 
-        # copy
-        self.btn_clipboard = Button(parent=self.panel, id=wx.ID_ANY, label=_("Copy"))
-        self.btn_clipboard.SetToolTip(
-            _("Copy the current command string to the clipboard")
+        # --- Split Copy Button ---
+        self.copyMenu = wx.Menu()
+        # Note: We include Shell command in the menu too, for clarity
+        item_shell = self.copyMenu.Append(wx.ID_ANY, _("Copy as Shell command"))
+        item_python = self.copyMenu.Append(wx.ID_ANY, _("Copy as Python"))
+        item_json = self.copyMenu.Append(wx.ID_ANY, _("Copy as JSON settings"))
+
+        # Bind menu items
+        self.Bind(wx.EVT_MENU, self.OnCopyShellCommand, item_shell)
+        self.Bind(wx.EVT_MENU, self.OnCopyPython, item_python)
+        self.Bind(wx.EVT_MENU, self.OnCopyJSON, item_json)
+
+        # A horizontal sizer to combine the main button and the arrow button
+        copy_sizer = wx.BoxSizer(wx.HORIZONTAL)
+
+        # Main Copy button (triggers Shell command copy by default)
+        self.btn_copy = Button(parent=self.panel, id=wx.ID_ANY, label=_("Copy"))
+        self.btn_copy.Bind(wx.EVT_BUTTON, self.OnCopyMain)
+        self._updateCopyButtonUI()
+
+        # Get standard button dimensions to ensure the arrow segment matches
+        standard_size = self.btn_copy.GetBestSize()
+        btn_h = standard_size.height
+        arrow_btn_w = 23
+
+        icon_size = 23
+        bmp = wx.Bitmap.FromRGBA(icon_size, icon_size, red=0, green=0, blue=0, alpha=0)
+
+        mdc = wx.MemoryDC(bmp)
+        renderer = wx.RendererNative.Get()
+
+        rect = wx.Rect(0, 0, icon_size, icon_size)
+
+        renderer.DrawDropArrow(self.panel, mdc, rect, wx.CONTROL_FLAT)
+
+        mdc.SelectObject(wx.NullBitmap)
+
+        # The Arrow Button segment
+        # Using a standard Button class to inherit native hover and click effects
+        self.btn_copy_menu = Button(
+            parent=self.panel, id=wx.ID_ANY, size=(arrow_btn_w, btn_h)
         )
+        self.btn_copy_menu.SetBitmap(bmp)
+        self.btn_copy_menu.SetToolTip(_("More copy formats"))
+        self.btn_copy_menu.Bind(wx.EVT_BUTTON, self.OnShowCopyMenu)
+
+        # Using a small negative border to pull the buttons closer on Windows.
+        btn_glue = -1 if sys.platform.startswith("win") else 0
+
+        # Assembly
+        copy_sizer.Add(self.btn_copy, 0, wx.EXPAND)
+        copy_sizer.Add(self.btn_copy_menu, 0, wx.EXPAND | wx.LEFT, border=btn_glue)
+
+        # Final addition to the main button row with standard 10px outer margin
+        btnsizer.Add(copy_sizer, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, border=10)
+
+        # Paste button
+        # Create the Paste button to populate the dialog from a JSON string
+        self.btn_paste = Button(
+            parent=self.panel, id=wx.ID_ANY, label=_("Paste JSON settings")
+        )
+        self.btn_paste.SetToolTip(
+            _("Paste parameters from JSON string in the clipboard")
+        )
+        self.btn_paste.Bind(wx.EVT_BUTTON, self.OnPaste)
+
         btnsizer.Add(
-            self.btn_clipboard, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER, border=10
+            self.btn_paste,
+            proportion=0,
+            flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL,
+            border=10,
         )
-        self.btn_clipboard.Bind(wx.EVT_BUTTON, self.OnCopyCommand)
 
         # help
         self.btn_help = Button(parent=self.panel, id=wx.ID_HELP)
@@ -877,8 +935,80 @@ class TaskFrame(wx.Frame):
         event = wxCmdAbort(aborted=True)
         wx.PostEvent(self._gconsole, event)
 
-    def OnCopyCommand(self, event):
-        """Copy the command"""
+    def OnShowCopyMenu(self, event):
+        """Show the copy formats popup menu"""
+        button = event.GetEventObject()
+        pos = button.GetPosition()
+        size = button.GetSize()
+        self.panel.PopupMenu(self.copyMenu, wx.Point(pos.x, pos.y + size.height))
+
+    def _setCopyMode(self, mode):
+        """Save the last used copy format and update the button tooltip"""
+        config = wx.Config.Get()
+        config.Write("CmdPanel/CopyMode", mode)
+        config.Flush()
+        self._updateCopyButtonUI()
+
+    def _updateCopyButtonUI(self):
+        """Update the tooltip of the main Copy button based on current mode"""
+        config = wx.Config.Get()
+        mode = config.Read("CmdPanel/CopyMode", "shell")
+
+        api_index = UserSettings.Get(group="cmd", key="pythonAPI", subkey="selection")
+        api_map = {0: "tools", 1: "script", 2: "pygrass"}
+        api_flavor = api_map.get(api_index, "tools")
+
+        if mode == "shell":
+            self.btn_copy.SetToolTip(_("Copy as Shell command"))
+        elif mode == "python":
+            if api_flavor == "tools":
+                self.btn_copy.SetToolTip(_("Copy as Python (Tools API)"))
+            elif api_flavor == "script":
+                self.btn_copy.SetToolTip(_("Copy as Python (Script API)"))
+            else:
+                self.btn_copy.SetToolTip(_("Copy as Python (PyGRASS API)"))
+        else:
+            self.btn_copy.SetToolTip(_("Copy as JSON settings"))
+
+    def _getInlineFiles(self, cmd):
+        """Find inline file parameters and mark them in the command list.
+
+        :param cmd: list of command arguments
+        :return: dict mapping parameter name to its raw text content
+        """
+        inline_files = {}
+        for p in self.task.params:
+            if p.get("prompt") == "file" and "wxId" in p and len(p["wxId"]) > 1:
+                ifbb = self.FindWindowById(p["wxId"][1])
+                if ifbb and hasattr(ifbb, "GetValue"):
+                    text = ifbb.GetValue().strip()
+                    if text:
+                        param_name = p["name"]
+                        inline_files[param_name] = text
+
+                        # Mark the parameter in the command list for replacement
+                        for i, arg in enumerate(cmd):
+                            if arg.startswith(param_name + "="):
+                                cmd[i] = f"{param_name}=___INLINE_{param_name}___"
+                                break
+
+        return inline_files
+
+    def OnCopyMain(self, event):
+        """Route the main Copy button click to the last used method"""
+        config = wx.Config.Get()
+        mode = config.Read("CmdPanel/CopyMode", "shell")
+
+        if mode == "shell":
+            self.OnCopyShellCommand(event)
+        elif mode == "python":
+            self.OnCopyPython(event)
+        else:
+            self.OnCopyJSON(event)
+
+    def OnCopyShellCommand(self, event):
+        """Copy the command in shell syntax"""
+        self._setCopyMode("shell")
         cmddata = wx.TextDataObject()
         # list -> string
         cmdlist = self.createCmd(ignoreErrors=True)
@@ -894,6 +1024,261 @@ class TaskFrame(wx.Frame):
             wx.TheClipboard.SetData(cmddata)
             wx.TheClipboard.Close()
             self.SetStatusText(_("'%s' copied to clipboard") % (cmdstring))
+
+    def OnCopyPython(self, event):
+        """Copy the command in the selected Python API syntax"""
+        self._setCopyMode("python")
+        cmd = self.createCmd(ignoreErrors=True)
+        if not cmd or len(cmd) < 1:
+            return
+
+        api_index = UserSettings.Get(group="cmd", key="pythonAPI", subkey="selection")
+        api_map = {0: "tools", 1: "script", 2: "pygrass"}
+        api_flavor = api_map.get(api_index, "tools")
+
+        module_name = cmd[0]
+        # Find any inline file parameters
+        inline_files = self._getInlineFiles(cmd)
+        args_str = gtask.cmd_to_python_args(cmd)
+
+        script_lines = []
+
+        # Construct the final Python code
+        if inline_files:
+            if api_flavor == "tools":
+                script_lines.append("import io")
+            else:
+                script_lines.append("import tempfile")
+
+            script_lines.append("")
+
+            # Generate inline file variables
+            for param_name, text in inline_files.items():
+                script_lines.append(
+                    f"{param_name}_txt = {json.dumps(text, ensure_ascii=False)}"
+                )
+
+            script_lines.append("")
+
+            if api_flavor != "tools":
+                for param_name in inline_files:
+                    script_lines.extend(
+                        [
+                            'with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:',
+                            f"    f.write({param_name}_txt)",
+                            f"    {param_name}_file = f.name",
+                            "",
+                        ]
+                    )
+
+            # Change the command arguments to use StringIO for inline file parameters
+            for param_name in inline_files:
+                if api_flavor == "tools":
+                    replace_str = f"io.StringIO({param_name}_txt)"
+                else:
+                    replace_str = f"{param_name}_file"
+
+                args_str = args_str.replace(f'"___INLINE_{param_name}___"', replace_str)
+                args_str = args_str.replace(f"'___INLINE_{param_name}___'", replace_str)
+
+        # Route to the appropriate API flavor
+        if api_flavor == "tools":
+            method_name = module_name.replace(".", "_")
+            call_str = f"Tools().{method_name}({args_str})"
+        elif api_flavor == "script":
+            call_str = f'gs.run_command("{module_name}", {args_str})'
+        else:
+            call_str = f'Module("{module_name}", {args_str})'
+
+        script_lines.append(call_str)
+        py_cmd = "\n".join(script_lines)
+
+        # Copy to clipboard
+        self._toClipboard(py_cmd)
+        if inline_files:
+            self.SetStatusText(_("Python code copied to clipboard"))
+
+    def OnCopyJSON(self, event):
+        """Copy parameters as JSON string with inline text support"""
+        self._setCopyMode("json")
+        cmd = self.createCmd(ignoreErrors=True)
+        if not cmd or len(cmd) < 1:
+            return
+
+        inline_files = self._getInlineFiles(cmd)
+        params_dict = gtask.cmd_to_dict(cmd)
+
+        # Replace inline file parameter values with their raw text content
+        for param_name, text in inline_files.items():
+            if param_name in params_dict:
+                params_dict[param_name] = text
+
+        data = {"module": cmd[0], "params": params_dict}
+        self._toClipboard(json.dumps(data, indent=4))
+        self.SetStatusText(_("JSON copied to clipboard"))
+
+    def OnPaste(self, event):
+        """Populate dialog fields from JSON string in the clipboard"""
+        tdo = wx.TextDataObject()
+        if not (wx.TheClipboard.Open() and wx.TheClipboard.GetData(tdo)):
+            if wx.TheClipboard.IsOpened():
+                wx.TheClipboard.Close()
+            return
+        wx.TheClipboard.Close()
+
+        try:
+            data = json.loads(tdo.GetText())
+            if not isinstance(data, dict):
+                raise ValueError(_("Pasted data is not a valid JSON object."))
+
+            pasted_module = data.get("module")
+            current_module = self.task.get_name()
+
+            if pasted_module and pasted_module != current_module:
+                confirm = wx.MessageBox(
+                    _(
+                        "You are pasting settings from module '%(pasted)s' into module '%(current)s'. "
+                        "Only matching parameters will be updated. Continue?"
+                    )
+                    % {"pasted": pasted_module, "current": current_module},
+                    _("Module Mismatch"),
+                    wx.YES_NO | wx.ICON_WARNING,
+                )
+                if confirm != wx.YES:
+                    return
+
+            new_params = data.get("params", data)
+            if not isinstance(new_params, dict):
+                raise ValueError(_("Pasted parameters are not a valid JSON object."))
+            target_flags_str = new_params.get("flags", "")
+            found_any = False
+
+            # Process both Parameters and Flags in one unified logic
+            for porf in self.task.params + self.task.flags:
+                name = porf.get("name")
+                is_flag = porf in self.task.flags
+
+                # Determine the value to set
+                val = None
+                if name in new_params:
+                    val = new_params[name]
+                elif is_flag:
+                    # Absent flags default to False unless found in the 'flags' string
+                    val = bool(
+                        len(name) == 1 and name in target_flags_str.replace("-", "")
+                    )
+                else:
+                    # Absent parameters revert to their standard default values
+                    val = porf.get("default", "")
+
+                if val is None:
+                    continue
+
+                # Update internal task state
+                clean_val = str(val) if not isinstance(val, bool) else val
+                porf["value"] = val
+
+                # Update GUI Widgets
+                for w_id in porf.get("wxId", []):
+                    if not w_id:
+                        continue
+                    win = self.FindWindowById(w_id)
+                    if not win or win.GetName() == "ModelParam":
+                        continue
+
+                    # Catch inline file parameters and set their content directly to the second widget
+                    if (
+                        not is_flag
+                        and porf.get("prompt") == "file"
+                        and len(porf.get("wxId", [])) > 1
+                    ):
+                        idx = porf["wxId"].index(w_id)
+                        if idx == 0:
+                            # First widget is the file path
+                            if hasattr(win, "SetValue"):
+                                win.SetValue("")
+                            continue
+                        if idx == 1:
+                            # Second widget is the file content
+                            if hasattr(win, "SetValue"):
+                                win.SetValue(str(clean_val))
+                            found_any = True
+                            continue
+
+                    # Specialized Widget Handling
+                    if isinstance(win, wx.CheckBox):
+                        if not is_flag and porf.get("prompt") == "color":
+                            win.SetValue(clean_val == "none")
+                        elif not is_flag:  # Multi-selection checkboxes
+                            try:
+                                idx = porf["wxId"].index(w_id)
+                                values = porf.get("values", [])
+                                if idx < len(values):
+                                    win.SetValue(
+                                        str(values[idx]) in str(clean_val).split(",")
+                                    )
+                            except (ValueError, IndexError):
+                                pass
+                        else:  # Standard Boolean Flag
+                            win.SetValue(
+                                val
+                                if isinstance(val, bool)
+                                else str(val).lower() in {"true", "1", "yes"}
+                            )
+
+                    elif isinstance(win, wx.SpinCtrl):
+                        try:
+                            win.SetValue(int(float(clean_val)))
+                        except ValueError:
+                            pass
+
+                    elif (
+                        win.GetName() == "GetColour"
+                        and clean_val
+                        and clean_val != "none"
+                    ):
+                        col, lab = utils.color_resolve(clean_val)
+                        if hasattr(win, "SetColour"):
+                            win.SetColour(col)
+                            if hasattr(win, "SetLabel"):
+                                win.SetLabel(lab)
+                            win.Refresh()
+                    elif isinstance(win, wx.Choice):
+                        win.SetStringSelection(str(clean_val))
+                    elif hasattr(win, "SetValue"):
+                        # Standard TextCtrl / ComboBox
+                        try:
+                            win.SetValue(str(clean_val))
+                        except (TypeError, ValueError):
+                            pass
+
+                    found_any = True
+
+            if found_any:
+                self.updateValuesHook()
+                self.SetStatusText(_("Parameters pasted from clipboard."))
+            else:
+                self.SetStatusText(_("No matching parameters found in clipboard."))
+
+        except json.JSONDecodeError:
+            wx.MessageBox(
+                _(
+                    "The clipboard does not contain valid JSON data. "
+                    "Please ensure you have copied the settings correctly."
+                ),
+                _("Invalid Data"),
+                wx.ICON_ERROR,
+            )
+        except ValueError as e:
+            wx.MessageBox(str(e), _("Paste Error"), wx.ICON_ERROR)
+
+    def _toClipboard(self, text):
+        """Stores text string into the system clipboard"""
+        if not wx.TheClipboard.IsOpened():
+            if wx.TheClipboard.Open():
+                wx.TheClipboard.SetData(wx.TextDataObject(text))
+                wx.TheClipboard.Close()
+                self.SetStatusText(_("%s copied to clipboard") % text)
 
     def OnCancel(self, event):
         """Cancel button pressed"""
@@ -1123,7 +1508,7 @@ class CmdPanel(wx.Panel):
             which_sizer = tabsizer[p["guisection"]]
             which_panel = tab[p["guisection"]]
             # if label is given -> label and description -> tooltip
-            # otherwise description -> lavel
+            # otherwise description -> label
             if p.get("label", "") != "":
                 title = text_beautify(p["label"])
                 tooltip = text_beautify(p["description"], width=-1)
@@ -1516,6 +1901,9 @@ class CmdPanel(wx.Panel):
                         selection = gselect.Select(
                             parent=which_panel,
                             id=wx.ID_ANY,
+                            validator=MapNameValidator()
+                            if p.get("age") == "new"
+                            else wx.DefaultValidator,
                             size=globalvar.DIALOG_GSELECT_SIZE,
                             type=elem,
                             multiple=multiple,
@@ -2040,7 +2428,7 @@ class CmdPanel(wx.Panel):
                             style=wx.TE_MULTILINE,
                             size=(-1, 75),
                         )
-                        if p.get("value", "") and os.path.isfile(p["value"]):
+                        if p.get("value", "") and Path(p["value"]).is_file():
                             ifbb.Clear()
                             try:
                                 # Python >= 3.11
@@ -2299,6 +2687,9 @@ class CmdPanel(wx.Panel):
 
                 elif prompt == "sql_query":
                     win = gselect.SqlWhereSelect(parent=which_panel, param=p)
+                    value = self._getValue(p)
+                    if value:
+                        win.SetValue(value)  # parameter previously set
                     p["wxId"] = [win.GetTextWin().GetId()]
                     win.GetTextWin().Bind(wx.EVT_TEXT, self.OnSetValue)
                     which_sizer.Add(
@@ -2561,9 +2952,8 @@ class CmdPanel(wx.Panel):
             gcmd.GMessage(parent=self, message=_("Nothing to load."))
             return
 
-        data = ""
         try:
-            f = open(path)
+            data = Path(path).read_text()
         except OSError as e:
             gcmd.GError(
                 parent=self,
@@ -2571,11 +2961,6 @@ class CmdPanel(wx.Panel):
                 message=_("Unable to load file.\n\nReason: %s") % e,
             )
             return
-
-        try:
-            data = f.read()
-        finally:
-            f.close()
 
         win["text"].SetValue(data)
 
@@ -2611,11 +2996,9 @@ class CmdPanel(wx.Panel):
                 enc = locale.getencoding()
             except AttributeError:
                 enc = locale.getdefaultlocale()[1]
-            f = codecs.open(path, encoding=enc, mode="w", errors="replace")
-            try:
+
+            with codecs.open(path, encoding=enc, mode="w", errors="replace") as f:
                 f.write(text + os.linesep)
-            finally:
-                f.close()
 
             win["file"].SetValue(path)
 
@@ -2639,13 +3022,11 @@ class CmdPanel(wx.Panel):
                 enc = locale.getencoding()
             except AttributeError:
                 enc = locale.getdefaultlocale()[1]
-            f = codecs.open(filename, encoding=enc, mode="w", errors="replace")
-            try:
+
+            with codecs.open(filename, encoding=enc, mode="w", errors="replace") as f:
                 f.write(text)
                 if text[-1] != os.linesep:
                     f.write(os.linesep)
-            finally:
-                f.close()
         else:
             win.SetValue("")
 
@@ -2782,38 +3163,43 @@ class CmdPanel(wx.Panel):
     def OnColorChange(self, event):
         myId = event.GetId()
         for p in self.task.params:
-            if "wxId" in p and myId in p["wxId"]:
-                multiple = p["wxId"][1] is not None  # multiple colors
-                hasTansp = p["wxId"][2] is not None
-                if multiple:
-                    # selected color is added at the end of textCtrl
-                    colorchooser = wx.FindWindowById(p["wxId"][0])
-                    new_color = colorchooser.GetValue()[:]
-                    new_label = utils.rgb2str.get(
-                        new_color, ":".join(list(map(str, new_color)))
-                    )
-                    textCtrl = wx.FindWindowById(p["wxId"][1])
-                    val = textCtrl.GetValue()
-                    sep = ","
-                    if val and val[-1] != sep:
-                        val += sep
-                    val += new_label
-                    textCtrl.SetValue(val)
-                    p["value"] = val
-                elif hasTansp and wx.FindWindowById(p["wxId"][2]).GetValue():
-                    p["value"] = "none"
-                else:
-                    colorchooser = wx.FindWindowById(p["wxId"][0])
-                    new_color = colorchooser.GetValue()[:]
-                    # This is weird: new_color is a 4-tuple and new_color[:] is
-                    # a 3-tuple under wx2.8.1
-                    new_label = utils.rgb2str.get(
-                        new_color, ":".join(list(map(str, new_color)))
-                    )
-                    colorchooser.SetLabel(new_label)
-                    colorchooser.SetColour(new_color)
-                    colorchooser.Refresh()
-                    p["value"] = colorchooser.GetLabel()
+            if "wxId" not in p or myId not in p["wxId"]:
+                continue
+
+            multiple = p["wxId"][1] is not None  # multiple colors
+            hasTansp = p["wxId"][2] is not None
+            if multiple:
+                # selected color is added at the end of textCtrl
+                colorchooser = wx.FindWindowById(p["wxId"][0])
+                new_color = colorchooser.GetValue()[:]
+                new_label = utils.rgb2str.get(
+                    new_color, ":".join(list(map(str, new_color)))
+                )
+                textCtrl = wx.FindWindowById(p["wxId"][1])
+                val = textCtrl.GetValue()
+                sep = ","
+                if val and val[-1] != sep:
+                    val += sep
+                val += new_label
+                textCtrl.SetValue(val)
+                p["value"] = val
+
+                continue
+            if hasTansp and wx.FindWindowById(p["wxId"][2]).GetValue():
+                p["value"] = "none"
+                continue
+
+            colorchooser = wx.FindWindowById(p["wxId"][0])
+            new_color = colorchooser.GetValue()[:]
+            # This is weird: new_color is a 4-tuple and new_color[:] is
+            # a 3-tuple under wx2.8.1
+            new_label = utils.rgb2str.get(
+                new_color, ":".join(list(map(str, new_color)))
+            )
+            colorchooser.SetLabel(new_label)
+            colorchooser.SetColour(new_color)
+            colorchooser.Refresh()
+            p["value"] = colorchooser.GetLabel()
         self.OnUpdateValues()
 
     def OnUpdateValues(self, event=None):
@@ -2837,9 +3223,7 @@ class CmdPanel(wx.Panel):
                 myIndex = p["wxId"].index(me)
 
         # Unpack current value list
-        currentValues = {}
-        for isThere in theParam.get("value", "").split(","):
-            currentValues[isThere] = 1
+        currentValues = dict.fromkeys(theParam.get("value", "").split(","), 1)
         theValue = theParam["values"][myIndex]
 
         if event.IsChecked():
@@ -2848,10 +3232,7 @@ class CmdPanel(wx.Panel):
             del currentValues[theValue]
 
         # Keep the original order, so that some defaults may be recovered
-        currentValueList = []
-        for v in theParam["values"]:
-            if v in currentValues:
-                currentValueList.append(v)
+        currentValueList = [v for v in theParam["values"] if v in currentValues]
 
         # Pack it back
         theParam["value"] = ",".join(currentValueList)
@@ -2910,25 +3291,24 @@ class CmdPanel(wx.Panel):
         myId = event.GetId()
 
         for p in self.task.params:
-            if "wxId" in p and myId in p["wxId"]:
-                from gui_core.dialogs import SymbolDialog
+            if "wxId" not in p or myId not in p["wxId"]:
+                continue
+            from gui_core.dialogs import SymbolDialog
 
-                dlg = SymbolDialog(
-                    self, symbolPath=globalvar.SYMBDIR, currentSymbol=p["value"]
-                )
-                if dlg.ShowModal() == wx.ID_OK:
-                    img = dlg.GetSelectedSymbolPath()
-                    p["value"] = dlg.GetSelectedSymbolName()
+            dlg = SymbolDialog(
+                self, symbolPath=globalvar.SYMBDIR, currentSymbol=p["value"]
+            )
+            if dlg.ShowModal() == wx.ID_OK:
+                img = dlg.GetSelectedSymbolPath()
+                p["value"] = dlg.GetSelectedSymbolName()
+                bitmapButton = wx.FindWindowById(p["wxId"][0])
+                label = wx.FindWindowById(p["wxId"][1])
+                bitmapButton.SetBitmapLabel(wx.Bitmap(img + ".png"))
+                label.SetLabel(p["value"])
 
-                    bitmapButton = wx.FindWindowById(p["wxId"][0])
-                    label = wx.FindWindowById(p["wxId"][1])
+                self.OnUpdateValues(event)
 
-                    bitmapButton.SetBitmapLabel(wx.Bitmap(img + ".png"))
-                    label.SetLabel(p["value"])
-
-                    self.OnUpdateValues(event)
-
-                dlg.Destroy()
+            dlg.Destroy()
 
     def OnTimelineTool(self, event):
         """Show Timeline Tool with dataset(s) from gselect.
@@ -2939,35 +3319,37 @@ class CmdPanel(wx.Panel):
         myId = event.GetId()
 
         for p in self.task.params:
-            if "wxId" in p and myId in p["wxId"]:
-                select = self.FindWindowById(p["wxId"][0])
-                if not select.GetValue():
-                    gcmd.GMessage(parent=self, message=_("No dataset given."))
-                    return
-                datasets = select.GetValue().split(",")
-                from timeline import frame
+            if "wxId" not in p or myId not in p["wxId"]:
+                continue
+            select = self.FindWindowById(p["wxId"][0])
+            if not select.GetValue():
+                gcmd.GMessage(parent=self, message=_("No dataset given."))
+                return
+            datasets = select.GetValue().split(",")
+            from timeline import frame
 
-                frame.run(parent=self, datasets=datasets)
+            frame.run(parent=self, datasets=datasets)
 
     def OnSelectFont(self, event):
         """Select font using font dialog"""
         myId = event.GetId()
         for p in self.task.params:
-            if "wxId" in p and myId in p["wxId"]:
-                from gui_core.dialogs import DefaultFontDialog
+            if "wxId" not in p or myId not in p["wxId"]:
+                continue
+            from gui_core.dialogs import DefaultFontDialog
 
-                dlg = DefaultFontDialog(
-                    parent=self,
-                    title=_("Select font"),
-                    style=wx.DEFAULT_DIALOG_STYLE,
-                    type="font",
-                )
-                if dlg.ShowModal() == wx.ID_OK:
-                    if dlg.font:
-                        p["value"] = dlg.font
-                        self.FindWindowById(p["wxId"][1]).SetValue(dlg.font)
-                        self.OnUpdateValues(event)
-                dlg.Destroy()
+            dlg = DefaultFontDialog(
+                parent=self,
+                title=_("Select font"),
+                style=wx.DEFAULT_DIALOG_STYLE,
+                type="font",
+            )
+            if dlg.ShowModal() == wx.ID_OK:
+                if dlg.font:
+                    p["value"] = dlg.font
+                    self.FindWindowById(p["wxId"][1]).SetValue(dlg.font)
+                    self.OnUpdateValues(event)
+            dlg.Destroy()
 
     def OnUpdateSelection(self, event):
         """Update dialog (layers, tables, columns, etc.)"""
@@ -3090,7 +3472,7 @@ class GUI:
         try:
             global _blackList
             self.grass_task = gtask.parse_interface(cmd[0], blackList=_blackList)
-        except (grass.ScriptError, ValueError) as e:
+        except (ScriptError, ValueError) as e:
             raise gcmd.GException(e.value)
 
         # if layer parameters previously set, re-insert them into dialog
@@ -3116,32 +3498,34 @@ class GUI:
                     else:
                         self.grass_task.set_flag(option[1], True)
                     cmd_validated.append(option)
-                else:  # parameter
-                    try:
-                        key, value = option.split("=", 1)
-                    except ValueError:
-                        if self.grass_task.firstParam:
-                            if i == 0:  # add key name of first parameter if not given
-                                key = self.grass_task.firstParam
-                                value = option
-                            else:
-                                raise gcmd.GException(
-                                    _("Unable to parse command '%s'") % " ".join(cmd)
-                                )
-                        else:
-                            continue
+                    continue
 
-                    task = self.grass_task.get_param(key, raiseError=False)
-                    if not task:
-                        err.append(
-                            _("%(cmd)s: parameter '%(key)s' not available")
-                            % {"cmd": cmd[0], "key": key}
-                        )
+                # parameter
+                try:
+                    key, value = option.split("=", 1)
+                except ValueError:
+                    if self.grass_task.firstParam:
+                        if i == 0:  # add key name of first parameter if not given
+                            key = self.grass_task.firstParam
+                            value = option
+                        else:
+                            raise gcmd.GException(
+                                _("Unable to parse command '%s'") % " ".join(cmd)
+                            )
+                    else:
                         continue
 
-                    self.grass_task.set_param(key, value)
-                    cmd_validated.append(key + "=" + value)
-                    i += 1
+                task = self.grass_task.get_param(key, raiseError=False)
+                if not task:
+                    err.append(
+                        _("%(cmd)s: parameter '%(key)s' not available")
+                        % {"cmd": cmd[0], "key": key}
+                    )
+                    continue
+
+                self.grass_task.set_param(key, value)
+                cmd_validated.append(key + "=" + value)
+                i += 1
 
             # update original command list
             cmd = cmd_validated
@@ -3193,16 +3577,17 @@ class GUI:
             self.grass_task = gtask.processTask(tree).get_task()
 
             for p in self.grass_task.params:
-                if p.get("name", "") in {"input", "map"}:
-                    age = p.get("age", "")
-                    prompt = p.get("prompt", "")
-                    element = p.get("element", "")
-                    if (
-                        age == "old"
-                        and element in {"cell", "grid3", "vector"}
-                        and prompt in {"raster", "raster_3d", "vector"}
-                    ):
-                        return p.get("name", None)
+                if p.get("name", "") not in {"input", "map"}:
+                    continue
+                age = p.get("age", "")
+                prompt = p.get("prompt", "")
+                element = p.get("element", "")
+                if (
+                    age == "old"
+                    and (element in {"cell", "grid3", "vector"})
+                    and (prompt in {"raster", "raster_3d", "vector"})
+                ):
+                    return p.get("name", None)
         return None
 
 
@@ -3261,8 +3646,6 @@ if __name__ == "__main__":
             "forms.py opening form for: %s"
             % task.get_cmd(ignoreErrors=True, ignoreRequired=True),
         )
-        app = GrassGUIApp(task)
-        app.MainLoop()
     else:  # Test
         # Test grassTask from within a GRASS session
         if os.getenv("GISBASE") is not None:
@@ -3362,7 +3745,8 @@ if __name__ == "__main__":
                 "gisprompt": False,
                 "multiple": "yes",
                 # values must be an array of strings
-                "values": utils.str2rgb.keys() + list(map(str, utils.str2rgb.values())),
+                "values": list(utils.str2rgb.keys())
+                + list(map(str, utils.str2rgb.values())),
                 "key_desc": ["value"],
                 "values_desc": [],
             },
@@ -3399,4 +3783,5 @@ if __name__ == "__main__":
             },
         ]
         q = wx.LogNull()
-        GrassGUIApp(task).MainLoop()
+
+    GrassGUIApp(task).MainLoop()

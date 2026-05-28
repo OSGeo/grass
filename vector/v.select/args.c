@@ -41,7 +41,7 @@ void parse_options(struct GParm *parm, struct GFlag *flag)
 
     parm->output = G_define_standard_option(G_OPT_V_OUTPUT);
 
-    parm->operator= G_define_option();
+    parm->operator = G_define_option();
     parm->operator->key = "operator";
     parm->operator->type = TYPE_STRING;
     parm->operator->required = YES;

@@ -19,19 +19,11 @@ class TestAggregationAbsolute(TestCase):
         tgis.init()
         cls.use_temp_region()
         cls.runModule("g.region", s=0, n=90, w=140, e=160, b=0, t=50, res=10, res3=10)
-        cls.runModule(
-            "r.mapcalc", expression="a4 = rand(1,10)", flags=["s"], overwrite=True
-        )
+        cls.runModule("r.mapcalc", expression="a4 = rand(1,10)", overwrite=True)
         cls.runModule("g.region", s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10)
-        cls.runModule(
-            "r.mapcalc", expression="a1 = rand(1,10)", flags=["s"], overwrite=True
-        )
-        cls.runModule(
-            "r.mapcalc", expression="a2 = rand(1,10)", flags=["s"], overwrite=True
-        )
-        cls.runModule(
-            "r.mapcalc", expression="a3 = rand(1,10)", flags=["s"], overwrite=True
-        )
+        cls.runModule("r.mapcalc", expression="a1 = rand(1,10)", overwrite=True)
+        cls.runModule("r.mapcalc", expression="a2 = rand(1,10)", overwrite=True)
+        cls.runModule("r.mapcalc", expression="a3 = rand(1,10)", overwrite=True)
 
         cls.runModule(
             "t.create",

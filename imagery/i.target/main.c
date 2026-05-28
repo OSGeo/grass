@@ -78,8 +78,10 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Group must exist in the current mapset"));
     }
     else {
-        strcpy(group_name, group->answer); /* FIXME for buffer overflow (have
-                                              the parser check that?) */
+        if (G_strlcpy(group_name, group->answer, sizeof(group_name)) >=
+            sizeof(group_name)) {
+            G_fatal_error(_("Group name <%s> is too long"), group->answer);
+        }
     }
 
     /* if no setting options are given, print the current target info */

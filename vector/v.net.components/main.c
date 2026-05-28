@@ -29,7 +29,8 @@ int insert_new_record(dbDriver *driver, struct field_info *Fi, dbString *sql,
 {
     char buf[2000];
 
-    sprintf(buf, "insert into %s values (%d, %d)", Fi->table, cat, comp);
+    snprintf(buf, sizeof(buf), "insert into %s values (%d, %d)", Fi->table, cat,
+             comp);
     db_set_string(sql, buf);
     G_debug(3, "%s", db_get_string(sql));
 
@@ -177,7 +178,8 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                       Fi->database, Fi->driver);
 
-    sprintf(buf, "create table %s ( cat integer, comp integer)", Fi->table);
+    snprintf(buf, sizeof(buf), "create table %s ( cat integer, comp integer)",
+             Fi->table);
 
     db_set_string(&sql, buf);
     G_debug(2, "%s", db_get_string(&sql));

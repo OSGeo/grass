@@ -101,7 +101,7 @@ int G_math_solver_pcg(double **A, double *x, double *b, int rows, int maxit,
 int G_math_solver_pcg_sband(double **A, double *x, double *b, int rows,
                             int bandwidth, int maxit, double err, int prec)
 {
-    G_fatal_error("Preconditioning of band matrics is not implemented yet");
+    G_fatal_error("Preconditioning of band matrices is not implemented yet");
     return solver_pcg(A, NULL, x, b, rows, maxit, err, prec, 1, bandwidth);
 }
 
@@ -208,7 +208,7 @@ int solver_pcg(double **A, G_math_spvector **Asp, double *x, double *b,
             else
                 G_math_d_Ax(A, p, v, rows, rows);
 
-                /* scalar product */
+            /* scalar product */
 #pragma omp for schedule(static) private(i) reduction(+ : s)
             for (i = 0; i < rows; i++) {
                 s += v[i] * p[i];
@@ -445,7 +445,7 @@ int solver_cg(double **A, G_math_spvector **Asp, double *x, double *b, int rows,
             else
                 G_math_d_Ax(A, p, v, rows, rows);
 
-                /* scalar product */
+            /* scalar product */
 #pragma omp for schedule(static) private(i) reduction(+ : s)
             for (i = 0; i < rows; i++) {
                 s += v[i] * p[i];
@@ -643,7 +643,7 @@ int solver_bicgstab(double **A, G_math_spvector **Asp, double *x, double *b,
             else
                 G_math_d_Ax(A, p, v, rows, rows);
 
-                /* scalar product */
+            /* scalar product */
 #pragma omp for schedule(static) private(i) reduction(+ : s1, s2, s3)
             for (i = 0; i < rows; i++) {
                 s1 += r[i] * r[i];
@@ -674,7 +674,7 @@ int solver_bicgstab(double **A, G_math_spvector **Asp, double *x, double *b,
             else
                 G_math_d_Ax(A, s, t, rows, rows);
 
-                /* scalar product */
+            /* scalar product */
 #pragma omp for schedule(static) private(i) reduction(+ : s1, s2)
             for (i = 0; i < rows; i++) {
                 s1 += t[i] * s[i];

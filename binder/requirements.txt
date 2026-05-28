@@ -1,6 +1,6 @@
 folium
+ipyleaflet
 matplotlib
 numpy
 Pillow
-ply
 PyVirtualDisplay

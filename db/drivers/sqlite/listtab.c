@@ -29,7 +29,6 @@
  * \param[in] system
  * \return int DB_FAILED on error; DB_OK on success
  */
-
 int db__driver_list_tables(dbString **tlist, int *tcount, int system)
 {
     int i, nrows;

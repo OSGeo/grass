@@ -39,11 +39,11 @@ int Vect_remove_colors(const char *name, const char *mapset)
     }
 
     /* get rid of existing colr2, if any */
-    sprintf(element, "%s/%s", GV_COLR2_DIRECTORY, mapset);
+    snprintf(element, sizeof(element), "%s/%s", GV_COLR2_DIRECTORY, mapset);
     stat = G_remove(element, name);
 
     if (strcmp(mapset, G_mapset()) == 0) {
-        sprintf(element, "%s/%s", GV_DIRECTORY, name);
+        snprintf(element, sizeof(element), "%s/%s", GV_DIRECTORY, name);
         stat = G_remove(element, GV_COLR_ELEMENT);
     }
 

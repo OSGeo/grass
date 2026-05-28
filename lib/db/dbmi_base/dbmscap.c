@@ -105,7 +105,7 @@ dbDbmscap *db_read_dbmscap(void)
        char comment[1024];
        int  line;
      */
-    char *dirpath;
+    char *dirpath = NULL;
     DIR *dir;
     struct dirent *ent;
 
@@ -156,9 +156,10 @@ dbDbmscap *db_read_dbmscap(void)
     /* START OF NEW CODE FOR SEARCH IN $(GISBASE)/driver/db/ */
 
     /* opend db drivers directory */
-#ifdef __MINGW32__
-    dirpath = G_malloc(strlen("\\driver\\db\\") + strlen(G_gisbase()) + 1);
-    sprintf(dirpath, "%s\\driver\\db\\", G_gisbase());
+#ifdef _WIN32
+    size_t len = (strlen("\\driver\\db\\") + strlen(G_gisbase()) + 1);
+    dirpath = G_malloc(len);
+    snprintf(dirpath, len, "%s\\driver\\db\\", G_gisbase());
     G_convert_dirseps_to_host(dirpath);
 #else
     G_asprintf(&dirpath, "%s/driver/db/", G_gisbase());
@@ -179,7 +180,7 @@ dbDbmscap *db_read_dbmscap(void)
         if ((strcmp(ent->d_name, ".") == 0) || (strcmp(ent->d_name, "..") == 0))
             continue;
 
-#ifdef __MINGW32__
+#ifdef _WIN32
         /* skip manifest files on Windows */
         if (strstr(ent->d_name, ".manifest"))
             continue;
@@ -188,10 +189,11 @@ dbDbmscap *db_read_dbmscap(void)
         /* Remove '.exe' from name (windows extension) */
         name = G_str_replace(ent->d_name, ".exe", "");
 
-#ifdef __MINGW32__
-        dirpath = G_malloc(strlen("\\driver\\db\\") + strlen(G_gisbase()) +
-                           strlen(ent->d_name) + 1);
-        sprintf(dirpath, "%s\\driver\\db\\%s", G_gisbase(), ent->d_name);
+#ifdef _WIN32
+        len = strlen("\\driver\\db\\") + strlen(G_gisbase()) +
+              strlen(ent->d_name) + 1;
+        dirpath = G_malloc(len);
+        snprintf(dirpath, len, "%s\\driver\\db\\%s", G_gisbase(), ent->d_name);
         G_convert_dirseps_to_host(dirpath);
 #else
         G_asprintf(&dirpath, "%s/driver/db/%s", G_gisbase(), ent->d_name);

@@ -48,6 +48,7 @@ import math
 import atexit
 import glob
 import shutil
+from pathlib import Path
 from grass.script.utils import try_remove, basename
 from grass.script import core as gcore
 
@@ -283,10 +284,10 @@ newpath
 
     (x, y) = outercircle[1]
     outf.write("%.2f %.2f moveto\n" % (x * scale + halfframe, y * scale + halfframe))
-    for x, y in outercircle[2:]:
-        outf.write(
-            "%.2f %.2f lineto\n" % (x * scale + halfframe, y * scale + halfframe)
-        )
+    outf.writelines(
+        "%.2f %.2f lineto\n" % (x * scale + halfframe, y * scale + halfframe)
+        for x, y in outercircle[2:]
+    )
 
     t = string.Template(
         """
@@ -338,10 +339,10 @@ newpath
 
     (x, y) = sine_cosine_replic[1]
     outf.write("%.2f %.2f moveto\n" % (x * scale + halfframe, y * scale + halfframe))
-    for x, y in sine_cosine_replic[2:]:
-        outf.write(
-            "%.2f %.2f lineto\n" % (x * scale + halfframe, y * scale + halfframe)
-        )
+    outf.writelines(
+        "%.2f %.2f lineto\n" % (x * scale + halfframe, y * scale + halfframe)
+        for x, y in sine_cosine_replic[2:]
+    )
 
     t = string.Template(
         """
@@ -363,10 +364,10 @@ newpath
 
     (x, y) = vector[1]
     outf.write("%.2f %.2f moveto\n" % (x * scale + halfframe, y * scale + halfframe))
-    for x, y in vector[2:]:
-        outf.write(
-            "%.2f %.2f lineto\n" % (x * scale + halfframe, y * scale + halfframe)
-        )
+    outf.writelines(
+        "%.2f %.2f lineto\n" % (x * scale + halfframe, y * scale + halfframe)
+        for x, y in vector[2:]
+    )
 
     t = string.Template(
         """
@@ -421,7 +422,7 @@ def main():
         gcore.fatal(_("Please select only one output method"))
 
     if eps:
-        if os.sep in eps and not os.path.exists(os.path.dirname(eps)):
+        if os.sep in eps and not Path(eps).parent.exists():
             gcore.fatal(
                 _(
                     "EPS output file path <{}>, doesn't exists. "
@@ -432,7 +433,7 @@ def main():
             eps = basename(eps, "eps") + ".eps"
         if not eps.endswith(".eps"):
             eps += ".eps"
-        if os.path.exists(eps) and not os.getenv("GRASS_OVERWRITE"):
+        if Path(eps).exists() and not os.getenv("GRASS_OVERWRITE"):
             gcore.fatal(
                 _(
                     "option <output>: <{}> exists. To overwrite, "

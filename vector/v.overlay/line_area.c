@@ -236,7 +236,7 @@ int point_area(struct Map_info *Map, int field, double x, double y,
 
 int line_area(struct Map_info *In, int *field, struct Map_info *Tmp,
               struct Map_info *Out, struct field_info *Fi, dbDriver *driver,
-              int operator, int * ofield, ATTRIBUTES *attr, struct ilist *BList)
+              int operator, int *ofield, ATTRIBUTES *attr, struct ilist *BList)
 {
     int i, line, nlines, ncat;
     struct line_pnts *Points;
@@ -349,8 +349,8 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Tmp,
             }
         }
 
-        if ((ACats->n_cats > 0 && operator== OP_AND) ||
-            (ACats->n_cats == 0 && operator== OP_NOT)) {
+        if ((ACats->n_cats > 0 && operator == OP_AND) ||
+            (ACats->n_cats == 0 && operator == OP_NOT)) {
 
             /* Point is inside */
             G_debug(3, "OK, write line, line ncats = %d area ncats = %d",
@@ -378,8 +378,9 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                         if (driver) {
                             ATTR *at;
 
-                            sprintf(buf, "insert into %s values ( %d",
-                                    Fi->table, ncat);
+                            snprintf(buf, sizeof(buf),
+                                     "insert into %s values ( %d", Fi->table,
+                                     ncat);
                             db_set_string(&stmt, buf);
 
                             /* cata */
@@ -396,7 +397,8 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                                                          attr[0].null_values);
                                 }
                                 else {
-                                    sprintf(buf, ", %d", Cats->cat[i]);
+                                    snprintf(buf, sizeof(buf), ", %d",
+                                             Cats->cat[i]);
                                     db_append_string(&stmt, buf);
                                 }
                             }
@@ -406,7 +408,7 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                                                      attr[0].null_values);
                                 }
                                 else {
-                                    sprintf(buf, ", null");
+                                    snprintf(buf, sizeof(buf), ", null");
                                     db_append_string(&stmt, buf);
                                 }
                             }
@@ -425,7 +427,8 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                                                          attr[1].null_values);
                                 }
                                 else {
-                                    sprintf(buf, ", %d", ACats->cat[j]);
+                                    snprintf(buf, sizeof(buf), ", %d",
+                                             ACats->cat[j]);
                                     db_append_string(&stmt, buf);
                                 }
                             }
@@ -435,7 +438,7 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                                                      attr[1].null_values);
                                 }
                                 else {
-                                    sprintf(buf, ", null");
+                                    snprintf(buf, sizeof(buf), ", null");
                                     db_append_string(&stmt, buf);
                                 }
                             }
@@ -473,6 +476,10 @@ int line_area(struct Map_info *In, int *field, struct Map_info *Tmp,
             Vect_write_line(Out, ltype, Points, OCats);
         }
     }
+    Vect_destroy_cats_struct(ACats);
+    Vect_destroy_cats_struct(Cats);
+    Vect_destroy_cats_struct(OCats);
+    Vect_destroy_line_struct(Points);
 
     return 0;
 }

@@ -161,7 +161,7 @@ int main(int argc, char *argv[])
     if (basename) {
         G_basename(basename, "png");
         outfile = G_malloc(strlen(basename) + 5);
-        sprintf(outfile, "%s.png", basename);
+        snprintf(outfile, (strlen(basename) + 5), "%s.png", basename);
     }
 
     png_compr = atoi(compr->answer);
@@ -374,19 +374,23 @@ int main(int argc, char *argv[])
         fp = NULL;
     }
 
+    G_free(outfile);
+
     if (wld_flag->answer) {
+        outfile = NULL;
         if (do_stdout)
             outfile = G_store("png_map.wld");
-        else
-            sprintf(outfile, "%s.wld", basename);
+        else {
+            outfile = G_malloc(strlen(basename) + 5);
+            snprintf(outfile, (strlen(basename) + 5), "%s.wld", basename);
+        }
 
         write_wld(outfile, &win);
+        G_free(outfile);
     }
 
     if (basename)
         G_free(basename);
-    if (outfile)
-        G_free(outfile);
 
     exit(EXIT_SUCCESS);
 }

@@ -119,7 +119,8 @@ void close_down(void)
     Rast_command_history(&history);
     Rast_write_history(rast_out_name, &history);
 
-    sprintf(map_title, "DEM terrain parameter: %s", map_type);
+    snprintf(map_title, sizeof(map_title), "DEM terrain parameter: %s",
+             map_type);
     Rast_put_cell_title(rast_out_name, map_title);
 
     return;

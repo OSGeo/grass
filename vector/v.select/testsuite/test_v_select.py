@@ -53,7 +53,8 @@ class TestRasterReport(TestCase):
             output=self.output,
             operator="equals",
         )
-        self.assertVectorDoesNotExist(self.output)
+        topology = {"areas": 0}
+        self.assertVectorFitsTopoInfo(self.output, topology)
 
     def test_opt(self):
         """Testing operator touches"""
@@ -64,7 +65,8 @@ class TestRasterReport(TestCase):
             output=self.output,
             operator="touches",
         )
-        self.assertVectorDoesNotExist(self.output)
+        topology = {"areas": 0}
+        self.assertVectorFitsTopoInfo(self.output, topology)
 
     def test_opw(self):
         """Testing operator within"""

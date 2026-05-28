@@ -104,7 +104,8 @@ int main(int argc, char *argv[])
         exit(EXIT_SUCCESS);
     }
 
-    sprintf(progname, "%s/gui/wxpython/wxgui.py", G_gisbase());
+    snprintf(progname, sizeof(progname), "%s/gui/wxpython/wxgui.py",
+             G_gisbase());
     if (access(progname, F_OK) == -1)
         G_fatal_error(_("Your installation doesn't include GUI, exiting."));
 

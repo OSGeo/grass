@@ -34,7 +34,6 @@ static void get_column_info(sqlite3_stmt *statement, int col, int *litetype,
  * \param[in] table
  * \return int DB_FAILED on error; DB_OK on success
  */
-
 int db__driver_describe_table(dbString *table_name, dbTable **table)
 {
     dbString sql;
@@ -110,7 +109,6 @@ int db__driver_describe_table(dbString *table_name, dbTable **table)
  * \param[in] c SQLite cursor. See NOTE.
  * \return int DB_FAILED on error; DB_OK on success
  */
-
 int describe_table(sqlite3_stmt *statement, dbTable **table, cursor *c)
 {
     int i, ncols, nkcols, ret;
@@ -295,7 +293,6 @@ static int dbmi_type(int litetype)
  * \param[in,out] litetype
  * \param[in,out] sqltype
  */
-
 static void get_column_info(sqlite3_stmt *statement, int col, int *litetype,
                             int *sqltype, int *length)
 {
@@ -339,7 +336,6 @@ static void get_column_info(sqlite3_stmt *statement, int col, int *litetype,
  *
  *   4. Otherwise, the affinity is NUMERIC.
  */
-
 static int affinity_type(const char *declared)
 {
     char *lc;

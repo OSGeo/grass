@@ -170,8 +170,6 @@ USE_LIBSVM          = @USE_LIBSVM@
 #GDAL/OGR
 GDALLIBS            = @GDAL_LIBS@
 GDALCFLAGS          = @GDAL_CFLAGS@
-USE_GDAL            = @USE_GDAL@
-USE_OGR             = @USE_OGR@
 
 #NetCDF
 NETCDFLIBS          = @NETCDF_LIBS@

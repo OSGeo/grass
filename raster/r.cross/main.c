@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
     parm.input->required = YES;
     parm.input->multiple = YES;
     parm.input->gisprompt = "old,cell,raster";
-    sprintf(buf, _("Names of 2-%d input raster maps"), NFILES);
+    snprintf(buf, sizeof(buf), _("Names of 2-%d input raster maps"), NFILES);
     parm.input->description = G_store(buf);
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
     output = parm.output->answer;
     outfd = Rast_open_c_new(output);
 
-    sprintf(buf, "Cross of %s", names[0]);
+    snprintf(buf, sizeof(buf), "Cross of %s", names[0]);
     for (i = 1; i < nfiles - 1; i++) {
         strcat(buf, ", ");
         strcat(buf, names[i]);

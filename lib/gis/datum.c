@@ -148,7 +148,7 @@ void G_read_datum_table(void)
     if (G_is_initialized(&table.initialized))
         return;
 
-    sprintf(file, "%s%s", G_gisbase(), DATUMTABLE);
+    snprintf(file, sizeof(file), "%s%s", G_gisbase(), DATUMTABLE);
 
     fd = fopen(file, "r");
     if (!fd) {
@@ -189,6 +189,7 @@ void G_read_datum_table(void)
     qsort(table.datums, table.count, sizeof(struct datum), compare_table_names);
 
     G_initialize_done(&table.initialized);
+    fclose(fd);
 }
 
 static int compare_table_names(const void *aa, const void *bb)

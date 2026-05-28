@@ -38,7 +38,6 @@
  * \param[in] fmt
  * \return number of chars written
  */
-
 int G_snprintf(char *str, size_t size, const char *fmt, ...)
 {
     va_list ap;

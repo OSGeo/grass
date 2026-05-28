@@ -277,7 +277,7 @@ def main():
             gs.warning(
                 _("Nothing to import.\nNo data has been downloaded from wms server.")
             )
-            return
+            return None
         importer = GRASSImporter(options["output"], (not flags["b"]))
         importer.ImportMapIntoGRASS(fetched_map)
 

@@ -27,29 +27,22 @@
 
 #include "local_proto.h"
 
-static int clo_dummy(struct Map_info *map UNUSED)
+static int clo_dummy(struct Map_info *map G_UNUSED)
 {
     return -1;
 }
 
-#if !defined HAVE_OGR || !defined HAVE_POSTGRES
-static int format(struct Map_info *map UNUSED)
+#if !defined HAVE_POSTGRES
+static int format(struct Map_info *map G_UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 #endif
 
-static int (*Close_array[][2])(struct Map_info *) = {{clo_dummy, V1_close_nat}
-#ifdef HAVE_OGR
-                                                     ,
+static int (*Close_array[][2])(struct Map_info *) = {{clo_dummy, V1_close_nat},
                                                      {clo_dummy, V1_close_ogr},
                                                      {clo_dummy, V1_close_ogr}
-#else
-                                                     ,
-                                                     {clo_dummy, format},
-                                                     {clo_dummy, format}
-#endif
 #ifdef HAVE_POSTGRES
                                                      ,
                                                      {clo_dummy, V1_close_pg}
@@ -96,7 +89,7 @@ int Vect_close(struct Map_info *Map)
         /* copy dblinks (temporary map -> output map) to transfer
            (input map -> output map) attributes */
         Vect_copy_map_dblinks(Map, &Out, TRUE);
-        /* afterwords, dblinks must be removed from temporary map
+        /* afterwards, dblinks must be removed from temporary map
            otherwise when deleting temporary map also original
            attribute tables would be deleted */
         Vect_map_del_dblink(Map, -1); /* delete db links for all layers */
@@ -216,8 +209,9 @@ int Vect_close(struct Map_info *Map)
     /* close level 1 files / data sources if not head_only */
     if (!Map->head_only) {
         if (create_link && ((*Close_array[Map->format][1])(Map)) != 0) {
-            G_warning(_("Unable to close vector <%s>"),
-                      Vect_get_full_name(Map));
+            const char *mname = Vect_get_full_name(Map);
+            G_warning(_("Unable to close vector <%s>"), mname);
+            G_free((void *)mname);
             return 1;
         }
     }
@@ -252,7 +246,7 @@ int Vect_save_frmt(struct Map_info *Map)
     }
 
     /* create frmt file */
-    sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
+    snprintf(buf, sizeof(buf), "%s/%s", GV_DIRECTORY, Map->name);
     fd = G_fopen_new(buf, GV_FRMT_ELEMENT);
     if (fd == NULL) {
         G_fatal_error("Unable to create file '%s'", buf);
@@ -270,14 +264,9 @@ int Vect_save_frmt(struct Map_info *Map)
 #endif
     }
     else if (Map->format == GV_FORMAT_OGR) {
-#ifdef HAVE_OGR
         fprintf(fd, "format: ogr\n");
         fprintf(fd, "dsn: %s\n", Map->fInfo.ogr.dsn);
         fprintf(fd, "layer: %s\n", Map->fInfo.ogr.layer_name);
-#else
-        G_fatal_error(_("GRASS is not compiled with OGR support"));
-        return 0;
-#endif
     }
 
     G_verbose_message(_("Link to vector map <%s> created"), Map->name);
@@ -309,7 +298,7 @@ void Vect__free_cache(struct Format_info_cache *cache)
 
 /*! Free memory of offset array
 
-   \param cache pointer to offset array to be freed
+   \param offset pointer to offset array to be freed
  */
 void Vect__free_offset(struct Format_info_offset *offset)
 {

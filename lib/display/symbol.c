@@ -146,7 +146,6 @@ static void symbol(const SYMBOL *Symb, double x0, double y0,
  *  \param fill_color  Fill color
  *  \return void
  */
-
 void D_symbol(const SYMBOL *Symb, double x0, double y0,
               const RGBA_Color *line_color, const RGBA_Color *fill_color)
 {

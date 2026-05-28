@@ -7,8 +7,6 @@
 #include <grass/bitmap.h>
 #include <grass/linkm.h>
 
-#include <grass/waterglobs.h>
-
 double simwe_rand(void)
 {
     return G_drand48();

@@ -52,7 +52,7 @@ static void sum_out(FILE *fp, long cat, double sum1)
     if (cat == 0)
         *buf = 0;
     else {
-        sprintf(buf, "%.10lf", sum1);
+        snprintf(buf, sizeof(buf), "%.10lf", sum1);
         G_trim_decimal(buf);
     }
 

@@ -4,7 +4,6 @@
  * sum2: sum of x squared
  * n:    number of points
  */
-
 double I_variance(double sum, double sum2, int n)
 {
     if (n < 2)

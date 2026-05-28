@@ -6,7 +6,7 @@
  *
  ******************************************************************************
  * Copyright (c) 1999, 2001, Frank Warmerdam
- * Copyright (c) 2011-2019, Even Rouault <even dot rouault at spatialys.com>
+ * Copyright (c) 2011-2024, Even Rouault <even dot rouault at spatialys.com>
  *
  * SPDX-License-Identifier: MIT OR LGPL-2.0-or-later
  ******************************************************************************/
@@ -44,6 +44,12 @@
 #define snprintf _snprintf
 #endif
 #endif
+#endif
+
+/* Allows customization of the message in vendored builds (such as GDAL) */
+#ifndef SHP_RESTORE_SHX_HINT_MESSAGE
+#define SHP_RESTORE_SHX_HINT_MESSAGE \
+    " Use SHPRestoreSHX() to restore or create it."
 #endif
 
 /************************************************************************/
@@ -173,7 +179,7 @@ void SHPAPI_CALL SHPWriteHeader(SHPHandle psSHP)
     uint32_t *panSHX =
         STATIC_CAST(uint32_t *, malloc(sizeof(uint32_t) * 2 * psSHP->nRecords));
     if (panSHX == SHPLIB_NULLPTR) {
-        psSHP->sHooks.Error("Failure allocatin panSHX");
+        psSHP->sHooks.Error("Failure allocating panSHX");
         return;
     }
 
@@ -264,6 +270,8 @@ SHPHandle SHPAPI_CALL SHPOpenLL(const char *pszLayer, const char *pszAccess,
     /*  Initialize the info structure.                  */
     /* -------------------------------------------------------------------- */
     SHPHandle psSHP = STATIC_CAST(SHPHandle, calloc(1, sizeof(SHPInfo)));
+    if (!psSHP)
+        return SHPLIB_NULLPTR;
 
     psSHP->bUpdated = FALSE;
     memcpy(&(psSHP->sHooks), psHooks, sizeof(SAHooks));
@@ -274,6 +282,10 @@ SHPHandle SHPAPI_CALL SHPOpenLL(const char *pszLayer, const char *pszAccess,
     /* -------------------------------------------------------------------- */
     const int nLenWithoutExtension = SHPGetLenWithoutExtension(pszLayer);
     char *pszFullname = STATIC_CAST(char *, malloc(nLenWithoutExtension + 5));
+    if (!pszFullname) {
+        free(psSHP);
+        return SHPLIB_NULLPTR;
+    }
     memcpy(pszFullname, pszLayer, nLenWithoutExtension);
     memcpy(pszFullname + nLenWithoutExtension, ".shp", 5);
     psSHP->fpSHP =
@@ -287,12 +299,14 @@ SHPHandle SHPAPI_CALL SHPOpenLL(const char *pszLayer, const char *pszAccess,
     if (psSHP->fpSHP == SHPLIB_NULLPTR) {
         const size_t nMessageLen = strlen(pszFullname) * 2 + 256;
         char *pszMessage = STATIC_CAST(char *, malloc(nMessageLen));
-        pszFullname[nLenWithoutExtension] = 0;
-        snprintf(pszMessage, nMessageLen,
-                 "Unable to open %s.shp or %s.SHP in %s mode.", pszFullname,
-                 pszFullname, pszAccess);
-        psHooks->Error(pszMessage);
-        free(pszMessage);
+        if (pszMessage) {
+            pszFullname[nLenWithoutExtension] = 0;
+            snprintf(pszMessage, nMessageLen,
+                     "Unable to open %s.shp or %s.SHP in %s mode.", pszFullname,
+                     pszFullname, pszAccess);
+            psHooks->Error(pszMessage);
+            free(pszMessage);
+        }
 
         free(psSHP);
         free(pszFullname);
@@ -310,16 +324,18 @@ SHPHandle SHPAPI_CALL SHPOpenLL(const char *pszLayer, const char *pszAccess,
     }
 
     if (psSHP->fpSHX == SHPLIB_NULLPTR) {
-        const size_t nMessageLen = strlen(pszFullname) * 2 + 256;
+        const size_t nMessageLen =
+            64 + strlen(pszFullname) * 2 + strlen(SHP_RESTORE_SHX_HINT_MESSAGE);
         char *pszMessage = STATIC_CAST(char *, malloc(nMessageLen));
-        pszFullname[nLenWithoutExtension] = 0;
-        snprintf(pszMessage, nMessageLen,
-                 "Unable to open %s.shx or %s.SHX. "
-                 "Set SHAPE_RESTORE_SHX config option to YES to restore or "
-                 "create it.",
-                 pszFullname, pszFullname);
-        psHooks->Error(pszMessage);
-        free(pszMessage);
+        if (pszMessage) {
+            pszFullname[nLenWithoutExtension] = 0;
+            snprintf(
+                pszMessage, nMessageLen,
+                "Unable to open %s.shx or %s.SHX." SHP_RESTORE_SHX_HINT_MESSAGE,
+                pszFullname, pszFullname);
+            psHooks->Error(pszMessage);
+            free(pszMessage);
+        }
 
         psSHP->sHooks.FClose(psSHP->fpSHP);
         free(psSHP);
@@ -333,7 +349,7 @@ SHPHandle SHPAPI_CALL SHPOpenLL(const char *pszLayer, const char *pszAccess,
     /*  Read the file size from the SHP file.               */
     /* -------------------------------------------------------------------- */
     unsigned char *pabyBuf = STATIC_CAST(unsigned char *, malloc(100));
-    if (psSHP->sHooks.FRead(pabyBuf, 100, 1, psSHP->fpSHP) != 1) {
+    if (!pabyBuf || psSHP->sHooks.FRead(pabyBuf, 100, 1, psSHP->fpSHP) != 1) {
         psSHP->sHooks.Error(".shp file is unreadable, or corrupt.");
         psSHP->sHooks.FClose(psSHP->fpSHP);
         psSHP->sHooks.FClose(psSHP->fpSHX);
@@ -626,6 +642,8 @@ int SHPAPI_CALL SHPRestoreSHX(const char *pszLayer, const char *pszAccess,
     /* -------------------------------------------------------------------- */
     const int nLenWithoutExtension = SHPGetLenWithoutExtension(pszLayer);
     char *pszFullname = STATIC_CAST(char *, malloc(nLenWithoutExtension + 5));
+    if (!pszFullname)
+        return 0;
     memcpy(pszFullname, pszLayer, nLenWithoutExtension);
     memcpy(pszFullname + nLenWithoutExtension, ".shp", 5);
     SAFile fpSHP = psHooks->FOpen(pszFullname, pszAccess, psHooks->pvUserData);
@@ -637,12 +655,14 @@ int SHPAPI_CALL SHPRestoreSHX(const char *pszLayer, const char *pszAccess,
     if (fpSHP == SHPLIB_NULLPTR) {
         const size_t nMessageLen = strlen(pszFullname) * 2 + 256;
         char *pszMessage = STATIC_CAST(char *, malloc(nMessageLen));
-
-        pszFullname[nLenWithoutExtension] = 0;
-        snprintf(pszMessage, nMessageLen, "Unable to open %s.shp or %s.SHP.",
-                 pszFullname, pszFullname);
-        psHooks->Error(pszMessage);
-        free(pszMessage);
+        if (pszMessage) {
+            pszFullname[nLenWithoutExtension] = 0;
+            snprintf(pszMessage, nMessageLen,
+                     "Unable to open %s.shp or %s.SHP.", pszFullname,
+                     pszFullname);
+            psHooks->Error(pszMessage);
+            free(pszMessage);
+        }
 
         free(pszFullname);
 
@@ -678,11 +698,13 @@ int SHPAPI_CALL SHPRestoreSHX(const char *pszLayer, const char *pszAccess,
     if (fpSHX == SHPLIB_NULLPTR) {
         size_t nMessageLen = strlen(pszFullname) * 2 + 256;
         char *pszMessage = STATIC_CAST(char *, malloc(nMessageLen));
-        pszFullname[nLenWithoutExtension] = 0;
-        snprintf(pszMessage, nMessageLen,
-                 "Error opening file %s.shx for writing", pszFullname);
-        psHooks->Error(pszMessage);
-        free(pszMessage);
+        if (pszMessage) {
+            pszFullname[nLenWithoutExtension] = 0;
+            snprintf(pszMessage, nMessageLen,
+                     "Error opening file %s.shx for writing", pszFullname);
+            psHooks->Error(pszMessage);
+            free(pszMessage);
+        }
 
         psHooks->FClose(fpSHP);
 
@@ -697,6 +719,14 @@ int SHPAPI_CALL SHPRestoreSHX(const char *pszLayer, const char *pszAccess,
     /* -------------------------------------------------------------------- */
     psHooks->FSeek(fpSHP, 100, 0);
     char *pabySHXHeader = STATIC_CAST(char *, malloc(100));
+    if (!pabySHXHeader) {
+        psHooks->FClose(fpSHP);
+
+        free(pabyBuf);
+        free(pszFullname);
+
+        return (0);
+    }
     memcpy(pabySHXHeader, pabyBuf, 100);
     psHooks->FWrite(pabySHXHeader, 100, 1, fpSHX);
     free(pabyBuf);
@@ -930,34 +960,52 @@ SHPHandle SHPAPI_CALL SHPCreate(const char *pszLayer, int nShapeType)
 SHPHandle SHPAPI_CALL SHPCreateLL(const char *pszLayer, int nShapeType,
                                   const SAHooks *psHooks)
 {
+
+    SHPHandle psSHP = STATIC_CAST(SHPHandle, calloc(1, sizeof(SHPInfo)));
+    if (!psSHP)
+        return SHPLIB_NULLPTR;
+
     /* -------------------------------------------------------------------- */
     /*      Open the two files so we can write their headers.               */
     /* -------------------------------------------------------------------- */
     const int nLenWithoutExtension = SHPGetLenWithoutExtension(pszLayer);
     char *pszFullname = STATIC_CAST(char *, malloc(nLenWithoutExtension + 5));
+    if (!pszFullname) {
+        free(psSHP);
+        return SHPLIB_NULLPTR;
+    }
     memcpy(pszFullname, pszLayer, nLenWithoutExtension);
     memcpy(pszFullname + nLenWithoutExtension, ".shp", 5);
     SAFile fpSHP = psHooks->FOpen(pszFullname, "w+b", psHooks->pvUserData);
     if (fpSHP == SHPLIB_NULLPTR) {
-        char szErrorMsg[200];
-        snprintf(szErrorMsg, sizeof(szErrorMsg), "Failed to create file %s: %s",
-                 pszFullname, strerror(errno));
-        psHooks->Error(szErrorMsg);
-
+        const size_t nMessageLen = strlen(pszFullname) + 256;
+        char *pszMessage = STATIC_CAST(char *, malloc(nMessageLen));
+        if (pszMessage) {
+            snprintf(pszMessage, nMessageLen, "Failed to create file %s: %s",
+                     pszFullname, strerror(errno));
+            psHooks->Error(pszMessage);
+            free(pszMessage);
+        }
         free(pszFullname);
+        free(psSHP);
         return SHPLIB_NULLPTR;
     }
 
     memcpy(pszFullname + nLenWithoutExtension, ".shx", 5);
     SAFile fpSHX = psHooks->FOpen(pszFullname, "w+b", psHooks->pvUserData);
     if (fpSHX == SHPLIB_NULLPTR) {
-        char szErrorMsg[200];
-        snprintf(szErrorMsg, sizeof(szErrorMsg), "Failed to create file %s: %s",
-                 pszFullname, strerror(errno));
-        psHooks->Error(szErrorMsg);
+        const size_t nMessageLen = strlen(pszFullname) + 256;
+        char *pszMessage = STATIC_CAST(char *, malloc(nMessageLen));
+        if (pszMessage) {
+            snprintf(pszMessage, nMessageLen, "Failed to create file %s: %s",
+                     pszFullname, strerror(errno));
+            psHooks->Error(pszMessage);
+            free(pszMessage);
+        }
 
         free(pszFullname);
         psHooks->FClose(fpSHP);
+        free(psSHP);
         return SHPLIB_NULLPTR;
     }
 
@@ -1011,6 +1059,7 @@ SHPHandle SHPAPI_CALL SHPCreateLL(const char *pszLayer, int nShapeType,
         free(pszFullname);
         psHooks->FClose(fpSHP);
         psHooks->FClose(fpSHX);
+        free(psSHP);
         return SHPLIB_NULLPTR;
     }
 
@@ -1034,10 +1083,9 @@ SHPHandle SHPAPI_CALL SHPCreateLL(const char *pszLayer, int nShapeType,
         free(pszFullname);
         psHooks->FClose(fpSHP);
         psHooks->FClose(fpSHX);
+        free(psSHP);
         return SHPLIB_NULLPTR;
     }
-
-    SHPHandle psSHP = STATIC_CAST(SHPHandle, calloc(1, sizeof(SHPInfo)));
 
     psSHP->bUpdated = FALSE;
     memcpy(&(psSHP->sHooks), psHooks, sizeof(SAHooks));
@@ -1136,6 +1184,8 @@ SHPObject SHPAPI_CALL1(*)
 {
     SHPObject *psObject =
         STATIC_CAST(SHPObject *, calloc(1, sizeof(SHPObject)));
+    if (!psObject)
+        return SHPLIB_NULLPTR;
     psObject->nSHPType = nSHPType;
     psObject->nShapeId = nShapeId;
     psObject->bMeasureIsUsed = FALSE;
@@ -1176,6 +1226,12 @@ SHPObject SHPAPI_CALL1(*)
             STATIC_CAST(int *, calloc(psObject->nParts, sizeof(int)));
         psObject->panPartType =
             STATIC_CAST(int *, malloc(sizeof(int) * psObject->nParts));
+        if (!psObject->panPartStart || !psObject->panPartType) {
+            free(psObject->panPartStart);
+            free(psObject->panPartType);
+            free(psObject);
+            return SHPLIB_NULLPTR;
+        }
 
         psObject->panPartStart[0] = 0;
         psObject->panPartType[0] = SHPP_RING;
@@ -1210,6 +1266,17 @@ SHPObject SHPAPI_CALL1(*)
         psObject->padfM = STATIC_CAST(
             double *,
             padfM &&bHasM ? malloc(nSize) : calloc(nVertices, sizeof(double)));
+        if (!psObject->padfX || !psObject->padfY || !psObject->padfZ ||
+            !psObject->padfM) {
+            free(psObject->panPartStart);
+            free(psObject->panPartType);
+            free(psObject->padfX);
+            free(psObject->padfY);
+            free(psObject->padfZ);
+            free(psObject->padfM);
+            free(psObject);
+            return SHPLIB_NULLPTR;
+        }
         if (padfX != SHPLIB_NULLPTR)
             memcpy(psObject->padfX, padfX, nSize);
         if (padfY != SHPLIB_NULLPTR)
@@ -2007,6 +2074,10 @@ SHPObject SHPAPI_CALL1(*) SHPReadObject(const SHPHandle psSHP, int hEntity)
     }
     else {
         psShape = STATIC_CAST(SHPObject *, calloc(1, sizeof(SHPObject)));
+        if (!psShape) {
+            psSHP->sHooks.Error("Out of memory.");
+            return SHPLIB_NULLPTR;
+        }
     }
     psShape->nShapeId = hEntity;
     psShape->nSHPType = nSHPType;

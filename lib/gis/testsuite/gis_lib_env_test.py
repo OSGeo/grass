@@ -3,8 +3,8 @@
 @author Soeren Gebbert
 """
 
-from grass.gunittest.case import TestCase
 import grass.lib.gis as libgis
+from grass.gunittest.case import TestCase
 
 
 class GisLibraryTestEnv(TestCase):

@@ -119,7 +119,8 @@ int query(struct Map_info *Map)
         }
 
         if (Values[i].nqcats > 0) {
-            sprintf(buf, "SELECT %s FROM %s WHERE", options.qcol, Fi->table);
+            snprintf(buf, sizeof(buf), "SELECT %s FROM %s WHERE", options.qcol,
+                     Fi->table);
             db_set_string(&stmt, buf);
 
             for (j = 0; j < Values[i].nqcats; j++) {
@@ -128,7 +129,8 @@ int query(struct Map_info *Map)
                 if (j > 0)
                     db_append_string(&stmt, " OR");
 
-                sprintf(buf, " %s = %d", Fi->key, Values[i].qcat[j]);
+                snprintf(buf, sizeof(buf), " %s = %d", Fi->key,
+                         Values[i].qcat[j]);
                 db_append_string(&stmt, buf);
             }
             G_debug(4, "  SQL: '%s'", db_get_string(&stmt));

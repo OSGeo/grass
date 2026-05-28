@@ -1041,6 +1041,8 @@ int gvl_file_end_read(geovol_file *vf)
    \brief Get value for volume file at x, y, z
 
    \param vf pointer to geovol_file struct
+   \param x,y,z
+   \param[out] value
 
    \return -1 on failure
    \return 1 on success

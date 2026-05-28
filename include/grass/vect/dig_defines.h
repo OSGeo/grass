@@ -1,5 +1,5 @@
 /*!
-   \file include/vect/dig_defines.h
+   \file include/grass/vect/dig_defines.h
 
    Defines for diglib (part of vector library)
  */

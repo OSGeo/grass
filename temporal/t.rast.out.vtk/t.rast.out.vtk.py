@@ -73,6 +73,7 @@
 # %end
 
 import os
+from pathlib import Path
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
@@ -97,7 +98,7 @@ def main():
     # Make sure the temporal database exists
     tgis.init()
 
-    if not os.path.exists(expdir):
+    if not Path(expdir).exists():
         gs.fatal(_("Export directory <%s> not found.") % expdir)
 
     os.chdir(expdir)

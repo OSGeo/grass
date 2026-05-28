@@ -234,8 +234,8 @@ int main(int argc, char *argv[])
     for (i = 0; i < dim.n_measures; i++) {
         if (flag.ind->answer) {
             for (j = 0; j < 4; j++) {
-                sprintf(mapname[i * 4 + j], "%s%s_%d", result,
-                        measure_menu[measure_idx[i]].suffix, j * 45);
+                snprintf(mapname[i * 4 + j], GNAME_MAX, "%s%s_%d", result,
+                         measure_menu[measure_idx[i]].suffix, j * 45);
                 if (!G_find_raster(mapname[i * 4 + j], G_mapset()) ||
                     overwrite) {
                     outfd[i * 4 + j] =
@@ -248,8 +248,8 @@ int main(int argc, char *argv[])
             }
         }
         else {
-            sprintf(mapname[i], "%s%s", result,
-                    measure_menu[measure_idx[i]].suffix);
+            snprintf(mapname[i], GNAME_MAX, "%s%s", result,
+                     measure_menu[measure_idx[i]].suffix);
             if (!G_find_raster(mapname[i], G_mapset()) || overwrite) {
                 outfd[i] = Rast_open_new(mapname[i], out_data_type);
             }
@@ -313,6 +313,10 @@ int main(int argc, char *argv[])
     out_set.flag_ind = flag.ind;
 
     threads = G_set_omp_num_threads(parm.nproc);
+    threads = Rast_disable_omp_on_mask(threads);
+    if (threads < 1)
+        G_fatal_error(_("<%d> is not valid number of nprocs."), threads);
+
     execute_texture(data, &dim, measure_menu, measure_idx, &out_set, threads);
 
     for (i = 0; i < dim.n_outputs; i++) {

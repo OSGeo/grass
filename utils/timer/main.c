@@ -12,7 +12,6 @@
  *               for details.
  *
  *****************************************************************************/
-
 #include <sys/time.h>
 #include <string.h>
 #include <stdio.h>
@@ -21,7 +20,7 @@ int main(void)
 {
     struct timeval t;
 
-    if (gettimeofday(&t, NULL) == -1) {
+    if (gettimeofday(&t, NULL) != 0) {
         fprintf(stderr, "gettimeofday error");
         return 1;
     }

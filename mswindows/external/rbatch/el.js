@@ -1,3 +1,5 @@
+/* global ActiveXObject, WScript */
+/* global Application:writeable, Arguments:writeable, Index:writeable */
 // elevate.js -- runs target command line elevated
 // Arguments should not have embedded spaces.
 // http://blogs.msdn.com/b/aaron_margosis/archive/2007/07/01/scripting-elevation-on-vista.aspx

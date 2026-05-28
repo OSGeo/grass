@@ -164,7 +164,8 @@ int main(int argc, char *argv[])
             }
         }
         else
-            sprintf(title, "clump of <%s@%s>", name, G_mapset());
+            snprintf(title, sizeof(title), "clump of <%s@%s>", name,
+                     G_mapset());
         Rast_put_cell_title(OUTPUT, title);
 
         /* colors */

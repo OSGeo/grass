@@ -1,12 +1,11 @@
 import os
 import platform
 
+import grass.script as gs
+from grass.exceptions import CalledModuleError
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-import grass.script as gs
-from grass.script import legal_name
-from grass.script import utils
+from grass.script import legal_name, utils
 
 
 class TestUnique(TestCase):
@@ -115,7 +114,7 @@ class TestLegalizeVectorName(TestCase):
                 columns=f"{name} integer",
             )
             works = True
-        except gs.CalledModuleError:
+        except CalledModuleError:
             works = False
         finally:
             gs.run_command("g.remove", name=name, type="vector", flags="f")

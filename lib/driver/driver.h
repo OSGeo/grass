@@ -3,18 +3,24 @@
 
 #include <grass/fontcap.h>
 
-extern int screen_width;
-extern int screen_height;
+#ifdef GRASS_CMAKE_BUILD
+#include <export/grass_driver_export.h>
+#else
+#define GRASS_DRIVER_EXPORT
+#endif
 
-extern double cur_x;
-extern double cur_y;
+GRASS_DRIVER_EXPORT extern int screen_width;
+GRASS_DRIVER_EXPORT extern int screen_height;
 
-extern double text_size_x;
-extern double text_size_y;
-extern double text_rotation;
+GRASS_DRIVER_EXPORT extern double cur_x;
+GRASS_DRIVER_EXPORT extern double cur_y;
+
+GRASS_DRIVER_EXPORT extern double text_size_x;
+GRASS_DRIVER_EXPORT extern double text_size_y;
+GRASS_DRIVER_EXPORT extern double text_rotation;
 extern double text_sinrot;
 extern double text_cosrot;
-extern int matrix_valid;
+GRASS_DRIVER_EXPORT extern int matrix_valid;
 
 extern struct GFONT_CAP *ftcap;
 

@@ -1,3 +1,7 @@
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
+
 #include <stdlib.h>
 #include <limits.h>
 #include <string.h>
@@ -242,7 +246,7 @@ static void translate_from_colors(map *m, DCELL *rast, CELL *cell, int ncols,
  * category file.
  *
  * This requires performing sscanf() of the category label
- * and only do it it for new categories. Must maintain
+ * and only do it for new categories. Must maintain
  * some kind of maps of already scanned values.
  *
  * This maps is a hybrid tree, where the data in each node
@@ -319,7 +323,7 @@ static void translate_from_cats(map *m, CELL *cell, DCELL *xcell, int ncols)
     }
 }
 
-static void setup_map(map *m UNUSED)
+static void setup_map(map *m G_UNUSED)
 {
 }
 
@@ -424,7 +428,8 @@ int map_type(const char *name, int mod)
     }
 }
 
-int open_map(const char *name, int mod, int row, int col)
+int open_map(const char *name, int mod, int row, int col,
+             int thread_num G_UNUSED)
 {
     int i;
     const char *mapset;
@@ -619,8 +624,12 @@ int open_output_map(const char *name, int res_type)
 void put_map_row(int fd, void *buf, int res_type)
 {
     void *handle = omaps[fd];
+    int tid = 0;
+#if defined(_OPENMP)
+    tid = omp_get_thread_num();
+#endif
 
-    write_row(handle, buf, res_type, current_depth, current_row);
+    write_row(handle, buf, res_type, current_depth, current_row[tid]);
 }
 
 void close_output_map(int fd)
@@ -662,11 +671,11 @@ void copy_colors(const char *dst, int idx)
     Rast_free_colors(&colr);
 }
 
-void copy_history(const char *dst UNUSED, int idx UNUSED)
+void copy_history(const char *dst G_UNUSED, int idx G_UNUSED)
 {
 }
 
-void create_history(const char *dst UNUSED, expression *e UNUSED)
+void create_history(const char *dst G_UNUSED, expression *e G_UNUSED)
 {
 }
 

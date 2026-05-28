@@ -99,17 +99,17 @@ def main():
     database2 = database.replace("$MAP/", map_name + "/")
 
     # maybe there is already a table linked to the selected layer?
-    nuldev = open(os.devnull, "w")
-    try:
-        gs.vector_db(map_name, stderr=nuldev)[int(layer)]
-        gs.fatal(_("There is already a table linked to layer <%s>") % layer)
-    except KeyError:
-        pass
+    with open(os.devnull, "w") as nuldev:
+        try:
+            gs.vector_db(map_name, stderr=nuldev)[int(layer)]
+            gs.fatal(_("There is already a table linked to layer <%s>") % layer)
+        except KeyError:
+            pass
 
-    # maybe there is already a table with that name?
-    tables = gs.read_command(
-        "db.tables", flags="p", database=database2, driver=driver, stderr=nuldev
-    )
+        # maybe there is already a table with that name?
+        tables = gs.read_command(
+            "db.tables", flags="p", database=database2, driver=driver, stderr=nuldev
+        )
     tables = decode(tables)
 
     if table not in tables.splitlines():

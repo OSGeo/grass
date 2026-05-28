@@ -2,7 +2,7 @@
 #include <grass/raster.h>
 #include <grass/stats.h>
 
-void c_median(DCELL *result, DCELL *values, int n, const void *closure UNUSED)
+void c_median(DCELL *result, DCELL *values, int n, const void *closure G_UNUSED)
 {
     n = sort_cell(values, n);
 
@@ -13,7 +13,7 @@ void c_median(DCELL *result, DCELL *values, int n, const void *closure UNUSED)
 }
 
 void w_median(DCELL *result, DCELL (*values)[2], int n,
-              const void *closure UNUSED)
+              const void *closure G_UNUSED)
 {
     DCELL total;
     int i;

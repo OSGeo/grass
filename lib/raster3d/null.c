@@ -30,7 +30,6 @@ int Rast3d_is_null_value_num(const void *n, int type)
  *  \param type
  *  \return void
  */
-
 void Rast3d_set_null_value(void *c, int nofElts, int type)
 {
     if (type == FCELL_TYPE) {

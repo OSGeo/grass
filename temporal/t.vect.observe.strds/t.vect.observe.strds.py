@@ -265,7 +265,7 @@ def main():
 
         # Create the columns creation string
         columns_string = ""
-        for name, column in zip(raster_names, column_names):
+        for name, column in zip(raster_names, column_names, strict=False):
             # The column is by default double precision
             coltype = "DOUBLE PRECISION"
             # Get raster map type
@@ -315,7 +315,7 @@ def main():
                 )
 
         # Call v.what.rast for each raster map
-        for name, column in zip(raster_names, column_names):
+        for name, column in zip(raster_names, column_names, strict=False):
             try:
                 gs.run_command(
                     "v.what.rast",

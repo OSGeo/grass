@@ -43,7 +43,7 @@ void append_double(dbString *string, double d)
 {
     char buf[50];
 
-    sprintf(buf, ",%f", d);
+    snprintf(buf, sizeof(buf), ",%f", d);
     db_append_string(string, buf);
 }
 
@@ -51,7 +51,7 @@ void process_node(int node, int cat)
 {
     char buf[2000];
 
-    sprintf(buf, "INSERT INTO %s VALUES(%d", Fi->table, cat);
+    snprintf(buf, sizeof(buf), "INSERT INTO %s VALUES(%d", Fi->table, cat);
     db_set_string(&sql, buf);
     if (deg_opt->answer)
         append_double(&sql, deg[node]);
@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("network"));
     G_add_keyword(_("centrality measures"));
     module->description =
-        _("Computes degree, centrality, betweeness, closeness and eigenvector "
+        _("Computes degree, centrality, betweenness, closeness and eigenvector "
           "centrality measures in the network.");
 
     /* Define the different options as defined in gis.h */
@@ -254,8 +254,8 @@ int main(int argc, char *argv[])
         append_string(&tmp, betw_opt->answer);
     if (eigen_opt->answer)
         append_string(&tmp, eigen_opt->answer);
-    sprintf(buf, "create table %s(cat integer%s)", Fi->table,
-            db_get_string(&tmp));
+    snprintf(buf, sizeof(buf), "create table %s(cat integer%s)", Fi->table,
+             db_get_string(&tmp));
 
     db_set_string(&sql, buf);
     G_debug(2, "%s", db_get_string(&sql));

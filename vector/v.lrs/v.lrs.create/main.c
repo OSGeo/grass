@@ -36,7 +36,7 @@
 
 /* MP is milepost */
 
-/* the same as specified fo from_ */
+/* the same as specified for from_ */
 #define TO_TYPE_FROM     1
 /* calculated from map along the line from previous MP */
 #define TO_TYPE_MAP      2
@@ -276,10 +276,10 @@ int main(int argc, char **argv)
     }
 
     /* Because the line feature identified by one id (lidcol) may be split
-     *  to more line parts, and milepost may be in threshold for more such
+     * to more line parts, and milepost may be in threshold for more such
      * parts, so that if each line part would be processed separately, it could
-     * be attached to more parts, it is better to process always whole line
-     * feature (all parts) of one id at the same time, and attache mileposts
+     * be attached to more parts. It is better always to process a whole line
+     * feature (all parts) of one id at the same time, and attach mileposts
      * always to nearest one */
 
     /* Open the database for lines and points */
@@ -323,26 +323,27 @@ int main(int argc, char **argv)
                         db_get_default_database_name(),
                         table_opt->answer) == 1) {
         db_init_string(&rsstmt);
-        sprintf(buf, "drop table %s", table_opt->answer);
+        snprintf(buf, sizeof(buf), "drop table %s", table_opt->answer);
         db_append_string(&rsstmt, buf);
         if (db_execute_immediate(rsdriver, &rsstmt) != DB_OK)
             G_warning(_("Unable to drop table: %s"), buf);
     }
     db_init_string(&rsstmt);
-    sprintf(buf,
-            "create table %s (rsid int, lcat int, lid int, start_map double "
-            "precision, "
-            "end_map double precision, start_mp double precision, start_off "
-            "double precision, "
-            "end_mp double precision, end_off double precision, end_type int)",
-            table_opt->answer);
+    snprintf(buf, sizeof(buf),
+             "create table %s (rsid int, lcat int, lid int, start_map double "
+             "precision, "
+             "end_map double precision, start_mp double precision, start_off "
+             "double precision, "
+             "end_mp double precision, end_off double precision, end_type int)",
+             table_opt->answer);
     G_debug(debug, "ref tab SQL: %s", buf);
     db_append_string(&rsstmt, buf);
     if (db_execute_immediate(rsdriver, &rsstmt) != DB_OK)
         G_fatal_error(_("Unable to create table: %s"), buf);
 
     /* Select all lid from line table */
-    sprintf(buf, "select %s from %s", lidcol_opt->answer, Lfi->table);
+    snprintf(buf, sizeof(buf), "select %s from %s", lidcol_opt->answer,
+             Lfi->table);
     G_debug(debug, "line tab lid SQL: %s", buf);
     db_append_string(&lstmt, buf);
     if (db_open_select_cursor(ldriver, &lstmt, &lcursor, DB_SEQUENTIAL) !=
@@ -399,7 +400,7 @@ int main(int argc, char **argv)
     rlines = (RLINE *)G_malloc(Vect_get_num_lines(&In) * sizeof(RLINE));
     mposts = (MILEPOST *)G_malloc(Vect_get_num_lines(&PMap) * sizeof(MILEPOST));
 
-    /* Go throuhg each line id */
+    /* Go through each line id */
     G_debug(debug, "Process each line id");
     rsid = 1;
     for (i = 0; i < nLid; i++) {
@@ -408,7 +409,7 @@ int main(int argc, char **argv)
 
         /* Select all LINES for current lid */
 
-        sprintf(buf, "%s = %d", lidcol_opt->answer, lid);
+        snprintf(buf, sizeof(buf), "%s = %d", lidcol_opt->answer, lid);
         ncat = db_select_int(ldriver, Lfi->table, Lfi->key, buf, &cats);
         G_debug(debug, "  %d cats selected:", ncat);
 
@@ -449,10 +450,11 @@ int main(int argc, char **argv)
          *  to PORT_DOUBLE_MAX, and such records are not used after qsort */
 
         /* Select all attributes for points */
-        sprintf(buf, "select %s, %s, %s, %s, %s from %s where %s = %d",
-                Pfi->key, start_mp_opt->answer, start_off_opt->answer,
-                end_mp_opt->answer, end_off_opt->answer, Pfi->table,
-                pidcol_opt->answer, lid);
+        snprintf(buf, sizeof(buf),
+                 "select %s, %s, %s, %s, %s from %s where %s = %d", Pfi->key,
+                 start_mp_opt->answer, start_off_opt->answer,
+                 end_mp_opt->answer, end_off_opt->answer, Pfi->table,
+                 pidcol_opt->answer, lid);
         G_debug(debug, "  SQL: %s", buf);
         db_init_string(&pstmt);
         db_append_string(&pstmt, buf);
@@ -630,7 +632,7 @@ int main(int argc, char **argv)
 
         /* 1) Check number of MP
          * 2) Guess direction: find direction for each segment between 2 MPs and
-         * at the end compare number of segmnets in both directions, if equal
+         * at the end compare number of segments in both directions, if equal
          * assign DIR_UNKNOWN. */
         for (j = 0; j < nrlines; j++) {
             G_debug(debug,
@@ -844,14 +846,14 @@ int main(int argc, char **argv)
                         mposts[k + 1].dist_along, mposts[k].start_mp,
                         mposts[k].start_off, end_mp, end_off, totype);
 
-                sprintf(buf,
-                        "insert into %s (rsid, lcat, lid, start_map, end_map, "
-                        "start_mp, start_off, end_mp, end_off, end_type) "
-                        "values ( %d, %d, %d, %f, %f, %f, %f, %f, %f, %d )",
-                        table_opt->answer, rsid, rlines[j].cat, lid,
-                        mposts[k].dist_along, mposts[k + 1].dist_along,
-                        mposts[k].start_mp, mposts[k].start_off, end_mp,
-                        end_off, totype);
+                snprintf(buf, sizeof(buf),
+                         "insert into %s (rsid, lcat, lid, start_map, end_map, "
+                         "start_mp, start_off, end_mp, end_off, end_type) "
+                         "values ( %d, %d, %d, %f, %f, %f, %f, %f, %f, %d )",
+                         table_opt->answer, rsid, rlines[j].cat, lid,
+                         mposts[k].dist_along, mposts[k + 1].dist_along,
+                         mposts[k].start_mp, mposts[k].start_off, end_mp,
+                         end_off, totype);
                 G_debug(debug, "  SQL: %s", buf);
                 db_init_string(&rsstmt);
                 db_append_string(&rsstmt, buf);

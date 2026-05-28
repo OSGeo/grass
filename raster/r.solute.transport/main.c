@@ -423,7 +423,7 @@ int main(int argc, char *argv[])
     /*write the result to the output file */
     N_write_array_2d_to_rast(data->c, param.output->answer);
 
-    /*Compute the the velocity field if required and write the result into three
+    /*Compute the velocity field if required and write the result into three
      * rast maps */
     if (param.vector_x->answer || param.vector_y->answer) {
         xcomp = N_alloc_array_2d(geom->cols, geom->rows, 1, DCELL_TYPE);

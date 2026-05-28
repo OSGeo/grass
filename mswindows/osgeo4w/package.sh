@@ -117,6 +117,8 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 	rm -f mswindows/osgeo4w/package.log.*
 
 	mkdir -p mswindows/osgeo4w/lib
+	rm -f $OSGEO4W_ROOT_MSYS/lib/libpq.a
+	cp -uv $OSGEO4W_ROOT_MSYS/lib/libpq.lib mswindows/osgeo4w/lib/libpq.lib
 	cp -uv $OSGEO4W_ROOT_MSYS/lib/sqlite3_i.lib mswindows/osgeo4w/lib/sqlite3.lib
 
 
@@ -155,7 +157,7 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-openmp \
 		--with-postgres \
 		--with-postgres-includes=${OSGEO4W_ROOT_MSYS}/include \
-		--with-postgres-libs=${OSGEO4W_ROOT_MSYS}/lib \
+		--with-postgres-libs=${SRC}/mswindows/osgeo4w/lib \
 		--with-proj-includes=${OSGEO4W_ROOT_MSYS}/include \
 		--with-proj-libs=${OSGEO4W_ROOT_MSYS}/lib \
 		--with-proj-share=${OSGEO4W_ROOT_MSYS}/share/proj \

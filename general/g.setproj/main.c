@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
      * no longer necessary, table is a static struct
      * init_unit_table();
      ***/
-    sprintf(set_name, "PERMANENT");
+    snprintf(set_name, sizeof(set_name), "PERMANENT");
     G_file_name(path, "", PROJECTION_FILE, set_name);
 
     /* get the output projection parameters, if existing */
@@ -164,20 +164,23 @@ int main(int argc, char *argv[])
         }
     case PROJECTION_UTM:
         if (!exist) {
-            sprintf(proj_name, "%s", G_projection_name(PROJECTION_UTM));
-            sprintf(proj_out, "utm");
+            snprintf(proj_name, sizeof(proj_name), "%s",
+                     G_projection_name(PROJECTION_UTM));
+            snprintf(proj_out, sizeof(proj_out), "utm");
             break;
         }
     case PROJECTION_SP:
         if (!exist) {
-            sprintf(proj_name, "%s", G_projection_name(PROJECTION_SP));
-            sprintf(proj_out, "stp");
+            snprintf(proj_name, sizeof(proj_name), "%s",
+                     G_projection_name(PROJECTION_SP));
+            snprintf(proj_out, sizeof(proj_out), "stp");
             break;
         }
     case PROJECTION_LL:
         if (!exist) {
-            sprintf(proj_name, "%s", G_projection_name(PROJECTION_LL));
-            sprintf(proj_out, "ll");
+            snprintf(proj_name, sizeof(proj_name), "%s",
+                     G_projection_name(PROJECTION_LL));
+            snprintf(proj_out, sizeof(proj_out), "ll");
             break;
         }
     case PROJECTION_OTHER:
@@ -220,9 +223,10 @@ int main(int argc, char *argv[])
                           0))
                     sph_check = ask_datum(datum, dat_ellps, dat_params);
                 else {
-                    sprintf(datum, lbuf);
-                    sprintf(dat_params, lbufa);
-                    sprintf(dat_ellps, G_datum_ellipsoid(i));
+                    snprintf(datum, sizeof(datum), lbuf);
+                    snprintf(dat_params, sizeof(dat_params), lbufa);
+                    snprintf(dat_ellps, sizeof(dat_ellps),
+                             G_datum_ellipsoid(i));
                     sph_check = 1;
                     G_message(_("The datum information has not been changed"));
                 }
@@ -244,7 +248,7 @@ int main(int argc, char *argv[])
         paramkey = strtok(dat_params, "=");
         paramvalue = dat_params + strlen(paramkey) + 1;
         G_set_key_value(paramkey, paramvalue, out_proj_keys);
-        sprintf(spheroid, "%s", dat_ellps);
+        snprintf(spheroid, sizeof(spheroid), "%s", dat_ellps);
     }
     else {
 
@@ -255,18 +259,18 @@ int main(int argc, char *argv[])
             if (G_strcasecmp(proj_out, "ALSK") == 0 ||
                 G_strcasecmp(proj_out, "GS48") == 0 ||
                 G_strcasecmp(proj_out, "GS50") == 0) {
-                sprintf(spheroid, "%s", "clark66");
+                snprintf(spheroid, sizeof(spheroid), "%s", "clark66");
                 G_set_key_value("ellps", spheroid, out_proj_keys);
                 sph_check = 1;
             }
             else if (G_strcasecmp(proj_out, "LABRD") == 0 ||
                      G_strcasecmp(proj_out, "NZMG") == 0) {
-                sprintf(spheroid, "%s", "international");
+                snprintf(spheroid, sizeof(spheroid), "%s", "international");
                 G_set_key_value("ellps", spheroid, out_proj_keys);
                 sph_check = 1;
             }
             else if (G_strcasecmp(proj_out, "SOMERC") == 0) {
-                sprintf(spheroid, "%s", "bessel");
+                snprintf(spheroid, sizeof(spheroid), "%s", "bessel");
                 G_set_key_value("ellps", spheroid, out_proj_keys);
                 sph_check = 1;
             }
@@ -345,7 +349,7 @@ write_file:
      **  written out once it is opened for write
      */
     if (exist) {
-        sprintf(buff, "%s~", path);
+        snprintf(buff, sizeof(buff), "%s~", path);
         G_rename_file(path, buff);
     }
     if (Out_proj == 0)
@@ -358,7 +362,7 @@ write_file:
         for (i = 0; i < strlen(buffb); i++)
             if (buffb[i] == ' ')
                 buffb[i] = '\t';
-        sprintf(cmnd2, "%s\t\n", buffb);
+        snprintf(cmnd2, sizeof(cmnd2), "%s\t\n", buffb);
         for (i = 0; i < strlen(cmnd2); i++) {
             j = k = 0;
             if (cmnd2[i] == '+') {
@@ -380,17 +384,17 @@ write_file:
         if (sph_check != 2) {
             G_set_key_value("proj", proj_out, out_proj_keys);
             G_set_key_value("ellps", spheroid, out_proj_keys);
-            sprintf(tmp_buff, "%.10f", aa);
+            snprintf(tmp_buff, sizeof(tmp_buff), "%.10f", aa);
             G_set_key_value("a", tmp_buff, out_proj_keys);
-            sprintf(tmp_buff, "%.10f", e2);
+            snprintf(tmp_buff, sizeof(tmp_buff), "%.10f", e2);
             G_set_key_value("es", tmp_buff, out_proj_keys);
-            sprintf(tmp_buff, "%.10f", f);
+            snprintf(tmp_buff, sizeof(tmp_buff), "%.10f", f);
             G_set_key_value("f", tmp_buff, out_proj_keys);
         }
         else {
             G_set_key_value("proj", proj_out, out_proj_keys);
             /* G_set_key_value ("ellps", "sphere", out_proj_keys); */
-            sprintf(tmp_buff, "%.10f", radius);
+            snprintf(tmp_buff, sizeof(tmp_buff), "%.10f", radius);
             G_set_key_value("a", tmp_buff, out_proj_keys);
             G_set_key_value("es", "0.0", out_proj_keys);
             G_set_key_value("f", "0.0", out_proj_keys);
@@ -420,7 +424,7 @@ write_file:
 
                     while (!get_LL_stuff(parm, desc, 1, &val))
                         ;
-                    sprintf(tmp_buff, "%.10f", val);
+                    snprintf(tmp_buff, sizeof(tmp_buff), "%.10f", val);
                     G_set_key_value(desc->key, tmp_buff, out_proj_keys);
                 }
                 else if (G_strcasecmp(desc->type, "lon") == 0) {
@@ -428,7 +432,7 @@ write_file:
 
                     while (!get_LL_stuff(parm, desc, 0, &val))
                         ;
-                    sprintf(tmp_buff, "%.10f", val);
+                    snprintf(tmp_buff, sizeof(tmp_buff), "%.10f", val);
                     G_set_key_value(desc->key, tmp_buff, out_proj_keys);
                 }
                 else if (G_strcasecmp(desc->type, "float") == 0) {
@@ -436,7 +440,7 @@ write_file:
 
                     while (!get_double(parm, desc, &val))
                         ;
-                    sprintf(tmp_buff, "%.10f", val);
+                    snprintf(tmp_buff, sizeof(tmp_buff), "%.10f", val);
                     G_set_key_value(desc->key, tmp_buff, out_proj_keys);
                 }
                 else if (G_strcasecmp(desc->type, "int") == 0) {
@@ -444,7 +448,7 @@ write_file:
 
                     while (!get_int(parm, desc, &val))
                         ;
-                    sprintf(tmp_buff, "%d", val);
+                    snprintf(tmp_buff, sizeof(tmp_buff), "%d", val);
                     G_set_key_value(desc->key, tmp_buff, out_proj_keys);
                 }
                 else if (G_strcasecmp(desc->type, "zone") == 0) {
@@ -477,7 +481,7 @@ write_file:
                     while (!get_zone())
                         ;
 
-                    sprintf(tmp_buff, "%d", zone);
+                    snprintf(tmp_buff, sizeof(tmp_buff), "%d", zone);
                     G_set_key_value("zone", tmp_buff, out_proj_keys);
                     cellhd.zone = zone;
                 }
@@ -488,11 +492,12 @@ write_file:
                 if (G_strcasecmp(desc->type, "float") == 0 ||
                     G_strcasecmp(desc->type, "lat") == 0 ||
                     G_strcasecmp(desc->type, "lon") == 0) {
-                    sprintf(tmp_buff, "%.10f", parm->deflt);
+                    snprintf(tmp_buff, sizeof(tmp_buff), "%.10f", parm->deflt);
                     G_set_key_value(desc->key, tmp_buff, out_proj_keys);
                 }
                 else if (G_strcasecmp(desc->type, "int") == 0) {
-                    sprintf(tmp_buff, "%d", (int)parm->deflt);
+                    snprintf(tmp_buff, sizeof(tmp_buff), "%d",
+                             (int)parm->deflt);
                     G_set_key_value(desc->key, tmp_buff, out_proj_keys);
                 }
             }
@@ -518,7 +523,7 @@ write_units:
      ** so if units file is here, remove it.
      */
     if (access(path, 0) == 0) {
-        sprintf(buff, "%s~", path);
+        snprintf(buff, sizeof(buff), "%s~", path);
         G_rename_file(path, buff);
     }
     if (Out_proj == 0)
@@ -604,7 +609,7 @@ write_units:
 #endif
                         G_set_key_value("unit", unit->unit, in_unit_keys);
                         G_set_key_value("units", unit->units, in_unit_keys);
-                        sprintf(buffb, "%.10f", unit->fact);
+                        snprintf(buffb, sizeof(buffb), "%.10f", unit->fact);
                         G_set_key_value("meters", buffb, in_unit_keys);
                     }
                     else {
@@ -630,7 +635,7 @@ write_units:
                         }
                         G_set_key_value("unit", answer1, in_unit_keys);
                         G_set_key_value("units", answer, in_unit_keys);
-                        sprintf(buffb, "%.10f", unit_fact);
+                        snprintf(buffb, sizeof(buffb), "%.10f", unit_fact);
                         G_set_key_value("meters", buffb, in_unit_keys);
                     }
                 }

@@ -20,7 +20,7 @@ pseudo-topology (boundaries constructed from polygons) is written.
 The following rules apply to the vector data:
 
 - Boundaries should not cross each other (i.e., boundaries which would
-  cross must be split at their intersection to form distict boundaries).
+  cross must be split at their intersection to form distinct boundaries).
   On the contrary, lines can cross each other, e.g. bridges over rivers.
 - Lines and boundaries share nodes only if their endpoints are identical.
   Lines or boundaries can be forced to share a common node by snapping

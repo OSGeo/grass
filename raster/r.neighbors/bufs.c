@@ -9,7 +9,6 @@
    last row read will be in the last i/o buf
 
  */
-
 int allocate_bufs(void)
 {
     int i, t;

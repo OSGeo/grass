@@ -207,7 +207,7 @@ void gk_follow_frames(Viewnode *view, int numsteps, Keylist *keys, int step,
             GS_set_fov((int)v->fields[KF_FOV]);
         }
 
-        /* Initilaize lights before drawing */
+        /* Initialize lights before drawing */
         num = 1;
         GS_getlight_position(num, &x, &y, &z, &w);
         GS_setlight_position(num, x, y, z, w);
@@ -561,8 +561,8 @@ double lin_interp(float dt, float val1, float val2)
 
    \return interval value
  */
-double get_2key_neighbors(int nvk, float time, float range UNUSED,
-                          int loop UNUSED, Keylist *karray[], Keylist **km1,
+double get_2key_neighbors(int nvk, float time, float range G_UNUSED,
+                          int loop G_UNUSED, Keylist *karray[], Keylist **km1,
                           Keylist **kp1)
 {
     int i;
@@ -600,13 +600,13 @@ double get_2key_neighbors(int nvk, float time, float range UNUSED,
    Here we use linear interpolation. Loop variable isn't used, but left
    in for use in possible "linear interp with smoothing" version.
 
-   \param kesy keyframe list
+   \param keys keyframe list
    \param keysteps step value
    \param newsteps new step value
    \param loop loop indicator
 
-   \param pointer to viewnode struct
-   \param NULL on failure
+   \return pointer to viewnode struct
+   \return NULL on failure
  */
 Viewnode *gk_make_linear_framesfromkeys(Keylist *keys, int keysteps,
                                         int newsteps, int loop)

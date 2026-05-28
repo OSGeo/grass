@@ -73,7 +73,7 @@ from gui_core.wrap import (
 )
 from location_wizard.dialogs import SelectTransformDialog
 
-from grass.exceptions import OpenError
+from grass.exceptions import OpenError, ScriptError
 from grass.grassdb.checks import location_exists
 from grass.script import core as grass
 from grass.script import decode
@@ -197,7 +197,11 @@ class DatabasePage(TitledPage):
         self.bbrowse = self.MakeButton(_("Change"))
 
         # text controls
-        self.tgisdbase = self.MakeLabel(grassdatabase)
+        # Show long paths with middle ellipsis and full value in tooltip
+        self.tgisdbase = self.MakeLabel(
+            text=grassdatabase, style=wx.ST_ELLIPSIZE_MIDDLE, tooltip=grassdatabase
+        )
+        self.tgisdbase.SetMaxSize((400, -1))
         self.tlocation = self.MakeTextCtrl("newProject")
         self.tlocation.SetFocus()
 
@@ -274,7 +278,7 @@ class DatabasePage(TitledPage):
         )
         self.sizer.Add(
             self.tgisdbase,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND,
             border=5,
             pos=(6, 1),
         )
@@ -332,6 +336,7 @@ class DatabasePage(TitledPage):
         if dlg.ShowModal() == wx.ID_OK:
             self.grassdatabase = dlg.GetPath()
             self.tgisdbase.SetLabel(self.grassdatabase)
+            self.tgisdbase.SetToolTip(self.grassdatabase)
 
         dlg.Destroy()
 
@@ -618,7 +623,7 @@ class ProjectionsPage(TitledPage):
             self.proj, self.projdesc = self.projlist.Search(
                 index=[0, 1], pattern=search_str
             )
-        except:
+        except (IndexError, ValueError):
             self.proj = self.projdesc = ""
 
         event.Skip()
@@ -902,7 +907,7 @@ class ProjParamsPage(TitledPage):
             self.p4projparams = ""
             for param in self.pparam.values():
                 if param["type"] == "bool":
-                    if param["value"] is False:
+                    if param["value"] == 0 or param["value"] is False:
                         continue
                     self.p4projparams += " +" + param["proj4"]
                 elif param["value"] is None:
@@ -1063,9 +1068,9 @@ class DatumPage(TitledPage):
         self.searchb.ShowCancelButton(True)
 
         # create list control for datum/elipsoid list
-        data = []
-        for key in self.parent.datums.keys():
-            data.append([key, self.parent.datums[key][0], self.parent.datums[key][1]])
+        data = [
+            [key, datum[0], datum[1]] for (key, datum) in self.parent.datums.items()
+        ]
         self.datumlist = ItemList(
             self, data=data, columns=[_("Code"), _("Ellipsoid"), _("Description")]
         )
@@ -1188,15 +1193,15 @@ class DatumPage(TitledPage):
             self.datumparams = self.parent.datums[self.datum][2]
             try:
                 self.datumparams.remove("dx=0.0")
-            except:
+            except ValueError:
                 pass
             try:
                 self.datumparams.remove("dy=0.0")
-            except:
+            except ValueError:
                 pass
             try:
                 self.datumparams.remove("dz=0.0")
-            except:
+            except ValueError:
                 pass
 
             nextButton.Enable(True)
@@ -1211,7 +1216,7 @@ class DatumPage(TitledPage):
             self.datum, self.ellipsoid, self.datumdesc = self.datumlist.Search(
                 index=[0, 1, 2], pattern=search_str
             )
-        except:
+        except (IndexError, ValueError):
             self.datum = self.datumdesc = self.ellipsoid = ""
 
         event.Skip()
@@ -1262,10 +1267,10 @@ class EllipsePage(TitledPage):
         )
 
         # create list control for ellipse list
-        data = []
         # extract code, desc
-        for key in self.parent.ellipsoids.keys():
-            data.append([key, self.parent.ellipsoids[key][0]])
+        data = [
+            [key, ellipsoid[0]] for (key, ellipsoid) in self.parent.ellipsoids.items()
+        ]
 
         self.ellipselist = ItemList(
             self, data=data, columns=[_("Code"), _("Description")]
@@ -1392,7 +1397,7 @@ class EllipsePage(TitledPage):
                 self.ellipseparams = self.parent.ellipsoids[self.ellipse][1]
             else:
                 self.ellipseparams = self.parent.planetary_ellipsoids[self.ellipse][1]
-        except:
+        except (IndexError, ValueError, KeyError):
             self.ellipse = self.ellipsedesc = self.ellipseparams = ""
 
         event.Skip()
@@ -1479,7 +1484,7 @@ class GeoreferencedFilePage(TitledPage):
         event.Skip()
 
     def OnPageChanging(self, event: WizardEvent) -> None:
-        if event.GetDirection() and not os.path.isfile(self.georeffile):
+        if event.GetDirection() and not Path(self.georeffile).is_file():
             event.Veto()
         self.GetNext().SetPrev(self)
 
@@ -1487,7 +1492,7 @@ class GeoreferencedFilePage(TitledPage):
         """File changed"""
         self.georeffile = event.GetString()
         nextButton = wx.FindWindowById(wx.ID_FORWARD)
-        if len(self.georeffile) > 0 and os.path.isfile(self.georeffile):
+        if len(self.georeffile) > 0 and Path(self.georeffile).is_file():
             if not nextButton.IsEnabled():
                 nextButton.Enable(True)
         elif nextButton.IsEnabled():
@@ -1662,7 +1667,7 @@ class EPSGPage(TitledPage):
         if event.GetDirection():
             if not self.epsgcode:
                 event.Veto()
-                return
+                return None
             # check for datum transforms
             ret = RunCommand(
                 "g.proj", read=True, epsg=self.epsgcode, datum_trans="-1", flags="t"
@@ -1753,10 +1758,11 @@ class EPSGPage(TitledPage):
             self.epsglist.Populate([], update=True)
             return
 
-        data = []
-        for code, val in self.epsgCodeDict.items():
-            if code is not None:
-                data.append((code, val[0], val[1]))
+        data = [
+            (code, val[0], val[1])
+            for code, val in self.epsgCodeDict.items()
+            if code is not None
+        ]
 
         self.epsglist.Populate(data, update=True)
 
@@ -1881,7 +1887,7 @@ class IAUPage(TitledPage):
         if event.GetDirection():
             if not self.epsgcode:
                 event.Veto()
-                return
+                return None
             # check for datum transforms
             ret = RunCommand(
                 "g.proj",
@@ -1915,7 +1921,8 @@ class IAUPage(TitledPage):
             # convert them:
             ret, projlabel, err = RunCommand(
                 "g.proj",
-                flags="jft",
+                flags="ftp",
+                format="proj4",
                 proj4=self.epsgparams,
                 datum_trans=self.parent.datum_trans,
                 getErrorMsg=True,
@@ -1934,7 +1941,7 @@ class IAUPage(TitledPage):
         self.epsgcode = event.GetString()
         try:
             self.epsgcode = int(self.epsgcode)
-        except:
+        except ValueError:
             self.epsgcode = None
 
         nextButton = wx.FindWindowById(wx.ID_FORWARD)
@@ -2025,10 +2032,11 @@ class IAUPage(TitledPage):
             self.epsglist.Populate([], update=True)
             return
 
-        data = []
-        for code, val in self.epsgCodeDict.items():
-            if code is not None:
-                data.append((code, val[0], val[1]))
+        data = [
+            (code, val[0], val[1])
+            for code, val in self.epsgCodeDict.items()
+            if code is not None
+        ]
 
         self.epsglist.Populate(data, update=True)
 
@@ -2087,7 +2095,7 @@ class CustomPage(TitledPage):
 
             if self.customstring.find("+datum=") < 0:
                 self.GetNext().SetPrev(self)
-                return
+                return None
 
             # check for datum transforms
             # FIXME: -t flag is a hack-around for trac bug #1849
@@ -2107,7 +2115,7 @@ class CustomPage(TitledPage):
                     style=wx.OK | wx.ICON_ERROR | wx.CENTRE,
                 )
                 event.Veto()
-                return
+                return None
 
             if out:
                 dtrans = ""
@@ -2131,7 +2139,8 @@ class CustomPage(TitledPage):
                 # convert them:
                 ret, projlabel, err = RunCommand(
                     "g.proj",
-                    flags="jft",
+                    flags="ftp",
+                    format="proj4",
                     proj4=self.customstring,
                     datum_trans=dtrans,
                     getErrorMsg=True,
@@ -2287,10 +2296,7 @@ class SummaryPage(TitledPage):
 
         # print coordsys,proj4string
         if coordsys in {"proj", "epsg", "iau", "wkt", "file"}:
-            extra_opts = {}
-            extra_opts["project"] = "project"
-            extra_opts["getErrorMsg"] = True
-            extra_opts["read"] = True
+            extra_opts = {"project": "project", "getErrorMsg": True, "read": True}
 
             if coordsys == "proj":
                 if len(datum) > 0:
@@ -2298,7 +2304,11 @@ class SummaryPage(TitledPage):
                     extra_opts["datum_trans"] = dtrans
 
                 ret, projlabel, err = RunCommand(
-                    "g.proj", flags="jf", proj4=proj4string, **extra_opts
+                    "g.proj",
+                    flags="fp",
+                    format="proj4",
+                    proj4=proj4string,
+                    **extra_opts,
                 )
             elif coordsys == "iau":
                 if len(datum) > 0:
@@ -2306,12 +2316,17 @@ class SummaryPage(TitledPage):
                     extra_opts["datum_trans"] = dtrans
 
                 ret, projlabel, err = RunCommand(
-                    "g.proj", flags="jf", proj4=iauproj4string, **extra_opts
+                    "g.proj",
+                    flags="fp",
+                    format="proj4",
+                    proj4=iauproj4string,
+                    **extra_opts,
                 )
             elif coordsys == "epsg":
                 ret, projlabel, err = RunCommand(
                     "g.proj",
-                    flags="jft",
+                    flags="ftp",
+                    format="proj4",
                     epsg=epsgcode,
                     datum_trans=dtrans,
                     **extra_opts,
@@ -2319,14 +2334,16 @@ class SummaryPage(TitledPage):
             elif coordsys == "file":
                 ret, projlabel, err = RunCommand(
                     "g.proj",
-                    flags="jft",
+                    flags="ftp",
+                    format="proj4",
                     georef=self.parent.filepage.georeffile,
                     **extra_opts,
                 )
             elif coordsys == "wkt":
                 ret, projlabel, err = RunCommand(
                     "g.proj",
-                    flags="jft",
+                    flags="ftp",
+                    format="proj4",
                     wkt="-",
                     stdin=self.parent.wktpage.wktstring,
                     **extra_opts,
@@ -2490,6 +2507,14 @@ class LocationWizard(wx.Object):
         self.wizard.FitToPage(self.datumpage)
         size = self.wizard.GetPageSize()
         self.wizard.SetPageSize((size[0], size[1] + 75))
+        # Allow user to resize while keeping sensible minimum size
+        cur_size = self.wizard.GetSize()
+        try:
+            # Set size hints (min size) to current size
+            self.wizard.SetSizeHints(cur_size[0], cur_size[1])
+        except Exception:
+            # Fallback for environments not supporting SetSizeHints
+            self.wizard.SetMinSize(cur_size)
 
         # new location created?
         self.location = None
@@ -2541,89 +2566,86 @@ class LocationWizard(wx.Object):
         """Get georeferencing information from tables in $GISBASE/etc/proj"""
 
         # read projection and parameters
-        f = open(os.path.join(globalvar.ETCDIR, "proj", "parms.table"))
         self.projections = {}
         self.projdesc = {}
-        for line in f:
-            line = line.strip()
-            try:
-                proj, projdesc, params = line.split(":")
-                paramslist = params.split(";")
-                plist = []
-                for p in paramslist:
-                    if p == "":
-                        continue
-                    p1, pdefault = p.split(",")
-                    pterm, pask = p1.split("=")
-                    p = [pterm.strip(), pask.strip(), pdefault.strip()]
-                    plist.append(p)
-                self.projections[proj.lower().strip()] = (projdesc.strip(), plist)
-                self.projdesc[proj.lower().strip()] = projdesc.strip()
-            except:
-                continue
-        f.close()
+        with open(os.path.join(globalvar.ETCDIR, "proj", "parms.table")) as f:
+            for line in f:
+                line = line.strip()
+                try:
+                    proj, projdesc, params = line.split(":")
+                    paramslist = params.split(";")
+                    plist = []
+                    for p in paramslist:
+                        if p == "":
+                            continue
+                        p1, pdefault = p.split(",")
+                        pterm, pask = p1.split("=")
+                        p = [pterm.strip(), pask.strip(), pdefault.strip()]
+                        plist.append(p)
+                    self.projections[proj.lower().strip()] = (projdesc.strip(), plist)
+                    self.projdesc[proj.lower().strip()] = projdesc.strip()
+                except (ValueError, IndexError):
+                    continue
 
         # read datum definitions
-        f = open(os.path.join(globalvar.ETCDIR, "proj", "datum.table"))
         self.datums = {}
         paramslist = []
-        for line in f:
-            line = line.expandtabs(1)
-            line = line.strip()
-            if line == "" or line[0] == "#":
-                continue
-            datum, info = line.split(" ", 1)
-            info = info.strip()
-            datumdesc, params = info.split(" ", 1)
-            datumdesc = datumdesc.strip('"')
-            paramlist = params.split()
-            ellipsoid = paramlist.pop(0)
-            self.datums[datum] = (ellipsoid, datumdesc.replace("_", " "), paramlist)
-        f.close()
+        with open(os.path.join(globalvar.ETCDIR, "proj", "datum.table")) as f:
+            for line in f:
+                line = line.expandtabs(1)
+                line = line.strip()
+                if line == "" or line[0] == "#":
+                    continue
+                datum, info = line.split(" ", 1)
+                info = info.strip()
+                datumdesc, params = info.split(" ", 1)
+                datumdesc = datumdesc.strip('"')
+                paramlist = params.split()
+                ellipsoid = paramlist.pop(0)
+                self.datums[datum] = (ellipsoid, datumdesc.replace("_", " "), paramlist)
 
         # read Earth-based ellipsiod definitions
-        f = open(os.path.join(globalvar.ETCDIR, "proj", "ellipse.table"))
         self.ellipsoids = {}
-        for line in f:
-            line = line.expandtabs(1)
-            line = line.strip()
-            if line == "" or line[0] == "#":
-                continue
-            ellipse, rest = line.split(" ", 1)
-            rest = rest.strip('" ')
-            desc, params = rest.split('"', 1)
-            desc = desc.strip('" ')
-            paramslist = params.split()
-            self.ellipsoids[ellipse] = (desc, paramslist)
-        f.close()
+        with open(os.path.join(globalvar.ETCDIR, "proj", "ellipse.table")) as f:
+            for line in f:
+                line = line.expandtabs(1)
+                line = line.strip()
+                if line == "" or line[0] == "#":
+                    continue
+                ellipse, rest = line.split(" ", 1)
+                rest = rest.strip('" ')
+                desc, params = rest.split('"', 1)
+                desc = desc.strip('" ')
+                paramslist = params.split()
+                self.ellipsoids[ellipse] = (desc, paramslist)
 
         # read Planetary ellipsiod definitions
-        f = open(os.path.join(globalvar.ETCDIR, "proj", "ellipse.table.solar.system"))
         self.planetary_ellipsoids = {}
-        for line in f:
-            line = line.expandtabs(1)
-            line = line.strip()
-            if line == "" or line[0] == "#":
-                continue
-            ellipse, rest = line.split(" ", 1)
-            rest = rest.strip('" ')
-            desc, params = rest.split('"', 1)
-            desc = desc.strip('" ')
-            paramslist = params.split()
-            self.planetary_ellipsoids[ellipse] = (desc, paramslist)
-        f.close()
+        with open(
+            os.path.join(globalvar.ETCDIR, "proj", "ellipse.table.solar.system")
+        ) as f:
+            for line in f:
+                line = line.expandtabs(1)
+                line = line.strip()
+                if line == "" or line[0] == "#":
+                    continue
+                ellipse, rest = line.split(" ", 1)
+                rest = rest.strip('" ')
+                desc, params = rest.split('"', 1)
+                desc = desc.strip('" ')
+                paramslist = params.split()
+                self.planetary_ellipsoids[ellipse] = (desc, paramslist)
 
         # read projection parameter description and parsing table
-        f = open(os.path.join(globalvar.ETCDIR, "proj", "desc.table"))
         self.paramdesc = {}
-        for line in f:
-            line = line.strip()
-            try:
-                pparam, datatype, proj4term, desc = line.split(":")
-                self.paramdesc[pparam] = (datatype, proj4term, desc)
-            except:
-                continue
-        f.close()
+        with open(os.path.join(globalvar.ETCDIR, "proj", "desc.table")) as f:
+            for line in f:
+                line = line.strip()
+                try:
+                    pparam, datatype, proj4term, desc = line.split(":")
+                    self.paramdesc[pparam] = (datatype, proj4term, desc)
+                except ValueError:
+                    continue
 
     def OnWizFinished(self):
         """Wizard finished, create new location
@@ -2635,7 +2657,7 @@ class LocationWizard(wx.Object):
         location = self.startpage.location
 
         # location already exists?
-        if os.path.isdir(os.path.join(database, location)):
+        if Path(database, location).is_dir():
             GError(
                 parent=self.wizard,
                 message="%s <%s>: %s"
@@ -2651,10 +2673,10 @@ class LocationWizard(wx.Object):
         current_gdb = decode(grass.gisenv()["GISDBASE"])
         if current_gdb != database:
             # change to new GISDbase or create new one
-            if not os.path.isdir(database):
+            if not Path(database).is_dir():
                 # create new directory
                 try:
-                    os.mkdir(database)
+                    Path(database).mkdir()
                 except OSError as error:
                     GError(
                         parent=self.wizard,
@@ -2721,8 +2743,9 @@ class LocationWizard(wx.Object):
                     desc=self.startpage.locTitle,
                 )
             elif coordsys == "file":
-                if not self.filepage.georeffile or not os.path.isfile(
-                    self.filepage.georeffile
+                if (
+                    not self.filepage.georeffile
+                    or not Path(self.filepage.georeffile).is_file()
                 ):
                     return _("File <%s> not found.") % self.filepage.georeffile
 
@@ -2743,7 +2766,7 @@ class LocationWizard(wx.Object):
                     desc=self.startpage.locTitle,
                 )
 
-        except grass.ScriptError as e:
+        except ScriptError as e:
             return e.value
 
         return None
@@ -2785,9 +2808,19 @@ class WizardWithHelpButton(Wizard):
         if globalvar.wxPythonPhoenix:
             Wizard.__init__(self)
             self.SetExtraStyle(wx.adv.WIZARD_EX_HELPBUTTON)
-            self.Create(parent=parent, id=id, title=title)
+            self.Create(
+                parent=parent,
+                id=id,
+                title=title,
+                style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER | wx.MAXIMIZE_BOX,
+            )
         else:
             pre = wiz.PreWizard()
             pre.SetExtraStyle(wx.wizard.WIZARD_EX_HELPBUTTON)
-            pre.Create(parent=parent, id=id, title=title)
+            pre.Create(
+                parent=parent,
+                id=id,
+                title=title,
+                style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER | wx.MAXIMIZE_BOX,
+            )
             self.PostCreate(pre)

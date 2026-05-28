@@ -35,7 +35,7 @@ static struct state *st = &state;
    Initializes the distance calculations. It is used both for the
    planimetric and latitude-longitude projections.
 
-   \return 0 if projection has no metrix (ie. imagery)
+   \return 0 if projection has no metrics (ie. imagery)
    \return 1 if projection is planimetric
    \return 2 if projection is latitude-longitude
  */
@@ -67,8 +67,8 @@ int G_begin_distance_calculations(void)
    latitude-longitude, this distance is measured along the
    geodesic. Two routines perform geodesic distance calculations.
 
-   \param e1,n1 east-north coordinates of first point
-   \param e2,n2 east-north coordinates of second point
+   \param[in] e1,n1 east-north coordinates of first point
+   \param[in] e2,n2 east-north coordinates of second point
 
    \return distance
  */

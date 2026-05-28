@@ -67,6 +67,7 @@
 
 import os
 import sys
+from pathlib import Path
 
 from grass.script.core import (
     fatal,
@@ -109,7 +110,7 @@ def read_monitor_file(monitor, ftype="env"):
 
 def check_monitor_file(monitor, ftype="env"):
     mfile = parse_command("d.mon", flags="g").get(ftype, None)
-    if mfile is None or not os.path.isfile(mfile):
+    if mfile is None or not Path(mfile).is_file():
         fatal(_("Unable to get monitor info"))
 
     return mfile

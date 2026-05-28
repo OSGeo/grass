@@ -75,7 +75,6 @@ static int _datetime_compare(const DateTime *, const DateTime *);
  *  \param result
  *  \return int
  */
-
 int datetime_difference(const DateTime *a, const DateTime *b, DateTime *result)
 {
     DateTime tb, ta, *early, *late;

@@ -28,14 +28,16 @@
  *  \param cache The type of the caching
  *  \param region The region of the map
  *  \param type The type of the map (FCELL_TYPE, or DCELL_TYPE)
+ *  \param compression
  *  \param doLzw Use the LZW compression algorithm
- *  \param doRle Use the Run-Length-Encoding algroithm for compression
+ *  \param doRle Use the Run-Length-Encoding algorithm for compression
  *  \param precision The precision used for the mantissa (0 - 52) or
- * RASTER3D_MAX_PRECISION \param tileX The number of cells in X direction of a
- * tile \param tileY The number of cells in Y direction of a tile \param tileZ
- * The number of cells in Z direction of a tile \return void *
+ *                   RASTER3D_MAX_PRECISION
+ *  \param tileX The number of cells in X direction of a tile
+ *  \param tileY The number of cells in Y direction of a tile
+ *  \param tileZ The number of cells in Z direction of a tile
+ *  \return void *
  */
-
 void *Rast3d_open_new_param(const char *name, int typeIntern, int cache,
                             RASTER3D_Region *region, int type, int compression,
                             int precision, int tileX, int tileY, int tileZ)
@@ -90,7 +92,6 @@ void *Rast3d_open_new_param(const char *name, int typeIntern, int cache,
  *  \param maxSize The maximum size of a tile in kilo bytes
  *  \return void *
  */
-
 void *Rast3d_open_new_opt_tile_size(const char *name, int cache,
                                     RASTER3D_Region *region, int type,
                                     int maxSize)

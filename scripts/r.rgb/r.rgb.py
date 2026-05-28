@@ -57,13 +57,13 @@ def main():
     expressions = []
     maps = []
     if red:
-        expressions.append("%s = r#${input}" % red)
+        expressions.append("%s = r#${input}" % red)  # noqa: RUF027
         maps.append(red)
     if green:
-        expressions.append("%s = g#${input}" % green)
+        expressions.append("%s = g#${input}" % green)  # noqa: RUF027
         maps.append(green)
     if blue:
-        expressions.append("%s = b#${input}" % blue)
+        expressions.append("%s = b#${input}" % blue)  # noqa: RUF027
         maps.append(blue)
     expr = ";".join(expressions)
     gs.mapcalc(expr, input=input)

@@ -22,7 +22,7 @@
 
    \param Map pointer to Map_info
    \param List list of selected lines
-   \param point_start_end staring and ending point
+   \param x1,y1,x2,y2 staring and ending point
    \param start starting value
    \param step step value
 

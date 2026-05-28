@@ -61,7 +61,7 @@ class DebugMsg:
         :param args: formatting params
         """
         # self.SetLevel()
-        if self.debuglevel > 0 and level > 0 and level <= self.debuglevel:
+        if 0 < level <= self.debuglevel:
             if args:
                 sys.stderr.write(
                     "GUI D%d/%d: " % (level, self.debuglevel)

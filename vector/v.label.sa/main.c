@@ -67,7 +67,6 @@ int main(int argc, char *argv[])
     p.font->required = YES;
     p.font->description = _("Name of TrueType font (as listed in the fontcap)");
     p.font->guisection = _("Font");
-    p.font->gisprompt = "font";
 
     p.size = G_define_option();
     p.size->key = "size";

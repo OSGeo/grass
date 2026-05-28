@@ -39,14 +39,14 @@ void Vect__init_head(struct Map_info *Map)
     Vect_set_date(Map, "");
 
     /* user name */
-    sprintf(buf, "%s", G_whoami());
+    snprintf(buf, sizeof(buf), "%s", G_whoami());
     Vect_set_person(Map, buf);
 
     /* map name */
     Vect_set_map_name(Map, "");
 
     /* source date */
-    sprintf(buf, "%s", G_date());
+    snprintf(buf, sizeof(buf), "%s", G_date());
     Vect_set_map_date(Map, buf);
 
     /* comments */

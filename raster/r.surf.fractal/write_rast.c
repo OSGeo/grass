@@ -51,7 +51,7 @@ int write_rast(double *data[2], /* Array holding complex data.          */
     /*------------------------------------------------------------------*/
 
     if (Steps != step)
-        sprintf(file_name, "%s.%d", rast_out_name, step);
+        snprintf(file_name, sizeof(file_name), "%s.%d", rast_out_name, step);
     else
         strcpy(file_name, rast_out_name);
 

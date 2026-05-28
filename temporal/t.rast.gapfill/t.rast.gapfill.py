@@ -42,16 +42,9 @@
 # % description: A numerical suffix separated by an underscore will be attached to create a unique identifier
 # % required: yes
 # % multiple: no
-# % gisprompt:
 # %end
 
-# %option
-# % key: suffix
-# % type: string
-# % description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
-# % answer: gran
-# % required: no
-# % multiple: no
+# %option G_OPT_T_SUFFIX
 # %end
 
 # %option
@@ -151,10 +144,7 @@ def main():
 
         if len(map_.get_follows()) > 1:
             gs.warning(
-                _(
-                    "More than one predecessor of the gap found. "
-                    "Using the first found."
-                )
+                _("More than one predecessor of the gap found. Using the first found.")
             )
 
     # Interpolate the maps using parallel processing

@@ -24,7 +24,7 @@
    \param List list of features to be deleted
 
    \return number of deleted features
-   \return -1 on on error
+   \return -1 on error
  */
 int Vedit_delete_lines(struct Map_info *Map, struct ilist *List)
 {

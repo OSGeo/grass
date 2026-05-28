@@ -5,7 +5,7 @@
 /* TODO: replace with imagery lib I_compute_georef_equations() */
 
 static int floating_exception;
-static void catch (int);
+static void catch(int);
 static double determinant(double, double, double, double, double, double,
                           double, double, double);
 
@@ -35,7 +35,6 @@ static double determinant(double, double, double, double, double, double,
  *     | s2 s4 s5 |      | s2 s4 s5 |      | s2 s4 s5 |
  *
  */
-
 int I_compute_ref_equations(struct Ortho_Photo_Points *cp, double E12[3],
                             double N12[3], double E21[3], double N21[3])
 {
@@ -167,7 +166,7 @@ static double determinant(double a, double b, double c, double d, double e,
     return a * (e * i - f * h) - b * (d * i - f * g) + c * (d * h - e * g);
 }
 
-static void catch (int n)
+static void catch(int n)
 {
     floating_exception = 1;
     signal(n, catch);

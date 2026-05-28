@@ -192,7 +192,11 @@ int parse_args(int argc, char *argv[], struct globals *globals)
 
         for (bands = 0; group->answers[bands] != NULL; bands++) {
             /* strip @mapset, do not modify opt_in->answers */
-            strcpy(name, group->answers[bands]);
+            if (G_strlcpy(name, group->answers[bands], sizeof(name)) >=
+                sizeof(name)) {
+                G_fatal_error(_("Raster map name <%s> is too long"),
+                              group->answers[bands]);
+            }
             mapset = G_find_raster(name, "");
             if (!mapset)
                 G_fatal_error(_("Raster map <%s> not found"),

@@ -42,7 +42,6 @@
 # % description: A numerical suffix separated by an underscore will be attached to create a unique identifier
 # % required: no
 # % multiple: no
-# % gisprompt:
 # %end
 
 # %option G_OPT_M_DIR

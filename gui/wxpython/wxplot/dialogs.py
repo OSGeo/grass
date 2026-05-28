@@ -547,8 +547,6 @@ class HistRasterDialog(wx.Dialog):
             self.gselection.Enable()
             self.rselection.Disable()
             self.rselection.SetValue("")
-        else:
-            pass
 
     def OnRasterSelection(self, event):
         """Handler for selecting a single raster map"""
@@ -986,9 +984,7 @@ class OptDialog(wx.Dialog):
         gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
 
         row = 0
-        choicelist = []
-        for i in self.rasterList:
-            choicelist.append(str(i))
+        choicelist = [str(i) for i in self.rasterList]
 
         self.mapchoice = Choice(
             parent=self, id=wx.ID_ANY, size=(300, -1), choices=choicelist

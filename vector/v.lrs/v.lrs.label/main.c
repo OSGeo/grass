@@ -309,11 +309,11 @@ int main(int argc, char **argv)
         if (cat < 0)
             continue;
 
-        sprintf(buf,
-                "select start_map, end_map, start_mp, start_off, end_mp, "
-                "end_off, lid "
-                "from %s where lcat = %d;",
-                table_opt->answer, cat);
+        snprintf(buf, sizeof(buf),
+                 "select start_map, end_map, start_mp, start_off, end_mp, "
+                 "end_off, lid "
+                 "from %s where lcat = %d;",
+                 table_opt->answer, cat);
         G_debug(2, "  SQL: %s", buf);
         db_append_string(&stmt, buf);
 

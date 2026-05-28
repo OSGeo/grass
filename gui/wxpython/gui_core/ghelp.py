@@ -5,7 +5,6 @@
 
 Classes:
  - ghelp::AboutWindow
- - ghelp::HelpFrame
  - ghelp::HelpWindow
  - ghelp::HelpPanel
 
@@ -17,12 +16,17 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
+from __future__ import annotations
 import os
 import codecs
 import platform
-import re
 import textwrap
 import sys
+
+from pathlib import Path
+from html.parser import HTMLParser
+from urllib.parse import urljoin, urlparse
+
 import wx
 from wx.html import HtmlWindow
 from operator import itemgetter
@@ -58,7 +62,7 @@ from core.debug import Debug
 class AboutWindow(wx.Frame):
     """Create custom About Window"""
 
-    def __init__(self, parent, size=(770, 460), title=_("About GRASS GIS"), **kwargs):
+    def __init__(self, parent, size=(770, 460), title=_("About GRASS"), **kwargs):
         wx.Frame.__init__(
             self, parent=parent, id=wx.ID_ANY, title=title, size=size, **kwargs
         )
@@ -128,7 +132,7 @@ class AboutWindow(wx.Frame):
             logoBitmap, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER, border=20
         )
 
-        infoLabel = "GRASS GIS %s" % vInfo.get("version", _("unknown version"))
+        infoLabel = "GRASS %s" % vInfo.get("version", _("unknown version"))
         if "x86_64" in vInfo.get("build_platform", ""):
             infoLabel += " (64bit)"
         info = StaticText(parent=infoTxt, id=wx.ID_ANY, label=infoLabel + os.linesep)
@@ -273,10 +277,8 @@ class AboutWindow(wx.Frame):
     def _pageCopyright(self):
         """Copyright information"""
         copyfile = os.path.join(os.getenv("GISBASE"), "COPYING")
-        if os.path.exists(copyfile):
-            copyrightFile = open(copyfile)
-            copytext = copyrightFile.read()
-            copyrightFile.close()
+        if Path(copyfile).exists():
+            copytext = Path(copyfile).read_text()
         else:
             copytext = _("%s file missing") % "COPYING"
 
@@ -302,10 +304,9 @@ class AboutWindow(wx.Frame):
     def _pageLicense(self):
         """Licence about"""
         licfile = os.path.join(os.getenv("GISBASE"), "GPL.TXT")
-        if os.path.exists(licfile):
-            licenceFile = open(licfile)
-            license = "".join(licenceFile.readlines())
-            licenceFile.close()
+        if Path(licfile).exists():
+            with open(licfile) as licenceFile:
+                license = "".join(licenceFile.readlines())
         else:
             license = _("%s file missing") % "GPL.TXT"
         # put text into a scrolling panel
@@ -334,7 +335,7 @@ class AboutWindow(wx.Frame):
         except CalledModuleError as error:
             text = _(
                 "Unable to provide citation suggestion,"
-                " see GRASS GIS website instead."
+                " see GRASS website instead."
                 " The error was: {0}"
             ).format(error)
 
@@ -356,7 +357,7 @@ class AboutWindow(wx.Frame):
         """Credit about"""
         # credits
         authfile = os.path.join(os.getenv("GISBASE"), "AUTHORS")
-        if os.path.exists(authfile):
+        if Path(authfile).exists():
             with codecs.open(authfile, encoding="utf-8", mode="r") as authorsFile:
                 authors = "".join(authorsFile.readlines())
         else:
@@ -383,34 +384,32 @@ class AboutWindow(wx.Frame):
             contribfile = os.path.join(os.getenv("GISBASE"), "contributors_extra.csv")
         else:
             contribfile = os.path.join(os.getenv("GISBASE"), "contributors.csv")
-        if os.path.exists(contribfile):
-            contribFile = codecs.open(contribfile, encoding="utf-8", mode="r")
+        if Path(contribfile).exists():
             contribs = []
             errLines = []
-            for line in contribFile.readlines()[1:]:
-                line = line.rstrip("\n")
-                try:
+            with codecs.open(contribfile, encoding="utf-8", mode="r") as contribFile:
+                for line in contribFile.readlines()[1:]:
+                    line = line.rstrip("\n")
+                    try:
+                        if extra:
+                            name, email, country, rfc2_agreed = line.split(",")
+                        else:
+                            (
+                                cvs_id,
+                                name,
+                                email,
+                                country,
+                                osgeo_id,
+                                rfc2_agreed,
+                                orcid,
+                            ) = line.split(",")
+                    except ValueError:
+                        errLines.append(line)
+                        continue
                     if extra:
-                        name, email, country, rfc2_agreed = line.split(",")
+                        contribs.append((name, email, country))
                     else:
-                        (
-                            cvs_id,
-                            name,
-                            email,
-                            country,
-                            osgeo_id,
-                            rfc2_agreed,
-                            orcid,
-                        ) = line.split(",")
-                except ValueError:
-                    errLines.append(line)
-                    continue
-                if extra:
-                    contribs.append((name, email, country))
-                else:
-                    contribs.append((name, email, country, osgeo_id, orcid))
-
-            contribFile.close()
+                        contribs.append((name, email, country, osgeo_id, orcid))
 
             if errLines:
                 GError(
@@ -468,22 +467,21 @@ class AboutWindow(wx.Frame):
     def _pageTranslators(self):
         """Translators info"""
         translatorsfile = os.path.join(os.getenv("GISBASE"), "translators.csv")
-        if os.path.exists(translatorsfile):
-            translatorsFile = codecs.open(translatorsfile, encoding="utf-8", mode="r")
+        if Path(translatorsfile).exists():
             translators = {}
             errLines = []
-            for line in translatorsFile.readlines()[1:]:
-                line = line.rstrip("\n")
-                try:
-                    name, email, languages = line.split(",")
-                except ValueError:
-                    errLines.append(line)
-                    continue
-                for language in languages.split(" "):
-                    if language not in translators:
-                        translators[language] = []
-                    translators[language].append((name, email))
-            translatorsFile.close()
+            with codecs.open(translatorsfile, encoding="utf-8", mode="r") as fd:
+                for line in fd.readlines()[1:]:
+                    line = line.rstrip("\n")
+                    try:
+                        name, email, languages = line.split(",")
+                    except ValueError:
+                        errLines.append(line)
+                        continue
+                    for language in languages.split(" "):
+                        if language not in translators:
+                            translators[language] = []
+                        translators[language].append((name, email))
 
             if errLines:
                 GError(
@@ -540,7 +538,7 @@ class AboutWindow(wx.Frame):
                     flag = os.path.join(
                         globalvar.ICONDIR, "flags", "%s.png" % lang.lower()
                     )
-                    if os.path.exists(flag):
+                    if Path(flag).exists():
                         flagBitmap = wx.StaticBitmap(
                             translatorswin,
                             wx.ID_ANY,
@@ -649,11 +647,11 @@ class AboutWindow(wx.Frame):
         """Translation statistics info"""
         fname = "translation_status.json"
         statsfile = os.path.join(os.getenv("GISBASE"), fname)
-        if os.path.exists(statsfile):
-            statsFile = open(statsfile)
+        if Path(statsfile).exists():
             import json
 
-            jsStats = json.load(statsFile)
+            with open(statsfile) as statsFile:
+                jsStats = json.load(statsFile)
         else:
             jsStats = None
         self.statswin = ScrolledPanel(self.aboutNotebook)
@@ -686,57 +684,72 @@ class AboutWindow(wx.Frame):
         self.Close()
 
 
-class HelpFrame(wx.Dialog):
-    """GRASS Quickstart help window
+def extract_md_content(html_string, base_url):
+    """Extract only relevant part of the mkdocs generated html as string.
 
-    As a base class wx.Dialog is used, because of not working
-    close button with wx.Frame when dialog is called from wizard.
-    If parent is None, application TopLevelWindow is used (wxPython
-    standard behaviour).
-
-    Currently not used (was in location wizard before)
-    due to unsolved problems - window sometimes does not respond.
+    Relevant content is in a div with class="md-content".
     """
 
-    def __init__(self, parent, id, title, size, file):
-        wx.Dialog.__init__(
-            self,
-            parent=parent,
-            id=id,
-            title=title,
-            size=size,
-            style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER | wx.MINIMIZE_BOX,
-        )
+    class SimpleDivParser(HTMLParser):
+        def __init__(self):
+            super().__init__()
+            self.recording = False
+            self.depth = 0
+            self.extracted_data = []
+            self.base_url = base_url
+            self.target_class = "md-content"
 
-        sizer = wx.BoxSizer(wx.VERTICAL)
+        def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]):
+            attr_dict = dict(attrs)
 
-        # text
-        content = HelpPanel(parent=self)
-        content.LoadPage(file)
+            # Convert relative URLs to absolute
+            # to be able to display images and use links
+            if tag in {"img", "a"}:
+                if "src" in attr_dict and not bool(urlparse(attr_dict["src"]).netloc):
+                    attr_dict["src"] = urljoin(self.base_url, attr_dict["src"])
+                if "href" in attr_dict and not bool(urlparse(attr_dict["href"]).netloc):
+                    attr_dict["href"] = urljoin(self.base_url, attr_dict["href"])
 
-        sizer.Add(content, proportion=1, flag=wx.EXPAND)
+            attr_str = " ".join(f'{k}="{v}"' for k, v in attr_dict.items())
 
-        self.SetAutoLayout(True)
-        self.SetSizer(sizer)
-        self.Layout()
+            if tag == "div" and attr_dict.get("class") == self.target_class:
+                self.recording = True
+                self.extracted_data.append(f"<div {attr_str}>")
+                self.depth = 1
+            elif self.recording:
+                self.extracted_data.append(
+                    f"<{tag} {attr_str}>" if attr_str else f"<{tag}>"
+                )
+                if tag == "div":
+                    self.depth += 1
+
+        def handle_endtag(self, tag: str):
+            if self.recording:
+                self.extracted_data.append(f"</{tag}>")
+                if tag == "div":
+                    self.depth -= 1
+                    if self.depth == 0:
+                        self.recording = False
+
+        def handle_data(self, data: str):
+            if self.recording:
+                self.extracted_data.append(data)
+
+    parser = SimpleDivParser()
+    parser.feed(html_string)
+    return "".join(parser.extracted_data)
 
 
 class HelpWindow(HtmlWindow):
     """This panel holds the text from GRASS docs.
 
     GISBASE must be set in the environment to find the html docs dir.
-    The SYNOPSIS section is skipped, since this Panel is supposed to
-    be integrated into the cmdPanel and options are obvious there.
     """
 
-    def __init__(self, parent, command, text, skipDescription, **kwargs):
+    def __init__(self, parent, command, text, **kwargs):
         """If command is given, the corresponding HTML help
         file will be presented, with all links pointing to absolute
         paths of local files.
-
-        If 'skipDescription' is True, the HTML corresponding to
-        SYNOPSIS will be skipped, thus only presenting the help file
-        from the DESCRIPTION section onwards.
 
         If 'text' is given, it must be the HTML text to be presented
         in the Panel.
@@ -747,23 +760,18 @@ class HelpWindow(HtmlWindow):
         self.loaded = False
         self.history = []
         self.historyIdx = 0
-        self.fspath = os.path.join(os.getenv("GISBASE"), "docs", "html")
+        self.markdown = True
+        # check if mkdocs is used (add slash at the end)
+        self.fspath = os.path.join(os.getenv("GISBASE"), "docs", "mkdocs", "site", "")
+        if not Path(self.fspath).exists():
+            self.markdown = False
+            self.fspath = os.path.join(os.getenv("GISBASE"), "docs", "html", "")
 
         self._setFont()
         self.SetBorders(10)
 
-        if text is None:
-            if skipDescription:
-                url = os.path.join(self.fspath, command + ".html")
-                self.fillContentsFromFile(url, skipDescription=skipDescription)
-                self.history.append(url)
-                self.loaded = True
-            else:
-                # FIXME: calling LoadPage() is strangely time-consuming
-                #        (only first call)
-                # self.LoadPage(self.fspath + command + ".html")
-                self.loaded = False
-        else:
+        self.loaded = False
+        if text:
             self.SetPage(text)
             self.loaded = True
 
@@ -796,66 +804,31 @@ class HelpWindow(HtmlWindow):
 
         super().OnLinkClicked(linkinfo)
 
+    def OnOpeningURL(self, type, url):
+        """A workaround reloading the extracted mkdocs tool page content"""
+        if self.markdown and url.startswith(self.fspath) and url.endswith(".html"):
+            wx.CallAfter(self.LoadPage, url)
+        return (wx.html.HTML_OPEN, url)
+
     def LoadPage(self, path):
-        super().LoadPage(path)
-        self.loaded = True
-
-    def fillContentsFromFile(self, htmlFile, skipDescription=True):
-        """Load content from file.
-
-        Currently not used.
-        """
-        aLink = re.compile(r'(<a href="?)(.+\.html?["\s]*>)', re.IGNORECASE)
-        imgLink = re.compile(r'(<img src="?)(.+\.[png|gif])', re.IGNORECASE)
+        if not self.markdown:
+            super().LoadPage(path)
+            return
         try:
-            contents = []
-            skip = False
-            for line in open(htmlFile, "rb"):
-                if "DESCRIPTION" in line:
-                    skip = False
-                if not skip:
-                    # do skip the options description if requested
-                    if "SYNOPSIS" in line:
-                        skip = skipDescription
-                    else:
-                        # FIXME: find only first item
-                        findALink = aLink.search(line)
-                        if findALink is not None:
-                            contents.append(
-                                aLink.sub(
-                                    findALink.group(1)
-                                    + self.fspath
-                                    + findALink.group(2),
-                                    line,
-                                )
-                            )
-                        findImgLink = imgLink.search(line)
-                        if findImgLink is not None:
-                            contents.append(
-                                imgLink.sub(
-                                    findImgLink.group(1)
-                                    + self.fspath
-                                    + findImgLink.group(2),
-                                    line,
-                                )
-                            )
-
-                        if findALink is None and findImgLink is None:
-                            contents.append(line)
-            self.SetPage("".join(contents))
+            # extract only certain div content
+            html = Path(path).read_text(encoding="utf-8")
+            self.SetPage(extract_md_content(html, self.fspath))
             self.loaded = True
-        except Exception:  # The Manual file was not found
-            self.loaded = False
+        except OSError:
+            pass
 
 
 class HelpPanel(wx.Panel):
-    def __init__(
-        self, parent, command="index", text=None, skipDescription=False, **kwargs
-    ):
+    def __init__(self, parent, command="index", text=None, **kwargs):
         self.command = command
         wx.Panel.__init__(self, parent=parent, id=wx.ID_ANY)
 
-        self.content = HelpWindow(self, command, text, skipDescription)
+        self.content = HelpWindow(self, command, text)
 
         self.btnNext = Button(parent=self, id=wx.ID_ANY, label=_("&Next"))
         self.btnNext.Enable(False)
@@ -892,14 +865,14 @@ class HelpPanel(wx.Panel):
     def GetFile(self):
         """Get HTML file"""
         fMan = os.path.join(self.content.fspath, self.command + ".html")
-        if os.path.isfile(fMan):
+        if Path(fMan).is_file():
             return fMan
 
         # check also addons
         faMan = os.path.join(
             os.getenv("GRASS_ADDON_BASE"), "docs", "html", self.command + ".html"
         )
-        if os.getenv("GRASS_ADDON_BASE") and os.path.isfile(faMan):
+        if os.getenv("GRASS_ADDON_BASE") and Path(faMan).is_file():
             return faMan
 
         return None
@@ -984,21 +957,3 @@ def _grassDevTeam(start):
         "start": start,
         "end": end,
     }
-
-
-def main():
-    """Test application (potentially useful as g.gui.gmanual)"""
-    app = wx.App()
-    frame = HelpFrame(
-        parent=None,
-        id=wx.ID_ANY,
-        title="Test help application",
-        size=(600, 800),
-        file=sys.argv[1],
-    )
-    frame.Show()
-    app.MainLoop()
-
-
-if __name__ == "__main__":
-    main()

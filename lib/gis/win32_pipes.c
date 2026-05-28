@@ -58,7 +58,7 @@ static char *_get_make_pipe_path(void)
     }
     len = strlen(prefix) + strlen(user) + 1;
     path = G_malloc(len);
-    sprintf(path, "%s%s", prefix, user);
+    snprintf(path, len, "%s%s", prefix, user);
 
     if ((status = G_lstat(path, &theStat)) != 0) {
         status = G_mkdir(path);
@@ -100,7 +100,7 @@ char *G_pipe_get_fname(char *name)
 
     len = strlen(dirpath) + strlen(name) + 2;
     path = G_malloc(len);
-    sprintf(path, "%s/%s", dirpath, name);
+    snprintf(path, len, "%s/%s", dirpath, name);
     G_free(dirpath);
 
     return path;

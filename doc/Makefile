@@ -1,7 +1,19 @@
 MODULE_TOPDIR = ..
 
-include $(MODULE_TOPDIR)/include/Make/Other.make
+SUBDIRS = \
+	development
+
+include $(MODULE_TOPDIR)/include/Make/Dir.make
 
 FILES := $(wildcard *.html)
+# So far, we disntinguished user and contributor documentation here by
+# extension. This is no longer possible with Markdown.
+MDFILES := grass_database.md \
+	projectionintro.md \
+	jupyter_intro.md \
+	interfaces_overview.md \
+	python_intro.md \
+	migration_to_grass_tools_python_api.md \
+	grass_projects.md
 
-default: $(patsubst %,$(HTMLDIR)/%,$(FILES))
+default: $(patsubst %,$(HTMLDIR)/%,$(FILES)) $(patsubst %,$(MDDIR)/source/%,$(MDFILES)) parsubdirs

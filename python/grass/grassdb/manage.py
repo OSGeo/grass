@@ -1,5 +1,5 @@
 """
-Managing existing objects in a GRASS GIS Spatial Database
+Managing existing objects in a GRASS Spatial Database
 
 (C) 2020 by the GRASS Development Team
 This program is free software under the GNU General Public

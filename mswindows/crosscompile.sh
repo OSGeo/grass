@@ -4,7 +4,7 @@
 #
 # MODULE:	crosscompile.sh
 # AUTHOR(S):	Huidae Cho <grass4u gmail.com>
-# PURPOSE:	Builds a cross-compiled portable package of GRASS GIS
+# PURPOSE:	Builds a cross-compiled portable package of GRASS
 # COPYRIGHT:	(C) 2019-2021 by Huidae Cho and the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -409,7 +409,6 @@ if not exist "%GISBASE%\etc\fontcap" (
 )
 
 "%GRASS_PYTHON%" "%GISBASE%\etc\grass$version.py" %*
-if %ERRORLEVEL% geq 1 pause
 EOT
 unix2dos $dist/grass.bat
 

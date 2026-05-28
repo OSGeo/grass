@@ -319,7 +319,7 @@ class MapPanelBase(wx.Panel):
     def CoordinatesChanged(self):
         """Shows current coordinates on statusbar."""
         # assuming that the first mode is coordinates
-        # probably shold not be here but good solution is not available now
+        # probably shouldn't be here but a better solution isn't available now
         if self.statusbarManager:
             if self.statusbarManager.GetMode() == 0:
                 self.statusbarManager.ShowItem("coordinates")

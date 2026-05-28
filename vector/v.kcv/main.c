@@ -130,8 +130,8 @@ int main(int argc, char *argv[])
 
     buf[0] = '\0';
     if (nlinks < 1)
-        sprintf(buf, "create table %s (%s integer, %s integer)", Fi->table,
-                Fi->key, col_opt->answer);
+        snprintf(buf, sizeof(buf), "create table %s (%s integer, %s integer)",
+                 Fi->table, Fi->key, col_opt->answer);
     else {
         dbColumn *column = NULL;
 
@@ -148,8 +148,8 @@ int main(int argc, char *argv[])
             }
         }
         else
-            sprintf(buf, "alter table %s add column %s integer", Fi->table,
-                    col_opt->answer);
+            snprintf(buf, sizeof(buf), "alter table %s add column %s integer",
+                     Fi->table, col_opt->answer);
     }
 
     if (*buf) {
@@ -270,11 +270,12 @@ int main(int argc, char *argv[])
             continue;
         }
         if (nlinks < 1)
-            sprintf(buf, "insert into %s (%s, %s) values (%d, %d)", Fi->table,
-                    Fi->key, col_opt->answer, cat, part[p].id);
+            snprintf(buf, sizeof(buf),
+                     "insert into %s (%s, %s) values (%d, %d)", Fi->table,
+                     Fi->key, col_opt->answer, cat, part[p].id);
         else
-            sprintf(buf, "update %s set %s = %d where %s = %d", Fi->table,
-                    col_opt->answer, part[p].id, Fi->key, cat);
+            snprintf(buf, sizeof(buf), "update %s set %s = %d where %s = %d",
+                     Fi->table, col_opt->answer, part[p].id, Fi->key, cat);
 
         db_set_string(&sql, buf);
 

@@ -162,7 +162,7 @@ class TestR3ToRastIntegerRounding(TestCase):
             self.assertRasterFitsUnivar(raster=rast, reference=ref_univar, precision=0)
 
         # check the actual values
-        for rast_ref, rast in zip(self.rast2d_refs, rasts):
+        for rast_ref, rast in zip(self.rast2d_refs, rasts, strict=True):
             self.assertRastersNoDifference(
                 actual=rast, reference=rast_ref, precision=0.1
             )

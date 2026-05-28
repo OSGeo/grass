@@ -42,12 +42,8 @@
 # % options: 0-100
 # % multiple: yes
 # %end
-# %option
-# % key: format
-# % type: string
-# % multiple: no
+# %option G_OPT_F_FORMAT
 # % options: plain,json,shell
-# % label: Output format
 # % descriptions: plain;Plain text output;json;JSON (JavaScript Object Notation);shell;Shell script style for Bash eval
 # %end
 # %flag
@@ -56,7 +52,8 @@
 # %end
 # %flag
 # % key: g
-# % description: Print stats in shell script style
+# % label: Print stats in shell script style [deprecated]
+# % description: This flag is deprecated and will be removed in a future release. Use format=shell instead.
 # %end
 
 import sys
@@ -87,15 +84,22 @@ def main():
     database = fi["database"]
     driver = fi["driver"]
 
+    output_format = options["format"]
+    if not output_format:
+        output_format = "shell" if flags["g"] else "plain"
+    if flags["g"]:
+        # This can be a message or warning in future versions.
+        # In version 9, -g may be removed.
+        gs.verbose(
+            _(
+                "Flag 'g' is deprecated and will be removed in a future "
+                "release. Please use format=shell instead."
+            )
+        )
+
     passflags = None
     if flags["e"]:
         passflags = "e"
-    if flags["g"]:
-        if not passflags:
-            passflags = "g"
-        else:
-            passflags += "g"
-    output_format = options["format"]
 
     try:
         gs.run_command(

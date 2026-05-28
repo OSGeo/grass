@@ -311,7 +311,6 @@ int Rast3d_rewrite_header(RASTER3D_Map *map)
  *  \param n
  *  \return int
  */
-
 int Rast3d_cache_size_encode(int cacheCode, int n)
 {
     if (cacheCode >= RASTER3D_NO_CACHE)

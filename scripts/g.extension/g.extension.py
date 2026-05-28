@@ -8,7 +8,7 @@
 #               Vaclav Petras <wenzeslaus gmail com> (support for general sources)
 # PURPOSE:      Tool to download and install extensions into local installation
 #
-# COPYRIGHT:    (C) 2009-2021 by Markus Neteler, and the GRASS Development Team
+# COPYRIGHT:    (C) 2009-2025 by Markus Neteler, and the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -81,19 +81,19 @@
 
 # %flag
 # % key: l
-# % description: List available extensions in the official GRASS GIS Addons repository
+# % description: List available extensions in the official GRASS Addons repository
 # % guisection: Print
 # % suppress_required: yes
 # %end
 # %flag
 # % key: c
-# % description: List available extensions in the official GRASS GIS Addons repository including module description
+# % description: List available extensions in the official GRASS Addons repository including module description
 # % guisection: Print
 # % suppress_required: yes
 # %end
 # %flag
 # % key: g
-# % description: List available extensions in the official GRASS GIS Addons repository (shell script style)
+# % description: List available extensions in the official GRASS Addons repository (shell script style)
 # % guisection: Print
 # % suppress_required: yes
 # %end
@@ -154,14 +154,7 @@ import zipfile
 import tempfile
 import json
 import xml.etree.ElementTree as ET
-
-if sys.version_info < (3, 8):
-    from distutils.dir_util import copy_tree
-else:
-    from functools import partial
-
-    copy_tree = partial(shutil.copytree, dirs_exist_ok=True)
-
+from functools import partial
 from pathlib import Path
 from subprocess import PIPE
 from urllib import request as urlrequest
@@ -180,6 +173,7 @@ else:
 import grass.script as gs
 from grass.script import task as gtask
 from grass.script.utils import try_rmdir
+from grass.app.runtime import RuntimePaths
 
 # temp dir
 REMOVE_TMPDIR = True
@@ -198,10 +192,12 @@ if sys.platform.startswith("freebsd"):
 else:
     MAKE = "make"
 
+copy_tree = partial(shutil.copytree, dirs_exist_ok=True)
+
 
 class GitAdapter:
     """
-    Basic class for listing and downloading GRASS GIS AddOns using git
+    Basic class for listing and downloading GRASS AddOns using git
 
     """
 
@@ -313,7 +309,7 @@ class GitAdapter:
         """Return commit hash reference and names for remote branches of
         a git repository
 
-        :param url: URL to git repository, defaults to the official GRASS GIS
+        :param url: URL to git repository, defaults to the official GRASS
                     addon repository
         """
         branch_list = gs.Popen(
@@ -330,7 +326,7 @@ class GitAdapter:
         """Return commit hash reference and names for remote branches of
         a git repository
 
-        :param url: URL to git repository, defaults to the official GRASS GIS
+        :param url: URL to git repository, defaults to the official GRASS
                     addon repository
         """
         default_branch = gs.Popen(
@@ -517,8 +513,7 @@ def get_version_branch(major_version):
     if stderr:
         gs.fatal(
             _(
-                "Failed to get branch from the Git repository <{repo_path}>.\n"
-                "{error}"
+                "Failed to get branch from the Git repository <{repo_path}>.\n{error}"
             ).format(
                 repo_path=GIT_URL,
                 error=gs.decode(stderr),
@@ -675,7 +670,7 @@ def get_installed_toolboxes(force=False):
     to read the current one.
     """
     xml_file = os.path.join(options["prefix"], "toolboxes.xml")
-    if not os.path.exists(xml_file):
+    if not Path(xml_file).exists():
         write_xml_toolboxes(xml_file)
     # read XML file
     try:
@@ -698,7 +693,7 @@ def get_installed_modules(force=False):
     to read the current one.
     """
     xml_file = os.path.join(options["prefix"], "modules.xml")
-    if not os.path.exists(xml_file):
+    if not Path(xml_file).exists():
         if force:
             write_xml_modules(xml_file)
         else:
@@ -990,7 +985,7 @@ def get_wxgui_extensions(url):
     file_ = urlopen(url)
     if not file_:
         gs.warning(_("Unable to fetch '%s'") % url)
-        return
+        return None
 
     for line in file_.readlines():
         # list extensions
@@ -1005,7 +1000,7 @@ def get_wxgui_extensions(url):
 
 
 def cleanup():
-    """Cleanup after the downloads and copilation"""
+    """Cleanup after the downloads and compilation"""
     if REMOVE_TMPDIR:
         try_rmdir(TMPDIR)
 
@@ -1041,11 +1036,11 @@ def write_xml_modules(name, tree=None):
             if bnode is not None:
                 file_.write("%s<binary>\n" % (" " * indent))
                 indent += 4
-                for fnode in bnode.findall("file"):
-                    file_.write(
-                        "%s<file>%s</file>\n"
-                        % (" " * indent, os.path.join(options["prefix"], fnode.text))
-                    )
+                file_.writelines(
+                    "%s<file>%s</file>\n"
+                    % (" " * indent, os.path.join(options["prefix"], fnode.text))
+                    for fnode in bnode.findall("file")
+                )
                 indent -= 4
                 file_.write("%s</binary>\n" % (" " * indent))
             file_.write('%s<libgis revision="%s" />\n' % (" " * indent, libgis_revison))
@@ -1091,11 +1086,11 @@ def write_xml_extensions(name, tree=None):
             if bnode is not None:
                 file_.write("%s<binary>\n" % (" " * indent))
                 indent += 4
-                for fnode in bnode.findall("file"):
-                    file_.write(
-                        "%s<file>%s</file>\n"
-                        % (" " * indent, os.path.join(options["prefix"], fnode.text))
-                    )
+                file_.writelines(
+                    "%s<file>%s</file>\n"
+                    % (" " * indent, os.path.join(options["prefix"], fnode.text))
+                    for fnode in bnode.findall("file")
+                )
                 indent -= 4
                 file_.write("%s</binary>\n" % (" " * indent))
             # extension modules
@@ -1103,8 +1098,10 @@ def write_xml_extensions(name, tree=None):
             if mnode is not None:
                 file_.write("%s<modules>\n" % (" " * indent))
                 indent += 4
-                for fnode in mnode.findall("module"):
-                    file_.write("%s<module>%s</module>\n" % (" " * indent, fnode.text))
+                file_.writelines(
+                    "%s<module>%s</module>\n" % (" " * indent, fnode.text)
+                    for fnode in mnode.findall("module")
+                )
                 indent -= 4
                 file_.write("%s</modules>\n" % (" " * indent))
 
@@ -1136,14 +1133,14 @@ def write_xml_toolboxes(name, tree=None):
                 % (" " * indent, tnode.get("name"), tnode.get("code"))
             )
             indent += 4
-            for cnode in tnode.findall("correlate"):
-                file_.write(
-                    '%s<correlate code="%s" />\n' % (" " * indent, tnode.get("code"))
-                )
-            for mnode in tnode.findall("task"):
-                file_.write(
-                    '%s<task name="%s" />\n' % (" " * indent, mnode.get("name"))
-                )
+            file_.writelines(
+                '%s<correlate code="%s" />\n' % (" " * indent, tnode.get("code"))
+                for cnode in tnode.findall("correlate")
+            )
+            file_.writelines(
+                '%s<task name="%s" />\n' % (" " * indent, mnode.get("name"))
+                for mnode in tnode.findall("task")
+            )
             indent -= 4
             file_.write("%s</toolbox>\n" % (" " * indent))
 
@@ -1286,7 +1283,7 @@ def install_toolbox_xml(url, name):
 
     xml_file = os.path.join(options["prefix"], "toolboxes.xml")
     # create an empty file if not exists
-    if not os.path.exists(xml_file):
+    if not Path(xml_file).exists():
         write_xml_modules(xml_file)
 
     # read XML file
@@ -1386,7 +1383,7 @@ def install_extension_xml(edict):
 
     xml_file = os.path.join(options["prefix"], "extensions.xml")
     # create an empty file if not exists
-    if not os.path.exists(xml_file):
+    if not Path(xml_file).exists():
         write_xml_extensions(xml_file)
 
     # read XML file
@@ -1506,7 +1503,7 @@ def install_module_xml(mlist):
 
     xml_file = os.path.join(options["prefix"], "modules.xml")
     # create an empty file if not exists
-    if not os.path.exists(xml_file):
+    if not Path(xml_file).exists():
         write_xml_modules(xml_file)
 
     # read XML file
@@ -1674,7 +1671,7 @@ def install_extension_win(name):
 def download_source_code_svn(url, name, outdev, directory=None):
     """Download source code from a Subversion repository
 
-    .. note:
+    .. note::
         Stdout is passed to to *outdev* while stderr is will be just printed.
 
     :param url: URL of the repository
@@ -1703,7 +1700,7 @@ def download_source_code_svn(url, name, outdev, directory=None):
 def download_source_code_official_github(url, name, branch, directory=None):
     """Download source code from a official GitHub repository
 
-    .. note:
+    .. note::
         Stdout is passed to to *outdev* while stderr is just printed.
 
     :param url: URL of the repository
@@ -1752,11 +1749,10 @@ def move_extracted_files(extract_dir, target_dir, files):
     if len(files) == 1:
         shutil.copytree(os.path.join(extract_dir, files[0]), target_dir)
     else:
-        if not os.path.exists(target_dir):
-            os.mkdir(target_dir)
+        Path(target_dir).mkdir(exist_ok=True)
         for file_name in files:
             actual_file = os.path.join(extract_dir, file_name)
-            if os.path.isdir(actual_file):
+            if Path(actual_file).is_dir():
                 # shutil.copytree() replaced by copy_tree() because
                 # shutil's copytree() fails when subdirectory exists
                 copy_tree(actual_file, os.path.join(target_dir, file_name))
@@ -1801,8 +1797,9 @@ def fix_newlines(directory):
 def extract_zip(name, directory, tmpdir):
     """Extract a ZIP file into a directory"""
     gs.debug(
-        "extract_zip(name={name}, directory={directory},"
-        " tmpdir={tmpdir})".format(name=name, directory=directory, tmpdir=tmpdir),
+        "extract_zip(name={name}, directory={directory}, tmpdir={tmpdir})".format(
+            name=name, directory=directory, tmpdir=tmpdir
+        ),
         3,
     )
     try:
@@ -1811,7 +1808,7 @@ def extract_zip(name, directory, tmpdir):
         # we suppose we can write to parent of the given dir
         # (supposing a tmp dir)
         extract_dir = os.path.join(tmpdir, "extract_dir")
-        os.mkdir(extract_dir)
+        Path(extract_dir).mkdir()
         for subfile in file_list:
             if "__pycache__" in subfile:
                 continue
@@ -1826,8 +1823,9 @@ def extract_zip(name, directory, tmpdir):
 def extract_tar(name, directory, tmpdir):
     """Extract a TAR or a similar file into a directory"""
     gs.debug(
-        "extract_tar(name={name}, directory={directory},"
-        " tmpdir={tmpdir})".format(name=name, directory=directory, tmpdir=tmpdir),
+        "extract_tar(name={name}, directory={directory}, tmpdir={tmpdir})".format(
+            name=name, directory=directory, tmpdir=tmpdir
+        ),
         3,
     )
     import tarfile
@@ -1835,7 +1833,7 @@ def extract_tar(name, directory, tmpdir):
     try:
         tar = tarfile.open(name)
         extract_dir = os.path.join(tmpdir, "extract_dir")
-        os.mkdir(extract_dir)
+        Path(extract_dir).mkdir()
 
         # Extraction filters were added in Python 3.12,
         # and backported to 3.8.17, 3.9.17, 3.10.12, and 3.11.4
@@ -1950,14 +1948,34 @@ def download_source_code(
                 " Please report this to the grass-user mailing list."
             ).format(source)
         )
-    assert os.path.isdir(directory)
+    assert Path(directory).is_dir()
     return directory, url
+
+
+def create_md_if_missing(root_dir):
+    """Recursively searches for HTML files in the specified directory.
+    If an HTML file does not have a corresponding Markdown (.md) file,
+    it creates one by copying the HTML file and renaming it.
+    """
+    for dirpath, _, filenames in os.walk(root_dir):
+        html_files = [f for f in filenames if f.endswith(".html")]
+
+        for html_file in html_files:
+            md_file = os.path.splitext(html_file)[0] + ".md"
+            md_path = os.path.join(dirpath, md_file)
+
+            if not Path(md_path).exists():
+                html_path = os.path.join(dirpath, html_file)
+                shutil.copy(html_path, md_path)
 
 
 def install_extension_std_platforms(name, source, url, branch):
     """Install extension on standard platforms"""
-    gisbase = os.getenv("GISBASE")
+    runtime_paths = RuntimePaths()
+    gisbase = runtime_paths.gisbase
     path_to_src_code_message = _("Path to the source code:")
+
+    is_cmake = runtime_paths.is_cmake_build
 
     # to hide non-error messages from subprocesses
     outdev = open(os.devnull, "w") if gs.verbosity() <= 2 else sys.stdout
@@ -1973,6 +1991,7 @@ def install_extension_std_platforms(name, source, url, branch):
         tmpdir=TMPDIR,
         branch=branch,
     )
+    create_md_if_missing(srcdir)
     os.chdir(srcdir)
 
     pgm_not_found_message = _(
@@ -1980,22 +1999,42 @@ def install_extension_std_platforms(name, source, url, branch):
     )
     # collect module names
     module_list = []
-    for r, d, f in os.walk(srcdir):
-        for filename in f:
-            if filename == "Makefile":
-                # get the module name: PGM = <module name>
-                with open(os.path.join(r, "Makefile")) as fp:
-                    for line in fp:
-                        if re.match(r"PGM.*.=|PGM=", line):
-                            try:
-                                modulename = line.split("=")[1].strip()
-                                if modulename:
-                                    if modulename not in module_list:
-                                        module_list.append(modulename)
-                                else:
+
+    if is_cmake:
+        for r, d, f in os.walk(srcdir):
+            for filename in f:
+                if filename == "CMakeLists.txt":
+                    # get the module name: project(<module name>)
+                    with open(os.path.join(r, "CMakeLists.txt")) as fp:
+                        for line in fp:
+                            m = re.match(r"project\(\s*(\S+).*\)", line)
+                            if m:
+                                try:
+                                    modulename = m.group(1)
+                                    if modulename:
+                                        if modulename not in module_list:
+                                            module_list.append(modulename)
+                                    else:
+                                        gs.fatal(pgm_not_found_message)
+                                except IndexError:
                                     gs.fatal(pgm_not_found_message)
-                            except IndexError:
-                                gs.fatal(pgm_not_found_message)
+    else:
+        for r, d, f in os.walk(srcdir):
+            for filename in f:
+                if filename == "Makefile":
+                    # get the module name: PGM = <module name>
+                    with open(os.path.join(r, "Makefile")) as fp:
+                        for line in fp:
+                            if re.match(r"PGM.*.=|PGM=", line):
+                                try:
+                                    modulename = line.split("=")[1].strip()
+                                    if modulename:
+                                        if modulename not in module_list:
+                                            module_list.append(modulename)
+                                    else:
+                                        gs.fatal(pgm_not_found_message)
+                                except IndexError:
+                                    gs.fatal(pgm_not_found_message)
 
     # change shebang from python to python3
     pyfiles = []
@@ -2013,40 +2052,99 @@ def install_extension_std_platforms(name, source, url, branch):
                     end="",
                 )
 
-    dirs = {
-        "bin": os.path.join(srcdir, "bin"),
-        "docs": os.path.join(srcdir, "docs"),
-        "html": os.path.join(srcdir, "docs", "html"),
-        "rest": os.path.join(srcdir, "docs", "rest"),
-        "man": os.path.join(srcdir, "docs", "man"),
-        "script": os.path.join(srcdir, "scripts"),
-        # TODO: handle locales also for addons
-        #             'string'  : os.path.join(srcdir, 'locale'),
-        "string": srcdir,
-        "etc": os.path.join(srcdir, "etc"),
-    }
+    if is_cmake:
+        grass_addon_base = options["prefix"]
+        cmake_prefix_path = (
+            ";" + os.getenv("CMAKE_PREFIX_PATH")
+            if os.getenv("CMAKE_PREFIX_PATH")
+            else ""
+        )
+        cmake_module_path = (
+            ";" + os.getenv("CMAKE_MODULE_PATH")
+            if os.getenv("CMAKE_MODULE_PATH")
+            else ""
+        )
+        grass_cmake_prefix_path = (
+            ";" + runtime_paths.grass_cmake_prefix_path
+            if runtime_paths.grass_cmake_prefix_path
+            else ""
+        )
+        g_cmake_config_dir = runtime_paths.grass_cmake_config_dir
+        g_cmake_module_dir = runtime_paths.grass_cmake_module_dir
+        g_c_compiler = os.getenv("CC") or runtime_paths.grass_cmake_c_compiler
+        g_cxx_compiler = os.getenv("CXX") or runtime_paths.grass_cmake_cxx_compiler
 
-    make_cmd = [
-        MAKE,
-        "MODULE_TOPDIR=%s" % gisbase.replace(" ", r"\ "),
-        "RUN_GISRC=%s" % os.environ["GISRC"],
-        "BIN=%s" % dirs["bin"],
-        "HTMLDIR=%s" % dirs["html"],
-        "RESTDIR=%s" % dirs["rest"],
-        "MANBASEDIR=%s" % dirs["man"],
-        "SCRIPTDIR=%s" % dirs["script"],
-        "STRINGDIR=%s" % dirs["string"],
-        "ETC=%s" % os.path.join(dirs["etc"]),
-        "SOURCE_URL=%s" % url,
-    ]
+        c_prefix_path = (
+            f"{g_cmake_config_dir}{grass_cmake_prefix_path}{cmake_prefix_path}"
+        )
+        c_mod_path = f"{g_cmake_module_dir}{cmake_module_path}"
+        c_compiler = f"-DCMAKE_C_COMPILER={g_c_compiler}" if g_c_compiler else ""
+        cxx_compiler = (
+            f"-DCMAKE_CXX_COMPILER={g_cxx_compiler}" if g_cxx_compiler else ""
+        )
 
-    install_cmd = [
-        MAKE,
-        "MODULE_TOPDIR=%s" % gisbase,
-        "ARCH_DISTDIR=%s" % srcdir,
-        "INST_DIR=%s" % options["prefix"],
-        "install",
-    ]
+        config_cmd = [
+            "cmake",
+            "-B",
+            "build",
+            f"-DCMAKE_PREFIX_PATH={c_prefix_path}",
+            f"-DCMAKE_MODULE_PATH={c_mod_path}",
+            f"-DCMAKE_INSTALL_PREFIX={grass_addon_base}",
+            f"-DPYTHON_EXECUTABLE={sys.executable}",
+            f"-DSOURCE_URL={url}",
+            c_compiler,
+            cxx_compiler,
+        ]
+        make_cmd = [
+            "cmake",
+            "--build",
+            "build",
+            "-v",
+        ]
+        install_cmd = [
+            "cmake",
+            "--install",
+            "build",
+        ]
+        try:
+            shutil.rmtree(os.path.join(srcdir, "build"))
+        except FileNotFoundError:
+            pass
+    else:
+        dirs = {
+            "bin": os.path.join(srcdir, "bin"),
+            "docs": os.path.join(srcdir, "docs"),
+            "html": os.path.join(srcdir, "docs", "html"),
+            "mkdocs": os.path.join(srcdir, "docs", "mkdocs"),
+            "rest": os.path.join(srcdir, "docs", "rest"),
+            "man": os.path.join(srcdir, "docs", "man"),
+            "script": os.path.join(srcdir, "scripts"),
+            # TODO: handle locales also for addons
+            #             'string'  : os.path.join(srcdir, 'locale'),
+            "string": srcdir,
+            "etc": os.path.join(srcdir, "etc"),
+        }
+        make_cmd = [
+            MAKE,
+            "MODULE_TOPDIR=%s" % gisbase.replace(" ", r"\ "),
+            "RUN_GISRC=%s" % os.environ["GISRC"],
+            "BIN=%s" % dirs["bin"],
+            "HTMLDIR=%s" % dirs["html"],
+            "MDDIR=%s" % dirs["mkdocs"],
+            "RESTDIR=%s" % dirs["rest"],
+            "MANBASEDIR=%s" % dirs["man"],
+            "SCRIPTDIR=%s" % dirs["script"],
+            "STRINGDIR=%s" % dirs["string"],
+            "ETC=%s" % os.path.join(dirs["etc"]),
+            "SOURCE_URL=%s" % url,
+        ]
+        install_cmd = [
+            MAKE,
+            "MODULE_TOPDIR=%s" % gisbase,
+            "ARCH_DISTDIR=%s" % srcdir,
+            "INST_DIR=%s" % options["prefix"],
+            "install",
+        ]
 
     if flags["d"]:
         gs.message("\n%s\n" % _("To compile run:"))
@@ -2060,8 +2158,11 @@ def install_extension_std_platforms(name, source, url, branch):
     os.chdir(srcdir)
 
     gs.message(_("Compiling..."))
-    if not os.path.exists(os.path.join(gisbase, "include", "Make", "Module.make")):
+    if not is_cmake and not Path(gisbase, "include", "Make", "Module.make").exists():
         gs.fatal(_("Please install GRASS development package"))
+
+    if is_cmake and gs.call(config_cmd, stdout=outdev) != 0:
+        gs.fatal(_("Compilation failed, sorry. Please check above error messages."))
 
     if gs.call(make_cmd, stdout=outdev) != 0:
         gs.fatal(_("Compilation failed, sorry. Please check above error messages."))
@@ -2108,7 +2209,7 @@ def remove_extension(force=False):
     # collect modules and files installed by these extensions
     mlist = []
     xml_file = os.path.join(options["prefix"], "extensions.xml")
-    if os.path.exists(xml_file):
+    if Path(xml_file).exists():
         # read XML file
         tree = None
         try:
@@ -2123,14 +2224,14 @@ def remove_extension(force=False):
                 if ename in edict:
                     # modules installed by this extension
                     mnode = tnode.find("modules")
-                    if mnode:
+                    if mnode is not None:
                         for fnode in mnode.findall("module"):
                             mname = fnode.text.strip()
                             edict[ename]["mlist"].append(mname)
                             mlist.append(mname)
                     # files installed by this extension
                     bnode = tnode.find("binary")
-                    if bnode:
+                    if bnode is not None:
                         for fnode in bnode.findall("file"):
                             bname = fnode.text.strip()
                             edict[ename]["flist"].append(bname)
@@ -2139,7 +2240,7 @@ def remove_extension(force=False):
             write_xml_extensions(xml_file)
 
         xml_file = os.path.join(options["prefix"], "modules.xml")
-        if not os.path.exists(xml_file):
+        if not Path(xml_file).exists():
             if force:
                 write_xml_modules(xml_file)
             else:
@@ -2163,7 +2264,7 @@ def remove_extension(force=False):
                     mlist.append(ename)
                     # files installed by this extension
                     bnode = tnode.find("binary")
-                    if bnode:
+                    if bnode is not None:
                         for fnode in bnode.findall("file"):
                             bname = fnode.text.strip()
                             edict[ename]["flist"].append(bname)
@@ -2184,18 +2285,12 @@ def remove_extension(force=False):
                     gs.message(_("Extension <%s> successfully uninstalled.") % ename)
     elif flags["t"]:
         gs.warning(
-            _(
-                "Toolbox <%s> not removed. "
-                "Re-run '%s' with '-f' flag to force removal"
-            )
+            _("Toolbox <%s> not removed. Re-run '%s' with '-f' flag to force removal")
             % (options["extension"], "g.extension")
         )
     else:
         gs.warning(
-            _(
-                "Extension <%s> not removed. "
-                "Re-run '%s' with '-f' flag to force removal"
-            )
+            _("Extension <%s> not removed. Re-run '%s' with '-f' flag to force removal")
             % (options["extension"], "g.extension")
         )
 
@@ -2215,7 +2310,7 @@ def remove_extension_files(edict, force=False):
     einstalled = []
     eremoved = []
 
-    if os.path.exists(xml_file):
+    if Path(xml_file).exists():
         tree = etree_fromfile(xml_file)
         if tree is not None:
             for task in tree.findall("task"):
@@ -2268,14 +2363,14 @@ def remove_extension_std(name, force=False):
         os.path.join(options["prefix"], "docs", "rest", name + ".txt"),
         os.path.join(options["prefix"], "docs", "man", "man1", name + ".1"),
     ]:
-        if os.path.isfile(fpath):
+        if Path(fpath).is_file():
             gs.verbose(fpath)
             if force:
                 os.remove(fpath)
 
     # remove module libraries under GRASS_ADDONS/etc/{name}/*
     libpath = os.path.join(options["prefix"], "etc", name)
-    if os.path.isdir(libpath):
+    if Path(libpath).is_dir():
         gs.verbose(libpath)
         if force:
             shutil.rmtree(libpath)
@@ -2284,7 +2379,7 @@ def remove_extension_std(name, force=False):
 def remove_from_toolbox_xml(name):
     """Update local meta-file when removing existing toolbox"""
     xml_file = os.path.join(options["prefix"], "toolboxes.xml")
-    if not os.path.exists(xml_file):
+    if not Path(xml_file).exists():
         return
     # read XML file
     tree = etree_fromfile(xml_file)
@@ -2304,7 +2399,7 @@ def remove_extension_xml(mlist, edict):
 
     # modules
     xml_file = os.path.join(options["prefix"], "modules.xml")
-    if os.path.exists(xml_file):
+    if Path(xml_file).exists():
         # read XML file
         tree = etree_fromfile(xml_file)
         for name in mlist:
@@ -2316,7 +2411,7 @@ def remove_extension_xml(mlist, edict):
 
     # extensions
     xml_file = os.path.join(options["prefix"], "extensions.xml")
-    if os.path.exists(xml_file):
+    if Path(xml_file).exists():
         # read XML file
         tree = etree_fromfile(xml_file)
         for name in edict:
@@ -2349,7 +2444,7 @@ def check_style_file(name):
         gs.warning(
             _(
                 "Unable to create '{filename}': {error}."
-                " Is the GRASS GIS documentation package installed?"
+                " Is the GRASS documentation package installed?"
                 " Installation continues,"
                 " but documentation may not look right."
             ).format(filename=addons_file, error=error)
@@ -2361,11 +2456,11 @@ def create_dir(path):
 
     NOOP for existing directory.
     """
-    if os.path.isdir(path):
+    if Path(path).is_dir():
         return
 
     try:
-        os.makedirs(path)
+        Path(path).mkdir(parents=True)
     except OSError as error:
         gs.fatal(_("Unable to create '%s': %s") % (path, error))
 
@@ -2458,17 +2553,20 @@ def resolve_install_prefix(path, to_system):
         path = os.environ["GISBASE"]
     if path == "$GRASS_ADDON_BASE":
         if not os.getenv("GRASS_ADDON_BASE"):
-            from grass.app.runtime import get_grass_config_dir
+            from grass.app.runtime import get_grass_config_dir_for_version
 
             path = os.path.join(
-                get_grass_config_dir(VERSION[0], VERSION[1], os.environ), "addons"
+                get_grass_config_dir_for_version(
+                    VERSION[0], VERSION[1], env=os.environ
+                ),
+                "addons",
             )
             gs.warning(
                 _("GRASS_ADDON_BASE is not defined, installing to {}").format(path)
             )
         else:
             path = os.environ["GRASS_ADDON_BASE"]
-    if os.path.exists(path) and not os.access(path, os.W_OK):
+    if Path(path).exists() and not os.access(path, os.W_OK):
         gs.fatal(
             _(
                 "You don't have permission to install extension to <{0}>."
@@ -2591,7 +2689,7 @@ def resolve_known_host_service(url, name, branch):
 
 
 def validate_url(url):
-    if not os.path.exists(url):
+    if not Path(url).exists():
         url_validated = False
         message = None
         if url.startswith("http"):
@@ -2708,9 +2806,9 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
         return "official_fork", url
 
     # Handle local URLs
-    if os.path.isdir(url):
+    if Path(url).is_dir():
         return "dir", os.path.abspath(url)
-    if os.path.exists(url):
+    if Path(url).exists():
         if url.endswith(".zip"):
             return "zip", os.path.abspath(url)
         for suffix in extract_tar.supported_formats:
@@ -2822,8 +2920,7 @@ def main():
         if options["operation"] != "add":
             gs.warning(
                 _(
-                    "Flag '{}' is relevant only to"
-                    " 'operation=add'. Ignoring this flag."
+                    "Flag '{}' is relevant only to 'operation=add'. Ignoring this flag."
                 ).format(flag)
             )
         else:
@@ -2837,7 +2934,7 @@ def main():
         else:
             if original_url == "" or flags["o"]:
                 # Query GitHub API only if extension will be downloaded
-                # from official GRASS GIS addons repository
+                # from official GRASS addons repository
                 get_addons_paths(gg_addons_base_dir=options["prefix"])
             source, url = resolve_source_code(
                 name=options["extension"],

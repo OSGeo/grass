@@ -338,7 +338,6 @@ void G_math_f_aAx_by(float **A, float *x, float *y, float a, float b, float *z,
  * \param rows (int)
  * \return int
  */
-
 int G_math_d_A_T(double **A, int rows)
 {
     int i, j;
@@ -372,7 +371,6 @@ int G_math_d_A_T(double **A, int rows)
  * \param rows (int)
  * \return int
  */
-
 int G_math_f_A_T(float **A, int rows)
 {
     int i, j;

@@ -4,7 +4,8 @@ PGM = db.test
 
 include $(MODULE_TOPDIR)/include/Make/Script.make
 
-TEST_SRC := $(wildcard test*)
+TEST_SRC = \
+	test1
 TEST_DST := $(patsubst %,$(ETC)/db.test/%,$(TEST_SRC))
 
 default: script $(TEST_DST)

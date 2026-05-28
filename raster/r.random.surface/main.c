@@ -93,11 +93,7 @@ int main(int argc, char **argv)
         _("Distance filter remains flat before beginning exponent");
     Weight->answer = "0.0";
 
-    SeedStuff = G_define_option();
-    SeedStuff->key = "seed";
-    SeedStuff->type = TYPE_INTEGER;
-    SeedStuff->required = NO;
-    SeedStuff->description = _("Random seed, default [random]");
+    SeedStuff = G_define_standard_option(G_OPT_M_SEED);
 
     range_high_stuff = G_define_option();
     range_high_stuff->key = "high";

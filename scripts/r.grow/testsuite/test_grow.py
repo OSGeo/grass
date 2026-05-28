@@ -4,7 +4,6 @@ from grass.gunittest.gmodules import SimpleModule
 
 
 class TestRGrow(TestCase):
-
     @classmethod
     def setUpClass(cls):
         """Set up a small region and test map."""

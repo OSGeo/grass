@@ -146,12 +146,6 @@
 /* define if SQLite is to be used */
 #define HAVE_SQLITE 1
 
-/* define if GDAL is to be used */
-#define HAVE_GDAL 1
-
-/* define if OGR is to be used */
-#define HAVE_OGR 1
-
 /* define if postgres client header exists */
 #define HAVE_LIBPQ_FE_H 1
 
@@ -295,5 +289,4 @@
 /* define if langinfo.h exists */
 /* #undef HAVE_LANGINFO_H */
 
-#define HAVE_PROJ_H 1
 #endif /* _config_h */

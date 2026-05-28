@@ -3,10 +3,12 @@
 #include <grass/raster.h>
 #include "global.h"
 
+#define NUM_BUFSZ 100
+
 int print_report(int unit1, int unit2)
 {
     int ns, nl, nx;
-    char num[100];
+    char num[NUM_BUFSZ];
     int len, new;
     CELL *cats, *prev;
     int first;
@@ -187,15 +189,15 @@ int print_report(int unit1, int unit2)
     return 0;
 }
 
-int construct_val_str(int nl, CELL *pval, char *str)
+int construct_val_str(int nl, CELL *pval, char str[100])
 {
     char str1[50], str2[50];
     DCELL dLow, dHigh;
 
     if (Rast_is_c_null_value(pval))
-        sprintf(str, "%s", no_data_str);
+        snprintf(str, NUM_BUFSZ, "%s", no_data_str);
     else if (!is_fp[nl] || as_int)
-        sprintf(str, "%d", *pval);
+        snprintf(str, NUM_BUFSZ, "%d", *pval);
     else { /* find out which floating point range to print */
 
         if (cat_ranges)
@@ -205,13 +207,13 @@ int construct_val_str(int nl, CELL *pval, char *str)
                 (DMAX[nl] - DMIN[nl]) / nsteps * (double)(*pval - 1) + DMIN[nl];
             dHigh = (DMAX[nl] - DMIN[nl]) / nsteps * (double)*pval + DMIN[nl];
         }
-        sprintf(str1, "%10f", dLow);
-        sprintf(str2, "%10f", dHigh);
+        snprintf(str1, sizeof(str1), "%10f", dLow);
+        snprintf(str2, sizeof(str2), "%10f", dHigh);
         G_strip(str1);
         G_strip(str2);
         G_trim_decimal(str1);
         G_trim_decimal(str2);
-        sprintf(str, "%s-%s", str1, str2);
+        snprintf(str, NUM_BUFSZ, "%s-%s", str1, str2);
     }
 
     return 0;
@@ -236,9 +238,9 @@ char *construct_cat_label(int nl, CELL cat)
                    DMIN[nl];
             dHigh =
                 (DMAX[nl] - DMIN[nl]) / (double)nsteps * (double)cat + DMIN[nl];
-            sprintf(str, "from %s to %s",
-                    Rast_get_d_cat(&dLow, &layers[nl].labels),
-                    Rast_get_d_cat(&dHigh, &layers[nl].labels));
+            snprintf(str, sizeof(str), "from %s to %s",
+                     Rast_get_d_cat(&dLow, &layers[nl].labels),
+                     Rast_get_d_cat(&dHigh, &layers[nl].labels));
             return str;
         }
     } /* fp label */

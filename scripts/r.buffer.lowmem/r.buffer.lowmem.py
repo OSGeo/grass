@@ -90,7 +90,7 @@ def main():
     distances1 = [scale * float(d) for d in distances]
     distances2 = [d * d for d in distances1]
 
-    s = gs.read_command("g.proj", flags="j")
+    s = gs.read_command("g.proj", flags="p", format="proj4")
     kv = gs.parse_key_val(s)
     metric = "geodesic" if kv["+proj"] == "longlat" else "squared"
 

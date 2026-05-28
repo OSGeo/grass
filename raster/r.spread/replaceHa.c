@@ -4,7 +4,7 @@
  *  This routine is to delete a cell in a heap.
  *  It 1) searches the cell backward and sequentially from
  *        the heap (if not found, returns a error message),
- *     2) repalce that cell with the new min_cost and
+ *     2) replace that cell with the new min_cost and
  *        restore a heap order.
  *
  ************************************************************/
