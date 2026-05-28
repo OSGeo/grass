@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-25 16:03+0000\n"
+"POT-Creation-Date: 2026-05-09 16:40+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/de/>\n"
@@ -3293,10 +3293,39 @@ msgstr "Schließe dieses Fenster ohne den Befehl auszuführen (Ctrl+Q)"
 msgid "Run the command (Ctrl+R)"
 msgstr "Führe den Befehl aus (Ctrl+R)"
 
+msgid "Copy as Shell command"
+msgstr ""
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (Script API)"
+msgstr "Python-Skript"
+
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+msgid "Copy as Python (PyGRASS)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector maps settings"
+msgid "Copy as JSON settings"
+msgstr "Vektorkarteneinstellungen"
+
 msgid "Copy"
 msgstr "Kopieren"
 
-msgid "Copy the current command string to the clipboard"
+msgid "More copy formats"
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster map settings"
+msgid "Paste JSON settings"
+msgstr "Rasterkarteneinstellungen"
+
+#, fuzzy
+#| msgid "Copy the current command string to the clipboard"
+msgid "Paste parameters from JSON string in the clipboard"
 msgstr "Kopiere die aktuelle Befehlszeile in die Zwischenablage"
 
 msgid "Show manual page of the command (Ctrl+H)"
@@ -3313,6 +3342,48 @@ msgstr "Schließe Dialog, wenn Befehl erfolgreich ausgeführt. Ändere dies in d
 
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr "'%s' in die Zwischenablage kopiert"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "JSON copied to clipboard"
+msgstr "'%s' in die Zwischenablage kopiert"
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+msgid "Module Mismatch"
+msgstr ""
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid name"
+msgid "Invalid Data"
+msgstr "ungültiger Name"
+
+#, fuzzy
+#| msgid "Error"
+msgid "Paste Error"
+msgstr "Fehler"
+
+#, fuzzy, python-format
+#| msgid "'%s' copied to clipboard"
+msgid "%s copied to clipboard"
 msgstr "'%s' in die Zwischenablage kopiert"
 
 msgid "Required"
@@ -7303,6 +7374,9 @@ msgstr "Speichere Ausdruck in Datei"
 
 msgid "Load expression from file"
 msgstr "Lade ausdruck aus Datei"
+
+msgid "Copy the current command string to the clipboard"
+msgstr "Kopiere die aktuelle Befehlszeile in die Zwischenablage"
 
 msgid "exponent"
 msgstr "Exponent"

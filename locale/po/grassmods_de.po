@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-25 16:03+0000\n"
+"POT-Creation-Date: 2026-05-09 16:40+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/grassmods/de/>\n"
@@ -31637,6 +31637,11 @@ msgstr "Hänge Dateien an eine existierende Datei an. Das Überschreiben von exi
 msgid "Missing attribute table for vector map <%s>"
 msgstr ""
 
+#, fuzzy
+#| msgid "Too many units to place"
+msgid "Too many columns to copy the table"
+msgstr "Zu viele Einheiten zu platzieren."
+
 #, c-format
 msgid "Missing table for <%s>"
 msgstr ""
@@ -31690,6 +31695,11 @@ msgstr "Die Header-Informationen müssen auch editiert werden"
 #, c-format
 msgid "%d vector maps patched"
 msgstr "%d Vektorkarten kombiniert"
+
+#, fuzzy
+#| msgid "Too many column names"
+msgid "Too many columns to copy records"
+msgstr "Zu viele Spaltennamen."
 
 #, c-format
 msgid "Cannot open select cursor: '%s'"

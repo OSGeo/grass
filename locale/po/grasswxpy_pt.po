@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_pt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-25 16:03+0000\n"
+"POT-Creation-Date: 2026-05-09 16:40+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/pt/>\n"
@@ -3181,10 +3181,35 @@ msgstr ""
 msgid "Run the command (Ctrl+R)"
 msgstr ""
 
+msgid "Copy as Shell command"
+msgstr ""
+
+msgid "Copy as Python (Script API)"
+msgstr ""
+
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+msgid "Copy as Python (PyGRASS)"
+msgstr ""
+
+#, fuzzy
+msgid "Copy as JSON settings"
+msgstr "Mostrar configuração"
+
 msgid "Copy"
 msgstr "Copiar"
 
-msgid "Copy the current command string to the clipboard"
+msgid "More copy formats"
+msgstr ""
+
+#, fuzzy
+msgid "Paste JSON settings"
+msgstr "Configuração do tipo de letra"
+
+#, fuzzy
+#| msgid "Copy the current command string to the clipboard"
+msgid "Paste parameters from JSON string in the clipboard"
 msgstr "Copiar o texto do comando actual para a área de trabalho (clipboard)"
 
 msgid "Show manual page of the command (Ctrl+H)"
@@ -3201,6 +3226,47 @@ msgstr ""
 
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr "'%s' copiado para a área de trabalho (clipboard)"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "JSON copied to clipboard"
+msgstr "'%s' copiado para a área de trabalho (clipboard)"
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+msgid "Module Mismatch"
+msgstr ""
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+#, fuzzy
+msgid "Invalid Data"
+msgstr "Região inválida"
+
+#, fuzzy
+#| msgid "Error"
+msgid "Paste Error"
+msgstr "Erro"
+
+#, fuzzy, python-format
+#| msgid "'%s' copied to clipboard"
+msgid "%s copied to clipboard"
 msgstr "'%s' copiado para a área de trabalho (clipboard)"
 
 msgid "Required"
@@ -7035,6 +7101,9 @@ msgstr ""
 
 msgid "Load expression from file"
 msgstr ""
+
+msgid "Copy the current command string to the clipboard"
+msgstr "Copiar o texto do comando actual para a área de trabalho (clipboard)"
 
 msgid "exponent"
 msgstr ""
@@ -11524,10 +11593,6 @@ msgstr ""
 
 #~ msgid "Load map layers from GRC file to layer tree"
 #~ msgstr "Carregar camadas de mapas a partir de ficheiro GRC para árvore de camadas"
-
-#, fuzzy
-#~ msgid "Load settings:"
-#~ msgstr "Mostrar configuração"
 
 #~ msgid "Load workspace from file"
 #~ msgstr "Carregar workspace de ficheiro"

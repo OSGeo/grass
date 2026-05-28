@@ -228,7 +228,7 @@ jobs:
           cd grass || exit
           eval "$(./utils/update_version.py status --bash)"
           cd ..
-          export SITE_NAME="GRASS $VERSION Documentation"
+          export SITE_NAME="GRASS ${MAJOR}.${MINOR} Documentation"
           export COPYRIGHT="&copy; 2003-$YEAR GRASS Development Team, GRASS $VERSION Documentation"
           cd "${MKDOCS_DIR}" || exit
           mkdocs build

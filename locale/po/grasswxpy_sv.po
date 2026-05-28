@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-25 16:03+0000\n"
+"POT-Creation-Date: 2026-05-09 16:40+0000\n"
 "PO-Revision-Date: 2025-12-22 12:47+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/sv/>\n"
@@ -3253,10 +3253,43 @@ msgstr "Stäng detta fönster utan att utföra kommandot (Ctrl+Q)"
 msgid "Run the command (Ctrl+R)"
 msgstr "Kör kommandot (Ctrl+R)"
 
+#, fuzzy
+#| msgid "Copy all to clipboard"
+msgid "Copy as Shell command"
+msgstr "Kopiera allt till urklipp"
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (Script API)"
+msgstr "Python-skript"
+
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+msgid "Copy as Python (PyGRASS)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector maps settings"
+msgid "Copy as JSON settings"
+msgstr "Inställningar för vektorkartor"
+
 msgid "Copy"
 msgstr "Kopiera"
 
-msgid "Copy the current command string to the clipboard"
+#, fuzzy
+#| msgid "Export common formats"
+msgid "More copy formats"
+msgstr "Exportera vanliga format"
+
+#, fuzzy
+#| msgid "Raster map settings"
+msgid "Paste JSON settings"
+msgstr "Inställningar för Raster-karta"
+
+#, fuzzy
+#| msgid "Copy the current command string to the clipboard"
+msgid "Paste parameters from JSON string in the clipboard"
 msgstr "Kopiera den aktuella kommandosträngen till urklipp"
 
 msgid "Show manual page of the command (Ctrl+H)"
@@ -3273,6 +3306,48 @@ msgstr "Stäng dialogrutan när kommandot är slutfört. Ändra dessa inställni
 
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr "'%s' kopierat till urklipp"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "JSON copied to clipboard"
+msgstr "'%s' kopierat till urklipp"
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+msgid "Module Mismatch"
+msgstr ""
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid name"
+msgid "Invalid Data"
+msgstr "Ogiltigt namn"
+
+#, fuzzy
+#| msgid "Error"
+msgid "Paste Error"
+msgstr "Fel"
+
+#, fuzzy, python-format
+#| msgid "'%s' copied to clipboard"
+msgid "%s copied to clipboard"
 msgstr "'%s' kopierat till urklipp"
 
 msgid "Required"
@@ -7204,6 +7279,9 @@ msgstr "Spara uttryck till fil"
 
 msgid "Load expression from file"
 msgstr "Läs in uttryck från fil"
+
+msgid "Copy the current command string to the clipboard"
+msgstr "Kopiera den aktuella kommandosträngen till urklipp"
 
 msgid "exponent"
 msgstr "exponent"

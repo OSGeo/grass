@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_tr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-25 16:03+0000\n"
+"POT-Creation-Date: 2026-05-09 16:40+0000\n"
 "PO-Revision-Date: 2010-12-01 03:06+0200\n"
 "Last-Translator: Fatih <bounfat@gmail.com>\n"
 "Language-Team: Türkçe <grass-translations@lists.osgeo.org>\n"
@@ -3191,10 +3191,35 @@ msgstr ""
 msgid "Run the command (Ctrl+R)"
 msgstr ""
 
+msgid "Copy as Shell command"
+msgstr ""
+
+msgid "Copy as Python (Script API)"
+msgstr ""
+
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+msgid "Copy as Python (PyGRASS)"
+msgstr ""
+
+#, fuzzy
+msgid "Copy as JSON settings"
+msgstr "Ayarları göster"
+
 msgid "Copy"
 msgstr "Kopyala"
 
-msgid "Copy the current command string to the clipboard"
+msgid "More copy formats"
+msgstr ""
+
+#, fuzzy
+msgid "Paste JSON settings"
+msgstr "Yazı tipi ayarları"
+
+#, fuzzy
+#| msgid "Copy the current command string to the clipboard"
+msgid "Paste parameters from JSON string in the clipboard"
 msgstr "Geçerli komut dizesini panoya kopyala"
 
 msgid "Show manual page of the command (Ctrl+H)"
@@ -3211,6 +3236,48 @@ msgstr ""
 
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr "%s i panoya kopyalandı"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "JSON copied to clipboard"
+msgstr "%s i panoya kopyalandı"
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+msgid "Module Mismatch"
+msgstr ""
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid input"
+msgid "Invalid Data"
+msgstr "Geçersiz girdi"
+
+#, fuzzy
+#| msgid "Error"
+msgid "Paste Error"
+msgstr "Hata"
+
+#, fuzzy, python-format
+#| msgid "'%s' copied to clipboard"
+msgid "%s copied to clipboard"
 msgstr "%s i panoya kopyalandı"
 
 msgid "Required"
@@ -7064,6 +7131,9 @@ msgstr ""
 
 msgid "Load expression from file"
 msgstr ""
+
+msgid "Copy the current command string to the clipboard"
+msgstr "Geçerli komut dizesini panoya kopyala"
 
 msgid "exponent"
 msgstr ""
@@ -11678,10 +11748,6 @@ msgstr ""
 
 #~ msgid "Load GRC file (Tcl/Tk GUI)"
 #~ msgstr "GRC dosyasını yükle (Tcl/Tk GUI)"
-
-#, fuzzy
-#~ msgid "Load settings:"
-#~ msgstr "Ayarları göster"
 
 #~ msgid "Locates the closest points between objects in two raster maps."
 #~ msgstr "İki raster haritaki objelere en yakın noktaları yerleştirir."

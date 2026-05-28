@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_pl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-25 16:03+0000\n"
+"POT-Creation-Date: 2026-05-09 16:40+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Polish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/pl/>\n"
@@ -3258,10 +3258,43 @@ msgstr "Zamknij okno bez wykonywania polecenia (Ctrl+Q)"
 msgid "Run the command (Ctrl+R)"
 msgstr "Uruchom polecenie (Ctrl+R)"
 
+#, fuzzy
+#| msgid "Copy all to clipboard"
+msgid "Copy as Shell command"
+msgstr "Kopiuj wszystko do schowka"
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (Script API)"
+msgstr "Skrypt pythona"
+
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+msgid "Copy as Python (PyGRASS)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector maps settings"
+msgid "Copy as JSON settings"
+msgstr "Ustawienia mapy wektorowej"
+
 msgid "Copy"
 msgstr "Kopiuj"
 
-msgid "Copy the current command string to the clipboard"
+#, fuzzy
+#| msgid "Export common formats"
+msgid "More copy formats"
+msgstr "do popularnych formatów   /GDAL/"
+
+#, fuzzy
+#| msgid "Raster map settings"
+msgid "Paste JSON settings"
+msgstr "Ustawienia mapy rastrowej"
+
+#, fuzzy
+#| msgid "Copy the current command string to the clipboard"
+msgid "Paste parameters from JSON string in the clipboard"
 msgstr "Kopiuj bieżącą komendę do schowka"
 
 msgid "Show manual page of the command (Ctrl+H)"
@@ -3278,6 +3311,50 @@ msgstr "Zamknij okno po pomyślnym zakończeniu polecenia. Zmień ustawienia w o
 
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr "'%s' skopiowano do schowka"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "JSON copied to clipboard"
+msgstr "'%s' skopiowano do schowka"
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Modules"
+msgid "Module Mismatch"
+msgstr "Moduły"
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid name"
+msgid "Invalid Data"
+msgstr "Nieprawidłowa nazwa"
+
+#, fuzzy
+#| msgid "Error"
+msgid "Paste Error"
+msgstr "Błąd"
+
+#, fuzzy, python-format
+#| msgid "'%s' copied to clipboard"
+msgid "%s copied to clipboard"
 msgstr "'%s' skopiowano do schowka"
 
 msgid "Required"
@@ -7203,6 +7280,9 @@ msgstr "Zapisz wyrażenie w pliku"
 
 msgid "Load expression from file"
 msgstr "Wczytuje wyrażenie z pliku"
+
+msgid "Copy the current command string to the clipboard"
+msgstr "Kopiuj bieżącą komendę do schowka"
 
 msgid "exponent"
 msgstr "wykładnik"
@@ -12529,9 +12609,6 @@ msgstr ""
 
 #~ msgid "Modis quality control"
 #~ msgstr "Kontrola jakości Modis"
-
-#~ msgid "Modules"
-#~ msgstr "Moduły"
 
 #~ msgid "Mosaic images"
 #~ msgstr "Mozaikowanie obrazów"
