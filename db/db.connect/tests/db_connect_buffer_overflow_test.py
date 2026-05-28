@@ -18,7 +18,9 @@ def test_db_connect_long_valid_database_name(session):
     long_name = "/tmp/" + "a" * 2000 + "/test.db"
 
     try:
-        gs.run_command("db.connect", driver="sqlite", database=long_name, env=session.env)
+        gs.run_command(
+            "db.connect", driver="sqlite", database=long_name, env=session.env
+        )
         output = gs.read_command("db.connect", flags="p", env=session.env)
         assert "test.db" in output
     except CalledModuleError as e:
@@ -32,7 +34,9 @@ def test_db_connect_overlong_database_name_rejected(session):
     overlong_name = "/tmp/" + "x" * 4500 + "/test.db"
 
     with pytest.raises(CalledModuleError, match=r"too long|exceeds.*characters"):
-        gs.run_command("db.connect", driver="sqlite", database=overlong_name, env=session.env)
+        gs.run_command(
+            "db.connect", driver="sqlite", database=overlong_name, env=session.env
+        )
 
 
 def test_db_connect_variable_expansion_overflow(session):
@@ -46,10 +50,17 @@ def test_db_connect_variable_expansion_overflow(session):
     padding_needed = 4096 - expanded_length + 500
 
     if padding_needed > 0:
-        overlong_template = "$GISDBASE/" + "x" * padding_needed + "/$LOCATION_NAME/$MAPSET/test.db"
+        overlong_template = (
+            "$GISDBASE/" + "x" * padding_needed + "/$LOCATION_NAME/$MAPSET/test.db"
+        )
 
         with pytest.raises(CalledModuleError, match=r"too long|exceeds.*characters"):
-            gs.run_command("db.connect", driver="sqlite", database=overlong_template, env=session.env)
+            gs.run_command(
+                "db.connect",
+                driver="sqlite",
+                database=overlong_template,
+                env=session.env,
+            )
 
 
 def test_db_connect_variable_expansion_normal(session):
