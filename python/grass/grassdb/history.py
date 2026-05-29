@@ -265,8 +265,8 @@ def get_initial_command_info(env_run):
     mask3d_present = (mapset_path / "grid3" / "RASTER3D_MASK").exists()
     mask3d_name = f"RASTER3D_MASK@{env['MAPSET']}"
 
-    # Computational region settings
-    region_settings = gs.region(env=env_run)
+    # Computational region settings (store full 2D + 3D snapshot)
+    region_settings = gs.region(region3d=True, env=env_run)
 
     # Finalize the command info dictionary
     return {
