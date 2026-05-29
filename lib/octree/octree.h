@@ -14,6 +14,7 @@
 /* Point structure */
 typedef struct {
     double x, y, z;
+    void *user_data; /* Arbitrary user pointer to attach point IDs or metadata */
 } OctreePoint3D;
 
 /* Octree node structure */
