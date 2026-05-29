@@ -515,13 +515,13 @@ if __name__ == "__main__":
         task = GUI(show=None).ParseCommand(cmd=item.GetLog(string=False))
 
         if self.grassAPI == "script":
-            fn = "run_command"
+            func = "run_command"
         elif self.grassAPI == "pygrass":
-            fn = "Module"
+            func = "Module"
         else:  # tools
-            fn = "tools.run"
+            func = "tools.run"
 
-        strcmd = "\n%s%s(" % (" " * self.indent, fn)
+        strcmd = "\n%s%s(" % (" " * self.indent, func)
 
         self.fd.write(
             strcmd + self._getPythonActionCmd(item, task, len(strcmd) - 1, variables)
@@ -955,12 +955,12 @@ if __name__ == "__main__":
         """Write model action to Python file"""
         task = GUI(show=None).ParseCommand(cmd=item.GetLog(string=False))
         if self.grassAPI == "script":
-            fn = "run_command"
+            func = "run_command"
         elif self.grassAPI == "pygrass":
-            fn = "Module"
+            func = "Module"
         else:
-            fn = "tools.run"
-        strcmd = "%s%s(" % (" " * self.indent, fn)
+            func = "tools.run"
+        strcmd = "%s%s(" % (" " * self.indent, func)
         self.fd.write(
             strcmd + self._getPythonActionCmd(item, task, len(strcmd), variables) + "\n"
         )
