@@ -22,7 +22,8 @@ int constrained;           /* Flag that forces quadtratic through  */
 int fd_in,  /* File descriptor for input and        */
     fd_out, /* output raster files.                 */
     wsize,  /* Size of local processing window.     */
-    mparam; /* Morphometric parameter to calculate. */
+    mparam, /* Morphometric parameter to calculate. */
+    nprocs; /* NUmber of threads in process. */
 
 double resoln, /* Planimetric resolution.              */
     exponent,  /* Distance weighting exponent.         */
