@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-09 16:40+0000\n"
+"POT-Creation-Date: 2026-05-23 16:07+0000\n"
 "PO-Revision-Date: 2025-12-22 12:47+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/sv/>\n"
@@ -749,6 +749,21 @@ msgstr "Redigera vald post"
 
 msgid "Display selected"
 msgstr "Display vald"
+
+#, fuzzy
+#| msgid "Tools"
+msgid "Tools API"
+msgstr "Verktyg"
+
+#, fuzzy
+#| msgid "Script editor"
+msgid "Script API"
+msgstr "Skriptredigerare"
+
+#, fuzzy
+#| msgid "GRASS API:"
+msgid "PyGRASS API"
+msgstr "GRASS API:"
 
 msgid "Classic (labels only)"
 msgstr "Classic (endast etiketter)"
@@ -3259,15 +3274,9 @@ msgid "Copy as Shell command"
 msgstr "Kopiera allt till urklipp"
 
 #, fuzzy
-#| msgid "Python script"
-msgid "Copy as Python (Script API)"
-msgstr "Python-skript"
-
-msgid "Copy as Python (Tools API)"
-msgstr ""
-
-msgid "Copy as Python (PyGRASS)"
-msgstr ""
+#| msgid "CVS path"
+msgid "Copy as Python"
+msgstr "CVS sökväg"
 
 #, fuzzy
 #| msgid "Vector maps settings"
@@ -3304,9 +3313,27 @@ msgstr "Stäng dialogrutan när du är klar"
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr "Stäng dialogrutan när kommandot är slutfört. Ändra dessa inställningar i dialogrutan Inställningar (fliken \"Kommando\")."
 
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (Script API)"
+msgstr "Python-skript"
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (PyGRASS API)"
+msgstr "Python-skript"
+
 #, python-format
 msgid "'%s' copied to clipboard"
 msgstr "'%s' kopierat till urklipp"
+
+#, fuzzy
+#| msgid "'{cmd}' copied to clipboard"
+msgid "Python code copied to clipboard"
+msgstr "'{cmd}' kopierat till urklipp"
 
 #, fuzzy
 #| msgid "'%s' copied to clipboard"
@@ -3957,6 +3984,9 @@ msgstr "Tillåt interaktiv input"
 
 msgid "Verbosity level:"
 msgstr "Ordstyrka nivå:"
+
+msgid "Default Python API for copied commands:"
+msgstr ""
 
 msgid "Number of threads for parallel computing (supported tools only):"
 msgstr "Antal trådar för parallell databehandling (endast verktyg som stöds):"

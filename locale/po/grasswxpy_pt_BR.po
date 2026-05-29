@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-09 16:40+0000\n"
+"POT-Creation-Date: 2026-05-23 16:07+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/pt_BR/>\n"
@@ -749,6 +749,20 @@ msgstr "Editar registo selecionado"
 
 msgid "Display selected"
 msgstr "Display selecionado"
+
+#, fuzzy
+#| msgid "Tools"
+msgid "Tools API"
+msgstr "Ferramentas"
+
+#, fuzzy
+msgid "Script API"
+msgstr "Editor Python"
+
+#, fuzzy
+#| msgid "GRASS API:"
+msgid "PyGRASS API"
+msgstr "API GRASS"
 
 msgid "Classic (labels only)"
 msgstr "Classico (apenas rótulos)"
@@ -3278,15 +3292,9 @@ msgid "Copy as Shell command"
 msgstr "Copiar tudo para a área de transferência"
 
 #, fuzzy
-#| msgid "Python script"
-msgid "Copy as Python (Script API)"
-msgstr "Script Python"
-
-msgid "Copy as Python (Tools API)"
-msgstr ""
-
-msgid "Copy as Python (PyGRASS)"
-msgstr ""
+#| msgid "CVS path"
+msgid "Copy as Python"
+msgstr "Caminho CVS"
 
 #, fuzzy
 #| msgid "Vector maps settings"
@@ -3321,9 +3329,27 @@ msgstr "Fechar diálogo ao terminar"
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr "Feche a caixa de diálogo quando o comando for concluído com sucesso. Altere essas configurações na caixa de diálogo Preferências (guia 'Comando')."
 
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (Script API)"
+msgstr "Script Python"
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (PyGRASS API)"
+msgstr "Script Python"
+
 #, python-format
 msgid "'%s' copied to clipboard"
 msgstr "'%s' copiado para a área de transferência"
+
+#, fuzzy
+#| msgid "'{cmd}' copied to clipboard"
+msgid "Python code copied to clipboard"
+msgstr "'{cmd}' copiado para a área de transferência"
 
 #, fuzzy
 #| msgid "'%s' copied to clipboard"
@@ -3985,6 +4011,9 @@ msgstr "Permitir entrada interativa"
 
 msgid "Verbosity level:"
 msgstr "Nível de verbosidade:"
+
+msgid "Default Python API for copied commands:"
+msgstr ""
 
 msgid "Number of threads for parallel computing (supported tools only):"
 msgstr ""
