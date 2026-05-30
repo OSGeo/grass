@@ -9,8 +9,6 @@ again, those subprocesses must be restarted; otherwise they remain
 bound to the previous session's GISRC, which may have been deleted.
 """
 
-import os
-
 import pytest
 
 from grass.grassdb.create import create_mapset
@@ -30,25 +28,15 @@ def two_projects(tmp_path):
     return project_a, project_b
 
 
-def _promote_session_env(session, monkeypatch):
-    """Copy session.env entries into os.environ so tgis (which reads
-    os.environ directly) sees the active session.
-    """
-    for key, value in session.env.items():
-        monkeypatch.setenv(key, value)
-
-
-def test_init_restarts_subprocesses_on_session_change(two_projects, monkeypatch):
+def test_init_restarts_subprocesses_on_session_change(two_projects):
     """tgis.init() must respawn its subprocesses after a session change."""
     project_a, project_b = two_projects
-    with gs.setup.init(project_a / "a", env=os.environ.copy()) as session_a:
-        _promote_session_env(session_a, monkeypatch)
+    with gs.setup.init(project_a / "a"):
         tgis.init()
         first_ciface = tgis.get_tgis_c_library_interface()
         assert first_ciface.available_mapsets() == ["a", "PERMANENT"]
 
-    with gs.setup.init(project_b / "b", env=os.environ.copy()) as session_b:
-        _promote_session_env(session_b, monkeypatch)
+    with gs.setup.init(project_b / "b"):
         tgis.init()
         second_ciface = tgis.get_tgis_c_library_interface()
 
