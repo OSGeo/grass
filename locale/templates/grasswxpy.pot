@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-23 16:07+0000\n"
+"POT-Creation-Date: 2026-05-30 15:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1172,19 +1172,23 @@ msgstr ""
 msgid "PyGRASS"
 msgstr ""
 
-#: ../gui/wxpython/core/settings.py:940
+#: ../gui/wxpython/core/settings.py:896
+msgid "GRASS Tools"
+msgstr ""
+
+#: ../gui/wxpython/core/settings.py:941
 #, python-brace-format
 msgid ""
 "Unable to read settings file <{path}>:\n"
 "{err}"
 msgstr ""
 
-#: ../gui/wxpython/core/settings.py:974
+#: ../gui/wxpython/core/settings.py:975
 #, python-format
 msgid "Unable to read settings file <%s>\n"
 msgstr ""
 
-#: ../gui/wxpython/core/settings.py:980
+#: ../gui/wxpython/core/settings.py:981
 #, python-format
 msgid ""
 "Error: Reading settings from file <%(file)s> failed.\n"
@@ -1192,11 +1196,11 @@ msgid ""
 "\t\tLine: '%(line)s'\n"
 msgstr ""
 
-#: ../gui/wxpython/core/settings.py:998
+#: ../gui/wxpython/core/settings.py:999
 msgid "Unable to create settings directory"
 msgstr ""
 
-#: ../gui/wxpython/core/settings.py:1007
+#: ../gui/wxpython/core/settings.py:1008
 #, python-format
 msgid ""
 "Writing settings to file <%(file)s> failed.\n"
@@ -1204,11 +1208,11 @@ msgid ""
 "Details: %(detail)s"
 msgstr ""
 
-#: ../gui/wxpython/core/settings.py:1113
+#: ../gui/wxpython/core/settings.py:1114
 msgid "Unable to set "
 msgstr ""
 
-#: ../gui/wxpython/core/settings.py:1151 ../gui/wxpython/core/settings.py:1172
+#: ../gui/wxpython/core/settings.py:1152 ../gui/wxpython/core/settings.py:1173
 #, python-format
 msgid "Unable to parse settings '%s'"
 msgstr ""
@@ -3784,8 +3788,8 @@ msgid "{} script contains local modifications"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/panels.py:281
-#: ../gui/wxpython/gmodeler/panels.py:1812
-#: ../gui/wxpython/gmodeler/panels.py:1831
+#: ../gui/wxpython/gmodeler/panels.py:1819
+#: ../gui/wxpython/gmodeler/panels.py:1838
 msgid "{} script is up-to-date"
 msgstr ""
 
@@ -4018,7 +4022,7 @@ msgid "Python script"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/panels.py:1599
-#: ../gui/wxpython/gmodeler/panels.py:1820
+#: ../gui/wxpython/gmodeler/panels.py:1827
 msgid "Run script"
 msgstr ""
 
@@ -4058,38 +4062,38 @@ msgstr ""
 msgid "Update"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1722
+#: ../gui/wxpython/gmodeler/panels.py:1729
 #: ../gui/wxpython/gui_core/pyedit.py:401
 #: ../gui/wxpython/gui_core/pyedit.py:472
 msgid "Python script (*.py)|*.py"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1724
+#: ../gui/wxpython/gmodeler/panels.py:1731
 msgid "JSON file (*.json)|*.json"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1728
+#: ../gui/wxpython/gmodeler/panels.py:1735
 #: ../gui/wxpython/gui_core/pyedit.py:399
 msgid "Choose file to save"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1749
+#: ../gui/wxpython/gmodeler/panels.py:1756
 #: ../gui/wxpython/gui_core/pyedit.py:419 ../gui/wxpython/wxplot/profile.py:427
 #, python-format
 msgid "File <%s> already exists. Do you want to overwrite this file?"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1752
+#: ../gui/wxpython/gmodeler/panels.py:1759
 #: ../gui/wxpython/gui_core/pyedit.py:422
 msgid "Save file"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1776
+#: ../gui/wxpython/gmodeler/panels.py:1783
 #, python-format
 msgid "Unable to launch Python script. %s"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1824
+#: ../gui/wxpython/gmodeler/panels.py:1831
 msgid "Run script - enabled only for basic Python scripts"
 msgstr ""
 
