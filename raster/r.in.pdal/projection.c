@@ -88,9 +88,6 @@ void projection_mismatch_report(struct Cell_head cellhd,
               " in the coordinate reference system definitions,"
               " use the -o flag to ignore them and use"
               " current project definition.\n"));
-    strcat(error_msg,
-           _("Consider generating a new project with 'project' parameter"
-             " from input data set.\n"));
     G_fatal_error("%s", error_msg);
 }
 
