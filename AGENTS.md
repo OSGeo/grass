@@ -62,38 +62,47 @@ and test dependencies (pytest, numpy, etc.) installed in the Python
 environment. If using a virtual environment (venv, conda, pipenv, etc.),
 it likely needs to be activated before running tests.
 
-If running from a local build (not a system install), add the binary directory
-to PATH first:
+If running from a local build (not a system install), generate a build
+environment file once per build. This resolves all dynamic paths up front
+so that subsequent test commands need no command substitution:
 
 ```bash
-export PATH="$(pwd)/bin.$(uname -m)-pc-linux-gnu:${PATH}"
+cat > .grass_build_env << EOF
+export PATH="$(pwd)/bin.$(uname -m)-pc-linux-gnu:\${PATH}"
+export PYTHONPATH="$(grass --config python_path):\${PYTHONPATH}"
+export LD_LIBRARY_PATH="$(grass --config path)/lib:\${LD_LIBRARY_PATH}"
+EOF
 ```
 
-Before running pytest, set the required environment variables:
+Regenerate the file after rebuilding GRASS or switching branches. The file
+is local and should not be committed (it is listed in `.gitignore`).
+The exact content of the generated file above is a best guess for most
+Linux setups. Adapt it as needed for the local environment — for example,
+the architecture suffix, the virtual environment wrapper, or additional
+variables may differ.
 
-```bash
-export PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
-export LD_LIBRARY_PATH="$(grass --config path)/lib:${LD_LIBRARY_PATH}"
-```
-
-For coverage reporting, two additional variables are needed (used by
-`.coveragerc` to map paths):
-
-```bash
-export INITIAL_GISBASE="$(grass --config path)"
-export INITIAL_PWD="${PWD}"
-```
+Then prefix each pytest invocation with `source .grass_build_env`:
 
 **Run tests for a specific tool:**
 
 ```bash
-pytest raster/r.slope.aspect/tests/
+source .grass_build_env && pytest raster/r.slope.aspect/tests/
 ```
 
 **Run a single test file:**
 
 ```bash
-pytest raster/r.slope.aspect/tests/r_slope_aspect_test.py
+source .grass_build_env && pytest raster/r.slope.aspect/tests/r_slope_aspect_test.py
+```
+
+For coverage reporting, two additional variables are needed (used by
+`.coveragerc` to map paths). Add them to the env file:
+
+```bash
+cat >> .grass_build_env << EOF
+export INITIAL_GISBASE="$(grass --config path)"
+export INITIAL_PWD="${PWD}"
+EOF
 ```
 
 **Run gunittest-style tests** (legacy `testsuite/` directories; currently the
