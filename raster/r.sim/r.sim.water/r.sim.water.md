@@ -64,17 +64,15 @@ defines the probability of particles to pass through the structure (the
 values will be 0-1).
 
 Output includes a water depth raster map **depth** in \[m\], and a water
-discharge raster map **discharge** in \[m3/s\]. Error of the numerical
-solution can be analyzed using the **error** raster map (the resulting
-water depth is an average, and err is its RMSE). The output vector
-points map **output_walkers** can be used to analyze and visualize
-spatial distribution of walkers at different simulation times (note that
-the resulting water depth is based on the density of these walkers). The
-spatial distribution of numerical error associated with path sampling
-solution can be analysed using the output error raster file \[m\]. This
-error is a function of the number of particles used in the simulation
-and can be reduced by increasing the number of walkers given by
-parameter **nwalkers**. Duration of simulation is controlled by the
+discharge raster map **discharge** in \[m3/s\]. The **error** raster map
+is a Monte Carlo standard-deviation estimator across replicas of the
+particle simulation; the simulation currently runs a single replica, so
+this map is zero everywhere and is provided for forward compatibility
+with planned multiple-replica execution. The output vector points map
+**output_walkers** can be used to analyze and visualize spatial
+distribution of walkers at different simulation times (note that the
+resulting water depth is based on the density of these walkers).
+Duration of simulation is controlled by the
 **duration** parameter. The default value is 10 minutes, reaching the
 steady-state may require much longer time, depending on the time step,
 complexity of terrain, land cover and size of the area. Output walker,
@@ -217,16 +215,6 @@ d.mon stop=cairo
 ![r.sim.water generated depth map](r_sim_water_water_depth.png)  
 *Figure: Simulated water depth map in the rural area of the North
 Carolina sample dataset.*
-
-## ERROR MESSAGES
-
-If the module fails with
-
-```sh
-ERROR: nwalk (7000001) > maxw (7000000)!
-```
-
-then a lower **nwalkers** parameter value has to be selected.
 
 ## REFERENCES
 
