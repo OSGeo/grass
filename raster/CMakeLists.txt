@@ -504,8 +504,15 @@ build_program_in_subdir(
   grass_interpdata
   grass_qtree)
 
-build_program_in_subdir(r.resamp.stats DEPENDS grass_gis grass_raster
-                        grass_stats ${LIBM})
+build_program_in_subdir(
+  r.resamp.stats
+  DEPENDS
+  grass_gis
+  grass_raster
+  grass_stats
+  ${LIBM}
+  OPTIONAL_DEPENDS
+  OpenMP::OpenMP_C)
 
 build_program_in_subdir(r.resample DEPENDS grass_gis grass_raster)
 
