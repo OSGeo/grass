@@ -1112,19 +1112,22 @@ class TemporalAlgebraParser:
                     returncode = 0
         return returncode
 
-    def set_temporal_extent_list(self, maplist, topolist=["EQUAL"], temporal="l"):
+    def set_temporal_extent_list(self, maplist, topolist=None, temporal="l"):
         """Change temporal extent of map list based on temporal relations to
             other map list and given temporal operator.
 
         :param maplist: List of map objects for which relations has been build
                                     correctly.
-        :param topolist: List of strings of temporal relations.
+        :param topolist: List of strings of temporal relations. If None,
+                         defaults to ["EQUAL"] internally.
         :param temporal: The temporal operator specifying the temporal
                                         extent operation (intersection, union, disjoint
                                         union, right reference, left reference).
 
         :return: Map list with specified temporal extent.
         """
+        if topolist is None:
+            topolist = ["EQUAL"]
         resultdict = {}
         temporal_topo_list, spatial_topo_list = self._check_topology(topolist=topolist)
 
@@ -1399,7 +1402,7 @@ class TemporalAlgebraParser:
         self,
         maplistA,
         maplistB=None,
-        topolist=["EQUAL"],
+        topolist=None,
         assign_val: bool = False,
         count_map: bool = False,
         compare_bool: bool = False,
@@ -1411,7 +1414,8 @@ class TemporalAlgebraParser:
 
         :param maplistA: List of maps.
         :param maplistB: List of maps.
-        :param topolist: List of strings of spatio-temporal relations.
+        :param topolist: List of strings of spatio-temporal relations. If None,
+                         defaults to ["EQUAL"] internally.
         :param assign_val: Boolean for assigning a boolean map value based on
                            the map_values from the compared map list by
                            topological relationships.
@@ -1573,6 +1577,8 @@ class TemporalAlgebraParser:
         """
         # Check the topology definitions and return the list of temporal and spatial
         # topological relations that must be fulfilled
+        if topolist is None:
+            topolist = ["EQUAL"]
         temporal_topo_list, spatial_topo_list = self._check_topology(topolist=topolist)
 
         resultdict = {}
@@ -1624,20 +1630,25 @@ class TemporalAlgebraParser:
         return sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
 
     def assign_bool_value(
-        self, map_i, temporal_topo_list=["EQUAL"], spatial_topo_list=[]
+        self, map_i, temporal_topo_list=None, spatial_topo_list=None
     ) -> bool:
         """Function to assign boolean map value based on the map_values from the
         compared map list by topological relationships.
 
           :param map_i: Map object with temporal extent.
-          :param temporal_topo_list: List of strings for given temporal relations.
-          :param spatial_topo_list: List of strings for given spatial relations.
+          :param temporal_topo_list: List of strings for given temporal relations. If None,
+                                    defaults to ["EQUAL"] internally.
+          :param spatial_topo_list: List of strings for given spatial relations. If None,
+                                   defaults to empty list internally.
 
           :return: Map object with conditional value that has been assigned by
                         relation maps that fulfil the topological relationships to
                         maplistB specified in temporal_topo_list.
         """
-
+        if temporal_topo_list is None:
+            temporal_topo_list = ["EQUAL"]
+        if spatial_topo_list is None:
+            spatial_topo_list = []
         temporal_relations = map_i.get_temporal_relations()
         condition_value_list = []
         for topo in temporal_topo_list:
@@ -1669,8 +1680,8 @@ class TemporalAlgebraParser:
         map_i,
         compop,
         aggregate,
-        temporal_topo_list=["EQUAL"],
-        spatial_topo_list=[],
+        temporal_topo_list=None,
+        spatial_topo_list=None,
     ):
         """Function to evaluate two map lists with boolean values by boolean
           comparison operator.
@@ -1678,13 +1689,18 @@ class TemporalAlgebraParser:
         :param map_i: Map object with temporal extent.
         :param compop: Comparison operator, && or ||.
         :param aggregate: Aggregation operator for relation map list, & or \\|.
-        :param temporal_topo_list: List of strings for given temporal relations.
-        :param spatial_topo_list: List of strings for given spatial relations.
+        :param temporal_topo_list: List of strings for given temporal relations. If None,
+                                  defaults to ["EQUAL"] internally.
+        :param spatial_topo_list: List of strings for given spatial relations. If None,
+                                 defaults to empty list internally.
 
         :return: Map object with conditional value that has been evaluated by
                       comparison operators.
         """
-
+        if temporal_topo_list is None:
+            temporal_topo_list = ["EQUAL"]
+        if spatial_topo_list is None:
+            spatial_topo_list = []
         temporal_relations = map_i.get_temporal_relations()
 
         # Build conditional list with elements from related maps and given relation
@@ -1760,7 +1776,7 @@ class TemporalAlgebraParser:
         self,
         maplistA,
         maplistB,
-        topolist=["EQUAL"],
+        topolist=None,
         inverse: bool = False,
         assign_val: bool = False,
     ):
@@ -1770,7 +1786,8 @@ class TemporalAlgebraParser:
                            expression.
         :param maplistB:   List of maps representing the right side of a temporal
                            expression.
-        :param topolist: List of strings of temporal relations.
+        :param topolist: List of strings of temporal relations. If None,
+                         defaults to ["EQUAL"] internally.
         :param inverse: Boolean value that specifies if the selection should be
                            inverted.
         :param assign_val: Boolean for assigning a boolean map value based on
@@ -1828,6 +1845,8 @@ class TemporalAlgebraParser:
             Map a4 has no equal relation to mapset mapsB
 
         """
+        if topolist is None:
+            topolist = ["EQUAL"]
         if not inverse:
             topolist = self.build_spatio_temporal_topology_list(
                 maplistA, maplistB, topolist, assign_val=assign_val
@@ -1849,14 +1868,15 @@ class TemporalAlgebraParser:
         # Sort list of maps chronological.
         return sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
 
-    def set_granularity(self, maplistA, maplistB, toperator="l", topolist=["EQUAL"]):
+    def set_granularity(self, maplistA, maplistB, toperator="l", topolist=None):
         """This function sets the temporal extends of a list of maps based on
            another map list.
 
         :param maplistB: List of maps.
         :param maplistB: List of maps.
         :param toperator: String containing the temporal operator: l, r, d, i, u.
-        :param topolist: List of topological relations.
+        :param topolist: List of topological relations. If None, defaults to ["EQUAL"]
+                         internally.
 
         :return: List of maps with the new temporal extends.
 
@@ -1900,6 +1920,8 @@ class TemporalAlgebraParser:
 
         :raises SyntaxError: If an unpermitted temporal relation name is used in ``topolist``
         """
+        if topolist is None:
+            topolist = ["EQUAL"]
         topologylist = [
             "EQUAL",
             "FOLLOWS",
@@ -2153,7 +2175,7 @@ class TemporalAlgebraParser:
                 map_i.condition_value = boolname
         return maplist
 
-    def eval_map_list(self, maplist, thenlist, topolist=["EQUAL"]):
+    def eval_map_list(self, maplist, thenlist, topolist=None):
         """This function transfers boolean values from temporal expression
            from one map list to another by their topology. These boolean
            values are added to the maps as condition_value.
@@ -2161,6 +2183,8 @@ class TemporalAlgebraParser:
         :param maplist:  List of map objects containing boolean map values.
         :param thenlist: List of map objects where the boolean values
                         should be added.
+        :param topolist: List of temporal relations between the two map lists. If None,
+                        defaults to ["EQUAL"] internally.
 
         :return: List of maps from thenlist with added conditional boolean values.
         """
@@ -2172,11 +2196,13 @@ class TemporalAlgebraParser:
         #                                              inverse = True,
         #                                              topolist = topolist)
         # Combining the selection and inverse selection list.
+        if topolist is None:
+            topolist = ["EQUAL"]
         return self.perform_temporal_selection(
             thenlist, maplist, assign_val=True, topolist=topolist
         )
 
-    def build_condition_list(self, tvarexpr, thenlist, topolist=["EQUAL"]):
+    def build_condition_list(self, tvarexpr, thenlist, topolist=None):
         """This function evaluates temporal variable expressions of a conditional
         expression in two steps.
         At first it combines stepwise the single conditions by their relations with
@@ -2207,7 +2233,8 @@ class TemporalAlgebraParser:
         :return: Map list with conditional values for all temporal expressions.
 
         """
-
+        if topolist is None:
+            topolist = ["EQUAL"]
         # Evaluate the temporal variable expression and compute the temporal combination
         # of conditions.
 
