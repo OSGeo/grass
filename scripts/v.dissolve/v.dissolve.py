@@ -541,11 +541,16 @@ def option_as_list(options, name):
 
 def main():
     """Run the dissolve operation based on command line parameters"""
-    options, unused_flags = gs.parser()
+    options, unused_flags = gs.parser()s
     input_vector = options["input"]
     output = options["output"]
     layer = options["layer"]
     column = options["column"]
+    column2 = options['column2'] if 'column2' in options else None
+    if column2:
+    	dissolve_col = column + '_' + column2
+    else:
+    	dissolve_col = column
     aggregate_backend = options["aggregate_backend"]
 
     columns_to_aggregate = option_as_list(options, "aggregate_columns")
