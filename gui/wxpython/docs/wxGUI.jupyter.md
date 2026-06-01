@@ -14,10 +14,16 @@ This lets you combine interactive Python notebooks with your GUI workflow.
 
 - **Linux / macOS:** No additional setup is required in most cases.
   On systems with an externally managed Python environment (e.g. Debian),
-  installing the `notebook` package may need extra steps —
-  see [Install Missing Notebook Package](#install-missing-notebook-package).
-- **Windows:** Setup and dependency fixes are guided automatically by GRASS dialogs.
-  For details, see [Windows Setup Details](#windows-setup-details).
+  installing the `notebook` package may require extra steps.
+  Integrated mode requires `wx.html2` support, which is not auto-fixed by
+  a dialog and may require manual steps.
+- **Windows:** GRASS provides dialogs for selected dependency issues:
+  missing `notebook` package and missing Microsoft Edge WebView2 backend support
+  for integrated mode. A missing `wx.html2` support itself
+  is not auto-fixed by a dialog and may require manual steps.
+
+For details, see [Install Missing Notebook Package](#install-missing-notebook-package)
+and [Integrated Mode Requirements](#integrated-mode-requirements).
 
 ## Getting Started
 
@@ -114,7 +120,7 @@ in the current GRASS Python environment. After installation, the
 Jupyter Startup dialog opens normally.
 
 If the automatic installation fails, an error dialog displays the exact command
-you can run manually, along with guidance for your platform. On systems with an
+you can run manually. On systems with an
 externally managed Python environment (e.g. Debian), pip may refuse to
 install packages. In that case you have two options:
 
@@ -130,6 +136,56 @@ install packages. In that case you have two options:
    sudo apt install jupyter-notebook
    ```
 
+### Integrated Mode Requirements
+
+Integrated mode requires two conditions to be met:
+
+#### `wx.html2` module availability (all platforms)
+
+First, GRASS checks whether `wx.html2` is importable. If this fails, Integrated
+mode stops with an error:
+
+```text
+Integrated mode requires wx.html2.WebView, which is not available on this system.
+This can happen if wxPython or wxWidgets were built without HTML2/WebView support.
+```
+
+On Debian-based systems, a known fix is:
+
+```bash
+sudo apt install libwebkit2gtk-4.1-dev
+<GRASS Python> -m pip install --force-reinstall wxpython==<current version>
+```
+
+Because the current GRASS session still uses the previously loaded wxPython
+build, a restart is required after reinstalling. After restart, Integrated mode
+should start successfully.
+
+#### Microsoft Edge WebView2 backend availability (Windows only)
+
+If `wx.html2` is available, GRASS performs an additional check on Windows
+to ensure the backend is Microsoft Edge WebView2.
+
+If WebView2 is not available, wx may fall back to the legacy Internet
+Explorer backend, which is not compatible with modern Jupyter Notebook
+interface.
+
+Some wxPython builds (including current OSGeo4W-based builds) are compiled
+without WebView2 support, so Integrated mode cannot start.
+
+When you choose Integrated mode and WebView2 is not available, GRASS detects
+this and opens a dialog offering to reinstall wxPython using pip. The reinstall
+keeps the currently installed wxPython version, but fetches the pip wheel that
+includes WebView2 support. Clicking **Reinstall** runs:
+
+```bash
+<GRASS Python> -m pip install --force-reinstall wxpython==<current version>
+```
+
+After reinstalling wxPython, restart GRASS and try Integrated mode again.
+
+## Technical Notes
+
 ### Command Used to Start Jupyter
 
 GRASS starts Jupyter with the same command on Windows, Linux, and macOS:
@@ -138,42 +194,16 @@ GRASS starts Jupyter with the same command on Windows, Linux, and macOS:
 <GRASS Python> -m notebook ...
 ```
 
-The main reason for this choice is Windows standalone reliability. On
-Windows standalone installations, running `python -m jupyter notebook` can fail
-even when Notebook is installed and available. A typical symptom is an
-import/bootstrap error (for example `Could not import runpy._run_module_as_main`
-or `AssertionError: SRE module mismatch`).
+The main reason for this choice over `<GRASS Python> -m jupyter notebook`
+is Windows standalone reliability. On Windows standalone installations,
+`<GRASS Python> -m jupyter notebook` can fail even when Notebook is installed
+and available. A typical symptom is an import/bootstrap error (for example
+`Could not import runpy._run_module_as_main` or
+`AssertionError: SRE module mismatch`).
 
 This usually indicates a Python environment mismatch in the `jupyter` launcher
 path, where imported modules do not fully match the active GRASS Python runtime.
 Using `python -m notebook` avoids that extra launcher layer.
-
-## Windows Setup Details
-
-This section describes the Windows-specific setup.
-Users on Linux and macOS can skip this section.
-
-### Microsoft Edge WebView2 Runtime Support for Integrated Mode
-
-Integrated mode requires `wx.html2.WebView` with Microsoft Edge WebView2
-backend support. Even when `wx.html2.WebView` itself is available, some
-wxPython builds (including current OSGeo4W-based builds) are compiled without
-the WebView2 backend, so `wx.html2.WebView` falls back to the legacy Internet
-Explorer (MSHTML) engine, which is not compatible with modern Jupyter interfaces,
-and Integrated mode cannot start.
-
-When you choose Integrated mode and the WebView2 backend is not available,
-GRASS detects this and opens a dialog offering to reinstall wxPython using pip.
-The reinstall keeps the currently installed wxPython version, but fetches the
-pip wheel that includes WebView2 backend support. Clicking **Reinstall** runs:
-
-```bash
-<GRASS Python> -m pip install --force-reinstall wxpython==<current version>
-```
-
-Because the current GRASS session still uses the previously loaded wxPython
-build, a restart is required after reinstalling. After restart, Integrated mode
-should start successfully.
 
 ## Tips
 
