@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-09 16:40+0000\n"
+"POT-Creation-Date: 2026-05-23 16:07+0000\n"
 "PO-Revision-Date: 2014-05-03 16:44-0400\n"
 "Last-Translator: Huidae Cho <grass4u@gmail.com>\n"
 "Language-Team: Korean <grass-translations@lists.osgeo.org>\n"
@@ -739,6 +739,16 @@ msgstr ""
 
 msgid "Display selected"
 msgstr ""
+
+msgid "Tools API"
+msgstr ""
+
+msgid "Script API"
+msgstr ""
+
+#, fuzzy
+msgid "PyGRASS API"
+msgstr "GRASS 도움말"
 
 msgid "Classic (labels only)"
 msgstr ""
@@ -3176,14 +3186,10 @@ msgstr ""
 msgid "Copy as Shell command"
 msgstr ""
 
-msgid "Copy as Python (Script API)"
-msgstr ""
-
-msgid "Copy as Python (Tools API)"
-msgstr ""
-
-msgid "Copy as Python (PyGRASS)"
-msgstr ""
+#, fuzzy
+#| msgid "Copy"
+msgid "Copy as Python"
+msgstr "복사"
 
 msgid "Copy as JSON settings"
 msgstr ""
@@ -3213,9 +3219,23 @@ msgstr ""
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr ""
 
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+msgid "Copy as Python (Script API)"
+msgstr ""
+
+msgid "Copy as Python (PyGRASS API)"
+msgstr ""
+
 #, python-format
 msgid "'%s' copied to clipboard"
 msgstr ""
+
+#, fuzzy
+#| msgid "Vector cleaning command copied to clipboard"
+msgid "Python code copied to clipboard"
+msgstr "벡터 정리 명령을 클립보드로 복사했습니다"
 
 #, fuzzy
 #| msgid "Vector cleaning command copied to clipboard"
@@ -3856,6 +3876,9 @@ msgid "Allow interactive input"
 msgstr ""
 
 msgid "Verbosity level:"
+msgstr ""
+
+msgid "Default Python API for copied commands:"
 msgstr ""
 
 msgid "Number of threads for parallel computing (supported tools only):"

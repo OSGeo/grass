@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-09 16:40+0000\n"
+"POT-Creation-Date: 2026-05-23 16:07+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Japanese <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/ja/>\n"
@@ -750,6 +750,19 @@ msgstr "選択レコードの修正"
 
 msgid "Display selected"
 msgstr "表示選択"
+
+#, fuzzy
+#| msgid "Tools"
+msgid "Tools API"
+msgstr "ツール"
+
+#, fuzzy
+msgid "Script API"
+msgstr "編集開始 "
+
+#, fuzzy
+msgid "PyGRASS API"
+msgstr "GRASSのヘルプ "
 
 msgid "Classic (labels only)"
 msgstr "クラシック（ラベルのみ）"
@@ -3268,15 +3281,9 @@ msgid "Copy as Shell command"
 msgstr ""
 
 #, fuzzy
-#| msgid "Python script"
-msgid "Copy as Python (Script API)"
-msgstr "Pythonスクリプト"
-
-msgid "Copy as Python (Tools API)"
-msgstr ""
-
-msgid "Copy as Python (PyGRASS)"
-msgstr ""
+#| msgid "Copy map"
+msgid "Copy as Python"
+msgstr "マップのコピー"
 
 #, fuzzy
 #| msgid "Vector maps settings"
@@ -3311,8 +3318,26 @@ msgstr "終了時にダイアログを閉じる"
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr "コマンドが成功した場合はダイアログを閉じます. ダイアログ（'コマンド'タブ）でこの設定を変更します."
 
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (Script API)"
+msgstr "Pythonスクリプト"
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (PyGRASS API)"
+msgstr "Pythonスクリプト"
+
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr "'%s' クリップボードにコピーしました"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "Python code copied to clipboard"
 msgstr "'%s' クリップボードにコピーしました"
 
 #, fuzzy
@@ -3964,6 +3989,9 @@ msgstr "対話形式の入力を許可"
 
 msgid "Verbosity level:"
 msgstr "冗長レベル："
+
+msgid "Default Python API for copied commands:"
+msgstr ""
 
 msgid "Number of threads for parallel computing (supported tools only):"
 msgstr ""

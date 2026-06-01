@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-09 16:40+0000\n"
+"POT-Creation-Date: 2026-05-23 16:07+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Greek <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/el/>\n"
@@ -736,6 +736,17 @@ msgid "Edit selected record"
 msgstr ""
 
 msgid "Display selected"
+msgstr ""
+
+#, fuzzy
+#| msgid "Tools"
+msgid "Tools API"
+msgstr "Εργαλεία"
+
+msgid "Script API"
+msgstr ""
+
+msgid "PyGRASS API"
 msgstr ""
 
 msgid "Classic (labels only)"
@@ -3185,15 +3196,9 @@ msgid "Copy as Shell command"
 msgstr ""
 
 #, fuzzy
-#| msgid "Python script"
-msgid "Copy as Python (Script API)"
-msgstr "Python script"
-
-msgid "Copy as Python (Tools API)"
-msgstr ""
-
-msgid "Copy as Python (PyGRASS)"
-msgstr ""
+#| msgid "Copy"
+msgid "Copy as Python"
+msgstr "Αντιγραφή"
 
 msgid "Copy as JSON settings"
 msgstr ""
@@ -3224,9 +3229,26 @@ msgstr ""
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr ""
 
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (Script API)"
+msgstr "Python script"
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (PyGRASS API)"
+msgstr "Python script"
+
 #, python-format
 msgid "'%s' copied to clipboard"
 msgstr ""
+
+#, fuzzy
+msgid "Python code copied to clipboard"
+msgstr "Python script"
 
 msgid "JSON copied to clipboard"
 msgstr ""
@@ -3868,6 +3890,9 @@ msgid "Allow interactive input"
 msgstr ""
 
 msgid "Verbosity level:"
+msgstr ""
+
+msgid "Default Python API for copied commands:"
 msgstr ""
 
 msgid "Number of threads for parallel computing (supported tools only):"
