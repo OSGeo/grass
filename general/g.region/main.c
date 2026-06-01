@@ -914,7 +914,7 @@ int main(int argc, char *argv[])
     /* grow by number of cells */
     if ((value = parm.grow->answer)) {
         update_file = true;
-        if (sscanf(value, "%i", &pix)) {
+        if (sscanf(value, "%i", &pix) == 1) {
             xs = window.ns_res * pix;
             if (window.north + xs > window.south - xs) {
                 if (G_projection() == PROJECTION_LL &&
