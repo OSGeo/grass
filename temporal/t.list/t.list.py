@@ -72,7 +72,14 @@
 # % guisection: Selection
 # %end
 
+# %option G_OPT_F_FORMAT
+# % options: plain,line,json,csv
+# % descriptions: plain;Plain text output;line;Comma separated list of dataset names;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)
+# % guisection: Formatting
+# %end
+
 # %option G_OPT_F_SEP
+# % answer:
 # % label: Field separator character between the output columns
 # % guisection: Formatting
 # %end
@@ -87,6 +94,7 @@
 # % guisection: Formatting
 # %end
 
+import json
 import sys
 from contextlib import nullcontext
 
@@ -108,6 +116,35 @@ def main():
     separator = gs.separator(options["separator"])
     outpath = options["output"]
     colhead = flags["c"]
+    output_format = options.get("format", "plain")
+
+    if output_format == "csv":
+        if not separator:
+            separator = ","
+        elif len(separator) > 1:
+            gs.fatal(
+                _("A standard CSV separator (delimiter) is only one character long")
+            )
+
+    elif output_format == "json":
+        if colhead:
+            gs.fatal(_("Column names are always included in JSON output"))
+        if separator:
+            gs.fatal(_("Separator option is not allowed with JSON format"))
+
+    elif output_format == "line":
+        if not separator:
+            separator = ","
+        columns_list = columns.split(",") if columns else []
+        if len(columns_list) > 1:
+            gs.fatal(
+                _(
+                    "Only one column is allowed for line format (not {num_columns})"
+                ).format(num_columns=len(columns_list))
+            )
+
+    elif not separator:  # output_format == "plain"
+        separator = "|"
 
     # Make sure the temporal database exists
     tgis.init()
@@ -116,6 +153,8 @@ def main():
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
     first = True
+
+    json_output = {}
 
     if gs.verbosity() > 0 and not outpath:
         sys.stderr.write("----------------------------------------------\n")
@@ -162,24 +201,50 @@ def main():
                                     )
                                 )
 
-                        if colhead and first:
-                            output = ""
-                            count = 0
-                            for col_key in rows[0].keys():
-                                output += (separator if count > 0 else "") + str(
-                                    col_key
-                                )
-                                count += 1
-                            out_file.write("{st}\n".format(st=output))
-                            first = False
+                        if output_format == "json":
+                            if key not in json_output:
+                                json_output[key] = []
 
-                        for row in rows:
-                            output = ""
-                            count = 0
-                            for col in row:
-                                output += (separator if count > 0 else "") + str(col)
-                                count += 1
-                            out_file.write("{st}\n".format(st=output))
+                            for row in rows:
+                                json_output[key].append(dict(row))
+
+                        elif output_format == "line":
+                            values = [str(row[0]) for row in rows]
+                            out_file.write(separator.join(values) + "\n")
+                        else:
+                            if (colhead or output_format == "csv") and first:
+                                output = ""
+                                count = 0
+                                for col_key in rows[0].keys():
+                                    output += (separator if count > 0 else "") + str(
+                                        col_key
+                                    )
+                                    count += 1
+                                out_file.write("{st}\n".format(st=output))
+                                first = False
+
+                            for row in rows:
+                                output = ""
+                                count = 0
+                                for col in row:
+                                    # If the database value is None, make it an empty string for csv
+                                    if col is None:
+                                        cell_value = (
+                                            "" if output_format == "csv" else "None"
+                                        )
+                                    else:
+                                        cell_value = str(col)
+
+                                    output += (
+                                        separator if count > 0 else ""
+                                    ) + cell_value
+                                    count += 1
+                                out_file.write("{st}\n".format(st=output))
+
+        # Dump the collected JSON data
+        if output_format == "json":
+            out_file.write(json.dumps(json_output, indent=4, default=str) + "\n")
+
     dbif.close()
 
 

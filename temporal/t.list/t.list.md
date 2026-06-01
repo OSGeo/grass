@@ -79,6 +79,38 @@ Time stamped raster maps with absolute time available in mapset <climate_2000_20
 2012_12_tempmean@climate_2000_2012
 ```
 
+You can also use the *format=* option with `plain` (default), `csv`, `line`, and
+`json`.
+For `plain`, `csv`, and `line`, you can also use the *separator=* option to change
+ the output delimiter.
+
+```sh
+t.list raster format=json
+```
+
+```json
+{
+    "climate_2000_2012": [
+        {
+            "id": "2009_01_tempmean@climate_2000_2012"
+        },
+        {
+            "id": "2009_02_tempmean@climate_2000_2012"
+        },
+        {
+            "id": "2009_03_tempmean@climate_2000_2012"
+        },
+        ...
+        {
+            "id": "2012_11_tempmean@climate_2000_2012"
+        },
+        {
+            "id": "2012_12_tempmean@climate_2000_2012"
+        }
+    ]
+}
+```
+
 ## SEE ALSO
 
 *[g.list](g.list.md), [t.create](t.create.md), [t.info](t.info.md),
