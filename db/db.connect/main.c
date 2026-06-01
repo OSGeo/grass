@@ -340,11 +340,7 @@ char *substitute_variables(dbConnection *conn)
                       GPATH_MAX - 1, conn->databaseName);
     }
 
-    ret = snprintf(buf, GPATH_MAX, "%s", database);
-    if (ret >= GPATH_MAX) {
-        G_fatal_error(_("Database path too long (exceeds %d characters): %s"),
-                      GPATH_MAX - 1, database);
-    }
+    snprintf(buf, GPATH_MAX, "%s", database);
     c = (char *)strstr(buf, "$GISDBASE");
     if (c != NULL) {
         *c = '\0';
@@ -356,11 +352,7 @@ char *substitute_variables(dbConnection *conn)
         }
     }
 
-    ret = snprintf(buf, GPATH_MAX, "%s", database);
-    if (ret >= GPATH_MAX) {
-        G_fatal_error(_("Database path too long (exceeds %d characters): %s"),
-                      GPATH_MAX - 1, database);
-    }
+    snprintf(buf, GPATH_MAX, "%s", database);
     c = (char *)strstr(buf, "$LOCATION_NAME");
     if (c != NULL) {
         *c = '\0';
@@ -374,11 +366,7 @@ char *substitute_variables(dbConnection *conn)
         }
     }
 
-    ret = snprintf(buf, GPATH_MAX, "%s", database);
-    if (ret >= GPATH_MAX) {
-        G_fatal_error(_("Database path too long (exceeds %d characters): %s"),
-                      GPATH_MAX - 1, database);
-    }
+    snprintf(buf, GPATH_MAX, "%s", database);
     c = (char *)strstr(buf, "$MAPSET");
     if (c != NULL) {
         *c = '\0';
