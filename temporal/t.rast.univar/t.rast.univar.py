@@ -5,7 +5,7 @@
 # MODULE:    t.rast.univar
 # AUTHOR(S):    Soeren Gebbert
 #
-# PURPOSE:    Calculates univariate statistics from the non-null cells for each registered raster map of a space time raster dataset
+# PURPOSE:    Calculates statistics univariate from the non-null cells for each registered raster map of a space time raster dataset
 # COPYRIGHT:    (C) 2011-2017, Soeren Gebbert and the GRASS Development Team
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -60,6 +60,14 @@
 # %end
 
 # %option
+# % key: granularity
+# % type: string
+# % description: Aggregation granularity, format absolute time "x years, x months, x weeks, x days, x hours, x minutes, x seconds" or an integer value for relative time
+# % required: no
+# % multiple: no
+# %end
+
+# %option
 # % key: region_relation
 # % description: Process only maps with this spatial relation to the current computational region
 # % guisection: Selection
@@ -101,7 +109,6 @@ import grass.script as gs
 def main():
     # Get the options and flags
     options, flags = gs.parser()
-
     # lazy imports
     import grass.temporal as tgis
 
@@ -150,6 +157,7 @@ def main():
         rast_region=rast_region,
         region_relation=region_relation,
         nprocs=nprocs,
+        granularity=options["granularity"] or None,
     )
 
 
