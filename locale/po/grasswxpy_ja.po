@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-28 15:49+0000\n"
+"POT-Creation-Date: 2026-05-23 16:07+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Japanese <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/ja/>\n"
@@ -751,6 +751,19 @@ msgstr "選択レコードの修正"
 msgid "Display selected"
 msgstr "表示選択"
 
+#, fuzzy
+#| msgid "Tools"
+msgid "Tools API"
+msgstr "ツール"
+
+#, fuzzy
+msgid "Script API"
+msgstr "編集開始 "
+
+#, fuzzy
+msgid "PyGRASS API"
+msgstr "GRASSのヘルプ "
+
 msgid "Classic (labels only)"
 msgstr "クラシック（ラベルのみ）"
 
@@ -1322,6 +1335,11 @@ msgid "Re&load maps"
 msgstr ""
 
 #, fuzzy
+#| msgid "Show computational extent"
+msgid "Show computational region"
+msgstr "計算範囲表示"
+
+#, fuzzy
 #| msgid "&Copy"
 msgid "&Copy path"
 msgstr "コピー &C"
@@ -1336,6 +1354,11 @@ msgstr "レコード削除"
 #, fuzzy
 msgid "&Rename project"
 msgstr "投影法の管理 "
+
+#, fuzzy
+#| msgid "Choose projection"
+msgid "Show projection info"
+msgstr "投影法の選択 "
 
 #, fuzzy
 #| msgid "Copy map"
@@ -3254,10 +3277,33 @@ msgstr "コマンドを実行せずに画面を閉じる (Ctrl+Q)"
 msgid "Run the command (Ctrl+R)"
 msgstr "コマンド実行 (Ctrl+R)"
 
+msgid "Copy as Shell command"
+msgstr ""
+
+#, fuzzy
+#| msgid "Copy map"
+msgid "Copy as Python"
+msgstr "マップのコピー"
+
+#, fuzzy
+#| msgid "Vector maps settings"
+msgid "Copy as JSON settings"
+msgstr "ベクトル設定"
+
 msgid "Copy"
 msgstr "コピー "
 
-msgid "Copy the current command string to the clipboard"
+msgid "More copy formats"
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster map settings"
+msgid "Paste JSON settings"
+msgstr "ラスター設定"
+
+#, fuzzy
+#| msgid "Copy the current command string to the clipboard"
+msgid "Paste parameters from JSON string in the clipboard"
 msgstr "クリップボードに現在のコマンド文をコピー"
 
 msgid "Show manual page of the command (Ctrl+H)"
@@ -3272,8 +3318,67 @@ msgstr "終了時にダイアログを閉じる"
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr "コマンドが成功した場合はダイアログを閉じます. ダイアログ（'コマンド'タブ）でこの設定を変更します."
 
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (Script API)"
+msgstr "Pythonスクリプト"
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (PyGRASS API)"
+msgstr "Pythonスクリプト"
+
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr "'%s' クリップボードにコピーしました"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "Python code copied to clipboard"
+msgstr "'%s' クリップボードにコピーしました"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "JSON copied to clipboard"
+msgstr "'%s' クリップボードにコピーしました"
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+msgid "Module Mismatch"
+msgstr ""
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+#, fuzzy
+msgid "Invalid Data"
+msgstr "間違った領域"
+
+#, fuzzy
+#| msgid "Error"
+msgid "Paste Error"
+msgstr "エラー "
+
+#, fuzzy, python-format
+#| msgid "'%s' copied to clipboard"
+msgid "%s copied to clipboard"
 msgstr "'%s' クリップボードにコピーしました"
 
 msgid "Required"
@@ -3884,6 +3989,9 @@ msgstr "対話形式の入力を許可"
 
 msgid "Verbosity level:"
 msgstr "冗長レベル："
+
+msgid "Default Python API for copied commands:"
+msgstr ""
 
 msgid "Number of threads for parallel computing (supported tools only):"
 msgstr ""
@@ -5850,6 +5958,14 @@ msgstr ""
 msgid "Remove raster mask"
 msgstr "ラスターマップの作成"
 
+#, fuzzy
+#| msgid "Custom min"
+msgid "Custom CRS"
+msgstr "ユーザ定義最小値"
+
+msgid "Left mouse click to print detailed projection info"
+msgstr ""
+
 msgid "Create new workspace (Ctrl+N)"
 msgstr "新しいワークスペース作成 (Ctrl+N)"
 
@@ -7192,6 +7308,9 @@ msgstr "式をファイルに保存"
 
 msgid "Load expression from file"
 msgstr "式をファイルからロード"
+
+msgid "Copy the current command string to the clipboard"
+msgstr "クリップボードに現在のコマンド文をコピー"
 
 msgid "exponent"
 msgstr "指数"
@@ -11558,9 +11677,6 @@ msgstr ""
 #~ msgid "Choose method of specifying georeferencing parameters"
 #~ msgstr "地理参照パラメータの定義方法の選択"
 
-#~ msgid "Choose projection"
-#~ msgstr "投影法の選択 "
-
 #~ msgid "Classifies attribute data, e.g. for thematic mapping"
 #~ msgstr "主題図作成等の属性データの分類"
 
@@ -12346,10 +12462,6 @@ msgstr ""
 
 #~ msgid "Interpolates point data to a 3D raster map using regularized spline with tension (RST) algorithm."
 #~ msgstr "テンション（ＲＳＴ）アルゴリズムによる正規化スプライン曲線を使用して3Dグリッドのポイントを補間する"
-
-#, fuzzy
-#~ msgid "Invalid input data"
-#~ msgstr "間違った領域"
 
 #, python-format
 #~ msgid "Invalid map size %d,%d\n"

@@ -263,7 +263,7 @@ int Nviz_set_attr(int id, int type, int desc, int src, const char *str_value,
 
             break;
         }
-        FALLTHROUGH;
+        G_FALLTHROUGH;
     default: {
         return 0;
     }

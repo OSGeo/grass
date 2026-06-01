@@ -25,7 +25,7 @@ except (ImportError, NameError) as err:
     GV_LINES = -1
 
     class IVDigit:
-        def __init__(self):
+        def __init__(self, giface, mapwindow):
             pass
 
 
