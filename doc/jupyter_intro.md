@@ -275,7 +275,7 @@ For local installation, see the tutorials for [Unix/Linux]
 (<https://grass-tutorials.osgeo.org/content/tutorials/get_started/fast_track_grass_and_python.html>)
 or [Windows](https://grass-tutorials.osgeo.org/content/tutorials/get_started/JupyterOnWindows_OSGeo4W_Tutorial.html).
 If you want to combine the notebook workflow with the desktop GUI experience,
-the GUI includes a built-in [Jupyter integration](wxGUI.jupyter.md) (since v8.5+).
+the GUI includes a built-in [Jupyter integration](wxGUI.jupyter.md) (since v8.6+).
 For cloud setup, see the [Google Colab tutorial](https://grass-tutorials.osgeo.org/content/tutorials/get_started/grass_gis_in_google_colab.html).
 
 To try GRASS in a notebook without any setup,
