@@ -65,7 +65,7 @@
 # % required: no
 # % multiple: yes
 # % options: id,name,semantic_label,creator,mapset,number_of_maps,creation_time,start_time,end_time,north,south,west,east,granularity,all
-# % answer: id
+# % answer:
 # %end
 
 # %option G_OPT_T_WHERE
@@ -118,6 +118,9 @@ def main():
     colhead = flags["c"]
     output_format = options.get("format", "plain")
 
+    if not columns:
+        columns = "all" if output_format == "json" else "id"
+
     if output_format == "csv":
         if not separator:
             separator = ","
@@ -154,9 +157,10 @@ def main():
     dbif.connect()
     first = True
 
-    json_output = {}
+    json_output = []
+    line_output = []
 
-    if gs.verbosity() > 0 and not outpath:
+    if gs.verbosity() > 0 and not outpath and output_format == "plain":
         sys.stderr.write("----------------------------------------------\n")
 
     # Replace separate "if outpath" and "else" blocks with a unified context manager:
@@ -179,7 +183,11 @@ def main():
                     rows = stds_list[key]
 
                     if rows:
-                        if gs.verbosity() > 0 and (not outpath or outpath == "-"):
+                        if (
+                            gs.verbosity() > 0
+                            and (not outpath or outpath == "-")
+                            and output_format == "plain"
+                        ):
                             if issubclass(sp.__class__, tgis.AbstractMapDataset):
                                 sys.stderr.write(
                                     _(
@@ -202,15 +210,12 @@ def main():
                                 )
 
                         if output_format == "json":
-                            if key not in json_output:
-                                json_output[key] = []
-
                             for row in rows:
-                                json_output[key].append(dict(row))
+                                json_output.append(dict(row))
 
                         elif output_format == "line":
-                            values = [str(row[0]) for row in rows]
-                            out_file.write(separator.join(values) + "\n")
+                            line_output.extend([str(row[0]) for row in rows])
+
                         else:
                             if (colhead or output_format == "csv") and first:
                                 output = ""
@@ -241,9 +246,12 @@ def main():
                                     count += 1
                                 out_file.write("{st}\n".format(st=output))
 
-        # Dump the collected JSON data
+        # Dump the collected JSON and line data
         if output_format == "json":
             out_file.write(json.dumps(json_output, indent=4, default=str) + "\n")
+        elif output_format == "line":
+            if line_output:
+                out_file.write(separator.join(line_output) + "\n")
 
     dbif.close()
 

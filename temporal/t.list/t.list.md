@@ -85,30 +85,32 @@ For `plain`, `csv`, and `line`, you can also use the *separator=* option to chan
  the output delimiter.
 
 ```sh
-t.list raster format=json
+t.list raster format=json columns=id
 ```
 
+By default, if no columns are specified, it will output all available metadata.
+You can restrict the output using the `columns` parameter.
+
 ```json
-{
-    "climate_2000_2012": [
-        {
-            "id": "2009_01_tempmean@climate_2000_2012"
-        },
-        {
-            "id": "2009_02_tempmean@climate_2000_2012"
-        },
-        {
-            "id": "2009_03_tempmean@climate_2000_2012"
-        },
-        ...
-        {
-            "id": "2012_11_tempmean@climate_2000_2012"
-        },
-        {
-            "id": "2012_12_tempmean@climate_2000_2012"
-        }
-    ]
-}
+[
+    {
+        "id": "2009_01_tempmean@climate_2000_2012"
+    },
+    {
+        "id": "2009_02_tempmean@climate_2000_2012"
+    },
+    {
+        "id": "2009_03_tempmean@climate_2000_2012"
+    },
+    ...
+    {
+        "id": "2012_11_tempmean@climate_2000_2012"
+    },
+    {
+        "id": "2012_12_tempmean@climate_2000_2012"
+    }
+]
+
 ```
 
 ## SEE ALSO
