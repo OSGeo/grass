@@ -105,7 +105,6 @@ set(raster_modules_list
     r.support.stats
     r.surf.area
     r.surf.contour
-    r.surf.fractal
     r.surf.gauss
     r.surf.idw
     r.surf.random
@@ -133,6 +132,10 @@ set(raster_modules_list
 
 if(WITH_LIBPNG)
   list(APPEND raster_modules_list r.in.png r.out.png)
+endif()
+
+if(WITH_FFTW)
+  list(APPEND raster_modules_list r.surf.fractal)
 endif()
 
 if(MSVC)
@@ -618,8 +621,12 @@ build_program_in_subdir(r.surf.area DEPENDS grass_gis grass_raster ${LIBM})
 
 build_program_in_subdir(r.surf.contour DEPENDS grass_gis grass_raster)
 
-build_program_in_subdir(r.surf.fractal DEPENDS grass_gis grass_raster
-                        grass_gmath ${LIBM})
+if(WITH_FFTW)
+  build_program_in_subdir(r.surf.fractal DEPENDS grass_gis grass_raster
+    grass_gmath ${LIBM})
+else()
+  message(STATUS "r.surf.fractal disabled because FFTW is not available")
+endif()
 
 build_program_in_subdir(r.surf.gauss DEPENDS grass_gis grass_raster grass_gmath)
 
