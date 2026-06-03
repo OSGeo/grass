@@ -104,8 +104,6 @@ import grass.script as gs
 
 
 def main():
-    # lazy imports
-    import grass.temporal as tgis
 
     # Get the options
     type = options["type"]
@@ -136,6 +134,8 @@ def main():
             gs.fatal(_("Separator option is not allowed with JSON format"))
 
     elif output_format == "line":
+        if colhead:
+            gs.fatal(_("Column names is not allowed with line format"))
         if not separator:
             separator = ","
         columns_list = columns.split(",") if columns else []
@@ -148,6 +148,9 @@ def main():
 
     elif not separator:  # output_format == "plain"
         separator = "|"
+
+    # Lazy import
+    import grass.temporal as tgis
 
     # Make sure the temporal database exists
     tgis.init()
