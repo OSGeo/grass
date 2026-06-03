@@ -14,6 +14,12 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
+import json
+import os
+import threading
+import urllib.error
+import urllib.request
+
 import wx
 
 from gui_core.treeview import TreeListView
@@ -23,6 +29,121 @@ from core.treemodel import TreeModel, DictNode
 from grass.pydispatch.signal import Signal
 
 
+def _format_query_data_as_text(data):
+    """Convert query result data (list of dicts) into a plain-text summary.
+
+    The output is suitable for inclusion in a prompt sent to an LLM.
+    """
+    lines = []
+    for part in data:
+        for key, value in part.items():
+            if isinstance(value, dict):
+                lines.append(f"{key}:")
+                for sub_key, sub_value in value.items():
+                    lines.append(f"  {sub_key}: {sub_value}")
+            else:
+                lines.append(f"{key}: {value}")
+    return "\n".join(lines)
+
+
+def _call_llm_api(prompt):
+    """Send a prompt to an LLM API and return the response text.
+
+    Tries Google Gemini first (GEMINI_API_KEY), then OpenAI (OPENAI_API_KEY).
+    Uses only Python standard library modules to avoid external dependencies.
+
+    :param prompt: the text prompt to send
+    :returns: response text from the LLM
+    :raises OSError: if no API key is configured
+    :raises RuntimeError: if the API request fails
+    """
+    gemini_key = os.environ.get("GEMINI_API_KEY")
+    openai_key = os.environ.get("OPENAI_API_KEY")
+
+    if gemini_key:
+        return _call_gemini(prompt, gemini_key)
+    if openai_key:
+        return _call_openai(prompt, openai_key)
+
+    msg = (
+        "No LLM API key found. Set GEMINI_API_KEY or OPENAI_API_KEY "
+        "in your environment before starting GRASS."
+    )
+    raise OSError(msg)
+
+
+def _call_gemini(prompt, api_key):
+    """Call the Google Gemini REST API.
+
+    :param prompt: text prompt
+    :param api_key: Gemini API key
+    :returns: generated text
+    """
+    url = (
+        "https://generativelanguage.googleapis.com/v1beta/models/"
+        f"gemini-2.0-flash:generateContent?key={api_key}"
+    )
+    payload = {"contents": [{"parts": [{"text": prompt}]}]}
+    data = json.dumps(payload).encode("utf-8")
+    req = urllib.request.Request(
+        url, data=data, headers={"Content-Type": "application/json"}
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            body = json.loads(resp.read().decode("utf-8"))
+    except urllib.error.HTTPError as exc:
+        msg = f"Gemini API returned HTTP {exc.code}: {exc.read().decode('utf-8', errors='replace')}"
+        raise RuntimeError(msg) from exc
+    except urllib.error.URLError as exc:
+        msg = f"Network error contacting Gemini API: {exc.reason}"
+        raise RuntimeError(msg) from exc
+
+    try:
+        return body["candidates"][0]["content"]["parts"][0]["text"]
+    except (KeyError, IndexError) as exc:
+        msg = f"Unexpected Gemini API response structure: {body}"
+        raise RuntimeError(msg) from exc
+
+
+def _call_openai(prompt, api_key):
+    """Call the OpenAI chat completions REST API.
+
+    :param prompt: text prompt
+    :param api_key: OpenAI API key
+    :returns: generated text
+    """
+    url = "https://api.openai.com/v1/chat/completions"
+    payload = {
+        "model": "gpt-4o-mini",
+        "messages": [{"role": "user", "content": prompt}],
+        "max_tokens": 1024,
+    }
+    data = json.dumps(payload).encode("utf-8")
+    req = urllib.request.Request(
+        url,
+        data=data,
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {api_key}",
+        },
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            body = json.loads(resp.read().decode("utf-8"))
+    except urllib.error.HTTPError as exc:
+        msg = f"OpenAI API returned HTTP {exc.code}: {exc.read().decode('utf-8', errors='replace')}"
+        raise RuntimeError(msg) from exc
+    except urllib.error.URLError as exc:
+        msg = f"Network error contacting OpenAI API: {exc.reason}"
+        raise RuntimeError(msg) from exc
+
+    try:
+        return body["choices"][0]["message"]["content"]
+    except (KeyError, IndexError) as exc:
+        msg = f"Unexpected OpenAI API response structure: {body}"
+        raise RuntimeError(msg) from exc
+
+
 class QueryDialog(wx.Dialog):
     def __init__(self, parent, data=None):
         wx.Dialog.__init__(
@@ -30,7 +151,7 @@ class QueryDialog(wx.Dialog):
             parent,
             id=wx.ID_ANY,
             title=_("Query results"),
-            size=(420, 400),
+            size=(520, 480),
             style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
         )
         # send query output to console
@@ -41,21 +162,28 @@ class QueryDialog(wx.Dialog):
         self.panel = wx.Panel(self, id=wx.ID_ANY)
         self.mainSizer = wx.BoxSizer(wx.VERTICAL)
 
+        # --- Notebook with two tabs ---
+        self.notebook = wx.Notebook(self.panel, id=wx.ID_ANY)
+
+        # Tab 1: Query Results (original tree view)
+        self._queryPage = wx.Panel(self.notebook)
+        querySizer = wx.BoxSizer(wx.VERTICAL)
+
         helpText = StaticText(
-            self.panel,
+            self._queryPage,
             wx.ID_ANY,
             label=_("Right click to copy selected values to clipboard."),
         )
         helpText.SetForegroundColour(
             wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT)
         )
-        self.mainSizer.Add(helpText, proportion=0, flag=wx.ALL, border=5)
+        querySizer.Add(helpText, proportion=0, flag=wx.ALL, border=5)
 
         self._colNames = [_("Feature"), _("Value")]
         self._model = QueryTreeBuilder(self.data, column=self._colNames[1])
         self.tree = TreeListView(
             model=self._model,
-            parent=self.panel,
+            parent=self._queryPage,
             columns=self._colNames,
             style=wx.TR_DEFAULT_STYLE
             | wx.TR_HIDE_ROOT
@@ -68,8 +196,59 @@ class QueryDialog(wx.Dialog):
         self.tree.ExpandAll()
         self.tree.RefreshItems()
         self.tree.contextMenu.connect(self.ShowContextMenu)
-        self.mainSizer.Add(self.tree, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
+        querySizer.Add(self.tree, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
 
+        self._queryPage.SetSizer(querySizer)
+        self.notebook.AddPage(self._queryPage, _("Query Results"))
+
+        # Tab 2: AI Terrain Agent
+        self._aiPage = wx.Panel(self.notebook)
+        aiSizer = wx.BoxSizer(wx.VERTICAL)
+
+        aiDesc = StaticText(
+            self._aiPage,
+            wx.ID_ANY,
+            label=_(
+                "Generate a human-readable terrain description from the "
+                "queried map data using an AI language model."
+            ),
+        )
+        aiDesc.Wrap(460)
+        aiDesc.SetForegroundColour(
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT)
+        )
+        aiSizer.Add(aiDesc, proportion=0, flag=wx.ALL, border=5)
+
+        self._aiStatus = StaticText(self._aiPage, wx.ID_ANY, label="")
+        aiSizer.Add(self._aiStatus, proportion=0, flag=wx.LEFT | wx.RIGHT, border=5)
+
+        self._aiText = wx.TextCtrl(
+            self._aiPage,
+            wx.ID_ANY,
+            style=wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_WORDWRAP,
+        )
+        aiSizer.Add(self._aiText, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
+
+        self._aiButton = Button(
+            self._aiPage, id=wx.ID_ANY, label=_("Describe Terrain")
+        )
+        self._aiButton.Bind(wx.EVT_BUTTON, self.OnGenerateAI)
+
+        aiButtonSizer = wx.BoxSizer(wx.HORIZONTAL)
+        aiButtonSizer.AddStretchSpacer(1)
+        aiButtonSizer.Add(
+            self._aiButton, proportion=0, flag=wx.EXPAND | wx.ALL, border=0
+        )
+        aiSizer.Add(aiButtonSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
+
+        self._aiPage.SetSizer(aiSizer)
+        self.notebook.AddPage(self._aiPage, _("AI Terrain Agent"))
+
+        self.mainSizer.Add(
+            self.notebook, proportion=1, flag=wx.EXPAND | wx.ALL, border=5
+        )
+
+        # --- Bottom bar (shared across tabs) ---
         close = Button(self.panel, id=wx.ID_CLOSE)
         close.Bind(wx.EVT_BUTTON, lambda event: self.Close())
         copy = Button(self.panel, id=wx.ID_ANY, label=_("Copy all to clipboard"))
@@ -102,6 +281,11 @@ class QueryDialog(wx.Dialog):
 
         if self.redirect.IsChecked():
             self.redirectOutput.emit(output=self._textToRedirect())
+
+        # Reset AI tab for the new query location.
+        self._aiText.SetValue("")
+        self._aiStatus.SetLabel("")
+        self._aiButton.Enable()
 
     def Copy(self, event):
         text = printResults(self._model, self._colNames[1])
@@ -159,6 +343,51 @@ class QueryDialog(wx.Dialog):
         menu.Destroy()
         for id in ids:
             self.Unbind(wx.EVT_MENU, id=id)
+
+    def OnGenerateAI(self, event):
+        """Request an AI-generated terrain description in a background thread."""
+        if not self.data:
+            self._aiStatus.SetLabel(_("No query data available."))
+            return
+
+        self._aiButton.Disable()
+        self._aiText.SetValue("")
+        self._aiStatus.SetLabel(_("Contacting AI service..."))
+
+        query_text = _format_query_data_as_text(self.data)
+        prompt = (
+            "You are a geospatial terrain analyst. A user queried a location "
+            "in GRASS GIS and received the following map data:\n\n"
+            f"{query_text}\n\n"
+            "Provide a concise, informative, human-readable description of "
+            "the terrain at this location. Explain what the values mean in "
+            "practical terms (e.g. slope steepness, land cover type, "
+            "elevation context). Keep the response under 200 words."
+        )
+
+        thread = threading.Thread(target=self._queryAI, args=(prompt,), daemon=True)
+        thread.start()
+
+    def _queryAI(self, prompt):
+        """Run the LLM API call in a background thread.
+
+        Results are posted back to the GUI via wx.CallAfter.
+        """
+        try:
+            result = _call_llm_api(prompt)
+            wx.CallAfter(self._onAIDone, result, error=None)
+        except Exception as exc:
+            wx.CallAfter(self._onAIDone, None, error=str(exc))
+
+    def _onAIDone(self, result, error):
+        """Handle the completed AI response on the main GUI thread."""
+        self._aiButton.Enable()
+        if error:
+            self._aiStatus.SetLabel(_("Error"))
+            self._aiText.SetValue(error)
+        else:
+            self._aiStatus.SetLabel(_("Description generated successfully."))
+            self._aiText.SetValue(result)
 
     def _onRedirect(self, redirect):
         """Emits instructions to redirect query results.
