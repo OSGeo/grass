@@ -1,11 +1,8 @@
 """Test t.list functionality"""
 
-import pytest
-
 from grass.tools import Tools
 
 
-@pytest.mark.needs_solo_run
 def test_t_list_defaults(space_time_dataset):
     """Check that the module correctly lists datasets (strds) and maps (raster)."""
     tools = Tools(session=space_time_dataset.session)
@@ -24,7 +21,6 @@ def test_t_list_defaults(space_time_dataset):
         assert map_name in raster_lines
 
 
-@pytest.mark.needs_solo_run
 def test_t_list_where_filter(space_time_dataset):
     """Check that where clause filter the output exactly."""
     tools = Tools(session=space_time_dataset.session)
@@ -38,7 +34,6 @@ def test_t_list_where_filter(space_time_dataset):
     assert empty is None
 
 
-@pytest.mark.needs_solo_run
 def test_t_list_order(space_time_dataset):
     """Check that ordering the output actually sorts the data correctly."""
     tools = Tools(session=space_time_dataset.session)
