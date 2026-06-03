@@ -18,7 +18,7 @@ set(dbf_SRCS
 set(mysql_SRCS
     mysql/create_table.c
     mysql/cursor.c
-    mysql/dbe.c
+    mysql/db.c
     mysql/describe.c
     mysql/driver.c
     mysql/error.c

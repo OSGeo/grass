@@ -257,6 +257,7 @@ ignore = [
     "PLW0602", # global-variable-not-assigned
     "PLW0603", # global-statement
     "PLW0604", # global-at-module-level
+    "PLW0717", # too-many-statements-in-try-clause
     "PLW1508", # invalid-envvar-default
     "PLW1510", # subprocess-run-without-check
     "PLW1641", # eq-without-hash
@@ -282,6 +283,7 @@ ignore = [
     "RUF012",  # mutable-class-default
     "RUF015",  # unnecessary-iterable-allocation-for-first-element
     "RUF019",  # unnecessary-key-check
+    "RUF050",  # unnecessary-if
     "RUF059",  # unused-unpacked-variable
     "RUF067",  # non-empty-init-module
     "RUF100",  # unused-noqa
