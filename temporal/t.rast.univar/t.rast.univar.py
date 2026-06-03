@@ -70,6 +70,13 @@
 
 # %option G_OPT_F_SEP
 # % label: Field separator character between the output columns
+# % answer:
+# % guisection: Formatting
+# %end
+
+# %option G_OPT_F_FORMAT
+# % options: plain,json,csv
+# % descriptions: plain;Plain text output;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)
 # % guisection: Formatting
 # %end
 
@@ -102,9 +109,6 @@ def main():
     # Get the options and flags
     options, flags = gs.parser()
 
-    # lazy imports
-    import grass.temporal as tgis
-
     # Define variables
     input = options["input"]
     zones = options["zones"]
@@ -116,6 +120,31 @@ def main():
     no_header = flags["u"]
     rast_region = bool(flags["r"])
     separator = gs.separator(options["separator"])
+    output_format = options.get("format", "plain")
+
+    if output_format == "csv":
+        if not separator:
+            separator = ","
+        elif len(separator) > 1:
+            gs.fatal(
+                _("A standard CSV separator (delimiter) is only one character long")
+            )
+
+    elif output_format == "json":
+        if no_header:
+            gs.fatal(_("Column names are always included in JSON output"))
+        if separator:
+            gs.fatal(_("Separator option is not allowed with JSON format"))
+
+        # We need this in univar_statistics.py for data split
+        separator = "|"
+
+    else:
+        separator = "|"
+
+    # lazy imports
+    import grass.temporal as tgis
+
     percentile = None
     if options["percentile"]:
         try:
@@ -150,6 +179,7 @@ def main():
         rast_region=rast_region,
         region_relation=region_relation,
         nprocs=nprocs,
+        format=output_format,
     )
 
 

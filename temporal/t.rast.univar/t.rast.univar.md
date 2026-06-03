@@ -44,6 +44,80 @@ id|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|c
 2012_12_tempmean@climate_2009_2012|2012-12-01 00:00:00|2013-01-01 00:00:00|8.71|1.76|11.98|8.71|1.72|2.95|19.74|4418403.77|503233|1010600|7.84|8.95|9.99|10.67
 ```
 
+You can use format options as well to output the statistics in
+JSON, CSV or Plain (default) formats. For example, to get JSON
+output with extended statistics:
+
+```sh
+t.rast.univar -e input=nc_lst_daily format=json
+```
+
+```json
+[
+    {
+        "id": "aqua_lst_day20020705@modis2002lst",
+        "semantic_label": null,
+        "start": "2002-01-02 00:00:00",
+        "end": "2002-01-03 00:00:00",
+        "mean": 36.6047213436794,
+        "min": 29.85,
+        "max": 41.11,
+        "mean_of_abs": 36.6047213436794,
+        "stddev": 2.74434797543588,
+        "variance": 7.53144581027899,
+        "coeff_var": 7.49725137822896,
+        "sum": 3726726.68,
+        "null_cells": 148515,
+        "cells": 101810,
+        "non_null_cells": 101810,
+        "first_quartile": 35.17,
+        "median": 36.23,
+        "third_quartile": 39.05
+    },
+    {
+        "id": "aqua_lst_day20020706@modis2002lst",
+        "semantic_label": null,
+        "start": "2002-01-03 00:00:00",
+        "end": "2002-01-04 00:00:00",
+        "mean": 28.5035320158103,
+        "min": 27.7500000000001,
+        "max": 29.5700000000001,
+        "mean_of_abs": 28.5035320158103,
+        "stddev": 0.570228624574918,
+        "variance": 0.325160684284603,
+        "coeff_var": 2.00055426204242,
+        "sum": 1081709.04,
+        "null_cells": 212375,
+        "cells": 37950,
+        "non_null_cells": 37950,
+        "first_quartile": 27.91,
+        "median": 28.41,
+        "third_quartile": 28.85
+    },
+    {
+        "id": "aqua_lst_day20020707@modis2002lst",
+        "semantic_label": null,
+        "start": "2002-01-04 00:00:00",
+        "end": "2002-01-05 00:00:00",
+        "mean": 34.6977710657791,
+        "min": 26.67,
+        "max": 43.27,
+        "mean_of_abs": 34.6977710657791,
+        "stddev": 3.42837919872729,
+        "variance": 11.7537839302659,
+        "coeff_var": 9.88069000809261,
+        "sum": 7771502.67000001,
+        "null_cells": 26348,
+        "cells": 223977,
+        "non_null_cells": 223977,
+        "first_quartile": 32.17,
+        "median": 35.07,
+        "third_quartile": 36.57
+    },
+    ...
+]
+```
+
 ## SEE ALSO
 
 *[t.create](t.create.md), [t.info](t.info.md) [t.create](r.univar.md),*

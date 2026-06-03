@@ -125,6 +125,7 @@ def print_gridded_dataset_univar_statistics(
     zones=None,
     percentile=None,
     nprocs: int = 1,
+    format: str = "plain",
 ) -> None:
     """Print univariate statistics for a space time raster or raster3d dataset.
 
@@ -140,6 +141,7 @@ def print_gridded_dataset_univar_statistics(
     :param no_header: Suppress the printing of column names
     :param fs: Field separator
     :param nprocs: Number of cores to use for processing
+    :param format: Output format ("plain", "csv", or "json"). Default is "plain".
     :param rast_region: If set True ignore the current region settings
            and use the raster map regions for univar statistical calculation.
     :param region_relation: Process only maps with the given spatial relation
@@ -192,7 +194,7 @@ def print_gridded_dataset_univar_statistics(
     if output is not None:
         out_file = open(output, "w")
 
-    if no_header is False:
+    if no_header is False or format == "json":
         cols = (
             ["id", "semantic_label", "start", "end"]
             if type == "strds"
@@ -225,12 +227,12 @@ def print_gridded_dataset_univar_statistics(
                         for perc in percentile
                     ]
                 )
-        string = fs.join(cols)
-
-        if output is None:
-            print(string)
-        else:
-            out_file.write(string + "\n")
+        if no_header is False and format != "json":
+            string = fs.join(cols)
+            if output is None:
+                print(string)
+            else:
+                out_file.write(string + "\n")
 
     # Define flags
     flag = "g"
@@ -265,10 +267,35 @@ def print_gridded_dataset_univar_statistics(
                 compute_univar_stats, [(dict(row), univar_module, fs) for row in rows]
             )
 
-    if output is None:
-        print("\n".join(filter(None, strings)))
+    if format == "json":
+        # lazy import
+        import json
+
+        json_out = []
+        for block in filter(None, strings):
+            for line in block.splitlines():
+                if line.strip():
+                    row = {}
+                    for k, v in zip(cols, line.split(fs), strict=False):
+                        if not v or v == "None":
+                            row[k] = None
+                        else:
+                            try:
+                                row[k] = (
+                                    float(v) if "." in v or "e" in v.lower() else int(v)
+                                )
+                            except ValueError:
+                                row[k] = v
+                    json_out.append(row)
+
+        output_str = json.dumps(json_out, indent=4)
     else:
-        out_file.write("\n".join(filter(None, strings)))
+        output_str = "\n".join(filter(None, strings))
+
+    if output is None:
+        print(output_str)
+    else:
+        out_file.write(output_str + "\n")
 
     dbif.close()
 
