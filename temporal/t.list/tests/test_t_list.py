@@ -85,7 +85,7 @@ def test_t_list_json(space_time_dataset):
             assert actual_item[key] == expected_value
 
 
-@pytest.mark.parametrize("separator", [",", "|"])
+@pytest.mark.parametrize("separator", [",", ":"])
 def test_t_list_csv(space_time_dataset, separator):
     """Check CSV output using string matching."""
     tools = Tools(session=space_time_dataset.session)
@@ -104,7 +104,7 @@ def test_t_list_csv(space_time_dataset, separator):
     assert result.stdout.strip() == expected
 
 
-@pytest.mark.parametrize("separator", [",", "|"])
+@pytest.mark.parametrize("separator", [",", ":"])
 def test_t_list_line(space_time_dataset, separator):
     """Check line format by matching the exact joined string in one statement."""
     tools = Tools(session=space_time_dataset.session)
