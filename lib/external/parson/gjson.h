@@ -3,6 +3,8 @@
 
 #include <stddef.h>
 
+#include <grass/gis.h>
+
 /* *************************************************************** */
 /* ***** WRAPPER FOR PARSON FUNCTIONS USED IN GRASS ************** */
 /* *************************************************************** */
@@ -25,8 +27,8 @@ typedef int G_JSON_Value_Type;
 enum g_json_result_t { G_JSONSuccess = 0, G_JSONFailure = -1 };
 typedef int G_JSON_Status;
 
-extern G_JSON_Value *G_json_value_init_object(void);
-extern G_JSON_Value *G_json_value_init_array(void);
+extern G_JSON_Value *G_json_value_init_object(void) G_ATTR_RET_NONNULL;
+extern G_JSON_Value *G_json_value_init_array(void) G_ATTR_RET_NONNULL;
 
 extern G_JSON_Value_Type G_json_value_get_type(const G_JSON_Value *value);
 extern G_JSON_Object *G_json_value_get_object(const G_JSON_Value *);
