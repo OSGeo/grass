@@ -135,7 +135,7 @@ def main():
 
     elif output_format == "line":
         if colhead:
-            gs.fatal(_("Column names is not allowed with line format"))
+            gs.fatal(_("Column names are not allowed with line format"))
         if not separator:
             separator = ","
         columns_list = columns.split(",") if columns else []
