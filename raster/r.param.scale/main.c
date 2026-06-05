@@ -19,11 +19,11 @@ const char *rast_out_name; /* Name of the raster output file.      */
 int constrained;           /* Flag that forces quadtratic through  */
 
 /* the central cell of the window.      */
-int fd_in,  /* File descriptor for input and        */
-    fd_out, /* output raster files.                 */
+int fd_out, /* File descriptor for output raster.   */
     wsize,  /* Size of local processing window.     */
     mparam, /* Morphometric parameter to calculate. */
-    nprocs; /* NUmber of threads in process. */
+    nprocs, /* Number of threads in process.        */
+    memory; /* Memory cap in MB for row buffering.  */
 
 double resoln, /* Planimetric resolution.              */
     exponent,  /* Distance weighting exponent.         */

@@ -32,7 +32,7 @@ void interface(int argc, char **argv)
         *parameter,         /* Morphometric parameter to calculate. */
         *expon,             /* Inverse distance exponent for weight. */
         *vert_sc,           /* Vertical scaling factor.             */
-        *nprocs_opt;
+        *nprocs_opt, *mem_opt;
 
     struct Flag *constr; /* Forces quadratic through the central */
 
@@ -69,6 +69,7 @@ void interface(int argc, char **argv)
     expon = G_define_option();
     vert_sc = G_define_option();
     nprocs_opt = G_define_standard_option(G_OPT_M_NPROCS);
+    mem_opt = G_define_standard_option(G_OPT_MEMORYMB);
 
     constr = G_define_flag();
 
@@ -133,6 +134,10 @@ void interface(int argc, char **argv)
     rast_out_name = rast_out->answer; /* can place the contents into strings  */
     wsize = atoi(win_size->answer);
     nprocs = G_set_omp_num_threads(nprocs_opt);
+    nprocs = Rast_disable_omp_on_mask(nprocs);
+    if (nprocs < 1)
+        G_fatal_error(_("<%d> is not valid number of nprocs."), nprocs);
+    memory = atoi(mem_opt->answer);
     constrained = constr->answer;
     sscanf(expon->answer, "%lf", &exponent);
     sscanf(vert_sc->answer, "%lf", &zscale);

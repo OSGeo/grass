@@ -85,11 +85,11 @@ extern int constrained;          /* Flag that forces quadtratic through  */
 
 /* the central cell of the window.      */
 
-extern int fd_in, /* File descriptor for input and        */
-    fd_out,       /* output raster files.                 */
-    wsize,        /* Size of local processing window.     */
-    mparam,       /* Morphometric parameter to calculate. */
-    nprocs;
+extern int fd_out, /* File descriptor for output raster.   */
+    wsize,         /* Size of local processing window.     */
+    mparam,        /* Morphometric parameter to calculate. */
+    nprocs,        /* Number of threads in process.        */
+    memory;        /* Memory cap in MB for row buffering.   */
 
 extern double resoln, /* Planimetric resolution.              */
     exponent,         /* Distance weighting exponent.         */

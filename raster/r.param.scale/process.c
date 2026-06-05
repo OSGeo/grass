@@ -19,6 +19,17 @@
 #include <omp.h>
 #endif
 
+/* Rotate the per-thread ring: the oldest slot (0, smallest row index) is     */
+/* recycled to become the newest slot (n-1). Mirrors r.neighbors rotate_bufs  */
+/* (bufs.c:32-45). Pointer shuffle only, no data copy. */
+static void rotate_ring(DCELL **ring, int n)
+{
+    DCELL *temp = ring[0];
+    for (int i = 1; i < n; i++)
+        ring[i - 1] = ring[i];
+    ring[n - 1] = temp;
+}
+
 void process(void)
 {
     struct Cell_head region; /* Structure to hold region information */
@@ -69,139 +80,203 @@ void process(void)
         fd_thread[i] = Rast_open_old(rast_in_name, "");
 
     /*-----------------------------------------------------------------------*/
-    /* CHANGE 2: Output slots, one pointer per row.                          */
-    /* Threads fill their rows into slots, a serial                          */
-    /* loop writes them in order at the end (Rast_put_row is not            */
-    /* thread-safe and must be called in row order).                         */
+    /* Band height from the memory cap. Reserve wsize input rows per thread  */
+    /* (the eventual ring-buffer cost), spend the rest on the band.          */
     /*-----------------------------------------------------------------------*/
 
-    DCELL **row_out = (DCELL **)G_malloc((size_t)nrows * sizeof(DCELL *));
-    CELL **featrow_out = (CELL **)G_malloc((size_t)nrows * sizeof(CELL *));
-    for (row = 0; row < nrows; row++) {
-        row_out[row] = NULL;
-        featrow_out[row] = NULL;
+    size_t in_buf_size =
+        (size_t)ncols * sizeof(DCELL) * (size_t)wsize * (size_t)nprocs;
+    size_t out_buf_size = (size_t)memory * (1 << 20);
+    if (out_buf_size <= in_buf_size)
+        out_buf_size = 0;
+    else
+        out_buf_size -= in_buf_size;
+    int brows = (int)(out_buf_size / (sizeof(DCELL) * (size_t)ncols));
+    int proc_rows = nrows - 2 * EDGE; /* processable rows */
+    if (brows > proc_rows)
+        brows = proc_rows;
+    if (brows < nprocs)
+        brows = nprocs;
+    if (brows < 1)
+        brows = 1;
+
+    /*-----------------------------------------------------------------------*/
+    /* CHANGE 2: One shared band buffer (brows rows), reused each band, plus */
+    /* a single NULL row for the EDGE borders. Threads write disjoint        */
+    /* band-relative rows; a serial loop writes each band in row order.      */
+    /*-----------------------------------------------------------------------*/
+
+    DCELL *band_d = NULL, *null_d = NULL;
+    CELL *band_c = NULL, *null_c = NULL;
+    if (mparam != FEATURE) {
+        band_d = (DCELL *)G_malloc((size_t)brows * ncols * sizeof(DCELL));
+        null_d = Rast_allocate_buf(DCELL_TYPE);
+        Rast_set_d_null_value(null_d, ncols);
+    }
+    else {
+        band_c = (CELL *)G_malloc((size_t)brows * ncols * sizeof(CELL));
+        null_c = Rast_allocate_buf(CELL_TYPE);
+        Rast_set_c_null_value(null_c, ncols);
+    }
+
+    /* Top EDGE border rows are written as NULL. top_border is clamped to nrows
+     */
+    /* so a region with fewer than 2*EDGE+1 rows cannot overflow (see bottom).
+     */
+    int top_border = (EDGE < nrows) ? EDGE : nrows;
+    for (row = 0; row < top_border; row++) {
+        if (mparam != FEATURE)
+            Rast_put_row(fd_out, null_d, DCELL_TYPE);
+        else
+            Rast_put_row(fd_out, null_c, CELL_TYPE);
     }
 
     /*-----------------------------------------------------------------------*/
-    /* CHANGE 3: Parallel region.                                            */
-    /* Each thread claims its output row range, then reads its strip + halo */
-    /* from disk via its own descriptor into a private buffer, and does     */
-    /* all window math reading from that private buffer.                     */
+    /* Per-thread scratch, allocated ONCE before the band loop and indexed by */
+    /* tid (like r.neighbors allocate_bufs), instead of churning the allocator
+     */
+    /* on every band: a wsize-row ring, the window matrix, and the obs vector.
+     */
     /*-----------------------------------------------------------------------*/
 
+    DCELL ***rings = (DCELL ***)G_malloc((size_t)nprocs * sizeof(DCELL **));
+    DCELL **window_ptrs = (DCELL **)G_malloc((size_t)nprocs * sizeof(DCELL *));
+    double **obs_ptrs = (double **)G_malloc((size_t)nprocs * sizeof(double *));
+    for (int t = 0; t < nprocs; t++) {
+        rings[t] = (DCELL **)G_malloc((size_t)wsize * sizeof(DCELL *));
+        for (int k = 0; k < wsize; k++)
+            rings[t][k] = (DCELL *)G_malloc((size_t)ncols * sizeof(DCELL));
+        window_ptrs[t] = (DCELL *)G_malloc(SQR(wsize) * sizeof(DCELL));
+        obs_ptrs[t] = dvector(0, 5);
+    }
+
+    /*-----------------------------------------------------------------------*/
+    /* CHANGE 3: Two-level structure. Outer serial loop over bands of brows  */
+    /* rows; inner parallel region splits the band across threads. Each      */
+    /* thread reads its sub-band + halo from disk into a private strip.       */
+    /*-----------------------------------------------------------------------*/
+
+    for (int band_start = EDGE; band_start < nrows - EDGE;
+         band_start += brows) {
+        int band_end = band_start + brows;
+        if (band_end > nrows - EDGE)
+            band_end = nrows - EDGE; /* exclusive */
+        int band_count = band_end - band_start;
+
 #pragma omp parallel if (nprocs > 1)
-    {
-        int nthreads = 1;
-        int tid = 0;
+        {
+            int nthreads = 1;
+            int tid = 0;
 #if defined(_OPENMP)
-        nthreads = omp_get_num_threads();
-        tid = omp_get_thread_num();
+            nthreads = omp_get_num_threads();
+            tid = omp_get_thread_num();
 #endif
 
-        /* Split processable rows [EDGE .. nrows-EDGE) evenly across threads */
-        int proc_first = EDGE;
-        int proc_last = nrows - EDGE; /* exclusive */
-        int proc_count = proc_last - proc_first;
+            /* Split this band's rows [band_start .. band_end) across threads */
+            int my_start =
+                band_start + (int)((long)band_count * tid / nthreads);
+            int my_end =
+                band_start + (int)((long)band_count * (tid + 1) / nthreads);
 
-        int my_start = proc_first + (int)((long)proc_count * tid / nthreads);
-        int my_end =
-            proc_first + (int)((long)proc_count * (tid + 1) / nthreads);
+            if (my_end > my_start) {
+                /* Per-thread scratch, allocated once before the band loop. */
+                DCELL **ring = rings[tid];
+                DCELL *window_ptr = window_ptrs[tid];
+                double *obs_ptr = obs_ptrs[tid];
 
-        if (my_end > my_start) {
-            /* Input rows this thread needs: my_start-EDGE .. my_end-1+EDGE */
-            int buf_first = my_start - EDGE;
-            int buf_last = my_end - 1 + EDGE;
-            int buf_rows = buf_last - buf_first + 1;
-
-            /* Allocate private strip and read it from disk via THIS         */
-            /* thread's own descriptor. No shared RAM map; each thread       */
-            /* pulls only what it needs.                                     */
-            DCELL *strip =
-                (DCELL *)G_malloc((size_t)buf_rows * ncols * sizeof(DCELL));
-            for (int r = 0; r < buf_rows; r++)
-                Rast_get_d_row(fd_thread[tid], strip + (size_t)r * ncols,
-                               buf_first + r);
-
-            /* Per-thread math scratch */
-            DCELL *window_ptr = (DCELL *)G_malloc(SQR(wsize) * sizeof(DCELL));
-            double *obs_ptr = dvector(0, 5);
-
-            for (int orow = my_start; orow < my_end; orow++) {
-                DCELL *out_d = NULL;
-                CELL *out_c = NULL;
-                if (mparam != FEATURE) {
-                    out_d = Rast_allocate_buf(DCELL_TYPE);
-                    Rast_set_d_null_value(out_d, ncols);
-                }
-                else {
-                    out_c = Rast_allocate_buf(CELL_TYPE);
-                    Rast_set_c_null_value(out_c, ncols);
+                /* Seed the ring with the first wsize-1 window rows; one new */
+                /* row is read per output row below (read-once, mirrors */
+                /* r.neighbors main.c:522-528). readrow = next disk row. */
+                int readrow = my_start - EDGE;
+                for (int k = 0; k < wsize - 1; k++) {
+                    rotate_ring(ring, wsize);
+                    Rast_get_d_row(fd_thread[tid], ring[wsize - 1], readrow++);
                 }
 
-                /* Position of this row inside the private strip */
-                int srow = orow - buf_first;
-
-                for (int col = EDGE; col < (ncols - EDGE); col++) {
-                    DCELL centre = *(strip + (size_t)srow * ncols + col);
-                    if (Rast_is_d_null_value(&centre)) {
-                        if (mparam == FEATURE)
-                            Rast_set_c_null_value(out_c + col, 1);
-                        else
-                            Rast_set_d_null_value(out_d + col, 1);
-                        continue;
+                for (int orow = my_start; orow < my_end; orow++) {
+                    size_t boff = (size_t)(orow - band_start) * ncols;
+                    DCELL *out_d = NULL;
+                    CELL *out_c = NULL;
+                    if (mparam != FEATURE) {
+                        out_d = band_d + boff;
+                        Rast_set_d_null_value(out_d, ncols);
+                    }
+                    else {
+                        out_c = band_c + boff;
+                        Rast_set_c_null_value(out_c, ncols);
                     }
 
-                    int found_null = FALSE;
-                    for (int wind_row = 0; wind_row < wsize; wind_row++) {
-                        if (found_null)
-                            break;
-                        for (int wind_col = 0; wind_col < wsize; wind_col++) {
-                            DCELL *window_cell =
-                                strip +
-                                (size_t)(srow - EDGE + wind_row) * ncols + col +
-                                wind_col - EDGE;
-                            if (Rast_is_d_null_value(window_cell)) {
-                                if (mparam == FEATURE)
-                                    Rast_set_c_null_value(out_c + col, 1);
-                                else
-                                    Rast_set_d_null_value(out_d + col, 1);
-                                found_null = TRUE;
-                                break;
-                            }
-                            *(window_ptr + (wind_row * wsize) + wind_col) =
-                                *(window_cell)-centre;
+                    /* Advance the ring by one row: rotate out the oldest, */
+                    /* read row orow+EDGE into the recycled newest slot;
+                     * ring[k]*/
+                    /* then holds map row orow-EDGE+k (same layout as 3.1). */
+                    rotate_ring(ring, wsize);
+                    Rast_get_d_row(fd_thread[tid], ring[wsize - 1], readrow++);
+
+                    for (int col = EDGE; col < (ncols - EDGE); col++) {
+                        DCELL centre = *(ring[EDGE] + col);
+                        if (Rast_is_d_null_value(&centre)) {
+                            if (mparam == FEATURE)
+                                Rast_set_c_null_value(out_c + col, 1);
+                            else
+                                Rast_set_d_null_value(out_d + col, 1);
+                            continue;
                         }
+
+                        int found_null = FALSE;
+                        for (int wind_row = 0; wind_row < wsize; wind_row++) {
+                            if (found_null)
+                                break;
+                            for (int wind_col = 0; wind_col < wsize;
+                                 wind_col++) {
+                                DCELL *window_cell =
+                                    ring[wind_row] + col + wind_col - EDGE;
+                                if (Rast_is_d_null_value(window_cell)) {
+                                    if (mparam == FEATURE)
+                                        Rast_set_c_null_value(out_c + col, 1);
+                                    else
+                                        Rast_set_d_null_value(out_d + col, 1);
+                                    found_null = TRUE;
+                                    break;
+                                }
+                                *(window_ptr + (wind_row * wsize) + wind_col) =
+                                    *(window_cell)-centre;
+                            }
+                        }
+                        if (found_null)
+                            continue;
+
+                        /* Math block: unchanged from serial */
+                        find_obs(window_ptr, obs_ptr, weight_ptr);
+                        if (constrained)
+                            G_lubksb(normal_ptr, 5, index_ptr, obs_ptr);
+                        else
+                            G_lubksb(normal_ptr, 6, index_ptr, obs_ptr);
+
+                        if (mparam == FEATURE)
+                            *(out_c + col) = (CELL)feature(obs_ptr);
+                        else
+                            *(out_d + col) = param(mparam, obs_ptr);
+
+                        if (mparam == ELEV)
+                            *(out_d + col) += centre;
                     }
-                    if (found_null)
-                        continue;
-
-                    /* Math block: unchanged from serial */
-                    find_obs(window_ptr, obs_ptr, weight_ptr);
-                    if (constrained)
-                        G_lubksb(normal_ptr, 5, index_ptr, obs_ptr);
-                    else
-                        G_lubksb(normal_ptr, 6, index_ptr, obs_ptr);
-
-                    if (mparam == FEATURE)
-                        *(out_c + col) = (CELL)feature(obs_ptr);
-                    else
-                        *(out_d + col) = param(mparam, obs_ptr);
-
-                    if (mparam == ELEV)
-                        *(out_d + col) += centre;
                 }
-
-                if (mparam != FEATURE)
-                    row_out[orow] = out_d;
-                else
-                    featrow_out[orow] = out_c;
             }
+        } /* end parallel */
 
-            G_free(strip);
-            G_free(window_ptr);
-            free_dvector(obs_ptr, 0, 5);
-        }
-    } /* end parallel */
+        /* Serial in-order write of this band's computed rows. */
+        if (mparam != FEATURE)
+            for (int orow = band_start; orow < band_end; orow++)
+                Rast_put_row(fd_out,
+                             band_d + (size_t)(orow - band_start) * ncols,
+                             DCELL_TYPE);
+        else
+            for (int orow = band_start; orow < band_end; orow++)
+                Rast_put_row(fd_out,
+                             band_c + (size_t)(orow - band_start) * ncols,
+                             CELL_TYPE);
+    } /* end band loop */
 
     /*-----------------------------------------------------------------------*/
     /* CHANGE 4: Close per-thread descriptors.                               */
@@ -212,47 +287,40 @@ void process(void)
     G_free(fd_thread);
 
     /*-----------------------------------------------------------------------*/
-    /* CHANGE 5: Serial in-order write to disk.                              */
-    /* Top and bottom EDGE rows are written as NULL, then the computed rows */
-    /* are written from row_out[]/featrow_out[] in order.                    */
+    /* CHANGE 5: Bottom EDGE border rows are written as NULL. The computed   */
+    /* rows were written per band inside the loop above.                     */
     /*-----------------------------------------------------------------------*/
 
-    DCELL *null_d = NULL;
-    CELL *null_c = NULL;
+    /* Bottom border: the remaining rows are NULL. With band_rows = max(0, */
+    /* nrows-2*EDGE) computed rows, top_border + band_rows + bottom always sums
+     */
+    /* to exactly nrows, even when the window is taller than the region. */
+    int band_rows = (proc_rows > 0) ? proc_rows : 0;
+    for (row = top_border + band_rows; row < nrows; row++) {
+        if (mparam != FEATURE)
+            Rast_put_row(fd_out, null_d, DCELL_TYPE);
+        else
+            Rast_put_row(fd_out, null_c, CELL_TYPE);
+    }
+
     if (mparam != FEATURE) {
-        null_d = Rast_allocate_buf(DCELL_TYPE);
-        Rast_set_d_null_value(null_d, ncols);
+        G_free(band_d);
+        G_free(null_d);
     }
     else {
-        null_c = Rast_allocate_buf(CELL_TYPE);
-        Rast_set_c_null_value(null_c, ncols);
-    }
-
-    for (row = 0; row < nrows; row++) {
-        if (row < EDGE || row >= nrows - EDGE) {
-            if (mparam != FEATURE)
-                Rast_put_row(fd_out, null_d, DCELL_TYPE);
-            else
-                Rast_put_row(fd_out, null_c, CELL_TYPE);
-        }
-        else {
-            if (mparam != FEATURE) {
-                Rast_put_row(fd_out, row_out[row], DCELL_TYPE);
-                G_free(row_out[row]);
-            }
-            else {
-                Rast_put_row(fd_out, featrow_out[row], CELL_TYPE);
-                G_free(featrow_out[row]);
-            }
-        }
-    }
-
-    if (mparam != FEATURE)
-        G_free(null_d);
-    else
+        G_free(band_c);
         G_free(null_c);
-    G_free(row_out);
-    G_free(featrow_out);
+    }
+    for (int t = 0; t < nprocs; t++) {
+        for (int k = 0; k < wsize; k++)
+            G_free(rings[t][k]);
+        G_free(rings[t]);
+        G_free(window_ptrs[t]);
+        free_dvector(obs_ptrs[t], 0, 5);
+    }
+    G_free(rings);
+    G_free(window_ptrs);
+    G_free(obs_ptrs);
     G_free(weight_ptr);
     free_dmatrix(normal_ptr, 0, 5, 0, 5);
     free_ivector(index_ptr, 0, 5);
