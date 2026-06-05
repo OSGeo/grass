@@ -89,8 +89,7 @@ static char *STD_OPT_STRINGS[] = {"G_OPT_UNDEFINED",
                                   "G_OPT_T_SUFFIX",
                                   "G_OPT_T_TYPE",
                                   "G_OPT_T_WHERE",
-                                  "G_OPT_T_SAMPLE",
-                                  "G_OPT_F_FORMAT"};
+                                  "G_OPT_T_SAMPLE"};
 
 struct Option *define_standard_option(const char *name)
 {
