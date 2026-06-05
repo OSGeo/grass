@@ -48,6 +48,7 @@ def space_time_dataset(tmp_path_factory):
             file=dataset_file,
             start="2026-01-01",
             increment="1 month",
+            flags="i",
         )
 
         yield SimpleNamespace(
