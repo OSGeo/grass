@@ -7,8 +7,10 @@ for details.
 
 :authors: GRASS Development Team
 """
+
 import json
 from datetime import datetime
+
 
 class TemporalJSONEncoder(json.JSONEncoder):
     """Custom JSON encoder with datetime support for GRASS GIS.
