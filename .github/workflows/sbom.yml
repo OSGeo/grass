@@ -1,0 +1,38 @@
+---
+name: Generate and Publish SBOM
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-sbom:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Generate SPDX SBOM
+        uses: anchore/sbom-action@v0
+        id: sbom
+        with:
+          path: .
+          format: spdx-json
+          output-file: grass-sbom.spdx.json
+
+      - name: Upload SBOM as Run Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: grass-release-sbom
+          path: grass-sbom.spdx.json
+          retention-days: 90
+
+      - name: Attach SBOM to GitHub Release Assets
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: grass-sbom.spdx.json
