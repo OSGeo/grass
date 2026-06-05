@@ -9,6 +9,14 @@
  * storing points in leaf nodes and subdividing when a node exceeds its
  * capacity.
  *
+ * This is a pointer-based (explicit) octree: each node is a separately
+ * allocated structure linked to its children by pointers, built incrementally
+ * as points are inserted. It is not a linear octree (Gargantini, 1982), which
+ * stores no internal nodes or pointers and instead encodes leaves as sorted
+ * locational (Morton) codes. The pointer-based form suits the incremental
+ * insertion this library targets; a linear octree would be more compact and
+ * cache-friendly for static, bulk-loaded point clouds but is a distinct design.
+ *
  * \par Purpose
  * The octree library is designed to:
  * - Efficiently store and index 3D point data
@@ -39,16 +47,17 @@
  *
  * \section octree_insert Inserting Points
  *
- * Add 3D points to the octree:
+ * Add 3D points to the octree. The fourth field is a caller-defined id (here
+ * a vector category) used to join query results back to source records:
  * \code{.c}
- * OctreePoint3D p = {25.5, 30.2, 15.8};
+ * OctreePoint3D p = {25.5, 30.2, 15.8, cat};
  *
  * if (octree_insert_point(tree, p) != 0)
  *     G_warning("Point is outside octree bounds or non-finite");
  *
  * // Insert multiple points
  * for (int i = 0; i < num_points; i++) {
- *     OctreePoint3D pt = {x[i], y[i], z[i]};
+ *     OctreePoint3D pt = {x[i], y[i], z[i], cat[i]};
  *     octree_insert_point(tree, pt);
  * }
  * \endcode
@@ -94,6 +103,15 @@
  * filter vs. caller-supplied "should I descend?" predicate -- depends on
  * the first real consumer (e.g., the NVIZ point-cloud LOD path in
  * lib/ogsf). Add it when that consumer lands, shaped to its actual needs.
+ *
+ * \par Point Identity
+ * Each OctreePoint3D carries a caller-defined grass_int64 id, opaque to the
+ * octree. Set it to a vector category, an index into the source point array,
+ * or OCTREE_NO_ID when unused. The id is preserved through insertion and
+ * subdivision and is delivered to octree_query_box() visitors via the point
+ * pointer, so query results can be joined back to the source vector and its
+ * attributes. octree_subtree_representative() sets the centroid's id to
+ * OCTREE_NO_ID, since a centroid maps to no single source point.
  *
  * \par Depth Limit
  * The tree enforces a maximum depth of OCTREE_MAX_DEPTH (21) to prevent

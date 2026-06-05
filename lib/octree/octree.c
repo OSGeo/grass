@@ -1,3 +1,16 @@
+/*!
+ * \file octree.c
+ *
+ * \brief Octree for 3D point spatial indexing
+ *
+ * (C) 2026 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public License
+ * (>=v2).  Read the file COPYING that comes with GRASS for details.
+ *
+ * \author Corey White
+ */
+
 #include <math.h>
 
 #include <grass/gis.h>
@@ -335,6 +348,7 @@ int octree_subtree_representative(const OctreeNode *node,
         out_centroid->x = sx / (double)count;
         out_centroid->y = sy / (double)count;
         out_centroid->z = sz / (double)count;
+        out_centroid->id = OCTREE_NO_ID;
     }
     return 0;
 }

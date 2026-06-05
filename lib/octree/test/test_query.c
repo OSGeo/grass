@@ -29,6 +29,8 @@ static int test_query_disjoint_box(void);
 static int test_query_partial_overlap(void);
 static int test_query_early_stop(void);
 static int test_query_collects_points(void);
+static int test_query_preserves_id(void);
+static int test_query_preserves_id_after_subdivision(void);
 static int test_visit_to_depth_root_only(void);
 static int test_visit_to_depth_full(void);
 static int test_visit_to_depth_cap(void);
@@ -36,6 +38,7 @@ static int test_representative_null(void);
 static int test_representative_empty(void);
 static int test_representative_single(void);
 static int test_representative_centroid(void);
+static int test_representative_id_is_sentinel(void);
 static int test_subtree_count_null_and_empty(void);
 static int test_subtree_count_matches_inserts(void);
 static int test_subtree_count_after_subdivision(void);
@@ -75,6 +78,23 @@ static int terminal_counter(const OctreeNode *node, void *user_data)
     return 0;
 }
 
+/* Visitor that records every matched point (coordinates and id) so a test
+   can verify each id stayed attached to its own point. */
+typedef struct {
+    OctreePoint3D pts[64];
+    size_t count;
+} CollectState;
+
+static int point_collector(const OctreePoint3D *p, void *user_data)
+{
+    CollectState *s = (CollectState *)user_data;
+
+    if (s->count < sizeof(s->pts) / sizeof(s->pts[0]))
+        s->pts[s->count] = *p;
+    s->count++;
+    return 0;
+}
+
 /* ************************************************************************* */
 /* Driver *********************************************************** */
 /* ************************************************************************* */
@@ -90,6 +110,8 @@ int unit_test_query(void)
     sum += test_query_partial_overlap();
     sum += test_query_early_stop();
     sum += test_query_collects_points();
+    sum += test_query_preserves_id();
+    sum += test_query_preserves_id_after_subdivision();
     sum += test_visit_to_depth_root_only();
     sum += test_visit_to_depth_full();
     sum += test_visit_to_depth_cap();
@@ -97,6 +119,7 @@ int unit_test_query(void)
     sum += test_representative_empty();
     sum += test_representative_single();
     sum += test_representative_centroid();
+    sum += test_representative_id_is_sentinel();
     sum += test_subtree_count_null_and_empty();
     sum += test_subtree_count_matches_inserts();
     sum += test_subtree_count_after_subdivision();
@@ -280,6 +303,113 @@ static int test_query_collects_points(void)
         G_warning("Expected %d matches in {0..1}^3, got %zu",
                   OCTREE_MAX_POINTS_PER_NODE + 1, n);
         sum++;
+    }
+
+    octree_free(root);
+    return sum;
+}
+
+/* ************************************************************************* */
+static int test_query_preserves_id(void)
+{
+    int sum = 0;
+
+    G_message("\t * testing query preserves each point's id\n");
+
+    OctreeNode *root = octree_create_node(0.0, 10.0, 0.0, 10.0, 0.0, 10.0);
+
+    /* Distinct coordinates, distinct ids, all within one leaf (no
+       subdivision). */
+    OctreePoint3D in[] = {
+        {1.0, 2.0, 3.0, 100},
+        {4.0, 5.0, 6.0, 200},
+        {7.0, 8.0, 9.0, 300},
+        {2.0, 2.0, 2.0, 400},
+    };
+    size_t n_in = sizeof(in) / sizeof(in[0]);
+
+    for (size_t i = 0; i < n_in; i++)
+        octree_insert_point(root, in[i]);
+
+    CollectState s = {0};
+    size_t n = octree_query_box(root, 0, 10, 0, 10, 0, 10, point_collector, &s);
+
+    if (n != n_in || s.count != n_in) {
+        G_warning("Expected %zu matches, got n=%zu count=%zu", n_in, n,
+                  s.count);
+        sum++;
+    }
+
+    /* Each returned point's id must still map to its original coordinates. */
+    for (size_t i = 0; i < s.count; i++) {
+        int matched = 0;
+
+        for (size_t j = 0; j < n_in; j++) {
+            if (s.pts[i].id == in[j].id) {
+                matched = 1;
+                if (s.pts[i].x != in[j].x || s.pts[i].y != in[j].y ||
+                    s.pts[i].z != in[j].z) {
+                    G_warning("id %lld returned with wrong coordinates",
+                              (long long)s.pts[i].id);
+                    sum++;
+                }
+                break;
+            }
+        }
+        if (!matched) {
+            G_warning("Unexpected id %lld in query result",
+                      (long long)s.pts[i].id);
+            sum++;
+        }
+    }
+
+    octree_free(root);
+    return sum;
+}
+
+/* ************************************************************************* */
+static int test_query_preserves_id_after_subdivision(void)
+{
+    int sum = 0;
+
+    G_message("\t * testing query preserves ids through subdivision\n");
+
+    OctreeNode *root = octree_create_node(0.0, 10.0, 0.0, 10.0, 0.0, 10.0);
+
+    /* Enough points across octants to force subdivision and redistribution.
+       The id offset 1000 keeps ids distinct from any coordinate value. */
+    int total = OCTREE_MAX_POINTS_PER_NODE * 3;
+
+    for (int i = 0; i < total; i++) {
+        OctreePoint3D p = {(double)(i % 10), (double)((i * 3) % 10),
+                           (double)((i * 7) % 10), 1000 + i};
+        octree_insert_point(root, p);
+    }
+
+    CollectState s = {0};
+    size_t n = octree_query_box(root, 0, 10, 0, 10, 0, 10, point_collector, &s);
+
+    if (n != (size_t)total || s.count != (size_t)total) {
+        G_warning("Expected %d matches after subdivision, got n=%zu count=%zu",
+                  total, n, s.count);
+        sum++;
+    }
+
+    /* Every id in [1000, 1000 + total) must be returned exactly once. */
+    int seen[OCTREE_MAX_POINTS_PER_NODE * 3] = {0};
+
+    for (size_t i = 0; i < s.count; i++) {
+        long long idx = (long long)s.pts[i].id - 1000;
+
+        if (idx < 0 || idx >= total) {
+            G_warning("id %lld out of expected range", (long long)s.pts[i].id);
+            sum++;
+        }
+        else if (seen[idx]++) {
+            G_warning("id %lld returned more than once",
+                      (long long)s.pts[i].id);
+            sum++;
+        }
     }
 
     octree_free(root);
@@ -521,6 +651,39 @@ static int test_representative_centroid(void)
        only reports 0/-1); just verify no crash. */
     if (octree_subtree_representative(root, NULL, NULL) != 0) {
         G_warning("Expected success when out parameters are NULL");
+        sum++;
+    }
+
+    octree_free(root);
+    return sum;
+}
+
+/* ************************************************************************* */
+static int test_representative_id_is_sentinel(void)
+{
+    int sum = 0;
+
+    G_message("\t * testing representative centroid id is OCTREE_NO_ID\n");
+
+    OctreeNode *root = octree_create_node(0.0, 10.0, 0.0, 10.0, 0.0, 10.0);
+
+    /* Several points with real ids; the centroid must not adopt any of them. */
+    OctreePoint3D pts[] = {
+        {1, 1, 1, 7}, {2, 2, 2, 8}, {3, 3, 3, 9}, {4, 4, 4, 10}};
+
+    for (size_t i = 0; i < sizeof(pts) / sizeof(pts[0]); i++)
+        octree_insert_point(root, pts[i]);
+
+    OctreePoint3D c;
+    size_t n = 0;
+
+    if (octree_subtree_representative(root, &c, &n) != 0) {
+        G_warning("Expected success for non-empty subtree");
+        sum++;
+    }
+    if (c.id != OCTREE_NO_ID) {
+        G_warning("Expected centroid id OCTREE_NO_ID, got %lld",
+                  (long long)c.id);
         sum++;
     }
 

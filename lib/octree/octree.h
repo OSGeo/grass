@@ -1,3 +1,75 @@
+/*!
+ * \file octree.h
+ *
+ * \brief Octree for 3D point spatial indexing
+ *
+ * Octree is a multidimensional (3-dimensional) tree for spatial
+ * partitioning/indexing.
+ *
+ * Copyright and license:
+ *
+ * (C) 2026 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public License
+ * (>=v2).  Read the file COPYING that comes with GRASS for details.
+ *
+ * \author Corey White
+ *
+ * \par References
+ * Meagher, D. (1982). "Geometric modeling using octree encoding".
+ * Computer Graphics and Image Processing 19 (2): 129-147.
+ * doi:10.1016/0146-664X(82)90104-6
+ *
+ * \par Features
+ * - Adaptive subdivision: a leaf splits into eight octants once it exceeds
+ *   OCTREE_MAX_POINTS_PER_NODE points.
+ * - Lazy allocation: child nodes and per-node point arrays are created on
+ *   demand, and the point array grows geometrically.
+ * - Depth limit (OCTREE_MAX_DEPTH) bounds recursion so coincident points
+ *   cannot subdivide forever.
+ * - Cached per-node subtree point counts (O(1) octree_subtree_count()) and
+ *   subtree centroids for level-of-detail representatives.
+ * - Axis-aligned range queries with bounding-box pruning, and depth-limited
+ *   traversal for level-of-detail rendering.
+ * - Each point carries a caller-defined id to join query results back to
+ *   source records.
+ *
+ * Here is a structure of basic usage:
+ *
+ * Create a new octree over spatial bounds:
+ *
+ *     octree_create_node(...);
+ *
+ * Insert points into the tree:
+ *
+ *     octree_insert_point(...);
+ *
+ * Query points within an axis-aligned box:
+ *
+ *     octree_query_box(...);
+ *
+ * Traverse terminal nodes down to a depth for level-of-detail:
+ *
+ *     octree_visit_to_depth(...);
+ *
+ * Get a subtree's point count and centroid:
+ *
+ *     octree_subtree_representative(...);
+ *
+ * Free the tree:
+ *
+ *     octree_free(...);
+ *
+ * \todo
+ * Add a view-frustum or box-pruned depth-limited traversal for view-dependent
+ * level-of-detail, once a consumer (e.g., the NVIZ point-cloud path in
+ * lib/ogsf) defines the shape it needs.
+ *
+ * \todo
+ * Support point removal for dynamic updates; the tree currently only grows
+ * through insertion.
+ */
+
 #ifndef OCTREE_H
 #define OCTREE_H
 
@@ -11,9 +83,16 @@
 /* Maximum tree depth to prevent infinite recursion with coincident points */
 #define OCTREE_MAX_DEPTH           21
 
+/* Id value for points the library synthesizes (e.g., a subtree centroid)
+   rather than stores from the caller. */
+#define OCTREE_NO_ID               ((grass_int64)(-1))
+
 /* Point structure */
 typedef struct {
     double x, y, z;
+    grass_int64 id; /* Caller-defined identity (e.g., vector cat or source
+                       index) used to join query results back to source
+                       records; opaque to and unused by the octree itself. */
 } OctreePoint3D;
 
 /* Octree node structure */
@@ -29,6 +108,8 @@ typedef struct OctreeNode {
 
 /* Visitor invoked per matching point in a range query.
    Return 0 to continue iteration, non-zero to stop early.
+   The point's caller-defined id is available via point->id, letting the
+   visitor join each match back to its source record.
    The point pointer aliases internal storage and must not be retained past
    the call or across tree modifications. */
 typedef int (*OctreePointVisitor)(const OctreePoint3D *point, void *user_data);
@@ -65,6 +146,7 @@ size_t octree_subtree_count(const OctreeNode *node);
 
 /* Compute the centroid and total point count of a subtree.
    out_centroid and out_count may each be NULL if not needed.
+   The centroid's id is set to OCTREE_NO_ID since it maps to no single point.
    Returns 0 on success, -1 if the subtree contains no points.
    The count is O(1) (cached); computing the centroid is O(subtree size). */
 int octree_subtree_representative(const OctreeNode *node,
