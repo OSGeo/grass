@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 17:57+0000\n"
-"PO-Revision-Date: 2026-03-27 18:44+0000\n"
+"POT-Creation-Date: 2026-05-23 16:07+0000\n"
+"PO-Revision-Date: 2026-05-19 20:40+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs/fr/>\n"
 "Language: fr\n"
@@ -465,7 +465,7 @@ msgstr ""
 "\n"
 "-- tests unitaires gjson terminés avec succès --"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal n-s resolution value: %g"
 msgstr "Valeur de résolution n-s illégale : %g"
 
@@ -473,7 +473,7 @@ msgstr "Valeur de résolution n-s illégale : %g"
 msgid "Illegal number of rows: %d (resolution is %g)"
 msgstr "Nombre de lignes illégal : %d (la résolution est %g)"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal e-w resolution value: %g"
 msgstr "Valeur de résolution e-o illégale : %g"
 
@@ -679,7 +679,7 @@ msgstr "Échec de l’affichage de %s"
 
 #, c-format
 msgid "Failed to parse string specifier: %s"
-msgstr ""
+msgstr "Échec de l'analyse du spécificateur de chaîne : %s"
 
 #, c-format
 msgid "Format specifier exceeds the buffer size (%d)"
@@ -2953,6 +2953,10 @@ msgid ""
 "(DISPLAY variable is not set.)\n"
 "Switching to text based interface mode."
 msgstr ""
+"Il semble que le système X Windows ne soit pas actif.\n"
+"Une interface utilisateur graphique n'est pas prise en charge.\n"
+"(La variable DISPLAY n'est pas définie).\n"
+"Passage au mode d'interface textuelle."
 
 msgid "Error creating project: {}"
 msgstr "Erreur lors de la création du projet : {}"

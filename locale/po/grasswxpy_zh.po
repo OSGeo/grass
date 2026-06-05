@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GRASS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 17:57+0000\n"
+"POT-Creation-Date: 2026-05-23 16:07+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Chinese (Simplified) <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/zh_Hans/>\n"
@@ -741,6 +741,17 @@ msgstr "编辑选中的记录"
 msgid "Display selected"
 msgstr "显示选中项目"
 
+msgid "Tools API"
+msgstr ""
+
+#, fuzzy
+msgid "Script API"
+msgstr "Python编辑器"
+
+#, fuzzy
+msgid "PyGRASS API"
+msgstr "GRASS帮助文件"
+
 msgid "Classic (labels only)"
 msgstr "经典（仅标签）"
 
@@ -1291,6 +1302,11 @@ msgid "Re&load maps"
 msgstr ""
 
 #, fuzzy
+#| msgid "Computational region"
+msgid "Show computational region"
+msgstr "可计算区域"
+
+#, fuzzy
 msgid "&Copy path"
 msgstr "设置地图集权限"
 
@@ -1304,6 +1320,11 @@ msgstr "删除选中项目"
 #, fuzzy
 msgid "&Rename project"
 msgstr "投影管理"
+
+#, fuzzy
+#| msgid "Choose projection"
+msgid "Show projection info"
+msgstr "选择投影"
 
 #, fuzzy
 #| msgid "Copy table"
@@ -3191,10 +3212,31 @@ msgstr "不执行命令而关闭窗口(Ctrl+Q)"
 msgid "Run the command (Ctrl+R)"
 msgstr "运行命令(Ctrl+R)"
 
+msgid "Copy as Shell command"
+msgstr ""
+
+#, fuzzy
+#| msgid "Copy table"
+msgid "Copy as Python"
+msgstr "拷贝数据表"
+
+#, fuzzy
+msgid "Copy as JSON settings"
+msgstr "无法获取栅格行\n"
+
 msgid "Copy"
 msgstr "复制"
 
-msgid "Copy the current command string to the clipboard"
+#, fuzzy
+#| msgid "Export common formats"
+msgid "More copy formats"
+msgstr "常见格式导出"
+
+#, fuzzy
+msgid "Paste JSON settings"
+msgstr "字体设置"
+
+msgid "Paste parameters from JSON string in the clipboard"
 msgstr ""
 
 msgid "Show manual page of the command (Ctrl+H)"
@@ -3209,8 +3251,66 @@ msgstr ""
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr ""
 
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+msgid "Copy as Python (Script API)"
+msgstr ""
+
+msgid "Copy as Python (PyGRASS API)"
+msgstr ""
+
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr "'%s'已复制到剪贴板"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "Python code copied to clipboard"
+msgstr "'%s'已复制到剪贴板"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "JSON copied to clipboard"
+msgstr "'%s'已复制到剪贴板"
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Modules"
+msgid "Module Mismatch"
+msgstr "模块"
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+#, fuzzy
+#| msgid "Input Data"
+msgid "Invalid Data"
+msgstr "输入数据"
+
+#, fuzzy
+#| msgid "Error"
+msgid "Paste Error"
+msgstr "错误"
+
+#, fuzzy, python-format
+#| msgid "'%s' copied to clipboard"
+msgid "%s copied to clipboard"
 msgstr "'%s'已复制到剪贴板"
 
 msgid "Required"
@@ -3820,6 +3920,9 @@ msgstr "使用交互输入"
 
 msgid "Verbosity level:"
 msgstr "信息详细程度"
+
+msgid "Default Python API for copied commands:"
+msgstr ""
 
 msgid "Number of threads for parallel computing (supported tools only):"
 msgstr ""
@@ -5781,6 +5884,14 @@ msgstr ""
 msgid "Remove raster mask"
 msgstr "栅格地图开发"
 
+#, fuzzy
+#| msgid "Custom min"
+msgid "Custom CRS"
+msgstr "指定最小值"
+
+msgid "Left mouse click to print detailed projection info"
+msgstr ""
+
 msgid "Create new workspace (Ctrl+N)"
 msgstr "创建新工作区(Ctrl+N)"
 
@@ -7113,6 +7224,9 @@ msgid "Save expression to file"
 msgstr ""
 
 msgid "Load expression from file"
+msgstr ""
+
+msgid "Copy the current command string to the clipboard"
 msgstr ""
 
 msgid "exponent"
@@ -11506,9 +11620,6 @@ msgstr ""
 #~ msgid "Choose method of specifying georeferencing parameters"
 #~ msgstr "选择定义地理配准参数的方式"
 
-#~ msgid "Choose projection"
-#~ msgstr "选择投影"
-
 #~ msgid "Classify attribute data"
 #~ msgstr "数据属性分类"
 
@@ -12373,9 +12484,6 @@ msgstr ""
 #~ msgid "Imports older versions of GRASS vector maps."
 #~ msgstr "导入旧版GRASS矢量地图。"
 
-#~ msgid "Input Data"
-#~ msgstr "输入数据"
-
 #~ msgid "Input for supervised MLC"
 #~ msgstr "监督最大似然分类输入数据"
 
@@ -12556,10 +12664,6 @@ msgstr ""
 #~ msgid "Load map layers from GRC file to layer tree"
 #~ msgstr "从GRC文件加载地图层到图层列表"
 
-#, fuzzy
-#~ msgid "Load settings:"
-#~ msgstr "无法获取栅格行\n"
-
 #~ msgid "Load workspace from file"
 #~ msgstr "加载工作区文件"
 
@@ -12713,9 +12817,6 @@ msgstr ""
 
 #~ msgid "Module dialog settings"
 #~ msgstr "模块对话框设置"
-
-#~ msgid "Modules"
-#~ msgstr "模块"
 
 #~ msgid "Mosaic images"
 #~ msgstr "图象镶嵌"
