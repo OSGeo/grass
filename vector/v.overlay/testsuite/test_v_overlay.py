@@ -1,16 +1,14 @@
-import pytest
 import grass.script as gs
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 
-# run in a GRASS session with nc_spm_full_v2beta1
 
-
-class TestVOverlay:
+class TestVOverlay(TestCase):
     """Test v.overlay output against expected output"""
 
-    # create test data
-    @pytest.fixture(scope="class", autouse=True)
-    def create_testdata(self):
-        # set up
+    @classmethod
+    def setUpClass(cls):
+        """Create input vectors for v.overlay."""
         gs.run_command(
             "v.extract",
             input="boundary_county",
@@ -39,10 +37,9 @@ class TestVOverlay:
             distance=-2,
         )
 
-        # run the tests
-        yield
-
-        # clean up test data regardless of test success/failure
+    @classmethod
+    def tearDownClass(cls):
+        """Remove created vector map and temporary files, then delete the temp region."""
         gs.run_command(
             "g.remove", type="vector", flags="f", pattern="boundary_county_extract*"
         )
@@ -66,27 +63,23 @@ class TestVOverlay:
             quiet=True,
         )
 
-        reference = {
-            "nodes": 1050,
-            "primitives": 1802,
-            "points": 0,
-            "lines": 0,
-            "boundaries": 1572,
-            "centroids": 230,
-            "areas": 529,
-            "islands": 7,
-        }
-
-        observed = gs.vector_info_topo(
+        self.assertModuleKeyValue(
+            "v.info",
             map="boundary_county_extract_overlay_nocleaning",
+            flags="tg",
+            sep="=",
+            precision=0.1,
+            reference={
+                "nodes": 1050,
+                "primitives": 1802,
+                "points": 0,
+                "lines": 0,
+                "boundaries": 1572,
+                "centroids": 230,
+                "areas": 529,
+                "islands": 7,
+            },
         )
-
-        # compare results
-        for key in list(reference):
-            # all integers, simple comparison is ok
-            assert reference[key] == observed[key], (
-                f"Difference in {key}, expected {reference[key]}, got {observed[key]}"
-            )
 
     def test_voverlay_withcleaning(self):
         """Overlay two input vectors and compare the output to the expected output.
@@ -105,24 +98,24 @@ class TestVOverlay:
             quiet=True,
         )
 
-        reference = {
-            "nodes": 1232,
-            "primitives": 2164,
-            "points": 0,
-            "lines": 0,
-            "boundaries": 1847,
-            "centroids": 317,
-            "areas": 622,
-            "islands": 7,
-        }
-
-        observed = gs.vector_info_topo(
+        self.assertModuleKeyValue(
+            "v.info",
             map="boundary_county_extract_overlay_withcleaning",
+            flags="tg",
+            sep="=",
+            precision=0.1,
+            reference={
+                "nodes": 1232,
+                "primitives": 2164,
+                "points": 0,
+                "lines": 0,
+                "boundaries": 1847,
+                "centroids": 317,
+                "areas": 622,
+                "islands": 7,
+            },
         )
 
-        # compare results
-        for key in list(reference):
-            # all integers, simple comparison is ok
-            assert reference[key] == observed[key], (
-                f"Difference in {key}, expected {reference[key]}, got {observed[key]}"
-            )
+
+if __name__ == "__main__":
+    test()
