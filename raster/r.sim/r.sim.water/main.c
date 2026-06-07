@@ -358,8 +358,11 @@ int main(int argc, char *argv[])
     }
     else {
         /* default as it used to be */
-        G_srand48(12345);
+        seed_value = 12345;
+        G_srand48(seed_value);
     }
+
+    simwe_rand_init(seed_value);
 
     G_get_set_window(&cellhd);
 

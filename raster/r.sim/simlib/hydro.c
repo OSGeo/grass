@@ -185,6 +185,8 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                             printf("    nwalka,nwalk=%d %d", sim->nwalka,
                                    sim->nwalk);
                             G_debug(2, "  ");
+                            
+                            continue;
                         }
 
                         if (grids->zz[k][l] != UNDEF) {
@@ -195,22 +197,30 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                                     double decr = pow(
                                         addac * sim->w[lw].m,
                                         3. / 5.); /* decreasing factor in m */
-                                    if (grids->inf[k][l] > decr) {
-                                        grids->inf[k][l] -=
-                                            decr; /* decrease infilt. in cell
-                                                     and eliminate the walker */
-                                        sim->w[lw].m = 0.;
-                                    }
-                                    else {
-                                        sim->w[lw].m -=
-                                            pow(grids->inf[k][l], 5. / 3.) /
-                                            addac; /* use just proportional part
-                                                      of the walker weight */
-                                        grids->inf[k][l] = 0.;
+#if defined(_OPENMP)
+#pragma omp critical
+#endif
+                                    {
+                                        if (grids->inf[k][l] > decr) {
+                                            grids->inf[k][l] -=
+                                                decr; /* decrease infilt. in cell
+                                                         and eliminate the walker */
+                                            sim->w[lw].m = 0.;
+                                        }
+                                        else {
+                                            sim->w[lw].m -=
+                                                pow(grids->inf[k][l], 5. / 3.) /
+                                                addac; /* use just proportional part
+                                                          of the walker weight */
+                                            grids->inf[k][l] = 0.;
+                                        }
                                     }
                                 }
                             }
 
+#if defined(_OPENMP)
+#pragma omp atomic
+#endif
                             grids->gama[k][l] +=
                                 (addac * sim->w[lw].m); /* add walker weigh to
                                                       water depth or conc. */
