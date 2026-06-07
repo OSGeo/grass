@@ -55,7 +55,7 @@ void process(void)
     /* threads.                                                              */
     /*-----------------------------------------------------------------------*/
 
-    double *weight_ptr = (double *)G_malloc(SQR(wsize) * sizeof(double));
+    double *weight_ptr = (double *)G_malloc(DSQR(wsize) * sizeof(double));
     double **normal_ptr = dmatrix(0, 5, 0, 5);
     int *index_ptr = ivector(0, 5);
     double temp;
@@ -146,7 +146,7 @@ void process(void)
         rings[t] = (DCELL **)G_malloc((size_t)wsize * sizeof(DCELL *));
         for (int k = 0; k < wsize; k++)
             rings[t][k] = (DCELL *)G_malloc((size_t)ncols * sizeof(DCELL));
-        window_ptrs[t] = (DCELL *)G_malloc(SQR(wsize) * sizeof(DCELL));
+        window_ptrs[t] = (DCELL *)G_malloc(DSQR(wsize) * sizeof(DCELL));
         obs_ptrs[t] = dvector(0, 5);
     }
 
