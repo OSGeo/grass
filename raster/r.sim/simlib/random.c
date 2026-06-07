@@ -7,9 +7,41 @@
 #include <grass/bitmap.h>
 #include <grass/linkm.h>
 
+#if defined(_OPENMP)
+#include <omp.h>
+#define MAX_SIMWE_THREADS 1024
+static unsigned int thread_seeds[MAX_SIMWE_THREADS];
+static int seeds_initialized = 0;
+#endif
+
+void simwe_rand_init(long global_seed)
+{
+#if defined(_OPENMP)
+    int i;
+    int max_threads = omp_get_max_threads();
+    if (max_threads > MAX_SIMWE_THREADS) max_threads = MAX_SIMWE_THREADS;
+    for (i = 0; i < max_threads; i++) {
+        thread_seeds[i] = (unsigned int)(global_seed + i * 314159);
+    }
+    seeds_initialized = 1;
+#endif
+}
+
 double simwe_rand(void)
 {
+#if defined(_OPENMP)
+    int tid = omp_get_thread_num();
+    if (tid >= MAX_SIMWE_THREADS) tid = MAX_SIMWE_THREADS - 1;
+    
+    if (!seeds_initialized) {
+        thread_seeds[tid] = 12345 + tid; // Fallback
+    }
+    
+    thread_seeds[tid] = (thread_seeds[tid] * 1103515245 + 12345) & 0x7fffffff;
+    return (double)thread_seeds[tid] / 2147483648.0;
+#else
     return G_drand48();
+#endif
 } /* ulec */
 
 double gasdev(void)
