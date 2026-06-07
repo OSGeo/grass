@@ -1,18 +1,31 @@
 ## DESCRIPTION
 
 *t.info* reports information about any dataset that is registered in the
-temporal database in human readable or shell script style. Datasets are
-raster, 3D raster and vector maps as well as their corresponding space
-time datasets (STRDS, STR3DS and STVDS). This module reports the
-information that are stored in the temporal database. These are basic
-information (id, name, mapset, creator, creation time, temporal type),
-the temporal and spatial extent and dataset type specific metadata. The
-user has to utilize *r.info*, *r3.info*, *v.info* to report detailed
-information about raster, 3D raster and vector maps, since not all map
-specific information and metadata are stored in the temporal database.
+temporal database. Datasets are raster, 3D raster and vector maps as well
+as their corresponding space time datasets (STRDS, STR3DS and STVDS).
+This module reports the information that are stored in the temporal
+database. These are basic information (id, name, mapset, creator,
+creation time, temporal type), the temporal and spatial extent and
+dataset type specific metadata. The user has to utilize *r.info*,
+*r3.info*, *v.info* to report detailed information about raster,
+3D raster and vector maps, since not all map specific information and
+metadata are stored in the temporal database.
 
 In addition, information about the chosen temporal database backend can
-be reported.
+be reported using the **-d** flag.
+
+in different **format**s:
+
+- *plain*: human readable format
+- *shell*: shell script style with key value pairs separated by "="
+- *json*: json format
+
+While both shell and json format are machine readable, there are some
+notable differences: shell format has singel quotes around granularity,
+and datetime-strings and returns a None string for empty fields, while
+json format returns valid JSON. Furthermore, json more comprehensive
+metadata, including also the metadata fields: *proj*, *title*, *command*,
+and *description*.
 
 ## NOTES
 
