@@ -37,5 +37,5 @@ class TemporalJSONEncoder(json.JSONEncoder):
                  or calls parent encoder for other types
         """
         if isinstance(obj, datetime):
-            return obj.isoformat()
+            return obj.strftime("%Y-%m-%d %H:%M:%S")
         return super().default(obj)
