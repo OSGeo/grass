@@ -341,7 +341,7 @@ class AbstractMapDataset(AbstractDataset):
         if self.is_topology_build():
             self.print_topology_shell_info()
 
-    def _to_json_dict(self):
+    def get_metadata_dict(self):
         """Build a dictionary from internal metadata storage for JSON output.
 
         Extends the base implementation by adding information about
@@ -350,7 +350,7 @@ class AbstractMapDataset(AbstractDataset):
         :return: Complete metadata dictionary including STDS registration info
         """
         # Get base metadata from parent class (uses dict-merge approach)
-        data = super()._to_json_dict()
+        data = super().get_metadata_dict()
 
         # Add map-specific information: which STDSs is this map registered in?
         datasets = self.get_registered_stds()

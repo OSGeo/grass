@@ -230,10 +230,10 @@ class AbstractDataset(
 
         The output can be parsed by any JSON-compatible tool or library.
         """
-        data = self._to_json_dict()
+        data = self.get_metadata_dict()
         print(json.dumps(data, cls=TemporalJSONEncoder, indent=4))
 
-    def _to_json_dict(self):
+    def get_metadata_dict(self):
         """Build a dictionary from internal metadata storage for JSON output.
 
         Uses dict merging to automatically capture all metadata from the
