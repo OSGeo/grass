@@ -161,6 +161,7 @@ void create_observation_points(ObservationPoints *points);
 void derivatives(const Geometry *geometry, float **elevation, double **dx,
                  double **dy);
 
+void simwe_rand_init(long global_seed);
 double simwe_rand(void);
 double gasdev(void);
 void gasdev_for_paralel(double *, double *);
