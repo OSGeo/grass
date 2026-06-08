@@ -37,7 +37,7 @@ def space_time_raster3d_dataset(tmp_path_factory):
         names = [f"vol_{i}" for i in range(1, 7)]
         max_values = [550, 445, 320, 510, 300, 650]
 
-        for name, value in zip(names, max_values, strict=False):
+        for name, value in zip(names, max_values, strict=True):
             tools.r3_mapcalc(
                 expression=f"{name} = rand(0, {value})",
                 seed=1,
