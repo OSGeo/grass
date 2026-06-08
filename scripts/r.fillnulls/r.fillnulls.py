@@ -669,14 +669,11 @@ def main():
     if len(failed_list) > 0:
         gs.warning(
             _(
-                "Following holes where not filled. Temporary maps with are left "
-                "in place to allow examination of unfilled holes"
+                "The following holes were not filled. Temporary maps are left "
+                "in place to allow examination of unfilled holes:"
             )
         )
-        outlist = failed_list[0]
-        for hole in failed_list[1:]:
-            outlist = ", " + outlist
-        gs.message(outlist)
+        gs.message(", ".join(failed_list))
 
     gs.message(_("Done."))
 
