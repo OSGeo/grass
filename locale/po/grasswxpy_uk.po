@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_uk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-28 15:49+0000\n"
+"POT-Creation-Date: 2026-05-23 16:07+0000\n"
 "PO-Revision-Date: 2017-05-23 21:08+0200\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian (https://www.transifex.com/grass-gis/teams/45198/uk/)\n"
@@ -737,6 +737,15 @@ msgstr ""
 msgid "Display selected"
 msgstr ""
 
+msgid "Tools API"
+msgstr ""
+
+msgid "Script API"
+msgstr ""
+
+msgid "PyGRASS API"
+msgstr ""
+
 msgid "Classic (labels only)"
 msgstr ""
 
@@ -1275,6 +1284,9 @@ msgstr ""
 msgid "Re&load maps"
 msgstr ""
 
+msgid "Show computational region"
+msgstr ""
+
 msgid "&Copy path"
 msgstr ""
 
@@ -1285,6 +1297,9 @@ msgid "&Delete project"
 msgstr ""
 
 msgid "&Rename project"
+msgstr ""
+
+msgid "Show projection info"
 msgstr ""
 
 msgid "Copy path"
@@ -3121,10 +3136,25 @@ msgstr ""
 msgid "Run the command (Ctrl+R)"
 msgstr ""
 
+msgid "Copy as Shell command"
+msgstr ""
+
+msgid "Copy as Python"
+msgstr ""
+
+msgid "Copy as JSON settings"
+msgstr ""
+
 msgid "Copy"
 msgstr ""
 
-msgid "Copy the current command string to the clipboard"
+msgid "More copy formats"
+msgstr ""
+
+msgid "Paste JSON settings"
+msgstr ""
+
+msgid "Paste parameters from JSON string in the clipboard"
 msgstr ""
 
 msgid "Show manual page of the command (Ctrl+H)"
@@ -3139,8 +3169,55 @@ msgstr ""
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr ""
 
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+msgid "Copy as Python (Script API)"
+msgstr ""
+
+msgid "Copy as Python (PyGRASS API)"
+msgstr ""
+
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr ""
+
+msgid "Python code copied to clipboard"
+msgstr ""
+
+msgid "JSON copied to clipboard"
+msgstr ""
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+msgid "Module Mismatch"
+msgstr ""
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+msgid "Invalid Data"
+msgstr ""
+
+msgid "Paste Error"
+msgstr ""
+
+#, python-format
+msgid "%s copied to clipboard"
 msgstr ""
 
 msgid "Required"
@@ -3739,6 +3816,9 @@ msgid "Allow interactive input"
 msgstr ""
 
 msgid "Verbosity level:"
+msgstr ""
+
+msgid "Default Python API for copied commands:"
 msgstr ""
 
 msgid "Number of threads for parallel computing (supported tools only):"
@@ -5605,6 +5685,12 @@ msgstr ""
 msgid "Remove raster mask"
 msgstr ""
 
+msgid "Custom CRS"
+msgstr ""
+
+msgid "Left mouse click to print detailed projection info"
+msgstr ""
+
 msgid "Create new workspace (Ctrl+N)"
 msgstr ""
 
@@ -6901,6 +6987,9 @@ msgid "Save expression to file"
 msgstr ""
 
 msgid "Load expression from file"
+msgstr ""
+
+msgid "Copy the current command string to the clipboard"
 msgstr ""
 
 msgid "exponent"

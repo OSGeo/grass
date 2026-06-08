@@ -439,7 +439,7 @@ int gsd_wire_surf_const(geosurf *surf, float k)
 
    \return 1
  */
-int gsd_wire_surf_func(geosurf *gs UNUSED, int (*user_func)(void) UNUSED)
+int gsd_wire_surf_func(geosurf *gs G_UNUSED, int (*user_func)(void) G_UNUSED)
 {
     return (1);
 }
