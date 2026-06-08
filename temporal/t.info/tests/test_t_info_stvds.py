@@ -36,7 +36,6 @@ def test_json_format_returns_valid_json(space_time_vector_dataset):
         "map_time": "interval",
         "top": 0.0,
         "bottom": 0.0,
-        "dbmi_python_interface": "sqlite3",
     }
     info = tools.t_info(format="json", type="stvds", input=stvds_id).json
     assert isinstance(info, dict)
@@ -50,9 +49,17 @@ def test_json_format_returns_valid_json(space_time_vector_dataset):
         "creator",
         "command",
         "modification_time",
-        "sql_template_path",
         "tgis_db",
     } <= set(info.keys())
+    expected_tgis_info_keys = {
+        "creation_time",
+        "dbmi_python_interface",
+        "dbmi_string",
+        "sql_template_path",
+        "tgis_db_version",
+        "tgis_version",
+    }
+    assert expected_tgis_info_keys <= set(info["tgis_db"].keys())
 
 
 def test_json_shell_parity(space_time_vector_dataset):
