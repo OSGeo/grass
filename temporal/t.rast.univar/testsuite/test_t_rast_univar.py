@@ -570,9 +570,9 @@ a_3@testing,,2001-07-01 00:00:00,2001-10-01 00:00:00,300,300,300,300,0,0,0,28800
 a_4@testing,,2001-10-01 00:00:00,2002-01-01 00:00:00,400,400,400,400,0,0,0,3840000,0,9600,9600
 """
         for ref, res in zip(
-            univar_text.split("\n"),
-            t_rast_univar.outputs.stdout.split("\n"),
-            strict=False,
+            univar_text.splitlines(),
+            t_rast_univar.outputs.stdout.splitlines(),
+            strict=True,
         ):
             if ref and res:
                 ref_line = ref.split(",", 1)[1]
@@ -610,7 +610,7 @@ a_4@testing,,2001-10-01 00:00:00,2002-01-01 00:00:00,400,400,400,400,0,0,0,38400
                 "sum": 1920000,
                 "null_cells": 0,
                 "cells": 9600,
-                "non_null_cells": 9600,
+                "n": 9600,
             },
             {
                 "id": "a_3",
@@ -627,7 +627,7 @@ a_4@testing,,2001-10-01 00:00:00,2002-01-01 00:00:00,400,400,400,400,0,0,0,38400
                 "sum": 2880000,
                 "null_cells": 0,
                 "cells": 9600,
-                "non_null_cells": 9600,
+                "n": 9600,
             },
             {
                 "id": "a_4",
@@ -644,13 +644,13 @@ a_4@testing,,2001-10-01 00:00:00,2002-01-01 00:00:00,400,400,400,400,0,0,0,38400
                 "sum": 3840000,
                 "null_cells": 0,
                 "cells": 9600,
-                "non_null_cells": 9600,
+                "n": 9600,
             },
         ]
 
         self.assertEqual(len(output_json), len(expected_json))
 
-        for res_obj, exp_obj in zip(output_json, expected_json, strict=False):
+        for res_obj, exp_obj in zip(output_json, expected_json, strict=True):
             for key in exp_obj:
                 if key == "id":
                     self.assertTrue(res_obj[key].startswith(exp_obj[key]))

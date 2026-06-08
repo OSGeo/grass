@@ -23,6 +23,7 @@ for details.
 
 from multiprocessing import Pool
 from subprocess import PIPE
+import json
 
 import grass.script as gs
 from grass.pygrass.modules import Module
@@ -35,7 +36,11 @@ from .open_stds import open_old_stds
 
 
 def compute_univar_stats(
-    registered_map_info, stats_module, fs, rast_region: bool = False
+    registered_map_info,
+    stats_module,
+    fs,
+    rast_region: bool = False,
+    output_format: str | None = None,
 ):
     """Compute univariate statistics for a map of a space time raster or raster3d
     dataset
@@ -47,6 +52,7 @@ def compute_univar_stats(
     :param rast_region: If set True ignore the current region settings
            and use the raster map regions for univar statistical calculation.
            Only available for strds.
+    :param output_format: Output format specification
     """
     string = ""
     id = registered_map_info["id"]
@@ -72,6 +78,34 @@ def compute_univar_stats(
             else _("Unable to get statistics for 3d raster map <%s>") % id
         )
         return None
+
+    if output_format == "json":
+        try:
+            stats = json.loads(univar_stats)
+        except ValueError:
+            gs.warning(_("Unable to parse JSON output for map <%s>") % id)
+            return None
+
+        if isinstance(stats, dict):
+            stats = [stats]
+
+        processed_stats = []
+        for s in stats:
+            new_s = {
+                "id": id,
+                "semantic_label": semantic_label
+                if stats_module.name == "r.univar" and semantic_label
+                else None,
+                "start": str(start) if start else None,
+                "end": str(end) if end else None,
+            }
+
+            new_s.update(s)
+
+            processed_stats.append(new_s)
+
+        return processed_stats
+
     eol = ""
 
     for idx, stats_kv in enumerate(univar_stats.split(";")):
@@ -194,7 +228,7 @@ def print_gridded_dataset_univar_statistics(
     if output is not None:
         out_file = open(output, "w")
 
-    if no_header is False or format == "json":
+    if no_header is False:
         cols = (
             ["id", "semantic_label", "start", "end"]
             if type == "strds"
@@ -235,7 +269,9 @@ def print_gridded_dataset_univar_statistics(
                 out_file.write(string + "\n")
 
     # Define flags
-    flag = "g"
+    flag = ""
+    if format != "json":
+        flag = "g"
     if extended is True:
         flag += "e"
     if type == "strds" and rast_region is True and not zones:
@@ -248,45 +284,28 @@ def print_gridded_dataset_univar_statistics(
         zones=zones,
         percentile=percentile,
         stdout_=PIPE,
+        format="json" if format == "json" else None,
         run_=False,
     )
 
     nprocs = max(nprocs, 1)
     if nprocs == 1:
         strings = [
-            compute_univar_stats(
-                row,
-                univar_module,
-                fs,
-            )
+            compute_univar_stats(row, univar_module, fs, rast_region, format)
             for row in rows
         ]
     else:
         with Pool(min(nprocs, len(rows))) as pool:
             strings = pool.starmap(
-                compute_univar_stats, [(dict(row), univar_module, fs) for row in rows]
+                compute_univar_stats,
+                [(dict(row), univar_module, fs, rast_region, format) for row in rows],
             )
 
     if format == "json":
-        # lazy import
-        import json
-
         json_out = []
+
         for block in filter(None, strings):
-            for line in block.splitlines():
-                if line.strip():
-                    row = {}
-                    for k, v in zip(cols, line.split(fs), strict=False):
-                        if not v or v == "None":
-                            row[k] = None
-                        else:
-                            try:
-                                row[k] = (
-                                    float(v) if "." in v or "e" in v.lower() else int(v)
-                                )
-                            except ValueError:
-                                row[k] = v
-                    json_out.append(row)
+            json_out.extend(block)
 
         output_str = json.dumps(json_out, indent=4)
     else:

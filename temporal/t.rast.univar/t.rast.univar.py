@@ -136,10 +136,7 @@ def main():
         if separator:
             gs.fatal(_("Separator option is not allowed with JSON format"))
 
-        # We need this in univar_statistics.py for data split
-        separator = "|"
-
-    else:
+    elif not separator:
         separator = "|"
 
     # lazy imports
