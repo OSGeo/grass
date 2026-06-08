@@ -10,12 +10,16 @@ for details.
 """
 
 import os
+import pathlib
+import shutil
 
+import grass.script as gs
 from grass.gunittest.case import TestCase
 
 
 class TestRasterImport(TestCase):
     input_ = os.path.join("data", "precip_2000.tar.bzip2")
+    new_project_name = "test_project_import"
 
     @classmethod
     def tearDownClass(cls):
@@ -43,6 +47,25 @@ class TestRasterImport(TestCase):
         self.assertModuleKeyValue(
             module="t.info", input="A", flags="g", reference=tinfo, precision=2, sep="="
         )
+
+    def test_import_new_project(self):
+        """Test the project option."""
+        path = os.path.join(gs.gisenv()["GISDBASE"], self.new_project_name)
+
+        shutil.rmtree(path, ignore_errors=True)
+        self.addCleanup(shutil.rmtree, path, ignore_errors=True)
+
+        self.assertModule(
+            "t.rast.import",
+            flags="o",
+            input=self.input_,
+            output="B",
+            basename="b",
+            project=self.new_project_name,
+            overwrite=True,
+        )
+
+        self.assertTrue(pathlib.Path(path).exists())
 
 
 if __name__ == "__main__":

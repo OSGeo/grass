@@ -47,6 +47,7 @@ from pathlib import Path
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
+from grass.temporal import core as tcore
 
 from .core import get_current_mapset, get_tgis_message_interface
 from .factory import dataset_factory
@@ -367,6 +368,16 @@ def import_stds(
                 old_env["GISDBASE"], location, "PERMANENT"
             )
             os.environ["GISRC"] = target_gisrc
+
+            # The temporal framework uses background C-subprocesses that cache the
+            # original environment. We must stop them and clear the globals so
+            # they are forced to restart and connect to the new project.
+            tcore.stop_subprocesses()
+            tcore.message_interface = None
+            tcore.c_library_interface = None
+            tcore.tgis_backend = None
+            tcore.tgis_database_string = None
+
         except OSError as e:
             gs.fatal(
                 _("Unable to create environment for location %s. Reason: %s")
@@ -610,6 +621,13 @@ def import_stds(
                 os.environ["GISRC"] = old_gisrc
             else:
                 os.environ.pop("GISRC", None)
+
+            # Stop the subprocesses running in the temporary project.
+            tcore.stop_subprocesses()
+            tcore.message_interface = None
+            tcore.c_library_interface = None
+            tcore.tgis_backend = None
+            tcore.tgis_database_string = None
 
             # Delete the temporary session file
             if target_gisrc:
