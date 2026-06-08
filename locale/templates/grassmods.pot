@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-09 16:40+0000\n"
+"POT-Creation-Date: 2026-06-06 18:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -336,6 +336,7 @@ msgstr ""
 #: ../general/g.version/main.c:134 ../misc/m.measure/main.c:87
 #: ../raster/r.describe/dumplist.c:38 ../raster/r.distance/report.c:211
 #: ../raster/r.distance/report.c:218 ../raster/r.distance/report.c:225
+#: ../raster/r.geomorphon/profile.c:261 ../raster/r.geomorphon/profile.c:274
 #: ../raster/r.info/main.c:147 ../raster/r.kappa/print_json.c:25
 #: ../raster/r.proj/main.c:481 ../raster/r.regression.line/main.c:101
 #: ../raster/r.regression.multi/main.c:197
@@ -5337,12 +5338,12 @@ msgstr ""
 #: ../raster/r.ros/main.c:382 ../raster/r.ros/main.c:387
 #: ../raster/r.ros/main.c:401 ../raster/r.ros/main.c:405
 #: ../raster/r.ros/main.c:420 ../raster/r.ros/main.c:424
-#: ../raster/r.ros/main.c:434 ../raster/r.sim/simlib/output.c:388
-#: ../raster/r.sim/simlib/output.c:397 ../raster/r.sim/simlib/output.c:425
-#: ../raster/r.sim/simlib/output.c:434 ../raster/r.sim/simlib/output.c:476
-#: ../raster/r.sim/simlib/output.c:492 ../raster/r.sim/simlib/output.c:513
-#: ../raster/r.sim/simlib/output.c:567 ../raster/r.sim/simlib/output.c:627
-#: ../raster/r.sim/simlib/output.c:805
+#: ../raster/r.ros/main.c:434 ../raster/r.sim/simlib/output.c:391
+#: ../raster/r.sim/simlib/output.c:400 ../raster/r.sim/simlib/output.c:428
+#: ../raster/r.sim/simlib/output.c:437 ../raster/r.sim/simlib/output.c:479
+#: ../raster/r.sim/simlib/output.c:495 ../raster/r.sim/simlib/output.c:516
+#: ../raster/r.sim/simlib/output.c:570 ../raster/r.sim/simlib/output.c:630
+#: ../raster/r.sim/simlib/output.c:808
 #: ../raster/r.smooth.edgepreserve/main.c:144 ../raster/r.spread/main.c:445
 #: ../raster/r.spread/main.c:448 ../raster/r.spread/main.c:451
 #: ../raster/r.spread/main.c:455 ../raster/r.spread/main.c:458
@@ -15086,6 +15087,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.list_to_translate.c:11
 #: ../locale/scriptstrings/t.list_to_translate.c:17
 #: ../locale/scriptstrings/t.list_to_translate.c:19
+#: ../locale/scriptstrings/t.list_to_translate.c:21
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:8
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:15
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:17
@@ -15127,6 +15129,10 @@ msgid "Columns to be printed to stdout"
 msgstr ""
 
 #: ../locale/scriptstrings/t.list_to_translate.c:16
+msgid "plain;Plain text output;line;Comma separated list of dataset names;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
+msgstr ""
+
+#: ../locale/scriptstrings/t.list_to_translate.c:18
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:16
 #: ../locale/scriptstrings/t.rast.univar_to_translate.c:12
 #: ../locale/scriptstrings/t.rast3d.list_to_translate.c:13
@@ -15137,7 +15143,7 @@ msgstr ""
 msgid "Field separator character between the output columns"
 msgstr ""
 
-#: ../locale/scriptstrings/t.list_to_translate.c:18
+#: ../locale/scriptstrings/t.list_to_translate.c:20
 #: ../locale/scriptstrings/t.sample_to_translate.c:11
 msgid "Print the column names as first row"
 msgstr ""
@@ -20682,6 +20688,10 @@ msgstr ""
 #: ../raster/r.geomorphon/pattern.c:229
 #, c-format
 msgid "Internal error in %s()"
+msgstr ""
+
+#: ../raster/r.geomorphon/profile.c:283
+msgid "JSON nesting exceeds maximum depth"
 msgstr ""
 
 #: ../raster/r.grow.distance/main.c:149
@@ -27430,16 +27440,16 @@ msgstr ""
 msgid "You are not outputting any raster maps"
 msgstr ""
 
-#: ../raster/r.sim/simlib/hydro.c:72
+#: ../raster/r.sim/simlib/hydro.c:79
 #, c-format
 msgid "Processing block %d of %d"
 msgstr ""
 
-#: ../raster/r.sim/simlib/hydro.c:338
+#: ../raster/r.sim/simlib/hydro.c:347
 msgid "Unable to write raster maps"
 msgstr ""
 
-#: ../raster/r.sim/simlib/hydro.c:410
+#: ../raster/r.sim/simlib/hydro.c:442
 msgid "Cannot write raster maps"
 msgstr ""
 
@@ -27523,7 +27533,7 @@ msgstr ""
 msgid "Unable to open observation logfile %s for writing"
 msgstr ""
 
-#: ../raster/r.sim/simlib/output.c:348 ../raster/r.sim/simlib/output.c:356
+#: ../raster/r.sim/simlib/output.c:351 ../raster/r.sim/simlib/output.c:359
 #, c-format
 msgid "FP raster map <%s> not found"
 msgstr ""

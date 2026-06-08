@@ -8,6 +8,7 @@ for details.
 :authors: Soeren Gebbert
 """
 
+import datetime
 import os
 
 import grass.temporal as tgis
@@ -64,6 +65,59 @@ class TestSnapAbsoluteSTRDS(TestCase):
 
         A.select()
         self.assertEqual(A.get_map_time(), "interval")
+
+
+class TestSnapAbsoluteSTRDSExtents(TestCase):
+    """Verify snap() sets exact datetime extents, not just the map_time flag."""
+
+    @classmethod
+    def setUpClass(cls):
+        """Initiate the temporal GIS and set the region"""
+        tgis.init()
+        cls.use_temp_region()
+        cls.runModule("g.region", s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10)
+        cls.runModule("r.mapcalc", expression="b1 = 1", overwrite=True)
+        cls.runModule("r.mapcalc", expression="b2 = 2", overwrite=True)
+        cls.runModule(
+            "t.create",
+            type="strds",
+            temporaltype="absolute",
+            output="B",
+            title="Snap extents test",
+            description="Snap extents test",
+            overwrite=True,
+        )
+        cls.runModule(
+            "t.register",
+            type="raster",
+            input="B",
+            maps="b1,b2",
+            start="2001-01-01",
+            increment="2 days",
+            overwrite=True,
+        )
+
+    @classmethod
+    def tearDownClass(cls):
+        """Remove the temporary region"""
+        cls.del_temp_region()
+        cls.runModule("t.remove", flags="df", type="strds", inputs="B")
+
+    def test_snap_closes_gaps_and_extends_last(self):
+        """snap() sets each map's end time to its successor's start time,
+        and extends the last map by the dataset granularity."""
+        B = tgis.open_old_stds("B", type="strds")
+        B.select()
+        B.snap()
+        maps = B.get_registered_maps_as_objects(order="start_time")
+        self.assertEqual(
+            maps[0].get_temporal_extent_as_tuple(),
+            (datetime.datetime(2001, 1, 1), datetime.datetime(2001, 1, 3)),
+        )
+        self.assertEqual(
+            maps[1].get_temporal_extent_as_tuple(),
+            (datetime.datetime(2001, 1, 3), datetime.datetime(2001, 1, 5)),
+        )
 
 
 class TestSnapRelativeSTRDS(TestCase):

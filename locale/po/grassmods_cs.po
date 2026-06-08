@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-25 16:03+0000\n"
+"POT-Creation-Date: 2026-05-23 16:07+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Czech <https://weblate.osgeo.org/projects/grass-gis/grassmods/cs/>\n"
@@ -2251,7 +2251,6 @@ msgstr "Počet míst za desetinnou čárkou (pouze pro mapy s plovoucí desetinn
 msgid "Get text color from cell color value"
 msgstr ""
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -13632,6 +13631,9 @@ msgstr ""
 msgid "Internal error in %s()"
 msgstr ""
 
+msgid "JSON nesting exceeds maximum depth"
+msgstr ""
+
 msgid "Generates a raster map containing distances to nearest raster features and/or the value of the nearest non-null cell."
 msgstr ""
 
@@ -20512,7 +20514,6 @@ msgstr "Příliš mnoho kategorií (nalezeno: %i, max: %i). Zkuste změnit měř
 msgid "Input raster must be of type CELL."
 msgstr ""
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
@@ -31746,6 +31747,11 @@ msgstr "Přiložit soubory k existujícímu souboru (musí být aktivována volb
 msgid "Missing attribute table for vector map <%s>"
 msgstr ""
 
+#, fuzzy
+#| msgid "Too many units to place"
+msgid "Too many columns to copy the table"
+msgstr "Příliš mnoho jednotek k umístění"
+
 #, c-format
 msgid "Missing table for <%s>"
 msgstr ""
@@ -31799,6 +31805,11 @@ msgstr "Informace v hlavičce by také měly být upraveny."
 #, c-format
 msgid "%d vector maps patched"
 msgstr "%d vektorových map opraveno"
+
+#, fuzzy
+#| msgid "Too many column names"
+msgid "Too many columns to copy records"
+msgstr "Příliš mnoho názvů sloupců"
 
 #, c-format
 msgid "Cannot open select cursor: '%s'"

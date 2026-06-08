@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ro\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-25 16:03+0000\n"
+"POT-Creation-Date: 2026-05-23 16:07+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Romanian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/ro/>\n"
@@ -744,6 +744,19 @@ msgstr "Editează înregistrarea selectată"
 
 msgid "Display selected"
 msgstr "Afișare selectată"
+
+#, fuzzy
+#| msgid "Tools"
+msgid "Tools API"
+msgstr "Instrumente"
+
+#, fuzzy
+msgid "Script API"
+msgstr "Editor Python"
+
+#, fuzzy
+msgid "PyGRASS API"
+msgstr "Ajutor GRASS"
 
 msgid "Classic (labels only)"
 msgstr "Clasic (doar etichetele)"
@@ -3260,10 +3273,31 @@ msgstr "Închideți această fereastră fără executarea comenzii (Ctrl+Q)"
 msgid "Run the command (Ctrl+R)"
 msgstr "Rulează comanda (Ctrl+R)"
 
+msgid "Copy as Shell command"
+msgstr ""
+
+#, fuzzy
+#| msgid "Copy table"
+msgid "Copy as Python"
+msgstr "Copiază tabel"
+
+#, fuzzy
+#| msgid "Vector maps settings"
+msgid "Copy as JSON settings"
+msgstr "Setările hărților vectoriale"
+
 msgid "Copy"
 msgstr "Copiază"
 
-msgid "Copy the current command string to the clipboard"
+msgid "More copy formats"
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster map settings"
+msgid "Paste JSON settings"
+msgstr "Setările hărții raster"
+
+msgid "Paste parameters from JSON string in the clipboard"
 msgstr ""
 
 msgid "Show manual page of the command (Ctrl+H)"
@@ -3278,8 +3312,68 @@ msgstr "Închide caseta de dialog la final"
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr "Închide caseta de dialog când comanda a fost finalizată cu succes. Schimbă setările în caseta Preferences ('Command' tab)."
 
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (Script API)"
+msgstr "Script Python"
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (PyGRASS API)"
+msgstr "Script Python"
+
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr "'%s' copiat în clipboard"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "Python code copied to clipboard"
+msgstr "'%s' copiat în clipboard"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "JSON copied to clipboard"
+msgstr "'%s' copiat în clipboard"
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+msgid "Module Mismatch"
+msgstr ""
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid name"
+msgid "Invalid Data"
+msgstr "Nume invalid"
+
+#, fuzzy
+#| msgid "Error"
+msgid "Paste Error"
+msgstr "Eroare"
+
+#, fuzzy, python-format
+#| msgid "'%s' copied to clipboard"
+msgid "%s copied to clipboard"
 msgstr "'%s' copiat în clipboard"
 
 msgid "Required"
@@ -3894,6 +3988,9 @@ msgstr "Permite intrare interactivă"
 
 msgid "Verbosity level:"
 msgstr "Nivelul de detaliere:"
+
+msgid "Default Python API for copied commands:"
+msgstr ""
 
 msgid "Number of threads for parallel computing (supported tools only):"
 msgstr ""
@@ -7223,6 +7320,9 @@ msgstr "Salvează expresia ca fișier"
 
 msgid "Load expression from file"
 msgstr "Încarcă expresia din fișier"
+
+msgid "Copy the current command string to the clipboard"
+msgstr ""
 
 msgid "exponent"
 msgstr "exponent"

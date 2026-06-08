@@ -31,7 +31,7 @@ desc1_tmpl = string.Template(
 modclass_intro_tmpl = string.Template(
     r"""# ${modclass} tools
 
-To learn more about these tool in general, go to [${modclass} introduction](${modclass_lower}intro.md).
+To learn more, see the [${modclass} introduction](${modclass_lower}intro.md).
 """
 )
 
