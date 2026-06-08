@@ -88,6 +88,14 @@ def main():
             ),
         )
 
+    if format == "json" and (history or system):
+        gs.warning(
+            _(
+                "Output from the 'd' and 'h' flag are always included "
+                "with format=json.",
+            ),
+        )
+
     # Make sure the temporal database exists
     tgis.init()
 
@@ -145,7 +153,8 @@ def main():
 
     if format_ == "json":
         metadata = dataset.get_metadata_dict()
-        metadata.update(
+        metadata["tgis_db"] = {}
+        metadata["tgis_db"].update(
             {
                 "dbmi_python_interface": dbif.get_dbmi().__name__,
                 "dbmi_string": tgis.get_tgis_database_string(),
@@ -153,9 +162,9 @@ def main():
             }
         )
         if rows:
-            metadata["tgis_db"] = {
-                row[0]: int(row[1]) if row[1].isdigit() else row[1] for row in rows
-            }
+            metadata["tgis_db"].update(
+                {row[0]: int(row[1]) if row[1].isdigit() else row[1] for row in rows}
+            )
         print(json.dumps(metadata, cls=TemporalJSONEncoder, indent=4))
 
     elif format_ == "shell" or shellstyle:
