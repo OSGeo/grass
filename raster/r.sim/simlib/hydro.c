@@ -185,7 +185,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                             printf("    nwalka,nwalk=%d %d", sim->nwalka,
                                    sim->nwalk);
                             G_debug(2, "  ");
-                            
+
                             continue;
                         }
 

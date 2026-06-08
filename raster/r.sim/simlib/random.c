@@ -32,11 +32,11 @@ double simwe_rand(void)
 #if defined(_OPENMP)
     int tid = omp_get_thread_num();
     if (tid >= MAX_SIMWE_THREADS) tid = MAX_SIMWE_THREADS - 1;
-    
+
     if (!seeds_initialized) {
         thread_seeds[tid] = 12345 + tid; // Fallback
     }
-    
+
     thread_seeds[tid] = (thread_seeds[tid] * 1103515245 + 12345) & 0x7fffffff;
     return (double)thread_seeds[tid] / 2147483648.0;
 #else
