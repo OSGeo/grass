@@ -222,9 +222,8 @@ class GMFrame(wx.Frame):
         self.Show()
 
         # load workspace file if requested
-        if workspace:
-            if self.workspace_manager.Load(workspace):
-                self._setTitle()
+        if self.workspace_manager.AutoLoad(workspace):
+            self._setTitle()
         else:
             # start default initial display
             self.NewDisplay(show=False)
@@ -272,6 +271,15 @@ class GMFrame(wx.Frame):
         location = gisenv["LOCATION_NAME"]
         mapset = gisenv["MAPSET"]
         if self.workspace_manager.workspaceFile:
+            if self.workspace_manager.IsCurrentMapsetWorkspaceFile():
+                # Be more verbose just for clarity during testing, but otherwise
+                # showing just location/mapset might be sufficient.
+                self.SetTitle(
+                    "{location}/{mapset} (workspace in mapset) - {program}".format(
+                        location=location, mapset=mapset, program=self.baseTitle
+                    )
+                )
+                return
             filename = os.path.splitext(
                 os.path.basename(self.workspace_manager.workspaceFile)
             )[0]
@@ -1499,12 +1507,12 @@ class GMFrame(wx.Frame):
         """Current mapset changed.
         If location is None, mapset changed within location.
         """
-        if not location:
-            self._setTitle()
-        else:
-            # close current workspace and create new one
-            self.OnWorkspaceClose()
+        if location:
+            # Close was probably wrong action even before because it saved wrong mapset.
+            # self.OnWorkspaceClose()
             self.OnWorkspaceNew()
+        self.workspace_manager.AutoLoad()
+        self._setTitle()
 
     def OnChangeCWD(self, event=None, cmd=None):
         """Change current working directory
