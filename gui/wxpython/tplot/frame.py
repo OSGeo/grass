@@ -45,9 +45,9 @@ except ImportError as e:
     raise ImportError(
         _(
             'The Temporal Plot Tool needs the "matplotlib" '
-            "(python-matplotlib) package to be installed. {0}"
-        ).format(e)
-    )
+            "(python-matplotlib) package to be installed."
+        )
+    ) from e
 
 
 import grass.temporal as tgis
