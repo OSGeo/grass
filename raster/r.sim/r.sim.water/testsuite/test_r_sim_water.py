@@ -13,6 +13,7 @@ class TestRSimWater(TestCase):
     dx = "tmp_dx"
     dy = "tmp_dy"
     depth = "tmp_depth"
+    depth2 = "tmp_depth2"
     discharge = "tmp_discharge"
     diff_depth = "tmp_diff_depth"
     diff_discharge = "tmp_diff_discharge"
@@ -132,6 +133,7 @@ class TestRSimWater(TestCase):
             depth=self.depth,
             discharge=self.discharge,
             random_seed=1,
+            nprocs=1,
         )
 
         # Assert that the output rasters exist
@@ -158,6 +160,21 @@ class TestRSimWater(TestCase):
         stats = tools.r_univar(map=self.diff_discharge, format="json")
         self.assertAlmostEqual(stats["sum"], 0, delta=1e-3)
 
+        # test parallelized dxdy
+        # lower precision because parallelization affects random number generator
+        self.assertModule(
+            "r.sim.water",
+            elevation=self.elevation,
+            depth=self.depth2,
+            random_seed=1,
+            nprocs=2,
+        )
+        self.assertRastersEqual(
+            self.depth2,
+            reference=self.reference_depth_default,
+            precision="0.02",
+        )
+
     def test_complex(self):
         """Test r.sim.water execution with more complex inputs"""
         # Run the r.sim.water simulation
@@ -172,7 +189,7 @@ class TestRSimWater(TestCase):
             infil=self.infil,
             depth=self.depth,
             discharge=self.discharge,
-            niterations=15,
+            duration=15,
             output_step=5,
             diffusion_coeff=0.9,
             hmax=0.25,

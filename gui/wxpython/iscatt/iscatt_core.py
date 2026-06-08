@@ -777,9 +777,7 @@ def idScattToidBands(scatt_id, n_bands):
 def idBandsToidScatt(band_1_id, band_2_id, n_bands):
     """Get scatter plot id from band ids."""
     if band_2_id < band_1_id:
-        tmp = band_1_id
-        band_1_id = band_2_id
-        band_2_id = tmp
+        band_1_id, band_2_id = band_2_id, band_1_id
 
     n_b1 = n_bands - 1
 

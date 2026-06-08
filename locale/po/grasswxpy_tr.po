@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_tr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-21 21:15+0000\n"
+"POT-Creation-Date: 2026-05-23 16:07+0000\n"
 "PO-Revision-Date: 2010-12-01 03:06+0200\n"
 "Last-Translator: Fatih <bounfat@gmail.com>\n"
 "Language-Team: Türkçe <grass-translations@lists.osgeo.org>\n"
@@ -742,6 +742,16 @@ msgstr "Seçilen kaydı düzelt"
 msgid "Display selected"
 msgstr "Seçileni göster"
 
+msgid "Tools API"
+msgstr ""
+
+#, fuzzy
+msgid "Script API"
+msgstr "Düzeltmeyi başlat"
+
+msgid "PyGRASS API"
+msgstr ""
+
 msgid "Classic (labels only)"
 msgstr ""
 
@@ -1291,8 +1301,15 @@ msgstr ""
 msgid "Re&load maps"
 msgstr ""
 
-msgid "&Copy path to mapset"
-msgstr ""
+#, fuzzy
+#| msgid "clip to computational region in target location"
+msgid "Show computational region"
+msgstr "hedef konumdaki hesaplama bölgesini kırp"
+
+#, fuzzy
+#| msgid "Copy table"
+msgid "&Copy path"
+msgstr "Tabloyu kopyala"
 
 msgid "&Create mapset"
 msgstr ""
@@ -1304,6 +1321,16 @@ msgstr "Kayıtları sil"
 #, fuzzy
 msgid "&Rename project"
 msgstr "Projeksiyonları yönet"
+
+#, fuzzy
+#| msgid "Show vector lines"
+msgid "Show projection info"
+msgstr "Vektör çizgileri göster"
+
+#, fuzzy
+#| msgid "Copy table"
+msgid "Copy path"
+msgstr "Tabloyu kopyala"
 
 #, fuzzy
 #| msgid "Change values"
@@ -1338,11 +1365,18 @@ msgstr ""
 msgid "&Delete projects (locations)"
 msgstr "Seçilen mevkiyi sil"
 
+#, fuzzy
+#| msgid "Copy categories"
+msgid "Copy paths"
+msgstr "Kategorileri kopyala"
+
 msgid "&Delete mapsets"
 msgstr ""
 
-msgid "&Copy paths to mapsets"
-msgstr ""
+#, fuzzy
+#| msgid "Copy categories"
+msgid "&Copy paths"
+msgstr "Kategorileri kopyala"
 
 #, python-brace-format
 msgid "Remove label '{label}' for this database?"
@@ -3167,10 +3201,31 @@ msgstr ""
 msgid "Run the command (Ctrl+R)"
 msgstr ""
 
+msgid "Copy as Shell command"
+msgstr ""
+
+#, fuzzy
+#| msgid "Copy table"
+msgid "Copy as Python"
+msgstr "Tabloyu kopyala"
+
+#, fuzzy
+msgid "Copy as JSON settings"
+msgstr "Ayarları göster"
+
 msgid "Copy"
 msgstr "Kopyala"
 
-msgid "Copy the current command string to the clipboard"
+msgid "More copy formats"
+msgstr ""
+
+#, fuzzy
+msgid "Paste JSON settings"
+msgstr "Yazı tipi ayarları"
+
+#, fuzzy
+#| msgid "Copy the current command string to the clipboard"
+msgid "Paste parameters from JSON string in the clipboard"
 msgstr "Geçerli komut dizesini panoya kopyala"
 
 msgid "Show manual page of the command (Ctrl+H)"
@@ -3185,8 +3240,64 @@ msgstr "Bittiğinde diyaloğu kapat"
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr ""
 
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+msgid "Copy as Python (Script API)"
+msgstr ""
+
+msgid "Copy as Python (PyGRASS API)"
+msgstr ""
+
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr "%s i panoya kopyalandı"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "Python code copied to clipboard"
+msgstr "%s i panoya kopyalandı"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "JSON copied to clipboard"
+msgstr "%s i panoya kopyalandı"
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+msgid "Module Mismatch"
+msgstr ""
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid input"
+msgid "Invalid Data"
+msgstr "Geçersiz girdi"
+
+#, fuzzy
+#| msgid "Error"
+msgid "Paste Error"
+msgstr "Hata"
+
+#, fuzzy, python-format
+#| msgid "'%s' copied to clipboard"
+msgid "%s copied to clipboard"
 msgstr "%s i panoya kopyalandı"
 
 msgid "Required"
@@ -3792,6 +3903,9 @@ msgstr ""
 
 msgid "Verbosity level:"
 msgstr "Ayrıntı seviyesi:"
+
+msgid "Default Python API for copied commands:"
+msgstr ""
 
 msgid "Number of threads for parallel computing (supported tools only):"
 msgstr ""
@@ -5712,6 +5826,12 @@ msgstr ""
 msgid "Remove raster mask"
 msgstr "Raster harita geliştir"
 
+msgid "Custom CRS"
+msgstr ""
+
+msgid "Left mouse click to print detailed projection info"
+msgstr ""
+
 msgid "Create new workspace (Ctrl+N)"
 msgstr ""
 
@@ -7034,6 +7154,9 @@ msgstr ""
 
 msgid "Load expression from file"
 msgstr ""
+
+msgid "Copy the current command string to the clipboard"
+msgstr "Geçerli komut dizesini panoya kopyala"
 
 msgid "exponent"
 msgstr ""
@@ -11256,9 +11379,6 @@ msgstr ""
 #~ msgid "Convex hull"
 #~ msgstr "Dışbükey kabuk"
 
-#~ msgid "Copy table"
-#~ msgstr "Tabloyu kopyala"
-
 #, fuzzy
 #~ msgid "Copying"
 #~ msgstr "Tabloyu kopyala"
@@ -11651,10 +11771,6 @@ msgstr ""
 
 #~ msgid "Load GRC file (Tcl/Tk GUI)"
 #~ msgstr "GRC dosyasını yükle (Tcl/Tk GUI)"
-
-#, fuzzy
-#~ msgid "Load settings:"
-#~ msgstr "Ayarları göster"
 
 #~ msgid "Locates the closest points between objects in two raster maps."
 #~ msgstr "İki raster haritaki objelere en yakın noktaları yerleştirir."

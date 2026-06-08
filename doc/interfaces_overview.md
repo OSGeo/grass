@@ -69,7 +69,7 @@ with gs.setup.init("path/to/my_project") as session:
 
     # Run GRASS tools
     tools = Tools(session=session)
-    tools.r_import_(input="/path/to/elevation.tif", output="elevation")
+    tools.r_import(input="/path/to/elevation.tif", output="elevation")
     tools.g_region(raster="elevation")
     tools.r_slope_aspect(elevation="elevation", slope="slope")
 ```

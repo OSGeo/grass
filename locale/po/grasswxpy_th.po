@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_th\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-21 21:15+0000\n"
+"POT-Creation-Date: 2026-05-23 16:07+0000\n"
 "PO-Revision-Date: 2008-01-05 15:19+0700\n"
 "Last-Translator: \n"
 "Language-Team: Thai <grass-translations@lists.osgeo.org>\n"
@@ -738,6 +738,15 @@ msgstr ""
 msgid "Display selected"
 msgstr ""
 
+msgid "Tools API"
+msgstr ""
+
+msgid "Script API"
+msgstr ""
+
+msgid "PyGRASS API"
+msgstr ""
+
 msgid "Classic (labels only)"
 msgstr ""
 
@@ -1279,8 +1288,13 @@ msgstr ""
 msgid "Re&load maps"
 msgstr ""
 
-msgid "&Copy path to mapset"
+msgid "Show computational region"
 msgstr ""
+
+#, fuzzy
+#| msgid "Copy table"
+msgid "&Copy path"
+msgstr "คัดลอกตาราง"
 
 msgid "&Create mapset"
 msgstr ""
@@ -1291,6 +1305,14 @@ msgstr ""
 #, fuzzy
 msgid "&Rename project"
 msgstr "จัดการ projections"
+
+msgid "Show projection info"
+msgstr ""
+
+#, fuzzy
+#| msgid "Copy table"
+msgid "Copy path"
+msgstr "คัดลอกตาราง"
 
 #, fuzzy
 #| msgid "Change values"
@@ -1322,11 +1344,18 @@ msgstr ""
 msgid "&Delete projects (locations)"
 msgstr ""
 
+#, fuzzy
+#| msgid "Copy categories"
+msgid "Copy paths"
+msgstr "คัดลอกหมวดหมู่"
+
 msgid "&Delete mapsets"
 msgstr ""
 
-msgid "&Copy paths to mapsets"
-msgstr ""
+#, fuzzy
+#| msgid "Copy categories"
+msgid "&Copy paths"
+msgstr "คัดลอกหมวดหมู่"
 
 #, python-brace-format
 msgid "Remove label '{label}' for this database?"
@@ -3127,10 +3156,30 @@ msgstr ""
 msgid "Run the command (Ctrl+R)"
 msgstr ""
 
+msgid "Copy as Shell command"
+msgstr ""
+
+#, fuzzy
+#| msgid "Copy table"
+msgid "Copy as Python"
+msgstr "คัดลอกตาราง"
+
+#, fuzzy
+#| msgid "Change settings"
+msgid "Copy as JSON settings"
+msgstr "เปลี่ยนค่าติดตั้ง"
+
 msgid "Copy"
 msgstr "คัดลอก"
 
-msgid "Copy the current command string to the clipboard"
+msgid "More copy formats"
+msgstr ""
+
+#, fuzzy
+msgid "Paste JSON settings"
+msgstr "แสดงค่าติดตั้ง"
+
+msgid "Paste parameters from JSON string in the clipboard"
 msgstr ""
 
 msgid "Show manual page of the command (Ctrl+H)"
@@ -3145,8 +3194,57 @@ msgstr ""
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr ""
 
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+msgid "Copy as Python (Script API)"
+msgstr ""
+
+msgid "Copy as Python (PyGRASS API)"
+msgstr ""
+
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr ""
+
+msgid "Python code copied to clipboard"
+msgstr ""
+
+msgid "JSON copied to clipboard"
+msgstr ""
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+msgid "Module Mismatch"
+msgstr ""
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+msgid "Invalid Data"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "Paste Error"
+msgstr "ผิดพลาด"
+
+#, python-format
+msgid "%s copied to clipboard"
 msgstr ""
 
 msgid "Required"
@@ -3748,6 +3846,9 @@ msgid "Allow interactive input"
 msgstr ""
 
 msgid "Verbosity level:"
+msgstr ""
+
+msgid "Default Python API for copied commands:"
 msgstr ""
 
 msgid "Number of threads for parallel computing (supported tools only):"
@@ -5630,6 +5731,12 @@ msgstr ""
 msgid "Remove raster mask"
 msgstr "ลบ vertex"
 
+msgid "Custom CRS"
+msgstr ""
+
+msgid "Left mouse click to print detailed projection info"
+msgstr ""
+
 msgid "Create new workspace (Ctrl+N)"
 msgstr ""
 
@@ -6937,6 +7044,9 @@ msgid "Save expression to file"
 msgstr ""
 
 msgid "Load expression from file"
+msgstr ""
+
+msgid "Copy the current command string to the clipboard"
 msgstr ""
 
 msgid "exponent"
@@ -10984,9 +11094,6 @@ msgstr ""
 #~ msgid "Change project (location) and mapset"
 #~ msgstr "กลุ่มภาพเป้าหมาย ตำแหน่ง และ ชุดแผนที่  ของ GRASS"
 
-#~ msgid "Change settings"
-#~ msgstr "เปลี่ยนค่าติดตั้ง"
-
 #~ msgid "Change working environment"
 #~ msgstr "เปลี่ยน สภาวะแวดล้อม การทำงาน"
 
@@ -11042,9 +11149,6 @@ msgstr ""
 
 #~ msgid "Converts files in DXF format to GRASS vector map format."
 #~ msgstr "แปลงไฟล์ในรูปแบบ DXF ไปเป็น แผนที่เชิงเส้น GRASS."
-
-#~ msgid "Copy table"
-#~ msgstr "คัดลอกตาราง"
 
 #, fuzzy
 #~ msgid "Copying"

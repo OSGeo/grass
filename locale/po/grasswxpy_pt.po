@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_pt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-21 21:15+0000\n"
+"POT-Creation-Date: 2026-05-23 16:07+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/pt/>\n"
@@ -742,6 +742,16 @@ msgstr "Editar registo seleccionado"
 msgid "Display selected"
 msgstr "Mostrar lo seleccionado"
 
+msgid "Tools API"
+msgstr ""
+
+#, fuzzy
+msgid "Script API"
+msgstr "Iniciar a edição"
+
+msgid "PyGRASS API"
+msgstr ""
+
 msgid "Classic (labels only)"
 msgstr ""
 
@@ -1295,8 +1305,15 @@ msgstr ""
 msgid "Re&load maps"
 msgstr ""
 
-msgid "&Copy path to mapset"
-msgstr ""
+#, fuzzy
+#| msgid "Show computational extent"
+msgid "Show computational region"
+msgstr "Exibir extensão computacional"
+
+#, fuzzy
+#| msgid "Copy table"
+msgid "&Copy path"
+msgstr "Copiar tabla"
 
 msgid "&Create mapset"
 msgstr ""
@@ -1308,6 +1325,16 @@ msgstr "Apagar registos"
 #, fuzzy
 msgid "&Rename project"
 msgstr "Gestão de projecções"
+
+#, fuzzy
+#| msgid "Projection code:"
+msgid "Show projection info"
+msgstr "Código de projecção:"
+
+#, fuzzy
+#| msgid "Copy table"
+msgid "Copy path"
+msgstr "Copiar tabla"
 
 #, fuzzy
 #| msgid "Change values"
@@ -1342,11 +1369,18 @@ msgstr ""
 msgid "&Delete projects (locations)"
 msgstr "Apagar location seleccionada"
 
+#, fuzzy
+#| msgid "Copy categories"
+msgid "Copy paths"
+msgstr "Copiar categorías"
+
 msgid "&Delete mapsets"
 msgstr ""
 
-msgid "&Copy paths to mapsets"
-msgstr ""
+#, fuzzy
+#| msgid "Copy categories"
+msgid "&Copy paths"
+msgstr "Copiar categorías"
 
 #, python-brace-format
 msgid "Remove label '{label}' for this database?"
@@ -3157,10 +3191,31 @@ msgstr ""
 msgid "Run the command (Ctrl+R)"
 msgstr ""
 
+msgid "Copy as Shell command"
+msgstr ""
+
+#, fuzzy
+#| msgid "Copy table"
+msgid "Copy as Python"
+msgstr "Copiar tabla"
+
+#, fuzzy
+msgid "Copy as JSON settings"
+msgstr "Mostrar configuração"
+
 msgid "Copy"
 msgstr "Copiar"
 
-msgid "Copy the current command string to the clipboard"
+msgid "More copy formats"
+msgstr ""
+
+#, fuzzy
+msgid "Paste JSON settings"
+msgstr "Configuração do tipo de letra"
+
+#, fuzzy
+#| msgid "Copy the current command string to the clipboard"
+msgid "Paste parameters from JSON string in the clipboard"
 msgstr "Copiar o texto do comando actual para a área de trabalho (clipboard)"
 
 msgid "Show manual page of the command (Ctrl+H)"
@@ -3175,8 +3230,63 @@ msgstr "Encerrar o diálogo/janela quando finalizar"
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr ""
 
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+msgid "Copy as Python (Script API)"
+msgstr ""
+
+msgid "Copy as Python (PyGRASS API)"
+msgstr ""
+
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr "'%s' copiado para a área de trabalho (clipboard)"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "Python code copied to clipboard"
+msgstr "'%s' copiado para a área de trabalho (clipboard)"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "JSON copied to clipboard"
+msgstr "'%s' copiado para a área de trabalho (clipboard)"
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+msgid "Module Mismatch"
+msgstr ""
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+#, fuzzy
+msgid "Invalid Data"
+msgstr "Região inválida"
+
+#, fuzzy
+#| msgid "Error"
+msgid "Paste Error"
+msgstr "Erro"
+
+#, fuzzy, python-format
+#| msgid "'%s' copied to clipboard"
+msgid "%s copied to clipboard"
 msgstr "'%s' copiado para a área de trabalho (clipboard)"
 
 msgid "Required"
@@ -3781,6 +3891,9 @@ msgid "Allow interactive input"
 msgstr ""
 
 msgid "Verbosity level:"
+msgstr ""
+
+msgid "Default Python API for copied commands:"
 msgstr ""
 
 msgid "Number of threads for parallel computing (supported tools only):"
@@ -5690,6 +5803,14 @@ msgstr ""
 msgid "Remove raster mask"
 msgstr "Desenvolver mapa raster"
 
+#, fuzzy
+#| msgid "Custom min"
+msgid "Custom CRS"
+msgstr "Mínimo Personalizado"
+
+msgid "Left mouse click to print detailed projection info"
+msgstr ""
+
 msgid "Create new workspace (Ctrl+N)"
 msgstr ""
 
@@ -7003,6 +7124,9 @@ msgstr ""
 
 msgid "Load expression from file"
 msgstr ""
+
+msgid "Copy the current command string to the clipboard"
+msgstr "Copiar o texto do comando actual para a área de trabalho (clipboard)"
 
 msgid "exponent"
 msgstr ""
@@ -11145,9 +11269,6 @@ msgstr ""
 #~ msgid "Convex hull"
 #~ msgstr "Casco convexo"
 
-#~ msgid "Copy table"
-#~ msgstr "Copiar tabla"
-
 #, fuzzy
 #~ msgid "Copying"
 #~ msgstr "Copiar tabla"
@@ -11495,10 +11616,6 @@ msgstr ""
 
 #~ msgid "Load map layers from GRC file to layer tree"
 #~ msgstr "Carregar camadas de mapas a partir de ficheiro GRC para árvore de camadas"
-
-#, fuzzy
-#~ msgid "Load settings:"
-#~ msgstr "Mostrar configuração"
 
 #~ msgid "Load workspace from file"
 #~ msgstr "Carregar workspace de ficheiro"

@@ -442,7 +442,7 @@ int main(int argc, char *argv[])
         } while (max_norm > 0.01 && inner_count < innerit);
 
         if (tmp_vect)
-            free(tmp_vect);
+            G_free(tmp_vect);
     }
 
     /*release the memory */

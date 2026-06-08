@@ -608,7 +608,7 @@ def import_stds(
                     "g.mapset",
                     mapset=old_env["MAPSET"],
                     project=old_env["LOCATION_NAME"],
-                    gisdbase=old_env["GISDBASE"],
+                    dbase=old_env["GISDBASE"],
                 )
             except CalledModuleError:
                 gs.warning(_("Switching to original location failed"))

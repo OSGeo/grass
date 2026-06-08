@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-21 21:15+0000\n"
+"POT-Creation-Date: 2026-05-23 16:07+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Greek <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/el/>\n"
@@ -738,6 +738,17 @@ msgstr ""
 msgid "Display selected"
 msgstr ""
 
+#, fuzzy
+#| msgid "Tools"
+msgid "Tools API"
+msgstr "Εργαλεία"
+
+msgid "Script API"
+msgstr ""
+
+msgid "PyGRASS API"
+msgstr ""
+
 msgid "Classic (labels only)"
 msgstr ""
 
@@ -1285,7 +1296,10 @@ msgstr ""
 msgid "Re&load maps"
 msgstr ""
 
-msgid "&Copy path to mapset"
+msgid "Show computational region"
+msgstr ""
+
+msgid "&Copy path"
 msgstr ""
 
 msgid "&Create mapset"
@@ -1298,6 +1312,16 @@ msgstr "Διαγραφή εγγραφών"
 #, fuzzy
 msgid "&Rename project"
 msgstr "Μετεονομασ&ία"
+
+#, fuzzy
+#| msgid "Show vector points"
+msgid "Show projection info"
+msgstr "Προβολή διανυσματικών σημείων"
+
+#, fuzzy
+#| msgid "Copy"
+msgid "Copy path"
+msgstr "Αντιγραφή"
 
 #, fuzzy
 #| msgid "Change values"
@@ -1329,11 +1353,18 @@ msgstr ""
 msgid "&Delete projects (locations)"
 msgstr "Διαγραφή επιλεγμένης Τοποθεσίας"
 
+#, fuzzy
+#| msgid "Copy categories"
+msgid "Copy paths"
+msgstr "Αντιγραφή κατηγοριών"
+
 msgid "&Delete mapsets"
 msgstr ""
 
-msgid "&Copy paths to mapsets"
-msgstr ""
+#, fuzzy
+#| msgid "Copy categories"
+msgid "&Copy paths"
+msgstr "Αντιγραφή κατηγοριών"
 
 #, python-brace-format
 msgid "Remove label '{label}' for this database?"
@@ -3161,10 +3192,29 @@ msgstr "Κλείσιμο αυτού του παραθύρου δίχως να ε
 msgid "Run the command (Ctrl+R)"
 msgstr "Εκτέλεση της εντολής (Ctrl +R)"
 
+msgid "Copy as Shell command"
+msgstr ""
+
+#, fuzzy
+#| msgid "Copy"
+msgid "Copy as Python"
+msgstr "Αντιγραφή"
+
+msgid "Copy as JSON settings"
+msgstr ""
+
 msgid "Copy"
 msgstr "Αντιγραφή"
 
-msgid "Copy the current command string to the clipboard"
+msgid "More copy formats"
+msgstr ""
+
+#, fuzzy
+#| msgid "User settings"
+msgid "Paste JSON settings"
+msgstr "Επιλογές Χρήστη"
+
+msgid "Paste parameters from JSON string in the clipboard"
 msgstr ""
 
 msgid "Show manual page of the command (Ctrl+H)"
@@ -3179,8 +3229,64 @@ msgstr ""
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr ""
 
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (Script API)"
+msgstr "Python script"
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (PyGRASS API)"
+msgstr "Python script"
+
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr ""
+
+#, fuzzy
+msgid "Python code copied to clipboard"
+msgstr "Python script"
+
+msgid "JSON copied to clipboard"
+msgstr ""
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+msgid "Module Mismatch"
+msgstr ""
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid input"
+msgid "Invalid Data"
+msgstr "Μη έγκυρη εισαγωγή"
+
+#, fuzzy
+#| msgid "Error"
+msgid "Paste Error"
+msgstr "Σφάλμα"
+
+#, python-format
+msgid "%s copied to clipboard"
 msgstr ""
 
 msgid "Required"
@@ -3784,6 +3890,9 @@ msgid "Allow interactive input"
 msgstr ""
 
 msgid "Verbosity level:"
+msgstr ""
+
+msgid "Default Python API for copied commands:"
 msgstr ""
 
 msgid "Number of threads for parallel computing (supported tools only):"
@@ -5681,6 +5790,12 @@ msgstr ""
 msgid "Remove raster mask"
 msgstr "Χάρτες raster"
 
+msgid "Custom CRS"
+msgstr ""
+
+msgid "Left mouse click to print detailed projection info"
+msgstr ""
+
 msgid "Create new workspace (Ctrl+N)"
 msgstr ""
 
@@ -6998,6 +7113,9 @@ msgid "Save expression to file"
 msgstr ""
 
 msgid "Load expression from file"
+msgstr ""
+
+msgid "Copy the current command string to the clipboard"
 msgstr ""
 
 msgid "exponent"

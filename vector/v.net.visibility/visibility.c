@@ -19,8 +19,8 @@
 
 /** for all points initiate their vis line to the one directly below
  */
-void init_vis(struct Point *points, int num_points, struct Line *lines UNUSED,
-              int num_lines UNUSED)
+void init_vis(struct Point *points, int num_points, struct Line *lines G_UNUSED,
+              int num_lines G_UNUSED)
 {
     int i;
     double d;
@@ -237,8 +237,8 @@ void construct_visibility(struct Point *points, int num_points,
     struct Point *p_infinity, *p_ninfinity;
     int i;
 
-    p_ninfinity = (struct Point *)malloc(sizeof(struct Point));
-    p_infinity = (struct Point *)malloc(sizeof(struct Point));
+    p_ninfinity = (struct Point *)G_malloc(sizeof(struct Point));
+    p_infinity = (struct Point *)G_malloc(sizeof(struct Point));
 
     p_ninfinity->x = PORT_DOUBLE_MAX;
     p_ninfinity->y = -PORT_DOUBLE_MAX;

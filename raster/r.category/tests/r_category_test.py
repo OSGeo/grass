@@ -1,11 +1,13 @@
 """Tests of r.category"""
 
+import io
 import json
 
 import pytest
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
+from grass.tools import Tools
 
 
 def test_r_category_plain_output(simple_dataset):
@@ -337,6 +339,26 @@ def test_r_category_with_json_output_color(simple_dataset):
         assert result == expected, (
             f"test failed: expected {expected} but got {result} for color option {color}"
         )
+
+
+def test_r_category_rules_preserves_title(simple_dataset):
+    """Test that rules= does not erase a title previously set with r.support."""
+
+    session = simple_dataset
+    tools = Tools(session=session)
+    title = "USGS National Land Cover"
+
+    tools.r_support(map="test", title=title)
+    tools.r_category(
+        map="test",
+        rules=io.StringIO("1:trees\n2:water\n"),
+        separator=":",
+    )
+
+    info = tools.r_info(map="test", format="json")
+    assert info["title"] == title, (
+        f"Expected title '{title}', but r.category rules= overwrote it with '{info['title']}'"
+    )
 
 
 def test_r_category_with_plain_output_color(simple_dataset):

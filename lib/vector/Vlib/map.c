@@ -349,7 +349,7 @@ int Vect_rename(const char *in, const char *out)
     }
 
     Vect_close(&Map);
-    free(fields);
+    G_free(fields);
 
     return 0;
 }

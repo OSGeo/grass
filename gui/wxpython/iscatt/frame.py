@@ -379,9 +379,7 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
         y_b = bands[b2_id].split("@")[0]
 
         if transpose:
-            tmp = x_b
-            x_b = y_b
-            y_b = tmp
+            x_b, y_b = y_b, x_b
 
         return "%s x: %s y: %s" % (_("scatter plot"), x_b, y_b)
 

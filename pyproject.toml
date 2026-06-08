@@ -257,6 +257,7 @@ ignore = [
     "PLW0602", # global-variable-not-assigned
     "PLW0603", # global-statement
     "PLW0604", # global-at-module-level
+    "PLW0717", # too-many-statements-in-try-clause
     "PLW1508", # invalid-envvar-default
     "PLW1510", # subprocess-run-without-check
     "PLW1641", # eq-without-hash
@@ -282,6 +283,7 @@ ignore = [
     "RUF012",  # mutable-class-default
     "RUF015",  # unnecessary-iterable-allocation-for-first-element
     "RUF019",  # unnecessary-key-check
+    "RUF050",  # unnecessary-if
     "RUF059",  # unused-unpacked-variable
     "RUF067",  # non-empty-init-module
     "RUF100",  # unused-noqa
@@ -338,6 +340,7 @@ known-first-party = ["grass"]
 # Other ignores:
 "**.ipynb" = ["I001"]
 "**.py" = ["PYI066"]
+"**/tests/*.py" = ["RUF069"]
 "*/testsuite/**.py" = ["PT009", "PT027", "PLW1514"]
 "display/d.mon/render_cmd.py" = ["PLW1514"]
 "display/d.text/test.py" = ["PLW1514"]
@@ -349,7 +352,7 @@ known-first-party = ["grass"]
 "gui/wxpython/core/render.py" = ["PLW1514"]
 "gui/wxpython/core/settings.py" = ["PLW1514"]
 "gui/wxpython/core/toolboxes.py" = ["PLW1514"]
-"gui/wxpython/core/utils.py" = ["PLW1514"]
+"gui/wxpython/core/utils.py" = ["PLW1514", "RUF069"]
 "gui/wxpython/core/watchdog.py" = ["PLW1514"]
 "gui/wxpython/core/workspace.py" = ["PLW1514"]
 "gui/wxpython/dbmgr/base.py" = ["PLR6201", "PLW1514"]
@@ -367,7 +370,7 @@ known-first-party = ["grass"]
 "gui/wxpython/iclass/statistics.py" = ["A005"]
 "gui/wxpython/image2target/ii2t_gis_set.py" = ["PLW1514"]
 "gui/wxpython/image2target/ii2t_manager.py" = ["PLR6201", "PLW1514"]
-"gui/wxpython/iscatt/plots.py" = ["PLR6201"]
+"gui/wxpython/iscatt/plots.py" = ["PLR6201", "RUF069"]
 "gui/wxpython/location_wizard/wizard.py" = ["PLW1514"]
 "gui/wxpython/mapdisp/main.py" = ["PLW1514"]
 "gui/wxpython/modules/colorrules.py" = ["PLW1514"]
@@ -521,6 +524,7 @@ docstring-code-format = true
 
 [tool.pytest.ini_options]
 addopts = """
+    --import-mode=importlib
     --ignore-glob='dist.*'
     --ignore-glob='bin.*'
     --ignore-glob='*/tests/data/*'

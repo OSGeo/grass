@@ -575,7 +575,7 @@ int LR_get_nearest_offset(dbDriver *driver, char *table_name, char *lcat_col,
         }
     }
 
-    free(rseg);
+    G_free(rseg);
 
     /* Was any segment found ? */
     if (seg_found == 0) { /* no */

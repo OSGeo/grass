@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-28 15:43+0000\n"
+"POT-Creation-Date: 2026-05-23 16:07+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.osgeo.org/projects/grass-gis/grassmods/pt_BR/>\n"
@@ -2236,7 +2236,6 @@ msgstr "Número de dígitos significativos (apenas ponto flutuante)"
 msgid "Get text color from cell color value"
 msgstr "Usar cor do texto a partir da cor da célula"
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -13614,6 +13613,9 @@ msgstr ""
 msgid "Internal error in %s()"
 msgstr ""
 
+msgid "JSON nesting exceeds maximum depth"
+msgstr ""
+
 msgid "Generates a raster map containing distances to nearest raster features and/or the value of the nearest non-null cell."
 msgstr ""
 
@@ -18497,7 +18499,7 @@ msgstr ""
 msgid "Number of walkers"
 msgstr ""
 
-msgid "Time used for iterations [minutes]"
+msgid "Duration of the simulated water flow [minutes]"
 msgstr ""
 
 msgid "Minimum time step for the simulation [seconds]"
@@ -20481,7 +20483,6 @@ msgstr "Categorias demais (encontrei: %i, máx: %i). Tente rescalonar ou reclass
 msgid "Input raster must be of type CELL."
 msgstr "O raster de entrada deve ser do tipo CELL."
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
@@ -31603,6 +31604,11 @@ msgstr "Anexar arquivos a um arquivo existente (a substituição de arquivos exi
 msgid "Missing attribute table for vector map <%s>"
 msgstr "Tabela de atributos ausente para mapa vetorial <%s>"
 
+#, fuzzy
+#| msgid "Too many units to place"
+msgid "Too many columns to copy the table"
+msgstr "Muitas unidades para colocar"
+
 #, c-format
 msgid "Missing table for <%s>"
 msgstr ""
@@ -31656,6 +31662,11 @@ msgstr "As informações do cabeçalho também podem ter que ser editadas"
 #, c-format
 msgid "%d vector maps patched"
 msgstr "%d mapas vetoriais corrigidos"
+
+#, fuzzy
+#| msgid "Too many column names"
+msgid "Too many columns to copy records"
+msgstr "Muitos nomes de coluna"
 
 #, c-format
 msgid "Cannot open select cursor: '%s'"
