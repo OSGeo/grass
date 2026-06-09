@@ -16,7 +16,6 @@ from datetime import date
 import string
 from shutil import copy
 
-from _pickleable import table_fix, derender_toc
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -267,14 +266,6 @@ html_theme_options = {
             "internal": True,
         },
     ],
-}
-
-# Make html_context cacheable by replacing theme's class objects with
-# pickleable proxy instances.  The theme stores class objects (type instances)
-# in html_context which Sphinx's is_serializable() conservatively rejects.
-html_context = {
-    "table_fix": table_fix,
-    "derender_toc": derender_toc,
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
