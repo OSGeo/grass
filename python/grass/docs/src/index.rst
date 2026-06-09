@@ -34,6 +34,8 @@ Additional Resources
   the Python interface to GRASS.
 * `GRASS Jupyter notebooks introduction <../jupyter_intro.html>`_ provides an overview of how to use the **grass.jupyter** module.
 
+.. _GRASS: https://grass.osgeo.org/
+
 --------------------
 Modules and Packages
 --------------------
@@ -41,8 +43,10 @@ Modules and Packages
   :maxdepth: 1
 
   grass
+  grass.tools
   script_intro
   pygrass_index
+  grass.jupyter
   exceptions
   imaging
   pydispatch
