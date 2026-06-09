@@ -51,6 +51,7 @@ class TestRasterImport(TestCase):
     def test_import_new_project(self):
         """Test the project option."""
         path = os.path.join(gs.gisenv()["GISDBASE"], self.new_project_name)
+        original_env = gs.gisenv()
 
         shutil.rmtree(path, ignore_errors=True)
         self.addCleanup(shutil.rmtree, path, ignore_errors=True)
@@ -66,6 +67,7 @@ class TestRasterImport(TestCase):
         )
 
         self.assertTrue(pathlib.Path(path).exists())
+        self.assertDictEqual(original_env, gs.gisenv())
 
 
 if __name__ == "__main__":
