@@ -27,7 +27,7 @@ caused by C library functions does not influence the main testing process.
 
 Some tests will run without any data but many tests require
 the small (basic) version of GRASS sample Location for North Carolina
-(see `GRASS sample data testing`).
+(see `GRASS sample data`).
 
 Basic example
 -------------
