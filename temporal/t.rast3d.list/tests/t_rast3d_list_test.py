@@ -10,7 +10,7 @@ def test_t_rast3d_list_defaults(space_time_raster3d_dataset):
     result = tools.t_rast3d_list(input=space_time_raster3d_dataset.name)
     assert result.returncode == 0
 
-    lines = [line.strip().split("|") for line in result.stdout.strip().splitlines()]
+    lines = [line.split("|") for line in result.text.splitlines()]
     header = lines[0]
     data_lines = [row[0] for row in lines[1:]]
 
@@ -29,7 +29,7 @@ def test_t_rast3d_list_where_filter(space_time_raster3d_dataset):
     )
     assert result.returncode == 0
 
-    lines = [line.strip() for line in result.stdout.strip().splitlines()]
+    lines = result.text.splitlines()
     data_lines = lines[1:]
 
     assert len(data_lines) == 1
@@ -45,7 +45,7 @@ def test_t_rast3d_list_order(space_time_raster3d_dataset):
     )
     assert result_asc.returncode == 0
 
-    lines_asc = [line.strip() for line in result_asc.stdout.strip().splitlines()]
+    lines_asc = result_asc.text.splitlines()
     data_lines = lines_asc[1:]
 
     assert data_lines == space_time_raster3d_dataset.raster_names
