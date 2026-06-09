@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 17:57+0000\n"
+"POT-Creation-Date: 2026-05-23 16:07+0000\n"
 "PO-Revision-Date: 2025-12-22 12:47+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/sv/>\n"
@@ -750,6 +750,21 @@ msgstr "Redigera vald post"
 msgid "Display selected"
 msgstr "Display vald"
 
+#, fuzzy
+#| msgid "Tools"
+msgid "Tools API"
+msgstr "Verktyg"
+
+#, fuzzy
+#| msgid "Script editor"
+msgid "Script API"
+msgstr "Skriptredigerare"
+
+#, fuzzy
+#| msgid "GRASS API:"
+msgid "PyGRASS API"
+msgstr "GRASS API:"
+
 msgid "Classic (labels only)"
 msgstr "Classic (endast etiketter)"
 
@@ -1314,6 +1329,11 @@ msgid "Re&load maps"
 msgstr "U&ppdatera kartor"
 
 #, fuzzy
+#| msgid "Show computational region extent"
+msgid "Show computational region"
+msgstr "Visa beräkningsregionens omfattning"
+
+#, fuzzy
 #| msgid "&Copy path to mapset"
 msgid "&Copy path"
 msgstr "&Kopiera sökväg till mapset"
@@ -1326,6 +1346,11 @@ msgstr "&Avsluta projekt"
 
 msgid "&Rename project"
 msgstr "&Rename-projekt"
+
+#, fuzzy
+#| msgid "Source projection:"
+msgid "Show projection info"
+msgstr "Källa projektion:"
 
 #, fuzzy
 #| msgid "CVS path"
@@ -3243,10 +3268,37 @@ msgstr "Stäng detta fönster utan att utföra kommandot (Ctrl+Q)"
 msgid "Run the command (Ctrl+R)"
 msgstr "Kör kommandot (Ctrl+R)"
 
+#, fuzzy
+#| msgid "Copy all to clipboard"
+msgid "Copy as Shell command"
+msgstr "Kopiera allt till urklipp"
+
+#, fuzzy
+#| msgid "CVS path"
+msgid "Copy as Python"
+msgstr "CVS sökväg"
+
+#, fuzzy
+#| msgid "Vector maps settings"
+msgid "Copy as JSON settings"
+msgstr "Inställningar för vektorkartor"
+
 msgid "Copy"
 msgstr "Kopiera"
 
-msgid "Copy the current command string to the clipboard"
+#, fuzzy
+#| msgid "Export common formats"
+msgid "More copy formats"
+msgstr "Exportera vanliga format"
+
+#, fuzzy
+#| msgid "Raster map settings"
+msgid "Paste JSON settings"
+msgstr "Inställningar för Raster-karta"
+
+#, fuzzy
+#| msgid "Copy the current command string to the clipboard"
+msgid "Paste parameters from JSON string in the clipboard"
 msgstr "Kopiera den aktuella kommandosträngen till urklipp"
 
 msgid "Show manual page of the command (Ctrl+H)"
@@ -3261,8 +3313,68 @@ msgstr "Stäng dialogrutan när du är klar"
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr "Stäng dialogrutan när kommandot är slutfört. Ändra dessa inställningar i dialogrutan Inställningar (fliken \"Kommando\")."
 
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (Script API)"
+msgstr "Python-skript"
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (PyGRASS API)"
+msgstr "Python-skript"
+
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr "'%s' kopierat till urklipp"
+
+#, fuzzy
+#| msgid "'{cmd}' copied to clipboard"
+msgid "Python code copied to clipboard"
+msgstr "'{cmd}' kopierat till urklipp"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "JSON copied to clipboard"
+msgstr "'%s' kopierat till urklipp"
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+msgid "Module Mismatch"
+msgstr ""
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid name"
+msgid "Invalid Data"
+msgstr "Ogiltigt namn"
+
+#, fuzzy
+#| msgid "Error"
+msgid "Paste Error"
+msgstr "Fel"
+
+#, fuzzy, python-format
+#| msgid "'%s' copied to clipboard"
+msgid "%s copied to clipboard"
 msgstr "'%s' kopierat till urklipp"
 
 msgid "Required"
@@ -3872,6 +3984,9 @@ msgstr "Tillåt interaktiv input"
 
 msgid "Verbosity level:"
 msgstr "Ordstyrka nivå:"
+
+msgid "Default Python API for copied commands:"
+msgstr ""
 
 msgid "Number of threads for parallel computing (supported tools only):"
 msgstr "Antal trådar för parallell databehandling (endast verktyg som stöds):"
@@ -5849,6 +5964,16 @@ msgstr "Är du säker på att du vill ta bort den aktuella rastermasken?"
 msgid "Remove raster mask"
 msgstr "Ta bort rastermask"
 
+#, fuzzy
+#| msgid "Custom min"
+msgid "Custom CRS"
+msgstr "Anpassad min"
+
+#, fuzzy
+#| msgid "Left mouse click to remove the raster mask"
+msgid "Left mouse click to print detailed projection info"
+msgstr "Vänster musklick för att ta bort rastermasken"
+
 msgid "Create new workspace (Ctrl+N)"
 msgstr "Skapa en ny arbetsyta (Ctrl+N)"
 
@@ -7184,6 +7309,9 @@ msgstr "Spara uttryck till fil"
 
 msgid "Load expression from file"
 msgstr "Läs in uttryck från fil"
+
+msgid "Copy the current command string to the clipboard"
+msgstr "Kopiera den aktuella kommandosträngen till urklipp"
 
 msgid "exponent"
 msgstr "exponent"

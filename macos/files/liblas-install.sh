@@ -11,7 +11,7 @@
 #
 #############################################################################
 
-liblas_commit="0756b73ed41211d1bb8d9b96c6767f2350d8fe2b"
+liblas_commit="33097f17e27b853ac7b9651025a70354ffb10cfc"
 liblas_zipfile_name="libLAS_${liblas_commit}.zip"
 liblas_zipfile_url="https://github.com/libLAS/libLAS/archive/${liblas_commit}.zip"
 liblas_source_dir_name="libLAS-${liblas_commit}"
@@ -44,21 +44,6 @@ mkdir -p "$liblas_source_dir"
 mkdir -p "$liblas_build_dir"
 
 unzip "$liblas_zipfile" -d "$cache_dir" &> /dev/null
-
-patch -d "$liblas_source_dir" -p0 << EOF
---- CMakeLists.txt.orig	2025-11-08 16:34:42
-+++ CMakeLists.txt	2026-04-11 15:36:21
-@@ -231,9 +231,6 @@
-   endif ()
- endif ()
- if (GDAL_FOUND)
--  SET(CMAKE_CXX_STANDARD 11)
--  SET(CMAKE_CXX_STANDARD_REQUIRED ON)
--  SET(CMAKE_CXX_EXTENSIONS OFF)
-   include_directories(${GDAL_INCLUDE_DIR})
-   add_definitions(-DHAVE_GDAL=1)
-   set(WITH_GDAL TRUE)
-EOF
 
 LIBLAS_CONFIGURE_FLAGS="
   -DCMAKE_OSX_SYSROOT=${sdk} \
