@@ -88,7 +88,7 @@ def main():
             ),
         )
 
-    if format == "json" and (history or system):
+    if format_ == "json" and (history or system):
         gs.warning(
             _(
                 "Output from the 'd' and 'h' flag are always included "
