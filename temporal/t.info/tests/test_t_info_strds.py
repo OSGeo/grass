@@ -128,7 +128,7 @@ def test_plain_format_still_works(space_time_raster_dataset):
 
 
 def test_t_info_dh_flags(space_time_raster_dataset):
-    """Default plain format output still functions correctly."""
+    """Flags -d and -h work and are included in JSON."""
     mapset, session = space_time_raster_dataset
     strds_id = f"precip_abs1@{mapset}"
     tools = Tools(session=session)
