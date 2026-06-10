@@ -77,6 +77,13 @@
 
 # %option G_OPT_F_SEP
 # % label: Field separator character between the output columns
+# % answer:
+# % guisection: Formatting
+# %end
+
+# %option G_OPT_F_FORMAT
+# % options: plain,line,json,yaml,csv
+# % descriptions: plain;Plain text output;line;Comma separated list of map names;json;JSON (JavaScript Object Notation);yaml;YAML (YAML Ain't Markup Language);csv;CSV (Comma Separated Values);
 # % guisection: Formatting
 # %end
 
@@ -140,9 +147,6 @@ def message_option_value_excludes_flag(option_name, option_value, flag_name, rea
 def main():
     options, flags = gs.parser()
 
-    # lazy imports
-    import grass.temporal as tgis
-
     # Get the options
     input = options["input"]
     columns = options["columns"]
@@ -153,6 +157,66 @@ def main():
     header = flags["s"]
     granule = options["granule"]
     output = options["output"]
+    output_format = options["format"]
+
+    if output_format == "csv":
+        if not separator:
+            separator = ","
+        elif len(separator) > 1:
+            gs.fatal(
+                message_option_value_excludes_option_value(
+                    option_name="format",
+                    option_value=output_format,
+                    excluded_option_name="separator",
+                    excluded_option_value=separator,
+                    reason=_(
+                        "A standard CSV separator (delimiter) is only one character "
+                        "long"
+                    ),
+                )
+            )
+    elif output_format in {"json", "yaml"}:
+        if header:
+            gs.fatal(
+                message_option_value_excludes_flag(
+                    option_name="format",
+                    option_value=output_format,
+                    flag_name="s",
+                    reason=_("Column names are always included"),
+                )
+            )
+        if separator:
+            gs.fatal(
+                message_option_value_excludes_option_value(
+                    option_name="format",
+                    option_value=output_format,
+                    excluded_option_name="separator",
+                    excluded_option_value=separator,
+                    reason=_("Separator option is not allowed with this format"),
+                )
+            )
+    elif output_format == "line" or method == "comma":
+        output_format = "line"
+        if not separator:
+            separator = ","
+        columns_list = columns.split(",")
+        if len(columns_list) > 1:
+            gs.fatal(
+                message_option_value_excludes_option_value(
+                    option_name="format",
+                    option_value=output_format,
+                    excluded_option_name="columns",
+                    excluded_option_value=columns,
+                    reason=_("Only one column is allowed (not {num_columns})").format(
+                        num_columns=len(columns_list)
+                    ),
+                )
+            )
+    elif not separator:  # output_format = "plain"
+        separator = "|"
+
+    # lazy imports
+    import grass.temporal as tgis
 
     if method in {"delta", "deltagaps", "gran"}:
         if order:
@@ -238,6 +302,7 @@ def main():
         header,
         gran=granule,
         outpath=output,
+        output_format=output_format,
     )
 
 
