@@ -123,3 +123,73 @@ def test_plain_format_still_works(space_time_vector_dataset):
     tools = Tools(session=session)
     info = tools.t_info(format="plain", type="stvds", input=stvds_id).text
     assert "vect_abs1" in info
+
+
+def test_t_info_dh_flags(space_time_vector_dataset):
+    """Flags -d and -h work and are included in JSON."""
+    mapset, session = space_time_vector_dataset
+    stds_id = f"vect_abs1@{mapset}"
+    tools = Tools(session=session)
+    json_info = tools.t_info(format="json", type="stvds", input=stds_id).json
+    system_info = tools.t_info(
+        flags="d", format="shell", type="stvds", input=stds_id
+    ).text
+    system_info_dict = gs.parse_key_val(system_info)
+    system_info_dict = {k: v.strip("'") for k, v in system_info_dict.items()}
+    json_info["tgis_db"] = {k: str(v) for k, v in json_info["tgis_db"].items()}
+    assert json_info["tgis_db"] | system_info_dict == json_info["tgis_db"]
+    history_info = tools.t_info(
+        flags="h", format="shell", type="stvds", input=stds_id
+    ).text
+    for line in json_info["command"].split():
+        assert line in history_info
+
+
+def test_t_info_map_dataset(space_time_vector_dataset):
+    """Vector map metadata is returned correctly."""
+    mapset, session = space_time_vector_dataset
+    map_name = "vect_1"
+    stds_name = "vect_abs1"
+    expected = {
+        "areas": 0,
+        "bottom": 0.0,
+        "boundaries": 0,
+        "centroids": 0,
+        "end_time": "2001-02-01 00:00:00",
+        "faces": 0,
+        "holes": 0,
+        "id": f"{map_name}@{mapset}",
+        "is_3d": 0,
+        "islands": 0,
+        "kernels": 0,
+        "layer": None,
+        "lines": 0,
+        "mapset": mapset,
+        "name": map_name,
+        "nodes": 0,
+        "points": 20,
+        "primitives": 20,
+        "proj": "XY",
+        "registered_datasets": [
+            f"{stds_name}@{mapset}",
+        ],
+        "start_time": "2001-01-01 00:00:00",
+        "temporal_type": "absolute",
+        "top": 0.0,
+        "volumes": 0,
+    }
+
+    tools = Tools(session=session)
+    json_info = tools.t_info(format="json", type="vector", input=map_name).json
+
+    expected_keys = {
+        "creation_time",
+        "creator",
+        "north",
+        "south",
+        "west",
+        "east",
+    }
+
+    assert json_info | expected == json_info
+    assert expected_keys.issubset(set(json_info.keys()))
