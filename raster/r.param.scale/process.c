@@ -63,10 +63,22 @@ void process(void)
     find_weight(weight_ptr);
     find_normal(normal_ptr, weight_ptr);
 
+    /* The one-time LU decomposition is run single-threaded because G_ludcmp's
+     * internal pivot search is not thread-safe (it has an unsynchronized shared
+     * reduction in lib/gmath/lu.c). Parallelizing this tiny one-time 6x6 solve
+     * gains nothing, and at nprocs>1 the race shifts the factorization by about
+     * 1 ULP, which then perturbs every per-cell solve. */
+#ifdef _OPENMP
+    int saved_threads = omp_get_max_threads();
+    omp_set_num_threads(1);
+#endif
     if (constrained)
         G_ludcmp(normal_ptr, 5, index_ptr, &temp);
     else
         G_ludcmp(normal_ptr, 6, index_ptr, &temp);
+#ifdef _OPENMP
+    omp_set_num_threads(saved_threads);
+#endif
 
     /*-----------------------------------------------------------------------*/
     /* CHANGE 1: Per-thread input file descriptors.                          */
