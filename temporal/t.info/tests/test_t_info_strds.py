@@ -37,20 +37,28 @@ def test_json_format_returns_valid_json(space_time_raster_dataset):
         "max_min": 1.0,
         "max_max": 3.0,
         "aggregation_type": None,
-        "dbmi_python_interface": "sqlite3",
+    }
+    expected_tgis_info_keys = {
+        "creation_time",
+        "dbmi_python_interface",
+        "dbmi_string",
+        "sql_template_path",
+        "tgis_db_version",
+        "tgis_version",
     }
     info = tools.t_info(format="json", type="strds", input=strds_id).json
     assert isinstance(info, dict)
     assert info | expected == info
-    assert {
-        "creation_time",
-        "creator",
-        "command",
-        "modification_time",
-        "sql_template_path",
-        "tgis_db",
-        "dbmi_string",
-    } <= set(info.keys())
+    assert set(info.keys()).issuperset(
+        {
+            "creation_time",
+            "creator",
+            "command",
+            "modification_time",
+            "tgis_db",
+        }
+    )
+    assert expected_tgis_info_keys == set(info["tgis_db"].keys())
 
 
 def test_json_shell_parity(space_time_raster_dataset):
@@ -74,6 +82,9 @@ def test_json_shell_parity(space_time_raster_dataset):
 
     # JSON should have all the keys that shell has
     assert shell_keys <= json_keys
+
+    for shell_key in shell_keys:
+        assert shell_dict[shell_key].strip("'") == str(json_info[shell_key])
 
 
 def test_shell_format_via_option(space_time_raster_dataset):
@@ -114,3 +125,67 @@ def test_plain_format_still_works(space_time_raster_dataset):
     tools = Tools(session=session)
     info = tools.t_info(format="plain", type="strds", input=strds_id).text
     assert "precip_abs1" in info
+
+
+def test_t_info_dh_flags(space_time_raster_dataset):
+    """Default plain format output still functions correctly."""
+    mapset, session = space_time_raster_dataset
+    strds_id = f"precip_abs1@{mapset}"
+    tools = Tools(session=session)
+    json_info = tools.t_info(format="json", type="strds", input=strds_id).json
+    system_info = tools.t_info(
+        flags="d", format="shell", type="strds", input=strds_id
+    ).text
+    system_info_dict = gs.parse_key_val(system_info)
+    system_info_dict = {k: v.strip("'") for k, v in system_info_dict.items()}
+    json_info["tgis_db"] = {k: str(v) for k, v in json_info["tgis_db"].items()}
+    assert json_info["tgis_db"] | system_info_dict == json_info["tgis_db"]
+    history_info = tools.t_info(
+        flags="h", format="shell", type="strds", input=strds_id
+    ).text
+    for line in json_info["command"].split():
+        assert line in history_info
+
+
+def test_t_info_map_dataset(space_time_raster_dataset):
+    """Raster map metadata is returned correctly."""
+    mapset, session = space_time_raster_dataset
+    stds_name = "precip_abs1"
+    map_name = "prec_1"
+    expected = {
+        "bottom": 0.0,
+        "cols": 8,
+        "datatype": "CELL",
+        "east": 120.0,
+        "end_time": "2001-02-01 00:00:00",
+        "ewres": 10.0,
+        "id": f"{map_name}@{mapset}",
+        "mapset": mapset,
+        "max": 1.0,
+        "min": 1.0,
+        "name": map_name,
+        "north": 80.0,
+        "nsres": 10.0,
+        "number_of_cells": 96,
+        "proj": "XY",
+        "registered_datasets": [
+            f"{stds_name}@{mapset}",
+        ],
+        "rows": 12,
+        "south": 0.0,
+        "start_time": "2001-01-01 00:00:00",
+        "temporal_type": "absolute",
+        "top": 0.0,
+        "west": 0.0,
+    }
+
+    tools = Tools(session=session)
+    json_info = tools.t_info(format="json", type="raster", input=map_name).json
+
+    expected_keys = {
+        "creation_time",
+        "creator",
+    }
+
+    assert json_info | expected == json_info
+    assert expected_keys.issubset(set(json_info.keys()))
