@@ -20,6 +20,24 @@
 #include "parser_local_proto.h"
 
 /*!
+   \brief Print a string as the content of a double-quoted YAML scalar.
+
+   Escapes the characters that are special inside a double-quoted YAML
+   scalar (backslash and double quote). Quoting the value lets it contain
+   YAML-significant sequences such as ": " without breaking the parser.
+
+   \param str string to print (escaped) to stdout
+ */
+static void print_yaml_escaped(const char *str)
+{
+    for (const char *p = str; *p; p++) {
+        if (*p == '\\' || *p == '"')
+            fprintf(stdout, "\\");
+        fprintf(stdout, "%c", *p);
+    }
+}
+
+/*!
    \brief Print module usage description in Markdown format.
  */
 void G__usage_markdown(void)
@@ -32,14 +50,14 @@ void G__usage_markdown(void)
     /* print metadata used by man/build*.py */
     fprintf(stdout, "---\n");
     fprintf(stdout, "name: %s\n", st->pgm_name);
-    fprintf(stdout, "description: ");
+    fprintf(stdout, "description: \"");
     if (st->module_info.label)
-        fprintf(stdout, "%s", st->module_info.label);
+        print_yaml_escaped(st->module_info.label);
     if (st->module_info.label && st->module_info.description)
         fprintf(stdout, " ");
     if (st->module_info.description)
-        fprintf(stdout, "%s", st->module_info.description);
-    fprintf(stdout, "\n");
+        print_yaml_escaped(st->module_info.description);
+    fprintf(stdout, "\"\n");
     fprintf(stdout, "keywords: [ ");
     G__print_keywords(stdout, NULL, FALSE);
     fprintf(stdout, " ]");
