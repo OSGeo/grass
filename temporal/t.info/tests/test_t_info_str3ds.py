@@ -110,6 +110,27 @@ def test_plain_format_still_works(space_time_raster3d_dataset):
     assert "volume_abs1" in info
 
 
+def test_t_info_dh_flags(space_time_raster3d_dataset):
+    """Flags -d and -h work and are included in JSON."""
+    mapset, session = space_time_raster3d_dataset
+    stds_name = "volume_abs1"
+    stds_id = f"{stds_name}@{mapset}"
+    tools = Tools(session=session)
+    json_info = tools.t_info(format="json", type="str3ds", input=stds_id).json
+    system_info = tools.t_info(
+        flags="d", format="shell", type="str3ds", input=stds_id
+    ).text
+    system_info_dict = gs.parse_key_val(system_info)
+    system_info_dict = {k: v.strip("'") for k, v in system_info_dict.items()}
+    json_info["tgis_db"] = {k: str(v) for k, v in json_info["tgis_db"].items()}
+    assert json_info["tgis_db"] | system_info_dict == json_info["tgis_db"]
+    history_info = tools.t_info(
+        flags="h", format="shell", type="str3ds", input=stds_id
+    ).text
+    for line in json_info["command"].split():
+        assert line in history_info
+
+
 def test_t_info_map_dataset(space_time_raster3d_dataset):
     """Raster3D map metadata is returned correctly."""
     mapset, session = space_time_raster3d_dataset
