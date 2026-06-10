@@ -127,10 +127,10 @@ def compute_univar_stats(
             else:
                 eol = ""
         string += f"{fs}{stats['mean']}{fs}{stats['min']}"
-        string += f"{fs}{stats['max']}{fs}{stats['mean_of_abs']}"
+        string += f"{fs}{stats['max']}{fs}{stats['range']}{fs}{stats['mean_of_abs']}"
         string += f"{fs}{stats['stddev']}{fs}{stats['variance']}"
         string += f"{fs}{stats['coeff_var']}{fs}{stats['sum']}"
-        string += f"{fs}{stats['null_cells']}{fs}{stats['n']}"
+        string += f"{fs}{stats['null_cells']}{fs}{stats['cells']}"
         string += f"{fs}{stats['n']}"
         if "median" in stats:
             string += f"{fs}{stats['first_quartile']}{fs}{stats['median']}"
@@ -241,6 +241,7 @@ def print_gridded_dataset_univar_statistics(
                 "mean",
                 "min",
                 "max",
+                "range",
                 "mean_of_abs",
                 "stddev",
                 "variance",
@@ -248,7 +249,7 @@ def print_gridded_dataset_univar_statistics(
                 "sum",
                 "null_cells",
                 "cells",
-                "non_null_cells",
+                "n",
             ]
         )
         if extended is True:
@@ -270,8 +271,6 @@ def print_gridded_dataset_univar_statistics(
 
     # Define flags
     flag = ""
-    if format != "json":
-        flag = "g"
     if extended is True:
         flag += "e"
     if type == "strds" and rast_region is True and not zones:
@@ -284,7 +283,7 @@ def print_gridded_dataset_univar_statistics(
         zones=zones,
         percentile=percentile,
         stdout_=PIPE,
-        format="json" if format == "json" else None,
+        format="json" if format == "json" else "shell",
         run_=False,
     )
 
