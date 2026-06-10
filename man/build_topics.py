@@ -32,6 +32,7 @@ def build_topics(ext):
             headertopics_tmpl,
             man_dir,
             moduletopics_tmpl,
+            unquote_yaml,
         )
 
     keywords = {}
@@ -86,7 +87,7 @@ def build_topics(ext):
                     key = keys[1]  # Second keyword is topic.
                 match = re.match(r"description:\s*(.*)\s*", line)
                 if match:
-                    text = match.group(1)
+                    text = unquote_yaml(match.group(1))
                     if not text:
                         print(f"Warning: Empty tile in {fname}", file=sys.stderr)
                         break
