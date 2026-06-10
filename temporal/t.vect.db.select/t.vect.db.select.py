@@ -36,8 +36,16 @@
 # %option G_OPT_DB_COLUMNS
 # %end
 
+# %option G_OPT_F_FORMAT
+# % options: plain,csv,json
+# % descriptions: plain;Plain text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)
+# % answer: plain
+# % guisection: Formatting
+# %end
+
 # %option G_OPT_F_SEP
 # % label: Field separator character between the output columns
+# % answer:
 # %end
 
 # %option G_OPT_V_FIELD
@@ -50,14 +58,15 @@
 # % key: t_where
 # %end
 
+import json
+
 import grass.script as gs
+from grass.tools import ToolError, Tools
 
 ############################################################################
 
 
 def main():
-    # lazy imports
-    import grass.temporal as tgis
 
     # Get the options
     input = options["input"]
@@ -66,12 +75,31 @@ def main():
     tempwhere = options["t_where"]
     layer = options["layer"]
     separator = gs.separator(options["separator"])
+    output_format = options.get("format", "plain")
 
     if where in {"", " ", "\n"}:
         where = None
 
     if columns in {"", " ", "\n"}:
         columns = None
+
+    if output_format == "csv":
+        if not separator:
+            separator = ","
+        elif len(separator) > 1:
+            gs.fatal(
+                _("A standard CSV separator (delimiter) is only one character long")
+            )
+
+    elif output_format == "json":
+        if separator:
+            gs.fatal(_("Separator option is not allowed with JSON format"))
+
+    elif not separator:  # output_format == "plain"
+        separator = "|"
+
+    # lazy imports
+    import grass.temporal as tgis
 
     # Make sure the temporal database exists
     tgis.init()
@@ -82,6 +110,8 @@ def main():
         "name,layer,mapset,start_time,end_time", tempwhere, "start_time", None
     )
 
+    tools = Tools()
+    json_output = []
     col_names = ""
     if rows:
         for row in rows:
@@ -91,52 +121,73 @@ def main():
             if row["layer"]:
                 layer = row["layer"]
 
-            select = gs.read_command(
-                "v.db.select",
-                map=vector_name,
-                layer=layer,
-                columns=columns,
-                separator="%s" % (separator),
-                where=where,
-            )
-
-            if not select:
+            try:
+                res = tools.v_db_select(
+                    map=vector_name,
+                    layer=layer,
+                    columns=columns,
+                    separator=separator,
+                    where=where,
+                    format=output_format,
+                )
+                select = res.text
+            except ToolError:
                 gs.fatal(
                     _("Unable to run v.db.select for vector map <%s> with layer %s")
                     % (vector_name, layer)
                 )
-            # The first line are the column names
-            list = select.split("\n")
-            count = 0
-            for entry in list:
-                if entry.strip() != "":
-                    # print the column names in case they change
-                    if count == 0:
-                        col_names_new = "start_time%send_time%s%s" % (
-                            separator,
-                            separator,
-                            entry,
-                        )
-                        if col_names != col_names_new:
-                            col_names = col_names_new
-                            print(col_names)
-                    elif row["end_time"]:
-                        print(
-                            "%s%s%s%s%s"
-                            % (
-                                row["start_time"],
+            if output_format == "json":
+                try:
+                    map_json = json.loads(select)
+                    records = map_json.get("records", [])
+                    for record in records:
+                        new_record = {
+                            "start_time": row["start_time"],
+                            "end_time": row["end_time"],
+                        }
+                        new_record.update(record)
+                        json_output.append(new_record)
+                except json.JSONDecodeError:
+                    gs.fatal(
+                        _("Unable to parse JSON output for vector map <%s>")
+                        % vector_name
+                    )
+            else:
+                # The first line are the column names
+                list = select.split("\n")
+                count = 0
+                for entry in list:
+                    if entry.strip() != "":
+                        # print the column names in case they change
+                        if count == 0:
+                            col_names_new = "start_time%send_time%s%s" % (
                                 separator,
-                                row["end_time"],
                                 separator,
                                 entry,
                             )
-                        )
-                    else:
-                        print(
-                            "%s%s%s%s"
-                            % (row["start_time"], separator, separator, entry)
-                        )
-                    count += 1
+                            if col_names != col_names_new:
+                                col_names = col_names_new
+                                print(col_names)
+                        elif row["end_time"]:
+                            print(
+                                "%s%s%s%s%s"
+                                % (
+                                    row["start_time"],
+                                    separator,
+                                    row["end_time"],
+                                    separator,
+                                    entry,
+                                )
+                            )
+                        else:
+                            print(
+                                "%s%s%s%s"
+                                % (row["start_time"], separator, separator, entry)
+                            )
+                        count += 1
+
+        if output_format == "json":
+            print(json.dumps(json_output, indent=4, default=str))
 
 
 if __name__ == "__main__":
