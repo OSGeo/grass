@@ -63,7 +63,9 @@ def keep_awake():
     """On macOS, hold an idle-sleep assertion for this process's lifetime."""
     if platform.system() == "Darwin":
         try:
-            return subprocess.Popen(["caffeinate", "-i", "-w", str(os.getpid())])
+            return subprocess.Popen(
+                ["/usr/bin/caffeinate", "-i", "-w", str(os.getpid())]
+            )
         except FileNotFoundError:
             pass
     return None
@@ -72,7 +74,7 @@ def keep_awake():
 def report_power():
     if platform.system() == "Darwin":
         try:
-            ps = subprocess.check_output(["pmset", "-g", "ps"], text=True)
+            ps = subprocess.check_output(["/usr/bin/pmset", "-g", "ps"], text=True)
             if "Battery Power" in ps:
                 print("Power: BATTERY -- WARNING: plug into AC, results will be noisy")
             else:
