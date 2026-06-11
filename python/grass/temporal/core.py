@@ -596,6 +596,7 @@ def init(raise_fatal_error: bool = False, skip_db_version_check: bool = False):
     global raise_on_error  # noqa: FURB154
     global enable_mapset_check, enable_timestamp_write  # noqa: FURB154
     global current_mapset, current_location, current_gisdbase  # noqa: FURB154
+    global message_interface, c_library_interface  # noqa: FURB154
 
     raise_on_error = raise_fatal_error
 
@@ -604,10 +605,30 @@ def init(raise_fatal_error: bool = False, skip_db_version_check: bool = False):
     gs.run_command("t.connect", flags="c")
     grassenv = gs.gisenv()
 
+    new_mapset = grassenv["MAPSET"]
+    new_location = grassenv["LOCATION_NAME"]
+    new_gisdbase = grassenv["GISDBASE"]
+
+    # The message and C-library subprocesses inherit GISRC at spawn time,
+    # so a session change leaves them bound to the old (possibly deleted)
+    # session. Stop them so the _init_* helpers below respawn them in the
+    # current environment.
+    if current_mapset is not None and (
+        current_mapset != new_mapset
+        or current_location != new_location
+        or current_gisdbase != new_gisdbase
+    ):
+        if message_interface is not None:
+            message_interface.stop()
+            message_interface = None
+        if c_library_interface is not None:
+            c_library_interface.stop()
+            c_library_interface = None
+
     # Set the global variable for faster access
-    current_mapset = grassenv["MAPSET"]
-    current_location = grassenv["LOCATION_NAME"]
-    current_gisdbase = grassenv["GISDBASE"]
+    current_mapset = new_mapset
+    current_location = new_location
+    current_gisdbase = new_gisdbase
 
     # Check environment variable GRASS_TGIS_RAISE_ON_ERROR
     if (

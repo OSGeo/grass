@@ -8,6 +8,7 @@ for details.
 @author Soeren Gebbert
 """
 
+import json
 from pathlib import Path
 
 from grass.gunittest.case import TestCase
@@ -548,6 +549,113 @@ d_1@stbl||2001-01-01 00:00:00|2001-04-01 00:00:00|100|100|100|100|0|0|0|960000|2
                 ref_line = ref.split("|", 1)[1]
                 res_line = res.split("|", 1)[1]
                 self.assertLooksLike(ref_line, res_line)
+
+    def test_format_csv(self):
+        """Test output generation in CSV format"""
+        t_rast_univar = SimpleModule(
+            "t.rast.univar",
+            input="A",
+            where="start_time >= '2001-01-01'",
+            format="csv",
+            overwrite=True,
+            verbose=True,
+        )
+        self.runModule("g.region", **self.default_region, res=1)
+        self.assertModule(t_rast_univar)
+
+        univar_text = """id,semantic_label,start,end,mean,min,max,mean_of_abs,stddev,variance,coeff_var,sum,null_cells,cells,non_null_cells
+a_1@testing,,2001-01-01 00:00:00,2001-04-01 00:00:00,100,100,100,100,0,0,0,960000,0,9600,9600
+a_2@testing,,2001-04-01 00:00:00,2001-07-01 00:00:00,200,200,200,200,0,0,0,1920000,0,9600,9600
+a_3@testing,,2001-07-01 00:00:00,2001-10-01 00:00:00,300,300,300,300,0,0,0,2880000,0,9600,9600
+a_4@testing,,2001-10-01 00:00:00,2002-01-01 00:00:00,400,400,400,400,0,0,0,3840000,0,9600,9600
+"""
+        for ref, res in zip(
+            univar_text.splitlines(),
+            t_rast_univar.outputs.stdout.splitlines(),
+            strict=True,
+        ):
+            if ref and res:
+                ref_line = ref.split(",", 1)[1]
+                res_line = res.split(",", 1)[1]
+                self.assertLooksLike(ref_line, res_line)
+
+    def test_format_json(self):
+        """Test output generation in JSON format"""
+        t_rast_univar = SimpleModule(
+            "t.rast.univar",
+            input="A",
+            where="start_time >= '2001-04-01 00:00:00'",
+            format="json",
+            overwrite=True,
+            verbose=True,
+        )
+        self.runModule("g.region", **self.default_region, res=1)
+        self.assertModule(t_rast_univar)
+
+        output_json = json.loads(t_rast_univar.outputs.stdout)
+
+        expected_json = [
+            {
+                "id": "a_2",
+                "semantic_label": None,
+                "start": "2001-04-01 00:00:00",
+                "end": "2001-07-01 00:00:00",
+                "mean": 200,
+                "min": 200,
+                "max": 200,
+                "mean_of_abs": 200,
+                "stddev": 0,
+                "variance": 0,
+                "coeff_var": 0,
+                "sum": 1920000,
+                "null_cells": 0,
+                "cells": 9600,
+                "n": 9600,
+            },
+            {
+                "id": "a_3",
+                "semantic_label": None,
+                "start": "2001-07-01 00:00:00",
+                "end": "2001-10-01 00:00:00",
+                "mean": 300,
+                "min": 300,
+                "max": 300,
+                "mean_of_abs": 300,
+                "stddev": 0,
+                "variance": 0,
+                "coeff_var": 0,
+                "sum": 2880000,
+                "null_cells": 0,
+                "cells": 9600,
+                "n": 9600,
+            },
+            {
+                "id": "a_4",
+                "semantic_label": None,
+                "start": "2001-10-01 00:00:00",
+                "end": "2002-01-01 00:00:00",
+                "mean": 400,
+                "min": 400,
+                "max": 400,
+                "mean_of_abs": 400,
+                "stddev": 0,
+                "variance": 0,
+                "coeff_var": 0,
+                "sum": 3840000,
+                "null_cells": 0,
+                "cells": 9600,
+                "n": 9600,
+            },
+        ]
+
+        self.assertEqual(len(output_json), len(expected_json))
+
+        for res_obj, exp_obj in zip(output_json, expected_json, strict=True):
+            for key in exp_obj:
+                if key == "id":
+                    self.assertTrue(res_obj[key].startswith(exp_obj[key]))
+                else:
+                    self.assertEqual(res_obj[key], exp_obj[key])
 
 
 if __name__ == "__main__":

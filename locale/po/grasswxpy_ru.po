@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-09 16:40+0000\n"
+"POT-Creation-Date: 2026-05-23 16:07+0000\n"
 "PO-Revision-Date: 2023-06-28 19:08+0000\n"
 "Last-Translator: Sergey Kazorin <kazorin@basealt.ru>\n"
 "Language-Team: Russian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/ru/>\n"
@@ -751,6 +751,19 @@ msgstr "Редактировать выбранную запись"
 
 msgid "Display selected"
 msgstr "Отобразить выбранные объекты"
+
+#, fuzzy
+#| msgid "Tools"
+msgid "Tools API"
+msgstr "Инструменты"
+
+#, fuzzy
+msgid "Script API"
+msgstr "Простой &редактор"
+
+#, fuzzy
+msgid "PyGRASS API"
+msgstr "ГИС GRASS"
 
 msgid "Classic (labels only)"
 msgstr "Классический (только подписи)"
@@ -3321,15 +3334,9 @@ msgid "Copy as Shell command"
 msgstr "Скопировать всё в буфер обмена"
 
 #, fuzzy
-#| msgid "Python script"
-msgid "Copy as Python (Script API)"
-msgstr "Сценарий Python"
-
-msgid "Copy as Python (Tools API)"
-msgstr ""
-
-msgid "Copy as Python (PyGRASS)"
-msgstr ""
+#| msgid "CVS path"
+msgid "Copy as Python"
+msgstr "Путь к CVS"
 
 #, fuzzy
 #| msgid "Vector maps settings"
@@ -3366,9 +3373,27 @@ msgstr "Закрыть окно после окончания операции"
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr "Закрыть диалоговое окно при успешном завершении команды. Этипараметры можно настроить в диалоговом окне «Параметры» (вкладка «Команда»)."
 
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (Script API)"
+msgstr "Сценарий Python"
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (PyGRASS API)"
+msgstr "Сценарий Python"
+
 #, python-format
 msgid "'%s' copied to clipboard"
 msgstr "«%s» скопировано в буфер обмена"
+
+#, fuzzy
+#| msgid "'{cmd}' copied to clipboard"
+msgid "Python code copied to clipboard"
+msgstr "«{cmd}» скопировано в буфер обмена"
 
 #, fuzzy
 #| msgid "'%s' copied to clipboard"
@@ -4035,6 +4060,9 @@ msgstr "Разрешить интерактивный ввод"
 
 msgid "Verbosity level:"
 msgstr "Уровень избыточности информации:"
+
+msgid "Default Python API for copied commands:"
+msgstr ""
 
 msgid "Number of threads for parallel computing (supported tools only):"
 msgstr ""
