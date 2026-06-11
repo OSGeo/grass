@@ -139,7 +139,7 @@ def test_yaml_format(space_time_raster3d_dataset):
     assert times == expected_times
 
 
-@pytest.mark.parametrize("separator", [",", "|"])
+@pytest.mark.parametrize("separator", [",", ":"])
 def test_csv_format(space_time_raster3d_dataset, separator):
     """Check CSV output using string matching."""
     tools = Tools(session=space_time_raster3d_dataset.session)
@@ -161,7 +161,7 @@ def test_csv_format(space_time_raster3d_dataset, separator):
     assert result.text == expected
 
 
-@pytest.mark.parametrize("separator", [",", "|"])
+@pytest.mark.parametrize("separator", [",", ":"])
 def test_line_format(space_time_raster3d_dataset, separator):
     """Check line format by matching the string in one statement."""
     tools = Tools(session=space_time_raster3d_dataset.session)
