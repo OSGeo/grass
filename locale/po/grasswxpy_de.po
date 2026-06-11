@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-09 16:40+0000\n"
+"POT-Creation-Date: 2026-05-23 16:07+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/de/>\n"
@@ -750,6 +750,20 @@ msgstr "Ausgewählten Datensatz editieren"
 
 msgid "Display selected"
 msgstr "Ausgewählte anzeigen"
+
+#, fuzzy
+#| msgid "Tools"
+msgid "Tools API"
+msgstr "Werkzeuge"
+
+#, fuzzy
+#| msgid "Python editor"
+msgid "Script API"
+msgstr "Python Editor"
+
+#, fuzzy
+msgid "PyGRASS API"
+msgstr "GRASS Hilfe"
 
 msgid "Classic (labels only)"
 msgstr "Klassisch (nur Beschriftung)"
@@ -3297,15 +3311,9 @@ msgid "Copy as Shell command"
 msgstr ""
 
 #, fuzzy
-#| msgid "Python script"
-msgid "Copy as Python (Script API)"
-msgstr "Python-Skript"
-
-msgid "Copy as Python (Tools API)"
-msgstr ""
-
-msgid "Copy as Python (PyGRASS)"
-msgstr ""
+#| msgid "Copy map"
+msgid "Copy as Python"
+msgstr "Kopiere Karte"
 
 #, fuzzy
 #| msgid "Vector maps settings"
@@ -3340,9 +3348,27 @@ msgstr "Schließe den Dialog beim Beenden"
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr "Schließe Dialog, wenn Befehl erfolgreich ausgeführt. Ändere dies in den Einstellungen (Reiter 'Befehle')."
 
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (Script API)"
+msgstr "Python-Skript"
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (PyGRASS API)"
+msgstr "Python-Skript"
+
 #, python-format
 msgid "'%s' copied to clipboard"
 msgstr "'%s' in die Zwischenablage kopiert"
+
+#, fuzzy
+#| msgid "'{cmd}' copied to clipboard"
+msgid "Python code copied to clipboard"
+msgstr "{cmd}' in die Zwischenablage kopiert"
 
 #, fuzzy
 #| msgid "'%s' copied to clipboard"
@@ -4002,6 +4028,9 @@ msgstr "Erlaube interaktive Eingabe"
 
 msgid "Verbosity level:"
 msgstr "Gesprächigkeitsstufe:"
+
+msgid "Default Python API for copied commands:"
+msgstr ""
 
 msgid "Number of threads for parallel computing (supported tools only):"
 msgstr ""

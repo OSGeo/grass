@@ -73,7 +73,7 @@
             <termEntry id="coordinate reference system, we use CRS instead of SRS https://en.wikipedia.org/wiki/Spatial_reference_system">
                 <langSet xml:lang="en"><tig><term>CRS</term></tig></langSet>
                 <langSet xml:lang="de"><tig><term/></tig></langSet>
-                <descrip>coordinate reference system, we use CRS instead of SRS https://en.wikipedia.org/wiki/Spatial_reference_systeM</descrip>
+                <descrip>coordinate reference system, we use CRS instead of SRS https://en.wikipedia.org/wiki/Spatial_reference_system</descrip>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>vertex</term></tig></langSet>

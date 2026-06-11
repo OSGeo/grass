@@ -65,7 +65,7 @@
             <termEntry id="coordinate reference system, we use CRS instead of SRS https://en.wikipedia.org/wiki/Spatial_reference_system">
                 <langSet xml:lang="en"><tig><term>CRS</term></tig></langSet>
                 <langSet xml:lang="el"><tig><term/></tig></langSet>
-                <descrip>coordinate reference system, we use CRS instead of SRS https://en.wikipedia.org/wiki/Spatial_reference_systeM</descrip>
+                <descrip>coordinate reference system, we use CRS instead of SRS https://en.wikipedia.org/wiki/Spatial_reference_system</descrip>
             </termEntry>
             <termEntry id="Need to distinguish between meanings of map, and the verb.">
                 <langSet xml:lang="en"><tig><term>map</term></tig></langSet>

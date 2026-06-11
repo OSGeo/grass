@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-09 16:40+0000\n"
+"POT-Creation-Date: 2026-05-23 16:07+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Czech <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/cs/>\n"
@@ -745,6 +745,17 @@ msgstr "Editovat vybraný záznam"
 
 msgid "Display selected"
 msgstr "Zobrazit vybrané"
+
+msgid "Tools API"
+msgstr ""
+
+#, fuzzy
+msgid "Script API"
+msgstr "Editor Pythonu"
+
+#, fuzzy
+msgid "PyGRASS API"
+msgstr "Nápověda GRASS"
 
 msgid "Classic (labels only)"
 msgstr ""
@@ -3243,15 +3254,9 @@ msgid "Copy as Shell command"
 msgstr "Kopírovat vše do schránky"
 
 #, fuzzy
-#| msgid "Python script"
-msgid "Copy as Python (Script API)"
-msgstr "Skript Pythonu"
-
-msgid "Copy as Python (Tools API)"
-msgstr ""
-
-msgid "Copy as Python (PyGRASS)"
-msgstr ""
+#| msgid "Copy table"
+msgid "Copy as Python"
+msgstr "Kopírovat tabulku"
 
 #, fuzzy
 #| msgid "Color settings"
@@ -3288,8 +3293,26 @@ msgstr "Zavřít dialog při ukončení"
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr ""
 
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (Script API)"
+msgstr "Skript Pythonu"
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (PyGRASS API)"
+msgstr "Skript Pythonu"
+
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr "'%s' zkopírováno do schránky"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "Python code copied to clipboard"
 msgstr "'%s' zkopírováno do schránky"
 
 #, fuzzy
@@ -3945,6 +3968,9 @@ msgstr "Povolit interaktivní vstup"
 
 msgid "Verbosity level:"
 msgstr "Úroveň upovídanosti příkazů:"
+
+msgid "Default Python API for copied commands:"
+msgstr ""
 
 msgid "Number of threads for parallel computing (supported tools only):"
 msgstr ""

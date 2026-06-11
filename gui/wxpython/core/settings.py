@@ -272,6 +272,9 @@ class Settings:
                 "interactiveInput": {
                     "enabled": True,
                 },
+                "pythonAPI": {
+                    "selection": 0,
+                },
             },
             #
             # d.rast
@@ -802,6 +805,12 @@ class Settings:
             "quiet",
         )
 
+        self.internalSettings["cmd"]["pythonAPI"]["choices"] = (
+            _("Tools API"),
+            _("Script API"),
+            _("PyGRASS API"),
+        )
+
         self.internalSettings["appearance"]["iconTheme"]["choices"] = ("grass",)
         self.internalSettings["appearance"]["menustyle"]["choices"] = (
             _("Classic (labels only)"),
@@ -884,6 +893,7 @@ class Settings:
         self.internalSettings["modeler"]["grassAPI"]["choices"] = (
             _("Script package"),
             _("PyGRASS"),
+            _("GRASS Tools"),
         )
 
     def ReadSettingsFile(self, settings=None):

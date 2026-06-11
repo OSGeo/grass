@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_tr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-09 16:40+0000\n"
+"POT-Creation-Date: 2026-05-23 16:07+0000\n"
 "PO-Revision-Date: 2010-12-01 03:06+0200\n"
 "Last-Translator: Fatih <bounfat@gmail.com>\n"
 "Language-Team: Türkçe <grass-translations@lists.osgeo.org>\n"
@@ -741,6 +741,16 @@ msgstr "Seçilen kaydı düzelt"
 
 msgid "Display selected"
 msgstr "Seçileni göster"
+
+msgid "Tools API"
+msgstr ""
+
+#, fuzzy
+msgid "Script API"
+msgstr "Düzeltmeyi başlat"
+
+msgid "PyGRASS API"
+msgstr ""
 
 msgid "Classic (labels only)"
 msgstr ""
@@ -3194,14 +3204,10 @@ msgstr ""
 msgid "Copy as Shell command"
 msgstr ""
 
-msgid "Copy as Python (Script API)"
-msgstr ""
-
-msgid "Copy as Python (Tools API)"
-msgstr ""
-
-msgid "Copy as Python (PyGRASS)"
-msgstr ""
+#, fuzzy
+#| msgid "Copy table"
+msgid "Copy as Python"
+msgstr "Tabloyu kopyala"
 
 #, fuzzy
 msgid "Copy as JSON settings"
@@ -3234,8 +3240,22 @@ msgstr "Bittiğinde diyaloğu kapat"
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr ""
 
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+msgid "Copy as Python (Script API)"
+msgstr ""
+
+msgid "Copy as Python (PyGRASS API)"
+msgstr ""
+
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr "%s i panoya kopyalandı"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "Python code copied to clipboard"
 msgstr "%s i panoya kopyalandı"
 
 #, fuzzy
@@ -3883,6 +3903,9 @@ msgstr ""
 
 msgid "Verbosity level:"
 msgstr "Ayrıntı seviyesi:"
+
+msgid "Default Python API for copied commands:"
+msgstr ""
 
 msgid "Number of threads for parallel computing (supported tools only):"
 msgstr ""
