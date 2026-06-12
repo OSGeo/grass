@@ -40,6 +40,36 @@ start_time|end_time|DATE|SOURCE
 1849|1873|01/01/1873|Coastal Carolina University
 ```
 
+You can output the data in three formats: plain (the default), csv, and json.
+
+```sh
+t.vect.db.select input=schools_stds columns="cat,CORECAPACI" format=json
+```
+
+```json
+[
+    {
+        "start_time": "2024-01-01 00:00:00",
+        "end_time": "2025-01-01 00:00:00",
+        "cat": 1,
+        "CORECAPACI": 448
+    },
+    {
+        "start_time": "2024-01-01 00:00:00",
+        "end_time": "2025-01-01 00:00:00",
+        "cat": 2,
+        "CORECAPACI": 540
+    },
+    {
+        "start_time": "2024-01-01 00:00:00",
+        "end_time": "2025-01-01 00:00:00",
+        "cat": 3,
+        "CORECAPACI": 523
+    },
+    ...
+]
+```
+
 ## SEE ALSO
 
 *[t.create](t.create.md), [t.info](t.info.md)*
