@@ -669,6 +669,14 @@ void G_progress(long, int);
 void G_set_percent_routine(int (*)(int));
 void G_unset_percent_routine(void);
 
+/* progress.c */
+GProgressContext *G_progress_context_create(size_t, size_t);
+GProgressContext *G_progress_context_create_time(size_t, long);
+GProgressContext *G_progress_context_create_counter(size_t);
+void G_progress_context_destroy(GProgressContext *);
+void G_progress_update(GProgressContext *);
+void G_progress_log(GProgressContext *, const char *);
+
 /* popen.c */
 void G_popen_clear(struct Popen *);
 FILE *G_popen_write(struct Popen *, const char *, const char **);
