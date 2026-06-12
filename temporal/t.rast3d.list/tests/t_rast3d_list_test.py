@@ -1,7 +1,6 @@
 """Test t.rast3d.list functionality"""
 
 import datetime
-import json
 
 import pytest
 
@@ -10,7 +9,7 @@ try:
 except ImportError:
     yaml = None
 
-from grass.tools import Tools
+from grass.tools import ToolError, Tools
 
 
 def test_t_rast3d_list_defaults(space_time_raster3d_dataset):
@@ -66,8 +65,6 @@ def test_json_format(space_time_raster3d_dataset):
     tools = Tools(session=space_time_raster3d_dataset.session)
     result = tools.t_rast3d_list(input=space_time_raster3d_dataset.name, format="json")
 
-    parsed = json.loads(result.text)
-
     expected = [
         {
             "name": "vol_1",
@@ -107,10 +104,10 @@ def test_json_format(space_time_raster3d_dataset):
         },
     ]
 
-    assert len(parsed["data"]) == len(expected)
+    assert len(result["data"]) == len(expected)
 
     for i, expected_item in enumerate(expected):
-        actual_item = parsed["data"][i]
+        actual_item = result["data"][i]
         for key, expected_value in expected_item.items():
             assert actual_item[key] == expected_value
 
@@ -169,11 +166,11 @@ def test_line_format(space_time_raster3d_dataset, separator):
         input=space_time_raster3d_dataset.name, format="line", separator=separator
     )
 
-    expected = separator.join(
-        [f"{name}@PERMANENT" for name in space_time_raster3d_dataset.raster_names]
-    )
+    expected = [
+        f"{name}@PERMANENT" for name in space_time_raster3d_dataset.raster_names
+    ]
 
-    assert result.text == expected
+    assert result.text_split(separator) == expected
 
 
 def test_method_comma(space_time_raster3d_dataset):
@@ -181,11 +178,11 @@ def test_method_comma(space_time_raster3d_dataset):
     tools = Tools(session=space_time_raster3d_dataset.session)
     result = tools.t_rast3d_list(input=space_time_raster3d_dataset.name, method="comma")
 
-    expected = ",".join(
-        [f"{name}@PERMANENT" for name in space_time_raster3d_dataset.raster_names]
-    )
+    expected = [
+        f"{name}@PERMANENT" for name in space_time_raster3d_dataset.raster_names
+    ]
 
-    assert result.text == expected
+    assert result.comma_items == expected
 
 
 @pytest.mark.parametrize("output_format", ["json", "yaml", "csv", "plain"])
@@ -193,16 +190,12 @@ def test_suppress_header_validation(space_time_raster3d_dataset, output_format):
     """Check that the suppress column flag (-s) is rejected for specific formats."""
     tools = Tools(session=space_time_raster3d_dataset.session)
 
-    result = tools.t_rast3d_list(
-        input=space_time_raster3d_dataset.name,
-        format=output_format,
-        flags="s",
-        errors="status",
-    )
-
-    status = result.returncode if hasattr(result, "returncode") else result
-
     if output_format in {"plain", "csv"}:
-        assert status == 0
+        tools.t_rast3d_list(
+            input=space_time_raster3d_dataset.name, format=output_format, flags="s"
+        )
     else:
-        assert status != 0
+        with pytest.raises(ToolError):
+            tools.t_rast3d_list(
+                input=space_time_raster3d_dataset.name, format=output_format, flags="s"
+            )
