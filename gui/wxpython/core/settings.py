@@ -893,6 +893,7 @@ class Settings:
         self.internalSettings["modeler"]["grassAPI"]["choices"] = (
             _("Script package"),
             _("PyGRASS"),
+            _("GRASS Tools"),
         )
 
     def ReadSettingsFile(self, settings=None):
