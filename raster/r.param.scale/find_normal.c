@@ -103,25 +103,34 @@ void find_obs(DCELL *z,    /* Local window of elevs.       */
         edge = EDGE, /* EDGE = (wsize-1)/2.          */
         offset;      /* Array offset for weights & z */
 
-    double x, y; /* Local window coordinates.    */
+    double xv[MAX_WSIZE], /* Precomputed window coordinates,  */
+        yv[MAX_WSIZE];    /* constant for every output cell.  */
 
     for (row = 0; row < 6; row++) /* Initialise column vector.        */
         obs[row] = 0.0;
 
+    for (col = 0; col < wsize; col++) /* x depends only on column.    */
+        xv[col] = resoln * (col - edge);
+    for (row = 0; row < wsize; row++) /* y depends only on row.       */
+        yv[row] = resoln * (row - edge);
+
     for (row = 0; row < wsize; row++)
         for (col = 0; col < wsize; col++) {
-            x = resoln * (col - edge);
-            y = resoln * (row - edge);
-            offset = row * wsize + col;
+            /* w*z reused across all six sums; multiply order is kept */
+            /* identical to the original so the result is unchanged.  */
+            double wz;
 
-            obs[0] += *(w + offset) * *(z + offset) * x * x;
-            obs[1] += *(w + offset) * *(z + offset) * y * y;
-            obs[2] += *(w + offset) * *(z + offset) * x * y;
-            obs[3] += *(w + offset) * *(z + offset) * x;
-            obs[4] += *(w + offset) * *(z + offset) * y;
+            offset = row * wsize + col;
+            wz = *(w + offset) * *(z + offset);
+
+            obs[0] += wz * xv[col] * xv[col];
+            obs[1] += wz * yv[row] * yv[row];
+            obs[2] += wz * xv[col] * yv[row];
+            obs[3] += wz * xv[col];
+            obs[4] += wz * yv[row];
 
             if (!constrained) /* If constrained, should remain 0.0 */
-                obs[5] += *(w + offset) * *(z + offset);
+                obs[5] += wz;
         }
 }
 
