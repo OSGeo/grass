@@ -18,13 +18,20 @@
 #include <grass/gis.h>
 #include <grass/temporal.h>
 #include <grass/glocale.h>
+#include <grass/gjson.h>
+
+enum OutputFormat { PLAIN, SHELL, JSON };
 
 int main(int argc, char *argv[])
 {
     dbConnection conn;
     struct Flag *print, *check_set_default, *def, *sh;
-    struct Option *driver, *database;
+    struct Option *driver, *database, *format_opt;
     struct GModule *module;
+
+    enum OutputFormat format;
+    G_JSON_Value *root_value = NULL;
+    G_JSON_Object *root_object = NULL;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -41,6 +48,15 @@ int main(int argc, char *argv[])
     print->key = 'p';
     print->description = _("Print current connection parameters and exit");
     print->guisection = _("Print");
+
+    format_opt = G_define_standard_option(G_OPT_F_FORMAT);
+    format_opt->options = "plain,shell,json";
+    format_opt->required = NO;
+    format_opt->answer = "plain";
+    format_opt->descriptions = _("plain;Plain text output;"
+                                 "shell;Shell script style output;"
+                                 "json;JSON (JavaScript Object Notation)");
+    format_opt->guisection = _("Print");
 
     check_set_default = G_define_flag();
     check_set_default->key = 'c';
@@ -72,30 +88,101 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
+    if (format_opt->answer != NULL) {
+        if (strcmp(format_opt->answer, "json") == 0) {
+            format = JSON;
+            root_value = G_json_value_init_object();
+            if (root_value == NULL) {
+                G_fatal_error(
+                    _("Failed to initialize JSON object. Out of memory?"));
+            }
+            root_object = G_json_object(root_value);
+        }
+        else if (strcmp(format_opt->answer, "shell") == 0) {
+            format = SHELL;
+        }
+        else {
+            format = PLAIN;
+        }
+    }
+    else {
+        format = PLAIN;
+    }
+
+    if (sh->answer) {
+        G_verbose_message(
+            _("Flag 'g' is deprecated and will be removed in a future "
+              "release. Please use format=shell instead."));
+        if (format == JSON) {
+            /* Free memory before failing to prevent memory leaks */
+            if (root_value)
+                G_json_value_free(root_value);
+            G_fatal_error(_("The -g flag cannot be used with format=json. "
+                            "Please select only one output format."));
+        }
+        format = SHELL;
+        print->answer = 1;
+    }
+
+    if (format != PLAIN && !print->answer) {
+        G_fatal_error(
+            _("The -p flag is required when using the format option."));
+    }
+
     if (print->answer) {
-        if (sh->answer) {
-            if (tgis_get_connection(&conn) == DB_OK) {
+        if (tgis_get_connection(&conn) == DB_OK) {
+            switch (format) {
+            case SHELL:
                 fprintf(stdout, "driver=%s\n",
                         conn.driverName ? conn.driverName : "");
                 fprintf(stdout, "database=%s\n",
                         conn.databaseName ? conn.databaseName : "");
+                break;
+
+            case PLAIN:
+                fprintf(stdout, "driver: %s\n",
+                        conn.driverName ? conn.driverName : "");
+                fprintf(stdout, "database: %s\n",
+                        conn.databaseName ? conn.databaseName : "");
+                break;
+
+            case JSON:
+                if (conn.driverName)
+                    G_json_object_set_string(root_object, "driver",
+                                             conn.driverName);
+                else
+                    G_json_object_set_null(root_object, "driver");
+
+                if (conn.databaseName)
+                    G_json_object_set_string(root_object, "database",
+                                             conn.databaseName);
+                else
+                    G_json_object_set_null(root_object, "database");
+                break;
             }
-            else
-                G_fatal_error(_("Temporal GIS database connection not defined. "
-                                "Run t.connect."));
         }
         else {
-            /* get and print connection */
-            if (tgis_get_connection(&conn) == DB_OK) {
-                fprintf(stdout, "driver:%s\n",
-                        conn.driverName ? conn.driverName : "");
-                fprintf(stdout, "database:%s\n",
-                        conn.databaseName ? conn.databaseName : "");
-            }
-            else
-                G_fatal_error(_("Temporal GIS database connection not defined. "
-                                "Run t.connect."));
+            if (root_value)
+                G_json_value_free(root_value);
+            G_fatal_error(_("Temporal GIS database connection not defined. "
+                            "Run t.connect."));
         }
+
+        if (format == JSON) {
+            char *json_string = G_json_serialize_to_string_pretty(root_value);
+            if (!json_string) {
+                G_json_value_free(root_value);
+                G_fatal_error(_("Failed to serialize JSON to pretty format."));
+            }
+
+            fputs(json_string, stdout);
+            fputc('\n', stdout);
+
+            G_json_free_serialized_string(json_string);
+            G_json_value_free(root_value);
+        }
+
+        fflush(stdout);
 
         exit(EXIT_SUCCESS);
     }
