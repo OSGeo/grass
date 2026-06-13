@@ -487,7 +487,9 @@ class Model:
                 if not sval:
                     continue
                 s = sval.group(2).strip()
-                var = s[2:-1] if s.startswith("%{") else s[1:]  # strip curly braces only if present
+                var = (
+                    s[2:-1] if s.startswith("%{") else s[1:]
+                )  # strip curly braces only if present
                 found = False
                 for v in variables:
                     if var.startswith(v):
@@ -563,7 +565,9 @@ class Model:
             sval = pattern.search(data)
             if sval:
                 s = sval.group(2).strip()
-                var = s[2:-1] if s.startswith("%{") else s[1:]  # strip curly braces only if present
+                var = (
+                    s[2:-1] if s.startswith("%{") else s[1:]
+                )  # strip curly braces only if present
                 cmd = item.GetLog(string=False)[0]
                 errList.append(cmd + ": " + _("undefined variable '%s'") % var)
 
@@ -694,7 +698,9 @@ class Model:
                 variables = self.GetVariables()
                 for variable in variables:
                     # curly braces are optional
-                    pattern = re.compile(r"%(?:\{" + variable + r"\}|" + variable + r")")
+                    pattern = re.compile(
+                        r"%(?:\{" + variable + r"\}|" + variable + r")"
+                    )
                     if not pattern.search(cond):
                         continue
                     value = ""
@@ -747,7 +753,6 @@ class Model:
 
         if delInterData:
             self.DeleteIntermediateData(log)
-        
         # store run params
         self._runParams = params
 

@@ -417,14 +417,15 @@ class ModelerPanel(wx.Panel, MainPageBase):
                 value = p.get("value", "")
                 if name and value:
                     resolved[name] = value
-        
         # display data if required
         for data in self.model.GetData():
             if not data.HasDisplay():
                 continue
 
             # remove existing map layers first
-            layers = self._giface.GetLayerList().GetLayersByName(data.GetResolvedValue(resolved))
+            layers = self._giface.GetLayerList().GetLayersByName(
+                data.GetResolvedValue(resolved)
+            )
             if layers:
                 for layer in layers:
                     self._giface.GetLayerList().DeleteLayer(layer)
@@ -436,7 +437,6 @@ class ModelerPanel(wx.Panel, MainPageBase):
                 checked=True,
                 cmd=data.GetDisplayCmd(resolved),
             )
-        
         # discard values
         if run_params:
             for item in run_params.values():
@@ -1835,14 +1835,15 @@ class PythonPanel(wx.Panel):
                 value = p.get("value", "")
                 if name and value:
                     resolved[name] = value
-        
         # display data if required
         for data in model.GetData():
             if not data.HasDisplay():
                 continue
 
             # remove existing map layers first
-            layers = self.parent._giface.GetLayerList().GetLayersByName(data.GetResolvedValue(resolved))
+            layers = self.parent._giface.GetLayerList().GetLayersByName(
+                data.GetResolvedValue(resolved)
+            )
             if layers:
                 for layer in layers:
                     self.parent._giface.GetLayerList().DeleteLayer(layer)

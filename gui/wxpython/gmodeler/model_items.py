@@ -681,7 +681,6 @@ class ModelData(ModelObject):
 
     def GetResolvedValue(self, resolved=None):
         """Get value with model substituted variables
-        
         :param resolved: dict mapping variable name to resolved value,
             or None to return the raw value
         """
@@ -693,13 +692,11 @@ class ModelData(ModelObject):
         for variable, var_value in resolved.items():
             pattern = re.compile(r"%(?:\{" + variable + r"\}|" + variable + r")")
             value = pattern.sub(var_value, value)
-        
         # return substituted value
         return value
 
     def GetDisplayCmd(self, resolved=None):
         """Get display command as list
-        
         :param resolved: dict mapping variable name to resolved value,
             or None to return the raw value
         """
