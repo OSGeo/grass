@@ -2,7 +2,10 @@ MODULE_TOPDIR = ..
 
 include $(MODULE_TOPDIR)/include/Make/Other.make
 
-MANPAGES := $(patsubst $(HTMLDIR)/%.html,$(MANDIR)/%.$(MANSECT),$(wildcard $(HTMLDIR)/*.html))
+# keywords.md is a static stub for the MkDocs tags plugin and has no
+# content to convert to a man page.
+MANPAGES := $(filter-out $(MANDIR)/keywords.$(MANSECT),\
+	$(patsubst $(MDDIR)/source/%.md,$(MANDIR)/%.$(MANSECT),$(wildcard $(MDDIR)/source/*.md)))
 
 DSTFILES := \
 	$(HTMLDIR)/grassdocs.css \
@@ -66,8 +69,8 @@ default: $(DSTFILES)
 	@echo "Generating manual pages index (help system)..."
 	$(MAKE) $(INDICES)
 	$(call build,check)
-	$(MAKE) manpages
 	$(MAKE) $(INDICES_MD)
+	$(MAKE) manpages
 # $(MAKE) build-mkdocs
 
 # This must be a separate target so that evaluation of $(MANPAGES)

@@ -1,0 +1,294 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+"""Tests for the g.md2man Markdown to man page converter."""
+
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+import pytest
+
+TOOL_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(TOOL_DIR))
+
+import gmd  # noqa: E402
+
+TOOL_PAGE = """\
+---
+name: r.example
+description: "Does example things. Computes examples from a raster map."
+keywords: [ raster, example ]
+---
+
+# r.example
+
+Does example things.
+
+Computes examples from a raster map.
+
+=== "Command line"
+
+    **r.example**
+    [**-a**]
+    **input**=*name*
+
+    Example:
+
+    ```sh
+    r.example input=name
+    ```
+
+=== "Python (grass.tools)"
+
+    *grass.tools.Tools.r_example*(**input**)
+
+    ```python
+    tools.r_example(input="name")
+    ```
+
+## Parameters
+
+=== "Command line"
+
+    **input**=*name* **[required]**
+    &nbsp;&nbsp;&nbsp;&nbsp;Name of input raster map
+    &nbsp;&nbsp;&nbsp;&nbsp;Default: *none*
+    **-a**
+    &nbsp;&nbsp;&nbsp;&nbsp;Align region
+
+=== "Python (grass.tools)"
+
+    **input** : str, *required*
+    &nbsp;&nbsp;&nbsp;&nbsp;Name of input raster map
+
+## DESCRIPTION
+
+*r.example* computes **examples** with values &gt; 0 from
+[r.mapcalc](r.mapcalc.md) output.
+
+## SEE ALSO
+
+*[r.mapcalc](r.mapcalc.md)*
+"""
+
+
+def convert(md_text, tmp_path, filename="r.example.md"):
+    """Run g.md2man.py on the given text and return the groff output."""
+    infile = tmp_path / filename
+    outfile = tmp_path / (filename + ".1")
+    infile.write_text(md_text, encoding="UTF-8")
+    subprocess.run(
+        [
+            sys.executable,
+            str(TOOL_DIR / "g.md2man.py"),
+            str(infile),
+            str(outfile),
+        ],
+        env={**os.environ, "VERSION_NUMBER": "9.9"},
+        check=True,
+    )
+    return outfile.read_text(encoding="UTF-8")
+
+
+@pytest.fixture
+def tool_page(tmp_path):
+    return convert(TOOL_PAGE, tmp_path)
+
+
+def test_title_and_name_section(tool_page):
+    assert tool_page.startswith('.TH r.example 1 "" "GRASS 9.9" "GRASS User\'s Manual"')
+    assert ".SH NAME" in tool_page
+    assert "\\fBr.example\\fR \\- Does example things." in tool_page
+
+
+def test_keywords_section(tool_page):
+    assert ".SH KEYWORDS\nraster, example" in tool_page
+
+
+def test_synopsis_from_command_line_tab(tool_page):
+    name = tool_page.index(".SH NAME")
+    synopsis = tool_page.index(".SH SYNOPSIS")
+    description = tool_page.index(".SH DESCRIPTION")
+    assert name < synopsis < description
+    assert "\\fBinput\\fR=\\fIname\\fR" in tool_page
+
+
+def test_python_tabs_dropped(tool_page):
+    assert "grass.tools" not in tool_page
+    assert "r_example" not in tool_page
+
+
+def test_description_not_duplicated(tool_page):
+    # The lead paragraphs repeating the front matter description are
+    # dropped; the description appears only in NAME.
+    assert tool_page.count("Does example things.") == 1
+
+
+def test_parameter_definition_list(tool_page):
+    assert '.IP "\\fBinput\\fR=\\fIname\\fR \\fB[required]\\fR" 4m' in tool_page
+    assert "Name of input raster map" in tool_page
+    assert "Default: \\fInone\\fR" in tool_page
+
+
+def test_code_block(tool_page):
+    assert ".nf" in tool_page
+    assert "r.example input=name" in tool_page
+
+
+def test_entities_and_link_text(tool_page):
+    assert "values > 0" in tool_page
+    # Link target is dropped, link text is kept.
+    assert "r.mapcalc.md" not in tool_page
+    assert "r.mapcalc" in tool_page
+
+
+def test_page_without_front_matter(tmp_path):
+    text = "# Topic: hydrology\n\nSome tools.\n\n## Tools\n\nMore text.\n"
+    result = convert(text, tmp_path, filename="topic_hydrology.md")
+    assert result.startswith(".TH topic_hydrology 1")
+    assert ".SH Topic: hydrology" in result
+    assert ".SH Tools" in result
+
+
+def test_headings(tmp_path):
+    result = convert("## Section\n\n### Subsection\n\n#### Deeper\n", tmp_path)
+    assert ".SH Section" in result
+    assert ".SS Subsection" in result
+    assert ".SS Deeper" in result
+
+
+def test_unordered_list_nested(tmp_path):
+    result = convert("- first\n- second\n    - nested\n", tmp_path)
+    assert result.count(".IP \\(bu 4n") == 3  # codespell:ignore bu
+    assert ".RS 4n" in result
+
+
+def test_ordered_list(tmp_path):
+    result = convert("1. first\n2. second\n", tmp_path)
+    assert ".IP \\fB1\\fR" in result
+    assert ".IP \\fB2\\fR" in result
+
+
+def test_table(tmp_path):
+    md = "| Tool | Description |\n|------|-------------|\n| r.info | Info tool |\n"
+    result = convert(md, tmp_path)
+    assert ".TS" in result
+    assert ".TE" in result  # codespell:ignore TE
+    assert "r.info" in result
+
+
+def test_hard_break(tmp_path):
+    result = convert("first line  \nsecond line\n", tmp_path)
+    assert "first line\n.br\nsecond line" in result
+
+
+def test_admonition(tmp_path):
+    md = '!!! grass-tip "Remember"\n\n    Useful advice.\n'
+    result = convert(md, tmp_path)
+    assert "\\fBRemember\\fR" in result
+    assert "Useful advice." in result
+
+
+def test_example_tabs_kept_with_title(tmp_path):
+    md = (
+        "## EXAMPLES\n\n"
+        '=== "Bash"\n\n    ```sh\n    g.region -p\n    ```\n\n'
+        '=== "Python (grass.script)"\n\n    ```python\n    gs.run_command()\n    ```\n'
+    )
+    result = convert(md, tmp_path)
+    assert ".SS Bash" in result
+    assert "g.region \\-p" in result
+    assert "gs.run_command" not in result
+
+
+def test_raw_html_block(tmp_path):
+    md = "<ul>\n<li><b>bold</b> text</li>\n</ul>\n"
+    result = convert(md, tmp_path)
+    assert "\\fBbold\\fR text" in result
+
+
+def test_style_block_dropped(tmp_path):
+    md = "<style>\n.cls {\n    color: red;\n}\n</style>\n\nVisible text.\n"
+    result = convert(md, tmp_path)
+    assert "color" not in result
+    assert "Visible text." in result
+
+
+def test_front_matter_parsing():
+    meta, nodes = gmd.parse(TOOL_PAGE)
+    assert meta["name"] == "r.example"
+    assert meta["keywords"] == ["raster", "example"]
+    assert meta["description"].startswith("Does example things.")
+
+
+def test_front_matter_nested_keys_ignored():
+    meta, nodes = gmd.parse("---\nhide:\n  - toc\n---\n\n# Title\n")
+    assert nodes[0][0] == "h1"
+
+
+def test_inline_emphasis():
+    nodes = gmd.parse_inline("**bold** and *italic* and `code`")
+    assert ("b", [], ["bold"]) in nodes
+    assert ("i", [], ["italic"]) in nodes
+    assert ("code", [], ["code"]) in nodes
+
+
+def test_inline_escapes_and_autolink():
+    nodes = gmd.parse_inline(r"a \* literal <https://example.com>")
+    assert "a * literal " in nodes
+    assert "https://example.com" in nodes
+
+
+def test_escaped_asterisk_does_not_pair_with_emphasis():
+    nodes = gmd.parse_inline(r"The *db.\** set and *v.db.\** set")
+    assert ("i", [], ["db.*"]) in nodes
+    assert ("i", [], ["v.db.*"]) in nodes
+
+
+def test_emphasis_closes_at_earliest_marker():
+    nodes = gmd.parse_inline(r"\[-**s**\] \[-**t**\]")
+    assert nodes == ["[-", ("b", [], ["s"]), "] [-", ("b", [], ["t"]), "]"]
+
+
+def test_linked_image_keeps_alt_text():
+    nodes = gmd.parse_inline("[![Raster](gi_raster.jpg)](raster_graphical.md)")
+    assert nodes == ["Raster"]
+
+
+def test_code_span_keeps_backslash_escapes():
+    nodes = gmd.parse_inline(r"`a\*b`")
+    assert nodes == [("code", [], ["a\\*b"])]
+
+
+def test_tool_placeholder_not_html():
+    # Angle-bracket placeholders like <i.group> are not HTML tags.
+    (node,) = gmd.parse_blocks(["Use <i.group> here."])
+    assert node[0] == "p"
+    assert "Use <i.group> here." in node[2]
+
+
+def test_blockquote_content_kept(tmp_path):
+    md = "Intro text.\n\n> xps \\>= 0 means the target is at sea level.\n> More quoted text.\n"
+    result = convert(md, tmp_path)
+    assert ">= 0 means the target" in result
+    assert "More quoted text." in result
+    assert "\n> " not in result
+
+
+def test_stray_closing_tag_does_not_crash(tmp_path):
+    md = "Some text.\n\n  </li>\n\nMore text.\n"
+    result = convert(md, tmp_path)
+    assert "Some text." in result
+    assert "More text." in result
+    assert "li" not in result
+
+
+def test_html_only_page(tmp_path):
+    # g.extension copies <tool>.html to <tool>.md for addons that have
+    # no Markdown documentation; the converter must handle HTML headings.
+    md = "<h2>DESCRIPTION</h2>\n\n<em>r.fake</em> uses <b>input</b>.\n\n<pre>\nr.fake input=elev\n</pre>\n"
+    result = convert(md, tmp_path)
+    assert ".SH DESCRIPTION" in result
+    assert "<h2>" not in result
+    assert "\\fBinput\\fR" in result
+    assert "r.fake input=elev" in result
