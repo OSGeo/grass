@@ -85,7 +85,7 @@ def main():
     input = options["input"]
     zones = options["zones"]
     output = options["output"]
-    nprocs = int(options["nprocs"])
+    nprocs = gs.resolve_nprocs(options["nprocs"])
     where = options["where"]
     extended = flags["e"]
     no_header = flags["s"]
