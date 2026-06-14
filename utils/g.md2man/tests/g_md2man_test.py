@@ -234,9 +234,10 @@ def test_inline_emphasis():
 
 
 def test_inline_escapes_and_autolink():
+    # The escaped asterisk stays literal and the autolink becomes a plain
+    # text node holding the URL.
     nodes = gmd.parse_inline(r"a \* literal <https://example.com>")
-    assert "a * literal " in nodes
-    assert "https://example.com" in nodes
+    assert nodes == ["a * literal ", "https://example.com"]
 
 
 def test_escaped_asterisk_does_not_pair_with_emphasis():
