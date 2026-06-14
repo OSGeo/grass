@@ -292,3 +292,31 @@ def test_html_only_page(tmp_path):
     assert "<h2>" not in result
     assert "\\fBinput\\fR" in result
     assert "r.fake input=elev" in result
+
+
+def test_inline_comment_removed(tmp_path):
+    result = convert("Before <!-- hide this --> after.\n", tmp_path)
+    assert "Before  after." in result
+    assert "hide this" not in result
+
+
+def test_multiline_comment_removed(tmp_path):
+    md = "Visible start.\n\n<!-- comment\nspanning several\nlines -->\n\nVisible end.\n"
+    result = convert(md, tmp_path)
+    assert "Visible start." in result
+    assert "Visible end." in result
+    assert "comment" not in result
+    assert "spanning" not in result
+
+
+def test_comment_kept_in_fenced_code(tmp_path):
+    # A comment inside a code block is documentation content, not markup,
+    # so it must survive (groff escapes the dashes in the output).
+    md = "```html\n<!-- required -->\n```\n"
+    result = convert(md, tmp_path)
+    assert "required" in result
+
+
+def test_comment_parsing_unit():
+    lines = ["a <!-- x --> b <!-- y", "z --> c", "<!-- lone -->d"]
+    assert gmd.strip_html_comments(lines) == ["a  b ", " c", "d"]

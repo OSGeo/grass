@@ -184,8 +184,29 @@ def parse_front_matter(lines):
     return meta, lines[i + 1 :]
 
 
+def strip_line_comments(line):
+    """Remove complete HTML comments from a single line.
+
+    Returns the cleaned line and whether a comment is left open (an
+    unterminated ``<!--`` whose ``-->`` is on a later line).
+    """
+    while True:
+        start = line.find("<!--")
+        if start < 0:
+            return line, False
+        end = line.find("-->", start + 4)
+        if end < 0:
+            return line[:start], True
+        line = line[:start] + line[end + 3 :]
+
+
 def strip_html_comments(lines):
-    """Remove HTML comments, except inside fenced code blocks."""
+    """Remove HTML comments, except inside fenced code blocks.
+
+    Comments are handled line by line (rather than with a single regular
+    expression) so that fenced code blocks are preserved and comments
+    spanning multiple lines are removed correctly.
+    """
     out = []
     in_fence = False
     in_comment = False
@@ -201,11 +222,7 @@ def strip_html_comments(lines):
                 continue
             line = line[end + 3 :]
             in_comment = False
-        line = re.sub(r"<!--.*?-->", "", line)
-        start = line.find("<!--")
-        if start >= 0:
-            line = line[:start]
-            in_comment = True
+        line, in_comment = strip_line_comments(line)
         out.append(line)
     return out
 
