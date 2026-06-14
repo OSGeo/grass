@@ -5,10 +5,8 @@
 
    (C) 2021 by Maris Nartiss and the GRASS Development Team
 
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
-
-   \author Maris Nartiss
+    SPDX-License-Identifier: GPL-2.0-or-later
+\author Maris Nartiss
  */
 
 #include <unistd.h>

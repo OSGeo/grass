@@ -5,10 +5,8 @@
 
    (C) 2012-2025 by the GRASS Development Team
 
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
-
-   \author Martin Landa
+    SPDX-License-Identifier: GPL-2.0-or-later
+\author Martin Landa
    \author Vaclav Petras
  */
 #include <stdio.h>

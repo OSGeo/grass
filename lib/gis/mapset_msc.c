@@ -5,9 +5,8 @@
 
    (C) 1999-2014 The GRASS development team
 
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
- */
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include <grass/config.h>
 #include <string.h>
