@@ -190,7 +190,7 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-lapack-includes=/mingw64/include \
 		--with-openmp \
 		--with-cairo \
-		--with-cairo-includes=$OSGEO4W_ROOT_MSYS/include \
+		--with-cairo-includes=${OSGEO4W_ROOT_MSYS}/include/cairo \
 		--with-cairo-ldflags="-L$PWD/mswindows/osgeo4w/lib -lcairo -lfontconfig" \
 		--with-bzlib \
 		--with-liblas=$PWD/mswindows/osgeo4w/liblas-config \

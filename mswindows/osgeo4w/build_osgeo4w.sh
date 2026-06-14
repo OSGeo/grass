@@ -63,9 +63,9 @@ cp -uv $OSGEO4W_ROOT_MSYS/lib/libpq.lib mswindows/osgeo4w/lib/libpq.lib
     --with-zstd \
     --with-odbc \
     --with-cairo \
-    --with-cairo-includes=${OSGEO4W_ROOT_MSYS}/include \
-    --with-cairo-libs=$OSGEO4W_ROOT_MSYS/lib \
+    --with-cairo-includes=${OSGEO4W_ROOT_MSYS}/include/cairo \
     --with-cairo-ldflags="-L${SRC}/mswindows/osgeo4w/lib -lcairo" \
+    --with-cairo-libs=${OSGEO4W_ROOT_MSYS}/lib \
     --with-opengl=windows \
     --with-bzlib \
     --with-liblas=${SRC}/mswindows/osgeo4w/liblas-config \
