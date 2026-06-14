@@ -10,10 +10,8 @@
    will be zero. The next memory location asked for could have been
    previously used and not zeroed. (e.g. compress()).
 
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
-
-   \author CERL (probably Dave Gerdes)
+    SPDX-License-Identifier: GPL-2.0-or-later
+\author CERL (probably Dave Gerdes)
    \author Radim Blazek
  */
 
