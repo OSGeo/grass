@@ -36,7 +36,7 @@ jobs:
       # renovate: datasource=pypi depName=bandit
       BANDIT_VERSION: "1.9.4"
       # renovate: datasource=pypi depName=ruff
-      RUFF_VERSION: "0.15.16"
+      RUFF_VERSION: "0.15.17"
 
     runs-on: ${{ matrix.os }}
     permissions:
@@ -133,7 +133,7 @@ jobs:
           path: bandit.sarif
 
       - name: Upload SARIF File into Security Tab
-        uses: github/codeql-action/upload-sarif@7211b7c8077ea37d8641b6271f6a365a22a5fbfa # v4.36.0
+        uses: github/codeql-action/upload-sarif@8aad20d150bbac5944a9f9d289da16a4b0d87c1e # v4.36.2
         with:
           sarif_file: bandit.sarif
 

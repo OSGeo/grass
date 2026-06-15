@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-23 16:07+0000\n"
+"POT-Creation-Date: 2026-06-06 18:30+0000\n"
 "PO-Revision-Date: 2026-03-22 08:14+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grassmods/hi/>\n"
@@ -2231,6 +2231,7 @@ msgstr "महत्वपूर्ण अंकों की संख्या
 msgid "Get text color from cell color value"
 msgstr "सेल रंग मान से टेक्स्ट का रंग प्राप्त करें"
 
+#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -9567,6 +9568,11 @@ msgstr "का प्रारूपण"
 
 msgid "Columns to be printed to stdout"
 msgstr "स्टडआउट करने के लिए कॉलम मुद्रित किए जाने हैं"
+
+#, fuzzy
+#| msgid "plain;Plain text output;line;Comma separated list of map names;json;JSON (JavaScript Object Notation);yaml;YAML (YAML Ain't Markup Language);csv;CSV (Comma Separated Values);"
+msgid "plain;Plain text output;line;Comma separated list of dataset names;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
+msgstr "सादा; सादा पाठ आउटपुट; लाइन; मानचित्र नामों की अल्पविराम से अलग की गई सूची; json; JSON (जावास्क्रिप्ट ऑब्जेक्ट नोटेशन); yaml; YAML (YAML मार्कअप भाषा नहीं है); csv; CSV (अल्पविराम से अलग किए गए मान);"
 
 msgid "Field separator character between the output columns"
 msgstr "आउटपुट कॉलम के बीच फ़ील्ड विभाजक चरित्र"
@@ -20222,6 +20228,7 @@ msgstr "बहुत सारी श्रेणियाँ (मिलीं: 
 msgid "Input raster must be of type CELL."
 msgstr "इनपुट रैस्टर सेल प्रकार का होना चाहिए।"
 
+#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format

@@ -371,10 +371,8 @@ build_program_in_subdir(
   grass_gis
   grass_gproj
   grass_imagery
-  grass_gis
   grass_raster
   grass_dbmibase
-  grass_imagery
   ${LIBM}
   PROJ::proj
   PRIMARY_DEPENDS
