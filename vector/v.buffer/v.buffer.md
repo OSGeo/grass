@@ -25,7 +25,7 @@ example below).
 Buffers for lines and areas are generated using the algorithms from the
 GEOS library.
 
-For advanced users:* current *v.buffer* builds use GEOS for buffering.
+*For advanced users:* current *v.buffer* builds use GEOS for buffering.
 If GRASS is built without GEOS support, *v.buffer* is not compiled and
 thus unavailable. When *v.buffer* is available and the
 [environmental variable](variables.md) `GRASS_VECTOR_BUFFER` is
