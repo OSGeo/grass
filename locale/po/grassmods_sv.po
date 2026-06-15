@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-25 16:03+0000\n"
+"POT-Creation-Date: 2026-06-06 18:30+0000\n"
 "PO-Revision-Date: 2026-01-08 02:38+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
@@ -9591,6 +9591,11 @@ msgstr "Formaterar"
 msgid "Columns to be printed to stdout"
 msgstr "Kolumner som ska skrivas ut till stdout"
 
+#, fuzzy
+#| msgid "plain;Human readable text output;shell;shell script style text output;json;JSON (JavaScript Object Notation);"
+msgid "plain;Plain text output;line;Comma separated list of dataset names;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
+msgstr "vanlig;mänsklig läsbar textutmatning;skal;textutmatning i skalskriptstil;json;JSON (JavaScript Object Notation);"
+
 msgid "Field separator character between the output columns"
 msgstr "Fältavgränsningstecken mellan utdatakolumnerna"
 
@@ -13487,6 +13492,9 @@ msgstr "Regionens upplösning bör inte vara mindre än kartans %s upplösning. 
 #, c-format
 msgid "Internal error in %s()"
 msgstr "Internt fel i %s()"
+
+msgid "JSON nesting exceeds maximum depth"
+msgstr ""
 
 msgid "Generates a raster map containing distances to nearest raster features and/or the value of the nearest non-null cell."
 msgstr "Genererar en rasterkarta som innehåller avstånd till närmaste rasterobjekt och/eller värdet för närmaste icke-nullcell."
@@ -31378,6 +31386,11 @@ msgstr "Lägga till filer i befintliga filer (överskrivning av befintliga filer
 msgid "Missing attribute table for vector map <%s>"
 msgstr "Attributtabell saknas för vektorkarta <%s>"
 
+#, fuzzy
+#| msgid "Too many units to place"
+msgid "Too many columns to copy the table"
+msgstr "För många enheter att placera"
+
 #, c-format
 msgid "Missing table for <%s>"
 msgstr "Tabell saknas för <%s>"
@@ -31431,6 +31444,11 @@ msgstr "Huvudinformationen kan också behöva redigeras"
 #, c-format
 msgid "%d vector maps patched"
 msgstr "%d Vektorkartor patchade"
+
+#, fuzzy
+#| msgid "Too many column names"
+msgid "Too many columns to copy records"
+msgstr "För många kolumnnamn"
 
 #, c-format
 msgid "Cannot open select cursor: '%s'"

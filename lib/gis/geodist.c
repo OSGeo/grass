@@ -22,6 +22,7 @@
 
 #include <math.h>
 #include <grass/gis.h>
+#include <geodesic.h>
 #include "pi.h"
 
 static struct state {
@@ -30,6 +31,7 @@ static struct state {
     double ff64;
     double al;
     double t1, t2, t3, t4, t1r, t2r;
+    struct geod_geodesic g;
 } state;
 
 static struct state *st = &state;
@@ -49,9 +51,11 @@ static struct state *st = &state;
 void G_begin_geodesic_distance(double a, double e2)
 {
     st->al = a;
-    st->boa = sqrt(1 - e2);
-    st->f = 1 - st->boa;
-    st->ff64 = st->f * st->f / 64;
+    st->boa = sqrt(1.0 - e2);
+    st->f = 1.0 - st->boa;
+    st->ff64 = st->f * st->f / 64.0;
+    /* GeographicLib */
+    geod_init(&st->g, st->al, st->f);
 }
 
 /*!
@@ -192,7 +196,17 @@ double G_geodesic_distance_lon_to_lon(double lon1, double lon2)
  */
 double G_geodesic_distance(double lon1, double lat1, double lon2, double lat2)
 {
+    /* GeographicLib */
+    double ps12 = 0, pazi1 = 0, pazi2 = 0;
+
+    geod_inverse(&st->g, lat1, lon1, lat2, lon2, &ps12, &pazi1, &pazi2);
+
+    return ps12;
+
+#if 0
+    /* GRASS native */
     G_set_geodesic_distance_lat1(lat1);
     G_set_geodesic_distance_lat2(lat2);
     return G_geodesic_distance_lon_to_lon(lon1, lon2);
+#endif
 }

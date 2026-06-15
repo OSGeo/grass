@@ -37,10 +37,18 @@
 # % key: order
 # % type: string
 # % description: Order the space time dataset by category
+# % guisection: Formatting
 # % required: no
 # % multiple: yes
 # % options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,tbres,ewres,cols,rows,depths,number_of_cells,min,max
-# % answer: start_time
+# %end
+
+# %option
+# % key: granule
+# % type: string
+# % description: The granule to be used for listing. The granule must be specified as string eg.: absolute time "1 months" or relative time "1"
+# % required: no
+# % multiple: no
 # %end
 
 # %option
@@ -50,8 +58,7 @@
 # % guisection: Selection
 # % required: no
 # % multiple: yes
-# % options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,tbres,ewres,cols,rows,depths,number_of_cells,min,max
-# % answer: name,mapset,start_time,end_time
+# % options: id,name,creator,mapset,temporal_type,creation_time,start_time,end_time,north,south,west,east,nsres,tbres,ewres,cols,rows,depths,number_of_cells,min,max,interval_length,distance_from_begin
 # %end
 
 # %option G_OPT_T_WHERE
@@ -83,12 +90,56 @@
 # % guisection: Formatting
 # %end
 
-import grass.script as gs
 
 ############################################################################
 
+import grass.script as gs
+
+
+def message_option_value_excludes_option_value(
+    option_name, option_value, excluded_option_name, excluded_option_value, reason
+):
+    return _(
+        "Combining {option_name}={option_value} and "
+        "{excluded_option_name}={excluded_option_value} is not allowed. {reason}"
+    ).format(
+        option_name=option_name,
+        option_value=option_value,
+        excluded_option_name=excluded_option_name,
+        excluded_option_value=excluded_option_value,
+        reason=reason,
+    )
+
+
+def message_option_value_excludes_option(
+    option_name, option_value, excluded_option_name, reason
+):
+    return _(
+        "The option {excluded_option_name} is not allowed with "
+        "{option_name}={option_value}. {reason}"
+    ).format(
+        excluded_option_name=excluded_option_name,
+        option_name=option_name,
+        option_value=option_value,
+        reason=reason,
+    )
+
+
+def message_option_value_excludes_flag(option_name, option_value, flag_name, reason):
+    return _(
+        "The flag -{flag_name} is not allowed with {option_name}={option_value}."
+        " {reason}"
+    ).format(
+        flag_name=flag_name,
+        option_name=option_name,
+        option_value=option_value,
+        reason=reason,
+    )
+
 
 def main():
+    options, flags = gs.parser()
+
     # lazy imports
     import grass.temporal as tgis
 
@@ -100,7 +151,78 @@ def main():
     separator = gs.separator(options["separator"])
     method = options["method"]
     header = flags["s"]
+    granule = options["granule"]
     output = options["output"]
+
+    if method in {"delta", "deltagaps", "gran"}:
+        if order:
+            gs.fatal(
+                message_option_value_excludes_option(
+                    option_name="method",
+                    option_value=method,
+                    excluded_option_name="order",
+                    reason=_("Values are always ordered by start_time"),
+                )
+            )
+        if columns:
+            columns_list = columns.split(",")
+            for column in [
+                "creator",
+                "temporal_type",
+                "creation_time",
+                "north",
+                "south",
+                "west",
+                "east",
+                "nsres",
+                "tbres",
+                "ewres",
+                "cols",
+                "rows",
+                "depths",
+                "number_of_cells",
+                "min",
+                "max",
+            ]:
+                if column in columns_list:
+                    gs.fatal(
+                        message_option_value_excludes_option_value(
+                            option_name="method",
+                            option_value=method,
+                            excluded_option_name="columns",
+                            excluded_option_value=columns,
+                            reason=_(
+                                "Column '{name}' is not available with the method "
+                                "'{method}'"
+                            ).format(name=column, method=method),
+                        )
+                    )
+    elif columns:
+        columns_list = columns.split(",")
+        for column in ["interval_length", "distance_from_begin"]:
+            if column in columns_list:
+                gs.fatal(
+                    message_option_value_excludes_option_value(
+                        option_name="method",
+                        option_value=method,
+                        excluded_option_name="columns",
+                        excluded_option_value=columns,
+                        reason=_(
+                            "Column '{name}' is not available with the method "
+                            "'{method}'"
+                        ).format(name=column, method=method),
+                    )
+                )
+
+    if method == "gran" and where:
+        gs.fatal(
+            message_option_value_excludes_option(
+                option_name="method",
+                option_value=method,
+                excluded_option_name="where",
+                reason=_("All maps are always listed"),
+            )
+        )
 
     # Make sure the temporal database exists
     tgis.init()
@@ -114,10 +236,10 @@ def main():
         separator,
         method,
         header,
+        gran=granule,
         outpath=output,
     )
 
 
 if __name__ == "__main__":
-    options, flags = gs.parser()
     main()

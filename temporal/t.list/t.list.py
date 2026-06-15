@@ -65,14 +65,21 @@
 # % required: no
 # % multiple: yes
 # % options: id,name,semantic_label,creator,mapset,number_of_maps,creation_time,start_time,end_time,north,south,west,east,granularity,all
-# % answer: id
+# % answer:
 # %end
 
 # %option G_OPT_T_WHERE
 # % guisection: Selection
 # %end
 
+# %option G_OPT_F_FORMAT
+# % options: plain,line,json,csv
+# % descriptions: plain;Plain text output;line;Comma separated list of dataset names;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)
+# % guisection: Formatting
+# %end
+
 # %option G_OPT_F_SEP
+# % answer:
 # % label: Field separator character between the output columns
 # % guisection: Formatting
 # %end
@@ -87,6 +94,7 @@
 # % guisection: Formatting
 # %end
 
+import json
 import sys
 from contextlib import nullcontext
 
@@ -96,8 +104,6 @@ import grass.script as gs
 
 
 def main():
-    # lazy imports
-    import grass.temporal as tgis
 
     # Get the options
     type = options["type"]
@@ -108,6 +114,43 @@ def main():
     separator = gs.separator(options["separator"])
     outpath = options["output"]
     colhead = flags["c"]
+    output_format = options.get("format", "plain")
+
+    if not columns:
+        columns = "all" if output_format == "json" else "id"
+
+    if output_format == "csv":
+        if not separator:
+            separator = ","
+        elif len(separator) > 1:
+            gs.fatal(
+                _("A standard CSV separator (delimiter) is only one character long")
+            )
+
+    elif output_format == "json":
+        if colhead:
+            gs.fatal(_("Column names are always included in JSON output"))
+        if separator:
+            gs.fatal(_("Separator option is not allowed with JSON format"))
+
+    elif output_format == "line":
+        if colhead:
+            gs.fatal(_("Column names are not allowed with line format"))
+        if not separator:
+            separator = ","
+        columns_list = columns.split(",") if columns else []
+        if len(columns_list) > 1:
+            gs.fatal(
+                _(
+                    "Only one column is allowed for line format (not {num_columns})"
+                ).format(num_columns=len(columns_list))
+            )
+
+    elif not separator:  # output_format == "plain"
+        separator = "|"
+
+    # Lazy import
+    import grass.temporal as tgis
 
     # Make sure the temporal database exists
     tgis.init()
@@ -117,7 +160,10 @@ def main():
     dbif.connect()
     first = True
 
-    if gs.verbosity() > 0 and not outpath:
+    json_output = []
+    line_output = []
+
+    if gs.verbosity() > 0 and not outpath and output_format == "plain":
         sys.stderr.write("----------------------------------------------\n")
 
     # Replace separate "if outpath" and "else" blocks with a unified context manager:
@@ -140,7 +186,11 @@ def main():
                     rows = stds_list[key]
 
                     if rows:
-                        if gs.verbosity() > 0 and (not outpath or outpath == "-"):
+                        if (
+                            gs.verbosity() > 0
+                            and (not outpath or outpath == "-")
+                            and output_format == "plain"
+                        ):
                             if issubclass(sp.__class__, tgis.AbstractMapDataset):
                                 sys.stderr.write(
                                     _(
@@ -162,24 +212,50 @@ def main():
                                     )
                                 )
 
-                        if colhead and first:
-                            output = ""
-                            count = 0
-                            for col_key in rows[0].keys():
-                                output += (separator if count > 0 else "") + str(
-                                    col_key
-                                )
-                                count += 1
-                            out_file.write("{st}\n".format(st=output))
-                            first = False
+                        if output_format == "json":
+                            for row in rows:
+                                json_output.append(dict(row))
 
-                        for row in rows:
-                            output = ""
-                            count = 0
-                            for col in row:
-                                output += (separator if count > 0 else "") + str(col)
-                                count += 1
-                            out_file.write("{st}\n".format(st=output))
+                        elif output_format == "line":
+                            line_output.extend([str(row[0]) for row in rows])
+
+                        else:
+                            if (colhead or output_format == "csv") and first:
+                                output = ""
+                                count = 0
+                                for col_key in rows[0].keys():
+                                    output += (separator if count > 0 else "") + str(
+                                        col_key
+                                    )
+                                    count += 1
+                                out_file.write("{st}\n".format(st=output))
+                                first = False
+
+                            for row in rows:
+                                output = ""
+                                count = 0
+                                for col in row:
+                                    # If the database value is None, make it an empty string for csv
+                                    if col is None:
+                                        cell_value = (
+                                            "" if output_format == "csv" else "None"
+                                        )
+                                    else:
+                                        cell_value = str(col)
+
+                                    output += (
+                                        separator if count > 0 else ""
+                                    ) + cell_value
+                                    count += 1
+                                out_file.write("{st}\n".format(st=output))
+
+        # Dump the collected JSON and line data
+        if output_format == "json":
+            out_file.write(json.dumps(json_output, indent=4, default=str) + "\n")
+        elif output_format == "line":
+            if line_output:
+                out_file.write(separator.join(line_output) + "\n")
+
     dbif.close()
 
 
