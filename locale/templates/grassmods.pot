@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-06 18:30+0000\n"
+"POT-Creation-Date: 2026-06-13 16:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1345,7 +1345,7 @@ msgstr ""
 #: ../db/drivers/postgres/index.c:60 ../raster/r.random/random.c:248
 #: ../raster/r.to.vect/main.c:245 ../vector/v.decimate/copy_tab.c:116
 #: ../vector/v.extract/copy_tab.c:121 ../vector/v.mkgrid/main.c:368
-#: ../vector/v.mkgrid/main.c:429 ../vector/v.overlay/main.c:621
+#: ../vector/v.mkgrid/main.c:429 ../vector/v.overlay/main.c:629
 #: ../vector/v.patch/main.c:391 ../vector/v.random/main.c:302
 #: ../vector/v.select/copy_tabs.c:85
 msgid "Unable to create index"
@@ -2272,7 +2272,7 @@ msgstr ""
 #: ../vector/v.out.dxf/main.c:78 ../vector/v.out.lidar/main.c:606
 #: ../vector/v.out.ogr/main.c:141 ../vector/v.out.postgis/main.c:100
 #: ../vector/v.out.pov/main.c:101 ../vector/v.out.svg/main.c:139
-#: ../vector/v.overlay/main.c:196 ../vector/v.parallel/main.c:146
+#: ../vector/v.overlay/main.c:203 ../vector/v.parallel/main.c:146
 #: ../vector/v.patch/main.c:133 ../vector/v.patch/main.c:152
 #: ../vector/v.patch/main.c:188 ../vector/v.patch/main.c:339
 #: ../vector/v.patch/main.c:417 ../vector/v.perturb/main.c:160
@@ -2335,7 +2335,7 @@ msgstr ""
 #: ../vector/v.net.steiner/main.c:622 ../vector/v.net.timetable/main.c:352
 #: ../vector/v.net.visibility/main.c:74 ../vector/v.outlier/main.c:232
 #: ../vector/v.outlier/main.c:237 ../vector/v.outlier/main.c:243
-#: ../vector/v.overlay/main.c:230 ../vector/v.parallel/main.c:151
+#: ../vector/v.overlay/main.c:238 ../vector/v.parallel/main.c:151
 #: ../vector/v.patch/main.c:348 ../vector/v.patch/main.c:353
 #: ../vector/v.perturb/main.c:170 ../vector/v.profile/main.c:595
 #: ../vector/v.proj/main.c:481 ../vector/v.qcount/main.c:127
@@ -4100,7 +4100,6 @@ msgstr ""
 msgid "Get text color from cell color value"
 msgstr ""
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #: ../display/d.rast.num/main.c:211 ../raster/r.thin/io.c:110
@@ -4157,8 +4156,8 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:7
 #: ../locale/scriptstrings/t.rast.univar_to_translate.c:9
 #: ../locale/scriptstrings/t.rast.univar_to_translate.c:11
-#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:10
-#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:11
+#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:12
+#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:13
 #: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:10
 #: ../locale/scriptstrings/t.vect.list_to_translate.c:10
 #: ../locale/scriptstrings/t.vect.list_to_translate.c:11
@@ -4519,7 +4518,7 @@ msgstr ""
 #: ../vector/v.colors/scan_attr.c:24 ../vector/v.colors/write_rgb.c:20
 #: ../vector/v.distance/main.c:590 ../vector/v.edit/select.c:499
 #: ../vector/v.extrude/main.c:223 ../vector/v.generalize/misc.c:168
-#: ../vector/v.neighbors/main.c:219 ../vector/v.overlay/main.c:422
+#: ../vector/v.neighbors/main.c:219 ../vector/v.overlay/main.c:430
 #: ../vector/v.surf.bspline/crosscorr.c:123 ../vector/v.to.rast/support.c:101
 #: ../vector/v.to.rast/support.c:271 ../vector/v.to.rast/support.c:499
 #: ../vector/v.univar/main.c:271 ../vector/v.vect.stats/main.c:384
@@ -4560,8 +4559,8 @@ msgstr ""
 #: ../vector/v.net.path/path.c:95 ../vector/v.net.timetable/main.c:89
 #: ../vector/v.normal/main.c:120 ../vector/v.out.ogr/main.c:713
 #: ../vector/v.out.postgis/table.c:34 ../vector/v.out.svg/main.c:159
-#: ../vector/v.out.vtk/writeVTK.c:645 ../vector/v.overlay/main.c:255
-#: ../vector/v.overlay/main.c:439 ../vector/v.patch/main.c:161
+#: ../vector/v.out.vtk/writeVTK.c:645 ../vector/v.overlay/main.c:263
+#: ../vector/v.overlay/main.c:447 ../vector/v.patch/main.c:161
 #: ../vector/v.patch/main.c:199 ../vector/v.patch/main.c:372
 #: ../vector/v.patch/main.c:454 ../vector/v.profile/main.c:475
 #: ../vector/v.profile/main.c:640 ../vector/v.random/main.c:243
@@ -15093,9 +15092,11 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:17
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:19
 #: ../locale/scriptstrings/t.rast.univar_to_translate.c:13
-#: ../locale/scriptstrings/t.rast.univar_to_translate.c:17
-#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:14
+#: ../locale/scriptstrings/t.rast.univar_to_translate.c:15
+#: ../locale/scriptstrings/t.rast.univar_to_translate.c:19
+#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:9
 #: ../locale/scriptstrings/t.rast3d.list_to_translate.c:16
+#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:18
 #: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:12
 #: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:15
 #: ../locale/scriptstrings/t.vect.list_to_translate.c:8
@@ -15123,7 +15124,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/t.list_to_translate.c:13
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:9
-#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:9
+#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:11
 #: ../locale/scriptstrings/t.vect.list_to_translate.c:9
 msgid "Columns to be printed to stdout"
 msgstr ""
@@ -15135,7 +15136,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.list_to_translate.c:18
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:16
 #: ../locale/scriptstrings/t.rast.univar_to_translate.c:12
-#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:13
+#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:15
 #: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:11
 #: ../locale/scriptstrings/t.vect.db.select_to_translate.c:8
 #: ../locale/scriptstrings/t.vect.list_to_translate.c:15
@@ -15606,7 +15607,7 @@ msgid "Path to the extraction directory"
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.import_to_translate.c:12
-msgid "Create a new project and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
+msgid "Create a new project and import the data into it."
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.import_to_translate.c:13
@@ -15635,12 +15636,13 @@ msgid "Lists registered maps of a space time raster dataset."
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:12
-#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:12
+#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:14
 #: ../locale/scriptstrings/t.vect.list_to_translate.c:12
 msgid "Method used for data listing"
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:13
+#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:10
 msgid "The granule to be used for listing. The granule must be specified as string eg.: absolute time \"1 months\" or relative time \"1\""
 msgstr ""
 
@@ -15650,8 +15652,8 @@ msgid "plain;Plain text output;line;Comma separated list of map names;json;JSON 
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:18
-#: ../locale/scriptstrings/t.rast.univar_to_translate.c:16
-#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:15
+#: ../locale/scriptstrings/t.rast.univar_to_translate.c:18
+#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:17
 #: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:14
 #: ../locale/scriptstrings/t.vect.list_to_translate.c:17
 #: ../locale/scriptstrings/t.vect.univar_to_translate.c:11
@@ -15877,6 +15879,10 @@ msgid "Raster map used for zoning, must be of type CELL"
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.univar_to_translate.c:14
+msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
+msgstr ""
+
+#: ../locale/scriptstrings/t.rast.univar_to_translate.c:16
 #: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:13
 #: ../locale/scriptstrings/t.vect.univar_to_translate.c:10
 #: ../raster/r.univar/r.univar_main.c:109
@@ -15884,7 +15890,7 @@ msgstr ""
 msgid "Calculate extended statistics"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.univar_to_translate.c:15
+#: ../locale/scriptstrings/t.rast.univar_to_translate.c:17
 msgid "Use the raster map regions for univar statistical calculation instead of the current region"
 msgstr ""
 
@@ -19186,7 +19192,7 @@ msgstr ""
 #: ../vector/v.net.components/main.c:189 ../vector/v.net.distance/main.c:293
 #: ../vector/v.net.flow/main.c:179 ../vector/v.net.iso/main.c:387
 #: ../vector/v.net.path/path.c:110 ../vector/v.net.timetable/main.c:99
-#: ../vector/v.overlay/main.c:616 ../vector/v.to.points/main.c:214
+#: ../vector/v.overlay/main.c:624 ../vector/v.to.points/main.c:214
 #, c-format
 msgid "Unable to create table: '%s'"
 msgstr ""
@@ -19206,7 +19212,7 @@ msgstr ""
 #: ../vector/v.in.ascii/main.c:435 ../vector/v.in.dxf/write_vect.c:242
 #: ../vector/v.in.lidar/attributes.c:144 ../vector/v.in.ogr/main.c:1180
 #: ../vector/v.mkgrid/main.c:372 ../vector/v.mkgrid/main.c:433
-#: ../vector/v.overlay/main.c:625 ../vector/v.patch/main.c:395
+#: ../vector/v.overlay/main.c:633 ../vector/v.patch/main.c:395
 #: ../vector/v.random/main.c:307 ../vector/v.reclass/main.c:327
 #: ../vector/v.sample/main.c:196 ../vector/v.select/copy_tabs.c:88
 #: ../vector/v.to.points/main.c:224
@@ -19221,7 +19227,7 @@ msgid "Writing attributes..."
 msgstr ""
 
 #: ../raster/r.contour/main.c:215 ../raster3d/r3.flow/flowline.c:61
-#: ../vector/v.overlay/area_area.c:439 ../vector/v.overlay/line_area.c:452
+#: ../vector/v.overlay/area_area.c:448 ../vector/v.overlay/line_area.c:452
 #: ../vector/v.to.points/write.c:59
 #, c-format
 msgid "Unable to insert new record: '%s'"
@@ -24983,7 +24989,7 @@ msgid "Processing start points..."
 msgstr ""
 
 #: ../raster/r.path/main.c:538 ../vector/v.buffer/main.c:410
-#: ../vector/v.in.ogr/main.c:881 ../vector/v.overlay/main.c:237
+#: ../vector/v.in.ogr/main.c:881 ../vector/v.overlay/main.c:245
 #: ../vector/v.voronoi/main.c:215
 msgid "Unable to create temporary vector map"
 msgstr ""
@@ -29499,7 +29505,7 @@ msgstr ""
 #: ../raster/r.support/main.c:356 ../raster/r.viewshed/viewshed.cpp:240
 #: ../scripts/d.polar/d.polar.py:406
 #: ../scripts/i.in.spotvgt/i.in.spotvgt.py:278
-#: ../scripts/r.fillnulls/r.fillnulls.py:681
+#: ../scripts/r.fillnulls/r.fillnulls.py:678
 #: ../scripts/r.in.aster/r.in.aster.py:173 ../scripts/r.plane/r.plane.py:131
 #: ../scripts/v.in.e00/v.in.e00.py:172
 msgid "Done."
@@ -29896,7 +29902,6 @@ msgstr ""
 msgid "Input raster must be of type CELL."
 msgstr ""
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #: ../raster/r.thin/io.c:112 ../raster/r.thin/io.c:188
@@ -30212,7 +30217,7 @@ msgstr ""
 #: ../vector/v.in.ogr/main.c:321 ../vector/v.in.ogr/main.c:330
 #: ../vector/v.in.ogr/main.c:339 ../vector/v.in.ogr/main.c:375
 #: ../vector/v.in.ogr/main.c:406 ../vector/v.overlay/main.c:136
-#: ../vector/v.overlay/main.c:146 ../vector/v.to.rast/main.c:88
+#: ../vector/v.overlay/main.c:153 ../vector/v.to.rast/main.c:88
 #: ../vector/v.to.rast/main.c:94 ../vector/v.to.rast/main.c:99
 msgid "Attributes"
 msgstr ""
@@ -33199,7 +33204,7 @@ msgstr ""
 msgid "Cannot continue (problem deleting table)."
 msgstr ""
 
-#: ../scripts/db.in.ogr/db.in.ogr.py:111 ../vector/v.overlay/main.c:263
+#: ../scripts/db.in.ogr/db.in.ogr.py:111 ../vector/v.overlay/main.c:271
 #, c-format, python-format
 msgid "Table <%s> already exists and will be overwritten"
 msgstr ""
@@ -34230,7 +34235,7 @@ msgid "Filled raster map is: %s"
 msgstr ""
 
 #: ../scripts/r.fillnulls/r.fillnulls.py:672
-msgid "Following holes where not filled. Temporary maps with are left in place to allow examination of unfilled holes"
+msgid "The following holes were not filled. Temporary maps are left in place to allow examination of unfilled holes:"
 msgstr ""
 
 #: ../scripts/r.grow/r.grow.py:131
@@ -36120,7 +36125,7 @@ msgstr ""
 msgid "Removing bridges..."
 msgstr ""
 
-#: ../vector/v.buffer/main.c:825 ../vector/v.overlay/area_area.c:183
+#: ../vector/v.buffer/main.c:825 ../vector/v.overlay/area_area.c:192
 msgid "Attaching islands..."
 msgstr ""
 
@@ -36128,7 +36133,7 @@ msgstr ""
 msgid "Calculating centroids for all areas..."
 msgstr ""
 
-#: ../vector/v.buffer/main.c:846 ../vector/v.overlay/area_area.c:196
+#: ../vector/v.buffer/main.c:846 ../vector/v.overlay/area_area.c:205
 msgid "Cannot calculate area centroid"
 msgstr ""
 
@@ -39790,7 +39795,7 @@ msgstr ""
 msgid "Number of OSM line splits: %d"
 msgstr ""
 
-#: ../vector/v.in.ogr/clean.c:123 ../vector/v.overlay/area_area.c:179
+#: ../vector/v.in.ogr/clean.c:123 ../vector/v.overlay/area_area.c:188
 msgid "Merging lines..."
 msgstr ""
 
@@ -40114,7 +40119,7 @@ msgstr ""
 msgid "The order of features in input layer <%s> has changed"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1630 ../vector/v.overlay/area_area.c:307
+#: ../vector/v.in.ogr/main.c:1630 ../vector/v.overlay/area_area.c:316
 msgid "Writing centroids..."
 msgstr ""
 
@@ -40866,7 +40871,7 @@ msgid "Cannot allocate more memory"
 msgstr ""
 
 #: ../vector/v.label.sa/labels.c:161 ../vector/v.label/main.c:317
-#: ../vector/v.overlay/main.c:449
+#: ../vector/v.overlay/main.c:457
 msgid "Unable to select attributes"
 msgstr ""
 
@@ -41571,7 +41576,7 @@ msgstr ""
 #: ../vector/v.out.ogr/export_lines_fast.c:170
 #: ../vector/v.out.ogr/export_lines_fast.c:301
 #: ../vector/v.out.ogr/export_lines_fast.c:398 ../vector/v.out.svg/main.c:403
-#: ../vector/v.out.vtk/writeVTK.c:586 ../vector/v.overlay/main.c:515
+#: ../vector/v.out.vtk/writeVTK.c:586 ../vector/v.overlay/main.c:523
 msgid "Unable to fetch data from table"
 msgstr ""
 
@@ -44230,18 +44235,23 @@ msgid_plural "%d boundaries snapped"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../vector/v.overlay/area_area.c:230
+#: ../vector/v.overlay/area_area.c:177
+#, c-format
+msgid "Removing areas smaller than %g sqm..."
+msgstr ""
+
+#: ../vector/v.overlay/area_area.c:239
 #, c-format
 msgid "Querying vector map <%s>..."
 msgstr ""
 
-#: ../vector/v.overlay/area_area.c:294 ../vector/v.overlay/area_area.c:380
-#: ../vector/v.overlay/area_area.c:410 ../vector/v.overlay/line_area.c:391
+#: ../vector/v.overlay/area_area.c:303 ../vector/v.overlay/area_area.c:389
+#: ../vector/v.overlay/area_area.c:419 ../vector/v.overlay/line_area.c:391
 #: ../vector/v.overlay/line_area.c:421
 msgid "Attribute not found"
 msgstr ""
 
-#: ../vector/v.overlay/area_area.c:471
+#: ../vector/v.overlay/area_area.c:480
 msgid "Copying results to final output map..."
 msgstr ""
 
@@ -44338,51 +44348,59 @@ msgstr ""
 msgid "Disable snapping with snap <= 0"
 msgstr ""
 
-#: ../vector/v.overlay/main.c:185 ../vector/v.select/main.c:96
+#: ../vector/v.overlay/main.c:147
+msgid "Minimum size of areas to keep in square meters"
+msgstr ""
+
+#: ../vector/v.overlay/main.c:148
+msgid "Enable with minsize > 0"
+msgstr ""
+
+#: ../vector/v.overlay/main.c:192 ../vector/v.select/main.c:96
 #, c-format
 msgid "Unknown operator '%s'"
 msgstr ""
 
-#: ../vector/v.overlay/main.c:204
+#: ../vector/v.overlay/main.c:211
 #, c-format
 msgid "Unable to determine feature type for <%s>"
 msgstr ""
 
-#: ../vector/v.overlay/main.c:210
+#: ../vector/v.overlay/main.c:217
 #, c-format
 msgid "Invalid feature type (%d) for <%s>. Only '%s' or '%s' supported."
 msgstr ""
 
-#: ../vector/v.overlay/main.c:219
+#: ../vector/v.overlay/main.c:226
 #, c-format
 msgid "Operator '%s' is not supported for type line"
 msgstr ""
 
-#: ../vector/v.overlay/main.c:269
+#: ../vector/v.overlay/main.c:277
 #, c-format
 msgid "Table <%s> already exists, use '%s'"
 msgstr ""
 
-#: ../vector/v.overlay/main.c:287
+#: ../vector/v.overlay/main.c:295
 #, c-format
 msgid "Copying vector features from <%s>..."
 msgstr ""
 
-#: ../vector/v.overlay/main.c:368
+#: ../vector/v.overlay/main.c:376
 #, c-format
 msgid "No %s features found in vector map <%s>. Verify '%s' parameter."
 msgstr ""
 
-#: ../vector/v.overlay/main.c:418
+#: ../vector/v.overlay/main.c:426
 msgid "Collecting input attributes..."
 msgstr ""
 
-#: ../vector/v.overlay/main.c:501
+#: ../vector/v.overlay/main.c:509
 #, c-format
 msgid "Unknown column type '%s' of column '%s'"
 msgstr ""
 
-#: ../vector/v.overlay/main.c:566
+#: ../vector/v.overlay/main.c:574
 #, c-format
 msgid "Unknown column type '%s' of column '%s', values lost"
 msgstr ""
@@ -47279,10 +47297,6 @@ msgstr ""
 #: ../vector/v.voronoi/skeleton.c:296 ../vector/v.voronoi/skeleton.c:406
 #, c-format
 msgid "Pass %d"
-msgstr ""
-
-#: ../vector/v.voronoi/skeleton.c:517
-msgid "Node is outside any input area"
 msgstr ""
 
 #: ../vector/v.voronoi/sw_main.c:194

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-06 18:30+0000\n"
+"POT-Creation-Date: 2026-06-13 16:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1673,7 +1673,7 @@ msgstr ""
 msgid "Flags"
 msgstr ""
 
-#: ../lib/gis/parser_html.c:207 ../lib/gis/parser_md.c:71
+#: ../lib/gis/parser_html.c:207 ../lib/gis/parser_md.c:89
 #: ../lib/gis/parser_rest.c:173 ../lib/init/grass.py:322
 msgid "Parameters"
 msgstr ""

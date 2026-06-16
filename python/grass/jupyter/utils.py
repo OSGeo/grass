@@ -17,7 +17,6 @@ from io import StringIO
 import tempfile
 import json
 import os
-import multiprocessing
 
 from pathlib import Path
 import grass.script as gs
@@ -423,11 +422,7 @@ def get_number_of_cores(requested, env=None):
     if nprocs is not None:
         return int(nprocs)
 
-    try:
-        num_cores = len(os.sched_getaffinity(0))
-    except AttributeError:
-        num_cores = multiprocessing.cpu_count()
-    return min(requested, max(1, num_cores - 1))
+    return min(requested, max(1, gs.available_cpus() - 1))
 
 
 def get_region_bounds_latlon():

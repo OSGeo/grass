@@ -515,7 +515,10 @@ def list_maps_of_stds(
     if not output_format:
         if method == "comma":
             output_format = "line"
-        output_format = "plain"
+            if not separator:
+                separator = ","
+        else:
+            output_format = "plain"
 
     if columns:
         if isinstance(columns, str):
