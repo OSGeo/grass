@@ -24,11 +24,11 @@ DEM_EXPRESSION = (
 @pytest.fixture(scope="module")
 def param_scale_session(tmp_path_factory):
     """Active session in an XY project with a fixed region and a generated DEM."""
-    project = tmp_path_factory.mktemp("grassdata") / "param_scale_xy"
+    project = tmp_path_factory.mktemp("param_scale_xy") / "project"
     gs.create_project(project)
     with gs.setup.init(project, env=os.environ.copy()) as session:
         with Tools(session=session) as tools:
-            # Fixed, reproducible 100 x 100 region (square cells, res=1).
-            tools.g_region(s=0, n=100, w=0, e=100, res=1)
+            # Fixed, reproducible 50 x 50 region (square cells, res=1).
+            tools.g_region(s=0, n=50, w=0, e=50, res=1)
             tools.r_mapcalc(expression=f"dem = {DEM_EXPRESSION}")
         yield session
