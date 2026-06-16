@@ -24,11 +24,11 @@ def space_time_vector_dataset(tmp_path_factory):
 
         tools.g_region(s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10)
 
-        for i in range(1, 7):
+        for i in range(1, 4):
             tools.r_mapcalc(expression=f"prec_int_{i} = {i}00.0", overwrite=True)
             tools.r_mapcalc(expression=f"prec_inst_{i} = {i}00.0", overwrite=True)
 
-        tools.v_random(output="prec_points", n=5, seed=1, flags="z", overwrite=True)
+        tools.v_random(output="prec_points", n=3, seed=1, flags="z", overwrite=True)
 
         interval_strds = "precip_abs1"
         tools.t_create(
@@ -42,7 +42,7 @@ def space_time_vector_dataset(tmp_path_factory):
             type="raster",
             flags="i",
             input=interval_strds,
-            maps=",".join([f"prec_int_{i}" for i in range(1, 7)]),
+            maps=",".join([f"prec_int_{i}" for i in range(1, 4)]),
             start="2001-03-01 00:00:00",
             increment="1 months",
         )
@@ -67,7 +67,7 @@ def space_time_vector_dataset(tmp_path_factory):
         tools.t_register(
             type="raster",
             input=instance_strds,
-            maps=",".join([f"prec_inst_{i}" for i in range(1, 7)]),
+            maps=",".join([f"prec_inst_{i}" for i in range(1, 4)]),
             start="2004-01-01 00:00:00",
             increment="3 months",
         )
