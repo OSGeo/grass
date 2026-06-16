@@ -12,13 +12,11 @@ for details.
 
 from __future__ import annotations
 
-import json
 from abc import ABCMeta, abstractmethod
 
 from .core import get_current_mapset, get_tgis_message_interface, init_dbif
 from .spatial_topology_dataset_connector import SpatialTopologyDatasetConnector
 from .temporal_topology_dataset_connector import TemporalTopologyDatasetConnector
-from .utils import TemporalJSONEncoder
 
 
 ###############################################################################
@@ -221,19 +219,7 @@ class AbstractDataset(
     def print_shell_info(self):
         """Print information about this class in shell style"""
 
-    def print_json(self) -> None:
-        """Print dataset metadata as JSON to stdout.
-
-        Outputs complete metadata in JSON format by merging all internal
-        data dictionaries. This automatically includes all metadata fields
-        without manual enumeration, ensuring parity with shell output.
-
-        The output can be parsed by any JSON-compatible tool or library.
-        """
-        data = self.get_metadata_dict()
-        print(json.dumps(data, cls=TemporalJSONEncoder, indent=4))
-
-    def get_metadata_dict(self):
+    def get_metadata_dict(self) -> dict:
         """Build a dictionary from internal metadata storage for JSON output.
 
         Uses dict merging to automatically capture all metadata from the
