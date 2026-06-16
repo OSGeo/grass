@@ -54,7 +54,6 @@ def compute_univar_stats(
            Only available for strds.
     :param output_format: Output format specification
     """
-    string = ""
     id = registered_map_info["id"]
     start = registered_map_info["start_time"]
     end = registered_map_info["end_time"]
@@ -106,44 +105,23 @@ def compute_univar_stats(
 
         return processed_stats
 
-    eol = ""
+    lines = univar_stats.strip().split("\n")
+    if len(lines) < 2:
+        return ""
 
-    for idx, stats_kv in enumerate(univar_stats.split(";")):
-        stats = gs.utils.parse_key_val(stats_kv)
-        string += (
-            f"{id}{fs}{semantic_label}{fs}{start}{fs}{end}"
-            if stats_module.name == "r.univar"
-            else f"{id}{fs}{start}{fs}{end}"
-        )
-        if stats_module.inputs.zones:
-            if idx == 0:
-                zone = str(stats["zone"])
-                string = ""
-                continue
-            string += f"{fs}{zone}"
-            if "zone" in stats:
-                zone = str(stats["zone"])
-                eol = "\n"
-            else:
-                eol = ""
-        string += f"{fs}{stats['mean']}{fs}{stats['min']}"
-        string += f"{fs}{stats['max']}{fs}{stats['range']}{fs}{stats['mean_of_abs']}"
-        string += f"{fs}{stats['stddev']}{fs}{stats['variance']}"
-        string += f"{fs}{stats['coeff_var']}{fs}{stats['sum']}"
-        string += f"{fs}{stats['null_cells']}{fs}{stats['cells']}"
-        string += f"{fs}{stats['n']}"
-        if "median" in stats:
-            string += f"{fs}{stats['first_quartile']}{fs}{stats['median']}"
-            string += f"{fs}{stats['third_quartile']}"
-            if stats_module.inputs.percentile:
-                for perc in stats_module.inputs.percentile:
-                    perc_value = stats[
-                        "percentile_"
-                        f"{str(perc).rstrip('0').rstrip('.').replace('.', '_')}"
-                    ]
-                    string += f"{fs}{perc_value}"
-        string += eol
-    return string
+    prefix = (
+        f"{id}{fs}{semantic_label}{fs}{start}{fs}{end}"
+        if stats_module.name == "r.univar"
+        else f"{id}{fs}{start}{fs}{end}"
+    )
+
+    output_rows = []
+    for line in lines[1:]:
+        if line.strip():
+            formatted_line = line.replace(",", fs)
+            output_rows.append(f"{prefix}{fs}{formatted_line}")
+
+    return "\n".join(output_rows)
 
 
 def print_gridded_dataset_univar_statistics(
@@ -235,21 +213,21 @@ def print_gridded_dataset_univar_statistics(
             else ["id", "start", "end"]
         )
         if zones:
-            cols.append("zone")
+            cols.extend(["zone", "label"])
         cols.extend(
             [
-                "mean",
+                "non_null_cells",
+                "null_cells",
                 "min",
                 "max",
                 "range",
+                "mean",
                 "mean_of_abs",
                 "stddev",
                 "variance",
                 "coeff_var",
                 "sum",
-                "null_cells",
-                "cells",
-                "n",
+                "sum_abs",
             ]
         )
         if extended is True:
@@ -262,6 +240,9 @@ def print_gridded_dataset_univar_statistics(
                         for perc in percentile
                     ]
                 )
+            else:
+                cols.extend(["percentile_90"])
+
         if no_header is False and format != "json":
             string = fs.join(cols)
             if output is None:
@@ -283,7 +264,8 @@ def print_gridded_dataset_univar_statistics(
         zones=zones,
         percentile=percentile,
         stdout_=PIPE,
-        format="json" if format == "json" else "shell",
+        format="json" if format == "json" else "csv",
+        quiet=True,
         run_=False,
     )
 
