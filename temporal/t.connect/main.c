@@ -72,9 +72,12 @@ int main(int argc, char *argv[])
 
     sh = G_define_flag();
     sh->key = 'g';
+    sh->label = _("Print current connection parameters using shell style "
+                  "and exit [deprecated]");
     sh->description =
-        _("Print current connection parameter in shell style and exit");
-    sh->guisection = _("Set");
+        _("This flag is deprecated and will be removed in a future "
+          "release. Use format=shell instead.");
+    sh->guisection = _("Print");
 
     driver = G_define_standard_option(G_OPT_DB_DRIVER);
     driver->options = "sqlite,pg";
@@ -140,9 +143,9 @@ int main(int argc, char *argv[])
                 break;
 
             case PLAIN:
-                fprintf(stdout, "driver: %s\n",
+                fprintf(stdout, "driver:%s\n",
                         conn.driverName ? conn.driverName : "");
-                fprintf(stdout, "database: %s\n",
+                fprintf(stdout, "database:%s\n",
                         conn.databaseName ? conn.databaseName : "");
                 break;
 
