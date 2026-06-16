@@ -15,7 +15,8 @@ from datetime import datetime
 class TemporalJSONEncoder(json.JSONEncoder):
     """Custom JSON encoder with datetime support for GRASS GIS.
 
-    Handles serialization of datetime objects to ISO 8601 format strings.
+    Handles serialization of datetime objects to a ISO 8601-like string,
+    that can be handled by SQLite3 and temporal modules.
     Can be used across GRASS modules that need JSON output with temporal data.
 
     Example:
@@ -26,14 +27,14 @@ class TemporalJSONEncoder(json.JSONEncoder):
         >>> from datetime import datetime
         >>> data = {"timestamp": datetime(2024, 1, 15, 10, 30)}
         >>> json.dumps(data, cls=TemporalJSONEncoder)
-        '{"timestamp": "2024-01-15T10:30:00"}'
+        '{"timestamp": "2024-01-15 10:30:00"}'
     """
 
     def default(self, obj):
         """Override default JSON encoding for datetime objects.
 
         :param obj: Object to encode
-        :return: ISO 8601 formatted string for datetime objects,
+        :return: ISO 8601-like formatted string for datetime objects,
                  or calls parent encoder for other types
         """
         if isinstance(obj, datetime):
