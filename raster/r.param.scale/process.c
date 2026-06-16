@@ -87,7 +87,7 @@ void process(void)
     /* This is the r.neighbors pattern. No full_map array exists.            */
     /*-----------------------------------------------------------------------*/
 
-    int *fd_thread = (int *)G_malloc((size_t)nprocs * sizeof(int));
+    int *fd_thread = G_malloc(sizeof(*fd_thread) * nprocs);
     for (int i = 0; i < nprocs; i++)
         fd_thread[i] = Rast_open_old(rast_in_name, "");
 
@@ -96,8 +96,8 @@ void process(void)
     /* (the eventual ring-buffer cost), spend the rest on the band.          */
     /*-----------------------------------------------------------------------*/
 
-    size_t in_buf_size =
-        (size_t)ncols * sizeof(DCELL) * (size_t)wsize * (size_t)nprocs;
+    size_t in_buf_size = sizeof(DCELL) * ncols * wsize * nprocs;
+    /* memory= is in MiB; convert to bytes */
     size_t out_buf_size = (size_t)memory * (1 << 20);
     if (out_buf_size <= in_buf_size)
         out_buf_size = 0;
@@ -121,12 +121,12 @@ void process(void)
     DCELL *band_d = NULL, *null_d = NULL;
     CELL *band_c = NULL, *null_c = NULL;
     if (mparam != FEATURE) {
-        band_d = (DCELL *)G_malloc((size_t)brows * ncols * sizeof(DCELL));
+        band_d = G_malloc(sizeof(*band_d) * brows * ncols);
         null_d = Rast_allocate_buf(DCELL_TYPE);
         Rast_set_d_null_value(null_d, ncols);
     }
     else {
-        band_c = (CELL *)G_malloc((size_t)brows * ncols * sizeof(CELL));
+        band_c = G_malloc(sizeof(*band_c) * brows * ncols);
         null_c = Rast_allocate_buf(CELL_TYPE);
         Rast_set_c_null_value(null_c, ncols);
     }
@@ -151,13 +151,17 @@ void process(void)
      */
     /*-----------------------------------------------------------------------*/
 
-    DCELL ***rings = (DCELL ***)G_malloc((size_t)nprocs * sizeof(DCELL **));
-    DCELL **window_ptrs = (DCELL **)G_malloc((size_t)nprocs * sizeof(DCELL *));
-    double **obs_ptrs = (double **)G_malloc((size_t)nprocs * sizeof(double *));
+    DCELL ***rings = G_malloc(sizeof(*rings) * nprocs);
+    DCELL **window_ptrs = G_malloc(sizeof(*window_ptrs) * nprocs);
+    double **obs_ptrs = G_malloc(sizeof(*obs_ptrs) * nprocs);
+    /* All ring rows live in one contiguous block; each thread's pointer    */
+    /* table (rings[t][k]) indexes into it, so rotate_ring only shuffles     */
+    /* pointers and there are no per-row allocations.                        */
+    DCELL *ring_block = G_malloc(sizeof(*ring_block) * nprocs * wsize * ncols);
     for (int t = 0; t < nprocs; t++) {
-        rings[t] = (DCELL **)G_malloc((size_t)wsize * sizeof(DCELL *));
+        rings[t] = G_malloc(sizeof(*rings[t]) * wsize);
         for (int k = 0; k < wsize; k++)
-            rings[t][k] = (DCELL *)G_malloc((size_t)ncols * sizeof(DCELL));
+            rings[t][k] = ring_block + (size_t)(t * wsize + k) * ncols;
         window_ptrs[t] = (DCELL *)G_malloc(DSQR(wsize) * sizeof(DCELL));
         obs_ptrs[t] = dvector(0, 5);
     }
@@ -324,12 +328,11 @@ void process(void)
         G_free(null_c);
     }
     for (int t = 0; t < nprocs; t++) {
-        for (int k = 0; k < wsize; k++)
-            G_free(rings[t][k]);
         G_free(rings[t]);
         G_free(window_ptrs[t]);
         free_dvector(obs_ptrs[t], 0, 5);
     }
+    G_free(ring_block);
     G_free(rings);
     G_free(window_ptrs);
     G_free(obs_ptrs);
