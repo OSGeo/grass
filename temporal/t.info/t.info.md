@@ -22,7 +22,7 @@ Output can be printed in different **format**s:
 - *json*: JSON format
 
 While both *shell* and *json* format are machine readable, there are some
-notable differences: shell format has singel quotes around *granularity*,
+notable differences: shell format has single quotes around *granularity*,
 and datetime-strings in order to assist parsing on the command line. It
 returns a None string for empty fields. JSON-format returns key-value-pairs
 in valid JSON. Furthermore, JSON-format returns a comprehensive set of
