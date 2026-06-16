@@ -1,4 +1,4 @@
-"""Test t.rast3d.list functionality"""
+"""Test t.info functionality with raster3D data."""
 
 import grass.script as gs
 from grass.tools import Tools
