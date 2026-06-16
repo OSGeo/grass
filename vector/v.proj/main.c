@@ -289,8 +289,14 @@ int main(int argc, char *argv[])
             int first = 1, counter = 0;
             struct Cell_head inwindow;
 
-            G_unset_window();
-            G_get_window(&inwindow);
+            /* Initialize from the source projects's default region, not the
+             * current region: G_get_window() would honor WIND_OVERRIDE /
+             * GRASS_REGION, but those name a region in the target's mapset,
+             * not in the source project we just switched into, and would
+             * fail to open it. Every spatial field below is overwritten from
+             * the input vector's extent anyway, so the default window is a
+             * sufficient and side-effect-free seed. */
+            G_get_default_window(&inwindow);
 
             /* Cycle through all lines */
             Vect_rewind(&Map);
