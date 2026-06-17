@@ -99,6 +99,7 @@ import sys
 from contextlib import nullcontext
 
 import grass.script as gs
+from grass.tools import Tools
 
 ############################################################################
 
@@ -148,6 +149,29 @@ def main():
 
     elif not separator:  # output_format == "plain"
         separator = "|"
+
+    tools = Tools()
+
+    conn = tools.t_connect(flags="pg").keyval
+
+    driver = conn["driver"]
+    database = conn["database"]
+
+    db_exists = True
+
+    if not driver or not database:
+        db_exists = False
+
+    # if no connection is found
+    if not db_exists:
+        gs.message(
+            _(
+                "No temporal database connection exists in this mapset. No datasets to list."
+            )
+        )
+        if outpath and outpath != "-":
+            open(outpath, "w").close()
+        return
 
     # Lazy import
     import grass.temporal as tgis
