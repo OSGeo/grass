@@ -469,7 +469,7 @@ def test_grass_path_types_in_setup(tmp_path, path_type):
     assert "GISBASE" in env
 
 
-@pytest.mark.parametrize("variable", ["GRASS_REGION", "WIND_OVERRIDE"])
+@pytest.mark.parametrize("variable", ["GRASS_REGION", "WIND_OVERRIDE", "GRASS_MASK"])
 @pytest.mark.usefixtures("mock_no_session")
 def test_init_removes_mapset_variables(tmp_path, variable):
     """Check that init removes mapset-specific variables from the environment.
