@@ -61,7 +61,7 @@
 import json
 
 import grass.script as gs
-from grass.tools import ToolError, Tools
+from grass.tools import Tools
 
 ############################################################################
 
@@ -113,6 +113,7 @@ def main():
     tools = Tools()
     json_output = []
     col_names = ""
+
     if rows:
         for row in rows:
             vector_name = "%s@%s" % (row["name"], row["mapset"])
@@ -121,38 +122,27 @@ def main():
             if row["layer"]:
                 layer = row["layer"]
 
-            try:
-                res = tools.v_db_select(
-                    map=vector_name,
-                    layer=layer,
-                    columns=columns,
-                    separator=separator,
-                    where=where,
-                    format=output_format,
-                )
-                select = res.text
-            except ToolError:
-                gs.fatal(
-                    _("Unable to run v.db.select for vector map <%s> with layer %s")
-                    % (vector_name, layer)
-                )
+            res = tools.v_db_select(
+                map=vector_name,
+                layer=layer,
+                columns=columns,
+                separator=separator,
+                where=where,
+                format=output_format,
+            )
+
             if output_format == "json":
-                try:
-                    map_json = json.loads(select)
-                    records = map_json.get("records", [])
-                    for record in records:
-                        new_record = {
-                            "start_time": row["start_time"],
-                            "end_time": row["end_time"],
-                        }
-                        new_record.update(record)
-                        json_output.append(new_record)
-                except json.JSONDecodeError:
-                    gs.fatal(
-                        _("Unable to parse JSON output for vector map <%s>")
-                        % vector_name
-                    )
+                records = res["records"]
+                for record in records:
+                    new_record = {
+                        "start_time": row["start_time"],
+                        "end_time": row["end_time"],
+                    }
+                    new_record.update(record)
+                    json_output.append(new_record)
+
             else:
+                select = res.text
                 # The first line are the column names
                 list = select.split("\n")
                 count = 0
@@ -186,8 +176,8 @@ def main():
                             )
                         count += 1
 
-        if output_format == "json":
-            print(json.dumps(json_output, indent=4, default=str))
+    if output_format == "json":
+        print(json.dumps(json_output, indent=4, default=str))
 
 
 if __name__ == "__main__":
