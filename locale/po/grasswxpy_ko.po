@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-23 16:07+0000\n"
+"POT-Creation-Date: 2026-06-06 18:30+0000\n"
 "PO-Revision-Date: 2014-05-03 16:44-0400\n"
 "Last-Translator: Huidae Cho <grass4u@gmail.com>\n"
 "Language-Team: Korean <grass-translations@lists.osgeo.org>\n"
@@ -815,6 +815,11 @@ msgstr ""
 
 msgid "PyGRASS"
 msgstr ""
+
+#, fuzzy
+#| msgid "GRASS help"
+msgid "GRASS Tools"
+msgstr "GRASS 도움말"
 
 #, python-brace-format
 msgid ""
@@ -11409,9 +11414,6 @@ msgstr ""
 
 #~ msgid "GRASS GIS Vector Network Analysis Tool"
 #~ msgstr "GRASS GIS 벡터 네트워크 분석 도구"
-
-#~ msgid "GRASS help"
-#~ msgstr "GRASS 도움말"
 
 #~ msgid "GRIDATB.FOR export"
 #~ msgstr "GRIDATB.FOR 내보내기"
