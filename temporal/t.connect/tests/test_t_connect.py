@@ -1,6 +1,8 @@
 """Test current baseline functionality of t.connect"""
 
-from grass.tools import Tools
+import pytest
+
+from grass.tools import ToolError, Tools
 
 
 def test_no_connection(empty_session):
@@ -28,8 +30,35 @@ def test_print_shell(t_connect_session):
     """Check that the shell format prints correctly."""
     tools = Tools(session=t_connect_session.session)
 
-    result = tools.t_connect(flags="pg")
+    result = tools.t_connect(flags="p", format="shell")
     lines = result.text_split("\n")
 
     assert "driver=sqlite" in lines
     assert "database=$GISDBASE/$LOCATION_NAME/$MAPSET/tgis/sqlite.db" in lines
+
+
+def test_print_json(t_connect_session):
+    """Check that the JSON format parses correctly and matches connection values."""
+    tools = Tools(session=t_connect_session.session)
+
+    result = tools.t_connect(flags="p", format="json")
+
+    assert result["driver"] == "sqlite"
+    assert result["database"] == "$GISDBASE/$LOCATION_NAME/$MAPSET/tgis/sqlite.db"
+
+
+@pytest.mark.parametrize("output_format", ["shell", "json"])
+def test_missing_print_flag(t_connect_session, output_format):
+    """Ensure omitting the -p flag when requesting a format triggers a fatal error."""
+    tools = Tools(session=t_connect_session.session)
+
+    with pytest.raises(ToolError):
+        tools.t_connect(format=output_format)
+
+
+def test_incompatible_flags(t_connect_session):
+    """Ensure combining the deprecated -g flag with format=json triggers a fatal error."""
+    tools = Tools(session=t_connect_session.session)
+
+    with pytest.raises(ToolError):
+        tools.t_connect(flags="g", format="json")
