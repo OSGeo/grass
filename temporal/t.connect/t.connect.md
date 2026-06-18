@@ -5,10 +5,11 @@ default setting is that the temporal database of type *sqlite3* is
 located in the current mapset directory.
 
 The **-p** flag will display the current temporal database connection
-parameters.
+parameters. Use the **format** option to specify the output format: `plain`,
+ `shell`, or `json` — with `plain` being the default.
 
-The **-pg** flag will display the current temporal database connection
-parameters using shell style.
+The **-g** flag is deprecated and will be removed in a future release. Please
+use **format=shell** option with the **-p** flag instead.
 
 The **-c** flag will silently check if the temporal database connection
 parameters have been set, and if not will set them to use GRASS's
