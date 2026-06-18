@@ -273,7 +273,7 @@ SYMBOL *S_read(const char *sname)
         fp = G_fopen_old(buf, name, ms);
     }
     else { /* Search in GISBASE */
-        snprintf(buf, sizeof(buf), "%s/etc/symbol/%s", G_gisbase(), sname);
+        snprintf(buf, sizeof(buf), "%s/symbol/%s", G_etc_dir(), sname);
         fp = fopen(buf, "r");
     }
 

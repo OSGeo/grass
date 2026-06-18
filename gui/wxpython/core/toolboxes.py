@@ -31,7 +31,7 @@ ETREE_EXCEPTIONS = (ET.ParseError, expat.ExpatError)
 # if this will become part of grass Python library or module, this should be
 # parametrized, so we will get rid of the definition here
 # (GUI will use its definition and build also its own)
-WXGUIDIR = os.path.join(os.getenv("GISBASE"), "gui", "wxpython")
+WXGUIDIR = os.environ["GRASS_GUIWXDIR"]
 
 
 # this could be placed to functions

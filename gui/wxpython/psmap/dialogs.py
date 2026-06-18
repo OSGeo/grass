@@ -2203,13 +2203,13 @@ class VPropertiesDialog(Dialog):
         self.currLayer = self.vPropertiesDict["layer"]
 
         # path to symbols, patterns
-        gisbase = os.getenv("GISBASE")
-        self.symbolPath = os.path.join(gisbase, "etc", "symbol")
+        g_etc_dir = os.getenv("GRASS_ETCDIR")
+        self.symbolPath = os.path.join(g_etc_dir, "symbol")
         self.symbols = []
         for dir in Path(self.symbolPath).iterdir():
             for symbol in Path(self.symbolPath).joinpath(dir.name).iterdir():
                 self.symbols.append(os.path.join(dir.name, symbol.name))
-        self.patternPath = os.path.join(gisbase, "etc", "paint", "patterns")
+        self.patternPath = os.path.join(g_etc_dir, "paint", "patterns")
 
         # notebook
         notebook = Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
@@ -6193,8 +6193,8 @@ class NorthArrowDialog(ImageDialog):
         return NorthArrow(self.id, self.instruction, env=self.env)
 
     def _getImageDirectory(self):
-        gisbase = os.getenv("GISBASE")
-        return os.path.join(gisbase, "etc", "paint", "decorations")
+        g_etc_dir = os.getenv("GRASS_ETCDIR")
+        return os.path.join(g_etc_dir, "paint", "decorations")
 
     def _addConvergence(self, panel, gridBagSizer):
         convergence = Button(parent=panel, id=wx.ID_ANY, label=_("Compute convergence"))

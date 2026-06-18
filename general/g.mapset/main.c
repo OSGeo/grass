@@ -246,7 +246,7 @@ int main(int argc, char *argv[])
     if (!gis_lock)
         G_fatal_error(_("Unable to read GIS_LOCK environment variable"));
 
-    G_asprintf(&lock_prog, "%s/etc/lock", G_gisbase());
+    G_asprintf(&lock_prog, "%s/lock", G_etc_dir());
 
     snprintf(path, sizeof(path), "%s/.gislock", mapset_new_path);
     G_debug(2, "%s", path);
@@ -269,7 +269,7 @@ int main(int argc, char *argv[])
     }
 
     /* Clean temporary directory */
-    snprintf(path, sizeof(path), "%s/etc/clean_temp", G_gisbase());
+    snprintf(path, sizeof(path), "%s/clean_temp", G_etcbin_dir());
     G_verbose_message(_("Cleaning up temporary files..."));
     G_spawn(path, "clean_temp", NULL);
 

@@ -63,7 +63,6 @@ if(MSVC)
   string(APPEND _c_flags " -I${CMAKE_SOURCE_DIR}/msvc")
 elseif(APPLE AND CMAKE_OSX_SYSROOT)
   string(APPEND _c_flags " --sysroot ${CMAKE_OSX_SYSROOT}")
-  message("_c_flags")
 endif()
 
 foreach(module ${MODULES})
