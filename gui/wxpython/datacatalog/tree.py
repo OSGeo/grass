@@ -22,7 +22,7 @@ for details.
 import os
 import re
 import copy
-from multiprocessing import Process, Queue, cpu_count
+from multiprocessing import Process, Queue
 from pathlib import Path
 
 import wx
@@ -556,10 +556,7 @@ class DataCatalogTree(TreeView):
         queue_list = []
         proc_list = []
         loc_list = []
-        try:
-            nprocs = max(1, cpu_count() - 1)
-        except NotImplementedError:
-            nprocs = 1
+        nprocs = gs.resolve_nprocs(-1)
 
         results = {}
         errors = []
