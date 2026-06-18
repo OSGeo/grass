@@ -1,14 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-"""Regression test for v.proj run with a region override set.
-
-v.proj switches into the source project to read the input vector. It used to
-seed its working region with G_get_window(), which honors WIND_OVERRIDE and
-GRASS_REGION. Those name a region in the caller's mapset, not in the source
-project, so the read failed with "Unable to open element file <windows>".
-v.proj now seeds from the source project's default window instead, which does
-not consult the override.
-"""
+"""Regression test for v.proj run with a region override set."""
 
 import os
 from io import StringIO
