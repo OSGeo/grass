@@ -139,7 +139,7 @@ t.rast.univar -e input=nc_lst_daily format=json
 
 ## SEE ALSO
 
-*[t.create](t.create.md), [t.info](t.info.md) [t.create](r.univar.md),*
+*[t.create](t.create.md), [t.info](t.info.md) [r.univar](r.univar.md),*
 
 ## AUTHOR
 
