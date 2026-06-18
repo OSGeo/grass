@@ -40,7 +40,7 @@ start_time|end_time|DATE|SOURCE
 1849|1873|01/01/1873|Coastal Carolina University
 ```
 
-You can output the data in three formats: plain (the default), csv, and json.
+You can output the data in three formats: plain (the default), CSV, and JSON.
 
 ```sh
 t.vect.db.select input=schools_stds columns="cat,CORECAPACI" format=json
