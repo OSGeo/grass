@@ -158,11 +158,10 @@ def main():
 
     # if no connection is found
     if not db_exists:
-        gs.message(
-            _(
-                "No temporal database connection exists in this mapset. No datasets to list."
+        if output_format == "plain":
+            gs.message(
+                _("No temporal database exists in this mapset. No datasets to list.")
             )
-        )
         with (
             open(outpath, "w")
             if (outpath and outpath != "-")
