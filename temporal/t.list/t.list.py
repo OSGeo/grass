@@ -152,15 +152,9 @@ def main():
 
     tools = Tools()
 
-    conn = tools.t_connect(flags="pg").keyval
+    conn = tools.t_connect(flags="p", format="json")
 
-    driver = conn["driver"]
-    database = conn["database"]
-
-    db_exists = True
-
-    if not driver or not database:
-        db_exists = False
+    db_exists = conn["driver"] and conn["database"]
 
     # if no connection is found
     if not db_exists:
@@ -169,8 +163,13 @@ def main():
                 "No temporal database connection exists in this mapset. No datasets to list."
             )
         )
-        if outpath and outpath != "-":
-            open(outpath, "w").close()
+        with (
+            open(outpath, "w")
+            if (outpath and outpath != "-")
+            else nullcontext(sys.stdout)
+        ) as out_file:
+            if output_format == "json":
+                out_file.write(json.dumps([], indent=4) + "\n")
         return
 
     # Lazy import
