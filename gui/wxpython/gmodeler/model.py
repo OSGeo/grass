@@ -756,6 +756,10 @@ class Model:
         # store run params
         self._runParams = params
 
+    def GetRunParams(self):
+        """Get the models run parameters"""
+        return getattr(self, "_runParams", None)
+
     def DeleteIntermediateData(self, log):
         """Delete intermediate data"""
         rast, vect, rast3d, msg = self.GetIntermediateData()

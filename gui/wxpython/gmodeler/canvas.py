@@ -483,7 +483,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         self.frame.canvas.Refresh()
 
         model = self.frame.GetModel()
-        run_params = getattr(model, "_runParams", None)
+        run_params = model.GetRunParams()
         resolved = {}
         if run_params and "variables" in run_params:
             for p in run_params["variables"]["params"]:

@@ -409,7 +409,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
         self._deleteIntermediateData()
 
         # store resolved variables
-        run_params = getattr(self.model, "_runParams", None)
+        run_params = self.model.GetRunParams()
         resolved = {}
         if run_params and "variables" in run_params:
             for p in run_params["variables"]["params"]:
@@ -437,12 +437,6 @@ class ModelerPanel(wx.Panel, MainPageBase):
                 checked=True,
                 cmd=data.GetDisplayCmd(resolved),
             )
-        # discard values
-        if run_params:
-            for item in run_params.values():
-                for p in item["params"]:
-                    p["value"] = ""
-            del self.model._runParams
 
     def _switchPageHandler(self, event, notification):
         self._switchPage(notification=notification)
@@ -1827,7 +1821,7 @@ class PythonPanel(wx.Panel):
 
         # store resolved variables
         model = self.parent.GetModel()
-        run_params = getattr(model, "_runParams", None)
+        run_params = model.GetRunParams()
         resolved = {}
         if run_params and "variables" in run_params:
             for p in run_params["variables"]["params"]:
