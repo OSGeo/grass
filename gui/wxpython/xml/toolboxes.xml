@@ -565,9 +565,6 @@
       <module-item name="g.download.project">
         <label>Download project from web</label>
       </module-item>
-      <module-item name="g.download.location">
-        <label>Download project from web (deprecated name)</label>
-      </module-item>
       <separator/>
       <module-item name="g.extension.all">
         <label>Rebuild or remove all addons</label>
@@ -673,9 +670,6 @@
       <separator/>
       <module-item name="g.download.project">
         <label>Download project from web</label>
-      </module-item>
-      <module-item name="g.download.location">
-        <label>Download project from web (deprecated name)</label>
       </module-item>
     </items>
   </toolbox>
