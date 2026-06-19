@@ -477,8 +477,8 @@ def __ll_parts(value, reverse=False, precision=3):
                 d = d[:-1]
                 m = "0"
                 s = "0.0"
-            except ValueError:
-                raise ValueError
+            except ValueError as err:
+                raise ValueError from err
 
     if hs not in {"N", "S", "E", "W"}:
         raise ValueError
