@@ -191,7 +191,8 @@ def test_param_scale_matches_reference(param_scale_session, method, size):
     assert stats["n"] == reference["n"]
     assert stats["null_cells"] == reference["null_cells"]
 
-    # Value statistics: relative tolerance, with an absolute floor that
-    # covers near-zero values and a zero standard deviation.
+    # Value statistics: relative tolerance for the large-magnitude methods,
+    # with an absolute floor above cross-build floating-point noise for the
+    # near-zero curvature outputs (profc/planc/minic) and zero stddev.
     for field in ("min", "max", "mean", "stddev", "sum"):
-        assert stats[field] == pytest.approx(reference[field], rel=1e-6, abs=1e-9)
+        assert stats[field] == pytest.approx(reference[field], rel=1e-6, abs=5e-8)
