@@ -77,11 +77,19 @@
 # % key: t
 # % description: output to text file
 # %end
+# % flag
+# % key: p
+# % description: output to pyplot
+# %end
 
 import os
 import atexit
 from grass.script.utils import try_rmdir
 from grass.script import core as gcore
+
+# For pyplot
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 def cleanup():
@@ -218,6 +226,52 @@ def draw_linegraph(what):
     )
 
 
+def draw_pyplot(what, xlabels, coord_legend):
+    """
+    Draw using pyplot
+    """
+    plt.figure(figsize=(10, 6))
+    max_len = 0
+
+    for i, row in enumerate(what):
+        y = [float(val) for val in row[3:]]  # data points
+        x = np.arange(1, len(y) + 1)
+        max_len = max(max_len, len(y))
+        label = str(tuple(row[0:2])) if coord_legend else f"Pick {i + 1}"
+        plt.plot(x, y, marker="", label=label)
+
+    # Assume 'what' is your data as given
+    row = what[0]  # or any row you want to use
+    num_bands = len(row) - 3  # subtract the first three elements (coords/meta)
+    # Generate xlabels: ['Band1', 'Band2', ..., 'BandN']
+    xlabels = [f"B{i + 1}" for i in range(num_bands)]
+    # Determine up to 10 evenly spaced tick positions
+    max_ticks = 10
+    if num_bands <= max_ticks:
+        tick_indices = np.arange(num_bands)
+    else:
+        tick_indices = np.linspace(0, num_bands - 1, max_ticks, dtype=int)
+    # Set x-axis labels
+    if xlabels and isinstance(xlabels, (list, tuple)):
+        plt.xticks(np.arange(1, len(xlabels) + 1), xlabels, rotation=40)
+    else:
+        plt.xticks(np.arange(1, max_len + 1))
+
+    # Plot data
+    y = row[3:]
+    x = np.arange(1, num_bands + 1)
+    plt.xticks(
+        ticks=x[tick_indices], labels=[xlabels[i] for i in tick_indices], rotation=40
+    )
+    plt.grid(True, linestyle=":", linewidth=0.7, color="gray", alpha=0.7)
+    plt.title("Spectral signatures")
+    plt.xlabel("Bands")
+    plt.ylabel("DN Value")
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
+
 def main():
     group = options["group"]
     subgroup = options["subgroup"]
@@ -228,6 +282,7 @@ def main():
     coord_legend = flags["c"]
     gnuplot = flags["g"]
     textfile = flags["t"]
+    pyplot = flags["p"]
 
     global tmp_dir
     tmp_dir = gcore.tempdir()
@@ -283,6 +338,8 @@ def main():
     # build data files
     if gnuplot:
         draw_gnuplot(what, xlabels, output, img_fmt, coord_legend)
+    elif pyplot:
+        draw_pyplot(what, xlabels, coord_legend)
     elif textfile:
         write2textf(what, output)
     else:
