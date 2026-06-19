@@ -1447,27 +1447,38 @@ def install_extension_xml(edict):
 
 
 def get_multi_addon_addons_which_install_only_html_man_page():
-    """Get multi-addon addons which install only manual html page
+    """Get multi-addon addons which installs only manual HTML page
 
-    :return list addons: list of multi-addon addons which install
-                         only manual html page
+    :return list addon_dirs: list of addon directories which does
+                             not contain any Python or C source code
+                             files
     """
-    all_addon_dirs = []
+    addon_dirs = []
+    escape_dot = "\\."
     addon_paths = re.findall(
-        rf".*{options['extension']}*.",
+        rf".*{options['extension'].replace('.', escape_dot)}.*",
         get_addons_paths(gg_addons_base_dir=options["prefix"]),
     )
     addon_dir_paths = {os.path.dirname(i) for i in addon_paths}
     for addon_dir in addon_dir_paths:
         addon_src_files = list(
-            re.finditer(rf"{addon_dir}/(.*py)|(.*c)\n", "\n".join(addon_paths)),
+            re.finditer(
+                rf"{addon_dir.replace('.', escape_dot)}/(.*.py)|(.*.c)\n",
+                "\n".join(addon_paths),
+            ),
         )
-        if not addon_src_files:
-            all_addon_dirs.append(os.path.basename(addon_dir))
+        if addon_dir not in {os.path.dirname(i.group(0)) for i in addon_src_files}:
+            addon_dirs.append(os.path.basename(addon_dir))
         else:
             for addon_src_file in addon_src_files:
-                addon_paths.pop(addon_paths.index(addon_src_file.group(0)))
-    return all_addon_dirs
+                addon_paths.pop(
+                    addon_paths.index(addon_src_file.group(0).replace("\n", ""))
+                )
+    gs.debug(
+        f"Addon directory named <{', '.join(addon_dirs)}> which"
+        " does not contain any Python or C source code files."
+    )
+    return addon_dirs
 
 
 def filter_multi_addon_addons(mlist):
@@ -1491,6 +1502,7 @@ def filter_multi_addon_addons(mlist):
     # to check if metadata is available if there is no executable module.
     for addon in get_multi_addon_addons_which_install_only_html_man_page():
         if addon in mlist:
+            gs.debug(f"Addon name <{addon}> which installs only HTML man page.")
             mlist.pop(mlist.index(addon))
     return mlist
 
@@ -2517,7 +2529,7 @@ def update_manual_page(module):
         # Multi-addon
         if len(addons) > 1:
             for a in get_multi_addon_addons_which_install_only_html_man_page():
-                # Add multi-addon addons which install only manual html page
+                # Add multi-addon addons which installs only manual HTML page
                 addons.append(a)
 
     for match in re.finditer(pattern, shtml):
