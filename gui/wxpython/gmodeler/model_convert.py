@@ -895,7 +895,7 @@ def cleanup():
                 r"""    %s("g.remove", flags="f", type="raster",
                 name=%s)
 """
-                % (run_command, ",".join(f'"{x}"' for x in rast3d))
+                % (run_command, ",".join(f'"{x}"' for x in rast))
             )
         if vect:
             self.fd.write(
