@@ -99,6 +99,7 @@ import sys
 from contextlib import nullcontext
 
 import grass.script as gs
+from grass.tools import Tools
 
 ############################################################################
 
@@ -148,6 +149,27 @@ def main():
 
     elif not separator:  # output_format == "plain"
         separator = "|"
+
+    tools = Tools()
+
+    conn = tools.t_connect(flags="p", format="json")
+
+    db_exists = conn["driver"] and conn["database"]
+
+    # if no connection is found
+    if not db_exists:
+        if output_format == "plain":
+            gs.message(
+                _("No temporal database exists in this mapset. No datasets to list.")
+            )
+        with (
+            open(outpath, "w")
+            if (outpath and outpath != "-")
+            else nullcontext(sys.stdout)
+        ) as out_file:
+            if output_format == "json":
+                out_file.write(json.dumps([], indent=4) + "\n")
+        return
 
     # Lazy import
     import grass.temporal as tgis
