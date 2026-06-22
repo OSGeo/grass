@@ -524,6 +524,7 @@ docstring-code-format = true
 
 [tool.pytest.ini_options]
 addopts = """
+    --import-mode=importlib
     --ignore-glob='dist.*'
     --ignore-glob='bin.*'
     --ignore-glob='*/tests/data/*'

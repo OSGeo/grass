@@ -221,10 +221,14 @@ def setup_runtime_env(gisbase=None, *, env=None):
         RuntimePaths,
     )
 
+    from grass.script.core import sanitize_mapset_environment
+
     # If environment is not provided, use the global one.
     if not env:
         env = os.environ
-
+    # Remove mapset-specific variables that should not leak into the
+    # runtime environment being set up.
+    sanitize_mapset_environment(env)
     runtime_paths = RuntimePaths(env=env, prefix=gisbase)
     gisbase = runtime_paths.gisbase
     if not Path(gisbase).is_dir():
