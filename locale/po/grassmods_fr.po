@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-06 18:30+0000\n"
-"PO-Revision-Date: 2026-04-09 14:56+0000\n"
+"POT-Creation-Date: 2026-06-20 16:28+0000\n"
+"PO-Revision-Date: 2026-06-22 04:41+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grassmods/fr/>\n"
 "Language: fr\n"
@@ -46,10 +46,8 @@ msgstr "Échec de l'initialisation du tableau JSON. Mémoire insuffisante ?"
 msgid "Failed to serialize JSON to pretty format."
 msgstr "Échec de la sérialisation du format JSON avec mis en forme (pretty format)."
 
-#, fuzzy
-#| msgid "Print raster3d information in shell style"
 msgid "Print type information about the columns"
-msgstr "Afficher les informations du raster3d en format shell"
+msgstr "Afficher les informations sur le type des colonnes"
 
 msgid "Print the name and the type of all the columns for a given table."
 msgstr "Afficher le nom et le type de toutes les colonnes d'une table donnée."
@@ -69,7 +67,6 @@ msgstr "table attributaire"
 msgid "List all columns for a given table."
 msgstr "Lister toutes les colonnes d'une table."
 
-#, fuzzy
 msgid "Separator is part of the format."
 msgstr "Le séparateur fait partie du format."
 
@@ -342,10 +339,8 @@ msgstr "Ne pas inclure de nom de colonnes en sortie"
 msgid "Describe query only (don't run it)"
 msgstr ""
 
-#, fuzzy
-#| msgid "Vertical output (instead of horizontal)"
 msgid "Vertical output instead of horizontal [deprecated]"
-msgstr "Sortie verticale (à la place d'horizontale)"
+msgstr "Sortie verticale au lieu d'horizontale [obsolète]"
 
 msgid "Use format=vertical instead."
 msgstr ""
@@ -1817,9 +1812,9 @@ msgstr ""
 msgid "Scale Y labels cannot be used with this range of data (%f, %f)"
 msgstr ""
 
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to append <%s> to path"
-msgstr "Impossible de créer le fichier <%s>"
+msgstr "Impossible d'ajouter <%s> au chemin d'accès"
 
 msgid "List of running monitors:"
 msgstr ""
@@ -2241,7 +2236,6 @@ msgstr "Nombre de chiffres significatifs (virgule flottante uniquement)"
 msgid "Get text color from cell color value"
 msgstr "Choisir la couleur du texte en fonction de la valeur de couleur de la cellule"
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -2334,9 +2328,8 @@ msgstr "Texte à afficher"
 msgid "Input file"
 msgstr "Fichier source"
 
-#, fuzzy
 msgid "Text background color"
-msgstr "Couleur de fond d'étiquette"
+msgstr "Couleur d’arrière-plan du texte"
 
 msgid "Line spacing"
 msgstr "Espacement des lignes"
@@ -2467,10 +2460,9 @@ msgstr "Ne pas afficher cette couche dans la légende vectorielle"
 msgid "Create 3D charts"
 msgstr ""
 
-#, fuzzy, c-format
-#| msgid "Unable to open file <%s> for writing"
+#, c-format
 msgid "Unable to open GRASS_LEGEND_FILE <%s> for writing"
-msgstr "Impossible d'ouvrir <%s> en écriture"
+msgstr "Impossible d'ouvrir le fichier GRASS_LEGEND_FILE <%s> en mode écriture"
 
 #, c-format
 msgid "Database connection not defined for layer %d"
@@ -2646,7 +2638,7 @@ msgstr ""
 msgid "The bounding box of the map is outside the current region, nothing drawn."
 msgstr ""
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Total number of records: %.0f\n"
@@ -3876,9 +3868,8 @@ msgstr ""
 msgid "WKT not recognized: %s"
 msgstr ""
 
-#, fuzzy
 msgid "Failed to read PROJ.4 parameter from stdin"
-msgstr "Impossible de parser la chaîne de paramètres de style-PROJ.4"
+msgstr "Impossible de lire le paramètres PROJ.4 à partir de l'entrée standard"
 
 #, c-format
 msgid "PROJ.4 parameter string is too long: %s"
@@ -4264,9 +4255,8 @@ msgstr ""
 msgid "You are already in Lat/Long. Use the -p flag instead."
 msgstr "Vous êtes déjà en Lat/Long. Utilisez l'option -p à la place."
 
-#, fuzzy
 msgid "You are in a simple XY project, projection to Lat/Lon is not possible. Use the -p flag instead."
-msgstr "Vous êtes dans un Secteur XY simple, la projection en Lat/Long n'est pas possible. Utilisez l'option -p à la place."
+msgstr "Vous êtes dans un projet XY simple, la projection en Lat/Long n'est pas possible. Utilisez l'option -p à la place."
 
 msgid "Unable to update lat/long projection parameters"
 msgstr "Impossible de mettre à jour les paramètres de projection lat/lon"
@@ -4443,17 +4433,17 @@ msgstr ""
 
 #, c-format
 msgid "The current datum is %s (%s)"
-msgstr ""
+msgstr "Le système de référence géodésique actuel est %s (%s)"
 
 msgid "Do you wish to change the datum (or datum transformation parameters)?"
-msgstr ""
+msgstr "Souhaitez-vous modifier le système de référence géodésique (ou les paramètres de transformation du système de référence géodésique) ?"
 
 msgid "The datum information has not been changed"
-msgstr ""
+msgstr "L'information sur le système de référence géodésique n'a pas été modifiée"
 
 #, c-format
 msgid "The current ellipsoid is %s"
-msgstr ""
+msgstr "L'ellipsoïde actuel est %s"
 
 msgid "Do you want to change ellipsoid parameter?"
 msgstr ""
@@ -9889,9 +9879,8 @@ msgstr "Importer un jeu de données raster temporel."
 msgid "Path to the extraction directory"
 msgstr "Chemin vers le répertoire d'extraction"
 
-#, fuzzy
-msgid "Create a new project and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
-msgstr "Créer un nouveau Secteur et importer les données dedans. Ne pas lancer ce module en parallèle où l'interrompre quand un nouveau Secteur doit être créé"
+msgid "Create a new project and import the data into it."
+msgstr ""
 
 msgid "Set the current region from the last map that was imported"
 msgstr "Définir la région courante depuis la dernière carte qui a été importée"
@@ -10062,6 +10051,9 @@ msgid "parallel"
 msgstr "parallèle"
 
 msgid "Raster map used for zoning, must be of type CELL"
+msgstr ""
+
+msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
 msgstr ""
 
 msgid "Calculate extended statistics"
@@ -10328,9 +10320,8 @@ msgstr ""
 msgid "Imports a space time vector dataset from a GRASS specific archive file."
 msgstr "Importer un jeu de données vectoriel temporel depuis un fichier d'archive GRASS."
 
-#, fuzzy
 msgid "Create a new project (location) and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
-msgstr "Créer un nouveau Secteur et importer les données dedans. Ne pas lancer ce module en parallèle où l'interrompre quand un nouveau Secteur doit être créé"
+msgstr "Créer un nouveau projet (Secteur) et importer les données dedans. Ne pas lancer ce module en parallèle ou l'interrompre quand un nouveau projet doit être créé"
 
 msgid "Create the project specified by the \"project\" parameter and exit. Do not import the space time vector datasets."
 msgstr ""
@@ -10473,9 +10464,8 @@ msgstr "Colonne d'identifiant (ex : id) de l'autre table à utiliser pour la joi
 msgid "Subset of columns from the other table"
 msgstr "Échantillon de colonnes de l'autre table"
 
-#, fuzzy
 msgid "Columns to exclude from the other table"
-msgstr "Échantillon de colonnes de l'autre table"
+msgstr "Colonnes à exclure de l'autre table"
 
 msgid "Reconnects attribute tables for all vector maps from the current mapset to a new database."
 msgstr "Reconnecter les tables attributaires pour toutes les cartes vecteur du jeu de données actuel vers une nouvelle base de données."
@@ -10537,9 +10527,8 @@ msgstr "Nom d'une autre colonne à requêter, peut être une combinaison de colo
 msgid "Name of SQLite extension file for extra functions (SQLite backend only)"
 msgstr "Nom du fichier d'extention SQLite pour des fonctions supplémentaires (backend SQLite uniquement)"
 
-#, fuzzy
 msgid "Dissolves adjacent or overlapping features sharing a common category number or attribute."
-msgstr "Fusionne des contours entre surfaces adjacentes partageant un attribut ou une catégorie commun(e)."
+msgstr "Regroupe les entités adjacentes ou qui se chevauchent et qui partagent un numéro de catégorie ou un attribut commun."
 
 msgid "dissolve"
 msgstr "dissoudre"
@@ -10549,14 +10538,13 @@ msgstr "ligne"
 
 #, fuzzy
 msgid "Dissolving"
-msgstr "dissoudre"
+msgstr "Regrouppement"
 
 msgid "Layer number or name."
 msgstr "Numéro de couche ou nom."
 
-#, fuzzy
 msgid "Name of attribute column used to dissolve features"
-msgstr "Nom de la colonne d'attributs utilisée pour dissoudre les contours communs"
+msgstr "Nom de la colonne d'attribut utilisée pour regrouper les entités"
 
 msgid "Names of attribute columns to get aggregate statistics for"
 msgstr "Noms des colonnes d'attribut pour lesquelles obtenir des statistiques agrégées"
@@ -10581,7 +10569,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Backend for attribute aggregation"
-msgstr "Back-end pour l’agrégation des attributs"
+msgstr "Backend pour l'agrégation d'attributs"
 
 msgid "Default is sql unless the provided aggregate methods are for univar"
 msgstr ""
@@ -10874,9 +10862,8 @@ msgstr ""
 msgid "Units"
 msgstr "Unités"
 
-#, fuzzy
 msgid "Default: project map units"
-msgstr "Par défaut : en unité de carte au carré"
+msgstr "Par défaut : unités de la carte du projet"
 
 msgid "Shell script style [deprecated]"
 msgstr "Style script shell [obsolète]"
@@ -12278,7 +12265,7 @@ msgstr ""
 
 #, c-format
 msgid "bad rule (%s): [%s]"
-msgstr "mauvaise règle (%s): [%s]"
+msgstr "Règle incorrecte (%s) : [%s]"
 
 #, c-format
 msgid "(%i/%i) Reading raster map <%s>..."
@@ -13136,10 +13123,9 @@ msgstr "Le nom de la carte de sortie <%s> est trop long"
 msgid "Direction map name <%s> is too long"
 msgstr "Le nom de la carte de sens d’écoulement <%s> est trop long"
 
-#, fuzzy, c-format
-#| msgid "Raster map name <%s> is too long"
+#, c-format
 msgid "Areas map name <%s> is too long"
-msgstr "Le nom de carte de surfaces <%s> est trop long"
+msgstr "Le nom de la carte des surfaces <%s> est trop long"
 
 msgid "Direction map is D8 resolution, i.e. 45 degrees"
 msgstr ""
@@ -13681,7 +13667,6 @@ msgstr ""
 msgid "Maximum difference between this and last increment: %g"
 msgstr ""
 
-#, fuzzy
 msgid "Failed to compute gradient field"
 msgstr "Échec du calcul du champ de gradient"
 
@@ -13761,9 +13746,8 @@ msgstr "Pas du coefficient d'échantillonnage (0.5-1.5)"
 msgid "Name of file for output (use output=- for stdout)"
 msgstr "Nom du fichier en sortie (utilisez output=- pour le flux de sortie stdout)"
 
-#, fuzzy
 msgid "Include horizon distance in the plain output"
-msgstr "Inclure les étiquettes de catégories dans la sortie"
+msgstr "Inclure la distance à l'horizon dans la sortie en mode texte"
 
 msgid "Write output in degrees (default is radians)"
 msgstr ""
@@ -13839,9 +13823,8 @@ msgstr "Erreur dans %s"
 msgid "Calculating map %01d of %01d (angle %.2f, raster map <%s>)"
 msgstr ""
 
-#, fuzzy
 msgid "failed to read the input file"
-msgstr "Impossible de lire le fichier segment"
+msgstr "impossible de lire le fichier d'entrée"
 
 msgid "input file is not a Surfer ascii grid file"
 msgstr ""
@@ -14107,9 +14090,8 @@ msgstr ""
 msgid "Bands"
 msgstr ""
 
-#, fuzzy
 msgid "Name of GCPs target project (location)"
-msgstr "Nom du Secteur de destination du groupe d'images"
+msgstr "Nom du projet cible des GCP (Secteur)"
 
 msgid "Name of project to create or to read CRS from for GCPs transformation"
 msgstr ""
@@ -14239,9 +14221,8 @@ msgstr ""
 msgid "Unable to translate projection key values of input GCPs"
 msgstr ""
 
-#, fuzzy
 msgid "Unable to get CRS info of target project"
-msgstr "Impossible d'obtenir les informations de projection de la carte en entrée"
+msgstr "Impossible d'obtenir les informations SCR du projet cible"
 
 msgid "Unable to get CRS units of target project"
 msgstr "Impossible d'obtenir les unités du SCR de la carte en entrée"
@@ -14514,9 +14495,8 @@ msgid ""
 "\n"
 msgstr ""
 
-#, fuzzy
 msgid "GRASS project PROJ_INFO is:\n"
-msgstr "Le PROJ_INFO du jeu de données est : \n"
+msgstr "Le PROJ_INFO du projet GRASS est :\n"
 
 msgid "Import dataset PROJ_INFO is:\n"
 msgstr ""
@@ -14661,10 +14641,9 @@ msgstr ""
 msgid "Unknown return filter value <%s>"
 msgstr "Valeur de filtre <%s> inconnue retournée"
 
-#, fuzzy, c-format
-#| msgid "Cannot create segment file %s"
+#, c-format
 msgid "Cannot determine input file type of <%s>"
-msgstr "Impossible de créer le segment de fichier %s"
+msgstr "Impossible de déterminer le type du fichier d'entrée <%s>"
 
 #, c-format
 msgid "PDAL error: %s"
@@ -20336,7 +20315,6 @@ msgstr "Trop de catégories (trouvées: %i, max: %i). Essaye de rééchelonner o
 msgid "Input raster must be of type CELL."
 msgstr "Le raster d'entrée doit être de type CELL."
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
@@ -23671,7 +23649,7 @@ msgstr ""
 msgid "Filled raster map is: %s"
 msgstr ""
 
-msgid "Following holes where not filled. Temporary maps with are left in place to allow examination of unfilled holes"
+msgid "The following holes were not filled. Temporary maps are left in place to allow examination of unfilled holes:"
 msgstr ""
 
 msgid "Output can be written only to the current mapset"
@@ -24947,11 +24925,11 @@ msgstr ""
 msgid "Prints/sets general temporal GIS database connection for current mapset."
 msgstr "Afficher/définir la connecion DB générale pour le jeu de cartes courant."
 
+msgid "plain;Plain text output;shell;Shell script style output;json;JSON (JavaScript Object Notation)"
+msgstr ""
+
 msgid "Overwrite current settings if initialized"
 msgstr "Écraser les paramètres courants si initialisés"
-
-msgid "Print current connection parameter in shell style and exit"
-msgstr "Afficher les paramètres de connexion courants en mode shell et quitter"
 
 msgid "Temporal GIS database connection not defined. Run t.connect."
 msgstr "Connexion à la base de données SIG temporelle non définie. Lancez t.connect."
@@ -31182,6 +31160,11 @@ msgid_plural "%d boundaries snapped"
 msgstr[0] ""
 msgstr[1] ""
 
+#, fuzzy, c-format
+#| msgid "Reading raster map <%s>..."
+msgid "Removing areas smaller than %g sqm..."
+msgstr "Lecture de la carte raster <%s> ..."
+
 #, c-format
 msgid "Querying vector map <%s>..."
 msgstr ""
@@ -31261,6 +31244,13 @@ msgid "Snapping threshold for boundaries"
 msgstr ""
 
 msgid "Disable snapping with snap <= 0"
+msgstr ""
+
+#, fuzzy
+msgid "Minimum size of areas to keep in square meters"
+msgstr "Afficher la surface totale en mètres carrés"
+
+msgid "Enable with minsize > 0"
 msgstr ""
 
 #, c-format
@@ -33493,9 +33483,6 @@ msgstr "Impossible de copier la table"
 msgid "Pass %d"
 msgstr "Passe %d"
 
-msgid "Node is outside any input area"
-msgstr ""
-
 #, c-format
 msgid "Found %d point/centroid in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
 msgid_plural "Found %d points/centroids in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
@@ -33875,6 +33862,13 @@ msgstr "Visionner des images BMP avec le pilote PNG."
 
 msgid "Image file"
 msgstr ""
+
+#~ msgid "Print current connection parameter in shell style and exit"
+#~ msgstr "Afficher les paramètres de connexion courants en mode shell et quitter"
+
+#, fuzzy
+#~ msgid "Create a new project and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
+#~ msgstr "Créer un nouveau Secteur et importer les données dedans. Ne pas lancer ce module en parallèle où l'interrompre quand un nouveau Secteur doit être créé"
 
 #~ msgid ""
 #~ "WGS84 output not possible as this location does not contain\n"
@@ -36163,10 +36157,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Minimum size of areas in map units"
 #~ msgstr "Ecart type minimum en unités carte"
-
-#, fuzzy
-#~ msgid "Minimum size of areas to be retained in output (square meters)"
-#~ msgstr "Afficher la surface totale en mètres carrés"
 
 #, fuzzy
 #~ msgid "Minimum size of tiles in map units"
