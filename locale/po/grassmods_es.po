@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-08 19:11+0000\n"
+"POT-Creation-Date: 2026-06-13 12:01+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grassmods/es/>\n"
@@ -2258,7 +2258,6 @@ msgstr "Número de dígitos significativos (coma flotante solamente)"
 msgid "Get text color from cell color value"
 msgstr "Obtener color de texto del valor de color de la celda"
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -20622,7 +20621,6 @@ msgstr "Demasiadas categorías (encontradas: %i, máximo: %i). Intente rescalar 
 msgid "Input raster must be of type CELL."
 msgstr "Mapa ráster de entrada debe ser de tipo CELL."
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
@@ -33928,9 +33926,6 @@ msgstr "Imposible copiar la tabla"
 msgid "Pass %d"
 msgstr "Paso: %d"
 
-msgid "Node is outside any input area"
-msgstr "Nodo está fuera de todas las áreas de entrada"
-
 #, c-format
 msgid "Found %d point/centroid in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
 msgid_plural "Found %d points/centroids in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
@@ -34348,6 +34343,9 @@ msgstr "Ver imágenes BMP desde el controlador PNG."
 
 msgid "Image file"
 msgstr "Archivo de imagen"
+
+#~ msgid "Node is outside any input area"
+#~ msgstr "Nodo está fuera de todas las áreas de entrada"
 
 #~ msgid ""
 #~ "WGS84 grid output not possible as this location does not contain\n"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-08 19:11+0000\n"
+"POT-Creation-Date: 2026-06-13 12:01+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Arabic <https://weblate.osgeo.org/projects/grass-gis/grassmods/ar/>\n"
@@ -2513,7 +2513,6 @@ msgstr "عدد الأرقام المميزة , النقط العشرية فقط"
 msgid "Get text color from cell color value"
 msgstr ""
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -22751,7 +22750,6 @@ msgstr ""
 msgid "Input raster must be of type CELL."
 msgstr "وصف مبسط للملف الراسترى المخرج"
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, fuzzy, c-format
@@ -37188,10 +37186,6 @@ msgstr "لم يتم نسخ الجدول"
 msgid "Pass %d"
 msgstr ""
 
-#, fuzzy
-msgid "Node is outside any input area"
-msgstr "اسم الخريطة المدخلة"
-
 #, c-format
 msgid "Found %d point/centroid in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
 msgid_plural "Found %d points/centroids in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
@@ -37594,6 +37588,10 @@ msgstr ""
 #, fuzzy
 msgid "Image file"
 msgstr "ملف المدخل"
+
+#, fuzzy
+#~ msgid "Node is outside any input area"
+#~ msgstr "اسم الخريطة المدخلة"
 
 #, fuzzy, c-format
 #~ msgid "Unable to find init file %s"
