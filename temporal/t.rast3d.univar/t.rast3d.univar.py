@@ -37,7 +37,7 @@
 # %option G_OPT_R3_INPUT
 # % key: zones
 # % label: Raster map with zones to compute statistics for
-# % description: Raster map with zones to compute statistics for
+# % description: 3D raster map with zones
 # % required: no
 # %end
 
