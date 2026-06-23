@@ -45,7 +45,7 @@ ARG GRASS_RUN_PACKAGES="\
   gcc \
   git \
   language-pack-en-base \
-  libarmadillo12 \
+  libarmadillo15 \
   libcairo2 \
   libcurl4-gnutls-dev \
   libfftw3-bin \
@@ -55,7 +55,7 @@ ARG GRASS_RUN_PACKAGES="\
   libgeotiff5 \
   libgif7 \
   libgsl-dev \
-  libgsl27 \
+  libgsl28 \
   libhdf5-dev \
   libjpeg-turbo8 \
   libjson-c5 \
