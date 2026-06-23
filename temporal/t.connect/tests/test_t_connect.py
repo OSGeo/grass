@@ -1,7 +1,10 @@
 """Test current baseline functionality of t.connect"""
 
+import pathlib
+
 import pytest
 
+import grass.script as gs
 from grass.tools import ToolError, Tools
 
 
@@ -127,3 +130,29 @@ def test_mapset_requires_print_flag(t_connect_session):
 
     with pytest.raises(ToolError):
         tools.t_connect(mapset=".", format="json")
+
+
+def test_print_does_not_write_var_file(empty_session):
+    """Verify that print-only operations leave no TGIS entries in the VAR file.
+
+    Calling t.connect with -p (in any output format) must never write
+    connection settings to the mapset's VAR file.
+    """
+    tools = Tools(session=empty_session.session)
+
+    tools.t_connect(flags="p")
+    tools.t_connect(flags="p", format="shell")
+    tools.t_connect(flags="p", format="json")
+
+    gisenv = gs.gisenv(env=empty_session.session.env)
+    var_file = (
+        pathlib.Path(gisenv["GISDBASE"])
+        / gisenv["LOCATION_NAME"]
+        / gisenv["MAPSET"]
+        / "VAR"
+    )
+
+    if var_file.exists():
+        contents = var_file.read_text()
+        assert "TGISDB_DRIVER" not in contents
+        assert "TGISDB_DATABASE" not in contents
