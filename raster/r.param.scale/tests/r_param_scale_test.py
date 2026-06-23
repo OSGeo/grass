@@ -168,6 +168,7 @@ def _combos():
             yield method, size
 
 
+@pytest.mark.skip(reason="Waiting for a fix to the libgmath race, see #7539")
 @pytest.mark.parametrize(("method", "size"), list(_combos()))
 def test_param_scale_matches_reference(param_scale_session, method, size):
     """r.param.scale stats must match the main reference values."""
