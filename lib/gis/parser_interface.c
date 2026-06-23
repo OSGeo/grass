@@ -210,12 +210,14 @@ void G__usage_xml(void)
                 fprintf(stdout, "\t\t<keydesc>\n");
                 top = G_calloc(strlen(opt->key_desc) + 1, 1);
                 strcpy(top, opt->key_desc);
-                s = strtok(top, ",");
+                char *saveptr;
+                s = strtok_r(top, ",", &saveptr);
+
                 for (i = 1; s != NULL; i++) {
                     fprintf(stdout, "\t\t\t<item order=\"%d\">", i);
                     print_escaped_for_xml(stdout, s);
                     fprintf(stdout, "</item>\n");
-                    s = strtok(NULL, ",");
+                    s = strtok_r(NULL, ",", &saveptr);
                 }
                 fprintf(stdout, "\t\t</keydesc>\n");
                 G_free(top);
@@ -225,11 +227,12 @@ void G__usage_xml(void)
                 const char *atts[] = {"age", "element", "prompt", NULL};
                 top = G_calloc(strlen(opt->gisprompt) + 1, 1);
                 strcpy(top, opt->gisprompt);
-                s = strtok(top, ",");
+                char *saveptr;
+                s = strtok_r(top, ",", &saveptr);
                 fprintf(stdout, "\t\t<gisprompt ");
                 for (i = 0; s != NULL && atts[i] != NULL; i++) {
                     fprintf(stdout, "%s=\"%s\" ", atts[i], s);
-                    s = strtok(NULL, ",");
+                    s = strtok_r(NULL, ",", &saveptr);
                 }
                 fprintf(stdout, "/>\n");
                 G_free(top);
