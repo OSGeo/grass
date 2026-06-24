@@ -492,10 +492,14 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
                 if name and value:
                     resolved[name] = value
 
+        layer_list = self.frame._giface.GetLayerList()
+        if not hasattr(layer_list, "GetLayersByName"):
+            return
+
         try:
             if event.IsChecked():
                 # add map layer to display
-                self.frame._giface.GetLayerList().AddLayer(
+                layer_list.AddLayer(
                     ltype=shape.GetPrompt(),
                     name=shape.GetResolvedValue(resolved),
                     checked=True,
@@ -503,11 +507,9 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
                 )
             else:
                 # remove map layer(s) from display
-                layers = self.frame._giface.GetLayerList().GetLayersByName(
-                    shape.GetResolvedValue(resolved)
-                )
+                layers = layer_list.GetLayersByName(shape.GetResolvedValue(resolved))
                 for layer in layers:
-                    self.frame._giface.GetLayerList().DeleteLayer(layer)
+                    layer_list.DeleteLayer(layer)
 
         except GException as e:
             GError(parent=self, message="{}".format(e))

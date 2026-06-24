@@ -417,21 +417,24 @@ class ModelerPanel(wx.Panel, MainPageBase):
                 value = p.get("value", "")
                 if name and value:
                     resolved[name] = value
-        # display data if required
+
+        # display data if required and is possible
+        layer_list = self._giface.GetLayerList()
+        if not hasattr(layer_list, "GetLayersByName"):
+            return
+
         for data in self.model.GetData():
             if not data.HasDisplay():
                 continue
 
             # remove existing map layers first
-            layers = self._giface.GetLayerList().GetLayersByName(
-                data.GetResolvedValue(resolved)
-            )
+            layers = layer_list.GetLayersByName(data.GetResolvedValue(resolved))
             if layers:
                 for layer in layers:
-                    self._giface.GetLayerList().DeleteLayer(layer)
+                    layer_list.DeleteLayer(layer)
 
             # add new map layer
-            self._giface.GetLayerList().AddLayer(
+            layer_list.AddLayer(
                 ltype=data.GetPrompt(),
                 name=data.GetResolvedValue(resolved),
                 checked=True,
@@ -1829,21 +1832,24 @@ class PythonPanel(wx.Panel):
                 value = p.get("value", "")
                 if name and value:
                     resolved[name] = value
-        # display data if required
+
+        # display data if required and is possible
+        layer_list = self.parent._giface.GetLayerList()
+        if not hasattr(layer_list, "GetLayersByName"):
+            return
+
         for data in model.GetData():
             if not data.HasDisplay():
                 continue
 
             # remove existing map layers first
-            layers = self.parent._giface.GetLayerList().GetLayersByName(
-                data.GetResolvedValue(resolved)
-            )
+            layers = layer_list.GetLayersByName(data.GetResolvedValue(resolved))
             if layers:
                 for layer in layers:
-                    self.parent._giface.GetLayerList().DeleteLayer(layer)
+                    layer_list.DeleteLayer(layer)
 
             # add new map layer
-            self.parent._giface.GetLayerList().AddLayer(
+            layer_list.AddLayer(
                 ltype=data.GetPrompt(),
                 name=data.GetResolvedValue(resolved),
                 checked=True,
