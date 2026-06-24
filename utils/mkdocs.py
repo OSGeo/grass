@@ -92,7 +92,7 @@ def get_version_branch(major_version, addons_git_repo_url):
             if gs:
                 gs.fatal(_(message))
             else:
-                sys.stderr.write(message + "\n")
+                sys.exit(message)
         if version_branch not in branch.decode():
             version_branch = "grass{}".format(int(major_version) - 1)
     return version_branch
@@ -440,7 +440,7 @@ def get_addon_path(base_url, pgm, major_version):
         if gs:
             gs.fatal(_(message))
         else:
-            sys.stderr.write(message + "\n")
+            sys.exit(message)
     addon_paths = re.findall(
         rf".*{pgm}*.",
         addons_file_list.decode(),
