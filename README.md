@@ -1,5 +1,9 @@
 # GRASS Repository
 
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/grass/badges/version.svg)](https://anaconda.org/conda-forge/grass)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/OSGeo/grass/main?labpath=doc%2Fexamples%2Fnotebooks%2Fjupyter_example.ipynb)  
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5176030.svg)](https://doi.org/10.5281/zenodo.5176030)
+[![Discourse](https://img.shields.io/badge/discourse-forum-blue?logo=discourse)](https://discourse.osgeo.org/c/grass/62)
 [![GCC C/C++ standards check](https://github.com/OSGeo/grass/workflows/GCC%20C/C++%20standards%20check/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3A%22GCC+C%2FC%2B%2B+standards+check%22)
 [![Python code quality check](https://github.com/OSGeo/grass/workflows/Python%20code%20quality%20check/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3A%22Python+code+quality+check%22)
 [![General linting](https://github.com/OSGeo/grass/workflows/General%20linting/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3A%22General+linting%22)
@@ -8,9 +12,6 @@
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/OSGeo/grass/badge)](https://securityscorecards.dev/viewer/?uri=github.com/OSGeo/grass)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/2470/badge)](https://www.bestpractices.dev/projects/2470)
 [![Coverity](https://scan.coverity.com/projects/1038/badge.svg)](https://scan.coverity.com/projects/grass)  
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5176030.svg)](https://doi.org/10.5281/zenodo.5176030)
-[![Discourse](https://img.shields.io/badge/discourse-forum-blue?logo=discourse)](https://discourse.osgeo.org/c/grass/62)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/OSGeo/grass/main?labpath=doc%2Fexamples%2Fnotebooks%2Fjupyter_example.ipynb)  
 [![Translation status](https://weblate.osgeo.org/widget/grass-gis/svg-badge.svg)](https://weblate.osgeo.org/engage/grass-gis/)  
 [![Powered by NumFOCUS](https://img.shields.io/badge/powered%20by-NumFOCUS-orange.svg?style=flat&colorA=E1523D&colorB=007D8A)](http://numfocus.org)
 [![Hosted by OSGeo](https://img.shields.io/badge/hosted%20by-OSGeo-4cb05b.svg?style=flat&labelColor=00393f)](https://www.osgeo.org/)

@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-06 18:30+0000\n"
+"POT-Creation-Date: 2026-06-20 16:28+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Czech <https://weblate.osgeo.org/projects/grass-gis/grassmods/cs/>\n"
@@ -2251,7 +2251,6 @@ msgstr "Počet míst za desetinnou čárkou (pouze pro mapy s plovoucí desetinn
 msgid "Get text color from cell color value"
 msgstr ""
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -9979,7 +9978,7 @@ msgstr ""
 msgid "Path to the extraction directory"
 msgstr ""
 
-msgid "Create a new project and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
+msgid "Create a new project and import the data into it."
 msgstr ""
 
 msgid "Set the current region from the last map that was imported"
@@ -10147,6 +10146,9 @@ msgid "parallel"
 msgstr ""
 
 msgid "Raster map used for zoning, must be of type CELL"
+msgstr ""
+
+msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
 msgstr ""
 
 msgid "Calculate extended statistics"
@@ -20518,7 +20520,6 @@ msgstr "Příliš mnoho kategorií (nalezeno: %i, max: %i). Zkuste změnit měř
 msgid "Input raster must be of type CELL."
 msgstr ""
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
@@ -23881,7 +23882,7 @@ msgstr ""
 msgid "Filled raster map is: %s"
 msgstr ""
 
-msgid "Following holes where not filled. Temporary maps with are left in place to allow examination of unfilled holes"
+msgid "The following holes were not filled. Temporary maps are left in place to allow examination of unfilled holes:"
 msgstr ""
 
 msgid "Output can be written only to the current mapset"
@@ -25168,10 +25169,10 @@ msgstr ""
 msgid "Prints/sets general temporal GIS database connection for current mapset."
 msgstr ""
 
-msgid "Overwrite current settings if initialized"
+msgid "plain;Plain text output;shell;Shell script style output;json;JSON (JavaScript Object Notation)"
 msgstr ""
 
-msgid "Print current connection parameter in shell style and exit"
+msgid "Overwrite current settings if initialized"
 msgstr ""
 
 msgid "Temporal GIS database connection not defined. Run t.connect."
@@ -31572,6 +31573,11 @@ msgstr[1] "%d hranice uzavřeny"
 msgstr[2] "%d hranic uzavřeno"
 msgstr[3] "%d hranic uzavřeno"
 
+#, fuzzy, c-format
+#| msgid "Removing raster maps from group <%s>..."
+msgid "Removing areas smaller than %g sqm..."
+msgstr "Odstraňují rastovou mapu ze skupiny <%s>"
+
 #, c-format
 msgid "Querying vector map <%s>..."
 msgstr "Dotazuji vektorovou mapu <%s>..."
@@ -31650,6 +31656,13 @@ msgid "Snapping threshold for boundaries"
 msgstr "Práh navázaní pro hranice"
 
 msgid "Disable snapping with snap <= 0"
+msgstr ""
+
+#, fuzzy
+msgid "Minimum size of areas to keep in square meters"
+msgstr "Minimální odchylka v mapových jednotkách"
+
+msgid "Enable with minsize > 0"
 msgstr ""
 
 #, c-format
@@ -33905,9 +33918,6 @@ msgstr "Nelze kopírovat tabulku"
 
 #, c-format
 msgid "Pass %d"
-msgstr ""
-
-msgid "Node is outside any input area"
 msgstr ""
 
 #, c-format
@@ -36503,10 +36513,6 @@ msgstr "Soubory obrazové skupiny"
 #, fuzzy
 #~ msgid "Minimum reach slope"
 #~ msgstr "Minimální náhodná hodnota"
-
-#, fuzzy
-#~ msgid "Minimum size of areas in map units"
-#~ msgstr "Minimální odchylka v mapových jednotkách"
 
 #, fuzzy
 #~ msgid "Minimum size of tiles in map units"
