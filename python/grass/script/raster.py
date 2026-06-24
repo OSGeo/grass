@@ -509,23 +509,54 @@ class RegionManager:
     >>> with gs.RegionManager(raster="elevation", env=os.environ.copy()) as manager:
     ...     gs.run_command("r.univar", map="elevation", env=manager.env)
 
+    The *region_name* parameter allows working with named saved regions (created with
+    ``g.region save=...``). If *region_name* refers to an existing saved region and no
+    additional *g.region* parameters are given, the saved region is used directly without
+    overwriting it. If *region_name* is not provided, a unique name is generated and the
+    temporary region is removed at the end of the context.
+
+    Example using an existing saved region:
+
+    >>> with gs.RegionManager(region_name="study_area"):
+    ...     gs.parse_command("r.univar", map="elevation", format="json")
+
+    Example saving to a named region that persists after the context:
+
+    >>> with gs.RegionManager(region_name="my_region", raster="elevation"):
+    ...     gs.run_command("r.slope.aspect", elevation="elevation", slope="slope")
+
     In the background, this class manages the `WIND_OVERRIDE` environment variable
     that holds the unique name of the saved region to use.
     """
 
-    def __init__(self, env: dict[str, str] | None = None, **kwargs):
+    def __init__(
+        self,
+        region_name: str | None = None,
+        env: dict[str, str] | None = None,
+        **kwargs,
+    ):
         """
         Initializes the RegionManager.
 
+        :param region_name: Name of the saved region. Generated if not provided.
+                            If it refers to an existing saved region and no kwargs are given,
+                            the region is used as-is and never removed at the end.
         :param env: Environment to use.
                     Defaults to modifying :external:py:data:`os.environ`.
-        :param kwargs: Keyword arguments passed to `g.region`
+        :param kwargs: Keyword arguments passed to `g.region` when saving the region.
         """
         self.env = env if env is not None else os.environ
         self._original_value = None
-        self.region_name = append_uuid(append_node_pid("region"))
         self._region_inputs = kwargs or {}
         self._active = False
+        if region_name is None:
+            self.region_name = append_uuid(append_node_pid("region"))
+            self._remove = True
+            self._save_on_activate = True
+        else:
+            self.region_name = region_name
+            self._remove = False
+            self._save_on_activate = bool(kwargs)
 
     def set_region(self, **kwargs):
         """Sets region.
@@ -535,16 +566,17 @@ class RegionManager:
         run_command("g.region", **kwargs, env=self.env)
 
     def activate(self):
-        """Sets the `WIND_OVERRIDE` environment variable to the generated region name.
+        """Sets the `WIND_OVERRIDE` environment variable to this manager's region name.
 
         :return: Returns the :class:`RegionManager` instance.
         """
         if self._active:
             return None
         self._original_value = self.env.get("WIND_OVERRIDE")
-        run_command(
-            "g.region", save=self.region_name, env=self.env, **self._region_inputs
-        )
+        if self._save_on_activate:
+            run_command(
+                "g.region", save=self.region_name, env=self.env, **self._region_inputs
+            )
         self.env["WIND_OVERRIDE"] = self.region_name
         self._active = True
         return self
@@ -564,6 +596,7 @@ class RegionManager:
             self.env["WIND_OVERRIDE"] = self._original_value
         else:
             self.env.pop("WIND_OVERRIDE", None)
+        if self._remove:
             run_command(
                 "g.remove",
                 flags="f",
