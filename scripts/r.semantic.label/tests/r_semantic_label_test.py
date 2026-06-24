@@ -2,8 +2,7 @@
 
 import pytest
 
-from grass.exceptions import CalledModuleError
-from grass.tools import Tools
+from grass.tools import Tools, ToolError
 
 
 def test_print_missing_map_is_error(xy_raster_dataset_session_mapset):
@@ -13,7 +12,7 @@ def test_print_missing_map_is_error(xy_raster_dataset_session_mapset):
     while add/remove exit with an error for the same missing-map condition.
     """
     tools = Tools(session=xy_raster_dataset_session_mapset)
-    with pytest.raises(CalledModuleError):
+    with pytest.raises(ToolError):
         tools.r_semantic_label(operation="print", map="doesnotexist")
 
 
