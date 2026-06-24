@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-20 16:28+0000\n"
-"PO-Revision-Date: 2026-06-22 04:41+0000\n"
+"PO-Revision-Date: 2026-06-24 04:14+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grassmods/fr/>\n"
 "Language: fr\n"
@@ -138,7 +138,7 @@ msgid "Default database is not set"
 msgstr "La base de données par défaut n'est pas définie"
 
 msgid "Unable to set default database connection"
-msgstr ""
+msgstr "Impossible de définir la connexion à la base de données par défaut"
 
 msgid "SQL"
 msgstr "SQL"
@@ -192,7 +192,7 @@ msgid "Unable to list databases. Try to define correct connection settings by db
 msgstr ""
 
 msgid "No databases found"
-msgstr ""
+msgstr "Aucune base de données trouvée"
 
 msgid "Connection"
 msgstr "Connexion"
@@ -219,7 +219,7 @@ msgid "Describes a table in detail."
 msgstr "Décrit une table en détail."
 
 msgid "Unable to read dbmscap file"
-msgstr ""
+msgstr "Impossible de lire le fichier dbmscap"
 
 msgid "Full output"
 msgstr "Sortie complète"
@@ -239,10 +239,11 @@ msgstr "Impossible d'ouvrir le fichier <%s> : %s"
 
 #, c-format
 msgid "Error while executing: '%s'"
-msgstr ""
+msgstr "Erreur lors de l'exécution : «%s »"
 
+#, fuzzy
 msgid "Executes any SQL statement."
-msgstr ""
+msgstr "Exécute n'importe quelle instruction SQL."
 
 msgid "For SELECT statements use 'db.select'."
 msgstr ""
@@ -254,7 +255,7 @@ msgid "Example: update rybniky set kapri = 'hodne' where kapri = 'malo'"
 msgstr ""
 
 msgid "Name of file containing SQL statement(s)"
-msgstr ""
+msgstr "Nom du fichier contenant les instructions SQL"
 
 msgid "'-' for standard input"
 msgstr "'-' pour l'entrée standard"
@@ -267,7 +268,7 @@ msgstr "Erreurs"
 
 #, c-format
 msgid "You must provide <%s> or <%s> option"
-msgstr ""
+msgstr "Vous devez fournir l'option <%s> ou <%s>"
 
 msgid "Sets user/password for DB driver/database."
 msgstr "Définir utilisateur/mot de passe pour un pilote/base de données."
@@ -279,13 +280,14 @@ msgid "Settings"
 msgstr "Paramètres"
 
 msgid "Password"
-msgstr ""
+msgstr "Mot de passe"
 
 msgid "Hostname"
-msgstr ""
+msgstr "Nom d'hôte"
 
+#, fuzzy
 msgid "Relevant only for pg and mysql driver"
-msgstr ""
+msgstr "Applicable uniquement pour le pilote pg et MySQL"
 
 msgid "Port"
 msgstr ""
@@ -337,7 +339,7 @@ msgid "Do not include column names in output"
 msgstr "Ne pas inclure de nom de colonnes en sortie"
 
 msgid "Describe query only (don't run it)"
-msgstr ""
+msgstr "Décrire la requête uniquement (ne pas l’exécuter)"
 
 msgid "Vertical output instead of horizontal [deprecated]"
 msgstr "Sortie verticale au lieu d'horizontale [obsolète]"
@@ -368,7 +370,7 @@ msgid "Null value is part of the format"
 msgstr ""
 
 msgid "Column names are always included"
-msgstr ""
+msgstr "Les noms des colonnes sont toujours inclus"
 
 msgid "Flag 'v' is deprecated and will be removed in a future release. Please use format=vertical instead."
 msgstr "L'option 'v' est obsolète et sera retirée dans une prochaine version. Utiliser plutôt format=vertical."
@@ -381,10 +383,11 @@ msgid "Unable to list tables from database <%s>"
 msgstr ""
 
 msgid "No tables found"
-msgstr ""
+msgstr "Aucune table trouvée"
 
+#, fuzzy
 msgid "Print tables and exit"
-msgstr ""
+msgstr "Imprimer les tables et quitter"
 
 msgid "System tables instead of user tables"
 msgstr ""
@@ -398,13 +401,13 @@ msgstr ""
 
 #, c-format
 msgid "Column '%s' does not exist"
-msgstr ""
+msgstr "La colonne '%s' n'existe pas"
 
 msgid "Unable to create table"
-msgstr ""
+msgstr "Impossible de créer la table"
 
 msgid "Unable to allocate new cursor"
-msgstr ""
+msgstr "Impossible d’allouer un nouveau curseur"
 
 msgid "Unable to tokenize new cursor"
 msgstr ""
@@ -415,11 +418,11 @@ msgstr ""
 
 #, c-format
 msgid "Cannot open DBF database directory: %s"
-msgstr ""
+msgstr "Impossible d'ouvrir le répertoire de la base de données DBF : %s"
 
 #, c-format
 msgid "Unable to open DBF database: %s"
-msgstr ""
+msgstr "Impossible d'ouvrir la base de données DBF : %s"
 
 msgid "SQL parser error"
 msgstr ""
@@ -429,7 +432,7 @@ msgstr ""
 
 #, c-format
 msgid "Table '%s' doesn't exist."
-msgstr ""
+msgstr "La table '%s' n'existe pas."
 
 msgid "Unable to load table head."
 msgstr ""
@@ -439,32 +442,32 @@ msgstr ""
 
 #, c-format
 msgid "Column '%s' not found"
-msgstr ""
+msgstr "Colonne '%s' non trouvée"
 
 msgid "Incompatible value type."
-msgstr ""
+msgstr "Type de valeur incompatible."
 
 msgid "Unable to add column."
-msgstr ""
+msgstr "Impossible d'ajouter une colonne."
 
 msgid "Unable to delete column."
-msgstr ""
+msgstr "Impossible de supprimer la colonne."
 
 #, c-format
 msgid "Table %s already exists"
-msgstr ""
+msgstr "La table %s existe déjà"
 
 msgid "Unable to create table."
-msgstr ""
+msgstr "Impossible de créer la table."
 
 msgid "Error in selecting rows"
 msgstr ""
 
 msgid "Cannot load table."
-msgstr ""
+msgstr "Impossible de charger la table."
 
 msgid "Incompatible types in WHERE condition."
-msgstr ""
+msgstr "Types incompatibles dans la condition WHERE."
 
 msgid "Result of WHERE condition is not of type BOOL."
 msgstr ""
@@ -481,7 +484,7 @@ msgstr ""
 
 #, c-format
 msgid "Unable to find order column '%s'"
-msgstr ""
+msgstr "Impossible de trouver la colonne d'ordre '%s'"
 
 msgid "Division by zero"
 msgstr "Division par zéro"
@@ -3820,11 +3823,13 @@ msgstr ""
 msgid "Unable to create project <%s>"
 msgstr "Impossible de créer le fichier <%s>"
 
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "You can switch to the new project by\n"
 "`%s=%s`"
 msgstr ""
+"Vous pouvez passer au nouveau projet en utilisant\n"
+"`%s=%s`"
 
 #, c-format
 msgid "You must select the PERMANENT mapset before updating the current project's coordinate reference system (current mapset is <%s>)"
@@ -4560,8 +4565,9 @@ msgstr ""
 msgid "Print also the citation options"
 msgstr ""
 
+#, fuzzy
 msgid "Print also the build information"
-msgstr ""
+msgstr "Imprimer également les informations de compilation."
 
 msgid "Print also the GIS library revision number and date"
 msgstr ""
@@ -4570,7 +4576,7 @@ msgid "Print also extended info for additional libraries"
 msgstr ""
 
 msgid "GDAL/OGR, PROJ, GEOS"
-msgstr ""
+msgstr "GDAL/OGR, PROJ, GEOS"
 
 msgid "Print info in shell script style (including Git reference commit) [deprecated]"
 msgstr "Afficher les informations en style script shell (y compris le commit de référence Git) [obsolète]"
@@ -5084,14 +5090,14 @@ msgid "Reading raster maps..."
 msgstr ""
 
 msgid "Out of Memory. Please run again and choose a smaller sample size."
-msgstr ""
+msgstr "Mémoire insuffisante. Veuillez réexécuter et choisir une taille d'échantillon plus petite."
 
 #, c-format
 msgid "Sample size: %d points%s"
-msgstr ""
+msgstr "Taille de l'échantillon : %d points%s"
 
 msgid "Not enough sample points. Please run again and choose a larger sample size."
-msgstr ""
+msgstr "Pas assez de points d'échantillonnage. Veuillez réexécuter et choisir une taille d'échantillon plus grande."
 
 msgid "Not enough non-zero sample data points. Check your current region (and mask)."
 msgstr ""
@@ -5122,7 +5128,7 @@ msgstr ""
 
 #, c-format
 msgid "File <%s> created."
-msgstr ""
+msgstr "Fichier <%s> créé."
 
 #, c-format
 msgid "Raster map <%s> do not exists in subgroup <%s>"
@@ -5207,10 +5213,10 @@ msgid "class distribution"
 msgstr "Distribution des classes"
 
 msgid "energy balance"
-msgstr ""
+msgstr "bilan énergétique"
 
 msgid "actual evapotranspiration"
-msgstr ""
+msgstr "évapotranspiration réelle"
 
 msgid "SEBAL"
 msgstr ""
@@ -5219,7 +5225,7 @@ msgid "Actual evapotranspiration for diurnal period (Bastiaanssen, 1995)."
 msgstr "Évapotranspiration réelle pour la période diurne (Bastiaanssen, 1995)."
 
 msgid "Name of the diurnal net radiation map [W/m2]"
-msgstr ""
+msgstr "Nom de la carte du rayonnement net diurne [W/m²]"
 
 msgid "Name of the evaporative fraction map [-]"
 msgstr ""
@@ -5231,7 +5237,7 @@ msgid "Name of the output actual evapotranspiration layer [mm/d]"
 msgstr ""
 
 msgid "soil moisture"
-msgstr ""
+msgstr "humidité du sol"
 
 msgid "evaporative fraction"
 msgstr ""
@@ -5240,7 +5246,7 @@ msgid "Computes evaporative fraction and root zone soil moisture."
 msgstr "Calcule la fraction évaporée et l'humidité racinaire du sol."
 
 msgid "Name of Net Radiation raster map [W/m2]"
-msgstr ""
+msgstr "Nom de la carte raster du rayonnement net [W/m²]"
 
 msgid "Name of soil heat flux raster map [W/m2]"
 msgstr ""
@@ -5261,7 +5267,7 @@ msgid "Computes sensible heat flux iteration SEBAL 01."
 msgstr "Calcule le flux de chaleur sensible par itération SEBAL 01."
 
 msgid "Name of instantaneous net radiation raster map [W/m2]"
-msgstr ""
+msgstr "Nom de la carte raster du rayonnement net instantané [W/m²]"
 
 msgid "Name of instantaneous soil heat flux raster map [W/m2]"
 msgstr ""
@@ -5273,7 +5279,7 @@ msgid "Name of altitude corrected surface temperature raster map [K]"
 msgstr ""
 
 msgid "Name of the actual vapour pressure (e_act) map [KPa]"
-msgstr ""
+msgstr "Nom de la carte de la pression de vapeur actuelle (e_act) [kPa]"
 
 msgid "Value of the height independent friction velocity (u*) [m/s]"
 msgstr ""
