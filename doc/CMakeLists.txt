@@ -2,6 +2,9 @@ set(doc_files
   grass_database
   projectionintro)
 
+add_subdirectory(raster)
+
+
 set(img_files
   create_new_project_gui.png
   gi_3dview.jpg
