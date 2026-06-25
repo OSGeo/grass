@@ -80,6 +80,9 @@ latex/
 lib/*/html/
 lib/*/latex/
 
+# Ignore build environment file for local test runs (see AGENTS.md)
+.grass_build_env
+
 # Ignore code coverage files
 *.gcov
 *.gcno
