@@ -1,12 +1,12 @@
-# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025, 2026.
 # Jietao Wang <quaternary@163.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GRASS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-13 12:01+0000\n"
-"PO-Revision-Date: 2026-06-24 09:37+0000\n"
-"Last-Translator: Jietao Wang <quaternary@163.com>\n"
+"PO-Revision-Date: 2026-06-25 11:57+0000\n"
+"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://weblate.osgeo.org/projects/grass-gis/grasswxpy-8-5/zh_Hans/>\n"
 "Language: zh\n"
 "MIME-Version: 1.0\n"
@@ -3281,8 +3281,6 @@ msgstr ""
 msgid "Try to set up GRASS_ADDON_PATH or GRASS_ADDON_BASE variable."
 msgstr ""
 
-#, fuzzy
-#| msgid "About GRASS GIS"
 msgid "About GRASS"
 msgstr "关于GRASS"
 
@@ -4368,7 +4366,7 @@ msgstr "将已执行命令的历史记录导出到文件"
 
 #, python-brace-format
 msgid "{json} (*.json)|*.txt|{files} (*)|*"
-msgstr ""
+msgstr "{json} (*.json)|*.txt|{files} (*)|*"
 
 #, fuzzy
 msgid "JSON files"
@@ -4748,10 +4746,8 @@ msgstr "2. 选择GRASS地点"
 msgid "3. Select GRASS Mapset"
 msgstr "3. 选择GRASS地图集"
 
-#, fuzzy
-#| msgid "GRASS GIS database directory contains Locations."
 msgid "GRASS database directory contains Locations."
-msgstr "包含GRASS地点的GRASS数据库目录。"
+msgstr "包含位置的GRASS数据库目录。"
 
 msgid "All data in one Location is in the same  coordinate reference system (projection). One Location can be one project. Location contains Mapsets."
 msgstr "一个地点下的所有数据具有相同的坐标参考系统(即投影)。可将地点定义为一个投影。地点下包含地图集。"
@@ -4799,8 +4795,7 @@ msgstr "重命名选中的地图集"
 msgid "Delete selected mapset"
 msgstr "删除选中的地图集"
 
-#, fuzzy, python-format
-#| msgid "GRASS GIS %s startup%s"
+#, python-format
 msgid "GRASS %s startup%s"
 msgstr "GRASS %s 启动 %s"
 
@@ -8105,10 +8100,10 @@ msgid "Data selection"
 msgstr ""
 
 msgid "centroids"
-msgstr ""
+msgstr "质心"
 
 msgid "boundaries"
-msgstr ""
+msgstr "边界"
 
 msgid "Layer selection"
 msgstr ""
@@ -8880,8 +8875,6 @@ msgstr "多边形的面积似乎为0"
 msgid "The raster map <%s> already exists. Please remove or rename the maps with the prefix '%s' or select the option to overwrite existing maps"
 msgstr ""
 
-#, fuzzy
-#| msgid "GRASS GIS Setup for r.li modules"
 msgid "Setup for r.li modules - GRASS"
 msgstr "GRASS r.li模块设置"
 
@@ -9902,7 +9895,7 @@ msgid "Geometry attributes"
 msgstr ""
 
 msgid "area"
-msgstr ""
+msgstr "面积"
 
 msgid "perimeter"
 msgstr ""
