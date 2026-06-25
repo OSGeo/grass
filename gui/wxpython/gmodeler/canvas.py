@@ -483,6 +483,9 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         shape.SetHasDisplay(event.IsChecked())
         self.frame.canvas.Refresh()
 
+        if isinstance(self.frame._giface, StandaloneGrassInterface):
+            return
+
         model = self.frame.GetModel()
         run_params = model.GetRunParams()
         resolved = {}
@@ -494,9 +497,6 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
                     resolved[name] = value
 
         layer_list = self.frame._giface.GetLayerList()
-        if isinstance(self.frame._giface, StandaloneGrassInterface):
-            return
-
         try:
             if event.IsChecked():
                 # add map layer to display

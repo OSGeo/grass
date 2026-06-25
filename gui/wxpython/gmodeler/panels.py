@@ -419,10 +419,10 @@ class ModelerPanel(wx.Panel, MainPageBase):
                     resolved[name] = value
 
         # display data if required and is possible
-        layer_list = self._giface.GetLayerList()
         if isinstance(self._giface, StandaloneGrassInterface):
             return
 
+        layer_list = self._giface.GetLayerList()
         for data in self.model.GetData():
             if not data.HasDisplay():
                 continue
