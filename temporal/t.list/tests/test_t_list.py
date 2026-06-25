@@ -148,6 +148,6 @@ def test_t_list_empty_database(empty_session):
     assert plain_result is None
 
     # Ensure no connection is established
-    result = tools.t_connect(flags="p", format="json")
-    db_exist = result["driver"] and result["database"]
+    result = tools.t_connect(flags="p", format="json", mapset=".")
+    db_exist = result[0]["driver"] and result[0]["database"]
     assert not db_exist
