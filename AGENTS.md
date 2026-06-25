@@ -46,6 +46,13 @@ cmake --build build
 cmake --install build
 ```
 
+Optional dependencies are controlled by `WITH_*` options (see
+`CMakeLists.txt`). Those enabled by default (PDAL, GEOS, etc.) are *required*:
+on a system missing one, configure fails with a "Could not find ..." error.
+Disable it (e.g. `cmake -B build -DWITH_PDAL=OFF`) or install the dependency.
+If `ccache` is installed it is used automatically; set `CCACHE_DIR` to a
+writable path if the default cache location is read-only (e.g. in a sandbox).
+
 **Compile a single tool** (after libraries are built):
 
 ```bash
@@ -53,7 +60,9 @@ cd raster/r.slope.aspect
 make
 ```
 
-Build outputs go to `bin.$ARCH/` and `dist.$ARCH/` directories.
+With Autotools, build outputs go to `bin.$ARCH/` and `dist.$ARCH/`. With
+CMake, the runnable tree (before `cmake --install`) is under `build/output/`,
+with the binary at `build/output/bin/grass`.
 
 ## Running Tests
 
@@ -66,7 +75,10 @@ If running from a local build (not a system install), add the binary directory
 to PATH first:
 
 ```bash
+# Autotools build:
 export PATH="$(pwd)/bin.$(uname -m)-pc-linux-gnu:${PATH}"
+# CMake build (before cmake --install):
+export PATH="$(pwd)/build/output/bin:${PATH}"
 ```
 
 Before running pytest, set the required environment variables:
