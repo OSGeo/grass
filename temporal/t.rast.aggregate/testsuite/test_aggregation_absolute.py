@@ -237,6 +237,123 @@ class TestAggregationAbsolute(TestCase):
         maps = "b_101" + os.linesep
         self.assertEqual(maps, lister.outputs.stdout)
 
+    def test_extend_existing_strds(self):
+        """Test extending existing STRDS with -e flag"""
+        # First run — create initial result with 3 monthly maps
+        self.assertModule(
+            "t.rast.aggregate",
+            input="A",
+            output="B",
+            basename="b",
+            granularity="1 month",
+            method="average",
+            sampling=["contains"],
+        )
+
+        # Verify initial STRDS has 3 maps
+        tinfo_string = """aggregation_type=average
+                          number_of_maps=3"""
+        info = SimpleModule("t.info", flags="g", input="B")
+        self.assertModuleKeyValue(
+            module=info, reference=tinfo_string, precision=2, sep="="
+        )
+
+        # Record original map names before extending
+        lister = SimpleModule("t.rast.list", input="B", columns="name", flags="u")
+        self.runModule(lister)
+        original_maps = lister.outputs.stdout
+
+        # Second run — extend existing STRDS with -e flag using different basename
+        self.assertModule(
+            "t.rast.aggregate",
+            flags="e",
+            input="A",
+            output="B",
+            basename="b_ext",
+            granularity="1 month",
+            method="average",
+            sampling=["contains"],
+            overwrite=True,
+        )
+
+        # Verify new maps were added
+        lister = SimpleModule("t.rast.list", input="B", columns="name", flags="u")
+        self.runModule(lister)
+        extended_maps = lister.outputs.stdout
+
+        # Check that at least one map with the new basename prefix exists
+        extended_map_list = extended_maps.strip().split(os.linesep)
+        b_ext_maps = [m for m in extended_map_list if m.startswith("b_ext")]
+        self.assertTrue(
+            len(b_ext_maps) > 0,
+            "No maps with basename b_ext found in extended STRDS",
+        )
+
+        # Check original maps are still present (STRDS was not overwritten)
+        original_map_set = set(original_maps.strip().split(os.linesep))
+        self.assertTrue(
+            original_map_set.issubset(extended_maps.strip().split(os.linesep)),
+            "Original maps are missing from extended STRDS",
+        )
+
+        # Check total map count increased (original 3 + extended 3 = 6)
+        self.assertEqual(len(extended_maps.strip().split(os.linesep)), 6)
+
+    def test_extend_nonexistent_strds(self):
+        """Test that -e flag fails if output STRDS does not exist"""
+        self.assertModuleFail(
+            "t.rast.aggregate",
+            input="A",
+            output="nonexistent_strds",
+            basename="test_fail",
+            granularity="2 seconds",
+            method="average",
+            flags="e",
+        )
+        # B was never created, so tearDown must not try to remove it
+        # Create a dummy B so tearDown cleanup doesn't fail
+        self.runModule(
+            "t.create",
+            type="strds",
+            temporaltype="absolute",
+            output="B",
+            title="dummy",
+            description="dummy",
+        )
+
+    def test_extend_incompatible_temporal_type(self):
+        """Test that -e flag fails if existing STRDS has incompatible temporal type"""
+        # Create a relative STRDS first
+        self.runModule(
+            "t.create",
+            type="strds",
+            temporaltype="relative",
+            output="relative_strds",
+            title="Relative STRDS",
+            description="Test relative STRDS",
+        )
+        self.assertModuleFail(
+            "t.rast.aggregate",
+            input="A",
+            output="relative_strds",
+            basename="test_fail",
+            granularity="1 months",
+            method="average",
+            sampling=["contains"],
+            flags="e",
+        )
+        self.runModule("t.remove", flags="f", type="strds", inputs="relative_strds")
+        # B was never created, so tearDown must not try to remove it
+        # Create a dummy B so tearDown cleanup doesn't fail
+        self.runModule(
+            "t.create",
+            type="strds",
+            temporaltype="absolute",
+            output="B",
+            title="dummy",
+            description="dummy",
+        )
+
 
 if __name__ == "__main__":
     from grass.gunittest.main import test
