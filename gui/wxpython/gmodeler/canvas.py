@@ -23,6 +23,7 @@ from gui_core.dialogs import TextEntryDialog as CustomTextEntryDialog
 from gui_core.wrap import TextEntryDialog as wxTextEntryDialog, NewId, Menu
 from gui_core.forms import GUI
 from core.gcmd import GException, GError
+from core.giface import StandaloneGrassInterface
 
 from gmodeler.model_items import (
     ModelRelation,
@@ -493,7 +494,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
                     resolved[name] = value
 
         layer_list = self.frame._giface.GetLayerList()
-        if not hasattr(layer_list, "GetLayersByName"):
+        if isinstance(self.frame._giface, StandaloneGrassInterface):
             return
 
         try:

@@ -45,7 +45,7 @@ from core.gconsole import GConsole, EVT_CMD_RUN, EVT_CMD_DONE, EVT_CMD_PREPARE
 from core.debug import Debug
 from core.gcmd import GMessage, GException, GWarning, GError
 from core.settings import UserSettings
-from core.giface import Notification
+from core.giface import Notification, StandaloneGrassInterface
 
 from gui_core.widgets import GNotebook
 from gui_core.goutput import GConsoleWindow
@@ -420,7 +420,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
 
         # display data if required and is possible
         layer_list = self._giface.GetLayerList()
-        if not hasattr(layer_list, "GetLayersByName"):
+        if isinstance(self._giface, StandaloneGrassInterface):
             return
 
         for data in self.model.GetData():
@@ -1835,7 +1835,7 @@ class PythonPanel(wx.Panel):
 
         # display data if required and is possible
         layer_list = self.parent._giface.GetLayerList()
-        if not hasattr(layer_list, "GetLayersByName"):
+        if isinstance(self.parent._giface, StandaloneGrassInterface):
             return
 
         for data in model.GetData():
