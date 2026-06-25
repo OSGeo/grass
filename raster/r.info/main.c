@@ -15,24 +15,24 @@
  *
  *****************************************************************************/
 
-#include <math.h>
-#include <sys/types.h>
+#include "local_proto.h"
 #include <grass/config.h>
+#include <grass/gis.h>
+#include <grass/gjson.h>
+#include <grass/glocale.h>
+#include <grass/raster.h>
+#include <inttypes.h>
+#include <math.h>
+#include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdarg.h>
-#include <inttypes.h>
-#include <grass/gis.h>
-#include <grass/raster.h>
-#include <grass/glocale.h>
-#include <grass/gjson.h>
-#include "local_proto.h"
+#include <sys/types.h>
 
 #define printline(x) fprintf(out, " | %-74.74s |\n", x)
-#define divider(x)           \
-    fprintf(out, " %c", x);  \
-    for (i = 0; i < 76; i++) \
-        fprintf(out, "-");   \
+#define divider(x)                                                             \
+    fprintf(out, " %c", x);                                                    \
+    for (i = 0; i < 76; i++)                                                   \
+        fprintf(out, "-");                                                     \
     fprintf(out, "%c\n", x)
 #define TMPBUF_SZ 100
 
@@ -43,8 +43,7 @@ static void format_double(const double, char[100]);
 static void compose_line(FILE *, const char *, ...);
 static char *history_as_string(struct History *hist);
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     const char *name, *mapset;
     const char *title;
     char tmp1[TMPBUF_SZ], tmp2[TMPBUF_SZ], tmp3[TMPBUF_SZ], tmp4[TMPBUF_SZ];
@@ -129,8 +128,7 @@ int main(int argc, char **argv)
                   "future release. To avoid unexpected behaviour, specify the "
                   "format explicitly."));
             fopt->answer = "shell";
-        }
-        else {
+        } else {
             fopt->answer = "plain";
         }
     }
@@ -147,11 +145,9 @@ int main(int argc, char **argv)
                 _("Failed to initialize JSON object. Out of memory?"));
         }
         root_object = G_json_object(root_value);
-    }
-    else if (strcmp(fopt->answer, "shell") == 0) {
+    } else if (strcmp(fopt->answer, "shell") == 0) {
         format = SHELL;
-    }
-    else {
+    } else {
         format = PLAIN;
     }
 
@@ -222,8 +218,7 @@ int main(int argc, char **argv)
         if (time_ok && (first_time_ok || second_time_ok)) {
             G_format_timestamp(&ts, timebuff);
             compose_line(out, "Timestamp: %s", timebuff);
-        }
-        else {
+        } else {
             compose_line(out, "Timestamp: none");
         }
 
@@ -264,8 +259,7 @@ int main(int argc, char **argv)
             if (G_projection() == PROJECTION_UTM) {
                 compose_line(out, "       Projection: %s (zone %d)",
                              G_database_projection_name(), G_zone());
-            }
-            else {
+            } else {
                 compose_line(out, "       Projection: %s",
                              G_database_projection_name());
             }
@@ -297,15 +291,13 @@ int main(int argc, char **argv)
                     if (Rast_is_c_null_value(&min)) {
                         compose_line(
                             out, "  Range of data:    min = NULL  max = NULL");
-                    }
-                    else {
+                    } else {
                         compose_line(out,
                                      "  Range of data:    min = %i  max = %i",
                                      min, max);
                     }
                 }
-            }
-            else {
+            } else {
                 int ret;
                 DCELL min, max;
 
@@ -314,22 +306,19 @@ int main(int argc, char **argv)
                 if (ret == 2) {
                     compose_line(out,
                                  "  Range of data:    min = NULL  max = NULL");
-                }
-                else if (ret > 0) {
+                } else if (ret > 0) {
                     Rast_get_fp_range_min_max(&range, &min, &max);
 
                     if (Rast_is_d_null_value(&min)) {
                         compose_line(
                             out, "  Range of data:    min = NULL  max = NULL");
-                    }
-                    else {
+                    } else {
                         if (data_type == FCELL_TYPE) {
                             compose_line(
                                 out,
                                 "  Range of data:    min = %.7g  max = %.7g",
                                 min, max);
-                        }
-                        else {
+                        } else {
                             compose_line(
                                 out,
                                 "  Range of data:    min = %.15g  max = %.15g",
@@ -414,8 +403,7 @@ int main(int argc, char **argv)
         divider('+');
 
         fprintf(out, "\n");
-    }
-    else { /* g, r, s, e, or h flags */
+    } else { /* g, r, s, e, or h flags */
         int need_range, have_range, need_stats, have_stats;
 
         need_range = rflag->answer;
@@ -428,8 +416,7 @@ int main(int argc, char **argv)
             if (data_type == CELL_TYPE) {
                 if (Rast_read_range(name, "", &crange) > 0)
                     have_range = 1;
-            }
-            else {
+            } else {
                 if (Rast_read_fp_range(name, "", &range) > 0)
                     have_range = 1;
             }
@@ -463,8 +450,7 @@ int main(int argc, char **argv)
                         min = max = val;
 
                         first = 0;
-                    }
-                    else {
+                    } else {
                         rstats.sum += val;
                         rstats.sumsq += (DCELL)val * val;
 
@@ -485,8 +471,7 @@ int main(int argc, char **argv)
                     Rast_update_range((CELL)min, &crange);
                     Rast_update_range((CELL)max, &crange);
                 }
-            }
-            else {
+            } else {
                 Rast_init_fp_range(&range);
                 if (rstats.count > 0) {
                     Rast_update_fp_range(min, &range);
@@ -525,7 +510,7 @@ int main(int argc, char **argv)
                 fprintf(out, "Rows: %d\n", cellhd.rows);
                 fprintf(out, "Columns: %d\n", cellhd.cols);
 
-                fprintf(out, "Total cells: %" PRId64 "\n", total_cells);
+                fprintf(out, "Total cells: %lld" PRId64 "\n", total_cells);
 
                 fprintf(out, "Data type: %s\n", data_type_f);
 
@@ -555,7 +540,7 @@ int main(int argc, char **argv)
                 fprintf(out, "rows=%d\n", cellhd.rows);
                 fprintf(out, "cols=%d\n", cellhd.cols);
 
-                fprintf(out, "cells=%" PRId64 "\n", total_cells);
+                fprintf(out, "cells=%lld" PRId64 "\n", total_cells);
 
                 fprintf(out, "datatype=%s\n", data_type_f);
 
@@ -579,8 +564,7 @@ int main(int argc, char **argv)
                 G_json_object_set_string(root_object, "datatype", data_type_f);
                 if (cats_ok) {
                     G_json_object_set_number(root_object, "ncats", cats.num);
-                }
-                else {
+                } else {
                     G_json_object_set_null(root_object, "ncats");
                 }
                 break;
@@ -607,8 +591,7 @@ int main(int argc, char **argv)
                         G_json_object_set_null(root_object, "max");
                         break;
                     }
-                }
-                else {
+                } else {
                     switch (format) {
                     case PLAIN:
                         fprintf(out, "Minimum: %i\n", min);
@@ -624,8 +607,7 @@ int main(int argc, char **argv)
                         break;
                     }
                 }
-            }
-            else {
+            } else {
                 DCELL min, max;
 
                 Rast_get_fp_range_min_max(&range, &min, &max);
@@ -644,15 +626,13 @@ int main(int argc, char **argv)
                         G_json_object_set_null(root_object, "max");
                         break;
                     }
-                }
-                else {
+                } else {
                     switch (format) {
                     case PLAIN:
                         if (data_type == FCELL_TYPE) {
                             fprintf(out, "Minimum: %.7g\n", min);
                             fprintf(out, "Maximum: %.7g\n", max);
-                        }
-                        else {
+                        } else {
                             fprintf(out, "Minimum: %.15g\n", min);
                             fprintf(out, "Maximum: %.15g\n", max);
                         }
@@ -661,8 +641,7 @@ int main(int argc, char **argv)
                         if (data_type == FCELL_TYPE) {
                             fprintf(out, "min=%.7g\n", min);
                             fprintf(out, "max=%.7g\n", max);
-                        }
-                        else {
+                        } else {
                             fprintf(out, "min=%.15g\n", min);
                             fprintf(out, "max=%.15g\n", max);
                         }
@@ -684,10 +663,10 @@ int main(int argc, char **argv)
                 /* always report total number of cells */
                 switch (format) {
                 case PLAIN:
-                    fprintf(out, "Total cells: %" PRId64 "\n", total_cells);
+                    fprintf(out, "Total cells: %lld" PRId64 "\n", total_cells);
                     break;
                 case SHELL:
-                    fprintf(out, "cells=%" PRId64 "\n", total_cells);
+                    fprintf(out, "cells=%lld" PRId64 "\n", total_cells);
                     break;
                 case JSON:
                     G_json_object_set_number(root_object, "cells", total_cells);
@@ -709,8 +688,7 @@ int main(int argc, char **argv)
                         mean = min;
                         sd = 0;
                     }
-                }
-                else {
+                } else {
                     DCELL min, max;
 
                     Rast_get_fp_range_min_max(&range, &min, &max);
@@ -722,13 +700,13 @@ int main(int argc, char **argv)
 
                 switch (format) {
                 case PLAIN:
-                    fprintf(out, "N: %" PRId64 "\n", rstats.count);
+                    fprintf(out, "N: %lld" PRId64 "\n", rstats.count);
                     fprintf(out, "Mean: %.15g\n", mean);
                     fprintf(out, "Standard deviation: %.15g\n", sd);
                     fprintf(out, "Sum: %.15g\n", rstats.sum);
                     break;
                 case SHELL:
-                    fprintf(out, "n=%" PRId64 "\n", rstats.count);
+                    fprintf(out, "n=%lld" PRId64 "\n", rstats.count);
                     fprintf(out, "mean=%.15g\n", mean);
                     fprintf(out, "stddev=%.15g\n", sd);
                     fprintf(out, "sum=%.15g\n", rstats.sum);
@@ -740,8 +718,7 @@ int main(int argc, char **argv)
                     G_json_object_set_number(root_object, "sum", rstats.sum);
                     break;
                 }
-            }
-            else {
+            } else {
                 switch (format) {
                 case PLAIN:
                     fprintf(out, "N: 0\n");
@@ -827,8 +804,7 @@ int main(int argc, char **argv)
                                              timebuff);
                     break;
                 }
-            }
-            else {
+            } else {
                 switch (format) {
                 case PLAIN:
                     fprintf(out, "Timestamp: none\n");
@@ -883,21 +859,18 @@ int main(int argc, char **argv)
             case JSON:
                 if (units) {
                     G_json_object_set_string(root_object, "units", units);
-                }
-                else {
+                } else {
                     G_json_object_set_null(root_object, "units");
                 }
                 if (vdatum) {
                     G_json_object_set_string(root_object, "vdatum", vdatum);
-                }
-                else {
+                } else {
                     G_json_object_set_null(root_object, "vdatum");
                 }
                 if (semantic_label) {
                     G_json_object_set_string(root_object, "semantic_label",
                                              semantic_label);
-                }
-                else {
+                } else {
                     G_json_object_set_null(root_object, "semantic_label");
                 }
 
@@ -916,12 +889,10 @@ int main(int argc, char **argv)
                         G_json_object_set_string(root_object, "comments",
                                                  buffer);
                         G_free(buffer);
-                    }
-                    else {
+                    } else {
                         G_json_object_set_null(root_object, "comments");
                     }
-                }
-                else {
+                } else {
                     G_json_object_set_null(root_object, "source1");
                     G_json_object_set_null(root_object, "source2");
                     G_json_object_set_null(root_object, "description");
@@ -982,8 +953,7 @@ int main(int argc, char **argv)
                         G_json_object_set_string(root_object, "comments",
                                                  buffer);
                         G_free(buffer);
-                    }
-                    else {
+                    } else {
                         G_json_object_set_null(root_object, "comments");
                     }
 
@@ -1007,14 +977,12 @@ int main(int argc, char **argv)
     return EXIT_SUCCESS;
 }
 
-static void format_double(const double value, char buf[100])
-{
+static void format_double(const double value, char buf[100]) {
     snprintf(buf, TMPBUF_SZ, "%.8f", value);
     G_trim_decimal(buf);
 }
 
-static void compose_line(FILE *out, const char *fmt, ...)
-{
+static void compose_line(FILE *out, const char *fmt, ...) {
     char *line = NULL;
     va_list ap;
 
@@ -1029,8 +997,7 @@ static void compose_line(FILE *out, const char *fmt, ...)
     G_free(line);
 }
 
-static char *history_as_string(struct History *hist)
-{
+static char *history_as_string(struct History *hist) {
     int history_length = Rast_history_length(hist);
     char *buffer = NULL;
     if (history_length) {
@@ -1056,8 +1023,7 @@ static char *history_as_string(struct History *hist)
                 // Ending backslash is line continuation.
                 strncat(buffer, line, line_length - 1);
                 total_length += line_length - 1;
-            }
-            else {
+            } else {
                 strncat(buffer, line, line_length);
                 total_length += line_length;
                 if (i < history_length - 1) {
