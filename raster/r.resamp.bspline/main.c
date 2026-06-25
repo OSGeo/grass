@@ -21,6 +21,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <math.h>
+#include <errno.h>
 #include "bspline.h"
 
 #define SEGSIZE 64
@@ -456,6 +457,7 @@ int main(int argc, char *argv[])
             Rast_close(maskfd);
         }
         if (null_flag->answer && null_count == 0 && !mask_opt->answer) {
+            errno = EINVAL;
             G_fatal_error(_("No NULL cells found in input raster."));
         }
     }
