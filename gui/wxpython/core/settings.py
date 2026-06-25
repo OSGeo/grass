@@ -258,6 +258,8 @@ class Settings:
                 "encoding": {
                     "value": "",
                 },
+                "enableHiddenCols": {"enabled": False},
+                "hiddenCols": {},
             },
             #
             # Command
