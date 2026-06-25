@@ -1834,10 +1834,10 @@ class PythonPanel(wx.Panel):
                     resolved[name] = value
 
         # display data if required and is possible
-        layer_list = self.parent._giface.GetLayerList()
         if isinstance(self.parent._giface, StandaloneGrassInterface):
             return
 
+        layer_list = self.parent._giface.GetLayerList()
         for data in model.GetData():
             if not data.HasDisplay():
                 continue
