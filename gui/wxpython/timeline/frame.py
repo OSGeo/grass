@@ -88,6 +88,9 @@ class TimelineFrame(wx.Frame):
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
     def OnClose(self, event):
+        self.close(event)
+
+    def close(self, event=None):
         """Close the database interface and stop the messenger and C-interface
         subprocesses.
         """
