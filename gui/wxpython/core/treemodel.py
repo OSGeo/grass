@@ -148,9 +148,17 @@ class TreeModel:
             del node.children[:]
 
     def SortChildren(self, node):
-        """Sorts children with 'natural sort' based on label."""
+        """Sorts children with 'natural sort' based on label.
+        Pins temporal datasets to the top."""
         if node.children:
-            naturally_sort(node.children, key=lambda node: node.label)
+
+            def custom_sort_key(n):
+                # Pin STDS to the top
+                if n.data.get("type") in {"strds", "stvds", "str3ds"}:
+                    return "0_" + n.label
+                return "1_" + n.label
+
+            naturally_sort(node.children, key=custom_sort_key)
 
     def Filtered(self, **kwargs):
         """Filters model based on parameters in kwargs

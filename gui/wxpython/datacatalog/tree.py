@@ -22,6 +22,7 @@ for details.
 import os
 import re
 import copy
+import json
 from multiprocessing import Process, Queue
 from pathlib import Path
 
@@ -78,7 +79,7 @@ from grass.exceptions import CalledModuleError
 
 
 def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
-    """Creates dictionary with mapsets, elements, layers for given location.
+    """Creates dictionary with mapsets, stds, elements, layers for given location.
     Returns tuple with the dictionary and error (or None)"""
     tmp_gisrc_file, env = gs.create_environment(gisdbase, location, "PERMANENT")
     env["GRASS_SKIP_MAPSET_OWNER_CHECK"] = "1"
@@ -133,6 +134,42 @@ def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
             ltype, wholename = each.split("/")
             name, mapset = wholename.split("@", maxsplit=1)
             maps_dict[mapset].append({"name": name, "type": ltype})
+
+    valid_tgis_mapsets = []
+    try:
+        conn_out = gs.read_command(
+            "t.connect", flags="p", format="json", mapset="*", quiet=True, env=env
+        ).strip()
+        if conn_out:
+            for conn in json.loads(conn_out):
+                if conn.get("driver"):
+                    valid_tgis_mapsets.append(conn.get("mapset"))
+    except (CalledModuleError, json.JSONDecodeError) as e:
+        Debug.msg(1, "t.connect check failed: {0}".format(e))
+
+    if valid_tgis_mapsets:
+        try:
+            gs.run_command(
+                "g.mapsets",
+                mapset=",".join(valid_tgis_mapsets),
+                operation="set",
+                quiet=True,
+                env=env,
+            )
+
+            for t_type in ["strds", "stvds", "str3ds"]:
+                t_out = gs.read_command(
+                    "t.list", type=t_type, format="json", quiet=True, env=env
+                ).strip()
+                if t_out:
+                    items = json.loads(t_out)
+                    for item in items:
+                        m_set = item["mapset"]
+                        d_name = item["name"]
+                        if m_set and d_name:
+                            maps_dict[m_set].append({"name": d_name, "type": t_type})
+        except (CalledModuleError, json.JSONDecodeError) as e:
+            Debug.msg(1, "Temporal fetch failed: {0}".format(e))
 
     queue.put((maps_dict, None))
     gs.try_remove(tmp_gisrc_file)
@@ -271,6 +308,9 @@ class DataCatalogTree(TreeView):
             "grassdb",
             "location",
             "mapset",
+            "strds",
+            "stvds",
+            "str3ds",
             "raster",
             "vector",
             "raster_3d",
@@ -345,6 +385,8 @@ class DataCatalogTree(TreeView):
         """Reset variables related to item selection."""
         self.selected_grassdb = []
         self.selected_layer = []
+        self.selected_stds = []
+        self.selected_stds_map = []
         self.selected_mapset = []
         self.selected_location = []
         self.mixed = False
@@ -437,6 +479,53 @@ class DataCatalogTree(TreeView):
         )
 
         UserSettings.SaveToFile(grassdbSettings)
+
+    def _reloadDatasetNode(self, dataset_node, mapset_node):
+        """Recursively reload the model of a specific temporal dataset node"""
+        if dataset_node.children:
+            del dataset_node.children[:]
+
+        dataset_name = dataset_node.data["name"]
+        mapset_name = mapset_node.data["name"]
+        ds_type = dataset_node.data["type"]
+
+        t_map = {
+            "strds": ("t.rast.list", "raster"),
+            "stvds": ("t.vect.list", "vector"),
+            "str3ds": ("t.rast3d.list", "raster_3d"),
+        }
+        list_cmd, child_type = t_map[ds_type]
+
+        gisrc, env = gs.create_environment(
+            self.selected_grassdb[0].data["name"],
+            self.selected_location[0].data["name"],
+            mapset_name,
+        )
+
+        self.busy = wx.BusyCursor()
+        try:
+            out = gs.read_command(
+                list_cmd,
+                input=f"{dataset_name}@{mapset_name}",
+                columns="name",
+                format="json",
+                quiet=True,
+                env=env,
+            ).strip()
+
+            if out:
+                parsed = json.loads(out)
+                items = parsed.get("data", []) if isinstance(parsed, dict) else parsed
+                for item in items:
+                    self._model.AppendNode(
+                        parent=dataset_node,
+                        data={"type": child_type, "name": item.get("name", "unknown")},
+                    )
+        except (CalledModuleError, json.JSONDecodeError) as e:
+            Debug.msg(1, "Lazy load failed: {0}".format(e))
+        finally:
+            gs.try_remove(gisrc)
+            del self.busy
 
     def _reloadMapsetNode(self, mapset_node):
         """Recursively reload the model of a specific mapset node"""
@@ -724,8 +813,10 @@ class DataCatalogTree(TreeView):
             EVT_CURRENT_MAPSET_CHANGED, lambda evt: self._updateAfterMapsetChanged()
         )
 
-    def GetDbNode(self, grassdb, location=None, mapset=None, map=None, map_type=None):
-        """Returns node representing db/location/mapset/map or None if not found."""
+    def GetDbNode(
+        self, grassdb, location=None, mapset=None, element_name=None, element_type=None
+    ):
+        """Returns node representing db/location/mapset/map(or stds) or None if not found."""
         grassdb_nodes = self._model.SearchNodes(name=grassdb, type="grassdb")
         if grassdb_nodes:
             if not location:
@@ -740,10 +831,10 @@ class DataCatalogTree(TreeView):
                     parent=location_nodes[0], name=mapset, type="mapset"
                 )
                 if mapset_nodes:
-                    if not map:
+                    if not element_name:
                         return mapset_nodes[0]
                     map_nodes = self._model.SearchNodes(
-                        parent=mapset_nodes[0], name=map, type=map_type
+                        parent=mapset_nodes[0], name=element_name, type=element_type
                     )
                     if map_nodes:
                         return map_nodes[0]
@@ -845,6 +936,9 @@ class DataCatalogTree(TreeView):
             "grassdb": MetaIcon(img="grassdb").GetBitmap(bmpsize),
             "location": MetaIcon(img="location").GetBitmap(bmpsize),
             "mapset": MetaIcon(img="mapset").GetBitmap(bmpsize),
+            "strds": MetaIcon(img="mapset").GetBitmap(bmpsize),
+            "stvds": MetaIcon(img="mapset").GetBitmap(bmpsize),
+            "str3ds": MetaIcon(img="mapset").GetBitmap(bmpsize),
             "raster": MetaIcon(img="raster").GetBitmap(bmpsize),
             "vector": MetaIcon(img="vector").GetBitmap(bmpsize),
             "raster_3d": MetaIcon(img="raster3d").GetBitmap(bmpsize),
@@ -865,25 +959,54 @@ class DataCatalogTree(TreeView):
         for item in selected:
             type = item.data["type"]
             if type in {"raster", "raster_3d", "vector"}:
-                self.selected_layer.append(item)
+                if item.parent.data["type"] in {"strds", "stvds", "str3ds"}:
+                    self.selected_layer.append(None)
+                    self.selected_stds.append(None)
+                    self.selected_stds_map.append(item)
+                    mixed.append("stds_map")
+                else:
+                    self.selected_layer.append(item)
+                    self.selected_stds.append(None)
+                    self.selected_stds_map.append(None)
+                    mixed.append("layer")
+
+                parent_node = item.parent
+                while parent_node and parent_node.data["type"] != "mapset":
+                    parent_node = parent_node.parent
+
+                self.selected_mapset.append(parent_node)
+                self.selected_location.append(parent_node.parent)
+                self.selected_grassdb.append(parent_node.parent.parent)
+
+            elif type in {"strds", "stvds", "str3ds"}:
+                self.selected_layer.append(None)
+                self.selected_stds.append(item)
+                self.selected_stds_map.append(None)
+
                 self.selected_mapset.append(item.parent)
                 self.selected_location.append(item.parent.parent)
                 self.selected_grassdb.append(item.parent.parent.parent)
-                mixed.append("layer")
+                mixed.append("stds")
             elif type == "mapset":
                 self.selected_layer.append(None)
+                self.selected_stds.append(None)
+                self.selected_stds_map.append(None)
                 self.selected_mapset.append(item)
                 self.selected_location.append(item.parent)
                 self.selected_grassdb.append(item.parent.parent)
                 mixed.append("mapset")
             elif type == "location":
                 self.selected_layer.append(None)
+                self.selected_stds.append(None)
+                self.selected_stds_map.append(None)
                 self.selected_mapset.append(None)
                 self.selected_location.append(item)
                 self.selected_grassdb.append(item.parent)
                 mixed.append("location")
             elif type == "grassdb":
                 self.selected_layer.append(None)
+                self.selected_stds.append(None)
+                self.selected_stds_map.append(None)
                 self.selected_mapset.append(None)
                 self.selected_location.append(None)
                 self.selected_grassdb.append(item)
@@ -902,10 +1025,14 @@ class DataCatalogTree(TreeView):
             self._popupMenuEmpty()
             return
 
-        if not self.selected_layer:
+        if not self.selected_layer and not self.selected_stds:
             self._popupMenuEmpty()
         elif self.selected_layer[0]:
             self._popupMenuLayer()
+        elif self.selected_stds[0]:
+            self._popupMenuStds()
+        elif self.selected_stds_map[0]:
+            self._popupMenuEmpty()  # just for now
         elif self.selected_mapset[0] and len(self.selected_mapset) == 1:
             self._popupMenuMapset()
         elif (
@@ -979,7 +1106,19 @@ class DataCatalogTree(TreeView):
         if node.data["type"] == "mapset" and not node.children:
             self._reloadMapsetNode(node)
             self.RefreshNode(node, recursive=True)
-        if node.data["type"] in {"mapset", "location", "grassdb"}:
+
+        if node.data["type"] in {"strds", "stvds", "str3ds"} and not node.children:
+            self._reloadDatasetNode(node, self.selected_mapset[0])
+            self.RefreshNode(node, recursive=True)
+
+        if node.data["type"] in {
+            "mapset",
+            "location",
+            "grassdb",
+            "strds",
+            "stvds",
+            "str3ds",
+        }:
             # expand/collapse location/mapset...
             if self.IsNodeExpanded(node):
                 self.CollapseNode(node, recursive=False)
@@ -1772,6 +1911,8 @@ class DataCatalogTree(TreeView):
         all_names = []
         names = {"raster": [], "vector": [], "raster_3d": []}
         for i in range(len(self.selected_layer)):
+            if self.selected_layer[i] is None:
+                continue
             name = (
                 self.selected_layer[i].data["name"]
                 + "@"
@@ -1948,8 +2089,8 @@ class DataCatalogTree(TreeView):
                     grassdb=grassdb,
                     location=location,
                     mapset=mapset,
-                    map=map,
-                    map_type=element,
+                    element_name=map,
+                    element_type=element,
                 )
                 if node:
                     self._model.RemoveNode(node)
@@ -1959,8 +2100,38 @@ class DataCatalogTree(TreeView):
                     grassdb=grassdb,
                     location=location,
                     mapset=mapset,
-                    map=map,
-                    map_type=element,
+                    element_name=map,
+                    element_type=element,
+                )
+                if node:
+                    self._renameNode(node, newname)
+
+        elif element in {"strds", "stvds", "str3ds"}:
+            if action == "new":
+                node = self.GetDbNode(grassdb=grassdb, location=location, mapset=mapset)
+                if node:
+                    self._reloadMapsetNode(node)
+                    self.RefreshNode(node, recursive=True)
+
+            elif action == "delete":
+                node = self.GetDbNode(
+                    grassdb=grassdb,
+                    location=location,
+                    mapset=mapset,
+                    element_name=map,
+                    element_type=element,
+                )
+                if node:
+                    self._model.RemoveNode(node)
+                    self.RefreshNode(node.parent, recursive=True)
+
+            elif action == "rename":
+                node = self.GetDbNode(
+                    grassdb=grassdb,
+                    location=location,
+                    mapset=mapset,
+                    element_name=map,
+                    element_type=element,
                 )
                 if node:
                     self._renameNode(node, newname)
@@ -2141,6 +2312,100 @@ class DataCatalogTree(TreeView):
             wx.TheClipboard.SetData(do)
             wx.TheClipboard.Close()
 
+    def OnMetadataStds(self, event):
+        """Show metadata natively using t.info"""
+
+        def done(event):
+            gs.try_remove(event.userData)
+
+        stds_type = self.selected_stds[0].data["type"]
+        stds_name = self.selected_stds[0].data["name"]
+        mapset_name = self.selected_mapset[0].data["name"]
+
+        cmd = ["t.info", f"type={stds_type}", f"input={stds_name}@{mapset_name}"]
+        gisrc, env = gs.create_environment(
+            self.selected_grassdb[0].data["name"],
+            self.selected_location[0].data["name"],
+            mapset_name,
+        )
+        self._giface.RunCmd(cmd, env=env, onDone=done, userData=gisrc)
+
+    def OnDeleteStds(self, event):
+        """Delete temporal dataset natively using t.remove"""
+        stds_type = self.selected_stds[0].data["type"]
+        stds_name = self.selected_stds[0].data["name"]
+
+        question = _("Do you really want to delete dataset <{m}>?").format(m=stds_name)
+        if self._confirmDialog(question, title=_("Delete dataset")) == wx.ID_YES:
+            label = _("Deleting {name}...").format(name=stds_name)
+            self.showNotification.emit(message=label)
+
+            gisrc, env = gs.create_environment(
+                self.selected_grassdb[0].data["name"],
+                self.selected_location[0].data["name"],
+                self.selected_mapset[0].data["name"],
+            )
+            removed, cmd = self._runCommand(
+                "t.remove", inputs=stds_name, type=stds_type, flags="f", env=env
+            )
+            gs.try_remove(gisrc)
+
+            if removed == 0:
+                self._giface.grassdbChanged.emit(
+                    grassdb=self.selected_grassdb[0].data["name"],
+                    location=self.selected_location[0].data["name"],
+                    mapset=self.selected_mapset[0].data["name"],
+                    element=stds_type,
+                    map=stds_name,
+                    action="delete",
+                )
+                self.UnselectAll()
+                self.showNotification.emit(message=_("t.remove completed"))
+
+    def OnRenameStds(self, event):
+        """Rename temporal dataset natively using t.rename"""
+        old_name = self.selected_stds[0].data["name"]
+        stds_type = self.selected_stds[0].data["type"]
+
+        gisrc, env = gs.create_environment(
+            self.selected_grassdb[0].data["name"],
+            self.selected_location[0].data["name"],
+            self.selected_mapset[0].data["name"],
+        )
+
+        new_name = self._getNewMapName(
+            _("New name"),
+            _("Rename dataset"),
+            old_name,
+            env=env,
+            mapset=self.selected_mapset[0].data["name"],
+            element=stds_type,
+        )
+
+        if new_name:
+            string = f"{old_name},{new_name}"
+            label = _("Renaming dataset <{name}>...").format(name=string)
+            self.showNotification.emit(message=label)
+
+            renamed, cmd = self._runCommand(
+                "t.rename", input=old_name, output=new_name, type=stds_type, env=env
+            )
+
+            if renamed == 0:
+                self.showNotification.emit(
+                    message=_("{cmd} -- completed").format(cmd=cmd)
+                )
+                self._giface.grassdbChanged.emit(
+                    grassdb=self.selected_grassdb[0].data["name"],
+                    location=self.selected_location[0].data["name"],
+                    mapset=self.selected_mapset[0].data["name"],
+                    map=old_name,
+                    element=stds_type,
+                    newname=new_name,
+                    action="rename",
+                )
+        gs.try_remove(gisrc)
+
     def OnReloadGrassdb(self, event):
         """Reload all mapsets in selected grass db"""
         node = self.selected_grassdb[0]
@@ -2203,6 +2468,31 @@ class DataCatalogTree(TreeView):
                         break
             return currentGrassDb, currentLocation, currentMapset
         return True, True, True
+
+    def _popupMenuStds(self):
+        """Create dedicated popup menu for space time datasets"""
+        menu = Menu()
+        genv = gisenv()
+        currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete dataset"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnDeleteStds, item)
+        item.Enable(currentMapset)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename dataset"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnRenameStds, item)
+        item.Enable(currentMapset)
+
+        menu.AppendSeparator()
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Show &metadata"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnMetadataStds, item)
+
+        self.PopupMenu(menu)
+        menu.Destroy()
 
     def _popupMenuLayer(self):
         """Create popup menu for layers"""
