@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ro\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-23 16:07+0000\n"
+"POT-Creation-Date: 2026-06-20 16:28+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Romanian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/ro/>\n"
@@ -823,6 +823,11 @@ msgstr ""
 
 msgid "PyGRASS"
 msgstr ""
+
+#, fuzzy
+#| msgid "GRASS help"
+msgid "GRASS Tools"
+msgstr "Ajutor GRASS"
 
 #, python-brace-format
 msgid ""
@@ -12256,9 +12261,6 @@ msgstr ""
 
 #~ msgid "GRASS GIS Raster Map Calculator"
 #~ msgstr "Calculator GRASS GIS pentru harta raster"
-
-#~ msgid "GRASS help"
-#~ msgstr "Ajutor GRASS"
 
 #~ msgid "GRASS raster map layer data resampling capability."
 #~ msgstr "Capacitatea de re-eșantionare a datelor raster GRASS."

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-23 16:07+0000\n"
+"POT-Creation-Date: 2026-06-20 16:28+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Korean <https://weblate.osgeo.org/projects/grass-gis/grassmods/ko/>\n"
@@ -9649,6 +9649,9 @@ msgstr ""
 msgid "Columns to be printed to stdout"
 msgstr ""
 
+msgid "plain;Plain text output;line;Comma separated list of dataset names;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
+msgstr ""
+
 msgid "Field separator character between the output columns"
 msgstr ""
 
@@ -9928,7 +9931,7 @@ msgstr ""
 msgid "Path to the extraction directory"
 msgstr ""
 
-msgid "Create a new project and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
+msgid "Create a new project and import the data into it."
 msgstr ""
 
 msgid "Set the current region from the last map that was imported"
@@ -10095,6 +10098,9 @@ msgid "parallel"
 msgstr ""
 
 msgid "Raster map used for zoning, must be of type CELL"
+msgstr ""
+
+msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
 msgstr ""
 
 msgid "Calculate extended statistics"
@@ -23673,7 +23679,7 @@ msgstr ""
 msgid "Filled raster map is: %s"
 msgstr ""
 
-msgid "Following holes where not filled. Temporary maps with are left in place to allow examination of unfilled holes"
+msgid "The following holes were not filled. Temporary maps are left in place to allow examination of unfilled holes:"
 msgstr ""
 
 msgid "Output can be written only to the current mapset"
@@ -24962,10 +24968,10 @@ msgstr ""
 msgid "Prints/sets general temporal GIS database connection for current mapset."
 msgstr ""
 
-msgid "Overwrite current settings if initialized"
+msgid "plain;Plain text output;shell;Shell script style output;json;JSON (JavaScript Object Notation)"
 msgstr ""
 
-msgid "Print current connection parameter in shell style and exit"
+msgid "Overwrite current settings if initialized"
 msgstr ""
 
 msgid "Temporal GIS database connection not defined. Run t.connect."
@@ -31142,6 +31148,11 @@ msgid "%d boundary snapped"
 msgid_plural "%d boundaries snapped"
 msgstr[0] ""
 
+#, fuzzy, c-format
+#| msgid "Merging segments smaller than %d cells..."
+msgid "Removing areas smaller than %g sqm..."
+msgstr "%d개의 셀보다 작은 분절을 병합하는 중입니다..."
+
 #, c-format
 msgid "Querying vector map <%s>..."
 msgstr "벡터 지도 <%s>를 검색하는 중입니다..."
@@ -31220,6 +31231,13 @@ msgid "Snapping threshold for boundaries"
 msgstr ""
 
 msgid "Disable snapping with snap <= 0"
+msgstr ""
+
+#, fuzzy
+msgid "Minimum size of areas to keep in square meters"
+msgstr "지도 단위의 길이"
+
+msgid "Enable with minsize > 0"
 msgstr ""
 
 #, c-format
@@ -33444,9 +33462,6 @@ msgstr "테이블을 복사할 수 없습니다"
 msgid "Pass %d"
 msgstr ""
 
-msgid "Node is outside any input area"
-msgstr ""
-
 #, c-format
 msgid "Found %d point/centroid in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
 msgid_plural "Found %d points/centroids in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
@@ -35138,10 +35153,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Minimum reach slope"
 #~ msgstr "최소 난수값"
-
-#, fuzzy
-#~ msgid "Minimum size of areas in map units"
-#~ msgstr "지도 단위의 길이"
 
 #, fuzzy
 #~ msgid "Module for flowaccumulation calculation"

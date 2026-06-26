@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-23 16:07+0000\n"
+"POT-Creation-Date: 2026-06-20 16:28+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/es/>\n"
@@ -835,6 +835,11 @@ msgstr ""
 
 msgid "PyGRASS"
 msgstr ""
+
+#, fuzzy
+#| msgid "GRASS help"
+msgid "GRASS Tools"
+msgstr "Ayuda de GRASS"
 
 #, python-brace-format
 msgid ""
@@ -13206,9 +13211,6 @@ msgstr ""
 
 #~ msgid "GRASS SVN revision"
 #~ msgstr "Revisión SVN de GRASS"
-
-#~ msgid "GRASS help"
-#~ msgstr "Ayuda de GRASS"
 
 #~ msgid "GRASS locations in {0}"
 #~ msgstr "Localizaciones de GRASS en {0}"

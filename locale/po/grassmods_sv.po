@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-23 16:07+0000\n"
+"POT-Creation-Date: 2026-06-20 16:28+0000\n"
 "PO-Revision-Date: 2026-01-08 02:38+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
@@ -9590,6 +9590,11 @@ msgstr "Formaterar"
 msgid "Columns to be printed to stdout"
 msgstr "Kolumner som ska skrivas ut till stdout"
 
+#, fuzzy
+#| msgid "plain;Human readable text output;shell;shell script style text output;json;JSON (JavaScript Object Notation);"
+msgid "plain;Plain text output;line;Comma separated list of dataset names;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
+msgstr "vanlig;mänsklig läsbar textutmatning;skal;textutmatning i skalskriptstil;json;JSON (JavaScript Object Notation);"
+
 msgid "Field separator character between the output columns"
 msgstr "Fältavgränsningstecken mellan utdatakolumnerna"
 
@@ -9869,8 +9874,10 @@ msgstr "Importerar rasterdataset för rymdtid."
 msgid "Path to the extraction directory"
 msgstr "Sökväg till extraktionskatalogen"
 
-msgid "Create a new project and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
-msgstr "Skapa ett nytt projekt och importera data till det. Kör inte denna modul parallellt eller avbryt den när ett nytt projekt ska skapas"
+#, fuzzy
+#| msgid "Create a new empty vector map and exit. Nothing is read from input."
+msgid "Create a new project and import the data into it."
+msgstr "Skapa en ny tom vektorkarta och avsluta. Ingenting läses från inmatningen."
 
 msgid "Set the current region from the last map that was imported"
 msgstr "Ställ in den aktuella regionen från den senaste kartan som importerades"
@@ -10038,6 +10045,11 @@ msgstr "parallell"
 
 msgid "Raster map used for zoning, must be of type CELL"
 msgstr "Rasterkarta som används för zonindelning, måste vara av typen CELL"
+
+#, fuzzy
+#| msgid "plain;Human readable text output;shell;shell script style text output;json;JSON (JavaScript Object Notation);"
+msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
+msgstr "vanlig;mänsklig läsbar textutmatning;skal;textutmatning i skalskriptstil;json;JSON (JavaScript Object Notation);"
 
 msgid "Calculate extended statistics"
 msgstr "Beräkna utökad statistik"
@@ -23596,7 +23608,9 @@ msgstr "Patcha fyllnadsdata i NULL-områden..."
 msgid "Filled raster map is: %s"
 msgstr "Fylld rasterkarta är: %s"
 
-msgid "Following holes where not filled. Temporary maps with are left in place to allow examination of unfilled holes"
+#, fuzzy
+#| msgid "Following holes where not filled. Temporary maps with are left in place to allow examination of unfilled holes"
+msgid "The following holes were not filled. Temporary maps are left in place to allow examination of unfilled holes:"
 msgstr "Följande hål fylldes inte igen. Tillfälliga kartor med lämnas på plats för att möjliggöra undersökning av ofyllda hål"
 
 msgid "Output can be written only to the current mapset"
@@ -24920,11 +24934,13 @@ msgstr "Det går inte att köra v.what.rast för vektorkarta <%s> och rasterkart
 msgid "Prints/sets general temporal GIS database connection for current mapset."
 msgstr "Skriver ut/ställer in allmän temporal GIS-databasanslutning för aktuell kartuppsättning."
 
+#, fuzzy
+#| msgid "plain;Plain text output;shell;shell script style output;json;JSON (JavaScript Object Notation);"
+msgid "plain;Plain text output;shell;Shell script style output;json;JSON (JavaScript Object Notation)"
+msgstr "plain;Utdata i klartext;skal;utdata i skalskriptstil;json;JSON (JavaScript Object Notation);"
+
 msgid "Overwrite current settings if initialized"
 msgstr "Skriva över aktuella inställningar om de initialiserats"
-
-msgid "Print current connection parameter in shell style and exit"
-msgstr "Skriv ut aktuell anslutningsparameter i skal-stil och avsluta"
 
 msgid "Temporal GIS database connection not defined. Run t.connect."
 msgstr "Temporal GIS-databasanslutning inte definierad. Kör t.connect."
@@ -31199,6 +31215,11 @@ msgid_plural "%d boundaries snapped"
 msgstr[0] "%d gräns snäppt"
 msgstr[1] "%d gränser knäppta"
 
+#, fuzzy, c-format
+#| msgid "Merging segments smaller than %d cells..."
+msgid "Removing areas smaller than %g sqm..."
+msgstr "Sammanfoga segment som är mindre än %d celler..."
+
 #, c-format
 msgid "Querying vector map <%s>..."
 msgstr "Förfrågan på vektorkarta <%s>..."
@@ -31278,6 +31299,14 @@ msgstr "Tröskelvärde för snäppning av gränser"
 
 msgid "Disable snapping with snap <= 0"
 msgstr "Avaktivera snapping med snap <= 0"
+
+#, fuzzy
+#| msgid "Minimum size of area to be imported (square meters)"
+msgid "Minimum size of areas to keep in square meters"
+msgstr "Minsta storlek på det område som ska importeras (kvadratmeter)"
+
+msgid "Enable with minsize > 0"
+msgstr ""
 
 #, c-format
 msgid "Unknown operator '%s'"
@@ -33510,9 +33539,6 @@ msgstr "Det går inte att kopiera tabellen"
 msgid "Pass %d"
 msgstr "Passera %d"
 
-msgid "Node is outside any input area"
-msgstr "Noden ligger utanför något inmatningsområde"
-
 #, c-format
 msgid "Found %d point/centroid in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
 msgid_plural "Found %d points/centroids in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
@@ -33921,6 +33947,15 @@ msgstr "Visa BMP-bilder från PNG-drivrutinen."
 
 msgid "Image file"
 msgstr "Bildfil"
+
+#~ msgid "Print current connection parameter in shell style and exit"
+#~ msgstr "Skriv ut aktuell anslutningsparameter i skal-stil och avsluta"
+
+#~ msgid "Create a new project and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
+#~ msgstr "Skapa ett nytt projekt och importera data till det. Kör inte denna modul parallellt eller avbryt den när ett nytt projekt ska skapas"
+
+#~ msgid "Node is outside any input area"
+#~ msgstr "Noden ligger utanför något inmatningsområde"
 
 #~ msgid "Time used for iterations [minutes]"
 #~ msgstr "Tidsåtgång för iterationer [minuter]"
