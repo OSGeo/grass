@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-20 16:28+0000\n"
+"POT-Creation-Date: 2026-06-27 15:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,17 +71,17 @@ msgstr ""
 #: ../raster/r.stats.quantile/main.c:382 ../raster/r.stats.quantile/main.c:439
 #: ../raster/r.univar/stats.c:96 ../raster/r.univar/stats.c:396
 #: ../raster/r.volume/main.c:177 ../raster/r.what.color/main.c:246
-#: ../raster/r.what/main.c:280 ../vector/v.category/main.c:264
-#: ../vector/v.category/main.c:333 ../vector/v.class/main.c:223
-#: ../vector/v.class/main.c:264 ../vector/v.class/main.c:271
-#: ../vector/v.db.connect/main.c:148 ../vector/v.db.select/main.c:356
-#: ../vector/v.db.select/main.c:391 ../vector/v.distance/main.c:310
-#: ../vector/v.info/print.c:903 ../vector/v.profile/main.c:296
-#: ../vector/v.vect.stats/main.c:284 ../vector/v.what.rast/main.c:144
-#: ../vector/v.what/main.c:226 ../vector/v.what/what.c:510
-#: ../vector/v.what/what.c:654 ../vector/v.what/what.c:707
-#: ../vector/v.what/what.c:900 ../vector/v.what/what.c:1039
-#: ../vector/v.what/what.c:1160
+#: ../raster/r.what/main.c:280 ../temporal/t.connect/main.c:181
+#: ../vector/v.category/main.c:264 ../vector/v.category/main.c:333
+#: ../vector/v.class/main.c:223 ../vector/v.class/main.c:264
+#: ../vector/v.class/main.c:271 ../vector/v.db.connect/main.c:148
+#: ../vector/v.db.select/main.c:356 ../vector/v.db.select/main.c:391
+#: ../vector/v.distance/main.c:310 ../vector/v.info/print.c:903
+#: ../vector/v.profile/main.c:296 ../vector/v.vect.stats/main.c:284
+#: ../vector/v.what.rast/main.c:144 ../vector/v.what/main.c:226
+#: ../vector/v.what/what.c:510 ../vector/v.what/what.c:654
+#: ../vector/v.what/what.c:707 ../vector/v.what/what.c:900
+#: ../vector/v.what/what.c:1039 ../vector/v.what/what.c:1160
 msgid "Failed to initialize JSON array. Out of memory?"
 msgstr ""
 
@@ -92,7 +92,7 @@ msgstr ""
 #: ../raster/r.regression.line/main.c:269
 #: ../raster/r.regression.multi/main.c:696
 #: ../raster/r.stats.quantile/main.c:472 ../raster/r.volume/main.c:448
-#: ../raster3d/r3.info/main.c:993 ../temporal/t.connect/main.c:178
+#: ../raster3d/r3.info/main.c:993 ../temporal/t.connect/main.c:217
 #: ../vector/v.class/main.c:379 ../vector/v.db.connect/main.c:430
 #: ../vector/v.profile/main.c:885 ../vector/v.vect.stats/main.c:863
 #: ../vector/v.what.rast/main.c:694 ../vector/v.what/main.c:321
@@ -159,28 +159,29 @@ msgstr ""
 #: ../raster/r.what/main.c:159 ../raster/r.what/main.c:164
 #: ../raster/r.what/main.c:169 ../raster/r.what/main.c:175
 #: ../raster/r.what/main.c:185 ../raster3d/r3.info/main.c:101
-#: ../temporal/t.connect/main.c:50 ../temporal/t.connect/main.c:59
-#: ../temporal/t.connect/main.c:80 ../vector/v.category/main.c:169
-#: ../vector/v.class/main.c:106 ../vector/v.colors.out/main.c:71
-#: ../vector/v.colors/main.c:132 ../vector/v.colors/main.c:140
-#: ../vector/v.db.connect/main.c:92 ../vector/v.db.connect/main.c:105
-#: ../vector/v.db.connect/main.c:115 ../vector/v.db.connect/main.c:121
-#: ../vector/v.distance/main.c:247 ../vector/v.external.out/args.c:62
-#: ../vector/v.external.out/args.c:75 ../vector/v.external.out/args.c:81
-#: ../vector/v.external/args.c:60 ../vector/v.external/args.c:67
-#: ../vector/v.external/args.c:76 ../vector/v.in.ogr/main.c:351
-#: ../vector/v.in.ogr/main.c:358 ../vector/v.info/parse.c:24
-#: ../vector/v.info/parse.c:29 ../vector/v.info/parse.c:34
-#: ../vector/v.info/parse.c:39 ../vector/v.info/parse.c:44
-#: ../vector/v.info/parse.c:54 ../vector/v.to.db/parse.c:118
-#: ../vector/v.to.db/parse.c:125 ../vector/v.to.db/parse.c:130
-#: ../vector/v.to.db/parse.c:136 ../vector/v.to.db/parse.c:141
-#: ../vector/v.to.db/parse.c:147 ../vector/v.univar/main.c:152
-#: ../vector/v.vect.stats/main.c:238 ../vector/v.vect.stats/main.c:251
-#: ../vector/v.what.rast/main.c:112 ../vector/v.what/main.c:100
-#: ../vector/v.what/main.c:105 ../vector/v.what/main.c:111
-#: ../vector/v.what/main.c:118 ../vector/v.what/main.c:126
-#: ../vector/v.what/main.c:134 ../vector/v.what/main.c:142
+#: ../temporal/t.connect/main.c:74 ../temporal/t.connect/main.c:83
+#: ../temporal/t.connect/main.c:104 ../temporal/t.connect/main.c:123
+#: ../vector/v.category/main.c:169 ../vector/v.class/main.c:106
+#: ../vector/v.colors.out/main.c:71 ../vector/v.colors/main.c:132
+#: ../vector/v.colors/main.c:140 ../vector/v.db.connect/main.c:92
+#: ../vector/v.db.connect/main.c:105 ../vector/v.db.connect/main.c:115
+#: ../vector/v.db.connect/main.c:121 ../vector/v.distance/main.c:247
+#: ../vector/v.external.out/args.c:62 ../vector/v.external.out/args.c:75
+#: ../vector/v.external.out/args.c:81 ../vector/v.external/args.c:60
+#: ../vector/v.external/args.c:67 ../vector/v.external/args.c:76
+#: ../vector/v.in.ogr/main.c:351 ../vector/v.in.ogr/main.c:358
+#: ../vector/v.info/parse.c:24 ../vector/v.info/parse.c:29
+#: ../vector/v.info/parse.c:34 ../vector/v.info/parse.c:39
+#: ../vector/v.info/parse.c:44 ../vector/v.info/parse.c:54
+#: ../vector/v.to.db/parse.c:118 ../vector/v.to.db/parse.c:125
+#: ../vector/v.to.db/parse.c:130 ../vector/v.to.db/parse.c:136
+#: ../vector/v.to.db/parse.c:141 ../vector/v.to.db/parse.c:147
+#: ../vector/v.univar/main.c:152 ../vector/v.vect.stats/main.c:238
+#: ../vector/v.vect.stats/main.c:251 ../vector/v.what.rast/main.c:112
+#: ../vector/v.what/main.c:100 ../vector/v.what/main.c:105
+#: ../vector/v.what/main.c:111 ../vector/v.what/main.c:118
+#: ../vector/v.what/main.c:126 ../vector/v.what/main.c:134
+#: ../vector/v.what/main.c:142
 msgid "Print"
 msgstr ""
 
@@ -275,11 +276,11 @@ msgstr ""
 msgid "Prints/sets general DB connection for current mapset."
 msgstr ""
 
-#: ../db/db.connect/main.c:56 ../temporal/t.connect/main.c:49
+#: ../db/db.connect/main.c:56 ../temporal/t.connect/main.c:73
 msgid "Print current connection parameters and exit"
 msgstr ""
 
-#: ../db/db.connect/main.c:61 ../temporal/t.connect/main.c:75
+#: ../db/db.connect/main.c:61 ../temporal/t.connect/main.c:99
 msgid "Print current connection parameters using shell style and exit [deprecated]"
 msgstr ""
 
@@ -292,12 +293,12 @@ msgstr ""
 #: ../raster/r.regression.line/main.c:83
 #: ../raster/r.regression.multi/main.c:179
 #: ../raster/r.univar/r.univar_main.c:103
-#: ../raster/r.univar/r3.univar_main.c:65 ../temporal/t.connect/main.c:78
+#: ../raster/r.univar/r3.univar_main.c:65 ../temporal/t.connect/main.c:102
 #: ../vector/v.univar/main.c:131 ../vector/v.what/main.c:124
 msgid "This flag is deprecated and will be removed in a future release. Use format=shell instead."
 msgstr ""
 
-#: ../db/db.connect/main.c:71 ../temporal/t.connect/main.c:64
+#: ../db/db.connect/main.c:71 ../temporal/t.connect/main.c:88
 msgid "Check connection parameters, set if uninitialized, and exit"
 msgstr ""
 
@@ -305,13 +306,13 @@ msgstr ""
 #: ../db/db.connect/main.c:90 ../db/db.connect/main.c:99
 #: ../db/db.connect/main.c:102 ../db/db.connect/main.c:111
 #: ../general/g.gisenv/main.c:66 ../general/g.gisenv/main.c:74
-#: ../general/g.gisenv/main.c:84 ../temporal/t.connect/main.c:65
-#: ../temporal/t.connect/main.c:71 ../temporal/t.connect/main.c:85
-#: ../temporal/t.connect/main.c:89
+#: ../general/g.gisenv/main.c:84 ../temporal/t.connect/main.c:89
+#: ../temporal/t.connect/main.c:95 ../temporal/t.connect/main.c:109
+#: ../temporal/t.connect/main.c:113
 msgid "Set"
 msgstr ""
 
-#: ../db/db.connect/main.c:76 ../temporal/t.connect/main.c:69
+#: ../db/db.connect/main.c:76 ../temporal/t.connect/main.c:93
 msgid "Set from default settings and exit"
 msgstr ""
 
@@ -346,7 +347,7 @@ msgstr ""
 #: ../raster/r.univar/stats.c:104 ../raster/r.univar/stats.c:148
 #: ../raster/r.univar/stats.c:439 ../raster/r.volume/main.c:409
 #: ../raster/r.what.color/main.c:52 ../raster3d/r3.info/main.c:153
-#: ../temporal/t.connect/main.c:100 ../vector/v.category/main.c:942
+#: ../temporal/t.connect/main.c:32 ../vector/v.category/main.c:942
 #: ../vector/v.class/main.c:257 ../vector/v.class/main.c:348
 #: ../vector/v.db.connect/main.c:302 ../vector/v.db.connect/main.c:395
 #: ../vector/v.db.select/main.c:338 ../vector/v.db.select/main.c:349
@@ -369,19 +370,19 @@ msgstr ""
 #: ../raster/r.univar/r.univar_main.c:220
 #: ../raster/r.univar/r3.univar_main.c:176
 #: ../scripts/db.univar/db.univar.py:118
-#: ../scripts/v.db.univar/v.db.univar.py:95 ../temporal/t.connect/main.c:117
+#: ../scripts/v.db.univar/v.db.univar.py:95 ../temporal/t.connect/main.c:147
 #: ../vector/v.univar/main.c:177 ../vector/v.what/main.c:195
 msgid "Flag 'g' is deprecated and will be removed in a future release. Please use format=shell instead."
 msgstr ""
 
 #: ../db/db.connect/main.c:160 ../misc/m.measure/main.c:103
 #: ../raster/r.regression.line/main.c:117
-#: ../raster/r.regression.multi/main.c:216 ../temporal/t.connect/main.c:123
+#: ../raster/r.regression.multi/main.c:216 ../temporal/t.connect/main.c:153
 #: ../vector/v.db.connect/main.c:178 ../vector/v.univar/main.c:180
 msgid "The -g flag cannot be used with format=json. Please select only one output format."
 msgstr ""
 
-#: ../db/db.connect/main.c:169 ../temporal/t.connect/main.c:132
+#: ../db/db.connect/main.c:169 ../temporal/t.connect/main.c:162
 msgid "The -p flag is required when using the format option."
 msgstr ""
 
@@ -391,7 +392,7 @@ msgid "Database connection not defined. Run db.connect."
 msgstr ""
 
 #: ../db/db.connect/main.c:269 ../db/db.connect/main.c:296
-#: ../temporal/t.connect/main.c:223
+#: ../temporal/t.connect/main.c:287
 #, c-format
 msgid ""
 "Default driver / database set to:\n"
@@ -1812,7 +1813,7 @@ msgstr ""
 #: ../display/d.colorlist/main.c:35 ../display/d.font/main.c:46
 #: ../display/d.fontlist/main.c:46 ../general/g.gisenv/main.c:43
 #: ../general/g.mapset/main.c:71 ../general/g.mapsets/main.c:87
-#: ../general/g.region/main.c:66 ../temporal/t.connect/main.c:42
+#: ../general/g.region/main.c:66 ../temporal/t.connect/main.c:66
 msgid "settings"
 msgstr ""
 
@@ -4160,7 +4161,8 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast.univar_to_translate.c:11
 #: ../locale/scriptstrings/t.rast3d.list_to_translate.c:12
 #: ../locale/scriptstrings/t.rast3d.list_to_translate.c:13
-#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:10
+#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:11
+#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:13
 #: ../locale/scriptstrings/t.vect.list_to_translate.c:10
 #: ../locale/scriptstrings/t.vect.list_to_translate.c:11
 #: ../locale/scriptstrings/t.vect.univar_to_translate.c:6
@@ -13189,6 +13191,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/db.univar_to_translate.c:6
 #: ../locale/scriptstrings/t.rast.univar_to_translate.c:8
+#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:10
 #: ../locale/scriptstrings/v.db.univar_to_translate.c:6
 #: ../raster/r.univar/r.univar_main.c:89 ../raster/r.univar/r3.univar_main.c:53
 #: ../vector/v.univar/main.c:125
@@ -14915,7 +14918,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.vect.univar_to_translate.c:2
 #: ../locale/scriptstrings/t.vect.what.strds_to_translate.c:2
 #: ../locale/scriptstrings/v.what.strds_to_translate.c:3
-#: ../temporal/t.connect/main.c:41
+#: ../temporal/t.connect/main.c:65
 msgid "temporal"
 msgstr ""
 
@@ -15049,7 +15052,7 @@ msgstr ""
 #: ../raster/r.region/main.c:46 ../raster/r.support/main.c:55
 #: ../raster/r.timestamp/main.c:38 ../raster3d/r3.info/main.c:86
 #: ../raster3d/r3.support/main.c:49 ../raster3d/r3.timestamp/main.c:44
-#: ../temporal/t.connect/main.c:43 ../vector/v.info/main.c:43
+#: ../temporal/t.connect/main.c:67 ../vector/v.info/main.c:43
 #: ../vector/v.support/main.c:39 ../vector/v.timestamp/main.c:36
 msgid "metadata"
 msgstr ""
@@ -15100,8 +15103,10 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast3d.list_to_translate.c:16
 #: ../locale/scriptstrings/t.rast3d.list_to_translate.c:18
 #: ../locale/scriptstrings/t.rast3d.list_to_translate.c:20
-#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:12
 #: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:15
+#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:17
+#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:20
+#: ../locale/scriptstrings/t.vect.db.select_to_translate.c:9
 #: ../locale/scriptstrings/t.vect.list_to_translate.c:8
 #: ../locale/scriptstrings/t.vect.list_to_translate.c:14
 #: ../locale/scriptstrings/t.vect.list_to_translate.c:16
@@ -15140,8 +15145,8 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:16
 #: ../locale/scriptstrings/t.rast.univar_to_translate.c:12
 #: ../locale/scriptstrings/t.rast3d.list_to_translate.c:15
-#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:11
-#: ../locale/scriptstrings/t.vect.db.select_to_translate.c:8
+#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:14
+#: ../locale/scriptstrings/t.vect.db.select_to_translate.c:10
 #: ../locale/scriptstrings/t.vect.list_to_translate.c:15
 #: ../locale/scriptstrings/t.vect.univar_to_translate.c:8
 msgid "Field separator character between the output columns"
@@ -15658,7 +15663,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:18
 #: ../locale/scriptstrings/t.rast.univar_to_translate.c:18
 #: ../locale/scriptstrings/t.rast3d.list_to_translate.c:19
-#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:14
+#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:19
 #: ../locale/scriptstrings/t.vect.list_to_translate.c:17
 #: ../locale/scriptstrings/t.vect.univar_to_translate.c:11
 msgid "Suppress printing of column names"
@@ -15683,6 +15688,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:6
 #: ../locale/scriptstrings/t.rast.univar_to_translate.c:10
+#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:12
 msgid "Process only maps with this spatial relation to the current computational region"
 msgstr ""
 
@@ -15883,11 +15889,12 @@ msgid "Raster map used for zoning, must be of type CELL"
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.univar_to_translate.c:14
+#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:16
 msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.univar_to_translate.c:16
-#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:13
+#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:18
 #: ../locale/scriptstrings/t.vect.univar_to_translate.c:10
 #: ../raster/r.univar/r.univar_main.c:109
 #: ../raster/r.univar/r3.univar_main.c:71 ../vector/v.univar/main.c:136
@@ -15983,7 +15990,7 @@ msgid "Raster map with zones to compute statistics for"
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:9
-msgid "Raster map with zones to compute statistics for (needs to be CELL)"
+msgid "3D raster map with zones"
 msgstr ""
 
 #: ../locale/scriptstrings/t.register_to_translate.c:1
@@ -16220,6 +16227,10 @@ msgstr ""
 #: ../vector/v.decimate/main.c:122 ../vector/v.extract/main.c:79
 #: ../vector/v.outlier/main.c:71
 msgid "select"
+msgstr ""
+
+#: ../locale/scriptstrings/t.vect.db.select_to_translate.c:8
+msgid "plain;Plain text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
 msgstr ""
 
 #: ../locale/scriptstrings/t.vect.export_to_translate.c:1
@@ -34925,35 +34936,35 @@ msgstr ""
 msgid "Generating output raster map <%s>..."
 msgstr ""
 
-#: ../scripts/r.semantic.label/r.semantic.label.py:64
+#: ../scripts/r.semantic.label/r.semantic.label.py:67
 msgid "No semantic label assigned to <{}>"
 msgstr ""
 
-#: ../scripts/r.semantic.label/r.semantic.label.py:66
+#: ../scripts/r.semantic.label/r.semantic.label.py:69
 msgid "Map <{}> not found"
 msgstr ""
 
-#: ../scripts/r.semantic.label/r.semantic.label.py:83
+#: ../scripts/r.semantic.label/r.semantic.label.py:89
 msgid "Semantic label <{}> assigned to raster map <{}>"
 msgstr ""
 
-#: ../scripts/r.semantic.label/r.semantic.label.py:90
+#: ../scripts/r.semantic.label/r.semantic.label.py:96
 msgid "Semantic label dissociated from raster map <{}>"
 msgstr ""
 
-#: ../scripts/r.semantic.label/r.semantic.label.py:95
+#: ../scripts/r.semantic.label/r.semantic.label.py:101
 msgid "Unable to assign/dissociate semantic label. {}"
 msgstr ""
 
-#: ../scripts/r.semantic.label/r.semantic.label.py:98
+#: ../scripts/r.semantic.label/r.semantic.label.py:104
 msgid "Map <{}> not found in current mapset"
 msgstr ""
 
-#: ../scripts/r.semantic.label/r.semantic.label.py:109
+#: ../scripts/r.semantic.label/r.semantic.label.py:115
 msgid "Operation {}: required parameter <{}> not set"
 msgstr ""
 
-#: ../scripts/r.semantic.label/r.semantic.label.py:115
+#: ../scripts/r.semantic.label/r.semantic.label.py:121
 msgid "Number of maps differs from number of semantic labels"
 msgstr ""
 
@@ -35865,23 +35876,35 @@ msgstr ""
 msgid "Unable to run v.what.rast for vector map <%s> and raster map <%s>"
 msgstr ""
 
-#: ../temporal/t.connect/main.c:44
+#: ../temporal/t.connect/main.c:68
 msgid "Prints/sets general temporal GIS database connection for current mapset."
 msgstr ""
 
-#: ../temporal/t.connect/main.c:56
+#: ../temporal/t.connect/main.c:80
 msgid "plain;Plain text output;shell;Shell script style output;json;JSON (JavaScript Object Notation)"
 msgstr ""
 
-#: ../temporal/t.connect/main.c:70
+#: ../temporal/t.connect/main.c:94
 msgid "Overwrite current settings if initialized"
 msgstr ""
 
-#: ../temporal/t.connect/main.c:170
+#: ../temporal/t.connect/main.c:119
+msgid "Name of the mapset(s) to print the connection info for"
+msgstr ""
+
+#: ../temporal/t.connect/main.c:121
+msgid "'.' for current mapset; '*' for all mapsets in the project. Requires format=json."
+msgstr ""
+
+#: ../temporal/t.connect/main.c:168
+msgid "The mapset option requires format=json."
+msgstr ""
+
+#: ../temporal/t.connect/main.c:248
 msgid "Temporal GIS database connection not defined. Run t.connect."
 msgstr ""
 
-#: ../temporal/t.connect/main.c:202
+#: ../temporal/t.connect/main.c:266
 #, c-format
 msgid ""
 "Default TGIS driver / database set to:\n"
@@ -35889,11 +35912,11 @@ msgid ""
 "database: %s"
 msgstr ""
 
-#: ../temporal/t.connect/main.c:209
+#: ../temporal/t.connect/main.c:273
 msgid "Default TGIS driver is not set"
 msgstr ""
 
-#: ../temporal/t.connect/main.c:212
+#: ../temporal/t.connect/main.c:276
 msgid "Default TGIS database is not set"
 msgstr ""
 
