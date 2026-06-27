@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: grassmods_zh\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-13 12:01+0000\n"
-"PO-Revision-Date: 2026-06-24 09:37+0000\n"
+"PO-Revision-Date: 2026-06-25 11:56+0000\n"
 "Last-Translator: Jietao Wang <quaternary@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://weblate.osgeo.org/projects/grass-gis/grassmods-8-5/zh_Hans/>\n"
 "Language: zh\n"
@@ -37,10 +37,10 @@ msgid "Unable to describe table <%s>"
 msgstr "无法描述表 <%s>"
 
 msgid "Failed to initialize JSON array. Out of memory?"
-msgstr ""
+msgstr "JSON 数组初始化失败。内存不足？"
 
 msgid "Failed to serialize JSON to pretty format."
-msgstr ""
+msgstr "无法将 JSON 序列化为美观格式。"
 
 msgid "Print type information about the columns"
 msgstr ""
@@ -3098,7 +3098,7 @@ msgid "Unable to open display"
 msgstr "无法打开显示设备"
 
 msgid "Unable to obtain visual"
-msgstr ""
+msgstr "无法获取视觉内容"
 
 msgid "Failed to initialize output surface"
 msgstr ""
@@ -9276,7 +9276,7 @@ msgid "Name of vector map to use as mask"
 msgstr ""
 
 msgid "Vector"
-msgstr ""
+msgstr "矢量"
 
 msgid "Layer number or name (vector)"
 msgstr ""
@@ -10358,7 +10358,7 @@ msgid "centroid"
 msgstr ""
 
 msgid "area"
-msgstr ""
+msgstr "面积"
 
 msgid "Action to be taken"
 msgstr ""
@@ -10445,7 +10445,7 @@ msgid "Layer where to join"
 msgstr ""
 
 msgid "column"
-msgstr ""
+msgstr "列"
 
 msgid "Identifier column (e.g.: cat) in the vector table to be used for join"
 msgstr ""
@@ -20083,7 +20083,7 @@ msgid "Distribution mean"
 msgstr "分布均值"
 
 msgid "Standard deviation"
-msgstr "标准偏差"
+msgstr "标准差"
 
 msgid "Provides surface interpolation from raster point data by Inverse Distance Squared Weighting."
 msgstr ""
@@ -25258,7 +25258,7 @@ msgid "type       count        min        max\n"
 msgstr ""
 
 msgid "boundary"
-msgstr ""
+msgstr "边界"
 
 msgid "face"
 msgstr ""
