@@ -54,8 +54,9 @@ If `ccache` is installed it is used automatically; set `CCACHE_DIR` to a
 writable path if the default cache location is read-only (e.g. in a sandbox).
 GRASS uses `~/.grass8` for user config and installed addons by default; set
 `GRASS_CONFIG_DIR` to a writable directory for a sandbox, or to isolate a
-run from existing user settings. For a rootless install (e.g. a sandbox, where the default
-`/usr/local` is not writable), set the prefix at configure time:
+run from existing user settings. For a rootless install (e.g. a sandbox,
+where the default `/usr/local` is not writable), set the prefix at configure
+time:
 `cmake -B build -DCMAKE_INSTALL_PREFIX=<writable path>`. GRASS records this
 prefix in the install, so the configure-time value (not `cmake --install
 --prefix`) is what the installed tree uses.
