@@ -1041,7 +1041,7 @@ class DataCatalogTree(TreeView):
         ):
             self._popupMenuMultipleStds()
         elif self.selected_stds_map[0]:
-            self._popupMenuEmpty()  # just for now
+            self._popupMenuStdsMap()
         elif self.selected_mapset[0] and len(self.selected_mapset) == 1:
             self._popupMenuMapset()
         elif (
@@ -2013,6 +2013,12 @@ class DataCatalogTree(TreeView):
         # Update user's settings
         self._saveGrassDBs()
 
+    def OnDisplayStdsMap(self, event):
+        """Quickly display maps selected inside an STDS"""
+        self.selected_layer = self.selected_stds_map
+        self.DisplayLayer()
+        self.selected_layer = []
+
     def OnDisplayLayer(self, event):
         """
         Display layer in current graphics view
@@ -2487,6 +2493,59 @@ class DataCatalogTree(TreeView):
             ),
         )
 
+    def OnUnregisterStdsMap(self, event):
+        """Unregister selected maps from their temporal datasets natively"""
+        stds_groups = {}
+        for map_node in self.selected_stds_map:
+            stds_node = map_node.parent
+            if stds_node not in stds_groups:
+                stds_groups[stds_node] = []
+            stds_groups[stds_node].append(map_node)
+
+        self.showNotification.emit(
+            message=_("Unregistering {c} maps...").format(c=len(self.selected_stds_map))
+        )
+
+        success_count = 0
+
+        for stds_node, map_nodes in stds_groups.items():
+            mapset_node = stds_node.parent
+            location_node = mapset_node.parent
+            grassdb_node = location_node.parent
+
+            mapset_name = mapset_node.data["name"]
+            stds_name = stds_node.data["name"]
+            map_type = map_nodes[0].data["type"]
+
+            maps = ",".join([n.data["name"] for n in map_nodes])
+            gisrc, env = gs.create_environment(
+                grassdb_node.data["name"],
+                location_node.data["name"],
+                mapset_name,
+            )
+
+            unregistered, cmd = self._runCommand(
+                "t.unregister",
+                input=f"{stds_name}@{mapset_name}",
+                type=map_type,
+                maps=maps,
+                env=env,
+            )
+
+            gs.try_remove(gisrc)
+
+            if unregistered == 0:
+                success_count += len(map_nodes)
+                for node in map_nodes:
+                    self._model.RemoveNode(node)
+                self.RefreshNode(stds_node, recursive=True)
+
+        if success_count > 0:
+            self.showNotification.emit(
+                message=_("Successfully unregistered {c} maps").format(c=success_count)
+            )
+            self.UnselectAll()
+
     def OnDuplicateStds(self, event):
         """Duplicate temporal dataset natively using t.copy"""
         old_name = self.selected_stds[0].data["name"]
@@ -2622,39 +2681,54 @@ class DataCatalogTree(TreeView):
     def _popupMenuStds(self):
         """Create dedicated popup menu for space time datasets"""
         menu = Menu()
-        genv = gisenv()
-        currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
+
+        is_active = self.selected_mapset[0] == self.current_mapset_node
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Register maps"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRegisterStds, item)
-        item.Enable(currentMapset)
+        item.Enable(is_active)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Unregister maps"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnUnregisterStds, item)
-        item.Enable(currentMapset)
+        item.Enable(is_active)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("Duplicate dataset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDuplicateStds, item)
-        item.Enable(currentMapset)
+        item.Enable(is_active)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename dataset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRenameStds, item)
-        item.Enable(currentMapset)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete dataset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDeleteStds, item)
-        item.Enable(currentMapset)
 
         menu.AppendSeparator()
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("Show &metadata"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnMetadataStds, item)
+
+        self.PopupMenu(menu)
+        menu.Destroy()
+
+    def _popupMenuStdsMap(self):
+        """Create popup menu for maps inside a temporal dataset"""
+        menu = Menu()
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Display map(s)"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnDisplayStdsMap, item)
+        if self.selected_location[0].data["name"] != gisenv()["LOCATION_NAME"]:
+            item.Enable(False)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Unregister map(s)"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnUnregisterStdsMap, item)
 
         self.PopupMenu(menu)
         menu.Destroy()
@@ -2725,7 +2799,7 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("Create &temporal dataset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCreateStds, item)
-        if not currentMapset:
+        if self.selected_mapset[0] != self.current_mapset_node:
             item.Enable(False)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Paste"))
@@ -2926,13 +3000,30 @@ class DataCatalogTree(TreeView):
     def _popupMenuMultipleStds(self):
         """Create popup menu for multiple selected space time datasets"""
         menu = Menu()
-        genv = gisenv()
-        currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
+
+        try:
+            path_output = tools.g_mapsets(format="json", flags="p", quiet=True)
+            accessible_mapsets = set(path_output["mapsets"])
+        except ToolError as e:
+            Debug.msg(1, f"Failed to read search path: {e}")
+            accessible_mapsets = set()
+
+        curr_loc = (
+            self.current_location_node.data["name"]
+            if self.current_location_node
+            else ""
+        )
+
+        # Must be same location (by name) AND in the search path
+        is_mergeable = all(
+            loc.data["name"] == curr_loc and m.data["name"] in accessible_mapsets
+            for loc, m in zip(self.selected_location, self.selected_mapset, strict=True)
+        )
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Merge datasets"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnMergeStds, item)
-        item.Enable(currentMapset)
+        item.Enable(is_mergeable)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete datasets"))
         menu.AppendItem(item)
