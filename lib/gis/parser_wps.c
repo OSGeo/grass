@@ -251,7 +251,9 @@ void G__wps_print_process_description(void)
                 const char *atts[] = {"age", "element", "prompt", NULL};
                 top = G_calloc(strlen(opt->gisprompt) + 1, 1);
                 strcpy(top, opt->gisprompt);
-                s = strtok(top, ",");
+                char *saveptr = NULL;
+                s = strtok_r(top, ",", &saveptr);
+
                 for (i = 0; s != NULL && atts[i] != NULL; i++) {
 
                     char *token = G_store(s);
@@ -292,7 +294,7 @@ void G__wps_print_process_description(void)
                     if (strcmp(token, "file") == 0) {
                         data_type = TYPE_PLAIN_TEXT;
                     }
-                    s = strtok(NULL, ",");
+                    s = strtok_r(NULL, ",", &saveptr);
                     G_free(token);
                 }
                 G_free(top);
@@ -302,11 +304,12 @@ void G__wps_print_process_description(void)
             if (opt->key_desc) {
                 top = G_calloc(strlen(opt->key_desc) + 1, 1);
                 strcpy(top, opt->key_desc);
-                s = strtok(top, ",");
+                char *saveptr = NULL;
+                s = strtok_r(top, ",", &saveptr);
                 /* Count comma's */
                 for (i = 0; s != NULL; i++) {
                     num_tuples++;
-                    s = strtok(NULL, ",");
+                    s = strtok_r(NULL, ",", &saveptr);
                 }
                 if (num_tuples > 1)
                     is_tuple = 1;
@@ -479,7 +482,8 @@ void G__wps_print_process_description(void)
                 const char *atts[] = {"age", "element", "prompt", NULL};
                 top = G_calloc(strlen(opt->gisprompt) + 1, 1);
                 strcpy(top, opt->gisprompt);
-                s = strtok(top, ",");
+                char *saveptr = NULL;
+                s = strtok_r(top, ",", &saveptr);
                 for (i = 0; s != NULL && atts[i] != NULL; i++) {
 
                     char *token = G_store(s);
@@ -505,7 +509,7 @@ void G__wps_print_process_description(void)
                     if (strcmp(token, "file") == 0) {
                         data_type = TYPE_PLAIN_TEXT;
                     }
-                    s = strtok(NULL, ",");
+                    s = strtok_r(NULL, ",", &saveptr);
                     G_free(token);
                 }
                 G_free(top);
@@ -867,10 +871,11 @@ static void wps_print_literal_input_output(
         /* Check for range values */
         if (datatype && (strcmp(datatype, "integer") == 0 ||
                          strcmp(datatype, "float") == 0)) {
-            str = strtok((char *)choices[0], "-");
+            char *saveptr = NULL;                
+            str = strtok_r((char *)choices[0], "-", &saveptr);
             if (str != NULL) {
                 snprintf(range[0], 24, "%s", str);
-                str = strtok(NULL, "-");
+                str = strtok_r(NULL, "-", &saveptr);
                 if (str != NULL) {
                     snprintf(range[1], 24, "%s", str);
                     type = TYPE_RANGE;
