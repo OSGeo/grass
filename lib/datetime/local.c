@@ -27,13 +27,14 @@
  */
 int datetime_get_local_timezone(int *minutes)
 {
+    struct tm local_tm, gm_tm;
     struct tm *local, *gm;
     time_t clock;
     DateTime dtl, dtg, dtdiff;
 
     time(&clock);
 
-    local = localtime(&clock);
+    local = localtime_r(&clock, &local_tm);
 
     datetime_set_type(&dtl, DATETIME_ABSOLUTE, DATETIME_YEAR, DATETIME_SECOND,
                       0);
@@ -46,7 +47,7 @@ int datetime_get_local_timezone(int *minutes)
     datetime_set_minute(&dtl, (int)local->tm_min);
     datetime_set_second(&dtl, (double)local->tm_sec);
 
-    gm = gmtime(&clock);
+    gm = gmtime_r(&clock, &gm_tm);
 
     datetime_set_type(&dtg, DATETIME_ABSOLUTE, DATETIME_YEAR, DATETIME_SECOND,
                       0);
@@ -80,6 +81,7 @@ int datetime_get_local_timezone(int *minutes)
 void datetime_get_local_time(DateTime *dt)
 {
     time_t clock;
+    struct tm local_tm;
     struct tm *local;
 
     /* first set dt to absolute full date */
@@ -87,7 +89,7 @@ void datetime_get_local_time(DateTime *dt)
 
     /* get the current date/time */
     time(&clock);
-    local = localtime(&clock);
+    local = localtime_r(&clock, &local_tm);
 
     /* now put current {year,month,day,hour,minute,second} into dt */
     datetime_set_year(dt, (int)local->tm_year + 1900);

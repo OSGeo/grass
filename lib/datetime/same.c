@@ -20,6 +20,14 @@
  */
 int datetime_is_same(const DateTime *src, const DateTime *dst)
 {
-    /* WARNING: doesn't allow for padding */
-    return memcmp(src, dst, sizeof(DateTime)) == 0;
+    /* Compare field-by-field (DateTime may contain padding) */
+    return src->year == dst->year &&
+        src->month == dst->month &&
+        src->day == dst->day &&
+        src->hour == dst->hour &&
+        src->minute == dst->minute &&
+        src->second == dst->second &&
+        src->usec == dst->usec &&
+        src->timezone == dst->timezone;
+
 }
