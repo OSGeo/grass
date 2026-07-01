@@ -156,16 +156,34 @@ def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
             Debug.msg(1, "t.connect check failed: {0}".format(e))
 
     if valid_tgis_mapsets:
+        active_mapset = valid_tgis_mapsets[0]
+        temp_gisrc, tgis_env = gs.create_environment(gisdbase, location, active_mapset)
+
+        initial_mapsets = [active_mapset]
+
+        try:
+            initial_search_path = tools.g_mapsets(
+                flags="p", format="json", quiet=True, env=tgis_env
+            )
+            if initial_search_path:
+                initial_mapsets = initial_search_path["mapsets"]
+        except ToolError as e:
+            Debug.msg(
+                1, f"Failed to read original path for {active_mapset}. Error: {e}"
+            )
+
         try:
             tools.g_mapsets(
                 mapset=",".join(valid_tgis_mapsets),
                 operation="set",
                 quiet=True,
-                env=env,
+                env=tgis_env,
             )
 
             for t_type in ["strds", "stvds", "str3ds"]:
-                items = tools.t_list(type=t_type, format="json", quiet=True, env=env)
+                items = tools.t_list(
+                    type=t_type, format="json", quiet=True, env=tgis_env
+                )
 
                 if items:
                     for item in items:
@@ -176,6 +194,18 @@ def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
 
         except ToolError as e:
             Debug.msg(1, "Temporal fetch failed: {0}".format(e))
+        finally:
+            try:
+                tools.g_mapsets(
+                    mapset=",".join(initial_mapsets),
+                    operation="set",
+                    quiet=True,
+                    env=tgis_env,
+                )
+            except ToolError as e:
+                Debug.msg(1, f"Failed to restore search path for {active_mapset}: {e}")
+
+            gs.try_remove(temp_gisrc)
 
     queue.put((maps_dict, None))
     gs.try_remove(tmp_gisrc_file)
