@@ -4,7 +4,7 @@
 #       Changes to this file must be copied over to the other file.
 ARG GUI=without
 
-FROM ubuntu:24.04@sha256:786a8b558f7be160c6c8c4a54f9a57274f3b4fb1491cf65146521ae77ff1dc54 AS common_start
+FROM ubuntu:26.04@sha256:53958ec7b67c2c9355df922dd08dbf0360611f8c3cdb656875e81873db9ffdba AS common_start
 
 ARG BASE_NAME="ubuntu:24.04"
 ARG PYTHON_VERSION=3.12
@@ -45,7 +45,7 @@ ARG GRASS_RUN_PACKAGES="\
   gcc \
   git \
   language-pack-en-base \
-  libarmadillo12 \
+  libarmadillo15 \
   libcairo2 \
   libcurl4-gnutls-dev \
   libfftw3-bin \
@@ -55,7 +55,7 @@ ARG GRASS_RUN_PACKAGES="\
   libgeotiff5 \
   libgif7 \
   libgsl-dev \
-  libgsl27 \
+  libgsl28 \
   libhdf5-dev \
   libjpeg-turbo8 \
   libjson-c5 \
