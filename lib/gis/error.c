@@ -305,7 +305,7 @@ static void print_error(const char *msg, const int type)
                 char *w;
                 int len, lead;
 
-                fprintf(stderr, "%s", prefix_std[type]);
+                fprintf(stderr, "%s", prefix_std[(type >= 0 && type < 3) ? type : MSG]);
                 len = lead = strlen(prefix_std[type]);
                 w = (char *)msg;
 
@@ -313,7 +313,7 @@ static void print_error(const char *msg, const int type)
                     ;
             }
             else {
-                fprintf(stderr, "%s%s\n", prefix_std[type], msg);
+                 fprintf(stderr, "%s%s\n", prefix_std[(type >= 0 && type < 3) ? type : MSG], msg);
             }
 
             if ((type != MSG) && isatty(fileno(stderr)) &&
@@ -410,7 +410,8 @@ static int write_error(const char *msg, int fatal, time_t clock,
     fprintf(log, "%-10s %s\n", "program:", G_program_name());
     fprintf(log, "%-10s %s\n", "user:", G_whoami());
     fprintf(log, "%-10s %s\n", "cwd:", cwd);
-    fprintf(log, "%-10s %s\n", "date:", ctime(&clock));
+    char ctime_buf[26];
+    fprintf(log, "%-10s %s\n", "date:", ctime_r(&clock, ctime_buf));
     fprintf(log, "%-10s %s\n", fatal ? "error:" : "warning:", msg);
     fprintf(log, "-------------------------------------\n");
 

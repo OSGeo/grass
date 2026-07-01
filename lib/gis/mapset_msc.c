@@ -196,9 +196,8 @@ int make_mapset_element_impl(const char *p_path, const char *p_element,
     p = path;
     while (*p)
         p++;
-    /* add trailing slash if missing */
-    --p;
-    if (*p++ != '/') {
+   /* add trailing slash if missing */
+    if (p > path && *(p - 1) != '/') {
         *p++ = '/';
         *p = 0;
     }

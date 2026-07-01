@@ -49,12 +49,23 @@ const char *G_whoami(void)
         name = getenv("USER");
 
 #ifndef _WIN32
-    if (!name || !*name) {
-        struct passwd *p = getpwuid(getuid());
+if (!name || !*name) {
+    struct passwd pwd;
+    struct passwd *result = NULL;
 
-        if (p && p->pw_name && *p->pw_name)
-            name = G_store(p->pw_name);
+    long buflen = sysconf(_SC_GETPW_R_SIZE_MAX);
+    if (buflen < 0)
+        buflen = 16384; /* fallback */
+
+    char *buf = G_malloc((size_t)buflen);
+
+    if (getpwuid_r(getuid(), &pwd, buf, (size_t)buflen, &result) == 0 &&
+        result && result->pw_name && *result->pw_name) {
+        name = G_store(result->pw_name);
     }
+
+    G_free(buf);
+}
 #endif
 
     if (!name || !*name)

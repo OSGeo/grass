@@ -27,6 +27,16 @@ static int ll_wrap(struct Cell_head *cellhd);
 static int ll_check_ns(struct Cell_head *cellhd);
 static int ll_check_ew(struct Cell_head *cellhd);
 
+static double absd(double x);
+static void warn_subtle_rounding(const char *what, double val);
+static void debug_seconds(const char *what, double seconds);
+static void check_ns_ew_3d_input(const struct Cell_head *cellhd,
+                                 int row_flag, int col_flag);
+static void check_tb_3d_input(const struct Cell_head *cellhd, int depth_flag);
+
+static void check_ns_input(const struct Cell_head *cellhd, int row_flag);
+static void check_ew_input(const struct Cell_head *cellhd, int col_flag);
+
 /*!
  * \brief Adjust cell header.
  *
@@ -52,28 +62,8 @@ void G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
 {
     double old_res;
 
-    if (!row_flag) {
-        if (cellhd->ns_res <= 0)
-            G_fatal_error(_("Illegal n-s resolution value: %g"),
-                          cellhd->ns_res);
-    }
-    else {
-        if (cellhd->rows <= 0)
-            G_fatal_error(_("Illegal number of rows: %d"
-                            " (resolution is %g)"),
-                          cellhd->rows, cellhd->ns_res);
-    }
-    if (!col_flag) {
-        if (cellhd->ew_res <= 0)
-            G_fatal_error(_("Illegal e-w resolution value: %g"),
-                          cellhd->ew_res);
-    }
-    else {
-        if (cellhd->cols <= 0)
-            G_fatal_error(_("Illegal number of columns: %d"
-                            " (resolution is %g)"),
-                          cellhd->cols, cellhd->ew_res);
-    }
+   check_ns_input(cellhd, row_flag);
+   check_ew_input(cellhd, col_flag);   
 
     /* check the edge values */
     if (cellhd->north <= cellhd->south) {
@@ -133,6 +123,34 @@ void G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
     ll_check_ew(cellhd);
 }
 
+static void check_ns_input(const struct Cell_head *cellhd, int row_flag)
+{
+    if (!row_flag) {
+        if (cellhd->ns_res <= 0)
+            G_fatal_error(_("Illegal n-s resolution value: %g"), cellhd->ns_res);
+        return;
+    }
+
+    if (cellhd->rows <= 0)
+        G_fatal_error(_("Illegal number of rows: %d"
+                        " (resolution is %g)"),
+                      cellhd->rows, cellhd->ns_res);
+}
+
+static void check_ew_input(const struct Cell_head *cellhd, int col_flag)
+{
+    if (!col_flag) {
+        if (cellhd->ew_res <= 0)
+            G_fatal_error(_("Illegal e-w resolution value: %g"), cellhd->ew_res);
+        return;
+    }
+
+    if (cellhd->cols <= 0)
+        G_fatal_error(_("Illegal number of columns: %d"
+                        " (resolution is %g)"),
+                      cellhd->cols, cellhd->ew_res);
+}
+
 /*!
  * \brief Adjust cell header for 3D values.
  *
@@ -164,52 +182,9 @@ void G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag, int col_flag,
                          int depth_flag)
 {
     double old_res;
+    check_ns_ew_3d_input(cellhd, row_flag, col_flag);
+    check_tb_3d_input(cellhd, depth_flag);
 
-    if (!row_flag) {
-        if (cellhd->ns_res <= 0)
-            G_fatal_error(_("Illegal n-s resolution value: %g"),
-                          cellhd->ns_res);
-        if (cellhd->ns_res3 <= 0)
-            G_fatal_error(_("Illegal n-s resolution value for 3D: %g"),
-                          cellhd->ns_res3);
-    }
-    else {
-        if (cellhd->rows <= 0)
-            G_fatal_error(_("Illegal number of rows: %d"
-                            " (resolution is %g)"),
-                          cellhd->rows, cellhd->ns_res);
-        if (cellhd->rows3 <= 0)
-            G_fatal_error(_("Illegal number of rows for 3D: %d"
-                            " (resolution is %g)"),
-                          cellhd->rows3, cellhd->ns_res3);
-    }
-    if (!col_flag) {
-        if (cellhd->ew_res <= 0)
-            G_fatal_error(_("Illegal e-w resolution value: %g"),
-                          cellhd->ew_res);
-        if (cellhd->ew_res3 <= 0)
-            G_fatal_error(_("Illegal e-w resolution value for 3D: %g"),
-                          cellhd->ew_res3);
-    }
-    else {
-        if (cellhd->cols <= 0)
-            G_fatal_error(_("Illegal number of columns: %d"
-                            " (resolution is %g)"),
-                          cellhd->cols, cellhd->ew_res);
-        if (cellhd->cols3 <= 0)
-            G_fatal_error(_("Illegal number of columns for 3D: %d"
-                            " (resolution is %g)"),
-                          cellhd->cols3, cellhd->ew_res3);
-    }
-    if (!depth_flag) {
-        if (cellhd->tb_res <= 0)
-            G_fatal_error(_("Illegal t-b resolution value: %g"),
-                          cellhd->tb_res);
-    }
-    else {
-        if (cellhd->depths <= 0)
-            G_fatal_error(_("Illegal depths value: %d"), cellhd->depths);
-    }
 
     /* check the edge values */
     if (cellhd->north <= cellhd->south) {
@@ -298,6 +273,59 @@ void G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag, int col_flag,
     cellhd->ew_res3 = (cellhd->east - cellhd->west) / cellhd->cols3;
     cellhd->tb_res = (cellhd->top - cellhd->bottom) / cellhd->depths;
 }
+
+static void check_ns_ew_3d_input(const struct Cell_head *cellhd,
+                                 int row_flag, int col_flag)
+{
+    if (!row_flag) {
+        if (cellhd->ns_res <= 0)
+            G_fatal_error(_("Illegal n-s resolution value: %g"), cellhd->ns_res);
+        if (cellhd->ns_res3 <= 0)
+            G_fatal_error(_("Illegal n-s resolution value for 3D: %g"),
+                          cellhd->ns_res3);
+    }
+    else {
+        if (cellhd->rows <= 0)
+            G_fatal_error(_("Illegal number of rows: %d"
+                            " (resolution is %g)"),
+                          cellhd->rows, cellhd->ns_res);
+        if (cellhd->rows3 <= 0)
+            G_fatal_error(_("Illegal number of rows for 3D: %d"
+                            " (resolution is %g)"),
+                          cellhd->rows3, cellhd->ns_res3);
+    }
+
+    if (!col_flag) {
+        if (cellhd->ew_res <= 0)
+            G_fatal_error(_("Illegal e-w resolution value: %g"), cellhd->ew_res);
+        if (cellhd->ew_res3 <= 0)
+            G_fatal_error(_("Illegal e-w resolution value for 3D: %g"),
+                          cellhd->ew_res3);
+    }
+    else {
+        if (cellhd->cols <= 0)
+            G_fatal_error(_("Illegal number of columns: %d"
+                            " (resolution is %g)"),
+                          cellhd->cols, cellhd->ew_res);
+        if (cellhd->cols3 <= 0)
+            G_fatal_error(_("Illegal number of columns for 3D: %d"
+                            " (resolution is %g)"),
+                          cellhd->cols3, cellhd->ew_res3);
+    }
+}
+
+static void check_tb_3d_input(const struct Cell_head *cellhd, int depth_flag)
+{
+    if (!depth_flag) {
+        if (cellhd->tb_res <= 0)
+            G_fatal_error(_("Illegal t-b resolution value: %g"), cellhd->tb_res);
+        return;
+    }
+
+    if (cellhd->depths <= 0)
+        G_fatal_error(_("Illegal depths value: %d"), cellhd->depths);
+}
+
 
 static int ll_wrap(struct Cell_head *cellhd)
 {
@@ -393,15 +421,8 @@ static int ll_check_ns(struct Cell_head *cellhd)
         diff = -diff;
     if (cellhd->north < 90.0 && diff < 1.0) {
         G_verbose_message(_("%g cells missing to reach 90 degree north"), diff);
-        if (diff < llepsilon && diff > fpepsilon) {
-            G_verbose_message(
-                _("Subtle input data rounding error of north boundary (%g)"),
-                cellhd->north - 90.0);
-            /* check only, do not modify
-               cellhd->north = 90.0;
-               lladjust = 1;
-             */
-        }
+        if (diff < llepsilon && diff > fpepsilon)
+            warn_subtle_rounding("north", cellhd->north - 90.0);
     }
     if (cellhd->north > 90.0) {
         if (diff <= 0.5 + llepsilon) {
@@ -409,26 +430,16 @@ static int ll_check_ns(struct Cell_head *cellhd)
                                 diff);
 
             if (diff < llepsilon && diff > fpepsilon) {
-                G_verbose_message(_("Subtle input data rounding error of north "
-                                    "boundary (%g)"),
-                                  cellhd->north - 90.0);
-                G_debug(1, "North of north in seconds: %g",
-                        (cellhd->north - 90.0) * 3600);
-                /* check only, do not modify
-                   cellhd->north = 90.0;
-                   lladjust = 1;
-                 */
-            }
+                warn_subtle_rounding("north", cellhd->north - 90.0);
+                debug_seconds("North of north", (cellhd->north - 90.0) * 3600);
 
             diff = diff - 0.5;
-            if (diff < 0)
-                diff = -diff;
+            diff = absd(diff);
             if (diff < llepsilon && diff > fpepsilon) {
-                G_verbose_message(_("Subtle input data rounding error of north "
-                                    "boundary (%g)"),
-                                  cellhd->north - 90.0 - cellhd->ns_res / 2.0);
-                G_debug(1, "North of north + 0.5 cells in seconds: %g",
-                        (cellhd->north - 90.0 - cellhd->ns_res / 2.0) * 3600);
+                warn_subtle_rounding("north",
++                                     cellhd->north - 90.0 - cellhd->ns_res / 2.0);
++                debug_seconds("North of north + 0.5 cells",
++                              (cellhd->north - 90.0 - cellhd->ns_res / 2.0) * 3600);
                 /* check only, do not modify
                    cellhd->north = 90.0 + cellhd->ns_res / 2.0;
                    lladjust = 1;
@@ -441,46 +452,28 @@ static int ll_check_ns(struct Cell_head *cellhd)
 
     /* south */
     diff = (cellhd->south + 90) / cellhd->ns_res;
-    if (diff < 0)
-        diff = -diff;
+    diff = absd(diff);
     if (cellhd->south > -90.0 && diff < 1.0) {
         G_verbose_message(_("%g cells missing to reach 90 degree south"), diff);
-        if (diff < llepsilon && diff > fpepsilon) {
-            G_verbose_message(
-                _("Subtle input data rounding error of south boundary (%g)"),
-                cellhd->south + 90.0);
-            /* check only, do not modify
-               cellhd->south = -90.0;
-               lladjust = 1;
-             */
-        }
+        if (diff < llepsilon && diff > fpepsilon)
+            warn_subtle_rounding("south", cellhd->south + 90.0);
     }
     if (cellhd->south < -90.0) {
         if (diff <= 0.5 + llepsilon) {
             G_important_message(_("90 degree south is exceeded by %g cells"),
                                 diff);
-
             if (diff < llepsilon && diff > fpepsilon) {
-                G_verbose_message(_("Subtle input data rounding error of south "
-                                    "boundary (%g)"),
-                                  cellhd->south + 90);
-                G_debug(1, "South of south in seconds: %g",
-                        (-cellhd->south - 90) * 3600);
-                /* check only, do not modify
-                   cellhd->south = -90.0;
-                   lladjust = 1;
-                 */
+                warn_subtle_rounding("south", cellhd->south + 90.0);
+                debug_seconds("South of south", (-cellhd->south - 90.0) * 3600);
             }
 
             diff = diff - 0.5;
-            if (diff < 0)
-                diff = -diff;
+            diff = absd(diff);
             if (diff < llepsilon && diff > fpepsilon) {
-                G_verbose_message(_("Subtle input data rounding error of south "
-                                    "boundary (%g)"),
-                                  cellhd->south + 90 + cellhd->ns_res / 2.0);
-                G_debug(1, "South of south + 0.5 cells in seconds: %g",
-                        (-cellhd->south - 90 - cellhd->ns_res / 2.0) * 3600);
+                warn_subtle_rounding("south",
++                                     cellhd->south + 90.0 + cellhd->ns_res / 2.0);
++                debug_seconds("South of south + 0.5 cells",
++                              (-cellhd->south - 90.0 - cellhd->ns_res / 2.0) * 3600);
                 /* check only, do not modify
                    cellhd->south = -90.0 - cellhd->ns_res / 2.0;
                    lladjust = 1;
@@ -535,6 +528,23 @@ static int ll_check_ew(struct Cell_head *cellhd)
     }
 
     return lladjust;
+}
+
+
+static double absd(double x)
+{
+    return x < 0 ? -x : x;
+}
+
+static void warn_subtle_rounding(const char *what, double val)
+{
+    G_verbose_message(_("Subtle input data rounding error of %s boundary (%g)"),
+                      what, val);
+}
+
+static void debug_seconds(const char *what, double seconds)
+{
+    G_debug(1, "%s in seconds: %g", what, seconds);
 }
 
 /*!
