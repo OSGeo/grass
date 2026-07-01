@@ -12,7 +12,7 @@
         <body>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>Vector</term></tig></langSet>
-                <langSet xml:lang="zh_Hans"><tig><term>Vector</term></tig></langSet>
+                <langSet xml:lang="zh_Hans"><tig><term>矢量</term></tig></langSet>
             </termEntry>
             <termEntry id="The name of this project. Do not use GRASS GIS for 8.5 and later">
                 <langSet xml:lang="en"><tig><term>GRASS</term></tig></langSet>
@@ -29,7 +29,7 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>Standard deviation</term></tig></langSet>
-                <langSet xml:lang="zh_Hans"><tig><term/></tig></langSet>
+                <langSet xml:lang="zh_Hans"><tig><term>标准差</term></tig></langSet>
                 <descrip>https://en.wikipedia.org/wiki/Standard_deviation</descrip>
             </termEntry>
             <termEntry>
@@ -181,7 +181,7 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>columns</term></tig></langSet>
-                <langSet xml:lang="zh_Hans"><tig><term/></tig></langSet>
+                <langSet xml:lang="zh_Hans"><tig><term>列</term></tig></langSet>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>module</term></tig></langSet>
@@ -200,7 +200,7 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>column</term></tig></langSet>
-                <langSet xml:lang="zh_Hans"><tig><term/></tig></langSet>
+                <langSet xml:lang="zh_Hans"><tig><term>列</term></tig></langSet>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>mapset</term></tig></langSet>
@@ -226,17 +226,17 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>centroids</term></tig></langSet>
-                <langSet xml:lang="zh_Hans"><tig><term/></tig></langSet>
+                <langSet xml:lang="zh_Hans"><tig><term>质心</term></tig></langSet>
                 <descrip>Vector feature type</descrip>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>area</term></tig></langSet>
-                <langSet xml:lang="zh_Hans"><tig><term/></tig></langSet>
+                <langSet xml:lang="zh_Hans"><tig><term>面积</term></tig></langSet>
                 <descrip>Mathematical/geometry meaning, like the area of a square is d^2</descrip>
             </termEntry>
             <termEntry id="1">
                 <langSet xml:lang="en"><tig><term>area</term></tig></langSet>
-                <langSet xml:lang="zh_Hans"><tig><term/></tig></langSet>
+                <langSet xml:lang="zh_Hans"><tig><term>区域</term></tig></langSet>
                 <descrip>The geometry type</descrip>
             </termEntry>
             <termEntry>
@@ -270,16 +270,17 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>Support Vector Machine</term></tig></langSet>
-                <langSet xml:lang="zh_Hans"><tig><term/></tig></langSet>
+                <langSet xml:lang="zh_Hans"><tig><term>支持向量机</term></tig></langSet>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>SVM</term></tig></langSet>
-                <langSet xml:lang="zh_Hans"><tig><term/></tig></langSet>
+                <langSet xml:lang="zh_Hans"><tig><term>支持向量机</term></tig></langSet>
+                <note from="translator">支持向量机</note>
                 <descrip>Support Vector Machine</descrip>
             </termEntry>
             <termEntry id="geometry type, plural">
                 <langSet xml:lang="en"><tig><term>areas</term></tig></langSet>
-                <langSet xml:lang="zh_Hans"><tig><term/></tig></langSet>
+                <langSet xml:lang="zh_Hans"><tig><term>区域</term></tig></langSet>
                 <descrip>The geometry type, plural</descrip>
             </termEntry>
             <termEntry>
@@ -289,12 +290,12 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>boundary</term></tig></langSet>
-                <langSet xml:lang="zh_Hans"><tig><term/></tig></langSet>
+                <langSet xml:lang="zh_Hans"><tig><term>边界</term></tig></langSet>
                 <descrip>Vector feature type</descrip>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>boundaries</term></tig></langSet>
-                <langSet xml:lang="zh_Hans"><tig><term/></tig></langSet>
+                <langSet xml:lang="zh_Hans"><tig><term>边界</term></tig></langSet>
                 <descrip>Vector feature type</descrip>
             </termEntry>
             <termEntry>

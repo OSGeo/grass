@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_zh\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-20 16:28+0000\n"
-"PO-Revision-Date: 2026-06-24 09:59+0000\n"
+"PO-Revision-Date: 2026-06-25 11:49+0000\n"
 "Last-Translator: Jietao Wang <quaternary@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://weblate.osgeo.org/projects/grass-gis/grasslibs/zh_Hans/>\n"
 "Language: zh\n"
@@ -43,7 +43,7 @@ msgid "Unable to open display"
 msgstr "无法打开显示设备"
 
 msgid "Unable to obtain visual"
-msgstr ""
+msgstr "无法获取视觉内容"
 
 #, c-format
 msgid "Unknown file extension: %s"
@@ -4032,10 +4032,10 @@ msgid "Failed to initialize JSON object. Out of memory?"
 msgstr ""
 
 msgid "Failed to initialize JSON array. Out of memory?"
-msgstr ""
+msgstr "JSON 数组初始化失败。内存不足？"
 
 msgid "Failed to serialize JSON to pretty format."
-msgstr ""
+msgstr "无法将 JSON 序列化为美观格式。"
 
 #, c-format
 msgid "<%s> in mapset <%s>"
