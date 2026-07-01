@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_th\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-20 16:28+0000\n"
+"POT-Creation-Date: 2026-06-27 15:58+0000\n"
 "PO-Revision-Date: 2025-07-26 01:37+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Thai <https://weblate.osgeo.org/projects/grass-gis/grassmods/th/>\n"
@@ -10080,8 +10080,9 @@ msgstr ""
 msgid "Raster map with zones to compute statistics for"
 msgstr " icon เชิงเส้น สำหรับข้อมูล จุด"
 
-msgid "Raster map with zones to compute statistics for (needs to be CELL)"
-msgstr ""
+#, fuzzy
+msgid "3D raster map with zones"
+msgstr "ชื่อของแผนที่เชิงภาพผลลัพธ์"
 
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
 msgstr ""
@@ -10246,6 +10247,9 @@ msgid "Prints attributes of vector maps registered in a space time vector datase
 msgstr ""
 
 msgid "select"
+msgstr ""
+
+msgid "plain;Plain text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
 msgstr ""
 
 msgid "Exports a space time vector dataset as GRASS specific archive file."
@@ -24763,6 +24767,16 @@ msgstr ""
 msgid "Overwrite current settings if initialized"
 msgstr ""
 
+#, fuzzy
+msgid "Name of the mapset(s) to print the connection info for"
+msgstr "ชื่อของแผนเชิงเส้นนำเข้า ที่มีเส้น"
+
+msgid "'.' for current mapset; '*' for all mapsets in the project. Requires format=json."
+msgstr ""
+
+msgid "The mapset option requires format=json."
+msgstr ""
+
 msgid "Temporal GIS database connection not defined. Run t.connect."
 msgstr ""
 
@@ -34342,10 +34356,6 @@ msgstr ""
 #~ msgstr "ชื่อของแผนที่เชิงภาพผลลัพธ์"
 
 #, fuzzy
-#~ msgid "Name for input raster map with areas"
-#~ msgstr "ชื่อของแผนที่เชิงภาพผลลัพธ์"
-
-#, fuzzy
 #~ msgid "Name for mosaic output map"
 #~ msgstr "คำนำหน้า สำหรับ แผนที่เชิงภาพ ผลลัพธ์"
 
@@ -35016,10 +35026,6 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Name of the vector map layer of the segments"
-#~ msgstr "ชื่อของแผนเชิงเส้นนำเข้า ที่มีเส้น"
-
-#, fuzzy
-#~ msgid "Name of the vector map with the electric grid"
 #~ msgstr "ชื่อของแผนเชิงเส้นนำเข้า ที่มีเส้น"
 
 #, fuzzy
