@@ -183,67 +183,41 @@ static int _datetime_compare(const DateTime *a, const DateTime *b)
     int i;
 
     if (a->positive && !b->positive)
-        return (1);
-    else if (b->positive && !a->positive)
-        return (-1);
+        return 1;
+    if (b->positive && !a->positive)
+        return -1;
 
-    /* same signs */
     for (i = a->from; i <= a->to; i++) {
+        int c = 0;
+
         switch (i) {
-
         case DATETIME_SECOND:
-            if (a->second > b->second)
-                return (1);
-            else if (a->second < b->second)
-                return (-1);
+            c = (a->second > b->second) - (a->second < b->second);
             break;
-
         case DATETIME_MINUTE:
-            if (a->minute > b->minute)
-                return (1);
-            else if (a->minute < b->minute)
-                return (-1);
+            c = cmp_int(a->minute, b->minute);
             break;
-
         case DATETIME_HOUR:
-            if (a->hour > b->hour)
-                return (1);
-            else if (a->hour < b->hour)
-                return (-1);
+            c = cmp_int(a->hour, b->hour);
             break;
-
         case DATETIME_DAY:
-            if (a->day > b->day)
-                return (1);
-            else if (a->day < b->day)
-                return (-1);
+            c = cmp_int(a->day, b->day);
             break;
-
         case DATETIME_MONTH:
-            if (a->month > b->month)
-                return (1);
-            else if (a->month < b->month)
-                return (-1);
+            c = cmp_int(a->month, b->month);
             break;
-
         case DATETIME_YEAR: /* only place sign matters */
-            if (a->positive) {
-                if (a->year > b->year)
-                    return (1);
-                else if (a->year < b->year)
-                    return (-1);
-            }
-            else {
-                if (a->year < b->year)
-                    return (1);
-                else if (a->year > b->year)
-                    return (-1);
-            }
+            c = cmp_year_signed(a, b);
             break;
         }
+
+        if (c != 0)
+            return c;
     }
-    return (0);
+
+    return 0;
 }
+
 
 /*************************************************************/
 
