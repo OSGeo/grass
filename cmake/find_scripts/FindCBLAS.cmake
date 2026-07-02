@@ -134,6 +134,8 @@ find_package_handle_standard_args(
   VERSION_VAR CBLAS_VERSION)
 mark_as_advanced(CBLAS_LIBRARIES CBLAS_INCLUDEDIR)
 
+message(STATUS "Using CBLAS package: ${CBLAS_PKGCONFIG}")
+
 if(CBLAS_FOUND AND NOT TARGET CBLAS::CBLAS)
   add_library(CBLAS::CBLAS INTERFACE IMPORTED)
   set_target_properties(

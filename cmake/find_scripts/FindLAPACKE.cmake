@@ -139,6 +139,8 @@ find_package_handle_standard_args(
   VERSION_VAR LAPACKE_VERSION)
 mark_as_advanced(LAPACKE_LIBRARIES LAPACKE_INCLUDEDIR)
 
+message(STATUS "Using LAPACKE package: ${LAPACKE_PKGCONFIG}")
+
 if(LAPACKE_FOUND AND NOT TARGET LAPACKE::LAPACKE)
   add_library(LAPACKE::LAPACKE INTERFACE IMPORTED)
   set_target_properties(
