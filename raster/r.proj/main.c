@@ -66,6 +66,10 @@
 #include <grass/gjson.h>
 #include "r.proj.h"
 
+#define PACKAGE "grassmods"
+
+#include <omp.h>
+
 /* modify this table to add new methods */
 struct menu menu[] = {
     {p_nearest, "nearest", "nearest neighbor"},
@@ -79,6 +83,106 @@ struct menu menu[] = {
 
 static char *make_ipol_list(void);
 static char *make_ipol_desc(void);
+
+/* Nearest read from an in-RAM input STRIP holding input rows [imin, imax].
+ * col_idx/row_idx are full-map input indices; the strip is addressed relative
+ * to imin. A sample inside the full input map but outside the loaded strip
+ * means the band footprint was under-sized: this is the stop-on-divergence
+ * trip (must never fire if band_input_row_span is correct). Lock-free: reads
+ * only, disjoint output slots per thread. */
+static void interpolate_strip(void *strip, void *obufptr, int cell_type,
+                              double col_idx, double row_idx,
+                              struct Cell_head *incellhd, int imin, int imax)
+{
+    int c = (int)floor(col_idx);
+    int r = (int)floor(row_idx);
+    int cell_size = Rast_cell_size(cell_type);
+
+    /* Outside the full input map: legitimate NULL (same as p_nearest). */
+    if (r < 0 || r >= incellhd->rows || c < 0 || c >= incellhd->cols) {
+        Rast_set_null_value(obufptr, 1, cell_type);
+        return;
+    }
+
+    /* Inside the map but outside the loaded strip: the span check under-sized
+     * the strip. This is a correctness failure, not a NULL. */
+    if (r < imin || r > imax)
+        G_fatal_error(_("Band strip under-sized: input row %d outside loaded "
+                        "range [%d, %d] at column %d"),
+                      r, imin, imax, c);
+
+    unsigned char *src =
+        (unsigned char *)strip +
+        (((size_t)(r - imin) * incellhd->cols + c) * cell_size);
+    memcpy(obufptr, src, cell_size);
+}
+
+/* Dense edge-walk of an output band's rectangle [obr0, obr1) projected into
+ * input space; returns the min/max INPUT ROW touched, plus a 2-cell margin,
+ * clamped to the input map. Samples the band's top and bottom rows across all
+ * columns and its left and right columns across all band rows (bordwalk-style),
+ * so a curved transform's interior-edge extremum is caught -- corner-only
+ * sampling can under-size the strip. Called serially, before the parallel
+ * region, so the shared tproj is safe here. Returns imax < imin for a band
+ * that projects entirely outside the input. */
+static void band_input_row_span(const struct Cell_head *ohd,
+                                const struct Cell_head *ihd,
+                                const struct pj_info *oproj,
+                                const struct pj_info *iproj,
+                                const struct pj_info *tproj, int obr0, int obr1,
+                                int *imin, int *imax)
+{
+    double rmin = 1e300, rmax = -1e300;
+    int e, r, c;
+
+    /* top edge (row obr0) and bottom edge (row obr1-1), all columns */
+    for (e = 0; e < 2; e++) {
+        int orow = (e == 0) ? obr0 : (obr1 - 1);
+        double y = ohd->north - (orow + 0.5) * ohd->ns_res;
+        for (c = 0; c < ohd->cols; c++) {
+            double x = ohd->west + (c + 0.5) * ohd->ew_res;
+            double xx = x, yy = y;
+            if (GPJ_transform(oproj, iproj, tproj, PJ_FWD, &xx, &yy, NULL) < 0)
+                continue;
+            double ri = (ihd->north - yy) / ihd->ns_res;
+            if (ri < rmin)
+                rmin = ri;
+            if (ri > rmax)
+                rmax = ri;
+        }
+    }
+    /* left edge (col 0) and right edge (col cols-1), all band rows */
+    for (e = 0; e < 2; e++) {
+        int ocol = (e == 0) ? 0 : (ohd->cols - 1);
+        double x = ohd->west + (ocol + 0.5) * ohd->ew_res;
+        for (r = obr0; r < obr1; r++) {
+            double y = ohd->north - (r + 0.5) * ohd->ns_res;
+            double xx = x, yy = y;
+            if (GPJ_transform(oproj, iproj, tproj, PJ_FWD, &xx, &yy, NULL) < 0)
+                continue;
+            double ri = (ihd->north - yy) / ihd->ns_res;
+            if (ri < rmin)
+                rmin = ri;
+            if (ri > rmax)
+                rmax = ri;
+        }
+    }
+
+    if (rmax < rmin) { /* band projects entirely outside the input */
+        *imin = 0;
+        *imax = -1;
+        return;
+    }
+
+    int lo = (int)floor(rmin) - 2; /* 2-cell margin for interp stencils */
+    int hi = (int)floor(rmax) + 2;
+    if (lo < 0)
+        lo = 0;
+    if (hi > ihd->rows - 1)
+        hi = ihd->rows - 1;
+    *imin = lo;
+    *imax = hi;
+}
 
 int main(int argc, char **argv)
 {
@@ -98,14 +202,7 @@ int main(int argc, char **argv)
         overwrite,                 /* Overwrite                    */
         curr_proj;                 /* output projection (see gis.h) */
 
-    void *obuffer; /* buffer that holds one output row     */
-
-    struct cache *ibuffer; /* buffer that holds the input map      */
-    func interpolate;      /* interpolation routine        */
-
-    double xcoord2,     /* temporary x coordinates      */
-        ycoord2,        /* temporary y coordinates      */
-        onorth, osouth, /* save original border coords  */
+    double onorth, osouth, /* save original border coords  */
         oeast, owest, inorth, isouth, ieast, iwest;
     char north_str[30], south_str[30], east_str[30], west_str[30];
 
@@ -276,7 +373,6 @@ int main(int argc, char **argv)
     if (!ipolname)
         G_fatal_error(_("<%s=%s> unknown %s"), interpol->key, interpol->answer,
                       interpol->key);
-    interpolate = menu[method].method;
 
     mapname = outmap->answer ? outmap->answer : inmap->answer;
     if (mapname && !list->answer && !overwrite && !print_bounds->answer &&
@@ -664,19 +760,23 @@ int main(int argc, char **argv)
     G_message(_("NS-res: %f"), outcellhd.ns_res);
     G_message(" ");
 
-    /* open and read the relevant parts of the input map and close it */
+    /* Open the input map (input location env). Banding loads only per-band
+     * input strips, not the whole map, so fdi stays open across the band loop.
+     */
     G_switch_env();
     Rast_set_input_window(&incellhd);
     fdi = Rast_open_old(inmap->answer, setname);
     cell_type = Rast_get_map_type(fdi);
-    ibuffer = readcell(fdi, memory->answer);
-    Rast_close(fdi);
+    if (strcmp(interpol->answer, "nearest") != 0)
+        cell_type = FCELL_TYPE;
+    cell_size = Rast_cell_size(cell_type);
 
-    /* And switch back to original location */
+    /* Back to the output location: set output window, init transform, open
+     * output map. Both fds now stay open; rd_window/wr_window are set and
+     * survive env switches, so reads/writes use the right windows throughout.
+     */
     G_switch_env();
     Rast_set_output_window(&outcellhd);
-
-    /* reproject from output to input */
     G_unset_window();
     G_set_window(&outcellhd);
     tproj.def = NULL;
@@ -687,73 +787,152 @@ int main(int argc, char **argv)
     if (GPJ_init_transform(&oproj, &iproj, &tproj) < 0)
         G_fatal_error(_("Unable to initialize coordinate transformation"));
 
-    if (strcmp(interpol->answer, "nearest") == 0) {
+    if (strcmp(interpol->answer, "nearest") == 0)
         fdo = Rast_open_new(mapname, cell_type);
-        obuffer = (CELL *)Rast_allocate_output_buf(cell_type);
-    }
-    else {
+    else
         fdo = Rast_open_fp_new(mapname);
-        cell_type = FCELL_TYPE;
-        obuffer = (FCELL *)Rast_allocate_output_buf(cell_type);
-    }
 
-    cell_size = Rast_cell_size(cell_type);
+    /* Banding (r.neighbors two-level structure): outer serial band loop ->
+     * serial strip load -> parallel compute into a per-band buffer -> serial
+     * in-order per-band write -> next band. Bounds peak memory by the cap
+     * instead of the whole input map (Path A). */
+    double cap_mb = atof(memory->answer);
+    size_t cap_bytes = (size_t)(cap_mb * 1024.0 * 1024.0);
+    double t_size = 0.0, t_fill = 0.0, t_compute = 0.0, t_write = 0.0;
+    int n_bands = 0;
 
-    xcoord2 = outcellhd.west + (outcellhd.ew_res / 2);
-    ycoord2 = outcellhd.north - (outcellhd.ns_res / 2);
+    G_important_message(_("Projecting (banded, per-thread PROJ context)..."));
 
-    G_important_message(_("Projecting..."));
-    for (row = 0; row < outcellhd.rows; row++) {
-        /* obufptr = obuffer */;
+    int obr0 = 0;
+    while (obr0 < outcellhd.rows) {
+        /* Band height: start from all remaining rows, halve until the input
+         * strip plus the band's output buffer fit the cap. band_input_row_span
+         * is RE-RUN for every candidate height -- the previous band's span is
+         * never reused. */
+        double ts = omp_get_wtime();
+        int band_orows = outcellhd.rows - obr0;
+        int imin = 0, imax = -1;
+        for (;;) {
+            band_input_row_span(&outcellhd, &incellhd, &oproj, &iproj, &tproj,
+                                obr0, obr0 + band_orows, &imin, &imax);
+            int strip_rows = imax - imin + 1;
+            size_t strip_bytes =
+                strip_rows > 0 ? (size_t)strip_rows * incellhd.cols * cell_size
+                               : 0;
+            size_t out_bytes = (size_t)band_orows * outcellhd.cols * cell_size;
+            if (strip_bytes + out_bytes <= cap_bytes)
+                break;
+            if (band_orows == 1)
+                G_fatal_error(
+                    _("A single output row needs %.1f MB (input footprint %d "
+                      "rows), exceeding the memory cap (%.1f MB). This "
+                      "large-halo/oblique case needs the tile-cache path, "
+                      "which is not implemented."),
+                    (double)(strip_bytes + out_bytes) / (1024.0 * 1024.0),
+                    strip_rows, cap_mb);
+            band_orows = (band_orows + 1) / 2; /* halve (round up), re-sample */
+        }
+        t_size += omp_get_wtime() - ts;
 
-        G_percent(row, outcellhd.rows - 1, 2);
+        int obr1 = obr0 + band_orows;
+        int strip_rows = imax - imin + 1;
+        n_bands++;
 
-#if 0
-        /* parallelization does not always work,
-         * segfaults in the interpolation functions
-         * can happen */
-#pragma omp parallel for schedule(static)
-#endif
-
-        for (col = 0; col < outcellhd.cols; col++) {
-            void *obufptr =
-                (void *)((const unsigned char *)obuffer + col * cell_size);
-
-            double xcoord1 = xcoord2 + (col)*outcellhd.ew_res;
-            double ycoord1 = ycoord2;
-
-            /* project coordinates in output matrix to       */
-            /* coordinates in input matrix                   */
-            if (GPJ_transform(&oproj, &iproj, &tproj, PJ_FWD, &xcoord1,
-                              &ycoord1, NULL) < 0) {
-                G_fatal_error(_("Error in %s"), "GPJ_transform()");
-                Rast_set_null_value(obufptr, 1, cell_type);
-            }
-            else {
-                /* convert to row/column indices of input matrix */
-
-                /* column index in input matrix */
-                double col_idx = (xcoord1 - incellhd.west) / incellhd.ew_res;
-
-                /* row index in input matrix    */
-                double row_idx = (incellhd.north - ycoord1) / incellhd.ns_res;
-
-                /* and resample data point               */
-                interpolate(ibuffer, obufptr, cell_type, col_idx, row_idx,
-                            &incellhd);
-            }
-
-            /* obufptr = G_incr_void_ptr(obufptr, cell_size); */
+        /* Serial strip load (single fd -> get_row not thread-safe). Reads in
+         * the INPUT env (matching the serial code's invariant), then back to
+         * OUTPUT for compute+write. EMPTY BAND: strip_rows <= 0 means the band
+         * projects entirely outside the input -> no malloc, no read; its cells
+         * become NULL via interpolate_strip's out-of-map path. */
+        void *strip = NULL;
+        if (strip_rows > 0) {
+            strip = G_malloc((size_t)strip_rows * incellhd.cols * cell_size);
+            double t0 = omp_get_wtime();
+            G_switch_env(); /* -> input */
+            for (int r = imin; r <= imax; r++)
+                Rast_get_row(fdi,
+                             (unsigned char *)strip +
+                                 (size_t)(r - imin) * incellhd.cols * cell_size,
+                             r, cell_type);
+            G_switch_env(); /* -> output */
+            t_fill += omp_get_wtime() - t0;
         }
 
-        Rast_put_row(fdo, obuffer, cell_type);
+        /* Per-band output buffer, lock-free disjoint row slots (band-relative
+         * index), mirroring r.neighbors' outputs[i].buf. */
+        void *band_out =
+            G_malloc((size_t)band_orows * outcellhd.cols * cell_size);
 
-        xcoord2 = outcellhd.west + (outcellhd.ew_res / 2);
-        ycoord2 -= outcellhd.ns_res;
+        double t1 = omp_get_wtime();
+#pragma omp parallel
+        {
+            /* Per-thread PROJ context + private transform clone (KEEP: this is
+             * the bit-exact-verified, banding-agnostic part). oproj/iproj are
+             * read-only shared; the static METERS_in/out race is benign
+             * (constant CRS per run). */
+            struct pj_info tproj_local = tproj;
+            PJ_CONTEXT *thread_ctx = proj_context_create();
+            tproj_local.pj = proj_clone(thread_ctx, tproj.pj);
+
+#pragma omp for private(row, col) schedule(dynamic)
+            for (row = obr0; row < obr1; row++) {
+                void *out_row =
+                    (unsigned char *)band_out +
+                    (size_t)(row - obr0) * outcellhd.cols * cell_size;
+                double local_y = outcellhd.north - (outcellhd.ns_res / 2) -
+                                 (row * outcellhd.ns_res);
+                double local_x_start = outcellhd.west + (outcellhd.ew_res / 2);
+
+                for (col = 0; col < outcellhd.cols; col++) {
+                    void *obufptr =
+                        (unsigned char *)out_row + (size_t)col * cell_size;
+                    double x1 = local_x_start + (col * outcellhd.ew_res);
+                    double y1 = local_y;
+
+                    if (GPJ_transform(&oproj, &iproj, &tproj_local, PJ_FWD, &x1,
+                                      &y1, NULL) < 0) {
+                        Rast_set_null_value(obufptr, 1, cell_type);
+                    }
+                    else {
+                        double c_idx = (x1 - incellhd.west) / incellhd.ew_res;
+                        double r_idx = (incellhd.north - y1) / incellhd.ns_res;
+                        interpolate_strip(strip, obufptr, cell_type, c_idx,
+                                          r_idx, &incellhd, imin, imax);
+                    }
+                }
+            }
+
+            proj_destroy(tproj_local.pj);
+            proj_context_destroy(thread_ctx);
+        }
+        t_compute += omp_get_wtime() - t1;
+
+        /* Serial in-order write of the band's rows (Rast_put_row sequential).
+         */
+        double t2 = omp_get_wtime();
+        for (row = obr0; row < obr1; row++)
+            Rast_put_row(fdo,
+                         (unsigned char *)band_out +
+                             (size_t)(row - obr0) * outcellhd.cols * cell_size,
+                         cell_type);
+        t_write += omp_get_wtime() - t2;
+
+        G_percent(obr1, outcellhd.rows, 5);
+
+        if (strip)
+            G_free(strip);
+        G_free(band_out);
+        obr0 = obr1;
     }
 
+    G_message("PHASE_TIMERS size=%.4f fill=%.4f compute=%.4f write=%.4f "
+              "bands=%d",
+              t_size, t_fill, t_compute, t_write, n_bands);
+
+    /* Close input map in its own env, then the output map. */
+    G_switch_env(); /* -> input */
+    Rast_close(fdi);
+    G_switch_env(); /* -> output */
     Rast_close(fdo);
-    release_cache(ibuffer);
 
     if (have_colors > 0) {
         Rast_write_colors(mapname, G_mapset(), &colr);
