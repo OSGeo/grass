@@ -66,8 +66,6 @@
 #include <grass/gjson.h>
 #include "r.proj.h"
 
-#define PACKAGE "grassmods"
-
 #include <omp.h>
 
 /* modify this table to add new methods */
@@ -104,8 +102,12 @@ static void interpolate_strip(void *strip, void *obufptr, int cell_type,
         return;
     }
 
-    /* Inside the map but outside the loaded strip: the span check under-sized
-     * the strip. This is a correctness failure, not a NULL. */
+    /* This input row is inside the input map (the check above already handled
+     * coordinates that fall outside it), but it is not among the rows we
+     * preloaded into this band's strip. That cannot happen if the band's
+     * footprint estimate was right, so it means the estimate was wrong: a bug
+     * in band sizing, not a normal case. Fail loudly rather than write a NULL
+     * and silently produce wrong output. */
     if (r < imin || r > imax)
         G_fatal_error(_("Band strip under-sized: input row %d outside loaded "
                         "range [%d, %d] at column %d"),
@@ -863,6 +865,14 @@ int main(int argc, char **argv)
             G_malloc((size_t)band_orows * outcellhd.cols * cell_size);
 
         double t1 = omp_get_wtime();
+        /* Each band runs one parallel region. This is not nested parallelism:
+         * the "omp for" below does not create a second thread team, it only
+         * divides the band's output rows among the threads that this "omp
+         * parallel" created. The two directives are kept separate instead of a
+         * combined "omp parallel for" because every thread must clone its own
+         * PROJ context before the row loop starts and destroy it after the loop
+         * ends, and that per-thread setup has to sit inside the parallel region
+         * but outside the for. */
 #pragma omp parallel
         {
             /* Per-thread PROJ context + private transform clone (KEEP: this is
