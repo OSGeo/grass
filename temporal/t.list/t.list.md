@@ -17,19 +17,52 @@ The SQL *where* and *sort* expression will be applied for each temporal
 database that was found in accessible mapsets. Hence sorting works only
 on mapset basis.
 
-Temporal databases stored in other mapsets can be used as long as they
-are in the user's current mapset search path (managed with
-[g.mapsets](g.mapsets.md)).
+The **mapset** option allows the user to easily filter the output to one
+or multiple specific mapsets, or to query all mapsets in the project regardless
+of the current search path. By default (if the **mapset** option is not provided),
+Temporal datasets are listed from all mapsets in the user's current search path
+(managed with [g.mapsets](g.mapsets.md)).
+
+The **mapset** parameter accepts the following inputs:
+`mapset='.'` lists datasets only in the current mapset.
+`mapset='*'` lists datasets in all mapsets in the project (location), bypassing
+the search path.
+`mapset=name1,name2` lists datasets strictly from the explicitly named mapsets,
+even if they are outside the current search path.
 
 ## EXAMPLES
 
-Obtain the list of space time raster dataset(s):
+Obtain the list of space time raster dataset(s) in the current search path:
 
 ```sh
 t.list strds
 ----------------------------------------------
 Space time raster datasets with absolute time available in mapset <climate_2000_2012>:
 tempmean_monthly@climate_2000_2012
+```
+
+Obtain the list of space time raster datasets in a specific mapset, even if it is
+not in the search path:
+
+```sh
+t.list strds mapset=modis2002lst
+----------------------------------------------
+Space time raster datasets with absolute time available in mapset <modis2002lst>:
+mini_set@modis2002lst
+```
+
+Obtain the list of space time raster datasets across all mapsets in the project
+(location) using '*':
+
+```sh
+t.list type=strds mapset='*'
+----------------------------------------------
+Space time raster datasets with absolute time available in mapset <climate_2000_2012>:
+precip_abs@climate_2000_2012
+precipitation@climate_2000_2012
+tempmean@climate_2000_2012
+Space time raster datasets with absolute time available in mapset <modis2002lst>:
+mini_set@modis2002lst
 ```
 
 Obtain the list of space time raster datasets in a specific mapset (Note

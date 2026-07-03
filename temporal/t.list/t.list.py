@@ -78,6 +78,12 @@
 # % guisection: Formatting
 # %end
 
+# %option G_OPT_M_MAPSET
+# % multiple: yes
+# % description: Name of mapsets to list ('.' for current, '*' for all mapsets)
+# % guisection: Selection
+# %end
+
 # %option G_OPT_F_SEP
 # % answer:
 # % label: Field separator character between the output columns
@@ -116,6 +122,7 @@ def main():
     outpath = options["output"]
     colhead = flags["c"]
     output_format = options.get("format", "plain")
+    mapset_opt = options["mapset"]
 
     if not columns:
         columns = "all" if output_format == "json" else "id"
@@ -178,7 +185,7 @@ def main():
     tgis.init()
 
     sp = tgis.dataset_factory(type, None)
-    dbif = tgis.SQLDatabaseInterfaceConnection()
+    dbif = tgis.SQLDatabaseInterfaceConnection(mapset_opt)
     dbif.connect()
     first = True
 
@@ -198,12 +205,10 @@ def main():
             time = "absolute time" if ttype == "absolute" else "relative time"
 
             stds_list = tgis.get_dataset_list(
-                type, ttype, columns, where, order, dbif=dbif
+                type, ttype, columns, where, order, dbif=dbif, mapset_opt=mapset_opt
             )
 
-            mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
-
-            for key in mapsets:
+            for key in dbif.tgis_mapsets.keys():
                 if key in stds_list.keys():
                     rows = stds_list[key]
 

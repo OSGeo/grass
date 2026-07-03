@@ -34,7 +34,13 @@ from .open_stds import open_old_stds
 
 
 def get_dataset_list(
-    type, temporal_type, columns=None, where=None, order=None, dbif=None
+    type,
+    temporal_type,
+    columns=None,
+    where=None,
+    order=None,
+    dbif=None,
+    mapset_opt=None,
 ):
     """Return a list of time stamped maps or space time datasets of a specific
     temporal type that are registered in the temporal database
@@ -51,6 +57,8 @@ def get_dataset_list(
     :param order: A comma separated list of columns to order the
                   datasets by category
     :param dbif: The database interface to be used
+    :param mapset_opt: A string specifying target mapsets ('.' for current, '*'
+                       for all, or comma-separated names). Defaults to None.
 
     :return: A dictionary with the rows of the SQL query for each
              available mapset
@@ -96,9 +104,9 @@ def get_dataset_list(
     id = None
     sp = dataset_factory(type, id)
 
-    dbif, connection_state_changed = init_dbif(dbif)
+    dbif, connection_state_changed = init_dbif(dbif, mapset_opt)
 
-    mapsets = get_available_temporal_mapsets()
+    mapsets = get_available_temporal_mapsets(mapset_opt)
 
     result = {}
 
