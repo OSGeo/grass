@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_sl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-06 18:30+0000\n"
+"POT-Creation-Date: 2026-06-20 16:28+0000\n"
 "PO-Revision-Date: 2025-07-26 01:37+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Slovenian <https://weblate.osgeo.org/projects/grass-gis/grassmods/sl/>\n"
@@ -2536,7 +2536,6 @@ msgstr "Število decimalk (le za \"floating point\" podatke)"
 msgid "Get text color from cell color value"
 msgstr ""
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -11112,7 +11111,7 @@ msgstr "Ime rastrskega sloja, ki bo uporabljen za <%s>"
 msgid "Path to the extraction directory"
 msgstr "Ime datoteke s filtrom"
 
-msgid "Create a new project and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
+msgid "Create a new project and import the data into it."
 msgstr ""
 
 #, fuzzy
@@ -11316,6 +11315,9 @@ msgid "parallel"
 msgstr "izpiši znak razmejitve med polji"
 
 msgid "Raster map used for zoning, must be of type CELL"
+msgstr ""
+
+msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
 msgstr ""
 
 #, fuzzy
@@ -22896,7 +22898,6 @@ msgstr ""
 msgid "Input raster must be of type CELL."
 msgstr "Naslov izhodnega rastrskega sloja"
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, fuzzy, c-format
@@ -26518,7 +26519,7 @@ msgstr "Zapisujem novo datoteko...\n"
 msgid "Filled raster map is: %s"
 msgstr "Berem dig_att datoteko...\n"
 
-msgid "Following holes where not filled. Temporary maps with are left in place to allow examination of unfilled holes"
+msgid "The following holes were not filled. Temporary maps are left in place to allow examination of unfilled holes:"
 msgstr ""
 
 #, fuzzy
@@ -27870,13 +27871,12 @@ msgstr "Ime izhodnega rastrskega sloja"
 msgid "Prints/sets general temporal GIS database connection for current mapset."
 msgstr "Izpiši trenutne parametre povezave in končaj"
 
+msgid "plain;Plain text output;shell;Shell script style output;json;JSON (JavaScript Object Notation)"
+msgstr ""
+
 #, fuzzy
 msgid "Overwrite current settings if initialized"
 msgstr "Ne morem odpreti baze podatkov %s"
-
-#, fuzzy
-msgid "Print current connection parameter in shell style and exit"
-msgstr "Izpiši trenutne parametre povezave in končaj"
 
 #, fuzzy
 msgid "Temporal GIS database connection not defined. Run t.connect."
@@ -34793,6 +34793,10 @@ msgstr[0] "%-5d mrtvih linij preskočenih\n"
 msgstr[1] "%-5d mrtvih linij preskočenih\n"
 
 #, fuzzy, c-format
+msgid "Removing areas smaller than %g sqm..."
+msgstr "Berem dig_att datoteko...\n"
+
+#, fuzzy, c-format
 msgid "Querying vector map <%s>..."
 msgstr "Zapisujem novo datoteko...\n"
 
@@ -34882,6 +34886,13 @@ msgid "Snapping threshold for boundaries"
 msgstr "Rišem ..."
 
 msgid "Disable snapping with snap <= 0"
+msgstr ""
+
+#, fuzzy
+msgid "Minimum size of areas to keep in square meters"
+msgstr "Vhodni sloj: najmanjša velikost zunanjega porečja"
+
+msgid "Enable with minsize > 0"
 msgstr ""
 
 #, fuzzy, c-format
@@ -37402,10 +37413,6 @@ msgstr "Ne morem kopirati tabele"
 msgid "Pass %d"
 msgstr ""
 
-#, fuzzy
-msgid "Node is outside any input area"
-msgstr "Vhodni rastrski sloj"
-
 #, c-format
 msgid "Found %d point/centroid in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
 msgid_plural "Found %d points/centroids in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
@@ -37818,6 +37825,14 @@ msgstr ""
 #, fuzzy
 msgid "Image file"
 msgstr "Vhodni sloj"
+
+#, fuzzy
+#~ msgid "Print current connection parameter in shell style and exit"
+#~ msgstr "Izpiši trenutne parametre povezave in končaj"
+
+#, fuzzy
+#~ msgid "Node is outside any input area"
+#~ msgstr "Vhodni rastrski sloj"
 
 #, fuzzy, c-format
 #~ msgid "Unable to find init file %s"

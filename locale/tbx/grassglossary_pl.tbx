@@ -315,6 +315,14 @@
                 <langSet xml:lang="en"><tig><term>nodes</term></tig></langSet>
                 <langSet xml:lang="pl"><tig><term/></tig></langSet>
             </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>dissolve</term></tig></langSet>
+                <langSet xml:lang="pl"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>datum</term></tig></langSet>
+                <langSet xml:lang="pl"><tig><term></term></tig></langSet>
+            </termEntry>
         </body>
     </text>
 </martif>
