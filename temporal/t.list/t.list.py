@@ -152,15 +152,21 @@ def main():
 
     tools = Tools()
 
-    conn = tools.t_connect(flags="p", format="json", mapset=".")
+    # One entry per mapset in the current search path
+    conn = tools.t_connect(flags="p", format="json")
 
-    db_exists = conn[0]["driver"] and conn[0]["database"]
+    db_exists = any(
+        mapset_conn["driver"] and mapset_conn["database"] for mapset_conn in conn
+    )
 
-    # if no connection is found
+    # if no connection is found in any accessible mapset
     if not db_exists:
         if output_format == "plain":
             gs.message(
-                _("No temporal database exists in this mapset. No datasets to list.")
+                _(
+                    "No temporal database exists in any accessible mapset. "
+                    "No datasets to list."
+                )
             )
         with (
             open(outpath, "w")
