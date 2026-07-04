@@ -8,7 +8,6 @@ import pytest
 from grass.tools import ToolError, Tools
 
 
-@pytest.mark.needs_solo_run
 def test_plain_output(space_time_vector_dataset):
     """Default plain output has a header and one pipe-separated row per map"""
     tools = Tools(session=space_time_vector_dataset.session)
@@ -16,7 +15,7 @@ def test_plain_output(space_time_vector_dataset):
         input=space_time_vector_dataset.name,
         column=space_time_vector_dataset.column,
     )
-    lines = result.stdout.strip().splitlines()
+    lines = result.text_split("\n")
     assert len(lines) == 1 + len(space_time_vector_dataset.vector_names)
     header = lines[0].split("|")
     assert header[:6] == ["id", "start", "end", "n", "nmissing", "nnull"]
@@ -28,7 +27,6 @@ def test_plain_output(space_time_vector_dataset):
     assert float(first["mean"]) == 20.0
 
 
-@pytest.mark.needs_solo_run
 def test_plain_no_header(space_time_vector_dataset):
     """The u flag suppresses the header line"""
     tools = Tools(session=space_time_vector_dataset.session)
@@ -37,12 +35,11 @@ def test_plain_no_header(space_time_vector_dataset):
         column=space_time_vector_dataset.column,
         flags="u",
     )
-    lines = result.stdout.strip().splitlines()
+    lines = result.text_split("\n")
     assert len(lines) == len(space_time_vector_dataset.vector_names)
     assert lines[0].startswith("points_1@")
 
 
-@pytest.mark.needs_solo_run
 def test_csv_output(space_time_vector_dataset):
     """CSV output defaults to a comma separator and parses cleanly"""
     tools = Tools(session=space_time_vector_dataset.session)
@@ -59,7 +56,6 @@ def test_csv_output(space_time_vector_dataset):
     assert float(rows[1]["mean"]) == 50.0
 
 
-@pytest.mark.needs_solo_run
 def test_csv_rejects_long_separator(space_time_vector_dataset):
     """CSV output rejects a separator longer than one character"""
     tools = Tools(session=space_time_vector_dataset.session)
@@ -72,7 +68,6 @@ def test_csv_rejects_long_separator(space_time_vector_dataset):
         )
 
 
-@pytest.mark.needs_solo_run
 def test_json_output(space_time_vector_dataset):
     """JSON output is a list of records with typed v.univar statistics"""
     tools = Tools(session=space_time_vector_dataset.session)
@@ -80,10 +75,9 @@ def test_json_output(space_time_vector_dataset):
         input=space_time_vector_dataset.name,
         column=space_time_vector_dataset.column,
         format="json",
-    )
-    records = result.json
-    assert len(records) == len(space_time_vector_dataset.vector_names)
-    first = records[0]
+    ).json
+    assert len(result) == len(space_time_vector_dataset.vector_names)
+    first = result[0]
     assert first["id"].startswith("points_1@")
     assert first["start"] == "2001-01-01 00:00:00"
     assert first["end"] == "2001-02-01 00:00:00"
@@ -93,7 +87,6 @@ def test_json_output(space_time_vector_dataset):
     assert first["mean"] == 20.0
 
 
-@pytest.mark.needs_solo_run
 def test_json_extended_statistics(space_time_vector_dataset):
     """JSON output includes extended statistics with the e flag"""
     tools = Tools(session=space_time_vector_dataset.session)
@@ -107,7 +100,6 @@ def test_json_extended_statistics(space_time_vector_dataset):
     assert first["median"] == 20.0
 
 
-@pytest.mark.needs_solo_run
 def test_json_rejects_separator(space_time_vector_dataset):
     """JSON output does not allow the separator option"""
     tools = Tools(session=space_time_vector_dataset.session)
@@ -120,7 +112,6 @@ def test_json_rejects_separator(space_time_vector_dataset):
         )
 
 
-@pytest.mark.needs_solo_run
 def test_json_rejects_no_header_flag(space_time_vector_dataset):
     """JSON output does not allow suppressing column names"""
     tools = Tools(session=space_time_vector_dataset.session)
