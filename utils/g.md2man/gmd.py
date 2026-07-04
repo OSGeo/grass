@@ -240,12 +240,15 @@ def strip_html_comments(lines):
     return out
 
 
-RAW_BLOCK_OPEN_RE = re.compile(r"<(style|script)\b[^>]*>", re.IGNORECASE)
+# The opener is anchored to the start of the line so that a <style> or
+# <script> mentioned mid-line (e.g. inside an inline code span) is not
+# mistaken for the block that heads the *_graphical.md pages.
+RAW_BLOCK_OPEN_RE = re.compile(r"^\s*<(style|script)\b[^>]*>", re.IGNORECASE)
 RAW_BLOCK_CLOSE_RE = re.compile(r"</(style|script)\s*>", re.IGNORECASE)
 
 
 def strip_raw_html_blocks(lines):
-    """Remove <style> and <script> blocks, except inside fenced code.
+    """Remove line-leading <style> and <script> blocks, except in code fences.
 
     Stylesheets and scripts (present at the top of the *_graphical.md index
     pages) cannot render in a man page. Removing them here keeps their
@@ -266,17 +269,14 @@ def strip_raw_html_blocks(lines):
                 continue
             line = line[close.end() :]
             in_block = False
-        while True:
-            opening = RAW_BLOCK_OPEN_RE.search(line)
-            if not opening:
-                break
+        opening = RAW_BLOCK_OPEN_RE.match(line)
+        if opening:
             close = RAW_BLOCK_CLOSE_RE.search(line, opening.end())
             if close:
-                line = line[: opening.start()] + line[close.end() :]
+                line = line[close.end() :]
             else:
-                line = line[: opening.start()]
+                line = ""
                 in_block = True
-                break
         out.append(line)
     return out
 
@@ -570,6 +570,11 @@ def parse_paragraph(lines, i):
         return build_definition_list(block), i
     text = "\n".join(block)
     if HTML_TAG_RE.search(text):
+        # A paragraph containing inline HTML is handed to the HTML parser as
+        # a whole, so any Markdown markup in it (e.g. **bold** next to a
+        # <br>) is left literal. No core page mixes the two this way; pages
+        # that do (some legacy addon docs) should be fixed to use one or the
+        # other. Revisit with the g.extension/addon docs follow-up.
         parser = _ghtml_parser()
         try:
             parser.feed(text + "\n")
