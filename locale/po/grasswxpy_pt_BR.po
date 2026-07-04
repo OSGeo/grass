@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-23 16:07+0000\n"
+"POT-Creation-Date: 2026-06-20 16:28+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/pt_BR/>\n"
@@ -829,6 +829,11 @@ msgstr ""
 
 msgid "PyGRASS"
 msgstr ""
+
+#, fuzzy
+#| msgid "GRASS help"
+msgid "GRASS Tools"
+msgstr "Ajuda GRASS"
 
 #, python-brace-format
 msgid ""
@@ -13006,9 +13011,6 @@ msgstr ""
 
 #~ msgid "GRASS GIS Vector Network Analysis Tool"
 #~ msgstr "Ferramenta de Análise de Rede Vetorial GRASS GIS"
-
-#~ msgid "GRASS help"
-#~ msgstr "Ajuda GRASS"
 
 #~ msgid "GRASS raster map layer data resampling capability."
 #~ msgstr "Capacidade de reamostragem de dados da camada de mapa raster GRASS."

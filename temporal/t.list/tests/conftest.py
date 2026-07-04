@@ -56,3 +56,14 @@ def space_time_dataset(tmp_path_factory):
             name=dataset_name,
             map_names=names,
         )
+
+
+@pytest.fixture(scope="module")
+def empty_session(tmp_path_factory):
+    """Start an isolated session with no temporal database."""
+    tmp_path = tmp_path_factory.mktemp("empty_time_series")
+    project = tmp_path / "empty_project"
+    gs.create_project(project)
+
+    with gs.setup.init(project, env=os.environ.copy()) as session:
+        yield SimpleNamespace(session=session)

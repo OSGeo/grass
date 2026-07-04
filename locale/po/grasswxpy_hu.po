@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-23 16:07+0000\n"
+"POT-Creation-Date: 2026-06-20 16:28+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Hungarian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/hu/>\n"
@@ -824,6 +824,11 @@ msgstr ""
 
 msgid "PyGRASS"
 msgstr ""
+
+#, fuzzy
+#| msgid "GRASS help"
+msgid "GRASS Tools"
+msgstr "GRASS súgó"
 
 #, python-brace-format
 msgid ""
@@ -11777,9 +11782,6 @@ msgstr ""
 
 #~ msgid "GRASS GIS Vector Network Analysis Tool"
 #~ msgstr "GRASS GIS vektor hálózat elemzés eszköz"
-
-#~ msgid "GRASS help"
-#~ msgstr "GRASS súgó"
 
 #~ msgid "GRASS locations in {0}"
 #~ msgstr "GRASS hely ebben {0}"

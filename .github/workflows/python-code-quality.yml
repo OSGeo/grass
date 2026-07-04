@@ -32,11 +32,11 @@ jobs:
       # renovate: datasource=pypi depName=flake8
       FLAKE8_VERSION: "7.3.0"
       # renovate: datasource=pypi depName=pylint
-      PYLINT_VERSION: "4.0.5"
+      PYLINT_VERSION: "4.0.6"
       # renovate: datasource=pypi depName=bandit
       BANDIT_VERSION: "1.9.4"
       # renovate: datasource=pypi depName=ruff
-      RUFF_VERSION: "0.15.16"
+      RUFF_VERSION: "0.15.17"
 
     runs-on: ${{ matrix.os }}
     permissions:
@@ -55,7 +55,7 @@ jobs:
         env:
           MATRIX_OS: ${{ matrix.os }}
 
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
 
@@ -133,7 +133,7 @@ jobs:
           path: bandit.sarif
 
       - name: Upload SARIF File into Security Tab
-        uses: github/codeql-action/upload-sarif@7211b7c8077ea37d8641b6271f6a365a22a5fbfa # v4.36.0
+        uses: github/codeql-action/upload-sarif@8aad20d150bbac5944a9f9d289da16a4b0d87c1e # v4.36.2
         with:
           sarif_file: bandit.sarif
 

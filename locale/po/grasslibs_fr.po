@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-23 16:07+0000\n"
-"PO-Revision-Date: 2026-05-19 20:40+0000\n"
+"POT-Creation-Date: 2026-06-20 16:28+0000\n"
+"PO-Revision-Date: 2026-06-21 20:53+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs/fr/>\n"
 "Language: fr\n"
@@ -516,7 +516,7 @@ msgstr "Valeur de résolution n-s illégale pour 3D : %g"
 msgid "Illegal number of rows for 3D: %d (resolution is %g)"
 msgstr ""
 
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal e-w resolution value for 3D: %g"
 msgstr "Valeur de résolution e-o illégale pour 3D : %g"
 
@@ -1375,7 +1375,7 @@ msgid "Name of input raster map(s)"
 msgstr "Nom de(s) couche(s) matricielle(s) en entrée"
 
 msgid "Name for output raster map"
-msgstr "Nom de la couche matricielle en sortie"
+msgstr "Nom de la carte raster en sortie"
 
 msgid "Name for output raster map(s)"
 msgstr "Nom de la carte raster en sortie"
@@ -1600,8 +1600,6 @@ msgstr "Nombre de threads pour le calcul parallèle"
 msgid "0: use OpenMP default; >0: use nprocs; <0: use MAX-nprocs"
 msgstr "0 : utiliser la valeur par défaut d'OpenMP ; >0 : utiliser nprocs ; <0 : utiliser MAX-nprocs"
 
-#, fuzzy
-#| msgid "Pseudo-random number generator not seeded"
 msgid "Seed value for the random number generator"
 msgstr "Valeur de départ pour le générateur de nombres aléatoires"
 
@@ -2904,9 +2902,8 @@ msgstr "créer un jeu de cartes temporaire (utilisez avec l'option --exec)"
 msgid "created in the specified project and deleted at exit"
 msgstr "créé dans le projet spécifié et supprimé à la sortie"
 
-#, fuzzy
 msgid "timeout for acquiring a mapset lock"
-msgstr "délai d'acquisition d'un verrouillage de jeu de cartes"
+msgstr "délai d'expiration pour l'acquisition d'un verrou sur un jeu de cartes"
 
 msgid "time for which the process will attempt to get a lock in seconds"
 msgstr "durée en secondes pendant laquelle le processus tentera d'obtenir un verrou"
@@ -2916,7 +2913,7 @@ msgstr "Échec de création du répertoire de configuration '{}' avec l'erreur :
 
 #, python-brace-format
 msgid "Unable to create temporary directory <{tmpdir_name}>! Exiting."
-msgstr "Impossible de créer le répertoire temporaire <{tmpdir_name}>! Sortie."
+msgstr "Impossible de créer le répertoire temporaire <{tmpdir_name}> ! Sortie."
 
 #, python-brace-format
 msgid "Invalid line in RC file ({file}): '{line}' ({error})\n"
@@ -3202,7 +3199,7 @@ msgstr "Échec au lancement du shell '%s'"
 
 #, c-format
 msgid "Usage: %s file pid"
-msgstr "Usage: pid du fichier %s"
+msgstr "Usage : pid du fichier %s"
 
 msgid "Concurrent mapset locking is not supported on Windows"
 msgstr "Le verrouillage concurrent de jeux de cartes n'est pas pris en charge dans Windows"
@@ -3910,7 +3907,7 @@ msgstr "erreur inconnue"
 
 #, c-format
 msgid "bad rule (%s): [%s]"
-msgstr "mauvaise règle (%s): [%s]"
+msgstr "Règle incorrecte (%s) : [%s]"
 
 msgid "Unknown error reading color rule"
 msgstr "Erreur inconnue à la lecture de la règle de couleur"
@@ -5568,7 +5565,7 @@ msgstr "La carte vecteur n'est pas ouverte"
 
 #, c-format
 msgid "Vect_read_line_geos(): feature id %d is not reasonable (max features in vector map <%s>: %d)"
-msgstr "Vect_read_line_geos(): l'id d'objet %d n'est pas plausible (nombre maxi d'objets dans la carte vecteur <%s>: %d)"
+msgstr "Vect_read_line_geos() : l'id d'objet %d n'est pas plausible (nombre maxi d'objets dans la carte vecteur <%s> : %d)"
 
 msgid "only native format supported"
 msgstr "seul le format natif est pris en charge"
@@ -5578,11 +5575,11 @@ msgstr "Tentative de lecture d'une ligne morte"
 
 #, c-format
 msgid "Vect_read_area_geos(): unable to read area id %d"
-msgstr "Vect_read_area_geos(): impossible de lire l'id de surface %d"
+msgstr "Vect_read_area_geos() : impossible de lire l'id de surface %d"
 
 #, c-format
 msgid "Vect_read_area_geos(): unable to read isle id %d of area id %d"
-msgstr "Vect_read_area_geos(): impossible de lire l'île d'id %d de la surface d'id %d"
+msgstr "Vect_read_area_geos() : impossible de lire l'île d'id %d de la surface d'id %d"
 
 #, c-format
 msgid "Unable to read line offset %ld"
@@ -5604,7 +5601,7 @@ msgstr "Impossible d'ajouter un arc de réseau"
 
 #, c-format
 msgid "dglShortestPath error: %s"
-msgstr "erreur de dglShortestPath: %s"
+msgstr "erreur de dglShortestPath : %s"
 
 #, c-format
 msgid "Unable to create header file for vector map <%s>"
@@ -6824,7 +6821,7 @@ msgstr "Calcul de l'arbre couvrant de poids minimal ..."
 
 #, c-format
 msgid "Unable to open select cursor: %s"
-msgstr "Impossible d'ouvrir le curseur de sélection: %s"
+msgstr "Impossible d'ouvrir le curseur de sélection : %s"
 
 #, c-format
 msgid "Point %d is not connected!"

@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-23 16:07+0000\n"
-"PO-Revision-Date: 2026-04-09 14:56+0000\n"
+"POT-Creation-Date: 2026-06-20 16:28+0000\n"
+"PO-Revision-Date: 2026-06-25 00:52+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/fr/>\n"
 "Language: fr\n"
@@ -755,20 +755,14 @@ msgstr "Éditer les enregistrements sélectionnés"
 msgid "Display selected"
 msgstr "Afficher sélection"
 
-#, fuzzy
-#| msgid "Tools"
 msgid "Tools API"
-msgstr "Outils"
+msgstr "API Outils"
 
-#, fuzzy
-#| msgid "Script editor"
 msgid "Script API"
-msgstr "Éditeur de scripts"
+msgstr "API Script"
 
-#, fuzzy
-#| msgid "GRASS API:"
 msgid "PyGRASS API"
-msgstr "API GRASS :"
+msgstr "API PyGRASS"
 
 msgid "Classic (labels only)"
 msgstr "Classique (étiquettes uniquement)"
@@ -835,6 +829,9 @@ msgstr ""
 
 msgid "PyGRASS"
 msgstr "PyGRASS"
+
+msgid "GRASS Tools"
+msgstr "Outils GRASS"
 
 #, python-brace-format
 msgid ""
@@ -1325,15 +1322,11 @@ msgstr "&Renommer le jeu de cartes"
 msgid "Re&load maps"
 msgstr "Recharger &les cartes"
 
-#, fuzzy
-#| msgid "Show computational region extent"
 msgid "Show computational region"
-msgstr "Afficher l'emprise de la région de calcul"
+msgstr "Afficher la région de calculs"
 
-#, fuzzy
-#| msgid "&Copy path to mapset"
 msgid "&Copy path"
-msgstr "&Copier le chemin vers le jeu de cartes"
+msgstr "&Copier le chemin"
 
 msgid "&Create mapset"
 msgstr "&Créer un jeu de cartes"
@@ -1344,28 +1337,20 @@ msgstr "Supprimer le projet"
 msgid "&Rename project"
 msgstr "&Renommer le projet"
 
-#, fuzzy
-#| msgid "Choose projection"
 msgid "Show projection info"
-msgstr "Choisir la projection"
+msgstr "Afficher les informations de la projection"
 
 msgid "Copy path"
 msgstr "Copier le chemin"
 
-#, fuzzy
-#| msgid "Change mapset"
 msgid "Change Label"
-msgstr "Changer de jeu de cartes"
+msgstr "Changer l'étiquette"
 
-#, fuzzy
-#| msgid "Set label"
 msgid "Set Label"
 msgstr "Définir l'étiquette"
 
-#, fuzzy
-#| msgid "Remove table"
 msgid "Remove Label"
-msgstr "Supprimer une table"
+msgstr "Retirer l'étiquette"
 
 msgid "&Create new project (location)"
 msgstr "&Créer un nouveau projet (secteur)"
@@ -1382,18 +1367,14 @@ msgstr "&Supprimer la base de données GRASS du disque"
 msgid "&Delete projects (locations)"
 msgstr "Supprimer les projets (Secteurs)"
 
-#, fuzzy
-#| msgid "&Copy path to mapset"
 msgid "Copy paths"
-msgstr "&Copier le chemin vers le jeu de cartes"
+msgstr "&Copier les chemins d'accès"
 
 msgid "&Delete mapsets"
 msgstr "Supprimer les jeux de cartes"
 
-#, fuzzy
-#| msgid "&Copy path to mapset"
 msgid "&Copy paths"
-msgstr "&Copier le chemin vers le jeu de cartes"
+msgstr "&Copier les chemins d'accès"
 
 #, python-brace-format
 msgid "Remove label '{label}' for this database?"
@@ -2381,7 +2362,6 @@ msgstr ""
 msgid "Clear selected GCP"
 msgstr ""
 
-#, fuzzy
 msgid "Recalculate RMS error"
 msgstr "Recalculer l'erreur RMS"
 
@@ -2668,13 +2648,11 @@ msgstr "Éditeur de scripts"
 msgid "Command output"
 msgstr "Messages de la commande"
 
-#, fuzzy
 msgid "{} script contains local modifications"
-msgstr "Le script Python contient des modifications locales"
+msgstr "Le script {} contient des modifications locales"
 
-#, fuzzy
 msgid "{} script is up-to-date"
-msgstr "Le script Python est à jour"
+msgstr "Le script {} est à jour"
 
 msgid "Model computation finished"
 msgstr "Calcul du modèle terminé"
@@ -2843,19 +2821,17 @@ msgstr "Pas d'objets sélectionnés."
 msgid "Python script"
 msgstr "Script Python"
 
-#, fuzzy
 msgid "Run script"
-msgstr "Lancer un script"
+msgstr "Exécuter le script"
 
 msgid "Save the script to a file"
 msgstr "Enregistrer le script dans un fichier"
 
-#, fuzzy
 msgid ""
 "Refresh the script based on the model.\n"
 "It will discard all local changes."
 msgstr ""
-"Actualiser le script Python basé sur le modèle.\n"
+"Actualiser le script basé sur le modèle.\n"
 "Ceci écrasera toutes les modifications manuelles."
 
 msgid "Python"
@@ -2870,9 +2846,8 @@ msgstr "actinia"
 msgid "Python script type:"
 msgstr "Type de script Python :"
 
-#, fuzzy
 msgid "{} script is locally modified. Refresh will discard all changes. Do you really want to continue?"
-msgstr "Le script Python a été modifié manuellement. La mise à jour écrasera toutes les modifications. Voulez-vous vraiment continuer ?"
+msgstr "Le script {} a été modifié localement. La mise à jour écrasera toutes les modifications. Voulez-vous vraiment continuer ?"
 
 msgid "Update"
 msgstr "Mettre à jour"
@@ -3742,7 +3717,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Getting list of tables from PostgreSQL DB <{db}>, host <{host}> failed. {error}."
-msgstr ""
+msgstr "Échec de la récupération de la liste des tables à partir de la base de données PostgreSQL <{db}>, hôte <{host}>. {error}."
 
 #, python-brace-format
 msgid "Getting list of tables columns data types from PostGIS DB <{db}>, host <{host}> failed. {error}."
@@ -4305,7 +4280,7 @@ msgid "Erase display canvas with given background color"
 msgstr "Effacer la trame d'écran avec la couleur d'arrière-plan"
 
 msgid "Pointer"
-msgstr "Pointer"
+msgstr "Pointeur"
 
 msgid "Drag or click mouse to zoom"
 msgstr "Glisser ou cliquez pour zoomer"
@@ -4539,24 +4514,20 @@ msgstr "Nombre de cellules :"
 msgid "{} sec"
 msgstr "{} sec"
 
-#, fuzzy
 msgid "General info"
-msgstr "Général"
+msgstr "Infos générales"
 
-#, fuzzy
 msgid "Computational region during command execution"
-msgstr "Définir la région calculée depuis un nom de région"
+msgstr "Région de calculs pendant l'exécution de la commande"
 
 msgid "Update current region"
 msgstr "Mettre à jour la région actuelle"
 
-#, fuzzy
 msgid "Region match"
-msgstr "Concordance des projections"
+msgstr "Correspondance de région"
 
-#, fuzzy
 msgid "Set current computational region to the region of executed command"
-msgstr "Enregistrer la région de calcul vers un fichier de région"
+msgstr "Définir la région de calculs actuelle à la région de la commande exécutée"
 
 msgid "History browser"
 msgstr "Navigateur d'historique"
@@ -4615,7 +4586,6 @@ msgstr "Double-cliquez pour ouvrir l'outil"
 msgid "&Remove"
 msgstr "Supp&rimer"
 
-#, fuzzy
 msgid "Cannot be parsed into command"
 msgstr "Ne peut pas être analysé en commande"
 
@@ -4929,7 +4899,7 @@ msgid "Preview"
 msgstr "Aperçu"
 
 msgid "Training"
-msgstr "Training"
+msgstr "Entraînement"
 
 msgid "/ Zoom to map"
 msgstr "/ Zoomer sur la carte"
@@ -9177,7 +9147,7 @@ msgstr "Le polygone semble avoir 0 surface"
 
 #, python-format
 msgid "The raster map <%s> already exists. Please remove or rename the maps with the prefix '%s' or select the option to overwrite existing maps"
-msgstr "la carte raster <%s> existe déjà. Merci de supprimer ou de renommer les cartes avec le préfix '%s' ou de sélectionner l'option pour écraser les cartes existantes."
+msgstr "La carte raster <%s> existe déjà. Merci de supprimer ou de renommer les cartes avec le préfixe '%s' ou de sélectionner l'option pour écraser les cartes existantes"
 
 msgid "Setup for r.li modules - GRASS"
 msgstr "Initialisation des modules r.li - GRASS"
@@ -9258,7 +9228,7 @@ msgstr "Dessiner le cadre d'échantillonage"
 
 #, python-format
 msgid "The configuration file %s already exists, please change name"
-msgstr "Le fichier de configuration %s existe déjà, merci de modifier le nom."
+msgstr "Le fichier de configuration %s existe déjà, merci de modifier le nom"
 
 #, python-format
 msgid "Vector %s was not found, please select another vector"
@@ -9431,7 +9401,7 @@ msgstr "Sélectionner la zone d'échantillon {areas_count} sur {area_num}"
 
 #, python-brace-format
 msgid "The raster map <{map_name}> already exists. Please remove or rename the maps with the prefix '{prefix}' or select the option to overwrite existing maps"
-msgstr "La carte raster <{map_name}> existe déjà. Veuillez supprimer ou renommer les cartes avec le préfixe '{prefix}' ou sélectionnez l'option pour écraser les cartes existantes."
+msgstr "La carte raster <{map_name}> existe déjà. Veuillez supprimer ou renommer les cartes avec le préfixe '{prefix}' ou sélectionnez l'option pour écraser les cartes existantes"
 
 msgid "Select sample area 1 of "
 msgstr "Sélectionner la zone d'échantillon 1 de "
@@ -9771,9 +9741,8 @@ msgstr "Le nom de projet {name} existe déjà dans le chemin {path}, télécharg
 msgid "Download failed: %s"
 msgstr "Le téléchargement à échoué : %s"
 
-#, fuzzy
 msgid "Download completed. The downloaded sample data is available now in the data tree"
-msgstr "Téléchargement complet. Les données d'exemple téléchargées sont listées dans l'onglet Secteur/Jeu de cartes vers le bouton de fermeture de cette fenêtre"
+msgstr "Téléchargement terminé. Les données d'exemple téléchargées sont désormais disponibles dans l'arborescence des données"
 
 #, python-brace-format
 msgid "Project named {name} already exists, rename it first"
@@ -10162,7 +10131,7 @@ msgid "Digitize areas"
 msgstr "Numériser une nouvelle surface"
 
 msgid "Close boundary (snap to the start node)"
-msgstr "Fermer le contour (accrocher au noeud de départ)."
+msgstr "Fermer le contour (accrocher au noeud de départ)"
 
 msgid "Save changes"
 msgstr "Enregistrer les modifications"
@@ -10972,7 +10941,7 @@ msgstr "La carte ne peut être ajoutée qu'au jeu de cartes courant."
 
 #, python-format
 msgid "Output map <%s> already exists"
-msgstr "La carte <%s> existe déjà."
+msgstr "La carte <%s> existe déjà"
 
 #, python-format
 msgid "Region <%s> does not exist."
@@ -11069,7 +11038,7 @@ msgid ""
 "Keeping user defined server"
 msgstr ""
 "Un serveur défini par l'utilisateur existe déjà avec le même nom que le serveur par défaut <%s>.\n"
-"On garde le serveur défini par l'utilisateur."
+"On garde le serveur défini par l'utilisateur"
 
 msgid "Draw/re-draw plot"
 msgstr "Trace/retrace le graphique"
@@ -13118,9 +13087,6 @@ msgstr ""
 
 #~ msgid "GRASS SVN revision"
 #~ msgstr "Version SVN:"
-
-#~ msgid "GRASS help"
-#~ msgstr "Aide GRASS"
 
 #~ msgid "GRASS locations in {0}"
 #~ msgstr "Secteurs GRASS dans {0}"

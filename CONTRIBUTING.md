@@ -73,6 +73,9 @@ leads you through a first time setup and shows how to create a pull request.
 To contribute effectively, please familiarize yourself with our
 [Programming Style Guide](./doc/development/style_guide.md).
 
+If you use an AI assistant or agent, see [`AGENTS.md`](./AGENTS.md) for
+project-specific instructions and conventions.
+
 ### Testing changes
 
 Testing helps to ensure that the changes work well with the rest

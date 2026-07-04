@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_tr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-23 16:07+0000\n"
+"POT-Creation-Date: 2026-06-20 16:28+0000\n"
 "PO-Revision-Date: 2025-07-26 01:37+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Turkish <https://weblate.osgeo.org/projects/grass-gis/grassmods/tr/>\n"
@@ -9670,6 +9670,9 @@ msgstr "Biçimlendirme"
 msgid "Columns to be printed to stdout"
 msgstr ""
 
+msgid "plain;Plain text output;line;Comma separated list of dataset names;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
+msgstr ""
+
 msgid "Field separator character between the output columns"
 msgstr ""
 
@@ -9949,7 +9952,7 @@ msgstr ""
 msgid "Path to the extraction directory"
 msgstr ""
 
-msgid "Create a new project and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
+msgid "Create a new project and import the data into it."
 msgstr ""
 
 msgid "Set the current region from the last map that was imported"
@@ -10117,6 +10120,9 @@ msgid "parallel"
 msgstr ""
 
 msgid "Raster map used for zoning, must be of type CELL"
+msgstr ""
+
+msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
 msgstr ""
 
 msgid "Calculate extended statistics"
@@ -23720,7 +23726,7 @@ msgstr ""
 msgid "Filled raster map is: %s"
 msgstr ""
 
-msgid "Following holes where not filled. Temporary maps with are left in place to allow examination of unfilled holes"
+msgid "The following holes were not filled. Temporary maps are left in place to allow examination of unfilled holes:"
 msgstr ""
 
 msgid "Output can be written only to the current mapset"
@@ -25001,10 +25007,10 @@ msgstr ""
 msgid "Prints/sets general temporal GIS database connection for current mapset."
 msgstr ""
 
-msgid "Overwrite current settings if initialized"
+msgid "plain;Plain text output;shell;Shell script style output;json;JSON (JavaScript Object Notation)"
 msgstr ""
 
-msgid "Print current connection parameter in shell style and exit"
+msgid "Overwrite current settings if initialized"
 msgstr ""
 
 msgid "Temporal GIS database connection not defined. Run t.connect."
@@ -31235,6 +31241,11 @@ msgid_plural "%d boundaries snapped"
 msgstr[0] ""
 msgstr[1] ""
 
+#, fuzzy, c-format
+#| msgid "Removing raster maps from group <%s>..."
+msgid "Removing areas smaller than %g sqm..."
+msgstr "<%s> grubundaki raster haritalar kaldırılıyor..."
+
 #, c-format
 msgid "Querying vector map <%s>..."
 msgstr "<%s> vektör haritası sorgulanıyor..."
@@ -31313,6 +31324,13 @@ msgid "Snapping threshold for boundaries"
 msgstr "Sınırlar için yapışma eşiği"
 
 msgid "Disable snapping with snap <= 0"
+msgstr ""
+
+#, fuzzy
+msgid "Minimum size of areas to keep in square meters"
+msgstr "Sınıftaki minimum piksel sayısı"
+
+msgid "Enable with minsize > 0"
 msgstr ""
 
 #, c-format
@@ -33546,9 +33564,6 @@ msgstr "Tablo kopyalanamıyor"
 msgid "Pass %d"
 msgstr ""
 
-msgid "Node is outside any input area"
-msgstr ""
-
 #, c-format
 msgid "Found %d point/centroid in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
 msgid_plural "Found %d points/centroids in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
@@ -35555,10 +35570,6 @@ msgstr "Görüntü dosyası"
 #, fuzzy
 #~ msgid "Minimum size of a patch in meters squared"
 #~ msgstr "Her hücrenin en küçük boyutu"
-
-#, fuzzy
-#~ msgid "Minimum size of areas in map units"
-#~ msgstr "Sınıftaki minimum piksel sayısı"
 
 #, fuzzy
 #~ msgid "Minimum size of tiles in map units"

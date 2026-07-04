@@ -6,7 +6,7 @@
 # AUTHOR(S): Soeren Gebbert
 #
 # PURPOSE: List space time datasets and maps registered in the temporal database
-# COPYRIGHT: (C) 2011-2017, Soeren Gebbert and the GRASS Development Team
+# COPYRIGHT: (C) 2011-2026, Soeren Gebbert and the GRASS Development Team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -99,6 +99,7 @@ import sys
 from contextlib import nullcontext
 
 import grass.script as gs
+from grass.tools import Tools
 
 ############################################################################
 
@@ -148,6 +149,27 @@ def main():
 
     elif not separator:  # output_format == "plain"
         separator = "|"
+
+    tools = Tools()
+
+    conn = tools.t_connect(flags="p", format="json", mapset=".")
+
+    db_exists = conn[0]["driver"] and conn[0]["database"]
+
+    # if no connection is found
+    if not db_exists:
+        if output_format == "plain":
+            gs.message(
+                _("No temporal database exists in this mapset. No datasets to list.")
+            )
+        with (
+            open(outpath, "w")
+            if (outpath and outpath != "-")
+            else nullcontext(sys.stdout)
+        ) as out_file:
+            if output_format == "json":
+                out_file.write(json.dumps([], indent=4) + "\n")
+        return
 
     # Lazy import
     import grass.temporal as tgis
