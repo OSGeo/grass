@@ -163,10 +163,35 @@ def test_unordered_list_nested(tmp_path):
     assert ".RS 4n" in result
 
 
+def test_wrapped_number_line_is_not_a_list(tmp_path):
+    # A paragraph continuation beginning with a number (e.g. a year in a
+    # citation) must not be treated as an ordered list item.
+    md = "M. Neteler, 2005. Title.\nVol.3, pp. 2-6, June\n2005. ISSN 1614-8746.\n"
+    result = convert(md, tmp_path)
+    assert "2005. ISSN" in result
+    assert ".IP \\fB1\\fR" not in result
+
+
+def test_ordered_list_may_interrupt_paragraph_at_one(tmp_path):
+    md = "Intro text.\n1. first\n2. second\n"
+    result = convert(md, tmp_path)
+    assert "Intro text." in result
+    assert ".IP \\fB1\\fR" in result
+    assert ".IP \\fB2\\fR" in result
+
+
 def test_ordered_list(tmp_path):
     result = convert("1. first\n2. second\n", tmp_path)
     assert ".IP \\fB1\\fR" in result
     assert ".IP \\fB2\\fR" in result
+
+
+def test_list_lazy_continuation_keeps_first_char(tmp_path):
+    # A continuation line indented less than the marker width must not lose
+    # its leading characters ("Integers" -> "ntegers").
+    md = '1. J. Rissanen, "A Universal Prior for\n  Integers and Estimation."\n'
+    result = convert(md, tmp_path)
+    assert "Integers and Estimation." in result
 
 
 def test_table(tmp_path):
@@ -175,6 +200,18 @@ def test_table(tmp_path):
     assert ".TS" in result
     assert ".TE" in result  # codespell:ignore TE
     assert "r.info" in result
+
+
+def test_table_escaped_pipe():
+    # An escaped pipe is a literal cell value (a bitwise/logical operator in
+    # the r.mapcalc table), not a cell boundary.
+    assert gmd.split_table_row(r"| \|\|\| | logical or | Logical | 2 |") == [
+        r"\|\|\|",
+        "logical or",
+        "Logical",
+        "2",
+    ]
+    assert gmd.split_table_row("| a |  | b |") == ["a", "", "b"]
 
 
 def test_hard_break(tmp_path):
@@ -219,6 +256,27 @@ def test_front_matter_parsing():
     assert meta["name"] == "r.example"
     assert meta["keywords"] == ["raster", "example"]
     assert meta["description"].startswith("Does example things.")
+
+
+def test_front_matter_unescapes_quotes(tmp_path):
+    # parser_md.c wraps the description in double quotes and escapes any
+    # embedded " and \ as \" and \\; the parser must undo that so the NAME
+    # line is clean and matches the (unescaped) body paragraph for dedup.
+    md = (
+        "---\nname: r.volume\n"
+        'description: "Calculates the volume of data \\"clumps\\"."\n'
+        "keywords: [ raster ]\n---\n\n# r.volume\n\n"
+        'Calculates the volume of data "clumps".\n\n'
+        "## DESCRIPTION\n\nText.\n"
+    )
+    meta, _nodes = gmd.parse(md)
+    assert meta["description"] == 'Calculates the volume of data "clumps".'
+    result = convert(md, tmp_path, filename="r.volume.md")
+    assert "\\fBr.volume\\fR \\- Calculates the volume of data" in result
+    # The escaped backslash sequences must not survive into the output, and
+    # the description must not be duplicated below SYNOPSIS.
+    assert "\\\\" not in result
+    assert result.count("clumps") == 1
 
 
 def test_front_matter_nested_keys_ignored():
@@ -293,6 +351,15 @@ def test_html_only_page(tmp_path):
     assert "<h2>" not in result
     assert "\\fBinput\\fR" in result
     assert "r.fake input=elev" in result
+
+
+def test_html_unclosed_paragraphs_kept(tmp_path):
+    # Legacy HTML omits the closing </p>; the following <p> must not empty
+    # the parser's tag stack and silently drop the first paragraph.
+    md = "<h2>DESCRIPTION</h2>\n\n<p>First paragraph.\n\n<p>Second paragraph.\n"
+    result = convert(md, tmp_path)
+    assert "First paragraph." in result
+    assert "Second paragraph." in result
 
 
 def test_inline_comment_removed(tmp_path):

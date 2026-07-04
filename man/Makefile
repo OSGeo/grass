@@ -2,9 +2,12 @@ MODULE_TOPDIR = ..
 
 include $(MODULE_TOPDIR)/include/Make/Other.make
 
-# keywords.md is a static stub for the MkDocs tags plugin and has no
-# content to convert to a man page.
-MANPAGES := $(filter-out $(MANDIR)/keywords.$(MANSECT),\
+# These source/*.md files exist only for the MkDocs website and have no
+# man page equivalent: index.md is the site landing page, keywords.md is a
+# stub for the tags plugin (the keyword index is rendered by MkDocs), and
+# the *_intro.md pages are navigation-only introductions.
+MKDOCS_ONLY_MD := index keywords development_intro command_line_intro
+MANPAGES := $(filter-out $(patsubst %,$(MANDIR)/%.$(MANSECT),$(MKDOCS_ONLY_MD)),\
 	$(patsubst $(MDDIR)/source/%.md,$(MANDIR)/%.$(MANSECT),$(wildcard $(MDDIR)/source/*.md)))
 
 DSTFILES := \

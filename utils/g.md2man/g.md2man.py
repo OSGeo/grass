@@ -28,7 +28,10 @@ except ImportError:
 import gmd
 
 CLI_TAB_TITLE = "Command line"
-PYTHON_TAB_TITLES = ("Python (grass.tools)", "Python (grass.script)")
+# The Python API tabs are matched by prefix so that both the current
+# "Python (grass.tools)" and "Python (grass.script)" tabs, and any future
+# variant, are recognized. These titles come from lib/gis/parser_md.c.
+PYTHON_TAB_PREFIX = "Python ("
 
 
 def transform_tabs(nodes):
@@ -57,8 +60,13 @@ def expand_tabs(tabs):
     out = []
     for _tag, attrs, body in tabs:
         title = dict(attrs).get("title")
-        if title in PYTHON_TAB_TITLES:
+        if title and title.startswith(PYTHON_TAB_PREFIX):
             continue
+        if has_cli and title != CLI_TAB_TITLE:
+            # A generated group (one with a command line tab) should only
+            # contain the command line and Python tabs; anything else means
+            # the producer's tab titles drifted from what is expected here.
+            sys.stderr.write(f"warning: unexpected tab in generated group: {title}\n")
         if not has_cli:
             out.append(("h4", [], [title]))
         out.extend(transform_tabs(body))

@@ -155,6 +155,19 @@ def parse_inline(text):
     return nodes
 
 
+def unquote_yaml(value):
+    """Decode a YAML scalar as written by parser_md.c's print_yaml_escaped.
+
+    A double-quoted value has its surrounding quotes removed and the only
+    escapes the producer emits, \\" and \\\\, undone. Unquoted values are
+    returned unchanged.
+    """
+    if len(value) >= 2 and value[0] == '"' and value[-1] == '"':
+        value = value[1:-1]
+        value = re.sub(r"\\(.)", r"\1", value)
+    return value
+
+
 def parse_front_matter(lines):
     """Parse YAML front matter, returning (metadata, remaining lines).
 
@@ -176,7 +189,7 @@ def parse_front_matter(lines):
                     if item.strip()
                 ]
             elif value:
-                meta[key] = value.strip('"')
+                meta[key] = unquote_yaml(value)
         i += 1
     if i >= len(lines):
         # Unterminated block: treat the file as having no front matter.
@@ -227,10 +240,52 @@ def strip_html_comments(lines):
     return out
 
 
+RAW_BLOCK_OPEN_RE = re.compile(r"<(style|script)\b[^>]*>", re.IGNORECASE)
+RAW_BLOCK_CLOSE_RE = re.compile(r"</(style|script)\s*>", re.IGNORECASE)
+
+
+def strip_raw_html_blocks(lines):
+    """Remove <style> and <script> blocks, except inside fenced code.
+
+    Stylesheets and scripts (present at the top of the *_graphical.md index
+    pages) cannot render in a man page. Removing them here keeps their
+    content, which is not valid flow content, out of the HTML parser.
+    """
+    out = []
+    in_fence = False
+    in_block = False
+    for line in lines:
+        if not in_block and FENCE_RE.match(line.strip()):
+            in_fence = not in_fence
+        if in_fence:
+            out.append(line)
+            continue
+        if in_block:
+            close = RAW_BLOCK_CLOSE_RE.search(line)
+            if not close:
+                continue
+            line = line[close.end() :]
+            in_block = False
+        while True:
+            opening = RAW_BLOCK_OPEN_RE.search(line)
+            if not opening:
+                break
+            close = RAW_BLOCK_CLOSE_RE.search(line, opening.end())
+            if close:
+                line = line[: opening.start()] + line[close.end() :]
+            else:
+                line = line[: opening.start()]
+                in_block = True
+                break
+        out.append(line)
+    return out
+
+
 def parse(text):
     """Parse a Markdown document, returning (metadata, tree nodes)."""
     meta, lines = parse_front_matter(text.splitlines())
-    return meta, parse_blocks(strip_html_comments(lines))
+    lines = strip_raw_html_blocks(strip_html_comments(lines))
+    return meta, parse_blocks(lines)
 
 
 def parse_blocks(lines):
@@ -279,6 +334,22 @@ def parse_blocks(lines):
     return nodes
 
 
+def list_interrupts_paragraph(line):
+    """Check whether a list item on this line may interrupt a paragraph.
+
+    Following CommonMark, an ordered list interrupts a paragraph only when
+    it starts at 1, so a wrapped line beginning with a number or a year
+    (e.g. "2005. ISSN ...") is not mistaken for a list item.
+    """
+    match = LIST_ITEM_RE.match(line)
+    if not match:
+        return False
+    marker = match.group(2)
+    if marker[0].isdigit():
+        return marker[:-1] == "1"
+    return True
+
+
 def is_block_start(lines, i):
     """Check whether line i starts a non-paragraph block."""
     stripped = lines[i].strip()
@@ -291,7 +362,7 @@ def is_block_start(lines, i):
         or HEADING_RE.match(stripped)
         or HR_RE.match(stripped)
         or is_table_start(lines, i)
-        or LIST_ITEM_RE.match(lines[i])
+        or list_interrupts_paragraph(lines[i])
         or BLOCKQUOTE_RE.match(lines[i])
     )
 
@@ -344,14 +415,8 @@ def parse_tabs(lines, i):
             break
         body, i = parse_indented_body(lines, i + 1)
         tabs.append(("tab", [("title", match.group(1))], parse_blocks(body)))
-        # Skip blank lines between tabs of the same group.
-        j = i
-        while j < len(lines) and not lines[j].strip():
-            j += 1
-        if j < len(lines) and TAB_RE.match(lines[j].strip()):
-            i = j
-        else:
-            break
+        # parse_indented_body has already consumed the blank lines between
+        # tabs, so the loop condition sees the next tab (or ends the group).
     return ("tabs", [], tabs), i
 
 
@@ -362,8 +427,21 @@ def parse_admonition(lines, i):
     return [("p", [], [("b", [], [title])]), *parse_blocks(body)], i
 
 
+CELL_BOUNDARY_RE = re.compile(r"(?<!\\)\|")
+
+
 def split_table_row(line):
-    return [cell.strip() for cell in line.strip().strip("|").split("|")]
+    # Split on unescaped pipes only; a \| inside a cell is a literal pipe
+    # (e.g. the bitwise-or operator in the r.mapcalc table). parse_inline
+    # later restores the escape.
+    cells = CELL_BOUNDARY_RE.split(line.strip())
+    # Drop the empty cells produced by the leading and trailing border
+    # pipes, keeping genuinely empty interior cells.
+    if cells and not cells[0].strip():
+        cells = cells[1:]
+    if cells and not cells[-1].strip():
+        cells = cells[:-1]
+    return [cell.strip() for cell in cells]
 
 
 def parse_table(lines, i):
@@ -405,9 +483,12 @@ def parse_list(lines, i):
                 break
             if not line.startswith(" " * (indent + 2)):
                 break
-            item_lines.append(
-                line[content_indent:] if len(line) > content_indent else line.lstrip()
-            )
+            # Remove the item's indentation, but only leading spaces and
+            # never more than the content column, so a lazily indented
+            # continuation (fewer spaces than the marker width) does not
+            # lose its first characters.
+            leading_spaces = len(line) - len(line.lstrip(" "))
+            item_lines.append(line[min(leading_spaces, content_indent) :])
             i += 1
         items.append(("li", [], unwrap_first_paragraph(parse_blocks(item_lines))))
         # Skip a blank line separating items of the same list.
@@ -442,23 +523,36 @@ def parse_blockquote(lines, i):
 
 
 def parse_html_block(lines, i):
-    """Parse raw HTML lines with ghtml and splice in the resulting nodes."""
+    """Parse raw HTML lines with ghtml and splice in the resulting nodes.
+
+    The lines are parsed inside a synthetic <body> so ghtml has a valid
+    root context. Without it, force-closing an inline-only container such
+    as an unclosed <p> (legacy HTML omits the closing tag) would empty the
+    tag stack and raise, silently dropping content. Any tags still open at
+    the end of the block are closed, as an HTML renderer would.
+    """
     parser = _ghtml_parser()
+    parser.handle_starttag("body", [])
     start = i
     try:
         while i < len(lines):
+            # A blank line ends the block only when no element is still
+            # open; an unclosed <p> continues across it to the next block.
+            if not lines[i].strip() and len(parser.tag_stack) == 1:
+                i += 1
+                break
             parser.feed(lines[i] + "\n")
             i += 1
-            if not parser.tag_stack and parser.data:
-                break
         parser.close()
+        while len(parser.tag_stack) > 1:
+            parser.pop()
     except Exception as error:  # noqa: BLE001
         # Malformed HTML, e.g. a stray closing tag. Drop the offending
         # line, like a web browser rendering it would.
         sys.stderr.write(f"invalid HTML ({error}): {lines[start]}\n")
         return [], start + 1
-    # Stylesheets cannot be rendered in a man page (scripts are already
-    # masked by ghtml itself).
+    # parser.data now holds the body's children. Stylesheets cannot be
+    # rendered in a man page (scripts are already masked by ghtml itself).
     nodes = [
         node
         for node in parser.data
