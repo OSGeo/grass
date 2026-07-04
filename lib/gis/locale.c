@@ -39,7 +39,9 @@ void G_init_locale(void)
 #ifdef LC_MESSAGES
     setlocale(LC_MESSAGES, "");
 #endif
-    const char *localedir = G_locale_dir();
+    /* Not using G_locale_dir(): its G_fatal_error() would translate the
+       message and re-enter G_init_locale(), recursing without bound. */
+    const char *localedir = getenv("GRASS_LOCALEDIR");
 
     if (localedir && *localedir) {
         bindtextdomain("grasslibs", localedir);
