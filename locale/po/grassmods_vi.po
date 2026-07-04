@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_vi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-20 16:28+0000\n"
+"POT-Creation-Date: 2026-06-27 15:58+0000\n"
 "PO-Revision-Date: 2025-07-26 01:37+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Vietnamese <https://weblate.osgeo.org/projects/grass-gis/grassmods/vi/>\n"
@@ -10079,8 +10079,9 @@ msgstr ""
 msgid "Raster map with zones to compute statistics for"
 msgstr "Biểu tượng điểm vector dùng cho dữ liệu điểm"
 
-msgid "Raster map with zones to compute statistics for (needs to be CELL)"
-msgstr ""
+#, fuzzy
+msgid "3D raster map with zones"
+msgstr "Tên của bản đồ raster hướng đầu ra"
 
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
 msgstr ""
@@ -10245,6 +10246,9 @@ msgid "Prints attributes of vector maps registered in a space time vector datase
 msgstr ""
 
 msgid "select"
+msgstr ""
+
+msgid "plain;Plain text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
 msgstr ""
 
 msgid "Exports a space time vector dataset as GRASS specific archive file."
@@ -24762,6 +24766,16 @@ msgstr ""
 msgid "Overwrite current settings if initialized"
 msgstr ""
 
+#, fuzzy
+msgid "Name of the mapset(s) to print the connection info for"
+msgstr "Tên của bản đồ vec-tơ đầu vào chứa các đường"
+
+msgid "'.' for current mapset; '*' for all mapsets in the project. Requires format=json."
+msgstr ""
+
+msgid "The mapset option requires format=json."
+msgstr ""
+
 msgid "Temporal GIS database connection not defined. Run t.connect."
 msgstr ""
 
@@ -34357,10 +34371,6 @@ msgstr ""
 #~ msgstr "Tên của bản đồ raster hướng đầu ra"
 
 #, fuzzy
-#~ msgid "Name for input raster map with areas"
-#~ msgstr "Tên của bản đồ raster hướng đầu ra"
-
-#, fuzzy
 #~ msgid "Name for mosaic output map"
 #~ msgstr "Tiền tố dùng cho (các) bản đồ raster đầu ra"
 
@@ -35031,10 +35041,6 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Name of the vector map layer of the segments"
-#~ msgstr "Tên của bản đồ vec-tơ đầu vào chứa các đường"
-
-#, fuzzy
-#~ msgid "Name of the vector map with the electric grid"
 #~ msgstr "Tên của bản đồ vec-tơ đầu vào chứa các đường"
 
 #, fuzzy

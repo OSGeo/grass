@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_tr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-20 16:28+0000\n"
+"POT-Creation-Date: 2026-06-27 15:58+0000\n"
 "PO-Revision-Date: 2025-07-26 01:37+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Turkish <https://weblate.osgeo.org/projects/grass-gis/grassmods/tr/>\n"
@@ -10194,8 +10194,8 @@ msgid "Raster map with zones to compute statistics for"
 msgstr "Raster harita hesaplayıcı."
 
 #, fuzzy
-msgid "Raster map with zones to compute statistics for (needs to be CELL)"
-msgstr "Raster harita hesaplayıcı."
+msgid "3D raster map with zones"
+msgstr "Vektör noktalar"
 
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
 msgstr ""
@@ -10360,6 +10360,9 @@ msgid "Prints attributes of vector maps registered in a space time vector datase
 msgstr ""
 
 msgid "select"
+msgstr ""
+
+msgid "plain;Plain text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
 msgstr ""
 
 msgid "Exports a space time vector dataset as GRASS specific archive file."
@@ -25013,6 +25016,19 @@ msgstr ""
 msgid "Overwrite current settings if initialized"
 msgstr ""
 
+#, fuzzy
+#| msgid "Name of raster map(s) to include in group"
+msgid "Name of the mapset(s) to print the connection info for"
+msgstr "Gruptaki raster harita(lar)ın adı"
+
+msgid "'.' for current mapset; '*' for all mapsets in the project. Requires format=json."
+msgstr ""
+
+#, fuzzy
+#| msgid "This option requires one column"
+msgid "The mapset option requires format=json."
+msgstr "Bu seçim tek sütun gerektirir"
+
 msgid "Temporal GIS database connection not defined. Run t.connect."
 msgstr ""
 
@@ -33960,6 +33976,10 @@ msgid "Image file"
 msgstr "Görüntü dosyası"
 
 #, fuzzy
+#~ msgid "Raster map with zones to compute statistics for (needs to be CELL)"
+#~ msgstr "Raster harita hesaplayıcı."
+
+#, fuzzy
 #~| msgid "Layer <%s> not available"
 #~ msgid "JSON output is not available."
 #~ msgstr "<%s> katmanı mevcut değil"
@@ -38755,10 +38775,6 @@ msgstr "Görüntü dosyası"
 #, fuzzy
 #~ msgid "calibration"
 #~ msgstr "gösterim"
-
-#, fuzzy
-#~ msgid "categorical map with zones"
-#~ msgstr "Vektör noktalar"
 
 #, fuzzy
 #~ msgid "centerpoint"

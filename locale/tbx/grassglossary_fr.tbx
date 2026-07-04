@@ -329,6 +329,10 @@ https://vitrinelinguistique.oqlf.gouv.qc.ca/fiche-gdt/fiche/26579673/machine-a-v
                 <langSet xml:lang="en"><tig><term>datum</term></tig></langSet>
                 <langSet xml:lang="fr"><tig><term>système de référence géodésique</term></tig></langSet>
             </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>eigenvalue</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>valeur propre</term></tig></langSet>
+            </termEntry>
         </body>
     </text>
 </martif>
