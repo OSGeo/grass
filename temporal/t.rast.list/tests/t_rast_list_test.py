@@ -16,7 +16,6 @@ import grass.script as gs
 from grass.tools import Tools
 
 
-@pytest.mark.needs_solo_run
 def test_defaults(space_time_raster_dataset):
     """Check that the module runs with default parameters"""
     gs.run_command(
@@ -26,7 +25,6 @@ def test_defaults(space_time_raster_dataset):
     )
 
 
-@pytest.mark.needs_solo_run
 @pytest.mark.parametrize(
     ("separator", "delimiter"),
     [(None, ","), (",", ","), ("pipe", "|")],
@@ -47,7 +45,6 @@ def test_line(space_time_raster_dataset, separator, delimiter):
     assert names == space_time_raster_dataset.full_raster_names
 
 
-@pytest.mark.needs_solo_run
 def test_json(space_time_raster_dataset):
     """Check JSON can be parsed and contains the right values"""
     result = json.loads(
@@ -68,9 +65,8 @@ def test_json(space_time_raster_dataset):
 
 
 @pytest.mark.skipif(yaml is None, reason="PyYAML package not available")
-@pytest.mark.needs_solo_run
 def test_yaml(space_time_raster_dataset):
-    """Check JSON can be parsed and contains the right values"""
+    """Check YAML can be parsed and contains the right values"""
     result = yaml.safe_load(
         gs.read_command(
             "t.rast.list",
@@ -91,7 +87,6 @@ def test_yaml(space_time_raster_dataset):
     assert times == space_time_raster_dataset.start_times
 
 
-@pytest.mark.needs_solo_run
 @pytest.mark.parametrize(
     ("separator", "delimiter"),
     [(None, ","), (",", ","), (";", ";"), ("tab", "\t"), ("pipe", "|")],
@@ -122,9 +117,8 @@ def test_csv(space_time_raster_dataset, separator, delimiter):
         assert len(row) == len(columns)
 
 
-@pytest.mark.needs_solo_run
 def test_columns_list(space_time_raster_dataset):
-    """Check CSV can be parsed with different separators"""
+    """Check that specific columns are returned correctly for the list method"""
     # All relevant columns from the interface.
     columns = [
         "id",
@@ -164,9 +158,8 @@ def test_columns_list(space_time_raster_dataset):
         assert len(row) == len(columns)
 
 
-@pytest.mark.needs_solo_run
 def test_columns_delta_gran(space_time_raster_dataset):
-    """Check CSV can be parsed with different separators"""
+    """Check that specific columns are returned correctly for the gran method"""
     # All relevant columns from the interface.
     columns = [
         "id",
@@ -193,7 +186,6 @@ def test_columns_delta_gran(space_time_raster_dataset):
         assert len(row) == len(columns)
 
 
-@pytest.mark.needs_solo_run
 def test_json_empty_result(space_time_raster_dataset):
     """Check JSON is generated for no returned values"""
     result = json.loads(
@@ -210,7 +202,6 @@ def test_json_empty_result(space_time_raster_dataset):
     assert len(result["data"]) == 0
 
 
-@pytest.mark.needs_solo_run
 @pytest.mark.parametrize("output_format", ["plain", "line"])
 def test_plain_empty_result(space_time_raster_dataset, output_format):
     """Check module fails with non-zero return code for empty result"""
@@ -225,7 +216,6 @@ def test_plain_empty_result(space_time_raster_dataset, output_format):
     assert return_code != 0
 
 
-@pytest.mark.needs_solo_run
 @pytest.mark.parametrize("output_format", ["csv", "plain"])
 def test_no_header_accepted(space_time_raster_dataset, output_format):
     """Check that the no column names flag is accepted"""
@@ -237,7 +227,6 @@ def test_no_header_accepted(space_time_raster_dataset, output_format):
     )
 
 
-@pytest.mark.needs_solo_run
 @pytest.mark.parametrize(
     "output_format",
     [
@@ -263,7 +252,6 @@ def test_no_header_rejected(space_time_raster_dataset, output_format):
     assert return_code != 0
 
 
-@pytest.mark.needs_solo_run
 @pytest.mark.parametrize(
     "output_format",
     [
@@ -288,7 +276,6 @@ def test_separator_rejected(space_time_raster_dataset, output_format):
     assert returncode != 0
 
 
-@pytest.mark.needs_solo_run
 @pytest.mark.parametrize("method", ["delta", "deltagaps", "gran"])
 def test_other_methods_json(space_time_raster_dataset, method):
     """Test methods other than list"""
@@ -310,7 +297,6 @@ def test_other_methods_json(space_time_raster_dataset, method):
     assert names == space_time_raster_dataset.raster_names
 
 
-@pytest.mark.needs_solo_run
 def test_gran_json(space_time_raster_dataset):
     """Test granularity method"""
     result = json.loads(
