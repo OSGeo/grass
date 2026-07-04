@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-13 12:01+0000\n"
-"PO-Revision-Date: 2026-06-25 00:52+0000\n"
+"PO-Revision-Date: 2026-06-30 19:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grassmods-8-5/fr/>\n"
 "Language: fr\n"
@@ -3152,8 +3152,9 @@ msgstr ""
 msgid "input= and opacity= must have the same number of values"
 msgstr ""
 
+#, fuzzy
 msgid "copy"
-msgstr ""
+msgstr "copie"
 
 msgid "Creates copies of maps and other elements"
 msgstr "Crée des copies de cartes et d'autres éléments"
@@ -4767,9 +4768,8 @@ msgstr ""
 msgid "atmospheric correction"
 msgstr ""
 
-#, fuzzy
 msgid "Input range"
-msgstr "Cartes d'entrée"
+msgstr "Plage d'entrée"
 
 msgid "Name of input elevation raster map (in m)"
 msgstr "Nom de la carte raster d’altitude en entrée (en m)"
@@ -4789,13 +4789,11 @@ msgstr "Résolution de la carte raster en sortie"
 msgid "Output"
 msgstr "Sortie"
 
-#, fuzzy
 msgid "Output raster map as integer"
-msgstr "Titre du fichier raster de sortie"
+msgstr "Générer une carte raster sous forme de nombres entiers"
 
-#, fuzzy
 msgid "Input raster map converted to reflectance (default is radiance)"
-msgstr "Bande(s) à sélectionner (par défaut toutes les bandes)"
+msgstr "Carte raster d'entrée convertie en réflectance (la valeur par défaut est la radiance)"
 
 msgid "Input from ETM+ image taken after July 1, 2000"
 msgstr ""
@@ -4817,9 +4815,8 @@ msgstr "Impossible de créer la couche raster <%s>"
 msgid "Atmospheric correction..."
 msgstr ""
 
-#, fuzzy
 msgid "Atmospheric correction complete."
-msgstr "Calcule les corrections topologiques de la réflectance."
+msgstr "Correction atmosphérique terminée."
 
 msgid "biomass"
 msgstr "biomasse"
@@ -5591,8 +5588,8 @@ msgstr ""
 #, c-format
 msgid "One class found"
 msgid_plural "%d classes found"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Une classe trouvée"
+msgstr[1] "%d classes trouvées"
 
 msgid "supervised classification"
 msgstr "classification dirigée"
@@ -7590,17 +7587,15 @@ msgstr ""
 msgid "Writing out shifted band values..."
 msgstr ""
 
-#, fuzzy, c-format
+#, c-format
 msgid "No signature files of type \"%s\" found"
-msgstr "[à partir du fichier de signature %s]"
+msgstr "Aucun fichier de signature de type \"%s\" trouvé"
 
-#, fuzzy
 msgid "Manage imagery classification signature files"
-msgstr "reclassification"
+msgstr "Gérer les fichiers de signatures de classification d'images"
 
-#, fuzzy
 msgid "Type of signature file"
-msgstr "[à partir du fichier de signature %s]"
+msgstr "Type du fichier de signature"
 
 msgid "Main"
 msgstr ""
@@ -7616,9 +7611,8 @@ msgstr "Afficher les jeux de cartes dans le chemin de recherche"
 msgid "Files"
 msgstr "Fichiers"
 
-#, fuzzy
 msgid "Name of file to rename"
-msgstr "Nom du(es) fichier(s) à supprimer"
+msgstr "Nom du fichier à renommer"
 
 msgid "Name of file to copy"
 msgstr "Nom du fichier à copier"
@@ -7778,23 +7772,19 @@ msgstr ""
 msgid "Map with training labels or target values"
 msgstr "Carte avec des étiquettes d'apprentissage ou des valeurs cibles"
 
-#, fuzzy
 msgid "Type of SVM"
-msgstr "Nom du script en sortie"
+msgstr "Type de SVM"
 
-#, fuzzy
 msgid "SVM parameters"
-msgstr "Paramètres"
+msgstr "Paramètres SVM"
 
 #. GTC: SVM type
-#, fuzzy
 msgid "C-SVM classification"
-msgstr "reclassification"
+msgstr "Classification C-SVM"
 
 #. GTC: SVM type
-#, fuzzy
 msgid "nu-SVM classification"
-msgstr "reclassification"
+msgstr "Classification nu-SVM"
 
 #. GTC: SVM type
 msgid "one-class SVM"
@@ -7808,9 +7798,8 @@ msgstr ""
 msgid "nu-SVM regression"
 msgstr ""
 
-#, fuzzy
 msgid "SVM kernel type"
-msgstr "Type d'entité"
+msgstr "Type de noyau SVM"
 
 #. GTC: SVM kernel type
 msgid "u'*v"
@@ -7831,9 +7820,8 @@ msgstr ""
 msgid "Degree in kernel function"
 msgstr ""
 
-#, fuzzy
 msgid "SVM options"
-msgstr "options RST"
+msgstr "Options SVM"
 
 msgid "Gamma in kernel function"
 msgstr ""
@@ -7874,13 +7862,11 @@ msgstr ""
 msgid "Defaults to no probabilities in model"
 msgstr ""
 
-#, fuzzy
 msgid "Wrong SVM type"
-msgstr "Mauvais type raster : %s"
+msgstr "Type de SVM incorrect"
 
-#, fuzzy
 msgid "Wrong kernel type"
-msgstr "Mauvais type raster : %s"
+msgstr "Type de noyau incorrect"
 
 #, c-format
 msgid "Unable to get value range for raster map <%s@%s>"
@@ -8741,7 +8727,7 @@ msgid "Brovey"
 msgstr "Brovey"
 
 msgid "IHS"
-msgstr ""
+msgstr "IHS"
 
 msgid "HIS"
 msgstr ""
@@ -9080,9 +9066,8 @@ msgstr "Nom de l'image ASTER en entrée"
 msgid "ASTER imagery processing type (Level 1A, Level 1B, or relative DEM)"
 msgstr "Type de traitement d'image ASTER (Niveau 1A, Niveau 1B, ou MNT associé)"
 
-#, fuzzy
 msgid "List L1A L1B or L1T band to translate (1,2,3n,...), or enter 'all' to translate all bands"
-msgstr "Lister les bandes L1A ou L1B à traduire (1, 2, 3, n, ...), ou entrer 'all' pour traduire toutes les bandes"
+msgstr "Lister les bandes L1A L1B ou L1T à traduire (1, 2, 3n, ...), ou entrer 'all' pour traduire toutes les bandes"
 
 msgid "Base name for output raster map (band number will be appended to base name)"
 msgstr "Nom de base pour les cartes raster en sortie (le numéro de bande sera ajouté en suffixe)"
@@ -9542,13 +9527,11 @@ msgstr "entrée"
 msgid "Required"
 msgstr "Requis"
 
-#, fuzzy
 msgid "Also copy maps of the space-time dataset"
-msgstr "Nom de la nouvelle base de données"
+msgstr "Copier également les cartes du jeu de données spatiotemporel"
 
-#, fuzzy
 msgid "By default the old maps are only registered in the new dataset."
-msgstr "Lister les jeux de données temporels et cartes enregistrées dans la base de données temporelle."
+msgstr "Par défaut, les anciennes cartes sont uniquement enregistrées dans le nouveau jeu de données."
 
 msgid "Creates a space time dataset."
 msgstr "Créer un nouveau jeu de données temporel"
@@ -9616,8 +9599,9 @@ msgstr ""
 msgid "merge"
 msgstr ""
 
+#, fuzzy
 msgid "inputs"
-msgstr ""
+msgstr "entrées"
 
 msgid "Detects accumulation patterns in temporally accumulated space time raster datasets created by t.rast.accumulate."
 msgstr ""
@@ -10058,9 +10042,8 @@ msgstr ""
 msgid "Calculate extended statistics"
 msgstr "Calculer les statistiques étendues"
 
-#, fuzzy
 msgid "Use the raster map regions for univar statistical calculation instead of the current region"
-msgstr "Ignorer les paramètres de région actuelle et utiliser la région de la carte raster pour le calcul des statistiques univariées"
+msgstr "Utilisez les régions de la carte raster pour le calcul statistique univarié au lieu de la région actuelle"
 
 msgid "Sample a space time raster dataset at specific vector point coordinates and write the output to stdout using different layouts"
 msgstr "Échantilonner un jeu de données raster temporel aux coordonnées des points d'un vecteur et écrire le résultat sur stdout suivant différents formatages"
@@ -10119,9 +10102,8 @@ msgstr ""
 msgid "Calculates univariate statistics from the non-null cells for each registered 3D raster map of a space time 3D raster dataset."
 msgstr "Calculer les statistiques univariées pour les cellules non nulles de chaque carte raster 3D enregistrée dans un jeu de données raster 3D temporel."
 
-#, fuzzy
 msgid "Raster map with zones to compute statistics for"
-msgstr "Nom de la carte raster à partir de laquelle calculer les statistiques"
+msgstr "Carte raster avec des zones pour lesquelles calculer les statistiques"
 
 #, fuzzy
 msgid "Raster map with zones to compute statistics for (needs to be CELL)"
@@ -10535,9 +10517,8 @@ msgstr "dissoudre"
 msgid "line"
 msgstr "ligne"
 
-#, fuzzy
 msgid "Dissolving"
-msgstr "Regrouppement"
+msgstr "Regroupement"
 
 msgid "Layer number or name."
 msgstr "Numéro de couche ou nom."
@@ -12047,11 +12028,11 @@ msgstr "Le nom du raster d'entrée <%s> est trop long"
 msgid "Title <%s> is too long"
 msgstr "Le titre <%s> est trop long"
 
-#, c-format
+#, c-format, fuzzy
 msgid "%d clump."
 msgid_plural "%d clumps."
 msgstr[0] ""
-msgstr[1] ""
+msgstr[1] "%d amas."
 
 msgid "Minimum size must be larger than 1"
 msgstr ""
@@ -12410,8 +12391,8 @@ msgstr "<%s> a un fichier NULL décompressé"
 #, c-format
 msgid "Writing vector contour (one level)..."
 msgid_plural "Writing vector contours (total levels %d)..."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Écriture du contour vectoriel (un niveau)..."
+msgstr[1] "Écriture des contours vectoriels (nombre total de niveaux : %d)..."
 
 #, c-format
 msgid "%d crossing found"
@@ -14645,9 +14626,8 @@ msgstr "Impossible de déterminer le type du fichier d'entrée <%s>"
 msgid "PDAL error: %s"
 msgstr "Erreur de PDAL : %s"
 
-#, fuzzy
 msgid "Mode value of point values in cell"
-msgstr "Valeur médiane des valeurs ponctuelles dans la cellule"
+msgstr "Mode des valeurs des points dans la cellule"
 
 #, fuzzy
 msgid "Maximum number of points in cell per source ID"
@@ -14659,7 +14639,7 @@ msgstr "Nombre maximum de points dans un segment"
 
 #, fuzzy
 msgid "First eigenvalue of point x, y, z coordinates"
-msgstr "Réhausser les valeurs de coordonnées z"
+msgstr "Première valeur propre des coordonnées du point (x, y, z)"
 
 #, fuzzy
 msgid "Second eigenvalue of point x, y, z coordinates"
@@ -14673,9 +14653,8 @@ msgstr "Réhausser les valeurs de coordonnées z"
 msgid "Filter range for output dimension values (min,max)"
 msgstr "Étendue de filtre pour les données z (min,max)"
 
-#, fuzzy
 msgid "Scale to apply to output dimension values"
-msgstr "Échelle à appliquer aux données z"
+msgstr "Échelle à appliquer aux valeurs de dimension de sortie"
 
 msgid "Use if output dimension is not Z or intensity"
 msgstr ""
@@ -14692,13 +14671,11 @@ msgstr ""
 msgid "Override input dataset coordinate system using EPSG code or WKT definition"
 msgstr ""
 
-#, fuzzy
 msgid "Dimension (variable) to use for raster values"
-msgstr "Statistiques à utiliser pour les valeurs raster"
+msgstr "Dimension (variable) à utiliser pour les valeurs du raster"
 
-#, fuzzy
 msgid "Z coordinate"
-msgstr "Coordonnées"
+msgstr "coordonnée Z"
 
 #. GTC: LAS LiDAR point property
 msgid "Intensity"
@@ -15027,9 +15004,9 @@ msgstr ""
 msgid "Cannot open file <%s> to write header"
 msgstr ""
 
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open file <%s> to write JSON output"
-msgstr "Impossible d'ouvrir <%s> en écriture"
+msgstr "Impossible d'ouvrir le fichier <%s> pour écrire la sortie JSON"
 
 msgid "Failed to serialize JSON"
 msgstr "Échec de la sérialisation du format JSON"
@@ -15382,7 +15359,7 @@ msgstr "La région de calculs à utiliser."
 
 #, fuzzy
 msgid "current uses the current region of the mapset"
-msgstr "Afficher l'emprise de la région courante"
+msgstr "« current » utilise la région actuelle du jeu de cartes"
 
 msgid "intersect computes the intersection region between all input maps and uses the smallest resolution"
 msgstr ""
@@ -16283,9 +16260,8 @@ msgstr "Erreur altimétrique"
 msgid "Vertical scaling factor"
 msgstr "Facteur d'échelle vertical"
 
-#, fuzzy
 msgid "Invalid output filename"
-msgstr "Nom du fichier de sortie <%s> illégal"
+msgstr "Nom de fichier de sortie invalide"
 
 #, c-format
 msgid "Raster map is too big! Exceeds %d columns or %d rows"
@@ -16317,15 +16293,15 @@ msgstr "Le nom du fichier <%s> est trop long"
 #, c-format
 msgid "row = %d"
 msgid_plural "rows = %d"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ligne = %d"
+msgstr[1] "lignes = %d"
 
 #. GTC Raster columns
 #, c-format
 msgid "column = %d"
 msgid_plural "columns = %d"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "colonne = %d"
+msgstr[1] "colonnes = %d"
 
 #, c-format
 msgid "Unable to open file <%s> for write"
@@ -17570,11 +17546,11 @@ msgstr ""
 msgid "%d are too many cells, recommended are < 100 cells. The cross validation would take too much time."
 msgstr ""
 
-#, c-format
+#, c-format, fuzzy
 msgid "%d point read in region"
 msgid_plural "%d points read in region"
 msgstr[0] ""
-msgstr[1] ""
+msgstr[1] "%d points lus dans la région"
 
 msgid "Maybe it takes too long. Consider reducing the region extents."
 msgstr ""
@@ -20542,7 +20518,7 @@ msgid ""
 msgstr ""
 
 msgid "vectorization"
-msgstr ""
+msgstr "vectorisation"
 
 msgid "Converts a raster map into a vector map."
 msgstr "Convertir une carte raster vers une carte vecteur."
