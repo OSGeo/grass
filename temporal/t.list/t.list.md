@@ -17,7 +17,7 @@ The SQL *where* and *sort* expression will be applied for each temporal
 database that was found in accessible mapsets. Hence sorting works only
 on mapset basis.
 
-The **mapset** option allows the user to easily filter the output to one
+The **mapset** option allows the user to filter the output to one
 or multiple specific mapsets, or to query all mapsets in the project regardless
 of the current search path. By default (if the **mapset** option is not provided),
 Temporal datasets are listed from all mapsets in the user's current search path

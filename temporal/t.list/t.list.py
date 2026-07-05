@@ -122,7 +122,7 @@ def main():
     outpath = options["output"]
     colhead = flags["c"]
     output_format = options.get("format", "plain")
-    mapset_opt = options["mapset"]
+    mapsets = options["mapset"]
 
     if not columns:
         columns = "all" if output_format == "json" else "id"
@@ -185,7 +185,7 @@ def main():
     tgis.init()
 
     sp = tgis.dataset_factory(type, None)
-    dbif = tgis.SQLDatabaseInterfaceConnection(mapset_opt)
+    dbif = tgis.SQLDatabaseInterfaceConnection(mapsets)
     dbif.connect()
     first = True
 
@@ -205,7 +205,7 @@ def main():
             time = "absolute time" if ttype == "absolute" else "relative time"
 
             stds_list = tgis.get_dataset_list(
-                type, ttype, columns, where, order, dbif=dbif, mapset_opt=mapset_opt
+                type, ttype, columns, where, order, dbif=dbif, mapsets=mapsets
             )
 
             for key in dbif.tgis_mapsets.keys():

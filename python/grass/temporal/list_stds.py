@@ -40,7 +40,7 @@ def get_dataset_list(
     where=None,
     order=None,
     dbif=None,
-    mapset_opt=None,
+    mapsets=None,
 ):
     """Return a list of time stamped maps or space time datasets of a specific
     temporal type that are registered in the temporal database
@@ -57,7 +57,7 @@ def get_dataset_list(
     :param order: A comma separated list of columns to order the
                   datasets by category
     :param dbif: The database interface to be used
-    :param mapset_opt: A string specifying target mapsets ('.' for current, '*'
+    :param mapsets: A string specifying target mapsets ('.' for current, '*'
                        for all, or comma-separated names). Defaults to None.
 
     :return: A dictionary with the rows of the SQL query for each
@@ -104,13 +104,13 @@ def get_dataset_list(
     id = None
     sp = dataset_factory(type, id)
 
-    dbif, connection_state_changed = init_dbif(dbif, mapset_opt)
+    dbif, connection_state_changed = init_dbif(dbif, mapsets)
 
-    mapsets = get_available_temporal_mapsets(mapset_opt)
+    mapsets_dict = get_available_temporal_mapsets(mapsets)
 
     result = {}
 
-    for mapset in mapsets.keys():
+    for mapset in mapsets_dict.keys():
         if temporal_type == "absolute":
             table = sp.get_type() + "_view_abs_time"
         else:

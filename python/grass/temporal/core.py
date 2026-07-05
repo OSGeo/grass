@@ -497,11 +497,10 @@ def stop_subprocesses() -> None:
 atexit.register(stop_subprocesses)
 
 
-def get_available_temporal_mapsets(mapset_opt=None):
-    """Return a list of of mapset names with temporal database driver and names
-    that are accessible from the current mapset.
+def get_available_temporal_mapsets(mapsets: str | None = None):
+    """Return a list of of mapset names with temporal database driver and names.
 
-    :param mapset_opt: A string specifying target mapsets ('.' for current, '*'
+    :param mapsets: A string specifying target mapsets ('.' for current, '*'
                        for all mapsets in the location, or comma-separated names).
                        If None, defaults to the current search path.
 
@@ -510,20 +509,20 @@ def get_available_temporal_mapsets(mapset_opt=None):
     """
     global c_library_interface, message_interface
 
-    mapsets = []
+    mapsets_list = []
 
-    if not mapset_opt:
-        mapsets = c_library_interface.available_mapsets()
-    elif mapset_opt == "*":
-        mapsets = gs.mapsets(search_path=False)
-    elif mapset_opt == ".":
-        mapsets = [get_current_mapset()]
+    if not mapsets:
+        mapsets_list = c_library_interface.available_mapsets()
+    elif mapsets == "*":
+        mapsets_list = gs.mapsets(search_path=False)
+    elif mapsets == ".":
+        mapsets_list = [get_current_mapset()]
     else:
-        mapsets = mapset_opt.split(",")
+        mapsets_list = mapsets.split(",")
 
     tgis_mapsets = {}
 
-    for mapset in mapsets:
+    for mapset in mapsets_list:
         driver = c_library_interface.get_driver_name(mapset)
         database = c_library_interface.get_database_name(mapset)
 
@@ -1090,8 +1089,8 @@ def _create_tgis_metadata_table(content, dbif=None) -> None:
 
 
 class SQLDatabaseInterfaceConnection:
-    def __init__(self, mapset_opt=None) -> None:
-        self.tgis_mapsets = get_available_temporal_mapsets(mapset_opt)
+    def __init__(self, mapsets: str | None = None) -> None:
+        self.tgis_mapsets = get_available_temporal_mapsets(mapsets)
         self.current_mapset = get_current_mapset()
         self.connections = {}
         self.connected = False
@@ -1619,13 +1618,13 @@ class DBConnection:
 ###############################################################################
 
 
-def init_dbif(dbif, mapset_opt=None):
+def init_dbif(dbif, mapsets: str | None = None):
     """This method checks if the database interface connection exists,
     if not a new one will be created, connected and True will be returned.
     If the database interface exists but is not connected, the connection
     will be established.
 
-    :param mapset_opt: An optional string to restrict the database connections
+    :param mapsets: An optional string to restrict or expand the database connections
                        to specific mapsets (passed to SQLDatabaseInterfaceConnection)
 
     :returns: the tuple (dbif, connection_state_changed)
@@ -1648,7 +1647,7 @@ def init_dbif(dbif, mapset_opt=None):
     connection_state_changed = False
 
     if dbif is None:
-        dbif = SQLDatabaseInterfaceConnection(mapset_opt)
+        dbif = SQLDatabaseInterfaceConnection(mapsets)
         dbif.connect()
         connection_state_changed = True
     elif dbif.is_connected() is False:
