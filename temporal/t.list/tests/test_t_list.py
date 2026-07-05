@@ -131,3 +131,23 @@ def test_colhead_validation(space_time_dataset, output_format):
         assert status == 0
     else:
         assert status != 0
+
+
+def test_t_list_empty_database(empty_session):
+    """Verify that t.list handles a missing TGIS database without creating one."""
+    tools = Tools(session=empty_session.session)
+
+    json_result = tools.t_list(type="strds", format="json")
+    assert json_result.returncode == 0
+    assert json_result.stdout.strip() == "[]"
+
+    csv_result = tools.t_list(type="strds", format="csv")
+    assert csv_result is None
+
+    plain_result = tools.t_list(type="strds", format="plain")
+    assert plain_result is None
+
+    # Ensure no connection is established
+    result = tools.t_connect(flags="p", format="json", mapset=".")
+    db_exist = result[0]["driver"] and result[0]["database"]
+    assert not db_exist

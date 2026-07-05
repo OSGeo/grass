@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_pt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-06 18:30+0000\n"
+"POT-Creation-Date: 2026-06-27 15:58+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese <https://weblate.osgeo.org/projects/grass-gis/grassmods/pt/>\n"
@@ -2238,7 +2238,6 @@ msgstr "Número de dígitos significativos (apenas ponto flutuante)"
 msgid "Get text color from cell color value"
 msgstr "Usar cor do texto a partir da cor da célula"
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -9905,7 +9904,7 @@ msgstr ""
 msgid "Path to the extraction directory"
 msgstr ""
 
-msgid "Create a new project and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
+msgid "Create a new project and import the data into it."
 msgstr ""
 
 msgid "Set the current region from the last map that was imported"
@@ -10075,6 +10074,9 @@ msgstr ""
 msgid "Raster map used for zoning, must be of type CELL"
 msgstr ""
 
+msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
+msgstr ""
+
 msgid "Calculate extended statistics"
 msgstr ""
 
@@ -10143,8 +10145,8 @@ msgid "Raster map with zones to compute statistics for"
 msgstr "Mapas raster para quantizar"
 
 #, fuzzy
-msgid "Raster map with zones to compute statistics for (needs to be CELL)"
-msgstr "Mapas raster para quantizar"
+msgid "3D raster map with zones"
+msgstr "Título do mapa vetoria"
 
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
 msgstr ""
@@ -10309,6 +10311,9 @@ msgid "Prints attributes of vector maps registered in a space time vector datase
 msgstr ""
 
 msgid "select"
+msgstr ""
+
+msgid "plain;Plain text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
 msgstr ""
 
 msgid "Exports a space time vector dataset as GRASS specific archive file."
@@ -20346,7 +20351,6 @@ msgstr "Categorias demais (encontrei: %i, máx: %i). Tente rescalonar ou reclass
 msgid "Input raster must be of type CELL."
 msgstr ""
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
@@ -23643,7 +23647,7 @@ msgstr ""
 msgid "Filled raster map is: %s"
 msgstr ""
 
-msgid "Following holes where not filled. Temporary maps with are left in place to allow examination of unfilled holes"
+msgid "The following holes were not filled. Temporary maps are left in place to allow examination of unfilled holes:"
 msgstr ""
 
 msgid "Output can be written only to the current mapset"
@@ -24917,11 +24921,23 @@ msgstr ""
 msgid "Prints/sets general temporal GIS database connection for current mapset."
 msgstr ""
 
+msgid "plain;Plain text output;shell;Shell script style output;json;JSON (JavaScript Object Notation)"
+msgstr ""
+
 msgid "Overwrite current settings if initialized"
 msgstr ""
 
-msgid "Print current connection parameter in shell style and exit"
+#, fuzzy
+msgid "Name of the mapset(s) to print the connection info for"
+msgstr "Mapa de entrada contendo linhas"
+
+msgid "'.' for current mapset; '*' for all mapsets in the project. Requires format=json."
 msgstr ""
+
+#, fuzzy
+#| msgid "This option requires one column"
+msgid "The mapset option requires format=json."
+msgstr "Esta opção requer uma coluna"
 
 msgid "Temporal GIS database connection not defined. Run t.connect."
 msgstr ""
@@ -31144,6 +31160,10 @@ msgstr[0] ""
 msgstr[1] ""
 
 #, c-format
+msgid "Removing areas smaller than %g sqm..."
+msgstr ""
+
+#, c-format
 msgid "Querying vector map <%s>..."
 msgstr ""
 
@@ -31221,6 +31241,13 @@ msgid "Snapping threshold for boundaries"
 msgstr ""
 
 msgid "Disable snapping with snap <= 0"
+msgstr ""
+
+#, fuzzy
+msgid "Minimum size of areas to keep in square meters"
+msgstr "Desvio mínimo em unidades de mapa"
+
+msgid "Enable with minsize > 0"
 msgstr ""
 
 #, c-format
@@ -33450,9 +33477,6 @@ msgstr "Não consegui copiar a tabela"
 msgid "Pass %d"
 msgstr ""
 
-msgid "Node is outside any input area"
-msgstr ""
-
 #, c-format
 msgid "Found %d point/centroid in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
 msgid_plural "Found %d points/centroids in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
@@ -33838,6 +33862,10 @@ msgstr ""
 
 msgid "Image file"
 msgstr "Arquivo de imagem"
+
+#, fuzzy
+#~ msgid "Raster map with zones to compute statistics for (needs to be CELL)"
+#~ msgstr "Mapas raster para quantizar"
 
 #~ msgid ""
 #~ "WGS84 output not possible as this location does not contain\n"
@@ -35123,10 +35151,6 @@ msgstr "Arquivo de imagem"
 #~ msgstr "Mínimo valor aleatório"
 
 #, fuzzy
-#~ msgid "Minimum size of areas in map units"
-#~ msgstr "Desvio mínimo em unidades de mapa"
-
-#, fuzzy
 #~ msgid "Minimum size of tiles in map units"
 #~ msgstr "Desvio mínimo em unidades de mapa"
 
@@ -36123,10 +36147,6 @@ msgstr "Arquivo de imagem"
 
 #, fuzzy
 #~ msgid "Name of the vector map layer of the segments"
-#~ msgstr "Mapa de entrada contendo linhas"
-
-#, fuzzy
-#~ msgid "Name of the vector map with the electric grid"
 #~ msgstr "Mapa de entrada contendo linhas"
 
 #, fuzzy
@@ -37953,10 +37973,6 @@ msgstr "Arquivo de imagem"
 #, fuzzy
 #~ msgid "calibration"
 #~ msgstr "Locação: %s\n"
-
-#, fuzzy
-#~ msgid "categorical map with zones"
-#~ msgstr "Título do mapa vetoria"
 
 #, fuzzy
 #~ msgid "centerpoint"
