@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-20 16:28+0000\n"
+"POT-Creation-Date: 2026-06-27 15:58+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Japanese <https://weblate.osgeo.org/projects/grass-gis/grassmods/ja/>\n"
@@ -10204,8 +10204,8 @@ msgid "Raster map with zones to compute statistics for"
 msgstr "ラスターマップは量子化されました "
 
 #, fuzzy
-msgid "Raster map with zones to compute statistics for (needs to be CELL)"
-msgstr "ラスターマップは量子化されました "
+msgid "3D raster map with zones"
+msgstr "ベクトルポイント"
 
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
 msgstr ""
@@ -10371,6 +10371,9 @@ msgstr ""
 
 msgid "select"
 msgstr "選択"
+
+msgid "plain;Plain text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
+msgstr ""
 
 msgid "Exports a space time vector dataset as GRASS specific archive file."
 msgstr ""
@@ -25078,6 +25081,19 @@ msgstr ""
 msgid "Overwrite current settings if initialized"
 msgstr ""
 
+#, fuzzy
+#| msgid "Name of raster map(s) to include in group"
+msgid "Name of the mapset(s) to print the connection info for"
+msgstr "グループに含むラスターマップ名"
+
+msgid "'.' for current mapset; '*' for all mapsets in the project. Requires format=json."
+msgstr ""
+
+#, fuzzy
+#| msgid "This option requires one column"
+msgid "The mapset option requires format=json."
+msgstr "このオプションには１列必要です  "
+
 msgid "Temporal GIS database connection not defined. Run t.connect."
 msgstr ""
 
@@ -33974,6 +33990,10 @@ msgstr "PNG ドライバーから BMP 画像を見る"
 msgid "Image file"
 msgstr "画像ファイル"
 
+#, fuzzy
+#~ msgid "Raster map with zones to compute statistics for (needs to be CELL)"
+#~ msgstr "ラスターマップは量子化されました "
+
 #~ msgid ""
 #~ "WGS84 grid output not possible as this location does not contain\n"
 #~ "datum transformation parameters. Try running g.setproj."
@@ -39791,10 +39811,6 @@ msgstr "画像ファイル"
 #, fuzzy
 #~ msgid "calibration"
 #~ msgstr "装飾"
-
-#, fuzzy
-#~ msgid "categorical map with zones"
-#~ msgstr "ベクトルポイント"
 
 #, fuzzy
 #~ msgid "centerpoint"

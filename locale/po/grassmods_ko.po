@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-20 16:28+0000\n"
+"POT-Creation-Date: 2026-06-27 15:58+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Korean <https://weblate.osgeo.org/projects/grass-gis/grassmods/ko/>\n"
@@ -10170,8 +10170,10 @@ msgstr ""
 msgid "Raster map with zones to compute statistics for"
 msgstr "출력할 격자지도"
 
-msgid "Raster map with zones to compute statistics for (needs to be CELL)"
-msgstr ""
+#, fuzzy
+#| msgid "3D raster map <%s> not found"
+msgid "3D raster map with zones"
+msgstr "3차원 래스터 지도 <%s>를 찾을 수 없습니다"
 
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
 msgstr "타임스탬프를 할당하고 시공간 자료세트 안에 래스터, 벡터, 그리고 3차원 래스터 지도를 등록합니다."
@@ -10336,6 +10338,9 @@ msgid "Prints attributes of vector maps registered in a space time vector datase
 msgstr ""
 
 msgid "select"
+msgstr ""
+
+msgid "plain;Plain text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
 msgstr ""
 
 msgid "Exports a space time vector dataset as GRASS specific archive file."
@@ -24972,6 +24977,19 @@ msgid "plain;Plain text output;shell;Shell script style output;json;JSON (JavaSc
 msgstr ""
 
 msgid "Overwrite current settings if initialized"
+msgstr ""
+
+#, fuzzy
+#| msgid "Name of raster map(s) to report on"
+msgid "Name of the mapset(s) to print the connection info for"
+msgstr "보고에 쓰일 래스터 지도의 이름"
+
+#, fuzzy
+#| msgid "'.' for current mapset; '*' for all mapsets in location"
+msgid "'.' for current mapset; '*' for all mapsets in the project. Requires format=json."
+msgstr "현재 지도 세트 '.'; 로케이션 안의 모든 지도 세트 '*'"
+
+msgid "The mapset option requires format=json."
 msgstr ""
 
 msgid "Temporal GIS database connection not defined. Run t.connect."
