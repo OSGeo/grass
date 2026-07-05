@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-27 15:58+0000\n"
-"PO-Revision-Date: 2026-06-25 00:52+0000\n"
+"PO-Revision-Date: 2026-07-04 16:20+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/fr/>\n"
 "Language: fr\n"
@@ -5889,7 +5889,7 @@ msgid ""
 "Details: %s"
 msgstr ""
 "Impossible de démarrer l'outil wxGUI de numérisation de vecteur.\n"
-"Détails: %s"
+"Détails : %s"
 
 msgid "Set opacity of <{}>"
 msgstr "Régler l'opacité de <{}>"
@@ -6385,7 +6385,7 @@ msgid "GRASS Database:"
 msgstr "Base de données GRASS :"
 
 msgid "Project Name:"
-msgstr "Nom du projet:"
+msgstr "Nom du projet :"
 
 msgid "Projection:"
 msgstr "Projection :"
@@ -6406,9 +6406,9 @@ msgid ""
 "\n"
 "Details: %(err)s"
 msgstr ""
-"Impossible de créer le nouveau projet. Secteur <%(loc)s> non crée.\n"
+"Impossible de créer le nouveau projet. Le projet <%(loc)s> n'a pas été créé.\n"
 "\n"
-"Détails: %(err)s"
+"Détails : %(err)s"
 
 msgid "Unable to create new project"
 msgstr "Impossible de créer le nouveau projet"
@@ -6570,17 +6570,15 @@ msgstr "Afficher/cacher les limites de la région de calcul (définie avec g.reg
 msgid "Display coordinates in different CRS"
 msgstr "Afficher les coordonnées dans un différent SCR"
 
-#, fuzzy
 msgid "Reproject coordinates displayed in the statusbar. Coordinate reference system can be specified in GUI preferences dialog (tab 'Projection')"
-msgstr "Re-projeter les coordonnées affichées dans la barre d'état. La projection peut être définie dans les préférences de l'interface utilisateur (onglet 'Affichage de la carte')"
+msgstr "Reprojeter les coordonnées affichées dans la barre d'état. Le système de coordonnées de référence peut être spécifié dans la boîte de dialogue des préférences de l'interface graphique (onglet « Projection »)"
 
 #, python-brace-format
 msgid "{label} (EPSG: {epsg})"
 msgstr "{label} (EPSG : {epsg})"
 
-#, fuzzy
 msgid "Status bar"
-msgstr "Afficher la barre de status"
+msgstr "Barre d'état"
 
 msgid "Render"
 msgstr "Afficher"
@@ -8684,7 +8682,7 @@ msgstr ""
 "en mode brouillon (seulement en mode aperçu"
 
 msgid "Outline color:"
-msgstr "Couleur de mise en valeur:"
+msgstr "Couleur de mise en valeur :"
 
 msgid "Fill color:"
 msgstr "Couleur de remplissage :"
@@ -8749,12 +8747,12 @@ msgstr "La commande ps.map a retourné le code de sortie %s"
 msgid "Program {} is not available."
 msgstr "Le programme {} n'est pas disponible."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "{title} Please install it to create PDF.\n"
 "\n"
 msgstr ""
-"{title} Veuillez l'installer pour créer des PDF.\n"
+"{title} Veuillez l'installer pour créer des fichiers PDF.\n"
 "\n"
 
 msgid ""
@@ -10306,9 +10304,8 @@ msgstr "Gauche : Sélectionner"
 msgid "Display/update categories (Ctrl+J)"
 msgstr "Afficher/mettre à jour les catégories (Ctrl+J)"
 
-#, fuzzy
 msgid "Edit selected line/boundary (Ctrl+E)"
-msgstr "Modifier les lignes/contours sélectionné(e)s"
+msgstr "Modifier la ligne/contour sélectionné(e) (Ctrl+E)"
 
 msgid "Move selected point(s), line(s), boundary(ies) or centroid(s) (Ctrl+M)"
 msgstr "Déplacer le(s) point(s), ligne(s), contour(s) ou centroïde(s) sélectionné(s) (Ctrl+M)"
@@ -10346,9 +10343,8 @@ msgstr "Annuler le changement précédent"
 msgid "Redo (Ctrl+Y)"
 msgstr "Rétablir (Ctrl+Y)"
 
-#, fuzzy
 msgid "Redo previous change"
-msgstr "Refaire les changements précédents"
+msgstr "Rétablir la modification précédente"
 
 msgid "No vector map is open for editing. Please select firsta vector map from the combo box."
 msgstr "Aucune carte vectorielle n'est sélectionnée pour édition. Veuillez sélectionner la première carte vectorielle dans la boîte combinée."
@@ -10451,9 +10447,9 @@ msgid ""
 "\n"
 "Reason: %s"
 msgstr ""
-"Échec d'écriture de la nouvelle entité. Opération annulée.\n"
+"Échec de l'enregistrement de la nouvelle entité. Opération annulée.\n"
 "\n"
-"Raison: %s"
+"Raison : %s"
 
 #, python-format
 msgid "Reading feature id %d failed. Operation canceled."
@@ -10871,7 +10867,7 @@ msgid "Username:"
 msgstr "Nom d'utilisateur :"
 
 msgid "Password:"
-msgstr "Mot de passe:"
+msgstr "Mot de passe :"
 
 #, python-format
 msgid "Connecting to <%s>..."
@@ -11284,7 +11280,7 @@ msgid ""
 "Reason: %s"
 msgstr ""
 "Impossible d'ouvrir le fichier <%s> en écriture.\n"
-"Raison: %s"
+"Raison : %s"
 
 #, python-format
 msgid ""
