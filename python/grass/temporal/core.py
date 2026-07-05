@@ -40,12 +40,14 @@ from importlib.util import find_spec
 from pathlib import Path
 
 import grass.script as gs
+from grass.tools import Tools, ToolError
 from grass.pygrass import messages
 from grass.script.utils import decode
 
 from .c_libraries_interface import CLibrariesInterface
 
 
+tools = Tools()
 # Import all supported database backends (sqlite3 imported above)
 # Ignore import errors since they are checked later
 
@@ -511,14 +513,19 @@ def get_available_temporal_mapsets(mapsets: str | None = None):
 
     mapsets_list = []
 
-    if not mapsets:
-        mapsets_list = c_library_interface.available_mapsets()
-    elif mapsets == "*":
-        mapsets_list = gs.mapsets(search_path=False)
-    elif mapsets == ".":
-        mapsets_list = [get_current_mapset()]
-    else:
-        mapsets_list = mapsets.split(",")
+    try:
+        connections = tools.t_connect(
+            flags="p", format="json", mapset=mapsets, quiet=True
+        )
+        mapsets_list = [
+            conn["mapset"]
+            for conn in connections
+            if conn.get("mapset") and conn.get("driver") and conn.get("database")
+        ]
+    except ToolError as e:
+        message_interface.error(
+            _("Unable to read temporal database connections: {}").format(e)
+        )
 
     tgis_mapsets = {}
 
