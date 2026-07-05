@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-13 12:01+0000\n"
-"PO-Revision-Date: 2026-06-30 19:19+0000\n"
+"POT-Creation-Date: 2026-07-04 16:17+0000\n"
+"PO-Revision-Date: 2026-07-05 18:33+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grassmods-8-5/fr/>\n"
 "Language: fr\n"
@@ -2152,6 +2152,8 @@ msgid ""
 "  Distance to the network = %f, distance from the network = %f\n"
 "\n"
 msgstr ""
+"  Distance au réseau = %f, distance du réseau = %f\n"
+"\n"
 
 #, c-format
 msgid "Unable to read range for %s"
@@ -3824,7 +3826,7 @@ msgstr ""
 msgid "Unable to create project <%s>"
 msgstr "Impossible de créer le fichier <%s>"
 
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid ""
 "You can switch to the new project by\n"
 "`%s=%s`"
@@ -12028,7 +12030,7 @@ msgstr "Le nom du raster d'entrée <%s> est trop long"
 msgid "Title <%s> is too long"
 msgstr "Le titre <%s> est trop long"
 
-#, c-format, fuzzy
+#, c-format
 msgid "%d clump."
 msgid_plural "%d clumps."
 msgstr[0] ""
@@ -17546,7 +17548,7 @@ msgstr ""
 msgid "%d are too many cells, recommended are < 100 cells. The cross validation would take too much time."
 msgstr ""
 
-#, c-format, fuzzy
+#, c-format
 msgid "%d point read in region"
 msgid_plural "%d points read in region"
 msgstr[0] ""
@@ -18687,10 +18689,9 @@ msgstr "La région de calculs est trop grande!"
 msgid "Smoothed map"
 msgstr "Carte lissée"
 
-#, fuzzy, c-format
-#| msgid "Unable to open temporary file <%s>: %s"
+#, c-format
 msgid "Seek error on temp file. %d: %s"
-msgstr "Impossible d'ouvrir le fichier temporaire <%s> : %s"
+msgstr "Erreur de positionnement dans le fichier temporaire. %d: %s"
 
 #, c-format
 msgid "There was an error reading data from a temporary file. %d: %s"
@@ -20972,9 +20973,8 @@ msgstr ""
 msgid "rows=%d, cols=%d, total = %lld"
 msgstr ""
 
-#, fuzzy
 msgid "Sweep timings:"
-msgstr "Paramètres"
+msgstr "Durées des balayages :"
 
 msgid "Running the program in-memory mode requires memory beyond the capability of the platform. Use external mode, or a 64-bit platform."
 msgstr ""
