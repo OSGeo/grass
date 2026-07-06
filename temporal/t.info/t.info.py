@@ -54,6 +54,10 @@
 # % suppress_required: yes
 # %end
 
+# %rules
+# % required: -d, input
+# %end
+
 import grass.script as gs
 
 ############################################################################
@@ -63,16 +67,59 @@ def main():
     # lazy imports
     import grass.temporal as tgis
 
-    name = options["input"]
-    type_ = options["type"]
+    # Make sure the temporal database exists
+    tgis.init(skip_db_init=True)
+
+    def get_stds(
+        name: str,
+        mapset: str | None,
+        stds_type: str,
+        dbif: tgis.SQLDatabaseInterfaceConnection,
+    ) -> tgis.STDSBase:
+        """Get a space time dataset from the temporal database connection.
+
+        Returns None if the dataset is not found in the temporal database.
+
+        :param name: Name of the space time dataset
+        :param mapset: Mapset of the space time dataset
+        :param stds_type: Type of the space time dataset
+        :param dbif: Database interface connection
+        :return: The space time dataset object or None if not found
+        """
+        dataset = None
+        msg = _("Dataset <{n}> of type <{t}> not found in temporal database").format(
+            n=options["input"], t=stds_type
+        )
+        if mapset:
+            dataset = tgis.dataset_factory(stds_type, f"{name}@{mapset}")
+            if not dataset.is_in_db(dbif):
+                gs.fatal(msg)
+            return dataset
+        # Try current mapset first
+        stds_id = f"{name}@{tgis.get_current_mapset()}"
+        dataset = tgis.dataset_factory(stds_type, stds_id)
+        if dataset.is_in_db(dbif):
+            return dataset
+        # Try all other available mapsets with a temporal database
+        for mapset in dbif.tgis_mapsets.keys():
+            stds_id = f"{name}@{mapset}"
+            dataset = tgis.dataset_factory(stds_type, stds_id)
+            if dataset.is_in_db(dbif):
+                return dataset
+        gs.fatal(msg)
+
+    mapset = None
+    if "@" in options["input"]:
+        name, mapset = options["input"].split("@", 1)
+    else:
+        name = options["input"]
+
+    stds_type = options["type"]
     shellstyle = flags["g"]
     system = flags["d"]
     history = flags["h"]
 
-    # Make sure the temporal database exists
-    tgis.init()
-
-    dbif, connection_state_changed = tgis.init_dbif(None)
+    dbif = tgis.SQLDatabaseInterfaceConnection(mapsets=mapset)
 
     rows = tgis.get_tgis_metadata(dbif)
 
@@ -100,22 +147,11 @@ def main():
                 print("%s='%s'" % (row[0], row[1]))
         return
 
-    if not system and not name:
-        gs.fatal(_("Please specify %s=") % ("name"))
-
-    id_ = name if name.find("@") >= 0 else name + "@" + gs.gisenv()["MAPSET"]
-    dataset = tgis.dataset_factory(type_, id_)
-
-    if not dataset.is_in_db(dbif):
-        gs.fatal(
-            _("Dataset <{n}> of type <{t}> not found in temporal database").format(
-                n=id_, t=type_
-            )
-        )
+    dataset = get_stds(name, mapset, stds_type, dbif)
 
     dataset.select(dbif)
 
-    if history and type_ in {"strds", "stvds", "str3ds"}:
+    if history and stds_type in {"strds", "stvds", "str3ds"}:
         dataset.print_history()
         return
 
