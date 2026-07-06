@@ -56,7 +56,7 @@ Print in plain format (default):
 t.connect -p
 ```
 
-```sh
+```text
 driver:sqlite
 database:$GISDBASE/$LOCATION_NAME/$MAPSET/tgis/sqlite.db
 ```
@@ -67,7 +67,7 @@ Print in shell format:
 t.connect -p format=shell
 ```
 
-```sh
+```text
 driver=sqlite
 database=$GISDBASE/$LOCATION_NAME/$MAPSET/tgis/sqlite.db
 ```

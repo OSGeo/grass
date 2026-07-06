@@ -6,43 +6,44 @@
 # Su Yongheng <night2008@gmail.com>, 2007.
 # YusiJi <jiyusi0001@gmail.com>, 2014.
 # Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
+# Jietao Wang <quaternary@163.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_zh\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-20 16:28+0000\n"
-"PO-Revision-Date: 2025-08-23 20:19+0000\n"
-"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
-"Language-Team: Chinese (Simplified) <https://weblate.osgeo.org/projects/grass-gis/grasslibs/zh_Hans/>\n"
+"POT-Creation-Date: 2026-06-27 15:58+0000\n"
+"PO-Revision-Date: 2026-06-25 11:49+0000\n"
+"Last-Translator: Jietao Wang <quaternary@163.com>\n"
+"Language-Team: Chinese (Simplified Han script) <https://weblate.osgeo.org/projects/grass-gis/grasslibs/zh_Hans/>\n"
 "Language: zh\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #, c-format
 msgid "Unknown algorithm '%s'"
 msgstr "未知算法 '%s'"
 
 msgid "Classification algorithm failed"
-msgstr ""
+msgstr "分类算法失败"
 
 msgid "Equiprobable classbreaks currently limited to 10 classes"
-msgstr ""
+msgstr "等概率分级目前最多支持10个类别"
 
 #, c-format
 msgid "There are classbreaks outside the range min-max. Number of classes reduced to %i, but using probabilities for %i classes."
-msgstr ""
+msgstr "存在超出最小-最大范围的分级间断点。类别数已减少至%i，但仍按%i个类别使用概率。"
 
 msgid "Cairo_Bitmap: Failed to create source"
-msgstr ""
+msgstr "Cairo位图：创建源对象失败"
 
 msgid "Unable to open display"
-msgstr ""
+msgstr "无法打开显示设备"
 
 msgid "Unable to obtain visual"
-msgstr ""
+msgstr "无法获取视觉内容"
 
 #, c-format
 msgid "Unknown file extension: %s"
@@ -813,11 +814,11 @@ msgid "unknown"
 msgstr ""
 
 msgid "WARNING: "
-msgstr "警告："
+msgstr "警告： "
 
 #, c-format
 msgid "ERROR: "
-msgstr "错误："
+msgstr "错误： "
 
 #, c-format
 msgid "Data element '%s/%s' was found in more mapsets (also found in <%s>)"
@@ -1362,7 +1363,7 @@ msgid "Cache size for raster rows"
 msgstr ""
 
 msgid "Name of input raster map"
-msgstr ""
+msgstr "输入栅格地图名称"
 
 msgid "Name of input raster map(s)"
 msgstr ""
@@ -1575,7 +1576,7 @@ msgid "Default: path to the current GRASS database"
 msgstr ""
 
 msgid "Coordinates"
-msgstr ""
+msgstr "坐标"
 
 msgid "Name of color table"
 msgstr ""
@@ -1957,7 +1958,7 @@ msgstr ""
 
 #. GTC: localized units
 msgid "meters"
-msgstr ""
+msgstr "米"
 
 #. GTC: localized units
 msgid "meter"
@@ -2081,7 +2082,7 @@ msgstr ""
 
 #. GTC: localized time units
 msgid "day"
-msgstr ""
+msgstr "日"
 
 #. GTC: localized time units
 msgid "hours"
@@ -2482,9 +2483,9 @@ msgstr "无法打开3D栅格地图<%s>"
 msgid "Read g3d map <%s> into the memory"
 msgstr "将g3d地图 <%s> 读入内存"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Error closing g3d file <%s>"
-msgstr "关闭g3d文件错误"
+msgstr "关闭g3d文件错误<%s>"
 
 #, c-format
 msgid "Error opening g3d map <%s>"
@@ -3595,9 +3596,9 @@ msgstr ""
 msgid "Invalid north latitude %g"
 msgstr ""
 
-#, fuzzy, c-format
+#, c-format
 msgid "South %g is larger than north %g"
-msgstr "北纬值必须比南纬值大"
+msgstr "北纬值%g必须比南纬值%g大"
 
 #, c-format
 msgid "Unrecognized SRID '%s'"
@@ -3623,9 +3624,9 @@ msgstr ""
 msgid "The transformation pipeline contains an '%s' step. Remove this step if easting and northing are swapped in the output."
 msgstr ""
 
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to determine area of interest for '%s'"
-msgstr "无法读取输入文件<%s>"
+msgstr "无法读取输入文件'%s'"
 
 #, c-format
 msgid "Input CRS not available for '%s'"
@@ -3763,10 +3764,9 @@ msgstr ""
 msgid "Rast__null_bitstream_size: cols (%d) is negative"
 msgstr ""
 
-#, fuzzy, c-format
-#| msgid "Unable to open automatic MASK file"
+#, c-format
 msgid "Unable to open automatic mask <%s>"
-msgstr "无法打开自动掩膜文件"
+msgstr "无法打开自动掩膜文件<%s>"
 
 #, c-format
 msgid "Category support for <%s@%s> missing"
@@ -4032,10 +4032,10 @@ msgid "Failed to initialize JSON object. Out of memory?"
 msgstr ""
 
 msgid "Failed to initialize JSON array. Out of memory?"
-msgstr ""
+msgstr "JSON 数组初始化失败。内存不足？"
 
 msgid "Failed to serialize JSON to pretty format."
-msgstr ""
+msgstr "无法将 JSON 序列化为美观格式。"
 
 #, c-format
 msgid "<%s> in mapset <%s>"
@@ -4308,10 +4308,9 @@ msgstr ""
 msgid "Illegal reclass format in header file for <%s@%s>: %s"
 msgstr ""
 
-#, fuzzy, c-format
-#| msgid "Unable to open %s for reading"
+#, c-format
 msgid "File too short, reading line %d"
-msgstr "无法为读取打开%s"
+msgstr "文件太短，读取到第 %d 行时结束"
 
 #, c-format
 msgid "Line too long: %s..."
@@ -5451,7 +5450,7 @@ msgid "Default driver is not set"
 msgstr "默认驱动未设置"
 
 msgid "Default database is not set"
-msgstr "默认数据库未设置"
+msgstr "未设置默认数据库"
 
 #, c-format
 msgid "Requested dblink %d, maximum link number %d"
@@ -5775,9 +5774,9 @@ msgid ""
 "The unique categories layer is not valid therefore you will probably get incorrect results."
 msgstr ""
 
-#, fuzzy, c-format
+#, c-format
 msgid "Database record for turn with cat = %d is not found. (The turn was skipped."
-msgstr "类型为 %d 的记录未找到"
+msgstr "cat = %d 的转弯数据库记录未找到。（该转弯已被跳过。"
 
 msgid "Cannot add network arc representing turn."
 msgstr ""
@@ -5798,9 +5797,9 @@ msgstr ""
 msgid "Database record for line %d (cat = %d, forward/both direction(s)) not found (cost was set to 0)"
 msgstr ""
 
-#, fuzzy, c-format
+#, c-format
 msgid "Database record for line %d (cat = %d, backward direction) not found(cost was set to 0)"
-msgstr "类型为 %d 的记录未找到"
+msgstr "未找到线 %d（cat = %d，反向）的数据库记录（成本已设为 0）"
 
 msgid "Flattening the graph..."
 msgstr ""
@@ -5812,9 +5811,9 @@ msgstr ""
 msgid "Database record for line %d (cat = %d, forward/both direction(s)) not found (forward/both direction(s) of line skipped)"
 msgstr ""
 
-#, fuzzy, c-format
+#, c-format
 msgid "Database record for line %d (cat = %d, backward direction) not found(direction of line skipped)"
-msgstr "类型为 %d 的记录未找到"
+msgstr "未找到线 %d（cat = %d，反向）的数据库记录（已跳过该线的方向）"
 
 msgid "Cannot add network arc"
 msgstr ""
@@ -6273,13 +6272,13 @@ msgstr ""
 msgid "New vertices: %d"
 msgstr ""
 
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create temporary file <%s>: %s"
-msgstr "找不到临时空文件：%s"
+msgstr "无法创建临时文件<%s>: %s"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to remove temporary file <%s>: %s"
-msgstr "找不到临时空文件：%s"
+msgstr "无法删除临时文件<%s>: %s"
 
 msgid "Reading features..."
 msgstr ""

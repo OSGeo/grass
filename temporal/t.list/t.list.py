@@ -6,7 +6,7 @@
 # AUTHOR(S): Soeren Gebbert
 #
 # PURPOSE: List space time datasets and maps registered in the temporal database
-# COPYRIGHT: (C) 2011-2017, Soeren Gebbert and the GRASS Development Team
+# COPYRIGHT: (C) 2011-2026, Soeren Gebbert and the GRASS Development Team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -152,9 +152,9 @@ def main():
 
     tools = Tools()
 
-    conn = tools.t_connect(flags="p", format="json")
+    conn = tools.t_connect(flags="p", format="json", mapset=".")
 
-    db_exists = conn["driver"] and conn["database"]
+    db_exists = conn[0]["driver"] and conn[0]["database"]
 
     # if no connection is found
     if not db_exists:
