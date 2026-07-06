@@ -113,7 +113,7 @@ from grass.tools import Tools
 def main():
 
     # Get the options
-    type = options["type"]
+    stds_type = options["type"]
     temporal_type = options["temporaltype"]
     columns = options["columns"]
     order = options["order"]
@@ -157,17 +157,21 @@ def main():
     elif not separator:  # output_format == "plain"
         separator = "|"
 
-    tools = Tools()
 
-    conn = tools.t_connect(flags="p", format="json", mapset=".")
+    # Lazy import
+    import grass.temporal as tgis
 
-    db_exists = conn[0]["driver"] and conn[0]["database"]
+    # Make sure the temporal database exists
+    tgis.init()
+
+    sp = tgis.dataset_factory(stds_type, None)
+    dbif = tgis.SQLDatabaseInterfaceConnection(mapsets)
 
     # if no connection is found
-    if not db_exists:
+    if not dbif.tgis_mapsets:
         if output_format == "plain":
             gs.message(
-                _("No temporal database exists in this mapset. No datasets to list.")
+                _("No temporal database found in the requested mapset(s). No datasets to list.")
             )
         with (
             open(outpath, "w")
@@ -178,14 +182,6 @@ def main():
                 out_file.write(json.dumps([], indent=4) + "\n")
         return
 
-    # Lazy import
-    import grass.temporal as tgis
-
-    # Make sure the temporal database exists
-    tgis.init()
-
-    sp = tgis.dataset_factory(type, None)
-    dbif = tgis.SQLDatabaseInterfaceConnection(mapsets)
     dbif.connect()
     first = True
 
@@ -205,7 +201,7 @@ def main():
             time = "absolute time" if ttype == "absolute" else "relative time"
 
             stds_list = tgis.get_dataset_list(
-                type, ttype, columns, where, order, dbif=dbif
+                stds_type, ttype, columns, where, order, dbif=dbif
             )
 
             for key in dbif.tgis_mapsets.keys():
