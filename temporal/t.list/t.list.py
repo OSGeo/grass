@@ -105,7 +105,6 @@ import sys
 from contextlib import nullcontext
 
 import grass.script as gs
-from grass.tools import Tools
 
 ############################################################################
 
@@ -157,7 +156,6 @@ def main():
     elif not separator:  # output_format == "plain"
         separator = "|"
 
-
     # Lazy import
     import grass.temporal as tgis
 
@@ -171,7 +169,9 @@ def main():
     if not dbif.tgis_mapsets:
         if output_format == "plain":
             gs.message(
-                _("No temporal database found in the requested mapset(s). No datasets to list.")
+                _(
+                    "No temporal database found in the requested mapset(s). No datasets to list."
+                )
             )
         with (
             open(outpath, "w")
