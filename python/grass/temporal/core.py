@@ -511,8 +511,6 @@ def get_available_temporal_mapsets(mapsets: str | None = None):
     """
     global c_library_interface, message_interface
 
-    mapsets_list = []
-
     connections = tools.t_connect(flags="p", format="json", mapset=mapsets, quiet=True)
     mapsets_list = [conn for conn in connections if all(conn.values())]
 
