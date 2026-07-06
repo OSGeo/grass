@@ -205,7 +205,7 @@ def main():
             time = "absolute time" if ttype == "absolute" else "relative time"
 
             stds_list = tgis.get_dataset_list(
-                type, ttype, columns, where, order, dbif=dbif, mapsets=mapsets
+                type, ttype, columns, where, order, dbif=dbif
             )
 
             for key in dbif.tgis_mapsets.keys():

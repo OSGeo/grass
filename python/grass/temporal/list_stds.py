@@ -25,7 +25,7 @@ from contextlib import contextmanager
 
 import grass.script as gs
 
-from .core import get_available_temporal_mapsets, get_tgis_message_interface, init_dbif
+from .core import get_tgis_message_interface, init_dbif
 from .datetime_math import time_delta_to_relative_time
 from .factory import dataset_factory
 from .open_stds import open_old_stds
@@ -40,7 +40,6 @@ def get_dataset_list(
     where=None,
     order=None,
     dbif=None,
-    mapsets=None,
 ):
     """Return a list of time stamped maps or space time datasets of a specific
     temporal type that are registered in the temporal database
@@ -57,8 +56,6 @@ def get_dataset_list(
     :param order: A comma separated list of columns to order the
                   datasets by category
     :param dbif: The database interface to be used
-    :param mapsets: A string specifying target mapsets ('.' for current, '*'
-                       for all, or comma-separated names). Defaults to None.
 
     :return: A dictionary with the rows of the SQL query for each
              available mapset
@@ -104,13 +101,11 @@ def get_dataset_list(
     id = None
     sp = dataset_factory(type, id)
 
-    dbif, connection_state_changed = init_dbif(dbif, mapsets)
-
-    mapsets_dict = get_available_temporal_mapsets(mapsets)
+    dbif, connection_state_changed = init_dbif(dbif)
 
     result = {}
 
-    for mapset in mapsets_dict.keys():
+    for mapset in dbif.tgis_mapsets.keys():
         if temporal_type == "absolute":
             table = sp.get_type() + "_view_abs_time"
         else:

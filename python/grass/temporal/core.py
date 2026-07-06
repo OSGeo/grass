@@ -40,7 +40,7 @@ from importlib.util import find_spec
 from pathlib import Path
 
 import grass.script as gs
-from grass.tools import Tools, ToolError
+from grass.tools import Tools
 from grass.pygrass import messages
 from grass.script.utils import decode
 
@@ -513,24 +513,14 @@ def get_available_temporal_mapsets(mapsets: str | None = None):
 
     mapsets_list = []
 
-    try:
-        connections = tools.t_connect(
-            flags="p", format="json", mapset=mapsets, quiet=True
-        )
-        mapsets_list = [
-            conn["mapset"]
-            for conn in connections
-            if conn.get("mapset") and conn.get("driver") and conn.get("database")
-        ]
-    except ToolError as e:
-        message_interface.error(
-            _("Unable to read temporal database connections: {}").format(e)
-        )
+    connections = tools.t_connect(flags="p", format="json", mapset=mapsets, quiet=True)
+    mapsets_list = [conn for conn in connections if all(conn.values())]
 
     tgis_mapsets = {}
 
-    for mapset in mapsets_list:
-        driver = c_library_interface.get_driver_name(mapset)
+    for mapset_data in mapsets_list:
+        mapset = mapset_data["mapset"]
+        driver = mapset_data["driver"]
         database = c_library_interface.get_database_name(mapset)
 
         message_interface.debug(
@@ -1625,14 +1615,11 @@ class DBConnection:
 ###############################################################################
 
 
-def init_dbif(dbif, mapsets: str | None = None):
+def init_dbif(dbif):
     """This method checks if the database interface connection exists,
     if not a new one will be created, connected and True will be returned.
     If the database interface exists but is not connected, the connection
     will be established.
-
-    :param mapsets: An optional string to restrict or expand the database connections
-                       to specific mapsets (passed to SQLDatabaseInterfaceConnection)
 
     :returns: the tuple (dbif, connection_state_changed)
 
@@ -1654,7 +1641,7 @@ def init_dbif(dbif, mapsets: str | None = None):
     connection_state_changed = False
 
     if dbif is None:
-        dbif = SQLDatabaseInterfaceConnection(mapsets)
+        dbif = SQLDatabaseInterfaceConnection()
         dbif.connect()
         connection_state_changed = True
     elif dbif.is_connected() is False:
