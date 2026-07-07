@@ -37,6 +37,9 @@ def test_init_creates_tgis_db_if_not_skipped(simple_mapset):
         assert ciface.available_mapsets() == ["c", "PERMANENT"]
         # Test if the VAR file with the TGIS connection info is created
         assert var_file.exists()
+        varfile_content = var_file.read_text(encoding="utf-8")
+        assert "TGISDB_DRIVER" in varfile_content
+        assert "TGISDB_DATABASE" in varfile_content
         # Test if the TGIS DB is created with content
         assert tgis_db.parent.exists()
         assert tgis_db.exists()
