@@ -27,7 +27,6 @@ import grass.script as gs
 
 from .core import get_tgis_message_interface, init_dbif
 from .datetime_math import time_delta_to_relative_time
-from .factory import dataset_factory
 from .open_stds import open_old_stds
 
 ###############################################################################
@@ -98,18 +97,15 @@ def get_dataset_list(
         >>> check = sp.delete()
 
     """
-    id = None
-    sp = dataset_factory(type, id)
-
     dbif, connection_state_changed = init_dbif(dbif)
 
     result = {}
 
-    for mapset in dbif.tgis_mapsets.keys():
+    for mapset in dbif.tgis_mapsets:
         if temporal_type == "absolute":
-            table = sp.get_type() + "_view_abs_time"
+            table = type + "_view_abs_time"
         else:
-            table = sp.get_type() + "_view_rel_time"
+            table = type + "_view_rel_time"
 
         if columns and columns.find("all") == -1:
             sql = "SELECT " + str(columns) + " FROM " + table
