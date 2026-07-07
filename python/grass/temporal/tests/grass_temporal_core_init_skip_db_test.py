@@ -35,6 +35,11 @@ def test_init_creates_tgis_db_if_not_skipped(simple_mapset):
         tgis.init()
         ciface = tgis.get_tgis_c_library_interface()
         assert ciface.available_mapsets() == ["c", "PERMANENT"]
+        assert tgis.get_tgis_version() == 2
+        assert tgis.get_tgis_backend() == "sqlite"
+        assert tgis.get_enable_mapset_check() is True
+        assert tgis.get_enable_timestamp_write() is True
+        assert tgis.get_sql_template_path().endswith("sql")
         # Test if the VAR file with the TGIS connection info is created
         assert var_file.exists()
         varfile_content = var_file.read_text(encoding="utf-8")
@@ -62,5 +67,10 @@ def test_init_succeeds_without_db_creation(simple_mapset):
         tgis.init(skip_db_init=True)
         first_ciface = tgis.get_tgis_c_library_interface()
         assert first_ciface.available_mapsets() == ["c", "PERMANENT"]
+        assert tgis.get_tgis_version() == 2
+        assert tgis.get_tgis_backend() == "sqlite"
+        assert tgis.get_enable_mapset_check() is True
+        assert tgis.get_enable_timestamp_write() is True
+        assert tgis.get_sql_template_path().endswith("sql")
         assert not var_file.exists()
         assert not tgis_db.exists()
