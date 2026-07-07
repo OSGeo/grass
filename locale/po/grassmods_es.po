@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-20 16:28+0000\n"
+"POT-Creation-Date: 2026-06-27 15:58+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grassmods/es/>\n"
@@ -10297,8 +10297,8 @@ msgid "Raster map with zones to compute statistics for"
 msgstr "Nombre de mapa ráster de etrada al cual se le calcularán las estadísticas"
 
 #, fuzzy
-msgid "Raster map with zones to compute statistics for (needs to be CELL)"
-msgstr "Nombre de mapa ráster de etrada al cual se le calcularán las estadísticas"
+msgid "3D raster map with zones"
+msgstr "Puntos vectoriales"
 
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
 msgstr "Asigna estampa temporal y registra mapas de tipo ráster, vectorial y ráster 3D en un conjunto de datos espacio temporal."
@@ -10464,6 +10464,9 @@ msgstr "Muestra atributos de mapas vectoriales registrados en un conjunto de dat
 
 msgid "select"
 msgstr "seleccionar"
+
+msgid "plain;Plain text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
+msgstr ""
 
 #, fuzzy
 #| msgid "Exports a space time vector dataset as GRASS GIS specific archive file."
@@ -25309,6 +25312,21 @@ msgstr ""
 msgid "Overwrite current settings if initialized"
 msgstr "Sobrescribir configuraciones actuales si ya se ha inicializado"
 
+#, fuzzy
+#| msgid "Name of raster map(s) to include in group"
+msgid "Name of the mapset(s) to print the connection info for"
+msgstr "Nombre del mapa ráster(s) a incluir en el grupo"
+
+#, fuzzy
+#| msgid "'.' for current mapset; '*' for all mapsets in location"
+msgid "'.' for current mapset; '*' for all mapsets in the project. Requires format=json."
+msgstr "'.' para directorio de mapas actual, '*' para todos los directorios de mapas de la localización"
+
+#, fuzzy
+#| msgid "This option requires one column"
+msgid "The mapset option requires format=json."
+msgstr "Esta opción requiere una columna"
+
 msgid "Temporal GIS database connection not defined. Run t.connect."
 msgstr "Conexión de base de datos SIG temporal no definida. Ejecute t.connect."
 
@@ -34375,6 +34393,10 @@ msgstr "Ver imágenes BMP desde el controlador PNG."
 msgid "Image file"
 msgstr "Archivo de imagen"
 
+#, fuzzy
+#~ msgid "Raster map with zones to compute statistics for (needs to be CELL)"
+#~ msgstr "Nombre de mapa ráster de etrada al cual se le calcularán las estadísticas"
+
 #~ msgid "Print current connection parameter in shell style and exit"
 #~ msgstr "Mostrar los parámetros de la conexión actual estilo consola de comandos y salir"
 
@@ -42816,10 +42838,6 @@ msgstr "Archivo de imagen"
 #, fuzzy
 #~ msgid "calibration"
 #~ msgstr "animación"
-
-#, fuzzy
-#~ msgid "categorical map with zones"
-#~ msgstr "Puntos vectoriales"
 
 #, fuzzy
 #~ msgid "centerpoint"

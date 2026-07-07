@@ -550,14 +550,15 @@ def get_available_temporal_mapsets(mapsets: str | None = None):
 ###############################################################################
 
 
-def init(raise_fatal_error: bool = False, skip_db_version_check: bool = False):
-    """This function set the correct database backend from GRASS environmental
-    variables and creates the grass temporal database structure for raster,
-    vector and raster3d maps as well as for the space-time datasets strds,
-    str3ds and stvds in case it does not exist.
+def init(
+    raise_fatal_error: bool = False,
+    skip_db_version_check: bool = False,
+    skip_db_init: bool = False,
+):
+    """Initialize the temporal GIS system.
 
-    Several global variables are initiated and the messenger and C-library
-    interface subprocesses are spawned.
+    This function sets several global variables and spawns the messenger and
+    C-library interface subprocesses.
 
     Re-run this function in case the following GRASS variables change while
     the process runs:
@@ -579,7 +580,14 @@ def init(raise_fatal_error: bool = False, skip_db_version_check: bool = False):
     - GRASS_TGIS_PROFILE (True, False, 1, 0)
     - GRASS_TGIS_RAISE_ON_ERROR (True, False, 1, 0)
 
-    .. warning::
+    If not otherwise requested (skip_db_init), this function will check for
+    the existence of a temporal database and its version in the current mapset.
+    If the database does not exist, it will be created, using the database
+    backend from GRASS environment variables, with the GRASS temporal database
+    structure for raster, vector and raster3d maps as well as for the space-time
+    dataset types strds, str3ds and stvds.
+
+        .. warning::
 
         This functions must be called before any spatio-temporal processing
         can be started
@@ -595,6 +603,14 @@ def init(raise_fatal_error: bool = False, skip_db_version_check: bool = False):
                                    database version check.
                                    Recommended to be used only for
                                    upgrade_temporal_database().
+    :param skip_db_init: Set this True to allow init() to complete
+                         without initializing, (version) checking or creating
+                         a temporal database in the current mapset.
+                         Use this when the calling process only needs the
+                         global TGIS state (backend, mapset, interfaces)
+                         but does not require a temporal database in the
+                         current mapset for operations (like listing
+                         datasets, getting metainformation, ...).
     """
     # We need to set the correct database backend and several global variables
     # from the GRASS mapset specific environment variables of g.gisenv and t.connect
@@ -607,9 +623,6 @@ def init(raise_fatal_error: bool = False, skip_db_version_check: bool = False):
 
     raise_on_error = raise_fatal_error
 
-    # We must run t.connect at first to create the temporal database and to
-    # get the environmental variables
-    gs.run_command("t.connect", flags="c")
     grassenv = gs.gisenv()
 
     new_mapset = grassenv["MAPSET"]
@@ -654,14 +667,11 @@ def init(raise_fatal_error: bool = False, skip_db_version_check: bool = False):
     # Start the C-library interface server
     _init_tgis_c_library_interface()
     msgr = get_tgis_message_interface()
-    msgr.debug(1, "Initiate the temporal database")
 
     msgr.debug(1, ("Raise on error id: %s" % str(raise_on_error)))
 
     ciface = get_tgis_c_library_interface()
     current_mapset = decode(gs.gisenv().get("MAPSET"))
-    driver_string = ciface.get_driver_name(current_mapset)
-    database_string = ciface.get_database_name(current_mapset)
 
     # Set the mapset check and the timestamp write
     if "TGIS_DISABLE_MAPSET_CHECK" in grassenv:
@@ -679,6 +689,17 @@ def init(raise_fatal_error: bool = False, skip_db_version_check: bool = False):
         ):
             enable_timestamp_write = False
             msgr.warning("TGIS_DISABLE_TIMESTAMP_WRITE is True")
+
+    if skip_db_init:
+        return
+
+    msgr.debug(1, "Initiate the temporal database")
+    # We must run t.connect at first to create the temporal database and to
+    # get the environmental variables
+    gs.run_command("t.connect", flags="c")
+
+    driver_string = ciface.get_driver_name(current_mapset)
+    database_string = ciface.get_database_name(current_mapset)
 
     if driver_string is not None and driver_string != "":
         driver_string = decode(driver_string)

@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-20 16:28+0000\n"
+"POT-Creation-Date: 2026-06-27 15:58+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Italian <https://weblate.osgeo.org/projects/grass-gis/grassmods/it/>\n"
@@ -10226,8 +10226,8 @@ msgid "Raster map with zones to compute statistics for"
 msgstr "Mappa base da quantizzare"
 
 #, fuzzy
-msgid "Raster map with zones to compute statistics for (needs to be CELL)"
-msgstr "Mappa base da quantizzare"
+msgid "3D raster map with zones"
+msgstr "Punti vettoriale"
 
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
 msgstr "Assegna timestamp e registra mappe raster, vettoriali e raster3d in un dataset spazio tempo"
@@ -10392,6 +10392,9 @@ msgid "Prints attributes of vector maps registered in a space time vector datase
 msgstr ""
 
 msgid "select"
+msgstr ""
+
+msgid "plain;Plain text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
 msgstr ""
 
 msgid "Exports a space time vector dataset as GRASS specific archive file."
@@ -25143,6 +25146,19 @@ msgstr ""
 msgid "Overwrite current settings if initialized"
 msgstr ""
 
+#, fuzzy
+#| msgid "Name of raster map(s) to include in group"
+msgid "Name of the mapset(s) to print the connection info for"
+msgstr "Nome del/i raster da includere nel gruppo"
+
+msgid "'.' for current mapset; '*' for all mapsets in the project. Requires format=json."
+msgstr ""
+
+#, fuzzy
+#| msgid "This option requires one column"
+msgid "The mapset option requires format=json."
+msgstr "Quest'opzione richiede una colonna"
+
 msgid "Temporal GIS database connection not defined. Run t.connect."
 msgstr ""
 
@@ -34125,6 +34141,10 @@ msgstr "Visualizza immagini BMP dal driver PNG."
 msgid "Image file"
 msgstr "File immagine"
 
+#, fuzzy
+#~ msgid "Raster map with zones to compute statistics for (needs to be CELL)"
+#~ msgstr "Mappa base da quantizzare"
+
 #~ msgid "Time used for iterations [minutes]"
 #~ msgstr "Tempo usato per le iterazioni [minuti]"
 
@@ -39922,10 +39942,6 @@ msgstr "File immagine"
 #, fuzzy
 #~ msgid "calibration"
 #~ msgstr "Decorazione"
-
-#, fuzzy
-#~ msgid "categorical map with zones"
-#~ msgstr "Punti vettoriale"
 
 #, fuzzy
 #~ msgid "centerpoint"
