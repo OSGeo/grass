@@ -1,5 +1,4 @@
-"""
-Name:        r.reclass.area  test
+"""Name:        r.reclass.area  test
 Purpose:    Tests  r.reclass.area.
 
 Author:     Shubham Sharma, Google Code-in 2018
@@ -36,159 +35,194 @@ class TestReclassArea(TestCase):
             name=cls.map_list,
         )
 
-    def test_reclassGreater(self):
-        """Testing r.reclass.area with greater (old mode)."""
+    def test_reclass_greater(self) -> None:
+        """Testing r.reclass.area with method reclass and greater (old mode)."""
+        output_map = f"{self.output}_greater"
+        ref_max = 946
+        ref_min = 217
         self.assertModule(
             "r.reclass.area",
             input=self.input,
-            output=self.output + "Greater",
+            output=output_map,
             value=self.value,
             mode="greater",
             method="reclass",
         )
-        self.map_list.append(self.output + "Greater")
+        self.map_list.append(output_map)
         self.assertRasterMinMax(
-            map=self.output + "Greater",
-            refmin=200,
-            refmax=1000,
-            msg="Range of data: min = 200  max = 1000",
+            map=output_map,
+            refmin=ref_min,
+            refmax=ref_max,
+            msg=f"Range of data: min = {ref_min}  max = {ref_max}",
         )
 
-    def test_reclass_lower(self):
-        """Testing r.reclass.area with lower."""
+    def test_reclass_lower(self) -> None:
+        """Testing r.reclass.area with method reclass and lower."""
+        output_map = f"{self.output}_lower"
+        ref_max = 1000
+        ref_min = 200
         self.assertModule(
             "r.reclass.area",
             input=self.input,
-            output=f"{self.output}_lower",
+            output=output_map,
             lower=self.lower,
             method="reclass",
         )
-        self.map_list.append(f"{self.output}_lower")
+        self.map_list.append(output_map)
         self.assertRasterMinMax(
-            map=f"{self.output}_lower",
-            refmin=200,
-            refmax=1000,
-            msg="Range of data: min = 200  max = 1000",
+            map=output_map,
+            refmin=ref_min,
+            refmax=ref_max,
+            msg=f"Range of data: min = {ref_min}  max = {ref_max}",
         )
 
-    def test_reclassLesser(self):
-        """Testing r.reclass.area with lesser (old mode)."""
+    def test_reclass_lesser(self) -> None:
+        """Testing r.reclass.area with method reclass and lesser (old mode)."""
+        output_map = f"{self.output}_lesser"
+        ref_max = 1000
+        ref_min = 900
         self.assertModule(
             "r.reclass.area",
             input=self.input,
-            output=self.output + "Lesser",
+            output=output_map,
             value=self.value,
             mode="lesser",
             method="reclass",
         )
-        self.map_list.append(self.output + "Lesser")
+        self.map_list.append(output_map)
         self.assertRasterMinMax(
-            map=self.output + "Lesser",
-            refmin=900,
-            refmax=1000,
-            msg="Range of data: min = 900  max = 1000",
+            map=output_map,
+            refmin=ref_min,
+            refmax=ref_max,
+            msg=f"Range of data: min = {ref_min}  max = {ref_max}",
         )
 
-    def test_reclass_upper(self):
-        """Testing r.reclass.area with upper."""
+    def test_reclass_upper(self) -> None:
+        """Testing r.reclass.area with method reclass and upper."""
+        output_map = f"{self.output}_upper"
+        ref_max = 1000
+        ref_min = 262
         self.assertModule(
             "r.reclass.area",
             input=self.input,
-            output=f"{self.output}_upper",
+            output=output_map,
             upper=self.upper,
             method="reclass",
         )
-        self.map_list.append(f"{self.output}_upper")
+        self.map_list.append(output_map)
         self.assertRasterMinMax(
-            map=f"{self.output}_upper",
-            refmin=262,
-            refmax=1000,
-            msg="Range of data: min = 262  max = 1000",
+            map=output_map,
+            refmin=ref_min,
+            refmax=ref_max,
+            msg=f"Range of data: min = {ref_min}  max = {ref_max}",
         )
 
-    def test_reclass_lower_upper(self):
-        """Testing r.reclass.area with lower and upper."""
+    def test_reclass_lower_upper(self) -> None:
+        """Testing r.reclass.area with method reclass and lower and upper."""
+        output_map = f"{self.output}_lower_upper"
+        ref_max = 1000
+        ref_min = 200
         self.assertModule(
             "r.reclass.area",
             input=self.input,
-            output=f"{self.output}_lower_upper",
+            output=output_map,
             lower=self.lower,
             upper=self.upper,
             method="reclass",
         )
-        self.map_list.append(f"{self.output}_lower_upper")
+        self.map_list.append(output_map)
         self.assertRasterMinMax(
-            map=f"{self.output}_lower_upper",
-            refmin=200,
-            refmax=1000,
-            msg="Range of data: min = 200  max = 1000",
+            map=output_map,
+            refmin=ref_min,
+            refmax=ref_max,
+            msg=f"Range of data: min = {ref_min}  max = {ref_max}",
         )
 
-    def test_rmarea_lower(self):
-        """Testing r.reclass.area with rmarea and lower."""
+    def test_rmarea_lower(self) -> None:
+        """Testing r.reclass.area with method rmarea and lower."""
+        output_map = f"{self.output}_rmarea_lower"
+        ref_max = 946
+        ref_min = 217
         self.assertModule(
             "r.reclass.area",
             input=self.input,
-            output=f"{self.output}_rmarea_lower",
+            output=output_map,
             lower=self.lower,
             method="rmarea",
         )
-        self.map_list.append(f"{self.output}_rmarea_lower")
+        self.map_list.append(output_map)
         self.assertRasterMinMax(
-            map=f"{self.output}_rmarea_lower",
-            refmin=217,
-            refmax=946,
-            msg="Range of data: min = 1  max = 11",
+            map=output_map,
+            refmin=ref_min,
+            refmax=ref_max,
+            msg=f"Range of data: min = {ref_min}  max = {ref_max}",
         )
 
-    def test_rmarea_upper(self):
-        """Testing r.reclass.area with rmarea and upper."""
+    def test_rmarea_upper(self) -> None:
+        """Testing r.reclass.area with method rmarea and upper."""
+        output_map = f"{self.output}_rmarea_upper"
+        ref_max = 948
+        ref_min = 262
         self.assertModule(
             "r.reclass.area",
             input=self.input,
-            output=f"{self.output}_rmarea_upper",
+            output=output_map,
             upper=self.upper,
             method="rmarea",
         )
-        self.map_list.append(f"{self.output}_rmarea_upper")
+        self.map_list.append(output_map)
         self.assertRasterMinMax(
-            map=f"{self.output}_rmarea_upper",
-            refmin=262,
-            refmax=948,
-            msg="Range of data: min = 1  max = 13",
+            map=output_map,
+            refmin=ref_min,
+            refmax=ref_max,
+            msg=f"Range of data: min = {ref_min}  max = {ref_max}",
         )
 
-    def test_rmaea_lower_upper_vector(self):
-        """Testing r.reclass.area with rmarea, lower and upper."""
+    def test_rmarea_lower_upper_vector(self) -> None:
+        """Testing r.reclass.area with method rmarea, lower and upper."""
+        output_map = f"{self.output}_rmarea_lower_upper"
         self.assertModule(
             "r.reclass.area",
             flags="vd",
             input=self.input,
-            output=f"{self.output}_rmarea_lower_upper",
+            output=output_map,
             lower=self.lower,
             upper=self.upper,
             method="rmarea",
         )
-        self.map_list.append(f"{self.output}_rmarea_lower_upper")
+        self.map_list.append(output_map)
+        self.assertVectorExists(
+            output_map,
+            msg=f"Output map {output_map} not found.",
+        )
+        self.assertVectorFitsTopoInfo(
+            vector=output_map,
+            reference={"areas": 11, "primitives": 43},
+            msg=f"Toplogy of output map {output_map} does not match reference.",
+        )
 
-    def test_rmaea_lower_upper_vector(self):
-        """Testing r.reclass.area with rmarea, lower and upper."""
+    def test_rmarea_lower_upper_vector_basins(self) -> None:
+        """Testing r.reclass.area with method rmarea, lower and upper and basins input."""
+        output_map = f"{self.output}_rmarea_lower_upper_basin"
         self.assertModule(
             "r.reclass.area",
             flags="vd",
             input="basin",
-            output=f"{self.output}_rmarea_lower_upper",
+            output=output_map,
             lower=self.lower,
             upper=self.upper,
             method="rmarea",
         )
-        self.map_list.append(f"{self.output}_rmarea_lower_upper")
-        # self.assertRasterMinMax(
-        #    map=f"{self.output}_rmarea_lower_upper",
-        #    refmin=200,
-        #    refmax=1000,
-        #    msg="Range of data: min = 200  max = 1000",
-        # )
+        self.map_list.append(output_map)
+        self.assertVectorExists(
+            output_map,
+            msg=f"Output map {output_map} not found.",
+        )
+        self.assertVectorFitsTopoInfo(
+            vector=output_map,
+            reference={"areas": 14, "primitives": 82},
+            msg=f"Toplogy of output map {output_map} does not match reference.",
+        )
 
 
 if __name__ == "__main__":
