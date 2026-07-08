@@ -523,6 +523,14 @@ class DataCatalogTree(TreeView):
 
         dataset_name = dataset_node.data["name"]
         mapset_name = mapset_node.data["name"]
+
+        # Traverse the tree via node.parent instead of using
+        # self.selected_location[0] or self.selected_grassdb[0].
+        # In standalone mode (when a user runs `g.gui.datacatalog`),
+        # the selection arrays are empty and will throw an IndexError.
+        location_node = mapset_node.parent
+        grassdb_node = location_node.parent
+
         ds_type = dataset_node.data["type"]
 
         t_map = {
@@ -533,8 +541,8 @@ class DataCatalogTree(TreeView):
         list_cmd, child_type = t_map[ds_type]
 
         gisrc, env = gs.create_environment(
-            self.selected_grassdb[0].data["name"],
-            self.selected_location[0].data["name"],
+            grassdb_node.data["name"],
+            location_node.data["name"],
             mapset_name,
         )
 
@@ -542,7 +550,7 @@ class DataCatalogTree(TreeView):
         try:
             items = getattr(tools, list_cmd)(
                 input=f"{dataset_name}@{mapset_name}",
-                columns="name",
+                columns="id,name",
                 format="json",
                 quiet=True,
                 env=env,
@@ -552,7 +560,11 @@ class DataCatalogTree(TreeView):
                 for item in items["data"]:
                     self._model.AppendNode(
                         parent=dataset_node,
-                        data={"type": child_type, "name": item.get("name", "unknown")},
+                        data={
+                            "type": child_type,
+                            "name": item["name"],
+                            "map_id": item["id"],
+                        },
                     )
         except ToolError as e:
             Debug.msg(1, "Lazy load failed: {0}".format(e))
@@ -969,9 +981,9 @@ class DataCatalogTree(TreeView):
             "grassdb": MetaIcon(img="grassdb").GetBitmap(bmpsize),
             "location": MetaIcon(img="location").GetBitmap(bmpsize),
             "mapset": MetaIcon(img="mapset").GetBitmap(bmpsize),
-            "strds": MetaIcon(img="mapset").GetBitmap(bmpsize),
-            "stvds": MetaIcon(img="mapset").GetBitmap(bmpsize),
-            "str3ds": MetaIcon(img="mapset").GetBitmap(bmpsize),
+            "strds": MetaIcon(img="STRDS").GetBitmap(bmpsize),
+            "stvds": MetaIcon(img="STVDS").GetBitmap(bmpsize),
+            "str3ds": MetaIcon(img="STR3DS").GetBitmap(bmpsize),
             "raster": MetaIcon(img="raster").GetBitmap(bmpsize),
             "vector": MetaIcon(img="vector").GetBitmap(bmpsize),
             "raster_3d": MetaIcon(img="raster3d").GetBitmap(bmpsize),
@@ -993,7 +1005,7 @@ class DataCatalogTree(TreeView):
             type = item.data["type"]
             if type in {"raster", "raster_3d", "vector"}:
                 if item.parent.data["type"] in {"strds", "stvds", "str3ds"}:
-                    self.selected_layer.append(None)
+                    self.selected_layer.append(item)
                     self.selected_stds.append(None)
                     self.selected_stds_map.append(item)
                     mixed.append("stds_map")
@@ -1060,6 +1072,8 @@ class DataCatalogTree(TreeView):
 
         if not self.selected_layer and not self.selected_stds:
             self._popupMenuEmpty()
+        elif self.selected_stds_map[0]:
+            self._popupMenuStdsMap()
         elif self.selected_layer[0]:
             self._popupMenuLayer()
         elif self.selected_stds[0] and len(self.selected_stds) == 1:
@@ -1070,8 +1084,6 @@ class DataCatalogTree(TreeView):
             and not self.selected_layer[0]
         ):
             self._popupMenuMultipleStds()
-        elif self.selected_stds_map[0]:
-            self._popupMenuStdsMap()
         elif self.selected_mapset[0] and len(self.selected_mapset) == 1:
             self._popupMenuMapset()
         elif (
@@ -1147,7 +1159,7 @@ class DataCatalogTree(TreeView):
             self.RefreshNode(node, recursive=True)
 
         if node.data["type"] in {"strds", "stvds", "str3ds"} and not node.children:
-            self._reloadDatasetNode(node, self.selected_mapset[0])
+            self._reloadDatasetNode(node, node.parent)
             self.RefreshNode(node, recursive=True)
 
         if node.data["type"] in {
@@ -2043,12 +2055,6 @@ class DataCatalogTree(TreeView):
         # Update user's settings
         self._saveGrassDBs()
 
-    def OnDisplayStdsMap(self, event):
-        """Quickly display maps selected inside an STDS"""
-        self.selected_layer = self.selected_stds_map
-        self.DisplayLayer()
-        self.selected_layer = []
-
     def OnDisplayLayer(self, event):
         """
         Display layer in current graphics view
@@ -2062,12 +2068,12 @@ class DataCatalogTree(TreeView):
         for i in range(len(self.selected_layer)):
             if self.selected_layer[i] is None:
                 continue
-            name = (
-                self.selected_layer[i].data["name"]
-                + "@"
-                + self.selected_mapset[i].data["name"]
+            item_data = self.selected_layer[i].data
+            name = item_data.get(
+                "map_id", f"{item_data['name']}@{self.selected_mapset[i].data['name']}"
             )
-            names[self.selected_layer[i].data["type"]].append(name)
+
+            names[item_data["type"]].append(name)
             all_names.append(name)
         # if self.selected_location[0].data['name'] == gisenv()['LOCATION_NAME'] and
         # self.selected_mapset[0]:
@@ -2319,13 +2325,12 @@ class DataCatalogTree(TreeView):
                 cmd = ["v.info"]
             elif self.selected_layer[i].data["type"] == "raster_3d":
                 cmd = ["r3.info"]
-            cmd.append(
-                "map=%s@%s"
-                % (
-                    self.selected_layer[i].data["name"],
-                    self.selected_mapset[i].data["name"],
-                )
+            map_name = self.selected_layer[i].data.get(
+                "map_id",
+                f"{self.selected_layer[i].data['name']}@{self.selected_mapset[i].data['name']}",
             )
+
+            cmd.append(f"map={map_name}")
 
             gisrc, env = gs.create_environment(
                 self.selected_grassdb[i].data["name"],
@@ -2388,13 +2393,11 @@ class DataCatalogTree(TreeView):
             do = wx.TextDataObject()
             text = []
             for i in range(len(self.selected_layer)):
-                text.append(
-                    "%s@%s"
-                    % (
-                        self.selected_layer[i].data["name"],
-                        self.selected_mapset[i].data["name"],
-                    )
+                map_name = self.selected_layer[i].data.get(
+                    "map_id",
+                    f"{self.selected_layer[i].data['name']}@{self.selected_mapset[i].data['name']}",
                 )
+                text.append(map_name)
             do.SetText(",".join(text))
             wx.TheClipboard.SetData(do)
             wx.TheClipboard.Close()
@@ -2532,9 +2535,24 @@ class DataCatalogTree(TreeView):
                 stds_groups[stds_node] = []
             stds_groups[stds_node].append(map_node)
 
-        self.showNotification.emit(
-            message=_("Unregistering {c} maps...").format(c=len(self.selected_stds_map))
-        )
+        num_maps = len(self.selected_stds_map)
+        if num_maps == 1:
+            question = _("Do you really want to unregister map <{m}>?").format(
+                m=self.selected_stds_map[0].data["name"]
+            )
+        else:
+            question = _("Do you really want to unregister {n} maps?").format(
+                n=num_maps
+            )
+
+        if self._confirmDialog(question, title=_("Unregister map")) != wx.ID_YES:
+            return
+
+        if num_maps == 1:
+            msg = _("Unregistering map...")
+        else:
+            msg = _("Unregistering {c} maps...").format(c=num_maps)
+        self.showNotification.emit(message=msg)
 
         success_count = 0
 
@@ -2547,7 +2565,8 @@ class DataCatalogTree(TreeView):
             stds_name = stds_node.data["name"]
             map_type = map_nodes[0].data["type"]
 
-            maps = ",".join([n.data["name"] for n in map_nodes])
+            maps = ",".join([n.data["map_id"] for n in map_nodes])
+
             gisrc, env = gs.create_environment(
                 grassdb_node.data["name"],
                 location_node.data["name"],
@@ -2556,7 +2575,7 @@ class DataCatalogTree(TreeView):
 
             unregistered, cmd = self._runCommand(
                 "t.unregister",
-                input=f"{stds_name}@{mapset_name}",
+                input=stds_name,
                 type=map_type,
                 maps=maps,
                 env=env,
@@ -2571,53 +2590,35 @@ class DataCatalogTree(TreeView):
                 self.RefreshNode(stds_node, recursive=True)
 
         if success_count > 0:
-            self.showNotification.emit(
-                message=_("Successfully unregistered {c} maps").format(c=success_count)
-            )
+            if success_count == 1:
+                msg = _("Successfully unregistered map")
+            else:
+                msg = _("Successfully unregistered {c} maps").format(c=success_count)
+            self.showNotification.emit(message=msg)
             self.UnselectAll()
 
-    def OnDuplicateStds(self, event):
-        """Duplicate temporal dataset natively using t.copy"""
-        old_name = self.selected_stds[0].data["name"]
-        stds_type = self.selected_stds[0].data["type"]
-        mapset = self.selected_mapset[0].data["name"]
+    def OnPlotTimeline(self, event):
+        """Launch g.gui.timeline for one or more selected datasets"""
+        inputs = [
+            f"{n.data['name']}@{m.data['name']}"
+            for n, m in zip(self.selected_stds, self.selected_mapset, strict=True)
+        ]
+        self._giface.RunCmd(["g.gui.timeline", f"inputs={','.join(inputs)}"])
 
-        gisrc, env = gs.create_environment(
-            self.selected_grassdb[0].data["name"],
-            self.selected_location[0].data["name"],
-            mapset,
+    def OnModifyMetadata(self, event):
+        """Launch t.support dialog to modify dataset metadata"""
+        stds_node = self.selected_stds[0]
+        mapset_node = self.selected_mapset[0]
+        stds_type = stds_node.data["type"]
+
+        self._giface.RunCmd(
+            [
+                "t.support",
+                "--ui",
+                f"input={stds_node.data['name']}@{mapset_node.data['name']}",
+                f"type={stds_type}",
+            ]
         )
-
-        new_name = self._getNewMapName(
-            _("New name"),
-            _("Duplicate dataset"),
-            f"{old_name}_copy",
-            env=env,
-            mapset=mapset,
-            element=stds_type,
-        )
-
-        if new_name:
-            label = _("Duplicating dataset <{name}>...").format(name=old_name)
-            self.showNotification.emit(message=label)
-
-            copied, cmd = self._runCommand(
-                "t.copy", input=old_name, output=new_name, type=stds_type, env=env
-            )
-
-            if copied == 0:
-                self.showNotification.emit(
-                    message=_("{cmd} -- completed").format(cmd=cmd)
-                )
-                self._giface.grassdbChanged.emit(
-                    grassdb=self.selected_grassdb[0].data["name"],
-                    location=self.selected_location[0].data["name"],
-                    mapset=mapset,
-                    element=stds_type,
-                    map=new_name,
-                    action="new",
-                )
-        gs.try_remove(gisrc)
 
     def OnMergeStds(self, event):
         """Launch t.merge dialog pre-filled with selected datasets"""
@@ -2724,10 +2725,14 @@ class DataCatalogTree(TreeView):
         self.Bind(wx.EVT_MENU, self.OnUnregisterStds, item)
         item.Enable(is_active)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("Duplicate dataset"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Modify metadata"))
         menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, self.OnDuplicateStds, item)
+        self.Bind(wx.EVT_MENU, self.OnModifyMetadata, item)
         item.Enable(is_active)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Plot &timeline"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnPlotTimeline, item)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename dataset"))
         menu.AppendItem(item)
@@ -2749,16 +2754,39 @@ class DataCatalogTree(TreeView):
     def _popupMenuStdsMap(self):
         """Create popup menu for maps inside a temporal dataset"""
         menu = Menu()
+        genv = gisenv()
+        currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Display map(s)"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Copy &name"))
         menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, self.OnDisplayStdsMap, item)
-        if self.selected_location[0].data["name"] != gisenv()["LOCATION_NAME"]:
-            item.Enable(False)
+        self.Bind(wx.EVT_MENU, self.OnCopyName, item)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Unregister map(s)"))
+        if not isinstance(self._giface, StandaloneGrassInterface):
+            if all(
+                each.data["name"] == genv["LOCATION_NAME"]
+                for each in self.selected_location
+            ):
+                if len(self.selected_layer) > 1:
+                    item = wx.MenuItem(menu, wx.ID_ANY, _("&Display layers"))
+                else:
+                    item = wx.MenuItem(menu, wx.ID_ANY, _("&Display layer"))
+                menu.AppendItem(item)
+                self.Bind(wx.EVT_MENU, self.OnDisplayLayer, item)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Show &metadata"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnMetadata, item)
+
+        menu.AppendSeparator()
+
+        if len(self.selected_layer) > 1:
+            item = wx.MenuItem(menu, wx.ID_ANY, _("&Unregister maps"))
+        else:
+            item = wx.MenuItem(menu, wx.ID_ANY, _("&Unregister map"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnUnregisterStdsMap, item)
+        if not currentMapset:
+            item.Enable(False)
 
         self.PopupMenu(menu)
         menu.Destroy()
@@ -3031,12 +3059,16 @@ class DataCatalogTree(TreeView):
         """Create popup menu for multiple selected space time datasets"""
         menu = Menu()
 
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Plot &timeline"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnPlotTimeline, item)
+
         try:
             path_output = tools.g_mapsets(format="json", flags="p", quiet=True)
-            accessible_mapsets = set(path_output["mapsets"])
+            accessible = set(path_output["mapsets"])
         except ToolError as e:
             Debug.msg(1, f"Failed to read search path: {e}")
-            accessible_mapsets = set()
+            accessible = set()
 
         curr_loc = (
             self.current_location_node.data["name"]
@@ -3046,7 +3078,7 @@ class DataCatalogTree(TreeView):
 
         # Must be same location (by name) AND in the search path
         is_mergeable = all(
-            loc.data["name"] == curr_loc and m.data["name"] in accessible_mapsets
+            loc.data["name"] == curr_loc and m.data["name"] in accessible
             for loc, m in zip(self.selected_location, self.selected_mapset, strict=True)
         )
 
