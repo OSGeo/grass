@@ -784,6 +784,32 @@ int main(int argc, char **argv)
         cell_type = FCELL_TYPE;
     cell_size = Rast_cell_size(cell_type);
 
+    /* Parallel input reads: decide the read-thread count here, in the INPUT
+     * env, so the mask guard checks the source mapset's mask (the mask that
+     * would apply to Rast_get_row on fdi). Rast_disable_omp_on_mask returns 1
+     * (serial) if a mask is present or without OpenMP, and does NOT touch the
+     * thread count when no mask exists (lib/raster/mask_info.c:226-231), so the
+     * compute region's threads are unperturbed in the common case. When
+     * read_nprocs > 1 we open that many FRESH read fds (one per thread); fdi is
+     * used only by the serial fallback.
+     * INFERRED-safe (not yet runtime-verified; the gate converts it):
+     * concurrent Rast_open_old fds on the same map across locations is sound
+     * from the r.neighbors same-location precedent (in_fd[t]) plus the Stage 1
+     * fcb analysis (each fd carries its own cur_row/data/data_fd; reads depend
+     * only on the fcb and R__.rd_window). */
+#ifdef _OPENMP
+    int want_nprocs = omp_get_max_threads();
+#else
+    int want_nprocs = 1;
+#endif
+    int read_nprocs = Rast_disable_omp_on_mask(want_nprocs);
+    int *fd_read = NULL;
+    if (read_nprocs > 1) {
+        fd_read = G_malloc((size_t)read_nprocs * sizeof(int));
+        for (int t = 0; t < read_nprocs; t++)
+            fd_read[t] = Rast_open_old(inmap->answer, setname);
+    }
+
     /* Back to the output location: set output window, init transform, open
      * output map. Both fds now stay open; rd_window/wr_window are set and
      * survive env switches, so reads/writes use the right windows throughout.
@@ -861,11 +887,35 @@ int main(int argc, char **argv)
             strip = G_malloc((size_t)strip_rows * incellhd.cols * cell_size);
             double t0 = rproj_wtime();
             G_switch_env(); /* -> input */
-            for (int r = imin; r <= imax; r++)
-                Rast_get_row(fdi,
-                             (unsigned char *)strip +
-                                 (size_t)(r - imin) * incellhd.cols * cell_size,
-                             r, cell_type);
+            if (read_nprocs > 1) {
+#ifdef _OPENMP
+                /* Parallel read: each thread reads a contiguous, disjoint
+                 * block of strip rows (schedule(static)) through its OWN fd
+                 * into its own disjoint strip slice (slice = row r - imin).
+                 * No two threads share an fd or a strip row. */
+#pragma omp parallel num_threads(read_nprocs)
+                {
+                    int t = omp_get_thread_num();
+#pragma omp for schedule(static)
+                    for (int r = imin; r <= imax; r++)
+                        Rast_get_row(fd_read[t],
+                                     (unsigned char *)strip +
+                                         (size_t)(r - imin) * incellhd.cols *
+                                             cell_size,
+                                     r, cell_type);
+                }
+#endif
+            }
+            else {
+                /* Serial fallback (nprocs==1, mask present, or no OpenMP):
+                 * original loop, unchanged, through fdi. */
+                for (int r = imin; r <= imax; r++)
+                    Rast_get_row(fdi,
+                                 (unsigned char *)strip + (size_t)(r - imin) *
+                                                              incellhd.cols *
+                                                              cell_size,
+                                 r, cell_type);
+            }
             G_switch_env(); /* -> output */
             t_fill += rproj_wtime() - t0;
         }
@@ -950,6 +1000,11 @@ int main(int argc, char **argv)
     /* Close input map in its own env, then the output map. */
     G_switch_env(); /* -> input */
     Rast_close(fdi);
+    if (fd_read) {
+        for (int t = 0; t < read_nprocs; t++)
+            Rast_close(fd_read[t]);
+        G_free(fd_read);
+    }
     G_switch_env(); /* -> output */
     Rast_close(fdo);
 
