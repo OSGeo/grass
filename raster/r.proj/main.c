@@ -66,7 +66,18 @@
 #include <grass/gjson.h>
 #include "r.proj.h"
 
+#ifdef _OPENMP
 #include <omp.h>
+static inline double rproj_wtime(void)
+{
+    return omp_get_wtime();
+}
+#else
+static inline double rproj_wtime(void)
+{
+    return 0.0;
+}
+#endif
 
 /* modify this table to add new methods */
 struct menu menu[] = {
@@ -811,7 +822,7 @@ int main(int argc, char **argv)
          * strip plus the band's output buffer fit the cap. band_input_row_span
          * is RE-RUN for every candidate height -- the previous band's span is
          * never reused. */
-        double ts = omp_get_wtime();
+        double ts = rproj_wtime();
         int band_orows = outcellhd.rows - obr0;
         int imin = 0, imax = -1;
         for (;;) {
@@ -834,7 +845,7 @@ int main(int argc, char **argv)
                     strip_rows, cap_mb);
             band_orows = (band_orows + 1) / 2; /* halve (round up), re-sample */
         }
-        t_size += omp_get_wtime() - ts;
+        t_size += rproj_wtime() - ts;
 
         int obr1 = obr0 + band_orows;
         int strip_rows = imax - imin + 1;
@@ -848,7 +859,7 @@ int main(int argc, char **argv)
         void *strip = NULL;
         if (strip_rows > 0) {
             strip = G_malloc((size_t)strip_rows * incellhd.cols * cell_size);
-            double t0 = omp_get_wtime();
+            double t0 = rproj_wtime();
             G_switch_env(); /* -> input */
             for (int r = imin; r <= imax; r++)
                 Rast_get_row(fdi,
@@ -856,7 +867,7 @@ int main(int argc, char **argv)
                                  (size_t)(r - imin) * incellhd.cols * cell_size,
                              r, cell_type);
             G_switch_env(); /* -> output */
-            t_fill += omp_get_wtime() - t0;
+            t_fill += rproj_wtime() - t0;
         }
 
         /* Per-band output buffer, lock-free disjoint row slots (band-relative
@@ -864,7 +875,7 @@ int main(int argc, char **argv)
         void *band_out =
             G_malloc((size_t)band_orows * outcellhd.cols * cell_size);
 
-        double t1 = omp_get_wtime();
+        double t1 = rproj_wtime();
         /* Each band runs one parallel region. This is not nested parallelism:
          * the "omp for" below does not create a second thread team, it only
          * divides the band's output rows among the threads that this "omp
@@ -914,17 +925,17 @@ int main(int argc, char **argv)
             proj_destroy(tproj_local.pj);
             proj_context_destroy(thread_ctx);
         }
-        t_compute += omp_get_wtime() - t1;
+        t_compute += rproj_wtime() - t1;
 
         /* Serial in-order write of the band's rows (Rast_put_row sequential).
          */
-        double t2 = omp_get_wtime();
+        double t2 = rproj_wtime();
         for (row = obr0; row < obr1; row++)
             Rast_put_row(fdo,
                          (unsigned char *)band_out +
                              (size_t)(row - obr0) * outcellhd.cols * cell_size,
                          cell_type);
-        t_write += omp_get_wtime() - t2;
+        t_write += rproj_wtime() - t2;
 
         G_percent(obr1, outcellhd.rows, 5);
 
@@ -934,9 +945,9 @@ int main(int argc, char **argv)
         obr0 = obr1;
     }
 
-    G_message("PHASE_TIMERS size=%.4f fill=%.4f compute=%.4f write=%.4f "
-              "bands=%d",
-              t_size, t_fill, t_compute, t_write, n_bands);
+    G_debug(1,
+            "PHASE_TIMERS size=%.4f fill=%.4f compute=%.4f write=%.4f bands=%d",
+            t_size, t_fill, t_compute, t_write, n_bands);
 
     /* Close input map in its own env, then the output map. */
     G_switch_env(); /* -> input */
