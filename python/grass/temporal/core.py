@@ -40,12 +40,14 @@ from importlib.util import find_spec
 from pathlib import Path
 
 import grass.script as gs
+from grass.tools import Tools
 from grass.pygrass import messages
 from grass.script.utils import decode
 
 from .c_libraries_interface import CLibrariesInterface
 
 
+tools = Tools()
 # Import all supported database backends (sqlite3 imported above)
 # Ignore import errors since they are checked later
 
@@ -497,21 +499,26 @@ def stop_subprocesses() -> None:
 atexit.register(stop_subprocesses)
 
 
-def get_available_temporal_mapsets():
-    """Return a list of of mapset names with temporal database driver and names
-    that are accessible from the current mapset.
+def get_available_temporal_mapsets(mapsets: str | None = None):
+    """Return a list of of mapset names with temporal database driver and names.
+
+    :param mapsets: A string specifying target mapsets ('.' for current, '*'
+                       for all mapsets in the location, or comma-separated names).
+                       If None, defaults to the current search path.
 
     :returns: A dictionary, mapset names are keys, the tuple (driver,
               database) are the values
     """
     global c_library_interface, message_interface
 
-    mapsets = c_library_interface.available_mapsets()
+    connections = tools.t_connect(flags="p", format="json", mapset=mapsets, quiet=True)
+    mapsets_list = [conn for conn in connections if all(conn.values())]
 
     tgis_mapsets = {}
 
-    for mapset in mapsets:
-        driver = c_library_interface.get_driver_name(mapset)
+    for mapset_data in mapsets_list:
+        mapset = mapset_data["mapset"]
+        driver = mapset_data["driver"]
         database = c_library_interface.get_database_name(mapset)
 
         message_interface.debug(
@@ -1098,8 +1105,8 @@ def _create_tgis_metadata_table(content, dbif=None) -> None:
 
 
 class SQLDatabaseInterfaceConnection:
-    def __init__(self) -> None:
-        self.tgis_mapsets = get_available_temporal_mapsets()
+    def __init__(self, mapsets: str | None = None) -> None:
+        self.tgis_mapsets = get_available_temporal_mapsets(mapsets)
         self.current_mapset = get_current_mapset()
         self.connections = {}
         self.connected = False
