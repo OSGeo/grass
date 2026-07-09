@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-20 16:28+0000\n"
+"POT-Creation-Date: 2026-06-27 15:58+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.osgeo.org/projects/grass-gis/grassmods/pt_BR/>\n"
@@ -10195,8 +10195,8 @@ msgid "Raster map with zones to compute statistics for"
 msgstr "Nome do mapa raster de entrada para cálculo da estatística"
 
 #, fuzzy
-msgid "Raster map with zones to compute statistics for (needs to be CELL)"
-msgstr "Nome do mapa raster de entrada para cálculo da estatística"
+msgid "3D raster map with zones"
+msgstr "Título do mapa vetorial"
 
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
 msgstr ""
@@ -10362,6 +10362,9 @@ msgstr ""
 
 msgid "select"
 msgstr "selecionar"
+
+msgid "plain;Plain text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
+msgstr ""
 
 #, fuzzy
 #| msgid "Name of a space time raster dataset archive"
@@ -25124,6 +25127,19 @@ msgstr ""
 msgid "Overwrite current settings if initialized"
 msgstr ""
 
+#, fuzzy
+#| msgid "Name of raster map(s) for elevation"
+msgid "Name of the mapset(s) to print the connection info for"
+msgstr "Nome(s) do(s) mapa(s) raster para elevação"
+
+msgid "'.' for current mapset; '*' for all mapsets in the project. Requires format=json."
+msgstr ""
+
+#, fuzzy
+#| msgid "This option requires four columns"
+msgid "The mapset option requires format=json."
+msgstr "Esta opção requer quatro colunas"
+
 msgid "Temporal GIS database connection not defined. Run t.connect."
 msgstr ""
 
@@ -34195,6 +34211,10 @@ msgstr ""
 msgid "Image file"
 msgstr "Arquivo de imagem"
 
+#, fuzzy
+#~ msgid "Raster map with zones to compute statistics for (needs to be CELL)"
+#~ msgstr "Nome do mapa raster de entrada para cálculo da estatística"
+
 #~ msgid "Node is outside any input area"
 #~ msgstr "O nó está fora de qualquer área de entrada"
 
@@ -39297,10 +39317,6 @@ msgstr "Arquivo de imagem"
 #, fuzzy
 #~ msgid "calibration"
 #~ msgstr "Locação: %s\n"
-
-#, fuzzy
-#~ msgid "categorical map with zones"
-#~ msgstr "Título do mapa vetorial"
 
 #, fuzzy
 #~ msgid "centerpoint"

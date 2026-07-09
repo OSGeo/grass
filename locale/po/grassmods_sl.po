@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_sl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-20 16:28+0000\n"
+"POT-Creation-Date: 2026-06-27 15:58+0000\n"
 "PO-Revision-Date: 2025-07-26 01:37+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Slovenian <https://weblate.osgeo.org/projects/grass-gis/grassmods/sl/>\n"
@@ -11405,8 +11405,8 @@ msgid "Raster map with zones to compute statistics for"
 msgstr "Ime rastrskega sloja, ki bo vseboval rezultate"
 
 #, fuzzy
-msgid "Raster map with zones to compute statistics for (needs to be CELL)"
-msgstr "Ime rastrskega sloja, ki bo vseboval rezultate"
+msgid "3D raster map with zones"
+msgstr "Ne najdem vhodnega vektorja <%s>"
 
 #, fuzzy
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
@@ -11603,6 +11603,9 @@ msgstr "Izpiši rastrske sloje v vhodni \"location\" in končaj"
 #, fuzzy
 msgid "select"
 msgstr "Ne najdem vhodne datoteke %s\n"
+
+msgid "plain;Plain text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
+msgstr ""
 
 #, fuzzy
 msgid "Exports a space time vector dataset as GRASS specific archive file."
@@ -27879,6 +27882,16 @@ msgid "Overwrite current settings if initialized"
 msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
+msgid "Name of the mapset(s) to print the connection info for"
+msgstr "Ime rastrskega sloja, ki bo vseboval rezultate"
+
+msgid "'.' for current mapset; '*' for all mapsets in the project. Requires format=json."
+msgstr ""
+
+msgid "The mapset option requires format=json."
+msgstr ""
+
+#, fuzzy
 msgid "Temporal GIS database connection not defined. Run t.connect."
 msgstr "Povezava z bazo podatkov za gonilnik <%s> ni definirana. Poženi db.connect."
 
@@ -37827,6 +37840,10 @@ msgid "Image file"
 msgstr "Vhodni sloj"
 
 #, fuzzy
+#~ msgid "Raster map with zones to compute statistics for (needs to be CELL)"
+#~ msgstr "Ime rastrskega sloja, ki bo vseboval rezultate"
+
+#, fuzzy
 #~ msgid "Print current connection parameter in shell style and exit"
 #~ msgstr "Izpiši trenutne parametre povezave in končaj"
 
@@ -44225,10 +44242,6 @@ msgstr "Vhodni sloj"
 #, fuzzy
 #~ msgid "calibration"
 #~ msgstr "Ime datoteke z rezultatom klasifikacije"
-
-#, fuzzy
-#~ msgid "categorical map with zones"
-#~ msgstr "Ne najdem vhodnega vektorja <%s>"
 
 #, fuzzy
 #~ msgid "centerpoint"
