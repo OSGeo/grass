@@ -139,7 +139,7 @@ class Core:
         )
 
         if returncode < 0:
-            GException(_("Computing of scatter plots failed."))
+            raise GException(_("Computing of scatter plots failed."))
 
     def CatRastUpdater(self):
         return self.cat_rast_updater
@@ -274,7 +274,7 @@ class CatRastUpdater:
             region = self.an_data.GetRegion()
             ret = UpdateCatRast(patch_rast, region, self.scatts_dt.GetCatRastCond(cat))
             if ret < 0:
-                GException(_("Patching category raster conditions file failed."))
+                raise GException(_("Patching category raster conditions file failed."))
             RunCommand("g.remove", flags="f", type="raster", name=patch_rast)
 
     def _rasterize(self, grass_region, layer, cat, out_rast):
@@ -296,7 +296,7 @@ class CatRastUpdater:
         )
 
         if ret != 0:
-            GException(_("v.build failed:\n%s") % msg)
+            raise GException(_("v.build failed:\n%s") % msg)
 
         environs = os.environ.copy()
         environs["GRASS_REGION"] = grass_region["GRASS_REGION"]
@@ -316,7 +316,7 @@ class CatRastUpdater:
         )
 
         if ret != 0:
-            GException(_("v.to.rast failed:\n{messages}").format(messages=msg))
+            raise GException(_("v.to.rast failed:\n{messages}").format(messages=msg))
 
     def _create_grass_region_env(self, bbox):
         r = self.an_data.GetRegion()
@@ -383,7 +383,7 @@ class AnalyzedData:
 
         self.region = GetRegion()
         if self.region["rows"] * self.region["cols"] > MAX_NCELLS:
-            GException("too big region")
+            raise GException("too big region")
 
         self.bands_info = {}
 
@@ -391,7 +391,7 @@ class AnalyzedData:
             i = GetRasterInfo(b)
 
             if i is None:
-                GException("raster %s is not CELL type" % (b))
+                raise GException("raster %s is not CELL type" % (b))
 
             self.bands_info[b] = i
             # TODO check size of raster
