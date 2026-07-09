@@ -383,7 +383,8 @@ class AnalyzedData:
 
         self.region = GetRegion()
         if self.region["rows"] * self.region["cols"] > MAX_NCELLS:
-            raise GException("too big region")
+            msg = "too big region"
+            raise GException(msg)
 
         self.bands_info = {}
 
