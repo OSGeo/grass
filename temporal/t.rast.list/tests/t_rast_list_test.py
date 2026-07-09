@@ -70,7 +70,7 @@ def test_json(space_time_raster_dataset):
 @pytest.mark.skipif(yaml is None, reason="PyYAML package not available")
 @pytest.mark.needs_solo_run
 def test_yaml(space_time_raster_dataset):
-    """Check JSON can be parsed and contains the right values"""
+    """Check YAML can be parsed and contains the right values"""
     result = yaml.safe_load(
         gs.read_command(
             "t.rast.list",
@@ -124,7 +124,7 @@ def test_csv(space_time_raster_dataset, separator, delimiter):
 
 @pytest.mark.needs_solo_run
 def test_columns_list(space_time_raster_dataset):
-    """Check CSV can be parsed with different separators"""
+    """Check that specific columns are returned correctly for the list method"""
     # All relevant columns from the interface.
     columns = [
         "id",
@@ -166,7 +166,7 @@ def test_columns_list(space_time_raster_dataset):
 
 @pytest.mark.needs_solo_run
 def test_columns_delta_gran(space_time_raster_dataset):
-    """Check CSV can be parsed with different separators"""
+    """Check that specific columns are returned correctly for the gran method"""
     # All relevant columns from the interface.
     columns = [
         "id",
