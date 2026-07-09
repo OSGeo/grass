@@ -1382,8 +1382,12 @@ class DBConnection:
                 self.connection.isolation_level = None
                 self.connection.text_factory = str
                 self.cursor = self.connection.cursor()
-                self.cursor.execute("PRAGMA synchronous = OFF")
-                self.cursor.execute("PRAGMA journal_mode = MEMORY")
+                # busy_timeout is set to 30 seconds to avoid "database is locked" errors
+                self.cursor.executescript(
+                    "PRAGMA synchronous = OFF;"
+                    "PRAGMA journal_mode = MEMORY;"
+                    "PRAGMA busy_timeout = 30000;"
+                )
             elif self.dbmi.__name__ == "psycopg2":
                 self.connection = self.dbmi.connect(dbstring)
                 # self.connection.set_isolation_level(dbmi.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
@@ -1577,13 +1581,11 @@ class DBConnection:
             else:
                 self.cursor.execute(statement)
         except db_errors:
-            if connected:
-                self.close()
             self.msgr.error(_("Unable to execute :\n %(sql)s") % {"sql": statement})
             raise
-
-        if connected:
-            self.close()
+        finally:
+            if connected:
+                self.close()
 
     def fetchone(self):
         if self.connected:
@@ -1608,27 +1610,22 @@ class DBConnection:
             self.connect()
             connected = True
 
-        sql_script = ""
-        sql_script += "BEGIN TRANSACTION;\n"
-        sql_script += statement
-        sql_script += "END TRANSACTION;"
+        sql_script = f"BEGIN TRANSACTION;\n{statement};\nEND TRANSACTION;"
 
         try:
             if self.dbmi.__name__ == "sqlite3":
-                self.cursor.executescript(statement)
+                self.cursor.executescript(sql_script)
             else:
                 self.cursor.execute(statement)
             self.connection.commit()
         except db_errors:
-            if connected:
-                self.close()
             self.msgr.error(
                 _("Unable to execute transaction:\n %(sql)s") % {"sql": statement}
             )
             raise
-
-        if connected:
-            self.close()
+        finally:
+            if connected:
+                self.close()
 
 
 ###############################################################################
