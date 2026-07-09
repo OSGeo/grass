@@ -890,9 +890,8 @@ int main(int argc, char **argv)
              * the bit-exact-verified, banding-agnostic part). oproj/iproj are
              * read-only shared; the static METERS_in/out race is benign
              * (constant CRS per run). */
-            struct pj_info tproj_local = tproj;
-            PJ_CONTEXT *thread_ctx = proj_context_create();
-            tproj_local.pj = proj_clone(thread_ctx, tproj.pj);
+            struct gpj_transform_clone tproj_local;
+            GPJ_clone_transform(&tproj, &tproj_local);
 
 #pragma omp for private(row, col) schedule(dynamic)
             for (row = obr0; row < obr1; row++) {
@@ -909,8 +908,8 @@ int main(int argc, char **argv)
                     double x1 = local_x_start + (col * outcellhd.ew_res);
                     double y1 = local_y;
 
-                    if (GPJ_transform(&oproj, &iproj, &tproj_local, PJ_FWD, &x1,
-                                      &y1, NULL) < 0) {
+                    if (GPJ_transform(&oproj, &iproj, &tproj_local.info, PJ_FWD,
+                                      &x1, &y1, NULL) < 0) {
                         Rast_set_null_value(obufptr, 1, cell_type);
                     }
                     else {
@@ -922,8 +921,7 @@ int main(int argc, char **argv)
                 }
             }
 
-            proj_destroy(tproj_local.pj);
-            proj_context_destroy(thread_ctx);
+            GPJ_free_transform_clone(&tproj_local);
         }
         t_compute += rproj_wtime() - t1;
 
