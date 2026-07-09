@@ -330,7 +330,7 @@ void write_vtk_data(int fd, FILE *fp, char *varname, struct Cell_head region,
     G_debug(3, _("write_vtk_data: Writing VTK-Data"));
 
     /*the nullvalue */
-    if (!sscanf(null_value, "%lf", &nullvalue)) {
+    if (sscanf(null_value, "%lf", &nullvalue) != 1) {
         G_warning("Null value is not valid, using 0 instead.");
         nullvalue = 0;
     }
