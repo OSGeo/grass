@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-20 16:28+0000\n"
+"POT-Creation-Date: 2026-06-27 15:58+0000\n"
 "PO-Revision-Date: 2026-01-08 02:38+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
@@ -10117,8 +10117,10 @@ msgstr "Beräknar univariat statistik från de icke-nullceller som finns för va
 msgid "Raster map with zones to compute statistics for"
 msgstr "Rasterkarta med zoner för att beräkna statistik för"
 
-msgid "Raster map with zones to compute statistics for (needs to be CELL)"
-msgstr "Rasterkarta med zoner att beräkna statistik för (måste vara CELL)"
+#, fuzzy
+#| msgid "3D raster map with reference values"
+msgid "3D raster map with zones"
+msgstr "3D-rasterkarta med referensvärden"
 
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
 msgstr "Tilldelar tidsstämplar och registrerar raster-, vektor- och raster3d-kartor i en rymdtidsdataset."
@@ -10284,6 +10286,11 @@ msgstr "Skriver ut attribut för vektorkartor som registrerats i ett vektordatas
 
 msgid "select"
 msgstr "välj"
+
+#, fuzzy
+#| msgid "plain;Human readable text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation);"
+msgid "plain;Plain text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
+msgstr "vanlig;Mänskligt läsbar textutmatning;csv;CSV (kommaseparerade värden);json;JSON (JavaScript Object Notation);"
 
 msgid "Exports a space time vector dataset as GRASS specific archive file."
 msgstr "Exporterar en vektoruppsättning för rymdtid som GRASS-specifik arkivfil."
@@ -24942,6 +24949,21 @@ msgstr "plain;Utdata i klartext;skal;utdata i skalskriptstil;json;JSON (JavaScri
 msgid "Overwrite current settings if initialized"
 msgstr "Skriva över aktuella inställningar om de initialiserats"
 
+#, fuzzy
+#| msgid "Name of raster map(s) to include in group"
+msgid "Name of the mapset(s) to print the connection info for"
+msgstr "Namn på den eller de rasterkartor som ska ingå i gruppen"
+
+#, fuzzy
+#| msgid "'.' for current mapset; '*' for all mapsets in location"
+msgid "'.' for current mapset; '*' for all mapsets in the project. Requires format=json."
+msgstr "'.' för aktuellt kartset; '*' för alla kartset på platsen"
+
+#, fuzzy
+#| msgid "This option requires four columns"
+msgid "The mapset option requires format=json."
+msgstr "Detta alternativ kräver fyra kolumner"
+
 msgid "Temporal GIS database connection not defined. Run t.connect."
 msgstr "Temporal GIS-databasanslutning inte definierad. Kör t.connect."
 
@@ -33947,6 +33969,9 @@ msgstr "Visa BMP-bilder från PNG-drivrutinen."
 
 msgid "Image file"
 msgstr "Bildfil"
+
+#~ msgid "Raster map with zones to compute statistics for (needs to be CELL)"
+#~ msgstr "Rasterkarta med zoner att beräkna statistik för (måste vara CELL)"
 
 #~ msgid "Print current connection parameter in shell style and exit"
 #~ msgstr "Skriv ut aktuell anslutningsparameter i skal-stil och avsluta"
