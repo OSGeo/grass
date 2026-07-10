@@ -1240,14 +1240,17 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """Popup opacity level indicator for group of layers"""
         # Get opacity level from the first found map layer
         child, cookie = self.GetFirstChild(self.layer_selected)
+        maplayer = None
         while child:
             maplayer = self.GetLayerInfo(child, key="maplayer")
             ltype = self.GetLayerInfo(child, key="type")
             if maplayer and ltype != "command":
                 break
             child = self.GetNextSibling(child)
-            if child is None:
-                child, cookie = self.GetNextChild(child, cookie)
+
+        if not child or not maplayer:
+            return
+
         current_opacity = maplayer.GetOpacity()
         dlg = SetOpacityDialog(
             self,
