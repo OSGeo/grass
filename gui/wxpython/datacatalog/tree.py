@@ -147,7 +147,7 @@ def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
                 for item in items:
                     m_set = item["mapset"]
                     d_name = item["name"]
-                    if m_set and d_name:
+                    if m_set and d_name and m_set in maps_dict:
                         maps_dict[m_set].append({"name": d_name, "type": t_type})
 
     except ToolError as e:
