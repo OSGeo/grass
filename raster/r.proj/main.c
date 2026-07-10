@@ -130,29 +130,30 @@ static void interpolate_strip(void *strip, void *obufptr, int cell_type,
     memcpy(obufptr, src, cell_size);
 }
 
-/* Dense edge-walk of an output band's rectangle [obr0, obr1) projected into
- * input space; returns the min/max INPUT ROW touched, plus a 2-cell margin,
- * clamped to the input map. Samples the band's top and bottom rows across all
- * columns and its left and right columns across all band rows (bordwalk-style),
- * so a curved transform's interior-edge extremum is caught -- corner-only
- * sampling can under-size the strip. Called serially, before the parallel
- * region, so the shared tproj is safe here. Returns imax < imin for a band
- * that projects entirely outside the input. */
+/* Dense edge-walk of an output tile's rectangle [obr0, obr1) x [obc0, obc1)
+ * projected into input space; returns the min/max INPUT ROW touched, plus a
+ * 2-cell margin, clamped to the input map. Samples the tile's top and bottom
+ * rows across its columns [obc0, obc1) and its left and right columns across
+ * its rows (bordwalk-style), so a curved transform's interior-edge extremum is
+ * caught -- corner-only sampling can under-size the strip. A full-width band is
+ * the case obc0=0, obc1=cols. Called serially, before the parallel region, so
+ * the shared tproj is safe here. Returns imax < imin for a tile that projects
+ * entirely outside the input. */
 static void band_input_row_span(const struct Cell_head *ohd,
                                 const struct Cell_head *ihd,
                                 const struct pj_info *oproj,
                                 const struct pj_info *iproj,
                                 const struct pj_info *tproj, int obr0, int obr1,
-                                int *imin, int *imax)
+                                int obc0, int obc1, int *imin, int *imax)
 {
     double rmin = 1e300, rmax = -1e300;
     int e, r, c;
 
-    /* top edge (row obr0) and bottom edge (row obr1-1), all columns */
+    /* top edge (row obr0) and bottom edge (row obr1-1), tile columns */
     for (e = 0; e < 2; e++) {
         int orow = (e == 0) ? obr0 : (obr1 - 1);
         double y = ohd->north - (orow + 0.5) * ohd->ns_res;
-        for (c = 0; c < ohd->cols; c++) {
+        for (c = obc0; c < obc1; c++) {
             double x = ohd->west + (c + 0.5) * ohd->ew_res;
             double xx = x, yy = y;
             if (GPJ_transform(oproj, iproj, tproj, PJ_FWD, &xx, &yy, NULL) < 0)
@@ -164,9 +165,9 @@ static void band_input_row_span(const struct Cell_head *ohd,
                 rmax = ri;
         }
     }
-    /* left edge (col 0) and right edge (col cols-1), all band rows */
+    /* left edge (col obc0) and right edge (col obc1-1), all band rows */
     for (e = 0; e < 2; e++) {
-        int ocol = (e == 0) ? 0 : (ohd->cols - 1);
+        int ocol = (e == 0) ? obc0 : (obc1 - 1);
         double x = ohd->west + (ocol + 0.5) * ohd->ew_res;
         for (r = obr0; r < obr1; r++) {
             double y = ohd->north - (r + 0.5) * ohd->ns_res;
@@ -195,6 +196,75 @@ static void band_input_row_span(const struct Cell_head *ohd,
         hi = ihd->rows - 1;
     *imin = lo;
     *imax = hi;
+}
+
+/* Largest input-row strip (in rows) among the column tiles of width tilew that
+ * partition output columns [0, ohd->cols) for the band [obr0, obr1). Tiles are
+ * loaded one at a time, so peak strip memory is set by the worst tile, not the
+ * union of the band's tiles; the fit search sizes this against the cap. Every
+ * call is a full tile edge-walk, so this is O(tiles * perimeter) -- paid in the
+ * serial size phase, and only when column splitting is actually entered.
+ * Returns 0 if every tile projects entirely outside the input. */
+static int worst_tile_strip_rows(const struct Cell_head *ohd,
+                                 const struct Cell_head *ihd,
+                                 const struct pj_info *oproj,
+                                 const struct pj_info *iproj,
+                                 const struct pj_info *tproj, int obr0,
+                                 int obr1, int tilew)
+{
+    int worst = 0, obc0;
+
+    for (obc0 = 0; obc0 < ohd->cols; obc0 += tilew) {
+        int obc1 = obc0 + tilew;
+        int imin, imax, rows;
+
+        if (obc1 > ohd->cols)
+            obc1 = ohd->cols;
+        band_input_row_span(ohd, ihd, oproj, iproj, tproj, obr0, obr1, obc0,
+                            obc1, &imin, &imax);
+        rows = imax - imin + 1; /* imax < imin (empty) -> <= 0, ignored */
+        if (rows > worst)
+            worst = rows;
+    }
+    return worst;
+}
+
+#define TILE_PROBE 16 /* tiles sampled by the Phase-2 width-search estimate */
+
+/* Cheap estimate of worst_tile_strip_rows: the largest input-row strip among
+ * at most `probe` column tiles, evenly spaced across the band width and always
+ * including the first and last. A subset max is a LOWER bound on the true
+ * worst, so it only PRUNES the Phase-2 search; the chosen width is exact-
+ * validated by worst_tile_strip_rows before use. */
+static int est_worst_tile_strip_rows(const struct Cell_head *ohd,
+                                     const struct Cell_head *ihd,
+                                     const struct pj_info *oproj,
+                                     const struct pj_info *iproj,
+                                     const struct pj_info *tproj, int obr0,
+                                     int obr1, int tilew, int probe)
+{
+    int ntiles = (ohd->cols + tilew - 1) / tilew;
+    int worst = 0, k;
+
+    if (probe < 1)
+        probe = 1;
+    if (probe > ntiles)
+        probe = ntiles;
+    for (k = 0; k < probe; k++) {
+        int ti = (probe == 1) ? 0 : (int)((long)k * (ntiles - 1) / (probe - 1));
+        int obc0 = ti * tilew;
+        int obc1 = obc0 + tilew;
+        int imin, imax, rows;
+
+        if (obc1 > ohd->cols)
+            obc1 = ohd->cols;
+        band_input_row_span(ohd, ihd, oproj, iproj, tproj, obr0, obr1, obc0,
+                            obc1, &imin, &imax);
+        rows = imax - imin + 1;
+        if (rows > worst)
+            worst = rows;
+    }
+    return worst;
 }
 
 int main(int argc, char **argv)
@@ -839,21 +909,28 @@ int main(int argc, char **argv)
     size_t cap_bytes = (size_t)(cap_mb * 1024.0 * 1024.0);
     double t_size = 0.0, t_fill = 0.0, t_compute = 0.0, t_write = 0.0;
     int n_bands = 0;
+    int max_tiles = 1; /* most column tiles used by any single band */
 
     G_important_message(_("Projecting (banded, per-thread PROJ context)..."));
 
     int obr0 = 0;
     while (obr0 < outcellhd.rows) {
-        /* Band height: start from all remaining rows, halve until the input
-         * strip plus the band's output buffer fit the cap. band_input_row_span
-         * is RE-RUN for every candidate height -- the previous band's span is
-         * never reused. */
+        /* Fit search. Phase 1 (fast path, unchanged): halve the band height
+         * until the FULL-WIDTH strip plus the band output buffer fit the cap;
+         * the span is re-run per candidate height. Phase 2 (oblique fallback):
+         * only if a single full-width output row still busts the cap, split the
+         * row into column tiles and halve tile WIDTH until the worst tile's
+         * strip fits. Strips are full input width (the raster API reads whole
+         * rows), so width splitting shrinks a tile's input ROW span, not its
+         * width. Easy pairs never leave Phase 1. */
         double ts = rproj_wtime();
         int band_orows = outcellhd.rows - obr0;
+        int tilew = outcellhd.cols;
         int imin = 0, imax = -1;
         for (;;) {
             band_input_row_span(&outcellhd, &incellhd, &oproj, &iproj, &tproj,
-                                obr0, obr0 + band_orows, &imin, &imax);
+                                obr0, obr0 + band_orows, 0, outcellhd.cols,
+                                &imin, &imax);
             int strip_rows = imax - imin + 1;
             size_t strip_bytes =
                 strip_rows > 0 ? (size_t)strip_rows * incellhd.cols * cell_size
@@ -862,121 +939,213 @@ int main(int argc, char **argv)
             if (strip_bytes + out_bytes <= cap_bytes)
                 break;
             if (band_orows == 1)
-                G_fatal_error(
-                    _("A single output row needs %.1f MB (input footprint %d "
-                      "rows), exceeding the memory cap (%.1f MB). This "
-                      "large-halo/oblique case needs the tile-cache path, "
-                      "which is not implemented."),
-                    (double)(strip_bytes + out_bytes) / (1024.0 * 1024.0),
-                    strip_rows, cap_mb);
+                break; /* height exhausted: fall through to column splitting */
             band_orows = (band_orows + 1) / 2; /* halve (round up), re-sample */
+        }
+        if (band_orows == 1) {
+            /* Phase 2 (oblique only): Phase 1 could not fit even a single
+             * full-width row, so prefer a TALL tiled band instead of a 1-row
+             * one. Rescan from the full remaining height downward; at the
+             * tallest height whose output buffer fits the cap, halve tile WIDTH
+             * until the worst column tile's strip fits, and only reduce height
+             * when no width fits. Keeping the band tall gives the per-band
+             * parallel region many output rows. Runs only on this path, so the
+             * easy-pair size phase (Phase 1) is unaffected. */
+            band_orows = outcellhd.rows - obr0;
+            for (;;) {
+                size_t out_bytes =
+                    (size_t)band_orows * outcellhd.cols * cell_size;
+                if (out_bytes <= cap_bytes) {
+                    /* Upper tier: cheap probe estimate narrows to a candidate
+                     * width, checking down to tilew==1. The estimate is a lower
+                     * bound, so est-no-fit at tilew==1 implies exact-no-fit ->
+                     * the exact validation below is skipped entirely at heights
+                     * where no width can fit (this is what keeps the search
+                     * cheap; scanning every tile there was the cost). */
+                    tilew = outcellhd.cols;
+                    int est_fit = 0;
+                    for (;;) {
+                        int est = est_worst_tile_strip_rows(
+                            &outcellhd, &incellhd, &oproj, &iproj, &tproj, obr0,
+                            obr0 + band_orows, tilew, TILE_PROBE);
+                        size_t est_bytes =
+                            est > 0 ? (size_t)est * incellhd.cols * cell_size
+                                    : 0;
+                        if (est_bytes + out_bytes <= cap_bytes) {
+                            est_fit = 1;
+                            break;
+                        }
+                        if (tilew == 1)
+                            break;
+                        tilew = (tilew + 1) / 2;
+                    }
+                    /* Lower tier: EXACT validation, only when the estimate
+                     * found a candidate. Narrow and re-validate if the estimate
+                     * was optimistic; this exact-sizes the accepted width so
+                     * the cap is honored. */
+                    int fit = 0;
+                    if (est_fit) {
+                        for (;;) {
+                            int worst = worst_tile_strip_rows(
+                                &outcellhd, &incellhd, &oproj, &iproj, &tproj,
+                                obr0, obr0 + band_orows, tilew);
+                            size_t strip_bytes =
+                                worst > 0
+                                    ? (size_t)worst * incellhd.cols * cell_size
+                                    : 0;
+                            if (strip_bytes + out_bytes <= cap_bytes) {
+                                fit = 1;
+                                break;
+                            }
+                            if (tilew == 1)
+                                break; /* exact: no width fits at this height */
+                            tilew = (tilew + 1) / 2;
+                        }
+                    }
+                    if (fit)
+                        break;
+                }
+                if (band_orows == 1) {
+                    /* Single output row at minimum width still over cap =
+                     * singular/large-halo; needs the tile-cache path. */
+                    size_t out1 = (size_t)outcellhd.cols * cell_size;
+                    int worst = worst_tile_strip_rows(&outcellhd, &incellhd,
+                                                      &oproj, &iproj, &tproj,
+                                                      obr0, obr0 + 1, 1);
+                    size_t strip_bytes =
+                        worst > 0 ? (size_t)worst * incellhd.cols * cell_size
+                                  : 0;
+                    G_fatal_error(
+                        _("A single output row needs %.1f MB (input footprint "
+                          "%d rows), exceeding the memory cap (%.1f MB). This "
+                          "large-halo/oblique case needs the tile-cache path, "
+                          "which is not implemented."),
+                        (double)(strip_bytes + out1) / (1024.0 * 1024.0), worst,
+                        cap_mb);
+                }
+                band_orows = (band_orows + 1) / 2; /* shrink height, retry */
+            }
         }
         t_size += rproj_wtime() - ts;
 
         int obr1 = obr0 + band_orows;
-        int strip_rows = imax - imin + 1;
         n_bands++;
+        int n_tiles = (outcellhd.cols + tilew - 1) / tilew;
+        if (n_tiles > max_tiles)
+            max_tiles = n_tiles;
 
-        /* Serial strip load (single fd -> get_row not thread-safe). Reads in
-         * the INPUT env (matching the serial code's invariant), then back to
-         * OUTPUT for compute+write. EMPTY BAND: strip_rows <= 0 means the band
-         * projects entirely outside the input -> no malloc, no read; its cells
-         * become NULL via interpolate_strip's out-of-map path. */
-        void *strip = NULL;
-        if (strip_rows > 0) {
-            strip = G_malloc((size_t)strip_rows * incellhd.cols * cell_size);
-            double t0 = rproj_wtime();
-            G_switch_env(); /* -> input */
-            if (read_nprocs > 1) {
+        /* Per-band output buffer, lock-free disjoint row slots, filled column
+         * tile by column tile and written once after all tiles. Full width
+         * regardless of tiling. */
+        void *band_out =
+            G_malloc((size_t)band_orows * outcellhd.cols * cell_size);
+
+        /* Column tiles processed one at a time: only the current tile's strip
+         * is resident, so peak strip memory is the worst tile, not the band's
+         * union. tilew == cols is the single-tile fast path (obc0=0,
+         * obc1=cols), identical to un-tiled banding. */
+        for (int obc0 = 0; obc0 < outcellhd.cols; obc0 += tilew) {
+            int obc1 = obc0 + tilew;
+            if (obc1 > outcellhd.cols)
+                obc1 = outcellhd.cols;
+
+            /* Per-tile input row span (full-width strip: the raster API reads
+             * whole rows, so columns are not cropped). */
+            band_input_row_span(&outcellhd, &incellhd, &oproj, &iproj, &tproj,
+                                obr0, obr1, obc0, obc1, &imin, &imax);
+            int strip_rows = imax - imin + 1;
+
+            /* Serial strip load (single fd -> get_row not thread-safe). EMPTY
+             * TILE: strip_rows <= 0 -> projects outside input, no read; cells
+             * become NULL via interpolate_strip's out-of-map path. */
+            void *strip = NULL;
+            if (strip_rows > 0) {
+                strip =
+                    G_malloc((size_t)strip_rows * incellhd.cols * cell_size);
+                double t0 = rproj_wtime();
+                G_switch_env(); /* -> input */
+                if (read_nprocs > 1) {
 #ifdef _OPENMP
-                /* Parallel read: each thread reads a contiguous, disjoint
-                 * block of strip rows (schedule(static)) through its OWN fd
-                 * into its own disjoint strip slice (slice = row r - imin).
-                 * No two threads share an fd or a strip row. */
+                    /* Parallel read: each thread reads a contiguous, disjoint
+                     * block of strip rows through its OWN fd into its own
+                     * disjoint strip slice. No two threads share an fd/row. */
 #pragma omp parallel num_threads(read_nprocs)
-                {
-                    int t = omp_get_thread_num();
+                    {
+                        int t = omp_get_thread_num();
 #pragma omp for schedule(static)
+                        for (int r = imin; r <= imax; r++)
+                            Rast_get_row(fd_read[t],
+                                         (unsigned char *)strip +
+                                             (size_t)(r - imin) *
+                                                 incellhd.cols * cell_size,
+                                         r, cell_type);
+                    }
+#endif
+                }
+                else {
+                    /* Serial fallback (nprocs==1, mask, or no OpenMP). */
                     for (int r = imin; r <= imax; r++)
-                        Rast_get_row(fd_read[t],
+                        Rast_get_row(fdi,
                                      (unsigned char *)strip +
                                          (size_t)(r - imin) * incellhd.cols *
                                              cell_size,
                                      r, cell_type);
                 }
-#endif
+                G_switch_env(); /* -> output */
+                t_fill += rproj_wtime() - t0;
             }
-            else {
-                /* Serial fallback (nprocs==1, mask present, or no OpenMP):
-                 * original loop, unchanged, through fdi. */
-                for (int r = imin; r <= imax; r++)
-                    Rast_get_row(fdi,
-                                 (unsigned char *)strip + (size_t)(r - imin) *
-                                                              incellhd.cols *
-                                                              cell_size,
-                                 r, cell_type);
-            }
-            G_switch_env(); /* -> output */
-            t_fill += rproj_wtime() - t0;
-        }
 
-        /* Per-band output buffer, lock-free disjoint row slots (band-relative
-         * index), mirroring r.neighbors' outputs[i].buf. */
-        void *band_out =
-            G_malloc((size_t)band_orows * outcellhd.cols * cell_size);
-
-        double t1 = rproj_wtime();
-        /* Each band runs one parallel region. This is not nested parallelism:
-         * the "omp for" below does not create a second thread team, it only
-         * divides the band's output rows among the threads that this "omp
-         * parallel" created. The two directives are kept separate instead of a
-         * combined "omp parallel for" because every thread must clone its own
-         * PROJ context before the row loop starts and destroy it after the loop
-         * ends, and that per-thread setup has to sit inside the parallel region
-         * but outside the for. */
+            double t1 = rproj_wtime();
+            /* One parallel region per tile. Not nested: the "omp for" divides
+             * the band's output rows among this region's threads. Separate
+             * directives so each thread clones its PROJ context before the row
+             * loop and destroys it after. */
 #pragma omp parallel
-        {
-            /* Per-thread PROJ context + private transform clone (KEEP: this is
-             * the bit-exact-verified, banding-agnostic part). oproj/iproj are
-             * read-only shared; the static METERS_in/out race is benign
-             * (constant CRS per run). */
-            struct gpj_transform_clone tproj_local;
-            GPJ_clone_transform(&tproj, &tproj_local);
+            {
+                struct gpj_transform_clone tproj_local;
+                GPJ_clone_transform(&tproj, &tproj_local);
 
 #pragma omp for private(row, col) schedule(dynamic)
-            for (row = obr0; row < obr1; row++) {
-                void *out_row =
-                    (unsigned char *)band_out +
-                    (size_t)(row - obr0) * outcellhd.cols * cell_size;
-                double local_y = outcellhd.north - (outcellhd.ns_res / 2) -
-                                 (row * outcellhd.ns_res);
-                double local_x_start = outcellhd.west + (outcellhd.ew_res / 2);
+                for (row = obr0; row < obr1; row++) {
+                    void *out_row =
+                        (unsigned char *)band_out +
+                        (size_t)(row - obr0) * outcellhd.cols * cell_size;
+                    double local_y = outcellhd.north - (outcellhd.ns_res / 2) -
+                                     (row * outcellhd.ns_res);
+                    double local_x_start =
+                        outcellhd.west + (outcellhd.ew_res / 2);
 
-                for (col = 0; col < outcellhd.cols; col++) {
-                    void *obufptr =
-                        (unsigned char *)out_row + (size_t)col * cell_size;
-                    double x1 = local_x_start + (col * outcellhd.ew_res);
-                    double y1 = local_y;
+                    for (col = obc0; col < obc1; col++) {
+                        void *obufptr =
+                            (unsigned char *)out_row + (size_t)col * cell_size;
+                        double x1 = local_x_start + (col * outcellhd.ew_res);
+                        double y1 = local_y;
 
-                    if (GPJ_transform(&oproj, &iproj, &tproj_local.info, PJ_FWD,
-                                      &x1, &y1, NULL) < 0) {
-                        Rast_set_null_value(obufptr, 1, cell_type);
-                    }
-                    else {
-                        double c_idx = (x1 - incellhd.west) / incellhd.ew_res;
-                        double r_idx = (incellhd.north - y1) / incellhd.ns_res;
-                        interpolate_strip(strip, obufptr, cell_type, c_idx,
-                                          r_idx, &incellhd, imin, imax);
+                        if (GPJ_transform(&oproj, &iproj, &tproj_local.info,
+                                          PJ_FWD, &x1, &y1, NULL) < 0) {
+                            Rast_set_null_value(obufptr, 1, cell_type);
+                        }
+                        else {
+                            double c_idx =
+                                (x1 - incellhd.west) / incellhd.ew_res;
+                            double r_idx =
+                                (incellhd.north - y1) / incellhd.ns_res;
+                            interpolate_strip(strip, obufptr, cell_type, c_idx,
+                                              r_idx, &incellhd, imin, imax);
+                        }
                     }
                 }
+
+                GPJ_free_transform_clone(&tproj_local);
             }
+            t_compute += rproj_wtime() - t1;
 
-            GPJ_free_transform_clone(&tproj_local);
+            if (strip)
+                G_free(strip);
         }
-        t_compute += rproj_wtime() - t1;
 
-        /* Serial in-order write of the band's rows (Rast_put_row sequential).
-         */
+        /* Serial in-order write of the band's rows once all tiles filled
+         * band_out (Rast_put_row sequential). */
         double t2 = rproj_wtime();
         for (row = obr0; row < obr1; row++)
             Rast_put_row(fdo,
@@ -987,15 +1156,14 @@ int main(int argc, char **argv)
 
         G_percent(obr1, outcellhd.rows, 5);
 
-        if (strip)
-            G_free(strip);
         G_free(band_out);
         obr0 = obr1;
     }
 
     G_debug(1,
-            "PHASE_TIMERS size=%.4f fill=%.4f compute=%.4f write=%.4f bands=%d",
-            t_size, t_fill, t_compute, t_write, n_bands);
+            "PHASE_TIMERS size=%.4f fill=%.4f compute=%.4f write=%.4f bands=%d "
+            "tiles=%d",
+            t_size, t_fill, t_compute, t_write, n_bands, max_tiles);
 
     /* Close input map in its own env, then the output map. */
     G_switch_env(); /* -> input */
