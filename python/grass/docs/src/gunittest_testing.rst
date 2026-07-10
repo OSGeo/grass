@@ -713,7 +713,7 @@ Further reading
    gunittest_running_tests
 
 
-.. _unittest: https://docs.python.org/2/library/unittest.html
+.. _unittest: https://docs.python.org/3/library/unittest.html
 .. _Coverity Scan: https://scan.coverity.com/
 .. _1038: https://scan.coverity.com/projects/1038
 .. _Cppcheck: http://cppcheck.sourceforge.net/
