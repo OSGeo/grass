@@ -1957,15 +1957,15 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if self.mapdisplay.IsPaneShown("3d"):
             if self.layer_selected.IsChecked():
                 # update Nviz tool window
-                type = self.GetLayerInfo(self.layer_selected, key="maplayer").type
+                layer_type = self.GetLayerInfo(self.layer_selected, key="maplayer").type
 
-                if type == "raster":
+                if layer_type == "raster":
                     self.lmgr.nviz.UpdatePage("surface")
                     self.lmgr.nviz.SetPage("surface")
-                elif type == "vector":
+                elif layer_type == "vector":
                     self.lmgr.nviz.UpdatePage("vector")
                     self.lmgr.nviz.SetPage("vector")
-                elif type == "raster_3d":
+                elif layer_type == "raster_3d":
                     self.lmgr.nviz.UpdatePage("volume")
                     self.lmgr.nviz.SetPage("volume")
 
