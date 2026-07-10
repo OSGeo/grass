@@ -637,7 +637,7 @@ def init(
         if c_library_interface is not None:
             c_library_interface.stop()
             c_library_interface = None
-        tgis_backend = None
+        tgis_backend = "sqlite"
         tgis_database_string = None
 
     # Set the global variable for faster access
