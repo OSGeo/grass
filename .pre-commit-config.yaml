@@ -118,3 +118,7 @@ repos:
           - python
           - tex
           - xml
+  - repo: https://github.com/BlankSpruce/gersemi-pre-commit
+    rev: 0.27.7
+    hooks:
+      - id: gersemi
