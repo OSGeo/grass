@@ -14,7 +14,8 @@ set(SUBDIRS1
     r.li.richness
     r.li.shannon
     r.li.shape
-    r.li.simpson)
+    r.li.simpson
+)
 # r.li.setup
 
 build_library_in_subdir(
@@ -25,12 +26,13 @@ build_library_in_subdir(
   grass_gis
   grass_raster
   HTML_FILE_NAME
-  "r.li.daemon")
+  "r.li.daemon"
+)
 
 if(WITH_DOCS)
-  generate_docs(r.li TARGET grass_rli)
+    generate_docs(r.li TARGET grass_rli)
 endif()
 
 foreach(SUBDIR ${SUBDIRS1})
-  build_program_in_subdir(${SUBDIR} DEPENDS grass_gis grass_rli grass_raster ${LIBM})
+    build_program_in_subdir(${SUBDIR} DEPENDS grass_gis grass_rli grass_raster ${LIBM})
 endforeach()

@@ -1,6 +1,6 @@
 file(GLOB SQLFILES "SQL/*.sql")
 foreach(sqlfile ${SQLFILES})
-  install(FILES "${sqlfile}" DESTINATION ${GRASS_INSTALL_ETCDIR}/sql)
+    install(FILES "${sqlfile}" DESTINATION ${GRASS_INSTALL_ETCDIR}/sql)
 endforeach()
 build_library_in_subdir(
   lib
@@ -9,4 +9,5 @@ build_library_in_subdir(
   DEPENDS
   grass_gis
   grass_dbmibase
-  grass_datetime)
+  grass_datetime
+)

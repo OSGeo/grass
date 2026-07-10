@@ -10,4 +10,5 @@ build_addon(
     r.plus.example.py
   DOCFILES
     r.plus.example.html
-    r.plus.example.md)
+    r.plus.example.md
+)

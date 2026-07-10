@@ -7,5 +7,5 @@ SPDX-License-Identifier: GPL-2.0-or-later
 #]]
 
 macro(build_program)
-  build_module(${ARGN} EXE)
+    build_module(${ARGN} EXE)
 endmacro()

@@ -21,18 +21,24 @@ build_library_in_subdir(
   grass_raster
   grass_rtree
   OPTIONAL_DEPENDS
-  GEOS::geos_c)
+  GEOS::geos_c
+)
 
-target_include_directories(grass_vector
-  INTERFACE $<TARGET_PROPERTY:GDAL::GDAL,INTERFACE_INCLUDE_DIRECTORIES>)
+target_include_directories(
+    grass_vector
+    INTERFACE $<TARGET_PROPERTY:GDAL::GDAL,INTERFACE_INCLUDE_DIRECTORIES>
+)
 if(TARGET PostgreSQL::PostgreSQL)
-  target_link_libraries(grass_vector PRIVATE PostgreSQL::PostgreSQL)
-  target_include_directories(grass_vector
-    INTERFACE $<TARGET_PROPERTY:PostgreSQL::PostgreSQL,INTERFACE_INCLUDE_DIRECTORIES>)
+    target_link_libraries(grass_vector PRIVATE PostgreSQL::PostgreSQL)
+    target_include_directories(
+        grass_vector
+        INTERFACE
+            $<TARGET_PROPERTY:PostgreSQL::PostgreSQL,INTERFACE_INCLUDE_DIRECTORIES>
+    )
 endif()
 
 if(TARGET LAPACKE)
-  target_link_libraries(grass_vector PRIVATE LAPACKE)
+    target_link_libraries(grass_vector PRIVATE LAPACKE)
 endif()
 
 build_library_in_subdir(
@@ -45,7 +51,8 @@ build_library_in_subdir(
   grass_dbmibase
   grass_dbmiclient
   grass_dbmidriver
-  GDAL::GDAL)
+  GDAL::GDAL
+)
 
 build_library_in_subdir(
   neta
@@ -58,8 +65,9 @@ build_library_in_subdir(
   grass_gis
   grass_dgl
   grass_vector
-  GDAL::GDAL)
+  GDAL::GDAL
+)
 
 if(WITH_DOCS)
-  generate_docs(vectorascii TARGET grass_vector)
+    generate_docs(vectorascii TARGET grass_vector)
 endif()

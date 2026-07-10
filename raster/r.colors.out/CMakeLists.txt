@@ -6,7 +6,8 @@ build_program(
   DEPENDS
   grass_gis
   grass_raster
-  grass_parson)
+  grass_parson
+)
 
 build_program(
   NAME
@@ -17,4 +18,5 @@ build_program(
   grass_gis
   grass_raster
   grass_raster3d
-  grass_parson)
+  grass_parson
+)

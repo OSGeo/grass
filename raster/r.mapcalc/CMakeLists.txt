@@ -12,10 +12,23 @@ set(r_mapcalc_common_SRCS
     main.c
     xrowcol.c
     ${CMAKE_CURRENT_BINARY_DIR}/mapcalc.tab.c
-    ${CMAKE_CURRENT_BINARY_DIR}/mapcalc.yy.c)
+    ${CMAKE_CURRENT_BINARY_DIR}/mapcalc.yy.c
+)
 
-set(r_mapcalc_SRCS ${r_mapcalc_common_SRCS} map.c xarea.c xcoor.c xres.c)
-set(r3_mapcalc_SRCS ${r_mapcalc_common_SRCS} map3.c xarea.c xcoor3.c xres3.c)
+set(r_mapcalc_SRCS
+    ${r_mapcalc_common_SRCS}
+    map.c
+    xarea.c
+    xcoor.c
+    xres.c
+)
+set(r3_mapcalc_SRCS
+    ${r_mapcalc_common_SRCS}
+    map3.c
+    xarea.c
+    xcoor3.c
+    xres3.c
+)
 
 build_program(
   NAME
@@ -31,7 +44,8 @@ build_program(
   Readline::Readline
   Readline::History
   Threads::Threads
-  OpenMP::OpenMP_C)
+  OpenMP::OpenMP_C
+)
 
 build_program(
   NAME
@@ -47,7 +61,8 @@ build_program(
   OPTIONAL_DEPENDS
   Readline::Readline
   Readline::History
-  Threads::Threads)
+  Threads::Threads
+)
 
 # mapcalc.yy.c is attached to both targets, work around this with build
 # dependency chain

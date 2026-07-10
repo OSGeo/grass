@@ -5,7 +5,8 @@ set(doc_files
     wxGUI.modules
     wxGUI.nviz
     wxGUI.toolboxes
-    wxGUI.vnet)
+    wxGUI.vnet
+)
 
 set(img_files
     wxGUI_iscatt.jpg
@@ -25,7 +26,8 @@ set(img_files
     wxGUI_nviz_tools_view.jpg
     wxGUI_nviz_tools_volume.jpg
     wxGUI_toolboxes.jpg
-    wxGUI_vnet.jpg)
+    wxGUI_vnet.jpg
+)
 
 add_custom_target(wxpython_docs DEPENDS grass_gis LIB_PYTHON)
 add_dependencies(GUI_WXPYTHON wxpython_docs)
@@ -34,7 +36,8 @@ set_target_properties(wxpython_docs PROPERTIES FOLDER GUI)
 generate_docs_list(
   TARGET wxpython_docs
   DOC_FILES ${doc_files}
-  IMG_FILES ${img_files})
+  IMG_FILES ${img_files}
+)
 
 unset(doc_files)
 unset(img_files)

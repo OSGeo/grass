@@ -8,7 +8,8 @@ build_library_in_subdir(
   grass_dbmiclient
   grass_dbmidriver
   HEADERS
-  "lrs.h")
+  "lrs.h"
+)
 add_dependencies(grass_lrs db.drivers)
 build_program_in_subdir(
   v.lrs.create
@@ -20,7 +21,8 @@ build_program_in_subdir(
   grass_dbmiclient
   grass_dbmidriver
   GDAL::GDAL
-  ${LIBM})
+  ${LIBM}
+)
 
 build_program_in_subdir(
   v.lrs.segment
@@ -32,7 +34,8 @@ build_program_in_subdir(
   grass_dbmiclient
   grass_dbmidriver
   GDAL::GDAL
-  ${LIBM})
+  ${LIBM}
+)
 
 build_program_in_subdir(
   v.lrs.label
@@ -44,7 +47,8 @@ build_program_in_subdir(
   grass_dbmiclient
   grass_dbmidriver
   GDAL::GDAL
-  ${LIBM})
+  ${LIBM}
+)
 
 build_program_in_subdir(
   v.lrs.where
@@ -55,4 +59,5 @@ build_program_in_subdir(
   grass_dbmibase
   grass_dbmiclient
   grass_dbmidriver
-  GDAL::GDAL)
+  GDAL::GDAL
+)

@@ -128,35 +128,39 @@ set(raster_modules_list
     r.water.outlet
     r.watershed
     r.what
-    r.what.color)
+    r.what.color
+)
 
 if(WITH_LIBPNG)
-  list(APPEND raster_modules_list r.in.png r.out.png)
+    list(APPEND raster_modules_list r.in.png r.out.png)
 endif()
 
 if(WITH_FFTW)
-  list(APPEND raster_modules_list r.surf.fractal)
+    list(APPEND raster_modules_list r.surf.fractal)
 endif()
 
 if(MSVC)
-  list(REMOVE_ITEM raster_modules_list r.in.xyz)
+    list(REMOVE_ITEM raster_modules_list r.in.xyz)
 endif()
 
 add_custom_target(
-  ALL_RASTER_MODULES ALL
-  DEPENDS ${raster_modules_list}
-  COMMENT "All raster modules are built.")
+    ALL_RASTER_MODULES
+    ALL
+    DEPENDS ${raster_modules_list}
+    COMMENT "All raster modules are built."
+)
 
 set_target_properties(ALL_RASTER_MODULES PROPERTIES FOLDER Misc)
 
 if(WITH_DOCS)
-  generate_docs(rasterintro TARGET ALL_RASTER_MODULES)
+    generate_docs(rasterintro TARGET ALL_RASTER_MODULES)
 endif()
 
 build_program_in_subdir(r.basins.fill DEPENDS grass_gis grass_raster)
 
 build_program_in_subdir(r.buildvrt DEPENDS grass_gis grass_raster grass_gmath
-                        ${LIBM})
+                        ${LIBM}
+)
 
 build_program_in_subdir(r.buffer DEPENDS grass_gis grass_raster)
 
@@ -168,7 +172,8 @@ build_program_in_subdir(
   grass_vector
   grass_bitmap
   grass_dig2
-  ${LIBM})
+  ${LIBM}
+)
 
 build_program_in_subdir(r.category DEPENDS grass_gis grass_raster grass_parson)
 
@@ -195,7 +200,8 @@ build_program_in_subdir(
   grass_dbmibase
   grass_dbmiclient
   grass_dbmidriver
-  ${LIBM})
+  ${LIBM}
+)
 
 build_program_in_subdir(
   r.cost
@@ -204,12 +210,14 @@ build_program_in_subdir(
   grass_raster
   grass_segment
   grass_vector
-  ${LIBM})
+  ${LIBM}
+)
 
 build_program_in_subdir(r.covar DEPENDS grass_gis grass_raster ${LIBM})
 
 build_program_in_subdir(r.cross DEPENDS grass_gis grass_raster grass_btree
-                        grass_btree2)
+                        grass_btree2
+)
 
 build_program_in_subdir(r.describe DEPENDS grass_gis grass_raster grass_parson)
 
@@ -225,10 +233,12 @@ build_program_in_subdir(
   ${LIBM}
   PRIMARY_DEPENDS
   PROJ::proj
-  GDAL::GDAL)
+  GDAL::GDAL
+)
 
 build_program_in_subdir(r.external.out DEPENDS grass_gis grass_raster grass_gproj
-                        PRIMARY_DEPENDS GDAL::GDAL)
+                        PRIMARY_DEPENDS GDAL::GDAL
+)
 
 build_program_in_subdir(r.fill.dir DEPENDS grass_gis grass_raster)
 
@@ -242,15 +252,18 @@ build_program_in_subdir(
   grass_segment
   grass_vector
   grass_bitmap
-  ${LIBM})
+  ${LIBM}
+)
 
 build_program_in_subdir(r.geomorphon DEPENDS grass_gis grass_raster grass_gmath grass_parson
-                        ${LIBM})
+                        ${LIBM}
+)
 
 build_program_in_subdir(r.grow.distance DEPENDS grass_gis grass_raster ${LIBM})
 
 build_program_in_subdir(r.gwflow DEPENDS grass_gis grass_raster grass_gpde
-                        grass_gmath)
+                        grass_gmath
+)
 
 build_program_in_subdir(r.his DEPENDS grass_gis grass_raster grass_gproj)
 
@@ -261,7 +274,8 @@ build_program_in_subdir(
   grass_raster
   grass_gproj
   grass_parson
-  ${LIBM})
+  ${LIBM}
+)
 
 build_program_in_subdir(r.in.ascii DEPENDS grass_gis grass_raster)
 
@@ -277,29 +291,31 @@ build_program_in_subdir(
   ${LIBM}
   PRIMARY_DEPENDS
   PROJ::proj
-  GDAL::GDAL)
+  GDAL::GDAL
+)
 
 build_program_in_subdir(r.in.gridatb DEPENDS grass_gis grass_raster)
 
 build_program_in_subdir(r.in.mat DEPENDS grass_gis grass_raster)
 
 if(WITH_PDAL)
-  file(GLOB r_in_pdal_SOURCES "r.in.pdal/*.c" "r.in.pdal/*.cpp")
-  build_program_in_subdir(
-    r.in.pdal
-    SOURCES
-    "${r_in_pdal_SOURCES}"
-    DEPENDS
-    grass_gis
-    grass_raster
-    grass_vector
-    grass_gmath
-    grass_segment
-    grass_gproj
-    ${LIBM}
-    PRIMARY_DEPENDS
-    ${PDAL})
-  list(APPEND raster_modules_list r.in.pdal)
+    file(GLOB r_in_pdal_SOURCES "r.in.pdal/*.c" "r.in.pdal/*.cpp")
+    build_program_in_subdir(
+      r.in.pdal
+      SOURCES
+      "${r_in_pdal_SOURCES}"
+      DEPENDS
+      grass_gis
+      grass_raster
+      grass_vector
+      grass_gmath
+      grass_segment
+      grass_gproj
+      ${LIBM}
+      PRIMARY_DEPENDS
+      ${PDAL}
+    )
+    list(APPEND raster_modules_list r.in.pdal)
 endif()
 
 build_program_in_subdir(
@@ -309,12 +325,13 @@ build_program_in_subdir(
   grass_raster
   ${LIBM}
   PRIMARY_DEPENDS
-  PNG::PNG)
+  PNG::PNG
+)
 
 build_program_in_subdir(r.in.poly DEPENDS grass_gis grass_raster)
 
 if(NOT MSVC)
-  build_program_in_subdir(r.in.xyz DEPENDS grass_gis grass_raster ${LIBM})
+    build_program_in_subdir(r.in.xyz DEPENDS grass_gis grass_raster ${LIBM})
 endif()
 build_program_in_subdir(
   r.info
@@ -324,7 +341,8 @@ build_program_in_subdir(
   grass_gis
   ${LIBM}
   grass_raster
-  grass_parson)
+  grass_parson
+)
 
 build_program_in_subdir(r.kappa DEPENDS grass_gis grass_raster grass_parson ${LIBM})
 
@@ -333,7 +351,8 @@ build_program_in_subdir(r.latlong DEPENDS grass_gis grass_raster grass_gproj)
 build_program_in_subdir(r.lake DEPENDS grass_gis grass_raster)
 
 build_program_in_subdir(r.mask.status DEPENDS grass_gis grass_manage
-                        grass_parson grass_raster)
+                        grass_parson grass_raster
+)
 
 build_program_in_subdir(
   r.mfilter
@@ -342,7 +361,8 @@ build_program_in_subdir(
   grass_raster
   grass_rowio
   OPTIONAL_DEPENDS
-  OpenMP::OpenMP_C)
+  OpenMP::OpenMP_C
+)
 
 build_program_in_subdir(r.mode DEPENDS grass_gis grass_raster)
 
@@ -354,12 +374,14 @@ build_program_in_subdir(
   grass_stats
   ${LIBM}
   OPTIONAL_DEPENDS
-  OpenMP::OpenMP_C)
+  OpenMP::OpenMP_C
+)
 
 build_program_in_subdir(r.null DEPENDS grass_gis grass_raster)
 
 build_program_in_subdir(r.object.geometry DEPENDS grass_gis grass_raster
-                        grass_parson ${LIBM})
+                        grass_parson ${LIBM}
+)
 
 build_program_in_subdir(r.out.ascii DEPENDS grass_gis grass_raster)
 
@@ -376,12 +398,14 @@ build_program_in_subdir(
   ${LIBM}
   PROJ::proj
   PRIMARY_DEPENDS
-  GDAL::GDAL)
+  GDAL::GDAL
+)
 
 set_source_files_properties(
-  r.out.gdal/main.c
-  PROPERTIES COMPILE_DEFINITIONS
-             "GRASS_VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\"")
+    r.out.gdal/main.c
+    PROPERTIES
+        COMPILE_DEFINITIONS "GRASS_VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\""
+)
 
 build_program_in_subdir(r.out.gridatb DEPENDS grass_gis grass_raster)
 
@@ -390,7 +414,8 @@ build_program_in_subdir(r.out.mat DEPENDS grass_gis grass_raster)
 build_program_in_subdir(r.out.mpeg DEPENDS grass_gis grass_raster)
 
 build_program_in_subdir(r.out.png DEPENDS grass_gis grass_raster
-                        PRIMARY_DEPENDS PNG::PNG)
+                        PRIMARY_DEPENDS PNG::PNG
+)
 
 build_program_in_subdir(r.out.pov DEPENDS grass_gis grass_raster)
 
@@ -411,16 +436,20 @@ build_program_in_subdir(
   grass_interpfl
   grass_interpdata
   grass_qtree
-  ${LIBM})
+  ${LIBM}
+)
 
 build_program_in_subdir(r.patch DEPENDS grass_gis grass_raster OPTIONAL_DEPENDS
-                        OpenMP::OpenMP_C)
+                        OpenMP::OpenMP_C
+)
 
 build_program_in_subdir(r.path DEPENDS grass_gis grass_raster grass_vector
-                        ${LIBM})
+                        ${LIBM}
+)
 
 build_program_in_subdir(r.profile DEPENDS grass_gis grass_raster grass_parson
-                        ${LIBM})
+                        ${LIBM}
+)
 
 build_program_in_subdir(
   r.proj
@@ -431,7 +460,8 @@ build_program_in_subdir(
   grass_parson
   ${LIBM}
   OPTIONAL_DEPENDS
-  OpenMP::OpenMP_C)
+  OpenMP::OpenMP_C
+)
 
 build_program_in_subdir(r.quant DEPENDS grass_gis grass_raster)
 
@@ -446,7 +476,8 @@ build_program_in_subdir(
   grass_dbmibase
   grass_dbmiclient
   grass_dbmidriver
-  ${LIBM})
+  ${LIBM}
+)
 
 build_program_in_subdir(r.random.cells DEPENDS grass_gis grass_raster ${LIBM})
 
@@ -459,10 +490,12 @@ build_program_in_subdir(r.recode DEPENDS grass_gis grass_raster)
 build_program_in_subdir(r.region DEPENDS grass_gis grass_raster grass_vector)
 
 build_program_in_subdir(r.regression.line DEPENDS grass_gis grass_raster grass_parson
-                        ${LIBM})
+                        ${LIBM}
+)
 
 build_program_in_subdir(r.regression.multi DEPENDS grass_gis grass_raster grass_parson
-                        ${LIBM})
+                        ${LIBM}
+)
 
 build_program_in_subdir(r.report DEPENDS grass_gis grass_raster grass_parson)
 
@@ -475,7 +508,8 @@ build_program_in_subdir(
   grass_vector
   grass_segment
   grass_lidar
-  ${LIBM})
+  ${LIBM}
+)
 
 build_program_in_subdir(
   r.resamp.filter
@@ -484,7 +518,8 @@ build_program_in_subdir(
   grass_raster
   ${LIBM}
   OPTIONAL_DEPENDS
-  OpenMP::OpenMP_C)
+  OpenMP::OpenMP_C
+)
 
 build_program_in_subdir(
   r.resamp.interp
@@ -493,7 +528,8 @@ build_program_in_subdir(
   grass_raster
   ${LIBM}
   OPTIONAL_DEPENDS
-  OpenMP::OpenMP_C)
+  OpenMP::OpenMP_C
+)
 
 build_program_in_subdir(
   r.resamp.rst
@@ -503,10 +539,12 @@ build_program_in_subdir(
   grass_gmath
   grass_interpfl
   grass_interpdata
-  grass_qtree)
+  grass_qtree
+)
 
 build_program_in_subdir(r.resamp.stats DEPENDS grass_gis grass_raster
-                        grass_stats ${LIBM})
+                        grass_stats ${LIBM}
+)
 
 build_program_in_subdir(r.resample DEPENDS grass_gis grass_raster)
 
@@ -523,7 +561,8 @@ build_program_in_subdir(
   grass_raster
   grass_stats
   OPTIONAL_DEPENDS
-  OpenMP::OpenMP_C)
+  OpenMP::OpenMP_C
+)
 
 build_program_in_subdir(
   r.series.accumulate
@@ -532,10 +571,12 @@ build_program_in_subdir(
   grass_raster
   grass_stats
   OPTIONAL_DEPENDS
-  OpenMP::OpenMP_C)
+  OpenMP::OpenMP_C
+)
 
 build_program_in_subdir(r.series.interp DEPENDS grass_gis grass_raster
-                        grass_stats)
+                        grass_stats
+)
 
 build_program_in_subdir(r.relief DEPENDS grass_gis grass_raster ${LIBM})
 
@@ -548,7 +589,8 @@ build_program_in_subdir(
   grass_raster
   ${LIBM}
   OPTIONAL_DEPENDS
-  OpenMP::OpenMP_C)
+  OpenMP::OpenMP_C
+)
 
 build_program_in_subdir(
   r.smooth.edgepreserve
@@ -558,7 +600,8 @@ build_program_in_subdir(
   grass_rowio
   ${LIBM}
   OPTIONAL_DEPENDS
-  OpenMP::OpenMP_C)
+  OpenMP::OpenMP_C
+)
 
 build_program_in_subdir(
   r.solute.transport
@@ -567,12 +610,14 @@ build_program_in_subdir(
   grass_raster
   grass_gmath
   grass_gpde
-  ${LIBM})
+  ${LIBM}
+)
 
 add_subdirectory(r.spread)
 
 build_program_in_subdir(r.spreadpath DEPENDS grass_gis grass_raster
-                        grass_segment)
+                        grass_segment
+)
 
 build_program_in_subdir(r.statistics DEPENDS grass_gis grass_raster ${LIBM})
 
@@ -592,7 +637,8 @@ build_program_in_subdir(
   grass_dbmibase
   grass_dbmiclient
   grass_dbmidriver
-  ${LIBM})
+  ${LIBM}
+)
 
 build_program_in_subdir(
   r.sun
@@ -603,13 +649,16 @@ build_program_in_subdir(
   grass_gproj
   ${LIBM}
   OPTIONAL_DEPENDS
-  OpenMP::OpenMP_C)
+  OpenMP::OpenMP_C
+)
 
 build_program_in_subdir(r.sunhours DEPENDS grass_gis grass_raster grass_gproj
-                        ${LIBM})
+                        ${LIBM}
+)
 
 build_program_in_subdir(r.sunmask DEPENDS grass_gis grass_raster grass_gproj
-                        ${LIBM})
+                        ${LIBM}
+)
 
 build_program_in_subdir(r.support DEPENDS grass_gis grass_raster)
 
@@ -620,10 +669,11 @@ build_program_in_subdir(r.surf.area DEPENDS grass_gis grass_raster ${LIBM})
 build_program_in_subdir(r.surf.contour DEPENDS grass_gis grass_raster)
 
 if(WITH_FFTW)
-  build_program_in_subdir(r.surf.fractal DEPENDS grass_gis grass_raster
-    grass_gmath ${LIBM})
+    build_program_in_subdir(r.surf.fractal DEPENDS grass_gis grass_raster
+      grass_gmath ${LIBM}
+    )
 else()
-  message(STATUS "r.surf.fractal disabled because FFTW is not available")
+    message(STATUS "r.surf.fractal disabled because FFTW is not available")
 endif()
 
 build_program_in_subdir(r.surf.gauss DEPENDS grass_gis grass_raster grass_gmath)
@@ -631,12 +681,13 @@ build_program_in_subdir(r.surf.gauss DEPENDS grass_gis grass_raster grass_gmath)
 build_program_in_subdir(r.surf.idw DEPENDS grass_gis grass_raster ${LIBM})
 
 build_program_in_subdir(r.surf.random DEPENDS grass_gis grass_raster
-                        grass_gmath)
+                        grass_gmath
+)
 
 if(MSVC)
-  set(USER_NAME $ENV{USERNAME})
+    set(USER_NAME $ENV{USERNAME})
 else()
-  set(USER_NAME $ENV{USER})
+    set(USER_NAME $ENV{USER})
 endif()
 
 build_program_in_subdir(r.texture DEPENDS grass_gis grass_raster ${LIBM})
@@ -648,10 +699,12 @@ build_program_in_subdir(r.tile DEPENDS grass_gis grass_raster)
 build_program_in_subdir(r.timestamp DEPENDS grass_gis grass_raster)
 
 build_program_in_subdir(r.to.rast3 DEPENDS grass_gis grass_raster
-                        grass_raster3d)
+                        grass_raster3d
+)
 
 build_program_in_subdir(r.to.rast3elev DEPENDS grass_gis grass_raster
-                        grass_raster3d)
+                        grass_raster3d
+)
 
 build_program_in_subdir(
   r.to.vect
@@ -661,7 +714,8 @@ build_program_in_subdir(
   grass_vector
   grass_dbmibase
   grass_dbmiclient
-  grass_dbmidriver)
+  grass_dbmidriver
+)
 
 build_program_in_subdir(r.topidx DEPENDS grass_gis grass_raster ${LIBM})
 
@@ -684,7 +738,8 @@ build_program_in_subdir(
   grass_dbmibase
   grass_dbmiclient
   grass_dbmidriver
-  grass_parson)
+  grass_parson
+)
 
 build_program_in_subdir(
   r.walk
@@ -693,12 +748,14 @@ build_program_in_subdir(
   grass_raster
   grass_segment
   grass_vector
-  ${LIBM})
+  ${LIBM}
+)
 
 build_program_in_subdir(r.water.outlet DEPENDS grass_gis grass_raster)
 
 build_program_in_subdir(r.what DEPENDS grass_gis grass_raster grass_vector
-                        grass_parson)
+                        grass_parson
+)
 
 build_program_in_subdir(r.what.color DEPENDS grass_gis grass_raster grass_parson)
 
@@ -713,7 +770,8 @@ build_program_in_subdir(
   grass_segment
   PRIMARY_DEPENDS
   LIBLAS
-  ${LIBM})
+  ${LIBM}
+)
 
 add_subdirectory(r.li)
 
@@ -729,7 +787,8 @@ build_program_in_subdir(
   SRC_REGEX
   "*.cpp"
   DEFS
-  "-DUSER=${USER_NAME}")
+  "-DUSER=${USER_NAME}"
+)
 
 build_program_in_subdir(
   r.terraflow
@@ -741,6 +800,7 @@ build_program_in_subdir(
   SRC_REGEX
   "*.cpp"
   DEFS
-  "-DUSER=${USER_NAME};-DNODATA_FIX;-DELEV_FLOAT")
+  "-DUSER=${USER_NAME};-DNODATA_FIX;-DELEV_FLOAT"
+)
 
 add_subdirectory(r.watershed)

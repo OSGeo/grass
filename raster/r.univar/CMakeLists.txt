@@ -12,7 +12,8 @@ build_program(
   grass_parson
   ${LIBM}
   OPTIONAL_DEPENDS
-  OpenMP::OpenMP_C)
+  OpenMP::OpenMP_C
+)
 
 build_program(
   NAME
@@ -26,4 +27,5 @@ build_program(
   grass_parson
   ${LIBM}
   OPTIONAL_DEPENDS
-  OpenMP::OpenMP_C)
+  OpenMP::OpenMP_C
+)

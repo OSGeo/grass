@@ -24,7 +24,8 @@ set(dig2_SRCS
     poly.c
     portable.c
     spindex_rw.c
-    type.c)
+    type.c
+)
 build_module(
   NAME
   grass_dig2
@@ -35,9 +36,13 @@ build_module(
   grass_gis
   grass_rtree
   GDAL::GDAL
-  ${LIBM})
+  ${LIBM}
+)
 
 if(TARGET PostgreSQL::PostgreSQL)
-  target_include_directories(grass_dig2
-    PUBLIC $<TARGET_PROPERTY:PostgreSQL::PostgreSQL,INTERFACE_INCLUDE_DIRECTORIES>)
+    target_include_directories(
+        grass_dig2
+        PUBLIC
+            $<TARGET_PROPERTY:PostgreSQL::PostgreSQL,INTERFACE_INCLUDE_DIRECTORIES>
+    )
 endif()

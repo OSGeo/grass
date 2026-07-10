@@ -1,9 +1,11 @@
-execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory
-                        etc/python/grass/pygrass/)
+execute_process(
+    COMMAND ${CMAKE_COMMAND} -E make_directory etc/python/grass/pygrass/
+)
 copy_python_file(${CMAKE_CURRENT_SOURCE_DIR}/errors.py etc/python/grass/pygrass)
 copy_python_file(${CMAKE_CURRENT_SOURCE_DIR}/utils.py etc/python/grass/pygrass)
 copy_python_file(${CMAKE_CURRENT_SOURCE_DIR}/orderdict.py
-                 etc/python/grass/pygrass)
+                 etc/python/grass/pygrass
+)
 
 build_pymodule_in_subdir(messages etc/python/grass/pygrass)
 

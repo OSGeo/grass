@@ -12,7 +12,8 @@ build_library_in_subdir(
   OPTIONAL_DEPENDS
   OpenMP::OpenMP_C
   HEADERS
-  "simlib.h")
+  "simlib.h"
+)
 
 build_program_in_subdir(
   r.sim.water
@@ -25,7 +26,8 @@ build_program_in_subdir(
   OPTIONAL_DEPENDS
   OpenMP::OpenMP_C
   INCLUDES
-  "${CMAKE_CURRENT_SOURCE_DIR}/../simlib")
+  "${CMAKE_CURRENT_SOURCE_DIR}/../simlib"
+)
 
 build_program_in_subdir(
   r.sim.sediment
@@ -38,4 +40,5 @@ build_program_in_subdir(
   OPTIONAL_DEPENDS
   OpenMP::OpenMP_C
   INCLUDES
-  "${CMAKE_CURRENT_SOURCE_DIR}/../simlib")
+  "${CMAKE_CURRENT_SOURCE_DIR}/../simlib"
+)

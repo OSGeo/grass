@@ -6,13 +6,16 @@ build_library_in_subdir(
   ${LIBM}
   grass_gis
   grass_imagery
-  grass_gmath)
+  grass_gmath
+)
 
 build_program_in_subdir(i.ortho.camera DEPENDS grass_iortho grass_imagery
-                        grass_gis grass_gmath)
+                        grass_gis grass_gmath
+)
 
 build_program_in_subdir(i.ortho.elev DEPENDS grass_iortho grass_imagery
-                        grass_gis grass_gmath)
+                        grass_gis grass_gmath
+)
 
 build_program_in_subdir(
   i.ortho.init
@@ -21,10 +24,12 @@ build_program_in_subdir(
   grass_imagery
   grass_gis
   grass_gmath
-  grass_raster)
+  grass_raster
+)
 
 build_program_in_subdir(i.ortho.photo DEPENDS grass_iortho grass_imagery
-                        grass_gis)
+                        grass_gis
+)
 
 build_program_in_subdir(
   i.ortho.rectify
@@ -34,10 +39,13 @@ build_program_in_subdir(
   grass_gis
   grass_gmath
   grass_raster
-  ${LIBM})
+  ${LIBM}
+)
 
 build_program_in_subdir(i.ortho.target DEPENDS grass_iortho grass_imagery
-                        grass_gis)
+                        grass_gis
+)
 
 build_program_in_subdir(i.ortho.transform DEPENDS grass_iortho grass_imagery
-                        grass_gis grass_gmath ${LIBM})
+                        grass_gis grass_gmath ${LIBM}
+)

@@ -5,7 +5,8 @@ build_library_in_subdir(
   DEPENDS
   grass_gis
   HEADERS
-  "dataquad.h")
+  "dataquad.h"
+)
 
 build_library_in_subdir(
   qtree
@@ -14,7 +15,8 @@ build_library_in_subdir(
   DEPENDS
   grass_gis
   HEADERS
-  "qtree.h")
+  "qtree.h"
+)
 
 build_library_in_subdir(
   interp_float
@@ -35,11 +37,17 @@ build_library_in_subdir(
   OPTIONAL_DEPENDS
   OpenMP::OpenMP_C
   HEADERS
-  "interpf.h")
+  "interpf.h"
+)
 
-target_include_directories(grass_interpfl
-  INTERFACE $<TARGET_PROPERTY:GDAL::GDAL,INTERFACE_INCLUDE_DIRECTORIES>)
+target_include_directories(
+    grass_interpfl
+    INTERFACE $<TARGET_PROPERTY:GDAL::GDAL,INTERFACE_INCLUDE_DIRECTORIES>
+)
 if(TARGET PostgreSQL::PostgreSQL)
-  target_include_directories(grass_interpfl
-    INTERFACE $<TARGET_PROPERTY:PostgreSQL::PostgreSQL,INTERFACE_INCLUDE_DIRECTORIES>)
+    target_include_directories(
+        grass_interpfl
+        INTERFACE
+            $<TARGET_PROPERTY:PostgreSQL::PostgreSQL,INTERFACE_INCLUDE_DIRECTORIES>
+    )
 endif()

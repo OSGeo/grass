@@ -1,6 +1,6 @@
 set(use_math_DEFS "")
 if(MSVC)
-  set(use_math_DEFS "-D_USE_MATH_DEFINES=1")
+    set(use_math_DEFS "-D_USE_MATH_DEFINES=1")
 endif()
 
 build_library_in_subdir(datetime)
@@ -15,7 +15,8 @@ build_library_in_subdir(
   grass_gis
   OPTIONAL_DEPENDS
   Freetype::Freetype
-  Iconv::Iconv)
+  Iconv::Iconv
+)
 
 add_subdirectory(proj)
 
@@ -32,21 +33,24 @@ build_library_in_subdir(
   grass_gproj
   grass_parson
   OPTIONAL_DEPENDS
-  OpenMP::OpenMP_C)
+  OpenMP::OpenMP_C
+)
 
 if(TARGET LAPACKE)
-  target_link_libraries(grass_raster PRIVATE LAPACKE)
+    target_link_libraries(grass_raster PRIVATE LAPACKE)
 endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
-  find_library(DL_LIBRARY dl)
-  mark_as_advanced(DL_LIBRARY)
-  target_link_libraries(grass_raster PRIVATE ${DL_LIBRARY})
+    find_library(DL_LIBRARY dl)
+    mark_as_advanced(DL_LIBRARY)
+    target_link_libraries(grass_raster PRIVATE ${DL_LIBRARY})
 endif()
 
 configure_file(
-  external/ccmath/ccmath.h
-  ${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}/grass/ccmath_grass.h COPYONLY)
+    external/ccmath/ccmath.h
+    ${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}/grass/ccmath_grass.h
+    COPYONLY
+)
 build_library_in_subdir(external/ccmath)
 
 build_library_in_subdir(external/shapelib NAME grass_shape HEADERS "shapefil.h")
@@ -62,13 +66,14 @@ build_library_in_subdir(
   CBLAS::CBLAS
   FFTW
   LAPACKE::LAPACKE
-  OpenMP::OpenMP_C)
+  OpenMP::OpenMP_C
+)
 
 build_library_in_subdir(linkm)
 
 file(GLOB pngdriver_SRCS "./pngdriver/*.c")
 if(NOT WITH_LIBPNG)
-  list(FILTER pngdriver_SRCS EXCLUDE REGEX [[./pngdriver/.*_png\.c$]])
+    list(FILTER pngdriver_SRCS EXCLUDE REGEX [[./pngdriver/.*_png\.c$]])
 endif()
 build_library_in_subdir(
   pngdriver
@@ -78,7 +83,8 @@ build_library_in_subdir(
   grass_driver
   grass_gis
   OPTIONAL_DEPENDS
-  PNG::PNG)
+  PNG::PNG
+)
 
 build_library_in_subdir(
   psdriver
@@ -86,15 +92,20 @@ build_library_in_subdir(
   grass_driver
   grass_gis
   INCLUDES
-  "${CMAKE_CURRENT_SOURCE_DIR}/driver")
+  "${CMAKE_CURRENT_SOURCE_DIR}/driver"
+)
 add_custom_command(
-  TARGET grass_psdriver
-  POST_BUILD
-  COMMAND
-    ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/psdriver/psdriver.ps
-    ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/psdriver.ps)
-install(FILES ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/psdriver.ps
-        DESTINATION ${GRASS_INSTALL_ETCDIR})
+    TARGET grass_psdriver
+    POST_BUILD
+    COMMAND
+        ${CMAKE_COMMAND} -E copy
+        ${CMAKE_CURRENT_SOURCE_DIR}/psdriver/psdriver.ps
+        ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/psdriver.ps
+)
+install(
+    FILES ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/psdriver.ps
+    DESTINATION ${GRASS_INSTALL_ETCDIR}
+)
 
 build_library_in_subdir(
   htmldriver
@@ -102,40 +113,50 @@ build_library_in_subdir(
   grass_gis
   grass_driver
   INCLUDES
-  "${CMAKE_CURRENT_SOURCE_DIR}/driver")
+  "${CMAKE_CURRENT_SOURCE_DIR}/driver"
+)
 
 set(_grass_display_DEFS)
 
-set(_grass_display_DEPENDS grass_driver grass_raster grass_htmldriver
-                           grass_pngdriver grass_psdriver grass_gis)
+set(_grass_display_DEPENDS
+    grass_driver
+    grass_raster
+    grass_htmldriver
+    grass_pngdriver
+    grass_psdriver
+    grass_gis
+)
 
 if(WITH_CAIRO)
-  set(_cairodriver_DEPENDS
-      Cairo::Cairo
-      Fontconfig::Fontconfig
-      Freetype::Freetype
-      grass_gis
-      grass_driver
-      OPTIONAL_DEPENDS
-      Iconv::Iconv)
-  if(WITH_X11)
-    list(PREPEND _cairodriver_DEPENDS X11::X11)
-  endif()
-  build_library_in_subdir(cairodriver DEPENDS ${_cairodriver_DEPENDS})
+    set(_cairodriver_DEPENDS
+        Cairo::Cairo
+        Fontconfig::Fontconfig
+        Freetype::Freetype
+        grass_gis
+        grass_driver
+        OPTIONAL_DEPENDS
+        Iconv::Iconv
+    )
+    if(WITH_X11)
+        list(PREPEND _cairodriver_DEPENDS X11::X11)
+    endif()
+    build_library_in_subdir(cairodriver DEPENDS ${_cairodriver_DEPENDS})
 
-  set(_grass_display_DEFS "-DUSE_CAIRO")
-  list(APPEND _grass_display_DEPENDS grass_cairodriver)
+    set(_grass_display_DEFS "-DUSE_CAIRO")
+    list(APPEND _grass_display_DEPENDS grass_cairodriver)
 endif()
 
 build_library_in_subdir(bitmap SOURCES "./bitmap/bitmap.c" "./bitmap/sparse.c"
-                        DEPENDS grass_linkm)
+                        DEPENDS grass_linkm
+)
 
 build_library_in_subdir(btree)
 
 build_library_in_subdir(btree2 HEADERS "kdtree.h" DEPENDS grass_gis)
 
 build_library_in_subdir(display DEFS ${_grass_display_DEFS} DEPENDS
-                        ${_grass_display_DEPENDS})
+                        ${_grass_display_DEPENDS}
+)
 
 add_subdirectory(db)
 
@@ -150,7 +171,7 @@ build_library_in_subdir(cluster DEPENDS grass_imagery grass_gis grass_raster)
 build_library_in_subdir(rowio DEPENDS grass_gis)
 
 build_library_in_subdir(segment DEPENDS grass_gis) # added DEPENDS grass_gis
-                                                   # for uninstd.h
+# for uninstd.h
 
 add_subdirectory(rst)
 
@@ -167,7 +188,8 @@ build_library_in_subdir(
   grass_segment
   GDAL::GDAL
   HEADERS
-  "lidar.h")
+  "lidar.h"
+)
 
 build_library_in_subdir(
   raster3d
@@ -176,7 +198,8 @@ build_library_in_subdir(
   DEPENDS
   ${LIBM}
   grass_raster
-  grass_gis)
+  grass_gis
+)
 
 build_program_in_subdir(
   raster3d/test
@@ -188,7 +211,8 @@ build_program_in_subdir(
   grass_interpfl
   grass_raster
   grass_raster3d
-  GDAL::GDAL)
+  GDAL::GDAL
+)
 
 build_library_in_subdir(
   gpde
@@ -204,20 +228,24 @@ build_library_in_subdir(
   grass_gmath
   ${LIBM}
   OPTIONAL_DEPENDS
-  OpenMP::OpenMP_C)
+  OpenMP::OpenMP_C
+)
 
 build_library_in_subdir(dspf DEPENDS grass_gis)
 
 build_library_in_subdir(symbol NAME grass_symb DEPENDS grass_gis ${LIBM})
 add_custom_command(
-  TARGET grass_symb
-  POST_BUILD
-  COMMAND
-    ${CMAKE_COMMAND} -E copy_directory
-    ${CMAKE_CURRENT_SOURCE_DIR}/symbol/symbol
-    ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/symbol)
-install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/symbol
-        DESTINATION ${GRASS_INSTALL_ETCDIR})
+    TARGET grass_symb
+    POST_BUILD
+    COMMAND
+        ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_CURRENT_SOURCE_DIR}/symbol/symbol
+        ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/symbol
+)
+install(
+    DIRECTORY ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/symbol
+    DESTINATION ${GRASS_INSTALL_ETCDIR}
+)
 
 add_subdirectory(init)
 
@@ -228,34 +256,36 @@ build_library_in_subdir(stats DEPENDS grass_gis grass_raster ${LIBM})
 build_library_in_subdir(arraystats DEPENDS grass_gis ${LIBM})
 
 if(WITH_OPENGL)
-  build_library_in_subdir(
-    ogsf
-    DEPENDS
-    grass_bitmap
-    grass_dbmibase
-    grass_dbmiclient
-    grass_dbmidriver
-    grass_gis
-    grass_raster
-    grass_raster3d
-    grass_vector
-    GDAL::GDAL
-    OpenGL::GL
-    OpenGL::GLU
-    TIFF::TIFF)
+    build_library_in_subdir(
+      ogsf
+      DEPENDS
+      grass_bitmap
+      grass_dbmibase
+      grass_dbmiclient
+      grass_dbmidriver
+      grass_gis
+      grass_raster
+      grass_raster3d
+      grass_vector
+      GDAL::GDAL
+      OpenGL::GL
+      OpenGL::GLU
+      TIFF::TIFF
+    )
 
-  build_library_in_subdir(
-    nviz
-    DEPENDS
-    grass_display
-    grass_raster
-    grass_vector
-    grass_bitmap
-    grass_ogsf
-    grass_gis
-    OpenGL::GL
-    OPTIONAL_DEPENDS
-    X11::X11)
+    build_library_in_subdir(
+      nviz
+      DEPENDS
+      grass_display
+      grass_raster
+      grass_vector
+      grass_bitmap
+      grass_ogsf
+      grass_gis
+      OpenGL::GL
+      OPTIONAL_DEPENDS
+      X11::X11
+    )
 endif()
 
 add_subdirectory(temporal)
@@ -263,9 +293,12 @@ add_subdirectory(temporal)
 build_library_in_subdir(iostream SRC_REGEX "*.cpp" DEPENDS grass_gis)
 
 build_library_in_subdir(manage DEPENDS grass_gis grass_raster grass_vector
-                        grass_raster3d GDAL::GDAL)
+                        grass_raster3d GDAL::GDAL
+)
 file(COPY manage/element_list DESTINATION ${OUTDIR}/${GRASS_INSTALL_ETCDIR})
-install(FILES ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/element_list
-        DESTINATION ${GRASS_INSTALL_ETCDIR})
+install(
+    FILES ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/element_list
+    DESTINATION ${GRASS_INSTALL_ETCDIR}
+)
 
 build_library_in_subdir(calc DEPENDS grass_raster grass_gis ${LIBM})

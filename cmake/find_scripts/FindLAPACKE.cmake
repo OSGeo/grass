@@ -57,40 +57,44 @@ This module defines the following variables:
 set(_default_pkgs lapacke openblas)
 
 macro(_search_lapacke_pkgs)
-  foreach(_pkg ${_default_pkgs})
-    pkg_check_modules(PKGC_LAPACKE QUIET ${_pkg})
-    if(PKGC_LAPACKE_FOUND)
-      set(LAPACKE_PKGCONFIG ${_pkg})
-      break()
-    endif()
-  endforeach()
+    foreach(_pkg ${_default_pkgs})
+        pkg_check_modules(PKGC_LAPACKE QUIET ${_pkg})
+        if(PKGC_LAPACKE_FOUND)
+            set(LAPACKE_PKGCONFIG ${_pkg})
+            break()
+        endif()
+    endforeach()
 endmacro()
 
 if(CBLAS_PREFER_PKGCONFIG)
-  find_package(PkgConfig QUIET)
-  if(PKG_CONFIG_FOUND)
-    if(NOT LAPACKE_PKGCONFIG)
-      _search_lapacke_pkgs()
-    endif()
-    pkg_check_modules(PKGC_LAPACKE QUIET ${LAPACKE_PKGCONFIG})
-    if(PKGC_LAPACKE_FOUND)
-      set(LAPACKE_FOUND ${PKGC_LAPACKE_FOUND})
-      set(LAPACKE_LIBRARIES "${PKGC_LAPACKE_LINK_LIBRARIES}")
-      if(MSVC)
-        # MSVC needs msvc/lapacke.h to define custom complex types
-        set(LAPACKE_INCLUDEDIR "${CMAKE_SOURCE_DIR}/msvc;${PKGC_LAPACKE_INCLUDEDIR}")
-      else()
-        set(LAPACKE_INCLUDEDIR "${PKGC_LAPACKE_INCLUDEDIR}")
-      endif()
-      set(LAPACKE_INCLUDE_DIRS ${PKGC_LAPACKE_INCLUDEDIR}
-                               ${PKGC_LAPACKE_INCLUDE_DIRS})
-      set(LAPACKE_VERSION ${PKGC_LAPACKE_VERSION})
-      set(LAPACKE_LINKER_FLAGS "${PKGC_LAPACKE_LDFLAGS}")
+    find_package(PkgConfig QUIET)
+    if(PKG_CONFIG_FOUND)
+        if(NOT LAPACKE_PKGCONFIG)
+            _search_lapacke_pkgs()
+        endif()
+        pkg_check_modules(PKGC_LAPACKE QUIET ${LAPACKE_PKGCONFIG})
+        if(PKGC_LAPACKE_FOUND)
+            set(LAPACKE_FOUND ${PKGC_LAPACKE_FOUND})
+            set(LAPACKE_LIBRARIES "${PKGC_LAPACKE_LINK_LIBRARIES}")
+            if(MSVC)
+                # MSVC needs msvc/lapacke.h to define custom complex types
+                set(LAPACKE_INCLUDEDIR
+                    "${CMAKE_SOURCE_DIR}/msvc;${PKGC_LAPACKE_INCLUDEDIR}"
+                )
+            else()
+                set(LAPACKE_INCLUDEDIR "${PKGC_LAPACKE_INCLUDEDIR}")
+            endif()
+            set(LAPACKE_INCLUDE_DIRS
+                ${PKGC_LAPACKE_INCLUDEDIR}
+                ${PKGC_LAPACKE_INCLUDE_DIRS}
+            )
+            set(LAPACKE_VERSION ${PKGC_LAPACKE_VERSION})
+            set(LAPACKE_LINKER_FLAGS "${PKGC_LAPACKE_LDFLAGS}")
 
-      list(REMOVE_DUPLICATES LAPACKE_INCLUDE_DIRS)
-      list(FILTER LAPACKE_LINKER_FLAGS EXCLUDE REGEX "^-L\.*|^-l\.*")
+            list(REMOVE_DUPLICATES LAPACKE_INCLUDE_DIRS)
+            list(FILTER LAPACKE_LINKER_FLAGS EXCLUDE REGEX "^-L\.*|^-l\.*")
+        endif()
     endif()
-  endif()
 endif()
 
 unset(_default_pkgs)
@@ -106,20 +110,28 @@ unset(CMAKE_REQUIRED_QUIET)
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(
-  LAPACKE
-  REQUIRED_VARS LAPACKE_FOUND LAPACKE_LIBRARIES LAPACKE_INCLUDEDIR
-                HAVE_LAPACKE_DGESV
-  VERSION_VAR LAPACKE_VERSION)
+    LAPACKE
+    REQUIRED_VARS
+        LAPACKE_FOUND
+        LAPACKE_LIBRARIES
+        LAPACKE_INCLUDEDIR
+        HAVE_LAPACKE_DGESV
+    VERSION_VAR LAPACKE_VERSION
+)
 mark_as_advanced(LAPACKE_LIBRARIES LAPACKE_INCLUDEDIR)
 
 if(LAPACKE_FOUND AND NOT TARGET LAPACKE::LAPACKE)
-  add_library(LAPACKE::LAPACKE INTERFACE IMPORTED)
-  set_target_properties(
-    LAPACKE::LAPACKE
-    PROPERTIES INTERFACE_LINK_LIBRARIES "${LAPACKE_LIBRARIES}"
-               INTERFACE_INCLUDE_DIRECTORIES "${LAPACKE_INCLUDEDIR}")
-  if(LAPACKE_LINKER_FLAGS)
-    set_target_properties(LAPACKE::LAPACKE PROPERTIES INTERFACE_LINK_OPTIONS
-                                                      "${LAPACKE_LINKER_FLAGS}")
-  endif()
+    add_library(LAPACKE::LAPACKE INTERFACE IMPORTED)
+    set_target_properties(
+        LAPACKE::LAPACKE
+        PROPERTIES
+            INTERFACE_LINK_LIBRARIES "${LAPACKE_LIBRARIES}"
+            INTERFACE_INCLUDE_DIRECTORIES "${LAPACKE_INCLUDEDIR}"
+    )
+    if(LAPACKE_LINKER_FLAGS)
+        set_target_properties(
+            LAPACKE::LAPACKE
+            PROPERTIES INTERFACE_LINK_OPTIONS "${LAPACKE_LINKER_FLAGS}"
+        )
+    endif()
 endif()

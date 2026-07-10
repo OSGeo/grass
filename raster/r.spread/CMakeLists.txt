@@ -12,7 +12,8 @@ set(r_spread_SRCS
     replaceHa.c
     select_linksB.c
     spot.c
-    spread.c)
+    spread.c
+)
 
 build_program(
   NAME
@@ -23,4 +24,5 @@ build_program(
   grass_gis
   grass_raster
   grass_display
-  ${LIBM})
+  ${LIBM}
+)

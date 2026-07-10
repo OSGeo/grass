@@ -58,34 +58,36 @@ This module defines the following variables:
 set(_default_pkgs cblas blas-netlib openblas blas-atlas)
 
 macro(_search_cblas_pkgs)
-  foreach(_pkg ${_default_pkgs})
-    pkg_check_modules(PKGC_CBLAS QUIET ${_pkg})
-    if(PKGC_CBLAS_FOUND)
-      set(CBLAS_PKGCONFIG ${_pkg})
-    endif()
-  endforeach()
+    foreach(_pkg ${_default_pkgs})
+        pkg_check_modules(PKGC_CBLAS QUIET ${_pkg})
+        if(PKGC_CBLAS_FOUND)
+            set(CBLAS_PKGCONFIG ${_pkg})
+        endif()
+    endforeach()
 endmacro()
 
 if(CBLAS_PREFER_PKGCONFIG)
-  find_package(PkgConfig QUIET)
-  if(PKG_CONFIG_FOUND)
-    if(NOT CBLAS_PKGCONFIG)
-      _search_cblas_pkgs()
-    endif()
-    pkg_check_modules(PKGC_CBLAS QUIET ${CBLAS_PKGCONFIG})
-    if(PKGC_CBLAS_FOUND)
-      set(CBLAS_FOUND ${PKGC_CBLAS_FOUND})
-      set(CBLAS_LIBRARIES "${PKGC_CBLAS_LINK_LIBRARIES}")
-      set(CBLAS_INCLUDEDIR "${PKGC_CBLAS_INCLUDEDIR}")
-      set(CBLAS_INCLUDE_DIRS ${PKGC_CBLAS_INCLUDEDIR}
-                             ${PKGC_CBLAS_INCLUDE_DIRS})
-      set(CBLAS_VERSION "${PKGC_CBLAS_VERSION}")
-      set(CBLAS_LINKER_FLAGS "${PKGC_CBLAS_LDFLAGS}")
+    find_package(PkgConfig QUIET)
+    if(PKG_CONFIG_FOUND)
+        if(NOT CBLAS_PKGCONFIG)
+            _search_cblas_pkgs()
+        endif()
+        pkg_check_modules(PKGC_CBLAS QUIET ${CBLAS_PKGCONFIG})
+        if(PKGC_CBLAS_FOUND)
+            set(CBLAS_FOUND ${PKGC_CBLAS_FOUND})
+            set(CBLAS_LIBRARIES "${PKGC_CBLAS_LINK_LIBRARIES}")
+            set(CBLAS_INCLUDEDIR "${PKGC_CBLAS_INCLUDEDIR}")
+            set(CBLAS_INCLUDE_DIRS
+                ${PKGC_CBLAS_INCLUDEDIR}
+                ${PKGC_CBLAS_INCLUDE_DIRS}
+            )
+            set(CBLAS_VERSION "${PKGC_CBLAS_VERSION}")
+            set(CBLAS_LINKER_FLAGS "${PKGC_CBLAS_LDFLAGS}")
 
-      list(REMOVE_DUPLICATES CBLAS_INCLUDE_DIRS)
-      list(FILTER CBLAS_LINKER_FLAGS EXCLUDE REGEX "^-L\.*|^-l\.*")
+            list(REMOVE_DUPLICATES CBLAS_INCLUDE_DIRS)
+            list(FILTER CBLAS_LINKER_FLAGS EXCLUDE REGEX "^-L\.*|^-l\.*")
+        endif()
     endif()
-  endif()
 endif()
 
 unset(_default_pkgs)
@@ -101,18 +103,24 @@ unset(CMAKE_REQUIRED_QUIET)
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(
-  CBLAS
-  REQUIRED_VARS CBLAS_FOUND CBLAS_LIBRARIES CBLAS_INCLUDEDIR HAVE_CBLAS_DGEMM
-  VERSION_VAR CBLAS_VERSION)
+    CBLAS
+    REQUIRED_VARS CBLAS_FOUND CBLAS_LIBRARIES CBLAS_INCLUDEDIR HAVE_CBLAS_DGEMM
+    VERSION_VAR CBLAS_VERSION
+)
 mark_as_advanced(CBLAS_LIBRARIES CBLAS_INCLUDEDIR)
 
 if(CBLAS_FOUND AND NOT TARGET CBLAS::CBLAS)
-  add_library(CBLAS::CBLAS INTERFACE IMPORTED)
-  set_target_properties(
-    CBLAS::CBLAS PROPERTIES INTERFACE_LINK_LIBRARIES "${CBLAS_LIBRARIES}"
-                            INTERFACE_INCLUDE_DIRECTORIES "${CBLAS_INCLUDEDIR}")
-  if(CBLAS_LINKER_FLAGS)
-    set_target_properties(CBLAS::CBLAS PROPERTIES INTERFACE_LINK_OPTIONS
-                                                  "${CBLAS_LINKER_FLAGS}")
-  endif()
+    add_library(CBLAS::CBLAS INTERFACE IMPORTED)
+    set_target_properties(
+        CBLAS::CBLAS
+        PROPERTIES
+            INTERFACE_LINK_LIBRARIES "${CBLAS_LIBRARIES}"
+            INTERFACE_INCLUDE_DIRECTORIES "${CBLAS_INCLUDEDIR}"
+    )
+    if(CBLAS_LINKER_FLAGS)
+        set_target_properties(
+            CBLAS::CBLAS
+            PROPERTIES INTERFACE_LINK_OPTIONS "${CBLAS_LINKER_FLAGS}"
+        )
+    endif()
 endif()

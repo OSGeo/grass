@@ -1,4 +1,10 @@
-set(r3_flow_SRCS main.c flowline.c integrate.c interpolate.c voxel_traversal.c)
+set(r3_flow_SRCS
+    main.c
+    flowline.c
+    integrate.c
+    interpolate.c
+    voxel_traversal.c
+)
 
 build_program(
   NAME
@@ -13,10 +19,16 @@ build_program(
   grass_raster
   grass_raster3d
   grass_vector
-  ${LIBM})
+  ${LIBM}
+)
 
-set(test_r3flow_SRCS test_main.c flowline.c integrate.c interpolate.c
-                     voxel_traversal.c)
+set(test_r3flow_SRCS
+    test_main.c
+    flowline.c
+    integrate.c
+    interpolate.c
+    voxel_traversal.c
+)
 
 build_program(
   NAME
@@ -31,4 +43,5 @@ build_program(
   grass_dbmiclient
   grass_dbmidriver
   grass_vector
-  ${LIBM})
+  ${LIBM}
+)
