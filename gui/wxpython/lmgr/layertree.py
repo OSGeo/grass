@@ -2256,6 +2256,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         type = self.GetLayerInfo(item, key="type")
         layerName = None
 
+        if type == "group":
+            return
+
         if type == "command":
             win = self.FindWindowById(self.GetLayerInfo(item, key="ctrl"))
             if win.GetValue() is not None:
