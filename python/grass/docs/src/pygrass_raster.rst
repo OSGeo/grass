@@ -1,3 +1,5 @@
+.. _raster-label:
+
 Introduction to Raster classes
 ==============================
 

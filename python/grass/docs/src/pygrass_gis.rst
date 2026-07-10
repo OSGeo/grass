@@ -1,3 +1,5 @@
+.. _GRASSdatabase-label:
+
 GRASS database management
 =========================
 
@@ -13,6 +15,8 @@ GIS data directory, Location and Mapset. Details about the GRASS
 database management (locations and mapsets) can be found in the `GRASS
 User's Manual: GRASS Quickstart
 <https://grass.osgeo.org/grass-devel/manuals/helptext.html>`_.
+
+.. _Region-label:
 
 Region management
 =================
