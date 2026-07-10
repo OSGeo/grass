@@ -506,6 +506,8 @@ However, do not use use doctest for tests of edge cases, for tests which require
 generate complex data first, etc. In these cases use `gunittest`.
 
 
+.. _test-as-scripts:
+
 Tests as general scripts
 ------------------------
 
