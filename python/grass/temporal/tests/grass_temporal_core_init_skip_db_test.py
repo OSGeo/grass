@@ -111,19 +111,7 @@ def test_stds_construction_without_tgis_db_initialization(
         tgis.SpaceTimeRaster3DDataset(ident)
         tgis.SpaceTimeVectorDataset(ident)
         # Test dataset_factory for all dataset types, which should be constructed without DB access
-        for ds_type in (
-            "strds",
-            "str3ds",
-            "stvds",
-            "rast",
-            "raster",
-            "raster_3d",
-            "rast3d",
-            "raster3d",
-            "vect",
-            "vector",
-        ):
-            valid_ds_types = ds_types_dict[ds_type]
+        for ds_type, valid_ds_types in ds_types_dict.items():
             stds = tgis.dataset_factory(ds_type, ident)
             assert stds.get_id() == ident
             assert stds.get_type() in valid_ds_types
@@ -156,19 +144,7 @@ def test_stds_construction_with_tgis_db_initialization(
         assert strds.is_in_db() is False
         assert "number_of_semantic_labels" in strds.metadata.D
         # Test dataset_factory for all dataset types, which should be constructed with DB access
-        for ds_type in (
-            "strds",
-            "str3ds",
-            "stvds",
-            "rast",
-            "raster",
-            "raster_3d",
-            "rast3d",
-            "raster3d",
-            "vect",
-            "vector",
-        ):
-            valid_ds_types = ds_types_dict[ds_type]
+        for ds_type, valid_ds_types in ds_types_dict.items():
             stds = tgis.dataset_factory(ds_type, ident)
             assert stds.get_id() == ident
             assert stds.get_type() in valid_ds_types
