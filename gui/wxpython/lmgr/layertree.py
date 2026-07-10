@@ -132,7 +132,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.hitCheckbox = False
         self.forceCheck = False  # force check layer if CheckItem is called
         # forms default to centering on screen, this will put on lmgr
-        self.centreFromsOnParent = True
+        self.centreFormsOnParent = True
 
         try:
             ctstyle |= CT.TR_ALIGN_WINDOWS
