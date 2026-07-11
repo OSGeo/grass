@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-27 15:58+0000\n"
+"POT-Creation-Date: 2026-07-11 16:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,7 +67,7 @@ msgstr ""
 msgid "Exporting animation, please wait..."
 msgstr ""
 
-#: ../gui/wxpython/animation/data.py:48 ../gui/wxpython/lmgr/layertree.py:1177
+#: ../gui/wxpython/animation/data.py:48 ../gui/wxpython/lmgr/layertree.py:1188
 #: ../gui/wxpython/mapdisp/frame.py:313 ../gui/wxpython/mapdisp/frame.py:416
 #: ../gui/wxpython/mapdisp/toolbars.py:95
 #: ../gui/wxpython/mapdisp/toolbars.py:360
@@ -334,7 +334,7 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:1032
 #: ../gui/wxpython/gmodeler/canvas.py:322
 #: ../gui/wxpython/gui_core/simplelmgr.py:515
-#: ../gui/wxpython/lmgr/layertree.py:450 ../gui/wxpython/rlisetup/frame.py:157
+#: ../gui/wxpython/lmgr/layertree.py:457 ../gui/wxpython/rlisetup/frame.py:157
 msgid "Remove"
 msgstr ""
 
@@ -353,7 +353,7 @@ msgid "Decorations"
 msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:957
-#: ../gui/wxpython/lmgr/layertree.py:771 ../gui/wxpython/tplot/frame.py:395
+#: ../gui/wxpython/lmgr/layertree.py:778 ../gui/wxpython/tplot/frame.py:395
 msgid "Export"
 msgstr ""
 
@@ -554,7 +554,7 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:1574
 #: ../gui/wxpython/datacatalog/tree.py:161 ../gui/wxpython/gcp/manager.py:1737
 #: ../gui/wxpython/gui_core/dialogs.py:531
-#: ../gui/wxpython/lmgr/layertree.py:1086
+#: ../gui/wxpython/lmgr/layertree.py:1093
 #: ../gui/wxpython/modules/colorrules.py:675
 #: ../gui/wxpython/rdigit/dialogs.py:114
 msgid "Overwrite?"
@@ -793,7 +793,7 @@ msgid "Add space-time dataset or series of map layers for animation"
 msgstr ""
 
 #: ../gui/wxpython/animation/utils.py:95 ../gui/wxpython/animation/utils.py:105
-#: ../gui/wxpython/lmgr/layertree.py:2145 ../gui/wxpython/mapswipe/frame.py:459
+#: ../gui/wxpython/lmgr/layertree.py:2147 ../gui/wxpython/mapswipe/frame.py:459
 #, python-format
 msgid "Map <%s> not found."
 msgstr ""
@@ -842,7 +842,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:325
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:733
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:782
-#: ../gui/wxpython/lmgr/layertree.py:1004
+#: ../gui/wxpython/lmgr/layertree.py:1011
 #: ../gui/wxpython/location_wizard/dialogs.py:102
 #: ../gui/wxpython/location_wizard/dialogs.py:122
 #: ../gui/wxpython/location_wizard/dialogs.py:533
@@ -3465,7 +3465,7 @@ msgstr ""
 msgid "Display"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/canvas.py:383 ../gui/wxpython/lmgr/layertree.py:512
+#: ../gui/wxpython/gmodeler/canvas.py:383 ../gui/wxpython/lmgr/layertree.py:519
 msgid "Properties"
 msgstr ""
 
@@ -4065,7 +4065,7 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/panels.py:1743
 #: ../gui/wxpython/gui_core/pyedit.py:401
-#: ../gui/wxpython/gui_core/pyedit.py:472
+#: ../gui/wxpython/gui_core/pyedit.py:470
 msgid "Python script (*.py)|*.py"
 msgstr ""
 
@@ -4206,8 +4206,8 @@ msgid "Model properties"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/preferences.py:693
-#: ../gui/wxpython/lmgr/layertree.py:759 ../gui/wxpython/lmgr/layertree.py:854
-#: ../gui/wxpython/lmgr/layertree.py:880
+#: ../gui/wxpython/lmgr/layertree.py:766 ../gui/wxpython/lmgr/layertree.py:861
+#: ../gui/wxpython/lmgr/layertree.py:887
 msgid "Metadata"
 msgstr ""
 
@@ -5802,60 +5802,60 @@ msgstr ""
 msgid " Unable to launch Python script."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:470
+#: ../gui/wxpython/gui_core/pyedit.py:468
 msgid "Open file"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:512
+#: ../gui/wxpython/gui_core/pyedit.py:508
 #, python-brace-format
 msgid "File <{path}> doesn't exist. It was probably moved or deleted."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:580
+#: ../gui/wxpython/gui_core/pyedit.py:576
 msgid "Replace the content by the template?"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:582
+#: ../gui/wxpython/gui_core/pyedit.py:578
 msgid "Replace the content by the example?"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:584
+#: ../gui/wxpython/gui_core/pyedit.py:580
 msgid "Replace the current content by the file content?"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:591
+#: ../gui/wxpython/gui_core/pyedit.py:587
 msgid "Replace content"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:604
+#: ../gui/wxpython/gui_core/pyedit.py:600
 msgid "Set parameters for the script"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:606
+#: ../gui/wxpython/gui_core/pyedit.py:602
 msgid "Specify command line parameters for the script separated by spaces:"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:659
+#: ../gui/wxpython/gui_core/pyedit.py:655
 msgid "Open (Ctrl+O)"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:660
+#: ../gui/wxpython/gui_core/pyedit.py:656
 msgid "Save (Ctrl+S)"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:661
+#: ../gui/wxpython/gui_core/pyedit.py:657
 msgid "Run (Ctrl+R)"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:663
+#: ../gui/wxpython/gui_core/pyedit.py:659
 msgid "Activate overwrite"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:664
+#: ../gui/wxpython/gui_core/pyedit.py:660
 msgid "Deactivate overwrite"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/pyedit.py:883
+#: ../gui/wxpython/gui_core/pyedit.py:879
 msgid "Simple Python Editor"
 msgstr ""
 
@@ -5930,7 +5930,7 @@ msgid "Copy map names to clipboard (bottom to top)"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/simplelmgr.py:307
-#: ../gui/wxpython/lmgr/layertree.py:1282
+#: ../gui/wxpython/lmgr/layertree.py:1293
 #, python-format
 msgid "Set opacity of <%s>"
 msgstr ""
@@ -6530,7 +6530,7 @@ msgstr ""
 msgid "Enter name of new vector map:"
 msgstr ""
 
-#: ../gui/wxpython/iclass/dialogs.py:792 ../gui/wxpython/lmgr/layertree.py:640
+#: ../gui/wxpython/iclass/dialogs.py:792 ../gui/wxpython/lmgr/layertree.py:647
 msgid "Export attribute table"
 msgstr ""
 
@@ -7372,8 +7372,8 @@ msgstr ""
 msgid "Set color"
 msgstr ""
 
-#: ../gui/wxpython/iscatt/frame.py:565 ../gui/wxpython/lmgr/layertree.py:500
-#: ../gui/wxpython/lmgr/layertree.py:598
+#: ../gui/wxpython/iscatt/frame.py:565 ../gui/wxpython/lmgr/layertree.py:507
+#: ../gui/wxpython/lmgr/layertree.py:605
 msgid "Change opacity level"
 msgstr ""
 
@@ -7736,7 +7736,7 @@ msgstr ""
 msgid "Note that cell values can only be displayed for regions of less than 10,000 cells."
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:2215 ../gui/wxpython/lmgr/layertree.py:2128
+#: ../gui/wxpython/lmgr/frame.py:2215 ../gui/wxpython/lmgr/layertree.py:2130
 #: ../gui/wxpython/main_window/frame.py:2340
 msgid "opacity:"
 msgstr ""
@@ -7833,181 +7833,181 @@ msgstr ""
 msgid "Background vector map"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:161 ../gui/wxpython/lmgr/layertree.py:1661
+#: ../gui/wxpython/lmgr/layertree.py:162 ../gui/wxpython/lmgr/layertree.py:1672
 msgid "Map Layers"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:456 ../gui/wxpython/rlisetup/frame.py:161
+#: ../gui/wxpython/lmgr/layertree.py:463 ../gui/wxpython/rlisetup/frame.py:161
 msgid "Rename"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:463
+#: ../gui/wxpython/lmgr/layertree.py:470
 msgid "Check selected layers"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:474
+#: ../gui/wxpython/lmgr/layertree.py:481
 msgid "Uncheck selected layers"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:525
+#: ../gui/wxpython/lmgr/layertree.py:532
 msgid "3D view properties"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:535
+#: ../gui/wxpython/lmgr/layertree.py:542
 msgid "Zoom to selected map(s)"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:547
+#: ../gui/wxpython/lmgr/layertree.py:554
 msgid "Zoom to selected map(s) (ignore NULLs)"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:558
+#: ../gui/wxpython/lmgr/layertree.py:565
 msgid "Set computational region from selected map(s)"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:571
+#: ../gui/wxpython/lmgr/layertree.py:578
 msgid "Align computational region to selected map"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:614
+#: ../gui/wxpython/lmgr/layertree.py:621
 msgid "Export common formats"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:628
+#: ../gui/wxpython/lmgr/layertree.py:635
 msgid "Export PostGIS"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:653 ../gui/wxpython/lmgr/layertree.py:784
+#: ../gui/wxpython/lmgr/layertree.py:660 ../gui/wxpython/lmgr/layertree.py:791
 msgid "Create pack"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:667 ../gui/wxpython/lmgr/layertree.py:800
+#: ../gui/wxpython/lmgr/layertree.py:674 ../gui/wxpython/lmgr/layertree.py:807
 msgid "Make a copy in the current mapset"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:673 ../gui/wxpython/lmgr/layertree.py:806
-#: ../gui/wxpython/lmgr/layertree.py:863
+#: ../gui/wxpython/lmgr/layertree.py:680 ../gui/wxpython/lmgr/layertree.py:813
+#: ../gui/wxpython/lmgr/layertree.py:870
 msgid "Set color table"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:677 ../gui/wxpython/lmgr/layertree.py:810
+#: ../gui/wxpython/lmgr/layertree.py:684 ../gui/wxpython/lmgr/layertree.py:817
 msgid "Set color table interactively"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:682
+#: ../gui/wxpython/lmgr/layertree.py:689
 msgid "Show attribute data"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:695
+#: ../gui/wxpython/lmgr/layertree.py:702
 msgid "Start editing"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:700
+#: ../gui/wxpython/lmgr/layertree.py:707
 msgid "Stop editing"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:723
+#: ../gui/wxpython/lmgr/layertree.py:730
 msgid "Rebuild topology"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:817
+#: ../gui/wxpython/lmgr/layertree.py:824
 msgid "Histogram"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:828 ../gui/wxpython/lmgr/layertree.py:871
+#: ../gui/wxpython/lmgr/layertree.py:835 ../gui/wxpython/lmgr/layertree.py:878
 msgid "Univariate raster statistics"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:837
+#: ../gui/wxpython/lmgr/layertree.py:844
 msgid "Report raster statistics"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:845
+#: ../gui/wxpython/lmgr/layertree.py:852
 msgid "Profile"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:888
+#: ../gui/wxpython/lmgr/layertree.py:895
 msgid "Save web service layer"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:1003
+#: ../gui/wxpython/lmgr/layertree.py:1010
 msgid "Unable to create profile of raster map."
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:1045
+#: ../gui/wxpython/lmgr/layertree.py:1052
 #: ../gui/wxpython/nviz/mapwindow.py:1782 ../gui/wxpython/nviz/tools.py:894
 #: ../gui/wxpython/psmap/dialogs.py:1635
 msgid "Raster map"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:1049 ../gui/wxpython/nviz/tools.py:1529
+#: ../gui/wxpython/lmgr/layertree.py:1056 ../gui/wxpython/nviz/tools.py:1529
 #: ../gui/wxpython/psmap/dialogs.py:3642
 msgid "Vector map"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:1053 ../gui/wxpython/nviz/tools.py:1953
+#: ../gui/wxpython/lmgr/layertree.py:1060 ../gui/wxpython/nviz/tools.py:1953
 msgid "3D raster map"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:1055
+#: ../gui/wxpython/lmgr/layertree.py:1062
 #, python-format
 msgid "Unsupported map type <%s>"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:1061
+#: ../gui/wxpython/lmgr/layertree.py:1068
 #, python-format
 msgid "Enter name for the new %s in the current mapset:"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:1063
+#: ../gui/wxpython/lmgr/layertree.py:1070
 #, python-format
 msgid "Make a copy of %s <%s>"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:1081
+#: ../gui/wxpython/lmgr/layertree.py:1088
 #, python-format
 msgid "%s <%s> already exists in the current mapset. Do you want to overwrite it?"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:1094
+#: ../gui/wxpython/lmgr/layertree.py:1101
 #, python-format
 msgid "Unable to make copy of <%s>"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:1101
+#: ../gui/wxpython/lmgr/layertree.py:1108
 #, python-format
 msgid "Unable to make copy of <%s>. Mapset <%s> is not current mapset."
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:1123
+#: ../gui/wxpython/lmgr/layertree.py:1130
 msgid "Unable to display histogram of raster map. No map name defined."
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:1180 ../gui/wxpython/mapdisp/frame.py:316
+#: ../gui/wxpython/lmgr/layertree.py:1191 ../gui/wxpython/mapdisp/frame.py:316
 #, python-format
 msgid ""
 "Unable to start wxGUI vector digitizer.\n"
 "Details: %s"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:1244
+#: ../gui/wxpython/lmgr/layertree.py:1255
 msgid "Set opacity of <{}>"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:1483
+#: ../gui/wxpython/lmgr/layertree.py:1494
 msgid "Layer group:"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:1488
-#: ../gui/wxpython/lmgr/layertree.py:2047
+#: ../gui/wxpython/lmgr/layertree.py:1499
+#: ../gui/wxpython/lmgr/layertree.py:2049
 msgid "Click to edit layer settings"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:1552
+#: ../gui/wxpython/lmgr/layertree.py:1563
 msgid "(double click to set properties)"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:1826
+#: ../gui/wxpython/lmgr/layertree.py:1837
 msgid "Please wait, updating data..."
 msgstr ""
 

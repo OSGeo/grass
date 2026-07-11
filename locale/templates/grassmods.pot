@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-27 15:58+0000\n"
+"POT-Creation-Date: 2026-07-11 16:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4154,6 +4154,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.list_to_translate.c:8
 #: ../locale/scriptstrings/t.list_to_translate.c:14
 #: ../locale/scriptstrings/t.list_to_translate.c:15
+#: ../locale/scriptstrings/t.list_to_translate.c:19
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:10
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:11
 #: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:7
@@ -15090,8 +15091,8 @@ msgstr ""
 
 #: ../locale/scriptstrings/t.list_to_translate.c:11
 #: ../locale/scriptstrings/t.list_to_translate.c:17
-#: ../locale/scriptstrings/t.list_to_translate.c:19
 #: ../locale/scriptstrings/t.list_to_translate.c:21
+#: ../locale/scriptstrings/t.list_to_translate.c:23
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:8
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:15
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:17
@@ -15142,6 +15143,10 @@ msgid "plain;Plain text output;line;Comma separated list of dataset names;json;J
 msgstr ""
 
 #: ../locale/scriptstrings/t.list_to_translate.c:18
+msgid "Name of mapsets to list ('.' for current, '*' for all mapsets)"
+msgstr ""
+
+#: ../locale/scriptstrings/t.list_to_translate.c:20
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:16
 #: ../locale/scriptstrings/t.rast.univar_to_translate.c:12
 #: ../locale/scriptstrings/t.rast3d.list_to_translate.c:15
@@ -15152,7 +15157,7 @@ msgstr ""
 msgid "Field separator character between the output columns"
 msgstr ""
 
-#: ../locale/scriptstrings/t.list_to_translate.c:20
+#: ../locale/scriptstrings/t.list_to_translate.c:22
 #: ../locale/scriptstrings/t.sample_to_translate.c:11
 msgid "Print the column names as first row"
 msgstr ""
