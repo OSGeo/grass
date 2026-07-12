@@ -9,26 +9,36 @@ already converted during the tool builds are up to date and are skipped,
 so this effectively converts the index pages, including the dynamically
 named topic_* pages.
 
-Usage: build_manpages.py <markdown-directory> <man-directory> <g.md2man.py>
+Every page in the markdown directory gets a man page: this assumes the
+CMake build puts no web-only pages (WEB_ONLY_MD in man/Makefile) into the
+markdown tree, which holds until the MkDocs site files are added to the
+CMake build; that change must add an exclusion mechanism here.
+
 """
 
+import argparse
 import subprocess
 import sys
 from pathlib import Path
 
 
 def main():
-    md_dir = Path(sys.argv[1])
-    man_dir = Path(sys.argv[2])
-    md2man = sys.argv[3]
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("md_dir", type=Path, help="directory with Markdown pages")
+    parser.add_argument("man_dir", type=Path, help="directory for man pages")
+    parser.add_argument("md2man", help="path to g.md2man.py")
+    args = parser.parse_args()
 
-    man_dir.mkdir(parents=True, exist_ok=True)
-    for md_file in sorted(md_dir.glob("*.md")):
-        man_file = man_dir / (md_file.stem + ".1")
-        if man_file.exists() and man_file.stat().st_mtime >= md_file.stat().st_mtime:
+    args.man_dir.mkdir(parents=True, exist_ok=True)
+    for md_file in sorted(args.md_dir.glob("*.md")):
+        man_file = args.man_dir / (md_file.stem + ".1")
+        # Convert also on equal timestamps: with coarse mtime granularity
+        # a page regenerated within the same second would otherwise be
+        # skipped, and a redundant conversion is cheaper than a stale page.
+        if man_file.exists() and man_file.stat().st_mtime > md_file.stat().st_mtime:
             continue
         subprocess.run(
-            [sys.executable, md2man, str(md_file), str(man_file)], check=True
+            [sys.executable, args.md2man, str(md_file), str(man_file)], check=True
         )
 
 

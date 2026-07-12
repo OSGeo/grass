@@ -167,6 +167,7 @@ function(generate_docs name)
       COMMAND ${copy_images_command}
       COMMAND ${copy_images_command_md}
       COMMAND ${CMAKE_COMMAND} -E remove ${tmp_html_file} ${tmp_md_file}
+      BYPRODUCTS ${out_md_file} ${out_man_file}
       COMMENT "Creating ${name}.[html|md|1]")
   elseif(D_GUI_TARGET_NAME)
     set(gui_html_file ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/wxGUI.${name}.html)
@@ -192,6 +193,7 @@ function(generate_docs name)
       COMMAND ${CMAKE_COMMAND} -E remove ${tmp_md_file}
       COMMAND ${mkmarkdown_cmd} ${D_GUI_TARGET_NAME} > ${gui_md_file}
       COMMAND ${md2man_cmd} ${gui_md_file} ${gui_man_file}
+      BYPRODUCTS ${out_md_file} ${out_man_file} ${gui_md_file} ${gui_man_file}
       COMMENT "Creating ${out_html_file} and ${gui_html_file}"
       DEPENDS ${D_DEPENDS})
   else()
@@ -212,6 +214,7 @@ function(generate_docs name)
       COMMAND ${copy_images_command}
       COMMAND ${copy_images_command_md}
       COMMAND ${CMAKE_COMMAND} -E remove ${tmp_html_file} ${tmp_md_file}
+      BYPRODUCTS ${out_md_file} ${out_man_file}
       COMMENT "Creating ${OUT_HTML_FILE}"
       DEPENDS ${D_DEPENDS})
   endif()
