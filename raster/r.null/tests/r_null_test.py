@@ -53,7 +53,7 @@ def test_fill_nulls(session_with_maps):
     """NULL cells are replaced by the null= value."""
     tools = Tools(session=session_with_maps)
 
-    tools.r_null(map="map_fill_nulls", null="1")
+    tools.r_null(map="map_fill_nulls", null=1)
 
     described = tools.r_describe(map="map_fill_nulls", format="json", flags="1").json
     assert described == {"has_nulls": False, "values": [1, 2, 3]}
