@@ -1,16 +1,29 @@
 ---
 name: CMake
 
+# Documentation content under doc/ is ignored, but not the CMakeLists.txt
+# files there, which are part of the build (paths-ignore does not support
+# negation, so the content types are listed instead).
 on:
   push:
     paths-ignore:
-      - "doc/**"
+      - "doc/**/*.md"
+      - "doc/**/*.html"
+      - "doc/**/*.png"
+      - "doc/**/*.jpg"
+      - "doc/**/*.ipynb"
+      - "doc/**/*.py"
     branches:
       - main
       - releasebranch_*
   pull_request:
     paths-ignore:
-      - "doc/**"
+      - "doc/**/*.md"
+      - "doc/**/*.html"
+      - "doc/**/*.png"
+      - "doc/**/*.jpg"
+      - "doc/**/*.ipynb"
+      - "doc/**/*.py"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}

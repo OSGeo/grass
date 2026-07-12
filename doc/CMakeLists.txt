@@ -2,6 +2,15 @@ set(doc_files
   grass_database
   projectionintro)
 
+# Guides shown only on the documentation website; they have no .html source
+# and are excluded from man page generation (see man/CMakeLists.txt).
+set(web_only_doc_files
+  grass_projects
+  interfaces_overview
+  jupyter_intro
+  migration_to_grass_tools_python_api
+  python_intro)
+
 set(img_files
   create_new_project_gui.png
   gi_3dview.jpg
@@ -37,5 +46,13 @@ generate_docs_list(
   DOC_FILES ${doc_files}
   IMG_FILES ${img_files})
 
+generate_docs_list(
+  TARGET ADD_DOC_DOCS
+  DOC_FILES ${web_only_doc_files}
+  MD_ONLY)
+
 unset(doc_files)
+unset(web_only_doc_files)
 unset(img_files)
+
+add_subdirectory(development)
