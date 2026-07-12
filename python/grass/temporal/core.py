@@ -691,6 +691,12 @@ def init(
             msgr.warning("TGIS_DISABLE_TIMESTAMP_WRITE is True")
 
     if skip_db_init:
+        # Honor the documented contract that skip_db_init still provides the
+        # backend global. Read the driver non-destructively (no t.connect,
+        # which would write the connection VAR) and fall back to the sqlite
+        # default when no temporal connection is defined yet.
+        driver_string = ciface.get_driver_name(current_mapset)
+        tgis_backend = decode(driver_string) if driver_string else "sqlite"
         return
 
     msgr.debug(1, "Initiate the temporal database")
