@@ -6,15 +6,15 @@
 #   Markus Neteler
 #   Glynn Clements
 
-import sys
 import os
+import sys
 
 from build import (
-    write_header,
+    grass_version,
+    replace_file,
     write_cmd_overview,
     write_footer,
-    replace_file,
-    grass_version,
+    write_header,
 )
 
 year = None

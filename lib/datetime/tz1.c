@@ -20,7 +20,6 @@ static int have(int x, const DateTime *dt)
  *  \param minutes
  *  \return int
  */
-
 int datetime_check_timezone(const DateTime *dt, int minutes)
 {
     if (!datetime_is_absolute(dt))
@@ -42,7 +41,6 @@ int datetime_check_timezone(const DateTime *dt, int minutes)
  *  \param minutes
  *  \return int
  */
-
 int datetime_get_timezone(const DateTime *dt, int *minutes)
 {
     int stat;
@@ -63,7 +61,6 @@ int datetime_get_timezone(const DateTime *dt, int *minutes)
  *  \param minutes
  *  \return int
  */
-
 int datetime_set_timezone(DateTime *dt, int minutes)
 {
     int stat;
@@ -84,7 +81,6 @@ int datetime_set_timezone(DateTime *dt, int minutes)
  *  \param dt
  *  \return int
  */
-
 int datetime_unset_timezone(DateTime *dt)
 {
     dt->tz = -9999;
@@ -102,7 +98,6 @@ int datetime_unset_timezone(DateTime *dt)
  *  \param minutes
  *  \return int
  */
-
 int datetime_is_valid_timezone(int minutes)
 {
     return (minutes >= -720 && minutes <= 780);

@@ -57,9 +57,7 @@ class AnimationFrame(wx.Frame):
         self.iconsize = (16, 16)
 
         self.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
 
         # Make sure the temporal database exists

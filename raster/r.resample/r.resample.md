@@ -37,7 +37,7 @@ created by *r.resample*.
 [r.rescale](r.rescale.md), [r.resamp.interp](r.resamp.interp.md)*
 
 Overview: [Interpolation and
-Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS GIS
+Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS
 
 ## AUTHOR
 

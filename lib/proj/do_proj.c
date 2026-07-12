@@ -41,8 +41,6 @@
 
 static double METERS_in = 1.0, METERS_out = 1.0;
 
-#ifdef HAVE_PROJ_H
-#if PROJ_VERSION_MAJOR >= 6
 int get_pj_area(const struct pj_info *iproj, double *xmin, double *xmax,
                 double *ymin, double *ymax)
 {
@@ -389,8 +387,6 @@ PJ *get_pj_object(const struct pj_info *in_gpj, char **in_defstr)
 
     return in_pj;
 }
-#endif
-#endif
 
 /**
  * \brief Create a PROJ transformation object to transform coordinates
@@ -405,8 +401,7 @@ PJ *get_pj_object(const struct pj_info *in_gpj, char **in_defstr)
  * info_out->pj = NULL can be passed to the function. In this case,
  * coordinates will be transformed between the input SRS and its
  * latlong equivalent, and for PROJ 5+, the transformation object is
- * created accordingly, while for PROJ 4, the output SRS is created as
- * latlong equivalent of the input SRS
+ * created accordingly
  *
  * PROJ 5+:
  *   info_in->pj must not be null
@@ -419,10 +414,6 @@ PJ *get_pj_object(const struct pj_info *in_gpj, char **in_defstr)
  *         first step of the pipeline for proj_create_crs_to_crs()
  *   if info_trans->def is not NULL, this pipeline definition will be
  *   used to create a transformation object
- * PROJ 4:
- *   info_in->pj must not be null
- *   if info_out->pj is null, create info_out as ll equivalent
- *   else do nothing, info_trans is not used
  *
  * \param info_in pointer to pj_info struct for input co-ordinate system
  * \param info_out pointer to pj_info struct for output co-ordinate system
@@ -440,9 +431,6 @@ int GPJ_init_transform(const struct pj_info *info_in,
 
     if (info_in->def == NULL)
         G_fatal_error(_("Input coordinate system definition is NULL"));
-
-#ifdef HAVE_PROJ_H
-#if PROJ_VERSION_MAJOR >= 6
 
     /* PROJ6+: enforce axis order easting, northing
      * +axis=enu (works with proj-4.8+) */
@@ -660,7 +648,6 @@ int GPJ_init_transform(const struct pj_info *info_in,
                     G_important_message(_("Accuracy within area of use: %g m"),
                                         pj_info.accuracy);
                 }
-#if PROJ_VERSION_NUM >= 6020000
                 const char *str = proj_get_remarks(op);
 
                 if (str && *str) {
@@ -672,7 +659,6 @@ int GPJ_init_transform(const struct pj_info *info_in,
                     G_important_message(" ");
                     G_important_message(_("Scope: %s"), str);
                 }
-#endif
 
                 projstr = proj_as_proj_string(NULL, op, PJ_PROJ_5, NULL);
                 if (projstr) {
@@ -727,12 +713,9 @@ int GPJ_init_transform(const struct pj_info *info_in,
         /* from GDAL OGRProjCT::ListCoordinateOperations() */
         proj_operation_factory_context_set_grid_availability_use(
             PJ_DEFAULT_CTX, operation_ctx,
-#if PROJ_VERSION_NUM >= 7000000
             proj_context_is_network_enabled(PJ_DEFAULT_CTX)
                 ? PROJ_GRID_AVAILABILITY_KNOWN_AVAILABLE
-                :
-#endif
-                PROJ_GRID_AVAILABILITY_DISCARD_OPERATION_IF_MISSING_GRID);
+                : PROJ_GRID_AVAILABILITY_DISCARD_OPERATION_IF_MISSING_GRID);
 
         /* The operations are sorted with the most relevant ones first:
          * by descending area (intersection of the transformation area
@@ -856,124 +839,6 @@ int GPJ_init_transform(const struct pj_info *info_in,
 
         return -1;
     }
-#else /* PROJ 5 */
-    info_trans->pj = NULL;
-    info_trans->meters = 1.;
-    info_trans->zone = 0;
-    snprintf(info_trans->proj, sizeof(info_trans->proj), "pipeline");
-
-    /* user-provided pipeline */
-    if (info_trans->def) {
-        /* create a pj from user-defined transformation pipeline */
-        info_trans->pj = proj_create(PJ_DEFAULT_CTX, info_trans->def);
-        if (info_trans->pj == NULL) {
-            G_warning(_("proj_create() failed for '%s'"), info_trans->def);
-
-            return -1;
-        }
-    }
-    /* if no output CRS is defined,
-     * assume info_out to be ll equivalent of info_in */
-    else if (info_out->pj == NULL) {
-        G_asprintf(&(info_trans->def), "+proj=pipeline +step +inv %s",
-                   info_in->def);
-        info_trans->pj = proj_create(PJ_DEFAULT_CTX, info_trans->def);
-        if (info_trans->pj == NULL) {
-            G_warning(_("proj_create() failed for '%s'"), info_trans->def);
-
-            return -1;
-        }
-    }
-    else if (info_in->def && info_out->pj && info_out->def) {
-        char *indef = NULL, *outdef = NULL;
-        char *insrid = NULL, *outsrid = NULL;
-
-        /* PROJ5: EPSG must be lowercase epsg */
-        if (info_in->srid) {
-            if (strncmp(info_in->srid, "EPSG", 4) == 0)
-                insrid = G_store_lower(info_in->srid);
-            else
-                insrid = G_store(info_in->srid);
-        }
-
-        if (info_out->pj && info_out->srid) {
-            if (strncmp(info_out->srid, "EPSG", 4) == 0)
-                outsrid = G_store_lower(info_out->srid);
-            else
-                outsrid = G_store(info_out->srid);
-        }
-
-        info_trans->pj = NULL;
-
-        if (insrid && outsrid) {
-            G_asprintf(&indef, "%s", insrid);
-            G_asprintf(&outdef, "%s", outsrid);
-
-            G_asprintf(&(info_trans->def),
-                       "+proj=pipeline +step +inv +init=%s +step +init=%s",
-                       indef, outdef);
-
-            /* try proj_create_crs_to_crs() */
-            info_trans->pj =
-                proj_create_crs_to_crs(PJ_DEFAULT_CTX, indef, outdef, NULL);
-        }
-
-        if (info_trans->pj) {
-            G_debug(1, "proj_create_crs_to_crs() succeeded with PROJ5");
-        }
-        else {
-            if (indef) {
-                G_free(indef);
-                indef = NULL;
-            }
-            if (insrid) {
-                G_asprintf(&indef, "+init=%s", insrid);
-            }
-            else {
-                G_asprintf(&indef, "%s", info_in->def);
-            }
-
-            if (outdef) {
-                G_free(outdef);
-                outdef = NULL;
-            }
-            if (outsrid) {
-                G_asprintf(&outdef, "+init=%s", outsrid);
-            }
-            else {
-                G_asprintf(&outdef, "%s", info_out->def);
-            }
-
-            /* try proj_create() with +proj=pipeline +step +inv %s +step %s" */
-            G_asprintf(&(info_trans->def),
-                       "+proj=pipeline +step +inv %s +step %s", indef, outdef);
-
-            info_trans->pj = proj_create(PJ_DEFAULT_CTX, info_trans->def);
-        }
-        if (insrid)
-            G_free(insrid);
-        if (outsrid)
-            G_free(outsrid);
-        G_free(indef);
-        G_free(outdef);
-    }
-    if (info_trans->pj == NULL) {
-        G_warning(_("proj_create() failed for '%s'"), info_trans->def);
-
-        return -1;
-    }
-
-#endif
-#else /* PROJ 4 */
-    if (info_out->pj == NULL) {
-        if (GPJ_get_equivalent_latlong(info_out, info_in) < 0) {
-            G_warning(_("Unable to create latlong equivalent for '%s'"),
-                      info_in->def);
-
-            return -1;
-        }
-    }
-#endif
 
     return 1;
 }
@@ -1011,8 +876,6 @@ int GPJ_transform(const struct pj_info *info_in, const struct pj_info *info_out,
 {
     int ok = 0;
 
-#ifdef HAVE_PROJ_H
-    /* PROJ 5+ variant */
     int in_is_ll, out_is_ll, in_deg2rad, out_rad2deg;
     PJ_COORD c;
 
@@ -1027,25 +890,21 @@ int GPJ_transform(const struct pj_info *info_in, const struct pj_info *info_out,
         /* info_in -> info_out */
         METERS_in = info_in->meters;
         in_is_ll = !strncmp(info_in->proj, "ll", 2);
-#if PROJ_VERSION_MAJOR >= 6
         /* PROJ 6+: conversion to radians is not always needed:
          * if proj_angular_input(info_trans->pj, dir) == 1
          * -> convert from degrees to radians */
         if (in_is_ll && proj_angular_input(info_trans->pj, dir) == 0) {
             in_deg2rad = 0;
         }
-#endif
         if (info_out->pj) {
             METERS_out = info_out->meters;
             out_is_ll = !strncmp(info_out->proj, "ll", 2);
-#if PROJ_VERSION_MAJOR >= 6
             /* PROJ 6+: conversion to radians is not always needed:
              * if proj_angular_input(info_trans->pj, dir) == 1
              * -> convert from degrees to radians */
             if (out_is_ll && proj_angular_output(info_trans->pj, dir) == 0) {
                 out_rad2deg = 0;
             }
-#endif
         }
         else {
             METERS_out = 1.0;
@@ -1056,25 +915,21 @@ int GPJ_transform(const struct pj_info *info_in, const struct pj_info *info_out,
         /* info_out -> info_in */
         METERS_out = info_in->meters;
         out_is_ll = !strncmp(info_in->proj, "ll", 2);
-#if PROJ_VERSION_MAJOR >= 6
         /* PROJ 6+: conversion to radians is not always needed:
          * if proj_angular_input(info_trans->pj, dir) == 1
          * -> convert from degrees to radians */
         if (out_is_ll && proj_angular_output(info_trans->pj, dir) == 0) {
             out_rad2deg = 0;
         }
-#endif
         if (info_out->pj) {
             METERS_in = info_out->meters;
             in_is_ll = !strncmp(info_out->proj, "ll", 2);
-#if PROJ_VERSION_MAJOR >= 6
             /* PROJ 6+: conversion to radians is not always needed:
              * if proj_angular_input(info_trans->pj, dir) == 1
              * -> convert from degrees to radians */
             if (in_is_ll && proj_angular_input(info_trans->pj, dir) == 0) {
                 in_deg2rad = 0;
             }
-#endif
         }
         else {
             METERS_in = 1.0;
@@ -1143,57 +998,6 @@ int GPJ_transform(const struct pj_info *info_in, const struct pj_info *info_out,
         if (z)
             *z = c.xyzt.z;
     }
-#else
-    /* PROJ 4 variant */
-    double u, v;
-    double h = 0.0;
-    const struct pj_info *p_in, *p_out;
-
-    if (info_out == NULL)
-        G_fatal_error(_("No output projection"));
-
-    if (dir == PJ_FWD) {
-        p_in = info_in;
-        p_out = info_out;
-    }
-    else {
-        p_in = info_out;
-        p_out = info_in;
-    }
-
-    METERS_in = p_in->meters;
-    METERS_out = p_out->meters;
-
-    if (z)
-        h = *z;
-
-    if (strncmp(p_in->proj, "ll", 2) == 0) {
-        u = (*x) / RAD_TO_DEG;
-        v = (*y) / RAD_TO_DEG;
-    }
-    else {
-        u = *x * METERS_in;
-        v = *y * METERS_in;
-    }
-
-    ok = pj_transform(p_in->pj, p_out->pj, 1, 0, &u, &v, &h);
-
-    if (ok < 0) {
-        G_warning(_("pj_transform() failed: %s"), pj_strerrno(ok));
-        return ok;
-    }
-
-    if (strncmp(p_out->proj, "ll", 2) == 0) {
-        *x = u * RAD_TO_DEG;
-        *y = v * RAD_TO_DEG;
-    }
-    else {
-        *x = u / METERS_out;
-        *y = v / METERS_out;
-    }
-    if (z)
-        *z = h;
-#endif
 
     return ok;
 }
@@ -1233,7 +1037,6 @@ int GPJ_transform_array(const struct pj_info *info_in,
     int i;
     int has_z = 1;
 
-#ifdef HAVE_PROJ_H
     /* PROJ 5+ variant */
     int in_is_ll, out_is_ll, in_deg2rad, out_rad2deg;
     PJ_COORD c;
@@ -1246,25 +1049,21 @@ int GPJ_transform_array(const struct pj_info *info_in,
         /* info_in -> info_out */
         METERS_in = info_in->meters;
         in_is_ll = !strncmp(info_in->proj, "ll", 2);
-#if PROJ_VERSION_MAJOR >= 6
         /* PROJ 6+: conversion to radians is not always needed:
          * if proj_angular_input(info_trans->pj, dir) == 1
          * -> convert from degrees to radians */
         if (in_is_ll && proj_angular_input(info_trans->pj, dir) == 0) {
             in_deg2rad = 0;
         }
-#endif
         if (info_out->pj) {
             METERS_out = info_out->meters;
             out_is_ll = !strncmp(info_out->proj, "ll", 2);
-#if PROJ_VERSION_MAJOR >= 6
             /* PROJ 6+: conversion to radians is not always needed:
              * if proj_angular_input(info_trans->pj, dir) == 1
              * -> convert from degrees to radians */
             if (out_is_ll && proj_angular_output(info_trans->pj, dir) == 0) {
                 out_rad2deg = 0;
             }
-#endif
         }
         else {
             METERS_out = 1.0;
@@ -1275,25 +1074,21 @@ int GPJ_transform_array(const struct pj_info *info_in,
         /* info_out -> info_in */
         METERS_out = info_in->meters;
         out_is_ll = !strncmp(info_in->proj, "ll", 2);
-#if PROJ_VERSION_MAJOR >= 6
         /* PROJ 6+: conversion to radians is not always needed:
          * if proj_angular_input(info_trans->pj, dir) == 1
          * -> convert from degrees to radians */
         if (out_is_ll && proj_angular_output(info_trans->pj, dir) == 0) {
             out_rad2deg = 0;
         }
-#endif
         if (info_out->pj) {
             METERS_in = info_out->meters;
             in_is_ll = !strncmp(info_out->proj, "ll", 2);
-#if PROJ_VERSION_MAJOR >= 6
             /* PROJ 6+: conversion to degrees is not always needed:
              * if proj_angular_output(info_trans->pj, dir) == 1
              * -> convert from degrees to radians */
             if (in_is_ll && proj_angular_input(info_trans->pj, dir) == 0) {
                 in_deg2rad = 0;
             }
-#endif
         }
         else {
             METERS_in = 1.0;
@@ -1409,59 +1204,6 @@ int GPJ_transform_array(const struct pj_info *info_in,
     if (ok < 0) {
         G_warning(_("proj_trans() failed: %s"), proj_errno_string(ok));
     }
-#else
-    /* PROJ 4 variant */
-    const struct pj_info *p_in, *p_out;
-
-    if (dir == PJ_FWD) {
-        p_in = info_in;
-        p_out = info_out;
-    }
-    else {
-        p_in = info_out;
-        p_out = info_in;
-    }
-
-    METERS_in = p_in->meters;
-    METERS_out = p_out->meters;
-
-    if (z == NULL) {
-        z = G_malloc(sizeof(double) * n);
-        /* they say memset is only guaranteed for chars ;-( */
-        for (i = 0; i < n; ++i)
-            z[i] = 0.0;
-        has_z = 0;
-    }
-    if (strncmp(p_in->proj, "ll", 2) == 0) {
-        if (strncmp(p_out->proj, "ll", 2) == 0) {
-            DIVIDE_LOOP(x, y, n, RAD_TO_DEG);
-            ok = pj_transform(info_in->pj, info_out->pj, n, 1, x, y, z);
-            MULTIPLY_LOOP(x, y, n, RAD_TO_DEG);
-        }
-        else {
-            DIVIDE_LOOP(x, y, n, RAD_TO_DEG);
-            ok = pj_transform(info_in->pj, info_out->pj, n, 1, x, y, z);
-            DIVIDE_LOOP(x, y, n, METERS_out);
-        }
-    }
-    else {
-        if (strncmp(p_out->proj, "ll", 2) == 0) {
-            MULTIPLY_LOOP(x, y, n, METERS_in);
-            ok = pj_transform(info_in->pj, info_out->pj, n, 1, x, y, z);
-            MULTIPLY_LOOP(x, y, n, RAD_TO_DEG);
-        }
-        else {
-            MULTIPLY_LOOP(x, y, n, METERS_in);
-            ok = pj_transform(info_in->pj, info_out->pj, n, 1, x, y, z);
-            DIVIDE_LOOP(x, y, n, METERS_out);
-        }
-    }
-    if (!has_z)
-        G_free(z);
-
-    if (ok < 0)
-        G_warning(_("pj_transform() failed: %s"), pj_strerrno(ok));
-#endif
 
     return ok;
 }
@@ -1492,7 +1234,6 @@ int pj_do_proj(double *x, double *y, const struct pj_info *info_in,
 {
     int ok;
 
-#ifdef HAVE_PROJ_H
     struct pj_info info_trans;
     PJ_COORD c;
 
@@ -1548,49 +1289,6 @@ int pj_do_proj(double *x, double *y, const struct pj_info *info_in,
     if (ok < 0) {
         G_warning(_("proj_trans() failed: %d"), ok);
     }
-#else
-    double u, v;
-    double h = 0.0;
-
-    METERS_in = info_in->meters;
-    METERS_out = info_out->meters;
-
-    if (strncmp(info_in->proj, "ll", 2) == 0) {
-        if (strncmp(info_out->proj, "ll", 2) == 0) {
-            u = (*x) / RAD_TO_DEG;
-            v = (*y) / RAD_TO_DEG;
-            ok = pj_transform(info_in->pj, info_out->pj, 1, 0, &u, &v, &h);
-            *x = u * RAD_TO_DEG;
-            *y = v * RAD_TO_DEG;
-        }
-        else {
-            u = (*x) / RAD_TO_DEG;
-            v = (*y) / RAD_TO_DEG;
-            ok = pj_transform(info_in->pj, info_out->pj, 1, 0, &u, &v, &h);
-            *x = u / METERS_out;
-            *y = v / METERS_out;
-        }
-    }
-    else {
-        if (strncmp(info_out->proj, "ll", 2) == 0) {
-            u = *x * METERS_in;
-            v = *y * METERS_in;
-            ok = pj_transform(info_in->pj, info_out->pj, 1, 0, &u, &v, &h);
-            *x = u * RAD_TO_DEG;
-            *y = v * RAD_TO_DEG;
-        }
-        else {
-            u = *x * METERS_in;
-            v = *y * METERS_in;
-            ok = pj_transform(info_in->pj, info_out->pj, 1, 0, &u, &v, &h);
-            *x = u / METERS_out;
-            *y = v / METERS_out;
-        }
-    }
-    if (ok < 0) {
-        G_warning(_("pj_transform() failed: %s"), pj_strerrno(ok));
-    }
-#endif
     return ok;
 }
 
@@ -1625,7 +1323,6 @@ int pj_do_transform(int count, double *x, double *y, double *h,
     int i;
     int has_h = 1;
 
-#ifdef HAVE_PROJ_H
     struct pj_info info_trans;
     PJ_COORD c;
 
@@ -1713,47 +1410,5 @@ int pj_do_transform(int count, double *x, double *y, double *h,
     if (ok < 0) {
         G_warning(_("proj_trans() failed: %d"), ok);
     }
-#else
-    METERS_in = info_in->meters;
-    METERS_out = info_out->meters;
-
-    if (h == NULL) {
-        h = G_malloc(sizeof *h * count);
-        /* they say memset is only guaranteed for chars ;-( */
-        for (i = 0; i < count; ++i)
-            h[i] = 0.0;
-        has_h = 0;
-    }
-    if (strncmp(info_in->proj, "ll", 2) == 0) {
-        if (strncmp(info_out->proj, "ll", 2) == 0) {
-            DIVIDE_LOOP(x, y, count, RAD_TO_DEG);
-            ok = pj_transform(info_in->pj, info_out->pj, count, 1, x, y, h);
-            MULTIPLY_LOOP(x, y, count, RAD_TO_DEG);
-        }
-        else {
-            DIVIDE_LOOP(x, y, count, RAD_TO_DEG);
-            ok = pj_transform(info_in->pj, info_out->pj, count, 1, x, y, h);
-            DIVIDE_LOOP(x, y, count, METERS_out);
-        }
-    }
-    else {
-        if (strncmp(info_out->proj, "ll", 2) == 0) {
-            MULTIPLY_LOOP(x, y, count, METERS_in);
-            ok = pj_transform(info_in->pj, info_out->pj, count, 1, x, y, h);
-            MULTIPLY_LOOP(x, y, count, RAD_TO_DEG);
-        }
-        else {
-            MULTIPLY_LOOP(x, y, count, METERS_in);
-            ok = pj_transform(info_in->pj, info_out->pj, count, 1, x, y, h);
-            DIVIDE_LOOP(x, y, count, METERS_out);
-        }
-    }
-    if (!has_h)
-        G_free(h);
-
-    if (ok < 0) {
-        G_warning(_("pj_transform() failed: %s"), pj_strerrno(ok));
-    }
-#endif
     return ok;
 }

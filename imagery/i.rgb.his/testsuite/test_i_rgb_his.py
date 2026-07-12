@@ -103,17 +103,17 @@ class TestIRGBHIS(TestCase):
         )
 
         univar_hue = gs.parse_command("r.univar", map="test_hue_gray", format="json")
-        self.assertAlmostEqual(univar_hue[0]["mean"], 0.0, places=6)
+        self.assertAlmostEqual(univar_hue["mean"], 0.0, places=6)
 
         univar_intensity = gs.parse_command(
             "r.univar", map="test_intensity_gray", format="json"
         )
-        self.assertAlmostEqual(univar_intensity[0]["mean"], 100.0, places=6)
+        self.assertAlmostEqual(univar_intensity["mean"], 100.0, places=6)
 
         univar_saturation = gs.parse_command(
             "r.univar", map="test_saturation_gray", format="json"
         )
-        self.assertAlmostEqual(univar_saturation[0]["mean"], 0.0, places=6)
+        self.assertAlmostEqual(univar_saturation["mean"], 0.0, places=6)
 
     def test_pure_primary_colors(self):
         """Test conversion for primary RGB colors"""
@@ -153,16 +153,16 @@ class TestIRGBHIS(TestCase):
                 "r.univar", map=f"test_hue_{color}", format="json"
             )
             self.assertEqual(
-                univar_hue[0]["mean"],
+                univar_hue["mean"],
                 exp_hue,
-                msg=f"Hue for {color}: Expected {exp_hue}, got {univar_hue[0]['mean']}",
+                msg=f"Hue for {color}: Expected {exp_hue}, got {univar_hue['mean']}",
             )
 
             univar_intensity = gs.parse_command(
                 "r.univar", map=f"test_intensity_{color}", format="json"
             )
             self.assertAlmostEqual(
-                univar_intensity[0]["mean"],
+                univar_intensity["mean"],
                 128,
                 msg=f"Intensity check failed for {color}",
             )
@@ -172,7 +172,7 @@ class TestIRGBHIS(TestCase):
                 "r.univar", map=f"test_saturation_{color}", format="json"
             )
             self.assertAlmostEqual(
-                univar_saturation[0]["mean"],
+                univar_saturation["mean"],
                 255.0,
                 msg=f"Saturation check failed for {color}",
             )

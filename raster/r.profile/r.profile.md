@@ -23,28 +23,11 @@ By default *r.profile* uses the resolution of the current GRASS region.
 The **null** parameter can optionally be set to change the character
 string representing null values.
 
-## OUTPUT FORMAT
-
-The multi column output from *r.profile* is intended for easy use in
-other programs. The output can be piped (\|) directly into other
-programs or saved to a file for later use. Output with geographic
-coordinates (*-g*) is compatible with *[v.in.ascii](v.in.ascii.md)* and
-can be piped directly into this program.
-
-```sh
-r.profile -g input=elevation coordinates=... | v.in.ascii output=elevation_profile separator=space
-```
-
-The 2 column output is compatible with most plotting programs.
-
-The optional RGB output provides the associated GRASS colour value for
-each profile point.
-
-Option **units** enables to set units of the profile length output. If
-the units are not specified, current coordinate reference system's units
-will be used. In case of geographic CRS (latitude/longitude), meters are
-used as default unit. Finally, the output from *r.info* can be output in
-JSON by passing the **format=json** option.
+The optional color output (with **-c**) provides the associated GRASS colour
+value for each profile point. The format of the color output is controlled by
+the **color_format** option, which can be set to hex, triplet, rgb, or hsv
+color formats. The default color format is triplet for plain output, and hex
+for JSON output.
 
 ## NOTES
 
@@ -60,6 +43,11 @@ r.profile input=dgm12.5 coordinates=3570631,5763556 2>/dev/null
 ```
 
 This filters out everything except the numbers.
+
+Option **units** enables to set units of the profile length output. If
+the units are not specified, current coordinate reference system's units
+will be used. In case of geographic CRS (latitude/longitude), meters are
+used as default unit.
 
 ## EXAMPLES
 
@@ -133,55 +121,43 @@ The output looks as follows:
         "easting": 641712,
         "northing": 226095,
         "distance": 0,
-        "elevation": 84.661506652832031,
-        "red": 113,
-        "green": 255,
-        "blue": 0
+        "value": 84.661506652832031,
+        "color": "#71FF00"
     },
     {
         "easting": 641627.47980925441,
         "northing": 225098.57823319823,
         "distance": 1000.0000000000125,
-        "elevation": 98.179061889648438,
-        "red": 255,
-        "green": 241,
-        "blue": 0
+        "value": 98.179061889648438,
+        "color": "#FFF100"
     },
     {
         "easting": 641546,
         "northing": 224138,
         "distance": 1964.0277492948007,
-        "elevation": 83.638137817382812,
-        "red": 100,
-        "green": 255,
-        "blue": 0
+        "value": 83.638137817382812,
+        "color": "#64FF00"
     },
     {
         "easting": 641546,
         "northing": 223138,
         "distance": 2964.0277492948007,
-        "elevation": 89.141029357910156,
-        "red": 169,
-        "green": 255,
-        "blue": 0
+        "value": 89.141029357910156,
+        "color": "#A9FF00"
     },
     {
         "easting": 641546,
         "northing": 222138,
         "distance": 3964.0277492948007,
-        "elevation": 78.497756958007812,
-        "red": 35,
-        "green": 255,
-        "blue": 0
+        "value": 78.497756958007812,
+        "color": "#23FF00"
     },
     {
         "easting": 641546,
         "northing": 222048,
         "distance": 4054.0277492948007,
-        "elevation": 73.988029479980469,
-        "red": 0,
-        "green": 249,
-        "blue": 17
+        "value": 73.988029479980469,
+        "color": "#00F911"
     }
 ]
 ```
@@ -203,23 +179,35 @@ elevation = gs.read_command(
     input="elevation",
     coordinates="641712,226095,641546,224138,641546,222048,641049,221186",
     format="json",
-    flags="gc"
+    flags="gc",
 )
 
 # Load the JSON data into a dataframe
 df = pd.read_json(elevation)
 
-# Convert the RGB color values to hex format for matplotlib
-df["color"] = df.apply(lambda x: "#{:02x}{:02x}{:02x}".format(int(x["red"]), int(x["green"]), int(x["blue"])), axis=1)
-
 # Create the scatter plot
 plt.figure(figsize=(10, 6))
-plt.scatter(df['distance'], df['elevation'], c=df['color'], marker='o')
-plt.title('Profile of Distance vs. Elevation with Color Coding')
-plt.xlabel('Distance (meters)')
-plt.ylabel('Elevation')
+plt.scatter(df["distance"], df["value"], c=df["color"], marker="o")
+plt.title("Profile of Distance vs. Elevation with Color Coding")
+plt.xlabel("Distance (meters)")
+plt.ylabel("Elevation")
 plt.grid(True)
 plt.show()
+```
+
+![Profile of Distance Plot](rprofile_plot.png)  
+*Profile of Distance Plot.*
+
+### Using output in other programs
+
+The multi column output from *r.profile* is intended for easy use in
+other programs. The output can be piped (\|) directly into other
+programs or saved to a file for later use. Output with geographic
+coordinates (*-g*) is compatible with *[v.in.ascii](v.in.ascii.md)* and
+can be piped directly into this program.
+
+```sh
+r.profile -g input=elevation coordinates=... | v.in.ascii output=elevation_profile separator=space
 ```
 
 ## SEE ALSO

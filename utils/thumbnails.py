@@ -13,13 +13,12 @@
 #       for details.
 #
 
-import os
 import atexit
+import os
 import sys
 from pathlib import Path
 
 import grass.script as gs
-
 
 tmp_grad_abs = None
 tmp_grad_rel = None
@@ -161,8 +160,7 @@ def main():
     color_dir = os.path.join(os.environ["GISBASE"], "etc", "colors")
     output_dir = sys.argv[1]
 
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+    Path(output_dir).mkdir(parents=True, exist_ok=True)
 
     pid = os.getpid()
     tmp_grad_abs = "tmp_grad_abs_%d" % pid

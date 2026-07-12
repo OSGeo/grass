@@ -47,7 +47,7 @@ class MapPanel(SingleMapPanel):
         self,
         parent,
         giface,
-        title=_("GRASS GIS Manage Ground Control Points"),
+        title=_("GRASS Manage Ground Control Points"),
         toolbars=["gcpdisp"],
         Map=None,
         auimgr=None,

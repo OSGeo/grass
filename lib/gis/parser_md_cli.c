@@ -35,15 +35,15 @@ void print_cli_flag(FILE *file, const char *key, const char *label,
     fprintf(file, "\n");
     if (label != NULL) {
         fprintf(file, "%s", indent);
-        G__md_print_escaped(file, "\t");
-        G__md_print_escaped(file, label);
+        G__md_print_escaped(file, "\t", indent);
+        G__md_print_escaped(file, label, indent);
         fprintf(file, MD_NEWLINE);
         fprintf(file, "\n");
     }
     if (description != NULL) {
         fprintf(file, "%s", indent);
-        G__md_print_escaped(file, "\t");
-        G__md_print_escaped(file, description);
+        G__md_print_escaped(file, "\t", indent);
+        G__md_print_escaped(file, description, indent);
     }
 }
 
@@ -82,8 +82,8 @@ void print_cli_option(FILE *file, const struct Option *opt, const char *indent)
     fprintf(file, "\n");
     if (opt->label) {
         fprintf(file, "%s", indent);
-        G__md_print_escaped(file, "\t");
-        G__md_print_escaped(file, opt->label);
+        G__md_print_escaped(file, "\t", indent);
+        G__md_print_escaped(file, opt->label, indent);
     }
     if (opt->description) {
         if (opt->label) {
@@ -91,30 +91,28 @@ void print_cli_option(FILE *file, const struct Option *opt, const char *indent)
             fprintf(file, "\n");
         }
         fprintf(file, "%s", indent);
-        G__md_print_escaped(file, "\t");
-        G__md_print_escaped(file, opt->description);
+        G__md_print_escaped(file, "\t", indent);
+        G__md_print_escaped(file, opt->description, indent);
     }
 
     if (opt->options) {
         fprintf(file, MD_NEWLINE);
         fprintf(file, "\n");
         fprintf(file, "%s", indent);
-        G__md_print_escaped(file, "\t");
+        G__md_print_escaped(file, "\t", indent);
         fprintf(file, "%s: *", _("Allowed values"));
         G__md_print_escaped_for_options(file, opt->options);
         fprintf(file, "*");
     }
 
-    if (opt->def) {
+    if (opt->def && opt->def[0] != '\0') {
         fprintf(file, MD_NEWLINE);
         fprintf(file, "\n");
         fprintf(file, "%s", indent);
-        G__md_print_escaped(file, "\t");
+        G__md_print_escaped(file, "\t", indent);
         fprintf(file, "%s:", _("Default"));
-        /* TODO check if value is empty
-           if (!opt->def.empty()){ */
         fprintf(file, " *");
-        G__md_print_escaped(file, opt->def);
+        G__md_print_escaped(file, opt->def, indent);
         fprintf(file, "*");
     }
 
@@ -139,19 +137,19 @@ void print_cli_option(FILE *file, const struct Option *opt, const char *indent)
                         thumbnails = "northarrows";
 
                     if (thumbnails) {
-                        G__md_print_escaped(file, "\t\t");
+                        G__md_print_escaped(file, "\t\t", indent);
                         fprintf(file, "![%s](%s/%s.png) ", opt->opts[i],
                                 thumbnails, opt->opts[i]);
                     }
                     else {
-                        G__md_print_escaped(file, "\t\t");
+                        G__md_print_escaped(file, "\t\t", indent);
                     }
                 }
-                G__md_print_escaped(file, "\t");
+                G__md_print_escaped(file, "\t", indent);
                 fprintf(file, "**");
-                G__md_print_escaped(file, opt->opts[i]);
+                G__md_print_escaped(file, opt->opts[i], indent);
                 fprintf(file, "**: ");
-                G__md_print_escaped(file, opt->descs[i]);
+                G__md_print_escaped(file, opt->descs[i], indent);
             }
             i++;
         }
@@ -194,12 +192,44 @@ void print_cli_example(FILE *file, const char *indent)
             if (opt->required || first_required_rule_option == opt) {
                 fprintf(file, " ");
                 fprintf(file, "%s=", opt->key);
+
+                char *value = NULL;
                 if (opt->answer) {
-                    fprintf(file, "%s", opt->answer);
+                    value = G_store(opt->answer);
+                }
+                else if (opt->options && opt->type == TYPE_STRING) {
+                    // Get example value from allowed values, but only for
+                    // strings because numbers may have ranges and we don't
+                    // want to print a range.
+                    // Get allowed values as tokens.
+                    char **tokens;
+                    char delm[2];
+                    delm[0] = ',';
+                    delm[1] = '\0';
+                    tokens = G_tokenize(opt->options, delm);
+                    // We are interested in the first allowed value.
+                    if (tokens[0]) {
+                        G_chop(tokens[0]);
+                        value = G_store(tokens[0]);
+                    }
+                    G_free_tokens(tokens);
+                }
+
+                if (value) {
+                    fprintf(file, "%s", value);
                 }
                 else {
-                    fprintf(file, "%s", type);
+                    if (opt->type == TYPE_INTEGER) {
+                        fprintf(file, "0");
+                    }
+                    else if (opt->type == TYPE_DOUBLE) {
+                        fprintf(file, "0.0");
+                    }
+                    else {
+                        fprintf(file, "%s", type);
+                    }
                 }
+                G_free(value);
             }
             opt = opt->next_opt;
         }

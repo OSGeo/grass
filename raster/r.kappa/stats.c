@@ -46,10 +46,12 @@ int stats(void)
     argv[argc++] = "-cin";
 
     argv[argc++] = "separator=:";
+    char *f_mname = G_fully_qualified_name(mname, mmapset);
+    char *f_rname = G_fully_qualified_name(rname, rmapset);
 
-    snprintf(buf, sizeof(buf), "input=%s,%s",
-             G_fully_qualified_name(mname, mmapset),
-             G_fully_qualified_name(rname, rmapset));
+    snprintf(buf, sizeof(buf), "input=%s,%s", f_mname, f_rname);
+    G_free(f_mname);
+    G_free(f_rname);
     argv[argc++] = buf;
 
     argv[argc++] = SF_REDIRECT_FILE;
@@ -60,8 +62,10 @@ int stats(void)
     argv[argc++] = NULL;
 
     if (G_vspawn_ex(argv[0], argv) != 0) {
-        remove(stats_file);
-        G_fatal_error("error running r.stats");
+        if (remove(stats_file) != 0) {
+            G_warning(_("Failed to remove file"));
+        }
+        G_fatal_error(_("error running r.stats"));
     }
 
     fd = fopen(stats_file, "r");

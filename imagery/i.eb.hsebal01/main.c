@@ -198,6 +198,9 @@ int main(int argc, char *argv[])
     h0 = output->answer;
 
     ustar = atof(input_ustar->answer);
+    if (ustar <= 0.0) {
+        G_fatal_error("Friction Velocity (u*) must be > 0");
+    }
 
     /*If automatic flag, just forget the rest of options */
     if (flag2->answer)
@@ -209,11 +212,22 @@ int main(int argc, char *argv[])
         m_col_wet = atof(input_col_wet->answer);
         m_row_dry = atof(input_row_dry->answer);
         m_col_dry = atof(input_col_dry->answer);
+        /*
+         * If the -c flag is not set, interpret the provided wet/dry pixel
+         * coordinates as integer row/column indices.
+         */
+        if (!flag3->answer) {
+            rowWet = (int)m_row_wet;
+            colWet = (int)m_col_wet;
+            rowDry = (int)m_row_dry;
+            colDry = (int)m_col_dry;
+        }
         /*If pixels locations are in projected coordinates */
-        if (flag3->answer)
+        if (flag3->answer) {
             G_verbose_message(_("Manual wet/dry pixels in image coordinates"));
-        G_verbose_message(_("Wet Pixel=> x:%f y:%f"), m_col_wet, m_row_wet);
-        G_verbose_message(_("Dry Pixel=> x:%f y:%f"), m_col_dry, m_row_dry);
+            G_verbose_message(_("Wet Pixel=> x:%f y:%f"), m_col_wet, m_row_wet);
+            G_verbose_message(_("Dry Pixel=> x:%f y:%f"), m_col_dry, m_row_dry);
+        }
     }
     /*If not automatic & missing any of the pixel location, Fatal Error */
     else {
@@ -298,6 +312,19 @@ int main(int argc, char *argv[])
     DCELL d_Rah_dry = 0.0, d_Roh_dry = 0.0;
     DCELL d_t0dem_dry = 0.0, d_t0dem_wet = 0.0;
 
+    /* Read t0dem, z0m, eact for use in both auto and manual modes*/
+    for (row = 0; row < nrows; row++) {
+        Rast_get_d_row(infd_t0dem, inrast_t0dem, row);
+        Rast_get_d_row(infd_z0m, inrast_z0m, row);
+        Rast_get_d_row(infd_eact, inrast_eact, row);
+
+        for (col = 0; col < ncols; col++) {
+            d_t0dem[row][col] = ((DCELL *)inrast_t0dem)[col];
+            d_z0m[row][col] = ((DCELL *)inrast_z0m)[col];
+            d_eact[row][col] = ((DCELL *)inrast_eact)[col];
+        }
+    }
+
     if (flag2->answer) {
         /* Process tempk min / max pixels */
         /* Internal use only */
@@ -305,17 +332,13 @@ int main(int argc, char *argv[])
         DCELL d_Rn, d_g0, d_h0;
         DCELL t0dem_min = 1000.0, t0dem_max = 0.0;
 
-        /*********************/
+        /* Only read Rn and g0 per row for candidate pixel selection */
         for (row = 0; row < nrows; row++) {
             G_percent(row, nrows, 2);
-            Rast_get_d_row(infd_t0dem, inrast_t0dem, row);
-            Rast_get_d_row(infd_z0m, inrast_z0m, row);
             Rast_get_d_row(infd_Rn, inrast_Rn, row);
             Rast_get_d_row(infd_g0, inrast_g0, row);
             /*process the data */
             for (col = 0; col < ncols; col++) {
-                d_t0dem[row][col] = (double)((DCELL *)inrast_t0dem)[col];
-                d_z0m[row][col] = (double)((DCELL *)inrast_z0m)[col];
                 d_Rn = ((DCELL *)inrast_Rn)[col];
                 d_g0 = ((DCELL *)inrast_g0)[col];
                 if (Rast_is_d_null_value(&d_Rn) ||
@@ -422,6 +445,11 @@ int main(int argc, char *argv[])
     }
     /* END OF MANUAL WET/DRY PIXELS */
 
+    if (rowDry < 0 || rowWet < 0 || colDry < 0 || colWet < 0 ||
+        rowDry >= nrows || rowWet >= nrows || colDry >= ncols ||
+        colWet >= ncols) {
+        G_fatal_error("Computed pixel indices out of raster bounds.");
+    }
     /* Extract end-members */
     Rast_get_d_row(infd_Rn, inrast_Rn, rowDry);
     Rast_get_d_row(infd_g0, inrast_g0, rowDry);

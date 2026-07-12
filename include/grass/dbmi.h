@@ -1,5 +1,5 @@
 /*!
-   \file include/dbmi.h
+   \file include/grass/dbmi.h
 
    \brief Main header of \ref dbmilib
 

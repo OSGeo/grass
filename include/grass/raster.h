@@ -168,15 +168,6 @@ enum History_field {
     HIST_NUM_FIELDS
 };
 
-/*!
-   \typedef ColorFormat
-   \brief  Color format identifiers (enum)
-
-   Identifiers of all recognized color formats.
-
- */
-typedef enum { RGB, HEX, HSV, TRIPLET } ColorFormat;
-
 /*! \brief Raster history info (metadata) */
 struct History {
     /*! \brief Array of fields (see \ref History_field for details) */

@@ -9,7 +9,7 @@ header1_tmpl = string.Template(
 <html>
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
- <title>${title} - GRASS GIS Manual</title>
+ <title>${title} - GRASS Manual</title>
  <meta name="Author" content="GRASS Development Team">
  <meta http-equiv="content-language" content="en-us">
  <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,7 +18,7 @@ header1_tmpl = string.Template(
 
 macosx_tmpl = string.Template(
     r"""
- <meta name="AppleTitle" content="GRASS GIS ${grass_version} Help">
+ <meta name="AppleTitle" content="GRASS ${grass_version} Help">
  <meta name="AppleIcon" content="GRASS-${grass_mmver}/grass_icon.png">
  <meta name="robots" content="anchors">
 """
@@ -34,10 +34,10 @@ header2_tmpl = string.Template(
 <a href="index.html"><img src="grass_logo.png" alt="GRASS logo"></a>
 <hr class="header">
 
-<h2>GRASS GIS ${grass_version} Reference Manual</h2>
+<h2>GRASS ${grass_version} Reference Manual</h2>
 
 <p><b>Geographic Resources Analysis Support System</b>, commonly
-referred to as <a href="https://grass.osgeo.org">GRASS GIS</a>, is a <a
+referred to as <a href="https://grass.osgeo.org">GRASS</a>, is a <a
 href="https://en.wikipedia.org/wiki/Geographic_information_system">Geographic
 Information System</a> (GIS) used for geospatial data management and
 analysis, image processing, graphics/maps production, spatial
@@ -62,7 +62,7 @@ overview_tmpl = string.Template(
     <tr>
       <td width="33%" valign="top" class="box"><h3>&nbsp;Quick Introduction</h3>
       <ul>
-       <li class="box"><a href="helptext.html">How to start with GRASS GIS</a></li>
+       <li class="box"><a href="helptext.html">How to start with GRASS</a></li>
        <li class="box"><span>Index of <a href="topics.html">topics</a> and <a href="keywords.html">keywords</a></span></li>
       </ul>
       <p>
@@ -96,7 +96,7 @@ overview_tmpl = string.Template(
       </td>
       <td width="33%" valign="top" class="box"><h3>&nbsp;General</h3>
        <ul>
-        <li class="box"><a href="grass.html">GRASS GIS startup manual</a></li>
+        <li class="box"><a href="grass.html">GRASS startup manual</a></li>
         <li class="box"><a href="general.html">General commands manual</a></li>
        </ul>
         <h3>&nbsp;Addons</h3>
@@ -137,7 +137,7 @@ overview_tmpl = string.Template(
       <td width="33%" valign="top" class="box"><h3>&nbsp;Database</h3>
        <ul>
         <li class="box"><a href="databaseintro.html">Intro: database management</a></li>
-        <li class="box"><a href="sql.html">SQL support in GRASS GIS</a></li>
+        <li class="box"><a href="sql.html">SQL support in GRASS</a></li>
         <li class="box"><a href="database.html">Database commands manual</a></li>
        </ul>
       </td>
@@ -163,9 +163,9 @@ overview_tmpl = string.Template(
       </td>
       <td width="33%" valign="top" class="box"><h3>&nbsp;Python</h3>
        <ul>
-        <li class="box"><a href="https://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/index.html">GRASS GIS Python library documentation</a></li>
+        <li class="box"><a href="https://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/index.html">GRASS Python library documentation</a></li>
         <li class="box"><a href="https://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/pygrass_index.html">PyGRASS documentation</a></li>
-        <li class="box"><a href="https://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/grass.jupyter.html">GRASS GIS in Jupyter Notebooks</a></li>
+        <li class="box"><a href="https://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/grass.jupyter.html">GRASS in Jupyter Notebooks</a></li>
        </ul>
       </td>
     </tr>
@@ -211,7 +211,7 @@ footer_tmpl = string.Template(  # TODO: https://trac.osgeo.org/grass/ticket/3987
 <p>
 &copy; 2003-${year}
 <a href="https://grass.osgeo.org">GRASS Development Team</a>,
-GRASS GIS ${grass_version} Reference Manual
+GRASS ${grass_version} Reference Manual
 </p>
 
 </div>
@@ -310,7 +310,7 @@ headerkeywords_tmpl = r"""
 
 <a href="index.html"><img src="grass_logo.png" alt="GRASS logo"></a>
 <hr class="header">
-<h2>Keywords - Index of GRASS GIS modules</h2>
+<h2>Keywords - Index of GRASS modules</h2>
 """
 # "
 
@@ -402,7 +402,7 @@ header_graphical_index_tmpl = """\
 
 <a href="index.html"><img src="grass_logo.png" alt="GRASS logo"></a>
 <hr class="header">
-<h2>Graphical index of GRASS GIS modules</h2>
+<h2>Graphical index of GRASS modules</h2>
 """
 
 

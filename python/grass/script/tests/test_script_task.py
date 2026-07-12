@@ -11,9 +11,9 @@ def xy_session_patched_env(tmp_path, monkeypatch):
     """Active session in an XY location (scope: function), patching env vars directly.
 
     This allows functions not accepting an env dictionary argument to work in tests"""
-    location = "xy_test"
-    gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with gs.setup.init(tmp_path / location, env=os.environ.copy()) as session:
+    project = tmp_path / "xy_test"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy()) as session:
         for key, value in session.env.items():
             monkeypatch.setenv(key, value)
         yield session

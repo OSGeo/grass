@@ -7,9 +7,13 @@ import json
 
 import pytest
 
-import grass.script as gs
+try:
+    import yaml
+except ImportError:
+    yaml = None
 
-yaml = pytest.importorskip("yaml", reason="PyYAML package not available")
+import grass.script as gs
+from grass.tools import Tools
 
 
 @pytest.mark.needs_solo_run
@@ -23,7 +27,11 @@ def test_defaults(space_time_raster_dataset):
 
 
 @pytest.mark.needs_solo_run
-def test_line(space_time_raster_dataset):
+@pytest.mark.parametrize(
+    ("separator", "delimiter"),
+    [(None, ","), (",", ","), ("pipe", "|")],
+)
+def test_line(space_time_raster_dataset, separator, delimiter):
     """Line format can be parsed and contains full names by default"""
     names = (
         gs.read_command(
@@ -31,9 +39,10 @@ def test_line(space_time_raster_dataset):
             input=space_time_raster_dataset.name,
             format="line",
             env=space_time_raster_dataset.session.env,
+            separator=separator,
         )
         .strip()
-        .split(",")
+        .split(delimiter)
     )
     assert names == space_time_raster_dataset.full_raster_names
 
@@ -58,9 +67,10 @@ def test_json(space_time_raster_dataset):
     assert names == space_time_raster_dataset.raster_names
 
 
+@pytest.mark.skipif(yaml is None, reason="PyYAML package not available")
 @pytest.mark.needs_solo_run
 def test_yaml(space_time_raster_dataset):
-    """Check JSON can be parsed and contains the right values"""
+    """Check YAML can be parsed and contains the right values"""
     result = yaml.safe_load(
         gs.read_command(
             "t.rast.list",
@@ -83,7 +93,8 @@ def test_yaml(space_time_raster_dataset):
 
 @pytest.mark.needs_solo_run
 @pytest.mark.parametrize(
-    ("separator", "delimiter"), [(None, ","), (",", ","), (";", ";"), ("tab", "\t")]
+    ("separator", "delimiter"),
+    [(None, ","), (",", ","), (";", ";"), ("tab", "\t"), ("pipe", "|")],
 )
 def test_csv(space_time_raster_dataset, separator, delimiter):
     """Check CSV can be parsed with different separators"""
@@ -113,7 +124,7 @@ def test_csv(space_time_raster_dataset, separator, delimiter):
 
 @pytest.mark.needs_solo_run
 def test_columns_list(space_time_raster_dataset):
-    """Check CSV can be parsed with different separators"""
+    """Check that specific columns are returned correctly for the list method"""
     # All relevant columns from the interface.
     columns = [
         "id",
@@ -155,7 +166,7 @@ def test_columns_list(space_time_raster_dataset):
 
 @pytest.mark.needs_solo_run
 def test_columns_delta_gran(space_time_raster_dataset):
-    """Check CSV can be parsed with different separators"""
+    """Check that specific columns are returned correctly for the gran method"""
     # All relevant columns from the interface.
     columns = [
         "id",
@@ -227,13 +238,20 @@ def test_no_header_accepted(space_time_raster_dataset, output_format):
 
 
 @pytest.mark.needs_solo_run
-@pytest.mark.parametrize("output_format", ["json", "yaml"])
+@pytest.mark.parametrize(
+    "output_format",
+    [
+        "json",
+        pytest.param(
+            "yaml",
+            marks=pytest.mark.skipif(
+                yaml is None, reason="PyYAML package not available"
+            ),
+        ),
+    ],
+)
 def test_no_header_rejected(space_time_raster_dataset, output_format):
-    """Check that the no column names flag is rejected
-
-    Given how the format dependencies are handled, this will run even
-    when YAML support is missing.
-    """
+    """Check that the no column names flag is rejected"""
     return_code = gs.run_command(
         "t.rast.list",
         input=space_time_raster_dataset.name,
@@ -243,6 +261,31 @@ def test_no_header_rejected(space_time_raster_dataset, output_format):
         env=space_time_raster_dataset.session.env,
     )
     assert return_code != 0
+
+
+@pytest.mark.needs_solo_run
+@pytest.mark.parametrize(
+    "output_format",
+    [
+        "json",
+        pytest.param(
+            "yaml",
+            marks=pytest.mark.skipif(
+                yaml is None, reason="PyYAML package not available"
+            ),
+        ),
+    ],
+)
+def test_separator_rejected(space_time_raster_dataset, output_format):
+    """Check that the separator option is rejected"""
+    tools = Tools(session=space_time_raster_dataset.session)
+    returncode = tools.t_rast_list(
+        input=space_time_raster_dataset.name,
+        format=output_format,
+        separator=",",
+        errors="status",
+    )
+    assert returncode != 0
 
 
 @pytest.mark.needs_solo_run

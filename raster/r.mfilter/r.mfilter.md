@@ -128,7 +128,7 @@ of cells for 9x9 matrix, benchmark on the right shows execution time for
 
 Note that parallelization is implemented only for the parallel filter,
 not the sequential one. To take advantage of the parallelization, GRASS
-GIS needs to compiled with OpenMP enabled.
+needs to compiled with OpenMP enabled.
 
 ## NOTES
 

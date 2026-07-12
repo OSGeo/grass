@@ -395,12 +395,16 @@ static void map_file(void)
     int fd;
 
     fd = open(ca.file_name, O_RDWR);
-    if (fd < 0)
+    if (fd < 0) {
+        G_warning(_("Unable to open file: %s"), ca.file_name);
         return;
+    }
 
     ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, (off_t)0);
-    if (ptr == MAP_FAILED)
+    if (ptr == MAP_FAILED) {
+        close(fd);
         return;
+    }
 
     if (ca.grid) {
         cairo_destroy(cairo);

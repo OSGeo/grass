@@ -1,8 +1,7 @@
 ---
+title: PostgreSQL Database Driver
 description: PostgreSQL DATABASE DRIVER
 ---
-
-# PostgreSQL DATABASE DRIVER
 
 PostgreSQL database driver enables GRASS to store vector attributes in
 PostgreSQL server.
@@ -126,9 +125,9 @@ v.info -t test
 
 *[db.connect](db.connect.md), [db.execute](db.execute.md)*
 
-[Database management in GRASS GIS](databaseintro.md)  
+[Database management in GRASS](databaseintro.md)  
 [Help pages for database modules](database.md)  
-[SQL support in GRASS GIS](sql.md)  
+[SQL support in GRASS](sql.md)  
 
 ## REFERENCES
 

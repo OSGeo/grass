@@ -730,7 +730,7 @@ static void begin_spawn(struct spawn *sp)
 }
 
 #define NEXT_ARG(var, type) ((type) * (var)++)
-#define NEXT_ARG_INT(var)   (int)((intptr_t) * (var)++)
+#define NEXT_ARG_INT(var)   (int)((intptr_t)*(var)++)
 
 static void parse_argvec(struct spawn *sp, const char **va)
 {
@@ -896,7 +896,6 @@ int G_vspawn_ex(const char *command, const char **args)
  * \return -1 on error
  * \return process status on success
  */
-
 int G_spawn_ex(const char *command, ...)
 {
     struct spawn sp;
@@ -918,7 +917,6 @@ int G_spawn_ex(const char *command, ...)
  * \return -1 on error
  * \return process status on success
  */
-
 int G_spawn(const char *command, ...)
 {
     const char *args[MAX_ARGS];

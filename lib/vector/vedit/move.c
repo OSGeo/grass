@@ -18,10 +18,12 @@
    \brief Move selected primitives
 
    \param Map pointer to Map_info
-   \param BgMap, nbgmaps list of background vector maps used for snapping
+   \param BgMap list of background vector maps used for snapping
+   \param nbgmaps Number of background vector maps in BgMap
    \param List list of primitives to be moved
    \param move_x,move_y,move_z direction (move_z used only if map is 3D)
    \param snap enable snapping (see globals.h)
+   \param thresh snapping threshold (>0)
 
    \return number of modified primitives
    \return -1 on error

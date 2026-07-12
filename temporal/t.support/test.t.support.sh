@@ -7,12 +7,12 @@
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
 # Generate data
-r.mapcalc --o expr="prec_1 = rand(0, 550)" -s
-r.mapcalc --o expr="prec_2 = rand(0, 450)" -s
-r.mapcalc --o expr="prec_3 = rand(0, 320)" -s
-r.mapcalc --o expr="prec_4 = rand(0, 510)" -s
-r.mapcalc --o expr="prec_5 = rand(0, 300)" -s
-r.mapcalc --o expr="prec_6 = rand(0, 650)" -s
+r.mapcalc --o expr="prec_1 = rand(0, 550)"
+r.mapcalc --o expr="prec_2 = rand(0, 450)"
+r.mapcalc --o expr="prec_3 = rand(0, 320)"
+r.mapcalc --o expr="prec_4 = rand(0, 510)"
+r.mapcalc --o expr="prec_5 = rand(0, 300)"
+r.mapcalc --o expr="prec_6 = rand(0, 650)"
 # We create several space time raster datasets
 
 # @test Register the maps in two space time datasets
@@ -40,12 +40,12 @@ t.info type=strds input=precip_abs1
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=20 res3=20
 
 # Generate data
-r.mapcalc --o expr="prec_1 = rand(0, 55)" -s
-r.mapcalc --o expr="prec_2 = rand(0, 45)" -s
-r.mapcalc --o expr="prec_3 = rand(0, 32)" -s
-r.mapcalc --o expr="prec_4 = rand(0, 51)" -s
-r.mapcalc --o expr="prec_5 = rand(0, 30)" -s
-r.mapcalc --o expr="prec_6 = rand(0, 65)" -s
+r.mapcalc --o expr="prec_1 = rand(0, 55)"
+r.mapcalc --o expr="prec_2 = rand(0, 45)"
+r.mapcalc --o expr="prec_3 = rand(0, 32)"
+r.mapcalc --o expr="prec_4 = rand(0, 51)"
+r.mapcalc --o expr="prec_5 = rand(0, 30)"
+r.mapcalc --o expr="prec_6 = rand(0, 65)"
 
 # The map dependent metadata should have been updated
 t.support --v -m type=strds input=precip_abs1

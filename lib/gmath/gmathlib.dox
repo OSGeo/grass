@@ -458,7 +458,7 @@ Additions: Brad Douglas
 <BR>
 <P>
 This chapter provides an explanation of how numerical algebra routines from
-LAPACK/BLAS can be accessed through the GRASS GIS library "gmath". Most of
+LAPACK/BLAS can be accessed through the GRASS library "gmath". Most of
 the functions are wrapper modules for linear algebra problems, a few are locally
 implemented.
 <BR>

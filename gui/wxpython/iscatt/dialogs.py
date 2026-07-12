@@ -234,7 +234,7 @@ class ExportCategoryRaster(wx.Dialog):
         """Dialog for export of category raster.
 
         :param parent: window
-        :param str rasterName name of vector layer for export
+        :param str rasterName: name of vector layer for export
         :param title: window title
         """
         wx.Dialog.__init__(self, parent, id, title, style=style, **kwargs)

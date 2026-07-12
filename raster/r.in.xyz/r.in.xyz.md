@@ -29,7 +29,7 @@ Available statistics for populating the raster are (**method**):
 > | *variance*    | variance of points in cell                    |
 > | *coeff_var*   | coefficient of variance of points in cell     |
 > | *median*      | median value of points in cell                |
-> | *percentile*  | p-*th* percentile of points in cell |
+> | *percentile*  | p-*th* percentile of points in cell           |
 > | *skewness*    | skewness of points in cell                    |
 > | *trimmean*    | trimmed mean of points in cell                |
 

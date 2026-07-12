@@ -159,6 +159,46 @@ Report number of features for each category in the input vector map:
 v.to.db -p roads option=count type=line
 ```
 
+Report all area sizes of the input vector map using python:
+
+```python
+import grass.script as gs
+
+data = gs.parse_command(
+    "v.to.db", map="busroute6", flags="p", option="length", type="line", format="json"
+)
+print(data["totals"])
+```
+
+Possible output:
+
+```text
+{'length': 10426.657857419743}
+```
+
+The whole JSON may look like this:
+
+```json
+{
+    "units": {
+        "length": "meters"
+    },
+    "totals": {
+        "length": 10426.657857419743
+    },
+    "records": [
+        {
+            "category": 1,
+            "length": 4554.943058982206
+        },
+        {
+            "category": 2,
+            "length": 5871.714798437538
+        }
+    ]
+}
+```
+
 ## REFERENCES
 
 - Mandelbrot, B. B. (1982). The fractal geometry of nature. New

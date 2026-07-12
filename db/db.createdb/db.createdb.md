@@ -11,7 +11,7 @@ database drivers are supported.
 
 ### Create a new SQLite file-based database
 
-Note that the standard GRASS GIS SQLite database is by default generated
+Note that the standard GRASS SQLite database is by default generated
 in the user's current mapset. This example shows an out-of-mapset
 database file creation:
 

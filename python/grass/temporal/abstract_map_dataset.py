@@ -66,7 +66,7 @@ class AbstractMapDataset(AbstractDataset):
         """Return a new space time dataset instance that store maps with the
         type of this map object (raster, raster_3d or vector)
 
-        :param ident The identifier of the space time dataset
+        :param ident: The identifier of the space time dataset
         :return: The new space time dataset instance
         """
 
@@ -666,7 +666,7 @@ class AbstractMapDataset(AbstractDataset):
 
         :param extent: The temporal extent that should be set for this object
 
-        .. code-block: : python
+        .. code-block:: pycon
 
             >>> import datetime
             >>> import grass.temporal as tgis
@@ -733,7 +733,7 @@ class AbstractMapDataset(AbstractDataset):
 
         Usage:
 
-        .. code-block: : python
+        .. code-block:: pycon
 
             >>> import grass.temporal as tgis
             >>> maps = []
@@ -845,7 +845,7 @@ class AbstractMapDataset(AbstractDataset):
 
          :param spatial_extent: An object of type SpatialExtent or its subclasses
 
-        .. code-block: : python
+        .. code-block:: pycon
 
             >>> import datetime
             >>> import grass.temporal as tgis
@@ -869,7 +869,7 @@ class AbstractMapDataset(AbstractDataset):
                        internal variables are set
         :param dbif: The database interface to be used
 
-        .. code-block: : python
+        .. code-block:: pycon
 
             >>> import grass.temporal as tgis
             >>> map = tgis.RasterDataset(None)
@@ -901,7 +901,7 @@ class AbstractMapDataset(AbstractDataset):
                        internal variables are set
         :param dbif: The database interface to be used
 
-        .. code-block: : python
+        .. code-block:: pycon
 
             >>> import grass.temporal as tgis
             >>> map = tgis.RasterDataset(None)

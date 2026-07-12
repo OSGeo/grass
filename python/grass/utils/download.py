@@ -24,8 +24,10 @@ from urllib.parse import urlparse
 from urllib.request import urlretrieve
 
 
-reponse_content_type_header_pattern = re.compile(r"application/(zip|octet-stream)")
-reponse_content_disposition_header_pattern = re.compile(r"attachment; filename=.*.zip$")
+response_content_type_header_pattern = re.compile(r"application/(zip|octet-stream)")
+response_content_disposition_header_pattern = re.compile(
+    r"attachment; filename=.*.zip$"
+)
 
 
 def debug(*args, **kwargs):
@@ -56,7 +58,7 @@ def extract_tar(name, directory, tmpdir):
     try:
         tar = tarfile.open(name)
         extract_dir = os.path.join(tmpdir, "extract_dir")
-        os.mkdir(extract_dir)
+        Path(extract_dir).mkdir()
 
         # Extraction filters were added in Python 3.12,
         # and backported to 3.8.17, 3.9.17, 3.10.12, and 3.11.4
@@ -103,7 +105,7 @@ def extract_zip(name, directory, tmpdir):
         # we suppose we can write to parent of the given dir
         # (supposing a tmp dir)
         extract_dir = os.path.join(tmpdir, "extract_dir")
-        os.mkdir(extract_dir)
+        Path(extract_dir).mkdir()
         for subfile in file_list:
             # this should be safe in Python 2.7.4
             zip_file.extract(subfile, extract_dir)
@@ -127,16 +129,15 @@ def _move_extracted_files(extract_dir, target_dir, files):
     debug("_move_extracted_files({})".format(locals()))
     if len(files) == 1:
         actual_path = os.path.join(extract_dir, files[0])
-        if os.path.isdir(actual_path):
+        if Path(actual_path).is_dir():
             shutil.copytree(actual_path, target_dir)
         else:
             shutil.copy(actual_path, target_dir)
     else:
-        if not os.path.exists(target_dir):
-            os.mkdir(target_dir)
+        Path(target_dir).mkdir(exist_ok=True)
         for file_name in files:
             actual_file = os.path.join(extract_dir, file_name)
-            if os.path.isdir(actual_file):
+            if Path(actual_file).is_dir():
                 # Choice of copy tree function:
                 # shutil.copytree() fails when subdirectory exists.
                 # However, distutils.copy_tree() may fail to create directories before
@@ -177,9 +178,9 @@ def download_and_extract(source, reporthook=None):
             raise DownloadError(url_error_message.format(url=source))
 
         if not re.search(
-            reponse_content_type_header_pattern, headers.get("content-type", "")
+            response_content_type_header_pattern, headers.get("content-type", "")
         ) and not re.search(
-            reponse_content_disposition_header_pattern,
+            response_content_disposition_header_pattern,
             headers.get("content-disposition", ""),
         ):
             raise DownloadError(

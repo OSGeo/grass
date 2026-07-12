@@ -1,8 +1,8 @@
 ---
-description: SQL support in GRASS GIS
+description: SQL support in GRASS
 ---
 
-# SQL support in GRASS GIS
+# SQL support in GRASS
 
 Vector points, lines and areas usually have attribute data that are
 stored in DBMS. The attributes are linked to each vector object using a
@@ -10,7 +10,7 @@ category number (attribute ID, usually the "cat" integer column). The
 category numbers are stored both in the vector geometry and the
 attribute table.
 
-GRASS GIS supports various RDBMS ([Relational database management
+GRASS supports various RDBMS ([Relational database management
 system](https://en.wikipedia.org/wiki/Relational_database_management_system))
 and embedded databases. SQL ([Structured Query
 Language](https://en.wikipedia.org/wiki/Sql)) queries are directly
@@ -19,13 +19,13 @@ commands depends on the RDMBS and database driver selected.
 
 ## Database drivers
 
-The default database driver used by GRASS GIS 8 is SQLite. GRASS GIS
+The default database driver used by GRASS 8 is SQLite. GRASS
 handles multiattribute vector data by default. The *db.\** set of
 commands provides basic SQL support for attribute management, while the
 *v.db.\** set of commands operates on vector maps.
 
 Note: The list of available database drivers can vary in various binary
-distributions of GRASS GIS:
+distributions of GRASS:
 
 |                           |                                                            |                                             |
 |---------------------------|------------------------------------------------------------|---------------------------------------------|
@@ -212,7 +212,7 @@ v.db.update vectormap column=species qcolumn="CASE WHEN col1 >= 1 THEN cat WHEN 
 [db.execute](db.execute.md), [v.db.connect](v.db.connect.md),
 [v.db.select](v.db.select.md), [v.db.update](v.db.update.md)*
 
-[Database management in GRASS GIS](databaseintro.md), [Help pages for
+[Database management in GRASS](databaseintro.md), [Help pages for
 database modules](database.md)
 
 ## AUTHOR

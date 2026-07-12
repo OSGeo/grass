@@ -63,7 +63,7 @@ class TestEbEta(TestCase):
 
     def _get_univar_stats(self, raster):
         """Helper to get univariate statistics"""
-        return gs.parse_command("r.univar", map=raster, flags="g", format="json")[0]
+        return gs.parse_command("r.univar", map=raster, format="json")
 
     def test_eta_model_output(self):
         """Basic test to verify output of i.eb.eta."""

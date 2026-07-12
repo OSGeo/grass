@@ -26,7 +26,7 @@ static geoview Gv;
    the user decide on the id for each.
 
    \param data nviz data
-   \param id
+   \param id cplane id
  */
 int Nviz_new_cplane(nv_data *data, int id)
 {
@@ -43,7 +43,7 @@ int Nviz_new_cplane(nv_data *data, int id)
    \brief Turn on (make current) the given clip plane.
 
    \param data nviz data
-   \param cplane id
+   \param id cplane id
  */
 int Nviz_on_cplane(nv_data *data, int id)
 {
@@ -58,7 +58,7 @@ int Nviz_on_cplane(nv_data *data, int id)
    \brief Turn off (make inactive) the given clip plane
 
    \param data nviz data
-   \param cplane id
+   \param id cplane id
  */
 int Nviz_off_cplane(nv_data *data, int id)
 {
@@ -90,7 +90,7 @@ int Nviz_draw_cplane(nv_data *data, int bound1, int bound2)
    \param surf1 first surface id
    \param surf2 second surface id
  */
-void cp_draw(nv_data *data, int current UNUSED, int surf1, int surf2)
+void cp_draw(nv_data *data, int current G_UNUSED, int surf1, int surf2)
 {
     int i, nsurfs;
     int surf_min = 0, surf_max = 0, temp;
@@ -248,7 +248,7 @@ int Nviz_get_cplane_translation(nv_data *data, int id, float *dx, float *dy,
 
    \param type type of fence (FC_ABOVE, FC_BELOW, FC_BLEND, FC_GREY, FC_OFF)
  */
-int Nviz_set_fence_color(nv_data *data UNUSED, int type)
+int Nviz_set_fence_color(nv_data *data G_UNUSED, int type)
 {
     GS_set_fencecolor(type);
 

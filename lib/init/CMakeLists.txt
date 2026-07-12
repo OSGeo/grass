@@ -1,17 +1,31 @@
 # #for i18N support
 
-file(GLOB init_HTMLFILES "*.html")
 add_custom_target(ADD_INIT_DOCS ALL COMMENT "Generate init docs.")
+set_target_properties(ADD_INIT_DOCS PROPERTIES FOLDER Docs)
 
 if(WITH_DOCS)
-  foreach(html_file ${init_HTMLFILES})
-    get_filename_component(filename ${html_file} NAME_WLE)
-    generate_html(TARGET ADD_INIT_DOCS NAME ${filename})
-  endforeach()
+
+  generate_docs_list(
+    TARGET ADD_INIT_DOCS
+    DOC_FILES
+      grass
+      helptext
+      variables
+    IMG_FILES
+      grass_start.png
+      grassdb.png
+      help_project_structure.png
+      location-add.png
+      location-download.png
+      location.png
+      mapset.png
+      raster-import.png
+      vector-import.png)
+
 endif()
 
 # START_UP is the variable used in grass.py, grass.sh.in and grass.bat.in
-set(START_UP "grass")
+set(START_UP ${PROJECT_NAME_LOWER})
 if(WIN32)
   set(START_UP "${START_UP}.py")
   set(script_file_name "grass.bat")
@@ -21,21 +35,6 @@ else()
   set(script_input_file_name ${script_file_name}.sh.in)
 endif()
 
-file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR}/bin BINARY_DIR)
-set(CONFIG_PROJSHARE)
-get_filename_component(PROJ_INSTALL_PREFIX ${PROJ_INCLUDE_DIRS} PATH)
-if(DEFINED ENV{PROJSHARE})
-  message(WARNING "External PROJ directory not specified; default will be used")
-  set(CONFIG_PROJSHARE "$ENV{PROJSHARE}")
-else()
-  set(CONFIG_PROJSHARE "${PROJ_INSTALL_PREFIX}/share/proj")
-  if(EXISTS ${CONFIG_PROJSHARE}/epsg)
-    message(STATUS "PROJ directory ${CONFIG_PROJSHARE}")
-  endif()
-endif()
-file(TO_NATIVE_PATH "${PROJ_INSTALL_PREFIX}/share/proj" PROJ_LIB)
-file(TO_NATIVE_PATH ${CONFIG_PROJSHARE} GRASS_PROJSHARE)
-
 find_path(gdal_share_dir "gdal" PATH_SUFFIXES share)
 if(NOT gdal_share_dir)
   message(FATAL_ERROR "Cannot find share/gdal")
@@ -43,28 +42,19 @@ endif()
 mark_as_advanced(gdal_share_dir)
 
 file(TO_NATIVE_PATH "${gdal_share_dir}/gdal" GDAL_DATA)
-get_filename_component(GDAL_DIR ${GDAL_LIBRARY} PATH)
-get_filename_component(GDAL_DIR ${GDAL_DIR} PATH)
+get_filename_component(GDAL_DIR "${GDAL_LIBRARY}" PATH)
+get_filename_component(GDAL_DIR "${GDAL_DIR}" PATH)
 
 file(TO_NATIVE_PATH ${GDAL_DIR}/bin DEPS_DLL_PATH)
 list(APPEND DLL_PATH_LIST ${DEPS_DLL_PATH})
 
-# For install tree (first do install tree)
-set(LD_LIBRARY_PATH_VAR "LD_LIBRARY_PATH")
-
-if(APPLE)
-  set(LD_LIBRARY_PATH_VAR "LD_RUN_PATH")
-elseif(WIN32)
-  set(LD_LIBRARY_PATH_VAR "PATH")
-endif()
-
 # configure and install grass.py
-set(GISBASE_INSTALL_PATH ${RUNTIME_GISBASE})
+set(GRASS_PYDIR ${GRASS_INSTALL_PYDIR_RUNTIME_PATH})
 configure_file(grass.py ${OUTDIR}/${CMAKE_INSTALL_BINDIR}/${START_UP} @ONLY)
 
-set(GISBASE_INSTALL_PATH ${GISBASE})
+set(GRASS_PYDIR ${GRASS_INSTALL_PYDIR_PATH})
 configure_file(grass.py ${CMAKE_CURRENT_BINARY_DIR}/${START_UP} @ONLY)
-unset(GISBASE_INSTALL_PATH)
+unset(GRASS_PYDIR)
 
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${START_UP}
         DESTINATION ${CMAKE_INSTALL_BINDIR})
@@ -155,11 +145,7 @@ file(WRITE ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/VERSIONNUMBER
 install(FILES ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/VERSIONNUMBER
         DESTINATION ${GRASS_INSTALL_ETCDIR})
 
-execute_process(
-  COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/version.sed "${GRASS_VERSION_NUMBER}"
-          "${GRASS_VERSION_DATE}" ""
-  INPUT_FILE ${CMAKE_CURRENT_SOURCE_DIR}/license.txt
-  OUTPUT_FILE ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/license)
+configure_file(license.txt "${OUTDIR}/${GRASS_INSTALL_ETCDIR}/license" @ONLY)
 
 install(FILES ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/license
         DESTINATION ${GRASS_INSTALL_ETCDIR})

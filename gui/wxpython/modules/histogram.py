@@ -19,6 +19,7 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
+from pathlib import Path
 
 import wx
 
@@ -212,8 +213,8 @@ class BufferedWindow(wx.Window):
         """Converts files to wx.Image"""
         if (
             self.Map.mapfile
-            and os.path.isfile(self.Map.mapfile)
-            and os.path.getsize(self.Map.mapfile)
+            and Path(self.Map.mapfile).is_file()
+            and Path(self.Map.mapfile).stat().st_size
         ):
             img = wx.Image(self.Map.mapfile, wx.BITMAP_TYPE_ANY)
         else:

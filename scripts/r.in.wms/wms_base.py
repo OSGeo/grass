@@ -135,8 +135,9 @@ class WMSBase:
             if self.source_epsg != self.target_epsg:
                 gs.warning(
                     _(
-                        "SRS differences: WMS source EPSG %s != location EPSG %s (use "
-                        "srs=%s to adjust)"
+                        "CRS (SRS) differences:"
+                        " WMS source EPSG %s != location EPSG %s (use"
+                        " srs=%s to adjust)"
                     )
                     % (self.source_epsg, self.target_epsg, self.target_epsg)
                 )

@@ -124,7 +124,6 @@ char *G_mktemp(char *template)
  *
  * \return file descriptor
  */
-
 int G_mkstemp(char *template, int flags, int mode)
 {
 
@@ -159,7 +158,6 @@ int G_mkstemp(char *template, int flags, int mode)
  *
  * \return FILE*
  */
-
 FILE *G_mkstemp_fp(char *template, int flags, int mode)
 {
     const char *fmode = ((flags & O_ACCMODE) == O_RDWR)

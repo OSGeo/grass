@@ -101,7 +101,11 @@ def main():
 
     # old col there?
     if not oldcoltype:
-        gs.fatal(_("Column <%s> not found in table <%s>") % (oldcol, table))
+        gs.fatal(
+            _("Column <{column_name}> not found in table <{table_name}>").format(
+                column_name=oldcol, table_name=table
+            )
+        )
 
     # some tricks
     if driver in {"sqlite", "dbf"}:

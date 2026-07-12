@@ -476,7 +476,7 @@ int db_copy_table_where(const char *from_drvname, const char *from_dbname,
 
    \param from_drvname name of driver from table is copied
    \param from_dbname name of database from table is copied
-   \param from_dbname name of table to be copied
+   \param from_tblname name of table to be copied
    \param to_drvname name of driver to - where table is copied to
    \param to_dbname name of database to - where table is copied to
    \param to_tblname name of copied table
@@ -503,9 +503,10 @@ int db_copy_table_select(const char *from_drvname, const char *from_dbname,
    \param to_drvname name of driver to - where table is copied to
    \param to_dbname name of database to - where table is copied to
    \param to_tblname name of copied table
-   \param selcol name of column used to select records by values in ivals or
-   NULL \param ivals pointer to array of integer values or NULL \param nvals
-   number of values in ivals
+   \param selcol name of column used to select records by values
+                 in ivals or NULL
+   \param ivals pointer to array of integer values or NULL
+   \param nvals number of values in ivals
 
    \return DB_OK on success
    \return DB_FAILED on failure

@@ -177,7 +177,7 @@ def print_notes(
     """
     num_changes = round_down_to_five(len(changes))
     print(
-        f"The GRASS GIS {end_tag} release provides more than "
+        f"The GRASS {end_tag} release provides more than "
         f"{num_changes} improvements and fixes "
         f"with respect to the release {start_tag}.\n"
     )
@@ -286,14 +286,16 @@ def notes_from_git_log(start_tag, end_tag, categories, exclude):
     lines = []
     unknow_authors = []
     for commit in commits:
-        if commit["author_email"].endswith("users.noreply.github.com"):
-            github_name = commit["author_email"].split("@")[0]
+        author_email = commit["author_email"]
+        local_part, sep, domain = author_email.rpartition("@")
+        if sep and domain == "users.noreply.github.com" and local_part:
+            github_name = local_part
             if "+" in github_name:
-                github_name = github_name.split("+")[1]
+                github_name = github_name.split("+", 1)[1]
             github_name = f"@{github_name}"
         else:
             # Emails are stored with @ replaced by a space.
-            email = commit["author_email"].replace("@", " ")
+            email = author_email.replace("@", " ")
             git_author = f"{commit['author_name']} <{email}>"
             if git_author in github_name_by_git_author:
                 github_name = github_name_by_git_author[git_author]

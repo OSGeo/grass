@@ -74,7 +74,7 @@ class RasterDataset(AbstractMapDataset):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> import grass.script as gs
         >>> import grass.temporal as tgis
@@ -224,7 +224,7 @@ class RasterDataset(AbstractMapDataset):
         """Return the two dimensional union as spatial_extent
         object or None in case the extents does not overlap or meet.
 
-        :param dataset :The abstract dataset to create a union with
+        :param dataset: The abstract dataset to create a union with
         :return: The union spatial extent or None
         """
         return self.spatial_extent.union_2d(dataset.spatial_extent)
@@ -486,7 +486,7 @@ class Raster3DDataset(AbstractMapDataset):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> import grass.script as gs
         >>> init()
@@ -868,7 +868,7 @@ class VectorDataset(AbstractMapDataset):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> import grass.script as gs
         >>> init()
@@ -1198,7 +1198,7 @@ class VectorDataset(AbstractMapDataset):
 class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
     """Space time raster dataset class
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> import grass.temporal as tgis
         >>> tgis.init()
@@ -1314,7 +1314,7 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
 class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
     """Space time raster3d dataset class
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> import grass.temporal as tgis
         >>> tgis.init()
@@ -1435,7 +1435,7 @@ class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
 class SpaceTimeVectorDataset(AbstractSpaceTimeDataset):
     """Space time vector dataset class
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> import grass.temporal as tgis
         >>> tgis.init()

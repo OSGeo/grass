@@ -341,29 +341,15 @@ int main(int argc, char *argv[])
      */
 
     for (i = 0; i < ntools; i++) {
+        G_message(_("Rebuilding parts of topology..."));
         if (tools[i] == TOOL_RMDAC || tools[i] == TOOL_PRUNE ||
             tools[i] == TOOL_RMAREA) {
-            if (Vect_get_built(&Out) >= GV_BUILD_CENTROIDS) {
-                Vect_build_partial(&Out, GV_BUILD_CENTROIDS);
-                G_message(SEP);
-            }
-            else {
-                G_important_message(_("Rebuilding parts of topology..."));
-                Vect_build_partial(&Out, GV_BUILD_CENTROIDS);
-                G_message(SEP);
-            }
+            Vect_build_partial(&Out, GV_BUILD_CENTROIDS);
         }
         else {
-            if (Vect_get_built(&Out) >= GV_BUILD_BASE) {
-                Vect_build_partial(&Out, GV_BUILD_BASE);
-                G_message(SEP);
-            }
-            else {
-                G_important_message(_("Rebuilding parts of topology..."));
-                Vect_build_partial(&Out, GV_BUILD_BASE);
-                G_message(SEP);
-            }
+            Vect_build_partial(&Out, GV_BUILD_BASE);
         }
+        G_message(SEP);
 
         switch (tools[i]) {
         case TOOL_BREAK:

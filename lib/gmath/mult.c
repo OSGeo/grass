@@ -19,7 +19,6 @@
  * \param size3
  * \return int
  */
-
 int G_math_complex_mult(double *v1[2], int size1, double *v2[2], int size2,
                         double *v3[2], int size3)
 {

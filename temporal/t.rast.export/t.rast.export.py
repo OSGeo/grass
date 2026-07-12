@@ -105,6 +105,7 @@
 # %end
 
 import os
+from pathlib import Path
 
 import grass.script as gs
 
@@ -126,7 +127,7 @@ def main():
         key: options[key] for key in ("createopt", "metaopt", "nodata") if options[key]
     }
 
-    if not directory or not os.path.exists(directory):
+    if not directory or not Path(directory).exists():
         gs.fatal(_("Directory {} not found").format(directory))
 
     if not os.access(directory, os.W_OK):

@@ -7,6 +7,7 @@ Created on Wed Aug  8 15:29:21 2012
 import ctypes
 import os
 from collections import OrderedDict
+from pathlib import Path
 
 import numpy as np
 from sqlite3 import OperationalError
@@ -217,7 +218,7 @@ class Columns:
 
     def __setitem__(self, name, new_type):
         self.cast(name, new_type)
-        self.update_odict(self)
+        self.update_odict()
 
     def __iter__(self):
         return self.odict.__iter__()
@@ -458,7 +459,7 @@ class Columns:
         )
         sqlcode = [
             sql.ADD_COL.format(tname=self.tname, cname=cn, ctype=ct)
-            for cn, ct in zip(col_name, col_type)
+            for cn, ct in zip(col_name, col_type, strict=True)
         ]
         cur = self.conn.cursor()
         cur.executescript("\n".join(sqlcode))
@@ -553,7 +554,7 @@ class Columns:
         'float8'
         >>> remove("mycensus", "vect")
 
-        .. warning ::
+        .. warning::
 
            It is not possible to cast a column with sqlite
 
@@ -846,8 +847,7 @@ class Link:
                 sqlite3.register_adapter(t, int)
             dbpath = get_path(self.database, self.table_name)
             dbdirpath = os.path.split(dbpath)[0]
-            if not os.path.exists(dbdirpath):
-                os.mkdir(dbdirpath)
+            Path(dbdirpath).mkdir(exist_ok=True)
             return sqlite3.connect(dbpath)
         if driver == "pg":
             try:
@@ -955,11 +955,16 @@ class DBlinks:
         """
         nlinks = self.num_dblinks()
         if nlinks == 0:
-            raise IndexError
+            msg = _("No links available.")
+            raise IndexError(msg)
         if indx < 0:
             indx += nlinks
         if indx > nlinks:
-            raise IndexError
+            msg = _(
+                "Index out of bounds. The maximum index allowed is "
+                "{max_link_indx}, the queried index is {indx}"
+            ).format(max_link_indx=nlinks - 1, indx=indx)
+            raise IndexError(msg)
         c_fieldinfo = libvect.Vect_get_dblink(self.c_mapinfo, indx)
         return Link(c_fieldinfo=c_fieldinfo) if c_fieldinfo else None
 

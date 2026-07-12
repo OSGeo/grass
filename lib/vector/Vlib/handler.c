@@ -23,7 +23,7 @@ struct handler_data_io {
 
 static struct handler_data_io *handler_io;
 
-static void error_handler_io(void *p UNUSED)
+static void error_handler_io(void *p G_UNUSED)
 {
     char *name;
     struct Map_info *In, *Out;

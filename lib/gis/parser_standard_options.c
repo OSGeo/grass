@@ -93,6 +93,7 @@
    - G_OPT_F_BIN_INPUT
    - G_OPT_F_OUTPUT
    - G_OPT_F_SEP
+   - G_OPT_F_FORMAT
 
    - colors
    - G_OPT_C
@@ -131,6 +132,7 @@
    - G_OPT_MAP_INPUTS
    - G_OPT_STDS_TYPE
    - G_OPT_MAP_TYPE
+   - G_OPT_T_SUFFIX
    - G_OPT_T_TYPE
    - G_OPT_T_WHERE
 
@@ -631,6 +633,17 @@ struct Option *G_define_standard_option(int opt)
         Opt->description =
             _("Special characters: pipe, comma, space, tab, newline");
         break;
+    case G_OPT_F_FORMAT:
+        Opt->key = "format";
+        Opt->type = TYPE_STRING;
+        Opt->key_desc = "name";
+        Opt->required = YES;
+        Opt->label = _("Output format");
+        Opt->answer = "plain";
+        Opt->options = "plain,json";
+        Opt->descriptions = _("plain;Plain text output;"
+                              "json;JSON (JavaScript Object Notation);");
+        break;
 
         /* colors */
     case G_OPT_C:
@@ -727,8 +740,8 @@ struct Option *G_define_standard_option(int opt)
         Opt->type = TYPE_STRING;
         Opt->required = NO;
         Opt->multiple = NO;
-        Opt->label = _("GRASS GIS database directory");
-        Opt->description = _("Default: path to the current GRASS GIS database");
+        Opt->label = _("GRASS database directory");
+        Opt->description = _("Default: path to the current GRASS database");
         Opt->gisprompt = "old,dbase,dbase";
         Opt->key_desc = "path";
         break;
@@ -777,14 +790,16 @@ struct Option *G_define_standard_option(int opt)
         Opt->type = TYPE_INTEGER;
         Opt->required = NO;
         Opt->multiple = NO;
-        Opt->answer = "1";
+        Opt->answer = "0";
         /* start dynamic answer */
         /* check NPROCS in GISRC, set with g.gisenv */
         memstr = G_store(G_getenv_nofatal("NPROCS"));
         if (memstr && *memstr)
             Opt->answer = memstr;
         /* end dynamic answer */
-        Opt->description = _("Number of threads for parallel computing");
+        Opt->label = _("Number of threads for parallel computing");
+        Opt->description = _("0: use OpenMP default; >0: use nprocs; "
+                             "<0: use MAX-nprocs");
         break;
 
     case G_OPT_M_SEED:
@@ -943,6 +958,18 @@ struct Option *G_define_standard_option(int opt)
         Opt->options = "raster,vector,raster_3d";
         Opt->description = _("Type of the input map");
         break;
+    case G_OPT_T_SUFFIX:
+        Opt->key = "suffix";
+        Opt->type = TYPE_STRING;
+        Opt->key_desc = "name";
+        Opt->required = NO;
+        Opt->answer = "gran";
+        Opt->description = _("Suffix to add at basename: set "
+                             "'gran' for granularity, "
+                             "'time' for the full time format, "
+                             "'num' for numerical suffix with "
+                             "a specific number of digits (default %%05)");
+        break;
     case G_OPT_T_TYPE:
         Opt->key = "temporaltype";
         Opt->type = TYPE_STRING;
@@ -971,17 +998,6 @@ struct Option *G_define_standard_option(int opt)
         Opt->options = "start,during,overlap,contain,equal,follows,precedes";
         Opt->description =
             _("The method to be used for sampling the input dataset");
-        break;
-    case G_OPT_F_FORMAT:
-        Opt->key = "format";
-        Opt->type = TYPE_STRING;
-        Opt->key_desc = "name";
-        Opt->required = YES;
-        Opt->label = _("Output format");
-        Opt->answer = "plain";
-        Opt->options = "plain,json";
-        Opt->descriptions = _("plain;Plain text output;"
-                              "json;JSON (JavaScript Object Notation);");
         break;
     }
 

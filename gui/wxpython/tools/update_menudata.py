@@ -164,6 +164,6 @@ def main(argv=None):
 
 if __name__ == "__main__":
     if os.getenv("GISBASE") is None:
-        sys.exit("You must be in GRASS GIS to run this program.")
+        sys.exit("You must be in GRASS to run this program.")
 
     sys.exit(main())

@@ -79,6 +79,10 @@ Users can restrict others' access to their mapset files through use of
 still be listed in another's mapset search path; however, access to
 these mapsets will remain restricted.
 
+For parsing the outputs, always use the JSON output. The current *plain* format
+may change in a future major release. Please, open an issue if you need a
+stable parsable format which is not JSON.
+
 ## EXAMPLES
 
 ### Selecting mapsets with the graphical mapset manager

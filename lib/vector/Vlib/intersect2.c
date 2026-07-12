@@ -665,6 +665,8 @@ static int boq_load(struct boq *q, struct line_pnts *Pnts,
  * \param BPoints second input line or NULL
  * \param[out] ALines array of new lines created from original A line
  * \param[out] BLines array of new lines created from original B line
+ * \param pABox
+ * \param pBBox
  * \param[out] nalines number of new lines (ALines)
  * \param[out] nblines number of new lines (BLines)
  * \param with_z 3D, not supported!

@@ -17,6 +17,10 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
+
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
@@ -62,13 +66,15 @@ char *Rast_mask_info(void)
  * This function checks if an environment variable "GRASS_MASK" is set.
  * If it is set, the value of the environment variable is returned
  * as the mask name. If it is not set, the function will default to the
- * mask name "MASK@<mapset>", where <mapset> is the current mapset.
+ * mask name "MASK@<mapset>", where \<mapset\> is the current mapset.
  *
  * The memory for the returned mask name is dynamically allocated using
  * G_store(). It is the caller's responsibility to free the memory with
  * G_free() when it is no longer needed.
  *
  * @returns A dynamically allocated string containing the mask name.
+ *
+ * @since version 8.5
  */
 char *Rast_mask_name(void)
 {
@@ -130,9 +136,12 @@ static bool Rast__get_present_mask(char *name, char *mapset)
  * @param[out] reclass_mapset Name of the mapset the reclassified raster is in
  *
  * @return true if mask is present, false otherwise
+ *
+ * @since version 8.5
  */
 bool Rast_mask_status(char *name, char *mapset, bool *is_mask_reclass,
-                      char *reclass_name, char *reclass_mapset)
+                      char reclass_name[GNAME_MAX],
+                      char reclass_mapset[GMAPSET_MAX])
 {
     bool present = Rast__get_present_mask(name, mapset);
 
@@ -189,10 +198,40 @@ int Rast__mask_info(char *name, char *mapset)
  * @brief Check presence of 2D raster mask
  *
  * @return true if mask is present, false otherwise
+ *
+ * @since version 8.5
  */
 bool Rast_mask_is_present(void)
 {
     char *name = Rast_mask_name();
     bool present = G_find_raster2(name, "") != NULL;
     return present;
+}
+
+/**
+ * \brief Disable OpenMP if raster mask is present
+ *
+ * This helper function can be removed when raster reading is made
+ * thread safe.
+ *
+ * \param nprocs number of threads to use
+ * \return number of threads in use
+ *
+ * \since version 8.5
+ */
+int Rast_disable_omp_on_mask(int nprocs)
+{
+
+#if defined(_OPENMP)
+    if (nprocs > 1 && Rast_mask_is_present()) {
+        omp_set_num_threads(1);
+        G_verbose_message(_("Single thread processing enforced due to "
+                            "raster mask being present."));
+        nprocs = 1;
+    }
+#else
+    nprocs = 1;
+#endif
+
+    return nprocs;
 }

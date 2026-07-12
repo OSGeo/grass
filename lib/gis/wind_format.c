@@ -62,7 +62,7 @@ void G_format_easting(double east, char *buf, int projection)
  * Converts the double representation of the <i>resolution</i> to its
  * ASCII representation (into <i>buf</i>).
  *
- * \param resolution resolution value
+ * \param res resolution value
  * \param[out] buf buffer to hold formatted string
  * \param projection projection code, or -1 to force full precision FP
  */

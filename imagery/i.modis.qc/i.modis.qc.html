@@ -504,7 +504,7 @@ This value is then transformed into GRASS NULLs when data is imported through
 will not give the expected range of values in the different QC bits. Therefore,
 before using <em>i.modis.qc</em>, the user needs to set the NULL value in QC bands
 back to zero (i.e.: <code>r.null map=QC_band null=0</code>) or just edit the metadata with GDAL
-utilities before importing into GRASS GIS. This is a known issue for MOD11A2
+utilities before importing into GRASS. This is a known issue for MOD11A2
 (8-day LST product), but other MODIS products might be affected as well.
 
 <h2>TODO</h2>

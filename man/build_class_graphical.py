@@ -13,29 +13,26 @@
 #
 #############################################################################
 
-import sys
-import os
 import fnmatch
-
-from build import (
-    default_year,
-    grass_version,
-    to_title,
-    get_files,
-    check_for_desc_override,
-    write_footer,
-    replace_file,
-)
-
-from build_html import (
-    header1_tmpl,
-    modclass_intro_tmpl,
-    get_desc,
-    man_dir,
-)
+import os
+import sys
 
 import build_md
-
+from build import (
+    check_for_desc_override,
+    default_year,
+    get_files,
+    grass_version,
+    replace_file,
+    to_title,
+    write_footer,
+)
+from build_html import (
+    get_desc,
+    header1_tmpl,
+    man_dir,
+    modclass_intro_tmpl,
+)
 
 graphical_index_style = """\
 <style>

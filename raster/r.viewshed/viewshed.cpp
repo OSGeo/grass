@@ -433,7 +433,6 @@ MemoryVisibilityGrid *viewshed_in_memory(char *inputfname, GridHeader *hd,
    runs in external memory, i.e. the input grid and the outpt grid are
    stored as streams
  */
-
 IOVisibilityGrid *viewshed_external(char *inputfname, GridHeader *hd,
                                     Viewpoint *vp, ViewOptions viewOptions)
 {

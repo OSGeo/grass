@@ -1,4 +1,4 @@
-"""Python interface to launch GRASS GIS modules in scripts"""
+"""Python interface to launch GRASS modules in scripts"""
 
 from . import setup
 from .core import (
@@ -76,6 +76,8 @@ from .raster import (
     raster_info,
     raster_what,
     MaskManager,
+    RegionManager,
+    RegionManagerEnv,
 )
 from .raster3d import mapcalc3d, raster3d_info
 from .utils import (
@@ -83,6 +85,7 @@ from .utils import (
     append_node_pid,
     append_random,
     append_uuid,
+    available_cpus,
     basename,
     clock,
     decode,
@@ -95,6 +98,7 @@ from .utils import (
     natural_sort,
     naturally_sorted,
     parse_key_val,
+    resolve_nprocs,
     separator,
     set_path,
     split,
@@ -118,9 +122,12 @@ __all__ = [
     "KeyValue",
     "MaskManager",
     "Popen",
+    "RegionManager",
+    "RegionManagerEnv",
     "append_node_pid",
     "append_random",
     "append_uuid",
+    "available_cpus",
     "basename",
     "call",
     "clock",
@@ -188,6 +195,7 @@ __all__ = [
     "read_command",
     "region",
     "region_env",
+    "resolve_nprocs",
     "run_command",
     "sanitize_mapset_environment",
     "separator",

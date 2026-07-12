@@ -42,6 +42,7 @@ import os
 import time
 import subprocess
 import shutil
+from pathlib import Path
 
 from grass.imaging import images2ims
 import grass.script as gs
@@ -77,8 +78,9 @@ def writeAvi(
     between 0 and 1 for float types.
 
     Requires the "ffmpeg" application:
-      * Most linux users can install using their package manager
-      * There is a windows installer on the visvis website
+
+    * Most linux users can install using their package manager
+    * There is a windows installer on the visvis website
 
     :param str filename: output filename
     :param images:
@@ -167,13 +169,12 @@ def readAvi(filename, asNumpy=True):
     """
 
     # Check whether it exists
-    if not os.path.isfile(filename):
+    if not Path(filename).is_file():
         raise OSError("File not found: " + str(filename))
 
     # Determine temp dir, make sure it exists
     tempDir = os.path.join(os.path.expanduser("~"), ".tempIms")
-    if not os.path.isdir(tempDir):
-        os.makedirs(tempDir)
+    Path(tempDir).mkdir(parents=True, exist_ok=True)
 
     # Copy movie there
     shutil.copy(filename, os.path.join(tempDir, "input.avi"))

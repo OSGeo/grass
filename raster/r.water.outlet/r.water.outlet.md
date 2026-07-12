@@ -1,7 +1,7 @@
 ## DESCRIPTION
 
 *r.water.outlet* generates a watershed basin from a drainage direction
-map and a set of coordinates representing the outlet point of watershed.
+map and a set of coordinates representing the outlet point of the watershed.
 
 Input drainage direction map indicates the "aspect" for each cell.
 Multiplying positive values by 45 will give the direction in degrees
@@ -19,7 +19,7 @@ of zero (0) are not in the watershed basin.
 
 In the context of this program, a watershed basin is the region upstream
 of an outlet point. Thus, if the user chooses an outlet point on a hill
-slope, the resulting map will be a thin silver of land representing the
+slope, the resulting map will be a thin sliver of land representing the
 overland slope uphill of the point.
 
 ## EXAMPLE

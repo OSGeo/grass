@@ -3,6 +3,7 @@ build_library_in_subdir(
   NAME
   grass_iortho
   DEPENDS
+  ${LIBM}
   grass_gis
   grass_imagery
   grass_gmath)

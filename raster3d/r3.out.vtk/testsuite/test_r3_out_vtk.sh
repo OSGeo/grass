@@ -26,7 +26,7 @@ r3.mapcalc --o expr="volume_rgb = volume_null * 5"
 r3.out.vtk --o input=volume_null output=test_volume_null_1_cells.vtk precision=3 null=0
 r3.out.vtk -p --o input=volume_null output=test_volume_null_1_points.vtk precision=3 null=0
 
-# The second @test adds rgb and vector maps. We re-use the created volume map
+# The second @test adds rgb and vector maps. We reuse the created volume map
 # for vector creation. The rgb value must range from 0 - 255. The generated @files
 # should be compared with the reference data.
 r3.out.vtk --o rgbmaps=volume_rgb,volume_rgb,volume_rgb vectormaps=volume_null,volume_null,volume_null input=volume_null output=test_volume_null_1_cells_rgb_vect.vtk precision=3 null=-1.0

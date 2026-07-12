@@ -616,7 +616,7 @@ int main(int argc, char *argv[])
                                    limit_opt->answer);
     if (!count_decimation_is_valid(&count_decimation_control))
         G_fatal_error(_("Settings for count-based decimation are not valid"));
-        /* we don't check if the decimation is noop */
+    /* we don't check if the decimation is noop */
 
 #ifdef HAVE_LONG_LONG_INT
     G_important_message(_("Scanning %llu points..."), n_features);
