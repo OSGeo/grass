@@ -43,7 +43,7 @@ def test_setnull_float(session_with_maps):
     """Cells matching setnull become NULL in a floating point map (-f)."""
     tools = Tools(session=session_with_maps)
 
-    tools.r_null(map="map_float", setnull="1", flags="f")
+    tools.r_null(map="map_float", setnull=1, flags="f")
 
     described = tools.r_describe(map="map_float", format="json", flags="r").json
     assert described == {"has_nulls": True, "ranges": [{"min": 2.5, "max": 3}]}
