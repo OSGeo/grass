@@ -33,7 +33,7 @@ def test_setnull_integer(session_with_maps):
     """Cells matching setnull become NULL in an integer map (-i)."""
     tools = Tools(session=session_with_maps)
 
-    tools.r_null(map="map_basic", setnull="1", flags="i")
+    tools.r_null(map="map_basic", setnull=1, flags="i")
 
     described = tools.r_describe(map="map_basic", format="json", flags="1").json
     assert described == {"has_nulls": True, "values": [2, 3]}
