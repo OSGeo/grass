@@ -16,7 +16,9 @@ def test_area_metrics(session):
     """
     tools = Tools(session=session)
     result = tools.v_geometry(
-        map="grid", metric="area,perimeter,compactness,fractal_dimension,bbox"
+        map="grid",
+        metric="area,perimeter,compactness,fractal_dimension,bbox",
+        format="json",
     )
     assert len(result["records"]) == 4
     expected_compactness = 200.0 / (2.0 * math.sqrt(math.pi * 2500.0))
@@ -34,7 +36,9 @@ def test_area_metrics(session):
 
 def test_area_hectares(session):
     tools = Tools(session=session)
-    result = tools.v_geometry(map="grid", metric="area", units="hectares")
+    result = tools.v_geometry(
+        map="grid", metric="area", units="hectares", format="json"
+    )
     for record in result["records"]:
         assert record["area"] == pytest.approx(0.25)
     assert result["units"]["area"] == "hectares"
@@ -43,7 +47,9 @@ def test_area_hectares(session):
 def test_line_metrics(session):
     """Line-family metrics on a straight line from (0,0) to (100,100)."""
     tools = Tools(session=session)
-    result = tools.v_geometry(map="line", metric="length,sinuosity,azimuth")
+    result = tools.v_geometry(
+        map="line", metric="length,sinuosity,azimuth", format="json"
+    )
     record = result["records"][0]
     assert record["length"] == pytest.approx(math.sqrt(2.0) * 100.0, rel=1e-6)
     # A straight line has sinuosity 1.
@@ -54,13 +60,13 @@ def test_line_metrics(session):
 
 def test_count_totals(session):
     tools = Tools(session=session)
-    result = tools.v_geometry(map="points", metric="count")
+    result = tools.v_geometry(map="points", metric="count", format="json")
     assert result["totals"]["count"] == 3
 
 
 def test_coordinates(session):
     tools = Tools(session=session)
-    result = tools.v_geometry(map="points", metric="coordinates")
+    result = tools.v_geometry(map="points", metric="coordinates", format="json")
     coords = {(record["x"], record["y"]) for record in result["records"]}
     assert coords == {(10.0, 20.0), (30.0, 40.0), (50.0, 60.0)}
 
@@ -68,7 +74,9 @@ def test_coordinates(session):
 def test_multiple_metrics_totals(session):
     """Totals from different metrics are merged."""
     tools = Tools(session=session)
-    result = tools.v_geometry(map="grid", metric="area,count", type="centroid")
+    result = tools.v_geometry(
+        map="grid", metric="area,count", type="centroid", format="json"
+    )
     assert result["totals"]["area"] == pytest.approx(10000.0)
     assert result["totals"]["count"] == 4
 
@@ -77,7 +85,7 @@ def test_per_metric_units(session):
     """Each metric gets its own unit via positional correspondence."""
     tools = Tools(session=session)
     result = tools.v_geometry(
-        map="grid", metric="area,perimeter", units="hectares,kilometers"
+        map="grid", metric="area,perimeter", units="hectares,kilometers", format="json"
     )
     assert result["units"]["area"] == "hectares"
     assert result["units"]["perimeter"] == "kilometers"
@@ -89,7 +97,9 @@ def test_per_metric_units(session):
 def test_partial_units(session):
     """Fewer units than metrics: extra metrics use defaults."""
     tools = Tools(session=session)
-    result = tools.v_geometry(map="grid", metric="area,perimeter", units="hectares")
+    result = tools.v_geometry(
+        map="grid", metric="area,perimeter", units="hectares", format="json"
+    )
     assert result["units"]["area"] == "hectares"
     assert result["units"]["perimeter"] == "meters"
 
@@ -153,7 +163,7 @@ def test_count_combined_aligns_with_family(session):
       the line or the cat=-1 boundaries.
     """
     tools = Tools(session=session)
-    result = tools.v_geometry(map="mixed", metric="area,count")
+    result = tools.v_geometry(map="mixed", metric="area,count", format="json")
 
     records_by_cat = {record["category"]: record for record in result["records"]}
     assert set(records_by_cat) == {1, 2}
