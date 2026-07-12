@@ -4,24 +4,25 @@
 #
 # Zhang Jun <nilarcs@gmail.com>, 2005, 2006.
 # Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
+# Jietao Wang <quaternary@163.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_zh\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-25 16:03+0000\n"
-"PO-Revision-Date: 2025-07-26 01:37+0000\n"
-"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
-"Language-Team: Chinese (Simplified) <https://weblate.osgeo.org/projects/grass-gis/grassmods/zh_Hans/>\n"
+"POT-Creation-Date: 2026-06-27 15:58+0000\n"
+"PO-Revision-Date: 2026-06-25 11:49+0000\n"
+"Last-Translator: Jietao Wang <quaternary@163.com>\n"
+"Language-Team: Chinese (Simplified Han script) <https://weblate.osgeo.org/projects/grass-gis/grassmods/zh_Hans/>\n"
 "Language: zh\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #, c-format
 msgid "Table <%s> not found in database <%s> using driver <%s>"
-msgstr ""
+msgstr "使用驱动 <%s> 在数据库 <%s> 中未找到表 <%s>"
 
 #, c-format
 msgid "Unable to start driver <%s>"
@@ -36,10 +37,10 @@ msgid "Unable to describe table <%s>"
 msgstr "无法描述表 <%s>"
 
 msgid "Failed to initialize JSON array. Out of memory?"
-msgstr ""
+msgstr "JSON 数组初始化失败。内存不足？"
 
 msgid "Failed to serialize JSON to pretty format."
-msgstr ""
+msgstr "无法将 JSON 序列化为美观格式。"
 
 msgid "Print type information about the columns"
 msgstr ""
@@ -53,7 +54,7 @@ msgid "Print"
 msgstr ""
 
 msgid "Format"
-msgstr ""
+msgstr "格式"
 
 msgid "database"
 msgstr ""
@@ -132,7 +133,7 @@ msgid "Default driver is not set"
 msgstr ""
 
 msgid "Default database is not set"
-msgstr ""
+msgstr "未设置默认数据库"
 
 msgid "Unable to set default database connection"
 msgstr ""
@@ -1019,7 +1020,7 @@ msgid "Outputs a list of all available display colors."
 msgstr ""
 
 msgid "raster"
-msgstr ""
+msgstr "栅格"
 
 msgid "color table"
 msgstr ""
@@ -1092,7 +1093,7 @@ msgid "L: add  M: remove  R: quit and save\n"
 msgstr ""
 
 msgid "vector"
-msgstr ""
+msgstr "矢量"
 
 msgid "Selects and extracts vectors with mouse into new vector map."
 msgstr ""
@@ -2233,7 +2234,6 @@ msgstr "有意义数字的位数(只用于浮点型)"
 msgid "Get text color from cell color value"
 msgstr ""
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -3095,10 +3095,10 @@ msgid "Unable to write output file <%s>"
 msgstr ""
 
 msgid "Unable to open display"
-msgstr ""
+msgstr "无法打开显示设备"
 
 msgid "Unable to obtain visual"
-msgstr ""
+msgstr "无法获取视觉内容"
 
 msgid "Failed to initialize output surface"
 msgstr ""
@@ -8192,7 +8192,7 @@ msgid "Zero-crossing \"edge detection\" raster function for image processing."
 msgstr ""
 
 msgid "Name of input raster map"
-msgstr "输入栅格图的名称"
+msgstr "输入栅格地图名称"
 
 msgid "Zero crossing raster map"
 msgstr ""
@@ -9264,7 +9264,7 @@ msgid "Name of raster map to use as mask"
 msgstr ""
 
 msgid "Raster"
-msgstr ""
+msgstr "栅格"
 
 msgid "Raster values to use for mask"
 msgstr ""
@@ -9276,7 +9276,7 @@ msgid "Name of vector map to use as mask"
 msgstr ""
 
 msgid "Vector"
-msgstr ""
+msgstr "矢量"
 
 msgid "Layer number or name (vector)"
 msgstr ""
@@ -9602,6 +9602,9 @@ msgstr ""
 msgid "Columns to be printed to stdout"
 msgstr ""
 
+msgid "plain;Plain text output;line;Comma separated list of dataset names;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
+msgstr ""
+
 msgid "Field separator character between the output columns"
 msgstr ""
 
@@ -9881,7 +9884,7 @@ msgstr ""
 msgid "Path to the extraction directory"
 msgstr ""
 
-msgid "Create a new project and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
+msgid "Create a new project and import the data into it."
 msgstr ""
 
 msgid "Set the current region from the last map that was imported"
@@ -10055,6 +10058,9 @@ msgstr ""
 msgid "Raster map used for zoning, must be of type CELL"
 msgstr ""
 
+msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
+msgstr ""
+
 msgid "Calculate extended statistics"
 msgstr ""
 
@@ -10123,8 +10129,8 @@ msgid "Raster map with zones to compute statistics for"
 msgstr "需要量化的栅格地图"
 
 #, fuzzy
-msgid "Raster map with zones to compute statistics for (needs to be CELL)"
-msgstr "需要量化的栅格地图"
+msgid "3D raster map with zones"
+msgstr "矢量地图<%s>非3D"
 
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
 msgstr ""
@@ -10262,7 +10268,7 @@ msgid "Lists temporal topology of a space time dataset."
 msgstr ""
 
 msgid "topology"
-msgstr ""
+msgstr "拓扑"
 
 msgid "Print temporal topological relationships and exit"
 msgstr ""
@@ -10289,6 +10295,9 @@ msgid "Prints attributes of vector maps registered in a space time vector datase
 msgstr ""
 
 msgid "select"
+msgstr ""
+
+msgid "plain;Plain text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
 msgstr ""
 
 msgid "Exports a space time vector dataset as GRASS specific archive file."
@@ -10358,7 +10367,7 @@ msgid "centroid"
 msgstr ""
 
 msgid "area"
-msgstr ""
+msgstr "面积"
 
 msgid "Action to be taken"
 msgstr ""
@@ -10445,7 +10454,7 @@ msgid "Layer where to join"
 msgstr ""
 
 msgid "column"
-msgstr ""
+msgstr "列"
 
 msgid "Identifier column (e.g.: cat) in the vector table to be used for join"
 msgstr ""
@@ -10532,7 +10541,7 @@ msgid "dissolve"
 msgstr ""
 
 msgid "line"
-msgstr ""
+msgstr "线"
 
 msgid "Dissolving"
 msgstr ""
@@ -10638,7 +10647,7 @@ msgid "Imports ASCII x,y[,z] coordinates as a series of lines."
 msgstr ""
 
 msgid "point"
-msgstr ""
+msgstr "点"
 
 msgid "Create a 3D line from 3 column data"
 msgstr ""
@@ -11405,7 +11414,7 @@ msgid "Reading PostScript include file <%s> ..."
 msgstr "读取PostScript包含文件 <%s> ..."
 
 msgid "meters"
-msgstr ""
+msgstr "米"
 
 msgid "kilometers"
 msgstr ""
@@ -13009,10 +13018,8 @@ msgstr ""
 msgid "Input contains an invalid CRS."
 msgstr ""
 
-#, fuzzy
-#| msgid "Transect definition"
 msgid "WKT definition:"
-msgstr "横断线的定义"
+msgstr "WKT的定义："
 
 msgid "No projection information available"
 msgstr ""
@@ -13504,6 +13511,9 @@ msgstr ""
 
 #, c-format
 msgid "Internal error in %s()"
+msgstr ""
+
+msgid "JSON nesting exceeds maximum depth"
 msgstr ""
 
 msgid "Generates a raster map containing distances to nearest raster features and/or the value of the nearest non-null cell."
@@ -14101,7 +14111,7 @@ msgid "Name of project to create or to read CRS from for GCPs transformation"
 msgstr ""
 
 msgid "Projection"
-msgstr ""
+msgstr "投影"
 
 msgid "Offset to be added to band numbers"
 msgstr ""
@@ -17021,7 +17031,7 @@ msgid "percentile"
 msgstr ""
 
 msgid "quantile"
-msgstr ""
+msgstr "分位数"
 
 msgid "Compute quantiles using two passes."
 msgstr ""
@@ -18014,7 +18024,7 @@ msgid "rate of spread"
 msgstr ""
 
 msgid "model"
-msgstr ""
+msgstr "模型"
 
 msgid "Generates rate of spread raster maps."
 msgstr ""
@@ -19132,7 +19142,7 @@ msgid "Print grid coordinates (east and north)"
 msgstr "打印格网坐标(东和北)"
 
 msgid "Coordinates"
-msgstr ""
+msgstr "坐标"
 
 msgid "Print x and y (column and row)"
 msgstr "打印x和y(列和行)"
@@ -20085,7 +20095,7 @@ msgid "Distribution mean"
 msgstr "分布均值"
 
 msgid "Standard deviation"
-msgstr "标准偏差"
+msgstr "标准差"
 
 msgid "Provides surface interpolation from raster point data by Inverse Distance Squared Weighting."
 msgstr ""
@@ -20315,7 +20325,6 @@ msgstr "太多的类别 (找到：%i，最大值：%i)。试着将地图重新�
 msgid "Input raster must be of type CELL."
 msgstr ""
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
@@ -23598,7 +23607,7 @@ msgstr ""
 msgid "Filled raster map is: %s"
 msgstr ""
 
-msgid "Following holes where not filled. Temporary maps with are left in place to allow examination of unfilled holes"
+msgid "The following holes were not filled. Temporary maps are left in place to allow examination of unfilled holes:"
 msgstr ""
 
 msgid "Output can be written only to the current mapset"
@@ -23627,9 +23636,9 @@ msgstr ""
 msgid "Unable to import GDAL dataset <%s>"
 msgstr ""
 
-#, fuzzy, python-format
+#, python-format
 msgid "Coordinate reference system not available for current project <%s>"
-msgstr "使用地图坐标而不是 xyz 坐标"
+msgstr "坐标参考系统对当前项目 <%s> 不可用"
 
 #, fuzzy, python-format
 msgid "Creating temporary project for <%s>..."
@@ -24870,11 +24879,23 @@ msgstr ""
 msgid "Prints/sets general temporal GIS database connection for current mapset."
 msgstr ""
 
+msgid "plain;Plain text output;shell;Shell script style output;json;JSON (JavaScript Object Notation)"
+msgstr ""
+
 msgid "Overwrite current settings if initialized"
 msgstr ""
 
-msgid "Print current connection parameter in shell style and exit"
+#, fuzzy
+msgid "Name of the mapset(s) to print the connection info for"
+msgstr "包含线的输入地图"
+
+msgid "'.' for current mapset; '*' for all mapsets in the project. Requires format=json."
 msgstr ""
+
+#, fuzzy
+#| msgid "This option requires one column"
+msgid "The mapset option requires format=json."
+msgstr "该选项需要一个字段"
 
 msgid "Temporal GIS database connection not defined. Run t.connect."
 msgstr ""
@@ -25078,10 +25099,10 @@ msgid "Unable to calculate centroid for area %d"
 msgstr ""
 
 msgid "node"
-msgstr ""
+msgstr "节点"
 
 msgid "vertex"
-msgstr ""
+msgstr "顶点"
 
 msgid "Builds polylines from lines or boundaries."
 msgstr ""
@@ -25261,7 +25282,7 @@ msgid "type       count        min        max\n"
 msgstr ""
 
 msgid "boundary"
-msgstr ""
+msgstr "边界"
 
 msgid "face"
 msgstr ""
@@ -31037,6 +31058,10 @@ msgid_plural "%d boundaries snapped"
 msgstr[0] ""
 
 #, c-format
+msgid "Removing areas smaller than %g sqm..."
+msgstr ""
+
+#, c-format
 msgid "Querying vector map <%s>..."
 msgstr ""
 
@@ -31114,6 +31139,13 @@ msgid "Snapping threshold for boundaries"
 msgstr ""
 
 msgid "Disable snapping with snap <= 0"
+msgstr ""
+
+#, fuzzy
+msgid "Minimum size of areas to keep in square meters"
+msgstr "标签大小 (地图单位)"
+
+msgid "Enable with minsize > 0"
 msgstr ""
 
 #, c-format
@@ -31216,6 +31248,11 @@ msgstr ""
 msgid "Missing attribute table for vector map <%s>"
 msgstr ""
 
+#, fuzzy
+#| msgid "List all columns for a given table."
+msgid "Too many columns to copy the table"
+msgstr "列出给出表的所有字段。"
+
 #, c-format
 msgid "Missing table for <%s>"
 msgstr ""
@@ -31268,6 +31305,9 @@ msgstr ""
 
 #, c-format
 msgid "%d vector maps patched"
+msgstr ""
+
+msgid "Too many columns to copy records"
 msgstr ""
 
 #, c-format
@@ -33330,9 +33370,6 @@ msgstr "无法拷贝表"
 msgid "Pass %d"
 msgstr ""
 
-msgid "Node is outside any input area"
-msgstr ""
-
 #, c-format
 msgid "Found %d point/centroid in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
 msgid_plural "Found %d points/centroids in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
@@ -33706,6 +33743,10 @@ msgstr ""
 
 msgid "Image file"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Raster map with zones to compute statistics for (needs to be CELL)"
+#~ msgstr "需要量化的栅格地图"
 
 #, fuzzy
 #~ msgid "WGS84 output not possible as this project does not contain datum transformation parameters. Try running g.setproj."
@@ -34711,10 +34752,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Minimum reach slope"
 #~ msgstr "最小随机值"
-
-#, fuzzy
-#~ msgid "Minimum size of areas in map units"
-#~ msgstr "标签大小 (地图单位)"
 
 #, fuzzy
 #~ msgid "Misc"
@@ -35806,10 +35843,6 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Name of the vector map layer of the segments"
-#~ msgstr "包含线的输入地图"
-
-#, fuzzy
-#~ msgid "Name of the vector map with the electric grid"
 #~ msgstr "包含线的输入地图"
 
 #, fuzzy
@@ -37400,10 +37433,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "calibration"
 #~ msgstr "位置名称"
-
-#, fuzzy
-#~ msgid "categorical map with zones"
-#~ msgstr "矢量地图<%s>非3D"
 
 #, fuzzy
 #~ msgid "centerpoint"

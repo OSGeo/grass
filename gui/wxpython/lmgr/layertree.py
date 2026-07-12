@@ -115,6 +115,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.notebook = kwargs["notebook"]
         del kwargs["notebook"]
 
+        self.scrollbar_y_pos = 0
         self._giface = giface
         self.treepg = parent  # notebook page holding layer tree
         self.Map = Map()  # instance of render.Map to be associated with display
@@ -171,9 +172,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self._setIcons(il)
         self.AssignImageList(il)
 
+        self.Bind(wx.EVT_SCROLLWIN, self.OnScroll)
         self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnActivateLayer)
         self.Bind(wx.EVT_TREE_SEL_CHANGED, self.OnChangeSel)
-        self.Bind(wx.EVT_TREE_SEL_CHANGING, self.OnChangingSel)
         self.Bind(CT.EVT_TREE_ITEM_CHECKED, self.OnLayerChecked)
         self.Bind(CT.EVT_TREE_ITEM_CHECKING, self.OnLayerChecking)
         self.Bind(wx.EVT_TREE_DELETE_ITEM, self.OnDeleteLayer)
@@ -186,6 +187,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.Bind(wx.EVT_MOTION, self.OnMotion)
 
         self._giface.grassdbChanged.connect(self.OnGrassDBChanged)
+
+    def _preserveScrollPosition(self):
+        """Scrolling position is default handled internally by
+        wx.lib.agw.customtreectrl class, ScrollTo() method.
+        """
+        self.Scroll(0, self.scrollbar_y_pos)
 
     def _setIcons(self, il):
         self._icon = {}
@@ -1168,6 +1175,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 ]
             )
 
+    def OnScroll(self, evt):
+        self.scrollbar_y_pos = self.GetScrollPos(wx.VERTICAL)
+        evt.Skip()
+
     def OnStartEditing(self, event):
         """Start editing vector map layer requested by the user"""
         mapLayer = self.GetLayerInfo(self.layer_selected, key="maplayer")
@@ -1858,6 +1869,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             vselect.Reset()
 
         self.AdjustMyScrollbars()
+        self._preserveScrollPosition()
 
     def OnCmdChanged(self, event):
         """Change command string"""
@@ -1891,17 +1903,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         else:
             self.hitCheckbox = False
         event.Skip()
-
-    def OnChangingSel(self, event):
-        """Selection is changing.
-
-        If the user is clicking on checkbox, selection change is vetoed.
-        """
-        if self.hitCheckbox:
-            # Prevent the scrollbar from scrolling up when a layer item
-            # is checked or unchecked
-            self.EnsureVisible(event.GetItem())
-            event.Veto()
 
     def OnChangeSel(self, event):
         """Selection changed
@@ -1972,6 +1973,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         vselect = self._giface.GetMapDisplay().GetDialog("vselect")
         if vselect:
             vselect.Reset()
+        self._preserveScrollPosition()
 
     def OnEndDrag(self, event):
         self.StopDragging()

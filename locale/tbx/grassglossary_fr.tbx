@@ -69,7 +69,7 @@
             <termEntry id="coordinate reference system, we use CRS instead of SRS https://en.wikipedia.org/wiki/Spatial_reference_system">
                 <langSet xml:lang="en"><tig><term>CRS</term></tig></langSet>
                 <langSet xml:lang="fr"><tig><term>SCR</term></tig></langSet>
-                <descrip>coordinate reference system, we use CRS instead of SRS https://en.wikipedia.org/wiki/Spatial_reference_systeM</descrip>
+                <descrip>coordinate reference system, we use CRS instead of SRS https://en.wikipedia.org/wiki/Spatial_reference_system</descrip>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>vertex</term></tig></langSet>
@@ -320,6 +320,18 @@ https://vitrinelinguistique.oqlf.gouv.qc.ca/fiche-gdt/fiche/26579673/machine-a-v
             <termEntry>
                 <langSet xml:lang="en"><tig><term>nodes</term></tig></langSet>
                 <langSet xml:lang="fr"><tig><term>nœuds</term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>dissolve</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>regrouper</term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>datum</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>système de référence géodésique</term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>eigenvalue</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>valeur propre</term></tig></langSet>
             </termEntry>
         </body>
     </text>

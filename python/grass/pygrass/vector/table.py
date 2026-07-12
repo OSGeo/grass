@@ -218,7 +218,7 @@ class Columns:
 
     def __setitem__(self, name, new_type):
         self.cast(name, new_type)
-        self.update_odict(self)
+        self.update_odict()
 
     def __iter__(self):
         return self.odict.__iter__()

@@ -47,7 +47,7 @@ with gs.setup.init("path/to/my_project") as session:
 
     # Run GRASS tools
     tools = Tools(session=session)
-    tools.r_import_(input="/path/to/elevation.tif", output="elevation")
+    tools.r_import(input="/path/to/elevation.tif", output="elevation")
     tools.g_region(raster="elevation")
     tools.r_slope_aspect(elevation="elevation", slope="slope")
 ```
@@ -58,7 +58,7 @@ can run the tools right away (without the call to *init*):
 ```python
 # Run GRASS tools
 tools = Tools()
-tools.r_import_(input="/path/to/elevation.tif", output="elevation")
+tools.r_import(input="/path/to/elevation.tif", output="elevation")
 tools.g_region(raster="elevation")
 tools.r_slope_aspect(elevation="elevation", slope="slope")
 ```
@@ -167,11 +167,11 @@ tools = Tools()
 
 # Get number of points in a vector map.
 # A single value can be accessed directly without storing it.
-num_points = tools.v_info("hospitals", format="json")["points"])
+num_points = tools.v_info(map="hospitals", format="json")["points"]
 
 # Get region resolution to get cell size (assuming projected CRS).
 # Result of a tool can be stored and access multiple times.
-region = tools.g_region(flags="p", ,format="json")
+region = tools.g_region(flags="p", format="json")
 cell_area = region["nsres"] * region["ewres"]
 ```
 
@@ -510,9 +510,9 @@ to check if a vector map exists and print the mapset it is in.
 from grass.pygrass.vector import Vector
 
 # Check if the roads vector map exists
-geology = Vector('roadsmajor')
+roads = Vector('roadsmajor')
 
-if roads.exists():
+if roads.exist():
     mapset = roads.mapset
     print(f"The roads vector map exists in the {mapset} mapset")
 
@@ -524,7 +524,7 @@ vector map returned by the [Vector](https://grass.osgeo.org/grass-stable/manuals
 class in addition to read and write access.
 
 ```python
-from grass.pygrass.vector import Vector
+from grass.pygrass.vector import VectorTopo
 
 # Open the roads vector map as a VectorTopo object
 with VectorTopo('roadsmajor') as roads:
@@ -557,7 +557,7 @@ module.
 | [Point](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.geometry.Point) | Represents a point feature in a vector map. |
 
 Each geometry class has its own set of methods to help extract useful
-information. For example, let's built a `Boundary` object from a list of points
+information. For example, let's build a `Boundary` object from a list of points
 and calculate the area of the boundary.
 
 ```python
@@ -625,7 +625,7 @@ with VectorTopo('roadsmajor', mode='rw') as roads:
     roads.build()
 ```
 
-Featurs can also be updated by using the [rewrite](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.VectorTopo.rewrite)
+Features can also be updated by using the [rewrite](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.VectorTopo.rewrite)
 method instead of the `write`. If the geometry of the feature has not changed,
 you can save the attributes to the database table without rebuilding the
 topology using `table.conn.commit`.
@@ -642,10 +642,10 @@ from grass.pygrass.vector import VectorTopo
 # Open the roads vector map as a VectorTopo object
 with VectorTopo('roadsmajor') as roads:
     # Iterate over each feature in the vector map
-    for feature in roads.viter('line'):
+    for feature in roads.viter('lines'):
         # Check if the feature is a line and the length is greater than 1000
         # And the ROAD_NAME attribute is 'NC-50'
-        if feature.lenght() < 100 and feature['ROAD_NAME'] == 'NC-50':
+        if feature.length() > 1000 and feature.attrs['ROAD_NAME'] == 'NC-50':
             print(feature)
 ```
 
@@ -660,6 +660,8 @@ method returns a [LineDist](https://grass.osgeo.org/grass-stable/manuals/libpyth
 object that contains the distance and the closest point on the line.
 
 ```python
+import random
+
 from grass.pygrass.vector import VectorTopo
 from grass.pygrass.vector.geometry import Point
 
@@ -668,8 +670,8 @@ with VectorTopo('roadsmajor') as roads:
     extent = roads.bbox()
 
     # Create a random point within the extent
-    x = random.uniform(extent.east, extent.west)
-    y = random.uniform(extent.north, extent.south) 
+    x = random.uniform(extent.west, extent.east)
+    y = random.uniform(extent.south, extent.north)
     random_point = Point(x, y)
 
     # Iterate over each feature in the vector map
@@ -683,7 +685,7 @@ with VectorTopo('roadsmajor') as roads:
             """)
 ```
 
-Or to simple filter a table using `SQL` you can use the `where` method with
+Or to simply filter a table using `SQL` you can use the `where` method with
 [table_to_dict](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.VectorTopo.table_to_dict)
 to get a dictionary of the features that match the query, the [table.Filter](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass.vector.html#pygrass.vector.table.Filters)
 class for more advanced operations.
@@ -717,7 +719,7 @@ used to filter the features.
 SELECT * FROM roadsmajor WHERE ROAD_NAME = 'NC-50' ORDER BY cat;
 
 -- Value of sql_2
-SELECT * FROM roadsmajor WHERE ROAD_NAME = 'NC-50' ORDER BY cat LIMIT 5;
+SELECT * FROM roadsmajor WHERE ROAD_NAME = 'NC-70' ORDER BY cat LIMIT 5;
 ```
 
 !!! grass-tip "Used Different SQL Database"
