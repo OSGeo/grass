@@ -27,7 +27,7 @@ caused by C library functions does not influence the main testing process.
 
 Some tests will run without any data but many tests require
 the small (basic) version of GRASS sample Location for North Carolina
-(see `GRASS sample data`).
+(see `GRASS sample data`_).
 
 Basic example
 -------------
@@ -720,4 +720,4 @@ Further reading
 .. _1038: https://scan.coverity.com/projects/1038
 .. _Cppcheck: http://cppcheck.sourceforge.net/
 .. _sandbox: https://svn.osgeo.org/grass/sandbox/wenzeslaus/grass_py_static_check.py
-.. _GRASS sample data: https://grass.osgeo.org/sampledata/north_carolina/ (nc_spm_full_v2beta1.tar.gz)
+.. _GRASS sample data: https://grass.osgeo.org/sampledata/north_carolina/

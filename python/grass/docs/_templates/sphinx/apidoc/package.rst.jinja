@@ -1,11 +1,8 @@
-{%- macro automodule(modname, options, noindex=False) -%}
+{%- macro automodule(modname, options) -%}
 .. automodule:: {{ modname }}
 {%- for option in options %}
    :{{ option }}:
 {%- endfor %}
-{%- if noindex %}
-   :no-index:
-{%- endif %}
 {%- endmacro %}
 
 {%- macro toctree(docnames) -%}
@@ -27,10 +24,7 @@
 {% endif %}
 
 {%- if modulefirst and not is_namespace %}
-{# Root grass package keeps full index; subpackages use no-index to avoid
-   duplicating index entries that the parent already generates recursively. #}
-{%- set _pkg_noindex = pkgname != "grass" %}
-{{ automodule(pkgname, automodule_options, noindex=_pkg_noindex) }}
+{{ automodule(pkgname, automodule_options) }}
 {% endif %}
 
 {%- if subpackages %}
@@ -50,7 +44,7 @@ Submodules
 {% if show_headings %}
 {{- [submodule, "module"] | join(" ") | e | heading(2) }}
 {% endif %}
-{{ automodule(submodule, automodule_options, noindex=True) }}
+{{ automodule(submodule, automodule_options) }}
 {% endfor %}
 {%- endif %}
 {%- endif %}
@@ -59,8 +53,5 @@ Submodules
 Module contents
 ---------------
 
-{# Root grass package keeps full index; subpackages use no-index to avoid
-   duplicating index entries that the parent already generates recursively. #}
-{%- set _pkg_noindex = pkgname != "grass" %}
-{{ automodule(pkgname, automodule_options, noindex=_pkg_noindex) }}
+{{ automodule(pkgname, automodule_options) }}
 {% endif %}

@@ -23,7 +23,7 @@ at various levels:
 * `grass.jupyter package <grass.jupyter.html>`_ offers classes and setup functions for
   running GRASS in Jupyter Notebooks
 * `Testing GRASS source code and modules <gunittest_testing.html>`_ using gunittest package
-* `exceptions package <grass.exceptions.html>`_ contains exceptions used by other packages
+* `exceptions package <exceptions.html>`_ contains exceptions used by other packages
 * `imaging package <imaging.html>`_ is a library to create animated images and films
 * `pydispatch package <pydispatch.html>`_ is a library for signal-dispatching
 
@@ -40,15 +40,15 @@ Additional Resources
 Modules and Packages
 --------------------
 .. toctree::
-  :maxdepth: 1
+   :maxdepth: 1
 
-  grass
-  grass.tools
-  script_intro
-  pygrass_index
-  grass.jupyter
-  exceptions
-  imaging
-  pydispatch
-  temporal_framework
-  gunittest_testing
+   grass
+   grass.tools
+   script_intro
+   pygrass_index
+   grass.jupyter
+   exceptions
+   imaging
+   pydispatch
+   temporal_framework
+   gunittest_testing

@@ -16,7 +16,6 @@ from datetime import date
 import string
 from shutil import copy
 
-
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -115,14 +114,11 @@ extensions = [
     "sphinx_sitemap",
 ]
 
-# When building docs, compiled GRASS extension modules (C libraries) may not
-# be importable; mock them so autodoc can proceed using the pure-Python
-# checkout sources.
-autodoc_mock_imports = ["grass.lib", "grass.lib.gis"]
-
 
 # Skip temporal lexer rule methods because their regex docstrings are not intended
-# for reStructuredText parsing and only serve PLY token definitions.
+# for reStructuredText parsing and only serve PLY token definitions. The modules
+# are checked under both names because the sys.path entries above make them
+# importable both as grass.temporal.* and as temporal.*.
 def skip_member(app, what, name, obj, skip, options):
     if name.startswith("t_"):
         mod = getattr(obj, "__module__", None)
