@@ -59,6 +59,8 @@ endif()
 
 set(GRASSAddon_BinDIR bin)
 set(GRASSAddon_DocDIR docs/html)
+set(GRASSAddon_MkdocsDIR docs/mkdocs/source)
+set(GRASSAddon_ManDIR docs/man/man1)
 set(GRASSAddon_ETCDIR etc)
 set(GRASSAddon_LibDIR lib)
 set(GRASSAddon_ScriptDIR scripts)
@@ -66,6 +68,8 @@ set(GRASSAddon_ScriptDIR scripts)
 set(OUTDIR "${CMAKE_BINARY_DIR}/output")
 file(MAKE_DIRECTORY "${OUTDIR}/${GRASSAddon_BinDIR}")
 file(MAKE_DIRECTORY "${OUTDIR}/${GRASSAddon_DocDIR}")
+file(MAKE_DIRECTORY "${OUTDIR}/${GRASSAddon_MkdocsDIR}")
+file(MAKE_DIRECTORY "${OUTDIR}/${GRASSAddon_ManDIR}")
 file(MAKE_DIRECTORY "${OUTDIR}/${GRASSAddon_ETCDIR}")
 file(MAKE_DIRECTORY "${OUTDIR}/${GRASSAddon_LibDIR}")
 file(MAKE_DIRECTORY "${OUTDIR}/${GRASSAddon_ScriptDIR}")
@@ -88,6 +92,14 @@ function(build_addon name)
   if(NOT EXISTS ${MKHTML_PY})
     message(FATAL_ERROR "NO MKHTML_PY FOUND")
   endif()
+  set(MKMARKDOWN_PY ${GRASS_UTILS_DIR}/mkmarkdown.py)
+  if(NOT EXISTS ${MKMARKDOWN_PY})
+    message(FATAL_ERROR "NO MKMARKDOWN_PY FOUND")
+  endif()
+  set(MD2MAN_PY ${GRASS_UTILS_DIR}/g.md2man.py)
+  if(NOT EXISTS ${MD2MAN_PY})
+    message(FATAL_ERROR "NO MD2MAN_PY FOUND")
+  endif()
 
   if(G_ADDONS)
     set(_pythonpath
@@ -96,6 +108,8 @@ function(build_addon name)
     if(NOT G_NO_DOCS)
       set(_tmp_html_file ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.tmp.html)
       set(_out_html_file ${OUTDIR}/${GRASSAddon_DocDIR}/${G_NAME}.html)
+      set(_out_md_file ${OUTDIR}/${GRASSAddon_MkdocsDIR}/${G_NAME}.md)
+      set(_out_man_file ${OUTDIR}/${GRASSAddon_ManDIR}/${G_NAME}.1)
       add_custom_command(
         OUTPUT ${_out_html_file}
         COMMAND
@@ -103,8 +117,16 @@ function(build_addon name)
           ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.html
         COMMAND ${_pythonpath} MODULE_TOPDIR=$ENV{GISBASE} ${PYTHON_EXECUTABLE}
                 ${MKHTML_PY} ${G_NAME} > ${_out_html_file}
-        COMMAND ${CMAKE_COMMAND} -E remove ${_tmp_html_file}
-                ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.html
+        COMMAND ${_pythonpath} ${CMAKE_COMMAND} -E copy ${_src_dir}/${G_NAME}.md
+                ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.md
+        COMMAND ${_pythonpath} MODULE_TOPDIR=$ENV{GISBASE} ${PYTHON_EXECUTABLE}
+                ${MKMARKDOWN_PY} ${G_NAME} > ${_out_md_file}
+        COMMAND VERSION_NUMBER=${GRASS_VERSION_STRING} ${PYTHON_EXECUTABLE}
+                ${MD2MAN_PY} ${_out_md_file} ${_out_man_file}
+        COMMAND
+          ${CMAKE_COMMAND} -E remove ${_tmp_html_file}
+          ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.html
+          ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.md
         COMMENT
           "Creating ${OUT_HTML_FILE} ${OUTDIR}/${GRASSAddon_ETCDIR}/${G_NAME} ${CMAKE_COMMAND}"
       )
@@ -112,6 +134,8 @@ function(build_addon name)
       add_custom_target(${G_NAME}-docs ALL DEPENDS ${_out_html_file})
 
       install(FILES ${_out_html_file} DESTINATION ${GRASSAddon_DocDIR})
+      install(FILES ${_out_md_file} DESTINATION ${GRASSAddon_MkdocsDIR})
+      install(FILES ${_out_man_file} DESTINATION ${GRASSAddon_ManDIR})
     endif()
     foreach(addon IN ITEMS ${G_ADDONS})
       add_subdirectory(${addon})
@@ -251,11 +275,17 @@ function(_build_addon)
     if(img_files)
       set(copy_images_command ${CMAKE_COMMAND} -E copy ${img_files}
                               ${OUTDIR}/${GRASSAddon_DocDIR})
+      set(copy_images_command_md ${CMAKE_COMMAND} -E copy ${img_files}
+                                 ${OUTDIR}/${GRASSAddon_MkdocsDIR})
       install(FILES ${img_files} DESTINATION ${GRASSAddon_DocDIR})
+      install(FILES ${img_files} DESTINATION ${GRASSAddon_MkdocsDIR})
     endif()
 
     set(_tmp_html_file ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.tmp.html)
     set(_out_html_file ${OUTDIR}/${GRASSAddon_DocDIR}/${G_NAME}.html)
+    set(_tmp_md_file ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.tmp.md)
+    set(_out_md_file ${OUTDIR}/${GRASSAddon_MkdocsDIR}/${G_NAME}.md)
+    set(_out_man_file ${OUTDIR}/${GRASSAddon_ManDIR}/${G_NAME}.1)
 
     if(EXISTS ${html_doc})
       install(FILES ${_out_html_file} DESTINATION ${GRASSAddon_DocDIR})
@@ -280,15 +310,33 @@ function(_build_addon)
       COMMAND MODULE_TOPDIR=$ENV{GISBASE} SOURCE_URL=${SOURCE_URL}
               VERSION_NUMBER=${GRASS_VERSION_STRING} ${PYTHON_EXECUTABLE}
               ${MKHTML_PY} ${G_NAME} > ${_out_html_file}
+      COMMAND ${CMAKE_COMMAND} -E copy ${G_SRC_DIR}/${G_NAME}.md
+              ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.md
+      COMMAND
+        ${G_PYTHONPATH} GISBASE=$ENV{GISBASE} GISRC=$ENV{GISRC}
+        VERSION_NUMBER=${GRASS_VERSION_STRING}
+        VERSION_DATE=${GRASS_VERSION_DATE}
+        ${_execute} ${OUTDIR}/${install_dest}/${G_NAME}${SCRIPT_EXT}
+        --md-description < ${null_device} > ${_tmp_md_file}
+      COMMAND MODULE_TOPDIR=$ENV{GISBASE} SOURCE_URL=${SOURCE_URL}
+              VERSION_NUMBER=${GRASS_VERSION_STRING} ${PYTHON_EXECUTABLE}
+              ${MKMARKDOWN_PY} ${G_NAME} > ${_out_md_file}
+      COMMAND VERSION_NUMBER=${GRASS_VERSION_STRING} ${PYTHON_EXECUTABLE}
+              ${MD2MAN_PY} ${_out_md_file} ${_out_man_file}
       COMMAND ${copy_images_command}
-      COMMAND ${CMAKE_COMMAND} -E remove ${_tmp_html_file}
-              ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.html
+      COMMAND ${copy_images_command_md}
+      COMMAND
+        ${CMAKE_COMMAND} -E remove ${_tmp_html_file} ${_tmp_md_file}
+        ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.html
+        ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.md
       COMMENT "Creating ${OUT_HTML_FILE}")
 
     add_custom_target(${G_NAME}-docs ALL DEPENDS ${G_NAME} ${_out_html_file})
     target_sources(${G_NAME}-docs PRIVATE ${html_doc} ${md_doc} ${img_files})
 
     install(FILES ${_out_html_file} DESTINATION ${GRASSAddon_DocDIR})
+    install(FILES ${_out_md_file} DESTINATION ${GRASSAddon_MkdocsDIR})
+    install(FILES ${_out_man_file} DESTINATION ${GRASSAddon_ManDIR})
   endif()
 endfunction()
 

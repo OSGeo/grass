@@ -2360,6 +2360,7 @@ def remove_extension_std(name, force=False):
         os.path.join(options["prefix"], "bin", name),
         os.path.join(options["prefix"], "scripts", name),
         os.path.join(options["prefix"], "docs", "html", name + ".html"),
+        os.path.join(options["prefix"], "docs", "mkdocs", "source", name + ".md"),
         os.path.join(options["prefix"], "docs", "rest", name + ".txt"),
         os.path.join(options["prefix"], "docs", "man", "man1", name + ".1"),
     ]:
@@ -2471,6 +2472,7 @@ def check_dirs():
     """Ensure that the necessary directories in prefix path exist"""
     create_dir(os.path.join(options["prefix"], "bin"))
     create_dir(os.path.join(options["prefix"], "docs", "html"))
+    create_dir(os.path.join(options["prefix"], "docs", "mkdocs", "source"))
     create_dir(os.path.join(options["prefix"], "docs", "rest"))
     check_style_file("grass_logo.png")
     check_style_file("hamburger_menu.svg")
