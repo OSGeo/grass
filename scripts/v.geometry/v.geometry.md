@@ -60,6 +60,7 @@ Compute area, perimeter, and compactness in a single call:
 v.geometry map=geology metric=area,perimeter,compactness
 ```
 
+<!-- markdownlint-disable MD046 -->
 Consume metrics from Python:
 
 === "Python (grass.script)"
@@ -104,6 +105,7 @@ Sample JSON output for `metric=length`:
     ]
 }
 ```
+<!-- markdownlint-restore -->
 
 ## SEE ALSO
 
