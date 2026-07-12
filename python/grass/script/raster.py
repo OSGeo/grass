@@ -481,15 +481,17 @@ class RegionManager:
     >>> with gs.RegionManager(raster="elevation"):
     ...     gs.run_command("r.slope.aspect", elevation="elevation", slope="slope")
 
-    Example using a saved region:
-
-    >>> with gs.RegionManager(region="study_area"):
-    ...     gs.parse_command("r.univar", map="elevation", format="json")
-
     Example using g.region:
 
     >>> with gs.RegionManager():
     ...     gs.run_command("g.region", n=226000, s=222000, w=634000, e=638000)
+    ...     gs.parse_command("r.univar", map="elevation", format="json")
+
+    Example saving a region and reusing it later through *region=*:
+
+    >>> with gs.RegionManager(raster="elevation") as manager:
+    ...     manager.save("study_area")
+    >>> with gs.RegionManager(region="study_area"):
     ...     gs.parse_command("r.univar", map="elevation", format="json")
 
     Example using :py:meth:`~grass.script.raster.RegionManager.set_region`:
@@ -497,12 +499,6 @@ class RegionManager:
     >>> with gs.RegionManager() as manager:
     ...     manager.set_region(n=226000, s=222000, w=634000, e=638000)
     ...     gs.parse_command("r.univar", map="elevation", format="json")
-
-    Example using :py:meth:`~grass.script.raster.RegionManager.save` to store the current
-    region under a persistent name so it can be reused after the context exits:
-
-    >>> with gs.RegionManager(raster="elevation") as manager:
-    ...     manager.save("elevation_region", overwrite=True)
 
     Example using explicit activate and deactivate:
 
@@ -546,7 +542,7 @@ class RegionManager:
         """
         run_command("g.region", **kwargs, env=self.env)
 
-    def save(self, name, overwrite=False):
+    def save(self, name, overwrite=None):
         """Save the current region under a persistent name.
 
         :param name: Name of the region to save.
@@ -605,7 +601,9 @@ class RegionManagerEnv:
     """Context manager for temporarily setting the computational region.
 
     See :class:`RegionManager`. Unlike :class:`RegionManager`, this class uses
-    `GRASS_REGION` instead of `WIND_OVERRIDE`. The advantage is no files are written to disk.
+    `GRASS_REGION` instead of `WIND_OVERRIDE`. The advantage is that, during normal
+    context usage, no region files are written to disk. If you call
+    :py:meth:`.save`, a named region is intentionally written to disk.
     The disadvantage is that simply calling *g.region* within the context will not affect
     the temporary region, but the global one, which can be confusing.
 
@@ -626,6 +624,13 @@ class RegionManagerEnv:
     ...     manager.env["GRASS_REGION"] = gs.region_env()
     ...     gs.parse_command("r.univar", map="elevation", format="json")
 
+    Example saving the temporary region and reusing it later through *region=*:
+
+    >>> with gs.RegionManagerEnv(raster="elevation") as manager:
+    ...     manager.save("study_area")
+    >>> with gs.RegionManager(region="study_area"):
+    ...     gs.parse_command("r.univar", map="elevation", format="json")
+
 
     Example using explicit activate and deactivate:
 
@@ -640,7 +645,9 @@ class RegionManagerEnv:
     .. caution::
 
         To set region within the context, do not call *g.region*,
-        use :py:meth:`.set_region` instead.
+        use :py:meth:`.set_region` instead. The :py:meth:`.save` method
+        is an exception and uses *g.region save=* intentionally to store
+        the current region persistently.
     """
 
     def __init__(self, env: dict[str, str] | None = None, **kwargs):
@@ -662,6 +669,14 @@ class RegionManagerEnv:
         :param kwargs: Keyword arguments with g.region parameters
         """
         self.env["GRASS_REGION"] = region_env(**kwargs, env=self.env)
+
+    def save(self, name, overwrite=None):
+        """Save the current region under a persistent name.
+
+        :param name: Name of the region to save.
+        :param overwrite: Whether to overwrite an existing saved region.
+        """
+        run_command("g.region", save=name, overwrite=overwrite, env=self.env)
 
     def activate(self):
         """Sets the `GRASS_REGION` environment variable to the generated region name.
