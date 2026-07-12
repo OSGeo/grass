@@ -561,6 +561,14 @@ def parse_html_block(lines, i):
     return nodes, i
 
 
+# Matches an inline code span (a backtick run closed by an equal run), used
+# to mask code spans before sniffing a paragraph for HTML: a tag inside a
+# code span is literal text, and a `<script>` mention in particular must not
+# reach the HTML parser, which would treat it as a real script opener and
+# swallow the rest of the paragraph.
+CODE_SPAN_RE = re.compile(r"(`+).+?\1", re.DOTALL)
+
+
 def parse_paragraph(lines, i):
     block = []
     while i < len(lines) and not is_block_start(lines, i):
@@ -569,7 +577,7 @@ def parse_paragraph(lines, i):
     if any(NBSP_RUN_RE.match(line) for line in block):
         return build_definition_list(block), i
     text = "\n".join(block)
-    if HTML_TAG_RE.search(text):
+    if HTML_TAG_RE.search(CODE_SPAN_RE.sub("", text)):
         # A paragraph containing inline HTML is handed to the HTML parser as
         # a whole, so any Markdown markup in it (e.g. **bold** next to a
         # <br>) is left literal. No core page mixes the two this way; pages

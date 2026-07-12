@@ -245,10 +245,11 @@ def test_raw_html_block(tmp_path):
 
 
 def test_inline_style_script_mention_not_swallowed(tmp_path):
-    # A <script>/<style> token mid-line (e.g. in a code span) must not start
-    # a raw block and delete the rest of the document.
+    # A <script>/<style> token in a code span must not start a raw block or
+    # send the paragraph to the HTML parser; both would delete text.
     md = "Use `<script>` tags in HTML.\n\nNext paragraph stays.\n"
     result = convert(md, tmp_path)
+    assert "tags in HTML." in result
     assert "Next paragraph stays." in result
 
 
