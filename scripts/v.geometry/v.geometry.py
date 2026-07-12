@@ -55,9 +55,9 @@
 # %end
 
 # %option G_OPT_F_FORMAT
-# % options: plain,json,csv
-# % answer: json
-# % descriptions: plain;Plain text with pipe separator by default;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)
+# % options: plain,csv,json
+# % answer: plain
+# % descriptions: plain;Plain text with pipe separator by default;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)
 # %end
 
 import csv
@@ -120,36 +120,6 @@ METRIC_GROUPS = {
 
 def _rename_keys(mapping):
     return {_VTODB_KEY_RENAMES.get(k, k): v for k, v in mapping.items()}
-
-
-def _available_cpus():
-    """Number of CPUs this process may actually use.
-
-    Prefers affinity-aware sources over ``os.cpu_count()``, which reports
-    the host total and overcounts in containers and cgroup-limited jobs.
-    """
-    if hasattr(os, "process_cpu_count"):  # Python 3.13+
-        return os.process_cpu_count() or 1
-    if hasattr(os, "sched_getaffinity"):  # Linux
-        return len(os.sched_getaffinity(0))
-    return os.cpu_count() or 1
-
-
-def _resolve_nprocs(nprocs):
-    """Resolve G_OPT_M_NPROCS into a worker count for ThreadPoolExecutor.
-
-    Mirrors the semantics of G_set_omp_num_threads() in
-    lib/gis/omp_threads.c: 0 means use all available cores, a positive
-    number is used as-is, a negative number means cpu_count + nprocs
-    (clamped to at least 1). Belongs in a library helper eventually.
-    """
-    nprocs = int(nprocs)
-    if nprocs > 0:
-        return nprocs
-    available = _available_cpus()
-    if nprocs == 0:
-        return available
-    return max(1, available + nprocs)
 
 
 def _run_vtodb(metric, unit, common_kwargs):
@@ -253,7 +223,7 @@ def main():
         # Submit all metrics concurrently but collect results in metric
         # order so downstream column/field ordering is deterministic. Cap
         # at len(metrics); extra workers just sit idle.
-        max_workers = min(_resolve_nprocs(options["nprocs"]), len(metrics))
+        max_workers = min(gs.resolve_nprocs(options["nprocs"]), len(metrics))
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             futures = [
                 executor.submit(_run_vtodb, m, u, common_kwargs)

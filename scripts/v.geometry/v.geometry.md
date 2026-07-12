@@ -62,13 +62,25 @@ v.geometry map=geology metric=area,perimeter,compactness
 
 Consume metrics from Python:
 
-```python
-import grass.script as gs
+=== "Python (grass.script)"
 
-data = gs.parse_command("v.geometry", map="geology", metric="compactness")
-for record in data["records"]:
-    print(record["category"], record["compactness"])
-```
+    ```python
+    import grass.script as gs
+
+    data = gs.parse_command("v.geometry", map="geology", metric="compactness", format="json")
+    for record in data["records"]:
+        print(record["category"], record["compactness"])
+    ```
+
+=== "Python (grass.tools)"
+
+    ```python
+    from grass.tools import Tools
+
+    data = Tools().v_geometry(map="geology", metric="compactness", format="json")
+    for record in data["records"]:
+        print(record["category"], record["compactness"])
+    ```
 
 Sample JSON output for `metric=length`:
 
