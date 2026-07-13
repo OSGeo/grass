@@ -100,6 +100,11 @@ repos:
           - "--fix"
           # https://github.com/zizmorcore/zizmor-pre-commit/blob/120fe9ac3c965ab7decf67e8b9ca24b274230eed/.pre-commit-hooks.yaml#L10
           - "--no-progress"
+  - repo: https://github.com/BlankSpruce/gersemi-pre-commit
+    rev: 0.27.7
+    hooks:
+      - id: gersemi
+        files: (^CMakeLists\.txt$|\.cmake$)
   - repo: https://github.com/editorconfig-checker/editorconfig-checker
     rev: v3.6.1
     hooks:
@@ -118,8 +123,3 @@ repos:
           - python
           - tex
           - xml
-  - repo: https://github.com/BlankSpruce/gersemi-pre-commit
-    rev: 0.27.7
-    hooks:
-      - id: gersemi
-        files: (^CMakeLists\.txt$|\.cmake$)
