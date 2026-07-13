@@ -4,6 +4,7 @@ import json
 
 import pytest
 
+from grass.experimental import TemporaryMapsetSession
 from grass.tools import Tools
 
 
@@ -133,6 +134,43 @@ def test_colhead_validation(space_time_dataset, output_format):
         assert status != 0
 
 
+def test_t_list_mapset_current(space_time_dataset):
+    """Check that mapset='.' correctly restricts output to the current mapset (PERMANENT)."""
+    tools = Tools(session=space_time_dataset.session)
+
+    result = tools.t_list(type="strds", mapset=".", columns="name", format="json")
+
+    assert len(result) == 1
+    assert result[0]["name"] == space_time_dataset.name
+
+
+def test_t_list_mapset_all(space_time_dataset):
+    """Check that mapset='*' successfully queries datasets across all mapsets."""
+    tools = Tools(session=space_time_dataset.session)
+
+    result = tools.t_list(type="strds", mapset="*", columns="name", format="json")
+
+    assert len(result) == 2
+    names = [d["name"] for d in result]
+    assert space_time_dataset.name in names
+    assert space_time_dataset.user_dataset in names
+
+
+def test_t_list_mapset_explicit(space_time_dataset):
+    """Check explicit querying of mapsets."""
+    tools = Tools(session=space_time_dataset.session)
+
+    res_user = tools.t_list(type="strds", mapset="user1", columns="name", format="json")
+    assert len(res_user) == 1
+    assert res_user[0]["name"] == space_time_dataset.user_dataset
+
+    res = tools.t_list(type="strds", mapset="PERMANENT,user1", format="json")
+    assert len(res) == 2
+    names = [d["name"] for d in res]
+    assert space_time_dataset.name in names
+    assert space_time_dataset.user_dataset in names
+
+
 def test_t_list_empty_database(empty_session):
     """Verify that t.list handles a missing TGIS database without creating one."""
     tools = Tools(session=empty_session.session)
@@ -151,3 +189,13 @@ def test_t_list_empty_database(empty_session):
     result = tools.t_connect(flags="p", format="json", mapset=".")
     db_exist = result[0]["driver"] and result[0]["database"]
     assert not db_exist
+
+
+def test_t_list_from_mapset_without_temporal_database(space_time_dataset):
+    """Datasets in accessible mapsets are listed even when the current mapset
+    has no temporal database (https://github.com/OSGeo/grass/issues/7622)."""
+    with TemporaryMapsetSession(env=space_time_dataset.session.env) as mapset_session:
+        tools = Tools(session=mapset_session)
+        result = tools.t_list(type="strds", format="json")
+        names = [record["name"] for record in result.json]
+        assert space_time_dataset.name in names

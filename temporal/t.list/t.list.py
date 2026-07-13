@@ -78,6 +78,12 @@
 # % guisection: Formatting
 # %end
 
+# %option G_OPT_M_MAPSET
+# % multiple: yes
+# % description: Name of mapsets to list ('.' for current, '*' for all mapsets)
+# % guisection: Selection
+# %end
+
 # %option G_OPT_F_SEP
 # % answer:
 # % label: Field separator character between the output columns
@@ -99,7 +105,6 @@ import sys
 from contextlib import nullcontext
 
 import grass.script as gs
-from grass.tools import Tools
 
 ############################################################################
 
@@ -107,7 +112,7 @@ from grass.tools import Tools
 def main():
 
     # Get the options
-    type = options["type"]
+    stds_type = options["type"]
     temporal_type = options["temporaltype"]
     columns = options["columns"]
     order = options["order"]
@@ -116,6 +121,7 @@ def main():
     outpath = options["output"]
     colhead = flags["c"]
     output_format = options.get("format", "plain")
+    mapsets = options["mapset"]
 
     if not columns:
         columns = "all" if output_format == "json" else "id"
@@ -150,17 +156,20 @@ def main():
     elif not separator:  # output_format == "plain"
         separator = "|"
 
-    tools = Tools()
+    # Lazy import and initialize TGIS
+    import grass.temporal as tgis
 
-    conn = tools.t_connect(flags="p", format="json", mapset=".")
+    tgis.init(skip_db_init=True)
 
-    db_exists = conn[0]["driver"] and conn[0]["database"]
+    dbif = tgis.SQLDatabaseInterfaceConnection(mapsets=mapsets)
 
     # if no connection is found
-    if not db_exists:
+    if not dbif.tgis_mapsets:
         if output_format == "plain":
             gs.message(
-                _("No temporal database exists in this mapset. No datasets to list.")
+                _(
+                    "No temporal database found in the requested mapset(s). No datasets to list."
+                )
             )
         with (
             open(outpath, "w")
@@ -171,19 +180,11 @@ def main():
                 out_file.write(json.dumps([], indent=4) + "\n")
         return
 
-    # Lazy import
-    import grass.temporal as tgis
-
-    # Make sure the temporal database exists
-    tgis.init()
-
-    sp = tgis.dataset_factory(type, None)
-    dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
-    first = True
 
     json_output = []
     line_output = []
+    first = True
 
     if gs.verbosity() > 0 and not outpath and output_format == "plain":
         sys.stderr.write("----------------------------------------------\n")
@@ -196,80 +197,73 @@ def main():
     ):
         for ttype in temporal_type.split(","):
             time = "absolute time" if ttype == "absolute" else "relative time"
-
             stds_list = tgis.get_dataset_list(
-                type, ttype, columns, where, order, dbif=dbif
+                stds_type, ttype, columns, where, order, dbif=dbif
             )
 
-            mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
-
-            for key in mapsets:
-                if key in stds_list.keys():
-                    rows = stds_list[key]
-
-                    if rows:
-                        if (
-                            gs.verbosity() > 0
-                            and (not outpath or outpath == "-")
-                            and output_format == "plain"
-                        ):
-                            if issubclass(sp.__class__, tgis.AbstractMapDataset):
-                                sys.stderr.write(
-                                    _(
-                                        "Time stamped %s maps with %s available in mapset "
-                                        "<%s>:\n"
-                                    )
-                                    % (sp.get_type(), time, key)
+            for mapset in dbif.tgis_mapsets:
+                rows = stds_list.get(mapset)
+                if rows:
+                    if (
+                        gs.verbosity() > 0
+                        and (not outpath or outpath == "-")
+                        and output_format == "plain"
+                    ):
+                        if stds_type in {"raster", "raster_3d", "vector"}:
+                            sys.stderr.write(
+                                _(
+                                    "Time stamped %s maps with %s available in mapset "
+                                    "<%s>:\n"
                                 )
-                            else:
-                                sys.stderr.write(
-                                    _(
-                                        "Space time %s datasets with %s available in "
-                                        "mapset <%s>:\n"
-                                    )
-                                    % (
-                                        sp.get_new_map_instance(None).get_type(),
-                                        time,
-                                        key,
-                                    )
-                                )
-
-                        if output_format == "json":
-                            for row in rows:
-                                json_output.append(dict(row))
-
-                        elif output_format == "line":
-                            line_output.extend([str(row[0]) for row in rows])
-
+                                % (stds_type, time, mapset)
+                            )
                         else:
-                            if (colhead or output_format == "csv") and first:
-                                output = ""
-                                count = 0
-                                for col_key in rows[0].keys():
-                                    output += (separator if count > 0 else "") + str(
-                                        col_key
+                            sys.stderr.write(
+                                _(
+                                    "Space time %s datasets with %s available in "
+                                    "mapset <%s>:\n"
+                                )
+                                % (
+                                    stds_type,
+                                    time,
+                                    mapset,
+                                )
+                            )
+
+                    if output_format == "json":
+                        for row in rows:
+                            json_output.append(dict(row))
+
+                    elif output_format == "line":
+                        line_output.extend([str(row[0]) for row in rows])
+
+                    else:
+                        if (colhead or output_format == "csv") and first:
+                            output = ""
+                            count = 0
+                            for col_key in rows[0].keys():
+                                output += (separator if count > 0 else "") + str(
+                                    col_key
+                                )
+                                count += 1
+                            out_file.write(f"{output}\n")
+                            first = False
+
+                        for row in rows:
+                            output = ""
+                            count = 0
+                            for col in row:
+                                # If the database value is None, make it an empty string for csv
+                                if col is None:
+                                    cell_value = (
+                                        "" if output_format == "csv" else "None"
                                     )
-                                    count += 1
-                                out_file.write("{st}\n".format(st=output))
-                                first = False
+                                else:
+                                    cell_value = str(col)
 
-                            for row in rows:
-                                output = ""
-                                count = 0
-                                for col in row:
-                                    # If the database value is None, make it an empty string for csv
-                                    if col is None:
-                                        cell_value = (
-                                            "" if output_format == "csv" else "None"
-                                        )
-                                    else:
-                                        cell_value = str(col)
-
-                                    output += (
-                                        separator if count > 0 else ""
-                                    ) + cell_value
-                                    count += 1
-                                out_file.write("{st}\n".format(st=output))
+                                output += (separator if count > 0 else "") + cell_value
+                                count += 1
+                            out_file.write("{st}\n".format(st=output))
 
         # Dump the collected JSON and line data
         if output_format == "json":

@@ -40,12 +40,14 @@ from importlib.util import find_spec
 from pathlib import Path
 
 import grass.script as gs
+from grass.tools import Tools
 from grass.pygrass import messages
 from grass.script.utils import decode
 
 from .c_libraries_interface import CLibrariesInterface
 
 
+tools = Tools()
 # Import all supported database backends (sqlite3 imported above)
 # Ignore import errors since they are checked later
 
@@ -497,21 +499,26 @@ def stop_subprocesses() -> None:
 atexit.register(stop_subprocesses)
 
 
-def get_available_temporal_mapsets():
-    """Return a list of of mapset names with temporal database driver and names
-    that are accessible from the current mapset.
+def get_available_temporal_mapsets(mapsets: str | None = None):
+    """Return a list of of mapset names with temporal database driver and names.
+
+    :param mapsets: A string specifying target mapsets ('.' for current, '*'
+                       for all mapsets in the location, or comma-separated names).
+                       If None, defaults to the current search path.
 
     :returns: A dictionary, mapset names are keys, the tuple (driver,
               database) are the values
     """
     global c_library_interface, message_interface
 
-    mapsets = c_library_interface.available_mapsets()
+    connections = tools.t_connect(flags="p", format="json", mapset=mapsets, quiet=True)
+    mapsets_list = [conn for conn in connections if all(conn.values())]
 
     tgis_mapsets = {}
 
-    for mapset in mapsets:
-        driver = c_library_interface.get_driver_name(mapset)
+    for mapset_data in mapsets_list:
+        mapset = mapset_data["mapset"]
+        driver = mapset_data["driver"]
         database = c_library_interface.get_database_name(mapset)
 
         message_interface.debug(
@@ -1098,8 +1105,8 @@ def _create_tgis_metadata_table(content, dbif=None) -> None:
 
 
 class SQLDatabaseInterfaceConnection:
-    def __init__(self) -> None:
-        self.tgis_mapsets = get_available_temporal_mapsets()
+    def __init__(self, mapsets: str | None = None) -> None:
+        self.tgis_mapsets = get_available_temporal_mapsets(mapsets)
         self.current_mapset = get_current_mapset()
         self.connections = {}
         self.connected = False
@@ -1375,8 +1382,12 @@ class DBConnection:
                 self.connection.isolation_level = None
                 self.connection.text_factory = str
                 self.cursor = self.connection.cursor()
-                self.cursor.execute("PRAGMA synchronous = OFF")
-                self.cursor.execute("PRAGMA journal_mode = MEMORY")
+                # busy_timeout is set to 30 seconds to avoid "database is locked" errors
+                self.cursor.executescript(
+                    "PRAGMA synchronous = OFF;"
+                    "PRAGMA journal_mode = MEMORY;"
+                    "PRAGMA busy_timeout = 30000;"
+                )
             elif self.dbmi.__name__ == "psycopg2":
                 self.connection = self.dbmi.connect(dbstring)
                 # self.connection.set_isolation_level(dbmi.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
@@ -1570,13 +1581,11 @@ class DBConnection:
             else:
                 self.cursor.execute(statement)
         except db_errors:
-            if connected:
-                self.close()
             self.msgr.error(_("Unable to execute :\n %(sql)s") % {"sql": statement})
             raise
-
-        if connected:
-            self.close()
+        finally:
+            if connected:
+                self.close()
 
     def fetchone(self):
         if self.connected:
@@ -1601,27 +1610,22 @@ class DBConnection:
             self.connect()
             connected = True
 
-        sql_script = ""
-        sql_script += "BEGIN TRANSACTION;\n"
-        sql_script += statement
-        sql_script += "END TRANSACTION;"
+        sql_script = f"BEGIN TRANSACTION;\n{statement};\nEND TRANSACTION;"
 
         try:
             if self.dbmi.__name__ == "sqlite3":
-                self.cursor.executescript(statement)
+                self.cursor.executescript(sql_script)
             else:
                 self.cursor.execute(statement)
             self.connection.commit()
         except db_errors:
-            if connected:
-                self.close()
             self.msgr.error(
                 _("Unable to execute transaction:\n %(sql)s") % {"sql": statement}
             )
             raise
-
-        if connected:
-            self.close()
+        finally:
+            if connected:
+                self.close()
 
 
 ###############################################################################
