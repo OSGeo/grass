@@ -161,6 +161,14 @@ def test_unordered_list_nested(tmp_path):
     result = convert("- first\n- second\n    - nested\n", tmp_path)
     assert result.count(".IP \\(bu 4n") == 3  # codespell:ignore bu
     assert ".RS 4n" in result
+    assert ".RE" in result
+
+    rs_index = result.find(".RS 4n")
+    re_index = result.find(".RE", rs_index)
+    assert rs_index != -1
+    assert re_index != -1
+    assert rs_index < re_index
+    assert ".IP \\(bu 4n" in result[rs_index:re_index]
 
 
 def test_wrapped_number_line_is_not_a_list(tmp_path):
@@ -397,3 +405,13 @@ def test_comment_kept_in_fenced_code(tmp_path):
 def test_comment_parsing_unit():
     lines = ["a <!-- x --> b <!-- y", "z --> c", "<!-- lone -->d"]
     assert gmd.strip_html_comments(lines) == ["a  b ", " c", "d"]
+
+
+def test_strip_html_comments_keeps_comment_in_fenced_code_unit():
+    lines = ["```html", "<!-- required -->", "```", "x <!-- drop --> y"]
+    assert gmd.strip_html_comments(lines) == [
+        "```html",
+        "<!-- required -->",
+        "```",
+        "x  y",
+    ]
