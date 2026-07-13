@@ -1,4 +1,5 @@
-"""Name:        r.reclass.area  test
+"""
+Name:        r.reclass.area  test
 Purpose:    Tests  r.reclass.area.
 
 Author:     Shubham Sharma, Google Code-in 2018
