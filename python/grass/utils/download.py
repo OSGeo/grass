@@ -167,15 +167,15 @@ def download_and_extract(source, reporthook=None):
         archive_name = os.path.join(tmpdir, "archive.zip")
         try:
             filename, headers = urlretrieve(source, archive_name, reporthook)
-        except HTTPError as err:
+        except HTTPError as error:
             raise DownloadError(
                 http_error_message.format(
                     url=source,
-                    code=err,
+                    code=error,
                 ),
-            ) from err
-        except URLError as e:
-            raise DownloadError(url_error_message.format(url=source)) from e
+            ) from error
+        except URLError as error:
+            raise DownloadError(url_error_message.format(url=source)) from error
 
         if not re.search(
             response_content_type_header_pattern, headers.get("content-type", "")
@@ -194,15 +194,15 @@ def download_and_extract(source, reporthook=None):
         archive_name = os.path.join(tmpdir, "archive" + ext)
         try:
             urlretrieve(source, archive_name, reporthook)
-        except HTTPError as err:
+        except HTTPError as error:
             raise DownloadError(
                 http_error_message.format(
                     url=source,
-                    code=err,
+                    code=error,
                 ),
-            ) from err
-        except URLError as e:
-            raise DownloadError(url_error_message.format(url=source)) from e
+            ) from error
+        except URLError as error:
+            raise DownloadError(url_error_message.format(url=source)) from error
         extract_tar(name=archive_name, directory=directory, tmpdir=tmpdir)
     else:
         # probably programmer error
