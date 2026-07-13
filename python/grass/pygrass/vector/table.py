@@ -861,7 +861,7 @@ class Link:
                 raise ImportError(er) from None
 
         str_err = "Driver is not supported yet, pleas use: sqlite or pg"
-        raise TypeError(str_err) from None
+        raise TypeError(str_err)
 
     def table(self):
         """Return a Table object.
