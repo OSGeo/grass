@@ -209,7 +209,7 @@ class KeyValue(dict[str, VT]):
         try:
             return self[key]
         except KeyError:
-            raise AttributeError(key)
+            raise AttributeError(key) from None
 
     def __setattr__(self, key: str, value: VT) -> None:
         self[key] = value
