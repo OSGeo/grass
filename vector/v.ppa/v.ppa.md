@@ -1,55 +1,129 @@
-## Description
+## DESCRIPTION
 
-*v.ppa* allows users to perform point pattern analysis with the G, F, K, L, and
-bivariate Ripley's K functions.
+*v.ppa* performs point pattern analysis on the points of a vector map
+using one of four summary functions: the nearest neighbor distance
+distribution function G, the empty space function F, Ripley's K
+function, and the variance stabilized L function. The functions
+describe whether and at which spatial scales a point pattern is
+clustered, random, or dispersed.
 
-## Notes
+The **method** option selects the summary function:
 
-## Examples
+- **g**: the fraction of points whose nearest neighbor lies within
+  distance *d*, estimated for a range of distances.
+- **f**: the fraction of uniformly random locations whose nearest
+  pattern point lies within distance *d*. The number of sampled
+  locations is set by **random_points**.
+- **k**: the average number of further points within distance *d* of a
+  typical point, scaled by the intensity. Under complete spatial
+  randomness (CSR), K(d) equals pi \* d^2.
+- **l**: the transformation L(d) = sqrt(K(d) / pi), which equals *d*
+  under CSR and stabilizes the variance of K.
 
-### G Function
+Each estimate is evaluated at **num_distances** equally spaced
+distances and reported together with the theoretical value of the
+function under CSR, so the output can be plotted and interpreted
+directly. Values above the CSR reference indicate clustering, values
+below it indicate dispersion (for F, the interpretation is reversed).
 
-Determine the distribution of distances from each point to its nearest neighbor
-to learn if the points are clustered, dispersed, or randomly distributed across
-the computational region.
+The **computational region is the observation window** of the
+analysis: it defines the area used to estimate the intensity (points
+per unit area), the sampling window of the F function, the edge
+correction geometry, and the default distance range. Points of the
+input map that fall outside the current region are ignored with a
+warning. Use *g.region* to set the study area before running the tool.
 
-```bash
-v.ppa input=crash output=crash_g.csv method=g
+Results are printed to standard output by default, or written to the
+file given by **output**. The **format** option selects human readable
+text (**plain**), comma separated values (**csv**), or JSON
+(**json**). The JSON output includes the number of points, the
+estimated intensity, the observation window, and, for K and L, the
+edge correction, followed by the per-distance results.
+
+## NOTES
+
+The K and L functions apply Ripley's isotropic edge correction by
+default: each point pair is weighted by the reciprocal of the fraction
+of the circle through the neighbor, centered at the point, that lies
+inside the window. Without a correction (**correction=none**), K and L
+are biased downward at larger distances because part of each circle
+falls outside the observed window. The G and F estimates are currently
+uncorrected empirical distribution functions; interpret them against
+the reported CSR reference rather than in absolute terms.
+
+The K and L functions are evaluated up to **max_distance**, which
+defaults to one quarter of the shorter side of the computational
+region, a common rule of thumb beyond which K estimates become
+unreliable. The G and F functions are evaluated up to the largest
+observed nearest neighbor or empty space distance, so their last value
+is always 1.
+
+The intensity is estimated as the number of points inside the region
+divided by the region area. Duplicate point locations are retained and
+count as nearest neighbors at distance zero. Only point geometry is
+used; for 3D maps the z coordinate is ignored.
+
+The **seed** option only affects the F function, which samples random
+locations; G, K, and L are deterministic. The computation of all
+functions is parallelized with OpenMP; the number of threads is set
+with **nprocs**.
+
+## EXAMPLES
+
+Generate a random point pattern in a 1000 by 1000 window and compare
+its K function against CSR (the two columns should be similar):
+
+```sh
+g.region n=1000 s=0 w=0 e=1000 res=1
+v.random output=random_points npoints=500 seed=42
+v.ppa input=random_points method=k format=csv
 ```
 
-### F Function
+Estimate the G function of a point map within the current region and
+save it to a file:
 
-Determine the distribution of the distances from random points in the
-computational region to the points in the input vector map. This function is to
-determine if the points are clustered, dispersed, or randomly distributed across
-the computational region. The output file will contain the distances from the
-random points to the nearest crash location.
-
-```bash
-v.ppa input=crash output=crash_f.csv method=f
+```sh
+v.ppa input=points_of_interest method=g format=csv output=g_function.csv
 ```
 
-### K and L Functions
+Compute the L function without edge correction at 200 distances up to
+500 map units:
 
-Determine if the points are clustered, dispersed, or randomly distributed across
-patial scales in the computational region.
-
-```bash
-v.ppa input=crash output=crash_k.csv method=k
+```sh
+v.ppa input=points_of_interest method=l correction=none \
+    num_distances=200 max_distance=500
 ```
 
-The *L-Function* is a transformation of the K-Function that allows for easier
-interpretation of the results.
+Read the K function results into Python:
 
-- If L(r) is less than the expected value, the points are dispersed.
-- If L(r) is greater than the expected value, the points are clustered.
-- If L(r) is equal to the expected value, the points are randomly distributed
-(Poisson Process).
+```python
+from grass.tools import Tools
 
-```bash
-v.ppa input=crash output=crash_l.csv method=l
+tools = Tools()
+data = tools.v_ppa(input="random_points", method="k", format="json").json
+print(data["intensity"], data["results"][0])
 ```
 
-## Authors
+## TODO
 
-Corey T. White, OpenPlains Inc.
+- Monte Carlo simulation envelopes for testing deviations from CSR.
+- Bivariate (cross-type) K function.
+- Border corrections for the G and F functions.
+
+## REFERENCES
+
+- Ripley, B.D. (1977). Modelling spatial patterns. *Journal of the
+  Royal Statistical Society, Series B* 39, 172-212.
+- Baddeley, A., Rubak, E., Turner, R. (2015). *Spatial Point Patterns:
+  Methodology and Applications with R*. Chapman and Hall/CRC.
+
+## SEE ALSO
+
+*[g.region](g.region.md), [v.cluster](v.cluster.md),
+[v.kernel](v.kernel.md), [v.qcount](v.qcount.md),
+[v.random](v.random.md)*
+
+## AUTHORS
+
+Corey T. White, OpenPlains Inc. and Center for Geospatial Analytics,
+NC State University
