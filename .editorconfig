@@ -12,6 +12,9 @@ insert_final_newline = true
 charset = utf-8
 trim_trailing_whitespace = true
 
+[*.{cmake,CMakeLists.txt}]
+indent_size = 4
+
 [*.{htm,html,js,css,svg}]
 indent_size = 2
 
