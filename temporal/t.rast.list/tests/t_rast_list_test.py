@@ -35,8 +35,7 @@ def test_line(space_time_raster_dataset, separator, delimiter):
             format="line",
             separator=separator,
         )
-        .text.strip()
-        .split(delimiter)
+        .text_split(delimiter)
     )
     assert names == space_time_raster_dataset.full_raster_names
 
