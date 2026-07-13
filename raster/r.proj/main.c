@@ -267,6 +267,78 @@ static int est_worst_tile_strip_rows(const struct Cell_head *ohd,
     return worst;
 }
 
+/* Exact per-height fit test for the Phase-2 height search: 1 iff a band of
+ * height h at obr0 has an output buffer within the cap AND some column-tile
+ * width whose worst input strip fits (setting *acc_tilew to that width, via the
+ * same upper-tier estimate then lower-tier exact validation the search uses);
+ * 0 if no width fits or the output buffer alone exceeds the cap. */
+static int phase2_width_fit(const struct Cell_head *ohd,
+                            const struct Cell_head *ihd,
+                            const struct pj_info *oproj,
+                            const struct pj_info *iproj,
+                            const struct pj_info *tproj, int obr0, int h,
+                            size_t cap_bytes, int cell_size, int *acc_tilew)
+{
+    size_t out_bytes = (size_t)h * ohd->cols * cell_size;
+    int tilew, est_fit;
+
+    if (out_bytes > cap_bytes)
+        return 0;
+    tilew = ohd->cols;
+    est_fit = 0;
+    for (;;) {
+        int est = est_worst_tile_strip_rows(ohd, ihd, oproj, iproj, tproj, obr0,
+                                            obr0 + h, tilew, TILE_PROBE);
+        size_t est_bytes = est > 0 ? (size_t)est * ihd->cols * cell_size : 0;
+        if (est_bytes + out_bytes <= cap_bytes) {
+            est_fit = 1;
+            break;
+        }
+        if (tilew == 1)
+            break;
+        tilew = (tilew + 1) / 2;
+    }
+    if (est_fit) {
+        for (;;) {
+            int worst = worst_tile_strip_rows(ohd, ihd, oproj, iproj, tproj,
+                                              obr0, obr0 + h, tilew);
+            size_t strip_bytes =
+                worst > 0 ? (size_t)worst * ihd->cols * cell_size : 0;
+            if (strip_bytes + out_bytes <= cap_bytes) {
+                *acc_tilew = tilew;
+                return 1;
+            }
+            if (tilew == 1)
+                break;
+            tilew = (tilew + 1) / 2;
+        }
+    }
+    return 0;
+}
+
+/* Full-width fit test for the Phase-1 height search: 1 iff a band of height h
+ * at obr0 has its full-width input strip plus output buffer within the cap.
+ * Short-circuits on the output buffer alone (no edge walk) when it already
+ * exceeds the cap. Used only by the seed peek; the walk keeps its inline test,
+ * so the miss path is byte-for-byte today's execution. */
+static int phase1_fits(const struct Cell_head *ohd, const struct Cell_head *ihd,
+                       const struct pj_info *oproj, const struct pj_info *iproj,
+                       const struct pj_info *tproj, int obr0, int h,
+                       size_t cap_bytes, int cell_size)
+{
+    int imin, imax, strip_rows;
+    size_t out_bytes = (size_t)h * ohd->cols * cell_size, strip_bytes;
+
+    if (out_bytes > cap_bytes)
+        return 0;
+    band_input_row_span(ohd, ihd, oproj, iproj, tproj, obr0, obr0 + h, 0,
+                        ohd->cols, &imin, &imax);
+    strip_rows = imax - imin + 1;
+    strip_bytes =
+        strip_rows > 0 ? (size_t)strip_rows * ihd->cols * cell_size : 0;
+    return strip_bytes + out_bytes <= cap_bytes;
+}
+
 int main(int argc, char **argv)
 {
     char *mapname, /* ptr to name of output layer  */
@@ -909,7 +981,11 @@ int main(int argc, char **argv)
     size_t cap_bytes = (size_t)(cap_mb * 1024.0 * 1024.0);
     double t_size = 0.0, t_fill = 0.0, t_compute = 0.0, t_write = 0.0;
     int n_bands = 0;
-    int max_tiles = 1; /* most column tiles used by any single band */
+    int max_tiles = 1;          /* most column tiles used by any single band */
+    int seed_h = 0, seed_w = 0; /* previous Phase-2 band's accepted sizing */
+    int seed_hits = 0, phase2_bands = 0; /* seed hit rate on the Phase-2 path */
+    int seed_h1 = 0;               /* previous Phase-1 band's accepted height */
+    int p1_hits = 0, p1_bands = 0; /* seed hit rate on the Phase-1 path */
 
     G_important_message(_("Projecting (banded, per-thread PROJ context)..."));
 
@@ -924,9 +1000,31 @@ int main(int argc, char **argv)
          * rows), so width splitting shrinks a tile's input ROW span, not its
          * width. Easy pairs never leave Phase 1. */
         double ts = rproj_wtime();
-        int band_orows = outcellhd.rows - obr0;
         int tilew = outcellhd.cols;
         int imin = 0, imax = -1;
+        /* Phase-1 neighbor seed (hit path): seed_h1 (previous Phase-1 accepted
+         * height) is close to this band's. Take g_seed, the grid height just
+         * ABOVE seed_h1 on this band's descending lattice; if it does not fit
+         * then (height-monotone span) nothing taller fits, so the tallest
+         * fitting height is at or below (g_seed+1)/2 and the walk can start
+         * there, skipping the tall full-width edge walks. Any miss (no seed,
+         * seed_h1 too tall, or g_seed fits) starts from the full remaining
+         * height -- byte-for-byte the walk below. Same lattice, same acceptance
+         * line -> identical accepted height and partition; the hit only skips
+         * heights it has shown cannot fit. */
+        int band_orows = outcellhd.rows - obr0;
+        int p1_seeded = 0;
+        if (seed_h1 > 0 && seed_h1 < band_orows) {
+            int gs = band_orows;
+
+            while ((gs + 1) / 2 > seed_h1)
+                gs = (gs + 1) / 2;
+            if (!phase1_fits(&outcellhd, &incellhd, &oproj, &iproj, &tproj,
+                             obr0, gs, cap_bytes, cell_size)) {
+                band_orows = (gs + 1) / 2;
+                p1_seeded = 1;
+            }
+        }
         for (;;) {
             band_input_row_span(&outcellhd, &incellhd, &oproj, &iproj, &tproj,
                                 obr0, obr0 + band_orows, 0, outcellhd.cols,
@@ -942,69 +1040,46 @@ int main(int argc, char **argv)
                 break; /* height exhausted: fall through to column splitting */
             band_orows = (band_orows + 1) / 2; /* halve (round up), re-sample */
         }
+        if (band_orows > 1) { /* Phase-1 accepted a full-width band */
+            seed_h1 = band_orows;
+            p1_bands++;
+            if (p1_seeded)
+                p1_hits++;
+        }
         if (band_orows == 1) {
-            /* Phase 2 (oblique only): Phase 1 could not fit even a single
-             * full-width row, so prefer a TALL tiled band instead of a 1-row
-             * one. Rescan from the full remaining height downward; at the
-             * tallest height whose output buffer fits the cap, halve tile WIDTH
-             * until the worst column tile's strip fits, and only reduce height
-             * when no width fits. Keeping the band tall gives the per-band
-             * parallel region many output rows. Runs only on this path, so the
-             * easy-pair size phase (Phase 1) is unaffected. */
-            band_orows = outcellhd.rows - obr0;
-            for (;;) {
-                size_t out_bytes =
-                    (size_t)band_orows * outcellhd.cols * cell_size;
-                if (out_bytes <= cap_bytes) {
-                    /* Upper tier: cheap probe estimate narrows to a candidate
-                     * width, checking down to tilew==1. The estimate is a lower
-                     * bound, so est-no-fit at tilew==1 implies exact-no-fit ->
-                     * the exact validation below is skipped entirely at heights
-                     * where no width can fit (this is what keeps the search
-                     * cheap; scanning every tile there was the cost). */
-                    tilew = outcellhd.cols;
-                    int est_fit = 0;
-                    for (;;) {
-                        int est = est_worst_tile_strip_rows(
-                            &outcellhd, &incellhd, &oproj, &iproj, &tproj, obr0,
-                            obr0 + band_orows, tilew, TILE_PROBE);
-                        size_t est_bytes =
-                            est > 0 ? (size_t)est * incellhd.cols * cell_size
-                                    : 0;
-                        if (est_bytes + out_bytes <= cap_bytes) {
-                            est_fit = 1;
-                            break;
-                        }
-                        if (tilew == 1)
-                            break;
-                        tilew = (tilew + 1) / 2;
-                    }
-                    /* Lower tier: EXACT validation, only when the estimate
-                     * found a candidate. Narrow and re-validate if the estimate
-                     * was optimistic; this exact-sizes the accepted width so
-                     * the cap is honored. */
-                    int fit = 0;
-                    if (est_fit) {
-                        for (;;) {
-                            int worst = worst_tile_strip_rows(
-                                &outcellhd, &incellhd, &oproj, &iproj, &tproj,
-                                obr0, obr0 + band_orows, tilew);
-                            size_t strip_bytes =
-                                worst > 0
-                                    ? (size_t)worst * incellhd.cols * cell_size
-                                    : 0;
-                            if (strip_bytes + out_bytes <= cap_bytes) {
-                                fit = 1;
-                                break;
-                            }
-                            if (tilew == 1)
-                                break; /* exact: no width fits at this height */
-                            tilew = (tilew + 1) / 2;
-                        }
-                    }
-                    if (fit)
-                        break;
+            /* Phase 2 (oblique only): find the tallest band height on the
+             * descending grid whose worst column tile fits the cap, then that
+             * height's widest fitting tile width. Neighbor seed (hit path): the
+             * previous Phase-2 band's height (seed_h) is close to this band's
+             * H*. Take g_seed, the grid height just ABOVE seed_h; if it does
+             * not fit then (for an input-row span monotone in band height)
+             * nothing taller fits, so H* is at or below g_seed and the walk can
+             * start there, skipping the tall no-fit heights. On a miss (no
+             * seed, seed_h too tall, or g_seed fits) start from the full
+             * remaining height -- byte-for-byte the unseeded walk. Both starts
+             * lie on the same grid and accept via the same phase2_width_fit, so
+             * H*, W* and the partition are identical; the hit path only skips
+             * heights it has shown cannot fit. */
+            phase2_bands++;
+            int start_h = outcellhd.rows - obr0;
+            if (seed_w > 0 && seed_h < start_h) {
+                int gs = start_h, w;
+
+                while ((gs + 1) / 2 > seed_h)
+                    gs = (gs + 1) / 2;
+                if (!phase2_width_fit(&outcellhd, &incellhd, &oproj, &iproj,
+                                      &tproj, obr0, gs, cap_bytes, cell_size,
+                                      &w)) {
+                    start_h = (gs + 1) / 2;
+                    seed_hits++;
                 }
+            }
+            band_orows = start_h;
+            for (;;) {
+                if (phase2_width_fit(&outcellhd, &incellhd, &oproj, &iproj,
+                                     &tproj, obr0, band_orows, cap_bytes,
+                                     cell_size, &tilew))
+                    break;
                 if (band_orows == 1) {
                     /* Single output row at minimum width still over cap =
                      * singular/large-halo; needs the tile-cache path. */
@@ -1023,8 +1098,10 @@ int main(int argc, char **argv)
                         (double)(strip_bytes + out1) / (1024.0 * 1024.0), worst,
                         cap_mb);
                 }
-                band_orows = (band_orows + 1) / 2; /* shrink height, retry */
+                band_orows = (band_orows + 1) / 2;
             }
+            seed_h = band_orows;
+            seed_w = tilew;
         }
         t_size += rproj_wtime() - ts;
 
@@ -1162,8 +1239,9 @@ int main(int argc, char **argv)
 
     G_debug(1,
             "PHASE_TIMERS size=%.4f fill=%.4f compute=%.4f write=%.4f bands=%d "
-            "tiles=%d",
-            t_size, t_fill, t_compute, t_write, n_bands, max_tiles);
+            "tiles=%d seed_hits=%d phase2_bands=%d p1_hits=%d p1_bands=%d",
+            t_size, t_fill, t_compute, t_write, n_bands, max_tiles, seed_hits,
+            phase2_bands, p1_hits, p1_bands);
 
     /* Close input map in its own env, then the output map. */
     G_switch_env(); /* -> input */
