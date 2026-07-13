@@ -29,13 +29,11 @@ def test_defaults(space_time_raster_dataset):
 def test_line(space_time_raster_dataset, separator, delimiter):
     """Line format can be parsed and contains full names by default"""
     tools = Tools(session=space_time_raster_dataset.session)
-    names = (
-        tools.t_rast_list(
-            input=space_time_raster_dataset.name,
-            format="line",
-            separator=separator,
-        ).text_split(delimiter)
-    )
+    names = tools.t_rast_list(
+        input=space_time_raster_dataset.name,
+        format="line",
+        separator=separator,
+    ).text_split(delimiter)
     assert names == space_time_raster_dataset.full_raster_names
 
 
