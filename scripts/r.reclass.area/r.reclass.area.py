@@ -197,7 +197,7 @@ def reclass(
     upper: float | None = None,
     input_map: str | None = None,
 ) -> None:
-    """Perform raster based filtering."""
+    """Perform raster-based filtering."""
     tools = Tools(capture_output=True)
     stats_input = clump_map
     expected_fields_number = 4
@@ -267,7 +267,7 @@ def rmarea(
     *,
     return_vector: bool = False,
 ) -> None:
-    """Perform vector based filtering."""
+    """Perform vector-based filtering."""
     tools = Tools(capture_output=False)
 
     if gs.raster_info(input_map)["datatype"] != "CELL":
@@ -291,7 +291,7 @@ def rmarea(
 
     # Apply lower threshold
     # transform user input from hectares to meters because currently v.clean
-    # rmarea accept only meters as threshold
+    # rmarea accepts only meters as threshold
     if lower:
         lower *= 10000.0
         tools.v_clean(
