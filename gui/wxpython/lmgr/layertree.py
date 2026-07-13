@@ -1037,7 +1037,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """Set color table for vector map"""
         name = self.GetLayerInfo(self.layer_selected, key="maplayer").GetName()
         GUI(
-            parent=self, giface=self._giface, centreOnParent=self.centreFromsOnParent
+            parent=self, giface=self._giface, centreOnParent=self.centreFormsOnParent
         ).ParseCommand(["v.colors", "map=%s" % name])
 
     def OnCopyMap(self, event):
@@ -1700,7 +1700,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 parent=self,
                 giface=self._giface,
                 show=show,
-                centreOnParent=self.centreFromsOnParent,
+                centreOnParent=self.centreFormsOnParent,
             )
             module.ParseCommand(
                 self.GetLayerInfo(layer, key="cmd"),
@@ -1721,7 +1721,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             module = GUI(
                 parent=self,
                 giface=self._giface,
-                centreOnParent=self.centreFromsOnParent,
+                centreOnParent=self.centreFormsOnParent,
             )
             module.ParseCommand(cmd, completed=(self.GetOptData, layer, params))
 
