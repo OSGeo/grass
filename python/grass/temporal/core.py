@@ -587,7 +587,7 @@ def init(
     structure for raster, vector and raster3d maps as well as for the space-time
     dataset types strds, str3ds and stvds.
 
-        .. warning::
+    .. warning::
 
         This functions must be called before any spatio-temporal processing
         can be started
