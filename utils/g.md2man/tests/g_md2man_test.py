@@ -409,4 +409,9 @@ def test_comment_parsing_unit():
 
 def test_strip_html_comments_keeps_comment_in_fenced_code_unit():
     lines = ["```html", "<!-- required -->", "```", "x <!-- drop --> y"]
-    assert gmd.strip_html_comments(lines) == ["```html", "<!-- required -->", "```", "x  y"]
+    assert gmd.strip_html_comments(lines) == [
+        "```html",
+        "<!-- required -->",
+        "```",
+        "x  y",
+    ]
