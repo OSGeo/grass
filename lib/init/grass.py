@@ -2439,7 +2439,7 @@ def main() -> None:
         fatal(e.args[0])
         sys.exit(_("Exiting..."))
 
-    start_time = datetime.datetime.now(datetime.timezone.utc)
+    start_time = datetime.datetime.now(datetime.UTC)
 
     # unlock the mapset which is current at the time of turning off
     # in case mapset was changed
