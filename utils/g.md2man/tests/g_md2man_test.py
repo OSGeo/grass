@@ -161,6 +161,14 @@ def test_unordered_list_nested(tmp_path):
     result = convert("- first\n- second\n    - nested\n", tmp_path)
     assert result.count(".IP \\(bu 4n") == 3  # codespell:ignore bu
     assert ".RS 4n" in result
+    assert ".RE" in result
+
+    rs_index = result.find(".RS 4n")
+    re_index = result.find(".RE", rs_index)
+    assert rs_index != -1
+    assert re_index != -1
+    assert rs_index < re_index
+    assert ".IP \\(bu 4n" in result[rs_index:re_index]
 
 
 def test_wrapped_number_line_is_not_a_list(tmp_path):
