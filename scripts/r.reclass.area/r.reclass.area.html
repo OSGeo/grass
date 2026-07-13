@@ -20,7 +20,7 @@ r.report zipcodes unit=h
 Extract only areas greater than 2000 ha, NULL otherwise:
 
 <div class="code"><pre>
-r.reclass.area input=zipcodes output=zipcodes_larger2000ha mode=greater value=2000
+r.reclass.area input=zipcodes output=zipcodes_larger2000ha greater=2000
 
 r.report zipcodes_larger2000ha unit=h
 </pre></div>
@@ -33,7 +33,7 @@ r.report zipcodes_larger2000ha unit=h
 In this example, the ZIP code map in the North Carolina sample dataset
 is filtered for smaller areas which are substituted with the
 value of the respective adjacent area with largest shared
-boundary. Reclass by substitutional removing of areas minor of 1000 ha:
+boundary. Reclass by substitutional removing of areas smaller than 1000 ha:
 
 <div class="code"><pre>
 r.reclass.area input=zipcodes output=zipcodes_minor1000ha mode=lesser value=1000 method=rmarea
@@ -47,12 +47,16 @@ r.reclass.area input=zipcodes output=zipcodes_minor1000ha mode=lesser value=1000
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="r.reclass.html">r.reclass</a>,
 <a href="r.clump.html">r.clump</a>,
-<a href="r.stats.html">r.stats</a>
+<a href="r.reclass.html">r.reclass</a>,
+<a href="r.stats.html">r.stats</a>,
+<a href="v.to.rast.html">r.stats</a>,
+<a href="v.clean.html">r.stats</a>,
+<a href="v.edit.html">r.stats</a>
 </em>
 
 <h2>AUTHORS</h2>
 
 NRCS,<br>
-Markus Neteler
+Markus Neteler<br>
+Stefan Blumentath
