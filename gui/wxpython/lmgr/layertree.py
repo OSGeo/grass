@@ -2256,15 +2256,15 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
     def ChangeLayer(self, item):
         """Change layer"""
-        type = self.GetLayerInfo(item, key="type")
-        if type == "group":
+        layer_type = self.GetLayerInfo(item, key="type")
+        if layer_type == "group":
             return
         layerName = None
 
-        if type == "group":
+        if layer_type == "group":
             return
 
-        if type == "command":
+        if layer_type == "command":
             win = self.FindWindowById(self.GetLayerInfo(item, key="ctrl"))
             if win.GetValue() is not None:
                 cmd = win.GetValue().split(";")
@@ -2272,7 +2272,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 opac = 1.0
                 chk = self.IsItemChecked(item)
                 hidden = not self.IsVisible(item)
-        elif type != "group":
+        elif layer_type != "group":
             if self.GetPyData(item) is not None:
                 cmdlist = self.GetLayerInfo(item, key="cmd")
                 opac = self.GetLayerInfo(item, key="maplayer").GetOpacity()
@@ -2285,7 +2285,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         maplayer = self.Map.ChangeLayer(
             layer=self.GetLayerInfo(item, key="maplayer"),
-            ltype=type,
+            ltype=layer_type,
             command=cmdlist,
             name=layerName,
             active=chk,
