@@ -471,14 +471,13 @@ def __ll_parts(value, reverse=False, precision=3):
             m = m[:-1]
             s = "0.0"
         except ValueError:
-            try:
-                d = value
-                hs = d[-1]
-                d = d[:-1]
-                m = "0"
-                s = "0.0"
-            except ValueError as err:
-                raise ValueError from err
+            # Value without minutes and seconds. Errors are passed to the caller
+            # as they are.
+            d = value
+            hs = d[-1]
+            d = d[:-1]
+            m = "0"
+            s = "0.0"
 
     if hs not in {"N", "S", "E", "W"}:
         raise ValueError
