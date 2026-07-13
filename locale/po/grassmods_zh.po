@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_zh\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-20 16:28+0000\n"
-"PO-Revision-Date: 2026-06-24 09:37+0000\n"
+"POT-Creation-Date: 2026-06-27 15:58+0000\n"
+"PO-Revision-Date: 2026-06-25 11:49+0000\n"
 "Last-Translator: Jietao Wang <quaternary@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://weblate.osgeo.org/projects/grass-gis/grassmods/zh_Hans/>\n"
 "Language: zh\n"
@@ -37,10 +37,10 @@ msgid "Unable to describe table <%s>"
 msgstr "无法描述表 <%s>"
 
 msgid "Failed to initialize JSON array. Out of memory?"
-msgstr ""
+msgstr "JSON 数组初始化失败。内存不足？"
 
 msgid "Failed to serialize JSON to pretty format."
-msgstr ""
+msgstr "无法将 JSON 序列化为美观格式。"
 
 msgid "Print type information about the columns"
 msgstr ""
@@ -3098,7 +3098,7 @@ msgid "Unable to open display"
 msgstr "无法打开显示设备"
 
 msgid "Unable to obtain visual"
-msgstr ""
+msgstr "无法获取视觉内容"
 
 msgid "Failed to initialize output surface"
 msgstr ""
@@ -9276,7 +9276,7 @@ msgid "Name of vector map to use as mask"
 msgstr ""
 
 msgid "Vector"
-msgstr ""
+msgstr "矢量"
 
 msgid "Layer number or name (vector)"
 msgstr ""
@@ -10129,8 +10129,8 @@ msgid "Raster map with zones to compute statistics for"
 msgstr "需要量化的栅格地图"
 
 #, fuzzy
-msgid "Raster map with zones to compute statistics for (needs to be CELL)"
-msgstr "需要量化的栅格地图"
+msgid "3D raster map with zones"
+msgstr "矢量地图<%s>非3D"
 
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
 msgstr ""
@@ -10297,6 +10297,9 @@ msgstr ""
 msgid "select"
 msgstr ""
 
+msgid "plain;Plain text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
+msgstr ""
+
 msgid "Exports a space time vector dataset as GRASS specific archive file."
 msgstr ""
 
@@ -10364,7 +10367,7 @@ msgid "centroid"
 msgstr ""
 
 msgid "area"
-msgstr ""
+msgstr "面积"
 
 msgid "Action to be taken"
 msgstr ""
@@ -10451,7 +10454,7 @@ msgid "Layer where to join"
 msgstr ""
 
 msgid "column"
-msgstr ""
+msgstr "列"
 
 msgid "Identifier column (e.g.: cat) in the vector table to be used for join"
 msgstr ""
@@ -20092,7 +20095,7 @@ msgid "Distribution mean"
 msgstr "分布均值"
 
 msgid "Standard deviation"
-msgstr "标准偏差"
+msgstr "标准差"
 
 msgid "Provides surface interpolation from raster point data by Inverse Distance Squared Weighting."
 msgstr ""
@@ -24882,6 +24885,18 @@ msgstr ""
 msgid "Overwrite current settings if initialized"
 msgstr ""
 
+#, fuzzy
+msgid "Name of the mapset(s) to print the connection info for"
+msgstr "包含线的输入地图"
+
+msgid "'.' for current mapset; '*' for all mapsets in the project. Requires format=json."
+msgstr ""
+
+#, fuzzy
+#| msgid "This option requires one column"
+msgid "The mapset option requires format=json."
+msgstr "该选项需要一个字段"
+
 msgid "Temporal GIS database connection not defined. Run t.connect."
 msgstr ""
 
@@ -25267,7 +25282,7 @@ msgid "type       count        min        max\n"
 msgstr ""
 
 msgid "boundary"
-msgstr ""
+msgstr "边界"
 
 msgid "face"
 msgstr ""
@@ -33730,6 +33745,10 @@ msgid "Image file"
 msgstr ""
 
 #, fuzzy
+#~ msgid "Raster map with zones to compute statistics for (needs to be CELL)"
+#~ msgstr "需要量化的栅格地图"
+
+#, fuzzy
 #~ msgid "WGS84 output not possible as this project does not contain datum transformation parameters. Try running g.setproj."
 #~ msgstr "无法使用 WGS84 来输出，因为该区域不包含基准面转换参数。尝试运行 g.setproj。"
 
@@ -35827,10 +35846,6 @@ msgstr ""
 #~ msgstr "包含线的输入地图"
 
 #, fuzzy
-#~ msgid "Name of the vector map with the electric grid"
-#~ msgstr "包含线的输入地图"
-
-#, fuzzy
 #~ msgid "Name of the vector map with the points (intake and restitution) of hydropower plants"
 #~ msgstr "用于平滑参数的属性字段的名称"
 
@@ -37418,10 +37433,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "calibration"
 #~ msgstr "位置名称"
-
-#, fuzzy
-#~ msgid "categorical map with zones"
-#~ msgstr "矢量地图<%s>非3D"
 
 #, fuzzy
 #~ msgid "centerpoint"

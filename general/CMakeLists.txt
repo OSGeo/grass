@@ -65,7 +65,7 @@ build_program_in_subdir(
   GDAL::GDAL
   GEOS::geos_c
   PROJ::proj
-  SQLite::SQLite3
+  SQLite3::SQLite3
   DEFS
   "-DGRASS_VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\""
   "-DGRASS_VERSION_GIT=\"${GRASS_VERSION_GIT}\""

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-20 16:28+0000\n"
+"POT-Creation-Date: 2026-06-27 15:58+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/grassmods/de/>\n"
@@ -10243,8 +10243,8 @@ msgid "Raster map with zones to compute statistics for"
 msgstr "Rasterkarte(n) die quantisiert werden soll(en)."
 
 #, fuzzy
-msgid "Raster map with zones to compute statistics for (needs to be CELL)"
-msgstr "Rasterkarte(n) die quantisiert werden soll(en)."
+msgid "3D raster map with zones"
+msgstr "Vektorpunkte"
 
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
 msgstr ""
@@ -10409,6 +10409,9 @@ msgid "Prints attributes of vector maps registered in a space time vector datase
 msgstr ""
 
 msgid "select"
+msgstr ""
+
+msgid "plain;Plain text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
 msgstr ""
 
 msgid "Exports a space time vector dataset as GRASS specific archive file."
@@ -25193,6 +25196,19 @@ msgstr ""
 msgid "Overwrite current settings if initialized"
 msgstr ""
 
+#, fuzzy
+#| msgid "Name of raster map(s) to include in group"
+msgid "Name of the mapset(s) to print the connection info for"
+msgstr "Name der Rasterkarte(n), die in die Gruppe eingefügt werden sollen."
+
+msgid "'.' for current mapset; '*' for all mapsets in the project. Requires format=json."
+msgstr ""
+
+#, fuzzy
+#| msgid "This option requires one column"
+msgid "The mapset option requires format=json."
+msgstr "Diese Option benötigt eine Spalte."
+
 msgid "Temporal GIS database connection not defined. Run t.connect."
 msgstr ""
 
@@ -34211,6 +34227,10 @@ msgstr "Zeige BMP Bilder von dem PNG-Treiber."
 msgid "Image file"
 msgstr "Bild-Datei"
 
+#, fuzzy
+#~ msgid "Raster map with zones to compute statistics for (needs to be CELL)"
+#~ msgstr "Rasterkarte(n) die quantisiert werden soll(en)."
+
 #~ msgid "Time used for iterations [minutes]"
 #~ msgstr "Zeit verwendet für die Iterationen [Minuten]"
 
@@ -41017,10 +41037,6 @@ msgstr "Bild-Datei"
 #, fuzzy
 #~ msgid "calibration"
 #~ msgstr "Dekoration"
-
-#, fuzzy
-#~ msgid "categorical map with zones"
-#~ msgstr "Vektorpunkte"
 
 #, fuzzy
 #~ msgid "centerpoint"
