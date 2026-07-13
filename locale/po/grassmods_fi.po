@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_fi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-20 16:28+0000\n"
+"POT-Creation-Date: 2026-06-27 15:58+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Finnish <https://weblate.osgeo.org/projects/grass-gis/grassmods/fi/>\n"
@@ -10067,7 +10067,7 @@ msgstr ""
 msgid "Raster map with zones to compute statistics for"
 msgstr ""
 
-msgid "Raster map with zones to compute statistics for (needs to be CELL)"
+msgid "3D raster map with zones"
 msgstr ""
 
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
@@ -10233,6 +10233,9 @@ msgid "Prints attributes of vector maps registered in a space time vector datase
 msgstr ""
 
 msgid "select"
+msgstr ""
+
+msgid "plain;Plain text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
 msgstr ""
 
 msgid "Exports a space time vector dataset as GRASS specific archive file."
@@ -24741,6 +24744,15 @@ msgid "plain;Plain text output;shell;Shell script style output;json;JSON (JavaSc
 msgstr ""
 
 msgid "Overwrite current settings if initialized"
+msgstr ""
+
+msgid "Name of the mapset(s) to print the connection info for"
+msgstr ""
+
+msgid "'.' for current mapset; '*' for all mapsets in the project. Requires format=json."
+msgstr ""
+
+msgid "The mapset option requires format=json."
 msgstr ""
 
 msgid "Temporal GIS database connection not defined. Run t.connect."

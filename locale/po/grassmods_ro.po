@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ro\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-20 16:28+0000\n"
+"POT-Creation-Date: 2026-06-27 15:58+0000\n"
 "PO-Revision-Date: 2025-07-26 01:37+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Romanian <https://weblate.osgeo.org/projects/grass-gis/grassmods/ro/>\n"
@@ -10165,8 +10165,9 @@ msgstr ""
 msgid "Raster map with zones to compute statistics for"
 msgstr ""
 
-msgid "Raster map with zones to compute statistics for (needs to be CELL)"
-msgstr ""
+#, fuzzy
+msgid "3D raster map with zones"
+msgstr "puncte vectoriale"
 
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
 msgstr ""
@@ -10332,6 +10333,9 @@ msgstr ""
 
 msgid "select"
 msgstr "selectează"
+
+msgid "plain;Plain text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
+msgstr ""
 
 msgid "Exports a space time vector dataset as GRASS specific archive file."
 msgstr ""
@@ -24974,6 +24978,19 @@ msgstr ""
 msgid "Overwrite current settings if initialized"
 msgstr ""
 
+#, fuzzy
+#| msgid "Name of raster map(s) for elevation"
+msgid "Name of the mapset(s) to print the connection info for"
+msgstr "Numele hărții raster pentru elevație"
+
+msgid "'.' for current mapset; '*' for all mapsets in the project. Requires format=json."
+msgstr ""
+
+#, fuzzy
+#| msgid "This option requires one column"
+msgid "The mapset option requires format=json."
+msgstr "Această opțiune necesită o singură coloană"
+
 msgid "Temporal GIS database connection not defined. Run t.connect."
 msgstr ""
 
@@ -37519,10 +37536,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "calibration"
 #~ msgstr "vizualizare"
-
-#, fuzzy
-#~ msgid "categorical map with zones"
-#~ msgstr "puncte vectoriale"
 
 #, fuzzy
 #~ msgid "centerpoint"
