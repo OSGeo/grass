@@ -87,6 +87,13 @@ STDS_LIST_CMD = {
     "str3ds": "t_rast3d_list",
 }
 
+try:
+    import matplotlib as mpl  # noqa: F401
+
+    HAS_MATPLOTLIB = True
+except ImportError:
+    HAS_MATPLOTLIB = False
+
 
 def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
     """Creates dictionary with mapsets, stds, elements, layers for given location.
@@ -938,7 +945,8 @@ class DataCatalogTree(TreeView):
         ):
             return
 
-        self._reloadMapsetNodeWithExpandedStds(self.current_mapset_node)
+        self._reloadMapsetNode(self.current_mapset_node)
+        self.RefreshNode(self.current_mapset_node, recursive=True)
 
     def _populateMapsetItem(self, mapset_node, data):
         for item in data:
@@ -2361,7 +2369,8 @@ class DataCatalogTree(TreeView):
             else:
                 self.InsertMapset(genv["MAPSET"], location_node)
         self.UpdateCurrentDbLocationMapsetNode()
-        self._reloadMapsetNodeWithExpandedStds(self.current_mapset_node)
+        self._reloadMapsetNode(self.current_mapset_node)
+        self.RefreshNode(self.current_mapset_node, recursive=True)
         self.ExpandCurrentMapset()
         self.RefreshItems()
         self._mapset_watchdog.ScheduleWatchCurrentMapset()
@@ -2485,7 +2494,8 @@ class DataCatalogTree(TreeView):
     def OnReloadMapset(self, event):
         """Reload selected mapset"""
         node = self.selected_mapset[0]
-        self._reloadMapsetNodeWithExpandedStds(node)
+        self._reloadMapsetNode(node)
+        self.RefreshNode(node, recursive=True)
         self.ExpandNode(node, recursive=False)
 
     def OnCopyMapsetPath(self, event):
@@ -2764,6 +2774,14 @@ class DataCatalogTree(TreeView):
 
         is_active = self.selected_mapset[0] == self.current_mapset_node
 
+        try:
+            path_output = tools.g_mapsets(format="json", flags="p", quiet=True)
+            accessible = set(path_output["mapsets"])
+        except ToolError:
+            accessible = set()
+
+        is_accessible = self.selected_mapset[0].data["name"] in accessible
+
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Register maps"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRegisterStds, item)
@@ -2782,6 +2800,7 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("Plot &timeline"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnPlotTimeline, item)
+        item.Enable(HAS_MATPLOTLIB and is_accessible)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename dataset"))
         menu.AppendItem(item)
@@ -3108,33 +3127,23 @@ class DataCatalogTree(TreeView):
         """Create popup menu for multiple selected space time datasets"""
         menu = Menu()
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("Plot &timeline"))
-        menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, self.OnPlotTimeline, item)
-
         try:
             path_output = tools.g_mapsets(format="json", flags="p", quiet=True)
             accessible = set(path_output["mapsets"])
-        except ToolError as e:
-            Debug.msg(1, f"Failed to read search path: {e}")
+        except ToolError:
             accessible = set()
 
-        curr_loc = (
-            self.current_location_node.data["name"]
-            if self.current_location_node
-            else ""
-        )
+        is_accessible = all(m.data["name"] in accessible for m in self.selected_mapset)
 
-        # Must be same location (by name) AND in the search path
-        is_mergeable = all(
-            loc.data["name"] == curr_loc and m.data["name"] in accessible
-            for loc, m in zip(self.selected_location, self.selected_mapset, strict=True)
-        )
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Plot &timeline"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnPlotTimeline, item)
+        item.Enable(HAS_MATPLOTLIB and is_accessible)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Merge datasets"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnMergeStds, item)
-        item.Enable(is_mergeable)
+        item.Enable(is_accessible)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete datasets"))
         menu.AppendItem(item)
