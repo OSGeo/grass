@@ -163,10 +163,10 @@ endif()
 # Data storage options
 
 if(WITH_SQLITE)
-  find_package(SQLite3 REQUIRED)
-  if(NOT TARGET SQLite3::SQLite3) # CMake < 4.3
-    add_library(SQLite3::SQLite3 ALIAS SQLite::SQLite3)
-  endif()
+    find_package(SQLite3 REQUIRED)
+    if(NOT TARGET SQLite3::SQLite3) # CMake < 4.3
+        add_library(SQLite3::SQLite3 ALIAS SQLite::SQLite3)
+    endif()
 endif()
 
 if(WITH_POSTGRES)
@@ -263,13 +263,13 @@ if(WITH_CBLAS)
 endif()
 
 if(WITH_LAPACKE)
-  if(NOT WITH_CBLAS)
-    message(FATAL_ERROR "LAPACKE support requires CBLAS")
-  endif()
-  if(NOT LAPACKE_PREFER_PKGCONFIG)
-    set(LAPACKE_PREFER_PKGCONFIG ON)
-  endif()
-  find_package(LAPACKE REQUIRED)
+    if(NOT WITH_CBLAS)
+        message(FATAL_ERROR "LAPACKE support requires CBLAS")
+    endif()
+    if(NOT LAPACKE_PREFER_PKGCONFIG)
+        set(LAPACKE_PREFER_PKGCONFIG ON)
+    endif()
+    find_package(LAPACKE REQUIRED)
 endif()
 
 if(WITH_OPENMP)
