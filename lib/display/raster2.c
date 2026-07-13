@@ -84,7 +84,6 @@ int D_c_color(CELL cat, struct Colors *colors)
  *  \param colors
  *  \return int
  */
-
 int D_d_color(DCELL val, struct Colors *colors)
 {
     return D_color_of_type(&val, colors, DCELL_TYPE);

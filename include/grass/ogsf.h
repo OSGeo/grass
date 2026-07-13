@@ -217,7 +217,8 @@ typedef struct {
 } typbuff;
 
 typedef struct { /* use hash table? */
-    int n_elem;  /* if n_elem == 256, index == NULL */
+    /** @brief if n_elem == 256, index == NULL */
+    int n_elem;
     char *index;
     int *value;
 } table256;
@@ -243,12 +244,21 @@ typedef struct {
 
 /* maybe add transformation matrix? */
 typedef struct {
-    IFLAG att_src;          /* NOTSET_ATT, MAP_ATT, CONST_ATT, FUNC_ATT */
-    IFLAG att_type;         /* ATTY_INT, ATTY_SHORT, ATTY_CHAR, or ATTY_FLOAT */
-    int hdata;              /* handle to dataset */
-    int (*user_func)(void); /* Not yet supported */
+    /** @brief NOTSET_ATT, MAP_ATT, CONST_ATT, FUNC_ATT */
+    IFLAG att_src;
+
+    /** @brief ATTY_INT, ATTY_SHORT, ATTY_CHAR, or ATTY_FLOAT */
+    IFLAG att_type;
+
+    /** @brief handle to dataset */
+    int hdata;
+
+    /** Not yet supported */
+    int (*user_func)(void);
     float constant;
-    int *lookup; /* TODO: use transform instead */
+
+    /** @todo: use transform instead */
+    int *lookup;
     float min_nz, max_nz, range_nz;
     float default_null;
 } gsurf_att;
@@ -256,19 +266,29 @@ typedef struct {
 typedef struct g_surf {
     int gsurf_id;
     int cols, rows;
-    gsurf_att att[MAX_ATTS]; /* mask, topo, color, etc. */
-    IFLAG draw_mode;         /* DM_GOURAUD | DM_FRINGE | DM_POLY,
-                              DM_WIRE, DM_WIRE_POLY */
-    long wire_color;         /* 0xBBGGRR or WC_COLOR_ATT */
-    double ox, oy;           /* real world origin (i.e., SW corner) */
+
+    /** @brief mask, topo, color, etc. */
+    gsurf_att att[MAX_ATTS];
+
+    /** @brief DM_GOURAUD | DM_FRINGE | DM_POLY, DM_WIRE, DM_WIRE_POLY */
+    IFLAG draw_mode;
+
+    /** @brief 0xBBGGRR or WC_COLOR_ATT */
+    long wire_color;
+
+    /** @brief real world origin (i.e., SW corner) */
+    double ox, oy;
     double xres, yres;
     float z_exag;
     float x_trans, y_trans, z_trans;
     float xmin, xmax, ymin, ymax, zmin, zmax, zminmasked;
     float xrange, yrange, zrange;
     float zmin_nz, zmax_nz, zrange_nz;
-    int x_mod, y_mod, x_modw, y_modw; /*cells per viewcell, per wire viewcell */
-    int nz_topo, nz_color;            /* no zero flags */
+    /** @brief cells per viewcell, per wire viewcell */
+    int x_mod, y_mod, x_modw, y_modw;
+
+    /** @brief no zero flags */
+    int nz_topo, nz_color;
     int mask_needupdate, norm_needupdate;
     unsigned long *norms;
     struct BM *curmask;
@@ -281,23 +301,43 @@ typedef struct g_surf {
    usually be stored as 2d, since they may be draped on multiple
    surfaces & Z will vary depending upon surface. */
 
-/* Struct for vector feature displaying attributes */
+/**
+ * @brief Struct for vector feature displaying attributes.
+ */
 typedef struct g_vect_style {
-    int color;  /* Line color */
-    int symbol; /* Point symbol/line type */
-    float size; /* Symbol size. Unset for lines. */
-    int width;  /* Line width. Also used for lines forming symbols i.e. X */
+    /** @brief Line color. */
+    int color;
+
+    /** @brief %Point symbol/line type. */
+    int symbol;
+
+    /** @brief Symbol size.
+     *
+     * Unset for lines.
+     */
+    float size;
+
+    /**
+     * @brief Line width.
+     *
+     * Also used for lines forming symbols i.e. X.
+     */
+    int width;
 
     /*TODO:fill;         Area fill pattern */
     /*TODO:falpha;       Area fill transparency */
     /*TODO:lalpha;       Line/boundary/point transparency */
     /*TODO:struct *orientation;  Symbol orientation */
-    struct g_vect_style *next; /* Point to next gvstyle struct if single point
-                                  has multiple styles. In such case feature with
-                                  next style should be shifted. */
+
+    /** @brief %Point to next \ref gvstyle struct if single point has multiple
+     * styles.
+     *
+     * In such case, the feature with next style should be shifted.
+     */
+    struct g_vect_style *next;
 } gvstyle;
 
-/* Struct for vector map (thematic mapping) */
+/** @brief Struct for vector map (thematic mapping) */
 typedef struct g_vect_style_thematic {
     int active;
     int layer;
@@ -308,7 +348,7 @@ typedef struct g_vect_style_thematic {
     char *width_column;
 } gvstyle_thematic;
 
-/* Line instance */
+/** @brief Line instance */
 typedef struct g_line {
     int type;
     float norm[3];
@@ -316,23 +356,31 @@ typedef struct g_line {
     Point3 *p3;
     Point2 *p2;
 
-    struct line_cats *
-        cats; /* Store information about all layers/cats for thematic display */
-    gvstyle *style;          /* Line instance look&feel */
-    signed char highlighted; /* >0 Feature is highlighted */
+    /** @brief Store information about all layers/cats for thematic display */
+    struct line_cats *cats;
+
+    /** @brief Line instance look&feel. */
+    gvstyle *style;
+
+    /** @brief >0 Feature is highlighted. */
+    signed char highlighted;
 
     struct g_line *next;
 } geoline;
 
-/* Vector map (lines) */
+/** @brief Vector map (lines) */
 typedef struct g_vect {
     int gvect_id;
     int use_mem, n_lines;
-    int drape_surf_id[MAX_SURFS]; /* if you want 'em flat, define the surface */
+
+    /** if you want 'em flat, define the surface */
+    int drape_surf_id[MAX_SURFS];
+
     int use_z;
     int n_surfs;
     char *filename;
     float x_trans, y_trans, z_trans;
+
     /* also maybe center & rotate? */
     geoline *lines;
     geoline *fastlines;
@@ -340,31 +388,38 @@ typedef struct g_vect {
     struct g_vect *next;
     void *clientdata;
 
-    gvstyle_thematic *tstyle; /* thematic mapping */
-    gvstyle *style;           /* Vector default look&feel */
-    gvstyle *hstyle;          /* IMHO highlight should be per layer basis. */
+    /** @brief thematic mapping */
+    gvstyle_thematic *tstyle;
+
+    /** @brief Vector default look&feel */
+    gvstyle *style;
+    gvstyle *hstyle; /* IMHO highlight should be per layer basis. */
 } geovect;
 
-/* Point instance */
+/** @brief Point instance */
 typedef struct g_point {
     int dims;
     Point3 p3;
 
-    struct line_cats *
-        cats; /* Store information about all layers/cats for thematic display */
+    /** @brief Store information about all layers/cats for thematic display */
+    struct line_cats *cats;
     gvstyle *style;
-    signed char highlighted; /* >0 Feature is highlighted */
+
+    /** @brief >0 Feature is highlighted */
+    signed char highlighted;
 
     struct g_point *next;
 } geopoint;
 
-/* Vector map (points) */
+/** @brief Vector map (points) */
 typedef struct g_site {
     int gsite_id;
     int drape_surf_id[MAX_SURFS]; /* ditto */
     int n_surfs, n_sites;
     int use_z, use_mem;
-    int has_z; /* set when file loaded */
+
+    /** set when file loaded */
+    int has_z;
 
     char *filename;
     transform attr_trans;
@@ -374,32 +429,51 @@ typedef struct g_site {
     struct g_site *next;
     void *clientdata;
 
-    gvstyle_thematic *tstyle; /* thematic mapping */
-    gvstyle *style;           /* points default look&feel */
-    gvstyle *hstyle;          /* IMHO highlight should be per layer basis */
+    /** @brief thematic mapping */
+    gvstyle_thematic *tstyle;
+
+    /** @brief points default look&feel */
+    gvstyle *style;
+    gvstyle *hstyle; /* IMHO highlight should be per layer basis */
 } geosite;
 
 typedef struct {
-    int data_id;        /* id */
-    IFLAG file_type;    /* file type */
-    unsigned int count; /* number of referencies to this file */
-    char *file_name;    /* file name */
+    /** @brief id */
+    int data_id;
+
+    /** @brief file type */
+    IFLAG file_type;
+
+    /** @brief number of referencies to this file */
+    unsigned int count;
+
+    /** @brief file name */
+    char *file_name;
 
     IFLAG data_type;
-    void *map;       /* pointer to volume file descriptor */
-    double min, max; /* minimum, maximum value in file */
 
-    IFLAG status; /* current status */
-    IFLAG mode;   /* current read mode */
+    /** @brief pointer to volume file descriptor */
+    void *map;
 
-    void *buff; /* data buffer */
+    /** @brief minimum, maximum value in file */
+    double min, max;
+
+    /** @brief current status */
+    IFLAG status;
+    /** @brief current read mode */
+    IFLAG mode;
+
+    /** @brief data buffer */
+    void *buff;
 } geovol_file;
 
 typedef struct {
     IFLAG att_src;
 
     int hfile;
-    int (*user_func)(void); /* unused */
+
+    /** unused */
+    int (*user_func)(void);
     float constant;
 
     void *att_data;
@@ -450,35 +524,62 @@ typedef struct g_vol {
 } geovol;
 
 struct lightdefs {
-    float position[4]; /* X, Y, Z, (1=local/0=inf) */
-    float color[3];    /* R, G, B */
-    float ambient[3];  /* R, G, B */
-    float emission[3]; /* R, G, B */
-    float shine;       /* 0. to 128. */
+    /** @brief X, Y, Z, (1=local/0=inf) */
+    float position[4];
+
+    /** @brief R, G, B */
+    float color[3];
+
+    /** @brief R, G, B */
+    float ambient[3];
+
+    /** @brief R, G, B */
+    float emission[3];
+
+    /** @brief 0. to 128. */
+    float shine;
 };
 
 struct georot {
-    int do_rot;             /* do rotation */
-    double rot_angle;       /* rotation angle */
-    double rot_axes[3];     /* rotation axis */
-    GLdouble rotMatrix[16]; /* rotation matrix */
+    /** @brief do rotation */
+    int do_rot;
+
+    /** @brief rotation angle */
+    double rot_angle;
+
+    /** @brief rotation axis */
+    double rot_axes[3];
+
+    /** @brief rotation matrix */
+    GLdouble rotMatrix[16];
 };
 
 typedef struct {
-    int coord_sys; /* latlon, equal area, etc */
-    int view_proj; /* perspective, ortho */
-    int infocus;   /* fixed center of view - true or false */
+    /** @brief latlon, equal area, etc */
+    int coord_sys;
+
+    /** @brief perspective, ortho */
+    int view_proj;
+
+    /** @brief fixed center of view - true or false */
+    int infocus;
     float from_to[2][4];
     struct georot rotate;
-    int twist, fov, incl, look;  /* 10ths of degrees */
-    float real_to[4], vert_exag; /* a global Z exag */
+
+    /** @brief 10ths of degrees */
+    int twist, fov, incl, look;
+
+    /** @brief a global Z exag */
+    float real_to[4], vert_exag;
     float scale;
     struct lightdefs lights[MAX_LIGHTS];
 } geoview;
 
 typedef struct { /* need to add elements here for off_screen drawing */
     float nearclip, farclip, aspect;
-    short left, right, bottom, top; /* Screen coordinates */
+
+    /** @brief Screen coordinates */
+    short left, right, bottom, top;
     int bgcol;
 } geodisplay;
 

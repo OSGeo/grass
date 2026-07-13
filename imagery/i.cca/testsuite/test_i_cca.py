@@ -4,7 +4,7 @@ import grass.script as gs
 
 
 class TestICCA(TestCase):
-    """Regression and invariance tests for the i.cca GRASS GIS module."""
+    """Regression and invariance tests for the i.cca GRASS module."""
 
     group_name = "cca_group"
     subgroup_name = "cca_subgroup"

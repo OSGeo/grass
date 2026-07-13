@@ -6,6 +6,8 @@ Detect GRASS dependencies and set variable HAVE_*
 
 #]=======================================================================]
 
+include(CheckSymbolExists)
+
 # Required dependencies
 
 find_package(FLEX REQUIRED)
@@ -20,9 +22,9 @@ if(UNIX)
   set(LIBM LIBM)
 endif()
 
-find_package(PROJ REQUIRED)
+find_package(PROJ 9.0.0 REQUIRED)
 
-find_package(GDAL REQUIRED)
+find_package(GDAL 3.7.0 REQUIRED)
 
 find_package(ZLIB REQUIRED)
 
@@ -41,6 +43,34 @@ endif()
 
 find_package(Iconv)
 
+# FreeBSD specific iconv configuration
+if(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
+  if(Iconv_FOUND)
+    # LIBICONV_PLUG makes libiconv iconv.h act like libc iconv.h
+    add_compile_definitions(LIBICONV_PLUG)
+
+    # Use CMAKE_PREFIX_PATH to locate iconv (typically /usr/local on FreeBSD)
+    if(NOT Iconv_INCLUDE_DIR AND CMAKE_PREFIX_PATH)
+      find_path(Iconv_INCLUDE_DIR iconv.h HINTS ${CMAKE_PREFIX_PATH}/include)
+    endif()
+    if(NOT Iconv_LIBRARY AND CMAKE_PREFIX_PATH)
+      find_library(Iconv_LIBRARY NAMES iconv libiconv HINTS ${CMAKE_PREFIX_PATH}/lib)
+    endif()
+
+    # Ensure iconv target has correct properties
+    if(TARGET Iconv::Iconv)
+      if(Iconv_INCLUDE_DIR)
+        set_property(TARGET Iconv::Iconv PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${Iconv_INCLUDE_DIR})
+      endif()
+      if(Iconv_LIBRARY)
+        set_property(TARGET Iconv::Iconv PROPERTY INTERFACE_LINK_LIBRARIES ${Iconv_LIBRARY})
+      endif()
+    endif()
+
+    message(STATUS "FreeBSD: Using iconv from ${Iconv_LIBRARY} with LIBICONV_PLUG")
+  endif()
+endif()
+
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads)
 
@@ -51,13 +81,49 @@ if(WITH_X11)
 endif()
 
 if(WITH_OPENGL)
-  find_package(OpenGL REQUIRED COMPONENTS OpenGL)
+  set(OPENGL_X11)
+  set(OPENGL_WINDOWS)
+  set(OPENGL_AQUA)
+  set(OPENGL_AGL)
+  set(HAVE_PIXMAPS)
+
+  # TODO: this mirrors configure.ac, remove this macro after 8.5 release
+  set(OPENGL_FBO 1)
+
   if(APPLE)
-    find_library(AGL_FRAMEWORK AGL REQUIRED)
-    set_property(
-      TARGET OpenGL::GL
-      APPEND
-      PROPERTY INTERFACE_LINK_LIBRARIES ${AGL_FRAMEWORK})
+    set(OPENGL_AQUA 1)
+
+    find_package(OpenGL REQUIRED COMPONENTS OpenGL)
+
+    # We're aware of the deprecation of macOS OpenGL, no need to remind us
+    target_compile_options(OpenGL::GL INTERFACE -DGL_SILENCE_DEPRECATION=1)
+
+    find_library(AGL_FRAMEWORK AGL)
+    set(CMAKE_REQUIRED_LIBRARIES ${AGL_FRAMEWORK})
+    check_include_file(AGL/agl.h HAVE_AGL_H)
+    check_symbol_exists(aglSwapBuffers AGL/agl.h HAVE_AGLSWAPBUFFERS)
+    unset(CMAKE_REQUIRED_LIBRARIES)
+    if(AGL_FRAMEWORK AND HAVE_AGL_H AND HAVE_AGLSWAPBUFFERS)
+      set_property(
+        TARGET OpenGL::GL
+        APPEND PROPERTY INTERFACE_LINK_LIBRARIES ${AGL_FRAMEWORK})
+      set(OPENGL_AGL 1)
+    endif()
+  elseif(WIN32)
+    set(OPENGL_WINDOWS 1)
+
+    find_package(OpenGL REQUIRED COMPONENTS OpenGL)
+  else()
+    set(OPENGL_X11 1)
+
+    find_package(OpenGL REQUIRED COMPONENTS OpenGL GLX)
+
+    # probably not necessary, but to be sure
+    set(CMAKE_REQUIRED_LIBRARIES ${OPENGL_LIBRARIES})
+    set(CMAKE_REQUIRED_INCLUDES ${OPENGL_INCLUDE_DIR})
+    check_symbol_exists(glXCreateGLXPixmap GL/glx.h HAVE_PIXMAPS)
+    unset(CMAKE_REQUIRED_LIBRARIES)
+    unset(CMAKE_REQUIRED_INCLUDES)
   endif()
 endif()
 
@@ -74,6 +140,9 @@ endif()
 
 if(WITH_SQLITE)
   find_package(SQLite3 REQUIRED)
+  if(NOT TARGET SQLite3::SQLite3) # CMake < 4.3
+    add_library(SQLite3::SQLite3 ALIAS SQLite::SQLite3)
+  endif()
 endif()
 
 if(WITH_POSTGRES)
@@ -155,6 +224,9 @@ if(WITH_LAPACKE)
   if(NOT WITH_CBLAS)
     message(FATAL_ERROR "LAPACKE support requires CBLAS")
   endif()
+  if(NOT LAPACKE_PREFER_PKGCONFIG)
+    set(LAPACKE_PREFER_PKGCONFIG ON)
+  endif()
   find_package(LAPACKE REQUIRED)
 endif()
 
@@ -168,8 +240,12 @@ if(WITH_OPENMP)
   if(OpenMP_FOUND AND MSVC AND CMAKE_VERSION VERSION_LESS "3.30")
     # CMake < 3.30 doesn't support OpenMP_RUNTIME_MSVC
     # for min/max reduction
-    add_compile_options(-openmp:llvm)
+    target_compile_options(OpenMP::OpenMP_C PRIVATE -openmp:llvm)
   endif()
+endif()
+
+if(WITH_LIBSVM)
+  find_package(LibSVM REQUIRED)
 endif()
 
 # Data format options
@@ -219,15 +295,12 @@ if(Python3_FOUND)
   #]]
 endif()
 
-check_target(PROJ::proj HAVE_PROJ_H)
-check_target(GDAL::GDAL HAVE_GDAL)
-check_target(GDAL::GDAL HAVE_OGR)
 check_target(ZLIB::ZLIB HAVE_ZLIB_H)
 check_target(Iconv::Iconv HAVE_ICONV_H)
 check_target(PNG::PNG HAVE_PNG_H)
 check_target(LIBJPEG HAVE_JPEGLIB_H)
-check_target(SQLite::SQLite3 HAVE_SQLITE)
-check_target(SQLite::SQLite3 HAVE_SQLITE3_H)
+check_target(SQLite3::SQLite3 HAVE_SQLITE)
+check_target(SQLite3::SQLite3 HAVE_SQLITE3_H)
 check_target(PostgreSQL::PostgreSQL HAVE_POSTGRES)
 check_target(PostgreSQL::PostgreSQL HAVE_LIBPQ_FE_H)
 check_target(MYSQL HAVE_MYSQL_H)
@@ -246,59 +319,8 @@ check_target(LAPACKE::LAPACKE HAVE_LIBLAPACK)
 check_target(TIFF::TIFF HAVE_TIFFIO_H)
 check_target(NETCDF HAVE_NETCDF)
 check_target(GEOS::geos_c HAVE_GEOS)
+check_target(LibSVM::LibSVM HAVE_SVM_H)
 
 if(MSVC)
   check_target(PCRE HAVE_PCRE_H)
-endif()
-
-set(HAVE_PBUFFERS 0)
-set(HAVE_PIXMAPS 0)
-if(WITH_OPENGL)
-  try_compile(
-    HAVE_PBUFFERS ${CMAKE_CURRENT_BINARY_DIR}
-    ${CMAKE_SOURCE_DIR}/cmake/tests/have_pbuffer.c
-    CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${OPENGL_INCLUDE_DIR}" "-w"
-                "-DLINK_LIBRARIES:STRING=${OPENGL_LIBRARIES}"
-    OUTPUT_VARIABLE COMPILE_HAVE_PBUFFERS)
-  if(NOT COMPILE_HAVE_PBUFFERS)
-    message(
-      FATAL_ERROR
-        "Performing Test HAVE_PBUFFERS - Failed\n COMPILE_OUTPUT:${COMPILE_HAVE_PBUFFERS}\n"
-    )
-  else()
-    message(STATUS "Performing Test HAVE_PBUFFERS - Success")
-    set(HAVE_PBUFFERS 1)
-  endif()
-
-  try_compile(
-    HAVE_PIXMAPS ${CMAKE_CURRENT_BINARY_DIR}
-    ${CMAKE_SOURCE_DIR}/cmake/tests/have_pixmaps.c
-    CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${OPENGL_INCLUDE_DIR}" "-w"
-                "-DLINK_LIBRARIES:STRING=${OPENGL_LIBRARIES}"
-    OUTPUT_VARIABLE COMPILE_HAVE_PIXMAPS)
-
-  if(NOT COMPILE_HAVE_PIXMAPS)
-    message(
-      FATAL_ERROR
-        "Performing Test HAVE_PIXMAPS - Failed\n COMPILE_OUTPUT:${COMPILE_HAVE_PIXMAPS}\n"
-    )
-  else()
-    message(STATUS "Performing Test HAVE_PIXMAPS - Success")
-    set(HAVE_PIXMAPS 1)
-  endif()
-
-endif(WITH_OPENGL)
-
-set(OPENGL_X11 0)
-set(OPENGL_AQUA 0)
-set(OPENGL_WINDOWS 0)
-if(WITH_OPENGL)
-  if(APPLE)
-    set(OPENGL_AQUA 1)
-    set(OPENGL_AGL 1)
-  elseif(WIN32)
-    set(OPENGL_WINDOWS 1)
-  else()
-    set(OPENGL_X11 1)
-  endif()
 endif()

@@ -1,4 +1,6 @@
 ---
+# yamllint disable-line rule:line-length
+# yaml-language-server: $schema=https://raw.githubusercontent.com/DavidAnson/markdownlint/refs/heads/main/schema/markdownlint-config-schema.json
 default: true
 
 # Fix any fixable errors (depending on the markdownlint wrapper tool used)
@@ -9,5 +11,11 @@ MD041: false # first-line-h1
 # Errors from .html to .md rename (first step in HTML to Markdown conversion)
 MD013:
   code_blocks: false
+  headings: false
   tables: false
 # The block above this is to be eventually removed.
+
+# MD060/table-column-style : Table column style
+# https://github.com/DavidAnson/markdownlint/blob/main/doc/md060.md
+MD060:
+  style: any

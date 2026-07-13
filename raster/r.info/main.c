@@ -25,7 +25,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 #include "local_proto.h"
 
 #define printline(x) fprintf(out, " | %-74.74s |\n", x)
@@ -70,8 +70,8 @@ int main(int argc, char **argv)
     struct Flag *gflag, *rflag, *eflag, *hflag, *sflag;
     enum OutputFormat format;
 
-    JSON_Value *root_value = NULL;
-    JSON_Object *root_object = NULL;
+    G_JSON_Value *root_value = NULL;
+    G_JSON_Object *root_object = NULL;
 
     /* Initialize GIS Engine */
     G_gisinit(argv[0]);
@@ -141,12 +141,12 @@ int main(int argc, char **argv)
 
     if (strcmp(fopt->answer, "json") == 0) {
         format = JSON;
-        root_value = json_value_init_object();
+        root_value = G_json_value_init_object();
         if (root_value == NULL) {
             G_fatal_error(
                 _("Failed to initialize JSON object. Out of memory?"));
         }
-        root_object = json_object(root_value);
+        root_object = G_json_object(root_value);
     }
     else if (strcmp(fopt->answer, "shell") == 0) {
         format = SHELL;
@@ -564,24 +564,24 @@ int main(int argc, char **argv)
                 fprintf(out, "ncats=%s\n", cats_ok ? tmp4 : "??");
                 break;
             case JSON:
-                json_object_set_number(root_object, "north", cellhd.north);
-                json_object_set_number(root_object, "south", cellhd.south);
-                json_object_set_number(root_object, "nsres", cellhd.ns_res);
+                G_json_object_set_number(root_object, "north", cellhd.north);
+                G_json_object_set_number(root_object, "south", cellhd.south);
+                G_json_object_set_number(root_object, "nsres", cellhd.ns_res);
 
-                json_object_set_number(root_object, "east", cellhd.east);
-                json_object_set_number(root_object, "west", cellhd.west);
-                json_object_set_number(root_object, "ewres", cellhd.ew_res);
+                G_json_object_set_number(root_object, "east", cellhd.east);
+                G_json_object_set_number(root_object, "west", cellhd.west);
+                G_json_object_set_number(root_object, "ewres", cellhd.ew_res);
 
-                json_object_set_number(root_object, "rows", cellhd.rows);
-                json_object_set_number(root_object, "cols", cellhd.cols);
-                json_object_set_number(root_object, "cells", total_cells);
+                G_json_object_set_number(root_object, "rows", cellhd.rows);
+                G_json_object_set_number(root_object, "cols", cellhd.cols);
+                G_json_object_set_number(root_object, "cells", total_cells);
 
-                json_object_set_string(root_object, "datatype", data_type_f);
+                G_json_object_set_string(root_object, "datatype", data_type_f);
                 if (cats_ok) {
-                    json_object_set_number(root_object, "ncats", cats.num);
+                    G_json_object_set_number(root_object, "ncats", cats.num);
                 }
                 else {
-                    json_object_set_null(root_object, "ncats");
+                    G_json_object_set_null(root_object, "ncats");
                 }
                 break;
             }
@@ -603,8 +603,8 @@ int main(int argc, char **argv)
                         fprintf(out, "max=NULL\n");
                         break;
                     case JSON:
-                        json_object_set_null(root_object, "min");
-                        json_object_set_null(root_object, "max");
+                        G_json_object_set_null(root_object, "min");
+                        G_json_object_set_null(root_object, "max");
                         break;
                     }
                 }
@@ -619,8 +619,8 @@ int main(int argc, char **argv)
                         fprintf(out, "max=%i\n", max);
                         break;
                     case JSON:
-                        json_object_set_number(root_object, "min", min);
-                        json_object_set_number(root_object, "max", max);
+                        G_json_object_set_number(root_object, "min", min);
+                        G_json_object_set_number(root_object, "max", max);
                         break;
                     }
                 }
@@ -640,8 +640,8 @@ int main(int argc, char **argv)
                         fprintf(out, "max=NULL\n");
                         break;
                     case JSON:
-                        json_object_set_null(root_object, "min");
-                        json_object_set_null(root_object, "max");
+                        G_json_object_set_null(root_object, "min");
+                        G_json_object_set_null(root_object, "max");
                         break;
                     }
                 }
@@ -668,8 +668,8 @@ int main(int argc, char **argv)
                         }
                         break;
                     case JSON:
-                        json_object_set_number(root_object, "min", min);
-                        json_object_set_number(root_object, "max", max);
+                        G_json_object_set_number(root_object, "min", min);
+                        G_json_object_set_number(root_object, "max", max);
                         break;
                     }
                 }
@@ -690,7 +690,7 @@ int main(int argc, char **argv)
                     fprintf(out, "cells=%" PRId64 "\n", total_cells);
                     break;
                 case JSON:
-                    json_object_set_number(root_object, "cells", total_cells);
+                    G_json_object_set_number(root_object, "cells", total_cells);
                     break;
                 }
             }
@@ -734,10 +734,10 @@ int main(int argc, char **argv)
                     fprintf(out, "sum=%.15g\n", rstats.sum);
                     break;
                 case JSON:
-                    json_object_set_number(root_object, "n", rstats.count);
-                    json_object_set_number(root_object, "mean", mean);
-                    json_object_set_number(root_object, "stddev", sd);
-                    json_object_set_number(root_object, "sum", rstats.sum);
+                    G_json_object_set_number(root_object, "n", rstats.count);
+                    G_json_object_set_number(root_object, "mean", mean);
+                    G_json_object_set_number(root_object, "stddev", sd);
+                    G_json_object_set_number(root_object, "sum", rstats.sum);
                     break;
                 }
             }
@@ -756,10 +756,10 @@ int main(int argc, char **argv)
                     fprintf(out, "sum=NULL\n");
                     break;
                 case JSON:
-                    json_object_set_number(root_object, "n", 0);
-                    json_object_set_null(root_object, "mean");
-                    json_object_set_null(root_object, "stddev");
-                    json_object_set_null(root_object, "sum");
+                    G_json_object_set_number(root_object, "n", 0);
+                    G_json_object_set_null(root_object, "mean");
+                    G_json_object_set_null(root_object, "stddev");
+                    G_json_object_set_null(root_object, "sum");
                     break;
                 }
             }
@@ -799,15 +799,15 @@ int main(int argc, char **argv)
                 fprintf(out, "title=\"%s\"\n", title);
                 break;
             case JSON:
-                json_object_set_string(root_object, "map", name);
-                json_object_set_string(root_object, "maptype", maptype);
-                json_object_set_string(root_object, "mapset", mapset);
-                json_object_set_string(root_object, "location", G_location());
-                json_object_set_string(root_object, "project", G_location());
-                json_object_set_string(root_object, "database", G_gisdbase());
-                json_object_set_string(root_object, "date", date);
-                json_object_set_string(root_object, "creator", creator);
-                json_object_set_string(root_object, "title", title);
+                G_json_object_set_string(root_object, "map", name);
+                G_json_object_set_string(root_object, "maptype", maptype);
+                G_json_object_set_string(root_object, "mapset", mapset);
+                G_json_object_set_string(root_object, "location", G_location());
+                G_json_object_set_string(root_object, "project", G_location());
+                G_json_object_set_string(root_object, "database", G_gisdbase());
+                G_json_object_set_string(root_object, "date", date);
+                G_json_object_set_string(root_object, "creator", creator);
+                G_json_object_set_string(root_object, "title", title);
                 break;
             }
             if (time_ok && (first_time_ok || second_time_ok)) {
@@ -823,7 +823,8 @@ int main(int argc, char **argv)
                     fprintf(out, "timestamp=\"%s\"\n", timebuff);
                     break;
                 case JSON:
-                    json_object_set_string(root_object, "timestamp", timebuff);
+                    G_json_object_set_string(root_object, "timestamp",
+                                             timebuff);
                     break;
                 }
             }
@@ -836,7 +837,7 @@ int main(int argc, char **argv)
                     fprintf(out, "timestamp=\"none\"\n");
                     break;
                 case JSON:
-                    json_object_set_null(root_object, "timestamp");
+                    G_json_object_set_null(root_object, "timestamp");
                     break;
                 }
             }
@@ -881,49 +882,50 @@ int main(int argc, char **argv)
                 break;
             case JSON:
                 if (units) {
-                    json_object_set_string(root_object, "units", units);
+                    G_json_object_set_string(root_object, "units", units);
                 }
                 else {
-                    json_object_set_null(root_object, "units");
+                    G_json_object_set_null(root_object, "units");
                 }
                 if (vdatum) {
-                    json_object_set_string(root_object, "vdatum", vdatum);
+                    G_json_object_set_string(root_object, "vdatum", vdatum);
                 }
                 else {
-                    json_object_set_null(root_object, "vdatum");
+                    G_json_object_set_null(root_object, "vdatum");
                 }
                 if (semantic_label) {
-                    json_object_set_string(root_object, "semantic_label",
-                                           semantic_label);
+                    G_json_object_set_string(root_object, "semantic_label",
+                                             semantic_label);
                 }
                 else {
-                    json_object_set_null(root_object, "semantic_label");
+                    G_json_object_set_null(root_object, "semantic_label");
                 }
 
                 if (hist_ok) {
-                    json_object_set_string(
+                    G_json_object_set_string(
                         root_object, "source1",
                         Rast_get_history(&hist, HIST_DATSRC_1));
-                    json_object_set_string(
+                    G_json_object_set_string(
                         root_object, "source2",
                         Rast_get_history(&hist, HIST_DATSRC_2));
-                    json_object_set_string(
+                    G_json_object_set_string(
                         root_object, "description",
                         Rast_get_history(&hist, HIST_KEYWRD));
                     char *buffer = history_as_string(&hist);
                     if (buffer) {
-                        json_object_set_string(root_object, "comments", buffer);
+                        G_json_object_set_string(root_object, "comments",
+                                                 buffer);
                         G_free(buffer);
                     }
                     else {
-                        json_object_set_null(root_object, "comments");
+                        G_json_object_set_null(root_object, "comments");
                     }
                 }
                 else {
-                    json_object_set_null(root_object, "source1");
-                    json_object_set_null(root_object, "source2");
-                    json_object_set_null(root_object, "description");
-                    json_object_set_null(root_object, "comments");
+                    G_json_object_set_null(root_object, "source1");
+                    G_json_object_set_null(root_object, "source2");
+                    G_json_object_set_null(root_object, "description");
+                    G_json_object_set_null(root_object, "comments");
                 }
                 break;
             }
@@ -966,22 +968,23 @@ int main(int argc, char **argv)
                     }
                     break;
                 case JSON:
-                    json_object_set_string(
+                    G_json_object_set_string(
                         root_object, "source1",
                         Rast_get_history(&hist, HIST_DATSRC_1));
-                    json_object_set_string(
+                    G_json_object_set_string(
                         root_object, "source2",
                         Rast_get_history(&hist, HIST_DATSRC_2));
-                    json_object_set_string(
+                    G_json_object_set_string(
                         root_object, "description",
                         Rast_get_history(&hist, HIST_KEYWRD));
                     char *buffer = history_as_string(&hist);
                     if (buffer) {
-                        json_object_set_string(root_object, "comments", buffer);
+                        G_json_object_set_string(root_object, "comments",
+                                                 buffer);
                         G_free(buffer);
                     }
                     else {
-                        json_object_set_null(root_object, "comments");
+                        G_json_object_set_null(root_object, "comments");
                     }
 
                     break;
@@ -992,13 +995,13 @@ int main(int argc, char **argv)
 
     if (format == JSON) {
         char *serialized_string = NULL;
-        serialized_string = json_serialize_to_string_pretty(root_value);
+        serialized_string = G_json_serialize_to_string_pretty(root_value);
         if (serialized_string == NULL) {
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         }
         puts(serialized_string);
-        json_free_serialized_string(serialized_string);
-        json_value_free(root_value);
+        G_json_free_serialized_string(serialized_string);
+        G_json_value_free(root_value);
     }
 
     return EXIT_SUCCESS;

@@ -118,6 +118,8 @@ import os
 import atexit
 import math
 
+from pathlib import Path
+
 import grass.script as gs
 from grass.exceptions import CalledModuleError
 
@@ -303,10 +305,10 @@ def main():
     # is output a group?
     group = False
     path = os.path.join(GISDBASE, TMPLOC, "group", output)
-    if os.path.exists(path):
+    if Path(path).exists():
         group = True
         path = os.path.join(GISDBASE, TMPLOC, "group", output, "POINTS")
-        if os.path.exists(path):
+        if Path(path).exists():
             gs.fatal(_("Input contains GCPs, rectification is required"))
 
     if "r" in region_flag:

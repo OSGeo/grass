@@ -44,7 +44,7 @@ r.resamp.stats -w input=el_D782_6m output=el_D782_20m
 [r.resamp.interp](r.resamp.interp.md), [r.neighbors](r.neighbors.md)*
 
 Overview: [Interpolation and
-Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS GIS
+Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS
 
 Examples how statistical functions are applied can be found in the
 [r.neighbors](r.neighbors.md) module documentation.

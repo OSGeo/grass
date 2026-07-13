@@ -22,17 +22,11 @@
 #include <grass/glocale.h>
 #include <grass/gjson.h>
 
+#include <gdal_version.h>
+
 #include "local_proto.h"
 
-#ifdef HAVE_PROJ_H
 #include <proj.h>
-#else
-#include <proj_api.h>
-#endif
-
-#ifdef HAVE_GDAL
-#include <gdal_version.h>
-#endif
 
 #ifdef HAVE_GEOS
 #include <geos_c.h>
@@ -65,8 +59,8 @@ int main(int argc, char *argv[])
     struct Flag *copyright, *build, *gish_rev, *cite_flag, *shell, *extended;
     struct Option *fopt;
     enum OutputFormat format;
-    JSON_Value *root_value = NULL;
-    JSON_Object *root_object = NULL;
+    G_JSON_Value *root_value = NULL;
+    G_JSON_Object *root_object = NULL;
 
     G_gisinit(argv[0]);
 
@@ -77,7 +71,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("copyright"));
     G_add_keyword(_("version"));
     G_add_keyword(_("license"));
-    module->label = _("Displays GRASS GIS version info.");
+    module->label = _("Displays GRASS version info.");
     module->description =
         _("Optionally also prints build or copyright information.");
 
@@ -257,8 +251,7 @@ int main(int argc, char *argv[])
             case SHELL:
                 fprintf(stdout, "libgis_revision=\n");
                 fprintf(stdout, "libgis_date=\n");
-                G_warning(
-                    "GRASS GIS libgis version and date number not available");
+                G_warning("GRASS libgis version and date number not available");
                 /* this can be alternatively fatal error or it can cause
                    fatal error later */
                 break;
@@ -272,13 +265,12 @@ int main(int argc, char *argv[])
             case JSON:
                 G_json_object_set_null(root_object, "libgis_revision");
                 G_json_object_set_null(root_object, "libgis_date");
-                G_warning(
-                    "GRASS GIS libgis version and date number not available");
+                G_warning("GRASS libgis version and date number not available");
                 break;
             }
         }
         if (no_libgis) {
-            G_debug(1, _("GRASS GIS libgis version and date number don't have "
+            G_debug(1, _("GRASS libgis version and date number don't have "
                          "the expected format."
                          " Trying to print the original strings..."));
             G_debug(1, _("GIS_H_VERSION=\"%s\""), GIS_H_VERSION);
@@ -289,12 +281,8 @@ int main(int argc, char *argv[])
     if (extended->answer) {
         char *proj = NULL;
 
-#ifdef HAVE_PROJ_H
         G_asprintf(&proj, "%d%d%d", PROJ_VERSION_MAJOR, PROJ_VERSION_MINOR,
                    PROJ_VERSION_PATCH);
-#else
-        G_asprintf(&proj, "%d", PJ_VERSION);
-#endif
         if (strlen(proj) == 3) {
             char proj_str[6];
             snprintf(proj_str, sizeof(proj_str), "%c.%c.%c", proj[0], proj[1],
@@ -325,7 +313,6 @@ int main(int argc, char *argv[])
                 break;
             }
         }
-#ifdef HAVE_GDAL
         switch (format) {
         case SHELL:
             fprintf(stdout, "gdal=%s\n", GDAL_RELEASE_NAME);
@@ -337,20 +324,6 @@ int main(int argc, char *argv[])
             G_json_object_set_string(root_object, "gdal", GDAL_RELEASE_NAME);
             break;
         }
-#else
-        switch (format) {
-        case SHELL:
-            fprintf(stdout, "gdal=\n");
-            break;
-        case PLAIN:
-            fprintf(stdout, "%s\n",
-                    _("GRASS not compiled with GDAL/OGR support"));
-            break;
-        case JSON:
-            G_json_object_set_null(root_object, "gdal");
-            break;
-        }
-#endif
 #ifdef HAVE_GEOS
         switch (format) {
         case SHELL:

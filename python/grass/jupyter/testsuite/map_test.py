@@ -17,7 +17,6 @@
 #############################################################################
 
 import os
-import sys
 import unittest
 from pathlib import Path
 
@@ -61,13 +60,7 @@ class TestMap(TestCase):
         """
         for f in self.files:
             f = Path(f)
-            if sys.version_info < (3, 8):
-                try:
-                    os.remove(f)
-                except FileNotFoundError:
-                    pass
-            else:
-                f.unlink(missing_ok=True)
+            f.unlink(missing_ok=True)
 
     def test_defaults(self):
         """Test that Map can create a map with default settings."""
@@ -148,10 +141,20 @@ class TestMap(TestCase):
         # Create map
         grass_renderer = gj.Map()
         # Pass bad shortcuts
-        with self.assertRaisesRegex(AttributeError, "Module must begin with 'd_'"):
-            grass_renderer.r_watersheds()
+        with self.assertRaisesRegex(AttributeError, "r_does_not_exist"):
+            grass_renderer.r_does_not_exist()
+        with self.assertRaisesRegex(AttributeError, "r_info.*[^a-z]d_[^a-z]"):
+            grass_renderer.r_info()
         with self.assertRaisesRegex(AttributeError, "d.module.does.not.exist"):
             grass_renderer.d_module_does_not_exist()
+        with self.assertRaisesRegex(AttributeError, "d_module_does_not_exist"):
+            grass_renderer.d_module_does_not_exist()
+
+    def test_run_wrong_tool(self):
+        grass_renderer = gj.Map()
+        # We do two separate tests. Order is purely based on the current message.
+        with self.assertRaisesRegex(ValueError, "[^a-z]d[^a-z].*r.info"):
+            grass_renderer.run("r.info", map="elevation")
 
     @unittest.skipIf(not can_import_ipython(), "Cannot import IPython")
     def test_image_creation(self):

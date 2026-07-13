@@ -73,6 +73,8 @@ char *Rast_mask_info(void)
  * G_free() when it is no longer needed.
  *
  * @returns A dynamically allocated string containing the mask name.
+ *
+ * @since version 8.5
  */
 char *Rast_mask_name(void)
 {
@@ -134,9 +136,12 @@ static bool Rast__get_present_mask(char *name, char *mapset)
  * @param[out] reclass_mapset Name of the mapset the reclassified raster is in
  *
  * @return true if mask is present, false otherwise
+ *
+ * @since version 8.5
  */
 bool Rast_mask_status(char *name, char *mapset, bool *is_mask_reclass,
-                      char *reclass_name, char *reclass_mapset)
+                      char reclass_name[GNAME_MAX],
+                      char reclass_mapset[GMAPSET_MAX])
 {
     bool present = Rast__get_present_mask(name, mapset);
 
@@ -193,6 +198,8 @@ int Rast__mask_info(char *name, char *mapset)
  * @brief Check presence of 2D raster mask
  *
  * @return true if mask is present, false otherwise
+ *
+ * @since version 8.5
  */
 bool Rast_mask_is_present(void)
 {
@@ -209,6 +216,8 @@ bool Rast_mask_is_present(void)
  *
  * \param nprocs number of threads to use
  * \return number of threads in use
+ *
+ * \since version 8.5
  */
 int Rast_disable_omp_on_mask(int nprocs)
 {

@@ -24,7 +24,7 @@ Region management
 The :class:`~pygrass.gis.region.Region` class it is useful to obtain
 information about the computational region and to change it. Details
 about the GRASS computational region management can be found in
-the `GRASS GIS Wiki: Computational region
+the `GRASS Wiki: Computational region
 <https://grasswiki.osgeo.org/wiki/Computational_region>`_.
 
 The classes are part of the :mod:`~pygrass.gis` module.

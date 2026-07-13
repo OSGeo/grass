@@ -1,7 +1,7 @@
 """
 @package startup.guiutils
 
-@brief General GUI-dependent utilities for GUI startup of GRASS GIS
+@brief General GUI-dependent utilities for GUI startup of GRASS
 
 (C) 2018 by Vaclav Petras the GRASS Development Team
 

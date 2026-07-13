@@ -168,8 +168,7 @@ double trunca()
   illustrate the way molecules and aerosols are mixed in a realistic atmosphere.
   For molecules, the scale height is 8km. For aerosols it is assumed to be 2km
   unless otherwise specified by the user (using aircraft measurements).
-*/
-
+ */
 double discre(const double ta, const double ha, const double tr,
               const double hr, const int it, const int ntd, const double yy,
               const double dd, const double ppp2, const double ppp1)

@@ -2331,7 +2331,7 @@ class QuitDialog(wx.Dialog):
     def __init__(
         self,
         parent,
-        title=_("Quit GRASS GIS"),
+        title=_("Quit GRASS"),
         id=wx.ID_ANY,
         style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
         **kwargs,
@@ -2352,19 +2352,15 @@ class QuitDialog(wx.Dialog):
         self._shell_running = is_shell_running()
 
         if self._shell_running:
-            text = _(
-                "Do you want to quit GRASS GIS including shell or just close the GUI?"
-            )
+            text = _("Do you want to quit GRASS including shell or just close the GUI?")
         else:
-            text = _("Do you want to quit GRASS GIS?")
+            text = _("Do you want to quit GRASS?")
         self.informLabel = StaticText(parent=self.panel, id=wx.ID_ANY, label=text)
         self.btnCancel = Button(parent=self.panel, id=wx.ID_CANCEL)
         if self._shell_running:
             self.btnClose = Button(parent=self.panel, id=wx.ID_NO, label=_("Close GUI"))
             self.btnClose.Bind(wx.EVT_BUTTON, self.OnClose)
-        self.btnQuit = Button(
-            parent=self.panel, id=wx.ID_YES, label=_("Quit GRASS GIS")
-        )
+        self.btnQuit = Button(parent=self.panel, id=wx.ID_YES, label=_("Quit GRASS"))
         self.btnQuit.SetFocus()
         self.btnQuit.Bind(wx.EVT_BUTTON, self.OnQuit)
 

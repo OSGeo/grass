@@ -108,7 +108,6 @@ static int G__open_misc(const char *dir, const char *element, const char *name,
  *  \param name
  *  \return int
  */
-
 int G_open_new_misc(const char *dir, const char *element, const char *name)
 {
     return G__open_misc(dir, element, name, G_mapset(), 1);
@@ -130,7 +129,6 @@ int G_open_new_misc(const char *dir, const char *element, const char *name)
  *  \param mapset
  *  \return int
  */
-
 int G_open_old_misc(const char *dir, const char *element, const char *name,
                     const char *mapset)
 {
@@ -151,14 +149,18 @@ int G_open_old_misc(const char *dir, const char *element, const char *name,
  *  \param name
  *  \return int
  */
-
 int G_open_update_misc(const char *dir, const char *element, const char *name)
 {
     int fd;
 
     fd = G__open_misc(dir, element, name, G_mapset(), 2);
     if (fd >= 0)
-        lseek(fd, 0L, SEEK_END);
+        if (lseek(fd, 0L, SEEK_END) == -1) {
+            int err = errno;
+            G_warning(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+            return -1;
+        }
 
     return fd;
 }
@@ -178,7 +180,6 @@ int G_open_update_misc(const char *dir, const char *element, const char *name)
  *  \param name
  *  \return FILE *
  */
-
 FILE *G_fopen_new_misc(const char *dir, const char *element, const char *name)
 {
     int fd;
@@ -200,12 +201,12 @@ FILE *G_fopen_new_misc(const char *dir, const char *element, const char *name)
  * the file does not exist, the NULL pointer is returned. Otherwise the file
  * descriptor from the fopen( ) is returned.
  *
+ *  \param dir
  *  \param element
  *  \param name
  *  \param mapset
  *  \return FILE *
  */
-
 FILE *G_fopen_old_misc(const char *dir, const char *element, const char *name,
                        const char *mapset)
 {
@@ -226,7 +227,12 @@ FILE *G_fopen_append_misc(const char *dir, const char *element,
     fd = G__open_misc(dir, element, name, G_mapset(), 2);
     if (fd < 0)
         return (FILE *)0;
-    lseek(fd, 0L, SEEK_END);
+    if (lseek(fd, 0L, SEEK_END) == -1) {
+        int err = errno;
+        G_warning(_("File read/write operation failed: %s (%d)"), strerror(err),
+                  err);
+        return (FILE *)-1;
+    }
 
     return fdopen(fd, "a");
 }
@@ -239,7 +245,12 @@ FILE *G_fopen_modify_misc(const char *dir, const char *element,
     fd = G__open_misc(dir, element, name, G_mapset(), 2);
     if (fd < 0)
         return (FILE *)0;
-    lseek(fd, 0L, SEEK_END);
+    if (lseek(fd, 0L, SEEK_END) == -1) {
+        int err = errno;
+        G_warning(_("File read/write operation failed: %s (%d)"), strerror(err),
+                  err);
+        return (FILE *)-1;
+    }
 
     return fdopen(fd, "r+");
 }

@@ -5,7 +5,7 @@
 # MODULE:    build_graphical_index
 # AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
 # PURPOSE:   Build graphical index
-# COPYRIGHT: (C) 2015-2025 by Vaclav Petras and the GRASS Development Team
+# COPYRIGHT: (C) 2015-2026 by Vaclav Petras and the GRASS Development Team
 #
 #        This program is free software under the GNU General Public
 #        License (>=v2). Read the file COPYING that comes with GRASS
@@ -98,8 +98,8 @@ def main(ext):
 
 if __name__ == "__main__":
     from build import (
-        write_footer,
         grass_version,
+        write_footer,
     )
 
     main("html")

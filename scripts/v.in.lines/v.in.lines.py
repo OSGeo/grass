@@ -35,8 +35,8 @@
 # %end
 
 import sys
-import os
 import atexit
+from pathlib import Path
 from grass.script.utils import separator, try_remove
 from grass.script import core as grass
 
@@ -59,7 +59,7 @@ def main():
         inf = sys.stdin
     else:
         infile = options["input"]
-        if not os.path.exists(infile):
+        if not Path(infile).exists():
             grass.fatal(_("Unable to read input file <%s>") % infile)
         grass.debug("input file=[%s]" % infile)
 

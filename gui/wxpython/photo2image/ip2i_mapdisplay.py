@@ -42,7 +42,7 @@ class MapPanel(SingleMapPanel):
         self,
         parent,
         giface,
-        title=_("GRASS GIS Manage Location of Tick Points on a Scanned Photo"),
+        title=_("GRASS Manage Location of Tick Points on a Scanned Photo"),
         toolbars=["gcpdisp"],
         Map=None,
         auimgr=None,

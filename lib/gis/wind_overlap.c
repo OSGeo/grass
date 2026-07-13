@@ -8,7 +8,7 @@
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
+ * \author GRASS Development Team
  *
  * \date 1999-2014
  */
@@ -31,7 +31,6 @@
  * \return 1 if box overlaps window
  * \return 0 if box does not overlap window
  */
-
 int G_window_overlap(const struct Cell_head *window, double N, double S,
                      double E, double W)
 {
@@ -76,7 +75,6 @@ int G_window_overlap(const struct Cell_head *window, double N, double S,
  * \param[in] W west
  * \return percentage of overlap
  */
-
 double G_window_percentage_overlap(const struct Cell_head *window, double N,
                                    double S, double E, double W)
 {

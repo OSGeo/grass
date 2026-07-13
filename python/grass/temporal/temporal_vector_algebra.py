@@ -62,7 +62,7 @@ from .temporal_algebra import (
 
 
 class TemporalVectorAlgebraLexer(TemporalAlgebraLexer):
-    """Lexical analyzer for the GRASS GIS temporal vector algebra"""
+    """Lexical analyzer for the GRASS temporal vector algebra"""
 
     def __init__(self) -> None:
         TemporalAlgebraLexer.__init__(self)

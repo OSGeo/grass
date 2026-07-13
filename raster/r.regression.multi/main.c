@@ -126,10 +126,10 @@ int main(int argc, char *argv[])
     struct Cell_head region;
     struct GModule *module;
     enum OutputFormat format;
-    JSON_Value *root_value = NULL, *predictors_value = NULL,
-               *predictor_value = NULL;
-    JSON_Object *root_object = NULL, *predictor_object = NULL;
-    JSON_Array *predictors_array = NULL;
+    G_JSON_Value *root_value = NULL, *predictors_value = NULL,
+                 *predictor_value = NULL;
+    G_JSON_Object *root_object = NULL, *predictor_object = NULL;
+    G_JSON_Array *predictors_array = NULL;
 
     G_gisinit(argv[0]);
 

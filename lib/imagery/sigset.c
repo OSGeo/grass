@@ -58,7 +58,7 @@ struct ClassData *I_AllocClassData(struct SigSet *S, struct ClassSig *C,
  *
  * No need to call before calling I_ReadSigSet.
  *
- * \param *Signature to initialize
+ * \param S *Signature to initialize
  * \param nbands band (imagery group member) count
  */
 int I_InitSigSet(struct SigSet *S, int nbands)
@@ -462,11 +462,13 @@ int I_WriteSigSet(FILE *fd, const struct SigSet *S)
  * detected (== all are present in the other list), a NULL value will be
  * returned in the particular list of mismatches (not an empty string).
  * For example:
- * \code if (ret && ret[1]) printf("List of imagery group bands without
- * signatures: %s\n, ret[1]); \endcode
+ * \code
+ * if (ret && ret[1])
+ *     printf("List of imagery group bands without signatures: %s\n, ret[1]);
+ * \endcode
  *
- * \param *SigSet existing signatures to check & sort
- * \param *Ref group reference
+ * \param S existing signatures to check & sort
+ * \param R group reference
  *
  * \return NULL successfully sorted
  * \return err_array two comma separated lists of mismatches
@@ -617,28 +619,28 @@ char **I_SortSigSetBySemanticLabel(struct SigSet *S, const struct Ref *R)
     /* Clean up */
     for (unsigned int j = R->nfiles; j--;)
         free(group_semantic_labels[j]);
-    free(group_semantic_labels);
-    free(new_order);
-    free(match1);
-    free(match2);
-    free(new_semantic_labels);
+    G_free(group_semantic_labels);
+    G_free(new_order);
+    G_free(match1);
+    G_free(match2);
+    G_free(new_semantic_labels);
     for (unsigned int c = S->nclasses; c--;) {
         for (unsigned int s = S->ClassSig[c].nsubclasses; s--;) {
-            free(new_means[c][s]);
+            G_free(new_means[c][s]);
             for (unsigned int i = S->nbands; i--;)
-                free(new_vars[c][s][i]);
-            free(new_vars[c][s]);
+                G_free(new_vars[c][s][i]);
+            G_free(new_vars[c][s]);
         }
-        free(new_means[c]);
-        free(new_vars[c]);
+        G_free(new_means[c]);
+        G_free(new_vars[c]);
     }
 
-    free(new_means);
-    free(new_vars);
+    G_free(new_means);
+    G_free(new_vars);
 
     if (mc1 || mc2) {
         return mismatches;
     }
-    free(mismatches);
+    G_free(mismatches);
     return NULL;
 }

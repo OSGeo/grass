@@ -3,11 +3,13 @@ Specialized interfaces for invoking modules for testing framework
 
 Copyright (C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS GIS
+License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :authors: Vaclav Petras, Soeren Gebbert
 """
+
+from __future__ import annotations
 
 import subprocess
 from grass.script.core import start_command
@@ -58,11 +60,11 @@ class SimpleModule(Module):
 def call_module(
     module,
     stdin=None,
-    merge_stderr=False,
-    capture_stdout=True,
-    capture_stderr=True,
+    merge_stderr: bool = False,
+    capture_stdout: bool = True,
+    capture_stderr: bool = True,
     **kwargs,
-):
+) -> str | None:
     r"""Run module with parameters given in `kwargs` and return its output.
 
     >>> print(call_module("g.region", flags="pg"))  # doctest: +ELLIPSIS
@@ -129,13 +131,13 @@ def call_module(
             kwargs["stderr"] = subprocess.STDOUT
         else:
             kwargs["stderr"] = subprocess.PIPE
-    process = start_command(module, **kwargs)
-    # input=None means no stdin (our default)
-    # for no stdout, output is None which is out interface
-    # for stderr=STDOUT or no stderr, errors is None
-    # which is fine for CalledModuleError
-    output, errors = process.communicate(input=decode(stdin) if stdin else None)
-    returncode = process.poll()
+    with start_command(module, **kwargs) as process:
+        # input=None means no stdin (our default)
+        # for no stdout, output is None which is out interface
+        # for stderr=STDOUT or no stderr, errors is None
+        # which is fine for CalledModuleError
+        output, errors = process.communicate(input=decode(stdin) if stdin else None)
+        returncode = process.poll()
     if returncode:
         raise CalledModuleError(module, kwargs, returncode, errors)
     return decode(output) if output else None

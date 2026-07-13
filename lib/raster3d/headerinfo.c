@@ -14,7 +14,6 @@
  *  \param depths
  *  \return void
  */
-
 void Rast3d_get_coords_map(RASTER3D_Map *map, int *rows, int *cols, int *depths)
 {
     *rows = map->region.rows;
@@ -46,7 +45,6 @@ void Rast3d_get_coords_map_window(RASTER3D_Map *map, int *rows, int *cols,
  *  \param nz
  *  \return void
  */
-
 void Rast3d_get_nof_tiles_map(RASTER3D_Map *map, int *nx, int *ny, int *nz)
 {
     *nx = map->nx;
@@ -70,7 +68,6 @@ void Rast3d_get_nof_tiles_map(RASTER3D_Map *map, int *nx, int *ny, int *nz)
  *  \param bottom
  *  \return void
  */
-
 void Rast3d_get_region_map(RASTER3D_Map *map, double *north, double *south,
                            double *east, double *west, double *top,
                            double *bottom)
@@ -108,7 +105,6 @@ void Rast3d_get_window_map(RASTER3D_Map *map, double *north, double *south,
  *  \param region
  *  \return void
  */
-
 void Rast3d_get_region_struct_map(RASTER3D_Map *map, RASTER3D_Region *region)
 {
     Rast3d_region_copy(region, &(map->region));
@@ -134,7 +130,6 @@ void Rast3d_getWindowStructMap(RASTER3D_Map *map, RASTER3D_Region *window)
  *  \param z
  *  \return void
  */
-
 void Rast3d_get_tile_dimensions_map(RASTER3D_Map *map, int *x, int *y, int *z)
 {
     *x = map->tileX;
@@ -152,7 +147,6 @@ void Rast3d_get_tile_dimensions_map(RASTER3D_Map *map, int *x, int *y, int *z)
  *  \param map
  *  \return int
  */
-
 int Rast3d_tile_type_map(RASTER3D_Map *map)
 {
     return map->typeIntern;
@@ -169,7 +163,6 @@ int Rast3d_tile_type_map(RASTER3D_Map *map)
  *  \param unit
  *  \return void
  */
-
 void Rast3d_set_unit(RASTER3D_Map *map, const char *unit)
 {
     map->unit = G_store(unit);
@@ -186,7 +179,6 @@ void Rast3d_set_unit(RASTER3D_Map *map, const char *unit)
  *  \param vertical_unit
  *  \return void
  */
-
 void Rast3d_set_vertical_unit2(RASTER3D_Map *map, int vertical_unit)
 {
     map->vertical_unit = vertical_unit;
@@ -203,7 +195,6 @@ void Rast3d_set_vertical_unit2(RASTER3D_Map *map, int vertical_unit)
  *  \param vertical_unit
  *  \return void
  */
-
 void Rast3d_set_vertical_unit(RASTER3D_Map *map, const char *vertical_unit)
 {
     map->vertical_unit = G_units(vertical_unit);
@@ -219,7 +210,6 @@ void Rast3d_set_vertical_unit(RASTER3D_Map *map, const char *vertical_unit)
  *  \param map
  *  \return int
  */
-
 const char *Rast3d_get_unit(RASTER3D_Map *map)
 {
     return map->unit;
@@ -238,7 +228,6 @@ const char *Rast3d_get_unit(RASTER3D_Map *map)
  *  \param map
  *  \return int
  */
-
 int Rast3d_get_vertical_unit2(RASTER3D_Map *map)
 {
     return map->vertical_unit;
@@ -256,7 +245,6 @@ int Rast3d_get_vertical_unit2(RASTER3D_Map *map)
  *  \param map
  *  \return int
  */
-
 const char *Rast3d_get_vertical_unit(RASTER3D_Map *map)
 {
     return G_get_units_name(map->vertical_unit, 1, 0);
@@ -272,7 +260,6 @@ const char *Rast3d_get_vertical_unit(RASTER3D_Map *map)
  *  \param map
  *  \return int
  */
-
 int Rast3d_file_type_map(RASTER3D_Map *map)
 {
     return map->type;
@@ -288,7 +275,6 @@ int Rast3d_file_type_map(RASTER3D_Map *map)
  *  \param map
  *  \return int
  */
-
 int Rast3d_tile_precision_map(RASTER3D_Map *map)
 {
     return map->precision;
@@ -304,7 +290,6 @@ int Rast3d_tile_precision_map(RASTER3D_Map *map)
  *  \param map
  *  \return int
  */
-
 int Rast3d_tile_use_cache_map(RASTER3D_Map *map)
 {
     return map->useCache;
@@ -318,7 +303,6 @@ int Rast3d_tile_use_cache_map(RASTER3D_Map *map)
  *  \param map
  *  \return void
  */
-
 void Rast3d_print_header(RASTER3D_Map *map)
 {
     double rangeMin, rangeMax;

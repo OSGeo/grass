@@ -23,14 +23,14 @@ static double t1r, t2r;
 #define DIST_PARAMS struct dist_params
 DIST_PARAMS
 {
-    short targetrow; /* interpolation row for which params apply */
+    int targetrow; /* interpolation row for which params apply */
     double t1, t2, t3, t4;
 };
 
 static DIST_PARAMS *lat_params, *nextcalc;
 
 /* must be called once to establish the ellipsoid */
-int G_begin_geodesic_distance_l(short nrows, double a, double e2)
+int G_begin_geodesic_distance_l(int nrows, double a, double e2)
 {
     int i;
 

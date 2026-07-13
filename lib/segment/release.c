@@ -6,7 +6,7 @@
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
+ * \author GRASS Development Team
  *
  * \date 2005-2009
  */
@@ -30,7 +30,6 @@
  * \return 1 if successful
  * \return -1 if SEGMENT is not available (not open)
  */
-
 int Segment_release(SEGMENT *SEG)
 {
     int i;

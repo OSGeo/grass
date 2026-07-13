@@ -1,11 +1,9 @@
 #include <grass/raster.h>
 
-#define SHORT    short
-
 #define MELEMENT struct Melement
 MELEMENT
 {
-    short x, y; /* grid coordinates */
+    int x, y; /* grid coordinates */
     int value;
     MELEMENT *next, *prior; /* next and prior element in row list */
 };
@@ -27,16 +25,16 @@ NEIGHBOR
 #define EW struct ew
 EW
 {
-    MELEMENT *east, /* next eastward search in this row */
-        *west,      /* next westward search in this row */
-        *start;     /* starting point of east and west search in this row */
-    short ealive, walive; /* used only for latitude-longitude,
+    MELEMENT *east,     /* next eastward search in this row */
+        *west,          /* next westward search in this row */
+        *start;         /* starting point of east and west search in this row */
+    int ealive, walive; /* used only for latitude-longitude,
                              TRUE if search is active in this direction */
     EW *next;
 };
 
 /* dist.c */
-int G_begin_geodesic_distance_l(short, double, double);
+int G_begin_geodesic_distance_l(int, double, double);
 double LL_set_geodesic_distance_lat(double);
 double set_sdlmr(double);
 int LL_set_geodesic_distance(double *, int, int);
@@ -46,20 +44,20 @@ int free_dist_params(void);
 /* ll.c */
 int extend_west(EW *);
 int extend_east(EW *);
-double distance_LL(SHORT, SHORT, MELEMENT *);
-int LL_lookup_tables(SHORT, SHORT);
+double distance_LL(int, int, MELEMENT *);
+int LL_lookup_tables(int, int);
 
 /* main.c */
-int lookup_and_function_ptrs(SHORT, SHORT);
-int interpolate(MELEMENT[], SHORT, SHORT, SHORT, int, int, int);
-int make_neighbors_list(EW *, EW *, EW *, SHORT, SHORT, NEIGHBOR *, int);
-int search(EW **, NEIGHBOR *, SHORT, SHORT, int, SHORT *, EW *, SHORT);
-int exhaust(EW **, NEIGHBOR *, SHORT, SHORT);
-EW *next_row(EW *, EW *, SHORT *, SHORT);
-double triangulate(MELEMENT *, SHORT, SHORT);
+int lookup_and_function_ptrs(int, int);
+int interpolate(MELEMENT[], int, int, int, int, int, int);
+int make_neighbors_list(EW *, EW *, EW *, int, int, NEIGHBOR *, int);
+int search(EW **, NEIGHBOR *, int, int, int, int *, EW *, int);
+int exhaust(EW **, NEIGHBOR *, int, int);
+EW *next_row(EW *, EW *, int *, int);
+double triangulate(MELEMENT *, int, int);
 int add_neighbor(MELEMENT **, NEIGHBOR *, double, int);
 int replace_neighbor(MELEMENT **, NEIGHBOR *, double);
 int sort_neighbors(NEIGHBOR *, double);
-int free_row_lists(MELEMENT *, SHORT);
-MELEMENT *row_lists(SHORT, SHORT, SHORT *, int *, int, CELL *);
-int lookup_tables(SHORT, SHORT);
+int free_row_lists(MELEMENT *, int);
+MELEMENT *row_lists(int, int, int *, int *, int, CELL *);
+int lookup_tables(int, int);

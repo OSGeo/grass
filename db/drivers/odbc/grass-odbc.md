@@ -1,8 +1,7 @@
 ---
+title: ODBC Database Driver
 description: ODBC DATABASE DRIVER
 ---
-
-# ODBC DATABASE DRIVER
 
 Communication between GRASS and ODBC database for attribute management:
 
@@ -143,4 +142,4 @@ RDBMS.
 ## SEE ALSO
 
 *[db.connect](db.connect.md), [v.db.connect](v.db.connect.md), [unixODBC
-web site](https://www.unixodbc.org), [SQL support in GRASS GIS](sql.md)*
+web site](https://www.unixodbc.org), [SQL support in GRASS](sql.md)*

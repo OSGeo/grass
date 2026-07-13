@@ -65,7 +65,7 @@ v.db.update mygeodetic_pts col=zval qcol="CAST(z_value AS double precision)" \
 ### Updating of columns with on the fly calculation (SQLite extended functions)
 
 Note: this requires SQLite extended functions. For details see the GRASS
-GIS Wiki (compilation of
+Wiki (compilation of
 [libsqlitefunctions.so](https://grasswiki.osgeo.org/wiki/Build_SQLite_extension_on_Linux)
 and
 [libsqlitefunctions.dll](https://grasswiki.osgeo.org/wiki/Build_SQLite_extension_on_windows)).

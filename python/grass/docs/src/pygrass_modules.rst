@@ -136,7 +136,7 @@ and get the module documentation with: ::
 
 
 
-For each input and output parameter it is possible to obtain specific
+For each input and output parameter, it is possible to obtain specific
 information. To see all module inputs, just type: ::
 
     >>> slope_aspect.inputs #doctest: +NORMALIZE_WHITESPACE

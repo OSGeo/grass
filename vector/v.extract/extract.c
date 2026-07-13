@@ -166,7 +166,8 @@ static int areas_new_cats_match(struct Map_info *In, int area1, int area2,
                     break;
                 }
                 case DB_C_TYPE_DOUBLE: {
-                    if (db_get_value_int(&val1) == db_get_value_double(&val2))
+                    if (db_get_value_double(&val1) ==
+                        db_get_value_double(&val2))
                         found = 1;
                     break;
                 }
@@ -470,6 +471,7 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
         db_close_database_shutdown_driver(driver);
     Vect_destroy_cats_struct(CCats);
     Vect_destroy_field_info(Fi);
-
+    Vect_destroy_cats_struct(Line_Cats_Old);
+    Vect_destroy_line_struct(Points);
     return 0;
 }

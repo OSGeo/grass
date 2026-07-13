@@ -160,7 +160,6 @@ int IL_check_at_points_2d(struct interp_params *params,
  *
  * \return 1
  */
-
 int IL_write_point_2d(struct triple point, double err)
 {
 

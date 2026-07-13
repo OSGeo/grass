@@ -230,7 +230,7 @@ def main():
         id=wx.ID_ANY,
         size=(850, 600),
         style=wx.DEFAULT_FRAME_STYLE,
-        title=_("Raster Digitizer - GRASS GIS"),
+        title=_("Raster Digitizer - GRASS"),
     )
     frame = RDigitMapDisplay(parent=frame, **kwargs)
     frame.Show()

@@ -22,7 +22,10 @@
 #include <unistd.h>
 #include <assert.h>
 #include <errno.h>
+
 #include <grass/gis.h>
+#include <grass/glocale.h>
+
 #include "index.h"
 
 /* #define USAGE_SWAP */
@@ -96,7 +99,11 @@ size_t RTreeReadNode(struct RTree_Node *n, off_t nodepos, struct RTree *t)
     int i;
     size_t size = 0;
 
-    lseek(t->fd, nodepos, SEEK_SET);
+    if (lseek(t->fd, nodepos, SEEK_SET) == -1) {
+        int err = errno;
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+    }
     size += read(t->fd, &(n->count), sizeof(int));
     size += read(t->fd, &(n->level), sizeof(int));
 
@@ -192,7 +199,11 @@ size_t RTreeWriteNode(struct RTree_Node *n, struct RTree *t)
 /* rewrite updated node to file */
 size_t RTreeRewriteNode(struct RTree_Node *n, off_t nodepos, struct RTree *t)
 {
-    lseek(t->fd, nodepos, SEEK_SET);
+    if (lseek(t->fd, nodepos, SEEK_SET) == -1) {
+        int err = errno;
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+    }
 
     return RTreeWriteNode(n, t);
 }

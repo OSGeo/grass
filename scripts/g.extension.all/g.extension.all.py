@@ -42,7 +42,7 @@ import re
 import sys
 
 import xml.etree.ElementTree as ET
-
+from pathlib import Path
 from urllib import request as urlrequest
 from urllib.error import HTTPError, URLError
 
@@ -60,7 +60,7 @@ def get_extensions():
     if not addon_base:
         gs.fatal(_("%s not defined") % "GRASS_ADDON_BASE")
     fXML = os.path.join(addon_base, "modules.xml")
-    if not os.path.exists(fXML):
+    if not Path(fXML).exists():
         return []
 
     # read XML file
@@ -171,7 +171,7 @@ def find_addon_name(addons):
     if grass_version != "unknown":
         major, minor, patch = grass_version.split(".")
     else:
-        gs.fatal(_("Unable to get GRASS GIS version."))
+        gs.fatal(_("Unable to get GRASS version."))
     url = "https://grass.osgeo.org/addons/grass{major}/modules.xml".format(
         major=major,
     )

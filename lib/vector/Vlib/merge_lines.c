@@ -75,7 +75,6 @@ static int compare_cats(struct line_cats *ACats, struct line_cats *BCats)
 
    \return number of merged lines/boundaries
  */
-
 int Vect_merge_lines(struct Map_info *Map, int type, int *new_lines,
                      struct Map_info *Err)
 {

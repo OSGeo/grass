@@ -47,7 +47,7 @@ def main():
     frame = DataCatalogFrame(
         parent=None,
         giface=StandaloneGrassInterface(),
-        title=_("Data Catalog - GRASS GIS"),
+        title=_("Data Catalog - GRASS"),
     )
     frame.CentreOnScreen()
     frame.Show()

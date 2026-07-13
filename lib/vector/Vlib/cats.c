@@ -497,8 +497,10 @@ int Vect_cat_list_to_array(const struct cat_list *list, int **vals, int *nvals)
     cats = NULL;
     for (i = 0; i < list->n_ranges; i++) {
         n = list->max[i] - list->min[i] + 1;
-        if (n < 1)
+        if (n < 1) {
+            G_free(cats);
             return -1;
+        }
 
         /* realloc array */
         cats = (int *)G_realloc(cats, sizeof(int) * (n_cats + n));

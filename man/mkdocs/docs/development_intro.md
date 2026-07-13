@@ -20,10 +20,12 @@ title: Development Introduction
 ## Addons
 
 In addition to the core tools, GRASS also provides a number of addons that
-extend the functionality of GRASS. Addons are part of the [OSGeo/grass-addons](https://github.com/OSGeo/grass-addons)
-repository and are a great place to plubish and share custom tools, models, and reserach.
-The addons are maintained by the GRASS community and are a great way to extend the
-functionality of GRASS.
+extend the functionality of GRASS.
+Addons are part of the
+[OSGeo/grass-addons](https://github.com/OSGeo/grass-addons) repository
+and are a great place to publish and share custom tools, models, and research.
+The addons are maintained by the GRASS community
+and are a great way to extend the functionality of GRASS.
 
 - [Addons](https://grass.osgeo.org/grass-stable/manuals/addons/)
 

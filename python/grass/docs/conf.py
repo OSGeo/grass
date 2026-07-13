@@ -89,7 +89,7 @@ GRASS Development Team</a>, GRASS ${grass_version} Documentation</p>
 )
 
 grass_version = core.version()["version"]
-today = date.today()
+today = date.today().strftime("%B %d, %Y")
 
 copy("_templates/layout.html.template", "_templates/layout.html")
 
@@ -114,6 +114,28 @@ extensions = [
     "sphinx_sitemap",
 ]
 
+
+# Skip temporal lexer rule methods because their regex docstrings are not intended
+# for reStructuredText parsing and only serve PLY token definitions. The modules
+# are checked under both names because the sys.path entries above make them
+# importable both as grass.temporal.* and as temporal.*.
+def skip_member(app, what, name, obj, skip, options):
+    if name.startswith("t_"):
+        mod = getattr(obj, "__module__", None)
+        if mod in {
+            "grass.temporal.temporal_algebra",
+            "grass.temporal.temporal_operator",
+            "temporal.temporal_algebra",
+            "temporal.temporal_operator",
+        }:
+            return True
+    return None
+
+
+def setup(app):
+    app.connect("autodoc-skip-member", skip_member)
+
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 
@@ -128,7 +150,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "GRASS Python Library"
-copyright = "2025, GRASS Development Team"
+copyright = "2026, GRASS Development Team"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -155,7 +177,7 @@ exclude_patterns = ["_build"]
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
-# default_role = None
+default_role = "literal"
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
 # add_function_parentheses = True
@@ -192,7 +214,6 @@ html_theme_options = {
     "repo_url": "https://github.com/OSGeo/grass/",
     "repo_name": "GRASS",
     "repo_type": "github",
-    "logo": "grass_logo.svg",
     # Visible levels of the global TOC; -1 means unlimited
     "globaltoc_depth": 1,
     # If False, expand all TOC entries
@@ -205,6 +226,11 @@ html_theme_options = {
     "version_dropdown": False,
     "localtoc_label_text": "Table of contents",
     "nav_links": [
+        {
+            "href": "grass.tools",
+            "title": "Tools API",
+            "internal": True,
+        },
         {
             "href": "script_intro",
             "title": "Scripting API",
@@ -399,7 +425,7 @@ texinfo_documents = [
         project,
         "GRASS Development Team",
         "PythonLib",
-        "Documentation for Python API of GRASS GIS",
+        "Documentation for Python API of GRASS",
         "Miscellaneous",
     ),
 ]

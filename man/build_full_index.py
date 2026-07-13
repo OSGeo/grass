@@ -6,21 +6,20 @@
 #   Markus Neteler
 #   Glynn Clements
 
-import sys
 import os
-
+import sys
 from datetime import date
 from operator import itemgetter
 
 from build import (
+    check_for_desc_override,
     get_files,
-    write_footer,
-    write_header,
     grass_version,
     grass_version_major,
     grass_version_minor,
-    check_for_desc_override,
     replace_file,
+    write_footer,
+    write_header,
 )
 
 CORE_TEXT = """\
@@ -75,19 +74,19 @@ def build_full_index(ext, index_name, source_dir, year, text_type):
     """Generate index with all tools"""
     if ext == "html":
         from build_html import (
-            man_dir,
-            full_index_header,
             cmd2_tmpl,
             desc1_tmpl,
+            full_index_header,
             get_desc,
+            man_dir,
             toc,
         )
     else:
         from build_md import (
-            man_dir,
             cmd2_tmpl,
             desc1_tmpl,
             get_desc,
+            man_dir,
         )
 
     if source_dir is None:
@@ -175,7 +174,7 @@ def main():
     source_dir = None
     text_type = "core"
     if len(sys.argv) > 1:
-        if sys.argv[1] in ["html", "md"]:
+        if sys.argv[1] in {"html", "md"}:
             ext = sys.argv[1]
         else:
             year = sys.argv[1]
@@ -196,7 +195,7 @@ def main():
                 source_dir=source_dir,
                 text_type=text_type,
             )
-    elif ext in ["html", "md"]:
+    elif ext in {"html", "md"}:
         build_full_index(
             ext,
             index_name=index_name,

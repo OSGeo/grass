@@ -23,9 +23,7 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-#ifdef HAVE_OGR
 #include <ogr_api.h>
-#endif
 
 #include "local_proto.h"
 
@@ -66,32 +64,23 @@ int main(int argc, char *argv[])
     if (options.dsn->answer &&
         G_strncasecmp(options.dsn->answer, "PG:", 3) == 0) {
         /* -> PostgreSQL */
-#if defined HAVE_OGR && defined HAVE_POSTGRES
+#if defined(HAVE_POSTGRES)
         if (getenv("GRASS_VECTOR_OGR"))
-            use_ogr = TRUE;
+            G_warning(_("Environment variable GRASS_VECTOR_OGR is defined, "
+                        "using OGR-PostgreSQL driver instead of native "
+                        "GRASS-PostGIS data driver."));
         else
             use_ogr = FALSE;
-#else
-#ifdef HAVE_POSTGRES
-        if (getenv("GRASS_VECTOR_OGR"))
-            G_warning(_("Environment variable GRASS_VECTOR_OGR defined, "
-                        "but GRASS is compiled with OGR support. "
-                        "Using GRASS-PostGIS data driver instead."));
-        use_ogr = FALSE;
 #else  /* -> force using OGR */
         G_warning(_("GRASS is not compiled with PostgreSQL support. "
                     "Using OGR-PostgreSQL driver instead of native "
                     "GRASS-PostGIS data driver."));
-        use_ogr = TRUE;
 #endif /* HAVE_POSTRES */
-#endif /* HAVE_OGR && HAVE_POSTGRES */
     }
 
-#ifdef HAVE_OGR
     /* GDAL drivers must be registered since check_projection()
      * depends on it (even use_ogr is false)*/
     OGRRegisterAll();
-#endif
 
     if (flags.format->answer) {
         /* list formats */

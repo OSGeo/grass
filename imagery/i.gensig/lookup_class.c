@@ -18,7 +18,7 @@ int lookup_class(
     while (ncats-- > 0) {
         c = *cats++; /* extract the category */
         if (Rast_is_c_null_value(&c)) {
-            *class ++ = -1;
+            *class++ = -1;
             continue;
         }
         left = 0;
@@ -30,11 +30,11 @@ int lookup_class(
             else
                 left = cur + 1;
             if (c == list[cur]) {
-                *class ++ = cur;
+                *class++ = cur;
                 break;
             }
             else if (left > right) {
-                *class ++ = -1; /* this should never happen */
+                *class++ = -1; /* this should never happen */
                 break;
             }
         }

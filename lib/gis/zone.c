@@ -20,7 +20,6 @@
  *
  * \return int cartographic zone
  */
-
 int G_zone(void)
 {
     struct Cell_head window;

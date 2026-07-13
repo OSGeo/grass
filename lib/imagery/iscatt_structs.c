@@ -198,7 +198,7 @@ int I_sc_add_cat(struct scCats *cats)
    cats struct (SC_SCATT_DATA or SC_SCATT_CONDITIONS).
 
    \param cats pointer to scCats struct
-   \param scarr_data pointer to scdScattData struct
+   \param scatt_data pointer to scdScattData struct
    \param cat_id id number of category
    \param scatt_id id number of scatter plot
 

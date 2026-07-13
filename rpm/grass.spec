@@ -2,8 +2,8 @@
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:		grass
-Version:	8.4.0
-Release:	3%{?dist}
+Version:	8.4.2
+Release:	4%{?dist}
 Summary:	GRASS GIS - Geographic Resources Analysis Support System
 
 %if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
@@ -30,6 +30,9 @@ Source0:	https://grass.osgeo.org/%{name}%{shortver}/source/%{name}-%{version}.ta
 
 # fix pkgconfig file
 Patch 0:	grass-pkgconfig.patch
+
+# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+ExcludeArch: %{ix86}
 
 BuildRequires:	bison
 %if %{with flexiblas}
@@ -59,11 +62,7 @@ BuildRequires:	libtiff-devel
 BuildRequires:	libXmu-devel
 BuildRequires:	libzstd-devel
 BuildRequires:	make
-%if (0%{?rhel} > 7 || 0%{?fedora})
 BuildRequires:	mariadb-connector-c-devel openssl-devel
-%else
-BuildRequires:	mysql-devel
-%endif
 BuildRequires:	mesa-libGL-devel
 BuildRequires:	mesa-libGLU-devel
 BuildRequires:	netcdf-devel
@@ -97,11 +96,6 @@ Requires:	geos
 Requires:	libzstd
 Requires:	PDAL
 Requires:	PDAL-libs
-# fedora >= 34: Nothing
-%if (0%{?rhel} > 7 || 0%{?fedora} < 34)
-Requires:	proj-datumgrid
-Requires:	proj-datumgrid-world
-%endif
 Requires:	python3
 %if 0%{?rhel} == 7
 # EPEL7
@@ -340,6 +334,54 @@ fi
 %{_libdir}/%{name}%{shortver}/include
 
 %changelog
+* Fri Jan 16 2026 Fedora Release Engineering <releng@fedoraproject.org> - 8.4.2-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
+
+* Wed Jan 14 2026 Elliott Sales de Andrade <quantum.analyst@gmail.com> - 8.4.2-3
+- Drop support for i686
+
+* Sun Nov 23 2025 Sandro Mani <manisandro@gmail.com> - 8.4.2-2
+- Rebuild (gdal)
+
+* Sun Nov 23 2025 Markus Neteler <neteler@mundialis.de> - 8.4.2-1
+- Update to GRASS 8.4.2 (#2416357)
+
+* Sat Sep 27 2025 Markus Neteler <neteler@mundialis.de> - 8.4.1-8
+- Rebuilt for F43
+
+* Fri Sep 19 2025 Python Maint <python-maint@redhat.com> - 8.4.1-7
+- Rebuilt for Python 3.14.0rc3 bytecode
+
+* Fri Aug 22 2025 Orion Poplawski <orion@nwra.com> - 8.4.1-6
+- Rebuild for netcdf 4.9.3 soname bump
+
+* Fri Aug 15 2025 Python Maint <python-maint@redhat.com> - 8.4.1-5
+- Rebuilt for Python 3.14.0rc2 bytecode
+
+* Sun Aug 03 2025 Sandro Mani <manisandro@gmail.com> - 8.4.1-4
+- Rebuild (PDAL)
+
+* Wed Jul 30 2025 Sandro Mani <manisandro@gmail.com> - 8.4.1-3
+- Rebuild (gdal)
+
+* Thu Jul 24 2025 Fedora Release Engineering <releng@fedoraproject.org> - 8.4.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_43_Mass_Rebuild
+
+* Mon Feb 24 2025 Fedora Release Monitoring <release-monitoring@fedoraproject.org> - 8.4.1-1
+- Update to 8.4.1 (#2347356)
+
+* Sat Feb 22 2025 Markus Neteler <neteler@mundialis.de> - 8.4.0-7
+- drop outdated proj-datumgrid condition
+
+* Mon Feb 10 2025 Markus Neteler <neteler@mundialis.de> - 8.4.0-6
+- EPEL10: fix proj-datumgrid condition
+
+* Fri Jan 17 2025 Fedora Release Engineering <releng@fedoraproject.org> - 8.4.0-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
+
+* Sat Nov 09 2024 Sandro Mani <manisandro@gmail.com> - 8.4.0-4
+- Rebuild (gdal)
+
 * Sat Oct 26 2024 Markus Neteler <neteler@mundialis.de> - 8.4.0-3
 - Sort requirements and flags (https://github.com/OSGeo/grass/pull/4563/ by Edouard Choinière)
 

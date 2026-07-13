@@ -1,4 +1,4 @@
-FROM alpine:3.22@sha256:4bcff63911fcb4448bd4fdacec207030997caf25e9bea4045fa6c8c44de311d1 as common
+FROM alpine:3.24@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b AS common
 
 # Based on:
 # https://github.com/mundialis/docker-grass-gis/blob/master/Dockerfile
@@ -56,7 +56,7 @@ ENV GRASS_RUN_PACKAGES="\
       openjpeg \
       pdal \
       pdal-dev \
-      postgresql15-client \
+      postgresql18-client \
       proj-util \
       py3-numpy \
       py3-pillow \
@@ -108,7 +108,7 @@ ENV GRASS_CONFIG="\
       --without-opengl \
       "
 
-# Set environmental variables for GRASS GIS compilation, without debug symbols
+# Set environmental variables for GRASS compilation, without debug symbols
 ENV MYCFLAGS="-O2 -std=gnu99 -m64" \
     MYLDFLAGS="-s -Wl,--no-undefined -lblas" \
     # CXX stuff:
@@ -118,7 +118,7 @@ ENV MYCFLAGS="-O2 -std=gnu99 -m64" \
     CXXFLAGS="$MYCXXFLAGS" \
     NUMTHREADS=2
 
-# These packages are required to compile GRASS GIS.
+# These packages are required to compile GRASS.
 ENV GRASS_BUILD_PACKAGES="\
       build-base \
       bzip2-dev \
@@ -156,11 +156,11 @@ RUN echo "Install main packages";\
     apk add --no-cache --virtual .build-deps $GRASS_BUILD_PACKAGES
     # echo LANG="en_US.UTF-8" > /etc/default/locale;
 
-# Copy and install GRASS GIS
+# Copy and install GRASS
 COPY . /src/grass_build/
 WORKDIR /src/grass_build/
 
-# Configure compile and install GRASS GIS
+# Configure compile and install GRASS
 RUN echo "  => Configure and compile grass" && \
     /src/grass_build/configure $GRASS_CONFIG && \
     make -j $NUMTHREADS && \
@@ -169,7 +169,7 @@ RUN echo "  => Configure and compile grass" && \
 
 # Build the GDAL-GRASS plugin
 # renovate: datasource=github-tags depName=OSGeo/gdal-grass
-ARG GDAL_GRASS_VERSION=1.0.4
+ARG GDAL_GRASS_VERSION=2.0.0
 RUN git clone --branch $GDAL_GRASS_VERSION --depth 1 https://github.com/OSGeo/gdal-grass.git /src/gdal-grass
 WORKDIR /src/gdal-grass
 RUN cmake -B build -DAUTOLOAD_DIR=/usr/lib/gdalplugins -DBUILD_TESTING=OFF && \
@@ -177,7 +177,7 @@ RUN cmake -B build -DAUTOLOAD_DIR=/usr/lib/gdalplugins -DBUILD_TESTING=OFF && \
     cmake --install build
 
 # Get rid of version number here, restore in next stage via symbolic link
-RUN mv /usr/local/grass85 /usr/local/grass
+RUN mv /usr/local/grass86 /usr/local/grass
 
 # Reduce the image size - Remove unnecessary grass files
 RUN cp /usr/local/grass/gui/wxpython/xml/module_items.xml module_items.xml; \
@@ -191,7 +191,7 @@ RUN cp /usr/local/grass/gui/wxpython/xml/module_items.xml module_items.xml; \
 
 FROM common AS grass
 
-# GRASS GIS specific
+# GRASS specific
 # allow work with MAPSETs that are not owned by current user
 ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     SHELL="/bin/bash" \
@@ -200,7 +200,7 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
     LC_ALL="en_US.UTF-8" \
     PYTHONPATH="/usr/local/grass/etc/python:$PYTHONPATH"
 
-# Copy GRASS GIS and GDAL GRASS driver from build image
+# Copy GRASS and GDAL GRASS driver from build image
 COPY --from=build /usr/local/bin/grass /usr/local/bin/grass
 COPY --from=build /usr/local/grass* /usr/local/grass/
 COPY --from=build /usr/lib/gdalplugins/*_GRASS.so /usr/lib/gdalplugins/
@@ -210,16 +210,16 @@ ENV GRASS_GISBASE=/usr/local/grass
 
 # run simple LAZ test
 COPY docker/testdata/simple.laz /tmp/
-COPY docker/testdata/test_grass_python.py docker/testdata/test_grass_session.py docker/alpine/grass_tests.sh /scripts/
+COPY docker/testdata/test_grass_session.py docker/alpine/grass_tests.sh /scripts/
 
-# run GRASS GIS python session and scan the test LAZ file; some cleanup
+# run GRASS python session and scan the test LAZ file; some cleanup
 # also show installed version
-RUN ln -sf /usr/local/grass /usr/local/grass85; \
+RUN ln -sf /usr/local/grass /usr/local/grass86; \
     rm -rf /tmp/grasstest_epsg_25832; \
     $SHELL /scripts/grass_tests.sh; \
     python /scripts/test_grass_session.py && rm -rf /tmp/grasstest_epsg_25832; \
     grass --tmp-project EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g \
-    && rm -f /scripts/grass_tests.sh /tmp/simple.laz /scripts/test_grass_python.py; \
+    && rm -f /scripts/grass_tests.sh /tmp/simple.laz; \
     apk del --no-cache gettext pdal-dev; \
     grass --tmp-project XY --exec g.version -rge \
     && pdal --version \

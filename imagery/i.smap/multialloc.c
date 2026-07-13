@@ -11,7 +11,6 @@
  * dimensions are stored in a list starting at d1. Each array element is
  * of size s.
  */
-
 char *multialloc(size_t s, /* individual array element size */
                  int d,    /* number of dimensions */
                  ...)

@@ -965,18 +965,9 @@ int main(int argc, char *argv[])
                 char *gdalsrid = NULL, *gdalwkt = NULL;
                 OGRSpatialReferenceH hSRS = NULL;
 
-                /* GDAL >= 3 */
-#if GDAL_VERSION_MAJOR >= 3
                 hSRS = GDALGetGCPSpatialRef(hDS);
                 char **papszOptions = NULL;
-#else
-                gdalwkt = G_store(GDALGetGCPProjection(hDS));
-                hSRS = OSRNewSpatialReference(NULL);
-                if (OSRImportFromWkt(hSRS, &gdalwkt) != OGRERR_NONE) {
-                    OSRDestroySpatialReference(hSRS);
-                    hSRS = NULL;
-                }
-#endif
+
                 /* create target location */
                 if (!hSRS || GPJ_osr_to_grass(&gcpcellhd, &proj_info,
                                               &proj_units, hSRS, 0) == 1) {
@@ -1022,7 +1013,6 @@ int main(int argc, char *argv[])
                     }
 
                     /* get WKT of spatial reference */
-#if GDAL_VERSION_MAJOR >= 3
                     papszOptions = G_calloc(3, sizeof(char *));
                     papszOptions[0] = G_store("MULTILINE=YES");
                     papszOptions[1] = G_store("FORMAT=WKT2");
@@ -1031,7 +1021,6 @@ int main(int argc, char *argv[])
                     G_free(papszOptions[0]);
                     G_free(papszOptions[1]);
                     G_free(papszOptions);
-#endif
                     G_create_alt_env();
                     if (0 != G_make_location_crs(
                                  parm.target->answer, &gcpcellhd, proj_info,

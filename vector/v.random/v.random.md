@@ -232,7 +232,7 @@ random sampling)*
 [v.sample](v.sample.md), [v.univar](v.univar.md),
 [v.what.rast](v.what.rast.md), [v.what.vect](v.what.vect.md)*
 
-[SQL support in GRASS GIS](sql.md)
+[SQL support in GRASS](sql.md)
 
 ## AUTHOR
 

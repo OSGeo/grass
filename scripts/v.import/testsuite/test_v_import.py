@@ -82,10 +82,10 @@ class TestVImport(TestCase):
             vector=self.imported,
             # Values rounded to one decimal point.
             reference={
-                "north": 227744.8,
-                "south": 215259.6,
-                "east": 644450.6,
-                "west": 631257.4,
+                "north": 227744.0,
+                "south": 215258.8,
+                "east": 644450.8,
+                "west": 631257.7,
                 "top": 0,
                 "bottom": 0,
             },

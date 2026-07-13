@@ -29,9 +29,9 @@ the flow direction cannot otherwise be resolved.
 
 The **format** parameter is the type of format at which the user wishes
 to create the flow **direction** map. The flow direction map can be
-encoded in GRASS GIS aspect format, ANSWERS (Beasley et.al, 1982), or
+encoded in GRASS aspect format, ANSWERS (Beasley et.al, 1982), or
 AGNPS (Young et.al, 1985) format, so that it can be readily used as
-input to other GRASS GIS modules or the aforementioned hydrological
+input to other GRASS modules or the aforementioned hydrological
 models. The *grass* format gives the same category values as
 *[r.slope.aspect](r.slope.aspect.md)* gives for aspect, i.e. angles in
 degrees counter-clockwise from east in 45 degree increments. The *agnps*
@@ -61,7 +61,7 @@ The resulting depressionless elevation raster map can further be
 processed to derive slopes and other attributes required by other
 hydrological models.
 
-As any GRASS GIS module, *r.fill.dir* respects the computational region
+As any GRASS module, *r.fill.dir* respects the computational region
 settings. Thus, the module can be used to generate a flow direction map
 for any sub-area within the full raster map layer. Also, *r.fill.dir*
 will take into account an active raster mask.

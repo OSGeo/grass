@@ -23,10 +23,8 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-#ifdef HAVE_OGR
 #include <ogr_api.h>
 #include <cpl_error.h>
-#endif
 
 #include "local_proto.h"
 
@@ -48,7 +46,6 @@
  */
 int Vect_build_ogr(struct Map_info *Map, int build)
 {
-#ifdef HAVE_OGR
     struct Plus_head *plus;
     struct Format_info_ogr *ogr_info;
 
@@ -97,10 +94,6 @@ int Vect_build_ogr(struct Map_info *Map, int build)
                   Vect_get_finfo_geometry_type(Map));
 
     return Vect__build_sfa(Map, build);
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-    return 0;
-#endif
 }
 
 /*!
@@ -115,7 +108,6 @@ int Vect_build_ogr(struct Map_info *Map, int build)
  */
 int Vect_save_fidx(struct Map_info *Map, struct Format_info_offset *offset)
 {
-#ifdef HAVE_OGR
     char fname[GPATH_MAX], elem[GPATH_MAX];
     char buf[5];
     long length;
@@ -169,8 +161,4 @@ int Vect_save_fidx(struct Map_info *Map, struct Format_info_offset *offset)
     fclose(fp.file);
 
     return 1;
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-    return 0;
-#endif
 }

@@ -2,7 +2,7 @@
 
 *r.pack* collects raster map elements and support files and compressed
 them using *gzip* algorithm for copying. The resulting packed file can
-be afterwards unpacked within a GRASS GIS session by
+be afterwards unpacked within a GRASS session by
 *[r.unpack](r.unpack.md)*. Since the selected raster map is not exported
 but natively stored, the current region is not respected. Hence *r.pack*
 stores the entire raster map.

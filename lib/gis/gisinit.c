@@ -8,7 +8,7 @@
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
-   \author GRASS GIS Development Team
+   \author GRASS Development Team
  */
 
 #include <stdio.h>
@@ -78,16 +78,15 @@ void G__gisinit(const char *version, const char *pgm)
             G_warning(_("Module built against version %s but "
                         "trying to use version %s. "
                         "In case of errors you need to rebuild the module "
-                        "against GRASS GIS version %s."),
+                        "against GRASS version %s."),
                       version, GIS_H_VERSION, GRASS_VERSION_STRING);
         }
         else {
-            G_fatal_error(
-                _("Module built against version %s but "
-                  "trying to use version %s. "
-                  "You need to rebuild GRASS GIS or untangle multiple "
-                  "installations."),
-                version, GIS_H_VERSION);
+            G_fatal_error(_("Module built against version %s but "
+                            "trying to use version %s. "
+                            "You need to rebuild GRASS or untangle multiple "
+                            "installations."),
+                          version, GIS_H_VERSION);
         }
     }
 
@@ -129,16 +128,15 @@ void G__no_gisinit(const char *version)
             G_warning(_("Module built against version %s but "
                         "trying to use version %s. "
                         "In case of errors you need to rebuild the module "
-                        "against GRASS GIS version %s."),
+                        "against GRASS version %s."),
                       version, GIS_H_VERSION, GRASS_VERSION_STRING);
         }
         else {
-            G_fatal_error(
-                _("Module built against version %s but "
-                  "trying to use version %s. "
-                  "You need to rebuild GRASS GIS or untangle multiple "
-                  "installations."),
-                version, GIS_H_VERSION);
+            G_fatal_error(_("Module built against version %s but "
+                            "trying to use version %s. "
+                            "You need to rebuild GRASS or untangle multiple "
+                            "installations."),
+                          version, GIS_H_VERSION);
         }
     }
     gisinit();

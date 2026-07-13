@@ -33,12 +33,10 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
+#include <ogr_api.h>
+
 #ifdef HAVE_POSTGRES
 #include "pg_local_proto.h"
-#endif
-
-#ifdef HAVE_OGR
-#include <ogr_api.h>
 #endif
 
 static int check_sftype(const struct line_pnts *, int, SF_FeatureType, int);
@@ -70,8 +68,7 @@ SF_FeatureType Vect_sfa_get_line_type(const struct line_pnts *Points, int type,
 /*!
    \brief Get relevant GV type
 
-   \param Map pointer to Map_info structure
-   \param type SF geometry type (SF_POINT, SF_LINESTRING, ...)
+   \param sftype SF geometry type (SF_POINT, SF_LINESTRING, ...)
 
    \return GV type
    \return -1 on error
@@ -120,7 +117,6 @@ int Vect_sfa_check_line_type(const struct line_pnts *Points, int type,
 /*!
    \brief Get geometry dimension
 
-   \param Points pointer to line_pnts structure
    \param type   feature type (GV_POINT, GV_LINE, ...)
 
    \return 0 for GV_POINT
@@ -237,16 +233,17 @@ int Vect_sfa_line_astext(const struct line_pnts *Points, int type, int with_z,
 /*!
    \brief Check if feature is simple
 
-   \param Points pointer to line_pnts structure
-   \param type   feature type (GV_POINT, GV_LINE, ...)
+   \param Points pointer to line_pnts structure (unused)
+   \param type   feature type (GV_POINT, GV_LINE, ...) (unused)
+   \param with_z (unused)
 
    \return 1  feature simple
    \return 0  feature not simple
    \return -1 feature type not supported (GV_POINT, GV_CENTROID, ...)
    \note Implementation is pending, now always returns 0
  */
-int Vect_sfa_is_line_simple(const struct line_pnts *Points UNUSED,
-                            int type UNUSED, int with_z UNUSED)
+int Vect_sfa_is_line_simple(const struct line_pnts *Points G_UNUSED,
+                            int type G_UNUSED, int with_z G_UNUSED)
 {
     /* TODO:
        SF_FeatureType sftype;
@@ -305,7 +302,6 @@ int Vect_sfa_get_num_features(struct Map_info *Map)
     nfeat = 0;
     if (Map->format == GV_FORMAT_OGR || Map->format == GV_FORMAT_OGR_DIRECT) {
         /* OGR */
-#ifdef HAVE_OGR
         const struct Format_info_ogr *ogr_info;
 
         ogr_info = &(Map->fInfo.ogr);
@@ -314,10 +310,6 @@ int Vect_sfa_get_num_features(struct Map_info *Map)
             return -1;
 
         return OGR_L_GetFeatureCount(ogr_info->layer, TRUE);
-#else
-        G_fatal_error(_("GRASS is not compiled with OGR support"));
-        return -1;
-#endif
     }
     else if (Map->format == GV_FORMAT_POSTGIS &&
              !Map->fInfo.pg.toposchema_name) {

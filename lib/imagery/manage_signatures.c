@@ -166,8 +166,8 @@ int I_signatures_copy(I_SIGFILE_TYPE type, const char *old_name,
  * It is safe to pass fully qualified names.
  *
  * \param type I_SIGFILE_TYPE signature type
- * \param name of old signature
- * \param name of new signature
+ * \param old_name name of old signature
+ * \param new_name name of new signature
  * \return 0 on success
  * \return 1 on failure
  */
@@ -233,7 +233,8 @@ int I_signatures_rename(I_SIGFILE_TYPE type, const char *old_name,
  *
  * \param type I_SIGFILE_TYPE signature type
  * \param mapset optional mapset to search in or NULL
- * \param pointer to array of found signature strings or NULL if none found
+ * \param out_list pointer to array of found signature strings or NULL if none
+ *                 found
  * \return count of signature strings in the array
  */
 int I_signatures_list_by_type(I_SIGFILE_TYPE type, const char *mapset,

@@ -429,13 +429,21 @@ class VirtualAttributeList(
         if keyId > -1:  # load cats only when LoadData() is called first time
             self.itemCatsMap[i] = cat
 
+    def GetMapCatKeyColumn(self):
+        """Get map cat key column name and index
+
+        :return dict: e.g. {"name": "cat", "index": 0}
+        """
+        cols = self.mapDBInfo.GetColumns(self.mapDBInfo.layers[self.layer]["table"])
+        catColName = self.mapDBInfo.layers[self.layer]["key"]
+        return {"name": catColName, "index": cols.index(catColName)}
+
     def OnItemSelected(self, event):
         """Item selected. Add item to selected cats..."""
         #         cat = int(self.GetItemText(event.m_itemIndex))
         #         if cat not in self.selectedCats:
         #             self.selectedCats.append(cat)
         #             self.selectedCats.sort()
-
         event.Skip()
 
     def OnItemDeselected(self, event):
@@ -444,15 +452,15 @@ class VirtualAttributeList(
         #         if cat in self.selectedCats:
         #             self.selectedCats.remove(cat)
         #             self.selectedCats.sort()
-
         event.Skip()
 
     def GetSelectedItems(self):
         """Return list of selected items (category numbers)"""
         cats = []
         item = self.GetFirstSelected()
+        catColIdx = self.GetMapCatKeyColumn()["index"]
         while item != -1:
-            cats.append(self.GetItemText(item))
+            cats.append(self.GetItemText(item=item, col=catColIdx))
             item = self.GetNextSelected(item)
 
         return cats
@@ -460,8 +468,9 @@ class VirtualAttributeList(
     def GetItems(self):
         """Return list of items (category numbers)"""
         cats = []
+        catColIdx = self.GetMapCatKeyColumn()["index"]
         for item in range(self.GetItemCount()):
-            cats.append(self.GetItemText(item))
+            cats.append(self.GetItemText(item=item, col=catColIdx))
 
         return cats
 
@@ -3925,7 +3934,9 @@ class FieldStatistics(wx.Frame):
 
         self.SetTitle(_("Field statistics"))
         self.SetIcon(
-            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
+            wx.Icon(
+                os.path.join(globalvar.ICONDIR, "grass_sql.ico"), wx.BITMAP_TYPE_ICO
+            )
         )
 
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
@@ -4009,18 +4020,67 @@ class FieldStatistics(wx.Frame):
             self.Close()
             return
 
+        # Get cat key col name
+        catColName = self.parent.GetMapCatKeyColumn()["name"]
+
+        eol = "\n"
+        sqlWhereClause = ""
+        baseSql = "select {fn}({column}) from {table} {where};{eol}"
+
+        # Interactively selected rows
+        interactivelySelectedCats = self.parent.GetSelectedItems()
+        # SQL filtered rows
+        sqlFilteredCats = []
+
+        if self.parent.sqlFilter:
+            sqlFilteredCats = self.parent.GetItems()
+
+        cats = None
+        if len(interactivelySelectedCats) > 0 and len(sqlFilteredCats) == 0:
+            cats = ", ".join(interactivelySelectedCats)
+        elif len(interactivelySelectedCats) > 0 and len(sqlFilteredCats) > 0:
+            cats = ", ".join(set(interactivelySelectedCats) & set(sqlFilteredCats))
+        elif len(interactivelySelectedCats) == 0 and len(sqlFilteredCats) > 0:
+            cats = ", ".join(sqlFilteredCats)
+
+        if cats:
+            sqlWhereClause = f" where {catColName} in ({cats})"
+
         fd, sqlFilePath = tempfile.mkstemp(text=True)
         stats = ["count", "min", "max", "avg", "sum", "null"]
         with open(sqlFilePath, "w") as sqlFile:
             for fn in stats:
                 if fn == "null":
-                    sqlFile.write(
-                        "select count(*) from %s where %s is null;%s"
-                        % (table, column, "\n")
-                    )
+                    sql = "select count(*) from {table} where {column} is null {andOperatorCondition};{eol}"
+                    # Appending SQL AND operator condition
+                    if sqlWhereClause:
+                        sqlFile.write(
+                            sql.format(
+                                table=table,
+                                column=column,
+                                andOperatorCondition=f" and {catColName} in ({cats})",
+                                eol=eol,
+                            )
+                        )
+                    else:
+                        sqlFile.write(
+                            sql.format(
+                                table=table,
+                                column=column,
+                                andOperatorCondition="",
+                                eol=eol,
+                            )
+                        )
                 else:
+                    # Appending SQL WHERE clause with IN operator
                     sqlFile.write(
-                        "select %s(%s) from %s;%s" % (fn, column, table, "\n")
+                        baseSql.format(
+                            fn=fn,
+                            column=column,
+                            table=table,
+                            where=sqlWhereClause,
+                            eol=eol,
+                        )
                     )
 
         dataStr = RunCommand(

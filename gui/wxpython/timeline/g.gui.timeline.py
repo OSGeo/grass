@@ -61,7 +61,7 @@ def main():
     app = wx.App()
     frame = TimelineFrame(
         parent=None,
-        title=_("Timeline Tool - GRASS GIS"),
+        title=_("Timeline Tool - GRASS"),
     )
     frame.SetDatasets(datasets)
     frame.Show3D(view3d)

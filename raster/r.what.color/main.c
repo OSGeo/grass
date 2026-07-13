@@ -23,7 +23,7 @@
 #include <string.h>
 #include <grass/colors.h>
 #include <grass/gis.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
@@ -33,25 +33,25 @@ static const char *fmt;
 
 static int do_value(const char *buf, RASTER_MAP_TYPE type,
                     struct Colors *colors, enum OutputFormat outputFormat,
-                    ColorFormat colorFormat, JSON_Array *root_array,
-                    JSON_Value *root_value)
+                    ColorFormat colorFormat, G_JSON_Array *root_array,
+                    G_JSON_Value *root_value)
 {
     CELL ival;
     DCELL fval;
     int red, grn, blu;
     char color_str[COLOR_STRING_LENGTH];
 
-    JSON_Object *color_object = NULL;
-    JSON_Value *color_value = NULL;
+    G_JSON_Object *color_object = NULL;
+    G_JSON_Value *color_value = NULL;
 
     if (outputFormat == JSON) {
-        color_value = json_value_init_object();
+        color_value = G_json_value_init_object();
         if (color_value == NULL) {
-            json_value_free(root_value);
+            G_json_value_free(root_value);
             G_fatal_error(
                 _("Failed to initialize JSON object. Out of memory?"));
         }
-        color_object = json_object(color_value);
+        color_object = G_json_object(color_value);
     }
 
     switch (type) {
@@ -63,9 +63,9 @@ static int do_value(const char *buf, RASTER_MAP_TYPE type,
                 break;
 
             case JSON:
-                json_object_set_null(color_object, "value");
-                json_object_set_null(color_object, "color");
-                json_array_append_value(root_array, color_value);
+                G_json_object_set_null(color_object, "value");
+                G_json_object_set_null(color_object, "color");
+                G_json_array_append_value(root_array, color_value);
                 break;
             }
             return 0;
@@ -77,9 +77,9 @@ static int do_value(const char *buf, RASTER_MAP_TYPE type,
                 break;
 
             case JSON:
-                json_object_set_number(color_object, "value", ival);
-                json_object_set_null(color_object, "color");
-                json_array_append_value(root_array, color_value);
+                G_json_object_set_number(color_object, "value", ival);
+                G_json_object_set_null(color_object, "color");
+                G_json_array_append_value(root_array, color_value);
                 break;
             }
             return 0;
@@ -98,10 +98,10 @@ static int do_value(const char *buf, RASTER_MAP_TYPE type,
             break;
 
         case JSON:
-            json_object_set_number(color_object, "value", ival);
+            G_json_object_set_number(color_object, "value", ival);
             G_color_to_str(red, grn, blu, colorFormat, color_str);
-            json_object_set_string(color_object, "color", color_str);
-            json_array_append_value(root_array, color_value);
+            G_json_object_set_string(color_object, "color", color_str);
+            G_json_array_append_value(root_array, color_value);
             break;
         }
         return 1;
@@ -115,9 +115,9 @@ static int do_value(const char *buf, RASTER_MAP_TYPE type,
                 break;
 
             case JSON:
-                json_object_set_null(color_object, "value");
-                json_object_set_null(color_object, "color");
-                json_array_append_value(root_array, color_value);
+                G_json_object_set_null(color_object, "value");
+                G_json_object_set_null(color_object, "color");
+                G_json_array_append_value(root_array, color_value);
                 break;
             }
             return 0;
@@ -129,9 +129,9 @@ static int do_value(const char *buf, RASTER_MAP_TYPE type,
                 break;
 
             case JSON:
-                json_object_set_number(color_object, "value", fval);
-                json_object_set_null(color_object, "color");
-                json_array_append_value(root_array, color_value);
+                G_json_object_set_number(color_object, "value", fval);
+                G_json_object_set_null(color_object, "color");
+                G_json_array_append_value(root_array, color_value);
                 break;
             }
             return 0;
@@ -150,16 +150,16 @@ static int do_value(const char *buf, RASTER_MAP_TYPE type,
             break;
 
         case JSON:
-            json_object_set_number(color_object, "value", fval);
+            G_json_object_set_number(color_object, "value", fval);
             G_color_to_str(red, grn, blu, colorFormat, color_str);
-            json_object_set_string(color_object, "color", color_str);
-            json_array_append_value(root_array, color_value);
+            G_json_object_set_string(color_object, "color", color_str);
+            G_json_array_append_value(root_array, color_value);
             break;
         }
         return 1;
     default:
         if (outputFormat == JSON)
-            json_value_free(root_value);
+            G_json_value_free(root_value);
         G_fatal_error("Invalid map type %d", type);
         return 0;
     }
@@ -181,8 +181,8 @@ int main(int argc, char **argv)
     enum OutputFormat outputFormat;
     ColorFormat colorFormat;
 
-    JSON_Array *root_array = NULL;
-    JSON_Value *root_value = NULL;
+    G_JSON_Array *root_array = NULL;
+    G_JSON_Value *root_value = NULL;
 
     G_gisinit(argv[0]);
 
@@ -241,11 +241,11 @@ int main(int argc, char **argv)
     if (strcmp(fmt, "json") == 0) {
         outputFormat = JSON;
 
-        root_value = json_value_init_array();
+        root_value = G_json_value_init_array();
         if (root_value == NULL) {
             G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
         }
-        root_array = json_array(root_value);
+        root_array = G_json_array(root_value);
     }
     else {
         outputFormat = PLAIN;
@@ -284,14 +284,14 @@ int main(int argc, char **argv)
 
     if (outputFormat == JSON) {
         char *serialized_string = NULL;
-        serialized_string = json_serialize_to_string_pretty(root_value);
+        serialized_string = G_json_serialize_to_string_pretty(root_value);
         if (serialized_string == NULL) {
-            json_value_free(root_value);
+            G_json_value_free(root_value);
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         }
         puts(serialized_string);
-        json_free_serialized_string(serialized_string);
-        json_value_free(root_value);
+        G_json_free_serialized_string(serialized_string);
+        G_json_value_free(root_value);
     }
 
     return EXIT_SUCCESS;

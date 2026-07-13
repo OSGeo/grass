@@ -30,7 +30,6 @@ static int nalloc;
  *  \param suggested_color_index
  *  \return int
  */
-
 static int translate_or_add_color(const char *str)
 {
     int num_names = G_num_standard_color_names();
@@ -101,7 +100,6 @@ static int translate_or_add_color(const char *str)
  *  \param none_acceptable
  *  \return int Returns a color number usable by D_use_color.
  */
-
 int D_parse_color(const char *str, int none_acceptable)
 {
     int color;
@@ -125,7 +123,6 @@ int D_parse_color(const char *str, int none_acceptable)
  *  \param str Color name as an ASCII string
  *  \return int
  */
-
 int D_translate_color(const char *str)
 {
     return D_parse_color(str, 0);
@@ -141,7 +138,6 @@ int D_translate_color(const char *str)
  *  \param color
  *  \return int
  */
-
 int D_use_color(int color)
 {
     if (color <= 0)

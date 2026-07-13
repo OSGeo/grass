@@ -5,7 +5,7 @@ from grass.gunittest.main import test
 
 
 class TestIZC(TestCase):
-    """Regression tests for the i.zc GRASS GIS module."""
+    """Regression tests for the i.zc GRASS module."""
 
     input_raster = "input_raster"
     output_raster = "output_raster"

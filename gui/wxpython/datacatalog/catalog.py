@@ -28,6 +28,7 @@ from datacatalog.infomanager import DataCatalogInfoManager
 from gui_core.wrap import Menu
 from gui_core.forms import GUI
 from core.settings import UserSettings
+from core.gcmd import GError
 
 from grass.pydispatch.signal import Signal
 from grass.script.utils import clock
@@ -38,6 +39,8 @@ from grass.grassdb.checks import (
     get_reason_id_mapset_not_usable,
     is_fallback_session,
     is_first_time_user,
+    is_location_valid,
+    get_location_invalid_reason,
 )
 
 
@@ -198,34 +201,6 @@ class DataCatalog(wx.Panel):
         """Reload current mapset tree only"""
         self.tree.ReloadCurrentMapset()
 
-    def OnAddGrassDB(self, event):
-        """Add grass database"""
-        dlg = wx.DirDialog(
-            self,
-            _("Choose GRASS data directory:"),
-            str(Path.cwd()),
-            wx.DD_DEFAULT_STYLE,
-        )
-        if dlg.ShowModal() == wx.ID_OK:
-            grassdatabase = dlg.GetPath()
-            grassdb_node = self.tree.InsertGrassDb(name=grassdatabase)
-
-            # Offer to create a new location
-            if grassdb_node and not any(Path(grassdatabase).iterdir()):
-                message = _(
-                    "Do you want to create a new project (also known as location)?"
-                )
-                dlg2 = wx.MessageDialog(
-                    self,
-                    message=message,
-                    caption=_("Create project?"),
-                    style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
-                )
-                if dlg2.ShowModal() == wx.ID_YES:
-                    self.tree.CreateLocation(grassdb_node)
-                dlg2.Destroy()
-        dlg.Destroy()
-
     def OnCreateMapset(self, event):
         """Create new mapset in current location"""
         db_node, loc_node, mapset_node = self.tree.GetCurrentDbLocationMapsetNode()
@@ -235,6 +210,31 @@ class DataCatalog(wx.Panel):
         """Create new location"""
         db_node, loc_node, mapset_node = self.tree.GetCurrentDbLocationMapsetNode()
         self.tree.CreateLocation(db_node)
+
+    def OnAddProject(self, event):
+        dlg = wx.DirDialog(
+            self,
+            _("Choose GRASS project:"),
+            str(Path.cwd()),
+            wx.DD_DEFAULT_STYLE,
+        )
+        if dlg.ShowModal() == wx.ID_OK:
+            project = Path(dlg.GetPath())
+            grassdatabase = None
+            if is_location_valid(project):
+                grassdatabase = project.parent
+            elif is_location_valid(project.parent):
+                grassdatabase = project.parent.parent
+            else:
+                for child in project.iterdir():
+                    if is_location_valid(child):
+                        grassdatabase = project
+                        break
+            if grassdatabase:
+                self.tree.InsertGrassDb(name=str(grassdatabase))
+            else:
+                error = get_location_invalid_reason(project.parent, project.name)
+                GError(parent=self.parent, message=error)
 
     def OnDownloadLocation(self, event):
         """Download location to current grass database"""
@@ -301,10 +301,6 @@ class DataCatalog(wx.Panel):
 
     def OnMoreOptions(self, event):
         self.giface.Help(entry="topic_import")
-
-    def SetRestriction(self, restrict):
-        """Allow editing other mapsets or restrict editing to current mapset"""
-        self.tree.SetRestriction(restrict)
 
     def Filter(self, text, element=None):
         self.tree.Filter(text=text, element=element)

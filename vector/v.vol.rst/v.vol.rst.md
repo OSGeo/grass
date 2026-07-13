@@ -204,7 +204,7 @@ paraview --data=elevrand_3d.vtk
 # interpolate volume to "soilrange" voxel map
 v.vol.rst input=elevrand_3d wcol=soilrange elevation=soilrange zscale=100
 
-# visualize I: in GRASS GIS wxGUI
+# visualize I: in GRASS wxGUI
 g.gui
 # load: 2D raster map: elevation.10m
 #       3D raster map: soilrange

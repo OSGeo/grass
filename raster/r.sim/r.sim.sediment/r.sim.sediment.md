@@ -11,7 +11,7 @@ method, to provide robustness necessary for spatially variable
 conditions and high resolutions (Mitas and Mitasova 1998). Key inputs of
 the model include the following raster maps: elevation (*elevation*
 \[m\]), flow gradient given by the first-order partial derivatives of
-elevation field ( *dx* and *dy*), overland flow water depth
+elevation field (*dx* and *dy* raster maps are optional), overland flow water depth
 (*water_depth* \[m\]), detachment capacity coefficient
 (*detachment_coeff* \[s/m\]), transport capacity coefficient
 (*transport_coeff* \[s\]), critical shear stress (*shear_stress* \[Pa\])
@@ -31,7 +31,7 @@ almost immediately and can be viewed while the simulation continues.
 Sediment flow rate raster map *sediment_flux* \[kg/ms\], and net
 erosion/deposition raster map \[kg/m^2s\] can take longer time
 depending on time step and simulation time. Simulation time is
-controlled by *niterations* \[minutes\] parameter. If the resulting
+controlled by *duration* \[minutes\] parameter. If the resulting
 erosion/deposition map is noisy, higher number of walkers, given by
 *nwalkers* should be used.  
 

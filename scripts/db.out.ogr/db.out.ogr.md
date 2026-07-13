@@ -1,6 +1,6 @@
 ## DESCRIPTION
 
-*db.out.ogr* exports GRASS GIS attribute tables into various formats as
+*db.out.ogr* exports GRASS attribute tables into various formats as
 supported by the OGR driver on the local system (CSV, DBF, PostgreSQL,
 SQLite, MySQL, ODBC, etc.).
 
@@ -14,19 +14,19 @@ linked as non-default layer to a vector map.
 
 ## EXAMPLES
 
-### Export of GRASS GIS attribute table to a CSV table file (default format)
+### Export of GRASS attribute table to a CSV table file (default format)
 
 ```sh
 db.out.ogr input=precip_30ynormals output=precip_30ynormals.csv
 ```
 
-### Export of a GRASS GIS attribute table to a DBF table
+### Export of a GRASS attribute table to a DBF table
 
 ```sh
 db.out.ogr input=precip_30ynormals output=precip_30ynormals.dbf format=DBF
 ```
 
-### Export of GRASS GIS attribute table into a PostgreSQL table
+### Export of GRASS attribute table into a PostgreSQL table
 
 ```sh
 db.out.ogr input=precip_30ynormals \

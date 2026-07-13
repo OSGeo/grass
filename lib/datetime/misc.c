@@ -13,7 +13,6 @@
  *  \param ad
  *  \return int
  */
-
 int datetime_is_leap_year(int year, int ad)
 {
     if (year == 0)
@@ -35,7 +34,6 @@ int datetime_is_leap_year(int year, int ad)
  *  \param ad
  *  \return int
  */
-
 int datetime_days_in_year(int year, int ad)
 {
     if (year == 0)
@@ -57,7 +55,6 @@ int datetime_days_in_year(int year, int ad)
  *  \param ad
  *  \return int
  */
-
 int datetime_days_in_month(int year, int month, int ad)
 {
     static int days[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};

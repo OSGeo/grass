@@ -31,29 +31,22 @@
 
 #define SEP "-----------------------------------\n"
 
-#if !defined HAVE_OGR || !defined HAVE_POSTGRES
-static int format(struct Map_info *Map UNUSED, int build UNUSED)
+#if !defined HAVE_POSTGRES
+static int format(struct Map_info *Map G_UNUSED, int build G_UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 #endif
 
-static int (*Build_array[])(struct Map_info *, int) = {Vect_build_nat
-#ifdef HAVE_OGR
-                                                       ,
-                                                       Vect_build_ogr,
-                                                       Vect_build_ogr
-#else
-                                                       ,
-                                                       format, format
-#endif
+static int (*Build_array[])(struct Map_info *, int) = {
+    Vect_build_nat, Vect_build_ogr, Vect_build_ogr
 #ifdef HAVE_POSTGRES
-                                                       ,
-                                                       Vect_build_pg
+    ,
+    Vect_build_pg
 #else
-                                                       ,
-                                                       format
+    ,
+    format
 #endif
 };
 

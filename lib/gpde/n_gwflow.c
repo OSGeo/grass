@@ -144,6 +144,8 @@ void N_free_gwflow_data3d(N_gwflow_data3d *data)
  *
  * \param cols int
  * \param rows int
+ * \param river
+ * \param drain
  * \return N_gwflow_data2d *
  * */
 N_gwflow_data2d *N_alloc_gwflow_data2d(int cols, int rows, int river, int drain)
@@ -648,7 +650,7 @@ N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data *geom, int col,
  * the cells. The sum of the water budget of each active/dirichlet cell must be
  * near zero due the effect of numerical inaccuracy of cpu's.
  *
- * \param gwdata N_gwflow_data2d *
+ * \param data N_gwflow_data2d *
  * \param geom N_geom_data *
  * \param budget N_array_2d
  * \return void

@@ -6,7 +6,7 @@ timestamps to raster, 3D raster and vector maps in the temporal database
 registers them within input space time datasets (stds). The existing
 timestamp modules [r.timestamp](r.timestamp.md),
 [r3.timestamp](r3.timestamp.md) and [v.timestamp](v.timestamp.md) do not
-register the maps in the temporal database of GRASS GIS. However,
+register the maps in the temporal database of GRASS. However,
 timestamps that have been created with these modules can be read and
 used by *t.register*. This works only for maps that are not already
 registered in the temporal database.

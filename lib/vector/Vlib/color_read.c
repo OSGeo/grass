@@ -59,16 +59,17 @@ int Vect_read_colors(const char *name, const char *mapset,
 
     name = xname;
 
-    if (strcmp(mapset, G_mapset()) == 0) {
-        /* look for the regular color table */
-        (void)snprintf(buf, sizeof(buf), "%s/%s", GV_DIRECTORY, name);
-        ret = Rast__read_colors(buf, GV_COLR_ELEMENT, mapset, colors);
-    }
-    else {
-        /* look for secondary color table in current mapset */
-        (void)snprintf(buf, sizeof(buf), "%s/%s", GV_COLR2_DIRECTORY, mapset);
-        ret = Rast__read_colors(buf, name, G_mapset(), colors);
-    }
+    /* look for secondary color table in current mapset */
+    (void)snprintf(buf, sizeof(buf), "%s/%s", GV_COLR2_DIRECTORY, mapset);
+    if (Rast__read_colors(buf, name, G_mapset(), colors) >= 0)
+        return 1;
+
+    /* look for the regular color table */
+    (void)snprintf(buf, sizeof(buf), "%s/%s", GV_DIRECTORY, name);
+    ret = Rast__read_colors(buf, GV_COLR_ELEMENT, mapset, colors);
+    if (ret >= 0)
+        return 1;
+
     if (ret == -2)
         return 0;
 

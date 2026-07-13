@@ -22,9 +22,7 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-#ifdef HAVE_OGR
 #include "ogr_api.h"
-#endif
 
 #include "local_proto.h"
 
@@ -47,9 +45,7 @@ int main(int argc, char *argv[])
     G_add_keyword("PostGIS");
     module->description = _("Defines vector output format.");
 
-#ifdef HAVE_OGR
     OGRRegisterAll();
-#endif
     parse_args(argc, argv, &options, &flags);
 
     if (flags.f->answer) {

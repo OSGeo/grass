@@ -113,6 +113,7 @@ class TestRVolume(TestCase):
         )
         self.assertModule(module)
         expected_output = [
+            "cat,average,sum,cells,easting,northing,volume",
             "217,118.93,86288828,725562,635325.00,221535.00,8628882798.63",
             "262,108.97,21650560,198684,638935.00,222495.00,2165056037.02",
             "270,92.23,63578874,689373,642405.00,221485.00,6357887443.53",
@@ -176,7 +177,7 @@ class TestRVolume(TestCase):
 
     def _assert_json_equal(self, expected_output, actual_output):
         self.assertEqual(len(expected_output), len(actual_output))
-        for exp_cat, out_cat in zip(expected_output, actual_output):
+        for exp_cat, out_cat in zip(expected_output, actual_output, strict=True):
             self.assertCountEqual(list(exp_cat.keys()), list(out_cat.keys()))
             for key, value in exp_cat.items():
                 if isinstance(value, float):

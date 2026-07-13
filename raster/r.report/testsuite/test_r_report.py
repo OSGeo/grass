@@ -10,9 +10,9 @@ Licence:    This program is free software under the GNU General Public
 """
 
 import json
-import os
 from itertools import zip_longest
 from datetime import datetime
+from pathlib import Path
 
 from grass.gunittest.case import TestCase
 
@@ -33,8 +33,7 @@ class TestRasterreport(TestCase):
     def tearDownClass(cls):
         """!Remove the temporary region"""
         cls.del_temp_region()
-        if os.path.isfile(cls.outfile):
-            os.remove(cls.outfile)
+        Path(cls.outfile).unlink(missing_ok=True)
 
     def test_flage(self):
         """Testing flag 'e' with map elevation"""
@@ -97,7 +96,7 @@ class TestRasterreport(TestCase):
     def test_json(self):
         """Test JSON format"""
         reference = {
-            "project": "nc_spm_full_v2alpha2",
+            "project": "nc_spm_full_v2beta1",
             "region": {
                 "north": 228500,
                 "south": 215000,
@@ -299,7 +298,7 @@ class TestRasterreport(TestCase):
     def test_json2(self):
         """Test JSON format with more options"""
         reference = {
-            "project": "nc_spm_full_v2alpha2",
+            "project": "nc_spm_full_v2beta1",
             "created": "2024-07-24T14:59:09+0530",
             "region": {
                 "north": 228500,

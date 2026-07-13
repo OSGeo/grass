@@ -8,6 +8,7 @@ for details.
 @author Soeren Gebbert
 """
 
+import json
 from pathlib import Path
 
 from grass.gunittest.case import TestCase
@@ -69,14 +70,16 @@ class TestRasterUnivar(TestCase):
         )
         self.assertModule(t_rast3d_univar)
 
-        univar_text = """id|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells|non_null_cells
-a_1@testing|2001-01-01 00:00:00|2001-04-01 00:00:00|100|100|100|100|0|0|0|48000000|0|480000|480000
-a_2@testing|2001-04-01 00:00:00|2001-07-01 00:00:00|200|200|200|200|0|0|0|96000000|0|480000|480000
-a_3@testing|2001-07-01 00:00:00|2001-10-01 00:00:00|300|300|300|300|0|0|0|144000000|0|480000|480000
-a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000000|0|480000|480000
+        univar_text = """id|start|end|non_null_cells|null_cells|min|max|range|mean|mean_of_abs|stddev|variance|coeff_var|sum|sum_abs
+a_1@testing|2001-01-01 00:00:00|2001-04-01 00:00:00|480000|0|100|100|0|100|100|0|0|0|48000000|48000000
+a_2@testing|2001-04-01 00:00:00|2001-07-01 00:00:00|480000|0|200|200|0|200|200|0|0|0|96000000|96000000
+a_3@testing|2001-07-01 00:00:00|2001-10-01 00:00:00|480000|0|300|300|0|300|300|0|0|0|144000000|144000000
+a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|480000|0|400|400|0|400|400|0|0|0|192000000|192000000
 """
         for ref, res in zip(
-            univar_text.split("\n"), t_rast3d_univar.outputs.stdout.split("\n")
+            univar_text.split("\n"),
+            t_rast3d_univar.outputs.stdout.split("\n"),
+            strict=False,
         ):
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
@@ -93,13 +96,15 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000
         )
         self.assertModule(t_rast3d_univar)
 
-        univar_text = """id|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells|non_null_cells
-a_2@testing|2001-04-01 00:00:00|2001-07-01 00:00:00|200|200|200|200|0|0|0|96000000|0|480000|480000
-a_3@testing|2001-07-01 00:00:00|2001-10-01 00:00:00|300|300|300|300|0|0|0|144000000|0|480000|480000
-a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000000|0|480000|480000
+        univar_text = """id|start|end|non_null_cells|null_cells|min|max|range|mean|mean_of_abs|stddev|variance|coeff_var|sum|sum_abs
+a_2@testing|2001-04-01 00:00:00|2001-07-01 00:00:00|480000|0|200|200|0|200|200|0|0|0|96000000|96000000
+a_3@testing|2001-07-01 00:00:00|2001-10-01 00:00:00|480000|0|300|300|0|300|300|0|0|0|144000000|144000000
+a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|480000|0|400|400|0|400|400|0|0|0|192000000|192000000
 """
         for ref, res in zip(
-            univar_text.split("\n"), t_rast3d_univar.outputs.stdout.split("\n")
+            univar_text.split("\n"),
+            t_rast3d_univar.outputs.stdout.split("\n"),
+            strict=False,
         ):
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
@@ -116,14 +121,16 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000
             verbose=True,
         )
 
-        univar_text = """id|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells|non_null_cells
-a_2@testing|2001-04-01 00:00:00|2001-07-01 00:00:00|200|200|200|200|0|0|0|96000000|0|480000|480000
-a_3@testing|2001-07-01 00:00:00|2001-10-01 00:00:00|300|300|300|300|0|0|0|144000000|0|480000|480000
-a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000000|0|480000|480000
+        univar_text = """id|start|end|non_null_cells|null_cells|min|max|range|mean|mean_of_abs|stddev|variance|coeff_var|sum|sum_abs
+a_2@testing|2001-04-01 00:00:00|2001-07-01 00:00:00|480000|0|200|200|0|200|200|0|0|0|96000000|96000000
+a_3@testing|2001-07-01 00:00:00|2001-10-01 00:00:00|480000|0|300|300|0|300|300|0|0|0|144000000|144000000
+a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|480000|0|400|400|0|400|400|0|0|0|192000000|192000000
 """
         univar_output = Path("univar_output.txt").read_text()
 
-        for ref, res in zip(univar_text.split("\n"), univar_output.split("\n")):
+        for ref, res in zip(
+            univar_text.split("\n"), univar_output.split("\n"), strict=False
+        ):
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
                 res_line = res.split("|", 1)[1]
@@ -140,13 +147,15 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000
             verbose=True,
         )
 
-        univar_text = """a_2@testing|2001-04-01 00:00:00|2001-07-01 00:00:00|200|200|200|200|0|0|0|96000000|0|480000|480000
-a_3@testing|2001-07-01 00:00:00|2001-10-01 00:00:00|300|300|300|300|0|0|0|144000000|0|480000|480000
-a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000000|0|480000|480000
+        univar_text = """a_2@testing|2001-04-01 00:00:00|2001-07-01 00:00:00|480000|0|200|200|0|200|200|0|0|0|96000000|96000000
+a_3@testing|2001-07-01 00:00:00|2001-10-01 00:00:00|480000|0|300|300|0|300|300|0|0|0|144000000|144000000
+a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|480000|0|400|400|0|400|400|0|0|0|192000000|192000000
 """
         univar_output = Path("univar_output.txt").read_text()
 
-        for ref, res in zip(univar_text.split("\n"), univar_output.split("\n")):
+        for ref, res in zip(
+            univar_text.split("\n"), univar_output.split("\n"), strict=False
+        ):
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
                 res_line = res.split("|", 1)[1]
@@ -181,23 +190,25 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000
         self.runModule("g.region", res=1)
         self.assertModule(t_rast_univar_zones)
 
-        univar_text = """id|start|end|zone|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells|non_null_cells
-a_1@PERMANENT|2001-01-01 00:00:00|2001-04-01 00:00:00|1|100|100|100|100|0|0|0|3000000|0|30000|30000
-a_1@PERMANENT|2001-01-01 00:00:00|2001-04-01 00:00:00|2|100|100|100|100|0|0|0|8400000|0|84000|84000
-a_1@PERMANENT|2001-01-01 00:00:00|2001-04-01 00:00:00|3|100|100|100|100|0|0|0|36600000|0|366000|366000
-a_2@PERMANENT|2001-04-01 00:00:00|2001-07-01 00:00:00|1|200|200|200|200|0|0|0|6000000|0|30000|30000
-a_2@PERMANENT|2001-04-01 00:00:00|2001-07-01 00:00:00|2|200|200|200|200|0|0|0|16800000|0|84000|84000
-a_2@PERMANENT|2001-04-01 00:00:00|2001-07-01 00:00:00|3|200|200|200|200|0|0|0|73200000|0|366000|366000
-a_3@PERMANENT|2001-07-01 00:00:00|2001-10-01 00:00:00|1|300|300|300|300|0|0|0|9000000|0|30000|30000
-a_3@PERMANENT|2001-07-01 00:00:00|2001-10-01 00:00:00|2|300|300|300|300|0|0|0|25200000|0|84000|84000
-a_3@PERMANENT|2001-07-01 00:00:00|2001-10-01 00:00:00|3|300|300|300|300|0|0|0|109800000|0|366000|366000
-a_4@PERMANENT|2001-10-01 00:00:00|2002-01-01 00:00:00|1|400|400|400|400|0|0|0|12000000|0|30000|30000
-a_4@PERMANENT|2001-10-01 00:00:00|2002-01-01 00:00:00|2|400|400|400|400|0|0|0|33600000|0|84000|84000
-a_4@PERMANENT|2001-10-01 00:00:00|2002-01-01 00:00:00|3|400|400|400|400|0|0|0|146400000|0|366000|366000
+        univar_text = """id|start|end|zone|label|non_null_cells|null_cells|min|max|range|mean|mean_of_abs|stddev|variance|coeff_var|sum|sum_abs
+a_1@PERMANENT|2001-01-01 00:00:00|2001-04-01 00:00:00|1||30000|0|100|100|0|100|100|0|0|0|3000000|3000000
+a_1@PERMANENT|2001-01-01 00:00:00|2001-04-01 00:00:00|2||84000|0|100|100|0|100|100|0|0|0|8400000|8400000
+a_1@PERMANENT|2001-01-01 00:00:00|2001-04-01 00:00:00|3||366000|0|100|100|0|100|100|0|0|0|36600000|36600000
+a_2@PERMANENT|2001-04-01 00:00:00|2001-07-01 00:00:00|1||30000|0|200|200|0|200|200|0|0|0|6000000|6000000
+a_2@PERMANENT|2001-04-01 00:00:00|2001-07-01 00:00:00|2||84000|0|200|200|0|200|200|0|0|0|16800000|16800000
+a_2@PERMANENT|2001-04-01 00:00:00|2001-07-01 00:00:00|3||366000|0|200|200|0|200|200|0|0|0|73200000|73200000
+a_3@PERMANENT|2001-07-01 00:00:00|2001-10-01 00:00:00|1||30000|0|300|300|0|300|300|0|0|0|9000000|9000000
+a_3@PERMANENT|2001-07-01 00:00:00|2001-10-01 00:00:00|2||84000|0|300|300|0|300|300|0|0|0|25200000|25200000
+a_3@PERMANENT|2001-07-01 00:00:00|2001-10-01 00:00:00|3||366000|0|300|300|0|300|300|0|0|0|109800000|109800000
+a_4@PERMANENT|2001-10-01 00:00:00|2002-01-01 00:00:00|1||30000|0|400|400|0|400|400|0|0|0|12000000|12000000
+a_4@PERMANENT|2001-10-01 00:00:00|2002-01-01 00:00:00|2||84000|0|400|400|0|400|400|0|0|0|33600000|33600000
+a_4@PERMANENT|2001-10-01 00:00:00|2002-01-01 00:00:00|3||366000|0|400|400|0|400|400|0|0|0|146400000|146400000
 """
 
         for ref, res in zip(
-            univar_text.split("\n"), t_rast_univar_zones.outputs.stdout.split("\n")
+            univar_text.split("\n"),
+            t_rast_univar_zones.outputs.stdout.split("\n"),
+            strict=False,
         ):
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
@@ -219,28 +230,145 @@ a_4@PERMANENT|2001-10-01 00:00:00|2002-01-01 00:00:00|3|400|400|400|400|0|0|0|14
         self.runModule("g.region", res=1)
         self.assertModule(t_rast_univar_zones)
 
-        univar_text = """id|start|end|zone|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells|non_null_cells
-a_1@PERMANENT|2001-01-01 00:00:00|2001-04-01 00:00:00|1|100|100|100|100|0|0|0|3000000|0|30000|30000
-a_1@PERMANENT|2001-01-01 00:00:00|2001-04-01 00:00:00|2|100|100|100|100|0|0|0|8400000|0|84000|84000
-a_1@PERMANENT|2001-01-01 00:00:00|2001-04-01 00:00:00|3|100|100|100|100|0|0|0|36600000|0|366000|366000
-a_2@PERMANENT|2001-04-01 00:00:00|2001-07-01 00:00:00|1|200|200|200|200|0|0|0|6000000|0|30000|30000
-a_2@PERMANENT|2001-04-01 00:00:00|2001-07-01 00:00:00|2|200|200|200|200|0|0|0|16800000|0|84000|84000
-a_2@PERMANENT|2001-04-01 00:00:00|2001-07-01 00:00:00|3|200|200|200|200|0|0|0|73200000|0|366000|366000
-a_3@PERMANENT|2001-07-01 00:00:00|2001-10-01 00:00:00|1|300|300|300|300|0|0|0|9000000|0|30000|30000
-a_3@PERMANENT|2001-07-01 00:00:00|2001-10-01 00:00:00|2|300|300|300|300|0|0|0|25200000|0|84000|84000
-a_3@PERMANENT|2001-07-01 00:00:00|2001-10-01 00:00:00|3|300|300|300|300|0|0|0|109800000|0|366000|366000
-a_4@PERMANENT|2001-10-01 00:00:00|2002-01-01 00:00:00|1|400|400|400|400|0|0|0|12000000|0|30000|30000
-a_4@PERMANENT|2001-10-01 00:00:00|2002-01-01 00:00:00|2|400|400|400|400|0|0|0|33600000|0|84000|84000
-a_4@PERMANENT|2001-10-01 00:00:00|2002-01-01 00:00:00|3|400|400|400|400|0|0|0|146400000|0|366000|366000
+        univar_text = """id|start|end|zone|label|non_null_cells|null_cells|min|max|range|mean|mean_of_abs|stddev|variance|coeff_var|sum|sum_abs
+a_1@PERMANENT|2001-01-01 00:00:00|2001-04-01 00:00:00|1||30000|0|100|100|0|100|100|0|0|0|3000000|3000000
+a_1@PERMANENT|2001-01-01 00:00:00|2001-04-01 00:00:00|2||84000|0|100|100|0|100|100|0|0|0|8400000|8400000
+a_1@PERMANENT|2001-01-01 00:00:00|2001-04-01 00:00:00|3||366000|0|100|100|0|100|100|0|0|0|36600000|36600000
+a_2@PERMANENT|2001-04-01 00:00:00|2001-07-01 00:00:00|1||30000|0|200|200|0|200|200|0|0|0|6000000|6000000
+a_2@PERMANENT|2001-04-01 00:00:00|2001-07-01 00:00:00|2||84000|0|200|200|0|200|200|0|0|0|16800000|16800000
+a_2@PERMANENT|2001-04-01 00:00:00|2001-07-01 00:00:00|3||366000|0|200|200|0|200|200|0|0|0|73200000|73200000
+a_3@PERMANENT|2001-07-01 00:00:00|2001-10-01 00:00:00|1||30000|0|300|300|0|300|300|0|0|0|9000000|9000000
+a_3@PERMANENT|2001-07-01 00:00:00|2001-10-01 00:00:00|2||84000|0|300|300|0|300|300|0|0|0|25200000|25200000
+a_3@PERMANENT|2001-07-01 00:00:00|2001-10-01 00:00:00|3||366000|0|300|300|0|300|300|0|0|0|109800000|109800000
+a_4@PERMANENT|2001-10-01 00:00:00|2002-01-01 00:00:00|1||30000|0|400|400|0|400|400|0|0|0|12000000|12000000
+a_4@PERMANENT|2001-10-01 00:00:00|2002-01-01 00:00:00|2||84000|0|400|400|0|400|400|0|0|0|33600000|33600000
+a_4@PERMANENT|2001-10-01 00:00:00|2002-01-01 00:00:00|3||366000|0|400|400|0|400|400|0|0|0|146400000|146400000
 """
 
         for ref, res in zip(
-            univar_text.split("\n"), t_rast_univar_zones.outputs.stdout.split("\n")
+            univar_text.split("\n"),
+            t_rast_univar_zones.outputs.stdout.split("\n"),
+            strict=False,
         ):
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
                 res_line = res.split("|", 1)[1]
                 self.assertLooksLike(ref_line, res_line)
+
+    def test_format_csv(self):
+        """Test output generation in CSV format"""
+        t_rast3d_univar = SimpleModule(
+            "t.rast3d.univar",
+            input="A",
+            where="start_time >= '2001-01-01'",
+            format="csv",
+            overwrite=True,
+            verbose=True,
+        )
+        self.assertModule(t_rast3d_univar)
+
+        univar_text = """id,start,end,non_null_cells,null_cells,min,max,range,mean,mean_of_abs,stddev,variance,coeff_var,sum,sum_abs
+a_1@testing,2001-01-01 00:00:00,2001-04-01 00:00:00,480000,0,100,100,0,100,100,0,0,0,48000000,48000000
+a_2@testing,2001-04-01 00:00:00,2001-07-01 00:00:00,480000,0,200,200,0,200,200,0,0,0,96000000,96000000
+a_3@testing,2001-07-01 00:00:00,2001-10-01 00:00:00,480000,0,300,300,0,300,300,0,0,0,144000000,144000000
+a_4@testing,2001-10-01 00:00:00,2002-01-01 00:00:00,480000,0,400,400,0,400,400,0,0,0,192000000,192000000
+"""
+        for ref, res in zip(
+            univar_text.split("\n"),
+            t_rast3d_univar.outputs.stdout.split("\n"),
+            strict=True,
+        ):
+            if ref and res:
+                ref_line = ref.split(",", 1)[1]
+                res_line = res.split(",", 1)[1]
+                self.assertLooksLike(ref_line, res_line)
+
+    def test_format_json(self):
+        """Test output generation in JSON format"""
+        t_rast3d_univar = SimpleModule(
+            "t.rast3d.univar",
+            input="A",
+            where="start_time >= '2001-04-01 00:00:00'",
+            format="json",
+            overwrite=True,
+            verbose=True,
+        )
+        self.assertModule(t_rast3d_univar)
+
+        output_json = json.loads(t_rast3d_univar.outputs.stdout)
+
+        expected_json = [
+            {
+                "id": "a_2",
+                "start": "2001-04-01 00:00:00",
+                "end": "2001-07-01 00:00:00",
+                "mean": 200,
+                "min": 200,
+                "max": 200,
+                "range": 0,
+                "mean_of_abs": 200,
+                "stddev": 0,
+                "variance": 0,
+                "coeff_var": 0,
+                "sum": 96000000,
+                "null_cells": 0,
+                "cells": 480000,
+                "n": 480000,
+            },
+            {
+                "id": "a_3",
+                "start": "2001-07-01 00:00:00",
+                "end": "2001-10-01 00:00:00",
+                "mean": 300,
+                "min": 300,
+                "max": 300,
+                "range": 0,
+                "mean_of_abs": 300,
+                "stddev": 0,
+                "variance": 0,
+                "coeff_var": 0,
+                "sum": 144000000,
+                "null_cells": 0,
+                "cells": 480000,
+                "n": 480000,
+            },
+            {
+                "id": "a_4",
+                "start": "2001-10-01 00:00:00",
+                "end": "2002-01-01 00:00:00",
+                "mean": 400,
+                "min": 400,
+                "max": 400,
+                "range": 0,
+                "mean_of_abs": 400,
+                "stddev": 0,
+                "variance": 0,
+                "coeff_var": 0,
+                "sum": 192000000,
+                "null_cells": 0,
+                "cells": 480000,
+                "n": 480000,
+            },
+        ]
+
+        self.assertEqual(len(output_json), len(expected_json))
+
+        for res_obj, exp_obj in zip(output_json, expected_json, strict=True):
+            for key in exp_obj:
+                if key == "id":
+                    self.assertTrue(res_obj[key].startswith(exp_obj[key]))
+                else:
+                    self.assertEqual(res_obj[key], exp_obj[key])
+
+    def test_format_validation(self):
+        """Test format validation errors (e.g. JSON with separator or no header)"""
+        self.assertModuleFail("t.rast3d.univar", input="A", format="json", flags="s")
+        self.assertModuleFail(
+            "t.rast3d.univar", input="A", format="json", separator=","
+        )
+        self.assertModuleFail(
+            "t.rast3d.univar", input="A", format="csv", separator="::"
+        )
 
 
 if __name__ == "__main__":

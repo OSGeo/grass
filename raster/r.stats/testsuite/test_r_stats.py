@@ -811,6 +811,284 @@ class TestRStats(TestCase):
         actual_output = json.loads(rstats_module.outputs.stdout)
         self.assertEqual(actual_output, expected_output)
 
+    def test_percentage_flag_csv_output(self):
+        """Verify that r.stats with the -p flag returns correct percentage values with CSV format.."""
+        rstats_module = SimpleModule(
+            "r.stats", input=self.test_raster_1, flags="p", format="csv"
+        )
+        self.assertModule(rstats_module)
+
+        expected_output = ["test_raster_1_cat,percent", "1,21.74%", "2,86.96%"]
+
+        actual_output = rstats_module.outputs.stdout.splitlines()
+        self.assertEqual(actual_output, expected_output)
+
+    def test_cross_tabulation_csv_output(self):
+        """Verify that r.stats with the -c flag produces correct cross-tabulation for multiple raster inputs with CSV format."""
+        rstats_module = SimpleModule(
+            "r.stats",
+            input=[self.test_raster_1, self.test_raster_2],
+            flags="c",
+            format="csv",
+        )
+        self.assertModule(rstats_module)
+
+        expected_output = [
+            "test_raster_1_cat,test_raster_2_cat,count",
+            "1,1,5",
+            "2,2,5",
+            "2,3,5",
+            "2,4,5",
+            "2,*,5",
+        ]
+
+        actual_output = rstats_module.outputs.stdout.splitlines()
+        self.assertEqual(actual_output, expected_output)
+
+    def test_area_calculation_flag_csv_output(self):
+        """Verify that r.stats with the -a flag returns correct area calculations with CSV format."""
+        rstats_module = SimpleModule(
+            "r.stats", input=self.test_raster_1, flags="a", format="csv"
+        )
+        self.assertModule(rstats_module)
+
+        expected_output = ["test_raster_1_cat,area", "1,2000.000000", "2,8000.000000"]
+
+        actual_output = rstats_module.outputs.stdout.splitlines()
+        self.assertEqual(actual_output, expected_output)
+
+    def test_label_output_csv_flag(self):
+        """Verify that r.stats with the -l flag returns category labels correctly with CSV format."""
+        rstats_module = SimpleModule(
+            "r.stats", input=self.float_raster, flags="l", format="csv"
+        )
+        self.assertModule(rstats_module)
+
+        expected_output = [
+            "float_raster_range,float_raster_label",
+            "0.5-0.515686,from 1 degrees to 1 degrees",
+            "0.986275-1.001961,from 1 degrees to 2 degrees",
+            "1.488235-1.503922,from 2 degrees to 3 degrees",
+            "1.990196-2.005882,from 3 degrees to 4 degrees",
+            "4.484314-4.5,from 7 degrees to 7 degrees",
+        ]
+
+        actual_output = rstats_module.outputs.stdout.splitlines()
+        self.assertEqual(actual_output, expected_output)
+
+    def test_grid_coordinates_csv_output(self):
+        """Verify that r.stats with the -g flag produces correct grid coordinates with CSV format."""
+        rstats_module = SimpleModule(
+            "r.stats", input=self.test_raster_1, flags="g", format="csv"
+        )
+        self.assertModule(rstats_module)
+
+        expected_output = [
+            "east,north,test_raster_1_cat",
+            "10,90,1",
+            "30,90,2",
+            "50,90,2",
+            "70,90,2",
+            "90,90,2",
+            "10,70,1",
+            "30,70,2",
+            "50,70,2",
+            "70,70,2",
+            "90,70,2",
+            "10,50,1",
+            "30,50,2",
+            "50,50,2",
+            "70,50,2",
+            "90,50,2",
+            "10,30,1",
+            "30,30,2",
+            "50,30,2",
+            "70,30,2",
+            "90,30,2",
+            "10,10,1",
+            "30,10,2",
+            "50,10,2",
+            "70,10,2",
+            "90,10,2",
+        ]
+
+        actual_output = rstats_module.outputs.stdout.splitlines()
+        self.assertEqual(actual_output, expected_output)
+
+    def test_cell_coordinates_csv_output(self):
+        """Verify that r.stats with the -x flag outputs row, column, and category values with CSV format."""
+        rstats_module = SimpleModule(
+            "r.stats", input=self.test_raster_1, flags="x", format="csv"
+        )
+        self.assertModule(rstats_module)
+
+        expected_output = [
+            "col,row,test_raster_1_cat",
+            "1,1,1",
+            "2,1,2",
+            "3,1,2",
+            "4,1,2",
+            "5,1,2",
+            "1,2,1",
+            "2,2,2",
+            "3,2,2",
+            "4,2,2",
+            "5,2,2",
+            "1,3,1",
+            "2,3,2",
+            "3,3,2",
+            "4,3,2",
+            "5,3,2",
+            "1,4,1",
+            "2,4,2",
+            "3,4,2",
+            "4,4,2",
+            "5,4,2",
+            "1,5,1",
+            "2,5,2",
+            "3,5,2",
+            "4,5,2",
+            "5,5,2",
+        ]
+
+        actual_output = rstats_module.outputs.stdout.splitlines()
+        self.assertEqual(actual_output, expected_output)
+
+    def test_area_statistics_csv_output(self):
+        """Verify that r.stats with the -A and -a flags outputs area statistics with CSV format."""
+        rstats_module = SimpleModule(
+            "r.stats",
+            input=self.float_raster,
+            flags="Aa",
+            format="csv",
+        )
+        self.assertModule(rstats_module)
+
+        expected_output = [
+            "float_raster_average,area",
+            "0.507843,2000.000000",
+            "0.994118,2000.000000",
+            "1.496078,2000.000000",
+            "1.998039,2000.000000",
+            "4.492157,2000.000000",
+        ]
+
+        actual_output = rstats_module.outputs.stdout.splitlines()
+        self.assertEqual(actual_output, expected_output)
+
+    def test_raw_index_area_csv_output(self):
+        """Verify that r.stats with -r and -a flags outputs raw indexes and corresponding area with CSV format."""
+        rstats_module = SimpleModule(
+            "r.stats", input=self.float_raster, flags="ra", format="csv"
+        )
+        self.assertModule(rstats_module)
+
+        expected_output = [
+            "float_raster_cat,area",
+            "1,2000.000000",
+            "32,2000.000000",
+            "64,2000.000000",
+            "96,2000.000000",
+            "255,2000.000000",
+        ]
+
+        actual_output = rstats_module.outputs.stdout.splitlines()
+        self.assertEqual(actual_output, expected_output)
+
+    def test_cats_range_csv_output(self):
+        """Verify that r.stats with -C and -l flags computes cats ranges and outputs labels with CSV format."""
+        rstats_module = SimpleModule(
+            "r.stats",
+            input=self.float_raster,
+            flags="Cl",
+            format="csv",
+        )
+        self.assertModule(rstats_module)
+
+        expected_output = [
+            "float_raster_range,float_raster_label",
+            "0.5-1,1 degrees",
+            "1-1.5,2 degrees",
+            "2-2.5,4 degrees",
+            "4-4.5,7 degrees",
+        ]
+
+        actual_output = rstats_module.outputs.stdout.splitlines()
+        self.assertEqual(actual_output, expected_output)
+
+    def test_integer_category_counts_csv_output(self):
+        """Verify that r.stats with -i and -c flags outputs integer-rounded category values and their counts with CSV format."""
+        rstats_module = SimpleModule(
+            "r.stats",
+            input=self.float_raster,
+            flags="ic",
+            format="csv",
+        )
+        self.assertModule(rstats_module)
+
+        expected_output = ["float_raster_cat,count", "1,10", "2,10", "5,5"]
+
+        actual_output = rstats_module.outputs.stdout.splitlines()
+        self.assertEqual(actual_output, expected_output)
+
+    def test_multiple_raster_inputs_with_stats_csv_output(self):
+        """Verify r.stats with multiple raster inputs using -nacp flags and with CSV format."""
+        rstats_module = SimpleModule(
+            "r.stats",
+            input=[self.test_raster_1, self.test_raster_2],
+            flags="nacp",
+            format="csv",
+        )
+        self.assertModule(rstats_module)
+
+        expected_output = [
+            "test_raster_1_cat,test_raster_2_cat,area,count,percent",
+            "1,1,2000.000000,5,33.33%",
+            "2,2,2000.000000,5,33.33%",
+            "2,3,2000.000000,5,33.33%",
+            "2,4,2000.000000,5,33.33%",
+        ]
+
+        actual_output = rstats_module.outputs.stdout.splitlines()
+        self.assertEqual(actual_output, expected_output)
+
+    def test_per_cell_label_csv_output(self):
+        """Test r.stats with -1ln flags to output per cell label with CSV format."""
+        rstats_module = SimpleModule(
+            "r.stats",
+            input=[self.test_raster_1, self.test_raster_2],
+            flags="1ln",
+            format="csv",
+        )
+        self.assertModule(rstats_module)
+
+        expected_output = [
+            "test_raster_1_cat,test_raster_1_label,test_raster_2_cat,test_raster_2_label",
+            "1,trees,1,trees",
+            "2,water,2,buildings",
+            "2,water,3,buildings",
+            "2,water,4,buildings",
+            "1,trees,1,trees",
+            "2,water,2,buildings",
+            "2,water,3,buildings",
+            "2,water,4,buildings",
+            "1,trees,1,trees",
+            "2,water,2,buildings",
+            "2,water,3,buildings",
+            "2,water,4,buildings",
+            "1,trees,1,trees",
+            "2,water,2,buildings",
+            "2,water,3,buildings",
+            "2,water,4,buildings",
+            "1,trees,1,trees",
+            "2,water,2,buildings",
+            "2,water,3,buildings",
+            "2,water,4,buildings",
+        ]
+
+        actual_output = rstats_module.outputs.stdout.splitlines()
+        self.assertEqual(actual_output, expected_output)
+
 
 if __name__ == "__main__":
     test()

@@ -32,7 +32,6 @@
  * \param[in,out] more 1 = more data; 0 = no more data
  * \return int
  */
-
 int db__driver_fetch(dbCursor *cn, int position, int *more)
 {
     cursor *c;
@@ -238,7 +237,6 @@ int db__driver_fetch(dbCursor *cn, int position, int *more)
  * \param[in] cn open database cursor
  * \return int number of rows in table
  */
-
 int db__driver_get_num_rows(dbCursor *cn)
 {
     cursor *c;

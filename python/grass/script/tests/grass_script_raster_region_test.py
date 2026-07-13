@@ -104,3 +104,62 @@ def test_region_manager_env_problem_with_g_region(session_2x2):
     region = gs.region(env=session_2x2.env)
     assert region["rows"] == 5
     assert region["cols"] == 5
+
+
+def test_region_manager_activate_deactivate(session_2x2):
+    """Test RegionManager with explicit activate/deactivate."""
+    assert "WIND_OVERRIDE" not in session_2x2.env
+
+    manager = gs.RegionManager(env=session_2x2.env)
+    manager.activate()
+    assert "WIND_OVERRIDE" in session_2x2.env
+    assert session_2x2.env["WIND_OVERRIDE"] == manager.region_name
+    region = gs.region(env=session_2x2.env)
+    assert region["rows"] == 2
+    assert region["cols"] == 2
+
+    # Change region inside manager
+    manager.set_region(n=4, s=0, e=4, w=0, res=1)
+    region = gs.region(env=session_2x2.env)
+    assert region["rows"] == 4
+    assert region["cols"] == 4
+
+    # Deactivate restores original
+    manager.deactivate()
+    assert "WIND_OVERRIDE" not in session_2x2.env
+    region = gs.region(env=session_2x2.env)
+    assert region["rows"] == 2
+    assert region["cols"] == 2
+
+    # Deactivate twice is harmless
+    manager.deactivate()
+    assert "WIND_OVERRIDE" not in session_2x2.env
+
+
+def test_region_manager_env_activate_deactivate(session_2x2):
+    """Test RegionManagerEnv with explicit activate/deactivate."""
+    assert "GRASS_REGION" not in session_2x2.env
+
+    manager = gs.RegionManagerEnv(env=session_2x2.env)
+    manager.activate()
+    assert "GRASS_REGION" in session_2x2.env
+    region = gs.region(env=session_2x2.env)
+    assert region["rows"] == 2
+    assert region["cols"] == 2
+
+    # Change region inside manager
+    manager.set_region(n=5, s=0, e=5, w=0, res=1)
+    region = gs.region(env=session_2x2.env)
+    assert region["rows"] == 5
+    assert region["cols"] == 5
+
+    # Deactivate restores original
+    manager.deactivate()
+    assert "GRASS_REGION" not in session_2x2.env
+    region = gs.region(env=session_2x2.env)
+    assert region["rows"] == 2
+    assert region["cols"] == 2
+
+    # Deactivate twice is harmless
+    manager.deactivate()
+    assert "GRASS_REGION" not in session_2x2.env

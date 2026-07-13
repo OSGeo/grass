@@ -829,11 +829,11 @@ int Vect_write_ascii(FILE *ascii, FILE *att, struct Map_info *Map, int ver,
                     if (Map->head.with_z) {
                         G_rasprintf(&zstring, &zsize, "%.*f", dp, *zptr++);
                         G_trim_decimal(zstring);
-                        fprintf(ascii, " %-12s %-12s %-12s%s", xstring, ystring,
+                        fprintf(ascii, " %-12s %-12s %s%s", xstring, ystring,
                                 zstring, HOST_NEWLINE);
                     }
                     else {
-                        fprintf(ascii, " %-12s %-12s%s", xstring, ystring,
+                        fprintf(ascii, " %-12s %s%s", xstring, ystring,
                                 HOST_NEWLINE);
                     }
                 } /*Version 4 */
@@ -845,8 +845,8 @@ int Vect_write_ascii(FILE *ascii, FILE *att, struct Map_info *Map, int ver,
 
             if (ver == 5) {
                 for (i = 0; i < Cats->n_cats; i++) {
-                    fprintf(ascii, " %-5d %-10d%s", Cats->field[i],
-                            Cats->cat[i], HOST_NEWLINE);
+                    fprintf(ascii, " %-5d %d%s", Cats->field[i], Cats->cat[i],
+                            HOST_NEWLINE);
                 }
             }
             else {

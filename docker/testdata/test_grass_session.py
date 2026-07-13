@@ -1,4 +1,4 @@
-# Import GRASS GIS Python bindings (requires 8.4+) and test r.in.pdal
+# Import GRASS Python bindings (requires 8.4+) and test r.in.pdal
 
 # PYTHONPATH=$(grass --config python-path) python
 
@@ -10,7 +10,7 @@ gs.create_project(project, epsg="25832")
 
 # hint: do not use ~ as an alias for HOME
 with gs.setup.init(project):
-    print("GRASS GIS session: tests for PROJ, GDAL, PDAL, GRASS GIS")
+    print("GRASS session: tests for PROJ, GDAL, PDAL, GRASS")
     print(gs.parse_command("g.gisenv", flags="s"))
 
     # simple test: just scan the LAZ file

@@ -286,7 +286,6 @@ int Vect_get_isle_area(struct Map_info *Map, int isle)
 
    \return perimeter of area with perimeters of isles in meters
  */
-
 double Vect_get_area_perimeter(struct Map_info *Map, int area)
 {
     const struct Plus_head *Plus;

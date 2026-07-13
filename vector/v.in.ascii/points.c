@@ -51,7 +51,6 @@ static int is_double(char *str)
  * If the who whole column is empty, column_sample will contain NULL
  * for that given column.
  */
-
 int points_analyse(FILE *ascii_in, FILE *ascii, char *fs, char *td,
                    int *rowlength, int *ncolumns, int *minncolumns, int *nrows,
                    int **column_type, char ***column_sample,

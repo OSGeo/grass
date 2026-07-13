@@ -18,7 +18,6 @@
  *  \param nameOut
  *  \return void
  */
-
 void Rast3d_change_type(void *map, const char *nameOut)
 {
     void *map2;

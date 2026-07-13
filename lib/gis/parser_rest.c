@@ -44,7 +44,7 @@ void G__usage_rest(void)
         fprintf(stdout, "=");
     }
     fprintf(stdout, "\n");
-    fprintf(stdout, "%s - GRASS GIS manual\n", st->pgm_name);
+    fprintf(stdout, "%s - GRASS manual\n", st->pgm_name);
     fprintf(stdout, "=================");
     for (s = 0; s <= strlen(st->pgm_name); s++) {
         fprintf(stdout, "=");

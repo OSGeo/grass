@@ -144,7 +144,7 @@ from .ply import lex, yacc
 
 
 class TemporalOperatorLexer:
-    """Lexical analyzer for the GRASS GIS temporal operator"""
+    """Lexical analyzer for the GRASS temporal operator"""
 
     # Functions that defines topological relations.
     relations = {

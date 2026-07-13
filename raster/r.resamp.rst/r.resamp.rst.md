@@ -158,7 +158,7 @@ Pennsylvania.
 [r.surf.contour](r.surf.contour.md), [v.surf.rst](v.surf.rst.md)
 
 Overview: [Interpolation and
-Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS GIS
+Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS
 
 ## AUTHORS
 

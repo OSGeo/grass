@@ -2,7 +2,7 @@
 
 *v.type* changes the type of geometry primitives.
 
-The following vector object types are defined in GRASS GIS:
+The following vector object types are defined in GRASS:
 
 - point: a point;
 - line: a directed sequence of connected vertices with two endpoints

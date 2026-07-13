@@ -5,7 +5,7 @@ from grass.gunittest.main import test
 
 
 class TestIBiomass(TestCase):
-    """Regression tests for the i.biomass GRASS GIS module."""
+    """Regression tests for the i.biomass GRASS module."""
 
     input_rasters = {
         "fpar": "test_fpar",

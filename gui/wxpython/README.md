@@ -1,4 +1,4 @@
-# GRASS GIS - wxPython Graphical User Interface (wxGUI)
+# GRASS - wxPython Graphical User Interface (wxGUI)
 
 ## 1 - REQUIREMENTS
 

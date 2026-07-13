@@ -2,4 +2,6 @@
 --color=yes
 --durations=0
 --durations-min=0.5
+--junitxml=junit.xml
+-o junit_family=legacy
 -ra
