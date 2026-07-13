@@ -2007,7 +2007,7 @@ def install_extension_std_platforms(name, source, url, branch):
                     # get the module name: project(<module name>)
                     with open(os.path.join(r, "CMakeLists.txt")) as fp:
                         for line in fp:
-                            m = re.match(r"project\((.*)\)", line)
+                            m = re.match(r"project\(\s*(\S+).*\)", line)
                             if m:
                                 try:
                                     modulename = m.group(1)

@@ -123,7 +123,7 @@ class TestVCluster(TestCase):
         clusters = self.get_cluster_info("clustered")
         # print(clusters)
         self.assertGreater(len(clusters), 1)
-        cluster_sizes = sorted([len(points) for _, points in clusters.items()])
+        cluster_sizes = sorted([len(points) for points in clusters.values()])
         self.assertEqual(cluster_sizes, [4, 4, 5])
 
         noise_points = self.get_noise_points("clustered")

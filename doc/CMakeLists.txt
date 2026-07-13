@@ -30,6 +30,7 @@ set(img_files
   project.png)
 
 add_custom_target(ADD_DOC_DOCS ALL COMMENT "Generate doc/html docs." DEPENDS LIB_PYTHON)
+set_target_properties(ADD_DOC_DOCS PROPERTIES FOLDER Docs)
 
 generate_docs_list(
   TARGET ADD_DOC_DOCS

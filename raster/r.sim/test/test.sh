@@ -7,12 +7,12 @@
 
 g.region rural_1m res=2 -p
 v.surf.rst -d input=elev_lid792_bepts elevation=elev_lid792_2m slope=dx_2m aspect=dy_2m tension=15 smooth=1.5 npmin=150
-r.sim.water -t elevation=elev_lid792_2m dx=dx_2m dy=dy_2m rain_value=50 infil_value=0 man_value=0.05 depth=wdp_2m discharge=disch_2m nwalkers=100000 niterations=120 output_step=20
+r.sim.water -t elevation=elev_lid792_2m dx=dx_2m dy=dy_2m rain_value=50 infil_value=0 man_value=0.05 depth=wdp_2m discharge=disch_2m nwalkers=100000 duration=120 output_step=20
 r.mapcalc "tranin = 0.001"
 r.mapcalc "detin = 0.001"
 r.mapcalc "tauin = 0.01"
 g.copy rast=wdp_2m.120,wdp_2m
-r.sim.sediment elevation=elev_lid792_2m dx=dx_2m dy=dy_2m water_depth=wdp_2m detachment_coeff=detin transport_coeff=tranin shear_stress=tauin man_value=0.05 nwalkers=1000000 niterations=120 transport_capacity=tcapacity tlimit_erosion_deposition=erdepmax sediment_flux=sedflow erosion_deposition=erdepsimwe
+r.sim.sediment elevation=elev_lid792_2m dx=dx_2m dy=dy_2m water_depth=wdp_2m detachment_coeff=detin transport_coeff=tranin shear_stress=tauin man_value=0.05 nwalkers=1000000 duration=120 transport_capacity=tcapacity tlimit_erosion_deposition=erdepmax sediment_flux=sedflow erosion_deposition=erdepsimwe
 
 g.copy rast=disch_2m.120,disch_2m
 

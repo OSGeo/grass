@@ -20,7 +20,7 @@ permissions: {}
 jobs:
   macos_build:
     name: macOS build
-    runs-on: macos-15
+    runs-on: macos-26
     env:
       PYTHONWARNINGS: always
     steps:
@@ -47,7 +47,7 @@ jobs:
             -mindepth 1 -maxdepth 1 -type f -print -delete
           # Rehash to forget about the deleted files
           hash -r
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - name: Get current date cache key segment
@@ -67,7 +67,7 @@ jobs:
           cp ./macos/files/conda-requirements-dev-arm64.txt "${RUNNER_TEMP}/macos_dependencies.txt"
           echo "${test_dependencies// /\n}" >> "${RUNNER_TEMP}/macos_dependencies.txt"
       - name: Setup Mamba
-        uses: mamba-org/setup-micromamba@add3a49764cedee8ee24e82dfde87f5bc2914462 # v2.0.7
+        uses: mamba-org/setup-micromamba@d7c9bd84e824b79d2af72a2d4196c7f4300d3476 # v3.0.0
         with:
           init-shell: bash
           environment-file: ${{ runner.temp }}/macos_dependencies.txt
@@ -137,7 +137,7 @@ jobs:
 
       - name: Cache GRASS Sample Dataset
         id: cached-data
-        uses: actions/cache/restore@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: sample-data/nc_spm_full_v2beta1.tar.gz
           key: nc_spm_full_v2beta1.tar.gz
@@ -153,7 +153,7 @@ jobs:
             nc_spm_full_v2beta1.tar.gz"
 
       - name: Save GRASS Sample Dataset to cache
-        uses: actions/cache/save@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         if: steps.cached-data.outputs.cache-hit != 'true'
         with:
           path: sample-data/nc_spm_full_v2beta1.tar.gz
@@ -168,7 +168,7 @@ jobs:
 
       - name: Make HTML test report available
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: testreport-macOS
           path: testreport

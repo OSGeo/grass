@@ -5,10 +5,21 @@ default setting is that the temporal database of type *sqlite3* is
 located in the current mapset directory.
 
 The **-p** flag will display the current temporal database connection
-parameters.
+parameters. Use the **format** option to specify the output format: `plain`,
+ `shell`, or `json` — with `plain` being the default.
 
-The **-pg** flag will display the current temporal database connection
-parameters using shell style.
+**format=json** always returns a JSON array. By default it contains one entry
+per mapset on the current search path.
+
+The optional **mapset** option can be used to extend or restrict the selection
+of mapsets to report the connection information for. Use `.` for the current
+mapset only, `*` for all mapsets in the project, or a comma-separated list for
+specific mapsets. The **mapset** option requires both the **-p** flag and
+**format=json**; the **format=plain** and **format=shell** do not support
+multi-mapset output.
+
+The **-g** flag is deprecated and will be removed in a future release. Please
+use **format=shell** option with the **-p** flag instead.
 
 The **-c** flag will silently check if the temporal database connection
 parameters have been set, and if not will set them to use GRASS's
@@ -36,6 +47,97 @@ database.
 PostgreSQL and SQLite databases can not be mixed in a project.
 
 ## EXAMPLES
+
+### Print the current connection in different formats
+
+Print in plain format (default):
+
+```sh
+t.connect -p
+```
+
+```text
+driver:sqlite
+database:$GISDBASE/$LOCATION_NAME/$MAPSET/tgis/sqlite.db
+```
+
+Print in shell format:
+
+```sh
+t.connect -p format=shell
+```
+
+```text
+driver=sqlite
+database=$GISDBASE/$LOCATION_NAME/$MAPSET/tgis/sqlite.db
+```
+
+Print as JSON (reports all mapsets on the search path as an array):
+
+```sh
+t.connect -p format=json
+```
+
+```json
+[
+    {
+        "mapset": "PERMANENT",
+        "driver": "sqlite",
+        "database": "$GISDBASE/$LOCATION_NAME/PERMANENT/tgis/sqlite.db"
+    },
+    {
+        "mapset": "user1",
+        "driver": "sqlite",
+        "database": "$GISDBASE/$LOCATION_NAME/user1/tgis/sqlite.db"
+    }
+]
+```
+
+Restrict JSON output to the current mapset only:
+
+```sh
+t.connect -p format=json mapset=.
+```
+
+```json
+[
+    {
+        "mapset": "user1",
+        "driver": "sqlite",
+        "database": "$GISDBASE/$LOCATION_NAME/user1/tgis/sqlite.db"
+    }
+]
+```
+
+### Print connection for a subset of mapsets
+
+Restrict JSON output to specific mapsets:
+
+```sh
+t.connect -p format=json mapset=PERMANENT,user1
+```
+
+```json
+[
+    {
+        "mapset": "PERMANENT",
+        "driver": "sqlite",
+        "database": "$GISDBASE/$LOCATION_NAME/PERMANENT/tgis/sqlite.db"
+    },
+    {
+        "mapset": "user1",
+        "driver": "sqlite",
+        "database": "$GISDBASE/$LOCATION_NAME/user1/tgis/sqlite.db"
+    }
+]
+```
+
+Use `mapset=*` to include all mapsets in the project, not just those on the
+search path:
+
+```sh
+t.connect -p format=json mapset=*
+```
 
 ### SQLite
 

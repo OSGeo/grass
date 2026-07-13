@@ -150,7 +150,7 @@ void write_vtk_pointdata_header(FILE *fp, struct Cell_head region)
 /* ************************************************************************* */
 /* Write the VTK Structured Coordinates ************************************ */
 /* ************************************************************************* */
-void write_vtk_structured_coordinates(int fd, FILE *fp, char *varname UNUSED,
+void write_vtk_structured_coordinates(int fd, FILE *fp, char *varname G_UNUSED,
                                       struct Cell_head region, int out_type,
                                       char *null_value, double scale, int dp)
 {
@@ -202,7 +202,7 @@ void write_vtk_structured_coordinates(int fd, FILE *fp, char *varname UNUSED,
 /* ************************************************************************* */
 /* Write Polygonal Coordinates ********************************************* */
 /* ************************************************************************* */
-void write_vtk_polygonal_coordinates(int fd, FILE *fp, char *varname UNUSED,
+void write_vtk_polygonal_coordinates(int fd, FILE *fp, char *varname G_UNUSED,
                                      struct Cell_head region, int out_type,
                                      char *null_value, double scale,
                                      int polytype, int dp)

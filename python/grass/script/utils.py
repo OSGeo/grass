@@ -93,6 +93,40 @@ def separator(sep: str) -> str:
     return sep
 
 
+def available_cpus() -> int:
+    """Number of CPUs this process may actually use.
+
+    Prefers affinity-aware sources over ``os.cpu_count()``, which reports
+    the host total and overcounts in containers and cgroup-limited jobs.
+
+    .. versionadded:: 8.6
+    """
+    if hasattr(os, "process_cpu_count"):  # Python 3.13+
+        return os.process_cpu_count() or 1
+    if hasattr(os, "sched_getaffinity"):  # Linux
+        return len(os.sched_getaffinity(0))
+    return os.cpu_count() or 1
+
+
+def resolve_nprocs(nprocs: int | str) -> int:
+    """Resolve G_OPT_M_NPROCS into a worker count.
+
+    Mirrors the semantics of ``G_set_omp_num_threads()`` in
+    ``lib/gis/omp_threads.c``: 0 means use all available cores, a positive
+    number is used as-is, a negative number means cpu_count + nprocs
+    (clamped to at least 1).
+
+    .. versionadded:: 8.6
+    """
+    n = int(nprocs)
+    if n > 0:
+        return n
+    available = available_cpus()
+    if n == 0:
+        return available
+    return max(1, available + n)
+
+
 def diff_files(
     filename_a: FileDescriptorOrPath, filename_b: FileDescriptorOrPath
 ) -> list[str]:
@@ -457,8 +491,19 @@ def get_lib_path(modname, libname=None):
         idx = cwd.find(modname)
         if idx < 0:
             return None
-        path = "{cwd}{sep}etc{sep}{modname}".format(
-            cwd=cwd[: idx + len(modname)], sep=sep, modname=modname
+
+        from grass.app.runtime import RuntimePaths
+
+        runtime_paths = RuntimePaths(set_env_variables=True)
+
+        path = (
+            "{cwd}{sep}build{sep}output{sep}etc{sep}{modname}".format(
+                cwd=cwd[: idx + len(modname)], sep=sep, modname=modname
+            )
+            if runtime_paths.is_cmake_build
+            else "{cwd}{sep}etc{sep}{modname}".format(
+                cwd=cwd[: idx + len(modname)], sep=sep, modname=modname
+            )
         )
         if libname:
             path += "{pathsep}{cwd}{sep}etc{sep}{modname}{sep}{libname}".format(

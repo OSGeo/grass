@@ -1,6 +1,7 @@
 # #for i18N support
 
 add_custom_target(ADD_INIT_DOCS ALL COMMENT "Generate init docs.")
+set_target_properties(ADD_INIT_DOCS PROPERTIES FOLDER Docs)
 
 if(WITH_DOCS)
 

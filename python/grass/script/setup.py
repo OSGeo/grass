@@ -65,7 +65,7 @@ and session without using grassXY.
     session.finish()
 
 
-(C) 2010-2025 by the GRASS Development Team
+(C) 2010-2026 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -221,10 +221,14 @@ def setup_runtime_env(gisbase=None, *, env=None):
         RuntimePaths,
     )
 
+    from grass.script.core import sanitize_mapset_environment
+
     # If environment is not provided, use the global one.
     if not env:
         env = os.environ
-
+    # Remove mapset-specific variables that should not leak into the
+    # runtime environment being set up.
+    sanitize_mapset_environment(env)
     runtime_paths = RuntimePaths(env=env, prefix=gisbase)
     gisbase = runtime_paths.gisbase
     if not Path(gisbase).is_dir():

@@ -597,7 +597,7 @@ void setup_maps(void)
         setup_map(&maps[i]);
 }
 
-void get_map_row(int idx, int mod, int depth UNUSED, int row, int col,
+void get_map_row(int idx, int mod, int depth G_UNUSED, int row, int col,
                  void *buf, int res_type)
 {
     CELL *ibuf;

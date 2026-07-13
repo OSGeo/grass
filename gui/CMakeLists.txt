@@ -14,5 +14,7 @@ add_custom_target(
     "${CMAKE_CURRENT_SOURCE_DIR}/xml/grass-interface.dtd"
     ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/xml)
 add_dependencies(grass_interface_dtd GUI_WXPYTHON)
+set_target_properties(grass_interface_dtd PROPERTIES FOLDER GUI)
+
 install(FILES ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/xml/grass-interface.dtd
         DESTINATION ${GRASS_INSTALL_GUIDIR}/xml)

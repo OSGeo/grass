@@ -57,11 +57,13 @@ add_custom_target(
   DEPENDS ${temporal_script_modules_list} ${temporal_modules_list}
   COMMENT "All temporal modules are built.")
 
+set_target_properties(ALL_TEMPORAL_MODULES PROPERTIES FOLDER Misc)
+
 if(WITH_DOCS)
   generate_docs(temporalintro TARGET ALL_TEMPORAL_MODULES)
 endif()
 
-build_program_in_subdir(t.connect DEPENDS grass_gis grass_temporal)
+build_program_in_subdir(t.connect DEPENDS grass_gis grass_temporal grass_parson)
 
 foreach(temporal_DIR ${temporal_script_modules_list})
   build_script_in_subdir(${temporal_DIR})
