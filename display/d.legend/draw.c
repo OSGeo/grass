@@ -1098,7 +1098,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                             0.81)); /* ?? txsiz*.81=actual text width. */
             if (ScaleFactor < 1.0) {
                 txsiz = txsiz * ScaleFactor;
-                dots_per_line = (int)floor(dots_per_line * ScaleFactor);
+                dots_per_line = (int)floor((double)dots_per_line * ScaleFactor);
             }
         }
 

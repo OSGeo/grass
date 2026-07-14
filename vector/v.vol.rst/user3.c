@@ -253,7 +253,7 @@ int COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
        c normalization
        c
      */
-    offset1 = nsizr * nsizc;
+    offset1 = (off_t)nsizr * nsizc;
 
     stepix = ew_res / dnorm;
     stepiy = ns_res / dnorm;
