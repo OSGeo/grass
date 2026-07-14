@@ -503,7 +503,7 @@ class RegionManager:
     modified region under a persistent name so it can be reused after the context exits:
 
     >>> with gs.RegionManager(raster="elevation") as manager:
-    ...     manager.save("elevation_region", overwrite=True)
+    ...     manager.save("elevation_region")
 
     Example using explicit activate and deactivate:
 
