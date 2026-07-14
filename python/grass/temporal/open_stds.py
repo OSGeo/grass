@@ -71,6 +71,11 @@ def open_old_stds(name, type, dbif=None):
 
     dbif, connection_state_changed = init_dbif(dbif)
 
+    # Make sure the dataset's mapset is part of the connection so a fully
+    # qualified name (name@mapset) can be opened even when the mapset is not
+    # on the current search path.
+    dbif.add_mapset(mapset)
+
     if not sp.is_in_db(dbif):
         dbif.close()
         msgr.fatal(

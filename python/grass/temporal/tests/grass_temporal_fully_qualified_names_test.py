@@ -95,3 +95,18 @@ def test_add_mapset_includes_offpath_mapset(two_mapset_session):
         assert sp.is_in_db(dbif) is True
     finally:
         dbif.close()
+
+
+def test_open_old_stds_offpath(two_mapset_session):
+    """open_old_stds resolves a fully qualified name off the search path.
+
+    Tools that go through open_old_stds are covered by this change. Tools that
+    build their own database interface (e.g. t.info) are handled separately and
+    are intentionally out of scope here.
+    """
+    import grass.temporal as tgis
+
+    tgis.init()
+    sp = tgis.open_old_stds(two_mapset_session.offpath_id, "strds")
+    assert sp is not None
+    assert sp.get_id() == two_mapset_session.offpath_id
