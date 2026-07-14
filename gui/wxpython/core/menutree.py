@@ -192,9 +192,9 @@ def printStrings(node, fh):
     if node.label and not node.data:
         fh.write("    _(%r),\n" % str(node.label))
     if node.data:
-        if "label" in node.data and node.data["label"]:
+        if node.data.get("label"):
             fh.write("    _(%r),\n" % str(node.data["label"]))
-        if "description" in node.data and node.data["description"]:
+        if node.data.get("description"):
             fh.write("    _(%r),\n" % str(node.data["description"]))
     for child in node.children:
         printStrings(node=child, fh=fh)
