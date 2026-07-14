@@ -499,8 +499,8 @@ class RegionManager:
     ...     manager.set_region(n=226000, s=222000, w=634000, e=638000)
     ...     gs.parse_command("r.univar", map="elevation", format="json")
 
-    Example using :py:meth:`~grass.script.raster.RegionManager.save` to store the current
-    region under a persistent name so it can be reused after the context exits:
+    Example using :py:meth:`~grass.script.raster.RegionManager.save` to store the temporarily
+    modified region under a persistent name so it can be reused after the context exits:
 
     >>> with gs.RegionManager(raster="elevation") as manager:
     ...     manager.save("elevation_region", overwrite=True)
