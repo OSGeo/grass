@@ -130,6 +130,21 @@ static void interpolate_strip(void *strip, void *obufptr, int cell_type,
     memcpy(obufptr, src, cell_size);
 }
 
+/* Geographic poles within the input map's latitude coverage.
+ * band_input_row_span samples only the tile perimeter, so a tile whose interior
+ * holds a pole has an input-row (latitude) extremum the perimeter misses; the
+ * pole's row is folded into that tile's span. Each pole is stored as its
+ * output-CRS coordinate (for a point-in-tile test) and its input row. Filled
+ * once per map, and empty (n == 0) whenever no pole is in frame, so pole
+ * handling is a no-op on such maps. Assumes a pole maps to a single output
+ * point (azimuthal/stereographic); for a projection that images a pole as a
+ * line or arc, the under-size guard remains the backstop. */
+struct pole_set {
+    int n;               /* active poles, 0..2 */
+    double ox[2], oy[2]; /* pole coordinates in the output CRS */
+    double ri[2];        /* pole input row index */
+};
+
 /* Dense edge-walk of an output tile's rectangle [obr0, obr1) x [obc0, obc1)
  * projected into input space; returns the min/max INPUT ROW touched, plus a
  * 2-cell margin, clamped to the input map. Samples the tile's top and bottom
@@ -144,7 +159,8 @@ static void band_input_row_span(const struct Cell_head *ohd,
                                 const struct pj_info *oproj,
                                 const struct pj_info *iproj,
                                 const struct pj_info *tproj, int obr0, int obr1,
-                                int obc0, int obc1, int *imin, int *imax)
+                                int obc0, int obc1, int *imin, int *imax,
+                                const struct pole_set *poles, int *pole_widened)
 {
     double rmin = 1e300, rmax = -1e300;
     int e, r, c;
@@ -182,6 +198,32 @@ static void band_input_row_span(const struct Cell_head *ohd,
         }
     }
 
+    /* Fold in any pole whose output point lies in this tile's rect: the
+     * perimeter walk cannot see an interior latitude extremum. A pole exactly
+     * on a tile edge (inclusive test) is caught by both adjacent tiles, which
+     * is harmless -- it only widens a strip that is loaded anyway. Placed
+     * before the empty-tile check so a pole inside an otherwise-outside tile
+     * still yields a valid span. */
+    if (poles) {
+        double x_lo = ohd->west + obc0 * ohd->ew_res;
+        double x_hi = ohd->west + obc1 * ohd->ew_res;
+        double y_lo = ohd->north - obr1 * ohd->ns_res;
+        double y_hi = ohd->north - obr0 * ohd->ns_res;
+        int k;
+
+        for (k = 0; k < poles->n; k++) {
+            if (poles->ox[k] < x_lo || poles->ox[k] > x_hi ||
+                poles->oy[k] < y_lo || poles->oy[k] > y_hi)
+                continue;
+            if (poles->ri[k] < rmin)
+                rmin = poles->ri[k];
+            if (poles->ri[k] > rmax)
+                rmax = poles->ri[k];
+            if (pole_widened)
+                *pole_widened = k + 1; /* 1-based pole index, 0 == none */
+        }
+    }
+
     if (rmax < rmin) { /* band projects entirely outside the input */
         *imin = 0;
         *imax = -1;
@@ -205,12 +247,11 @@ static void band_input_row_span(const struct Cell_head *ohd,
  * call is a full tile edge-walk, so this is O(tiles * perimeter) -- paid in the
  * serial size phase, and only when column splitting is actually entered.
  * Returns 0 if every tile projects entirely outside the input. */
-static int worst_tile_strip_rows(const struct Cell_head *ohd,
-                                 const struct Cell_head *ihd,
-                                 const struct pj_info *oproj,
-                                 const struct pj_info *iproj,
-                                 const struct pj_info *tproj, int obr0,
-                                 int obr1, int tilew)
+static int
+worst_tile_strip_rows(const struct Cell_head *ohd, const struct Cell_head *ihd,
+                      const struct pj_info *oproj, const struct pj_info *iproj,
+                      const struct pj_info *tproj, int obr0, int obr1,
+                      int tilew, const struct pole_set *poles)
 {
     int worst = 0, obc0;
 
@@ -221,7 +262,7 @@ static int worst_tile_strip_rows(const struct Cell_head *ohd,
         if (obc1 > ohd->cols)
             obc1 = ohd->cols;
         band_input_row_span(ohd, ihd, oproj, iproj, tproj, obr0, obr1, obc0,
-                            obc1, &imin, &imax);
+                            obc1, &imin, &imax, poles, NULL);
         rows = imax - imin + 1; /* imax < imin (empty) -> <= 0, ignored */
         if (rows > worst)
             worst = rows;
@@ -241,7 +282,8 @@ static int est_worst_tile_strip_rows(const struct Cell_head *ohd,
                                      const struct pj_info *oproj,
                                      const struct pj_info *iproj,
                                      const struct pj_info *tproj, int obr0,
-                                     int obr1, int tilew, int probe)
+                                     int obr1, int tilew, int probe,
+                                     const struct pole_set *poles)
 {
     int ntiles = (ohd->cols + tilew - 1) / tilew;
     int worst = 0, k;
@@ -259,7 +301,7 @@ static int est_worst_tile_strip_rows(const struct Cell_head *ohd,
         if (obc1 > ohd->cols)
             obc1 = ohd->cols;
         band_input_row_span(ohd, ihd, oproj, iproj, tproj, obr0, obr1, obc0,
-                            obc1, &imin, &imax);
+                            obc1, &imin, &imax, poles, NULL);
         rows = imax - imin + 1;
         if (rows > worst)
             worst = rows;
@@ -272,12 +314,11 @@ static int est_worst_tile_strip_rows(const struct Cell_head *ohd,
  * width whose worst input strip fits (setting *acc_tilew to that width, via the
  * same upper-tier estimate then lower-tier exact validation the search uses);
  * 0 if no width fits or the output buffer alone exceeds the cap. */
-static int phase2_width_fit(const struct Cell_head *ohd,
-                            const struct Cell_head *ihd,
-                            const struct pj_info *oproj,
-                            const struct pj_info *iproj,
-                            const struct pj_info *tproj, int obr0, int h,
-                            size_t cap_bytes, int cell_size, int *acc_tilew)
+static int
+phase2_width_fit(const struct Cell_head *ohd, const struct Cell_head *ihd,
+                 const struct pj_info *oproj, const struct pj_info *iproj,
+                 const struct pj_info *tproj, int obr0, int h, size_t cap_bytes,
+                 int cell_size, int *acc_tilew, const struct pole_set *poles)
 {
     size_t out_bytes = (size_t)h * ohd->cols * cell_size;
     int tilew, est_fit;
@@ -288,7 +329,7 @@ static int phase2_width_fit(const struct Cell_head *ohd,
     est_fit = 0;
     for (;;) {
         int est = est_worst_tile_strip_rows(ohd, ihd, oproj, iproj, tproj, obr0,
-                                            obr0 + h, tilew, TILE_PROBE);
+                                            obr0 + h, tilew, TILE_PROBE, poles);
         size_t est_bytes = est > 0 ? (size_t)est * ihd->cols * cell_size : 0;
         if (est_bytes + out_bytes <= cap_bytes) {
             est_fit = 1;
@@ -301,7 +342,7 @@ static int phase2_width_fit(const struct Cell_head *ohd,
     if (est_fit) {
         for (;;) {
             int worst = worst_tile_strip_rows(ohd, ihd, oproj, iproj, tproj,
-                                              obr0, obr0 + h, tilew);
+                                              obr0, obr0 + h, tilew, poles);
             size_t strip_bytes =
                 worst > 0 ? (size_t)worst * ihd->cols * cell_size : 0;
             if (strip_bytes + out_bytes <= cap_bytes) {
@@ -324,7 +365,8 @@ static int phase2_width_fit(const struct Cell_head *ohd,
 static int phase1_fits(const struct Cell_head *ohd, const struct Cell_head *ihd,
                        const struct pj_info *oproj, const struct pj_info *iproj,
                        const struct pj_info *tproj, int obr0, int h,
-                       size_t cap_bytes, int cell_size)
+                       size_t cap_bytes, int cell_size,
+                       const struct pole_set *poles)
 {
     int imin, imax, strip_rows;
     size_t out_bytes = (size_t)h * ohd->cols * cell_size, strip_bytes;
@@ -332,7 +374,7 @@ static int phase1_fits(const struct Cell_head *ohd, const struct Cell_head *ihd,
     if (out_bytes > cap_bytes)
         return 0;
     band_input_row_span(ohd, ihd, oproj, iproj, tproj, obr0, obr0 + h, 0,
-                        ohd->cols, &imin, &imax);
+                        ohd->cols, &imin, &imax, poles, NULL);
     strip_rows = imax - imin + 1;
     strip_bytes =
         strip_rows > 0 ? (size_t)strip_rows * ihd->cols * cell_size : 0;
@@ -987,6 +1029,35 @@ int main(int argc, char **argv)
     int seed_h1 = 0;               /* previous Phase-1 band's accepted height */
     int p1_hits = 0, p1_bands = 0; /* seed hit rate on the Phase-1 path */
 
+    /* Pole footprint fix: a tile whose interior holds a geographic pole has an
+     * input-row extremum the perimeter walk misses. Precompute each in-range
+     * pole's output coordinate and input row (lat/lon input only, where a pole
+     * is at latitude +/- 90). On transform failure or a non-finite result the
+     * pole is skipped and the strip under-size guard stays the backstop. Uses
+     * the adjusted incellhd, matching what band_input_row_span sees. */
+    struct pole_set poles;
+
+    poles.n = 0;
+    if (incellhd.proj == PROJECTION_LL) {
+        double polelat[2] = {90.0, -90.0};
+
+        for (int p = 0; p < 2; p++) {
+            double px = 0.0, py = polelat[p];
+
+            if (polelat[p] > incellhd.north + 0.5 * incellhd.ns_res ||
+                polelat[p] < incellhd.south - 0.5 * incellhd.ns_res)
+                continue;
+            if (GPJ_transform(&oproj, &iproj, &tproj, PJ_INV, &px, &py, NULL) <
+                    0 ||
+                !isfinite(px) || !isfinite(py))
+                continue;
+            poles.ox[poles.n] = px;
+            poles.oy[poles.n] = py;
+            poles.ri[poles.n] = (incellhd.north - polelat[p]) / incellhd.ns_res;
+            poles.n++;
+        }
+    }
+
     G_important_message(_("Projecting (banded, per-thread PROJ context)..."));
 
     int obr0 = 0;
@@ -1020,7 +1091,7 @@ int main(int argc, char **argv)
             while ((gs + 1) / 2 > seed_h1)
                 gs = (gs + 1) / 2;
             if (!phase1_fits(&outcellhd, &incellhd, &oproj, &iproj, &tproj,
-                             obr0, gs, cap_bytes, cell_size)) {
+                             obr0, gs, cap_bytes, cell_size, &poles)) {
                 band_orows = (gs + 1) / 2;
                 p1_seeded = 1;
             }
@@ -1028,7 +1099,7 @@ int main(int argc, char **argv)
         for (;;) {
             band_input_row_span(&outcellhd, &incellhd, &oproj, &iproj, &tproj,
                                 obr0, obr0 + band_orows, 0, outcellhd.cols,
-                                &imin, &imax);
+                                &imin, &imax, &poles, NULL);
             int strip_rows = imax - imin + 1;
             size_t strip_bytes =
                 strip_rows > 0 ? (size_t)strip_rows * incellhd.cols * cell_size
@@ -1069,7 +1140,7 @@ int main(int argc, char **argv)
                     gs = (gs + 1) / 2;
                 if (!phase2_width_fit(&outcellhd, &incellhd, &oproj, &iproj,
                                       &tproj, obr0, gs, cap_bytes, cell_size,
-                                      &w)) {
+                                      &w, &poles)) {
                     start_h = (gs + 1) / 2;
                     seed_hits++;
                 }
@@ -1078,15 +1149,15 @@ int main(int argc, char **argv)
             for (;;) {
                 if (phase2_width_fit(&outcellhd, &incellhd, &oproj, &iproj,
                                      &tproj, obr0, band_orows, cap_bytes,
-                                     cell_size, &tilew))
+                                     cell_size, &tilew, &poles))
                     break;
                 if (band_orows == 1) {
                     /* Single output row at minimum width still over cap =
                      * singular/large-halo; needs the tile-cache path. */
                     size_t out1 = (size_t)outcellhd.cols * cell_size;
-                    int worst = worst_tile_strip_rows(&outcellhd, &incellhd,
-                                                      &oproj, &iproj, &tproj,
-                                                      obr0, obr0 + 1, 1);
+                    int worst = worst_tile_strip_rows(
+                        &outcellhd, &incellhd, &oproj, &iproj, &tproj, obr0,
+                        obr0 + 1, 1, &poles);
                     size_t strip_bytes =
                         worst > 0 ? (size_t)worst * incellhd.cols * cell_size
                                   : 0;
@@ -1128,8 +1199,16 @@ int main(int argc, char **argv)
 
             /* Per-tile input row span (full-width strip: the raster API reads
              * whole rows, so columns are not cropped). */
+            int pole_widened = 0;
+
             band_input_row_span(&outcellhd, &incellhd, &oproj, &iproj, &tproj,
-                                obr0, obr1, obc0, obc1, &imin, &imax);
+                                obr0, obr1, obc0, obc1, &imin, &imax, &poles,
+                                &pole_widened);
+            if (pole_widened)
+                G_verbose_message(
+                    _("Pole (input row %d) in output tile rows [%d, %d) cols "
+                      "[%d, %d): input strip extended to reach it"),
+                    (int)poles.ri[pole_widened - 1], obr0, obr1, obc0, obc1);
             int strip_rows = imax - imin + 1;
 
             /* Serial strip load (single fd -> get_row not thread-safe). EMPTY
