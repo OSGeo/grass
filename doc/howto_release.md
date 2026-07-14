@@ -288,7 +288,7 @@ auto-generated notes) which need to be refined further:
 - add highlights
 - verify that the subsections are well sorted
 
-For the final release, edit these draft release again in order to publish it
+For the final release, edit this draft release again in order to publish it
 using the "Publish release" button.
 
 ## Upload to OSGeo servers
