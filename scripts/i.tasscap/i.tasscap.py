@@ -326,7 +326,7 @@ def calcN(outpre, bands, satel):
         bands_num = used_bands[i]
 
         # use combination function suitable for used number of bands
-        eval("calc1bands%d(out, bands, *p)" % bands_num)
+        globals()["calc1bands%d" % bands_num](out, bands, *p)
         gs.run_command("r.colors", map=out, color="grey", quiet=True)
 
 

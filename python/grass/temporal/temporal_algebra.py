@@ -1723,7 +1723,9 @@ class TemporalAlgebraParser:
         condition_value_str = "".join(map(str, condition_value_list))
         if self.debug:
             print(condition_value_str)
-        resultbool = eval(condition_value_str)
+        # The string is built above solely from checked bool values and
+        # grammar tokens, so evaluating it does not run arbitrary input.
+        resultbool = eval(condition_value_str)  # nosec B307
         if self.debug:
             print(resultbool)
         # Add boolean value to result list.
@@ -2095,19 +2097,19 @@ class TemporalAlgebraParser:
         return tvardict
 
     def eval_datetime_str(self, tfuncval, comp, value):
-        # Evaluate date object comparison expression.
+        # Evaluate a comparison of two values with the given operator.
         if comp == "<":
-            boolname = eval(str(tfuncval < value))
+            boolname = tfuncval < value
         elif comp == ">":
-            boolname = eval(str(tfuncval > value))
+            boolname = tfuncval > value
         elif comp == "==":
-            boolname = eval(str(tfuncval == value))
+            boolname = tfuncval == value
         elif comp == "<=":
-            boolname = eval(str(tfuncval <= value))
+            boolname = tfuncval <= value
         elif comp == ">=":
-            boolname = eval(str(tfuncval >= value))
+            boolname = tfuncval >= value
         elif comp == "!=":
-            boolname = eval(str(tfuncval != value))
+            boolname = tfuncval != value
 
         return boolname
 
@@ -2145,7 +2147,7 @@ class TemporalAlgebraParser:
                 value = timeobj.date()
                 boolname = self.eval_datetime_str(tfuncval, comp_op, value)
             else:
-                boolname = eval(str(tfuncval) + comp_op + str(value))
+                boolname = self.eval_datetime_str(tfuncval, comp_op, float(value))
             # Add conditional boolean value to the map.
             if "condition_value" in dir(map_i):
                 map_i.condition_value.append(boolname)
@@ -2829,13 +2831,13 @@ class TemporalAlgebraParser:
                 # Evaluate time differences and hash operator statements for each map.
                 try:
                     td = map_i.map_value[0].td
-                    boolname = eval(str(td) + comp_op + value)
+                    boolname = self.eval_datetime_str(td, comp_op, float(value))
                     # Add conditional boolean value to the map.
                     if "condition_value" in dir(map_i):
                         map_i.condition_value.append(boolname)
                     else:
                         map_i.condition_value = boolname
-                except (IndexError, AttributeError, SyntaxError):
+                except (IndexError, AttributeError, TypeError, ValueError):
                     self.msgr.fatal(
                         "Error: the given expression does not contain a correct time "
                         "difference object."
