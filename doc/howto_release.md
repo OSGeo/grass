@@ -377,7 +377,7 @@ scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
 ssh $USER@$SERVER1 "cd $SERVER1DIR ; rm -f grass-$MAJOR.$MINOR-latest.tar.gz"
 ssh $USER@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.tar.gz grass-$MAJOR.$MINOR-latest.tar.gz"
 ssh $USER@$SERVER1 "cd $SERVER1DIR ; rm -f grass-$MAJOR.$MINOR-latest.md5sum"
-ssh $USER@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.tar.md5sum grass-$MAJOR.$MINOR-latest.md5sum"
+ssh $USER@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.md5sum grass-$MAJOR.$MINOR-latest.md5sum"
 
 # verify
 echo "https://grass.osgeo.org/grass$MAJOR$MINOR/source/"
