@@ -1145,6 +1145,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     weeks, month, months, year, years". The unit of the
                     relative time granule is always the space time dataset
                     unit and can not be changed.
+        :param where: The SQL where statement to select a subset of
+                      the registered maps without "WHERE"
         :param dbif: The database interface to be used
 
         :return: ordered list of map lists. Each list represents a single
@@ -1169,7 +1171,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         start = maps[0].get_temporal_extent_as_tuple()[0]
         end_extend = maps[-1].get_temporal_extent_as_tuple()
-        end = end_extend[1] or end_extend[0]
+        end = end_extend[1] if end_extend[1] is not None else end_extend[0]
 
         if start is None or end is None:
             return None
