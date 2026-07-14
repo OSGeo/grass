@@ -477,7 +477,7 @@ def replace_shebang_win(python_file):
             out_file.write(new_line)
 
     os.remove(python_file)  # remove original
-    os.rename(tmp_name, python_file)  # rename temp to original name
+    Path(tmp_name).rename(python_file)  # rename temp to original name
 
 
 def urlretrieve(url, filename, *args, **kwargs):
