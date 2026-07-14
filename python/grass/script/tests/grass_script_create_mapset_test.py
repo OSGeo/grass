@@ -99,6 +99,13 @@ def test_create_mapset_illegal_name(project_path, name):
         gs.create_mapset(project_path, name=name, initialize_db=False)
 
 
+@pytest.mark.parametrize("name", ["ogr", "OGR", "Ogr"])
+def test_create_mapset_reserved_ogr_name(project_path, name):
+    """Check that the reserved OGR mapset name is rejected regardless of case."""
+    with pytest.raises(ValueError, match="reserved"):
+        gs.create_mapset(project_path, name=name, initialize_db=False)
+
+
 def test_create_multiple_mapsets(project_path):
     """Check that multiple mapsets can be created in the same project."""
     names = ["mapset_a", "mapset_b", "mapset_c"]

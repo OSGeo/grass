@@ -2167,9 +2167,9 @@ def create_mapset(
 
     :raises ValueError: when neither *path* nor *name* is provided; when
         *name* is given without *path* and no session is active; when the
-        mapset name is illegal or is ``PERMANENT``; when the project does
-        not exist; or when the mapset already exists and *overwrite* is
-        False
+        mapset name is illegal, ``PERMANENT``, or the reserved name ``ogr``;
+        when the project does not exist; or when the mapset already exists
+        and *overwrite* is False
     :raises OSError: when the underlying directory creation fails
     """
     from grass.grassdb.create import create_mapset as grassdb_create_mapset
@@ -2199,11 +2199,19 @@ def create_mapset(
         msg = "Cannot create PERMANENT mapset (it is managed by the project)"
         raise ValueError(msg)
 
+    if mapset_path.mapset.lower() == "ogr":
+        msg = (
+            f"Name <{mapset_path.mapset}> is reserved for direct "
+            "read access to OGR layers"
+        )
+        raise ValueError(msg)
+
     project_dir = mapset_path.path.parent
     if not project_dir.exists():
         msg = (
             f"Project <{mapset_path.location}> does not exist in "
-            f"<{mapset_path.directory}>"
+            f"<{mapset_path.directory}>. "
+            "Create the project first, e.g., with create_project()"
         )
         raise ValueError(msg)
 
