@@ -219,8 +219,9 @@ include(build_gui_in_subdir)
 include(generate_docs)
 
 set(MKHTML_PY ${CMAKE_BINARY_DIR}/utils/mkhtml.py)
+set(MKMARKDOWN_PY ${CMAKE_BINARY_DIR}/utils/mkmarkdown.py)
 set(THUMBNAILS_PY ${CMAKE_BINARY_DIR}/utils/thumbnails.py)
-set(HTML2MAN ${CMAKE_BINARY_DIR}/utils/g.html2man.py)
+set(MD2MAN ${CMAKE_BINARY_DIR}/utils/g.md2man.py)
 
 set(env_path "$ENV{PATH}")
 
@@ -299,6 +300,7 @@ if(WITH_DOCS)
   add_subdirectory(doc)
   add_subdirectory(man)
   install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/ DESTINATION ${GRASS_INSTALL_DOCDIR})
+  install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/ DESTINATION ${GRASS_INSTALL_MKDOCSDIR})
   install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_MANDIR}/ DESTINATION ${GRASS_INSTALL_MANDIR})
 endif()
 
