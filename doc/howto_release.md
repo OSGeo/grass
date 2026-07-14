@@ -193,7 +193,7 @@ python ./utils/generate_release_notes.py api releasebranch_8_4 8.3.0 $VERSION
 
 For micro releases (x.y.Z), GitHub API does not give good results because it uses
 PRs while the backports are usually direct commits without PRs.
-The _git log_ command operates on commits, so use use the _log_ backend:
+The _git log_ command operates on commits, so use the _log_ backend:
 
 ```bash
 python ./utils/generate_release_notes.py log releasebranch_8_4 8.4.0 $VERSION
