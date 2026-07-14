@@ -166,7 +166,11 @@ def test_plain_reports_title_description_and_history(temporal_data):
     assert "Title:" in plain
     assert "Description:" in plain
     assert "Command history:" in plain
-    assert 't.create type="strds"' in plain
+    # The history records the command name as t.create.py on Windows,
+    # so the name and its parameters are checked separately.
+    assert "t.create" in plain
+    assert 'type="strds"' in plain
+    assert 'title="A test"' in plain
 
     assert "Title:" not in shell
     assert "Description:" not in shell
@@ -181,7 +185,8 @@ def test_history_flag(temporal_data):
     assert "# Title:" in text
     assert "# Description:" in text
     assert "# Command history:" in text
-    assert 't.create type="strds"' in text
+    assert "t.create" in text
+    assert 'output="precip_abs1"' in text
     assert "t.register" in text
     assert 'maps="prec_1,prec_2,prec_3"' in text
 
