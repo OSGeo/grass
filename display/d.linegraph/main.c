@@ -191,8 +191,8 @@ int main(int argc, char **argv)
     float max_y;
     float min_y;
     float height, width;
-    float xscale;
-    float yscale;
+    double xscale;
+    double yscale;
 
     char txt[1024];
     char tic_name[1024];
