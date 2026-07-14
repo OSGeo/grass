@@ -282,7 +282,7 @@ you can get the same or similar message again using the script
 
 ## Publishing a final release
 
-The published RC releases has the initial release notes (based on locally
+The published RC releases have the initial release notes (based on locally
 auto-generated notes) which need to be refined further:
 
 - add highlights
