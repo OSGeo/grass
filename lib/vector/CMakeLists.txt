@@ -4,24 +4,24 @@ add_subdirectory(dglib)
 add_subdirectory(diglib)
 
 build_library_in_subdir(
-  Vlib
-  NAME
-  grass_vector
-  DEPENDS
-  GDAL::GDAL
-  grass_btree2
-  grass_dbmibase
-  grass_dbmiclient
-  grass_dbmidriver
-  grass_dig2
-  grass_gis
-  grass_gproj
-  grass_dgl
-  grass_linkm
-  grass_raster
-  grass_rtree
-  OPTIONAL_DEPENDS
-  GEOS::geos_c
+    Vlib
+    NAME
+    grass_vector
+    DEPENDS
+    GDAL::GDAL
+    grass_btree2
+    grass_dbmibase
+    grass_dbmiclient
+    grass_dbmidriver
+    grass_dig2
+    grass_gis
+    grass_gproj
+    grass_dgl
+    grass_linkm
+    grass_raster
+    grass_rtree
+    OPTIONAL_DEPENDS
+    GEOS::geos_c
 )
 
 target_include_directories(
@@ -42,30 +42,30 @@ if(TARGET LAPACKE)
 endif()
 
 build_library_in_subdir(
-  vedit
-  NAME
-  grass_vedit
-  DEPENDS
-  grass_gis
-  grass_vector
-  grass_dbmibase
-  grass_dbmiclient
-  grass_dbmidriver
-  GDAL::GDAL
+    vedit
+    NAME
+    grass_vedit
+    DEPENDS
+    grass_gis
+    grass_vector
+    grass_dbmibase
+    grass_dbmiclient
+    grass_dbmidriver
+    GDAL::GDAL
 )
 
 build_library_in_subdir(
-  neta
-  NAME
-  grass_neta
-  DEPENDS
-  grass_dbmibase
-  grass_dbmiclient
-  grass_dbmidriver
-  grass_gis
-  grass_dgl
-  grass_vector
-  GDAL::GDAL
+    neta
+    NAME
+    grass_neta
+    DEPENDS
+    grass_dbmibase
+    grass_dbmiclient
+    grass_dbmidriver
+    grass_gis
+    grass_dgl
+    grass_vector
+    GDAL::GDAL
 )
 
 if(WITH_DOCS)

@@ -37,9 +37,9 @@ add_custom_target(
 set_target_properties(ADD_DOC_DOCS PROPERTIES FOLDER Docs)
 
 generate_docs_list(
-  TARGET ADD_DOC_DOCS
-  DOC_FILES ${doc_files}
-  IMG_FILES ${img_files}
+    TARGET ADD_DOC_DOCS
+    DOC_FILES ${doc_files}
+    IMG_FILES ${img_files}
 )
 
 unset(doc_files)

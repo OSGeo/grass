@@ -27,16 +27,9 @@ set(dig2_SRCS
     type.c
 )
 build_module(
-  NAME
-  grass_dig2
-  SOURCES
-  ${dig2_SRCS}
-  DEPENDS
-  grass_gmath
-  grass_gis
-  grass_rtree
-  GDAL::GDAL
-  ${LIBM}
+    NAME grass_dig2
+    SOURCES ${dig2_SRCS}
+    DEPENDS grass_gmath grass_gis grass_rtree GDAL::GDAL ${LIBM}
 )
 
 if(TARGET PostgreSQL::PostgreSQL)

@@ -15,26 +15,19 @@ if(MSVC)
 endif()
 
 build_module(
-  NAME
-  grass_gis
-  INCLUDES
-  ${gislib_INCLUDES}
-  SOURCES
-  "${gislib_SRCS}"
-  DEPENDS
-  grass_datetime
-  ZLIB::ZLIB
-  PROJ::proj
-  OPTIONAL_DEPENDS
-  BZip2::BZip2
-  Iconv::Iconv
-  Intl::Intl
-  PostgreSQL::PostgreSQL
-  Threads::Threads
-  OpenMP::OpenMP_C
-  ZSTD
-  DEFS
-  "${grass_gis_DEFS}"
+    NAME grass_gis
+    INCLUDES ${gislib_INCLUDES}
+    SOURCES "${gislib_SRCS}"
+    DEPENDS grass_datetime ZLIB::ZLIB PROJ::proj
+    OPTIONAL_DEPENDS
+        BZip2::BZip2
+        Iconv::Iconv
+        Intl::Intl
+        PostgreSQL::PostgreSQL
+        Threads::Threads
+        OpenMP::OpenMP_C
+        ZSTD
+    DEFS "${grass_gis_DEFS}"
 )
 
 add_custom_command(

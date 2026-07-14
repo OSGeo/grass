@@ -144,14 +144,11 @@ function(build_addon name)
         set(install_dest ${GRASSAddon_ScriptDIR})
         set(PYTHON_EXECUTABLE $ENV{PYTHON_EXECUTABLE})
         _build_addon(
-          NAME
-          ${G_NAME}
-          ${ARGN}
-          SRC_DIR
-          ${_src_dir}
-          IS_SCRIPT
-          PYTHONPATH
-          ${_pythonpath}
+            NAME ${G_NAME}
+            ${ARGN}
+            SRC_DIR ${_src_dir}
+            IS_SCRIPT
+            PYTHONPATH ${_pythonpath}
         )
     else()
         _set_thirdparty_include_paths()

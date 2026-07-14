@@ -281,10 +281,11 @@ function(build_module)
             set(HTML_DESCR "HTML_DESCR")
         endif()
 
-        generate_docs(${PGM_NAME}
-          TARGET ${G_NAME}
-          SOURCEDIR ${PGM_SOURCE_DIR}
-          ${HTML_DESCR}
+        generate_docs(
+            ${PGM_NAME}
+            TARGET ${G_NAME}
+            SOURCEDIR ${PGM_SOURCE_DIR}
+            ${HTML_DESCR}
         )
     endif() # WITH_DOCS
 

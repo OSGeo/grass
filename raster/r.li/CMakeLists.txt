@@ -19,14 +19,14 @@ set(SUBDIRS1
 # r.li.setup
 
 build_library_in_subdir(
-  r.li.daemon
-  NAME
-  grass_rli
-  DEPENDS
-  grass_gis
-  grass_raster
-  HTML_FILE_NAME
-  "r.li.daemon"
+    r.li.daemon
+    NAME
+    grass_rli
+    DEPENDS
+    grass_gis
+    grass_raster
+    HTML_FILE_NAME
+    "r.li.daemon"
 )
 
 if(WITH_DOCS)
@@ -34,5 +34,12 @@ if(WITH_DOCS)
 endif()
 
 foreach(SUBDIR ${SUBDIRS1})
-    build_program_in_subdir(${SUBDIR} DEPENDS grass_gis grass_rli grass_raster ${LIBM})
+    build_program_in_subdir(
+        ${SUBDIR}
+        DEPENDS
+        grass_gis
+        grass_rli
+        grass_raster
+        ${LIBM}
+    )
 endforeach()

@@ -16,13 +16,13 @@ set(r_spread_SRCS
 )
 
 build_program(
-  NAME
-  r.spread
-  SOURCES
-  "${r_spread_SRCS}"
-  DEPENDS
-  grass_gis
-  grass_raster
-  grass_display
-  ${LIBM}
+    NAME
+    r.spread
+    SOURCES
+    "${r_spread_SRCS}"
+    DEPENDS
+    grass_gis
+    grass_raster
+    grass_display
+    ${LIBM}
 )

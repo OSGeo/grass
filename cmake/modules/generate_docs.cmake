@@ -55,7 +55,12 @@ macro(generate_docs_list)
     endif()
 
     foreach(doc_file ${D_DOC_FILES})
-        generate_docs(${doc_file} TARGET ${D_TARGET} SOURCEDIR ${CMAKE_CURRENT_SOURCE_DIR} IMG_NO)
+        generate_docs(
+            ${doc_file}
+            TARGET ${D_TARGET}
+            SOURCEDIR ${CMAKE_CURRENT_SOURCE_DIR}
+            IMG_NO
+        )
     endforeach()
 
     if(D_IMG_FILES)

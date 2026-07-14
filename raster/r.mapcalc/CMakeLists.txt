@@ -31,37 +31,37 @@ set(r3_mapcalc_SRCS
 )
 
 build_program(
-  NAME
-  r.mapcalc
-  SOURCES
-  "${r_mapcalc_SRCS}"
-  DEPENDS
-  grass_btree
-  grass_calc
-  grass_gis
-  grass_raster
-  OPTIONAL_DEPENDS
-  Readline::Readline
-  Readline::History
-  Threads::Threads
-  OpenMP::OpenMP_C
+    NAME
+    r.mapcalc
+    SOURCES
+    "${r_mapcalc_SRCS}"
+    DEPENDS
+    grass_btree
+    grass_calc
+    grass_gis
+    grass_raster
+    OPTIONAL_DEPENDS
+    Readline::Readline
+    Readline::History
+    Threads::Threads
+    OpenMP::OpenMP_C
 )
 
 build_program(
-  NAME
-  r3.mapcalc
-  SOURCES
-  "${r3_mapcalc_SRCS}"
-  DEPENDS
-  grass_btree
-  grass_calc
-  grass_gis
-  grass_raster
-  grass_raster3d
-  OPTIONAL_DEPENDS
-  Readline::Readline
-  Readline::History
-  Threads::Threads
+    NAME
+    r3.mapcalc
+    SOURCES
+    "${r3_mapcalc_SRCS}"
+    DEPENDS
+    grass_btree
+    grass_calc
+    grass_gis
+    grass_raster
+    grass_raster3d
+    OPTIONAL_DEPENDS
+    Readline::Readline
+    Readline::History
+    Threads::Threads
 )
 
 # mapcalc.yy.c is attached to both targets, work around this with build

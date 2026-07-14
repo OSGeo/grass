@@ -178,11 +178,7 @@ function(check_symbol_definitions)
 endfunction()
 
 check_symbol_definitions(
-  SYMBOL
-  asprintf
-  INCLUDES
-  stdio.h
-  DEFINITIONS
-  _GNU_SOURCE
-  _BSD_SOURCE
+    SYMBOL asprintf
+    INCLUDES stdio.h
+    DEFINITIONS _GNU_SOURCE _BSD_SOURCE
 )

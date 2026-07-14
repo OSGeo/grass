@@ -92,11 +92,12 @@ function(build_script_in_subdir dir_name)
 
         set(OUT_HTML_FILE ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${G_NAME}.html)
 
-        generate_docs(${G_NAME}
-          OUTPUT ${OUT_HTML_FILE}
-          SOURCEDIR ${G_SRC_DIR}
-          DEST_DIR ${G_DEST_DIR}
-          DEPENDS ${TRANSLATE_C_FILE} LIB_PYTHON
+        generate_docs(
+            ${G_NAME}
+            OUTPUT ${OUT_HTML_FILE}
+            SOURCEDIR ${G_SRC_DIR}
+            DEST_DIR ${G_DEST_DIR}
+            DEPENDS ${TRANSLATE_C_FILE} LIB_PYTHON
         )
     endif() # WITH_DOCS
 

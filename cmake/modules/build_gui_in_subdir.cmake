@@ -104,11 +104,12 @@ function(build_gui_in_subdir dir_name)
             ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${G_TARGET_NAME}.html
         )
 
-        generate_docs(${G_NAME}
-          OUTPUT ${out_html_file}
-          GUI_TARGET_NAME ${G_TARGET_NAME}
-          SOURCEDIR ${G_SRC_DIR}
-          DEPENDS ${OUT_SCRIPT_FILE} GUI_WXPYTHON LIB_PYTHON
+        generate_docs(
+            ${G_NAME}
+            OUTPUT ${out_html_file}
+            GUI_TARGET_NAME ${G_TARGET_NAME}
+            SOURCEDIR ${G_SRC_DIR}
+            DEPENDS ${OUT_SCRIPT_FILE} GUI_WXPYTHON LIB_PYTHON
         )
     endif() # WITH_DOCS
 

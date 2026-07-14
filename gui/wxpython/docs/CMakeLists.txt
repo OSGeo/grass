@@ -34,9 +34,9 @@ add_dependencies(GUI_WXPYTHON wxpython_docs)
 set_target_properties(wxpython_docs PROPERTIES FOLDER GUI)
 
 generate_docs_list(
-  TARGET wxpython_docs
-  DOC_FILES ${doc_files}
-  IMG_FILES ${img_files}
+    TARGET wxpython_docs
+    DOC_FILES ${doc_files}
+    IMG_FILES ${img_files}
 )
 
 unset(doc_files)

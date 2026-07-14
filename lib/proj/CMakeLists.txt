@@ -15,17 +15,10 @@ if(MINGW)
 endif()
 
 build_module(
-  NAME
-  grass_gproj
-  DEPENDS
-  grass_driver
-  grass_gis
-  GDAL::GDAL
-  PROJ::proj
-  SOURCES
-  "${grass_gproj_SOURCES}"
-  INCLUDES
-  "${CMAKE_CURRENT_SOURCE_DIR}/../driver"
+    NAME grass_gproj
+    DEPENDS grass_driver grass_gis GDAL::GDAL PROJ::proj
+    SOURCES "${grass_gproj_SOURCES}"
+    INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}/../driver"
 )
 
 target_include_directories(

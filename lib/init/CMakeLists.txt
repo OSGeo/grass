@@ -5,21 +5,18 @@ set_target_properties(ADD_INIT_DOCS PROPERTIES FOLDER Docs)
 
 if(WITH_DOCS)
     generate_docs_list(
-      TARGET ADD_INIT_DOCS
-      DOC_FILES
-        grass
-        helptext
-        variables
-      IMG_FILES
-        grass_start.png
-        grassdb.png
-        help_project_structure.png
-        location-add.png
-        location-download.png
-        location.png
-        mapset.png
-        raster-import.png
-        vector-import.png
+        TARGET ADD_INIT_DOCS
+        DOC_FILES grass helptext variables
+        IMG_FILES
+            grass_start.png
+            grassdb.png
+            help_project_structure.png
+            location-add.png
+            location-download.png
+            location.png
+            mapset.png
+            raster-import.png
+            vector-import.png
     )
 endif()
 
@@ -75,67 +72,67 @@ message(STATUS "gisrc (build): ${GISRC}")
 # finish installtree and buildtree configurations
 
 build_program(
-  NAME
-  echo
-  SOURCES
-  echo.c
-  PACKAGE
-  "grasslibs"
-  RUNTIME_OUTPUT_DIR
-  ${GRASS_INSTALL_ETCBINDIR}
-  NO_DOCS
+    NAME
+    echo
+    SOURCES
+    echo.c
+    PACKAGE
+    "grasslibs"
+    RUNTIME_OUTPUT_DIR
+    ${GRASS_INSTALL_ETCBINDIR}
+    NO_DOCS
 )
 
 build_program(
-  NAME
-  run
-  SOURCES
-  run.c
-  PACKAGE
-  "grasslibs"
-  RUNTIME_OUTPUT_DIR
-  ${GRASS_INSTALL_ETCBINDIR}
-  NO_DOCS
+    NAME
+    run
+    SOURCES
+    run.c
+    PACKAGE
+    "grasslibs"
+    RUNTIME_OUTPUT_DIR
+    ${GRASS_INSTALL_ETCBINDIR}
+    NO_DOCS
 )
 
 build_program(
-  NAME
-  clean_temp
-  SOURCES
-  clean_temp.c
-  DEPENDS
-  grass_gis
-  PACKAGE
-  "grasslibs"
-  RUNTIME_OUTPUT_DIR
-  ${GRASS_INSTALL_ETCBINDIR}
-  NO_DOCS
+    NAME
+    clean_temp
+    SOURCES
+    clean_temp.c
+    DEPENDS
+    grass_gis
+    PACKAGE
+    "grasslibs"
+    RUNTIME_OUTPUT_DIR
+    ${GRASS_INSTALL_ETCBINDIR}
+    NO_DOCS
 )
 
 build_program(
-  NAME
-  lock
-  SOURCES
-  lock.c
-  DEPENDS
-  grass_gis
-  grass_datetime
-  PACKAGE
-  "grasslibs"
-  RUNTIME_OUTPUT_DIR
-  ${GRASS_INSTALL_ETCBINDIR}
-  NO_DOCS
+    NAME
+    lock
+    SOURCES
+    lock.c
+    DEPENDS
+    grass_gis
+    grass_datetime
+    PACKAGE
+    "grasslibs"
+    RUNTIME_OUTPUT_DIR
+    ${GRASS_INSTALL_ETCBINDIR}
+    NO_DOCS
 )
 
 if(MINGW)
     build_program(
-      NAME
-      winlocale
-      SOURCES
-      winlocale.c
-      RUNTIME_OUTPUT_DIR
-      ${GRASS_INSTALL_ETCBINDIR}
-      NO_DOCS
+        NAME
+        winlocale
+        SOURCES
+        winlocale.c
+        RUNTIME_OUTPUT_DIR
+        ${GRASS_INSTALL_ETCBINDIR}
+        NO_DOCS
     )
 endif()
 
