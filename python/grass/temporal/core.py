@@ -645,6 +645,10 @@ def init(
             c_library_interface.stop()
             c_library_interface = None
 
+    # Set defaults for the TGIS DB (overwritten later if initialized)
+    tgis_backend = "sqlite"
+    tgis_database_string = None
+
     # Set the global variable for faster access
     current_mapset = new_mapset
     current_location = new_location
