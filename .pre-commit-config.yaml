@@ -105,14 +105,13 @@ repos:
     hooks:
       - id: gersemi
         args:
-          [
-            "--in-place",
-            "--safe",
-            "--warn-about-unknown-commands",
-            "--definitions",
-            "cmake/modules",
-            "cmake/find_scripts",
-          ]
+          - "--in-place"
+          - "--safe"
+          - "--definitions"
+          - "cmake/modules"
+          - "cmake/find_scripts"
+          - "--warn-about-unknown-commands" # Need an argument/flag after the --definitions list
+
         exclude: |
           (?x)^(
               include\/config\.h\.cmake\.in
