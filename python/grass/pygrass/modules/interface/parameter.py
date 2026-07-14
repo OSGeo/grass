@@ -201,7 +201,7 @@ class Parameter:
         #
         # default
         #
-        if "default" in diz and diz["default"]:
+        if diz.get("default"):
             if self.multiple or self.keydescvalues:
                 self.default = [self.type(v) for v in diz["default"].split(",")]
             else:
@@ -214,7 +214,7 @@ class Parameter:
         #
         # gisprompt
         #
-        if "gisprompt" in diz and diz["gisprompt"]:
+        if diz.get("gisprompt"):
             self.typedesc = diz["gisprompt"].get("prompt", "")
             self.input = diz["gisprompt"]["age"] != "new"
         else:
