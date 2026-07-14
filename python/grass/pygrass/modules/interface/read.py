@@ -10,36 +10,47 @@ from typing import TYPE_CHECKING
 
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+    from typing import TypeVar, Never
     from xml.etree.ElementTree import Element
 
+    T = TypeVar(name="T")
 
-def do_nothing(p):
+
+def do_nothing(p: T) -> T:
     return p
 
 
-def get_None(p):
+def get_None(p: Never) -> None:
     return None
 
 
-def get_dict(p):
+def get_dict(p: Element[str]) -> dict[str, str]:
     return dict(p.items())
 
 
-def get_values(p):
-    return [e.text.strip() for e in p.findall("value/name")]
+def get_values(p: Element[str]) -> list[str]:
+    return [e.text.strip() for e in p.findall(path="value/name")]
 
 
-def read_text(p):
+def read_text(p: Element[str]) -> str:
     return p.text.strip()
 
 
-def read_keydesc(par):
-    name = par.text.strip()
-    items = [e.text.strip() for e in par.findall("item")]
+def read_keydesc(par: Element[str]) -> tuple[str, tuple[str, ...] | None]:
+    name: str = par.text.strip()
+    items: list[str] = [e.text.strip() for e in par.findall("item")]
     return name, tuple(items) if len(items) > 1 else None
 
 
-GETFROMTAG = {
+GETFROMTAG: dict[
+    str,
+    Callable[Element[str], str]
+    | Callable[Element[str], tuple[str, tuple[str, ...] | None]]
+    | Callable[Element[str], dict[str, str]]
+    | Callable[Element[str], list[str]]
+    | Callable[Never, None],
+] = {
     "description": read_text,
     "keydesc": read_keydesc,
     "gisprompt": get_dict,
@@ -64,8 +75,8 @@ GETTYPE = {
 }
 
 
-def element2dict(xparameter: Element[str]) -> dict:
-    diz = dict(xparameter.items())
+def element2dict(xparameter: Element[str]):
+    diz: dict[str, str] = dict(xparameter.items())
     for p in xparameter:
         if p.tag in GETFROMTAG:
             diz[p.tag] = GETFROMTAG[p.tag](p)
