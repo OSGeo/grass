@@ -104,7 +104,14 @@ repos:
     rev: 0.27.7
     hooks:
       - id: gersemi
-        files: (^CMakeLists\.txt$|\.cmake$)
+        args:
+          [
+            "-i",
+            "--definitions",
+            "cmake/modules/",
+            "--warn-about-unknown-commands",
+            "--safe",
+          ]
   - repo: https://github.com/editorconfig-checker/editorconfig-checker
     rev: v3.6.1
     hooks:
