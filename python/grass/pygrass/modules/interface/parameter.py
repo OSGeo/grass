@@ -4,10 +4,16 @@ Created on Tue Apr  2 18:31:47 2013
 @author: pietro
 """
 
+from __future__ import annotations
 import re
+from typing import TYPE_CHECKING
+
 
 from grass.pygrass.modules.interface.docstring import docstring_property
 from grass.pygrass.modules.interface.read import GETTYPE, element2dict, DOC
+
+if TYPE_CHECKING:
+    from xml.etree.ElementTree import Element
 
 
 def _check_value(param, value):
@@ -153,7 +159,11 @@ class Parameter:
     ...
     """  # noqa: E501
 
-    def __init__(self, xparameter=None, diz=None):
+    def __init__(
+        self,
+        xparameter: Element[str] | None = None,
+        diz: dict[str, str | bool | float | list | tuple | None] | None = None,
+    ):
         self._value = None
         self._rawvalue = None
         self.min = None

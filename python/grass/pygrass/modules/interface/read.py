@@ -4,6 +4,14 @@ Created on Tue Apr  2 18:30:34 2013
 @author: pietro
 """
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+
+if TYPE_CHECKING:
+    from xml.etree.ElementTree import Element
+
 
 def do_nothing(p):
     return p
@@ -56,7 +64,7 @@ GETTYPE = {
 }
 
 
-def element2dict(xparameter):
+def element2dict(xparameter: Element[str]) -> dict:
     diz = dict(xparameter.items())
     for p in xparameter:
         if p.tag in GETFROMTAG:
@@ -67,7 +75,7 @@ def element2dict(xparameter):
 
 
 # dictionary used to create docstring for the objects
-DOC = {
+DOC: dict[str, str] = {
     # ------------------------------------------------------------
     # head
     "head": """{cmd_name}({cmd_params})
