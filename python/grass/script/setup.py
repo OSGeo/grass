@@ -485,7 +485,7 @@ class SessionHandle:
     def __init__(self, *, env, active=True, locked=False):
         self._env = env
         self._active = active
-        self._start_time = datetime.datetime.now(datetime.timezone.utc)
+        self._start_time = datetime.datetime.now(datetime.UTC)
         self._locked = locked
 
     @property
@@ -563,7 +563,7 @@ def clean_default_db(*, modified_after=None, env=None, gis_env=None):
         return
     if modified_after:
         modified_time = datetime.datetime.fromtimestamp(
-            file_stat.st_mtime, tz=datetime.timezone.utc
+            file_stat.st_mtime, tz=datetime.UTC
         )
         if modified_after >= modified_time:
             return
