@@ -1,0 +1,39 @@
+---
+name: Generate SBOM
+
+on:
+  workflow_dispatch:
+    inputs:
+      source-path:
+        description: Path to scan for SBOM generation
+        required: false
+        default: '.'
+      output-file:
+        description: Output SBOM file name
+        required: false
+        default: 'grass.cyclonedx.json'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+      - name: Generate CycloneDX SBOM
+        uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610 # v0.24.0
+        with:
+          path: ${{ inputs.source-path }}
+          format: cyclonedx-json
+          output-file: ${{ inputs.output-file }}
+          upload-artifact: true
+          artifact-name: grass-sbom
