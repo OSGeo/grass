@@ -108,7 +108,7 @@
 import os
 from pathlib import Path
 import sys
-from grass.script.utils import try_remove
+from grass.script.utils import check_url_scheme, try_remove
 from grass.script import core as grass
 
 from urllib.request import urlopen
@@ -186,7 +186,11 @@ def main():
     # GTC Downloading WFS features
     grass.message(_("Retrieving data..."))
     try:
-        inf = urlopen(wfs_url)
+        check_url_scheme(wfs_url)
+    except ValueError as e:
+        grass.fatal("%s" % e)
+    try:
+        inf = urlopen(wfs_url)  # nosec B310 (scheme checked above)
     except HTTPError as e:
         # GTC WFS request HTTP failure
         grass.fatal(_("Server couldn't fulfill the request.\nError code: %s") % e.code)
