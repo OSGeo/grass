@@ -487,10 +487,9 @@ class RegionManager:
     ...     gs.run_command("g.region", n=226000, s=222000, w=634000, e=638000)
     ...     gs.parse_command("r.univar", map="elevation", format="json")
 
-    Example saving a region and reusing it later through *region=*:
+    Example using a saved region:
 
-    >>> with gs.RegionManager(raster="elevation") as manager:
-    ...     manager.save("study_area")
+    >>> gs.run_command("g.region", save="study_area", s=1000, n=1100, w=1000, e=1100)
     >>> with gs.RegionManager(region="study_area"):
     ...     gs.parse_command("r.univar", map="elevation", format="json")
 
@@ -499,6 +498,12 @@ class RegionManager:
     >>> with gs.RegionManager() as manager:
     ...     manager.set_region(n=226000, s=222000, w=634000, e=638000)
     ...     gs.parse_command("r.univar", map="elevation", format="json")
+
+    Example using :py:meth:`~grass.script.raster.RegionManager.save` to store the current
+    region under a persistent name so it can be reused after the context exits:
+
+    >>> with gs.RegionManager(raster="elevation") as manager:
+    ...     manager.save("elevation_region", overwrite=True)
 
     Example using explicit activate and deactivate:
 
@@ -602,14 +607,21 @@ class RegionManagerEnv:
 
     See :class:`RegionManager`. Unlike :class:`RegionManager`, this class uses
     `GRASS_REGION` instead of `WIND_OVERRIDE`. The advantage is that, during normal
-    context usage, no region files are written to disk. If you call
-    :py:meth:`.save`, a named region is intentionally written to disk.
+    context usage, no region files are written to disk.
     The disadvantage is that simply calling *g.region* within the context will not affect
     the temporary region, but the global one, which can be confusing.
+
+    The :py:meth:`.save` method intentionally writes the current region to a saved region file.
 
     Example with explicit region parameters:
 
     >>> with gs.RegionManagerEnv(n=226000, s=222000, w=634000, e=638000):
+    ...     gs.parse_command("r.univar", map="elevation", format="json")
+
+    Example using a saved region:
+
+    >>> gs.run_command("g.region", save="study_area", s=1000, n=1100, w=1000, e=1100)
+    >>> with gs.RegionManagerEnv(region="study_area"):
     ...     gs.parse_command("r.univar", map="elevation", format="json")
 
     Example with :py:meth:`.set_region`:
@@ -624,13 +636,11 @@ class RegionManagerEnv:
     ...     manager.env["GRASS_REGION"] = gs.region_env()
     ...     gs.parse_command("r.univar", map="elevation", format="json")
 
-    Example saving the temporary region and reusing it later through *region=*:
+    Example using :py:meth:`.save`: to store the current region under
+    a persistent name so it can be reused after the context exits:
 
     >>> with gs.RegionManagerEnv(raster="elevation") as manager:
-    ...     manager.save("study_area")
-    >>> with gs.RegionManager(region="study_area"):
-    ...     gs.parse_command("r.univar", map="elevation", format="json")
-
+    ...     manager.save("elevation_region", overwrite=True)
 
     Example using explicit activate and deactivate:
 
@@ -645,9 +655,7 @@ class RegionManagerEnv:
     .. caution::
 
         To set region within the context, do not call *g.region*,
-        use :py:meth:`.set_region` instead. The :py:meth:`.save` method
-        is an exception and uses *g.region save=* intentionally to store
-        the current region persistently.
+        use :py:meth:`.set_region` instead.
     """
 
     def __init__(self, env: dict[str, str] | None = None, **kwargs):
