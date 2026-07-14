@@ -1272,7 +1272,7 @@ class WriteModelFile:
                 % (" " * self.indent, self.properties["author"])
             )
 
-        if "overwrite" in self.properties and self.properties["overwrite"]:
+        if self.properties.get("overwrite"):
             self.fd.write('%s<flag name="overwrite" />\n' % (" " * self.indent))
         self.indent -= 4
         self.fd.write("%s</properties>\n" % (" " * self.indent))
