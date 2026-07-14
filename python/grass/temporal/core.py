@@ -540,10 +540,13 @@ def get_available_temporal_mapsets(mapsets: str | None = None):
             # exists
             if driver == "sqlite" and not Path(database).exists():
                 message_interface.warning(
-                    "Temporal database connection defined as:\n"
-                    + database
-                    + "\nBut database file does not exist."
+                    _(
+                        "Temporal database connection for mapset <%s> "
+                        "defined as:\n %s\nBut database file does not exist."
+                    )
+                    % (mapset, database)
                 )
+                del tgis_mapsets[mapset]
     return tgis_mapsets
 
 
