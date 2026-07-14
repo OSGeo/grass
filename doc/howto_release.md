@@ -229,6 +229,12 @@ GitHub and further modify as needed.
 Older release description may or may not be a good inspiration:
 <https://github.com/OSGeo/grass/releases>.
 
+To see a list of new add-ons since the last release, filter the merged pull
+requests in the
+[GRASS addons repository](https://github.com/OSGeo/grass-addons/pulls?q=sort%3Aupdated-desc+is%3Apr+is%3Aopen+sort%3Aupdated-desc+is%3Apr+is%3Aclosed+label%3A%22new+addon%22+).
+To filter the list by date, enter the release date of the previous release in
+the search field (e.g., `closed:>2025-11-21`).
+
 If RC, mark it as a pre-release, check:
 
 ```text
@@ -343,13 +349,13 @@ md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 
 ### Upload source code tarball to OSGeo servers
 
-Note: servers 'osgeo8-grass' and 'osgeo7-download' only reachable via
+Note: servers 'osgeo10-grass' and 'osgeo7-download' only reachable via
 jumphost (managed by OSGeo-SAC) - see <https://wiki.osgeo.org/wiki/SAC_Service_Status#grass>
 
 ```bash
 # Store the source tarball (twice) in (use scp -p FILES grass:):
 USER=neteler
-SERVER1=osgeo8-grass
+SERVER1=osgeo10-grass
 SERVER1DIR=/var/www/code_and_data/grass$MAJOR$MINOR/source/
 SERVER2=osgeo7-download
 SERVER2DIR=/osgeo/download/grass/grass$MAJOR$MINOR/source/
@@ -380,7 +386,7 @@ echo "https://grass.osgeo.org/grass$MAJOR$MINOR/source/"
 ### Update redirects
 
 For final minor and major releases (not release candidates and micro releases),
-update `grass-stable` redirect at `osgeo7-grass`:
+update `grass-stable` redirect at `osgeo10-grass`:
 
 ```bash
 sudo vim /etc/apache2/sites-enabled/000-default.conf
