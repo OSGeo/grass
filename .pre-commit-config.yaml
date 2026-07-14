@@ -106,12 +106,17 @@ repos:
       - id: gersemi
         args:
           [
-            "-i",
-            "--definitions",
-            "cmake/modules/",
-            "--warn-about-unknown-commands",
+            "--in-place",
             "--safe",
+            "--warn-about-unknown-commands",
+            "--definitions",
+            "cmake/modules",
+            "cmake/find_scripts",
           ]
+        exclude: |
+          (?x)^(
+              include\/config\.h\.cmake\.in
+          )$
   - repo: https://github.com/editorconfig-checker/editorconfig-checker
     rev: v3.6.1
     hooks:
