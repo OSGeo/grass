@@ -26,6 +26,29 @@ function under CSR, so the output can be plotted and interpreted
 directly. Values above the CSR reference indicate clustering, values
 below it indicate dispersion (for F, the interpretation is reversed).
 
+![Clustered, random, and dispersed point patterns](v_ppa_patterns.png)  
+*Figure: Clustered, random (CSR), and dispersed point patterns of
+about 200 points in a 1000x1000 window, used in the figures below.*
+
+![G function for the three patterns](v_ppa_g.png)  
+*Figure: G function. Clustered patterns rise left of the CSR
+expectation because nearest neighbors are close; dispersed patterns
+stay at zero up to their minimum spacing and then rise right of it.*
+
+![F function for the three patterns](v_ppa_f.png)  
+*Figure: F function. The interpretation is reversed compared to G:
+dispersed patterns rise faster than the CSR expectation, clustered
+patterns slower because of their large empty spaces.*
+
+![Ripley's K function for the three patterns](v_ppa_k.png)  
+*Figure: Ripley's K function with isotropic edge correction. Clustered
+patterns lie above the CSR expectation, dispersed patterns below it up
+to the pattern spacing.*
+
+![L function for the three patterns](v_ppa_l.png)  
+*Figure: L function. The square root transformation makes departures
+from CSR easier to see than in K.*
+
 The **computational region is the observation window** of the
 analysis: it defines the area used to estimate the intensity (points
 per unit area), the sampling window of the F function, the edge
