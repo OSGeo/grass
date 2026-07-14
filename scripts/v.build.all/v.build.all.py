@@ -4,7 +4,7 @@
 # MODULE:	v.build.all
 # AUTHOR(S):	Glynn Clements, Radim Blazek
 # PURPOSE:	Build all vectors in current mapset
-# COPYRIGHT:	(C) 2004, 2008-2009 by the GRASS Development Team
+# SPDX-FileCopyrightText: 2004, 2008-2009 by the GRASS Development Team
 #
 # 		This program is free software under the GNU General Public
 # 		License (>=v2). Read the file COPYING that comes with GRASS

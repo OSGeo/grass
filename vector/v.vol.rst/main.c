@@ -16,7 +16,7 @@
  *               Regularized spline with tension is used for the
  *               interpolation.
  *
- * COPYRIGHT:    (C) 1989, 1993, 2000 L. Mitas,  H. Mitasova,
+ * SPDX-FileCopyrightText: 1989, 1993, 2000 L. Mitas,  H. Mitasova,
  *               I. Kosinovsky, D. Gerdes, J. Hofierka
  *
  *               This program is free software under the GNU General Public

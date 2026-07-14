@@ -5,12 +5,10 @@
  *                      (adapted from Radim Blazek's d.vect code)
  *               Glynn Clements <glynn gclements.plus.com>
  * PURPOSE:      draw a symbol at pixel coordinates
- * COPYRIGHT:    (C) 2005-2007 by M. Hamish Bowman, and
+ * SPDX-FileCopyrightText: 2005-2007 by M. Hamish Bowman, and
  *                              the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-License-Identifier: GPL-2.0-or-later.
  *
  *****************************************************************************/
 

@@ -3,10 +3,9 @@
 
    \brief GIS Library - Argument parsing functions (script)
 
-   (C) 2001-2009, 2011 by the GRASS Development Team
+   SPDX-FileCopyrightText: 2001-2009, 2011 by the GRASS Development Team
 
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-License-Identifier: GPL-2.0-or-later.
 
    \author Original author CERL
    \author Soeren Gebbert added Dec. 2009 WPS process_description document
@@ -33,9 +32,10 @@ void G__script(void)
     fprintf(fp, "# MODULE:       %s_wrapper\n", G_program_name());
     fprintf(fp, "# AUTHOR(S):    %s\n", G_whoami());
     fprintf(fp, "# PURPOSE:      Wrapper for %s\n", G_program_name());
-    fprintf(fp,
-            "# COPYRIGHT:    (C) %s by %s, and the GRASS Development Team\n",
-            GRASS_VERSION_DATE, G_whoami());
+    fprintf(
+        fp,
+        "# SPDX-FileCopyrightText: %s by %s, and the GRASS Development Team\n",
+        GRASS_VERSION_DATE, G_whoami());
     fprintf(fp, "#\n");
     fprintf(fp, "#  This program is free software; you can redistribute it "
                 "and/or modify\n");

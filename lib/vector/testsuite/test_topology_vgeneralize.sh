@@ -6,7 +6,7 @@
 # AUTHOR(S):    Markus Metz
 #
 # PURPOSE:      Tests if the topology is correct using v.generalize debug mode
-# COPYRIGHT:    (C) 2011-2014 by Markus Metz and the GRASS Development Team
+# SPDX-FileCopyrightText: 2011-2014 by Markus Metz and the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (version 2). Read the file COPYING that comes with GRASS

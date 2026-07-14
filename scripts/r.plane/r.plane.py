@@ -9,7 +9,7 @@
 #               Modified to produce floating and double values maps
 #               Converted to Python by Glynn Clements
 # PURPOSE:	Creates a raster plane map from user specified inclination and azimuth
-# COPYRIGHT:	(C) 2004-2012 by the GRASS Development Team
+# SPDX-FileCopyrightText: 2004-2012 by the GRASS Development Team
 #
 # 		This program is free software under the GNU General Public
 # 		License (>=v2). Read the file COPYING that comes with GRASS

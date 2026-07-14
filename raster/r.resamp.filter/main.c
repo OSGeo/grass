@@ -4,11 +4,10 @@
  * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com>
  *               Aaron Saw Min Sern (OpenMP parallelization)
  * PURPOSE:
- * COPYRIGHT:    (C) 2010-2023 by Glynn Clements and the GRASS Development Team
+ * SPDX-FileCopyrightText: 2010-2023 by Glynn Clements and the GRASS Development
+ * Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-License-Identifier: GPL-2.0-or-later.
  *
  *****************************************************************************/
 #if defined(_OPENMP)

@@ -3,11 +3,9 @@
  * MODULE:       imagery library
  * AUTHOR(S):    Original author(s) name(s) unknown - written by CERL
  * PURPOSE:      Image processing library
- * COPYRIGHT:    (C) 1999, 2005 by the GRASS Development Team
+ * SPDX-FileCopyrightText: 1999, 2005 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-License-Identifier: GPL-2.0-or-later.
  *
  *****************************************************************************/
 

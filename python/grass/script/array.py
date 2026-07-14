@@ -99,10 +99,8 @@ Usage:
 ... map3d_2.write(mapname="map3d_2", overwrite=True)
 0
 
-(C) 2010-2021 by Glynn Clements and the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2010-2021 by Glynn Clements and the GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later.
 
 .. sectionauthor:: Glynn Clements
 """

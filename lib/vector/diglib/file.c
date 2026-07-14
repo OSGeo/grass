@@ -9,7 +9,7 @@
    - reading from file
    - load whole file to memory and read from memory
 
-   (C) 2001-2009 by the GRASS Development Team
+   SPDX-FileCopyrightText: 2001-2009 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2).  Read the file COPYING that comes with GRASS for details.

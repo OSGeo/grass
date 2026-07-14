@@ -3,11 +3,8 @@
 # MODULE:       Test of db.select
 # AUTHOR(S):    Gulshan Kumar
 # PURPOSE:      Test parsing and structure of CSV and JSON outputs
-# COPYRIGHT:    (C) 2021-2025 by the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-FileCopyrightText: 2021-2025 by the GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later.
 #
 #############################################################################
 

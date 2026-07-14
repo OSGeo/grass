@@ -9,11 +9,9 @@
  *
  * PURPOSE:      Create map raster with textural features.
  *
- * COPYRIGHT:    (C) 2003 by University of Sannio (BN) - Italy
+ * SPDX-FileCopyrightText: 2003 by University of Sannio (BN) - Italy
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-License-Identifier: GPL-2.0-or-later.
  *
  * Permission to use, copy, modify, and distribute this software and its
  * documentation for any purpose and without fee is hereby granted. This

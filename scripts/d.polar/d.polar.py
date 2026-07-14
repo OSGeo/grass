@@ -11,11 +11,9 @@
 #               all cells in the map. If one or many of them are NULL (no data),
 #               the figure will not reach the outer circle. The vector inside
 #               indicates the prevalent direction.
-# COPYRIGHT:    (C) 2006,2008 by the GRASS Development Team
+# SPDX-FileCopyrightText: 2006,2008 by the GRASS Development Team
 #
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-License-Identifier: GPL-2.0-or-later.
 #
 #############################################################################
 

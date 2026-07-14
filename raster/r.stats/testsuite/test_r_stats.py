@@ -8,10 +8,7 @@ AUTHOR(S): Nishant Bansal <nishant.bansal.282003@gmail.com>
 PURPOSE:   Test that verifies the generated area statistics for a raster map.
 
 COPYRIGHT: (C) 2025 by Nishant Bansal and the GRASS Development Team
-
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-License-Identifier: GPL-2.0-or-later.
 """
 
 import json

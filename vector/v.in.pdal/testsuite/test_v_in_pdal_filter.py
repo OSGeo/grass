@@ -3,7 +3,7 @@ Name:      filter_test
 Purpose:   v.in.pdal test if various filters and selections
 
 Author:    Vaclav Petras
-Copyright: (C) 2015 by Vaclav Petras and the GRASS Development Team
+SPDX-FileCopyrightText: 2015 by Vaclav Petras and the GRASS Development Team
 Licence:   This program is free software under the GNU General Public
            License (>=v2). Read the file COPYING that comes with GRASS
            for details.

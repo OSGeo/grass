@@ -7,11 +7,9 @@
 #               Converted to Python by Glynn Clements
 #               Added rmarea method by Luca Delucchi
 # PURPOSE:      Reclasses a raster map greater or less than user specified area size (in hectares)
-# COPYRIGHT:    (C) 1999-2026 by the GRASS Development Team
+# SPDX-FileCopyrightText: 1999-2026 by the GRASS Development Team
 #
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-License-Identifier: GPL-2.0-or-later.
 #
 #############################################################################
 # 04/2026: rewrite with Tools API and new options (Stefan Blumentrath)

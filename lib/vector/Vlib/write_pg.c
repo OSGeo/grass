@@ -11,10 +11,10 @@
    \todo function to delete corresponding entry in fidx
    \todo PostGIS version of V2__add_area_cats_to_cidx_nat
 
-   (C) 2012-2014 by Martin Landa, and the GRASS Development Team
+   SPDX-FileCopyrightText: 2012-2014 by Martin Landa, and the GRASS Development
+   Team
 
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-License-Identifier: GPL-2.0-or-later.
 
    \author Martin Landa <landa.martin gmail.com>
  */

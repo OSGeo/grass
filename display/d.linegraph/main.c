@@ -11,12 +11,11 @@
  *               Hamish Bowman <hamish_b yahoo.com>
  *               Vaclav Petras <wenzeslaus gmail com> (various features)
  *
- * PURPOSE:
- * COPYRIGHT:    (C) 1999-2016 by the GRASS Development Team
+ * PURPOSE:      Generates and displays simple line graphs in the active
+ *               graphics monitor display frame
+ * SPDX-FileCopyrightText: 1999-2016 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-License-Identifier: GPL-2.0-or-later.
  *
  *****************************************************************************/
 /* Chris Rewerts

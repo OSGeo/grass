@@ -16,11 +16,8 @@ set -eu
 #    current directory and subdirectories:
 #      ./utils/grass_html2md.sh
 #
-# COPYRIGHT: (C) 2024-2025 by the GRASS Development Team
-#
-#            This program is free software under the GNU General Public
-#            License (>=v2). Read the file COPYING that comes with GRASS
-#            for details.
+# SPDX-FileCopyrightText: 2024-2025 by the GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later.
 #
 ###############################################################################
 

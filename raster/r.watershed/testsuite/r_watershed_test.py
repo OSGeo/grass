@@ -4,7 +4,7 @@ Purpose:   This script is to demonstrate a unit test for r.watershed
            module (originally developed for GIS582 course at NCSU).
 
 Author:    Stephanie Wendel
-Copyright: (C) 205 by Stephanie Wendel and the GRASS Development Team
+SPDX-FileCopyrightText: 205 by Stephanie Wendel and the GRASS Development Team
 Licence:   This program is free software under the GNU General Public
            License (>=v2). Read the file COPYING that comes with GRASS
            for details.

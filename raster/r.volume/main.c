@@ -17,11 +17,9 @@
  *               area of each cell. It also outputs the "centroid" location of
  *               each clump. Output is to standard out.
  *
- * COPYRIGHT:    (C) 1999-2006, 2013 by the GRASS Development Team
+ * SPDX-FileCopyrightText: 1999-2006, 2013 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-License-Identifier: GPL-2.0-or-later.
  *
  *****************************************************************************/
 

@@ -6,9 +6,7 @@
  *               Markus Metz: dynamic bins to reduce memory consumptions
  * PURPOSE:      Compute category or object oriented quantiles using two passes
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-License-Identifier: GPL-2.0-or-later.
  *
  *****************************************************************************/
 

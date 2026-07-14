@@ -4,11 +4,9 @@
  * AUTHOR(S):    Hamish Bowman, Dunedin New Zealand
  * PURPOSE:      lib fns for working with RGBA_Color struct.
  *               Inspired by ps.map's ps_colors.c
- * COPYRIGHT:    (C) 2007 by Hamish Bowman, and the GRASS Development Team
+ * SPDX-FileCopyrightText: 2007 by Hamish Bowman, and the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-License-Identifier: GPL-2.0-or-later.
  *
  *****************************************************************************/
 

@@ -3,7 +3,7 @@
 
    \brief Vector library - Check if map name is legal vector map name
 
-   (C) 2001-2009 by the GRASS Development Team
+   SPDX-FileCopyrightText: 2001-2009 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2).  Read the file COPYING that comes with GRASS for details.

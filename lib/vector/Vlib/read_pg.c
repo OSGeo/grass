@@ -13,10 +13,9 @@
    \todo PostGIS Topology - fix category handling (read categories
    from feature table)
 
-   (C) 2011-2013 by the GRASS Development Team
+   SPDX-FileCopyrightText: 2011-2013 by the GRASS Development Team
 
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-License-Identifier: GPL-2.0-or-later.
 
    \author Martin Landa <landa.martin gmail.com>
  */

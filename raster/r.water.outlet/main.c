@@ -12,11 +12,9 @@
  * PURPOSE:      this program makes a watershed basin raster map using the
  *               drainage pointer map, from an outlet point defined by an
  *               easting and a northing.
- * COPYRIGHT:    (C) 1999-2006, 2010, 2013 by the GRASS Development Team
+ * SPDX-FileCopyrightText: 1999-2006, 2010, 2013 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-License-Identifier: GPL-2.0-or-later.
  *
  *****************************************************************************/
 

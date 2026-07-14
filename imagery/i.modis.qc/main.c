@@ -7,11 +7,9 @@
  *               (MOD09Q/MOD09A/MOD09GA), Modis LST (MOD11A1, MOD11A2),
  *               Modis Vegetation (MOD13A2)
  *
- * COPYRIGHT:    (C) 2008 -2016 by the GRASS Development Team
+ * SPDX-FileCopyrightText: 2008 -2016 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-License-Identifier: GPL-2.0-or-later.
  *
  * CHANGELOG:    Added support MOD11A1 (Markus, December 2010)
  *               Added support MOD13A2, MCD43B2 (Yann, January 2011)

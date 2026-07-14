@@ -4,7 +4,7 @@ Purpose:   Validates output of LAS file property printing and handling
            of broken LAS files
 
 Author:    Maris Nartiss
-Copyright: (C) 2024 by Maris Nartiss and the GRASS Development Team
+SPDX-FileCopyrightText: 2024 by Maris Nartiss and the GRASS Development Team
 Licence:   This program is free software under the GNU General Public
            License (>=v2). Read the file COPYING that comes with GRASS
            for details.

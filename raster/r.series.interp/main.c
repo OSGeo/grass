@@ -7,7 +7,7 @@
  *
  * PURPOSE:      Interpolate raster maps located (temporal or spatial) in
  *               between input raster maps at specific sampling positions
- * COPYRIGHT:    (C) 2011-2012 by the GRASS Development Team
+ * SPDX-FileCopyrightText: 2011-2012 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the infile COPYING that comes with GRASS

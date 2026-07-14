@@ -4,7 +4,7 @@
    \brief Raster library - Functions to read and write raster "units",
    "semantic label" and "vertical datum" meta-data info
 
-   (C) 2007-2009, 2021 by Hamish Bowman, Maris Nartiss,
+   SPDX-FileCopyrightText: 2007-2009, 2021 by Hamish Bowman, Maris Nartiss,
    and the GRASS Development Team
 
    This program is free software under the GNU General Public License

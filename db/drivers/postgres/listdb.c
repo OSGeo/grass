@@ -3,8 +3,7 @@
 
    \brief DBMI - Low Level PostgreSQL database driver - list databases
 
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-License-Identifier: GPL-2.0-or-later.
 
    \author Radim Blazek
    \author Updated for GRASS 7 by Martin Landa <landa.martin gmail.com>

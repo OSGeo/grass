@@ -6,9 +6,8 @@
    Based on visualization/nviz/src/draw.c and
    visualization/nviz/src/togl_flythrough.c
 
-   (C) 2008, 2010-2011 by the GRASS Development Team
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2008, 2010-2011 by the GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later.
 
    \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC
            2008/2010) \author Textures by Anna Kratochvilova

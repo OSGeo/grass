@@ -3,7 +3,7 @@ Name:      r.in.pdal filter and selection test
 Purpose:   Validates output of input filtering and dimension selection
 
 Author:    Maris Nartiss
-Copyright: (C) 2020 by Maris Nartiss and the GRASS Development Team
+SPDX-FileCopyrightText: 2020 by Maris Nartiss and the GRASS Development Team
 Licence:   This program is free software under the GNU General Public
            License (>=v2). Read the file COPYING that comes with GRASS
            for details.

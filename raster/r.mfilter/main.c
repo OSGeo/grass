@@ -9,11 +9,9 @@
  *               Jan-Oliver Wagner <jan intevation.de>,
  *               Aaron Saw Min Sern
  * PURPOSE:      Performs raster map matrix filter
- * COPYRIGHT:    (C) 1999-2022 by the GRASS Development Team
+ * SPDX-FileCopyrightText: 1999-2022 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-License-Identifier: GPL-2.0-or-later.
  *
  *****************************************************************************/
 

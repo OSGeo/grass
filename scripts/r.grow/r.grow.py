@@ -6,7 +6,7 @@
 # AUTHOR(S): Glynn Clements
 # PURPOSE:   Fast replacement for r.grow using r.grow.distance
 #
-# COPYRIGHT: (C) 2008 by Glynn Clements
+# SPDX-FileCopyrightText: 2008 by Glynn Clements
 #
 #   This program is free software under the GNU General Public
 #   License (>=v2). Read the file COPYING that comes with GRASS

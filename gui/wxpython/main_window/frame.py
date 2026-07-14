@@ -8,7 +8,7 @@ Classes:
  - frame::GMFrame
  - frame::SingleWindowAuiManager
 
-(C) 2006-2021 by the GRASS Development Team
+SPDX-FileCopyrightText: 2006-2021 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.

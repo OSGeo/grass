@@ -3,11 +3,9 @@
  * MODULE:       v.label
  * AUTHOR(S):    Philip Verhagen (original s.label), Radim Blazek, Hamish Bowman
  * PURPOSE:      Create paint labels
- * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ * SPDX-FileCopyrightText: 2000 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-License-Identifier: GPL-2.0-or-later.
  *
  *****************************************************************************/
 #include <stdio.h>

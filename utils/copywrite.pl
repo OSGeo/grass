@@ -4,7 +4,7 @@
 ## GRASS source code files
 ## 2006, written by Schuyler Erle <schuyler , nocat net>
 ##
-## COPYRIGHT:    (C) 2006 by the GRASS Development Team
+## SPDX-FileCopyrightText: 2006 by the GRASS Development Team
 ##
 ##               This program is free software under the GNU General Public
 ##               License (>=v2). Read the file COPYING that comes with GRASS
@@ -181,11 +181,9 @@ __END__
  * AUTHOR(S):    $original_author (original contributor)
  *               @authors
  * PURPOSE:
- * COPYRIGHT:    (C) $years[0]-$years[-1] by the GRASS Development Team
+ * SPDX-FileCopyrightText: $years[0]-$years[-1] by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-License-Identifier: GPL-2.0-or-later.
  *
  *****************************************************************************/
 $main_c

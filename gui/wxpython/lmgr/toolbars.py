@@ -11,7 +11,7 @@ Classes:
  - toolbars::LMNvizToolbar
 
 
-(C) 2007-2013 by the GRASS Development Team
+SPDX-FileCopyrightText: 2007-2013 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.

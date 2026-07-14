@@ -9,11 +9,9 @@
  *               Glynn Clements <glynn gclements.plus.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      user selection of font for graphics monitor text
- * COPYRIGHT:    (C) 1999-2008 by the GRASS Development Team
+ * SPDX-FileCopyrightText: 1999-2008 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-License-Identifier: GPL-2.0-or-later.
  *
  * Implementation:
  *  d.fontlist gets the list via D_font_list(), which calls COM_Font_list(),

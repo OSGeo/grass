@@ -3,7 +3,7 @@
 
    \brief Vedit library - extend lines (adopted from break.c)
 
-   (C) 2017 by the GRASS Development Team
+   SPDX-FileCopyrightText: 2017 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2).  Read the file COPYING that comes with GRASS for details.

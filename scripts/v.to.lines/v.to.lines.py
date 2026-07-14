@@ -7,7 +7,7 @@
 #               point support added by Markus Neteler
 #
 # PURPOSE:      Converts polygons and points to lines
-# COPYRIGHT:    (C) 2013-2014 by the GRASS Development Team
+# SPDX-FileCopyrightText: 2013-2014 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (version 2). Read the file COPYING that comes with GRASS

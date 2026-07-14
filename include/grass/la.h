@@ -3,8 +3,7 @@
  *
  * \brief Wrapper headers for BLAS/LAPACK.
  *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-License-Identifier: GPL-2.0-or-later.
  *
  * \author David D. Gray, ddgray@armacde.demon co uk
  * \author GRASS Development Team

@@ -3,11 +3,9 @@
 # MODULE:       Test of v.db.select
 # AUTHOR(S):    Vaclav Petras <wenzeslaus gmail com>
 # PURPOSE:      Test parsing and structure of CSV and JSON outputs
-# COPYRIGHT:    (C) 2021-2023 by Vaclav Petras the GRASS Development Team
+# SPDX-FileCopyrightText: 2021-2023 by Vaclav Petras the GRASS Development Team
 #
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-License-Identifier: GPL-2.0-or-later.
 #
 #############################################################################
 

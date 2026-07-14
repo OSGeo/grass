@@ -4,10 +4,9 @@
    \brief OGSF library - loading and manipulating point sets (higher level
    functions)
 
-   (C) 1999-2008, 2011 by the GRASS Development Team
+   SPDX-FileCopyrightText: 1999-2008, 2011 by the GRASS Development Team
 
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-License-Identifier: GPL-2.0-or-later.
 
    \author Bill Brown USACERL (January 1994)
    \author Updated by Martin landa <landa.martin gmail.com>

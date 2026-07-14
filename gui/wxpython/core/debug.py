@@ -11,7 +11,7 @@ from core.debug import Debug
 Debug.msg (3, 'debug message')
 @endcode
 
-(C) 2007-2009, 2011 by the GRASS Development Team
+SPDX-FileCopyrightText: 2007-2009, 2011 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.

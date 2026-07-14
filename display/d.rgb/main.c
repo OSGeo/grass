@@ -11,11 +11,9 @@
  *               Martin Landa <landa.martin gmail.com> (nulls opaque)
  * PURPOSE:      Combine three rasters to form a colour image using
  *               red, green, and blue display channels
- * COPYRIGHT:    (C) 2001-2007, 2010 by the GRASS Development Team
+ * SPDX-FileCopyrightText: 2001-2007, 2010 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-License-Identifier: GPL-2.0-or-later.
  *
  *****************************************************************************/
 

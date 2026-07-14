@@ -3,10 +3,9 @@
 
    \brief DBMI Library (base) - string management
 
-   (C) 1999-2009 by the GRASS Development Team
+   SPDX-FileCopyrightText: 1999-2009 by the GRASS Development Team
 
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-License-Identifier: GPL-2.0-or-later.
 
    \author Joel Jones (CERL/UIUC)
    \author Upgraded to GRASS 5.7 by Radim Blazek

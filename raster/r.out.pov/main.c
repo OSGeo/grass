@@ -10,11 +10,9 @@
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      converts a user-specified raster map layer into a
  *               height-field file for POVray
- * COPYRIGHT:    (C) 2000-2007 by the GRASS Development Team
+ * SPDX-FileCopyrightText: 2000-2007 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-License-Identifier: GPL-2.0-or-later.
  *
  *****************************************************************************/
 

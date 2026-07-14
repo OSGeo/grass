@@ -12,7 +12,7 @@ http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/426407
 List of classes:
  - manager::AttributeManager
 
-(C) 2007-2014 by the GRASS Development Team
+SPDX-FileCopyrightText: 2007-2014 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.

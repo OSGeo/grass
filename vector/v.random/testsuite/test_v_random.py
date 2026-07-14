@@ -4,7 +4,7 @@ Name:      v.random test
 Purpose:   Tests v.random and its flags/options.
 Authors:   Josef Pudil (original draft)
            Sunveer Singh (finished test)
-Copyright: (C) 2020-2021 by Sunveer Singh and the GRASS Development Team
+SPDX-FileCopyrightText: 2020-2021 by Sunveer Singh and the GRASS Development Team
 Licence:   This program is free software under the GNU General Public
            License (>=v2). Read the file COPYING that comes with GRASS
            for details.

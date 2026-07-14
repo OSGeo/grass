@@ -5,11 +5,9 @@
  *               Alex Shevlakov - sixote@yahoo.com
  *               Glynn Clements
  * PURPOSE:      Import non-georeferenced Images in PNG format.
- * COPYRIGHT:    (C) 2000-2002, 2010-2011 by the GRASS Development Team
+ * SPDX-FileCopyrightText: 2000-2002, 2010-2011 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-License-Identifier: GPL-2.0-or-later.
  *
  *****************************************************************************/
 

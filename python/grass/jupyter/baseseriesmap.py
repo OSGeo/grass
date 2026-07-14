@@ -7,11 +7,8 @@
 #            sliders to navigate through time-series or series data, while reducing
 #            redundancy and enhancing functionality.
 #
-# COPYRIGHT: (C) 2024 Riya Saxena, and by the GRASS Development Team
-#
-#            This program is free software under the GNU General Public
-#            License (>=v2). Read the file COPYING that comes with GRASS
-#            for details.
+# SPDX-FileCopyrightText: 2024 Riya Saxena, and by the GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later.
 
 """Base class for SeriesMap and TimeSeriesMap"""
 

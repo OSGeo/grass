@@ -4,11 +4,8 @@
 #
 # PURPOSE:   This module contains utility functions for InteractiveMap.
 #
-# COPYRIGHT: (C) 2021-2024 Caitlin Haedrich, and by the GRASS Development Team
-#
-#            This program is free software under the GNU General Public
-#            License (>=v2). Read the file COPYING that comes with GRASS
-#            for details.
+# SPDX-FileCopyrightText: 2021-2024 Caitlin Haedrich, and by the GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later.
 
 """Utility functions wrapping existing processes in a suitable way"""
 

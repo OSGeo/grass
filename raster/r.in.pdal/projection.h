@@ -4,11 +4,9 @@
  *               adapted from v.in.lidar
  * AUTHOR(S):    Vaclav Petras
  * PURPOSE:      projection related functions
- * COPYRIGHT:    (C) 2015 by the GRASS Development Team
+ * SPDX-FileCopyrightText: 2015 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the COPYING file that comes with GRASS
- *               for details.
+ * SPDX-License-Identifier: GPL-2.0-or-later.
  *
  *****************************************************************************/
 

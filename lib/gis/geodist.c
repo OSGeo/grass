@@ -12,10 +12,9 @@
  * <b>WARNING:</b> this code is preliminary and may be changed,
  * including calling sequences to any of the functions defined here.
  *
- * (C) 2001-2009 by the GRASS Development Team
+ * SPDX-FileCopyrightText:  2001-2009 by the GRASS Development Team
  *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-License-Identifier: GPL-2.0-or-later.
  *
  * \author Original author CERL
  */

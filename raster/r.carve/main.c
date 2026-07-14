@@ -8,11 +8,9 @@
  * PURPOSE:      Takes vector stream data, converts it to 3D raster and
  *               subtracts a specified depth
  *
- * COPYRIGHT:    (C) 2006, 2010 by the GRASS Development Team
+ * SPDX-FileCopyrightText: 2006, 2010 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-License-Identifier: GPL-2.0-or-later.
  *
  ****************************************************************************/
 

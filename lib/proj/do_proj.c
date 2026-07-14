@@ -6,11 +6,9 @@
    \author Original Author unknown, probably Soil Conservation Service
    Eric Miller, Paul Kelly, Markus Metz
 
-   (C) 2003-2008,2018 by the GRASS Development Team
+   SPDX-FileCopyrightText: 2003-2008,2018 by the GRASS Development Team
 
-   This program is free software under the GNU General Public
-   License (>=v2). Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-License-Identifier: GPL-2.0-or-later.
 **/
 
 #include <stdio.h>
