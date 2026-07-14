@@ -10,21 +10,6 @@ Starting with GRASS 8.6, the GUI provides integrated support for launching
 and managing Jupyter Notebooks directly from the interface.
 This lets you combine interactive Python notebooks with your GUI workflow.
 
-## Before You Start
-
-- **Linux / macOS:** No additional setup is required in most cases.
-  On systems with an externally managed Python environment (e.g. Debian),
-  installing the `notebook` package may require extra steps.
-  Integrated mode requires `wx.html2` support, which is not auto-fixed by
-  a dialog and may require manual steps.
-- **Windows:** GRASS provides dialogs for selected dependency issues:
-  missing `notebook` package and missing Microsoft Edge WebView2 backend support
-  for integrated mode. A missing `wx.html2` support itself
-  is not auto-fixed by a dialog and may require manual steps.
-
-For details, see [Install Missing Notebook Package](#install-missing-notebook-package)
-and [Integrated Mode Requirements](#integrated-mode-requirements).
-
 ## Getting Started
 
 To launch Jupyter from GUI, go to **File → Jupyter Notebook** or
