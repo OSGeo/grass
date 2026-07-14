@@ -34,8 +34,11 @@ set(imagery_modules_list
     i.smap
     i.target
     i.topo.corr
-    i.vi
-    i.zc)
+    i.vi)
+
+if(WITH_FFTW)
+  list(APPEND imagery_modules_list i.zc)
+endif()
 
 if(WITH_LIBSVM)
   build_program_in_subdir(
@@ -220,14 +223,18 @@ build_program_in_subdir(
 build_program_in_subdir(i.vi DEPENDS grass_imagery grass_raster grass_vector
                         grass_gis ${LIBM})
 
-build_program_in_subdir(
-  i.zc
-  DEPENDS
-  grass_imagery
-  grass_raster
-  grass_vector
-  grass_gis
-  grass_gmath)
+if(WITH_FFTW)
+  build_program_in_subdir(
+    i.zc
+    DEPENDS
+    grass_imagery
+    grass_raster
+    grass_vector
+    grass_gis
+    grass_gmath)
+else()
+  message(STATUS "i.zc disabled because FFTW is not available")
+endif()
 
 build_program_in_subdir(
   i.fft

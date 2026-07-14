@@ -2246,6 +2246,8 @@ def sanitize_mapset_environment(env):
         del env["WIND_OVERRIDE"]
     if "GRASS_REGION" in env:
         del env["GRASS_REGION"]
+    if "GRASS_MASK" in env:
+        del env["GRASS_MASK"]
     return env
 
 

@@ -1,0 +1,10912 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Languages add-on <noreply-addon-languages@weblate.org>, 2026.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-27 15:58+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: zh_Hant\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#, python-format
+msgid "Maximum number of animations is %d."
+msgstr ""
+
+msgid "More animations are using one window. Please select different window for each animation."
+msgstr ""
+
+msgid "Invalid input"
+msgstr ""
+
+msgid "Failed to display legend."
+msgstr ""
+
+msgid "Inconsistent number of maps, please check input data."
+msgstr ""
+
+msgid "No animation to export."
+msgstr ""
+
+msgid "Preparing export, please wait..."
+msgstr ""
+
+#, python-format
+msgid "%(from)s %(dash)s %(to)s"
+msgstr ""
+
+#, python-format
+msgid "%(start)s %(unit)s"
+msgstr ""
+
+msgid "Exporting animation, please wait..."
+msgstr ""
+
+msgid "2D view"
+msgstr ""
+
+msgid "3D view"
+msgstr ""
+
+msgid "No animation name selected."
+msgstr ""
+
+msgid "No workspace file selected."
+msgstr ""
+
+#, python-format
+msgid "File %s not found"
+msgstr ""
+
+#, python-format
+msgid "Animation %d"
+msgstr ""
+
+msgid "Adjust speed of animation"
+msgstr ""
+
+msgid "Simple mode"
+msgstr ""
+
+msgid "Frame duration:"
+msgstr ""
+
+msgid "ms"
+msgstr ""
+
+msgid "Temporal mode"
+msgstr ""
+
+msgid "Time unit:"
+msgstr ""
+
+msgid "Duration of time unit:"
+msgstr ""
+
+msgid "year"
+msgstr ""
+
+msgid "month"
+msgstr ""
+
+msgid "day"
+msgstr ""
+
+msgid "hour"
+msgstr ""
+
+msgid "minute"
+msgstr ""
+
+msgid "second"
+msgstr ""
+
+msgid "Animation speed is too high."
+msgstr ""
+
+msgid "Add new animation"
+msgstr ""
+
+msgid "Edit animation"
+msgstr ""
+
+msgid "General"
+msgstr ""
+
+msgid "Advanced"
+msgstr ""
+
+msgid "top left"
+msgstr ""
+
+msgid "top right"
+msgstr ""
+
+msgid "bottom left"
+msgstr ""
+
+msgid "bottom right"
+msgstr ""
+
+msgid "Select 2D or 3D view"
+msgstr ""
+
+msgid "Name:"
+msgstr ""
+
+msgid "Window position:"
+msgstr ""
+
+msgid "View mode:"
+msgstr ""
+
+msgid ""
+"For 3D animation, please select only one space-time dataset\n"
+"or one series of map layers."
+msgstr ""
+
+msgid "Show raster legend"
+msgstr ""
+
+msgid "Set options"
+msgstr ""
+
+msgid "3D view parameters"
+msgstr ""
+
+msgid "Workspace file:"
+msgstr ""
+
+msgid "Choose workspace file to import 3D view parameters"
+msgstr ""
+
+msgid "Browse"
+msgstr ""
+
+msgid "Parameter for animation:"
+msgstr ""
+
+msgid "Set spatial extent in 2D view"
+msgstr ""
+
+msgid "Use saved region:"
+msgstr ""
+
+msgid "Animate region change"
+msgstr ""
+
+msgid "End region:"
+msgstr ""
+
+msgid "Zoom value:"
+msgstr ""
+
+msgid "N-S/E-W distances in map units used to gradually reduce region."
+msgstr ""
+
+msgid "N-S:"
+msgstr ""
+
+msgid "E-W:"
+msgstr ""
+
+msgid "Only one series or space-time dataset is accepted for 3D mode."
+msgstr ""
+
+msgid "No map series or space-time dataset added."
+msgstr ""
+
+msgid "Region information is not complete"
+msgstr ""
+
+msgid "Add, edit or remove animations"
+msgstr ""
+
+msgid "List of animations"
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "Export animation"
+msgstr ""
+
+msgid "Format"
+msgstr ""
+
+msgid "Decorations"
+msgstr ""
+
+msgid "Export"
+msgstr ""
+
+msgid "Add image"
+msgstr ""
+
+msgid "Add text"
+msgstr ""
+
+msgid "Add time stamp"
+msgstr ""
+
+msgid "Add time stamp, image or text decoration by one of the buttons above."
+msgstr ""
+
+msgid "Add image or text decoration by one of the buttons above."
+msgstr ""
+
+msgid "Font settings:"
+msgstr ""
+
+msgid "Sample text"
+msgstr ""
+
+msgid "Set font"
+msgstr ""
+
+msgid "Image file:"
+msgstr ""
+
+msgid "Choose image file"
+msgstr ""
+
+msgid "Text:"
+msgstr ""
+
+msgid "Placement as percentage of screen coordinates (X: 0, Y: 0 is top left):"
+msgstr ""
+
+msgid "X:"
+msgstr ""
+
+msgid "Y:"
+msgstr ""
+
+msgid "AVI"
+msgstr ""
+
+msgid "SWF"
+msgstr ""
+
+msgid "animated GIF"
+msgstr ""
+
+msgid "image sequence"
+msgstr ""
+
+msgid "Export to:"
+msgstr ""
+
+msgid "File prefix:"
+msgstr ""
+
+msgid "animation_"
+msgstr ""
+
+msgid "File format:"
+msgstr ""
+
+msgid "Directory:"
+msgstr ""
+
+msgid "Choose directory for export"
+msgstr ""
+
+msgid "GIF file:"
+msgstr ""
+
+msgid "Choose file to save animation"
+msgstr ""
+
+msgid "SWF file:"
+msgstr ""
+
+msgid ""
+"Program 'ffmpeg' was not found.\n"
+"Please install it first and make sure\n"
+"it's in the PATH variable."
+msgstr ""
+
+msgid "AVI file:"
+msgstr ""
+
+msgid "Video codec:"
+msgstr ""
+
+msgid "Additional options:"
+msgstr ""
+
+msgid "Consider adding '-sameq' or '-qscale 1' if not satisfied with video quality. Options depend on ffmpeg version."
+msgstr ""
+
+#, python-format
+msgid "Current frame rate: %.2f fps"
+msgstr ""
+
+#, python-format
+msgid "File %s not found."
+msgstr ""
+
+msgid "Decoration image file is missing."
+msgstr ""
+
+#, python-format
+msgid "Directory %s not found."
+msgstr ""
+
+msgid "Export directory is missing."
+msgstr ""
+
+msgid "Image"
+msgstr ""
+
+msgid "Text"
+msgstr ""
+
+msgid "Time stamp"
+msgstr ""
+
+#, python-brace-format
+msgid "Exported file directory '{base_dir}' does not exist."
+msgstr ""
+
+msgid "Export file is missing."
+msgstr ""
+
+#, python-brace-format
+msgid "Exported animation file <{file}> exists. Do you want to overwrite it?"
+msgstr ""
+
+msgid "Overwrite?"
+msgstr ""
+
+msgid "Add space-time dataset layer"
+msgstr ""
+
+msgid "Multiple raster maps"
+msgstr ""
+
+msgid "Multiple vector maps"
+msgstr ""
+
+msgid "Multiple 3D raster maps"
+msgstr ""
+
+msgid "Space time raster dataset"
+msgstr ""
+
+msgid "Space time vector dataset"
+msgstr ""
+
+msgid "Space time 3D raster dataset"
+msgstr ""
+
+msgid "Input data type:"
+msgstr ""
+
+msgid "Select raster/vector maps."
+msgstr ""
+
+msgid "Please select maps or dataset first."
+msgstr ""
+
+msgid "Animation Tool settings"
+msgstr ""
+
+msgid "Background color:"
+msgstr ""
+
+msgid "Number of parallel processes:"
+msgstr ""
+
+msgid "Text foreground color:"
+msgstr ""
+
+msgid "Text background color:"
+msgstr ""
+
+msgid "Time"
+msgstr ""
+
+msgid "Absolute time format:"
+msgstr ""
+
+msgid "Click and then press key up or down to preview different date and time formats. Type custom format string."
+msgstr ""
+
+msgid "Learn more about formatting options"
+msgstr ""
+
+msgid "Display instances with no data"
+msgstr ""
+
+msgid "When animating instant-based data which have irregular timestamps you can display 'no data frame' (checked option) or keep last frame."
+msgstr ""
+
+msgid "Invalid"
+msgstr ""
+
+msgid "Animation Tool"
+msgstr ""
+
+msgid "Main Toolbar"
+msgstr ""
+
+msgid "Animation Toolbar"
+msgstr ""
+
+msgid "Misc Toolbar"
+msgstr ""
+
+msgid "Loading data"
+msgstr ""
+
+#, python-brace-format
+msgid " ({c} out of {p})"
+msgstr ""
+
+#, python-format
+msgid "to %(to)s"
+msgstr ""
+
+#, python-format
+msgid "%s=, %s=, %s= and %s= are mutually exclusive."
+msgstr ""
+
+msgid "Animation Tool - GRASS"
+msgstr ""
+
+#, python-format
+msgid ""
+"Reading workspace file <%s> failed.\n"
+"Invalid file, unable to parse XML document."
+msgstr ""
+
+#, python-format
+msgid "No 3d view information in workspace file <%s>."
+msgstr ""
+
+msgid "Please add only one layer in the list."
+msgstr ""
+
+msgid "No map series nor space-time dataset is added."
+msgstr ""
+
+msgid "Rendering map layers"
+msgstr ""
+
+msgid "Overlaying map layers"
+msgstr ""
+
+#, python-brace-format
+msgid "Directory {t} not removed."
+msgstr ""
+
+msgid "It is not allowed to display data with different temporal types (absolute and relative)."
+msgstr ""
+
+#, python-format
+msgid "It is not allowed to display data with different units (%s)."
+msgstr ""
+
+msgid "You are going to display data with different temporal types of maps (interval and point). It is recommended to use data of one temporal type to avoid confusion."
+msgstr ""
+
+#, python-format
+msgid "Space time dataset <%s> not found."
+msgstr ""
+
+#, python-format
+msgid "Topology of Space time dataset %s is invalid."
+msgstr ""
+
+msgid "Change animation speed"
+msgstr ""
+
+msgid "Play forward"
+msgstr ""
+
+msgid "Play back"
+msgstr ""
+
+msgid "Stop"
+msgstr ""
+
+msgid "Pause"
+msgstr ""
+
+msgid "Repeat"
+msgstr ""
+
+msgid "Play back and forward"
+msgstr ""
+
+msgid "Add, edit or remove animation"
+msgstr ""
+
+msgid "Add space-time dataset or series of map layers"
+msgstr ""
+
+msgid "Add space-time dataset or series of map layers for animation"
+msgstr ""
+
+#, python-format
+msgid "Map <%s> not found."
+msgstr ""
+
+msgid "The number of maps in space-time datasets has to be the same."
+msgstr ""
+
+msgid "The temporal type (absolute/relative) of space-time datasets has to be the same."
+msgstr ""
+
+msgid "The map type (point/interval) of space-time datasets has to be the same."
+msgstr ""
+
+msgid "The temporal extents of maps in space-time datasets have to be the same."
+msgstr ""
+
+msgid "The number of maps to animate has to be the same for each map series."
+msgstr ""
+
+msgid "The number of maps to animate has to be the same as the number of maps in temporal dataset."
+msgstr ""
+
+#, python-brace-format
+msgid "Wx debug level {0}."
+msgstr ""
+
+#, python-brace-format
+msgid "WARNING: Ignoring unsupported wx debug level (must be >=0 and <=5). {0}\n"
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "Reason"
+msgstr ""
+
+msgid "Warning"
+msgstr ""
+
+msgid "Message"
+msgstr ""
+
+msgid "Execution failed:"
+msgstr ""
+
+msgid "Details:"
+msgstr ""
+
+msgid "Error: "
+msgstr ""
+
+#, python-format
+msgid "Unable to execute command: '%s'"
+msgstr ""
+
+#, python-format
+msgid "Error in %s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to run command:\n"
+"%(cmd)s\n"
+"\n"
+"Option <%(opt)s>: read from standard input is not supported by wxGUI"
+msgstr ""
+
+#, python-format
+msgid "Module <%s> not found."
+msgstr ""
+
+#, python-format
+msgid "%d sec"
+msgstr ""
+
+#, python-format
+msgid "%(min)d min %(sec)d sec"
+msgstr ""
+
+msgid "unknown"
+msgstr ""
+
+msgid "Please note that the data are left in inconsistent state and may be corrupted"
+msgstr ""
+
+msgid "Command aborted"
+msgstr ""
+
+#, python-brace-format
+msgid "Command ended with non-zero return code {returncode}"
+msgstr ""
+
+msgid "Command finished"
+msgstr ""
+
+#, python-format
+msgid "Unknown tag %s"
+msgstr ""
+
+#, python-format
+msgid "<%(name)s>: layer type <%(type)s> is not supported"
+msgstr ""
+
+#, python-format
+msgid "Command '%s' failed\n"
+msgstr ""
+
+#, python-format
+msgid "Details: %s\n"
+msgstr ""
+
+#, python-format
+msgid "Unsupported map layer type '%s'"
+msgstr ""
+
+#, python-format
+msgid "Rendering failed: %s"
+msgstr ""
+
+msgid "Rendering aborted"
+msgstr ""
+
+msgid "Downloading data "
+msgstr ""
+
+msgid "Rendering & "
+msgstr ""
+
+msgid "Rendering..."
+msgstr ""
+
+msgid "Trying to recover from default region..."
+msgstr ""
+
+#, python-format
+msgid "GRASS tool '%s' not found. Unable to start map display window."
+msgstr ""
+
+#, python-format
+msgid ""
+"\n"
+"ERROR: Unable to read WIND file: %s\n"
+msgstr ""
+
+#, python-format
+msgid "Error: Unable to open '%(file)s'. Reason: %(ret)s. wxGUI exited.\n"
+msgstr ""
+
+#, python-format
+msgid "Unable to zoom to raster map <%s>."
+msgstr ""
+
+#, python-format
+msgid "Unable to zoom to vector map <%s>."
+msgstr ""
+
+#, python-format
+msgid "Unable to zoom to 3d raster map <%s>."
+msgstr ""
+
+msgid "Unable to get current geographic extent. Force quitting wxGUI. Please manually run g.region to fix the problem."
+msgstr ""
+
+msgid "Segment break"
+msgstr ""
+
+msgid "Data point"
+msgstr ""
+
+msgid "animation"
+msgstr ""
+
+msgid "Collapse all except PERMANENT and current"
+msgstr ""
+
+msgid "Collapse all except PERMANENT"
+msgstr ""
+
+msgid "Collapse all except current"
+msgstr ""
+
+msgid "Collapse all"
+msgstr ""
+
+msgid "Expand all"
+msgstr ""
+
+msgid "Edit selected record"
+msgstr ""
+
+msgid "Display selected"
+msgstr ""
+
+msgid "Tools API"
+msgstr ""
+
+msgid "Script API"
+msgstr ""
+
+msgid "PyGRASS API"
+msgstr ""
+
+msgid "Classic (labels only)"
+msgstr ""
+
+msgid "Combined (labels and tool names)"
+msgstr ""
+
+msgid "Expert (tool names only)"
+msgstr ""
+
+msgid "Basic top"
+msgstr ""
+
+msgid "Basic left"
+msgstr ""
+
+msgid "List left"
+msgstr ""
+
+msgid "Zoom and recenter"
+msgstr ""
+
+msgid "Zoom to mouse cursor"
+msgstr ""
+
+msgid "Nothing"
+msgstr ""
+
+msgid "Scroll forward to zoom in"
+msgstr ""
+
+msgid "Scroll back to zoom in"
+msgstr ""
+
+msgid "box"
+msgstr ""
+
+msgid "sphere"
+msgstr ""
+
+msgid "cube"
+msgstr ""
+
+msgid "diamond"
+msgstr ""
+
+msgid "aster"
+msgstr ""
+
+msgid "gyro"
+msgstr ""
+
+msgid "histogram"
+msgstr ""
+
+msgid "cross"
+msgstr ""
+
+msgid "circle"
+msgstr ""
+
+msgid "Script package"
+msgstr ""
+
+msgid "PyGRASS"
+msgstr ""
+
+msgid "GRASS Tools"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Unable to read settings file <{path}>:\n"
+"{err}"
+msgstr ""
+
+#, python-format
+msgid "Unable to read settings file <%s>\n"
+msgstr ""
+
+#, python-format
+msgid ""
+"Error: Reading settings from file <%(file)s> failed.\n"
+"\t\tDetails: %(detail)s\n"
+"\t\tLine: '%(line)s'\n"
+msgstr ""
+
+msgid "Unable to create settings directory"
+msgstr ""
+
+#, python-format
+msgid ""
+"Writing settings to file <%(file)s> failed.\n"
+"\n"
+"Details: %(detail)s"
+msgstr ""
+
+msgid "Unable to set "
+msgstr ""
+
+#, python-format
+msgid "Unable to parse settings '%s'"
+msgstr ""
+
+msgid "Unable to parse user toolboxes XML files. Default files will be loaded."
+msgstr ""
+
+msgid "Unable to create toolboxes directory."
+msgstr ""
+
+msgid "Custom toolboxes"
+msgstr ""
+
+#, python-format
+msgid "List of addons cannot be obtained because g.extension failed. Details: %s"
+msgstr ""
+
+msgid "Addons"
+msgstr ""
+
+msgid "Module not installed"
+msgstr ""
+
+msgid "map units"
+msgstr ""
+
+msgid "meters"
+msgstr ""
+
+msgid "kilometers"
+msgstr ""
+
+msgid "miles"
+msgstr ""
+
+msgid "feet"
+msgstr ""
+
+msgid "sq map units"
+msgstr ""
+
+msgid "sq meters"
+msgstr ""
+
+msgid "sq kilometers"
+msgstr ""
+
+msgid "acres"
+msgstr ""
+
+msgid "hectares"
+msgstr ""
+
+#, python-format
+msgid "Syntax error: %s"
+msgstr ""
+
+#, python-format
+msgid "Vector map <%(map)s>: %(msg)s\n"
+msgstr ""
+
+#, python-format
+msgid ""
+"%s: line skipped - unable to parse '%s'\n"
+"Reason: %s\n"
+msgstr ""
+
+#, python-format
+msgid "Duplicated key: %s\n"
+msgstr ""
+
+#, python-brace-format
+msgid "Unable to open file '{name}': {error}\n"
+msgstr ""
+
+#, python-brace-format
+msgid "Unable to create file '{name}': {error}\n"
+msgstr ""
+
+msgid "Select Color"
+msgstr ""
+
+#, python-format
+msgid "Unable to open file <%s> for reading."
+msgstr ""
+
+#, python-format
+msgid ""
+"Some lines were skipped when reading settings from file <%(file)s>.\n"
+"See 'Command output' window for details.\n"
+"\n"
+"Number of skipped lines: %(line)d"
+msgstr ""
+
+#, python-format
+msgid " row %d:"
+msgstr ""
+
+msgid "Data catalog"
+msgstr ""
+
+msgid "Choose GRASS project:"
+msgstr ""
+
+msgid "Link external raster data  [r.external]"
+msgstr ""
+
+msgid "Link external vector data  [v.external]"
+msgstr ""
+
+msgid "Set raster output format  [r.external.out]"
+msgstr ""
+
+msgid "Set vector output format  [v.external.out]"
+msgstr ""
+
+msgid "Unpack GRASS raster map  [r.unpack]"
+msgstr ""
+
+msgid "Unpack GRASS vector map  [v.unpack]"
+msgstr ""
+
+msgid "Create raster map from x,y,z data  [r.in.xyz]"
+msgstr ""
+
+msgid "Create vector map from x,y,z data  [v.in.ascii]"
+msgstr ""
+
+msgid "Link external data"
+msgstr ""
+
+msgid "More options..."
+msgstr ""
+
+msgid "Reprojection"
+msgstr ""
+
+msgid "Reproject"
+msgstr ""
+
+msgid "Reproject raster"
+msgstr ""
+
+msgid "Reproject vector"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Map layer <{ml}> needs to be reprojected.\n"
+"Please review and modify reprojection parameters:"
+msgstr ""
+
+msgid "Estimated resolution:"
+msgstr ""
+
+msgid "Resampling method:"
+msgstr ""
+
+msgid "Maximum segment length:"
+msgstr ""
+
+msgid "Data Catalog"
+msgstr ""
+
+msgid "Close GRASS Data Catalog"
+msgstr ""
+
+msgid "Data Catalog - GRASS"
+msgstr ""
+
+msgid "Create new project"
+msgstr ""
+
+msgid "Learn more"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"GRASS helps you organize your data using projects (locations) which contain mapsets (subprojects). All data in one project is in the same coordinate reference system (CRS).\n"
+"\n"
+"You are currently in mapset PERMANENT in default project {loc} which uses WGS 84 (EPSG:4326). Consider creating a new project with a CRS specific to your area. You can do it now or anytime later from the toolbar above."
+msgstr ""
+
+msgid "Import vector data"
+msgstr ""
+
+msgid "Import raster data"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"You have successfully created a new project {loc}. Currently you are in its PERMANENT mapset which is used for storing your base maps to make them readily available in other mapsets. You can create new mapsets for different tasks by right clicking on the project name.\n"
+"\n"
+"To import data, go to the toolbar above or use the buttons below."
+msgstr ""
+
+msgid "Loading of Data catalog content took rather long. To prevent delay, you can enable loading of current mapset only. You can change that later in GUI Settings, General tab."
+msgstr ""
+
+msgid "Enable loading current mapset only"
+msgstr ""
+
+msgid "No change, don't ask me again"
+msgstr ""
+
+#, python-brace-format
+msgid "{string} GRASS has started in a temporary project. To continue, use Data Catalog below to switch to a different project."
+msgstr ""
+
+msgid "Switch to last used mapset"
+msgstr ""
+
+#, python-brace-format
+msgid "Last used mapset in path '{mapsetpath}' is currently in use. GRASS has started in a temporary project. To continue, use Data Catalog below to switch to a different project or remove lock file and switch to the last used mapset."
+msgstr ""
+
+#, python-brace-format
+msgid "Last used mapset in path '{mapsetpath}' does not exist."
+msgstr ""
+
+#, python-brace-format
+msgid "Last used mapset in path '{mapsetpath}' is invalid."
+msgstr ""
+
+#, python-brace-format
+msgid "Last used mapset in path '{mapsetpath}' has different owner {owner}."
+msgstr ""
+
+msgid "Reload GRASS projects"
+msgstr ""
+
+msgid "Reload current GRASS mapset only"
+msgstr ""
+
+msgid "Create new mapset in current project"
+msgstr ""
+
+msgid "Add an existing project"
+msgstr ""
+
+msgid "Download sample project"
+msgstr ""
+
+msgid "Import raster data  [r.import]"
+msgstr ""
+
+msgid "Import vector data  [v.import]"
+msgstr ""
+
+msgid "Select another import option"
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "Type to search database by map type or name. Use Python regular expressions to refine your search."
+msgstr ""
+
+#, python-brace-format
+msgid "Failed to read mapsets from project <{l}>."
+msgstr ""
+
+#, python-brace-format
+msgid "Failed to read maps from project <{l}>."
+msgstr ""
+
+#, python-brace-format
+msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
+msgstr ""
+
+msgid "name unknown"
+msgstr ""
+
+#, python-brace-format
+msgid "{name}  (current)"
+msgstr ""
+
+#, python-brace-format
+msgid "{name}  (in use, owner: {owner})"
+msgstr ""
+
+#, python-brace-format
+msgid "{name}  (in use)"
+msgstr ""
+
+#, python-brace-format
+msgid "{name}  (owner: {owner})"
+msgstr ""
+
+#, python-brace-format
+msgid "{name}"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Map <{map_name}@{map_mapset}> is not in the current project. To be able to display it you need to switch to <{map_location}> project. Note that if you switch there all current Map Displays will be closed.\n"
+"\n"
+"Do you want to switch anyway?"
+msgstr ""
+
+msgid "Map in a different project"
+msgstr ""
+
+#, python-brace-format
+msgid "{c} maps marked for moving."
+msgstr ""
+
+#, python-brace-format
+msgid "Map <{layer}> marked for moving."
+msgstr ""
+
+#, python-brace-format
+msgid "{c} maps marked for copying."
+msgstr ""
+
+#, python-brace-format
+msgid "Map <{layer}> marked for copying."
+msgstr ""
+
+msgid "New name"
+msgstr ""
+
+msgid "Rename map"
+msgstr ""
+
+msgid "Cannot rename mapset"
+msgstr ""
+
+#, python-brace-format
+msgid "Renaming mapset <{oldmapset}> to <{newmapset}> completed"
+msgstr ""
+
+msgid "Cannot rename location"
+msgstr ""
+
+#, python-brace-format
+msgid "Renaming project <{oldlocation}> to <{newlocation}> completed"
+msgstr ""
+
+#, python-brace-format
+msgid "Renaming map <{name}>..."
+msgstr ""
+
+#, python-brace-format
+msgid "{cmd} -- completed"
+msgstr ""
+
+msgid "No map selected for copying."
+msgstr ""
+
+msgid "No map selected for moving."
+msgstr ""
+
+#, python-brace-format
+msgid "New name for <{n}>"
+msgstr ""
+
+msgid "Select new name"
+msgstr ""
+
+#, python-brace-format
+msgid "Copying <{name}>..."
+msgstr ""
+
+#, python-brace-format
+msgid "Moving <{name}>..."
+msgstr ""
+
+msgid "Copying completed"
+msgstr ""
+
+msgid "Moving completed"
+msgstr ""
+
+msgid "Reprojection is not implemented for 3D rasters"
+msgstr ""
+
+msgid "g.remove completed"
+msgstr ""
+
+#, python-brace-format
+msgid "Do you really want to delete map(s) <{m}>?"
+msgstr ""
+
+#, python-brace-format
+msgid "Do you really want to delete {n} maps?"
+msgstr ""
+
+msgid "Delete map"
+msgstr ""
+
+#, python-brace-format
+msgid "Deleting {name}..."
+msgstr ""
+
+msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
+msgstr ""
+
+msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
+msgstr ""
+
+msgid "&Cut"
+msgstr ""
+
+msgid "&Copy"
+msgstr ""
+
+msgid "Copy &name"
+msgstr ""
+
+msgid "&Paste"
+msgstr ""
+
+#. GTC Delete mapset
+msgid "&Delete"
+msgstr ""
+
+#. GTC Rename mapset
+msgid "&Rename"
+msgstr ""
+
+msgid "&Display layers"
+msgstr ""
+
+msgid "&Display layer"
+msgstr ""
+
+msgid "Show &metadata"
+msgstr ""
+
+msgid "&Switch mapset"
+msgstr ""
+
+msgid "&Delete mapset"
+msgstr ""
+
+msgid "&Rename mapset"
+msgstr ""
+
+msgid "Re&load maps"
+msgstr ""
+
+msgid "Show computational region"
+msgstr ""
+
+msgid "&Copy path"
+msgstr ""
+
+msgid "&Create mapset"
+msgstr ""
+
+msgid "&Delete project"
+msgstr ""
+
+msgid "&Rename project"
+msgstr ""
+
+msgid "Show projection info"
+msgstr ""
+
+msgid "Copy path"
+msgstr ""
+
+msgid "Change Label"
+msgstr ""
+
+msgid "Set Label"
+msgstr ""
+
+msgid "Remove Label"
+msgstr ""
+
+msgid "&Create new project (location)"
+msgstr ""
+
+msgid "&Download sample project (location)"
+msgstr ""
+
+msgid "&Remove GRASS database from data catalog"
+msgstr ""
+
+msgid "&Delete GRASS database from disk"
+msgstr ""
+
+msgid "&Delete projects (locations)"
+msgstr ""
+
+msgid "Copy paths"
+msgstr ""
+
+msgid "&Delete mapsets"
+msgstr ""
+
+msgid "&Copy paths"
+msgstr ""
+
+#, python-brace-format
+msgid "Remove label '{label}' for this database?"
+msgstr ""
+
+msgid "No available options"
+msgstr ""
+
+msgid "Loading data..."
+msgstr ""
+
+#, python-format
+msgid "Attribute table <%s> not found. For creating the table switch to 'Manage layers' tab."
+msgstr ""
+
+#, python-format
+msgid "Column <%(column)s> not found in in the table <%(table)s>."
+msgstr ""
+
+msgid "Can display only 256 columns."
+msgstr ""
+
+#, python-brace-format
+msgid "Incorrect encoding {enc} used. Set encoding in GUI Settings or set GRASS_DB_ENCODING variable."
+msgstr ""
+
+#, python-brace-format
+msgid "Unable to read the table <{table}> from the database due to seemingly inconsistent number of columns in the data transfer. Check row: {row}... Likely, a newline character is present in the attribute value starting with: '{value}' Use the v.db.select module to investigate."
+msgstr ""
+
+msgid "Viewing limit: 100000 records."
+msgstr ""
+
+#, python-format
+msgid "Number of loaded records: %d"
+msgstr ""
+
+msgid "Unknown value"
+msgstr ""
+
+msgid "Unable to decode value. Set encoding in GUI preferences ('Attributes')."
+msgstr ""
+
+#, python-format
+msgid ""
+"Error loading attribute data. Record number: %(rec)d. Unable to convert value '%(val)s' in key column (%(key)s) to integer.\n"
+"\n"
+"Details: %(detail)s"
+msgstr ""
+
+msgid "Sort ascending"
+msgstr ""
+
+msgid "Sort descending"
+msgstr ""
+
+msgid "Calculate (only numeric columns)"
+msgstr ""
+
+msgid "Field calculator"
+msgstr ""
+
+msgid "Statistics"
+msgstr ""
+
+msgid "Add column"
+msgstr ""
+
+msgid "Area size"
+msgstr ""
+
+msgid "Line length"
+msgstr ""
+
+msgid "Compactness of an area"
+msgstr ""
+
+msgid "Fractal dimension of boundary defining a polygon"
+msgstr ""
+
+msgid "Perimeter length of an area"
+msgstr ""
+
+msgid "Number of features for each category"
+msgstr ""
+
+msgid "Slope steepness of 3D line"
+msgstr ""
+
+msgid "Line sinuousity"
+msgstr ""
+
+msgid "Line azimuth"
+msgstr ""
+
+#, python-format
+msgid "Add column to table <%s>"
+msgstr ""
+
+msgid "Unable to add column to the table. No column name defined."
+msgstr ""
+
+#, python-format
+msgid "Column <%(column)s> already exists in table <%(table)s>."
+msgstr ""
+
+msgid "Attribute data - right-click to edit/manage records"
+msgstr ""
+
+msgid "Table"
+msgstr ""
+
+msgid " (read-only)"
+msgstr ""
+
+msgid "SQL Query"
+msgstr ""
+
+msgid "Simple"
+msgstr ""
+
+msgid "Apply SELECT statement and reload data records"
+msgstr ""
+
+#, python-format
+msgid "Example: %s"
+msgstr ""
+
+msgid "Builder"
+msgstr ""
+
+msgid "SQL Builder"
+msgstr ""
+
+msgid "Insert new record"
+msgstr ""
+
+msgid "Delete selected record(s)"
+msgstr ""
+
+msgid "Delete all records"
+msgstr ""
+
+msgid "Select all"
+msgstr ""
+
+msgid "Deselect all"
+msgstr ""
+
+msgid "Highlight selected features"
+msgstr ""
+
+msgid "Highlight selected features and zoom"
+msgstr ""
+
+msgid "Extract selected features"
+msgstr ""
+
+msgid "Delete selected features"
+msgstr ""
+
+msgid "Reload"
+msgstr ""
+
+msgid "Update existing record"
+msgstr ""
+
+#, python-format
+msgid "Value '%(value)s' needs to be entered as %(type)s."
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to update existing record.\n"
+"%s"
+msgstr ""
+
+#, python-format
+msgid "Record with category number %d already exists in the table."
+msgstr ""
+
+#, python-format
+msgid "Category number (column %s) is missing."
+msgstr ""
+
+#, python-format
+msgid "Column '%(column)s' does not exist."
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to insert new record.\n"
+"%s"
+msgstr ""
+
+#, python-format
+msgid "Selected data records (%d) will be permanently deleted from table. Do you want to delete them?"
+msgstr ""
+
+msgid "Delete records"
+msgstr ""
+
+#, python-format
+msgid "All data records (%d) will be permanently deleted from table. Do you want to delete them?"
+msgstr ""
+
+msgid "Nothing to extract."
+msgstr ""
+
+msgid "Nothing to delete."
+msgstr ""
+
+#, python-format
+msgid ""
+"Loading attribute data failed.\n"
+"\n"
+"%s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Loading attribute data failed.\n"
+"Invalid SQL select statement.\n"
+"\n"
+"%s"
+msgstr ""
+
+msgid "Database connection"
+msgstr ""
+
+#, python-format
+msgid "Table <%s> - right-click to delete column(s)"
+msgstr ""
+
+msgid "Column"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Length"
+msgstr ""
+
+msgid "Rename column"
+msgstr ""
+
+msgid "To"
+msgstr ""
+
+msgid "Unable to rename column. No column name defined."
+msgstr ""
+
+#, python-format
+msgid "Unable to rename column <%(column)s> to <%(columnTo)s>. Column already exists in the table <%(table)s>."
+msgstr ""
+
+#, python-format
+msgid "Unable to rename column. Column <%(column)s> doesn't exist in the table <%(table)s>."
+msgstr ""
+
+msgid "Drop selected column"
+msgstr ""
+
+msgid "Drop all columns"
+msgstr ""
+
+#, python-format
+msgid "Selected %s will PERMANENTLY removed from table. Do you want to drop the column?"
+msgstr ""
+
+msgid "Drop column(s)"
+msgstr ""
+
+#, python-format
+msgid ""
+"Selected columns\n"
+"%s\n"
+"will PERMANENTLY removed from table. Do you want to drop the columns?"
+msgstr ""
+
+msgid "List of layers"
+msgstr ""
+
+#, python-format
+msgid "Drop also linked attribute table (%s)"
+msgstr ""
+
+msgid "Column name"
+msgstr ""
+
+msgid "Data length"
+msgstr ""
+
+msgid "Data type"
+msgstr ""
+
+msgid "Database"
+msgstr ""
+
+msgid "Driver"
+msgstr ""
+
+msgid "Key"
+msgstr ""
+
+msgid "Layer"
+msgstr ""
+
+msgid "Add layer"
+msgstr ""
+
+msgid "Layer description"
+msgstr ""
+
+msgid "Key column"
+msgstr ""
+
+msgid "Insert record for each category into table"
+msgstr ""
+
+msgid "You need to add categories by v.category module."
+msgstr ""
+
+msgid "Table description"
+msgstr ""
+
+msgid "Table name"
+msgstr ""
+
+msgid "&Create table"
+msgstr ""
+
+msgid "&Add layer"
+msgstr ""
+
+msgid "&Set default"
+msgstr ""
+
+msgid "Remove layer"
+msgstr ""
+
+msgid "Layer to remove"
+msgstr ""
+
+msgid "&Remove layer"
+msgstr ""
+
+msgid "Modify layer"
+msgstr ""
+
+msgid "&Modify layer"
+msgstr ""
+
+msgid ""
+"Unable to get list of tables.\n"
+"Please use db.connect to set database parameters."
+msgstr ""
+
+msgid "Unable to create new table. Table name or key column name is missing."
+msgstr ""
+
+#, python-format
+msgid "Unable to create new table. Table <%s> already exists in the database."
+msgstr ""
+
+#, python-format
+msgid "Unable to add new layer to vector map <%(vector)s>. Layer %(layer)d already exists."
+msgstr ""
+
+msgid "Field statistics"
+msgstr ""
+
+msgid "Copy statistics the clipboard (Ctrl+C)"
+msgstr ""
+
+msgid "Statistics is not support for DBF tables."
+msgstr ""
+
+msgid "Unable to calculate statistics."
+msgstr ""
+
+#, python-format
+msgid "Unable to calculate statistics. Invalid number of lines %d (should be %d)."
+msgstr ""
+
+msgid "Unable to calculate standard deviation."
+msgstr ""
+
+#, python-format
+msgid "Field statistics <%s>"
+msgstr ""
+
+#, python-format
+msgid ""
+"No attribute table found.\n"
+"\n"
+"Do you want to create a new attribute table and defined a link to vector map <%s>?"
+msgstr ""
+
+msgid "Create table?"
+msgstr ""
+
+msgid "Close dialog on submit"
+msgstr ""
+
+msgid "No attributes found"
+msgstr ""
+
+msgid "Update attributes"
+msgstr ""
+
+msgid "Define attributes"
+msgstr ""
+
+msgid "Display attributes"
+msgstr ""
+
+msgid "&Reload"
+msgstr ""
+
+msgid "&Submit"
+msgstr ""
+
+msgid "Feature id:"
+msgstr ""
+
+#, python-format
+msgid "Column <%(col)s>: Value '%(value)s' needs to be entered as %(type)s."
+msgstr ""
+
+msgid "Unknown"
+msgstr ""
+
+msgid "Category"
+msgstr ""
+
+msgid "YYYY-MM-DD"
+msgstr ""
+
+#, python-format
+msgid "Vector map <%s> not found"
+msgstr ""
+
+#, python-format
+msgid "Loading attribute data for vector map <%s>..."
+msgstr ""
+
+msgid "Attribute Table Manager - GRASS"
+msgstr ""
+
+msgid "Attribute Table Manager"
+msgstr ""
+
+#, python-brace-format
+msgid "{document} (read-only)"
+msgstr ""
+
+#, python-format
+msgid "Database connection for vector map <%s> is not defined in DB file. You can define new connection in 'Manage layers' tab."
+msgstr ""
+
+msgid "Please wait, loading attribute data..."
+msgstr ""
+
+msgid "Browse data"
+msgstr ""
+
+msgid "Manage tables"
+msgstr ""
+
+msgid "Manage layers"
+msgstr ""
+
+msgid "Close Attribute Table Manager"
+msgstr ""
+
+msgid "Reload currently selected attribute data"
+msgstr ""
+
+msgid "Reload all attribute data (drop current selection)"
+msgstr ""
+
+msgid "Query"
+msgstr ""
+
+msgid "Set SQL statement to default"
+msgstr ""
+
+msgid "Apply SQL statement"
+msgstr ""
+
+msgid "Close the dialog"
+msgstr ""
+
+msgid "Columns"
+msgstr ""
+
+msgid "Interactive insertion"
+msgstr ""
+
+msgid "Values"
+msgstr ""
+
+msgid "Get all values"
+msgstr ""
+
+msgid "Get sample"
+msgstr ""
+
+msgid "Get first 256 unique values as sample"
+msgstr ""
+
+msgid "Go to:"
+msgstr ""
+
+msgid "Close dialog on apply"
+msgstr ""
+
+#, python-format
+msgid "GRASS SQL Builder (%(type)s) - <%(map)s>"
+msgstr ""
+
+msgid "Column to show (SELECT clause)"
+msgstr ""
+
+msgid "Constraint for query (WHERE clause)"
+msgstr ""
+
+msgid "Verify"
+msgstr ""
+
+msgid "Verify SQL statement"
+msgstr ""
+
+msgid "SQL statement not verified"
+msgstr ""
+
+msgid "SQL statement is not valid"
+msgstr ""
+
+#, python-format
+msgid ""
+"SQL statement is not valid.\n"
+"\n"
+"%s"
+msgstr ""
+
+msgid "SQL statement is valid"
+msgstr ""
+
+msgid "Column to set (SET clause)"
+msgstr ""
+
+msgid "Calculate column value to set"
+msgstr ""
+
+msgid "Functions"
+msgstr ""
+
+msgid "SQL statement was not applied"
+msgstr ""
+
+msgid "SQL statement applied"
+msgstr ""
+
+msgid "Dbf driver does not support usage of SQL functions."
+msgstr ""
+
+msgid "Setup for georectification"
+msgstr ""
+
+msgid "Georectifying setup canceled."
+msgstr ""
+
+msgid "Select map type and location/mapset"
+msgstr ""
+
+msgid "Map type to georectify"
+msgstr ""
+
+msgid "raster"
+msgstr ""
+
+msgid "vector"
+msgstr ""
+
+msgid "Select source location:"
+msgstr ""
+
+msgid "Select source mapset:"
+msgstr ""
+
+msgid "You must select a valid location before selecting a mapset"
+msgstr ""
+
+msgid "You must select a valid location and mapset in order to continue"
+msgstr ""
+
+msgid "Select image/map group to georectify"
+msgstr ""
+
+msgid "Select/create group:"
+msgstr ""
+
+msgid "Create group if none exists"
+msgstr ""
+
+msgid "Create/edit group..."
+msgstr ""
+
+msgid "Add vector map to group..."
+msgstr ""
+
+msgid "Extension for output maps:"
+msgstr ""
+
+msgid "No vector maps."
+msgstr ""
+
+msgid "You must select a valid image/map group in order to continue"
+msgstr ""
+
+msgid "You must enter an map name extension in order to continue"
+msgstr ""
+
+msgid "Select maps to display for ground control point (GCP) creation"
+msgstr ""
+
+msgid "Map Display Web Service Layer(s)"
+msgstr ""
+
+msgid "Select source map to display:"
+msgstr ""
+
+msgid "Select target raster map to display:"
+msgstr ""
+
+msgid "Select target vector map to display:"
+msgstr ""
+
+msgid "You must select a source map in order to continue"
+msgstr ""
+
+#, python-format
+msgid ""
+"No maps in selected group <%s>.\n"
+"Please edit group or select another group."
+msgstr ""
+
+msgid "Manage Ground Control Points"
+msgstr ""
+
+#, python-format
+msgid "At least %d GCPs required. Operation canceled."
+msgstr ""
+
+msgid "source"
+msgstr ""
+
+msgid "target"
+msgstr ""
+
+msgid "Set GCP coordinates"
+msgstr ""
+
+#, python-format
+msgid ""
+"Set %(coor)s coordinates for GCP No. %(key)s? \n"
+"\n"
+"East: %(coor0)s \n"
+"North: %(coor1)s"
+msgstr ""
+
+msgid "Writing POINTS file failed"
+msgstr ""
+
+#, python-format
+msgid "POINTS file saved for group <%s>"
+msgstr ""
+
+msgid "source mapwin not defined"
+msgstr ""
+
+msgid "target mapwin not defined"
+msgstr ""
+
+msgid "Reading POINTS file failed"
+msgstr ""
+
+#, python-format
+msgid ""
+"Insufficient points defined and active (checked) for selected rectification method (order: %d).\n"
+"3+ points needed for 1st order,\n"
+"6+ points for 2nd order, and\n"
+"10+ points for 3rd order."
+msgstr ""
+
+#, python-brace-format
+msgid "The {map_type} map {map_name} exists. Do you want to overwrite?"
+msgstr ""
+
+msgid "Rectifying images, please wait..."
+msgstr ""
+
+#, python-format
+msgid "Transforming <%s>..."
+msgstr ""
+
+#, python-format
+msgid "Rectifying vector map <%s>, please wait..."
+msgstr ""
+
+#, python-format
+msgid "Georectification of vector map <%s> failed"
+msgstr ""
+
+msgid "GCP Manager settings"
+msgstr ""
+
+msgid "Quit GCP Manager"
+msgstr ""
+
+msgid "Save ground control points?"
+msgstr ""
+
+msgid ""
+"Could not calculate RMS Error.\n"
+"Possible error with m.transform."
+msgstr ""
+
+msgid ""
+"Could not calculate new extends.\n"
+"Possible error with m.transform."
+msgstr ""
+
+msgid "Adjust source display to target display"
+msgstr ""
+
+msgid "Adjust target display to source display"
+msgstr ""
+
+msgid "use"
+msgstr ""
+
+msgid "source E"
+msgstr ""
+
+msgid "source N"
+msgstr ""
+
+msgid "target E"
+msgstr ""
+
+msgid "target N"
+msgstr ""
+
+msgid "Forward error"
+msgstr ""
+
+msgid "Backward error"
+msgstr ""
+
+msgid "Invalid coordinate value. Operation canceled."
+msgstr ""
+
+msgid "Create vector map group"
+msgstr ""
+
+msgid "Select vector map(s) to add to group:"
+msgstr ""
+
+msgid "Edit GCP"
+msgstr ""
+
+msgid "Ground Control Point No."
+msgstr ""
+
+msgid "source E:"
+msgstr ""
+
+msgid "target E:"
+msgstr ""
+
+msgid "source N:"
+msgstr ""
+
+msgid "target N:"
+msgstr ""
+
+msgid "Apply changes for the current session"
+msgstr ""
+
+msgid "Apply and save changes to user settings file (default for next sessions)"
+msgstr ""
+
+msgid "Close dialog"
+msgstr ""
+
+msgid "Symbology"
+msgstr ""
+
+msgid "Highlight highest RMS error only"
+msgstr ""
+
+msgid "Highlight RMS error > M + SD * factor:"
+msgstr ""
+
+msgid ""
+"Highlight GCPs with an RMS error larger than \n"
+"mean + standard deviation * given factor. \n"
+"Recommended values for this factor are between 1 and 2."
+msgstr ""
+
+msgid "Symbol settings"
+msgstr ""
+
+msgid "Color:"
+msgstr ""
+
+msgid "Color for high RMS error:"
+msgstr ""
+
+msgid "Color for selected GCP:"
+msgstr ""
+
+msgid "Color for unused GCPs:"
+msgstr ""
+
+msgid "Show unused GCPs"
+msgstr ""
+
+msgid "Symbol size:"
+msgstr ""
+
+msgid "Line width:"
+msgstr ""
+
+msgid "Rectification"
+msgstr ""
+
+msgid "Select rectification order"
+msgstr ""
+
+msgid "1st order"
+msgstr ""
+
+msgid "2nd order"
+msgstr ""
+
+msgid "3rd order"
+msgstr ""
+
+msgid "Select interpolation method:"
+msgstr ""
+
+msgid "clip to computational region in target location"
+msgstr ""
+
+msgid "overwrite result map"
+msgstr ""
+
+msgid "RMS threshold factor must be > 0"
+msgstr ""
+
+msgid ""
+"RMS threshold factor is < 1\n"
+"Too many points might be highlighted"
+msgstr ""
+
+#, python-format
+msgid "GCP Manager settings saved to file '%s'."
+msgstr ""
+
+msgid "Map Toolbar"
+msgstr ""
+
+msgid "GCP Display toolbar"
+msgstr ""
+
+msgid "GCP Manager toolbar"
+msgstr ""
+
+msgid "GCP List"
+msgstr ""
+
+msgid "Source Display"
+msgstr ""
+
+msgid "Target Display"
+msgstr ""
+
+msgid "Nothing to render (empty map). Operation canceled."
+msgstr ""
+
+msgid "Choose a file name to save the image (no need to add extension)"
+msgstr ""
+
+msgid "Page setup"
+msgstr ""
+
+msgid "Print preview"
+msgstr ""
+
+msgid "Print display"
+msgstr ""
+
+msgid "Zoom to computational region (set with g.region)"
+msgstr ""
+
+msgid "Zoom to default region"
+msgstr ""
+
+msgid "Zoom to saved region"
+msgstr ""
+
+msgid "Set computational region from display"
+msgstr ""
+
+msgid "Save display geometry to named region"
+msgstr ""
+
+msgid "Pan to GCP by number"
+msgstr ""
+
+msgid "Valid Range:"
+msgstr ""
+
+msgid "RMS error"
+msgstr ""
+
+#, python-format
+msgid "Forward: %(forw)s, Backward: %(back)s"
+msgstr ""
+
+msgid "Add new GCP to the list"
+msgstr ""
+
+msgid "Delete selected GCP"
+msgstr ""
+
+msgid "Clear selected GCP"
+msgstr ""
+
+msgid "Recalculate RMS error"
+msgstr ""
+
+msgid "Georectify"
+msgstr ""
+
+msgid "Save GCPs to POINTS file"
+msgstr ""
+
+msgid "Reload GCPs from POINTS file"
+msgstr ""
+
+msgid "Set map canvas for "
+msgstr ""
+
+msgid " / Zoom to map"
+msgstr ""
+
+msgid "Update GCP coordinates"
+msgstr ""
+
+msgid "Update GCP coordinates)"
+msgstr ""
+
+msgid "Disable"
+msgstr ""
+
+msgid "Enable"
+msgstr ""
+
+msgid "Set label"
+msgstr ""
+
+msgid "Set comment"
+msgstr ""
+
+msgid "Add control point"
+msgstr ""
+
+msgid "Remove control point"
+msgstr ""
+
+msgid "Intermediate"
+msgstr ""
+
+msgid "Display"
+msgstr ""
+
+msgid "Properties"
+msgstr ""
+
+msgid "Label:"
+msgstr ""
+
+msgid "Comment:"
+msgstr ""
+
+msgid "Data properties"
+msgstr ""
+
+msgid "Name of raster map:"
+msgstr ""
+
+msgid "Name of vector map:"
+msgstr ""
+
+msgid "Name of element:"
+msgstr ""
+
+msgid "Type of element:"
+msgstr ""
+
+msgid "Add GRASS command to the model"
+msgstr ""
+
+msgid "Command"
+msgstr ""
+
+msgid "Label and comment"
+msgstr ""
+
+msgid ""
+"Command not defined.\n"
+"\n"
+"Unable to add new action to the model."
+msgstr ""
+
+#, python-format
+msgid ""
+"'%s' is not a GRASS tool.\n"
+"\n"
+"Unable to add new action to the model."
+msgstr ""
+
+msgid "Relation properties"
+msgstr ""
+
+msgid "From"
+msgstr ""
+
+#, python-format
+msgid "Data: %s"
+msgstr ""
+
+msgid "Command:"
+msgstr ""
+
+msgid "Option:"
+msgstr ""
+
+msgid ""
+"Relation doesn't start with data item.\n"
+"Unable to add relation."
+msgstr ""
+
+msgid ""
+"Relation doesn't point to GRASS command.\n"
+"Unable to add relation."
+msgstr ""
+
+msgid ""
+"No relevant option found.\n"
+"Unable to add relation."
+msgstr ""
+
+msgid "Condition"
+msgstr ""
+
+msgid "Label"
+msgstr ""
+
+msgid "Loop properties"
+msgstr ""
+
+msgid "List of items in loop"
+msgstr ""
+
+msgid "Series"
+msgstr ""
+
+msgid "Define map series as condition for the loop"
+msgstr ""
+
+msgid "Define series of maps"
+msgstr ""
+
+msgid "If-else properties"
+msgstr ""
+
+msgid "List of items in 'if' block"
+msgstr ""
+
+msgid "List of items in 'else' block"
+msgstr ""
+
+#, python-format
+msgid "Variable <%s> already exists in the model. Adding variable failed."
+msgstr ""
+
+msgid "Do you want to delete all variables from the model?"
+msgstr ""
+
+msgid "Delete variables"
+msgstr ""
+
+msgid "Delete selected"
+msgstr ""
+
+msgid "Delete all"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "Model parameters"
+msgstr ""
+
+msgid "Delete intermediate data when finish"
+msgstr ""
+
+msgid "&Run"
+msgstr ""
+
+msgid "Variables"
+msgstr ""
+
+msgid "Graphical Modeler"
+msgstr ""
+
+msgid "Graphical Modeler - GRASS"
+msgstr ""
+
+msgid "model"
+msgstr ""
+
+msgid "Script generated by wxGUI Graphical Modeler."
+msgstr ""
+
+#, python-format
+msgid "undefined variable '%s'"
+msgstr ""
+
+msgid "Running model..."
+msgstr ""
+
+msgid "Model is empty. Nothing to run."
+msgstr ""
+
+msgid "Validating model..."
+msgstr ""
+
+#, python-format
+msgid ""
+"Model is not valid. Do you want to run the model anyway?\n"
+"\n"
+"%s"
+msgstr ""
+
+msgid "Run model?"
+msgstr ""
+
+msgid "Variables below not defined:"
+msgstr ""
+
+msgid "Raster maps"
+msgstr ""
+
+msgid "3D raster maps"
+msgstr ""
+
+msgid "Vector maps"
+msgstr ""
+
+msgid "empty"
+msgstr ""
+
+#, python-brace-format
+msgid "Details: unsupported tag name '{0}'."
+msgstr ""
+
+#, python-brace-format
+msgid "Module {task_name} in your model contains parameterized flags. Actinia does not support parameterized flags. The following flags are therefore not being written in the generated JSON: {flags}"
+msgstr ""
+
+msgid "<not defined>"
+msgstr ""
+
+msgid "Condition: "
+msgstr ""
+
+msgid "Condition: not defined"
+msgstr ""
+
+msgid "if-else"
+msgstr ""
+
+msgid "Model"
+msgstr ""
+
+msgid "Items"
+msgstr ""
+
+msgid "Script editor"
+msgstr ""
+
+msgid "Command output"
+msgstr ""
+
+msgid "{} script contains local modifications"
+msgstr ""
+
+msgid "{} script is up-to-date"
+msgstr ""
+
+msgid "Model computation finished"
+msgstr ""
+
+#, python-format
+msgid "%d intermediate maps deleted from current mapset"
+msgstr ""
+
+#, python-format
+msgid ""
+"Reading model file <%s> failed.\n"
+"Invalid file, unable to parse XML document.\n"
+"\n"
+"%s"
+msgstr ""
+
+msgid "Please wait, loading model..."
+msgstr ""
+
+msgid "Writing current settings to model file failed."
+msgstr ""
+
+#, python-format
+msgid "Unable to open file <%s> for writing."
+msgstr ""
+
+msgid "Current model is not empty. Do you want to store current settings to model file?"
+msgstr ""
+
+msgid "Create new model?"
+msgstr ""
+
+msgid "Choose model file"
+msgstr ""
+
+msgid "GRASS Model File (*.gxm)|*.gxm"
+msgstr ""
+
+#, python-format
+msgid "%(items)d items (%(actions)d actions) loaded into model"
+msgstr ""
+
+#, python-format
+msgid "Model file <%s> already exists. Do you want to overwrite this file?"
+msgstr ""
+
+msgid "Save model"
+msgstr ""
+
+#, python-format
+msgid "File <%s> saved"
+msgstr ""
+
+msgid "Choose file to save current model"
+msgstr ""
+
+msgid "File already exists"
+msgstr ""
+
+#, python-format
+msgid "Model exported to <%s>"
+msgstr ""
+
+msgid "Add comment"
+msgstr ""
+
+msgid "Empty comment. Nothing to add to the model."
+msgstr ""
+
+msgid "No intermediate data to delete."
+msgstr ""
+
+#, python-format
+msgid "Do you want to permanently delete data?%s"
+msgstr ""
+
+msgid "Delete intermediate data?"
+msgstr ""
+
+msgid "Model is empty. Nothing to validate."
+msgstr ""
+
+#, python-format
+msgid ""
+"Model is not valid.\n"
+"\n"
+"%s"
+msgstr ""
+
+msgid "Model is valid."
+msgstr ""
+
+msgid "wxGUI Graphical Modeler"
+msgstr ""
+
+msgid "Redrawing model..."
+msgstr ""
+
+msgid "Do you want to save changes in the model?"
+msgstr ""
+
+msgid "Do you want to store current model settings to model file?"
+msgstr ""
+
+msgid "Quit Graphical Modeler"
+msgstr ""
+
+msgid "List of variables - right-click to delete"
+msgstr ""
+
+msgid "Default value"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Add new variable"
+msgstr ""
+
+msgid "integer"
+msgstr ""
+
+msgid "float"
+msgstr ""
+
+msgid "string"
+msgstr ""
+
+msgid "region"
+msgstr ""
+
+msgid "mapset"
+msgstr ""
+
+msgid "file"
+msgstr ""
+
+msgid "dir"
+msgstr ""
+
+msgid "Add new variable to the model"
+msgstr ""
+
+msgid "List of items - right-click to delete"
+msgstr ""
+
+msgid "In loop"
+msgstr ""
+
+msgid "Parameterized"
+msgstr ""
+
+msgid "No items to selected."
+msgstr ""
+
+msgid "Python script"
+msgstr ""
+
+msgid "Run script"
+msgstr ""
+
+msgid "Save the script to a file"
+msgstr ""
+
+msgid ""
+"Refresh the script based on the model.\n"
+"It will discard all local changes."
+msgstr ""
+
+msgid "Python"
+msgstr ""
+
+msgid "PyWPS"
+msgstr ""
+
+msgid "actinia"
+msgstr ""
+
+msgid "Python script type:"
+msgstr ""
+
+msgid "{} script is locally modified. Refresh will discard all changes. Do you really want to continue?"
+msgstr ""
+
+msgid "Update"
+msgstr ""
+
+msgid "Python script (*.py)|*.py"
+msgstr ""
+
+msgid "JSON file (*.json)|*.json"
+msgstr ""
+
+msgid "Choose file to save"
+msgstr ""
+
+#, python-format
+msgid "File <%s> already exists. Do you want to overwrite this file?"
+msgstr ""
+
+msgid "Save file"
+msgstr ""
+
+#, python-format
+msgid "Unable to launch Python script. %s"
+msgstr ""
+
+msgid "Run script - enabled only for basic Python scripts"
+msgstr ""
+
+msgid "Modeler settings"
+msgstr ""
+
+msgid "Item properties"
+msgstr ""
+
+msgid "Disabled:"
+msgstr ""
+
+msgid "Python editor"
+msgstr ""
+
+msgid "GRASS API:"
+msgstr ""
+
+msgid "Color"
+msgstr ""
+
+msgid "Valid:"
+msgstr ""
+
+msgid "Invalid:"
+msgstr ""
+
+msgid "Running:"
+msgstr ""
+
+msgid "Shape size"
+msgstr ""
+
+msgid "Width:"
+msgstr ""
+
+msgid "Height:"
+msgstr ""
+
+msgid "Data"
+msgstr ""
+
+msgid "Raster:"
+msgstr ""
+
+msgid "3D raster:"
+msgstr ""
+
+msgid "Vector:"
+msgstr ""
+
+msgid "Table:"
+msgstr ""
+
+msgid "Loop"
+msgstr ""
+
+msgid "Comment"
+msgstr ""
+
+msgid "Model properties"
+msgstr ""
+
+msgid "Metadata"
+msgstr ""
+
+msgid "Commands"
+msgstr ""
+
+msgid "Allow output files to overwrite existing files"
+msgstr ""
+
+msgid "Apply properties"
+msgstr ""
+
+msgid "Close dialog and ignore changes"
+msgstr ""
+
+msgid "Description:"
+msgstr ""
+
+msgid "Author(s):"
+msgstr ""
+
+msgid "Create new model"
+msgstr ""
+
+msgid "Load model from file"
+msgstr ""
+
+msgid "Save current model to file"
+msgstr ""
+
+msgid "Export model to image"
+msgstr ""
+
+msgid "Export model to Python script"
+msgstr ""
+
+msgid "Add GRASS tool (module) to model"
+msgstr ""
+
+msgid "Add data to model"
+msgstr ""
+
+msgid "Manually define relation between data and commands"
+msgstr ""
+
+msgid "Add loop/series to model"
+msgstr ""
+
+msgid "Add comment to model"
+msgstr ""
+
+msgid "Run model"
+msgstr ""
+
+msgid "Validate model"
+msgstr ""
+
+msgid "Set model properties"
+msgstr ""
+
+msgid "Manage model variables"
+msgstr ""
+
+msgid "Redraw model canvas"
+msgstr ""
+
+msgid "Required item is not set."
+msgstr ""
+
+msgid "Select GRASS project and mapset"
+msgstr ""
+
+msgid "Project or mapset is not defined."
+msgstr ""
+
+msgid "Name of GRASS project:"
+msgstr ""
+
+msgid "Name of mapset:"
+msgstr ""
+
+msgid "Select mapset in GRASS project"
+msgstr ""
+
+msgid "Name of mapset is missing."
+msgstr ""
+
+msgid "Select vector map"
+msgstr ""
+
+msgid "Name of vector map is missing."
+msgstr ""
+
+msgid "Create new vector map"
+msgstr ""
+
+msgid "Create attribute table"
+msgstr ""
+
+msgid "Add created map into layer tree"
+msgstr ""
+
+msgid "Name of new vector map is missing."
+msgstr ""
+
+msgid "Name for new vector map:"
+msgstr ""
+
+msgid "Key column:"
+msgstr ""
+
+#, python-format
+msgid "Unable to create vector map <%s>."
+msgstr ""
+
+#, python-format
+msgid ""
+"Invalid or empty key column.\n"
+"Unable to create vector map <%s>."
+msgstr ""
+
+#, python-format
+msgid "Vector map <%s> already exists in the current mapset. Do you want to overwrite it?"
+msgstr ""
+
+msgid "Load region:"
+msgstr ""
+
+msgid "Save region:"
+msgstr ""
+
+msgid "Name cannot begin with '.' and must not contain space, quotes, '/', ''', '@', ',', '=', '*', and all other non-alphanumeric characters."
+msgstr ""
+
+msgid "Create or edit imagery groups"
+msgstr ""
+
+msgid "Apply changes to selected group and close dialog"
+msgstr ""
+
+msgid "Apply changes to selected group"
+msgstr ""
+
+msgid "Close dialog, changes are not applied"
+msgstr ""
+
+msgid "Put here a regular expression. Characters '.*' stand for anything, character '^' stands for the beginning and '$' for the end."
+msgstr ""
+
+msgid "Select existing group or enter name of new group:"
+msgstr ""
+
+msgid "Edit/create subgroup"
+msgstr ""
+
+msgid "Select existing subgroup or enter name of new subgroup:"
+msgstr ""
+
+msgid "Pattern:"
+msgstr ""
+
+msgid "List of maps:"
+msgstr ""
+
+msgid "Select map layers and add them to the list."
+msgstr ""
+
+msgid "Remove selected layer(s) from list."
+msgstr ""
+
+msgid "Check maps from group to be included into subgroup."
+msgstr ""
+
+msgid "Add selected map layers into group"
+msgstr ""
+
+#, python-format
+msgid "Group <%s> was changed, do you want to apply changes?"
+msgstr ""
+
+msgid "Unapplied changes"
+msgstr ""
+
+#, python-format
+msgid "Subgroup <%s> was changed, do you want to apply changes?"
+msgstr ""
+
+msgid "No raster maps selected."
+msgstr ""
+
+#, python-format
+msgid "No changes to apply in group <%s>."
+msgstr ""
+
+#, python-format
+msgid "Group <%s> was successfully created."
+msgstr ""
+
+#, python-format
+msgid "Group <%s> was successfully changed."
+msgstr ""
+
+#, python-format
+msgid "Creating of new group <%s> failed."
+msgstr ""
+
+#, python-format
+msgid "Changing of group <%s> failed."
+msgstr ""
+
+msgid "No group selected."
+msgstr ""
+
+msgid "No subgroup selected."
+msgstr ""
+
+msgid "Use fully-qualified map names"
+msgstr ""
+
+msgid "3D raster"
+msgstr ""
+
+msgid "Map type:"
+msgstr ""
+
+msgid "Select toggle"
+msgstr ""
+
+msgid "Mapset:"
+msgstr ""
+
+msgid "Invert selection"
+msgstr ""
+
+#, python-format
+msgid "Dynamic series (%s)"
+msgstr ""
+
+msgid "Set Map Layer Opacity"
+msgstr ""
+
+msgid "transparent"
+msgstr ""
+
+msgid "opaque"
+msgstr ""
+
+msgid "Set image size"
+msgstr ""
+
+msgid "Image size"
+msgstr ""
+
+msgid "Template:"
+msgstr ""
+
+msgid "SQL Query Utility"
+msgstr ""
+
+msgid " SQL statement "
+msgstr ""
+
+msgid "Symbols"
+msgstr ""
+
+msgid "Symbol directory:"
+msgstr ""
+
+msgid "Symbol name:"
+msgstr ""
+
+msgid "Quit GRASS"
+msgstr ""
+
+msgid "Do you want to quit GRASS including shell or just close the GUI?"
+msgstr ""
+
+msgid "Do you want to quit GRASS?"
+msgstr ""
+
+msgid "Close GUI"
+msgstr ""
+
+msgid "Font settings"
+msgstr ""
+
+msgid "Select font:"
+msgstr ""
+
+msgid "Character encoding:"
+msgstr ""
+
+msgid "Font size:"
+msgstr ""
+
+msgid "Example"
+msgstr ""
+
+msgid "Enter parameters for '"
+msgstr ""
+
+msgid "Close this window without executing the command (Ctrl+Q)"
+msgstr ""
+
+msgid "Run the command (Ctrl+R)"
+msgstr ""
+
+msgid "Copy as Shell command"
+msgstr ""
+
+msgid "Copy as Python"
+msgstr ""
+
+msgid "Copy as JSON settings"
+msgstr ""
+
+msgid "Copy"
+msgstr ""
+
+msgid "More copy formats"
+msgstr ""
+
+msgid "Paste JSON settings"
+msgstr ""
+
+msgid "Paste parameters from JSON string in the clipboard"
+msgstr ""
+
+msgid "Show manual page of the command (Ctrl+H)"
+msgstr ""
+
+msgid "Add created map(s) into layer tree"
+msgstr ""
+
+msgid "Close dialog on finish"
+msgstr ""
+
+msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
+msgstr ""
+
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+msgid "Copy as Python (Script API)"
+msgstr ""
+
+msgid "Copy as Python (PyGRASS API)"
+msgstr ""
+
+#, python-format
+msgid "'%s' copied to clipboard"
+msgstr ""
+
+msgid "Python code copied to clipboard"
+msgstr ""
+
+msgid "JSON copied to clipboard"
+msgstr ""
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+msgid "Module Mismatch"
+msgstr ""
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+msgid "Invalid Data"
+msgstr ""
+
+msgid "Paste Error"
+msgstr ""
+
+#, python-format
+msgid "%s copied to clipboard"
+msgstr ""
+
+msgid "Required"
+msgstr ""
+
+msgid "Optional"
+msgstr ""
+
+msgid "Parameterized in model"
+msgstr ""
+
+msgid "This option is required"
+msgstr ""
+
+msgid "[multiple]"
+msgstr ""
+
+msgid "valid range"
+msgstr ""
+
+msgid "Select font"
+msgstr ""
+
+msgid "Map Display"
+msgstr ""
+
+msgid "Show graphical representation of temporal extent of dataset(s)."
+msgstr ""
+
+msgid "Transparent"
+msgstr ""
+
+#, python-format
+msgid "Choose %s"
+msgstr ""
+
+msgid "&Load"
+msgstr ""
+
+msgid "Load and edit content of a file"
+msgstr ""
+
+msgid "&Save as"
+msgstr ""
+
+msgid "Save content to a file for further use"
+msgstr ""
+
+msgid "or enter values directly:"
+msgstr ""
+
+msgid "Enter file content directly instead of specifying a file. Temporary file will be automatically created."
+msgstr ""
+
+msgid "Directory"
+msgstr ""
+
+msgid "Layer id"
+msgstr ""
+
+msgid "Layer name"
+msgstr ""
+
+msgid "Feature type"
+msgstr ""
+
+msgid "Projection match"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Nothing to load."
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to load file.\n"
+"\n"
+"Reason: %s"
+msgstr ""
+
+msgid "Nothing to save."
+msgstr ""
+
+msgid "Save input as..."
+msgstr ""
+
+msgid "No dataset given."
+msgstr ""
+
+#, python-format
+msgid "Unable to parse command '%s'"
+msgstr ""
+
+#, python-format
+msgid "%(cmd)s: parameter '%(key)s' not available"
+msgstr ""
+
+msgid "Try to set up GRASS_ADDON_PATH or GRASS_ADDON_BASE variable."
+msgstr ""
+
+msgid "About GRASS"
+msgstr ""
+
+msgid "Info"
+msgstr ""
+
+msgid "Copyright"
+msgstr ""
+
+msgid "License"
+msgstr ""
+
+msgid "Citation"
+msgstr ""
+
+msgid "Authors"
+msgstr ""
+
+msgid "Contributors"
+msgstr ""
+
+msgid "Extra contributors"
+msgstr ""
+
+msgid "Translators"
+msgstr ""
+
+msgid "Translation status"
+msgstr ""
+
+msgid "Unable to get GRASS version\n"
+msgstr ""
+
+msgid "unknown version"
+msgstr ""
+
+msgid "Official GRASS site:"
+msgstr ""
+
+msgid "Code Revision"
+msgstr ""
+
+msgid "Build Date"
+msgstr ""
+
+msgid "Language"
+msgstr ""
+
+#, python-format
+msgid "%s file missing"
+msgstr ""
+
+#, python-brace-format
+msgid "Unable to provide citation suggestion, see GRASS website instead. The error was: {0}"
+msgstr ""
+
+#, python-format
+msgid "Error when reading file '%s'."
+msgstr ""
+
+msgid "Lines:"
+msgstr ""
+
+msgid "Country"
+msgstr ""
+
+msgid "E-mail"
+msgstr ""
+
+msgid "OSGeo_ID"
+msgstr ""
+
+msgid "ORCID"
+msgstr ""
+
+msgid "Nation"
+msgstr ""
+
+#, python-format
+msgid "   %d translated"
+msgstr ""
+
+#, python-format
+msgid "   %d fuzzy"
+msgstr ""
+
+#, python-format
+msgid "   %d untranslated"
+msgstr ""
+
+#, python-format
+msgid "%d translated"
+msgstr ""
+
+#, python-format
+msgid "File <%s> not found"
+msgstr ""
+
+msgid "&Next"
+msgstr ""
+
+msgid "&Previous"
+msgstr ""
+
+msgid "Clear prompt and output window"
+msgstr ""
+
+msgid "Save output to a file"
+msgstr ""
+
+msgid "Abort running command"
+msgstr ""
+
+msgid "Save file as..."
+msgstr ""
+
+#, python-format
+msgid "%(txt)s (*.txt)|*.txt|%(files)s (*)|*"
+msgstr ""
+
+msgid "Files"
+msgstr ""
+
+msgid "Text files"
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to write file '%(path)s'.\n"
+"\n"
+"Details: %(error)s"
+msgstr ""
+
+#, python-format
+msgid "Command output saved into '%s'"
+msgstr ""
+
+msgid "Not selectable element"
+msgstr ""
+
+msgid "Mapset"
+msgstr ""
+
+msgid "Type: "
+msgstr ""
+
+#, python-format
+msgid "GSelect: invalid item: %s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Temporal GIS error:\n"
+"%s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to import pyGRASS: %s\n"
+"Some functionality will be not accessible"
+msgstr ""
+
+msgid "No table linked to layer <{}>."
+msgstr ""
+
+msgid "Choose GIS Data Directory"
+msgstr ""
+
+msgid "Output settings"
+msgstr ""
+
+msgid "Source input"
+msgstr ""
+
+msgid "Native"
+msgstr ""
+
+msgid "File"
+msgstr ""
+
+msgid "Protocol"
+msgstr ""
+
+msgid "Output type"
+msgstr ""
+
+msgid "Source type"
+msgstr ""
+
+msgid "All files"
+msgstr ""
+
+msgid "ZIP files"
+msgstr ""
+
+msgid "GZIP files"
+msgstr ""
+
+msgid "TAR files"
+msgstr ""
+
+msgid "TARGZ files"
+msgstr ""
+
+msgid "File:"
+msgstr ""
+
+msgid "Choose file to import"
+msgstr ""
+
+msgid "Choose input directory"
+msgstr ""
+
+msgid "Extension:"
+msgstr ""
+
+msgid "Choose file"
+msgstr ""
+
+msgid "Feature type:"
+msgstr ""
+
+msgid "simple features"
+msgstr ""
+
+msgid "topological"
+msgstr ""
+
+msgid "Creation options:"
+msgstr ""
+
+msgid "Format:"
+msgstr ""
+
+msgid "Protocol:"
+msgstr ""
+
+msgid "No settings available"
+msgstr ""
+
+msgid "No data source defined, settings are not saved."
+msgstr ""
+
+msgid "PostgreSQL/PostGIS login was not set. Set it via <db.login> module, please."
+msgstr ""
+
+#, python-brace-format
+msgid "Getting raster <{table}> SRID from PostgreSQL DB <{db}>, host <{host}> failed. {error}."
+msgstr ""
+
+#, python-brace-format
+msgid "Getting list of tables from PostgreSQL DB <{db}>, host <{host}> failed. {error}."
+msgstr ""
+
+#, python-brace-format
+msgid "Getting list of tables columns data types from PostGIS DB <{db}>, host <{host}> failed. {error}."
+msgstr ""
+
+#, python-brace-format
+msgid "PostgreSQL DB <{psql}> program was not found. Please, install it."
+msgstr ""
+
+msgid "The Python GDAL package is missing. Please install it."
+msgstr ""
+
+msgid "LineString"
+msgstr ""
+
+msgid "Point"
+msgstr ""
+
+msgid "Polygon"
+msgstr ""
+
+msgid "No vector map selected in layer manager. Operation canceled."
+msgstr ""
+
+msgid "Input vector map is not selected"
+msgstr ""
+
+#, python-format
+msgid "Input vector map <%s> and selected map <%s> in layer manager are different. Operation canceled."
+msgstr ""
+
+#, python-format
+msgid "Unable to import C imagery library functions: %s\n"
+msgstr ""
+
+msgid "No vector map selected"
+msgstr ""
+
+#, python-format
+msgid "GRASS module '%s' not found. Unable to start map display window."
+msgstr ""
+
+msgid "Adva&nced search..."
+msgstr ""
+
+#, python-format
+msgid "Do advanced search using %s tool"
+msgstr ""
+
+msgid "Double-click to run selected tool"
+msgstr ""
+
+msgid "&Run..."
+msgstr ""
+
+msgid "Run selected tool from the tree"
+msgstr ""
+
+msgid "H&elp"
+msgstr ""
+
+msgid "Show manual for selected tool from the tree"
+msgstr ""
+
+#, python-format
+msgid "Documentation for %s is now open in the web browser"
+msgstr ""
+
+msgid "&Recent Files"
+msgstr ""
+
+msgid "User settings"
+msgstr ""
+
+msgid "Set to default"
+msgstr ""
+
+msgid "Revert settings to default"
+msgstr ""
+
+msgid "Apply changes for the current session only and close"
+msgstr ""
+
+msgid "Save for this session only"
+msgstr ""
+
+msgid "Settings applied to current session but not saved"
+msgstr ""
+
+msgid "Key column cannot be empty string."
+msgstr ""
+
+msgid "GUI Settings"
+msgstr ""
+
+msgid "Layer Manager settings"
+msgstr ""
+
+msgid "Ask when removing map layer from layer tree"
+msgstr ""
+
+msgid "Ask when quitting wxGUI or closing display"
+msgstr ""
+
+msgid "Automatically copy selected text to clipboard (in the Console tab)"
+msgstr ""
+
+msgid "Layout settings"
+msgstr ""
+
+msgid "Save current window layout as default"
+msgstr ""
+
+msgid "Save current position and size of Layer Manager window and opened Map Display window(s) and use as default for next sessions."
+msgstr ""
+
+msgid "Save current single window panes layout as default"
+msgstr ""
+
+msgid "Save current position and size of single-window mode panes and use as default for next sessions."
+msgstr ""
+
+msgid "Hide '{}' tab (requires GUI restart)"
+msgstr ""
+
+msgid "Tools"
+msgstr ""
+
+msgid "History"
+msgstr ""
+
+msgid "Data Catalog settings"
+msgstr ""
+
+msgid "At startup load maps from current mapset only (in the Data tab)"
+msgstr ""
+
+msgid "Workspace settings"
+msgstr ""
+
+msgid "Suppress positioning Map Display Window(s)"
+msgstr ""
+
+msgid "Suppress positioning Layer Manager window"
+msgstr ""
+
+msgid "Region settings"
+msgstr ""
+
+msgid "Align region to resolution"
+msgstr ""
+
+msgid "Appearance"
+msgstr ""
+
+msgid "Window layout settings"
+msgstr ""
+
+msgid "Use single-window mode (requires GUI restart)"
+msgstr ""
+
+msgid "Use single-window mode instead of multi-window mode"
+msgstr ""
+
+msgid "Font for command output:"
+msgstr ""
+
+msgid "Font for manual pages:"
+msgstr ""
+
+msgid "Language settings"
+msgstr ""
+
+msgid "Choose language (requires to save and GRASS restart):"
+msgstr ""
+
+msgid "Appearance settings"
+msgstr ""
+
+msgid "Element list:"
+msgstr ""
+
+msgid "Menu style (requires to save and GUI restart):"
+msgstr ""
+
+msgid "Height of map selection popup window (in pixels):"
+msgstr ""
+
+msgid "Icon theme (requires GUI restart):"
+msgstr ""
+
+msgid "Tool dialog style:"
+msgstr ""
+
+msgid "Default font for GRASS displays:"
+msgstr ""
+
+msgid "Default display settings"
+msgstr ""
+
+msgid "Display driver:"
+msgstr ""
+
+msgid "Statusbar mode:"
+msgstr ""
+
+msgid "Align region extent based on display size"
+msgstr ""
+
+msgid "Constrain display resolution to computational settings"
+msgstr ""
+
+msgid "Enable auto-rendering"
+msgstr ""
+
+msgid "Enable auto-zooming to selected map layer"
+msgstr ""
+
+msgid "Show computational region extent"
+msgstr ""
+
+msgid "Mouse wheel action:"
+msgstr ""
+
+msgid "Mouse scrolling direction:"
+msgstr ""
+
+msgid "Advanced display settings"
+msgstr ""
+
+msgid "3D view depth buffer (possible values are 16, 24, 32):"
+msgstr ""
+
+msgid "Tool dialog settings"
+msgstr ""
+
+msgid "Close dialog when completed successfully"
+msgstr ""
+
+msgid "Allow interactive input"
+msgstr ""
+
+msgid "Verbosity level:"
+msgstr ""
+
+msgid "Default Python API for copied commands:"
+msgstr ""
+
+msgid "Number of threads for parallel computing (supported tools only):"
+msgstr ""
+
+msgid "Maximum memory in MB to be used (supported tools only):"
+msgstr ""
+
+msgid "Layers"
+msgstr ""
+
+msgid "Default raster settings"
+msgstr ""
+
+msgid "Make null cells opaque"
+msgstr ""
+
+msgid "Default color table"
+msgstr ""
+
+msgid "Default vector settings"
+msgstr ""
+
+msgid "Display:"
+msgstr ""
+
+msgid "Feature color:"
+msgstr ""
+
+msgid "Area fill color:"
+msgstr ""
+
+msgid "Random colors according to category number "
+msgstr ""
+
+msgid "Symbol:"
+msgstr ""
+
+msgid "Attributes"
+msgstr ""
+
+msgid "Line width (in pixels):"
+msgstr ""
+
+msgid "Automatically highlight selected features in map display"
+msgstr ""
+
+msgid "Data browser"
+msgstr ""
+
+msgid "Left mouse double click:"
+msgstr ""
+
+msgid "Encoding (e.g. utf-8, ascii, iso8859-1, koi8-r):"
+msgstr ""
+
+msgid "Ask when deleting data record(s) from table"
+msgstr ""
+
+msgid "Create table"
+msgstr ""
+
+msgid "Projection"
+msgstr ""
+
+msgid "Projection statusbar settings"
+msgstr ""
+
+msgid ""
+"\n"
+"Note: This only controls the coordinates displayed in the lower-left of the Map Display\n"
+"window's status bar. It is purely cosmetic and does not affect the working project's\n"
+"coordinate reference system in any way. You will need to enable the Projection check box in the drop-down\n"
+"menu located at the bottom of the Map Display window.\n"
+msgstr ""
+
+msgid "EPSG code:"
+msgstr ""
+
+msgid "PROJ string (required):"
+msgstr ""
+
+msgid "EPSG file:"
+msgstr ""
+
+msgid "Load EPSG codes (be patient), enter EPSG code or insert PROJ string directly."
+msgstr ""
+
+msgid "&Load EPSG codes"
+msgstr ""
+
+msgid "Coordinates format"
+msgstr ""
+
+msgid "Lat/long projections"
+msgstr ""
+
+msgid "Precision:"
+msgstr ""
+
+#, python-brace-format
+msgid "Unable to read EPGS codes: {0}"
+msgstr ""
+
+#, python-format
+msgid "Unable to read EPSG codes: %s"
+msgstr ""
+
+#, python-format
+msgid "EPSG code %s not found"
+msgstr ""
+
+msgid "Select default display font"
+msgstr ""
+
+msgid "Failed to set default display font. Try different font."
+msgstr ""
+
+msgid "Select default output font"
+msgstr ""
+
+msgid "Manage access to mapsets"
+msgstr ""
+
+msgid ""
+"Check a mapset to make it accessible, uncheck it to hide it.\n"
+"  Notes:\n"
+"    - The current mapset is always accessible.\n"
+"    - You may only write to the current mapset.\n"
+"    - You may only write to mapsets which you own."
+msgstr ""
+
+msgid "Owner"
+msgstr ""
+
+msgid "Type command here and press Enter"
+msgstr ""
+
+msgid "Permission denied <{}>. Please change file permission for reading."
+msgstr ""
+
+msgid "Couldn't read file <{}>."
+msgstr ""
+
+msgid "Permission denied <{}>. Please change file permission for writing.{}"
+msgstr ""
+
+msgid "Couldn't write file <{}>.{}"
+msgstr ""
+
+msgid " Unable to launch Python script."
+msgstr ""
+
+msgid "Open file"
+msgstr ""
+
+#, python-brace-format
+msgid "File <{path}> doesn't exist. It was probably moved or deleted."
+msgstr ""
+
+msgid "Replace the content by the template?"
+msgstr ""
+
+msgid "Replace the content by the example?"
+msgstr ""
+
+msgid "Replace the current content by the file content?"
+msgstr ""
+
+msgid "Replace content"
+msgstr ""
+
+msgid "Set parameters for the script"
+msgstr ""
+
+msgid "Specify command line parameters for the script separated by spaces:"
+msgstr ""
+
+msgid "Open (Ctrl+O)"
+msgstr ""
+
+msgid "Save (Ctrl+S)"
+msgstr ""
+
+msgid "Run (Ctrl+R)"
+msgstr ""
+
+msgid "Activate overwrite"
+msgstr ""
+
+msgid "Deactivate overwrite"
+msgstr ""
+
+msgid "Simple Python Editor"
+msgstr ""
+
+msgid "Query results"
+msgstr ""
+
+msgid "Right click to copy selected values to clipboard."
+msgstr ""
+
+msgid "Feature"
+msgstr ""
+
+msgid "Value"
+msgstr ""
+
+msgid "Copy all to clipboard"
+msgstr ""
+
+msgid "Redirect to console"
+msgstr ""
+
+#, python-format
+msgid "Copy from '%s' column"
+msgstr ""
+
+msgid "Copy selected lines"
+msgstr ""
+
+#, python-format
+msgid "Copy '%s'"
+msgstr ""
+
+msgid "Copy line"
+msgstr ""
+
+msgid "Query results:"
+msgstr ""
+
+msgid " "
+msgstr ""
+
+msgid "east, north"
+msgstr ""
+
+msgid "Nothing found"
+msgstr ""
+
+msgid "Toolbar"
+msgstr ""
+
+msgid "Copy map names to clipboard (top to bottom)"
+msgstr ""
+
+msgid "Copy map names to clipboard (bottom to top)"
+msgstr ""
+
+#, python-format
+msgid "Set opacity of <%s>"
+msgstr ""
+
+msgid "Remove selected map(s) from list"
+msgstr ""
+
+msgid "Layer up"
+msgstr ""
+
+msgid "Move selected layer(s) up"
+msgstr ""
+
+msgid "Layer down"
+msgstr ""
+
+msgid "Move selected layer(s) down"
+msgstr ""
+
+msgid "Edit layer properties"
+msgstr ""
+
+msgid "Change layer opacity"
+msgstr ""
+
+msgid "Change opacity"
+msgstr ""
+
+msgid "Add 3D raster map layer"
+msgstr ""
+
+msgid "Add RGB map layer"
+msgstr ""
+
+msgid "Display map"
+msgstr ""
+
+msgid "Re-render modified map layers only"
+msgstr ""
+
+msgid "Render map"
+msgstr ""
+
+msgid "Force re-rendering all map layers"
+msgstr ""
+
+msgid "Erase display"
+msgstr ""
+
+msgid "Erase display canvas with given background color"
+msgstr ""
+
+msgid "Pointer"
+msgstr ""
+
+msgid "Drag or click mouse to zoom"
+msgstr ""
+
+msgid "Zoom in"
+msgstr ""
+
+msgid "Drag or click mouse to unzoom"
+msgstr ""
+
+msgid "Zoom out"
+msgstr ""
+
+msgid "Return to previous zoom"
+msgstr ""
+
+msgid "Various zoom options"
+msgstr ""
+
+msgid "Zoom to default or saved region, save to named region, ..."
+msgstr ""
+
+msgid "Zoom to selected map layer(s)"
+msgstr ""
+
+msgid "Zoom to computational region extent"
+msgstr ""
+
+msgid "Drag with mouse to pan"
+msgstr ""
+
+msgid "Pan"
+msgstr ""
+
+msgid "Save display to file"
+msgstr ""
+
+msgid "Show manual"
+msgstr ""
+
+msgid "Quit"
+msgstr ""
+
+msgid "Add raster map layer"
+msgstr ""
+
+msgid "Add vector map layer"
+msgstr ""
+
+msgid "Add map elements"
+msgstr ""
+
+msgid "Overlay elements like scale and legend onto map"
+msgstr ""
+
+msgid "Create histogram with d.histogram"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Map Display Settings"
+msgstr ""
+
+msgid "(Un)dock"
+msgstr ""
+
+msgid "category"
+msgstr ""
+
+msgid "type"
+msgstr ""
+
+msgid "Select features"
+msgstr ""
+
+msgid "Create a new map"
+msgstr ""
+
+#, python-format
+msgid "Selected map <%s> has been disabled for rendering. Operation canceled."
+msgstr ""
+
+msgid "No vector map layer selected. Operation canceled."
+msgstr ""
+
+msgid "No map layer selected. Operation canceled."
+msgstr ""
+
+#, python-format
+msgid "Failed to query vector map(s) <%s>."
+msgstr ""
+
+msgid "No features selected"
+msgstr ""
+
+#, python-format
+msgid "Vector map <%s> was created"
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to create a new vector map.\n"
+"\n"
+"Reason: %s"
+msgstr ""
+
+msgid " (...)"
+msgstr ""
+
+#, python-format
+msgid "Name <%(name)s> is not a valid name for GRASS map. Please use only ASCII characters excluding %(chars)s and space."
+msgstr ""
+
+msgid "Invalid name"
+msgstr ""
+
+msgid "Fulltext search"
+msgstr ""
+
+msgid "Type to search in all tools. Press Enter for next match."
+msgstr ""
+
+msgid "Searching, please type more characters."
+msgstr ""
+
+msgid "{} tools matched"
+msgstr ""
+
+msgid "Profiles"
+msgstr ""
+
+msgid "Save current settings"
+msgstr ""
+
+msgid "Delete currently selected settings"
+msgstr ""
+
+msgid "Load:"
+msgstr ""
+
+#, python-format
+msgid "Settings <%s> not found"
+msgstr ""
+
+msgid "Save settings"
+msgstr ""
+
+msgid "Name not given, settings is not saved."
+msgstr ""
+
+#, python-format
+msgid "Settings <%s> already exists. Do you want to overwrite the settings?"
+msgstr ""
+
+msgid "No settings is defined. Operation canceled."
+msgstr ""
+
+msgid "Unable to save settings"
+msgstr ""
+
+msgid "Clear"
+msgstr ""
+
+msgid "&Clear"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "&Cancel"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "&Close"
+msgstr ""
+
+msgid "Apply"
+msgstr ""
+
+msgid "&Apply"
+msgstr ""
+
+msgid "Timestamp:"
+msgstr ""
+
+msgid "Runtime duration:"
+msgstr ""
+
+msgid "Status:"
+msgstr ""
+
+msgid "Mask 2D:"
+msgstr ""
+
+msgid "Mask 3D:"
+msgstr ""
+
+msgid "North:"
+msgstr ""
+
+msgid "South:"
+msgstr ""
+
+msgid "West:"
+msgstr ""
+
+msgid "East:"
+msgstr ""
+
+msgid "North-south resolution:"
+msgstr ""
+
+msgid "East-west resolution:"
+msgstr ""
+
+msgid "Number of rows:"
+msgstr ""
+
+msgid "Number of columns:"
+msgstr ""
+
+msgid "Number of cells:"
+msgstr ""
+
+msgid "{} sec"
+msgstr ""
+
+msgid "General info"
+msgstr ""
+
+msgid "Computational region during command execution"
+msgstr ""
+
+msgid "Update current region"
+msgstr ""
+
+msgid "Region match"
+msgstr ""
+
+msgid "Set current computational region to the region of executed command"
+msgstr ""
+
+msgid "History browser"
+msgstr ""
+
+msgid "&Export history"
+msgstr ""
+
+msgid "Export history of executed commands to a file"
+msgstr ""
+
+#, python-brace-format
+msgid "{json} (*.json)|*.txt|{files} (*)|*"
+msgstr ""
+
+msgid "JSON files"
+msgstr ""
+
+#, python-brace-format
+msgid "{txt} (*.txt)|*.txt|{files} (*)|*"
+msgstr ""
+
+msgid "Command history saved to '{}'"
+msgstr ""
+
+msgid "No time info"
+msgstr ""
+
+#, python-brace-format
+msgid "{month_name} {day_number}"
+msgstr ""
+
+#, python-brace-format
+msgid "{base_date} (today)"
+msgstr ""
+
+#, python-brace-format
+msgid "{base_date} (yesterday)"
+msgstr ""
+
+#, python-brace-format
+msgid "{base_date} (this week)"
+msgstr ""
+
+#, python-brace-format
+msgid "{base_date}"
+msgstr ""
+
+#, python-brace-format
+msgid "{base_date}, {year}"
+msgstr ""
+
+msgid "Double-click to open the tool"
+msgstr ""
+
+msgid "&Remove"
+msgstr ""
+
+msgid "Cannot be parsed into command"
+msgstr ""
+
+msgid "Do you really want to remove <{}> command?"
+msgstr ""
+
+msgid "Remove command"
+msgstr ""
+
+msgid "Removing <{}>"
+msgstr ""
+
+msgid "<{}> removed"
+msgstr ""
+
+msgid "Command <{}> copied to clipboard"
+msgstr ""
+
+msgid "Failed to copy command to clipboard"
+msgstr ""
+
+msgid "Select imagery group"
+msgstr ""
+
+msgid "Name of imagery group is missing."
+msgstr ""
+
+msgid "Name of imagery group:"
+msgstr ""
+
+msgid "Name of imagery subgroup:"
+msgstr ""
+
+msgid "Please choose a subgroup."
+msgstr ""
+
+#, python-format
+msgid "Subgroup <%s> not found in group <%s>"
+msgstr ""
+
+#, python-format
+msgid ""
+"No data found in subgroup <%s> of group <%s>.\n"
+"."
+msgstr ""
+
+#, python-format
+msgid ""
+"No data found in group <%s>.\n"
+"."
+msgstr ""
+
+#, python-format
+msgid "Group <%s> not found"
+msgstr ""
+
+msgid "Name of map is missing."
+msgstr ""
+
+msgid "Class manager"
+msgstr ""
+
+msgid "Classes"
+msgstr ""
+
+msgid "Class name"
+msgstr ""
+
+msgid "Please use only ASCII characters."
+msgstr ""
+
+msgid "Zoom to training areas of selected class"
+msgstr ""
+
+msgid "Save signature file"
+msgstr ""
+
+msgid "Enter name of signature file:"
+msgstr ""
+
+msgid "Signature file path:"
+msgstr ""
+
+msgid "Export training areas"
+msgstr ""
+
+msgid "Enter name of new vector map:"
+msgstr ""
+
+msgid "Export attribute table"
+msgstr ""
+
+msgid "Export attribute table containing computed statistical data"
+msgstr ""
+
+#, python-format
+msgid "Vector map <%s> already exists. Do you want to overwrite it?"
+msgstr ""
+
+#, python-format
+msgid "Vector <%s> exists"
+msgstr ""
+
+msgid "You are trying to create a training area outside the computational region. Please, use g.region to set the appropriate region first."
+msgstr ""
+
+msgid ""
+"In order to create a training area, you have to select class first.\n"
+"\n"
+"There is no class yet, do you want to create one?"
+msgstr ""
+
+msgid "No class selected"
+msgstr ""
+
+#, python-format
+msgid ""
+"Loading imagery lib failed.\n"
+"%s"
+msgstr ""
+
+msgid "Supervised Classification Tool"
+msgstr ""
+
+msgid "IClass Toolbar"
+msgstr ""
+
+msgid "IClass Misc Toolbar"
+msgstr ""
+
+msgid "Digitization Toolbar"
+msgstr ""
+
+msgid "Plots"
+msgstr ""
+
+msgid "Preview Display"
+msgstr ""
+
+msgid "Training Areas Display"
+msgstr ""
+
+msgid "Adjust Training Area Display to Preview Display"
+msgstr ""
+
+msgid "Adjust Preview display to Training Area Display"
+msgstr ""
+
+msgid "Display synchronization ON"
+msgstr ""
+
+msgid "Display synchronization OFF"
+msgstr ""
+
+msgid "All changes will be lost. Do you want to continue?"
+msgstr ""
+
+msgid "Import vector map"
+msgstr ""
+
+#, python-format
+msgid "No areas in vector map <%s>.\n"
+msgstr ""
+
+#, python-format
+msgid "Vector map <%s> contains points or lines, these features are ignored."
+msgstr ""
+
+#, python-format
+msgid "Unable to open vector map <%s>"
+msgstr ""
+
+#, python-format
+msgid "Unable to copy vector features from <%s>"
+msgstr ""
+
+msgid "Unable to open temporary vector map"
+msgstr ""
+
+msgid "No training areas to export."
+msgstr ""
+
+#, python-format
+msgid "%d training areas (%d classes) exported to vector map <%s>."
+msgstr ""
+
+msgid "Failed to create temporary vector map."
+msgstr ""
+
+msgid "There was an error initializing signatures. Check GUI console for any error messages."
+msgstr ""
+
+#, python-format
+msgid "No area in category %s. Category skipped."
+msgstr ""
+
+msgid "Analysis failed."
+msgstr ""
+
+msgid "results"
+msgstr ""
+
+msgid "No imagery group selected."
+msgstr ""
+
+msgid "Due to recent changes in classes, signatures can be outdated and should be recalculated. Do you still want to continue?"
+msgstr ""
+
+msgid "Outdated signatures"
+msgstr ""
+
+msgid "Signatures are not valid. Recalculate them and then try again."
+msgstr ""
+
+#, python-format
+msgid ""
+"A signature file named %s already exists.\n"
+"Do you want to replace it?"
+msgstr ""
+
+msgid "No imagery group selected. Operation canceled."
+msgstr ""
+
+#, python-format
+msgid "Group <%(group)s> does not have enough files (it has %(files)d files). Operation canceled."
+msgstr ""
+
+msgid "No areas given. Operation canceled."
+msgstr ""
+
+msgid "Vector features are outside raster layers. Operation canceled."
+msgstr ""
+
+msgid "Name of subgroup required"
+msgstr ""
+
+#, python-format
+msgid "Subgroup <%s> not found"
+msgstr ""
+
+#, python-format
+msgid "Raster map <%s> not found"
+msgstr ""
+
+msgid "Supervised Classification Tool - GRASS"
+msgstr ""
+
+#, python-format
+msgid "Loading raster map <%s>..."
+msgstr ""
+
+#, python-format
+msgid "Loading training map <%s>..."
+msgstr ""
+
+msgid "Coincident plots"
+msgstr ""
+
+msgid "Histograms"
+msgstr ""
+
+msgid "Scatter plots"
+msgstr ""
+
+#, python-format
+msgid ""
+"Scatter plot functionality is disabled.\n"
+"\n"
+"Reason: Unable to import packages needed for scatter plot.\n"
+"%s"
+msgstr ""
+
+msgid "Loading imagery lib failed"
+msgstr ""
+
+msgid "Set opacity level"
+msgstr ""
+
+msgid "Run analysis, update histogram and coincidence plots"
+msgstr ""
+
+msgid "Save signature file for i.maxlik"
+msgstr ""
+
+msgid "Remove selected map layer"
+msgstr ""
+
+msgid "Export training areas to vector map"
+msgstr ""
+
+msgid "Import training areas from vector map"
+msgstr ""
+
+msgid "Preview"
+msgstr ""
+
+msgid "Training"
+msgstr ""
+
+msgid "/ Zoom to map"
+msgstr ""
+
+msgid "std dev"
+msgstr ""
+
+msgid "Add raster map"
+msgstr ""
+
+#, python-format
+msgid "Unknown iconset '%s', using default 'grass'...\n"
+msgstr ""
+
+#, python-format
+msgid "Unable to load icon theme. Reason: %s. Quitting wxGUI..."
+msgstr ""
+
+msgid "1. Select GRASS database directory"
+msgstr ""
+
+msgid "2. Select GRASS Location"
+msgstr ""
+
+msgid "3. Select GRASS Mapset"
+msgstr ""
+
+msgid "GRASS database directory contains Locations."
+msgstr ""
+
+msgid "All data in one Location is in the same  coordinate reference system (projection). One Location can be one project. Location contains Mapsets."
+msgstr ""
+
+msgid "Mapset contains GIS data related to one project, task within one project, subregion or user."
+msgstr ""
+
+msgid "Start &GRASS session"
+msgstr ""
+
+msgid "&Browse"
+msgstr ""
+
+#. GTC New mapset
+msgid "&New"
+msgstr ""
+
+msgid "Create a new Mapset in selected Location"
+msgstr ""
+
+#. GTC New location
+msgid "N&ew"
+msgstr ""
+
+msgid "Create a new location using location wizard. After location is created successfully, GRASS session is started."
+msgstr ""
+
+#. GTC Rename location
+msgid "Ren&ame"
+msgstr ""
+
+msgid "Rename selected location"
+msgstr ""
+
+#. GTC Delete location
+msgid "De&lete"
+msgstr ""
+
+msgid "Delete selected location"
+msgstr ""
+
+msgid "Rename selected mapset"
+msgstr ""
+
+msgid "Delete selected mapset"
+msgstr ""
+
+#, python-format
+msgid "GRASS %s startup%s"
+msgstr ""
+
+msgid "Enter GRASS session"
+msgstr ""
+
+msgid "Unable to set GRASS database. Check your locale settings."
+msgstr ""
+
+#, python-format
+msgid "ERROR: Location <%s> not found\n"
+msgstr ""
+
+#, python-format
+msgid "ERROR: Mapset <%s> not found\n"
+msgstr ""
+
+#, python-format
+msgid "Invalid line in GISRC file (%s):%s\n"
+msgstr ""
+
+#, python-brace-format
+msgid "Error: {text}"
+msgstr ""
+
+#, python-format
+msgid "Do you want to import <%(name)s> to the newly created location?"
+msgstr ""
+
+msgid "Import data?"
+msgstr ""
+
+msgid "New mapset:"
+msgstr ""
+
+msgid "Create new mapset"
+msgstr ""
+
+#, python-format
+msgid ""
+"Import of <%(name)s> failed.\n"
+"Reason: %(msg)s"
+msgstr ""
+
+#, python-format
+msgid "Data file <%(name)s> imported successfully. The location's default region was set from this imported map."
+msgstr ""
+
+msgid ""
+"Mapset <PERMANENT> is required for valid GRASS location.\n"
+"\n"
+"This mapset cannot be renamed."
+msgstr ""
+
+#, python-format
+msgid ""
+"Current name: %s\n"
+"\n"
+"Enter new name:"
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to rename mapset.\n"
+"\n"
+"Mapset <%s> already exists in location."
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to rename mapset.\n"
+"\n"
+"%s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to rename location.\n"
+"\n"
+"Location <%s> already exists in GRASS database."
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to rename location.\n"
+"\n"
+"%s"
+msgstr ""
+
+msgid ""
+"Mapset <PERMANENT> is required for valid GRASS location.\n"
+"\n"
+"This mapset cannot be deleted."
+msgstr ""
+
+#, python-format
+msgid ""
+"Do you want to continue with deleting mapset <%(mapset)s> from location <%(location)s>?\n"
+"\n"
+"ALL MAPS included in this mapset will be PERMANENTLY DELETED!"
+msgstr ""
+
+#, python-format
+msgid "Unable to delete mapset: %s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Do you want to continue with deleting location <%s>?\n"
+"\n"
+"ALL MAPS included in this location will be PERMANENTLY DELETED!"
+msgstr ""
+
+#, python-format
+msgid "Unable to delete location: %s"
+msgstr ""
+
+#, python-brace-format
+msgid "Unicode error detected. Check your locale settings. Details: {0}"
+msgstr ""
+
+#, python-format
+msgid "No GRASS Location found in '%s'. Create a new Location or choose different GRASS database directory."
+msgstr ""
+
+#, python-format
+msgid "Path '%s' doesn't exist."
+msgstr ""
+
+msgid "Enter name for new mapset:"
+msgstr ""
+
+#, python-format
+msgid "Mapset <%s> already exists."
+msgstr ""
+
+#, python-format
+msgid ""
+"Mapset <%s> is reserved for direct read access to OGR layers. Please consider to use another name for your mapset.\n"
+"\n"
+"Are you really sure that you want to create this mapset?"
+msgstr ""
+
+msgid "Reserved mapset name"
+msgstr ""
+
+#, python-format
+msgid "Unable to create new mapset: %s"
+msgstr ""
+
+#, python-format
+msgid ""
+"GRASS is already running in selected mapset <%(mapset)s>\n"
+"(file %(lock)s found).\n"
+"\n"
+"Concurrent use not allowed.\n"
+"\n"
+"Do you want to try to remove .gislock (note that you need permission for this operation) and continue?"
+msgstr ""
+
+msgid "Lock file found"
+msgstr ""
+
+msgid ""
+"ARE YOU REALLY SURE?\n"
+"\n"
+"If you really are running another GRASS session doing this could corrupt your data. Have another look in the processor manager just to be sure..."
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to remove '%(lock)s'.\n"
+"\n"
+"Details: %(reason)s"
+msgstr ""
+
+#, python-format
+msgid "Name <%(name)s> is not a valid name for location or mapset. Please use only ASCII characters excluding %(chars)s and space."
+msgstr ""
+
+msgid "GRASS needs a directory (GRASS database) in which to store its data. Create one now if you have not already done so. A popular choice is \"grassdata\", located in your home directory. Press Browse button to select the directory."
+msgstr ""
+
+msgid "Select group:"
+msgstr ""
+
+msgid "Writing CONTROL_POINTS file failed"
+msgstr ""
+
+#, python-format
+msgid "CONTROL_POINTS file saved for group <%s>"
+msgstr ""
+
+msgid "Reading CONTROL_POINTS file failed"
+msgstr ""
+
+msgid ""
+"Could not calculate RMS Error.\n"
+"Possible error with i.ortho.transform."
+msgstr ""
+
+msgid ""
+"Could not calculate new extends.\n"
+"Possible error with i.ortho.transform."
+msgstr ""
+
+msgid "source Z"
+msgstr ""
+
+msgid "target Z"
+msgstr ""
+
+msgid "source Z:"
+msgstr ""
+
+msgid "target Z:"
+msgstr ""
+
+msgid "GRASS Manage Ground Control Points"
+msgstr ""
+
+msgid "No data set."
+msgstr ""
+
+#, python-format
+msgid ""
+"Interactive Scatter Plot Tool can not be used.\n"
+"Number of cells (rows*cols) <%d> in current regionis higher than maximum limit <%d>.\n"
+"\n"
+"You can reduce number of cells in current region using <g.region> command."
+msgstr ""
+
+#, python-format
+msgid ""
+"Number of cells (rows*cols) <%d> in current region is higher than recommended threshold <%d>.\n"
+"It is strongly advised to reduce number of cells in current region below recommend threshold.\n"
+" It can be done by <g.region> command.\n"
+"\n"
+"Do you want to continue using Interactive Scatter Plot Tool with this region?"
+msgstr ""
+
+msgid "Scatter plot with same band combination (regardless x y order) is already displayed."
+msgstr ""
+
+#, python-format
+msgid "Band <%s> is not CELL (integer) type.\n"
+msgstr ""
+
+msgid "Scatter plot cannot be added.\n"
+msgstr ""
+
+#, python-format
+msgid ""
+"Scatter plot cannot be added.\n"
+"Multiple of bands ranges <%s:%d * %s:%d = %d> is higher than maximum limit <%d>.\n"
+msgstr ""
+
+#, python-format
+msgid ""
+"Multiple of bands ranges <%s:%d * %s:%d = %d> is higher than recommended limit <%d>.\n"
+"It is strongly advised to reduce range extend of bands(e. g. using r.rescale) below recommended threshold.\n"
+"\n"
+"Do you really want to add this scatter plot?"
+msgstr ""
+
+msgid ""
+"In order to select arrea in scatter plot, you have to select class first.\n"
+"\n"
+"There is no class yet, do you want to create one?"
+msgstr ""
+
+#, python-format
+msgid ""
+"Error occurred during computation of scatter plot category:\n"
+"%s"
+msgstr ""
+
+#, python-format
+msgid "Export scatter plot raster of class <%s>"
+msgstr ""
+
+#, python-format
+msgid "Scatter plot raster of class <%s> exported to raster map <%s>."
+msgstr ""
+
+#, python-format
+msgid ""
+"Export of scatter plot raster of class <%s> to map <%s> failed.\n"
+"%s"
+msgstr ""
+
+#, python-format
+msgid "Loading ctypes libs failed: %s"
+msgstr ""
+
+msgid "Add scatter plots"
+msgstr ""
+
+msgid "x axis:"
+msgstr ""
+
+msgid "y axis:"
+msgstr ""
+
+msgid "Bands of scatter plots to be added (x y):"
+msgstr ""
+
+msgid "No scatter plots selected."
+msgstr ""
+
+msgid "Select both x and y bands."
+msgstr ""
+
+msgid "Selected bands must be different."
+msgstr ""
+
+msgid "Scatter plot with same bands combination (regardless x y order) has been already added into the list."
+msgstr ""
+
+#, python-format
+msgid "Raster map <%s> already exists. Do you want to overwrite it?"
+msgstr ""
+
+#, python-format
+msgid "Raster <%s> exists"
+msgstr ""
+
+msgid "Show confidence ellipses"
+msgstr ""
+
+msgid "Selection polygon color:"
+msgstr ""
+
+msgid "Color of selection polygon vertex:"
+msgstr ""
+
+msgid "Selected area color:"
+msgstr ""
+
+msgid "Snapping threshold in pixels:"
+msgstr ""
+
+msgid "Selected area opacity:"
+msgstr ""
+
+msgid "Selection style:"
+msgstr ""
+
+msgid "Ellipses settings:"
+msgstr ""
+
+msgid "Interactive Scatter Plot Tool"
+msgstr ""
+
+msgid "scatter plot"
+msgstr ""
+
+msgid "Maximum limit of categories number was reached."
+msgstr ""
+
+msgid "Rename class"
+msgstr ""
+
+msgid "Set color"
+msgstr ""
+
+msgid "Change opacity level"
+msgstr ""
+
+msgid "Hide"
+msgstr ""
+
+msgid "Show"
+msgstr ""
+
+msgid "Move to top"
+msgstr ""
+
+msgid "Move to bottom"
+msgstr ""
+
+msgid "Move category up"
+msgstr ""
+
+msgid "Move category down"
+msgstr ""
+
+msgid "Export class raster"
+msgstr ""
+
+#, python-format
+msgid "Change opacity of class <%s>"
+msgstr ""
+
+msgid "Empty name was inserted."
+msgstr ""
+
+msgid "Select category for editing."
+msgstr ""
+
+msgid "Computing of scatter plots failed."
+msgstr ""
+
+msgid "Patching category raster conditions file failed."
+msgstr ""
+
+#, python-format
+msgid ""
+"v.build failed:\n"
+"%s"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"v.to.rast failed:\n"
+"{messages}"
+msgstr ""
+
+#, python-brace-format
+msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgstr ""
+
+msgid "Zoom to scatter plot extend"
+msgstr ""
+
+msgid "Add scatter plot"
+msgstr ""
+
+msgid "Select area with polygon"
+msgstr ""
+
+msgid "Pan mode for scatter plots"
+msgstr ""
+
+msgid "Zoom mode for scatter plots (left mouse button, wheel)"
+msgstr ""
+
+msgid "Zoom to scatter plot data extend mode (click on scatter plot for zooming to extend)"
+msgstr ""
+
+msgid "Show/hide class manager"
+msgstr ""
+
+msgid "Include selected area to class"
+msgstr ""
+
+msgid "Exclude selected area from class"
+msgstr ""
+
+msgid "Add new vertex"
+msgstr ""
+
+msgid "Add new vertex to polygon boundary scatter plot"
+msgstr ""
+
+msgid "Create selection polygon"
+msgstr ""
+
+msgid "Add new vertex between last and first points of the boundary"
+msgstr ""
+
+msgid "Move vertex"
+msgstr ""
+
+msgid "Move boundary vertex"
+msgstr ""
+
+msgid "Remove vertex"
+msgstr ""
+
+msgid "Remove boundary vertex"
+msgstr ""
+
+msgid "Remove polygon (click on scatter plot for removing it's polygon)"
+msgstr ""
+
+msgid "Add class"
+msgstr ""
+
+msgid "Remove selected class"
+msgstr ""
+
+msgid "GRASS"
+msgstr ""
+
+msgid "There were some issues when loading menu or Tools tab:"
+msgstr ""
+
+msgid "Workspace Toolbar"
+msgstr ""
+
+msgid "Tools Toolbar"
+msgstr ""
+
+msgid "3D view Toolbar"
+msgstr ""
+
+msgid "Rename current Map Display"
+msgstr ""
+
+#, python-brace-format
+msgid "Map Display {number}"
+msgstr ""
+
+msgid "Close Map Display {}"
+msgstr ""
+
+msgid "Console"
+msgstr ""
+
+msgid "Map Swipe Tool"
+msgstr ""
+
+msgid "Choose model to run"
+msgstr ""
+
+#, python-format
+msgid "Command '%s' not yet implemented in the WxGUI. Try adding it as a command layer instead."
+msgstr ""
+
+msgid "Selected map layer is not vector."
+msgstr ""
+
+msgid "Editing is allowed only for vector maps from the current mapset."
+msgstr ""
+
+msgid "Choose script file to run"
+msgstr ""
+
+msgid "Python script (*.py)|*.py|Bash script (*.sh)|*.sh"
+msgstr ""
+
+#, python-format
+msgid "Script file '%s' doesn't exist. Operation canceled."
+msgstr ""
+
+#, python-format
+msgid "Script <%s> is not executable. Do you want to set the permissions that allows you to run this script (note that you must be the owner of the file)?"
+msgstr ""
+
+msgid "Set permission?"
+msgstr ""
+
+msgid "Unable to set permission. Operation canceled."
+msgstr ""
+
+#, python-format
+msgid "Directory '%s' is not defined in GRASS_ADDON_PATH. Do you want add this directory to GRASS_ADDON_PATH?"
+msgstr ""
+
+msgid "Update Addons path?"
+msgstr ""
+
+#, python-format
+msgid "Launching script '%s'..."
+msgstr ""
+
+msgid "No location/mapset provided. Operation canceled."
+msgstr ""
+
+msgid "No mapset provided. Operation canceled."
+msgstr ""
+
+#, python-format
+msgid ""
+"Working directory changed to:\n"
+"\"%s\""
+msgstr ""
+
+msgid "Changes current working directory for this GUI."
+msgstr ""
+
+msgid "Usage: cd [directory]"
+msgstr ""
+
+msgid "Without parameters it opens a dialog."
+msgstr ""
+
+msgid "If ~ (tilde) is present as the first directory on the path, it is replaced by user's home directory."
+msgstr ""
+
+msgid "More than one parameter provided."
+msgstr ""
+
+msgid "Choose a working directory"
+msgstr ""
+
+msgid "System Info"
+msgstr ""
+
+msgid "GRASS version"
+msgstr ""
+
+msgid "Code revision"
+msgstr ""
+
+msgid "Build date"
+msgstr ""
+
+msgid "Build platform"
+msgstr ""
+
+msgid "Platform"
+msgstr ""
+
+msgid "Close all Map Displays"
+msgstr ""
+
+msgid "Enter new name:"
+msgstr ""
+
+msgid "Rename Map Display"
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to launch \"Supervised Classification Tool\".\n"
+"\n"
+"Reason: %s"
+msgstr ""
+
+msgid "Unable to start Timeline Tool."
+msgstr ""
+
+msgid "Unable to start Temporal Plot Tool."
+msgstr ""
+
+msgid "Add selected map layers into layer tree"
+msgstr ""
+
+#, python-format
+msgid "Unsupported map layer type <%s>."
+msgstr ""
+
+msgid "Note that cell values can only be displayed for regions of less than 10,000 cells."
+msgstr ""
+
+msgid "opacity:"
+msgstr ""
+
+#, python-format
+msgid ""
+"Do you want to remove map layer(s)\n"
+"%s\n"
+"from layer tree?"
+msgstr ""
+
+msgid "Do you want to remove selected map layer(s) from layer tree?"
+msgstr ""
+
+msgid "Remove map layer"
+msgstr ""
+
+msgid "Quit GRASS GUI"
+msgstr ""
+
+msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
+msgstr ""
+
+msgid "Constrain map to region geometry?"
+msgstr ""
+
+msgid "Import data from WMS server"
+msgstr ""
+
+msgid "Add command layer"
+msgstr ""
+
+msgid "Add HIS map layer"
+msgstr ""
+
+msgid "Add shaded relief map layer"
+msgstr ""
+
+msgid "Add raster flow arrows"
+msgstr ""
+
+msgid "Add raster cell numbers"
+msgstr ""
+
+msgid "Add thematic (choropleth) vector map layer"
+msgstr ""
+
+msgid "Add thematic chart layer"
+msgstr ""
+
+msgid "Add grid layer"
+msgstr ""
+
+msgid "Add geodesic line layer"
+msgstr ""
+
+msgid "Add rhumbline layer"
+msgstr ""
+
+msgid "Add labels"
+msgstr ""
+
+msgid "Note that 3D raster data are rendered only in 3D view mode"
+msgstr ""
+
+msgid "Add WMS layer."
+msgstr ""
+
+msgid "Editing mode"
+msgstr ""
+
+msgid "Background vector map"
+msgstr ""
+
+msgid "Map Layers"
+msgstr ""
+
+msgid "Rename"
+msgstr ""
+
+msgid "Check selected layers"
+msgstr ""
+
+msgid "Uncheck selected layers"
+msgstr ""
+
+msgid "3D view properties"
+msgstr ""
+
+msgid "Zoom to selected map(s)"
+msgstr ""
+
+msgid "Zoom to selected map(s) (ignore NULLs)"
+msgstr ""
+
+msgid "Set computational region from selected map(s)"
+msgstr ""
+
+msgid "Align computational region to selected map"
+msgstr ""
+
+msgid "Export common formats"
+msgstr ""
+
+msgid "Export PostGIS"
+msgstr ""
+
+msgid "Create pack"
+msgstr ""
+
+msgid "Make a copy in the current mapset"
+msgstr ""
+
+msgid "Set color table"
+msgstr ""
+
+msgid "Set color table interactively"
+msgstr ""
+
+msgid "Show attribute data"
+msgstr ""
+
+msgid "Start editing"
+msgstr ""
+
+msgid "Stop editing"
+msgstr ""
+
+msgid "Rebuild topology"
+msgstr ""
+
+msgid "Histogram"
+msgstr ""
+
+msgid "Univariate raster statistics"
+msgstr ""
+
+msgid "Report raster statistics"
+msgstr ""
+
+msgid "Profile"
+msgstr ""
+
+msgid "Save web service layer"
+msgstr ""
+
+msgid "Unable to create profile of raster map."
+msgstr ""
+
+msgid "Raster map"
+msgstr ""
+
+msgid "Vector map"
+msgstr ""
+
+msgid "3D raster map"
+msgstr ""
+
+#, python-format
+msgid "Unsupported map type <%s>"
+msgstr ""
+
+#, python-format
+msgid "Enter name for the new %s in the current mapset:"
+msgstr ""
+
+#, python-format
+msgid "Make a copy of %s <%s>"
+msgstr ""
+
+#, python-format
+msgid "%s <%s> already exists in the current mapset. Do you want to overwrite it?"
+msgstr ""
+
+#, python-format
+msgid "Unable to make copy of <%s>"
+msgstr ""
+
+#, python-format
+msgid "Unable to make copy of <%s>. Mapset <%s> is not current mapset."
+msgstr ""
+
+msgid "Unable to display histogram of raster map. No map name defined."
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to start wxGUI vector digitizer.\n"
+"Details: %s"
+msgstr ""
+
+msgid "Set opacity of <{}>"
+msgstr ""
+
+msgid "Layer group:"
+msgstr ""
+
+msgid "Click to edit layer settings"
+msgstr ""
+
+msgid "(double click to set properties)"
+msgstr ""
+
+msgid "Please wait, updating data..."
+msgstr ""
+
+#, python-format
+msgid "Welcome to wxGUI Interactive Python Shell %s"
+msgstr ""
+
+#, python-format
+msgid "Type %s for more GRASS scripting related information."
+msgstr ""
+
+#, python-format
+msgid "Type %s to add raster or vector to the layer tree."
+msgstr ""
+
+msgid "Delete all text from the shell"
+msgstr ""
+
+msgid "Simple &editor"
+msgstr ""
+
+msgid "Open a simple Python code editor"
+msgstr ""
+
+#, python-format
+msgid "Raster or vector map <%s> not found"
+msgstr ""
+
+#, python-format
+msgid "Raster map <%s> added"
+msgstr ""
+
+#, python-format
+msgid "Vector map <%s> added"
+msgstr ""
+
+msgid "Mask"
+msgstr ""
+
+msgid "Left mouse click to remove the raster mask"
+msgstr ""
+
+msgid "Are you sure that you want to remove the current raster mask?"
+msgstr ""
+
+msgid "Remove raster mask"
+msgstr ""
+
+msgid "Custom CRS"
+msgstr ""
+
+msgid "Left mouse click to print detailed projection info"
+msgstr ""
+
+msgid "Create new workspace (Ctrl+N)"
+msgstr ""
+
+msgid "Open existing workspace file (Ctrl+O)"
+msgstr ""
+
+msgid "Save current workspace to file (Ctrl+S)"
+msgstr ""
+
+msgid "New workspace"
+msgstr ""
+
+msgid "Open workspace"
+msgstr ""
+
+msgid "Save workspace"
+msgstr ""
+
+msgid "Add multiple raster or vector map layers (Ctrl+Shift+L)"
+msgstr ""
+
+msgid "Add raster map layer (Ctrl+Shift+R)"
+msgstr ""
+
+msgid "Add various raster map layers (RGB, HIS, shaded relief...)"
+msgstr ""
+
+msgid "Add vector map layer (Ctrl+Shift+V)"
+msgstr ""
+
+msgid "Add various vector map layers (thematic, chart...)"
+msgstr ""
+
+msgid "Add web service layer (WMS, WMTS, NASA OnEarth)"
+msgstr ""
+
+msgid "Add group"
+msgstr ""
+
+msgid "Add various overlays"
+msgstr ""
+
+msgid "Remove selected map layer(s) from layer tree"
+msgstr ""
+
+msgid "Edit selected vector map"
+msgstr ""
+
+msgid "Show attribute data for selected vector map"
+msgstr ""
+
+msgid "Add multiple map layers"
+msgstr ""
+
+msgid "Add various raster maps"
+msgstr ""
+
+msgid "Add vector map"
+msgstr ""
+
+msgid "Add various vector maps"
+msgstr ""
+
+msgid "Add web service map"
+msgstr ""
+
+msgid "Delete map layer"
+msgstr ""
+
+msgid "Start new map display"
+msgstr ""
+
+msgid "Raster Map Calculator"
+msgstr ""
+
+msgid "Georectifier"
+msgstr ""
+
+msgid "Cartographic Composer"
+msgstr ""
+
+msgid "Launch user-defined script"
+msgstr ""
+
+msgid "New display"
+msgstr ""
+
+msgid "Python code editor"
+msgstr ""
+
+msgid "GUI settings"
+msgstr ""
+
+msgid "GRASS manual"
+msgstr ""
+
+msgid "Generate command for m.nviz.image"
+msgstr ""
+
+msgid "Generate command for m.nviz.image based on current state"
+msgstr ""
+
+msgid "3D view mode settings"
+msgstr ""
+
+msgid "Show 3D view mode settings dialog"
+msgstr ""
+
+msgid "Show 3D view mode manual"
+msgstr ""
+
+msgid "Current workspace is not empty. Do you want to store current settings to workspace file?"
+msgstr ""
+
+msgid "Create new workspace?"
+msgstr ""
+
+msgid "Choose workspace file"
+msgstr ""
+
+msgid "GRASS Workspace File (*.gxw)|*.gxw"
+msgstr ""
+
+msgid "Most likely the database, location or mapset does not exist"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Unable to change to location and mapset specified in the workspace.\n"
+"Reason: {reason}\n"
+"Details: {details}\n"
+"\n"
+"Do you want to proceed with opening the workspace anyway?"
+msgstr ""
+
+msgid "Proceed with opening of the workspace?"
+msgstr ""
+
+#, python-format
+msgid ""
+"Current location is <%(loc)s>.\n"
+"Current mapset is <%(mapset)s>."
+msgstr ""
+
+#, python-format
+msgid ""
+"Reading workspace file <%s> failed.\n"
+"Invalid file, unable to parse XML document.\n"
+"Error details: %s"
+msgstr ""
+
+msgid "Please wait, loading workspace..."
+msgstr ""
+
+msgid "Choose file to save current workspace"
+msgstr ""
+
+#, python-format
+msgid "Workspace file <%s> already exists. Do you want to overwrite this file?"
+msgstr ""
+
+#, python-format
+msgid ""
+"Writing current settings to workspace file <%s> failed.\n"
+"Error details: %s"
+msgstr ""
+
+msgid "Do you want to save changes in the workspace?"
+msgstr ""
+
+msgid "Do you want to store current settings to workspace file?"
+msgstr ""
+
+msgid "Workspace"
+msgstr ""
+
+msgid "File <{}> doesn't exist. It was probably moved or deleted."
+msgstr ""
+
+msgid "Set default region extent and resolution"
+msgstr ""
+
+msgid "&Set region"
+msgstr ""
+
+msgid "Invalid location selected."
+msgstr ""
+
+msgid "Invalid region"
+msgstr ""
+
+msgid "Click here to show 3D settings"
+msgstr ""
+
+msgid "Click here to hide 3D settings"
+msgstr ""
+
+#, python-format
+msgid "Rows: %d"
+msgstr ""
+
+#, python-format
+msgid "Cols: %d"
+msgstr ""
+
+#, python-format
+msgid "Cells: %d"
+msgstr ""
+
+#, python-format
+msgid "Depth: %d"
+msgstr ""
+
+#, python-format
+msgid "3D Cells: %d"
+msgstr ""
+
+msgid "Top"
+msgstr ""
+
+msgid "Bottom"
+msgstr ""
+
+msgid "T-B resolution"
+msgstr ""
+
+msgid "North"
+msgstr ""
+
+msgid "West"
+msgstr ""
+
+msgid "East"
+msgstr ""
+
+msgid "South"
+msgstr ""
+
+msgid "N-S resolution"
+msgstr ""
+
+msgid "E-W resolution"
+msgstr ""
+
+#, python-format
+msgid "Invalid value: %s"
+msgstr ""
+
+msgid "Select datum transformation"
+msgstr ""
+
+msgid "Select from list of datum transformations"
+msgstr ""
+
+msgid "Define new GRASS project"
+msgstr ""
+
+msgid "Change"
+msgstr ""
+
+msgid "(optional)"
+msgstr ""
+
+msgid "Name of project directory in GIS Data Directory"
+msgstr ""
+
+msgid "Description of project directory in GIS Data Directory"
+msgstr ""
+
+msgid "Project will be created in GRASS database:"
+msgstr ""
+
+msgid "Name '{}' is not a valid name for project. Please use only ASCII characters excluding characters {} and space."
+msgstr ""
+
+msgid "Project '{}' already exists. Please consider using another name for your project."
+msgstr ""
+
+msgid "Existing project path"
+msgstr ""
+
+msgid "Choose GRASS data directory:"
+msgstr ""
+
+msgid "Title of the project is limited only to one line and 256 characters. The rest of the text will be ignored."
+msgstr ""
+
+msgid "Select Coordinate Reference System (CRS)"
+msgstr ""
+
+msgid "Select CRS from a list by EPSG or description"
+msgstr ""
+
+msgid "Read CRS from a georeferenced data file"
+msgstr ""
+
+msgid "Create a generic cartesian coordinate system (XY)"
+msgstr ""
+
+msgid "Specify CRS using WKT string"
+msgstr ""
+
+msgid "Specify CRS using PROJ.4 string"
+msgstr ""
+
+msgid "Define custom CRS"
+msgstr ""
+
+msgid "Additional methods:"
+msgstr ""
+
+msgid "Code"
+msgstr ""
+
+msgid "Projection code:"
+msgstr ""
+
+msgid "Search in description:"
+msgstr ""
+
+#, python-format
+msgid "Unable to read list: %s"
+msgstr ""
+
+msgid "Choose projection parameters"
+msgstr ""
+
+msgid "Select datum or ellipsoid (next page)"
+msgstr ""
+
+msgid "Datum with associated ellipsoid"
+msgstr ""
+
+msgid "Ellipsoid only"
+msgstr ""
+
+#, python-format
+msgid "You must enter a value for %s"
+msgstr ""
+
+#, python-format
+msgid " Enter parameters for %s projection "
+msgstr ""
+
+msgid "Specify geodetic datum"
+msgstr ""
+
+msgid "Ellipsoid"
+msgstr ""
+
+msgid "Datum code:"
+msgstr ""
+
+msgid "Specify ellipsoid"
+msgstr ""
+
+msgid "Earth based"
+msgstr ""
+
+msgid "Planetary bodies"
+msgstr ""
+
+msgid "Ellipsoid code:"
+msgstr ""
+
+msgid "Georeferenced file:"
+msgstr ""
+
+msgid "Select georeferenced file"
+msgstr ""
+
+msgid "Enter WKT parameters string:"
+msgstr ""
+
+msgid "Select CRS from a list"
+msgstr ""
+
+msgid "Filter by EPSG code or description:"
+msgstr ""
+
+msgid "Find more information at:"
+msgstr ""
+
+msgid "Parameters"
+msgstr ""
+
+msgid "Choose IAU Code"
+msgstr ""
+
+msgid "Path to the IAU-codes file:"
+msgstr ""
+
+msgid "IAU code:"
+msgstr ""
+
+msgid "Choose IAU codes file"
+msgstr ""
+
+#, python-brace-format
+msgid "Unable to read IAU codes: {0}"
+msgstr ""
+
+msgid "Enter PROJ.4 parameters string:"
+msgstr ""
+
+msgid "Datum transform is required."
+msgstr ""
+
+msgid "Summary"
+msgstr ""
+
+msgid "GRASS Database:"
+msgstr ""
+
+msgid "Project Name:"
+msgstr ""
+
+msgid "Projection:"
+msgstr ""
+
+msgid ""
+"PROJ.4 definition:\n"
+" (non-definitive)"
+msgstr ""
+
+msgid "custom"
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to create new project. Project <%(loc)s> not created.\n"
+"\n"
+"Details: %(err)s"
+msgstr ""
+
+msgid "Unable to create new project"
+msgstr ""
+
+msgid "Project already exists in GRASS Database."
+msgstr ""
+
+#, python-brace-format
+msgid "Unable to create new GRASS Database <{path}>: {error}"
+msgstr ""
+
+msgid "EPSG code missing."
+msgstr ""
+
+msgid "IAU code missing."
+msgstr ""
+
+#, python-format
+msgid "File <%s> not found."
+msgstr ""
+
+msgid "WKT string missing."
+msgstr ""
+
+msgid "There were some issues when loading menu or Tools:"
+msgstr ""
+
+msgid "No project provided. Operation canceled."
+msgstr ""
+
+msgid "Close workspace"
+msgstr ""
+
+msgid "Code editor"
+msgstr ""
+
+#, python-format
+msgid ""
+"Failed to run command '%(command)s'. Details:\n"
+"%(error)s"
+msgstr ""
+
+msgid "Hide toolbars"
+msgstr ""
+
+msgid "Show toolbars"
+msgstr ""
+
+msgid "Hide statusbar"
+msgstr ""
+
+msgid "Show statusbar"
+msgstr ""
+
+msgid "Vector Digitizer Toolbar"
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to switch to 3D display mode.\n"
+"The Nviz python extension was not found or loaded properly.\n"
+"Switching back to 2D display mode.\n"
+"\n"
+"Details: %s"
+msgstr ""
+
+msgid "Starting 3D view mode..."
+msgstr ""
+
+msgid "Please wait, loading data..."
+msgstr ""
+
+msgid "Please wait, unloading data..."
+msgstr ""
+
+msgid "Switching back to 2D view mode..."
+msgstr ""
+
+msgid "Vector digitizer"
+msgstr ""
+
+msgid "Raster digitizer"
+msgstr ""
+
+msgid "Failed to run d.to.rast:\n"
+msgstr ""
+
+msgid "d.to.rast can be used only in 2D mode."
+msgstr ""
+
+#, python-format
+msgid "Vector map <%s> opened for editing - skipped."
+msgstr ""
+
+msgid "No raster or vector map layer selected for querying."
+msgstr ""
+
+#, python-brace-format
+msgid "Failed to query vector map(s) <{maps}>. Check database settings and topology."
+msgstr ""
+
+msgid "Set computational region extent from display"
+msgstr ""
+
+msgid "Set computational region extent interactively"
+msgstr ""
+
+msgid "Set computational region from named region"
+msgstr ""
+
+msgid "Save computational region to named region"
+msgstr ""
+
+msgid "Raster Digitizer Toolbar"
+msgstr ""
+
+#, python-format
+msgid "Unsupported command %s."
+msgstr ""
+
+#, python-format
+msgid "Unable to read cmdfile '%(cmd)s'. Details: %(det)s"
+msgstr ""
+
+#, python-format
+msgid "Starting map display <%s>..."
+msgstr ""
+
+#, python-format
+msgid "Unable to create file <%s>"
+msgstr ""
+
+#, python-format
+msgid "Stopping map display <%s>..."
+msgstr ""
+
+msgid "Enable/disable auto-rendering"
+msgstr ""
+
+msgid "Align region extent based on display size from center point. Default value for new map displays can be set up in 'User GUI settings' dialog."
+msgstr ""
+
+msgid "Constrain display resolution to computational region settings. Default value for new map displays can be set up in 'User GUI settings' dialog."
+msgstr ""
+
+msgid "Show computational extent"
+msgstr ""
+
+msgid "Show/hide computational region extent (set with g.region). Display region drawn as a blue box inside the computational region, computational region inside a display region as a red box)."
+msgstr ""
+
+msgid "Display coordinates in different CRS"
+msgstr ""
+
+msgid "Reproject coordinates displayed in the statusbar. Coordinate reference system can be specified in GUI preferences dialog (tab 'Projection')"
+msgstr ""
+
+#, python-brace-format
+msgid "{label} (EPSG: {epsg})"
+msgstr ""
+
+msgid "Status bar"
+msgstr ""
+
+msgid "Render"
+msgstr ""
+
+msgid "Map scale"
+msgstr ""
+
+msgid "As everyone's monitors and resolutions are set differently these values are not true map scales, but should get you into the right neighborhood."
+msgstr ""
+
+msgid "Go to XY coordinates"
+msgstr ""
+
+msgid "Projection not defined (check the settings)"
+msgstr ""
+
+msgid "Error in projection (check the settings)"
+msgstr ""
+
+msgid "Display geometry"
+msgstr ""
+
+msgid "Coordinates"
+msgstr ""
+
+msgid "Display extent"
+msgstr ""
+
+msgid "Computational region"
+msgstr ""
+
+msgid "Map window test frame"
+msgstr ""
+
+msgid "Map display test"
+msgstr ""
+
+msgid "Map window API test frame"
+msgstr ""
+
+msgid "Map window distance measurement test frame"
+msgstr ""
+
+msgid "Map window profile tool test frame"
+msgstr ""
+
+msgid "Map window rlisetup test frame"
+msgstr ""
+
+#, python-format
+msgid "Unknown value %s of test parameter."
+msgstr ""
+
+msgid "Query raster/vector map(s)"
+msgstr ""
+
+msgid "Query selected raster/vector map(s)"
+msgstr ""
+
+msgid "Select vector feature(s)"
+msgstr ""
+
+msgid "Select features interactively from vector map"
+msgstr ""
+
+msgid "Add scale bar"
+msgstr ""
+
+msgid "Add raster legend"
+msgstr ""
+
+msgid "Add vector legend"
+msgstr ""
+
+msgid "Add north arrow"
+msgstr ""
+
+msgid "Analyze map"
+msgstr ""
+
+msgid "Measuring, profiling, histogramming, ..."
+msgstr ""
+
+msgid "Measure distance"
+msgstr ""
+
+msgid "Measure area"
+msgstr ""
+
+msgid "Profile surface map"
+msgstr ""
+
+msgid "Create bivariate scatterplot of raster maps"
+msgstr ""
+
+msgid "Create histogram of raster map"
+msgstr ""
+
+msgid "Vector network analysis tool"
+msgstr ""
+
+msgid "Rotate 3D scene"
+msgstr ""
+
+msgid "Drag with mouse to rotate 3D scene"
+msgstr ""
+
+msgid "Fly-through mode"
+msgstr ""
+
+msgid "Drag with mouse, hold Ctrl down for different mode or Shift to accelerate"
+msgstr ""
+
+msgid "Click mouse to zoom"
+msgstr ""
+
+msgid "Click mouse to unzoom"
+msgstr ""
+
+msgid "3D view mode not available"
+msgstr ""
+
+#, python-format
+msgid "Reason: %s"
+msgstr ""
+
+msgid "Vector digitizer not available"
+msgstr ""
+
+msgid "Note that the wxGUI's vector digitizer is disabled in this installation.Please keep an eye out for updated versions of GRASS. In the meantime you can use \"v.edit\" for non-interactive editing from the Develop vector map menu."
+msgstr ""
+
+msgid "Select raster maps"
+msgstr ""
+
+msgid "Name of top/left raster map:"
+msgstr ""
+
+msgid "Name of bottom/right raster map:"
+msgstr ""
+
+msgid "Switch to advanced mode"
+msgstr ""
+
+msgid "Switch to simple mode"
+msgstr ""
+
+msgid "Name of the first map is missing."
+msgstr ""
+
+msgid "Name of the second map is missing."
+msgstr ""
+
+msgid "Map Swipe settings"
+msgstr ""
+
+msgid "Mirror mode"
+msgstr ""
+
+msgid "Mirrored cursor"
+msgstr ""
+
+msgid "Shape:"
+msgstr ""
+
+msgid "Size:"
+msgstr ""
+
+msgid "Map Swipe"
+msgstr ""
+
+#, python-format
+msgid "Map <%s> not found. "
+msgstr ""
+
+msgid "Map Swipe Tool - GRASS"
+msgstr ""
+
+msgid "Swipe mode"
+msgstr ""
+
+msgid "Choose view mode"
+msgstr ""
+
+msgid "Switch orientation"
+msgstr ""
+
+msgid "Switch maps"
+msgstr ""
+
+msgid "Measuring finished"
+msgstr ""
+
+#, python-format
+msgid "Click and drag with left mouse button to measure.%sDouble click with left button to clear."
+msgstr ""
+
+msgid "Measuring distance"
+msgstr ""
+
+msgid "Measuring distance:"
+msgstr ""
+
+#, python-format
+msgid ""
+"Geodesic distance calculation is not available.\n"
+"Reason: %s"
+msgstr ""
+
+msgid "segment"
+msgstr ""
+
+msgid "total distance"
+msgstr ""
+
+msgid "bearing"
+msgstr ""
+
+msgid "degrees (clockwise from grid-north)"
+msgstr ""
+
+msgid "Measuring area:"
+msgstr ""
+
+msgid "Units not recognized, measurement failed."
+msgstr ""
+
+#, python-brace-format
+msgid "Area: {area} {unit}\n"
+msgstr ""
+
+#, python-format
+msgid ""
+"Error occurred during calling of handler: %s \n"
+"Handler was unregistered."
+msgstr ""
+
+#, python-format
+msgid ""
+"Error occurred during unregistration of handler: %s \n"
+"                                        Handler was unregistered."
+msgstr ""
+
+#, python-format
+msgid "Handler: %s was not registered"
+msgstr ""
+
+#, python-format
+msgid ""
+"Error occurred during unregistration of handler: %s \n"
+"                                        Handler was unregistered"
+msgstr ""
+
+msgid "Copy coordinates to clipboard"
+msgstr ""
+
+msgid "Resize and move legend"
+msgstr ""
+
+msgid "Please wait, exporting image..."
+msgstr ""
+
+msgid "Unable to draw registered graphics. The graphics was unregistered."
+msgstr ""
+
+msgid "Zoom to saved region extents"
+msgstr ""
+
+#, python-format
+msgid "Region <%s> not found. Operation canceled."
+msgstr ""
+
+msgid "Save display extents to region file"
+msgstr ""
+
+msgid "Save computational region to region file"
+msgstr ""
+
+#, python-format
+msgid "Region file <%s> already exists. Do you want to overwrite it?"
+msgstr ""
+
+msgid ""
+"Please install Python Imaging Library (PIL)\n"
+"for better control of legend and other decorations."
+msgstr ""
+
+msgid "Remove text"
+msgstr ""
+
+msgid "Text properties"
+msgstr ""
+
+msgid "Remove scale bar"
+msgstr ""
+
+msgid "Scale bar properties"
+msgstr ""
+
+msgid "Remove north arrow"
+msgstr ""
+
+msgid "North arrow properties"
+msgstr ""
+
+msgid "Remove legend"
+msgstr ""
+
+msgid "Vector legend properties"
+msgstr ""
+
+msgid "Raster legend properties"
+msgstr ""
+
+#, python-format
+msgid "Property does not exist: %s"
+msgstr ""
+
+msgid "Check all"
+msgstr ""
+
+msgid "Clear all"
+msgstr ""
+
+msgid "Enter vector attribute values"
+msgstr ""
+
+#, python-format
+msgid "Bad color format '%s'. Use color format '0:0:0'"
+msgstr ""
+
+msgid "Select raster map:"
+msgstr ""
+
+msgid "Select vector map:"
+msgstr ""
+
+msgid "Import or export color table:"
+msgstr ""
+
+msgid "Choose file to load color table"
+msgstr ""
+
+msgid "Load"
+msgstr ""
+
+msgid "Type filename or click to choose file and load color table"
+msgstr ""
+
+msgid "Choose file to save color table"
+msgstr ""
+
+msgid "Type filename or click to choose file and save color table"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "&Set"
+msgstr ""
+
+msgid "Load color table:"
+msgstr ""
+
+msgid "Load color table from file:"
+msgstr ""
+
+msgid "Save color table to file:"
+msgstr ""
+
+msgid "Reload default table"
+msgstr ""
+
+msgid "Show preview of map (current Map Display extent is used)."
+msgstr ""
+
+msgid "No valid color rules given."
+msgstr ""
+
+#, python-format
+msgid "File <%s> already already exists. Do you want to overwrite it?"
+msgstr ""
+
+msgid "Invalid color table format"
+msgstr ""
+
+#, python-format
+msgid "Invalid rule value '%s'. Unable to apply color table."
+msgstr ""
+
+msgid "Create new color table for raster map"
+msgstr ""
+
+msgid "Enter raster category values or percents"
+msgstr ""
+
+msgid "fp range"
+msgstr ""
+
+msgid "range"
+msgstr ""
+
+#, python-format
+msgid "Enter raster category values or percents (%(range)s = %(min)d-%(max)d)"
+msgstr ""
+
+msgid "Create new color rules for vector map"
+msgstr ""
+
+msgid "Enter vector attribute values or percents:"
+msgstr ""
+
+msgid "Enter vector attribute values:"
+msgstr ""
+
+msgid "Select vector columns"
+msgstr ""
+
+msgid "Layer:"
+msgstr ""
+
+msgid "Attribute column:"
+msgstr ""
+
+msgid "Load color from column:"
+msgstr ""
+
+msgid "Save color to column:"
+msgstr ""
+
+msgid "Load size from column:"
+msgstr ""
+
+msgid "Save size to column:"
+msgstr ""
+
+msgid "Load width from column:"
+msgstr ""
+
+msgid "Save width to column:"
+msgstr ""
+
+msgid "Use color column instead of color table:"
+msgstr ""
+
+msgid "Add GRASSRGB column to current attribute table."
+msgstr ""
+
+msgid "Import or export color table"
+msgstr ""
+
+#, python-format
+msgid "Database connection for vector map <%s> is not defined in DB file.  Do you want to create and connect new attribute table?"
+msgstr ""
+
+msgid "No database connection defined"
+msgstr ""
+
+#, python-format
+msgid "Selected map <%(map)s> is not in current mapset <%(mapset)s>. Attribute table cannot be edited."
+msgstr ""
+
+#, python-format
+msgid "%s column already exists."
+msgstr ""
+
+msgid "Please wait, loading data from attribute table..."
+msgstr ""
+
+#, python-format
+msgid "Number of loaded records reached %d, displaying all the records will be time-consuming and may lead to computer freezing, do you still want to continue?"
+msgstr ""
+
+msgid "Too many records"
+msgstr ""
+
+#, python-format
+msgid "Enter vector attribute values or percents %s:"
+msgstr ""
+
+#, python-format
+msgid "Enter vector attribute values %s:"
+msgstr ""
+
+msgid "Please select column to save values to."
+msgstr ""
+
+msgid "No color column defined. Operation canceled."
+msgstr ""
+
+msgid "Thematic mapping for vector map in 3D view"
+msgstr ""
+
+msgid "Fetch & install extension from GRASS Addons"
+msgstr ""
+
+msgid "List of extensions - double-click to install"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "&Install"
+msgstr ""
+
+msgid "Install selected add-ons GRASS tool"
+msgstr ""
+
+msgid "Show g.extension manual page"
+msgstr ""
+
+msgid "Extension not defined"
+msgstr ""
+
+msgid "Fetching list of tools from GRASS-Addons (be patient)..."
+msgstr ""
+
+#, python-format
+msgid "%d extensions loaded"
+msgstr ""
+
+msgid "Install"
+msgstr ""
+
+msgid "Show manual page"
+msgstr ""
+
+#, python-format
+msgid "Unable to load extensions. %s"
+msgstr ""
+
+msgid "Manage installed GRASS Addons extensions"
+msgstr ""
+
+msgid "List of installed extensions"
+msgstr ""
+
+msgid "Uninstall"
+msgstr ""
+
+msgid "Uninstall selected Addons extensions"
+msgstr ""
+
+msgid "Reinstall"
+msgstr ""
+
+msgid "Reinstall selected Addons extensions"
+msgstr ""
+
+msgid "No extension selected. Operation canceled."
+msgstr ""
+
+#, python-format
+msgid ""
+"List of files to be removed:\n"
+"%(files)s\n"
+"\n"
+"Do you want really to remove <%(ext)s> extension?"
+msgstr ""
+
+msgid "Remove extension"
+msgstr ""
+
+msgid "Extension"
+msgstr ""
+
+msgid "Histogram Tool  [d.histogram]"
+msgstr ""
+
+msgid "Select font for histogram text"
+msgstr ""
+
+msgid "Multiple import"
+msgstr ""
+
+msgid "List of raster layers"
+msgstr ""
+
+msgid "List of vector layers"
+msgstr ""
+
+#, python-format
+msgid "List of %s layers"
+msgstr ""
+
+msgid "right click to (un)select all"
+msgstr ""
+
+msgid "Name for output GRASS map (editable)"
+msgstr ""
+
+msgid "Override projection check (use current location's projection)"
+msgstr ""
+
+msgid "&Import"
+msgstr ""
+
+msgid "Import selected layers"
+msgstr ""
+
+msgid "Source settings"
+msgstr ""
+
+msgid "Import settings"
+msgstr ""
+
+#, python-format
+msgid "Output map names %(names)s exist. "
+msgstr ""
+
+#, python-format
+msgid "Output map name <%(name)s> exist. "
+msgstr ""
+
+msgid "Dialog cannot be closed while command is running."
+msgstr ""
+
+msgid "Link external raster data"
+msgstr ""
+
+msgid "Add linked layers into layer tree"
+msgstr ""
+
+msgid "Add imported layers into layer tree"
+msgstr ""
+
+msgid "&Link"
+msgstr ""
+
+msgid "Link selected layers"
+msgstr ""
+
+msgid "No layers selected. Operation canceled."
+msgstr ""
+
+msgid "Unable to determine number of raster bands"
+msgstr ""
+
+msgid "Link external vector data"
+msgstr ""
+
+msgid "Define output format for vector data"
+msgstr ""
+
+msgid "Define output format for raster data"
+msgstr ""
+
+msgid "Set external format and close dialog"
+msgstr ""
+
+msgid "No data source selected."
+msgstr ""
+
+msgid "Import DXF layers"
+msgstr ""
+
+msgid "Choose DXF file to import"
+msgstr ""
+
+msgid "No layers selected."
+msgstr ""
+
+msgid "Name for output GRASS map"
+msgstr ""
+
+msgid "Projection of following layers do not match with projection of current location. "
+msgstr ""
+
+msgid "Layers to be reprojected"
+msgstr ""
+
+msgid "&Import && reproject"
+msgstr ""
+
+msgid "Reproject selected layers"
+msgstr ""
+
+msgid "3D Raster Map Calculator"
+msgstr ""
+
+msgid "mapcalc statement"
+msgstr ""
+
+msgid "Operators"
+msgstr ""
+
+msgid "Output"
+msgstr ""
+
+msgid "Operands"
+msgstr ""
+
+msgid "Expression"
+msgstr ""
+
+msgid "Save expression to file"
+msgstr ""
+
+msgid "Load expression from file"
+msgstr ""
+
+msgid "Copy the current command string to the clipboard"
+msgstr ""
+
+msgid "exponent"
+msgstr ""
+
+msgid "divide"
+msgstr ""
+
+msgid "add"
+msgstr ""
+
+msgid "subtract"
+msgstr ""
+
+msgid "modulus"
+msgstr ""
+
+msgid "multiply"
+msgstr ""
+
+msgid "left shift"
+msgstr ""
+
+msgid "right shift"
+msgstr ""
+
+msgid "right shift (unsigned)"
+msgstr ""
+
+msgid "greater than"
+msgstr ""
+
+msgid "greater than or equal to"
+msgstr ""
+
+msgid "less than"
+msgstr ""
+
+msgid "less than or equal to"
+msgstr ""
+
+msgid "equal to"
+msgstr ""
+
+msgid "not equal to"
+msgstr ""
+
+msgid "one's complement"
+msgstr ""
+
+msgid "NOT"
+msgstr ""
+
+msgid "bitwise AND"
+msgstr ""
+
+msgid "bitwise OR"
+msgstr ""
+
+msgid "logical AND"
+msgstr ""
+
+msgid "logical AND (ignores NULLs)"
+msgstr ""
+
+msgid "logical OR"
+msgstr ""
+
+msgid "logical OR (ignores NULLs)"
+msgstr ""
+
+msgid "conditional"
+msgstr ""
+
+msgid "Name for new 3D raster map to create"
+msgstr ""
+
+msgid "Name for new raster map to create"
+msgstr ""
+
+msgid "Insert existing 3D raster map"
+msgstr ""
+
+msgid "Insert existing raster map"
+msgstr ""
+
+msgid "Insert mapcalc function"
+msgstr ""
+
+msgid "Random seed:"
+msgstr ""
+
+msgid "Integer seed for rand() function"
+msgstr ""
+
+msgid "Add created raster map into layer tree"
+msgstr ""
+
+msgid "You must enter the name of a new raster map to create."
+msgstr ""
+
+msgid "You must enter an expression to create a new raster map."
+msgstr ""
+
+msgid "Choose a file name to save the expression"
+msgstr ""
+
+msgid "Expression file (*)|*"
+msgstr ""
+
+msgid "Choose a file name to load the expression"
+msgstr ""
+
+#, python-brace-format
+msgid "'{cmd}' copied to clipboard"
+msgstr ""
+
+msgid "Opening 3D view was not successful. Please try to change the value of depth buffer in GUI Settings dialog > tab Map Display > Advanced and restart GUI."
+msgstr ""
+
+#, python-format
+msgid "Image is too large, your OpenGL implementation supports maximum texture size %d px."
+msgstr ""
+
+msgid "Easting"
+msgstr ""
+
+msgid "Northing"
+msgstr ""
+
+msgid "Elevation"
+msgstr ""
+
+msgid "Surface map name"
+msgstr ""
+
+msgid "Surface map elevation"
+msgstr ""
+
+msgid "Surface map color"
+msgstr ""
+
+msgid "XY distance from previous"
+msgstr ""
+
+msgid "XYZ distance from previous"
+msgstr ""
+
+msgid "Distance along surface"
+msgstr ""
+
+msgid "Distance along exag. surface"
+msgstr ""
+
+msgid "No point on surface"
+msgstr ""
+
+msgid "Loading raster map"
+msgstr ""
+
+msgid "Loading 3d raster map"
+msgstr ""
+
+msgid "failed"
+msgstr ""
+
+#, python-format
+msgid "Unsupported layer type '%s'"
+msgstr ""
+
+msgid "Unable to unload raster map"
+msgstr ""
+
+msgid "Unable to unload 3d raster map"
+msgstr ""
+
+msgid "3d raster map"
+msgstr ""
+
+msgid "unloaded successfully"
+msgstr ""
+
+#, python-format
+msgid "Loading vector map <%(name)s> (%(type)s) failed"
+msgstr ""
+
+#, python-format
+msgid "Unable to unload vector map <%(name)s> (%(type)s)"
+msgstr ""
+
+#, python-format
+msgid "Vector map <%(name)s> (%(type)s) unloaded successfully"
+msgstr ""
+
+#, python-format
+msgid "Vector point layer not found (id = %d)"
+msgstr ""
+
+#, python-format
+msgid "Unable to set data layer properties (id = %d)"
+msgstr ""
+
+#, python-format
+msgid ""
+"Setting data layer properties failed.\n"
+"\n"
+"%s"
+msgstr ""
+
+msgid "constant#"
+msgstr ""
+
+msgid "3D view default settings"
+msgstr ""
+
+msgid "Revert settings to default, changes are not applied"
+msgstr ""
+
+msgid "View"
+msgstr ""
+
+msgid "Perspective:"
+msgstr ""
+
+msgid "value:"
+msgstr ""
+
+msgid "step:"
+msgstr ""
+
+msgid "Position:"
+msgstr ""
+
+msgid "x:"
+msgstr ""
+
+msgid "Twist:"
+msgstr ""
+
+msgid "Z-exag:"
+msgstr ""
+
+msgid "Image Appearance"
+msgstr ""
+
+msgid "Fly-through"
+msgstr ""
+
+msgid "Move exag:"
+msgstr ""
+
+msgid "Turn exag:"
+msgstr ""
+
+msgid "Lighting"
+msgstr ""
+
+msgid "Light"
+msgstr ""
+
+msgid "z:"
+msgstr ""
+
+msgid "Brightness:"
+msgstr ""
+
+msgid "Ambient:"
+msgstr ""
+
+msgid "Surface"
+msgstr ""
+
+msgid "Draw"
+msgstr ""
+
+msgid "Mode:"
+msgstr ""
+
+msgid "both"
+msgstr ""
+
+msgid "coarse"
+msgstr ""
+
+msgid "fine"
+msgstr ""
+
+msgid "Fine mode:"
+msgstr ""
+
+msgid "resolution:"
+msgstr ""
+
+msgid "Coarse mode:"
+msgstr ""
+
+msgid "style:"
+msgstr ""
+
+msgid "surface"
+msgstr ""
+
+msgid "wire"
+msgstr ""
+
+msgid "wire color:"
+msgstr ""
+
+msgid "Vector"
+msgstr ""
+
+msgid "Vector lines"
+msgstr ""
+
+msgid "Vector points"
+msgstr ""
+
+msgid "Automatic size"
+msgstr ""
+
+msgid "Icon size is set automatically based on landscape dimensions."
+msgstr ""
+
+msgid "Marker:"
+msgstr ""
+
+#, python-format
+msgid "3D view settings saved to file <%s>."
+msgstr ""
+
+msgid "Analysis"
+msgstr ""
+
+msgid "Animation"
+msgstr ""
+
+msgid "Control View"
+msgstr ""
+
+msgid "Adjusts the distance and angular perspective of the image viewpoint"
+msgstr ""
+
+msgid "Tilts the plane of the surface from the horizontal"
+msgstr ""
+
+msgid "Tilt:"
+msgstr ""
+
+msgid "Adjusts the viewing height above the surface (angle of view automatically adjusts to maintain the same center of view)"
+msgstr ""
+
+msgid "Adjusts the relative height of features above the plane of the surface"
+msgstr ""
+
+msgid "Look:"
+msgstr ""
+
+msgid "here"
+msgstr ""
+
+msgid "Allows you to select a point on the surface that becomes the new center of view. Click on the button and then on the surface."
+msgstr ""
+
+msgid "center"
+msgstr ""
+
+msgid "Resets the view to the original default center of view"
+msgstr ""
+
+msgid "top"
+msgstr ""
+
+msgid "Sets the viewer directly over the scene's center position. This top view orients approximately north south."
+msgstr ""
+
+msgid "reset"
+msgstr ""
+
+msgid "Reset to default view"
+msgstr ""
+
+msgid "Press 'Record' button and start changing the view. It is recommended to use fly-through mode (Map Display toolbar) to achieve smooth motion."
+msgstr ""
+
+msgid "Record"
+msgstr ""
+
+msgid "Play"
+msgstr ""
+
+msgid "Total number of frames :"
+msgstr ""
+
+msgid "Frame rate (FPS):"
+msgstr ""
+
+msgid "Frames are recorded with given frequency (FPS). "
+msgstr ""
+
+msgid "Save image sequence"
+msgstr ""
+
+msgid "Choose a directory:"
+msgstr ""
+
+msgid "Choose a directory for images"
+msgstr ""
+
+msgid "Generated files names will look like this: prefix_1.ppm, prefix_2.ppm, ..."
+msgstr ""
+
+msgid "Constant surface"
+msgstr ""
+
+msgid "Fringe"
+msgstr ""
+
+msgid "Cutting planes"
+msgstr ""
+
+msgid "Shading:"
+msgstr ""
+
+msgid "flat"
+msgstr ""
+
+msgid "gouraud"
+msgstr ""
+
+msgid "Set to all"
+msgstr ""
+
+msgid "Use draw settings for all loaded surfaces"
+msgstr ""
+
+msgid "Change wire color"
+msgstr ""
+
+msgid "Surface attributes"
+msgstr ""
+
+msgid "Transparency"
+msgstr ""
+
+msgid "Shininess"
+msgstr ""
+
+msgid "map"
+msgstr ""
+
+msgid "unset"
+msgstr ""
+
+msgid "constant"
+msgstr ""
+
+msgid "Position"
+msgstr ""
+
+msgid "Changes the x, y, and z position of the current surface"
+msgstr ""
+
+msgid "Reset"
+msgstr ""
+
+msgid "Reset to default position"
+msgstr ""
+
+msgid "Active cutting plane:"
+msgstr ""
+
+msgid "clear"
+msgstr ""
+
+msgid "top color"
+msgstr ""
+
+msgid "bottom color"
+msgstr ""
+
+msgid "blend"
+msgstr ""
+
+msgid "shaded"
+msgstr ""
+
+msgid "Horizontal X:"
+msgstr ""
+
+msgid "Sets the X coordinate of the current cutting plane"
+msgstr ""
+
+msgid "Horizontal Y:"
+msgstr ""
+
+msgid "Sets the Y coordinate of the current cutting plane"
+msgstr ""
+
+msgid "Rotation:"
+msgstr ""
+
+msgid "Rotates the current cutting plane about vertical axis"
+msgstr ""
+
+msgid "Rotates the current cutting plane about horizontal axis"
+msgstr ""
+
+msgid "Sets the Z coordinate of the current cutting plane (only meaningful when tilt is not 0)"
+msgstr ""
+
+msgid "New"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Fine resolution:"
+msgstr ""
+
+msgid "Value:"
+msgstr ""
+
+msgid "Transparency:"
+msgstr ""
+
+msgid "Show vector lines"
+msgstr ""
+
+msgid "Line:"
+msgstr ""
+
+msgid "width:"
+msgstr ""
+
+msgid "color:"
+msgstr ""
+
+msgid "use color for thematic mapping"
+msgstr ""
+
+msgid "use width for thematic mapping"
+msgstr ""
+
+msgid "Set options..."
+msgstr ""
+
+msgid "as 3D"
+msgstr ""
+
+msgid "on surface(s):"
+msgstr ""
+
+msgid "Height above surface:"
+msgstr ""
+
+msgid "Show vector points"
+msgstr ""
+
+msgid "Icon:"
+msgstr ""
+
+msgid "size:"
+msgstr ""
+
+msgid "symbol:"
+msgstr ""
+
+msgid "use size for thematic mapping"
+msgstr ""
+
+msgid "isosurfaces"
+msgstr ""
+
+msgid "slices"
+msgstr ""
+
+msgid "Resolution:"
+msgstr ""
+
+msgid "Draw wire box"
+msgstr ""
+
+msgid "List of isosurfaces"
+msgstr ""
+
+msgid "Show light model"
+msgstr ""
+
+msgid "Light source position"
+msgstr ""
+
+msgid "Adjusts the light height"
+msgstr ""
+
+msgid "Light color and intensity"
+msgstr ""
+
+msgid "Adjusts the brightness of the light"
+msgstr ""
+
+msgid "Adjusts the ambient light"
+msgstr ""
+
+msgid "Edges with fringe"
+msgstr ""
+
+msgid "N && W"
+msgstr ""
+
+msgid "N && E"
+msgstr ""
+
+msgid "S && W"
+msgstr ""
+
+msgid "S && E"
+msgstr ""
+
+msgid "Elevation of fringe from bottom:"
+msgstr ""
+
+msgid "North Arrow"
+msgstr ""
+
+msgid "Arrow length (in map units):"
+msgstr ""
+
+msgid "Arrow color:"
+msgstr ""
+
+msgid "Place arrow"
+msgstr ""
+
+msgid "Scale bar"
+msgstr ""
+
+msgid "Scale bar length (in map units):"
+msgstr ""
+
+msgid "Scale bar color:"
+msgstr ""
+
+msgid "Place new scale bar"
+msgstr ""
+
+msgid "Do you want to record new animation without saving the previous one?"
+msgstr ""
+
+msgid "Animation already exists"
+msgstr ""
+
+msgid "No file prefix given."
+msgstr ""
+
+#, python-format
+msgid "Directory %s does not exist."
+msgstr ""
+
+msgid "Isosurface attributes"
+msgstr ""
+
+msgid "toggle normal direction"
+msgstr ""
+
+msgid "Isosurface value"
+msgstr ""
+
+msgid "Slice attributes"
+msgstr ""
+
+msgid "Slice parallel to axis:"
+msgstr ""
+
+msgid "W"
+msgstr ""
+
+msgid "N"
+msgstr ""
+
+msgid "S"
+msgstr ""
+
+msgid "E"
+msgstr ""
+
+msgid "NW"
+msgstr ""
+
+msgid "NE"
+msgstr ""
+
+msgid "SE"
+msgstr ""
+
+msgid "SW"
+msgstr ""
+
+msgid "Level"
+msgstr ""
+
+msgid "List of slices"
+msgstr ""
+
+#, python-brace-format
+msgid "Level {level}"
+msgstr ""
+
+#, python-brace-format
+msgid "Slice parallel to {axis}"
+msgstr ""
+
+msgid "Slice parallel to"
+msgstr ""
+
+#, python-format
+msgid "Scalebar %d"
+msgstr ""
+
+msgid "None"
+msgstr ""
+
+msgid "Plane"
+msgstr ""
+
+msgid "Vector map is 3D"
+msgstr ""
+
+msgid "Vector map is 2D"
+msgstr ""
+
+#, python-format
+msgid "%(features)d features (%(points)d points)"
+msgstr ""
+
+msgid "on surface"
+msgstr ""
+
+msgid "range:"
+msgstr ""
+
+msgid "North edge:"
+msgstr ""
+
+msgid "South edge:"
+msgstr ""
+
+msgid "West edge:"
+msgstr ""
+
+msgid "East edge:"
+msgstr ""
+
+msgid "Northing (Y):"
+msgstr ""
+
+msgid "Height (Z):"
+msgstr ""
+
+msgid "Easting (X):"
+msgstr ""
+
+msgid "Bottom edge:"
+msgstr ""
+
+msgid "Top edge:"
+msgstr ""
+
+msgid "Adjusts the distance and direction of the image viewpoint"
+msgstr ""
+
+msgid "Adjusts the light direction. Click and drag the puck to change the light direction."
+msgstr ""
+
+msgid "This module requires the NumPy module, which could not be imported. It probably is not installed (it's not part of the standard Python distribution). See the Numeric Python site (https://numpy.org) for information on downloading source or binaries."
+msgstr ""
+
+#, python-format
+msgid "3d raster map <%s> not found"
+msgstr ""
+
+msgid "Please provide a group name to process"
+msgstr ""
+
+msgid "Please provide a raster map name to process"
+msgstr ""
+
+msgid "Please provide a camera name (generated by i.ortho.camera)"
+msgstr ""
+
+msgid "Please provide an order value (1 if 4 Fiducials, 2 if 8 Fiducials)"
+msgstr ""
+
+msgid "Please provide an output files extension (used by i.rectify)"
+msgstr ""
+
+msgid "Manage Location of Fiducial Points on a Scanned Photo"
+msgstr ""
+
+msgid "A POINTS file exists, renaming it to POINTS_BAK"
+msgstr ""
+
+msgid "Opening CAMERA file failed"
+msgstr ""
+
+msgid "Writing output image to group, please wait..."
+msgstr ""
+
+msgid "source X"
+msgstr ""
+
+msgid "source Y"
+msgstr ""
+
+msgid "target X"
+msgstr ""
+
+msgid "target Y"
+msgstr ""
+
+msgid "source X:"
+msgstr ""
+
+msgid "target X:"
+msgstr ""
+
+msgid "source Y:"
+msgstr ""
+
+msgid "target Y:"
+msgstr ""
+
+msgid "GRASS Manage Location of Tick Points on a Scanned Photo"
+msgstr ""
+
+msgid "Units:"
+msgstr ""
+
+msgid ""
+"Position of the top left corner\n"
+"from the top left edge of the paper"
+msgstr ""
+
+msgid "Position is given:"
+msgstr ""
+
+msgid "relative to paper"
+msgstr ""
+
+msgid "by map coordinates"
+msgstr ""
+
+msgid ""
+"Position from the top left\n"
+"edge of the paper"
+msgstr ""
+
+msgid "Font:"
+msgstr ""
+
+msgid "Choose color:"
+msgstr ""
+
+msgid "Close dialog and apply changes"
+msgstr ""
+
+msgid "Apply changes"
+msgstr ""
+
+msgid "Units"
+msgstr ""
+
+msgid "Orientation"
+msgstr ""
+
+msgid "Width"
+msgstr ""
+
+msgid "Height"
+msgstr ""
+
+msgid "Left"
+msgstr ""
+
+msgid "Right"
+msgstr ""
+
+msgid "Literal is not allowed!"
+msgstr ""
+
+msgid "Page size"
+msgstr ""
+
+msgid "Margins"
+msgstr ""
+
+msgid "Landscape"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Map settings"
+msgstr ""
+
+msgid "Map frame settings"
+msgstr ""
+
+msgid "Map frame"
+msgstr ""
+
+msgid "Map frame options:"
+msgstr ""
+
+msgid "fit frame to match selected map"
+msgstr ""
+
+msgid "fit frame to match saved region"
+msgstr ""
+
+msgid "fit frame to match current computational region"
+msgstr ""
+
+msgid "fixed scale and map center"
+msgstr ""
+
+msgid "Map selection"
+msgstr ""
+
+msgid "Map:"
+msgstr ""
+
+msgid "Region:"
+msgstr ""
+
+msgid "Map scale and center"
+msgstr ""
+
+msgid "Center:"
+msgstr ""
+
+msgid "E:"
+msgstr ""
+
+msgid "N:"
+msgstr ""
+
+msgid "Scale:"
+msgstr ""
+
+msgid "1 :"
+msgstr ""
+
+msgid "Map max resolution (dpi):"
+msgstr ""
+
+#. GTC Line around legend or map frame
+#. GTC  Line around legend or map frame
+msgid "Border"
+msgstr ""
+
+msgid "draw border around map frame"
+msgstr ""
+
+msgid "border color:"
+msgstr ""
+
+msgid "border width (pts):"
+msgstr ""
+
+msgid ""
+"Region is set to match this map,\n"
+"raster or vector map must be added later"
+msgstr ""
+
+msgid "Region selection"
+msgstr ""
+
+msgid "No map selected!"
+msgstr ""
+
+msgid "No region selected!"
+msgstr ""
+
+msgid "Invalid scale or map center!"
+msgstr ""
+
+msgid "Choose raster map"
+msgstr ""
+
+msgid "no raster map"
+msgstr ""
+
+msgid "raster:"
+msgstr ""
+
+msgid "Please, create map frame first."
+msgstr ""
+
+msgid "Add map"
+msgstr ""
+
+msgid "areas"
+msgstr ""
+
+msgid "lines"
+msgstr ""
+
+msgid "points"
+msgstr ""
+
+msgid "Data Type"
+msgstr ""
+
+msgid "Manage vector maps"
+msgstr ""
+
+msgid "The topmost vector map overlaps the others"
+msgstr ""
+
+msgid "Up"
+msgstr ""
+
+msgid "Down"
+msgstr ""
+
+msgid "Properties..."
+msgstr ""
+
+msgid "Raster map settings"
+msgstr ""
+
+msgid "Vector maps settings"
+msgstr ""
+
+#, python-format
+msgid "%s properties"
+msgstr ""
+
+msgid "Data selection"
+msgstr ""
+
+msgid "centroids"
+msgstr ""
+
+msgid "boundaries"
+msgstr ""
+
+msgid "Layer selection"
+msgstr ""
+
+msgid "Database connection is not defined in DB file."
+msgstr ""
+
+msgid "Select layer:"
+msgstr ""
+
+msgid "list of categories (e.g. 1,3,5-7)"
+msgstr ""
+
+msgid "Use current mask"
+msgstr ""
+
+msgid "Colors"
+msgstr ""
+
+msgid "Outline"
+msgstr ""
+
+msgid "draw outline"
+msgstr ""
+
+msgid "Width (pts):"
+msgstr ""
+
+msgid "Fill"
+msgstr ""
+
+msgid "fill color"
+msgstr ""
+
+msgid "choose color:"
+msgstr ""
+
+msgid "color from map table column:"
+msgstr ""
+
+msgid "No effect for fill color from table column"
+msgstr ""
+
+msgid "Color of lines:"
+msgstr ""
+
+msgid "Size and style"
+msgstr ""
+
+msgid "eps file:"
+msgstr ""
+
+msgid "Type filename or click browse to choose file"
+msgstr ""
+
+msgid "Choose a file"
+msgstr ""
+
+msgid "Size"
+msgstr ""
+
+msgid "size from map table column:"
+msgstr ""
+
+msgid "scale:"
+msgstr ""
+
+msgid "Rotation"
+msgstr ""
+
+msgid "rotate symbols:"
+msgstr ""
+
+msgid "counterclockwise in degrees:"
+msgstr ""
+
+msgid "from map table column:"
+msgstr ""
+
+msgid "Set width (pts):"
+msgstr ""
+
+msgid "multiply width by category value"
+msgstr ""
+
+msgid "Line style"
+msgstr ""
+
+msgid "Choose line style:"
+msgstr ""
+
+msgid "Choose linecap:"
+msgstr ""
+
+msgid "Pattern"
+msgstr ""
+
+msgid "use pattern:"
+msgstr ""
+
+msgid "Choose pattern file:"
+msgstr ""
+
+msgid "pattern line width (pts):"
+msgstr ""
+
+msgid "pattern scale factor:"
+msgstr ""
+
+msgid "Raster legend"
+msgstr ""
+
+msgid "Source raster"
+msgstr ""
+
+msgid "current raster"
+msgstr ""
+
+msgid "select raster"
+msgstr ""
+
+#, python-format
+msgid "%(rast)s: type %(type)s"
+msgstr ""
+
+msgid "Type of legend"
+msgstr ""
+
+msgid "discrete legend (categorical maps)"
+msgstr ""
+
+msgid "continuous color gradient legend (floating point map)"
+msgstr ""
+
+msgid "Advanced legend settings"
+msgstr ""
+
+msgid "draw \"no data\" box"
+msgstr ""
+
+msgid "draw ticks across color table"
+msgstr ""
+
+msgid "Vector legend"
+msgstr ""
+
+msgid "Show vector legend"
+msgstr ""
+
+msgid "Source vector maps"
+msgstr ""
+
+msgid "Choose vector maps and their order in legend"
+msgstr ""
+
+msgid "Edit label"
+msgstr ""
+
+msgid "draw border around legend"
+msgstr ""
+
+msgid "Size and position"
+msgstr ""
+
+msgid "Leave the edit field empty, to use default values."
+msgstr ""
+
+msgid ""
+"Width of the color symbol (for lines)\n"
+"in front of the legend text"
+msgstr ""
+
+msgid "Columns:"
+msgstr ""
+
+msgid "column span:"
+msgstr ""
+
+msgid ""
+"Column separation distance between the left edges\n"
+"of two columns in a multicolumn legend"
+msgstr ""
+
+msgid "Edit legend label:"
+msgstr ""
+
+msgid "No raster map selected!"
+msgstr ""
+
+msgid "No raster"
+msgstr ""
+
+msgid "Mapinfo settings"
+msgstr ""
+
+msgid "Color settings"
+msgstr ""
+
+msgid "use border color:"
+msgstr ""
+
+msgid "use background color:"
+msgstr ""
+
+msgid "Length:"
+msgstr ""
+
+msgid "Scalebar length is given in map units"
+msgstr ""
+
+msgid "Scalebar height is real height on paper"
+msgstr ""
+
+msgid "default"
+msgstr ""
+
+msgid "Style"
+msgstr ""
+
+msgid "Type:"
+msgstr ""
+
+msgid "Number of segments:"
+msgstr ""
+
+msgid "Label every "
+msgstr ""
+
+msgid "segments"
+msgstr ""
+
+msgid "transparent text background"
+msgstr ""
+
+msgid "Length of scale bar is not defined"
+msgstr ""
+
+msgid "Enter text:"
+msgstr ""
+
+msgid "Text effects"
+msgstr ""
+
+msgid "text background"
+msgstr ""
+
+msgid "highlight"
+msgstr ""
+
+msgid "text border"
+msgstr ""
+
+msgid "Offset"
+msgstr ""
+
+msgid "horizontal (pts):"
+msgstr ""
+
+msgid "vertical (pts):"
+msgstr ""
+
+msgid " Reference point"
+msgstr ""
+
+msgid "Text rotation"
+msgstr ""
+
+msgid "rotate text (counterclockwise)"
+msgstr ""
+
+msgid "No text entered!"
+msgstr ""
+
+msgid "Choose a directory with images"
+msgstr ""
+
+msgid "Note: only EPS format supported"
+msgstr ""
+
+msgid "Scale And Rotation"
+msgstr ""
+
+msgid "Rotation angle (deg):"
+msgstr ""
+
+msgid "Counterclockwise rotation in degrees"
+msgstr ""
+
+msgid ""
+"PIL\n"
+"missing"
+msgstr ""
+
+#, python-format
+msgid "Unable to read file %s: %s"
+msgstr ""
+
+#, python-format
+msgid "size: %(width)s x %(height)s pts"
+msgstr ""
+
+msgid "No image selected."
+msgstr ""
+
+msgid "North Arrow settings"
+msgstr ""
+
+msgid "Compute convergence"
+msgstr ""
+
+msgid "Symbol"
+msgstr ""
+
+msgid "Select symbol:"
+msgstr ""
+
+msgid ""
+"Note: Selected symbol is not displayed\n"
+"in draft mode (only in preview mode)"
+msgstr ""
+
+msgid "Outline color:"
+msgstr ""
+
+msgid "Fill color:"
+msgstr ""
+
+msgid "Size and Rotation"
+msgstr ""
+
+msgid "Size (pt):"
+msgstr ""
+
+msgid "Symbol size in points"
+msgstr ""
+
+msgid "Line settings"
+msgstr ""
+
+msgid "Rectangle settings"
+msgstr ""
+
+msgid "Line width in points"
+msgstr ""
+
+msgid "Vector labels"
+msgstr ""
+
+msgid "Vector label files created beforehand by v.label module"
+msgstr ""
+
+msgid "You can select multiple label files."
+msgstr ""
+
+msgid ""
+"Python Imaging Library is not available.\n"
+"'Preview' functionality won't work."
+msgstr ""
+
+#, python-format
+msgid "Characters on position %s are not supported by ISO-8859-1 (Latin 1) encoding which is required by module ps.map."
+msgstr ""
+
+msgid "Not all characters are supported by ISO-8859-1 (Latin 1) encoding which is required by module ps.map."
+msgstr ""
+
+msgid "Program ps2pdf is not available. Please install it first to create PDF."
+msgstr ""
+
+msgid "Generating PDF..."
+msgstr ""
+
+msgid "Generating PostScript..."
+msgstr ""
+
+msgid "Generating preview..."
+msgstr ""
+
+#, python-format
+msgid "Ps.map exited with return code %s"
+msgstr ""
+
+msgid "Program {} is not available."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"{title} Please install it to create PDF.\n"
+"\n"
+msgstr ""
+
+msgid ""
+"Program {} is not available. Please install it to create PDF.\n"
+"\n"
+" "
+msgstr ""
+
+#, python-format
+msgid "%(prg)s exited with return code %(code)s"
+msgstr ""
+
+msgid "PDF generated"
+msgstr ""
+
+msgid "You can download {} version here."
+msgstr ""
+
+msgid "PostScript file generated"
+msgstr ""
+
+msgid "Generating preview, wait please"
+msgstr ""
+
+msgid "Preview not available"
+msgstr ""
+
+msgid "Preview is not available probably because Ghostscript is not installed or not on PATH."
+msgstr ""
+
+#, python-brace-format
+msgid "You can download {program} {arch} version here."
+msgstr ""
+
+msgid "Preview generated"
+msgstr ""
+
+msgid "Save file as"
+msgstr ""
+
+#, python-format
+msgid "Failed to read file %s."
+msgstr ""
+
+msgid "Scalebar is not appropriate for this projection"
+msgstr ""
+
+msgid "Press button with green triangle icon to generate preview."
+msgstr ""
+
+msgid "wxGUI Cartographic Composer"
+msgstr ""
+
+msgid "MAP FRAME"
+msgstr ""
+
+msgid "RASTER LEGEND"
+msgstr ""
+
+msgid "VECTOR LEGEND"
+msgstr ""
+
+msgid "MAP INFO"
+msgstr ""
+
+msgid "SCALE BAR"
+msgstr ""
+
+msgid "IMAGE"
+msgstr ""
+
+msgid "NORTH ARROW"
+msgstr ""
+
+msgid "Click and drag to resize object"
+msgstr ""
+
+msgid "labels: "
+msgstr ""
+
+msgid "Cartographic Composer - GRASS"
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to open file\n"
+"%s"
+msgstr ""
+
+#, python-format
+msgid "Instruction file will be loaded with following region: %s\n"
+msgstr ""
+
+#, python-format
+msgid ""
+"Region cannot be set\n"
+"%s"
+msgstr ""
+
+#, python-format
+msgid "Failed to read instruction %s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Scale has changed, old value: %(old)s\n"
+"new value: %(new)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Failed to read instruction %s.\n"
+"Use 1:25000 notation."
+msgstr ""
+
+#, python-format
+msgid ""
+"Map frame position changed, old value: %(old1)s %(old2)s\n"
+"new value: %(new1)s %(new2)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Map frame size changed, old value: %(old1)s %(old2)s\n"
+"new value: %(new1)s %(new2)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Failed to read instruction %(file)s.\n"
+"Unknown format %(for)s"
+msgstr ""
+
+#, python-format
+msgid "Failed to read instruction %s."
+msgstr ""
+
+#, python-format
+msgid "Failed to read instruction %(inst)s: file %(file)s not found."
+msgstr ""
+
+msgid "Select graphics tool"
+msgstr ""
+
+msgid "Generate text file with mapping instructions"
+msgstr ""
+
+msgid "Load text file with mapping instructions"
+msgstr ""
+
+msgid "Generate PostScript output"
+msgstr ""
+
+msgid "Generate PDF output"
+msgstr ""
+
+msgid "Specify paper size, margins and orientation"
+msgstr ""
+
+msgid "Full extent"
+msgstr ""
+
+msgid "Zoom to full extent"
+msgstr ""
+
+msgid "Click and drag to place map frame"
+msgstr ""
+
+msgid "Delete selected object"
+msgstr ""
+
+msgid "Show preview"
+msgstr ""
+
+msgid "Map info"
+msgstr ""
+
+msgid "Legend"
+msgstr ""
+
+msgid "Line"
+msgstr ""
+
+msgid "Rectangle"
+msgstr ""
+
+msgid "Add overlays"
+msgstr ""
+
+msgid "Add simple graphics: points"
+msgstr ""
+
+msgid "Add simple graphics: lines"
+msgstr ""
+
+msgid "Add simple graphics: rectangles"
+msgstr ""
+
+msgid "inch"
+msgstr ""
+
+msgid "point"
+msgstr ""
+
+msgid "centimeter"
+msgstr ""
+
+msgid "millimeter"
+msgstr ""
+
+msgid "nautical miles"
+msgstr ""
+
+msgid "pixel"
+msgstr ""
+
+msgid "meter"
+msgstr ""
+
+msgid "degree"
+msgstr ""
+
+msgid "Unable to run `ps.map -b`"
+msgstr ""
+
+msgid "Please select first the raster map"
+msgstr ""
+
+msgid "Right click to finish area"
+msgstr ""
+
+msgid "Right click to finish line"
+msgstr ""
+
+msgid "Do you want to save changes?"
+msgstr ""
+
+msgid "Save raster map changes"
+msgstr ""
+
+msgid "Failed to create backup copy of edited raster map."
+msgstr ""
+
+msgid "Failed to create new raster map."
+msgstr ""
+
+msgid "Rasterizing..."
+msgstr ""
+
+msgid "Failed to set default color table for edited raster map"
+msgstr ""
+
+msgid "Create new raster map"
+msgstr ""
+
+msgid "Name for new raster map:"
+msgstr ""
+
+msgid "Optionally select background raster map:"
+msgstr ""
+
+msgid "New raster map type:"
+msgstr ""
+
+msgid "Please specify name for a new raster map"
+msgstr ""
+
+#, python-format
+msgid "Raster map <%s> already exists in the current mapset. Do you want to overwrite it?"
+msgstr ""
+
+msgid "Raster map <{}> not found in current mapset."
+msgstr ""
+
+msgid "Base raster map <{}> not found in current mapset."
+msgstr ""
+
+msgid "Raster Digitizer - GRASS"
+msgstr ""
+
+msgid "Digitize area"
+msgstr ""
+
+msgid "Digitize line"
+msgstr ""
+
+msgid "Digitize point"
+msgstr ""
+
+msgid "Save raster map"
+msgstr ""
+
+msgid "Undo"
+msgstr ""
+
+msgid "Select raster map"
+msgstr ""
+
+msgid "Set drawing color (not raster cell color)"
+msgstr ""
+
+msgid "Cell value:"
+msgstr ""
+
+msgid "Width of currently digitized line or diameter of a digitized point in map units."
+msgstr ""
+
+msgid "New raster map"
+msgstr ""
+
+msgid "Modify the configuration file"
+msgstr ""
+
+#, python-brace-format
+msgid "View and modify the configuration file '{name}'"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Are you sure that you want modify r.li configuration file {name}?\n"
+"You could broke the configuration file..."
+msgstr ""
+
+msgid "WARNING"
+msgstr ""
+
+msgid "Setup for r.li modules"
+msgstr ""
+
+msgid "Available sampling area configuration files"
+msgstr ""
+
+msgid "Remove a configuration file"
+msgstr ""
+
+msgid "Create"
+msgstr ""
+
+msgid "Create a new configuration file"
+msgstr ""
+
+msgid "Rename a configuration file"
+msgstr ""
+
+msgid "View/Edit"
+msgstr ""
+
+msgid "View and edit a configuration file"
+msgstr ""
+
+msgid "You have to select a configuration file"
+msgstr ""
+
+#, python-format
+msgid "Do you want remove r.li configuration file <%s>?"
+msgstr ""
+
+msgid "Remove new r.li configuration file?"
+msgstr ""
+
+#, python-format
+msgid "Set the new name for %s \"                                            \"configuration file"
+msgstr ""
+
+msgid "Rename configuration file"
+msgstr ""
+
+msgid "The polygon seems to have 0 areas"
+msgstr ""
+
+#, python-format
+msgid "The raster map <%s> already exists. Please remove or rename the maps with the prefix '%s' or select the option to overwrite existing maps"
+msgstr ""
+
+msgid "Setup for r.li modules - GRASS"
+msgstr ""
+
+#, python-format
+msgid "The raster file %s already exists, please change name"
+msgstr ""
+
+msgid "Raster map not created. Please redraw region."
+msgstr ""
+
+msgid "Raster map not created. redraw region again."
+msgstr ""
+
+msgid "Draw sampling frame"
+msgstr ""
+
+msgid "Draw sampling frame by clicking and dragging"
+msgstr ""
+
+msgid "Draw sampling rectangle"
+msgstr ""
+
+msgid "Draw sampling rectangle by clicking and dragging"
+msgstr ""
+
+msgid "Draw sampling circle"
+msgstr ""
+
+msgid "Draw sampling circle radius by clicking and dragging"
+msgstr ""
+
+msgid "Draw sampling region"
+msgstr ""
+
+msgid "Draw sampling region by polygon. Right Double click to end drawing"
+msgstr ""
+
+msgid "Create new configuration file for r.li modules"
+msgstr ""
+
+#, python-format
+msgid "Do you want to create r.li configuration file <%s>?"
+msgstr ""
+
+msgid "Create new r.li configuration file?"
+msgstr ""
+
+msgid "r.li.setup wizard canceled. Configuration file not created."
+msgstr ""
+
+msgid "Select maps and define name"
+msgstr ""
+
+msgid "Name for new configuration file to create"
+msgstr ""
+
+msgid "Raster map to use to select areas"
+msgstr ""
+
+msgid "Vector map to use to select areas"
+msgstr ""
+
+msgid "Vector map layer to use to select areas"
+msgstr ""
+
+msgid "Define sampling region (region for analysis)"
+msgstr ""
+
+msgid "Whole map layer"
+msgstr ""
+
+msgid "Keyboard setting"
+msgstr ""
+
+msgid "Draw the sampling frame"
+msgstr ""
+
+#, python-format
+msgid "The configuration file %s already exists, please change name"
+msgstr ""
+
+#, python-format
+msgid "Vector %s was not found, please select another vector"
+msgstr ""
+
+#, python-format
+msgid "Vector %s has no areas, please select another vector"
+msgstr ""
+
+#, python-format
+msgid "Vector %s has no table connected, please select another vector"
+msgstr ""
+
+msgid "Insert sampling frame parameter"
+msgstr ""
+
+msgid "Column of upper left corner"
+msgstr ""
+
+msgid "Row of upper left corner"
+msgstr ""
+
+msgid "Row length of sampling frame"
+msgstr ""
+
+msgid "Insert sampling areas"
+msgstr ""
+
+msgid "Regions"
+msgstr ""
+
+msgid "Sample units"
+msgstr ""
+
+msgid "Moving window"
+msgstr ""
+
+msgid ""
+"Select areas from the\n"
+"overlaid vector map"
+msgstr ""
+
+msgid "Choose a method"
+msgstr ""
+
+msgid "Use keyboard to enter sampling area"
+msgstr ""
+
+msgid "Use mouse to draw sampling area"
+msgstr ""
+
+msgid "This option is not supported yet"
+msgstr ""
+
+msgid "Number of regions to draw:"
+msgstr ""
+
+msgid "Do you want to overwrite existing temporal maps if they exist?"
+msgstr ""
+
+msgid "Do you want to check vector areas?"
+msgstr ""
+
+msgid "Select if use area by area"
+msgstr ""
+
+msgid "All the features will be used"
+msgstr ""
+
+msgid "Analysing all vector features..."
+msgstr ""
+
+msgid "Analysing vector"
+msgstr ""
+
+msgid "All feature are been analyzed."
+msgstr ""
+
+msgid "An error occurred"
+msgstr ""
+
+msgid "Draw sampling regions"
+msgstr ""
+
+#, python-brace-format
+msgid "Draw sample region {count} of {num_regions}"
+msgstr ""
+
+msgid "Draw moving windows region"
+msgstr ""
+
+msgid "Select sample units from keyboard"
+msgstr ""
+
+msgid "Select type of shape"
+msgstr ""
+
+msgid "Circle"
+msgstr ""
+
+msgid "Width size (in cells)?"
+msgstr ""
+
+msgid "What radius size (in meters)?"
+msgstr ""
+
+msgid "Height size (in cells)?"
+msgstr ""
+
+msgid "Name of the circle mask"
+msgstr ""
+
+msgid "Select method of sampling unit distribution"
+msgstr ""
+
+msgid "Random non overlapping"
+msgstr ""
+
+msgid "Systematic contiguous"
+msgstr ""
+
+msgid "Stratified random"
+msgstr ""
+
+msgid "Systematic non contiguous"
+msgstr ""
+
+msgid "Centered over sites"
+msgstr ""
+
+msgid "What number of Sampling Units to use?"
+msgstr ""
+
+msgid "Insert number of row strates"
+msgstr ""
+
+msgid "Insert number of column strates"
+msgstr ""
+
+msgid "Insert distance between units"
+msgstr ""
+
+msgid "Set sample units"
+msgstr ""
+
+msgid "Set moving windows"
+msgstr ""
+
+msgid "Draw sampling units"
+msgstr ""
+
+msgid "Number of sampling area to draw:"
+msgstr ""
+
+#, python-brace-format
+msgid "Draw sampling {draw_type} {count} of {num_regions}"
+msgstr ""
+
+msgid "Select sampling areas"
+msgstr ""
+
+msgid "Is this area ok?"
+msgstr ""
+
+#, python-brace-format
+msgid "Select sample area {areas_count} of {area_num}"
+msgstr ""
+
+#, python-brace-format
+msgid "The raster map <{map_name}> already exists. Please remove or rename the maps with the prefix '{prefix}' or select the option to overwrite existing maps"
+msgstr ""
+
+msgid "Select sample area 1 of "
+msgstr ""
+
+msgid "Configuration file name:"
+msgstr ""
+
+msgid "Raster name:"
+msgstr ""
+
+msgid "Vector name:"
+msgstr ""
+
+msgid "Region type:"
+msgstr ""
+
+msgid "Sampling area type:"
+msgstr ""
+
+msgid "Region keyboard values:"
+msgstr ""
+
+msgid "Type of shape:"
+msgstr ""
+
+msgid "Radius size:"
+msgstr ""
+
+msgid "Name circle mask:"
+msgstr ""
+
+msgid "Width size:"
+msgstr ""
+
+msgid "Height size:"
+msgstr ""
+
+msgid "Method of distribution:"
+msgstr ""
+
+msgid "Number sampling units:"
+msgstr ""
+
+msgid "Distance between units:"
+msgstr ""
+
+msgid "Number row strates:"
+msgstr ""
+
+msgid "Number column strates:"
+msgstr ""
+
+msgid "Invalid mapset name"
+msgstr ""
+
+msgid "Invalid project name"
+msgstr ""
+
+msgid "Name for the new mapset:"
+msgstr ""
+
+msgid "Unable to create new mapset: {}"
+msgstr ""
+
+msgid "Do you want to import {} to the newly created project?"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Cannot rename mapset <{mapset}> for the following reason:\n"
+"\n"
+"{reason}\n"
+"\n"
+"No mapset will be renamed."
+msgstr ""
+
+msgid "Unable to rename selected mapset"
+msgstr ""
+
+msgid ""
+"Current name: {}\n"
+"\n"
+"Enter new name:"
+msgstr ""
+
+msgid ""
+"Unable to rename mapset.\n"
+"\n"
+"{}"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Cannot rename project <{location}> for the following reasons:\n"
+"\n"
+"{reasons}\n"
+"\n"
+"No project will be renamed."
+msgstr ""
+
+msgid "Unable to rename selected project"
+msgstr ""
+
+msgid "Rename selected project"
+msgstr ""
+
+msgid ""
+"Unable to rename project.\n"
+"\n"
+"{}"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Cannot delete one or more mapsets for the following reasons:\n"
+"\n"
+"{reasons}\n"
+"\n"
+"No mapsets will be deleted."
+msgstr ""
+
+msgid "Unable to delete selected mapsets"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Do you want to continue with deleting one or more of the following mapsets?\n"
+"\n"
+"{deletes}\n"
+"\n"
+"All maps included in these mapsets will be permanently deleted!"
+msgstr ""
+
+msgid "Delete selected mapsets"
+msgstr ""
+
+msgid "Error when deleting mapsets"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"The following error occurred when deleting mapset <{path}>:\n"
+"\n"
+"{error}\n"
+"\n"
+"Deleting of mapsets was interrupted."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Cannot delete one or more projects for the following reasons:\n"
+"\n"
+"{reasons}\n"
+"\n"
+"No projects will be deleted."
+msgstr ""
+
+msgid "Unable to delete selected projects"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Do you want to continue with deleting one or more of the following projects?\n"
+"\n"
+"{deletes}\n"
+"\n"
+"All mapsets included in these projects will be permanently deleted!"
+msgstr ""
+
+msgid "Delete selected projects"
+msgstr ""
+
+msgid "Error when deleting projects"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"The following error occurred when deleting project <{path}>:\n"
+"\n"
+"{error}\n"
+"\n"
+"Deleting of projects was interrupted."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Cannot delete GRASS database from disk for the following reason:\n"
+"\n"
+"{reasons}\n"
+"\n"
+"GRASS database will not be deleted."
+msgstr ""
+
+msgid "Unable to delete selected GRASS database"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Do you want to delete the following GRASS database from disk?\n"
+"\n"
+"{grassdb}\n"
+"\n"
+"The directory will be permanently deleted!"
+msgstr ""
+
+msgid "Delete selected GRASS database"
+msgstr ""
+
+msgid "Error when deleting GRASS database"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"The following error occurred when deleting database <{path}>:\n"
+"\n"
+"{error}\n"
+"\n"
+"Deleting of GRASS database was interrupted."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"User {user} is already running GRASS in selected mapset <{mapset}>\n"
+" (file {lockpath} created {timestamp} found).\n"
+"\n"
+"Concurrent use not allowed.\n"
+"\n"
+"Do you want to stay in the current mapset or remove .gislock and switch to selected mapset?"
+msgstr ""
+
+msgid "Mapset is in use"
+msgstr ""
+
+msgid "Error when removing lock file"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Unable to remove {lockpath}.\n"
+"\n"
+" Details: {error}."
+msgstr ""
+
+#, python-format
+msgid "Data file <%(name)s> imported successfully. The project's default region was set from this imported map."
+msgstr ""
+
+#, python-format
+msgid ""
+"Current GRASS database is <%(dbase)s>.\n"
+"Current project is <%(loc)s>.\n"
+"Current mapset is <%(mapset)s>."
+msgstr ""
+
+#, python-format
+msgid ""
+"Current project is <%(loc)s>.\n"
+"Current mapset is <%(mapset)s>."
+msgstr ""
+
+#, python-format
+msgid "Current mapset is <%s>."
+msgstr ""
+
+msgid "Download in progress, wait until it is finished 0%"
+msgstr ""
+
+#, python-brace-format
+msgid "Download in progress, wait until it is finished {0}%, {1} MB, {2} KB/s, {3:.0f} seconds passed"
+msgstr ""
+
+msgid "Downloaded project is not valid"
+msgstr ""
+
+msgid "Abort"
+msgstr ""
+
+msgid "Abort download"
+msgstr ""
+
+msgid "Select sample project to download:"
+msgstr ""
+
+msgid "Do&wnload"
+msgstr ""
+
+msgid "Download selected project"
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid "Download in progress, wait until it is finished"
+msgstr ""
+
+#, python-brace-format
+msgid "Project name {name} already exists in {path}, download canceled"
+msgstr ""
+
+#, python-format
+msgid "Download failed: %s"
+msgstr ""
+
+msgid "Download completed. The downloaded sample data is available now in the data tree"
+msgstr ""
+
+#, python-brace-format
+msgid "Project named {name} already exists, rename it first"
+msgstr ""
+
+msgid "Dataset Download"
+msgstr ""
+
+msgid "Download selected dataset"
+msgstr ""
+
+msgid "Do you want to cancel dataset download?"
+msgstr ""
+
+msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {}"
+msgstr ""
+
+msgid "Timeline Tool"
+msgstr ""
+
+msgid "Help"
+msgstr ""
+
+msgid "3D plot of spatio-temporal extents"
+msgstr ""
+
+msgid "3D plot of spatio-temporal extents (matplotlib >= 1.0.0)"
+msgstr ""
+
+msgid "Select space time dataset(s):"
+msgstr ""
+
+#, python-format
+msgid "Dataset <%s> not found in temporal database"
+msgstr ""
+
+msgid "Datasets have different temporal type (absolute x relative), which is not allowed."
+msgstr ""
+
+msgid "Datasets have different time unit which is not allowed."
+msgstr ""
+
+#, python-brace-format
+msgid "Dataset <{name}> is empty"
+msgstr ""
+
+#, python-format
+msgid "X [%s]"
+msgstr ""
+
+#, python-format
+msgid "Y [%s]"
+msgstr ""
+
+msgid "X"
+msgstr ""
+
+msgid "Y"
+msgstr ""
+
+#, python-format
+msgid "Time [%s]"
+msgstr ""
+
+#, python-format
+msgid "Please specify the space time dataset <%s>."
+msgstr ""
+
+msgid "Ambiguous dataset name"
+msgstr ""
+
+#, python-format
+msgid "Space time raster dataset: %s"
+msgstr ""
+
+#, python-format
+msgid "Space time vector dataset: %s"
+msgstr ""
+
+#, python-format
+msgid "Space time 3D raster dataset: %s"
+msgstr ""
+
+#, python-format
+msgid "Mapset: %s"
+msgstr ""
+
+#, python-format
+msgid "Map name: %s"
+msgstr ""
+
+#, python-format
+msgid "Start time: %s"
+msgstr ""
+
+#, python-format
+msgid "End time: %s"
+msgstr ""
+
+msgid "WARNING: invalid topology"
+msgstr ""
+
+msgid ""
+"\n"
+"Press Del to dismiss."
+msgstr ""
+
+msgid "Timeline Tool - GRASS"
+msgstr ""
+
+#, python-brace-format
+msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgstr ""
+
+msgid "Temporal Plot Tool"
+msgstr ""
+
+msgid ""
+"Raster temporal dataset (strds)\n"
+"Press ENTER after typing the name or select with the combobox"
+msgstr ""
+
+msgid "X and Y coordinates separated by comma:"
+msgstr ""
+
+msgid "Coordinates can be obtained for example by right-clicking on Map Display."
+msgstr ""
+
+msgid "Show simple linear regression line"
+msgstr ""
+
+msgid "STRDS"
+msgstr ""
+
+msgid ""
+"Vector temporal dataset (stvds)\n"
+"Press ENTER after typing the name or select with the combobox"
+msgstr ""
+
+msgid "Select attribute column"
+msgstr ""
+
+msgid "Select category of vector(s)"
+msgstr ""
+
+msgid "STVDS"
+msgstr ""
+
+msgid "Set title for the plot"
+msgstr ""
+
+msgid "Set label for X axis"
+msgstr ""
+
+msgid "Set label for Y axis"
+msgstr ""
+
+msgid "Labels"
+msgstr ""
+
+msgid "Path for output CSV file with plotted data"
+msgstr ""
+
+msgid "CVS path"
+msgstr ""
+
+msgid "Do you want the CSV header?"
+msgstr ""
+
+msgid "Invalid input coordinates"
+msgstr ""
+
+#, python-brace-format
+msgid "Category {ca} is not on vector map {ma} and it will be not used"
+msgstr ""
+
+msgid "Both coordinates and categories are set, coordinates will be used. The use categories remove text from coordinate form"
+msgstr ""
+
+msgid "With Vector temporal dataset you have to select an attribute column"
+msgstr ""
+
+msgid "Difference number of vector layers and maps in the vector temporal dataset"
+msgstr ""
+
+#, python-brace-format
+msgid "No connection between vector map {vmap} and layer {la}"
+msgstr ""
+
+#, python-format
+msgid "Temporal resolution: %s"
+msgstr ""
+
+msgid "Problem getting data from raster temporal dataset. Empty list of values."
+msgstr ""
+
+#, python-brace-format
+msgid "Problem getting data from vector temporal dataset. Empty list of values for cat {ca}."
+msgstr ""
+
+msgid "Problem getting data from vector temporal dataset. Empty list of values."
+msgstr ""
+
+#, python-brace-format
+msgid "{pa} already exists, do you want to overwrite?"
+msgstr ""
+
+msgid "File exists"
+msgstr ""
+
+msgid "Please change name of output CSV file or "
+msgstr ""
+
+msgid "Incorrect coordinates format, should be: x,y"
+msgstr ""
+
+msgid "Seed point outside the current region"
+msgstr ""
+
+msgid "Invalid input raster dataset"
+msgstr ""
+
+msgid "Invalid input vector dataset"
+msgstr ""
+
+msgid "Invalid input temporal dataset"
+msgstr ""
+
+msgid "Datasets have different number of values"
+msgstr ""
+
+#, python-brace-format
+msgid "Value for {date} is {val}"
+msgstr ""
+
+msgid "Press Del to dismiss."
+msgstr ""
+
+msgid "With stvds you have to set 'attr' option"
+msgstr ""
+
+msgid "With stvds it is not possible to use 'coordinates' and 'cats' options together"
+msgstr ""
+
+msgid "With stvds you have to use 'coordinates' or 'cats' option"
+msgstr ""
+
+msgid "Temporal Plot Tool - GRASS"
+msgstr ""
+
+msgid "List of categories - right-click to delete"
+msgstr ""
+
+msgid "Add new category"
+msgstr ""
+
+msgid "Ignore changes and close dialog"
+msgstr ""
+
+msgid "Apply changes and close dialog"
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to add new layer/category <%(layer)s/%(category)s>.\n"
+"Layer and category number must be integer.\n"
+"Layer number must be greater than zero."
+msgstr ""
+
+msgid "Unable to update vector map."
+msgstr ""
+
+#, python-format
+msgid "%d lines selected for z bulk-labeling"
+msgstr ""
+
+msgid "Set value"
+msgstr ""
+
+msgid "Starting value"
+msgstr ""
+
+msgid "Step"
+msgstr ""
+
+msgid "List of duplicates"
+msgstr ""
+
+msgid "Feature id"
+msgstr ""
+
+msgid "Layer (Categories)"
+msgstr ""
+
+#, python-format
+msgid "Vector digitizer not available. %s"
+msgstr ""
+
+#, python-format
+msgid "Vector map <%s> not found in current mapset. New vector map can be created by providing '-c' flag."
+msgstr ""
+
+#, python-format
+msgid "New vector map <%s> created"
+msgstr ""
+
+#, python-format
+msgid "Unable to create new vector map <%s>"
+msgstr ""
+
+msgid "Vector Digitizer - GRASS"
+msgstr ""
+
+msgid "Update categories"
+msgstr ""
+
+msgid "No vector map selected for editing."
+msgstr ""
+
+msgid "Nothing to do. Choose appropriate tool from digitizer toolbar."
+msgstr ""
+
+msgid "Z bulk-labeling dialog"
+msgstr ""
+
+msgid "Digitization settings"
+msgstr ""
+
+msgid "Apply changes for this session"
+msgstr ""
+
+msgid "Close dialog and save changes to user settings file"
+msgstr ""
+
+msgid "Line width"
+msgstr ""
+
+msgid "Snapping"
+msgstr ""
+
+msgid "Snapping threshold"
+msgstr ""
+
+msgid "screen pixels"
+msgstr ""
+
+msgid "Snap also to vertex"
+msgstr ""
+
+#, python-format
+msgid "Snapping threshold is %(value).1f %(units)s"
+msgstr ""
+
+msgid "Select vector features"
+msgstr ""
+
+msgid "Select threshold"
+msgstr ""
+
+msgid "Select only features inside of selection bounding box"
+msgstr ""
+
+msgid "By default are selected all features overlapping selection bounding box "
+msgstr ""
+
+msgid "Check for duplicates"
+msgstr ""
+
+msgid "Digitize lines/boundaries"
+msgstr ""
+
+msgid "Break lines at intersection"
+msgstr ""
+
+msgid "Digitize areas"
+msgstr ""
+
+msgid "Close boundary (snap to the start node)"
+msgstr ""
+
+msgid "Save changes"
+msgstr ""
+
+msgid "Save changes on exit"
+msgstr ""
+
+msgid "Query tool"
+msgstr ""
+
+msgid "Choose query tool"
+msgstr ""
+
+msgid "Select by box"
+msgstr ""
+
+msgid "length"
+msgstr ""
+
+msgid "Select lines"
+msgstr ""
+
+msgid "longer than"
+msgstr ""
+
+msgid "shorter than"
+msgstr ""
+
+msgid "dangle"
+msgstr ""
+
+msgid "Select dangles"
+msgstr ""
+
+msgid "Digitize new feature"
+msgstr ""
+
+msgid "Add new record into table"
+msgstr ""
+
+msgid "Category number"
+msgstr ""
+
+msgid "Category mode"
+msgstr ""
+
+msgid "Manual entry"
+msgstr ""
+
+msgid "Next to use"
+msgstr ""
+
+msgid "No category"
+msgstr ""
+
+msgid "Delete existing feature(s)"
+msgstr ""
+
+msgid "Delete record from table"
+msgstr ""
+
+msgid "Geometry attributes"
+msgstr ""
+
+msgid "area"
+msgstr ""
+
+msgid "perimeter"
+msgstr ""
+
+msgid "Note: These settings are stored in the workspace not in the vector digitizer preferences."
+msgstr ""
+
+msgid "Digitize new line segment"
+msgstr ""
+
+msgid "Digitize new line/boundary"
+msgstr ""
+
+msgid "Highlight"
+msgstr ""
+
+msgid "Highlight (duplicates)"
+msgstr ""
+
+msgid "Boundary (no area)"
+msgstr ""
+
+msgid "Boundary (one area)"
+msgstr ""
+
+msgid "Boundary (two areas)"
+msgstr ""
+
+msgid "Centroid (in area)"
+msgstr ""
+
+msgid "Centroid (outside area)"
+msgstr ""
+
+msgid "Centroid (duplicate in area)"
+msgstr ""
+
+msgid "Node (one line)"
+msgstr ""
+
+msgid "Node (two lines)"
+msgstr ""
+
+msgid "Vertex"
+msgstr ""
+
+msgid "Area (closed boundary + centroid)"
+msgstr ""
+
+msgid "Direction"
+msgstr ""
+
+msgid "Snapping disabled"
+msgstr ""
+
+#, python-format
+msgid "Snapping threshold is %(value).1f %(units)s (based on comp. resolution)"
+msgstr ""
+
+#, python-format
+msgid "Vector digitizer settings saved to file <%s>."
+msgstr ""
+
+msgid "Select area/boundary/centroid tool"
+msgstr ""
+
+msgid "Digitize new point (Ctrl+P)"
+msgstr ""
+
+msgid "Left: new point"
+msgstr ""
+
+msgid "Digitize new line (Ctrl+L)"
+msgstr ""
+
+msgid "Left: new point; Ctrl+Left: undo last point; Right: close line"
+msgstr ""
+
+msgid "Digitize new boundary (Ctrl+B)"
+msgstr ""
+
+msgid "Digitize new centroid (Ctrl+C)"
+msgstr ""
+
+msgid "Digitize new area (boundary without category) (Ctrl+A)"
+msgstr ""
+
+msgid "Add new vertex to line or boundary (Ctrl+V)"
+msgstr ""
+
+msgid "Left: Select; Ctrl+Left: Unselect; Right: Confirm"
+msgstr ""
+
+msgid "Delete selected point(s), line(s), boundary(ies) or centroid(s) (Ctrl+D)"
+msgstr ""
+
+msgid "Delete selected area(s) (Ctrl+F)"
+msgstr ""
+
+msgid "Display/update attributes (Ctrl+K)"
+msgstr ""
+
+msgid "Left: Select"
+msgstr ""
+
+msgid "Display/update categories (Ctrl+J)"
+msgstr ""
+
+msgid "Edit selected line/boundary (Ctrl+E)"
+msgstr ""
+
+msgid "Move selected point(s), line(s), boundary(ies) or centroid(s) (Ctrl+M)"
+msgstr ""
+
+msgid "Move selected vertex (Ctrl+G)"
+msgstr ""
+
+msgid "Remove selected vertex (Ctrl+X)"
+msgstr ""
+
+msgid "Settings (Ctrl+T)"
+msgstr ""
+
+msgid "Quit (Ctrl+Q)"
+msgstr ""
+
+msgid "Quit digitizer and save changes"
+msgstr ""
+
+msgid "Show manual (Ctrl+H)"
+msgstr ""
+
+msgid "Show Vector Digitizer manual"
+msgstr ""
+
+msgid "Additional tools (copy, flip, connect, etc.)"
+msgstr ""
+
+msgid "Undo (Ctrl+Z)"
+msgstr ""
+
+msgid "Undo previous change"
+msgstr ""
+
+msgid "Redo (Ctrl+Y)"
+msgstr ""
+
+msgid "Redo previous change"
+msgstr ""
+
+msgid "No vector map is open for editing. Please select firsta vector map from the combo box."
+msgstr ""
+
+msgid "Break selected lines/boundaries at intersection"
+msgstr ""
+
+msgid "Connect selected lines/boundaries"
+msgstr ""
+
+msgid "Copy categories"
+msgstr ""
+
+msgid "Copy features from (background) vector map"
+msgstr ""
+
+msgid "Copy attributes"
+msgstr ""
+
+msgid "Feature type conversion"
+msgstr ""
+
+msgid "Flip selected lines/boundaries"
+msgstr ""
+
+msgid "Merge selected lines/boundaries"
+msgstr ""
+
+msgid "Snap selected lines/boundaries (only to nodes)"
+msgstr ""
+
+msgid "Split line/boundary"
+msgstr ""
+
+msgid "Query features"
+msgstr ""
+
+msgid "Z bulk-labeling of 3D lines"
+msgstr ""
+
+msgid "Select background vector map"
+msgstr ""
+
+msgid "Vector map is not 3D. Operation canceled."
+msgstr ""
+
+#, python-format
+msgid ""
+"Topology for vector map <%s> is not available. Topology is required by digitizer.\n"
+"Do you want to rebuild topology (takes some time) and open the vector map for editing?"
+msgstr ""
+
+msgid "Digitizer error"
+msgstr ""
+
+#, python-format
+msgid "Please wait, opening vector map <%s> for editing..."
+msgstr ""
+
+#, python-format
+msgid "Unsupported feature type '%(type)s'. Unable to edit OGR layer <%(layer)s>."
+msgstr ""
+
+#, python-format
+msgid "Do you want to save changes in vector map <%s>?"
+msgstr ""
+
+msgid "Save changes?"
+msgstr ""
+
+#, python-format
+msgid "Please wait, closing and rebuilding topology of vector map <%s>..."
+msgstr ""
+
+#, python-format
+msgid "Editing of vector map <%s> successfully finished"
+msgstr ""
+
+msgid "New vector map"
+msgstr ""
+
+msgid "Digitization Error"
+msgstr ""
+
+#, python-format
+msgid "Unable to open vector map <%s>."
+msgstr ""
+
+msgid "No vector map open for editing."
+msgstr ""
+
+msgid "Operation canceled."
+msgstr ""
+
+#, python-format
+msgid ""
+"Writing new feature failed. Operation canceled.\n"
+"\n"
+"Reason: %s"
+msgstr ""
+
+#, python-format
+msgid "Reading feature id %d failed. Operation canceled."
+msgstr ""
+
+#, python-format
+msgid "Database link %d not available. Operation canceled."
+msgstr ""
+
+#, python-format
+msgid "Unable to start database driver <%s>. Operation canceled."
+msgstr ""
+
+#, python-format
+msgid "Unable to open database <%(db)s> by driver <%(driver)s>. Operation canceled."
+msgstr ""
+
+#, python-format
+msgid "Unable to execute SQL query '%s'. Operation canceled."
+msgstr ""
+
+#, python-format
+msgid "Feature id %d is marked as dead. Operation canceled."
+msgstr ""
+
+#, python-format
+msgid "Unsupported feature type %d. Operation canceled."
+msgstr ""
+
+#, python-format
+msgid "Unknown feature type '%s'"
+msgstr ""
+
+msgid "Not enough points for line"
+msgstr ""
+
+msgid "WARNING: Zero-length line or boundary drawing skipped. Use v.clean to remove it."
+msgstr ""
+
+#, python-format
+msgid "Topology for vector map <%s> is not available. Topology is required by digitizer. Do you want to rebuild topology (takes some time) and open the vector map for editing?"
+msgstr ""
+
+msgid "Topology missing"
+msgstr ""
+
+msgid "Vector Network Analysis Tool"
+msgstr ""
+
+msgid "Point list toolbar"
+msgstr ""
+
+msgid "Analysis toolbar"
+msgstr ""
+
+msgid "Points for analysis:"
+msgstr ""
+
+msgid "Analysis settings:"
+msgstr ""
+
+msgid "Points"
+msgstr ""
+
+msgid "Maximum distance of point to the network:"
+msgstr ""
+
+msgid "Iso lines:"
+msgstr ""
+
+msgid "Add vector map into layer tree"
+msgstr ""
+
+msgid "Input tables"
+msgstr ""
+
+msgid "Result tables"
+msgstr ""
+
+msgid "Loading tables..."
+msgstr ""
+
+msgid "Creating turntable..."
+msgstr ""
+
+msgid "Input vector map does not exist."
+msgstr ""
+
+msgid "Analysing..."
+msgstr ""
+
+msgid "Computing nodes..."
+msgstr ""
+
+msgid "Other settings"
+msgstr ""
+
+msgid "Point style:"
+msgstr ""
+
+msgid "Analysis result style:"
+msgstr ""
+
+#, python-format
+msgid "Color table style %s:"
+msgstr ""
+
+#, python-format
+msgid "Invert colors %s:"
+msgstr ""
+
+msgid "Line color:"
+msgstr ""
+
+msgid "Color for unused point:"
+msgstr ""
+
+msgid "Color for Start/From/Source/Used point:"
+msgstr ""
+
+msgid "Color for End/To/Sink point:"
+msgstr ""
+
+msgid "Color for selected point:"
+msgstr ""
+
+msgid "Point size:"
+msgstr ""
+
+msgid "Point width:"
+msgstr ""
+
+msgid "Maximum number of results in history:"
+msgstr ""
+
+msgid "New vector map with turntable"
+msgstr ""
+
+msgid "Save analysis result"
+msgstr ""
+
+msgid "Edit intersection turns costs"
+msgstr ""
+
+msgid "Define Global Turn Costs"
+msgstr ""
+
+msgid "Insert points from Map Display"
+msgstr ""
+
+msgid "Activate snapping to nodes"
+msgstr ""
+
+msgid "Activate mode for turns editing"
+msgstr ""
+
+msgid "Activate mode for global turns editing"
+msgstr ""
+
+msgid "Add new point"
+msgstr ""
+
+msgid "Delete selected point"
+msgstr ""
+
+msgid "Execute analysis"
+msgstr ""
+
+msgid "Go to previous analysis result"
+msgstr ""
+
+msgid "Go to next analysis result"
+msgstr ""
+
+msgid "Show analysis result"
+msgstr ""
+
+msgid "Save temporary result"
+msgstr ""
+
+msgid "Previous analysis result"
+msgstr ""
+
+msgid "Next analysis result"
+msgstr ""
+
+msgid "Available analyses"
+msgstr ""
+
+msgid "Unable to perform analysis."
+msgstr ""
+
+#, python-format
+msgid ""
+"Temporary map '%s' with result was changed outside vector network analysis tool.\n"
+"Showed result may not correspond to original analysis result."
+msgstr ""
+
+msgid "Result changed outside"
+msgstr ""
+
+msgid "Map can be created only in current mapset"
+msgstr ""
+
+#, python-format
+msgid "Vector map %s already exists. Do you want to overwrite it?"
+msgstr ""
+
+msgid "Overwrite vector map"
+msgstr ""
+
+msgid "Creation of turntable failed."
+msgstr ""
+
+msgid "Vector map with analysis result does not exist."
+msgstr ""
+
+msgid "Map can be saved only to currently set mapset"
+msgstr ""
+
+#, python-format
+msgid "Please choose '%s' and '%s' point."
+msgstr ""
+
+#, python-brace-format
+msgid "Please choose '{0}' and '{1}' point."
+msgstr ""
+
+msgid "Please choose at least two points."
+msgstr ""
+
+#, python-format
+msgid ""
+"Input map '%s' for analysis was changed outside vector network analysis tool.\n"
+"Topology column may not correspond to changed situation."
+msgstr ""
+
+msgid "Input changed outside"
+msgstr ""
+
+#, python-format
+msgid ""
+"Temporary map %s already exists.\n"
+"Do you want to continue in analysis and overwrite it?"
+msgstr ""
+
+msgid "Unable to use ctypes. \n"
+msgstr ""
+
+msgid "Snapping mode can not be activated."
+msgstr ""
+
+msgid "Do you really want to activate snapping and overwrite it?"
+msgstr ""
+
+#, python-format
+msgid ""
+"Temporary map '%s' was changed outside vector analysis tool.\n"
+"Do you really want to activate snapping and overwrite it? "
+msgstr ""
+
+msgid "Overwrite map"
+msgstr ""
+
+#, python-format
+msgid "Module <%s> does not support turns costs."
+msgstr ""
+
+#, python-format
+msgid "Vector map '%s' does not exist."
+msgstr ""
+
+msgid "Vector map was not chosen."
+msgstr ""
+
+msgid "arc layer"
+msgstr ""
+
+msgid "node layer"
+msgstr ""
+
+msgid "turntable layer"
+msgstr ""
+
+msgid "unique categories layer"
+msgstr ""
+
+#, python-format
+msgid "Chosen %s '%s' does not exist in vector map '%s'.\n"
+msgstr ""
+
+#, python-format
+msgid "Choose existing %s.\n"
+msgstr ""
+
+#, python-format
+msgid "Chosen column '%s' does not exist in attribute table of layer '%s' of vector map '%s'.\n"
+msgstr ""
+
+msgid "topology"
+msgstr ""
+
+msgid "End Point"
+msgstr ""
+
+msgid "Start point"
+msgstr ""
+
+msgid "new point"
+msgstr ""
+
+msgid "Arc forward/both direction(s) cost column:"
+msgstr ""
+
+msgid "arc forward/both"
+msgstr ""
+
+msgid "Arc backward direction cost column:"
+msgstr ""
+
+msgid "arc backward"
+msgstr ""
+
+msgid "Arcs' cost column (for both directions):"
+msgstr ""
+
+msgid "arc"
+msgstr ""
+
+msgid "Node cost column:"
+msgstr ""
+
+msgid "node"
+msgstr ""
+
+#, python-format
+msgid "Shortest path %s"
+msgstr ""
+
+msgid "End point"
+msgstr ""
+
+#, python-format
+msgid "Traveling salesman %s"
+msgstr ""
+
+#, python-format
+msgid "Maximum flow %s"
+msgstr ""
+
+msgid "Source point"
+msgstr ""
+
+msgid "Sink point"
+msgstr ""
+
+#, python-format
+msgid "Subnets for nearest centers %s"
+msgstr ""
+
+#, python-format
+msgid "Steiner tree for the network and given terminals %s"
+msgstr ""
+
+#, python-format
+msgid "Shortest distance via the network %s"
+msgstr ""
+
+#, python-format
+msgid "Cost isolines %s"
+msgstr ""
+
+msgid "Overwrite map layer"
+msgstr ""
+
+msgid "Invalid value inserted. Operation canceled."
+msgstr ""
+
+msgid "Edit point"
+msgstr ""
+
+msgid " Server settings "
+msgstr ""
+
+msgid "Server:"
+msgstr ""
+
+msgid "&Connect"
+msgstr ""
+
+msgid "Connect to the server"
+msgstr ""
+
+msgid "Show advanced connection settings"
+msgstr ""
+
+msgid "Hide advanced connection settings"
+msgstr ""
+
+msgid " Layer Manager Settings "
+msgstr ""
+
+msgid "Output layer name:"
+msgstr ""
+
+msgid "Username:"
+msgstr ""
+
+msgid "Password:"
+msgstr ""
+
+#, python-format
+msgid "Connecting to <%s>..."
+msgstr ""
+
+msgid "Available web services"
+msgstr ""
+
+#, python-format
+msgid "Connected to <%s>"
+msgstr ""
+
+#, python-format
+msgid "Unable to connect to <%s>"
+msgstr ""
+
+msgid "Add web service layer"
+msgstr ""
+
+msgid "Add selected web service layers as map layer into layer tree"
+msgstr ""
+
+msgid "Web service layer properties"
+msgstr ""
+
+msgid "&OK"
+msgstr ""
+
+msgid "Name for output raster map:"
+msgstr ""
+
+msgid "Export region"
+msgstr ""
+
+msgid "Map display"
+msgstr ""
+
+msgid "Named region"
+msgstr ""
+
+msgid "Extent and resolution are based on Map Display geometry."
+msgstr ""
+
+msgid "Extent and resolution are based on computational region."
+msgstr ""
+
+msgid "Extent and resolution are based on named region."
+msgstr ""
+
+msgid "Overwrite existing raster map"
+msgstr ""
+
+msgid "Choose named region:"
+msgstr ""
+
+msgid "&Save layer"
+msgstr ""
+
+msgid "Save web service layer as raster map"
+msgstr ""
+
+msgid "Missing output raster."
+msgstr ""
+
+msgid "Output map can be added only to current mapset."
+msgstr ""
+
+#, python-format
+msgid "Output map <%s> already exists"
+msgstr ""
+
+#, python-format
+msgid "Region <%s> does not exist."
+msgstr ""
+
+msgid "Downloading data..."
+msgstr ""
+
+msgid "Unable to fetch data.\n"
+msgstr ""
+
+msgid " Requested data settings "
+msgstr ""
+
+msgid "Request"
+msgstr ""
+
+msgid "List of layers "
+msgstr ""
+
+msgid "Source projection:"
+msgstr ""
+
+msgid "Advanced request settings"
+msgstr ""
+
+msgid "Order of layers in raster"
+msgstr ""
+
+msgid "Reprojection method:"
+msgstr ""
+
+msgid "Nearest neighbor"
+msgstr ""
+
+msgid "Linear interpolation"
+msgstr ""
+
+msgid "Cubic interpolation"
+msgstr ""
+
+msgid "Cubic spline interpolation"
+msgstr ""
+
+msgid "Maximum columns to request from server at time:"
+msgstr ""
+
+msgid "Maximum rows to request from server at time:"
+msgstr ""
+
+msgid "Do not request transparent data"
+msgstr ""
+
+msgid "Additional query parameters for server:"
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to download %s capabilities file\n"
+"from <%s>:\n"
+msgstr ""
+
+#, python-format
+msgid ""
+"%s web service was not found in fetched capabilities file from <%s>:\n"
+"%s\n"
+msgstr ""
+
+msgid "Source image format"
+msgstr ""
+
+msgid "Select layer in layer list.\n"
+msgstr ""
+
+msgid "Select source image format.\n"
+msgstr ""
+
+msgid "Select source projection.\n"
+msgstr ""
+
+msgid "Choose output layer name.\n"
+msgstr ""
+
+msgid "Add default"
+msgstr ""
+
+#, python-format
+msgid ""
+"User defined server with same name as default server <%s> already exists.\n"
+"Keeping user defined server"
+msgstr ""
+
+msgid "Draw/re-draw plot"
+msgstr ""
+
+msgid "Draw transect in map display window to profile"
+msgstr ""
+
+msgid "Plot statistics"
+msgstr ""
+
+msgid "Save profile data to CSV file"
+msgstr ""
+
+msgid "Left Mouse Down at Point:"
+msgstr ""
+
+msgid "Text settings"
+msgstr ""
+
+msgid "Plot settings"
+msgstr ""
+
+msgid "This feature is not yet functional"
+msgstr ""
+
+msgid "Under Construction"
+msgstr ""
+
+msgid "Select raster maps to profile"
+msgstr ""
+
+msgid "Select raster map(s) to profile:"
+msgstr ""
+
+msgid "Select pairs of raster maps for scatterplots"
+msgstr ""
+
+msgid "Select pairs of raster maps for bivariate scatterplots:"
+msgstr ""
+
+msgid "Number of bins (for FP maps)"
+msgstr ""
+
+msgid "C&opy"
+msgstr ""
+
+msgid "Copy regression statistics the clipboard (Ctrl+C)"
+msgstr ""
+
+msgid "Regression statistics copied to clipboard"
+msgstr ""
+
+msgid "Select raster map or imagery group to histogram"
+msgstr ""
+
+msgid "Histogram single raster"
+msgstr ""
+
+msgid "Histogram imagery group"
+msgstr ""
+
+msgid "Select image group:"
+msgstr ""
+
+msgid "Histogram type"
+msgstr ""
+
+msgid "Selected group must be in current mapset"
+msgstr ""
+
+msgid "Profile title:"
+msgstr ""
+
+msgid "Title font size (pts):"
+msgstr ""
+
+msgid "X-axis label:"
+msgstr ""
+
+msgid "Y-axis label:"
+msgstr ""
+
+msgid "Label font size (pts):"
+msgstr ""
+
+msgid "Font family:"
+msgstr ""
+
+msgid "Style:"
+msgstr ""
+
+msgid "Weight:"
+msgstr ""
+
+msgid "Apply changes for the current session and close dialog"
+msgstr ""
+
+#, python-format
+msgid "Plot text sizes saved to file '%s'."
+msgstr ""
+
+msgid "No map or image group selected to plot."
+msgstr ""
+
+msgid "Map/image plotted"
+msgstr ""
+
+msgid "Settings for selected map"
+msgstr ""
+
+msgid "Line color"
+msgstr ""
+
+msgid "Transect segment marker settings"
+msgstr ""
+
+msgid "Scatterplot points"
+msgstr ""
+
+msgid "Axis settings"
+msgstr ""
+
+msgid "X-Axis"
+msgstr ""
+
+msgid "Y-Axis"
+msgstr ""
+
+msgid "Scale"
+msgstr ""
+
+msgid "Automatic axis scaling, custom max and min, or scale matches data range (min)"
+msgstr ""
+
+msgid "Custom min"
+msgstr ""
+
+msgid "Custom max"
+msgstr ""
+
+msgid "Log scale"
+msgstr ""
+
+msgid "Grid and Legend settings"
+msgstr ""
+
+msgid "Grid color"
+msgstr ""
+
+msgid "Show grid"
+msgstr ""
+
+msgid "Legend font size"
+msgstr ""
+
+msgid "Show legend"
+msgstr ""
+
+#, python-format
+msgid "Plot settings saved to file '%s'."
+msgstr ""
+
+msgid "Histogram Tool"
+msgstr ""
+
+msgid "Histogram of"
+msgstr ""
+
+msgid "Raster cell values"
+msgstr ""
+
+msgid "Cell counts"
+msgstr ""
+
+#, python-format
+msgid "Histogram of image group <%s>"
+msgstr ""
+
+#, python-format
+msgid "Histogram of raster map <%s>"
+msgstr ""
+
+msgid "Histogram of selected raster maps"
+msgstr ""
+
+#, python-format
+msgid "Raster cell values %s"
+msgstr ""
+
+msgid "Percent of total cells"
+msgstr ""
+
+msgid "Area"
+msgstr ""
+
+msgid "Statistics for Map(s) Histogrammed"
+msgstr ""
+
+#, python-format
+msgid "Statistics for raster map <%s>"
+msgstr ""
+
+msgid "GRASS Profile Analysis Tool"
+msgstr ""
+
+msgid "Profile of"
+msgstr ""
+
+#, python-format
+msgid "Distance (%s)"
+msgstr ""
+
+msgid "Distance along transect"
+msgstr ""
+
+msgid "Cell values"
+msgstr ""
+
+msgid "Not all points of profile lie inside computational region."
+msgstr ""
+
+msgid "Raster values"
+msgstr ""
+
+msgid "You must draw a transect to profile in the map display window."
+msgstr ""
+
+msgid "Nothing to profile"
+msgstr ""
+
+msgid "Choose prefix for file(s) where to save profile values..."
+msgstr ""
+
+msgid "Comma separated value (*.csv)|*.csv"
+msgstr ""
+
+msgid "Overwrite file?"
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to open file <%s> for writing.\n"
+"Reason: %s"
+msgstr ""
+
+#, python-format
+msgid ""
+"%d files created:\n"
+"%s"
+msgstr ""
+
+msgid "No files generated."
+msgstr ""
+
+msgid "Statistics for Profile(s)"
+msgstr ""
+
+msgid "GRASS Bivariate Scatterplot Tool"
+msgstr ""
+
+msgid "Bivariate Scatterplot"
+msgstr ""
+
+msgid "Nothing to plot."
+msgstr ""
+
+msgid "At least 2 raster maps must be specified"
+msgstr ""
+
+msgid "Bivariate Scatterplot of "
+msgstr ""
+
+#, python-format
+msgid "Raster <%s> cell values"
+msgstr ""
+
+#, python-format
+msgid ": %s"
+msgstr ""
+
+msgid "Regression Statistics for Scatterplot(s)"
+msgstr ""
+
+#, python-format
+msgid ""
+"Regression equation for raster map <%(rast1)s> vs. <%(rast2)s>:\n"
+"\n"
+msgstr ""

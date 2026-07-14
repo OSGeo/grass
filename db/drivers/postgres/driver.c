@@ -2,7 +2,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_init(int argc UNUSED, char *argv[] UNUSED)
+int db__driver_init(int argc G_UNUSED, char *argv[] G_UNUSED)
 {
     init_error();
     return DB_OK;

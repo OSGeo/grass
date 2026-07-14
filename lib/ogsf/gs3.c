@@ -849,7 +849,7 @@ int Gs_get_cat_label(const char *filename, int drow, int dcol, char *catstr)
    \return -1 on error
    \return ?
  */
-int Gs_save_3dview(const char *vname, geoview *gv, geodisplay *gd UNUSED,
+int Gs_save_3dview(const char *vname, geoview *gv, geodisplay *gd G_UNUSED,
                    struct Cell_head *w, geosurf *defsurf)
 {
     const char *mapset;
@@ -948,7 +948,7 @@ int Gs_save_3dview(const char *vname, geoview *gv, geodisplay *gd UNUSED,
 
    \return 1
  */
-int Gs_load_3dview(const char *vname, geoview *gv, geodisplay *gd UNUSED,
+int Gs_load_3dview(const char *vname, geoview *gv, geodisplay *gd G_UNUSED,
                    struct Cell_head *w, const geosurf *defsurf)
 {
     const char *mapset;

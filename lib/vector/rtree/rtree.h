@@ -41,12 +41,12 @@ typedef double RectReal;
  * this is LFS dependent, not good
  * on 32 bit without LFS this is 9.69
  * on 32 bit with LFS and on 64 bit this is 9 */
-#define MAXCARD          9
-#define NODECARD         MAXCARD
-#define LEAFCARD         MAXCARD
+#define MAXCARD  9
+#define NODECARD MAXCARD
+#define LEAFCARD MAXCARD
 
 /* maximum no of levels = tree depth */
-#define MAXLEVEL         20 /* 8^MAXLEVEL items are guaranteed to fit into the tree */
+#define MAXLEVEL 20 /* 8^MAXLEVEL items are guaranteed to fit into the tree */
 
 /* number of nodes buffered per level */
 #define NODE_BUFFER_SIZE 32

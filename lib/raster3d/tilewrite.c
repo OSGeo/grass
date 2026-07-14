@@ -15,7 +15,7 @@
 
 static int Rast3d_tile2xdrTile(RASTER3D_Map *map, const void *tile, int rows,
                                int cols, int depths, int xRedundant,
-                               int yRedundant, int zRedundant UNUSED,
+                               int yRedundant, int zRedundant G_UNUSED,
                                int nofNum, int type)
 {
     int y, z;

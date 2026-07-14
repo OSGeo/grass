@@ -30,9 +30,9 @@ at various levels:
 --------------------
 Additional Resources
 --------------------
-* `GRASS Python introduction <manuals/python_intro.html>`_ provides a general overview of
+* `GRASS Python introduction <../python_intro.html>`_ provides a general overview of
   the Python interface to GRASS.
-* `GRASS Jupyter notebooks introduction <manuals/jupyter_intro.html>`_ provides an overview of how to use the **grass.jupyter** module.
+* `GRASS Jupyter notebooks introduction <../jupyter_intro.html>`_ provides an overview of how to use the **grass.jupyter** module.
 
 .. _GRASS: https://grass.osgeo.org/
 
@@ -42,7 +42,7 @@ Modules and Packages
 .. toctree::
    :maxdepth: 1
 
-   index
+   grass
    grass.tools
    script_intro
    pygrass_index
@@ -50,4 +50,5 @@ Modules and Packages
    exceptions
    imaging
    pydispatch
+   temporal_framework
    gunittest_testing

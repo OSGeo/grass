@@ -183,7 +183,7 @@ int Nviz_new_light(nv_data *data)
 
    \param data nviz data [unused]
  */
-void Nviz_draw_model(nv_data *data UNUSED)
+void Nviz_draw_model(nv_data *data G_UNUSED)
 {
     GS_set_draw(GSD_FRONT);
     GS_ready_draw();

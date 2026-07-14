@@ -14,7 +14,6 @@
 #
 #############################################################################
 
-# script_dir=$(dirname "$(dirname "$0")")
 app_dir="$(cd "$(dirname "$0")/../.."; pwd -P)"
 
 # Mac app only startup shell - complete rewrite for starting from a GRASS.app
@@ -22,22 +21,14 @@ app_dir="$(cd "$(dirname "$0")/../.."; pwd -P)"
 
 trap "echo 'User break!' ; exit" 2 3 9 15
 
-export GISBASE=$app_dir/Contents/Resources
+export GISBASE=${app_dir}/Contents/Resources
 grass_ver=$(cut -d . -f 1-2 "$GISBASE/etc/VERSIONNUMBER")
+grass_ver_major=$(cut -d . -f 1 "$GISBASE/etc/VERSIONNUMBER")
 
-export GISBASE_USER="$HOME/Library/GRASS/$grass_ver"
-export GISBASE_SYSTEM="/Library/GRASS/$grass_ver"
+GISBASE_USER="$HOME/Library/GRASS/GRASS${grass_ver_major}"
+GISBASE_SYSTEM="/Library/GRASS/GRASS${grass_ver_major}"
 
-# add some OS X style app support paths, and create user one if missing.
-mkdir -p "$GISBASE_USER/Addons/bin"
-mkdir -p "$GISBASE_USER/Addons/scripts"
-if [ ! "$GRASS_ADDON_BASE" ] ; then
-	GRASS_ADDON_BASE="$GISBASE_USER/Addons"
-fi
-export GRASS_ADDON_BASE
-
-mkdir -p "$GISBASE_USER/Addons/etc"
-addpath="$GISBASE_USER/Addons/etc:$GISBASE_SYSTEM/Addons/etc"
+addpath="$GISBASE_USER/Addons${grass_ver}/etc:$GISBASE_SYSTEM/Addons${grass_ver}/etc"
 if [ "$GRASS_ADDON_ETC" ] ; then
 	GRASS_ADDON_ETC="$GRASS_ADDON_ETC:$addpath"
 else
@@ -45,12 +36,9 @@ else
 fi
 export GRASS_ADDON_ETC
 
-mkdir -p "$GISBASE_USER/Addons/lib"
-mkdir -p "$GISBASE_USER/Addons/docs/html"
-
 # user fontcap files
 if [ ! "$GRASS_FONT_CAP" ] ; then
-	GRASS_FONT_CAP="$GISBASE_USER/Addons/etc/fontcap"
+    GRASS_FONT_CAP="$GISBASE_USER/fontcap${grass_ver}"
 fi
 export GRASS_FONT_CAP
 

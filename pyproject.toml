@@ -1,12 +1,12 @@
 [project]
 name = "grass"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 # *GRASS TODO: keep in sync with MIN_PYTHON_VERSION supported*
 
 [tool.black]
 line-length = 88
 required-version = '25'
-target-version = ['py310', 'py311', 'py312', 'py313', 'py314']
+target-version = ['py311', 'py312', 'py313', 'py314']
 # 'extend-exclude' excludes files or directories in addition to the defaults
 extend-exclude = '''
 (
@@ -257,6 +257,7 @@ ignore = [
     "PLW0602", # global-variable-not-assigned
     "PLW0603", # global-statement
     "PLW0604", # global-at-module-level
+    "PLW0717", # too-many-statements-in-try-clause
     "PLW1508", # invalid-envvar-default
     "PLW1510", # subprocess-run-without-check
     "PLW1641", # eq-without-hash
@@ -282,6 +283,7 @@ ignore = [
     "RUF012",  # mutable-class-default
     "RUF015",  # unnecessary-iterable-allocation-for-first-element
     "RUF019",  # unnecessary-key-check
+    "RUF050",  # unnecessary-if
     "RUF059",  # unused-unpacked-variable
     "RUF067",  # non-empty-init-module
     "RUF100",  # unused-noqa
@@ -522,6 +524,7 @@ docstring-code-format = true
 
 [tool.pytest.ini_options]
 addopts = """
+    --import-mode=importlib
     --ignore-glob='dist.*'
     --ignore-glob='bin.*'
     --ignore-glob='*/tests/data/*'
@@ -600,7 +603,7 @@ load-plugins = [
 # version used to run pylint.
 # *GRASS modified*
 # *GRASS TODO: keep in sync with MIN_PYTHON_VERSION supported*
-py-version = "3.10"
+py-version = "3.11"
 
 # Add paths to the list of the source roots. Supports globbing patterns. The
 # source root is an absolute path or a path relative to the current working
@@ -877,7 +880,7 @@ include = ["python"]
 
 # *GRASS modified*
 # *GRASS TODO: keep in sync with MIN_PYTHON_VERSION supported*
-pythonVersion = "3.10"
+pythonVersion = "3.11"
 
 [tool.pyrefact]
 line_length = 88
@@ -885,4 +888,4 @@ line_length = 88
 [tool.isort]
 profile = "black"
 # *GRASS TODO: keep in sync with MIN_PYTHON_VERSION supported*
-py_version = 310
+py_version = 311
