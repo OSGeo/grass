@@ -326,8 +326,8 @@ int main(int argc, char **argv)
          * restore the region afterwards.
          */
         if (oneoff) {
-            unsigned long window_square = nrows * ncols;
-            unsigned long search_square = 4 * search_cells * search_cells;
+            unsigned long window_square = (unsigned long)nrows * ncols;
+            unsigned long search_square = 4UL * search_cells * search_cells;
 
             if (window_square > WINDOW_THRESHOLD &&
                 window_square / search_square > 10)

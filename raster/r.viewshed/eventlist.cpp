@@ -64,7 +64,8 @@ double calculate_center_gradient(AEvent *e, Viewpoint *vp)
     sqdist = (e->row - vp->row) * (e->row - vp->row) +
              (e->col - vp->col) * (e->col - vp->col);
 
-    gradient = (e->elev[1] - vp->elev) * (e->elev[1] - vp->elev) / sqdist;
+    gradient =
+        (double)(e->elev[1] - vp->elev) * (e->elev[1] - vp->elev) / sqdist;
     /*maintain sign */
     if (e->elev[1] < vp->elev)
         gradient = -gradient;

@@ -170,7 +170,7 @@ static void make_h_weights(void)
 {
     int col;
 
-    h_weights = G_malloc(dst_w.cols * col_scale * sizeof(double));
+    h_weights = G_malloc((size_t)dst_w.cols * col_scale * sizeof(double));
     mapcol0 = G_malloc(dst_w.cols * sizeof(int));
     mapcol1 = G_malloc(dst_w.cols * sizeof(int));
 
@@ -213,7 +213,7 @@ static void make_v_weights(void)
 {
     int row;
 
-    v_weights = G_malloc(dst_w.rows * row_scale * sizeof(double));
+    v_weights = G_malloc((size_t)dst_w.rows * row_scale * sizeof(double));
     maprow0 = G_malloc(dst_w.rows * sizeof(int));
     maprow1 = G_malloc(dst_w.rows * sizeof(int));
 

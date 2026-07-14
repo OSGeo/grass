@@ -79,8 +79,9 @@ void report(struct Parms *parms)
     }
 
     if (parms->sort > 0)
-        lines = (struct ReportLine *)G_malloc(
-            map1->edges.ncats * map2->edges.ncats * sizeof(struct ReportLine));
+        lines = (struct ReportLine *)G_malloc((size_t)map1->edges.ncats *
+                                              map2->edges.ncats *
+                                              sizeof(struct ReportLine));
     else
         lines = NULL;
     nlines = 0;

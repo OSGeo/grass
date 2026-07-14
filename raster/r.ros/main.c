@@ -715,8 +715,8 @@ int main(int argc, char *argv[])
             A = 133 / pow(sigma[fuel[col]], 0.7913);
             gammamax = pow(sigma[fuel[col]], 1.5) /
                        (495 + 0.0594 * pow(sigma[fuel[col]], 1.5));
-            gamma =
-                gammamax * pow(beta / betaop, A) * exp(A * (1 - beta / betaop));
+            gamma = gammamax * pow(beta / betaop, A) *
+                    exp((double)A * (1 - beta / betaop));
             xi = exp((0.792 + 0.681 * pow(sigma[fuel[col]], 0.5)) *
                      (beta + 0.1)) /
                  (192 + 0.2595 * sigma[fuel[col]]);
