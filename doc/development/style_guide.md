@@ -926,7 +926,7 @@ d.    - display tools
 db.   - database tools
 g.    - general GIS management tools
 i.    - imagery tools
-m.    - miscellaneous tool tools
+m.    - miscellaneous tools
 ps.   - postscript tools
 r.    - raster tools
 r3.   - raster3D tools
