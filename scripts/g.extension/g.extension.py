@@ -291,7 +291,7 @@ class GitAdapter:
         try:
             gs.call([self._git], stdout=PIPE)
         except OSError:
-            gs.fatal(_("Could not found Git. Please install it."))
+            gs.fatal(_("Could not find Git. Please install it."))
 
     def __check_permissions(self):
         """"""
