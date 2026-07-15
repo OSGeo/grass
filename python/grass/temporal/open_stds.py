@@ -10,7 +10,7 @@ Usage:
     tgis.register_maps_in_space_time_dataset(type, name, maps)
 
 
-(C) 2012-2014 by the GRASS Development Team
+(C) 2012-2026 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -57,7 +57,7 @@ def open_old_stds(name, type, dbif=None):
             sp = dataset_factory("strds", ds_id)
 
         if not sp.is_in_db(dbif):
-            return
+            return None
         return sp
 
     # Check if the dataset name contains the mapset and the semantic label as well
@@ -79,17 +79,17 @@ def open_old_stds(name, type, dbif=None):
     if mapset:
         dbif.add_mapset(mapset)
         id = f"{name}@{mapset}"
-        sp = check_id(id, type, semantic_label, dbif)
+        sp = check_id(id, type, dbif)
     else:
         # Check current mapset first
         id = f"{name}@{get_current_mapset()}"
-        sp = check_id(id, type, semantic_label, dbif)
+        sp = check_id(id, type, dbif)
         if not sp:
             for tgis_mapset in dbif.tgis_mapsets:
                 if tgis_mapset == get_current_mapset():
                     continue
                 id = f"{name}@{tgis_mapset}"
-                sp = check_id(id, type, semantic_label, dbif)
+                sp = check_id(id, type, dbif)
                 if sp:
                     break
     if not sp:
@@ -127,7 +127,6 @@ def check_new_stds(name, type, dbif=None, overwrite: bool = False):
 
     This function will raise a FatalError in case of an error.
     """
-
     # Get the current mapset to create the id of the space time dataset
 
     mapset = get_current_mapset()
@@ -136,7 +135,7 @@ def check_new_stds(name, type, dbif=None, overwrite: bool = False):
     if name.find("@") < 0:
         id = name + "@" + mapset
     else:
-        n, m = name.split("@")
+        _n, m = name.split("@")
         if mapset != m:
             msgr.fatal(
                 _("Space time datasets can only be created in the current mapset")
@@ -259,17 +258,16 @@ def check_new_map_dataset(
 
     new_map = dataset_factory(type, map_id)
     # Check if new map is in the temporal database
-    if new_map.is_in_db(dbif):
-        if not overwrite:
-            if connection_state_changed:
-                dbif.close()
-            msgr.fatal(
-                _(
-                    "Map <%s> is already in temporal database,"
-                    " use overwrite flag to overwrite"
-                )
-                % (map_id)
+    if new_map.is_in_db(dbif) and not overwrite:
+        if connection_state_changed:
+            dbif.close()
+        msgr.fatal(
+            _(
+                "Map <%s> is already in temporal database,"
+                " use overwrite flag to overwrite"
             )
+            % (map_id)
+        )
 
     if connection_state_changed:
         dbif.close()
@@ -300,7 +298,6 @@ def open_new_map_dataset(
     :return: A map dataset object
 
     """
-
     dbif, connection_state_changed = init_dbif(dbif)
     new_map = check_new_map_dataset(name, layer, type, overwrite, dbif)
 
