@@ -527,8 +527,8 @@ def get_available_temporal_mapsets(mapsets: str | None = None) -> dict:
         if driver and database:
             # Check if the temporal sqlite database exists
             if driver == "sqlite" and not Path(database).exists():
-                # Warn if DB for defined connection does not exist
-                message_interface.warning(
+                # Inform if DB for defined connection does not exist
+                message_interface.verbose(
                     _(
                         "Temporal database connection for mapset <%s> "
                         "defined as:\n %s\nBut database file does not exist."
@@ -694,7 +694,7 @@ def init(
     msgr.debug(1, "Initiate the temporal database")
     # We must run t.connect at first to create the temporal database and to
     # get the environmental variables
-    gs.run_command("t.connect", flags="c")
+    gs.run_command("t.connect", flags="c", superquiet=True)
 
     driver_string = ciface.get_driver_name(current_mapset)
     database_string = ciface.get_database_name(current_mapset)
@@ -732,7 +732,7 @@ def init(
             )
     else:
         # Set the default sqlite3 connection in case nothing was defined
-        gs.run_command("t.connect", flags="d")
+        gs.run_command("t.connect", flags="d", superquiet=True)
         current_mapset = decode(gs.gisenv().get("MAPSET"))
         driver_string = ciface.get_driver_name(current_mapset)
         database_string = ciface.get_database_name(current_mapset)
@@ -945,7 +945,7 @@ def create_temporal_database(dbif) -> None:
     stvds_tables_sql = stds_tables_template_sql.replace("STDS", "stvds")
     str3ds_tables_sql = stds_tables_template_sql.replace("STDS", "str3ds")
 
-    msgr.message(_("Creating temporal database: %s") % (str(tgis_database_string)))
+    msgr.verbose(_("Creating temporal database: %s") % (str(tgis_database_string)))
 
     if tgis_backend == "sqlite":
         # We need to create the sqlite3 database path if it does not exist
