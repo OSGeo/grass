@@ -47,7 +47,7 @@ def two_mapset_session(tmp_path_factory):
             flags="i",
         )
 
-        gs.run_command("g.mapset", mapset="user1", flags="c", env=session.env)
+        tools.g_mapset(mapset="user1", flags="c")
         tools.r_mapcalc(expression="precip_1 = 2", overwrite=True)
         tools.t_create(
             type="strds",
@@ -65,7 +65,9 @@ def two_mapset_session(tmp_path_factory):
             flags="i",
         )
 
-        gs.run_command("g.mapset", mapset="PERMANENT", env=session.env)
+        tools.g_mapset(mapset="PERMANENT", flags="c")
+
+        tools.g_mapset(mapset="empty_mapset", flags="c")
 
         yield SimpleNamespace(
             session=session,
@@ -73,6 +75,7 @@ def two_mapset_session(tmp_path_factory):
             offpath_dataset="precipitation_dataset",
             offpath_id="precipitation_dataset@user1",
             offpath_mapset="user1",
+            empty_mapset="empty_mapset",
         )
 
 
@@ -110,3 +113,22 @@ def test_open_old_stds_offpath(two_mapset_session):
     sp = tgis.open_old_stds(two_mapset_session.offpath_id, "strds")
     assert sp is not None
     assert sp.get_id() == two_mapset_session.offpath_id
+
+
+def test_open_old_stds_searchpath(two_mapset_session):
+    """open_old_stds finds STDS not in the current mapset but on the search path."""
+    import grass.temporal as tgis
+
+    tools = Tools(session=two_mapset_session)
+    tools.g_mapset(mapset="empty_mapset")
+    print(tools.g_gisenv().text)
+    # open_old_stds fails if stds not found (on search path)
+    tgis.init(skip_db_init=True)
+    with pytest.raises(SystemExit):
+        sp = tgis.open_old_stds(two_mapset_session.offpath_dataset, "strds")
+    # After adding the source mapset to the search path open_old_stds succeeds
+    tools.g_mapsets(operation="add", mapset="user1")
+    tgis.init(skip_db_init=True)
+    sp = tgis.open_old_stds(two_mapset_session.offpath_dataset, "strds")
+    assert sp.get_id() == two_mapset_session.offpath_id
+    # assert sp.get_id() == "test"
