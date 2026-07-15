@@ -595,7 +595,7 @@ int main(int argc, char **argv)
             }
         }
         else if (num_y_files != i)
-            G_fatal_error(_("Number of widths (%d) is lower then"
+            G_fatal_error(_("Number of widths (%d) is lower than"
                             " the number of files (%d)"),
                           i, num_y_files);
     }
