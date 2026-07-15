@@ -18,6 +18,7 @@ from .core import get_current_mapset, get_tgis_message_interface, init_dbif
 from .spatial_topology_dataset_connector import SpatialTopologyDatasetConnector
 from .temporal_topology_dataset_connector import TemporalTopologyDatasetConnector
 
+
 ###############################################################################
 
 
@@ -217,6 +218,42 @@ class AbstractDataset(
     @abstractmethod
     def print_shell_info(self):
         """Print information about this class in shell style"""
+
+    def get_metadata_dict(self) -> dict:
+        """Build a dictionary from internal metadata storage for JSON output.
+
+        Uses dict merging to automatically capture all metadata from the
+        internal D dictionaries. This approach ensures:
+
+        - Complete metadata coverage (no missing fields)
+        - No manual key enumeration required
+        - Automatic updates when new metadata fields are added
+        - Parity with print_shell_info() output
+
+        :return: Complete metadata dictionary ready for JSON serialization
+        """
+        # Merge all internal data dictionaries.
+        # Each component (base, temporal_extent, spatial_extent, metadata)
+        # stores its data in a D dict that gets merged here.
+        data = {}
+
+        # Add base metadata (id, name, mapset, creator, etc.)
+        if hasattr(self, "base") and hasattr(self.base, "D"):
+            data.update(self.base.D)
+
+        # Add temporal extent metadata (start_time, end_time, etc.)
+        if hasattr(self, "temporal_extent") and hasattr(self.temporal_extent, "D"):
+            data.update(self.temporal_extent.D)
+
+        # Add spatial extent metadata (north, south, east, west, etc.)
+        if hasattr(self, "spatial_extent") and hasattr(self.spatial_extent, "D"):
+            data.update(self.spatial_extent.D)
+
+        # Add general metadata (title, description, etc.)
+        if hasattr(self, "metadata") and hasattr(self.metadata, "D"):
+            data.update(self.metadata.D)
+
+        return data
 
     @abstractmethod
     def print_self(self):

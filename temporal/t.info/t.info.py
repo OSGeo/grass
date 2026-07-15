@@ -6,7 +6,7 @@
 # AUTHOR(S):    Soeren Gebbert
 #
 # PURPOSE:      Print information about a space-time dataset
-# COPYRIGHT:    (C) 2011-2017 by the GRASS Development Team
+# COPYRIGHT:    (C) 2011-2026 by the GRASS Development Team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -38,14 +38,21 @@
 # % options: strds, str3ds, stvds, raster, raster_3d, vector
 # %end
 
+# %option G_OPT_F_FORMAT
+# % options: plain,json,shell
+# % descriptions: plain;Human readable text output;shell;Shell script style text output;json;JSON (JavaScript Object Notation)
+# % guisection: Print
+# %end
+
 # %flag
 # % key: g
-# % description: Print in shell script style
+# % description: This flag is deprecated and will be removed in a future release. Use format=shell instead.
+# % label: Print in shell script style (deprecated)
 # %end
 
 # %flag
 # % key: h
-# % description: Print history information in human readable shell style for space time datasets
+# % description: Print history information in human readable or shell style for space time datasets
 # %end
 
 # %flag
@@ -53,6 +60,8 @@
 # % description: Print information about the temporal DBMI interface and exit
 # % suppress_required: yes
 # %end
+
+import json
 
 import grass.script as gs
 
@@ -62,12 +71,30 @@ import grass.script as gs
 def main():
     # lazy imports
     import grass.temporal as tgis
+    from grass.temporal.utils import TemporalJSONEncoder
 
     name = options["input"]
     type_ = options["type"]
-    shellstyle = flags["g"]
+    format_ = options["format"]
+    shellstyle = flags["g"] or format_ == "shell"
     system = flags["d"]
     history = flags["h"]
+
+    if flags["g"]:
+        gs.warning(
+            _(
+                "Flag 'g' is deprecated and will be removed in a future "
+                "release. Please use format=shell instead.",
+            ),
+        )
+
+    if format_ == "json" and (history or system):
+        gs.warning(
+            _(
+                "Output from the 'd' and 'h' flag are always included "
+                "with format=json.",
+            ),
+        )
 
     # Make sure the temporal database exists
     tgis.init()
@@ -76,51 +103,73 @@ def main():
 
     rows = tgis.get_tgis_metadata(dbif)
 
-    if system and not shellstyle and not history:
-        #      0123456789012345678901234567890
+    if system and not history and format_ != "json":
+        if shellstyle:
+            print(
+                f"dbmi_python_interface='{dbif.get_dbmi().__name__}'\n"
+                f"dbmi_string='{tgis.get_tgis_database_string()}'\n"
+                f"sql_template_path='{tgis.get_sql_template_path()}'",
+            )
+            if rows:
+                for row in rows:
+                    print(f"{row[0]}={row[1]}")
+            return
+
         print(
-            " +------------------- Temporal DBMI backend information ----------------------+"  # noqa: E501
+            " +------------------- Temporal DBMI backend information"
+            " ----------------------+\n"
+            f" | DBMI Python interface:...... {dbif.get_dbmi().__name__}\n"
+            f" | Temporal database string:... {tgis.get_tgis_database_string()}\n"
+            f" | SQL template path:.......... {tgis.get_sql_template_path()}\n",
         )
-        print(" | DBMI Python interface:...... " + str(dbif.get_dbmi().__name__))
-        print(" | Temporal database string:... " + str(tgis.get_tgis_database_string()))
-        print(" | SQL template path:.......... " + str(tgis.get_sql_template_path()))
         if rows:
             for row in rows:
-                print(" | %s .......... %s" % (row[0], row[1]))
+                print(f" | {row[0]} .......... {row[1]}")
         print(
-            " +----------------------------------------------------------------------------+"  # noqa: E501
+            " +-----------------------------------------------------"
+            "-----------------------+",
         )
-        return
-    if system and not history:
-        print("dbmi_python_interface='" + str(dbif.get_dbmi().__name__) + "'")
-        print("dbmi_string='" + str(tgis.get_tgis_database_string()) + "'")
-        print("sql_template_path='" + str(tgis.get_sql_template_path()) + "'")
-        if rows:
-            for row in rows:
-                print("%s='%s'" % (row[0], row[1]))
         return
 
     if not system and not name:
         gs.fatal(_("Please specify %s=") % ("name"))
 
-    id_ = name if name.find("@") >= 0 else name + "@" + gs.gisenv()["MAPSET"]
+    id_ = name if "@" in name else f"{name}@{gs.gisenv()['MAPSET']}"
     dataset = tgis.dataset_factory(type_, id_)
 
     if not dataset.is_in_db(dbif):
         gs.fatal(
             _("Dataset <{n}> of type <{t}> not found in temporal database").format(
-                n=id_, t=type_
-            )
+                n=id_,
+                t=type_,
+            ),
         )
 
     dataset.select(dbif)
 
-    if history and type_ in {"strds", "stvds", "str3ds"}:
+    if history and type_ in {"strds", "stvds", "str3ds"} and format_ != "json":
         dataset.print_history()
         return
 
-    if shellstyle:
+    if format_ == "json":
+        metadata = dataset.get_metadata_dict()
+        metadata["tgis_db"] = {}
+        metadata["tgis_db"].update(
+            {
+                "dbmi_python_interface": dbif.get_dbmi().__name__,
+                "dbmi_string": tgis.get_tgis_database_string(),
+                "sql_template_path": tgis.get_sql_template_path(),
+            }
+        )
+        if rows:
+            metadata["tgis_db"].update(
+                {row[0]: int(row[1]) if row[1].isdigit() else row[1] for row in rows}
+            )
+        print(json.dumps(metadata, cls=TemporalJSONEncoder, indent=4))
+
+    elif format_ == "shell" or shellstyle:
         dataset.print_shell_info()
+
     else:
         dataset.print_info()
 
