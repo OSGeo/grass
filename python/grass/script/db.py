@@ -55,7 +55,10 @@ def db_describe(table, env=None, **args):
         args.pop("database")
     if "driver" in args and args["driver"] == "":
         args.pop("driver")
-    s = read_command("db.describe", flags="c", table=table, env=env, **args)
+    try:
+        s = read_command("db.describe", flags="c", table=table, env=env, **args)
+    except CalledModuleError:
+        fatal(_("Unable to describe table <%s>") % table, env=env)
     if not s:
         fatal(_("Unable to describe table <%s>") % table, env=env)
 
