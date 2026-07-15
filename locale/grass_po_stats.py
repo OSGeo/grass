@@ -112,7 +112,7 @@ def get_stats(languages, directory):
             fpref = flang.split("_")[0]
             # run msgfmt for statistics
             # TODO check if it's working on windows
-            process = subprocess.Popen(
+            process = subprocess.Popen(  # nosec B607: executable intentionally resolved via PATH
                 ["msgfmt", "--statistics", os.path.join(directory, flang)],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,

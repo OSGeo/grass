@@ -176,7 +176,7 @@ def get_svn_revision():
     """
     # TODO: here should be starting directory
     # but now we are using current as starting
-    with subprocess.Popen(
+    with subprocess.Popen(  # nosec B607: executable intentionally resolved via PATH
         ["svnversion", "."], stdout=subprocess.PIPE, stderr=subprocess.PIPE
     ) as p:
         stdout, stderr = p.communicate()
@@ -199,7 +199,7 @@ def get_svn_info():
     """
     try:
         # TODO: introduce directory, not only current
-        with subprocess.Popen(
+        with subprocess.Popen(  # nosec B607: executable intentionally resolved via PATH
             ["svn", "info", ".", "--xml"],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -254,7 +254,7 @@ def get_svn_path_authors(path, from_date=None):
     revision_range = "BASE:1" if from_date is None else "BASE:{%s}" % from_date
     try:
         # TODO: allow also usage of --limit
-        with subprocess.Popen(
+        with subprocess.Popen(  # nosec B607: executable intentionally resolved via PATH
             ["svn", "log", "--xml", "--revision", revision_range, path],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,

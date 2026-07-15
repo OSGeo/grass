@@ -154,7 +154,7 @@ def adjust_after(lines):
             username = username.replace("@", "")
             if username in known_bot_names:
                 continue
-            output = subprocess.run(
+            output = subprocess.run(  # nosec B607: executable intentionally resolved via PATH
                 ["gh", "api", f"users/{username}"],
                 capture_output=True,
                 text=True,
@@ -203,7 +203,7 @@ def print_notes(
 
 def notes_from_gh_api(start_tag, end_tag, branch, categories, exclude):
     """Generate notes from GitHub API"""
-    text = subprocess.run(
+    text = subprocess.run(  # nosec B607: executable intentionally resolved via PATH
         [
             "gh",
             "api",
@@ -255,7 +255,7 @@ def csv_to_dict(filename, key, value):
 
 def notes_from_git_log(start_tag, end_tag, categories, exclude):
     """Generate notes from git log"""
-    text = subprocess.run(
+    text = subprocess.run(  # nosec B607: executable intentionally resolved via PATH
         ["git", "log", f"{start_tag}..{end_tag}", f"--pretty=format:{PRETTY_TEMPLATE}"],
         capture_output=True,
         text=True,
@@ -337,7 +337,7 @@ def create_release_notes(args):
     end_tag = args.end_tag
     if not end_tag:
         # git log has default, but the others do not.
-        end_tag = subprocess.run(
+        end_tag = subprocess.run(  # nosec B607: executable intentionally resolved via PATH
             ["git", "rev-parse", "--verify", "HEAD"],
             capture_output=True,
             text=True,

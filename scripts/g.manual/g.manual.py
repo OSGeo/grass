@@ -124,7 +124,7 @@ def start_man(entry):
 
     for ext in ["", ".gz", ".bz2"]:
         if Path(path + ext).exists():
-            os.execlp("man", "man", path + ext)
+            os.execlp("man", "man", path + ext)  # nosec B607: executable intentionally resolved via PATH
             grass.fatal(_("Error starting 'man' for '%s'") % path)
     grass.fatal(_("No manual page entry for '%s'") % entry)
 
