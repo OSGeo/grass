@@ -45,43 +45,63 @@ def open_old_stds(name, type, dbif=None):
     """
     msgr = get_tgis_message_interface()
 
+    if type not in {"strds", "str3ds", "stvds", "raster", "vector", "raster3d"}:
+        msgr.fatal(_("Unknown type: %s") % (type))
+
+    def check_id(ds_id, stds_type, dbif) -> AbstractMapDataset | None:
+        if stds_type in {"str3ds", "raster3d", "rast3d", "raster_3d"}:
+            sp = dataset_factory("str3ds", ds_id)
+        elif stds_type in {"stvds", "vect", "vector"}:
+            sp = dataset_factory("stvds", ds_id)
+        else:
+            sp = dataset_factory("strds", ds_id)
+
+        if not sp.is_in_db(dbif):
+            return
+        return sp
+
     # Check if the dataset name contains the mapset and the semantic label as well
-    if name.find("@") < 0:
-        mapset = get_current_mapset()
-    else:
+    mapset = None
+    if "@" in name:
         name, mapset = name.split("@")
+
     semantic_label = None
     if name.find(".") > -1:
         try:
             name, semantic_label = name.split(".")
         except ValueError:
             msgr.fatal("Invalid name of the space time dataset. Only one dot allowed.")
-    id = name + "@" + mapset
-
-    if type in {"strds", "rast", "raster"}:
-        sp = dataset_factory("strds", id)
-        if semantic_label:
-            sp.set_semantic_label(semantic_label)
-    elif type in {"str3ds", "raster3d", "rast3d", "raster_3d"}:
-        sp = dataset_factory("str3ds", id)
-    elif type in {"stvds", "vect", "vector"}:
-        sp = dataset_factory("stvds", id)
-    else:
-        msgr.fatal(_("Unknown type: %s") % (type))
 
     dbif, connection_state_changed = init_dbif(dbif)
 
-    # Make sure the dataset's mapset is part of the connection so a fully
-    # qualified name (name@mapset) can be opened even when the mapset is not
-    # on the current search path.
-    dbif.add_mapset(mapset)
-
-    if not sp.is_in_db(dbif):
-        dbif.close()
+    # Check user given ID
+    sp = None
+    if mapset:
+        dbif.add_mapset(mapset)
+        id = f"{name}@{mapset}"
+        sp = check_id(id, type, semantic_label, dbif)
+    else:
+        # Check current mapset first
+        id = f"{name}@{get_current_mapset()}"
+        sp = check_id(id, type, semantic_label, dbif)
+        if not sp:
+            for tgis_mapset in dbif.tgis_mapsets:
+                if tgis_mapset == get_current_mapset():
+                    continue
+                id = f"{name}@{tgis_mapset}"
+                sp = check_id(id, type, semantic_label, dbif)
+                if sp:
+                    break
+    if not sp:
+        if connection_state_changed:
+            dbif.close()
         msgr.fatal(
-            _("Space time %(sp)s dataset <%(id)s> not found")
-            % {"sp": sp.get_new_map_instance(None).get_type(), "id": id}
+            _("Space time dataset <%(id)s> of type <%(sp)s> not found")
+            % {"id": id, "sp": type}
         )
+    # Set the semantic label if it was given
+    if semantic_label:
+        sp.set_semantic_label(semantic_label)
     # Read content from temporal database
     sp.select(dbif)
     if connection_state_changed:
