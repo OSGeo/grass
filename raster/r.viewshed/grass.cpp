@@ -94,7 +94,7 @@ GridHeader *read_header(char *rastName, Cell_head *region)
 
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
-    /*check for loss of prescion */
+    /*check for loss of precision */
     if (nrows <= maxDimension && ncols <= maxDimension) {
         hd->nrows = (dimensionType)nrows;
         hd->ncols = (dimensionType)ncols;
