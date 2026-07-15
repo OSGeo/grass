@@ -13,6 +13,7 @@
  */
 
 #include <grass/glocale.h>
+#include <grass/gis.h>
 
 #include "cairodriver.h"
 
@@ -38,7 +39,7 @@ void Cairo_Bitmap(int ncols, int nrows, int threshold, const unsigned char *buf)
 #define MULTIPLE 4
     stride = (ncols + (MULTIPLE - 1)) / MULTIPLE * MULTIPLE;
 #endif
-    data = malloc((size_t)stride * nrows);
+    data = G_malloc((size_t)stride * nrows);
     surf = cairo_image_surface_create_for_data(data, CAIRO_FORMAT_A8, ncols,
                                                nrows, stride);
 
