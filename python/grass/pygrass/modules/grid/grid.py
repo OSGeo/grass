@@ -6,9 +6,8 @@ import shutil as sht
 from math import ceil
 from pathlib import Path
 
-from grass.script import core as gcore
 from grass.script.setup import write_gisrc
-from grass.script import append_node_pid, available_cpus, legalize_vector_name
+from grass.script import Popen, append_node_pid, available_cpus, legalize_vector_name
 
 from grass.pygrass.gis import Mapset, Location
 from grass.pygrass.gis.region import Region
@@ -226,9 +225,9 @@ def set_region(region, gisrc_src, gisrc_dst, env):
         "ewres=%r" % region_dict["ewres"],
     ]
     env["GISRC"] = gisrc_src
-    sub.Popen(reg_cmd, env=env)
+    Popen(reg_cmd, env=env)
     env["GISRC"] = gisrc_dst
-    sub.Popen(reg_cmd, env=env)
+    Popen(reg_cmd, env=env)
 
 
 def copy_rasters(rasters, gisrc_src, gisrc_dst, processes, region=None):
@@ -388,15 +387,15 @@ def cmd_exe(args):
             inputs[key] = mapnames[key]
         cmd["inputs"] = inputs.items()
         # set the region to the tile
-        gcore.Popen(["g.region", "raster=%s" % key], env=env).wait()
+        Popen(["g.region", "raster=%s" % key], env=env).wait()
     else:
         # set the computational region
         lcmd = ["g.region", *["%s=%s" % (k, v) for k, v in bbox.items()]]
-        gcore.Popen(lcmd, env=env).wait()
+        Popen(lcmd, env=env).wait()
     if groups:
         copy_groups(groups, gisrc_src, gisrc_dst, processes=1)
     # run the grass command
-    gcore.Popen(get_cmd(cmd), env=env).wait()
+    Popen(get_cmd(cmd), env=env).wait()
     # remove temp GISRC
     Path(gisrc_dst).unlink()
 
