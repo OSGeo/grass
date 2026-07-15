@@ -87,6 +87,72 @@ LMIcons = {
 }
 
 
+if sys.platform == "darwin":
+
+    class _MacSafeDragImage(CT.DragImage):
+        """Item drag image drawn in a popup window owned by this class.
+
+        CustomTreeCtrl shows its drag animation through wx.DragImage, which
+        on macOS renders via wxOverlay. The native wxOverlay implementation
+        never removes its borderless NSWindow from screen on Reset()
+        (wxWidgets issue #26380, open as of wxWidgets 3.2.8/3.3.1), so every
+        drag leaves an orphaned window behind, visible in Mission Control.
+        This replacement provides the same animation in a wx.PopupWindow
+        that is explicitly destroyed when the drag ends.
+        """
+
+        def __init__(self, treeCtrl, item):
+            # must go through super(), not CT.DragImage: this class is
+            # assigned to CT.DragImage below, so a CT.DragImage.__init__
+            # call would recurse into itself
+            super().__init__(treeCtrl, item)
+            self._dragWindow = None
+            self._hotspot = wx.Point(0, 0)
+            self._ghost = None
+
+        def BeginDrag(self, hotspot, window, fullScreen=False, rect=None):
+            self._dragWindow = window
+            self._hotspot = wx.Point(*hotspot)
+            self._ghost = wx.PopupWindow(window.GetTopLevelParent(), wx.BORDER_NONE)
+            wx.StaticBitmap(self._ghost, bitmap=self._bitmap)
+            self._ghost.SetClientSize(self._bitmap.GetSize())
+            self._ghost.SetBackgroundColour(window.GetBackgroundColour())
+            if self._ghost.CanSetTransparent():
+                self._ghost.SetTransparent(196)
+            # wx.DragImage.BeginDrag captures the mouse so that the tree
+            # receives the button-up event even outside its bounds; keep
+            # that behavior
+            if not window.HasCapture():
+                window.CaptureMouse()
+            return True
+
+        def Show(self):
+            if self._ghost:
+                self._ghost.Show()
+            return True
+
+        def Hide(self):
+            if self._ghost:
+                self._ghost.Hide()
+            return True
+
+        def Move(self, pt):
+            if self._ghost and self._dragWindow:
+                screen = self._dragWindow.ClientToScreen(wx.Point(*pt))
+                self._ghost.SetPosition(screen - self._hotspot)
+            return True
+
+        def EndDrag(self):
+            if self._dragWindow and self._dragWindow.HasCapture():
+                self._dragWindow.ReleaseMouse()
+            if self._ghost:
+                self._ghost.Destroy()
+                self._ghost = None
+            return True
+
+    CT.DragImage = _MacSafeDragImage
+
+
 class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     """Creates layer tree structure"""
 
@@ -180,6 +246,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.Bind(wx.EVT_TREE_DELETE_ITEM, self.OnDeleteLayer)
         self.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, self.OnLayerContextMenu)
         self.Bind(wx.EVT_TREE_END_DRAG, self.OnEndDrag)
+        self.Bind(wx.EVT_MOUSE_CAPTURE_LOST, self.OnMouseCaptureLost)
         self.Bind(wx.EVT_TREE_END_LABEL_EDIT, self.OnRenamed)
         self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
@@ -1974,6 +2041,29 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if vselect:
             vselect.Reset()
         self._preserveScrollPosition()
+
+    def OnMouseCaptureLost(self, event):
+        """Recover from involuntary mouse capture loss during a drag.
+
+        CustomTreeCtrl captures the mouse itself once the drag animation
+        starts (in its DragImage.BeginDrag()), so a normal drag-and-release
+        is already handled correctly even if the button is released outside
+        the tree. But macOS can steal that capture mid-gesture (e.g. the
+        user switches virtual desktops via Mission Control while dragging).
+        When that happens EVT_TREE_END_DRAG never fires, so the drag-image
+        window is never told to end and is orphaned on screen.
+        """
+        if getattr(self, "_isDragging", False):
+            dragImage = getattr(self, "_dragImage", None)
+            if dragImage:
+                try:
+                    dragImage.EndDrag()
+                except AssertionError:
+                    # EndDrag() may itself try to release a capture that is
+                    # already gone; that's fine, we're just forcing cleanup.
+                    pass
+            self._isDragging = False
+            self.StopDragging()
 
     def OnEndDrag(self, event):
         self.StopDragging()
