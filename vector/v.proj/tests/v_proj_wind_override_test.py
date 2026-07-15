@@ -38,23 +38,22 @@ def test_vproj_succeeds_with_wind_override(source_and_target):
     source, target = source_and_target
     with gs.setup.init(target, env=os.environ.copy()) as session:
         # A named region that exists only in the target's current mapset.
-        gs.run_command(
-            "g.region",
+        tools = Tools(session=session)
+        tools.g_region(
             n=300000,
             s=200000,
             e=700000,
             w=600000,
             res=10,
             save="local_region",
-            env=session.env,
         )
         # Set the override after init so it is not stripped by runtime setup;
         # this mirrors a caller running under a temporary named region.
         session.env["WIND_OVERRIDE"] = "local_region"
-        Tools(session=session).v_proj(
+        tools.v_proj(
             project=source.name,
             mapset="PERMANENT",
             input="points",
             output="points",
         )
-        assert gs.find_file("points", element="vector", env=session.env)["name"]
+        assert tools.g_findfile(file="points", element="vector", format="json")["name"]
