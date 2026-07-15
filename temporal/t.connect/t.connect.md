@@ -4,7 +4,7 @@
 
 The default setting is that the temporal database uses the *sqlite* backend,
 where the path to the SQLite database is set to "tgis/sqlite.db" in the current
-mapset directory. That way it will not interfere with the *sqlite* database
+mapset directory. In that way it will not interfere with the *sqlite* database
 used for vector attribute storage.
 
 The **-p** flag will display the current temporal database connection
@@ -36,9 +36,7 @@ Setting the connection with *t.connect* will only store connection values
 in the mapset's `VAR` file. It will not test the connection for validity.
 Hence a database connection will not be established. Neither will
 *t.connect* create the temporal database. The temporal database will
-be created by the first run of a tool that creates SpaceTimeDataSets (STDS),
-either based on connection values set by *t.connect* or - if not defined -
-the global default (sqlite).
+be created by the first run of a tool that creates SpaceTimeDataSets (STDS).
 
 In case you have tens of thousands of maps to register in the temporal
 database or you need concurrent read and write access in the temporal
