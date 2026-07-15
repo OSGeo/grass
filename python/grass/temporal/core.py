@@ -527,7 +527,7 @@ def get_available_temporal_mapsets(mapsets: str | None = None) -> dict:
         if driver and database:
             # Check if the temporal sqlite database exists
             if driver == "sqlite" and not Path(database).exists():
-                # Warn if DB for defined connection does not exists
+                # Warn if DB for defined connection does not exist
                 message_interface.warning(
                     _(
                         "Temporal database connection for mapset <%s> "
