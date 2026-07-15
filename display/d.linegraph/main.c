@@ -982,7 +982,7 @@ int main(int argc, char **argv)
                 /* draw a tic-mark number */
 
                 if (scale_y_labels)
-                    snprintf(txt, sizeof(txt), "%f.0",
+                    snprintf(txt, sizeof(txt), "%.0f",
                              (i / tic_unit * y_scale));
                 else
                     snprintf(txt, sizeof(txt), "%d", (i / tic_unit));
