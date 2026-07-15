@@ -1835,19 +1835,12 @@ def extract_tar(name, directory, tmpdir):
         extract_dir = os.path.join(tmpdir, "extract_dir")
         Path(extract_dir).mkdir()
 
-        # Extraction filters were added in Python 3.12,
-        # and backported to 3.8.17, 3.9.17, 3.10.12, and 3.11.4
-        # See
-        # https://docs.python.org/3.12/library/tarfile.html#tarfile-extraction-filter
-        # and https://peps.python.org/pep-0706/
-        # In Python 3.12, using `filter=None` triggers a DepreciationWarning,
-        # and in Python 3.14, `filter='data'` will be the default
-        if hasattr(tarfile, "data_filter"):
-            tar.extractall(path=extract_dir, filter="data")
-        else:
-            # Remove this when no longer needed
-            gs.warning(_("Extracting may be unsafe; consider updating Python"))
-            tar.extractall(path=extract_dir)
+        # The 'data' extraction filter was added in Python 3.12 and backported
+        # to 3.11.4 (PEP 706). Refuse to extract without it rather
+        # than extracting unsafely.
+        if not hasattr(tarfile, "data_filter"):
+            gs.fatal(_("Extracting may be unsafe; upgrade Python to 3.11.4 or newer"))
+        tar.extractall(path=extract_dir, filter="data")
 
         files = os.listdir(extract_dir)
         move_extracted_files(extract_dir=extract_dir, target_dir=directory, files=files)
@@ -2360,6 +2353,7 @@ def remove_extension_std(name, force=False):
         os.path.join(options["prefix"], "bin", name),
         os.path.join(options["prefix"], "scripts", name),
         os.path.join(options["prefix"], "docs", "html", name + ".html"),
+        os.path.join(options["prefix"], "docs", "mkdocs", "source", name + ".md"),
         os.path.join(options["prefix"], "docs", "rest", name + ".txt"),
         os.path.join(options["prefix"], "docs", "man", "man1", name + ".1"),
     ]:
@@ -2471,6 +2465,7 @@ def check_dirs():
     """Ensure that the necessary directories in prefix path exist"""
     create_dir(os.path.join(options["prefix"], "bin"))
     create_dir(os.path.join(options["prefix"], "docs", "html"))
+    create_dir(os.path.join(options["prefix"], "docs", "mkdocs", "source"))
     create_dir(os.path.join(options["prefix"], "docs", "rest"))
     check_style_file("grass_logo.png")
     check_style_file("hamburger_menu.svg")

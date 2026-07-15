@@ -216,11 +216,7 @@ class KeyValue(dict[str, VT]):
 
 
 def _get_encoding() -> str:
-    try:
-        # Python >= 3.11
-        encoding = locale.getencoding()
-    except AttributeError:
-        encoding = locale.getdefaultlocale()[1]
+    encoding = locale.getencoding()
     if not encoding:
         encoding = "UTF-8"
     return encoding
