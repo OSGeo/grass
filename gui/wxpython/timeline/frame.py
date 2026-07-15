@@ -37,14 +37,15 @@ try:
         NavigationToolbar2WxAgg as NavigationToolbar,
     )
     import matplotlib.dates as mdates
-except ImportError as e:
-    raise ImportError(
+except ImportError as error:
+    error.add_note(
         _(
             'The Timeline Tool needs the "matplotlib" '
             "(python-matplotlib and on some systems also python-matplotlib-wx) "
-            "package(s) to be installed. {}"
-        ).format(e)
-    ) from e
+            "package(s) to be installed."
+        )
+    )
+    raise
 
 import grass.script as gs
 

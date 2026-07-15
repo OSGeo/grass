@@ -39,13 +39,14 @@ try:
     from matplotlib.patches import Polygon, Ellipse
     import matplotlib.image as mi
     import matplotlib.colors as mcolors
-except ImportError as e:
-    raise ImportError(
+except ImportError as error:
+    error.add_note(
         _(
             'The Scatterplot Tool needs the "matplotlib" '
-            "(python-matplotlib) package to be installed. {0}"
-        ).format(e)
-    ) from e
+            "(python-matplotlib) package to be installed."
+        )
+    )
+    raise
 
 import grass.script as gs
 from grass.pydispatch.signal import Signal

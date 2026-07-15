@@ -856,9 +856,11 @@ class Link:
                 psycopg2.paramstyle = "qmark"
                 db = " ".join(self.database.split(","))
                 return psycopg2.connect(db)
-            except ImportError:
-                er = "You need to install psycopg2 to connect with this table."
-                raise ImportError(er) from None
+            except ImportError as error:
+                error.add_note(
+                    "You need to install psycopg2 to connect with this table."
+                )
+                raise
 
         str_err = "Driver is not supported yet, pleas use: sqlite or pg"
         raise TypeError(str_err)

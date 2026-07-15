@@ -41,13 +41,14 @@ try:
         NavigationToolbar2WxAgg as NavigationToolbar,
     )
     import matplotlib.dates as mdates
-except ImportError as e:
-    raise ImportError(
+except ImportError as error:
+    error.add_note(
         _(
             'The Temporal Plot Tool needs the "matplotlib" '
             "(python-matplotlib) package to be installed."
         )
-    ) from e
+    )
+    raise
 
 
 import grass.temporal as tgis

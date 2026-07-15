@@ -2430,11 +2430,7 @@ class CmdPanel(wx.Panel):
                         )
                         if p.get("value", "") and Path(p["value"]).is_file():
                             ifbb.Clear()
-                            try:
-                                # Python >= 3.11
-                                enc = locale.getencoding()
-                            except AttributeError:
-                                enc = locale.getdefaultlocale()[1]
+                            enc = locale.getencoding()
                             with codecs.open(
                                 p["value"], encoding=enc, errors="ignore"
                             ) as f:
@@ -2991,11 +2987,7 @@ class CmdPanel(wx.Panel):
 
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
-            try:
-                # Python >= 3.11
-                enc = locale.getencoding()
-            except AttributeError:
-                enc = locale.getdefaultlocale()[1]
+            enc = locale.getencoding()
 
             with codecs.open(path, encoding=enc, mode="w", errors="replace") as f:
                 f.write(text + os.linesep)
@@ -3017,11 +3009,7 @@ class CmdPanel(wx.Panel):
                 filename = grass.tempfile()
                 win.SetValue(filename)
 
-            try:
-                # Python >= 3.11
-                enc = locale.getencoding()
-            except AttributeError:
-                enc = locale.getdefaultlocale()[1]
+            enc = locale.getencoding()
 
             with codecs.open(filename, encoding=enc, mode="w", errors="replace") as f:
                 f.write(text)

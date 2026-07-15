@@ -410,11 +410,7 @@ class GConsole(wx.EvtHandler):
             sys.stdout = self.cmdStdOut
             sys.stderr = self.cmdStdErr
         else:
-            try:
-                # Python >= 3.11
-                enc = locale.getencoding()
-            except AttributeError:
-                enc = locale.getdefaultlocale()[1]
+            enc = locale.getencoding()
             if enc:
                 # https://stackoverflow.com/questions/4374455/how-to-set-sys-stdout-encoding-in-python-3
                 sys.stdout = codecs.getwriter(enc)(sys.__stdout__.detach())

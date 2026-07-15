@@ -551,6 +551,9 @@ exclude_dirs = [
     "*/tests/*",
     "*/testsuite/*",
     "utils/test_generate_last_commit_file.py",
+    # Vendored code, matching the pylint ignore-paths entries below.
+    "python/grass/temporal/ply",
+    "python/libgrass_interface_generator",
 ]
 skips = ["B324", "B110", "B101", "B112", "B311", "B404", "B603"]
 
