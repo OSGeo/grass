@@ -744,7 +744,7 @@ gs.fatal(_("No map found, exiting."))
 # debug output (users can use g.gisenv to enable/disable)
 # debug level is 1 to 5 (5 is most detailed)
 # debug message should not be translated
-gs.debug(f"Our calculated value is: {value}."), 3)
+gs.debug(f"Our calculated value is: {value}.", 3)
 ```
 
 Do not use the `print` function for informational output. This is reserved for
