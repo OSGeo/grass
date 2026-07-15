@@ -275,7 +275,7 @@ The structure consists of several required and optional sections:
 ```
 
 Sections _Notes_, _Examples_, _References_, and _Authors_ can be also in
-singular form (e.g, _Note_).
+singular form (e.g., _Note_).
 
 Note that Markdown is converted to html using [MkDocs](https://www.mkdocs.org/).
 See also [supported Markdown elements by MkDocs](https://www.markdownguide.org/tools/mkdocs/)
