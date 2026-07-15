@@ -3,7 +3,7 @@ GRASS Python testing framework checkers
 
 Copyright (C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS GIS
+License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :authors: Vaclav Petras, Soeren Gebbert
@@ -366,7 +366,7 @@ def keyvalue_equals(
     :param key_equal: dictionary of functions used for comparison
         of specific keys, `def_equal` is used for the rest,
         keys in dictionary are keys in `dict_a` and `dict_b` dictionaries,
-        values are the functions used to comapare the given key
+        values are the functions used to compare the given key
     :param a_is_subset: `True` if `dict_a` is a subset of `dict_b`,
         `False` otherwise
 

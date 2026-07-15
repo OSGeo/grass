@@ -1,15 +1,3 @@
-string(TIMESTAMP YEAR %Y)
-
-add_custom_target(
-  build_full_index
-  COMMAND
-    ${grass_env_command} ${PYTHON_EXECUTABLE}
-    ${CMAKE_CURRENT_SOURCE_DIR}/build_full_index.py
-    ${YEAR}
-  BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/full_index.html
-  DEPENDS ALL_MODULES LIB_PYTHON GUI_WXPYTHON
-  COMMENT "man generation: build full index")
-
 set(data_files
     ${CMAKE_CURRENT_SOURCE_DIR}/jquery.fixedheadertable.min.js
     ${CMAKE_CURRENT_SOURCE_DIR}/grassdocs.css
@@ -20,6 +8,21 @@ set(data_files
     ${CMAKE_CURRENT_SOURCE_DIR}/parser_standard_options.css
     ${CMAKE_CURRENT_SOURCE_DIR}/parser_standard_options.js)
 install(FILES ${data_files} DESTINATION ${GRASS_INSTALL_DOCDIR})
+
+# TODO(FHS): remove this if condition
+if(NOT WITH_FHS)
+
+string(TIMESTAMP YEAR %Y)
+add_custom_target(
+  build_full_index
+  COMMAND
+    ${grass_env_command} ${PYTHON_EXECUTABLE}
+    ${CMAKE_CURRENT_SOURCE_DIR}/build_full_index.py
+    ${YEAR}
+  BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/full_index.html
+  DEPENDS ALL_MODULES LIB_PYTHON GUI_WXPYTHON
+  COMMENT "man generation: build full index")
+set_target_properties(build_full_index PROPERTIES FOLDER Man)
 
 add_custom_command(
   TARGET build_full_index
@@ -36,6 +39,7 @@ add_custom_target(
   BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/index.html
   DEPENDS build_full_index
   COMMENT "man generation: build index")
+set_target_properties(build_index PROPERTIES FOLDER Man)
 
 set(target_names build_topics build_keywords build_graphical_index
                  build_manual_gallery)
@@ -47,6 +51,7 @@ foreach(target_name ${target_names})
       ${CMAKE_CURRENT_SOURCE_DIR}/${target_name}.py
     DEPENDS build_index
     COMMENT "man generation: ${target_name}")
+  set_target_properties(${target_name} PROPERTIES FOLDER Man)
 endforeach()
 
 add_custom_target(
@@ -56,8 +61,14 @@ add_custom_target(
     ${CMAKE_CURRENT_SOURCE_DIR}/build_class_graphical.py
     html
     ${OUTDIR}/${GRASS_INSTALL_DOCDIR}
+  COMMAND
+    ${grass_env_command} ${PYTHON_EXECUTABLE}
+    ${CMAKE_CURRENT_SOURCE_DIR}/build_class_graphical.py
+    md
+    ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/source
   DEPENDS build_index
   COMMENT "man generation: build_class_graphical")
+set_target_properties(build_class_graphical PROPERTIES FOLDER Man)
 
 add_custom_target(
   build_pso
@@ -67,8 +78,14 @@ add_custom_target(
     "${CMAKE_SOURCE_DIR}/lib/gis/parser_standard_options.c" -f "grass" -o
     "${OUTDIR}/${GRASS_INSTALL_DOCDIR}/parser_standard_options.html" -p
     "id='opts_table' class='scroolTable'"
+  COMMAND
+    ${grass_env_command} ${PYTHON_EXECUTABLE}
+    ${CMAKE_CURRENT_SOURCE_DIR}/parser_standard_options.py -t
+    "${CMAKE_SOURCE_DIR}/lib/gis/parser_standard_options.c" -f "grass" -o
+    "${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/source/parser_standard_options.md"
   DEPENDS ${target_names}
   COMMENT "man generation: parser standard options")
+set_target_properties(build_pso PROPERTIES FOLDER Man)
 
 set(categories
     d:display
@@ -92,10 +109,22 @@ foreach(category ${categories})
     COMMAND
       ${grass_env_command} ${PYTHON_EXECUTABLE}
       ${CMAKE_CURRENT_SOURCE_DIR}/build_class.py ${prefix} ${class_name}
-      ${OUTDIR}/${GRASS_INSTALL_DOCDIR}
+      ${YEAR}
     DEPENDS build_pso
     COMMENT "man generation: build class ${class_name}")
+  set_target_properties(build_class_${class_name} PROPERTIES FOLDER Man)
 endforeach()
+
+add_custom_target(
+  build_manpages
+  COMMAND
+    ${grass_env_command} ${PYTHON_EXECUTABLE}
+    ${CMAKE_CURRENT_SOURCE_DIR}/build_manpages.py
+    ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/source ${OUTDIR}/${GRASS_INSTALL_MANDIR}
+    ${MD2MAN}
+  DEPENDS ${category_targets} build_class_graphical
+  COMMENT "man generation: man pages from markdown")
+set_target_properties(build_manpages PROPERTIES FOLDER Man)
 
 # TODO: this shouldn't depend on GUI_WXPYTHON
 add_custom_target(
@@ -103,16 +132,9 @@ add_custom_target(
   COMMAND
     ${grass_env_command} ${PYTHON_EXECUTABLE}
     ${CMAKE_CURRENT_SOURCE_DIR}/build_check.py ${OUTDIR}/${GRASS_INSTALL_DOCDIR}
-  DEPENDS ${category_targets} ALL_MODULES LIB_PYTHON GUI_WXPYTHON
+  DEPENDS ${category_targets} build_class_graphical build_manpages ALL_MODULES
+          LIB_PYTHON GUI_WXPYTHON
   COMMENT "man generation: check output")
+set_target_properties(build_check PROPERTIES FOLDER Man)
 
-#[=======[ TODO: implement somehow...
-add_custom_target(
-  create_man_pages ALL
-  DEPENDS build_check
-  COMMAND ${CMAKE_COMMAND} -DHTML2MAN=${HTML2MAN}
-    -DGRASS_INSTALL_DOCDIR=${GRASS_INSTALL_DOCDIR} -DOUTDIR=${OUTDIR}
-    -DGRASS_INSTALL_MANDIR=${GRASS_INSTALL_MANDIR} -P
-    ${CMAKE_SOURCE_DIR}/cmake/generate_man_pages.cmake
-  COMMENT "!!! man generation: create man pages")
-]=======]
+endif() # NOT WITH_FHS

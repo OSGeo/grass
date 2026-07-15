@@ -4,8 +4,8 @@
 
 <em>g.extension</em> downloads and installs, removes or updates
 extensions (addons) from the official
-<a href="https://grass.osgeo.org/grass8/manuals/addons/">GRASS GIS Addons repository</a>
-or from user-specified source code repositories into the local GRASS GIS
+<a href="https://grass.osgeo.org/grass8/manuals/addons/">GRASS Addons repository</a>
+or from user-specified source code repositories into the local GRASS
 installation.
 <p>
 Two types of extensions are supported:
@@ -14,7 +14,7 @@ Two types of extensions are supported:
     the need of special dependencies.</li>
 <li>Source code (mostly written in C programming language; may also be written
     in C++, Fortran or other languages): while on MS-Windows systems the requested
-    GRASS GIS extension is downloaded pre-compiled from the GRASS GIS site, on Unix
+    GRASS extension is downloaded pre-compiled from the GRASS site, on Unix
     based systems the installation is preceded by the automated download of the
     extension's source code along with subsequent compilation and installation.
     This requires a compiler environment to be present on the user's computer.</li>
@@ -22,17 +22,17 @@ Two types of extensions are supported:
 
 <h3>Managing installed extensions</h3>
 
-<p>Re-running <em>g.extension</em> on an installed GRASS GIS Addon
+<p>Re-running <em>g.extension</em> on an installed GRASS Addon
 extension re-installs the requested extension which may include
 updates.
 <p>
-To bulk-update all locally installed GRASS GIS extensions,
+To bulk-update all locally installed GRASS extensions,
 <em><a href="g.extension.all.html">g.extension.all</a></em> module
 is available.
 
 <h3>Where the extensions are installed</h3>
 
-GRASS GIS extensions are installed by <em>g.extension</em> into a dedicated
+GRASS extensions are installed by <em>g.extension</em> into a dedicated
 directory.
 The default is a directory for application data and settings inside
 the user's home directory.
@@ -42,7 +42,7 @@ The name of the directory is stored in the <code>GRASS_ADDON_BASE</code>
 environmental variable.
 
 <p>
-The flag <b>-s</b> changes this install target directory to the GRASS GIS
+The flag <b>-s</b> changes this install target directory to the GRASS
 installation directory
 (determined by <code>GISBASE</code> environmental variable, e.g. <code>/usr/</code>)
 rather than the default directory defined as per  <code>GRASS_ADDON_BASE</code>
@@ -53,13 +53,13 @@ rather than the default directory defined as per  <code>GRASS_ADDON_BASE</code>
 <p>
 The place where the extensions are installed can be customized by
 the option <b>prefix</b>. Ensuring that these extensions will be accessible
-in GRASS GIS is in this case in the responsibility of the user.
+in GRASS is in this case in the responsibility of the user.
 
 <h3>Source code sources and repositories</h3>
 
-<h4>GRASS GIS Addons repository on GitHub</h4>
+<h4>GRASS Addons repository on GitHub</h4>
 By default, <em>g.extension</em> installs extensions from the official
-GRASS GIS Addons GitHub repository. However, different sources can be specified
+GRASS Addons GitHub repository. However, different sources can be specified
 using the <b>url</b> option.
 
 <p>
@@ -117,7 +117,7 @@ MS-Windows.
 
 On MS-Windows systems, where compilation tools are typically not readily
 locally installed, <em>g.extension</em> downloads a precompiled executable
-from the GRASS GIS project server. On all other operating systems
+from the GRASS project server. On all other operating systems
 where it is not difficult to install compilation tools,
 <em>g.extension</em> downloads the source code of the requested
 extension (addon) and compiles it locally.
@@ -160,7 +160,7 @@ g.extension extension=r.stream.distance proxy="http=http://username:password@pro
 
 <h3>Managing the extensions</h3>
 
-List all available extensions in the official GRASS GIS Addons repository:
+List all available extensions in the official GRASS Addons repository:
 
 <div class="code"><pre>
 g.extension -l
@@ -209,7 +209,7 @@ only official repository is supported on this platform.
 
 <h3>Install a specific version from Addons</h3>
 
-To install a specific version from GRASS GIS Addons, specify the full
+To install a specific version from GRASS Addons, specify the full
 URL pointing to Trac code browser and include Subversion revision
 number. For example, this installs the version number 57854 of
 r.local.relief module:
@@ -256,7 +256,7 @@ present on the user's computer.
 
 <h3>ERROR: Please install GRASS development package</h3>
 
-While GRASS GIS is available on the user's computer, the respective development
+While GRASS is available on the user's computer, the respective development
 package is lacking. If GRASS was installed from a (Linux) repository, also the
 grass-dev* package (commonly named "grass-dev" or "grass-devel", sometimes along
 with the version number) must be installed.
@@ -268,7 +268,7 @@ with the version number) must be installed.
 </em>
 
 <p>
-<a href="https://grass.osgeo.org/grass8/manuals/addons/">GRASS GIS 8 Addons Manual pages</a>
+<a href="https://grass.osgeo.org/grass8/manuals/addons/">GRASS 8 Addons Manual pages</a>
 <br>
 <a href="https://grasswiki.osgeo.org/wiki/GRASS_AddOns">GRASS Addons</a> wiki page.
 

@@ -19,7 +19,6 @@ int draw_line(double x1, double y1, double x2, double y2)
    by calling G_plot_where_xy() and therefore they are integers which need to
    be divided by 10. to get double with precision until first decimal place
  */
-
 int start_line(double east, double north)
 {
     int x, y;

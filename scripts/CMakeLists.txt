@@ -67,6 +67,7 @@ set(script_DIRS
     v.db.univar
     v.db.update
     v.dissolve
+    v.geometry
     v.import
     v.in.e00
     v.in.geonames
@@ -152,4 +153,4 @@ add_custom_target(
   DEPENDS v.to.lines)
 add_dependencies(r.in.wms r.in.wms_files)
 
-set_target_properties(r.in.wms_files PROPERTIES FOLDER scripts)
+set_target_properties(r.in.wms_files PROPERTIES FOLDER "Tools/Raster")

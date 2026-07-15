@@ -7,18 +7,29 @@ Usage:
 
     import grass.temporal as tgis
 
-    input="/tmp/temp_1950_2012.tar.gz"
-    output="temp_1950_2012"
-    directory="/tmp"
-    title="My new dataset"
-    descr="May new shiny dataset"
-    location=None
-    link=True
-    exp=True
-    overr=False
-    create=False
-    tgis.import_stds(input, output, directory, title, descr, location,
-                    link, exp, overr, create, "strds")
+    input = "/tmp/temp_1950_2012.tar.gz"
+    output = "temp_1950_2012"
+    directory = "/tmp"
+    title = "My new dataset"
+    descr = "May new shiny dataset"
+    location = None
+    link = True
+    exp = True
+    overr = False
+    create = False
+    tgis.import_stds(
+        input,
+        output,
+        directory,
+        title,
+        descr,
+        location,
+        link,
+        exp,
+        overr,
+        create,
+        "strds",
+    )
 
 
 (C) 2012-2013 by the GRASS Development Team
@@ -104,7 +115,7 @@ def _import_raster_maps_from_gdal(
 
         # Set the color rules if present
         filename = row["filename"] + ".color"
-        if os.path.isfile(filename):
+        if Path(filename).is_file():
             try:
                 gs.run_command(
                     "r.colors", map=name, rules=filename, overwrite=gs.overwrite()
@@ -249,9 +260,9 @@ def import_stds(
     gs.set_raise_on_error(True)
 
     # Check if input file and extraction directory exits
-    if not os.path.exists(input):
+    if not Path(input).exists():
         gs.fatal(_("Space time raster dataset archive <%s> not found") % input)
-    if not create and not os.path.exists(directory):
+    if not create and not Path(directory).exists():
         gs.fatal(_("Extraction directory <%s> not found") % directory)
 
     tar = tarfile.open(name=input, mode="r")
@@ -260,7 +271,7 @@ def import_stds(
     msgr = get_tgis_message_interface()
     msgr.message(
         _("Checking validity of input file (size: %0.1f MB). Make take a while...")
-        % (os.path.getsize(input) / (1024 * 1024.0))
+        % (Path(input).stat().st_size / (1024 * 1024.0))
     )
     members = tar.getnames()
     # Make sure that the basenames of the files are used for comparison
@@ -313,7 +324,7 @@ def import_stds(
         Path(proj_name_tmp).write_text(proj_content)
 
         with open(temp_name, "w") as temp_file:
-            p = gs.start_command("g.proj", flags="j", stdout=temp_file)
+            p = gs.start_command("g.proj", flags="p", format="proj4", stdout=temp_file)
             p.communicate()
 
         if not gs.compare_key_value_text_files(temp_name, proj_name_tmp, sep="="):
@@ -333,6 +344,8 @@ def import_stds(
     # Create a new location based on the projection information and switch
     # into it
     old_env = gs.gisenv()
+    target_gisrc = None
+    old_gisrc = os.environ.get("GISRC")
     if location:
         try:
             proj4_string = Path(proj_file_name).read_text()
@@ -348,16 +361,18 @@ def import_stds(
                 _("Unable to create location %(l)s. Reason: %(e)s")
                 % {"l": location, "e": str(e)}
             )
-        # Switch to the new created location
+        # Create a temporary environment
         try:
-            gs.run_command(
-                "g.mapset",
-                mapset="PERMANENT",
-                project=location,
-                dbase=old_env["GISDBASE"],
+            target_gisrc, target_env = gs.create_environment(
+                old_env["GISDBASE"], location, "PERMANENT"
             )
-        except CalledModuleError:
-            gs.fatal(_("Unable to switch to location %s") % location)
+            os.environ["GISRC"] = target_gisrc
+
+        except OSError as e:
+            gs.fatal(
+                _("Unable to create environment for location %s. Reason: %s")
+                % (location, e)
+            )
         # create default database connection
         try:
             gs.run_command("t.connect", flags="d")
@@ -470,7 +485,7 @@ def import_stds(
         if format_ == "GTiff":
             for row in maplist:
                 filename = row["filename"] + ".tif"
-                if not os.path.exists(filename):
+                if not Path(filename).exists():
                     gs.fatal(
                         _("Unable to find GeoTIFF raster file <%s> in archive.")
                         % filename
@@ -478,7 +493,7 @@ def import_stds(
         elif format_ == "AAIGrid":
             for row in maplist:
                 filename = row["filename"] + ".asc"
-                if not os.path.exists(filename):
+                if not Path(filename).exists():
                     gs.fatal(
                         _("Unable to find AAIGrid raster file <%s> in archive.")
                         % filename
@@ -486,7 +501,7 @@ def import_stds(
         elif format_ == "GML":
             for row in maplist:
                 filename = row["filename"] + ".xml"
-                if not os.path.exists(filename):
+                if not Path(filename).exists():
                     gs.fatal(
                         _("Unable to find GML vector file <%s> in archive.") % filename
                     )
@@ -496,7 +511,7 @@ def import_stds(
                     filename = str(row["filename"].split(":")[0]) + ".pack"
                 else:
                     filename = row["filename"] + ".pack"
-                if not os.path.exists(filename):
+                if not Path(filename).exists():
                     gs.fatal(
                         _("Unable to find GRASS package file <%s> in archive.")
                         % filename
@@ -587,19 +602,22 @@ def import_stds(
             update_cmd_list=False,
         )
 
-        os.chdir(old_cwd)
     # Make sure the location is switched back correctly
     finally:
+        os.chdir(old_cwd)
         if location:
-            # Switch to the old location
-            try:
-                gs.run_command(
-                    "g.mapset",
-                    mapset=old_env["MAPSET"],
-                    project=old_env["LOCATION_NAME"],
-                    gisdbase=old_env["GISDBASE"],
-                )
-            except CalledModuleError:
-                gs.warning(_("Switching to original location failed"))
+            # Restore the original session
+            if old_gisrc is not None:
+                os.environ["GISRC"] = old_gisrc
+            else:
+                os.environ.pop("GISRC", None)
+
+            from .core import init
+
+            init()
+
+            # Delete the temporary session file
+            if target_gisrc:
+                gs.try_remove(target_gisrc)
 
         gs.set_raise_on_error(old_state)

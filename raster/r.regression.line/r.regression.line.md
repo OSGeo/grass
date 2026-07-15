@@ -47,12 +47,12 @@ r.regression.line mapx=elev_ned_30m mapy=elev_srtm_30m
    sdY (Standard deviation of map2): 23.718307
 ```
 
-Using the script style flag AND *eval* to make results available in the
+Using the shell format option AND *eval* to make results available in the
 shell:
 
 ```sh
 g.region raster=elev_srtm_30m -p
-eval `r.regression.line -g mapx=elev_ned_30m mapy=elev_srtm_30m`
+eval `r.regression.line mapx=elev_ned_30m mapy=elev_srtm_30m format=shell`
 
 # print result stored in respective variables
 echo $a
@@ -63,6 +63,33 @@ echo $b
 
 echo $R
 0.894038
+```
+
+Using the JSON format option and Python to parse the output:
+
+```python
+import grass.script as gs
+
+data = gs.parse_command(
+    "r.regression.line", mapx="elev_ned_30m", mapy="elev_srtm_30m", format="json"
+)
+print(data)
+```
+
+Possible JSON Output:
+
+```json
+{
+ "a": -1.6592786233805945,
+ "b": 1.0439679629649166,
+ "R": 0.8940383063008781,
+ "N": 225000,
+ "F": 896093.366283,
+ "x_mean": 110.30757108713786,
+ "x_stddev": 20.311997672696272,
+ "y_mean": 113.49829166406644,
+ "y_stddev": 23.718306793642626
+}
 ```
 
 ## SEE ALSO

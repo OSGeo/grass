@@ -12,14 +12,13 @@
  * x, y, and z into region coordinates and returned the nearest neighbor.
  *
  *  \param map
- *  \param col
- *  \param row
- *  \param depth
+ *  \param x
+ *  \param y
+ *  \param z
  *  \param value
  *  \param type
  *  \return void
  */
-
 void Rast3d_nearest_neighbor(RASTER3D_Map *map, int x, int y, int z,
                              void *value, int type)
 {
@@ -46,10 +45,10 @@ void Rast3d_nearest_neighbor(RASTER3D_Map *map, int x, int y, int z,
  * Sets the resampling function to be used by
  * Rast3d_get_value () (cf.{g3d:G3d.getValue}). This function is defined
  * as follows:
- *
- *  \return void
+ * \param map
+ * \param resampleFun
+ * \return void
  */
-
 void Rast3d_set_resampling_fun(RASTER3D_Map *map,
                                void (*resampleFun)(RASTER3D_Map *, int, int,
                                                    int, void *, int))
@@ -68,7 +67,6 @@ void Rast3d_set_resampling_fun(RASTER3D_Map *map,
  *
  *  \return void
  */
-
 void Rast3d_get_resampling_fun(RASTER3D_Map *map,
                                void (**resampleFun)(RASTER3D_Map *, int, int,
                                                     int, void *, int))
@@ -87,7 +85,6 @@ void Rast3d_get_resampling_fun(RASTER3D_Map *map,
  *
  *  \return void
  */
-
 void Rast3d_get_nearest_neighbor_fun_ptr(void (**nnFunPtr)(RASTER3D_Map *, int,
                                                            int, int, void *,
                                                            int))

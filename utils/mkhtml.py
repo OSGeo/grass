@@ -7,7 +7,7 @@
 #               Glynn Clements
 #               Martin Landa <landa.martin gmail.com>
 # PURPOSE:      Create HTML manual page snippets
-# COPYRIGHT:    (C) 2007-2025 by Glynn Clements
+# COPYRIGHT:    (C) 2007-2026 by Glynn Clements
 #                and the GRASS Development Team
 #
 #               This program is free software under the GNU General
@@ -16,30 +16,31 @@
 #
 #############################################################################
 
-import sys
-import os
-import string
-import re
-from datetime import datetime
 import locale
-
-from html.parser import HTMLParser
-
+import os
+import re
+import string
+import sys
 import urllib.parse as urlparse
+from datetime import datetime
+from html.parser import HTMLParser
+from pathlib import Path
 
 try:
     import grass.script as gs
 except ImportError:
-    # During compilation GRASS GIS
+    # During compilation GRASS
     gs = None
 
 from mkdocs import (
-    read_file,
-    get_version_branch,
-    get_last_git_commit,
-    top_dir as topdir,
     get_addon_path,
+    get_last_git_commit,
+    get_version_branch,
+    read_file,
     set_proxy,
+)
+from mkdocs import (
+    top_dir as topdir,
 )
 
 grass_version = os.getenv("VERSION_NUMBER", "unknown")
@@ -70,11 +71,7 @@ if grass_version != "unknown":
 
 
 def _get_encoding():
-    try:
-        # Python >= 3.11
-        encoding = locale.getencoding()
-    except AttributeError:
-        encoding = locale.getdefaultlocale()[1]
+    encoding = locale.getencoding()
     if not encoding:
         encoding = "UTF-8"
     return encoding
@@ -93,7 +90,7 @@ header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
- <title>${PGM} - GRASS GIS Manual</title>
+ <title>${PGM} - GRASS Manual</title>
  <meta name="Author" content="GRASS Development Team">
  <meta name="description" content="${PGM}: ${PGM_DESC}">
  <link rel="stylesheet" href="grassdocs.css" type="text/css">
@@ -144,7 +141,7 @@ footer_index = string.Template(
 <p>
 &copy; 2003-${YEAR}
 <a href="https://grass.osgeo.org">GRASS Development Team</a>,
-GRASS GIS ${GRASS_VERSION} Reference Manual
+GRASS ${GRASS_VERSION} Reference Manual
 </p>
 
 </div>
@@ -165,7 +162,7 @@ footer_noindex = string.Template(
 <p>
 &copy; 2003-${YEAR}
 <a href="https://grass.osgeo.org">GRASS Development Team</a>,
-GRASS GIS ${GRASS_VERSION} Reference Manual
+GRASS ${GRASS_VERSION} Reference Manual
 </p>
 
 </div>
@@ -339,7 +336,7 @@ def update_toc(data):
 # process header
 src_data = read_file(src_file)
 name = re.search(r"(<!-- meta page name:)(.*)(-->)", src_data, re.IGNORECASE)
-pgm_desc = "GRASS GIS Reference Manual"
+pgm_desc = "GRASS Reference Manual"
 if name:
     pgm = name.group(2).strip().split("-", 1)[0].strip()
     name_desc = re.search(
@@ -471,7 +468,7 @@ if os.getenv("SOURCE_URL", ""):
     addon_path = get_addon_path(base_url=base_url, pgm=pgm, major_version=major)
     if addon_path:
         # Addon is installed from the local dir
-        if os.path.exists(os.getenv("SOURCE_URL")):
+        if Path(os.getenv("SOURCE_URL")).exists():
             url_source = urlparse.urljoin(
                 addons_url,
                 addon_path,

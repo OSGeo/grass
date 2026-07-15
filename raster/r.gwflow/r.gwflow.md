@@ -150,6 +150,5 @@ paraview --data=/tmp/gwdata_unconf2d.vtk &
 
 Sören Gebbert
 
-This work is based on the Diploma Thesis of Sören Gebbert available
-[here](https://grass.osgeo.org/gdp/hydrology/gebbert2007_diplom_stroemung_grass_gis.pdf)
+This work is based on the [Diploma Thesis of Sören Gebbert](https://grass.osgeo.org/gdp/hydrology/gebbert2007_diplom_stroemung_grass_gis.pdf)
 at Technical University Berlin in Germany.

@@ -31,11 +31,12 @@ import random
 import string
 
 from pathlib import Path
-from typing import TYPE_CHECKING, AnyStr, Callable, TypeVar, cast, overload
+from typing import TYPE_CHECKING, AnyStr, TypeVar, cast, overload
 
 
 if TYPE_CHECKING:
     from _typeshed import FileDescriptorOrPath, StrOrBytesPath, StrPath
+    from collections.abc import Callable
 
 
 # Type variables
@@ -46,9 +47,9 @@ VT = TypeVar("VT")  # Value type
 def float_or_dms(s) -> float:
     """Convert DMS to float.
 
-    >>> round(float_or_dms('26:45:30'), 5)
+    >>> round(float_or_dms("26:45:30"), 5)
     26.75833
-    >>> round(float_or_dms('26:0:0.1'), 5)
+    >>> round(float_or_dms("26:0:0.1"), 5)
     26.00003
 
     :param s: DMS value
@@ -64,15 +65,15 @@ def separator(sep: str) -> str:
     """Returns separator from G_OPT_F_SEP appropriately converted
     to character.
 
-    >>> separator('pipe')
+    >>> separator("pipe")
     '|'
-    >>> separator('comma')
+    >>> separator("comma")
     ','
 
     If the string does not match any of the separator keywords,
     it is returned as is:
 
-    >>> separator(', ')
+    >>> separator(", ")
     ', '
 
     :param str separator: character or separator keyword
@@ -90,6 +91,40 @@ def separator(sep: str) -> str:
     if sep in {"newline", "\\n"}:
         return "\n"
     return sep
+
+
+def available_cpus() -> int:
+    """Number of CPUs this process may actually use.
+
+    Prefers affinity-aware sources over ``os.cpu_count()``, which reports
+    the host total and overcounts in containers and cgroup-limited jobs.
+
+    .. versionadded:: 8.6
+    """
+    if hasattr(os, "process_cpu_count"):  # Python 3.13+
+        return os.process_cpu_count() or 1
+    if hasattr(os, "sched_getaffinity"):  # Linux
+        return len(os.sched_getaffinity(0))
+    return os.cpu_count() or 1
+
+
+def resolve_nprocs(nprocs: int | str) -> int:
+    """Resolve G_OPT_M_NPROCS into a worker count.
+
+    Mirrors the semantics of ``G_set_omp_num_threads()`` in
+    ``lib/gis/omp_threads.c``: 0 means use all available cores, a positive
+    number is used as-is, a negative number means cpu_count + nprocs
+    (clamped to at least 1).
+
+    .. versionadded:: 8.6
+    """
+    n = int(nprocs)
+    if n > 0:
+        return n
+    available = available_cpus()
+    if n == 0:
+        return available
+    return max(1, available + n)
 
 
 def diff_files(
@@ -153,33 +188,35 @@ class KeyValue(dict[str, VT]):
     """A general-purpose key-value store.
 
     KeyValue is a subclass of dict, but also allows entries to be read and
-    written using attribute syntax. Example:
+    written using attribute syntax.
 
-    >>> reg = KeyValue()
-    >>> reg['north'] = 489
-    >>> reg.north
-    489
-    >>> reg.south = 205
-    >>> reg['south']
-    205
+    :Example:
+      .. code-block:: pycon
+
+        >>> reg = KeyValue()
+        >>> reg["north"] = 489
+        >>> reg.north
+        489
+        >>> reg.south = 205
+        >>> reg["south"]
+        205
 
     The keys of KeyValue are strings. To use other key types, use other mapping types.
     To use the attribute syntax, the keys must be valid Python attribute names.
     """
 
     def __getattr__(self, key: str) -> VT:
-        return self[key]
+        try:
+            return self[key]
+        except KeyError:
+            raise AttributeError(key)
 
     def __setattr__(self, key: str, value: VT) -> None:
         self[key] = value
 
 
 def _get_encoding() -> str:
-    try:
-        # Python >= 3.11
-        encoding = locale.getencoding()
-    except AttributeError:
-        encoding = locale.getdefaultlocale()[1]
+    encoding = locale.getencoding()
     if not encoding:
         encoding = "UTF-8"
     return encoding
@@ -190,15 +227,15 @@ def decode(bytes_: AnyStr, encoding: str | None = None) -> str:
 
     No-op if parameter is not bytes (assumed unicode string).
 
-    :param bytes bytes_: the bytes to decode
+    :param bytes\\_: the bytes to decode
     :param encoding: encoding to be used, default value is None
 
     Example
     -------
 
-    >>> decode(b'S\xc3\xbcdtirol')
+    >>> decode(b"S\xc3\xbcdtirol")
     u'Südtirol'
-    >>> decode(u'Südtirol')
+    >>> decode("Südtirol")
     u'Südtirol'
     >>> decode(1234)
     u'1234'
@@ -225,9 +262,9 @@ def encode(string: AnyStr, encoding: str | None = None) -> bytes:
     Example
     -------
 
-    >>> encode(b'S\xc3\xbcdtirol')
+    >>> encode(b"S\xc3\xbcdtirol")
     b'S\xc3\xbcdtirol'
-    >>> decode(u'Südtirol')
+    >>> decode("Südtirol")
     b'S\xc3\xbcdtirol'
     >>> decode(1234)
     b'1234'
@@ -245,6 +282,10 @@ def encode(string: AnyStr, encoding: str | None = None) -> bytes:
 def text_to_string(text: AnyStr, encoding: str | None = None) -> str:
     """Convert text to str. Useful when passing text into environments,
     in Python 2 it needs to be bytes on Windows, in Python 3 in needs unicode.
+
+    :param text: The text to convert to string
+    :param encoding: The encoding to be used to decode the text that will be converted
+    :returns: A (unicode) string
     """
     return decode(text, encoding=encoding)
 
@@ -292,9 +333,9 @@ def parse_key_val(
     """Parse a string into a dictionary, where entries are separated
     by newlines and the key and value are separated by `sep` (default: `=`)
 
-    >>> parse_key_val('min=20\\nmax=50') == {'min': '20', 'max': '50'}
+    >>> parse_key_val("min=20\\nmax=50") == {"min": "20", "max": "50"}
     True
-    >>> parse_key_val('min=20\\nmax=50', val_type=float) == {'min': 20, 'max': 50}
+    >>> parse_key_val("min=20\\nmax=50", val_type=float) == {"min": 20, "max": 50}
     True
 
     :param s: string to be parsed
@@ -422,21 +463,22 @@ def naturally_sort(items, key=None):
 def get_lib_path(modname, libname=None):
     """Return the path of the libname contained in the module."""
     from os import getenv
-    from os.path import isdir, join, sep
+    from os.path import join, sep
 
-    if isdir(join(getenv("GISBASE"), "etc", modname)):
+    if Path(getenv("GISBASE"), "etc", modname).is_dir():
         path = join(os.getenv("GISBASE"), "etc", modname)
     elif (
         getenv("GRASS_ADDON_BASE")
         and libname
-        and isdir(join(getenv("GRASS_ADDON_BASE"), "etc", modname, libname))
+        and Path(getenv("GRASS_ADDON_BASE"), "etc", modname, libname).is_dir()
     ) or (
         getenv("GRASS_ADDON_BASE")
-        and isdir(join(getenv("GRASS_ADDON_BASE"), "etc", modname))
+        and Path(getenv("GRASS_ADDON_BASE"), "etc", modname).is_dir()
     ):
         path = join(getenv("GRASS_ADDON_BASE"), "etc", modname)
-    elif getenv("GRASS_ADDON_BASE") and isdir(
-        join(getenv("GRASS_ADDON_BASE"), modname, modname)
+    elif (
+        getenv("GRASS_ADDON_BASE")
+        and Path(getenv("GRASS_ADDON_BASE"), modname, modname).is_dir()
     ):
         path = join(os.getenv("GRASS_ADDON_BASE"), modname, modname)
     else:
@@ -445,8 +487,19 @@ def get_lib_path(modname, libname=None):
         idx = cwd.find(modname)
         if idx < 0:
             return None
-        path = "{cwd}{sep}etc{sep}{modname}".format(
-            cwd=cwd[: idx + len(modname)], sep=sep, modname=modname
+
+        from grass.app.runtime import RuntimePaths
+
+        runtime_paths = RuntimePaths(set_env_variables=True)
+
+        path = (
+            "{cwd}{sep}build{sep}output{sep}etc{sep}{modname}".format(
+                cwd=cwd[: idx + len(modname)], sep=sep, modname=modname
+            )
+            if runtime_paths.is_cmake_build
+            else "{cwd}{sep}etc{sep}{modname}".format(
+                cwd=cwd[: idx + len(modname)], sep=sep, modname=modname
+            )
         )
         if libname:
             path += "{pathsep}{cwd}{sep}etc{sep}{modname}{sep}{libname}".format(
@@ -461,7 +514,7 @@ def get_lib_path(modname, libname=None):
 
 
 def set_path(modulename, dirname=None, path="."):
-    """Set sys.path looking in the the local directory GRASS directories.
+    """Set sys.path looking in the local directory GRASS directories.
 
     :param modulename: string with the name of the GRASS module
     :param dirname: string with the directory name containing the python
@@ -501,8 +554,8 @@ def set_path(modulename, dirname=None, path="."):
 
     in the source code the function is called with the following parameters: ::
 
-        set_path('r.green', 'libhydro', '..')
-        set_path('r.green', 'libgreen', os.path.join('..', '..'))
+        set_path("r.green", "libhydro", "..")
+        set_path("r.green", "libgreen", os.path.join("..", ".."))
 
     when we are executing the module: r.green.hydro.financial locally from
     the command line:  ::
@@ -515,7 +568,7 @@ def set_path(modulename, dirname=None, path="."):
     The function is checking if the dirname is provided and if the
     directory exists and it is available using the path
     provided as third parameter, if yes add the path to sys.path to be
-    importable, otherwise it will check on GRASS GIS standard paths.
+    importable, otherwise it will check on GRASS standard paths.
 
     """
     import sys
@@ -524,12 +577,12 @@ def set_path(modulename, dirname=None, path="."):
     pathlib_ = None
     if dirname:
         pathlib_ = os.path.join(path, dirname)
-    if pathlib_ and os.path.exists(pathlib_):
+    if pathlib_ and Path(pathlib_).exists():
         # we are running the script from the script directory, therefore
         # we add the path to sys.path to reach the directory (dirname)
         sys.path.append(os.path.abspath(path))
     else:
-        # running from GRASS GIS session
+        # running from GRASS session
         path = get_lib_path(modulename, dirname)
         if path is None:
             pathname = os.path.join(modulename, dirname) if dirname else modulename
@@ -549,7 +602,7 @@ def clock():
     return time.perf_counter()
 
 
-def legalize_vector_name(name, fallback_prefix="x"):
+def legalize_vector_name(name, fallback_prefix: str | None = "x") -> str:
     """Make *name* usable for vectors, tables, and columns
 
     The returned string is a name usable for vectors, tables, and columns,
@@ -599,11 +652,11 @@ def append_node_pid(name):
 
     >>> append_node_pid("tmp_raster_1")
 
-    ..note::
+    .. note::
 
         Before you use this function for creating temporary files (i.e., normal
         files on disk, not maps and other mapset elements), see functions
-        designed for it in the GRASS GIS or standard Python library. These
+        designed for it in the GRASS or standard Python library. These
         take care of collisions already on different levels.
     """
     # We are using this node as a suffix, so we don't need to make sure it
@@ -632,7 +685,7 @@ def append_uuid(name):
 
     >>> append_uuid("tmp")
 
-    ..note::
+    .. note::
 
         See the note about creating temporary files in the
         :func:`append_node_pid()` description.
@@ -647,12 +700,12 @@ def append_random(name, suffix_length=None, total_length=None):
     >>> append_random("tmp", 8)
     >>> append_random("tmp", total_length=16)
 
-    ..note::
+    .. note::
 
         Note that this will be influenced by the random seed set for the Python
         random package.
 
-    ..note::
+    .. note::
 
         See the note about creating temporary files in the
         :func:`append_node_pid()` description.

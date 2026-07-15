@@ -132,7 +132,7 @@ static void redraw(void)
     last = (tv1.tv_sec - tv0.tv_sec) * 1000000L + (tv1.tv_usec - tv0.tv_usec);
 }
 
-static void dummy_handler(int sig UNUSED)
+static void dummy_handler(int sig G_UNUSED)
 {
 }
 

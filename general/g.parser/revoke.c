@@ -38,7 +38,9 @@ int reinvoke_script(const struct context *ctx, const char *filename)
                    option->answer ? option->answer : "");
         putenv(str);
 
-        strcpy(upper, option->key);
+        if (G_strlcpy(upper, option->key, sizeof(upper)) >= sizeof(upper)) {
+            G_fatal_error(_("Option key <%s> is too long"), option->key);
+        }
         G_str_to_upper(upper);
         G_asprintf(&str, "GIS_OPT_%s=%s", upper,
                    option->answer ? option->answer : "");

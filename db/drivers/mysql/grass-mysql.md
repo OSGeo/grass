@@ -1,8 +1,7 @@
 ---
+title: MySQL Database Driver
 description: MySQL DATABASE DRIVER
 ---
-
-# MySQL DATABASE DRIVER
 
 MySQL database driver enables GRASS to store vector attributes in MySQL
 server.
@@ -109,4 +108,4 @@ Credits: Development of the driver was sponsored by
 
 ## SEE ALSO
 
-*[db.connect](db.connect.md), [SQL support in GRASS GIS](sql.md)*
+*[db.connect](db.connect.md), [SQL support in GRASS](sql.md)*

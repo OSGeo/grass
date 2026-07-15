@@ -272,6 +272,9 @@ class Settings:
                 "interactiveInput": {
                     "enabled": True,
                 },
+                "pythonAPI": {
+                    "selection": 0,
+                },
             },
             #
             # d.rast
@@ -802,6 +805,12 @@ class Settings:
             "quiet",
         )
 
+        self.internalSettings["cmd"]["pythonAPI"]["choices"] = (
+            _("Tools API"),
+            _("Script API"),
+            _("PyGRASS API"),
+        )
+
         self.internalSettings["appearance"]["iconTheme"]["choices"] = ("grass",)
         self.internalSettings["appearance"]["menustyle"]["choices"] = (
             _("Classic (labels only)"),
@@ -884,6 +893,7 @@ class Settings:
         self.internalSettings["modeler"]["grassAPI"]["choices"] = (
             _("Script package"),
             _("PyGRASS"),
+            _("GRASS Tools"),
         )
 
     def ReadSettingsFile(self, settings=None):
@@ -891,9 +901,9 @@ class Settings:
         if settings is None:
             settings = self.userSettings
 
-        if os.path.exists(self.filePath):
+        if Path(self.filePath).exists():
             self._readFile(settings)
-        elif os.path.exists(self.legacyFilePath):
+        elif Path(self.legacyFilePath).exists():
             self._readLegacyFile(settings)
 
         # set environment variables
@@ -982,9 +992,9 @@ class Settings:
             settings = self.userSettings
 
         dirPath = GetSettingsPath()
-        if not os.path.exists(dirPath):
+        if not Path(dirPath).exists():
             try:
-                os.mkdir(dirPath)
+                Path(dirPath).mkdir()
             except OSError:
                 GError(_("Unable to create settings directory"))
                 return None

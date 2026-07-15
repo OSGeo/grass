@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
                           output->answer);
 }
 
-int meanPatchSize(int fd, char **par UNUSED, struct area_entry *ad,
+int meanPatchSize(int fd, char **par G_UNUSED, struct area_entry *ad,
                   double *result)
 {
     int ris = RLI_OK;

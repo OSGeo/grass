@@ -1,6 +1,6 @@
 ## DESCRIPTION
 
-*r.external.out* instructs GRASS GIS to write subsequently generated
+*r.external.out* instructs GRASS to write subsequently generated
 raster maps as data files (e.g. GeoTIFF) using GDAL instead of storing
 them in GRASS raster format in the current mapset.
 
@@ -44,7 +44,7 @@ r.external.out -r
 gdalinfo $HOME/gisoutput/elev_filt.tif
 ```
 
-### Complete workflow using only external geodata while processing in GRASS GIS
+### Complete workflow using only external geodata while processing in GRASS
 
 The module *r.external.out* can be used along with *r.external* to
 process external geodata in GRASS while writing out the results directly

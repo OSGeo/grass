@@ -46,7 +46,7 @@ class TestVHull(TestCase):
         )
 
     def setUp(self):
-        """Creates temporary test point data and imports it into GRASS GIS as vector maps.s"""
+        """Creates temporary test point data and imports it into GRASS as vector maps.s"""
         self.temp_files = []
         self.temp_colinear = self.create_temp_file("0 0\n1 0\n2 0\n")
         self.temp_non_colinear = self.create_temp_file("0 0\n1 0\n0.5 1\n")

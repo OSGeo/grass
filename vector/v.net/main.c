@@ -108,6 +108,8 @@ int main(int argc, char **argv)
 
         /* create output map */
         Out = (struct Map_info *)G_malloc(sizeof(struct Map_info));
+        if (!Out)
+            G_fatal_error(_("Out of memory"));
         is3d = WITHOUT_Z;
         if (In)
             is3d = Vect_is_3d(In);

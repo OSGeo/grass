@@ -91,7 +91,7 @@ int G_scan_easting(const char *buf, double *easting, int projection)
    - PROJECTION_OTHER
 
    \param buf buffer containing string resolution
-   \param[out] resolution resolution value
+   \param[out] res resolution value
    \param projection projection code
 
    \return 0 on error

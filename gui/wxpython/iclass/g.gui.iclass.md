@@ -1,11 +1,9 @@
 ---
+title: g.gui.iclass
 description: wxGUI Supervised Classification Tool
 index: topic_GUI|GUI
 keywords: [display, GUI, imagery, classification, supervised classification]
-
 ---
-
-# wxGUI Supervised Classification Tool
 
 ## DESCRIPTION
 

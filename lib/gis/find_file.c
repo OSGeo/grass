@@ -166,7 +166,7 @@ static const char *find_file1(int misc, const char *dir, const char *element,
  *
  * Returns the mapset name where the file was found.
  *
- * If the user specifies a fully qualified element (name@mapset)
+ * If the user specifies a fully qualified element (name\@mapset)
  * which exists, then G_find_file() modifies "name"
  * by removing the "@mapset" part.
  *

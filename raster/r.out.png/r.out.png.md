@@ -1,6 +1,6 @@
 ## DESCRIPTION
 
-*r.out.png* exports a GRASS GIS raster map in non-georeferenced Portable
+*r.out.png* exports a GRASS raster map in non-georeferenced Portable
 Network Graphics (PNG) image format, respecting the current region
 resolution and bounds.
 

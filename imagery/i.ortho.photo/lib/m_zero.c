@@ -3,7 +3,6 @@
 /*
  * zero: returns arg2 zero filled
  */
-
 int zero(MATRIX *a)
 {
     register int i, j;

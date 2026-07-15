@@ -130,7 +130,7 @@ void N_copy_array_2d(N_array_2d *source, N_array_2d *target)
  *
  * The norm can be of type N_MAXIMUM_NORM or N_EUKLID_NORM.
  * All arrays must have equal sizes and offsets.
- * The complete data array inclusively offsets is used for norm calucaltion.
+ * The complete data array inclusively offsets is used for norm calculation.
  * Only non-null values are used to calculate the norm.
  *
 
@@ -270,7 +270,7 @@ void N_calc_array_2d_stats(N_array_2d *a, double *min, double *max, double *sum,
  * the result is written to a third array.
  *
  * All arrays must have equal sizes and offsets.
- * The complete data array inclusively offsets is used for calucaltions.
+ * The complete data array inclusively offsets is used for calculations.
  * Only non-null values are computed. If one array value is null,
  * the result array value will be null too.
  * <br><br>
@@ -545,7 +545,7 @@ void N_copy_array_3d(N_array_3d *source, N_array_3d *target)
  *
  * The norm can be of type N_MAXIMUM_NORM or N_EUKLID_NORM.
  * All arrays must have equal sizes and offsets.
- * The complete data array inclusively offsets is used for norm calucaltion.
+ * The complete data array inclusively offsets is used for norm calculation.
  * Only non-null values are used to calculate the norm.
  *
  * \param a N_array_3d *
@@ -691,7 +691,7 @@ void N_calc_array_3d_stats(N_array_3d *a, double *min, double *max, double *sum,
  * the result is written to a third array.
  *
  * All arrays must have equal sizes and offsets.
- * The complete data array inclusively offsets is used for calucaltions.
+ * The complete data array inclusively offsets is used for calculations.
  * Only non-null values are used. If one array value is null,
  * the result array value will be null too.
  * <br><br>

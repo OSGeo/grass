@@ -121,8 +121,15 @@ int main(int argc, char *argv[])
         char name[GNAME_MAX], mapset[GMAPSET_MAX];
 
         if (!G_name_is_fully_qualified(outvect->answer, name, mapset)) {
-            strcpy(name, outvect->answer);
-            strcpy(mapset, G_mapset());
+            if (G_strlcpy(name, outvect->answer, sizeof(name)) >=
+                sizeof(name)) {
+                G_fatal_error(_("Output vector name too long: <%s>"),
+                              outvect->answer);
+            }
+            if (G_strlcpy(mapset, G_mapset(), sizeof(mapset)) >=
+                sizeof(mapset)) {
+                G_fatal_error(_("Mapset name too long: <%s>"), G_mapset());
+            }
         }
 
         Vect_set_open_level(1); /* no topo needed */

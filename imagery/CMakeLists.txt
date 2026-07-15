@@ -34,18 +34,42 @@ set(imagery_modules_list
     i.smap
     i.target
     i.topo.corr
-    i.vi
-    i.zc)
+    i.vi)
 
-# TODO: add i.svm.predict and i.svm.train
+if(WITH_FFTW)
+  list(APPEND imagery_modules_list i.zc)
+endif()
+
+if(WITH_LIBSVM)
+  build_program_in_subdir(
+    i.svm.predict
+    DEPENDS
+    grass_imagery
+    grass_raster
+    grass_gis
+    LibSVM::LibSVM)
+
+  build_program_in_subdir(
+    i.svm.train
+    DEPENDS
+    grass_imagery
+    grass_raster
+    grass_vector
+    grass_gis
+    LibSVM::LibSVM)
+
+    list(APPEND imagery_modules_list i.svm.predict i.svm.train)
+endif()
 
 add_custom_target(
   ALL_IMAGERY_MODULES ALL
   DEPENDS ${imagery_modules_list}
   COMMENT "All imagery modules are built.")
 
+set_target_properties(ALL_IMAGERY_MODULES PROPERTIES FOLDER Misc)
+
 if(WITH_DOCS)
-  generate_html(TARGET ALL_IMAGERY_MODULES NAME imageryintro)
+  generate_docs(imageryintro TARGET ALL_IMAGERY_MODULES)
 
   file(COPY ${CMAKE_SOURCE_DIR}/lib/imagery/band_references_scheme.png
        DESTINATION ${OUTDIR}/${GRASS_INSTALL_DOCDIR})
@@ -138,7 +162,7 @@ build_program_in_subdir(
   ${LIBM})
 
 build_program_in_subdir(i.group DEPENDS grass_imagery grass_raster grass_vector
-                        grass_gis)
+                        grass_gis grass_parson)
 
 build_program_in_subdir(i.his.rgb DEPENDS grass_imagery grass_raster
                         grass_vector grass_gis)
@@ -199,14 +223,18 @@ build_program_in_subdir(
 build_program_in_subdir(i.vi DEPENDS grass_imagery grass_raster grass_vector
                         grass_gis ${LIBM})
 
-build_program_in_subdir(
-  i.zc
-  DEPENDS
-  grass_imagery
-  grass_raster
-  grass_vector
-  grass_gis
-  grass_gmath)
+if(WITH_FFTW)
+  build_program_in_subdir(
+    i.zc
+    DEPENDS
+    grass_imagery
+    grass_raster
+    grass_vector
+    grass_gis
+    grass_gmath)
+else()
+  message(STATUS "i.zc disabled because FFTW is not available")
+endif()
 
 build_program_in_subdir(
   i.fft

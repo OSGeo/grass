@@ -59,50 +59,50 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
 
     if (parm.operator->answer[0] == 'e')
-        operator= OP_EQUALS;
+        operator = OP_EQUALS;
 
     else if (parm.operator->answer[0] == 'd') {
         /* operator = OP_DISJOINT; */
-        operator= OP_INTERSECTS;
+        operator = OP_INTERSECTS;
 
         flag.reverse->answer = YES;
     }
     else if (parm.operator->answer[0] == 'i')
-        operator= OP_INTERSECTS;
+        operator = OP_INTERSECTS;
 
     else if (parm.operator->answer[0] == 't')
-        operator= OP_TOUCHES;
+        operator = OP_TOUCHES;
 
     else if (parm.operator->answer[0] == 'c' && parm.operator->answer[1] == 'r')
-        operator= OP_CROSSES;
+        operator = OP_CROSSES;
 
     else if (parm.operator->answer[0] == 'w')
-        operator= OP_WITHIN;
+        operator = OP_WITHIN;
 
     else if (parm.operator->answer[0] == 'c' && parm.operator->answer[1] == 'o')
-        operator= OP_CONTAINS;
+        operator = OP_CONTAINS;
 
     else if (parm.operator->answer[0] == 'o') {
         if (strcmp(parm.operator->answer, "overlaps") == 0)
-            operator= OP_OVERLAPS;
+            operator = OP_OVERLAPS;
 
         else
-            operator= OP_OVERLAP;
+            operator = OP_OVERLAP;
     }
     else if (parm.operator->answer[0] == 'r')
-        operator= OP_RELATE;
+        operator = OP_RELATE;
 
     else
         G_fatal_error(_("Unknown operator '%s'"), parm.operator->answer);
 
 #ifdef HAVE_GEOS
-    if (operator== OP_RELATE && !parm.relate->answer) {
+    if (operator == OP_RELATE && !parm.relate->answer) {
         G_fatal_error(_("Required parameter <%s> not set"), parm.relate->key);
     }
 #else
-    if (operator!= OP_OVERLAP) {
+    if (operator != OP_OVERLAP) {
         G_warning(_("Operator can only be 'overlap'"));
-        operator= OP_OVERLAP;
+        operator = OP_OVERLAP;
     }
 #endif
     for (iopt = 0; iopt < 2; iopt++) {
@@ -152,65 +152,54 @@ int main(int argc, char *argv[])
         AAreas = NULL;
     }
 
-    if ((!flag.reverse->answer && nfound > 0) ||
-        (flag.reverse->answer && nlines + nareas - nfound > 0)) {
-        /* Open output */
-        if (Vect_open_new(&Out, parm.output->answer, Vect_is_3d(&(In[0]))) < 0)
-            G_fatal_error(_("Unable to create vector map <%s>"),
-                          parm.output->answer);
+    /* Open output */
+    if (Vect_open_new(&Out, parm.output->answer, Vect_is_3d(&(In[0]))) < 0)
+        G_fatal_error(_("Unable to create vector map <%s>"),
+                      parm.output->answer);
 
-        Vect_set_map_name(&Out, _("Output from v.select"));
-        Vect_set_person(&Out, G_whoami());
-        Vect_copy_head_data(&(In[0]), &Out);
-        Vect_hist_copy(&(In[0]), &Out);
-        Vect_hist_command(&Out);
+    Vect_set_map_name(&Out, _("Output from v.select"));
+    Vect_set_person(&Out, G_whoami());
+    Vect_copy_head_data(&(In[0]), &Out);
+    Vect_hist_copy(&(In[0]), &Out);
+    Vect_hist_command(&Out);
 
-        native = Vect_maptype(&Out) == GV_FORMAT_NATIVE;
+    native = Vect_maptype(&Out) == GV_FORMAT_NATIVE;
 
-        nfields = Vect_cidx_get_num_fields(&(In[0]));
-        cats = (int **)G_malloc(nfields * sizeof(int *));
-        ncats = (int *)G_malloc(nfields * sizeof(int));
-        fields = (int *)G_malloc(nfields * sizeof(int));
+    nfields = Vect_cidx_get_num_fields(&(In[0]));
+    cats = (int **)G_malloc(nfields * sizeof(int *));
+    ncats = (int *)G_malloc(nfields * sizeof(int));
+    fields = (int *)G_malloc(nfields * sizeof(int));
 
-        /* Write lines */
-        if (!flag.table->answer && !native) {
-            /* Copy attributes for OGR output */
-            Vect_copy_map_dblinks(&(In[0]), &Out, TRUE);
-        }
-
-        write_lines(&(In[0]), IFi, ALines, AAreas, &Out,
-                    flag.table->answer ? 1 : 0, flag.reverse->answer ? 1 : 0,
-                    nfields, fields, ncats, cats);
-
-        /* Copy tables */
-        if (!flag.table->answer && native) {
-            copy_tabs(&(In[0]), &Out, nfields, fields, ncats, cats);
-        }
-
-        /* print info about skipped features & close input maps */
-        for (iopt = 0; iopt < 2; iopt++) {
-            if (nskipped[iopt] > 0) {
-                G_warning(_("%d features from <%s> without category skipped"),
-                          nskipped[iopt], Vect_get_full_name(&(In[iopt])));
-            }
-            Vect_set_release_support(&In[iopt]);
-            Vect_close(&(In[iopt]));
-        }
-
-        Vect_build(&Out);
-        nfound = Vect_get_num_lines(&Out);
-        Vect_set_release_support(&Out);
-        Vect_close(&Out);
-
-        G_done_msg(_("%d features written to output."), nfound);
+    /* Write lines */
+    if (!flag.table->answer && !native) {
+        /* Copy attributes for OGR output */
+        Vect_copy_map_dblinks(&(In[0]), &Out, TRUE);
     }
-    else {
-        Vect_set_release_support(&In[0]);
-        Vect_set_release_support(&In[1]);
-        Vect_close(&In[0]);
-        Vect_close(&In[1]);
-        G_done_msg(_("No features found !"));
+
+    write_lines(&(In[0]), IFi, ALines, AAreas, &Out, flag.table->answer ? 1 : 0,
+                flag.reverse->answer ? 1 : 0, nfields, fields, ncats, cats);
+
+    /* Copy tables */
+    if (!flag.table->answer && native) {
+        copy_tabs(&(In[0]), &Out, nfields, fields, ncats, cats);
     }
+
+    /* print info about skipped features & close input maps */
+    for (iopt = 0; iopt < 2; iopt++) {
+        if (nskipped[iopt] > 0) {
+            G_warning(_("%d features from <%s> without category skipped"),
+                      nskipped[iopt], Vect_get_full_name(&(In[iopt])));
+        }
+        Vect_set_release_support(&In[iopt]);
+        Vect_close(&(In[iopt]));
+    }
+
+    Vect_build(&Out);
+    nfound = Vect_get_num_lines(&Out);
+    Vect_set_release_support(&Out);
+    Vect_close(&Out);
+
+    G_done_msg(_("%d features written to output."), nfound);
 
     exit(EXIT_SUCCESS);
 }

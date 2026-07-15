@@ -350,7 +350,7 @@ class TestMd5Sums(TestCase):
 
     To create MD5 which is used for testing use:
 
-    .. code: sh
+    .. code:: sh
     $ cat > test.txt << EOF
     null_cells=57995100
     cells=60020100

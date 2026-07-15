@@ -26,17 +26,27 @@
         fputs(escaped, f);    \
         break
 
-void G__md_print_escaped(FILE *f, const char *str)
+void G__md_print_escaped(FILE *f, const char *str, const char *indent)
 {
     const char *s;
-
     for (s = str; *s; s++) {
         switch (*s) {
-            do_escape('\n', "\\\n");
-            do_escape('\t', "&nbsp;&nbsp;&nbsp;&nbsp;");
-            do_escape('<', "&lt;");
-            do_escape('>', "&gt;");
-            do_escape('*', "\\*");
+        case '\n':
+            fputs(MD_NEWLINE "\n", f);
+            fputs(indent, f);
+            break;
+        case '\t':
+            fputs("&nbsp;&nbsp;&nbsp;&nbsp;", f);
+            break;
+        case '<':
+            fputs("&lt;", f);
+            break;
+        case '>':
+            fputs("&gt;", f);
+            break;
+        case '*':
+            fputs("\\*", f);
+            break;
         default:
             fputc(*s, f);
         }

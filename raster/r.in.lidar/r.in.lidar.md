@@ -22,7 +22,7 @@ with large datasets (see below for memory management notes).
 
 The main difference between *r.in.lidar* and
 *[v.in.lidar](v.in.lidar.md)* is that *r.in.lidar* creates a raster
-instead of just importing the points into GRASS GIS. However,
+instead of just importing the points into GRASS. However,
 *r.in.lidar* does not merely rasterizes the points from the point cloud.
 *r.in.lidar* uses binning to derive values for individual raster cells,
 so the value of a cell is typically an aggregation of values of
@@ -35,7 +35,7 @@ In the basic case, binning is a method which counts the number of points
 which fall into one raster cell, i.e. bin. The number of points per cell
 (bin) indicates the density of points in the point cloud. The cell (bin)
 is always square or rectangular in case of *r.in.lidar* because the
-result is GRASS GIS 2D raster. The result of binning where the number of
+result is GRASS 2D raster. The result of binning where the number of
 point per cell is counted is sometimes called 2D (two dimensional)
 histogram because a histogram is used in univariate statistics (in one
 dimension) to count the number samples falling into a given bin.
@@ -142,7 +142,7 @@ g.region s=s-0.000001
 ```
 
 See *[g.region](g.region.md)* for details about computation region
-handling in GRASS GIS.
+handling in GRASS.
 
 The **zrange** parameter may be used for filtering the input data by
 vertical extent. Example uses include filtering out extreme outliers and

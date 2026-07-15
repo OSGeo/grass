@@ -37,14 +37,15 @@ try:
         NavigationToolbar2WxAgg as NavigationToolbar,
     )
     import matplotlib.dates as mdates
-except ImportError as e:
-    raise ImportError(
+except ImportError as error:
+    error.add_note(
         _(
             'The Timeline Tool needs the "matplotlib" '
             "(python-matplotlib and on some systems also python-matplotlib-wx) "
-            "package(s) to be installed. {}"
-        ).format(e)
+            "package(s) to be installed."
+        )
     )
+    raise
 
 import grass.script as gs
 
@@ -295,7 +296,7 @@ class TimelineFrame(wx.Frame):
                 )
             )
 
-        params = gs.read_command("g.proj", flags="g")
+        params = gs.read_command("g.proj", flags="p", format="shell")
         params = gs.parse_key_val(params)
         if "unit" in params:
             self.axes3d.set_xlabel(_("X [%s]") % params["unit"])
@@ -336,9 +337,9 @@ class TimelineFrame(wx.Frame):
             # TODO: mixed
             if mapType == "interval":
                 end = convert(self.timeData[name]["end_datetime"])
-                lookUpData = list(zip(start, end))
+                lookUpData = list(zip(start, end, strict=False))
                 duration = end - np.array(start)
-                barData = list(zip(start, duration))
+                barData = list(zip(start, duration, strict=False))
                 lookUp.AddDataset(
                     type_="bar",
                     yrange=(i - 0.1, i + 0.1),

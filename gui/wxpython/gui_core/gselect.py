@@ -1141,7 +1141,14 @@ class ColumnSelect(ComboCtrl):
         self.SetValue("")
 
     def InsertColumns(
-        self, vector, layer, excludeKey=False, excludeCols=None, type=None, dbInfo=None
+        self,
+        vector,
+        layer,
+        excludeKey=False,
+        excludeCols=None,
+        type=None,
+        dbInfo=None,
+        setDefaultValue=True,
     ):
         """Insert columns for a vector attribute table into the columns combobox
 
@@ -1150,6 +1157,8 @@ class ColumnSelect(ComboCtrl):
         :param excludeKey: exclude key column from the list?
         :param excludeCols: list of columns to be removed from the list
         :param type: only columns of given type (given as list)
+        :param dbInfo: dbInfo object
+        :param bool setDefaultValue: True to set default value
         """
         if not dbInfo:
             dbInfo = VectorDBInfo(vector)
@@ -1187,19 +1196,23 @@ class ColumnSelect(ComboCtrl):
         for col in self.columns:
             self.tcp.AddItem(col)
 
-        self.SetValue(self.defaultValue)
+        if setDefaultValue:
+            self.SetValue(self.defaultValue)
 
         if self.param:
             value = self.param.get("value", "")
             if value != "" and value in self.columns:
                 self.SetValue(value)
 
-    def InsertTableColumns(self, table, driver=None, database=None):
+    def InsertTableColumns(
+        self, table, driver=None, database=None, setDefaultValue=True
+    ):
         """Insert table columns
 
         :param str table: table name
         :param str driver: driver name
         :param str database: database name
+        :param bool setDefaultValue: True to set default value
         """
         self.columns[:] = []
 
@@ -1212,7 +1225,8 @@ class ColumnSelect(ComboCtrl):
 
         # update list
         self.tcp.DeleteAllItems()
-        self.SetValue(self.defaultValue)
+        if setDefaultValue:
+            self.SetValue(self.defaultValue)
 
         for col in self.columns:
             self.tcp.AddItem(col)
@@ -2258,7 +2272,9 @@ class GdalSelect(wx.Panel):
                     )
                 if ret:
                     raster_srid = gs.utils.decode(ret).replace(os.linesep, "")
-                    location_srid = gs.parse_command("g.proj", flags="g")
+                    location_srid = gs.parse_command(
+                        "g.proj", flags="p", format="shell"
+                    )
                     if raster_srid == location_srid["srid"].split(":")[-1]:
                         projectionMatch = "1"
             else:
@@ -2628,6 +2644,8 @@ class GdalSelect(wx.Panel):
         """
         try:
             from osgeo import gdal
+
+            gdal.DontUseExceptions()
         except ImportError:
             GError(
                 parent=self,

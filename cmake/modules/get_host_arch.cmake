@@ -1,6 +1,6 @@
 #[[
 AUTHOR(S):  Rashad Kanavath <rashad km gmail>
-PURPOSE:    Get host system architecuture
+PURPOSE:    Get host system architecture
 COPYRIGHT:  (C) 2020 by the GRASS Development Team
 
 SPDX-License-Identifier: GPL-2.0-or-later

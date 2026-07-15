@@ -84,7 +84,7 @@ def main():
     frame = wx.Frame(
         parent=None,
         size=globalvar.MAP_WINDOW_SIZE,
-        title=_("Map Swipe Tool - GRASS GIS"),
+        title=_("Map Swipe Tool - GRASS"),
     )
     frame = SwipeMapDisplay(
         parent=frame,

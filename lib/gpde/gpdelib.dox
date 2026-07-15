@@ -48,7 +48,7 @@ Basic mathematical operations are available for the arrays.
 The principle to create and solve a linear equation systems with this library:
 \verbatim
 1.) Read all needed raster/volume data into the memory
-    - use the the two and three dimensional data arrays N_array_2d and N_array_3d
+    - use the two and three dimensional data arrays N_array_2d and N_array_3d
       to manage the data
 2.) Assemble the linear equation system
     - use the sparse matrix structure to save lots of memory and cpu time
@@ -492,10 +492,10 @@ typedef struct
 \endverbatim
 
 <p>
-The callback to compute a les row entry in 3d dimesnions<br>
+The callback to compute a les row entry in 3d dimensions<br>
 N_data_star *#N_callback_gwflow_3d (void *gwdata, N_geom_data * geom, int col, int row, int depth);
 <p>
-The callback to compute a les row entry in 2d dimesnions<br>
+The callback to compute a les row entry in 2d dimensions<br>
 N_data_star *#N_callback_gwflow_2d (void *gwdata, N_geom_data * geom, int col, int row);
 <p>
 Allocation the 3d groundwater flow data structure<br>

@@ -19,7 +19,7 @@ COPYRIGHT: (c) 2006-2019 Hamish Bowman, and the GRASS Development Team
 # notes:
 #  - cs2cs expects "x y" data so be sure to send it "lon lat" not "lat lon"
 #  - if you send cs2cs a third data column, beware it might be treated as "z"
-# todo:
+# TODO:
 #  - `cut` away x,y columns into a temp file, feed to cs2cs, then `paste`
 #    back to input file. see method in v.in.garmin.sh. that way additional
 #    numeric and string columns would survive the trip, and 3rd column would
@@ -99,8 +99,8 @@ COPYRIGHT: (c) 2006-2019 Hamish Bowman, and the GRASS Development Team
 # %end
 
 import sys
-import os
 import threading
+from pathlib import Path
 from grass.script.utils import separator, parse_key_val, encode, decode
 from grass.script import core as gcore
 
@@ -161,7 +161,7 @@ def main():
     ofs = separator(ofs)
 
     # set up projection params
-    s = gcore.read_command("g.proj", flags="j")
+    s = gcore.read_command("g.proj", flags="p", format="proj4")
     kv = parse_key_val(s)
     if "XY location" in kv:
         gcore.fatal(_("Unable to project to or from a XY location"))
@@ -173,7 +173,7 @@ def main():
         gcore.verbose("Assuming LL WGS84 as input, current projection as output ")
 
     if ll_out:
-        in_proj = gcore.read_command("g.proj", flags="jf")
+        in_proj = gcore.read_command("g.proj", flags="fp", format="proj4")
 
     if proj_in:
         if "+" in proj_in:
@@ -183,7 +183,7 @@ def main():
 
     if not in_proj:
         gcore.verbose("Assuming current location as input")
-        in_proj = gcore.read_command("g.proj", flags="jf")
+        in_proj = gcore.read_command("g.proj", flags="fp", format="proj4")
 
     in_proj = in_proj.strip()
     gcore.verbose("Input parameters: '%s'" % in_proj)
@@ -195,7 +195,7 @@ def main():
         gcore.verbose("Assuming current projection as input, LL WGS84 as output ")
 
     if ll_in:
-        out_proj = gcore.read_command("g.proj", flags="jf")
+        out_proj = gcore.read_command("g.proj", flags="fp", format="proj4")
 
     if proj_out:
         if "+" in proj_out:
@@ -221,7 +221,7 @@ def main():
         inf = sys.stdin
     else:
         infile = input
-        if not os.path.exists(infile):
+        if not Path(infile).exists():
             gcore.fatal(_("Unable to read input data"))
         inf = open(infile)
         gcore.debug("input file=[%s]" % infile)
@@ -245,7 +245,7 @@ def main():
 
     cmd = ["cs2cs"] + copyinp + outfmt + in_proj.split() + ["+to"] + out_proj.split()
 
-    p = gcore.Popen(cmd, stdin=gcore.PIPE, stdout=gcore.PIPE)
+    p = gcore.Popen(cmd, stdin=gcore.PIPE, stdout=gcore.PIPE, text=False)
 
     tr = TrThread(ifs, inf, p.stdin)
     tr.start()

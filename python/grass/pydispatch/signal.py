@@ -14,7 +14,7 @@ def _islambda(function) -> bool:
     Should work on the most of Python implementations where name of lambda
     function is not unique.
 
-    >>> mylambda = lambda x: x*x
+    >>> mylambda = lambda x: x * x
     >>> _islambda(mylambda)
     True
     >>> _islambda(_islambda)
@@ -32,7 +32,7 @@ class Signal:
     The signal object is created usually as a instance attribute.
     However, it can be created anywhere.
 
-    >>> signal1 = Signal('signal1')
+    >>> signal1 = Signal("signal1")
 
     The function has to be connected to a signal in order to be called when
     the signal is emitted. The connection can be done where the function is
@@ -56,7 +56,7 @@ class Signal:
     must use these names (if the names cannot be the same, lambda function
     can be used to overcome this problem).
 
-    >>> signal2 = Signal('signal2')
+    >>> signal2 = Signal("signal2")
     >>> def handler2(text):
     ...     print "handler2: %s" % text
     >>> signal2.connect(handler2)
@@ -70,8 +70,7 @@ class Signal:
     callable object.
 
     >>> import sys
-    >>> signal2.connect(lambda text:
-    ...                 sys.stdout.write('lambda handler: %s\\n' % text))
+    >>> signal2.connect(lambda text: sys.stdout.write("lambda handler: %s\\n" % text))
     >>> signal2.emit(text="Hi")
     handler2: Hi
     lambda handler: Hi
@@ -91,7 +90,7 @@ class Signal:
     forwarded from one object to another. In other words, one object can
     expose signal of some object.
 
-    >>> signal3 = Signal('signal3')
+    >>> signal3 = Signal("signal3")
     >>> signal3.connect(handler3)
     >>> signal1.connect(signal3)
     >>> signal1.emit()
@@ -105,7 +104,7 @@ class Signal:
     from handler1
     >>> signal2.disconnect(handler2)
     >>> signal2.disconnect(handler3)
-    >>> signal2.emit(text='Hello')
+    >>> signal2.emit(text="Hello")
     lambda handler: Hello
     """
 
@@ -126,6 +125,7 @@ class Signal:
         class connects to the signal::
 
             from module import SomeClass
+
             ...
             self.someObject = SomeClass()
             self.someObject.connect(self.someMethod)
@@ -136,11 +136,11 @@ class Signal:
         garbage collected. If you want to force some behaviour, specify the
         weak parameter.
 
-        >>> signal1 = Signal('signal1')
+        >>> signal1 = Signal("signal1")
         >>> import sys
-        >>> signal1.connect(lambda: sys.stdout.write('will print\\n'))
-        >>> signal1.connect(lambda: sys.stdout.write('will print\\n'), weak=False)
-        >>> signal1.connect(lambda: sys.stdout.write('will not print'), weak=True)
+        >>> signal1.connect(lambda: sys.stdout.write("will print\\n"))
+        >>> signal1.connect(lambda: sys.stdout.write("will print\\n"), weak=False)
+        >>> signal1.connect(lambda: sys.stdout.write("will not print"), weak=True)
         >>> signal1.emit()
         will print
         will print
@@ -157,7 +157,7 @@ class Signal:
         Underlying PyDispatcher will take care of connections to deleted
         objects.
 
-        >>> signal1 = Signal('signal1')
+        >>> signal1 = Signal("signal1")
         >>> import sys
         >>> signal1.connect(sys.stdout.write)
         >>> signal1.disconnect(sys.stdout.write)
@@ -168,7 +168,7 @@ class Signal:
 
         Disconnecting the not-connected handler will result in error.
 
-        >>> signal1.disconnect(sys.stdout.flush)  #doctest: +ELLIPSIS
+        >>> signal1.disconnect(sys.stdout.flush)  # doctest: +ELLIPSIS
         Traceback (most recent call last):
         DispatcherKeyError: 'No receivers found for signal ...'
 
@@ -193,8 +193,9 @@ class Signal:
 
             class Abc(object):
                 def __init__(self):
-                    self.colorChanged = Signal('Abc.colorChanged')
+                    self.colorChanged = Signal("Abc.colorChanged")
                     ...
+
                 def setColor(self, color):
                     ...
                     self.colorChanged.emit(oldColor=self.Color, newColor=color)
@@ -213,16 +214,16 @@ class Signal:
         The associated parameters shall be documented for each Signal instance.
         Use only keyword arguments when emitting.
 
-        >>> signal1 = Signal('signal1')
+        >>> signal1 = Signal("signal1")
         >>> def mywrite(text):
         ...     print text
         >>> signal1.connect(mywrite)
-        >>> signal1.emit(text='Hello')
+        >>> signal1.emit(text="Hello")
         Hello
         >>> signal1.emit()
         Traceback (most recent call last):
         TypeError: mywrite() takes exactly 1 argument (0 given)
-        >>> signal1.emit('Hello')
+        >>> signal1.emit("Hello")
         Traceback (most recent call last):
         TypeError: send() got multiple values for keyword argument 'signal'
         """
@@ -240,13 +241,13 @@ class Signal:
         The use of emit method is more explicit than the function call
         and thus it it clear that we are using signal.
 
-        >>> signal1 = Signal('signal1')
+        >>> signal1 = Signal("signal1")
         >>> def mywrite(text):
         ...     print text
         >>> signal1.connect(mywrite)
-        >>> functions = [signal1, lambda text: mywrite(text + '!')]
+        >>> functions = [signal1, lambda text: mywrite(text + "!")]
         >>> for function in functions:
-        ...     function(text='text')
+        ...     function(text="text")
         text
         text!
 
@@ -259,10 +260,10 @@ class Signal:
         when using emit than function call. Concluding remark is that
         emit behaves more predictable.
 
-        >>> signal1.emit(signal='Hello')
+        >>> signal1.emit(signal="Hello")
         Traceback (most recent call last):
         TypeError: send() got multiple values for keyword argument 'signal'
-        >>> signal1(signal='Hello')
+        >>> signal1(signal="Hello")
         Traceback (most recent call last):
         TypeError: mywrite() takes exactly 1 argument (0 given)
         """

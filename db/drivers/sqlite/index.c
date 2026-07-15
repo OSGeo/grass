@@ -25,7 +25,6 @@
  * \param[in] index index to be created
  * \return int DB_FAILED on error; DB_OK on success
  */
-
 int db__driver_create_index(dbIndex *index)
 {
     int i, ncols;

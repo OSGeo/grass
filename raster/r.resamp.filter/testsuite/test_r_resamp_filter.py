@@ -27,7 +27,7 @@ class TestResampFilter(TestCase):
                 "stddev": 20.3084660266678,
                 "variance": 412.433792356322,
                 "coeff_var": 18.3994429908677,
-                "sum": 620861845.962976,
+                "sum": 620861845.962989,
             },
             "bartlett": {
                 "n": 5625000,
@@ -41,7 +41,7 @@ class TestResampFilter(TestCase):
                 "stddev": 20.3119057626464,
                 "variance": 412.573515710628,
                 "coeff_var": 18.4025592333715,
-                "sum": 620861851.14783,
+                "sum": 620861851.147877,
             },
             "hermite": {
                 "n": 5625000,
@@ -55,7 +55,7 @@ class TestResampFilter(TestCase):
                 "stddev": 20.3125721916948,
                 "variance": 412.600589042813,
                 "coeff_var": 18.403163004099,
-                "sum": 620861851.589502,
+                "sum": 620861851.589519,
             },
             "lanczos1": {
                 "n": 5625000,
@@ -69,7 +69,7 @@ class TestResampFilter(TestCase):
                 "stddev": 20.313022054599,
                 "variance": 412.618864990624,
                 "coeff_var": 18.4035705877522,
-                "sum": 620861851.303796,
+                "sum": 620861851.30377,
             },
             "lanczos2": {
                 "n": 5625000,
@@ -83,7 +83,7 @@ class TestResampFilter(TestCase):
                 "stddev": 20.3151009676525,
                 "variance": 412.703327325917,
                 "coeff_var": 18.405454927196,
-                "sum": 620861822.731673,
+                "sum": 620861822.731579,
             },
             "lanczos3": {
                 "n": 5625000,
@@ -97,7 +97,7 @@ class TestResampFilter(TestCase):
                 "stddev": 20.3154206838383,
                 "variance": 412.716317561325,
                 "coeff_var": 18.4057438367356,
-                "sum": 620861848.128697,
+                "sum": 620861848.128782,
             },
         },
         "test_infinite_box_options": {
@@ -113,7 +113,7 @@ class TestResampFilter(TestCase):
                 "stddev": 20.3108768847555,
                 "variance": 412.531719827694,
                 "coeff_var": 18.4016270729355,
-                "sum": 620861851.095669,
+                "sum": 620861851.095697,
             },
             "normal": {
                 "n": 5625000,
@@ -127,7 +127,7 @@ class TestResampFilter(TestCase):
                 "stddev": 20.3089516110606,
                 "variance": 412.4535155404,
                 "coeff_var": 18.3998828728091,
-                "sum": 620861847.881836,
+                "sum": 620861847.881879,
             },
             "sinc": {
                 "n": 5625000,
@@ -141,7 +141,7 @@ class TestResampFilter(TestCase):
                 "stddev": 20.3119057626423,
                 "variance": 412.573515710463,
                 "coeff_var": 18.4025592333678,
-                "sum": 620861851.14783,
+                "sum": 620861851.147877,
             },
             "hann": {
                 "n": 5625000,
@@ -155,7 +155,7 @@ class TestResampFilter(TestCase):
                 "stddev": 20.3126467418446,
                 "variance": 412.603617658969,
                 "coeff_var": 18.4032305464401,
-                "sum": 620861851.589302,
+                "sum": 620861851.589254,
             },
             "hamming": {
                 "n": 5625000,
@@ -169,7 +169,7 @@ class TestResampFilter(TestCase):
                 "stddev": 20.3116372028825,
                 "variance": 412.562605861522,
                 "coeff_var": 18.4023159177328,
-                "sum": 620861851.176668,
+                "sum": 620861851.176612,
             },
             "blackman": {
                 "n": 5625000,
@@ -183,7 +183,7 @@ class TestResampFilter(TestCase):
                 "stddev": 20.3132139323513,
                 "variance": 412.626660261469,
                 "coeff_var": 18.4037444423197,
-                "sum": 620861850.845575,
+                "sum": 620861850.845649,
             },
         },
     }

@@ -26,7 +26,6 @@ int header(int unit1, int unit2)
     char ns_res[50], ew_res[50];
     int len1, len2;
     char *label;
-    char *mask;
 
     nlines = page_length;
     if (date == NULL)
@@ -73,7 +72,8 @@ int header(int unit1, int unit2)
 
         divider("|");
 
-        mask = maskinfo();
+        char *mask_info = maskinfo();
+        char *mask = mask_info;
         label = "MASK:";
         len1 = strlen(label) + 1;
         while (mask) {
@@ -83,6 +83,7 @@ int header(int unit1, int unit2)
             fprintf(stdout, "|");
             newline();
         }
+        G_free(mask_info);
         divider("|");
 
         /*if title is available, print it, otherwise, print (untitled). in

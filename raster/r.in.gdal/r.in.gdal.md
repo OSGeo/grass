@@ -1,6 +1,6 @@
 ## DESCRIPTION
 
-*r.in.gdal* allows a user to create a GRASS GIS raster map layer, or
+*r.in.gdal* allows a user to create a GRASS raster map layer, or
 imagery group, from any GDAL supported raster map format, with an
 optional title. The imported file may also be used to create a new
 project (previously called location).
@@ -395,7 +395,7 @@ GDAL Pages: <https://gdal.org>
 [r.in.ascii](r.in.ascii.md), [r.in.bin](r.in.bin.md),
 [r.null](r.null.md), [t.register](t.register.md)*
 
-GRASS GIS Wiki page: Import of [Global
+GRASS Wiki page: Import of [Global
 datasets](https://grasswiki.osgeo.org/wiki/Global_datasets)
 
 ## AUTHOR

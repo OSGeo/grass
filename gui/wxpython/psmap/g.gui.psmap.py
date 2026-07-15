@@ -49,7 +49,7 @@ def main():
     app = wx.App()
     frame = PsMapFrame(
         parent=None,
-        title=_("Cartographic Composer - GRASS GIS"),
+        title=_("Cartographic Composer - GRASS"),
     )
     frame.Show()
 

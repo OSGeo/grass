@@ -1,7 +1,7 @@
 MODULE_TOPDIR = ../../..
 
-include $(MODULE_TOPDIR)/include/Make/Other.make
 include $(MODULE_TOPDIR)/include/Make/Python.make
+include $(MODULE_TOPDIR)/include/Make/Dir.make
 
 DSTDIR = $(ETC)/python/grass/experimental
 
@@ -12,7 +12,7 @@ MODULES = \
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)
 
-default: $(PYFILES) $(PYCFILES)
+default: subdirs $(PYFILES) $(PYCFILES)
 
 $(DSTDIR):
 	$(MKDIR) $@

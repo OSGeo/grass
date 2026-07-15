@@ -3,7 +3,7 @@ Metadata classes for map layer and space time datasets
 
 Usage:
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> import grass.temporal as tgis
     >>> tgis.init()
@@ -23,7 +23,12 @@ for details.
 """
 
 from .base import SQLDatabaseInterface
-from .core import SQLDatabaseInterfaceConnection, get_tgis_db_version_from_metadata
+from .core import (
+    SQLDatabaseInterfaceConnection,
+    get_tgis_database_string,
+    get_tgis_db_version,
+    get_tgis_db_version_from_metadata,
+)
 
 ###############################################################################
 
@@ -33,7 +38,7 @@ class RasterMetadataBase(SQLDatabaseInterface):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> meta = RasterMetadataBase(
@@ -170,6 +175,7 @@ class RasterMetadataBase(SQLDatabaseInterface):
 
     def get_id(self):
         """Convenient method to get the unique identifier (primary key)
+
         :return: None if not found
         """
         if "id" in self.D:
@@ -178,56 +184,72 @@ class RasterMetadataBase(SQLDatabaseInterface):
 
     def get_datatype(self):
         """Get the map type
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "datatype" in self.D:
             return self.D["datatype"]
         return None
 
     def get_cols(self):
         """Get number of cols
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "cols" in self.D:
             return self.D["cols"]
         return None
 
     def get_rows(self):
         """Get number of rows
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "rows" in self.D:
             return self.D["rows"]
         return None
 
     def get_number_of_cells(self):
         """Get number of cells
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "number_of_cells" in self.D:
             return self.D["number_of_cells"]
         return None
 
     def get_nsres(self):
         """Get the north-south resolution
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "nsres" in self.D:
             return self.D["nsres"]
         return None
 
     def get_ewres(self):
         """Get east-west resolution
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "ewres" in self.D:
             return self.D["ewres"]
         return None
 
     def get_min(self):
         """Get the minimum cell value
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "min" in self.D:
             return self.D["min"]
         return None
 
     def get_max(self):
         """Get the maximum cell value
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "max" in self.D:
             return self.D["max"]
         return None
@@ -302,7 +324,7 @@ class RasterMetadata(RasterMetadataBase):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> meta = RasterMetadata(
@@ -389,7 +411,9 @@ class RasterMetadata(RasterMetadataBase):
 
     def get_semantic_label(self):
         """Get the semantic label identifier
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "semantic_label" in self.D:
             return self.D["semantic_label"]
         return None
@@ -427,7 +451,7 @@ class Raster3DMetadata(RasterMetadataBase):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> meta = Raster3DMetadata(
@@ -536,14 +560,18 @@ class Raster3DMetadata(RasterMetadataBase):
 
     def get_depths(self):
         """Get number of depths
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "depths" in self.D:
             return self.D["depths"]
         return None
 
     def get_tbres(self):
         """Get top-bottom resolution
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "tbres" in self.D:
             return self.D["tbres"]
         return None
@@ -578,7 +606,7 @@ class VectorMetadata(SQLDatabaseInterface):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> meta = VectorMetadata(
@@ -750,6 +778,7 @@ class VectorMetadata(SQLDatabaseInterface):
 
     def get_id(self):
         """Convenient method to get the unique identifier (primary key)
+
         :return: None if not found
         """
         if "id" in self.D:
@@ -765,84 +794,108 @@ class VectorMetadata(SQLDatabaseInterface):
 
     def get_number_of_points(self):
         """Get the number of points of the vector map
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "points" in self.D:
             return self.D["points"]
         return None
 
     def get_number_of_lines(self):
         """Get the number of lines of the vector map
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "lines" in self.D:
             return self.D["lines"]
         return None
 
     def get_number_of_boundaries(self):
         """Get the number of boundaries of the vector map
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "boundaries" in self.D:
             return self.D["boundaries"]
         return None
 
     def get_number_of_centroids(self):
         """Get the number of centroids of the vector map
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "centroids" in self.D:
             return self.D["centroids"]
         return None
 
     def get_number_of_faces(self):
         """Get the number of faces of the vector map
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "faces" in self.D:
             return self.D["faces"]
         return None
 
     def get_number_of_kernels(self):
         """Get the number of kernels of the vector map
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "kernels" in self.D:
             return self.D["kernels"]
         return None
 
     def get_number_of_primitives(self):
         """Get the number of primitives of the vector map
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "primitives" in self.D:
             return self.D["primitives"]
         return None
 
     def get_number_of_nodes(self):
         """Get the number of nodes of the vector map
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "nodes" in self.D:
             return self.D["nodes"]
         return None
 
     def get_number_of_areas(self):
         """Get the number of areas of the vector map
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "areas" in self.D:
             return self.D["areas"]
         return None
 
     def get_number_of_islands(self):
         """Get the number of islands of the vector map
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "islands" in self.D:
             return self.D["islands"]
         return None
 
     def get_number_of_holes(self):
         """Get the number of holes of the vector map
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "holes" in self.D:
             return self.D["holes"]
         return None
 
     def get_number_of_volumes(self):
         """Get the number of volumes of the vector map
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "volumes" in self.D:
             return self.D["volumes"]
         return None
@@ -913,31 +966,31 @@ class STDSMetadataBase(SQLDatabaseInterface):
     strds, stvds and str3ds datasets
     setting/getting the id, the title and the description
 
-     Usage:
+    Usage:
 
-     .. code-block:: python
+    .. code-block:: pycon
 
-         >>> init()
-         >>> meta = STDSMetadataBase(
-         ...     ident="soils@PERMANENT", title="Soils", description="Soils 1950 - 2010"
-         ... )
-         >>> meta.id
-         'soils@PERMANENT'
-         >>> meta.title
-         'Soils'
-         >>> meta.description
-         'Soils 1950 - 2010'
-         >>> meta.number_of_maps
-         >>> meta.print_info()
-          | Number of registered maps:.. None
-          |
-          | Title:
-          | Soils
-          | Description:
-          | Soils 1950 - 2010
-          | Command history:
-         >>> meta.print_shell_info()
-         number_of_maps=None
+        >>> init()
+        >>> meta = STDSMetadataBase(
+        ...     ident="soils@PERMANENT", title="Soils", description="Soils 1950 - 2010"
+        ... )
+        >>> meta.id
+        'soils@PERMANENT'
+        >>> meta.title
+        'Soils'
+        >>> meta.description
+        'Soils 1950 - 2010'
+        >>> meta.number_of_maps
+        >>> meta.print_info()
+         | Number of registered maps:.. None
+         |
+         | Title:
+         | Soils
+         | Description:
+         | Soils 1950 - 2010
+         | Command history:
+        >>> meta.print_shell_info()
+        number_of_maps=None
 
     """
 
@@ -972,6 +1025,7 @@ class STDSMetadataBase(SQLDatabaseInterface):
 
     def get_id(self):
         """Convenient method to get the unique identifier (primary key)
+
         :return: None if not found
         """
         if "id" in self.D:
@@ -980,21 +1034,27 @@ class STDSMetadataBase(SQLDatabaseInterface):
 
     def get_title(self):
         """Get the title
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "title" in self.D:
             return self.D["title"]
         return None
 
     def get_description(self):
         """Get description
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "description" in self.D:
             return self.D["description"]
         return None
 
     def get_command(self):
         """Get command
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "command" in self.D:
             return self.D["command"]
         return None
@@ -1003,7 +1063,9 @@ class STDSMetadataBase(SQLDatabaseInterface):
         """Get the number of registered maps,
         this value is set in the database
         automatically via SQL, so no setter exists
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "number_of_maps" in self.D:
             return self.D["number_of_maps"]
         return None
@@ -1106,7 +1168,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> meta = STDSRasterMetadataBase(
@@ -1185,6 +1247,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
 
     def get_aggregation_type(self):
         """Get the aggregation type of the dataset (mean, min, max, ...)
+
         :return: None if not found
         """
         if "aggregation_type" in self.D:
@@ -1195,7 +1258,9 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         """Get the minimal maximum of all registered maps,
         this value is set in the database
         automatically via SQL, so no setter exists
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "max_min" in self.D:
             return self.D["max_min"]
         return None
@@ -1204,7 +1269,9 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         """Get the minimal minimum of all registered maps,
         this value is set in the database
         automatically via SQL, so no setter exists
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "min_min" in self.D:
             return self.D["min_min"]
         return None
@@ -1213,7 +1280,9 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         """Get the maximal maximum of all registered maps,
         this value is set in the database
         automatically via SQL, so no setter exists
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "max_max" in self.D:
             return self.D["max_max"]
         return None
@@ -1222,7 +1291,9 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         """Get the maximal minimum of all registered maps,
         this value is set in the database
         automatically via SQL, so no setter exists
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "min_max" in self.D:
             return self.D["min_max"]
         return None
@@ -1231,7 +1302,9 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         """Get the minimal north-south resolution of all registered maps,
         this value is set in the database
         automatically via SQL, so no setter exists
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "nsres_min" in self.D:
             return self.D["nsres_min"]
         return None
@@ -1240,7 +1313,9 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         """Get the maximal north-south resolution of all registered maps,
         this value is set in the database
         automatically via SQL, so no setter exists
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "nsres_max" in self.D:
             return self.D["nsres_max"]
         return None
@@ -1249,7 +1324,9 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         """Get the minimal east-west resolution of all registered maps,
         this value is set in the database
         automatically via SQL, so no setter exists
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "ewres_min" in self.D:
             return self.D["ewres_min"]
         return None
@@ -1258,7 +1335,9 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         """Get the maximal east-west resolution of all registered maps,
         this value is set in the database
         automatically via SQL, so no setter exists
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "ewres_max" in self.D:
             return self.D["ewres_max"]
         return None
@@ -1316,7 +1395,7 @@ class STRDSMetadata(STDSRasterMetadataBase):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> meta = STRDSMetadata(
@@ -1383,7 +1462,15 @@ class STRDSMetadata(STDSRasterMetadataBase):
             self, "strds_metadata", ident, title, description
         )
 
-        if get_tgis_db_version_from_metadata() > 2:
+        # TGIS metadata is only available with an accessible temporal database
+        # initialized with tgis.init(). Initialization with tgis.init(skip_db_init=True)
+        # will result in an empty tgis_database_string is empty, fall back to a global
+        # tgis_db_version if tgis is not fully initialized.
+        if get_tgis_database_string() is not None:
+            tgis_db_version_ = get_tgis_db_version_from_metadata()
+        else:
+            tgis_db_version_ = get_tgis_db_version()
+        if tgis_db_version_ > 2:
             self.D["number_of_semantic_labels"] = None
 
         self.set_raster_register(raster_register)
@@ -1394,13 +1481,16 @@ class STRDSMetadata(STDSRasterMetadataBase):
 
     def get_raster_register(self):
         """Get the raster map register table name
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "raster_register" in self.D:
             return self.D["raster_register"]
         return None
 
     def get_number_of_semantic_labels(self):
         """Get the number of registered semantic labels
+
         :return: None if not found
         """
         if "number_of_semantic_labels" in self.D:
@@ -1411,6 +1501,7 @@ class STRDSMetadata(STDSRasterMetadataBase):
         """Get the distinct semantic labels of registered maps
            The distinct semantic labels are not stored in the metadata table
            and fetched on-the-fly
+
         :return: None if not found
         """
         if get_tgis_db_version_from_metadata() <= 2:
@@ -1499,7 +1590,7 @@ class STR3DSMetadata(STDSRasterMetadataBase):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> init()
         >>> meta = STR3DSMetadata(
@@ -1578,7 +1669,9 @@ class STR3DSMetadata(STDSRasterMetadataBase):
 
     def get_raster3d_register(self):
         """Get the raster3d map register table name
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "raster3d_register" in self.D:
             return self.D["raster3d_register"]
         return None
@@ -1587,7 +1680,9 @@ class STR3DSMetadata(STDSRasterMetadataBase):
         """Get the minimal top-bottom resolution of all registered maps,
         this value is set in the database
         automatically via SQL, so no setter exists
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "tbres_min" in self.D:
             return self.D["tbres_min"]
         return None
@@ -1596,7 +1691,9 @@ class STR3DSMetadata(STDSRasterMetadataBase):
         """Get the maximal top-bottom resolution of all registered maps,
         this value is set in the database
         automatically via SQL, so no setter exists
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "tbres_max" in self.D:
             return self.D["tbres_max"]
         return None
@@ -1647,72 +1744,72 @@ class STVDSMetadata(STDSMetadataBase):
     new vector maps are added. Therefor only some set- an many get-functions
     are available.
 
-     Usage:
+    Usage:
 
-     .. code-block:: python
+    .. code-block:: pycon
 
-         >>> init()
-         >>> meta = STVDSMetadata(
-         ...     ident="lidars@PERMANENT",
-         ...     title="LIDARS",
-         ...     description="LIDARS 2008 - 2010",
-         ... )
-         >>> meta.id
-         'lidars@PERMANENT'
-         >>> meta.title
-         'LIDARS'
-         >>> meta.description
-         'LIDARS 2008 - 2010'
-         >>> meta.number_of_maps
-         >>> meta.number_of_points
-         >>> meta.number_of_lines
-         >>> meta.number_of_boundaries
-         >>> meta.number_of_centroids
-         >>> meta.number_of_faces
-         >>> meta.number_of_kernels
-         >>> meta.number_of_primitives
-         >>> meta.number_of_nodes
-         >>> meta.number_of_areas
-         >>> meta.number_of_islands
-         >>> meta.number_of_holes
-         >>> meta.number_of_volumes
-         >>> meta.print_info()
-          +-------------------- Metadata information ----------------------------------+
-          | Vector register table:...... None
-          | Number of points ........... None
-          | Number of lines ............ None
-          | Number of boundaries ....... None
-          | Number of centroids ........ None
-          | Number of faces ............ None
-          | Number of kernels .......... None
-          | Number of primitives ....... None
-          | Number of nodes ............ None
-          | Number of areas ............ None
-          | Number of islands .......... None
-          | Number of holes ............ None
-          | Number of volumes .......... None
-          | Number of registered maps:.. None
-          |
-          | Title:
-          | LIDARS
-          | Description:
-          | LIDARS 2008 - 2010
-          | Command history:
-         >>> meta.print_shell_info()
-         vector_register=None
-         points=None
-         lines=None
-         boundaries=None
-         centroids=None
-         faces=None
-         kernels=None
-         primitives=None
-         nodes=None
-         areas=None
-         islands=None
-         holes=None
-         volumes=None
-         number_of_maps=None
+        >>> init()
+        >>> meta = STVDSMetadata(
+        ...     ident="lidars@PERMANENT",
+        ...     title="LIDARS",
+        ...     description="LIDARS 2008 - 2010",
+        ... )
+        >>> meta.id
+        'lidars@PERMANENT'
+        >>> meta.title
+        'LIDARS'
+        >>> meta.description
+        'LIDARS 2008 - 2010'
+        >>> meta.number_of_maps
+        >>> meta.number_of_points
+        >>> meta.number_of_lines
+        >>> meta.number_of_boundaries
+        >>> meta.number_of_centroids
+        >>> meta.number_of_faces
+        >>> meta.number_of_kernels
+        >>> meta.number_of_primitives
+        >>> meta.number_of_nodes
+        >>> meta.number_of_areas
+        >>> meta.number_of_islands
+        >>> meta.number_of_holes
+        >>> meta.number_of_volumes
+        >>> meta.print_info()
+         +-------------------- Metadata information ----------------------------------+
+         | Vector register table:...... None
+         | Number of points ........... None
+         | Number of lines ............ None
+         | Number of boundaries ....... None
+         | Number of centroids ........ None
+         | Number of faces ............ None
+         | Number of kernels .......... None
+         | Number of primitives ....... None
+         | Number of nodes ............ None
+         | Number of areas ............ None
+         | Number of islands .......... None
+         | Number of holes ............ None
+         | Number of volumes .......... None
+         | Number of registered maps:.. None
+         |
+         | Title:
+         | LIDARS
+         | Description:
+         | LIDARS 2008 - 2010
+         | Command history:
+        >>> meta.print_shell_info()
+        vector_register=None
+        points=None
+        lines=None
+        boundaries=None
+        centroids=None
+        faces=None
+        kernels=None
+        primitives=None
+        nodes=None
+        areas=None
+        islands=None
+        holes=None
+        volumes=None
+        number_of_maps=None
 
     """
 
@@ -1741,7 +1838,9 @@ class STVDSMetadata(STDSMetadataBase):
 
     def get_vector_register(self):
         """Get the vector map register table name
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "vector_register" in self.D:
             return self.D["vector_register"]
         return None
@@ -1750,7 +1849,9 @@ class STVDSMetadata(STDSMetadataBase):
         """Get the number of points of all registered maps,
         this value is set in the database
         automatically via SQL, so no setter exists
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "points" in self.D:
             return self.D["points"]
         return None
@@ -1759,7 +1860,9 @@ class STVDSMetadata(STDSMetadataBase):
         """Get the number of lines of all registered maps,
         this value is set in the database
         automatically via SQL, so no setter exists
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "lines" in self.D:
             return self.D["lines"]
         return None
@@ -1768,7 +1871,9 @@ class STVDSMetadata(STDSMetadataBase):
         """Get the number of boundaries of all registered maps,
         this value is set in the database
         automatically via SQL, so no setter exists
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "boundaries" in self.D:
             return self.D["boundaries"]
         return None
@@ -1777,7 +1882,9 @@ class STVDSMetadata(STDSMetadataBase):
         """Get the number of centroids of all registered maps,
         this value is set in the database
         automatically via SQL, so no setter exists
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "centroids" in self.D:
             return self.D["centroids"]
         return None
@@ -1786,7 +1893,9 @@ class STVDSMetadata(STDSMetadataBase):
         """Get the number of faces of all registered maps,
         this value is set in the database
         automatically via SQL, so no setter exists
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "faces" in self.D:
             return self.D["faces"]
         return None
@@ -1795,7 +1904,9 @@ class STVDSMetadata(STDSMetadataBase):
         """Get the number of kernels of all registered maps,
         this value is set in the database
         automatically via SQL, so no setter exists
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "kernels" in self.D:
             return self.D["kernels"]
         return None
@@ -1804,7 +1915,9 @@ class STVDSMetadata(STDSMetadataBase):
         """Get the number of primitives of all registered maps,
         this value is set in the database
         automatically via SQL, so no setter exists
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "primitives" in self.D:
             return self.D["primitives"]
         return None
@@ -1813,7 +1926,9 @@ class STVDSMetadata(STDSMetadataBase):
         """Get the number of nodes of all registered maps,
         this value is set in the database
         automatically via SQL, so no setter exists
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "nodes" in self.D:
             return self.D["nodes"]
         return None
@@ -1822,7 +1937,9 @@ class STVDSMetadata(STDSMetadataBase):
         """Get the number of areas of all registered maps,
         this value is set in the database
         automatically via SQL, so no setter exists
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "areas" in self.D:
             return self.D["areas"]
         return None
@@ -1831,7 +1948,9 @@ class STVDSMetadata(STDSMetadataBase):
         """Get the number of islands of all registered maps,
         this value is set in the database
         automatically via SQL, so no setter exists
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "islands" in self.D:
             return self.D["islands"]
         return None
@@ -1840,7 +1959,9 @@ class STVDSMetadata(STDSMetadataBase):
         """Get the number of holes of all registered maps,
         this value is set in the database
         automatically via SQL, so no setter exists
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "holes" in self.D:
             return self.D["holes"]
         return None
@@ -1849,7 +1970,9 @@ class STVDSMetadata(STDSMetadataBase):
         """Get the number of volumes of all registered maps,
         this value is set in the database
         automatically via SQL, so no setter exists
-        :return: None if not found"""
+
+        :return: None if not found
+        """
         if "volumes" in self.D:
             return self.D["volumes"]
         return None

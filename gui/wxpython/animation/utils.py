@@ -21,7 +21,6 @@ This program is free software under the GNU General Public License
 import os
 import wx
 import hashlib
-from multiprocessing import cpu_count
 
 try:
     from PIL import Image
@@ -127,11 +126,11 @@ def getNameAndLayer(name):
     and returns map name with mapset (when there was mapset)
     and layer (can be None).
 
-    >>> getNameAndLayer('name:2@mapset')
+    >>> getNameAndLayer("name:2@mapset")
     ('name@mapset', '2')
-    >>> getNameAndLayer('name@mapset')
+    >>> getNameAndLayer("name@mapset")
     ('name@mapset', None)
-    >>> getNameAndLayer('name:2')
+    >>> getNameAndLayer("name:2")
     ('name', '2')
     """
     mapset = layer = None
@@ -239,7 +238,7 @@ def ComputeScaledRect(sourceSize, destSize):
     """Fits source rectangle into destination rectangle
     by scaling and centering.
 
-        >>> ComputeScaledRect(sourceSize = (10, 40), destSize = (100, 50))
+        >>> ComputeScaledRect(sourceSize=(10, 40), destSize=(100, 50))
         {'height': 50, 'scale': 1.25, 'width': 13, 'x': 44, 'y': 0}
 
     :param sourceSize: size of source rectangle
@@ -350,7 +349,7 @@ def layerListToCmdsMatrix(layerList):
         else:
             cmdsForComposition.append([layer.cmd] * count)
 
-    return list(zip(*cmdsForComposition))
+    return list(zip(*cmdsForComposition, strict=False))
 
 
 def sampleCmdMatrixAndCreateNames(cmdMatrix, sampledSeries, regions):
@@ -372,13 +371,8 @@ def sampleCmdMatrixAndCreateNames(cmdMatrix, sampledSeries, regions):
 
 
 def getCpuCount():
-    """Returns number of available cpus.
-    If fails, default (4) is returned.
-    """
-    try:
-        return cpu_count()
-    except NotImplementedError:
-        return 4
+    """Returns number of available cpus."""
+    return gs.available_cpus()
 
 
 def interpolate(start, end, count):

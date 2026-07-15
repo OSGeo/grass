@@ -32,7 +32,6 @@
  *
  * \return number of records or -1 if it fails
  */
-
 int load_catval_array_rgb(struct Map_info *map, int vec,
                           dbCatValArray *cvarr_rgb)
 {
@@ -94,7 +93,6 @@ int load_catval_array_rgb(struct Map_info *map, int vec,
  *
  * \return number of records or -1 if it fails
  */
-
 int load_catval_array_size(struct Map_info *map, int vec,
                            dbCatValArray *cvarr_size)
 {
@@ -161,7 +159,6 @@ int load_catval_array_size(struct Map_info *map, int vec,
  *
  * \return number of records or -1 if it fails
  */
-
 int load_catval_array_rot(struct Map_info *map, int vec,
                           dbCatValArray *cvarr_rot)
 {

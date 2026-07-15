@@ -75,7 +75,6 @@
  *  \return void * a pointer to a buffer ... if successful,
  *                 NULL ... otherwise.
  */
-
 void *Rast3d_get_tile_ptr(RASTER3D_Map *map, int tileIndex)
 {
     void *ptr;
@@ -119,7 +118,6 @@ void *Rast3d_get_tile_ptr(RASTER3D_Map *map, int tileIndex)
  *  \return 1 ... if successful,
  *          0 ... otherwise.
  */
-
 int Rast3d_tile_load(RASTER3D_Map *map, int tileIndex)
 {
     if (Rast3d_get_tile_ptr(map, tileIndex) == NULL) {

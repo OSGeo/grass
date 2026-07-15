@@ -1,6 +1,6 @@
 build_program_in_subdir(m.cogo DEPENDS grass_gis ${LIBM})
 
-build_program_in_subdir(m.measure DEPENDS grass_gis)
+build_program_in_subdir(m.measure DEPENDS grass_gis grass_parson)
 
 build_program_in_subdir(m.transform DEPENDS grass_gis grass_imagery
                         grass_raster grass_vector ${LIBM})

@@ -18,7 +18,7 @@ set(dbf_SRCS
 set(mysql_SRCS
     mysql/create_table.c
     mysql/cursor.c
-    mysql/dbe.c
+    mysql/db.c
     mysql/describe.c
     mysql/driver.c
     mysql/error.c
@@ -106,13 +106,13 @@ build_program_in_subdir(
   DEFS
   "${grass_dbstubs_DEFS}"
   PRIMARY_DEPENDS
-  SQLite::SQLite3
+  SQLite3::SQLite3
   HTML_FILE_NAME
   grass-sqlite
   RUNTIME_OUTPUT_DIR
   "${GRASS_INSTALL_DRIVERDIR}/db")
 
-if(TARGET SQLite::SQLite3)
+if(TARGET SQLite3::SQLite3)
   list(APPEND db_drivers sqlite)
 endif()
 
@@ -162,8 +162,9 @@ if(TARGET MYSQL)
   list(APPEND db_drivers mysql)
 
   if(WITH_DOCS)
-    generate_html(TARGET mysql NAME grass-mesql SOURCEDIR
-                  ${CMAKE_CURRENT_SOURCE_DIR}/mysql)
+    generate_docs(grass-mesql
+      TARGET mysql
+      SOURCEDIR ${CMAKE_CURRENT_SOURCE_DIR}/mysql)
   endif()
 endif()
 

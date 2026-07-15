@@ -28,13 +28,7 @@ void parse_args(int argc, char **argv, struct _options *options,
     options->format->required = NO;
     options->format->type = TYPE_STRING;
     options->format->options = format_options();
-#ifdef HAVE_OGR
     options->format->answer = "ESRI_Shapefile";
-#else
-#ifdef HAVE_POSTGRES
-    options->format->answer = "PostgreSQL";
-#endif /* HAVE_POSTGRES */
-#endif /* HAVE_OGR */
     options->format->guisection = _("Settings");
 
     options->opts = G_define_option();

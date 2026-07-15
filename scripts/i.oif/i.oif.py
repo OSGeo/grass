@@ -84,7 +84,7 @@ def main():
 
     if serial:
         for band in bands:
-            grass.verbose("band %d" % band)
+            grass.verbose("band %s" % band)
             s = grass.read_command("r.univar", flags="g", map=band)
             kv = parse_key_val(s)
             stddev[band] = float(kv["stddev"])
@@ -123,8 +123,8 @@ def main():
 
     # We need to skip the first line, since r.covar prints the number of values
     lines = s.splitlines()
-    for i, row in zip(bands, lines[1:]):
-        for j, cell in zip(bands, row.split(" ")):
+    for i, row in zip(bands, lines[1:], strict=False):
+        for j, cell in zip(bands, row.split(" "), strict=False):
             correlation[i, j] = float(cell)
 
     # Calculate all combinations

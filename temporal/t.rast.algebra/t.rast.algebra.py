@@ -45,13 +45,8 @@
 # % required: yes
 # %end
 
-# %option
-# % key: suffix
-# % type: string
-# % description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
+# %option G_OPT_T_SUFFIX
 # % answer: num
-# % required: no
-# % multiple: no
 # %end
 
 # %option
@@ -100,21 +95,6 @@ def main():
     register_null = flags["n"]
     granularity = flags["g"]
     dry_run = flags["d"]
-
-    # Check for PLY installation
-    try:
-        # Intentionally unused imports
-        from ply import lex  # noqa: F401
-        from ply import yacc  # noqa: F401
-    except ImportError:
-        gs.fatal(
-            _(
-                "Please install PLY (Lex and Yacc Python implementation) to use the "
-                "temporal algebra modules. You can use t.rast.mapcalc that provides a "
-                "limited but useful alternative to t.rast.algebra without PLY "
-                "requirement."
-            )
-        )
 
     tgis.init(True)
     p = tgis.TemporalRasterAlgebraParser(

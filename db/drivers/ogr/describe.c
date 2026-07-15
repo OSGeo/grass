@@ -25,7 +25,7 @@
    \brief Describe table using driver
 
    \param table_name table name (as dbString)
-   \param table[out] pointer to dbTable
+   \param[out] table pointer to dbTable
 
    \return DB_OK on success
    \return DB_FAILED on failure

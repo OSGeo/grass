@@ -10,11 +10,10 @@ Read the file COPYING that comes with GRASS
 for details
 """
 
-from ctypes import byref, c_int, c_double
+from ctypes import byref, c_double, c_int
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
 from grass.lib.raster import Rast_parse_color_rule, Rast_parse_color_rule_error
 
 
@@ -66,14 +65,14 @@ class ParseSingleColorRuleColorsTestCase(TestCase):
         self.assertEqual(b.value, blue, msg="Wrong number for blue (%s)" % colors)
 
     def test_grass_format_separators(self):
-        """Test GRASS GIS color format with all allowed separators"""
+        """Test GRASS color format with all allowed separators"""
         self.convert_rule("15% 50,150,250", 15, 50, 150, 250)
         self.convert_rule("15% 50:150:250", 15, 50, 150, 250)
         self.convert_rule("15 50;150;250", 15, 50, 150, 250)
         self.convert_rule("15 50 150 250", 15, 50, 150, 250)
 
     def test_grass_format_multiple_separators(self):
-        """Test GRASS GIS color format with duplicated separators"""
+        """Test GRASS color format with duplicated separators"""
         self.convert_rule("15%  50, 150, 250", 15, 50, 150, 250)
         self.convert_rule("15%   50::150:250", 15, 50, 150, 250)
         self.convert_rule("15   50  ; 150 ; 250", 15, 50, 150, 250)
@@ -96,7 +95,7 @@ class ParseSingleColorRuleColorsTestCase(TestCase):
         self.convert_rule("15 #fB9A99", 15, 251, 154, 153)
 
     def test_grass_named(self):
-        """Test GRASS GIS named colors"""
+        """Test GRASS named colors"""
         self.convert_rule("15% black   ", 15, 0, 0, 0)
         self.convert_rule("15    white", 15, 255, 255, 255)
         self.convert_rule("   15 white", 15, 255, 255, 255)

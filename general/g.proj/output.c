@@ -21,39 +21,35 @@
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 #include <grass/config.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 
-#ifdef HAVE_OGR
 #include <cpl_csv.h>
-#endif
 
 #include "local_proto.h"
 
 static int check_xy(enum OutputFormat);
-static void print_json(JSON_Value *);
+static void print_json(G_JSON_Value *);
+
+static void print_projjson(void);
 
 /* print projection information gathered from one of the possible inputs
  * in GRASS format */
 void print_projinfo(enum OutputFormat format)
 {
     int i;
-    JSON_Value *value = NULL;
-    JSON_Object *object = NULL;
 
     if (check_xy(format))
         return;
 
-    if (format == PLAIN)
+    if (format == JSON) {
+        print_projjson();
+
+        return;
+    }
+    if (format == PLAIN) {
         fprintf(
             stdout,
             "-PROJ_INFO-------------------------------------------------\n");
-    else if (format == JSON) {
-        value = json_value_init_object();
-        if (value == NULL) {
-            G_fatal_error(
-                _("Failed to initialize JSON object. Out of memory?"));
-        }
-        object = json_object(value);
     }
 
     for (i = 0; i < projinfo->nitems; i++) {
@@ -67,17 +63,13 @@ void print_projinfo(enum OutputFormat format)
             fprintf(stdout, "%-11s: %s\n", projinfo->key[i],
                     projinfo->value[i]);
             break;
-        case JSON:
-            json_object_set_string(object, projinfo->key[i],
-                                   projinfo->value[i]);
-            break;
         case PROJ4:
         case WKT:
+        case JSON:
             break;
         }
     }
 
-    /* TODO: use projsrid instead */
     if (projsrid) {
         switch (format) {
         case PLAIN:
@@ -88,11 +80,9 @@ void print_projinfo(enum OutputFormat format)
         case SHELL:
             fprintf(stdout, "%s=%s\n", "srid", projsrid);
             break;
-        case JSON:
-            json_object_set_string(object, "srid", projsrid);
-            break;
         case PROJ4:
         case WKT:
+        case JSON:
             break;
         }
     }
@@ -111,19 +101,12 @@ void print_projinfo(enum OutputFormat format)
                 fprintf(stdout, "%s=%s\n", projunits->key[i],
                         projunits->value[i]);
                 break;
-            case JSON:
-                json_object_set_string(object, projunits->key[i],
-                                       projunits->value[i]);
-                break;
             case PROJ4:
             case WKT:
+            case JSON:
                 break;
             }
         }
-    }
-
-    if (format == JSON) {
-        print_json(value);
     }
 
     return;
@@ -193,38 +176,30 @@ void print_proj4(int dontprettify)
     projstr = NULL;
     projstrmod = NULL;
 
-#if PROJ_VERSION_MAJOR >= 6
     /* PROJ6+: create a PJ object from wkt or srid,
      * then get PROJ string using PROJ API */
-    {
-        PJ *obj = NULL;
+    PJ *obj = NULL;
 
-        if (projwkt) {
-            obj = proj_create_from_wkt(NULL, projwkt, NULL, NULL, NULL);
-        }
-        if (!obj && projsrid) {
-            obj = proj_create(NULL, projsrid);
-        }
-        if (obj) {
-            projstr = proj_as_proj_string(NULL, obj, PJ_PROJ_5, NULL);
-
-            if (projstr)
-                projstr = G_store(projstr);
-            proj_destroy(obj);
-        }
+    if (projwkt) {
+        obj = proj_create_from_wkt(NULL, projwkt, NULL, NULL, NULL);
     }
-#endif
+    if (!obj && projsrid) {
+        obj = proj_create(NULL, projsrid);
+    }
+    if (obj) {
+        projstr = proj_as_proj_string(NULL, obj, PJ_PROJ_5, NULL);
+
+        if (projstr)
+            projstr = G_store(projstr);
+        proj_destroy(obj);
+    }
 
     if (!projstr) {
         if (pj_get_kv(&pjinfo, projinfo, projunits) == -1)
             G_fatal_error(
                 _("Unable to convert projection information to PROJ format"));
         projstr = G_store(pjinfo.def);
-#if PROJ_VERSION_MAJOR >= 5
         proj_destroy(pjinfo.pj);
-#else
-        pj_free(pjinfo.pj);
-#endif
 
         /* GRASS-style PROJ.4 strings don't include a unit factor as this is
          * handled separately in GRASS - must include it here though */
@@ -256,7 +231,6 @@ void print_proj4(int dontprettify)
     return;
 }
 
-#ifdef HAVE_OGR
 void print_wkt(int esristyle, int dontprettify)
 {
     char *outwkt;
@@ -266,68 +240,55 @@ void print_wkt(int esristyle, int dontprettify)
 
     outwkt = NULL;
 
-#if PROJ_VERSION_MAJOR >= 6
-    /* print WKT2 using GDAL OSR interface */
-    {
-        OGRSpatialReferenceH hSRS;
-        const char *tmpwkt;
-        char **papszOptions = NULL;
+    char **papszOptions = G_calloc(3, sizeof(char *));
+    if (dontprettify)
+        papszOptions[0] = G_store("MULTILINE=NO");
+    else
+        papszOptions[0] = G_store("MULTILINE=YES");
+    if (esristyle)
+        papszOptions[1] = G_store("FORMAT=WKT1_ESRI");
+    else
+        papszOptions[1] = G_store("FORMAT=WKT2");
+    papszOptions[2] = NULL;
 
-        papszOptions = G_calloc(3, sizeof(char *));
-        if (dontprettify)
-            papszOptions[0] = G_store("MULTILINE=NO");
-        else
-            papszOptions[0] = G_store("MULTILINE=YES");
-        if (esristyle)
-            papszOptions[1] = G_store("FORMAT=WKT1_ESRI");
-        else
-            papszOptions[1] = G_store("FORMAT=WKT2");
-        papszOptions[2] = NULL;
+    OGRSpatialReferenceH hSRS = NULL;
 
-        hSRS = NULL;
+    if (projsrid) {
+        PJ *obj;
 
-        if (projsrid) {
-            PJ *obj;
-
-            obj = proj_create(NULL, projsrid);
-            if (!obj)
-                G_fatal_error(
-                    _("Unable to create PROJ definition from srid <%s>"),
-                    projsrid);
-            tmpwkt = proj_as_wkt(NULL, obj, PJ_WKT2_LATEST, NULL);
-            hSRS = OSRNewSpatialReference(tmpwkt);
-            OSRExportToWktEx(hSRS, &outwkt, (const char **)papszOptions);
-        }
-        if (!outwkt && projwkt) {
-            hSRS = OSRNewSpatialReference(projwkt);
-            OSRExportToWktEx(hSRS, &outwkt, (const char **)papszOptions);
-        }
-        if (!outwkt && projepsg) {
-            int epsg_num;
-
-            epsg_num = atoi(G_find_key_value("epsg", projepsg));
-
-            hSRS = OSRNewSpatialReference(NULL);
-            OSRImportFromEPSG(hSRS, epsg_num);
-            OSRExportToWktEx(hSRS, &outwkt, (const char **)papszOptions);
-        }
-        if (!outwkt) {
-            /* use GRASS proj info + units */
-            projwkt = GPJ_grass_to_wkt2(projinfo, projunits, projepsg,
-                                        esristyle, !(dontprettify));
-            hSRS = OSRNewSpatialReference(projwkt);
-            OSRExportToWktEx(hSRS, &outwkt, (const char **)papszOptions);
-        }
-        G_free(papszOptions[0]);
-        G_free(papszOptions[1]);
-        G_free(papszOptions);
-        if (hSRS)
-            OSRDestroySpatialReference(hSRS);
+        obj = proj_create(NULL, projsrid);
+        if (!obj)
+            G_fatal_error(_("Unable to create PROJ definition from srid <%s>"),
+                          projsrid);
+        const char *tmpwkt = proj_as_wkt(NULL, obj, PJ_WKT2_LATEST, NULL);
+        hSRS = OSRNewSpatialReference(tmpwkt);
+        OSRExportToWktEx(hSRS, &outwkt, (const char **)papszOptions);
     }
-#else
-    outwkt = GPJ_grass_to_wkt2(projinfo, projunits, projepsg, esristyle,
-                               !(dontprettify));
-#endif
+    if (!outwkt && projwkt) {
+        hSRS = OSRNewSpatialReference(projwkt);
+        OSRExportToWktEx(hSRS, &outwkt, (const char **)papszOptions);
+    }
+    if (!outwkt && projepsg) {
+        int epsg_num;
+
+        epsg_num = atoi(G_find_key_value("epsg", projepsg));
+
+        hSRS = OSRNewSpatialReference(NULL);
+        OSRImportFromEPSG(hSRS, epsg_num);
+        OSRExportToWktEx(hSRS, &outwkt, (const char **)papszOptions);
+    }
+    if (!outwkt) {
+        /* use GRASS proj info + units */
+        projwkt = GPJ_grass_to_wkt2(projinfo, projunits, projepsg, esristyle,
+                                    !(dontprettify));
+        hSRS = OSRNewSpatialReference(projwkt);
+        OSRExportToWktEx(hSRS, &outwkt, (const char **)papszOptions);
+    }
+    G_free(papszOptions[0]);
+    G_free(papszOptions[1]);
+    G_free(papszOptions);
+    if (hSRS)
+        OSRDestroySpatialReference(hSRS);
 
     if (outwkt != NULL) {
         fprintf(stdout, "%s\n", outwkt);
@@ -338,12 +299,11 @@ void print_wkt(int esristyle, int dontprettify)
 
     return;
 }
-#endif
 
 static int check_xy(enum OutputFormat format)
 {
-    JSON_Value *value = NULL;
-    JSON_Object *object = NULL;
+    G_JSON_Value *value = NULL;
+    G_JSON_Object *object = NULL;
 
     if (cellhd.proj == PROJECTION_XY) {
         switch (format) {
@@ -354,14 +314,15 @@ static int check_xy(enum OutputFormat format)
             fprintf(stdout, "XY location (unprojected)\n");
             break;
         case JSON:
-            value = json_value_init_object();
+            value = G_json_value_init_object();
             if (value == NULL) {
                 G_fatal_error(
                     _("Failed to initialize JSON object. Out of memory?"));
             }
-            object = json_object(value);
+            object = G_json_object(value);
 
-            json_object_set_string(object, "name", "xy_location_unprojected");
+            G_json_object_set_string(object, "name",
+                                     "XY location (unprojected)");
 
             print_json(value);
             break;
@@ -375,14 +336,69 @@ static int check_xy(enum OutputFormat format)
         return 0;
 }
 
-void print_json(JSON_Value *value)
+void print_json(G_JSON_Value *value)
 {
-    char *serialized_string = json_serialize_to_string_pretty(value);
+    char *serialized_string = G_json_serialize_to_string_pretty(value);
     if (serialized_string == NULL) {
         G_fatal_error(_("Failed to initialize pretty JSON string."));
     }
     puts(serialized_string);
 
-    json_free_serialized_string(serialized_string);
-    json_value_free(value);
+    G_json_free_serialized_string(serialized_string);
+    G_json_value_free(value);
+}
+
+void print_projjson(void)
+{
+    /* PROJ6+: create a PJ object from wkt or srid,
+     * then get PROJJSON using PROJ API */
+    const char *projstr = NULL;
+    PJ *obj = NULL;
+
+    if (check_xy(PLAIN))
+        return;
+
+    if (projwkt) {
+        obj = proj_create_from_wkt(NULL, projwkt, NULL, NULL, NULL);
+    }
+    if (!obj && projsrid) {
+        obj = proj_create(NULL, projsrid);
+    }
+    if (!obj && projepsg) {
+        int epsg_num;
+        char *buf = NULL;
+
+        epsg_num = atoi(G_find_key_value("epsg", projepsg));
+        if (epsg_num) {
+            G_asprintf(&buf, "EPSG:%d", epsg_num);
+            obj = proj_create(NULL, buf);
+            G_free(buf);
+        }
+    }
+    if (!obj) {
+        char *outwkt;
+
+        outwkt = GPJ_grass_to_wkt(projinfo, projunits, 0, 0);
+        /* datum info might be incomplete or incorrect */
+        if (outwkt) {
+            obj = proj_create_from_wkt(NULL, projwkt, NULL, NULL, NULL);
+            G_free(outwkt);
+        }
+    }
+    if (obj) {
+        projstr = proj_as_projjson(NULL, obj, NULL);
+
+        if (projstr)
+            projstr = G_store(projstr);
+        proj_destroy(obj);
+    }
+
+    if (projstr) {
+        fprintf(stdout, "%s\n", projstr);
+        G_free((char *)projstr);
+    }
+    else
+        G_warning(_("Unable to convert to PROJJSON"));
+
+    return;
 }

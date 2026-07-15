@@ -25,6 +25,8 @@ add_custom_target(
           ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/images/symbols/README
   DEPENDS gui_icons ${output_images})
 
+set_target_properties(gui_images PROPERTIES FOLDER GUI)
+
 install(FILES ${GUI_IMAGES} DESTINATION ${GRASS_INSTALL_GUIDIR}/images)
 install(DIRECTORY symbols/basic
         DESTINATION ${GRASS_INSTALL_GUIDIR}/images/symbols)

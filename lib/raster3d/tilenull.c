@@ -18,7 +18,6 @@
  *  \param type
  *  \return void
  */
-
 void Rast3d_set_null_tile_type(RASTER3D_Map *map, void *tile, int type)
 {
     Rast3d_set_null_value(tile, map->tileSize, type);
@@ -36,7 +35,6 @@ void Rast3d_set_null_tile_type(RASTER3D_Map *map, void *tile, int type)
  *  \param tile
  *  \return void
  */
-
 void Rast3d_set_null_tile(RASTER3D_Map *map, void *tile)
 {
     Rast3d_set_null_tile_type(map, tile, map->typeIntern);

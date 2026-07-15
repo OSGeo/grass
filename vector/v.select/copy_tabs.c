@@ -30,6 +30,7 @@ void copy_tabs(struct Map_info *In, struct Map_info *Out, int nfields,
         }
         if (ncats[f] > 0)
             ntabs++;
+        Vect_destroy_field_info(IFi);
     }
 
     if (ntabs > 1)
@@ -87,5 +88,7 @@ void copy_tabs(struct Map_info *In, struct Map_info *Out, int nfields,
             G_fatal_error(_("Unable to grant privileges on table <%s>"),
                           OFi->table);
         db_close_database_shutdown_driver(Driver);
+        Vect_destroy_field_info(OFi);
+        Vect_destroy_field_info(IFi);
     }
 }

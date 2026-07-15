@@ -37,7 +37,6 @@ int Vect_remove_small_areas_ext(struct Map_info *, double, struct Map_info *,
 
    \return number of removed areas
  */
-
 int Vect_remove_small_areas(struct Map_info *Map, double thresh,
                             struct Map_info *Err, double *removed_area)
 {

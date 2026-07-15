@@ -22,7 +22,6 @@ static unsigned char Buffer[10000]; /* buffer for outputting data to file */
  **   BUT, this code will simply place a 0 in 1st byte, and send it on to
  *       lower routine that writes out compressed data.
  */
-
 int write_cube(Cube_data *Cube, /* array of poly info  by threshold */
                int cur_x, file_info *headfax)
 {

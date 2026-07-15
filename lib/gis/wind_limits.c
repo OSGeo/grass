@@ -8,7 +8,7 @@
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
+ * \author GRASS Development Team
  *
  * \date 1999-2014
  */
@@ -29,8 +29,7 @@
  * \return 1 no change
  * \return 0 changed
  */
-
-int G_limit_east(double *east UNUSED, int proj UNUSED)
+int G_limit_east(double *east G_UNUSED, int proj G_UNUSED)
 {
     return 1;
 }
@@ -49,8 +48,7 @@ int G_limit_east(double *east UNUSED, int proj UNUSED)
  * \return 1 no change
  * \return 0 changed
  */
-
-int G_limit_west(double *west UNUSED, int proj UNUSED)
+int G_limit_west(double *west G_UNUSED, int proj G_UNUSED)
 {
     return 1;
 }
@@ -67,7 +65,6 @@ int G_limit_west(double *west UNUSED, int proj UNUSED)
  * \return 1 no change
  * \return 0 changed
  */
-
 int G_limit_north(double *north, int proj)
 {
     if (proj == PROJECTION_LL) {
@@ -96,7 +93,6 @@ int G_limit_north(double *north, int proj)
  * \return 1 no change
  * \return 0 changed
  */
-
 int G_limit_south(double *south, int proj)
 {
     if (proj == PROJECTION_LL) {

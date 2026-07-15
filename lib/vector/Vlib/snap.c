@@ -14,12 +14,15 @@
  * \author update to GRASS 7 Markus Metz
  */
 
+#include <errno.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <math.h>
 #include <grass/vector.h>
+#include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/kdtree.h>
 
@@ -73,7 +76,7 @@ static int sort_new2(const void *pa, const void *pb)
 }
 
 /* This function is called by RTreeSearch() to find a vertex */
-static int find_item(int id, const struct RTree_Rect *rect UNUSED, void *list)
+static int find_item(int id, const struct RTree_Rect *rect G_UNUSED, void *list)
 {
     G_ilist_add((struct ilist *)list, id);
     return 0;
@@ -81,7 +84,7 @@ static int find_item(int id, const struct RTree_Rect *rect UNUSED, void *list)
 
 /* This function is called by RTreeSearch() to add selected node/line/area/isle
  * to the list */
-static int add_item(int id, const struct RTree_Rect *rect UNUSED, void *list)
+static int add_item(int id, const struct RTree_Rect *rect G_UNUSED, void *list)
 {
     G_ilist_add((struct ilist *)list, id);
     return 1;
@@ -564,7 +567,14 @@ static void Vect_snap_lines_list_rtree(struct Map_info *Map,
         char *filename = G_tempfile();
 
         rtreefd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
-        remove(filename);
+        if (rtreefd < 0) {
+            G_fatal_error(_("Unable to create temporary file <%s>: %s"),
+                          filename, strerror(errno));
+        }
+        if (remove(filename) != 0) {
+            G_warning(_("Unable to remove temporary file <%s>: %s"), filename,
+                      strerror(errno));
+        }
         G_free(filename);
     }
     RTree = RTreeCreateTree(rtreefd, 0, 2);

@@ -45,7 +45,7 @@ from core.gconsole import GConsole, EVT_CMD_RUN, EVT_CMD_DONE, EVT_CMD_PREPARE
 from core.debug import Debug
 from core.gcmd import GMessage, GException, GWarning, GError
 from core.settings import UserSettings
-from core.giface import Notification
+from core.giface import Notification, StandaloneGrassInterface
 
 from gui_core.widgets import GNotebook
 from gui_core.goutput import GConsoleWindow
@@ -66,19 +66,20 @@ from gui_core.wrap import (
 )
 from main_window.page import MainPageBase
 from gmodeler.giface import GraphicalModelerGrassInterface
-from gmodeler.model import (
-    Model,
+from gmodeler.model import Model, WriteModelFile
+from gmodeler.model_items import (
     ModelAction,
     ModelRelation,
     ModelLoop,
     ModelCondition,
     ModelComment,
-    WriteModelFile,
     ModelDataSeries,
     ModelDataSingle,
-    WriteActiniaFile,
-    WritePythonFile,
-    WritePyWPSFile,
+)
+from gmodeler.model_convert import (
+    ModelToActinia,
+    ModelToPython,
+    ModelToPyWPS,
 )
 from gmodeler.dialogs import (
     ModelDataDialog,
@@ -407,23 +408,37 @@ class ModelerPanel(wx.Panel, MainPageBase):
         # delete intermediate data
         self._deleteIntermediateData()
 
-        # display data if required
+        # store resolved variables
+        run_params = self.model.GetRunParams()
+        resolved = {}
+        if run_params and "variables" in run_params:
+            for p in run_params["variables"]["params"]:
+                name = p.get("name", "")
+                value = p.get("value", "")
+                if name and value:
+                    resolved[name] = value
+
+        # display data if required and is possible
+        if isinstance(self._giface, StandaloneGrassInterface):
+            return
+
+        layer_list = self._giface.GetLayerList()
         for data in self.model.GetData():
             if not data.HasDisplay():
                 continue
 
             # remove existing map layers first
-            layers = self._giface.GetLayerList().GetLayersByName(data.GetValue())
+            layers = layer_list.GetLayersByName(data.GetResolvedValue(resolved))
             if layers:
                 for layer in layers:
-                    self._giface.GetLayerList().DeleteLayer(layer)
+                    layer_list.DeleteLayer(layer)
 
             # add new map layer
-            self._giface.GetLayerList().AddLayer(
+            layer_list.AddLayer(
                 ltype=data.GetPrompt(),
-                name=data.GetValue(),
+                name=data.GetResolvedValue(resolved),
                 checked=True,
-                cmd=data.GetDisplayCmd(),
+                cmd=data.GetDisplayCmd(resolved),
             )
 
     def _switchPageHandler(self, event, notification):
@@ -900,7 +915,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
         if filename[-4:] != ".gxm":
             filename += ".gxm"
 
-        if os.path.exists(filename):
+        if Path(filename).exists():
             dlg = wx.MessageDialog(
                 parent=self,
                 message=_(
@@ -1585,7 +1600,7 @@ class PythonPanel(wx.Panel):
         self.filename = None
         # default values of variables that will be changed if the desired
         # script type is changed
-        self.write_object = WritePythonFile
+        self.write_object = ModelToPython
 
         self.bodyBox = StaticBox(
             parent=self, id=wx.ID_ANY, label=" %s " % _("Python script")
@@ -1655,19 +1670,19 @@ class PythonPanel(wx.Panel):
         :return: script extension
         """
         # return "py" for Python, PyWPS
-        return "json" if self.write_object == WriteActiniaFile else "py"
+        return "json" if self.write_object == ModelToActinia else "py"
 
     def SetWriteObject(self, script_type):
         """Set correct self.write_object depending on the script type.
         :param script_type: script type name as a string
         """
         if script_type == "PyWPS":
-            self.write_object = WritePyWPSFile
+            self.write_object = ModelToPyWPS
         elif script_type == "actinia":
-            self.write_object = WriteActiniaFile
+            self.write_object = ModelToActinia
         else:
             # script_type == "Python", fallback
-            self.write_object = WritePythonFile
+            self.write_object = ModelToPython
 
     def RefreshScript(self):
         """Refresh the script.
@@ -1697,11 +1712,18 @@ class PythonPanel(wx.Panel):
                 return False
 
         grassAPI = UserSettings.Get(group="modeler", key="grassAPI", subkey="selection")
+        if grassAPI == 0:
+            grassAPIStr = "script"
+        elif grassAPI == 1:
+            grassAPIStr = "pygrass"
+        else:
+            grassAPIStr = "tools"
+
         with tempfile.TemporaryFile(mode="r+") as fd:
             self.write_object(
                 fd,
                 self.parent.GetModel(),
-                grassAPI="script" if grassAPI == 0 else "pygrass",
+                grassAPI=grassAPIStr,
             )
             fd.seek(0)
             self.body.SetText(fd.read())
@@ -1741,7 +1763,7 @@ class PythonPanel(wx.Panel):
         if filename[-len(file_ext) - 1 :] != f".{file_ext}":
             filename += f".{file_ext}"
 
-        if os.path.exists(filename):
+        if Path(filename).exists():
             dlg = wx.MessageDialog(
                 self,
                 message=_(
@@ -1799,6 +1821,40 @@ class PythonPanel(wx.Panel):
         """Python script finished"""
         try_remove(self.filename)
         self.filename = None
+
+        # store resolved variables
+        model = self.parent.GetModel()
+        run_params = model.GetRunParams()
+        resolved = {}
+        if run_params and "variables" in run_params:
+            for p in run_params["variables"]["params"]:
+                name = p.get("name", "")
+                value = p.get("value", "")
+                if name and value:
+                    resolved[name] = value
+
+        # display data if required and is possible
+        if isinstance(self.parent._giface, StandaloneGrassInterface):
+            return
+
+        layer_list = self.parent._giface.GetLayerList()
+        for data in model.GetData():
+            if not data.HasDisplay():
+                continue
+
+            # remove existing map layers first
+            layers = layer_list.GetLayersByName(data.GetResolvedValue(resolved))
+            if layers:
+                for layer in layers:
+                    layer_list.DeleteLayer(layer)
+
+            # add new map layer
+            layer_list.AddLayer(
+                ltype=data.GetPrompt(),
+                name=data.GetResolvedValue(resolved),
+                checked=True,
+                cmd=data.GetDisplayCmd(resolved),
+            )
 
     def OnChangeScriptType(self, event):
         new_script_type = self.script_type_box.GetStringSelection()

@@ -409,7 +409,10 @@ static int mk_attribs(int cat, struct field_info *Fi, dbDriver *Driver,
         for (i = 0; i < attr_size; i++) {
             Column = db_get_table_column(Table, attr_cols[i]);
             db_convert_column_value_to_string(Column, &dbstring);
-            strcpy(buf, db_get_column_name(Column));
+            const char *name = db_get_column_name(Column);
+            if (G_strlcpy(buf, name, sizeof(buf)) >= sizeof(buf)) {
+                G_fatal_error(_("Column name <%s> is too long"), name);
+            }
             fprintf(fpsvg, "gg:%s=\"", G_tolcase(buf));
             print_escaped_for_xml(db_get_string(&dbstring));
             fprintf(fpsvg, "\" ");

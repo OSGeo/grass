@@ -646,7 +646,7 @@ void V2__add_area_cats_to_cidx_nat(struct Map_info *Map, int area)
 
    \param Map pointer to Map_info struct
    \param line feature id to be removed
-   \param Points feature geometry (pointer to line_pnts struct)
+   \param points feature geometry (pointer to \ref line_pnts struct)
    \param external_routine external subroutine to execute (used by PostGIS
    Topology)
 

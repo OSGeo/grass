@@ -92,11 +92,16 @@ void set_params(void)
     param.nprocs = G_define_standard_option(G_OPT_M_NPROCS);
 
     param.separator = G_define_standard_option(G_OPT_F_SEP);
+    param.separator->answer = NULL;
     param.separator->guisection = _("Formatting");
 
     param.shell_style = G_define_flag();
     param.shell_style->key = 'g';
-    param.shell_style->description = _("Print the stats in shell script style");
+    param.shell_style->label =
+        _("Print the stats in shell script style [deprecated]");
+    param.shell_style->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=shell instead.");
     param.shell_style->guisection = _("Formatting");
 
     param.extended = G_define_flag();
@@ -106,11 +111,19 @@ void set_params(void)
 
     param.table = G_define_flag();
     param.table->key = 't';
-    param.table->description =
-        _("Table output format instead of standard output format");
+    param.table->label =
+        _("Table output format instead of standard output format [deprecated]");
+    param.table->description = _(
+        "This flag is deprecated and will be removed in a future release. Use "
+        "format=csv instead.");
     param.table->guisection = _("Formatting");
 
     param.format = G_define_standard_option(G_OPT_F_FORMAT);
+    param.format->options = "plain,shell,csv,json";
+    param.format->descriptions = ("plain;Human readable text output;"
+                                  "shell;shell script style text output;"
+                                  "csv;CSV (Comma Separated Values);"
+                                  "json;JSON (JavaScript Object Notation);");
     param.format->guisection = _("Print");
 
     param.use_rast_region = G_define_flag();
@@ -123,9 +136,10 @@ void set_params(void)
 }
 
 static int open_raster(const char *infile);
-static univar_stat *univar_stat_with_percentiles(int map_type);
 static void process_raster(univar_stat *stats, thread_workspace *tw,
-                           const struct Cell_head *region, int nprocs);
+                           const struct Cell_head *region, int nprocs,
+                           enum OutputFormat format);
+static void kahan_sum(double *sum, double *c, double x);
 
 /* *************************************************************** */
 /* **** the main functions for r.univar ************************** */
@@ -137,7 +151,7 @@ int main(int argc, char *argv[])
     struct Cell_head region;
     struct GModule *module;
     univar_stat *stats;
-    char **p, *z;
+    char **infile, *zonemap;
     int cell_type, min, max;
     struct Range zone_range;
     const char *mapset, *name;
@@ -180,30 +194,58 @@ int main(int argc, char *argv[])
         }
     }
 
+    /* For backward compatibility */
+    if (!param.separator->answer) {
+        if (strcmp(param.format->answer, "csv") == 0)
+            param.separator->answer = "comma";
+        else
+            param.separator->answer = "pipe";
+    }
+
     if (strcmp(param.format->answer, "json") == 0) {
         format = JSON;
+    }
+    else if (strcmp(param.format->answer, "shell") == 0) {
+        format = SHELL;
+    }
+    else if (strcmp(param.format->answer, "csv") == 0) {
+        format = CSV;
     }
     else {
         format = PLAIN;
     }
 
+    if (param.shell_style->answer) {
+        G_verbose_message(
+            _("Flag 'g' is deprecated and will be removed in a future "
+              "release. Please use format=shell instead."));
+        if (format == JSON || format == CSV) {
+            G_fatal_error(
+                _("The -g flag cannot be used with format=json or format=csv. "
+                  "Please select only one output format."));
+        }
+        format = SHELL;
+    }
+
+    if (param.table->answer) {
+        G_verbose_message(
+            _("Flag 't' is deprecated and will be removed in a future "
+              "release. Please use format=csv instead."));
+        if (format == JSON || format == SHELL) {
+            G_fatal_error(_(
+                "The -t flag cannot be used with format=json or format=shell. "
+                "Please select only one output format."));
+        }
+        format = CSV;
+    }
+
     /* set nprocs parameter */
     int nprocs;
-    sscanf(param.nprocs->answer, "%d", &nprocs);
+    nprocs = G_set_omp_num_threads(param.nprocs);
+    nprocs = Rast_disable_omp_on_mask(nprocs);
     if (nprocs < 1)
         G_fatal_error(_("<%d> is not valid number of nprocs."), nprocs);
-    if (nprocs > 1 && Rast_mask_is_present()) {
-        G_warning(_("Parallel processing disabled due to active mask."));
-        nprocs = 1;
-    }
-#if defined(_OPENMP)
-    omp_set_num_threads(nprocs);
-#else
-    if (nprocs != 1)
-        G_warning(_("GRASS is compiled without OpenMP support. Ignoring "
-                    "threads setting."));
-    nprocs = 1;
-#endif
+
     /* table field separator */
     zone_info.sep = G_option_to_separator(param.separator);
 
@@ -215,21 +257,21 @@ int main(int argc, char *argv[])
     thread_workspace *tw = G_malloc(nprocs * sizeof *tw);
 
     /* open zoning raster */
-    if ((z = param.zonefile->answer)) {
-        mapset = G_find_raster2(z, "");
+    if ((zonemap = param.zonefile->answer)) {
+        mapset = G_find_raster2(zonemap, "");
 
         for (t = 0; t < nprocs; ++t)
-            tw[t].fdz = open_raster(z);
+            tw[t].fdz = open_raster(zonemap);
 
         cell_type = Rast_get_map_type(tw->fdz);
         if (cell_type != CELL_TYPE)
             G_fatal_error("Zoning raster must be of type CELL");
 
-        if (Rast_read_range(z, mapset, &zone_range) == -1)
+        if (Rast_read_range(zonemap, mapset, &zone_range) == -1)
             G_fatal_error("Can not read range for zoning raster");
         Rast_get_range_min_max(&zone_range, &min, &max);
-        if (Rast_read_cats(z, mapset, &(zone_info.cats)))
-            G_warning("no category support for zoning raster");
+        if (Rast_read_cats(zonemap, mapset, &(zone_info.cats)))
+            G_warning("No category support for zoning raster");
 
         zone_info.min = min;
         zone_info.max = max;
@@ -237,7 +279,8 @@ int main(int argc, char *argv[])
     }
 
     /* count the input rasters given */
-    for (p = (char **)param.inputfile->answers, rasters = 0; *p; p++, rasters++)
+    for (infile = (char **)param.inputfile->answers, rasters = 0; *infile;
+         infile++, rasters++)
         ;
 
     /* process all input rasters */
@@ -245,13 +288,13 @@ int main(int argc, char *argv[])
 
     stats = ((map_type == -1) ? create_univar_stat_struct(-1, 0) : 0);
 
-    for (p = param.inputfile->answers; *p; p++) {
+    for (infile = param.inputfile->answers; *infile; infile++) {
 
         /* Check if the native extent and resolution
            of the input map should be used */
         if (param.use_rast_region->answer) {
-            mapset = G_find_raster2(*p, "");
-            Rast_get_cellhd(*p, mapset, &region);
+            mapset = G_find_raster2(*infile, "");
+            Rast_get_cellhd(*infile, mapset, &region);
             /* Set the computational region */
             Rast_set_window(&region);
         }
@@ -260,7 +303,7 @@ int main(int argc, char *argv[])
         }
 
         for (t = 0; t < nprocs; t++)
-            tw[t].fd = open_raster(*p);
+            tw[t].fd = open_raster(*infile);
 
         if (map_type != -1) {
             /* NB: map_type must match when doing extended stats */
@@ -274,11 +317,11 @@ int main(int argc, char *argv[])
                 stats = univar_stat_with_percentiles(map_type);
             }
             else if (this_type != map_type) {
-                G_fatal_error(_("Raster <%s> type mismatch"), *p);
+                G_fatal_error(_("Raster <%s> type mismatch"), *infile);
             }
         }
 
-        process_raster(stats, tw, &region, nprocs);
+        process_raster(stats, tw, &region, nprocs, format);
 
         /* close input raster */
         for (t = 0; t < nprocs; t++)
@@ -286,13 +329,13 @@ int main(int argc, char *argv[])
     }
 
     /* close zoning raster */
-    if (z) {
+    if (zonemap) {
         for (t = 0; t < nprocs; t++)
             Rast_close(tw[t].fdz);
     }
 
     /* create the output */
-    if (param.table->answer)
+    if (format == CSV)
         print_stats_table(stats);
     else
         print_stats(stats, format);
@@ -319,30 +362,9 @@ static int open_raster(const char *infile)
     return fd;
 }
 
-static univar_stat *univar_stat_with_percentiles(int map_type)
-{
-    univar_stat *stats;
-    unsigned int i, j;
-    unsigned int n_zones = zone_info.n_zones;
-
-    if (n_zones == 0)
-        n_zones = 1;
-
-    i = 0;
-    while (param.percentile->answers[i])
-        i++;
-    stats = create_univar_stat_struct(map_type, i);
-    for (i = 0; i < n_zones; i++) {
-        for (j = 0; j < stats[i].n_perc; j++) {
-            sscanf(param.percentile->answers[j], "%lf", &(stats[i].perc[j]));
-        }
-    }
-
-    return stats;
-}
-
 static void process_raster(univar_stat *stats, thread_workspace *tw,
-                           const struct Cell_head *region, int nprocs)
+                           const struct Cell_head *region, int nprocs,
+                           enum OutputFormat format)
 {
     /* use G_window_rows(), G_window_cols() here? */
     const int rows = region->rows;
@@ -353,6 +375,11 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
 
     const int n_zones = zone_info.n_zones;
     const int n_alloc = n_zones ? n_zones : 1;
+
+    /* initialize for KhanSum through rows */
+    double c_sum = 0.0;
+    double c_sumsq = 0.0;
+    double c_sum_abs = 0.0;
 
     for (int t = 0; t < nprocs; t++) {
         tw[t].raster_row = Rast_allocate_buf(map_type);
@@ -372,9 +399,12 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
     int computed = 0;
     int row;
 
-#pragma omp parallel
+#pragma omp parallel private(row, c_sum, c_sumsq, c_sum_abs)
     {
         int t_id = 0;
+        c_sum = 0;
+        c_sumsq = 0;
+        c_sum_abs = 0;
 #if defined(_OPENMP)
         t_id = omp_get_thread_num();
 #endif
@@ -470,30 +500,48 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
                     bucket->nextp = G_incr_void_ptr(bucket->nextp, value_sz);
                 }
 
-                double val = ((map_type == DCELL_TYPE)   ? *((DCELL *)ptr)
-                              : (map_type == FCELL_TYPE) ? *((FCELL *)ptr)
-                                                         : *((CELL *)ptr));
-
-                zd->sum += val;
-                zd->sumsq += val * val;
-                zd->sum_abs += fabs(val);
-
-                if (val > zd->max)
-                    zd->max = val;
-                if (val < zd->min)
-                    zd->min = val;
+                if ((map_type == DCELL_TYPE) || (map_type == FCELL_TYPE)) {
+                    /* use Kaham sum for floating point */
+                    double val = ((map_type == DCELL_TYPE) ? *((DCELL *)ptr)
+                                                           : *((FCELL *)ptr));
+                    kahan_sum(&zd->sum, &c_sum, val);
+                    kahan_sum(&zd->sumsq, &c_sumsq, val * val);
+                    kahan_sum(&zd->sum_abs, &c_sum_abs, fabs(val));
+                    if (val > zd->max)
+                        zd->max = val;
+                    if (val < zd->min)
+                        zd->min = val;
+                }
+                else if (map_type == CELL_TYPE) {
+                    /* integer does not have floating point error */
+                    int val = *((CELL *)ptr);
+                    zd->sum += val;
+                    zd->sumsq += val * val;
+                    zd->sum_abs += abs(val);
+                    if (val > zd->max)
+                        zd->max = val;
+                    if (val < zd->min)
+                        zd->min = val;
+                }
+                else
+                    G_fatal_error(_("Unknown map type"));
 
                 ptr = G_incr_void_ptr(ptr, value_sz);
                 if (n_zones)
                     zptr++;
                 zd->bucket.n++;
             } /* end column loop */
-            if (!(param.shell_style->answer)) {
+            if (format != SHELL) {
 #pragma omp atomic update
                 computed++;
                 G_percent(computed, rows, 2);
             }
         } /* end row loop */
+
+        /* initialize for KhanSum through threads */
+        c_sum = 0.0;
+        c_sumsq = 0.0;
+        c_sum_abs = 0.0;
 
         for (int z = 0; z < n_alloc; z++) {
             zone_workspace *zd = &zw[z];
@@ -570,12 +618,23 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
             }
 #pragma omp atomic update
             stats[z].size += zd->size;
-#pragma omp atomic update
-            stats[z].sum += zd->sum;
-#pragma omp atomic update
-            stats[z].sumsq += zd->sumsq;
-#pragma omp atomic update
-            stats[z].sum_abs += zd->sum_abs;
+#pragma omp critical
+            {
+                if ((map_type == DCELL_TYPE) || (map_type == FCELL_TYPE)) {
+                    /* use Kahan sum for floating point */
+                    kahan_sum(&stats[z].sum, &c_sum, zd->sum);
+                    kahan_sum(&stats[z].sumsq, &c_sumsq, zd->sumsq);
+                    kahan_sum(&stats[z].sum_abs, &c_sum_abs, zd->sum_abs);
+                }
+                else if (map_type == CELL_TYPE) {
+                    /* integer does not have floating point error */
+                    stats[z].sum += zd->sum;
+                    stats[z].sumsq += zd->sumsq;
+                    stats[z].sum_abs += zd->sum_abs;
+                }
+                else
+                    G_fatal_error(_("Unknown map type"));
+            }
 
 #if defined(_OPENMP)
             omp_set_lock(&minmax[z]);
@@ -621,6 +680,15 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
             G_free(tw[t].zoneraster_row);
         }
     }
-    if (!(param.shell_style->answer))
+    if (format != SHELL)
         G_percent(rows, rows, 2);
+}
+
+/* Use Kahan sum to avoid floating point error from lots of summations */
+static void kahan_sum(double *sum, double *c, double x)
+{
+    double y = x - *c;
+    double t = *sum + y;
+    *c = (t - *sum) - y; /* (t - sum) recovers the high-order part of y; */
+    *sum = t;            /* Algebraically, c should always be zero. */
 }

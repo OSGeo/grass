@@ -4,11 +4,10 @@ Created on Sun Jun 08 12:50:45 2018
 @author: Sanjeet Bhatti
 """
 
+from pathlib import Path
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
-
-import os
 
 
 class TestVUnpack(TestCase):
@@ -26,8 +25,7 @@ class TestVUnpack(TestCase):
     def tearDownClass(cls):
         """Remove pack file created region"""
         cls.runModule("g.remove", type="vector", name=cls.mapName, flags="f")
-        if os.path.isfile(cls.packFile):
-            os.remove(cls.packFile)
+        Path(cls.packFile).unlink(missing_ok=True)
 
     def test_v_pack(self):
         """Unpack file test"""

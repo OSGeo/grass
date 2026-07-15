@@ -39,13 +39,14 @@ try:
     from matplotlib.patches import Polygon, Ellipse
     import matplotlib.image as mi
     import matplotlib.colors as mcolors
-except ImportError as e:
-    raise ImportError(
+except ImportError as error:
+    error.add_note(
         _(
             'The Scatterplot Tool needs the "matplotlib" '
-            "(python-matplotlib) package to be installed. {0}"
-        ).format(e)
+            "(python-matplotlib) package to be installed."
+        )
     )
+    raise
 
 import grass.script as gs
 from grass.pydispatch.signal import Signal
@@ -111,13 +112,13 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
 
         self.axes = self.fig.add_axes([0.0, 0.0, 1, 1])
 
-        pol = Polygon(list(zip([0], [0])), animated=True)
+        pol = Polygon(list(zip([0], [0], strict=False)), animated=True)
         self.axes.add_patch(pol)
         self.polygon_drawer = PolygonDrawer(self.axes, pol=pol, empty_pol=True)
 
         self.zoom_wheel_coords = None
         self.zoom_rect_coords = None
-        self.zoom_rect = Polygon(list(zip([0], [0])), facecolor="none")
+        self.zoom_rect = Polygon(list(zip([0], [0], strict=False)), facecolor="none")
         self.zoom_rect.set_visible(False)
         self.axes.add_patch(self.zoom_rect)
 
@@ -645,7 +646,7 @@ class PolygonDrawer:
         self.pol = pol
         self.empty_pol = empty_pol
 
-        x, y = zip(*self.pol.xy)
+        x, y = zip(*self.pol.xy, strict=False)
 
         self.line = Line2D(x, y, marker="o", markerfacecolor="r", animated=True)
         self.ax.add_line(self.line)
@@ -816,7 +817,7 @@ class PolygonDrawer:
             coords.append(tup)
 
         self.pol.xy = coords
-        self.line.set_data(list(zip(*self.pol.xy)))
+        self.line.set_data(list(zip(*self.pol.xy, strict=False)))
 
         self.Redraw()
 
@@ -837,7 +838,7 @@ class PolygonDrawer:
                     + [(event.xdata, event.ydata)]
                     + list(self.pol.xy[i + 1 :])
                 )
-                self.line.set_data(list(zip(*self.pol.xy)))
+                self.line.set_data(list(zip(*self.pol.xy, strict=False)))
                 break
 
         self.Redraw()
@@ -855,7 +856,7 @@ class PolygonDrawer:
                 + [(event.xdata, event.ydata)]
             )
 
-        self.line.set_data(list(zip(*self.pol.xy)))
+        self.line.set_data(list(zip(*self.pol.xy, strict=False)))
 
         self.Redraw()
 
@@ -884,7 +885,7 @@ class PolygonDrawer:
         elif self.moving_ver_idx == len(self.pol.xy) - 1:
             self.pol.xy[0] = x, y
 
-        self.line.set_data(list(zip(*self.pol.xy)))
+        self.line.set_data(list(zip(*self.pol.xy, strict=False)))
 
         self.canvas.restore_region(self.background)
 

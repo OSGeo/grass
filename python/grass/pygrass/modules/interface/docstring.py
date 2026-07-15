@@ -4,8 +4,10 @@ def docstring_property(class_doc):
 
     >>> class A(object):
     ...     '''Main docstring'''
+    ...
     ...     def __init__(self, x):
     ...         self.x = x
+    ...
     ...     @docstring_property(__doc__)
     ...     def __doc__(self):
     ...         return "My value of x is %s." % self.x

@@ -171,6 +171,7 @@
 import sys
 import os
 import atexit
+from pathlib import Path
 from grass.script import core as grass
 from grass.exceptions import CalledModuleError
 
@@ -208,7 +209,7 @@ def main():
     if workers == 1 and "WORKERS" in os.environ:
         workers = int(os.environ["WORKERS"])
 
-    if not os.path.exists(infile):
+    if not Path(infile).exists():
         grass.fatal(_("Unable to read input file <%s>") % infile)
 
     addl_opts = {}

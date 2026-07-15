@@ -22,7 +22,7 @@
         <task name="r.import">
             <flag name="overwrite" />
             <parameter name="input">
-                <value>%raster</value>
+                <value>%{raster}</value>
             </parameter>
             <parameter name="memory">
                 <value>300</value>
@@ -47,7 +47,7 @@
             <flag name="o" />
             <flag name="overwrite" />
             <parameter name="input">
-                <value>%vector</value>
+                 <value>%{vector}</value>
             </parameter>
             <parameter name="output">
                 <value>zipcodes_wake</value>

@@ -1,6 +1,6 @@
 ## DESCRIPTION
 
-*v.support* is used to set/update vector map metadata. While GRASS GIS
+*v.support* is used to set/update vector map metadata. While GRASS
 typically generates these metadata entries automatically, *v.support*
 allows users to manually edit them when necessary.
 

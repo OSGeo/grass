@@ -3,6 +3,7 @@
 import subprocess
 import os
 import sys
+from pathlib import Path
 
 
 # All init tests change the global environment, but we use a separate process
@@ -22,13 +23,13 @@ def run_in_subprocess(file):
 
 def test_init_finish(tmp_path):
     """Check that init function works with an explicit session finish"""
-    location = "test"
+    project = tmp_path / "test"
     script = f"""
 import os
 import grass.script as gs
 import grass.jupyter as gj
-gs.core._create_location_xy(r"{tmp_path}", r"{location}")
-session = gj.init(r"{tmp_path / location}")
+gs.create_project(r"{project}")
+session = gj.init(r"{project}")
 gs.read_command("g.region", flags="p")
 print(os.environ["GISRC"])
 session.finish()
@@ -39,18 +40,18 @@ session.finish()
     assert session_file, "Expected something from the subprocess"
     session_file = session_file.strip()
     assert "\n" not in session_file, "Expected a file name from the subprocess"
-    assert not os.path.exists(session_file), f"Session file {session_file} not deleted"
+    assert not Path(session_file).exists(), f"Session file {session_file} not deleted"
 
 
 def test_init_with_auto_finish(tmp_path):
     """Check that init function works with an implicit session finish"""
-    location = "test"
+    project = tmp_path / "test"
     script = f"""
 import os
 import grass.script as gs
 import grass.jupyter as gj
-gs.core._create_location_xy(r"{tmp_path}", r"{location}")
-session = gj.init(r"{tmp_path / location}")
+gs.create_project(r"{project}")
+session = gj.init(r"{project}")
 print(os.environ["GISRC"])
 """
 
@@ -60,4 +61,4 @@ print(os.environ["GISRC"])
     assert session_file, "Expected something from the subprocess"
     session_file = session_file.strip()
     assert "\n" not in session_file, "Expected a file name from the subprocess"
-    assert not os.path.exists(session_file), f"Session file {session_file} not deleted"
+    assert not Path(session_file).exists(), f"Session file {session_file} not deleted"

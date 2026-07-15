@@ -40,7 +40,6 @@ static int G__remove(int misc, const char *dir, const char *element,
  * \return 1 if successful
  * \return -1 on error
  */
-
 int G_remove(const char *element, const char *name)
 {
     return G__remove(0, NULL, element, name);

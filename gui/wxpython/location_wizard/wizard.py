@@ -197,7 +197,11 @@ class DatabasePage(TitledPage):
         self.bbrowse = self.MakeButton(_("Change"))
 
         # text controls
-        self.tgisdbase = self.MakeLabel(grassdatabase)
+        # Show long paths with middle ellipsis and full value in tooltip
+        self.tgisdbase = self.MakeLabel(
+            text=grassdatabase, style=wx.ST_ELLIPSIZE_MIDDLE, tooltip=grassdatabase
+        )
+        self.tgisdbase.SetMaxSize((400, -1))
         self.tlocation = self.MakeTextCtrl("newProject")
         self.tlocation.SetFocus()
 
@@ -274,7 +278,7 @@ class DatabasePage(TitledPage):
         )
         self.sizer.Add(
             self.tgisdbase,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND,
             border=5,
             pos=(6, 1),
         )
@@ -332,6 +336,7 @@ class DatabasePage(TitledPage):
         if dlg.ShowModal() == wx.ID_OK:
             self.grassdatabase = dlg.GetPath()
             self.tgisdbase.SetLabel(self.grassdatabase)
+            self.tgisdbase.SetToolTip(self.grassdatabase)
 
         dlg.Destroy()
 
@@ -902,7 +907,7 @@ class ProjParamsPage(TitledPage):
             self.p4projparams = ""
             for param in self.pparam.values():
                 if param["type"] == "bool":
-                    if param["value"] is False:
+                    if param["value"] == 0 or param["value"] is False:
                         continue
                     self.p4projparams += " +" + param["proj4"]
                 elif param["value"] is None:
@@ -1479,7 +1484,7 @@ class GeoreferencedFilePage(TitledPage):
         event.Skip()
 
     def OnPageChanging(self, event: WizardEvent) -> None:
-        if event.GetDirection() and not os.path.isfile(self.georeffile):
+        if event.GetDirection() and not Path(self.georeffile).is_file():
             event.Veto()
         self.GetNext().SetPrev(self)
 
@@ -1487,7 +1492,7 @@ class GeoreferencedFilePage(TitledPage):
         """File changed"""
         self.georeffile = event.GetString()
         nextButton = wx.FindWindowById(wx.ID_FORWARD)
-        if len(self.georeffile) > 0 and os.path.isfile(self.georeffile):
+        if len(self.georeffile) > 0 and Path(self.georeffile).is_file():
             if not nextButton.IsEnabled():
                 nextButton.Enable(True)
         elif nextButton.IsEnabled():
@@ -1916,7 +1921,8 @@ class IAUPage(TitledPage):
             # convert them:
             ret, projlabel, err = RunCommand(
                 "g.proj",
-                flags="jft",
+                flags="ftp",
+                format="proj4",
                 proj4=self.epsgparams,
                 datum_trans=self.parent.datum_trans,
                 getErrorMsg=True,
@@ -2133,7 +2139,8 @@ class CustomPage(TitledPage):
                 # convert them:
                 ret, projlabel, err = RunCommand(
                     "g.proj",
-                    flags="jft",
+                    flags="ftp",
+                    format="proj4",
                     proj4=self.customstring,
                     datum_trans=dtrans,
                     getErrorMsg=True,
@@ -2297,7 +2304,11 @@ class SummaryPage(TitledPage):
                     extra_opts["datum_trans"] = dtrans
 
                 ret, projlabel, err = RunCommand(
-                    "g.proj", flags="jf", proj4=proj4string, **extra_opts
+                    "g.proj",
+                    flags="fp",
+                    format="proj4",
+                    proj4=proj4string,
+                    **extra_opts,
                 )
             elif coordsys == "iau":
                 if len(datum) > 0:
@@ -2305,12 +2316,17 @@ class SummaryPage(TitledPage):
                     extra_opts["datum_trans"] = dtrans
 
                 ret, projlabel, err = RunCommand(
-                    "g.proj", flags="jf", proj4=iauproj4string, **extra_opts
+                    "g.proj",
+                    flags="fp",
+                    format="proj4",
+                    proj4=iauproj4string,
+                    **extra_opts,
                 )
             elif coordsys == "epsg":
                 ret, projlabel, err = RunCommand(
                     "g.proj",
-                    flags="jft",
+                    flags="ftp",
+                    format="proj4",
                     epsg=epsgcode,
                     datum_trans=dtrans,
                     **extra_opts,
@@ -2318,14 +2334,16 @@ class SummaryPage(TitledPage):
             elif coordsys == "file":
                 ret, projlabel, err = RunCommand(
                     "g.proj",
-                    flags="jft",
+                    flags="ftp",
+                    format="proj4",
                     georef=self.parent.filepage.georeffile,
                     **extra_opts,
                 )
             elif coordsys == "wkt":
                 ret, projlabel, err = RunCommand(
                     "g.proj",
-                    flags="jft",
+                    flags="ftp",
+                    format="proj4",
                     wkt="-",
                     stdin=self.parent.wktpage.wktstring,
                     **extra_opts,
@@ -2489,6 +2507,14 @@ class LocationWizard(wx.Object):
         self.wizard.FitToPage(self.datumpage)
         size = self.wizard.GetPageSize()
         self.wizard.SetPageSize((size[0], size[1] + 75))
+        # Allow user to resize while keeping sensible minimum size
+        cur_size = self.wizard.GetSize()
+        try:
+            # Set size hints (min size) to current size
+            self.wizard.SetSizeHints(cur_size[0], cur_size[1])
+        except Exception:
+            # Fallback for environments not supporting SetSizeHints
+            self.wizard.SetMinSize(cur_size)
 
         # new location created?
         self.location = None
@@ -2631,7 +2657,7 @@ class LocationWizard(wx.Object):
         location = self.startpage.location
 
         # location already exists?
-        if os.path.isdir(os.path.join(database, location)):
+        if Path(database, location).is_dir():
             GError(
                 parent=self.wizard,
                 message="%s <%s>: %s"
@@ -2647,10 +2673,10 @@ class LocationWizard(wx.Object):
         current_gdb = decode(grass.gisenv()["GISDBASE"])
         if current_gdb != database:
             # change to new GISDbase or create new one
-            if not os.path.isdir(database):
+            if not Path(database).is_dir():
                 # create new directory
                 try:
-                    os.mkdir(database)
+                    Path(database).mkdir()
                 except OSError as error:
                     GError(
                         parent=self.wizard,
@@ -2717,8 +2743,9 @@ class LocationWizard(wx.Object):
                     desc=self.startpage.locTitle,
                 )
             elif coordsys == "file":
-                if not self.filepage.georeffile or not os.path.isfile(
-                    self.filepage.georeffile
+                if (
+                    not self.filepage.georeffile
+                    or not Path(self.filepage.georeffile).is_file()
                 ):
                     return _("File <%s> not found.") % self.filepage.georeffile
 
@@ -2781,9 +2808,19 @@ class WizardWithHelpButton(Wizard):
         if globalvar.wxPythonPhoenix:
             Wizard.__init__(self)
             self.SetExtraStyle(wx.adv.WIZARD_EX_HELPBUTTON)
-            self.Create(parent=parent, id=id, title=title)
+            self.Create(
+                parent=parent,
+                id=id,
+                title=title,
+                style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER | wx.MAXIMIZE_BOX,
+            )
         else:
             pre = wiz.PreWizard()
             pre.SetExtraStyle(wx.wizard.WIZARD_EX_HELPBUTTON)
-            pre.Create(parent=parent, id=id, title=title)
+            pre.Create(
+                parent=parent,
+                id=id,
+                title=title,
+                style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER | wx.MAXIMIZE_BOX,
+            )
             self.PostCreate(pre)

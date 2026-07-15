@@ -1,6 +1,6 @@
 """Test MapsetSession"""
 
-import os
+from pathlib import Path
 
 import pytest
 
@@ -25,9 +25,9 @@ def test_simple_create(xy_session):
 
         other_session_file = session.env["GISRC"]
         assert session_file != other_session_file
-        assert os.path.exists(other_session_file)
-    assert not os.path.exists(other_session_file)
-    assert os.path.exists(session_file)
+        assert Path(other_session_file).exists()
+    assert not Path(other_session_file).exists()
+    assert Path(session_file).exists()
     assert xy_session.env["GISRC"]
 
 
@@ -48,10 +48,10 @@ def test_without_context_manager(xy_session):
 
     other_session_file = session.env["GISRC"]
     assert session_file != other_session_file
-    assert os.path.exists(other_session_file)
+    assert Path(other_session_file).exists()
     session.finish()
-    assert not os.path.exists(other_session_file)
-    assert os.path.exists(session_file)
+    assert not Path(other_session_file).exists()
+    assert Path(session_file).exists()
     assert xy_session.env["GISRC"]
 
 
@@ -89,7 +89,7 @@ def test_create_overwrite(xy_session):
         )
         assert len(rasters) == 1
         assert rasters[0] == "a"
-    assert os.path.exists(session_file)
+    assert Path(session_file).exists()
 
 
 def test_ensure(xy_session):
@@ -124,7 +124,7 @@ def test_ensure(xy_session):
             .split()
         )
         assert sorted(rasters) == ["a", "b"]
-    assert os.path.exists(session_file)
+    assert Path(session_file).exists()
 
 
 def get_mapset_names(env):
@@ -172,12 +172,14 @@ def test_nested_top_env(xy_session):
             with experimental.MapsetSession(
                 names[2], create=True, env=xy_session.env
             ) as session3:
-                for name, session in zip(names, [session1, session2, session3]):
+                for name, session in zip(
+                    names, [session1, session2, session3], strict=True
+                ):
                     session_mapset = gs.read_command(
                         "g.mapset", flags="p", env=session.env
                     ).strip()
                     assert name == session_mapset
-    assert os.path.exists(xy_session.env["GISRC"])
+    assert Path(xy_session.env["GISRC"]).exists()
 
 
 def test_nested_inherited_env(xy_session):
@@ -192,12 +194,14 @@ def test_nested_inherited_env(xy_session):
             with experimental.MapsetSession(
                 names[2], create=True, env=session2.env
             ) as session3:
-                for name, session in zip(names, [session1, session2, session3]):
+                for name, session in zip(
+                    names, [session1, session2, session3], strict=True
+                ):
                     session_mapset = gs.read_command(
                         "g.mapset", flags="p", env=session.env
                     ).strip()
                     assert name == session_mapset
-    assert os.path.exists(xy_session.env["GISRC"])
+    assert Path(xy_session.env["GISRC"]).exists()
 
 
 @pytest.mark.parametrize("number", [1, 2, 3.1])

@@ -546,7 +546,7 @@ class SbGoTo(SbItem):
                 raise SbException(_("Projection not defined (check the settings)"))
             # reproject values
             projIn = settings
-            projOut = RunCommand("g.proj", flags="jf", read=True)
+            projOut = RunCommand("g.proj", flags="fp", format="proj4", read=True)
             proj = projIn.split(" ")[0].split("=")[1]
             if proj in {"ll", "latlong", "longlat"}:
                 e, n = utils.DMS2Deg(e, n)

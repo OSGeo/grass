@@ -18,7 +18,6 @@
  *  \param type
  *  \return void
  */
-
 void Rast3d_get_value(RASTER3D_Map *map, int x, int y, int z, void *value,
                       int type)
 {
@@ -40,7 +39,6 @@ void Rast3d_get_value(RASTER3D_Map *map, int x, int y, int z, void *value,
  *  \param z
  *  \return float
  */
-
 float Rast3d_get_float(RASTER3D_Map *map, int x, int y, int z)
 {
     float value;
@@ -64,7 +62,6 @@ float Rast3d_get_float(RASTER3D_Map *map, int x, int y, int z)
  *  \param z
  *  \return double
  */
-
 double Rast3d_get_double(RASTER3D_Map *map, int x, int y, int z)
 {
     double value;
@@ -91,7 +88,6 @@ double Rast3d_get_double(RASTER3D_Map *map, int x, int y, int z)
  *  \param type
  *  \return void
  */
-
 void Rast3d_get_window_value(RASTER3D_Map *map, double north, double east,
                              double top, void *value, int type)
 {
@@ -127,7 +123,6 @@ void Rast3d_get_window_value(RASTER3D_Map *map, double north, double east,
  *  \param type
  *  \return void
  */
-
 void Rast3d_get_region_value(RASTER3D_Map *map, double north, double east,
                              double top, void *value, int type)
 {
@@ -161,7 +156,6 @@ void Rast3d_get_region_value(RASTER3D_Map *map, double north, double east,
  *  \param z
  *  \return float
  */
-
 float Rast3d_get_float_region(RASTER3D_Map *map, int x, int y, int z)
 {
     int tileIndex, offs;
@@ -204,7 +198,6 @@ float Rast3d_get_float_region(RASTER3D_Map *map, int x, int y, int z)
  *  \param z
  *  \return double
  */
-
 double Rast3d_get_double_region(RASTER3D_Map *map, int x, int y, int z)
 {
     int tileIndex, offs;
@@ -253,7 +246,6 @@ double Rast3d_get_double_region(RASTER3D_Map *map, int x, int y, int z)
  *  \param type
  *  \return void
  */
-
 void Rast3d_get_value_region(RASTER3D_Map *map, int x, int y, int z,
                              void *value, int type)
 {

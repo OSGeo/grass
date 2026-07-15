@@ -22,6 +22,7 @@
 
 #include <math.h>
 #include <grass/gis.h>
+#include <geodesic.h>
 #include "pi.h"
 
 static struct state {
@@ -30,6 +31,7 @@ static struct state {
     double ff64;
     double al;
     double t1, t2, t3, t4, t1r, t2r;
+    struct geod_geodesic g;
 } state;
 
 static struct state *st = &state;
@@ -46,13 +48,14 @@ static struct state *st = &state;
  * \param a semi-major axis in meters
  * \param e2 ellipsoid eccentricity
  */
-
 void G_begin_geodesic_distance(double a, double e2)
 {
     st->al = a;
-    st->boa = sqrt(1 - e2);
-    st->f = 1 - st->boa;
-    st->ff64 = st->f * st->f / 64;
+    st->boa = sqrt(1.0 - e2);
+    st->f = 1.0 - st->boa;
+    st->ff64 = st->f * st->f / 64.0;
+    /* GeographicLib */
+    geod_init(&st->g, st->al, st->f);
 }
 
 /*!
@@ -62,10 +65,9 @@ void G_begin_geodesic_distance(double a, double e2)
  *
  * <b>Note:</b> Must be called first.
  *
- * \param lat1 first latitude
+ * \param[in] lat1 first latitude
  * \return
  */
-
 void G_set_geodesic_distance_lat1(double lat1)
 {
     st->t1r = atan(st->boa * tan(Radians(lat1)));
@@ -78,7 +80,7 @@ void G_set_geodesic_distance_lat1(double lat1)
  *
  * <b>Note:</b> Must be called second.
  *
- * \param lat2 second latitidue
+ * \param[in] lat2 second latitude
  */
 void G_set_geodesic_distance_lat2(double lat2)
 {
@@ -113,8 +115,8 @@ void G_set_geodesic_distance_lat2(double lat2)
  * passed to G_set_geodesic_distance_latl() and <i>lat2</i> was the
  * latitude passed to G_set_geodesic_distance_lat2().
  *
- * \param lon1 first longitude
- * \param lon2 second longitude
+ * \param[in] lon1 first longitude
+ * \param[in] lon2 second longitude
  *
  * \return double distance in meters
  */
@@ -187,14 +189,24 @@ double G_geodesic_distance_lon_to_lon(double lon1, double lon2)
  * <b>Note:</b> The calculation of the geodesic distance is fairly
  * costly.
  *
- * \param lon1,lat1 longitude,latitude of first point
- * \param lon2,lat2 longitude,latitude of second point
+ * \param[in] lon1,lat1 longitude,latitude of first point
+ * \param[in] lon2,lat2 longitude,latitude of second point
  *
  * \return distance in meters
  */
 double G_geodesic_distance(double lon1, double lat1, double lon2, double lat2)
 {
+    /* GeographicLib */
+    double ps12 = 0, pazi1 = 0, pazi2 = 0;
+
+    geod_inverse(&st->g, lat1, lon1, lat2, lon2, &ps12, &pazi1, &pazi2);
+
+    return ps12;
+
+#if 0
+    /* GRASS native */
     G_set_geodesic_distance_lat1(lat1);
     G_set_geodesic_distance_lat2(lat2);
     return G_geodesic_distance_lon_to_lon(lon1, lon2);
+#endif
 }

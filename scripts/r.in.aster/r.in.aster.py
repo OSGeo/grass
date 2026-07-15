@@ -122,7 +122,7 @@ def main():
     tempfile = gs.read_command("g.tempfile", pid=os.getpid()).strip() + ".tif"
 
     # get projection information for current GRASS location
-    proj = gs.read_command("g.proj", flags="jf").strip()
+    proj = gs.read_command("g.proj", flags="fp", format="proj4").strip()
 
     # currently only runs in projected location
     if "XY location" in proj:

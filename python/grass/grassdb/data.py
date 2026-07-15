@@ -1,5 +1,5 @@
 """
-Manipulate data in mapsets in GRASS GIS Spatial Database
+Manipulate data in mapsets in GRASS Spatial Database
 
 (C) 2020 by the GRASS Development Team
 This program is free software under the GNU General Public

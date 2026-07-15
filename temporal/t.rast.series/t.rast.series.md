@@ -30,7 +30,7 @@ threads to be used with the **nprocs** parameter (default 1). The
 **memory** parameter (default 300 MB) can also be provided to determine
 the size of the buffer in MB for computation. Both parameters are passed
 to [r.series](r.series.md). To take advantage of the parallelization,
-GRASS GIS needs to be compiled with OpenMP enabled.
+GRASS needs to be compiled with OpenMP enabled.
 
 ## EXAMPLES
 

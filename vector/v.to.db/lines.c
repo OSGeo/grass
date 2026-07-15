@@ -56,7 +56,6 @@ void read_side_cats(struct line_cats *ACats, int *val, int *count)
  * Read: - points/centroids : cat,count,coor
  *       - lines/boundaries : cat,count,length,slope,sinuous
  */
-
 int read_lines(struct Map_info *Map)
 {
     int i, idx, nlines, type, found;
