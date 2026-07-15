@@ -52,7 +52,7 @@ static void put_raster_row(int, const void *, RASTER_MAP_TYPE, int);
    updating the range file upon close of the cell file.  HOWEVER when
    nulls are not embedded, the cells are considered 0's as far as
    updating range is concerned, even if the corresponding cell is null
-   in the resulting null file, so programmer should be carefult to set
+   in the resulting null file, so programmer should be careful to set
    all the null values using Rast_set_null_value() or
    G_insert_d_null_values() or G_insert_f_null_values().
 
