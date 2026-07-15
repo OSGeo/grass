@@ -7,6 +7,8 @@ SPDX-License-Identifier: GPL-2.0-or-later
 #]]
 
 macro(build_library_in_subdir dir_name)
+    # Ignoring this definition since using a stub as the definition instead
+    # gersemi: ignore
   set(extra_args ${ARGN})
   if("NAME" IN_LIST extra_args)
     build_module(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${dir_name} ${ARGN})

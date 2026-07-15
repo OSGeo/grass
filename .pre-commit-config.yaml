@@ -72,8 +72,7 @@ repos:
           - "--in-place"
           - "--safe"
           - "--definitions"
-          - "cmake/modules"
-          - "cmake/find_scripts"
+          - "cmake/"
           - "--warn-about-unknown-commands" # Need an argument/flag after the --definitions list
         exclude: |
           (?x)^(

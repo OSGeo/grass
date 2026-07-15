@@ -8,6 +8,8 @@ SPDX-License-Identifier: GPL-2.0-or-later
 #]]
 
 macro(build_program_in_subdir dir_name)
+    # Ignoring this definition since using a stub as the definition instead
+    # gersemi: ignore
   set(extra_args ${ARGN})
   if("NAME" IN_LIST extra_args)
     # message("dir_name=${dir_name} ${extra_args}")
