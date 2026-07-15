@@ -45,7 +45,18 @@ def open_old_stds(name, type, dbif=None):
     """
     msgr = get_tgis_message_interface()
 
-    if type not in {"strds", "str3ds", "stvds", "raster", "rast", "raster3d", "rast3d", "raster_3d", "vector", "vect"}:
+    if type not in {
+        "strds",
+        "str3ds",
+        "stvds",
+        "raster",
+        "rast",
+        "raster3d",
+        "rast3d",
+        "raster_3d",
+        "vector",
+        "vect",
+    }:
         msgr.fatal(_("Unknown type: %s") % (type))
 
     def check_id(ds_id, stds_type, dbif) -> AbstractMapDataset | None:
