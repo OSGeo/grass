@@ -65,6 +65,7 @@ set(LAPACKE_LINKER_FLAGS)
 set(HAVE_LAPACKE_DGESV)
 
 macro(_test_package)
+    # gersemi: ignore
   pkg_check_modules(PKGC_LAPACKE QUIET ${LAPACKE_PKGCONFIG})
   if(PKGC_LAPACKE_FOUND)
     set(_lapacke_found ${PKGC_LAPACKE_FOUND})
