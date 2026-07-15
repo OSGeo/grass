@@ -25,16 +25,20 @@ from contextlib import contextmanager
 
 import grass.script as gs
 
-from .core import get_available_temporal_mapsets, get_tgis_message_interface, init_dbif
+from .core import get_tgis_message_interface, init_dbif
 from .datetime_math import time_delta_to_relative_time
-from .factory import dataset_factory
 from .open_stds import open_old_stds
 
 ###############################################################################
 
 
 def get_dataset_list(
-    type, temporal_type, columns=None, where=None, order=None, dbif=None
+    type,
+    temporal_type,
+    columns=None,
+    where=None,
+    order=None,
+    dbif=None,
 ):
     """Return a list of time stamped maps or space time datasets of a specific
     temporal type that are registered in the temporal database
@@ -93,20 +97,15 @@ def get_dataset_list(
         >>> check = sp.delete()
 
     """
-    id = None
-    sp = dataset_factory(type, id)
-
     dbif, connection_state_changed = init_dbif(dbif)
-
-    mapsets = get_available_temporal_mapsets()
 
     result = {}
 
-    for mapset in mapsets.keys():
+    for mapset in dbif.tgis_mapsets:
         if temporal_type == "absolute":
-            table = sp.get_type() + "_view_abs_time"
+            table = type + "_view_abs_time"
         else:
-            table = sp.get_type() + "_view_rel_time"
+            table = type + "_view_rel_time"
 
         if columns and columns.find("all") == -1:
             sql = "SELECT " + str(columns) + " FROM " + table
@@ -515,7 +514,10 @@ def list_maps_of_stds(
     if not output_format:
         if method == "comma":
             output_format = "line"
-        output_format = "plain"
+            if not separator:
+                separator = ","
+        else:
+            output_format = "plain"
 
     if columns:
         if isinstance(columns, str):

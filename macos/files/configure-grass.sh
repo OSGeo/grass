@@ -68,6 +68,7 @@ CONFIGURE_FLAGS="\
   --with-libs=${PREFIX}/lib \
   --with-includes=${PREFIX}/include \
   --with-pdal=${PREFIX}/bin/pdal-config \
+  --with-pthread \
   --with-readline \
   --with-readline-includes=${PREFIX}/include/readline \
   --with-readline-libs=${PREFIX}/lib

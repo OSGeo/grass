@@ -8,7 +8,7 @@ Core functions to be used in Python scripts.
 
     grass.parser()
 
-(C) 2008-2025 by the GRASS Development Team
+(C) 2008-2026 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -2246,6 +2246,8 @@ def sanitize_mapset_environment(env):
         del env["WIND_OVERRIDE"]
     if "GRASS_REGION" in env:
         del env["GRASS_REGION"]
+    if "GRASS_MASK" in env:
+        del env["GRASS_MASK"]
     return env
 
 

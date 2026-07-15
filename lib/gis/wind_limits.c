@@ -29,7 +29,7 @@
  * \return 1 no change
  * \return 0 changed
  */
-int G_limit_east(double *east UNUSED, int proj UNUSED)
+int G_limit_east(double *east G_UNUSED, int proj G_UNUSED)
 {
     return 1;
 }
@@ -48,7 +48,7 @@ int G_limit_east(double *east UNUSED, int proj UNUSED)
  * \return 1 no change
  * \return 0 changed
  */
-int G_limit_west(double *west UNUSED, int proj UNUSED)
+int G_limit_west(double *west G_UNUSED, int proj G_UNUSED)
 {
     return 1;
 }
