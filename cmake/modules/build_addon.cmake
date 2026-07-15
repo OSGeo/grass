@@ -119,8 +119,10 @@ function(build_addon name)
                 ${MKHTML_PY} ${G_NAME} > ${_out_html_file}
         COMMAND ${_pythonpath} ${CMAKE_COMMAND} -E copy ${_src_dir}/${G_NAME}.md
                 ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.md
-        COMMAND ${_pythonpath} MODULE_TOPDIR=$ENV{GISBASE} ${PYTHON_EXECUTABLE}
-                ${MKMARKDOWN_PY} ${G_NAME} > ${_out_md_file}
+        COMMAND ${_pythonpath} MODULE_TOPDIR=$ENV{GISBASE}
+                SOURCE_URL=${SOURCE_URL} VERSION_NUMBER=${GRASS_VERSION_STRING}
+                ${PYTHON_EXECUTABLE} ${MKMARKDOWN_PY} ${G_NAME} >
+                ${_out_md_file}
         COMMAND VERSION_NUMBER=${GRASS_VERSION_STRING} ${PYTHON_EXECUTABLE}
                 ${MD2MAN_PY} ${_out_md_file} ${_out_man_file}
         COMMAND
