@@ -501,7 +501,7 @@ int main(int argc, char **argv)
                                      &rgb_b);
 
             if (ret == 0)
-                G_fatal_error(_("Color <%s> cannot for option %s be parsed"),
+                G_fatal_error(_("Color <%s> for option <%s> cannot be parsed"),
                               point_color2_opt->answer, point_color2_opt->key);
             else if (ret == 2)
                 secondary_color.a = RGBA_COLOR_TRANSPARENT;
