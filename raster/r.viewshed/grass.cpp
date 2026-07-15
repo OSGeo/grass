@@ -868,7 +868,7 @@ void save_io_visibilitygrid_to_GRASS(IOVisibilityGrid *visgrid, char *fname,
         for (j = 0; j < (dimensionType)ncols; j++) {
 
             if (curResult->row == i && curResult->col == j) {
-                /*cell is recodred in the visibility stream: it must be
+                /*cell is recorded in the visibility stream: it must be
                    either visible, or NODATA  */
                 if (is_visible(curResult->angle))
                     writeValue(visrast, j, fun(curResult->angle), type);
