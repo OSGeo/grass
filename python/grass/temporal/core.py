@@ -152,7 +152,7 @@ tgis_db_version = 3
 tgis_dbmi_paramstyle = None
 
 
-def get_tgis_dbmi_paramstyle() -> str:
+def get_tgis_dbmi_paramstyle() -> str | None:
     """Return the temporal database backend parameter style
 
     :returns: "qmark" or ""
@@ -170,7 +170,7 @@ current_gisdbase = None
 ###############################################################################
 
 
-def get_current_mapset() -> str:
+def get_current_mapset() -> str | None:
     """Return the current mapset
 
     This is the fastest way to receive the current mapset.
@@ -184,7 +184,7 @@ def get_current_mapset() -> str:
 ###############################################################################
 
 
-def get_current_location() -> str:
+def get_current_location() -> str | None:
     """Return the current location
 
     This is the fastest way to receive the current location.
@@ -198,7 +198,7 @@ def get_current_location() -> str:
 ###############################################################################
 
 
-def get_current_gisdbase() -> str:
+def get_current_gisdbase() -> str | None:
     """Return the current gis database (gisdbase)
 
     This is the fastest way to receive the current gisdbase.
@@ -779,6 +779,7 @@ def init(
         )
         if dbif.fetchone()[0]:
             db_exists = True
+        dbif.close()
 
     if tgis_db_version > 2:
         backup_howto = _(
@@ -869,7 +870,7 @@ def init(
         return
     # dbif may not contain connection info for the current mapset
     # so we use a dedicated DB connection for the current mapset
-    # to greate the temporal database
+    # to create the temporal database
     create_temporal_database(
         DBConnection(backend=tgis_backend, dbstring=tgis_database_string)
     )
@@ -1091,7 +1092,7 @@ def _create_tgis_metadata_table(content, dbif=None) -> None:
     statement = "CREATE TABLE tgis_metadata (key VARCHAR NOT NULL, value VARCHAR);\n"
     dbif.execute_transaction(statement)
 
-    for key in content.keys():
+    for key in content:
         statement = (
             "INSERT INTO tgis_metadata (key, value) VALUES "
             + "('%s' , '%s');\n" % (str(key), str(content[key]))
@@ -1276,7 +1277,7 @@ class SQLDatabaseInterfaceConnection:
             mapset = self.current_mapset
 
         mapset = decode(mapset)
-        if mapset not in self.tgis_mapsets.keys():
+        if mapset not in self.tgis_mapsets:
             self.msgr.fatal(
                 _(
                     "Unable to execute transaction. "
