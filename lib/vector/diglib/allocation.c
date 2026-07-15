@@ -151,7 +151,7 @@ void *dig__frealloc(void *oldptr, int nelem, int elsize, int oldnelem)
         register char *b;
         register size_t n;
 
-        n = oldnelem * elsize;
+        n = (size_t)oldnelem * elsize;
         a = ptr;
         b = oldptr;
         while (n--)

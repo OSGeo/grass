@@ -73,8 +73,8 @@ static int Rast3d_tile2xdrTile(RASTER3D_Map *map, const void *tile, int rows,
 
 static int Rast3d_writeTileUncompressed(RASTER3D_Map *map, int nofNum)
 {
-    if (write(map->data_fd, xdr, map->numLengthExtern * nofNum) !=
-        map->numLengthExtern * nofNum) {
+    if (write(map->data_fd, xdr, (size_t)map->numLengthExtern * nofNum) !=
+        (ssize_t)map->numLengthExtern * nofNum) {
         Rast3d_error("Rast3d_writeTileUncompressed: can't write file.");
         return 0;
     }
