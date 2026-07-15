@@ -312,7 +312,7 @@ def test_gran_where_json(space_time_raster_dataset):
         input=space_time_raster_dataset.name,
         format="json",
         method="gran",
-        where="True",
+        where="start_time >= '2001-02-01 00:00:00'",
         gran="15 days",
     ).json
     assert "data" in result
@@ -327,7 +327,7 @@ def test_gran_where_json(space_time_raster_dataset):
     assert len(result["data"]) > len(space_time_raster_dataset.raster_names), (
         "There should be more entries because of finer granularity"
     )
-    assert len(result["data"]) == 13
+    assert len(result["data"]) == 10
 
 
 @pytest.mark.needs_solo_run
