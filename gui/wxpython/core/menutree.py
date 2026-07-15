@@ -33,10 +33,14 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
+from __future__ import annotations
+
 import os
 import sys
 import copy
 import xml.etree.ElementTree as ET
+
+from typing import TYPE_CHECKING
 
 import wx
 
@@ -50,8 +54,12 @@ from core.gcmd import GError
 if not os.getenv("GISBASE"):
     sys.exit("GRASS is not running. Exiting...")
 
+if TYPE_CHECKING:
+    from typing_extensions import Writer
 
 # TODO: change the system to remove strange derived classes
+
+
 class MenuTreeModelBuilder:
     """Abstract menu data class"""
 
@@ -69,7 +77,7 @@ class MenuTreeModelBuilder:
                 message_handler(message)
             clearToolboxMessages()
 
-        self.model = TreeModel(ModuleNode)
+        self.model: TreeModel = TreeModel(ModuleNode)
         self._createModel(xmlTree)
 
     def _createModel(self, xmlTree):
@@ -152,7 +160,7 @@ class MenuTreeModelBuilder:
         for child in self.model.root.children:
             printTree(node=child, fh=fh)
 
-    def PrintStrings(self, fh):
+    def PrintStrings(self, fh: Writer[str]):
         """Print menu strings to file (used for localization)
 
         :param fh: file descriptor
@@ -186,7 +194,7 @@ def printTree(node, fh, indent=0):
         printTree(node=child, fh=fh, indent=indent + 2)
 
 
-def printStrings(node, fh):
+def printStrings(node, fh: Writer[str]):
     # node.label  - with module in brackets
     # node.data['label'] - without module in brackets
     if node.label and not node.data:

@@ -45,11 +45,11 @@ def read_keydesc(par: Element[str]) -> tuple[str, tuple[str, ...] | None]:
 
 GETFROMTAG: dict[
     str,
-    Callable[Element[str], str]
-    | Callable[Element[str], tuple[str, tuple[str, ...] | None]]
-    | Callable[Element[str], dict[str, str]]
-    | Callable[Element[str], list[str]]
-    | Callable[Never, None],
+    Callable[[Element[str]], str]
+    | Callable[[Element[str]], tuple[str, tuple[str, ...] | None]]
+    | Callable[[Element[str]], dict[str, str]]
+    | Callable[[Element[str]], list[str]]
+    | Callable[[Never], None],
 ] = {
     "description": read_text,
     "keydesc": read_keydesc,
@@ -76,7 +76,7 @@ GETTYPE = {
 
 
 def element2dict(xparameter: Element[str]):
-    diz: dict[str, str] = dict(xparameter.items())
+    diz: dict[str, str | bool | float | list | tuple | None] = dict(xparameter.items())
     for p in xparameter:
         if p.tag in GETFROMTAG:
             diz[p.tag] = GETFROMTAG[p.tag](p)
