@@ -27,7 +27,8 @@
 
 static void unmap_file(void)
 {
-    size_t size = HEADER_SIZE + png.width * png.height * sizeof(unsigned int);
+    size_t size =
+        HEADER_SIZE + (size_t)png.width * png.height * sizeof(unsigned int);
     void *ptr = (char *)png.grid - HEADER_SIZE;
 
     if (!png.mapped)

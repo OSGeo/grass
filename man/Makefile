@@ -2,7 +2,20 @@ MODULE_TOPDIR = ..
 
 include $(MODULE_TOPDIR)/include/Make/Other.make
 
-MANPAGES := $(patsubst $(HTMLDIR)/%.html,$(MANDIR)/%.$(MANSECT),$(wildcard $(HTMLDIR)/*.html))
+# Some source/*.md files exist only for the MkDocs website and have no man
+# page equivalent. index.md is the site landing page, keywords.md is a stub
+# for the tags plugin (the keyword index is rendered by MkDocs), and the
+# *_intro.md pages are navigation-only introductions. The remaining ones are
+# the developer and user guides installed from doc/ and doc/development/;
+# they are derived from those directories so a newly added guide is excluded
+# automatically. grass_database and projectionintro are the exception: they
+# are reference pages that also ship as man pages.
+DOC_MD := $(wildcard $(MODULE_TOPDIR)/doc/*.md) \
+	$(wildcard $(MODULE_TOPDIR)/doc/development/*.md)
+WEB_ONLY_MD := index keywords development_intro command_line_intro \
+	$(filter-out grass_database projectionintro,$(basename $(notdir $(DOC_MD))))
+MANPAGES := $(filter-out $(patsubst %,$(MANDIR)/%.$(MANSECT),$(WEB_ONLY_MD)),\
+	$(patsubst $(MDDIR)/source/%.md,$(MANDIR)/%.$(MANSECT),$(wildcard $(MDDIR)/source/*.md)))
 
 DSTFILES := \
 	$(HTMLDIR)/grassdocs.css \
@@ -66,8 +79,8 @@ default: $(DSTFILES)
 	@echo "Generating manual pages index (help system)..."
 	$(MAKE) $(INDICES)
 	$(call build,check)
-	$(MAKE) manpages
 	$(MAKE) $(INDICES_MD)
+	$(MAKE) manpages
 # $(MAKE) build-mkdocs
 
 # This must be a separate target so that evaluation of $(MANPAGES)

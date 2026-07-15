@@ -221,10 +221,14 @@ def setup_runtime_env(gisbase=None, *, env=None):
         RuntimePaths,
     )
 
+    from grass.script.core import sanitize_mapset_environment
+
     # If environment is not provided, use the global one.
     if not env:
         env = os.environ
-
+    # Remove mapset-specific variables that should not leak into the
+    # runtime environment being set up.
+    sanitize_mapset_environment(env)
     runtime_paths = RuntimePaths(env=env, prefix=gisbase)
     gisbase = runtime_paths.gisbase
     if not Path(gisbase).is_dir():
@@ -481,7 +485,7 @@ class SessionHandle:
     def __init__(self, *, env, active=True, locked=False):
         self._env = env
         self._active = active
-        self._start_time = datetime.datetime.now(datetime.timezone.utc)
+        self._start_time = datetime.datetime.now(datetime.UTC)
         self._locked = locked
 
     @property
@@ -559,7 +563,7 @@ def clean_default_db(*, modified_after=None, env=None, gis_env=None):
         return
     if modified_after:
         modified_time = datetime.datetime.fromtimestamp(
-            file_stat.st_mtime, tz=datetime.timezone.utc
+            file_stat.st_mtime, tz=datetime.UTC
         )
         if modified_after >= modified_time:
             return

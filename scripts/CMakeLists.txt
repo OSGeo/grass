@@ -67,6 +67,7 @@ set(script_DIRS
     v.db.univar
     v.db.update
     v.dissolve
+    v.geometry
     v.import
     v.in.e00
     v.in.geonames
