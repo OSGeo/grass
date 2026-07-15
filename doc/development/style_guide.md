@@ -336,7 +336,7 @@ Examples:
 - `v_clean_rmsa.png`
 
 **Image size:** ideally **600 pixel width** (height depends on that), use e.g.
-ImageMagic:
+ImageMagick:
 
 ```bash
 mogrify -resize 600x file.png
