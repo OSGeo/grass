@@ -993,7 +993,7 @@ void save_io_vis_and_elev_to_GRASS(IOVisibilityGrid *visgrid, char *elevfname,
             }
 
             if (curResult->row == i && curResult->col == j) {
-                /*cell is recodred in the visibility stream: it must be
+                /*cell is recorded in the visibility stream: it must be
                    either visible, or NODATA  */
                 if (is_visible(curResult->angle))
                     writeValue(visrast, j, elev - vp_elev, elev_data_type);
