@@ -203,11 +203,22 @@ def download_and_extract(source, reporthook=None):
         archive_name = os.path.join(tmpdir, "archive.zip")
         filename, headers = _download_file(source, archive_name, reporthook)
 
-        if not re.search(
-            response_content_type_header_pattern, headers.get("content-type", "")
-        ) and not re.search(
-            response_content_disposition_header_pattern,
-            headers.get("content-disposition", ""),
+        # Check that a remote download looks like a ZIP archive by its response
+        # headers to catch a server returning an error page instead of the file.
+        # A local file (the file scheme) has no such response: urlretrieve
+        # synthesizes the content type from the file name, which is unreliable
+        # (the Windows registry maps .zip to application/x-zip-compressed), so
+        # the check is skipped for it. A local file which is not a ZIP is caught
+        # by extract_zip.
+        if (
+            urlparse(source).scheme != "file"
+            and not re.search(
+                response_content_type_header_pattern, headers.get("content-type", "")
+            )
+            and not re.search(
+                response_content_disposition_header_pattern,
+                headers.get("content-disposition", ""),
+            )
         ):
             raise DownloadError(
                 _(

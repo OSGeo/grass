@@ -38,6 +38,19 @@ def test_extract_from_file_url(request, archive):
     assert (directory / "PERMANENT" / "DEFAULT_WIND").is_file()
 
 
+def test_extract_from_file_url_not_a_zip(tmp_path):
+    """A local file with a .zip name which is not a ZIP is reported as an error
+
+    The content type of a file URL is not checked (it is unreliable), so an
+    invalid ZIP has to be caught during extraction.
+    """
+    archive = tmp_path / "project.zip"
+    archive.write_text("This is not a ZIP file.\n")
+
+    with pytest.raises(DownloadError, match="ZIP file is unreadable"):
+        download_and_extract(archive.as_uri())
+
+
 @pytest.mark.parametrize(
     "source",
     [
