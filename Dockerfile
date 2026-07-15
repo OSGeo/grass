@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.24@sha256:87999aa3d42bdc6bea60565083ee17e86d1f3339802f543c0d03998580f9cb89
+# syntax=docker/dockerfile:1.25@sha256:0adf442eae370b6087e08edc7c50b552d80ddf261576f4ebd6421006b2461f12
 
 # Note: This file must be kept in sync in ./Dockerfile and ./docker/ubuntu/Dockerfile.
 #       Changes to this file must be copied over to the other file.
@@ -15,7 +15,7 @@ ARG PROJ_VERSION=9.8.1
 # renovate: datasource=github-tags depName=OSGeo/gdal
 ARG GDAL_VERSION=3.13.1
 # renovate: datasource=github-tags depName=PDAL/PDAL
-ARG PDAL_VERSION=2.10.1
+ARG PDAL_VERSION=2.10.2
 # renovate: datasource=github-tags depName=OSGeo/gdal-grass
 ARG GDAL_GRASS_VERSION=2.0.0
 # renovate: datasource=pypi depName=wxPython

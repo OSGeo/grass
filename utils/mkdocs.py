@@ -73,7 +73,7 @@ def get_version_branch(major_version, addons_git_repo_url):
     """
     version_branch = f"grass{major_version}"
     if source_is_remote():
-        branch = gs.Popen(
+        branch = subprocess.Popen(
             [
                 "git",
                 "ls-remote",
@@ -86,16 +86,14 @@ def get_version_branch(major_version, addons_git_repo_url):
         )
         branch, stderr = branch.communicate()
         if stderr:
-            gs.fatal(
-                _(
-                    "Failed to get branch from the Git repository"
-                    " <{repo_path}>.\n{error}"
-                ).format(
-                    repo_path=addons_git_repo_url,
-                    error=gs.decode(stderr),
-                )
-            )
-        if version_branch not in gs.decode(branch):
+            message = (
+                "Failed to get branch from the Git repository <{repo_path}>.\n{error}"
+            ).format(repo_path=addons_git_repo_url, error=stderr.decode())
+            if gs:
+                gs.fatal(_(message))
+            else:
+                sys.exit(message)
+        if version_branch not in branch.decode():
             version_branch = "grass{}".format(int(major_version) - 1)
     return version_branch
 
@@ -210,17 +208,7 @@ def format_git_commit_date_from_local_git(
 
     :return str: output formatted commit datetime
     """
-    try:
-        date = datetime.fromisoformat(
-            commit_datetime,
-        )
-    except ValueError:
-        if commit_datetime.endswith("Z"):
-            # Python 3.10 and older does not support Z in time, while recent versions
-            # of Git (2.45.1) use it. Try to help the parsing if Z is in the string.
-            date = datetime.fromisoformat(commit_datetime[:-1] + "+00:00")
-        else:
-            raise
+    date = datetime.fromisoformat(commit_datetime)
     return date.strftime(datetime_format)
 
 
@@ -397,14 +385,6 @@ def get_addon_path(base_url, pgm, major_version):
     if not addons_base_dir or not major_version:
         return None
     grass_addons_dir = Path(addons_base_dir) / "grass-addons"
-    if gs:
-        call = gs.call
-        popen = gs.Popen
-        fatal = gs.fatal
-    else:
-        call = subprocess.call
-        popen = subprocess.Popen
-        fatal = sys.stderr.write
     addons_branch = get_version_branch(
         major_version=major_version,
         addons_git_repo_url=urlparse.urljoin(base_url, "grass-addons/"),
@@ -419,7 +399,7 @@ def get_addon_path(base_url, pgm, major_version):
         try:
             with tempfile.TemporaryDirectory(dir=addons_base_dir) as tmpdir:
                 tmp_clone_path = Path(tmpdir) / "grass-addons"
-                call(
+                subprocess.call(
                     [
                         "git",
                         "clone",
@@ -435,7 +415,7 @@ def get_addon_path(base_url, pgm, major_version):
         except (shutil.Error, OSError):
             if not grass_addons_dir.exists():
                 raise
-    addons_file_list = popen(
+    addons_file_list = subprocess.Popen(
         ["git", "ls-tree", "--name-only", "-r", addons_branch],
         cwd=grass_addons_dir,
         stdout=subprocess.PIPE,
@@ -446,27 +426,14 @@ def get_addon_path(base_url, pgm, major_version):
         message = (
             "Failed to get addons files list from the"
             " Git repository <{repo_path}>.\n{error}"
-        )
+        ).format(repo_path=grass_addons_dir, error=stderr.decode())
         if gs:
-            fatal(
-                _(
-                    message,
-                ).format(
-                    repo_path=grass_addons_dir,
-                    error=gs.decode(stderr),
-                )
-            )
+            gs.fatal(_(message))
         else:
-            message += "\n"
-            fatal(
-                message.format(
-                    repo_path=grass_addons_dir,
-                    error=stderr.decode(),
-                )
-            )
+            sys.exit(message)
     addon_paths = re.findall(
         rf".*{pgm}*.",
-        gs.decode(addons_file_list) if gs else addons_file_list.decode(),
+        addons_file_list.decode(),
     )
     for addon_path in addon_paths:
         if pgm == Path(addon_path).name:

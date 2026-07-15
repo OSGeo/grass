@@ -703,8 +703,8 @@ def _read_raster_info(name, mapset):
     kvp["west"] = region.west
     kvp["nsres"] = region.ns_res
     kvp["ewres"] = region.ew_res
-    kvp["rows"] = region.cols
-    kvp["cols"] = region.rows
+    kvp["rows"] = region.rows
+    kvp["cols"] = region.cols
 
     maptype = libraster.Rast_map_type(name, mapset)
 
@@ -788,8 +788,8 @@ def _read_raster3d_info(name, mapset):
     kvp["nsres"] = region.ns_res
     kvp["ewres"] = region.ew_res
     kvp["tbres"] = region.tb_res
-    kvp["rows"] = region.cols
-    kvp["cols"] = region.rows
+    kvp["rows"] = region.rows
+    kvp["cols"] = region.cols
     kvp["depths"] = region.depths
     kvp["top"] = region.top
     kvp["bottom"] = region.bottom
@@ -1331,7 +1331,7 @@ class CLibrariesInterface(RPCServerBase):
         >>> print(check)
         True
         >>> ciface.read_raster_info("test", tgis.get_current_mapset())
-        {'rows': 12, 'north': 80.0, 'min': 1, 'datatype': 'CELL', 'max': 1, 'ewres': 10.0, 'cols': 8, 'west': 0.0, 'east': 120.0, 'nsres': 10.0, 'south': 0.0}
+        {'rows': 8, 'north': 80.0, 'min': 1, 'datatype': 'CELL', 'max': 1, 'ewres': 10.0, 'cols': 12, 'west': 0.0, 'east': 120.0, 'nsres': 10.0, 'south': 0.0}
 
         >>> info = ciface.read_raster_full_info("test", tgis.get_current_mapset())
         >>> info  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
@@ -1367,7 +1367,7 @@ class CLibrariesInterface(RPCServerBase):
         >>> print(check)
         True
         >>> ciface.read_raster3d_info("test", tgis.get_current_mapset())
-        {'tbres': 1.0, 'rows': 12, 'north': 80.0, 'bottom': 0.0, 'datatype': 'DCELL', 'max': 1.0, 'top': 1.0, 'min': 1.0, 'cols': 8, 'depths': 1, 'west': 0.0, 'ewres': 10.0, 'east': 120.0, 'nsres': 10.0, 'south': 0.0}
+        {'tbres': 1.0, 'rows': 8, 'north': 80.0, 'bottom': 0.0, 'datatype': 'DCELL', 'max': 1.0, 'top': 1.0, 'min': 1.0, 'cols': 12, 'depths': 1, 'west': 0.0, 'ewres': 10.0, 'east': 120.0, 'nsres': 10.0, 'south': 0.0}
         >>> check = ciface.has_raster3d_timestamp("test", tgis.get_current_mapset())
         >>> print(check)
         True

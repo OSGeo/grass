@@ -46,6 +46,21 @@ cmake --build build
 cmake --install build
 ```
 
+Optional dependencies are controlled by `WITH_*` options (see
+`CMakeLists.txt`). Those enabled by default (PDAL, GEOS, etc.) are *required*:
+on a system missing one, configure fails with a "Could not find ..." error.
+Disable it (e.g. `cmake -B build -DWITH_PDAL=OFF`) or install the dependency.
+If `ccache` is installed it is used automatically; set `CCACHE_DIR` to a
+writable path if the default cache location is read-only (e.g. in a sandbox).
+GRASS uses `~/.grass8` for user config and installed addons by default; set
+`GRASS_CONFIG_DIR` to a writable directory for a sandbox, or to isolate a
+run from existing user settings. For a rootless install (e.g. a sandbox,
+where the default `/usr/local` is not writable), set the prefix at configure
+time:
+`cmake -B build -DCMAKE_INSTALL_PREFIX=<writable path>`. GRASS records this
+prefix in the install, so the configure-time value (not `cmake --install
+--prefix`) is what the installed tree uses.
+
 **Compile a single tool** (after libraries are built):
 
 ```bash
@@ -53,7 +68,12 @@ cd raster/r.slope.aspect
 make
 ```
 
-Build outputs go to `bin.$ARCH/` and `dist.$ARCH/` directories.
+With Autotools, build outputs go to `bin.$ARCH/` and `dist.$ARCH/`. With
+CMake, the runnable tree (before `cmake --install`) is under `build/output/`,
+with the binary at `build/output/bin/grass`. With a CMake-built GRASS,
+`g.extension` builds an addon with CMake and needs an *installed* GRASS
+(`cmake --install` to a prefix), not the `build/output/` tree, which omits the
+addon CMake package (`etc/cmake/build_addon.cmake`).
 
 ## Running Tests
 
@@ -66,7 +86,10 @@ If running from a local build (not a system install), add the binary directory
 to PATH first:
 
 ```bash
+# Autotools build:
 export PATH="$(pwd)/bin.$(uname -m)-pc-linux-gnu:${PATH}"
+# CMake build (before cmake --install):
+export PATH="$(pwd)/build/output/bin:${PATH}"
 ```
 
 Before running pytest, set the required environment variables:
@@ -97,10 +120,12 @@ pytest raster/r.slope.aspect/tests/r_slope_aspect_test.py
 ```
 
 **Run gunittest-style tests** (legacy `testsuite/` directories; currently the
-only way to use larger datasets like the `nc_spm` sample dataset):
+only way to use larger datasets like the `nc_spm` sample dataset) by creating a
+throwaway mapset in an existing project (judge by exit code, not the verbose
+output):
 
 ```bash
-python -m grass.gunittest.main --grassdata /path/to/grassdata --location location --location-type xyz
+grass -c <project>/<mapset> --exec ./test_x.py
 ```
 
 ## Writing Tests
