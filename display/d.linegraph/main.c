@@ -62,7 +62,7 @@ static void set_optimal_text_size(double text_width, double text_height,
 {
     D_text_size(text_width, text_height);
     D_get_text_box(text, tt, tb, tl, tr);
-    while ((tt - tb) > YTIC_DIST) {
+    while ((*tt - *tb) > YTIC_DIST) {
         text_width *= 0.75;
         text_height *= 0.75;
         D_text_size(text_width, text_height);
