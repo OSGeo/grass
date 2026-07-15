@@ -29,6 +29,10 @@ response_content_disposition_header_pattern = re.compile(
     r"attachment; filename=.*.zip$"
 )
 
+# Schemes urlretrieve can fetch, except data. The file scheme allows an archive
+# on the local disk.
+supported_url_schemes = ("http", "https", "ftp", "file")
+
 
 def debug(*args, **kwargs):
     """Print a debug message (to be used in this module only)
@@ -142,6 +146,42 @@ def _move_extracted_files(extract_dir, target_dir, files):
                 shutil.copy(actual_file, os.path.join(target_dir, file_name))
 
 
+def _download_file(source, destination, reporthook=None):
+    """Download a file from URL to a local file
+
+    Only URLs with one of the supported schemes are downloaded. A file on the
+    local disk needs to be specified with the file scheme, i.e., as file://<path>.
+
+    :param source: URL to download from
+    :param destination: local file name to download to
+    :param reporthook: function called with the download progress
+
+    :return: tuple with the local file name and the response headers
+    """
+    if urlparse(source).scheme not in supported_url_schemes:
+        raise DownloadError(
+            _(
+                "Unsupported URL <{url}>. Supported are only URLs with the "
+                "following schemes: {schemes}."
+            ).format(url=source, schemes=", ".join(supported_url_schemes))
+        )
+    try:
+        # The scheme of the URL is limited to the supported ones above.
+        return urlretrieve(source, destination, reporthook)  # nosec B310
+    except HTTPError as error:
+        raise DownloadError(
+            _("Download file from <{url}>, return status code {code}, {desc}").format(
+                url=source, code=error.code, desc=error.reason
+            )
+        ) from error
+    except URLError as error:
+        raise DownloadError(
+            _("Download file from <{url}>, failed. Check internet connection.").format(
+                url=source
+            )
+        ) from error
+
+
 # modified copy from g.extension
 # TODO: remove the hardcoded location/extension, use general name
 def download_and_extract(source, reporthook=None):
@@ -154,29 +194,26 @@ def download_and_extract(source, reporthook=None):
     tmpdir = tempfile.mkdtemp()
     debug("Tmpdir: {}".format(tmpdir))
     directory = Path(tmpdir) / "extracted"
-    http_error_message = _("Download file from <{url}>, return status code {code}, ")
-    url_error_message = _(
-        "Download file from <{url}>, failed. Check internet connection."
-    )
     if source_path.suffix and source_path.suffix == ".zip":
         archive_name = os.path.join(tmpdir, "archive.zip")
-        try:
-            filename, headers = urlretrieve(source, archive_name, reporthook)
-        except HTTPError as err:
-            raise DownloadError(
-                http_error_message.format(
-                    url=source,
-                    code=err,
-                ),
-            )
-        except URLError:
-            raise DownloadError(url_error_message.format(url=source))
+        filename, headers = _download_file(source, archive_name, reporthook)
 
-        if not re.search(
-            response_content_type_header_pattern, headers.get("content-type", "")
-        ) and not re.search(
-            response_content_disposition_header_pattern,
-            headers.get("content-disposition", ""),
+        # Check that a remote download looks like a ZIP archive by its response
+        # headers to catch a server returning an error page instead of the file.
+        # A local file (the file scheme) has no such response: urlretrieve
+        # synthesizes the content type from the file name, which is unreliable
+        # (the Windows registry maps .zip to application/x-zip-compressed), so
+        # the check is skipped for it. A local file which is not a ZIP is caught
+        # by extract_zip.
+        if (
+            urlparse(source).scheme != "file"
+            and not re.search(
+                response_content_type_header_pattern, headers.get("content-type", "")
+            )
+            and not re.search(
+                response_content_disposition_header_pattern,
+                headers.get("content-disposition", ""),
+            )
         ):
             raise DownloadError(
                 _(
@@ -187,17 +224,7 @@ def download_and_extract(source, reporthook=None):
     elif source_path.suffix and source_path.suffix[1:] in extract_tar.supported_formats:
         ext = "".join(source_path.suffixes)
         archive_name = os.path.join(tmpdir, "archive" + ext)
-        try:
-            urlretrieve(source, archive_name, reporthook)
-        except HTTPError as err:
-            raise DownloadError(
-                http_error_message.format(
-                    url=source,
-                    code=err,
-                ),
-            )
-        except URLError:
-            raise DownloadError(url_error_message.format(url=source))
+        _download_file(source, archive_name, reporthook)
         extract_tar(name=archive_name, directory=directory, tmpdir=tmpdir)
     else:
         # probably programmer error
