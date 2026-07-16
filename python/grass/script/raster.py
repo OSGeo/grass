@@ -548,7 +548,7 @@ class RegionManager:
         run_command("g.region", **kwargs, env=self.env)
 
     def save(self, name, overwrite=None):
-        """Save the current region under a persistent name.
+        """Save the temporarily modified region under a persistent name.
 
         :param name: Name of the region to save.
         :param overwrite: Whether to overwrite an existing saved region.
@@ -611,7 +611,8 @@ class RegionManagerEnv:
     The disadvantage is that simply calling *g.region* within the context will not affect
     the temporary region, but the global one, which can be confusing.
 
-    The :py:meth:`.save` method intentionally writes the current region to a saved region file.
+    The :py:meth:`.save` method intentionally writes the temporarily modified region to
+    a saved region file.
 
     Example with explicit region parameters:
 
@@ -636,7 +637,7 @@ class RegionManagerEnv:
     ...     manager.env["GRASS_REGION"] = gs.region_env()
     ...     gs.parse_command("r.univar", map="elevation", format="json")
 
-    Example using :py:meth:`.save`: to store the current region under
+    Example using :py:meth:`.save`: to store the temporarily modified region under
     a persistent name so it can be reused after the context exits:
 
     >>> with gs.RegionManagerEnv(raster="elevation") as manager:
@@ -679,7 +680,7 @@ class RegionManagerEnv:
         self.env["GRASS_REGION"] = region_env(**kwargs, env=self.env)
 
     def save(self, name, overwrite=None):
-        """Save the current region under a persistent name.
+        """Save the temporarily modified region under a persistent name.
 
         :param name: Name of the region to save.
         :param overwrite: Whether to overwrite an existing saved region.
