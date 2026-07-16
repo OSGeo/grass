@@ -126,15 +126,16 @@ code-coverage-clean:
 sbom:
 	@if command -v syft > /dev/null 2>&1; then \
 		echo "Generating CycloneDX SBOM using Syft..."; \
-		syft dir:. -o cyclonedx-json=grass.cyclonedx.json; \
-		echo "SBOM written to grass.cyclonedx.json"; \
+		syft dir:. -o cyclonedx-json=grass.cdx.json; \
+		echo "SBOM written to grass.cdx.json"; \
 	else \
-		echo "Syft not found. Install it from https://github.com/anchore/syft"; \
+		echo "Syft not found. Install it from https://github.com/anchore/syft" >&2; \
 		exit 1; \
 	fi
 
 distclean: clean
 	-rm -f config.cache config.log config.status config.status.$(ARCH) 2>/dev/null
+	-rm -f grass.cdx.json
 	-rm -f ChangeLog ChangeLog.bak $(ERRORLOG) grass.pc
 	-rm -f include/grass/config.h include/grass/version.h
 	-rm -f include/Make/Platform.make include/Make/Doxyfile_arch_html include/Make/Doxyfile_arch_latex 2>/dev/null

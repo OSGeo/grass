@@ -60,7 +60,11 @@ vulnerability until we have had adequate time to provide a fix.
 GRASS publishes a CycloneDX SBOM with every official release.
 
 - The SBOM is generated automatically in CI via [Syft](https://github.com/anchore/syft)
-  and attached as `grass.cyclonedx.json` to each GitHub release draft.
+  and attached as `grass.cdx.json` to each GitHub release draft.
+  It covers dependencies declared in the source tree (Python package
+  requirements); components linked at build time (GDAL, PROJ, GEOS,
+  etc.) are resolved only in built artifacts and appear in the Docker
+  image SBOMs where they are installed from OS package repositories.
 - For Docker images, an SBOM is embedded at build time (`sbom: true` in
   `docker/build-push-action`) and attestations are published via
   `actions/attest-build-provenance`.
