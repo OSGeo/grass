@@ -115,13 +115,65 @@ foreach(category ${categories})
   set_target_properties(build_class_${class_name} PROPERTIES FOLDER Man)
 endforeach()
 
+set(mkdocs_dir ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR})
+add_custom_target(
+  copy_mkdocs_files
+  COMMAND
+    ${CMAKE_COMMAND} -E make_directory ${mkdocs_dir}/scripts
+    ${mkdocs_dir}/overrides/partials
+    ${mkdocs_dir}/overrides/fragments/tags/default
+  COMMAND ${CMAKE_COMMAND} -E copy_if_different
+          ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/mkdocs.yml ${mkdocs_dir}
+  COMMAND
+    ${CMAKE_COMMAND} -E copy_if_different
+    ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/index.md
+    ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/keywords.md
+    ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/grassdocs.css
+    ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/docs/development_intro.md
+    ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/docs/command_line_intro.md
+    ${CMAKE_CURRENT_SOURCE_DIR}/grass_logo.svg
+    ${CMAKE_CURRENT_SOURCE_DIR}/grass_icon.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/favicon.ico ${mkdocs_dir}/source
+  COMMAND
+    ${CMAKE_COMMAND} -E copy_if_different
+    ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/scripts/hook_list_scripts.py
+    ${mkdocs_dir}/scripts
+  COMMAND
+    ${CMAKE_COMMAND} -E copy_if_different
+    ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/overrides/partials/copyright.html
+    ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/overrides/partials/footer.html
+    ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/overrides/partials/actions.html
+    ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/overrides/partials/source.html
+    ${mkdocs_dir}/overrides/partials
+  COMMAND
+    ${CMAKE_COMMAND} -E copy_if_different
+    ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/overrides/fragments/tags/default/listing.html
+    ${mkdocs_dir}/overrides/fragments/tags/default
+  COMMENT "man generation: copy mkdocs site files")
+set_target_properties(copy_mkdocs_files PROPERTIES FOLDER Man)
+
+# Pages in the markdown tree that exist only for the documentation website
+# and have no man page equivalent (WEB_ONLY_MD in man/Makefile). The guides
+# are derived from the doc/ source directories, so a newly added guide is
+# excluded once CMake reconfigures (which adding the guide to
+# doc/CMakeLists.txt triggers anyway); grass_database and projectionintro
+# are reference pages that also ship as man pages.
+set(web_only_pages index keywords development_intro command_line_intro)
+file(GLOB doc_md ${CMAKE_SOURCE_DIR}/doc/*.md
+     ${CMAKE_SOURCE_DIR}/doc/development/*.md)
+foreach(doc_file ${doc_md})
+  cmake_path(GET doc_file STEM LAST_ONLY page_name)
+  list(APPEND web_only_pages ${page_name})
+endforeach()
+list(REMOVE_ITEM web_only_pages grass_database projectionintro)
+
 add_custom_target(
   build_manpages
   COMMAND
     ${grass_env_command} ${PYTHON_EXECUTABLE}
     ${CMAKE_CURRENT_SOURCE_DIR}/build_manpages.py
     ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/source ${OUTDIR}/${GRASS_INSTALL_MANDIR}
-    ${MD2MAN}
+    ${MD2MAN} --exclude ${web_only_pages}
   DEPENDS ${category_targets} build_class_graphical
   COMMENT "man generation: man pages from markdown")
 set_target_properties(build_manpages PROPERTIES FOLDER Man)
@@ -132,9 +184,38 @@ add_custom_target(
   COMMAND
     ${grass_env_command} ${PYTHON_EXECUTABLE}
     ${CMAKE_CURRENT_SOURCE_DIR}/build_check.py ${OUTDIR}/${GRASS_INSTALL_DOCDIR}
-  DEPENDS ${category_targets} build_class_graphical build_manpages ALL_MODULES
-          LIB_PYTHON GUI_WXPYTHON
+  DEPENDS ${category_targets} build_class_graphical build_manpages
+          copy_mkdocs_files ALL_MODULES LIB_PYTHON GUI_WXPYTHON
   COMMENT "man generation: check output")
 set_target_properties(build_check PROPERTIES FOLDER Man)
+
+# The MkDocs site is built on demand (requires mkdocs installed), matching
+# the Autotools build-mkdocs and serve-mkdocs targets. Unlike Autotools,
+# the targets depend on build_check so that the markdown tree is generated
+# before the site is rendered.
+# $<SEMICOLON> keeps the ; of &copy; from being parsed as a list separator.
+set(mkdocs_env
+    ${CMAKE_COMMAND} -E env
+    "SITE_NAME=GRASS ${GRASS_VERSION_NUMBER} Documentation"
+    "COPYRIGHT=&copy$<SEMICOLON> 2003-${GRASS_VERSION_DATE} GRASS Development Team, GRASS ${GRASS_VERSION_NUMBER} Documentation"
+)
+add_custom_target(
+  build-mkdocs
+  COMMAND ${mkdocs_env} mkdocs build
+  WORKING_DIRECTORY ${mkdocs_dir}
+  DEPENDS copy_mkdocs_files build_check
+  VERBATIM
+  COMMENT "Building the MkDocs documentation site")
+set_target_properties(build-mkdocs PROPERTIES FOLDER Man)
+
+add_custom_target(
+  serve-mkdocs
+  COMMAND ${mkdocs_env} mkdocs serve
+  WORKING_DIRECTORY ${mkdocs_dir}
+  DEPENDS copy_mkdocs_files build_check
+  USES_TERMINAL
+  VERBATIM
+  COMMENT "Serving the MkDocs documentation site")
+set_target_properties(serve-mkdocs PROPERTIES FOLDER Man)
 
 endif() # NOT WITH_FHS

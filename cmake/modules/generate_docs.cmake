@@ -14,12 +14,15 @@ Generate documentation
 
   generate_docs_list([TARGET <target>]
                      [DOC_FILES <doc-files>...]
-                     [IMG_FILES <image-files>...])
+                     [IMG_FILES <image-files>...]
+                     [MD_ONLY])
 
   Generate documentation files (.html, .md, man page) of <doc-files>, which
   is a list of file names without file extension. The image files
   <image-files> are installed. The command is added to the target <target>.
   This is a command intended for plain documentation files, not modules.
+  With MD_ONLY, only the Markdown page is generated: for the web-only
+  guides, which have no .html source and are not shipped as man pages.
 
   generate_docs(<name>
               [SOURCEDIR <source-directory>]
@@ -30,12 +33,14 @@ Generate documentation
               [DEPENDS <dependency-targets>...]
               [IMG_FILES <image-files>...]
               [IMG_NO]
-              [HTML_DESCR])
+              [HTML_DESCR]
+              [MD_ONLY])
 
   Generate documentation files (.html, .md, man page) of <name>, which is a
   source documentation file name without extension. The man page is built
   from the generated Markdown; the HTML pages are generated for the legacy
-  documentation system.
+  documentation system. With MD_ONLY, only the Markdown page is generated
+  (no .html, no man page); it applies only together with TARGET.
 
   Typical use case is, for example:
 
@@ -47,14 +52,21 @@ Generate documentation
 #]=======================================================================]
 
 macro(generate_docs_list)
-  cmake_parse_arguments(D "" "TARGET" "DOC_FILES;IMG_FILES" ${ARGN})
+  cmake_parse_arguments(D "MD_ONLY" "TARGET" "DOC_FILES;IMG_FILES" ${ARGN})
 
   if(NOT D_TARGET OR NOT D_DOC_FILES)
     message(FATAL_ERROR "TARGET >${D_TARGET}< or DOC_FILES >${D_DOC_FILES}< in not set")
   endif()
 
+  if(D_MD_ONLY)
+    set(md_only_flag MD_ONLY)
+  else()
+    set(md_only_flag)
+  endif()
+
   foreach(doc_file ${D_DOC_FILES})
-    generate_docs(${doc_file} TARGET ${D_TARGET} SOURCEDIR ${CMAKE_CURRENT_SOURCE_DIR} IMG_NO)
+    generate_docs(${doc_file} TARGET ${D_TARGET} SOURCEDIR ${CMAKE_CURRENT_SOURCE_DIR}
+                  IMG_NO ${md_only_flag})
   endforeach()
 
   if(D_IMG_FILES)
@@ -72,7 +84,7 @@ endmacro()
 
 function(generate_docs name)
   cmake_parse_arguments(PARSE_ARGV 1 D
-    "IMG_NO;HTML_DESCR"
+    "IMG_NO;HTML_DESCR;MD_ONLY"
     "SOURCEDIR;TARGET;OUTPUT;DEST_DIR;GUI_TARGET_NAME"
     "IMG_FILES;DEPENDS")
 
@@ -154,7 +166,18 @@ function(generate_docs name)
   set(mkmarkdown_cmd ${grass_env_command} ${PYTHON_EXECUTABLE} ${MKMARKDOWN_PY})
   set(md2man_cmd ${grass_env_command} ${PYTHON_EXECUTABLE} ${MD2MAN})
 
-  if(D_TARGET)
+  if(D_TARGET AND D_MD_ONLY)
+    add_custom_command(
+      TARGET ${D_TARGET}
+      POST_BUILD
+      WORKING_DIRECTORY ${sourcedir}
+      COMMAND ${md_descr_command} > ${tmp_md_file}
+      COMMAND ${mkmarkdown_cmd} ${name} > ${out_md_file}
+      COMMAND ${copy_images_command_md}
+      COMMAND ${CMAKE_COMMAND} -E remove ${tmp_md_file}
+      BYPRODUCTS ${out_md_file}
+      COMMENT "Creating ${name}.md")
+  elseif(D_TARGET)
     add_custom_command(
       TARGET ${D_TARGET}
       POST_BUILD
