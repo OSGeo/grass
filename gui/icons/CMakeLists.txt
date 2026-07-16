@@ -12,6 +12,7 @@ add_custom_target(
           ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/icons
   COMMAND ${CMAKE_COMMAND} -E make_directory
           ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/images/symbols)
+set_target_properties(make_gui_icons_dirs PROPERTIES FOLDER GUI)
 
 set(output_icons)
 foreach(ICON ${GUI_ICONS})
@@ -50,6 +51,7 @@ foreach(ICON ${FLAGS_ICONS})
 endforeach()
 
 add_custom_target(gui_icons DEPENDS make_gui_icons_dirs ${output_icons})
+set_target_properties(gui_icons PROPERTIES FOLDER GUI)
 
 install(FILES ${GUI_ICONS} DESTINATION ${GRASS_INSTALL_GUIDIR}/icons)
 install(FILES ${GRASS_ICONS} DESTINATION ${GRASS_INSTALL_GUIDIR}/icons/grass)
@@ -75,12 +77,12 @@ foreach(
   192)
   set(icon_size "${icon_type}x${icon_type}")
   install(
-    FILES grass-${icon_size}.png
-    DESTINATION ${GRASS_INSTALL_SHAREDIR}/icons/hicolor/${icon_size}/apps
-    RENAME grass.svg)
+    FILES grass-${icon_size}.png RENAME grass.png
+    DESTINATION ${GRASS_INSTALL_SHAREDIR}/icons/hicolor/${icon_size}/apps)
 endforeach()
 
 install(FILES grass.svg
         DESTINATION ${GRASS_INSTALL_SHAREDIR}/icons/hicolor/scalable/apps)
 
-install(FILES grass.appdata.xml DESTINATION ${GRASS_INSTALL_SHAREDIR}/metainfo)
+install(FILES grass.appdata.xml RENAME org.osgeo.grass.appdata.xml
+        DESTINATION ${GRASS_INSTALL_SHAREDIR}/metainfo)

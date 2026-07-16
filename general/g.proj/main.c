@@ -35,26 +35,22 @@ int main(int argc, char *argv[])
         *printproj4,        /* Print projection in PROJ.4 format        */
         *datuminfo,         /* Check if datum information is present    */
         *create,            /* Create new projection files              */
-#ifdef HAVE_OGR
-        *printwkt,  /* Print projection in WKT format           */
-        *esristyle, /* Use ESRI-style WKT format                */
-#endif
-        *dontprettify,    /* Print 'flat' output (no linebreaks)      */
-        *forcedatumtrans; /* Force override of datumtrans parameters  */
+        *printwkt,          /* Print projection in WKT format           */
+        *esristyle,         /* Use ESRI-style WKT format                */
+        *dontprettify,      /* Print 'flat' output (no linebreaks)      */
+        *forcedatumtrans;   /* Force override of datumtrans parameters  */
 
     struct Option *location, /* Name of new location to create           */
-#ifdef HAVE_OGR
-        *insrid,  /* spatial reference id (auth name + code   */
-        *inepsg,  /* EPSG projection code                     */
-        *inwkt,   /* Input file with projection in WKT format */
-        *inproj4, /* Projection in PROJ.4 format              */
-        *ingeo,   /* Input geo-referenced file readable by
-                   * GDAL or OGR                              */
-#endif
-        *listcodes, /* list codes of given authority */
-        *datum,     /* datum to add (or replace existing datum) */
-        *dtrans,    /* index to datum transform option          */
-        *format;    /* output format */
+        *insrid,             /* spatial reference id (auth name + code   */
+        *inepsg,             /* EPSG projection code                     */
+        *inwkt,              /* Input file with projection in WKT format */
+        *inproj4,            /* Projection in PROJ.4 format              */
+        *ingeo,              /* Input geo-referenced file readable by
+                              * GDAL or OGR                              */
+        *listcodes,          /* list codes of given authority */
+        *datum,              /* datum to add (or replace existing datum) */
+        *dtrans,             /* index to datum transform option          */
+        *format;             /* output format */
     struct GModule *module;
 
     int formats;
@@ -71,14 +67,9 @@ int main(int argc, char *argv[])
     G_add_keyword(_("general"));
     G_add_keyword(_("projection"));
     G_add_keyword(_("create project"));
-#ifdef HAVE_OGR
     module->label = _("Prints or modifies GRASS projection information files "
-                      "(in various co-ordinate system descriptions).");
+                      "(in various coordinate system descriptions).");
     module->description = _("Can also be used to create new GRASS projects.");
-#else
-    module->description =
-        _("Prints and manipulates GRASS projection information files.");
-#endif
 
     printinfo = G_define_flag();
     printinfo->key = 'p';
@@ -112,15 +103,9 @@ int main(int argc, char *argv[])
     dontprettify = G_define_flag();
     dontprettify->key = 'f';
     dontprettify->guisection = _("Print");
-#ifdef HAVE_OGR
     dontprettify->description = _("Print 'flat' output with no linebreaks "
                                   "(applies to WKT and PROJ.4 output)");
-#else
-    dontprettify->description =
-        _("Print 'flat' output with no linebreaks (applies to PROJ.4 output)");
-#endif
 
-#ifdef HAVE_OGR
     printwkt = G_define_flag();
     printwkt->key = 'w';
     printwkt->guisection = _("Print");
@@ -181,7 +166,6 @@ int main(int argc, char *argv[])
     inepsg->options = "1-1000000";
     inepsg->guisection = _("Specification");
     inepsg->description = _("EPSG projection code");
-#endif
 
     listcodes = G_define_option();
     listcodes->key = "list_codes";
@@ -199,7 +183,7 @@ int main(int argc, char *argv[])
     datum->required = NO;
     datum->guisection = _("Datum");
     datum->label =
-        _("Datum (overrides any datum specified in input co-ordinate system)");
+        _("Datum (overrides any datum specified in input coordinate system)");
     datum->description =
         _("Accepts standard GRASS datum codes, or \"list\" to list and exit");
 
@@ -219,7 +203,7 @@ int main(int argc, char *argv[])
     forcedatumtrans->guisection = _("Datum");
     forcedatumtrans->description =
         _("Force override of datum transformation information in input "
-          "co-ordinate system");
+          "coordinate system");
 
     create = G_define_flag();
     create->key = 'c';
@@ -235,12 +219,13 @@ int main(int argc, char *argv[])
     location->description = _("Name of new project (location) to create");
 
     format = G_define_standard_option(G_OPT_F_FORMAT);
-    format->options = "plain,shell,json,wkt,proj4";
-    format->descriptions = _("plain;Human readable text output;"
-                             "shell;shell script style text output;"
-                             "json;JSON (JavaScript Object Notation);"
-                             "wkt;Well-known text output;"
-                             "proj4;PROJ.4 style text output;");
+    format->options = "plain,shell,wkt,projjson,proj4";
+    format->descriptions =
+        _("plain;Human readable text output;"
+          "shell;shell script style text output;"
+          "wkt;Well-known text output;"
+          "projjson;JSON (JavaScript Object Notation) version of WKT;"
+          "proj4;PROJ.4 style text output;");
     format->guisection = _("Print");
 
     G_option_exclusive(printinfo, datuminfo, create, NULL);
@@ -250,7 +235,7 @@ int main(int argc, char *argv[])
 
     /* Initialisation & Validation */
 
-    if (strcmp(format->answer, "json") == 0) {
+    if (strcmp(format->answer, "projjson") == 0) {
         outputFormat = JSON;
     }
     else if (strcmp(format->answer, "shell") == 0) {
@@ -300,7 +285,6 @@ int main(int argc, char *argv[])
         exit(EXIT_SUCCESS);
     }
 
-#ifdef HAVE_OGR
     /* -e implies -w */
     if (esristyle->answer && !printwkt->answer)
         printwkt->answer = 1;
@@ -336,10 +320,8 @@ int main(int argc, char *argv[])
     /* We can only have one input source, hence if..else construct */
 
     if (formats == 0)
-#endif
         /* Input is projection of current location */
         input_currloc();
-#ifdef HAVE_OGR
     else if (inwkt->answer)
         /* Input in WKT format */
         input_wkt(inwkt->answer);
@@ -355,7 +337,6 @@ int main(int argc, char *argv[])
     else
         /* Input from georeferenced file */
         input_georef(ingeo->answer);
-#endif
 
     /* Consistency Check */
 
@@ -378,26 +359,17 @@ int main(int argc, char *argv[])
         print_datuminfo();
     else if (outputFormat == PROJ4)
         print_proj4(dontprettify->answer);
-#ifdef HAVE_OGR
     else if (outputFormat == WKT)
         print_wkt(esristyle->answer, dontprettify->answer);
-#endif
     else if (location->answer)
         create_location(location->answer);
     else if (create->answer)
         modify_projinfo();
     else
-#ifdef HAVE_OGR
         G_fatal_error(
             _("No output format specified. Define one of the options: "
               "plain, shell, json, wkt, or proj4 using the -%c flag."),
             printinfo->key);
-#else
-        G_fatal_error(
-            _("No output format specified. Define one of the options: "
-              "plain, shell, json, or proj4 using the -%c flag."),
-            printinfo->key);
-#endif
 
     /* Tidy Up */
     if (projinfo != NULL)

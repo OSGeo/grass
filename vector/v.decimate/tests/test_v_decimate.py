@@ -1,6 +1,8 @@
-import pytest
+import os
 import io
 from types import SimpleNamespace
+
+import pytest
 
 import grass.script as gs
 from grass.tools import Tools
@@ -30,7 +32,7 @@ def setup_point_map(tmp_path):
     project = tmp_path / "grassdata"
     gs.create_project(project)
 
-    with gs.setup.init(project) as session:
+    with gs.setup.init(project, env=os.environ.copy()) as session:
         tools = Tools(session=session)
         tools.g_region(n=110, s=90, e=110, w=90, res=1)
 

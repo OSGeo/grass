@@ -115,7 +115,7 @@ void Rast_put_d_row(int fd, const DCELL *buf)
 static void write_data(int fd, int row, unsigned char *buf, int n)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
-    ssize_t nwrite = fcb->nbytes * n;
+    ssize_t nwrite = (ssize_t)fcb->nbytes * n;
 
     if (write(fcb->data_fd, buf, nwrite) != nwrite)
         G_fatal_error(
@@ -140,6 +140,11 @@ static void set_file_pointer(int fd, int row)
     struct fileinfo *fcb = &R__.fileinfo[fd];
 
     fcb->row_ptr[row] = lseek(fcb->data_fd, 0L, SEEK_CUR);
+    if (fcb->row_ptr[row] == -1) {
+        int err = errno;
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+    }
 }
 
 static void convert_float(float *work_buf, char *null_buf, const FCELL *rast,
@@ -406,7 +411,7 @@ static void put_data(int fd, char *null_buf, const CELL *cell, int row, int n,
         G_free(compressed_buf);
     }
     else {
-        nwrite = fcb->nbytes * n;
+        nwrite = (ssize_t)fcb->nbytes * n;
 
         if (write(fcb->data_fd, work_buf, nwrite) != nwrite)
             G_fatal_error(
@@ -420,7 +425,6 @@ static void put_data(int fd, char *null_buf, const CELL *cell, int row, int n,
 static void put_data_gdal(int fd, const void *rast, int row, int n,
                           int zeros_r_nulls, RASTER_MAP_TYPE map_type)
 {
-#ifdef HAVE_GDAL
     struct fileinfo *fcb = &R__.fileinfo[fd];
     int size = Rast_cell_size(map_type);
     DCELL null_val = fcb->gdal->null_val;
@@ -472,7 +476,6 @@ static void put_data_gdal(int fd, const void *rast, int row, int n,
     if (err != CE_None)
         G_fatal_error(_("Error writing data via GDAL for row %d of <%s>"), row,
                       fcb->name);
-#endif
 }
 
 static void put_raster_data(int fd, char *null_buf, const void *rast, int row,
@@ -514,6 +517,11 @@ static void write_null_bits_compressed(const unsigned char *flags, int row,
     int res;
 
     fcb->null_row_ptr[row] = lseek(fcb->null_fd, 0L, SEEK_CUR);
+    if (fcb->null_row_ptr[row] == -1) {
+        int err = errno;
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+    }
 
     /* get upper bound of compressed size */
     cmax = G_compress_bound(size, 3);
@@ -567,7 +575,7 @@ void Rast__write_null_bits(int fd, const unsigned char *flags)
 
     offset = (off_t)size * row;
 
-    if (lseek(fcb->null_fd, offset, SEEK_SET) < 0)
+    if (lseek(fcb->null_fd, offset, SEEK_SET) == -1)
         G_fatal_error(_("Error writing null row %d of <%s>"), row, fcb->name);
 
     if ((res = write(fcb->null_fd, flags, size)) < 0 ||

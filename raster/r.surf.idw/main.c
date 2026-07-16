@@ -410,7 +410,7 @@ int search(EW **ewptr, /* double-indirection !! */
     prior = NULL;
 
     /* process rows where search has already been initiated */
-    while (!new &&current) {
+    while (!new && current) {
         (*locate_neighbors)(current, head, row, col, npoints, neighbors);
         prior = current;
         current = next_row(current, boundary, &new, south);

@@ -200,7 +200,7 @@ def get_mapset_lock_info(mapset_path: str | os.PathLike[str]):
     except KeyError:
         info["owner"] = None
     info["timestamp"] = (
-        datetime.datetime.fromtimestamp(os.path.getmtime(info["lockpath"]))
+        datetime.datetime.fromtimestamp(Path(info["lockpath"]).stat().st_mtime)
     ).replace(microsecond=0)
     return info
 
@@ -221,7 +221,7 @@ def get_reason_id_mapset_not_usable(mapset_path):
     If mapset path is None or no reason found, returns None.
     """
     # Check whether mapset exists
-    if not os.path.exists(mapset_path):
+    if not Path(mapset_path).exists():
         return "non-existent"
     # Check whether mapset is valid
     if not is_mapset_valid(mapset_path):

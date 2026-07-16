@@ -36,7 +36,7 @@ class TestVDistance(TestCase):
         received = json.loads(module.outputs.stdout)
 
         self.assertEqual(len(reference), len(received))
-        for expected, actual in zip(reference, received):
+        for expected, actual in zip(reference, received, strict=True):
             for key, expected_value in expected.items():
                 self.assertIn(key, actual)
                 actual_value = actual[key]

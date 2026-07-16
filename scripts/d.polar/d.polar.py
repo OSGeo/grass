@@ -48,6 +48,7 @@ import math
 import atexit
 import glob
 import shutil
+from pathlib import Path
 from grass.script.utils import try_remove, basename
 from grass.script import core as gcore
 
@@ -421,7 +422,7 @@ def main():
         gcore.fatal(_("Please select only one output method"))
 
     if eps:
-        if os.sep in eps and not os.path.exists(os.path.dirname(eps)):
+        if os.sep in eps and not Path(eps).parent.exists():
             gcore.fatal(
                 _(
                     "EPS output file path <{}>, doesn't exists. "
@@ -432,7 +433,7 @@ def main():
             eps = basename(eps, "eps") + ".eps"
         if not eps.endswith(".eps"):
             eps += ".eps"
-        if os.path.exists(eps) and not os.getenv("GRASS_OVERWRITE"):
+        if Path(eps).exists() and not os.getenv("GRASS_OVERWRITE"):
             gcore.fatal(
                 _(
                     "option <output>: <{}> exists. To overwrite, "

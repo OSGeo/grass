@@ -1,6 +1,7 @@
 set(PYDIRS
     benchmark
     exceptions
+    experimental
     grassdb
     gunittest
     imaging
@@ -69,7 +70,7 @@ add_custom_target(
   VERBATIM
   DEPENDS ${pydir_targets})
 
-set_target_properties(LIB_PYTHON PROPERTIES FOLDER lib)
+set_target_properties(LIB_PYTHON PROPERTIES FOLDER Misc)
 
 install(DIRECTORY ${OUTDIR}/${PYDIR_GRASS} DESTINATION ${GRASS_INSTALL_PYDIR}
         PATTERN "*/resource_paths.py" EXCLUDE)

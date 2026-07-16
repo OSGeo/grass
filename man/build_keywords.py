@@ -27,10 +27,10 @@ the variable is ignored, but it must be set regardless.
 @author Martin Landa - Markdown support
 """
 
+import glob
 import os
 import re
 import sys
-import glob
 
 from build import (
     grass_version,
@@ -230,7 +230,7 @@ def main():
 
     if len(sys.argv) >= 2:
         doc_type = sys.argv[1]
-    if doc_type in ["html", "md"]:
+    if doc_type in {"html", "md"}:
         offset = 1
     else:
         # The original usage according to the build sever scripts.

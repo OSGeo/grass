@@ -225,7 +225,7 @@ class InteractiveMap:
 
         If map_backend is not specified, InteractiveMap tries to import
         ipyleaflet first, then folium if it fails. The backend can be
-        specified explicitely with valid values "folium" and "ipyleaflet" .
+        specified explicitly with valid values "folium" and "ipyleaflet" .
 
         In case of folium backend, tiles parameter is passed directly
         to folium.Map() which supports several built-in tilesets
@@ -265,9 +265,9 @@ class InteractiveMap:
                 import folium  # pylint: disable=import-outside-toplevel
 
                 return folium
-            except ImportError as err:
+            except ImportError:
                 if error:
-                    raise err
+                    raise
                 return None
 
         def _import_ipyleaflet(error):
@@ -275,9 +275,9 @@ class InteractiveMap:
                 import ipyleaflet  # pylint: disable=import-outside-toplevel
 
                 return ipyleaflet
-            except ImportError as err:
+            except ImportError:
                 if error:
-                    raise err
+                    raise
                 return None
 
         if not map_backend:

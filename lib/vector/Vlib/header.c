@@ -485,7 +485,7 @@ int Vect_set_zone(struct Map_info *Map, int zone)
 
    \return projection zone
  */
-int Vect_get_zone(struct Map_info *Map UNUSED)
+int Vect_get_zone(struct Map_info *Map G_UNUSED)
 {
     /* return Map->head.plani_zone; */
 

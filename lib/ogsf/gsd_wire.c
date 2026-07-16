@@ -64,9 +64,9 @@ int gsd_wire_surf(geosurf *surf)
             ret = (gsd_coarse_surf_map(surf)); /* draw coarse surf */
 
 #ifdef DO_ARROWS
-            /*
-               gsd_wire_arrows(surf);
-             */
+        /*
+           gsd_wire_arrows(surf);
+         */
 #endif
 
         break;
@@ -163,7 +163,7 @@ int gsd_wire_surf_map(geosurf *surf)
     /* would also be good to check if colormap == surfmap, to increase speed */
     for (row = 0; row < ycnt; row++) {
         pt[Y] = ymax - row * yres;
-        y1off = row * ymod * surf->cols;
+        y1off = (long)row * ymod * surf->cols;
 
         gsd_bgnline();
         cnt = 0;
@@ -219,7 +219,7 @@ int gsd_wire_surf_map(geosurf *surf)
 
         for (row = 0; row < ycnt; row++) {
             pt[Y] = ymax - row * yres;
-            y1off = row * ymod * surf->cols;
+            y1off = (long)row * ymod * surf->cols;
             offset = x1off + y1off;
 
             if (check_mask) {
@@ -337,7 +337,7 @@ int gsd_wire_surf_const(geosurf *surf, float k)
 
     for (row = 0; row < ycnt; row++) {
         pt[Y] = ymax - row * yres;
-        y1off = row * ymod * surf->cols;
+        y1off = (long)row * ymod * surf->cols;
 
         gsd_bgnline();
         cnt = 0;
@@ -388,7 +388,7 @@ int gsd_wire_surf_const(geosurf *surf, float k)
 
         for (row = 0; row < ycnt; row++) {
             pt[Y] = ymax - row * yres;
-            y1off = row * ymod * surf->cols;
+            y1off = (long)row * ymod * surf->cols;
             offset = x1off + y1off;
 
             if (check_mask) {
@@ -439,7 +439,7 @@ int gsd_wire_surf_const(geosurf *surf, float k)
 
    \return 1
  */
-int gsd_wire_surf_func(geosurf *gs UNUSED, int (*user_func)(void) UNUSED)
+int gsd_wire_surf_func(geosurf *gs G_UNUSED, int (*user_func)(void) G_UNUSED)
 {
     return (1);
 }
@@ -522,11 +522,11 @@ int gsd_wire_arrows(geosurf *surf)
 
     for (row = 0; row < ycnt; row++) {
         pt[Y] = ymax - row * yres;
-        y1off = row * ymod * surf->cols;
+        y1off = (long)row * ymod * surf->cols;
 
         for (col = 0; col < xcnt; col++) {
             pt[X] = col * xres;
-            offset = col * xmod + y1off;
+            offset = (long)col * xmod + y1off;
 
             if (check_mask) {
                 if (BM_get(surf->curmask, col * xmod, row * ymod)) {
@@ -723,9 +723,9 @@ int gsd_coarse_surf_map(geosurf *surf)
         y2 = ymax - (row - (step_val / 2)) * yres;
         y3 = ymax - (row + (step_val / 2)) * yres;
 
-        y1off = row * ymod * surf->cols;
-        y2off = (row - (step_val / 2)) * ymod * surf->cols;
-        y3off = (row + (step_val / 2)) * ymod * surf->cols;
+        y1off = (long)row * ymod * surf->cols;
+        y2off = (long)(row - (step_val / 2)) * ymod * surf->cols;
+        y3off = (long)(row + (step_val / 2)) * ymod * surf->cols;
 
         for (col = start_val; col <= xcnt - start_val; col += step_val) {
 

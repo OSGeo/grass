@@ -142,7 +142,7 @@ static int seg_format(int fd, off_t nrows, off_t ncols, int srows, int scols,
         }
     }
 
-    if (lseek(fd, 0L, SEEK_SET) == (off_t)-1) {
+    if (lseek(fd, 0L, SEEK_SET) == -1) {
         int err = errno;
 
         G_warning("Segment_format(): Unable to seek (%s)", strerror(err));
@@ -258,7 +258,7 @@ static int seek_only(int fd, off_t nbytes)
 
     G_debug(3, "Using new segmentation code...");
     errno = 0;
-    if (lseek(fd, nbytes - 1, SEEK_CUR) < 0) {
+    if (lseek(fd, nbytes - 1, SEEK_CUR) == -1) {
         int err = errno;
 
         G_warning("segment zero_fill(): Unable to seek (%s)", strerror(err));

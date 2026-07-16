@@ -20,8 +20,12 @@ def mock_no_session(monkeypatch):
 
     There may or may not be a session in the background (we don't check either way).
     """
+    # Session
     monkeypatch.delenv("GISRC", raising=False)
+    monkeypatch.delenv("GIS_LOCK", raising=False)
+    # Runtime
     monkeypatch.delenv("GISBASE", raising=False)
+    monkeypatch.delenv("GRASS_PREFIX", raising=False)
 
 
 @pytest.fixture

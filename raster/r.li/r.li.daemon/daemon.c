@@ -710,7 +710,7 @@ int error_Output(int out, msg m)
     }
 }
 
-int raster_Output(int fd, int aid, struct g_area *g UNUSED, double res)
+int raster_Output(int fd, int aid, struct g_area *g G_UNUSED, double res)
 {
     double toPut = res;
     off_t offset = (off_t)aid * sizeof(double);
@@ -738,7 +738,11 @@ int write_raster(int mv_fd, int random_access, struct g_area *g)
     center = g->sf_x + ((int)g->cl / 2);
 
     file_buf = G_malloc(cols * sizeof(double));
-    lseek(random_access, 0, SEEK_SET);
+    if (lseek(random_access, 0, SEEK_SET) == -1) {
+        int err = errno;
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+    }
 
     cell_buf = Rast_allocate_d_buf();
     Rast_set_d_null_value(cell_buf, Rast_window_cols() + 1);

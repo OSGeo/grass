@@ -59,7 +59,7 @@ def setup_vector_with_values(tmp_path_factory):
 
         sql_statements = "\n".join(
             f"UPDATE test_points SET value = {val} WHERE cat = {cat};"
-            for cat, val in zip(range(1, 11), range(1, 11))
+            for cat, val in zip(range(1, 11), range(1, 11), strict=False)
         )
         gs.write_command(
             "db.execute",
@@ -286,11 +286,11 @@ def test_v_class_where_no_matches(setup_vector_with_values):
         where="value > 100",  # No points satisfy this
         algorithm="int",
         nbclasses=5,
-        flags="g",
+        flags="b",
         env=session.env,
     )
-    breaks = [float(b) for b in output.strip().split(",")] if output.strip() else []
-    assert len(breaks) == 4  # For 5 classes → 4 breaks
+    breaks = [float(b) for b in output.strip().split(",")]
+    assert len(breaks) == 4  # For 5 classes, there are 4 breaks
     assert all(b == 0.0 for b in breaks)
 
 
@@ -419,7 +419,7 @@ def assert_json_equal(expected, actual):
     elif isinstance(expected, list):
         assert isinstance(actual, list)
         assert len(expected) == len(actual)
-        for exp_item, act_item in zip(expected, actual):
+        for exp_item, act_item in zip(expected, actual, strict=False):
             assert_json_equal(exp_item, act_item)
     elif isinstance(expected, float):
         assert actual == pytest.approx(expected, rel=1e-6)

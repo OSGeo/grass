@@ -488,10 +488,9 @@ class LocationPage(TitledPage):
         tmplist = [p.name for p in Path(self.grassdatabase, self.xylocation).iterdir()]
         self.mapsetList = []
         for item in tmplist:
-            if os.path.isdir(
-                os.path.join(self.grassdatabase, self.xylocation, item)
-            ) and os.path.exists(
-                os.path.join(self.grassdatabase, self.xylocation, item, "WIND")
+            if (
+                Path(self.grassdatabase, self.xylocation, item).is_dir()
+                and Path(self.grassdatabase, self.xylocation, item, "WIND").exists()
             ):
                 if item != "PERMANENT":
                     self.mapsetList.append(item)
@@ -1088,7 +1087,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         }
 
         # make a backup of the current points file
-        if os.path.exists(self.file["control_points"]):
+        if Path(self.file["control_points"]).exists():
             shutil.copy(self.file["control_points"], self.file["control_points_bak"])
 
         # polynomial order transformation for georectification
@@ -1449,7 +1448,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             self.mapcoordlist[key][4] = coord[0]
             self.mapcoordlist[key][5] = coord[1]
             # ADD ELEVATION FROM MAP AS HEIGHT PARAMETER
-            if os.path.exists(self.file["elevation"]):
+            if Path(self.file["elevation"]).exists():
                 # Parse the i.ortho.elev generated file
                 # Get all lines from file
                 lines = Path(self.file["elevation"]).read_text().splitlines()
@@ -1870,12 +1869,12 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 self.SaveGCPs(None)
             elif ret == wx.NO:
                 # restore POINTS file from backup
-                if os.path.exists(self.file["control_points_bak"]):
+                if Path(self.file["control_points_bak"]).exists():
                     shutil.copy(
                         self.file["control_points_bak"], self.file["control_points"]
                     )
 
-            if os.path.exists(self.file["control_points_bak"]):
+            if Path(self.file["control_points_bak"]).exists():
                 os.unlink(self.file["control_points_bak"])
 
             self.SrcMap.Clean()
@@ -2357,7 +2356,7 @@ class GCPList(ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
         self.DeleteAllItems()
 
         self.render = False
-        if os.path.isfile(self.gcp.file["control_points"]):
+        if Path(self.gcp.file["control_points"]).is_file():
             self.gcp.ReadGCPs()
         else:
             # 3 gcp is minimum
@@ -2560,7 +2559,7 @@ class VectGroup(wx.Dialog):
             ).iterdir()
         ]
         for dir in vectlist:
-            if not os.path.isfile(
+            if not Path(
                 os.path.join(
                     self.grassdatabase,
                     self.xylocation,
@@ -2569,7 +2568,7 @@ class VectGroup(wx.Dialog):
                     dir,
                     "coor",
                 )
-            ):
+            ).is_file():
                 vectlist.remove(dir)
 
         utils.ListSortLower(vectlist)
@@ -2596,7 +2595,7 @@ class VectGroup(wx.Dialog):
         #
         self.listMap = CheckListBox(parent=self, id=wx.ID_ANY, choices=vectlist)
 
-        if os.path.isfile(self.vgrpfile):
+        if Path(self.vgrpfile).is_file():
             with open(self.vgrpfile) as f:
                 checked = []
                 for line in f:

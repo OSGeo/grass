@@ -40,7 +40,12 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <assert.h>
+#include <string.h>
+#include <errno.h>
+
 #include <grass/gis.h>
+#include <grass/glocale.h>
+
 #include "index.h"
 
 /*!
@@ -134,7 +139,11 @@ struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
         }
 
         /* write empty root node */
-        lseek(new_rtree->fd, rootpos, SEEK_SET);
+        if (lseek(new_rtree->fd, rootpos, SEEK_SET) == -1) {
+            int err = errno;
+            G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                          strerror(err), err);
+        }
         RTreeWriteNode(n, new_rtree);
         RTreeFreeNode(n);
         new_rtree->root = NULL;

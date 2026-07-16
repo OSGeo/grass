@@ -44,10 +44,11 @@ void parse_args(int argc, char **argv, char **input, char **field, int *history,
     topo_flag->guisection = _("Print");
 
     format_opt = G_define_standard_option(G_OPT_F_FORMAT);
-    format_opt->options = "plain,shell,json";
+    format_opt->options = "plain,shell,json,csv";
     format_opt->descriptions = _("plain;Human readable text output;"
                                  "shell;shell script style text output;"
-                                 "json;JSON (JavaScript Object Notation);");
+                                 "json;JSON (JavaScript Object Notation);"
+                                 "csv;CSV (Comma Separated Values);");
     format_opt->answer = NULL;
     format_opt->required = NO;
     format_opt->guisection = _("Print");
@@ -78,10 +79,21 @@ void parse_args(int argc, char **argv, char **input, char **field, int *history,
             *print_content |= PRINT_CONTENT_TOPO;
         }
     }
+    else if (format_opt->answer && strcmp(format_opt->answer, "csv") == 0) {
+        if (!*columns) {
+            G_fatal_error(_("format=csv is only valid with -c flag."));
+        }
+        *format_ptr = CSV;
+    }
     else if (!format_opt->answer && *print_content == PRINT_CONTENT_UNSET &&
              !*columns && !*history) {
         // No flags and no format specified, default to plain.
         *format_ptr = PLAIN;
+    }
+    else if (!format_opt->answer && *columns) { // -c without `format=`
+        // Backward compatibilty: sep should be pipe + header skipped
+        // sep and header is handled during printing
+        *format_ptr = NONE;
     }
     else {
         *format_ptr = SHELL;

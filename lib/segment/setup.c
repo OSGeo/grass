@@ -14,7 +14,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
+#include <errno.h>
+
 #include <grass/gis.h>
+#include <grass/glocale.h>
+
 #include "local_proto.h"
 
 /**
@@ -47,6 +52,12 @@ int seg_setup(SEGMENT *SEG)
     /* This is close to the beginning of the file, so doesn't need to be an
      * off_t */
     SEG->offset = (int)lseek(SEG->fd, 0L, SEEK_CUR);
+    if (SEG->offset == -1) {
+        int err = errno;
+        G_warning(_("File read/write operation failed: %s (%d)"), strerror(err),
+                  err);
+        return -1;
+    }
 
     SEG->spr = SEG->ncols / SEG->scols;
     SEG->spill = SEG->ncols % SEG->scols;

@@ -177,7 +177,7 @@ class TestRVolume(TestCase):
 
     def _assert_json_equal(self, expected_output, actual_output):
         self.assertEqual(len(expected_output), len(actual_output))
-        for exp_cat, out_cat in zip(expected_output, actual_output):
+        for exp_cat, out_cat in zip(expected_output, actual_output, strict=True):
             self.assertCountEqual(list(exp_cat.keys()), list(out_cat.keys()))
             for key, value in exp_cat.items():
                 if isinstance(value, float):

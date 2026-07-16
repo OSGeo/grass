@@ -26,7 +26,7 @@ int classify(CELL *class, CELL *reject, int ncols)
                 break;
 
         if (!valid_data) { /* all nulls are classified as nulls */
-            Rast_set_c_null_value(class ++, 1);
+            Rast_set_c_null_value(class++, 1);
             if (reject)
                 Rast_set_c_null_value(reject++, 1);
             continue;
@@ -75,7 +75,7 @@ int classify(CELL *class, CELL *reject, int ncols)
                 max = tot;
             }
         }
-        *class ++ = cc + 1;
+        *class++ = cc + 1;
 
         if (reject) {
             rej = 2 * (B[cc] - max);

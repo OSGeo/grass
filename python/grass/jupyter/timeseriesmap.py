@@ -14,6 +14,7 @@
 """Create and display visualizations for space-time datasets."""
 
 import grass.script as gs
+from grass.tools import Tools
 
 from .region import RegionManagerForTimeSeries
 from .baseseriesmap import BaseSeriesMap
@@ -22,7 +23,7 @@ from .baseseriesmap import BaseSeriesMap
 def fill_none_values(names):
     """Replace `None` values in array with previous item"""
     for i, name in enumerate(names):
-        if name == "None":
+        if name is None:
             names[i] = names[i - 1]
     return names
 
@@ -39,54 +40,18 @@ def collect_layers(timeseries, element_type, fill_gaps):
     :param str element_type: element type, "stvds" or "strds"
     :param bool fill_gaps: fill empty time steps with data from previous step
     """
-    # NEW WAY: Comment in after json output for t.rast.list and t.vect.list is merged
-    # import json
-    # if element_type == "strds":
-    #     result = json.loads(
-    #         gs.read_command(
-    #             "t.rast.list", method="gran", input=timeseries, format="json"
-    #         )
-    #     )
-    # elif element_type == "stvds":
-    #     result = json.loads(
-    #         gs.read_command(
-    #             "t.vect.list", method="gran", input=timeseries, format="json"
-    #         )
-    #     )
-    # else:
-    #     raise NameError(
-    #         _("Dataset {} must be element type 'strds' or 'stvds'").format(timeseries)
-    #     )
-    #
-    # # Get layer names and start time from json
-    # names = [item["name"] for item in result["data"]]
-    # dates = [item["start_time"] for item in result["data"]]
-
+    tools = Tools()
     if element_type == "strds":
-        rows = gs.read_command(
-            "t.rast.list", method="gran", input=timeseries
-        ).splitlines()
+        result = tools.t_rast_list(method="gran", input=timeseries, format="json")
     elif element_type == "stvds":
-        rows = gs.read_command(
-            "t.vect.list", method="gran", input=timeseries
-        ).splitlines()
+        result = tools.t_vect_list(method="gran", input=timeseries, format="json")
     else:
         raise NameError(
             _("Dataset {} must be element type 'strds' or 'stvds'").format(timeseries)
         )
-
-    # Parse string
-    # Create list of list
-    new_rows = [row.split("|") for row in rows]
-    # Transpose into columns where the first value is the name of the column
-    new_array = [list(row) for row in zip(*new_rows)]
-
-    # Collect layer name and start time
-    for column in new_array:
-        if column[0] == "name":
-            names = column[1:]
-        if column[0] == "start_time":
-            dates = column[1:]
+    # Get layer names and start time from json
+    names = [item["name"] for item in result["data"]]
+    dates = [item["start_time"] for item in result["data"]]
 
     # For datasets with variable time steps, fill in gaps with
     # previous time step value, if fill_gaps==True.
@@ -180,7 +145,7 @@ class TimeSeriesMap(BaseSeriesMap):
         )
         for raster in self._layers:
             kwargs["map"] = raster
-            if raster == "None":
+            if raster is None:
                 self._calls.append([(None, None)])
             else:
                 self._calls.append([("d.rast", kwargs.copy())])
@@ -211,7 +176,7 @@ class TimeSeriesMap(BaseSeriesMap):
         )
         for vector in self._layers:
             kwargs["map"] = vector
-            if vector == "None":
+            if vector is None:
                 self._calls.append([(None, None)])
             else:
                 self._calls.append([("d.vect", kwargs.copy())])

@@ -294,10 +294,12 @@ class TestStatsQuantile(TestCase):
         output_json = json.loads(module.outputs.stdout)
 
         self.assertEqual(len(expected), len(output_json))
-        for exp_cat, out_cat in zip(expected, output_json):
+        for exp_cat, out_cat in zip(expected, output_json, strict=True):
             self.assertEqual(exp_cat["category"], out_cat["category"])
             self.assertEqual(len(exp_cat["percentiles"]), len(out_cat["percentiles"]))
-            for exp_p, out_p in zip(exp_cat["percentiles"], out_cat["percentiles"]):
+            for exp_p, out_p in zip(
+                exp_cat["percentiles"], out_cat["percentiles"], strict=True
+            ):
                 self.assertAlmostEqual(
                     exp_p["percentile"], out_p["percentile"], places=6
                 )

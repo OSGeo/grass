@@ -27,29 +27,22 @@
 
 #include "local_proto.h"
 
-static int clo_dummy(struct Map_info *map UNUSED)
+static int clo_dummy(struct Map_info *map G_UNUSED)
 {
     return -1;
 }
 
-#if !defined HAVE_OGR || !defined HAVE_POSTGRES
-static int format(struct Map_info *map UNUSED)
+#if !defined HAVE_POSTGRES
+static int format(struct Map_info *map G_UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 #endif
 
-static int (*Close_array[][2])(struct Map_info *) = {{clo_dummy, V1_close_nat}
-#ifdef HAVE_OGR
-                                                     ,
+static int (*Close_array[][2])(struct Map_info *) = {{clo_dummy, V1_close_nat},
                                                      {clo_dummy, V1_close_ogr},
                                                      {clo_dummy, V1_close_ogr}
-#else
-                                                     ,
-                                                     {clo_dummy, format},
-                                                     {clo_dummy, format}
-#endif
 #ifdef HAVE_POSTGRES
                                                      ,
                                                      {clo_dummy, V1_close_pg}
@@ -271,14 +264,9 @@ int Vect_save_frmt(struct Map_info *Map)
 #endif
     }
     else if (Map->format == GV_FORMAT_OGR) {
-#ifdef HAVE_OGR
         fprintf(fd, "format: ogr\n");
         fprintf(fd, "dsn: %s\n", Map->fInfo.ogr.dsn);
         fprintf(fd, "layer: %s\n", Map->fInfo.ogr.layer_name);
-#else
-        G_fatal_error(_("GRASS is not compiled with OGR support"));
-        return 0;
-#endif
     }
 
     G_verbose_message(_("Link to vector map <%s> created"), Map->name);

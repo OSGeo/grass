@@ -62,7 +62,7 @@ def main():
     tmp_dir = grass.tempdir()
     grass.debug("tmp_dir = {tmpdir}".format(tmpdir=tmp_dir))
 
-    if not os.path.exists(infile):
+    if not Path(infile).exists():
         grass.fatal(_("File {name} not found.").format(name=infile))
 
     gisenv = grass.gisenv()
@@ -106,24 +106,18 @@ def main():
             )
 
     # extract data
-    # Extraction filters were added in Python 3.12,
-    # and backported to 3.8.17, 3.9.17, 3.10.12, and 3.11.4
-    # See https://docs.python.org/3.12/library/tarfile.html#tarfile-extraction-filter
-    # and https://peps.python.org/pep-0706/
-    # In Python 3.12, using `filter=None` triggers a DepreciationWarning,
-    # and in Python 3.14, `filter='data'` will be the default
-    if hasattr(tarfile, "data_filter"):
-        tar.extractall(filter="data")
-    else:
-        # Remove this when no longer needed
-        grass.warning(_("Extracting may be unsafe; consider updating Python"))
-        tar.extractall()
+    # The 'data' extraction filter was added in Python 3.12 and backported to
+    # 3.11.4 (PEP 706). Refuse to extract without it rather than
+    # extracting unsafely.
+    if not hasattr(tarfile, "data_filter"):
+        grass.fatal(_("Extracting may be unsafe; upgrade Python to 3.11.4 or newer"))
+    tar.extractall(filter="data")
     tar.close()
     os.chdir(data_names[0])
 
-    if os.path.exists("cell"):
+    if Path("cell").exists():
         pass
-    elif os.path.exists("coor"):
+    elif Path("coor").exists():
         grass.fatal(
             _(
                 "This GRASS pack file contains vector data. Use "
@@ -146,8 +140,8 @@ def main():
         proj_info_file_2 = os.path.join(mset_dir, "..", "PERMANENT", "PROJ_INFO")
 
         skip_projection_check = False
-        if not os.path.exists(proj_info_file_1):
-            if os.path.exists(proj_info_file_2):
+        if not Path(proj_info_file_1).exists():
+            if Path(proj_info_file_2).exists():
                 grass.fatal(
                     _(
                         "PROJ_INFO file is missing, unpack raster map in XY "
@@ -203,12 +197,11 @@ def main():
 
         for element in ["cats", "cell", "cellhd", "cell_misc", "colr", "fcell", "hist"]:
             src_path = os.path.join(tmp_dir, data, element)
-            if not os.path.exists(src_path):
+            if not Path(src_path).exists():
                 continue
 
             path = os.path.join(mset_dir, element)
-            if not os.path.exists(path):
-                os.mkdir(path)
+            Path(path).mkdir(exist_ok=True)
 
             if element == "cell_misc":
                 if index > 0:
@@ -227,7 +220,7 @@ def main():
                 if index == 0:
                     vrt_file = os.path.join(path, "vrt")
 
-                if os.path.exists(path):
+                if Path(path).exists():
                     shutil.rmtree(path)
                 shutil.copytree(src_path, path)
             else:
@@ -238,7 +231,7 @@ def main():
 
     # Update vrt file
     if maps:
-        if vrt_file and os.path.exists(vrt_file):
+        if vrt_file and Path(vrt_file).exists():
             files = "\n".join(maps)
             Path(vrt_file).write_text(files)
 

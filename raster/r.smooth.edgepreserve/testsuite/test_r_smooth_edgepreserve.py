@@ -10,7 +10,7 @@ Licence:   This program is free software under the GNU General Public
 """
 
 import os
-import pathlib
+from pathlib import Path
 
 from grass.script.core import tempname
 from grass.script.raster import raster_info
@@ -31,7 +31,7 @@ class SmoothingTest(TestCase):
         cls.use_temp_region()
         cls.runModule("g.region", n=10, s=0, e=10, w=0, res=1)
 
-        cls.data_dir = os.path.join(pathlib.Path(__file__).parent.absolute(), "data")
+        cls.data_dir = os.path.join(Path(__file__).parent.absolute(), "data")
         cls.rm_rast = []
 
         cls.in_map_i = tempname(10)
@@ -109,7 +109,7 @@ class SmoothingTest(TestCase):
             function="exp",
             quiet=True,
         )
-        self.assertTrue(raster_info(out_map_i)["datatype"] == "CELL")
+        self.assertEqual(raster_info(out_map_i)["datatype"], "CELL")
         self.assertRastersEqual(out_map_i, self.ref_exp_i)
 
     def test_exp_f_ram(self):
@@ -132,7 +132,7 @@ class SmoothingTest(TestCase):
             function="exp",
             quiet=True,
         )
-        self.assertTrue(raster_info(out_map_f)["datatype"] == "FCELL")
+        self.assertEqual(raster_info(out_map_f)["datatype"], "FCELL")
         self.assertRastersEqual(out_map_f, self.ref_exp_f, precision=0.1)
 
     def test_exp_d_ram(self):
@@ -155,7 +155,7 @@ class SmoothingTest(TestCase):
             function="exp",
             quiet=True,
         )
-        self.assertTrue(raster_info(out_map_d)["datatype"] == "DCELL")
+        self.assertEqual(raster_info(out_map_d)["datatype"], "DCELL")
         self.assertRastersEqual(out_map_d, self.ref_exp_f, precision=0.1)
 
     def test_quad_ram(self):

@@ -1,6 +1,8 @@
+import os
 import re
-import pytest
 import io
+
+import pytest
 
 import grass.script as gs
 import grass.exceptions
@@ -22,7 +24,7 @@ def simple_vector_map(tmp_path_factory):
     project = tmp_path / "grassdata"
     gs.create_project(project)
 
-    with gs.setup.init(project) as session:
+    with gs.setup.init(project, env=os.environ.copy()) as session:
         tools = Tools(session=session)
         tools.g_region(n=10, s=0, e=10, w=0, res=1)
 
@@ -54,21 +56,20 @@ def test_color_by_category(simple_vector_map):
     tools.v_colors(map=mapname, use="cat", color="blues")
     rules = tools.v_colors_out(map=mapname, format="json")
 
-    values = [rule["value"] for rule in rules]
-    assert any(isinstance(v, int) for v in values), (
-        "Expected at least one numeric category in color rules, found none."
-    )
-    assert "default" in values, (
-        "Expected 'default' category in color rules, but not found."
-    )
-    assert "nv" in values, (
-        "Expected 'nv' (null value) category in color rules, but not found."
-    )
+    assert len(rules["table"])
+    assert "default" in rules
+    assert "nv" in rules
 
-    for c in [rule["color"] for rule in rules]:
+    for c in [rule["color"] for rule in rules["table"]]:
         assert re.match(r"^#[0-9A-Fa-f]{6}$", c), (
             f"Invalid hex RGB color format detected: {c}"
         )
+    assert re.match(r"^#[0-9A-Fa-f]{6}$", rules["nv"]), (
+        f"Invalid hex RGB color format detected: {rules['nv']}"
+    )
+    assert re.match(r"^#[0-9A-Fa-f]{6}$", rules["default"]), (
+        f"Invalid hex RGB color format detected: {rules['default']}"
+    )
 
 
 def test_color_by_attr_column(simple_vector_map):
@@ -84,12 +85,9 @@ def test_color_by_attr_column(simple_vector_map):
 
     tools.v_colors(map=mapname, use="attr", column="val", color="ryg")
     rules = tools.v_colors_out(map=mapname, format="json")
-    filtered = [r for r in rules if str(r["value"]) not in ("nv", "default")]
 
-    assert len(filtered) >= 3, (
-        f"Expected at least 3 color rules for attributes, found {len(filtered)}."
-    )
-    colors = [r["color"] for r in filtered]
+    assert len(rules["table"]) >= 3
+    colors = [r["color"] for r in rules["table"]]
     assert len(set(colors)) == len(colors), (
         "Duplicate color values found in color rules."
     )

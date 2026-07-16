@@ -225,9 +225,9 @@ def main():
         # calculate percentages
         records4 = [float(r[-1]) * 100 / total for r in records3]
         if isinstance(records1[0], int):
-            records3 = [[r1] + [r4] for r1, r4 in zip(records1, records4)]
+            records3 = [[r1] + [r4] for r1, r4 in zip(records1, records4, strict=False)]
         else:
-            records3 = [r1 + [r4] for r1, r4 in zip(records1, records4)]
+            records3 = [r1 + [r4] for r1, r4 in zip(records1, records4, strict=False)]
 
     # sort results
     if sort:

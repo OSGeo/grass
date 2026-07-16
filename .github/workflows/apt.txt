@@ -8,6 +8,7 @@ libgdal-dev
 libgl1-mesa-dev
 libglu1-mesa-dev
 liblapacke-dev
+libncurses-dev
 libnetcdf-dev
 libpdal-dev
 libpng-dev

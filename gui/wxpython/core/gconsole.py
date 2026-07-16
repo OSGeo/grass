@@ -31,6 +31,7 @@ import queue as Queue
 
 import codecs
 import locale
+from pathlib import Path
 
 import wx
 from wx.lib.newevent import NewEvent
@@ -409,11 +410,7 @@ class GConsole(wx.EvtHandler):
             sys.stdout = self.cmdStdOut
             sys.stderr = self.cmdStdErr
         else:
-            try:
-                # Python >= 3.11
-                enc = locale.getencoding()
-            except AttributeError:
-                enc = locale.getdefaultlocale()[1]
+            enc = locale.getencoding()
             if enc:
                 # https://stackoverflow.com/questions/4374455/how-to-set-sys-stdout-encoding-in-python-3
                 sys.stdout = codecs.getwriter(enc)(sys.__stdout__.detach())
@@ -607,11 +604,11 @@ class GConsole(wx.EvtHandler):
                     if sys.platform == "win32":
                         pyFile += ".py"
                     pyPath = os.path.join(os.environ["GISBASE"], "scripts", pyFile)
-                    if not os.path.exists(pyPath):
+                    if not Path(pyPath).exists():
                         pyPath = os.path.join(
                             os.environ["GRASS_ADDON_BASE"], "scripts", pyFile
                         )
-                    if not os.path.exists(pyPath):
+                    if not Path(pyPath).exists():
                         GError(
                             parent=self._guiparent,
                             message=_("Module <%s> not found.") % command[0],

@@ -28,7 +28,7 @@ class TestIAlbedo(TestCase):
             "aster": [f"test_b{i}" for i in [1, 3, 5, 6, 8, 9]],
         }.get(sensor)
         values = values or [0.1 * (i + 1) for i in range(len(bands))]
-        for band, value in zip(bands, values):
+        for band, value in zip(bands, values, strict=True):
             self.runModule("r.mapcalc", expression=f"{band} = {value}", overwrite=True)
         return bands
 

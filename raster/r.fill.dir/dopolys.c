@@ -53,7 +53,11 @@ int dopolys(int fd, int fm, int nl, int ns)
 
     found = 0;
 
-    lseek(fd, bufsz, SEEK_SET);
+    if (lseek(fd, bufsz, SEEK_SET) == -1) {
+        int err = errno;
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+    }
     for (i = 1; i < nl - 1; i += 1) {
         if (read(fd, dir, bufsz) < 0)
             G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
@@ -91,7 +95,11 @@ int dopolys(int fd, int fm, int nl, int ns)
               flag);
 
     /* Compose a new raster map to contain the resulting assignments */
-    lseek(fm, 0, SEEK_SET);
+    if (lseek(fm, 0, SEEK_SET) == -1) {
+        int err = errno;
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+    }
     cnt = 0;
     for (i = 0; i < nl; i += 1) {
         for (j = 0; j < ns; j += 1)

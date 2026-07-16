@@ -67,6 +67,7 @@ class TestModulesFromDifferentSources(TestCase):
     files = [
         os.path.join(install_prefix, "scripts", "r.plus.example"),
         os.path.join(install_prefix, "docs", "html", "r.plus.example.html"),
+        os.path.join(install_prefix, "docs", "mkdocs", "source", "r.plus.example.md"),
     ]
     # to create archives from the source, the following was used:
     # zip r.plus.example.zip r.plus.example/*
@@ -76,7 +77,7 @@ class TestModulesFromDifferentSources(TestCase):
 
     def setUp(self):
         """Make sure we are not dealing with some old files"""
-        if os.path.exists(self.install_prefix):
+        if Path(self.install_prefix).exists():
             files = [p.name for p in Path(self.install_prefix).iterdir()]
             if files:
                 msg = "Install prefix path '{}' contains files {}".format(

@@ -4,10 +4,16 @@ Created on Tue Apr  2 18:31:47 2013
 @author: pietro
 """
 
+from __future__ import annotations
 import re
+from typing import TYPE_CHECKING
+
 
 from grass.pygrass.modules.interface.docstring import docstring_property
 from grass.pygrass.modules.interface.read import GETTYPE, element2dict, DOC
+
+if TYPE_CHECKING:
+    from xml.etree.ElementTree import Element
 
 
 def _check_value(param, value):
@@ -31,7 +37,7 @@ def _check_value(param, value):
     def check_string(value):
         """Function to check that a string parameter is already a string"""
         if param.type in string:
-            if type(value) in (int, float):
+            if type(value) in {int, float}:
                 value = str(value)
             if type(value) not in string:
                 msg = "The Parameter <%s> require a string, %s instead is provided: %r"
@@ -153,7 +159,11 @@ class Parameter:
     ...
     """  # noqa: E501
 
-    def __init__(self, xparameter=None, diz=None):
+    def __init__(
+        self,
+        xparameter: Element[str] | None = None,
+        diz: dict[str, str | bool | float | list | tuple | None] | None = None,
+    ):
         self._value = None
         self._rawvalue = None
         self.min = None
@@ -201,7 +211,7 @@ class Parameter:
         #
         # default
         #
-        if "default" in diz and diz["default"]:
+        if diz.get("default"):
             if self.multiple or self.keydescvalues:
                 self.default = [self.type(v) for v in diz["default"].split(",")]
             else:
@@ -214,7 +224,7 @@ class Parameter:
         #
         # gisprompt
         #
-        if "gisprompt" in diz and diz["gisprompt"]:
+        if diz.get("gisprompt"):
             self.typedesc = diz["gisprompt"].get("prompt", "")
             self.input = diz["gisprompt"]["age"] != "new"
         else:

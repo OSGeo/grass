@@ -38,5 +38,6 @@ build_module(
   ${LIBM})
 
 if(TARGET PostgreSQL::PostgreSQL)
-  target_include_directories(grass_dig2 PUBLIC ${PostgreSQL_INCLUDE_DIR})
+  target_include_directories(grass_dig2
+    PUBLIC $<TARGET_PROPERTY:PostgreSQL::PostgreSQL,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()

@@ -66,7 +66,7 @@ class TestIRectify(TestCase):
         cls.group_path = os.path.join(
             env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"], "group", cls.group
         )
-        os.makedirs(cls.group_path, exist_ok=True)
+        Path(cls.group_path).mkdir(exist_ok=True, parents=True)
         cls.points_path = os.path.join(cls.group_path, "POINTS")
         cls.runModule(
             "i.target",
@@ -90,10 +90,10 @@ class TestIRectify(TestCase):
         """Remove input rasters, group, and temporary files."""
         cls.runModule("g.remove", type="raster", name=cls.tmp_rasters, flags="f")
         cls.runModule("g.remove", type="group", name=cls.group, flags="f")
-        if os.path.exists(cls.points_path):
+        if Path(cls.points_path).exists():
             os.remove(cls.points_path)
         for f in cls.tmp_files:
-            if os.path.exists(f):
+            if Path(f).exists():
                 os.remove(f)
 
     def _run_and_check(

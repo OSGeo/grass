@@ -1,3 +1,4 @@
+<!-- markdownlint-disable-file line-length -->
 # RFC 3: PSC Voting Procedures
 
 Author: [GRASS PSC](https://trac.osgeo.org/grass/wiki/PSC)

@@ -3,6 +3,9 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <string.h>
+#include <errno.h>
+
 #include <grass/raster3d.h>
 #include <grass/glocale.h>
 #include "raster3d_intern.h"
@@ -295,6 +298,12 @@ void *Rast3d_open_cell_new(const char *name, int typeIntern, int cache,
 
     /* can't use a constant since this depends on sizeof (long) */
     nofHeaderBytes = lseek(map->data_fd, (long)0, SEEK_CUR);
+    if (nofHeaderBytes == -1) {
+        int err = errno;
+        Rast3d_error(_("File read/write operation failed: %s (%d)"),
+                     strerror(err), err);
+        return (void *)NULL;
+    }
 
     Rast3d_range_init(map);
     Rast3d_adjust_region(region);

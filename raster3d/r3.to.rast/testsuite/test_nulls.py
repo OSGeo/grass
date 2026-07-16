@@ -164,7 +164,7 @@ class TestR3ToRastNulls(TestCase):
         # check the actual values
         # TODO: this does not check the position of nulls
         # (it ignores nulls)
-        for rast_ref, rast in zip(self.rast2d_refs, rasts):
+        for rast_ref, rast in zip(self.rast2d_refs, rasts, strict=True):
             self.assertRastersNoDifference(
                 actual=rast, reference=rast_ref, precision=0.1
             )

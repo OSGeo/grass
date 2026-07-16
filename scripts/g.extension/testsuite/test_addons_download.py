@@ -23,7 +23,10 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 from grass.gunittest.main import test
 from grass.gunittest.utils import silent_rmtree
+from grass.app.runtime import RuntimePaths
 
+runtime_paths = RuntimePaths()
+is_cmake = runtime_paths.is_cmake_build
 ms_windows = sys.platform == "win32" or sys.platform == "cygwin"
 
 
@@ -40,6 +43,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
     files = [
         install_prefix / "scripts" / "r.example.plus",
         install_prefix / "docs" / "html" / "r.example.plus.html",
+        install_prefix / "docs" / "mkdocs" / "source" / "r.example.plus.md",
     ]
 
     request_headers = {
@@ -59,6 +63,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         """Remove created files"""
         silent_rmtree(str(self.install_prefix))
 
+    @unittest.skipIf(is_cmake, "currently not supported by CMake build")
     @unittest.skipIf(ms_windows, "currently not supported on MS Windows")
     def test_github_install(self):
         """Test installing extension from github"""
@@ -73,9 +78,10 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 
         for file in self.files:
             self.assertFileExists(file)
-            if file.suffix != ".html":
+            if file.suffix not in {".html", ".md"}:
                 self.assertModule(str(file), help=True)
 
+    @unittest.skipIf(is_cmake, "currently not supported by CMake build")
     @unittest.skipIf(ms_windows, "currently not supported on MS Windows")
     def test_gitlab_install(self):
         """Test installing extension from gitlab"""
@@ -88,7 +94,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 
         for file in self.files:
             self.assertFileExists(file)
-            if file.suffix != ".html":
+            if file.suffix not in {".html", ".md"}:
                 self.assertModule(str(file), help=True)
 
     @unittest.skipIf(ms_windows, "currently not supported on MS Windows")
@@ -97,6 +103,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         files = [
             self.install_prefix / "scripts" / "r.sim.stats",
             self.install_prefix / "docs" / "html" / "r.sim.stats.html",
+            self.install_prefix / "docs" / "mkdocs" / "source" / "r.sim.stats.md",
         ]
         self.assertModule(
             "g.extension",
@@ -107,13 +114,14 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 
         for file in files:
             self.assertFileExists(file)
-            if file.suffix != ".html":
+            if file.suffix not in {".html", ".md"}:
                 self.assertModule(str(file), help=True)
 
     def test_github_install_official(self):
         """Test installing C-extension from official addons repository"""
         files = [
             self.install_prefix / "docs" / "html" / "r.gdd.html",
+            self.install_prefix / "docs" / "mkdocs" / "source" / "r.gdd.md",
         ]
         if ms_windows:
             files.append(self.install_prefix / "bin" / "r.gdd.exe")
@@ -126,7 +134,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 
         for file in files:
             self.assertFileExists(file)
-            if file.suffix != ".html":
+            if file.suffix not in {".html", ".md"}:
                 self.assertModule(str(file), help=True)
 
     def test_github_install_official_multimodule(self):
@@ -134,6 +142,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         files = [
             self.install_prefix / "docs" / "html" / "i.sentinel.parallel.download.html",
             self.install_prefix / "docs" / "html" / "i.sentinel.import.html",
+            self.install_prefix / "docs" / "mkdocs" / "source" / "i.sentinel.import.md",
         ]
         if ms_windows:
             files.extend(
@@ -158,7 +167,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 
         for file in files:
             self.assertFileExists(file)
-            if file.suffix not in {".html", ".py"}:
+            if file.suffix not in {".html", ".md", ".py"}:
                 self.assertModule(str(file), help=True)
 
     def test_github_install_official_non_exists_module(self):

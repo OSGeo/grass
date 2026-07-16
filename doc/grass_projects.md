@@ -82,7 +82,8 @@ GRASS projects can be created from several types of information:
 - Use a georeferenced raster or vector file (e.g. GeoTiff or GeoPackage)
   to define the project's CRS automatically.
 
-- Create a generic cartesian system (X, Y) for simulations or non-georeferenced data.
+- Create a generic cartesian system (X, Y) for simulations
+  or non-georeferenced data.
 
 - Specify CRS using a WKT or a PROJ.4 string.
 

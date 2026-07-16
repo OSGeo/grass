@@ -14,11 +14,11 @@
 
         {% if "content.action.view" in features %}
             {% if "/blob/" in custom_edit_url %}
-                {% set part = "blob" %}
+                {% set part = "/blob/" %}
             {% else %}
-                {% set part = "edit" %}
+                {% set part = "/edit/" %}
             {% endif %}
-                <a href="{{ custom_edit_url | replace(part, 'tree') }}" title="{{ lang.t('action.view') }}" class="md-content__button md-icon">
+                <a href="{{ custom_edit_url | replace(part, '/tree/') }}" title="{{ lang.t('action.view') }}" class="md-content__button md-icon">
                     {% set icon = config.theme.icon.view or "material/file-eye-outline" %}
                     {% include ".icons/" ~ icon ~ ".svg" %}
                 </a>
