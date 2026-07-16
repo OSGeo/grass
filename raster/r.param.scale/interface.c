@@ -32,7 +32,8 @@ void interface(int argc, char **argv)
         *parameter,         /* Morphometric parameter to calculate. */
         *expon,             /* Inverse distance exponent for weight. */
         *vert_sc,           /* Vertical scaling factor.             */
-        *nprocs_opt, *mem_opt;
+        *nprocs_opt,        /* Number of threads.                   */
+        *mem_opt;           /* Memory limit in MB.                  */
 
     struct Flag *constr; /* Forces quadratic through the central */
 
@@ -55,6 +56,7 @@ void interface(int argc, char **argv)
     G_add_keyword(_("terrain"));
     G_add_keyword(_("elevation"));
     G_add_keyword(_("landform"));
+    G_add_keyword(_("parallel"));
     module->label = _("Extracts terrain parameters from a DEM.");
     module->description = _("Uses a multi-scale approach"
                             " by taking fitting quadratic parameters to any "

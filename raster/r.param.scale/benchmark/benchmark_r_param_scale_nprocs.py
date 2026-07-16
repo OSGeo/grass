@@ -2,8 +2,6 @@
 raster (2D)
 """
 
-# import os
-
 from grass.exceptions import CalledModuleError, GrassError
 from grass.pygrass.modules import Module
 import grass.benchmark as bm
@@ -19,13 +17,6 @@ METRICS = ["time", "speedup", "efficiency"]
 
 
 def main():
-    # Pin one thread per physical core so threads do not share a core's
-    # hyperthreads. The OpenMP runtime reads these when it initializes in each
-    # r.param.scale subprocess, so they must be set before the first run; the
-    # subprocesses inherit them from this environment.
-    # os.environ["OMP_PROC_BIND"] = "close"
-    # os.environ["OMP_PLACES"] = "cores"
-
     # Sweep raster size at the baseline window and memory.
     results = []
     for mapsize in MAPSIZES:

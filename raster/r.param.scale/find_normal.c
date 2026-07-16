@@ -116,8 +116,8 @@ void find_obs(DCELL *z,    /* Local window of elevs.       */
 
     for (row = 0; row < wsize; row++)
         for (col = 0; col < wsize; col++) {
-            /* w*z reused across all six sums; multiply order is kept */
-            /* identical to the original so the result is unchanged.  */
+            /* w*z is shared by all six sums; the multiplication order
+             * affects rounding of the results. */
             double wz;
 
             offset = row * wsize + col;

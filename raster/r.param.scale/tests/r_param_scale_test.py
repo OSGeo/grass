@@ -5,8 +5,9 @@ deterministic DEM and its univariate statistics are compared against
 reference values captured from the current (main) state. This verifies
 that changes such as the OpenMP parallelization do not change the output.
 
-Plain calls only (no nprocs, no memory), so the test runs identically on
-main, where those options do not exist, and on the parallel branch.
+The reference test runs with nprocs=1 to match the single-threaded
+reference values. The parallel tests compare threaded and banded runs
+against the serial run of the same binary.
 
 Reference provenance: the values below were generated with the main-branch
 r.param.scale binary at OMP_NUM_THREADS=1 (single threaded, so the internal
@@ -180,6 +181,7 @@ def test_param_scale_matches_reference(param_scale_session, method, size):
         "output": output,
         "method": method,
         "size": size,
+        "nprocs": 1,
         "overwrite": True,
     }
     tools.r_param_scale(**kwargs)
@@ -196,3 +198,48 @@ def test_param_scale_matches_reference(param_scale_session, method, size):
     # near-zero curvature outputs (profc/planc/minic) and zero stddev.
     for field in ("min", "max", "mean", "stddev", "sum"):
         assert stats[field] == pytest.approx(reference[field], rel=1e-6, abs=5e-8)
+
+
+@pytest.mark.parametrize("method", ["slope", "feature"])
+@pytest.mark.parametrize("memory", [None, 0])
+def test_parallel_matches_serial(param_scale_session, method, memory):
+    """Threaded (and, with memory=0, banded) runs must match serial exactly."""
+    tools = Tools(session=param_scale_session)
+    serial = f"serial_{method}"
+    tools.r_param_scale(
+        input="dem", output=serial, method=method, size=9, nprocs=1, overwrite=True
+    )
+
+    parallel = f"parallel_{method}_m{memory}"
+    kwargs = {} if memory is None else {"memory": memory}
+    tools.r_param_scale(
+        input="dem",
+        output=parallel,
+        method=method,
+        size=9,
+        nprocs=2,
+        overwrite=True,
+        **kwargs,
+    )
+
+    serial_stats = tools.r_univar(map=serial, format="json")
+    parallel_stats = tools.r_univar(map=parallel, format="json")
+    assert parallel_stats["null_cells"] == serial_stats["null_cells"]
+    assert parallel_stats["n"] == serial_stats["n"]
+
+    diff = f"diff_{parallel}"
+    tools.r_mapcalc(expression=f"{diff} = abs({serial} - {parallel})")
+    diff_stats = tools.r_univar(map=diff, format="json")
+    assert diff_stats["n"] == serial_stats["n"]
+    assert diff_stats["max"] == 0
+
+
+def test_window_taller_than_region(param_scale_session):
+    """A window taller than the region must yield an all-null output."""
+    tools = Tools(session=param_scale_session)
+    tools.r_param_scale(
+        input="dem", output="all_null", method="slope", size=51, overwrite=True
+    )
+    stats = tools.r_univar(map="all_null", format="json")
+    assert stats["n"] == 0
+    assert stats["null_cells"] == 2500
