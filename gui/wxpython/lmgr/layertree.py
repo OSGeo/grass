@@ -88,7 +88,8 @@ LMIcons = {
 
 
 if sys.platform == "darwin":
-
+    # TODO: remove this workaround once a wxPython release ships a wxWidgets
+    # version that includes the fix for wxWidgets/wxWidgets#26380.
     class _MacSafeDragImage(CT.DragImage):
         """Item drag image drawn in a popup window owned by this class.
 
@@ -246,7 +247,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.Bind(wx.EVT_TREE_DELETE_ITEM, self.OnDeleteLayer)
         self.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, self.OnLayerContextMenu)
         self.Bind(wx.EVT_TREE_END_DRAG, self.OnEndDrag)
-        self.Bind(wx.EVT_MOUSE_CAPTURE_LOST, self.OnMouseCaptureLost)
         self.Bind(wx.EVT_TREE_END_LABEL_EDIT, self.OnRenamed)
         self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
@@ -2041,29 +2041,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if vselect:
             vselect.Reset()
         self._preserveScrollPosition()
-
-    def OnMouseCaptureLost(self, event):
-        """Recover from involuntary mouse capture loss during a drag.
-
-        CustomTreeCtrl captures the mouse itself once the drag animation
-        starts (in its DragImage.BeginDrag()), so a normal drag-and-release
-        is already handled correctly even if the button is released outside
-        the tree. But macOS can steal that capture mid-gesture (e.g. the
-        user switches virtual desktops via Mission Control while dragging).
-        When that happens EVT_TREE_END_DRAG never fires, so the drag-image
-        window is never told to end and is orphaned on screen.
-        """
-        if getattr(self, "_isDragging", False):
-            dragImage = getattr(self, "_dragImage", None)
-            if dragImage:
-                try:
-                    dragImage.EndDrag()
-                except AssertionError:
-                    # EndDrag() may itself try to release a capture that is
-                    # already gone; that's fine, we're just forcing cleanup.
-                    pass
-            self._isDragging = False
-            self.StopDragging()
 
     def OnEndDrag(self, event):
         self.StopDragging()
