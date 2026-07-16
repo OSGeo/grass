@@ -362,12 +362,7 @@ def test_import_new_project_pack_format(absolute_strds_session):
 # Bundled test-data import (ported from the gunittest test)
 # ---------------------------------------------------------------------------
 
-_BUNDLED_ARCHIVE = (
-    pathlib.Path(__file__).parent.parent
-    / "testsuite"
-    / "data"
-    / "precip_2000.tar.bzip2"
-)
+_BUNDLED_ARCHIVE = pathlib.Path(__file__).parent / "data" / "precip_2000.tar.bzip2"
 
 
 @pytest.fixture
