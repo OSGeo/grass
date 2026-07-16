@@ -475,10 +475,10 @@ def html_file_preview(filename):
     before = "<pre>"
     after = "</pre>"
     if not Path(filename).is_file():
-        return '<p style="color: red>File %s does not exist</p>' % filename
+        return '<p style="color: red">File %s does not exist</p>' % filename
     size = Path(filename).stat().st_size
     if not size:
-        return '<p style="color: red>File %s is empty</p>' % filename
+        return '<p style="color: red">File %s is empty</p>' % filename
     max_size = 10000
     html = StringIO()
     html.write(before)
@@ -495,7 +495,7 @@ def html_file_preview(filename):
         for line in tail(filename, 50):
             html.write(color_error_line(html_escape(line)))
     else:
-        return '<p style="color: red>File %s is too large to show</p>' % filename
+        return '<p style="color: red">File %s is too large to show</p>' % filename
     html.write(after)
     return html.getvalue()
 
