@@ -11,6 +11,8 @@ add_custom_target(
   COMMAND ${CMAKE_COMMAND} -E make_directory
           ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/icons
   COMMAND ${CMAKE_COMMAND} -E make_directory
+          ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/source/icons
+  COMMAND ${CMAKE_COMMAND} -E make_directory
           ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/images/symbols)
 set_target_properties(make_gui_icons_dirs PROPERTIES FOLDER GUI)
 
@@ -36,7 +38,9 @@ foreach(ICON ${GRASS_ICONS})
   add_custom_command(
     OUTPUT ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/icons/${FILE_NAME}
     COMMAND ${CMAKE_COMMAND} -E copy ${ICON}
-            ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/icons)
+            ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/icons
+    COMMAND ${CMAKE_COMMAND} -E copy ${ICON}
+            ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/source/icons)
   list(APPEND output_icons ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/icons/${FILE_NAME})
 endforeach()
 

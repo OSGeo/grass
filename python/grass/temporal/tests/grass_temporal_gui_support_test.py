@@ -39,7 +39,7 @@ def session_with_stds(tmp_path_factory):
     create_mapset(project / "second")
     create_mapset(project / "plain")
 
-    with gs.setup.init(project / "second") as session:
+    with gs.setup.init(project / "second", env=os.environ.copy()) as session:
         tools = Tools(session=session)
         tools.g_region(n=3, s=0, e=3, w=0, res=1)
         tools.r_mapcalc(expression="other_map = 1")
@@ -47,7 +47,19 @@ def session_with_stds(tmp_path_factory):
         tools.t_create(output="other", type="strds", title="other", description="other")
         tools.t_register(input="other", maps="other_map", start="2020-01-01")
 
-    with gs.setup.init(project) as session:
+    # tgis reads the session from os.environ, so the session has to be
+    # visible there. Mirror it via monkeypatch rather than letting init()
+    # modify the global environment directly, so the environment is restored
+    # for the tests which run after this module. Once tgis accepts env, the
+    # session can be passed explicitly and the mirroring can go away.
+    with (
+        pytest.MonkeyPatch.context() as monkeypatch,
+        gs.setup.init(project, env=os.environ.copy()) as session,
+    ):
+        for key, value in session.env.items():
+            if os.environ.get(key) != value:
+                monkeypatch.setenv(key, value)
+
         tools = Tools(session=session)
         tools.g_region(n=3, s=0, e=3, w=0, res=1)
         for expression in ("a_map = 1", "b_map = 1", "rel_a = 1", "rel_b = 1"):
