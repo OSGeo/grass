@@ -576,7 +576,7 @@ def import_stds(
                 % {"sp": sp.get_new_map_instance(None).get_type(), "id": sp.get_id()},
             )
             sp.delete()
-            sp = sp.get_new_instance(id)
+            sp = sp.get_new_instance(ident)
 
         temporal_type = init_data["temporal_type"]
         semantic_type = init_data["semantic_type"]
