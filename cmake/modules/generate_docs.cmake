@@ -39,7 +39,8 @@ Generate documentation
   Generate documentation files (.html, .md, man page) of <name>, which is a
   source documentation file name without extension. The man page is built
   from the generated Markdown; the HTML pages are generated for the legacy
-  documentation system.
+  documentation system. With MD_ONLY, only the Markdown page is generated
+  (no .html, no man page); it applies only together with TARGET.
 
   Typical use case is, for example:
 

@@ -154,14 +154,15 @@ set_target_properties(copy_mkdocs_files PROPERTIES FOLDER Man)
 
 # Pages in the markdown tree that exist only for the documentation website
 # and have no man page equivalent (WEB_ONLY_MD in man/Makefile). The guides
-# are derived from the doc/ source directories so a newly added guide is
-# excluded automatically; grass_database and projectionintro are reference
-# pages that also ship as man pages.
+# are derived from the doc/ source directories, so a newly added guide is
+# excluded once CMake reconfigures (which adding the guide to
+# doc/CMakeLists.txt triggers anyway); grass_database and projectionintro
+# are reference pages that also ship as man pages.
 set(web_only_pages index keywords development_intro command_line_intro)
 file(GLOB doc_md ${CMAKE_SOURCE_DIR}/doc/*.md
      ${CMAKE_SOURCE_DIR}/doc/development/*.md)
 foreach(doc_file ${doc_md})
-  cmake_path(GET doc_file STEM page_name)
+  cmake_path(GET doc_file STEM LAST_ONLY page_name)
   list(APPEND web_only_pages ${page_name})
 endforeach()
 list(REMOVE_ITEM web_only_pages grass_database projectionintro)
@@ -189,7 +190,9 @@ add_custom_target(
 set_target_properties(build_check PROPERTIES FOLDER Man)
 
 # The MkDocs site is built on demand (requires mkdocs installed), matching
-# the Autotools build-mkdocs and serve-mkdocs targets.
+# the Autotools build-mkdocs and serve-mkdocs targets. Unlike Autotools,
+# the targets depend on build_check so that the markdown tree is generated
+# before the site is rendered.
 # $<SEMICOLON> keeps the ; of &copy; from being parsed as a list separator.
 set(mkdocs_env
     ${CMAKE_COMMAND} -E env
@@ -200,7 +203,7 @@ add_custom_target(
   build-mkdocs
   COMMAND ${mkdocs_env} mkdocs build
   WORKING_DIRECTORY ${mkdocs_dir}
-  DEPENDS copy_mkdocs_files
+  DEPENDS copy_mkdocs_files build_check
   VERBATIM
   COMMENT "Building the MkDocs documentation site")
 set_target_properties(build-mkdocs PROPERTIES FOLDER Man)
@@ -209,7 +212,7 @@ add_custom_target(
   serve-mkdocs
   COMMAND ${mkdocs_env} mkdocs serve
   WORKING_DIRECTORY ${mkdocs_dir}
-  DEPENDS copy_mkdocs_files
+  DEPENDS copy_mkdocs_files build_check
   USES_TERMINAL
   VERBATIM
   COMMENT "Serving the MkDocs documentation site")
