@@ -264,10 +264,13 @@ if(MSVC)
   include_directories("${CMAKE_SOURCE_DIR}/msvc")
 endif()
 
+set(modules_list
+    ""
+    CACHE INTERNAL "list of modules")
+
 add_subdirectory(lib)
 add_subdirectory(python)
 add_subdirectory(utils)
-set(modules_list)
 
 set(ALL_SUBDIRS
     db

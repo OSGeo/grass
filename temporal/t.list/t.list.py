@@ -153,7 +153,7 @@ def main():
                 ).format(num_columns=len(columns_list))
             )
 
-    elif not separator:  # output_format == "plain"
+    elif not separator:
         separator = "|"
 
     # Lazy import and initialize TGIS

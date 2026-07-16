@@ -193,7 +193,7 @@ python ./utils/generate_release_notes.py api releasebranch_8_4 8.3.0 $VERSION
 
 For micro releases (x.y.Z), GitHub API does not give good results because it uses
 PRs while the backports are usually direct commits without PRs.
-The _git log_ command operates on commits, so use use the _log_ backend:
+The _git log_ command operates on commits, so use the _log_ backend:
 
 ```bash
 python ./utils/generate_release_notes.py log releasebranch_8_4 8.4.0 $VERSION
@@ -282,13 +282,13 @@ you can get the same or similar message again using the script
 
 ## Publishing a final release
 
-The published RC releases has the initial release notes (based on locally
+The published RC releases have the initial release notes (based on locally
 auto-generated notes) which need to be refined further:
 
 - add highlights
 - verify that the subsections are well sorted
 
-For the final release, edit these draft release again in order to publish it
+For the final release, edit this draft release again in order to publish it
 using the "Publish release" button.
 
 ## Upload to OSGeo servers
@@ -377,7 +377,7 @@ scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz \
 ssh $USER@$SERVER1 "cd $SERVER1DIR ; rm -f grass-$MAJOR.$MINOR-latest.tar.gz"
 ssh $USER@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.tar.gz grass-$MAJOR.$MINOR-latest.tar.gz"
 ssh $USER@$SERVER1 "cd $SERVER1DIR ; rm -f grass-$MAJOR.$MINOR-latest.md5sum"
-ssh $USER@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.tar.md5sum grass-$MAJOR.$MINOR-latest.md5sum"
+ssh $USER@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.md5sum grass-$MAJOR.$MINOR-latest.md5sum"
 
 # verify
 echo "https://grass.osgeo.org/grass$MAJOR$MINOR/source/"
