@@ -1117,7 +1117,7 @@ class TestsuiteDirReporter:
                     self.total += summary["total"]
 
                     dir_failures += summary["failures"]
-                    dir_errors += summary["failures"]
+                    dir_errors += summary["errors"]
                     dir_skipped += summary["skipped"]
                     dir_successes += summary["successes"]
                     dir_expected_failures += summary["expected_failures"]
