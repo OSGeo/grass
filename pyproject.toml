@@ -265,7 +265,6 @@ ignore = [
     "PLW3201", # bad-dunder-method-name
     "PTH100",  # os-path-abspath
     "PTH101",  # os-chmod
-    "PTH104",  # os-rename
     "PTH106",  # os-rmdir
     "PTH107",  # os-remove
     "PTH108",  # os-unlink
@@ -282,7 +281,6 @@ ignore = [
     "RUF005",  # collection-literal-concatenation
     "RUF012",  # mutable-class-default
     "RUF015",  # unnecessary-iterable-allocation-for-first-element
-    "RUF019",  # unnecessary-key-check
     "RUF050",  # unnecessary-if
     "RUF059",  # unused-unpacked-variable
     "RUF067",  # non-empty-init-module

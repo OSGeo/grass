@@ -217,7 +217,7 @@ def main():
             gs.fatal(_("Unable to unzip file."))
 
     gs.message(_("Converting input file to BIL..."))
-    os.rename(hgtfile, bilfile)
+    Path(hgtfile).rename(bilfile)
 
     north = tile[0]
     ll_latitude = int(tile[1:3])
