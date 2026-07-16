@@ -62,7 +62,7 @@ static void set_optimal_text_size(double text_width, double text_height,
 {
     D_text_size(text_width, text_height);
     D_get_text_box(text, tt, tb, tl, tr);
-    while ((tt - tb) > YTIC_DIST) {
+    while ((*tt - *tb) > YTIC_DIST) {
         text_width *= 0.75;
         text_height *= 0.75;
         D_text_size(text_width, text_height);
@@ -501,7 +501,7 @@ int main(int argc, char **argv)
                                      &rgb_b);
 
             if (ret == 0)
-                G_fatal_error(_("Color <%s> cannot for option %s be parsed"),
+                G_fatal_error(_("Color <%s> for option <%s> cannot be parsed"),
                               point_color2_opt->answer, point_color2_opt->key);
             else if (ret == 2)
                 secondary_color.a = RGBA_COLOR_TRANSPARENT;
@@ -595,7 +595,7 @@ int main(int argc, char **argv)
             }
         }
         else if (num_y_files != i)
-            G_fatal_error(_("Number of widths (%d) is lower then"
+            G_fatal_error(_("Number of widths (%d) is lower than"
                             " the number of files (%d)"),
                           i, num_y_files);
     }
@@ -982,7 +982,7 @@ int main(int argc, char **argv)
                 /* draw a tic-mark number */
 
                 if (scale_y_labels)
-                    snprintf(txt, sizeof(txt), "%f.0",
+                    snprintf(txt, sizeof(txt), "%.0f",
                              (i / tic_unit * y_scale));
                 else
                     snprintf(txt, sizeof(txt), "%d", (i / tic_unit));
