@@ -205,6 +205,33 @@ def test_init_finish_global_functions_runtime_persists(tmp_path):
 
 
 @pytest.mark.usefixtures("mock_no_session")
+def test_init_makes_ctypes_libraries_loadable(tmp_path):
+    """Check that grass.lib imports work after init in the global environment.
+
+    The subprocess is started without the dynamic library search path variable,
+    so importing grass.lib works only if init loads the GRASS libraries
+    into the process.
+    """
+    project = tmp_path / "test"
+    code = f"""
+        import json
+        import grass.script as gs
+
+        gs.create_project(r"{project}")
+        with gs.setup.init(r"{project}"):
+            import grass.lib.gis as libgis
+
+            libgis.G_gisinit("test")
+        print(json.dumps({{"gis_init_worked": True}}))
+    """
+    env = os.environ.copy()
+    env.pop("LD_LIBRARY_PATH", None)
+    env.pop("DYLD_LIBRARY_PATH", None)
+    result = run_in_subprocess(code, tmp_path=tmp_path, env=env)
+    assert result["gis_init_worked"]
+
+
+@pytest.mark.usefixtures("mock_no_session")
 def test_init_finish_global_functions_set_environment(tmp_path):
     """Check that init and finish global functions work with global env.
 

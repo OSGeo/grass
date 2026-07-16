@@ -12,6 +12,7 @@ This is not a stable part of the API. Use at your own risk.
 """
 
 import collections
+import ctypes
 import os
 import shutil
 import subprocess
@@ -327,6 +328,44 @@ def set_dynamic_library_path(variable_name, install_path, env):
     if variable_name not in env:
         env[variable_name] = ""
     env[variable_name] += os.pathsep + os.path.join(install_path, "lib")
+
+
+def preload_dynamic_libraries(install_path):
+    """Load GRASS dynamic libraries into the current process.
+
+    The dynamic linker reads the library search path variable (set by
+    :func:`set_dynamic_library_path`) only at process startup, so setting it
+    in an already running process is not enough for the GRASS libraries to
+    find each other when a library is loaded later, e.g., through
+    :mod:`grass.lib`. Loading the libraries here by their full path works
+    around that because the dynamic linker resolves dependencies of any
+    library loaded later against the already loaded ones.
+
+    Libraries can be loaded only after the libraries they depend on, so
+    loading is repeated until it makes no progress. Libraries which never
+    load, e.g., due to a missing optional system dependency, are silently
+    skipped; importing the corresponding :mod:`grass.lib` module fails
+    either way.
+
+    On Windows, this is not needed because the loading of DLLs is driven by
+    directories from PATH, which is read when the DLL is loaded.
+    """
+    if WINDOWS:
+        return
+    lib_path = Path(install_path) / "lib"
+    remaining = sorted(lib_path.glob("libgrass_*.so")) + sorted(
+        lib_path.glob("libgrass_*.dylib")
+    )
+    while remaining:
+        failed = []
+        for library in remaining:
+            try:
+                ctypes.CDLL(str(library))
+            except OSError:
+                failed.append(library)
+        if len(failed) == len(remaining):
+            break
+        remaining = failed
 
 
 def set_python_path_variable(install_path, env):
