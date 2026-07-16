@@ -118,18 +118,12 @@ def main():
         shutil.rmtree(new_dir, True)
 
     # extract data
-    # Extraction filters were added in Python 3.12,
-    # and backported to 3.8.17, 3.9.17, 3.10.12, and 3.11.4
-    # See https://docs.python.org/3.12/library/tarfile.html#tarfile-extraction-filter
-    # and https://peps.python.org/pep-0706/
-    # In Python 3.12, using `filter=None` triggers a DepreciationWarning,
-    # and in Python 3.14, `filter='data'` will be the default
-    if hasattr(tarfile, "data_filter"):
-        tar.extractall(filter="data")
-    else:
-        # Remove this when no longer needed
-        grass.warning(_("Extracting may be unsafe; consider updating Python"))
-        tar.extractall()
+    # The 'data' extraction filter was added in Python 3.12 and backported to
+    # 3.11.4 (PEP 706). Refuse to extract without it rather than
+    # extracting unsafely.
+    if not hasattr(tarfile, "data_filter"):
+        grass.fatal(_("Extracting may be unsafe; upgrade Python to 3.11.4 or newer"))
+    tar.extractall(filter="data")
     tar.close()
     if Path(data_name, "coor").exists():
         pass
@@ -218,9 +212,9 @@ def main():
         dbln.close()
         # check if dbf or sqlite directory exists
         if dbconn["driver"] == "dbf" and not Path(mset_dir, "dbf").exists():
-            os.mkdir(os.path.join(mset_dir, "dbf"))
+            Path(mset_dir, "dbf").mkdir()
         elif dbconn["driver"] == "sqlite" and not Path(mset_dir, "sqlite").exists():
-            os.mkdir(os.path.join(mset_dir, "sqlite"))
+            Path(mset_dir, "sqlite").mkdir()
         # for each old connection
         for t in dbnlist:
             # it split the line of each connection, to found layer number and key

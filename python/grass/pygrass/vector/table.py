@@ -218,7 +218,7 @@ class Columns:
 
     def __setitem__(self, name, new_type):
         self.cast(name, new_type)
-        self.update_odict(self)
+        self.update_odict()
 
     def __iter__(self):
         return self.odict.__iter__()
@@ -847,8 +847,7 @@ class Link:
                 sqlite3.register_adapter(t, int)
             dbpath = get_path(self.database, self.table_name)
             dbdirpath = os.path.split(dbpath)[0]
-            if not Path(dbdirpath).exists():
-                os.mkdir(dbdirpath)
+            Path(dbdirpath).mkdir(exist_ok=True)
             return sqlite3.connect(dbpath)
         if driver == "pg":
             try:
@@ -857,9 +856,11 @@ class Link:
                 psycopg2.paramstyle = "qmark"
                 db = " ".join(self.database.split(","))
                 return psycopg2.connect(db)
-            except ImportError:
-                er = "You need to install psycopg2 to connect with this table."
-                raise ImportError(er)
+            except ImportError as error:
+                error.add_note(
+                    "You need to install psycopg2 to connect with this table."
+                )
+                raise
 
         str_err = "Driver is not supported yet, pleas use: sqlite or pg"
         raise TypeError(str_err)

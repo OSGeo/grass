@@ -18,8 +18,9 @@ import os
 import shutil
 from pathlib import Path
 
-import grass.script as gs
 import pytest
+
+import grass.script as gs
 from grass.tools import Tools
 
 

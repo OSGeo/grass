@@ -61,6 +61,6 @@ notes:
 
   exclude:
     regexp:
-      - "[Hh]appy [Nn]ew [Yy]ear"
+      - "[Hh]appy [Nn]ew [Yy]ear" # codespell:ignore appy
       - "version: "
       - "RFC: "

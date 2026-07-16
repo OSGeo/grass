@@ -32,12 +32,12 @@ using an increment of one day. Then we shift the time intervals with a
 granularity of 12 hours.
 
 ```sh
-r.mapcalc expression="prec_1 = rand(0, 550)" -s
-r.mapcalc expression="prec_2 = rand(0, 450)" -s
-r.mapcalc expression="prec_3 = rand(0, 320)" -s
-r.mapcalc expression="prec_4 = rand(0, 510)" -s
-r.mapcalc expression="prec_5 = rand(0, 300)" -s
-r.mapcalc expression="prec_6 = rand(0, 650)" -s
+r.mapcalc expression="prec_1 = rand(0, 550)"
+r.mapcalc expression="prec_2 = rand(0, 450)"
+r.mapcalc expression="prec_3 = rand(0, 320)"
+r.mapcalc expression="prec_4 = rand(0, 510)"
+r.mapcalc expression="prec_5 = rand(0, 300)"
+r.mapcalc expression="prec_6 = rand(0, 650)"
 
 t.create type=strds temporaltype=absolute \
          output=precipitation_daily \

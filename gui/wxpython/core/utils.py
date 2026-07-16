@@ -193,7 +193,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None, layerType=None):
             if p == "layer":
                 continue
             dcmd[i] = p + "=" + v
-            if i in mapsets and mapsets[i]:
+            if mapsets.get(i):
                 dcmd[i] += "@" + mapsets[i]
 
         maps = []
@@ -611,8 +611,9 @@ def GetListOfMapsets(dbase, location, selectable=False):
             listOfMapsets += line.split(" ")
     else:
         for mapset in glob.glob(os.path.join(dbase, location, "*")):
-            if os.path.isdir(mapset) and os.path.isfile(
-                os.path.join(dbase, location, mapset, "WIND")
+            if (
+                Path(mapset).is_dir()
+                and Path(dbase, location, mapset, "WIND").is_file()
             ):
                 listOfMapsets.append(os.path.basename(mapset))
 

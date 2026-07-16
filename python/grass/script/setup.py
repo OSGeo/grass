@@ -65,7 +65,7 @@ and session without using grassXY.
     session.finish()
 
 
-(C) 2010-2025 by the GRASS Development Team
+(C) 2010-2026 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -148,7 +148,7 @@ def get_install_path(path: str | Path | None = None) -> str:
         ).stdout.strip()
 
     # Directory was provided as a parameter.
-    if path and os.path.isdir(path):
+    if path and Path(path).is_dir():
         return os.fspath(path)
 
     # Executable was provided as parameter.
@@ -156,12 +156,12 @@ def get_install_path(path: str | Path | None = None) -> str:
         # The path was provided by the user and it is an executable
         # (on path or provided with full path), so raise exception on failure.
         path_from_executable = ask_executable(path)
-        if os.path.isdir(path_from_executable):
+        if Path(path_from_executable).is_dir():
             return path_from_executable
 
     # GISBASE is set from the outside or already set.
     env_gisbase = os.environ.get("GISBASE")
-    if env_gisbase and os.path.isdir(env_gisbase):
+    if env_gisbase and Path(env_gisbase).is_dir():
         return env_gisbase
 
     # Executable provided in environment (name is from grass-session).
@@ -170,7 +170,7 @@ def get_install_path(path: str | Path | None = None) -> str:
     grass_bin = os.environ.get("GRASSBIN")
     if grass_bin and shutil.which(grass_bin):
         path_from_executable = ask_executable(grass_bin)
-        if os.path.isdir(path_from_executable):
+        if Path(path_from_executable).is_dir():
             return path_from_executable
 
     # Derive the path from path to this file (Python module).
@@ -191,7 +191,7 @@ def get_install_path(path: str | Path | None = None) -> str:
     grass_bin = "grass"
     if grass_bin and shutil.which(grass_bin):
         path_from_executable = ask_executable(grass_bin)
-        if os.path.isdir(path_from_executable):
+        if Path(path_from_executable).is_dir():
             return path_from_executable
 
     # We fallback to whatever was provided. This may help trace the issue
@@ -221,13 +221,17 @@ def setup_runtime_env(gisbase=None, *, env=None):
         RuntimePaths,
     )
 
+    from grass.script.core import sanitize_mapset_environment
+
     # If environment is not provided, use the global one.
     if not env:
         env = os.environ
-
+    # Remove mapset-specific variables that should not leak into the
+    # runtime environment being set up.
+    sanitize_mapset_environment(env)
     runtime_paths = RuntimePaths(env=env, prefix=gisbase)
     gisbase = runtime_paths.gisbase
-    if not os.path.isdir(gisbase):
+    if not Path(gisbase).is_dir():
         gisbase = get_install_path(gisbase)
         # Set the main prefix again.
         # See also the main grass executable code.
@@ -481,7 +485,7 @@ class SessionHandle:
     def __init__(self, *, env, active=True, locked=False):
         self._env = env
         self._active = active
-        self._start_time = datetime.datetime.now(datetime.timezone.utc)
+        self._start_time = datetime.datetime.now(datetime.UTC)
         self._locked = locked
 
     @property
@@ -559,7 +563,7 @@ def clean_default_db(*, modified_after=None, env=None, gis_env=None):
         return
     if modified_after:
         modified_time = datetime.datetime.fromtimestamp(
-            file_stat.st_mtime, tz=datetime.timezone.utc
+            file_stat.st_mtime, tz=datetime.UTC
         )
         if modified_after >= modified_time:
             return

@@ -63,7 +63,7 @@ class TestIClusterWithSyntheticData(TestCase):
             "sig",
             "sig",
         )
-        return os.path.isfile(sig_file_path)
+        return Path(sig_file_path).is_file()
 
     def test_cluster_creation(self):
         """Test the creation of a signature file and validate the number of classes."""
@@ -109,7 +109,7 @@ class TestIClusterWithSyntheticData(TestCase):
             sample=sample_interval,
             overwrite=True,
         )
-        self.assertTrue(os.path.isfile(report_file))
+        self.assertTrue(Path(report_file).is_file())
         content = Path(report_file).read_text()
         expected_cells = (100 // sample_interval[0]) * (100 // sample_interval[1])
         match = re.search(r"Sample size:\s+(\d+)", content)

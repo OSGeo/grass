@@ -45,16 +45,16 @@ function(build_gui_in_subdir dir_name)
       "${OUTDIR}/${GRASS_INSTALL_SCRIPTDIR}/${G_TARGET_NAME}${SCRIPT_EXT}")
 
   if(UNIX)
-  add_custom_command(
-    OUTPUT ${OUT_SCRIPT_FILE}
-    COMMAND ${CMAKE_COMMAND} -E copy ${SRC_SCRIPT_FILE} ${OUT_SCRIPT_FILE}
-    COMMAND /bin/chmod 755 ${OUT_SCRIPT_FILE}
-    DEPENDS g.parser ${SRC_SCRIPT_FILE})
+    add_custom_command(
+      OUTPUT ${OUT_SCRIPT_FILE}
+      COMMAND ${CMAKE_COMMAND} -E copy ${SRC_SCRIPT_FILE} ${OUT_SCRIPT_FILE}
+      COMMAND /bin/chmod 755 ${OUT_SCRIPT_FILE}
+      DEPENDS g.parser ${SRC_SCRIPT_FILE})
   else()
-  add_custom_command(
-    OUTPUT ${OUT_SCRIPT_FILE}
-    COMMAND ${CMAKE_COMMAND} -E copy ${SRC_SCRIPT_FILE} ${OUT_SCRIPT_FILE}
-    DEPENDS g.parser ${SRC_SCRIPT_FILE})
+    add_custom_command(
+      OUTPUT ${OUT_SCRIPT_FILE}
+      COMMAND ${CMAKE_COMMAND} -E copy ${SRC_SCRIPT_FILE} ${OUT_SCRIPT_FILE}
+      DEPENDS g.parser ${SRC_SCRIPT_FILE})
   endif()
 
   if(WITH_DOCS)
@@ -81,47 +81,25 @@ function(build_gui_in_subdir dir_name)
       endif()
     endif()
 
-    set(TMP_HTML_FILE
-        ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${G_TARGET_NAME}.tmp.html)
-    set(OUT_HTML_FILE ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${G_TARGET_NAME}.html)
-    set(GUI_HTML_FILE ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/wxGUI.${G_NAME}.html)
+    set(out_html_file ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${G_TARGET_NAME}.html)
 
-
-    add_custom_command(
-      OUTPUT ${OUT_HTML_FILE}
-      COMMAND ${CMAKE_COMMAND} -E copy ${G_SRC_DIR}/${G_TARGET_NAME}.html
-              ${CMAKE_CURRENT_BINARY_DIR}/${G_TARGET_NAME}.html
-      COMMAND
-        ${grass_env_command} ${PYTHON_EXECUTABLE}
-        ${OUTDIR}/${GRASS_INSTALL_SCRIPTDIR}/${G_TARGET_NAME}${SCRIPT_EXT}
-        --html-description < ${NULL_DEVICE} | ${SEARCH_COMMAND}
-        ${HTML_SEARCH_STR} > ${TMP_HTML_FILE}
-      COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${MKHTML_PY}
-              ${G_TARGET_NAME} ${GRASS_VERSION_DATE} > ${OUT_HTML_FILE}
-      COMMENT "Creating ${OUT_HTML_FILE}"
-      COMMAND ${copy_images_command}
-      COMMAND ${CMAKE_COMMAND} -E remove ${TMP_HTML_FILE}
-              ${CMAKE_CURRENT_BINARY_DIR}/${G_TARGET_NAME}.html
-      COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${MKHTML_PY}
-              ${G_TARGET_NAME} ${GRASS_VERSION_DATE} > ${GUI_HTML_FILE}
-      COMMENT "Creating ${GUI_HTML_FILE}"
+    generate_docs(${G_NAME}
+      OUTPUT ${out_html_file}
+      GUI_TARGET_NAME ${G_TARGET_NAME}
+      SOURCEDIR ${G_SRC_DIR}
       DEPENDS ${OUT_SCRIPT_FILE} GUI_WXPYTHON LIB_PYTHON)
-
-
-    install(FILES ${OUT_HTML_FILE} ${GUI_HTML_FILE}
-            DESTINATION ${GRASS_INSTALL_DOCDIR})
 
   endif() # WITH_DOCS
 
   add_custom_target(
     ${G_TARGET_NAME} DEPENDS ${GUI_STAMP_FILE} ${OUT_SCRIPT_FILE}
-                             ${OUT_HTML_FILE})
+                             ${out_html_file})
 
   set(modules_list
       "${G_TARGET_NAME};${modules_list}"
       CACHE INTERNAL "list of modules")
 
-  set_target_properties(${G_TARGET_NAME} PROPERTIES FOLDER gui)
+  set_target_properties(${G_TARGET_NAME} PROPERTIES FOLDER "Tools/GUI")
 
   if(WIN32)
     install(PROGRAMS ${OUTDIR}/${GRASS_INSTALL_SCRIPTDIR}/${G_TARGET_NAME}.bat

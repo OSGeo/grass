@@ -12,12 +12,12 @@
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
 # Generate data
-r3.mapcalc --o expr="volume_1 = rand(0, 550)" -s
-r3.mapcalc --o expr="volume_2 = rand(0, 450)" -s
-r3.mapcalc --o expr="volume_3 = rand(0, 320)" -s
-r3.mapcalc --o expr="volume_4 = rand(0, 510)" -s
-r3.mapcalc --o expr="volume_5 = rand(0, 300)" -s
-r3.mapcalc --o expr="volume_6 = rand(0, 650)" -s
+r3.mapcalc --o expr="volume_1 = rand(0, 550)"
+r3.mapcalc --o expr="volume_2 = rand(0, 450)"
+r3.mapcalc --o expr="volume_3 = rand(0, 320)"
+r3.mapcalc --o expr="volume_4 = rand(0, 510)"
+r3.mapcalc --o expr="volume_5 = rand(0, 300)"
+r3.mapcalc --o expr="volume_6 = rand(0, 650)"
 
 # The first @test
 # We create the space time raster3d dataset and register the raster3d maps with absolute time interval

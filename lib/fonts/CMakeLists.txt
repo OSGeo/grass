@@ -31,6 +31,7 @@ add_custom_command(
   PRE_BUILD
   COMMAND ${CMAKE_COMMAND} -E make_directory ${OUTDIR}/${GRASS_INSTALL_FONTSDIR}
   BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_FONTSDIR})
+set_target_properties(fonts PROPERTIES FOLDER Misc)
 
 foreach(font_file ${font_files})
   add_custom_command(

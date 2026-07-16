@@ -1,8 +1,7 @@
 ---
+title: ODBC Database Driver
 description: ODBC DATABASE DRIVER
 ---
-
-# ODBC DATABASE DRIVER
 
 Communication between GRASS and ODBC database for attribute management:
 

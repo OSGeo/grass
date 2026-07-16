@@ -330,7 +330,7 @@ r.sim.sediment|flux:sediment_flux
 r.sim.sediment|manin:man
 r.sim.sediment|maninval:man_value
 r.sim.sediment|nwalk:nwalkers
-r.sim.sediment|niter:niterations
+r.sim.sediment|niterations:duration
 r.sim.sediment|outiter:output_step
 r.sim.sediment|outwalk:walkers_output
 r.sim.sediment|tauin:shear_stress
@@ -348,7 +348,7 @@ r.sim.water|infil:infil
 r.sim.water|infil_val:infil_value
 r.sim.water|manin:man
 r.sim.water|manin_val:man_value
-r.sim.water|niter:niterations
+r.sim.water|niterations:duration
 r.sim.water|nwalk:nwalkers
 r.sim.water|outiter:output_step
 r.sim.water|outwalk:walkers_output

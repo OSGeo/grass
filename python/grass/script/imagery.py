@@ -146,7 +146,7 @@ def group_to_dict(
                 _(
                     "Key {k} from raster map {m} already present in group dictionary."
                     "Overwriting existing entry..."
-                ).format(k=key, r=raster_map)
+                ).format(k=key, m=raster_map)
             )
         group_dict[key] = val
     return group_dict

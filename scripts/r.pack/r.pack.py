@@ -126,7 +126,7 @@ def main():
         path = os.path.join(basedir, element, infile)
         if Path(path).exists():
             grass.debug("copying %s" % path)
-            if os.path.isfile(path):
+            if Path(path).is_file():
                 shutil.copyfile(
                     path,
                     os.path.join(tmp_dir, element),
@@ -141,12 +141,11 @@ def main():
         if vrt_files:
             for f, value in vrt_files.items():
                 f_tmp_dir = os.path.join(tmp, f)
-                if not Path(f_tmp_dir).exists():
-                    os.mkdir(f_tmp_dir)
+                Path(f_tmp_dir).mkdir(exist_ok=True)
                 path = os.path.join(value, element, f)
                 if Path(path).exists():
                     grass.debug("copying vrt file {}".format(path))
-                    if os.path.isfile(path):
+                    if Path(path).is_file():
                         shutil.copyfile(
                             path,
                             os.path.join(f_tmp_dir, element),

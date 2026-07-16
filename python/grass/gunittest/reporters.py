@@ -69,7 +69,7 @@ def replace_in_file(file_path, pattern, repl) -> None:
     os.remove(file_path)
     # replace old file by new file
     # TODO: this can fail in some (random) cases on MS Windows
-    os.rename(tmp_file_path, file_path)
+    Path(tmp_file_path).rename(file_path)
 
 
 class NoopFileAnonymizer:
@@ -474,9 +474,9 @@ def wrap_stdstream_to_html(
 def html_file_preview(filename):
     before = "<pre>"
     after = "</pre>"
-    if not os.path.isfile(filename):
+    if not Path(filename).is_file():
         return '<p style="color: red>File %s does not exist</p>' % filename
-    size = os.path.getsize(filename)
+    size = Path(filename).stat().st_size
     if not size:
         return '<p style="color: red>File %s is empty</p>' % filename
     max_size = 10000

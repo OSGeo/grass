@@ -18,7 +18,7 @@
 #               command line options for setting the GISDBASE, LOCATION,
 #               and/or MAPSET. Finally it starts GRASS with the appropriate
 #               user interface and cleans up after it is finished.
-# COPYRIGHT:    (C) 2000-2025 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2026 by the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -57,7 +57,6 @@ import sys
 import tempfile
 import unicodedata
 import uuid
-
 from pathlib import Path
 from typing import TYPE_CHECKING, Literal, NoReturn
 
@@ -73,11 +72,7 @@ _WXPYTHON_BASE = None
 
 GISBASE = None
 
-try:
-    # Python >= 3.11
-    ENCODING = locale.getencoding()
-except AttributeError:
-    ENCODING = locale.getdefaultlocale()[1]
+ENCODING = locale.getencoding()
 if ENCODING is None:
     ENCODING = "UTF-8"
     print("Default locale not found, using UTF-8")  # intentionally not translatable
@@ -382,17 +377,30 @@ def create_grass_config_dir() -> str:
     except (RuntimeError, NotADirectoryError) as e:
         fatal(f"{e}")
 
-    if not os.path.isdir(directory):
+    if not Path(directory).is_dir():
         try:
-            os.makedirs(directory)
+            Path(directory).mkdir(parents=True)
         except OSError as e:
             # Can happen as a race condition
-            if e.errno != errno.EEXIST or not os.path.isdir(directory):
+            if e.errno != errno.EEXIST or not Path(directory).is_dir():
                 fatal(
                     _(
                         "Failed to create configuration directory '{}' with error: {}"
                     ).format(directory, e.strerror)
                 )
+        # TODO: remove with next major or minor release after GRASS 8.5 (8.6 or 9.0)
+        if MACOS:
+            old_mac_dir = os.path.join(
+                os.getenv("HOME"), f".grass{GRASS_VERSION_MAJOR}"
+            )
+            if Path(old_mac_dir).is_dir():
+                try:
+                    shutil.copy(os.path.join(old_mac_dir, "rc"), directory)
+                    shutil.copy(os.path.join(old_mac_dir, "wx.json"), directory)
+                    shutil.copytree(os.path.join(old_mac_dir, "toolboxes"), directory)
+                except Exception:
+                    pass
+
     return directory
 
 
@@ -415,7 +423,7 @@ def create_tmp(user, gis_lock) -> str:
     if tmp:
         tmpdir = os.path.join(tmp, tmpdir_name)
         try:
-            os.mkdir(tmpdir, 0o700)
+            Path(tmpdir).mkdir(mode=0o700)
         except:  # noqa: E722
             tmp = None
 
@@ -424,7 +432,7 @@ def create_tmp(user, gis_lock) -> str:
             tmp = ttmp
             tmpdir = os.path.join(tmp, tmpdir_name)
             try:
-                os.mkdir(tmpdir, 0o700)
+                Path(tmpdir).mkdir(mode=0o700)
             except:  # noqa: E722
                 tmp = None
             if tmp:
@@ -697,11 +705,11 @@ def cannot_create_location_reason(gisdbase: StrPath, location: str) -> str:
             " the project <{location}>"
             " already exists."
         ).format(**locals())
-    if os.path.isfile(path):
+    if Path(path).is_file():
         return _(
             "Unable to create new project <{location}> because <{path}> is a file."
         ).format(**locals())
-    if os.path.isdir(path):
+    if Path(path).is_dir():
         return _(
             "Unable to create new project <{location}> because"
             " the directory <{path}>"
@@ -843,7 +851,7 @@ def set_mapset(
             else:
                 # 'location_name' is a valid GRASS location,
                 # create new mapset
-                if os.path.isfile(path):
+                if Path(path).is_file():
                     # not a valid mapset, but dir exists, assuming
                     # broken/incomplete mapset
                     fatal(
@@ -852,7 +860,7 @@ def set_mapset(
                             " because <{path}> is a file."
                         ).format(mapset=mapset, path=path)
                     )
-                elif os.path.isdir(path):
+                elif Path(path).is_dir():
                     # not a valid mapset, but dir exists, assuming
                     # broken/incomplete mapset
                     warning(
@@ -875,7 +883,7 @@ def set_mapset(
                     if not tmp_mapset:
                         message(_("Creating new GRASS mapset <{}>...").format(mapset))
                     # create mapset directory
-                    os.mkdir(path)
+                    Path(path).mkdir()
                     if tmp_mapset:
                         # The tmp location is handled by (re-)using the
                         # tmpdir, but we need to take care of the tmp
@@ -1085,11 +1093,7 @@ def set_language(grass_config_dir: StrPath) -> None:
                 "Default locale settings are missing. GRASS running with C locale.\n"
             )
 
-        try:
-            # Python >= 3.11
-            language, encoding = locale.getlocale()
-        except AttributeError:
-            language, encoding = locale.getdefaultlocale()
+        language, encoding = locale.getlocale()
         if not language:
             sys.stderr.write(
                 "Default locale settings are missing. GRASS running with C locale.\n"
@@ -2182,7 +2186,7 @@ def main() -> None:
     GRASS_VERSION_MAJOR = runtime_paths.version_major
     GRASS_VERSION_GIT = runtime_paths.grass_version_git
     gisbase = runtime_paths.gisbase
-    if not os.path.isdir(gisbase):
+    if not Path(gisbase).is_dir():
         gisbase = get_install_path(gisbase)
         # Set the main prefix again.
         # See also grass.script.setup.setup_runtime_env.
@@ -2427,7 +2431,7 @@ def main() -> None:
         fatal(e.args[0])
         sys.exit(_("Exiting..."))
 
-    start_time = datetime.datetime.now(datetime.timezone.utc)
+    start_time = datetime.datetime.now(datetime.UTC)
 
     # unlock the mapset which is current at the time of turning off
     # in case mapset was changed

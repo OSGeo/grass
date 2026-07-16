@@ -23,11 +23,9 @@
 #include <grass/glocale.h>
 #include <grass/config.h>
 
-#ifdef HAVE_OGR
 #include <gdal.h>
 #include <ogr_api.h>
 #include <cpl_csv.h>
-#endif
 
 #include "local_proto.h"
 
@@ -82,7 +80,6 @@ static void set_default_region(void)
     return;
 }
 
-#ifdef HAVE_OGR
 static void set_gdal_region(GDALDatasetH);
 static void set_authnamecode(OGRSpatialReferenceH);
 
@@ -134,41 +131,34 @@ int input_wkt(char *wktfile)
 
     projwkt = G_store(buff);
 
-#if PROJ_VERSION_MAJOR >= 6
     /* validate input WKT */
-    {
-        PROJ_STRING_LIST wkt_warnings, wkt_grammar_errors;
-        PJ *obj;
+    PROJ_STRING_LIST wkt_warnings = NULL;
+    PROJ_STRING_LIST wkt_grammar_errors = NULL;
 
-        wkt_warnings = NULL;
-        wkt_grammar_errors = NULL;
-
-        /* no strict validation */
-        obj = proj_create_from_wkt(NULL, buff, NULL, &wkt_warnings,
+    /* no strict validation */
+    PJ *obj = proj_create_from_wkt(NULL, buff, NULL, &wkt_warnings,
                                    &wkt_grammar_errors);
 
-        if (wkt_warnings) {
-            int i;
+    if (wkt_warnings) {
+        int i;
 
-            G_warning(_("WKT validation warnings:"));
-            for (i = 0; wkt_warnings[i]; i++)
-                G_warning("%s", wkt_warnings[i]);
+        G_warning(_("WKT validation warnings:"));
+        for (i = 0; wkt_warnings[i]; i++)
+            G_warning("%s", wkt_warnings[i]);
 
-            proj_string_list_destroy(wkt_warnings);
-        }
-
-        if (wkt_grammar_errors) {
-            int i;
-
-            G_warning(_("WKT validation grammar errors:"));
-            for (i = 0; wkt_grammar_errors[i]; i++)
-                G_warning("%s", wkt_grammar_errors[i]);
-
-            proj_string_list_destroy(wkt_grammar_errors);
-        }
-        proj_destroy(obj);
+        proj_string_list_destroy(wkt_warnings);
     }
-#endif
+
+    if (wkt_grammar_errors) {
+        int i;
+
+        G_warning(_("WKT validation grammar errors:"));
+        for (i = 0; wkt_grammar_errors[i]; i++)
+            G_warning("%s", wkt_grammar_errors[i]);
+
+        proj_string_list_destroy(wkt_grammar_errors);
+    }
+    proj_destroy(obj);
 
     /* get GRASS proj info + units */
     /* NOTE: GPJ_wkt_to_grass() converts any WKT version to WKT1 */
@@ -181,16 +171,12 @@ int input_wkt(char *wktfile)
     /* find authname and authcode */
     hSRS = OSRNewSpatialReference(buff);
     /* get clean WKT definition */
-#if GDAL_VERSION_MAJOR >= 3
     papszOptions[0] = G_store("MULTILINE=YES");
     papszOptions[1] = G_store("FORMAT=WKT2");
     papszOptions[2] = NULL;
     OSRExportToWktEx(hSRS, &tmpwkt, (const char **)papszOptions);
     G_free(papszOptions[0]);
     G_free(papszOptions[1]);
-#else
-    OSRExportToPrettyWkt(hSRS, &tmpwkt, FALSE);
-#endif
     G_free(projwkt);
     projwkt = G_store(tmpwkt);
     CPLFree(tmpwkt);
@@ -238,14 +224,10 @@ int input_proj4(char *proj4params)
         }
     }
 
-#if PROJ_VERSION_MAJOR >= 6
     if (!strstr(buff, "+type=crs"))
         G_asprintf(&proj4string, "%s +no_defs +type=crs", buff);
     else
         G_asprintf(&proj4string, "%s +no_defs", buff);
-#else
-    G_asprintf(&proj4string, "%s +no_defs", buff);
-#endif
 
     /* Set finder function for locating OGR csv co-ordinate system tables */
     /* SetCSVFilenameHook(GPJ_set_csv_loc); */
@@ -287,7 +269,6 @@ int input_proj4(char *proj4params)
 
 int input_srid(char *srid)
 {
-#if PROJ_VERSION_MAJOR >= 6
     OGRSpatialReferenceH hSRS;
     int ret = 0;
     char *papszOptions[3];
@@ -323,11 +304,6 @@ int input_srid(char *srid)
 
     set_default_region();
     return ret;
-#else
-    G_fatal_error(_("Input srid requires GDAL 3+ and PROJ 6+"));
-
-    return 0;
-#endif
 }
 
 /**
@@ -369,7 +345,6 @@ int input_epsg(int epsg_num)
     /* srid as AUTHORITY:CODE */
     G_asprintf(&projsrid, "EPSG:%s", epsgstr);
 
-#if GDAL_VERSION_MAJOR >= 3
     /* WKT */
     papszOptions[0] = G_store("MULTILINE=YES");
     papszOptions[1] = G_store("FORMAT=WKT2");
@@ -380,7 +355,6 @@ int input_epsg(int epsg_num)
 
     G_free(papszOptions[0]);
     G_free(papszOptions[1]);
-#endif
 
     OSRDestroySpatialReference(hSRS);
 
@@ -410,8 +384,6 @@ int input_epsg(int epsg_num)
 
 int input_georef(char *geofile)
 {
-    /* GDAL >= 3 */
-#if GDAL_VERSION_MAJOR >= 3
     GDALDatasetH hDS = NULL;
     OGRSpatialReferenceH hSRS = NULL;
     int ret = 0;
@@ -499,87 +471,6 @@ int input_georef(char *geofile)
         GDALClose(hDS);
 
     return ret;
-
-    /* GDAL < 3 */
-#else
-    OGRDataSourceH ogr_ds;
-    OGRSpatialReferenceH hSRS;
-    int ret = 0;
-
-    /* Try opening file with OGR first because it doesn't output a
-     * (potentially confusing) error message if it can't open the file */
-    G_debug(1, "Trying to open <%s> with OGR...", geofile);
-    OGRRegisterAll();
-
-    ogr_ds = NULL;
-    hSRS = NULL;
-    /* Try opening with OGR */
-    if ((ogr_ds = OGROpen(geofile, FALSE, NULL)) &&
-        (OGR_DS_GetLayerCount(ogr_ds) > 0)) {
-        OGRLayerH ogr_layer;
-
-        G_debug(1, "...succeeded.");
-        /* Get the first layer */
-        ogr_layer = OGR_DS_GetLayer(ogr_ds, 0);
-        hSRS = OGR_L_GetSpatialRef(ogr_layer);
-        ret = GPJ_osr_to_grass(&cellhd, &projinfo, &projunits, hSRS, 0);
-        OSRExportToWkt(hSRS, &projwkt);
-        set_default_region();
-    }
-    else {
-        /* Try opening with GDAL */
-        GDALDatasetH gdal_ds;
-
-        G_debug(1, "Trying to open with GDAL...");
-        GDALAllRegister();
-
-        if ((gdal_ds = GDALOpen(geofile, GA_ReadOnly))) {
-            char *wktstring;
-
-            G_debug(1, "...succeeded.");
-            /* TODO: change for GDAL 3+ */
-            wktstring = (char *)GDALGetProjectionRef(gdal_ds);
-            projwkt = G_store(wktstring);
-            ret = GPJ_wkt_to_grass(&cellhd, &projinfo, &projunits, projwkt, 0);
-
-            set_gdal_region(gdal_ds);
-            hSRS = OSRNewSpatialReference(projwkt);
-            GDALClose(gdal_ds);
-        }
-        else {
-            int namelen;
-
-            namelen = strlen(geofile);
-            if (namelen > 4 &&
-                G_strcasecmp(geofile + (namelen - 4), ".prj") == 0) {
-                G_warning(_("<%s> is not a GDAL dataset, trying to open it as "
-                            "ESRI WKT"),
-                          geofile);
-
-                return input_wkt(geofile);
-            }
-            else {
-                G_fatal_error(_("Unable to read georeferenced file <%s> using "
-                                "GDAL library"),
-                              geofile);
-            }
-        }
-    }
-
-    if (cellhd.proj == PROJECTION_XY)
-        G_warning(_("Read of file %s was successful, but it did not contain "
-                    "projection information. 'XY (unprojected)' will be used"),
-                  geofile);
-
-    set_authnamecode(hSRS);
-
-    if (ogr_ds)
-        OGR_DS_Destroy(ogr_ds);
-    else
-        OSRDestroySpatialReference(hSRS);
-
-    return ret;
-#endif
 }
 
 /**
@@ -659,5 +550,3 @@ void set_authnamecode(OGRSpatialReferenceH hSRS)
         }
     }
 }
-
-#endif /* HAVE_OGR */

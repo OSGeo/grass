@@ -25,6 +25,7 @@ import os
 import time
 import math
 import sys
+from pathlib import Path
 
 import wx
 
@@ -798,8 +799,8 @@ class BufferedMapWindow(MapWindowBase, Window):
         for overlay in self.Map.GetListOfLayers(ltype="overlay", active=True):
             if (
                 overlay.mapfile is None
-                or not os.path.isfile(overlay.mapfile)
-                or (not os.path.getsize(overlay.mapfile))
+                or not Path(overlay.mapfile).is_file()
+                or (not Path(overlay.mapfile).stat().st_size)
             ):
                 continue
             img = utils.autoCropImageFromFile(overlay.mapfile)
@@ -823,8 +824,8 @@ class BufferedMapWindow(MapWindowBase, Window):
         imgId = 99
         if (
             self.Map.mapfile
-            and os.path.isfile(self.Map.mapfile)
-            and os.path.getsize(self.Map.mapfile)
+            and Path(self.Map.mapfile).is_file()
+            and Path(self.Map.mapfile).stat().st_size
         ):
             img = wx.Image(self.Map.mapfile, wx.BITMAP_TYPE_ANY)
         else:

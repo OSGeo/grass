@@ -64,7 +64,7 @@ Useful links:
 """
 # TODO: This module should be part of imageio (or at least based on)
 
-import os
+from pathlib import Path
 
 try:
     import PIL
@@ -634,7 +634,7 @@ def readGif(filename, asNumpy=True):
         raise RuntimeError(msg)
 
     # Check whether it exists
-    if not os.path.isfile(filename):
+    if not Path(filename).is_file():
         raise OSError("File not found: " + str(filename))
 
     # Load file using PIL

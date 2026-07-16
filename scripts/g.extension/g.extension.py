@@ -173,6 +173,7 @@ else:
 import grass.script as gs
 from grass.script import task as gtask
 from grass.script.utils import try_rmdir
+from grass.app.runtime import RuntimePaths
 
 # temp dir
 REMOVE_TMPDIR = True
@@ -476,7 +477,7 @@ def replace_shebang_win(python_file):
             out_file.write(new_line)
 
     os.remove(python_file)  # remove original
-    os.rename(tmp_name, python_file)  # rename temp to original name
+    Path(tmp_name).rename(python_file)  # rename temp to original name
 
 
 def urlretrieve(url, filename, *args, **kwargs):
@@ -1748,11 +1749,10 @@ def move_extracted_files(extract_dir, target_dir, files):
     if len(files) == 1:
         shutil.copytree(os.path.join(extract_dir, files[0]), target_dir)
     else:
-        if not Path(target_dir).exists():
-            os.mkdir(target_dir)
+        Path(target_dir).mkdir(exist_ok=True)
         for file_name in files:
             actual_file = os.path.join(extract_dir, file_name)
-            if os.path.isdir(actual_file):
+            if Path(actual_file).is_dir():
                 # shutil.copytree() replaced by copy_tree() because
                 # shutil's copytree() fails when subdirectory exists
                 copy_tree(actual_file, os.path.join(target_dir, file_name))
@@ -1808,7 +1808,7 @@ def extract_zip(name, directory, tmpdir):
         # we suppose we can write to parent of the given dir
         # (supposing a tmp dir)
         extract_dir = os.path.join(tmpdir, "extract_dir")
-        os.mkdir(extract_dir)
+        Path(extract_dir).mkdir()
         for subfile in file_list:
             if "__pycache__" in subfile:
                 continue
@@ -1833,21 +1833,14 @@ def extract_tar(name, directory, tmpdir):
     try:
         tar = tarfile.open(name)
         extract_dir = os.path.join(tmpdir, "extract_dir")
-        os.mkdir(extract_dir)
+        Path(extract_dir).mkdir()
 
-        # Extraction filters were added in Python 3.12,
-        # and backported to 3.8.17, 3.9.17, 3.10.12, and 3.11.4
-        # See
-        # https://docs.python.org/3.12/library/tarfile.html#tarfile-extraction-filter
-        # and https://peps.python.org/pep-0706/
-        # In Python 3.12, using `filter=None` triggers a DepreciationWarning,
-        # and in Python 3.14, `filter='data'` will be the default
-        if hasattr(tarfile, "data_filter"):
-            tar.extractall(path=extract_dir, filter="data")
-        else:
-            # Remove this when no longer needed
-            gs.warning(_("Extracting may be unsafe; consider updating Python"))
-            tar.extractall(path=extract_dir)
+        # The 'data' extraction filter was added in Python 3.12 and backported
+        # to 3.11.4 (PEP 706). Refuse to extract without it rather
+        # than extracting unsafely.
+        if not hasattr(tarfile, "data_filter"):
+            gs.fatal(_("Extracting may be unsafe; upgrade Python to 3.11.4 or newer"))
+        tar.extractall(path=extract_dir, filter="data")
 
         files = os.listdir(extract_dir)
         move_extracted_files(extract_dir=extract_dir, target_dir=directory, files=files)
@@ -1948,7 +1941,7 @@ def download_source_code(
                 " Please report this to the grass-user mailing list."
             ).format(source)
         )
-    assert os.path.isdir(directory)
+    assert Path(directory).is_dir()
     return directory, url
 
 
@@ -1971,8 +1964,11 @@ def create_md_if_missing(root_dir):
 
 def install_extension_std_platforms(name, source, url, branch):
     """Install extension on standard platforms"""
-    gisbase = os.getenv("GISBASE")
+    runtime_paths = RuntimePaths()
+    gisbase = runtime_paths.gisbase
     path_to_src_code_message = _("Path to the source code:")
+
+    is_cmake = runtime_paths.is_cmake_build
 
     # to hide non-error messages from subprocesses
     outdev = open(os.devnull, "w") if gs.verbosity() <= 2 else sys.stdout
@@ -1996,22 +1992,42 @@ def install_extension_std_platforms(name, source, url, branch):
     )
     # collect module names
     module_list = []
-    for r, d, f in os.walk(srcdir):
-        for filename in f:
-            if filename == "Makefile":
-                # get the module name: PGM = <module name>
-                with open(os.path.join(r, "Makefile")) as fp:
-                    for line in fp:
-                        if re.match(r"PGM.*.=|PGM=", line):
-                            try:
-                                modulename = line.split("=")[1].strip()
-                                if modulename:
-                                    if modulename not in module_list:
-                                        module_list.append(modulename)
-                                else:
+
+    if is_cmake:
+        for r, d, f in os.walk(srcdir):
+            for filename in f:
+                if filename == "CMakeLists.txt":
+                    # get the module name: project(<module name>)
+                    with open(os.path.join(r, "CMakeLists.txt")) as fp:
+                        for line in fp:
+                            m = re.match(r"project\(\s*(\S+).*\)", line)
+                            if m:
+                                try:
+                                    modulename = m.group(1)
+                                    if modulename:
+                                        if modulename not in module_list:
+                                            module_list.append(modulename)
+                                    else:
+                                        gs.fatal(pgm_not_found_message)
+                                except IndexError:
                                     gs.fatal(pgm_not_found_message)
-                            except IndexError:
-                                gs.fatal(pgm_not_found_message)
+    else:
+        for r, d, f in os.walk(srcdir):
+            for filename in f:
+                if filename == "Makefile":
+                    # get the module name: PGM = <module name>
+                    with open(os.path.join(r, "Makefile")) as fp:
+                        for line in fp:
+                            if re.match(r"PGM.*.=|PGM=", line):
+                                try:
+                                    modulename = line.split("=")[1].strip()
+                                    if modulename:
+                                        if modulename not in module_list:
+                                            module_list.append(modulename)
+                                    else:
+                                        gs.fatal(pgm_not_found_message)
+                                except IndexError:
+                                    gs.fatal(pgm_not_found_message)
 
     # change shebang from python to python3
     pyfiles = []
@@ -2029,42 +2045,99 @@ def install_extension_std_platforms(name, source, url, branch):
                     end="",
                 )
 
-    dirs = {
-        "bin": os.path.join(srcdir, "bin"),
-        "docs": os.path.join(srcdir, "docs"),
-        "html": os.path.join(srcdir, "docs", "html"),
-        "mkdocs": os.path.join(srcdir, "docs", "mkdocs"),
-        "rest": os.path.join(srcdir, "docs", "rest"),
-        "man": os.path.join(srcdir, "docs", "man"),
-        "script": os.path.join(srcdir, "scripts"),
-        # TODO: handle locales also for addons
-        #             'string'  : os.path.join(srcdir, 'locale'),
-        "string": srcdir,
-        "etc": os.path.join(srcdir, "etc"),
-    }
+    if is_cmake:
+        grass_addon_base = options["prefix"]
+        cmake_prefix_path = (
+            ";" + os.getenv("CMAKE_PREFIX_PATH")
+            if os.getenv("CMAKE_PREFIX_PATH")
+            else ""
+        )
+        cmake_module_path = (
+            ";" + os.getenv("CMAKE_MODULE_PATH")
+            if os.getenv("CMAKE_MODULE_PATH")
+            else ""
+        )
+        grass_cmake_prefix_path = (
+            ";" + runtime_paths.grass_cmake_prefix_path
+            if runtime_paths.grass_cmake_prefix_path
+            else ""
+        )
+        g_cmake_config_dir = runtime_paths.grass_cmake_config_dir
+        g_cmake_module_dir = runtime_paths.grass_cmake_module_dir
+        g_c_compiler = os.getenv("CC") or runtime_paths.grass_cmake_c_compiler
+        g_cxx_compiler = os.getenv("CXX") or runtime_paths.grass_cmake_cxx_compiler
 
-    make_cmd = [
-        MAKE,
-        "MODULE_TOPDIR=%s" % gisbase.replace(" ", r"\ "),
-        "RUN_GISRC=%s" % os.environ["GISRC"],
-        "BIN=%s" % dirs["bin"],
-        "HTMLDIR=%s" % dirs["html"],
-        "MDDIR=%s" % dirs["mkdocs"],
-        "RESTDIR=%s" % dirs["rest"],
-        "MANBASEDIR=%s" % dirs["man"],
-        "SCRIPTDIR=%s" % dirs["script"],
-        "STRINGDIR=%s" % dirs["string"],
-        "ETC=%s" % os.path.join(dirs["etc"]),
-        "SOURCE_URL=%s" % url,
-    ]
+        c_prefix_path = (
+            f"{g_cmake_config_dir}{grass_cmake_prefix_path}{cmake_prefix_path}"
+        )
+        c_mod_path = f"{g_cmake_module_dir}{cmake_module_path}"
+        c_compiler = f"-DCMAKE_C_COMPILER={g_c_compiler}" if g_c_compiler else ""
+        cxx_compiler = (
+            f"-DCMAKE_CXX_COMPILER={g_cxx_compiler}" if g_cxx_compiler else ""
+        )
 
-    install_cmd = [
-        MAKE,
-        "MODULE_TOPDIR=%s" % gisbase,
-        "ARCH_DISTDIR=%s" % srcdir,
-        "INST_DIR=%s" % options["prefix"],
-        "install",
-    ]
+        config_cmd = [
+            "cmake",
+            "-B",
+            "build",
+            f"-DCMAKE_PREFIX_PATH={c_prefix_path}",
+            f"-DCMAKE_MODULE_PATH={c_mod_path}",
+            f"-DCMAKE_INSTALL_PREFIX={grass_addon_base}",
+            f"-DPYTHON_EXECUTABLE={sys.executable}",
+            f"-DSOURCE_URL={url}",
+            c_compiler,
+            cxx_compiler,
+        ]
+        make_cmd = [
+            "cmake",
+            "--build",
+            "build",
+            "-v",
+        ]
+        install_cmd = [
+            "cmake",
+            "--install",
+            "build",
+        ]
+        try:
+            shutil.rmtree(os.path.join(srcdir, "build"))
+        except FileNotFoundError:
+            pass
+    else:
+        dirs = {
+            "bin": os.path.join(srcdir, "bin"),
+            "docs": os.path.join(srcdir, "docs"),
+            "html": os.path.join(srcdir, "docs", "html"),
+            "mkdocs": os.path.join(srcdir, "docs", "mkdocs"),
+            "rest": os.path.join(srcdir, "docs", "rest"),
+            "man": os.path.join(srcdir, "docs", "man"),
+            "script": os.path.join(srcdir, "scripts"),
+            # TODO: handle locales also for addons
+            #             'string'  : os.path.join(srcdir, 'locale'),
+            "string": srcdir,
+            "etc": os.path.join(srcdir, "etc"),
+        }
+        make_cmd = [
+            MAKE,
+            "MODULE_TOPDIR=%s" % gisbase.replace(" ", r"\ "),
+            "RUN_GISRC=%s" % os.environ["GISRC"],
+            "BIN=%s" % dirs["bin"],
+            "HTMLDIR=%s" % dirs["html"],
+            "MDDIR=%s" % dirs["mkdocs"],
+            "RESTDIR=%s" % dirs["rest"],
+            "MANBASEDIR=%s" % dirs["man"],
+            "SCRIPTDIR=%s" % dirs["script"],
+            "STRINGDIR=%s" % dirs["string"],
+            "ETC=%s" % os.path.join(dirs["etc"]),
+            "SOURCE_URL=%s" % url,
+        ]
+        install_cmd = [
+            MAKE,
+            "MODULE_TOPDIR=%s" % gisbase,
+            "ARCH_DISTDIR=%s" % srcdir,
+            "INST_DIR=%s" % options["prefix"],
+            "install",
+        ]
 
     if flags["d"]:
         gs.message("\n%s\n" % _("To compile run:"))
@@ -2078,8 +2151,11 @@ def install_extension_std_platforms(name, source, url, branch):
     os.chdir(srcdir)
 
     gs.message(_("Compiling..."))
-    if not Path(gisbase, "include", "Make", "Module.make").exists():
+    if not is_cmake and not Path(gisbase, "include", "Make", "Module.make").exists():
         gs.fatal(_("Please install GRASS development package"))
+
+    if is_cmake and gs.call(config_cmd, stdout=outdev) != 0:
+        gs.fatal(_("Compilation failed, sorry. Please check above error messages."))
 
     if gs.call(make_cmd, stdout=outdev) != 0:
         gs.fatal(_("Compilation failed, sorry. Please check above error messages."))
@@ -2277,17 +2353,18 @@ def remove_extension_std(name, force=False):
         os.path.join(options["prefix"], "bin", name),
         os.path.join(options["prefix"], "scripts", name),
         os.path.join(options["prefix"], "docs", "html", name + ".html"),
+        os.path.join(options["prefix"], "docs", "mkdocs", "source", name + ".md"),
         os.path.join(options["prefix"], "docs", "rest", name + ".txt"),
         os.path.join(options["prefix"], "docs", "man", "man1", name + ".1"),
     ]:
-        if os.path.isfile(fpath):
+        if Path(fpath).is_file():
             gs.verbose(fpath)
             if force:
                 os.remove(fpath)
 
     # remove module libraries under GRASS_ADDONS/etc/{name}/*
     libpath = os.path.join(options["prefix"], "etc", name)
-    if os.path.isdir(libpath):
+    if Path(libpath).is_dir():
         gs.verbose(libpath)
         if force:
             shutil.rmtree(libpath)
@@ -2373,11 +2450,11 @@ def create_dir(path):
 
     NOOP for existing directory.
     """
-    if os.path.isdir(path):
+    if Path(path).is_dir():
         return
 
     try:
-        os.makedirs(path)
+        Path(path).mkdir(parents=True)
     except OSError as error:
         gs.fatal(_("Unable to create '%s': %s") % (path, error))
 
@@ -2388,6 +2465,7 @@ def check_dirs():
     """Ensure that the necessary directories in prefix path exist"""
     create_dir(os.path.join(options["prefix"], "bin"))
     create_dir(os.path.join(options["prefix"], "docs", "html"))
+    create_dir(os.path.join(options["prefix"], "docs", "mkdocs", "source"))
     create_dir(os.path.join(options["prefix"], "docs", "rest"))
     check_style_file("grass_logo.png")
     check_style_file("hamburger_menu.svg")
@@ -2723,7 +2801,7 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
         return "official_fork", url
 
     # Handle local URLs
-    if os.path.isdir(url):
+    if Path(url).is_dir():
         return "dir", os.path.abspath(url)
     if Path(url).exists():
         if url.endswith(".zip"):

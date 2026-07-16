@@ -28,7 +28,7 @@ int I_cluster_sum2(struct Cluster *C)
     G_debug(3, "I_cluster_sum2(npoints=%d,nclasses=%d,nbands=%d)", C->npoints,
             C->nclasses, C->nbands);
 
-    for (class = 0; class < C->nclasses; class ++)
+    for (class = 0; class < C->nclasses; class++)
         for (band = 0; band < C->nbands; band++)
             C->sum2[band][class] = 0;
 

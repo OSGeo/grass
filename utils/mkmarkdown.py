@@ -17,9 +17,9 @@
 #############################################################################
 
 import os
-import sys
-import string
 import re
+import string
+import sys
 import urllib.parse as urlparse
 from pathlib import Path
 
@@ -30,12 +30,12 @@ except ImportError:
     gs = None
 
 from mkdocs import (
-    read_file,
-    get_version_branch,
-    get_last_git_commit,
-    top_dir,
     get_addon_path,
+    get_last_git_commit,
+    get_version_branch,
+    read_file,
     set_proxy,
+    top_dir,
 )
 
 

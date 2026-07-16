@@ -208,7 +208,7 @@ class WorkspaceManager:
                 self.lmgr.SetSize(gxwXml.layerManager["size"])
             if gxwXml.layerManager["cwd"]:
                 self.lmgr.cwdPath = gxwXml.layerManager["cwd"]
-                if os.path.isdir(self.lmgr.cwdPath):
+                if Path(self.lmgr.cwdPath).is_dir():
                     os.chdir(self.lmgr.cwdPath)
 
         #

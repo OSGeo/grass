@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 
 import pytest
@@ -39,4 +38,4 @@ def test_value_not_empty(name):
 def test_value_is_directory(name):
     value = getattr(resource_paths, name)
     assert Path(value).exists()
-    assert os.path.isdir(value)
+    assert Path(value).is_dir()

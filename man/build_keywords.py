@@ -27,10 +27,10 @@ the variable is ignored, but it must be set regardless.
 @author Martin Landa - Markdown support
 """
 
+import glob
 import os
 import re
 import sys
-import glob
 
 from build import (
     grass_version,
