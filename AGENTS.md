@@ -164,8 +164,7 @@ global `os.environ`, and `init()` prepends the GRASS executable paths to
 `PATH` on every call without removing them again, so `PATH` keeps growing for
 the rest of the pytest process. Tests are not isolated from each other:
 pytest runs them in one process, and a later test which copies `os.environ`
-inherits whatever earlier tests left there. On Windows this has broken
-unrelated tools which look up a tool on `PATH` in a subprocess.
+inherits whatever earlier tests left there.
 
 Some APIs, notably `grass.temporal`, still read the session from
 `os.environ` and cannot take an `env`. When a test needs one of those, create
