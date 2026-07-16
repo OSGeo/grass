@@ -3,6 +3,8 @@ set(py_files
   g.html2man/g.html2man.py
   g.html2man/ggroff.py
   g.html2man/ghtml.py
+  g.md2man/g.md2man.py
+  g.md2man/gmd.py
   generate_last_commit_file.py
   mkdocs.py
   mkhtml.py
@@ -65,6 +67,12 @@ add_custom_target(
     ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/ghtml.py
     ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}
   COMMAND
+    ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/g.md2man.py
+    ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}
+  COMMAND
+    ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/gmd.py
+    ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}
+  COMMAND
     ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/mkhtml.py
     ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}
   COMMAND
@@ -79,9 +87,11 @@ set_target_properties(python_doc_utils PROPERTIES FOLDER Docs)
 install(
   PROGRAMS
     ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/g.html2man.py
+    ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/g.md2man.py
     ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/generate_last_commit_file.py
     ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/ggroff.py
     ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/ghtml.py
+    ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/gmd.py
     ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/mkdocs.py
     ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/mkhtml.py
     ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/mkmarkdown.py
