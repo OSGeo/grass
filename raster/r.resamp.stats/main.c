@@ -92,7 +92,7 @@ static void resamp_unweighted(void)
 
     method_fn = menu[method].method;
 
-    values = G_malloc(row_scale * col_scale * sizeof(DCELL));
+    values = G_malloc((size_t)row_scale * col_scale * sizeof(DCELL));
 
     col_map = G_malloc((dst_w.cols + 1) * sizeof(int));
     row_map = G_malloc((dst_w.rows + 1) * sizeof(int));
@@ -164,7 +164,7 @@ static void resamp_weighted(void)
 
     method_fn = menu[method].method_w;
 
-    values = G_malloc(row_scale * col_scale * 2 * sizeof(DCELL));
+    values = G_malloc((size_t)row_scale * col_scale * 2 * sizeof(DCELL));
 
     col_map = G_malloc((dst_w.cols + 1) * sizeof(double));
     row_map = G_malloc((dst_w.rows + 1) * sizeof(double));

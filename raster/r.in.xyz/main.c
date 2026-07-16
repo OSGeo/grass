@@ -858,31 +858,31 @@ int main(int argc, char *argv[])
 
             switch (method) {
             case METHOD_N: /* n is a straight copy */
-                Rast_raster_cpy(raster_row,
-                                n_array +
-                                    (row * cols * Rast_cell_size(CELL_TYPE)),
-                                cols, CELL_TYPE);
+                Rast_raster_cpy(
+                    raster_row,
+                    n_array + ((size_t)row * cols * Rast_cell_size(CELL_TYPE)),
+                    cols, CELL_TYPE);
                 break;
 
             case METHOD_MIN:
-                Rast_raster_cpy(raster_row,
-                                min_array +
-                                    (row * cols * Rast_cell_size(rtype)),
-                                cols, rtype);
+                Rast_raster_cpy(
+                    raster_row,
+                    min_array + ((size_t)row * cols * Rast_cell_size(rtype)),
+                    cols, rtype);
                 break;
 
             case METHOD_MAX:
-                Rast_raster_cpy(raster_row,
-                                max_array +
-                                    (row * cols * Rast_cell_size(rtype)),
-                                cols, rtype);
+                Rast_raster_cpy(
+                    raster_row,
+                    max_array + ((size_t)row * cols * Rast_cell_size(rtype)),
+                    cols, rtype);
                 break;
 
             case METHOD_SUM:
-                Rast_raster_cpy(raster_row,
-                                sum_array +
-                                    (row * cols * Rast_cell_size(rtype)),
-                                cols, rtype);
+                Rast_raster_cpy(
+                    raster_row,
+                    sum_array + ((size_t)row * cols * Rast_cell_size(rtype)),
+                    cols, rtype);
                 break;
 
             case METHOD_RANGE: /* (max-min) */

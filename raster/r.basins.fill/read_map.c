@@ -28,7 +28,7 @@ CELL *read_map(const char *name, int nomask, int nrows, int ncols)
     void (*get_row)(int, CELL *, int);
 
     /* allocate entire map */
-    map = (CELL *)G_malloc(nrows * ncols * sizeof(CELL));
+    map = (CELL *)G_malloc((size_t)nrows * ncols * sizeof(CELL));
 
     /* open the map */
     fd = Rast_open_old(name, "");

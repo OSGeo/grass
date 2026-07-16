@@ -96,10 +96,10 @@ void process(void)
         Rast_set_c_null_value(featrow_out, ncols);
     }
 
-    window_ptr = (DCELL *)G_malloc(SQR(wsize) * sizeof(DCELL));
+    window_ptr = (DCELL *)G_malloc((size_t)SQR(wsize) * sizeof(DCELL));
     /* Reserve enough memory for local wind. */
 
-    weight_ptr = (double *)G_malloc(SQR(wsize) * sizeof(double));
+    weight_ptr = (double *)G_malloc((size_t)SQR(wsize) * sizeof(double));
     /* Reserve enough memory weights matrix. */
 
     normal_ptr = dmatrix(0, 5, 0, 5); /* Allocate memory for 6*6 matrix       */

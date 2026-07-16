@@ -123,7 +123,7 @@ AEvent *allocate_eventlist(GridHeader *hd)
 
     AEvent *eventList;
 
-    long long totalsize = hd->ncols * hd->nrows * 3;
+    long long totalsize = (long long)hd->ncols * hd->nrows * 3;
 
     totalsize *= sizeof(AEvent);
     G_debug(1, "total size of eventlist is %lld B (%d MB);  ", totalsize,
@@ -197,7 +197,7 @@ MemoryVisibilityGrid *viewshed_in_memory(char *inputfname, GridHeader *hd,
     assert(visgrid);
     G_debug(1, "visibility grid size:  %d x %d x %d B (%d MB)", hd->nrows,
             hd->ncols, (int)sizeof(float),
-            (int)(((long long)(hd->nrows * hd->ncols * sizeof(float))) >> 20));
+            (int)(((long long)hd->nrows * hd->ncols * sizeof(float)) >> 20));
 
     /* ------------------------------ */
     /* construct the event list corresponding to the given input file

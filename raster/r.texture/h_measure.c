@@ -407,7 +407,7 @@ float f12_icorr(struct matvec *mv)
     for (i = 0; i < Ng; i++) {
         for (j = 0; j < Ng; j++) {
             if (px[i] * py[j] > 0)
-                hxy1 -= P[i][j] * log2(px[i] * py[j]);
+                hxy1 -= P[i][j] * log2((double)px[i] * py[j]);
             if (P[i][j] > 0)
                 hxy -= P[i][j] * log2(P[i][j]);
         }
@@ -439,7 +439,7 @@ float f13_icorr(struct matvec *mv)
     for (i = 0; i < Ng; i++) {
         for (j = 0; j < Ng; j++) {
             if (px[i] * py[j] > 0)
-                hxy2 -= px[i] * py[j] * log2(px[i] * py[j]);
+                hxy2 -= (double)px[i] * py[j] * log2((double)px[i] * py[j]);
             if (P[i][j] > 0)
                 hxy -= P[i][j] * log2(P[i][j]);
         }
