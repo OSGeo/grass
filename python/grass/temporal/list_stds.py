@@ -101,31 +101,38 @@ def get_dataset_list(
 
     result = {}
 
-    for mapset in dbif.tgis_mapsets:
-        if temporal_type == "absolute":
-            table = type + "_view_abs_time"
-        else:
-            table = type + "_view_rel_time"
+    for dtype in [t.strip() for t in type.split(",") if t.strip()]:
+        for mapset in dbif.tgis_mapsets:
+            if temporal_type == "absolute":
+                table = dtype + "_view_abs_time"
+            else:
+                table = dtype + "_view_rel_time"
 
-        if columns and columns.find("all") == -1:
-            sql = "SELECT " + str(columns) + " FROM " + table
-        else:
-            sql = "SELECT * FROM " + table
+            if columns and columns.find("all") == -1:
+                cols = [
+                    f"'{dtype}' AS type" if c.strip() == "type" else c.strip()
+                    for c in str(columns).split(",")
+                ]
+                sql = "SELECT " + ", ".join(cols) + " FROM " + table
+            else:
+                sql = f"SELECT *, '{dtype}' AS type FROM {table}"
 
-        if where:
-            sql += " WHERE " + where
-            sql += " AND mapset = '%s'" % (mapset)
-        else:
-            sql += " WHERE mapset = '%s'" % (mapset)
+            if where:
+                sql += " WHERE " + where
+                sql += " AND mapset = '%s'" % (mapset)
+            else:
+                sql += " WHERE mapset = '%s'" % (mapset)
 
-        if order:
-            sql += " ORDER BY " + order
+            if order:
+                sql += " ORDER BY " + order
 
-        dbif.execute(sql, mapset=mapset)
-        rows = dbif.fetchall(mapset=mapset)
+            dbif.execute(sql, mapset=mapset)
+            rows = dbif.fetchall(mapset=mapset)
 
-        if rows:
-            result[mapset] = rows
+            if rows:
+                if mapset not in result:
+                    result[mapset] = []
+                result[mapset].extend(rows)
 
     if connection_state_changed:
         dbif.close()

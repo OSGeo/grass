@@ -2,8 +2,9 @@
 
 *t.list* lists any dataset that is registered in the temporal database.
 Datasets are raster, 3D raster and vector maps as well as their
-corresponding space time datasets (STRDS, STR3DS and STVDS). The type of
-the dataset can be specified using the *type* option, default is STRDS.
+corresponding space time datasets (STRDS, STR3DS and STVDS). The type of the
+dataset can be specified using the *type* option (default is STRDS).
+Multiple comma-separated types can be provided, such as *type=strds,stvds*.
 By default all datasets with relative and absolute time are listed.
 However, the user has the ability to specify a single temporal type with
 the *temporaltype* option. The user can define the columns that should
@@ -149,7 +150,24 @@ t.list type=raster format=json columns=id,start_time
         "start_time": "2012-12-01 00:00:00"
     }
 ]
+```
 
+To list multiple dataset types at once, specify a comma-separated list of
+types. When using multiple types, including `type` in the `columns` parameter
+allows identifying the type of each record:
+
+```sh
+t.list type=strds,stvds columns=id,type format=csv
+```
+
+```csv
+id,type
+lst_daily@PERMANENT,strds
+mini_set@PERMANENT,strds
+nc_lst_daily@PERMANENT,strds
+precip_abs1@PERMANENT,strds
+prec_observer@PERMANENT,stvds
+schools_stds@PERMANENT,stvds
 ```
 
 ## SEE ALSO

@@ -1,7 +1,5 @@
 """Test t.list functionality"""
 
-import json
-
 import pytest
 
 from grass.experimental import TemporaryMapsetSession
@@ -15,13 +13,13 @@ def test_t_list_defaults(space_time_dataset):
     strds_result = tools.t_list(type="strds", columns="name")
     assert strds_result.returncode == 0
 
-    strds_lines = [line.strip() for line in strds_result.stdout.strip().splitlines()]
-    assert space_time_dataset.name in strds_lines
+    strds_lines = strds_result.text_split("\n")
+    assert space_time_dataset.raster_dataset1 in strds_lines
 
     # Test Map Listing (raster)
     raster_result = tools.t_list(type="raster", columns="name")
 
-    raster_lines = [line.strip() for line in raster_result.stdout.strip().splitlines()]
+    raster_lines = raster_result.text_split("\n")
     for map_name in space_time_dataset.map_names:
         assert map_name in raster_lines
 
@@ -31,9 +29,9 @@ def test_t_list_where_filter(space_time_dataset):
     tools = Tools(session=space_time_dataset.session)
 
     match = tools.t_list(type="strds", columns="name", where="name LIKE 'temp_%'")
-    match_lines = [line.strip() for line in match.stdout.strip().splitlines()]
+    match_lines = match.text_split("\n")
     assert len(match_lines) == 1
-    assert match_lines[0] == space_time_dataset.name
+    assert match_lines[0] == space_time_dataset.raster_dataset1
 
     empty = tools.t_list(type="strds", columns="name", where="name LIKE 'land_%'")
     assert empty is None
@@ -46,7 +44,7 @@ def test_t_list_order(space_time_dataset):
     result_asc = tools.t_list(type="raster", columns="name", order="start_time")
     assert result_asc is not None
 
-    lines_asc = [line.strip() for line in result_asc.stdout.strip().splitlines()]
+    lines_asc = result_asc.text_split("\n")
 
     assert lines_asc == space_time_dataset.map_names
 
@@ -56,9 +54,7 @@ def test_t_list_json(space_time_dataset):
     tools = Tools(session=space_time_dataset.session)
     result = tools.t_list(
         type="raster", format="json", columns="name,start_time,end_time"
-    )
-
-    data = json.loads(result.stdout)
+    ).json
 
     expected = [
         {
@@ -78,10 +74,10 @@ def test_t_list_json(space_time_dataset):
         },
     ]
 
-    assert len(data) == len(expected)
+    assert len(result) == len(expected)
 
     for i, expected_item in enumerate(expected):
-        actual_item = data[i]
+        actual_item = result[i]
         for key, expected_value in expected_item.items():
             assert actual_item[key] == expected_value
 
@@ -102,7 +98,7 @@ def test_t_list_csv(space_time_dataset, separator):
     ]
     expected = "\n".join(expected_lines)
 
-    assert result.stdout.strip() == expected
+    assert result.text == expected
 
 
 @pytest.mark.parametrize("separator", [",", ":"])
@@ -115,7 +111,7 @@ def test_t_list_line(space_time_dataset, separator):
 
     expected = separator.join(space_time_dataset.map_names)
 
-    assert result.stdout.strip() == expected
+    assert result.text == expected
 
 
 @pytest.mark.parametrize("output_format", ["json", "line", "plain"])
@@ -141,7 +137,7 @@ def test_t_list_mapset_current(space_time_dataset):
     result = tools.t_list(type="strds", mapset=".", columns="name", format="json")
 
     assert len(result) == 1
-    assert result[0]["name"] == space_time_dataset.name
+    assert result[0]["name"] == space_time_dataset.raster_dataset1
 
 
 def test_t_list_mapset_all(space_time_dataset):
@@ -152,8 +148,8 @@ def test_t_list_mapset_all(space_time_dataset):
 
     assert len(result) == 2
     names = [d["name"] for d in result]
-    assert space_time_dataset.name in names
-    assert space_time_dataset.user_dataset in names
+    assert space_time_dataset.raster_dataset1 in names
+    assert space_time_dataset.raster_dataset2 in names
 
 
 def test_t_list_mapset_explicit(space_time_dataset):
@@ -162,13 +158,13 @@ def test_t_list_mapset_explicit(space_time_dataset):
 
     res_user = tools.t_list(type="strds", mapset="user1", columns="name", format="json")
     assert len(res_user) == 1
-    assert res_user[0]["name"] == space_time_dataset.user_dataset
+    assert res_user[0]["name"] == space_time_dataset.raster_dataset2
 
     res = tools.t_list(type="strds", mapset="PERMANENT,user1", format="json")
     assert len(res) == 2
     names = [d["name"] for d in res]
-    assert space_time_dataset.name in names
-    assert space_time_dataset.user_dataset in names
+    assert space_time_dataset.raster_dataset1 in names
+    assert space_time_dataset.raster_dataset2 in names
 
 
 def test_t_list_empty_database(empty_session):
@@ -193,9 +189,26 @@ def test_t_list_empty_database(empty_session):
 
 def test_t_list_from_mapset_without_temporal_database(space_time_dataset):
     """Datasets in accessible mapsets are listed even when the current mapset
-    has no temporal database (https://github.com/OSGeo/grass/issues/7622)."""
+    has no temporal database."""
     with TemporaryMapsetSession(env=space_time_dataset.session.env) as mapset_session:
         tools = Tools(session=mapset_session)
         result = tools.t_list(type="strds", format="json")
         names = [record["name"] for record in result.json]
-        assert space_time_dataset.name in names
+        assert space_time_dataset.raster_dataset1 in names
+
+
+def test_t_list_multiple_types_json(space_time_dataset):
+    """Check that listing multiple dataset types in JSON format returns entries from all types."""
+    tools = Tools(session=space_time_dataset.session)
+    result = tools.t_list(
+        type="stvds,strds", mapset=".", columns="name,type", format="json"
+    )
+
+    assert len(result.json) == 2
+    names = [record["name"] for record in result.json]
+    assert space_time_dataset.raster_dataset1 in names
+    assert space_time_dataset.stvds_name in names
+
+    types = {record["type"] for record in result.json}
+    assert "strds" in types
+    assert "stvds" in types

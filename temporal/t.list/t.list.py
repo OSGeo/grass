@@ -34,6 +34,7 @@
 # % description: Type of the space time dataset or map, default is strds
 # % guisection: Selection
 # % required: no
+# % multiple: yes
 # % options: strds, str3ds, stvds, raster, raster_3d, vector
 # % answer: strds
 # %end
@@ -64,7 +65,7 @@
 # % guisection: Selection
 # % required: no
 # % multiple: yes
-# % options: id,name,semantic_label,creator,mapset,number_of_maps,creation_time,start_time,end_time,north,south,west,east,granularity,all
+# % options: id,name,type,semantic_label,creator,mapset,number_of_maps,creation_time,start_time,end_time,north,south,west,east,granularity,all
 # % answer:
 # %end
 
@@ -209,7 +210,10 @@ def main():
                         and (not outpath or outpath == "-")
                         and output_format == "plain"
                     ):
-                        if stds_type in {"raster", "raster_3d", "vector"}:
+                        stds_types = {
+                            s.strip() for s in stds_type.split(",") if s.strip()
+                        }
+                        if stds_types.issubset({"raster", "raster_3d", "vector"}):
                             sys.stderr.write(
                                 _(
                                     "Time stamped %s maps with %s available in mapset "
@@ -217,11 +221,23 @@ def main():
                                 )
                                 % (stds_type, time, mapset)
                             )
-                        else:
+                        elif stds_types.issubset({"strds", "str3ds", "stvds"}):
                             sys.stderr.write(
                                 _(
                                     "Space time %s datasets with %s available in "
                                     "mapset <%s>:\n"
+                                )
+                                % (
+                                    stds_type,
+                                    time,
+                                    mapset,
+                                )
+                            )
+                        else:
+                            sys.stderr.write(
+                                _(
+                                    "Space time datasets and time stamped maps (%s) "
+                                    "with %s available in mapset <%s>:\n"
                                 )
                                 % (
                                     stds_type,
