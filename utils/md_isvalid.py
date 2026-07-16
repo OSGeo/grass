@@ -14,7 +14,7 @@ import grass.script as gs
 
 
 def check_md(filename):
-    with subprocess.Popen(["mdl", filename]) as p:  # nosec B607: executable intentionally resolved via PATH
+    with subprocess.Popen(["mdl", filename]) as p:  # nosec B607: fixed external tool "mdl" with no portable absolute path
         p.wait()
 
 
@@ -29,7 +29,7 @@ def check_module(module):
     with open(tmp_file, "w") as fp:
         with subprocess.Popen([module, "--md-description"], stdout=fp) as p:
             p.wait()
-        with subprocess.Popen(  # nosec B607: executable intentionally resolved via PATH
+        with subprocess.Popen(  # nosec B607: fixed external tool "mdl" with no portable absolute path
             [
                 "mdl",
                 "--style",
