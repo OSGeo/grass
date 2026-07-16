@@ -31,9 +31,8 @@ def stvds_session(tmp_path_factory):
     """GRASS session with a three-map absolute-time STVDS and pre-exported archives.
 
     Vector maps are created with v.random (-z, seeded) and registered in an
-    absolute-time STVDS.  Archives cover GML (bzip2/gzip/no compression) and
-    pack (bzip2/gzip/no compression), matching the combinations exercised by
-    the shell script test.t.vect.import.sh.
+    absolute-time STVDS. Archives for GML- and pack-format are created
+    with all available compressions: bzip2, gzip, and no compression.
     """
     tmp_path = tmp_path_factory.mktemp("t_vect_import")
     project = tmp_path / "test"

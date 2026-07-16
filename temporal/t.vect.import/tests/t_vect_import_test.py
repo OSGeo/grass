@@ -1,9 +1,7 @@
 """Tests for t.vect.import.
 
-Ports the shell script test test.t.vect.import.sh to pytest.
-
 Test groups:
-- Roundtrip of the absolute-time STVDS for every format/compression combination
+- absolute-time STVDS for every format/compression combination
   (GML bzip2/gzip/no, pack bzip2/gzip/no)
 - Import flags -o (override CRS check), -e (extend extents), and -oe together
 
