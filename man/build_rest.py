@@ -299,7 +299,7 @@ def replace_file(name):
             os.remove(name)
         except OSError:
             pass
-        os.rename(temp, name)
+        Path(temp).rename(name)
 
 
 def copy_file(src, dst):

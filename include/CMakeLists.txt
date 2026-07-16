@@ -111,6 +111,7 @@ foreach(srch ${SRCHS})
     OUTPUT ${output_dir}/${srch_NAME}
     COMMAND ${CMAKE_COMMAND} -E make_directory ${output_dir}
     COMMAND ${CMAKE_COMMAND} -E copy ${srch} ${output_dir}
+    DEPENDS ${srch}
     COMMENT "Copy ${srch} to ${output_dir}/${srch_NAME}")
   list(APPEND include_depends ${output_dir}/${srch_NAME})
 endforeach()
