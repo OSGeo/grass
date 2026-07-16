@@ -1,5 +1,4 @@
-"""
-Space time dataset import functions
+"""Space time dataset import functions.
 
 Usage:
 
@@ -32,7 +31,7 @@ Usage:
     )
 
 
-(C) 2012-2013 by the GRASS Development Team
+(C) 2012-2026 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -41,20 +40,19 @@ for details.
 """
 
 import os
-import os.path
 import tarfile
 from pathlib import Path
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
 
-from .core import get_current_mapset, get_tgis_message_interface
+from .core import get_current_mapset, get_tgis_message_interface, init
 from .factory import dataset_factory
 from .register import register_maps_in_space_time_dataset
 
-proj_file_name = "proj.txt"
-init_file_name = "init.txt"
-list_file_name = "list.txt"
+proj_file_name = Path("proj.txt")
+init_file_name = Path("init.txt")
+list_file_name = Path("list.txt")
 
 # This global variable is for unique vector map export,
 # since single vector maps may have several layer
@@ -65,14 +63,15 @@ imported_maps = {}
 
 
 def _import_raster_maps_from_gdal(
-    maplist,
-    overr,
-    exp,
-    location,
-    link,
-    format_,
+    maplist: list[dict[str, str]],
+    *,
+    overr: bool,
+    exp: bool,
+    location: str | None,
+    link: bool,
+    format_: str,
     set_current_region: bool = False,
-    memory=300,
+    memory: int = 300,
 ) -> None:
     impflags = ""
     if overr:
@@ -110,7 +109,7 @@ def _import_raster_maps_from_gdal(
         except CalledModuleError:
             gs.fatal(
                 _("Unable to import/link raster map <%s> from file %s.")
-                % (name, filename)
+                % (name, filename),
             )
 
         # Set the color rules if present
@@ -118,7 +117,10 @@ def _import_raster_maps_from_gdal(
         if Path(filename).is_file():
             try:
                 gs.run_command(
-                    "r.colors", map=name, rules=filename, overwrite=gs.overwrite()
+                    "r.colors",
+                    map=name,
+                    rules=filename,
+                    overwrite=gs.overwrite(),
                 )
             except CalledModuleError:
                 gs.fatal(_("Unable to set the color rules for raster map <%s>.") % name)
@@ -131,7 +133,11 @@ def _import_raster_maps_from_gdal(
 ############################################################################
 
 
-def _import_raster_maps(maplist, set_current_region: bool = False) -> None:
+def _import_raster_maps(
+    maplist: list[dict[str, str]],
+    *,
+    set_current_region: bool = False,
+) -> None:
     # We need to disable the projection check because of its
     # simple implementation
     impflags = "o"
@@ -150,7 +156,7 @@ def _import_raster_maps(maplist, set_current_region: bool = False) -> None:
 
         except CalledModuleError:
             gs.fatal(
-                _("Unable to unpack raster map <%s> from file %s.") % (name, filename)
+                _("Unable to unpack raster map <%s> from file %s.") % (name, filename),
             )
 
     # Set the computational region from the last map imported
@@ -161,33 +167,51 @@ def _import_raster_maps(maplist, set_current_region: bool = False) -> None:
 ############################################################################
 
 
-def _import_vector_maps_from_gml(maplist, overr, exp, location, link) -> None:
-    impflags = "o"
-    if exp or location:
+def _import_vector_maps_from_gml(
+    maplist: list[dict[str, str]],
+    *,
+    overr: bool,
+    exp: bool,
+    location: str | None,
+    link: bool,
+) -> None:
+    impflags = ""
+    if overr:
+        impflags += "o"
+    if not link and (exp or location):
         impflags += "e"
     for row in maplist:
         name = row["name"]
-        filename = row["filename"] + ".xml"
+        filename = f"{row['filename']}.xml"
 
         try:
-            gs.run_command(
-                "v.in.ogr",
-                input=filename,
-                output=name,
-                flags=impflags,
-                overwrite=gs.overwrite(),
-            )
+            if link:
+                gs.run_command(
+                    "v.external",
+                    input=filename,
+                    output=name,
+                    flags=impflags or None,
+                    overwrite=gs.overwrite(),
+                )
+            else:
+                gs.run_command(
+                    "v.in.ogr",
+                    input=filename,
+                    output=name,
+                    flags=impflags or None,
+                    overwrite=gs.overwrite(),
+                )
 
         except CalledModuleError:
             gs.fatal(
-                _("Unable to import vector map <%s> from file %s.") % (name, filename)
+                _("Unable to import vector map <%s> from file %s.") % (name, filename),
             )
 
 
 ############################################################################
 
 
-def _import_vector_maps(maplist) -> None:
+def _import_vector_maps(maplist: list[dict[str, str]]) -> None:
     # We need to disable the projection check because of its
     # simple implementation
     impflags = "o"
@@ -197,7 +221,7 @@ def _import_vector_maps(maplist) -> None:
         # Import only unique maps
         if name in imported_maps:
             continue
-        filename = row["filename"] + ".pack"
+        filename = f"{row['filename']}.pack"
         try:
             gs.run_command(
                 "v.unpack",
@@ -210,7 +234,7 @@ def _import_vector_maps(maplist) -> None:
 
         except CalledModuleError:
             gs.fatal(
-                _("Unable to unpack vector map <%s> from file %s.") % (name, filename)
+                _("Unable to unpack vector map <%s> from file %s.") % (name, filename),
             )
 
         imported_maps[name] = name
@@ -220,22 +244,22 @@ def _import_vector_maps(maplist) -> None:
 
 
 def import_stds(
-    input,
-    output,
-    directory,
-    title=None,
-    descr=None,
-    location=None,
+    input: str | Path,
+    output: str,
+    directory: str | Path | None = None,
+    title: str | None = None,
+    descr: str | None = None,
+    location: str | None = None,
     link: bool = False,
     exp: bool = False,
     overr: bool = False,
     create: bool = False,
-    stds_type="strds",
-    base=None,
+    stds_type: str = "strds",
+    base: str | None = None,
     set_current_region: bool = False,
-    memory=300,
+    memory: int = 300,
 ) -> None:
-    """Import space time datasets of type raster and vector
+    """Import space time datasets of type raster and vector.
 
     :param input: Name of the input archive file
     :param output: The name of the output space time dataset
@@ -255,52 +279,45 @@ def import_stds(
                  extended using a numerical index.
     :param memory: Cache size for raster rows, used in r.in.gdal
     """
-
     old_state = gs.get_raise_on_error()
     gs.set_raise_on_error(True)
 
+    input_path = Path(input)
     # Check if input file and extraction directory exits
-    if not Path(input).exists():
-        gs.fatal(_("Space time raster dataset archive <%s> not found") % input)
-    if not create and not Path(directory).exists():
-        gs.fatal(_("Extraction directory <%s> not found") % directory)
+    if not input_path.exists():
+        gs.fatal(_("Space time raster dataset archive <%s> not found") % str(input))
+    if not create:
+        directory = directory or gs.tempdir()
+        if not Path(directory).exists():
+            gs.fatal(_("Extraction directory <%s> not found") % directory)
 
-    tar = tarfile.open(name=input, mode="r")
+    with tarfile.open(name=input_path, mode="r") as tar:
+        # Check for important files
+        msgr = get_tgis_message_interface()
+        msgr.message(
+            _("Checking validity of input file (size: %0.1f MB). Make take a while...")
+            % (input_path.stat().st_size / (1024 * 1024.0)),
+        )
+        # Make sure that the basenames of the files are used for comparison
+        member_basenames = [Path(name).name for name in tar.getnames()]
 
-    # Check for important files
-    msgr = get_tgis_message_interface()
-    msgr.message(
-        _("Checking validity of input file (size: %0.1f MB). Make take a while...")
-        % (Path(input).stat().st_size / (1024 * 1024.0))
-    )
-    members = tar.getnames()
-    # Make sure that the basenames of the files are used for comparison
-    member_basenames = [os.path.basename(name) for name in members]
+        if str(init_file_name) not in member_basenames:
+            gs.fatal(_("Unable to find init file <%s>") % init_file_name)
+        if str(list_file_name) not in member_basenames:
+            gs.fatal(_("Unable to find list file <%s>") % list_file_name)
+        if str(proj_file_name) not in member_basenames:
+            gs.fatal(_("Unable to find projection file <%s>") % proj_file_name)
 
-    if init_file_name not in member_basenames:
-        gs.fatal(_("Unable to find init file <%s>") % init_file_name)
-    if list_file_name not in member_basenames:
-        gs.fatal(_("Unable to find list file <%s>") % list_file_name)
-    if proj_file_name not in member_basenames:
-        gs.fatal(_("Unable to find projection file <%s>") % proj_file_name)
-
-    msgr.message(_("Extracting data..."))
-    # Extraction filters were added in Python 3.12,
-    # and backported to 3.8.17, 3.9.17, 3.10.12, and 3.11.4
-    # See https://docs.python.org/3.12/library/tarfile.html#tarfile-extraction-filter
-    # and https://peps.python.org/pep-0706/
-    # In Python 3.12, using `filter=None` triggers a DepreciationWarning,
-    # and in Python 3.14, `filter='data'` will be the default
-    if hasattr(tarfile, "data_filter"):
+        msgr.message(_("Extracting data..."))
+        # The 'data' extraction filter was added in Python 3.12 and backported to
+        # 3.11.4 (PEP 706). Refuse to extract without it rather than
+        # extracting unsafely.    if hasattr(tarfile, "data_filter"):
+        if not hasattr(tarfile, "data_filter"):
+            gs.fatal(_("Extracting may be unsafe; upgrade Python to 3.11.4 or newer"))
         tar.extractall(path=directory, filter="data")
-    else:
-        # Remove this when no longer needed
-        gs.warning(_("Extracting may be unsafe; consider updating Python"))
-        tar.extractall(path=directory)
-    tar.close()
 
     # We use a new list file name for map registration
-    new_list_file_name = list_file_name + "_new"
+    new_list_file_name = list_file_name.with_name(f"{list_file_name.stem}_new")
     # Save current working directory path
     old_cwd = Path.cwd()
 
@@ -310,20 +327,20 @@ def import_stds(
     # Check projection information
     if not location:
         temp_name = gs.tempfile()
-        proj_name = os.path.abspath(proj_file_name)
+        proj_name = proj_file_name.absolute()
 
         # We need to convert projection strings generated
         # from other programs than g.proj into
         # new line format so that the grass file comparison function
         # can be used to compare the projections
-        proj_content = Path(proj_name).read_text()
+        proj_content = proj_name.read_text(encoding="utf-8")
         proj_content = proj_content.replace(" +", "\n+")
         proj_content = proj_content.replace("\t+", "\n+")
 
         proj_name_tmp = f"{temp_name}_in_projection"
         Path(proj_name_tmp).write_text(proj_content)
 
-        with open(temp_name, "w") as temp_file:
+        with Path(temp_name).open("w") as temp_file:
             p = gs.start_command("g.proj", flags="p", format="proj4", stdout=temp_file)
             p.communicate()
 
@@ -336,8 +353,8 @@ def import_stds(
                     _(
                         "Difference between PROJ_INFO file of "
                         "imported map and of current location:"
-                        "\n{diff}"
-                    ).format(diff=diff)
+                        "\n{diff}",
+                    ).format(diff=diff),
                 )
                 gs.fatal(_("Projection information does not match. Aborting."))
 
@@ -348,9 +365,12 @@ def import_stds(
     old_gisrc = os.environ.get("GISRC")
     if location:
         try:
-            proj4_string = Path(proj_file_name).read_text()
+            proj4_string = proj_file_name.read_text(encoding="utf-8").strip()
+            print(proj4_string)
             gs.create_location(
-                dbase=old_env["GISDBASE"], location=location, proj4=proj4_string
+                dbase=old_env["GISDBASE"],
+                location=location,
+                proj4=proj4_string,
             )
             # Just create a new location and return
             if create:
@@ -359,19 +379,21 @@ def import_stds(
         except Exception as e:
             gs.fatal(
                 _("Unable to create location %(l)s. Reason: %(e)s")
-                % {"l": location, "e": str(e)}
+                % {"l": location, "e": str(e)},
             )
         # Create a temporary environment
         try:
-            target_gisrc, target_env = gs.create_environment(
-                old_env["GISDBASE"], location, "PERMANENT"
+            target_gisrc, _target_env = gs.create_environment(
+                old_env["GISDBASE"],
+                location,
+                "PERMANENT",
             )
             os.environ["GISRC"] = target_gisrc
 
         except OSError as e:
             gs.fatal(
                 _("Unable to create environment for location %s. Reason: %s")
-                % (location, e)
+                % (location, e),
             )
         # create default database connection
         try:
@@ -379,104 +401,94 @@ def import_stds(
         except CalledModuleError:
             gs.fatal(
                 _("Unable to create default temporal database in new location %s")
-                % location
+                % location,
             )
 
     try:
         # Make sure the temporal database exists
-        from .core import init
-
         init()
 
         fs = "|"
         maplist = []
         mapset = get_current_mapset()
-        list_file = open(list_file_name)
-        new_list_file = open(new_list_file_name, "w")
-
-        # get number of lines to correctly form the suffix
-        max_count = -1
-        for max_count, l in enumerate(list_file):
-            pass
-        max_count += 1
-        list_file.seek(0)
-
-        # Read the map list from file
+        semantic_label_column = 4
         line_count = 0
-        while True:
-            line = list_file.readline()
-            if not line:
-                break
+        with (
+            list_file_name.open("r") as list_file,
+            new_list_file_name.open("w") as new_list_file,
+        ):
+            # get number of lines to correctly form the suffix
+            max_count = len(list_file.readlines())
+            list_file.seek(0)
 
-            line_list = line.split(fs)
+            # Read the map list from file
+            for line_count, line in enumerate(list_file, 1):
+                map_line = line.rstrip()
+                if not map_line:
+                    continue
 
-            # The filename is actually the base name of the map
-            # that must be extended by the file suffix
-            filename = line_list[0].strip().split(":")[0]
-            if base:
-                mapname = "%s_%s" % (
-                    base,
-                    gs.get_num_suffix(line_count + 1, max_count),
+                line_list = map_line.split(fs)
+
+                # The filename is actually the base name of the map
+                # that must be extended by the file suffix
+                filename = line_list[0].strip().split(":")[0]
+                if base:
+                    mapname = f"{base}_{gs.get_num_suffix(line_count + 1, max_count)}"
+                    mapid = f"{mapname}@{mapset}"
+                else:
+                    mapname = filename
+                    mapid = f"{mapname}@{mapset}"
+
+                row = {
+                    "filename": filename,
+                    "name": mapname,
+                    "id": mapid,
+                    "start": line_list[1].strip(),
+                    "end": line_list[2].strip(),
+                    "semantic_label": line_list[3].strip()
+                    if len(line_list) == semantic_label_column
+                    else "",
+                }
+
+                new_list_file.write(
+                    f"{mapname}{fs}{row['start']}{fs}{row['end']}"
+                    f"{fs}{row['semantic_label']}\n",
                 )
-                mapid = "%s@%s" % (mapname, mapset)
-            else:
-                mapname = filename
-                mapid = mapname + "@" + mapset
 
-            row = {
-                "filename": filename,
-                "name": mapname,
-                "id": mapid,
-                "start": line_list[1].strip(),
-                "end": line_list[2].strip(),
-                "semantic_label": line_list[3].strip() if len(line_list) == 4 else "",
-            }
-
-            new_list_file.write(
-                f"{mapname}{fs}{row['start']}{fs}{row['end']}"
-                f"{fs}{row['semantic_label']}\n"
-            )
-
-            maplist.append(row)
-            line_count += 1
-
-        list_file.close()
-        new_list_file.close()
+                maplist.append(row)
 
         # Read the init file
         fs = "="
-        init = {}
-        init_file = open(init_file_name)
-        while True:
-            line = init_file.readline()
-            if not line:
-                break
+        init_data = {}
+        with init_file_name.open("r") as init_file:
+            for line in init_file:
+                init_line = line.rstrip()
+                if not init_line:
+                    continue
 
-            kv = line.split(fs)
-            init[kv[0]] = kv[1].strip()
-
-        init_file.close()
+                kv = init_line.split(fs)
+                init_data[kv[0]] = kv[1].strip()
 
         if (
-            "temporal_type" not in init
-            or "semantic_type" not in init
-            or "number_of_maps" not in init
+            "temporal_type" not in init_data
+            or "semantic_type" not in init_data
+            or "number_of_maps" not in init_data
         ):
             gs.fatal(
                 _("Key words %(t)s, %(s)s or %(n)s not found in init file.")
-                % {"t": "temporal_type", "s": "semantic_type", "n": "number_of_maps"}
+                % {"t": "temporal_type", "s": "semantic_type", "n": "number_of_maps"},
             )
 
-        if line_count != int(init["number_of_maps"]):
+        if line_count != int(init_data["number_of_maps"]):
             gs.fatal(_("Number of maps mismatch in init and list file."))
 
         format_ = "GTiff"
         type_ = "strds"
 
-        if "stds_type" in init:
-            type_ = init["stds_type"]
-        if "format" in init:
-            format_ = init["format"]
+        if "stds_type" in init_data:
+            type_ = init_data["stds_type"]
+        if "format" in init_data:
+            format_ = init_data["format"]
 
         if stds_type != type_:
             gs.fatal(_("The archive file is of wrong space time dataset type"))
@@ -484,51 +496,51 @@ def import_stds(
         # Check the existence of the files
         if format_ == "GTiff":
             for row in maplist:
-                filename = row["filename"] + ".tif"
-                if not Path(filename).exists():
+                filename = Path(row["filename"]).with_suffix(".tif")
+                if not filename.exists():
                     gs.fatal(
                         _("Unable to find GeoTIFF raster file <%s> in archive.")
-                        % filename
+                        % filename,
                     )
         elif format_ == "AAIGrid":
             for row in maplist:
-                filename = row["filename"] + ".asc"
-                if not Path(filename).exists():
+                filename = Path(row["filename"]).with_suffix(".asc")
+                if not filename.exists():
                     gs.fatal(
                         _("Unable to find AAIGrid raster file <%s> in archive.")
-                        % filename
+                        % filename,
                     )
         elif format_ == "GML":
             for row in maplist:
-                filename = row["filename"] + ".xml"
-                if not Path(filename).exists():
+                filename = Path(row["filename"]).with_suffix(".xml")
+                if not filename.exists():
                     gs.fatal(
-                        _("Unable to find GML vector file <%s> in archive.") % filename
+                        _("Unable to find GML vector file <%s> in archive.") % filename,
                     )
         elif format_ == "pack":
             for row in maplist:
                 if type_ == "stvds":
-                    filename = str(row["filename"].split(":")[0]) + ".pack"
+                    filename = Path(row["filename"].split(":")[0]).with_suffix(".pack")
                 else:
-                    filename = row["filename"] + ".pack"
-                if not Path(filename).exists():
+                    filename = Path(row["filename"]).with_suffix(".pack")
+                if not filename.exists():
                     gs.fatal(
                         _("Unable to find GRASS package file <%s> in archive.")
-                        % filename
+                        % filename,
                     )
         else:
             gs.fatal(_("Unsupported input format"))
 
         # Check the space time dataset
-        id = output + "@" + mapset
-        sp = dataset_factory(type_, id)
+        ident = f"{output}@{mapset}"
+        sp = dataset_factory(type_, ident)
         if sp.is_in_db() and gs.overwrite() is False:
             gs.fatal(
                 _(
                     "Space time %(t)s dataset <%(sp)s> is already in"
-                    " the database. Use the overwrite flag."
+                    " the database. Use the overwrite flag.",
                 )
-                % {"t": type_, "sp": sp.get_id()}
+                % {"t": type_, "sp": sp.get_id()},
             )
 
         # Import the maps
@@ -536,19 +548,21 @@ def import_stds(
             if format_ in {"GTiff", "AAIGrid"}:
                 _import_raster_maps_from_gdal(
                     maplist,
-                    overr,
-                    exp,
-                    location,
-                    link,
-                    format_,
-                    set_current_region,
-                    memory,
+                    overr=overr,
+                    exp=exp,
+                    location=location,
+                    link=link,
+                    format_=format_,
+                    set_current_region=set_current_region,
+                    memory=memory,
                 )
             if format_ == "pack":
-                _import_raster_maps(maplist, set_current_region)
+                _import_raster_maps(maplist, set_current_region=set_current_region)
         elif type_ == "stvds":
             if format_ == "GML":
-                _import_vector_maps_from_gml(maplist, overr, exp, location, link)
+                _import_vector_maps_from_gml(
+                    maplist, overr=overr, exp=exp, location=location, link=link
+                )
             if format_ == "pack":
                 _import_vector_maps(maplist)
 
@@ -556,28 +570,28 @@ def import_stds(
         if sp.is_in_db() and gs.overwrite() is True:
             gs.info(
                 _(
-                    "Overwrite space time %(sp)s dataset "
-                    "<%(id)s> and unregister all maps."
+                    "Overwriting space time %(sp)s dataset "
+                    "<%(id)s> and unregister all maps.",
                 )
-                % {"sp": sp.get_new_map_instance(None).get_type(), "id": sp.get_id()}
+                % {"sp": sp.get_new_map_instance(None).get_type(), "id": sp.get_id()},
             )
             sp.delete()
             sp = sp.get_new_instance(id)
 
-        temporal_type = init["temporal_type"]
-        semantic_type = init["semantic_type"]
+        temporal_type = init_data["temporal_type"]
+        semantic_type = init_data["semantic_type"]
         relative_time_unit = None
         if temporal_type == "relative":
-            if "relative_time_unit" not in init:
+            if "relative_time_unit" not in init_data:
                 gs.fatal(
-                    _("Key word %s not found in init file.") % ("relative_time_unit")
+                    _("Key word %s not found in init file.") % ("relative_time_unit"),
                 )
-            relative_time_unit = init["relative_time_unit"]
+            relative_time_unit = init_data["relative_time_unit"]
             sp.set_relative_time_unit(relative_time_unit)
 
         gs.verbose(
             _("Create space time %s dataset.")
-            % sp.get_new_map_instance(None).get_type()
+            % sp.get_new_map_instance(None).get_type(),
         )
 
         sp.set_initial_values(
@@ -611,8 +625,6 @@ def import_stds(
                 os.environ["GISRC"] = old_gisrc
             else:
                 os.environ.pop("GISRC", None)
-
-            from .core import init
 
             init()
 
