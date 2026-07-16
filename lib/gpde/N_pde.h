@@ -6,12 +6,8 @@
  *
  * PURPOSE:      This file contains definitions of variables and data types
  *
- * COPYRIGHT:    (C) 2000 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
+ * SPDX-FileCopyrightText: 2000 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 #include <grass/gis.h>
@@ -667,3 +663,4 @@ extern void N_compute_gradient_field_components_3d(N_gradient_field_3d *field,
                                                    N_array_3d *z_comp);
 
 #endif
+

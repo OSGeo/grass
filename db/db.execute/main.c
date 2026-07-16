@@ -9,12 +9,8 @@
  *               Stephan Holl
  *               Martin Landa <landa.martin gmail.com>
  * PURPOSE:      process one non-select sql statement
- * COPYRIGHT:    (C) 2002-2011 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2). Read the file COPYING that
- *               comes with GRASS for details.
- *
+ * SPDX-FileCopyrightText: 2002-2011 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 #include <stdlib.h>
@@ -223,3 +219,4 @@ void error_handler(void *p)
     db_close_database(driver);
     db_shutdown_driver(driver);
 }
+

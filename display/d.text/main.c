@@ -8,12 +8,8 @@
  *
  * PURPOSE:      display text in active frame
  *
- * COPYRIGHT:    (C) 2001 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
+ * SPDX-FileCopyrightText: 2001 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 /*
@@ -696,3 +692,4 @@ static void draw_text(char *text, double *x, double *y, double size,
     *x += w * c;
     *y -= w * s;
 }
+

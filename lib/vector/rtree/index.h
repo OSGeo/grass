@@ -8,11 +8,8 @@
  *
  * PURPOSE:      Multidimensional index
  *
- * COPYRIGHT:    (C) 2010 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2010 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 #ifndef _R_TREE_INDEX_H_
@@ -117,3 +114,4 @@ size_t RTreeRewriteNode(struct RTree_Node *, off_t, struct RTree *);
 void RTreeAddNodePos(off_t, int, struct RTree *);
 
 #endif /* _INDEX_ */
+

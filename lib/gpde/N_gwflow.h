@@ -7,12 +7,8 @@
  * PURPOSE:      groundwater flow in porous media
  *                 part of the gpde library
  *
- * COPYRIGHT:    (C) 2000 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
+ * SPDX-FileCopyrightText: 2000 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 #ifndef _N_GWFLOW_H_
@@ -109,3 +105,4 @@ extern N_gwflow_data2d *N_alloc_gwflow_data2d(int cols, int rows, int river,
 extern void N_free_gwflow_data3d(N_gwflow_data3d *data);
 extern void N_free_gwflow_data2d(N_gwflow_data2d *data);
 #endif
+

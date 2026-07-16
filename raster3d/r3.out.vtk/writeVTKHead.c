@@ -7,12 +7,8 @@
  *                 27 Feb 2006 Berlin
  * PURPOSE:      Converts 3D raster maps (RASTER3D) into the VTK-Ascii format
  *
- * COPYRIGHT:    (C) 2005 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
+ * SPDX-FileCopyrightText: 2005 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 #include <stdio.h>
@@ -135,3 +131,4 @@ void write_vtk_unstructured_grid_header(FILE *fp, char *vtkFile G_UNUSED,
 
     return;
 }
+

@@ -7,12 +7,8 @@
  * PURPOSE:      IO array management functions
  *               part of the gpde library
  *
- * COPYRIGHT:    (C) 2000 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
+ * SPDX-FileCopyrightText: 2000 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 #include <math.h>
@@ -462,3 +458,4 @@ void N_write_array_3d_to_rast3d(N_array_3d *array, char *name, int mask)
 
     return;
 }
+

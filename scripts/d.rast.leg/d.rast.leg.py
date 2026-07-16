@@ -20,12 +20,8 @@
 #
 # See also:     d.rast, d.legend.
 #
-# COPYRIGHT:	(C) 1993-2014 by the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
-#
+# SPDX-FileCopyrightText: 1993-2014 Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #############################################################################
 
 # %module
@@ -163,3 +159,4 @@ def main():
 if __name__ == "__main__":
     options, flags = gs.parser()
     main()
+

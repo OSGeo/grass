@@ -7,18 +7,9 @@
 #
 # PURPOSE:	Test the import of space time raster datasets with relative time
 #           and with semantic label
-# COPYRIGHT:	(C) 2011-2024, Tomas Zigo and the GRASS Development Team
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
+# SPDX-FileCopyrightText: 2011-2024 , Tomas Zigo
+# SPDX-FileCopyrightText: Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #############################################################################
 
 export GRASS_OVERWRITE=1
@@ -79,3 +70,4 @@ t.remove type=strds input=precip_rel
 g.remove -f type=raster name=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 rm -rf test
 rm strds_export.tar.bz2
+

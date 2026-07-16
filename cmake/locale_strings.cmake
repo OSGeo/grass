@@ -2,7 +2,8 @@
 AUTHOR(S):  Rashad Kanavath <rashad km gmail>
 PURPOSE:    create translation strings for grass scripts
             environment. TODO use custom_command POST_BUILD directly
-COPYRIGHT:  (C) 2020 by the GRASS Development Team
+SPDX-FileCopyrightText: 2020 Other GRASS authors
+
 
 SPDX-License-Identifier: GPL-2.0-or-later
 

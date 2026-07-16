@@ -3,12 +3,8 @@
  * MODULE:       d.rast.arrow
  * AUTHOR(S):    Chris Rewerts, Agricultural Engineering, Purdue University
  * PURPOSE:      Draw arrows on slope/aspect maps.
- * COPYRIGHT:    (C) 2000, 2010, 2023 by the GRASS Development Team
- *
- *              This program is free software under the GNU General Public
- *              License (>=v2). Read the file COPYING that comes with GRASS
- *              for details.
- *
+ * SPDX-FileCopyrightText: 2000, 2010, 2023 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 /* some minor cleanup done by Andreas Lange, andreas.lange@rhein-main.de
@@ -871,3 +867,4 @@ static void unknown_(void)
     D_end();
     D_stroke();
 }
+

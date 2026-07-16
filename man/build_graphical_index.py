@@ -5,12 +5,9 @@
 # MODULE:    build_graphical_index
 # AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
 # PURPOSE:   Build graphical index
-# COPYRIGHT: (C) 2015-2026 by Vaclav Petras and the GRASS Development Team
-#
-#        This program is free software under the GNU General Public
-#        License (>=v2). Read the file COPYING that comes with GRASS
-#        for details.
-#
+# SPDX-FileCopyrightText: 2015-2026 Vaclav Petras
+# SPDX-FileCopyrightText: Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #############################################################################
 
 import os
@@ -105,3 +102,4 @@ if __name__ == "__main__":
     main("html")
 
     main("md")
+

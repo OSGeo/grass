@@ -3,7 +3,8 @@ AUTHOR(S):  Rashad Kanavath <rashad km gmail>
 PURPOSE:    This is the main function that builds all grass libraries (prefixed with grass_)
             and grass executables. This cmake function is tailored to meet requirement of grass
             gnu make rules
-COPYRIGHT:  (C) 2020 by the GRASS Development Team
+SPDX-FileCopyrightText: 2020 Other GRASS authors
+
 
 SPDX-License-Identifier: GPL-2.0-or-later
 #]]

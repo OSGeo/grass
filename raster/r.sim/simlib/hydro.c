@@ -4,12 +4,8 @@
  * AUTHOR(S):    Helena Mitasova, Jaro Hofierka, Lubos Mitas:
  * PURPOSE:      Hydrologic and sediment transport simulation (SIMWE)
  *
- * COPYRIGHT:    (C) 2002 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
+ * SPDX-FileCopyrightText: 2002 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 /* hydro.c (simlib), 20.nov.2002, JH */
@@ -447,3 +443,4 @@ void main_loop(const Setup *setup, const Geometry *geometry,
 
     points->is_open = 0;
 }
+

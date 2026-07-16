@@ -3,12 +3,9 @@
  * MODULE:       d.mon
  * AUTHOR(S):    Martin Landa <landa.martin gmail.com>
  * PURPOSE:      Controls graphics monitors for CLI
- * COPYRIGHT:    (C) 2011-2015 by Martin Landa, and the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2). Read the file COPYING that
- *               comes with GRASS for details.
- *
+ * SPDX-FileCopyrightText: 2011-2015 Martin Landa
+ * SPDX-FileCopyrightText: Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 /*
@@ -276,3 +273,4 @@ int main(int argc, char *argv[])
 
     exit(EXIT_SUCCESS);
 }
+

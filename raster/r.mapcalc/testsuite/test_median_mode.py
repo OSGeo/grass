@@ -5,12 +5,9 @@
 # MODULE:        test_median_mode.py
 # AUTHOR:        Anna Petrasova, based on Vaclav Petras test_row_above_below_bug.py
 # PURPOSE:       Test median, mode in r.mapcalc
-# COPYRIGHT:     (C) 2025 by Anna Petrasova and the GRASS Development Team
-#
-#                This program is free software under the GNU General Public
-#                License (>=v2). Read the file COPYING that comes with GRASS
-#                for details.
-#
+# SPDX-FileCopyrightText: 2025 Anna Petrasova
+# SPDX-FileCopyrightText: Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #############################################################################
 
 
@@ -134,3 +131,4 @@ class TestMedianMode(TestCase):
 
 if __name__ == "__main__":
     test()
+

@@ -4,12 +4,9 @@
  * PURPOSE:      g.ppmtopng isn't meant for end users. It's an internal tool
  *               for use by the script to generate thumbnails for the r.colors
  *               manual page.
- * COPYRIGHT:    (C) 2009 by Glynn Clements and the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
+ * SPDX-FileCopyrightText: 2009 Glynn Clements
+ * SPDX-FileCopyrightText: Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <stdio.h>
@@ -128,3 +125,4 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+

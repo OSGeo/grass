@@ -8,12 +8,8 @@
  *               Markus Neteler <neteler itc.it>
  *               Stephan Holl
  * PURPOSE:      Process one sql select statement
- * COPYRIGHT:    (C) 2002-2010, 2013 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
+ * SPDX-FileCopyrightText: 2002-2010, 2013 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 #include <stdlib.h>
@@ -584,3 +580,4 @@ int stmt_is_empty(dbString *stmt)
 
     return (sscanf(db_get_string(stmt), "%1s", dummy) != 1);
 }
+

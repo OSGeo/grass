@@ -8,12 +8,8 @@
 #               Martin Landa <landa.martin gmail.com>
 # PURPOSE:      Create Markdown manual page snippets
 #               Inspired by mkhtml.py
-# COPYRIGHT:    (C) 2024 by the GRASS Development Team
-#
-#               This program is free software under the GNU General
-#               Public License (>=v2). Read the file COPYING that
-#               comes with GRASS for details.
-#
+# SPDX-FileCopyrightText: 2024 Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #############################################################################
 
 import os
@@ -260,3 +256,4 @@ ${DATE_TAG}
 
 if __name__ == "__main__":
     main()
+

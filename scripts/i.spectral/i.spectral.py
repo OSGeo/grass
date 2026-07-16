@@ -7,12 +7,8 @@
 #               Converted to Python by Glynn Clements
 # PURPOSE:      Displays spectral response at user specified locations in
 #               group or raster images
-# COPYRIGHT:    (C) 1999-2013 by the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
-#
+# SPDX-FileCopyrightText: 1999-2013 Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #############################################################################
 #
 #  this script needs gnuplot for pretty rendering
@@ -293,3 +289,4 @@ if __name__ == "__main__":
     options, flags = gcore.parser()
     atexit.register(cleanup)
     main()
+

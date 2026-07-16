@@ -6,12 +6,9 @@
  *
  * PURPOSE:   This file is a wrapper for a subset of Segment functions
  *
- * COPYRIGHT: (C) 2015 by Vaclav Petras and the GRASS Development Team
- *
- *            This program is free software under the GNU General Public
- *            License (>=v2). Read the file COPYING that comes with
- *            GRASS for details.
- *
+ * SPDX-FileCopyrightText: 2015 Vaclav Petras
+ * SPDX-FileCopyrightText: Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 #include <grass/gis.h>
@@ -99,3 +96,4 @@ int rast_segment_get_value_xy(SEGMENT *base_segment,
     }
     return 1;
 }
+

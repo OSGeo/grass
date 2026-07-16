@@ -7,13 +7,8 @@
  * PURPOSE:    Definition of a point in 3D and basic operations
  *             with points
  *
- * COPYRIGHT:  (C) 2002-2005 by the GRASS Development Team
- *
- *             This program is free software under the
- *             GNU General Public License (>=v2).
- *             Read the file COPYING that comes with GRASS
- *             for details.
- *
+ * SPDX-FileCopyrightText: 2002-2005 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  ****************************************************************/
 
 #ifndef POINT_H
@@ -85,3 +80,4 @@ extern void point_list_free(POINT_LIST l);
 /*delete the p->next element and set the pointers appropriatelly */
 extern void point_list_delete_next(POINT_LIST *p);
 #endif
+

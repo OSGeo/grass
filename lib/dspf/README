@@ -11,12 +11,8 @@
  *               Glynn Clements <glynn gclements.plus.com>,
  *               Bernhard Reiter <bernhard intevation.de>
  * PURPOSE:      libraries for NVIZ: render/display volumes
- * COPYRIGHT:    (C) 1996-2006 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
+ * SPDX-FileCopyrightText: 1996-2006 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 Info in .grid3 headers:
@@ -42,3 +38,4 @@ Info in .dspf headers:
 Thu Mar 28 09:31:59 CST 1996
 In process of eliminating use of .grid3 files, using
 new 3dgrid format instead.
+

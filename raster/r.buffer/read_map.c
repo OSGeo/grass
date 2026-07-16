@@ -10,12 +10,8 @@
  *               have square cells. Works both for planimetric
  *               (UTM, State Plane) and lat-long.
  *
- * COPYRIGHT:    (C) 2005 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
+ * SPDX-FileCopyrightText: 2005 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  ****************************************************************************/
 
 #include <stdlib.h>
@@ -101,3 +97,4 @@ int read_input_map(char *input, char *mapset, int ZEROFLAG)
 
     return 0;
 }
+

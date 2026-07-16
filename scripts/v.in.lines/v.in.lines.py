@@ -8,12 +8,8 @@
 #
 # PURPOSE:      Import point data as lines ('v.in.mapgen -f' wrapper script)
 #
-# COPYRIGHT:    (c) 2009-2010 by the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
-#
+# SPDX-FileCopyrightText: 2009-2010 Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #############################################################################
 # %module
 # % description: Imports ASCII x,y[,z] coordinates as a series of lines.
@@ -110,3 +106,4 @@ if __name__ == "__main__":
     options, flags = grass.parser()
     atexit.register(cleanup)
     main()
+

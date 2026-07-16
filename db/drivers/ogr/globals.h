@@ -7,12 +7,8 @@
  *
  * PURPOSE:      DB driver for OGR sources
  *
- * COPYRIGHT:    (C) 2004-2009 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
+ * SPDX-FileCopyrightText: 2004-2009 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 /* cursor */
@@ -36,3 +32,4 @@ typedef struct {
 
 extern OGRDataSourceH hDs;
 extern dbString *errMsg;
+

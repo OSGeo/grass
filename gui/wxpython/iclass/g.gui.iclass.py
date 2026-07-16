@@ -5,18 +5,9 @@
 # AUTHOR(S): Anna Kratochvilova, Vaclav Petras
 # PURPOSE:   The Map Swipe is a wxGUI component which allows the user to
 #            interactively compare two maps
-# COPYRIGHT: (C) 2012-2013 by Anna Kratochvilova, and the GRASS Development Team
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
+# SPDX-FileCopyrightText: 2012-2013 Anna Kratochvilova
+# SPDX-FileCopyrightText: Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 ############################################################################
 
 # %module
@@ -133,3 +124,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

@@ -8,18 +8,8 @@
 # PURPOSE:      Provide temporal 3D raster algebra to perform spatial an temporal operations
 #               for space time datasets by topological relationships to other space time
 #               datasets.
-# COPYRIGHT:    (C) 2017 by the GRASS Development Team
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
+# SPDX-FileCopyrightText: 2017 Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #############################################################################
 
 # %module
@@ -110,3 +100,4 @@ def main():
 if __name__ == "__main__":
     options, flags = gs.parser()
     sys.exit(main())
+

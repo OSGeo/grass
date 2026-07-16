@@ -8,12 +8,8 @@
  *               Martin Wegmann <wegmann biozentrum.uni-wuerzburg.de>,
  *               Aaron Saw Min Sern (OpenMP parallelization)
  * PURPOSE:
- * COPYRIGHT:    (C) 2002-2022 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
+ * SPDX-FileCopyrightText: 2002-2022 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 #if defined(_OPENMP)
@@ -648,3 +644,4 @@ int main(int argc, char *argv[])
 
     exit(EXIT_SUCCESS);
 }
+

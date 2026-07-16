@@ -7,12 +7,8 @@
  *                 08 23 2005 Berlin
  * PURPOSE:      Converts raster maps into the VTK-Ascii format
  *
- * COPYRIGHT:    (C) 2005 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
+ * SPDX-FileCopyrightText: 2005 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 #include <stdio.h>
@@ -464,3 +460,4 @@ void write_vtk_vector_data(int xfd, int yfd, int zfd, FILE *fp,
     G_free(zraster);
     return;
 }
+

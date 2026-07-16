@@ -6,12 +6,8 @@
 #               Pietro Zambelli <peter.zamb@gmail.com>
 # PURPOSE:      Create a json file containing languages translations
 #               information and statistics.
-# COPYRIGHT:    (C) 2012 by the GRASS Development Team
-#
-#               This program is free software under the GNU General
-#               Public License (>=v2). Read the file COPYING that
-#               comes with GRASS for details.
-#
+# SPDX-FileCopyrightText: 2012 Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #############################################################################
 
 from __future__ import annotations
@@ -162,3 +158,4 @@ if __name__ == "__main__":
     directory = "po/"
     outfile = os.path.join(os.environ["GISBASE"], "translation_status.json")
     sys.exit(main(directory, outfile))
+

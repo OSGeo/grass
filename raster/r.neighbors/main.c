@@ -14,12 +14,8 @@
  * PURPOSE:      Makes each cell category value a function of the category
  *               values assigned to the cells around it, and stores new cell
  *               values in an output raster map layer
- * COPYRIGHT:    (C) 1999-2022 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
+ * SPDX-FileCopyrightText: 1999-2022 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 #if defined(_OPENMP)
@@ -616,3 +612,4 @@ int main(int argc, char *argv[])
 
     exit(EXIT_SUCCESS);
 }
+

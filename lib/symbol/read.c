@@ -6,12 +6,8 @@
  *
  * PURPOSE:      Read symbol from a file to internal structure
  *
- * COPYRIGHT:    (C) 2001 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with
- *               GRASS for details.
- *
+ * SPDX-FileCopyrightText: 2001 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 #include <stdlib.h>
@@ -476,3 +472,4 @@ SYMBOL *S_read(const char *sname)
 
     return symb;
 }
+

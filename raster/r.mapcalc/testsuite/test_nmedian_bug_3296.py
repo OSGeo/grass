@@ -5,12 +5,9 @@
 # MODULE:        test_nmedian_bug.py
 # AUTHOR:        Maris Nartiss, based on Vaclav Petras test_row_above_below_bug.py
 # PURPOSE:       Show bug reported in #3296
-# COPYRIGHT:     (C) 2017 by Maris Nartiss and the GRASS Development Team
-#
-#                This program is free software under the GNU General Public
-#                License (>=v2). Read the file COPYING that comes with GRASS
-#                for details.
-#
+# SPDX-FileCopyrightText: 2017 Maris Nartiss
+# SPDX-FileCopyrightText: Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #############################################################################
 
 # #3296
@@ -163,3 +160,4 @@ class TestNmedianBug(TestCase):
 
 if __name__ == "__main__":
     test()
+

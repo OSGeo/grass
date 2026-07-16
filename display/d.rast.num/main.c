@@ -4,12 +4,8 @@
  * AUTHOR(S):    Raghavan Srinivasan, Agricultural Engineering, Purdue
  *                 University
  * PURPOSE:      Print numbers of category for raster cells
- * COPYRIGHT:    (C) 2000, 2012 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
+ * SPDX-FileCopyrightText: 2000, 2012 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 /* updated by Andreas Lange, andreas.lange@rhein-main.de
@@ -337,3 +333,4 @@ int draw_number(int row, int col, double number, int prec,
 
     return 0;
 }
+

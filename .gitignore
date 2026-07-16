@@ -205,3 +205,7 @@ python/grass/docs/src/temporal.rst
 
 # Test result files
 *junit.xml
+
+# SPDX conversion tools and RFC
+tools/
+rfc/

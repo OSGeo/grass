@@ -5,12 +5,8 @@
 # MODULE:    d.what.vect
 # AUTHOR(S): Anna Petrasova <kratochanna gmail.com>
 # PURPOSE:	 Script for querying vector maps in d.mon
-# COPYRIGHT: (C) 2014 by the GRASS Development Team
-#
-# 		This program is free software under the GNU General
-# 		Public License (>=v2). Read the file COPYING that
-# 		comes with GRASS for details.
-#
+# SPDX-FileCopyrightText: 2014 Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #############################################################################
 
 # %module
@@ -47,3 +43,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

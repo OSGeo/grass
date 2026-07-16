@@ -4,13 +4,8 @@
  * AUTHOR(S):  Maximilian Maldacker
  *
  *
- * COPYRIGHT:  (C) 2002-2005 by the GRASS Development Team
- *
- *             This program is free software under the
- *             GNU General Public License (>=v2).
- *             Read the file COPYING that comes with GRASS
- *             for details.
- *
+ * SPDX-FileCopyrightText: 2002-2005 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  ****************************************************************/
 #ifndef DATA_STRUCTURES_H
 #define DATA_STRUCTURES_H
@@ -31,3 +26,4 @@ void quickSort(struct Point a[], int l, int r);
 int partition(struct Point a[], int l, int r);
 
 #endif
+

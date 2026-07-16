@@ -7,12 +7,8 @@
  * PURPOSE:      Prints category values and labels associated with
  *               user-specified raster map layers.
  *
- * COPYRIGHT:    (C) 2006 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
+ * SPDX-FileCopyrightText: 2006 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  ***************************************************************************/
 
 #ifndef __LOCAL_PROTO_H__
@@ -39,3 +35,4 @@ void scan_colors(const void *, struct Colors *, enum ColorOutput, char *,
                  RASTER_MAP_TYPE);
 
 #endif /* __LOCAL_PROTO_H__ */
+

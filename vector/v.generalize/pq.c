@@ -7,13 +7,8 @@
  * PURPOSE:    priority queue / binary heap
  *
  *
- * COPYRIGHT:  (C) 2002-2005 by the GRASS Development Team
- *
- *             This program is free software under the
- *             GNU General Public License (>=v2).
- *             Read the file COPYING that comes with GRASS
- *             for details.
- *
+ * SPDX-FileCopyrightText: 2002-2005 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  ****************************************************************/
 
 #include "pq.h"
@@ -96,3 +91,4 @@ int binary_heap_extract_max(binary_heap *bh, int *value)
     bh->items--;
     return 1;
 }
+

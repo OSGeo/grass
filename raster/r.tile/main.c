@@ -4,12 +4,9 @@
  * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com>
  * PURPOSE:      Retiles an existing raster map with user defined x and y tile
  *               size
- * COPYRIGHT:    (C) 2013 by Glynn Clements and the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
+ * SPDX-FileCopyrightText: 2013 Glynn Clements
+ * SPDX-FileCopyrightText: Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 #include <stdlib.h>
@@ -211,3 +208,4 @@ static void write_support_files(int xtile, int ytile, int overlap)
         Rast_mark_colors_as_fp(&colors);
     Rast_write_colors(name, G_mapset(), &colors);
 }
+

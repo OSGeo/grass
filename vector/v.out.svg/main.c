@@ -6,12 +6,8 @@
  *               OGR support by Martin Landa <landa.martin gmail.com> (2009)
  * PURPOSE:      Export GRASS vector map to SVG with custom
  *               coordinate-precision and optional attributes
- * COPYRIGHT:    (C) 2006-2009 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2). Read the file COPYING that
- *               comes with GRASS for details.
- *
+ * SPDX-FileCopyrightText: 2006-2009 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 #include <string.h>
@@ -444,3 +440,4 @@ static int print_escaped_for_xml(char *str)
     }
     return 1;
 }
+

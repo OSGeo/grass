@@ -3,12 +3,8 @@
  * MODULE:       v.decimate
  * AUTHOR(S):    Vaclav Petras
  * PURPOSE:      Reduce the number of points in a vector map
- * COPYRIGHT:    (C) 2015 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2). Read the file COPYING that
- *               comes with GRASS for details.
- *
+ * SPDX-FileCopyrightText: 2015 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 /* using the most-specific-first order of includes */
@@ -485,3 +481,4 @@ int main(int argc, char **argv)
 
     return EXIT_SUCCESS;
 }
+

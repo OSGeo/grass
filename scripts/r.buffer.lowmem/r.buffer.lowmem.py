@@ -6,12 +6,9 @@
 # AUTHOR(S): Glynn Clements
 # PURPOSE:   Low-memory replacement for r.buffer using r.grow.distance
 #
-# COPYRIGHT: (C) 2008, 2010 by Glynn Clements
-#
-#   This program is free software under the GNU General Public
-#   License (>=v2). Read the file COPYING that comes with GRASS
-#   for details.
-#
+# SPDX-FileCopyrightText: 2008, 2010 Glynn Clements
+# SPDX-FileCopyrightText: Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #############################################################################
 
 # %module
@@ -139,3 +136,4 @@ if __name__ == "__main__":
     options, flags = gs.parser()
     atexit.register(cleanup)
     main()
+

@@ -6,12 +6,8 @@
  *               Glynn Clements <glynn gclements.plus.com>
  *               Markus Neteler <neteler itc.it>
  * PURPOSE:      Stamps raster3d files with date and time.
- * COPYRIGHT:    (C) 2001-2006 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
+ * SPDX-FileCopyrightText: 2001-2006 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 /* based on r.timestamp by Michael Shapiro and v.timestamp by Markus Neteler:
@@ -94,3 +90,4 @@ int main(int argc, char *argv[])
     G_write_raster3d_timestamp(name, &ts);
     exit(EXIT_SUCCESS);
 }
+

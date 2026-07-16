@@ -27,11 +27,8 @@
  * paper: "Computing Visibility on * Terrains in External Memory" by
  * Herman Haverkort, Laura Toma and Yi Zhuang.
  *
- * COPYRIGHT: (C) 2008 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
- *
+ * SPDX-FileCopyrightText: 2008 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 #include <math.h>
@@ -747,3 +744,4 @@ void sort_event_list_by_distance(AMI_STREAM<AEvent> **eventList, Viewpoint vp)
     /*printf("..sorting done.\n"); fflush(stdout); */
     return;
 }
+

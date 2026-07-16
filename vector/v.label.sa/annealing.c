@@ -4,12 +4,8 @@
  * AUTHOR(S):    Wolf Bergenheim
  * PURPOSE:      This file contains functions which have to do with the
  *               annealing part of the algorithm.
- * COPYRIGHT:    (C) 2007 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
+ * SPDX-FileCopyrightText: 2007 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 #include "labels.h"
@@ -214,3 +210,4 @@ static void do_label_overlap(label_t *label, int cc, int nc)
         }
     }
 }
+

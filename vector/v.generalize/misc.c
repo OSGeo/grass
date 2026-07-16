@@ -7,13 +7,8 @@
  * PURPOSE:    miscellaneous functions of v.generalize
  *
  *
- * COPYRIGHT:  (C) 2002-2005 by the GRASS Development Team
- *
- *             This program is free software under the
- *             GNU General Public License (>=v2).
- *             Read the file COPYING that comes with GRASS
- *             for details.
- *
+ * SPDX-FileCopyrightText: 2002-2005 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  ****************************************************************/
 
 #include <stdlib.h>
@@ -878,3 +873,4 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 
     return 1;
 }
+

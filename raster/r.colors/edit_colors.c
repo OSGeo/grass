@@ -9,12 +9,8 @@
  * PURPOSE:      Allows creation and/or modification of the color table
  *               for a raster map layer.
  *
- * COPYRIGHT:    (C) 2006-2008, 2010-2011 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
+ * SPDX-FileCopyrightText: 2006-2008, 2010-2011 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  ***************************************************************************/
 
 #include <stdio.h>
@@ -579,3 +575,4 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
 
     exit(EXIT_SUCCESS);
 }
+

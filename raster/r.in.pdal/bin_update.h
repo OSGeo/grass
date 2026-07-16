@@ -10,12 +10,9 @@
  * PURPOSE:   Functions performing value updates on each incoming point
  *            during point binning process
  *
- * COPYRIGHT: (C) 2011-2021 by Vaclav Petras and the GRASS Development Team
- *
- *            This program is free software under the GNU General Public
- *            License (>=v2). Read the file COPYING that comes with
- *            GRASS for details.
- *
+ * SPDX-FileCopyrightText: 2011-2021 Vaclav Petras
+ * SPDX-FileCopyrightText: Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 #ifndef __BIN_UPDATE_H__
@@ -49,3 +46,4 @@ int row_array_get_value_row_col(void *, int, int, int, RASTER_MAP_TYPE,
                                 double *);
 
 #endif /* __BIN_UPDATE_H__ */
+

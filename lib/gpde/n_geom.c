@@ -7,12 +7,8 @@
  * PURPOSE:      part of the gpde library
  *                 allocation, destroying and initializing the geometric struct
  *
- * COPYRIGHT:    (C) 2000 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
+ * SPDX-FileCopyrightText: 2000 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 #include <grass/N_pde.h>
@@ -206,3 +202,4 @@ double N_get_geom_data_area_of_cell(N_geom_data *geom, int row)
 
     return 0.0;
 }
+

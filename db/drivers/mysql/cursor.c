@@ -2,11 +2,8 @@
  * MODULE:    mysql
  * AUTHOR(S): Radim Blazek (radim.blazek@gmail.com)
  * PURPOSE:   MySQL database driver
- * COPYRIGHT: (C) 2001 by the GRASS Development Team
- *            This program is free software under the
- *            GNU General Public License (>=v2).
- *            Read the file COPYING that comes with GRASS
- *            for details.
+ * SPDX-FileCopyrightText: 2001 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  **********************************************************/
 #include <stdio.h>
 
@@ -69,3 +66,4 @@ void free_cursor(cursor *c)
     G_free(c->cols);
     G_free(c);
 }
+

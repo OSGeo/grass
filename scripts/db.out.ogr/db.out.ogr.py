@@ -6,12 +6,9 @@
 # AUTHOR(S):   	Markus Neteler
 #               Converted to Python by Glynn Clements
 # PURPOSE:      exports attribute tables into various formats
-# COPYRIGHT:    (C) 2007-2014 by Markus Neteler and the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
-#
+# SPDX-FileCopyrightText: 2007-2014 Markus Neteler
+# SPDX-FileCopyrightText: Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #############################################################################
 
 # %module
@@ -130,3 +127,4 @@ def main():
 if __name__ == "__main__":
     options, flags = gcore.parser()
     main()
+

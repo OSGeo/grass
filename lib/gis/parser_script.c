@@ -3,10 +3,8 @@
 
    \brief GIS Library - Argument parsing functions (script)
 
-   (C) 2001-2009, 2011 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2009, 2011 Other GRASS authors
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL
    \author Soeren Gebbert added Dec. 2009 WPS process_description document
@@ -34,27 +32,10 @@ void G__script(void)
     fprintf(fp, "# AUTHOR(S):    %s\n", G_whoami());
     fprintf(fp, "# PURPOSE:      Wrapper for %s\n", G_program_name());
     fprintf(fp,
-            "# COPYRIGHT:    (C) %s by %s, and the GRASS Development Team\n",
+            "# SPDX-FileCopyrightText: %s %s\n",
             GRASS_VERSION_DATE, G_whoami());
-    fprintf(fp, "#\n");
-    fprintf(fp, "#  This program is free software; you can redistribute it "
-                "and/or modify\n");
-    fprintf(fp, "#  it under the terms of the GNU General Public License as "
-                "published by\n");
-    fprintf(fp, "#  the Free Software Foundation; either version 2 of the "
-                "License, or\n");
-    fprintf(fp, "#  (at your option) any later version.\n");
-    fprintf(fp, "#\n");
-    fprintf(
-        fp,
-        "#  This program is distributed in the hope that it will be useful,\n");
-    fprintf(
-        fp,
-        "#  but WITHOUT ANY WARRANTY; without even the implied warranty of\n");
-    fprintf(
-        fp,
-        "#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n");
-    fprintf(fp, "#  GNU General Public License for more details.\n");
+    fprintf(fp, "# SPDX-FileCopyrightText: Other GRASS authors\n");
+    fprintf(fp, "# SPDX-License-Identifier: GPL-2.0-or-later\n");
     fprintf(fp, "#\n");
     fprintf(fp, "##############################################################"
                 "##############\n\n");

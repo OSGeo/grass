@@ -7,12 +7,8 @@
  * PURPOSE:      Prints terse list of category values found in a raster
  *               map layer.
  *
- * COPYRIGHT:    (C) 2006-2025 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
+ * SPDX-FileCopyrightText: 2006-2025 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  ***************************************************************************/
 
 #include <grass/gis.h>
@@ -148,3 +144,4 @@ int describe(const char *name, int compact, char *no_data_str, int range,
     }
     return 1;
 }
+

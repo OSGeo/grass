@@ -5,12 +5,8 @@
 # AUTHOR(S):	Hamish Bowman, Otago University, New Zealand
 #               Converted to Python by Martin Landa <landa.martin gmail.com>
 # PURPOSE:	Unpack up a raster map packed with r.pack
-# COPYRIGHT:	(C) 2010-2017 by the GRASS Development Team
-#
-# 		This program is free software under the GNU General
-# 		Public License (>=v2). Read the file COPYING that
-# 		comes with GRASS for details.
-#
+# SPDX-FileCopyrightText: 2010-2017 Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #############################################################################
 
 # %module
@@ -242,3 +238,4 @@ if __name__ == "__main__":
     options, flags = grass.parser()
     atexit.register(cleanup)
     sys.exit(main())
+

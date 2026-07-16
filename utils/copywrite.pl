@@ -4,11 +4,8 @@
 ## GRASS source code files
 ## 2006, written by Schuyler Erle <schuyler , nocat net>
 ##
-## COPYRIGHT:    (C) 2006 by the GRASS Development Team
-##
-##               This program is free software under the GNU General Public
-##               License (>=v2). Read the file COPYING that comes with GRASS
-##               for details.
+## SPDX-FileCopyrightText: 2006 Other GRASS authors
+## SPDX-License-Identifier: GPL-2.0-or-later
 ##
 ## The script searches and opens sequentially all files
 ## which lack the word "copyright". Additionally the local
@@ -181,11 +178,8 @@ __END__
  * AUTHOR(S):    $original_author (original contributor)
  *               @authors
  * PURPOSE:
- * COPYRIGHT:    (C) $years[0]-$years[-1] by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: $years[0]-$years[-1] Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 $main_c

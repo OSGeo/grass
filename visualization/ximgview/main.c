@@ -3,12 +3,9 @@
  * MODULE:       ximgview
  * AUTHOR(S):    Glynn Clements
  * PURPOSE:      View BMP images from the PNG driver
- * COPYRIGHT:    (C) 2007 Glynn Clements
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
+ * SPDX-FileCopyrightText: 2007 Glynn Clements
+ * SPDX-FileCopyrightText: Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 #include <stdio.h>
@@ -320,3 +317,4 @@ int main(int argc, char **argv)
 
     return EXIT_SUCCESS;
 }
+

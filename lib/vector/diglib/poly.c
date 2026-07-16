@@ -8,12 +8,8 @@
  *
  * PURPOSE:      Lower level functions for reading/writing/manipulating vectors.
  *
- * COPYRIGHT:    (C) 2009 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
+ * SPDX-FileCopyrightText: 2009 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 #include <math.h>
@@ -349,3 +345,4 @@ double dig_find_poly_orientation(struct line_pnts *Points)
 
     return orientation; /* 0 for degenerate */
 }
+

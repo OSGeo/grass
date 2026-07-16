@@ -7,12 +7,8 @@
  *               Markus Neteler <neteler itc.it>
  * PURPOSE:      This module exports a GRASS raster map to the Virtual Reality
  *               Modeling Language (VRML) format for 3D visualization.
- * COPYRIGHT:    (C) 2006-2006 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
- *
+ * SPDX-FileCopyrightText: 2006-2006 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 #include <string.h>
@@ -225,3 +221,4 @@ int do_coordcnv(double *dval, int axis)
     *dval = dret;
     return 0;
 }
+

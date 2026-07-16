@@ -9,12 +9,9 @@
  * PURPOSE:   Imports LAS LiDAR point clouds to a raster map using
  *            aggregate statistics.
  *
- * COPYRIGHT: (C) 2019-2024 by Vaclav Petras and the GRASS Development Team
- *
- *            This program is free software under the GNU General Public
- *            License (>=v2). Read the file COPYING that comes with
- *            GRASS for details.
- *
+ * SPDX-FileCopyrightText: 2019-2024 Vaclav Petras
+ * SPDX-FileCopyrightText: Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 #include <cstdio>
@@ -971,3 +968,4 @@ int main(int argc, char *argv[])
 
     exit(EXIT_SUCCESS);
 }
+

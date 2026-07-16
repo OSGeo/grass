@@ -768,7 +768,8 @@ Use the following header in your source code.
 #
 # PURPOSE:   Provide short description of module here...
 #
-# COPYRIGHT: (C) 2024 by John Doe and the GRASS Development Team
+# SPDX-FileCopyrightText: 2024 John Doe
+# SPDX-FileCopyrightText: Other GRASS authors
 #
 # SPDX-License-Identifier: GPL-2.0-or-later
 ##############################################################################
@@ -1078,7 +1079,8 @@ original work remains, it must be properly cited.
  * MODULE:       g.foo
  * AUTHOR(S):    John Doe <jdoe at somewhere org>
  * PURPOSE:      Provide short description of module here...
- * COPYRIGHT:    (C) 2010 by John Doe, and the GRASS Development Team
+ * SPDX-FileCopyrightText: 2010 John Doe
+ * SPDX-FileCopyrightText: Other GRASS authors
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  *

@@ -5,18 +5,9 @@
 # AUTHOR(S): Anna Kratochvilova
 # PURPOSE:   Tool for animating a series of GRASS raster and vector maps
 #            or a space time raster dataset
-# COPYRIGHT: (C) 2012 by Anna Kratochvilova, and the GRASS Development Team
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
+# SPDX-FileCopyrightText: 2012 Anna Kratochvilova
+# SPDX-FileCopyrightText: Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 ############################################################################
 
 # %module
@@ -146,3 +137,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
