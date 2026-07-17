@@ -26,20 +26,27 @@
  * Segment_init(), all-in-memory mode initialization, and temporary
  * file handling.
  *
- * The values are not guaranteed to be initialized to zero or NULL.
- * You need to initialize them if needed. Typically, initialization
- * is done when loading values from existing raster map.
+ * In both modes, the underlying bytes are initialized to zero:
+ * the all-in-memory mode allocates the memory with G_calloc()
+ * and in the temporary file mode, the file is created by seeking
+ * to its end, so the skipped-over bytes read as zeros.
+ * Consequently, values read as zeros of the used data type,
+ * but they are not initialized to, e.g., raster NULL values.
+ * If other initial values are needed, you need to write them
+ * first. Typically, values are initialized by loading them from
+ * an existing raster map.
  *
  * The number of non-segmented rows and columns (*nrows* and *ncols*)
- * is typically a computational region.
+ * is typically given by the computational region.
  *
- * The number of segments to keep in memory is automatically adjusted
- * if it is larger than number of total segments required.
+ * If the number of segments to keep in memory (*nseg*) covers the
+ * whole data matrix, no temporary file is created and all data are
+ * kept in memory (the all-in-memory mode).
  *
  * In case of an error, a specific warning will be printed (using
  * G_warning()) and a negative number will be returned.
- * In case out of memory occurs in all-in-memory mode,
- * G_fatal_error() is called.
+ * If the memory allocation fails in the all-in-memory mode,
+ * G_fatal_error() is called (by the underlying G_calloc()).
  *
  * <b>Note:</b> The file with name *fname* will be created anew.
  *
@@ -74,8 +81,9 @@ int Segment_open(SEGMENT *SEG, char *fname, off_t nrows, off_t ncols, int srows,
         SEG->ncols = ncols;
         SEG->len = len;
         SEG->nseg = nseg;
+        /* the non-NULL cache marks the all-in-memory mode
+         * for the other functions in the library */
         SEG->cache = G_calloc(sizeof(char) * SEG->nrows * SEG->ncols, SEG->len);
-        /* scb is used to decide if we are in the all-in-memory mode */
         SEG->scb = NULL;
         SEG->open = 1;
 
