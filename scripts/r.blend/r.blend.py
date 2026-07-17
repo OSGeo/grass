@@ -6,11 +6,8 @@
 # AUTHOR(S):	CERL?; updated to GRASS 5.7 by Michael Barton
 #               Converted to Python by Glynn Clements
 # PURPOSE:	To redraw current displayed maps to 24 bit PNG output
-# COPYRIGHT:	(C) 2004-2012 by the GRASS Development Team
-#
-# 		This program is free software under the GNU General Public
-# 		License (>=v2). Read the file COPYING that comes with GRASS
-# 		for details.
+# SPDX-FileCopyrightText: 2004-2012 Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 

@@ -6,11 +6,8 @@
  * PURPOSE:      Program to manage and print the boundary definitions for the
  *               geographic region.
  *
- * COPYRIGHT:    (C) 2000-2021 by the GRASS Development Team
- *
- *               This program is free software under the GPL (>=v2)
- *               Read the file COPYING that comes with GRASS for
- *               details.
+ * SPDX-FileCopyrightText: 2000-2021 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  ****************************************************************************/
 
 #include <string.h>

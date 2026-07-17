@@ -9,10 +9,8 @@
  *            This function pointer can later be used to work with cell data of
  *            different types without having to go through any switching logics.
  *
- * COPYRIGHT: (C) 2011 by the GRASS Development Team
- *
- *            This program is free software under the GPL (>=v2)
- *            Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2011 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ****************************************************************************
  */

@@ -10,10 +10,9 @@ AUTHOR(S): M. Hamish Bowman, Dept. Marine Science, Otago University,
 PURPOSE:   cs2cs reprojection frontend for a list of coordinates.
            Replacement for m.proj2 from GRASS 5
 
-COPYRIGHT: (c) 2006-2019 Hamish Bowman, and the GRASS Development Team
-           This program is free software under the GNU General Public
-           License (>=v2). Read the file COPYING that comes with GRASS
-           for details.
+SPDX-FileCopyrightText: 2006-2019 Hamish Bowman
+SPDX-FileCopyrightText: Other GRASS authors
+SPDX-License-Identifier: GPL-2.0-or-later
 """
 
 # notes:

@@ -8,11 +8,9 @@
 #               Vaclav Petras <wenzeslaus gmail com> (support for general sources)
 # PURPOSE:      Tool to download and install extensions into local installation
 #
-# COPYRIGHT:    (C) 2009-2025 by Markus Neteler, and the GRASS Development Team
-#
-#               This program is free software under the GNU General
-#               Public License (>=v2). Read the file COPYING that
-#               comes with GRASS for details.
+# SPDX-FileCopyrightText: 2009-2025 Markus Neteler
+# SPDX-FileCopyrightText: Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 # TODO:         - update temporary workaround of using grass7 subdir of addon-repo, see
 #                 https://github.com/OSGeo/grass-addons/issues/528

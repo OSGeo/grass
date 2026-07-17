@@ -5,11 +5,9 @@
 # PURPOSE:   This module contains functions for non-interactive display
 #            in Jupyter Notebooks
 #
-# COPYRIGHT: (C) 2021-2022 Caitlin Haedrich, and by the GRASS Development Team
-#
-#           This program is free software under the GNU General Public
-#           License (>=v2). Read the file COPYING that comes with GRASS
-#           for details.
+# SPDX-FileCopyrightText: 2021-2022 Caitlin Haedrich
+# SPDX-FileCopyrightText: Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 """2D rendering and display functionality"""
 

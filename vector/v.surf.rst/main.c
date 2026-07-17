@@ -15,11 +15,8 @@
  *               Anna Petrasova (OpenMP version GRASS integration)
  *
  * PURPOSE:      Surface interpolation from vector point data by splines
- * COPYRIGHT:    (C) 2003-2009, 2013 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2). Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2003-2009, 2013 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 

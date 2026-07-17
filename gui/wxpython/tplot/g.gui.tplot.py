@@ -6,17 +6,9 @@
 # PURPOSE:   Temporal Plot Tool is a wxGUI component (based on matplotlib)
 #            the user to see in a plot the values of one or more temporal
 #            datasets for a queried point defined by a coordinate pair.
-# COPYRIGHT: (C) 2014-2015 by Luca Delucchi, and the GRASS Development Team
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
+# SPDX-FileCopyrightText: 2014-2015 Luca Delucchi
+# SPDX-FileCopyrightText: Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 ############################################################################
 

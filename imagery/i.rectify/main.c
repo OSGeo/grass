@@ -14,11 +14,8 @@
  * PURPOSE:      calculate a transformation matrix and then convert x,y cell
  *               coordinates to standard map coordinates for each pixel in the
  *               image (control points can come from g.gui.gcp)
- * COPYRIGHT:    (C) 2002-2020 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2002-2020 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 

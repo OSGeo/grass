@@ -7,10 +7,9 @@
 #               Converted to Python by Glynn Clements
 # PURPOSE:      Set color rules based on stddev from a map's mean value.
 #
-# COPYRIGHT:    (c) 2007,2009-2010 Hamish Bowman, and the GRASS Development Team
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-FileCopyrightText: 2007,2009-2010 Hamish Bowman
+# SPDX-FileCopyrightText: Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 

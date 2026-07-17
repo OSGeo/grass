@@ -7,11 +7,8 @@
  *               Martin Landa <landa.martin gmail.com> (GEOS support)
  *               Huidae Cho <grass4u gmail.com> (reverse flag fix)
  * PURPOSE:      Select features from one map by features in another map.
- * COPYRIGHT:    (C) 2003-2017, 2019 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2). Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2003-2017, 2019 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 

@@ -6,11 +6,8 @@
  *               based on r.series
  * PURPOSE:      Calculates (accumulated) raster value means, growing degree
  *               days (GDDs) or Winkler indices from several input maps.
- * COPYRIGHT:    (C) 2012 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2012 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 

@@ -9,11 +9,8 @@
  *             Major updates by Martin Landa <landa.martin gmail.com>
  *             Extend tools by Huidae Cho <grass4u gmail.com>
  *
- * COPYRIGHT:  (C) 2006-2017 by the GRASS Development Team
- *
- *             This program is free software under the GNU General
- *             Public License (>=v2). Read the file COPYING that comes
- *             with GRASS for details.
+ * SPDX-FileCopyrightText: 2006-2017 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * TODO:       3D support (done for move and vertexmove)
  ****************************************************************/

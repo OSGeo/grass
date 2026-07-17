@@ -3,11 +3,8 @@
  * MODULE:       v.in.lidar
  * AUTHOR(S):    Vaclav Petras
  * PURPOSE:      common lidar-related definitions
- * COPYRIGHT:    (C) 2015 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the COPYING file that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2015 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 

@@ -9,11 +9,8 @@
  *               Hamish Bowman <hamish_b yahoo.com>,
  *               Paul Kelly <paul-grass stjohnspoint.co.uk>
  * PURPOSE:
- * COPYRIGHT:    (C) 1999-2013 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1999-2013 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 /*

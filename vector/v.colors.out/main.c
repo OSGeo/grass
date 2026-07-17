@@ -6,11 +6,8 @@
  *
  * PURPOSE:      Allows export of the color table for a vector map.
  *
- * COPYRIGHT:    (C) 2011 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2). Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2011 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ***************************************************************************/
 

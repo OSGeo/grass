@@ -10,11 +10,8 @@
  * PURPOSE:      Calculate TOA Radiance or Reflectance and Kinetic Temperature
  *               for Landsat 1/2/3/4/5 MS, 4/5 TM, 7 ETM+, and 8 OLI/TIRS
  *
- * COPYRIGHT:    (C) 2006-2013 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2). Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2006-2013 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 

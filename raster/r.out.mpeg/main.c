@@ -11,11 +11,8 @@
  *               Paolo Zatelli <paolo.zatelli unitn.it>
  *
  * PURPOSE:      combines a series of GRASS raster maps into a single MPEG-1
- * COPYRIGHT:    (C) 1999-2006, 2011 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1999-2006, 2011 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 

@@ -5,11 +5,9 @@ AUTHOR(S): Maris Nartiss
 
 PURPOSE:   Test functions related to line intersection
 
-COPYRIGHT: (C) 2022 Maris Nartiss, and by the GRASS Development Team
-
-           This program is free software under the GNU General Public
-           License (>=v2). Read the file COPYING that comes with GRASS
-           for details.
+SPDX-FileCopyrightText: 2022 Maris Nartiss
+SPDX-FileCopyrightText: Other GRASS authors
+SPDX-License-Identifier: GPL-2.0-or-later
 """
 
 import grass.lib.vector as libvect

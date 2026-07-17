@@ -5,11 +5,9 @@
  *               based on the GSoC project by
  *               Eric Momsen <eric.momsen at gmail com>
  * PURPOSE:      Object recognition, segments an image group.
- * COPYRIGHT:    (C) 2012 by Eric Momsen, and the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2). Read the COPYING file that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2012 Eric Momsen
+ * SPDX-FileCopyrightText: Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *
  *               NOTE: the word "segment" is already used by the

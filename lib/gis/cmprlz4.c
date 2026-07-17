@@ -12,11 +12,8 @@
  *
  * ALGORITHM:   https://code.google.com/p/lz4/
  * DATE CREATED: Dec 18 2015
- * COPYRIGHT:   (C) 2015 by the GRASS Development Team
- *
- *              This program is free software under the GNU General Public
- *              License (version 2 or greater). Read the file COPYING that
- *              comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2015 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
