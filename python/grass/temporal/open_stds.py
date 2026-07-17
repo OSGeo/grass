@@ -18,11 +18,42 @@ for details.
 :authors: Soeren Gebbert
 """
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .core import SQLDatabaseInterfaceConnection
+    from .abstract_space_time_dataset import AbstractSpaceTimeDataset
+import contextlib
 from .abstract_map_dataset import AbstractMapDataset
 from .core import get_current_mapset, get_tgis_message_interface, init_dbif
 from .factory import dataset_factory
 
 ###############################################################################
+
+
+def parse_id(ident: str) -> tuple[str, str | None, str | None, str | None]:
+    """Parse parts of a user given dataset name.
+
+    :param ident: The id of a space time dataset
+
+    :return: Tuple with ID componenets: name, mapset, semantic_lablel, layer
+    """
+    name = ident
+
+    mapset = None
+    if "@" in ident:
+        name, mapset = ident.split("@", 1)
+
+    semantic_label = None
+    if "." in name:
+        name, semantic_label = name.split(".", 1)
+
+    layer = None
+    if ":" in name:
+        name, layer = name.split(":", 1)
+    return name, mapset, semantic_label, layer
 
 
 def open_old_stds(name, type, dbif=None):
@@ -44,8 +75,8 @@ def open_old_stds(name, type, dbif=None):
 
     """
     msgr = get_tgis_message_interface()
-
-    if type not in {
+    stds_type = type
+    if stds_type not in {
         "strds",
         "str3ds",
         "stvds",
@@ -57,31 +88,31 @@ def open_old_stds(name, type, dbif=None):
         "vector",
         "vect",
     }:
-        msgr.fatal(_("Unknown type: %s") % (type))
+        msgr.fatal(_("Unknown type: %s") % (stds_type))
 
-    def check_id(ds_id, stds_type, dbif) -> AbstractMapDataset | None:
+    def try_get_stds(
+        ds_id: str,
+        stds_type: str,
+        semantic_label: str | None,
+        dbif: SQLDatabaseInterfaceConnection,
+    ) -> AbstractSpaceTimeDataset | None:
         if stds_type in {"str3ds", "raster3d", "rast3d", "raster_3d"}:
             sp = dataset_factory("str3ds", ds_id)
         elif stds_type in {"stvds", "vect", "vector"}:
             sp = dataset_factory("stvds", ds_id)
         else:
             sp = dataset_factory("strds", ds_id)
+            # Set the semantic label if it was given
+            if semantic_label:
+                sp.set_semantic_label(semantic_label)
 
-        if not sp.is_in_db(dbif):
-            return None
-        return sp
+        with contextlib.suppress(Exception):
+            if sp.is_in_db(dbif):
+                return sp
+        return None
 
     # Check if the dataset name contains the mapset and the semantic label as well
-    mapset = None
-    if "@" in name:
-        name, mapset = name.split("@")
-
-    semantic_label = None
-    if name.find(".") > -1:
-        try:
-            name, semantic_label = name.split(".")
-        except ValueError:
-            msgr.fatal("Invalid name of the space time dataset. Only one dot allowed.")
+    name, mapset, semantic_label, _layer = parse_id(name)
 
     dbif, connection_state_changed = init_dbif(dbif)
 
@@ -89,30 +120,28 @@ def open_old_stds(name, type, dbif=None):
     sp = None
     if mapset:
         dbif.add_mapset(mapset)
-        id = f"{name}@{mapset}"
-        sp = check_id(id, type, dbif)
+        sp = try_get_stds(f"{name}@{mapset}", stds_type, semantic_label, dbif)
     else:
         # Check current mapset first
-        id = f"{name}@{get_current_mapset()}"
-        sp = check_id(id, type, dbif)
+        sp = try_get_stds(
+            f"{name}@{get_current_mapset()}", stds_type, semantic_label, dbif
+        )
         if not sp:
             for tgis_mapset in dbif.tgis_mapsets:
                 if tgis_mapset == get_current_mapset():
                     continue
-                id = f"{name}@{tgis_mapset}"
-                sp = check_id(id, type, dbif)
+                sp = try_get_stds(
+                    f"{name}@{tgis_mapset}", stds_type, semantic_label, dbif
+                )
                 if sp:
                     break
     if not sp:
         if connection_state_changed:
             dbif.close()
         msgr.fatal(
-            _("Space time dataset <%(id)s> of type <%(sp)s> not found")
-            % {"id": id, "sp": type}
+            _("Space time dataset <%(name)s> of type <%(sp)s> not found")
+            % {"name": name, "sp": stds_type}
         )
-    # Set the semantic label if it was given
-    if semantic_label:
-        sp.set_semantic_label(semantic_label)
     # Read content from temporal database
     sp.select(dbif)
     if connection_state_changed:
@@ -138,34 +167,35 @@ def check_new_stds(name, type, dbif=None, overwrite: bool = False):
 
     This function will raise a FatalError in case of an error.
     """
+    stds_type = type
     # Get the current mapset to create the id of the space time dataset
 
     mapset = get_current_mapset()
     msgr = get_tgis_message_interface()
 
-    if name.find("@") < 0:
-        id = name + "@" + mapset
-    else:
-        _n, m = name.split("@")
-        if mapset != m:
+    name, mapset, semantic_label, _layer = parse_id(name)
+    if mapset:
+        if mapset != get_current_mapset():
             msgr.fatal(
                 _("Space time datasets can only be created in the current mapset")
             )
-        id = name
+        id = f"{name}@{mapset}"
+    else:
+        id = f"{name}@{get_current_mapset()}"
 
-    if type in {"strds", "rast", "raster"}:
-        if name.find(".") > -1:
+    if stds_type in {"strds", "rast", "raster"}:
+        if "." in name:
             # a dot is used as a separator for semantic label filtering
             msgr.fatal(
                 _("Illegal dataset name <{}>. Character '.' not allowed.").format(name)
             )
         sp = dataset_factory("strds", id)
-    elif type in {"str3ds", "raster3d", "rast3d ", "raster_3d"}:
+    elif stds_type in {"str3ds", "raster3d", "rast3d ", "raster_3d"}:
         sp = dataset_factory("str3ds", id)
-    elif type in {"stvds", "vect", "vector"}:
+    elif stds_type in {"stvds", "vect", "vector"}:
         sp = dataset_factory("stvds", id)
     else:
-        msgr.error(_("Unknown type: %s") % (type))
+        msgr.error(_("Unknown type: %s") % (stds_type))
         return None
 
     dbif, connection_state_changed = init_dbif(dbif)
