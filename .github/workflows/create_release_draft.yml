@@ -82,7 +82,7 @@ jobs:
             --fail-on-no-commits \
             --generate-notes \
             --title "${TITLE}" \
-            "${PRERELEASE_FLAG}" \
+            --prerelease="${PRERELEASE_FLAG}" \
             "${OUT_DIR}/${GRASS}.tar.gz" \
             "${OUT_DIR}/${GRASS}.tar.gz.md5" \
             "${OUT_DIR}/${GRASS}.tar.gz.sha256" \
@@ -94,4 +94,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           TITLE: GRASS ${{ github.ref_name }}
-          PRERELEASE_FLAG: ${{ contains(github.ref, 'RC') && '--prerelease' || '' }}
+          PRERELEASE_FLAG: ${{ contains(github.ref, 'RC') }}
