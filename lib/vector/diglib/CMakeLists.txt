@@ -24,20 +24,18 @@ set(dig2_SRCS
     poly.c
     portable.c
     spindex_rw.c
-    type.c)
+    type.c
+)
 build_module(
-  NAME
-  grass_dig2
-  SOURCES
-  ${dig2_SRCS}
-  DEPENDS
-  grass_gmath
-  grass_gis
-  grass_rtree
-  GDAL::GDAL
-  ${LIBM})
+    NAME grass_dig2
+    SOURCES ${dig2_SRCS}
+    DEPENDS ${LIBM} GDAL::GDAL grass_gis grass_gmath grass_rtree
+)
 
 if(TARGET PostgreSQL::PostgreSQL)
-  target_include_directories(grass_dig2
-    PUBLIC $<TARGET_PROPERTY:PostgreSQL::PostgreSQL,INTERFACE_INCLUDE_DIRECTORIES>)
+    target_include_directories(
+        grass_dig2
+        PUBLIC
+            $<TARGET_PROPERTY:PostgreSQL::PostgreSQL,INTERFACE_INCLUDE_DIRECTORIES>
+    )
 endif()

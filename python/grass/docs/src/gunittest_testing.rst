@@ -8,7 +8,7 @@ of GRASS testing framework, you might want to skip to one of:
 * :ref:`test-c` section
 * :ref:`test-python` section
 * :ref:`test-doctest` section
-* :class:`~gunittest.case.TestCase` class
+* :class:`~grass.gunittest.case.TestCase` class
 * :ref:`running-tests-report` section
 
 
@@ -27,7 +27,7 @@ caused by C library functions does not influence the main testing process.
 
 Some tests will run without any data but many tests require
 the small (basic) version of GRASS sample Location for North Carolina
-(see `GRASS sample data`).
+(see `GRASS sample data`_).
 
 Basic example
 -------------
@@ -93,7 +93,7 @@ it must be placed into a directory named ``testsuite``.
 In the example we have used only two assert methods, one to check that
 module runs and end successfully and the other to test that map values are
 within an expect interval. There is a much larger selection of assert methods
-in :class:`~gunittest.case.TestCase` class documentation
+in :class:`~grass.gunittest.case.TestCase` class documentation
 and also in Python `unittest`_ package documentation.
 
 To run the test, run GRASS, use NC SPM sample location and create
@@ -141,7 +141,7 @@ test case
     In other words, a *test case* class contains all tests which are
     using the same *test fixture*.
 
-    There is also a general :class:`~gunittest.case.TestCase` class which
+    There is also a general :class:`~grass.gunittest.case.TestCase` class which
     all concrete test case classes should inherit from to get all
     GRASS-specific testing functionality and also to be found
     by the testing framework.
@@ -299,7 +299,7 @@ it is much better then relying on given data but it is not at all required
 and all approaches are encouraged.
 
 Whenever possible it is advantageous to use available assert methods.
-GRASS-specific assert methods are in :class:`gunittest.case.TestCase` class.
+GRASS-specific assert methods are in :class:`grass.gunittest.case.TestCase` class.
 For general assert methods refer to Python `unittest`_ package documentation.
 Both are used in the same way; they are methods of a given test case class.
 In cases (which should be rare) when no assert methods fits the purpose,
@@ -711,14 +711,13 @@ Further reading
 .. toctree::
    :maxdepth: 2
 
-   gunittest
+   grass.gunittest
    gunittest_running_tests
 
 
-.. _unittest: https://docs.python.org/2/library/unittest.html
-.. _doctest: https://docs.python.org/2/library/doctest.html
+.. _unittest: https://docs.python.org/3/library/unittest.html
 .. _Coverity Scan: https://scan.coverity.com/
 .. _1038: https://scan.coverity.com/projects/1038
 .. _Cppcheck: http://cppcheck.sourceforge.net/
 .. _sandbox: https://svn.osgeo.org/grass/sandbox/wenzeslaus/grass_py_static_check.py
-.. _GRASS sample data: https://grass.osgeo.org/download/data/ and http://fatra.cnr.ncsu.edu/data/ (nc_spm_full_v2beta1)
+.. _GRASS sample data: https://grass.osgeo.org/sampledata/north_carolina/
