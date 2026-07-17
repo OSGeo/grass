@@ -52,6 +52,8 @@ Generate documentation
 #]=======================================================================]
 
 macro(generate_docs_list)
+    # gersemi: hints { DOC_FILES: sort+unique }
+    # gersemi: hints { IMG_FILES: sort+unique }
   cmake_parse_arguments(D "MD_ONLY" "TARGET" "DOC_FILES;IMG_FILES" ${ARGN})
 
   if(NOT D_TARGET OR NOT D_DOC_FILES)
@@ -83,6 +85,8 @@ macro(generate_docs_list)
 endmacro()
 
 function(generate_docs name)
+    # gersemi: hints { IMG_FILES: sort+unique }
+    # gersemi: hints { DEPENDS: sort+unique }
   cmake_parse_arguments(PARSE_ARGV 1 D
     "IMG_NO;HTML_DESCR;MD_ONLY"
     "SOURCEDIR;TARGET;OUTPUT;DEST_DIR;GUI_TARGET_NAME"

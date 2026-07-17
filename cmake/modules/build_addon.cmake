@@ -75,6 +75,7 @@ file(MAKE_DIRECTORY "${OUTDIR}/${GRASSAddon_LibDIR}")
 file(MAKE_DIRECTORY "${OUTDIR}/${GRASSAddon_ScriptDIR}")
 
 function(add_files_to_etc_dir dir)
+    # gersemi: hints { FILES: sort+unique }
   cmake_parse_arguments(PARSE_ARGV 1 G "" "" "FILES")
   file(MAKE_DIRECTORY ${OUTDIR}/${GRASSAddon_ETCDIR}/${dir})
   file(COPY ${G_FILES} DESTINATION ${OUTDIR}/${GRASSAddon_ETCDIR}/${dir})
@@ -82,6 +83,11 @@ function(add_files_to_etc_dir dir)
 endfunction()
 
 function(build_addon name)
+    # gersemi: hints { SOURCES: sort+unique }
+    # gersemi: hints { ADDONS: sort+unique }
+    # gersemi: hints { DEPENDS: sort+unique }
+    # gersemi: hints { DOCFILES: sort+unique }
+    # gersemi: hints { GRASSLIBS: sort+unique }
   cmake_parse_arguments(PARSE_ARGV 1 G "NO_DOCS;IS_SCRIPT" "SRC_DIR;PYTHONPATH"
                         "SOURCES;ADDONS;DEPENDS;DOCFILES;GRASSLIBS")
   set(_src_dir ${CMAKE_CURRENT_SOURCE_DIR})
