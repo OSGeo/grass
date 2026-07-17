@@ -5,6 +5,9 @@ Test groups:
   (GML bzip2/gzip/no, pack bzip2/gzip/no)
 - Import flags -o (override CRS check), -e (extend extents), and -oe together
 
+Reprojection is currently not supported for space time vector datasets.
+The projection is ignored for STVDS import and import is always run with -o.
+
 (C) 2026 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
