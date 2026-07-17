@@ -17,9 +17,14 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.script.core import read_command
 
-# Reference statistics were computed with the nc_spm_full_v2beta1 dataset.
-# The elevation raster in nc_spm_08_grass7 classifies a small number of
-# cells differently, so precisions are chosen to accept both datasets.
+# A 400 x 400 cell subregion of the elevation raster which contains all
+# ten landforms and keeps the tests fast.
+region = {"n": 224000, "s": 220000, "w": 635000, "e": 639000, "res": 10}
+
+# Reference statistics were computed with the nc_spm_08_grass7 dataset.
+# The elevation raster in nc_spm_full_v2beta1 (used in CI) classifies a
+# small number of cells differently, so precisions are chosen to accept
+# both datasets.
 
 synth_out = """1	flat
 3	ridge
@@ -52,7 +57,7 @@ class TestClipling(TestCase):
     def setUpClass(cls):
         """Ensures expected computational region"""
         cls.use_temp_region()
-        cls.runModule("g.region", raster=cls.inele)
+        cls.runModule("g.region", **region)
         cls.runModule(
             "r.mapcalc",
             expression="{ou} = sin(x() / 5.0) + (sin(x() / 5.0) * 100.0 + 200)".format(
@@ -81,12 +86,12 @@ class TestClipling(TestCase):
         )
 
         reference = {
-            "n": 2019304,
-            "null_cells": 5696,
+            "n": 158404,
+            "null_cells": 1596,
             "min": 1,
             "max": 10,
-            "mean": 5.82088828626101,
-            "stddev": 1.7495396954895,
+            "mean": 5.81124214034999,
+            "stddev": 1.77419698170854,
         }
 
         self.assertRasterFitsUnivar(
@@ -108,12 +113,12 @@ class TestClipling(TestCase):
         )
 
         reference = {
-            "n": 2019304,
-            "null_cells": 5696,
+            "n": 158404,
+            "null_cells": 1596,
             "min": 1,
             "max": 9,
-            "mean": 5.99331056641298,
-            "stddev": 0.624993270568342,
+            "mean": 5.99981061084316,
+            "stddev": 0.600696938302586,
         }
 
         self.assertRasterFitsUnivar(
@@ -134,7 +139,7 @@ class TestParameterValidation(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
-        cls.runModule("g.region", raster=cls.inele)
+        cls.runModule("g.region", **region)
 
     @classmethod
     def tearDownClass(cls):
@@ -165,7 +170,7 @@ class TestMultipleOutputs(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
-        cls.runModule("g.region", raster=cls.inele)
+        cls.runModule("g.region", **region)
 
     @classmethod
     def tearDownClass(cls):
@@ -198,12 +203,12 @@ class TestMultipleOutputs(TestCase):
         )
 
         reference_forms = {
-            "n": 2019304,
-            "null_cells": 5696,
+            "n": 158404,
+            "null_cells": 1596,
             "min": 1,
             "max": 10,
-            "mean": 5.81997163379065,
-            "stddev": 1.80462751945005,
+            "mean": 5.81710057826823,
+            "stddev": 1.821438283467,
         }
 
         self.assertRasterFitsUnivar(
@@ -213,49 +218,49 @@ class TestMultipleOutputs(TestCase):
         )
 
         reference_ternary = {
-            "n": 2019304,
-            "null_cells": 5696,
+            "n": 158404,
+            "null_cells": 1596,
             "min": 0,
             "max": 6560,
-            "mean": 461.729427565141,
-            "stddev": 1035.85787176981,
+            "mean": 465.214786242772,
+            "stddev": 1038.84517618805,
         }
 
         self.assertRasterFitsUnivar(
             "test_ternary_multi",
             reference=reference_ternary,
-            precision=1,
+            precision=5,
         )
 
         reference_intensity = {
-            "n": 2019304,
-            "null_cells": 5696,
-            "min": -14.2301387786865,
-            "max": 19.7351875305176,
-            "mean": 0.401472390593266,
-            "stddev": 2.46468990424033,
+            "n": 158404,
+            "null_cells": 1596,
+            "min": -12.1759548187256,
+            "max": 13.1019992828369,
+            "mean": 0.506680904574651,
+            "stddev": 2.72539083939135,
         }
 
         self.assertRasterFitsUnivar(
             "test_intensity_multi",
             reference=reference_intensity,
-            precision=0.001,
+            precision=0.002,
         )
 
-        # Cell counts are omitted because the number of null (not applicable)
-        # cells depends on the form classification which slightly differs
-        # between the dataset versions.
+        # Cell counts and the maximum are omitted because the number of
+        # null (not applicable) cells and the single longest form depend
+        # on the classification which slightly differs between the
+        # dataset versions.
         reference_elongation = {
             "min": 0.999999940395355,
-            "max": 30,
-            "mean": 2.07217229639214,
-            "stddev": 1.59757907173383,
+            "mean": 2.09059988401335,
+            "stddev": 1.58855170683853,
         }
 
         self.assertRasterFitsUnivar(
             "test_elongation_multi",
             reference=reference_elongation,
-            precision=0.001,
+            precision=0.002,
         )
 
 
@@ -267,7 +272,7 @@ class TestFlags(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
-        cls.runModule("g.region", raster=cls.inele)
+        cls.runModule("g.region", **region)
 
     @classmethod
     def tearDownClass(cls):
@@ -298,12 +303,12 @@ class TestFlags(TestCase):
         )
 
         reference_basic = {
-            "n": 2019304,
-            "null_cells": 5696,
+            "n": 158404,
+            "null_cells": 1596,
             "min": 1,
             "max": 10,
-            "mean": 5.81211595678511,
-            "stddev": 1.84913018808328,
+            "mean": 5.82717608141209,
+            "stddev": 1.85255598163426,
         }
 
         self.assertRasterFitsUnivar(
@@ -321,12 +326,12 @@ class TestFlags(TestCase):
         )
 
         reference_extended = {
-            "n": 2019304,
-            "null_cells": 5696,
+            "n": 158404,
+            "null_cells": 1596,
             "min": 1,
             "max": 10,
-            "mean": 5.8660800949238,
-            "stddev": 1.79017370086154,
+            "mean": 5.85362112067877,
+            "stddev": 1.81621087978012,
         }
 
         self.assertRasterFitsUnivar(
@@ -361,12 +366,12 @@ class TestFlags(TestCase):
         )
 
         reference_meters = {
-            "n": 2019304,
-            "null_cells": 5696,
+            "n": 158404,
+            "null_cells": 1596,
             "min": 1,
             "max": 10,
-            "mean": 5.63588295769235,
-            "stddev": 1.75742791972737,
+            "mean": 5.65599353551678,
+            "stddev": 1.73140628723594,
         }
 
         self.assertRasterFitsUnivar(
@@ -392,7 +397,7 @@ class TestComparisonModes(TestCase):
     def setUpClass(cls):
         """Compute the anglev1 map once for use as a baseline in all tests"""
         cls.use_temp_region()
-        cls.runModule("g.region", raster=cls.inele)
+        cls.runModule("g.region", **region)
         cls.runModule(
             "r.geomorphon",
             elevation=cls.inele,
@@ -418,12 +423,12 @@ class TestComparisonModes(TestCase):
     def test_anglev1_mode(self):
         """Test anglev1 comparison mode (default) against reference statistics"""
         reference = {
-            "n": 2019304,
-            "null_cells": 5696,
+            "n": 158404,
+            "null_cells": 1596,
             "min": 1,
             "max": 10,
-            "mean": 5.82088828626101,
-            "stddev": 1.7495396954895,
+            "mean": 5.81124214034999,
+            "stddev": 1.77419698170854,
         }
 
         self.assertRasterFitsUnivar(
@@ -443,12 +448,12 @@ class TestComparisonModes(TestCase):
         )
 
         reference_anglev2 = {
-            "n": 2019304,
-            "null_cells": 5696,
+            "n": 158404,
+            "null_cells": 1596,
             "min": 1,
             "max": 10,
-            "mean": 5.82424092657668,
-            "stddev": 1.75081305759747,
+            "mean": 5.82252973409762,
+            "stddev": 1.78012008833156,
         }
 
         self.assertRasterFitsUnivar(
@@ -478,12 +483,12 @@ class TestComparisonModes(TestCase):
         # On this dataset, anglev2_distance produces the same result
         # as anglev2, but both differ from anglev1.
         reference_anglev2_dist = {
-            "n": 2019304,
-            "null_cells": 5696,
+            "n": 158404,
+            "null_cells": 1596,
             "min": 1,
             "max": 10,
-            "mean": 5.82424092657668,
-            "stddev": 1.75081305759747,
+            "mean": 5.82252973409762,
+            "stddev": 1.78012008833156,
         }
 
         self.assertRasterFitsUnivar(
@@ -509,11 +514,9 @@ class TestProfileFormat(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
-        cls.runModule("g.region", raster=cls.inele)
-
-        info = gs.raster_info(cls.inele)
-        cls.test_easting = (info["east"] + info["west"]) / 2
-        cls.test_northing = (info["north"] + info["south"]) / 2
+        cls.runModule("g.region", **region)
+        cls.test_easting = (region["e"] + region["w"]) / 2
+        cls.test_northing = (region["n"] + region["s"]) / 2
 
     @classmethod
     def tearDownClass(cls):
