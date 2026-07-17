@@ -32,7 +32,7 @@ CELL select_dir(CELL i)
     return dir[i];
 }
 
-void flink(int i UNUSED, int j, int nl UNUSED, int ns UNUSED, CELL *p1,
+void flink(int i G_UNUSED, int j, int nl G_UNUSED, int ns G_UNUSED, CELL *p1,
            CELL *p2, CELL *p3, int *active, int *goagain)
 {
     CELL bitmask[8] = {1, 2, 4, 8, 16, 32, 64, 128};

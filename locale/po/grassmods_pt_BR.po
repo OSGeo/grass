@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-28 15:48+0000\n"
+"POT-Creation-Date: 2026-06-27 15:58+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.osgeo.org/projects/grass-gis/grassmods/pt_BR/>\n"
@@ -9667,6 +9667,9 @@ msgstr "Formatação"
 msgid "Columns to be printed to stdout"
 msgstr ""
 
+msgid "plain;Plain text output;line;Comma separated list of dataset names;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
+msgstr ""
+
 msgid "Field separator character between the output columns"
 msgstr ""
 
@@ -9946,8 +9949,10 @@ msgstr ""
 msgid "Path to the extraction directory"
 msgstr ""
 
-msgid "Create a new project and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
-msgstr ""
+#, fuzzy
+#| msgid "Create a new empty vector map and exit. Nothing is read from input."
+msgid "Create a new project and import the data into it."
+msgstr "Cria um novo mapa vetorial vazio e sai. Nada é lido na entrada."
 
 msgid "Set the current region from the last map that was imported"
 msgstr ""
@@ -10118,6 +10123,9 @@ msgstr ""
 msgid "Raster map used for zoning, must be of type CELL"
 msgstr ""
 
+msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
+msgstr ""
+
 msgid "Calculate extended statistics"
 msgstr "Calcular estatísticas estendidas"
 
@@ -10187,8 +10195,8 @@ msgid "Raster map with zones to compute statistics for"
 msgstr "Nome do mapa raster de entrada para cálculo da estatística"
 
 #, fuzzy
-msgid "Raster map with zones to compute statistics for (needs to be CELL)"
-msgstr "Nome do mapa raster de entrada para cálculo da estatística"
+msgid "3D raster map with zones"
+msgstr "Título do mapa vetorial"
 
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
 msgstr ""
@@ -10354,6 +10362,9 @@ msgstr ""
 
 msgid "select"
 msgstr "selecionar"
+
+msgid "plain;Plain text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
+msgstr ""
 
 #, fuzzy
 #| msgid "Name of a space time raster dataset archive"
@@ -13611,6 +13622,9 @@ msgstr ""
 
 #, c-format
 msgid "Internal error in %s()"
+msgstr ""
+
+msgid "JSON nesting exceeds maximum depth"
 msgstr ""
 
 msgid "Generates a raster map containing distances to nearest raster features and/or the value of the nearest non-null cell."
@@ -23802,7 +23816,7 @@ msgstr ""
 msgid "Filled raster map is: %s"
 msgstr ""
 
-msgid "Following holes where not filled. Temporary maps with are left in place to allow examination of unfilled holes"
+msgid "The following holes were not filled. Temporary maps are left in place to allow examination of unfilled holes:"
 msgstr ""
 
 msgid "Output can be written only to the current mapset"
@@ -25107,11 +25121,24 @@ msgstr ""
 msgid "Prints/sets general temporal GIS database connection for current mapset."
 msgstr ""
 
+msgid "plain;Plain text output;shell;Shell script style output;json;JSON (JavaScript Object Notation)"
+msgstr ""
+
 msgid "Overwrite current settings if initialized"
 msgstr ""
 
-msgid "Print current connection parameter in shell style and exit"
+#, fuzzy
+#| msgid "Name of raster map(s) for elevation"
+msgid "Name of the mapset(s) to print the connection info for"
+msgstr "Nome(s) do(s) mapa(s) raster para elevação"
+
+msgid "'.' for current mapset; '*' for all mapsets in the project. Requires format=json."
 msgstr ""
+
+#, fuzzy
+#| msgid "This option requires four columns"
+msgid "The mapset option requires format=json."
+msgstr "Esta opção requer quatro colunas"
 
 msgid "Temporal GIS database connection not defined. Run t.connect."
 msgstr ""
@@ -31421,6 +31448,11 @@ msgid_plural "%d boundaries snapped"
 msgstr[0] "%d fronteira ligada"
 msgstr[1] "%d fronteiras ligadas"
 
+#, fuzzy, c-format
+#| msgid "Reading raster map <%s>..."
+msgid "Removing areas smaller than %g sqm..."
+msgstr "Lendo mapa raster <%s>..."
+
 #, c-format
 msgid "Querying vector map <%s>..."
 msgstr "Consultando mapa vetorial <%s>..."
@@ -31500,6 +31532,14 @@ msgstr "Limiar de 'snap' para fronteiras"
 
 msgid "Disable snapping with snap <= 0"
 msgstr "Desativar 'snap' com snap <= 0"
+
+#, fuzzy
+#| msgid "Minimum size of area to be imported (square meters)"
+msgid "Minimum size of areas to keep in square meters"
+msgstr "Tamanho mínimo da área a ser importada (metros quadrados)"
+
+msgid "Enable with minsize > 0"
+msgstr ""
 
 #, c-format
 msgid "Unknown operator '%s'"
@@ -31601,6 +31641,11 @@ msgstr "Anexar arquivos a um arquivo existente (a substituição de arquivos exi
 msgid "Missing attribute table for vector map <%s>"
 msgstr "Tabela de atributos ausente para mapa vetorial <%s>"
 
+#, fuzzy
+#| msgid "Too many units to place"
+msgid "Too many columns to copy the table"
+msgstr "Muitas unidades para colocar"
+
 #, c-format
 msgid "Missing table for <%s>"
 msgstr ""
@@ -31654,6 +31699,11 @@ msgstr "As informações do cabeçalho também podem ter que ser editadas"
 #, c-format
 msgid "%d vector maps patched"
 msgstr "%d mapas vetoriais corrigidos"
+
+#, fuzzy
+#| msgid "Too many column names"
+msgid "Too many columns to copy records"
+msgstr "Muitos nomes de coluna"
 
 #, c-format
 msgid "Cannot open select cursor: '%s'"
@@ -33741,9 +33791,6 @@ msgstr "Não consegui copiar a tabela"
 msgid "Pass %d"
 msgstr "Passo %d"
 
-msgid "Node is outside any input area"
-msgstr "O nó está fora de qualquer área de entrada"
-
 #, c-format
 msgid "Found %d point/centroid in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
 msgid_plural "Found %d points/centroids in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
@@ -34163,6 +34210,13 @@ msgstr ""
 
 msgid "Image file"
 msgstr "Arquivo de imagem"
+
+#, fuzzy
+#~ msgid "Raster map with zones to compute statistics for (needs to be CELL)"
+#~ msgstr "Nome do mapa raster de entrada para cálculo da estatística"
+
+#~ msgid "Node is outside any input area"
+#~ msgstr "O nó está fora de qualquer área de entrada"
 
 #~ msgid ""
 #~ "WGS84 output not possible as this location does not contain\n"
@@ -39263,10 +39317,6 @@ msgstr "Arquivo de imagem"
 #, fuzzy
 #~ msgid "calibration"
 #~ msgstr "Locação: %s\n"
-
-#, fuzzy
-#~ msgid "categorical map with zones"
-#~ msgstr "Título do mapa vetorial"
 
 #, fuzzy
 #~ msgid "centerpoint"

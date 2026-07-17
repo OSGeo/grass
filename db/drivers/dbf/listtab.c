@@ -18,7 +18,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_list_tables(dbString **tlist, int *tcount, int system UNUSED)
+int db__driver_list_tables(dbString **tlist, int *tcount, int system G_UNUSED)
 {
     dbString *list;
     int i;

@@ -154,8 +154,8 @@ void Nviz_destroy_render_window(struct render_window *rwin)
    \return 0 on success
    \return -1 on error
  */
-int Nviz_create_render_window(struct render_window *rwin, void *display UNUSED,
-                              int width, int height)
+int Nviz_create_render_window(struct render_window *rwin,
+                              void *display G_UNUSED, int width, int height)
 {
 #if defined(OPENGL_X11)
     int attributeList[] = {GLX_RGBA,

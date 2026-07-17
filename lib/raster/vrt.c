@@ -18,7 +18,7 @@
 
 #include "R.h"
 
-int cmp_wnd(const void *a, const void *b)
+static int cmp_wnd(const void *a, const void *b)
 {
     struct Cell_head *cellhda = &((struct tileinfo *)a)->cellhd;
     struct Cell_head *cellhdb = &((struct tileinfo *)b)->cellhd;
@@ -123,9 +123,9 @@ struct R_vrt *Rast_get_vrt(const char *vname, const char *vmapset)
 
                 if (rd_window->proj == PROJECTION_LL) {
                     while (east > p->cellhd.east)
-                        east -= 360;
+                        east -= 360.0;
                     while (east < p->cellhd.west)
-                        east += 360;
+                        east += 360.0;
                 }
                 if (east >= p->cellhd.west && east < p->cellhd.east)
                     G_ilist_add(p->clist, col);
@@ -206,7 +206,11 @@ int Rast_get_vrt_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
     for (i = 0; i < vrt->tlist->n_values; i++) {
         struct tileinfo *p = &ti[vrt->tlist->value[i]];
 
-        if (p->cellhd.north > rows && p->cellhd.south <= rown) {
+        /* open the tile only if it overlaps with the current reading
+         * row and the current reading EW extents */
+        if (p->cellhd.north > rows && p->cellhd.south <= rown &&
+            p->cellhd.west < rd_window->east &&
+            p->cellhd.east > rd_window->west) {
             int tfd;
             void *p1, *p2;
 
@@ -219,27 +223,13 @@ int Rast_get_vrt_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
             Rast_get_row_nomask(tfd, tmpbuf, row, data_type);
             Rast_unopen(tfd);
 
-            p1 = buf;
-            p2 = tmpbuf;
             /* restrict to start and end col ? */
             for (j = 0; j < p->clist->n_values; j++) {
                 p1 = (unsigned char *)buf + size * p->clist->value[j];
                 p2 = (unsigned char *)tmpbuf + size * p->clist->value[j];
 
                 if (!Rast_is_null_value(p2, data_type)) {
-                    switch (data_type) {
-                    case CELL_TYPE:
-                        *(CELL *)p1 = *(CELL *)p2;
-                        break;
-                    case FCELL_TYPE:
-                        *(FCELL *)p1 = *(FCELL *)p2;
-                        break;
-                    case DCELL_TYPE:
-                        *(DCELL *)p1 = *(DCELL *)p2;
-                        break;
-                    default:
-                        break;
-                    }
+                    memcpy(p1, p2, size);
                 }
             }
             have_tile = 1;

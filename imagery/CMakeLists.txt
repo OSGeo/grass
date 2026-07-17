@@ -35,219 +35,258 @@ set(imagery_modules_list
     i.target
     i.topo.corr
     i.vi
-    i.zc)
+)
+
+if(WITH_FFTW)
+    list(APPEND imagery_modules_list i.zc)
+endif()
 
 if(WITH_LIBSVM)
-  build_program_in_subdir(
-    i.svm.predict
-    DEPENDS
-    grass_imagery
-    grass_raster
-    grass_gis
-    LibSVM::LibSVM)
+    build_program_in_subdir(
+        i.svm.predict
+        DEPENDS LibSVM::LibSVM grass_gis grass_imagery grass_raster
+    )
 
-  build_program_in_subdir(
-    i.svm.train
-    DEPENDS
-    grass_imagery
-    grass_raster
-    grass_vector
-    grass_gis
-    LibSVM::LibSVM)
+    build_program_in_subdir(
+        i.svm.train
+        DEPENDS LibSVM::LibSVM grass_gis grass_imagery grass_raster grass_vector
+    )
 
     list(APPEND imagery_modules_list i.svm.predict i.svm.train)
 endif()
 
 add_custom_target(
-  ALL_IMAGERY_MODULES ALL
-  DEPENDS ${imagery_modules_list}
-  COMMENT "All imagery modules are built.")
+    ALL_IMAGERY_MODULES
+    ALL
+    DEPENDS ${imagery_modules_list}
+    COMMENT "All imagery modules are built."
+)
 
 set_target_properties(ALL_IMAGERY_MODULES PROPERTIES FOLDER Misc)
 
 if(WITH_DOCS)
-  generate_docs(imageryintro TARGET ALL_IMAGERY_MODULES)
+    generate_docs(imageryintro TARGET ALL_IMAGERY_MODULES)
 
-  file(COPY ${CMAKE_SOURCE_DIR}/lib/imagery/band_references_scheme.png
-       DESTINATION ${OUTDIR}/${GRASS_INSTALL_DOCDIR})
-  install(FILES ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/band_references_scheme.png
-          DESTINATION ${GRASS_INSTALL_DOCDIR})
+    file(
+        COPY ${CMAKE_SOURCE_DIR}/lib/imagery/band_references_scheme.png
+        DESTINATION ${OUTDIR}/${GRASS_INSTALL_DOCDIR}
+    )
+    install(
+        FILES ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/band_references_scheme.png
+        DESTINATION ${GRASS_INSTALL_DOCDIR}
+    )
 endif()
 
-build_program_in_subdir(i.albedo DEPENDS grass_imagery grass_raster
-                        grass_vector grass_gis)
-build_program_in_subdir(i.aster.toar DEPENDS grass_imagery grass_raster
-                        grass_vector grass_gis ${LIBM})
+build_program_in_subdir(
+    i.albedo
+    DEPENDS grass_gis grass_imagery grass_raster grass_vector
+)
+build_program_in_subdir(
+    i.aster.toar
+    DEPENDS ${LIBM} grass_gis grass_imagery grass_raster grass_vector
+)
 
 build_program_in_subdir(
-  i.atcorr
-  DEPENDS
-  grass_imagery
-  grass_raster
-  grass_vector
-  grass_gis
-  grass_btree2
-  ${LIBM}
-  SRC_REGEX
-  "*.cpp")
-
-build_program_in_subdir(i.biomass DEPENDS grass_imagery grass_raster
-                        grass_vector grass_gis ${LIBM})
-build_program_in_subdir(
-  i.cca
-  DEPENDS
-  grass_imagery
-  grass_raster
-  grass_vector
-  grass_gis
-  grass_gmath
-  ${LIBM})
-build_program_in_subdir(
-  i.cluster
-  DEPENDS
-  grass_imagery
-  grass_raster
-  grass_vector
-  grass_gis
-  grass_cluster)
-
-build_program_in_subdir(i.eb.evapfr DEPENDS grass_imagery grass_raster
-                        grass_vector grass_gis ${LIBM})
-build_program_in_subdir(i.eb.eta DEPENDS grass_imagery grass_raster
-                        grass_vector grass_gis ${LIBM})
-build_program_in_subdir(i.eb.hsebal01 DEPENDS grass_imagery grass_raster
-                        grass_vector grass_gis ${LIBM})
-build_program_in_subdir(i.eb.netrad DEPENDS grass_imagery grass_raster
-                        grass_vector grass_gis ${LIBM})
-build_program_in_subdir(i.eb.soilheatflux DEPENDS grass_imagery grass_raster
-                        grass_vector grass_gis ${LIBM})
-
-build_program_in_subdir(i.evapo.mh DEPENDS grass_imagery grass_raster
-                        grass_vector grass_gis ${LIBM})
-build_program_in_subdir(i.evapo.pm DEPENDS grass_imagery grass_raster
-                        grass_vector grass_gis ${LIBM})
-build_program_in_subdir(i.evapo.pt DEPENDS grass_imagery grass_raster
-                        grass_vector grass_gis ${LIBM})
-build_program_in_subdir(i.evapo.time DEPENDS grass_imagery grass_raster
-                        grass_vector grass_gis)
-build_program_in_subdir(i.emissivity DEPENDS grass_imagery grass_raster
-                        grass_vector grass_gis ${LIBM})
-build_program_in_subdir(
-  i.find
-  DEPENDS
-  grass_imagery
-  grass_raster
-  grass_vector
-  grass_gis
-  PACKAGE
-  "grassmods"
-  RUNTIME_OUTPUT_DIR
-  ${GRASS_INSTALL_ETCDIR}
-  NO_DOC)
-
-build_program_in_subdir(i.gensig DEPENDS grass_imagery grass_raster
-                        grass_vector grass_gis ${LIBM})
+    i.atcorr
+    DEPENDS
+        ${LIBM}
+        grass_btree2
+        grass_gis
+        grass_imagery
+        grass_raster
+        grass_vector
+    SRC_REGEX "*.cpp"
+)
 
 build_program_in_subdir(
-  i.gensigset
-  DEPENDS
-  grass_imagery
-  grass_raster
-  grass_vector
-  grass_gis
-  grass_gmath
-  ${LIBM})
-
-build_program_in_subdir(i.group DEPENDS grass_imagery grass_raster grass_vector
-                        grass_gis grass_parson)
-
-build_program_in_subdir(i.his.rgb DEPENDS grass_imagery grass_raster
-                        grass_vector grass_gis)
-
-build_program_in_subdir(i.landsat.toar DEPENDS grass_imagery grass_raster
-                        grass_vector grass_gis ${LIBM})
-
-build_program_in_subdir(i.maxlik DEPENDS grass_imagery grass_raster
-                        grass_vector grass_gis ${LIBM})
-
-build_program_in_subdir(i.modis.qc DEPENDS grass_imagery grass_raster
-                        grass_vector grass_gis)
-
-build_program_in_subdir(i.rectify DEPENDS grass_imagery grass_raster
-                        grass_vector grass_gis ${LIBM})
-
-build_program_in_subdir(i.rgb.his DEPENDS grass_imagery grass_raster
-                        grass_vector grass_gis)
+    i.biomass
+    DEPENDS ${LIBM} grass_gis grass_imagery grass_raster grass_vector
+)
+build_program_in_subdir(
+    i.cca
+    DEPENDS
+        ${LIBM}
+        grass_gis
+        grass_gmath
+        grass_imagery
+        grass_raster
+        grass_vector
+)
+build_program_in_subdir(
+    i.cluster
+    DEPENDS grass_cluster grass_gis grass_imagery grass_raster grass_vector
+)
 
 build_program_in_subdir(
-  i.segment
-  DEPENDS
-  grass_imagery
-  grass_raster
-  grass_vector
-  grass_gis
-  grass_segment
-  ${LIBM})
+    i.eb.evapfr
+    DEPENDS ${LIBM} grass_gis grass_imagery grass_raster grass_vector
+)
+build_program_in_subdir(
+    i.eb.eta
+    DEPENDS ${LIBM} grass_gis grass_imagery grass_raster grass_vector
+)
+build_program_in_subdir(
+    i.eb.hsebal01
+    DEPENDS ${LIBM} grass_gis grass_imagery grass_raster grass_vector
+)
+build_program_in_subdir(
+    i.eb.netrad
+    DEPENDS ${LIBM} grass_gis grass_imagery grass_raster grass_vector
+)
+build_program_in_subdir(
+    i.eb.soilheatflux
+    DEPENDS ${LIBM} grass_gis grass_imagery grass_raster grass_vector
+)
+
+build_program_in_subdir(
+    i.evapo.mh
+    DEPENDS ${LIBM} grass_gis grass_imagery grass_raster grass_vector
+)
+build_program_in_subdir(
+    i.evapo.pm
+    DEPENDS ${LIBM} grass_gis grass_imagery grass_raster grass_vector
+)
+build_program_in_subdir(
+    i.evapo.pt
+    DEPENDS ${LIBM} grass_gis grass_imagery grass_raster grass_vector
+)
+build_program_in_subdir(
+    i.evapo.time
+    DEPENDS grass_gis grass_imagery grass_raster grass_vector
+)
+build_program_in_subdir(
+    i.emissivity
+    DEPENDS ${LIBM} grass_gis grass_imagery grass_raster grass_vector
+)
+build_program_in_subdir(
+    i.find
+    DEPENDS grass_gis grass_imagery grass_raster grass_vector
+    PACKAGE "grassmods"
+    RUNTIME_OUTPUT_DIR ${GRASS_INSTALL_ETCDIR}
+    NO_DOC
+)
+
+build_program_in_subdir(
+    i.gensig
+    DEPENDS ${LIBM} grass_gis grass_imagery grass_raster grass_vector
+)
+
+build_program_in_subdir(
+    i.gensigset
+    DEPENDS
+        ${LIBM}
+        grass_gis
+        grass_gmath
+        grass_imagery
+        grass_raster
+        grass_vector
+)
+
+build_program_in_subdir(
+    i.group
+    DEPENDS grass_gis grass_imagery grass_parson grass_raster grass_vector
+)
+
+build_program_in_subdir(
+    i.his.rgb
+    DEPENDS grass_gis grass_imagery grass_raster grass_vector
+)
+
+build_program_in_subdir(
+    i.landsat.toar
+    DEPENDS ${LIBM} grass_gis grass_imagery grass_raster grass_vector
+)
+
+build_program_in_subdir(
+    i.maxlik
+    DEPENDS ${LIBM} grass_gis grass_imagery grass_raster grass_vector
+)
+
+build_program_in_subdir(
+    i.modis.qc
+    DEPENDS grass_gis grass_imagery grass_raster grass_vector
+)
+
+build_program_in_subdir(
+    i.rectify
+    DEPENDS ${LIBM} grass_gis grass_imagery grass_raster grass_vector
+)
+
+build_program_in_subdir(
+    i.rgb.his
+    DEPENDS grass_gis grass_imagery grass_raster grass_vector
+)
+
+build_program_in_subdir(
+    i.segment
+    DEPENDS
+        ${LIBM}
+        grass_gis
+        grass_imagery
+        grass_raster
+        grass_segment
+        grass_vector
+)
 
 build_program_in_subdir(i.signatures DEPENDS grass_imagery grass_gis)
 
 build_program_in_subdir(
-  i.smap
-  DEPENDS
-  grass_imagery
-  grass_raster
-  grass_vector
-  grass_gis
-  grass_gmath
-  ${LIBM})
-
-build_program_in_subdir(i.target DEPENDS grass_imagery grass_raster
-                        grass_vector grass_gis)
-
-build_program_in_subdir(i.topo.corr DEPENDS grass_imagery grass_raster
-                        grass_vector grass_gis ${LIBM})
+    i.smap
+    DEPENDS
+        ${LIBM}
+        grass_gis
+        grass_gmath
+        grass_imagery
+        grass_raster
+        grass_vector
+)
 
 build_program_in_subdir(
-  i.pca
-  DEPENDS
-  grass_imagery
-  grass_raster
-  grass_vector
-  grass_gis
-  grass_gmath
-  ${LIBM})
-
-build_program_in_subdir(i.vi DEPENDS grass_imagery grass_raster grass_vector
-                        grass_gis ${LIBM})
+    i.target
+    DEPENDS grass_gis grass_imagery grass_raster grass_vector
+)
 
 build_program_in_subdir(
-  i.zc
-  DEPENDS
-  grass_imagery
-  grass_raster
-  grass_vector
-  grass_gis
-  grass_gmath)
+    i.topo.corr
+    DEPENDS ${LIBM} grass_gis grass_imagery grass_raster grass_vector
+)
 
 build_program_in_subdir(
-  i.fft
-  DEPENDS
-  grass_imagery
-  grass_raster
-  grass_gmath
-  grass_gis
-  PRIMARY_DEPENDS
-  FFTW)
+    i.pca
+    DEPENDS
+        ${LIBM}
+        grass_gis
+        grass_gmath
+        grass_imagery
+        grass_raster
+        grass_vector
+)
 
 build_program_in_subdir(
-  i.ifft
-  DEPENDS
-  grass_gis
-  grass_raster
-  grass_gmath
-  grass_btree2
-  PRIMARY_DEPENDS
-  FFTW)
+    i.vi
+    DEPENDS ${LIBM} grass_gis grass_imagery grass_raster grass_vector
+)
+
+if(WITH_FFTW)
+    build_program_in_subdir(
+        i.zc
+        DEPENDS grass_gis grass_gmath grass_imagery grass_raster grass_vector
+    )
+else()
+    message(STATUS "i.zc disabled because FFTW is not available")
+endif()
+
+build_program_in_subdir(
+    i.fft
+    DEPENDS grass_gis grass_gmath grass_imagery grass_raster
+    PRIMARY_DEPENDS FFTW
+)
+
+build_program_in_subdir(
+    i.ifft
+    DEPENDS grass_btree2 grass_gis grass_gmath grass_raster
+    PRIMARY_DEPENDS FFTW
+)
 
 build_program_in_subdir(i.landsat.acca DEPENDS grass_raster grass_gis ${LIBM})
 
