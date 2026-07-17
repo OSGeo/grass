@@ -114,7 +114,7 @@ class MenuTreeModelBuilder:
                 "" if keywords is None or keywords.text is None else keywords.text
             )
             shortcut = shortcut.text if shortcut is not None else ""
-            wxId = getattr(wx, wxId.text) if wxId is not None else wx.ID_ANY
+            wxId = getattr(wx, wxId.text, wx.ID_ANY) if wxId is not None else wx.ID_ANY
             icon = icon.text if icon is not None else ""
             label = origLabel
             if gcmd:
