@@ -43,24 +43,12 @@ class TestRegisterFile(TestCase):
         )
 
         # Generate data
-        cls.runModule(
-            "r.mapcalc", flags="s", expression="prec_1 = rand(0, 550)", overwrite=True
-        )
-        cls.runModule(
-            "r.mapcalc", flags="s", expression="prec_2 = rand(0, 450)", overwrite=True
-        )
-        cls.runModule(
-            "r.mapcalc", flags="s", expression="prec_3 = rand(0, 320)", overwrite=True
-        )
-        cls.runModule(
-            "r.mapcalc", flags="s", expression="prec_4 = rand(0, 510)", overwrite=True
-        )
-        cls.runModule(
-            "r.mapcalc", flags="s", expression="prec_5 = rand(0, 300)", overwrite=True
-        )
-        cls.runModule(
-            "r.mapcalc", flags="s", expression="prec_6 = rand(0, 650)", overwrite=True
-        )
+        cls.runModule("r.mapcalc", expression="prec_1 = rand(0, 550)", overwrite=True)
+        cls.runModule("r.mapcalc", expression="prec_2 = rand(0, 450)", overwrite=True)
+        cls.runModule("r.mapcalc", expression="prec_3 = rand(0, 320)", overwrite=True)
+        cls.runModule("r.mapcalc", expression="prec_4 = rand(0, 510)", overwrite=True)
+        cls.runModule("r.mapcalc", expression="prec_5 = rand(0, 300)", overwrite=True)
+        cls.runModule("r.mapcalc", expression="prec_6 = rand(0, 650)", overwrite=True)
 
         cls.runModule(
             "t.create",

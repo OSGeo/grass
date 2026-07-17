@@ -115,7 +115,7 @@ void Rast_put_d_row(int fd, const DCELL *buf)
 static void write_data(int fd, int row, unsigned char *buf, int n)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
-    ssize_t nwrite = fcb->nbytes * n;
+    ssize_t nwrite = (ssize_t)fcb->nbytes * n;
 
     if (write(fcb->data_fd, buf, nwrite) != nwrite)
         G_fatal_error(
@@ -411,7 +411,7 @@ static void put_data(int fd, char *null_buf, const CELL *cell, int row, int n,
         G_free(compressed_buf);
     }
     else {
-        nwrite = fcb->nbytes * n;
+        nwrite = (ssize_t)fcb->nbytes * n;
 
         if (write(fcb->data_fd, work_buf, nwrite) != nwrite)
             G_fatal_error(
@@ -425,7 +425,6 @@ static void put_data(int fd, char *null_buf, const CELL *cell, int row, int n,
 static void put_data_gdal(int fd, const void *rast, int row, int n,
                           int zeros_r_nulls, RASTER_MAP_TYPE map_type)
 {
-#ifdef HAVE_GDAL
     struct fileinfo *fcb = &R__.fileinfo[fd];
     int size = Rast_cell_size(map_type);
     DCELL null_val = fcb->gdal->null_val;
@@ -477,7 +476,6 @@ static void put_data_gdal(int fd, const void *rast, int row, int n,
     if (err != CE_None)
         G_fatal_error(_("Error writing data via GDAL for row %d of <%s>"), row,
                       fcb->name);
-#endif
 }
 
 static void put_raster_data(int fd, char *null_buf, const void *rast, int row,

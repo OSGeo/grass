@@ -48,9 +48,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *omapopt, *mapopt, *isetopt, *ilocopt, *ibaseopt, *smax;
 
-#ifdef HAVE_PROJ_H
     struct Option *pipeline; /* name of custom PROJ pipeline */
-#endif
     struct Key_Value *in_proj_keys = NULL, *in_unit_keys = NULL;
     struct Key_Value *out_proj_keys, *out_unit_keys;
     struct line_pnts *Points, *Points2;
@@ -113,13 +111,11 @@ int main(int argc, char *argv[])
     omapopt->description = _("Name for output vector map (default: input)");
     omapopt->guisection = _("Target");
 
-#ifdef HAVE_PROJ_H
     pipeline = G_define_option();
     pipeline->key = "pipeline";
     pipeline->type = TYPE_STRING;
     pipeline->required = NO;
     pipeline->description = _("PROJ pipeline for coordinate transformation");
-#endif
 
     flag.list = G_define_flag();
     flag.list->key = 'l';
@@ -204,11 +200,9 @@ int main(int argc, char *argv[])
     info_out.wkt = G_get_projwkt();
 
     info_trans.def = NULL;
-#ifdef HAVE_PROJ_H
     if (pipeline->answer) {
         info_trans.def = G_store(pipeline->answer);
     }
-#endif
 
     /* Initialize the Point / Cat structure */
     Points = Vect_new_line_struct();
@@ -289,15 +283,19 @@ int main(int argc, char *argv[])
         if (Vect_open_old(&Map, map_name, mapset) < 0)
             G_fatal_error(_("Unable to open vector map <%s>"), map_name);
 
-#if PROJ_VERSION_MAJOR >= 6
         /* need to set the region to the input vector
          * for PROJ to select the appropriate pipeline */
         {
             int first = 1, counter = 0;
             struct Cell_head inwindow;
 
-            G_unset_window();
-            G_get_window(&inwindow);
+            // Initialize from the source projects's default region, not the
+            // current region, because G_get_window() honors WIND_OVERRIDE /
+            // GRASS_REGION, but those refer to a region in the target's mapset,
+            // not in the source project we just switched into. Every spatial
+            // field below is overwritten from the input vector's extent anyway,
+            // so the default window is a sufficient and side-effect-free seed.
+            G_get_default_window(&inwindow);
 
             /* Cycle through all lines */
             Vect_rewind(&Map);
@@ -356,7 +354,6 @@ int main(int argc, char *argv[])
         }
         /* GPJ_init_transform() must be called only after the region has been
          * set */
-#endif
         if (GPJ_init_transform(&info_in, &info_out, &info_trans) < 0)
             G_fatal_error(_("Unable to initialize coordinate transformation"));
     }

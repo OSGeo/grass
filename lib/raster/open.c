@@ -274,13 +274,7 @@ int Rast__open_old(const char *name, const char *mapset)
     vrt = Rast_get_vrt(r_name, r_mapset);
     cell_fd = -1;
     if (gdal) {
-#ifdef HAVE_GDAL
         cell_fd = -1;
-#else
-        G_fatal_error(_("Raster map <%s@%s> is a GDAL link but GRASS is "
-                        "compiled without GDAL support"),
-                      r_name, r_mapset);
-#endif
     }
     else if (vrt) {
         cell_fd = -1;
@@ -522,7 +516,6 @@ int Rast_open_fp_new_uncompressed(const char *name)
     return open_raster_new(name, OPEN_NEW_UNCOMPRESSED, R__.fp_type);
 }
 
-#ifdef HAVE_GDAL
 static int open_raster_new_gdal(char *map, char *mapset,
                                 RASTER_MAP_TYPE map_type)
 {
@@ -581,7 +574,6 @@ static int open_raster_new_gdal(char *map, char *mapset,
 
     return fd;
 }
-#endif /* HAVE_GDAL */
 
 static int open_raster_new(const char *name, int open_mode,
                            RASTER_MAP_TYPE map_type)
@@ -625,10 +617,8 @@ static int open_raster_new(const char *name, int open_mode,
     if (G_legal_filename(map) < 0)
         G_fatal_error(_("<%s> is an illegal file name"), map);
 
-#ifdef HAVE_GDAL
     if (G_find_file2("", "GDAL", G_mapset()))
         return open_raster_new_gdal(map, mapset, map_type);
-#endif
 
     /* open a tempfile name */
     tempname = G_tempfile();

@@ -23,18 +23,14 @@
 #include <grass/config.h>
 #include <grass/gjson.h>
 
-#ifdef HAVE_OGR
 #include <cpl_csv.h>
-#endif
 
 #include "local_proto.h"
 
 static int check_xy(enum OutputFormat);
 static void print_json(G_JSON_Value *);
 
-#if PROJ_VERSION_MAJOR >= 6
 static void print_projjson(void);
-#endif
 
 /* print projection information gathered from one of the possible inputs
  * in GRASS format */
@@ -46,13 +42,9 @@ void print_projinfo(enum OutputFormat format)
         return;
 
     if (format == JSON) {
-#if PROJ_VERSION_MAJOR >= 6
         print_projjson();
 
         return;
-#else
-        G_fatal_error(_("JSON output is not available."));
-#endif
     }
     if (format == PLAIN) {
         fprintf(
@@ -184,38 +176,30 @@ void print_proj4(int dontprettify)
     projstr = NULL;
     projstrmod = NULL;
 
-#if PROJ_VERSION_MAJOR >= 6
     /* PROJ6+: create a PJ object from wkt or srid,
      * then get PROJ string using PROJ API */
-    {
-        PJ *obj = NULL;
+    PJ *obj = NULL;
 
-        if (projwkt) {
-            obj = proj_create_from_wkt(NULL, projwkt, NULL, NULL, NULL);
-        }
-        if (!obj && projsrid) {
-            obj = proj_create(NULL, projsrid);
-        }
-        if (obj) {
-            projstr = proj_as_proj_string(NULL, obj, PJ_PROJ_5, NULL);
-
-            if (projstr)
-                projstr = G_store(projstr);
-            proj_destroy(obj);
-        }
+    if (projwkt) {
+        obj = proj_create_from_wkt(NULL, projwkt, NULL, NULL, NULL);
     }
-#endif
+    if (!obj && projsrid) {
+        obj = proj_create(NULL, projsrid);
+    }
+    if (obj) {
+        projstr = proj_as_proj_string(NULL, obj, PJ_PROJ_5, NULL);
+
+        if (projstr)
+            projstr = G_store(projstr);
+        proj_destroy(obj);
+    }
 
     if (!projstr) {
         if (pj_get_kv(&pjinfo, projinfo, projunits) == -1)
             G_fatal_error(
                 _("Unable to convert projection information to PROJ format"));
         projstr = G_store(pjinfo.def);
-#if PROJ_VERSION_MAJOR >= 5
         proj_destroy(pjinfo.pj);
-#else
-        pj_free(pjinfo.pj);
-#endif
 
         /* GRASS-style PROJ.4 strings don't include a unit factor as this is
          * handled separately in GRASS - must include it here though */
@@ -247,7 +231,6 @@ void print_proj4(int dontprettify)
     return;
 }
 
-#ifdef HAVE_OGR
 void print_wkt(int esristyle, int dontprettify)
 {
     char *outwkt;
@@ -257,68 +240,55 @@ void print_wkt(int esristyle, int dontprettify)
 
     outwkt = NULL;
 
-#if PROJ_VERSION_MAJOR >= 6
-    /* print WKT2 using GDAL OSR interface */
-    {
-        OGRSpatialReferenceH hSRS;
-        const char *tmpwkt;
-        char **papszOptions = NULL;
+    char **papszOptions = G_calloc(3, sizeof(char *));
+    if (dontprettify)
+        papszOptions[0] = G_store("MULTILINE=NO");
+    else
+        papszOptions[0] = G_store("MULTILINE=YES");
+    if (esristyle)
+        papszOptions[1] = G_store("FORMAT=WKT1_ESRI");
+    else
+        papszOptions[1] = G_store("FORMAT=WKT2");
+    papszOptions[2] = NULL;
 
-        papszOptions = G_calloc(3, sizeof(char *));
-        if (dontprettify)
-            papszOptions[0] = G_store("MULTILINE=NO");
-        else
-            papszOptions[0] = G_store("MULTILINE=YES");
-        if (esristyle)
-            papszOptions[1] = G_store("FORMAT=WKT1_ESRI");
-        else
-            papszOptions[1] = G_store("FORMAT=WKT2");
-        papszOptions[2] = NULL;
+    OGRSpatialReferenceH hSRS = NULL;
 
-        hSRS = NULL;
+    if (projsrid) {
+        PJ *obj;
 
-        if (projsrid) {
-            PJ *obj;
-
-            obj = proj_create(NULL, projsrid);
-            if (!obj)
-                G_fatal_error(
-                    _("Unable to create PROJ definition from srid <%s>"),
-                    projsrid);
-            tmpwkt = proj_as_wkt(NULL, obj, PJ_WKT2_LATEST, NULL);
-            hSRS = OSRNewSpatialReference(tmpwkt);
-            OSRExportToWktEx(hSRS, &outwkt, (const char **)papszOptions);
-        }
-        if (!outwkt && projwkt) {
-            hSRS = OSRNewSpatialReference(projwkt);
-            OSRExportToWktEx(hSRS, &outwkt, (const char **)papszOptions);
-        }
-        if (!outwkt && projepsg) {
-            int epsg_num;
-
-            epsg_num = atoi(G_find_key_value("epsg", projepsg));
-
-            hSRS = OSRNewSpatialReference(NULL);
-            OSRImportFromEPSG(hSRS, epsg_num);
-            OSRExportToWktEx(hSRS, &outwkt, (const char **)papszOptions);
-        }
-        if (!outwkt) {
-            /* use GRASS proj info + units */
-            projwkt = GPJ_grass_to_wkt2(projinfo, projunits, projepsg,
-                                        esristyle, !(dontprettify));
-            hSRS = OSRNewSpatialReference(projwkt);
-            OSRExportToWktEx(hSRS, &outwkt, (const char **)papszOptions);
-        }
-        G_free(papszOptions[0]);
-        G_free(papszOptions[1]);
-        G_free(papszOptions);
-        if (hSRS)
-            OSRDestroySpatialReference(hSRS);
+        obj = proj_create(NULL, projsrid);
+        if (!obj)
+            G_fatal_error(_("Unable to create PROJ definition from srid <%s>"),
+                          projsrid);
+        const char *tmpwkt = proj_as_wkt(NULL, obj, PJ_WKT2_LATEST, NULL);
+        hSRS = OSRNewSpatialReference(tmpwkt);
+        OSRExportToWktEx(hSRS, &outwkt, (const char **)papszOptions);
     }
-#else
-    outwkt = GPJ_grass_to_wkt2(projinfo, projunits, projepsg, esristyle,
-                               !(dontprettify));
-#endif
+    if (!outwkt && projwkt) {
+        hSRS = OSRNewSpatialReference(projwkt);
+        OSRExportToWktEx(hSRS, &outwkt, (const char **)papszOptions);
+    }
+    if (!outwkt && projepsg) {
+        int epsg_num;
+
+        epsg_num = atoi(G_find_key_value("epsg", projepsg));
+
+        hSRS = OSRNewSpatialReference(NULL);
+        OSRImportFromEPSG(hSRS, epsg_num);
+        OSRExportToWktEx(hSRS, &outwkt, (const char **)papszOptions);
+    }
+    if (!outwkt) {
+        /* use GRASS proj info + units */
+        projwkt = GPJ_grass_to_wkt2(projinfo, projunits, projepsg, esristyle,
+                                    !(dontprettify));
+        hSRS = OSRNewSpatialReference(projwkt);
+        OSRExportToWktEx(hSRS, &outwkt, (const char **)papszOptions);
+    }
+    G_free(papszOptions[0]);
+    G_free(papszOptions[1]);
+    G_free(papszOptions);
+    if (hSRS)
+        OSRDestroySpatialReference(hSRS);
 
     if (outwkt != NULL) {
         fprintf(stdout, "%s\n", outwkt);
@@ -329,7 +299,6 @@ void print_wkt(int esristyle, int dontprettify)
 
     return;
 }
-#endif
 
 static int check_xy(enum OutputFormat format)
 {
@@ -379,7 +348,6 @@ void print_json(G_JSON_Value *value)
     G_json_value_free(value);
 }
 
-#if PROJ_VERSION_MAJOR >= 6
 void print_projjson(void)
 {
     /* PROJ6+: create a PJ object from wkt or srid,
@@ -434,4 +402,3 @@ void print_projjson(void)
 
     return;
 }
-#endif

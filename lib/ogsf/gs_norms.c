@@ -95,7 +95,7 @@ void init_vars(geosurf *gs)
     }
 #endif
 
-    slice = gs->y_mod * gs->cols;
+    slice = (long)gs->y_mod * gs->cols;
 
     return;
 }

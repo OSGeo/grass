@@ -447,11 +447,11 @@ void gsd_surf2model(Point3 point)
     GS_get_scale(&sx, &sy, &sz, 1);
     GS_get_zrange(&min, &max, 0);
 
-    point[Z] = (sz ? (point[Z] - min) * sz : 0.0);
+    point[Z] = (sz ? (point[Z] - min) * sz : 0.0f);
 
     /* need to unscale x & y */
-    point[X] = (sx ? point[X] * sx : 0.0);
-    point[Y] = (sy ? point[Y] * sy : 0.0);
+    point[X] = (sx ? point[X] * sx : 0.0f);
+    point[Y] = (sy ? point[Y] * sy : 0.0f);
 
     return;
 }

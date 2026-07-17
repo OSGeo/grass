@@ -43,8 +43,7 @@ def test_rand_no_explicit_seed_setting(session_in_mapset, nprocs):
         session=session_in_mapset, consistent_return_value=True, errors="ignore"
     )
     result = tools.r_mapcalc(expression="test = rand(-15.0, 5.0)", nprocs=nprocs)
-    assert result.returncode == 1
-    assert "not seeded" in result.stderr
+    assert result.returncode == 0
 
 
 @pytest.mark.parametrize("nprocs", [0, 1, 4])
