@@ -411,7 +411,9 @@ build_program_in_subdir(
   grass_interpfl
   grass_interpdata
   grass_qtree
-  ${LIBM})
+  ${LIBM}
+  OPTIONAL_DEPENDS
+  OpenMP::OpenMP_C)
 
 build_program_in_subdir(r.patch DEPENDS grass_gis grass_raster OPTIONAL_DEPENDS
                         OpenMP::OpenMP_C)
