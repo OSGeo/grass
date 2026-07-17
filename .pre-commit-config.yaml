@@ -64,6 +64,20 @@ repos:
     rev: v0.48.0
     hooks:
       - id: markdownlint-fix
+  - repo: https://github.com/BlankSpruce/gersemi-pre-commit
+    rev: 0.27.7
+    hooks:
+      - id: gersemi
+        args:
+          - "--in-place"
+          - "--safe"
+          - "--definitions"
+          - "cmake/"
+          - "--warn-about-unknown-commands" # Need an argument/flag after the --definitions list
+        exclude: |
+          (?x)^(
+              include\/config\.h\.cmake\.in
+          )$
   - repo: https://github.com/pycqa/flake8
     rev: 7.3.0
     hooks:
@@ -93,7 +107,7 @@ repos:
     hooks:
       - id: actionlint
   - repo: https://github.com/zizmorcore/zizmor-pre-commit
-    rev: v1.22.0
+    rev: v1.27.0
     hooks:
       - id: zizmor
         args:

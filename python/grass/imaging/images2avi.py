@@ -90,7 +90,7 @@ def writeAvi(
     :param inputOptions:
     :param outputOptions:
     :param bool bg_task: if thread background task, not raise but
-    return error message
+        return error message
 
     :return str: error message
     """
@@ -98,8 +98,8 @@ def writeAvi(
     # Get fps
     try:
         fps = float(1.0 / duration)
-    except Exception:
-        raise ValueError(_("Invalid duration parameter for writeAvi."))
+    except Exception as e:
+        raise ValueError(_("Invalid duration parameter for writeAvi.")) from e
 
     # Determine temp dir and create images
     tempDir = os.path.join(os.path.expanduser("~"), ".tempIms")

@@ -193,15 +193,7 @@ CMakeUserPresets.json
 
 # Auto-generated sphinx source files for python library docs
 python/grass/docs/_templates/layout.html
-python/grass/docs/src/exceptions.rst
-python/grass/docs/src/ctypes*.rst
 python/grass/docs/src/grass.*rst
-python/grass/docs/src/gunittest.rst
-python/grass/docs/src/imaging.rst
-python/grass/docs/src/pydispatch.rst
-python/grass/docs/src/pygrass.*rst
-python/grass/docs/src/script.rst
-python/grass/docs/src/temporal.rst
 
 # Test result files
 *junit.xml

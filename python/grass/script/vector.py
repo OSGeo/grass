@@ -437,7 +437,7 @@ def vector_what(
     try:
         ret = read_command("v.what", env=env, **cmdParams).strip()
     except CalledModuleError as e:
-        raise ScriptError(e.msg)
+        raise ScriptError(e.msg) from e
 
     data = []
     if not ret:
@@ -460,10 +460,10 @@ def vector_what(
 
     try:
         result = json.loads(ret, **kwargs)
-    except ValueError:
+    except ValueError as err:
         raise ScriptError(
             _("v.what output is not valid JSON format:\n {ret}").format(ret=ret)
-        )
+        ) from err
 
     if multiple:
         for vmap in result["Maps"]:

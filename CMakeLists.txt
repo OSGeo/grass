@@ -24,89 +24,101 @@ set(CMAKE_MODULE_PATH
 )
 
 include(get_versions)
-get_versions("include/VERSION" GRASS_VERSION_MAJOR GRASS_VERSION_MINOR
-             GRASS_VERSION_RELEASE GRASS_VERSION_SUFFIX GRASS_VERSION_DATE)
+get_versions(
+    "include/VERSION"
+    GRASS_VERSION_MAJOR
+    GRASS_VERSION_MINOR
+    GRASS_VERSION_RELEASE
+    GRASS_VERSION_SUFFIX
+    GRASS_VERSION_DATE
+)
 
 set(GRASS_VERSION_NUMBER
-    ${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_VERSION_RELEASE}${GRASS_VERSION_SUFFIX})
-set(GRASS_VERSION_STRING ${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_VERSION_RELEASE})
+    ${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_VERSION_RELEASE}${GRASS_VERSION_SUFFIX}
+)
+set(GRASS_VERSION_STRING
+    ${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_VERSION_RELEASE}
+)
 message(STATUS "GRASS_VERSION_NUMBER  =  '${GRASS_VERSION_NUMBER}'")
 set(GRASS_VERSION_UPDATE_PKG "0.2")
 
-project(GRASS VERSION ${GRASS_VERSION_STRING}
-        HOMEPAGE_URL https://grass.osgeo.org)
+project(
+    GRASS
+    VERSION ${GRASS_VERSION_STRING}
+    HOMEPAGE_URL https://grass.osgeo.org
+)
 string(TOLOWER ${PROJECT_NAME} PROJECT_NAME_LOWER)
 
 set(BUILD_SHARED_LIBS ON)
 # message(FATAL_ERROR "VCPKG_TARGET_TRIPLET=${VCPKG_TARGET_TRIPLET}")
 if(MSVC)
-  if(BUILD_SHARED_LIBS)
-    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
-  endif()
-  set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+    if(BUILD_SHARED_LIBS)
+        set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
+    endif()
+    set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 endif()
 
 if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 11)
-  set(CMAKE_CXX_STANDARD_REQUIRED ON)
+    set(CMAKE_CXX_STANDARD 11)
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
 endif()
 
 if(NOT CMAKE_C_STANDARD)
-  set(CMAKE_C_STANDARD 11)
-  set(CMAKE_C_STANDARD_REQUIRED ON)
+    set(CMAKE_C_STANDARD 11)
+    set(CMAKE_C_STANDARD_REQUIRED ON)
 endif()
 
 set(x11_default_option_enabled ON)
 set(nls_default_option_enabled ON)
 if(WIN32)
-  set(x11_default_option_enabled OFF)
-  set(nls_default_option_enabled OFF)
+    set(x11_default_option_enabled OFF)
+    set(nls_default_option_enabled OFF)
 elseif(APPLE)
-  set(x11_default_option_enabled OFF)
+    set(x11_default_option_enabled OFF)
 endif()
 set(lfs_default_option_enabled ON)
 
 # Configure CCache if available
 if(NOT MSVC)
-  option(USE_CCACHE "Use ccache" ON)
-  if(USE_CCACHE)
-    find_program(CCACHE_FOUND ccache)
-    if(CCACHE_FOUND)
-      set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
-      set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
-      message(STATUS "ccache found")
-    endif(CCACHE_FOUND)
-  endif(USE_CCACHE)
+    option(USE_CCACHE "Use ccache" ON)
+    if(USE_CCACHE)
+        find_program(CCACHE_FOUND ccache)
+        if(CCACHE_FOUND)
+            set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
+            set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
+            message(STATUS "ccache found")
+        endif(CCACHE_FOUND)
+    endif(USE_CCACHE)
 endif(NOT MSVC)
 
 if(USE_ALTERNATE_LINKER)
-  include("cmake/modules/linker.cmake")
+    include("cmake/modules/linker.cmake")
 endif()
 
 if(CMAKE_BUILD_TYPE)
-  set(grass_build_type "${CMAKE_BUILD_TYPE}")
-  if(MSVC)
-    set(find_library_suffix "")
-  else()
-    string(TOLOWER "${grass_build_type}" grass_build_type_lc)
-    set(find_library_suffix "_RELEASE")
-    if(grass_build_type_lc STREQUAL "debug")
-      set(find_library_suffix "_DEBUG")
+    set(grass_build_type "${CMAKE_BUILD_TYPE}")
+    if(MSVC)
+        set(find_library_suffix "")
+    else()
+        string(TOLOWER "${grass_build_type}" grass_build_type_lc)
+        set(find_library_suffix "_RELEASE")
+        if(grass_build_type_lc STREQUAL "debug")
+            set(find_library_suffix "_DEBUG")
+        endif()
     endif()
-  endif()
 else()
-  set(find_library_suffix "")
-  if(MSVC)
-    set(CMAKE_BUILD_TYPE "DEBUG")
-  endif()
+    set(find_library_suffix "")
+    if(MSVC)
+        set(CMAKE_BUILD_TYPE "DEBUG")
+    endif()
 endif()
 
 # For install tree (first do install tree)
 set(LD_LIBRARY_PATH_VAR "LD_LIBRARY_PATH")
 if(APPLE)
-  set(LD_LIBRARY_PATH_VAR "LD_RUN_PATH")
+    set(LD_LIBRARY_PATH_VAR "LD_RUN_PATH")
 elseif(WIN32)
-  set(LD_LIBRARY_PATH_VAR "PATH")
+    set(LD_LIBRARY_PATH_VAR "PATH")
 endif()
 
 # Graphics options
@@ -145,8 +157,11 @@ option(WITH_PDAL "Build with PDAL support" ON)
 option(WITH_LIBLAS "Build with libLAS support" OFF)
 
 # Other options
-option(WITH_LARGEFILES "Build with large file support"
-       ${lfs_default_option_enabled})
+option(
+    WITH_LARGEFILES
+    "Build with large file support"
+    ${lfs_default_option_enabled}
+)
 option(WITH_DOCS "Build documentation" ON)
 option(WITH_GUI "Build GUI" ON)
 option(WITH_FHS "Install with FHS" OFF)
@@ -162,21 +177,25 @@ include(GRASSInstallDirs)
 
 # Setup build locations.
 if(MSVC)
-  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${CMAKE_BUILD_TYPE} ${OUTDIR}/${GRASS_INSTALL_LIBDIR})
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${CMAKE_BUILD_TYPE}
+        ${OUTDIR}/${GRASS_INSTALL_LIBDIR}
+    )
 elseif(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
-  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${OUTDIR}/${GRASS_INSTALL_LIBDIR})
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${OUTDIR}/${GRASS_INSTALL_LIBDIR})
 endif()
 if(MSVC)
-  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${CMAKE_BUILD_TYPE} ${OUTDIR}/${GRASS_INSTALL_LIBDIR})
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${CMAKE_BUILD_TYPE}
+        ${OUTDIR}/${GRASS_INSTALL_LIBDIR}
+    )
 elseif(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
-  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OUTDIR}/${GRASS_INSTALL_LIBDIR})
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OUTDIR}/${GRASS_INSTALL_LIBDIR})
 endif()
 
 if(APPLE)
-  if(POLICY CMP0042)
-    cmake_policy(SET CMP0042 NEW)
-  endif()
-  set(CMAKE_MACOSX_RPATH TRUE)
+    if(POLICY CMP0042)
+        cmake_policy(SET CMP0042 NEW)
+    endif()
+    set(CMAKE_MACOSX_RPATH TRUE)
 endif()
 
 set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${GRASS_INSTALL_LIBDIR}")
@@ -184,20 +203,46 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 # TODO: a proper fix to this workaround
 if(WITH_FHS)
-  file(CREATE_LINK ${OUTDIR}/${GRASS_INSTALL_DEMODIR}
-       ${RUNTIME_GISBASE}/demolocation SYMBOLIC)
-  file(CREATE_LINK ${OUTDIR}/${GRASS_INSTALL_FONTSDIR} ${RUNTIME_GISBASE}/fonts
-       SYMBOLIC)
-  file(CREATE_LINK ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/colors
-       ${RUNTIME_GISBASE}/etc/colors SYMBOLIC)
-  file(CREATE_LINK ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/colors.desc
-       ${RUNTIME_GISBASE}/etc/colors.desc SYMBOLIC)
-  file(CREATE_LINK ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/element_list
-       ${RUNTIME_GISBASE}/etc/element_list SYMBOLIC)
-  file(CREATE_LINK ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/renamed_options
-       ${RUNTIME_GISBASE}/etc/renamed_options SYMBOLIC)
-  file(CREATE_LINK ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/VERSIONNUMBER
-       ${RUNTIME_GISBASE}/etc/VERSIONNUMBER SYMBOLIC)
+    file(
+        CREATE_LINK
+            ${OUTDIR}/${GRASS_INSTALL_DEMODIR}
+            ${RUNTIME_GISBASE}/demolocation
+        SYMBOLIC
+    )
+    file(
+        CREATE_LINK ${OUTDIR}/${GRASS_INSTALL_FONTSDIR} ${RUNTIME_GISBASE}/fonts
+        SYMBOLIC
+    )
+    file(
+        CREATE_LINK
+            ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/colors
+            ${RUNTIME_GISBASE}/etc/colors
+        SYMBOLIC
+    )
+    file(
+        CREATE_LINK
+            ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/colors.desc
+            ${RUNTIME_GISBASE}/etc/colors.desc
+        SYMBOLIC
+    )
+    file(
+        CREATE_LINK
+            ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/element_list
+            ${RUNTIME_GISBASE}/etc/element_list
+        SYMBOLIC
+    )
+    file(
+        CREATE_LINK
+            ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/renamed_options
+            ${RUNTIME_GISBASE}/etc/renamed_options
+        SYMBOLIC
+    )
+    file(
+        CREATE_LINK
+            ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/VERSIONNUMBER
+            ${RUNTIME_GISBASE}/etc/VERSIONNUMBER
+        SYMBOLIC
+    )
 endif()
 
 include(set_compiler_flags)
@@ -226,31 +271,53 @@ set(MD2MAN ${CMAKE_BINARY_DIR}/utils/g.md2man.py)
 set(env_path "$ENV{PATH}")
 
 if(WIN32)
-  set(sep "\\\;")
-  string(REPLACE ";" "${sep}" env_path "${env_path}")
-  set(env_pythonpath "$ENV{PYTHONPATH}")
-  string(REPLACE ";" "${sep}" env_pythonpath "${env_pythonpath}")
-  set(grass_env_command
-    ${CMAKE_COMMAND} -E env "PATH=${BIN_DIR}${sep}${SCRIPTS_DIR}${sep}${env_path}${sep}${LIB_DIR}"
-    "PYTHONPATH=${ETC_PYTHON_DIR}${sep}${GUI_WXPYTHON_DIR}${sep}${env_pythonpath}"
-    "GRASS_PYTHON=${PYTHON_EXECUTABLE}" "GISBASE=${RUN_GISBASE_NATIVE}" "GISRC=${GISRC}" "LC_ALL=C" "LANG=C"
-    "ARCH=${BUILD_ARCH}" "ARCH_DISTDIR=${RUN_GISBASE_NATIVE}"
-    "LANGUAGE=C" "MODULE_TOPDIR=${MODULE_TOPDIR}" "HTMLDIR=${DOC_DIR}"
-    "LC_ALL=C" "LANG=C"
-    "LANGUAGE=C"
-    "VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\""
-    "VERSION_DATE=\"${GRASS_VERSION_DATE}\"")
+    set(sep "\\\;")
+    string(REPLACE ";" "${sep}" env_path "${env_path}")
+    set(env_pythonpath "$ENV{PYTHONPATH}")
+    string(REPLACE ";" "${sep}" env_pythonpath "${env_pythonpath}")
+    set(grass_env_command
+        ${CMAKE_COMMAND}
+        -E
+        env
+        "PATH=${BIN_DIR}${sep}${SCRIPTS_DIR}${sep}${env_path}${sep}${LIB_DIR}"
+        "PYTHONPATH=${ETC_PYTHON_DIR}${sep}${GUI_WXPYTHON_DIR}${sep}${env_pythonpath}"
+        "GRASS_PYTHON=${PYTHON_EXECUTABLE}"
+        "GISBASE=${RUN_GISBASE_NATIVE}"
+        "GISRC=${GISRC}"
+        "LC_ALL=C"
+        "LANG=C"
+        "ARCH=${BUILD_ARCH}"
+        "ARCH_DISTDIR=${RUN_GISBASE_NATIVE}"
+        "LANGUAGE=C"
+        "MODULE_TOPDIR=${MODULE_TOPDIR}"
+        "HTMLDIR=${DOC_DIR}"
+        "LC_ALL=C"
+        "LANG=C"
+        "LANGUAGE=C"
+        "VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\""
+        "VERSION_DATE=\"${GRASS_VERSION_DATE}\""
+    )
 else()
-  set(sep ":")
-  set(grass_env_command
-    ${CMAKE_COMMAND} -E env "PATH=${BIN_DIR}${sep}${SCRIPTS_DIR}${sep}${env_path}"
-    "PYTHONPATH=${ETC_PYTHON_DIR}${sep}${GUI_WXPYTHON_DIR}${sep}$ENV{PYTHONPATH}"
-    "LD_LIBRARY_PATH=${LIB_DIR}${sep}$ENV{LD_LIBRARY_PATH}"
-    "GISBASE=${RUN_GISBASE_NATIVE}" "GISRC=${GISRC}" "LC_ALL=C" "LANG=C"
-    "ARCH=${BUILD_ARCH}" "ARCH_DISTDIR=${RUN_GISBASE_NATIVE}"
-    "LANGUAGE=C" "MODULE_TOPDIR=${MODULE_TOPDIR}" "HTMLDIR=${DOC_DIR}"
-    "VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\""
-    "VERSION_DATE=\"${GRASS_VERSION_DATE}\"")
+    set(sep ":")
+    set(grass_env_command
+        ${CMAKE_COMMAND}
+        -E
+        env
+        "PATH=${BIN_DIR}${sep}${SCRIPTS_DIR}${sep}${env_path}"
+        "PYTHONPATH=${ETC_PYTHON_DIR}${sep}${GUI_WXPYTHON_DIR}${sep}$ENV{PYTHONPATH}"
+        "LD_LIBRARY_PATH=${LIB_DIR}${sep}$ENV{LD_LIBRARY_PATH}"
+        "GISBASE=${RUN_GISBASE_NATIVE}"
+        "GISRC=${GISRC}"
+        "LC_ALL=C"
+        "LANG=C"
+        "ARCH=${BUILD_ARCH}"
+        "ARCH_DISTDIR=${RUN_GISBASE_NATIVE}"
+        "LANGUAGE=C"
+        "MODULE_TOPDIR=${MODULE_TOPDIR}"
+        "HTMLDIR=${DOC_DIR}"
+        "VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\""
+        "VERSION_DATE=\"${GRASS_VERSION_DATE}\""
+    )
 endif()
 
 set(NO_HTML_DESCR_TARGETS "g.parser;ximgview;test.raster3d.lib")
@@ -261,12 +328,10 @@ add_subdirectory(include)
 
 include_directories("${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}")
 if(MSVC)
-  include_directories("${CMAKE_SOURCE_DIR}/msvc")
+    include_directories("${CMAKE_SOURCE_DIR}/msvc")
 endif()
 
-set(modules_list
-    ""
-    CACHE INTERNAL "list of modules")
+set(modules_list "" CACHE INTERNAL "list of modules")
 
 add_subdirectory(lib)
 add_subdirectory(python)
@@ -283,42 +348,63 @@ set(ALL_SUBDIRS
     raster3d
     scripts
     temporal
-    vector)
+    vector
+)
 
 foreach(d ${ALL_SUBDIRS})
-  add_subdirectory(${d})
+    add_subdirectory(${d})
 endforeach()
 
 if(WITH_GUI)
-  add_subdirectory(gui)
+    add_subdirectory(gui)
 endif()
 
 add_custom_target(
-  ALL_MODULES
-  DEPENDS ${modules_list}
-  COMMENT "Building all modules.")
+    ALL_MODULES
+    DEPENDS ${modules_list}
+    COMMENT "Building all modules."
+)
 set_target_properties(ALL_MODULES PROPERTIES FOLDER Misc)
 
 if(WITH_DOCS)
-  add_subdirectory(doc)
-  add_subdirectory(man)
-  install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/ DESTINATION ${GRASS_INSTALL_DOCDIR})
-  install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/ DESTINATION ${GRASS_INSTALL_MKDOCSDIR})
-  install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_MANDIR}/ DESTINATION ${GRASS_INSTALL_MANDIR})
+    add_subdirectory(doc)
+    add_subdirectory(man)
+    install(
+        DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/
+        DESTINATION ${GRASS_INSTALL_DOCDIR}
+    )
+    install(
+        DIRECTORY ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/
+        DESTINATION ${GRASS_INSTALL_MKDOCSDIR}
+    )
+    install(
+        DIRECTORY ${OUTDIR}/${GRASS_INSTALL_MANDIR}/
+        DESTINATION ${GRASS_INSTALL_MANDIR}
+    )
 endif()
 
 add_custom_target(
-  r_colors_thumbnails ALL
-  COMMAND ${CMAKE_COMMAND} -E make_directory
-          ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
-  COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${THUMBNAILS_PY}
-          ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
-  BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
-  COMMENT "Creating thumbnails"
-  DEPENDS ALL_MODULES)
+    r_colors_thumbnails
+    ALL
+    COMMAND
+        ${CMAKE_COMMAND} -E make_directory
+        ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
+    COMMAND
+        ${grass_env_command} ${PYTHON_EXECUTABLE} ${THUMBNAILS_PY}
+        ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
+    COMMAND
+        ${CMAKE_COMMAND} -E copy_directory
+        ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
+        ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/source/colortables
+    BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
+    COMMENT "Creating thumbnails"
+    DEPENDS ALL_MODULES
+)
 set_target_properties(r_colors_thumbnails PROPERTIES FOLDER Misc)
-install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
-        DESTINATION ${GRASS_INSTALL_DOCDIR})
+install(
+    DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
+    DESTINATION ${GRASS_INSTALL_DOCDIR}
+)
 
 set(misc_files
     AUTHORS
@@ -329,28 +415,37 @@ set(misc_files
     GPL.TXT
     INSTALL.md
     REQUIREMENTS.md
-    translators.csv)
+    translators.csv
+)
 install(FILES ${misc_files} DESTINATION ${GRASS_INSTALL_MISCDIR})
 
 if(WITH_NLS)
-  add_subdirectory(locale)
+    add_subdirectory(locale)
 endif()
 
 # TODO: To be discussed - add_subdirectory(testsuite) - add_subdirectory(macosx)
 
 if(WITH_X11)
-  build_program_in_subdir(visualization/ximgview DEPENDS grass_gis X11::X11)
+    build_program_in_subdir(visualization/ximgview DEPENDS grass_gis X11::X11)
 endif()
 
 add_subdirectory(cmake)
 include(CMakePackageConfigHelpers)
-configure_package_config_file(GRASSConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/GRASSConfig.cmake
-                              INSTALL_DESTINATION ${GRASS_INSTALL_CMAKECONFDIR}/GRASS)
-write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/GRASSConfigVersion.cmake
-                                 VERSION ${GRASS_VERSION_STRING}
-                                 COMPATIBILITY ExactVersion)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/GRASSConfig.cmake
-              ${CMAKE_CURRENT_BINARY_DIR}/GRASSConfigVersion.cmake
-        DESTINATION ${GRASS_INSTALL_CMAKECONFDIR}/GRASS)
+configure_package_config_file(
+    GRASSConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/GRASSConfig.cmake
+    INSTALL_DESTINATION ${GRASS_INSTALL_CMAKECONFDIR}/GRASS
+)
+write_basic_package_version_file(
+    ${CMAKE_CURRENT_BINARY_DIR}/GRASSConfigVersion.cmake
+    VERSION ${GRASS_VERSION_STRING}
+    COMPATIBILITY ExactVersion
+)
+install(
+    FILES
+        ${CMAKE_CURRENT_BINARY_DIR}/GRASSConfig.cmake
+        ${CMAKE_CURRENT_BINARY_DIR}/GRASSConfigVersion.cmake
+    DESTINATION ${GRASS_INSTALL_CMAKECONFDIR}/GRASS
+)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS YES)
