@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_bn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-14 15:46+0000\n"
+"POT-Creation-Date: 2026-06-27 15:58+0000\n"
 "PO-Revision-Date: 2026-03-14 11:20+0000\n"
 "Last-Translator: Faysal Mahmud  <faysalmahmud4300@gmail.com>\n"
 "Language-Team: Bengali <https://weblate.osgeo.org/projects/grass-gis/grassmods/bn/>\n"
@@ -2225,7 +2225,6 @@ msgstr ""
 msgid "Get text color from cell color value"
 msgstr ""
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -9539,6 +9538,9 @@ msgstr ""
 msgid "Columns to be printed to stdout"
 msgstr ""
 
+msgid "plain;Plain text output;line;Comma separated list of dataset names;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
+msgstr ""
+
 msgid "Field separator character between the output columns"
 msgstr ""
 
@@ -9818,7 +9820,7 @@ msgstr ""
 msgid "Path to the extraction directory"
 msgstr ""
 
-msgid "Create a new project and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
+msgid "Create a new project and import the data into it."
 msgstr ""
 
 msgid "Set the current region from the last map that was imported"
@@ -9986,6 +9988,9 @@ msgstr ""
 msgid "Raster map used for zoning, must be of type CELL"
 msgstr ""
 
+msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
+msgstr ""
+
 msgid "Calculate extended statistics"
 msgstr ""
 
@@ -10052,7 +10057,7 @@ msgstr ""
 msgid "Raster map with zones to compute statistics for"
 msgstr ""
 
-msgid "Raster map with zones to compute statistics for (needs to be CELL)"
+msgid "3D raster map with zones"
 msgstr ""
 
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
@@ -10218,6 +10223,9 @@ msgid "Prints attributes of vector maps registered in a space time vector datase
 msgstr ""
 
 msgid "select"
+msgstr ""
+
+msgid "plain;Plain text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
 msgstr ""
 
 msgid "Exports a space time vector dataset as GRASS specific archive file."
@@ -13419,6 +13427,9 @@ msgstr ""
 
 #, c-format
 msgid "Internal error in %s()"
+msgstr ""
+
+msgid "JSON nesting exceeds maximum depth"
 msgstr ""
 
 msgid "Generates a raster map containing distances to nearest raster features and/or the value of the nearest non-null cell."
@@ -20163,7 +20174,6 @@ msgstr ""
 msgid "Input raster must be of type CELL."
 msgstr ""
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
@@ -23430,7 +23440,7 @@ msgstr ""
 msgid "Filled raster map is: %s"
 msgstr ""
 
-msgid "Following holes where not filled. Temporary maps with are left in place to allow examination of unfilled holes"
+msgid "The following holes were not filled. Temporary maps are left in place to allow examination of unfilled holes:"
 msgstr ""
 
 msgid "Output can be written only to the current mapset"
@@ -24698,10 +24708,19 @@ msgstr ""
 msgid "Prints/sets general temporal GIS database connection for current mapset."
 msgstr ""
 
+msgid "plain;Plain text output;shell;Shell script style output;json;JSON (JavaScript Object Notation)"
+msgstr ""
+
 msgid "Overwrite current settings if initialized"
 msgstr ""
 
-msgid "Print current connection parameter in shell style and exit"
+msgid "Name of the mapset(s) to print the connection info for"
+msgstr ""
+
+msgid "'.' for current mapset; '*' for all mapsets in the project. Requires format=json."
+msgstr ""
+
+msgid "The mapset option requires format=json."
 msgstr ""
 
 msgid "Temporal GIS database connection not defined. Run t.connect."
@@ -30910,6 +30929,10 @@ msgstr[0] ""
 msgstr[1] ""
 
 #, c-format
+msgid "Removing areas smaller than %g sqm..."
+msgstr ""
+
+#, c-format
 msgid "Querying vector map <%s>..."
 msgstr ""
 
@@ -30987,6 +31010,12 @@ msgid "Snapping threshold for boundaries"
 msgstr ""
 
 msgid "Disable snapping with snap <= 0"
+msgstr ""
+
+msgid "Minimum size of areas to keep in square meters"
+msgstr ""
+
+msgid "Enable with minsize > 0"
 msgstr ""
 
 #, c-format
@@ -31089,6 +31118,9 @@ msgstr ""
 msgid "Missing attribute table for vector map <%s>"
 msgstr ""
 
+msgid "Too many columns to copy the table"
+msgstr ""
+
 #, c-format
 msgid "Missing table for <%s>"
 msgstr ""
@@ -31141,6 +31173,9 @@ msgstr ""
 
 #, c-format
 msgid "%d vector maps patched"
+msgstr ""
+
+msgid "Too many columns to copy records"
 msgstr ""
 
 #, c-format
@@ -33202,9 +33237,6 @@ msgstr ""
 
 #, c-format
 msgid "Pass %d"
-msgstr ""
-
-msgid "Node is outside any input area"
 msgstr ""
 
 #, c-format

@@ -446,14 +446,14 @@ class Tools:
         tool_kwargs: dict | None = None,
         **popen_options,
     ):
-        """Run a tool by passing its name and parameters a list of strings.
+        r"""Run a tool by passing its name and parameters a list of strings.
 
         The function will perform additional processing on the parameters
         such as importing GRASS native raster files to in-project data.
 
         :param command: list of strings to execute as the command
         :param input: text input for the standard input of the tool
-        :param **popen_options: additional options for :py:func:`subprocess.Popen`
+        :param \*\*popen_options: additional options for :py:func:`subprocess.Popen`
         """
         return self._run_cmd(command, input=input, **popen_options)
 
@@ -466,7 +466,7 @@ class Tools:
         tool_kwargs: dict | None = None,
         **popen_options,
     ):
-        """Run a tool by passing its name and parameters a list of strings.
+        r"""Run a tool by passing its name and parameters a list of strings.
 
         If parameters were already processed using a *ParameterConverter* instance,
         the instance can be passed as the *parameter_converter* parameter, avoiding
@@ -476,7 +476,7 @@ class Tools:
         :param input: text input for the standard input of the tool
         :param parameter_converter: a Parameter converter instance if already used
         :param tool_kwargs: named tool arguments used for error reporting (experimental)
-        :param **popen_options: additional options for :py:func:`subprocess.Popen`
+        :param \*\*popen_options: additional options for :py:func:`subprocess.Popen`
         """
         # Compute the environment for subprocesses and store it for later use.
         if "env" not in popen_options:
@@ -525,7 +525,7 @@ class Tools:
         return result
 
     def call(self, tool_name_: str, /, **kwargs):
-        """Run a tool by specifying its name as a string and parameters.
+        r"""Run a tool by specifying its name as a string and parameters.
 
         The parameters tool are tool name as a string and parameters as keyword
         arguments. The keyword arguments may include an argument *flags* which is a
@@ -536,13 +536,13 @@ class Tools:
         strings for execution.
 
         :param tool_name_: name of a GRASS tool
-        :param **kwargs: tool parameters
+        :param \*\*kwargs: tool parameters
         """
         args, popen_options = gs.popen_args_command(tool_name_, **kwargs)
         return self.call_cmd(args, **popen_options)
 
     def call_cmd(self, command, tool_kwargs=None, input=None, **popen_options):
-        """Run a tool by passing its name and parameters as a list of strings.
+        r"""Run a tool by passing its name and parameters as a list of strings.
 
         The function is similar to :py:func:`subprocess.run` but with different
         defaults and return value.
@@ -550,7 +550,7 @@ class Tools:
         :param command: list of strings to execute as the command
         :param tool_kwargs: named tool arguments used for error reporting
         :param input: text input for the standard input of the tool
-        :param **popen_options: additional options for :py:func:`subprocess.Popen`
+        :param \*\*popen_options: additional options for :py:func:`subprocess.Popen`
         """
         # We allow the user to overwrite env, which allows for maximum flexibility
         # with some potential for confusion when the user uses a broken environment.

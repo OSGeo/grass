@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-14 15:46+0000\n"
-"PO-Revision-Date: 2026-03-17 12:28+0000\n"
+"POT-Creation-Date: 2026-06-27 15:58+0000\n"
+"PO-Revision-Date: 2026-06-21 20:53+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs/fr/>\n"
 "Language: fr\n"
@@ -465,7 +465,7 @@ msgstr ""
 "\n"
 "-- tests unitaires gjson terminés avec succès --"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal n-s resolution value: %g"
 msgstr "Valeur de résolution n-s illégale : %g"
 
@@ -473,7 +473,7 @@ msgstr "Valeur de résolution n-s illégale : %g"
 msgid "Illegal number of rows: %d (resolution is %g)"
 msgstr "Nombre de lignes illégal : %d (la résolution est %g)"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal e-w resolution value: %g"
 msgstr "Valeur de résolution e-o illégale : %g"
 
@@ -516,7 +516,7 @@ msgstr "Valeur de résolution n-s illégale pour 3D : %g"
 msgid "Illegal number of rows for 3D: %d (resolution is %g)"
 msgstr ""
 
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal e-w resolution value for 3D: %g"
 msgstr "Valeur de résolution e-o illégale pour 3D : %g"
 
@@ -679,7 +679,7 @@ msgstr "Échec de l’affichage de %s"
 
 #, c-format
 msgid "Failed to parse string specifier: %s"
-msgstr ""
+msgstr "Échec de l'analyse du spécificateur de chaîne : %s"
 
 #, c-format
 msgid "Format specifier exceeds the buffer size (%d)"
@@ -1277,11 +1277,11 @@ msgstr "Paramètres :"
 
 #, c-format
 msgid "  %*s   default: %s\n"
-msgstr "  %*s   par défaut: %s\n"
+msgstr "  %*s   par défaut : %s\n"
 
 #, c-format
 msgid "  %*s   options: "
-msgstr "  %*s   options: "
+msgstr "  %*s   options : "
 
 msgid "NAME"
 msgstr "NOM"
@@ -1375,7 +1375,7 @@ msgid "Name of input raster map(s)"
 msgstr "Nom de(s) couche(s) matricielle(s) en entrée"
 
 msgid "Name for output raster map"
-msgstr "Nom de la couche matricielle en sortie"
+msgstr "Nom de la carte raster en sortie"
 
 msgid "Name for output raster map(s)"
 msgstr "Nom de la carte raster en sortie"
@@ -1600,8 +1600,6 @@ msgstr "Nombre de threads pour le calcul parallèle"
 msgid "0: use OpenMP default; >0: use nprocs; <0: use MAX-nprocs"
 msgstr "0 : utiliser la valeur par défaut d'OpenMP ; >0 : utiliser nprocs ; <0 : utiliser MAX-nprocs"
 
-#, fuzzy
-#| msgid "Pseudo-random number generator not seeded"
 msgid "Seed value for the random number generator"
 msgstr "Valeur de départ pour le générateur de nombres aléatoires"
 
@@ -2745,7 +2743,7 @@ msgstr "%s supprimé"
 
 #, c-format
 msgid "Unable to remove %s signature"
-msgstr "Impossible de supprimer la signature de %s."
+msgstr "Impossible de supprimer la signature de %s"
 
 #, c-format
 msgid "%s is missing"
@@ -2887,7 +2885,7 @@ msgid "standard flags"
 msgstr "options standards"
 
 msgid "deprecated, use --tmp-project instead"
-msgstr "obsolète, utiliser --tmp-project à la place."
+msgstr "obsolète, utiliser --tmp-project à la place"
 
 msgid "location was renamed to project"
 msgstr "Secteur a été renommé en projet"
@@ -2899,14 +2897,13 @@ msgid "created in a temporary directory and deleted at exit"
 msgstr "créé dans un répertoire temporaire et supprimé à la sortie"
 
 msgid "create temporary mapset (use with the --exec flag)"
-msgstr "créer un jeu de cartes temporaire (utilisez avec l'option --exec)."
+msgstr "créer un jeu de cartes temporaire (utilisez avec l'option --exec)"
 
 msgid "created in the specified project and deleted at exit"
 msgstr "créé dans le projet spécifié et supprimé à la sortie"
 
-#, fuzzy
 msgid "timeout for acquiring a mapset lock"
-msgstr "délai d'acquisition d'un verrouillage de jeu de cartes"
+msgstr "délai d'expiration pour l'acquisition d'un verrou sur un jeu de cartes"
 
 msgid "time for which the process will attempt to get a lock in seconds"
 msgstr "durée en secondes pendant laquelle le processus tentera d'obtenir un verrou"
@@ -2916,7 +2913,7 @@ msgstr "Échec de création du répertoire de configuration '{}' avec l'erreur :
 
 #, python-brace-format
 msgid "Unable to create temporary directory <{tmpdir_name}>! Exiting."
-msgstr "Impossible de créer le répertoire temporaire <{tmpdir_name}>! Sortie."
+msgstr "Impossible de créer le répertoire temporaire <{tmpdir_name}> ! Sortie."
 
 #, python-brace-format
 msgid "Invalid line in RC file ({file}): '{line}' ({error})\n"
@@ -2953,6 +2950,10 @@ msgid ""
 "(DISPLAY variable is not set.)\n"
 "Switching to text based interface mode."
 msgstr ""
+"Il semble que le système X Windows ne soit pas actif.\n"
+"Une interface utilisateur graphique n'est pas prise en charge.\n"
+"(La variable DISPLAY n'est pas définie).\n"
+"Passage au mode d'interface textuelle."
 
 msgid "Error creating project: {}"
 msgstr "Erreur lors de la création du projet : {}"
@@ -3140,7 +3141,7 @@ msgid "Flag -e requires also flag -c"
 msgstr "L'option -e nécessite également l'option -c"
 
 msgid "Flag -c requires name of project or mapset"
-msgstr "L'option -c requiert le nom du projet ou du jeu de cartes."
+msgstr "L'option -c requiert le nom du projet ou du jeu de cartes"
 
 msgid "Either --tmp-project or --tmp-mapset can be used, not both"
 msgstr "Soit --tmp-project ou --tmp-mapset peuvent être utilisés, pas les deux"
@@ -3198,7 +3199,7 @@ msgstr "Échec au lancement du shell '%s'"
 
 #, c-format
 msgid "Usage: %s file pid"
-msgstr "Usage: pid du fichier %s"
+msgstr "Usage : pid du fichier %s"
 
 msgid "Concurrent mapset locking is not supported on Windows"
 msgstr "Le verrouillage concurrent de jeux de cartes n'est pas pris en charge dans Windows"
@@ -3434,7 +3435,7 @@ msgid "Raster map <%s> is outside of current region. Load failed."
 msgstr "La carte raster <%s> est en dehors de la région courante. Chargement échoué."
 
 msgid "GS_load_att_map(): Out of memory. Unable to load map"
-msgstr "GS_load_att_map(): Mémoire saturée. Impossible de charger la carte"
+msgstr "GS_load_att_map() : Mémoire saturée. Impossible de charger la carte"
 
 msgid "Loading failed"
 msgstr "Échec du chargement"
@@ -3503,7 +3504,7 @@ msgstr "Couleur d'élément : %d"
 
 #, c-format
 msgid "gsd_rot(): %c is an invalid axis specification. Rotation ignored. Please advise GRASS developers of this error"
-msgstr "gsd_rot(): %c est une spécification d'axe non valide. Rotation ignorée. Merci d'avertir les développeurs GRASS de cette erreur"
+msgstr "gsd_rot() : %c est une spécification d'axe non valide. Rotation ignorée. Merci d'avertir les développeurs GRASS de cette erreur"
 
 msgid "Cut-plane points mismatch between surfaces. Check resolution(s)."
 msgstr "Non-concordance des points de surfaces de coupe. Vérifiez les résolutions."
@@ -3616,7 +3617,7 @@ msgstr "Impossible d'obtenir la chaîne de paramètre PROJ.4"
 
 #, c-format
 msgid "OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
-msgstr "OGR ne peut pas analyser la chaîne de paramètre PROJ.4: %s (Le code erreur OGR était %d)"
+msgstr "OGR ne peut pas analyser la chaîne de paramètre PROJ.4 : %s (Le code erreur OGR était %d)"
 
 #, c-format
 msgid "OGR can't get WKT-style parameter string (OGR Error code was %d)"
@@ -3714,7 +3715,7 @@ msgstr "Operation %d:"
 
 #, c-format
 msgid "Description: %s"
-msgstr "Description: %s"
+msgstr "Description : %s"
 
 #, c-format
 msgid "Area of use: %s"
@@ -3726,7 +3727,7 @@ msgstr ""
 
 #, c-format
 msgid "Remarks: %s"
-msgstr "Remarques: %s"
+msgstr "Remarques : %s"
 
 #, c-format
 msgid "Scope: %s"
@@ -3736,7 +3737,7 @@ msgid "PROJ string:"
 msgstr ""
 
 msgid "See also output of:"
-msgstr "Voir aussi la sortie de:"
+msgstr "Voir aussi la sortie de :"
 
 #, c-format
 msgid "Please provide the appropriate PROJ string with the %s option"
@@ -3796,7 +3797,7 @@ msgstr "Les options d'entrée débordent les options du tableau"
 
 #, c-format
 msgid "Unable to initialize pj cause: %s"
-msgstr "Impossible d'initialiser pj cause: %s"
+msgstr "Impossible d'initialiser pj cause : %s"
 
 msgid "Input Projection Parameters"
 msgstr "Paramètres de la projection d'entrée"
@@ -3906,7 +3907,7 @@ msgstr "erreur inconnue"
 
 #, c-format
 msgid "bad rule (%s): [%s]"
-msgstr "mauvaise règle (%s): [%s]"
+msgstr "Règle incorrecte (%s) : [%s]"
 
 msgid "Unknown error reading color rule"
 msgstr "Erreur inconnue à la lecture de la règle de couleur"
@@ -4135,7 +4136,7 @@ msgstr "Erreur de lecture du type de la carte raster <%s>"
 
 #, c-format
 msgid "Raster map <%s@%s>: format field in header file invalid"
-msgstr "Carte raster <%s@%s>: format de champ invalide dans le fichier d'en-tête"
+msgstr "Carte raster <%s@%s> : format de champ invalide dans le fichier d'en-tête"
 
 #, c-format
 msgid "Compression with %s is not supported in this GRASS GIS installation"
@@ -4193,7 +4194,7 @@ msgstr "Impossible de trouve '%s'"
 
 #, c-format
 msgid "Invalid type: field '%s' in file '%s'"
-msgstr "Type invalide: champ '%s' dans le fichier '%s'"
+msgstr "Type invalide : champ '%s' dans le fichier '%s'"
 
 #, c-format
 msgid "Missing type: field in file '%s'"
@@ -4201,7 +4202,7 @@ msgstr "Type manquant : champ dans le fichier '%s'"
 
 #, c-format
 msgid "Raster map <%s> is not xdr: byte_order: %s"
-msgstr "La carte raster <%s> n'est pas xdr: byte_order: %s"
+msgstr "La carte raster <%s> n'est pas xdr : byte_order : %s"
 
 msgid "Rast_set_quant_rules() can be called only for raster maps opened for reading"
 msgstr "Rast_set_quant_rules() ne peut être appelé que sur une carte raster ouverte en lecture"
@@ -4220,7 +4221,7 @@ msgstr "Erreur d'écriture de données FP compressées à la ligne %d de <%s> : 
 
 #, c-format
 msgid "Error writing compressed data for row %d of <%s>: %s"
-msgstr "Erreur lors de l'écriture des données compressées à la ligne % de <%s> : %s"
+msgstr "Erreur lors de l'écriture des données compressées à la ligne %d de <%s> : %s"
 
 #, c-format
 msgid "Error writing uncompressed data for row %d of <%s>: %s"
@@ -4597,7 +4598,7 @@ msgstr "Dépassement - augmentation de la tension suggérée. Le dépassement se
 
 #, c-format
 msgid "First change your rows number to nsizr! %d %d"
-msgstr "Commencez par modifier le nombre de lignes pour nsizr! %d %d"
+msgstr "Commencez par modifier le nombre de lignes pour nsizr ! %d %d"
 
 #, c-format
 msgid "First change your cols number to nsizc %d %d"
@@ -4664,14 +4665,14 @@ msgstr "%d points ignorés (trop dense)"
 
 #, c-format
 msgid "%d points given for interpolation (after thinning) is less than given NPMIN=%d"
-msgstr "%d points donnés pour l'interpolation (après squelettisation) est moins que le NPMIN=% donnéd"
+msgstr "%d points donnés pour l'interpolation (après squelettisation) est moins que le NPMIN=%d donné"
 
 msgid "Zero points in the given region"
 msgstr "Zéro point dans la région donnée"
 
 #, c-format
 msgid "Segmentation parameters set to invalid values: npmin= %d, segmax= %d for smooth connection of segments, npmin > segmax (see manual)"
-msgstr "Paramètres de segmentation invalides: npmin= %d, segmax= %d pour une bonne connexion des segments, npmin > segmax (voir le manuel)"
+msgstr "Paramètres de segmentation invalides : npmin= %d, segmax= %d pour une bonne connexion des segments, npmin > segmax (voir le manuel)"
 
 #, c-format
 msgid "There are less than %d points for interpolation. No segmentation is necessary, to run the program faster set segmax=%d (see manual)"
@@ -4737,19 +4738,19 @@ msgstr "Impossible de lire le fichier segment"
 
 #, c-format
 msgid "Cannot read symbol line coordinates: %s"
-msgstr "Impossible de lire les coordonnées du symbole ligne: %s"
+msgstr "Impossible de lire les coordonnées du symbole ligne : %s"
 
 #, c-format
 msgid "Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"
-msgstr "Nom du symbole incorrect: '%s' (devrait être group/nom ou groupe/nom@jeudedonnées)"
+msgstr "Nom du symbole incorrect : '%s' (devrait être group/nom ou groupe/nom@jeudedonnées)"
 
 #, c-format
 msgid "Cannot find/open symbol: '%s'"
-msgstr "Impossible de trouver/ouvrir le symbole: '%s'"
+msgstr "Impossible de trouver/ouvrir le symbole : '%s'"
 
 #, c-format
 msgid "Incorrect symbol color: '%s', using default."
-msgstr "Couleur de symbole incorrect: '%s', on utilise la couleur par défaut."
+msgstr "Couleur de symbole incorrect : '%s', on utilise la couleur par défaut."
 
 #, c-format
 msgid "Mapset <%s> does not exist."
@@ -5041,15 +5042,15 @@ msgstr "La topologie a bien été construite"
 
 #, c-format
 msgid "Number of nodes: %d"
-msgstr "Nombre de nœuds: %d"
+msgstr "Nombre de nœuds : %d"
 
 #, c-format
 msgid "Number of primitives: %d"
-msgstr "Nombre de primitives: %d"
+msgstr "Nombre de primitives : %d"
 
 #, c-format
 msgid "Number of points: %d"
-msgstr "Nombre de points: %d"
+msgstr "Nombre de points : %d"
 
 #, c-format
 msgid "Number of lines: %d"
@@ -5057,31 +5058,31 @@ msgstr "Nombre de lignes :%d"
 
 #, c-format
 msgid "Number of boundaries: %d"
-msgstr "Nombre de contours: %d"
+msgstr "Nombre de contours : %d"
 
 #, c-format
 msgid "Number of centroids: %d"
-msgstr "Nombre de centroïdes: %d"
+msgstr "Nombre de centroïdes : %d"
 
 #, c-format
 msgid "Number of faces: %d"
-msgstr "Nombre de faces: %d"
+msgstr "Nombre de faces : %d"
 
 #, c-format
 msgid "Number of kernels: %d"
-msgstr "Nombre de noyaux: %d"
+msgstr "Nombre de noyaux : %d"
 
 #, c-format
 msgid "Number of areas: %d"
-msgstr "Nombre de surfaces: %d"
+msgstr "Nombre de surfaces : %d"
 
 #, c-format
 msgid "Number of isles: %d"
-msgstr "Nombre d'îles: %d"
+msgstr "Nombre d'îles : %d"
 
 #, c-format
 msgid "Number of areas without centroid: %d"
-msgstr "Nombre de surfaces sans centroïde: %d"
+msgstr "Nombre de surfaces sans centroïde : %d"
 
 #, c-format
 msgid "Number of centroids exceeds number of areas: %d > %d"
@@ -5089,7 +5090,7 @@ msgstr "Le nombre de centroïdes dépasse le nombre de surfaces : %d > %d"
 
 #, c-format
 msgid "Number of incorrect boundaries: %d"
-msgstr "Nombre de contours incorrects: %d"
+msgstr "Nombre de contours incorrects : %d"
 
 #, c-format
 msgid "Number of centroids outside area: %d"
@@ -5100,10 +5101,10 @@ msgid "Number of duplicate centroids: %d"
 msgstr "Nombre de centroïdes en double : %d"
 
 msgid "Number of areas: -"
-msgstr "Nombre de surfaces: -"
+msgstr "Nombre de surfaces : -"
 
 msgid "Number of isles: -"
-msgstr "Nombre d'îles: -"
+msgstr "Nombre d'îles : -"
 
 #, c-format
 msgid "Unable to create topo file for vector map <%s>"
@@ -5138,7 +5139,9 @@ msgid_plural "%d primitives registered"
 msgstr[0] "Une primitive référencée"
 msgstr[1] "%d primitives référencées"
 
-#, c-format
+#, fuzzy, c-format
+#| msgid "One vertex registered"
+#| msgid_plural "%d vertices registered"
 msgid "One vertex registered"
 msgid_plural "%d vertices registered"
 msgstr[0] "%d sommet référencé"
@@ -5280,7 +5283,7 @@ msgid "Feature index is built only for non-native formats. Nothing to dump."
 msgstr "L'index est construit uniquement pour les formats non natifs. Rien à exporter."
 
 msgid "Vect_new_cats_struct(): Out of memory"
-msgstr "Vect_new_cats_struct(): allocation mémoire impossible"
+msgstr "Vect_new_cats_struct() : Mémoire insuffisante"
 
 #, c-format
 msgid "Too many categories (%d), unable to set cat %d (layer %d)"
@@ -5514,9 +5517,9 @@ msgid ""
 "driver: %s\n"
 "database: %s"
 msgstr ""
-"Pilote / base de données par défaut définis à :\n"
-"pilote: %s\n"
-"base de données: %s"
+"Pilote / base de données par défaut définis à :\n"
+"pilote : %s\n"
+"base de données : %s"
 
 msgid "Default driver is not set"
 msgstr "Le pilote par défaut n'est pas défini"
@@ -5562,7 +5565,7 @@ msgstr "La carte vecteur n'est pas ouverte"
 
 #, c-format
 msgid "Vect_read_line_geos(): feature id %d is not reasonable (max features in vector map <%s>: %d)"
-msgstr "Vect_read_line_geos(): l'id d'objet %d n'est pas plausible (nombre maxi d'objets dans la carte vecteur <%s>: %d)"
+msgstr "Vect_read_line_geos() : l'id d'objet %d n'est pas plausible (nombre maxi d'objets dans la carte vecteur <%s> : %d)"
 
 msgid "only native format supported"
 msgstr "seul le format natif est pris en charge"
@@ -5572,11 +5575,11 @@ msgstr "Tentative de lecture d'une ligne morte"
 
 #, c-format
 msgid "Vect_read_area_geos(): unable to read area id %d"
-msgstr "Vect_read_area_geos(): impossible de lire l'id de surface %d"
+msgstr "Vect_read_area_geos() : impossible de lire l'id de surface %d"
 
 #, c-format
 msgid "Vect_read_area_geos(): unable to read isle id %d of area id %d"
-msgstr "Vect_read_area_geos(): impossible de lire l'île d'id %d de la surface d'id %d"
+msgstr "Vect_read_area_geos() : impossible de lire l'île d'id %d de la surface d'id %d"
 
 #, c-format
 msgid "Unable to read line offset %ld"
@@ -5598,7 +5601,7 @@ msgstr "Impossible d'ajouter un arc de réseau"
 
 #, c-format
 msgid "dglShortestPath error: %s"
-msgstr "erreur de dglShortestPath: %s"
+msgstr "erreur de dglShortestPath : %s"
 
 #, c-format
 msgid "Unable to create header file for vector map <%s>"
@@ -5997,9 +6000,9 @@ msgstr "Impossible d'ouvrir le fichier coor pour la carte vecteur <%s>"
 msgid "Coor file of vector map <%s@%s> is larger than it should be (%<PRId64> bytes excess)"
 msgstr "Le fichier coor de la carte vecteur <%s@%s> est plus grand qu'il ne devrait l'être (%<PRId64> octets en trop)"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Coor file of vector <%s@%s> is shorter than it should be (%<PRId64> bytes missing)."
-msgstr "Le fichier coor de la carte vecteur <%s@%s> est plus petit qu'il ne devrait (%ld bytes en moins)"
+msgstr "Le fichier coor de la carte vecteur <%s@%s> est plus petit qu'il ne devrait (%<PRId64> bytes en moins)."
 
 msgid "OGR datasource not defined"
 msgstr "Source de données OGR non définie"
@@ -6389,7 +6392,7 @@ msgstr "Impossible de supprimer l'entité/décalage %<PRId64> dans la carte vect
 
 #, c-format
 msgid "Unable to restore feature/offset %<PRId64> in vector map <%s>"
-msgstr "Impossible de restaurer l’entité/décalage %<PRId64> dans la carte vectorielle <%s>."
+msgstr "Impossible de restaurer l’entité/décalage %<PRId64> dans la carte vectorielle <%s>"
 
 #, c-format
 msgid "Vector map <%s> is not opened"
@@ -6719,7 +6722,7 @@ msgstr "Tentative de suppression des information de la surface %d de l'île mort
 
 #, c-format
 msgid "Attempt to delete isle %d info from dead area %d"
-msgstr "Tentative de suppression des informations de l'île % de la surface morte %d"
+msgstr "Tentative de suppression des informations de l'île %d de la surface morte %d"
 
 #, c-format
 msgid "Attempt to delete not registered line %d from node %d"
@@ -6818,7 +6821,7 @@ msgstr "Calcul de l'arbre couvrant de poids minimal ..."
 
 #, c-format
 msgid "Unable to open select cursor: %s"
-msgstr "Impossible d'ouvrir le curseur de sélection: %s"
+msgstr "Impossible d'ouvrir le curseur de sélection : %s"
 
 #, c-format
 msgid "Point %d is not connected!"

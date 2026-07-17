@@ -16,62 +16,9 @@ from datetime import date
 import string
 from shutil import copy
 
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
+# The grass package is imported from GISBASE, which the build puts on PYTHONPATH.
 if not os.getenv("GISBASE"):
     sys.exit("GISBASE not defined")
-sys.path.insert(
-    0, os.path.abspath(os.path.join(os.environ["GISBASE"], "etc", "python", "grass"))
-)
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "ctypes")
-    ),
-)
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "exceptions")
-    ),
-)
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "gunittest")
-    ),
-)
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "imaging")
-    ),
-)
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "pydispatch")
-    ),
-)
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "pygrass")
-    ),
-)
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "script")
-    ),
-)
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "temporal")
-    ),
-)
 
 from grass.script import core  # noqa: E402
 
@@ -89,7 +36,7 @@ GRASS Development Team</a>, GRASS ${grass_version} Documentation</p>
 )
 
 grass_version = core.version()["version"]
-today = date.today()
+today = date.today().strftime("%B %d, %Y")
 
 copy("_templates/layout.html.template", "_templates/layout.html")
 
@@ -114,6 +61,24 @@ extensions = [
     "sphinx_sitemap",
 ]
 
+
+# Skip temporal lexer rule methods because their regex docstrings are not intended
+# for reStructuredText parsing and only serve PLY token definitions.
+def skip_member(app, what, name, obj, skip, options):
+    if name.startswith("t_"):
+        mod = getattr(obj, "__module__", None)
+        if mod in {
+            "grass.temporal.temporal_algebra",
+            "grass.temporal.temporal_operator",
+        }:
+            return True
+    return None
+
+
+def setup(app):
+    app.connect("autodoc-skip-member", skip_member)
+
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 
@@ -128,7 +93,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "GRASS Python Library"
-copyright = "2025, GRASS Development Team"
+copyright = "2026, GRASS Development Team"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -192,7 +157,6 @@ html_theme_options = {
     "repo_url": "https://github.com/OSGeo/grass/",
     "repo_name": "GRASS",
     "repo_type": "github",
-    "logo": "grass_logo.svg",
     # Visible levels of the global TOC; -1 means unlimited
     "globaltoc_depth": 1,
     # If False, expand all TOC entries
@@ -236,7 +200,7 @@ html_theme_options = {
             "internal": True,
         },
         {
-            "href": "exceptions",
+            "href": "grass.exceptions",
             "title": "Exceptions",
             "internal": True,
         },

@@ -29,12 +29,12 @@ int scan_ref(char *buf, int *xref, int *yref)
         lowercase(word2);
         if (!(xmatch(word2, xref) || ymatch(word2, yref)))
             return 0;
-        FALLTHROUGH;
+        G_FALLTHROUGH;
     case 1:
         lowercase(word1);
         if (xmatch(word1, xref) || ymatch(word1, yref))
             return 1;
-        FALLTHROUGH;
+        G_FALLTHROUGH;
     default:
         return 0;
     }

@@ -25,7 +25,7 @@
 #include "pg_local_proto.h"
 #define NOPG_UNUSED
 #else
-#define NOPG_UNUSED UNUSED
+#define NOPG_UNUSED G_UNUSED
 #endif
 
 /*!

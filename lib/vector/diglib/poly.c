@@ -96,19 +96,41 @@ int dig_get_poly_points(int n_lines, struct line_pnts **LPoints,
  */
 int dig_find_area_poly(struct line_pnts *Points, double *totalarea)
 {
-    int i;
-    double *x, *y;
+    int i, mid;
+    double *x, *y, xshift, yshift;
     double tot_area;
 
     x = Points->x;
     y = Points->y;
+
+    /* Get a reference point close to the polygon as new origin.
+     * The first point would be good enough, particularly for small
+     * polygons. The average of the first and the mid-point is a fast
+     * approximation of a reference point with reduced distance to the
+     * ring's vertices, also for larger rings.
+     *
+     * Shift coordinates towards this reference point to make
+     * calculation of the signed area more robust by increasing the
+     * accuracy for given fp precision limits.
+     *
+     * Considering the basic formula
+     *    area += (x2 - x1) * (y2 + y1)
+     * the shift is in theory only needed for addition, not subtraction,
+     * but does no harm and is kept for symmetry treating x and y coords.
+     *
+     * Keep in sync with G_planimetric_polygon_area() in lib/gis/area_poly2.c */
+
+    mid = Points->n_points / 2;
+    xshift = (x[0] + x[mid]) / 2.;
+    yshift = (y[0] + y[mid]) / 2.;
 
     /* line integral: *Points do not need to be pruned */
     /* surveyor's formula is more common, but more prone to
      * fp precision limit errors, and *Points would need to be pruned */
     tot_area = 0.0;
     for (i = 1; i < Points->n_points; i++) {
-        tot_area += (x[i] - x[i - 1]) * (y[i] + y[i - 1]);
+        tot_area += ((x[i] - xshift) - (x[i - 1] - xshift)) *
+                    ((y[i] - yshift) + (y[i - 1] - yshift));
     }
     *totalarea = 0.5 * tot_area;
 

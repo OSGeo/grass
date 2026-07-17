@@ -151,6 +151,7 @@ $(DESTDIR)$(INST_DIR)/$(RESOURCE_PATHS): $(ARCH_DISTDIR)/resource_paths.py
 	-e 's#'@LD_LIBRARY_PATH_VAR@'#$(LD_LIBRARY_PATH_VAR)#' \
 	-e 's#'@START_UP@'#$(GRASS_NAME)#' \
 	$< > $@
+	$(PYTHON) -m py_compile $@
 
 define fix_gisbase
 sed -e 's#$(GISBASE)#$(INST_DIR)#g' $< > $@

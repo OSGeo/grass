@@ -22,7 +22,6 @@ from __future__ import annotations
 
 import os
 import string
-import time
 from pathlib import Path
 
 from .core import (
@@ -135,14 +134,14 @@ def mapcalc(
     :param bool verbose: True to run verbosely (``--v``)
     :param bool overwrite: True to enable overwriting the output (``--o``)
     :param seed: an integer used to seed the random-number generator for the
-                 rand() function, or 'auto' to generate a random seed
+                 rand() function. If not provided, r.mapcalc uses automatic seeding.
     :param nprocs: Number of threads for parallel computing
     :param dict env: dictionary of environment variables for child process
     :param kwargs:
     """
-
+    # Handle backwards compatibility: convert seed="auto" to None
     if seed == "auto":
-        seed = hash((os.getpid(), time.time())) % (2**32)
+        seed = None
 
     t = string.Template(exp)
     e = t.substitute(**kwargs)
@@ -210,16 +209,16 @@ def mapcalc_start(
     :param bool verbose: True to run verbosely (``--v``)
     :param bool overwrite: True to enable overwriting the output (``--o``)
     :param seed: an integer used to seed the random-number generator for the
-                 rand() function, or 'auto' to generate a random seed
+                 rand() function. If not provided, r.mapcalc uses automatic seeding.
     :param nprocs: Number of threads for parallel computing
     :param dict env: dictionary of environment variables for child process
     :param kwargs:
 
     :return: Popen object
     """
-
+    # Handle backwards compatibility: convert seed="auto" to None
     if seed == "auto":
-        seed = hash((os.getpid(), time.time())) % (2**32)
+        seed = None
 
     t = string.Template(exp)
     e = t.substitute(**kwargs)
@@ -516,7 +515,7 @@ class RegionManager:
 
     def __init__(self, env: dict[str, str] | None = None, **kwargs):
         """
-        Initializes the MaskManager.
+        Initializes the RegionManager.
 
         :param env: Environment to use.
                     Defaults to modifying :external:py:data:`os.environ`.
@@ -604,7 +603,7 @@ class RegionManagerEnv:
     This is identical to:
 
     >>> with gs.RegionManagerEnv() as manager:
-            manager.env["GRASS_REGION"] = gs.region_env()
+    ...     manager.env["GRASS_REGION"] = gs.region_env()
     ...     gs.parse_command("r.univar", map="elevation", format="json")
 
 
@@ -626,7 +625,7 @@ class RegionManagerEnv:
 
     def __init__(self, env: dict[str, str] | None = None, **kwargs):
         """
-        Initializes the MaskManager.
+        Initializes the RegionManagerEnv.
 
         :param env: Environment to use.
                     Defaults to modifying :external:py:data:`os.environ`.
@@ -659,7 +658,7 @@ class RegionManagerEnv:
     def deactivate(self):
         """Restore the previous region state.
 
-        Restores the original value of `WIND_OVERRIDE`.
+        Restores the original value of `GRASS_REGION`.
 
         :param exc_type: Exception type, if any.
         :param exc_val: Exception value, if any.
