@@ -499,14 +499,10 @@ build_program_in_subdir(
 )
 
 build_program_in_subdir(
-  r.resamp.stats
-  DEPENDS
-  grass_gis
-  grass_raster
-  grass_stats
-  ${LIBM}
-  OPTIONAL_DEPENDS
-  OpenMP::OpenMP_C)
+    r.resamp.stats
+    DEPENDS ${LIBM} grass_gis grass_raster grass_stats
+    OPTIONAL_DEPENDS OpenMP::OpenMP_C
+)
 
 build_program_in_subdir(r.resample DEPENDS grass_gis grass_raster)
 
