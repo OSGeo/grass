@@ -153,21 +153,43 @@ t.list type=raster format=json columns=id,start_time
 ```
 
 To list multiple dataset types at once, specify a comma-separated list of
-types. When using multiple types, including `type` in the `columns` parameter
-allows identifying the type of each record:
+types.
+
+**Note:** When multiple types are requested (e.g., `type=strds,stvds`), the
+`type` column is automatically included in **csv** and **json** outputs to
+clearly identify the dataset type of each record:
 
 ```sh
-t.list type=strds,stvds columns=id,type format=csv
+t.list type=strds,stvds columns=id format=json
 ```
 
-```csv
-id,type
-lst_daily@PERMANENT,strds
-mini_set@PERMANENT,strds
-nc_lst_daily@PERMANENT,strds
-precip_abs1@PERMANENT,strds
-prec_observer@PERMANENT,stvds
-schools_stds@PERMANENT,stvds
+```json
+[
+    {
+        "id": "lst_daily@PERMANENT",
+        "type": "strds"
+    },
+    {
+        "id": "mini_set@PERMANENT",
+        "type": "strds"
+    },
+    {
+        "id": "nc_lst_daily@PERMANENT",
+        "type": "strds"
+    },
+    {
+        "id": "precip_abs1@PERMANENT",
+        "type": "strds"
+    },
+    {
+        "id": "prec_observer@PERMANENT",
+        "type": "stvds"
+    },
+    {
+        "id": "schools_stds@PERMANENT",
+        "type": "stvds"
+    }
+]
 ```
 
 ## SEE ALSO

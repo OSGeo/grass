@@ -3,7 +3,7 @@
 import pytest
 
 from grass.experimental import TemporaryMapsetSession
-from grass.tools import Tools
+from grass.tools import ToolError, Tools
 
 
 def test_t_list_defaults(space_time_dataset):
@@ -200,9 +200,7 @@ def test_t_list_from_mapset_without_temporal_database(space_time_dataset):
 def test_t_list_multiple_types_json(space_time_dataset):
     """Check that listing multiple dataset types in JSON format returns entries from all types."""
     tools = Tools(session=space_time_dataset.session)
-    result = tools.t_list(
-        type="stvds,strds", mapset=".", columns="name,type", format="json"
-    )
+    result = tools.t_list(type="stvds,strds", mapset=".", columns="name", format="json")
 
     assert len(result.json) == 2
     names = [record["name"] for record in result.json]
@@ -212,3 +210,20 @@ def test_t_list_multiple_types_json(space_time_dataset):
     types = {record["type"] for record in result.json}
     assert "strds" in types
     assert "stvds" in types
+
+
+def test_t_list_multiple_types_line_error(space_time_dataset):
+    """Check that line format with multiple dataset types raises an error."""
+    tools = Tools(session=space_time_dataset.session)
+    with pytest.raises(ToolError, match="Only one type is allowed for line format"):
+        tools.t_list(type="strds,stvds", columns="id", format="line")
+
+
+def test_t_list_cross_category_types_error(space_time_dataset):
+    """Check that mixing space time datasets and time stamped maps raises an error."""
+    tools = Tools(session=space_time_dataset.session)
+    with pytest.raises(
+        ToolError,
+        match="Combinations across space time datasets and time stamped maps",
+    ):
+        tools.t_list(type="strds,raster", columns="id")

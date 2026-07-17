@@ -46,7 +46,7 @@ def get_dataset_list(
     This method returns a dictionary, the keys are the available mapsets,
     the values are the rows from the SQL database query.
 
-    :param type: The type of the datasets (strds, str3ds, stvds, raster,
+    :param type: A list of dataset types (strds, str3ds, stvds, raster,
                  raster_3d, vector)
     :param temporal_type: The temporal type of the datasets (absolute,
                           relative)
@@ -76,7 +76,7 @@ def get_dataset_list(
         ... )
         >>> mapset = tgis.get_current_mapset()
         >>> stds_list = tgis.list_stds.get_dataset_list(
-        ...     "strds", "absolute", columns="name"
+        ...     ["strds"], "absolute", columns="name"
         ... )
         >>> rows = stds_list[mapset]
         >>> for row in rows:
@@ -84,7 +84,7 @@ def get_dataset_list(
         ...         print(True)
         True
         >>> stds_list = tgis.list_stds.get_dataset_list(
-        ...     "strds",
+        ...     ["strds"],
         ...     "absolute",
         ...     columns="name,mapset",
         ...     where="mapset = '%s'" % (mapset),
@@ -101,7 +101,7 @@ def get_dataset_list(
 
     result = {}
 
-    for dtype in [t.strip() for t in type.split(",") if t.strip()]:
+    for dtype in type:
         for mapset in dbif.tgis_mapsets:
             if temporal_type == "absolute":
                 table = dtype + "_view_abs_time"
@@ -109,13 +109,9 @@ def get_dataset_list(
                 table = dtype + "_view_rel_time"
 
             if columns and columns.find("all") == -1:
-                cols = [
-                    f"'{dtype}' AS type" if c.strip() == "type" else c.strip()
-                    for c in str(columns).split(",")
-                ]
-                sql = "SELECT " + ", ".join(cols) + " FROM " + table
+                sql = "SELECT " + columns + " FROM " + table
             else:
-                sql = f"SELECT *, '{dtype}' AS type FROM {table}"
+                sql = "SELECT * FROM " + table
 
             if where:
                 sql += " WHERE " + where
@@ -132,7 +128,11 @@ def get_dataset_list(
             if rows:
                 if mapset not in result:
                     result[mapset] = []
-                result[mapset].extend(rows)
+                for row in rows:
+                    row_dict = dict(row)
+                    if len(type) > 1:
+                        row_dict["type"] = dtype
+                    result[mapset].append(row_dict)
 
     if connection_state_changed:
         dbif.close()
