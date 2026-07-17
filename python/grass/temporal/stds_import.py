@@ -282,6 +282,15 @@ def import_stds(
     old_state = gs.get_raise_on_error()
     gs.set_raise_on_error(True)
 
+    if stds_type == "stvds" and not overr:
+        gs.warning(
+            _(
+                "Re-projection on import is currently not supported for "
+                "space time vector datasets. Ignoring projection information."
+            ),
+        )
+        overr = True
+
     input_path = Path(input)
     # Check if input file and extraction directory exits
     if not input_path.exists():
