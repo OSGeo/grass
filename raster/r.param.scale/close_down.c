@@ -21,9 +21,6 @@ void close_down(void)
     struct History history;
     char map_title[80], map_type[32];
 
-    /* Close connection with existing input raster. */
-    Rast_unopen(fd_in);
-
     /* Write output raster map and close connection. */
     Rast_close(fd_out);
 

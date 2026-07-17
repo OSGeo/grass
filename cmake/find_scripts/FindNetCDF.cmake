@@ -40,19 +40,21 @@ find_package(PkgConfig QUIET)
 pkg_check_modules(PC_NetCDF netcdf QUIET)
 
 find_path(
-  NetCDF_INCLUDEDIR
-  NAMES netcdf.h
-  HINTS ${PC_NetCDF_INCLUDEDIR} ${PC_NetCDF_INCLUDE_DIRS}
-  DOC "path to netcdf.h")
+    NetCDF_INCLUDEDIR
+    NAMES netcdf.h
+    HINTS ${PC_NetCDF_INCLUDEDIR} ${PC_NetCDF_INCLUDE_DIRS}
+    DOC "path to netcdf.h"
+)
 
 find_library(
-  NetCDF_LIBRARY
-  NAMES netcdf
-  HINTS ${PC_NetCDF_LIBDIR} ${PC_NetCDF_LIBRARY_DIRS}
-  DOC "path netcdf library")
+    NetCDF_LIBRARY
+    NAMES netcdf
+    HINTS ${PC_NetCDF_LIBDIR} ${PC_NetCDF_LIBRARY_DIRS}
+    DOC "path netcdf library"
+)
 
 if(NetCDF_INCLUDE_DIR AND NetCDF_LIBRARY)
-  set(NetCDF_FOUND TRUE)
+    set(NetCDF_FOUND TRUE)
 endif()
 
 set(NetCDF_VERSION ${PC_NetCDF_VERSION})
@@ -60,14 +62,17 @@ set(NetCDF_INCLUDE_DIRS ${NetCDF_INCLUDEDIR})
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(
-  NetCDF
-  REQUIRED_VARS NetCDF_LIBRARY NetCDF_INCLUDEDIR
-  VERSION_VAR NetCDF_VERSION)
+    NetCDF
+    REQUIRED_VARS NetCDF_LIBRARY NetCDF_INCLUDEDIR
+    VERSION_VAR NetCDF_VERSION
+)
 
 if(NetCDF_FOUND)
-  add_library(NetCDF::NetCDF UNKNOWN IMPORTED)
-  set_target_properties(
-    NetCDF::NetCDF
-    PROPERTIES IMPORTED_LOCATION "${NetCDF_LIBRARY}"
-               INTERFACE_INCLUDE_DIRECTORIES "${NetCDF_INCLUDEDIR}")
+    add_library(NetCDF::NetCDF UNKNOWN IMPORTED)
+    set_target_properties(
+        NetCDF::NetCDF
+        PROPERTIES
+            IMPORTED_LOCATION "${NetCDF_LIBRARY}"
+            INTERFACE_INCLUDE_DIRECTORIES "${NetCDF_INCLUDEDIR}"
+    )
 endif()

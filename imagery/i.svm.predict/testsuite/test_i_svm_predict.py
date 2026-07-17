@@ -167,9 +167,9 @@ class IOValidationTest(TestCase):
         self.tmp_rasts.append(rast)
         self.assertModuleFail(isvm)
         self.assertTrue(isvm.outputs.stderr)
-        self.assertTrue(
-            "Signature band count: 2, imagery group band count: 3"
-            in isvm.outputs.stderr
+        self.assertIn(
+            "Signature band count: 2, imagery group band count: 3",
+            isvm.outputs.stderr,
         )
 
     @unittest.skipIf(shutil.which("i.svm.predict") is None, "i.svm.predict not found.")

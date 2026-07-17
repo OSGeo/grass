@@ -1104,7 +1104,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return obj_list
 
-    def get_registered_maps_as_objects_by_granularity(self, gran=None, dbif=None):
+    def get_registered_maps_as_objects_by_granularity(
+        self, gran: str | None = None, where: str | None = None, dbif=None
+    ):
         """Return all registered maps as ordered (by start_time) object list
         with "gap" map objects (id==None) for spatio-temporal topological
         operations that require the temporal extent only.
@@ -1143,6 +1145,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     weeks, month, months, year, years". The unit of the
                     relative time granule is always the space time dataset
                     unit and can not be changed.
+        :param where: The SQL where statement to select a subset of
+                      the registered maps without "WHERE"
         :param dbif: The database interface to be used
 
         :return: ordered list of map lists. Each list represents a single
@@ -1158,16 +1162,19 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         if not check:
             self.msgr.fatal(_('Wrong granularity: "%s"') % str(gran))
 
-        start, end = self.get_temporal_extent_as_tuple()
-
-        if start is None or end is None:
-            return None
-
-        maps = self.get_registered_maps_as_objects(dbif=dbif, order="start_time")
+        maps = self.get_registered_maps_as_objects(
+            dbif=dbif, order="start_time", where=where
+        )
 
         if not maps:
             return None
 
+        start = maps[0].get_temporal_extent_as_tuple()[0]
+        end_extend = maps[-1].get_temporal_extent_as_tuple()
+        end = end_extend[1] if end_extend[1] is not None else end_extend[0]
+
+        if start is None or end is None:
+            return None
         # We need to adjust the end time in case the dataset has no
         # interval time, so we can catch time instances at the end
         if self.get_map_time() != "interval":
@@ -2086,6 +2093,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         if connection_state_changed:
             dbif.close()
+        return True
 
     @staticmethod
     def snap_map_list(maps):

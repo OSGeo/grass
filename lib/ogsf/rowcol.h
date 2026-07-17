@@ -24,19 +24,19 @@
 #define XY2OFF(gs, px, py)      (int)DRC2OFF(gs, Y2DROW(gs, py), X2DCOL(gs, px))
 
 /* ycoord/xcoord to viewres row/col */
-#define Y2VROW(gs, py)          (int)((gs->yrange - (py)) / (gs->yres * gs->y_mod))
-#define X2VCOL(gs, px)          (int)((px) / (gs->xres * gs->x_mod))
+#define Y2VROW(gs, py)      (int)((gs->yrange - (py)) / (gs->yres * gs->y_mod))
+#define X2VCOL(gs, px)      (int)((px) / (gs->xres * gs->x_mod))
 
 /* viewres row/col to data row/col */
-#define VROW2DROW(gs, vrow)     (int)(gs->y_mod * (vrow))
-#define VCOL2DCOL(gs, vcol)     (int)(gs->x_mod * (vcol))
+#define VROW2DROW(gs, vrow) (int)(gs->y_mod * (vrow))
+#define VCOL2DCOL(gs, vcol) (int)(gs->x_mod * (vcol))
 
 /* data row/col to ycoord/xcoord */
-#define DROW2Y(gs, drow)        (gs->yrange - ((drow) * gs->yres))
-#define DCOL2X(gs, dcol)        ((dcol) * gs->xres)
+#define DROW2Y(gs, drow)    (gs->yrange - ((drow) * gs->yres))
+#define DCOL2X(gs, dcol)    ((dcol) * gs->xres)
 
 /* viewres row/col to ycoord/xcoord */
-#define VROW2Y(gs, vrow)        (gs->yrange - ((vrow) * gs->yres * gs->y_mod))
-#define VCOL2X(gs, vcol)        ((vcol) * gs->xres * gs->x_mod)
+#define VROW2Y(gs, vrow)    (gs->yrange - ((vrow) * gs->yres * gs->y_mod))
+#define VCOL2X(gs, vcol)    ((vcol) * gs->xres * gs->x_mod)
 
 #endif /* _ROWCOL_H */
