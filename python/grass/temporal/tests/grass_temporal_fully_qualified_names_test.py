@@ -5,6 +5,7 @@ tools should resolve a fully qualified STDS name from any accessible mapset,
 even when that mapset is not on the current search path.
 """
 
+import os
 from types import SimpleNamespace
 
 import pytest
@@ -17,16 +18,22 @@ from grass.tools import Tools
 def two_mapset_session(tmp_path_factory):
     """STRDS in PERMANENT plus one in an off-search-path mapset ('user1').
 
-    Ends in PERMANENT so 'user1' is not on the search path. Uses
-    gs.setup.init(project) without a copied env so both Tools and the tgis
-    library share the same active session (mirrors
-    grass_temporal_core_init_skip_db_test.py).
+    Ends in empty_mapset so 'user1' is not on the search path. tgis reads
+    the session from os.environ, so the session env is mirrored there via
+    MonkeyPatch.context() and restored after the module.
     """
     tmp_path = tmp_path_factory.mktemp("fqn_temporal")
     project = tmp_path / "test_project"
     gs.create_project(project)
 
-    with gs.setup.init(project) as session:
+    with (
+        pytest.MonkeyPatch.context() as monkeypatch,
+        gs.setup.init(project, env=os.environ.copy()) as session,
+    ):
+        for key, value in session.env.items():
+            if os.environ.get(key) != value:
+                monkeypatch.setenv(key, value)
+
         tools = Tools(session=session)
         tools.g_region(s=0, n=80, w=0, e=120, res=10)
 
@@ -119,16 +126,18 @@ def test_open_old_stds_searchpath(two_mapset_session):
     """open_old_stds finds STDS not in the current mapset but on the search path."""
     import grass.temporal as tgis
 
-    tools = Tools(session=two_mapset_session)
+    tools = Tools(session=two_mapset_session.session)
     tools.g_mapset(mapset="empty_mapset")
-    print(tools.g_gisenv().text)
     # open_old_stds fails if stds not found (on search path)
     tgis.init(skip_db_init=True)
     with pytest.raises(SystemExit):
+        tgis.open_old_stds(two_mapset_session.offpath_dataset, "strds")
+    # After adding the source mapset to the search path open_old_stds succeeds.
+    # Restore the search path afterwards so subsequent tests are not affected.
+    try:
+        tools.g_mapsets(operation="add", mapset="user1")
+        tgis.init(skip_db_init=True)
         sp = tgis.open_old_stds(two_mapset_session.offpath_dataset, "strds")
-    # After adding the source mapset to the search path open_old_stds succeeds
-    tools.g_mapsets(operation="add", mapset="user1")
-    tgis.init(skip_db_init=True)
-    sp = tgis.open_old_stds(two_mapset_session.offpath_dataset, "strds")
-    assert sp.get_id() == two_mapset_session.offpath_id
-    # assert sp.get_id() == "test"
+        assert sp.get_id() == two_mapset_session.offpath_id
+    finally:
+        tools.g_mapsets(operation="remove", mapset="user1")
