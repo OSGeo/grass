@@ -64,8 +64,10 @@ def open_old_stds(name, type, dbif=None):
     or the space time dataset was not found.
 
     :param name: The name of the space time dataset, if the name does not
-                 contain the mapset (name@mapset) then the current mapset
-                 will be used to identify the space time dataset
+                 contain the mapset (name@mapset) then the space time dataset
+                 is searched first in the current mapset, then on the search
+                 path. The mapset of the first match  will be used to identify
+                 the space time dataset.
     :param type: The type of the space time dataset (strd, str3ds, stvds,
                  raster, vector, raster3d)
     :param dbif: The optional database interface to be used
