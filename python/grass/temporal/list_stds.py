@@ -46,8 +46,8 @@ def get_dataset_list(
     This method returns a dictionary, the keys are the available mapsets,
     the values are the rows from the SQL database query.
 
-    :param type: A list of dataset types (strds, str3ds, stvds, raster,
-                 raster_3d, vector)
+    :param type: The dataset type (strds, str3ds, stvds, raster,
+                 raster_3d, vector) as a string or a list of dataset types
     :param temporal_type: The temporal type of the datasets (absolute,
                           relative)
     :param columns: A comma separated list of columns that will be selected
@@ -76,7 +76,7 @@ def get_dataset_list(
         ... )
         >>> mapset = tgis.get_current_mapset()
         >>> stds_list = tgis.list_stds.get_dataset_list(
-        ...     ["strds"], "absolute", columns="name"
+        ...     "strds", "absolute", columns="name"
         ... )
         >>> rows = stds_list[mapset]
         >>> for row in rows:
@@ -84,7 +84,7 @@ def get_dataset_list(
         ...         print(True)
         True
         >>> stds_list = tgis.list_stds.get_dataset_list(
-        ...     ["strds"],
+        ...     "strds",
         ...     "absolute",
         ...     columns="name,mapset",
         ...     where="mapset = '%s'" % (mapset),
@@ -98,6 +98,9 @@ def get_dataset_list(
 
     """
     dbif, connection_state_changed = init_dbif(dbif)
+
+    if isinstance(type, str):
+        type = [type]
 
     result = {}
 
