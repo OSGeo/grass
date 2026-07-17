@@ -134,8 +134,11 @@ build_library_in_subdir(btree2 HEADERS "kdtree.h" DEPENDS grass_gis)
 
 build_library_in_subdir(octree HEADERS "octree.h" DEPENDS grass_gis ${LIBM})
 
-build_program_in_subdir(octree/test NAME test.octree.lib DEPENDS grass_gis grass_octree ${LIBM})
-
+build_program_in_subdir(
+    octree/test
+    NAME test.octree.lib
+    DEPENDS ${LIBM} grass_gis grass_octree
+)
 
 build_library_in_subdir(
     display
