@@ -1218,10 +1218,10 @@ def install_extension(source=None, url=None, xmlurl=None, branch=None):
 
         # update modules metadata file
         gs.message(_("Updating extension modules metadata file..."))
-        install_module_xml(new_modules)
+        install_module_xml(new_modules, source=source)
 
         for module in new_modules:
-            update_manual_page(module)
+            update_manual_page(module, source=source)
 
         gs.message(
             _("Installation of <%s> successfully finished") % options["extension"]
@@ -1495,7 +1495,7 @@ def filter_multi_addon_addons(mlist):
     return mlist
 
 
-def install_module_xml(mlist):
+def install_module_xml(mlist, source=None):
     """Update XML files with metadata about installed modules and toolbox
     of an private addon
 
@@ -1509,7 +1509,9 @@ def install_module_xml(mlist):
     # read XML file
     tree = etree_fromfile(xml_file)
 
-    if sys.platform != "win32":
+    # Identifying multi-addon addons queries the official repository over
+    # the network, so skip it for other sources (e.g. a local directory).
+    if sys.platform != "win32" and source in {"official", "official_fork"}:
         # Filter multi-addon addons
         if len(mlist) > 1:
             mlist = filter_multi_addon_addons(
@@ -2479,7 +2481,7 @@ def check_dirs():
 # fix file URI in manual page
 
 
-def update_manual_page(module):
+def update_manual_page(module, source=None):
     """Fix manual page for addons which are at different directory
     than core modules"""
     if module.split(".", 1)[0] == "wx":
@@ -2508,7 +2510,9 @@ def update_manual_page(module):
     # find URIs
     pattern = r"""<a href="([^"]+)">([^>]+)</a>"""
     addons = get_installed_extensions(force=True)
-    if sys.platform != "win32":
+    # Identifying multi-addon addons queries the official repository over
+    # the network, so skip it for other sources (e.g. a local directory).
+    if sys.platform != "win32" and source in {"official", "official_fork"}:
         # Multi-addon
         if len(addons) > 1:
             for a in get_multi_addon_addons_which_install_only_html_man_page():
