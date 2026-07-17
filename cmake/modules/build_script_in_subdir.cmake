@@ -1,8 +1,7 @@
 #[[
 AUTHOR(S):  Rashad Kanavath <rashad km gmail>
 PURPOSE:    A CMake function that builds grass python script modules
-COPYRIGHT:  (C) 2020 by the GRASS Development Team
-
+SPDX-FileCopyrightText: 2020 Other GRASS authors
 SPDX-License-Identifier: GPL-2.0-or-later
 #]]
 

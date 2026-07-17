@@ -5,11 +5,9 @@
  * AUTHOR(S):    Maris Nartiss - maris.gis gmail.com
  * PURPOSE:      Trains Support Vector Machine classifier
  *
- * COPYRIGHT:    (C) 2023 by Maris Nartiss and the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2023 Maris Nartiss
+ * SPDX-FileCopyrightText: Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *               Development of this module was supported from
  *               science funding of University of Latvia (2020-2023).

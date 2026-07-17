@@ -6,11 +6,9 @@
  *
  * PURPOSE:      Make GRASS write raster maps utilizing the GDAL library.
  *
- * COPYRIGHT:    (C) 2008, 2010 by Glynn Clements and the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2008, 2010 Glynn Clements
+ * SPDX-FileCopyrightText: Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 

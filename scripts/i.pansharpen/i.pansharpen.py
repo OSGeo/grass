@@ -14,11 +14,8 @@
 #
 # PURPOSE:	Sharpening of 3 RGB channels using a high-resolution panchromatic channel
 #
-# COPYRIGHT:	(C) 2002-2019 by the GRASS Development Team
-#
-# 		This program is free software under the GNU General Public
-# 		License (>=v2). Read the file COPYING that comes with GRASS
-# 		for details.
+# SPDX-FileCopyrightText: 2002-2019 Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 # REFERENCES:
 #   Roller, N.E.G. and Cox, S., 1980. Comparison of Landsat MSS and merged MSS/RBV

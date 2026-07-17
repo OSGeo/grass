@@ -6,13 +6,9 @@
  *
  * PURPOSE:      LIDAR Spline Interpolation
  *
- * COPYRIGHT:    (C) 2006 by Politecnico di Milano -
- *                           Polo Regionale di Como
- *
- *               This program is free software under the
- *               GNU General Public License (>=v2).
- *               Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2006 Politecnico di Milano - Polo Regionale di Como
+ * SPDX-FileCopyrightText: Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  **************************************************************************/
 

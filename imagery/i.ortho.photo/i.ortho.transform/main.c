@@ -7,11 +7,8 @@
  *               Markus Metz
  * PURPOSE:      Utility to compute transformation based upon GCPs and
  *               output error measurements
- * COPYRIGHT:    (C) 2006-2013 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2006-2013 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 

@@ -13,11 +13,8 @@
  * PURPOSE:      tabulates the error matrix of classification result by
  *               crossing classified map layer with respect to reference map
  *               layer
- * COPYRIGHT:    (C) 1999-2022 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1999-2022 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 #include <stdlib.h>

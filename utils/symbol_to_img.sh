@@ -5,12 +5,9 @@
 # MODULE:       symbol_to_img.sh
 # AUTHOR(S):    Anna Petrasova, Hamish Bowman, Vaclav Petras
 # PURPOSE:      Renders the GRASS symbols from dir to a dir of PNGs
-# COPYRIGHT:    (C) 2012-2016 by Anna Petrasova
-#               and the GRASS Development Team
-#
-#               This program is free software under the GNU General
-#               Public License (>=v2). Read the file COPYING that
-#               comes with GRASS for details.
+# SPDX-FileCopyrightText: 2012-2016 Anna Petrasova
+# SPDX-FileCopyrightText: Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 

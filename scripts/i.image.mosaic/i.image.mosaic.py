@@ -6,11 +6,8 @@
 # updated for GRASS 5.7 by Michael Barton 2004/04/05
 # converted to Python by Glynn Clements
 #
-# COPYRIGHT:    (C) 1999,2007,2008 by the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-FileCopyrightText: 1999,2007,2008 Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 # TODO: - implement g.findfile for 3 and 4 maps (currently only current mapset
 #           supported)

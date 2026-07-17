@@ -6,11 +6,9 @@
 # AUTHOR(S):    Markus Neteler, converted to Python by Glynn Clements
 #               Bug fixes, sort for coor by Huidae Cho <grass4u gmail.com>
 # PURPOSE:      Reports geometry statistics for vector maps
-# COPYRIGHT:    (C) 2005-2021 by MN and the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-FileCopyrightText: 2005-2021 MN
+# SPDX-FileCopyrightText: Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 

@@ -6,10 +6,9 @@ AUTHOR(S): Stepan Turek <stepan.turek AT seznam.cz>
 
 PURPOSE:   Downloads and imports data from WMS/WMTS/NASA OnEarth server.
 
-COPYRIGHT: (C) 2012-2021 Stepan Turek, and by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2012-2021 Stepan Turek
+SPDX-FileCopyrightText: Other GRASS authors
+SPDX-License-Identifier: GPL-2.0-or-later
 """
 
 # %module

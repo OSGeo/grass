@@ -6,10 +6,8 @@
  * PURPOSE:   Rapidly fill "no data" cells in a raster map by simple
  *            interpolation.
  *
- * COPYRIGHT: (C) 2011-2018 by the GRASS Development Team
- *
- *            This program is free software under the GPL (>=v2)
- *            Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2011-2018 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ****************************************************************************
  */

@@ -5,12 +5,9 @@
 # MODULE:       mkrest.py
 # AUTHOR(S):    Luca Delucchi
 # PURPOSE:      Create HTML manual page snippets
-# COPYRIGHT:    (C) 2012 by Luca Delucchi
-#                and the GRASS Development Team
-#
-#               This program is free software under the GNU General
-#               Public License (>=v2). Read the file COPYING that
-#               comes with GRASS for details.
+# SPDX-FileCopyrightText: 2012 Luca Delucchi
+# SPDX-FileCopyrightText: Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 

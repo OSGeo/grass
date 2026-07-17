@@ -5,10 +5,9 @@
 # MODULE:       v.clip
 # AUTHOR:       Zofie Cimburova, CTU Prague, Czech Republic
 # PURPOSE:      Clips vector features
-# COPYRIGHT:    (C) 2016 Zofie Cimburova
-#               This program is free software under the GNU General
-#               Public License (>=v2). Read the file COPYING that
-#               comes with GRASS for details.
+# SPDX-FileCopyrightText: 2016 Zofie Cimburova
+# SPDX-FileCopyrightText: Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 

@@ -4,17 +4,9 @@
 # MODULE:    g.gui.dbmgr
 # AUTHOR(S): Martin Landa <landa.martin gmail.com>
 # PURPOSE:   Attribute Table Manager
-# COPYRIGHT: (C) 2012-2013 by Martin Landa, and the GRASS Development Team
-#
-#  This program is free software; you can 1redistribute it and/or
-#  modify it under the terms of the GNU General Public License as
-#  published by the Free Software Foundation; either version 2 of the
-#  License, or (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful, but
-#  WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-#  General Public License for more details.
+# SPDX-FileCopyrightText: 2012-2013 Martin Landa
+# SPDX-FileCopyrightText: Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 ############################################################################
 

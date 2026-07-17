@@ -4,11 +4,9 @@
 # PURPOSE:   This module contains functionality for managing region
 #            during rendering.
 #
-# COPYRIGHT: (C) 2021 Anna Petrasova, and by the GRASS Development Team
-#
-#            This program is free software under the GNU General Public
-#            License (>=v2). Read the file COPYING that comes with GRASS
-#            for details.
+# SPDX-FileCopyrightText: 2021 Anna Petrasova
+# SPDX-FileCopyrightText: Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 """Manage computational or display region settings for display (render) classes."""
 

@@ -14,11 +14,8 @@
  *             Inspired by d.vect and v.drape
  *             Coding help and code cleaning by Markus Neteler
  *
- * COPYRIGHT:  (C) 2005-2010,2013 by the GRASS Development Team
- *
- *             This program is free software under the GNU General
- *             Public License (>=v2). Read the file COPYING that comes
- *             with GRASS for details.
+ * SPDX-FileCopyrightText: 2005-2010,2013 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  ****************************************************************/
 
 #include <stdio.h>

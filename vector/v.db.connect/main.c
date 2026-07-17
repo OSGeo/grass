@@ -6,11 +6,8 @@
  *
  * PURPOSE:      sets/prints DB connection for a given vector map
  *
- * COPYRIGHT:    (C) 2002-2010 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2).  Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2002-2010 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * TODO: - fix -o flag (needs fix in Vect lib)
  *

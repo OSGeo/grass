@@ -5,11 +5,9 @@ AUTHOR(S): Stefan Blumentrath <stefan dot blumentrath at nina dot no)
 
 PURPOSE:   Test for g.extension individual modules/extensions download
 
-COPYRIGHT: (C) 2022 Stefan Blumentrath and by the GRASS Development Team
-
-           This program is free software under the GNU General Public
-           License (>=v2). Read the file COPYING that comes with GRASS
-           for details.
+SPDX-FileCopyrightText: 2022 Stefan Blumentrath
+SPDX-FileCopyrightText: Other GRASS authors
+SPDX-License-Identifier: GPL-2.0-or-later
 """
 
 import re

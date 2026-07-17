@@ -9,11 +9,8 @@
 # PURPOSE:	This configure runs all the tests to determine what components
 #		are installed on the current system. It also defines certain
 #		configuration variables for compilation and installation.
-# COPYRIGHT:    (C) 2000-2026 by the GRASS Development Team
-#
-#		This program is free software under the GNU General
-#		Public License (>=v2). Read the file COPYING that
-#		comes with GRASS for details.
+# SPDX-FileCopyrightText: 2000-2026 Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 # MANUAL:       https://www.gnu.org/software/autoconf/manual/autoconf.html
 #               http://savannah.gnu.org/projects/autoconf/
