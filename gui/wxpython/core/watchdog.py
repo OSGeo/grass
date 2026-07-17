@@ -149,6 +149,7 @@ class MapsetWatchdog:
         self._evt_handler = evt_handler
         self._patterns = patterns
         self._giface = giface
+        self._scheduled_mapset = None
         MapsetWatchdog._instances.add(self)
 
     def ScheduleWatchCurrentMapset(self):
@@ -161,6 +162,18 @@ class MapsetWatchdog:
         if not watchdog_used:
             return
 
+        gisenv = grass.gisenv()
+        mapset_path = os.path.join(
+            gisenv["GISDBASE"], gisenv["LOCATION_NAME"], gisenv["MAPSET"]
+        )
+
+        if (
+            MapsetWatchdog._shared_observer
+            and MapsetWatchdog._shared_observer.is_alive()
+            and self._scheduled_mapset == mapset_path
+        ):
+            return
+
         if (
             MapsetWatchdog._shared_observer
             and MapsetWatchdog._shared_observer.is_alive()
@@ -170,13 +183,10 @@ class MapsetWatchdog:
             MapsetWatchdog._shared_observer.unschedule_all()
         MapsetWatchdog._shared_observer = Observer()
 
-        gisenv = grass.gisenv()
-        mapset_path = os.path.join(
-            gisenv["GISDBASE"], gisenv["LOCATION_NAME"], gisenv["MAPSET"]
-        )
         rcfile = os.environ["GISRC"]
 
         for instance in MapsetWatchdog._instances:
+            instance._scheduled_mapset = mapset_path
             MapsetWatchdog._shared_observer.schedule(
                 CurrentMapsetWatch(rcfile, mapset_path, instance._evt_handler),
                 os.path.dirname(rcfile),
