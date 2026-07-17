@@ -33,7 +33,8 @@ struct png_state png;
 
 static void map_file(void)
 {
-    size_t size = HEADER_SIZE + png.width * png.height * sizeof(unsigned int);
+    size_t size =
+        HEADER_SIZE + (size_t)png.width * png.height * sizeof(unsigned int);
     void *ptr;
     int fd;
 
@@ -158,7 +159,8 @@ int PNG_Graph_set(void)
         map_file();
 
     if (!png.mapped)
-        png.grid = G_malloc(png.width * png.height * sizeof(unsigned int));
+        png.grid =
+            G_malloc((size_t)png.width * png.height * sizeof(unsigned int));
 
     if (!do_read) {
         PNG_Erase();

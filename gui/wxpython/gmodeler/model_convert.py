@@ -56,7 +56,8 @@ class BaseModelConverter(ABC):
             # substitute condition
             cond = item.GetLabel()
             for variable in self.model.GetVariables():
-                pattern = re.compile("%{" + variable + "}")
+                # curly braces are optional
+                pattern = re.compile(r"%(?:\{" + variable + r"\}|" + variable + r")")
                 if pattern.search(cond):
                     value = variables[variable].get("value", "")
                     if variables[variable].get("type", "string") == "string":
@@ -325,8 +326,10 @@ import tempfile
         )
         if self.grassAPI == "script":
             self.fd.write("from grass.script import run_command\n")
-        else:
+        elif self.grassAPI == "pygrass":
             self.fd.write("from grass.pygrass.modules import Module\n")
+        else:
+            self.fd.write("from grass.tools import Tools\n")
 
         self.fd.write(
             r"""from pywps import Process, LiteralInput, ComplexInput, ComplexOutput, Format
@@ -511,10 +514,16 @@ if __name__ == "__main__":
     def _writePythonAction(self, item, variables={}, intermediates=None):
         """Write model action to Python file"""
         task = GUI(show=None).ParseCommand(cmd=item.GetLog(string=False))
-        strcmd = "\n%s%s(" % (
-            " " * self.indent,
-            "run_command" if self.grassAPI == "script" else "Module",
-        )
+
+        if self.grassAPI == "script":
+            func = "run_command"
+        elif self.grassAPI == "pygrass":
+            func = "Module"
+        else:  # tools
+            func = "tools.run"
+
+        strcmd = "\n%s%s(" % (" " * self.indent, func)
+
         self.fd.write(
             strcmd + self._getPythonActionCmd(item, task, len(strcmd) - 1, variables)
         )
@@ -711,7 +720,7 @@ class ModelToPython(BaseModelConverter):
 
         :param fd: file descriptor
         :param model: model to translate
-        :param grassAPI: script or pygrass
+        :param grassAPI: script, pygrass or tools
         """
         self.fd = fd
         self.model = model
@@ -863,8 +872,11 @@ from grass.script import parser
         )
         if self.grassAPI == "script":
             self.fd.write("from grass.script import run_command\n")
-        else:
+        elif self.grassAPI == "pygrass":
             self.fd.write("from grass.pygrass.modules import Module\n")
+        else:
+            self.fd.write("from grass.tools import Tools\n")
+            self.fd.write("\ntools = Tools()\n")
 
         # cleanup()
         rast, vect, rast3d, msg = self.model.GetIntermediateData()
@@ -873,13 +885,18 @@ from grass.script import parser
 def cleanup():
 """
         )
-        run_command = "run_command" if self.grassAPI == "script" else "Module"
+        if self.grassAPI == "script":
+            run_command = "run_command"
+        elif self.grassAPI == "pygrass":
+            run_command = "Module"
+        else:  # tools
+            run_command = "tools.run"
         if rast:
             self.fd.write(
                 r"""    %s("g.remove", flags="f", type="raster",
                 name=%s)
 """
-                % (run_command, ",".join(f'"{x}"' for x in rast3d))
+                % (run_command, ",".join(f'"{x}"' for x in rast))
             )
         if vect:
             self.fd.write(
@@ -938,10 +955,13 @@ if __name__ == "__main__":
     def _writePythonAction(self, item, variables={}, intermediates=None):
         """Write model action to Python file"""
         task = GUI(show=None).ParseCommand(cmd=item.GetLog(string=False))
-        strcmd = "%s%s(" % (
-            " " * self.indent,
-            "run_command" if self.grassAPI == "script" else "Module",
-        )
+        if self.grassAPI == "script":
+            func = "run_command"
+        elif self.grassAPI == "pygrass":
+            func = "Module"
+        else:
+            func = "tools.run"
+        strcmd = "%s%s(" % (" " * self.indent, func)
         self.fd.write(
             strcmd + self._getPythonActionCmd(item, task, len(strcmd), variables) + "\n"
         )
@@ -969,14 +989,15 @@ if __name__ == "__main__":
             # check for variables
             formattedVar = False
             for var in variables["vars"]:
-                pattern = re.compile("%{" + var + "}")
-                found = pattern.search(value)
+                # curly braces are optional
+                pattern = re.compile(r"%(?:\{" + var + r"\}|" + var + r")")
+                found = pattern.search(parameterizedValue)
                 if found:
                     foundVar = True
                     if found.end() != len(value):
                         formattedVar = True
                         parameterizedValue = pattern.sub(
-                            "{options['" + var + "']}", value
+                            "{options['" + var + "']}", parameterizedValue
                         )
                     else:
                         parameterizedValue = f'options["{var}"]'

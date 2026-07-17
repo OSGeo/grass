@@ -90,7 +90,7 @@ static void read_data_fp_compressed(int fd, int row, unsigned char *data_buf,
     off_t t1 = fcb->row_ptr[row];
     off_t t2 = fcb->row_ptr[row + 1];
     size_t readamount = t2 - t1;
-    size_t bufsize = fcb->cellhd.cols * fcb->nbytes;
+    size_t bufsize = (size_t)fcb->cellhd.cols * fcb->nbytes;
     int ret;
 
     if (lseek(fcb->data_fd, t1, SEEK_SET) == -1)
@@ -188,7 +188,7 @@ static void read_data_uncompressed(int fd, int row, unsigned char *data_buf,
                                    int *nbytes)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
-    ssize_t bufsize = fcb->cellhd.cols * fcb->nbytes;
+    ssize_t bufsize = (ssize_t)fcb->cellhd.cols * fcb->nbytes;
 
     *nbytes = fcb->nbytes;
 

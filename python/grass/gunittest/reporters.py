@@ -69,7 +69,7 @@ def replace_in_file(file_path, pattern, repl) -> None:
     os.remove(file_path)
     # replace old file by new file
     # TODO: this can fail in some (random) cases on MS Windows
-    os.rename(tmp_file_path, file_path)
+    Path(tmp_file_path).rename(file_path)
 
 
 class NoopFileAnonymizer:

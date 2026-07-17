@@ -6,10 +6,10 @@ check_include_file(limits.h HAVE_LIMITS_H)
 check_include_file(termio.h HAVE_TERMIO_H)
 check_include_file(termios.h HAVE_TERMIOS_H)
 if(NOT MSVC)
-  check_include_file(unistd.h HAVE_UNISTD_H)
+    check_include_file(unistd.h HAVE_UNISTD_H)
 else()
-  # unistd.h in stocked in thirdparty/msvc/ # codespell:ignore thirdparty
-  set(HAVE_UNISTD_H 1)
+    # unistd.h in stocked in thirdparty/msvc/ # codespell:ignore thirdparty
+    set(HAVE_UNISTD_H 1)
 endif()
 check_include_file(values.h HAVE_VALUES_H)
 check_include_file(sys/ioctl.h HAVE_SYS_IOCTL_H)
@@ -29,21 +29,21 @@ check_include_file(threads.h HAVE_THREADS_H)
 check_include_file(complex.h HAVE_COMPLEX_H)
 
 if(MSVC)
-  set(HAVE_PTHREAD_H 0)
-  set(HAVE_REGEX_H 0)
-  set(HAVE_LIBINTL_H 0)
-  set(HAVE_LANGINFO_H 0)
-  set(HAVE_DBM_H 0)
+    set(HAVE_PTHREAD_H 0)
+    set(HAVE_REGEX_H 0)
+    set(HAVE_LIBINTL_H 0)
+    set(HAVE_LANGINFO_H 0)
+    set(HAVE_DBM_H 0)
 else()
-  check_include_file(pthread.h HAVE_PTHREAD_H)
-  check_include_file(regex.h HAVE_REGEX_H)
+    check_include_file(pthread.h HAVE_PTHREAD_H)
+    check_include_file(regex.h HAVE_REGEX_H)
 
-  set(CMAKE_REQUIRED_INCLUDES ${Intl_INCLUDE_DIR})
-  check_include_file(libintl.h HAVE_LIBINTL_H)
-  unset(CMAKE_REQUIRED_INCLUDES)
+    set(CMAKE_REQUIRED_INCLUDES ${Intl_INCLUDE_DIR})
+    check_include_file(libintl.h HAVE_LIBINTL_H)
+    unset(CMAKE_REQUIRED_INCLUDES)
 
-  check_include_file(langinfo.h HAVE_LANGINFO_H)
-  check_include_file(dbm.h HAVE_DBM_H)
+    check_include_file(langinfo.h HAVE_LANGINFO_H)
+    check_include_file(dbm.h HAVE_DBM_H)
 endif()
 #
 # # set(CMAKE_REQUIRED_INCLUDES "${FFTW_INCLUDE_DIR}") check_target(ICONV
@@ -66,18 +66,18 @@ endif()
 set(USE_G_SOCKS 0)
 
 if(WITH_LARGEFILES)
-  set(HAVE_LARGEFILES 1)
+    set(HAVE_LARGEFILES 1)
 else()
-  set(HAVE_LARGEFILES 0)
+    set(HAVE_LARGEFILES 0)
 endif()
 
 if(MSVC)
-  set(GID_TYPE int)
-  set(UID_TYPE int)
-  set(UID_TYPE int)
-  set(RETSIGTYPE "void")
+    set(GID_TYPE int)
+    set(UID_TYPE int)
+    set(UID_TYPE int)
+    set(RETSIGTYPE "void")
 else()
-  set(RETSIGTYPE "int")
+    set(RETSIGTYPE "int")
 endif()
 
 # #######################TODO########################
@@ -85,11 +85,11 @@ endif()
 
 set(USE_NLS 0)
 if(WITH_NLS)
-  set(USE_NLS 1)
+    set(USE_NLS 1)
 endif()
 
 if(MSVC)
-  set(PID_TYPE int)
+    set(PID_TYPE int)
 endif()
 
 set(_OE_SOCKETS 0)
@@ -99,35 +99,36 @@ set(_REENTRANT 0)
 
 set(X_DISPLAY_MISSING 1)
 if(TARGET X11::X11)
-  set(X_DISPLAY_MISSING 0)
+    set(X_DISPLAY_MISSING 0)
 endif()
 
 # used in config.cmake.in
 set(STATIC_BUILD 0)
 if(NOT BUILD_SHARED_LIBS)
-  set(STATIC_BUILD 1)
+    set(STATIC_BUILD 1)
 endif()
 
 # used in config.cmake.in
 set(GDEBUG 0)
 if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
-  set(GDEBUG 1)
+    set(GDEBUG 1)
 endif()
 
 set(CMAKE_REQUIRED_FLAGS ${CMAKE_C_FLAGS})
 
 check_c_source_compiles(
-  "
+    "
 int main(int argc, char *argv[])
 {
 long long int x;
 return 0;
 }
 "
-  HAVE_LONG_LONG_INT)
+    HAVE_LONG_LONG_INT
+)
 
 check_c_source_compiles(
-  "
+    "
 #include <sys/types.h>
 #include <sys/time.h>
 #include <time.h>
@@ -135,7 +136,8 @@ int main() {
 struct tm *tp;
 ; return 0; }
 "
-  TIME_WITH_SYS_TIME)
+    TIME_WITH_SYS_TIME
+)
 
 check_symbol_exists(gethostname "unistd.h" HAVE_GETHOSTNAME)
 check_symbol_exists(gettimeofday "sys/time.h" HAVE_GETTIMEOFDAY)
@@ -156,33 +158,30 @@ check_symbol_exists(nanosleep "time.h" HAVE_NANOSLEEP)
 check_symbol_exists(fseeko "stdio.h" HAVE_FSEEKO)
 
 function(check_symbol_definitions)
-  cmake_parse_arguments(PARSE_ARGV 0 ARG "" "SYMBOL" "INCLUDES;DEFINITIONS")
+    cmake_parse_arguments(PARSE_ARGV 0 ARG "" "SYMBOL" "INCLUDES;DEFINITIONS")
 
-  string(TOUPPER "HAVE_${ARG_SYMBOL}" var_name)
+    string(TOUPPER "HAVE_${ARG_SYMBOL}" var_name)
 
-  # First try with a simple check
-  check_symbol_exists("${ARG_SYMBOL}" "${ARG_INCLUDES}" "${var_name}")
-
-  if($CACHE{${var_name}})
-    return()
-  endif()
-
-  # Otherwise, start trying alternatives
-  foreach(def IN LISTS ARG_DEFINITIONS)
-    unset(${var_name} CACHE)
-    set(CMAKE_REQUIRED_DEFINITIONS "-D${def}")
+    # First try with a simple check
     check_symbol_exists("${ARG_SYMBOL}" "${ARG_INCLUDES}" "${var_name}")
+
     if($CACHE{${var_name}})
-      return()
+        return()
     endif()
-  endforeach()
+
+    # Otherwise, start trying alternatives
+    foreach(def IN LISTS ARG_DEFINITIONS)
+        unset(${var_name} CACHE)
+        set(CMAKE_REQUIRED_DEFINITIONS "-D${def}")
+        check_symbol_exists("${ARG_SYMBOL}" "${ARG_INCLUDES}" "${var_name}")
+        if($CACHE{${var_name}})
+            return()
+        endif()
+    endforeach()
 endfunction()
 
 check_symbol_definitions(
-  SYMBOL
-  asprintf
-  INCLUDES
-  stdio.h
-  DEFINITIONS
-  _GNU_SOURCE
-  _BSD_SOURCE)
+    SYMBOL asprintf
+    INCLUDES stdio.h
+    DEFINITIONS _GNU_SOURCE _BSD_SOURCE
+)

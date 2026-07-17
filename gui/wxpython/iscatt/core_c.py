@@ -82,7 +82,8 @@ def ApplyColormap(vals, vals_mask, colmap, out_vals):
 
 def MergeArrays(merged_arr, overlay_arr, alpha):
     if merged_arr.shape != overlay_arr.shape:
-        GException("MergeArrays: merged_arr.shape != overlay_arr.shape")
+        msg = "MergeArrays: merged_arr.shape != overlay_arr.shape"
+        raise GException(msg)
 
     c_uint8_p = POINTER(c_uint8)
     merged_p = merged_arr.ctypes.data_as(c_uint8_p)

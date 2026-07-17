@@ -26,7 +26,7 @@ static int cmp_int(const void *a, const void *b)
 int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
               struct Map_info *Out, struct field_info *Fi, dbDriver *driver,
               int operator, int *ofield, ATTRIBUTES *attr, struct ilist *BList,
-              double snap)
+              double snap, double area_minsize)
 {
     int ret, input, line, nlines, area, nareas;
     int in_centr, out_cat;
@@ -172,10 +172,19 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
         Vect_remove_bridges(Tmp, NULL, NULL, NULL);
     }
 
-    G_set_verbose(0);
-    Vect_build_partial(Tmp, GV_BUILD_NONE);
-    Vect_build_partial(Tmp, GV_BUILD_BASE);
-    G_set_verbose(verbose);
+    if (area_minsize > 0) {
+        Vect_build_partial(Tmp, GV_BUILD_CENTROIDS);
+        G_message(_("Removing areas smaller than %g sqm..."), area_minsize);
+        Vect_remove_small_areas(Tmp, area_minsize, NULL, NULL);
+        Vect_build_partial(Tmp, GV_BUILD_BASE);
+    }
+    else {
+        G_set_verbose(0);
+        Vect_build_partial(Tmp, GV_BUILD_NONE);
+        Vect_build_partial(Tmp, GV_BUILD_BASE);
+        G_set_verbose(verbose);
+    }
+
     G_message(_("Merging lines..."));
     Vect_merge_lines(Tmp, GV_BOUNDARY, NULL, NULL);
 
@@ -205,6 +214,8 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
     Vect_spatial_index_init(&si, 0);
     ncentr = nareas;
     for (ocentr = 1; ocentr <= ncentr; ocentr++) {
+        if (!Centr[ocentr].valid)
+            continue;
         box.N = box.S = Centr[ocentr].y;
         box.E = box.W = Centr[ocentr].x;
         box.T = box.B = 0;
@@ -310,6 +321,9 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
         int i;
 
         G_percent(area, nareas, 1);
+
+        if (!Centr[area].valid)
+            continue;
 
         /* check the condition */
         switch (operator) {

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_sl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 17:57+0000\n"
+"POT-Creation-Date: 2026-06-27 15:58+0000\n"
 "PO-Revision-Date: 2025-07-26 01:37+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Slovenian <https://weblate.osgeo.org/projects/grass-gis/grassmods/sl/>\n"
@@ -2536,7 +2536,6 @@ msgstr "Število decimalk (le za \"floating point\" podatke)"
 msgid "Get text color from cell color value"
 msgstr ""
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -10785,6 +10784,9 @@ msgstr ""
 msgid "Columns to be printed to stdout"
 msgstr "Vrednost, ki bo prirejena NULL vrednosti"
 
+msgid "plain;Plain text output;line;Comma separated list of dataset names;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
+msgstr ""
+
 #, fuzzy
 msgid "Field separator character between the output columns"
 msgstr "izpiši znak razmejitve med polji"
@@ -11109,7 +11111,7 @@ msgstr "Ime rastrskega sloja, ki bo uporabljen za <%s>"
 msgid "Path to the extraction directory"
 msgstr "Ime datoteke s filtrom"
 
-msgid "Create a new project and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
+msgid "Create a new project and import the data into it."
 msgstr ""
 
 #, fuzzy
@@ -11315,6 +11317,9 @@ msgstr "izpiši znak razmejitve med polji"
 msgid "Raster map used for zoning, must be of type CELL"
 msgstr ""
 
+msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
+msgstr ""
+
 #, fuzzy
 msgid "Calculate extended statistics"
 msgstr "Izračun osnovnih statističnih parametrov po kategorijah pokrovnega sloja"
@@ -11400,8 +11405,8 @@ msgid "Raster map with zones to compute statistics for"
 msgstr "Ime rastrskega sloja, ki bo vseboval rezultate"
 
 #, fuzzy
-msgid "Raster map with zones to compute statistics for (needs to be CELL)"
-msgstr "Ime rastrskega sloja, ki bo vseboval rezultate"
+msgid "3D raster map with zones"
+msgstr "Ne najdem vhodnega vektorja <%s>"
 
 #, fuzzy
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
@@ -11598,6 +11603,9 @@ msgstr "Izpiši rastrske sloje v vhodni \"location\" in končaj"
 #, fuzzy
 msgid "select"
 msgstr "Ne najdem vhodne datoteke %s\n"
+
+msgid "plain;Plain text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
+msgstr ""
 
 #, fuzzy
 msgid "Exports a space time vector dataset as GRASS specific archive file."
@@ -15272,6 +15280,9 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Internal error in %s()"
 msgstr "%d napak med posodabljanjem\n"
+
+msgid "JSON nesting exceeds maximum depth"
+msgstr ""
 
 #, fuzzy
 msgid "Generates a raster map containing distances to nearest raster features and/or the value of the nearest non-null cell."
@@ -22890,7 +22901,6 @@ msgstr ""
 msgid "Input raster must be of type CELL."
 msgstr "Naslov izhodnega rastrskega sloja"
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, fuzzy, c-format
@@ -26512,7 +26522,7 @@ msgstr "Zapisujem novo datoteko...\n"
 msgid "Filled raster map is: %s"
 msgstr "Berem dig_att datoteko...\n"
 
-msgid "Following holes where not filled. Temporary maps with are left in place to allow examination of unfilled holes"
+msgid "The following holes were not filled. Temporary maps are left in place to allow examination of unfilled holes:"
 msgstr ""
 
 #, fuzzy
@@ -27864,13 +27874,22 @@ msgstr "Ime izhodnega rastrskega sloja"
 msgid "Prints/sets general temporal GIS database connection for current mapset."
 msgstr "Izpiši trenutne parametre povezave in končaj"
 
+msgid "plain;Plain text output;shell;Shell script style output;json;JSON (JavaScript Object Notation)"
+msgstr ""
+
 #, fuzzy
 msgid "Overwrite current settings if initialized"
 msgstr "Ne morem odpreti baze podatkov %s"
 
 #, fuzzy
-msgid "Print current connection parameter in shell style and exit"
-msgstr "Izpiši trenutne parametre povezave in končaj"
+msgid "Name of the mapset(s) to print the connection info for"
+msgstr "Ime rastrskega sloja, ki bo vseboval rezultate"
+
+msgid "'.' for current mapset; '*' for all mapsets in the project. Requires format=json."
+msgstr ""
+
+msgid "The mapset option requires format=json."
+msgstr ""
 
 #, fuzzy
 msgid "Temporal GIS database connection not defined. Run t.connect."
@@ -34787,6 +34806,10 @@ msgstr[0] "%-5d mrtvih linij preskočenih\n"
 msgstr[1] "%-5d mrtvih linij preskočenih\n"
 
 #, fuzzy, c-format
+msgid "Removing areas smaller than %g sqm..."
+msgstr "Berem dig_att datoteko...\n"
+
+#, fuzzy, c-format
 msgid "Querying vector map <%s>..."
 msgstr "Zapisujem novo datoteko...\n"
 
@@ -34876,6 +34899,13 @@ msgid "Snapping threshold for boundaries"
 msgstr "Rišem ..."
 
 msgid "Disable snapping with snap <= 0"
+msgstr ""
+
+#, fuzzy
+msgid "Minimum size of areas to keep in square meters"
+msgstr "Vhodni sloj: najmanjša velikost zunanjega porečja"
+
+msgid "Enable with minsize > 0"
 msgstr ""
 
 #, fuzzy, c-format
@@ -34990,6 +35020,10 @@ msgstr ""
 msgid "Missing attribute table for vector map <%s>"
 msgstr "Ime izhodnega rastrskega sloja"
 
+#, fuzzy
+msgid "Too many columns to copy the table"
+msgstr "Ime rastrskega sloja"
+
 #, fuzzy, c-format
 msgid "Missing table for <%s>"
 msgstr "Uporabljam koordinate središča sloja\n"
@@ -35046,6 +35080,10 @@ msgstr ""
 #, fuzzy, c-format
 msgid "%d vector maps patched"
 msgstr "%d enot je bilo posodobljenih\n"
+
+#, fuzzy
+msgid "Too many columns to copy records"
+msgstr "Ime rastrskega sloja"
 
 #, fuzzy, c-format
 msgid "Cannot open select cursor: '%s'"
@@ -37388,10 +37426,6 @@ msgstr "Ne morem kopirati tabele"
 msgid "Pass %d"
 msgstr ""
 
-#, fuzzy
-msgid "Node is outside any input area"
-msgstr "Vhodni rastrski sloj"
-
 #, c-format
 msgid "Found %d point/centroid in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
 msgid_plural "Found %d points/centroids in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
@@ -37804,6 +37838,18 @@ msgstr ""
 #, fuzzy
 msgid "Image file"
 msgstr "Vhodni sloj"
+
+#, fuzzy
+#~ msgid "Raster map with zones to compute statistics for (needs to be CELL)"
+#~ msgstr "Ime rastrskega sloja, ki bo vseboval rezultate"
+
+#, fuzzy
+#~ msgid "Print current connection parameter in shell style and exit"
+#~ msgstr "Izpiši trenutne parametre povezave in končaj"
+
+#, fuzzy
+#~ msgid "Node is outside any input area"
+#~ msgstr "Vhodni rastrski sloj"
 
 #, fuzzy, c-format
 #~ msgid "Unable to find init file %s"
@@ -44196,10 +44242,6 @@ msgstr "Vhodni sloj"
 #, fuzzy
 #~ msgid "calibration"
 #~ msgstr "Ime datoteke z rezultatom klasifikacije"
-
-#, fuzzy
-#~ msgid "categorical map with zones"
-#~ msgstr "Ne najdem vhodnega vektorja <%s>"
 
 #, fuzzy
 #~ msgid "centerpoint"

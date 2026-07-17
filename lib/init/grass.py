@@ -72,11 +72,7 @@ _WXPYTHON_BASE = None
 
 GISBASE = None
 
-try:
-    # Python >= 3.11
-    ENCODING = locale.getencoding()
-except AttributeError:
-    ENCODING = locale.getdefaultlocale()[1]
+ENCODING = locale.getencoding()
 if ENCODING is None:
     ENCODING = "UTF-8"
     print("Default locale not found, using UTF-8")  # intentionally not translatable
@@ -393,14 +389,17 @@ def create_grass_config_dir() -> str:
                     ).format(directory, e.strerror)
                 )
         # TODO: remove with next major or minor release after GRASS 8.5 (8.6 or 9.0)
-        old_mac_dir = os.path.join(os.getenv("HOME"), f".grass{GRASS_VERSION_MAJOR}")
-        if MACOS and Path(old_mac_dir).is_dir():
-            try:
-                shutil.copy(os.path.join(old_mac_dir, "rc"), directory)
-                shutil.copy(os.path.join(old_mac_dir, "wx.json"), directory)
-                shutil.copytree(os.path.join(old_mac_dir, "toolboxes"), directory)
-            except Exception:
-                pass
+        if MACOS:
+            old_mac_dir = os.path.join(
+                os.getenv("HOME"), f".grass{GRASS_VERSION_MAJOR}"
+            )
+            if Path(old_mac_dir).is_dir():
+                try:
+                    shutil.copy(os.path.join(old_mac_dir, "rc"), directory)
+                    shutil.copy(os.path.join(old_mac_dir, "wx.json"), directory)
+                    shutil.copytree(os.path.join(old_mac_dir, "toolboxes"), directory)
+                except Exception:
+                    pass
 
     return directory
 
@@ -1094,11 +1093,7 @@ def set_language(grass_config_dir: StrPath) -> None:
                 "Default locale settings are missing. GRASS running with C locale.\n"
             )
 
-        try:
-            # Python >= 3.11
-            language, encoding = locale.getlocale()
-        except AttributeError:
-            language, encoding = locale.getdefaultlocale()
+        language, encoding = locale.getlocale()
         if not language:
             sys.stderr.write(
                 "Default locale settings are missing. GRASS running with C locale.\n"
@@ -2436,7 +2431,7 @@ def main() -> None:
         fatal(e.args[0])
         sys.exit(_("Exiting..."))
 
-    start_time = datetime.datetime.now(datetime.timezone.utc)
+    start_time = datetime.datetime.now(datetime.UTC)
 
     # unlock the mapset which is current at the time of turning off
     # in case mapset was changed

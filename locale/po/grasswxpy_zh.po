@@ -1,40 +1,41 @@
-# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025, 2026.
+# Jietao Wang <quaternary@163.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GRASS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 17:57+0000\n"
-"PO-Revision-Date: 2025-08-26 14:19+0000\n"
-"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
-"Language-Team: Chinese (Simplified) <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/zh_Hans/>\n"
+"POT-Creation-Date: 2026-06-27 15:58+0000\n"
+"PO-Revision-Date: 2026-07-01 04:35+0000\n"
+"Last-Translator: Jietao Wang <quaternary@163.com>\n"
+"Language-Team: Chinese (Simplified Han script) <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/zh_Hans/>\n"
 "Language: zh\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #, python-format
 msgid "Maximum number of animations is %d."
-msgstr ""
+msgstr "最大动画数量为 %d。"
 
 msgid "More animations are using one window. Please select different window for each animation."
 msgstr "多个动画使用同一个窗口。请为每个动画选择不同窗口。"
 
 msgid "Invalid input"
-msgstr ""
+msgstr "无效输入"
 
 msgid "Failed to display legend."
-msgstr ""
+msgstr "显示图例失败。"
 
 msgid "Inconsistent number of maps, please check input data."
 msgstr "地图数字不一致，请检查输入数据。"
 
 msgid "No animation to export."
-msgstr ""
+msgstr "没有可导出的动画。"
 
 msgid "Preparing export, please wait..."
-msgstr ""
+msgstr "正在准备导出，请稍候…"
 
 #, python-format
 msgid "%(from)s %(dash)s %(to)s"
@@ -45,7 +46,7 @@ msgid "%(start)s %(unit)s"
 msgstr "%(start)s %(unit)s"
 
 msgid "Exporting animation, please wait..."
-msgstr ""
+msgstr "正在导出动画，请稍候…"
 
 msgid "2D view"
 msgstr "2D视图"
@@ -54,27 +55,27 @@ msgid "3D view"
 msgstr "3D视图"
 
 msgid "No animation name selected."
-msgstr ""
+msgstr "未选择动画名称。"
 
 msgid "No workspace file selected."
-msgstr ""
+msgstr "未选择工作区文件。"
 
 #, python-format
 msgid "File %s not found"
-msgstr ""
+msgstr "未找到文件 %s"
 
 #, python-format
 msgid "Animation %d"
-msgstr ""
+msgstr "动画 %d"
 
 msgid "Adjust speed of animation"
 msgstr "调整动画速度"
 
 msgid "Simple mode"
-msgstr ""
+msgstr "简单模式"
 
 msgid "Frame duration:"
-msgstr ""
+msgstr "帧持续时间："
 
 msgid "ms"
 msgstr "毫秒"
@@ -86,7 +87,7 @@ msgid "Time unit:"
 msgstr "时间单位："
 
 msgid "Duration of time unit:"
-msgstr ""
+msgstr "时间单位持续时间："
 
 msgid "year"
 msgstr "年"
@@ -95,7 +96,7 @@ msgid "month"
 msgstr "月"
 
 msgid "day"
-msgstr ""
+msgstr "日"
 
 msgid "hour"
 msgstr "小时"
@@ -107,13 +108,13 @@ msgid "second"
 msgstr "秒"
 
 msgid "Animation speed is too high."
-msgstr ""
+msgstr "动画速度过快。"
 
 msgid "Add new animation"
-msgstr ""
+msgstr "添加新动画"
 
 msgid "Edit animation"
-msgstr ""
+msgstr "编辑动画"
 
 msgid "General"
 msgstr "通用"
@@ -122,16 +123,16 @@ msgid "Advanced"
 msgstr "高级"
 
 msgid "top left"
-msgstr ""
+msgstr "左上"
 
 msgid "top right"
 msgstr "右上"
 
 msgid "bottom left"
-msgstr ""
+msgstr "左下"
 
 msgid "bottom right"
-msgstr ""
+msgstr "右下"
 
 msgid "Select 2D or 3D view"
 msgstr "选择二维或三维视图"
@@ -140,54 +141,56 @@ msgid "Name:"
 msgstr "名称："
 
 msgid "Window position:"
-msgstr ""
+msgstr "窗口位置："
 
 msgid "View mode:"
-msgstr ""
+msgstr "视图模式："
 
 msgid ""
 "For 3D animation, please select only one space-time dataset\n"
 "or one series of map layers."
 msgstr ""
+"对于3D动画，请仅选择一个时空数据集\n"
+"或一个地图图层系列。"
 
 msgid "Show raster legend"
-msgstr ""
+msgstr "显示栅格图例"
 
 msgid "Set options"
 msgstr "选项设置"
 
 msgid "3D view parameters"
-msgstr ""
+msgstr "3D视图参数"
 
 msgid "Workspace file:"
 msgstr "工作区文件："
 
 msgid "Choose workspace file to import 3D view parameters"
-msgstr ""
+msgstr "选择要导入3D视图参数的工作区文件"
 
 msgid "Browse"
 msgstr "浏览"
 
 msgid "Parameter for animation:"
-msgstr ""
+msgstr "动画参数："
 
 msgid "Set spatial extent in 2D view"
-msgstr ""
+msgstr "设置2D视图的空间范围"
 
 msgid "Use saved region:"
-msgstr ""
+msgstr "使用已保存的区域："
 
 msgid "Animate region change"
-msgstr ""
+msgstr "动画区域变化"
 
 msgid "End region:"
-msgstr ""
+msgstr "结束区域："
 
 msgid "Zoom value:"
-msgstr ""
+msgstr "缩放值："
 
 msgid "N-S/E-W distances in map units used to gradually reduce region."
-msgstr ""
+msgstr "用于逐步缩小区域的南北/东西距离（以地图单位计）。"
 
 msgid "N-S:"
 msgstr "南北向："
@@ -199,7 +202,7 @@ msgid "Only one series or space-time dataset is accepted for 3D mode."
 msgstr "三维模式仅接受一个系列或一个时空数据集。"
 
 msgid "No map series or space-time dataset added."
-msgstr ""
+msgstr "未添加地图系列或时空数据集。"
 
 msgid "Region information is not complete"
 msgstr "区域信息不完全"
@@ -208,7 +211,7 @@ msgid "Add, edit or remove animations"
 msgstr "添加，编辑或移除动画"
 
 msgid "List of animations"
-msgstr ""
+msgstr "动画列表"
 
 msgid "Add"
 msgstr "添加"
@@ -220,25 +223,25 @@ msgid "Remove"
 msgstr "移除"
 
 msgid "Export animation"
-msgstr ""
+msgstr "导出动画"
 
 msgid "Format"
-msgstr ""
+msgstr "格式"
 
 msgid "Decorations"
-msgstr ""
+msgstr "装饰"
 
 msgid "Export"
 msgstr "导出"
 
 msgid "Add image"
-msgstr ""
+msgstr "添加图像"
 
 msgid "Add text"
-msgstr ""
+msgstr "添加文本"
 
 msgid "Add time stamp"
-msgstr ""
+msgstr "添加时间戳"
 
 msgid "Add time stamp, image or text decoration by one of the buttons above."
 msgstr "使用上面其中一个按钮来添加时间戳，图像或装饰文本。"
@@ -247,22 +250,22 @@ msgid "Add image or text decoration by one of the buttons above."
 msgstr "使用上面按钮中的一个来添加图像或装饰文本。"
 
 msgid "Font settings:"
-msgstr ""
+msgstr "字体设置："
 
 msgid "Sample text"
-msgstr ""
+msgstr "示例文本"
 
 msgid "Set font"
 msgstr "设置字体"
 
 msgid "Image file:"
-msgstr ""
+msgstr "图像文件:"
 
 msgid "Choose image file"
-msgstr ""
+msgstr "选择图像文件"
 
 msgid "Text:"
-msgstr ""
+msgstr "文本:"
 
 msgid "Placement as percentage of screen coordinates (X: 0, Y: 0 is top left):"
 msgstr "以屏幕坐标的百分比来定位（左上角为X：0，Y:0）："
@@ -597,7 +600,7 @@ msgid "Details:"
 msgstr "细节："
 
 msgid "Error: "
-msgstr "错误："
+msgstr "错误： "
 
 #, python-format
 msgid "Unable to execute command: '%s'"
@@ -741,6 +744,17 @@ msgstr "编辑选中的记录"
 msgid "Display selected"
 msgstr "显示选中项目"
 
+msgid "Tools API"
+msgstr ""
+
+#, fuzzy
+msgid "Script API"
+msgstr "Python编辑器"
+
+#, fuzzy
+msgid "PyGRASS API"
+msgstr "GRASS帮助文件"
+
 msgid "Classic (labels only)"
 msgstr "经典（仅标签）"
 
@@ -807,6 +821,11 @@ msgstr ""
 msgid "PyGRASS"
 msgstr ""
 
+#, fuzzy
+#| msgid "GRASS help"
+msgid "GRASS Tools"
+msgstr "GRASS帮助文件"
+
 #, python-brace-format
 msgid ""
 "Unable to read settings file <{path}>:\n"
@@ -835,7 +854,7 @@ msgid ""
 msgstr ""
 
 msgid "Unable to set "
-msgstr "无法设置"
+msgstr "无法设置 "
 
 #, python-format
 msgid "Unable to parse settings '%s'"
@@ -865,7 +884,7 @@ msgid "map units"
 msgstr ""
 
 msgid "meters"
-msgstr ""
+msgstr "米"
 
 msgid "kilometers"
 msgstr ""
@@ -911,15 +930,13 @@ msgstr ""
 msgid "Duplicated key: %s\n"
 msgstr ""
 
-#, fuzzy, python-brace-format
-#| msgid "Unable to open file <%s> for reading."
+#, python-brace-format
 msgid "Unable to open file '{name}': {error}\n"
-msgstr "无法打开并读取文件<%s>。"
+msgstr "无法打开文件“{name}”：{error}\n"
 
-#, fuzzy, python-brace-format
-#| msgid "Unable to create new mapset: %s"
+#, python-brace-format
 msgid "Unable to create file '{name}': {error}\n"
-msgstr "无法创建新地图集: %s"
+msgstr "无法创建文件“{name}”：{error}\n"
 
 msgid "Select Color"
 msgstr "选择颜色"
@@ -938,7 +955,7 @@ msgstr ""
 
 #, python-format
 msgid " row %d:"
-msgstr "行 %d："
+msgstr " 行 %d："
 
 msgid "Data catalog"
 msgstr ""
@@ -1005,7 +1022,7 @@ msgid "Maximum segment length:"
 msgstr ""
 
 msgid "Data Catalog"
-msgstr ""
+msgstr "数据目录"
 
 #, fuzzy
 #| msgid "Choose GRASS data directory:"
@@ -1291,6 +1308,11 @@ msgid "Re&load maps"
 msgstr ""
 
 #, fuzzy
+#| msgid "Computational region"
+msgid "Show computational region"
+msgstr "可计算区域"
+
+#, fuzzy
 msgid "&Copy path"
 msgstr "设置地图集权限"
 
@@ -1304,6 +1326,11 @@ msgstr "删除选中项目"
 #, fuzzy
 msgid "&Rename project"
 msgstr "投影管理"
+
+#, fuzzy
+#| msgid "Choose projection"
+msgid "Show projection info"
+msgstr "选择投影"
 
 #, fuzzy
 #| msgid "Copy table"
@@ -2487,34 +2514,32 @@ msgid "Yes"
 msgstr "是"
 
 msgid "Model parameters"
-msgstr ""
+msgstr "模型参数"
 
 msgid "Delete intermediate data when finish"
-msgstr ""
+msgstr "完成时删除中间数据"
 
 msgid "&Run"
 msgstr "运行(&R)"
 
 msgid "Variables"
-msgstr ""
+msgstr "变量"
 
 msgid "Graphical Modeler"
 msgstr "建模器图形界面"
 
-#, fuzzy
-#| msgid "Graphical Modeler"
 msgid "Graphical Modeler - GRASS"
-msgstr "建模器图形界面"
+msgstr "建模器图形界面 - GRASS"
 
 msgid "model"
 msgstr "模型"
 
 msgid "Script generated by wxGUI Graphical Modeler."
-msgstr "wxGUI图形建模器生成的脚本"
+msgstr "wxGUI图形建模器生成的脚本。"
 
 #, python-format
 msgid "undefined variable '%s'"
-msgstr ""
+msgstr "未定义变量“%s”"
 
 msgid "Running model..."
 msgstr "模型运行中..."
@@ -2539,67 +2564,64 @@ msgid "Run model?"
 msgstr "是否运行模型？"
 
 msgid "Variables below not defined:"
-msgstr ""
+msgstr "以下变量未定义："
 
 msgid "Raster maps"
 msgstr "栅格地图"
 
 msgid "3D raster maps"
-msgstr "基础栅格图"
+msgstr "3D栅格地图"
 
 msgid "Vector maps"
 msgstr "矢量地图"
 
 msgid "empty"
-msgstr ""
+msgstr "空"
 
 #, python-brace-format
 msgid "Details: unsupported tag name '{0}'."
-msgstr ""
+msgstr "详情：不支持的标签名称“{0}”。"
 
 #, python-brace-format
 msgid "Module {task_name} in your model contains parameterized flags. Actinia does not support parameterized flags. The following flags are therefore not being written in the generated JSON: {flags}"
-msgstr ""
+msgstr "您的模型中的“{task_name}”模块包含参数化标志（parameterized flags）。Actinia 不支持参数化标志，因此以下标志未被写入生成的 JSON 中：{flags}"
 
 msgid "<not defined>"
-msgstr ""
+msgstr "<未定义>"
 
 msgid "Condition: "
-msgstr ""
+msgstr "条件： "
 
 msgid "Condition: not defined"
-msgstr ""
+msgstr "条件：未定义"
 
 msgid "if-else"
-msgstr "if-else"
+msgstr "if-else语句"
 
 msgid "Model"
-msgstr "  模型"
+msgstr "模型"
 
 msgid "Items"
 msgstr "项目"
 
-#, fuzzy
 msgid "Script editor"
-msgstr "Python编辑器"
+msgstr "脚本编辑器"
 
 msgid "Command output"
 msgstr "命令运行结果输出"
 
-#, fuzzy
 msgid "{} script contains local modifications"
-msgstr "Python脚本含有本地改动"
+msgstr "{}脚本含有本地改动"
 
-#, fuzzy
 msgid "{} script is up-to-date"
-msgstr "Python脚本已更新"
+msgstr "{}脚本已更新"
 
 msgid "Model computation finished"
-msgstr ""
+msgstr "完成模型计算"
 
 #, python-format
 msgid "%d intermediate maps deleted from current mapset"
-msgstr ""
+msgstr "已从当前地图集中删除 %d 个中间地图"
 
 #, python-format
 msgid ""
@@ -2608,6 +2630,10 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"读取模型文件 <%s> 失败。\n"
+"文件无效，无法解析 XML 文档。\n"
+"\n"
+"%s"
 
 msgid "Please wait, loading model..."
 msgstr "模型装载中，请稍候..."
@@ -2623,10 +2649,10 @@ msgid "Current model is not empty. Do you want to store current settings to mode
 msgstr "当前模型非空，将当前模型开设保存到模型文件？"
 
 msgid "Create new model?"
-msgstr ""
+msgstr "创建新模型？"
 
 msgid "Choose model file"
-msgstr ""
+msgstr "选择模型文件"
 
 msgid "GRASS Model File (*.gxm)|*.gxm"
 msgstr "GRASS模型文件(*.gxm)|*.gxm"
@@ -2637,7 +2663,7 @@ msgstr "模型项目%(items)d和动作(%(actions)d actions)已载入"
 
 #, python-format
 msgid "Model file <%s> already exists. Do you want to overwrite this file?"
-msgstr ""
+msgstr "模型文件 <%s> 已存在。是否要覆盖该文件？"
 
 msgid "Save model"
 msgstr "保存模型"
@@ -2647,17 +2673,17 @@ msgid "File <%s> saved"
 msgstr "文件<%s>已保存"
 
 msgid "Choose file to save current model"
-msgstr ""
+msgstr "选择保存当前模型的文件"
 
 msgid "File already exists"
-msgstr ""
+msgstr "文件已存在"
 
 #, python-format
 msgid "Model exported to <%s>"
-msgstr ""
+msgstr "模型已导出到 <%s>"
 
 msgid "Add comment"
-msgstr ""
+msgstr "添加注释"
 
 msgid "Empty comment. Nothing to add to the model."
 msgstr "空注释，无信息可添加到模型。"
@@ -2667,7 +2693,7 @@ msgstr ""
 
 #, python-format
 msgid "Do you want to permanently delete data?%s"
-msgstr "永久删除数据%s?"
+msgstr "永久删除数据？%s"
 
 msgid "Delete intermediate data?"
 msgstr "删除临时数据？"
@@ -2728,7 +2754,7 @@ msgid "region"
 msgstr ""
 
 msgid "mapset"
-msgstr ""
+msgstr "地图集"
 
 msgid "file"
 msgstr ""
@@ -2779,9 +2805,8 @@ msgstr ""
 msgid "actinia"
 msgstr ""
 
-#, fuzzy
 msgid "Python script type:"
-msgstr "Python脚本 (*.py)|*.py"
+msgstr "Python脚本类型:"
 
 #, fuzzy
 msgid "{} script is locally modified. Refresh will discard all changes. Do you really want to continue?"
@@ -2825,9 +2850,8 @@ msgstr "禁用："
 msgid "Python editor"
 msgstr "Python编辑器"
 
-#, fuzzy
 msgid "GRASS API:"
-msgstr "GRASS帮助文件"
+msgstr "GRASS API:"
 
 msgid "Color"
 msgstr "颜色"
@@ -3191,10 +3215,30 @@ msgstr "不执行命令而关闭窗口(Ctrl+Q)"
 msgid "Run the command (Ctrl+R)"
 msgstr "运行命令(Ctrl+R)"
 
+msgid "Copy as Shell command"
+msgstr ""
+
+#, fuzzy
+#| msgid "Copy table"
+msgid "Copy as Python"
+msgstr "拷贝数据表"
+
+msgid "Copy as JSON settings"
+msgstr "复制为 JSON 设置"
+
 msgid "Copy"
 msgstr "复制"
 
-msgid "Copy the current command string to the clipboard"
+#, fuzzy
+#| msgid "Export common formats"
+msgid "More copy formats"
+msgstr "常见格式导出"
+
+#, fuzzy
+msgid "Paste JSON settings"
+msgstr "字体设置"
+
+msgid "Paste parameters from JSON string in the clipboard"
 msgstr ""
 
 msgid "Show manual page of the command (Ctrl+H)"
@@ -3209,8 +3253,66 @@ msgstr ""
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr ""
 
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+msgid "Copy as Python (Script API)"
+msgstr ""
+
+msgid "Copy as Python (PyGRASS API)"
+msgstr ""
+
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr "'%s'已复制到剪贴板"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "Python code copied to clipboard"
+msgstr "'%s'已复制到剪贴板"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "JSON copied to clipboard"
+msgstr "'%s'已复制到剪贴板"
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Modules"
+msgid "Module Mismatch"
+msgstr "模块"
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+#, fuzzy
+#| msgid "Input Data"
+msgid "Invalid Data"
+msgstr "输入数据"
+
+#, fuzzy
+#| msgid "Error"
+msgid "Paste Error"
+msgstr "错误"
+
+#, fuzzy, python-format
+#| msgid "'%s' copied to clipboard"
+msgid "%s copied to clipboard"
 msgstr "'%s'已复制到剪贴板"
 
 msgid "Required"
@@ -3313,8 +3415,6 @@ msgstr ""
 msgid "Try to set up GRASS_ADDON_PATH or GRASS_ADDON_BASE variable."
 msgstr ""
 
-#, fuzzy
-#| msgid "About GRASS GIS"
 msgid "About GRASS"
 msgstr "关于GRASS"
 
@@ -3819,7 +3919,10 @@ msgid "Allow interactive input"
 msgstr "使用交互输入"
 
 msgid "Verbosity level:"
-msgstr "信息详细程度"
+msgstr "信息详细级别:"
+
+msgid "Default Python API for copied commands:"
+msgstr ""
 
 msgid "Number of threads for parallel computing (supported tools only):"
 msgstr ""
@@ -3870,7 +3973,7 @@ msgid "Data browser"
 msgstr "数据浏览器"
 
 msgid "Left mouse double click:"
-msgstr "鼠标左键双击"
+msgstr "鼠标左键双击:"
 
 msgid "Encoding (e.g. utf-8, ascii, iso8859-1, koi8-r):"
 msgstr "编码(如utf-8, ascii, iso8859-1, koi8-r)："
@@ -3887,7 +3990,6 @@ msgstr "投影"
 msgid "Projection statusbar settings"
 msgstr "投影状态栏设置"
 
-#, fuzzy
 msgid ""
 "\n"
 "Note: This only controls the coordinates displayed in the lower-left of the Map Display\n"
@@ -3898,7 +4000,8 @@ msgstr ""
 "\n"
 "注：此设置仅控制地图显示窗口左下角的坐标显示。\n"
 "且仅用于显示而不影响当前地点的投影设置。\n"
-"需在地图显示窗口底部的下拉菜单中勾选投影项以激活。\n"
+"需在地图显示窗口底部的下拉\n"
+"菜单中勾选投影项以激活。\n"
 
 msgid "EPSG code:"
 msgstr "EPSG代码："
@@ -3979,10 +4082,8 @@ msgstr ""
 msgid "Couldn't write file <{}>.{}"
 msgstr ""
 
-#, fuzzy
-#| msgid "Export model to Python script"
 msgid " Unable to launch Python script."
-msgstr "将模型导出到Python脚本"
+msgstr " 无法启动Python脚本。"
 
 msgid "Open file"
 msgstr ""
@@ -4034,7 +4135,7 @@ msgid "Right click to copy selected values to clipboard."
 msgstr ""
 
 msgid "Feature"
-msgstr ""
+msgstr "要素"
 
 msgid "Value"
 msgstr ""
@@ -4320,57 +4421,46 @@ msgstr ""
 msgid "&Apply"
 msgstr "应用改动(&A)"
 
-#, fuzzy
 msgid "Timestamp:"
-msgstr "时间戳"
+msgstr "时间戳:"
 
-#, fuzzy
 msgid "Runtime duration:"
-msgstr "量化"
+msgstr "运行时长："
 
 #, fuzzy
 msgid "Status:"
 msgstr "状态栏模式："
 
-#, fuzzy
 msgid "Mask 2D:"
-msgstr "掩码"
+msgstr "掩膜2D:"
 
-#, fuzzy
 msgid "Mask 3D:"
-msgstr "掩码"
+msgstr "掩膜3D:"
 
-#, fuzzy
 msgid "North:"
-msgstr "北"
+msgstr "北:"
 
-#, fuzzy
 msgid "South:"
-msgstr "南"
+msgstr "南:"
 
-#, fuzzy
 msgid "West:"
-msgstr "西"
+msgstr "西:"
 
-#, fuzzy
 msgid "East:"
-msgstr "东"
+msgstr "东:"
 
-#, fuzzy
 msgid "North-south resolution:"
-msgstr "南北向分辨率"
+msgstr "南北向分辨率:"
 
-#, fuzzy
 msgid "East-west resolution:"
-msgstr "东西向分辨率"
+msgstr "东西向分辨率:"
 
 #, fuzzy
 msgid "Number of rows:"
 msgstr "地图集名称："
 
-#, fuzzy
 msgid "Number of columns:"
-msgstr "数字列"
+msgstr "数字列:"
 
 #, fuzzy
 msgid "Number of cells:"
@@ -4408,13 +4498,12 @@ msgstr "数据浏览器"
 msgid "&Export history"
 msgstr "导出到Python"
 
-#, fuzzy
 msgid "Export history of executed commands to a file"
-msgstr "将矢量地图导出为SVG文件。"
+msgstr "将已执行命令的历史记录导出到文件"
 
 #, python-brace-format
 msgid "{json} (*.json)|*.txt|{files} (*)|*"
-msgstr ""
+msgstr "{json} (*.json)|*.txt|{files} (*)|*"
 
 #, fuzzy
 msgid "JSON files"
@@ -4794,10 +4883,8 @@ msgstr "2. 选择GRASS地点"
 msgid "3. Select GRASS Mapset"
 msgstr "3. 选择GRASS地图集"
 
-#, fuzzy
-#| msgid "GRASS GIS database directory contains Locations."
 msgid "GRASS database directory contains Locations."
-msgstr "包含GRASS地点的GRASS数据库目录。"
+msgstr "包含位置的GRASS数据库目录。"
 
 msgid "All data in one Location is in the same  coordinate reference system (projection). One Location can be one project. Location contains Mapsets."
 msgstr "一个地点下的所有数据具有相同的坐标参考系统(即投影)。可将地点定义为一个投影。地点下包含地图集。"
@@ -4845,8 +4932,7 @@ msgstr "重命名选中的地图集"
 msgid "Delete selected mapset"
 msgstr "删除选中的地图集"
 
-#, fuzzy, python-format
-#| msgid "GRASS GIS %s startup%s"
+#, python-format
 msgid "GRASS %s startup%s"
 msgstr "GRASS %s 启动 %s"
 
@@ -4955,10 +5041,9 @@ msgstr ""
 "\n"
 "该地图集下的所有地图将会被永久删除！"
 
-#, fuzzy, python-format
-#| msgid "Unable to delete mapset"
+#, python-format
 msgid "Unable to delete mapset: %s"
-msgstr "无法删除地图集"
+msgstr "无法删除地图集:%s"
 
 #, python-format
 msgid ""
@@ -4970,9 +5055,9 @@ msgstr ""
 "\n"
 "所有该地点下的地图将会被永久删除！"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to delete location: %s"
-msgstr "无法删除地点"
+msgstr "无法删除地点: %s"
 
 #, python-brace-format
 msgid "Unicode error detected. Check your locale settings. Details: {0}"
@@ -5166,10 +5251,9 @@ msgstr ""
 "将类<%s>的栅格散点图输出到地图<%s>时失败。\n"
 "%s"
 
-#, fuzzy, python-format
-#| msgid "Loading ctypes libs failed"
+#, python-format
 msgid "Loading ctypes libs failed: %s"
-msgstr "装载ctypes库失败"
+msgstr "装载ctypes库失败: %s"
 
 msgid "Add scatter plots"
 msgstr ""
@@ -5290,16 +5374,13 @@ msgstr ""
 "v.build操作失败:\n"
 "%s"
 
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "v.to.rast failed:\n"
-#| "%s"
+#, python-brace-format
 msgid ""
 "v.to.rast failed:\n"
 "{messages}"
 msgstr ""
 "v.to.rast操作失败:\n"
-"%s"
+"{messages}"
 
 #, python-brace-format
 msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
@@ -5536,10 +5617,7 @@ msgstr ""
 "从层列表中移除？"
 
 msgid "Do you want to remove selected map layer(s) from layer tree?"
-msgstr ""
-"是否将选中的图层\n"
-"%s\n"
-"从层列表中移除？"
+msgstr "是否要从图层树中移除选中的地图图层？"
 
 msgid "Remove map layer"
 msgstr "移除图层"
@@ -5781,6 +5859,14 @@ msgstr ""
 msgid "Remove raster mask"
 msgstr "栅格地图开发"
 
+#, fuzzy
+#| msgid "Custom min"
+msgid "Custom CRS"
+msgstr "指定最小值"
+
+msgid "Left mouse click to print detailed projection info"
+msgstr ""
+
 msgid "Create new workspace (Ctrl+N)"
 msgstr "创建新工作区(Ctrl+N)"
 
@@ -5834,9 +5920,8 @@ msgstr "编辑选中的矢量图"
 msgid "Show attribute data for selected vector map"
 msgstr "显示选中矢量地图的属性数据"
 
-#, fuzzy
 msgid "Add multiple map layers"
-msgstr "添加RGB图层"
+msgstr "添加多个地图图层"
 
 #, fuzzy
 msgid "Add various raster maps"
@@ -5937,17 +6022,15 @@ msgstr ""
 "当前地点为 <%(loc)s>.\n"
 "当前地图集为 <%(mapset)s>."
 
-#, fuzzy, python-format
-#| msgid ""
-#| "Reading workspace file <%s> failed.\n"
-#| "Invalid file, unable to parse XML document."
+#, python-format
 msgid ""
 "Reading workspace file <%s> failed.\n"
 "Invalid file, unable to parse XML document.\n"
 "Error details: %s"
 msgstr ""
-"读取工作区文件<%s>失败。\n"
-"无效文件，无法解析XML文档。"
+"读取工作区文件 <%s> 失败。\n"
+"文件无效，无法解析XML文档。\n"
+"错误详情：%s"
 
 msgid "Please wait, loading workspace..."
 msgstr "请稍候，工作区加载中..."
@@ -5959,12 +6042,13 @@ msgstr "选择用来保存当前工作区的文件"
 msgid "Workspace file <%s> already exists. Do you want to overwrite this file?"
 msgstr "工作区文件<%s>已经存在，是否覆盖？"
 
-#, fuzzy, python-format
-#| msgid "Writing current settings to workspace file failed."
+#, python-format
 msgid ""
 "Writing current settings to workspace file <%s> failed.\n"
 "Error details: %s"
-msgstr "保存当前设置到工作区文件失败。"
+msgstr ""
+"将当前设置写入工作区文件 <%s> 失败。\n"
+"错误详情：%s"
 
 msgid "Do you want to save changes in the workspace?"
 msgstr "是否保存您对工作区的改动？"
@@ -6145,7 +6229,7 @@ msgstr ""
 
 #, python-format
 msgid " Enter parameters for %s projection "
-msgstr "输入投影%s的参数"
+msgstr " 输入投影%s的参数 "
 
 msgid "Specify geodetic datum"
 msgstr "选择大地测量基准面"
@@ -6166,7 +6250,7 @@ msgid "Planetary bodies"
 msgstr "行星体"
 
 msgid "Ellipsoid code:"
-msgstr "椭球体代码"
+msgstr "椭球体代码:"
 
 msgid "Georeferenced file:"
 msgstr "地理配准文件："
@@ -6206,7 +6290,7 @@ msgid "Unable to read IAU codes: {0}"
 msgstr ""
 
 msgid "Enter PROJ.4 parameters string:"
-msgstr "输入PROJ.4参数字符串"
+msgstr "输入PROJ.4参数字符串:"
 
 msgid "Datum transform is required."
 msgstr ""
@@ -6833,7 +6917,7 @@ msgid "Select vector columns"
 msgstr ""
 
 msgid "Layer:"
-msgstr "图层"
+msgstr "图层:"
 
 msgid "Attribute column:"
 msgstr ""
@@ -7115,6 +7199,9 @@ msgstr ""
 msgid "Load expression from file"
 msgstr ""
 
+msgid "Copy the current command string to the clipboard"
+msgstr ""
+
 msgid "exponent"
 msgstr ""
 
@@ -7202,10 +7289,8 @@ msgstr ""
 msgid "Insert mapcalc function"
 msgstr ""
 
-#, fuzzy
-#| msgid "Random cells"
 msgid "Random seed:"
-msgstr "随机像元"
+msgstr "随机种子："
 
 msgid "Integer seed for rand() function"
 msgstr ""
@@ -7512,7 +7597,7 @@ msgid "Frame rate (FPS):"
 msgstr "帧率(FPS)："
 
 msgid "Frames are recorded with given frequency (FPS). "
-msgstr "使用认定的频率(FPS)录制。"
+msgstr "使用认定的频率(FPS)录制。 "
 
 msgid "Save image sequence"
 msgstr ""
@@ -8126,7 +8211,7 @@ msgid "areas"
 msgstr ""
 
 msgid "lines"
-msgstr ""
+msgstr "线"
 
 msgid "points"
 msgstr ""
@@ -8163,10 +8248,10 @@ msgid "Data selection"
 msgstr ""
 
 msgid "centroids"
-msgstr ""
+msgstr "质心"
 
 msgid "boundaries"
-msgstr ""
+msgstr "边界"
 
 msgid "Layer selection"
 msgstr ""
@@ -8205,7 +8290,7 @@ msgid "choose color:"
 msgstr ""
 
 msgid "color from map table column:"
-msgstr "从地图表格列选择颜色"
+msgstr "从地图表格列选择颜色:"
 
 msgid "No effect for fill color from table column"
 msgstr "地图表格列没有设置填充颜色效果"
@@ -8238,10 +8323,10 @@ msgid "Rotation"
 msgstr ""
 
 msgid "rotate symbols:"
-msgstr "旋转符号"
+msgstr "旋转符号:"
 
 msgid "counterclockwise in degrees:"
-msgstr "逆时针度数"
+msgstr "逆时针度数:"
 
 msgid "from map table column:"
 msgstr ""
@@ -8265,13 +8350,13 @@ msgid "Pattern"
 msgstr ""
 
 msgid "use pattern:"
-msgstr "保用模式"
+msgstr "使用图案："
 
 msgid "Choose pattern file:"
 msgstr ""
 
 msgid "pattern line width (pts):"
-msgstr "模式线宽（像素）"
+msgstr "模式线宽（像素）:"
 
 msgid "pattern scale factor:"
 msgstr ""
@@ -8397,7 +8482,7 @@ msgid "Number of segments:"
 msgstr ""
 
 msgid "Label every "
-msgstr "标签间隔"
+msgstr "标签间隔 "
 
 msgid "segments"
 msgstr ""
@@ -8466,10 +8551,9 @@ msgstr ""
 "PIL\n"
 "没有找到"
 
-#, fuzzy, python-format
-#| msgid "Unable to read list: %s"
+#, python-format
 msgid "Unable to read file %s: %s"
-msgstr "无法读取列表：%s"
+msgstr "无法读取文件 %s: %s"
 
 #, python-format
 msgid "size: %(width)s x %(height)s pts"
@@ -8641,7 +8725,7 @@ msgid "Click and drag to resize object"
 msgstr "点击并拖动以改变大小"
 
 msgid "labels: "
-msgstr "标签："
+msgstr "标签： "
 
 #, fuzzy
 #| msgid "Cartographic Composer"
@@ -8767,7 +8851,7 @@ msgid "inch"
 msgstr "英寸"
 
 msgid "point"
-msgstr ""
+msgstr "点"
 
 msgid "centimeter"
 msgstr ""
@@ -8939,8 +9023,6 @@ msgstr "多边形的面积似乎为0"
 msgid "The raster map <%s> already exists. Please remove or rename the maps with the prefix '%s' or select the option to overwrite existing maps"
 msgstr ""
 
-#, fuzzy
-#| msgid "GRASS GIS Setup for r.li modules"
 msgid "Setup for r.li modules - GRASS"
 msgstr "GRASS r.li模块设置"
 
@@ -9257,9 +9339,8 @@ msgstr ""
 msgid "Unable to create new mapset: {}"
 msgstr ""
 
-#, fuzzy
 msgid "Do you want to import {} to the newly created project?"
-msgstr "创建GRASS地点<%s>?"
+msgstr "是否要将{}导入到新创建的项目中？"
 
 #, python-brace-format
 msgid ""
@@ -9302,12 +9383,14 @@ msgstr "无法创建新地图集: %s"
 msgid "Rename selected project"
 msgstr "重命名选中的地图集"
 
-#, fuzzy
 msgid ""
 "Unable to rename project.\n"
 "\n"
 "{}"
-msgstr "无法创建新地图集: %s"
+msgstr ""
+"无法重命名项目。\n"
+"\n"
+"{}"
 
 #, python-brace-format
 msgid ""
@@ -9446,14 +9529,15 @@ msgstr ""
 msgid "Data file <%(name)s> imported successfully. The project's default region was set from this imported map."
 msgstr ""
 
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Current GRASS database is <%(dbase)s>.\n"
 "Current project is <%(loc)s>.\n"
 "Current mapset is <%(mapset)s>."
 msgstr ""
-"当前地点为 <%(loc)s>.\n"
-"当前地图集为 <%(mapset)s>."
+"当前GRASS数据库为<%(dbase)s>。\n"
+"当前项目为<%(loc)s>。\n"
+"当前地图集为<%(mapset)s>。"
 
 #, fuzzy, python-format
 msgid ""
@@ -9959,7 +10043,7 @@ msgid "Geometry attributes"
 msgstr ""
 
 msgid "area"
-msgstr ""
+msgstr "面积"
 
 msgid "perimeter"
 msgstr ""
@@ -10454,10 +10538,9 @@ msgstr "地图只能保存于当前地图集"
 msgid "Please choose '%s' and '%s' point."
 msgstr "请选择点'%s'和'%s'."
 
-#, fuzzy, python-brace-format
-#| msgid "Please choose '%s' and '%s' point."
+#, python-brace-format
 msgid "Please choose '{0}' and '{1}' point."
-msgstr "请选择点'%s'和'%s'."
+msgstr "请选择“{0}”和“{1}”点。"
 
 msgid "Please choose at least two points."
 msgstr ""
@@ -10499,7 +10582,7 @@ msgid ""
 "Do you really want to activate snapping and overwrite it? "
 msgstr ""
 "临时地图'%s'已被从矢量分析工具之外改动.\n"
-"确定激活快照模式并进行覆盖操作?"
+"确定激活快照模式并进行覆盖操作? "
 
 msgid "Overwrite map"
 msgstr ""
@@ -10540,7 +10623,7 @@ msgid "Chosen column '%s' does not exist in attribute table of layer '%s' of vec
 msgstr ""
 
 msgid "topology"
-msgstr ""
+msgstr "拓扑"
 
 msgid "End Point"
 msgstr ""
@@ -10558,7 +10641,7 @@ msgid "arc forward/both"
 msgstr "Arc前进/双向"
 
 msgid "Arc backward direction cost column:"
-msgstr "Arc后向成本字段"
+msgstr "反向弧成本列："
 
 msgid "arc backward"
 msgstr "Arc后向"
@@ -11081,7 +11164,7 @@ msgid "At least 2 raster maps must be specified"
 msgstr ""
 
 msgid "Bivariate Scatterplot of "
-msgstr "二元散点图"
+msgstr "二元散点图 "
 
 #, python-format
 msgid "Raster <%s> cell values"
@@ -11505,9 +11588,6 @@ msgstr ""
 
 #~ msgid "Choose method of specifying georeferencing parameters"
 #~ msgstr "选择定义地理配准参数的方式"
-
-#~ msgid "Choose projection"
-#~ msgstr "选择投影"
 
 #~ msgid "Classify attribute data"
 #~ msgstr "数据属性分类"
@@ -12173,9 +12253,6 @@ msgstr ""
 #~ msgid "GRASS SVN Revision"
 #~ msgstr "区域"
 
-#~ msgid "GRASS help"
-#~ msgstr "GRASS帮助文件"
-
 #~ msgid "GRASS needs a directory in which to store its data. Create one now if you have not already done so. A popular choice is \"grassdata\", located in your home directory."
 #~ msgstr "需为GRASS设置数据存贮目录。若尚未设置，请新建一个目录。较常见的做法是在用户home目录新建目录\"grassdata\"。"
 
@@ -12373,9 +12450,6 @@ msgstr ""
 #~ msgid "Imports older versions of GRASS vector maps."
 #~ msgstr "导入旧版GRASS矢量地图。"
 
-#~ msgid "Input Data"
-#~ msgstr "输入数据"
-
 #~ msgid "Input for supervised MLC"
 #~ msgstr "监督最大似然分类输入数据"
 
@@ -12556,10 +12630,6 @@ msgstr ""
 #~ msgid "Load map layers from GRC file to layer tree"
 #~ msgstr "从GRC文件加载地图层到图层列表"
 
-#, fuzzy
-#~ msgid "Load settings:"
-#~ msgstr "无法获取栅格行\n"
-
 #~ msgid "Load workspace from file"
 #~ msgstr "加载工作区文件"
 
@@ -12713,9 +12783,6 @@ msgstr ""
 
 #~ msgid "Module dialog settings"
 #~ msgstr "模块对话框设置"
-
-#~ msgid "Modules"
-#~ msgstr "模块"
 
 #~ msgid "Mosaic images"
 #~ msgstr "图象镶嵌"

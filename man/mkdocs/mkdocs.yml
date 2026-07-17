@@ -146,6 +146,7 @@ nav:
           - Vector digitizer: wxGUI.vdigit.md
           - Raster digitizer: wxGUI.rdigit.md
           - Graphical modeler: wxGUI.gmodeler.md
+          - Jupyter notebooks: wxGUI.jupyter.md
           - Ground control points manager: wxGUI.gcp.md
           - Network analysis: wxGUI.vnet.md
           - Visualization:

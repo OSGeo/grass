@@ -193,7 +193,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None, layerType=None):
             if p == "layer":
                 continue
             dcmd[i] = p + "=" + v
-            if i in mapsets and mapsets[i]:
+            if mapsets.get(i):
                 dcmd[i] += "@" + mapsets[i]
 
         maps = []
