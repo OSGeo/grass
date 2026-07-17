@@ -219,8 +219,9 @@ include(build_gui_in_subdir)
 include(generate_docs)
 
 set(MKHTML_PY ${CMAKE_BINARY_DIR}/utils/mkhtml.py)
+set(MKMARKDOWN_PY ${CMAKE_BINARY_DIR}/utils/mkmarkdown.py)
 set(THUMBNAILS_PY ${CMAKE_BINARY_DIR}/utils/thumbnails.py)
-set(HTML2MAN ${CMAKE_BINARY_DIR}/utils/g.html2man.py)
+set(MD2MAN ${CMAKE_BINARY_DIR}/utils/g.md2man.py)
 
 set(env_path "$ENV{PATH}")
 
@@ -263,10 +264,13 @@ if(MSVC)
   include_directories("${CMAKE_SOURCE_DIR}/msvc")
 endif()
 
+set(modules_list
+    ""
+    CACHE INTERNAL "list of modules")
+
 add_subdirectory(lib)
 add_subdirectory(python)
 add_subdirectory(utils)
-set(modules_list)
 
 set(ALL_SUBDIRS
     db
@@ -299,6 +303,7 @@ if(WITH_DOCS)
   add_subdirectory(doc)
   add_subdirectory(man)
   install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/ DESTINATION ${GRASS_INSTALL_DOCDIR})
+  install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/ DESTINATION ${GRASS_INSTALL_MKDOCSDIR})
   install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_MANDIR}/ DESTINATION ${GRASS_INSTALL_MANDIR})
 endif()
 
@@ -308,6 +313,10 @@ add_custom_target(
           ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
   COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${THUMBNAILS_PY}
           ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
+  COMMAND
+    ${CMAKE_COMMAND} -E copy_directory
+    ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
+    ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/source/colortables
   BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
   COMMENT "Creating thumbnails"
   DEPENDS ALL_MODULES)

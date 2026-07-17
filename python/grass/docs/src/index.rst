@@ -42,7 +42,7 @@ Modules and Packages
 .. toctree::
    :maxdepth: 1
 
-   index
+   grass
    grass.tools
    script_intro
    pygrass_index
@@ -50,4 +50,5 @@ Modules and Packages
    exceptions
    imaging
    pydispatch
+   temporal_framework
    gunittest_testing

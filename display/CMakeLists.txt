@@ -57,6 +57,10 @@ add_custom_command(
           ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/barscales
   COMMAND ${CMAKE_COMMAND} -E copy ${d_barscale_png}
           ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/barscales
+  COMMAND ${CMAKE_COMMAND} -E make_directory
+          ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/source/barscales
+  COMMAND ${CMAKE_COMMAND} -E copy ${d_barscale_png}
+          ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/source/barscales
   BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/barscales)
 install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/barscales
         DESTINATION ${GRASS_INSTALL_DOCDIR})
@@ -79,6 +83,8 @@ build_program_in_subdir(d.graph DEPENDS grass_gis grass_symb grass_display)
 if(WITH_DOCS)
   file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/d.graph/grass_logo.txt
        DESTINATION ${OUTDIR}/${GRASS_INSTALL_DOCDIR})
+  file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/d.graph/grass_logo.txt
+       DESTINATION ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/source)
   install(FILES ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/grass_logo.txt
           DESTINATION ${GRASS_INSTALL_DOCDIR})
 endif()
@@ -115,6 +121,8 @@ if(WITH_DOCS)
        ${CMAKE_CURRENT_SOURCE_DIR}/d.northarrow/thumbnails/*.png)
   file(COPY ${d_northarrow_png}
        DESTINATION ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/northarrows)
+  file(COPY ${d_northarrow_png}
+       DESTINATION ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/source/northarrows)
   install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/northarrows
           DESTINATION ${GRASS_INSTALL_DOCDIR})
 endif()
