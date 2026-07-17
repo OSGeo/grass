@@ -1,5 +1,4 @@
-"""
-Functions to open or create space time datasets
+"""Functions to open or create space time datasets
 
 Usage:
 
@@ -33,7 +32,7 @@ from .factory import dataset_factory
 ###############################################################################
 
 
-def parse_id(ident: str) -> tuple[str, str | None, str | None, str | None]:
+def _parse_id(ident: str) -> tuple[str, str | None, str | None, str | None]:
     """Parse parts of a user given dataset name.
 
     :param ident: The id of a space time dataset
@@ -112,7 +111,7 @@ def open_old_stds(name, type, dbif=None):
         return None
 
     # Check if the dataset name contains the mapset and the semantic label as well
-    name, mapset, semantic_label, _layer = parse_id(name)
+    name, mapset, semantic_label, _layer = _parse_id(name)
 
     dbif, connection_state_changed = init_dbif(dbif)
 
@@ -124,14 +123,20 @@ def open_old_stds(name, type, dbif=None):
     else:
         # Check current mapset first
         sp = try_get_stds(
-            f"{name}@{get_current_mapset()}", stds_type, semantic_label, dbif
+            f"{name}@{get_current_mapset()}",
+            stds_type,
+            semantic_label,
+            dbif,
         )
         if not sp:
             for tgis_mapset in dbif.tgis_mapsets:
                 if tgis_mapset == get_current_mapset():
                     continue
                 sp = try_get_stds(
-                    f"{name}@{tgis_mapset}", stds_type, semantic_label, dbif
+                    f"{name}@{tgis_mapset}",
+                    stds_type,
+                    semantic_label,
+                    dbif,
                 )
                 if sp:
                     break
@@ -140,7 +145,7 @@ def open_old_stds(name, type, dbif=None):
             dbif.close()
         msgr.fatal(
             _("Space time dataset <%(name)s> of type <%(sp)s> not found")
-            % {"name": name, "sp": stds_type}
+            % {"name": name, "sp": stds_type},
         )
     # Read content from temporal database
     sp.select(dbif)
@@ -173,11 +178,11 @@ def check_new_stds(name, type, dbif=None, overwrite: bool = False):
     mapset = get_current_mapset()
     msgr = get_tgis_message_interface()
 
-    name, mapset, semantic_label, _layer = parse_id(name)
+    name, mapset, _semantic_label, _layer = _parse_id(name)
     if mapset:
         if mapset != get_current_mapset():
             msgr.fatal(
-                _("Space time datasets can only be created in the current mapset")
+                _("Space time datasets can only be created in the current mapset"),
             )
         id = f"{name}@{mapset}"
     else:
@@ -187,7 +192,7 @@ def check_new_stds(name, type, dbif=None, overwrite: bool = False):
         if "." in name:
             # a dot is used as a separator for semantic label filtering
             msgr.fatal(
-                _("Illegal dataset name <{}>. Character '.' not allowed.").format(name)
+                _("Illegal dataset name <{}>. Character '.' not allowed.").format(name),
             )
         sp = dataset_factory("strds", id)
     elif stds_type in {"str3ds", "raster3d", "rast3d ", "raster_3d"}:
@@ -204,9 +209,9 @@ def check_new_stds(name, type, dbif=None, overwrite: bool = False):
         msgr.fatal(
             _(
                 "Space time %(sp)s dataset <%(name)s> is already in the"
-                " database. Use the overwrite flag."
+                " database. Use the overwrite flag.",
             )
-            % {"sp": sp.get_new_map_instance(None).get_type(), "name": name}
+            % {"sp": sp.get_new_map_instance(None).get_type(), "name": name},
         )
     if connection_state_changed:
         dbif.close()
@@ -218,7 +223,14 @@ def check_new_stds(name, type, dbif=None, overwrite: bool = False):
 
 
 def open_new_stds(
-    name, type, temporaltype, title, descr, semantic, dbif=None, overwrite: bool = False
+    name,
+    type,
+    temporaltype,
+    title,
+    descr,
+    semantic,
+    dbif=None,
+    overwrite: bool = False,
 ):
     """Create a new space time dataset of a specific type
 
@@ -244,9 +256,9 @@ def open_new_stds(
         msgr.warning(
             _(
                 "Overwriting space time %(sp)s dataset <%(name)s> and "
-                "unregistering all maps"
+                "unregistering all maps",
             )
-            % {"sp": sp.get_new_map_instance(None).get_type(), "name": name}
+            % {"sp": sp.get_new_map_instance(None).get_type(), "name": name},
         )
         id = sp.get_id()
         sp.delete(dbif)
@@ -254,7 +266,7 @@ def open_new_stds(
 
     msgr.verbose(
         _("Creating a new space time %s dataset")
-        % sp.get_new_map_instance(None).get_type()
+        % sp.get_new_map_instance(None).get_type(),
     )
 
     sp.set_initial_values(
@@ -276,7 +288,11 @@ def open_new_stds(
 
 
 def check_new_map_dataset(
-    name, layer=None, type="raster", overwrite: bool = False, dbif=None
+    name,
+    layer=None,
+    type="raster",
+    overwrite: bool = False,
+    dbif=None,
 ):
     """Check if a new map dataset of a specific type can be created in
      the temporal database
@@ -305,9 +321,9 @@ def check_new_map_dataset(
         msgr.fatal(
             _(
                 "Map <%s> is already in temporal database,"
-                " use overwrite flag to overwrite"
+                " use overwrite flag to overwrite",
             )
-            % (map_id)
+            % (map_id),
         )
 
     if connection_state_changed:
