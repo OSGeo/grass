@@ -279,7 +279,7 @@ class SearchModuleWindow(wx.Panel):
             return
 
         # extract name of the handler and create a new call
-        handler = getattr(self._handlerObj, data["handler"].lstrip("self."))
+        handler = getattr(self._handlerObj, data["handler"].removeprefix("self."))
 
         if data["command"]:
             handler(event=None, cmd=data["command"].split())
