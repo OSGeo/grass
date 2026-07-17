@@ -16,20 +16,25 @@ set(gui_lib_DIRS
     startup
     vnet
     web_services
-    wxplot)
+    wxplot
+)
 
 set(gui_lib_targets)
 foreach(gui_lib_DIR ${gui_lib_DIRS})
-  copy_python_files_in_subdir(${gui_lib_DIR} ${WXPYTHON_DIR})
-  list(APPEND gui_lib_targets python_${gui_lib_DIR})
-  install(DIRECTORY "${OUTDIR}/${WXPYTHON_DIR}/${gui_lib_DIR}"
-          DESTINATION "${WXPYTHON_DIR}")
+    copy_python_files_in_subdir(${gui_lib_DIR} ${WXPYTHON_DIR})
+    list(APPEND gui_lib_targets python_${gui_lib_DIR})
+    install(
+        DIRECTORY "${OUTDIR}/${WXPYTHON_DIR}/${gui_lib_DIR}"
+        DESTINATION "${WXPYTHON_DIR}"
+    )
 endforeach()
 add_custom_target(
-  GUI_WXPYTHON
-  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/wxgui.py
-          ${OUTDIR}/${WXPYTHON_DIR}
-  DEPENDS ${gui_lib_targets} LIB_PYTHON)
+    GUI_WXPYTHON
+    COMMAND
+        ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/wxgui.py
+        ${OUTDIR}/${WXPYTHON_DIR}
+    DEPENDS ${gui_lib_targets} LIB_PYTHON
+)
 
 set_target_properties(GUI_WXPYTHON PROPERTIES FOLDER GUI)
 
@@ -48,109 +53,129 @@ set(gui_DIRS
     timeline
     tplot
     rdigit
-    vdigit)
+    vdigit
+)
 set(g_gui_targets)
 foreach(gui_DIR ${gui_DIRS})
-  build_gui_in_subdir(${gui_DIR})
-  list(APPEND g_gui_targets "g.gui.${gui_DIR}")
+    build_gui_in_subdir(${gui_DIR})
+    list(APPEND g_gui_targets "g.gui.${gui_DIR}")
 endforeach()
 
 if(WITH_DOCS)
-  add_subdirectory(docs)
+    add_subdirectory(docs)
 endif()
 
-install(FILES README.md ${OUTDIR}/${WXPYTHON_DIR}/wxgui.py
-        DESTINATION ${WXPYTHON_DIR})
+install(
+    FILES README.md ${OUTDIR}/${WXPYTHON_DIR}/wxgui.py
+    DESTINATION ${WXPYTHON_DIR}
+)
 
 add_custom_target(
-  copy_wxpython_xml
-  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/xml
-          ${OUTDIR}/${WXPYTHON_DIR}/xml)
+    copy_wxpython_xml
+    COMMAND
+        ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/xml
+        ${OUTDIR}/${WXPYTHON_DIR}/xml
+)
 
 add_dependencies(copy_wxpython_xml GUI_WXPYTHON)
 set_target_properties(copy_wxpython_xml PROPERTIES FOLDER GUI)
 
 add_custom_target(
-  compile_python_files
-  COMMAND ${PYTHON_EXECUTABLE} -m compileall
-          ${OUTDIR}/${GRASS_INSTALL_SCRIPTDIR}
-  COMMAND ${PYTHON_EXECUTABLE} -m compileall ${OUTDIR}/${WXPYTHON_DIR})
+    compile_python_files
+    COMMAND
+        ${PYTHON_EXECUTABLE} -m compileall ${OUTDIR}/${GRASS_INSTALL_SCRIPTDIR}
+    COMMAND ${PYTHON_EXECUTABLE} -m compileall ${OUTDIR}/${WXPYTHON_DIR}
+)
 
 add_dependencies(compile_python_files ALL_MODULES)
 set_target_properties(compile_python_files PROPERTIES FOLDER GUI)
 
 add_custom_command(
-  OUTPUT "${OUTDIR}/${WXPYTHON_DIR}/xml/module_items.xml"
-  COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/tools"
-  COMMAND ${CMAKE_COMMAND} -E copy
-          ${CMAKE_CURRENT_SOURCE_DIR}/tools/build_modules_xml.py tools
-  COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} tools/build_modules_xml.py >
-          "${OUTDIR}/${WXPYTHON_DIR}/xml/module_items.xml"
-  COMMENT "Generating interface description for all modules...")
+    OUTPUT "${OUTDIR}/${WXPYTHON_DIR}/xml/module_items.xml"
+    COMMAND
+        ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/tools"
+    COMMAND
+        ${CMAKE_COMMAND} -E copy
+        ${CMAKE_CURRENT_SOURCE_DIR}/tools/build_modules_xml.py tools
+    COMMAND
+        ${grass_env_command} ${PYTHON_EXECUTABLE} tools/build_modules_xml.py >
+        "${OUTDIR}/${WXPYTHON_DIR}/xml/module_items.xml"
+    COMMENT "Generating interface description for all modules..."
+)
 
-add_custom_target(build_modules_items_xml
-                  DEPENDS "${OUTDIR}/${WXPYTHON_DIR}/xml/module_items.xml")
+add_custom_target(
+    build_modules_items_xml
+    DEPENDS "${OUTDIR}/${WXPYTHON_DIR}/xml/module_items.xml"
+)
 
-add_dependencies(build_modules_items_xml copy_wxpython_xml grass_interface_dtd
-                 compile_python_files ${g_gui_targets})
+add_dependencies(
+    build_modules_items_xml
+    copy_wxpython_xml
+    grass_interface_dtd
+    compile_python_files
+    ${g_gui_targets}
+)
 set_target_properties(build_modules_items_xml PROPERTIES FOLDER GUI)
 
 # TODO(FHS): remove this if condition
 if(NOT WITH_FHS)
+    add_custom_target(
+        build_xml_menudata
+        COMMAND
+            ${grass_env_command} ${PYTHON_EXECUTABLE}
+            ${CMAKE_CURRENT_SOURCE_DIR}/core/toolboxes.py >
+            ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/menudata.xml
+        COMMAND
+            ${grass_env_command} ${PYTHON_EXECUTABLE}
+            ${CMAKE_CURRENT_SOURCE_DIR}/core/toolboxes.py "validate"
+            ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/menudata.xml
+        COMMAND
+            ${CMAKE_COMMAND} -E copy
+            ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/menudata.xml
+            ${OUTDIR}/${WXPYTHON_DIR}/xml
+        DEPENDS build_modules_items_xml
+    )
 
-add_custom_target(
-  build_xml_menudata
-  COMMAND
-    ${grass_env_command} ${PYTHON_EXECUTABLE}
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/toolboxes.py >
-    ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/menudata.xml
-  COMMAND
-    ${grass_env_command} ${PYTHON_EXECUTABLE}
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/toolboxes.py "validate"
-    ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/menudata.xml
-  COMMAND
-    ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/menudata.xml
-    ${OUTDIR}/${WXPYTHON_DIR}/xml
-  DEPENDS build_modules_items_xml)
+    set_target_properties(build_xml_menudata PROPERTIES FOLDER GUI)
 
-set_target_properties(build_xml_menudata PROPERTIES FOLDER GUI)
+    add_custom_target(
+        build_module_tree_menudata
+        COMMAND
+            ${grass_env_command} ${PYTHON_EXECUTABLE}
+            ${CMAKE_CURRENT_SOURCE_DIR}/core/toolboxes.py "module_tree" >
+            ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/module_tree_menudata.xml
+        COMMAND
+            ${grass_env_command} ${PYTHON_EXECUTABLE}
+            ${CMAKE_CURRENT_SOURCE_DIR}/core/toolboxes.py "validate"
+            ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/module_tree_menudata.xml
+        COMMAND
+            ${CMAKE_COMMAND} -E copy
+            ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/module_tree_menudata.xml
+            ${OUTDIR}/${WXPYTHON_DIR}/xml
+        DEPENDS build_xml_menudata
+    )
 
-add_custom_target(
-  build_module_tree_menudata
-  COMMAND
-    ${grass_env_command} ${PYTHON_EXECUTABLE}
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/toolboxes.py "module_tree" >
-    ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/module_tree_menudata.xml
-  COMMAND
-    ${grass_env_command} ${PYTHON_EXECUTABLE}
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/toolboxes.py "validate"
-    ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/module_tree_menudata.xml
-  COMMAND
-    ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/module_tree_menudata.xml
-    ${OUTDIR}/${WXPYTHON_DIR}/xml
-  DEPENDS build_xml_menudata)
+    set_target_properties(build_module_tree_menudata PROPERTIES FOLDER GUI)
 
-set_target_properties(build_module_tree_menudata PROPERTIES FOLDER GUI)
+    add_custom_target(
+        build_menustrings
+        ALL
+        COMMAND
+            ${grass_env_command} ${PYTHON_EXECUTABLE}
+            ${CMAKE_CURRENT_SOURCE_DIR}/core/menutree.py "manager" >>
+            ${CMAKE_CURRENT_SOURCE_DIR}/menustrings.py
+        COMMAND
+            ${grass_env_command} ${PYTHON_EXECUTABLE}
+            ${CMAKE_CURRENT_SOURCE_DIR}/core/menutree.py "module_tree" >>
+            ${CMAKE_CURRENT_SOURCE_DIR}/menustrings.py
+        COMMAND
+            ${grass_env_command} ${PYTHON_EXECUTABLE}
+            ${CMAKE_CURRENT_SOURCE_DIR}/core/menutree.py "psmap" >>
+            ${CMAKE_CURRENT_SOURCE_DIR}/menustrings.py
+        DEPENDS build_module_tree_menudata gui_images
+    )
 
-add_custom_target(
-  build_menustrings ALL
-  COMMAND
-    ${grass_env_command} ${PYTHON_EXECUTABLE}
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/menutree.py "manager" >>
-    ${CMAKE_CURRENT_SOURCE_DIR}/menustrings.py
-  COMMAND
-    ${grass_env_command} ${PYTHON_EXECUTABLE}
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/menutree.py "module_tree" >>
-    ${CMAKE_CURRENT_SOURCE_DIR}/menustrings.py
-  COMMAND
-    ${grass_env_command} ${PYTHON_EXECUTABLE}
-    ${CMAKE_CURRENT_SOURCE_DIR}/core/menutree.py "psmap" >>
-    ${CMAKE_CURRENT_SOURCE_DIR}/menustrings.py
-  DEPENDS build_module_tree_menudata gui_images)
-
-set_target_properties(build_menustrings PROPERTIES FOLDER GUI)
-
+    set_target_properties(build_menustrings PROPERTIES FOLDER GUI)
 endif() # NOT WITH_FHS
 
 install(DIRECTORY "${OUTDIR}/${WXPYTHON_DIR}/xml" DESTINATION "${WXPYTHON_DIR}")
