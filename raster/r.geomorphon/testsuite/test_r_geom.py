@@ -10,13 +10,16 @@ Licence:    This program is free software under the GNU General Public
             for details.
 """
 
+import json
+
+import grass.script as gs
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.script.core import read_command
-import grass.script as gs
-import unittest
-import os
-import json
+
+# Reference statistics were computed with the nc_spm_full_v2beta1 dataset.
+# The elevation raster in nc_spm_08_grass7 classifies a small number of
+# cells differently, so precisions are chosen to accept both datasets.
 
 synth_out = """1	flat
 3	ridge
@@ -25,6 +28,7 @@ synth_out = """1	flat
 8	footslope
 9	valley
 """
+
 ele_out = """1	flat
 2	peak
 3	ridge
@@ -38,16 +42,15 @@ ele_out = """1	flat
 """
 
 
-@unittest.skipIf(os.getenv("CI") == "true", "Skipping slow tests in CI")
 class TestClipling(TestCase):
     inele = "elevation"
     insint = "synthetic_dem"
     outele = "ele_geomorph"
-    outsint = "synth_geomorph"
+    outsint = "synt_geomorph"
 
     @classmethod
     def setUpClass(cls):
-        """Ensures expected computational region and generated data"""
+        """Ensures expected computational region"""
         cls.use_temp_region()
         cls.runModule("g.region", raster=cls.inele)
         cls.runModule(
@@ -55,7 +58,6 @@ class TestClipling(TestCase):
             expression="{ou} = sin(x() / 5.0) + (sin(x() / 5.0) * 100.0 + 200)".format(
                 ou=cls.insint
             ),
-            overwrite=True,
         )
 
     @classmethod
@@ -65,18 +67,17 @@ class TestClipling(TestCase):
             "g.remove",
             flags="f",
             type="raster",
-            name=(cls.insint, cls.outele, cls.outsint),
+            name=(cls.outele, cls.outsint, cls.insint),
         )
         cls.del_temp_region()
 
     def test_ele(self):
-        """Test basic forms output with elevation data against reference"""
+        """Test forms output with elevation data against reference statistics"""
         self.assertModule(
             "r.geomorphon",
             elevation=self.inele,
             forms=self.outele,
             search=10,
-            overwrite=True,
         )
 
         reference = {
@@ -91,20 +92,19 @@ class TestClipling(TestCase):
         self.assertRasterFitsUnivar(
             self.outele,
             reference=reference,
-            precision=0.001,
+            precision=0.002,
         )
 
         category = read_command("r.category", map=self.outele)
         self.assertEqual(first=ele_out, second=category)
 
     def test_sint(self):
-        """Test r.geomorphon with synthetic data against reference"""
+        """Test forms output with synthetic data against reference statistics"""
         self.assertModule(
             "r.geomorphon",
             elevation=self.insint,
             forms=self.outsint,
             search=10,
-            overwrite=True,
         )
 
         reference = {
@@ -119,7 +119,7 @@ class TestClipling(TestCase):
         self.assertRasterFitsUnivar(
             self.outsint,
             reference=reference,
-            precision=0.001,
+            precision=0.002,
         )
 
         category = read_command("r.category", map=self.outsint)
@@ -173,18 +173,20 @@ class TestMultipleOutputs(TestCase):
 
     def tearDown(self):
         """Remove test outputs"""
-        outputs = [
-            "test_forms_multi",
-            "test_ternary_multi",
-            "test_intensity_multi",
-            "test_elongation_multi",
-        ]
-        existing = [o for o in outputs if gs.find_file(name=o, element="cell")["file"]]
-        if existing:
-            self.runModule("g.remove", flags="f", type="raster", name=existing)
+        self.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name=(
+                "test_forms_multi",
+                "test_ternary_multi",
+                "test_intensity_multi",
+                "test_elongation_multi",
+            ),
+        )
 
     def test_multiple_outputs_combined(self):
-        """Test multiple outputs in a single call against reference"""
+        """Test multiple outputs in a single call against reference statistics"""
         self.assertModule(
             "r.geomorphon",
             elevation=self.inele,
@@ -193,7 +195,6 @@ class TestMultipleOutputs(TestCase):
             intensity="test_intensity_multi",
             elongation="test_elongation_multi",
             search=15,
-            overwrite=True,
         )
 
         reference_forms = {
@@ -208,7 +209,7 @@ class TestMultipleOutputs(TestCase):
         self.assertRasterFitsUnivar(
             "test_forms_multi",
             reference=reference_forms,
-            precision=0.001,
+            precision=0.002,
         )
 
         reference_ternary = {
@@ -223,7 +224,7 @@ class TestMultipleOutputs(TestCase):
         self.assertRasterFitsUnivar(
             "test_ternary_multi",
             reference=reference_ternary,
-            precision=0.001,
+            precision=1,
         )
 
         reference_intensity = {
@@ -241,9 +242,10 @@ class TestMultipleOutputs(TestCase):
             precision=0.001,
         )
 
+        # Cell counts are omitted because the number of null (not applicable)
+        # cells depends on the form classification which slightly differs
+        # between the dataset versions.
         reference_elongation = {
-            "n": 2017213,
-            "null_cells": 7787,
             "min": 0.999999940395355,
             "max": 30,
             "mean": 2.07217229639214,
@@ -257,7 +259,6 @@ class TestMultipleOutputs(TestCase):
         )
 
 
-@unittest.skipIf(os.getenv("CI") == "true", "Skipping slow tests in CI")
 class TestFlags(TestCase):
     """Test flags"""
 
@@ -273,25 +274,27 @@ class TestFlags(TestCase):
         cls.del_temp_region()
 
     def tearDown(self):
-        outputs = [
-            "test_extended",
-            "test_meters",
-            "test_basic",
-            "test_cells",
-            "test_diff",
-        ]
-        existing = [o for o in outputs if gs.find_file(name=o, element="cell")["file"]]
-        if existing:
-            self.runModule("g.remove", flags="f", type="raster", name=existing)
+        """Remove test outputs"""
+        self.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name=(
+                "test_extended",
+                "test_meters",
+                "test_basic",
+                "test_cells",
+                "test_diff",
+            ),
+        )
 
     def test_extended_flag(self):
-        """Test extended form correction flag against reference"""
+        """Test extended form correction flag against reference statistics"""
         self.assertModule(
             "r.geomorphon",
             elevation=self.inele,
             forms="test_basic",
             search=20,
-            overwrite=True,
         )
 
         reference_basic = {
@@ -306,7 +309,7 @@ class TestFlags(TestCase):
         self.assertRasterFitsUnivar(
             "test_basic",
             reference=reference_basic,
-            precision=0.001,
+            precision=0.002,
         )
 
         self.assertModule(
@@ -315,7 +318,6 @@ class TestFlags(TestCase):
             elevation=self.inele,
             forms="test_extended",
             search=20,
-            overwrite=True,
         )
 
         reference_extended = {
@@ -330,13 +332,12 @@ class TestFlags(TestCase):
         self.assertRasterFitsUnivar(
             "test_extended",
             reference=reference_extended,
-            precision=0.001,
+            precision=0.002,
         )
 
         self.runModule(
             "r.mapcalc",
             expression="test_diff = if(test_basic != test_extended, 1, null())",
-            overwrite=True,
         )
 
         stats_diff = gs.parse_command("r.univar", flags="g", map="test_diff")
@@ -349,7 +350,6 @@ class TestFlags(TestCase):
             elevation=self.inele,
             forms="test_cells",
             search=30,
-            overwrite=True,
         )
 
         self.assertModule(
@@ -358,7 +358,6 @@ class TestFlags(TestCase):
             elevation=self.inele,
             forms="test_meters",
             search=30,
-            overwrite=True,
         )
 
         reference_meters = {
@@ -373,19 +372,17 @@ class TestFlags(TestCase):
         self.assertRasterFitsUnivar(
             "test_meters",
             reference=reference_meters,
-            precision=0.001,
+            precision=0.002,
         )
 
         self.runModule(
             "r.mapcalc",
             expression="test_diff = if(test_cells != test_meters, 1, null())",
-            overwrite=True,
         )
         stats_diff = gs.parse_command("r.univar", flags="g", map="test_diff")
         self.assertGreater(float(stats_diff["n"]), 0)
 
 
-@unittest.skipIf(os.getenv("CI") == "true", "Skipping slow tests in CI")
 class TestComparisonModes(TestCase):
     """Test different comparison modes for zenith/nadir line-of-sight"""
 
@@ -393,30 +390,33 @@ class TestComparisonModes(TestCase):
 
     @classmethod
     def setUpClass(cls):
+        """Compute the anglev1 map once for use as a baseline in all tests"""
         cls.use_temp_region()
         cls.runModule("g.region", raster=cls.inele)
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.del_temp_region()
-
-    def tearDown(self):
-        outputs = ["test_anglev1", "test_anglev2", "test_anglev2_dist", "test_diff"]
-        existing = [o for o in outputs if gs.find_file(name=o, element="cell")["file"]]
-        if existing:
-            self.runModule("g.remove", flags="f", type="raster", name=existing)
-
-    def test_anglev1_mode(self):
-        """Test anglev1 comparison mode (default) against reference"""
-        self.assertModule(
+        cls.runModule(
             "r.geomorphon",
-            elevation=self.inele,
+            elevation=cls.inele,
             forms="test_anglev1",
             search=10,
             comparison="anglev1",
-            overwrite=True,
         )
 
+    @classmethod
+    def tearDownClass(cls):
+        cls.runModule("g.remove", flags="f", type="raster", name="test_anglev1")
+        cls.del_temp_region()
+
+    def tearDown(self):
+        """Remove test outputs"""
+        self.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name=("test_anglev2", "test_anglev2_dist", "test_diff"),
+        )
+
+    def test_anglev1_mode(self):
+        """Test anglev1 comparison mode (default) against reference statistics"""
         reference = {
             "n": 2019304,
             "null_cells": 5696,
@@ -429,27 +429,17 @@ class TestComparisonModes(TestCase):
         self.assertRasterFitsUnivar(
             "test_anglev1",
             reference=reference,
-            precision=0.001,
+            precision=0.002,
         )
 
     def test_anglev2_mode(self):
-        """Test anglev2 comparison mode against reference"""
-        self.assertModule(
-            "r.geomorphon",
-            elevation=self.inele,
-            forms="test_anglev1",
-            search=10,
-            comparison="anglev1",
-            overwrite=True,
-        )
-
+        """Test that anglev2 comparison mode differs from anglev1"""
         self.assertModule(
             "r.geomorphon",
             elevation=self.inele,
             forms="test_anglev2",
             search=10,
             comparison="anglev2",
-            overwrite=True,
         )
 
         reference_anglev2 = {
@@ -464,38 +454,29 @@ class TestComparisonModes(TestCase):
         self.assertRasterFitsUnivar(
             "test_anglev2",
             reference=reference_anglev2,
-            precision=0.001,
+            precision=0.002,
         )
 
         self.runModule(
             "r.mapcalc",
             expression="test_diff = if(test_anglev1 != test_anglev2, 1, null())",
-            overwrite=True,
         )
 
         stats = gs.parse_command("r.univar", flags="g", map="test_diff")
         self.assertGreater(float(stats["n"]), 0)
 
     def test_anglev2_distance_mode(self):
-        """Test anglev2_distance comparison mode against reference"""
-        self.assertModule(
-            "r.geomorphon",
-            elevation=self.inele,
-            forms="test_anglev1",
-            search=10,
-            comparison="anglev1",
-            overwrite=True,
-        )
-
+        """Test that anglev2_distance comparison mode differs from anglev1"""
         self.assertModule(
             "r.geomorphon",
             elevation=self.inele,
             forms="test_anglev2_dist",
             search=10,
             comparison="anglev2_distance",
-            overwrite=True,
         )
 
+        # On this dataset, anglev2_distance produces the same result
+        # as anglev2, but both differ from anglev1.
         reference_anglev2_dist = {
             "n": 2019304,
             "null_cells": 5696,
@@ -508,13 +489,12 @@ class TestComparisonModes(TestCase):
         self.assertRasterFitsUnivar(
             "test_anglev2_dist",
             reference=reference_anglev2_dist,
-            precision=0.001,
+            precision=0.002,
         )
 
         self.runModule(
             "r.mapcalc",
             expression="test_diff = if(test_anglev1 != test_anglev2_dist, 1, null())",
-            overwrite=True,
         )
 
         stats = gs.parse_command("r.univar", flags="g", map="test_diff")
@@ -552,7 +532,6 @@ class TestProfileFormat(TestCase):
                 coordinates=(self.test_easting, self.test_northing),
                 profiledata=profile_file,
                 profileformat="json",
-                overwrite=True,
             )
 
             with open(profile_file) as f:
