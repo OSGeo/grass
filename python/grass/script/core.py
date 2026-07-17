@@ -1569,7 +1569,7 @@ def del_temp_region():
 # interface to g.findfile
 
 
-def find_file(name, element="cell", mapset=None, env=None):
+def find_file(name: str, element: str = "cell", mapset: str | None = None, env=None):
     """Returns the output from running g.findfile as a
     dictionary.
 

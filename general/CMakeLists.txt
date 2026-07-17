@@ -8,89 +8,84 @@ build_program_in_subdir(g.gisenv DEPENDS grass_gis)
 build_program_in_subdir(g.mapset DEPENDS grass_gis grass_parson)
 build_program_in_subdir(g.mapsets DEPENDS grass_gis grass_parson)
 build_program_in_subdir(g.message DEPENDS grass_gis)
-build_program_in_subdir(g.mkfontcap DEPENDS grass_gis PRIMARY_DEPENDS
-                        Freetype::Freetype)
+build_program_in_subdir(
+    g.mkfontcap
+    DEPENDS grass_gis
+    PRIMARY_DEPENDS Freetype::Freetype
+)
 add_dependencies(g.mkfontcap fonts)
 
 # TODO(FHS): rewire ${OUTDIR} path to ${PREFIX} in installed version of fontcap
 add_custom_command(
-  TARGET g.mkfontcap
-  POST_BUILD
-  COMMAND ${grass_env_command} ${OUTDIR}/${GRASS_INSTALL_BINDIR}/g.mkfontcap -s
-          > ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/fontcap)
-install(FILES ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/fontcap
-        DESTINATION ${GRASS_INSTALL_ETCDIR})
+    TARGET g.mkfontcap
+    POST_BUILD
+    COMMAND
+        ${grass_env_command} ${OUTDIR}/${GRASS_INSTALL_BINDIR}/g.mkfontcap -s >
+        ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/fontcap
+)
+install(
+    FILES ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/fontcap
+    DESTINATION ${GRASS_INSTALL_ETCDIR}
+)
 build_program_in_subdir(g.parser DEPENDS grass_gis)
 build_program_in_subdir(g.pnmcomp DEPENDS grass_gis)
 build_program_in_subdir(g.ppmtopng DEPENDS grass_gis PRIMARY_DEPENDS PNG::PNG)
 build_program_in_subdir(
-  g.proj
-  DEPENDS
-  grass_gis
-  grass_gproj
-  grass_parson
-  PROJ::proj
-  OPTIONAL_DEPENDS
-  GDAL::GDAL)
+    g.proj
+    DEPENDS PROJ::proj grass_gis grass_gproj grass_parson
+    OPTIONAL_DEPENDS GDAL::GDAL
+)
 
 build_program_in_subdir(
-  g.region
-  DEPENDS
-  grass_gis
-  grass_gproj
-  grass_vector
-  grass_raster
-  grass_raster3d
-  grass_gmath
-  grass_parson
-  PROJ::proj
-  ${LIBM})
+    g.region
+    DEPENDS
+        ${LIBM}
+        PROJ::proj
+        grass_gis
+        grass_gmath
+        grass_gproj
+        grass_parson
+        grass_raster
+        grass_raster3d
+        grass_vector
+)
 
 build_program_in_subdir(g.rename DEPENDS grass_gis grass_manage grass_raster)
 build_program_in_subdir(g.tempfile DEPENDS grass_gis)
 
 build_program_in_subdir(
-  g.version
-  DEPENDS
-  grass_gis
-  grass_parson
-  OPTIONAL_DEPENDS
-  GDAL::GDAL
-  GEOS::geos_c
-  PROJ::proj
-  SQLite3::SQLite3
-  DEFS
-  "-DGRASS_VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\""
-  "-DGRASS_VERSION_GIT=\"${GRASS_VERSION_GIT}\""
-  "-DGRASS_VERSION_UPDATE_PKG=${GRASS_VERSION_UPDATE_PKG}"
-  "-DARCH=\"${BUILD_ARCH}\"")
+    g.version
+    DEPENDS grass_gis grass_parson
+    OPTIONAL_DEPENDS GDAL::GDAL GEOS::geos_c PROJ::proj SQLite3::SQLite3
+    DEFS
+        "-DARCH=\"${BUILD_ARCH}\""
+        "-DGRASS_VERSION_GIT=\"${GRASS_VERSION_GIT}\""
+        "-DGRASS_VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\""
+        "-DGRASS_VERSION_UPDATE_PKG=${GRASS_VERSION_UPDATE_PKG}"
+)
 
-if(WITH_CAIRO
-   AND WITH_X11
-   AND CAIRO_HAS_XLIB_XRENDER_SURFACE)
-  if(NOT MSVC)
-    build_program_in_subdir(
-      g.cairocomp
-      DEPENDS
-      grass_gis
-      Fontconfig::Fontconfig
-      X11::X11
-      PRIMARY_DEPENDS
-      Cairo::Cairo)
-  endif()
+if(WITH_CAIRO AND WITH_X11 AND CAIRO_HAS_XLIB_XRENDER_SURFACE)
+    if(NOT MSVC)
+        build_program_in_subdir(
+            g.cairocomp
+            DEPENDS Fontconfig::Fontconfig X11::X11 grass_gis
+            PRIMARY_DEPENDS Cairo::Cairo
+        )
+    endif()
 endif()
 
 add_subdirectory(manage/lister)
 
 build_program_in_subdir(
-  g.list
-  DEPENDS
-  grass_gis
-  grass_manage
-  grass_raster
-  grass_raster3d
-  grass_vector
-  grass_parson)
+    g.list
+    DEPENDS
+        grass_gis
+        grass_manage
+        grass_parson
+        grass_raster
+        grass_raster3d
+        grass_vector
+)
 add_dependencies(g.list cell vector)
 
 build_program_in_subdir(g.remove DEPENDS grass_gis grass_manage grass_raster)
