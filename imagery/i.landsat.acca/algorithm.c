@@ -37,7 +37,7 @@
 #define KMAX     3
 #define KMIN     4
 
-/* re-use value */
+/* reuse value */
 #define KLOWER   0
 #define KUPPER   1
 #define MEAN     2
@@ -132,7 +132,7 @@ void acca_algorithm(Gfile *out, Gfile band[], int single_pass, int with_shadow,
               signa[KMEAN]);
     G_message(_("** Minimum: %.2lf K"), signa[KMIN]);
 
-    /* WARNING: re-use of the variable 'value' with new meaning */
+    /* WARNING: reuse of the variable 'value' with new meaning */
 
     /* step 14 */
 

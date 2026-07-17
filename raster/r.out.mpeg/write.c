@@ -193,7 +193,8 @@ void write_ppm(char *tr, char *tg, char *tb, int nrows, int ncols, int *y_rows,
 
 /*******************************************************/
 void write_params(char *mpfilename, char *yfiles[], char *outfile, int frames,
-                  int quality, int y_rows UNUSED, int y_cols UNUSED, int fly)
+                  int quality, int y_rows G_UNUSED, int y_cols G_UNUSED,
+                  int fly)
 {
     FILE *fp;
     char dir[1000], *enddir;

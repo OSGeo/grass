@@ -9,16 +9,18 @@ before RC1 of a new release series, please see assumptions in the
 ## Create a New Branch
 
 Given how the branch protection rules are set up and work,
-you need to bypass protection against merge commits on branches.
+you need to temporarily bypass protection against merge commits on branches.
 (We don't want any new merge commits. However, there are merge commits
 from the past and they prevent the creation of a new branch when the rules are
 applied.)
+
 To bypass, go to _Settings > Rules > Rulesets > Rules for release branches_.
-Press _Add bypass_ and add the team or user who is creating the branch.
+Press _Add bypass_ and add the team or user who is creating the branch (e.g.,
+"Repository admin"). Then _Save_ the new settings.
 
 Use GitHub web interface to create a new branch:
 
-1. Go to _branches_.
+1. Go to _branches_ (<https://github.com/OSGeo/grass/branches>).
 2. Copy the name of one of the existing branches.
 3. Click _New branch_.
 4. Paste the name of the existing branch.
@@ -32,13 +34,13 @@ Note down the latest commit hash on the branch to record it in the
 [release history overview](https://grass.osgeo.org/about/history/releases/).
 The instructions for updating the website come later in the procedure.
 
-Remove the bypass in _Settings_.
+Now remove the bypass in _Settings_ and _Save_.
 
 ## Check the Version
 
 ```bash
 git fetch upstream
-git switch releasebranch_8_4
+git switch releasebranch_8_5
 ```
 
 ## Increase Version on the main Branch
@@ -77,7 +79,7 @@ git switch -c update-version
 git add -p
 ./utils/update_version.py suggest
 git commit -m "version: ..."
-git push
+git push --set-upstream origin update-version
 ```
 
 Create a PR and review and merge it as soon as possible to avoid having
@@ -89,7 +91,7 @@ On grass.osgeo.org (grasslxd), new version directories need to be created:
 
 ```bash
 cd /var/www/code_and_data/
-VER=grass85
+VER=grass86
 mkdir -p ${VER}/manuals \
                 ${VER}/source/snapshot \
                 ${VER}/binary/mswindows/native \
@@ -98,7 +100,7 @@ mkdir -p ${VER}/manuals \
 
 ## Updates of grass-addon Repo
 
-* Add new branch into
+* Add new branch into the build matrix ("jobs") in
 [`.github/workflows/ci.yml`](https://github.com/OSGeo/grass-addons/blob/grass8/.github/workflows/ci.yml).
 
 ## Website Updates
@@ -133,7 +135,7 @@ git rebase upstream/main
 Create the branch:
 
 ```bash
-git switch -c releasebranch_8_4
+git switch -c releasebranch_8_5
 ```
 
 Push the version to the upstream repo:

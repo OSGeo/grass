@@ -150,7 +150,7 @@ void write_vtk_pointdata_header(FILE *fp, struct Cell_head region)
 /* ************************************************************************* */
 /* Write the VTK Structured Coordinates ************************************ */
 /* ************************************************************************* */
-void write_vtk_structured_coordinates(int fd, FILE *fp, char *varname UNUSED,
+void write_vtk_structured_coordinates(int fd, FILE *fp, char *varname G_UNUSED,
                                       struct Cell_head region, int out_type,
                                       char *null_value, double scale, int dp)
 {
@@ -165,7 +165,7 @@ void write_vtk_structured_coordinates(int fd, FILE *fp, char *varname UNUSED,
     G_debug(3, _("write_vtk_structured_coordinates: Writing Coordinates"));
 
     /*the nullvalue */
-    if (!sscanf(null_value, "%lf", &nullvalue)) {
+    if (sscanf(null_value, "%lf", &nullvalue) != 1) {
         G_warning("Null value is not valid, using 0 instead.");
         nullvalue = 0;
     }
@@ -202,7 +202,7 @@ void write_vtk_structured_coordinates(int fd, FILE *fp, char *varname UNUSED,
 /* ************************************************************************* */
 /* Write Polygonal Coordinates ********************************************* */
 /* ************************************************************************* */
-void write_vtk_polygonal_coordinates(int fd, FILE *fp, char *varname UNUSED,
+void write_vtk_polygonal_coordinates(int fd, FILE *fp, char *varname G_UNUSED,
                                      struct Cell_head region, int out_type,
                                      char *null_value, double scale,
                                      int polytype, int dp)
@@ -220,7 +220,7 @@ void write_vtk_polygonal_coordinates(int fd, FILE *fp, char *varname UNUSED,
             _("write_vtk_polygonal_coordinates: Writing VTK Polygonal data"));
 
     /*the nullvalue */
-    if (!sscanf(null_value, "%lf", &nullvalue)) {
+    if (sscanf(null_value, "%lf", &nullvalue) != 1) {
         G_warning("Null value is not valid, using 0 instead.");
         nullvalue = 0;
     }
@@ -330,7 +330,7 @@ void write_vtk_data(int fd, FILE *fp, char *varname, struct Cell_head region,
     G_debug(3, _("write_vtk_data: Writing VTK-Data"));
 
     /*the nullvalue */
-    if (!sscanf(null_value, "%lf", &nullvalue)) {
+    if (sscanf(null_value, "%lf", &nullvalue) != 1) {
         G_warning("Null value is not valid, using 0 instead.");
         nullvalue = 0;
     }

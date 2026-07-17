@@ -19,7 +19,7 @@ from grass.script import decode
 from grass.script.core import tempname
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-from grass.gunittest.checkers import keyvalue_equals
+from grass.gunittest.checkers import keyvalue_equals, diff_keyvalue
 from grass.gunittest.utils import xfail_windows
 
 
@@ -301,6 +301,8 @@ class CalculationCorrectness2Test(TestCase):
 class JSONOutputTest(TestCase):
     """Test printing of parameters in JSON format"""
 
+    precision = 0.0001
+
     @classmethod
     def setUpClass(cls):
         """Import sample maps with known properties"""
@@ -381,10 +383,10 @@ class JSONOutputTest(TestCase):
                     [0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0],
-                    [8, 8, 4, 1, 4, 0],
+                    [4, 8, 8, 4, 1, 0],
                 ],
                 "row_sum": [0, 0, 0, 0, 0, 25],
-                "col_sum": [8, 8, 4, 1, 4, 0],
+                "col_sum": [4, 8, 8, 4, 1, 0],
                 "producers_accuracy": [0.0, 0.0, 0.0, 0.0, 0.0, None],
                 "users_accuracy": [None, None, None, None, None, 0.0],
                 "conditional_kappa": [None, None, None, None, None, 0.0],
@@ -474,7 +476,17 @@ class JSONOutputTest(TestCase):
             )
             json_out = json.loads(decode(out))
             self.assertTrue(
-                keyvalue_equals(self.expected_outputs[i], json_out, precision=4)
+                keyvalue_equals(
+                    self.expected_outputs[i], json_out, precision=self.precision
+                ),
+                (
+                    "Output differs from expected: "
+                    + str(
+                        diff_keyvalue(
+                            self.expected_outputs[i], json_out, precision=self.precision
+                        )
+                    )
+                ),
             )
 
     @xfail_windows
@@ -491,7 +503,17 @@ class JSONOutputTest(TestCase):
             )
             json_out = json.loads(f.read())
             self.assertTrue(
-                keyvalue_equals(self.expected_outputs[i], json_out, precision=4)
+                keyvalue_equals(
+                    self.expected_outputs[i], json_out, precision=self.precision
+                ),
+                (
+                    "Output differs from expected: "
+                    + str(
+                        diff_keyvalue(
+                            self.expected_outputs[i], json_out, precision=self.precision
+                        )
+                    )
+                ),
             )
 
 

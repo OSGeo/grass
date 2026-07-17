@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("projection"));
     G_add_keyword(_("create project"));
     module->label = _("Prints or modifies GRASS projection information files "
-                      "(in various co-ordinate system descriptions).");
+                      "(in various coordinate system descriptions).");
     module->description = _("Can also be used to create new GRASS projects.");
 
     printinfo = G_define_flag();
@@ -183,7 +183,7 @@ int main(int argc, char *argv[])
     datum->required = NO;
     datum->guisection = _("Datum");
     datum->label =
-        _("Datum (overrides any datum specified in input co-ordinate system)");
+        _("Datum (overrides any datum specified in input coordinate system)");
     datum->description =
         _("Accepts standard GRASS datum codes, or \"list\" to list and exit");
 
@@ -203,7 +203,7 @@ int main(int argc, char *argv[])
     forcedatumtrans->guisection = _("Datum");
     forcedatumtrans->description =
         _("Force override of datum transformation information in input "
-          "co-ordinate system");
+          "coordinate system");
 
     create = G_define_flag();
     create->key = 'c';
