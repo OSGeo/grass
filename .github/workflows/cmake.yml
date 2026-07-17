@@ -1,16 +1,25 @@
 ---
 name: CMake
 
+# Documentation content under doc/ does not affect this build, only the
+# CMakeLists.txt files there do, so they are added back after the doc/**
+# exclusion (later patterns take precedence).
 on:
   push:
-    paths-ignore:
-      - "doc/**"
+    paths:
+      - "**"
+      - "!doc/**"
+      - "doc/CMakeLists.txt"
+      - "doc/**/CMakeLists.txt"
     branches:
       - main
       - releasebranch_*
   pull_request:
-    paths-ignore:
-      - "doc/**"
+    paths:
+      - "**"
+      - "!doc/**"
+      - "doc/CMakeLists.txt"
+      - "doc/**/CMakeLists.txt"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
@@ -29,7 +38,7 @@ jobs:
       CMAKE_VERSION: "3.22.0"
     steps:
       - name: Checkout GRASS
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - name: Install CMake
@@ -88,7 +97,7 @@ jobs:
         run: .github/workflows/test_thorough.sh --config .gunittest.cfg --min-success 100
       - name: Make HTML test report available
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: testreport-CMake
           path: testreport
