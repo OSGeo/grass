@@ -465,8 +465,9 @@ class RegionManager:
     settings are automatically restored. This is useful in scripts or functions that need to
     work with a specific region without permanently altering the user's working environment.
 
-    The new region can be defined by passing *g.region* parameters when initializing the context,
-    or by calling *g.region* directly within the context.
+    The new region can be defined either by passing *g.region* parameters as keyword
+    arguments when initializing the context or by calling *g.region* directly within
+    the context.
 
     The original region is saved at the beginning of the context and restored at the end.
 
@@ -486,11 +487,23 @@ class RegionManager:
     ...     gs.run_command("g.region", n=226000, s=222000, w=634000, e=638000)
     ...     gs.parse_command("r.univar", map="elevation", format="json")
 
-    Example using :py:func:`~grass.script.raster.RegionManager.set_region`:
+    Example using a saved region:
+
+    >>> gs.run_command("g.region", save="study_area", s=1000, n=1100, w=1000, e=1100)
+    >>> with gs.RegionManager(region="study_area"):
+    ...     gs.parse_command("r.univar", map="elevation", format="json")
+
+    Example using :py:meth:`~grass.script.raster.RegionManager.set_region`:
 
     >>> with gs.RegionManager() as manager:
     ...     manager.set_region(n=226000, s=222000, w=634000, e=638000)
     ...     gs.parse_command("r.univar", map="elevation", format="json")
+
+    Example using :py:meth:`~grass.script.raster.RegionManager.save` to store the temporarily
+    modified region under a persistent name so it can be reused after the context exits:
+
+    >>> with gs.RegionManager(raster="elevation") as manager:
+    ...     manager.save("elevation_region")
 
     Example using explicit activate and deactivate:
 
@@ -533,6 +546,14 @@ class RegionManager:
         :param kwargs: Keyword arguments with g.region parameters
         """
         run_command("g.region", **kwargs, env=self.env)
+
+    def save(self, name, overwrite=None):
+        """Save the temporarily modified region under a persistent name.
+
+        :param name: Name of the region to save.
+        :param overwrite: Whether to overwrite an existing saved region.
+        """
+        run_command("g.region", save=name, overwrite=overwrite, env=self.env)
 
     def activate(self):
         """Sets the `WIND_OVERRIDE` environment variable to the generated region name.
@@ -585,13 +606,23 @@ class RegionManagerEnv:
     """Context manager for temporarily setting the computational region.
 
     See :class:`RegionManager`. Unlike :class:`RegionManager`, this class uses
-    `GRASS_REGION` instead of `WIND_OVERRIDE`. The advantage is no files are written to disk.
+    `GRASS_REGION` instead of `WIND_OVERRIDE`. The advantage is that, during normal
+    context usage, no region files are written to disk.
     The disadvantage is that simply calling *g.region* within the context will not affect
     the temporary region, but the global one, which can be confusing.
+
+    The :py:meth:`.save` method intentionally writes the temporarily modified region to
+    a saved region file.
 
     Example with explicit region parameters:
 
     >>> with gs.RegionManagerEnv(n=226000, s=222000, w=634000, e=638000):
+    ...     gs.parse_command("r.univar", map="elevation", format="json")
+
+    Example using a saved region:
+
+    >>> gs.run_command("g.region", save="study_area", s=1000, n=1100, w=1000, e=1100)
+    >>> with gs.RegionManagerEnv(region="study_area"):
     ...     gs.parse_command("r.univar", map="elevation", format="json")
 
     Example with :py:meth:`.set_region`:
@@ -606,6 +637,11 @@ class RegionManagerEnv:
     ...     manager.env["GRASS_REGION"] = gs.region_env()
     ...     gs.parse_command("r.univar", map="elevation", format="json")
 
+    Example using :py:meth:`.save`: to store the temporarily modified region under
+    a persistent name so it can be reused after the context exits:
+
+    >>> with gs.RegionManagerEnv(raster="elevation") as manager:
+    ...     manager.save("elevation_region", overwrite=True)
 
     Example using explicit activate and deactivate:
 
@@ -642,6 +678,14 @@ class RegionManagerEnv:
         :param kwargs: Keyword arguments with g.region parameters
         """
         self.env["GRASS_REGION"] = region_env(**kwargs, env=self.env)
+
+    def save(self, name, overwrite=None):
+        """Save the temporarily modified region under a persistent name.
+
+        :param name: Name of the region to save.
+        :param overwrite: Whether to overwrite an existing saved region.
+        """
+        run_command("g.region", save=name, overwrite=overwrite, env=self.env)
 
     def activate(self):
         """Sets the `GRASS_REGION` environment variable to the generated region name.
