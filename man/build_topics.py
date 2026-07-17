@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # generates topics.html and topic_*.html
-# (c) 2012-2025 by the GRASS Development Team
+# (c) 2012-2026 by the GRASS Development Team
 
 import glob
 import os
@@ -32,6 +32,7 @@ def build_topics(ext):
             headertopics_tmpl,
             man_dir,
             moduletopics_tmpl,
+            unquote_yaml,
         )
 
     keywords = {}
@@ -86,7 +87,7 @@ def build_topics(ext):
                     key = keys[1]  # Second keyword is topic.
                 match = re.match(r"description:\s*(.*)\s*", line)
                 if match:
-                    text = match.group(1)
+                    text = unquote_yaml(match.group(1))
                     if not text:
                         print(f"Warning: Empty tile in {fname}", file=sys.stderr)
                         break
@@ -115,7 +116,7 @@ def build_topics(ext):
         topicsfile.write(headertopics_tmpl)
 
         for key, values in sorted(keywords.items(), key=lambda s: s[0].lower()):
-            with Path(man_dir, f"topic_%s.{ext}" % key.replace(" ", "_")).open(
+            with Path(man_dir, f"topic_{key.replace(' ', '_')}.{ext}").open(
                 "w"
             ) as keyfile:
                 if ext == "html":

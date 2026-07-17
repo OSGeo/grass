@@ -175,7 +175,7 @@ int NetA_flow(dglGraph_s *graph, struct ilist *source_list,
    \return -1 on failure
  */
 int NetA_min_cut(dglGraph_s *graph, struct ilist *source_list,
-                 struct ilist *sink_list UNUSED, int *flow, struct ilist *cut)
+                 struct ilist *sink_list G_UNUSED, int *flow, struct ilist *cut)
 {
     int nnodes, i;
     dglEdgesetTraverser_s et;
