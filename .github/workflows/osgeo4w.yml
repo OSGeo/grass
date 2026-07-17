@@ -156,11 +156,12 @@ jobs:
 
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@0fa95f0e1eeaafde2c782583b36b28ad0d8c77d3 # v1.2.1
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         with:
           exclude: gui
           flags: ${{ matrix.os }}-pytest-python
           token: ${{ secrets.CODECOV_TOKEN }}
+          report_type: test_results
 
       - name: Run tests
         run: .github/workflows/test_thorough.bat '%O4WROOT%\opt\grass\grass86.bat' '%O4WROOT%\bin\python3'

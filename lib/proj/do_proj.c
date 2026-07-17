@@ -1117,12 +1117,12 @@ int GPJ_transform_array(const struct pj_info *info_in,
             for (i = 0; i < n; i++) {
                 if (in_deg2rad) {
                     /* convert degrees to radians */
-                    c.lpzt.lam = (*x) / RAD_TO_DEG;
-                    c.lpzt.phi = (*y) / RAD_TO_DEG;
+                    c.lpzt.lam = x[i] / RAD_TO_DEG;
+                    c.lpzt.phi = y[i] / RAD_TO_DEG;
                 }
                 else {
-                    c.lpzt.lam = (*x);
-                    c.lpzt.phi = (*y);
+                    c.lpzt.lam = x[i];
+                    c.lpzt.phi = y[i];
                 }
                 c.lpzt.z = z[i];
                 c = proj_trans(info_trans->pj, dir, c);
@@ -1143,12 +1143,12 @@ int GPJ_transform_array(const struct pj_info *info_in,
             for (i = 0; i < n; i++) {
                 if (in_deg2rad) {
                     /* convert degrees to radians */
-                    c.lpzt.lam = (*x) / RAD_TO_DEG;
-                    c.lpzt.phi = (*y) / RAD_TO_DEG;
+                    c.lpzt.lam = x[i] / RAD_TO_DEG;
+                    c.lpzt.phi = y[i] / RAD_TO_DEG;
                 }
                 else {
-                    c.lpzt.lam = (*x);
-                    c.lpzt.phi = (*y);
+                    c.lpzt.lam = x[i];
+                    c.lpzt.phi = y[i];
                 }
                 c.lpzt.z = z[i];
                 c = proj_trans(info_trans->pj, dir, c);
