@@ -90,7 +90,7 @@ def writeAvi(
     :param inputOptions:
     :param outputOptions:
     :param bool bg_task: if thread background task, not raise but
-    return error message
+        return error message
 
     :return str: error message
     """
