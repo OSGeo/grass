@@ -310,11 +310,11 @@ $(MDDIR)/overrides/fragments/tags/default/listing.html: mkdocs/overrides/fragmen
 	$(INSTALL_DATA) $< $@
 
 build-mkdocs:
-	@cd $(MDDIR) ; SITE_NAME="GRASS $(GRASS_VERSION_NUMBER) Documentation" \
+	@cd $(MDDIR) ; SITE_NAME="GRASS $(GRASS_VERSION_MAJOR).$(GRASS_VERSION_MINOR) Documentation" \
 	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS $(GRASS_VERSION_NUMBER) Documentation" \
 	mkdocs build
 
 serve-mkdocs:
-	@cd $(MDDIR) ; SITE_NAME="GRASS $(GRASS_VERSION_NUMBER) Documentation" \
+	@cd $(MDDIR) ; SITE_NAME="GRASS $(GRASS_VERSION_MAJOR).$(GRASS_VERSION_MINOR) Documentation" \
 	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS $(GRASS_VERSION_NUMBER) Documentation" \
 	mkdocs serve

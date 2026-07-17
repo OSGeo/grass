@@ -373,6 +373,36 @@ if(WITH_DOCS)
         DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/
         DESTINATION ${GRASS_INSTALL_DOCDIR}
     )
+    # The documentation site ships with the installation: build it at install
+    # time so the default build does not need mkdocs. When mkdocs is not
+    # available (e.g. it is in a user environment but the install runs under
+    # sudo), a site built earlier by the build-mkdocs target is still
+    # installed; otherwise the site is skipped with a warning and the help
+    # system uses its fallbacks.
+    if(NOT WITH_FHS)
+        install(
+            CODE
+                "
+            find_program(MKDOCS_EXECUTABLE mkdocs)
+            if(MKDOCS_EXECUTABLE)
+                message(STATUS \"Building the MkDocs documentation site\")
+                set(ENV{SITE_NAME} \"GRASS ${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR} Documentation\")
+                set(ENV{COPYRIGHT} \"&copy; 2003-${GRASS_VERSION_DATE} GRASS Development Team, GRASS ${GRASS_VERSION_NUMBER} Documentation\")
+                execute_process(
+                    COMMAND \${MKDOCS_EXECUTABLE} build
+                    WORKING_DIRECTORY ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}
+                    RESULT_VARIABLE mkdocs_status)
+                if(NOT mkdocs_status EQUAL 0)
+                    message(WARNING \"mkdocs build failed; the documentation site will be incomplete or missing\")
+                endif()
+            elseif(EXISTS \"${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/site\")
+                message(STATUS \"mkdocs not found; installing the previously built documentation site\")
+            else()
+                message(WARNING \"mkdocs not found, the documentation site will not be installed. To include it, install the Python packages listed in man/mkdocs/requirements.txt and run cmake --install again.\")
+            endif()
+            "
+        )
+    endif()
     install(
         DIRECTORY ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/
         DESTINATION ${GRASS_INSTALL_MKDOCSDIR}
