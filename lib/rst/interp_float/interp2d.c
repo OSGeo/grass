@@ -24,14 +24,9 @@
  * bug fixes(mask) and modification for variable smoothing
  * Mitasova (Jan 1997)
  *
- * \copyright
- * (C) 1993-1999 by Lubos Mitas and the GRASS Development Team
- *
- * \copyright
- * This program is free software under the
- * GNU General Public License (>=v2).
- * Read the file COPYING that comes with GRASS
- * for details.
+ * SPDX-FileCopyrightText: 1993-1999 Lubos Mitas
+ * SPDX-FileCopyrightText: Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <stdio.h>

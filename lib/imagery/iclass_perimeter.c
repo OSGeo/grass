@@ -9,10 +9,8 @@
    Vector map with training areas is used to determine corresponding
    cells by computing cells on area perimeter.
 
-   Copyright (C) 1999-2007, 2011 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 1999-2007, 2011 Other GRASS authors
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author David Satnik, Central Washington University (original author)
    \author Markus Neteler <neteler itc.it> (i.class module)

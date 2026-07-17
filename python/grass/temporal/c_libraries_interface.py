@@ -2,10 +2,8 @@
 Fast and exit-safe interface to GRASS C-library functions
 using ctypes and multiprocessing
 
-(C) 2013-2024 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2013-2024 Other GRASS authors
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert
 """

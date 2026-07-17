@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (C) 2026 by the GRASS Development Team
+# SPDX-FileCopyrightText: 2026 Other GRASS authors
 # SPDX-License-Identifier: GPL-2.0-or-later
 """Convert generated GRASS Markdown documentation to a man page.
 

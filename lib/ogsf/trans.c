@@ -16,12 +16,8 @@
    class.  I was still learning about GL at the time.
    There are many places where the code could be improved.
 
-   (C) 1999-2008 by the GRASS Development Team
-
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 1999-2008 Other GRASS authors
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Dave Gerdes Jan 1990 All rights reserved, US Army Construction
    Engineering Research Lab \author Bill Brown USACERL (November 1993) \author

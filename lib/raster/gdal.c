@@ -3,10 +3,8 @@
 
    \brief Raster Library - Utilization of GDAL library.
 
-   (C) 2010 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2010 Other GRASS authors
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Glynn Clements
  */

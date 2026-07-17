@@ -14,10 +14,8 @@ List of classes:
  - cap_interface::OnEarthCapabilities
  - cap_interface::OnEarthLayer
 
-(C) 2012 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2012 Other GRASS authors
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Stepan Turek <stepan.turek seznam.cz> (Mentor: Martin Landa)
 """

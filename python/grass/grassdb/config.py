@@ -1,10 +1,8 @@
 """
 Set global variables for objects in a GRASS Spatial Database
 
-(C) 2020 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2020 Other GRASS authors
+SPDX-License-Identifier: GPL-2.0-or-later
 
 .. sectionauthor:: Linda Kladivova <linda.kladivova seznam cz>
 """

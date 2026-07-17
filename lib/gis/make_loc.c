@@ -6,10 +6,8 @@
  * Creates a new location automatically given a "Cell_head", PROJ_INFO
  * and PROJ_UNITS information.
  *
- * (C) 2000-2013 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2000-2013 Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Frank Warmerdam
  */

@@ -4,8 +4,7 @@
  * \brief Wrapper functions for MSVC _open() and _creat() that convert
  * permission mode.
  *
- * (C) 2025 by the GRASS Development Team
- *
+ * SPDX-FileCopyrightText: 2025 Other GRASS authors
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Huidae Cho

@@ -2,7 +2,8 @@
 //  grass-launcher-objc
 //
 //  Created by Nicklas Larsson on 2024-02-27.
-//  (c) 2024-2025 Nicklas Larsson and the GRASS Development Team
+//  SPDX-FileCopyrightText: 2024-2025 Nicklas Larsson
+//  SPDX-FileCopyrightText: Other GRASS authors
 //  SPDX-License-Identifier: GPL-2.0-or-later
 
 #import <Foundation/Foundation.h>

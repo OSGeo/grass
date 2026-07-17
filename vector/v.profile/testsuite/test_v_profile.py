@@ -4,10 +4,9 @@ Purpose:    Tests v.profile input parsing and simple output generation.
             Uses NC Basic data set.
 
 Author:     Maris Nartiss
-Copyright:  (C) 2017, 2022 by Maris Nartiss and the GRASS Development Team
-Licence:    This program is free software under the GNU General Public
-            License (>=v2). Read the file COPYING that comes with GRASS
-            for details.
+SPDX-FileCopyrightText: 2017, 2022 Maris Nartiss
+SPDX-FileCopyrightText: Other GRASS authors
+SPDX-License-Identifier: GPL-2.0-or-later
 TODO:       Convert to synthetic dataset. It would allow to shorten output sample length.
             Cover more input/output combinations.
 """

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
 # generates topics.html and topic_*.html
-# (c) 2012-2026 by the GRASS Development Team
+# SPDX-FileCopyrightText: 2012-2026 Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 import glob
 import os

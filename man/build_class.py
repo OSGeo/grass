@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 # generates HTML man pages docs/html/<category>.html
-# (C) 2003-2019 Markus Neteler and the GRASS Development Team
+# SPDX-FileCopyrightText: 2003-2019 Markus Neteler
+# SPDX-FileCopyrightText: Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 # Authors:
 #   Markus Neteler
 #   Glynn Clements

@@ -8,10 +8,8 @@ Classes:
  - watchdog::MapWatch
  - watchdog::MapsetWatchdog
 
-(C) 2022 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2022 Other GRASS authors
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Anna Kratochvilova <kratochanna gmail.com>
 @author Tomas Zigo <tomas.zigo slovanet.sk>

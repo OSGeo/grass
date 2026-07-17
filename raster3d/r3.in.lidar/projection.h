@@ -5,10 +5,9 @@
  *  Markus Metz (r.in.lidar)
  *  Vaclav Petras (refactoring and various additions)
  *
- * Copyright 2011-2016 by Vaclav Petras, and the GRASS Development Team
- *
- * This program is free software licensed under the GPL (>=v2).
- * Read the COPYING file that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2011-2016 Vaclav Petras
+ * SPDX-FileCopyrightText: Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  */
 

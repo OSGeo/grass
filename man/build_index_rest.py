@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 # generates docs/rest/index.txt
-# (C) 2003-2012 Markus Neteler and the GRASS Development Team
+# SPDX-FileCopyrightText: 2003-2012 Markus Neteler
+# SPDX-FileCopyrightText: Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 # Authors:
 #   Markus Neteler
 #   Glynn Clements

@@ -3,11 +3,9 @@
  *
  * \brief Raster Library - Get mask information
  *
- * (C) 1999-2024 by Vaclav Petras and the GRASS Development Team
- *
- * This program is free software under the GNU General Public
- * License (>=v2). Read the file COPYING that comes with GRASS
- * for details.
+ * SPDX-FileCopyrightText: 1999-2024 Vaclav Petras
+ * SPDX-FileCopyrightText: Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author CERL
  * \author Vaclav Petras, NC State University, Center for Geospatial Analytics

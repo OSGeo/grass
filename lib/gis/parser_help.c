@@ -3,10 +3,8 @@
 
    \brief GIS Library - Argument parsing functions (help)
 
-   (C) 2001-2009, 2011 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2009, 2011 Other GRASS authors
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL
    \author Soeren Gebbert added Dec. 2009 WPS process_description document

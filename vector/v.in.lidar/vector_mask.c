@@ -1,10 +1,9 @@
 /*
  * v.in.lidar vector mask
  *
- * Copyright 2011-2015 by Vaclav Petras, and the GRASS Development Team
- *
- * This program is free software licensed under the GPL (>=v2).
- * Read the COPYING file that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2011-2015 Vaclav Petras
+ * SPDX-FileCopyrightText: Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  */
 

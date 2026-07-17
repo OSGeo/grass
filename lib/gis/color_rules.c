@@ -5,7 +5,8 @@
 
    Taken from r.colors module.
 
-   (C) 2001-2011 by the GRASS Development Team
+   SPDX-FileCopyrightText: 2001-2011 Other GRASS authors
+   SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <stdio.h>

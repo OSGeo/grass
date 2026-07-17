@@ -3,8 +3,7 @@
  *
  * \brief Header file for msvc/fcntl.c
  *
- * (C) 2025 by the GRASS Development Team
- *
+ * SPDX-FileCopyrightText: 2025 Other GRASS authors
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Huidae Cho

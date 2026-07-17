@@ -1,7 +1,7 @@
 """Paths to resources and and other GRASS properties, configured during build
 
-(C) 2025 by Nicklas Larsson and the GRASS Development Team
-
+SPDX-FileCopyrightText: 2025 Nicklas Larsson
+SPDX-FileCopyrightText: Other GRASS authors
 SPDX-License-Identifier: GPL-2.0-or-later
 
 

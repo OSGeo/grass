@@ -5,12 +5,8 @@
 
    Higher level functions for managing R*-Trees.
 
-   (C) 2010-2012 by the GRASS Development Team
-
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 2010-2012 Other GRASS authors
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Antonin Guttman - original code
    \author Daniel Green (green@superliminal.com) - major clean-up

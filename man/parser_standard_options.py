@@ -1,5 +1,7 @@
 """
-Copyright 2015-2025 by Pietro Zambelli and the GRASS Development Team
+SPDX-FileCopyrightText: 2015-2025 Pietro Zambelli
+SPDX-FileCopyrightText: Other GRASS authors
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author: Pietro Zambelli
 @author: Vaclav Petras (Markdown output)

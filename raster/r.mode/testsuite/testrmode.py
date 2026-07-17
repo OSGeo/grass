@@ -3,10 +3,9 @@ Name:       r.mode test
 Purpose:    Tests r.mode and its flags/options.
 
 Author:     Supreet Singh
-Copyright:  (C) 2018 by Supreet Singh and the GRASS Development Team
-Licence:    This program is free software under the GNU General Public
-            License (>=v2). Read the file COPYING that comes with GRASS
-            for details.
+SPDX-FileCopyrightText: 2018 Supreet Singh
+SPDX-FileCopyrightText: Other GRASS authors
+SPDX-License-Identifier: GPL-2.0-or-later
 
 """
 

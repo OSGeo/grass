@@ -7,13 +7,9 @@
  * elev color) \author modified by Brown in September 1999 (fix for Timestamps)
  * \author modified by Mitasova in Nov. 1999 (write given tension into hist)
  *
- * \copyright
- * (C) 1992-2006 by Helena Mitasova and the GRASS Development Team
- *
- * \copyright
- * This program is free software under the
- * GNU General Public License (>=v2).
- * Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 1992-2006 Helena Mitasova
+ * SPDX-FileCopyrightText: Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <stdio.h>

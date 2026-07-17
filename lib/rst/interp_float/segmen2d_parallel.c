@@ -5,14 +5,9 @@
  * \author Stanislav Zubal, Michal Lacko (OpenMP version)
  * \author Anna Petrasova (OpenMP version GRASS integration)
  *
- * \copyright
- * (C) 1993-2017 by Helena Mitasova and the GRASS Development Team
- *
- * \copyright
- * This program is free software under the
- * GNU General Public License (>=v2).
- * Read the file COPYING that comes with GRASS
- * for details.
+ * SPDX-FileCopyrightText: 1993-2017 Helena Mitasova
+ * SPDX-FileCopyrightText: Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  */
 

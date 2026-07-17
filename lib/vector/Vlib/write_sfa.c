@@ -14,10 +14,9 @@
    \todo SFA version of V2__add_area_cats_to_cidx_nat
    \todo SFA version of V2__add_line_to_topo_nat
 
-   (C) 2011-2012 by Martin Landa, and the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2011-2012 Martin Landa
+   SPDX-FileCopyrightText: Other GRASS authors
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Martin Landa <landa.martin gmail.com>
  */

@@ -12,13 +12,9 @@
  *
  * \author modified by H. Mitasova, November 1996 (include variable smoothing)
  *
- * \copyright
- * (C) 1993-1996 by Helena Mitasova and the GRASS Development Team
- *
- * \copyright
- * This program is free software under the
- * GNU General Public License (>=v2).
- * Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 1993-1996 Helena Mitasova
+ * SPDX-FileCopyrightText: Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef DATAQUAD_H

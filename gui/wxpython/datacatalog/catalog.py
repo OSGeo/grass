@@ -6,11 +6,9 @@
 Classes:
  - datacatalog::DataCatalog
 
-(C) 2014-2018 by Tereza Fiedlerova, and the GRASS Development Team
-
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2014-2018 Tereza Fiedlerova
+SPDX-FileCopyrightText: Other GRASS authors
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Tereza Fiedlerova
 @author Linda Kladivova l.kladivova@seznam.cz

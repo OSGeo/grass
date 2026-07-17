@@ -7,14 +7,9 @@
  * L. Mitas (University of Illinois) \author I. Kosinovsky, (USA-CERL) \author
  * D.Gerdes (USA-CERL)
  *
- * \copyright
- * (C) 1994-1995 by Helena Mitasova and the GRASS Development Team
- *
- * \copyright
- * This program is free software under the
- * GNU General Public License (>=v2).
- * Read the file COPYING that comes with GRASS
- * for details.
+ * SPDX-FileCopyrightText: 1994-1995 Helena Mitasova
+ * SPDX-FileCopyrightText: Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  */
 

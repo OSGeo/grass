@@ -5,10 +5,8 @@ Script for creating an __init__.py file for a package.
 Adds all modules (*.py files) in a directory into an __init__.py file.
 Overwrites existing __init__.py file in a directory.
 
-(C) 2011-2013 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2011-2013 Other GRASS authors
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com>
 @author Vaclav Petras <wenzeslaus gmail.com>

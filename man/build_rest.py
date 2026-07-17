@@ -9,7 +9,9 @@ Created on Thu Aug  9 14:04:12 2012
 """
 # utilities for generating REST indices
 # utilities for generating HTML indices
-# (C) 2003-2026 by Luca Delucchi and the GRASS Development Team
+# SPDX-FileCopyrightText: 2003-2026 Luca Delucchi
+# SPDX-FileCopyrightText: Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 import os
 import string

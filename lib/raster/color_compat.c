@@ -3,10 +3,9 @@
  *
  * \brief Raster Library - Predefined color tables
  *
- * (C) 2007-2009 Glynn Clements and the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2007-2009 Glynn Clements
+ * SPDX-FileCopyrightText: Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Glynn Clements <glynn@gclements.plus.com>
  */
