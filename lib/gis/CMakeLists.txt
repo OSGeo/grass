@@ -8,7 +8,7 @@ find_package(Threads)
 
 set(grass_gis_DEFS "-DGRASS_VERSION_DATE=\"${GRASS_VERSION_DATE}\"")
 if(Threads_FOUND)
-  list(APPEND grass_gis_DEFS "HAVE_PTHREAD")
+    list(APPEND grass_gis_DEFS "HAVE_PTHREAD")
 endif()
 
 if(MSVC)
