@@ -14,8 +14,6 @@ DOC_MD := $(wildcard $(MODULE_TOPDIR)/doc/*.md) \
 	$(wildcard $(MODULE_TOPDIR)/doc/development/*.md)
 WEB_ONLY_MD := index keywords development_intro command_line_intro \
 	$(filter-out grass_database projectionintro,$(basename $(notdir $(DOC_MD))))
-MANPAGES := $(filter-out $(patsubst %,$(MANDIR)/%.$(MANSECT),$(WEB_ONLY_MD)),\
-	$(patsubst $(MDDIR)/source/%.md,$(MANDIR)/%.$(MANSECT),$(wildcard $(MDDIR)/source/*.md)))
 
 DSTFILES := \
 	$(HTMLDIR)/grassdocs.css \
@@ -83,12 +81,12 @@ default: $(DSTFILES)
 	$(MAKE) manpages
 # $(MAKE) build-mkdocs
 
-# This must be a separate target so that evaluation of $(MANPAGES)
-# is delayed until the indices have been generated
-left := (
-right := )
+# The sweep script is shared with the CMake build, so both builds convert
+# the same set of pages. It skips pages whose man page is up to date, so
+# after the tool builds this effectively converts the index pages.
 manpages:
-	$(MAKE) $(subst $(left),\$(left),$(subst $(right),\$(right),$(MANPAGES)))
+	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) $(PYTHON) ./build_manpages.py \
+		$(MDDIR)/source $(MANDIR) $(GISBASE)/utils/g.md2man.py --exclude $(WEB_ONLY_MD)
 
 .PHONY: manpages
 

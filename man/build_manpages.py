@@ -4,11 +4,11 @@
 
 """Convert Markdown pages without an up-to-date man page.
 
-Used by the CMake build after the index pages are generated. Tool pages
-already converted during the tool builds are up to date and are skipped,
-so this effectively converts the index pages, including the dynamically
-named topic_* pages. Web-only pages, which have no man page equivalent,
-are passed with --exclude.
+Used by both builds (man/Makefile and the CMake build) after the index
+pages are generated. Tool pages already converted during the tool builds
+are up to date and are skipped, so this effectively converts the index
+pages, including the dynamically named topic_* pages. Web-only pages,
+which have no man page equivalent, are passed with --exclude.
 """
 
 import argparse
