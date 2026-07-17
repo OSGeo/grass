@@ -642,6 +642,7 @@ def init(
     # Set defaults for the TGIS DB (overwritten later if initialized)
     tgis_backend = "sqlite"
     tgis_database_string = None
+    tgis_dbmi_paramstyle = "qmark"
 
     # Set the global variable for faster access
     current_mapset = new_mapset
