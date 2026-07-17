@@ -61,7 +61,7 @@ static void error_tuples(struct Format_info_pg *);
 
 #define NOPG_UNUSED
 #else
-#define NOPG_UNUSED UNUSED
+#define NOPG_UNUSED G_UNUSED
 #endif
 
 /*!

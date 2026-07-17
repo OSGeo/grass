@@ -23,6 +23,8 @@ Contributors must:
 - **Write clear, concise PR descriptions** in your own words.
 - **Use your own voice** in GitHub issues and PR discussions.
 - **Take responsibility** for code quality, correctness, and maintainability.
+  Self-review AI-generated code before submitting — question whether each
+  change is justified and remove what is not.
 
 ### Disclosure
 
@@ -70,6 +72,9 @@ leads you through a first time setup and shows how to create a pull request.
 
 To contribute effectively, please familiarize yourself with our
 [Programming Style Guide](./doc/development/style_guide.md).
+
+If you use an AI assistant or agent, see [`AGENTS.md`](./AGENTS.md) for
+project-specific instructions and conventions.
 
 ### Testing changes
 

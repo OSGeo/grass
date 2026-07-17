@@ -9,7 +9,7 @@
 # PURPOSE:	This configure runs all the tests to determine what components
 #		are installed on the current system. It also defines certain
 #		configuration variables for compilation and installation.
-# COPYRIGHT:    (C) 2000-2025 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2026 by the GRASS Development Team
 #
 #		This program is free software under the GNU General
 #		Public License (>=v2). Read the file COPYING that
@@ -765,7 +765,7 @@ proj_version="$proj_ver_major.$proj_ver_minor.$proj_ver_patch"
 
 if test "$(expr "$proj_ver_major" \>= 9)" = 1; then
   AC_MSG_RESULT([using PROJ version "${proj_version}"])
-else
+elif test "$cross_compiling" != "yes" ; then
   AC_MSG_ERROR([*** PROJ version 9.0.0 or newer is required (found version "${proj_version}")])
 fi
 
@@ -963,7 +963,7 @@ else
   if test "$(expr "$gdal_version_major" \>= 3)" = 1 && \
       test "$(expr "$gdal_version_minor" \>= 7)" = 1; then
       AC_MSG_RESULT([using GDAL version "${gdal_version}"])
-  else
+  elif test "$cross_compiling" != "yes" ; then
       AC_MSG_ERROR([*** GDAL version 3.7 or newer is required (found version "${gdal_version}")])
   fi
 

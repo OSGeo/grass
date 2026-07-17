@@ -22,7 +22,7 @@ for details.
 import os
 import re
 import copy
-from multiprocessing import Process, Queue, cpu_count
+from multiprocessing import Process, Queue
 from pathlib import Path
 
 import wx
@@ -556,10 +556,7 @@ class DataCatalogTree(TreeView):
         queue_list = []
         proc_list = []
         loc_list = []
-        try:
-            nprocs = max(1, cpu_count() - 1)
-        except NotImplementedError:
-            nprocs = 1
+        nprocs = gs.resolve_nprocs(-1)
 
         results = {}
         errors = []
@@ -924,7 +921,7 @@ class DataCatalogTree(TreeView):
         ):
             self._popupMenuGrassDb()
         elif len(self.selected_grassdb) > 1 and not self.selected_location[0]:
-            self._popupMenuEmpty()
+            self._popupMenuMultipleGrassDbs()
         elif len(self.selected_location) > 1 and not self.selected_mapset[0]:
             self._popupMenuMultipleLocations()
         elif len(self.selected_mapset) > 1:
@@ -2019,6 +2016,34 @@ class DataCatalogTree(TreeView):
             # temp gisrc file must be deleted onDone
             self._giface.RunCmd(cmd, env=env, onDone=done, userData=gisrc)
 
+    def OnShowProjection(self, event):
+        """Show projection info of selected project (location)"""
+
+        def done(event):
+            gs.try_remove(event.userData)
+
+        cmd = ["g.proj", "-p"]
+        gisrc, env = gs.create_environment(
+            self.selected_grassdb[0].data["name"],
+            self.selected_location[0].data["name"],
+            "PERMANENT",
+        )
+        self._giface.RunCmd(cmd, env=env, onDone=done, userData=gisrc)
+
+    def OnShowRegion(self, event):
+        """Show computational region of selected mapset"""
+
+        def done(event):
+            gs.try_remove(event.userData)
+
+        cmd = ["g.region", "-p3"]
+        gisrc, env = gs.create_environment(
+            self.selected_grassdb[0].data["name"],
+            self.selected_location[0].data["name"],
+            self.selected_mapset[0].data["name"],
+        )
+        self._giface.RunCmd(cmd, env=env, onDone=done, userData=gisrc)
+
     def OnCopyName(self, event):
         """Copy layer name to clipboard"""
         if wx.TheClipboard.Open():
@@ -2084,6 +2109,15 @@ class DataCatalogTree(TreeView):
             wx.TheClipboard.SetData(do)
             wx.TheClipboard.Close()
 
+    def OnCopyGrassDbPath(self, event):
+        """Copy path to GRASS database"""
+        if wx.TheClipboard.Open():
+            do = wx.TextDataObject()
+            paths = [db.data["name"] for db in self.selected_grassdb]
+            do.SetText("\n".join(paths))
+            wx.TheClipboard.SetData(do)
+            wx.TheClipboard.Close()
+
     def OnReloadLocation(self, event):
         """Reload all mapsets in selected location"""
         node = self.selected_location[0]
@@ -2091,6 +2125,21 @@ class DataCatalogTree(TreeView):
         self.UpdateCurrentDbLocationMapsetNode()
         self.RefreshNode(node, recursive=True)
         self.ExpandNode(node, recursive=False)
+
+    def OnCopyLocationPath(self, event):
+        """Copy path to project (location)"""
+        if wx.TheClipboard.Open():
+            do = wx.TextDataObject()
+            text = []
+            for i in range(len(self.selected_location)):
+                path = os.path.join(
+                    self.selected_grassdb[i].data["name"],
+                    self.selected_location[i].data["name"],
+                )
+                text.append(path)
+            do.SetText("\n".join(text))
+            wx.TheClipboard.SetData(do)
+            wx.TheClipboard.Close()
 
     def OnReloadGrassdb(self, event):
         """Reload all mapsets in selected grass db"""
@@ -2250,7 +2299,12 @@ class DataCatalogTree(TreeView):
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnReloadMapset, item)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy path to mapset"))
+        menu.AppendSeparator()
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Show computational region"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnShowRegion, item)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy path"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCopyMapsetPath, item)
 
@@ -2281,6 +2335,15 @@ class DataCatalogTree(TreeView):
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnReloadLocation, item)
 
+        menu.AppendSeparator()
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Show projection info"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnShowProjection, item)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Copy path"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCopyLocationPath, item)
+
         self.PopupMenu(menu)
         menu.Destroy()
 
@@ -2302,6 +2365,10 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, label_text)
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, lambda e: self.EditLabel(self.GetSelections()[0]), item)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Copy path"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCopyGrassDbPath, item)
 
         # Remove Label (only if its exists)
         if has_label:
@@ -2363,6 +2430,19 @@ class DataCatalogTree(TreeView):
         if self._restricted:
             item.Enable(False)
 
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Copy paths"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCopyLocationPath, item)
+
+        self.PopupMenu(menu)
+        menu.Destroy()
+
+    def _popupMenuMultipleGrassDbs(self):
+        """Create popup menu for multiple selected grass databases"""
+        menu = Menu()
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Copy paths"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCopyGrassDbPath, item)
         self.PopupMenu(menu)
         menu.Destroy()
 
@@ -2375,7 +2455,7 @@ class DataCatalogTree(TreeView):
         if self._restricted:
             item.Enable(False)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy paths to mapsets"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy paths"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCopyMapsetPath, item)
 

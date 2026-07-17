@@ -23,7 +23,7 @@
 #include <grass/vector.h>
 
 int reclass(struct Map_info *In, struct Map_info *Out, int type, int field,
-            dbCatValArray *cvarr, int dissolve UNUSED)
+            dbCatValArray *cvarr, int dissolve G_UNUSED)
 {
     int i, nlines, line, ltype, old_cat, new_cat;
     int nocat = 0, rclelem = 0, negative = 0;

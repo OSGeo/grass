@@ -390,7 +390,8 @@ static int ends_with(const char *string, const char *suffix)
 static void map_file(void)
 {
 #ifndef _WIN32
-    size_t size = HEADER_SIZE + ca.width * ca.height * sizeof(unsigned int);
+    size_t size =
+        HEADER_SIZE + (size_t)ca.width * ca.height * sizeof(unsigned int);
     void *ptr;
     int fd;
 
