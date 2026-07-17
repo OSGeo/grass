@@ -25,16 +25,20 @@ from contextlib import contextmanager
 
 import grass.script as gs
 
-from .core import get_available_temporal_mapsets, get_tgis_message_interface, init_dbif
+from .core import get_tgis_message_interface, init_dbif
 from .datetime_math import time_delta_to_relative_time
-from .factory import dataset_factory
 from .open_stds import open_old_stds
 
 ###############################################################################
 
 
 def get_dataset_list(
-    type, temporal_type, columns=None, where=None, order=None, dbif=None
+    type,
+    temporal_type,
+    columns=None,
+    where=None,
+    order=None,
+    dbif=None,
 ):
     """Return a list of time stamped maps or space time datasets of a specific
     temporal type that are registered in the temporal database
@@ -93,20 +97,15 @@ def get_dataset_list(
         >>> check = sp.delete()
 
     """
-    id = None
-    sp = dataset_factory(type, id)
-
     dbif, connection_state_changed = init_dbif(dbif)
-
-    mapsets = get_available_temporal_mapsets()
 
     result = {}
 
-    for mapset in mapsets.keys():
+    for mapset in dbif.tgis_mapsets:
         if temporal_type == "absolute":
-            table = sp.get_type() + "_view_abs_time"
+            table = type + "_view_abs_time"
         else:
-            table = sp.get_type() + "_view_rel_time"
+            table = type + "_view_rel_time"
 
         if columns and columns.find("all") == -1:
             sql = "SELECT " + str(columns) + " FROM " + table
@@ -280,17 +279,12 @@ def _get_get_registered_maps_as_objects_with_method(dataset, where, method, gran
         return dataset.get_registered_maps_as_objects(
             where=where, order="start_time", dbif=dbif
         )
-    if method != "gran":
-        msg = f"Invalid method '{method}'"
-        raise ValueError(msg)
-    if where:
-        msg = f"The where parameter is not supported with method={method}"
-        raise ValueError(msg)
-    if gran is not None and gran != "":
+    if method == "gran":
         return dataset.get_registered_maps_as_objects_by_granularity(
-            gran=gran, dbif=dbif
+            gran=gran, where=where, dbif=dbif
         )
-    return dataset.get_registered_maps_as_objects_by_granularity(dbif=dbif)
+    msg = f"Invalid method '{method}'"
+    raise ValueError(msg)
 
 
 def _get_get_registered_maps_as_objects_delta_gran(
@@ -512,6 +506,8 @@ def list_maps_of_stds(
                  dataset is used
     :param outpath: The path to file where to save output
     """
+    if gran == "":
+        gran = None
     if not output_format:
         if method == "comma":
             output_format = "line"

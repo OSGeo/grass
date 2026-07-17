@@ -106,11 +106,11 @@
  *++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 struct trigdata /* used to pass calculated values locally */
 {
-    float cd; /* cosine of the declination */
-    float ch; /* cosine of the hour angle */
-    float cl; /* cosine of the latitude */
-    float sd; /* sine of the declination */
-    float sl; /* sine of the latitude */
+    double cd; /* cosine of the declination */
+    double ch; /* cosine of the hour angle */
+    double cl; /* cosine of the latitude */
+    double sd; /* sine of the declination */
+    double sl; /* sine of the latitude */
 };
 
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -126,8 +126,8 @@ static int month_days[2][13] = {
 
 /* TODO: the "degrad" - "raddeg" variable names are flipped - typo or severe
  * bug?? */
-static float degrad = 57.295779513; /* converts from radians to degrees */
-static float raddeg = 0.0174532925; /* converts from degrees to radians */
+static double degrad = 57.295779513; /* converts from radians to degrees */
+static double raddeg = 0.0174532925; /* converts from degrees to radians */
 
 /*============================================================================
 *    Local function prototypes
