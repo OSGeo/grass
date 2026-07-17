@@ -2321,8 +2321,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def ChangeLayer(self, item):
         """Change layer"""
         layer_type = self.GetLayerInfo(item, key="type")
-        if layer_type == "group":
-            return
         layerName = None
 
         if layer_type == "command":
