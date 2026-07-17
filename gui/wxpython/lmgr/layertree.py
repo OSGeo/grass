@@ -87,6 +87,73 @@ LMIcons = {
 }
 
 
+if sys.platform == "darwin":
+    # TODO: remove this workaround once a wxPython release ships a wxWidgets
+    # version that includes the fix for wxWidgets/wxWidgets#26380.
+    class _MacSafeDragImage(CT.DragImage):
+        """Item drag image drawn in a popup window owned by this class.
+
+        CustomTreeCtrl shows its drag animation through wx.DragImage, which
+        on macOS renders via wxOverlay. The native wxOverlay implementation
+        never removes its borderless NSWindow from screen on Reset()
+        (wxWidgets issue #26380, open as of wxWidgets 3.2.8/3.3.1), so every
+        drag leaves an orphaned window behind, visible in Mission Control.
+        This replacement provides the same animation in a wx.PopupWindow
+        that is explicitly destroyed when the drag ends.
+        """
+
+        def __init__(self, treeCtrl, item):
+            # must go through super(), not CT.DragImage: this class is
+            # assigned to CT.DragImage below, so a CT.DragImage.__init__
+            # call would recurse into itself
+            super().__init__(treeCtrl, item)
+            self._dragWindow = None
+            self._hotspot = wx.Point(0, 0)
+            self._ghost = None
+
+        def BeginDrag(self, hotspot, window, fullScreen=False, rect=None):
+            self._dragWindow = window
+            self._hotspot = wx.Point(*hotspot)
+            self._ghost = wx.PopupWindow(window.GetTopLevelParent(), wx.BORDER_NONE)
+            wx.StaticBitmap(self._ghost, bitmap=self._bitmap)
+            self._ghost.SetClientSize(self._bitmap.GetSize())
+            self._ghost.SetBackgroundColour(window.GetBackgroundColour())
+            if self._ghost.CanSetTransparent():
+                self._ghost.SetTransparent(196)
+            # wx.DragImage.BeginDrag captures the mouse so that the tree
+            # receives the button-up event even outside its bounds; keep
+            # that behavior
+            if not window.HasCapture():
+                window.CaptureMouse()
+            return True
+
+        def Show(self):
+            if self._ghost:
+                self._ghost.Show()
+            return True
+
+        def Hide(self):
+            if self._ghost:
+                self._ghost.Hide()
+            return True
+
+        def Move(self, pt):
+            if self._ghost and self._dragWindow:
+                screen = self._dragWindow.ClientToScreen(wx.Point(*pt))
+                self._ghost.SetPosition(screen - self._hotspot)
+            return True
+
+        def EndDrag(self):
+            if self._dragWindow and self._dragWindow.HasCapture():
+                self._dragWindow.ReleaseMouse()
+            if self._ghost:
+                self._ghost.Destroy()
+                self._ghost = None
+            return True
+
+    CT.DragImage = _MacSafeDragImage
+
+
 class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     """Creates layer tree structure"""
 
@@ -115,6 +182,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.notebook = kwargs["notebook"]
         del kwargs["notebook"]
 
+        self.scrollbar_y_pos = 0
         self._giface = giface
         self.treepg = parent  # notebook page holding layer tree
         self.Map = Map()  # instance of render.Map to be associated with display
@@ -171,9 +239,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self._setIcons(il)
         self.AssignImageList(il)
 
+        self.Bind(wx.EVT_SCROLLWIN, self.OnScroll)
         self.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnActivateLayer)
         self.Bind(wx.EVT_TREE_SEL_CHANGED, self.OnChangeSel)
-        self.Bind(wx.EVT_TREE_SEL_CHANGING, self.OnChangingSel)
         self.Bind(CT.EVT_TREE_ITEM_CHECKED, self.OnLayerChecked)
         self.Bind(CT.EVT_TREE_ITEM_CHECKING, self.OnLayerChecking)
         self.Bind(wx.EVT_TREE_DELETE_ITEM, self.OnDeleteLayer)
@@ -186,6 +254,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.Bind(wx.EVT_MOTION, self.OnMotion)
 
         self._giface.grassdbChanged.connect(self.OnGrassDBChanged)
+
+    def _preserveScrollPosition(self):
+        """Scrolling position is default handled internally by
+        wx.lib.agw.customtreectrl class, ScrollTo() method.
+        """
+        self.Scroll(0, self.scrollbar_y_pos)
 
     def _setIcons(self, il):
         self._icon = {}
@@ -1168,6 +1242,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 ]
             )
 
+    def OnScroll(self, evt):
+        self.scrollbar_y_pos = self.GetScrollPos(wx.VERTICAL)
+        evt.Skip()
+
     def OnStartEditing(self, event):
         """Start editing vector map layer requested by the user"""
         mapLayer = self.GetLayerInfo(self.layer_selected, key="maplayer")
@@ -1858,6 +1936,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             vselect.Reset()
 
         self.AdjustMyScrollbars()
+        self._preserveScrollPosition()
 
     def OnCmdChanged(self, event):
         """Change command string"""
@@ -1891,17 +1970,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         else:
             self.hitCheckbox = False
         event.Skip()
-
-    def OnChangingSel(self, event):
-        """Selection is changing.
-
-        If the user is clicking on checkbox, selection change is vetoed.
-        """
-        if self.hitCheckbox:
-            # Prevent the scrollbar from scrolling up when a layer item
-            # is checked or unchecked
-            self.EnsureVisible(event.GetItem())
-            event.Veto()
 
     def OnChangeSel(self, event):
         """Selection changed
@@ -1972,6 +2040,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         vselect = self._giface.GetMapDisplay().GetDialog("vselect")
         if vselect:
             vselect.Reset()
+        self._preserveScrollPosition()
 
     def OnEndDrag(self, event):
         self.StopDragging()
