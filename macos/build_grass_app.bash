@@ -5,15 +5,14 @@
 # TOOL:         build_grass_app.bash
 # AUTHOR(s):    Nicklas Larsson
 # PURPOSE:      Build and bundle GRASS app for macOS
-# COPYRIGHT:    (c) 2020-2025 Nicklas Larsson and the GRASS Development Team
-#               (c) 2020 Michael Barton
-#               (c) 2018 Eric Hutton, Community Surface Dynamics Modeling
-#                   System
+# SPDX-FileCopyrightText: 2020-2025 Nicklas Larsson
+# SPDX-FileCopyrightText: 2020 Michael Barton
+# SPDX-FileCopyrightText: 2018 Eric Hutton, Community Surface Dynamics Modeling System
+# SPDX-FileCopyrightText: Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 # This package is written by Nicklas Larsson and is heavily based
 # on work by Eric Hutton with contributions by Michael Barton.
-#
-# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 

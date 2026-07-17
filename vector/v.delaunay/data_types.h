@@ -8,12 +8,9 @@
  *
  * PURPOSE:      Creates a Delaunay triangulation vector map
  *
- * COPYRIGHT:    (C) RMIT 1993
- *               (C) 2008-2009 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2).  Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 1993 RMIT
+ * SPDX-FileCopyrightText: Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * The following notices apply to portions of the code originally
  * derived from work by Geoff Leach of RMIT:
