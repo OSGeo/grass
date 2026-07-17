@@ -39,9 +39,12 @@ for details.
 :authors: Soeren Gebbert
 """
 
+from __future__ import annotations
+
 import os
 import tarfile
 from pathlib import Path
+from typing import Literal
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
@@ -69,7 +72,7 @@ def _import_raster_maps_from_gdal(
     exp: bool,
     location: str | None,
     link: bool,
-    format_: str,
+    format_: Literal["GTiff", "AAIGrid"],
     set_current_region: bool = False,
     memory: int = 300,
 ) -> None:
@@ -109,7 +112,7 @@ def _import_raster_maps_from_gdal(
         except CalledModuleError:
             gs.fatal(
                 _("Unable to import/link raster map <%s> from file %s.")
-                % (name, filename),
+                % (name, filename)
             )
 
         # Set the color rules if present
@@ -117,10 +120,7 @@ def _import_raster_maps_from_gdal(
         if Path(filename).is_file():
             try:
                 gs.run_command(
-                    "r.colors",
-                    map=name,
-                    rules=filename,
-                    overwrite=gs.overwrite(),
+                    "r.colors", map=name, rules=filename, overwrite=gs.overwrite()
                 )
             except CalledModuleError:
                 gs.fatal(_("Unable to set the color rules for raster map <%s>.") % name)
@@ -156,7 +156,7 @@ def _import_raster_maps(
 
         except CalledModuleError:
             gs.fatal(
-                _("Unable to unpack raster map <%s> from file %s.") % (name, filename),
+                _("Unable to unpack raster map <%s> from file %s.") % (name, filename)
             )
 
     # Set the computational region from the last map imported
@@ -204,7 +204,7 @@ def _import_vector_maps_from_gml(
 
         except CalledModuleError:
             gs.fatal(
-                _("Unable to import vector map <%s> from file %s.") % (name, filename),
+                _("Unable to import vector map <%s> from file %s.") % (name, filename)
             )
 
 
@@ -234,7 +234,7 @@ def _import_vector_maps(maplist: list[dict[str, str]]) -> None:
 
         except CalledModuleError:
             gs.fatal(
-                _("Unable to unpack vector map <%s> from file %s.") % (name, filename),
+                _("Unable to unpack vector map <%s> from file %s.") % (name, filename)
             )
 
         imported_maps[name] = name
@@ -362,8 +362,8 @@ def import_stds(
                     _(
                         "Difference between PROJ_INFO file of "
                         "imported map and of current location:"
-                        "\n{diff}",
-                    ).format(diff=diff),
+                        "\n{diff}"
+                    ).format(diff=diff)
                 )
                 gs.fatal(_("Projection information does not match. Aborting."))
 
@@ -375,11 +375,8 @@ def import_stds(
     if location:
         try:
             proj4_string = proj_file_name.read_text(encoding="utf-8").strip()
-            print(proj4_string)
             gs.create_location(
-                dbase=old_env["GISDBASE"],
-                location=location,
-                proj4=proj4_string,
+                dbase=old_env["GISDBASE"], location=location, proj4=proj4_string
             )
             # Just create a new location and return
             if create:
@@ -388,21 +385,19 @@ def import_stds(
         except Exception as e:
             gs.fatal(
                 _("Unable to create location %(l)s. Reason: %(e)s")
-                % {"l": location, "e": str(e)},
+                % {"l": location, "e": str(e)}
             )
         # Create a temporary environment
         try:
             target_gisrc, _target_env = gs.create_environment(
-                old_env["GISDBASE"],
-                location,
-                "PERMANENT",
+                old_env["GISDBASE"], location, "PERMANENT"
             )
             os.environ["GISRC"] = target_gisrc
 
         except OSError as e:
             gs.fatal(
                 _("Unable to create environment for location %s. Reason: %s")
-                % (location, e),
+                % (location, e)
             )
         # create default database connection
         try:
@@ -410,7 +405,7 @@ def import_stds(
         except CalledModuleError:
             gs.fatal(
                 _("Unable to create default temporal database in new location %s")
-                % location,
+                % location
             )
 
     try:
@@ -485,7 +480,7 @@ def import_stds(
         ):
             gs.fatal(
                 _("Key words %(t)s, %(s)s or %(n)s not found in init file.")
-                % {"t": "temporal_type", "s": "semantic_type", "n": "number_of_maps"},
+                % {"t": "temporal_type", "s": "semantic_type", "n": "number_of_maps"}
             )
 
         if line_count != int(init_data["number_of_maps"]):
@@ -509,7 +504,7 @@ def import_stds(
                 if not filename.exists():
                     gs.fatal(
                         _("Unable to find GeoTIFF raster file <%s> in archive.")
-                        % filename,
+                        % filename
                     )
         elif format_ == "AAIGrid":
             for row in maplist:
@@ -517,14 +512,14 @@ def import_stds(
                 if not filename.exists():
                     gs.fatal(
                         _("Unable to find AAIGrid raster file <%s> in archive.")
-                        % filename,
+                        % filename
                     )
         elif format_ == "GML":
             for row in maplist:
                 filename = Path(row["filename"]).with_suffix(".xml")
                 if not filename.exists():
                     gs.fatal(
-                        _("Unable to find GML vector file <%s> in archive.") % filename,
+                        _("Unable to find GML vector file <%s> in archive.") % filename
                     )
         elif format_ == "pack":
             for row in maplist:
@@ -535,7 +530,7 @@ def import_stds(
                 if not filename.exists():
                     gs.fatal(
                         _("Unable to find GRASS package file <%s> in archive.")
-                        % filename,
+                        % filename
                     )
         else:
             gs.fatal(_("Unsupported input format"))
@@ -547,9 +542,9 @@ def import_stds(
             gs.fatal(
                 _(
                     "Space time %(t)s dataset <%(sp)s> is already in"
-                    " the database. Use the overwrite flag.",
+                    " the database. Use the overwrite flag."
                 )
-                % {"t": type_, "sp": sp.get_id()},
+                % {"t": type_, "sp": sp.get_id()}
             )
 
         # Import the maps
@@ -580,9 +575,9 @@ def import_stds(
             gs.info(
                 _(
                     "Overwriting space time %(sp)s dataset "
-                    "<%(id)s> and unregister all maps.",
+                    "<%(id)s> and unregister all maps."
                 )
-                % {"sp": sp.get_new_map_instance(None).get_type(), "id": sp.get_id()},
+                % {"sp": sp.get_new_map_instance(None).get_type(), "id": sp.get_id()}
             )
             sp.delete()
             sp = sp.get_new_instance(ident)
@@ -593,14 +588,14 @@ def import_stds(
         if temporal_type == "relative":
             if "relative_time_unit" not in init_data:
                 gs.fatal(
-                    _("Key word %s not found in init file.") % ("relative_time_unit"),
+                    _("Key word %s not found in init file.") % ("relative_time_unit")
                 )
             relative_time_unit = init_data["relative_time_unit"]
             sp.set_relative_time_unit(relative_time_unit)
 
         gs.verbose(
             _("Create space time %s dataset.")
-            % sp.get_new_map_instance(None).get_type(),
+            % sp.get_new_map_instance(None).get_type()
         )
 
         sp.set_initial_values(
