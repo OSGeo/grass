@@ -138,7 +138,7 @@ void interface(int argc, char **argv)
     nprocs = G_set_omp_num_threads(nprocs_opt);
     nprocs = Rast_disable_omp_on_mask(nprocs);
     if (nprocs < 1)
-        G_fatal_error(_("<%d> is not valid number of nprocs."), nprocs);
+        G_fatal_error(_("<%d> is not a valid number of threads."), nprocs);
     memory = atoi(mem_opt->answer);
     constrained = constr->answer;
     sscanf(expon->answer, "%lf", &exponent);
