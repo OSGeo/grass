@@ -55,4 +55,23 @@ in allowing us time to address any reported vulnerabilities before disclosing
 them publicly. We ask that you refrain from disclosing any details of the
 vulnerability until we have had adequate time to provide a fix.
 
+## Software Bill of Materials (SBOM)
+
+GRASS publishes a CycloneDX SBOM with every official release.
+
+- The SBOM is generated automatically in CI via [Syft](https://github.com/anchore/syft)
+  and attached as `grass.cdx.json` to each GitHub release draft.
+  It covers dependencies declared in the source tree (Python package
+  requirements); components linked at build time (GDAL, PROJ, GEOS,
+  etc.) are resolved only in built artifacts and appear in the Docker
+  image SBOMs where they are installed from OS package repositories.
+- For Docker images, an SBOM is embedded at build time (`sbom: true` in
+  `docker/build-push-action`) and attestations are published via
+  `actions/attest-build-provenance`.
+- To generate an SBOM locally, install Syft and run `make sbom` from the
+  repository root.
+- SBOM generation can also be triggered manually via the
+  [Generate SBOM](https://github.com/OSGeo/grass/actions/workflows/sbom.yml)
+  workflow on GitHub Actions.
+
 Thank you for helping to keep GRASS secure!

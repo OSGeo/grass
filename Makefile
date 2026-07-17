@@ -123,8 +123,19 @@ code-coverage-clean:
 	-find . -type f \( -name "*.gcda" -o -name "*.gcno" -o -name "*.gcov" \) -delete
 	-rm -f .coverage
 
+sbom:
+	@if command -v syft > /dev/null 2>&1; then \
+		echo "Generating CycloneDX SBOM using Syft..."; \
+		syft dir:. -o cyclonedx-json=grass.cdx.json; \
+		echo "SBOM written to grass.cdx.json"; \
+	else \
+		echo "Syft not found. Install it from https://github.com/anchore/syft" >&2; \
+		exit 1; \
+	fi
+
 distclean: clean
 	-rm -f config.cache config.log config.status config.status.$(ARCH) 2>/dev/null
+	-rm -f grass.cdx.json
 	-rm -f ChangeLog ChangeLog.bak $(ERRORLOG) grass.pc
 	-rm -f include/grass/config.h include/grass/version.h
 	-rm -f include/Make/Platform.make include/Make/Doxyfile_arch_html include/Make/Doxyfile_arch_latex 2>/dev/null
@@ -136,5 +147,5 @@ include $(MODULE_TOPDIR)/include/Make/Sphinx.make
 
 DOXNAME=grass
 
-.PHONY: default libs
+.PHONY: default libs sbom
 .PHONY: cleandistdirs cleanscriptstrings clean libsclean distclean
