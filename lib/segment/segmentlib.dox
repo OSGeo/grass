@@ -72,7 +72,7 @@ modules which use this prefix.
 \section Loading_the_Segment_Library Including and Loading the Segment Library
 
 <P>
-The functions and data structures needed in oder to use the Segment
+The functions and data structures needed in order to use the Segment
 Library are defined in the header file called
 \c grass/segment.h and included using:
 
@@ -81,7 +81,7 @@ Library are defined in the header file called
 \endcode
 
 <P>
-To compile (link) the code code, the library needs to be specified
+To compile (link) the code, the library needs to be specified
 by adding the associated variables to the Makefile:
 
 \code
@@ -90,12 +90,12 @@ DEPENDENCIES = ... $(SEGMENTDEP)
 \endcode
 
 <P>
-See \ref Compiling_and_Installing_GRASS_Modules for a complete 
+See \ref Compiling_and_Installing_GRASS_Modules for a complete
 discussion of Makefiles.
 
 \section How_to_Use_the_Library How to Use the Library for Raster Maps
 
-The most typical use of the *Segment Library* in GRASS GIS is with
+The most typical use of the *Segment Library* in GRASS is with
 raster maps. Raster maps are read using row-by-row API and, at the same
 time, they might be too large to store in memory. The *Segment Library*
 can be used to make them accessible with random access when random
@@ -149,7 +149,7 @@ SEGMENT raster_seg;
 /* initialize the segment structures */
 if (Segment_open(&raster_seg, G_tempfile(),
                  nrows, ncols, srows, scols, cell_size, num_seg) != 1)
-    G_fatal_error("Unable to create temporary segment file");
+    G_fatal_error(_("Unable to create temporary segment file"));
 \endcode
 
 Now you can set the values in the segment storage to the values of
@@ -191,13 +191,13 @@ Segment_put(&raster_seg, (void *) &value, row, col);
 \endcode
 
 In both cases, the function takes pointer to void as a parameter,
-so we cast to `void *` to make it clear to compiler that this is what
-we intent to do. The library function will handle the value according to
-the size of the \c DCELL type we set with Segment_open().
+so we cast to `void *` to make it clear to the compiler that this is
+what we intend to do. The library function will handle the value
+according to the size of the \c DCELL type we set with Segment_open().
 
 Now, we are done with processing and we want to save the data to a
-GRASS GIS raster map. Often we this would be a different segment
-structure, but here with will store the data we were operating on.
+GRASS raster map. Often, this would be a different segment
+structure, but here we will store the data we were operating on.
 
 \code
 /* typically, name of map would be a parameter */
@@ -238,11 +238,11 @@ maps is not known in advance.
 In the following examples, we assume we can convert values from all
 raster maps into the same type (we are using double).
 We also assume that we got the raster names in command
-line options as a GRASS GIS module.
+line options as a GRASS module.
 Note that the code is not complete and some definitions or calls are
 not shown.
 
-\dontinclude doc/raster/r.example.segmulti/main.c
+\dontinclude doc/examples/raster/r.example.segmulti/main.c
 
 First, we count number of inputs to have the value at hand:
 
@@ -299,16 +299,19 @@ store a sum of all the rasters, so we are writing only one raster:
 \skip Segment_flush
 \until memory cleanup
 
-At the end, we free memory and close rasters:
+At the end, we free the memory, close the segment structure with
+Segment_close() (which also removes the temporary file), and close
+the rasters:
 
 \skip G_free
 \until Rast_close(output_fd);
 
 The actual processing with random access needs to get the individual
-values stored in each cell in the segment storage.
+values stored in each cell in the segment storage. The buffer
+allocated for the values is freed at the end.
 
 \skip hold the values
-\until Segment_put
+\until G_free
 
 \section Segment_Routines Segment Routines
 
@@ -630,17 +633,17 @@ the best performance. Calculating segment size as a fraction of the
 data matrix size, e.g. srows = nrows / 4 + 1, will result in very poor
 performance, particularly for larger datasets.
 
-\section A_Complete_Example_With_Two_Rasters A Complete Example With Two Rasters
+\section A_Complete_Example_Module A Complete Example Module
 
-This complete example of a module which loads a raster map into
+This is a complete example of a module which loads a raster map into
 the *Segment Library* data structures, modifies the values, and
 creates a new raster map with these values.
 
-\include doc/raster/r.example.segment/main.c
+\include doc/examples/raster/r.example.segment/main.c
 
 Makefile for this module looks like this:
 
-\dontinclude doc/raster/r.example.segment/Makefile
+\dontinclude doc/examples/raster/r.example.segment/Makefile
 
 \skip MODULE_TOPDIR = ..
 \until default

@@ -130,7 +130,6 @@ int main(int argc, char *argv[])
     /* make sure any pending disk operations take place */
     Segment_flush(&raster_seg);
     /* store the data permanently in a raster map */
-
     for (row = 0; row < nrows; row++) {
         for (col = 0; col < ncols; col++) {
             row_buffer[col] = 0;
@@ -169,7 +168,7 @@ int main(int argc, char *argv[])
 static void process(SEGMENT *raster_seg, int ninputs)
 {
     /* buffer we use to hold the values */
-    DCELL *values = G_malloc(ninputs * sizeof(DCELL *));
+    DCELL *values = G_malloc(ninputs * sizeof(DCELL));
 
     /* row and column to access */
     int row = 1;
@@ -184,4 +183,6 @@ static void process(SEGMENT *raster_seg, int ninputs)
 
     /* pass the pointer, set the value */
     Segment_put(raster_seg, values, row, col);
+
+    G_free(values);
 }

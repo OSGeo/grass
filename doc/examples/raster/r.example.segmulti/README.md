@@ -8,7 +8,7 @@ To run (the asterisks will match your operating system and version
 specific directory and file):
 
 ```shell
-../../../bin.*/grass* --tmp-location XY --exec bash <<EOF
+../../../../bin.*/grass* --tmp-project XY --exec bash <<EOF
 g.region res=0.1
 r.mapcalc -s expression='raster_1 = rand(0., 15)'
 r.mapcalc -s expression='raster_2 = rand(0., 15)'
@@ -22,10 +22,9 @@ r.info -g raster_out
 r.describe raster_out
 g.gui -f
 EOF
-
 ```
 
-Both assumes you have GRASS GIS locally compiled.
+Both steps assume you have GRASS locally compiled.
 
 To precisely time the execution, you can use *perf*:
 

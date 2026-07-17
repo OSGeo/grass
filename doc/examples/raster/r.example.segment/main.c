@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:    r.example.segment
@@ -37,7 +36,7 @@ int main(int argc, char *argv[])
     /* buffer for reading and writing rasters */
     void *buffer;
 
-    /* type of the map (CELL/DCELL/...) */
+    /* type we use for reading, processing, and writing */
     RASTER_MAP_TYPE map_type;
 
     /* variables for current and maximum rows and columns */
@@ -76,8 +75,9 @@ int main(int argc, char *argv[])
     input_name = input->answer;
     output_name = output->answer;
 
-    /* determine the input map type (CELL/FCELL/DCELL) */
-    map_type = Rast_map_type(input_name, "");
+    /* we process the raster as doubles (DCELL) regardless of the input
+     * map type; the reading function converts the values accordingly */
+    map_type = DCELL_TYPE;
     size_t cell_size = Rast_cell_size(map_type);
 
     /* open existing raster map for reading */
@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
     /* initialize the segment structures */
     if (Segment_open(&raster_seg, G_tempfile(), nrows, ncols, srows, scols,
                      cell_size, num_seg) != 1)
-        G_fatal_error("Unable to create temporary segment file");
+        G_fatal_error(_("Unable to create temporary segment file"));
 
     /* load data into the segment structures */
     for (row = 0; row < Rast_window_rows(); row++) {
