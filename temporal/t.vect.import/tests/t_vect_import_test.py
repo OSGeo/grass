@@ -14,11 +14,13 @@ License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 """
 
+from typing import Literal, LiteralString
+
 import pytest
 
 from grass.tools import Tools
 
-ALL_FORMATS = [
+ALL_FORMATS: list[tuple[Literal["GML", "pack"], Literal["bzip2", "gzip", "no"]]] = [
     ("GML", "bzip2"),
     ("GML", "gzip"),
     ("GML", "no"),
@@ -34,11 +36,15 @@ def _stvds_tinfo(tools, name):
 
 
 @pytest.mark.parametrize(("fmt", "compression"), ALL_FORMATS)
-def test_import_formats(stvds_session, fmt, compression):
+def test_import_formats(
+    stvds_session,
+    fmt: Literal["GML", "pack"],
+    compression: Literal["bzip2", "gzip", "no"],
+):
     """Roundtrip of the absolute-time STVDS for each format and compression."""
     data = stvds_session
     tools = Tools(session=data.session)
-    output = f"reimport_{fmt}_{compression}".lower()
+    output: LiteralString = f"reimport_{fmt}_{compression}".lower()
     tools.t_vect_import(
         input=data.archives[fmt, compression],
         output=output,

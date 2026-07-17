@@ -21,6 +21,7 @@ for details.
 import os
 import pathlib
 import shutil
+from typing import Literal, LiteralString
 
 import pytest
 
@@ -31,7 +32,10 @@ from grass.tools import Tools
 # Absolute-time import tests
 # ---------------------------------------------------------------------------
 
-ABSOLUTE_FORMATS = [
+ABSOLUTE_FORMATS: list[
+    tuple[Literal["GTiff", "pack"], Literal["bzip2", "gzip", "no"]]
+    | tuple[Literal["AAIGrid"], Literal["bzip2"]]
+] = [
     ("GTiff", "bzip2"),
     ("GTiff", "gzip"),
     ("GTiff", "no"),
@@ -41,7 +45,9 @@ ABSOLUTE_FORMATS = [
     ("AAIGrid", "bzip2"),
 ]
 
-RELATIVE_FORMATS = [
+RELATIVE_FORMATS: list[
+    tuple[Literal["GTiff", "pack"], Literal["bzip2", "gzip", "no"]]
+] = [
     ("GTiff", "bzip2"),
     ("GTiff", "gzip"),
     ("GTiff", "no"),
@@ -52,7 +58,7 @@ RELATIVE_FORMATS = [
 
 # Mapping from register-file S2 shorthand to the full label printed by
 # r.semantic.label.  Used in test_import_preserves_semantic_labels.
-SEMANTIC_LABELS = {
+SEMANTIC_LABELS: dict[str, str] = {
     "prec_1": "S2 Visible (Coastal/Aerosol)",
     "prec_2": "S2 Visible (Blue)",
     "prec_3": "S2 Visible (Green)",
@@ -68,7 +74,11 @@ def _strds_tinfo(tools, name):
 
 
 @pytest.mark.parametrize(("fmt", "compression"), ABSOLUTE_FORMATS)
-def test_import_absolute_formats(absolute_strds_session, fmt, compression):
+def test_import_absolute_formats(
+    absolute_strds_session,
+    fmt: Literal["GTiff", "pack", "AAIGrid"],
+    compression: Literal["bzip2", "gzip", "no"],
+):
     """Roundtrip of the absolute-time STRDS for each format and compression.
 
     The reimported STRDS must have the same temporal type and map count as
@@ -77,7 +87,7 @@ def test_import_absolute_formats(absolute_strds_session, fmt, compression):
     """
     data = absolute_strds_session
     tools = Tools(session=data.session)
-    output = f"reimport_{fmt}_{compression}".lower()
+    output: LiteralString = f"reimport_{fmt}_{compression}".lower()
     tools.t_rast_import(
         flags="o",
         input=data.archives[fmt, compression],
@@ -93,11 +103,15 @@ def test_import_absolute_formats(absolute_strds_session, fmt, compression):
 
 
 @pytest.mark.parametrize(("fmt", "compression"), ABSOLUTE_FORMATS)
-def test_import_absolute_formats_tinfo_times(absolute_strds_session, fmt, compression):
+def test_import_absolute_formats_tinfo_times(
+    absolute_strds_session,
+    fmt: Literal["GTiff", "pack", "AAIGrid"],
+    compression: Literal["bzip2", "gzip", "no"],
+):
     """Temporal extents are preserved in the roundtrip."""
     data = absolute_strds_session
     tools = Tools(session=data.session)
-    output = f"reimport_time_{fmt}_{compression}".lower()
+    output: LiteralString = f"reimport_time_{fmt}_{compression}".lower()
     tools.t_rast_import(
         flags="o",
         input=data.archives[fmt, compression],
@@ -172,11 +186,15 @@ def test_import_absolute_link_extend_flags(absolute_strds_session):
 
 
 @pytest.mark.parametrize(("fmt", "compression"), RELATIVE_FORMATS)
-def test_import_relative_formats(relative_strds_session, fmt, compression):
+def test_import_relative_formats(
+    relative_strds_session,
+    fmt: Literal["GTiff", "pack"],
+    compression: Literal["bzip2", "gzip", "no"],
+):
     """Roundtrip of the relative-time STRDS for each format and compression."""
     data = relative_strds_session
     tools = Tools(session=data.session)
-    output = f"reimport_rel_{fmt}_{compression}".lower()
+    output: LiteralString = f"reimport_rel_{fmt}_{compression}".lower()
     tools.t_rast_import(
         flags="o",
         input=data.archives[fmt, compression],
@@ -192,11 +210,15 @@ def test_import_relative_formats(relative_strds_session, fmt, compression):
 
 
 @pytest.mark.parametrize(("fmt", "compression"), RELATIVE_FORMATS)
-def test_import_relative_formats_tinfo_times(relative_strds_session, fmt, compression):
+def test_import_relative_formats_tinfo_times(
+    relative_strds_session,
+    fmt: Literal["GTiff", "pack"],
+    compression: Literal["bzip2", "gzip", "no"],
+):
     """Temporal extents are preserved in the relative-time roundtrip."""
     data = relative_strds_session
     tools = Tools(session=data.session)
-    output = f"reimport_rel_time_{fmt}_{compression}".lower()
+    output: LiteralString = f"reimport_rel_time_{fmt}_{compression}".lower()
     tools.t_rast_import(
         flags="o",
         input=data.archives[fmt, compression],
