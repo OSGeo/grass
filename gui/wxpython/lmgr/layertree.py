@@ -199,7 +199,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.hitCheckbox = False
         self.forceCheck = False  # force check layer if CheckItem is called
         # forms default to centering on screen, this will put on lmgr
-        self.centreFormsOnParent = True
+        self.centerFormsOnParent = True
 
         try:
             ctstyle |= CT.TR_ALIGN_WINDOWS
@@ -1104,7 +1104,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """Set color table for vector map"""
         name = self.GetLayerInfo(self.layer_selected, key="maplayer").GetName()
         GUI(
-            parent=self, giface=self._giface, centreOnParent=self.centreFormsOnParent
+            parent=self, giface=self._giface, centreOnParent=self.centerFormsOnParent
         ).ParseCommand(["v.colors", "map=%s" % name])
 
     def OnCopyMap(self, event):
@@ -1764,7 +1764,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 parent=self,
                 giface=self._giface,
                 show=show,
-                centreOnParent=self.centreFormsOnParent,
+                centreOnParent=self.centerFormsOnParent,
             )
             module.ParseCommand(
                 self.GetLayerInfo(layer, key="cmd"),
@@ -1785,7 +1785,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             module = GUI(
                 parent=self,
                 giface=self._giface,
-                centreOnParent=self.centreFormsOnParent,
+                centreOnParent=self.centerFormsOnParent,
             )
             module.ParseCommand(cmd, completed=(self.GetOptData, layer, params))
 
@@ -2324,9 +2324,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if layer_type == "group":
             return
         layerName = None
-
-        if layer_type == "group":
-            return
 
         if layer_type == "command":
             win = self.FindWindowById(self.GetLayerInfo(item, key="ctrl"))
