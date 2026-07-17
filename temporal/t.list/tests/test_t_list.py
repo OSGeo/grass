@@ -4,6 +4,7 @@ import json
 
 import pytest
 
+from grass.experimental import TemporaryMapsetSession
 from grass.tools import Tools
 
 
@@ -188,3 +189,13 @@ def test_t_list_empty_database(empty_session):
     result = tools.t_connect(flags="p", format="json", mapset=".")
     db_exist = result[0]["driver"] and result[0]["database"]
     assert not db_exist
+
+
+def test_t_list_from_mapset_without_temporal_database(space_time_dataset):
+    """Datasets in accessible mapsets are listed even when the current mapset
+    has no temporal database (https://github.com/OSGeo/grass/issues/7622)."""
+    with TemporaryMapsetSession(env=space_time_dataset.session.env) as mapset_session:
+        tools = Tools(session=mapset_session)
+        result = tools.t_list(type="strds", format="json")
+        names = [record["name"] for record in result.json]
+        assert space_time_dataset.name in names

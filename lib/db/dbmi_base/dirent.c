@@ -21,8 +21,8 @@
 #include <grass/dbmi.h>
 
 /* NOTE: these should come from <unistd.h> or from <sys/file.h> */
-#ifndef R_OK
 #if !defined(HAVE_UNISTD_H)
+#ifndef R_OK
 #define R_OK 4
 #endif
 #ifndef W_OK
