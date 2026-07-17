@@ -55,14 +55,15 @@ set(_GRASS_supported_components
     symb
     temporal
     vector
-    vedit)
+    vedit
+)
 
 foreach(_comp ${GRASS_FIND_COMPONENTS})
-  if(NOT _comp IN_LIST _GRASS_supported_components)
-    set(GRASS_FOUND False)
-    set(GRASS_NOT_FOUND_MESSAGE "Unsupported component: ${_comp}")
-  endif()
-  include("${CMAKE_CURRENT_LIST_DIR}/GRASS_${_comp}Targets.cmake")
+    if(NOT _comp IN_LIST _GRASS_supported_components)
+        set(GRASS_FOUND False)
+        set(GRASS_NOT_FOUND_MESSAGE "Unsupported component: ${_comp}")
+    endif()
+    include("${CMAKE_CURRENT_LIST_DIR}/GRASS_${_comp}Targets.cmake")
 endforeach()
 
 set(GRASS_VERSION_DATE "@GRASS_VERSION_DATE@")

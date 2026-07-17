@@ -174,14 +174,20 @@ def register_maps_in_space_time_dataset(
                 semantic_label_in_file = False
             elif len(line_list) == 3:
                 start_time_in_file = True
-                # Check if last column is an end time or a semantic label
-                time_object = check_datetime_string(line_list[2])
-                if not sp.is_time_relative() and isinstance(time_object, datetime):
-                    end_time_in_file = True
-                    semantic_label_in_file = False
+                # Check if last column is an end time or a semantic label.
+                # Relative timestamps are integers, absolute timestamps are
+                # datetime strings; anything else is a semantic label.
+                if sp.is_time_relative():
+                    try:
+                        int(line_list[2])
+                    except ValueError:
+                        end_time_in_file = False
+                    else:
+                        end_time_in_file = True
                 else:
-                    end_time_in_file = False
-                    semantic_label_in_file = True
+                    time_object = check_datetime_string(line_list[2])
+                    end_time_in_file = isinstance(time_object, datetime)
+                semantic_label_in_file = not end_time_in_file
             elif len(line_list) == 4:
                 start_time_in_file = True
                 end_time_in_file = True

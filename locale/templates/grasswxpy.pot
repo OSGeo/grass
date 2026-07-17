@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-30 15:58+0000\n"
+"POT-Creation-Date: 2026-06-27 15:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -332,7 +332,7 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:790
 #: ../gui/wxpython/animation/dialogs.py:1032
-#: ../gui/wxpython/gmodeler/canvas.py:321
+#: ../gui/wxpython/gmodeler/canvas.py:322
 #: ../gui/wxpython/gui_core/simplelmgr.py:515
 #: ../gui/wxpython/lmgr/layertree.py:450 ../gui/wxpython/rlisetup/frame.py:157
 msgid "Remove"
@@ -740,7 +740,7 @@ msgid "You are going to display data with different temporal types of maps (inte
 msgstr ""
 
 #: ../gui/wxpython/animation/temporal_manager.py:249
-#: ../gui/wxpython/animation/utils.py:72 ../gui/wxpython/animation/utils.py:80
+#: ../gui/wxpython/animation/utils.py:71 ../gui/wxpython/animation/utils.py:79
 #: ../gui/wxpython/timeline/frame.py:497 ../gui/wxpython/tplot/frame.py:1158
 #, python-format
 msgid "Space time dataset <%s> not found."
@@ -792,33 +792,33 @@ msgstr ""
 msgid "Add space-time dataset or series of map layers for animation"
 msgstr ""
 
-#: ../gui/wxpython/animation/utils.py:96 ../gui/wxpython/animation/utils.py:106
+#: ../gui/wxpython/animation/utils.py:95 ../gui/wxpython/animation/utils.py:105
 #: ../gui/wxpython/lmgr/layertree.py:2145 ../gui/wxpython/mapswipe/frame.py:459
 #, python-format
 msgid "Map <%s> not found."
 msgstr ""
 
-#: ../gui/wxpython/animation/utils.py:187
+#: ../gui/wxpython/animation/utils.py:186
 msgid "The number of maps in space-time datasets has to be the same."
 msgstr ""
 
-#: ../gui/wxpython/animation/utils.py:193
+#: ../gui/wxpython/animation/utils.py:192
 msgid "The temporal type (absolute/relative) of space-time datasets has to be the same."
 msgstr ""
 
-#: ../gui/wxpython/animation/utils.py:201
+#: ../gui/wxpython/animation/utils.py:200
 msgid "The map type (point/interval) of space-time datasets has to be the same."
 msgstr ""
 
-#: ../gui/wxpython/animation/utils.py:209
+#: ../gui/wxpython/animation/utils.py:208
 msgid "The temporal extents of maps in space-time datasets have to be the same."
 msgstr ""
 
-#: ../gui/wxpython/animation/utils.py:219
+#: ../gui/wxpython/animation/utils.py:218
 msgid "The number of maps to animate has to be the same for each map series."
 msgstr ""
 
-#: ../gui/wxpython/animation/utils.py:227
+#: ../gui/wxpython/animation/utils.py:226
 msgid "The number of maps to animate has to be the same as the number of maps in temporal dataset."
 msgstr ""
 
@@ -833,7 +833,7 @@ msgid "WARNING: Ignoring unsupported wx debug level (must be >=0 and <=5). {0}\n
 msgstr ""
 
 #: ../gui/wxpython/core/gcmd.py:123 ../gui/wxpython/core/workspace.py:1742
-#: ../gui/wxpython/gmodeler/panels.py:690
+#: ../gui/wxpython/gmodeler/panels.py:704
 #: ../gui/wxpython/gui_core/preferences.py:236
 #: ../gui/wxpython/gui_core/preferences.py:2072
 #: ../gui/wxpython/gui_core/preferences.py:2104
@@ -861,7 +861,7 @@ msgid "Reason"
 msgstr ""
 
 #: ../gui/wxpython/core/gcmd.py:146 ../gui/wxpython/core/workspace.py:1756
-#: ../gui/wxpython/gmodeler/model_convert.py:238
+#: ../gui/wxpython/gmodeler/model_convert.py:239
 #: ../gui/wxpython/mapwin/buffered.py:2153
 #: ../gui/wxpython/wxplot/dialogs.py:940
 msgid "Warning"
@@ -923,7 +923,7 @@ msgstr ""
 
 #: ../gui/wxpython/core/gconsole.py:766
 #: ../gui/wxpython/gmodeler/model_items.py:282
-#: ../gui/wxpython/gmodeler/model_items.py:387
+#: ../gui/wxpython/gmodeler/model_items.py:388
 #: ../gui/wxpython/gmodeler/panels.py:323 ../gui/wxpython/gui_core/ghelp.py:263
 #: ../gui/wxpython/startup/guiutils.py:586
 msgid "unknown"
@@ -1595,7 +1595,7 @@ msgstr ""
 msgid "{name}"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:956
+#: ../gui/wxpython/datacatalog/tree.py:953
 #, python-brace-format
 msgid ""
 "Map <{map_name}@{map_mapset}> is not in the current project. To be able to display it you need to switch to <{map_location}> project. Note that if you switch there all current Map Displays will be closed.\n"
@@ -1603,282 +1603,282 @@ msgid ""
 "Do you want to switch anyway?"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:966
+#: ../gui/wxpython/datacatalog/tree.py:963
 msgid "Map in a different project"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1085
+#: ../gui/wxpython/datacatalog/tree.py:1082
 #, python-brace-format
 msgid "{c} maps marked for moving."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1087
+#: ../gui/wxpython/datacatalog/tree.py:1084
 #, python-brace-format
 msgid "Map <{layer}> marked for moving."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1100
+#: ../gui/wxpython/datacatalog/tree.py:1097
 #, python-brace-format
 msgid "{c} maps marked for copying."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1102
+#: ../gui/wxpython/datacatalog/tree.py:1099
 #, python-brace-format
 msgid "Map <{layer}> marked for copying."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1117
-#: ../gui/wxpython/datacatalog/tree.py:1470
+#: ../gui/wxpython/datacatalog/tree.py:1114
+#: ../gui/wxpython/datacatalog/tree.py:1467
 msgid "New name"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1118
+#: ../gui/wxpython/datacatalog/tree.py:1115
 msgid "Rename map"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1283
+#: ../gui/wxpython/datacatalog/tree.py:1280
 msgid "Cannot rename mapset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1296
+#: ../gui/wxpython/datacatalog/tree.py:1293
 #, python-brace-format
 msgid "Renaming mapset <{oldmapset}> to <{newmapset}> completed"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1308
+#: ../gui/wxpython/datacatalog/tree.py:1305
 msgid "Cannot rename location"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1320
+#: ../gui/wxpython/datacatalog/tree.py:1317
 #, python-brace-format
 msgid "Renaming project <{oldlocation}> to <{newlocation}> completed"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1332
+#: ../gui/wxpython/datacatalog/tree.py:1329
 #, python-brace-format
 msgid "Renaming map <{name}>..."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1342
+#: ../gui/wxpython/datacatalog/tree.py:1339
 #, python-brace-format
 msgid "{cmd} -- completed"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1358
+#: ../gui/wxpython/datacatalog/tree.py:1355
 msgid "No map selected for copying."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1360
+#: ../gui/wxpython/datacatalog/tree.py:1357
 msgid "No map selected for moving."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1382
-#: ../gui/wxpython/datacatalog/tree.py:1401
+#: ../gui/wxpython/datacatalog/tree.py:1379
+#: ../gui/wxpython/datacatalog/tree.py:1398
 #, python-brace-format
 msgid "New name for <{n}>"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1385
-#: ../gui/wxpython/datacatalog/tree.py:1404
-#: ../gui/wxpython/datacatalog/tree.py:1471
+#: ../gui/wxpython/datacatalog/tree.py:1382
+#: ../gui/wxpython/datacatalog/tree.py:1401
+#: ../gui/wxpython/datacatalog/tree.py:1468
 msgid "Select new name"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1422
+#: ../gui/wxpython/datacatalog/tree.py:1419
 #, python-brace-format
 msgid "Copying <{name}>..."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1424
+#: ../gui/wxpython/datacatalog/tree.py:1421
 #, python-brace-format
 msgid "Moving <{name}>..."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1438
+#: ../gui/wxpython/datacatalog/tree.py:1435
 msgid "Copying completed"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1444
+#: ../gui/wxpython/datacatalog/tree.py:1441
 msgid "Moving completed"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1460
+#: ../gui/wxpython/datacatalog/tree.py:1457
 msgid "Reprojection is not implemented for 3D rasters"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1541
-#: ../gui/wxpython/datacatalog/tree.py:1661
+#: ../gui/wxpython/datacatalog/tree.py:1538
+#: ../gui/wxpython/datacatalog/tree.py:1658
 msgid "g.remove completed"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1625
+#: ../gui/wxpython/datacatalog/tree.py:1622
 #, python-brace-format
 msgid "Do you really want to delete map(s) <{m}>?"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1629
+#: ../gui/wxpython/datacatalog/tree.py:1626
 #, python-brace-format
 msgid "Do you really want to delete {n} maps?"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1630
+#: ../gui/wxpython/datacatalog/tree.py:1627
 msgid "Delete map"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1631
+#: ../gui/wxpython/datacatalog/tree.py:1628
 #, python-brace-format
 msgid "Deleting {name}..."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1822
+#: ../gui/wxpython/datacatalog/tree.py:1819
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1836
+#: ../gui/wxpython/datacatalog/tree.py:1833
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2216
+#: ../gui/wxpython/datacatalog/tree.py:2213
 msgid "&Cut"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2222 ../gui/wxpython/history/tree.py:219
+#: ../gui/wxpython/datacatalog/tree.py:2219 ../gui/wxpython/history/tree.py:219
 msgid "&Copy"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2226
+#: ../gui/wxpython/datacatalog/tree.py:2223
 msgid "Copy &name"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2230
-#: ../gui/wxpython/datacatalog/tree.py:2273
-#: ../gui/wxpython/datacatalog/tree.py:2416
+#: ../gui/wxpython/datacatalog/tree.py:2227
+#: ../gui/wxpython/datacatalog/tree.py:2270
+#: ../gui/wxpython/datacatalog/tree.py:2413
 msgid "&Paste"
 msgstr ""
 
 #. GTC Delete mapset
-#: ../gui/wxpython/datacatalog/tree.py:2236
+#: ../gui/wxpython/datacatalog/tree.py:2233
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:242
 msgid "&Delete"
 msgstr ""
 
 #. GTC Rename mapset
-#: ../gui/wxpython/datacatalog/tree.py:2241 ../gui/wxpython/dbmgr/base.py:2490
+#: ../gui/wxpython/datacatalog/tree.py:2238 ../gui/wxpython/dbmgr/base.py:2490
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:235
 msgid "&Rename"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2254
+#: ../gui/wxpython/datacatalog/tree.py:2251
 msgid "&Display layers"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2256
+#: ../gui/wxpython/datacatalog/tree.py:2253
 msgid "&Display layer"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2260
+#: ../gui/wxpython/datacatalog/tree.py:2257
 msgid "Show &metadata"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2279
+#: ../gui/wxpython/datacatalog/tree.py:2276
 msgid "&Switch mapset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2289
+#: ../gui/wxpython/datacatalog/tree.py:2286
 msgid "&Delete mapset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2295
+#: ../gui/wxpython/datacatalog/tree.py:2292
 msgid "&Rename mapset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2301
-#: ../gui/wxpython/datacatalog/tree.py:2337
-#: ../gui/wxpython/datacatalog/tree.py:2406
+#: ../gui/wxpython/datacatalog/tree.py:2298
+#: ../gui/wxpython/datacatalog/tree.py:2334
+#: ../gui/wxpython/datacatalog/tree.py:2403
 msgid "Re&load maps"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2306
+#: ../gui/wxpython/datacatalog/tree.py:2303
 msgid "Show computational region"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2310
+#: ../gui/wxpython/datacatalog/tree.py:2307
 msgid "&Copy path"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2321
+#: ../gui/wxpython/datacatalog/tree.py:2318
 msgid "&Create mapset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2325
+#: ../gui/wxpython/datacatalog/tree.py:2322
 msgid "&Delete project"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2331
+#: ../gui/wxpython/datacatalog/tree.py:2328
 msgid "&Rename project"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2342
+#: ../gui/wxpython/datacatalog/tree.py:2339
 msgid "Show projection info"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2346
-#: ../gui/wxpython/datacatalog/tree.py:2372
+#: ../gui/wxpython/datacatalog/tree.py:2343
+#: ../gui/wxpython/datacatalog/tree.py:2369
 msgid "Copy path"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2365
+#: ../gui/wxpython/datacatalog/tree.py:2362
 msgid "Change Label"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2365
+#: ../gui/wxpython/datacatalog/tree.py:2362
 msgid "Set Label"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2378
-#: ../gui/wxpython/datacatalog/tree.py:2482
+#: ../gui/wxpython/datacatalog/tree.py:2375
+#: ../gui/wxpython/datacatalog/tree.py:2479
 msgid "Remove Label"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2384
+#: ../gui/wxpython/datacatalog/tree.py:2381
 msgid "&Create new project (location)"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2388
+#: ../gui/wxpython/datacatalog/tree.py:2385
 msgid "&Download sample project (location)"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2393
+#: ../gui/wxpython/datacatalog/tree.py:2390
 msgid "&Remove GRASS database from data catalog"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2400
+#: ../gui/wxpython/datacatalog/tree.py:2397
 msgid "&Delete GRASS database from disk"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2430
+#: ../gui/wxpython/datacatalog/tree.py:2427
 msgid "&Delete projects (locations)"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2436
-#: ../gui/wxpython/datacatalog/tree.py:2446
+#: ../gui/wxpython/datacatalog/tree.py:2433
+#: ../gui/wxpython/datacatalog/tree.py:2443
 msgid "Copy paths"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2455
+#: ../gui/wxpython/datacatalog/tree.py:2452
 msgid "&Delete mapsets"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2461
+#: ../gui/wxpython/datacatalog/tree.py:2458
 msgid "&Copy paths"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2479
+#: ../gui/wxpython/datacatalog/tree.py:2476
 #, python-brace-format
 msgid "Remove label '{label}' for this database?"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2501 ../gui/wxpython/history/tree.py:233
+#: ../gui/wxpython/datacatalog/tree.py:2498 ../gui/wxpython/history/tree.py:233
 msgid "No available options"
 msgstr ""
 
@@ -2265,8 +2265,8 @@ msgstr ""
 msgid "Data length"
 msgstr ""
 
-#: ../gui/wxpython/dbmgr/base.py:2993 ../gui/wxpython/gmodeler/panels.py:1351
-#: ../gui/wxpython/gmodeler/panels.py:1407
+#: ../gui/wxpython/dbmgr/base.py:2993 ../gui/wxpython/gmodeler/panels.py:1365
+#: ../gui/wxpython/gmodeler/panels.py:1421
 msgid "Data type"
 msgstr ""
 
@@ -2660,7 +2660,7 @@ msgstr ""
 msgid "Map type to georectify"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:406 ../gui/wxpython/gmodeler/panels.py:1368
+#: ../gui/wxpython/gcp/manager.py:406 ../gui/wxpython/gmodeler/panels.py:1382
 #: ../gui/wxpython/gui_core/dialogs.py:1487
 #: ../gui/wxpython/gui_core/dialogs.py:1728
 #: ../gui/wxpython/image2target/ii2t_manager.py:424
@@ -2668,7 +2668,7 @@ msgstr ""
 msgid "raster"
 msgstr ""
 
-#: ../gui/wxpython/gcp/manager.py:406 ../gui/wxpython/gmodeler/panels.py:1369
+#: ../gui/wxpython/gcp/manager.py:406 ../gui/wxpython/gmodeler/panels.py:1383
 #: ../gui/wxpython/gui_core/dialogs.py:1487
 #: ../gui/wxpython/image2target/ii2t_manager.py:424
 #: ../gui/wxpython/psmap/dialogs.py:1033
@@ -3269,7 +3269,8 @@ msgstr ""
 msgid "Nothing to render (empty map). Operation canceled."
 msgstr ""
 
-#: ../gui/wxpython/gcp/mapdisplay.py:461 ../gui/wxpython/gmodeler/panels.py:994
+#: ../gui/wxpython/gcp/mapdisplay.py:461
+#: ../gui/wxpython/gmodeler/panels.py:1008
 #: ../gui/wxpython/image2target/ii2t_mapdisplay.py:451
 #: ../gui/wxpython/mapdisp/frame.py:757 ../gui/wxpython/mapswipe/frame.py:612
 #: ../gui/wxpython/modules/histogram.py:475
@@ -3429,53 +3430,53 @@ msgstr ""
 msgid "Update GCP coordinates)"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/canvas.py:325
+#: ../gui/wxpython/gmodeler/canvas.py:326
 msgid "Disable"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/canvas.py:328
+#: ../gui/wxpython/gmodeler/canvas.py:329
 msgid "Enable"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/canvas.py:333
-#: ../gui/wxpython/gmodeler/canvas.py:407
+#: ../gui/wxpython/gmodeler/canvas.py:334
+#: ../gui/wxpython/gmodeler/canvas.py:408
 msgid "Set label"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/canvas.py:336
-#: ../gui/wxpython/gmodeler/canvas.py:423
+#: ../gui/wxpython/gmodeler/canvas.py:337
+#: ../gui/wxpython/gmodeler/canvas.py:424
 msgid "Set comment"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/canvas.py:341
+#: ../gui/wxpython/gmodeler/canvas.py:342
 msgid "Add control point"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/canvas.py:343
+#: ../gui/wxpython/gmodeler/canvas.py:344
 msgid "Remove control point"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/canvas.py:357
+#: ../gui/wxpython/gmodeler/canvas.py:358
 msgid "Intermediate"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/canvas.py:368 ../gui/wxpython/nviz/tools.py:1652
+#: ../gui/wxpython/gmodeler/canvas.py:369 ../gui/wxpython/nviz/tools.py:1652
 #: ../gui/wxpython/nviz/tools.py:1867 ../gui/wxpython/vdigit/preferences.py:136
 msgid "Display"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/canvas.py:382 ../gui/wxpython/lmgr/layertree.py:512
+#: ../gui/wxpython/gmodeler/canvas.py:383 ../gui/wxpython/lmgr/layertree.py:512
 msgid "Properties"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/canvas.py:406
+#: ../gui/wxpython/gmodeler/canvas.py:407
 #: ../gui/wxpython/gmodeler/dialogs.py:252
 msgid "Label:"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/canvas.py:422
+#: ../gui/wxpython/gmodeler/canvas.py:423
 #: ../gui/wxpython/gmodeler/dialogs.py:258
-#: ../gui/wxpython/gmodeler/panels.py:1151
+#: ../gui/wxpython/gmodeler/panels.py:1165
 msgid "Comment:"
 msgstr ""
 
@@ -3510,7 +3511,7 @@ msgstr ""
 #: ../gui/wxpython/gmodeler/dialogs.py:206
 #: ../gui/wxpython/gmodeler/dialogs.py:539
 #: ../gui/wxpython/gmodeler/dialogs.py:668
-#: ../gui/wxpython/gmodeler/panels.py:1505
+#: ../gui/wxpython/gmodeler/panels.py:1519
 #: ../gui/wxpython/gmodeler/preferences.py:136
 msgid "Command"
 msgstr ""
@@ -3579,7 +3580,7 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/dialogs.py:539
 #: ../gui/wxpython/gmodeler/dialogs.py:668
-#: ../gui/wxpython/gmodeler/panels.py:1505
+#: ../gui/wxpython/gmodeler/panels.py:1519
 #: ../gui/wxpython/psmap/dialogs.py:3643
 msgid "Label"
 msgstr ""
@@ -3661,7 +3662,7 @@ msgid "Delete intermediate data when finish"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/dialogs.py:1212
-#: ../gui/wxpython/gmodeler/panels.py:1598
+#: ../gui/wxpython/gmodeler/panels.py:1612
 #: ../gui/wxpython/gui_core/forms.py:602
 #: ../gui/wxpython/modules/mcalc_builder.py:170
 msgid "&Run"
@@ -3690,25 +3691,25 @@ msgstr ""
 msgid "Script generated by wxGUI Graphical Modeler."
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/model.py:505 ../gui/wxpython/gmodeler/model.py:565
+#: ../gui/wxpython/gmodeler/model.py:508 ../gui/wxpython/gmodeler/model.py:572
 #, python-format
 msgid "undefined variable '%s'"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/model.py:594
+#: ../gui/wxpython/gmodeler/model.py:601
 msgid "Running model..."
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/model.py:615
+#: ../gui/wxpython/gmodeler/model.py:622
 msgid "Model is empty. Nothing to run."
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/model.py:624
-#: ../gui/wxpython/gmodeler/panels.py:1270
+#: ../gui/wxpython/gmodeler/model.py:631
+#: ../gui/wxpython/gmodeler/panels.py:1284
 msgid "Validating model..."
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/model.py:632
+#: ../gui/wxpython/gmodeler/model.py:639
 #, python-format
 msgid ""
 "Model is not valid. Do you want to run the model anyway?\n"
@@ -3716,53 +3717,53 @@ msgid ""
 "%s"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/model.py:635
+#: ../gui/wxpython/gmodeler/model.py:642
 msgid "Run model?"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/model.py:673
+#: ../gui/wxpython/gmodeler/model.py:680
 msgid "Variables below not defined:"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/model.py:784
+#: ../gui/wxpython/gmodeler/model.py:795
 msgid "Raster maps"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/model.py:787
+#: ../gui/wxpython/gmodeler/model.py:798
 msgid "3D raster maps"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/model.py:790 ../gui/wxpython/psmap/dialogs.py:1792
+#: ../gui/wxpython/gmodeler/model.py:801 ../gui/wxpython/psmap/dialogs.py:1792
 msgid "Vector maps"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/model.py:885
+#: ../gui/wxpython/gmodeler/model.py:896
 msgid "empty"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/model.py:886
+#: ../gui/wxpython/gmodeler/model.py:897
 #, python-brace-format
 msgid "Details: unsupported tag name '{0}'."
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/model_convert.py:233
+#: ../gui/wxpython/gmodeler/model_convert.py:234
 #, python-brace-format
 msgid "Module {task_name} in your model contains parameterized flags. Actinia does not support parameterized flags. The following flags are therefore not being written in the generated JSON: {flags}"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/model_items.py:673
+#: ../gui/wxpython/gmodeler/model_items.py:674
 msgid "<not defined>"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/model_items.py:865
+#: ../gui/wxpython/gmodeler/model_items.py:885
 msgid "Condition: "
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/model_items.py:866
+#: ../gui/wxpython/gmodeler/model_items.py:886
 msgid "Condition: not defined"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/model_items.py:1003
+#: ../gui/wxpython/gmodeler/model_items.py:1023
 msgid "if-else"
 msgstr ""
 
@@ -3788,8 +3789,8 @@ msgid "{} script contains local modifications"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/panels.py:281
-#: ../gui/wxpython/gmodeler/panels.py:1819
-#: ../gui/wxpython/gmodeler/panels.py:1838
+#: ../gui/wxpython/gmodeler/panels.py:1867
+#: ../gui/wxpython/gmodeler/panels.py:1886
 msgid "{} script is up-to-date"
 msgstr ""
 
@@ -3802,7 +3803,7 @@ msgstr ""
 msgid "%d intermediate maps deleted from current mapset"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:603
+#: ../gui/wxpython/gmodeler/panels.py:617
 #, python-format
 msgid ""
 "Reading model file <%s> failed.\n"
@@ -3811,100 +3812,100 @@ msgid ""
 "%s"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:615
+#: ../gui/wxpython/gmodeler/panels.py:629
 msgid "Please wait, loading model..."
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:679
+#: ../gui/wxpython/gmodeler/panels.py:693
 msgid "Writing current settings to model file failed."
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:689 ../gui/wxpython/lmgr/workspace.py:455
+#: ../gui/wxpython/gmodeler/panels.py:703 ../gui/wxpython/lmgr/workspace.py:455
 #, python-format
 msgid "Unable to open file <%s> for writing."
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:797
-#: ../gui/wxpython/gmodeler/panels.py:938
+#: ../gui/wxpython/gmodeler/panels.py:811
+#: ../gui/wxpython/gmodeler/panels.py:952
 msgid "Current model is not empty. Do you want to store current settings to model file?"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:801
-#: ../gui/wxpython/gmodeler/panels.py:942
+#: ../gui/wxpython/gmodeler/panels.py:815
+#: ../gui/wxpython/gmodeler/panels.py:956
 msgid "Create new model?"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:830
+#: ../gui/wxpython/gmodeler/panels.py:844
 msgid "Choose model file"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:832
-#: ../gui/wxpython/gmodeler/panels.py:890 ../gui/wxpython/lmgr/frame.py:848
+#: ../gui/wxpython/gmodeler/panels.py:846
+#: ../gui/wxpython/gmodeler/panels.py:904 ../gui/wxpython/lmgr/frame.py:848
 #: ../gui/wxpython/main_window/frame.py:976
 msgid "GRASS Model File (*.gxm)|*.gxm"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:850
+#: ../gui/wxpython/gmodeler/panels.py:864
 #, python-format
 msgid "%(items)d items (%(actions)d actions) loaded into model"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:864
-#: ../gui/wxpython/gmodeler/panels.py:908
+#: ../gui/wxpython/gmodeler/panels.py:878
+#: ../gui/wxpython/gmodeler/panels.py:922
 #, python-format
 msgid "Model file <%s> already exists. Do you want to overwrite this file?"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:868
+#: ../gui/wxpython/gmodeler/panels.py:882
 msgid "Save model"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:876
-#: ../gui/wxpython/gmodeler/panels.py:924
+#: ../gui/wxpython/gmodeler/panels.py:890
+#: ../gui/wxpython/gmodeler/panels.py:938
 #, python-format
 msgid "File <%s> saved"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:888
+#: ../gui/wxpython/gmodeler/panels.py:902
 msgid "Choose file to save current model"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:912 ../gui/wxpython/iclass/frame.py:1264
+#: ../gui/wxpython/gmodeler/panels.py:926 ../gui/wxpython/iclass/frame.py:1264
 msgid "File already exists"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1022
-#: ../gui/wxpython/gmodeler/panels.py:1046
+#: ../gui/wxpython/gmodeler/panels.py:1036
+#: ../gui/wxpython/gmodeler/panels.py:1060
 #, python-format
 msgid "Model exported to <%s>"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1152
+#: ../gui/wxpython/gmodeler/panels.py:1166
 msgid "Add comment"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1160
+#: ../gui/wxpython/gmodeler/panels.py:1174
 msgid "Empty comment. Nothing to add to the model."
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1249
+#: ../gui/wxpython/gmodeler/panels.py:1263
 msgid "No intermediate data to delete."
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1254
+#: ../gui/wxpython/gmodeler/panels.py:1268
 #, python-format
 msgid "Do you want to permanently delete data?%s"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1255
+#: ../gui/wxpython/gmodeler/panels.py:1269
 msgid "Delete intermediate data?"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1267
+#: ../gui/wxpython/gmodeler/panels.py:1281
 msgid "Model is empty. Nothing to validate."
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1276
+#: ../gui/wxpython/gmodeler/panels.py:1290
 #, python-format
 msgid ""
 "Model is not valid.\n"
@@ -3912,41 +3913,41 @@ msgid ""
 "%s"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1279
+#: ../gui/wxpython/gmodeler/panels.py:1293
 msgid "Model is valid."
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1287
+#: ../gui/wxpython/gmodeler/panels.py:1301
 msgid "wxGUI Graphical Modeler"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1291
+#: ../gui/wxpython/gmodeler/panels.py:1305
 msgid "Redrawing model..."
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1305
+#: ../gui/wxpython/gmodeler/panels.py:1319
 msgid "Do you want to save changes in the model?"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1308
+#: ../gui/wxpython/gmodeler/panels.py:1322
 msgid "Do you want to store current model settings to model file?"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1315
+#: ../gui/wxpython/gmodeler/panels.py:1329
 msgid "Quit Graphical Modeler"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1346
+#: ../gui/wxpython/gmodeler/panels.py:1360
 msgid "List of variables - right-click to delete"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1351
-#: ../gui/wxpython/gmodeler/panels.py:1413
+#: ../gui/wxpython/gmodeler/panels.py:1365
+#: ../gui/wxpython/gmodeler/panels.py:1427
 msgid "Default value"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1351
-#: ../gui/wxpython/gmodeler/panels.py:1419
+#: ../gui/wxpython/gmodeler/panels.py:1365
+#: ../gui/wxpython/gmodeler/panels.py:1433
 #: ../gui/wxpython/location_wizard/wizard.py:253
 #: ../gui/wxpython/location_wizard/wizard.py:535
 #: ../gui/wxpython/location_wizard/wizard.py:1075
@@ -3956,144 +3957,144 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1351
-#: ../gui/wxpython/gmodeler/panels.py:1401
+#: ../gui/wxpython/gmodeler/panels.py:1365
+#: ../gui/wxpython/gmodeler/panels.py:1415
 #: ../gui/wxpython/gui_core/ghelp.py:439 ../gui/wxpython/gui_core/ghelp.py:442
 #: ../gui/wxpython/gui_core/ghelp.py:514
 #: ../gui/wxpython/location_wizard/wizard.py:231
 msgid "Name"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1357
+#: ../gui/wxpython/gmodeler/panels.py:1371
 msgid "Add new variable"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1365
+#: ../gui/wxpython/gmodeler/panels.py:1379
 msgid "integer"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1366
+#: ../gui/wxpython/gmodeler/panels.py:1380
 msgid "float"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1367
+#: ../gui/wxpython/gmodeler/panels.py:1381
 msgid "string"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1370
+#: ../gui/wxpython/gmodeler/panels.py:1384
 msgid "region"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1371
+#: ../gui/wxpython/gmodeler/panels.py:1385
 msgid "mapset"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1372
+#: ../gui/wxpython/gmodeler/panels.py:1386
 #: ../gui/wxpython/gui_core/forms.py:2399
 msgid "file"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1373
+#: ../gui/wxpython/gmodeler/panels.py:1387
 msgid "dir"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1382
+#: ../gui/wxpython/gmodeler/panels.py:1396
 msgid "Add new variable to the model"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1500
+#: ../gui/wxpython/gmodeler/panels.py:1514
 msgid "List of items - right-click to delete"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1505
+#: ../gui/wxpython/gmodeler/panels.py:1519
 msgid "In loop"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1505
+#: ../gui/wxpython/gmodeler/panels.py:1519
 msgid "Parameterized"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1553
+#: ../gui/wxpython/gmodeler/panels.py:1567
 msgid "No items to selected."
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1592
+#: ../gui/wxpython/gmodeler/panels.py:1606
 msgid "Python script"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1599
-#: ../gui/wxpython/gmodeler/panels.py:1827
+#: ../gui/wxpython/gmodeler/panels.py:1613
+#: ../gui/wxpython/gmodeler/panels.py:1875
 msgid "Run script"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1602
+#: ../gui/wxpython/gmodeler/panels.py:1616
 msgid "Save the script to a file"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1607
+#: ../gui/wxpython/gmodeler/panels.py:1621
 msgid ""
 "Refresh the script based on the model.\n"
 "It will discard all local changes."
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1615
+#: ../gui/wxpython/gmodeler/panels.py:1629
 #: ../gui/wxpython/gui_core/preferences.py:443
 #: ../gui/wxpython/lmgr/frame.py:650 ../gui/wxpython/main_window/frame.py:721
 msgid "Python"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1616
+#: ../gui/wxpython/gmodeler/panels.py:1630
 msgid "PyWPS"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1617
+#: ../gui/wxpython/gmodeler/panels.py:1631
 msgid "actinia"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1638
+#: ../gui/wxpython/gmodeler/panels.py:1652
 msgid "Python script type:"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1688
+#: ../gui/wxpython/gmodeler/panels.py:1702
 msgid "{} script is locally modified. Refresh will discard all changes. Do you really want to continue?"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1692
+#: ../gui/wxpython/gmodeler/panels.py:1706
 msgid "Update"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1729
+#: ../gui/wxpython/gmodeler/panels.py:1743
 #: ../gui/wxpython/gui_core/pyedit.py:401
 #: ../gui/wxpython/gui_core/pyedit.py:472
 msgid "Python script (*.py)|*.py"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1731
+#: ../gui/wxpython/gmodeler/panels.py:1745
 msgid "JSON file (*.json)|*.json"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1735
+#: ../gui/wxpython/gmodeler/panels.py:1749
 #: ../gui/wxpython/gui_core/pyedit.py:399
 msgid "Choose file to save"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1756
+#: ../gui/wxpython/gmodeler/panels.py:1770
 #: ../gui/wxpython/gui_core/pyedit.py:419 ../gui/wxpython/wxplot/profile.py:427
 #, python-format
 msgid "File <%s> already exists. Do you want to overwrite this file?"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1759
+#: ../gui/wxpython/gmodeler/panels.py:1773
 #: ../gui/wxpython/gui_core/pyedit.py:422
 msgid "Save file"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1783
+#: ../gui/wxpython/gmodeler/panels.py:1797
 #, python-format
 msgid "Unable to launch Python script. %s"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/panels.py:1831
+#: ../gui/wxpython/gmodeler/panels.py:1879
 msgid "Run script - enabled only for basic Python scripts"
 msgstr ""
 

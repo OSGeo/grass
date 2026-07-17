@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-23 16:07+0000\n"
+"POT-Creation-Date: 2026-06-27 15:58+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Latvian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/lv/>\n"
@@ -822,6 +822,11 @@ msgstr ""
 #, fuzzy
 msgid "PyGRASS"
 msgstr "Iziet no GRASS"
+
+#, fuzzy
+#| msgid "GRASS help"
+msgid "GRASS Tools"
+msgstr "GRASS palīdzība"
 
 #, fuzzy, python-brace-format
 msgid ""
@@ -11666,9 +11671,6 @@ msgstr ""
 #, python-format
 #~ msgid "GRASS GIS %s Startup%s"
 #~ msgstr "GRASS GIS %s palaišana %s"
-
-#~ msgid "GRASS help"
-#~ msgstr "GRASS palīdzība"
 
 #~ msgid "GRASS working environment"
 #~ msgstr "GRASS darba vide"

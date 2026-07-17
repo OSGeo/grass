@@ -515,7 +515,7 @@ class RegionManager:
 
     def __init__(self, env: dict[str, str] | None = None, **kwargs):
         """
-        Initializes the MaskManager.
+        Initializes the RegionManager.
 
         :param env: Environment to use.
                     Defaults to modifying :external:py:data:`os.environ`.
@@ -603,7 +603,7 @@ class RegionManagerEnv:
     This is identical to:
 
     >>> with gs.RegionManagerEnv() as manager:
-            manager.env["GRASS_REGION"] = gs.region_env()
+    ...     manager.env["GRASS_REGION"] = gs.region_env()
     ...     gs.parse_command("r.univar", map="elevation", format="json")
 
 
@@ -625,7 +625,7 @@ class RegionManagerEnv:
 
     def __init__(self, env: dict[str, str] | None = None, **kwargs):
         """
-        Initializes the MaskManager.
+        Initializes the RegionManagerEnv.
 
         :param env: Environment to use.
                     Defaults to modifying :external:py:data:`os.environ`.
@@ -658,7 +658,7 @@ class RegionManagerEnv:
     def deactivate(self):
         """Restore the previous region state.
 
-        Restores the original value of `WIND_OVERRIDE`.
+        Restores the original value of `GRASS_REGION`.
 
         :param exc_type: Exception type, if any.
         :param exc_val: Exception value, if any.

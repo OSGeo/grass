@@ -53,7 +53,7 @@ repos:
       - id: detect-private-key
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
-    rev: v0.15.15
+    rev: v0.15.17
     hooks:
       # Run the linter.
       - id: ruff-check
@@ -64,6 +64,20 @@ repos:
     rev: v0.48.0
     hooks:
       - id: markdownlint-fix
+  - repo: https://github.com/BlankSpruce/gersemi-pre-commit
+    rev: 0.27.7
+    hooks:
+      - id: gersemi
+        args:
+          - "--in-place"
+          - "--safe"
+          - "--definitions"
+          - "cmake/"
+          - "--warn-about-unknown-commands" # Need an argument/flag after the --definitions list
+        exclude: |
+          (?x)^(
+              include\/config\.h\.cmake\.in
+          )$
   - repo: https://github.com/pycqa/flake8
     rev: 7.3.0
     hooks:
@@ -75,7 +89,7 @@ repos:
                 .*/testsuite/.*
           )
   - repo: https://github.com/pre-commit/mirrors-clang-format
-    rev: v21.1.8
+    rev: v22.1.5
     hooks:
       - id: clang-format
         types_or: [c, c++, javascript, json, objective-c]

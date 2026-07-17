@@ -1,16 +1,25 @@
 ---
 name: CMake
 
+# Documentation content under doc/ does not affect this build, only the
+# CMakeLists.txt files there do, so they are added back after the doc/**
+# exclusion (later patterns take precedence).
 on:
   push:
-    paths-ignore:
-      - "doc/**"
+    paths:
+      - "**"
+      - "!doc/**"
+      - "doc/CMakeLists.txt"
+      - "doc/**/CMakeLists.txt"
     branches:
       - main
       - releasebranch_*
   pull_request:
-    paths-ignore:
-      - "doc/**"
+    paths:
+      - "**"
+      - "!doc/**"
+      - "doc/CMakeLists.txt"
+      - "doc/**/CMakeLists.txt"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
@@ -29,7 +38,7 @@ jobs:
       CMAKE_VERSION: "3.22.0"
     steps:
       - name: Checkout GRASS
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
       - name: Install CMake
