@@ -472,7 +472,8 @@ class RasterDataset(AbstractMapDataset):
         :param str semantic_label: semantic label (eg. S2_1)
         """
         self.metadata.set_semantic_label(semantic_label)
-        self.write_semantic_label_to_grass()
+        if not self.get_readonly():
+            self.write_semantic_label_to_grass()
 
 
 ###############################################################################
