@@ -198,8 +198,7 @@ class CmdThread(threading.Thread):
                     group="rasterLayer", key="colorTable", subkey="selection"
                 )
                 mapName = None
-                modules_to_exempt = {"r.mapcalc", "r.shade"}
-                if args[0][0] in modules_to_exempt:
+                if args[0][0] == "r.mapcalc":
                     try:
                         mapName = args[0][1].split("=", 1)[0].strip()
                     except (IndexError, AttributeError):
