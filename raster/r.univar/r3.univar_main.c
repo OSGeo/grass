@@ -4,15 +4,12 @@
  *  Calculates univariate statistics from the non-null 3d cells of a raster3d
  *  map
  *
- *   Copyright (C) 2004-2007 by the GRASS Development Team
+ *   SPDX-FileCopyrightText: 2004-2007 Other GRASS authors
+ *   SPDX-License-Identifier: GPL-2.0-or-later
  *   Author(s): Soeren Gebbert
  *              Based on r.univar from Hamish Bowman, University of Otago, New
  *              Zealand and Martin Landa heapsort code from
  *              http://de.wikipedia.org/wiki/Heapsort Zonal stats: Markus Metz
- *
- *      This program is free software under the GNU General Public
- *      License (>=v2). Read the file COPYING that comes with GRASS
- *      for details.
  *
  */
 

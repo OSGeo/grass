@@ -1,12 +1,11 @@
 /*
  * r.in.pdal Functions performing value updates on each incoming point
  *            during point binning process
- *   Copyright 2006 by M. Hamish Bowman, and the GRASS Development Team
+ *   SPDX-FileCopyrightText: 2006 M. Hamish Bowman
+ *   SPDX-FileCopyrightText: Other GRASS authors
+ *   SPDX-License-Identifier: GPL-2.0-or-later
  *   Author: M. Hamish Bowman, University of Otago, Dunedin, New Zealand
  *     Maris Nartiss code refactoring for r.in.pdal
- *
- *   This program is free software licensed under the GPL (>=v2).
- *   Read the COPYING file that comes with GRASS for details.
  *
  */
 

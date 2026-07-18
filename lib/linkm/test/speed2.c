@@ -2,7 +2,9 @@
 /*
  **  Written by David Gerdes  US Army Construction Engineering Research Lab
  **     April 1992
- **  Copyright 1992 USA-CERL   All rights reserved.
+ **  SPDX-FileCopyrightText: 1992 USA-CERL
+ **  SPDX-FileCopyrightText: Other GRASS authors
+ **  SPDX-License-Identifier: GPL-2.0-or-later
  **
  */
 

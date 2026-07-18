@@ -4,14 +4,13 @@
  *   Calculates univariate statistics from the non-null cells of a GRASS
  *   raster map
  *
- *   Copyright 2006-2014 by M. Hamish Bowman, and the GRASS Development Team
+ *   SPDX-FileCopyrightText: 2006-2014 M. Hamish Bowman
+ *   SPDX-FileCopyrightText: Other GRASS authors
+ *   SPDX-License-Identifier: GPL-2.0-or-later
  *   Author: M. Hamish Bowman, University of Otago, Dunedin, New Zealand
  *
  *   Extended 2007 by Volker Wichmann to support the aggregate functions
  *   median, percentile, skewness and trimmed mean
- *
- *   This program is free software licensed under the GPL (>=v2).
- *   Read the COPYING file that comes with GRASS for details.
  *
  *   This program is intended as a replacement for the GRASS 5 s.cellstats
  *   module.
