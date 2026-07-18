@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-27 15:58+0000\n"
-"PO-Revision-Date: 2026-06-30 19:18+0000\n"
+"PO-Revision-Date: 2026-07-05 13:12+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grassmods/fr/>\n"
 "Language: fr\n"
@@ -2152,6 +2152,8 @@ msgid ""
 "  Distance to the network = %f, distance from the network = %f\n"
 "\n"
 msgstr ""
+"  Distance au réseau = %f, distance du réseau = %f\n"
+"\n"
 
 #, c-format
 msgid "Unable to read range for %s"
@@ -18700,10 +18702,9 @@ msgstr "La région de calculs est trop grande!"
 msgid "Smoothed map"
 msgstr "Carte lissée"
 
-#, fuzzy, c-format
-#| msgid "Unable to open temporary file <%s>: %s"
+#, c-format
 msgid "Seek error on temp file. %d: %s"
-msgstr "Impossible d'ouvrir le fichier temporaire <%s> : %s"
+msgstr "Erreur de positionnement dans le fichier temporaire. %d: %s"
 
 #, c-format
 msgid "There was an error reading data from a temporary file. %d: %s"
@@ -20986,9 +20987,8 @@ msgstr ""
 msgid "rows=%d, cols=%d, total = %lld"
 msgstr ""
 
-#, fuzzy
 msgid "Sweep timings:"
-msgstr "Paramètres"
+msgstr "Durées des balayages :"
 
 msgid "Running the program in-memory mode requires memory beyond the capability of the platform. Use external mode, or a 64-bit platform."
 msgstr ""
@@ -31160,10 +31160,9 @@ msgid_plural "%d boundaries snapped"
 msgstr[0] ""
 msgstr[1] ""
 
-#, fuzzy, c-format
-#| msgid "Reading raster map <%s>..."
+#, c-format
 msgid "Removing areas smaller than %g sqm..."
-msgstr "Lecture de la carte raster <%s> ..."
+msgstr "Suppression des surfaces inférieures à %g m²..."
 
 #, c-format
 msgid "Querying vector map <%s>..."
