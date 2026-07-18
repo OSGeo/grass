@@ -4,29 +4,11 @@ r.sun: This program was written by Jaro Hofierka in Summer 1993 and
  from JRC in Ispra a new version of r.sun was prepared using ESRA solar
  radiation formulas.
 See manual pages for details.
-(C) 2002 Copyright Jaro Hofierka, Gresaka 22, 085 01 Bardejov, Slovakia,
-              and GeoModel, s.r.o., Bratislava, Slovakia
-email: hofierka@geomodel.sk,marcel.suri@jrc.it,
-       suri@geomodel.sk Thomas.Huld@jrc.it
-(c) 2003-2013 by the GRASS Development Team
+SPDX-FileCopyrightText: 2002 Jaro Hofierka
+SPDX-FileCopyrightText: 2002 GeoModel, s.r.o.
+SPDX-FileCopyrightText: Other GRASS authors
+SPDX-License-Identifier: GPL-2.0-or-later
 ******************************************************************************/
-/*
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the
- *   Free Software Foundation, Inc.,
- *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- */
-
 /*v. 2.0 July 2002, NULL data handling, JH */
 /*v. 2.1 January 2003, code optimization by Thomas Huld, JH */
 /*v. 3.0 February 2006, several changes (shadowing algorithm, earth's curvature
