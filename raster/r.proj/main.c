@@ -391,6 +391,60 @@ static int phase1_fits(const struct Cell_head *ohd, const struct Cell_head *ihd,
     return strip_bytes + out_bytes <= cap_bytes;
 }
 
+/* Serial tile-cache fallback for the large-halo/oblique corner: when even a
+ * single output row's full-width input strip busts the memory cap (the bail in
+ * the band loop), the banded strip path cannot proceed. This finishes the run
+ * from output row obr0 onward using the classic readcell block cache (faults
+ * blocks on demand, bounded by the same memory option via nblocks) and the
+ * CVAL cache kernels (menu[].method), exactly as the serial r.proj does.
+ *
+ * Runs strictly serially: get_block mutates shared cache state and is not
+ * thread-safe. Rows [0, obr0) were already written by the banded path; each
+ * output row is independent of the others, so the banded prefix followed by
+ * this serial suffix is bit-identical to a pure serial run. y_center supplies
+ * the same output-row northings the banded prefix used (and that serial's
+ * ycoord2 recurrence produces), so the seam at obr0 is seamless. A transform
+ * failure sets NULL here (matching the banded strip path) rather than the old
+ * serial fatal; identical on data where transforms succeed. */
+static void
+fallback_serial_cache(int fdi, int fdo, int cell_type, int method,
+                      const struct pj_info *oproj, const struct pj_info *iproj,
+                      const struct pj_info *tproj, struct Cell_head *incellhd,
+                      struct Cell_head *outcellhd, const double *y_center,
+                      int obr0, const char *memory)
+{
+    struct cache *ibuffer = readcell(fdi, memory);
+    func interpolate = menu[method].method;
+    void *obuffer = Rast_allocate_output_buf(cell_type);
+    int cell_size = Rast_cell_size(cell_type);
+    double local_x_start = outcellhd->west + (outcellhd->ew_res / 2);
+
+    for (int row = obr0; row < outcellhd->rows; row++) {
+        G_percent(row - obr0, outcellhd->rows - obr0, 5);
+        for (int col = 0; col < outcellhd->cols; col++) {
+            void *obufptr = (unsigned char *)obuffer + (size_t)col * cell_size;
+            double x1 = local_x_start + col * outcellhd->ew_res;
+            double y1 = y_center[row];
+
+            if (GPJ_transform(oproj, iproj, tproj, PJ_FWD, &x1, &y1, NULL) <
+                0) {
+                Rast_set_null_value(obufptr, 1, cell_type);
+            }
+            else {
+                double col_idx = (x1 - incellhd->west) / incellhd->ew_res;
+                double row_idx = (incellhd->north - y1) / incellhd->ns_res;
+
+                interpolate(ibuffer, obufptr, cell_type, col_idx, row_idx,
+                            incellhd);
+            }
+        }
+        Rast_put_row(fdo, obuffer, cell_type);
+    }
+
+    release_cache(ibuffer);
+    G_free(obuffer);
+}
+
 int main(int argc, char **argv)
 {
     char *mapname, /* ptr to name of output layer  */
@@ -1096,6 +1150,8 @@ int main(int argc, char **argv)
 
     G_important_message(_("Projecting (banded, per-thread PROJ context)..."));
 
+    int used_fallback = 0; /* set when the serial tile-cache fallback runs */
+    int force_tilecache = getenv("R_PROJ_FORCE_TILECACHE") != NULL;
     int obr0 = 0;
     while (obr0 < outcellhd.rows) {
         /* Fit search. Phase 1 (fast path, unchanged): halve the band height
@@ -1107,6 +1163,39 @@ int main(int argc, char **argv)
          * rows), so width splitting shrinks a tile's input ROW span, not its
          * width. Easy pairs never leave Phase 1. */
         double ts = rproj_wtime();
+        /* Band-0 early-out for the wide-input corner: if a single output row at
+         * the finest tiling already busts the cap, take the serial fallback now
+         * instead of running the height/width search only to bail. Uses the
+         * same worst_tile_strip_rows(obr0, obr0+1, 1) the Phase-2 bail uses,
+         * probed only at the first band so its O(cols) cost is paid once, not
+         * per band. Later-band (pole) busts still fall through to the Phase-2
+         * bail. force_tilecache is deliberately not handled here, so the forced
+         * override keeps routing through that bail unchanged. */
+        if (obr0 == 0) {
+            size_t out1 = (size_t)outcellhd.cols * cell_size;
+            int worst1 = worst_tile_strip_rows(&outcellhd, &incellhd, &oproj,
+                                               &iproj, &tproj, y_center, obr0,
+                                               obr0 + 1, 1, &poles);
+            size_t strip1 =
+                worst1 > 0 ? (size_t)worst1 * incellhd.cols * cell_size : 0;
+            if (strip1 + out1 > cap_bytes) {
+                int needed_mb =
+                    (int)ceil((double)(strip1 + out1) / (1024.0 * 1024.0)) + 1;
+                G_warning(_("Memory cap (%.1f MB) is below what one output row "
+                            "needs (input footprint %d rows, %.1f MB). Falling "
+                            "back to the serial tile-cache path for output "
+                            "rows %d-%d; this path is slower. Raise memory= to "
+                            "at least %d MB to use the parallel path."),
+                          cap_mb, worst1,
+                          (double)(strip1 + out1) / (1024.0 * 1024.0), obr0,
+                          outcellhd.rows - 1, needed_mb);
+                fallback_serial_cache(fdi, fdo, cell_type, method, &oproj,
+                                      &iproj, &tproj, &incellhd, &outcellhd,
+                                      y_center, obr0, memory->answer);
+                used_fallback = 1;
+                goto fallback_done;
+            }
+        }
         int tilew = outcellhd.cols;
         int imin = 0, imax = -1;
         /* Phase-1 neighbor seed (hit path): seed_h1 (previous Phase-1 accepted
@@ -1142,7 +1231,7 @@ int main(int argc, char **argv)
                 strip_rows > 0 ? (size_t)strip_rows * incellhd.cols * cell_size
                                : 0;
             size_t out_bytes = (size_t)band_orows * outcellhd.cols * cell_size;
-            if (strip_bytes + out_bytes <= cap_bytes)
+            if (!force_tilecache && strip_bytes + out_bytes <= cap_bytes)
                 break;
             if (band_orows == 1)
                 break; /* height exhausted: fall through to column splitting */
@@ -1184,27 +1273,51 @@ int main(int argc, char **argv)
             }
             band_orows = start_h;
             for (;;) {
-                if (phase2_width_fit(&outcellhd, &incellhd, &oproj, &iproj,
+                if (!force_tilecache &&
+                    phase2_width_fit(&outcellhd, &incellhd, &oproj, &iproj,
                                      &tproj, y_center, obr0, band_orows,
                                      cap_bytes, cell_size, &tilew, &poles))
                     break;
                 if (band_orows == 1) {
                     /* Single output row at minimum width still over cap =
-                     * singular/large-halo; needs the tile-cache path. */
-                    size_t out1 = (size_t)outcellhd.cols * cell_size;
-                    int worst = worst_tile_strip_rows(
-                        &outcellhd, &incellhd, &oproj, &iproj, &tproj, y_center,
-                        obr0, obr0 + 1, 1, &poles);
-                    size_t strip_bytes =
-                        worst > 0 ? (size_t)worst * incellhd.cols * cell_size
-                                  : 0;
-                    G_fatal_error(
-                        _("A single output row needs %.1f MB (input footprint "
-                          "%d rows), exceeding the memory cap (%.1f MB). This "
-                          "large-halo/oblique case needs the tile-cache path, "
-                          "which is not implemented."),
-                        (double)(strip_bytes + out1) / (1024.0 * 1024.0), worst,
-                        cap_mb);
+                     * singular/large-halo; take the serial tile-cache path.
+                     * Also reached from band 0 when R_PROJ_FORCE_TILECACHE is
+                     * set, which routes normal data through this identical
+                     * block for testing. */
+                    if (force_tilecache) {
+                        G_warning(
+                            _("R_PROJ_FORCE_TILECACHE is set: taking the "
+                              "serial tile-cache path for all output rows "
+                              "(testing override)."));
+                    }
+                    else {
+                        size_t out1 = (size_t)outcellhd.cols * cell_size;
+                        int worst = worst_tile_strip_rows(
+                            &outcellhd, &incellhd, &oproj, &iproj, &tproj,
+                            y_center, obr0, obr0 + 1, 1, &poles);
+                        size_t strip_bytes =
+                            worst > 0
+                                ? (size_t)worst * incellhd.cols * cell_size
+                                : 0;
+                        int needed_mb = (int)ceil((double)(strip_bytes + out1) /
+                                                  (1024.0 * 1024.0)) +
+                                        1;
+                        G_warning(
+                            _("Memory cap (%.1f MB) is below what one output "
+                              "row needs (input footprint %d rows, %.1f MB). "
+                              "Falling back to the serial tile-cache path for "
+                              "output rows %d-%d; this path is slower. Raise "
+                              "memory= to at least %d MB to use the parallel "
+                              "path."),
+                            cap_mb, worst,
+                            (double)(strip_bytes + out1) / (1024.0 * 1024.0),
+                            obr0, outcellhd.rows - 1, needed_mb);
+                    }
+                    fallback_serial_cache(fdi, fdo, cell_type, method, &oproj,
+                                          &iproj, &tproj, &incellhd, &outcellhd,
+                                          y_center, obr0, memory->answer);
+                    used_fallback = 1;
+                    goto fallback_done;
                 }
                 band_orows = (band_orows + 1) / 2;
             }
@@ -1352,14 +1465,18 @@ int main(int argc, char **argv)
         obr0 = obr1;
     }
 
+fallback_done:
     G_free(y_center);
 
-    G_debug(1,
-            "PHASE_TIMERS size=%.4f fill=%.4f compute=%.4f write=%.4f "
-            "bands=%d tiles=%d seed_hits=%d phase2_bands=%d p1_hits=%d "
-            "p1_bands=%d",
-            t_size, t_fill, t_compute, t_write, n_bands, max_tiles, seed_hits,
-            phase2_bands, p1_hits, p1_bands);
+    if (used_fallback)
+        G_debug(1, "PHASE_TIMERS fallback=1 fallback_from_row=%d", obr0);
+    else
+        G_debug(1,
+                "PHASE_TIMERS size=%.4f fill=%.4f compute=%.4f write=%.4f "
+                "bands=%d tiles=%d seed_hits=%d phase2_bands=%d p1_hits=%d "
+                "p1_bands=%d",
+                t_size, t_fill, t_compute, t_write, n_bands, max_tiles,
+                seed_hits, phase2_bands, p1_hits, p1_bands);
 
     /* Close input map in its own env, then the output map. */
     G_switch_env(); /* -> input */
