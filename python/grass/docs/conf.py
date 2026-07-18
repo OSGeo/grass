@@ -98,17 +98,13 @@ extensions = [
 
 
 # Skip temporal lexer rule methods because their regex docstrings are not intended
-# for reStructuredText parsing and only serve PLY token definitions. The modules
-# are checked under both names because the sys.path entries above make them
-# importable both as grass.temporal.* and as temporal.*.
+# for reStructuredText parsing and only serve PLY token definitions.
 def skip_member(app, what, name, obj, skip, options):
     if name.startswith("t_"):
         mod = getattr(obj, "__module__", None)
         if mod in {
             "grass.temporal.temporal_algebra",
             "grass.temporal.temporal_operator",
-            "temporal.temporal_algebra",
-            "temporal.temporal_operator",
         }:
             return True
     return None
@@ -239,7 +235,7 @@ html_theme_options = {
             "internal": True,
         },
         {
-            "href": "exceptions",
+            "href": "grass.exceptions",
             "title": "Exceptions",
             "internal": True,
         },
