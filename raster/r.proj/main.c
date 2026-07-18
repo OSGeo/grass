@@ -130,6 +130,13 @@ static void interpolate_strip(void *strip, void *obufptr, int cell_type,
     memcpy(obufptr, src, cell_size);
 }
 
+/* Strip-based kernels for the banded compute path, in the same order as menu[]:
+ * slot i is the strip counterpart of menu[i].method. Slot 0 is nearest
+ * (interpolate_strip above); slots 1-6 are the interp_strip.c kernels. */
+static const strip_func strip_kernels[] = {
+    interpolate_strip, strip_bilinear, strip_cubic,    strip_lanczos,
+    strip_bilinear_f,  strip_cubic_f,  strip_lanczos_f};
+
 /* Geographic poles within the input map's latitude coverage.
  * band_input_row_span samples only the tile perimeter, so a tile whose interior
  * holds a pole has an input-row (latitude) extremum the perimeter misses; the
@@ -570,6 +577,9 @@ int main(int argc, char **argv)
     if (!ipolname)
         G_fatal_error(_("<%s=%s> unknown %s"), interpol->key, interpol->answer,
                       interpol->key);
+
+    /* Resolve the strip kernel once; menu[] and strip_kernels[] share order. */
+    strip_func interp = strip_kernels[method];
 
     mapname = outmap->answer ? outmap->answer : inmap->answer;
     if (mapname && !list->answer && !overwrite && !print_bounds->answer &&
@@ -1286,8 +1296,8 @@ int main(int argc, char **argv)
                                 (x1 - incellhd.west) / incellhd.ew_res;
                             double r_idx =
                                 (incellhd.north - y1) / incellhd.ns_res;
-                            interpolate_strip(strip, obufptr, cell_type, c_idx,
-                                              r_idx, &incellhd, imin, imax);
+                            interp(strip, obufptr, cell_type, c_idx, r_idx,
+                                   &incellhd, imin, imax);
                         }
                     }
                 }
