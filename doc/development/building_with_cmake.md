@@ -54,6 +54,12 @@ plain `cmake -B build` or rebuild keeps using them. To change a setting,
 pass the new `-D...` value; to reset everything, delete the build
 directory.
 
+By default the build is driven by `make`. If [Ninja](https://ninja-build.org/)
+is installed, you can select it instead with `-G Ninja`; it is faster on
+incremental builds and compiles in parallel by default. The build tool
+is chosen at configure time and cannot be changed in an existing build
+directory.
+
 If `ccache` is installed, the build uses it automatically to cache
 compiler output, so recompiling files that have not changed (e.g. after
 deleting the build directory or in a second build directory) is nearly
@@ -65,8 +71,10 @@ instant. Pass `-DUSE_CCACHE=OFF` to opt out.
 cmake --build build -j$(nproc)
 ```
 
-`cmake --build` drives `make` under the hood; it compiles serially
-unless you pass `-j`.
+`cmake --build` is a thin wrapper that runs the actual build tool
+selected at configure time: `make` by default, or `ninja` if configured
+with `-G Ninja`. With `make` it compiles serially unless you pass `-j`;
+Ninja parallelizes by default.
 
 There is no separate reconfigure step after pulling changes: the build
 re-runs CMake automatically when any `CMakeLists.txt` changed.
@@ -117,6 +125,20 @@ To list all available targets (with the default Makefile generator):
 ```bash
 cmake --build build --target help
 ```
+
+## Installing
+
+For everyday development, installing is optional: GRASS runs directly
+from `build/output`. To install, run:
+
+```bash
+cmake --install build
+```
+
+This installs into the prefix recorded at configure time (default
+`/usr/local`, which typically requires `sudo`). To install without
+root, configure with `-DCMAKE_INSTALL_PREFIX` set to a writable
+directory, e.g. `$HOME/grass-install`.
 
 ## Compiling addons
 
