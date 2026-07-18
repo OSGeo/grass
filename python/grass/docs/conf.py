@@ -36,6 +36,12 @@ GRASS Development Team</a>, GRASS ${grass_version} Documentation</p>
 )
 
 grass_version = core.version()["version"]
+# Doc URLs use the short "grassMAJORMINOR" prefix (e.g. grass86) that matches the
+# published numbered manuals tree, not the full dev version string (see #5935).
+grass_short_version = "".join(grass_version.split(".")[:2])
+grass_docs_baseurl = (
+    f"https://grass.osgeo.org/grass{grass_short_version}/manuals/libpython/"
+)
 today = date.today().strftime("%B %d, %Y")
 
 copy("_templates/layout.html.template", "_templates/layout.html")
@@ -227,8 +233,9 @@ logo_url = "_static/grass_logo.svg"
 html_favicon = "_static/favicon.ico"
 
 # The base URL which points to the root of the HTML documentation. It is used
-# to indicate the location of document using the Canonical Link Relation.
-html_baseurl = "https://grass.osgeo.org/grass-stable/manuals/libpython/"
+# to indicate the location of document using the Canonical Link Relation, and
+# also as the base for the sphinx-sitemap URLs below (they must stay in sync).
+html_baseurl = grass_docs_baseurl
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -462,9 +469,10 @@ todo_include_todos = True
 
 # sphinx-sitemap extension config
 # https://sphinx-sitemap.readthedocs.io/en/latest/advanced-configuration.html
+# Each <loc> is html_baseurl + {link}, so the sitemap URLs match the canonical
+# URLs exactly; the version prefix is already part of html_baseurl (see #5935).
 sitemap_filename = "sitemap.xml"
-html_baseurl = "https://grass.osgeo.org/"
-sitemap_url_scheme = "grass{version}manuals/libpython/{link}"
+sitemap_url_scheme = "{link}"
 
 sitemap_excludes = [
     "search.html",
